@@ -22,6 +22,7 @@
 #ifndef MU_ENGRAVING_DEFAULTSTYLE_H
 #define MU_ENGRAVING_DEFAULTSTYLE_H
 
+#include "io/path.h"
 #include "style.h"
 
 namespace mu::engraving {
@@ -31,25 +32,25 @@ public:
 
     static DefaultStyle* instance();
 
-    void init(const QString& defaultSyleFilePath, const QString& partStyleFilePath);
+    void init(const io::path_t& defaultStyleFilePath, const io::path_t& partStyleFilePath);
 
-    static const Ms::MStyle& baseStyle();
+    static const MStyle& baseStyle();
 
     static bool isHasDefaultStyle();
-    static const Ms::MStyle& defaultStyle();
+    static const MStyle& defaultStyle();
 
-    static const Ms::MStyle* defaultStyleForParts();
+    static const MStyle* defaultStyleForParts();
 
-    static const Ms::MStyle& resolveStyleDefaults(const int defaultsVersion);
+    static const MStyle& resolveStyleDefaults(const int defaultsVersion);
 
 private:
     DefaultStyle() = default;
 
-    static bool doLoadStyle(Ms::MStyle* style, const QString& filePath);
+    static bool doLoadStyle(MStyle* style, const io::path_t& filePath);
 
-    Ms::MStyle m_baseStyle; // buildin initial style
-    Ms::MStyle* m_defaultStyle; // buildin modified by preferences
-    Ms::MStyle* m_defaultStyleForParts = nullptr;
+    MStyle m_baseStyle; // builtin initial style
+    MStyle* m_defaultStyle; // builtin modified by preferences
+    MStyle* m_defaultStyleForParts = nullptr;
 };
 }
 

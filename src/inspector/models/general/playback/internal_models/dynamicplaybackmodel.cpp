@@ -38,15 +38,15 @@ DynamicPlaybackModel::DynamicPlaybackModel(QObject* parent, IElementRepositorySe
 
 void DynamicPlaybackModel::createProperties()
 {
-    m_scopeType = buildPropertyItem(Ms::Pid::DYNAMIC_RANGE);
-    m_velocity = buildPropertyItem(Ms::Pid::VELOCITY);
-    m_velocityChangeSpeed = buildPropertyItem(Ms::Pid::VELO_CHANGE_SPEED);
-    m_velocityChange = buildPropertyItem(Ms::Pid::VELO_CHANGE);
+    m_scopeType = buildPropertyItem(mu::engraving::Pid::DYNAMIC_RANGE);
+    m_velocity = buildPropertyItem(mu::engraving::Pid::VELOCITY);
+    m_velocityChangeSpeed = buildPropertyItem(mu::engraving::Pid::VELO_CHANGE_SPEED);
+    m_velocityChange = buildPropertyItem(mu::engraving::Pid::VELO_CHANGE);
 }
 
 void DynamicPlaybackModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::DYNAMIC);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::DYNAMIC);
 }
 
 void DynamicPlaybackModel::loadProperties()

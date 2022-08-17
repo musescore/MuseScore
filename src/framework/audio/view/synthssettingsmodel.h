@@ -50,21 +50,21 @@ public:
     Q_INVOKABLE void apply();
 
     Q_INVOKABLE QStringList selectedSoundFonts(const QString& synth) const;
-    Q_INVOKABLE QStringList avalaibleSoundFonts(const QString& synth) const;
+    Q_INVOKABLE QStringList availableSoundFonts(const QString& synth) const;
 
     Q_INVOKABLE void soundFontUp(int selectedIndex, const QString& synth);
     Q_INVOKABLE void soundFontDown(int selectedIndex, const QString& synth);
     Q_INVOKABLE void removeSoundFont(int selectedIndex, const QString& synth);
-    Q_INVOKABLE void addSoundFont(int avalableIndex, const QString& synth);
+    Q_INVOKABLE void addSoundFont(int availableIndex, const QString& synth);
 
 signals:
     void selectedChanged(const QString& name);
-    void avalaibleChanged(const QString& name);
+    void availableChanged(const QString& name);
 
 private:
 
     SynthesizerState m_state;
-    QMap<QString, QStringList> m_avalaibleSoundFonts;
+    QMap<QString, QStringList> m_availableSoundFonts;
 };
 }
 

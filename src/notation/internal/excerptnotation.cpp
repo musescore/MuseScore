@@ -28,10 +28,10 @@
 
 using namespace mu::notation;
 
-ExcerptNotation::ExcerptNotation(Ms::Excerpt* excerpt)
+ExcerptNotation::ExcerptNotation(mu::engraving::Excerpt* excerpt)
     : Notation(), m_excerpt(excerpt)
 {
-    m_name = excerpt ? excerpt->name() : QString();
+    m_name = excerpt ? excerpt->name().toQString() : QString();
 }
 
 ExcerptNotation::~ExcerptNotation()
@@ -39,16 +39,9 @@ ExcerptNotation::~ExcerptNotation()
     setScore(nullptr);
 }
 
-bool ExcerptNotation::isCreated() const
+void ExcerptNotation::init()
 {
-    return m_isCreated;
-}
-
-void ExcerptNotation::setIsCreated(bool created)
-{
-    m_isCreated = created;
-
-    if (!created) {
+    if (m_inited) {
         return;
     }
 
@@ -58,6 +51,18 @@ void ExcerptNotation::setIsCreated(bool created)
     if (isEmpty()) {
         fillWithDefaultInfo();
     }
+
+    m_inited = true;
+}
+
+bool ExcerptNotation::isCustom() const
+{
+    return m_excerpt && !m_excerpt->initialPartId().isValid();
+}
+
+bool ExcerptNotation::isEmpty() const
+{
+    return m_excerpt ? m_excerpt->parts().empty() : true;
 }
 
 void ExcerptNotation::fillWithDefaultInfo()
@@ -68,18 +73,23 @@ void ExcerptNotation::fillWithDefaultInfo()
         return;
     }
 
-    Ms::Score* excerptScore = m_excerpt->excerptScore();
+    mu::engraving::Score* score = m_excerpt->excerptScore();
+    mu::engraving::MeasureBase* topVerticalFrame = score->first();
 
-    auto setText = [&excerptScore](TextStyleType textType, const QString& text) {
-        TextBase* textBox = excerptScore->getText(textType);
+    if (topVerticalFrame && topVerticalFrame->isVBox()) {
+        topVerticalFrame->undoUnlink();
+    }
 
-        if (!textBox) {
-            textBox = excerptScore->addText(textType, false /*addToAllScores*/);
+    auto setText = [&score](TextStyleType textType, const QString& text) {
+        TextBase* textItem = score->getText(textType);
+
+        if (!textItem) {
+            textItem = score->addText(textType, false /*addToAllScores*/);
         }
 
-        if (textBox) {
-            textBox->undoUnlink();
-            textBox->setPlainText(text);
+        if (textItem) {
+            textItem->undoUnlink();
+            textItem->setPlainText(text);
         }
     };
 
@@ -88,22 +98,17 @@ void ExcerptNotation::fillWithDefaultInfo()
     setText(TextStyleType::SUBTITLE, "");
     setText(TextStyleType::POET, "");
 
-    excerptScore->doLayout();
+    score->doLayout();
 }
 
-Ms::Excerpt* ExcerptNotation::excerpt() const
+mu::engraving::Excerpt* ExcerptNotation::excerpt() const
 {
     return m_excerpt;
 }
 
-bool ExcerptNotation::isEmpty() const
-{
-    return m_excerpt ? m_excerpt->parts().empty() : true;
-}
-
 QString ExcerptNotation::name() const
 {
-    return m_excerpt ? m_excerpt->name() : m_name;
+    return m_excerpt ? m_excerpt->name().toQString() : m_name;
 }
 
 void ExcerptNotation::setName(const QString& name)
@@ -120,13 +125,13 @@ void ExcerptNotation::setName(const QString& name)
         return;
     }
 
-    Ms::Text* excerptTitle = score()->getText(Ms::TextStyleType::INSTRUMENT_EXCERPT);
+    mu::engraving::Text* excerptTitle = score()->getText(mu::engraving::TextStyleType::INSTRUMENT_EXCERPT);
     if (!excerptTitle) {
         return;
     }
 
     excerptTitle->setPlainText(name);
-    score()->setMetaTag("partName", name);
+    score()->setMetaTag(u"partName", name);
     score()->doLayout();
 
     notifyAboutNotationChanged();
@@ -143,6 +148,6 @@ IExcerptNotationPtr ExcerptNotation::clone() const
         return nullptr;
     }
 
-    Ms::Excerpt* copy = new Ms::Excerpt(*m_excerpt);
+    mu::engraving::Excerpt* copy = new mu::engraving::Excerpt(*m_excerpt);
     return std::make_shared<ExcerptNotation>(copy);
 }

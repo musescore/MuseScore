@@ -13,7 +13,9 @@
 #ifndef __NOTIFIER_H__
 #define __NOTIFIER_H__
 
-namespace Ms {
+#include "global/allocator.h"
+
+namespace mu::engraving {
 template<typename Data> class Notifier;
 
 //---------------------------------------------------------
@@ -23,6 +25,8 @@ template<typename Data> class Notifier;
 template<typename Data>
 class Listener
 {
+    OBJECT_ALLOCATOR(engraving, Listener)
+
     Notifier<Data>* _notifier = nullptr;
 
 public:
@@ -34,7 +38,7 @@ public:
     Listener(Listener<Data>&&);
     Listener& operator=(const Listener<Data>&) { return *this; }
     Listener& operator=(Listener&&);
-    ~Listener();
+    virtual ~Listener();
 
     void setNotifier(Notifier<Data>* n);
 
@@ -161,5 +165,5 @@ void swap(Listener<Data>& l1, Listener<Data>& l2)
     l1.setNotifier(n2);
     l2.setNotifier(n1);
 }
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

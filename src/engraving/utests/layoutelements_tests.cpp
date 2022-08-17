@@ -33,15 +33,17 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString ALL_ELEMENTS_DATA_DIR("all_elements_data/");
+#include "log.h"
 
+using namespace mu;
 using namespace mu::engraving;
-using namespace Ms;
 
-class LayoutElementsTests : public ::testing::Test
+static const String ALL_ELEMENTS_DATA_DIR("all_elements_data/");
+
+class Engraving_LayoutElementsTests : public ::testing::Test
 {
 public:
-    void tstLayoutAll(QString file);
+    void tstLayoutAll(String file);
 };
 
 //---------------------------------------------------------
@@ -81,10 +83,10 @@ static void isLayoutDone(void* data, EngravingItem* e)
         (*result) = false;
         // Print some info about the element to make test more useful...
         if (Measure* m = toMeasure(e->findMeasure())) {
-            qDebug("Layout of %s is not done (page %zu, measure %d)", e->typeName(), m->system()->page()->no() + 1,
-                   m->no() + 1);
+            LOGD("Layout of %s is not done (page %zu, measure %d)", e->typeName(), m->system()->page()->no() + 1,
+                 m->no() + 1);
         } else {
-            qDebug("Layout of %s is not done", e->typeName());
+            LOGD("Layout of %s is not done", e->typeName());
         }
     }
 }
@@ -94,7 +96,7 @@ static void isLayoutDone(void* data, EngravingItem* e)
 //    Test that all elements in the score are laid out
 //---------------------------------------------------------
 
-void LayoutElementsTests::tstLayoutAll(QString file)
+void Engraving_LayoutElementsTests::tstLayoutAll(String file)
 {
     MasterScore* score = ScoreRW::readScore(ALL_ELEMENTS_DATA_DIR + file);
     // readScore should also do layout of the score
@@ -109,24 +111,24 @@ void LayoutElementsTests::tstLayoutAll(QString file)
     }
 }
 
-TEST_F(LayoutElementsTests, tstLayoutElements)
+TEST_F(Engraving_LayoutElementsTests, tstLayoutElements)
 {
-    tstLayoutAll("layout_elements.mscx");
+    tstLayoutAll(u"layout_elements.mscx");
 }
 
-TEST_F(LayoutElementsTests, tstLayoutTablature)
+TEST_F(Engraving_LayoutElementsTests, tstLayoutTablature)
 {
-    tstLayoutAll("layout_elements_tab.mscx");
+    tstLayoutAll(u"layout_elements_tab.mscx");
 }
 
-TEST_F(LayoutElementsTests, tstLayoutMoonlight)
+TEST_F(Engraving_LayoutElementsTests, tstLayoutMoonlight)
 {
-    tstLayoutAll("moonlight.mscx");
+    tstLayoutAll(u"moonlight.mscx");
 }
 
 // FIXME goldberg.mscx does not pass the test because of some
 // TimeSig and Clef elements. Need to check it later!
-TEST_F(LayoutElementsTests, DISABLED_tstLayoutGoldberg)
+TEST_F(Engraving_LayoutElementsTests, DISABLED_tstLayoutGoldberg)
 {
-    tstLayoutAll("goldberg.mscx");
+    tstLayoutAll(u"goldberg.mscx");
 }

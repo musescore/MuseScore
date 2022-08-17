@@ -30,7 +30,7 @@
 #include "mitypes.h"
 #include "async/notification.h"
 #include "async/channel.h"
-#include "val.h"
+#include "types/val.h"
 
 namespace mu::mi {
 class IMultiInstancesProvider : MODULE_EXPORT_INTERFACE
@@ -40,8 +40,8 @@ public:
     virtual ~IMultiInstancesProvider() = default;
 
     // Project opening
-    virtual bool isProjectAlreadyOpened(const io::path& projectPath) const = 0;
-    virtual void activateWindowWithProject(const io::path& projectPath) = 0;
+    virtual bool isProjectAlreadyOpened(const io::path_t& projectPath) const = 0;
+    virtual void activateWindowWithProject(const io::path_t& projectPath) = 0;
     virtual bool isHasAppInstanceWithoutProject() const = 0;
     virtual void activateWindowWithoutProject() = 0;
     virtual bool openNewAppInstance(const QStringList& args) = 0;
@@ -68,6 +68,7 @@ public:
 
     // Quit for all
     virtual void quitForAll() = 0;
+    virtual void quitAllAndRestartLast() = 0;
 };
 }
 

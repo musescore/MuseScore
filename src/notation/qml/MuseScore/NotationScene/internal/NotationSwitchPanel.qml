@@ -20,7 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -61,57 +62,111 @@ Rectangle {
         order: 1
     }
 
-    RadioButtonGroup {
-        id: notationsView
-
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-
-        width: Math.min(contentWidth, parent.width)
-
-        model: notationSwitchModel
-        currentIndex: 0
+    RowLayout {
+        anchors.fill: parent
         spacing: 0
 
-        interactive: width < contentWidth
+        RadioButtonGroup {
+            id: notationsView
 
-        delegate: NotationSwitchButton {
-            id: button
+            // - 1: don't need to see the right separator of the rightmost tab
+            readonly property bool needsScrollArrowButtons: contentWidth - 1 > root.width
 
-            navigation.name: "NotationTab" + index
-            navigation.panel: navPanel
-            navigation.row: index * 10  + 1 // * 10 - for close button
-            navigation.accessible.name: text + (needSave ? (" " + qsTrc("notation", "Not saved")) : "")
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-            text: model.title
-            needSave: model.needSave
+            ScrollBar.horizontal: null
 
-            ButtonGroup.group: notationsView.radioButtonGroup
-            checked: index === notationsView.currentIndex
+            model: notationSwitchModel
+            currentIndex: 0
+            spacing: 0
 
-            function resolveNextNotationIndex() {
-                var nextIndex = index - 1
-                if (nextIndex < 0) {
-                    return 0
+            clip: true
+            interactive: true
+
+            function scrollLeft() {
+                let leftmostTab = indexAt(contentX, 0)
+                let newLeftmostTab = Math.max(0, leftmostTab - 1)
+                positionViewAtIndex(newLeftmostTab, ListView.Contain)
+            }
+
+            function scrollRight() {
+                let rightmostTab = indexAt(contentX + width - 1, 0)
+                let newRightmostTab = Math.min(count - 1, rightmostTab + 1)
+                positionViewAtIndex(newRightmostTab, ListView.Contain)
+            }
+
+            delegate: NotationSwitchButton {
+                id: button
+
+                navigation.name: "NotationTab" + index
+                navigation.panel: navPanel
+                navigation.row: index * 10  + 1 // * 10 - for close button
+                navigation.accessible.name: text + (needSave ? (" " + qsTrc("notation", "Not saved")) : "")
+
+                text: model.title
+                needSave: model.needSave
+
+                ButtonGroup.group: notationsView.radioButtonGroup
+                checked: index === notationsView.currentIndex
+
+                onToggled: {
+                    notationSwitchModel.setCurrentNotation(index)
                 }
 
-                return nextIndex
-            }
-
-            onToggled: {
-                notationSwitchModel.setCurrentNotation(index)
-            }
-
-            onCloseRequested: {
-                if (index !== notationsView.currentIndex) {
+                onCloseRequested: {
                     notationSwitchModel.closeNotation(index)
-                    return
                 }
 
-                var nextIndex = button.resolveNextNotationIndex()
-                notationSwitchModel.setCurrentNotation(nextIndex)
-                notationSwitchModel.closeNotation(index)
+                onContextMenuItemsRequested: {
+                    contextMenuItems = notationSwitchModel.contextMenuItems(index)
+                }
+
+                onHandleContextMenuItem: function(itemId) {
+                    notationSwitchModel.handleContextMenuItem(index, itemId)
+                }
+            }
+        }
+
+        Row {
+            Layout.fillHeight: true
+            Layout.leftMargin: -1
+            spacing: 0
+
+            visible: notationsView.needsScrollArrowButtons
+
+            SeparatorLine {}
+
+            NotationSwitchScrollArrowButton {
+                enabled: !notationsView.atXBeginning
+
+                navigation.name: "ScrollLeftButton"
+                navigation.panel: navPanel
+                navigation.row: notationsView.count * 10 + 1
+                navigation.accessible.name: qsTrc("notation", "Scroll left")
+
+                icon: IconCode.CHEVRON_LEFT
+
+                onScrollRequested: {
+                    notationsView.scrollLeft()
+                }
+            }
+
+            SeparatorLine {}
+
+            NotationSwitchScrollArrowButton {
+                enabled: !notationsView.atXEnd
+
+                navigation.name: "ScrollRightButton"
+                navigation.panel: navPanel
+                navigation.row: notationsView.count * 10 + 2
+                navigation.accessible.name: qsTrc("notation", "Scroll right")
+
+                icon: IconCode.CHEVRON_RIGHT
+
+                onScrollRequested: {
+                    notationsView.scrollRight()
+                }
             }
         }
     }

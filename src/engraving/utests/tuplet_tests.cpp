@@ -33,20 +33,20 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString TUPLET_DATA_DIR("tuplet_data/");
-
+using namespace mu;
 using namespace mu::engraving;
-using namespace Ms;
 
-class TupletTests : public ::testing::Test
+static const String TUPLET_DATA_DIR(u"tuplet_data/");
+
+class Engraving_TupletTests : public ::testing::Test
 {
 public:
     bool createTuplet(int n, ChordRest* cr);
-    void tuplet(const char* p1, const char* p2);
-    void split(const char* p1, const char* p2);
+    void tuplet(const char16_t* p1, const char16_t* p2);
+    void split(const char16_t* p1, const char16_t* p2);
 };
 
-bool TupletTests::createTuplet(int n, ChordRest* cr)
+bool Engraving_TupletTests::createTuplet(int n, ChordRest* cr)
 {
     if (cr->durationType() < TDuration(DurationType::V_128TH)) {
         return false;
@@ -94,7 +94,7 @@ bool TupletTests::createTuplet(int n, ChordRest* cr)
     return true;
 }
 
-void TupletTests::tuplet(const char* p1, const char* p2)
+void Engraving_TupletTests::tuplet(const char16_t* p1, const char16_t* p2)
 {
     MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + p1);
     Measure* m1 = score->firstMeasure();
@@ -106,7 +106,7 @@ void TupletTests::tuplet(const char* p1, const char* p2)
 
     Segment* s = m2->first(SegmentType::ChordRest);
     EXPECT_TRUE(s != 0);
-    Ms::Chord* c = toChord(s->element(0));
+    Chord* c = toChord(s->element(0));
     EXPECT_TRUE(c != 0);
 
     EXPECT_TRUE(createTuplet(3, c));
@@ -115,12 +115,12 @@ void TupletTests::tuplet(const char* p1, const char* p2)
     delete score;
 }
 
-TEST_F(TupletTests, join1)
+TEST_F(Engraving_TupletTests, join1)
 {
-    tuplet("tuplet1.mscx", "tuplet1-ref.mscx");
+    tuplet(u"tuplet1.mscx", u"tuplet1-ref.mscx");
 }
 
-void TupletTests::split(const char* p1, const char* p2)
+void Engraving_TupletTests::split(const char16_t* p1, const char16_t* p2)
 {
     MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + p1);
     Measure* m         = score->firstMeasure();
@@ -140,24 +140,24 @@ void TupletTests::split(const char* p1, const char* p2)
     delete score;
 }
 
-TEST_F(TupletTests, split1)
+TEST_F(Engraving_TupletTests, split1)
 {
-    split("split1.mscx",   "split1-ref.mscx");
+    split(u"split1.mscx",   u"split1-ref.mscx");
 }
 
-TEST_F(TupletTests, split2)
+TEST_F(Engraving_TupletTests, split2)
 {
-    split("split2.mscx",   "split2-ref.mscx");
+    split(u"split2.mscx",   u"split2-ref.mscx");
 }
 
-TEST_F(TupletTests, split3)
+TEST_F(Engraving_TupletTests, split3)
 {
-    split("split3.mscx",   "split3-ref.mscx");
+    split(u"split3.mscx",   u"split3-ref.mscx");
 }
 
-TEST_F(TupletTests, split4)
+TEST_F(Engraving_TupletTests, split4)
 {
-    split("split4.mscx",   "split4-ref.mscx");
+    split(u"split4.mscx",   u"split4-ref.mscx");
 }
 
 //---------------------------------------------------------
@@ -166,7 +166,7 @@ TEST_F(TupletTests, split4)
 //    score is equal to the reference score
 //---------------------------------------------------------
 
-TEST_F(TupletTests, addStaff)
+TEST_F(Engraving_TupletTests, addStaff)
 {
     MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + "nestedTuplets_addStaff.mscx");
     EXPECT_TRUE(score);
@@ -182,7 +182,7 @@ TEST_F(TupletTests, addStaff)
     newStaff->setKey(Fraction(0, 1), ke);
     score->undoInsertStaff(newStaff, 0, true);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "nestedTuplets_addStaff.mscx", TUPLET_DATA_DIR + "nestedTuplets_addStaff-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"nestedTuplets_addStaff.mscx", TUPLET_DATA_DIR + u"nestedTuplets_addStaff-ref.mscx"));
     delete score;
 }
 
@@ -190,11 +190,11 @@ TEST_F(TupletTests, addStaff)
 //    saveLoad
 //     checks that properties persist after loading and saving
 //-----------------------------------------
-TEST_F(TupletTests, saveLoad)
+TEST_F(Engraving_TupletTests, saveLoad)
 {
     MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + "save-load.mscx");
     EXPECT_TRUE(score);
     //simply load and save
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "save-load.mscx", TUPLET_DATA_DIR + "save-load.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"save-load.mscx", TUPLET_DATA_DIR + u"save-load.mscx"));
     delete score;
 }

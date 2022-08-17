@@ -25,7 +25,7 @@
 
 #include "engravingitem.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Chord;
 
 //---------------------------------------------------------
@@ -39,8 +39,10 @@ class Chord;
 
 class LedgerLine final : public EngravingItem
 {
-    qreal _width;
-    qreal _len;
+    OBJECT_ALLOCATOR(engraving, LedgerLine)
+
+    double _width;
+    double _len;
     LedgerLine* _next;
     bool vertical { false };
 
@@ -54,21 +56,21 @@ public:
     mu::PointF pagePos() const override;        ///< position in page coordinates
     Chord* chord() const { return toChord(explicitParent()); }
 
-    qreal len() const { return _len; }
-    qreal lineWidth() const { return _width; }
-    void setLen(qreal v) { _len = v; }
-    void setLineWidth(qreal v) { _width = v; }
+    double len() const { return _len; }
+    double lineWidth() const { return _width; }
+    void setLen(double v) { _len = v; }
+    void setLineWidth(double v) { _width = v; }
 
     void layout() override;
     void draw(mu::draw::Painter*) const override;
 
-    qreal measureXPos() const;
+    double measureXPos() const;
     LedgerLine* next() const { return _next; }
     void setNext(LedgerLine* l) { _next = l; }
 
     void writeProperties(XmlWriter& xml) const override;
     bool readProperties(XmlReader&) override;
-    void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+    void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

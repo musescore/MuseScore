@@ -24,12 +24,12 @@
 
 #include "modularity/imodulesetup.h"
 #include "modularity/ioc.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 
 namespace mu::framework {
 class GlobalModule : public modularity::IModuleSetup
 {
-    INJECT(framework, system::IFileSystem, fileSystem)
+    INJECT(framework, io::IFileSystem, fileSystem)
 public:
 
     std::string moduleName() const override;

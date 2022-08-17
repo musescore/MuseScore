@@ -35,9 +35,11 @@
 #include <list>
 #include <utility> // std::pair
 
+#include "log.h"
+
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   RepeatSegment
 //---------------------------------------------------------
@@ -128,7 +130,7 @@ RepeatList::RepeatList(Score* s)
 
 RepeatList::~RepeatList()
 {
-    qDeleteAll(*this);
+    DeleteAll(*this);
 }
 
 //---------------------------------------------------------
@@ -172,12 +174,12 @@ void RepeatList::updateTempo()
     const TempoMap* tl = _score->tempomap();
 
     int utick = 0;
-    qreal t  = 0;
+    double t  = 0;
 
     for (RepeatSegment* s : *this) {
         s->utick      = utick;
         s->utime      = t;
-        qreal ct      = tl->tick2time(s->tick);
+        double ct      = tl->tick2time(s->tick);
         s->timeOffset = t - ct;
         utick        += s->len();
         t            += tl->tick2time(s->tick + s->len()) - ct;
@@ -190,7 +192,7 @@ void RepeatList::updateTempo()
 
 int RepeatList::utick2tick(int tick) const
 {
-    unsigned n = size();
+    size_t n = size();
     if (n == 0) {
         return tick;
     }
@@ -204,9 +206,8 @@ int RepeatList::utick2tick(int tick) const
             return tick - (at(i)->utick - at(i)->tick);
         }
     }
-    if (MScore::debugMode) {
-        qFatal("tick %d not found in RepeatList", tick);
-    }
+
+    ASSERT_X(String(u"tick %1 not found in RepeatList").arg(tick));
     return 0;
 }
 
@@ -231,14 +232,14 @@ int RepeatList::tick2utick(int tick) const
 //   utick2utime
 //---------------------------------------------------------
 
-qreal RepeatList::utick2utime(int tick) const
+double RepeatList::utick2utime(int tick) const
 {
-    unsigned n = size();
+    size_t n = size();
     unsigned ii = (idx1 < n) && (tick >= at(idx1)->utick) ? idx1 : 0;
     for (unsigned i = ii; i < n; ++i) {
         if ((tick >= at(i)->utick) && ((i + 1 == n) || (tick < at(i + 1)->utick))) {
             int t     = tick - (at(i)->utick - at(i)->tick);
-            qreal tt = _score->tempomap()->tick2time(t) + at(i)->timeOffset;
+            double tt = _score->tempomap()->tick2time(t) + at(i)->timeOffset;
             return tt;
         }
     }
@@ -249,9 +250,9 @@ qreal RepeatList::utick2utime(int tick) const
 //   utime2utick
 //---------------------------------------------------------
 
-int RepeatList::utime2utick(qreal secs) const
+int RepeatList::utime2utick(double secs) const
 {
-    unsigned repeatSegmentsCount = size();
+    size_t repeatSegmentsCount = size();
     unsigned ii = (idx2 < repeatSegmentsCount) && (secs >= at(idx2)->utime) ? idx2 : 0;
     for (unsigned i = ii; i < repeatSegmentsCount; ++i) {
         if ((secs >= at(i)->utime) && ((i + 1 == repeatSegmentsCount) || (secs < at(i + 1)->utime))) {
@@ -259,9 +260,8 @@ int RepeatList::utime2utick(qreal secs) const
             return _score->tempomap()->time2tick(secs - at(i)->timeOffset) + (at(i)->utick - at(i)->tick);
         }
     }
-    if (MScore::debugMode) {
-        qFatal("time %f not found in RepeatList", secs);
-    }
+
+    ASSERT_X(String(u"time %1 not found in RepeatList").arg(secs));
     return 0;
 }
 
@@ -283,7 +283,7 @@ std::vector<RepeatSegment*>::const_iterator RepeatList::findRepeatSegmentFromUTi
 
 void RepeatList::flatten()
 {
-    qDeleteAll(*this);
+    DeleteAll(*this);
     clear();
 
     Measure* m = _score->firstMeasure();
@@ -358,7 +358,7 @@ void RepeatList::collectRepeatListElements()
 
     // Clear out previous listing
     for (const RepeatListElementList& srle : _rlElements) {
-        qDeleteAll(srle);
+        DeleteAll(srle);
     }
     _rlElements.clear();
 
@@ -531,7 +531,7 @@ void RepeatList::collectRepeatListElements()
                             ) {
                             // Decrease position
                             // This should always be possible as the list always starts with a REPEAT_START element
-                            Q_ASSERT(insertionIt != sectionRLElements.begin());
+                            assert(insertionIt != sectionRLElements.begin());
                             --insertionIt;
                         } else {
                             // Found location after which we should go
@@ -614,7 +614,7 @@ void RepeatList::collectRepeatListElements()
 ///         "end" will result in end of current section
 ///
 std::pair<std::vector<RepeatListElementList>::const_iterator, RepeatListElementList::const_iterator> RepeatList::findMarker(
-    QString label, std::vector<RepeatListElementList>::const_iterator referenceSectionIt,
+    String label, std::vector<RepeatListElementList>::const_iterator referenceSectionIt,
     RepeatListElementList::const_iterator referenceRepeatListElementIt) const
 {
     bool found = false;
@@ -702,7 +702,7 @@ std::pair<std::vector<RepeatListElementList>::const_iterator, RepeatListElementL
 /// \brief RepeatList::performJump
 /// \param sectionIt                 [in]   Section of the jump target
 /// \param repeatListElementTargetIt [in]   RepeatListElement of the jump target within the section
-/// \param withRepeats               [in]   Whether first or last playtrough of the target is the actual target, influences playbackCount
+/// \param withRepeats               [in]   Whether first or last playthrough of the target is the actual target, influences playbackCount
 /// \param playbackCount             [out]  Will contain the resulting playbackCount value
 /// \param activeVolta               [out]  Contains a reference to the active Volta for jump target
 /// \param startRepeatReference      [out]  Reference point to return to and compare against for jump target
@@ -759,7 +759,7 @@ void RepeatList::performJump(std::vector<RepeatListElementList>::const_iterator 
 ///
 void RepeatList::unwind()
 {
-    qDeleteAll(*this);
+    DeleteAll(*this);
     clear();
     _jumpsTaken.clear();
 
@@ -889,23 +889,23 @@ void RepeatList::unwind()
                     || ((activeVolta != nullptr) && (playbackCount == activeVolta->lastEnding()))
                     ) {
                     std::pair<Jump const* const,
-                              int> jumpOccurence = std::make_pair(toJump((*repeatListElementIt)->element), playbackCount);
-                    if (_jumpsTaken.find(jumpOccurence) == _jumpsTaken.end()) {                 // Not yet processed
+                              int> jumpOccurrence = std::make_pair(toJump((*repeatListElementIt)->element), playbackCount);
+                    if (_jumpsTaken.find(jumpOccurrence) == _jumpsTaken.end()) {                 // Not yet processed
                         // Processing it now
-                        _jumpsTaken.insert(jumpOccurence);
+                        _jumpsTaken.insert(jumpOccurrence);
                         // Find the jump targets
                         std::pair<std::vector<RepeatListElementList>::const_iterator,
                                   RepeatListElementList::const_iterator> jumpTo = findMarker(
-                            jumpOccurence.first->jumpTo(), sectionIt, repeatListElementIt);
-                        playUntil = findMarker(jumpOccurence.first->playUntil(), sectionIt, repeatListElementIt);
-                        continueAt = findMarker(jumpOccurence.first->continueAt(), sectionIt, repeatListElementIt);
+                            jumpOccurrence.first->jumpTo(), sectionIt, repeatListElementIt);
+                        playUntil = findMarker(jumpOccurrence.first->playUntil(), sectionIt, repeatListElementIt);
+                        continueAt = findMarker(jumpOccurrence.first->continueAt(), sectionIt, repeatListElementIt);
 
                         // Execute
                         if (jumpTo.first != _rlElements.cend()) {
                             push_back(rs);
                             rs = nullptr;
 
-                            activeJump = jumpOccurence.first;
+                            activeJump = jumpOccurrence.first;
                             performJump(jumpTo.first, jumpTo.second,
                                         activeJump->playRepeats(), &playbackCount, &activeVolta, &startRepeatReference);
                             sectionIt = jumpTo.first;
@@ -1018,7 +1018,7 @@ void RepeatList::unwind()
         // Inform the last RepeatSegment that the Section Break pause property should be honored now
         rs = this->back();
         repeatListElementIt = sectionIt->cend() - 1;
-        Q_ASSERT((*repeatListElementIt)->repeatListElementType == RepeatListElementType::SECTION_BREAK);
+        assert((*repeatListElementIt)->repeatListElementType == RepeatListElementType::SECTION_BREAK);
 
         LayoutBreak const* const layoutBreak = toMeasureBase((*repeatListElementIt)->element)->sectionBreakElement();
         if (layoutBreak != nullptr) {

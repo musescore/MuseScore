@@ -26,9 +26,10 @@
 #include <QQuickPaintedItem>
 #include <QIcon>
 #include <QColor>
+#include "quickpaintedview.h"
 
 namespace mu::uicomponents {
-class IconView : public QQuickPaintedItem
+class IconView : public QuickPaintedView
 {
     Q_OBJECT
 

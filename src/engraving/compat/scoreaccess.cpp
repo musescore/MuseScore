@@ -23,29 +23,30 @@
 #include "style/defaultstyle.h"
 #include "libmscore/masterscore.h"
 
+using namespace mu::engraving;
 using namespace mu::engraving::compat;
 
-Ms::MasterScore* ScoreAccess::createMasterScore()
+MasterScore* ScoreAccess::createMasterScore()
 {
-    return new Ms::MasterScore();
+    return new MasterScore();
 }
 
-Ms::MasterScore* ScoreAccess::createMasterScoreWithBaseStyle()
+MasterScore* ScoreAccess::createMasterScoreWithBaseStyle()
 {
-    return new Ms::MasterScore(DefaultStyle::baseStyle());
+    return new MasterScore(DefaultStyle::baseStyle());
 }
 
-Ms::MasterScore* ScoreAccess::createMasterScoreWithDefaultStyle()
+MasterScore* ScoreAccess::createMasterScoreWithDefaultStyle()
 {
-    return new Ms::MasterScore(DefaultStyle::defaultStyle());
+    return new MasterScore(DefaultStyle::defaultStyle());
 }
 
-Ms::MasterScore* ScoreAccess::createMasterScore(const Ms::MStyle& style)
+MasterScore* ScoreAccess::createMasterScore(const MStyle& style)
 {
-    return new Ms::MasterScore(style);
+    return new MasterScore(style);
 }
 
-bool ScoreAccess::exportPart(mu::engraving::MscWriter& mscWriter, Ms::Score* partScore)
+bool ScoreAccess::exportPart(MscWriter& mscWriter, Score* partScore)
 {
     return partScore->masterScore()->exportPart(mscWriter, partScore);
 }

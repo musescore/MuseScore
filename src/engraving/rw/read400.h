@@ -25,17 +25,15 @@
 #include "libmscore/masterscore.h"
 #include "../engravingerrors.h"
 
-namespace Ms {
-class XmlReader;
-}
-
 namespace mu::engraving {
+class XmlReader;
+
 class Read400
 {
 public:
 
-    static bool read400(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx);
-    static bool readScore400(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx);
+    static bool read400(Score* score, XmlReader& e, ReadContext& ctx);
+    static bool readScore400(Score* score, XmlReader& e, ReadContext& ctx);
 };
 }
 

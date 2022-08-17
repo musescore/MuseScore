@@ -51,8 +51,7 @@ public:
     Q_INVOKABLE void removeSelectedDirectories();
     Q_INVOKABLE void addDirectory();
 
-    Q_INVOKABLE QStringList originDirectories() const;
-    Q_INVOKABLE QStringList directories() const;
+    Q_INVOKABLE QString directories() const;
 
     bool isRemovingAvailable() const;
 
@@ -67,13 +66,12 @@ private:
     };
 
     bool isIndexValid(int index) const;
-    int indexOf(const io::path& path) const;
+    int indexOf(const io::path_t& path) const;
 
     void doRemoveDirectory(int index);
 
-    io::paths m_originDirectories;
-    io::paths m_directories;
-    io::path m_dir;
+    io::paths_t m_directories;
+    io::path_t m_dir;
 
     uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
 };

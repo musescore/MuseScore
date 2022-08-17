@@ -31,7 +31,7 @@
 #include "../iinteractiveprovider.h"
 #include "../iinteractiveuriregister.h"
 #include "../imainwindow.h"
-#include "retval.h"
+#include "types/retval.h"
 
 namespace mu::ui {
 class QmlLaunchData : public QObject
@@ -65,11 +65,13 @@ public:
     RetVal<Val> info(const std::string& title, const std::string& text, const framework::IInteractive::ButtonDatas& buttons,
                      int defBtn = int(framework::IInteractive::Button::NoButton),
                      const framework::IInteractive::Options& options = {}) override;
-    RetVal<Val> warning(const std::string& title, const std::string& text, const framework::IInteractive::ButtonDatas& buttons,
-                        int defBtn = int(framework::IInteractive::Button::NoButton),
+
+    RetVal<Val> warning(const std::string& title, const framework::IInteractive::Text& text,
+                        const framework::IInteractive::ButtonDatas& buttons, int defBtn = int(framework::IInteractive::Button::NoButton),
                         const framework::IInteractive::Options& options = {}) override;
-    RetVal<Val> error(const std::string& title, const std::string& text, const framework::IInteractive::ButtonDatas& buttons,
-                      int defBtn = int(framework::IInteractive::Button::NoButton),
+
+    RetVal<Val> error(const std::string& title, const framework::IInteractive::Text& text,
+                      const framework::IInteractive::ButtonDatas& buttons, int defBtn = int(framework::IInteractive::Button::NoButton),
                       const framework::IInteractive::Options& options = {}) override;
 
     RetVal<Val> open(const UriQuery& uri) override;
@@ -137,10 +139,15 @@ private:
     void closeQml(const QVariant& objectId);
     void raiseQml(const QVariant& objectId);
 
+    std::vector<ObjectInfo> allOpenObjects() const;
+
     void notifyAboutCurrentUriChanged();
 
     UriQuery m_openingUriQuery;
+
     QStack<ObjectInfo> m_stack;
+    std::vector<ObjectInfo> m_floatingObjects;
+
     async::Channel<Uri> m_currentUriChanged;
     QMap<QString, RetVal<Val> > m_retvals;
     async::Channel<Uri> m_opened;

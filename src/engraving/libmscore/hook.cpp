@@ -28,7 +28,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace Ms;
+using namespace mu::engraving;
 
 Hook::Hook(Chord* parent)
     : Symbol(ElementType::HOOK, parent, ElementFlag::NOTHING)

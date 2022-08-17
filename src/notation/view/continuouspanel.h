@@ -27,10 +27,10 @@
 #include "notation/inotationconfiguration.h"
 #include "engraving/iengravingconfiguration.h"
 
-#include "engraving/infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 #include "notation/inotation.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 }
 
@@ -57,8 +57,8 @@ public:
     void paint(draw::Painter& painter, const NotationViewContext& ctx);
 
 private:
-    qreal styleMM(const Ms::Sid styleId) const;
-    const Ms::Score* score() const;
+    qreal styleMM(const mu::engraving::Sid styleId) const;
+    const mu::engraving::Score* score() const;
 
     INotationPtr m_notation;
     qreal m_width = 0;

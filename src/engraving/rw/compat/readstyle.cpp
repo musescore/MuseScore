@@ -31,10 +31,11 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::engraving::compat;
-using namespace Ms;
+using namespace mu::engraving;
 
-static int readStyleDefaultsVersion(MasterScore* score, const QByteArray& scoreData, const QString& completeBaseName)
+static int readStyleDefaultsVersion(MasterScore* score, const ByteArray& scoreData, const String& completeBaseName)
 {
     XmlReader e(scoreData);
     e.setDocName(completeBaseName);
@@ -49,7 +50,7 @@ static int readStyleDefaultsVersion(MasterScore* score, const QByteArray& scoreD
     return ReadStyleHook::styleDefaultByMscVersion(score->mscVersion());
 }
 
-ReadStyleHook::ReadStyleHook(Ms::Score* score, const QByteArray& scoreData, const QString& completeBaseName)
+ReadStyleHook::ReadStyleHook(Score* score, const ByteArray& scoreData, const String& completeBaseName)
     : m_score(score), m_scoreData(scoreData), m_completeBaseName(completeBaseName)
 {
 }
@@ -96,7 +97,7 @@ void ReadStyleHook::setupDefaultStyle()
     m_score->style().setDefaultStyleVersion(defaultsVersion);
 }
 
-void ReadStyleHook::setupDefaultStyle(Ms::Score* score)
+void ReadStyleHook::setupDefaultStyle(Score* score)
 {
     IF_ASSERT_FAILED(!score->isMaster()) {
         return;
@@ -107,18 +108,18 @@ void ReadStyleHook::setupDefaultStyle(Ms::Score* score)
     score->style().setDefaultStyleVersion(defaultsVersion);
 }
 
-void ReadStyleHook::readStyleTag(Ms::XmlReader& e)
+void ReadStyleHook::readStyleTag(XmlReader& e)
 {
     readStyleTag(m_score, e);
 }
 
-void ReadStyleHook::readStyleTag(Ms::Score* score, Ms::XmlReader& e)
+void ReadStyleHook::readStyleTag(Score* score, XmlReader& e)
 {
     ReadChordListHook clhook(score);
     score->style().read(e, &clhook);
 }
 
-bool ReadStyleHook::readStyleProperties(Ms::MStyle* style, Ms::XmlReader& e)
+bool ReadStyleHook::readStyleProperties(MStyle* style, XmlReader& e)
 {
     return style->readProperties(e);
 }

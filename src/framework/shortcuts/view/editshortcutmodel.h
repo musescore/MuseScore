@@ -25,6 +25,7 @@
 #include <QObject>
 
 #include "modularity/ioc.h"
+#include "iinteractive.h"
 
 class QKeySequence;
 
@@ -33,43 +34,44 @@ class EditShortcutModel : public QObject
 {
     Q_OBJECT
 
+    INJECT(shortcuts, framework::IInteractive, interactive)
+
     Q_PROPERTY(QString originSequence READ originSequenceInNativeFormat NOTIFY originSequenceChanged)
-    Q_PROPERTY(QString inputedSequence READ inputedSequenceInNativeFormat NOTIFY inputedSequenceChanged)
-    Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY inputedSequenceChanged)
-    Q_PROPERTY(bool canApplyInputedSequence READ canApplyInputedSequence NOTIFY inputedSequenceChanged)
+    Q_PROPERTY(QString newSequence READ newSequenceInNativeFormat NOTIFY newSequenceChanged)
+    Q_PROPERTY(QString conflictWarning READ conflictWarning NOTIFY newSequenceChanged)
 
 public:
     explicit EditShortcutModel(QObject* parent = nullptr);
 
     QString originSequenceInNativeFormat() const;
-    QString inputedSequenceInNativeFormat() const;
-    QString errorMessage() const;
-    bool canApplyInputedSequence() const;
+    QString newSequenceInNativeFormat() const;
+    QString conflictWarning() const;
 
     Q_INVOKABLE void load(const QVariant& shortcut, const QVariantList& allShortcuts);
-    Q_INVOKABLE void clear();
-
     Q_INVOKABLE void inputKey(int key, Qt::KeyboardModifiers modifiers);
-
-    Q_INVOKABLE void addToOriginSequence();
-    Q_INVOKABLE void replaceOriginSequence();
+    Q_INVOKABLE void applyNewSequence();
 
 signals:
-    void allShortcutsChanged(const QVariantList& shortcuts);
-    void originSequenceChanged(const QString& sequence);
-    void inputedSequenceChanged(const QString& sequence);
+    void originSequenceChanged();
+    void newSequenceChanged();
 
-    void applyNewSequenceRequested(const QString& newSequence);
+    void applyNewSequenceRequested(const QString& newSequence, int conflictShortcutIndex = -1);
 
 private:
-    QString inputedSequence() const;
+    void clearNewSequence();
 
-    void validateInputedSequence();
+    QString newSequence() const;
+    void checkNewSequenceForConflicts();
+
+    QVariantList m_allShortcuts;
+
+    QString m_originSequence;
+    QString m_originShortcutTitle;
 
     QVariantList m_potentialConflictShortcuts;
-    QKeySequence m_inputedSequence;
-    QString m_originSequence;
-    QString m_errorMessage;
+    QVariantMap m_conflictShortcut;
+
+    QKeySequence m_newSequence;
 };
 }
 

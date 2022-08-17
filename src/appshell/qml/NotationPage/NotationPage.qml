@@ -118,8 +118,10 @@ DockPage {
             title: qsTrc("appshell", "Notation toolbar")
 
             floatable: false
+            closable: false
             resizable: false
             separatorsVisible: false
+
             alignment: DockToolBarAlignment.Center
             contentBottomPadding: 2
 
@@ -164,8 +166,10 @@ DockPage {
             title: qsTrc("appshell", "Undo/redo")
 
             floatable: false
+            closable: false
             resizable: false
             separatorsVisible: false
+
             alignment: DockToolBarAlignment.Right
             contentBottomPadding: 2
 
@@ -282,7 +286,7 @@ DockPage {
             id: selectionFilterPanel
 
             objectName: pageModel.selectionFiltersPanelName()
-            title: qsTrc("appshell", "Selection Filter")
+            title: qsTrc("appshell", "Selection filter")
 
             navigationSection: root.navigationPanelSec(selectionFilterPanel.location)
 
@@ -392,7 +396,7 @@ DockPage {
             id: drumsetPanel
 
             objectName: pageModel.drumsetPanelName()
-            title: qsTrc("appshell", "Drumset Tools")
+            title: qsTrc("appshell", "Drumset tools")
 
             height: 64
             minimumHeight: 64
@@ -401,8 +405,8 @@ DockPage {
             //! NOTE: hidden by default
             visible: false
 
-            //! NOTE: the user cannot close or undock this panel
-            persistent: true
+            floatable: false
+            closable: false
 
             location: Location.Bottom
 
@@ -415,7 +419,7 @@ DockPage {
         name: "MainNotationView"
 
         isNavigatorVisible: pageModel.isNavigatorVisible
-        isAccessibilityEnabled: true
+        isMainView: true
 
         Component.onCompleted: {
             root.notationView = notationView

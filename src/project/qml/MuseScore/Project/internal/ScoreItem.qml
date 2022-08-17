@@ -30,8 +30,9 @@ FocusScope {
     id: root
 
     property string name: ""
+    property string suffix: ""
     property alias timeSinceModified: timeSinceModified.text
-    property alias thumbnail: loader.thumbnail
+    property var thumbnail: null
     property bool isAdd: false
 
     property alias navigation: navCtrl
@@ -75,16 +76,17 @@ FocusScope {
                 id: loader
 
                 anchors.fill: parent
-                anchors.margins: 2 //! NOTE: it is necessary to simplify understanding of which element the user is on when navigating
 
-                property var thumbnail: undefined
-
-                sourceComponent: root.isAdd ? addComp : thumbnailComp
-
-                onLoaded: {
-                    if (!root.isAdd) {
-                        item.setThumbnail(root.thumbnail)
+                sourceComponent: {
+                    if (root.isAdd) {
+                        return addComp
                     }
+
+                    if (root.thumbnail) {
+                        return scoreThumbnailComp
+                    }
+
+                    return genericThumbnailComp
                 }
 
                 layer.enabled: true
@@ -103,7 +105,14 @@ FocusScope {
                 color: "transparent"
                 radius: parent.radius
 
-                NavigationFocusBorder { navigationCtrl: navCtrl }
+                NavigationFocusBorder {
+                    navigationCtrl: navCtrl
+
+                    //! NOTE: the contrast between the navigation focus border and the thumbnail
+                    //! is very low, especially in dark mode. Add a small padding between the
+                    //! focus border and the thumbnail, to make the border easily visible.
+                    anchors.margins: -border.width - 2
+                }
 
                 border.color: ui.theme.strokeColor
                 border.width: parent.borderWidth
@@ -183,19 +192,10 @@ FocusScope {
     }
 
     Component {
-        id: thumbnailComp
-
-        ScoreThumbnail {
-            anchors.fill: parent
-        }
-    }
-
-    Component {
         id: addComp
 
         Rectangle {
             anchors.fill: parent
-
             color: "white"
 
             StyledIconLabel {
@@ -205,6 +205,59 @@ FocusScope {
 
                 font.pixelSize: 50
                 color: "black"
+            }
+        }
+    }
+
+    Component {
+        id: scoreThumbnailComp
+
+        ScoreThumbnail {
+            anchors.fill: parent
+            thumbnail: root.thumbnail
+        }
+    }
+
+    Component {
+        id: genericThumbnailComp
+
+        Rectangle {
+            anchors.fill: parent
+            color: "white"
+
+            Image {
+                anchors.centerIn: parent
+
+                width: 80
+                height: 110
+
+                source: {
+                    switch (root.suffix) {
+                    case "gtp":
+                    case "gp3":
+                    case "gp4":
+                    case "gp5":
+                    case "gpx":
+                    case "gp":
+                    case "ptb":
+                        return "qrc:/resources/Placeholder_GP.png"
+                    case "mid":
+                    case "midi":
+                    case "kar":
+                        return "qrc:/resources/Placeholder_MIDI.png"
+                    case "mxl":
+                    case "musicxml":
+                    case "xml":
+                        return "qrc:/resources/Placeholder_MXML.png"
+                    default:
+                        return "qrc:/resources/Placeholder_Other.png"
+                    }
+                }
+
+                fillMode: Image.PreserveAspectFit
+
+                // Prevent image from looking pixelated on low-res screens
+                mipmap: true
             }
         }
     }

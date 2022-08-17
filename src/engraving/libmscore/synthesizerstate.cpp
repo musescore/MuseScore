@@ -23,9 +23,11 @@
 #include "synthesizerstate.h"
 #include "rw/xml.h"
 
+#include "log.h"
+
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
@@ -36,17 +38,18 @@ void SynthesizerState::write(XmlWriter& xml, bool force /* = false */) const
         return;
     }
 
-    xml.startObject("Synthesizer");
+    xml.startElement("Synthesizer");
     for (const SynthesizerGroup& g : *this) {
         if (!g.name().isEmpty()) {
-            xml.startObject(g.name());
+            ByteArray ba = g.name().toAscii();
+            xml.startElement(ba.constChar());
             for (const IdValue& v : g) {
-                xml.tag(QString("val id=\"%1\"").arg(v.id), v.data);
+                xml.tag("val", { { "id", v.id } }, v.data);
             }
-            xml.endObject();
+            xml.endElement();
         }
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -58,12 +61,12 @@ void SynthesizerState::read(XmlReader& e)
     std::list<SynthesizerGroup> tempGroups;
     while (e.readNextStartElement()) {
         SynthesizerGroup group;
-        group.setName(e.name().toString());
+        group.setName(String::fromAscii(e.name().ascii()));
 
         while (e.readNextStartElement()) {
             if (e.name() == "val") {
                 int id = e.intAttribute("id");
-                group.push_back(IdValue(id, e.readElementText()));
+                group.push_back(IdValue(id, e.readText()));
             } else {
                 e.unknown();
             }
@@ -83,7 +86,7 @@ void SynthesizerState::read(XmlReader& e)
 ///  Get SynthesizerGroup by name
 //---------------------------------------------------------
 
-SynthesizerGroup SynthesizerState::group(const QString& name) const
+SynthesizerGroup SynthesizerState::group(const String& name) const
 {
     for (const SynthesizerGroup& g : *this) {
         if (g.name() == name) {
@@ -102,9 +105,9 @@ SynthesizerGroup SynthesizerState::group(const QString& name) const
 
 bool SynthesizerState::isDefaultSynthSoundfont()
 {
-    SynthesizerGroup fluid = group("Fluid");
+    SynthesizerGroup fluid = group(u"Fluid");
     if (fluid.size() == 1) {
-        if (fluid.front().data == "MuseScore_General.sf3") {
+        if (fluid.front().data == u"MS Basic.sf3") {
             return true;
         }
     }
@@ -117,7 +120,7 @@ bool SynthesizerState::isDefaultSynthSoundfont()
 
 int SynthesizerState::ccToUse() const
 {
-    SynthesizerGroup g = group("master");
+    SynthesizerGroup g = group(u"master");
 
     int method = 1;
     int cc = -1;
@@ -140,7 +143,7 @@ int SynthesizerState::ccToUse() const
                 cc = 11;
                 break;
             default:
-                qWarning("Unrecognised CCToUse index from synthesizer: %d", idVal.data.toInt());
+                LOGW("Unrecognised CCToUse index from synthesizer: %d", idVal.data.toInt());
             }
         }
     }
@@ -158,7 +161,7 @@ int SynthesizerState::ccToUse() const
 
 int SynthesizerState::method() const
 {
-    SynthesizerGroup g = group("master");
+    SynthesizerGroup g = group(u"master");
 
     int method = -1;
 

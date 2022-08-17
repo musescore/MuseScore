@@ -27,13 +27,13 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "iprojectconfiguration.h"
 #include "inotationreadersregister.h"
 #include "inotationwritersregister.h"
 
 #include "engraving/engravingproject.h"
-#include "engraving/infrastructure/io/ifileinfoprovider.h"
+#include "engraving/infrastructure/ifileinfoprovider.h"
 
 #include "notation/internal/masternotation.h"
 #include "projectaudiosettings.h"
@@ -48,21 +48,21 @@ class MscWriter;
 namespace mu::project {
 class NotationProject : public INotationProject, public async::Asyncable
 {
-    INJECT(project, system::IFileSystem, fileSystem)
+    INJECT(project, io::IFileSystem, fileSystem)
     INJECT(project, IProjectConfiguration, configuration)
     INJECT(project, INotationReadersRegister, readers)
     INJECT(project, INotationWritersRegister, writers)
     INJECT(project, IProjectMigrator, migrator)
 
 public:
-    NotationProject();
     ~NotationProject() override;
 
-    Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false, const std::string& format = "") override;
+    Ret load(const io::path_t& path, const io::path_t& stylePath = io::path_t(), bool forceMode = false,
+             const std::string& format = "") override;
     Ret createNew(const ProjectCreateOptions& projectInfo) override;
 
-    io::path path() const override;
-    void setPath(const io::path& path) override;
+    io::path_t path() const override;
+    void setPath(const io::path_t& path) override;
     async::Notification pathChanged() const override;
 
     QString displayName() const override;
@@ -76,8 +76,8 @@ public:
 
     ValNt<bool> needSave() const override;
 
-    Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) override;
-    Ret writeToDevice(io::Device* device) override;
+    Ret save(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save) override;
+    Ret writeToDevice(QIODevice* device) override;
 
     ProjectMeta metaInfo() const override;
     void setMetaInfo(const ProjectMeta& meta, bool undoable = false) override;
@@ -87,15 +87,17 @@ public:
     IProjectViewSettingsPtr viewSettings() const override;
 
 private:
+    void setupProject();
+
     Ret loadTemplate(const ProjectCreateOptions& projectOptions);
 
-    Ret doLoad(engraving::MscReader& reader, const io::path& stylePath, bool forceMode);
-    Ret doImport(const io::path& path, const io::path& stylePath, bool forceMode);
+    Ret doLoad(engraving::MscReader& reader, const io::path_t& stylePath, bool forceMode);
+    Ret doImport(const io::path_t& path, const io::path_t& stylePath, bool forceMode);
 
-    Ret saveScore(const io::path& path, const std::string& fileSuffix);
-    Ret saveSelectionOnScore(const io::path& path = io::path());
-    Ret exportProject(const io::path& path, const std::string& suffix);
-    Ret doSave(const io::path& path, bool generateBackup, engraving::MscIoMode ioMode);
+    Ret saveScore(const io::path_t& path, const std::string& fileSuffix);
+    Ret saveSelectionOnScore(const io::path_t& path = io::path_t());
+    Ret exportProject(const io::path_t& path, const std::string& suffix);
+    Ret doSave(const io::path_t& path, bool generateBackup, engraving::MscIoMode ioMode);
     Ret makeCurrentFileAsBackup();
     Ret writeProject(engraving::MscWriter& msczWriter, bool onlySelection);
 
@@ -104,10 +106,13 @@ private:
     ProjectAudioSettingsPtr m_projectAudioSettings = nullptr;
     ProjectViewSettingsPtr m_viewSettings = nullptr;
 
-    io::path m_path;
+    io::path_t m_path;
     async::Notification m_pathChanged;
 
     async::Notification m_needSaveNotification;
+
+    /// true if the file has never been saved yet
+    bool m_isNewlyCreated = false;
 };
 }
 

@@ -247,7 +247,7 @@ template<class T>
 static T* findByName(const std::set<T*>& set, const QString& name)
 {
     auto it = std::find_if(set.cbegin(), set.cend(), [name](const T* s) {
-        return s->name() == name && s->enabled();
+        return s->name() == name;
     });
 
     if (it != set.cend()) {
@@ -303,11 +303,15 @@ void NavigationController::reg(INavigationSection* section)
     TRACEFUNC;
     m_sections.insert(section);
     section->setOnActiveRequested([this](INavigationSection* section, INavigationPanel* panel, INavigationControl* control,
-                                         ActivationType activationType) {
+                                         bool enableHighlight, ActivationType activationType) {
         if (control && activationType == ActivationType::ByMouse) {
             if (mainWindow()->qWindow() == control->window()) {
                 return;
             }
+        }
+
+        if (enableHighlight) {
+            setIsHighlight(true);
         }
 
         onActiveRequested(section, panel, control);

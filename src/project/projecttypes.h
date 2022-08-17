@@ -22,6 +22,7 @@
 #ifndef MU_PROJECT_PROJECTTYPES_H
 #define MU_PROJECT_PROJECTTYPES_H
 
+#include <variant>
 #include <QString>
 
 #include "io/path.h"
@@ -38,7 +39,7 @@ struct ProjectCreateOptions
     QString lyricist;
     QString copyright;
 
-    io::path templatePath;
+    io::path_t templatePath;
 
     notation::ScoreCreateOptions scoreOptions;
 };
@@ -81,7 +82,7 @@ enum class CloudProjectVisibility {
 struct SaveLocation
 {
     struct LocalInfo {
-        io::path path;
+        io::path_t path;
     };
 
     struct CloudInfo {
@@ -139,7 +140,7 @@ struct SaveLocation
 
 struct ProjectMeta
 {
-    io::path filePath;
+    io::path_t filePath;
 
     QString title;
     QString subtitle;
@@ -160,7 +161,7 @@ struct ProjectMeta
 
     QVariantMap additionalTags;
 
-    io::path fileName(bool includingExtension = true) const
+    io::path_t fileName(bool includingExtension = true) const
     {
         return io::filename(filePath, includingExtension);
     }
@@ -168,6 +169,7 @@ struct ProjectMeta
     bool operator==(const ProjectMeta& other) const
     {
         bool equal = filePath == other.filePath;
+        equal &= title == other.title;
         equal &= subtitle == other.subtitle;
         equal &= composer == other.composer;
         equal &= lyricist == other.lyricist;

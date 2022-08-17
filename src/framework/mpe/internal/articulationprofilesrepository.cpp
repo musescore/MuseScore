@@ -35,13 +35,13 @@ using namespace mu;
 using namespace mu::mpe;
 using namespace mu::async;
 
-static const std::map<ArticulationFamily, io::path> DEFAULT_ARTICULATION_PROFILES =
+static const std::map<ArticulationFamily, io::path_t> DEFAULT_ARTICULATION_PROFILES =
 {
-    { ArticulationFamily::Keyboards, io::path(":/mpe/general_keyboard_articulations_profile.json") },
-    { ArticulationFamily::Strings, io::path(":/mpe/general_strings_articulations_profile.json") },
-    { ArticulationFamily::Winds, io::path(":/mpe/general_winds_articulations_profile.json") },
-    { ArticulationFamily::Percussions, io::path(":/mpe/general_percussion_articulations_profile.json") },
-    { ArticulationFamily::Voices, io::path(":/mpe/general_voice_articulations_profile.json") }
+    { ArticulationFamily::Keyboards, io::path_t(":/mpe/general_keyboard_articulations_profile.json") },
+    { ArticulationFamily::Strings, io::path_t(":/mpe/general_strings_articulations_profile.json") },
+    { ArticulationFamily::Winds, io::path_t(":/mpe/general_winds_articulations_profile.json") },
+    { ArticulationFamily::Percussions, io::path_t(":/mpe/general_percussion_articulations_profile.json") },
+    { ArticulationFamily::Voices, io::path_t(":/mpe/general_voice_articulations_profile.json") }
 };
 
 static const QString SUPPORTED_FAMILIES = "supportedFamilies";
@@ -91,9 +91,9 @@ ArticulationsProfilePtr ArticulationProfilesRepository::defaultProfile(const Art
     return result;
 }
 
-ArticulationsProfilePtr ArticulationProfilesRepository::loadProfile(const io::path& path) const
+ArticulationsProfilePtr ArticulationProfilesRepository::loadProfile(const io::path_t& path) const
 {
-    RetVal<QByteArray> fileReading = fileSystem()->readFile(path);
+    RetVal<ByteArray> fileReading = fileSystem()->readFile(path);
 
     if (!fileReading.ret) {
         LOGE() << "Unable to read profile, path: " << path;
@@ -102,7 +102,7 @@ ArticulationsProfilePtr ArticulationProfilesRepository::loadProfile(const io::pa
 
     QJsonParseError err;
 
-    QJsonDocument file = QJsonDocument::fromJson(fileReading.val, &err);
+    QJsonDocument file = QJsonDocument::fromJson(fileReading.val.toQByteArrayNoCopy(), &err);
     if (err.error != QJsonParseError::NoError) {
         LOGE() << err.errorString();
         return nullptr;
@@ -124,7 +124,7 @@ ArticulationsProfilePtr ArticulationProfilesRepository::loadProfile(const io::pa
     return result;
 }
 
-void ArticulationProfilesRepository::saveProfile(const io::path& path, const ArticulationsProfilePtr profilePtr)
+void ArticulationProfilesRepository::saveProfile(const io::path_t& path, const ArticulationsProfilePtr profilePtr)
 {
     IF_ASSERT_FAILED(profilePtr) {
         return;
@@ -143,7 +143,8 @@ void ArticulationProfilesRepository::saveProfile(const io::path& path, const Art
 
     rootObj.insert(PATTERNS_KEY, articulationPatterns);
 
-    Ret fileWriting = fileSystem()->writeToFile(path, QJsonDocument(rootObj).toJson());
+    QByteArray json = QJsonDocument(rootObj).toJson();
+    Ret fileWriting = fileSystem()->writeFile(path, ByteArray::fromQByteArrayNoCopy(json));
 
     if (!fileWriting) {
         LOGE() << "Unable to write MPE Articulation Profile, err: " << fileWriting.toString();
@@ -153,7 +154,7 @@ void ArticulationProfilesRepository::saveProfile(const io::path& path, const Art
     m_profileChanged.send(path);
 }
 
-Channel<io::path> ArticulationProfilesRepository::profileChanged() const
+Channel<io::path_t> ArticulationProfilesRepository::profileChanged() const
 {
     return m_profileChanged;
 }

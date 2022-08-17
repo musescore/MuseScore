@@ -30,8 +30,6 @@
 #include "notation/notationtypes.h"
 
 namespace mu::notation {
-class ScoreView;
-
 //---------------------------------------------------------
 //   EditStaffType
 //---------------------------------------------------------
@@ -40,8 +38,8 @@ class EditStaffType : public QDialog, private Ui::EditStaffType
 {
     Q_OBJECT
 
-    Ms::Staff* staff;
-    Ms::StaffType staffType;
+    mu::engraving::Staff* staff;
+    mu::engraving::StaffType staffType;
 
     virtual void hideEvent(QHideEvent*);
     void blockSignals(bool block);
@@ -51,7 +49,7 @@ class EditStaffType : public QDialog, private Ui::EditStaffType
     void tabStemsCompatibility(bool checked);
     void tabMinimShortCompatibility(bool checked);
     void tabStemThroughCompatibility(bool checked);
-    QString createUniqueStaffTypeName(Ms::StaffGroup group);
+    QString createUniqueStaffTypeName(mu::engraving::StaffGroup group);
     void setValues();
 
 private slots:
@@ -72,13 +70,13 @@ private slots:
 public:
     EditStaffType(QWidget* parent = nullptr);
     ~EditStaffType() {}
-    void setStaffType(const Ms::StaffType* staffType);
-    Ms::StaffType getStaffType() const { return staffType; }
+    void setStaffType(const mu::engraving::StaffType* staffType);
+    mu::engraving::StaffType getStaffType() const { return staffType; }
 
     void setInstrument(const Instrument& instrument);
 
 private:
-    mu::Ret loadScore(Ms::MasterScore* score, const io::path& path);
+    mu::Ret loadScore(mu::engraving::MasterScore* score, const io::path_t& path);
 };
 }
 #endif

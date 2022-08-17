@@ -25,11 +25,12 @@
 
 #include "engravingitem.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Chord;
 
 class Stem final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Stem)
 public:
 
     Stem(const Stem&) = default;
@@ -54,9 +55,9 @@ public:
     bool readProperties(XmlReader&) override;
 
     void reset() override;
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid id) const override;
 
     staff_idx_t vStaffIdx() const override;
 
@@ -84,7 +85,7 @@ public:
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 
 private:
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Stem(Chord* parent = 0);
 
     mu::LineF m_line;
@@ -93,6 +94,8 @@ private:
     Millimetre m_userLength = Millimetre(0.0);
 
     Millimetre m_lineWidth = Millimetre(0.0);
+
+    bool sameVoiceKerningLimited() const override { return true; }
 };
 }
 #endif

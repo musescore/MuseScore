@@ -32,13 +32,13 @@
 
 using ::testing::Return;
 using ::testing::_;
-using ::testing::SaveArgPointee;
+using ::testing::SaveArg;
 using ::testing::DoAll;
 
 using namespace mu;
 using namespace mu::accessibility;
 
-class AccessibilityControllerTests : public ::testing::Test
+class Accessibility_ControllerTests : public ::testing::Test
 {
 public:
 
@@ -95,6 +95,8 @@ public:
             return m_stateChanged;
         }
 
+        void setState(State, bool) override {}
+
         async::Channel<IAccessible::Property, Val> m_propertyChanged;
         async::Channel<IAccessible::State, bool> m_stateChanged;
 
@@ -112,21 +114,17 @@ public:
     }
 
 #ifdef Q_OS_LINUX
-    QEvent expectDispatchEventOnFocus()
+    void expectDispatchEventOnFocus(QEvent** event)
     {
-        QEvent event(QEvent::None);
-
-        //! For Linux it needs to send spontanous event for canceling reading the name of previous control on accessibility
+        //! For Linux it needs to send spontaneous event for canceling reading the name of previous control on accessibility
         QWindow* window = new QWindow();
         EXPECT_CALL(*m_mainWindow, qWindow()).WillOnce(Return(window));
-        EXPECT_CALL(*m_application, notify(window, _)).WillOnce(DoAll(SaveArgPointee<1>(&event), Return(true)));
-
-        return event;
+        EXPECT_CALL(*m_application, notify(window, _)).WillOnce(DoAll(SaveArg<1>(event), Return(true)));
     }
 
     void notExpectDispatchEventOnFocus()
     {
-        //! If accessibility is active then the sccessibility system should handle sended event,
+        //! If accessibility is active then the accessibility system should handle sended event,
         //! Otherwise, the item that is currently on focus will process the signal
         //! So, shouldn't dispatch event if accessibility is not active
         QWindow* window = new QWindow();
@@ -134,19 +132,16 @@ public:
         EXPECT_CALL(*m_application, notify(window, _)).Times(0);
     }
 
-    void checkDispatchEventOnFocus(const QEvent& event)
+    void checkDispatchEventOnFocus(const QEvent* event)
     {
-        EXPECT_TRUE(event.spontaneous());
+        EXPECT_TRUE(event);
+        EXPECT_TRUE(event->spontaneous());
     }
 
 #else
-    QEvent expectDispatchEventOnFocus()
-    {
-        return QEvent(QEvent::None);
-    }
-
+    void expectDispatchEventOnFocus(QEvent**) {}
     void notExpectDispatchEventOnFocus() {}
-    void checkDispatchEventOnFocus(const QEvent&) {}
+    void checkDispatchEventOnFocus(const QEvent*) {}
 #endif
 
     std::shared_ptr<AccessibilityController> m_controller;
@@ -155,7 +150,7 @@ public:
     std::shared_ptr<framework::ApplicationMock> m_application;
 };
 
-TEST_F(AccessibilityControllerTests, SendEventOnFocusChanged)
+TEST_F(Accessibility_ControllerTests, SendEventOnFocusChanged)
 {
     //! [GIVEN] Accessibility is enabled
     ON_CALL(*m_configuration, enabled()).WillByDefault(Return(true));
@@ -174,7 +169,8 @@ TEST_F(AccessibilityControllerTests, SendEventOnFocusChanged)
     //! [GIVEN] First is on focus
     item1->accessibleStateChanged().send(IAccessible::State::Focused, true);
 
-    QEvent event = expectDispatchEventOnFocus();
+    QEvent* event = nullptr;
+    expectDispatchEventOnFocus(&event);
 
     //! [WHEN] Focus on second item
     item2->accessibleStateChanged().send(IAccessible::State::Focused, true);
@@ -191,7 +187,7 @@ TEST_F(AccessibilityControllerTests, SendEventOnFocusChanged)
     testing::Mock::AllowLeak(m_configuration.get());
 }
 
-TEST_F(AccessibilityControllerTests, NotSendEventOnFocusChangedIfAccessibilityIsNotActive)
+TEST_F(Accessibility_ControllerTests, NotSendEventOnFocusChangedIfAccessibilityIsNotActive)
 {
     //! [GIVEN] Accessibility is enabled
     ON_CALL(*m_configuration, enabled()).WillByDefault(Return(true));

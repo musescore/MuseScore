@@ -32,12 +32,12 @@
 namespace mu::inspector {
 struct ElementKey
 {
-    Ms::ElementType type = Ms::ElementType::INVALID;
+    mu::engraving::ElementType type = mu::engraving::ElementType::INVALID;
     int subtype = -1;
 
     ElementKey() = default;
 
-    ElementKey(Ms::ElementType type, int subtype = -1)
+    ElementKey(mu::engraving::ElementType type, int subtype = -1)
         : type(type), subtype(subtype)
     {
     }

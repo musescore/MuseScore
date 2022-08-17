@@ -25,14 +25,10 @@
 
 #include "engravingitem.h"
 #include "bracketItem.h"
-#include "infrastructure/draw/painterpath.h"
+#include "draw/types/painterpath.h"
 
 namespace mu::engraving {
 class Factory;
-}
-
-namespace Ms {
-class MuseScoreView;
 class System;
 enum class BracketType : signed char;
 
@@ -42,23 +38,25 @@ enum class BracketType : signed char;
 
 class Bracket final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Bracket)
+
     BracketItem* _bi;
-    qreal ay1;
-    qreal h2;
+    double ay1;
+    double h2;
 
     size_t _firstStaff = 0;
     size_t _lastStaff = 0;
 
-    mu::PainterPath path;
+    mu::draw::PainterPath path;
     SymId _braceSymbol;
     Shape _shape;
 
     // horizontal scaling factor for brace symbol. Cannot be equal to magY or depend on h
     // because layout needs width of brace before knowing height of system...
-    qreal _magx;
+    double _magx;
     Measure* _measure = nullptr;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Bracket(EngravingItem* parent);
 
 public:
@@ -71,7 +69,6 @@ public:
     BracketItem* bracketItem() const { return _bi; }
 
     BracketType bracketType() const { return _bi->bracketType(); }
-    static const char* bracketTypeName(BracketType type);
 
     size_t firstStaff() const { return _firstStaff; }
     size_t lastStaff() const { return _lastStaff; }
@@ -79,9 +76,9 @@ public:
 
     SymId braceSymbol() const { return _braceSymbol; }
     void setBraceSymbol(const SymId& sym) { _braceSymbol = sym; }
-    int column() const { return _bi->column(); }
+    size_t column() const { return _bi->column(); }
     size_t span() const { return _bi->bracketSpan(); }
-    qreal magx() const { return _magx; }
+    double magx() const { return _magx; }
 
     System* system() const { return (System*)explicitParent(); }
 
@@ -90,8 +87,8 @@ public:
 
     Fraction playTick() const override;
 
-    void setHeight(qreal) override;
-    qreal width() const override;
+    void setHeight(double) override;
+    double width() const override;
 
     Shape shape() const override { return _shape; }
 
@@ -101,7 +98,8 @@ public:
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
 
-    bool isEditable() const override { return true; }
+    bool isEditable() const override;
+    bool needStartEditingAfterSelecting() const override;
     void startEdit(EditData&) override;
     bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
@@ -114,11 +112,11 @@ public:
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue& v, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
 
     int gripsCount() const override { return 1; }
@@ -128,5 +126,5 @@ public:
 
     void setSelected(bool f) override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

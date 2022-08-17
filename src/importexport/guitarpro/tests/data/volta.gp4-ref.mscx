@@ -4,10 +4,6 @@
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
-    <Style>
-      <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-      <Spatium>1.74978</Spatium>
-      </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
@@ -23,16 +19,17 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Track 1</trackName>
-      <Instrument>
+      <Instrument id="cavaquinho">
         <longName>Track 1</longName>
         <trackName></trackName>
+        <instrumentId>pluck.guitar</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
@@ -51,41 +48,31 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <VBox>
-        <height>10</height>
-        <linkedMain/>
-        </VBox>
       <Measure>
         <endRepeat>2</endRepeat>
         <voice>
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
-            <linkedMain/>
             </Clef>
           <KeySig>
-            <linkedMain/>
             <accidental>0</accidental>
             </KeySig>
           <TimeSig>
-            <linkedMain/>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <linkedMain/>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
-            <linkedMain/>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Spanner type="Volta">
             <Volta>
               <beginText>1</beginText>
-              <linkedMain/>
               <endings>1</endings>
               </Volta>
             <next>
@@ -95,10 +82,8 @@
               </next>
             </Spanner>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <fret>1</fret>
@@ -106,10 +91,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
@@ -120,10 +103,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -131,10 +112,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
@@ -156,10 +135,8 @@
               </prev>
             </Spanner>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -167,10 +144,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
@@ -181,10 +156,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -192,10 +165,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
                 </Accidental>
@@ -212,8 +183,7 @@
           <Spanner type="Volta">
             <Volta>
               <beginText>1,2</beginText>
-              <linkedMain/>
-              <endings>1, 2</endings>
+              <endings>1,2</endings>
               </Volta>
             <next>
               <location>
@@ -222,10 +192,8 @@
               </next>
             </Spanner>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
@@ -236,10 +204,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -247,10 +213,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
                 </Accidental>
@@ -261,10 +225,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
                 </Accidental>
@@ -288,7 +250,6 @@
           <Spanner type="Volta">
             <Volta>
               <beginText>3</beginText>
-              <linkedMain/>
               <endings>3</endings>
               </Volta>
             <next>
@@ -298,10 +259,8 @@
               </next>
             </Spanner>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
                 </Accidental>
@@ -312,10 +271,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
                 </Accidental>
@@ -326,10 +283,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
@@ -337,10 +292,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
@@ -362,10 +315,8 @@
               </prev>
             </Spanner>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
                 </Accidental>
@@ -376,10 +327,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
                 </Accidental>
@@ -390,10 +339,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -401,10 +348,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
@@ -421,7 +366,6 @@
           <Spanner type="Volta">
             <Volta>
               <beginText>4</beginText>
-              <linkedMain/>
               <endings>4</endings>
               </Volta>
             <next>
@@ -431,10 +375,8 @@
               </next>
             </Spanner>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>41</pitch>
               <tpc>13</tpc>
               <fret>1</fret>
@@ -442,10 +384,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
@@ -456,10 +396,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>43</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -467,10 +405,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
@@ -495,7 +431,6 @@
           <Spanner type="Volta">
             <Volta>
               <beginText>5</beginText>
-              <linkedMain/>
               <endings>5</endings>
               </Volta>
             <next>
@@ -505,10 +440,8 @@
               </next>
             </Spanner>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>76</pitch>
               <tpc>18</tpc>
               <fret>12</fret>
@@ -516,10 +449,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
                 </Accidental>
@@ -530,10 +461,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <fret>10</fret>
@@ -541,10 +470,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
@@ -569,8 +496,7 @@
           <Spanner type="Volta">
             <Volta>
               <beginText>1,2,3,4,5,6</beginText>
-              <linkedMain/>
-              <endings>1, 2, 3, 4, 5, 6</endings>
+              <endings>1,2,3,4,5,6</endings>
               </Volta>
             <next>
               <location>
@@ -579,10 +505,8 @@
               </next>
             </Spanner>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <fret>8</fret>
@@ -590,10 +514,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>7</fret>
@@ -601,10 +523,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
                 </Accidental>
@@ -615,10 +535,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -639,8 +557,7 @@
           <Spanner type="Volta">
             <Volta>
               <beginText>7,8</beginText>
-              <linkedMain/>
-              <endings>7, 8</endings>
+              <endings>7,8</endings>
               </Volta>
             <next>
               <location>
@@ -649,10 +566,8 @@
               </next>
             </Spanner>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
@@ -663,10 +578,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
                 </Accidental>
@@ -677,10 +590,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
@@ -691,10 +602,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
                 </Accidental>
@@ -714,1351 +623,5 @@
           </voice>
         </Measure>
       </Staff>
-    <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
-      <Division>480</Division>
-      <Style>
-        <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-        <Spatium>1.74978</Spatium>
-        </Style>
-      <showInvisible>1</showInvisible>
-      <showUnprintable>1</showUnprintable>
-      <showFrames>1</showFrames>
-      <showMargins>0</showMargins>
-      <Part>
-        <Staff id="1">
-          <linkedTo>1</linkedTo>
-          <StaffType group="pitched">
-            <name>stdNormal</name>
-            </StaffType>
-          <bracket type="0" span="2" col="0"/>
-          </Staff>
-        <Staff id="2">
-          <linkedTo>1</linkedTo>
-          <StaffType group="tablature">
-            <name>tab6StrCommon</name>
-            <lines>6</lines>
-            <lineDistance>1.5</lineDistance>
-            <timesig>0</timesig>
-            <durations>0</durations>
-            <durationFontName>MuseScore Tab Modern</durationFontName>
-            <durationFontSize>15</durationFontSize>
-            <durationFontY>0</durationFontY>
-            <fretFontName>MuseScore Tab Serif</fretFontName>
-            <fretFontSize>9</fretFontSize>
-            <fretFontY>0</fretFontY>
-            <linesThrough>0</linesThrough>
-            <minimStyle>1</minimStyle>
-            <onLines>1</onLines>
-            <showRests>0</showRests>
-            <stemsDown>1</stemsDown>
-            <stemsThrough>0</stemsThrough>
-            <upsideDown>0</upsideDown>
-            <useNumbers>1</useNumbers>
-            </StaffType>
-          </Staff>
-        <trackName></trackName>
-        <Instrument>
-          <longName>Track 1</longName>
-          <trackName></trackName>
-          <singleNoteDynamics>0</singleNoteDynamics>
-          <StringData>
-            <frets>24</frets>
-            <string>40</string>
-            <string>45</string>
-            <string>50</string>
-            <string>55</string>
-            <string>59</string>
-            <string>64</string>
-            </StringData>
-          <Channel>
-            <program value="25"/>
-            <controller ctrl="7" value="103"/>
-            <controller ctrl="10" value="63"/>
-            </Channel>
-          </Instrument>
-        </Part>
-      <Staff id="1">
-        <VBox>
-          <height>10</height>
-          <linked>
-            </linked>
-          <Text>
-            <style>instrument_excerpt</style>
-            <text>Track 1</text>
-            </Text>
-          </VBox>
-        <Measure>
-          <endRepeat>2</endRepeat>
-          <voice>
-            <Clef>
-              <concertClefType>G8vb</concertClefType>
-              <transposingClefType>G8vb</transposingClefType>
-              <linked>
-                </linked>
-              </Clef>
-            <KeySig>
-              <linked>
-                </linked>
-              <accidental>0</accidental>
-              </KeySig>
-            <TimeSig>
-              <linked>
-                </linked>
-              <sigN>4</sigN>
-              <sigD>4</sigD>
-              </TimeSig>
-            <Dynamic>
-              <subtype>f</subtype>
-              <velocity>96</velocity>
-              <linked>
-                </linked>
-              </Dynamic>
-            <Tempo>
-              <tempo>2</tempo>
-              <linked>
-                </linked>
-              <text><sym>metNoteQuarterUp</sym> = 120</text>
-              </Tempo>
-            <Spanner type="Volta">
-              <Volta>
-                <beginText>1</beginText>
-                <linked>
-                  </linked>
-                <endings>1</endings>
-                </Volta>
-              <next>
-                <location>
-                  <measures>1</measures>
-                  </location>
-                </next>
-              </Spanner>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>65</pitch>
-                <tpc>13</tpc>
-                <fret>1</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalSharp</subtype>
-                  </Accidental>
-                <pitch>66</pitch>
-                <tpc>20</tpc>
-                <fret>2</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalSharp</subtype>
-                  </Accidental>
-                <pitch>68</pitch>
-                <tpc>22</tpc>
-                <fret>4</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Spanner type="Volta">
-              <prev>
-                <location>
-                  <measures>-1</measures>
-                  </location>
-                </prev>
-              </Spanner>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>1</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalSharp</subtype>
-                  </Accidental>
-                <pitch>61</pitch>
-                <tpc>21</tpc>
-                <fret>2</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>62</pitch>
-                <tpc>16</tpc>
-                <fret>3</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalFlat</subtype>
-                  </Accidental>
-                <pitch>63</pitch>
-                <tpc>11</tpc>
-                <fret>4</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Spanner type="Volta">
-              <Volta>
-                <beginText>1,2</beginText>
-                <linked>
-                  </linked>
-                <endings>1, 2</endings>
-                </Volta>
-              <next>
-                <location>
-                  <measures>1</measures>
-                  </location>
-                </next>
-              </Spanner>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalSharp</subtype>
-                  </Accidental>
-                <pitch>56</pitch>
-                <tpc>22</tpc>
-                <fret>1</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalFlat</subtype>
-                  </Accidental>
-                <pitch>58</pitch>
-                <tpc>12</tpc>
-                <fret>3</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalNatural</subtype>
-                  </Accidental>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>4</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Spanner type="Volta">
-              <prev>
-                <location>
-                  <measures>-1</measures>
-                  </location>
-                </prev>
-              </Spanner>
-            <Spanner type="Volta">
-              <Volta>
-                <beginText>3</beginText>
-                <linked>
-                  </linked>
-                <endings>3</endings>
-                </Volta>
-              <next>
-                <location>
-                  <measures>1</measures>
-                  </location>
-                </next>
-              </Spanner>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalFlat</subtype>
-                  </Accidental>
-                <pitch>51</pitch>
-                <tpc>11</tpc>
-                <fret>1</fret>
-                <string>3</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalNatural</subtype>
-                  </Accidental>
-                <pitch>52</pitch>
-                <tpc>18</tpc>
-                <fret>2</fret>
-                <string>3</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>53</pitch>
-                <tpc>13</tpc>
-                <fret>3</fret>
-                <string>3</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalSharp</subtype>
-                  </Accidental>
-                <pitch>54</pitch>
-                <tpc>20</tpc>
-                <fret>4</fret>
-                <string>3</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Spanner type="Volta">
-              <prev>
-                <location>
-                  <measures>-1</measures>
-                  </location>
-                </prev>
-              </Spanner>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalFlat</subtype>
-                  </Accidental>
-                <pitch>46</pitch>
-                <tpc>12</tpc>
-                <fret>1</fret>
-                <string>4</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalNatural</subtype>
-                  </Accidental>
-                <pitch>47</pitch>
-                <tpc>19</tpc>
-                <fret>2</fret>
-                <string>4</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>48</pitch>
-                <tpc>14</tpc>
-                <fret>3</fret>
-                <string>4</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalSharp</subtype>
-                  </Accidental>
-                <pitch>49</pitch>
-                <tpc>21</tpc>
-                <fret>4</fret>
-                <string>4</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Spanner type="Volta">
-              <Volta>
-                <beginText>4</beginText>
-                <linked>
-                  </linked>
-                <endings>4</endings>
-                </Volta>
-              <next>
-                <location>
-                  <measures>1</measures>
-                  </location>
-                </next>
-              </Spanner>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>41</pitch>
-                <tpc>13</tpc>
-                <fret>1</fret>
-                <string>5</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalSharp</subtype>
-                  </Accidental>
-                <pitch>42</pitch>
-                <tpc>20</tpc>
-                <fret>2</fret>
-                <string>5</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>43</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>5</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalSharp</subtype>
-                  </Accidental>
-                <pitch>44</pitch>
-                <tpc>22</tpc>
-                <fret>4</fret>
-                <string>5</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <startRepeat/>
-          <voice>
-            <Spanner type="Volta">
-              <prev>
-                <location>
-                  <measures>-1</measures>
-                  </location>
-                </prev>
-              </Spanner>
-            <Spanner type="Volta">
-              <Volta>
-                <beginText>5</beginText>
-                <linked>
-                  </linked>
-                <endings>5</endings>
-                </Volta>
-              <next>
-                <location>
-                  <measures>1</measures>
-                  </location>
-                </next>
-              </Spanner>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>76</pitch>
-                <tpc>18</tpc>
-                <fret>12</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalFlat</subtype>
-                  </Accidental>
-                <pitch>75</pitch>
-                <tpc>11</tpc>
-                <fret>11</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>74</pitch>
-                <tpc>16</tpc>
-                <fret>10</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalSharp</subtype>
-                  </Accidental>
-                <pitch>73</pitch>
-                <tpc>21</tpc>
-                <fret>9</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <endRepeat>2</endRepeat>
-          <voice>
-            <Spanner type="Volta">
-              <prev>
-                <location>
-                  <measures>-1</measures>
-                  </location>
-                </prev>
-              </Spanner>
-            <Spanner type="Volta">
-              <Volta>
-                <beginText>1,2,3,4,5,6</beginText>
-                <linked>
-                  </linked>
-                <endings>1, 2, 3, 4, 5, 6</endings>
-                </Volta>
-              <next>
-                <location>
-                  <measures>1</measures>
-                  </location>
-                </next>
-              </Spanner>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>72</pitch>
-                <tpc>14</tpc>
-                <fret>8</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>71</pitch>
-                <tpc>19</tpc>
-                <fret>7</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalFlat</subtype>
-                  </Accidental>
-                <pitch>70</pitch>
-                <tpc>12</tpc>
-                <fret>6</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>69</pitch>
-                <tpc>17</tpc>
-                <fret>5</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Spanner type="Volta">
-              <prev>
-                <location>
-                  <measures>-1</measures>
-                  </location>
-                </prev>
-              </Spanner>
-            <Spanner type="Volta">
-              <Volta>
-                <beginText>7,8</beginText>
-                <linked>
-                  </linked>
-                <endings>7, 8</endings>
-                </Volta>
-              <next>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalSharp</subtype>
-                  </Accidental>
-                <pitch>68</pitch>
-                <tpc>22</tpc>
-                <fret>4</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalNatural</subtype>
-                  </Accidental>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalSharp</subtype>
-                  </Accidental>
-                <pitch>66</pitch>
-                <tpc>20</tpc>
-                <fret>2</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalNatural</subtype>
-                  </Accidental>
-                <pitch>65</pitch>
-                <tpc>13</tpc>
-                <fret>1</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Spanner type="Volta">
-              <prev>
-                <location>
-                  <fractions>-1/1</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            </voice>
-          </Measure>
-        </Staff>
-      <Staff id="2">
-        <Measure>
-          <voice>
-            <KeySig>
-              <linked>
-                <indexDiff>2</indexDiff>
-                </linked>
-              <accidental>0</accidental>
-              </KeySig>
-            <Chord>
-              <linked>
-                <indexDiff>6</indexDiff>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  <indexDiff>6</indexDiff>
-                  </linked>
-                <pitch>65</pitch>
-                <tpc>13</tpc>
-                <fret>1</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>66</pitch>
-                <tpc>20</tpc>
-                <fret>2</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>68</pitch>
-                <tpc>22</tpc>
-                <fret>4</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>1</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>61</pitch>
-                <tpc>21</tpc>
-                <fret>2</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>62</pitch>
-                <tpc>16</tpc>
-                <fret>3</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>63</pitch>
-                <tpc>11</tpc>
-                <fret>4</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Chord>
-              <linked>
-                <indexDiff>1</indexDiff>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  <indexDiff>1</indexDiff>
-                  </linked>
-                <pitch>56</pitch>
-                <tpc>22</tpc>
-                <fret>1</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>58</pitch>
-                <tpc>12</tpc>
-                <fret>3</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>4</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Chord>
-              <linked>
-                <indexDiff>1</indexDiff>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  <indexDiff>1</indexDiff>
-                  </linked>
-                <pitch>51</pitch>
-                <tpc>11</tpc>
-                <fret>1</fret>
-                <string>3</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>52</pitch>
-                <tpc>18</tpc>
-                <fret>2</fret>
-                <string>3</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>53</pitch>
-                <tpc>13</tpc>
-                <fret>3</fret>
-                <string>3</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>54</pitch>
-                <tpc>20</tpc>
-                <fret>4</fret>
-                <string>3</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>46</pitch>
-                <tpc>12</tpc>
-                <fret>1</fret>
-                <string>4</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>47</pitch>
-                <tpc>19</tpc>
-                <fret>2</fret>
-                <string>4</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>48</pitch>
-                <tpc>14</tpc>
-                <fret>3</fret>
-                <string>4</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>49</pitch>
-                <tpc>21</tpc>
-                <fret>4</fret>
-                <string>4</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Chord>
-              <linked>
-                <indexDiff>1</indexDiff>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  <indexDiff>1</indexDiff>
-                  </linked>
-                <pitch>41</pitch>
-                <tpc>13</tpc>
-                <fret>1</fret>
-                <string>5</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>42</pitch>
-                <tpc>20</tpc>
-                <fret>2</fret>
-                <string>5</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>43</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>5</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>44</pitch>
-                <tpc>22</tpc>
-                <fret>4</fret>
-                <string>5</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Chord>
-              <linked>
-                <indexDiff>1</indexDiff>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  <indexDiff>1</indexDiff>
-                  </linked>
-                <pitch>76</pitch>
-                <tpc>18</tpc>
-                <fret>12</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>75</pitch>
-                <tpc>11</tpc>
-                <fret>11</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>74</pitch>
-                <tpc>16</tpc>
-                <fret>10</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>73</pitch>
-                <tpc>21</tpc>
-                <fret>9</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Chord>
-              <linked>
-                <indexDiff>1</indexDiff>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  <indexDiff>1</indexDiff>
-                  </linked>
-                <pitch>72</pitch>
-                <tpc>14</tpc>
-                <fret>8</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>71</pitch>
-                <tpc>19</tpc>
-                <fret>7</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>70</pitch>
-                <tpc>12</tpc>
-                <fret>6</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>69</pitch>
-                <tpc>17</tpc>
-                <fret>5</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Chord>
-              <linked>
-                <indexDiff>1</indexDiff>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  <indexDiff>1</indexDiff>
-                  </linked>
-                <pitch>68</pitch>
-                <tpc>22</tpc>
-                <fret>4</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>66</pitch>
-                <tpc>20</tpc>
-                <fret>2</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>65</pitch>
-                <tpc>13</tpc>
-                <fret>1</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        </Staff>
-      <name>Track 1</name>
-      </Score>
     </Score>
   </museScore>

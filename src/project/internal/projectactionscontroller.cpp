@@ -27,7 +27,8 @@
 #include "defer.h"
 #include "notation/notationerrors.h"
 #include "projectconfiguration.h"
-#include "engraving/infrastructure/io/mscio.h"
+#include "engraving/infrastructure/mscio.h"
+#include "engraving/engravingerrors.h"
 
 #include "log.h"
 
@@ -96,7 +97,7 @@ INotationSelectionPtr ProjectActionsController::currentNotationSelection() const
     return currentNotation() ? currentInteraction()->selection() : nullptr;
 }
 
-bool ProjectActionsController::isFileSupported(const io::path& path) const
+bool ProjectActionsController::isFileSupported(const io::path_t& path) const
 {
     std::string suffix = io::suffix(path);
     if (engraving::isMuseScoreFile(suffix)) {
@@ -112,15 +113,15 @@ bool ProjectActionsController::isFileSupported(const io::path& path) const
 
 void ProjectActionsController::openProject(const actions::ActionData& args)
 {
-    io::path projectPath = !args.empty() ? args.arg<io::path>(0) : "";
+    io::path_t projectPath = !args.empty() ? args.arg<io::path_t>(0) : "";
     openProject(projectPath);
 }
 
-Ret ProjectActionsController::openProject(const io::path& projectPath_)
+Ret ProjectActionsController::openProject(const io::path_t& projectPath_)
 {
     //! NOTE This method is synchronous,
     //! but inside `multiInstancesProvider` there can be an event loop
-    //! to wait for the responces from other instances, accordingly,
+    //! to wait for the responses from other instances, accordingly,
     //! the events (like user click) can be executed and this method can be called several times,
     //! before the end of the current call.
     //! So we ignore all subsequent calls until the current one completes.
@@ -134,7 +135,7 @@ Ret ProjectActionsController::openProject(const io::path& projectPath_)
     };
 
     //! Step 1. If no path is specified, ask the user to select a project
-    io::path projectPath = projectPath_;
+    io::path_t projectPath = projectPath_;
     if (projectPath.empty()) {
         projectPath = selectScoreOpeningFile();
 
@@ -167,7 +168,7 @@ Ret ProjectActionsController::openProject(const io::path& projectPath_)
     return doOpenProject(projectPath);
 }
 
-Ret ProjectActionsController::doOpenProject(const io::path& filePath)
+Ret ProjectActionsController::doOpenProject(const io::path_t& filePath)
 {
     TRACEFUNC;
 
@@ -178,20 +179,23 @@ Ret ProjectActionsController::doOpenProject(const io::path& filePath)
 
     bool hasUnsavedChanges = projectAutoSaver()->projectHasUnsavedChanges(filePath);
 
-    io::path loadPath = hasUnsavedChanges ? projectAutoSaver()->projectAutoSavePath(filePath) : filePath;
-    constexpr auto NO_STYLE = "";
-    constexpr bool NO_FORCE_MODE = true;
+    io::path_t loadPath = hasUnsavedChanges ? projectAutoSaver()->projectAutoSavePath(filePath) : filePath;
     std::string format = io::suffix(filePath);
 
-    Ret ret = project->load(loadPath, NO_STYLE, NO_FORCE_MODE, format);
-
-    if (!ret && checkCanIgnoreError(ret, filePath)) {
-        constexpr bool FORCE_MODE = true;
-        ret = project->load(loadPath, NO_STYLE, FORCE_MODE, format);
-    }
+    Ret ret = project->load(loadPath, "" /*stylePath*/, false /*forceMode*/, format);
 
     if (!ret) {
-        return ret;
+        if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+            return ret;
+        }
+
+        if (checkCanIgnoreError(ret, filePath)) {
+            ret = project->load(loadPath, "" /*stylePath*/, true /*forceMode*/, format);
+        }
+
+        if (!ret) {
+            return ret;
+        }
     }
 
     if (hasUnsavedChanges) {
@@ -204,13 +208,11 @@ Ret ProjectActionsController::doOpenProject(const io::path& filePath)
     bool isNewlyCreated = projectAutoSaver()->isAutosaveOfNewlyCreatedProject(filePath);
     if (isNewlyCreated) {
         project->markAsNewlyCreated();
+    } else {
+        prependToRecentScoreList(filePath);
     }
 
     globalContext()->setCurrentProject(project);
-
-    if (!project->isNewlyCreated()) {
-        prependToRecentScoreList(filePath);
-    }
 
     return openPageIfNeed(NOTATION_PAGE_URI);
 }
@@ -224,7 +226,7 @@ Ret ProjectActionsController::openPageIfNeed(Uri pageUri)
     return interactive()->open(pageUri).ret;
 }
 
-bool ProjectActionsController::isProjectOpened(const io::path& scorePath) const
+bool ProjectActionsController::isProjectOpened(const io::path_t& scorePath) const
 {
     auto project = globalContext()->currentProject();
     if (!project) {
@@ -252,7 +254,7 @@ void ProjectActionsController::newProject()
 {
     //! NOTE This method is synchronous,
     //! but inside `multiInstancesProvider` there can be an event loop
-    //! to wait for the responces from other instances, accordingly,
+    //! to wait for the responses from other instances, accordingly,
     //! the events (like user click) can be executed and this method can be called several times,
     //! before the end of the current call.
     //! So we ignore all subsequent calls until the current one completes.
@@ -352,7 +354,7 @@ IInteractive::Button ProjectActionsController::askAboutSavingScore(INotationProj
     return result.standardButton();
 }
 
-bool ProjectActionsController::saveProject(const io::path& path)
+bool ProjectActionsController::saveProject(const io::path_t& path)
 {
     auto project = currentNotationProject();
     if (!project) {
@@ -404,7 +406,7 @@ void ProjectActionsController::saveSelection()
 {
     auto project = currentNotationProject();
 
-    RetVal<io::path> path = saveProjectScenario()->askLocalPath(project, SaveMode::SaveSelection);
+    RetVal<io::path_t> path = saveProjectScenario()->askLocalPath(project, SaveMode::SaveSelection);
     if (!path.ret) {
         return;
     }
@@ -452,7 +454,7 @@ bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveM
     return false;
 }
 
-bool ProjectActionsController::saveProjectLocally(const io::path& filePath, project::SaveMode saveMode)
+bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, project::SaveMode saveMode)
 {
     Ret ret = currentNotationProject()->save(filePath, saveMode);
     if (!ret) {
@@ -488,9 +490,8 @@ bool ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo&
 
     projectData->open(QIODevice::ReadOnly);
 
-    ProgressChannel progressCh = uploadingService()->progressChannel();
-    progressCh.onReceive(this, [](const Progress& progress) {
-        LOGD() << "Uploading progress: " << progress.current << "/" << progress.total;
+    uploadingService()->uploadProgress().progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
+        LOGD() << "Uploading progress: " << current << "/" << total;
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
     async::Channel<QUrl> sourceUrlCh = uploadingService()->sourceUrlReceived();
@@ -520,24 +521,27 @@ bool ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo&
     return true;
 }
 
-bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path& filePath)
+bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path_t& filePath)
 {
-    static const QList<notation::Err> ignorableErrors {
-        notation::Err::FileTooOld,
-        notation::Err::FileTooNew,
-        notation::Err::FileCorrupted,
-        notation::Err::FileOld300Format
+    static const QList<engraving::Err> ignorableErrors {
+        engraving::Err::FileTooOld,
+        engraving::Err::FileTooNew,
+        engraving::Err::FileCorrupted,
+        engraving::Err::FileOld300Format
     };
 
-    std::string title = trc("project", "Open Error");
-    std::string body = qtrc("project", "Cannot open file %1:\n%2")
-                       .arg(filePath.toQString())
-                       .arg(QString::fromStdString(ret.text())).toStdString();
+    //: an error that occurred while opening a file
+    std::string title = trc("project", "Open error");
+    std::string body = ret.text();
+
+    if (body.empty()) {
+        body = qtrc("project", "Cannot open file %1").arg(filePath.toQString()).toStdString();
+    }
 
     IInteractive::Options options;
     options.setFlag(IInteractive::Option::WithIcon);
 
-    bool canIgnore = ignorableErrors.contains(static_cast<notation::Err>(ret.code()));
+    bool canIgnore = ignorableErrors.contains(static_cast<engraving::Err>(ret.code()));
 
     if (!canIgnore) {
         interactive()->error(title, body, {
@@ -568,13 +572,13 @@ void ProjectActionsController::clearRecentScores()
 
 void ProjectActionsController::continueLastSession()
 {
-    io::paths recentScorePaths = configuration()->recentProjectPaths();
+    io::paths_t recentScorePaths = configuration()->recentProjectPaths();
 
     if (recentScorePaths.empty()) {
         return;
     }
 
-    io::path lastScorePath = recentScorePaths.front();
+    io::path_t lastScorePath = recentScorePaths.front();
     openProject(lastScorePath);
 }
 
@@ -593,34 +597,34 @@ void ProjectActionsController::printScore()
     printProvider()->printNotation(notation);
 }
 
-io::path ProjectActionsController::selectScoreOpeningFile()
+io::path_t ProjectActionsController::selectScoreOpeningFile()
 {
-    QString allExt = "*.mscz *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx"
+    QString allExt = "*.mscz *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx "
                      "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscx *.mscs *.mscz~";
 
     QStringList filter;
-    filter << QObject::tr("All Supported Files") + " (" + allExt + ")"
-           << QObject::tr("MuseScore File") + " (*.mscz)"
-           << QObject::tr("MusicXML Files") + " (*.mxl *.musicxml *.xml)"
-           << QObject::tr("MIDI Files") + " (*.mid *.midi *.kar)"
-           << QObject::tr("MuseData Files") + " (*.md)"
-           << QObject::tr("Capella Files") + " (*.cap *.capx)"
-           << QObject::tr("BB Files (experimental)") + " (*.mgu *.sgu)"
-           << QObject::tr("Overture / Score Writer Files (experimental)") + " (*.ove *.scw)"
-           << QObject::tr("Bagpipe Music Writer Files (experimental)") + " (*.bmw *.bww)"
-           << QObject::tr("Guitar Pro Files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)"
-           << QObject::tr("Power Tab Editor Files (experimental)") + " (*.ptb)"
-           << QObject::tr("MuseScore Unpack Files") + " (*.mscx)"
-           << QObject::tr("MuseScore Dev Files") + " (*.mscs)"
-           << QObject::tr("MuseScore Backup Files") + " (*.mscz~)";
+    filter << qtrc("project", "All supported files") + " (" + allExt + ")"
+           << qtrc("project", "MuseScore files") + " (*.mscz)"
+           << qtrc("project", "MusicXML files") + " (*.mxl *.musicxml *.xml)"
+           << qtrc("project", "MIDI files") + " (*.mid *.midi *.kar)"
+           << qtrc("project", "MuseData files") + " (*.md)"
+           << qtrc("project", "Capella files") + " (*.cap *.capx)"
+           << qtrc("project", "BB files (experimental)") + " (*.mgu *.sgu)"
+           << qtrc("project", "Overture / Score Writer files (experimental)") + " (*.ove *.scw)"
+           << qtrc("project", "Bagpipe Music Writer files (experimental)") + " (*.bmw *.bww)"
+           << qtrc("project", "Guitar Pro files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)"
+           << qtrc("project", "Power Tab Editor files (experimental)") + " (*.ptb)"
+           << qtrc("project", "Uncompressed MuseScore folders (experimental)") + " (*.mscx)"
+           << qtrc("project", "MuseScore developer files") + " (*.mscs)"
+           << qtrc("project", "MuseScore backup files") + " (*.mscz~)";
 
-    io::path defaultDir = configuration()->lastOpenedProjectsPath();
+    io::path_t defaultDir = configuration()->lastOpenedProjectsPath();
 
     if (defaultDir.empty()) {
         defaultDir = configuration()->defaultProjectsPath();
     }
 
-    io::path filePath = interactive()->selectOpeningFile(qtrc("project", "Score"), defaultDir, filter.join(";;"));
+    io::path_t filePath = interactive()->selectOpeningFile(qtrc("project", "Open"), defaultDir, filter.join(";;"));
 
     if (!filePath.empty()) {
         configuration()->setLastOpenedProjectsPath(io::dirpath(filePath));
@@ -629,13 +633,13 @@ io::path ProjectActionsController::selectScoreOpeningFile()
     return filePath;
 }
 
-void ProjectActionsController::prependToRecentScoreList(const io::path& filePath)
+void ProjectActionsController::prependToRecentScoreList(const io::path_t& filePath)
 {
     if (filePath.empty()) {
         return;
     }
 
-    io::paths recentScorePaths = configuration()->recentProjectPaths();
+    io::paths_t recentScorePaths = configuration()->recentProjectPaths();
 
     auto it = std::find(recentScorePaths.begin(), recentScorePaths.end(), filePath);
     if (it != recentScorePaths.end()) {

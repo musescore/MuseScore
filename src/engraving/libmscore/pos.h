@@ -23,9 +23,11 @@
 #ifndef __POS_H__
 #define __POS_H__
 
+#include "global/allocator.h"
+#include "types/string.h"
 #include "sig.h"
 
-namespace Ms {
+namespace mu::engraving {
 class TempoMap;
 class TimeSigMap;
 class XmlWriter;
@@ -61,7 +63,7 @@ public:
     Pos(TempoMap*, TimeSigMap*, int measure, int beat, int tick);
     Pos(TempoMap*, TimeSigMap*, int minute, int sec, int frame, int subframe);
     Pos(TempoMap*, TimeSigMap*, unsigned, TType type = TType::TICKS);
-    Pos(TempoMap*, TimeSigMap*, const QString&);
+    Pos(TempoMap*, TimeSigMap*, const String&);
 
     void setContext(TempoMap* t, TimeSigMap* s) { tempo = t; sig = s; }
     void dump(int n = 0) const;
@@ -116,6 +118,8 @@ public:
 
 class PosLen : public Pos
 {
+    OBJECT_ALLOCATOR(engraving, PosLen)
+
     mutable unsigned _lenTick;
     mutable unsigned _lenFrame;
     mutable int sn;
@@ -138,5 +142,5 @@ public:
 
     bool operator==(const PosLen& s) const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -32,7 +32,6 @@
 #include "inotation.h"
 #include "iinteractive.h"
 #include "playback/iplaybackcontroller.h"
-#include "playback/iplaybackconfiguration.h"
 #include "inotationconfiguration.h"
 #include "engraving/iengravingconfiguration.h"
 
@@ -44,7 +43,6 @@ class NotationActionController : public actions::Actionable, public async::Async
     INJECT(notation, context::IUiContextResolver, uiContextResolver)
     INJECT(notation, framework::IInteractive, interactive)
     INJECT(notation, playback::IPlaybackController, playbackController)
-    INJECT(notation, playback::IPlaybackConfiguration, playbackConfiguration)
     INJECT(notation, INotationConfiguration, configuration)
     INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
 
@@ -94,9 +92,10 @@ private:
     void moveWithinChord(MoveDirection direction);
     void selectTopOrBottomOfChord(MoveDirection direction);
 
-    void changeVoice(int voiceIndex);
+    void changeVoice(voice_idx_t voiceIndex);
 
     void cutSelection();
+    void repeatSelection();
     void addTie();
     void chordTie();
     void addSlur();
@@ -138,13 +137,14 @@ private:
     void openMeasurePropertiesDialog();
     void openEditGridSizeDialog();
     void openRealizeChordSymbolsDialog();
-    mu::io::path selectStyleFile(bool forLoad);
+    mu::io::path_t selectStyleFile(bool forLoad);
     void loadStyle();
     void saveStyle();
 
     void toggleScoreConfig(ScoreConfigType configType);
     void toggleConcertPitch();
 
+    void seekSelectedElement();
     void playSelectedElement(bool playChord = true);
 
     bool isEditingText() const;
@@ -153,6 +153,8 @@ private:
     bool isEditingElement() const;
     bool isNotEditingElement() const;
     bool isNotNoteInputMode() const;
+
+    bool isToggleVisibleAllowed() const;
 
     void pasteSelection(PastingType type = PastingType::Default);
     Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
@@ -184,7 +186,10 @@ private:
     void startNoteInputIfNeed();
 
     bool hasSelection() const;
-    Ms::EngravingItem* selectedElement() const;
+    mu::engraving::EngravingItem* selectedElement() const;
+    bool noteOrRestSelected() const;
+
+    const mu::engraving::Harmony* editedChordSymbol() const;
 
     bool canUndo() const;
     bool canRedo() const;
@@ -192,13 +197,13 @@ private:
     bool isStandardStaff() const;
     bool isTablatureStaff() const;
     void registerAction(const mu::actions::ActionCode&, void (NotationActionController::*)(const actions::ActionData& data),
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     void registerAction(const mu::actions::ActionCode&, void (NotationActionController::*)(),
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     void registerAction(const mu::actions::ActionCode&, std::function<void()>,
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     void registerAction(const mu::actions::ActionCode&, std::function<void(const actions::ActionData& data)>,
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     void registerAction(const mu::actions::ActionCode&, void (NotationActionController::*)(MoveDirection, bool), MoveDirection, bool,
                         bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
 
@@ -217,15 +222,15 @@ private:
 
     void registerAction(const mu::actions::ActionCode&, void (INotationInteraction::*)(), bool (NotationActionController::*)() const);
     void registerAction(const mu::actions::ActionCode&, void (INotationInteraction::*)(), PlayMode = PlayMode::NoPlay,
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     template<typename P1>
     void registerAction(const mu::actions::ActionCode&, void (INotationInteraction::*)(P1), P1, PlayMode = PlayMode::NoPlay,
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     template<typename P1>
     void registerAction(const mu::actions::ActionCode&, void (INotationInteraction::*)(P1), P1, bool (NotationActionController::*)() const);
     template<typename P1, typename P2>
     void registerAction(const mu::actions::ActionCode&, void (INotationInteraction::*)(P1, P2), P1, P2, PlayMode = PlayMode::NoPlay,
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
 
     async::Notification m_currentNotationNoteInputChanged;
 

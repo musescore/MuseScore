@@ -30,9 +30,9 @@
 #include "inotationinteraction.h"
 #include "inotationundostack.h"
 
-#include "engraving/infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 }
 
@@ -57,19 +57,23 @@ public:
     void padNote(const Pad& pad) override;
     void putNote(const PointF& pos, bool replace, bool insert) override;
     void removeNote(const PointF& pos) override;
-    void setAccidental(AccidentalType accidentalType) override;
-    void setArticulation(SymbolId articulationSymbolId) override;
-    void setDrumNote(int note) override;
+    async::Notification noteInputStarted() const override;
+    async::Notification noteInputEnded() const override;
+
     void addTuplet(const TupletOptions& options) override;
 
-    void addSlur(Ms::Slur* slur) override;
+    void addSlur(mu::engraving::Slur* slur) override;
     void resetSlur() override;
     void addTie() override;
 
     void doubleNoteInputDuration() override;
     void halveNoteInputDuration() override;
 
-    void setCurrentVoiceIndex(int voiceIndex) override;
+    void setAccidental(AccidentalType accidentalType) override;
+    void setArticulation(SymbolId articulationSymbolId) override;
+    void setDrumNote(int note) override;
+    void setCurrentVoice(voice_idx_t voiceIndex) override;
+    void setCurrentTrack(track_idx_t trackIndex) override;
 
     void resetInputPosition() override;
 
@@ -78,10 +82,12 @@ public:
     async::Notification noteAdded() const override;
     async::Notification stateChanged() const override;
 
-private:
-    Ms::Score* score() const;
+    void setGetViewRectFunc(const std::function<RectF()>& func);
 
-    Ms::EngravingItem* resolveNoteInputStartPosition() const;
+private:
+    mu::engraving::Score* score() const;
+
+    EngravingItem* resolveNoteInputStartPosition() const;
 
     void startEdit();
     void apply();
@@ -89,6 +95,8 @@ private:
     void updateInputState();
     void notifyAboutStateChanged();
     void notifyNoteAddedChanged();
+    void notifyAboutNoteInputStarted();
+    void notifyAboutNoteInputEnded();
 
     std::set<SymbolId> articulationIds() const;
 
@@ -98,8 +106,11 @@ private:
 
     async::Notification m_stateChanged;
     async::Notification m_noteAdded;
+    async::Notification m_noteInputStarted;
+    async::Notification m_noteInputEnded;
 
     ScoreCallbacks* m_scoreCallbacks = nullptr;
+    std::function<RectF()> m_getViewRectFunc;
 };
 }
 

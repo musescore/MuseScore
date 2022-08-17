@@ -64,12 +64,12 @@ ScriptEngine::~ScriptEngine()
     }
 }
 
-void ScriptEngine::setScriptPath(const io::path& arg)
+void ScriptEngine::setScriptPath(const io::path_t& arg)
 {
     m_scriptPath = arg;
 }
 
-io::path ScriptEngine::scriptPath() const
+io::path_t ScriptEngine::scriptPath() const
 {
     return m_scriptPath;
 }
@@ -78,13 +78,13 @@ QJSValue ScriptEngine::require(const QString& filePath)
 {
     TRACEFUNC;
 
-    RetVal<QByteArray> data = readScriptContent(filePath);
+    RetVal<ByteArray> data = readScriptContent(filePath);
     if (!data.ret) {
         LOGE() << "failed read file, err: " << data.ret.toString() << ", file: " << filePath;
         return QJSValue();
     }
 
-    QByteArray content = QByteArray("(function() { \n") + data.val + QByteArray("}());");
+    QByteArray content = QByteArray("(function() { \n") + data.val.toQByteArrayNoCopy() + QByteArray("}());");
 
     ScriptEngine requireEngine(this);
     requireEngine.setScriptPath(filePath);
@@ -120,18 +120,18 @@ void ScriptEngine::setExports(const QJSValue& obj)
 
 Ret ScriptEngine::evaluate()
 {
-    io::path path = scriptPath();
+    io::path_t path = scriptPath();
 
     IF_ASSERT_FAILED(!path.empty()) {
         return make_ret(Ret::Code::InternalError);
     }
 
-    RetVal<QByteArray> content = readScriptContent(path);
+    RetVal<ByteArray> content = readScriptContent(path);
     if (!content.ret) {
         return content.ret;
     }
 
-    const QByteArray& contentData = content.val;
+    const QByteArray contentData = content.val.toQByteArray();
 
     IF_ASSERT_FAILED(!contentData.isEmpty()) {
         return make_ret(Ret::Code::InternalError);
@@ -226,13 +226,13 @@ void ScriptEngine::throwError(const QString& message)
     m_engine->throwError(message);
 }
 
-RetVal<QByteArray> ScriptEngine::readScriptContent(const io::path& scriptPath) const
+RetVal<ByteArray> ScriptEngine::readScriptContent(const io::path_t& scriptPath) const
 {
     TRACEFUNC;
     return fileSystem()->readFile(scriptPath);
 }
 
-RetVal<QJSValue> ScriptEngine::evaluateContent(const QByteArray& fileContent, const io::path& filePath)
+RetVal<QJSValue> ScriptEngine::evaluateContent(const QByteArray& fileContent, const io::path_t& filePath)
 {
     TRACEFUNC;
     RetVal<QJSValue> rv;

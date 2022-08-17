@@ -33,7 +33,7 @@
 #include "async/channel.h"
 #include "async/notification.h"
 
-#include "retval.h"
+#include "types/retval.h"
 
 namespace mu::ipc {
 //! NOTE Inter-Process Communication Channel
@@ -66,7 +66,7 @@ public:
 private:
 
     void setupConnection();
-    void onDisconected();
+    void onDisconnected();
     void onSocketMsgReceived(const Msg& msg);
 
     IpcSocket* m_selfSocket = nullptr;

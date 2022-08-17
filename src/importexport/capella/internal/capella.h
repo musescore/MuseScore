@@ -26,7 +26,9 @@
 #include "engraving/rw/xml.h"
 #include "engraving/types/types.h"
 
-namespace Ms {
+class QFile;
+
+namespace mu::iex::capella {
 enum class TIMESTEP : char {
     D1, D2, D4, D8, D16, D32, D64, D128, D256, D_BREVE
 };
@@ -93,18 +95,18 @@ public:
     CapClef(Capella* c)
         : NoteObj(CapellaNoteObjectType::CLEF), CapellaObj(c) {}
     void read();
-    void readCapx(XmlReader& e);
+    void readCapx(engraving::XmlReader& e);
     const char* name()
     {
         static const char* formName[] = { "G", "C", "F", "=", " ", "*" };
         return formName[int(form)];
     }
 
-    ClefType clef() const;
+    engraving::ClefType clef() const;
 
     ClefLine line;
     Oct oct;
-    static ClefType clefType(Form, ClefLine, Oct);
+    static engraving::ClefType clefType(Form, ClefLine, Oct);
 };
 
 //---------------------------------------------------------
@@ -117,7 +119,7 @@ public:
     CapKey(Capella* c)
         : NoteObj(CapellaNoteObjectType::KEY), CapellaObj(c) {}
     void read();
-    void readCapx(XmlReader& e);
+    void readCapx(engraving::XmlReader& e);
     int signature { 0 };      // -7 - +7
 };
 
@@ -135,7 +137,7 @@ public:
     CapMeter(Capella* c)
         : NoteObj(CapellaNoteObjectType::METER), CapellaObj(c) {}
     void read();
-    void readCapx(XmlReader& e);
+    void readCapx(engraving::XmlReader& e);
 };
 
 //---------------------------------------------------------
@@ -144,15 +146,15 @@ public:
 
 class CapExplicitBarline : public NoteObj, public CapellaObj
 {
-    BarLineType _type { BarLineType::NORMAL };
+    engraving::BarLineType _type { engraving::BarLineType::NORMAL };
     int _barMode      { 0 };        // 0 = auto, 1 = nur Zeilen, 2 = durchgezogen
 
 public:
     CapExplicitBarline(Capella* c)
         : NoteObj(CapellaNoteObjectType::EXPL_BARLINE), CapellaObj(c) {}
     void read();
-    void readCapx(XmlReader& e);
-    BarLineType type() const { return _type; }
+    void readCapx(engraving::XmlReader& e);
+    engraving::BarLineType type() const { return _type; }
     int barMode() const { return _barMode; }
 };
 
@@ -262,7 +264,7 @@ public:
         : CapellaObj(c), modeX(0), modeY(0), distY(0), flags(0),
         nRefNote(0), nNotes(0), background(0), pageRange(0), type(t) {}
     void read();
-    void readCapx(XmlReader& e);
+    void readCapx(engraving::XmlReader& e);
 };
 
 //---------------------------------------------------------
@@ -307,7 +309,7 @@ public:
     TransposableObj(Capella* c)
         : BasicDrawObj(CapellaType::TRANSPOSABLE, c) {}
     void read();
-    void readCapx(XmlReader& e);
+    void readCapx(engraving::XmlReader& e);
 
     QPointF relPos;
     char b { 0 };
@@ -419,7 +421,7 @@ public:
         bLeft(false), bRight(false), bDotted(false),
         allNumbers(false), from(0), to(0) {}
     void read();
-    void readCapx(XmlReader& e);
+    void readCapx(engraving::XmlReader& e);
 
     int x0, x1, y;
     QColor color;
@@ -460,7 +462,7 @@ public:
         : BasicDrawObj(CapellaType::TRILL, c), x0(0),
         x1(0), y(0), trillSign(true) {}
     void read();
-    void readCapx(XmlReader& e);
+    void readCapx(engraving::XmlReader& e);
 
     int x0, x1, y;
     QColor color;
@@ -480,7 +482,7 @@ public:
     SlurObj(Capella* c)
         : BasicDrawObj(CapellaType::SLUR, c), color(Qt::black), nEnd(0), nMid(0), nDotDist(0), nDotWidth(0) {}
     void read();
-    void readCapx(XmlReader& e);
+    void readCapx(engraving::XmlReader& e);
     unsigned char nEnd, nMid, nDotDist, nDotWidth;
 };
 
@@ -514,7 +516,7 @@ public:
     SimpleTextObj(Capella* c)
         : BasicDrawObj(CapellaType::SIMPLE_TEXT, c), relPos(0, 0), align(0) {}
     void read();
-    void readCapx(XmlReader& e);
+    void readCapx(engraving::XmlReader& e);
     QString text() const { return _text; }
     QFont font() const { return _font; }
     QPointF pos() const { return relPos; }
@@ -546,7 +548,7 @@ public:
         : LineObj(CapellaType::WEDGE, c), height(32),
         decresc(false) {}
     void read();
-    void readCapx(XmlReader& e);
+    void readCapx(engraving::XmlReader& e);
 
     int height;
     bool decresc;
@@ -575,10 +577,10 @@ public:
     BasicDurationalObj(Capella* c)
         : CapellaObj(c) {}
     void read();
-    void readCapx(XmlReader& e, unsigned int& fullm);
-    void readCapxDisplay(XmlReader& e);
-    void readCapxObjectArray(XmlReader& e);
-    Fraction ticks() const;
+    void readCapx(engraving::XmlReader& e, unsigned int& fullm);
+    void readCapxDisplay(engraving::XmlReader& e);
+    void readCapxObjectArray(engraving::XmlReader& e);
+    engraving::Fraction ticks() const;
     bool invisible;
     QList<BasicDrawObj*> objects;
 };
@@ -628,11 +630,11 @@ public:
 public:
     ChordObj(Capella*);
     void read();
-    void readCapx(XmlReader& e);
-    void readCapxLyrics(XmlReader& e);
-    void readCapxNotes(XmlReader& e);
-    void readCapxStem(XmlReader& e);
-    void readCapxArticulation(XmlReader& e);
+    void readCapx(engraving::XmlReader& e);
+    void readCapxLyrics(engraving::XmlReader& e);
+    void readCapxNotes(engraving::XmlReader& e);
+    void readCapxStem(engraving::XmlReader& e);
+    void readCapxArticulation(engraving::XmlReader& e);
     QList<Verse> verse;
     QList<CNote> notes;
     StemDir stemDir;
@@ -650,7 +652,7 @@ class RestObj : public BasicDurationalObj, public NoteObj
 public:
     RestObj(Capella*);
     void read();
-    void readCapx(XmlReader& e);
+    void readCapx(engraving::XmlReader& e);
     unsigned fullMeasures;    // >0, multi measure rest (counting measures)
 };
 
@@ -766,17 +768,17 @@ public:
     int topDist;
 // capx support
 private:
-    void readCapxVoice(XmlReader& e, CapStaff*, int);
-    void readCapxStaff(XmlReader& e, CapSystem*);
-    void readCapxSystem(XmlReader& e);
-    void capxSystems(XmlReader& e);
-    void readCapxStaveLayout(XmlReader& e, CapStaffLayout*, int);
-    void capxLayoutStaves(XmlReader& e);
-    void capxLayout(XmlReader& e);
+    void readCapxVoice(engraving::XmlReader& e, CapStaff*, int);
+    void readCapxStaff(engraving::XmlReader& e, CapSystem*);
+    void readCapxSystem(engraving::XmlReader& e);
+    void capxSystems(engraving::XmlReader& e);
+    void readCapxStaveLayout(engraving::XmlReader& e, CapStaffLayout*, int);
+    void capxLayoutStaves(engraving::XmlReader& e);
+    void capxLayout(engraving::XmlReader& e);
     void initCapxLayout();
 public:
-    void readCapx(XmlReader& e);
-    QList<BasicDrawObj*> readCapxDrawObjectArray(XmlReader& e);
+    void readCapx(engraving::XmlReader& e);
+    QList<BasicDrawObj*> readCapxDrawObjectArray(engraving::XmlReader& e);
 };
 } // namespace Ms
 #endif

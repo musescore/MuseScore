@@ -25,21 +25,7 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-bool PercussionsSetupDataResolver::supportsInstrument(const Ms::Instrument* instrument)
-{
-    static const std::unordered_set<std::string> PERCUSSION_FAMILY_SET = {
-        "timpani", "roto-toms", "tubaphones", "steel-drums",
-        "keyboard-percussion", "pitched-metal-percussion",
-        "orff-percussion", "flexatones", "musical-saws",
-        "glass-percussion", "kalimbas", "drums", "unpitched-metal-percussion",
-        "unpitched-wooden-percussion", "other-percussion",
-        "batterie", "body-percussion"
-    };
-
-    return PERCUSSION_FAMILY_SET.find(instrument->family().toStdString()) != PERCUSSION_FAMILY_SET.cend();
-}
-
-const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const Ms::Instrument* instrument)
+const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const Instrument* instrument)
 {
     static std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
         { "timpani", { SoundId::Timpani, SoundCategory::Percussions, {}, {} } },
@@ -120,7 +106,7 @@ const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const Ms::Instr
         { "congas", { SoundId::Conga, SoundCategory::Percussions, {}, {} } },
         { "cuica", { SoundId::Cuica, SoundCategory::Percussions, {}, {} } },
         { "drumset", { SoundId::Drumset, SoundCategory::Percussions, {}, {} } },
-        { "military-drum", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Millitary }, {} } },
+        { "military-drum", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Military }, {} } },
         { "frame-drum", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Frame }, {} } },
         { "piccolo-snare-drum", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Snare,
                                                                                SoundSubCategory::Piccolo }, {} } },
@@ -181,7 +167,7 @@ const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const Ms::Instr
                                                                                 SoundSubCategory::Wind }, {} } },
         { "shell-wind-chimes", { SoundId::Chimes, SoundCategory::Percussions, { SoundSubCategory::Shell,
                                                                                 SoundSubCategory::Wind }, {} } },
-        { "percussion", { SoundId::Drumset, SoundCategory::Percussions, {}, {} } },
+        { "percussion", { SoundId::Drumset, SoundCategory::Percussions, { SoundSubCategory::Orchestral }, {} } },
         { "stones", { SoundId::Stones, SoundCategory::Percussions, {}, {} } },
         { "tambourine", { SoundId::Tambourine, SoundCategory::Percussions, {}, {} } },
         { "tubo", { SoundId::Tubo, SoundCategory::Percussions, {}, {} } },
@@ -204,6 +190,9 @@ const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const Ms::Instr
         { "hand-clap", { SoundId::Clap, SoundCategory::Percussions, { SoundSubCategory::Hand }, {} } },
         { "slap", { SoundId::Slap, SoundCategory::Percussions, { SoundSubCategory::Hand }, {} } },
         { "stamp", { SoundId::Stamp, SoundCategory::Percussions, { SoundSubCategory::Foot }, {} } },
+
+        { "percussion-synthesizer", { SoundId::Synthesizer, SoundCategory::Percussions, { SoundSubCategory::Electric,
+                                                                                          SoundSubCategory::Percussive }, {} } },
     };
 
     auto search = SETUP_DATA_MAP.find(instrument->id().toStdString());

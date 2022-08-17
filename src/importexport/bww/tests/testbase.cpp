@@ -22,14 +22,16 @@
 
 #include "testbase.h"
 
-#include <QFile>
 #include <QProcess>
 #include <QTextStream>
 
-#include "config.h"
+#include "io/file.h"
+#include "io/buffer.h"
+
+#include "libmscore/instrtemplate.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/musescoreCore.h"
-#include "engraving/infrastructure/io/localfileinfoprovider.h"
+#include "engraving/infrastructure/localfileinfoprovider.h"
 
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/scoreaccess.h"
@@ -38,9 +40,10 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 MTest::MTest()
 {
     MScore::testMode = true;
@@ -48,20 +51,20 @@ MTest::MTest()
 
 MasterScore* MTest::readScore(const QString& name)
 {
-    io::path path = root + "/" + name;
+    io::path_t path = root + "/" + name;
     MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
     std::string suffix = io::suffix(path);
 
     ScoreLoad sl;
-    Score::FileError rv;
+    Err rv;
     if (suffix == "mscz" || suffix == "mscx") {
         rv = compat::loadMsczOrMscx(score, path.toQString(), false);
     } else {
-        rv = Score::FileError::FILE_UNKNOWN_TYPE;
+        rv = Err::FileUnknownType;
     }
 
-    if (rv != Score::FileError::FILE_NO_ERROR) {
+    if (rv != Err::NoError) {
         LOGE() << "cannot load file at " << path;
         delete score;
         score = nullptr;
@@ -76,12 +79,12 @@ MasterScore* MTest::readScore(const QString& name)
 
 bool MTest::saveScore(Score* score, const QString& name) const
 {
-    QFile file(name);
+    File file(name);
     if (file.exists()) {
         file.remove();
     }
 
-    if (!file.open(QIODevice::ReadWrite)) {
+    if (!file.open(IODevice::ReadWrite)) {
         return false;
     }
     compat::WriteScoreHook hook;
@@ -97,12 +100,12 @@ bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)
     args.append(f2);
     args.append(f1);
     QProcess p;
-    qDebug() << "Running " << cmd << " with arg1: " << f2 << " and arg2: " << f1;
+    LOGD() << "Running " << cmd << " with arg1: " << f2 << " and arg2: " << f1;
     p.start(cmd, args);
     if (!p.waitForFinished() || p.exitCode()) {
         QByteArray ba = p.readAll();
-        //qDebug("%s", qPrintable(ba));
-        //qDebug("   <diff -u %s %s failed", qPrintable(compareWith),
+        //LOGD("%s", qPrintable(ba));
+        //LOGD("   <diff -u %s %s failed", qPrintable(compareWith),
         //   qPrintable(QString(root + "/" + saveName)));
         QTextStream outputText(stdout);
         outputText << QString(ba);

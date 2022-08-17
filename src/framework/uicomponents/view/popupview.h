@@ -26,26 +26,28 @@
 #include <QQuickItem>
 #include <QQmlParserStatus>
 
-#include "ret.h"
+#include "types/ret.h"
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/inavigationcontroller.h"
 #include "ui/view/navigationcontrol.h"
+
 #include "popupwindow/ipopupwindow.h"
+#include "internal/popupviewclosecontroller.h"
 
 class QQuickCloseEvent;
 
 namespace mu::uicomponents {
-class PopupView : public QObject, public QQmlParserStatus
+class PopupView : public QObject, public QQmlParserStatus, async::Asyncable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(QQuickItem * parent READ parentItem WRITE setParentItem NOTIFY parentItemChanged)
     Q_PROPERTY(QQuickItem * contentItem READ contentItem WRITE setContentItem NOTIFY contentItemChanged)
-    Q_PROPERTY(int contentWidth READ contentWidth WRITE setContentWidth NOTIFY contentWidthChanged)
-    Q_PROPERTY(int contentHeight READ contentHeight WRITE setContentHeight NOTIFY contentHeightChanged)
 
     Q_PROPERTY(QWindow * window READ window NOTIFY windowChanged)
 
@@ -59,7 +61,6 @@ class PopupView : public QObject, public QQmlParserStatus
     Q_PROPERTY(QQuickItem * anchorItem READ anchorItem WRITE setAnchorItem NOTIFY anchorItemChanged)
     Q_PROPERTY(bool opensUpward READ opensUpward NOTIFY opensUpwardChanged)
     Q_PROPERTY(int arrowX READ arrowX WRITE setArrowX NOTIFY arrowXChanged)
-    Q_PROPERTY(Qt::AlignmentFlag cascadeAlign READ cascadeAlign WRITE setCascadeAlign NOTIFY cascadeAlignChanged)
 
     Q_PROPERTY(bool isOpened READ isOpened NOTIFY isOpenedChanged)
     Q_PROPERTY(OpenPolicy openPolicy READ openPolicy WRITE setOpenPolicy NOTIFY openPolicyChanged)
@@ -72,6 +73,7 @@ class PopupView : public QObject, public QQmlParserStatus
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QString objectId READ objectId WRITE setObjectId NOTIFY objectIdChanged)
     Q_PROPERTY(bool modal READ modal WRITE setModal NOTIFY modalChanged)
+    Q_PROPERTY(bool frameless READ frameless WRITE setFrameless NOTIFY framelessChanged)
     Q_PROPERTY(bool resizable READ resizable WRITE setResizable NOTIFY resizableChanged)
     Q_PROPERTY(QVariantMap ret READ ret WRITE setRet NOTIFY retChanged)
 
@@ -85,7 +87,7 @@ class PopupView : public QObject, public QQmlParserStatus
 public:
 
     explicit PopupView(QQuickItem* parent = nullptr);
-    ~PopupView() override = default;
+    ~PopupView() override;
 
     enum OpenPolicy {
         Default = 0,
@@ -109,7 +111,7 @@ public:
     Q_INVOKABLE void forceActiveFocus();
 
     Q_INVOKABLE void open();
-    Q_INVOKABLE void close();
+    Q_INVOKABLE void close(bool force = false);
     Q_INVOKABLE void toggleOpened();
 
     Q_INVOKABLE void setParentWindow(QWindow* window);
@@ -126,21 +128,15 @@ public:
     QString objectId() const;
     QString title() const;
     bool modal() const;
+    bool frameless() const;
     bool resizable() const;
     QVariantMap ret() const;
 
     bool opensUpward() const;
     int arrowX() const;
-    Qt::AlignmentFlag cascadeAlign() const;
     int padding() const;
     bool showArrow() const;
     QQuickItem* anchorItem() const;
-
-    int contentWidth() const;
-    void setContentWidth(int newContentWidth);
-
-    int contentHeight() const;
-    void setContentHeight(int newContentHeight);
 
 public slots:
     void setParentItem(QQuickItem* parent);
@@ -153,12 +149,12 @@ public slots:
     void setObjectId(QString objectId);
     void setTitle(QString title);
     void setModal(bool modal);
+    void setFrameless(bool frameless);
     void setResizable(bool resizable);
     void setRet(QVariantMap ret);
 
     void setOpensUpward(bool opensUpward);
     void setArrowX(int arrowX);
-    void setCascadeAlign(Qt::AlignmentFlag cascadeAlign);
     void setPadding(int padding);
     void setShowArrow(bool showArrow);
     void setAnchorItem(QQuickItem* anchorItem);
@@ -177,28 +173,22 @@ signals:
     void objectIdChanged(QString objectId);
     void titleChanged(QString title);
     void modalChanged(bool modal);
+    void framelessChanged(bool frameless);
     void resizableChanged(bool resizable);
     void retChanged(QVariantMap ret);
 
     void isOpenedChanged();
     void opened();
     void aboutToClose(QQuickCloseEvent* closeEvent);
-    void closed();
+    void closed(bool force);
 
     void opensUpwardChanged(bool opensUpward);
     void arrowXChanged(int arrowX);
-    void cascadeAlignChanged(Qt::AlignmentFlag cascadeAlign);
     void paddingChanged(int padding);
     void showArrowChanged(bool showArrow);
     void anchorItemChanged(QQuickItem* anchorItem);
 
-    void contentWidthChanged();
-    void contentHeightChanged();
-
     void activateParentOnCloseChanged(bool activateParentOnClose);
-
-private slots:
-    void onApplicationStateChanged(Qt::ApplicationState state);
 
 protected:
     virtual bool isDialog() const;
@@ -221,12 +211,10 @@ protected:
 
     QScreen* resolveScreen() const;
     QRect currentScreenGeometry() const;
-    void updatePosition();
+    virtual void updatePosition();
     void updateContentPosition();
 
-    QQuickItem* parentPopupContentItem() const;
-    Qt::AlignmentFlag parentCascadeAlign(const QQuickItem* parent) const;
-
+    virtual QRect viewGeometry() const;
     QRectF anchorGeometry() const;
 
     void resolveNavigationParentControl();
@@ -235,8 +223,6 @@ protected:
     IPopupWindow* m_window = nullptr;
 
     QQuickItem* m_contentItem = nullptr;
-    int m_contentWidth = 0;
-    int m_contentHeight = 0;
 
     QQuickItem* m_anchorItem = nullptr;
 
@@ -249,13 +235,16 @@ protected:
     QString m_objectId;
     QString m_title;
     bool m_modal = true;
+    bool m_frameless = false;
     bool m_resizable = false;
     QVariantMap m_ret;
     bool m_opensUpward = false;
     int m_arrowX = 0;
-    Qt::AlignmentFlag m_cascadeAlign = Qt::AlignmentFlag::AlignRight;
     int m_padding = 0;
     bool m_showArrow = false;
+
+    PopupViewCloseController* m_closeController = nullptr;
+    bool m_forceClosed = false;
 };
 }
 

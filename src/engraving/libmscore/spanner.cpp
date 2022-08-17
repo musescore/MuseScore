@@ -36,12 +36,13 @@
 #include "musescoreCore.h"
 #include "repeatlist.h"
 
+#include "translation.h"
 #include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //-----------------------------------------------------------------------------
 //   @@ SpannerWriter
 ///   Helper class for writing Spanners
@@ -49,6 +50,7 @@ namespace Ms {
 
 class SpannerWriter : public ConnectorInfoWriter
 {
+    OBJECT_ALLOCATOR(engraving, SpannerWriter)
 protected:
     const char* tagName() const override { return "Spanner"; }
 public:
@@ -88,7 +90,7 @@ SpannerSegment::SpannerSegment(const SpannerSegment& s)
 //   mag
 //---------------------------------------------------------
 
-qreal SpannerSegment::mag() const
+double SpannerSegment::mag() const
 {
     if (spanner()->systemFlag()) {
         return 1.0;
@@ -123,7 +125,7 @@ void SpannerSegment::setSystem(System* s)
 //   spatiumChanged
 //---------------------------------------------------------
 
-void SpannerSegment::spatiumChanged(qreal ov, qreal nv)
+void SpannerSegment::spatiumChanged(double ov, double nv)
 {
     EngravingItem::spatiumChanged(ov, nv);
     if (offsetIsSpatiumDependent()) {
@@ -135,7 +137,7 @@ void SpannerSegment::spatiumChanged(qreal ov, qreal nv)
 //   mimeData
 //---------------------------------------------------------
 
-QByteArray SpannerSegment::mimeData(const PointF& dragOffset) const
+ByteArray SpannerSegment::mimeData(const PointF& dragOffset) const
 {
     if (dragOffset.isNull()) { // where is dragOffset used?
         return spanner()->mimeData(dragOffset);
@@ -346,7 +348,7 @@ EngravingItem* SpannerSegment::prevSegmentElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString SpannerSegment::accessibleInfo() const
+String SpannerSegment::accessibleInfo() const
 {
     return spanner()->accessibleInfo();
 }
@@ -400,15 +402,24 @@ Spanner::Spanner(const Spanner& s)
 
 Spanner::~Spanner()
 {
-    qDeleteAll(segments);
-    qDeleteAll(unusedSegments);
+    for (SpannerSegment* s : segments) {
+        if (s->parent() == this) {
+            delete s;
+        }
+    }
+
+    for (SpannerSegment* s : unusedSegments) {
+        if (s->parent() == this) {
+            delete s;
+        }
+    }
 }
 
 //---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
 
-qreal Spanner::mag() const
+double Spanner::mag() const
 {
     if (systemFlag()) {
         return 1.0;
@@ -538,7 +549,7 @@ void Spanner::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
 }
 
 //---------------------------------------------------------
-//   isVisbleCR
+//   isVisibleCR
 //---------------------------------------------------------
 
 static bool isVisibleCR(EngravingItem* e)
@@ -572,7 +583,7 @@ bool Spanner::eitherEndVisible() const
 void Spanner::setScore(Score* s)
 {
     EngravingItem::setScore(s);
-    foreach (SpannerSegment* seg, segments) {
+    for (SpannerSegment* seg : segments) {
         seg->setScore(s);
     }
 }
@@ -724,10 +735,10 @@ void Spanner::computeEndElement()
             Fraction tick = (l->ticks().ticks() == Lyrics::TEMP_MELISMA_TICKS) ? l->tick() : l->endTick();
             Segment* s = score()->tick2segment(tick, true, SegmentType::ChordRest);
             if (!s) {
-                qDebug("%s no end segment for tick %d", typeName(), tick.ticks());
+                LOGD("%s no end segment for tick %d", typeName(), tick.ticks());
                 return;
             }
-            int t = trackZeroVoice(track2());
+            voice_idx_t t = trackZeroVoice(track2());
             // take the first chordrest we can find;
             // linePos will substitute one in current voice if available
             for (voice_idx_t v = 0; v < VOICES; ++v) {
@@ -741,7 +752,7 @@ void Spanner::computeEndElement()
             _endElement = score()->findCRinStaff(tick2(), track2() / VOICES);
         }
         if (!_endElement) {
-            qDebug("%s no end element for tick %d", typeName(), tick2().ticks());
+            LOGD("%s no end element for tick %d", typeName(), tick2().ticks());
             return;
         }
 
@@ -749,7 +760,7 @@ void Spanner::computeEndElement()
             ChordRest* cr = endCR();
             Fraction nticks = cr->tick() + cr->actualTicks() - _tick;
             if ((_ticks - nticks).isNotZero()) {
-                qDebug("%s ticks changed, %d -> %d", typeName(), _ticks.ticks(), nticks.ticks());
+                LOGD("%s ticks changed, %d -> %d", typeName(), _ticks.ticks(), nticks.ticks());
                 setTicks(nticks);
                 if (isOttava()) {
                     staff()->updateOttava();
@@ -762,7 +773,7 @@ void Spanner::computeEndElement()
     case Anchor::MEASURE:
         _endElement = score()->tick2measure(tick2() - Fraction(1, 1920));
         if (!_endElement) {
-            qDebug("Spanner::computeEndElement(), measure not found for tick %d\n", tick2().ticks() - 1);
+            LOGD("Spanner::computeEndElement(), measure not found for tick %d\n", tick2().ticks() - 1);
             _endElement = score()->lastMeasure();
         }
         break;
@@ -880,11 +891,16 @@ void Spanner::setNoteSpan(Note* startNote, Note* endNote)
 
 Chord* Spanner::startChord()
 {
-    Q_ASSERT(_anchor == Anchor::CHORD);
+    assert(_anchor == Anchor::CHORD);
     if (!_startElement) {
         _startElement = findStartChord();
     }
-    return toChord(_startElement);
+
+    if (_startElement && _startElement->isChord()) {
+        return toChord(_startElement);
+    }
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -893,11 +909,16 @@ Chord* Spanner::startChord()
 
 Chord* Spanner::endChord()
 {
-    Q_ASSERT(_anchor == Anchor::CHORD);
+    assert(_anchor == Anchor::CHORD);
     if (!_endElement && type() == ElementType::SLUR) {
         _endElement = findEndChord();
     }
-    return toChord(_endElement);
+
+    if (_endElement && _endElement->isChord()) {
+        return toChord(_endElement);
+    }
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -906,7 +927,7 @@ Chord* Spanner::endChord()
 
 ChordRest* Spanner::startCR()
 {
-    Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
+    assert(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
     if (!_startElement || _startElement->score() != score()) {
         _startElement = findStartCR();
     }
@@ -919,7 +940,7 @@ ChordRest* Spanner::startCR()
 
 ChordRest* Spanner::endCR()
 {
-    Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
+    assert(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
     if ((!_endElement || _endElement->score() != score())) {
         _endElement = findEndCR();
     }
@@ -932,7 +953,7 @@ ChordRest* Spanner::endCR()
 
 Chord* Spanner::findStartChord() const
 {
-    Q_ASSERT(_anchor == Anchor::CHORD);
+    assert(_anchor == Anchor::CHORD);
     ChordRest* cr = score()->findCR(tick(), track());
     return cr->isChord() ? toChord(cr) : nullptr;
 }
@@ -943,7 +964,7 @@ Chord* Spanner::findStartChord() const
 
 Chord* Spanner::findEndChord() const
 {
-    Q_ASSERT(_anchor == Anchor::CHORD);
+    assert(_anchor == Anchor::CHORD);
     Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
     ChordRest* endCR = s ? toChordRest(s->element(track2())) : nullptr;
     if (endCR && !endCR->isChord()) {
@@ -958,7 +979,7 @@ Chord* Spanner::findEndChord() const
 
 ChordRest* Spanner::findStartCR() const
 {
-    Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
+    assert(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
     return score()->findCR(tick(), track());
 }
 
@@ -968,7 +989,7 @@ ChordRest* Spanner::findStartCR() const
 
 ChordRest* Spanner::findEndCR() const
 {
-    Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
+    assert(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
     Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
     const track_idx_t tr2 = effectiveTrack2();
     ChordRest* endCR = s ? toChordRest(s->element(tr2)) : nullptr;
@@ -981,7 +1002,7 @@ ChordRest* Spanner::findEndCR() const
 
 Segment* Spanner::startSegment() const
 {
-    Q_ASSERT(score() != NULL);
+    assert(score() != NULL);
     return score()->tick2rightSegment(tick());
 }
 
@@ -1068,7 +1089,7 @@ void Spanner::setStartElement(EngravingItem* e)
 {
 #ifndef NDEBUG
     if (_anchor == Anchor::NOTE) {
-        Q_ASSERT(!e || e->type() == ElementType::NOTE);
+        assert(!e || e->type() == ElementType::NOTE);
     }
 #endif
     _startElement = e;
@@ -1082,7 +1103,7 @@ void Spanner::setEndElement(EngravingItem* e)
 {
 #ifndef NDEBUG
     if (_anchor == Anchor::NOTE) {
-        Q_ASSERT(!e || e->type() == ElementType::NOTE);
+        assert(!e || e->type() == ElementType::NOTE);
     }
 #endif
     _endElement = e;
@@ -1239,12 +1260,24 @@ void Spanner::setTicks(const Fraction& f)
 
 int Spanner::startUniqueTicks() const
 {
-    return _startUniqueTicks;
+    Score* score = this->score();
+
+    if (!score) {
+        return 0;
+    }
+
+    return score->repeatList().tick2utick(tick().ticks());
 }
 
 int Spanner::endUniqueTicks() const
 {
-    return _endUniqueTicks;
+    Score* score = this->score();
+
+    if (!score) {
+        return 0;
+    }
+
+    return score->repeatList().tick2utick(tick2().ticks());
 }
 
 //---------------------------------------------------------
@@ -1368,8 +1401,8 @@ void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegm
 
 void Spanner::eraseSpannerSegments()
 {
-    qDeleteAll(segments);
-    qDeleteAll(unusedSegments);
+    DeleteAll(segments);
+    DeleteAll(unusedSegments);
     segments.clear();
     unusedSegments.clear();
 }
@@ -1380,8 +1413,20 @@ void Spanner::eraseSpannerSegments()
 
 SpannerSegment* Spanner::layoutSystem(System*)
 {
-    qDebug(" %s", typeName());
+    LOGD(" %s", typeName());
     return 0;
+}
+
+void Spanner::moveToSystemTopIfNeed(SpannerSegment* segment)
+{
+    if (segment->spanner()) {
+        for (SpannerSegment* ss : segment->spanner()->spannerSegments()) {
+            ss->setFlag(ElementFlag::SYSTEM, systemFlag());
+            ss->setTrack(systemFlag() ? 0 : track());
+        }
+        segment->spanner()->setFlag(ElementFlag::SYSTEM, systemFlag());
+        segment->spanner()->setTrack(systemFlag() ? 0 : track());
+    }
 }
 
 //---------------------------------------------------------
@@ -1402,7 +1447,7 @@ SpannerSegment* Spanner::getNextLayoutSystemSegment(System* system, std::functio
             reuse(seg);
         } else {
             seg = createSegment(system);
-            Q_ASSERT(seg);
+            assert(seg);
             add(seg);
         }
     }
@@ -1439,7 +1484,7 @@ void Spanner::layoutSystemsDone()
 static Fraction fraction(const XmlWriter& xml, const EngravingItem* current, const Fraction& t)
 {
     Fraction tick(t);
-    if (!xml.clipboardmode()) {
+    if (!xml.context()->clipboardmode()) {
         const Measure* m = toMeasure(current->findMeasure());
         if (m) {
             tick -= m->tick();
@@ -1454,8 +1499,8 @@ static Fraction fraction(const XmlWriter& xml, const EngravingItem* current, con
 
 bool Spanner::readProperties(XmlReader& e)
 {
-    const QStringRef tag(e.name());
-    if (e.pasteMode()) {
+    const AsciiStringView tag(e.name());
+    if (e.context()->pasteMode()) {
         if (tag == "ticks_f") {
             setTicks(e.readFraction());
             return true;
@@ -1470,8 +1515,8 @@ bool Spanner::readProperties(XmlReader& e)
 
 void Spanner::writeProperties(XmlWriter& xml) const
 {
-    if (xml.clipboardmode()) {
-        xml.tag("ticks_f", ticks());
+    if (xml.context()->clipboardmode()) {
+        xml.tagFraction("ticks_f", ticks());
     }
     EngravingItem::writeProperties(xml);
 }
@@ -1529,7 +1574,7 @@ void SpannerWriter::fillSpannerPosition(Location& l, const MeasureBase* m, const
         l.setFrac(tick);
     } else {
         if (!m) {
-            qWarning("fillSpannerPosition: couldn't find spanner's endpoint's measure");
+            LOGW("fillSpannerPosition: couldn't find spanner's endpoint's measure");
             l.setMeasure(0);
             l.setFrac(tick);
             return;
@@ -1546,9 +1591,9 @@ void SpannerWriter::fillSpannerPosition(Location& l, const MeasureBase* m, const
 SpannerWriter::SpannerWriter(XmlWriter& xml, const EngravingItem* current, const Spanner* sp, int track, Fraction frac, bool start)
     : ConnectorInfoWriter(xml, current, sp, track, frac)
 {
-    const bool clipboardmode = xml.clipboardmode();
+    const bool clipboardmode = xml.context()->clipboardmode();
     if (!sp->startElement() || !sp->endElement()) {
-        qWarning("SpannerWriter: spanner (%s) doesn't have an endpoint!", sp->typeName());
+        LOGW("SpannerWriter: spanner (%s) doesn't have an endpoint!", sp->typeName());
         return;
     }
     if (current->isMeasure() || current->isSegment() || (sp->startElement()->type() != current->type())) {
@@ -1597,29 +1642,29 @@ void SpannerSegment::autoplaceSpannerSegment()
     }
 
     // rebase vertical offset on drag
-    qreal rebase = 0.0;
+    double rebase = 0.0;
     if (offsetChanged() != OffsetChange::NONE) {
         rebase = rebaseOffset();
     }
 
     if (autoplace()) {
-        qreal sp = score()->spatium();
+        double sp = score()->spatium();
         if (!systemFlag() && !spanner()->systemFlag()) {
             sp *= staff()->staffMag(spanner()->tick());
         }
-        qreal md = minDistance().val() * sp;
+        double md = minDistance().val() * sp;
         bool above = spanner()->placeAbove();
         SkylineLine sl(!above);
         Shape sh = shape();
         sl.add(sh.translated(pos()));
-        qreal yd = 0.0;
+        double yd = 0.0;
         if (above) {
-            qreal d  = system()->topDistance(staffIdx(), sl);
+            double d  = system()->topDistance(staffIdx(), sl);
             if (d > -md) {
                 yd = -(d + md);
             }
         } else {
-            qreal d  = system()->bottomDistance(staffIdx(), sl);
+            double d  = system()->bottomDistance(staffIdx(), sl);
             if (d > -md) {
                 yd = d + md;
             }
@@ -1628,14 +1673,51 @@ void SpannerSegment::autoplaceSpannerSegment()
             if (offsetChanged() != OffsetChange::NONE) {
                 // user moved element within the skyline
                 // we may need to adjust minDistance, yd, and/or offset
-                qreal adj = pos().y() + rebase;
+                double adj = pos().y() + rebase;
                 bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < staff()->height();
                 rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
             }
-            rypos() += yd;
+            movePosY(yd);
         }
     }
     setOffsetChanged(false);
+}
+
+String SpannerSegment::formatBarsAndBeats() const
+{
+    const Spanner* spanner = this->spanner();
+
+    if (!spanner) {
+        return EngravingItem::formatBarsAndBeats();
+    }
+
+    const Segment* endSegment = spanner->endSegment();
+
+    if (!endSegment) {
+        endSegment = score()->lastSegment()->prev1MM(SegmentType::ChordRest);
+    }
+
+    if (endSegment->tick() != score()->lastSegment()->prev1MM(SegmentType::ChordRest)->tick()
+        && spanner->type() != ElementType::SLUR
+        && spanner->type() != ElementType::TIE) {
+        endSegment = endSegment->prev1MM(SegmentType::ChordRest);
+    }
+
+    return formatStartBarsAndBeats(spanner->startSegment()) + u' ' + formatEndBarsAndBeats(endSegment);
+}
+
+String SpannerSegment::formatStartBarsAndBeats(const Segment* segment) const
+{
+    std::pair<int, float> barbeat = segment->barbeat();
+    return mtrc("engraving", "Start measure: %1; Start beat: %2")
+           .arg(String::number(barbeat.first), String::number(barbeat.second));
+}
+
+String SpannerSegment::formatEndBarsAndBeats(const Segment* segment) const
+{
+    std::pair<int, float> barbeat = segment->barbeat();
+    return mtrc("engraving", "End measure: %1; End beat: %2")
+           .arg(String::number(barbeat.first), String::number(barbeat.second));
 }
 
 //---------------------------------------------------------

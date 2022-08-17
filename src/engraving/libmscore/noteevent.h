@@ -26,7 +26,9 @@
 #include <vector>
 #include <algorithm>
 
-namespace Ms {
+#include "global/allocator.h"
+
+namespace mu::engraving {
 class XmlWriter;
 class XmlReader;
 
@@ -67,6 +69,7 @@ public:
 
 class NoteEventList : public std::vector<NoteEvent>
 {
+    OBJECT_ALLOCATOR(engraving, NoteEventList)
 public:
     NoteEventList();
 
@@ -77,5 +80,5 @@ public:
         })->offtime();
     }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

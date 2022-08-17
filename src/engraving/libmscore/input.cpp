@@ -37,7 +37,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 class DrumSet;
 
 //---------------------------------------------------------
@@ -168,8 +168,8 @@ void InputState::update(Selection& selection)
                     articulationsIds.insert(artic->symId());
                 }
 
-                articulationsIds = Ms::splitArticulations(articulationsIds);
-                articulationsIds = Ms::flipArticulations(articulationsIds, Ms::PlacementV::ABOVE);
+                articulationsIds = mu::engraving::splitArticulations(articulationsIds);
+                articulationsIds = mu::engraving::flipArticulations(articulationsIds, PlacementV::ABOVE);
                 for (const SymId& articulationSymbolId: articulationsIds) {
                     if (std::find(articulationSymbolIds.begin(), articulationSymbolIds.end(),
                                   articulationSymbolId) == articulationSymbolIds.end()) {
@@ -183,7 +183,7 @@ void InputState::update(Selection& selection)
                 for (Articulation* artic: n->chord()->articulations()) {
                     articulationsIds.insert(artic->symId());
                 }
-                articulationSymbolIds = Ms::flipArticulations(articulationsIds, Ms::PlacementV::ABOVE);
+                articulationSymbolIds = mu::engraving::flipArticulations(articulationsIds, PlacementV::ABOVE);
 
                 n1 = n;
             }

@@ -25,13 +25,14 @@
 
 #include "text.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ Fingering
 //---------------------------------------------------------
 
 class Fingering final : public TextBase
 {
+    OBJECT_ALLOCATOR(engraving, Fingering)
 public:
     Fingering(Note* parent, TextStyleType tid, ElementFlags ef = ElementFlag::HAS_TAG);
     Fingering(Note* parent, ElementFlags ef = ElementFlag::HAS_TAG);
@@ -48,9 +49,9 @@ public:
     bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
 
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue propertyDefault(Pid id) const override;
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

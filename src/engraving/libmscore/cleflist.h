@@ -26,7 +26,7 @@
 #include "mscore.h"
 #include "clef.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 
 //---------------------------------------------------------
@@ -35,6 +35,7 @@ class Score;
 
 class ClefList : public std::map<int, ClefTypeList>
 {
+    OBJECT_ALLOCATOR(engraving, ClefList)
 public:
     ClefList() {}
     ClefTypeList clef(int tick) const;
@@ -42,5 +43,5 @@ public:
     int nextClefTick(int tick) const;
     int currentClefTick(int tick) const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

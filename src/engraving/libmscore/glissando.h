@@ -27,9 +27,9 @@
 #include "line.h"
 #include "property.h"
 
-namespace Ms {
+namespace mu::engraving {
 // the amount of white space to leave before a system-initial chord with glissando
-static const qreal GLISS_STARTOFSYSTEM_WIDTH = 4;           // in sp
+static const double GLISS_STARTOFSYSTEM_WIDTH = 4;           // in sp
 
 class Glissando;
 class Note;
@@ -41,6 +41,7 @@ enum class GlissandoType;
 
 class GlissandoSegment final : public LineSegment
 {
+    OBJECT_ALLOCATOR(engraving, GlissandoSegment)
 public:
     GlissandoSegment(Glissando* sp, System* parent);
 
@@ -59,27 +60,27 @@ public:
 
 class Glissando final : public SLine
 {
-    M_PROPERTY(QString, text, setText)
+    OBJECT_ALLOCATOR(engraving, Glissando)
+
+    M_PROPERTY(String, text, setText)
     M_PROPERTY(GlissandoType, glissandoType, setGlissandoType)
     M_PROPERTY(GlissandoStyle, glissandoStyle, setGlissandoStyle)
-    M_PROPERTY(QString, fontFace, setFontFace)
-    M_PROPERTY(qreal, fontSize, setFontSize)
+    M_PROPERTY(String, fontFace, setFontFace)
+    M_PROPERTY(double, fontSize, setFontSize)
     M_PROPERTY(bool, showText, setShowText)
     M_PROPERTY(bool, playGlissando, setPlayGlissando)
     M_PROPERTY(FontStyle, fontStyle, setFontStyle)
     M_PROPERTY(int, easeIn, setEaseIn)
     M_PROPERTY(int, easeOut, setEaseOut)
 
-    static const std::array<const char*, 2> glissandoTypeNames;
-
 public:
     Glissando(EngravingItem* parent);
     Glissando(const Glissando&);
 
     static Note* guessInitialNote(Chord* chord);
-    static Note* guessFinalNote(Chord* chord);
+    static Note* guessFinalNote(Chord* chord, Note* startNote);
 
-    QString glissandoTypeName() const;
+    const TranslatableString& glissandoTypeName() const;
 
     // overridden inherited methods
     Glissando* clone() const override { return new Glissando(*this); }
@@ -91,11 +92,11 @@ public:
     void read(XmlReader&) override;
 
     // property/style methods
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
+    void addLineAttachPoints();
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

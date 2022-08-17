@@ -23,7 +23,7 @@
 
 using namespace mu::project;
 
-void StubRecentFilesController::addRecentFile(const io::path&)
+void StubRecentFilesController::addRecentFile(const io::path_t&)
 {
 }
 

@@ -96,7 +96,7 @@
       <figured-bass>
         <figure>
           <figure-number>1</figure-number>
-          <extend type="start" />
+          <extend type="start"/>
           </figure>
         </figured-bass>
       <note>
@@ -111,7 +111,7 @@
         </note>
       <figured-bass>
         <figure>
-          <extend type="continue" />
+          <extend type="continue"/>
           </figure>
         </figured-bass>
       <note>
@@ -126,7 +126,7 @@
         </note>
       <figured-bass>
         <figure>
-          <extend type="continue" />
+          <extend type="continue"/>
           </figure>
         </figured-bass>
       <note>
@@ -141,7 +141,7 @@
         </note>
       <figured-bass>
         <figure>
-          <extend type="continue" />
+          <extend type="continue"/>
           </figure>
         </figured-bass>
       <note>
@@ -158,7 +158,7 @@
     <measure number="5">
       <figured-bass>
         <figure>
-          <extend type="stop" />
+          <extend type="stop"/>
           </figure>
         </figured-bass>
       <note>
@@ -301,7 +301,7 @@
       <figured-bass>
         <figure>
           <figure-number>2</figure-number>
-          <extend type="start" />
+          <extend type="start"/>
           </figure>
         </figured-bass>
       <note>
@@ -317,7 +317,7 @@
         </note>
       <figured-bass>
         <figure>
-          <extend type="stop" />
+          <extend type="stop"/>
           </figure>
         </figured-bass>
       <note>
@@ -348,7 +348,7 @@
       <figured-bass>
         <figure>
           <figure-number>3</figure-number>
-          <extend type="start" />
+          <extend type="start"/>
           </figure>
         </figured-bass>
       <note>
@@ -364,7 +364,7 @@
         </note>
       <figured-bass>
         <figure>
-          <extend type="continue" />
+          <extend type="continue"/>
           </figure>
         </figured-bass>
       <note>
@@ -380,7 +380,7 @@
         </note>
       <figured-bass>
         <figure>
-          <extend type="stop" />
+          <extend type="stop"/>
           </figure>
         </figured-bass>
       <note>

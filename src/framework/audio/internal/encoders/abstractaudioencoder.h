@@ -23,38 +23,84 @@
 #ifndef MU_AUDIO_ABSTRACTAUDIOENCODER_H
 #define MU_AUDIO_ABSTRACTAUDIOENCODER_H
 
+#include <cstdio>
+#include <vector>
+#include <memory>
+
 #include "log.h"
+#include "io/path.h"
 
 #include "audiotypes.h"
 
 namespace mu::audio::encode {
-template<class T>
 class AbstractAudioEncoder
 {
 public:
-    static size_t requiredOutputBufferSize(samples_t samplesPerChannel)
+    AbstractAudioEncoder() = default;
+
+    virtual ~AbstractAudioEncoder()
     {
-        return T::outputBufferSize(samplesPerChannel);
+        closeDestination();
     }
 
-    static samples_t encode(const SoundTrackFormat& format, samples_t samplesPerChannel, float* input, char* output)
+    virtual bool init(const io::path_t& path, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
     {
-        IF_ASSERT_FAILED(input && output) {
-            return 0;
+        if (!format.isValid()) {
+            return false;
         }
 
-        return T::doEncode(format, samplesPerChannel, input, output);
-    }
+        m_format = format;
 
-    static samples_t flush(char* output, size_t outputSize)
-    {
-        IF_ASSERT_FAILED(output && outputSize > 0) {
-            return 0;
+        if (!openDestination(path)) {
+            return false;
         }
 
-        return T::doFlush(output, outputSize);
+        prepareOutputBuffer(totalSamplesNumber);
+
+        return true;
     }
+
+    const SoundTrackFormat& format() const
+    {
+        return m_format;
+    }
+
+    virtual size_t encode(samples_t samplesPerChannel, const float* input) = 0;
+    virtual size_t flush() = 0;
+
+protected:
+    virtual size_t requiredOutputBufferSize(samples_t totalSamplesNumber) const = 0;
+
+    virtual bool openDestination(const io::path_t& path)
+    {
+        m_fileStream = std::fopen(path.c_str(), "wb+");
+
+        if (!m_fileStream) {
+            return false;
+        }
+
+        return true;
+    }
+
+    virtual void prepareOutputBuffer(const samples_t totalSamplesNumber)
+    {
+        m_outputBuffer.resize(requiredOutputBufferSize(totalSamplesNumber));
+    }
+
+    virtual void closeDestination()
+    {
+        if (m_fileStream) {
+            std::fclose(m_fileStream);
+        }
+    }
+
+    std::FILE* m_fileStream = nullptr;
+    std::vector<unsigned char> m_outputBuffer;
+
+    SoundTrackFormat m_format;
 };
+
+using AbstractAudioEncoderPtr = std::unique_ptr<AbstractAudioEncoder>;
 }
 
 #endif // MU_AUDIO_ABSTRACTAUDIOENCODER_H

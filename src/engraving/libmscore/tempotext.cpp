@@ -21,12 +21,11 @@
  */
 
 #include <cmath>
-#include <QRegularExpression>
 
 #include <unordered_map>
 
 #include "containers.h"
-
+#include "translation.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
 #include "types/constants.h"
@@ -43,7 +42,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 #define MIN_TEMPO 5.0 / 60
 #define MAX_TEMPO 999.0 / 60
 
@@ -79,13 +78,13 @@ TempoText::TempoText(Segment* parent)
 
 void TempoText::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     xml.tag("tempo", TConv::toXml(_tempo));
     if (_followText) {
         xml.tag("followText", _followText);
     }
     TextBase::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -95,9 +94,9 @@ void TempoText::write(XmlWriter& xml) const
 void TempoText::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "tempo") {
-            setTempo(TConv::fromXml(e.readElementText(), Constants::defaultTempo));
+            setTempo(TConv::fromXml(e.readAsciiText(), Constants::defaultTempo));
         } else if (tag == "followText") {
             _followText = e.readInt();
         } else if (!TextBase::readProperties(e)) {
@@ -106,22 +105,23 @@ void TempoText::read(XmlReader& e)
     }
     // check sanity
     if (xmlText().isEmpty()) {
-        setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(lrint(_tempo.toBPM().val)));
+        setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(int(lrint(_tempo.toBPM().val))));
         setVisible(false);
     }
 }
 
-qreal TempoText::tempoBpm() const
+double TempoText::tempoBpm() const
 {
     //! NOTE: find tempo in format " = 180"
-    QRegularExpression regex("\\s*=\\s*(\\d+[.]{0,1}\\d*)");
-    QStringList matches = regex.match(xmlText()).capturedTexts();
-
-    if (matches.empty() || matches.size() < 1) {
+    std::regex regex("\\s*=\\s*(\\d+[.]{0,1}\\d*)");
+    std::smatch match;
+    std::string stru8 = xmlText().toStdString();
+    std::regex_search(stru8, match, regex);
+    if (match.empty() || match.size() < 1) {
         return 0;
     }
 
-    qreal tempo = matches[1].toDouble();
+    double tempo = String::fromStdString(match[1].str()).toDouble();
     return tempo;
 }
 
@@ -131,9 +131,9 @@ qreal TempoText::tempoBpm() const
 
 struct TempoPattern {
     const char* pattern;
-    qreal f;
+    double f;
     TDuration d;
-    TempoPattern(const char* s, qreal v, DurationType val, int dots = 0)
+    TempoPattern(const char* s, double v, DurationType val, int dots = 0)
         : pattern(s), f(v), d(val)
     {
         d.setDots(dots);
@@ -174,17 +174,19 @@ static const TempoPattern tp[] = {
 //    set len to the match length and dur to the duration value
 //---------------------------------------------------------
 
-int TempoText::findTempoDuration(const QString& s, int& len, TDuration& dur)
+int TempoText::findTempoDuration(const String& s, int& len, TDuration& dur)
 {
     len = 0;
     dur = TDuration();
+    std::string su8 = s.toStdString();
     for (const auto& i : tp) {
-        QRegularExpression regex(i.pattern);
-        QRegularExpressionMatch match = regex.match(s);
-        if (match.hasMatch()) {
-            len = match.capturedLength();
+        std::regex regex(i.pattern);
+        std::smatch match;
+        std::regex_search(su8, match, regex);
+        if (!match.empty()) {
+            len = static_cast<int>(String::fromStdString(match[0].str()).size());
             dur = i.d;
-            return match.capturedStart();
+            return std::distance(su8.cbegin(), match[0].first);
         }
     }
     return -1;
@@ -235,16 +237,16 @@ static const TempoPattern tpSym[] = {
 //    find the tempoText string representation for duration
 //---------------------------------------------------------
 
-QString TempoText::duration2tempoTextString(const TDuration dur)
+String TempoText::duration2tempoTextString(const TDuration dur)
 {
     for (const TempoPattern& pa : tpSym) {
         if (pa.d == dur) {
-            QString res = pa.pattern;
-            res.replace("\\s*", " ");
+            String res = String::fromUtf8(pa.pattern);
+            res.replace(u"\\s*", u" ");
             return res;
         }
     }
-    return "";
+    return u"";
 }
 
 //---------------------------------------------------------
@@ -290,23 +292,25 @@ void TempoText::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags
 void TempoText::updateTempo()
 {
     // cache regexp, they are costly to create
-    static std::unordered_map<QString, QRegularExpression> regexps;
-    static std::unordered_map<QString, QRegularExpression> regexps2;
-    QString s = plainText();
-    s.replace(",", ".");
-    s.replace("<sym>space</sym>", " ");
+    static std::unordered_map<String, std::regex> regexps;
+    static std::unordered_map<String, std::regex> regexps2;
+    String s = plainText();
+    s.replace(u",", u".");
+    s.replace(u"<sym>space</sym>", u" ");
+    std::string su8 = s.toStdString();
     for (const TempoPattern& pa : tp) {
-        QRegularExpression re;
-        if (!mu::contains(regexps, QString(pa.pattern))) {
-            re = QRegularExpression(QString("%1\\s*=\\s*(\\d+[.]{0,1}\\d*)\\s*").arg(pa.pattern));
-            regexps[pa.pattern] = re;
+        String pattern = String::fromUtf8(pa.pattern);
+        std::regex re;
+        if (!mu::contains(regexps, String::fromUtf8(pa.pattern))) {
+            re = std::regex(String(u"%1\\s*=\\s*(\\d+[.]{0,1}\\d*)\\s*").arg(pattern).toStdString());
+            regexps[pattern] = re;
         }
-        re = mu::value(regexps, pa.pattern);
-        QRegularExpressionMatch match = re.match(s);
-        if (match.hasMatch()) {
-            QStringList sl = match.capturedTexts();
-            if (sl.size() == 2) {
-                BeatsPerSecond nt = BeatsPerSecond(sl[1].toDouble() * pa.f);
+        re = mu::value(regexps, pattern);
+        std::smatch match;
+        std::regex_search(su8, match, re);
+        if (!match.empty()) {
+            if (match.size() == 2) {
+                BeatsPerSecond nt = BeatsPerSecond(String::fromStdString(match[1].str()).toDouble() * pa.f);
                 if (nt != _tempo) {
                     undoChangeProperty(Pid::TEMPO, PropertyValue(nt), propertyFlags(Pid::TEMPO));
                     _relative = 1.0;
@@ -317,15 +321,17 @@ void TempoText::updateTempo()
             }
         } else {
             for (const TempoPattern& pa2 : tp) {
-                QString key = QString("%1_%2").arg(pa.pattern, pa2.pattern);
-                QRegularExpression re2;
+                String pattern2 = String::fromUtf8(pa2.pattern);
+                String key = String(u"%1_%2").arg(pattern, pattern2);
+                std::regex re2;
                 if (!mu::contains(regexps2, key)) {
-                    re2 = QRegularExpression(QString("%1\\s*=\\s*%2\\s*").arg(pa.pattern, pa2.pattern));
+                    re2 = std::regex(String(u"%1\\s*=\\s*%2\\s*").arg(pattern, pattern2).toStdString());
                     regexps2[key] = re2;
                 }
                 re2 = mu::value(regexps2, key);
-                QRegularExpressionMatch match2 = re2.match(s);
-                if (match2.hasMatch()) {
+                std::smatch match2;
+                std::regex_search(su8, match2, re2);
+                if (!match2.empty()) {
                     _relative = pa2.f / pa.f;
                     _isRelative = true;
                     updateRelative();
@@ -355,7 +361,7 @@ void TempoText::setTempo(BeatsPerSecond v)
 //   undoSetTempo
 //---------------------------------------------------------
 
-void TempoText::undoSetTempo(qreal v)
+void TempoText::undoSetTempo(double v)
 {
     undoChangeProperty(Pid::TEMPO, v, propertyFlags(Pid::TEMPO));
 }
@@ -446,10 +452,10 @@ void TempoText::layout()
     if (autoplace() && s->rtick().isZero()) {
         Segment* p = segment()->prev(SegmentType::TimeSig);
         if (p) {
-            rxpos() -= s->x() - p->x();
+            movePosX(-(s->x() - p->x()));
             EngravingItem* e = p->element(staffIdx() * VOICES);
             if (e) {
-                rxpos() += e->x();
+                movePosX(e->x());
             }
         }
     }
@@ -460,20 +466,20 @@ void TempoText::layout()
 //   duration2userName
 //---------------------------------------------------------
 
-QString TempoText::duration2userName(const TDuration t)
+String TempoText::duration2userName(const TDuration t)
 {
-    QString dots;
+    String dots;
     switch (t.dots()) {
-    case 1: dots = QObject::tr("Dotted %1").arg(TConv::toUserName(t.type()));
+    case 1: dots = mtrc("engraving", "Dotted %1").arg(TConv::translatedUserName(t.type()));
         break;
-    case 2: dots = QObject::tr("Double dotted %1").arg(TConv::toUserName(t.type()));
+    case 2: dots = mtrc("engraving", "Double dotted %1").arg(TConv::translatedUserName(t.type()));
         break;
-    case 3: dots = QObject::tr("Triple dotted %1").arg(TConv::toUserName(t.type()));
+    case 3: dots = mtrc("engraving", "Triple dotted %1").arg(TConv::translatedUserName(t.type()));
         break;
-    case 4: dots = QObject::tr("Quadruple dotted %1").arg(TConv::toUserName(t.type()));
+    case 4: dots = mtrc("engraving", "Quadruple dotted %1").arg(TConv::translatedUserName(t.type()));
         break;
     default:
-        dots = TConv::toUserName(t.type());
+        dots = TConv::translatedUserName(t.type());
         break;
     }
     return dots;
@@ -483,15 +489,15 @@ QString TempoText::duration2userName(const TDuration t)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString TempoText::accessibleInfo() const
+String TempoText::accessibleInfo() const
 {
     TDuration t1;
     TDuration t2;
     int len1;
     int len2;
-    QString text = plainText();
-    QString firstPart = text.split(" = ").first();
-    QString secondPart = text.split(" = ").back();
+    String text = plainText();
+    String firstPart = text.split(u" = ").front();
+    String secondPart = text.split(u" = ").back();
     int x1 = findTempoDuration(firstPart, len1, t1);
     int x2 = -1;
     if (_relative) {
@@ -499,16 +505,25 @@ QString TempoText::accessibleInfo() const
     }
 
     if (x1 != -1) {
-        QString dots1;
-        QString dots2;
-        dots1 = duration2userName(t1);
+        String info;
+        String dots1 = duration2userName(t1);
         if (x2 != -1) {
-            dots2 = duration2userName(t2);
-            return QString("%1: %2 %3 = %4 %5").arg(EngravingItem::accessibleInfo(), dots1, QObject::tr("note"), dots2,
-                                                    QObject::tr("note"));
+            String dots2 = duration2userName(t2);
+            //: %1 and %2 are note durations. If your language does not have different terms
+            //: for "quarter note" and "quarter" (for example), or if the translations for
+            //: the durations as separate strings are not suitable to be used as adjectives
+            //: here, translate "%1 note" with "%1" and "%2 note" with "%2", so that just the
+            //: duration will be shown.
+            info = mtrc("engraving", "%1 note = %2 note").arg(dots1, dots2);
         } else {
-            return QString("%1: %2 %3 = %4").arg(EngravingItem::accessibleInfo(), dots1, QObject::tr("note"), secondPart);
+            //: %1 is a note duration. If your language does not have different terms for
+            //: "quarter note" and "quarter" (for example), or if the translations for the
+            //: durations as separate strings are not suitable to be used as adjectives here,
+            //: translate "%1 note" with "%1", so that just the duration will be shown.
+            info = mtrc("engraving", "%1 note = %2").arg(dots1, secondPart);
         }
+
+        return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), info);
     } else {
         return TextBase::accessibleInfo();
     }

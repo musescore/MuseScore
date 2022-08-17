@@ -24,17 +24,18 @@
 
 #include "log.h"
 
+#include "vstplugin.h"
+
 using namespace mu::vst;
 using namespace mu::audio;
 
-void VstPluginsRegister::registerInstrPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId, VstPluginPtr pluginPtr)
+void VstPluginsRegister::registerInstrPlugin(const audio::TrackId trackId, VstPluginPtr pluginPtr)
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
     std::lock_guard lock(m_mutex);
 
-    VstiInstancesMap& instancesMap = m_vstiPluginsMap[trackId];
-    instancesMap.emplace(resourceId, pluginPtr);
+    m_vstiPluginsMap.insert_or_assign(trackId, pluginPtr);
 }
 
 void VstPluginsRegister::registerFxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId,
@@ -64,25 +65,16 @@ VstPluginPtr VstPluginsRegister::instrumentPlugin(const audio::TrackId trackId, 
 
     std::lock_guard lock(m_mutex);
 
-    auto mapSearch = m_vstiPluginsMap.find(trackId);
-    if (mapSearch == m_vstiPluginsMap.end()) {
-        LOGE() << "Unable to find intrument plugin, trackId: " << trackId
-               << " , resourceId: " << resourceId;
-
-        return nullptr;
+    auto search = m_vstiPluginsMap.find(trackId);
+    if (search != m_vstiPluginsMap.cend()
+        && search->second->resourceId() == resourceId) {
+        return search->second;
     }
 
-    const VstiInstancesMap& instancesMap = mapSearch->second;
+    LOGE() << "Unable to find instrument plugin, trackId: " << trackId
+           << " , resourceId: " << resourceId;
 
-    auto pluginSearch = instancesMap.find(resourceId);
-    if (pluginSearch == instancesMap.end()) {
-        LOGE() << "Unable to find instrument plugin, trackId: " << trackId
-               << " , resourceId: " << resourceId;
-
-        return nullptr;
-    }
-
-    return pluginSearch->second;
+    return nullptr;
 }
 
 VstPluginPtr VstPluginsRegister::fxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId,
@@ -135,15 +127,16 @@ void VstPluginsRegister::unregisterInstrPlugin(const audio::TrackId trackId, con
 
     std::lock_guard lock(m_mutex);
 
-    auto mapSearch = m_vstiPluginsMap.find(trackId);
-    if (mapSearch == m_vstiPluginsMap.end()) {
-        LOGE() << "Unable to find plugin, trackId: " << trackId
-               << " , resourceId: " << resourceId;
+    auto search = m_vstiPluginsMap.find(trackId);
+    if (search != m_vstiPluginsMap.end()
+        && search->second->resourceId() == resourceId) {
+        m_vstiPluginsMap.erase(search);
         return;
     }
 
-    VstiInstancesMap& instancesMap = mapSearch->second;
-    instancesMap.erase(resourceId);
+    LOGE() << "Unable to find plugin, trackId: " << trackId
+           << " , resourceId: " << resourceId;
+    return;
 }
 
 void VstPluginsRegister::unregisterFxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId,

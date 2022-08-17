@@ -84,7 +84,7 @@ private:
 
     ID m_staffId;
     QList<bool> m_voicesVisibility;
-    notation::StaffType m_type = notation::StaffType::STANDARD;
+    notation::StaffTypeId m_type = notation::StaffTypeId::STANDARD;
     notation::StaffConfig m_config;
 };
 }

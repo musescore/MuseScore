@@ -47,7 +47,7 @@ MixerPanelSection {
             height: 26
 
             supportsByPassing: false
-            resourceItemModel: channelItem.inputResourceItem
+            resourceItemModel: channelItem.inputResourceItem ?? null
 
             navigationPanel: channelItem.panel
             navigationRowStart: root.navigationRowStart

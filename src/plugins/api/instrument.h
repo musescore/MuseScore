@@ -26,7 +26,7 @@
 #include "scoreelement.h"
 #include "libmscore/instrument.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Instrument;
 
 namespace PluginAPI {
@@ -67,8 +67,8 @@ class Channel : public QObject
 {
     Q_OBJECT
 
-    Ms::Channel* _channel;
-    Ms::Part* _part;
+    mu::engraving::InstrChannel* _channel;
+    mu::engraving::Part* _part;
 
     /** Name of this channel */
     Q_PROPERTY(QString name READ name)
@@ -122,13 +122,13 @@ class Channel : public QObject
      */
     Q_PROPERTY(int midiBank READ midiBank WRITE setMidiBank)
 
-    Ms::Channel* activeChannel();
+    mu::engraving::InstrChannel* activeChannel();
 
     void setMidiBankAndProgram(int bank, int program, bool setUserBankController);
 
 public:
     /// \cond MS_INTERNAL
-    Channel(Ms::Channel* ch, Ms::Part* p, QObject* parent = nullptr)
+    Channel(mu::engraving::InstrChannel* ch, mu::engraving::Part* p, QObject* parent = nullptr)
         : QObject(parent), _channel(ch), _part(p) {}
 
     QString name() const { return _channel->name(); }
@@ -177,11 +177,11 @@ class StringData : public QObject
     /** Number of frets in this instrument */
     Q_PROPERTY(int frets READ frets)
 
-    Ms::StringData _data;
+    mu::engraving::StringData _data;
 
 public:
     /// \cond MS_INTERNAL
-    StringData(const Ms::StringData* d, QObject* parent = nullptr)
+    StringData(const mu::engraving::StringData* d, QObject* parent = nullptr)
         : QObject(parent), _data(*d) {}
 
     QVariantList stringList() const;
@@ -216,10 +216,10 @@ class Instrument : public QObject
      * The string identifier
      * ([MusicXML Sound ID](https://www.musicxml.com/for-developers/standard-sounds/))
      * for this instrument.
-     * \see \ref Ms::PluginAPI::Part::instrumentId "Part.instrumentId"
+     * \see \ref mu::engraving::PluginAPI::Part::instrumentId "Part.instrumentId"
      */
     Q_PROPERTY(QString instrumentId READ instrumentId)
-    // Ms::Instrument supports multiple short/long names (for aeolus instruments?)
+    // mu::engraving::Instrument supports multiple short/long names (for aeolus instruments?)
     // but in practice only one is actually used. If this gets changed this API could
     // be expanded.
     /** The long name for this instrument. */
@@ -231,24 +231,24 @@ class Instrument : public QObject
      * For fretted instruments, an information about this
      * instrument's strings.
      */
-    Q_PROPERTY(Ms::PluginAPI::StringData * stringData READ stringData)
+    Q_PROPERTY(mu::engraving::PluginAPI::StringData * stringData READ stringData)
 
     // TODO: a property for drumset?
 
-    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Channel> channels READ channels)
+    Q_PROPERTY(QQmlListProperty<mu::engraving::PluginAPI::Channel> channels READ channels)
 
-    Ms::Instrument* _instrument;
-    Ms::Part* _part;
+    mu::engraving::Instrument* _instrument;
+    mu::engraving::Part* _part;
 
 public:
     /// \cond MS_INTERNAL
-    Instrument(Ms::Instrument* i, Ms::Part* p)
+    Instrument(mu::engraving::Instrument* i, mu::engraving::Part* p)
         : QObject(), _instrument(i), _part(p) {}
 
-    Ms::Instrument* instrument() { return _instrument; }
-    const Ms::Instrument* instrument() const { return _instrument; }
+    mu::engraving::Instrument* instrument() { return _instrument; }
+    const mu::engraving::Instrument* instrument() const { return _instrument; }
 
-    Ms::Part* part() { return _part; }
+    mu::engraving::Part* part() { return _part; }
 
     QString instrumentId() const { return instrument()->id(); }
     QString longName() const;
@@ -260,7 +260,7 @@ public:
     /// \endcond
 
     /** Checks whether two variables represent the same object. */
-    Q_INVOKABLE bool is(Ms::PluginAPI::Instrument* other) { return other && instrument() == other->instrument(); }
+    Q_INVOKABLE bool is(mu::engraving::PluginAPI::Instrument* other) { return other && instrument() == other->instrument(); }
 };
 } // namespace PluginAPI
 } // namespace Ms

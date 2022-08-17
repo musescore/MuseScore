@@ -36,9 +36,11 @@ Item {
     property bool readOnly: false
 
     property string keyRoleName: "key"
-    property string keyTitle: qsTrc("uicomponents", "Key")
+    //: As in a "key/value" pair: for example, the "key" could be
+    //: the name of a setting and the "value" the value of that setting.
+    property string keyTitle: qsTrc("ui", "Key", "key/value")
     property string valueRoleName: "value"
-    property string valueTitle: qsTrc("uicomponents", "Value")
+    property string valueTitle: qsTrc("ui", "Value")
     property string valueTypeRole: "valueType"
     property string valueEnabledRoleName: "enabled"
     property string iconRoleName: "icon"
@@ -119,7 +121,9 @@ Item {
             enabled: header.enabled && header.visible
             direction: NavigationPanel.Horizontal
             order: root.navigationOrderStart
-            accessible.name: qsTrc("uicomponents", "Value list header panel")
+
+            //: Accessibility description of the header of a value list (table)
+            accessible.name: qsTrc("ui", "Value list header panel")
 
             onActiveChanged: function(active) {
                 if (active) {
@@ -187,7 +191,9 @@ Item {
             enabled: root.enabled && root.visible
             direction: NavigationPanel.Both
             order: root.navigationOrderStart + 1
-            accessible.name: qsTrc("uicomponents", "Value list panel")
+
+            //: Accessibility description of the body of a value list (table)
+            accessible.name: qsTrc("ui", "Value list panel")
 
             onActiveChanged: function(active) {
                 if (active) {
@@ -243,7 +249,8 @@ Item {
             }
 
             onDoubleClicked: {
-                root.handleItem(sortFilterProxyModel.mapToSource(modelIndex), item)
+                selectionModel.select(modelIndex)
+                Qt.callLater(root.handleItem, sortFilterProxyModel.mapToSource(modelIndex), item)
             }
 
             onNavigationTriggered: {

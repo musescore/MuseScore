@@ -25,7 +25,7 @@
 
 #include "libmscore/location.h"
 
-namespace Ms {
+namespace mu::engraving {
 class LinksIndexer
 {
 public:

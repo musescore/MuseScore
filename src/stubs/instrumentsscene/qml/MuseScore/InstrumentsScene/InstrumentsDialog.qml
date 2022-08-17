@@ -44,7 +44,7 @@ QmlDialog {
 
         StyledTextLabel {
             anchors.centerIn: parent
-            text: "Instrumens Dialog Stub"
+            text: "Instruments Dialog Stub"
         }
     }
 }

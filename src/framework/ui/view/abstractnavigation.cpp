@@ -21,6 +21,8 @@
  */
 #include "abstractnavigation.h"
 
+#include <QQuickWindow>
+
 #include "qmlaccessible.h"
 
 #include "log.h"

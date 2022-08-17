@@ -140,7 +140,7 @@ bool SampleRateConvertor::availableSamples(unsigned int sample) const
     float currentOutputSampleTime = sample / static_cast<float>(m_sampleRateOut);
     auto firstInputSample = std::floor(currentOutputSampleTime * m_sampleRateIn) - USE_SAMPLES / 2;
 
-    // first sample for convertion points out of the input buffer
+    // first sample for conversion points out of the input buffer
     if (firstInputSample * m_channelsCount >= m_data.size()) {
         return false;
     }

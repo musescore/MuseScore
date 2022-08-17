@@ -25,6 +25,10 @@
 
 #include <vector>
 
+#ifndef NO_QT_SUPPORT
+#include <QVariant>
+#endif
+
 namespace mu::engraving {
 //---------------------------------------------------------
 //   PitchValue
@@ -45,15 +49,57 @@ struct PitchValue {
 
     inline bool operator==(const PitchValue& pv) const { return pv.time == time && pv.pitch == pitch && pv.vibrato == vibrato; }
     inline bool operator!=(const PitchValue& pv) const { return !operator==(pv); }
+
+#ifndef NO_QT_SUPPORT
+    QVariant toQVariant() const
+    {
+        QVariantMap map;
+        map["time"] = time;
+        map["pitch"] = pitch;
+        map["vibrato"] = vibrato;
+
+        return map;
+    }
+
+    static PitchValue fromQVariant(const QVariant& obj)
+    {
+        QVariantMap map = obj.toMap();
+
+        PitchValue value;
+        value.time = map["time"].toInt();
+        value.pitch = map["pitch"].toInt();
+        value.vibrato = map["vibrato"].toBool();
+
+        return value;
+    }
+
+#endif
 };
 
 using PitchValues = std::vector<PitchValue>;
+
+#ifndef NO_QT_SUPPORT
+inline QVariant pitchValuesToQVariant(const PitchValues& values)
+{
+    QVariantList list;
+    for (const PitchValue& value : values) {
+        list << value.toQVariant();
+    }
+
+    return list;
 }
 
-//! NOTE compat
-namespace Ms {
-using PitchValue = mu::engraving::PitchValue;
-using PitchValues = mu::engraving::PitchValues;
+inline PitchValues pitchValuesFromQVariant(const QVariant& var)
+{
+    PitchValues values;
+    for (const QVariant& obj : var.toList()) {
+        values.push_back(PitchValue::fromQVariant(obj));
+    }
+
+    return values;
+}
+
+#endif
 }
 
 #endif // MU_ENGRAVING_PITCHVALUE_H

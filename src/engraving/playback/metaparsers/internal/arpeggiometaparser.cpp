@@ -26,13 +26,13 @@
 
 using namespace mu::engraving;
 
-void ArpeggioMetaParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
+void ArpeggioMetaParser::doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    IF_ASSERT_FAILED(item->type() == Ms::ElementType::ARPEGGIO) {
+    IF_ASSERT_FAILED(item->type() == ElementType::ARPEGGIO) {
         return;
     }
 
-    const Ms::Arpeggio* arpeggio = Ms::toArpeggio(item);
+    const Arpeggio* arpeggio = toArpeggio(item);
 
     if (!arpeggio->playArpeggio()) {
         return;
@@ -41,19 +41,19 @@ void ArpeggioMetaParser::doParse(const Ms::EngravingItem* item, const RenderingC
     mpe::ArticulationType type = mpe::ArticulationType::Undefined;
 
     switch (arpeggio->arpeggioType()) {
-    case Ms::ArpeggioType::NORMAL:
+    case ArpeggioType::NORMAL:
         type = mpe::ArticulationType::Arpeggio;
         break;
-    case Ms::ArpeggioType::UP:
+    case ArpeggioType::UP:
         type = mpe::ArticulationType::ArpeggioUp;
         break;
-    case Ms::ArpeggioType::DOWN:
+    case ArpeggioType::DOWN:
         type = mpe::ArticulationType::ArpeggioDown;
         break;
-    case Ms::ArpeggioType::DOWN_STRAIGHT:
+    case ArpeggioType::DOWN_STRAIGHT:
         type = mpe::ArticulationType::ArpeggioStraightDown;
         break;
-    case Ms::ArpeggioType::UP_STRAIGHT:
+    case ArpeggioType::UP_STRAIGHT:
         type = mpe::ArticulationType::ArpeggioStraightUp;
         break;
     default:

@@ -22,7 +22,7 @@
 #ifndef MU_LANGUAGES_LANGUAGEUNPACKER_H
 #define MU_LANGUAGES_LANGUAGEUNPACKER_H
 
-#include "retval.h"
+#include "types/retval.h"
 
 #include "../ilanguageunpacker.h"
 
@@ -32,7 +32,7 @@ namespace mu::languages {
 class LanguageUnpacker : public ILanguageUnpacker
 {
 public:
-    Ret unpack(const QString& languageCode, const QString& source, const io::path& destination) const override;
+    Ret unpack(const QString& languageCode, const QString& source, const io::path_t& destination) const override;
 
 private:
     Ret checkDirectoryIsWritable(const QString& directoryPath) const;

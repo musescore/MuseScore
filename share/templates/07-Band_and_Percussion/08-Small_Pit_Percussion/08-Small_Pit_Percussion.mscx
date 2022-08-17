@@ -880,7 +880,7 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Auxiliary Percussion</trackName>
-      <Instrument id="drumset">
+      <Instrument id="percussion">
         <longName>Aux. Perc.</longName>
         <shortName>Aux.</shortName>
         <trackName>Percussion</trackName>
@@ -1259,7 +1259,7 @@
         <trackName>Tenor Drums</trackName>
         <instrumentId>drum.tenor-drum</instrumentId>
         <useDrumset>1</useDrumset>
-        <Drum pitch="24">
+        <Drum pitch="36">
           <head>normal</head>
           <line>7</line>
           <voice>0</voice>
@@ -1267,7 +1267,7 @@
           <stem>1</stem>
           <shortcut>A</shortcut>
           </Drum>
-        <Drum pitch="25">
+        <Drum pitch="37">
           <head>cross</head>
           <line>7</line>
           <voice>0</voice>
@@ -1275,26 +1275,33 @@
           <stem>1</stem>
           <shortcut>B</shortcut>
           </Drum>
-        <Drum pitch="26">
+        <Drum pitch="38">
           <head>diamond</head>
           <line>7</line>
           <voice>0</voice>
           <name>Drum 4 Buzz</name>
           <stem>1</stem>
           </Drum>
-        <Drum pitch="27">
+        <Drum pitch="39">
           <head>xcircle</head>
           <line>7</line>
           <voice>0</voice>
           <name>Drum 4 Muted</name>
           <stem>1</stem>
           </Drum>
-        <Drum pitch="28">
+        <Drum pitch="40">
           <head>slash</head>
           <line>7</line>
           <voice>0</voice>
           <name>Drum 4 Shell</name>
           <stem>1</stem>
+          </Drum>
+        <Drum pitch="43">
+          <head>triangle-down</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>sticks</name>
+          <stem>2</stem>
           </Drum>
         <Drum pitch="48">
           <head>normal</head>
@@ -1333,7 +1340,7 @@
           <name>Drum 3 Shell</name>
           <stem>1</stem>
           </Drum>
-        <Drum pitch="72">
+        <Drum pitch="60">
           <head>normal</head>
           <line>3</line>
           <voice>0</voice>
@@ -1341,7 +1348,7 @@
           <stem>1</stem>
           <shortcut>E</shortcut>
           </Drum>
-        <Drum pitch="73">
+        <Drum pitch="61">
           <head>cross</head>
           <line>3</line>
           <voice>0</voice>
@@ -1349,21 +1356,21 @@
           <stem>1</stem>
           <shortcut>F</shortcut>
           </Drum>
-        <Drum pitch="74">
+        <Drum pitch="62">
           <head>diamond</head>
           <line>3</line>
           <voice>0</voice>
           <name>Drum 2 Buzz</name>
           <stem>1</stem>
           </Drum>
-        <Drum pitch="75">
+        <Drum pitch="63">
           <head>xcircle</head>
           <line>3</line>
           <voice>0</voice>
           <name>Drum 2 Muted</name>
           <stem>1</stem>
           </Drum>
-        <Drum pitch="96">
+        <Drum pitch="72">
           <head>normal</head>
           <line>1</line>
           <voice>0</voice>
@@ -1371,53 +1378,67 @@
           <stem>1</stem>
           <shortcut>G</shortcut>
           </Drum>
-        <Drum pitch="97">
+        <Drum pitch="73">
           <head>cross</head>
           <line>1</line>
           <voice>0</voice>
           <name>Drum 1 Rim</name>
           <stem>1</stem>
           </Drum>
-        <Drum pitch="98">
+        <Drum pitch="74">
           <head>diamond</head>
           <line>1</line>
           <voice>0</voice>
           <name>Drum 1 Buzz</name>
           <stem>1</stem>
           </Drum>
-        <Drum pitch="99">
+        <Drum pitch="75">
           <head>xcircle</head>
           <line>1</line>
           <voice>0</voice>
           <name>Drum 1 Muted</name>
           <stem>1</stem>
           </Drum>
-        <Drum pitch="120">
+        <Drum pitch="84">
           <head>normal</head>
           <line>-1</line>
           <voice>0</voice>
-          <name>Spock</name>
+          <name>Spock 1</name>
           <stem>1</stem>
           </Drum>
-        <Drum pitch="121">
+        <Drum pitch="85">
           <head>cross</head>
           <line>-1</line>
           <voice>0</voice>
-          <name>Spock Rim</name>
+          <name>Spock 1 Rim</name>
           <stem>1</stem>
           </Drum>
-        <Drum pitch="122">
+        <Drum pitch="86">
           <head>diamond</head>
           <line>-1</line>
           <voice>0</voice>
-          <name>Spock Buzz</name>
+          <name>Spock 1 Buzz</name>
           <stem>1</stem>
           </Drum>
-        <Drum pitch="123">
-          <head>cross</head>
-          <line>-1</line>
+        <Drum pitch="96">
+          <head>normal</head>
+          <line>-2</line>
           <voice>0</voice>
-          <name>Stick Click</name>
+          <name>Spock 2</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="97">
+          <head>cross</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>Spock 2 Rim</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="98">
+          <head>diamond</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>Spock 2 Buzz</name>
           <stem>1</stem>
           </Drum>
         <clef>PERC</clef>
@@ -1483,13 +1504,13 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Bass Drums</trackName>
-      <Instrument id="bass-drum">
+      <Instrument id="marching-bass-drums">
         <longName>Bass Drums</longName>
         <shortName>B.D.</shortName>
         <trackName>Bass Drums</trackName>
         <instrumentId>drum.bass-drum</instrumentId>
         <useDrumset>1</useDrumset>
-        <Drum pitch="1">
+        <Drum pitch="37">
           <head>normal</head>
           <line>7</line>
           <voice>0</voice>
@@ -1497,7 +1518,7 @@
           <stem>1</stem>
           <shortcut>A</shortcut>
           </Drum>
-        <Drum pitch="2">
+        <Drum pitch="39">
           <head>cross</head>
           <line>7</line>
           <voice>0</voice>
@@ -1505,7 +1526,7 @@
           <stem>1</stem>
           <shortcut>B</shortcut>
           </Drum>
-        <Drum pitch="24">
+        <Drum pitch="49">
           <head>normal</head>
           <line>5</line>
           <voice>0</voice>
@@ -1513,7 +1534,7 @@
           <stem>1</stem>
           <shortcut>C</shortcut>
           </Drum>
-        <Drum pitch="26">
+        <Drum pitch="51">
           <head>cross</head>
           <line>5</line>
           <voice>0</voice>
@@ -1521,7 +1542,7 @@
           <stem>1</stem>
           <shortcut>D</shortcut>
           </Drum>
-        <Drum pitch="48">
+        <Drum pitch="61">
           <head>normal</head>
           <line>3</line>
           <voice>0</voice>
@@ -1529,7 +1550,7 @@
           <stem>1</stem>
           <shortcut>E</shortcut>
           </Drum>
-        <Drum pitch="50">
+        <Drum pitch="63">
           <head>cross</head>
           <line>3</line>
           <voice>0</voice>
@@ -1537,7 +1558,7 @@
           <stem>1</stem>
           <shortcut>F</shortcut>
           </Drum>
-        <Drum pitch="69">
+        <Drum pitch="73">
           <head>normal</head>
           <line>1</line>
           <voice>0</voice>
@@ -1545,25 +1566,32 @@
           <stem>1</stem>
           <shortcut>G</shortcut>
           </Drum>
-        <Drum pitch="71">
+        <Drum pitch="75">
           <head>cross</head>
           <line>1</line>
           <voice>0</voice>
           <name>Bass Drum 4 Rim Knock</name>
           <stem>1</stem>
           </Drum>
-        <Drum pitch="96">
+        <Drum pitch="85">
           <head>normal</head>
           <line>-1</line>
           <voice>0</voice>
           <name>Bass Drum 5</name>
           <stem>1</stem>
           </Drum>
-        <Drum pitch="98">
+        <Drum pitch="87">
           <head>cross</head>
           <line>-1</line>
           <voice>0</voice>
           <name>Bass Drum 5 Rim Knock</name>
+          <stem>1</stem>
+          </Drum>
+         <Drum pitch="90">
+          <head>slash</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Simultaneous Hit</name>
           <stem>1</stem>
           </Drum>
         <clef>PERC</clef>
@@ -1614,7 +1642,7 @@
         <Channel>
           <controller ctrl="0" value="1"/>
           <controller ctrl="32" value="0"/>
-          <program value="57"/>
+          <program value="59"/>
           <synti>Fluid</synti>
           </Channel>
         </Instrument>
@@ -1628,7 +1656,7 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Cymbals</trackName>
-      <Instrument id="cymbal">
+      <Instrument id="marching-cymbals">
         <longName>Cymbals</longName>
         <shortName>Cym.</shortName>
         <trackName>Cymbals</trackName>

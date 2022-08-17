@@ -24,7 +24,7 @@
 
 #include <vector>
 
-namespace Ms {
+namespace mu::iex::midi {
 class ReducedFraction;
 
 namespace MidiTuplet {
@@ -32,6 +32,6 @@ struct TupletInfo;
 
 void filterTuplets(std::vector<TupletInfo>& tuplets, const ReducedFraction& basicQuant);
 } // namespace MidiTuplet
-} // namespace Ms
+} // namespace mu::iex::midi
 
 #endif // IMPORTMIDI_TUPLET_FILTER_H

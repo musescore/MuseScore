@@ -35,6 +35,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iexcerptnotation.h
     ${CMAKE_CURRENT_LIST_DIR}/inotation.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationpainting.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationviewstate.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationnoteinput.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationselection.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationinteraction.h
@@ -62,6 +63,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notation.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationpainting.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationpainting.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationviewstate.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationviewstate.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationundostack.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationundostack.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationstyle.cpp
@@ -103,6 +106,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractnotationpaintview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractnotationpaintview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.cpp
@@ -165,21 +170,10 @@ else (USE_SYSTEM_FREETYPE)
     set(FREETYPE_LIB mscore_freetype)
 endif (USE_SYSTEM_FREETYPE)
 
-set(Z_LIB )
-if (MSVC)
-    include(FindStaticLibrary)
-    set(Z_LIB zlibstat)
-elseif (CC_IS_EMSCRIPTEN)
-    #zlib included in main linker
-else ()
-    set(Z_LIB z)
-endif ()
-
 set(MODULE_LINK
     Qt5::Svg
     ${FREETYPE_LIB}
-    qzip
-    ${Z_LIB}
+    draw
     engraving
     commonscene
     uicomponents

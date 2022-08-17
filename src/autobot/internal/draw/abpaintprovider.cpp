@@ -22,7 +22,7 @@
 #include "abpaintprovider.h"
 
 #include "log.h"
-#include "engraving/infrastructure/draw/painter.h"
+#include "draw/painter.h"
 
 static const QColor REMOVED_COLOR("#cc0000");
 static const QColor ADDED_COLOR("#009900");

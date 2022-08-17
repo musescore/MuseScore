@@ -23,14 +23,16 @@
 #ifndef __TEXTBASE_H__
 #define __TEXTBASE_H__
 
-#include "infrastructure/draw/fontmetrics.h"
+#include <variant>
 
-#include "infrastructure/draw/color.h"
+#include "draw/fontmetrics.h"
+
+#include "draw/types/color.h"
 #include "engravingitem.h"
 #include "property.h"
 #include "style/style.h"
 
-namespace Ms {
+namespace mu::engraving {
 class TextBase;
 class TextBlock;
 
@@ -46,7 +48,7 @@ enum class FrameType : char {
 //   VerticalAlignment
 //---------------------------------------------------------
 
-enum class VerticalAlignment : char {
+enum class VerticalAlignment : signed char {
     AlignUndefined = -1, AlignNormal, AlignSuperScript, AlignSubScript
 };
 
@@ -57,6 +59,8 @@ enum class VerticalAlignment : char {
 enum class FormatId : char {
     Bold, Italic, Underline, Strike, Valign, FontSize, FontFamily
 };
+
+using FormatValue = std::variant<std::monostate, bool, int, double, String>;
 
 //---------------------------------------------------------
 //   MultiClick
@@ -74,9 +78,9 @@ class CharFormat
 {
     FontStyle _style          { FontStyle::Normal };
     VerticalAlignment _valign { VerticalAlignment::AlignNormal };
-    qreal _fontSize           { 12.0 };
-    qreal _textLineSpacing    { 1.0 };
-    QString _fontFamily;
+    double _fontSize           { 12.0 };
+    double _textLineSpacing    { 1.0 };
+    String _fontFamily;
 
 public:
     CharFormat() {}
@@ -94,15 +98,15 @@ public:
     void setStrike(bool val) { _style = val ? _style + FontStyle::Strike : _style - FontStyle::Strike; }
 
     VerticalAlignment valign() const { return _valign; }
-    qreal fontSize() const { return _fontSize; }
-    QString fontFamily() const { return _fontFamily; }
+    double fontSize() const { return _fontSize; }
+    String fontFamily() const { return _fontFamily; }
     void setValign(VerticalAlignment val) { _valign = val; }
-    void setFontSize(qreal val) { _fontSize = val; }
-    void setFontFamily(const QString& val) { _fontFamily = val; }
-    void setTextLineSpacing(qreal val) { _textLineSpacing = val; }
+    void setFontSize(double val) { _fontSize = val; }
+    void setFontFamily(const String& val) { _fontFamily = val; }
+    void setTextLineSpacing(double val) { _textLineSpacing = val; }
 
-    QVariant formatValue(FormatId) const;
-    void setFormatValue(FormatId, QVariant);
+    FormatValue formatValue(FormatId) const;
+    void setFormatValue(FormatId, const FormatValue& val);
 };
 
 //---------------------------------------------------------
@@ -168,10 +172,10 @@ public:
     struct Range {
         int startPosition = 0;
         int endPosition = 0;
-        QString text;
+        String text;
     };
 
-    std::pair<int, int> positionToLocalCoord(int position) const;
+    std::pair<size_t, size_t> positionToLocalCoord(int position) const;
 
     int currentPosition() const;
     Range selectionRange() const;
@@ -182,13 +186,13 @@ public:
     void doubleClickSelect();
     void moveCursorToEnd() { movePosition(TextCursor::MoveOperation::End); }
     void moveCursorToStart() { movePosition(TextCursor::MoveOperation::Start); }
-    QChar currentCharacter() const;
+    Char currentCharacter() const;
     bool set(const mu::PointF& p, TextCursor::MoveMode mode = TextCursor::MoveMode::MoveAnchor);
-    QString selectedText(bool withFormat = false) const;
-    QString extractText(int r1, int c1, int r2, int c2, bool withFormat = false) const;
+    String selectedText(bool withFormat = false) const;
+    String extractText(int r1, int c1, int r2, int c2, bool withFormat = false) const;
     void updateCursorFormat();
-    void setFormat(FormatId, QVariant);
-    void changeSelectionFormat(FormatId id, QVariant val);
+    void setFormat(FormatId, FormatValue val);
+    void changeSelectionFormat(FormatId id, const FormatValue& val);
     const CharFormat selectedFragmentsFormat() const;
 
 private:
@@ -206,18 +210,18 @@ class TextFragment
 public:
     mutable CharFormat format;
     mu::PointF pos;                    // y is relative to TextBlock->y()
-    mutable QString text;
+    mutable String text;
 
     bool operator ==(const TextFragment& f) const;
 
     TextFragment();
-    TextFragment(const QString& s);
-    TextFragment(TextCursor*, const QString&);
+    TextFragment(const String& s);
+    TextFragment(TextCursor*, const String&);
     TextFragment split(int column);
     void draw(mu::draw::Painter*, const TextBase*) const;
     mu::draw::Font font(const TextBase*) const;
     int columns() const;
-    void changeFormat(FormatId id, QVariant data);
+    void changeFormat(FormatId id, const FormatValue& data);
 };
 
 //---------------------------------------------------------
@@ -228,8 +232,8 @@ public:
 class TextBlock
 {
     std::list<TextFragment> _fragments;
-    qreal _y = 0;
-    qreal _lineSpacing = 0.0;
+    double _y = 0;
+    double _lineSpacing = 0.0;
     mu::RectF _bbox;
     bool _eol = false;
 
@@ -247,24 +251,24 @@ public:
     const mu::RectF& boundingRect() const { return _bbox; }
     mu::RectF boundingRect(int col1, int col2, const TextBase*) const;
     size_t columns() const;
-    void insert(TextCursor*, const QString&);
+    void insert(TextCursor*, const String&);
     void insertEmptyFragmentIfNeeded(TextCursor*);
     void removeEmptyFragment();
-    QString remove(int column, TextCursor*);
-    QString remove(int start, int n, TextCursor*);
-    int column(qreal x, TextBase*) const;
+    String remove(int column, TextCursor*);
+    String remove(int start, int n, TextCursor*);
+    int column(double x, TextBase*) const;
     TextBlock split(int column, TextCursor* cursor);
-    qreal xpos(int col, const TextBase*) const;
+    double xpos(size_t col, const TextBase*) const;
     const CharFormat* formatAt(int) const;
     const TextFragment* fragment(int col) const;
     std::list<TextFragment>::iterator fragment(int column, int* rcol, int* ridx);
-    qreal y() const { return _y; }
-    void setY(qreal val) { _y = val; }
-    qreal lineSpacing() const { return _lineSpacing; }
-    QString text(int, int, bool = false) const;
+    double y() const { return _y; }
+    void setY(double val) { _y = val; }
+    double lineSpacing() const { return _lineSpacing; }
+    String text(int, int, bool = false) const;
     bool eol() const { return _eol; }
     void setEol(bool val) { _eol = val; }
-    void changeFormat(FormatId, QVariant val, int start, int n);
+    void changeFormat(FormatId, const FormatValue& val, int start, int n);
 };
 
 //---------------------------------------------------------
@@ -273,9 +277,11 @@ public:
 
 class TextBase : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, TextBase)
+
     // sorted by size to allow for most compact memory layout
     M_PROPERTY(FrameType,  frameType,              setFrameType)
-    M_PROPERTY(qreal,      textLineSpacing,        setTextLineSpacing)
+    M_PROPERTY(double,      textLineSpacing,        setTextLineSpacing)
     M_PROPERTY(mu::draw::Color,      bgColor,                setBgColor)
     M_PROPERTY(mu::draw::Color,      frameColor,             setFrameColor)
     M_PROPERTY(Spatium,    frameWidth,             setFrameWidth)
@@ -287,7 +293,7 @@ class TextBase : public EngravingItem
     // there are two representations of text; only one
     // might be valid and the other can be constructed from it
 
-    mutable QString _text;                          // cached
+    mutable String _text;                          // cached
     mutable bool textInvalid      { true };
 
     std::vector<TextBlock> _layout;
@@ -302,20 +308,24 @@ class TextBase : public EngravingItem
     TextCursor* _cursor           { nullptr };
 
     void drawSelection(mu::draw::Painter*, const mu::RectF&) const;
-    void insert(TextCursor*, uint code);
+    void insert(TextCursor*, char32_t code);
     void genText() const;
     virtual int getPropertyFlagsIdx(Pid id) const override;
-    QString stripText(bool, bool, bool) const;
+    String stripText(bool, bool, bool) const;
     Sid offsetSid() const;
 
-    static QString getHtmlStartTag(qreal, qreal&, const QString&, QString&, Ms::FontStyle, Ms::VerticalAlignment);
-    static QString getHtmlEndTag(Ms::FontStyle, Ms::VerticalAlignment);
+    static String getHtmlStartTag(double, double&, const String&, String&, FontStyle, VerticalAlignment);
+    static String getHtmlEndTag(FontStyle, VerticalAlignment);
 
-    mu::engraving::AccessibleItem* createAccessible() override;
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr createAccessible() override;
+#endif
 
     void notifyAboutTextCursorChanged();
-    void notifyAboutTextInserted(int startPosition, int endPosition, const QString& text);
-    void notifyAboutTextRemoved(int startPosition, int endPosition, const QString& text);
+    void notifyAboutTextInserted(int startPosition, int endPosition, const String& text);
+    void notifyAboutTextRemoved(int startPosition, int endPosition, const String& text);
+
+    virtual bool alwaysKernable() const override { return true; }
 
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
@@ -329,8 +339,8 @@ protected:
     void layoutEdit();
     void createLayout();
     void insertSym(EditData& ed, SymId id);
-    void prepareFormat(const QString& token, Ms::TextCursor& cursor);
-    bool prepareFormat(const QString& token, Ms::CharFormat& format);
+    void prepareFormat(const String& token, TextCursor& cursor);
+    bool prepareFormat(const String& token, CharFormat& format);
 
     virtual void commitText();
 
@@ -343,37 +353,38 @@ public:
     Text& operator=(const Text&) = delete;
 
     virtual void draw(mu::draw::Painter*) const override;
-    virtual void drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentViewScaling) override;
-    static void drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const mu::PointF& pos, const QString& text);
+    virtual void drawEditMode(mu::draw::Painter* p, EditData& ed, double currentViewScaling) override;
+    static void drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const mu::PointF& pos, const String& text);
 
     Align align() const { return _align; }
     void setAlign(Align a) { _align = a; }
 
-    static QString plainToXmlText(const QString& s) { return s.toHtmlEscaped(); }
-    void setPlainText(const QString& t) { setXmlText(plainToXmlText(t)); }
-    virtual void setXmlText(const QString&);
-    QString xmlText() const;
-    QString plainText() const;
+    static String plainToXmlText(const String& s) { return s.toXmlEscaped(); }
+    void setPlainText(const String& t) { setXmlText(plainToXmlText(t)); }
+    virtual void setXmlText(const String&);
+    void setXmlText(const char* str) { setXmlText(String::fromUtf8(str)); }
+    String xmlText() const;
+    String plainText() const;
     void resetFormatting();
 
-    void insertText(EditData&, const QString&);
+    void insertText(EditData&, const String&);
 
     virtual void layout() override;
     virtual void layout1();
-    qreal lineSpacing() const;
-    qreal lineHeight() const;
-    virtual qreal baseLine() const override;
+    double lineSpacing() const;
+    double lineHeight() const;
+    virtual double baseLine() const override;
 
     bool empty() const { return xmlText().isEmpty(); }
-    void clear() { setXmlText(QString()); }
+    void clear() { setXmlText(String()); }
 
     FontStyle fontStyle() const;
-    QString family() const;
-    qreal size() const;
+    String family() const;
+    double size() const;
 
     void setFontStyle(const FontStyle& val);
-    void setFamily(const QString& val);
-    void setSize(const qreal& val);
+    void setFamily(const String& val);
+    void setSize(const double& val);
 
     bool layoutToParentWidth() const { return _layoutToParentWidth; }
     void setLayoutToParentWidth(bool v) { _layoutToParentWidth = v; }
@@ -400,7 +411,7 @@ public:
     void writeProperties(XmlWriter&, bool, bool) const;
     bool readProperties(XmlReader&) override;
 
-    virtual void paste(EditData& ed, const QString& txt);
+    virtual void paste(EditData& ed, const String& txt);
 
     mu::RectF pageRectangle() const;
 
@@ -414,32 +425,31 @@ public:
     friend class TextBlock;
     friend class TextFragment;
 
-    static QString unEscape(QString s);
-    static QString escape(QString s);
+    static String unEscape(String s);
+    static String escape(String s);
 
-    virtual QString accessibleInfo() const override;
-    virtual QString screenReaderInfo() const override;
+    String accessibleInfo() const override;
+    String screenReaderInfo() const override;
 
-    virtual int subtype() const override;
-    virtual QString subtypeName() const override;
+    int subtype() const override;
+    TranslatableString subtypeUserName() const override;
 
     std::list<TextFragment> fragmentList() const;   // for MusicXML formatted export
 
-    static bool validateText(QString& s);
+    static bool validateText(String& s);
     bool inHexState() const { return hexState >= 0; }
     void endHexState(EditData&);
 
     mu::draw::Font font() const;
     mu::draw::FontMetrics fontMetrics() const;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& v) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue& v, PropertyFlags ps) override;
-    Pid propertyId(const QStringRef& xmlName) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue& v) override;
+    PropertyValue propertyDefault(Pid id) const override;
+    void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
     Sid getPropertyStyle(Pid) const override;
     void styleChanged() override;
-    void editInsertText(TextCursor*, const QString&);
+    void editInsertText(TextCursor*, const String&);
 
     TextCursor* cursorFromEditData(const EditData&);
     TextCursor* cursor() const { return _cursor; }
@@ -464,7 +474,7 @@ public:
     void initTextStyleType(TextStyleType id, bool preserveDifferent);
     virtual void initElementStyle(const ElementStyle*) override;
 
-    static const QString UNDEFINED_FONT_FAMILY;
+    static const String UNDEFINED_FONT_FAMILY;
     static const int UNDEFINED_FONT_SIZE;
 
     bool bold() const { return fontStyle() & FontStyle::Bold; }
@@ -490,24 +500,24 @@ public:
 };
 
 // allow shortcut key controller to handle
-inline bool isTextNavigationKey(int key, Qt::KeyboardModifiers modifiers)
+inline bool isTextNavigationKey(int key, KeyboardModifiers modifiers)
 {
-    if (modifiers & Qt::ControlModifier) {
+    if (modifiers & ControlModifier) {
         static const std::set<int> standardTextOperationsKeys {
-            Qt::Key_Space, // Ctrl + Space inserts the space symbol
-            Qt::Key_A // select all
+            Key_Space, // Ctrl + Space inserts the space symbol
+            Key_A // select all
         };
 
         return standardTextOperationsKeys.find(key) == standardTextOperationsKeys.end();
     }
 
     static const std::set<int> navigationKeys {
-        Qt::Key_Space,
-        Qt::Key_Tab
+        Key_Space,
+        Key_Tab
     };
 
     return navigationKeys.find(key) != navigationKeys.end();
 }
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

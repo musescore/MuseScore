@@ -25,10 +25,10 @@
  Implementation of class Selection plus other selection related functions.
 */
 
-#include <QBuffer>
-
 #include "containers.h"
+#include "io/buffer.h"
 #include "rw/xml.h"
+#include "rw/writecontext.h"
 
 #include "mscore.h"
 #include "arpeggio.h"
@@ -76,7 +76,8 @@
 #include "log.h"
 
 using namespace mu;
-using namespace Ms;
+using namespace mu::io;
+using namespace mu::engraving;
 
 // ====================================================
 // SelectionFilter
@@ -429,7 +430,7 @@ void Selection::clear()
         return;
     }
 
-    for (EngravingItem* e : qAsConst(_el)) {
+    for (EngravingItem* e : _el) {
         if (e->isSpanner()) {       // TODO: only visible elements should be selectable?
             Spanner* sp = toSpanner(e);
             for (auto s : sp->spannerSegments()) {
@@ -508,7 +509,7 @@ void Selection::appendChord(Chord* chord)
         if (note->accidental()) {
             _el.push_back(note->accidental());
         }
-        foreach (EngravingItem* el, note->el()) {
+        for (EngravingItem* el : note->el()) {
             appendFiltered(el);
         }
         for (NoteDot* dot : note->dots()) {
@@ -571,7 +572,7 @@ void Selection::updateSelectedElements()
         _plannedTick2 = Fraction(-1, 1);
     }
 
-    for (EngravingItem* e : qAsConst(_el)) {
+    for (EngravingItem* e : _el) {
         e->setSelected(false);
     }
     _el.clear();
@@ -580,7 +581,7 @@ void Selection::updateSelectedElements()
     size_t staves = _score->nstaves();
     if (_staffStart == mu::nidx || _staffStart >= staves || _staffEnd == mu::nidx || _staffEnd > staves
         || _staffStart >= _staffEnd) {
-        qDebug("updateSelectedElements: bad staff selection %zu - %zu, staves %zu", _staffStart, _staffEnd, staves);
+        LOGD("updateSelectedElements: bad staff selection %zu - %zu, staves %zu", _staffStart, _staffEnd, staves);
         _staffStart = 0;
         _staffEnd   = 0;
     }
@@ -670,8 +671,8 @@ void Selection::updateSelectedElements()
 
 void Selection::setRange(Segment* startSegment, Segment* endSegment, staff_idx_t staffStart, staff_idx_t staffEnd)
 {
-    Q_ASSERT(staffEnd > staffStart && staffEnd <= _score->nstaves());
-    Q_ASSERT(!(endSegment && !startSegment));
+    assert(staffEnd > staffStart && staffEnd <= _score->nstaves());
+    assert(!(endSegment && !startSegment));
 
     _startSegment  = startSegment;
     _endSegment    = endSegment;
@@ -691,7 +692,7 @@ void Selection::setRange(Segment* startSegment, Segment* endSegment, staff_idx_t
 
 void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, staff_idx_t staffStart, staff_idx_t staffEnd)
 {
-    Q_ASSERT(staffEnd > staffStart && staffEnd <= _score->nstaves());
+    assert(staffEnd > staffStart && staffEnd <= _score->nstaves());
 
     deselectAll();
     _plannedTick1 = tick1;
@@ -709,7 +710,7 @@ void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, staf
 
 void Selection::update()
 {
-    for (EngravingItem* e : qAsConst(_el)) {
+    for (EngravingItem* e : _el) {
         e->setSelected(true);
     }
     updateState();
@@ -717,17 +718,17 @@ void Selection::update()
 
 void Selection::dump()
 {
-    qDebug("Selection dump: ");
+    LOGD("Selection dump: ");
     switch (_state) {
-    case SelState::NONE:   qDebug("NONE");
+    case SelState::NONE:   LOGD("NONE");
         return;
-    case SelState::RANGE:  qDebug("RANGE");
+    case SelState::RANGE:  LOGD("RANGE");
         break;
-    case SelState::LIST:   qDebug("LIST");
+    case SelState::LIST:   LOGD("LIST");
         break;
     }
-    foreach (const EngravingItem* e, _el) {
-        qDebug("  %p %s", e, e->typeName());
+    for (const EngravingItem* e : _el) {
+        LOGD("  %p %s", e, e->typeName());
     }
 }
 
@@ -764,22 +765,22 @@ void Selection::setState(SelState s)
     _score->setSelectionChanged(true);
 }
 
-QString Selection::mimeType() const
+String Selection::mimeType() const
 {
     switch (_state) {
     default:
     case SelState::NONE:
-        return QString();
+        return String();
     case SelState::LIST:
-        return isSingle() ? mimeSymbolFormat : mimeSymbolListFormat;
+        return isSingle() ? String::fromAscii(mimeSymbolFormat) : String::fromAscii(mimeSymbolListFormat);
     case SelState::RANGE:
-        return mimeStaffListFormat;
+        return String::fromAscii(mimeStaffListFormat);
     }
 }
 
-QByteArray Selection::mimeData() const
+ByteArray Selection::mimeData() const
 {
-    QByteArray a;
+    ByteArray a;
     switch (_state) {
     case SelState::LIST:
         if (isSingle()) {
@@ -823,27 +824,24 @@ static Fraction firstElementInTrack(Segment* startSeg, Segment* endSeg, track_id
     return Fraction(-1, 1);
 }
 
-QByteArray Selection::staffMimeData() const
+ByteArray Selection::staffMimeData() const
 {
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
-    XmlWriter xml(score(), &buffer);
-    xml.writeHeader();
-    xml.setClipboardmode(true);
-    xml.setFilter(selectionFilter());
+    Buffer buffer;
+    buffer.open(IODevice::WriteOnly);
+    XmlWriter xml(&buffer);
+    xml.startDocument();
+    xml.context()->setClipboardmode(true);
+    xml.context()->setFilter(selectionFilter());
 
     Fraction ticks  = tickEnd() - tickStart();
     int staves = static_cast<int>(staffEnd() - staffStart());
-    if (!MScore::testMode) {
-        xml.startObject(QString("StaffList version=\"" MSC_VERSION "\" tick=\"%1\" len=\"%2\" staff=\"%3\" staves=\"%4\"").arg(
-                            tickStart().ticks()).arg(ticks.ticks()).arg(staffStart()).arg(staves));
-    } else {
-        xml.startObject(QString("StaffList version=\"2.00\" tick=\"%1\" len=\"%2\" staff=\"%3\" staves=\"%4\"")
-                        .arg(tickStart().ticks())
-                        .arg(ticks.ticks())
-                        .arg(staffStart())
-                        .arg(staves));
-    }
+
+    xml.startElement("StaffList", { { "version", (MScore::testMode ? "2.00" : MSC_VERSION) },
+                         { "tick", tickStart().ticks() },
+                         { "len", ticks.ticks() },
+                         { "staff", staffStart() },
+                         { "staves", staves } });
+
     Segment* seg1 = _startSegment;
     Segment* seg2 = _endSegment;
 
@@ -851,7 +849,7 @@ QByteArray Selection::staffMimeData() const
         track_idx_t startTrack = staffIdx * VOICES;
         track_idx_t endTrack   = startTrack + VOICES;
 
-        xml.startObject(QString("Staff id=\"%1\"").arg(staffIdx));
+        xml.startElement("Staff", { { "id", staffIdx } });
 
         Staff* staff = _score->staff(staffIdx);
         Part* part = staff->part();
@@ -862,37 +860,36 @@ QByteArray Selection::staffMimeData() const
         if (interval.diatonic) {
             xml.tag("transposeDiatonic", interval.diatonic);
         }
-        xml.startObject("voiceOffset");
+        xml.startElement("voiceOffset");
         for (voice_idx_t voice = 0; voice < VOICES; voice++) {
             if (hasElementInTrack(seg1, seg2, startTrack + voice)
-                && xml.canWriteVoice(voice)) {
+                && xml.context()->canWriteVoice(voice)) {
                 Fraction offset = firstElementInTrack(seg1, seg2, startTrack + voice) - tickStart();
-                xml.tag(QString("voice id=\"%1\"").arg(voice), offset.ticks());
+                xml.tag("voice", { { "id", voice } }, offset.ticks());
             }
         }
-        xml.endObject();     // </voiceOffset>
-        xml.setCurTrack(startTrack);
+        xml.endElement();     // </voiceOffset>
+        xml.context()->setCurTrack(startTrack);
         _score->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, false);
-        xml.endObject();
+        xml.endElement();
     }
 
-    xml.endObject();
-    buffer.close();
-    return buffer.buffer();
+    xml.endElement();
+    return buffer.data();
 }
 
-QByteArray Selection::symbolListMimeData() const
+ByteArray Selection::symbolListMimeData() const
 {
     struct MapData {
         EngravingItem* e;
         Segment* s;
     };
 
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
-    XmlWriter xml(score(), &buffer);
-    xml.writeHeader();
-    xml.setClipboardmode(true);
+    Buffer buffer;
+    buffer.open(IODevice::WriteOnly);
+    XmlWriter xml(&buffer);
+    xml.startDocument();
+    xml.context()->setClipboardmode(true);
 
     track_idx_t topTrack    = 1000000;
     track_idx_t bottomTrack = 0;
@@ -900,10 +897,10 @@ QByteArray Selection::symbolListMimeData() const
     Fraction firstTick   = Fraction(0x7FFFFFFF, 1);
     MapData mapData;
     Segment* seg         = 0;
-    std::multimap<qint64, MapData> map;
+    std::multimap<int64_t, MapData> map;
 
     // scan selection element list, inserting relevant elements in a tick-sorted map
-    foreach (EngravingItem* e, _el) {
+    for (EngravingItem* e : _el) {
         switch (e->type()) {
         /* All these element types are ignored:
 
@@ -1051,11 +1048,13 @@ QByteArray Selection::symbolListMimeData() const
         }
         mapData.e = e;
         mapData.s = seg;
-        map.insert(std::pair<qint64, MapData>(((qint64)track << 32) + seg->tick().ticks(), mapData));
+        map.insert(std::pair<int64_t, MapData>(((int64_t)track << 32) + seg->tick().ticks(), mapData));
     }
 
-    xml.startObject(QString("SymbolList version=\"" MSC_VERSION "\" fromtrack=\"%1\" totrack=\"%2\"")
-                    .arg(topTrack).arg(bottomTrack));
+    xml.startElement("SymbolList", { { "version", MSC_VERSION },
+                         { "fromtrack", topTrack },
+                         { "totrack", bottomTrack } });
+
     // scan the map, outputting elements each with a relative <track> tag on track change,
     // a relative tick and the number of CR segments to skip
     track_idx_t currTrack = mu::nidx;
@@ -1075,9 +1074,9 @@ QByteArray Selection::symbolListMimeData() const
             bool done = false;
             for (; seg; seg = seg->next1()) {
                 if (seg->isChordRestType()) {
-                    // if no ChordRest in right track, look in anotations
+                    // if no ChordRest in right track, look in annotations
                     if (seg->element(currTrack) == nullptr) {
-                        foreach (EngravingItem* el, seg->annotations()) {
+                        for (EngravingItem* el : seg->annotations()) {
                             // do annotations include our element?
                             if (el == iter->second.e) {
                                 done = true;
@@ -1111,9 +1110,22 @@ QByteArray Selection::symbolListMimeData() const
         iter->second.e->write(xml);
     }
 
-    xml.endObject();
+    xml.endElement();
     buffer.close();
-    return buffer.buffer();
+    return buffer.data();
+}
+
+std::vector<EngravingItem*> Selection::elements(ElementType type) const
+{
+    std::vector<EngravingItem*> result;
+
+    for (EngravingItem* element : _el) {
+        if (element->type() == type) {
+            result.push_back(element);
+        }
+    }
+
+    return result;
 }
 
 std::vector<Note*> Selection::noteList(track_idx_t selTrack) const
@@ -1121,7 +1133,7 @@ std::vector<Note*> Selection::noteList(track_idx_t selTrack) const
     std::vector<Note*> nl;
 
     if (_state == SelState::LIST) {
-        foreach (EngravingItem* e, _el) {
+        for (EngravingItem* e : _el) {
             if (e->isNote()) {
                 nl.push_back(toNote(e));
             }
@@ -1426,7 +1438,7 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_
     }
     activeIsFirst ? _activeSegment = _startSegment : _activeSegment = _endSegment;
     _score->setSelectionChanged(true);
-    Q_ASSERT(!(_endSegment && !_startSegment));
+    assert(!(_endSegment && !_startSegment));
 }
 
 SelectionFilter Selection::selectionFilter() const

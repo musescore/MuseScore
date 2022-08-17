@@ -39,8 +39,8 @@ Rectangle {
         anchors.fill: parent
         anchors.margins: -5 //! NOTE: extra space for user convenience
 
-        cursorShape: separatorCpp ? (separatorCpp.isVertical ? Qt.SizeVerCursor : Qt.SizeHorCursor)
-                                   : Qt.SizeHorCursor
+        cursorShape: (separatorCpp && separatorCpp.showResizeCursor) ? (separatorCpp.isVertical ? Qt.SizeVerCursor : Qt.SizeHorCursor)
+                                   : Qt.ArrowCursor
         onPressed: {
             separatorCpp.onMousePressed()
         }

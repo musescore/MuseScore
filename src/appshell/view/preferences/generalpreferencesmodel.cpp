@@ -35,10 +35,12 @@ void GeneralPreferencesModel::load()
 {
     languagesConfiguration()->currentLanguageCode().ch.onReceive(this, [this](const QString& languageCode) {
         emit currentLanguageCodeChanged(languageCode);
+        setIsNeedRestart(true);
     });
 
     languagesService()->languages().ch.onReceive(this, [this](const LanguagesHash&) {
         emit languagesChanged(languages());
+        setIsNeedRestart(true);
     });
 
     projectConfiguration()->autoSaveEnabledChanged().onReceive(this, [this](bool enabled) {
@@ -52,15 +54,16 @@ void GeneralPreferencesModel::load()
 
 void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
 {
-    Language language = languagesService()->currentLanguage().val;
-
-    if (language.status != LanguageStatus::Status::NeedUpdate) {
-        QString msg = mu::qtrc("appshell", "Your version of %1 is up to date").arg(language.name);
+    QString currentLanguageCode = this->currentLanguageCode();
+    LanguageStatus::Status languageStatus = languagesService()->languageStatus(currentLanguageCode);
+    if (languageStatus != LanguageStatus::Status::NeedUpdate) {
+        Language currentLanguage = languagesService()->languages().val.value(currentLanguageCode);
+        QString msg = mu::qtrc("appshell/preferences", "Your version of %1 is up to date").arg(currentLanguage.name);
         interactive()->info(msg.toStdString(), "");
         return;
     }
 
-    RetCh<LanguageProgress> progress = languagesService()->update(language.code);
+    RetCh<LanguageProgress> progress = languagesService()->update(currentLanguageCode);
     if (!progress.ret) {
         LOGE() << progress.ret.toString();
         return;
@@ -78,12 +81,7 @@ QVariantList GeneralPreferencesModel::languages() const
 
     QVariantList result;
 
-    for (const Language& language: languageList) {
-        if (language.status == LanguageStatus::Status::NoInstalled
-            || language.status == LanguageStatus::Status::Undefined) {
-            continue;
-        }
-
+    for (const Language& language : languageList) {
         QVariantMap languageObj;
         languageObj["code"] = language.code;
         languageObj["name"] = language.name;
@@ -93,6 +91,18 @@ QVariantList GeneralPreferencesModel::languages() const
     std::sort(result.begin(), result.end(), [](const QVariant& l, const QVariant& r) {
         return l.toMap().value("code").toString() < r.toMap().value("code").toString();
     });
+
+    if (!languagesConfiguration()->languageFilePaths(PLACEHOLDER_LANGUAGE_CODE).empty()) {
+        QVariantMap placeholderLanguageObj;
+        placeholderLanguageObj["code"] = PLACEHOLDER_LANGUAGE_CODE;
+        placeholderLanguageObj["name"] = "«Placeholder translations»";
+        result.prepend(placeholderLanguageObj);
+    }
+
+    QVariantMap systemLanguageObj;
+    systemLanguageObj["code"] = SYSTEM_LANGUAGE_CODE;
+    systemLanguageObj["name"] = mu::qtrc("appshell/preferences", "System default");
+    result.prepend(systemLanguageObj);
 
     return result;
 }
@@ -183,4 +193,18 @@ void GeneralPreferencesModel::setOscPort(int oscPort)
 {
     NOT_IMPLEMENTED;
     emit oscPortChanged(oscPort);
+}
+
+bool GeneralPreferencesModel::isNeedRestart() const
+{
+    return m_isNeedRestart;
+}
+
+void GeneralPreferencesModel::setIsNeedRestart(bool newIsNeedRestart)
+{
+    if (m_isNeedRestart == newIsNeedRestart) {
+        return;
+    }
+    m_isNeedRestart = newIsNeedRestart;
+    emit isNeedRestartChanged();
 }

@@ -26,15 +26,15 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Project 1.0
 
-import "internal"
+import "internal/Properties"
 
 StyledDialogView {
     id: root
 
-    title: qsTrc("project", "Project properties")
+    title: qsTrc("project/properties", "Project properties")
 
     contentWidth: 680
-    contentHeight: 400
+    contentHeight: 460
     margins: 16
 
     property int propertyNameWidth: 110
@@ -63,16 +63,6 @@ StyledDialogView {
 
         spacing: 8
 
-        ProjectPropertiesTopPanel {
-            id: propertiesTopPanel
-
-            propertyNameWidth: root.propertyNameWidth
-
-            navigationPanel: root.navigationPanel
-        }
-
-        SeparatorLine {}
-
         ProjectPropertiesView {
             id: propertiesListView
 
@@ -80,7 +70,7 @@ StyledDialogView {
             propertyNameWidth: root.propertyNameWidth
 
             navigationPanel: root.navigationPanel
-            navigationColumnStart: propertiesTopPanel.navigationColumnEnd + 1
+            navigationColumnStart: propertiesFileInfoPanel.navigationColumnEnd + 1
         }
 
         Connections {
@@ -93,6 +83,16 @@ StyledDialogView {
         }
 
         SeparatorLine {}
+
+        ProjectPropertiesFileInfoPanel {
+            id: propertiesFileInfoPanel
+
+            propertyNameWidth: root.propertyNameWidth
+            Layout.topMargin: 4
+            Layout.bottomMargin: 8
+
+            navigationPanel: root.navigationPanel
+        }
 
         ProjectPropertiesBottomPanel {
             model: projectPropertiesModel

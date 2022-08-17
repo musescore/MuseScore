@@ -28,10 +28,10 @@ BaseSection {
 
     signal restartAudioAndMidiDevicesRequested()
 
-    title: qsTrc("appshell", "Audio engine")
+    title: qsTrc("appshell/preferences", "Audio engine")
 
     FlatButton {
-        text: qsTrc("appshell", "Restart audio and MIDI devices")
+        text: qsTrc("appshell/preferences", "Restart audio and MIDI devices")
 
         navigation.name: "RestartAudioAndMidiDevicesBox"
         navigation.panel: root.navigation

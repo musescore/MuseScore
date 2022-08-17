@@ -37,145 +37,15 @@
  * \namespace Ms .
  */
 
-namespace Ms {
+namespace mu::engraving {
 #ifdef SCRIPT_INTERFACE
 Q_NAMESPACE
 #endif
 
-//-------------------------------------------------------------------
-///   \internal
-///   The value of this enum determines the "stacking order"
-///   of elements on the canvas.
-///   Note: keep in sync with array elementNames[] in scoreElement.cpp
-//-------------------------------------------------------------------
-enum class ElementType {
-    ///.\{
-    INVALID = 0,
-    BRACKET_ITEM,
-    PART,
-    STAFF,
-    SCORE,
-    SYMBOL,
-    TEXT,
-    MEASURE_NUMBER,
-    MMREST_RANGE,
-    INSTRUMENT_NAME,
-    SLUR_SEGMENT,
-    TIE_SEGMENT,
-    BAR_LINE,
-    STAFF_LINES,
-    SYSTEM_DIVIDER,
-    STEM_SLASH,
-    ARPEGGIO,
-    ACCIDENTAL,
-    LEDGER_LINE,
-    STEM,                     // list STEM before NOTE: notes in TAB might 'break' stems
-    NOTE,                     // and this requires stems to be drawn before notes
-    CLEF,                     // elements from CLEF to TIMESIG need to be in the order
-    KEYSIG,                   // in which they appear in a measure
-    AMBITUS,
-    TIMESIG,
-    REST,
-    MMREST,
-    BREATH,
-    MEASURE_REPEAT,
-    TIE,
-    ARTICULATION,
-    FERMATA,
-    CHORDLINE,
-    SLIDE,
-    DYNAMIC,
-    BEAM,
-    HOOK,
-    LYRICS,
-    FIGURED_BASS,
-    MARKER,
-    JUMP,
-    FINGERING,
-    TUPLET,
-    TEMPO_TEXT,
-    STAFF_TEXT,
-    SYSTEM_TEXT,
-    PLAYTECH_ANNOTATION,
-    REHEARSAL_MARK,
-    INSTRUMENT_CHANGE,
-    STAFFTYPE_CHANGE,
-    HARMONY,
-    FRET_DIAGRAM,
-    BEND,
-    TREMOLOBAR,
-    VOLTA,
-    HAIRPIN_SEGMENT,
-    OTTAVA_SEGMENT,
-    TRILL_SEGMENT,
-    LET_RING_SEGMENT,
-    TEMPO_RANGED_CHANGE_SEGMENT,
-    VIBRATO_SEGMENT,
-    PALM_MUTE_SEGMENT,
-    TEXTLINE_SEGMENT,
-    VOLTA_SEGMENT,
-    PEDAL_SEGMENT,
-    LYRICSLINE_SEGMENT,
-    GLISSANDO_SEGMENT,
-    LAYOUT_BREAK,
-    SPACER,
-    STAFF_STATE,
-    NOTEHEAD,
-    NOTEDOT,
-    TREMOLO,
-    IMAGE,
-    MEASURE,
-    SELECTION,
-    LASSO,
-    SHADOW_NOTE,
-    TAB_DURATION_SYMBOL,
-    FSYMBOL,
-    PAGE,
-    HAIRPIN,
-    OTTAVA,
-    PEDAL,
-    TRILL,
-    LET_RING,
-    TEMPO_RANGED_CHANGE,
-    VIBRATO,
-    PALM_MUTE,
-    TEXTLINE,
-    TEXTLINE_BASE,
-    NOTELINE,
-    LYRICSLINE,
-    GLISSANDO,
-    BRACKET,
-    SEGMENT,
-    SYSTEM,
-    COMPOUND,
-    CHORD,
-    SLUR,
-    ELEMENT,
-    ELEMENT_LIST,
-    STAFF_LIST,
-    MEASURE_LIST,
-    HBOX,
-    VBOX,
-    TBOX,
-    FBOX,
-    ACTION_ICON,
-    OSSIA,
-    BAGPIPE_EMBELLISHMENT,
-    STICKING,
-
-    ROOT_ITEM,
-    DUMMY,
-
-    MAXTYPE
-    ///\}
-};
-
-using ElementTypeSet = std::unordered_set<ElementType>;
-
 //---------------------------------------------------------
 //   AccidentalType
 //---------------------------------------------------------
-// NOTE: keep this in sync with with accList array in accidentals.cpp
+// NOTE: keep this in sync with accList array in accidentals.cpp
 
 enum class AccidentalType {
     ///.\{
@@ -386,16 +256,6 @@ constexpr bool operator&(NoteType t1, NoteType t2)
 }
 
 //---------------------------------------------------------
-//   GlissandoType
-//---------------------------------------------------------
-
-enum class GlissandoType {
-    ///.\{
-    STRAIGHT, WAVY
-    ///\}
-};
-
-//---------------------------------------------------------
 //   HarmonyType
 //---------------------------------------------------------
 
@@ -470,7 +330,7 @@ constexpr bool operator&(const SegmentType t1, const SegmentType t2)
 //   FontStyle
 //---------------------------------------------------------
 
-enum class FontStyle : char {
+enum class FontStyle : signed char {
     Undefined = -1,
     Normal = 0,
     Bold = 1 << 0,
@@ -496,7 +356,7 @@ constexpr bool operator&(FontStyle a1, FontStyle a2)
 
 //---------------------------------------------------------
 //   PlayEventType
-/// Determines whether oranaments are automatically generated
+/// Determines whether ornaments are automatically generated
 /// when playing a score and whether the PlayEvents are saved
 /// in the score file.
 //---------------------------------------------------------
@@ -517,6 +377,20 @@ enum class TupletNumberType : char {
 };
 enum class TupletBracketType : char {
     AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET
+};
+
+//---------------------------------------------------------
+//   TripletFeels
+//---------------------------------------------------------
+
+enum class TripletFeelType : char {
+    NONE,
+    TRIPLET_8TH,
+    TRIPLET_16TH,
+    DOTTED_8TH,
+    DOTTED_16TH,
+    SCOTTISH_8TH,
+    SCOTTISH_16TH
 };
 
 struct ScoreChangesRange {
@@ -550,19 +424,12 @@ Q_ENUM_NS(PlayEventType);
 Q_ENUM_NS(AccidentalType);
 Q_ENUM_NS(HarmonyType);
 #endif
+} // namespace mu::engraving
 
-//hack: to force the build system to run moc on this file
-/// \private
-class Mops : public QObject
-{
-    Q_GADGET
-};
-} // namespace Ms
-
-Q_DECLARE_METATYPE(Ms::NoteType);
-
-Q_DECLARE_METATYPE(Ms::PlayEventType);
-
-Q_DECLARE_METATYPE(Ms::AccidentalType);
+#ifndef NO_QT_SUPPORT
+Q_DECLARE_METATYPE(mu::engraving::NoteType);
+Q_DECLARE_METATYPE(mu::engraving::PlayEventType);
+Q_DECLARE_METATYPE(mu::engraving::AccidentalType);
+#endif
 
 #endif

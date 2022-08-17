@@ -73,7 +73,7 @@ Ret SynthesizerStub::init(float)
     return make_ret(Ret::Code::NotSupported);
 }
 
-Ret SynthesizerStub::addSoundFonts(const std::vector<io::path>&)
+Ret SynthesizerStub::addSoundFonts(const std::vector<io::path_t>&)
 {
     return make_ret(Ret::Code::NotSupported);
 }

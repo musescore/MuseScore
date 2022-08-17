@@ -32,7 +32,6 @@
 #include "midi/miditypes.h"
 #include "mpe/events.h"
 #include "io/path.h"
-#include "io/device.h"
 #include "async/channel.h"
 
 namespace mu::audio {
@@ -91,12 +90,12 @@ struct AudioResourceMeta {
     bool operator<(const AudioResourceMeta& other) const
     {
         return id < other.id
-               && type < other.type
-               && vendor < other.vendor;
+               || vendor < other.vendor;
     }
 };
 
 using AudioResourceMetaList = std::vector<AudioResourceMeta>;
+using AudioResourceMetaSet = std::set<AudioResourceMeta>;
 
 enum class AudioFxType {
     Undefined = -1,
@@ -264,7 +263,7 @@ private:
     std::map<audioch_t, AudioSignalVal> m_signalValuesMap;
 };
 
-using PlaybackData = std::variant<mpe::PlaybackData, io::Device*>;
+using PlaybackData = std::variant<mpe::PlaybackData, QIODevice*>;
 using PlaybackSetupData = mpe::PlaybackSetupData;
 
 enum class PlaybackStatus {
@@ -277,7 +276,8 @@ enum class SoundTrackType {
     Undefined = -1,
     MP3,
     OGG,
-    FLAC
+    FLAC,
+    WAV
 };
 
 struct SoundTrackFormat {
@@ -293,7 +293,27 @@ struct SoundTrackFormat {
                && audioChannelsNumber == other.audioChannelsNumber
                && bitRate == other.bitRate;
     }
+
+    bool isValid() const
+    {
+        return type != SoundTrackType::Undefined
+               && sampleRate != 0
+               && audioChannelsNumber != 0;
+    }
 };
+
+using AudioDeviceID = std::string;
+struct AudioDevice {
+    AudioDeviceID id;
+    std::string name;
+
+    bool operator==(const AudioDevice& other) const
+    {
+        return id == other.id;
+    }
+};
+
+using AudioDeviceList = std::vector<AudioDevice>;
 }
 
 #endif // MU_AUDIO_AUDIOTYPES_H

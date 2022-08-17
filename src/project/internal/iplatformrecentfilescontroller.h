@@ -34,7 +34,7 @@ class IPlatformRecentFilesController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IPlatformRecentFilesController() = default;
 
-    virtual void addRecentFile(const io::path& path) = 0;
+    virtual void addRecentFile(const io::path_t& path) = 0;
     virtual void clearRecentFiles() = 0;
 };
 }

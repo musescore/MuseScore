@@ -27,25 +27,26 @@
 
 #include "scorerw.h"
 
+using namespace mu::io;
 using namespace mu::engraving;
 
-bool ScoreComp::saveCompareScore(Ms::Score* score, const QString& saveName, const QString& compareWithLocalPath)
+bool ScoreComp::saveCompareScore(Score* score, const String& saveName, const String& compareWithLocalPath)
 {
     if (!ScoreRW::saveScore(score, saveName)) {
         return false;
     }
-    return compareFiles(saveName, ScoreRW::rootPath() + "/" + compareWithLocalPath);
+    return compareFiles(saveName, ScoreRW::rootPath() + u"/" + compareWithLocalPath);
 }
 
-bool ScoreComp::saveCompareMimeData(QByteArray mimeData, const QString& saveName, const QString& compareWithLocalPath)
+bool ScoreComp::saveCompareMimeData(ByteArray mimeData, const String& saveName, const String& compareWithLocalPath)
 {
     if (!ScoreRW::saveMimeData(mimeData, saveName)) {
         return false;
     }
-    return compareFiles(saveName, ScoreRW::rootPath() + "/" + compareWithLocalPath);
+    return compareFiles(saveName, ScoreRW::rootPath() + u"/" + compareWithLocalPath);
 }
 
-bool ScoreComp::compareFiles(const QString& fullPath1, const QString& fullPath2)
+bool ScoreComp::compareFiles(const String& fullPath1, const String& fullPath2)
 {
     QString cmd = "diff";
     QStringList args;
@@ -66,8 +67,8 @@ bool ScoreComp::compareFiles(const QString& fullPath1, const QString& fullPath2)
     if (code) {
         QByteArray ba = p.readAll();
         QTextStream outputText(stdout);
-        outputText << QString(ba);
-        outputText << QString("   <diff -u %1 %2 failed, code: %3 \n").arg(fullPath1, fullPath2).arg(code);
+        outputText << String(ba);
+        outputText << String("   <diff -u %1 %2 failed, code: %3 \n").arg(fullPath1, fullPath2).arg(code);
         return false;
     }
 

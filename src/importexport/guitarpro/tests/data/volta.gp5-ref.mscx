@@ -4,10 +4,6 @@
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
-    <Style>
-      <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-      <Spatium>1.74978</Spatium>
-      </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
@@ -23,16 +19,17 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Guitar</trackName>
-      <Instrument>
+      <Instrument id="guitar-steel">
         <longName>Guitar</longName>
         <trackName></trackName>
+        <instrumentId>pluck.guitar.acoustic</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
@@ -53,14 +50,11 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <linkedMain/>
         <Text>
-          <linkedMain/>
           <style>title</style>
           <text>Etude</text>
           </Text>
         <Text>
-          <linkedMain/>
           <style>composer</style>
           <text>F. Tarrega</text>
           </Text>
@@ -70,29 +64,23 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
-            <linkedMain/>
             </Clef>
           <KeySig>
-            <linkedMain/>
             <accidental>0</accidental>
             </KeySig>
           <TimeSig>
-            <linkedMain/>
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <linkedMain/>
             </Dynamic>
           <Tempo>
-            <tempo>1.6666666666666667</tempo>
-            <linkedMain/>
+            <tempo>1.666667</tempo>
             <text><sym>metNoteQuarterUp</sym> = 100</text>
             </Tempo>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -102,14 +90,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-11</l1>
-            <l2>-5</l2>
+            <l1>-16</l1>
+            <l2>-12</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -117,10 +103,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -128,10 +112,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -140,7 +122,6 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -150,14 +131,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-15</l1>
-            <l2>-7</l2>
+            <l1>-24</l1>
+            <l2>-20</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -165,10 +144,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -176,10 +153,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -188,7 +163,6 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -198,14 +172,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-15</l1>
-            <l2>-7</l2>
+            <l1>-24</l1>
+            <l2>-20</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -213,10 +185,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -224,10 +194,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -238,11 +206,9 @@
           </voice>
         <voice>
           <Chord>
-            <linkedMain/>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <linkedMain/>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -254,7 +220,6 @@
       <Measure>
         <voice>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -264,14 +229,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-16</l1>
-            <l2>-9</l2>
+            <l1>-28</l1>
+            <l2>-22</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -279,10 +242,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
                 </Accidental>
@@ -293,10 +254,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -305,7 +264,6 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -315,14 +273,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-13</l1>
-            <l2>-7</l2>
+            <l1>-24</l1>
+            <l2>-20</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -330,10 +286,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <fret>4</fret>
@@ -341,10 +295,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -353,7 +305,6 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -363,14 +314,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-13</l1>
-            <l2>-7</l2>
+            <l1>-20</l1>
+            <l2>-16</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
@@ -381,10 +330,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <fret>4</fret>
@@ -392,10 +339,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -406,11 +351,9 @@
           </voice>
         <voice>
           <Chord>
-            <linkedMain/>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <linkedMain/>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -422,7 +365,6 @@
       <Measure>
         <voice>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -432,14 +374,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-17</l1>
-            <l2>-11</l2>
+            <l1>-32</l1>
+            <l2>-28</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>7</fret>
@@ -447,10 +387,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -458,10 +396,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -470,7 +406,6 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -480,14 +415,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-17</l1>
-            <l2>-11</l2>
+            <l1>-32</l1>
+            <l2>-28</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>7</fret>
@@ -495,10 +428,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -506,10 +437,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -518,7 +447,6 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -528,14 +456,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-17</l1>
-            <l2>-11</l2>
+            <l1>-32</l1>
+            <l2>-28</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>7</fret>
@@ -543,10 +469,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -554,10 +478,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -568,11 +490,9 @@
           </voice>
         <voice>
           <Chord>
-            <linkedMain/>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <linkedMain/>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -584,7 +504,6 @@
       <Measure>
         <voice>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -594,14 +513,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-11</l1>
-            <l2>-5</l2>
+            <l1>-16</l1>
+            <l2>-12</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -609,10 +526,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -620,10 +535,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -632,7 +545,6 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -642,14 +554,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-15</l1>
-            <l2>-7</l2>
+            <l1>-24</l1>
+            <l2>-20</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -657,10 +567,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -668,10 +576,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -680,7 +586,6 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -690,14 +595,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-15</l1>
-            <l2>-7</l2>
+            <l1>-24</l1>
+            <l2>-20</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -705,10 +608,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -716,10 +617,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -730,11 +629,9 @@
           </voice>
         <voice>
           <Chord>
-            <linkedMain/>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <linkedMain/>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -746,7 +643,6 @@
       <Measure>
         <voice>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -756,14 +652,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-13</l1>
-            <l2>-7</l2>
+            <l1>-24</l1>
+            <l2>-18</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -771,10 +665,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -782,10 +674,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -794,7 +684,6 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -804,14 +693,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-13</l1>
-            <l2>-7</l2>
+            <l1>-20</l1>
+            <l2>-14</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
@@ -822,10 +709,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -833,10 +718,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -845,7 +728,6 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -855,14 +737,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-13</l1>
-            <l2>-7</l2>
+            <l1>-20</l1>
+            <l2>-14</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>2</fret>
@@ -870,10 +750,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -881,10 +759,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -895,11 +771,9 @@
           </voice>
         <voice>
           <Chord>
-            <linkedMain/>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <linkedMain/>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>0</fret>
@@ -911,7 +785,6 @@
       <Measure>
         <voice>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -921,14 +794,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-16</l1>
-            <l2>-9</l2>
+            <l1>-28</l1>
+            <l2>-22</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -936,10 +807,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
                 </Accidental>
@@ -950,10 +819,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -962,7 +829,6 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -972,14 +838,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-13</l1>
-            <l2>-7</l2>
+            <l1>-24</l1>
+            <l2>-18</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -987,10 +851,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <fret>4</fret>
@@ -998,10 +860,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -1010,7 +870,6 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <linkedMain/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -1020,14 +879,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-13</l1>
-            <l2>-7</l2>
+            <l1>-20</l1>
+            <l2>-14</l2>
             </Beam>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
@@ -1038,10 +895,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <fret>4</fret>
@@ -1049,10 +904,8 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>eighth</durationType>
             <Note>
-              <linkedMain/>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -1063,11 +916,9 @@
           </voice>
         <voice>
           <Chord>
-            <linkedMain/>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <linkedMain/>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -1082,7 +933,6 @@
           <Spanner type="Volta">
             <Volta>
               <beginText>1</beginText>
-              <linkedMain/>
               <endings>1</endings>
               </Volta>
             <next>
@@ -1092,10 +942,8 @@
               </next>
             </Spanner>
           <Chord>
-            <linkedMain/>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -1103,24 +951,20 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
             <durationType>half</durationType>
             <Note>
-              <linkedMain/>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
               <string>2</string>
               </Note>
             <Note>
-              <linkedMain/>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
               <string>1</string>
               </Note>
             <Note>
-              <linkedMain/>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -1130,11 +974,9 @@
           </voice>
         <voice>
           <Chord>
-            <linkedMain/>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <linkedMain/>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -1155,8 +997,7 @@
           <Spanner type="Volta">
             <Volta>
               <beginText>2,3,6,8</beginText>
-              <linkedMain/>
-              <endings>2, 3, 6, 8</endings>
+              <endings>2,3,6,8</endings>
               </Volta>
             <next>
               <location>
@@ -1165,7 +1006,6 @@
               </next>
             </Spanner>
           <Rest>
-            <linkedMain/>
             <durationType>measure</durationType>
             <duration>3/4</duration>
             </Rest>
@@ -1179,32 +1019,27 @@
           </voice>
         <voice>
           <Chord>
-            <linkedMain/>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <linkedMain/>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
               <string>5</string>
               </Note>
             <Note>
-              <linkedMain/>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
               <string>2</string>
               </Note>
             <Note>
-              <linkedMain/>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
               <string>1</string>
               </Note>
             <Note>
-              <linkedMain/>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -1214,2638 +1049,5 @@
           </voice>
         </Measure>
       </Staff>
-    <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
-      <Division>480</Division>
-      <Style>
-        <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-        <Spatium>1.74978</Spatium>
-        </Style>
-      <showInvisible>1</showInvisible>
-      <showUnprintable>1</showUnprintable>
-      <showFrames>1</showFrames>
-      <showMargins>0</showMargins>
-      <Part>
-        <Staff id="1">
-          <linkedTo>1</linkedTo>
-          <StaffType group="pitched">
-            <name>stdNormal</name>
-            </StaffType>
-          <bracket type="0" span="2" col="0"/>
-          </Staff>
-        <Staff id="2">
-          <linkedTo>1</linkedTo>
-          <StaffType group="tablature">
-            <name>tab6StrCommon</name>
-            <lines>6</lines>
-            <lineDistance>1.5</lineDistance>
-            <timesig>0</timesig>
-            <durations>0</durations>
-            <durationFontName>MuseScore Tab Modern</durationFontName>
-            <durationFontSize>15</durationFontSize>
-            <durationFontY>0</durationFontY>
-            <fretFontName>MuseScore Tab Serif</fretFontName>
-            <fretFontSize>9</fretFontSize>
-            <fretFontY>0</fretFontY>
-            <linesThrough>0</linesThrough>
-            <minimStyle>1</minimStyle>
-            <onLines>1</onLines>
-            <showRests>0</showRests>
-            <stemsDown>1</stemsDown>
-            <stemsThrough>0</stemsThrough>
-            <upsideDown>0</upsideDown>
-            <useNumbers>1</useNumbers>
-            </StaffType>
-          </Staff>
-        <trackName></trackName>
-        <Instrument>
-          <longName>Guitar</longName>
-          <trackName></trackName>
-          <singleNoteDynamics>0</singleNoteDynamics>
-          <StringData>
-            <frets>24</frets>
-            <string>40</string>
-            <string>45</string>
-            <string>50</string>
-            <string>55</string>
-            <string>59</string>
-            <string>64</string>
-            </StringData>
-          <Channel>
-            <program value="24"/>
-            <controller ctrl="7" value="103"/>
-            <controller ctrl="10" value="63"/>
-            </Channel>
-          </Instrument>
-        </Part>
-      <Staff id="1">
-        <VBox>
-          <height>10</height>
-          <linked>
-            </linked>
-          <Text>
-            <linked>
-              </linked>
-            <style>title</style>
-            <text>Etude</text>
-            </Text>
-          <Text>
-            <linked>
-              </linked>
-            <style>composer</style>
-            <text>F. Tarrega</text>
-            </Text>
-          <Text>
-            <style>instrument_excerpt</style>
-            <text>Guitar</text>
-            </Text>
-          </VBox>
-        <Measure>
-          <voice>
-            <Clef>
-              <concertClefType>G8vb</concertClefType>
-              <transposingClefType>G8vb</transposingClefType>
-              <linked>
-                </linked>
-              </Clef>
-            <KeySig>
-              <linked>
-                </linked>
-              <accidental>0</accidental>
-              </KeySig>
-            <TimeSig>
-              <linked>
-                </linked>
-              <sigN>3</sigN>
-              <sigD>4</sigD>
-              </TimeSig>
-            <Dynamic>
-              <subtype>f</subtype>
-              <velocity>96</velocity>
-              <linked>
-                </linked>
-              </Dynamic>
-            <Tempo>
-              <tempo>1.6666666666666667</tempo>
-              <linked>
-                </linked>
-              <text><sym>metNoteQuarterUp</sym> = 100</text>
-              </Tempo>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-11</l1>
-              <l2>-5</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>64</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-15</l1>
-              <l2>-7</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-15</l1>
-              <l2>-7</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            </voice>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>40</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>5</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-9</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>69</pitch>
-                <tpc>17</tpc>
-                <fret>5</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalFlat</subtype>
-                  </Accidental>
-                <pitch>63</pitch>
-                <tpc>11</tpc>
-                <fret>4</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-13</l1>
-              <l2>-7</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>63</pitch>
-                <tpc>11</tpc>
-                <fret>4</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-13</l1>
-              <l2>-7</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalSharp</subtype>
-                  </Accidental>
-                <pitch>66</pitch>
-                <tpc>20</tpc>
-                <fret>2</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>63</pitch>
-                <tpc>11</tpc>
-                <fret>4</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            </voice>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>47</pitch>
-                <tpc>19</tpc>
-                <fret>2</fret>
-                <string>4</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-17</l1>
-              <l2>-11</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>71</pitch>
-                <tpc>19</tpc>
-                <fret>7</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-17</l1>
-              <l2>-11</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>71</pitch>
-                <tpc>19</tpc>
-                <fret>7</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-17</l1>
-              <l2>-11</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>71</pitch>
-                <tpc>19</tpc>
-                <fret>7</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            </voice>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>40</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>5</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-11</l1>
-              <l2>-5</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>64</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-15</l1>
-              <l2>-7</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-15</l1>
-              <l2>-7</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            </voice>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>40</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>5</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-13</l1>
-              <l2>-7</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>1</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-13</l1>
-              <l2>-7</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalSharp</subtype>
-                  </Accidental>
-                <pitch>66</pitch>
-                <tpc>20</tpc>
-                <fret>2</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>1</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-13</l1>
-              <l2>-7</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>66</pitch>
-                <tpc>20</tpc>
-                <fret>2</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>1</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            </voice>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>45</pitch>
-                <tpc>17</tpc>
-                <fret>0</fret>
-                <string>4</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-9</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>69</pitch>
-                <tpc>17</tpc>
-                <fret>5</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalFlat</subtype>
-                  </Accidental>
-                <pitch>63</pitch>
-                <tpc>11</tpc>
-                <fret>4</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-13</l1>
-              <l2>-7</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>63</pitch>
-                <tpc>11</tpc>
-                <fret>4</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-13</l1>
-              <l2>-7</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <Accidental>
-                  <subtype>accidentalSharp</subtype>
-                  </Accidental>
-                <pitch>66</pitch>
-                <tpc>20</tpc>
-                <fret>2</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>63</pitch>
-                <tpc>11</tpc>
-                <fret>4</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            </voice>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>47</pitch>
-                <tpc>19</tpc>
-                <fret>2</fret>
-                <string>4</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <endRepeat>2</endRepeat>
-          <voice>
-            <Spanner type="Volta">
-              <Volta>
-                <beginText>1</beginText>
-                <linked>
-                  </linked>
-                <endings>1</endings>
-                </Volta>
-              <next>
-                <location>
-                  <measures>1</measures>
-                  </location>
-                </next>
-              </Spanner>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>64</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>64</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            </voice>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>40</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>5</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Spanner type="Volta">
-              <prev>
-                <location>
-                  <measures>-1</measures>
-                  </location>
-                </prev>
-              </Spanner>
-            <Spanner type="Volta">
-              <Volta>
-                <beginText>2,3,6,8</beginText>
-                <linked>
-                  </linked>
-                <endings>2, 3, 6, 8</endings>
-                </Volta>
-              <next>
-                <location>
-                  <fractions>3/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <Rest>
-              <linked>
-                </linked>
-              <durationType>measure</durationType>
-              <duration>3/4</duration>
-              </Rest>
-            <Spanner type="Volta">
-              <prev>
-                <location>
-                  <fractions>-3/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            </voice>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>40</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>5</string>
-                </Note>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>64</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        </Staff>
-      <Staff id="2">
-        <Measure>
-          <voice>
-            <KeySig>
-              <linked>
-                <indexDiff>4</indexDiff>
-                </linked>
-              <accidental>0</accidental>
-              </KeySig>
-            <Tuplet>
-              <linked>
-                <indexDiff>7</indexDiff>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-16</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                <indexDiff>7</indexDiff>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  <indexDiff>7</indexDiff>
-                  </linked>
-                <pitch>64</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-16</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-16</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            </voice>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>40</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>5</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-16</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>69</pitch>
-                <tpc>17</tpc>
-                <fret>5</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>63</pitch>
-                <tpc>11</tpc>
-                <fret>4</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-16</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>63</pitch>
-                <tpc>11</tpc>
-                <fret>4</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-16</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>66</pitch>
-                <tpc>20</tpc>
-                <fret>2</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>63</pitch>
-                <tpc>11</tpc>
-                <fret>4</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            </voice>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>47</pitch>
-                <tpc>19</tpc>
-                <fret>2</fret>
-                <string>4</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-16</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>71</pitch>
-                <tpc>19</tpc>
-                <fret>7</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-16</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>71</pitch>
-                <tpc>19</tpc>
-                <fret>7</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-16</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>71</pitch>
-                <tpc>19</tpc>
-                <fret>7</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            </voice>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>40</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>5</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-16</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>64</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-16</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-16</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            </voice>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>40</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>5</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-16</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>1</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-16</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>66</pitch>
-                <tpc>20</tpc>
-                <fret>2</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>1</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-16</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>66</pitch>
-                <tpc>20</tpc>
-                <fret>2</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                <fret>1</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            </voice>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>45</pitch>
-                <tpc>17</tpc>
-                <fret>0</fret>
-                <string>4</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-16</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>69</pitch>
-                <tpc>17</tpc>
-                <fret>5</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>63</pitch>
-                <tpc>11</tpc>
-                <fret>4</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-16</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                <fret>3</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>63</pitch>
-                <tpc>11</tpc>
-                <fret>4</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            <Tuplet>
-              <linked>
-                </linked>
-              <normalNotes>2</normalNotes>
-              <actualNotes>3</actualNotes>
-              <baseNote>eighth</baseNote>
-              <Number>
-                <style>tuplet</style>
-                <text>3</text>
-                </Number>
-              </Tuplet>
-            <Beam>
-              <l1>-16</l1>
-              <l2>-16</l2>
-              </Beam>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>66</pitch>
-                <tpc>20</tpc>
-                <fret>2</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>63</pitch>
-                <tpc>11</tpc>
-                <fret>4</fret>
-                <string>1</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>eighth</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                <fret>2</fret>
-                <string>2</string>
-                </Note>
-              </Chord>
-            <endTuplet/>
-            </voice>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>47</pitch>
-                <tpc>19</tpc>
-                <fret>2</fret>
-                <string>4</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Chord>
-              <linked>
-                <indexDiff>1</indexDiff>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  <indexDiff>1</indexDiff>
-                  </linked>
-                <pitch>64</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>64</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            </voice>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>40</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>5</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Rest>
-              <linked>
-                <indexDiff>1</indexDiff>
-                </linked>
-              <durationType>measure</durationType>
-              <duration>3/4</duration>
-              </Rest>
-            </voice>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>40</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>5</string>
-                </Note>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>55</pitch>
-                <tpc>15</tpc>
-                <fret>0</fret>
-                <string>2</string>
-                </Note>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>59</pitch>
-                <tpc>19</tpc>
-                <fret>0</fret>
-                <string>1</string>
-                </Note>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>64</pitch>
-                <tpc>18</tpc>
-                <fret>0</fret>
-                <string>0</string>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        </Staff>
-      <name>Guitar</name>
-      </Score>
     </Score>
   </museScore>

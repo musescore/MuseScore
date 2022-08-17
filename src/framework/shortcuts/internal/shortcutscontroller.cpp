@@ -21,6 +21,8 @@
  */
 #include "shortcutscontroller.h"
 
+#include "context/shortcutcontext.h"
+
 #include "log.h"
 
 using namespace mu::shortcuts;
@@ -38,12 +40,28 @@ void ShortcutsController::activate(const std::string& sequence)
 {
     LOGD() << sequence;
 
-    ShortcutList shortcuts = shortcutsRegister()->shortcutsForSequence(sequence);
-    IF_ASSERT_FAILED(!shortcuts.empty()) {
-        return;
+    ActionCode actionCode = resolveAction(sequence);
+
+    if (!actionCode.empty()) {
+        dispatcher()->dispatch(actionCode);
+    }
+}
+
+bool ShortcutsController::isRegistered(const std::string& sequence) const
+{
+    return shortcutsRegister()->isRegistered(sequence);
+}
+
+ActionCode ShortcutsController::resolveAction(const std::string& sequence) const
+{
+    ShortcutList shortcutsForSequence = shortcutsRegister()->shortcutsForSequence(sequence);
+    IF_ASSERT_FAILED(!shortcutsForSequence.empty()) {
+        return ActionCode();
     }
 
-    for (const Shortcut& sc : shortcuts) {
+    ShortcutList allowedShortcuts;
+
+    for (const Shortcut& sc : shortcutsForSequence) {
         //! NOTE Check if the shortcut itself is allowed
         if (!uiContextResolver()->isShortcutContextAllowed(sc.context)) {
             continue;
@@ -55,11 +73,12 @@ void ShortcutsController::activate(const std::string& sequence)
             continue;
         }
 
-        dispatcher()->dispatch(sc.action);
+        allowedShortcuts.push_back(sc);
     }
-}
 
-bool ShortcutsController::isRegistered(const std::string& sequence) const
-{
-    return shortcutsRegister()->isRegistered(sequence);
+    allowedShortcuts.sort([](const Shortcut& f, const Shortcut& s) {
+        return context::shortcutContextHasLowerPriorityThan(f.context, s.context);
+    });
+
+    return !allowedShortcuts.empty() ? allowedShortcuts.back().action : ActionCode();
 }

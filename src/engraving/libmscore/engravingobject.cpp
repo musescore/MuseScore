@@ -25,9 +25,10 @@
 #include <iterator>
 #include <unordered_set>
 
-#include "translation.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
+#include "types/translatablestring.h"
+#include "types/typesconv.h"
 
 #include "score.h"
 #include "undo.h"
@@ -46,7 +47,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 ElementStyle const EngravingObject::emptyStyle;
 
 EngravingObject* EngravingObjectList::at(size_t i) const
@@ -62,7 +63,7 @@ EngravingObject::EngravingObject(const ElementType& type, EngravingObject* paren
     }
 
     if (type != ElementType::SCORE) {
-        Q_ASSERT(parent);
+        assert(parent);
     }
 
     doSetParent(parent);
@@ -94,6 +95,10 @@ EngravingObject::EngravingObject(const EngravingObject& se)
         }
     }
     _links = 0;
+
+    if (elementsProvider()) {
+        elementsProvider()->reg(this);
+    }
 }
 
 //---------------------------------------------------------
@@ -109,10 +114,20 @@ EngravingObject::~EngravingObject()
     if (!this->isType(ElementType::ROOT_ITEM)
         && !this->isType(ElementType::DUMMY)
         && !this->isType(ElementType::SCORE)) {
-        for (EngravingObject* c : m_children) {
+        EngravingObjectList children = m_children;
+        for (EngravingObject* c : children) {
             c->m_parent = nullptr;
             c->moveToDummy();
         }
+    } else {
+        bool isPaletteScore = score()->isPaletteScore();
+        for (EngravingObject* c : m_children) {
+            c->m_parent = nullptr;
+            if (!isPaletteScore) {
+                delete c;
+            }
+        }
+        m_children.clear();
     }
 
     if (elementsProvider()) {
@@ -294,7 +309,7 @@ PropertyValue EngravingObject::propertyDefault(Pid pid) const
     if (sid != Sid::NOSTYLE) {
         return styleValue(pid, sid);
     }
-    //      qDebug("<%s>(%d) not found in <%s>", propertyQmlName(pid), int(pid), typeName());
+    //      LOGD("<%s>(%d) not found in <%s>", propertyQmlName(pid), int(pid), typeName());
     return PropertyValue();
 }
 
@@ -408,7 +423,7 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
         if (isStyled(Pid::OFFSET)) {
             // TODO: maybe it just makes more sense to do this in EngravingItem::undoChangeProperty,
             // but some of the overrides call ScoreElement explicitly
-            qreal sp;
+            double sp;
             if (isEngravingItem()) {
                 sp = toEngravingItem(this)->spatium();
             } else {
@@ -461,7 +476,7 @@ void EngravingObject::undoPushProperty(Pid id)
 
 void EngravingObject::readProperty(XmlReader& e, Pid id)
 {
-    PropertyValue v = Ms::readProperty(id, e);
+    PropertyValue v = mu::engraving::readProperty(id, e);
     switch (propertyType(id)) {
     case P_TYPE::MILLIMETRE: //! NOTE type mm, but stored in xml as spatium
         v = v.value<Spatium>().toMM(score()->spatium());
@@ -482,7 +497,7 @@ void EngravingObject::readProperty(XmlReader& e, Pid id)
     }
 }
 
-bool EngravingObject::readProperty(const QStringRef& s, XmlReader& e, Pid id)
+bool EngravingObject::readProperty(const AsciiStringView& s, XmlReader& e, Pid id)
 {
     if (s == propertyName(id)) {
         readProperty(e, id);
@@ -506,7 +521,7 @@ void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
     }
     PropertyValue p = getProperty(pid);
     if (!p.isValid()) {
-        qDebug("%s invalid property %d <%s>", typeName(), int(pid), propertyName(pid));
+        LOGD("%s invalid property %d <%s>", typeName(), int(pid), propertyName(pid));
         return;
     }
     PropertyFlags f = propertyFlags(pid);
@@ -532,8 +547,8 @@ void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
 
     P_TYPE type = propertyType(pid);
     if (P_TYPE::MILLIMETRE == type) {
-        qreal f1 = p.toReal();
-        if (d.isValid() && qAbs(f1 - d.toReal()) < 0.0001) {            // fuzzy compare
+        double f1 = p.toReal();
+        if (d.isValid() && std::abs(f1 - d.toReal()) < 0.0001) {            // fuzzy compare
             return;
         }
         p = PropertyValue(Spatium::fromMM(f1, score()->spatium()));
@@ -542,31 +557,22 @@ void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
         PointF p1 = p.value<PointF>();
         if (d.isValid()) {
             PointF p2 = d.value<PointF>();
-            if ((qAbs(p1.x() - p2.x()) < 0.0001) && (qAbs(p1.y() - p2.y()) < 0.0001)) {
+            if ((std::abs(p1.x() - p2.x()) < 0.0001) && (std::abs(p1.y() - p2.y()) < 0.0001)) {
                 return;
             }
         }
-        qreal q = offsetIsSpatiumDependent() ? score()->spatium() : DPMM;
+        double q = offsetIsSpatiumDependent() ? score()->spatium() : DPMM;
         p = PropertyValue(p1 / q);
         d = PropertyValue();
     }
-    xml.tag(pid, p, d);
-}
-
-//---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid EngravingObject::propertyId(const QStringRef& xmlName) const
-{
-    return Ms::propertyId(xmlName);
+    xml.tagProperty(pid, p, d);
 }
 
 //---------------------------------------------------------
 //   readStyledProperty
 //---------------------------------------------------------
 
-bool EngravingObject::readStyledProperty(XmlReader& e, const QStringRef& tag)
+bool EngravingObject::readStyledProperty(XmlReader& e, const AsciiStringView& tag)
 {
     for (const StyledProperty& spp : *styledProperties()) {
         if (readProperty(tag, e, spp.pid)) {
@@ -604,8 +610,8 @@ void EngravingObject::reset()
 
 void EngravingObject::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
 {
-    Q_UNUSED(pasteMode);
-    qDebug("Cannot add connector %s to %s", info->connector()->typeName(), typeName());
+    UNUSED(pasteMode);
+    LOGD("Cannot add connector %s to %s", info->connector()->typeName(), typeName());
 }
 
 //---------------------------------------------------------
@@ -614,12 +620,12 @@ void EngravingObject::readAddConnector(ConnectorInfoReader* info, bool pasteMode
 //---------------------------------------------------------
 void EngravingObject::linkTo(EngravingObject* element)
 {
-    Q_ASSERT(element != this);
-    Q_ASSERT(!_links);
+    assert(element != this);
+    assert(!_links);
 
     if (element->links()) {
         _links = element->_links;
-        Q_ASSERT(_links->contains(element));
+        assert(_links->contains(element));
     } else {
         if (isStaff()) {
             _links = new LinkedObjects(score(), -1);       // don’t use lid
@@ -629,7 +635,7 @@ void EngravingObject::linkTo(EngravingObject* element)
         _links->push_back(element);
         element->_links = _links;
     }
-    Q_ASSERT(!_links->contains(this));
+    assert(!_links->contains(this));
     _links->push_back(this);
 }
 
@@ -643,7 +649,7 @@ void EngravingObject::unlink()
         return;
     }
 
-    Q_ASSERT(_links->contains(this));
+    assert(_links->contains(this));
     _links->remove(this);
 
     // if link list is empty, remove list
@@ -775,12 +781,17 @@ void EngravingObject::styleChanged()
 
 const char* EngravingObject::typeName() const
 {
-    return Factory::name(type());
+    return TConv::toXml(type()).ascii();
 }
 
-QString EngravingObject::typeUserName() const
+TranslatableString EngravingObject::typeUserName() const
 {
-    return qtrc("elementName", Factory::userName(type()));
+    return TConv::userName(type());
+}
+
+String EngravingObject::translatedTypeUserName() const
+{
+    return typeUserName().translated();
 }
 
 //---------------------------------------------------------
@@ -792,7 +803,7 @@ bool EngravingObject::isSLineSegment() const
     return isHairpinSegment() || isOttavaSegment() || isPedalSegment()
            || isTrillSegment() || isVoltaSegment() || isTextLineSegment()
            || isGlissandoSegment() || isLetRingSegment() || isVibratoSegment() || isPalmMuteSegment()
-           || isTempoChangeRangedSegment();
+           || isGradualTempoChangeSegment();
 }
 
 //---------------------------------------------------------
@@ -810,6 +821,7 @@ bool EngravingObject::isTextBase() const
            || type() == ElementType::JUMP
            || type() == ElementType::STAFF_TEXT
            || type() == ElementType::SYSTEM_TEXT
+           || type() == ElementType::TRIPLET_FEEL
            || type() == ElementType::PLAYTECH_ANNOTATION
            || type() == ElementType::REHEARSAL_MARK
            || type() == ElementType::INSTRUMENT_CHANGE
@@ -849,10 +861,5 @@ PropertyValue EngravingObject::styleValue(Pid pid, Sid sid) const
     default:
         return score()->styleV(sid);
     }
-}
-
-QString EngravingObject::mscoreVersion() const
-{
-    return score()->masterScore()->mscoreVersion();
 }
 }

@@ -27,16 +27,16 @@
 #include "libmscore/masterscore.h"
 #include "libmscore/undo.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 //---------------------------------------------------------
 //   Channel::activeChannel
 //---------------------------------------------------------
 
-Ms::Channel* Channel::activeChannel()
+mu::engraving::InstrChannel* Channel::activeChannel()
 {
-    Ms::Score* score = _part->score();
-    Ms::MasterScore* masterScore = score->masterScore();
+    mu::engraving::Score* score = _part->score();
+    mu::engraving::MasterScore* masterScore = score->masterScore();
 
     if (masterScore->playbackScore() == score) {
         return masterScore->playbackChannel(_channel);
@@ -50,7 +50,7 @@ Ms::Channel* Channel::activeChannel()
 
 void Channel::setMidiBankAndProgram(int bank, int program, bool setUserBankController)
 {
-    Ms::Channel* ch = activeChannel();
+    mu::engraving::InstrChannel* ch = activeChannel();
 
     MidiPatch patch;
     // other values are unused in ChangePatch command
@@ -58,7 +58,7 @@ void Channel::setMidiBankAndProgram(int bank, int program, bool setUserBankContr
     patch.bank = bank;
     patch.prog = program;
 
-    Ms::Score* score = _part->score();
+    mu::engraving::Score* score = _part->score();
     score->undo(new ChangePatch(score, ch, &patch));
 
     if (setUserBankController) {
@@ -130,7 +130,7 @@ Channel* ChannelListProperty::at(QQmlListProperty<Channel>* l, int i)
         return nullptr;
     }
 
-    Ms::Channel* ch = instr->instrument()->channel(i);
+    mu::engraving::InstrChannel* ch = instr->instrument()->channel(i);
 
     return customWrap<Channel>(ch, instr->part());
 }
@@ -141,8 +141,8 @@ Channel* ChannelListProperty::at(QQmlListProperty<Channel>* l, int i)
 
 QString Instrument::longName() const
 {
-    const std::list<Ms::StaffName>& names = instrument()->longNames();
-    return names.empty() ? "" : names.front().name();
+    const std::list<mu::engraving::StaffName>& names = instrument()->longNames();
+    return names.empty() ? u"" : names.front().name();
 }
 
 //---------------------------------------------------------
@@ -151,8 +151,8 @@ QString Instrument::longName() const
 
 QString Instrument::shortName() const
 {
-    const std::list<Ms::StaffName>& names = instrument()->shortNames();
-    return names.empty() ? "" : names.front().name();
+    const std::list<mu::engraving::StaffName>& names = instrument()->shortNames();
+    return names.empty() ? u"" : names.front().name();
 }
 
 //---------------------------------------------------------

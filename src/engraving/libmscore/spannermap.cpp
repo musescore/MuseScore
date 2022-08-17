@@ -23,9 +23,11 @@
 #include "spannermap.h"
 #include "spanner.h"
 
+#include "log.h"
+
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   SpannerMap
 //---------------------------------------------------------
@@ -55,7 +57,7 @@ void SpannerMap::update() const
 //   findContained
 //---------------------------------------------------------
 
-const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findContained(int start, int stop)
+const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findContained(int start, int stop) const
 {
     if (dirty) {
         update();
@@ -69,7 +71,7 @@ const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findContained
 //   findOverlapping
 //---------------------------------------------------------
 
-const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findOverlapping(int start, int stop)
+const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findOverlapping(int start, int stop) const
 {
     if (dirty) {
         update();
@@ -102,7 +104,7 @@ bool SpannerMap::removeSpanner(Spanner* s)
             return true;
         }
     }
-    qDebug("%s (%p) not found", s->typeName(), s);
+    LOGD("%s (%p) not found", s->typeName(), s);
     return false;
 }
 
@@ -113,11 +115,11 @@ bool SpannerMap::removeSpanner(Spanner* s)
 
 void SpannerMap::dump() const
 {
-    qDebug("SpannerMap::dump");
+    LOGD("SpannerMap::dump");
     for (auto i = begin(); i != end(); ++i) {
-        qDebug("   %5d: %s %p", i->first, i->second->typeName(), i->second);
+        LOGD("   %5d: %s %p", i->first, i->second->typeName(), i->second);
     }
 }
 
 #endif
-}     // namespace Ms
+} // namespace mu::engraving

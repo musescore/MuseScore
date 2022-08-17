@@ -27,9 +27,11 @@
 #include "libmscore/factory.h"
 #include "libmscore/score.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   accidental
 //---------------------------------------------------------
@@ -81,7 +83,7 @@ void mxmlNotePitch::displayStepOctave(QXmlStreamReader& e)
                 _displayStep = pos;
             } else {
                 //logError(QString("invalid step '%1'").arg(strStep));
-                qDebug("invalid step '%s'", qPrintable(step));                // TODO
+                LOGD("invalid step '%s'", qPrintable(step));                // TODO
             }
         } else if (e.name() == "display-octave") {
             const auto oct = e.readElementText();
@@ -89,7 +91,7 @@ void mxmlNotePitch::displayStepOctave(QXmlStreamReader& e)
             _displayOctave = oct.toInt(&ok);
             if (!ok || _displayOctave < 0 || _displayOctave > 9) {
                 //logError(QString("invalid octave '%1'").arg(strOct));
-                qDebug("invalid octave '%s'", qPrintable(oct));               // TODO
+                LOGD("invalid octave '%s'", qPrintable(oct));               // TODO
                 _displayOctave = -1;
             }
         } else {
@@ -148,7 +150,7 @@ void mxmlNotePitch::pitch(QXmlStreamReader& e)
             // TODO skipLogCurrElem();
         }
     }
-    //qDebug("pitch step %d alter %d oct %d accid %hhd", step, alter, oct, accid);
+    //LOGD("pitch step %d alter %d oct %d accid %hhd", step, alter, oct, accid);
 }
 
 //---------------------------------------------------------

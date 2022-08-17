@@ -25,7 +25,7 @@
 #include "styledef.h"
 #include "types/types.h"
 
-namespace Ms {
+namespace mu::engraving {
 constexpr size_t TEXT_STYLE_SIZE = 14;
 
 typedef std::array<StyledProperty, TEXT_STYLE_SIZE> TextStyle;

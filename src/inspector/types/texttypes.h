@@ -57,7 +57,7 @@ public:
         FRAME_TYPE_SQUARE,
         FRAME_TYPE_CIRCLE
     };
-    // must match Ms::Tid
+    // must match mu::engraving::Tid
     enum class TextType {
         TEXT_TYPE_DEFAULT,
         TEXT_TYPE_TITLE,
@@ -134,23 +134,25 @@ public:
     Q_ENUM(FontVerticalAlignment)
 };
 
-static const QList<Ms::ElementType> TEXT_ELEMENT_TYPES = {
-    Ms::ElementType::TEXT,
-    Ms::ElementType::STAFF_TEXT,
-    Ms::ElementType::SYSTEM_TEXT,
-    Ms::ElementType::DYNAMIC,
-    Ms::ElementType::FIGURED_BASS,
-    Ms::ElementType::FINGERING,
-    Ms::ElementType::HARMONY,
-    Ms::ElementType::INSTRUMENT_CHANGE,
-    Ms::ElementType::JUMP,
-    Ms::ElementType::LYRICS,
-    Ms::ElementType::MARKER,
-    Ms::ElementType::MEASURE_NUMBER,
-    Ms::ElementType::REHEARSAL_MARK,
-    Ms::ElementType::STICKING,
-    Ms::ElementType::TEMPO_TEXT,
-    Ms::ElementType::TUPLET
+static const QList<mu::engraving::ElementType> TEXT_ELEMENT_TYPES = {
+    mu::engraving::ElementType::TEXT,
+    mu::engraving::ElementType::STAFF_TEXT,
+    mu::engraving::ElementType::SYSTEM_TEXT,
+    mu::engraving::ElementType::TRIPLET_FEEL,
+    mu::engraving::ElementType::DYNAMIC,
+    mu::engraving::ElementType::FIGURED_BASS,
+    mu::engraving::ElementType::FINGERING,
+    mu::engraving::ElementType::HARMONY,
+    mu::engraving::ElementType::INSTRUMENT_CHANGE,
+    mu::engraving::ElementType::JUMP,
+    mu::engraving::ElementType::LYRICS,
+    mu::engraving::ElementType::MARKER,
+    mu::engraving::ElementType::MEASURE_NUMBER,
+    mu::engraving::ElementType::REHEARSAL_MARK,
+    mu::engraving::ElementType::STICKING,
+    mu::engraving::ElementType::TEMPO_TEXT,
+    mu::engraving::ElementType::TUPLET,
+    mu::engraving::ElementType::PLAYTECH_ANNOTATION
 };
 }
 

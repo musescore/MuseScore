@@ -23,8 +23,6 @@
 
 #include "log.h"
 
-static const std::string AUTOSAVE_SUFFIX = "autosave";
-
 using namespace mu::project;
 
 void ProjectAutoSaver::init()
@@ -77,15 +75,15 @@ void ProjectAutoSaver::init()
     });
 }
 
-bool ProjectAutoSaver::projectHasUnsavedChanges(const io::path& projectPath) const
+bool ProjectAutoSaver::projectHasUnsavedChanges(const io::path_t& projectPath) const
 {
-    io::path autoSavePath = projectAutoSavePath(projectPath);
+    io::path_t autoSavePath = projectAutoSavePath(projectPath);
     return fileSystem()->exists(autoSavePath);
 }
 
-void ProjectAutoSaver::removeProjectUnsavedChanges(const io::path& projectPath)
+void ProjectAutoSaver::removeProjectUnsavedChanges(const io::path_t& projectPath)
 {
-    io::path path = projectPath;
+    io::path_t path = projectPath;
     if (!isAutosaveOfNewlyCreatedProject(projectPath)) {
         path = projectAutoSavePath(projectPath);
     }
@@ -93,23 +91,25 @@ void ProjectAutoSaver::removeProjectUnsavedChanges(const io::path& projectPath)
     fileSystem()->remove(path);
 }
 
-bool ProjectAutoSaver::isAutosaveOfNewlyCreatedProject(const io::path& projectPath) const
+bool ProjectAutoSaver::isAutosaveOfNewlyCreatedProject(const io::path_t& projectPath) const
 {
     return projectPath == configuration()->newProjectTemporaryPath();
 }
 
-mu::io::path ProjectAutoSaver::projectOriginalPath(const mu::io::path& projectAutoSavePath) const
+mu::io::path_t ProjectAutoSaver::projectOriginalPath(const mu::io::path_t& projectAutoSavePath) const
 {
     IF_ASSERT_FAILED(io::suffix(projectAutoSavePath) == AUTOSAVE_SUFFIX) {
-        return projectAutoSavePath;
+        return engraving::mainFilePath(projectAutoSavePath);
     }
 
-    return io::absolutePath(projectAutoSavePath) + "/" + io::filename(projectAutoSavePath, false);
+    io::path_t withoutAutosaveSuffix = io::filename(projectAutoSavePath, false);
+
+    return engraving::mainFilePath(io::absoluteDirpath(projectAutoSavePath).appendingComponent(withoutAutosaveSuffix));
 }
 
-mu::io::path ProjectAutoSaver::projectAutoSavePath(const io::path& projectPath) const
+mu::io::path_t ProjectAutoSaver::projectAutoSavePath(const io::path_t& projectPath) const
 {
-    return projectPath.appendingSuffix(AUTOSAVE_SUFFIX);
+    return engraving::containerPath(projectPath).appendingSuffix(AUTOSAVE_SUFFIX);
 }
 
 INotationProjectPtr ProjectAutoSaver::currentProject() const
@@ -119,7 +119,7 @@ INotationProjectPtr ProjectAutoSaver::currentProject() const
 
 void ProjectAutoSaver::update()
 {
-    io::path newProjectPath;
+    io::path_t newProjectPath;
 
     auto project = currentProject();
     if (project && project->needSave().val) {
@@ -147,8 +147,8 @@ void ProjectAutoSaver::onTrySave()
         return;
     }
 
-    io::path projectPath = this->projectPath(project);
-    io::path savePath = project->isNewlyCreated() ? projectPath : projectAutoSavePath(projectPath);
+    io::path_t projectPath = this->projectPath(project);
+    io::path_t savePath = project->isNewlyCreated() ? projectPath : projectAutoSavePath(projectPath);
 
     Ret ret = project->save(savePath, SaveMode::AutoSave);
     if (!ret) {
@@ -159,7 +159,7 @@ void ProjectAutoSaver::onTrySave()
     LOGD() << "[autosave] successfully saved project";
 }
 
-mu::io::path ProjectAutoSaver::projectPath(INotationProjectPtr project) const
+mu::io::path_t ProjectAutoSaver::projectPath(INotationProjectPtr project) const
 {
     return project->isNewlyCreated() ? configuration()->newProjectTemporaryPath() : project->path();
 }

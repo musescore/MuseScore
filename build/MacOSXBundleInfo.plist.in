@@ -12,9 +12,31 @@
 		<!-- MuseScore documents -->
 		<dict>
 			<key>UTTypeIdentifier</key>
-			<string>org.musescore.mscx</string>
+			<string>org.musescore.mscz</string>
 			<key>UTTypeDescription</key>
 			<string>MuseScore File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>mscz</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-musescore</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.musescore.mscx</string>
+			<key>UTTypeDescription</key>
+			<string>MuseScore Uncompressed File</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -34,9 +56,9 @@
 		</dict>
 		<dict>
 			<key>UTTypeIdentifier</key>
-			<string>org.musescore.mscz</string>
+			<string>org.musescore.mscs</string>
 			<key>UTTypeDescription</key>
-			<string>MuseScore Compressed File</string>
+			<string>MuseScore Uncompressed File</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -46,11 +68,11 @@
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
-					<string>mscz</string>
+					<string>mscs</string>
 				</array>
 				<key>public.mime-type</key>
 				<array>
-					<string>application/x-musescore</string>
+					<string>application/x-musescore+xml</string>
 				</array>
 			</dict>
 		</dict>
@@ -109,7 +131,7 @@
 				<string>mscx</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>musescoreDocument.icns</string>
+			<string>MscxIcon.icns</string>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
 				<string>application/x-musescore+xml</string>
@@ -131,7 +153,7 @@
 				<string>mscz</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>musescoreDocument.icns</string>
+			<string>MsczIcon.icns</string>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
 				<string>application/x-musescore</string>
@@ -153,7 +175,7 @@
 				<string>mscx,</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>musescoreDocument.icns</string>
+			<string>MscxIcon.icns</string>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
 				<string>application/x-musescore+xml</string>
@@ -175,7 +197,7 @@
 				<string>mscz,</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>musescoreDocument.icns</string>
+			<string>MsczIcon.icns</string>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
 				<string>application/x-musescore</string>

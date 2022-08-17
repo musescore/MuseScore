@@ -30,22 +30,22 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString IMPLODEEXP_DATA_DIR("implode_explode_data/");
-
+using namespace mu;
 using namespace mu::engraving;
-using namespace Ms;
 
-class ImplodeExplodeTests : public ::testing::Test
+static const String IMPLODEEXP_DATA_DIR("implode_explode_data/");
+
+class Engraving_ImplodeExplodeTests : public ::testing::Test
 {
 };
 
-TEST_F(ImplodeExplodeTests, undoExplode)
+TEST_F(Engraving_ImplodeExplodeTests, undoExplode)
 {
-    QString readFile(IMPLODEEXP_DATA_DIR + "undoExplode.mscx");
-    QString writeFile1("undoExplode01-test.mscx");
-    QString reference1(IMPLODEEXP_DATA_DIR + "undoExplode01-ref.mscx");
-    QString writeFile2("undoExplode02-test.mscx");
-    QString reference2(IMPLODEEXP_DATA_DIR + "undoExplode02-ref.mscx");
+    String readFile(IMPLODEEXP_DATA_DIR + "undoExplode.mscx");
+    String writeFile1("undoExplode01-test.mscx");
+    String reference1(IMPLODEEXP_DATA_DIR + "undoExplode01-ref.mscx");
+    String writeFile2("undoExplode02-test.mscx");
+    String reference2(IMPLODEEXP_DATA_DIR + "undoExplode02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     EXPECT_TRUE(score);
@@ -70,13 +70,13 @@ TEST_F(ImplodeExplodeTests, undoExplode)
     delete score;
 }
 
-TEST_F(ImplodeExplodeTests, undoImplode)
+TEST_F(Engraving_ImplodeExplodeTests, undoImplode)
 {
-    QString readFile(IMPLODEEXP_DATA_DIR + "undoImplode.mscx");
-    QString writeFile1("undoImplode01-test.mscx");
-    QString reference1(IMPLODEEXP_DATA_DIR + "undoImplode01-ref.mscx");
-    QString writeFile2("undoImplode02-test.mscx");
-    QString reference2(IMPLODEEXP_DATA_DIR + "undoImplode02-ref.mscx");
+    String readFile(IMPLODEEXP_DATA_DIR + "undoImplode.mscx");
+    String writeFile1("undoImplode01-test.mscx");
+    String reference1(IMPLODEEXP_DATA_DIR + "undoImplode01-ref.mscx");
+    String writeFile2("undoImplode02-test.mscx");
+    String reference2(IMPLODEEXP_DATA_DIR + "undoImplode02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     EXPECT_TRUE(score);
@@ -101,13 +101,13 @@ TEST_F(ImplodeExplodeTests, undoImplode)
     delete score;
 }
 
-TEST_F(ImplodeExplodeTests, undoImplodeVoice)
+TEST_F(Engraving_ImplodeExplodeTests, undoImplodeVoice)
 {
-    QString readFile(IMPLODEEXP_DATA_DIR + "undoImplodeVoice.mscx");
-    QString writeFile1("undoImplodeVoice01-test.mscx");
-    QString reference1(IMPLODEEXP_DATA_DIR + "undoImplodeVoice01-ref.mscx");
-    QString writeFile2("undoImplodeVoice02-test.mscx");
-    QString reference2(IMPLODEEXP_DATA_DIR + "undoImplodeVoice02-ref.mscx");
+    String readFile(IMPLODEEXP_DATA_DIR + "undoImplodeVoice.mscx");
+    String writeFile1("undoImplodeVoice01-test.mscx");
+    String reference1(IMPLODEEXP_DATA_DIR + "undoImplodeVoice01-ref.mscx");
+    String writeFile2("undoImplodeVoice02-test.mscx");
+    String reference2(IMPLODEEXP_DATA_DIR + "undoImplodeVoice02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     EXPECT_TRUE(score);
@@ -132,12 +132,12 @@ TEST_F(ImplodeExplodeTests, undoImplodeVoice)
     delete score;
 }
 
-TEST_F(ImplodeExplodeTests, implode1)
+TEST_F(Engraving_ImplodeExplodeTests, implode1)
 {
-    QString readFile(IMPLODEEXP_DATA_DIR + "implode1.mscx");
-    QString writeFile1("implode1-test1.mscx");
-    QString writeFile2("implode1-test2.mscx");
-    QString reference(IMPLODEEXP_DATA_DIR + "implode1-ref.mscx");
+    String readFile(IMPLODEEXP_DATA_DIR + "implode1.mscx");
+    String writeFile1("implode1-test1.mscx");
+    String writeFile2("implode1-test2.mscx");
+    String reference(IMPLODEEXP_DATA_DIR + "implode1-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     EXPECT_TRUE(score);

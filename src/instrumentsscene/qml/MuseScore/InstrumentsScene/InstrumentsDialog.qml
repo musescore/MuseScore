@@ -36,11 +36,20 @@ StyledDialogView {
     contentWidth: root.canSelectMultipleInstruments ? 900 : 600
     margins: 12
 
-    title: canSelectMultipleInstruments ? qsTrc("instruments", "Instruments") :
+    title: canSelectMultipleInstruments ? qsTrc("instruments", "Add or remove instruments") :
                                           qsTrc("instruments", "Select instrument")
 
     onOpened: {
         instrumentsPage.focusOnFirst()
+    }
+
+    function submit() {
+        var result = {}
+        result["instruments"] = instrumentsPage.instruments()
+        result["scoreOrder"] = instrumentsPage.currentOrder()
+
+        root.ret = { errcode: 0, value: result }
+        root.hide()
     }
 
     ColumnLayout {
@@ -57,6 +66,10 @@ StyledDialogView {
             currentInstrumentId: root.currentInstrumentId
 
             navigationSection: root.navigationSection
+
+            onSubmitRequested: {
+                root.submit()
+            }
         }
 
         RowLayout {
@@ -106,12 +119,7 @@ StyledDialogView {
                 navigation.column: 2
 
                 onClicked: {
-                    var result = {}
-                    result["instruments"] = instrumentsPage.instruments()
-                    result["scoreOrder"] = instrumentsPage.currentOrder()
-
-                    root.ret = { errcode: 0, value: result }
-                    root.hide()
+                    root.submit()
                 }
             }
         }

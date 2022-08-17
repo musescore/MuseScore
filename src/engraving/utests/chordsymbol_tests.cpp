@@ -36,35 +36,35 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString CHORDSYMBOL_DATA_DIR("chordsymbol_data/");
-
+using namespace mu;
 using namespace mu::engraving;
-using namespace Ms;
 
-class ChordSymbolTests : public ::testing::Test
+static const String CHORDSYMBOL_DATA_DIR("chordsymbol_data/");
+
+class Engraving_ChordSymbolTests : public ::testing::Test
 {
 public:
-    MasterScore* test_pre(const char* p);
-    void test_post(MasterScore* score, const char* p);
+    MasterScore* test_pre(const char16_t* p);
+    void test_post(MasterScore* score, const char16_t* p);
 
     void selectAllChordSymbols(MasterScore* score);
     void realizeSelectionVoiced(MasterScore* score, Voicing voicing);
 };
 
-MasterScore* ChordSymbolTests::test_pre(const char* p)
+MasterScore* Engraving_ChordSymbolTests::test_pre(const char16_t* p)
 {
-    QString p1 = CHORDSYMBOL_DATA_DIR + p + ".mscx";
+    String p1 = CHORDSYMBOL_DATA_DIR + p + ".mscx";
     MasterScore* score = ScoreRW::readScore(p1);
     EXPECT_TRUE(score);
     score->doLayout();
     return score;
 }
 
-void ChordSymbolTests::test_post(MasterScore* score, const char* p)
+void Engraving_ChordSymbolTests::test_post(MasterScore* score, const char16_t* p)
 {
-    QString p1 = p;
-    p1 += "-test.mscx";
-    QString p2 = CHORDSYMBOL_DATA_DIR + p + "-ref.mscx";
+    String p1 = p;
+    p1 += u"-test.mscx";
+    String p2 = CHORDSYMBOL_DATA_DIR + p + u"-ref.mscx";
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, p1, p2));
     delete score;
 }
@@ -72,7 +72,7 @@ void ChordSymbolTests::test_post(MasterScore* score, const char* p)
 //---------------------------------------------------------
 //   select all chord symbols within the specified score
 //---------------------------------------------------------
-void ChordSymbolTests::selectAllChordSymbols(MasterScore* score)
+void Engraving_ChordSymbolTests::selectAllChordSymbols(MasterScore* score)
 {
     //find a chord symbol
     Segment* seg = score->firstSegment(SegmentType::ChordRest);
@@ -92,7 +92,7 @@ void ChordSymbolTests::selectAllChordSymbols(MasterScore* score)
 //   realize the current selection of the score using
 //   the specified voicing
 //---------------------------------------------------------
-void ChordSymbolTests::realizeSelectionVoiced(MasterScore* score, Voicing voicing)
+void Engraving_ChordSymbolTests::realizeSelectionVoiced(MasterScore* score, Voicing voicing)
 {
     for (EngravingItem* e : score->selection().elements()) {
         if (e->isHarmony()) {
@@ -104,58 +104,58 @@ void ChordSymbolTests::realizeSelectionVoiced(MasterScore* score, Voicing voicin
     score->endCmd();
 }
 
-TEST_F(ChordSymbolTests, testExtend)
+TEST_F(Engraving_ChordSymbolTests, testExtend)
 {
-    MasterScore* score = test_pre("extend");
+    MasterScore* score = test_pre(u"extend");
     Measure* m = score->firstMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
     ChordRest* cr = s->cr(0);
     score->changeCRlen(cr, DurationType::V_WHOLE);
     score->doLayout();
-    test_post(score, "extend");
+    test_post(score, u"extend");
 }
 
-TEST_F(ChordSymbolTests, testClear)
+TEST_F(Engraving_ChordSymbolTests, testClear)
 {
-    MasterScore* score = test_pre("clear");
+    MasterScore* score = test_pre(u"clear");
     Measure* m = score->firstMeasure();
     score->select(m, SelectType::SINGLE, 0);
     score->cmdDeleteSelection();
     score->doLayout();
-    test_post(score, "clear");
+    test_post(score, u"clear");
 }
 
-TEST_F(ChordSymbolTests, testAddLink)
+TEST_F(Engraving_ChordSymbolTests, testAddLink)
 {
-    MasterScore* score = test_pre("add-link");
+    MasterScore* score = test_pre(u"add-link");
     Segment* seg = score->firstSegment(SegmentType::ChordRest);
     ChordRest* cr = seg->cr(0);
     Harmony* harmony = new Harmony(cr->segment());
-    harmony->setHarmony("C7");
+    harmony->setHarmony(u"C7");
     harmony->setTrack(cr->track());
     harmony->setParent(cr->segment());
     score->undoAddElement(harmony);
     score->doLayout();
-    test_post(score, "add-link");
+    test_post(score, u"add-link");
 }
 
-TEST_F(ChordSymbolTests, testAddPart)
+TEST_F(Engraving_ChordSymbolTests, testAddPart)
 {
-    MasterScore* score = test_pre("add-part");
+    MasterScore* score = test_pre(u"add-part");
     Segment* seg = score->firstSegment(SegmentType::ChordRest);
     ChordRest* cr = seg->cr(0);
     Harmony* harmony = new Harmony(cr->segment());
-    harmony->setHarmony("C7");
+    harmony->setHarmony(u"C7");
     harmony->setTrack(cr->track());
     harmony->setParent(cr->segment());
     score->undoAddElement(harmony);
     score->doLayout();
-    test_post(score, "add-part");
+    test_post(score, u"add-part");
 }
 
-TEST_F(ChordSymbolTests, testNoSystem)
+TEST_F(Engraving_ChordSymbolTests, testNoSystem)
 {
-    MasterScore* score = test_pre("no-system");
+    MasterScore* score = test_pre(u"no-system");
 
     //
     // create first part
@@ -195,91 +195,91 @@ TEST_F(ChordSymbolTests, testNoSystem)
 
     score->setExcerptsChanged(true);
     score->doLayout();
-    test_post(score, "no-system");
+    test_post(score, u"no-system");
 }
 
-TEST_F(ChordSymbolTests, testTranspose)
+TEST_F(Engraving_ChordSymbolTests, testTranspose)
 {
-    MasterScore* score = test_pre("transpose");
+    MasterScore* score = test_pre(u"transpose");
     score->startCmd();
     score->cmdSelectAll();
     score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
     score->endCmd();
-    test_post(score, "transpose");
+    test_post(score, u"transpose");
 }
 
-TEST_F(ChordSymbolTests, testTransposePart)
+TEST_F(Engraving_ChordSymbolTests, testTransposePart)
 {
-    MasterScore* score = test_pre("transpose-part");
+    MasterScore* score = test_pre(u"transpose-part");
     score->startCmd();
     score->cmdSelectAll();
     score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
     score->endCmd();
-    test_post(score, "transpose-part");
+    test_post(score, u"transpose-part");
 }
 
 //---------------------------------------------------------
 //   check close voicing algorithm
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealizeClose)
+TEST_F(Engraving_ChordSymbolTests, testRealizeClose)
 {
-    MasterScore* score = test_pre("realize");
+    MasterScore* score = test_pre(u"realize");
     selectAllChordSymbols(score);
     realizeSelectionVoiced(score, Voicing::CLOSE);
-    test_post(score, "realize-close");
+    test_post(score, u"realize-close");
 }
 
 //---------------------------------------------------------
 //   check Drop 2 voicing algorithm
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealizeDrop2)
+TEST_F(Engraving_ChordSymbolTests, testRealizeDrop2)
 {
-    MasterScore* score = test_pre("realize");
+    MasterScore* score = test_pre(u"realize");
     selectAllChordSymbols(score);
     realizeSelectionVoiced(score, Voicing::DROP_2);
-    test_post(score, "realize-drop2");
+    test_post(score, u"realize-drop2");
 }
 
 //---------------------------------------------------------
 //   check 3 note voicing algorithm
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealize3Note)
+TEST_F(Engraving_ChordSymbolTests, testRealize3Note)
 {
-    MasterScore* score = test_pre("realize");
+    MasterScore* score = test_pre(u"realize");
     selectAllChordSymbols(score);
     realizeSelectionVoiced(score, Voicing::THREE_NOTE);
-    test_post(score, "realize-3note");
+    test_post(score, u"realize-3note");
 }
 
 //---------------------------------------------------------
 //   check 4 note voicing algorithm
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealize4Note)
+TEST_F(Engraving_ChordSymbolTests, testRealize4Note)
 {
-    MasterScore* score = test_pre("realize");
+    MasterScore* score = test_pre(u"realize");
     selectAllChordSymbols(score);
     realizeSelectionVoiced(score, Voicing::FOUR_NOTE);
-    test_post(score, "realize-4note");
+    test_post(score, u"realize-4note");
 }
 
 //---------------------------------------------------------
 //   check 6 note voicing algorithm
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealize6Note)
+TEST_F(Engraving_ChordSymbolTests, testRealize6Note)
 {
-    MasterScore* score = test_pre("realize");
+    MasterScore* score = test_pre(u"realize");
     selectAllChordSymbols(score);
     realizeSelectionVoiced(score, Voicing::SIX_NOTE);
-    test_post(score, "realize-6note");
+    test_post(score, u"realize-6note");
 }
 
 //---------------------------------------------------------
 //   Check if the note pitches and tpcs are correct after realizing
 //   chord symbols on transposed instruments.
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealizeConcertPitch)
+TEST_F(Engraving_ChordSymbolTests, testRealizeConcertPitch)
 {
-    MasterScore* score = test_pre("realize-concert-pitch");
+    MasterScore* score = test_pre(u"realize-concert-pitch");
     //concert pitch off
     score->startCmd();
     score->cmdConcertPitchChanged(false);
@@ -290,16 +290,16 @@ TEST_F(ChordSymbolTests, testRealizeConcertPitch)
     score->startCmd();
     score->cmdRealizeChordSymbols();
     score->endCmd();
-    test_post(score, "realize-concert-pitch");
+    test_post(score, u"realize-concert-pitch");
 }
 
 //---------------------------------------------------------
 //   Check if the note pitches and tpcs are correct after
 //   transposing the score
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealizeTransposed)
+TEST_F(Engraving_ChordSymbolTests, testRealizeTransposed)
 {
-    MasterScore* score = test_pre("transpose");
+    MasterScore* score = test_pre(u"transpose");
     //transpose
     score->cmdSelectAll();
     score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
@@ -309,64 +309,64 @@ TEST_F(ChordSymbolTests, testRealizeTransposed)
     score->startCmd();
     score->cmdRealizeChordSymbols();
     score->endCmd();
-    test_post(score, "realize-transpose");
+    test_post(score, u"realize-transpose");
 }
 
 //---------------------------------------------------------
 //   Check for correctness when using the override
 //   feature for realizing chord symbols
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealizeOverrides)
+TEST_F(Engraving_ChordSymbolTests, testRealizeOverrides)
 {
-    MasterScore* score = test_pre("realize-override");
+    MasterScore* score = test_pre(u"realize-override");
     //realize all chord symbols
     selectAllChordSymbols(score);
     score->startCmd();
     score->cmdRealizeChordSymbols(true, Voicing::ROOT_ONLY, HDuration::SEGMENT_DURATION);
     score->endCmd();
-    test_post(score, "realize-override");
+    test_post(score, u"realize-override");
 }
 
 //---------------------------------------------------------
 //   Check for correctness when realizing chord symbols on triplets
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealizeTriplet)
+TEST_F(Engraving_ChordSymbolTests, testRealizeTriplet)
 {
-    MasterScore* score = test_pre("realize-triplet");
+    MasterScore* score = test_pre(u"realize-triplet");
     //realize all chord symbols
     selectAllChordSymbols(score);
     score->startCmd();
     score->cmdRealizeChordSymbols();
     score->endCmd();
-    test_post(score, "realize-triplet");
+    test_post(score, u"realize-triplet");
 }
 
 //---------------------------------------------------------
 //   Check for correctness when realizing chord symbols
 //   with different durations
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealizeDuration)
+TEST_F(Engraving_ChordSymbolTests, testRealizeDuration)
 {
-    MasterScore* score = test_pre("realize-duration");
+    MasterScore* score = test_pre(u"realize-duration");
     //realize all chord symbols
     selectAllChordSymbols(score);
     score->startCmd();
     score->cmdRealizeChordSymbols();
     score->endCmd();
-    test_post(score, "realize-duration");
+    test_post(score, u"realize-duration");
 }
 
 //---------------------------------------------------------
 //   Check for correctness when realizing chord symbols
 //   with jazz mode
 //---------------------------------------------------------
-TEST_F(ChordSymbolTests, testRealizeJazz)
+TEST_F(Engraving_ChordSymbolTests, testRealizeJazz)
 {
-    MasterScore* score = test_pre("realize-jazz");
+    MasterScore* score = test_pre(u"realize-jazz");
     //realize all chord symbols
     selectAllChordSymbols(score);
     score->startCmd();
     score->cmdRealizeChordSymbols();
     score->endCmd();
-    test_post(score, "realize-jazz");
+    test_post(score, u"realize-jazz");
 }

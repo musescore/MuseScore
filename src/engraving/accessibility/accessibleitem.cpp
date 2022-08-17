@@ -23,36 +23,45 @@
 
 #include "accessibleroot.h"
 #include "../libmscore/score.h"
+#include "../libmscore/measure.h"
 
+#include "translation.h"
 #include "log.h"
 
+using namespace mu;
 using namespace mu::engraving;
 using namespace mu::accessibility;
-using namespace Ms;
+using namespace mu::engraving;
 
 bool AccessibleItem::enabled = true;
 
-AccessibleItem::AccessibleItem(Ms::EngravingItem* e, Role role)
+static QString readable(QString s)
+{
+    // Remove undesired pauses in screen reader speech output
+    s.remove(u':');
+
+    // Handle desired pauses
+    s.replace(u';', u','); // NVDA doesn't pause for semicolon
+
+    return s;
+}
+
+AccessibleItem::AccessibleItem(EngravingItem* e, Role role)
     : m_element(e), m_role(role)
 {
 }
 
 AccessibleItem::~AccessibleItem()
 {
-    AccessibleRoot* root = accessibleRoot();
-    if (root && root->focusedElement() == this) {
-        root->setFocusedElement(nullptr);
-    }
+    m_element = nullptr;
 
     if (m_registred && accessibilityController()) {
         accessibilityController()->unreg(this);
         m_registred = false;
     }
-
-    m_element = nullptr;
 }
 
-AccessibleItem* AccessibleItem::clone(Ms::EngravingItem* e) const
+AccessibleItem* AccessibleItem::clone(EngravingItem* e) const
 {
     return new AccessibleItem(e, m_role);
 }
@@ -77,16 +86,16 @@ AccessibleRoot* AccessibleItem::accessibleRoot() const
         return nullptr;
     }
 
-    Ms::Score* score = m_element->score();
+    Score* score = m_element->score();
     if (!score) {
         return nullptr;
     }
 
     RootItem* rootItem = m_element->explicitParent() ? score->rootItem() : score->dummy()->rootItem();
-    return dynamic_cast<AccessibleRoot*>(rootItem->accessible());
+    return dynamic_cast<AccessibleRoot*>(rootItem->accessible().get());
 }
 
-const Ms::EngravingItem* AccessibleItem::element() const
+const EngravingItem* AccessibleItem::element() const
 {
     return m_element;
 }
@@ -103,21 +112,30 @@ void AccessibleItem::notifyAboutFocus(bool focused)
 
 const IAccessible* AccessibleItem::accessibleParent() const
 {
-    Ms::EngravingObject* p = m_element->parent();
+    if (!m_element) {
+        return nullptr;
+    }
+
+    EngravingObject* p = m_element->parent();
     if (!p || !p->isEngravingItem()) {
         return nullptr;
     }
 
-    return static_cast<EngravingItem*>(p)->accessible();
+    return static_cast<EngravingItem*>(p)->accessible().get();
 }
 
 size_t AccessibleItem::accessibleChildCount() const
 {
     TRACEFUNC;
+
+    if (!m_element) {
+        return 0;
+    }
+
     size_t count = 0;
     for (const EngravingObject* obj : m_element->children()) {
         if (obj->isEngravingItem()) {
-            AccessibleItem* access = Ms::toEngravingItem(obj)->accessible();
+            AccessibleItemPtr access = toEngravingItem(obj)->accessible();
             if (access && access->registered()) {
                 ++count;
             }
@@ -129,13 +147,18 @@ size_t AccessibleItem::accessibleChildCount() const
 const IAccessible* AccessibleItem::accessibleChild(size_t i) const
 {
     TRACEFUNC;
+
+    if (!m_element) {
+        return nullptr;
+    }
+
     size_t count = 0;
     for (const EngravingObject* obj : m_element->children()) {
         if (obj->isEngravingItem()) {
-            AccessibleItem* access = Ms::toEngravingItem(obj)->accessible();
+            AccessibleItemPtr access = toEngravingItem(obj)->accessible();
             if (access && access->registered()) {
                 if (count == i) {
-                    return access;
+                    return access.get();
                 }
                 ++count;
             }
@@ -151,17 +174,37 @@ IAccessible::Role AccessibleItem::accessibleRole() const
 
 QString AccessibleItem::accessibleName() const
 {
-    return m_element->accessibleInfo();
+    if (!m_element) {
+        return QString();
+    }
+
+    AccessibleRoot* root = accessibleRoot();
+    QString staffInfo = root ? root->staffInfo() : "";
+    QString barsAndBeats = m_element->formatBarsAndBeats();
+
+    barsAndBeats.remove(u';'); // Too many pauses in speech
+
+    QString name = QString("%1%2%3%4")
+                   .arg(!staffInfo.isEmpty() ? (staffInfo + "; ") : "")
+                   .arg(m_element->screenReaderInfo().toQString())
+                   .arg(m_element->visible() ? "" : " " + qtrc("engraving", "invisible"))
+                   .arg(!barsAndBeats.isEmpty() ? ("; " + barsAndBeats) : "");
+
+    return readable(name);
 }
 
 QString AccessibleItem::accessibleDescription() const
 {
+    if (!m_element) {
+        return QString();
+    }
+
     QString result;
 #ifdef Q_OS_MACOS
     result = accessibleName() + " ";
 #endif
 
-    result += m_element->accessibleExtraInfo();
+    result += readable(m_element->accessibleExtraInfo());
     return result;
 }
 
@@ -187,9 +230,9 @@ QVariant AccessibleItem::accessibleValueStepSize() const
 
 void AccessibleItem::accessibleSelection(int selectionIndex, int* startOffset, int* endOffset) const
 {
-    Ms::TextCursor* textCursor = this->textCursor();
+    TextCursor* textCursor = this->textCursor();
     if (selectionIndex == 0 && textCursor && textCursor->hasSelection()) {
-        Ms::TextCursor::Range selectionRange = textCursor->selectionRange();
+        TextCursor::Range selectionRange = textCursor->selectionRange();
         *startOffset = selectionRange.startPosition;
         *endOffset = selectionRange.endPosition;
     } else {
@@ -200,17 +243,17 @@ void AccessibleItem::accessibleSelection(int selectionIndex, int* startOffset, i
 
 int AccessibleItem::accessibleSelectionCount() const
 {
-    Ms::TextCursor* textCursor = this->textCursor();
+    TextCursor* textCursor = this->textCursor();
     if (!textCursor) {
         return 0;
     }
 
-    return textCursor->selectedText().length();
+    return static_cast<int>(textCursor->selectedText().size());
 }
 
 int AccessibleItem::accessibleCursorPosition() const
 {
-    Ms::TextCursor* textCursor = this->textCursor();
+    TextCursor* textCursor = this->textCursor();
     if (!textCursor) {
         return 0;
     }
@@ -224,15 +267,16 @@ QString AccessibleItem::accessibleText(int startOffset, int endOffset) const
         return QString();
     }
 
-    Ms::TextCursor* textCursor = new Ms::TextCursor(Ms::toTextBase(m_element));
+    TextCursor* textCursor = new TextCursor(toTextBase(m_element));
     auto startCoord = textCursor->positionToLocalCoord(startOffset);
-    if (startCoord.first == -1 || startCoord.second == -1) {
+    if (startCoord.first == mu::nidx || startCoord.second == mu::nidx) {
         return QString();
     }
 
     textCursor->setRow(startCoord.first);
     textCursor->setColumn(startCoord.second);
-    textCursor->movePosition(Ms::TextCursor::MoveOperation::Right, Ms::TextCursor::MoveMode::KeepAnchor, endOffset - startOffset);
+    textCursor->movePosition(TextCursor::MoveOperation::Right, TextCursor::MoveMode::KeepAnchor,
+                             endOffset - startOffset);
 
     textCursor->setSelectLine(startCoord.first);
     textCursor->setSelectColumn(startCoord.second);
@@ -251,9 +295,9 @@ QString AccessibleItem::accessibleTextAtOffset(int offset, TextBoundaryType boun
 
     QString result;
 
-    Ms::TextCursor* textCursor = new Ms::TextCursor(Ms::toTextBase(m_element));
+    TextCursor* textCursor = new TextCursor(toTextBase(m_element));
     auto startCoord = textCursor->positionToLocalCoord(offset);
-    if (startCoord.first == -1 || startCoord.second == -1) {
+    if (startCoord.first == mu::nidx || startCoord.second == mu::nidx) {
         return QString();
     }
 
@@ -263,21 +307,21 @@ QString AccessibleItem::accessibleTextAtOffset(int offset, TextBoundaryType boun
     switch (boundaryType) {
     case CharBoundary: {
         *startOffset = textCursor->currentPosition();
-        textCursor->movePosition(Ms::TextCursor::MoveOperation::Right, Ms::TextCursor::MoveMode::KeepAnchor);
+        textCursor->movePosition(TextCursor::MoveOperation::Right, TextCursor::MoveMode::KeepAnchor);
         *endOffset = textCursor->currentPosition();
         break;
     }
     case WordBoundary: {
-        textCursor->movePosition(Ms::TextCursor::MoveOperation::WordLeft, Ms::TextCursor::MoveMode::MoveAnchor);
+        textCursor->movePosition(TextCursor::MoveOperation::WordLeft, TextCursor::MoveMode::MoveAnchor);
         *startOffset = textCursor->currentPosition();
-        textCursor->movePosition(Ms::TextCursor::MoveOperation::NextWord, Ms::TextCursor::MoveMode::KeepAnchor);
+        textCursor->movePosition(TextCursor::MoveOperation::NextWord, TextCursor::MoveMode::KeepAnchor);
         *endOffset = textCursor->currentPosition();
         break;
     }
     case LineBoundary: {
-        textCursor->movePosition(Ms::TextCursor::MoveOperation::StartOfLine, Ms::TextCursor::MoveMode::MoveAnchor);
+        textCursor->movePosition(TextCursor::MoveOperation::StartOfLine, TextCursor::MoveMode::MoveAnchor);
         *startOffset = textCursor->currentPosition();
-        textCursor->movePosition(Ms::TextCursor::MoveOperation::EndOfLine, Ms::TextCursor::MoveMode::KeepAnchor);
+        textCursor->movePosition(TextCursor::MoveOperation::EndOfLine, TextCursor::MoveMode::KeepAnchor);
         *endOffset = textCursor->currentPosition();
         break;
     }
@@ -301,8 +345,8 @@ int AccessibleItem::accessibleCharacterCount() const
         return 0;
     }
 
-    Ms::TextBase* text = Ms::toTextBase(m_element);
-    return text->plainText().length();
+    TextBase* text = toTextBase(m_element);
+    return static_cast<int>(text->plainText().size());
 }
 
 bool AccessibleItem::accessibleState(State st) const
@@ -311,7 +355,7 @@ bool AccessibleItem::accessibleState(State st) const
         return false;
     }
 
-    auto root = accessibleRoot();
+    AccessibleRoot* root = accessibleRoot();
     if (!root || !root->enabled()) {
         return false;
     }
@@ -319,7 +363,12 @@ bool AccessibleItem::accessibleState(State st) const
     switch (st) {
     case IAccessible::State::Enabled: return true;
     case IAccessible::State::Active: return true;
-    case IAccessible::State::Focused: return root->focusedElement() == this;
+    case IAccessible::State::Focused: {
+        if (AccessibleItemPtr focusedElement = root->focusedElement().lock()) {
+            return focusedElement->element() == element();
+        }
+        return false;
+    }
     case IAccessible::State::Selected: return m_element->selected();
     default:
         break;
@@ -333,8 +382,14 @@ QRect AccessibleItem::accessibleRect() const
         return QRect();
     }
 
-    RectF bbox = m_element->canvasBoundingRect();
-    RectF canvasRect(m_element->canvasPos(), SizeF(bbox.width(), bbox.height()));
+    EngravingItem* element = m_element;
+    Measure* measure = element->findMeasure();
+    if (measure) {
+        element = measure;
+    }
+
+    RectF bbox = element->canvasBoundingRect();
+    RectF canvasRect(element->canvasPos(), SizeF(bbox.width(), bbox.height()));
 
     auto rect = accessibleRoot()->toScreenRect(canvasRect).toQRect();
     return rect;
@@ -355,12 +410,24 @@ mu::async::Channel<IAccessible::State, bool> AccessibleItem::accessibleStateChan
     return m_accessibleStateChanged;
 }
 
+void AccessibleItem::setState(State state, bool arg)
+{
+    if (state != State::Focused) {
+        return;
+    }
+
+    AccessibleRoot* root = accessibleRoot();
+    if (arg) {
+        root->setFocusedElement(shared_from_this(), false /*voiceStaffInfoChange*/);
+    }
+}
+
 TextCursor* AccessibleItem::textCursor() const
 {
     if (!m_element || !m_element->isTextBase()) {
         return nullptr;
     }
 
-    Ms::TextBase* text = Ms::toTextBase(m_element);
+    TextBase* text = toTextBase(m_element);
     return text ? text->cursor() : nullptr;
 }

@@ -66,6 +66,9 @@ public:
 
     const IAccessible* accessibleRoot() const override;
     const IAccessible* lastFocused() const override;
+
+    bool needToVoicePanelInfo() const override;
+    QString currentPanelAccessibleName() const override;
     // -----
 
     // IAccessibility (root)
@@ -99,6 +102,8 @@ public:
 
     async::Channel<Property, Val> accessiblePropertyChanged() const override;
     async::Channel<State, bool> accessibleStateChanged() const override;
+
+    void setState(State state, bool arg) override;
     // -----
 
     QAccessibleInterface* parentIface(const IAccessible* item) const;
@@ -132,14 +137,26 @@ private:
     void sendEvent(QAccessibleEvent* ev);
 
     void cancelPreviousReading();
+    void savePanelAccessibleName(const IAccessible* oldItem, const IAccessible* newItem);
+#ifndef Q_OS_MAC
+    void triggerRevoicingOfChangedName(IAccessible* item);
+#endif
+
+    const IAccessible* panel(const IAccessible* item) const;
+
+    IAccessible* findSiblingItem(const IAccessible* item, const IAccessible* currentItem) const;
 
     QHash<const IAccessible*, Item> m_allItems;
 
     QList<IAccessible*> m_children;
     async::Channel<QAccessibleEvent*> m_eventSent;
     IAccessible* m_lastFocused = nullptr;
+    IAccessible* m_itemForRestoreFocus = nullptr;
 
     bool m_inited = false;
+
+    bool m_ignorePanelChangingVoice = false;
+    bool m_needToVoicePanelInfo = false;
 };
 }
 

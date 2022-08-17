@@ -22,7 +22,7 @@
 #ifndef MU_NETWORK_INETWORKMANAGER_H
 #define MU_NETWORK_INETWORKMANAGER_H
 
-#include "ret.h"
+#include "types/ret.h"
 #include "async/channel.h"
 #include "global/progress.h"
 #include "networktypes.h"
@@ -35,15 +35,15 @@ class INetworkManager
 public:
     virtual ~INetworkManager() = default;
 
-    virtual Ret get(const QUrl& url, IncomingDevice* incommingData, const RequestHeaders& headers = RequestHeaders()) = 0;
+    virtual Ret get(const QUrl& url, IncomingDevice* incomingData, const RequestHeaders& headers = RequestHeaders()) = 0;
     virtual Ret head(const QUrl& url, const RequestHeaders& headers = RequestHeaders()) = 0;
-    virtual Ret post(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incommingData,
+    virtual Ret post(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incomingData,
                      const RequestHeaders& headers = RequestHeaders()) = 0;
-    virtual Ret put(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incommingData,
+    virtual Ret put(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incomingData,
                     const RequestHeaders& headers = RequestHeaders()) = 0;
-    virtual Ret del(const QUrl& url, IncomingDevice* incommingData, const RequestHeaders& headers = RequestHeaders()) = 0;
+    virtual Ret del(const QUrl& url, IncomingDevice* incomingData, const RequestHeaders& headers = RequestHeaders()) = 0;
 
-    virtual framework::ProgressChannel progressChannel() const = 0;
+    virtual framework::Progress progress() const = 0;
 
     virtual void abort() = 0;
 };

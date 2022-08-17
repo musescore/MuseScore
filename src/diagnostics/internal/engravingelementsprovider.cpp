@@ -66,13 +66,13 @@ void EngravingElementsProvider::printStatistic(const std::string& title)
     LOGD() << stream.str() << '\n';
 }
 
-void EngravingElementsProvider::reg(const Ms::EngravingObject* e)
+void EngravingElementsProvider::reg(const mu::engraving::EngravingObject* e)
 {
     m_elements.insert(e);
     m_statistics[e->typeName()].regCount++;
 }
 
-void EngravingElementsProvider::unreg(const Ms::EngravingObject* e)
+void EngravingElementsProvider::unreg(const mu::engraving::EngravingObject* e)
 {
     m_elements.erase(e);
     m_statistics[e->typeName()].unregCount++;
@@ -83,7 +83,7 @@ const EngravingObjectList& EngravingElementsProvider::elements() const
     return m_elements;
 }
 
-void EngravingElementsProvider::select(const Ms::EngravingObject* e, bool arg)
+void EngravingElementsProvider::select(const mu::engraving::EngravingObject* e, bool arg)
 {
     if (arg) {
         m_selected.insert(e);
@@ -93,7 +93,7 @@ void EngravingElementsProvider::select(const Ms::EngravingObject* e, bool arg)
     m_selectChanged.send(e, arg);
 }
 
-bool EngravingElementsProvider::isSelected(const Ms::EngravingObject* e) const
+bool EngravingElementsProvider::isSelected(const mu::engraving::EngravingObject* e) const
 {
     if (std::find(m_selected.cbegin(), m_selected.cend(), e) != m_selected.cend()) {
         return true;
@@ -101,12 +101,12 @@ bool EngravingElementsProvider::isSelected(const Ms::EngravingObject* e) const
     return false;
 }
 
-mu::async::Channel<const Ms::EngravingObject*, bool> EngravingElementsProvider::selectChanged() const
+mu::async::Channel<const mu::engraving::EngravingObject*, bool> EngravingElementsProvider::selectChanged() const
 {
     return m_selectChanged;
 }
 
-void EngravingElementsProvider::checkTree(Ms::Score* score)
+void EngravingElementsProvider::checkTree(mu::engraving::Score* score)
 {
     LOGD() << "\n\n\n";
     LOGD() << "========================";
@@ -125,40 +125,40 @@ void EngravingElementsProvider::checkTree(Ms::Score* score)
 //    LOGI() << "========================";
 }
 
-void EngravingElementsProvider::dumpTree(const Ms::EngravingItem* item, int& level)
+void EngravingElementsProvider::dumpTree(const mu::engraving::EngravingItem* item, int& level)
 {
     ++level;
     QString gap;
     gap.fill(' ', level);
     LOGD() << gap << item->typeName();
-    for (const Ms::EngravingObject* ch : item->children()) {
+    for (const mu::engraving::EngravingObject* ch : item->children()) {
         if (!ch->isEngravingItem()) {
             LOGD() << "[" << item->typeName() << ": not item ch: " << ch->typeName();
             continue;
         }
-        dumpTree(static_cast<const Ms::EngravingItem*>(ch), level);
+        dumpTree(static_cast<const mu::engraving::EngravingItem*>(ch), level);
     }
     --level;
 }
 
-void EngravingElementsProvider::dumpTreeTree(const Ms::EngravingObject* obj, int& level)
+void EngravingElementsProvider::dumpTreeTree(const mu::engraving::EngravingObject* obj, int& level)
 {
     ++level;
     QString gap;
     gap.fill(' ', level);
     LOGD() << gap << obj->typeName();
 
-    for (const Ms::EngravingObject* child : obj->scanChildren()) {
+    for (const mu::engraving::EngravingObject* child : obj->scanChildren()) {
         dumpTreeTree(child, level);
     }
 
     --level;
 }
 
-void EngravingElementsProvider::checkObjectTree(const Ms::EngravingObject* obj)
+void EngravingElementsProvider::checkObjectTree(const mu::engraving::EngravingObject* obj)
 {
-    Ms::EngravingObject* p1 = obj->parent();
-    Ms::EngravingObject* p2 = obj->scanParent();
+    mu::engraving::EngravingObject* p1 = obj->parent();
+    mu::engraving::EngravingObject* p2 = obj->scanParent();
     if (p1 && p2 && p1 != p2) {
         LOGD() << "obj: " << obj->typeName();
         LOGD() << "parents is differens, p1: " << p1->typeName() << ", p2: " << p2->typeName();
@@ -178,12 +178,12 @@ void EngravingElementsProvider::checkObjectTree(const Ms::EngravingObject* obj)
         LOGD() << "children2:";
 
         int i = 0;
-        for (const Ms::EngravingObject* child : obj->scanChildren()) {
+        for (const mu::engraving::EngravingObject* child : obj->scanChildren()) {
             LOGD() << i++ << ": " << child->typeName();
         }
     }
 
-    for (const Ms::EngravingObject* ch : obj->children()) {
+    for (const mu::engraving::EngravingObject* ch : obj->children()) {
         checkObjectTree(ch);
     }
 }

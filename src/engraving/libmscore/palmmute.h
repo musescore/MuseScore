@@ -23,9 +23,9 @@
 #ifndef __PALM_MUTE_H__
 #define __PALM_MUTE_H__
 
-#include "textlinebase.h"
+#include "chordtextlinebase.h"
 
-namespace Ms {
+namespace mu::engraving {
 class PalmMute;
 
 //---------------------------------------------------------
@@ -34,6 +34,8 @@ class PalmMute;
 
 class PalmMuteSegment final : public TextLineBaseSegment
 {
+    OBJECT_ALLOCATOR(engraving, PalmMuteSegment)
+
     Sid getPropertyStyle(Pid) const override;
 
 public:
@@ -52,12 +54,11 @@ public:
 //   @@ PalmMute
 //---------------------------------------------------------
 
-class PalmMute final : public TextLineBase
+class PalmMute final : public ChordTextLineBase
 {
-    Sid getPropertyStyle(Pid) const override;
+    OBJECT_ALLOCATOR(engraving, PalmMute)
 
-protected:
-    mu::PointF linePos(Grip, System**) const override;
+    Sid getPropertyStyle(Pid) const override;
 
 public:
     PalmMute(EngravingItem* parent);
@@ -68,9 +69,9 @@ public:
 //      virtual void write(XmlWriter& xml) const override;
 
     LineSegment* createLineSegment(System* parent) override;
-    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
 
     friend class PalmMuteLine;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

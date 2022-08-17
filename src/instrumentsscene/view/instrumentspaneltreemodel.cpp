@@ -37,6 +37,8 @@ using namespace mu::notation;
 using namespace mu::uicomponents;
 using ItemType = InstrumentsTreeItemType::ItemType;
 
+static const mu::actions::ActionCode ADD_INSTRUMENTS_ACTIONCODE("instruments");
+
 namespace mu::instrumentsscene {
 static QString notationToKey(const INotationPtr notation)
 {
@@ -72,6 +74,10 @@ InstrumentsPanelTreeModel::InstrumentsPanelTreeModel(QObject* parent)
     onNotationChanged();
     context()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
+    });
+
+    shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
+        emit addInstrumentsKeyboardShortcutChanged();
     });
 }
 
@@ -330,7 +336,7 @@ void InstrumentsPanelTreeModel::clearSelection()
 
 void InstrumentsPanelTreeModel::addInstruments()
 {
-    dispatcher()->dispatch("instruments");
+    dispatcher()->dispatch(ADD_INSTRUMENTS_ACTIONCODE);
 }
 
 void InstrumentsPanelTreeModel::moveSelectedRowsUp()
@@ -370,16 +376,21 @@ void InstrumentsPanelTreeModel::moveSelectedRowsDown()
 
 void InstrumentsPanelTreeModel::removeSelectedRows()
 {
-    if (!m_selectionModel || !m_selectionModel->hasSelection()) {
+    if (!m_selectionModel) {
         return;
     }
 
     QModelIndexList selectedIndexList = m_selectionModel->selectedIndexes();
-
-    for (const QModelIndex& selectedIndex : selectedIndexList) {
-        AbstractInstrumentsPanelTreeItem* item = modelIndexToItem(selectedIndex);
-        removeRows(item->row(), 1, selectedIndex.parent());
+    if (selectedIndexList.empty()) {
+        return;
     }
+
+    QModelIndex firstIndex = *std::min_element(selectedIndexList.cbegin(), selectedIndexList.cend(),
+                                               [](const QModelIndex& f, const QModelIndex& s) {
+        return f.row() < s.row();
+    });
+
+    removeRows(firstIndex.row(), selectedIndexList.size(), firstIndex.parent());
 }
 
 bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
@@ -412,6 +423,21 @@ bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int so
     m_isLoadingBlocked = false;
 
     return true;
+}
+
+void InstrumentsPanelTreeModel::toggleVisibilityOfSelectedRows(bool visible)
+{
+    if (!m_selectionModel || !m_selectionModel->hasSelection()) {
+        return;
+    }
+
+    QModelIndexList selectedIndexes = m_selectionModel->selectedIndexes();
+
+    for (QModelIndex index : selectedIndexes) {
+        AbstractInstrumentsPanelTreeItem* item = modelIndexToItem(index);
+
+        item->setIsVisible(visible);
+    }
 }
 
 QItemSelectionModel* InstrumentsPanelTreeModel::selectionModel() const
@@ -503,13 +529,13 @@ void InstrumentsPanelTreeModel::setIsMovingUpAvailable(bool isMovingUpAvailable)
     emit isMovingUpAvailableChanged(m_isMovingUpAvailable);
 }
 
-void InstrumentsPanelTreeModel::setIsMovingDownAvailable(bool isMoveingDownAvailable)
+void InstrumentsPanelTreeModel::setIsMovingDownAvailable(bool isMovingDownAvailable)
 {
-    if (m_isMovingDownAvailable == isMoveingDownAvailable) {
+    if (m_isMovingDownAvailable == isMovingDownAvailable) {
         return;
     }
 
-    m_isMovingDownAvailable = isMoveingDownAvailable;
+    m_isMovingDownAvailable = isMovingDownAvailable;
     emit isMovingDownAvailableChanged(m_isMovingDownAvailable);
 }
 
@@ -536,6 +562,17 @@ bool InstrumentsPanelTreeModel::isAddingAvailable() const
 bool InstrumentsPanelTreeModel::isEmpty() const
 {
     return m_rootItem ? m_rootItem->isEmpty() : true;
+}
+
+QString InstrumentsPanelTreeModel::addInstrumentsKeyboardShortcut() const
+{
+    const shortcuts::Shortcut& shortcut = shortcutsRegister()->shortcut(ADD_INSTRUMENTS_ACTIONCODE);
+
+    if (shortcut.sequences.empty()) {
+        return {};
+    }
+
+    return shortcuts::sequencesToNativeText({ shortcut.sequences[0] });
 }
 
 void InstrumentsPanelTreeModel::setIsRemovingAvailable(bool isRemovingAvailable)

@@ -1,13 +1,13 @@
 #include "gpbeat.h"
 
-namespace Ms {
-std::pair<int, GPRhytm::RhytmType> GPBeat::lenth() const
+namespace mu::engraving {
+std::pair<int, GPRhythm::RhytmType> GPBeat::lenth() const
 {
-    return _rhytm->length();
+    return _rhythm->length();
 }
 
-GPRhytm::Tuplet GPBeat::tuplet() const
+GPRhythm::Tuplet GPBeat::tuplet() const
 {
-    return _rhytm->tuplet();
+    return _rhythm->tuplet();
 }
 }

@@ -30,8 +30,8 @@ FlatButton {
     property alias isMenuOpened: menuLoader.isMenuOpened
     property alias menuAnchorItem: menuLoader.menuAnchorItem
 
-    property int menuOffsetX: 0
-    property int menuOffsetY: 0
+    property int menuOffsetX: -1
+    property int menuOffsetY: -1
     property int menuAlign: 0
 
     signal handleMenuItem(string itemId)
@@ -47,7 +47,7 @@ FlatButton {
     transparent: !isMenuOpened
     accentButton: isMenuOpened
 
-    navigation.accessible.name: qsTrc("uicomponents", "Menu")
+    navigation.accessible.name: qsTrc("ui", "Menu")
 
     StyledMenuLoader {
         id: menuLoader

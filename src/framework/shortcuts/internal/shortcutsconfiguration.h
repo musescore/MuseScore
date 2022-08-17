@@ -38,10 +38,10 @@ public:
     QString currentKeyboardLayout() const override;
     void setCurrentKeyboardLayout(const QString& layout) override;
 
-    io::path shortcutsUserAppDataPath() const override;
-    io::path shortcutsAppDataPath() const override;
+    io::path_t shortcutsUserAppDataPath() const override;
+    io::path_t shortcutsAppDataPath() const override;
 
-    io::path midiMappingUserAppDataPath() const override;
+    io::path_t midiMappingUserAppDataPath() const override;
 
     bool advanceToNextNoteOnKeyRelease() const override;
     void setAdvanceToNextNoteOnKeyRelease(bool value) override;

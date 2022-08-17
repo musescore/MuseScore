@@ -1,0 +1,91 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef MU_ENGRAVING_GRADUALTEMPOCHANGE_H
+#define MU_ENGRAVING_GRADUALTEMPOCHANGE_H
+
+#include <optional>
+
+#include "textlinebase.h"
+#include "types/types.h"
+
+namespace mu::engraving {
+class GradualTempoChangeSegment;
+class GradualTempoChange : public TextLineBase
+{
+    OBJECT_ALLOCATOR(engraving, GradualTempoChange)
+public:
+    GradualTempoChange(EngravingItem* parent);
+
+    GradualTempoChange* clone() const override;
+
+    void read(XmlReader& reader) override;
+    void write(XmlWriter& writer) const override;
+
+    LineSegment* createLineSegment(System* parent) override;
+    SpannerSegment* layoutSystem(System* system) override;
+
+    GradualTempoChangeType tempoChangeType() const;
+    ChangeMethod easingMethod() const;
+    void setTempoChangeType(const GradualTempoChangeType type);
+
+    double tempoChangeFactor() const;
+
+    PropertyValue getProperty(Pid id) const override;
+    bool setProperty(Pid id, const PropertyValue& val) override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
+    Sid getPropertyStyle(Pid id) const override;
+
+protected:
+    void added() override;
+    void removed() override;
+
+private:
+    void requestToRebuildTempo();
+
+    GradualTempoChangeType m_tempoChangeType = GradualTempoChangeType::Undefined;
+    ChangeMethod m_tempoEasingMethod = ChangeMethod::NORMAL;
+    std::optional<float> m_tempoChangeFactor;
+
+    friend class GradualTempoChangeSegment;
+};
+
+class GradualTempoChangeSegment : public TextLineBaseSegment
+{
+    OBJECT_ALLOCATOR(engraving, GradualTempoChangeSegment)
+public:
+    GradualTempoChangeSegment(GradualTempoChange* annotation, System* parent);
+
+    GradualTempoChangeSegment* clone() const override;
+
+    GradualTempoChange* tempoChange() const;
+
+    void layout() override;
+    void endEdit(EditData& editData) override;
+    void added() override;
+    void removed() override;
+
+    friend class GradualTempoChange;
+};
+}
+
+#endif // MU_ENGRAVING_GRADUALTEMPOCHANGE_H

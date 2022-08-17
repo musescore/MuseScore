@@ -27,7 +27,7 @@
 
 #include "io/path.h"
 #include "modularity/ioc.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 
 namespace crashpad {
 class CrashpadClient;
@@ -36,16 +36,16 @@ class CrashpadClient;
 namespace mu::diagnostics {
 class CrashHandler
 {
-    INJECT(diagnostics, system::IFileSystem, fileSystem)
+    INJECT(diagnostics, io::IFileSystem, fileSystem)
 
 public:
     CrashHandler() = default;
     ~CrashHandler();
 
-    bool start(const io::path& handlerFilePath, const io::path& dumpsDir, const std::string& serverUrl);
+    bool start(const io::path_t& handlerFilePath, const io::path_t& dumpsDir, const std::string& serverUrl);
 
 private:
-    void removePendingLockFiles(const io::path& dumpsDir);
+    void removePendingLockFiles(const io::path_t& dumpsDir);
 
     crashpad::CrashpadClient* m_client = nullptr;
 };

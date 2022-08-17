@@ -241,7 +241,7 @@
         </layout>
        </item>
        <item>
-        <widget class="Ms::NoteGroups" name="groups">
+        <widget class="mu::palette::NoteGroups" name="groups">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -304,7 +304,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Ms::NoteGroups</class>
+   <class>mu::palette::NoteGroups</class>
    <extends>QGroupBox</extends>
    <header>palette/view/widgets/noteGroups.h</header>
    <container>1</container>

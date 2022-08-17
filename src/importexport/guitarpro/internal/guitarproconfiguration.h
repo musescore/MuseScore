@@ -29,9 +29,6 @@ class GuitarProConfiguration : public IGuitarProConfiguration
 {
 public:
     void init();
-
-    std::string importGuitarProCharset() const override;
-    void setImportGuitarProCharset(const std::string& charset) override;
 };
 }
 

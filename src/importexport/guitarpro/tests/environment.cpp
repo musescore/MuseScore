@@ -22,28 +22,39 @@
 
 #include "testing/environment.h"
 
-#include "log.h"
-#include "framework/fonts/fontsmodule.h"
-#include "instrumentsscene/instrumentsscenemodule.h"
-#include "framework/system/systemmodule.h"
-#include "importexport/guitarpro/guitarpromodule.h"
+#include "fonts/fontsmodule.h"
+#include "draw/drawmodule.h"
 #include "engraving/engravingmodule.h"
+#include "engraving/utests/utils/scorerw.h"
 
-#include "libmscore/masterscore.h"
+#include "importexport/guitarpro/guitarpromodule.h"
+
+#include "libmscore/instrtemplate.h"
 #include "libmscore/musescoreCore.h"
+
+#include "log.h"
+
+using namespace mu::iex::guitarpro;
 
 static mu::testing::SuiteEnvironment importexport_se(
 {
+    new mu::draw::DrawModule(),         // needs for engraving
+    new mu::fonts::FontsModule(),       // needs for engraving
     new mu::engraving::EngravingModule(),
-    new mu::fonts::FontsModule(), // needs for libmscore
-    new mu::instrumentsscene::InstrumentsSceneModule(),
     new mu::iex::guitarpro::GuitarProModule()
 },
     []() {
     LOGI() << "guitarpro tests suite post init";
-    Ms::MScore::noGui = true;
 
-    new Ms::MuseScoreCore();
-    Ms::MScore::init(); // initialize libmscore
+    mu::engraving::ScoreRW::setRootPath(mu::String::fromUtf8(iex_guitarpro_tests_DATA_ROOT));
+
+    mu::engraving::MScore::testMode = true;
+    mu::engraving::MScore::testWriteStyleToScore = false;
+    mu::engraving::MScore::noGui = true;
+
+    new mu::engraving::MuseScoreCore();
+    mu::engraving::MScore::init(); // initialize libmscore
+
+    mu::engraving::loadInstrumentTemplates(":/data/instruments.xml");
 }
     );

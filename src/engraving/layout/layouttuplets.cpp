@@ -25,7 +25,6 @@
 #include "libmscore/tuplet.h"
 
 using namespace mu::engraving;
-using namespace Ms;
 
 /// <summary>
 /// Recursively calls layout() on any nested tuplets and then the tuplet itself

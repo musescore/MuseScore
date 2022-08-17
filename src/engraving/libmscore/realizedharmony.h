@@ -28,7 +28,7 @@
 #include "containers.h"
 #include "types/fraction.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Harmony;
 
 //voicing modes to use

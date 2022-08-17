@@ -22,9 +22,10 @@
 #include "importmidi_operations.h"
 
 #include <QXmlStreamReader>
-#include <QDebug>
 
-namespace Ms {
+#include "log.h"
+
+namespace mu::iex::midi {
 MidiOperations::Data midiImportOperations;
 
 namespace MidiOperations {
@@ -40,7 +41,7 @@ static int readBoolFromXml(QXmlStreamReader& xml)
         } else if (xml.text() == "false") {
             value = 0;
         } else {
-            qDebug() << "Load MIDI import operations from file: unknown" << name << "value";
+            LOGD() << "Load MIDI import operations from file: unknown" << name << "value";
         }
     }
     return value;
@@ -56,7 +57,7 @@ static void setOperationsFromFile(const QString& fileName, Opers& opers)
 
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug("Load MIDI import operations from file: cannot open input file");
+        LOGD("Load MIDI import operations from file: cannot open input file");
         return;
     }
 
@@ -110,8 +111,8 @@ static void setOperationsFromFile(const QString& fileName, Opers& opers)
                         opers.quantValue.setDefaultValue(QuantValue::Q_1024, false);
                         break;
                     default:
-                        qDebug("Load MIDI import operations from file: "
-                               "unknown max quantization value");
+                        LOGD("Load MIDI import operations from file: "
+                             "unknown max quantization value");
                         break;
                     }
                 }
@@ -136,8 +137,8 @@ static void setOperationsFromFile(const QString& fileName, Opers& opers)
                         opers.maxVoiceCount.setDefaultValue(VoiceCount::V_4, false);
                         break;
                     default:
-                        qDebug("Load MIDI import operations from file: "
-                               "unknown max voice count");
+                        LOGD("Load MIDI import operations from file: "
+                             "unknown max voice count");
                         break;
                     }
                 }
@@ -229,8 +230,8 @@ static void setOperationsFromFile(const QString& fileName, Opers& opers)
                         opers.swing.setDefaultValue(Swing::SWING, false);
                         break;
                     default:
-                        qDebug("Load MIDI import operations from file: "
-                               "unknown swing");
+                        LOGD("Load MIDI import operations from file: "
+                             "unknown swing");
                         break;
                     }
                 }
@@ -238,7 +239,7 @@ static void setOperationsFromFile(const QString& fileName, Opers& opers)
         }
     }
     if (xml.hasError()) {
-        qDebug("Load MIDI import operations from file: cannot parse input file");
+        LOGD("Load MIDI import operations from file: cannot parse input file");
         return;
     }
 
@@ -323,4 +324,4 @@ void Data::setOperationsFile(const QString& fileName)
     }
 }
 } // namespace MidiOperations
-} // namespace Ms
+} // namespace mu::iex::midi

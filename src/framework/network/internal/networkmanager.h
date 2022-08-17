@@ -37,20 +37,17 @@ public:
     explicit NetworkManager(QObject* parent = nullptr);
     ~NetworkManager() override;
 
-    Ret get(const QUrl& url, IncomingDevice* incommingData, const RequestHeaders& headers = RequestHeaders()) override;
+    Ret get(const QUrl& url, IncomingDevice* incomingData, const RequestHeaders& headers = RequestHeaders()) override;
     Ret head(const QUrl& url, const RequestHeaders& headers = RequestHeaders()) override;
-    Ret post(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incommingData,
+    Ret post(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incomingData,
              const RequestHeaders& headers = RequestHeaders()) override;
-    Ret put(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incommingData,
+    Ret put(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incomingData,
             const RequestHeaders& headers = RequestHeaders()) override;
-    Ret del(const QUrl& url, IncomingDevice* incommingData, const RequestHeaders& headers = RequestHeaders()) override;
+    Ret del(const QUrl& url, IncomingDevice* incomingData, const RequestHeaders& headers = RequestHeaders()) override;
 
-    framework::ProgressChannel progressChannel() const override;
+    framework::Progress progress() const override;
 
     void abort() override;
-
-signals:
-    void aborted();
 
 private:
     enum RequestType {
@@ -61,17 +58,17 @@ private:
         DELETE_REQUEST
     };
 
-    Ret execRequest(RequestType requestType, const QUrl& url, IncomingDevice* incommingData = nullptr,
+    Ret execRequest(RequestType requestType, const QUrl& url, IncomingDevice* incomingData = nullptr,
                     OutgoingDevice* outgoingData = nullptr, const RequestHeaders& headers = RequestHeaders());
 
     QNetworkReply* receiveReply(RequestType requestType, const QNetworkRequest& request, OutgoingDevice* outgoingData = nullptr);
 
-    bool openDevice(io::Device* device, QIODevice::OpenModeFlag flags);
-    void closeDevice(io::Device* device);
+    bool openDevice(QIODevice* device, QIODevice::OpenModeFlag flags);
+    void closeDevice(QIODevice* device);
 
     bool isAborted() const;
 
-    void prepareReplyReceive(QNetworkReply* reply, IncomingDevice* incommingData);
+    void prepareReplyReceive(QNetworkReply* reply, IncomingDevice* incomingData);
     void prepareReplyTransmit(QNetworkReply* reply);
 
     Ret waitForReplyFinished(QNetworkReply* reply, int timeoutMs);
@@ -79,9 +76,9 @@ private:
 
 private:
     QNetworkAccessManager* m_manager = nullptr;
-    IncomingDevice* m_incommingData = nullptr;
+    IncomingDevice* m_incomingData = nullptr;
     QNetworkReply* m_reply = nullptr;
-    framework::ProgressChannel m_progressCh;
+    framework::Progress m_progress;
 
     bool m_isAborted = false;
 };

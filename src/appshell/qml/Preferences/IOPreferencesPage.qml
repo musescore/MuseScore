@@ -41,8 +41,6 @@ PreferencesPage {
         width: parent.width
         spacing: root.sectionsSpacing
 
-        /*
-         * TODO: https://github.com/musescore/MuseScore/issues/9807
         AudioApiSection {
             currentAudioApiIndex: ioModel.currentAudioApiIndex
             audioApiList: ioModel.audioApiList()
@@ -56,13 +54,15 @@ PreferencesPage {
         }
 
         SeparatorLine {}
-         */
 
         MidiDevicesSection {
             currentInputDeviceIndex: ioModel.currentMidiInputDeviceIndex
             currentOutputDeviceIndex: ioModel.currentMidiOutputDeviceIndex
             inputDevices: ioModel.midiInputDevices
             outputDevices: ioModel.midiOutputDevices
+
+            isMIDI20OutputSupported: ioModel.isMIDI20OutputSupported
+            useMIDI20Output: ioModel.useMIDI20Output
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
@@ -71,8 +71,12 @@ PreferencesPage {
                 ioModel.currentMidiInputDeviceIndex = newIndex
             }
 
-            onCurrentOuputDeviceIndexChangeRequested: function(newIndex) {
+            onCurrentOutputDeviceIndexChangeRequested: function(newIndex) {
                 ioModel.currentMidiOutputDeviceIndex = newIndex
+            }
+
+            onUseMIDI20OutputChangeRequested: function(use) {
+                ioModel.useMIDI20Output = use
             }
         }
 

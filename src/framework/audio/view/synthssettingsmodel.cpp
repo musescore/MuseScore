@@ -37,11 +37,11 @@ void SynthsSettingsModel::load()
 
         for (const auto& meta : resources) {
             if (meta.type == AudioResourceType::FluidSoundfont) {
-                m_avalaibleSoundFonts[name] << QString::fromStdString(meta.id);
+                m_availableSoundFonts[name] << QString::fromStdString(meta.id);
             }
         }
 
-        emit avalaibleChanged(name);
+        emit availableChanged(name);
         emit selectedChanged(name);
     });
 }
@@ -69,9 +69,9 @@ QStringList SynthsSettingsModel::selectedSoundFonts(const QString& synth) const
     return list;
 }
 
-QStringList SynthsSettingsModel::avalaibleSoundFonts(const QString& synth) const
+QStringList SynthsSettingsModel::availableSoundFonts(const QString& synth) const
 {
-    return m_avalaibleSoundFonts.value(synth);
+    return m_availableSoundFonts.value(synth);
 }
 
 void SynthsSettingsModel::soundFontUp(int selectedIndex_, const QString& synth)
@@ -128,11 +128,11 @@ void SynthsSettingsModel::removeSoundFont(int selectedIndex_, const QString& syn
     emit selectedChanged(synth);
 }
 
-void SynthsSettingsModel::addSoundFont(int avalableIndex_, const QString& synth)
+void SynthsSettingsModel::addSoundFont(int availableIndex_, const QString& synth)
 {
-    int avalableIndex = avalableIndex_;
-    const QStringList& avalaible = m_avalaibleSoundFonts[synth];
-    std::string name = avalaible.at(avalableIndex).toStdString();
+    int availableIndex = availableIndex_;
+    const QStringList& available = m_availableSoundFonts[synth];
+    std::string name = available.at(availableIndex).toStdString();
 
     auto it = m_state.groups.find(synth.toStdString());
     if (it == m_state.groups.end()) {

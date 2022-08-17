@@ -28,7 +28,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   defaultStyle
 //---------------------------------------------------------
@@ -54,10 +54,9 @@ Text::Text(EngravingItem* parent, TextStyleType tid)
 void Text::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "style") {
-            QString sn = e.readElementText();
-            TextStyleType s = TConv::fromXml(sn, TextStyleType::DEFAULT);
+            TextStyleType s = TConv::fromXml(e.readAsciiText(), TextStyleType::DEFAULT);
             if (TextStyleType::TUPLET == s) {  // ugly hack for compatibility
                 continue;
             }
@@ -82,7 +81,7 @@ engraving::PropertyValue Text::propertyDefault(Pid id) const
     }
 }
 
-QString Text::readXmlText(XmlReader& r, Score* score)
+String Text::readXmlText(XmlReader& r, Score* score)
 {
     Text t(score->dummy());
     t.read(r);

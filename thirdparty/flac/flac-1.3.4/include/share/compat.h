@@ -54,6 +54,7 @@
 #define ftello _ftelli64
 #else /* MinGW */
 #if !defined(HAVE_FSEEKO)
+#define _off_t _off64_t
 #define fseeko fseeko64
 #define ftello ftello64
 #endif
@@ -188,7 +189,7 @@
 #endif
 
 #ifndef M_LN2
-#define M_LN2 0.69314718055994530942
+#define M_LN2 0.693147180559945309417
 #endif
 #ifndef M_PI
 #define M_PI 3.14159265358979323846

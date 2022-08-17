@@ -25,7 +25,7 @@
 #include "modularity/imoduleexport.h"
 #include "cloudtypes.h"
 
-#include "retval.h"
+#include "types/retval.h"
 
 namespace mu::cloud {
 class IAuthorizationService : MODULE_EXPORT_INTERFACE

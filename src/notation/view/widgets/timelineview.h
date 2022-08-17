@@ -23,14 +23,14 @@
 #ifndef MU_NOTATION_TIMELINEVIEW_H
 #define MU_NOTATION_TIMELINEVIEW_H
 
-#include "ui/view/widgetview.h"
+#include "uicomponents/view/widgetview.h"
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
 
 namespace mu::notation {
-class TimelineView : public ui::WidgetView, public async::Asyncable
+class TimelineView : public uicomponents::WidgetView, public async::Asyncable
 {
     Q_OBJECT
 

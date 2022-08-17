@@ -23,6 +23,7 @@
 #include "topleveldialog.h"
 
 #include <QApplication>
+#include <QWindow>
 
 using namespace mu::uicomponents;
 

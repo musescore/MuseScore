@@ -23,7 +23,7 @@
 #ifndef MU_UI_UIMODULE_H
 #define MU_UI_UIMODULE_H
 
-#include "framework/global/modularity/imodulesetup.h"
+#include "modularity/imodulesetup.h"
 
 namespace mu::ui {
 class UiModule : public modularity::IModuleSetup

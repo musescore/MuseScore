@@ -23,19 +23,13 @@
 #ifndef MU_IMPORTEXPORT_MP3WRITER_H
 #define MU_IMPORTEXPORT_MP3WRITER_H
 
-#include "modularity/ioc.h"
-#include "audio/iplayback.h"
-#include "audio/iaudiooutput.h"
-#include "async/asyncable.h"
-
 #include "abstractaudiowriter.h"
 
 namespace mu::iex::audioexport {
-class Mp3Writer : public AbstractAudioWriter, public async::Asyncable
+class Mp3Writer : public AbstractAudioWriter
 {
-    INJECT(audioexport, audio::IPlayback, playback)
 public:
-    Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
+    Ret write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options& options = Options()) override;
 };
 }
 

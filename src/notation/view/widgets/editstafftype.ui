@@ -306,7 +306,7 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="Ms::ExampleView" name="standardPreview" native="true">
+             <widget class="mu::notation::ExampleView" name="standardPreview" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
                 <horstretch>0</horstretch>
@@ -1295,7 +1295,7 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="Ms::ExampleView" name="tabPreview" native="true">
+             <widget class="mu::notation::ExampleView" name="tabPreview" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
                 <horstretch>0</horstretch>
@@ -1400,9 +1400,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Ms::ExampleView</class>
+   <class>mu::notation::ExampleView</class>
    <extends>QWidget</extends>
-   <header>commonscene/exampleview.h</header>
+   <header>notation/view/widgets/exampleview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

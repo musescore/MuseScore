@@ -38,10 +38,12 @@
 #include "part.h"
 #include "linkedobjects.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   keydiff2Interval
 //    keysig -   -7(Cb) - +7(C#)
@@ -150,7 +152,7 @@ int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
     int steps     = interval.diatonic;
     int semitones = interval.chromatic;
 
-// qDebug("transposeTpc tpc %d steps %d semitones %d", tpc, steps, semitones);
+// LOGD("transposeTpc tpc %d steps %d semitones %d", tpc, steps, semitones);
     if (semitones == 0 && steps == 0) {
         return tpc;
     }
@@ -188,9 +190,9 @@ int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
         } else {
             break;
         }
-//            qDebug("  again alter %d steps %d, step %d", alter, steps, step);
+//            LOGD("  again alter %d steps %d, step %d", alter, steps, step);
     }
-//      qDebug("  = step %d alter %d  tpc %d", step, alter, step2tpc(step, alter));
+//      LOGD("  = step %d alter %d  tpc %d", step, alter, step2tpc(step, alter));
     return step2tpc(step, AccidentalVal(alter));
 }
 
@@ -611,7 +613,7 @@ void Score::transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fr
                 //      }
                 Key nKey = transposeKey(ke.key(), segmentInterval, pref);
                 // remove initial C major key signatures
-                if (nKey == Key::C && s->tick().isZero()) {
+                if (nKey == Key::C && s->tick().isZero() && !ks->isCustom()) {
                     undo(new RemoveElement(ks));
                     if (s->empty()) {
                         undo(new RemoveElement(s));
@@ -679,7 +681,7 @@ void Score::transposeSemitone(int step)
     const int interval = intervalListArray[keyType][step > 0 ? 0 : 1];
 
     if (!transpose(TransposeMode::BY_INTERVAL, dir, Key::C, interval, true, true, false)) {
-        qDebug("Score::transposeSemitone: failed");
+        LOGD("Score::transposeSemitone: failed");
         // TODO: set error message
     } else {
         setSelectionChanged(true);
@@ -715,10 +717,10 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
     if (concertPitch()) {
         v.flip();
         newTpc1 = newTpc;
-        newTpc2 = Ms::transposeTpc(newTpc, v, true);
+        newTpc2 = mu::engraving::transposeTpc(newTpc, v, true);
     } else {
         newPitch += v.chromatic;
-        newTpc1 = Ms::transposeTpc(newTpc, v, true);
+        newTpc1 = mu::engraving::transposeTpc(newTpc, v, true);
         newTpc2 = newTpc;
     }
 

@@ -26,7 +26,7 @@
 #include "scoreelement.h"
 #include "libmscore/part.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 class Instrument;
 class Part;
@@ -49,7 +49,7 @@ public:
 //   Part
 //---------------------------------------------------------
 
-class Part : public Ms::PluginAPI::ScoreElement
+class Part : public mu::engraving::PluginAPI::ScoreElement
 {
     Q_OBJECT
     Q_PROPERTY(int startTrack READ startTrack)
@@ -58,7 +58,7 @@ class Part : public Ms::PluginAPI::ScoreElement
      * The string identifier
      * ([MusicXML Sound ID](https://www.musicxml.com/for-developers/standard-sounds/))
      * for the first instrument in this part.
-     * \see \ref Ms::PluginAPI::Instrument::instrumentId "Instrument.instrumentId"
+     * \see \ref mu::engraving::PluginAPI::Instrument::instrumentId "Instrument.instrumentId"
      * \since MuseScore 3.2
      */
     Q_PROPERTY(QString instrumentId READ instrumentId)
@@ -99,18 +99,18 @@ class Part : public Ms::PluginAPI::ScoreElement
      * List of instruments in this part.
      * \since MuseScore 3.5
      */
-    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Instrument> instruments READ instruments);
+    Q_PROPERTY(QQmlListProperty<mu::engraving::PluginAPI::Instrument> instruments READ instruments);
 
 public:
     /// \cond MS_INTERNAL
-    Part(Ms::Part* p = nullptr, Ownership o = Ownership::SCORE)
+    Part(mu::engraving::Part* p = nullptr, Ownership o = Ownership::SCORE)
         : ScoreElement(p, o) {}
 
-    Ms::Part* part() { return toPart(e); }
-    const Ms::Part* part() const { return toPart(e); }
+    mu::engraving::Part* part() { return toPart(e); }
+    const mu::engraving::Part* part() const { return toPart(e); }
 
-    track_idx_t startTrack() const { return part()->startTrack(); }
-    track_idx_t endTrack()   const { return part()->endTrack(); }
+    int startTrack() const { return static_cast<int>(part()->startTrack()); }
+    int endTrack()   const { return static_cast<int>(part()->endTrack()); }
     QString instrumentId() const { return part()->instrument()->id(); }
     int harmonyCount() const { return part()->harmonyCount(); }
     bool hasPitchedStaff() const { return part()->hasPitchedStaff(); }
@@ -132,7 +132,7 @@ public:
      * Finds an instrument that is active in this part at the given \p tick.
      * \since MuseScore 3.5
      */
-    Q_INVOKABLE Ms::PluginAPI::Instrument* instrumentAtTick(int tick);
+    Q_INVOKABLE mu::engraving::PluginAPI::Instrument* instrumentAtTick(int tick);
 };
 } // namespace PluginAPI
 } // namespace Ms

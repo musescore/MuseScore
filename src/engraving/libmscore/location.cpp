@@ -27,10 +27,12 @@
 #include "measure.h"
 #include "mscore.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 static constexpr Location absDefaults = Location::absolute();
 static constexpr Location relDefaults = Location::relative();
 
@@ -43,7 +45,7 @@ int Location::track() const
     if ((_staff == absDefaults._staff) || (_voice == absDefaults._voice)) {
         return INT_MIN;
     }
-    return VOICES * _staff + _voice;
+    return static_cast<int>(VOICES) * _staff + _voice;
 }
 
 //---------------------------------------------------------
@@ -63,15 +65,15 @@ void Location::setTrack(int track)
 
 void Location::write(XmlWriter& xml) const
 {
-    Q_ASSERT(isRelative());
-    xml.startObject("location");
+    assert(isRelative());
+    xml.startElement("location");
     xml.tag("staves", _staff, relDefaults._staff);
     xml.tag("voices", _voice, relDefaults._voice);
     xml.tag("measures", _measure, relDefaults._measure);
-    xml.tag("fractions", _frac.reduced(), relDefaults._frac);
+    xml.tagFraction("fractions", _frac.reduced(), relDefaults._frac);
     xml.tag("grace", _graceIndex, relDefaults._graceIndex);
     xml.tag("notes", _note, relDefaults._note);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -81,7 +83,7 @@ void Location::write(XmlWriter& xml) const
 void Location::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
 
         if (tag == "staves") {
             _staff = e.readInt();
@@ -145,9 +147,9 @@ void Location::toRelative(const Location& ref)
 
 void Location::fillPositionForElement(const EngravingItem* e, bool absfrac)
 {
-    Q_ASSERT(isAbsolute());
+    assert(isAbsolute());
     if (!e) {
-        qWarning("Location::fillPositionForElement: element is nullptr");
+        LOGW("Location::fillPositionForElement: element is nullptr");
         return;
     }
     if (track() == absDefaults.track()) {
@@ -170,9 +172,9 @@ void Location::fillPositionForElement(const EngravingItem* e, bool absfrac)
 
 void Location::fillForElement(const EngravingItem* e, bool absfrac)
 {
-    Q_ASSERT(isAbsolute());
+    assert(isAbsolute());
     if (!e) {
-        qWarning("Location::fillForElement: element is nullptr");
+        LOGW("Location::fillForElement: element is nullptr");
         return;
     }
 
@@ -231,7 +233,7 @@ int Location::measure(const EngravingItem* e)
     if (m) {
         return m->measureIndex();
     }
-    qWarning("Location::measure: cannot find element's measure (%s)", e->typeName());
+    LOGW("Location::measure: cannot find element's measure (%s)", e->typeName());
     return 0;
 }
 

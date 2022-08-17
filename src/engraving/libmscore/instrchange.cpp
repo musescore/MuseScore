@@ -22,6 +22,7 @@
 
 #include "instrchange.h"
 
+#include "translation.h"
 #include "rw/xml.h"
 
 #include "score.h"
@@ -37,7 +38,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   instrumentChangeStyle
 //---------------------------------------------------------
@@ -138,7 +139,8 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
             score()->transpositionChanged(part, oldV, tickStart, tickEnd);
         }
 
-        const QString newInstrChangeText = tr("To %1").arg(instrument->trackName());
+        //: The text of an "instrument change" marking. It is an instruction to the player to switch to another instrument.
+        const String newInstrChangeText = mtrc("engraving", "To %1").arg(instrument->trackName());
         undoChangeProperty(Pid::TEXT, TextBase::plainToXmlText(newInstrChangeText));
     }
 }
@@ -193,13 +195,13 @@ std::vector<Clef*> InstrumentChange::clefs() const
 
 void InstrumentChange::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     _instrument->write(xml, part());
     if (_init) {
         xml.tag("init", _init);
     }
     TextBase::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -209,7 +211,7 @@ void InstrumentChange::write(XmlWriter& xml) const
 void InstrumentChange::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "Instrument") {
             _instrument->read(e, part());
         } else if (tag == "init") {

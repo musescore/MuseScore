@@ -27,20 +27,23 @@
 #include "text.h"
 #include "undo.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   TextEditData
 //---------------------------------------------------------
 
 struct TextEditData : public ElementEditData {
-    QString oldXmlText;
+    OBJECT_ALLOCATOR(engraving, TextEditData)
+public:
+
+    String oldXmlText;
     size_t startUndoIdx { 0 };
 
     TextCursor* cursor() const;
     TextBase* _textBase = nullptr;
     bool deleteText = false;
 
-    QString selectedText;
+    String selectedText;
 
     TextEditData(TextBase* t)
         : _textBase(t) {}
@@ -59,6 +62,7 @@ struct TextEditData : public ElementEditData {
 
 class TextEditUndoCommand : public UndoCommand
 {
+    OBJECT_ALLOCATOR(engraving, TextEditUndoCommand)
 protected:
     TextCursor _cursor;
 public:
@@ -78,16 +82,18 @@ public:
 
 class ChangeTextProperties : public TextEditUndoCommand
 {
-    QString xmlText;
+    OBJECT_ALLOCATOR(engraving, ChangeTextProperties)
+
+    String xmlText;
     Pid propertyId;
-    mu::engraving::PropertyValue propertyVal;
+    PropertyValue propertyVal;
     FontStyle existingStyle;
     PropertyFlags flags;
 
     void restoreSelection();
 
 public:
-    ChangeTextProperties(const TextCursor* tc, Ms::Pid propId, const mu::engraving::PropertyValue& propVal, PropertyFlags flags);
+    ChangeTextProperties(const TextCursor* tc, Pid propId, const PropertyValue& propVal, PropertyFlags flags);
     void undo(EditData*) override;
     void redo(EditData*) override;
 };
@@ -98,18 +104,20 @@ public:
 
 class ChangeText : public TextEditUndoCommand
 {
-    QString s;
+    OBJECT_ALLOCATOR(engraving, ChangeText)
+
+    String s;
 
 protected:
     void insertText(EditData*);
     void removeText(EditData*);
 
 public:
-    ChangeText(const TextCursor* tc, const QString& t)
+    ChangeText(const TextCursor* tc, const String& t)
         : TextEditUndoCommand(*tc), s(t) {}
     virtual void undo(EditData*) override = 0;
     virtual void redo(EditData*) override = 0;
-    const QString& string() const { return s; }
+    const String& string() const { return s; }
 };
 
 //---------------------------------------------------------
@@ -118,8 +126,9 @@ public:
 
 class InsertText : public ChangeText
 {
+    OBJECT_ALLOCATOR(engraving, InsertText)
 public:
-    InsertText(const TextCursor* tc, const QString& t)
+    InsertText(const TextCursor* tc, const String& t)
         : ChangeText(tc, t) {}
     virtual void redo(EditData* ed) override { insertText(ed); }
     virtual void undo(EditData* ed) override { removeText(ed); }
@@ -132,8 +141,9 @@ public:
 
 class RemoveText : public ChangeText
 {
+    OBJECT_ALLOCATOR(engraving, RemoveText)
 public:
-    RemoveText(const TextCursor* tc, const QString& t)
+    RemoveText(const TextCursor* tc, const String& t)
         : ChangeText(tc, t) {}
     virtual void redo(EditData* ed) override { removeText(ed); }
     virtual void undo(EditData* ed) override { insertText(ed); }
@@ -146,6 +156,7 @@ public:
 
 class SplitJoinText : public TextEditUndoCommand
 {
+    OBJECT_ALLOCATOR(engraving, SplitJoinText)
 protected:
     virtual void split(EditData*);
     virtual void join(EditData*);
@@ -161,6 +172,8 @@ public:
 
 class SplitText : public SplitJoinText
 {
+    OBJECT_ALLOCATOR(engraving, SplitText)
+
     virtual void undo(EditData* data) override { join(data); }
     virtual void redo(EditData* data) override { split(data); }
 
@@ -176,6 +189,8 @@ public:
 
 class JoinText : public SplitJoinText
 {
+    OBJECT_ALLOCATOR(engraving, JoinText)
+
     virtual void undo(EditData* data) override { split(data); }
     virtual void redo(EditData* data) override { join(data); }
 
@@ -184,6 +199,6 @@ public:
         : SplitJoinText(tc) {}
     UNDO_NAME("JoinText");
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

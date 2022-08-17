@@ -29,6 +29,8 @@
 #include "view/sortfilterproxymodel.h"
 #include "view/popupview.h"
 #include "view/dialogview.h"
+#include "view/dropdownview.h"
+#include "view/menuview.h"
 #include "view/filepickermodel.h"
 #include "view/itemmultiselectionmodel.h"
 #include "view/textinputfieldmodel.h"
@@ -77,7 +79,7 @@ void UiComponentsModule::registerUiTypes()
 {
     qmlRegisterType<SampleObject>("MuseScore.UiComponents", 1, 0, "SampleObject");
 
-    qmlRegisterUncreatableType<QAbstractItemModel>("MuseScore.UiComponents", 1, 0, "AbstractItemModel", "Cannot ...");
+    qmlRegisterUncreatableType<QAbstractItemModel>("MuseScore.UiComponents", 1, 0, "AbstractItemModel", "Cannot …");
 
     qmlRegisterType<DoubleInputValidator>("MuseScore.UiComponents", 1, 0, "DoubleInputValidator");
     qmlRegisterType<IntInputValidator>("MuseScore.UiComponents", 1, 0, "IntInputValidator");
@@ -92,6 +94,9 @@ void UiComponentsModule::registerUiTypes()
 
     qmlRegisterType<PopupView>("MuseScore.UiComponents", 1, 0, "PopupView");
     qmlRegisterType<DialogView>("MuseScore.UiComponents", 1, 0, "DialogView");
+    qmlRegisterType<DropdownView>("MuseScore.UiComponents", 1, 0, "DropdownView");
+    qmlRegisterType<MenuView>("MuseScore.UiComponents", 1, 0, "MenuView");
+
     qmlRegisterType<FilePickerModel>("MuseScore.UiComponents", 1, 0, "FilePickerModel");
     qmlRegisterType<ItemMultiSelectionModel>("MuseScore.UiComponents", 1, 0, "ItemMultiSelectionModel");
 

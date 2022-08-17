@@ -36,7 +36,7 @@ class Workspace : public IWorkspace, public async::Asyncable
     INJECT(workspace, mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
-    Workspace(const io::path& filePath);
+    Workspace(const io::path_t& filePath);
 
     std::string name() const override;
     std::string title() const override;
@@ -49,7 +49,7 @@ public:
 
     async::Notification reloadNotification() override;
 
-    io::path filePath() const;
+    io::path_t filePath() const;
     bool isLoaded() const;
     Ret load();
     Ret save();

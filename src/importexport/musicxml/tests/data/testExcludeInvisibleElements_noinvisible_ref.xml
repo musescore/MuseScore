@@ -233,7 +233,7 @@
         <type>quarter</type>
         <stem>up</stem>
         </note>
-      <note print-object="no">
+      <note>
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -242,6 +242,7 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notehead>none</notehead>
         </note>
       </measure>
     <measure number="5">

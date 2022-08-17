@@ -36,7 +36,7 @@ FocusScope {
     property alias publishMode: notationView.publishMode
 
     property alias isNavigatorVisible: notationNavigator.visible
-    property alias isAccessibilityEnabled: notationView.accessibilityEnabled
+    property alias isMainView: notationView.isMainView
 
     property alias defaultNavigationControl: fakeNavCtrl
 
@@ -106,9 +106,6 @@ FocusScope {
                         panel: navPanel
                         order: 1
 
-                        accessible.role: MUAccessible.Panel
-                        accessible.name: "Score"
-
                         onActiveChanged: {
                             if (fakeNavCtrl.active) {
                                 notationView.forceFocusIn()
@@ -133,14 +130,7 @@ FocusScope {
 
                     onShowContextMenuRequested: function (elementType, viewPos) {
                         contextMenuModel.loadItems(elementType)
-
-                        var posOnFakeItem = notationView.mapToItem(contextMenuParentFake, viewPos.x, viewPos.y)
-
-                        if (contextMenuLoader.isMenuOpened) {
-                            contextMenuLoader.update(contextMenuModel.items, posOnFakeItem.x, posOnFakeItem.y)
-                        } else {
-                            contextMenuLoader.open(contextMenuModel.items, posOnFakeItem.x, posOnFakeItem.y)
-                        }
+                        contextMenuLoader.show(viewPos, contextMenuModel.items)
                     }
 
                     onHideContextMenuRequested: {
@@ -151,23 +141,11 @@ FocusScope {
                         notationNavigator.setCursorRect(viewport)
                     }
 
-                    Item {
-                        id: contextMenuParentFake
+                    ContextMenuLoader {
+                        id: contextMenuLoader
 
-                        //! NOTE: Item coordinates are not important.
-                        //  To open the context menu next to the position(if the menu does not fit into the screen size),
-                        //  only the size of the item is important.
-                        //  Height and width are equal to zero - the menu will appear exactly
-                        //  next(depending on the limitation) to the pressed position.
-                        width: 0
-                        height: 0
-
-                        StyledMenuLoader {
-                            id: contextMenuLoader
-
-                            onHandleMenuItem: function(itemId) {
-                                contextMenuModel.handleMenuItem(itemId)
-                            }
+                        onHandleMenuItem: function(itemId) {
+                            contextMenuModel.handleMenuItem(itemId)
                         }
                     }
                 }

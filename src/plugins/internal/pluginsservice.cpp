@@ -22,17 +22,18 @@
 
 #include "pluginsservice.h"
 
+#include "types/translatablestring.h"
+
 #include "shortcuts/shortcutstypes.h"
 
 #include "pluginserrors.h"
-#include "pluginsuiactions.h"
 
 #include "view/pluginview.h"
 
+#include "containers.h"
 #include "log.h"
 
 using namespace mu::plugins;
-using namespace mu::framework;
 using namespace mu::async;
 using namespace mu::shortcuts;
 
@@ -56,22 +57,33 @@ void PluginsService::reloadPlugins()
     m_pluginsChanged.notify();
 }
 
-mu::RetVal<PluginInfoList> PluginsService::plugins(PluginsStatus status) const
+mu::RetVal<PluginInfoMap> PluginsService::plugins(PluginsStatus status) const
 {
-    PluginInfoList result;
+    PluginInfoMap result;
 
-    for (const PluginInfo& plugin: m_plugins) {
+    for (const PluginInfo& plugin: values(m_plugins)) {
         if (isAccepted(plugin.codeKey, status)) {
-            result << plugin;
+            result.insert({ plugin.codeKey, plugin });
         }
     }
 
-    return RetVal<PluginInfoList>::make_ok(result);
+    return RetVal<PluginInfoMap>::make_ok(result);
 }
 
 Notification PluginsService::pluginsChanged() const
 {
     return m_pluginsChanged;
+}
+
+IPluginsService::CategoryInfoMap PluginsService::categories() const
+{
+    static CategoryInfoMap categories {
+        { "composing-arranging-tools", TranslatableString("plugins", "Composing/arranging tools") },
+        { "color-notes", TranslatableString("plugins", "Color notes") },
+        { "playback", TranslatableString("plugins", "Playback") }
+    };
+
+    return categories;
 }
 
 bool PluginsService::isAccepted(const CodeKey& codeKey, PluginsStatus status) const
@@ -84,16 +96,16 @@ bool PluginsService::isAccepted(const CodeKey& codeKey, PluginsStatus status) co
     return false;
 }
 
-PluginInfoList PluginsService::readPlugins() const
+PluginInfoMap PluginsService::readPlugins() const
 {
     TRACEFUNC;
 
-    PluginInfoList result;
-    io::paths pluginsPaths = scanFileSystemForPlugins();
+    PluginInfoMap result;
+    io::paths_t pluginsPaths = scanFileSystemForPlugins();
 
     const PluginConfigurationHash& pluginsConfigurationHash = pluginsConfiguration();
 
-    for (const io::path& pluginPath: pluginsPaths) {
+    for (const io::path_t& pluginPath: pluginsPaths) {
         QUrl url = QUrl::fromLocalFile(pluginPath.toQString());
         PluginView view(url);
 
@@ -104,26 +116,32 @@ PluginInfoList PluginsService::readPlugins() const
         info.description = view.description();
         info.version = view.version();
         info.enabled = pluginsConfigurationHash.value(info.codeKey).enabled;
+        info.categoryCode = view.categoryCode();
+
+        QString thumbnailName = view.thumbnailName();
+        if (!thumbnailName.isEmpty()) {
+            info.thumbnailUrl = QUrl::fromLocalFile(io::dirpath(pluginPath).toQString() + "/" + thumbnailName);
+        }
 
         auto sequences = shortcutsRegister()->shortcut(info.codeKey.toStdString()).sequences;
         info.shortcuts = Shortcut::sequencesToString(sequences);
 
         if (info.isValid()) {
-            result << info;
+            result.insert({ info.codeKey, info });
         }
     }
 
     return result;
 }
 
-mu::io::paths PluginsService::scanFileSystemForPlugins() const
+mu::io::paths_t PluginsService::scanFileSystemForPlugins() const
 {
     TRACEFUNC;
 
-    io::paths result;
+    io::paths_t result;
 
-    for (const io::path& dirPath: configuration()->availablePluginsPaths()) {
-        RetVal<io::paths> files = fileSystem()->scanFiles(dirPath, { "*.qml" });
+    for (const io::path_t& dirPath: configuration()->availablePluginsPaths()) {
+        RetVal<io::paths_t> files = fileSystem()->scanFiles(dirPath, { "*.qml" });
 
         if (!files.ret) {
             LOGE() << files.ret.toString();
@@ -171,14 +189,14 @@ mu::Ret PluginsService::setEnable(const CodeKey& codeKey, bool enable)
 
 PluginInfo& PluginsService::pluginInfo(const CodeKey& codeKey)
 {
-    for (PluginInfo& plugin: m_plugins) {
-        if (plugin.codeKey == codeKey) {
-            return plugin;
-        }
+    auto it = m_plugins.find(codeKey);
+
+    if (it == m_plugins.end()) {
+        static PluginInfo _dummy;
+        return _dummy;
     }
 
-    static PluginInfo _dummy;
-    return _dummy;
+    return it->second;
 }
 
 void PluginsService::registerShortcuts()
@@ -189,7 +207,8 @@ void PluginsService::registerShortcuts()
 
     ShortcutList shortcuts;
 
-    for (const PluginInfo& plugin : m_plugins) {
+    for (auto& it : m_plugins) {
+        PluginInfo& plugin = it.second;
         Shortcut shortcut;
         shortcut.action = plugin.codeKey.toStdString();
 
@@ -251,9 +270,10 @@ void PluginsService::onShortcutsChanged()
 
     PluginConfigurationHash pluginsConfigurationHash = this->pluginsConfiguration();
 
-    PluginInfoList changedPlugins;
+    std::vector<PluginInfo> changedPlugins;
 
-    for (PluginInfo& plugin : m_plugins) {
+    for (auto& it : m_plugins) {
+        PluginInfo& plugin = it.second;
         const Shortcut shortcut = shortcutsRegister()->shortcut(plugin.codeKey.toStdString());
         if (shortcut.sequences.empty() && !pluginsConfigurationHash.contains(plugin.codeKey)) {
             continue;

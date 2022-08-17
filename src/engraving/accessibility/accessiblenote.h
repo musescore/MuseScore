@@ -29,11 +29,12 @@
 namespace mu::engraving {
 class AccessibleNote : public AccessibleItem
 {
+    OBJECT_ALLOCATOR(engraving, AccessibleNote)
 public:
-    AccessibleNote(Ms::EngravingItem* n = nullptr);
+    AccessibleNote(EngravingItem* n = nullptr);
     ~AccessibleNote();
 
-    AccessibleItem* clone(Ms::EngravingItem* e) const override;
+    AccessibleItem* clone(EngravingItem* e) const override;
 };
 }
 

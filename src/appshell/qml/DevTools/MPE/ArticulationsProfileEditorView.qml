@@ -63,7 +63,8 @@ Rectangle {
 
                     width: parent.width - openButton.width - saveButton.width - createButton.width
 
-                    hint: qsTrc("mpe", "Profile path")
+                    //! Make these strings translatable when we expose this tool to users
+                    hint: /*qsTrc*/ "Profile path"
                     currentText: editorModel.currentPath
                 }
 
@@ -119,7 +120,7 @@ Rectangle {
 
                     horizontalAlignment: Qt.AlignLeft
                     font: ui.theme.largeBodyBoldFont
-                    text: qsTrc("mpe", "Articulation Pattern List")
+                    text: /*qsTrc*/ "Articulation pattern list"
                 }
 
                 ArticulationPatternsTab {
@@ -168,7 +169,7 @@ Rectangle {
 
                     horizontalAlignment: Qt.AlignLeft
                     font: ui.theme.largeBodyBoldFont
-                    text: qsTrc("mpe", "Pattern Segments:")
+                    text: /*qsTrc*/ "Pattern segments:"
                 }
 
                 ArticulationPatternSegmentsList {
@@ -207,7 +208,7 @@ Rectangle {
 
                     horizontalAlignment: Qt.AlignLeft
                     font: ui.theme.largeBodyBoldFont
-                    text: qsTrc("mpe", "Appearance")
+                    text: /*qsTrc*/ "Appearance"
                 }
 
                 Column {
@@ -219,7 +220,7 @@ Rectangle {
                         width: parent.width
 
                         checked: editorModel ? editorModel.isArrangementVisible : false
-                        text: qsTrc("mpe", "Show arrangement")
+                        text: /*qsTrc*/ "Show arrangement"
 
                         onClicked: {
                             if (editorModel) {
@@ -232,7 +233,7 @@ Rectangle {
                         width: parent.width
 
                         checked: editorModel ? editorModel.isPitchVisible : false
-                        text: qsTrc("mpe", "Show pitch")
+                        text: /*qsTrc*/ "Show pitch"
 
                         onClicked: {
                             if (editorModel) {
@@ -245,7 +246,7 @@ Rectangle {
                         width: parent.width
 
                         checked: editorModel ? editorModel.isExpressionVisible : false
-                        text: qsTrc("mpe", "Show expression")
+                        text: /*qsTrc*/ "Show expression"
 
                         onClicked: {
                             if (editorModel) {
@@ -271,7 +272,7 @@ Rectangle {
 
                     horizontalAlignment: Qt.AlignLeft
                     font: ui.theme.largeBodyBoldFont
-                    text: qsTrc("mpe", "Pattern Segment Positioning")
+                    text: /*qsTrc*/ "Pattern segment positioning"
                 }
 
                 Column {
@@ -290,7 +291,7 @@ Rectangle {
 
                             horizontalAlignment: Qt.AlignLeft
 
-                            text: qsTrc("mpe", "From")
+                            text: /*qsTrc*/ "From"
                         }
 
                         IncrementalPropertyControl {
@@ -329,7 +330,7 @@ Rectangle {
 
                             horizontalAlignment: Qt.AlignLeft
 
-                            text: qsTrc("mpe", "To")
+                            text: /*qsTrc*/ "To"
                         }
 
                         IncrementalPropertyControl {
@@ -374,7 +375,7 @@ Rectangle {
 
                     horizontalAlignment: Qt.AlignLeft
                     font: ui.theme.largeBodyBoldFont
-                    text: qsTrc("mpe", "Pattern Parameters")
+                    text: /*qsTrc*/ "Pattern parameters"
                 }
 
                 ArticulationPatternControlsTab {

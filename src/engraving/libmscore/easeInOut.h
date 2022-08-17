@@ -23,11 +23,10 @@
 #ifndef __EASEINOUT_H__
 #define __EASEINOUT_H__
 
-#include <QtGlobal>
 #include <vector>
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ EaseInOut
 ///   \brief Specialized transfer curve using an underlying Bezier curve.
@@ -40,29 +39,29 @@ namespace Ms {
 
 class EaseInOut final
 {
-    qreal _easeIn;
-    qreal _easeOut;
+    double _easeIn;
+    double _easeOut;
 
 public:
     EaseInOut()
         : _easeIn(0.0), _easeOut(1.0) {}
-    EaseInOut(qreal easeIn, qreal easeOut)
+    EaseInOut(double easeIn, double easeOut)
         : _easeIn(easeIn), _easeOut(easeOut) {}
 
-    void SetEases(qreal easeIn, qreal easeOut) { _easeIn = easeIn; _easeOut = easeOut; }
-    qreal EvalX(const qreal t) const
+    void SetEases(double easeIn, double easeOut) { _easeIn = easeIn; _easeOut = easeOut; }
+    double EvalX(const double t) const
     {
-        qreal tCompl = 1.0 - t;
+        double tCompl = 1.0 - t;
         return (3.0 * _easeIn * tCompl * tCompl + (3.0 - 3.0 * _easeOut * tCompl - 2.0 * t) * t) * t;
     }
 
-    qreal EvalY(const qreal t) const { return -(t * t) * (2.0 * t - 3.0); }
-    mu::PointF Eval(const qreal t) const { return { EvalX(t), EvalY(t) }; }
-    qreal tFromX(const qreal x) const;
-    qreal tFromY(const qreal y) const;
-    qreal YfromX(const qreal x) const { return EvalY(tFromX(x)); }
-    qreal XfromY(const qreal y) const { return EvalX(tFromY(y)); }
+    double EvalY(const double t) const { return -(t * t) * (2.0 * t - 3.0); }
+    mu::PointF Eval(const double t) const { return { EvalX(t), EvalY(t) }; }
+    double tFromX(const double x) const;
+    double tFromY(const double y) const;
+    double YfromX(const double x) const { return EvalY(tFromX(x)); }
+    double XfromY(const double y) const { return EvalX(tFromY(y)); }
     void timeList(const int nbNotes, const int duration, std::vector<int>* times) const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

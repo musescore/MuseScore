@@ -37,7 +37,7 @@
 #include "libmscore/elementgroup.h"
 #include "scorecallbacks.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Lasso;
 }
 
@@ -100,12 +100,12 @@ public:
     bool startDrop(const QUrl& url) override;
     bool isDropAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers) override;
     bool drop(const PointF& pos, Qt::KeyboardModifiers modifiers) override;
-    const EngravingItem* dropTarget() const override;
     void setDropTarget(const EngravingItem* item, bool notify = true) override;
+    void setDropRect(const RectF& rect) override;
     void endDrop() override;
     async::Notification dropChanged() const override;
 
-    bool applyPaletteElement(Ms::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) override;
+    bool applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) override;
     void undo() override;
     void redo() override;
 
@@ -135,12 +135,13 @@ public:
     const TextBase* editedText() const override;
     async::Notification textEditingStarted() const override;
     async::Notification textEditingChanged() const override;
+    async::Notification textEditingEnded() const override;
 
     // Grip edit
     bool isGripEditStarted() const override;
     bool isHitGrip(const PointF& pos) const override;
     void startEditGrip(const PointF& pos) override;
-    void startEditGrip(EngravingItem* element, Ms::Grip grip) override;
+    void startEditGrip(EngravingItem* element, mu::engraving::Grip grip) override;
 
     bool isElementEditStarted() const override;
     void startEditElement(EngravingItem* element) override;
@@ -159,6 +160,7 @@ public:
 
     void copySelection() override;
     void copyLyrics() override;
+    Ret repeatSelection() override;
     void pasteSelection(const Fraction& scale = Fraction(1, 1)) override;
     void swapSelection() override;
     void deleteSelection() override;
@@ -211,7 +213,6 @@ public:
 
     void fillSelectionWithSlashes() override;
     void replaceSelectedNotesWithSlashes() override;
-    void repeatSelection() override;
     void changeEnharmonicSpelling(bool) override;
     void spellPitches() override;
     void regroupNotesAndRests() override;
@@ -229,7 +230,7 @@ public:
     void navigateToLyrics(MoveDirection direction) override;
     void navigateToLyricsVerse(MoveDirection direction) override;
 
-    void nagivateToNextSyllable() override;
+    void navigateToNextSyllable() override;
 
     void navigateToNearHarmony(MoveDirection direction, bool nearNoteOrRest) override;
     void navigateToHarmonyInNearMeasure(MoveDirection direction) override;
@@ -248,22 +249,25 @@ public:
     void toggleItalic() override;
     void toggleUnderline() override;
     void toggleStrike() override;
-    void toggleArticulation(Ms::SymId) override;
+    void toggleArticulation(mu::engraving::SymId) override;
     void toggleAutoplace(bool) override;
 
-    void insertClef(Ms::ClefType) override;
-    void changeAccidental(Ms::AccidentalType) override;
+    void insertClef(mu::engraving::ClefType) override;
+    void changeAccidental(mu::engraving::AccidentalType) override;
     void transposeSemitone(int) override;
-    void transposeDiatonicAlterations(Ms::TransposeDirection) override;
+    void transposeDiatonicAlterations(mu::engraving::TransposeDirection) override;
     void toggleGlobalOrLocalInsert() override;
     void getLocation() override;
-    void execute(void (Ms::Score::*)()) override;
+    void execute(void (mu::engraving::Score::*)()) override;
 
-    void showItem(const Ms::EngravingItem* item, int staffIndex = -1) override;
+    void showItem(const mu::engraving::EngravingItem* item, int staffIndex = -1) override;
     async::Channel<ShowItemRequest> showItemRequested() const override;
 
+    void setGetViewRectFunc(const std::function<RectF()>& func) override;
+
 private:
-    Ms::Score* score() const;
+    mu::engraving::Score* score() const;
+    void onScoreInited();
 
     void startEdit();
     void apply();
@@ -274,8 +278,10 @@ private:
     void doEndEditElement();
     void doEndDrag();
 
+    void onElementDestroyed(EngravingItem* element);
+
     void doSelect(const std::vector<EngravingItem*>& elements, SelectType type, engraving::staff_idx_t staffIndex = 0);
-    void selectElementsWithSameTypeOnSegment(Ms::ElementType elementType, Ms::Segment* segment);
+    void selectElementsWithSameTypeOnSegment(mu::engraving::ElementType elementType, mu::engraving::Segment* segment);
 
     void notifyAboutDragChanged();
     void notifyAboutDropChanged();
@@ -283,27 +289,30 @@ private:
     void notifyAboutNotationChanged();
     void notifyAboutTextEditingStarted();
     void notifyAboutTextEditingChanged();
+    void notifyAboutTextEditingEnded();
     void notifyAboutNoteInputStateChanged();
     void doDragLasso(const PointF& p);
     void endLasso();
-    void toggleFontStyle(Ms::FontStyle);
+    void toggleFontStyle(mu::engraving::FontStyle);
     void navigateToLyrics(bool, bool, bool);
 
-    Ms::Harmony* editedHarmony() const;
-    Ms::Harmony* findHarmonyInSegment(const Ms::Segment* segment, engraving::track_idx_t track, Ms::TextStyleType textStyleType) const;
-    Ms::Harmony* createHarmony(Ms::Segment* segment, engraving::track_idx_t track, Ms::HarmonyType type) const;
+    mu::engraving::Harmony* editedHarmony() const;
+    mu::engraving::Harmony* findHarmonyInSegment(const mu::engraving::Segment* segment, engraving::track_idx_t track,
+                                                 mu::engraving::TextStyleType textStyleType) const;
+    mu::engraving::Harmony* createHarmony(mu::engraving::Segment* segment, engraving::track_idx_t track,
+                                          mu::engraving::HarmonyType type) const;
 
-    void startEditText(Ms::TextBase* text);
+    void startEditText(mu::engraving::TextBase* text);
     bool needEndTextEdit() const;
 
-    Ms::Page* point2page(const PointF& p) const;
+    mu::engraving::Page* point2page(const PointF& p) const;
     std::vector<EngravingItem*> hitElements(const PointF& p_in, float w) const;
     std::vector<EngravingItem*> elementsAt(const PointF& p) const;
     EngravingItem* elementAt(const PointF& p) const;
 
     // Sorting using this function will place the elements that are the most
     // interesting to be selected at the end of the list
-    static bool elementIsLess(const Ms::EngravingItem* e1, const Ms::EngravingItem* e2);
+    static bool elementIsLess(const mu::engraving::EngravingItem* e1, const mu::engraving::EngravingItem* e2);
 
     void updateAnchorLines();
     void setAnchorLines(const std::vector<LineF>& anchorList);
@@ -316,19 +325,19 @@ private:
     void moveElementSelection(MoveDirection d);
     void moveStringSelection(MoveDirection d);
 
-    EngravingItem* dropTarget(Ms::EditData& ed) const;
+    EngravingItem* dropTarget(mu::engraving::EditData& ed) const;
     bool dragMeasureAnchorElement(const PointF& pos);
     bool dragTimeAnchorElement(const PointF& pos);
     bool dropCanvas(EngravingItem* e);
     void resetDropElement();
 
-    void selectInstrument(Ms::InstrumentChange* instrumentChange);
+    bool selectInstrument(mu::engraving::InstrumentChange* instrumentChange);
 
-    void applyDropPaletteElement(Ms::Score* score, Ms::EngravingItem* target, Ms::EngravingItem* e, Qt::KeyboardModifiers modifiers,
-                                 PointF pt = PointF(), bool pasteMode = false);
+    void applyDropPaletteElement(mu::engraving::Score* score, mu::engraving::EngravingItem* target, mu::engraving::EngravingItem* e,
+                                 Qt::KeyboardModifiers modifiers, PointF pt = PointF(), bool pasteMode = false);
 
-    void doAddSlur(const Ms::Slur* slurTemplate = nullptr);
-    void doAddSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const Ms::Slur* slurTemplate);
+    void doAddSlur(const mu::engraving::Slur* slurTemplate = nullptr);
+    void doAddSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const mu::engraving::Slur* slurTemplate);
 
     bool scoreHasMeasure() const;
     bool notesHaveActiculation(const std::vector<Note*>& notes, SymbolId articulationSymbolId) const;
@@ -341,7 +350,7 @@ private:
     bool elementsSelected(const std::vector<ElementType>& elementsTypes) const;
 
     template<typename P>
-    void execute(void (Ms::Score::* function)(P), P param);
+    void execute(void (mu::engraving::Score::* function)(P), P param);
 
     struct HitMeasureData
     {
@@ -355,17 +364,18 @@ private:
     {
         PointF beginMove;
         PointF elementOffset;
-        Ms::EditData ed;
+        mu::engraving::EditData ed;
         std::vector<EngravingItem*> elements;
-        std::vector<std::unique_ptr<Ms::ElementGroup> > dragGroups;
+        std::vector<std::unique_ptr<mu::engraving::ElementGroup> > dragGroups;
         DragMode mode { DragMode::BothXY };
         void reset();
     };
 
     struct DropData
     {
-        Ms::EditData ed;
+        mu::engraving::EditData ed;
         const EngravingItem* dropTarget = nullptr;
+        RectF dropRect;
     };
 
     ScoreCallbacks m_scoreCallbacks;
@@ -381,17 +391,18 @@ private:
     async::Notification m_dragChanged;
     std::vector<LineF> m_anchorLines;
 
-    Ms::EditData m_editData;
+    mu::engraving::EditData m_editData;
 
     async::Notification m_textEditingStarted;
     async::Notification m_textEditingChanged;
+    async::Notification m_textEditingEnded;
 
     DropData m_dropData;
     async::Notification m_dropChanged;
 
     async::Channel<ScoreConfigType> m_scoreConfigChanged;
 
-    Ms::Lasso* m_lasso = nullptr;
+    mu::engraving::Lasso* m_lasso = nullptr;
 
     bool m_notifyAboutDropChanged = false;
     HitElementContext m_hitElementContext;

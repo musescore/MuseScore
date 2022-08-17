@@ -28,51 +28,49 @@
 #include "types/fraction.h"
 #include "types/types.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class Page;
 class System;
 class Spanner;
 class MeasureBase;
-}
 
-namespace mu::engraving {
 class LayoutContext
 {
 public:
-    LayoutContext(Ms::Score* s);
+    LayoutContext(Score* s);
     LayoutContext(const LayoutContext&) = delete;
     LayoutContext& operator=(const LayoutContext&) = delete;
     ~LayoutContext();
 
-    Ms::Score* score() const { return m_score; }
+    Score* score() const { return m_score; }
 
     bool startWithLongNames = true;
     bool firstSystem = true;
     bool firstSystemIndent = true;
-    Ms::Page* page = nullptr;
+    Page* page = nullptr;
     page_idx_t curPage = 0; // index in Score->page()s
-    Ms::Fraction tick{ 0, 1 };
+    Fraction tick{ 0, 1 };
 
-    std::vector<Ms::System*> systemList; // reusable systems
-    std::set<Ms::Spanner*> processedSpanners;
+    std::vector<System*> systemList; // reusable systems
+    std::set<Spanner*> processedSpanners;
 
-    Ms::System* prevSystem = nullptr; // used during page layout
-    Ms::System* curSystem = nullptr;
+    System* prevSystem = nullptr; // used during page layout
+    System* curSystem = nullptr;
 
-    Ms::MeasureBase* systemOldMeasure = nullptr;
-    Ms::MeasureBase* pageOldMeasure = nullptr;
+    MeasureBase* systemOldMeasure = nullptr;
+    MeasureBase* pageOldMeasure = nullptr;
     bool rangeDone = false;
 
-    Ms::MeasureBase* prevMeasure = nullptr;
-    Ms::MeasureBase* curMeasure = nullptr;
-    Ms::MeasureBase* nextMeasure = nullptr;
+    MeasureBase* prevMeasure = nullptr;
+    MeasureBase* curMeasure = nullptr;
+    MeasureBase* nextMeasure = nullptr;
     int measureNo = 0;
-    Ms::Fraction startTick;
-    Ms::Fraction endTick;
+    Fraction startTick;
+    Fraction endTick;
 
 private:
-    Ms::Score* m_score = nullptr;
+    Score* m_score = nullptr;
 };
 }
 

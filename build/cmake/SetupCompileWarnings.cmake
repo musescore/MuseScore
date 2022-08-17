@@ -5,7 +5,7 @@ if (MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
     add_compile_options(/wd4127) # disabled warning: C4127: conditional expression is constant
 else()
-    add_compile_options(-Wall -Wextra ) #-Wconversion
+    add_compile_options(-Wall -Wextra) #-Wconversion
 endif()
 
 # Target
@@ -48,6 +48,8 @@ function(target_no_warning TARGET WNAME)
     elseif(WNAME STREQUAL "-Wno-attributes")
     elseif(WNAME STREQUAL "-Wno-absolute-value")
     elseif(WNAME STREQUAL "-Wno-tautological-pointer-compare")
+    elseif(WNAME STREQUAL "-Wno-sign-compare")
+    elseif(WNAME STREQUAL "-Wno-attributes")
 
     elseif(WNAME STREQUAL "-w")
         set(MSVC_Warning /w)
@@ -77,6 +79,10 @@ function(target_no_warning TARGET WNAME)
         unset(GCC_Warning)
         unset(CLANG_Warning)
         set(MSVC_Warning /wd4115)
+    elseif(WNAME STREQUAL "-WMSVC-no-unreachable")
+        unset(GCC_Warning)
+        unset(CLANG_Warning)
+        set(MSVC_Warning /wd4702)
     else()
         message(WARNING "Unknown warning: ${WNAME}, please add this warning to ${CMAKE_CURRENT_LIST_DIR}/SetupCompileWarnings.cmake")
     endif()

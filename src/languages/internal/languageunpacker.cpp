@@ -25,7 +25,7 @@
 #include <QFileInfo>
 #include <QStorageInfo>
 
-#include "thirdparty/qzip/qzipreader_p.h"
+#include "global/deprecated/qzipreader_p.h"
 #include "log.h"
 #include "../ilanguageunpacker.h"
 #include "languageserrors.h"
@@ -33,7 +33,7 @@
 using namespace mu;
 using namespace mu::languages;
 
-Ret LanguageUnpacker::unpack(const QString& languageCode, const QString& source, const io::path& _destination) const
+Ret LanguageUnpacker::unpack(const QString& languageCode, const QString& source, const io::path_t& _destination) const
 {
     QString destination = _destination.toQString();
     Ret destinationWritable = checkDirectoryIsWritable(destination);

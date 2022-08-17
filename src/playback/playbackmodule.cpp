@@ -34,6 +34,7 @@
 #include "internal/playbackconfiguration.h"
 
 #include "view/playbacktoolbarmodel.h"
+#include "view/playbackloadingmodel.h"
 #include "view/mixerpanelmodel.h"
 #include "view/mixerpanelcontextmenumodel.h"
 
@@ -78,6 +79,7 @@ void PlaybackModule::registerResources()
 void PlaybackModule::registerUiTypes()
 {
     qmlRegisterType<PlaybackToolBarModel>("MuseScore.Playback", 1, 0, "PlaybackToolBarModel");
+    qmlRegisterType<PlaybackLoadingModel>("MuseScore.Playback", 1, 0, "PlaybackLoadingModel");
     qmlRegisterType<MixerPanelModel>("MuseScore.Playback", 1, 0, "MixerPanelModel");
     qmlRegisterType<MixerPanelContextMenuModel>("MuseScore.Playback", 1, 0, "MixerPanelContextMenuModel");
 
@@ -86,11 +88,12 @@ void PlaybackModule::registerUiTypes()
 
 void PlaybackModule::onInit(const framework::IApplication::RunMode& mode)
 {
+    s_configuration->init();
+    s_playbackController->init();
+
     if (framework::IApplication::RunMode::Editor != mode) {
         return;
     }
 
-    s_configuration->init();
-    s_playbackController->init();
     s_playbackUiActions->init();
 }

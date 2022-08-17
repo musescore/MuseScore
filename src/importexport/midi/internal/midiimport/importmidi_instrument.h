@@ -22,12 +22,15 @@
 #ifndef IMPORTMIDI_INSTRUMENT_H
 #define IMPORTMIDI_INSTRUMENT_H
 
-#include "engraving/compat/midi/midifile.h"
+#include "../midishared/midifile.h"
 
 class QString;
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
+}
+
+namespace mu::iex::midi {
 class MTrack;
 
 namespace MidiInstr {
@@ -37,10 +40,10 @@ QString concatenateWithComma(const QString& left, const QString& right);
 bool isGrandStaff(const MTrack& t1, const MTrack& t2);
 void setGrandStaffProgram(QList<MTrack>& tracks);
 void findInstrumentsForAllTracks(const QList<MTrack>& tracks, bool forceReload = false);
-void createInstruments(Score* score, QList<MTrack>& tracks);
+void createInstruments(engraving::Score* score, QList<MTrack>& tracks);
 
 extern void instrumentTemplatesChanged();
 } // namespace MidiInstr
-} // namespace Ms
+} // namespace mu::iex::midi
 
 #endif // IMPORTMIDI_INSTRUMENT_H

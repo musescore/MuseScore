@@ -25,22 +25,22 @@
 
 #include "renderbase.h"
 
-namespace Ms {
-class Note;
-}
-
 namespace mu::engraving {
+class Note;
+
 class GlissandosRenderer : public RenderBase<GlissandosRenderer>
 {
 public:
     static const mpe::ArticulationTypeSet& supportedTypes();
 
-    static void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType type, const RenderingContext& context,
+    static void doRender(const EngravingItem* item, const mpe::ArticulationType type, const RenderingContext& context,
                          mpe::PlaybackEventList& result);
 
 private:
-    static void renderDiscreteGlissando(const Ms::Note* note, const RenderingContext& context, mpe::PlaybackEventList& result);
-    static void renderContinuousGlissando(const Ms::Note* note, const RenderingContext& context, mpe::PlaybackEventList& result);
+    static void renderDiscreteGlissando(const Note* note, const RenderingContext& context, mpe::PlaybackEventList& result);
+    static void renderContinuousGlissando(const Note* note, const RenderingContext& context, mpe::PlaybackEventList& result);
+
+    static mpe::pitch_level_t pitchLevelStep(const mpe::ArticulationAppliedData& articulationData);
 };
 }
 

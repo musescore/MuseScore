@@ -30,6 +30,9 @@
 #ifndef Q_OS_WASM
 #include <QThreadPool>
 #endif
+
+#include "view/internal/splashscreen.h"
+
 #include "view/dockwindow/docksetup.h"
 
 #include "modularity/ioc.h"
@@ -83,6 +86,15 @@ int AppShell::run(int argc, char** argv)
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
+    //! NOTE: For unknown reasons, Linux scaling for 1 is defined as 1.003 in fractional scaling.
+    //!       Because of this, some elements are drawn with a shift on the score.
+    //!       Let's make a Linux hack and round values above 0.75(see RoundPreferFloor)
+#ifdef Q_OS_LINUX
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor);
+#elif defined(Q_OS_WIN)
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+#endif
+
     QApplication app(argc, argv);
     QCoreApplication::setApplicationName(appName);
     QCoreApplication::setOrganizationName("MuseScore");
@@ -117,6 +129,11 @@ int AppShell::run(int argc, char** argv)
     commandLine.parse(QCoreApplication::arguments());
     commandLine.apply();
     framework::IApplication::RunMode runMode = muapplication()->runMode();
+
+    SplashScreen splashScreen;
+    if (runMode == framework::IApplication::RunMode::Editor) {
+        splashScreen.show();
+    }
 
     // ====================================================
     // Setup modules: onInit
@@ -160,8 +177,6 @@ int AppShell::run(int argc, char** argv)
             }, Qt::QueuedConnection);
     } break;
     case framework::IApplication::RunMode::Editor: {
-        QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
-
         // ====================================================
         // Setup Qml Engine
         // ====================================================
@@ -221,6 +236,8 @@ int AppShell::run(int argc, char** argv)
         QQuickWindow::setDefaultAlphaBuffer(true);
 
         engine->load(url);
+
+        splashScreen.close();
     }
     }
 
@@ -271,7 +288,7 @@ int AppShell::run(int argc, char** argv)
 int AppShell::processConverter(const CommandLineController::ConverterTask& task)
 {
     Ret ret = make_ret(Ret::Code::Ok);
-    io::path stylePath = task.params[CommandLineController::ParamKey::StylePath].toString();
+    io::path_t stylePath = task.params[CommandLineController::ParamKey::StylePath].toString();
     bool forceMode = task.params[CommandLineController::ParamKey::ForceMode].toBool();
 
     switch (task.type) {
@@ -285,7 +302,7 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
         ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode);
         break;
     case CommandLineController::ConvertType::ExportScoreMedia: {
-        io::path highlightConfigPath = task.params[CommandLineController::ParamKey::HighlightConfigPath].toString();
+        io::path_t highlightConfigPath = task.params[CommandLineController::ParamKey::HighlightConfigPath].toString();
         ret = converter()->exportScoreMedia(task.inputFile, task.outputFile, highlightConfigPath, stylePath, forceMode);
     } break;
     case CommandLineController::ConvertType::ExportScoreMeta:

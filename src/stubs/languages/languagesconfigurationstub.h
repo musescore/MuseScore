@@ -37,10 +37,10 @@ public:
     ValCh<LanguagesHash> languages() const override;
     Ret setLanguages(const LanguagesHash& languages) override;
 
-    io::path languagesUserAppDataPath() const override;
+    io::path_t languagesUserAppDataPath() const override;
 
-    io::paths languageFilePaths(const QString& languageCode) const override;
-    io::path languageArchivePath(const QString& languageCode) const override;
+    io::paths_t languageFilePaths(const QString& languageCode) const override;
+    io::path_t languageArchivePath(const QString& languageCode) const override;
 };
 }
 

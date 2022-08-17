@@ -104,6 +104,26 @@ export QML_SOURCES_PATHS=./
 linuxdeploy --appdir "${appdir}" # adds all shared library dependencies
 linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
 
+# Approximately on June 1, the QtQuick/Controls.2 stopped being deploying 
+# (at that time the linux deploy was updated). 
+# This is a hack, for the deployment of QtQuick/Controls.2 
+if [ ! -f ${appdir}/usr/lib/libQt5QuickControls2.so.5 ]; then
+    cp -r $BUILD_TOOLS/Qt/5152/qml/QtQuick/Controls.2 ${appdir}/usr/qml/QtQuick/Controls.2
+    cp -r $BUILD_TOOLS/Qt/5152/qml/QtQuick/Templates.2 ${appdir}/usr/qml/QtQuick/Templates.2
+    cp $BUILD_TOOLS/Qt/5152/lib/libQt5QuickControls2.so.5 ${appdir}/usr/lib/libQt5QuickControls2.so.5 
+    cp $BUILD_TOOLS/Qt/5152/lib/libQt5QuickTemplates2.so.5 ${appdir}/usr/lib/libQt5QuickTemplates2.so.5 
+fi
+
+# At an unknown point in time, the libqgtk3 plugin stopped being deployed
+if [ ! -f ${appdir}/plugins/platformthemes/libqgtk3.so ]; then
+  cp $BUILD_TOOLS/Qt/5152/plugins/platformthemes/libqgtk3.so ${appdir}/plugins/platformthemes/libqgtk3.so 
+fi
+
+# The system must be used
+if [ -f ${appdir}/lib/libglib-2.0.so.0 ]; then
+  rm -f ${appdir}/lib/libglib-2.0.so.0 
+fi
+
 unset QML_SOURCES_PATHS
 
 # In case this container is reused multiple times, return the moved libraries back

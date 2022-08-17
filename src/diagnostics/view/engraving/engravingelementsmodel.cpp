@@ -151,7 +151,7 @@ EngravingElementsModel::Item* EngravingElementsModel::itemByModelIndex(const QMo
     return m_allItems.value(index.internalId(), nullptr);
 }
 
-QVariantMap EngravingElementsModel::makeData(const Ms::EngravingObject* el) const
+QVariantMap EngravingElementsModel::makeData(const mu::engraving::EngravingObject* el) const
 {
     TRACEFUNC;
     if (!el) {
@@ -160,27 +160,27 @@ QVariantMap EngravingElementsModel::makeData(const Ms::EngravingObject* el) cons
 
     auto formatRect = [](const mu::RectF& r) {
         QString str = "[";
-        str += DataFormatter::formatReal(r.x(), 1) + ", ";
-        str += DataFormatter::formatReal(r.y(), 1) + ", ";
-        str += DataFormatter::formatReal(r.width(), 1) + ", ";
-        str += DataFormatter::formatReal(r.height(), 1) + "]";
+        str += DataFormatter::formatReal(r.x(), 1) + u", ";
+        str += DataFormatter::formatReal(r.y(), 1) + u", ";
+        str += DataFormatter::formatReal(r.width(), 1) + u", ";
+        str += DataFormatter::formatReal(r.height(), 1) + u"]";
         return str;
     };
 
     auto formatPoint= [](const mu::PointF& p) {
         QString str = "[";
-        str += DataFormatter::formatReal(p.x(), 1) + ", ";
-        str += DataFormatter::formatReal(p.y(), 1) + "]";
+        str += DataFormatter::formatReal(p.x(), 1) + u", ";
+        str += DataFormatter::formatReal(p.y(), 1) + u"]";
         return str;
     };
 
     QString name;
     if (el->isScore()) {
-        const Ms::Score* score = Ms::toScore(el);
+        const mu::engraving::Score* score = mu::engraving::toScore(el);
         if (score->isMaster()) {
-            name = "MasterScore: " + score->name();
+            name = "MasterScore: " + score->name().toQString();
         } else {
-            name = "Score: " + score->name();
+            name = "Score: " + score->name().toQString();
         }
     } else {
         name = el->typeName();
@@ -190,7 +190,7 @@ QVariantMap EngravingElementsModel::makeData(const Ms::EngravingObject* el) cons
     info += "children: " + QString::number(el->children().size());
     info += "\n";
     if (el->isEngravingItem()) {
-        const Ms::EngravingItem* item = Ms::toEngravingItem(el);
+        const mu::engraving::EngravingItem* item = mu::engraving::toEngravingItem(el);
         info += "pagePos: " + formatPoint(item->pagePos()) + ", bbox: " + formatRect(item->bbox());
     }
 
@@ -220,12 +220,12 @@ void EngravingElementsModel::reload()
     m_rootItem = createItem(nullptr);
 
     const EngravingObjectList& elements = elementsProvider()->elements();
-    for (const Ms::EngravingObject* el : elements) {
-        if (el == Ms::gpaletteScore) {
+    for (const mu::engraving::EngravingObject* el : elements) {
+        if (el == mu::engraving::gpaletteScore) {
             continue;
         }
 
-        if (el->isScore() && Ms::toScore(el)->isMaster()) {
+        if (el->isScore() && mu::engraving::toScore(el)->isMaster()) {
             Item* scoreItem = createItem(m_rootItem);
             scoreItem->setElement(el);
             load(elements, scoreItem);
@@ -246,12 +246,12 @@ void EngravingElementsModel::reload()
 void EngravingElementsModel::load(const EngravingObjectList& elements, Item* root)
 {
     TRACEFUNC;
-    for (const Ms::EngravingObject* el : elements) {
-        if (el == Ms::gpaletteScore) {
+    for (const mu::engraving::EngravingObject* el : elements) {
+        if (el == mu::engraving::gpaletteScore) {
             continue;
         }
 
-        Ms::EngravingObject* parent = el->parent();
+        mu::engraving::EngravingObject* parent = el->parent();
 
         if (parent == root->element()) {
             Item* item = createItem(root);
@@ -261,7 +261,7 @@ void EngravingElementsModel::load(const EngravingObjectList& elements, Item* roo
     }
 }
 
-const EngravingElementsModel::Item* EngravingElementsModel::findItem(const Ms::EngravingObject* el, const Item* root) const
+const EngravingElementsModel::Item* EngravingElementsModel::findItem(const mu::engraving::EngravingObject* el, const Item* root) const
 {
     if (root->element() == el) {
         return root;
@@ -280,13 +280,13 @@ void EngravingElementsModel::findAndAddLost(const EngravingObjectList& elements,
 {
     TRACEFUNC;
 
-    QSet<const Ms::EngravingObject*> used;
+    QSet<const mu::engraving::EngravingObject*> used;
     for (auto it = m_allItems.begin(); it != m_allItems.end(); ++it) {
         const Item* item = it.value();
         used.insert(item->element());
     }
 
-    for (const Ms::EngravingObject* el : elements) {
+    for (const mu::engraving::EngravingObject* el : elements) {
         if (used.contains(el)) {
             continue;
         }
@@ -319,15 +319,15 @@ void EngravingElementsModel::click1(QModelIndex index)
         return;
     }
 
-    const Ms::EngravingObject* el = item->element();
+    const mu::engraving::EngravingObject* el = item->element();
     if (!el) {
         return;
     }
 
-    const Ms::EngravingObject* parent = el->parent();
+    const mu::engraving::EngravingObject* parent = el->parent();
     UNUSED(parent);
 
-    const Ms::EngravingObject* explicitParent = el->explicitParent();
+    const mu::engraving::EngravingObject* explicitParent = el->explicitParent();
     UNUSED(explicitParent);
 
     size_t children = el->children().size();
@@ -338,7 +338,7 @@ void EngravingElementsModel::updateInfo()
 {
     const EngravingObjectList& elements = elementsProvider()->elements();
     QHash<QString, int> els;
-    for (const Ms::EngravingObject* el : elements) {
+    for (const mu::engraving::EngravingObject* el : elements) {
         els[el->typeName()] += 1;
     }
 

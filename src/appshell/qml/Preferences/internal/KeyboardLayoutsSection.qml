@@ -28,7 +28,7 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "Keyboard layout")
+    title: qsTrc("appshell/preferences", "Keyboard layout")
 
     navigation.direction: NavigationPanel.Horizontal
 
@@ -37,7 +37,7 @@ BaseSection {
 
     signal keyboardLayoutSelected(string keyboardLayout)
 
-    Dropdown {
+    StyledDropdown {
         id: dropdown
         width: root.columnWidth
 

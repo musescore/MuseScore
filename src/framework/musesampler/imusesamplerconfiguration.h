@@ -35,7 +35,7 @@ class IMuseSamplerConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMuseSamplerConfiguration() = default;
 
-    virtual mu::io::path libraryPath() const = 0;
+    virtual mu::io::path_t libraryPath() const = 0;
 };
 }
 

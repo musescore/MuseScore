@@ -54,7 +54,7 @@ echo "BUILD_VERSION: $BUILD_VERSION"
 echo "MAJOR_VERSION: $MAJOR_VERSION"
 echo "INSTALL_DIR: $INSTALL_DIR"
 
-# Constans
+# Constants
 HERE="$(cd "$(dirname "$0")" && pwd)"
 ORIGIN_DIR=${PWD}
 ROOT_DIR=${HERE}/../../..

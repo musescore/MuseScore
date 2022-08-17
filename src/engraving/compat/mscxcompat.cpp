@@ -21,26 +21,29 @@
  */
 #include "mscxcompat.h"
 
-#include <QFile>
-#include <QBuffer>
+#include "io/file.h"
+#include "io/buffer.h"
 
 #include "../rw/scorereader.h"
 
-#include "infrastructure/io/localfileinfoprovider.h"
+#include "infrastructure/localfileinfoprovider.h"
 
 #include "log.h"
 
-Ms::Score::FileError mu::engraving::compat::mscxToMscz(const QString& mscxFilePath, QByteArray* msczData)
+using namespace mu::io;
+using namespace mu::engraving;
+
+Err mu::engraving::compat::mscxToMscz(const String& mscxFilePath, ByteArray* msczData)
 {
-    QFile mscxFile(mscxFilePath);
-    if (!mscxFile.open(QIODevice::ReadOnly)) {
+    File mscxFile(mscxFilePath);
+    if (!mscxFile.open(IODevice::ReadOnly)) {
         LOGE() << "failed open file: " << mscxFilePath;
-        return Ms::Score::FileError::FILE_OPEN_ERROR;
+        return Err::FileOpenError;
     }
 
-    QByteArray mscxData = mscxFile.readAll();
+    ByteArray mscxData = mscxFile.readAll();
 
-    QBuffer buf(msczData);
+    Buffer buf(msczData);
     MscWriter::Params params;
     params.device = &buf;
     params.filePath = mscxFilePath;
@@ -49,35 +52,35 @@ Ms::Score::FileError mu::engraving::compat::mscxToMscz(const QString& mscxFilePa
     writer.open();
     writer.writeScoreFile(mscxData);
 
-    return Ms::Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }
 
-Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* score, const QString& path, bool ignoreVersionError)
+Err mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const String& path, bool ignoreVersionError)
 {
-    QByteArray msczData;
-    if (path.endsWith(".mscx", Qt::CaseInsensitive)) {
+    ByteArray msczData;
+    if (path.endsWith(u".mscx", mu::CaseInsensitive)) {
         //! NOTE Convert mscx -> mscz
 
-        Ms::Score::FileError err = mscxToMscz(path, &msczData);
-        if (err != Ms::Score::FileError::FILE_NO_ERROR) {
+        Err err = mscxToMscz(path, &msczData);
+        if (err != Err::NoError) {
             return err;
         }
-    } else if (path.endsWith(".mscz", Qt::CaseInsensitive)) {
-        QFile msczFile(path);
-        if (!msczFile.open(QIODevice::ReadOnly)) {
+    } else if (path.endsWith(u".mscz", mu::CaseInsensitive)) {
+        File msczFile(path);
+        if (!msczFile.open(IODevice::ReadOnly)) {
             LOGE() << "failed open file: " << path;
-            return Ms::Score::FileError::FILE_OPEN_ERROR;
+            return Err::FileOpenError;
         }
 
         msczData = msczFile.readAll();
     } else {
         LOGE() << "unknown type, path: " << path;
-        return Ms::Score::FileError::FILE_UNKNOWN_TYPE;
+        return Err::FileUnknownType;
     }
 
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
 
-    QBuffer msczBuf(&msczData);
+    Buffer msczBuf(&msczData);
     MscReader::Params params;
     params.device = &msczBuf;
     params.filePath = path;
@@ -87,37 +90,37 @@ Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* scor
     reader.open();
 
     ScoreReader scoreReader;
-    engraving::Err err = scoreReader.loadMscz(score, reader, ignoreVersionError);
-    return err == Err::NoError ? Ms::Score::FileError::FILE_NO_ERROR : Ms::Score::FileError::FILE_ERROR;
+    Err err = scoreReader.loadMscz(score, reader, ignoreVersionError);
+    return err;
 }
 
-mu::engraving::Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const QString& path, bool ignoreVersionError)
+Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const String& path, bool ignoreVersionError)
 {
-    QByteArray msczData;
-    QString filePath = path;
-    if (path.endsWith(".mscx", Qt::CaseInsensitive)) {
+    ByteArray msczData;
+    String filePath = path;
+    if (path.endsWith(u".mscx", mu::CaseInsensitive)) {
         //! NOTE Convert mscx -> mscz
 
-        Ms::Score::FileError err = mscxToMscz(path, &msczData);
-        if (err != Ms::Score::FileError::FILE_NO_ERROR) {
-            return scoreFileErrorToErr(err);
+        Err err = mscxToMscz(path, &msczData);
+        if (err != Err::NoError) {
+            return err;
         }
-    } else if (path.endsWith(".mscz", Qt::CaseInsensitive)) {
-        QFile msczFile(path);
-        if (!msczFile.open(QIODevice::ReadOnly)) {
+    } else if (path.endsWith(u".mscz", mu::CaseInsensitive)) {
+        File msczFile(path);
+        if (!msczFile.open(IODevice::ReadOnly)) {
             LOGE() << "failed open file: " << path;
-            return scoreFileErrorToErr(Ms::Score::FileError::FILE_OPEN_ERROR);
+            return Err::FileOpenError;
         }
 
         msczData = msczFile.readAll();
     } else {
         LOGE() << "unknown type, path: " << path;
-        return scoreFileErrorToErr(Ms::Score::FileError::FILE_UNKNOWN_TYPE);
+        return Err::FileUnknownType;
     }
 
     project->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
 
-    QBuffer msczBuf(&msczData);
+    Buffer msczBuf(&msczData);
     MscReader::Params params;
     params.device = &msczBuf;
     params.filePath = filePath;

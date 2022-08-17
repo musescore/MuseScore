@@ -22,7 +22,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -166,7 +166,7 @@
             <root>15</root>
             </Harmony>
           <Beam>
-            <l1>24</l1>
+            <l1>30</l1>
             <l2>32</l2>
             </Beam>
           <Chord>
@@ -254,7 +254,7 @@
             <root>16</root>
             </Harmony>
           <Beam>
-            <l1>24</l1>
+            <l1>30</l1>
             <l2>32</l2>
             </Beam>
           <Chord>

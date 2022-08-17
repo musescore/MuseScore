@@ -21,15 +21,14 @@
  */
 #include "overeader.h"
 
-#include "libmscore/masterscore.h"
-#include "notation/notationerrors.h"
+#include "engraving/engravingerrors.h"
 
-extern Ms::Score::FileError importOve(Ms::MasterScore*, const QString& name);
+extern mu::engraving::Err importOve(mu::engraving::MasterScore*, const QString& name);
 
 using namespace mu::iex::ove;
 
-mu::Ret OveReader::read(Ms::MasterScore* score, const io::path& path, const Options&)
+mu::Ret OveReader::read(mu::engraving::MasterScore* score, const io::path_t& path, const Options&)
 {
-    Ms::Score::FileError err = importOve(score, path.toQString());
-    return mu::notation::scoreFileErrorToRet(err, path);
+    mu::engraving::Err err = importOve(score, path.toQString());
+    return mu::engraving::make_ret(err, path);
 }

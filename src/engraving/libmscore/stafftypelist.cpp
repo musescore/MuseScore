@@ -26,7 +26,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   staffType
 //---------------------------------------------------------
@@ -56,7 +56,7 @@ const StaffType& StaffTypeList::staffType(const Fraction& tick) const
 
 StaffType& StaffTypeList::staffType(const Fraction& tick)
 {
-    Q_ASSERT(!tick.negative());
+    assert(!tick.negative());
 
     if (staffTypeChanges.empty()) {
         return firstStaffType;
@@ -75,7 +75,7 @@ StaffType& StaffTypeList::staffType(const Fraction& tick)
 
 StaffType* StaffTypeList::setStaffType(const Fraction& tick, const StaffType& st)
 {
-    Q_ASSERT(!tick.negative());
+    assert(!tick.negative());
 
     if (tick.isZero()) {
         firstStaffType = st;
@@ -100,7 +100,7 @@ StaffType* StaffTypeList::setStaffType(const Fraction& tick, const StaffType& st
 
 bool StaffTypeList::removeStaffType(const Fraction& tick)
 {
-    Q_ASSERT(!tick.negative());
+    assert(!tick.negative());
     if (tick.isZero()) {
         firstStaffType = StaffType();
         return true;
@@ -114,6 +114,18 @@ bool StaffTypeList::removeStaffType(const Fraction& tick)
 
     staffTypeChanges.erase(i);
     return true;
+}
+
+bool StaffTypeList::isStaffTypeStartFrom(const Fraction& tick) const
+{
+    return staffTypeChanges.find(tick.ticks()) != staffTypeChanges.end();
+}
+
+void StaffTypeList::moveStaffType(const Fraction& from, const Fraction& to)
+{
+    StaffType tmp = staffType(from);
+    removeStaffType(from);
+    setStaffType(to, tmp);
 }
 
 //---------------------------------------------------------

@@ -38,18 +38,19 @@ TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryServic
 
 void TempoSettingsModel::createProperties()
 {
-    m_isDefaultTempoForced = buildPropertyItem(Ms::Pid::TEMPO_FOLLOW_TEXT, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_isDefaultTempoForced
+        = buildPropertyItem(mu::engraving::Pid::TEMPO_FOLLOW_TEXT, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
 
-    m_tempo = buildPropertyItem(Ms::Pid::TEMPO);
+    m_tempo = buildPropertyItem(mu::engraving::Pid::TEMPO);
 }
 
 void TempoSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::TEMPO_TEXT);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::TEMPO_TEXT);
 }
 
 void TempoSettingsModel::loadProperties()

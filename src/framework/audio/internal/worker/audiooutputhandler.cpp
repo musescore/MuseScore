@@ -168,7 +168,7 @@ Promise<AudioSignalChanges> AudioOutputHandler::masterSignalChanges() const
     }, AudioThread::ID);
 }
 
-Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceId, const io::path& destination,
+Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination,
                                                  const SoundTrackFormat& format)
 {
     return Promise<bool>([this, sequenceId, destination, format](auto resolve, auto reject) {
@@ -184,10 +184,14 @@ Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceI
         }
 
 #ifdef ENABLE_AUDIO_EXPORT
+        s->player()->seek(0);
         msecs_t totalDuration = s->player()->duration();
         SoundTrackWriter writer(destination, format, totalDuration, mixer());
 
-        return resolve(writer.write());
+        bool ok = writer.write();
+        s->player()->seek(0);
+
+        return resolve(ok);
 #else
         return reject(static_cast<int>(Err::DisabledAudioExport), "audio export is disabled");
 #endif

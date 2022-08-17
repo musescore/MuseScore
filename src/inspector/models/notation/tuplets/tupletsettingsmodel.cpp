@@ -31,7 +31,7 @@ using namespace mu::inspector;
 using Icon = mu::ui::IconCode::Code;
 
 TupletSettingsModel::TupletSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository, Ms::ElementType::TUPLET)
+    : AbstractInspectorModel(parent, repository, mu::engraving::ElementType::TUPLET)
 {
     setModelType(InspectorModelType::TYPE_TUPLET);
     setTitle(qtrc("inspector", "Tuplet"));
@@ -61,7 +61,7 @@ PropertyItem* TupletSettingsModel::lineThickness() const
 
 QVariantList TupletSettingsModel::possibleNumberTypes() const
 {
-    using Type = Ms::TupletNumberType;
+    using Type = mu::engraving::TupletNumberType;
 
     QVariantList types {
         object(Type::SHOW_NUMBER, qtrc("inspector", "Number")),
@@ -74,7 +74,7 @@ QVariantList TupletSettingsModel::possibleNumberTypes() const
 
 QVariantList TupletSettingsModel::possibleBracketTypes() const
 {
-    using Type = Ms::TupletBracketType;
+    using Type = mu::engraving::TupletBracketType;
 
     QVariantList types {
         object(Type::AUTO_BRACKET, qtrc("inspector", "Auto")),
@@ -87,10 +87,10 @@ QVariantList TupletSettingsModel::possibleBracketTypes() const
 
 void TupletSettingsModel::createProperties()
 {
-    m_directionType = buildPropertyItem(Ms::Pid::DIRECTION);
-    m_numberType = buildPropertyItem(Ms::Pid::NUMBER_TYPE);
-    m_bracketType = buildPropertyItem(Ms::Pid::BRACKET_TYPE);
-    m_lineThickness = buildPropertyItem(Ms::Pid::LINE_WIDTH);
+    m_directionType = buildPropertyItem(mu::engraving::Pid::DIRECTION);
+    m_numberType = buildPropertyItem(mu::engraving::Pid::NUMBER_TYPE);
+    m_bracketType = buildPropertyItem(mu::engraving::Pid::BRACKET_TYPE);
+    m_lineThickness = buildPropertyItem(mu::engraving::Pid::LINE_WIDTH);
 }
 
 void TupletSettingsModel::loadProperties()

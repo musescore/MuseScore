@@ -22,10 +22,13 @@
 
 #include "mscnotationwriter.h"
 
+#include "io/buffer.h"
+#include "io/file.h"
 #include "engraving/engravingproject.h"
 
 #include "log.h"
 
+using namespace mu::io;
 using namespace mu::engraving;
 using namespace mu::framework;
 using namespace mu::notation;
@@ -47,26 +50,28 @@ bool MscNotationWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret MscNotationWriter::write(INotationPtr notation, io::Device& destinationDevice, const Options&)
+mu::Ret MscNotationWriter::write(INotationPtr notation, QIODevice& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
     }
 
-    Ms::Score* score = notation->elements()->msScore();
+    mu::engraving::Score* score = notation->elements()->msScore();
 
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);
     }
+
+    Buffer buf;
 
     MscWriter::Params params;
     params.mode = m_mode;
 
     params.filePath = destinationDevice.property("path").toString();
     if (m_mode != MscIoMode::Dir) {
-        params.device = &destinationDevice;
-    } else if (QFile::exists(params.filePath)) {
-        QFile::remove(params.filePath);
+        params.device = &buf;
+    } else if (File::exists(params.filePath)) {
+        File::remove(params.filePath);
     }
 
     MscWriter msczWriter(params);
@@ -75,23 +80,17 @@ mu::Ret MscNotationWriter::write(INotationPtr notation, io::Device& destinationD
         return Ret(Ret::Code::UnknownError);
     }
     notation->elements()->msScore()->masterScore()->project().lock()->writeMscz(msczWriter, false, true);
+
+    if (m_mode != MscIoMode::Dir) {
+        ByteArray ba = buf.readAll();
+        destinationDevice.write(reinterpret_cast<const char*>(ba.constData()), ba.size());
+    }
+
     return Ret(Ret::Code::Ok);
 }
 
-mu::Ret MscNotationWriter::writeList(const INotationPtrList&, io::Device&, const Options&)
+mu::Ret MscNotationWriter::writeList(const INotationPtrList&, QIODevice&, const Options&)
 {
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);
-}
-
-void MscNotationWriter::abort()
-{
-    NOT_IMPLEMENTED;
-}
-
-ProgressChannel MscNotationWriter::progress() const
-{
-    NOT_IMPLEMENTED;
-    static ProgressChannel prog;
-    return prog;
 }

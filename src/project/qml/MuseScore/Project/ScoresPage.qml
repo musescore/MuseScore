@@ -99,7 +99,7 @@ FocusScope {
             navigation.name: "Scores Search"
             navigation.panel: navSearchPanel
             navigation.order: 1
-            accessible.name: qsTrc("project", "Recent scores search")
+            accessible.name: qsTrc("project", "Search recent scores")
         }
     }
 
@@ -161,14 +161,34 @@ FocusScope {
     }
 
     Rectangle {
+        anchors.bottom: buttonsPanel.top
+
+        width: parent.width
+        height: 8
+        z: 1
+
+        gradient: Gradient {
+            GradientStop {
+                position: 0.0
+                color: "transparent"
+            }
+
+            GradientStop {
+                position: 1.0
+                color: buttonsPanel.color
+            }
+        }
+    }
+
+    Rectangle {
         id: buttonsPanel
 
         anchors.bottom: parent.bottom
 
-        height: 114
+        height: 100
         width: parent.width
 
-        color: ui.theme.popupBackgroundColor
+        color: ui.theme.backgroundSecondaryColor
 
         NavigationPanel {
             id: navBottomPanel
@@ -176,7 +196,9 @@ FocusScope {
             section: navSec
             direction: NavigationPanel.Horizontal
             order: 3
-            accessible.name: qsTrc("project", "Recent scores bottom")
+
+            //: accessibility name for the panel at the bottom of the "Scores" page
+            accessible.name: qsTrc("project", "Scores actions")
         }
 
         Row {

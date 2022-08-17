@@ -26,9 +26,11 @@
 
 #include "engravingobject.h"
 
-namespace Ms {
+namespace mu::engraving {
 class LinkedObjects : public std::list<EngravingObject*>
 {
+    OBJECT_ALLOCATOR(engraving, LinkedObjects)
+
     int _lid;           // unique id for every linked list
 
 public:

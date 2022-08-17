@@ -30,7 +30,9 @@
 #include "libmscore/tuplet.h"
 #include "importmidi_fraction.h"
 
-namespace Ms {
+using namespace mu::engraving;
+
+namespace mu::iex::midi {
 namespace Swing {
 class SwingDetector
 {
@@ -68,7 +70,7 @@ void SwingDetector::add(ChordRest* cr)
             return;
         }
         const int tickInBar = (cr->tick() - cr->measure()->tick()).ticks();
-        if (tickInBar % Constant::division == 0) {
+        if (tickInBar % Constants::division == 0) {
             append(cr);
         }
     } else {
@@ -170,7 +172,7 @@ void SwingDetector::applySwing()
     const int startTick = first->segment()->tick().ticks();
     ChordRest* last = elements.back();
     last->segment()->remove(last);
-    Segment* s = last->measure()->getSegment(SegmentType::ChordRest, Fraction::fromTicks(startTick + Constant::division / 2));
+    Segment* s = last->measure()->getSegment(SegmentType::ChordRest, Fraction::fromTicks(startTick + Constants::division / 2));
     s->add(last);
 
     if (elements.size() == 3) {
@@ -255,4 +257,4 @@ void detectSwing(Staff* staff, MidiOperations::Swing swingType)
     }
 }
 } // namespace Swing
-} // namespace Ms
+} // namespace mu::iex::midi

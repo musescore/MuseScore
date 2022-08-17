@@ -29,7 +29,7 @@ import MuseScore.Preferences 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "UI colors")
+    title: qsTrc("appshell/preferences", "UI colors")
     navigation.direction: NavigationPanel.Both
 
     signal colorChangeRequested(var newColor, var propertyType)

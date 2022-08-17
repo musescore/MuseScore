@@ -28,7 +28,7 @@
 
 #include "notation/notationtypes.h"
 
-namespace Ms {
+namespace mu::engraving {
 class EditData;
 enum class ElementType;
 }
@@ -40,11 +40,11 @@ public:
     virtual ~INotationUndoStack() = default;
 
     virtual bool canUndo() const = 0;
-    virtual void undo(Ms::EditData*) = 0;
+    virtual void undo(mu::engraving::EditData*) = 0;
     virtual async::Notification undoNotification() const = 0;
 
     virtual bool canRedo() const = 0;
-    virtual void redo(Ms::EditData*) = 0;
+    virtual void redo(mu::engraving::EditData*) = 0;
     virtual async::Notification redoNotification() const = 0;
 
     virtual void prepareChanges() = 0;

@@ -23,7 +23,10 @@
 #ifndef MU_ENGRAVING_ENGRAVINGERRORS_H
 #define MU_ENGRAVING_ENGRAVINGERRORS_H
 
-#include "libmscore/masterscore.h"
+#include "io/path.h"
+#include "types/ret.h"
+
+#include "translation.h"
 
 namespace mu::engraving {
 enum class Err {
@@ -41,31 +44,62 @@ enum class Err {
     FileTooNew = 2007,
     FileOld300Format = 2008,
     FileCorrupted = 2009,
-    FileCriticalCorrupted = 2010,
+    FileCriticallyCorrupted = 2010,
 
     UserAbort = 2011,
     IgnoreError = 2012
 };
 
-inline Err scoreFileErrorToErr(Ms::Score::FileError err)
+inline Ret make_ret(Err err, const io::path_t& filePath = "")
 {
+    String text;
+
     switch (err) {
-    case Ms::Score::FileError::FILE_NO_ERROR:       return Err::NoError;
-    case Ms::Score::FileError::FILE_ERROR:          return Err::FileUnknownError;
-    case Ms::Score::FileError::FILE_NOT_FOUND:      return Err::FileNotFound;
-    case Ms::Score::FileError::FILE_OPEN_ERROR:     return Err::FileOpenError;
-    case Ms::Score::FileError::FILE_BAD_FORMAT:     return Err::FileBadFormat;
-    case Ms::Score::FileError::FILE_UNKNOWN_TYPE:   return Err::FileUnknownType;
-    case Ms::Score::FileError::FILE_NO_ROOTFILE:    return Err::FileBadFormat;
-    case Ms::Score::FileError::FILE_TOO_OLD:        return Err::FileTooOld;
-    case Ms::Score::FileError::FILE_TOO_NEW:        return Err::FileTooNew;
-    case Ms::Score::FileError::FILE_OLD_300_FORMAT: return Err::FileOld300Format;
-    case Ms::Score::FileError::FILE_CORRUPTED:      return Err::FileCorrupted;
-    case Ms::Score::FileError::FILE_CRITICALLY_CORRUPTED: return Err::FileCriticalCorrupted;
-    case Ms::Score::FileError::FILE_USER_ABORT:      return Err::UserAbort;
-    case Ms::Score::FileError::FILE_IGNORE_ERROR:    return Err::IgnoreError;
+    case Err::FileUnknownError:
+        text = mtrc("engraving", "Unknown error");
+        break;
+    case Err::FileNotFound:
+        text = mtrc("engraving", "File \"%1\" not found").arg(filePath.toString());
+        break;
+    case Err::FileOpenError:
+        text = mtrc("engraving", "File open error");
+        break;
+    case Err::FileBadFormat:
+        text = mtrc("engraving", "Bad format");
+        break;
+    case Err::FileUnknownType:
+        text = mtrc("engraving", "Unknown filetype");
+        break;
+    case Err::FileTooOld:
+        text = mtrc("engraving", "This file was last saved in a version older than 2.0.0. "
+                                 "You can convert this score by opening and then "
+                                 "saving in MuseScore version 2.x. "
+                                 "Visit the <a href=\"%1\">MuseScore download page</a> to obtain such a 2.x version.")
+               .arg(u"https://musescore.org/download#older-versions");
+        break;
+    case Err::FileTooNew:
+        text = mtrc("engraving", "This file was saved using a newer version of MuseScore. "
+                                 "Visit the <a href=\"%1\">MuseScore website</a> to obtain the latest version.")
+               .arg(u"https://musescore.org");
+        break;
+    case Err::FileOld300Format:
+        text = mtrc("engraving", "This file was last saved with a development version of 3.0.");
+        break;
+    case Err::FileCorrupted:
+        text = mtrc("engraving", "File \"%1\" is corrupted.").arg(filePath.toString());
+        break;
+    case Err::FileCriticallyCorrupted:
+        text = mtrc("engraving", "File \"%1\" is critically corrupted and cannot be processed.").arg(filePath.toString());
+        break;
+    case Err::Undefined:
+    case Err::NoError:
+    case Err::UnknownError:
+    case Err::IgnoreError:
+    case Err::UserAbort:
+        break;
     }
-    return Err::FileUnknownError;
+
+    return mu::Ret(static_cast<int>(err), text.toStdString());
 }
 }
 

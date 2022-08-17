@@ -38,8 +38,8 @@ ApplicationWindow {
     width: 1150
     height: 800
 
-    minimumWidth: 1150
-    minimumHeight: 600
+    minimumWidth: 1050
+    minimumHeight: 500
 
     visible: false
 
@@ -55,6 +55,8 @@ ApplicationWindow {
     }
 
     MainWindowProvider {
+        id: windowProvider
+
         window: root
 
         //! NOTE These properties of QWindow (of which ApplicationWindow is derived)
@@ -75,5 +77,9 @@ ApplicationWindow {
 
     WindowDropArea {
         anchors.fill: parent
+    }
+
+    function showMinimizedWithSavePreviousState() {
+        windowProvider.showMinimizedWithSavePreviousState()
     }
 }

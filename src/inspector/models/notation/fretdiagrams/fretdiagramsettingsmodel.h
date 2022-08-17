@@ -36,7 +36,7 @@ class FretDiagramSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * fretsCount READ fretsCount CONSTANT)
     Q_PROPERTY(PropertyItem * isNutVisible READ isNutVisible CONSTANT)
     Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
-    Q_PROPERTY(PropertyItem * startingFretNumber READ startingFretNumber CONSTANT)
+    Q_PROPERTY(PropertyItem * fretNumber READ fretNumber CONSTANT)
 
     Q_PROPERTY(bool isBarreModeOn READ isBarreModeOn WRITE setIsBarreModeOn NOTIFY isBarreModeOnChanged)
     Q_PROPERTY(bool isMultipleDotsModeOn READ isMultipleDotsModeOn WRITE setIsMultipleDotsModeOn NOTIFY isMultipleDotsModeOnChanged)
@@ -59,7 +59,7 @@ public:
     PropertyItem* fretsCount() const;
     PropertyItem* isNutVisible() const;
     PropertyItem* placement() const;
-    PropertyItem* startingFretNumber() const;
+    PropertyItem* fretNumber() const;
 
     QVariant fretDiagram() const;
 
@@ -90,9 +90,9 @@ private:
     PropertyItem* m_fretsCount = nullptr;
     PropertyItem* m_isNutVisible = nullptr;
     PropertyItem* m_placement = nullptr;
-    PropertyItem* m_startingFretNumber = nullptr;
+    PropertyItem* m_fretNumber = nullptr;
 
-    Ms::FretDiagram* m_fretDiagram = nullptr;
+    mu::engraving::FretDiagram* m_fretDiagram = nullptr;
 
     bool m_isBarreModeOn = false;
     bool m_isMultipleDotsModeOn = false;

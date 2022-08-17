@@ -50,9 +50,9 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::draw;
 using namespace mu::engraving;
 using namespace mu::palette;
-using namespace Ms;
 
 //---------------------------------------------------------
 //   KeyCanvas
@@ -123,7 +123,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     qreal x = 3;
     qreal w = ww - 6;
 
-    painter.setWorldTransform(mu::Transform::fromQTransform(_matrix));
+    painter.setWorldTransform(Transform::fromQTransform(_matrix));
 
     QRectF r = imatrix.mapRect(QRectF(x, y, w, wh));
 
@@ -214,7 +214,6 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
     const QMimeData* dta = event->mimeData();
     if (dta->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
         QByteArray a = dta->data(mu::commonscene::MIME_SYMBOL_FORMAT);
-
         XmlReader e(a);
 
         PointF dragOffset;
@@ -231,9 +230,9 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
         dragElement->layout();
     } else {
         if (MScore::debugMode) {
-            qDebug("KeyCanvas::dragEnterEvent: formats:");
+            LOGD("KeyCanvas::dragEnterEvent: formats:");
             foreach (const QString& s, event->mimeData()->formats()) {
-                qDebug("   %s", qPrintable(s));
+                LOGD("   %s", qPrintable(s));
             }
         }
     }
@@ -275,11 +274,23 @@ void KeyCanvas::dropEvent(QDropEvent*)
 
 void KeyCanvas::snap(Accidental* a)
 {
-    double y        = a->ipos().y();
-    double spatium2 = gpaletteScore->spatium() * .5;
-    int line        = int((y + spatium2 * .5) / spatium2);
-    y               = line * spatium2;
-    a->rypos()      = y;
+    double _spatium = gpaletteScore->spatium();
+    double spatium2 = _spatium * .5;
+    double y = a->ipos().y();
+    int line = round(y / spatium2);
+    y = line * spatium2;
+    a->setPosY(y);
+    // take default xposition unless Control is pressed
+    int i = accidentals.indexOf(a);
+    if (i > 0) {
+        qreal accidentalGap = DefaultStyle::baseStyle().styleS(Sid::keysigAccidentalDistance).val();
+        Accidental* prev = accidentals[i - 1];
+        double prevX = prev->ipos().x();
+        qreal prevWidth = prev->symWidth(prev->symbol());
+        if (!QGuiApplication::keyboardModifiers().testFlag(Qt::ControlModifier)) {
+            a->setPosX(prevX + prevWidth + accidentalGap * _spatium);
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -337,7 +348,7 @@ KeyEditor::KeyEditor(QWidget* parent)
     connect(m_keySigPaletteWidget, &PaletteWidget::changed, this, &KeyEditor::setDirty);
 
     //
-    // set all "buildin" key signatures to read only
+    // set all "builtin" key signatures to read only
     //
     int n = m_keySigPaletteWidget->actualCellCount();
     for (int i = 0; i < n; ++i) {
@@ -376,19 +387,25 @@ void KeyEditor::addClicked()
 
     KeySigEvent e;
     e.setCustom(true);
-    for (Accidental* a : al) {
+    qreal accidentalGap = DefaultStyle::baseStyle().styleS(Sid::keysigAccidentalDistance).val();
+    for (int i = 0; i < al.size(); ++i) {
+        Accidental* a = al[i];
         CustDef c;
-        c.sym       = a->symbol();
-        int idx     = e.customKeyDefs().size();
-        PointF pos  = a->ipos();
-        pos.rx()   -= xoff;
-        c.xAlt      = pos.x() / spatium - idx * e.xstep();
-        int line    = static_cast<int>(round((pos.y() / spatium) * 2));
-        bool flat   = QString(SymNames::nameForSymId(c.sym)).contains("Flat");
-        c.degree    = (3 - line) % 7;
-        c.degree   += (c.degree < 0) ? 7 : 0;
-        line       += flat ? -1 : 1; // top accidentals in treble clef are gis (#), or es (b)
-        c.octAlt    = static_cast<int>((line - (line >= 0 ? 0 : 6)) / 7);
+        c.sym = a->symbol();
+        PointF pos = a->ipos();
+        c.xAlt = (pos.x() - xoff) / spatium;
+        if (i > 0) {
+            Accidental* prev = al[i - 1];
+            PointF prevPos = prev->ipos();
+            qreal prevWidth = prev->symWidth(prev->symbol());
+            c.xAlt -= (prevPos.x() - xoff + prevWidth) / spatium + accidentalGap;
+        }
+        int line = static_cast<int>(round((pos.y() / spatium) * 2));
+        bool flat = std::string(SymNames::nameForSymId(c.sym).ascii()).find("Flat") != std::string::npos;
+        c.degree = (3 - line) % 7;
+        c.degree += (c.degree < 0) ? 7 : 0;
+        line += flat ? -1 : 1; // top accidentals in treble clef are gis (#), or es (b)
+        c.octAlt = static_cast<int>((line - (line >= 0 ? 0 : 6)) / 7);
         e.customKeyDefs().push_back(c);
     }
     auto ks = Factory::makeKeySig(gpaletteScore->dummy()->segment());

@@ -51,7 +51,7 @@ StyledDialogView {
             spacing: 12
 
             StyledTextLabel {
-                text: qsTrc("notation", "Edit Grid")
+                text: qsTrc("notation", "Edit grid")
                 font: ui.theme.bodyBoldFont
             }
 
@@ -87,7 +87,7 @@ StyledDialogView {
                         maxValue: 20
                         minValue: 1
 
-                        measureUnitsSymbol: qsTrc("notation", "sp")
+                        measureUnitsSymbol: qsTrc("global", "sp")
 
                         onValueEdited: function(newValue) {
                             model.horizontalGridSizeSpatium = newValue
@@ -128,7 +128,7 @@ StyledDialogView {
                         maxValue: 20
                         minValue: 1
 
-                        measureUnitsSymbol: qsTrc("notation", "sp")
+                        measureUnitsSymbol: qsTrc("global", "sp")
 
                         onValueEdited: function(newValue) {
                             model.verticalGridSizeSpatium = newValue

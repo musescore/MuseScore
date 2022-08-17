@@ -35,7 +35,7 @@ static const Settings::Key EXPORTRPNS_KEY("iex_midi", "io/midi/exportRPNs");
 
 void MidiConfiguration::init()
 {
-    settings()->setDefaultValue(SHORTEST_NOTE_KEY, Val(Ms::Constant::division / 4));
+    settings()->setDefaultValue(SHORTEST_NOTE_KEY, Val(mu::engraving::Constants::division / 4));
     settings()->setDefaultValue(EXPORTRPNS_KEY, Val(false));
 }
 
@@ -59,7 +59,7 @@ void MidiConfiguration::setIsMidiExportRpns(bool exportRpns) const
     settings()->setSharedValue(EXPORTRPNS_KEY, Val(exportRpns));
 }
 
-void MidiConfiguration::setMidiImportOperationsFile(const mu::io::path& filePath) const
+void MidiConfiguration::setMidiImportOperationsFile(const mu::io::path_t& filePath) const
 {
-    Ms::midiImportOperations.setOperationsFile(filePath.toQString());
+    midiImportOperations.setOperationsFile(filePath.toQString());
 }

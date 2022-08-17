@@ -23,10 +23,10 @@
 #ifndef MU_ENGRAVING_READSTYLE_H
 #define MU_ENGRAVING_READSTYLE_H
 
-#include <QByteArray>
-#include <QString>
+#include "types/bytearray.h"
+#include "types/string.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class XmlReader;
 class MStyle;
@@ -36,21 +36,21 @@ namespace mu::engraving::compat {
 class ReadStyleHook
 {
 public:
-    ReadStyleHook(Ms::Score* score, const QByteArray& scoreData, const QString& completeBaseName);
+    ReadStyleHook(Score* score, const ByteArray& scoreData, const String& completeBaseName);
 
     void setupDefaultStyle();
 
-    void readStyleTag(Ms::XmlReader& e);
+    void readStyleTag(XmlReader& e);
 
     static int styleDefaultByMscVersion(const int mscVer);
-    static void setupDefaultStyle(Ms::Score* score);
-    static void readStyleTag(Ms::Score* score, Ms::XmlReader& e);
-    static bool readStyleProperties(Ms::MStyle* style, Ms::XmlReader& e);
+    static void setupDefaultStyle(Score* score);
+    static void readStyleTag(Score* score, XmlReader& e);
+    static bool readStyleProperties(MStyle* style, XmlReader& e);
 
 private:
-    Ms::Score* m_score = nullptr;
-    const QByteArray& m_scoreData;
-    const QString& m_completeBaseName;
+    Score* m_score = nullptr;
+    const ByteArray& m_scoreData;
+    const String& m_completeBaseName;
 };
 }
 

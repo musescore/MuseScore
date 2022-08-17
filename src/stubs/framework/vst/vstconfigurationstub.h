@@ -29,9 +29,10 @@ namespace mu::vst {
 class VstConfigurationStub : public IVstConfiguration
 {
 public:
-    io::paths userVstDirectories() const override;
-    void setUserVstDirectories(const io::paths& paths) override;
-    async::Channel<io::paths> userVstDirectoriesChanged() const override;
+    io::paths_t userVstDirectories() const override;
+    void setUserVstDirectories(const io::paths_t& paths) override;
+    async::Channel<io::paths_t> userVstDirectoriesChanged() const override;
+    io::path_t knownPluginsDir() const override;
 };
 }
 

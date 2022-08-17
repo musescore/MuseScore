@@ -23,7 +23,7 @@
 #define MU_PROJECT_IPROJECTFILESCONTROLLER_H
 
 #include "modularity/imoduleexport.h"
-#include "ret.h"
+#include "types/ret.h"
 #include "io/path.h"
 
 namespace mu::project {
@@ -34,12 +34,12 @@ class IProjectFilesController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IProjectFilesController() = default;
 
-    virtual bool isFileSupported(const io::path& path) const = 0;
-    virtual Ret openProject(const io::path& path) = 0;
+    virtual bool isFileSupported(const io::path_t& path) const = 0;
+    virtual Ret openProject(const io::path_t& path) = 0;
     virtual bool closeOpenedProject(bool quitApp = false) = 0;
-    virtual bool isProjectOpened(const io::path& path) const = 0;
+    virtual bool isProjectOpened(const io::path_t& path) const = 0;
     virtual bool isAnyProjectOpened() const = 0;
-    virtual bool saveProject(const io::path& path = io::path()) = 0;
+    virtual bool saveProject(const io::path_t& path = io::path_t()) = 0;
 };
 }
 

@@ -26,10 +26,12 @@
 #include <list>
 #include <vector>
 
+#include "global/allocator.h"
+
 #include "types/fraction.h"
 #include "types/types.h"
 
-namespace Ms {
+namespace mu::engraving {
 class EngravingItem;
 class Measure;
 class Tuplet;
@@ -45,6 +47,8 @@ class Score;
 
 class TrackList : public std::vector<EngravingItem*>
 {
+    OBJECT_ALLOCATOR(engraving, TrackList)
+
     Fraction _duration;
     ScoreRange* _range = nullptr;
     track_idx_t _track = 0;
@@ -67,7 +71,7 @@ public:
     void read(const Segment* fs, const Segment* ls);
     bool write(Score*, const Fraction&) const;
 
-    void appendGap(const Fraction&, Ms::Score* score);
+    void appendGap(const Fraction&, Score* score);
     bool truncate(const Fraction&);
     void dump() const;
 };
@@ -108,5 +112,5 @@ public:
 
     friend class TrackList;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

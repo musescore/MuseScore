@@ -33,7 +33,7 @@ using namespace mu::notation;
 using namespace mu::actions;
 
 TemplatePaintView::TemplatePaintView(QQuickItem* parent)
-    : NotationPaintView(parent)
+    : AbstractNotationPaintView(parent)
 {
     setReadonly(true);
 
@@ -57,7 +57,7 @@ void TemplatePaintView::load(const QString& templatePath)
 
     m_templatePath = templatePath;
 
-    NotationPaintView::load();
+    AbstractNotationPaintView::load();
 }
 
 QString TemplatePaintView::zoomInSequence() const

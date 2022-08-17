@@ -32,11 +32,11 @@ class FontStyleSelect : public QWidget, public Ui::FontStyleSelect
 
 public:
     FontStyleSelect(QWidget* parent);
-    Ms::FontStyle fontStyle() const;
-    void setFontStyle(Ms::FontStyle);
+    mu::engraving::FontStyle fontStyle() const;
+    void setFontStyle(mu::engraving::FontStyle);
 
 signals:
-    void fontStyleChanged(Ms::FontStyle);
+    void fontStyleChanged(mu::engraving::FontStyle);
 
 private slots:
     void _fontStyleChanged();

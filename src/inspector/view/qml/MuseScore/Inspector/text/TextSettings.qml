@@ -88,7 +88,7 @@ Column {
                 iconCode: modelData["iconRole"]
                 checked: root.model && !root.model.textScriptAlignment.isUndefined ? root.model.textScriptAlignment.value === modelData["typeRole"]
                                                                                    : false
-                onToggled: {
+                onClicked: {
                     if (root.model.textScriptAlignment.value === modelData["typeRole"]) {
                         root.model.textScriptAlignment.value = TextTypes.TEXT_SUBSCRIPT_NORMAL
                     } else {
@@ -110,7 +110,7 @@ Column {
 
         model: [
             { text: qsTrc("inspector", "None"), value: TextTypes.FRAME_TYPE_NONE, titleRole: qsTrc("inspector", "None") },
-            { iconCode: IconCode.FRAME_SQUARE, value: TextTypes.FRAME_TYPE_SQUARE, titleRole: qsTrc("inspector", "Square") },
+            { iconCode: IconCode.FRAME_SQUARE, value: TextTypes.FRAME_TYPE_SQUARE, titleRole: qsTrc("inspector", "Rectangle") },
             { iconCode: IconCode.FRAME_CIRCLE, value: TextTypes.FRAME_TYPE_CIRCLE, titleRole: qsTrc("inspector", "Circle") }
         ]
     }
@@ -146,11 +146,11 @@ Column {
             navigationPanel: root.navigationPanel
             navigationRowStart: borderColorSection.navigationRowEnd + 1
 
-            visible: root.model ? root.model.frameHighlightColor.isEnabled : false
+            visible: root.model ? root.model.frameFillColor.isEnabled : false
             height: visible ? implicitHeight : 0
 
-            titleText: qsTrc("inspector", "Highlight")
-            propertyItem: root.model ? root.model.frameHighlightColor : null
+            titleText: qsTrc("inspector", "Fill color")
+            propertyItem: root.model ? root.model.frameFillColor : null
         }
     }
 
@@ -251,7 +251,7 @@ Column {
             { text: qsTrc("inspector", "Dynamics"), value: TextTypes.TEXT_TYPE_DYNAMICS },
             { text: qsTrc("inspector", "Hairpin"), value: TextTypes.TEXT_TYPE_HAIRPIN },
             { text: qsTrc("inspector", "Tempo"), value: TextTypes.TEXT_TYPE_TEMPO },
-            { text: qsTrc("inspector", "Rehearshal mark"), value: TextTypes.TEXT_TYPE_REHEARSAL_MARK },
+            { text: qsTrc("inspector", "Rehearsal mark"), value: TextTypes.TEXT_TYPE_REHEARSAL_MARK },
             { text: qsTrc("inspector", "Repeat text left"), value: TextTypes.TEXT_TYPE_REPEAT_LEFT },
             { text: qsTrc("inspector", "Repeat text right"), value: TextTypes.TEXT_TYPE_REPEAT_RIGHT },
             { text: qsTrc("inspector", "Lyrics odd lines"), value: TextTypes.TEXT_TYPE_LYRICS_ODD },

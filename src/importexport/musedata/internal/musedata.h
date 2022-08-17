@@ -25,14 +25,16 @@
 
 #include "engraving/types/fraction.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Staff;
 class Part;
 class Score;
 class ChordRest;
 class Measure;
 class Slur;
+}
 
+namespace mu::iex::musedata {
 //---------------------------------------------------------
 //   MuseData
 //    used importing Musedata files
@@ -41,29 +43,29 @@ class Slur;
 class MuseData
 {
     int _division;
-    Fraction curTick;
+    engraving::Fraction curTick;
     QList<QStringList> parts;
-    Score* score;
-    ChordRest* chordRest;
+    engraving::Score* score;
+    engraving::ChordRest* chordRest;
     int ntuplet;
-    Measure* measure;
+    engraving::Measure* measure;
     int voice;
-    Slur* slur[4];
+    engraving::Slur* slur[4];
 
-    void musicalAttribute(QString s, Part*);
-    void readPart(QStringList sl, Part*);
-    void readNote(Part*, const QString& s);
-    void readChord(Part*, const QString& s);
-    void readRest(Part*, const QString& s);
+    void musicalAttribute(QString s, engraving::Part*);
+    void readPart(QStringList sl, engraving::Part*);
+    void readNote(engraving::Part*, const QString& s);
+    void readChord(engraving::Part*, const QString& s);
+    void readRest(engraving::Part*, const QString& s);
     void readBackup(const QString& s);
-    Measure* createMeasure();
+    engraving::Measure* createMeasure();
     int countStaves(const QStringList& sl);
-    void openSlur(int idx, const Fraction& tick, Staff* staff, int voice);
-    void closeSlur(int idx, const Fraction& tick, Staff* staff, int voice);
+    void openSlur(int idx, const engraving::Fraction& tick, engraving::Staff* staff, int voice);
+    void closeSlur(int idx, const engraving::Fraction& tick, engraving::Staff* staff, int voice);
     QString diacritical(QString);
 
 public:
-    MuseData(Score* s) { score = s; }
+    MuseData(engraving::Score* s) { score = s; }
     bool read(const QString&);
     void convert();
 };

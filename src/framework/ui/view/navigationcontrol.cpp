@@ -99,17 +99,17 @@ void NavigationControl::trigger()
     emit triggered();
 }
 
-void NavigationControl::requestActive()
+void NavigationControl::requestActive(bool enableHighlight)
 {
     if (m_panel) {
-        m_panel->requestActive(this);
+        m_panel->requestActive(this, enableHighlight);
     }
 }
 
-void NavigationControl::requestActiveByInteraction()
+void NavigationControl::requestActiveByInteraction(bool enableHighlight)
 {
     if (m_panel) {
-        m_panel->requestActive(this, INavigation::ActivationType::ByMouse);
+        m_panel->requestActive(this, enableHighlight, INavigation::ActivationType::ByMouse);
     }
 }
 

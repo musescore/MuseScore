@@ -73,17 +73,22 @@ mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstru
 
     result.ret = make_ret(Ret::Code::Ok);
 
-    QVariantMap content = retVal.val.toQVariant().toMap();
-    result.val.scoreOrder = content["scoreOrder"].value<ScoreOrder>();
+    ValMap content = retVal.val.toMap();
 
-    for (const QVariant& obj: content["instruments"].toList()) {
-        QVariantMap map = obj.toMap();
+    ValMap order = content["scoreOrder"].toMap();
+    result.val.scoreOrder = instrumentsRepository()->order(order["id"].toString());
+    result.val.scoreOrder.customized = order["customized"].toBool();
+
+    for (const Val& obj: content["instruments"].toList()) {
+        ValMap map = obj.toMap();
         PartInstrument pi;
 
-        pi.partId = ID(map["partId"]);
+        pi.partId = ID(map["partId"].toString());
         pi.isExistingPart = map["isExistingPart"].toBool();
         pi.isSoloist = map["isSoloist"].toBool();
-        pi.instrumentTemplate = map["instrumentTemplate"].value<InstrumentTemplate>();
+
+        std::string instrumentId = map["instrumentId"].toString();
+        pi.instrumentTemplate = instrumentsRepository()->instrumentTemplate(instrumentId);
 
         result.val.instruments << pi;
     }

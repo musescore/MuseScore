@@ -23,14 +23,13 @@
         <file>qml/FirstLaunchSetup/ThemesPage.qml</file>
         <file>qml/FirstLaunchSetup/PlaybackPage.qml</file>
         <file>qml/FirstLaunchSetup/TutorialsPage.qml</file>
-        <file>qml/FirstLaunchSetup/resources/placeholder.png</file>
+        <file>qml/FirstLaunchSetup/resources/MuseSounds.png</file>
         <file>qml/FirstLaunchSetup/resources/VideoTutorials.png</file>
         <file>qml/Preferences/PreferencesPage.qml</file>
         <file>qml/Preferences/GeneralPreferencesPage.qml</file>
         <file>qml/Preferences/UpdatePreferencesPage.qml</file>
         <file>qml/Preferences/ProgrammeStartPreferencesPage.qml</file>
         <file>qml/Preferences/NoteInputPreferencesPage.qml</file>
-        <file>qml/Preferences/StubPreferencesPage.qml</file>
         <file>qml/Preferences/AppearancePreferencesPage.qml</file>
         <file>qml/Preferences/FoldersPreferencesPage.qml</file>
         <file>qml/Preferences/AdvancedPreferencesPage.qml</file>
@@ -104,5 +103,6 @@
         <file>qml/platform/win/AppSystemButtons.qml</file>
         <file>qml/platform/AppMenuBar.qml</file>
         <file>qml/platform/AppButtonBackground.qml</file>
+        <file>resources/LoadingScreen.svg</file>
     </qresource>
 </RCC>

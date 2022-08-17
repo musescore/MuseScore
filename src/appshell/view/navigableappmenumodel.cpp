@@ -76,7 +76,7 @@ void NavigableAppMenuModel::load()
     qApp->installEventFilter(this);
 }
 
-void NavigableAppMenuModel::openMenu(const QString& menuId)
+void NavigableAppMenuModel::openMenu(const QString& menuId, bool byHover)
 {
     if (isNavigationStarted() || !isMenuOpened()) {
         saveMUNavigationSystemState();
@@ -84,7 +84,7 @@ void NavigableAppMenuModel::openMenu(const QString& menuId)
         restoreMUNavigationSystemState();
     }
 
-    emit openMenuRequested(menuId);
+    emit openMenuRequested(menuId, byHover);
 }
 
 bool NavigableAppMenuModel::isNavigationStarted() const
@@ -303,7 +303,8 @@ bool NavigableAppMenuModel::processEventForAppMenu(QEvent* event)
             }
         }
 
-        break;
+        event->accept();
+        return true;
     }
     case QEvent::MouseButtonPress: {
         resetNavigation();
@@ -463,7 +464,7 @@ void NavigableAppMenuModel::restoreMUNavigationSystemState()
 
 void NavigableAppMenuModel::activateHighlightedMenu()
 {
-    emit openMenuRequested(m_highlightedMenuId);
+    emit openMenuRequested(m_highlightedMenuId, false);
 }
 
 QString NavigableAppMenuModel::highlightedMenuId() const
@@ -479,7 +480,7 @@ QString NavigableAppMenuModel::openedMenuId() const
 QString NavigableAppMenuModel::menuItemId(const MenuItemList& items, const QSet<int>& activatePossibleKeys)
 {
     for (const MenuItem* item : items) {
-        QString title = item->action().title;
+        QString title = item->action().title.translated();
 
         int activateKeyIndex = title.indexOf('&');
         if (activateKeyIndex == -1) {

@@ -25,6 +25,8 @@
 #include <QTextCodec>
 #include <QMap>
 
+#include "log.h"
+
 namespace ovebase {
 /*
 template <class T>
@@ -1035,7 +1037,7 @@ void Track::setTransposeClef(int clef)
     m_transposeClef = ClefType(clef);
 }
 
-ClefType Track::getTansposeClef() const
+ClefType Track::getTransposeClef() const
 {
     return m_transposeClef;
 }
@@ -4185,7 +4187,7 @@ bool NameBlock::isEqual(const QString& name) const
     }
 
     for (int i = 0; i < size() && nsize; ++i) {
-        if (data()[i] != name[i]) {
+        if (name[i] != data()[i]) {
             return false;
         }
     }
@@ -7598,7 +7600,7 @@ QString binaryToHarmonyType(int bin)
         break;
     }
     default: {
-        qDebug("Unrecognized harmony type: %04X", bin);
+        LOGD("Unrecognized harmony type: %04X", bin);
         type = "";
         break;
     }

@@ -42,13 +42,13 @@ bool BrailleWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret BrailleWriter::write(notation::INotationPtr notation, io::Device& destinationDevice, const Options&)
+mu::Ret BrailleWriter::write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
     }
 
-    Ms::Score* score = notation->elements()->msScore();
+    mu::engraving::Score* score = notation->elements()->msScore();
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);
     }
@@ -57,20 +57,8 @@ mu::Ret BrailleWriter::write(notation::INotationPtr notation, io::Device& destin
     return exporter.write(destinationDevice);
 }
 
-mu::Ret BrailleWriter::writeList(const notation::INotationPtrList&, io::Device&, const Options&)
+mu::Ret BrailleWriter::writeList(const notation::INotationPtrList&, QIODevice&, const Options&)
 {
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);
-}
-
-void BrailleWriter::abort()
-{
-    NOT_IMPLEMENTED;
-}
-
-mu::framework::ProgressChannel BrailleWriter::progress() const
-{
-    NOT_IMPLEMENTED;
-    static framework::ProgressChannel prog;
-    return prog;
 }

@@ -26,11 +26,11 @@
 #include "elements.h"
 #include "libmscore/tie.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 //---------------------------------------------------------
 //   Tie
-///  Provides access to internal Ms::Tie objects.
+///  Provides access to internal mu::engraving::Tie objects.
 ///  \since MuseScore 3.3
 //---------------------------------------------------------
 
@@ -39,15 +39,15 @@ class Tie : public EngravingItem
     Q_OBJECT
     /// The starting note of the tie.
     /// \since MuseScore 3.3
-    Q_PROPERTY(Ms::PluginAPI::Note * startNote READ startNote)
+    Q_PROPERTY(mu::engraving::PluginAPI::Note * startNote READ startNote)
     /// The ending note of the tie.
     /// \since MuseScore 3.3
-    Q_PROPERTY(Ms::PluginAPI::Note * endNote READ endNote)
+    Q_PROPERTY(mu::engraving::PluginAPI::Note * endNote READ endNote)
 
     /// \cond MS_INTERNAL
 
 public:
-    Tie(Ms::Tie* tie, Ownership own = Ownership::PLUGIN)
+    Tie(mu::engraving::Tie* tie, Ownership own = Ownership::PLUGIN)
         : EngravingItem(tie, own) {}
 
     Note* startNote();
@@ -56,7 +56,7 @@ public:
     /// \endcond
 };
 
-extern Tie* tieWrap(Ms::Tie* tie);
+extern Tie* tieWrap(mu::engraving::Tie* tie);
 } // namespace PluginAPI
 } // namespace Ms
 #endif

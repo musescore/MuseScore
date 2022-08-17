@@ -30,23 +30,28 @@
 #include "inotationwritersregister.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "context/iglobalcontext.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
+#include "async/asyncable.h"
 
 namespace mu::project {
-class ExportProjectScenario : public IExportProjectScenario
+class ExportProjectScenario : public IExportProjectScenario, public async::Asyncable
 {
     INJECT(project, IProjectConfiguration, configuration)
     INJECT(project, framework::IInteractive, interactive)
     INJECT(project, INotationWritersRegister, writers)
     INJECT(project, iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
     INJECT(project, context::IGlobalContext, context)
-    INJECT(project, system::IFileSystem, fileSystem)
+    INJECT(project, io::IFileSystem, fileSystem)
 
 public:
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const override;
 
     bool exportScores(const notation::INotationPtrList& notations, const ExportType& exportType,
                       project::INotationWriter::UnitType unitType, bool openDestinationFolderOnExport = false) const override;
+
+    framework::Progress progress() const override;
+
+    void abort() override;
 
 private:
     enum class FileConflictPolicy {
@@ -59,18 +64,21 @@ private:
 
     bool isMainNotation(notation::INotationPtr notation) const;
 
-    io::path askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
-                           project::INotationWriter::UnitType unitType) const;
-    io::path completeExportPath(const io::path& basePath, notation::INotationPtr notation, bool isMain, int pageIndex = -1) const;
+    io::path_t askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
+                             project::INotationWriter::UnitType unitType) const;
+    io::path_t completeExportPath(const io::path_t& basePath, notation::INotationPtr notation, bool isMain, int pageIndex = -1) const;
 
     bool shouldReplaceFile(const QString& filename) const;
     bool askForRetry(const QString& filename) const;
 
-    bool doExportLoop(const io::path& path, std::function<bool(io::Device&)> exportFunction) const;
+    bool doExportLoop(const io::path_t& path, std::function<bool(QIODevice&)> exportFunction) const;
 
-    void openFolder(const io::path& path) const;
+    void showExportProgressIfNeed() const;
+
+    void openFolder(const io::path_t& path) const;
 
     mutable FileConflictPolicy m_fileConflictPolicy;
+    mutable INotationWriterPtr m_currentWriter;
 };
 }
 

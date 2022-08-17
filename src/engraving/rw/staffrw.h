@@ -29,9 +29,9 @@ class StaffRW
 {
 public:
 
-    static void readStaff(Ms::Score* score, Ms::XmlReader&, ReadContext& ctx);
-    static void writeStaff(const Ms::Staff* staff, Ms::XmlWriter& xml, Ms::MeasureBase* measureStart, Ms::MeasureBase* measureEnd,
-                           staff_idx_t staffStart, staff_idx_t staffIdx, bool selectionOnly);
+    static void readStaff(Score* score, XmlReader&, ReadContext& ctx);
+    static void writeStaff(const Staff* staff, XmlWriter& xml, MeasureBase* measureStart, MeasureBase* measureEnd, staff_idx_t staffStart,
+                           staff_idx_t staffIdx, bool selectionOnly);
 };
 }
 

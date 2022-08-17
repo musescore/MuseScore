@@ -26,24 +26,26 @@
 #include "score.h"
 #include "system.h"
 
-#include "infrastructure/draw/painter.h"
+#include "draw/painter.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::draw;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   addHorizontalSpacing
 //    This methods creates "walls". They are represented by
 //    rectangles of zero height, and it is assumed that rectangles
 //    of zero height vertically collide with everything. Use this
-//    method ONLY when you want to crate space that cannot tuck
+//    method ONLY when you want to create space that cannot tuck
 //    above/below other elements of the staff.
 //---------------------------------------------------------
 
-void Shape::addHorizontalSpacing(EngravingItem* item, qreal leftEdge, qreal rightEdge)
+void Shape::addHorizontalSpacing(EngravingItem* item, double leftEdge, double rightEdge)
 {
-    constexpr qreal eps = 100 * std::numeric_limits<qreal>::epsilon();
+    constexpr double eps = 100 * std::numeric_limits<double>::epsilon();
     if (leftEdge == rightEdge) { // HACK zero-width shapes collide with everything currently.
         rightEdge += eps;
     }
@@ -61,7 +63,7 @@ void Shape::translate(const PointF& pt)
     }
 }
 
-void Shape::translateX(qreal xo)
+void Shape::translateX(double xo)
 {
     for (RectF& r : *this) {
         r.setLeft(r.left() + xo);
@@ -69,7 +71,7 @@ void Shape::translateX(qreal xo)
     }
 }
 
-void Shape::translateY(qreal yo)
+void Shape::translateY(double yo)
 {
     for (RectF& r : *this) {
         r.setTop(r.top() + yo);
@@ -90,59 +92,6 @@ Shape Shape::translated(const PointF& pt) const
     return s;
 }
 
-bool Shape::sameVoiceExceptions(const EngravingItem* item1, const EngravingItem* item2) const
-{
-    if (item1->track() != item2->track()) {
-        return false;
-    }
-    if ((item1->isNote() || item1->isRest() || item1->isBreath())
-        && (item2->isNote() || item2->isRest() || item2->isStem() || item2->isBreath())) {
-        return true;
-    }
-    return false;
-}
-
-bool Shape::limitedKerningExceptions(const EngravingItem* item1, const EngravingItem* item2) const
-{
-    if ((item1->isClef() || item2->isClef())
-        && !(item1->isLyrics() || item2->isLyrics())) {
-        return true;
-    }
-    return false;
-}
-
-bool Shape::nonKerningExceptions(const ShapeElement& r1, const ShapeElement& r2) const
-{
-    const EngravingItem* item1 = r1.toItem;
-    const EngravingItem* item2 = r2.toItem;
-    if (item1 && !item1->isKernable()) { // Prepared for future user option, for now always false
-        return true;
-    }
-    if (r1.width() == 0 || r2.width() == 0) { // Shapes of zero width are assumed to collide with everything
-        return true;
-    }
-    if (item1 && item2 // this is needed for lyrics-to-lyrics and harmony-to-harmony spacing
-        && ((item1->isLyrics() && item2->isLyrics()) || (item1->isHarmony() && item2->isHarmony()))) {
-        return true;
-    }
-    if (item1 && item2
-        && (item1->isTimeSig() || item2->isTimeSig()
-            || item1->isKeySig() || item2->isKeySig())     // these items can never kern...
-        && !(item1->isLyrics() || item2->isLyrics() // except with lyrics and harmony
-             || item1->isHarmony() || item2->isHarmony())) {
-        return true;
-    }
-    if (item1 && item2
-        && (item1->isBarLine() || (item2->isBarLine())) // barlines can never kern...
-        && !(item1->isHarmony() || item2->isHarmony())) { // except with harmony
-        return true;
-    }
-    if (!item1 && item2 && item2->isLyrics()) { // Temporary hack: avoid lyrics overlapping the melisma line
-        return true;
-    }
-    return false;
-}
-
 //-------------------------------------------------------------------
 //   minHorizontalDistance
 //    a is located right of this shape.
@@ -150,53 +99,34 @@ bool Shape::nonKerningExceptions(const ShapeElement& r1, const ShapeElement& r2)
 //    so they don’t touch.
 //-------------------------------------------------------------------
 
-qreal Shape::minHorizontalDistance(const Shape& a, Score* score) const
+double Shape::minHorizontalDistance(const Shape& a, Score* score) const
 {
-    qreal dist = -1000000.0;        // min real
-    const PaddingTable& paddingTable = score->paddingTable();
-    double padding = 0;
+    double dist = -1000000.0;        // min real
     double verticalClearance = 0.2 * score->spatium();
-    bool sameVoiceCases = false;
-    bool nonKerning = false; // These items behave as is their padding has infinite height
-    bool limitedKerning = false; // These items can get close to each other when they vertically clear but not overlap
     for (const ShapeElement& r2 : a) {
         const EngravingItem* item2 = r2.toItem;
-        qreal by1 = r2.top();
-        qreal by2 = r2.bottom();
+        double by1 = r2.top();
+        double by2 = r2.bottom();
         for (const ShapeElement& r1 : *this) {
             const EngravingItem* item1 = r1.toItem;
-            qreal ay1 = r1.top();
-            qreal ay2 = r1.bottom();
-            padding = 0;
-            sameVoiceCases = false;
-            limitedKerning = false;
-            nonKerning = nonKerningExceptions(r1, r2);
+            double ay1 = r1.top();
+            double ay2 = r1.bottom();
+            bool intersection = mu::engraving::intersects(ay1, ay2, by1, by2, verticalClearance);
+            double padding = 0;
+            KerningType kerningType = KerningType::NON_KERNING;
             if (item1 && item2) {
-                padding = paddingTable.at(item1->type()).at(item2->type());
-                padding *= (item1->mag() + item2->mag()) / 2; // scales with items magnification
-                verticalClearance *= (item1->mag() + item2->mag()) / 2;
-                sameVoiceCases = sameVoiceExceptions(item1, item2);
-                limitedKerning = limitedKerningExceptions(item1, item2);
+                padding = item1->computePadding(item2);
+                kerningType = item1->computeKerningType(item2);
             }
-            if (sameVoiceCases // padding for note-note and note-stem needs needs this exception
-                && Ms::intersects(ay1, ay2, by1, by2, verticalClearance)
-                && (item2->isNote() || item2->isStem())) {
-                padding = std::max(padding, double(score->styleMM(Sid::minNoteDistance)));
+            if (intersection
+                || (r1.width() == 0 || r2.width() == 0) // Temporary hack: shapes of zero-width are assumed to collide with everyghin
+                || (!item1 && item2 && item2->isLyrics()) // Temporary hack: avoids collision with melisma line
+                || kerningType == KerningType::NON_KERNING) {
+                dist = std::max(dist, r1.right() - r2.left() + padding);
             }
-            if (limitedKerning && !Ms::intersects(ay1, ay2, by1, by2, verticalClearance)) {
-                padding = score->minimumPaddingUnit();
-            }
-            if (Ms::intersects(ay1, ay2, by1, by2, verticalClearance)
-                || sameVoiceCases
-                || limitedKerning
-                || nonKerning) {
-                dist = qMax(dist, r1.right() - r2.left() + padding);
-            }
-            if (item1 && item2
-                && item1->track() == item2->track()
-                && item1->isKernableUntilOrigin()) { //prepared for future user option, for now always false
-                qreal origin = r1.left();
-                dist = qMax(dist, origin - r2.left());
+            if (kerningType == KerningType::KERNING_UNTIL_ORIGIN) { //prepared for future user option, for now always false
+                double origin = r1.left();
+                dist = std::max(dist, origin - r2.left());
             }
         }
     }
@@ -209,31 +139,51 @@ qreal Shape::minHorizontalDistance(const Shape& a, Score* score) const
 //    Calculates the minimum distance between two shapes.
 //-------------------------------------------------------------------
 
-qreal Shape::minVerticalDistance(const Shape& a) const
+double Shape::minVerticalDistance(const Shape& a) const
 {
     if (empty() || a.empty()) {
         return 0.0;
     }
 
-    qreal dist = -1000000.0; // min real
+    double dist = -1000000.0; // min real
     for (const RectF& r2 : a) {
         if (r2.height() <= 0.0) {
             continue;
         }
-        qreal bx1 = r2.left();
-        qreal bx2 = r2.right();
+        double bx1 = r2.left();
+        double bx2 = r2.right();
         for (const RectF& r1 : *this) {
             if (r1.height() <= 0.0) {
                 continue;
             }
-            qreal ax1 = r1.left();
-            qreal ax2 = r1.right();
-            if (Ms::intersects(ax1, ax2, bx1, bx2, 0.0)) {
-                dist = qMax(dist, r1.bottom() - r2.top());
+            double ax1 = r1.left();
+            double ax2 = r1.right();
+            if (mu::engraving::intersects(ax1, ax2, bx1, bx2, 0.0)) {
+                dist = std::max(dist, r1.bottom() - r2.top());
             }
         }
     }
     return dist;
+}
+
+//----------------------------------------------------------------
+// clearsVertically()
+// a is located below this shape
+// returns true if, within the horizontal width of both shapes,
+// all parts of this shape are above all parts of a
+//----------------------------------------------------------------
+bool Shape::clearsVertically(const Shape& a) const
+{
+    for (const RectF r1 : a) {
+        for (const RectF r2 : *this) {
+            if (mu::engraving::intersects(r1.left(), r1.right(), r2.left(), r2.right(), 0.0)) {
+                if (std::min(r1.top(), r1.bottom()) <= std::max(r2.top(), r2.bottom())) {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
 }
 
 //---------------------------------------------------------
@@ -241,11 +191,11 @@ qreal Shape::minVerticalDistance(const Shape& a) const
 //    compute left border
 //---------------------------------------------------------
 
-qreal Shape::left() const
+double Shape::left() const
 {
-    qreal dist = 0.0;
-    for (const RectF& r : *this) {
-        if (r.height() != 0.0 && r.left() < dist) {
+    double dist = 0.0;
+    for (const ShapeElement& r : *this) {
+        if (r.height() != 0.0 && !(r.toItem && r.toItem->isTextBase()) && r.left() < dist) {
             // if (r.left() < dist)
             dist = r.left();
         }
@@ -258,9 +208,9 @@ qreal Shape::left() const
 //    compute right border
 //---------------------------------------------------------
 
-qreal Shape::right() const
+double Shape::right() const
 {
-    qreal dist = 0.0;
+    double dist = 0.0;
     for (const RectF& r : *this) {
         if (r.right() > dist) {
             dist = r.right();
@@ -278,9 +228,9 @@ qreal Shape::right() const
 //   top
 //---------------------------------------------------------
 
-qreal Shape::top() const
+double Shape::top() const
 {
-    qreal dist = 1000000.0;
+    double dist = 1000000.0;
     for (const RectF& r : *this) {
         if (r.top() < dist) {
             dist = r.top();
@@ -293,9 +243,9 @@ qreal Shape::top() const
 //   bottom
 //---------------------------------------------------------
 
-qreal Shape::bottom() const
+double Shape::bottom() const
 {
-    qreal dist = -1000000.0;
+    double dist = -1000000.0;
     for (const RectF& r : *this) {
         if (r.bottom() > dist) {
             dist = r.bottom();
@@ -310,12 +260,12 @@ qreal Shape::bottom() const
 //    returns negative values if there is an overlap
 //---------------------------------------------------------
 
-qreal Shape::topDistance(const PointF& p) const
+double Shape::topDistance(const PointF& p) const
 {
-    qreal dist = 1000000.0;
+    double dist = 1000000.0;
     for (const RectF& r : *this) {
         if (p.x() >= r.left() && p.x() < r.right()) {
-            dist = qMin(dist, r.top() - p.y());
+            dist = std::min(dist, r.top() - p.y());
         }
     }
     return dist;
@@ -327,12 +277,12 @@ qreal Shape::topDistance(const PointF& p) const
 //    returns negative values if there is an overlap
 //---------------------------------------------------------
 
-qreal Shape::bottomDistance(const PointF& p) const
+double Shape::bottomDistance(const PointF& p) const
 {
-    qreal dist = 1000000.0;
+    double dist = 1000000.0;
     for (const RectF& r : *this) {
         if (p.x() >= r.left() && p.x() < r.right()) {
-            dist = qMin(dist, p.y() - r.bottom());
+            dist = std::min(dist, p.y() - r.bottom());
         }
     }
     return dist;
@@ -350,8 +300,8 @@ void Shape::remove(const RectF& r)
             return;
         }
     }
-    // qWarning("Shape::remove: RectF not found in Shape");
-    qFatal("Shape::remove: RectF not found in Shape");
+
+    ASSERT_X("Shape::remove: RectF not found in Shape");
 }
 
 void Shape::remove(const Shape& s)
@@ -417,7 +367,7 @@ void Shape::paint(Painter& painter) const
 
 void Shape::dump(const char* p) const
 {
-    qDebug("Shape dump: %p %s size %zu", this, p, size());
+    LOGD("Shape dump: %p %s size %zu", this, p, size());
     for (const ShapeElement& r : *this) {
         r.dump();
     }
@@ -425,8 +375,8 @@ void Shape::dump(const char* p) const
 
 void ShapeElement::dump() const
 {
-    qDebug("   %s: %f %f %f %f", toItem ? toItem->typeName() : "", x(), y(), width(), height());
+    LOGD("   %s: %f %f %f %f", toItem ? toItem->typeName() : "", x(), y(), width(), height());
 }
 
 #endif
-} // namespace Ms
+} // namespace mu::engraving

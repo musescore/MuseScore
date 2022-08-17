@@ -72,7 +72,7 @@ FocusScope {
         anchors.topMargin: privateProperties.sideMargin
         anchors.leftMargin: privateProperties.sideMargin
 
-        text: qsTrc("scores", "Account")
+        text: qsTrc("cloud", "Account")
 
         font: ui.theme.titleBoldFont
     }
@@ -91,10 +91,10 @@ FocusScope {
     Rectangle {
         anchors.bottom: parent.bottom
 
-        height: 114
+        height: 100
         width: parent.width
 
-        color: ui.theme.popupBackgroundColor
+        color: ui.theme.backgroundSecondaryColor
 
         RowLayout {
             anchors.verticalCenter: parent.verticalCenter

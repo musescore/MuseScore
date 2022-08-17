@@ -32,7 +32,7 @@ jobs:
         access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v2
-    - name: Сcache cache files
+    - name: Ccache cache files
       uses: actions/cache@v2
       with:
         path: ~/.ccache
@@ -64,6 +64,22 @@ jobs:
           fi
         fi
 
+        DO_UPDATE_TS='false'
+        if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
+            DO_UPDATE_TS='true'
+            if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then 
+              echo "warning: not set TRANSIFEX_API_TOKEN, update .ts disabled" 
+              DO_UPDATE_TS='false'
+            fi 
+        fi
+
+        DO_PLACEHOLDER_TRANSLATIONS='false'
+        if [[ "$DO_BUILD" == "true" ]]; then
+          if [[ "$BUILD_MODE" == "nightly_build" || "$BUILD_MODE" == "devel_build" ]]; then
+            DO_PLACEHOLDER_TRANSLATIONS='true'
+          fi
+        fi
+
         DO_UPLOAD_SYMBOLS='false'
         SENTRY_PROJECT=${{ github.event.inputs.sentry_project }}
         SENTRY_URL=""
@@ -90,6 +106,10 @@ jobs:
         echo "BUILD_MODE: $BUILD_MODE"
         echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
         echo "DO_BUILD: $DO_BUILD"
+        echo "DO_UPDATE_TS=$DO_UPDATE_TS" >> $GITHUB_ENV
+        echo "DO_UPDATE_TS: $DO_UPDATE_TS"
+        echo "DO_PLACEHOLDER_TRANSLATIONS=$DO_PLACEHOLDER_TRANSLATIONS" >> $GITHUB_ENV
+        echo "DO_PLACEHOLDER_TRANSLATIONS: $DO_PLACEHOLDER_TRANSLATIONS"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
         echo "DO_UPLOAD_SYMBOLS=$DO_UPLOAD_SYMBOLS" >> $GITHUB_ENV
@@ -105,6 +125,23 @@ jobs:
       if: env.DO_BUILD == 'true'
       run: |
         sudo bash ./build/ci/linux/setup.sh
+    - name: Generate _en.ts files
+      if: env.DO_BUILD == 'true'
+      run: |
+        sudo bash ./build/ci/translation/run_lupdate.sh
+    - name: Update .ts files
+      if: env.DO_UPDATE_TS == 'true'
+      run: |
+        sudo bash ./build/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
+        sudo bash ./build/ci/translation/tx_pull.sh
+    - name: Generate placeholder.ts files
+      if: env.DO_PLACEHOLDER_TRANSLATIONS == 'true'
+      run: |
+        sudo python3 ./tools/translations/placeholder_translations.py
+    - name: Generate .qm files
+      if: env.DO_BUILD == 'true'
+      run: |
+        sudo bash ./build/ci/translation/run_lrelease.sh     
     - name: Build
       if: env.DO_BUILD == 'true'
       run: |
@@ -116,7 +153,7 @@ jobs:
     - name: Generate dump symbols
       if: env.DO_BUILD == 'true'
       run: |
-        sudo bash ./build/ci/linux/dumpsyms.sh
+        sudo bash ./build/ci/linux/dumpsyms.sh  
     - name: Package 
       if: env.DO_BUILD == 'true'
       run: |

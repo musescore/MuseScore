@@ -26,6 +26,8 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
+#include "types/bytearray.h"
+
 using namespace mu::project;
 using namespace mu::audio;
 using namespace mu::engraving;
@@ -121,7 +123,8 @@ IProjectAudioSettings::SoloMuteState ProjectAudioSettings::soloMuteState(const I
     return search->second;
 }
 
-async::Channel<engraving::InstrumentTrackId, IProjectAudioSettings::SoloMuteState> ProjectAudioSettings::soloMuteStateChanged() const
+mu::async::Channel<mu::engraving::InstrumentTrackId,
+                   IProjectAudioSettings::SoloMuteState> ProjectAudioSettings::soloMuteStateChanged() const
 {
     return m_soloMuteStateChanged;
 }
@@ -170,8 +173,8 @@ mu::ValNt<bool> ProjectAudioSettings::needSave() const
 
 mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
 {
-    QByteArray json = reader.readAudioSettingsJsonFile();
-    QJsonObject rootObj = QJsonDocument::fromJson(json).object();
+    ByteArray json = reader.readAudioSettingsJsonFile();
+    QJsonObject rootObj = QJsonDocument::fromJson(json.toQByteArrayNoCopy()).object();
 
     QJsonObject masterObj = rootObj.value("master").toObject();
     m_masterOutputParams = outputParamsFromJson(masterObj);
@@ -211,7 +214,7 @@ mu::Ret ProjectAudioSettings::write(engraving::MscWriter& writer)
     rootObj["tracks"] = tracksArray;
 
     QByteArray json = QJsonDocument(rootObj).toJson();
-    writer.writeAudioSettingsJsonFile(json);
+    writer.writeAudioSettingsJsonFile(ByteArray::fromQByteArrayNoCopy(json));
 
     setNeedSave(false);
 
@@ -290,7 +293,8 @@ AudioUnitConfig ProjectAudioSettings::unitConfigFromJson(const QJsonObject& obje
     AudioUnitConfig result;
 
     for (const QString& key : object.keys()) {
-        result.emplace(key.toStdString(), object.value(key).toString().toStdString());
+        QByteArray base = QByteArray::fromBase64(object.value(key).toString().toUtf8());
+        result.emplace(key.toStdString(), base.toStdString());
     }
 
     return result;
@@ -362,7 +366,8 @@ QJsonObject ProjectAudioSettings::unitConfigToJson(const audio::AudioUnitConfig&
     QJsonObject result;
 
     for (const auto& pair : config) {
-        result.insert(QString::fromStdString(pair.first), QString::fromStdString(pair.second));
+        QByteArray byteArray = QByteArray::fromRawData(pair.second.c_str(), static_cast<int>(pair.second.size()));
+        result.insert(QString::fromStdString(pair.first), QString(byteArray.toBase64()));
     }
 
     return result;

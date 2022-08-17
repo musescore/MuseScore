@@ -29,7 +29,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   NoteDot
 //---------------------------------------------------------
@@ -94,9 +94,9 @@ void NoteDot::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "name") {      // obsolete
-            e.readElementText();
+            e.readText();
         } else if (e.name() == "subtype") {     // obsolete
-            e.readElementText();
+            e.readText();
         } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
@@ -107,7 +107,7 @@ void NoteDot::read(XmlReader& e)
 //   mag
 //---------------------------------------------------------
 
-qreal NoteDot::mag() const
+double NoteDot::mag() const
 {
     return parentItem()->mag() * score()->styleD(Sid::dotMag);
 }

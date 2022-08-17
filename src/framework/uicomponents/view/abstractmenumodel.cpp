@@ -21,6 +21,8 @@
  */
 #include "abstractmenumodel.h"
 
+#include "types/translatablestring.h"
+
 #include "log.h"
 
 using namespace mu::uicomponents;
@@ -175,7 +177,7 @@ MenuItem& AbstractMenuModel::findMenu(const QString& menuId)
     return menu(m_items, menuId);
 }
 
-MenuItem* AbstractMenuModel::makeMenu(const QString& title, const MenuItemList& items,
+MenuItem* AbstractMenuModel::makeMenu(const TranslatableString& title, const MenuItemList& items,
                                       const QString& menuId, bool enabled)
 {
     MenuItem* item = new MenuItem(this);
@@ -193,7 +195,7 @@ MenuItem* AbstractMenuModel::makeMenu(const QString& title, const MenuItemList& 
     return item;
 }
 
-MenuItem* AbstractMenuModel::makeMenuItem(const ActionCode& actionCode, const QString& title)
+MenuItem* AbstractMenuModel::makeMenuItem(const ActionCode& actionCode, const TranslatableString& title)
 {
     const UiAction& action = uiActionsRegister()->action(actionCode);
     if (!action.isValid()) {
@@ -216,7 +218,7 @@ MenuItem* AbstractMenuModel::makeSeparator()
     MenuItem* item = new MenuItem(this);
 
     UiAction action;
-    action.title = QString();
+    action.title = {};
     item->setAction(action);
 
     return item;

@@ -31,13 +31,14 @@ BeamModesModel::BeamModesModel(QObject* parent, IElementRepositoryService* repos
 
 void BeamModesModel::createProperties()
 {
-    m_mode = buildPropertyItem(Ms::Pid::BEAM_MODE);
-    m_isFeatheringAvailable = buildPropertyItem(Ms::Pid::DURATION_TYPE_WITH_DOTS, [](const Ms::Pid, const QVariant&) {}); //@note readonly property, there is no need to modify it
+    m_mode = buildPropertyItem(mu::engraving::Pid::BEAM_MODE);
+    m_isFeatheringAvailable = buildPropertyItem(mu::engraving::Pid::DURATION_TYPE_WITH_DOTS, [](const mu::engraving::Pid, const QVariant&) {
+    });                                                                                                                                         //@note readonly property, there is no need to modify it
 }
 
 void BeamModesModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::CHORD);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::CHORD);
 }
 
 void BeamModesModel::loadProperties()
@@ -45,18 +46,23 @@ void BeamModesModel::loadProperties()
     loadPropertyItem(m_mode);
 
     loadPropertyItem(m_isFeatheringAvailable, [](const QVariant& elementPropertyValue) -> QVariant {
-        Ms::TDuration durationType = elementPropertyValue.value<Ms::TDuration>();
+        QVariantMap map = elementPropertyValue.toMap();
+        if (map.isEmpty()) {
+            return false;
+        }
 
-        switch (durationType.type()) {
-        case Ms::DurationType::V_INVALID:
-        case Ms::DurationType::V_MEASURE:
-        case Ms::DurationType::V_ZERO:
-        case Ms::DurationType::V_LONG:
-        case Ms::DurationType::V_BREVE:
-        case Ms::DurationType::V_WHOLE:
-        case Ms::DurationType::V_HALF:
-        case Ms::DurationType::V_QUARTER:
-        case Ms::DurationType::V_EIGHTH:
+        mu::engraving::DurationType durationType = static_cast<mu::engraving::DurationType>(map["type"].toInt());
+
+        switch (durationType) {
+        case mu::engraving::DurationType::V_INVALID:
+        case mu::engraving::DurationType::V_MEASURE:
+        case mu::engraving::DurationType::V_ZERO:
+        case mu::engraving::DurationType::V_LONG:
+        case mu::engraving::DurationType::V_BREVE:
+        case mu::engraving::DurationType::V_WHOLE:
+        case mu::engraving::DurationType::V_HALF:
+        case mu::engraving::DurationType::V_QUARTER:
+        case mu::engraving::DurationType::V_EIGHTH:
             return false;
 
         default:

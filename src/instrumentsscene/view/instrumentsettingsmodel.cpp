@@ -49,8 +49,8 @@ void InstrumentSettingsModel::load(const QVariant& instrument)
     }
 
     m_partName = part->partName();
-    m_instrumentName = part->instrument()->name();
-    m_instrumentAbbreviature = part->instrument()->abbreviature();
+    m_instrumentName = part->instrument()->nameAsPlainText();
+    m_instrumentAbbreviature = part->instrument()->abbreviatureAsPlainText();
 
     context()->currentNotationChanged().onNotify(this, [this]() {
         emit isMainScoreChanged();
@@ -75,8 +75,8 @@ void InstrumentSettingsModel::replaceInstrument()
     masterNotationParts()->replaceInstrument(m_instrumentKey, newInstrument);
 
     m_instrumentKey.instrumentId = newInstrument.id();
-    m_instrumentName = newInstrument.name();
-    m_instrumentAbbreviature = newInstrument.abbreviature();
+    m_instrumentName = newInstrument.nameAsPlainText();
+    m_instrumentAbbreviature = newInstrument.abbreviatureAsPlainText();
 
     emit dataChanged();
 }

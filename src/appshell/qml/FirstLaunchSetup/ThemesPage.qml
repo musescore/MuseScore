@@ -29,8 +29,8 @@ import MuseScore.AppShell 1.0
 import "../shared"
 
 Page {
-    title: qsTrc("appshell", "Welcome to MuseScore 4")
-    explanation: qsTrc("appshell", "Let's get started by choosing a theme.")
+    title: qsTrc("appshell/gettingstarted", "Welcome to MuseScore 4")
+    explanation: qsTrc("appshell/gettingstarted", "Let's get started by choosing a theme.")
 
     titleContentSpacing: model.isFollowSystemThemeAvailable ? 24 : 28
 
@@ -51,7 +51,7 @@ Page {
             visible: model.isFollowSystemThemeAvailable
             Layout.alignment: Qt.AlignCenter
 
-            text: qsTrc("appshell", "Follow system theme")
+            text: qsTrc("appshell/gettingstarted", "Follow system theme")
 
             checked: model.isFollowSystemTheme
 
@@ -112,13 +112,13 @@ Page {
             visible: model.highContrastEnabled
             Layout.fillWidth: true
             Layout.preferredHeight: Math.max(implicitHeight, accentColorsList.implicitHeight)
-            text: qsTrc("appshell", "Further high contrast settings are available in Preferences.")
+            text: qsTrc("appshell/gettingstarted", "Further high contrast settings are available in Preferences.")
         }
 
         CheckBox {
             Layout.alignment: Qt.AlignCenter
 
-            text: qsTrc("appshell", "Enable high contrast")
+            text: qsTrc("appshell/gettingstarted", "Enable high contrast")
             checked: model.highContrastEnabled
 
             navigation.name: "EnableHighContrastCheckbox"

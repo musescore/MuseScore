@@ -29,9 +29,10 @@
 #include "excerpt.h"
 #include "libmscore/masterscore.h"
 
-#include "log.h"
+#include "modularity/ioc.h"
+#include "context/iglobalcontext.h"
 
-namespace Ms {
+namespace mu::engraving {
 class InstrumentTemplate;
 
 namespace PluginAPI {
@@ -42,29 +43,32 @@ class Selection;
 class Score;
 class Staff;
 
-extern Selection* selectionWrap(Ms::Selection* select);
+extern Selection* selectionWrap(mu::engraving::Selection* select);
 
 //---------------------------------------------------------
 //   Score
 //---------------------------------------------------------
 
-class Score : public Ms::PluginAPI::ScoreElement
+class Score : public mu::engraving::PluginAPI::ScoreElement
 {
     Q_OBJECT
+
+    INJECT(plugins, mu::context::IGlobalContext, context)
+
     /** Composer of the score, as taken from the score properties (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(QString composer READ composer)
     /** Duration of score in seconds (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(int duration READ duration)
     /** List of the excerpts (linked parts) (read only) */
-    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Excerpt> excerpts READ excerpts)
+    Q_PROPERTY(QQmlListProperty<mu::engraving::PluginAPI::Excerpt> excerpts READ excerpts)
     /** First measure of the score (read only) */
-    Q_PROPERTY(Ms::PluginAPI::Measure * firstMeasure READ firstMeasure)
+    Q_PROPERTY(mu::engraving::PluginAPI::Measure * firstMeasure READ firstMeasure)
     /**
      * First multimeasure rest measure of the score (read only).
      * \see \ref Measure.nextMeasureMM
      * \since MuseScore 3.2
      */
-    Q_PROPERTY(Ms::PluginAPI::Measure * firstMeasureMM READ firstMeasureMM)
+    Q_PROPERTY(mu::engraving::PluginAPI::Measure * firstMeasureMM READ firstMeasureMM)
     /** Number of harmony items (chord symbols) in the score (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(int harmonyCount READ harmonyCount)
     /** Whether score has harmonies (chord symbols) (read only).\n \since MuseScore 3.2 */
@@ -72,18 +76,18 @@ class Score : public Ms::PluginAPI::ScoreElement
     /** Whether score has lyrics (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(bool hasLyrics READ hasLyrics)
     /// Key signature at the start of the score, in number of accidentals,
-    /// negative for flats, postitive for sharps (read only).\n \since MuseScore 3.2
+    /// negative for flats, positive for sharps (read only).\n \since MuseScore 3.2
     Q_PROPERTY(int keysig READ keysig)
     /** Last measure of the score (read only) */
-    Q_PROPERTY(Ms::PluginAPI::Measure * lastMeasure READ lastMeasure)
+    Q_PROPERTY(mu::engraving::PluginAPI::Measure * lastMeasure READ lastMeasure)
     /**
      * Last multimeasure rest measure of the score (read only).
      * \see \ref Measure.prevMeasureMM
      * \since MuseScore 3.2
      */
-    Q_PROPERTY(Ms::PluginAPI::Measure * lastMeasureMM READ lastMeasureMM)
+    Q_PROPERTY(mu::engraving::PluginAPI::Measure * lastMeasureMM READ lastMeasureMM)
     /** Last score segment (read only) */
-    Q_PROPERTY(Ms::PluginAPI::Segment * lastSegment READ lastSegment)                // TODO: make it function? Was property in 2.X, but firstSegment is a function...
+    Q_PROPERTY(mu::engraving::PluginAPI::Segment * lastSegment READ lastSegment)                // TODO: make it function? Was property in 2.X, but firstSegment is a function...
     /** Number of lyrics items (syllables) in the score (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(int lyricCount READ lyricCount)
     /** Name of the score, without path leading to it and extension.\n \since MuseScore 3.2 */
@@ -96,9 +100,9 @@ class Score : public Ms::PluginAPI::ScoreElement
     Q_PROPERTY(int nstaves READ nstaves)
     /** Number of tracks (#nstaves * 4) (read only) */
     Q_PROPERTY(int ntracks READ ntracks)
-//      Q_PROPERTY(Ms::PageFormat*                pageFormat        READ pageFormat     WRITE undoChangePageFormat)
+//      Q_PROPERTY(mu::engraving::PageFormat*                pageFormat        READ pageFormat     WRITE undoChangePageFormat)
     /** The list of parts */
-    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Part> parts READ parts)
+    Q_PROPERTY(QQmlListProperty<mu::engraving::PluginAPI::Part> parts READ parts)
     /** Lyricist of score, as taken from the score properties.\n \since MuseScore 3.2 */
     Q_PROPERTY(QString lyricist READ lyricist)
 //      Q_PROPERTY(QString                        subtitle          READ subtitle)
@@ -109,9 +113,9 @@ class Score : public Ms::PluginAPI::ScoreElement
     /** MuseScore revision the score has been last saved with (includes autosave) (read only) */
     Q_PROPERTY(QString mscoreRevision READ mscoreRevision)
     /** Current selections for the score. \since MuseScore 3.3 */
-    Q_PROPERTY(Ms::PluginAPI::Selection * selection READ selection)
+    Q_PROPERTY(mu::engraving::PluginAPI::Selection * selection READ selection)
     /** Style settings for this score. \since MuseScore 3.5 */
-    Q_PROPERTY(Ms::PluginAPI::MStyle * style READ style)
+    Q_PROPERTY(mu::engraving::PluginAPI::MStyle * style READ style)
     /**
      * Page numbering offset. The user-visible number of the given \p page is defined as
      * \code
@@ -126,26 +130,26 @@ class Score : public Ms::PluginAPI::ScoreElement
      * List of staves in this score.
      * \since MuseScore 3.6.3
      */
-    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Staff> staves READ staves)
+    Q_PROPERTY(QQmlListProperty<mu::engraving::PluginAPI::Staff> staves READ staves)
 
 public:
     /// \cond MS_INTERNAL
-    Score(Ms::Score* s = nullptr, Ownership o = Ownership::SCORE)
+    Score(mu::engraving::Score* s = nullptr, Ownership o = Ownership::SCORE)
         : ScoreElement(s, o) {}
 
-    Ms::Score* score() { return toScore(e); }
-    const Ms::Score* score() const { return toScore(e); }
+    mu::engraving::Score* score() { return toScore(e); }
+    const mu::engraving::Score* score() const { return toScore(e); }
 
-    QString composer() { return score()->metaTag("composer"); }
+    QString composer() { return score()->metaTag(u"composer"); }
     int duration() { return score()->duration(); }
     int harmonyCount() { return score()->harmonyCount(); }
     bool hasHarmonies() { return score()->hasHarmonies(); }
     bool hasLyrics() { return score()->hasLyrics(); }
     int keysig() { return score()->keysig(); }
     int lyricCount() { return score()->lyricCount(); }
-    QString lyricist() { return score()->metaTag("lyricist"); }   // not the meanwhile obsolete "poet"
-    QString title() { return score()->metaTag("workTitle"); }
-    Ms::PluginAPI::Selection* selection() { return selectionWrap(&score()->selection()); }
+    QString lyricist() { return score()->metaTag(u"lyricist"); }   // not the meanwhile obsolete "poet"
+    QString title() { return score()->metaTag(u"workTitle"); }
+    mu::engraving::PluginAPI::Selection* selection() { return selectionWrap(&score()->selection()); }
     MStyle* style() { return wrap(&score()->style(), score()); }
 
     int pageNumberOffset() const { return score()->pageNumberOffset(); }
@@ -173,7 +177,7 @@ public:
      * \param instrumentMusicXmlId -
      * [MusicXML Sound ID](https://www.musicxml.com/for-developers/standard-sounds/)
      * of the instrument to be added.
-     * \see \ref Ms::PluginAPI::Part::instrumentId, \ref Ms::PluginAPI::Instrument::instrumentId
+     * \see \ref mu::engraving::PluginAPI::Part::instrumentId, \ref mu::engraving::PluginAPI::Instrument::instrumentId
      * \since MuseScore 3.5
      */
     Q_INVOKABLE void appendPartByMusicXmlId(const QString& instrumentMusicXmlId);
@@ -182,9 +186,9 @@ public:
     Q_INVOKABLE void appendMeasures(int n) { score()->appendMeasures(n); }
     Q_INVOKABLE void addText(const QString& type, const QString& text);
     /// Creates and returns a cursor to be used to navigate in the score
-    Q_INVOKABLE Ms::PluginAPI::Cursor* newCursor();
+    Q_INVOKABLE mu::engraving::PluginAPI::Cursor* newCursor();
 
-    Q_INVOKABLE Ms::PluginAPI::Segment* firstSegment();   // TODO: segment type
+    Q_INVOKABLE mu::engraving::PluginAPI::Segment* firstSegment();   // TODO: segment type
     /// \cond MS_INTERNAL
     Segment* lastSegment();
 
@@ -227,7 +231,7 @@ public:
      * \param rollback If true, reverts all the changes
      * made since the last startCmd() invocation.
      */
-    Q_INVOKABLE void endCmd(bool rollback = false) { score()->endCmd(rollback); }
+    Q_INVOKABLE void endCmd(bool rollback = false);
 
     /**
      * Create PlayEvents for all notes based on ornamentation.
@@ -246,8 +250,12 @@ public:
     QQmlListProperty<Excerpt> excerpts() { return wrapExcerptsContainerProperty<Excerpt>(this, score()->masterScore()->excerpts()); }
     QQmlListProperty<Staff> staves();
 
-    static const Ms::InstrumentTemplate* instrTemplateFromName(const QString& name);   // used by PluginAPI::newScore()
+    static const mu::engraving::InstrumentTemplate* instrTemplateFromName(const QString& name);   // used by PluginAPI::newScore()
     /// \endcond
+
+private:
+    mu::notation::INotationPtr notation() const;
+    mu::notation::INotationUndoStackPtr undoStack() const;
 };
 } // namespace PluginAPI
 } // namespace Ms

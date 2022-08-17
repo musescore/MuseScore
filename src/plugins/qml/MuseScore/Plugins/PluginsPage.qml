@@ -68,9 +68,6 @@ Item {
 
         function resetSelectedPlugin() {
             selectedPlugin = undefined
-
-            disabledPluginsView.resetSelectedPlugin()
-            enabledPluginsView.resetSelectedPlugin()
         }
     }
 
@@ -143,6 +140,7 @@ Item {
                 search: root.search
                 pluginIsEnabled: true
                 selectedCategory: root.selectedCategory
+                selectedPluginCodeKey: prv.selectedPlugin ? prv.selectedPlugin.codeKey : ""
 
                 model: pluginsModel
 
@@ -173,6 +171,7 @@ Item {
                 search: root.search
                 pluginIsEnabled: false
                 selectedCategory: root.selectedCategory
+                selectedPluginCodeKey: prv.selectedPlugin ? prv.selectedPlugin.codeKey : ""
 
                 model: pluginsModel
 
@@ -208,6 +207,7 @@ Item {
 
         additionalInfoModel: [
             {"title": qsTrc("plugins", "Version:"), "value": Boolean(selectedPlugin) ? selectedPlugin.version : "" },
+            //: Keyboard shortcut
             {"title": qsTrc("plugins", "Shortcut:"), "value": Boolean(selectedPlugin) ? selectedPlugin.shortcuts : ""}
         ]
 

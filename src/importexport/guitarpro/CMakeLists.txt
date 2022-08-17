@@ -24,8 +24,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/guitarpromodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/guitarpromodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iguitarproconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproreader.h
 
@@ -60,8 +58,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpmastertracks.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpnote.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpnote.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gprhytm.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gprhytm.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gprhythm.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gprhythm.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpscore.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpscore.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gptrack.cpp
@@ -72,10 +70,18 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/inoteproperty.h
     )
 
+if (IEX_GUITARPRO_NO_INTERNAL)
+    set(MODULE_DEF -DIEX_GUITARPRO_NO_INTERNAL)
+else()
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproconfiguration.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproconfiguration.h
+    )
+endif()
+
+
 set(MODULE_LINK
     engraving
-    qzip
     )
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
-
+include(SetupModule)

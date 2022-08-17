@@ -29,9 +29,11 @@
 #include "accidental.h"
 #include "part.h"
 
+#include "log.h"
+
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 // transposition table for microtonal accidentals
 const SymId accTable[] = {
     SymId::noSym,
@@ -42,6 +44,21 @@ const SymId accTable[] = {
     SymId::accidentalNatural,
     SymId::accidentalSharp,
     SymId::accidentalDoubleSharp,
+    SymId::accidentalTripleSharp,
+    SymId::noSym,
+    //  natural sharp
+    SymId::accidentalNatural,
+    SymId::accidentalNaturalSharp,
+    SymId::accidentalSharp,
+    SymId::noSym,
+    //  natural flat
+    SymId::accidentalDoubleFlat,
+    SymId::accidentalNaturalFlat,
+    SymId::accidentalNatural,
+    SymId::noSym,
+    //  natural sharp sharp
+    SymId::accidentalSharp,
+    SymId::accidentalSharpSharp,
     SymId::accidentalTripleSharp,
     SymId::noSym,
     // Gould quarter tone
@@ -133,10 +150,10 @@ void KeySigEvent::enforceLimits()
 {
     if (_key < Key::MIN) {
         _key = Key::MIN;
-        qDebug("key < -7");
+        LOGD("key < -7");
     } else if (_key > Key::MAX) {
         _key = Key::MAX;
-        qDebug("key > 7");
+        LOGD("key > 7");
     }
 }
 
@@ -146,16 +163,16 @@ void KeySigEvent::enforceLimits()
 
 void KeySigEvent::print() const
 {
-    qDebug("<KeySigEvent: ");
+    LOGD("<KeySigEvent: ");
     if (!isValid()) {
-        qDebug("invalid>");
+        LOGD("invalid>");
     } else {
         if (isAtonal()) {
-            qDebug("atonal>");
+            LOGD("atonal>");
         } else if (custom()) {
-            qDebug("custom>");
+            LOGD("custom>");
         } else {
-            qDebug("accidental %d>", int(_key));
+            LOGD("accidental %d>", int(_key));
         }
     }
 }
@@ -345,7 +362,7 @@ void AccidentalState::init(const KeySigEvent& keySig)
                 if (i >= MAX_ACC_STATE) {
                     break;
                 }
-                state[i] = int(a) - int(AccidentalVal::MIN);
+                state[i] = static_cast<uint8_t>(int(a) - int(AccidentalVal::MIN));
             }
         }
     }
@@ -357,7 +374,7 @@ void AccidentalState::init(const KeySigEvent& keySig)
 
 AccidentalVal AccidentalState::accidentalVal(int line) const
 {
-    Q_ASSERT(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
+    assert(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
     return AccidentalVal((state[line] & 0x0f) + int(AccidentalVal::MIN));
 }
 
@@ -367,7 +384,7 @@ AccidentalVal AccidentalState::accidentalVal(int line) const
 
 bool AccidentalState::tieContext(int line) const
 {
-    Q_ASSERT(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
+    assert(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
     return state[line] & TIE_CONTEXT;
 }
 
@@ -377,9 +394,9 @@ bool AccidentalState::tieContext(int line) const
 
 void AccidentalState::setAccidentalVal(int line, AccidentalVal val, bool tieContext)
 {
-    Q_ASSERT(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
+    assert(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
     // casts needed to work around a bug in Xcode 4.2 on Mac, see #25910
-    Q_ASSERT(int(val) >= int(AccidentalVal::MIN) && int(val) <= int(AccidentalVal::MAX));
+    assert(int(val) >= int(AccidentalVal::MIN) && int(val) <= int(AccidentalVal::MAX));
     state[line] = (int(val) - int(AccidentalVal::MIN)) | (tieContext ? TIE_CONTEXT : 0);
 }
 

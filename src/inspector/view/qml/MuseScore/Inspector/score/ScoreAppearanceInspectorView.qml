@@ -67,11 +67,9 @@ InspectorSectionView {
 
                 enabled: root.model ? root.model.hideEmptyStaves : false
                 icon: IconCode.SETTINGS_COG
-                transparent: !popup.isOpened
+                transparent: !isOpened
 
                 anchorItem: root.anchorItem
-
-                notationView: root.notationView
 
                 navigation.name: "HideEmptyStavesSettings"
                 navigation.panel: root.navigationPanel
@@ -94,7 +92,7 @@ InspectorSectionView {
                 }
 
                 onPopupOpened: {
-                    root.popupOpened(hideEmptyStavesSettingsPopupButton.popup)
+                    root.popupOpened(popup, control)
                 }
             }
         }

@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -29,7 +30,7 @@ import MuseScore.Playback 1.0
 
 import "internal"
 
-Item {
+ColumnLayout {
     id: root
 
     property alias contextMenuModel: contextMenuModel
@@ -37,6 +38,14 @@ Item {
     property NavigationSection navigationSection: null
 
     signal resizeRequested(var newWidth, var newHeight)
+
+    spacing: 0
+
+    onImplicitHeightChanged: {
+        if (contentColumn.completed) {
+            resizeRequested(width, implicitHeight)
+        }
+    }
 
     QtObject {
         id: prv
@@ -97,12 +106,17 @@ Item {
     StyledFlickable {
         id: flickable
 
-        anchors.fill: parent
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
         contentWidth: contentColumn.width + 1 // for trailing separator
         contentHeight: Math.max(contentColumn.height, height)
 
+        implicitHeight: contentColumn.height
+
         interactive: height < contentHeight || width < contentWidth
+
+        ScrollBar.horizontal: horizontalScrollBar
 
         ScrollBar.vertical: StyledScrollBar { policy: ScrollBar.AlwaysOn }
 
@@ -154,12 +168,6 @@ Item {
 
             Component.onCompleted: {
                 contentColumn.completed = true
-            }
-
-            onHeightChanged: {
-                if (contentColumn.completed) {
-                    root.resizeRequested(root.width, contentColumn.height)
-                }
             }
 
             MixerSoundSection {
@@ -293,6 +301,20 @@ Item {
                     prv.setNavigateControlIndex(index)
                 }
             }
+        }
+    }
+
+    Column {
+        spacing: 0
+        Layout.fillWidth: true
+        visible: horizontalScrollBar.isScrollbarNeeded
+
+        SeparatorLine {}
+
+        StyledScrollBar {
+            id: horizontalScrollBar
+            width: parent.width
+            policy: ScrollBar.AlwaysOn
         }
     }
 

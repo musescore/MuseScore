@@ -22,7 +22,7 @@
 #ifndef MU_WORKSPACE_WORKSPACEERRORS_H
 #define MU_WORKSPACE_WORKSPACEERRORS_H
 
-#include "ret.h"
+#include "types/ret.h"
 
 namespace mu::workspace {
 enum class Err {
@@ -31,7 +31,6 @@ enum class Err {
     UnknownError    = int(Ret::Code::WorkspaceFirst),
 
     NotLoaded       = 1502,
-    NoData          = 1503,
 
     FailedPack      = 1510,
     FailedUnPack    = 1511,

@@ -26,11 +26,11 @@
 #include "elements.h"
 #include "score.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 //---------------------------------------------------------
 //   Selection
-//    Wrapper class for internal Ms::Selection
+//    Wrapper class for internal mu::engraving::Selection
 ///  \since MuseScore 3.3
 //---------------------------------------------------------
 
@@ -39,7 +39,7 @@ class Selection : public QObject
     Q_OBJECT
     /// Current GUI selections for the score.
     /// \since MuseScore 3.3
-    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::EngravingItem> elements READ elements)
+    Q_PROPERTY(QQmlListProperty<mu::engraving::PluginAPI::EngravingItem> elements READ elements)
 
     /**
      * Whether this selection covers a range of a score, as opposed to
@@ -53,14 +53,14 @@ class Selection : public QObject
      * \since MuseScore 3.5
      * \see \ref isRange
      */
-    Q_PROPERTY(Ms::PluginAPI::Segment * startSegment READ startSegment)
+    Q_PROPERTY(mu::engraving::PluginAPI::Segment * startSegment READ startSegment)
     /**
      * End segment of selection, excluded. This property is valid
      * only for range selection.
      * \since MuseScore 3.5
      * \see \ref isRange
      */
-    Q_PROPERTY(Ms::PluginAPI::Segment * endSegment READ endSegment)
+    Q_PROPERTY(mu::engraving::PluginAPI::Segment * endSegment READ endSegment)
     /**
      * First staff of selection, included. This property is valid
      * only for range selection.
@@ -78,13 +78,13 @@ class Selection : public QObject
 
 protected:
     /// \cond MS_INTERNAL
-    Ms::Selection* _select;
+    mu::engraving::Selection* _select;
 
     bool checkSelectionIsNotLocked() const;
     /// \endcond
 public:
     /// \cond MS_INTERNAL
-    Selection(Ms::Selection* select)
+    Selection(mu::engraving::Selection* select)
         : QObject(), _select(select) {}
     virtual ~Selection() { }
 
@@ -95,17 +95,17 @@ public:
 
     Segment* startSegment() const { return wrap<Segment>(_select->startSegment()); }
     Segment* endSegment() const { return wrap<Segment>(_select->endSegment()); }
-    staff_idx_t startStaff() const { return _select->staffStart(); }
-    staff_idx_t endStaff() const { return _select->staffEnd(); }
+    int startStaff() const { return static_cast<int>(_select->staffStart()); }
+    int endStaff() const { return static_cast<int>(_select->staffEnd()); }
     /// \endcond
 
-    Q_INVOKABLE bool select(Ms::PluginAPI::EngravingItem* e, bool add = false);
+    Q_INVOKABLE bool select(mu::engraving::PluginAPI::EngravingItem* e, bool add = false);
     Q_INVOKABLE bool selectRange(int startTick, int endTick, int startStaff, int endStaff);
-    Q_INVOKABLE bool deselect(Ms::PluginAPI::EngravingItem* e);
+    Q_INVOKABLE bool deselect(mu::engraving::PluginAPI::EngravingItem* e);
     Q_INVOKABLE bool clear();
 };
 
-extern Selection* selectionWrap(Ms::Selection* select);
+extern Selection* selectionWrap(mu::engraving::Selection* select);
 } // namespace PluginAPI
 } // namespace Ms
 #endif

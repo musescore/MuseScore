@@ -23,54 +23,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="orchestral">
-      <name>Orchestral</name>
-      <instrument id="voice">
-        <family id="voices">Voices</family>
-        </instrument>
-      <section id="woodwind" brackets="true" showSystemMarkings="true" barLineSpan="true" thinBrackets="true">
-        <family>flutes</family>
-        <family>oboes</family>
-        <family>clarinets</family>
-        <family>saxophones</family>
-        <family>bassoons</family>
-        <unsorted group="woodwinds"/>
-        </section>
-      <section id="brass" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
-        <family>horns</family>
-        <family>trumpets</family>
-        <family>cornets</family>
-        <family>flugelhorns</family>
-        <family>trombones</family>
-        <family>tubas</family>
-        </section>
-      <section id="timpani" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
-        <family>timpani</family>
-        </section>
-      <section id="percussion" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
-        <family>keyboard-percussion</family>
-        <family>drums</family>
-        <family>unpitched-metal-percussion</family>
-        <family>unpitched-wooden-percussion</family>
-        <family>other-percussion</family>
-        </section>
-      <family>keyboards</family>
-      <family>harps</family>
-      <family>organs</family>
-      <family>synths</family>
-      <section id="plucked-strings" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
-        <family>plucked-strings</family>
-        </section>
-      <soloists/>
-      <section id="voices" brackets="true" showSystemMarkings="false" barLineSpan="false" thinBrackets="true">
-        <family>voices</family>
-        </section>
-      <section id="strings" brackets="true" showSystemMarkings="true" barLineSpan="true" thinBrackets="true">
-        <family>orchestral-strings</family>
-        </section>
-      <unsorted/>
-      </Order>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -956,8 +909,8 @@
           </LayoutBreak>
         <voice>
           <Beam>
-            <l1>10</l1>
-            <l2>10</l2>
+            <l1>18</l1>
+            <l2>18</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -977,8 +930,8 @@
             <durationType>16th</durationType>
             </Rest>
           <Beam>
-            <l1>10</l1>
-            <l2>10</l2>
+            <l1>18</l1>
+            <l2>18</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -998,8 +951,8 @@
             <durationType>16th</durationType>
             </Rest>
           <Beam>
-            <l1>10</l1>
-            <l2>10</l2>
+            <l1>14</l1>
+            <l2>14</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -1128,8 +1081,8 @@
       <Measure>
         <voice>
           <Beam>
-            <l1>-12</l1>
-            <l2>-12</l2>
+            <l1>-10</l1>
+            <l2>-10</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -1170,8 +1123,8 @@
             <durationType>16th</durationType>
             </Rest>
           <Beam>
-            <l1>44</l1>
-            <l2>44</l2>
+            <l1>42</l1>
+            <l2>42</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -1300,8 +1253,8 @@
       <Measure>
         <voice>
           <Beam>
-            <l1>22</l1>
-            <l2>22</l2>
+            <l1>18</l1>
+            <l2>18</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -1321,8 +1274,8 @@
             <durationType>16th</durationType>
             </Rest>
           <Beam>
-            <l1>22</l1>
-            <l2>22</l2>
+            <l1>14</l1>
+            <l2>14</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -1342,8 +1295,8 @@
             <durationType>16th</durationType>
             </Rest>
           <Beam>
-            <l1>22</l1>
-            <l2>22</l2>
+            <l1>14</l1>
+            <l2>14</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -1363,8 +1316,8 @@
             <durationType>16th</durationType>
             </Rest>
           <Beam>
-            <l1>22</l1>
-            <l2>22</l2>
+            <l1>14</l1>
+            <l2>14</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -1391,8 +1344,8 @@
       <Measure>
         <voice>
           <Beam>
-            <l1>6</l1>
-            <l2>6</l2>
+            <l1>18</l1>
+            <l2>18</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
@@ -1412,8 +1365,8 @@
             <durationType>32nd</durationType>
             </Rest>
           <Beam>
-            <l1>4</l1>
-            <l2>4</l2>
+            <l1>6</l1>
+            <l2>6</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
@@ -1755,8 +1708,8 @@
             <durationType>32nd</durationType>
             </Rest>
           <Beam>
-            <l1>28</l1>
-            <l2>28</l2>
+            <l1>26</l1>
+            <l2>26</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
@@ -1776,8 +1729,8 @@
             <durationType>32nd</durationType>
             </Rest>
           <Beam>
-            <l1>26</l1>
-            <l2>26</l2>
+            <l1>14</l1>
+            <l2>14</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>

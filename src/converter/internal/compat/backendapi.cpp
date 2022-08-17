@@ -24,15 +24,16 @@
 #include <stdio.h>
 
 #include <QString>
-#include <QBuffer>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonValue>
 #include <QRandomGenerator>
 
+#include "io/buffer.h"
+
 #include "engraving/compat/scoreaccess.h"
-#include "engraving/infrastructure/io/mscwriter.h"
+#include "engraving/infrastructure/mscwriter.h"
 #include "engraving/libmscore/excerpt.h"
 
 #include "backendjsonwriter.h"
@@ -59,7 +60,8 @@ static const std::string META_DATA_NAME = "metadata";
 static constexpr bool ADD_SEPARATOR = true;
 static constexpr auto NO_STYLE = "";
 
-Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath, const io::path& stylePath,
+Ret BackendApi::exportScoreMedia(const io::path_t& in, const io::path_t& out, const io::path_t& highlightConfigPath,
+                                 const io::path_t& stylePath,
                                  bool forceMode)
 {
     TRACEFUNC
@@ -90,7 +92,7 @@ Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath, bool forceMode)
+Ret BackendApi::exportScoreMeta(const io::path_t& in, const io::path_t& out, const io::path_t& stylePath, bool forceMode)
 {
     TRACEFUNC
 
@@ -111,7 +113,7 @@ Ret BackendApi::exportScoreMeta(const io::path& in, const io::path& out, const i
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath, bool forceMode)
+Ret BackendApi::exportScoreParts(const io::path_t& in, const io::path_t& out, const io::path_t& stylePath, bool forceMode)
 {
     TRACEFUNC
 
@@ -132,7 +134,7 @@ Ret BackendApi::exportScoreParts(const io::path& in, const io::path& out, const 
     return ret;
 }
 
-Ret BackendApi::exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath, bool forceMode)
+Ret BackendApi::exportScorePartsPdfs(const io::path_t& in, const io::path_t& out, const io::path_t& stylePath, bool forceMode)
 {
     TRACEFUNC
 
@@ -153,7 +155,8 @@ Ret BackendApi::exportScorePartsPdfs(const io::path& in, const io::path& out, co
     return ret;
 }
 
-Ret BackendApi::exportScoreTranspose(const io::path& in, const io::path& out, const std::string& optionsJson, const io::path& stylePath,
+Ret BackendApi::exportScoreTranspose(const io::path_t& in, const io::path_t& out, const std::string& optionsJson,
+                                     const io::path_t& stylePath,
                                      bool forceMode)
 {
     TRACEFUNC
@@ -180,7 +183,7 @@ Ret BackendApi::exportScoreTranspose(const io::path& in, const io::path& out, co
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::openOutputFile(QFile& file, const io::path& out)
+Ret BackendApi::openOutputFile(QFile& file, const io::path_t& out)
 {
     bool ok = false;
     if (!out.empty()) {
@@ -193,8 +196,8 @@ Ret BackendApi::openOutputFile(QFile& file, const io::path& out)
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-RetVal<project::INotationProjectPtr> BackendApi::openProject(const io::path& path,
-                                                             const io::path& stylePath,
+RetVal<project::INotationProjectPtr> BackendApi::openProject(const io::path_t& path,
+                                                             const io::path_t& stylePath,
                                                              bool forceMode)
 {
     TRACEFUNC
@@ -230,7 +233,7 @@ PageList BackendApi::pages(const INotationPtr notation)
     return elements->pages();
 }
 
-QVariantMap BackendApi::readBeatsColors(const io::path& filePath)
+QVariantMap BackendApi::readBeatsColors(const io::path_t& filePath)
 {
     TRACEFUNC
 
@@ -238,15 +241,13 @@ QVariantMap BackendApi::readBeatsColors(const io::path& filePath)
         return QVariantMap();
     }
 
-    RetVal<QByteArray> fileData = fileSystem()->readFile(filePath);
+    RetVal<ByteArray> fileData = fileSystem()->readFile(filePath);
     if (!fileData.ret) {
         LOGW() << fileData.ret.toString();
         return QVariantMap();
     }
 
-    QString content(fileData.val);
-
-    QJsonDocument document = QJsonDocument::fromJson(content.toUtf8());
+    QJsonDocument document = QJsonDocument::fromJson(fileData.val.toQByteArrayNoCopy());
     QJsonObject obj = document.object();
     QJsonArray colors = obj.value("highlight").toArray();
 
@@ -306,7 +307,7 @@ Ret BackendApi::exportScorePngs(const INotationPtr notation, BackendJsonWriter& 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const io::path& highlightConfigPath, BackendJsonWriter& jsonWriter,
+Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const io::path_t& highlightConfigPath, BackendJsonWriter& jsonWriter,
                                 bool addSeparator)
 {
     TRACEFUNC
@@ -332,7 +333,7 @@ Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const io::path& hig
         INotationWriter::Options options {
             { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(i)) },
             { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(false) },
-            { INotationWriter::OptionKey::BEATS_COLORS, Val(beatsColors) }
+            { INotationWriter::OptionKey::BEATS_COLORS, Val::fromQVariant(beatsColors) }
         };
 
         Ret writeRet = svgWriter->write(notation, svgDevice, options);
@@ -381,7 +382,7 @@ Ret BackendApi::exportScorePdf(const INotationPtr notation, BackendJsonWriter& j
     return make_ret(Ret::Code::Ok);
 }
 
-Ret BackendApi::exportScorePdf(const INotationPtr notation, Device& destinationDevice)
+Ret BackendApi::exportScorePdf(const INotationPtr notation, QIODevice& destinationDevice)
 {
     TRACEFUNC
 
@@ -497,24 +498,24 @@ mu::RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, 
     return result;
 }
 
-Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, Device& destinationDevice)
+Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, QIODevice& destinationDevice)
 {
-    Ms::MasterScore* score = notation->elements()->msScore()->masterScore();
+    mu::engraving::MasterScore* score = notation->elements()->msScore()->masterScore();
 
     QJsonArray partsObjList;
     QJsonArray partsMetaList;
     QJsonArray partsTitles;
 
-    for (const Ms::Excerpt* excerpt : score->excerpts()) {
-        Ms::Score* part = excerpt->excerptScore();
-        std::map<QString, QString> partMetaTags = part->metaTags();
+    for (const mu::engraving::Excerpt* excerpt : score->excerpts()) {
+        mu::engraving::Score* part = excerpt->excerptScore();
+        std::map<String, String> partMetaTags = part->metaTags();
 
         QJsonValue partTitle(part->name());
         partsTitles << partTitle;
 
         QVariantMap meta;
-        for (const QString& key: mu::keys(partMetaTags)) {
-            meta[key] = partMetaTags[key];
+        for (const String& key: mu::keys(partMetaTags)) {
+            meta[key] = partMetaTags[key].toQString();
         }
 
         QJsonValue partMetaObj = QJsonObject::fromVariantMap(meta);
@@ -536,7 +537,7 @@ Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, Device
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, Device& destinationDevice,
+Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, QIODevice& destinationDevice,
                                        const std::string& scoreFileName)
 {
     QJsonObject jsonForPdfs;
@@ -579,7 +580,7 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
 
 Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
 {
-    Ms::Score* score = notation->elements()->msScore();
+    mu::engraving::Score* score = notation->elements()->msScore();
 
     jsonWriter.addKey("mscz");
 
@@ -597,10 +598,10 @@ Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonW
     return ret;
 }
 
-RetVal<QByteArray> BackendApi::scorePartJson(Ms::Score* score, const std::string& fileName)
+RetVal<QByteArray> BackendApi::scorePartJson(mu::engraving::Score* score, const std::string& fileName)
 {
-    QByteArray scoreData;
-    QBuffer buf(&scoreData);
+    ByteArray scoreData;
+    Buffer buf(&scoreData);
 
     MscWriter::Params params;
     params.device = &buf;
@@ -616,9 +617,11 @@ RetVal<QByteArray> BackendApi::scorePartJson(Ms::Score* score, const std::string
     }
     mscWriter.close();
 
+    QByteArray ba = QByteArray::fromRawData(reinterpret_cast<const char*>(scoreData.constData()), static_cast<int>(scoreData.size()));
+
     RetVal<QByteArray> result;
     result.ret = ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
-    result.val = scoreData.toBase64();
+    result.val = ba.toBase64();
 
     return result;
 }
@@ -711,7 +714,7 @@ Ret BackendApi::applyTranspose(const INotationPtr notation, const std::string& o
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::updateSource(const io::path& in, const std::string& newSource, bool forceMode)
+Ret BackendApi::updateSource(const io::path_t& in, const std::string& newSource, bool forceMode)
 {
     RetVal<INotationProjectPtr> project = openProject(in, NO_STYLE, forceMode);
     if (!project.ret) {

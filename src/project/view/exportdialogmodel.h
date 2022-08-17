@@ -65,7 +65,6 @@ class ExportDialogModel : public QAbstractListModel
     Q_PROPERTY(
         bool pngTransparentBackground READ pngTransparentBackground WRITE setPngTransparentBackground NOTIFY pngTransparentBackgroundChanged)
 
-    Q_PROPERTY(bool normalizeAudio READ normalizeAudio WRITE setNormalizeAudio NOTIFY normalizeAudioChanged)
     Q_PROPERTY(int sampleRate READ sampleRate WRITE setSampleRate NOTIFY sampleRateChanged)
     Q_PROPERTY(int bitRate READ bitRate WRITE setBitRate NOTIFY bitRateChanged)
 
@@ -113,9 +112,6 @@ public:
     bool pngTransparentBackground() const;
     void setPngTransparentBackground(const bool& transparent);
 
-    bool normalizeAudio() const;
-    void setNormalizeAudio(bool normalizeAudio);
-
     Q_INVOKABLE QList<int> availableSampleRates() const;
     int sampleRate() const;
     void setSampleRate(int sampleRate);
@@ -155,7 +151,6 @@ signals:
     void pngResolutionChanged(int resolution);
     void pngTransparentBackgroundChanged(bool transparent);
 
-    void normalizeAudioChanged(bool normalizeAudio);
     void availableSampleRatesChanged();
     void sampleRateChanged(int sampleRate);
     void availableBitRatesChanged();

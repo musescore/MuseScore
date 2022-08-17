@@ -22,12 +22,15 @@
 
 #include "instrumentsactionscontroller.h"
 
+#include "engraving/libmscore/instrchange.h"
+
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 
 void InstrumentsActionsController::init()
 {
     dispatcher()->reg(this, "instruments", this, &InstrumentsActionsController::selectInstruments);
+    dispatcher()->reg(this, "change-instrument", this, &InstrumentsActionsController::changeInstrument);
 }
 
 bool InstrumentsActionsController::canReceiveAction(const actions::ActionCode&) const
@@ -49,4 +52,31 @@ void InstrumentsActionsController::selectInstruments()
     }
 
     master->parts()->setParts(selectedInstruments.val.instruments, selectedInstruments.val.scoreOrder);
+}
+
+void InstrumentsActionsController::changeInstrument()
+{
+    IMasterNotationPtr master = context()->currentMasterNotation();
+    IF_ASSERT_FAILED(master) {
+        return;
+    }
+
+    const mu::engraving::EngravingItem* element = master->notation()->interaction()->selection()->element();
+    const mu::engraving::InstrumentChange* instrumentChange = element ? mu::engraving::toInstrumentChange(element) : nullptr;
+    if (!instrumentChange) {
+        return;
+    }
+
+    InstrumentKey key;
+    key.instrumentId = instrumentChange->instrument()->id();
+    key.partId = instrumentChange->part()->id();
+    key.tick = instrumentChange->tick();
+
+    RetVal<Instrument> instrument = selectInstrumentsScenario()->selectInstrument(key);
+    if (!instrument.ret) {
+        LOGE() << instrument.ret.toString();
+        return;
+    }
+
+    master->parts()->replaceInstrument(key, instrument.val);
 }

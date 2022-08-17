@@ -92,7 +92,6 @@ ProjectCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
 
     QVariantMap keySignature = info["keySignature"].toMap();
     scoreOptions.key = static_cast<Key>(keySignature["key"].toInt());
-    scoreOptions.keyMode = static_cast<KeyMode>(keySignature["mode"].toInt());
 
     QVariantMap measuresPickup = info["pickupTimeSignature"].toMap();
     scoreOptions.withPickupMeasure = info["withPickupMeasure"].toBool();
@@ -100,18 +99,24 @@ ProjectCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
     scoreOptions.measureTimesigNumerator = measuresPickup["numerator"].toInt();
     scoreOptions.measureTimesigDenominator = measuresPickup["denominator"].toInt();
 
-    for (const QVariant& obj : info["instruments"].toList()) {
+    QVariantList instruments = info["instruments"].toList();
+
+    for (const QVariant& obj : instruments) {
         QVariantMap objMap = obj.toMap();
 
         PartInstrument pi;
-        pi.instrumentTemplate = objMap["instrumentTemplate"].value<InstrumentTemplate>();
+
+        std::string instrumentId = objMap["instrumentId"].toString().toStdString();
+        pi.instrumentTemplate = instrumentsRepository()->instrumentTemplate(instrumentId);
         pi.isExistingPart = objMap["isExistingPart"].toBool();
         pi.isSoloist = objMap["isSoloist"].toBool();
 
         scoreOptions.parts << pi;
     }
 
-    scoreOptions.order = info["scoreOrder"].value<ScoreOrder>();
+    QVariantMap orderMap = info["scoreOrder"].toMap();
+    scoreOptions.order = instrumentsRepository()->order(orderMap["id"].toString().toStdString());
+    scoreOptions.order.customized = orderMap["customized"].toBool();
 
     return projectOptions;
 }

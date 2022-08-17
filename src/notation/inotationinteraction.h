@@ -94,12 +94,12 @@ public:
     virtual bool startDrop(const QUrl& url) = 0;
     virtual bool isDropAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
     virtual bool drop(const PointF& pos, Qt::KeyboardModifiers modifiers) = 0;
-    virtual const EngravingItem* dropTarget() const = 0;
     virtual void setDropTarget(const EngravingItem* item, bool notify = true) = 0;
+    virtual void setDropRect(const RectF& rect) = 0;
     virtual void endDrop() = 0;
     virtual async::Notification dropChanged() const = 0;
 
-    virtual bool applyPaletteElement(Ms::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) = 0;
+    virtual bool applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) = 0;
     virtual void undo() = 0;
     virtual void redo() = 0;
 
@@ -131,6 +131,7 @@ public:
     virtual const TextBase* editedText() const = 0;
     virtual async::Notification textEditingStarted() const = 0;
     virtual async::Notification textEditingChanged() const = 0;
+    virtual async::Notification textEditingEnded() const = 0;
 
     // Display
     virtual async::Channel<ScoreConfigType> scoreConfigChanged() const = 0;
@@ -139,7 +140,7 @@ public:
     virtual bool isGripEditStarted() const = 0;
     virtual bool isHitGrip(const PointF& pos) const = 0;
     virtual void startEditGrip(const PointF& pos) = 0;
-    virtual void startEditGrip(EngravingItem* element, Ms::Grip grip) = 0;
+    virtual void startEditGrip(EngravingItem* element, mu::engraving::Grip grip) = 0;
 
     virtual bool isElementEditStarted() const = 0;
     virtual void startEditElement(EngravingItem* element) = 0;
@@ -156,6 +157,7 @@ public:
     virtual void addBoxes(BoxType boxType, int count, int beforeBoxIndex) = 0;
 
     virtual void copySelection() = 0;
+    virtual mu::Ret repeatSelection() = 0;
     virtual void copyLyrics() = 0;
     virtual void pasteSelection(const Fraction& scale = Fraction(1, 1)) = 0;
     virtual void swapSelection() = 0;
@@ -210,7 +212,6 @@ public:
     virtual void fillSelectionWithSlashes() = 0;
     virtual void replaceSelectedNotesWithSlashes() = 0;
 
-    virtual void repeatSelection() = 0;
     virtual void changeEnharmonicSpelling(bool both) = 0;
     virtual void spellPitches() = 0;
     virtual void regroupNotesAndRests() = 0;
@@ -231,7 +232,7 @@ public:
     virtual void navigateToLyrics(MoveDirection direction) = 0;
     virtual void navigateToLyricsVerse(MoveDirection direction) = 0;
 
-    virtual void nagivateToNextSyllable() = 0;
+    virtual void navigateToNextSyllable() = 0;
 
     virtual void navigateToNearHarmony(MoveDirection direction, bool nearNoteOrRest) = 0;
     virtual void navigateToHarmonyInNearMeasure(MoveDirection direction) = 0;
@@ -249,26 +250,30 @@ public:
     virtual void toggleUnderline() = 0;
     virtual void toggleStrike() = 0;
 
-    virtual void toggleArticulation(Ms::SymId) = 0;
-    virtual void insertClef(Ms::ClefType) = 0;
-    virtual void changeAccidental(Ms::AccidentalType) = 0;
+    virtual void toggleArticulation(mu::engraving::SymId) = 0;
+    virtual void insertClef(mu::engraving::ClefType) = 0;
+    virtual void changeAccidental(mu::engraving::AccidentalType) = 0;
     virtual void transposeSemitone(int) = 0;
-    virtual void transposeDiatonicAlterations(Ms::TransposeDirection) = 0;
+    virtual void transposeDiatonicAlterations(mu::engraving::TransposeDirection) = 0;
     virtual void toggleGlobalOrLocalInsert() = 0;
     virtual void toggleAutoplace(bool all) = 0;
     virtual void getLocation() = 0;
-    virtual void execute(void (Ms::Score::*)()) = 0;
+    virtual void execute(void (mu::engraving::Score::*)()) = 0;
 
     struct ShowItemRequest {
         const EngravingItem* item = nullptr;
         RectF showRect;
     };
 
-    virtual void showItem(const Ms::EngravingItem* item, int staffIndex = -1) = 0;
+    virtual void showItem(const mu::engraving::EngravingItem* item, int staffIndex = -1) = 0;
     virtual async::Channel<ShowItemRequest> showItemRequested() const = 0;
+
+    virtual void setGetViewRectFunc(const std::function<RectF()>& func) = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;
+
+EngravingItem* contextItem(INotationInteractionPtr);
 }
 
 #endif // MU_NOTATION_INOTATIONINTERACTION_H

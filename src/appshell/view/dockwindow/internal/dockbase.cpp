@@ -33,9 +33,17 @@
 #include "thirdparty/KDDockWidgets/src/private/FloatingWindow_p.h"
 
 namespace mu::dock {
-static QSize adjustSizeByContraints(const QSize& size, const QSize& min, const QSize& max)
+static QSize adjustSizeByConstraints(const QSize& size, const QSize& min, const QSize& max)
 {
     return size.expandedTo(min).boundedTo(max);
+}
+
+static bool sizeInRange(const QSize& size, const QSize& min, const QSize& max)
+{
+    bool widthInRange = size.width() >= min.width() && size.width() <= max.width();
+    bool heightInRange = size.height() >= min.height() && size.height() <= max.height();
+
+    return widthInRange && heightInRange;
 }
 
 class DockWidgetImpl : public KDDockWidgets::DockWidgetQuick
@@ -61,9 +69,16 @@ public:
 
 using namespace mu::dock;
 
-DockBase::DockBase(QQuickItem* parent)
-    : QQuickItem(parent), m_resizable(true), m_separatorsVisible(true)
+DockBase::DockBase(DockType type, QQuickItem* parent)
+    : QQuickItem(parent)
 {
+    Q_ASSERT(type != DockType::Undefined);
+
+    m_properties.type = type;
+    m_properties.floatable = true;
+    m_properties.closable = true;
+    m_properties.resizable = true;
+    m_properties.separatorsVisible = true;
 }
 
 QString DockBase::title() const
@@ -108,12 +123,12 @@ QSize DockBase::preferredSize() const
 
 int DockBase::locationProperty() const
 {
-    return m_location;
+    return static_cast<int>(m_properties.location);
 }
 
 Location DockBase::location() const
 {
-    return static_cast<Location>(m_location);
+    return m_properties.location;
 }
 
 QVariantList DockBase::dropDestinationsProperty() const
@@ -147,24 +162,39 @@ QList<DropDestination> DockBase::dropDestinations() const
     return result;
 }
 
-bool DockBase::persistent() const
+bool DockBase::closable() const
 {
-    return m_persistent;
+    return m_properties.closable;
 }
 
 bool DockBase::resizable() const
 {
-    return m_resizable;
+    return m_properties.resizable;
 }
 
 bool DockBase::separatorsVisible() const
 {
-    return m_separatorsVisible;
+    return m_properties.separatorsVisible;
+}
+
+bool DockBase::floatable() const
+{
+    return m_properties.floatable;
 }
 
 bool DockBase::floating() const
 {
-    return m_floating.value_or(false);
+    return m_floating;
+}
+
+bool DockBase::inited() const
+{
+    return m_inited;
+}
+
+DockType DockBase::type() const
+{
+    return m_properties.type;
 }
 
 KDDockWidgets::DockWidgetQuick* DockBase::dockWidget() const
@@ -244,11 +274,11 @@ void DockBase::setContentHeight(int height)
 
 void DockBase::setLocation(int location)
 {
-    if (location == m_location) {
+    if (location == m_properties.location) {
         return;
     }
 
-    m_location = location;
+    m_properties.location = static_cast<Location>(location);
     emit locationChanged();
 }
 
@@ -262,33 +292,43 @@ void DockBase::setDropDestinations(const QVariantList& destinations)
     emit dropDestinationsChanged();
 }
 
-void DockBase::setPersistent(bool persistent)
+void DockBase::setFloatable(bool floatable)
 {
-    if (persistent == m_persistent) {
+    if (floatable == m_properties.floatable) {
         return;
     }
 
-    m_persistent = persistent;
-    emit persistentChanged();
+    m_properties.floatable = floatable;
+    emit floatableChanged();
+}
+
+void DockBase::setClosable(bool closable)
+{
+    if (closable == m_properties.closable) {
+        return;
+    }
+
+    m_properties.closable = closable;
+    emit closableChanged();
 }
 
 void DockBase::setResizable(bool resizable)
 {
-    if (resizable == m_resizable) {
+    if (resizable == m_properties.resizable) {
         return;
     }
 
-    m_resizable = resizable;
+    m_properties.resizable = resizable;
     emit resizableChanged();
 }
 
 void DockBase::setSeparatorsVisible(bool visible)
 {
-    if (visible == m_separatorsVisible) {
+    if (visible == m_properties.separatorsVisible) {
         return;
     }
 
-    m_separatorsVisible = visible;
+    m_properties.separatorsVisible = visible;
     emit separatorsVisibleChanged();
 }
 
@@ -308,6 +348,14 @@ void DockBase::init()
     }
 
     setVisible(m_dockWidget->isOpen());
+    setInited(true);
+
+    applySizeConstraints();
+}
+
+void DockBase::deinit()
+{
+    setInited(false);
 }
 
 bool DockBase::isOpen() const
@@ -345,11 +393,11 @@ void DockBase::close()
 
 void DockBase::showHighlighting(const QRect& highlightingRect)
 {
-    if (highlightingRect == m_highlightingRect) {
+    if (highlightingRect == m_properties.highlightingRect) {
         return;
     }
 
-    m_highlightingRect = highlightingRect;
+    m_properties.highlightingRect = highlightingRect;
     writeProperties();
 }
 
@@ -484,14 +532,21 @@ void DockBase::applySizeConstraints()
     int maxWidth = m_maximumWidth > 0 ? m_maximumWidth : m_dockWidget->maximumWidth();
     int maxHeight = m_maximumHeight > 0 ? m_maximumHeight : m_dockWidget->maximumHeight();
 
+    minWidth = std::min(minWidth, maxWidth);
+    minHeight = std::min(minHeight, maxHeight);
+    maxWidth = std::max(maxWidth, minWidth);
+    maxHeight = std::max(maxHeight, minHeight);
+
     QSize minimumSize(minWidth, minHeight);
     QSize maximumSize(maxWidth, maxHeight);
 
-    if (!m_resizable) {
+    if (!m_properties.resizable) {
         maximumSize = minimumSize;
     }
 
-    if (auto frame = m_dockWidget->frame()) {
+    KDDockWidgets::Frame* frame = m_dockWidget->frame();
+
+    if (frame) {
         frame->setMinimumSize(minimumSize);
         frame->setMaximumSize(maximumSize);
     }
@@ -499,17 +554,40 @@ void DockBase::applySizeConstraints()
     m_dockWidget->setMinimumSize(minimumSize);
     m_dockWidget->setMaximumSize(maximumSize);
 
-    if (auto window = m_dockWidget->floatingWindow()) {
+    if (KDDockWidgets::FloatingWindow* window = m_dockWidget->floatingWindow()) {
         window->setMinimumSize(minimumSize);
         window->setMaximumSize(maximumSize);
 
-        QSize winSize = adjustSizeByContraints(window->frameGeometry().size(), minimumSize, maximumSize);
+        QSize winSize = adjustSizeByConstraints(window->frameGeometry().size(), minimumSize, maximumSize);
         QRect winRect(window->dragRect().topLeft(), winSize);
 
         window->setGeometry(winRect);
 
-        if (auto layout = window->layoutWidget()) {
+        if (KDDockWidgets::LayoutWidget* layout = window->layoutWidget()) {
             layout->setLayoutSize(winSize);
+        }
+    }
+
+    if (!frame || !m_inited) {
+        return;
+    }
+
+    QSize currentSize = m_dockWidget->size();
+
+    //! NOTE: Initial size for all dock-widgets
+    //! See QWidgetAdapter_quick.cpp, QWidgetAdapter::QWidgetAdapter
+    static constexpr QSize INITIAL_DOCK_SIZE(800, 800);
+    if (currentSize == INITIAL_DOCK_SIZE) {
+        return;
+    }
+
+    if (sizeInRange(currentSize, minimumSize, maximumSize)) {
+        return;
+    }
+
+    if (const Layouting::Item* layout = frame->layoutItem()) {
+        if (Layouting::ItemBoxContainer* container = layout->parentBoxContainer()) {
+            container->layoutEqually_recursive();
         }
     }
 }
@@ -525,7 +603,7 @@ void DockBase::listenFloatingChanges()
     connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::parentChanged, this, [this, frameConn]() {
         if (frameConn) {
             disconnect(*frameConn);
-            m_floating = std::nullopt;
+            doSetFloating(false);
         }
 
         if (!m_dockWidget || !m_dockWidget->parentItem()) {
@@ -541,9 +619,7 @@ void DockBase::listenFloatingChanges()
         //! So it is important to apply size constraints
         //! and emit floatingChanged() after that
         QTimer::singleShot(0, this, [this]() {
-            if (!m_floating.has_value()) {
-                updateFloatingStatus();
-            }
+            updateFloatingStatus();
         });
 
         *frameConn
@@ -552,7 +628,7 @@ void DockBase::listenFloatingChanges()
 
     connect(m_dockWidget->toggleAction(), &QAction::toggled, this, [this]() {
         if (!isOpen()) {
-            m_floating = std::nullopt;
+            doSetFloating(false);
         }
     });
 }
@@ -560,37 +636,35 @@ void DockBase::listenFloatingChanges()
 void DockBase::updateFloatingStatus()
 {
     bool floating = m_dockWidget && m_dockWidget->floatingWindow();
-    bool oldValueIsNull = (m_floating == std::nullopt);
 
-    if (!oldValueIsNull && m_floating.value() == floating) {
+    doSetFloating(floating);
+}
+
+void DockBase::doSetFloating(bool floating)
+{
+    if (m_floating == floating) {
         return;
     }
 
-    TRACEFUNC;
-
     m_floating = floating;
-
-    if (!oldValueIsNull || floating) {
-        emit floatingChanged();
-    }
-
-    applySizeConstraints();
+    emit floatingChanged();
 }
 
 void DockBase::writeProperties()
 {
-    if (!m_dockWidget) {
+    if (m_dockWidget) {
+        writePropertiesToObject(m_properties, *m_dockWidget);
+    }
+}
+
+void DockBase::setInited(bool inited)
+{
+    if (m_inited == inited) {
         return;
     }
 
-    DockProperties properties;
-    properties.type = type();
-    properties.location = location();
-    properties.persistent = persistent();
-    properties.separatorsVisible = separatorsVisible();
-    properties.highlightingRect = m_highlightingRect;
-
-    writePropertiesToObject(properties, *m_dockWidget);
+    m_inited = inited;
+    emit initedChanged();
 }
 
 bool DropDestination::operator==(const DropDestination& dest) const

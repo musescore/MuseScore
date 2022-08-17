@@ -29,7 +29,7 @@
 
 #include <set>
 
-namespace Ms {
+namespace mu::iex::midi {
 namespace MidiTuplet {
 bool isMoreTupletVoicesAllowed(int voicesInUse, int availableVoices)
 {
@@ -442,7 +442,7 @@ bool validateSelectedTuplets(Iter beginIt,
                              const std::vector<TupletInfo>& tuplets)
 {
     // <chord address, used voices>
-    std::map<std::pair<const ReducedFraction, MidiChord>*, int> usedChords;
+    std::map<std::pair<const ReducedFraction, MidiChord>*, size_t> usedChords;
     for (auto indexIt = beginIt; indexIt != endIt; ++indexIt) {
         const auto& tuplet = tuplets[*indexIt];
         const auto& chords = tuplet.chords;
@@ -450,12 +450,12 @@ bool validateSelectedTuplets(Iter beginIt,
             bool isFirstChord = (tuplet.firstChordIndex == 0 && it == tuplet.chords.begin());
             const auto fit = usedChords.find(&*(it->second));
             if (fit == usedChords.end()) {
-                usedChords.insert({ &*(it->second), isFirstChord ? 1 : VOICES });
+                usedChords.insert({ &*(it->second), isFirstChord ? 1 : engraving::VOICES });
             } else {
                 if (!isFirstChord) {
                     return false;
                 }
-                if (!isMoreTupletVoicesAllowed(fit->second, it->second->second.notes.size())) {
+                if (!isMoreTupletVoicesAllowed(static_cast<int>(fit->second), it->second->second.notes.size())) {
                     return false;
                 }
                 ++(fit->second);
@@ -784,4 +784,4 @@ void filterTuplets(std::vector<TupletInfo>& tuplets,
     std::swap(tuplets, newTuplets);
 }
 } // namespace MidiTuplet
-} // namespace Ms
+} // namespace mu::iex::midi

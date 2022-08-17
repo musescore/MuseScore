@@ -26,7 +26,7 @@
 
 using namespace mu::project;
 
-void WindowsRecentFilesController::addRecentFile(const io::path& path)
+void WindowsRecentFilesController::addRecentFile(const io::path_t& path)
 {
     std::wstring pathString = path.toStdWString();
     SHAddToRecentDocs(SHARD_PATHW, pathString.c_str());

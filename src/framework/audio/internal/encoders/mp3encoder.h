@@ -26,14 +26,14 @@
 #include "abstractaudioencoder.h"
 
 namespace mu::audio::encode {
-class Mp3Encoder : public AbstractAudioEncoder<Mp3Encoder>
+class Mp3Encoder : public AbstractAudioEncoder
 {
-protected:
-    friend class AbstractAudioEncoder<Mp3Encoder>;
+public:
+    size_t encode(samples_t samplesPerChannel, const float* input) override;
+    size_t flush() override;
 
-    static size_t outputBufferSize(samples_t samplesPerChannel);
-    static samples_t doEncode(const SoundTrackFormat& format, samples_t samplesPerChannel, float* input, char* output);
-    static samples_t doFlush(char* output, size_t outputSize);
+protected:
+    size_t requiredOutputBufferSize(samples_t totalSamplesNumber) const override;
 };
 }
 

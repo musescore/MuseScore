@@ -23,6 +23,7 @@
 
 #include "actions/actiontypes.h"
 #include "pianokeyboardtypes.h"
+#include "types/translatablestring.h"
 
 #include "log.h"
 
@@ -73,10 +74,10 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makeViewMenu()
 {
     MenuItemList items;
 
-    std::vector<std::pair<QString, qreal> > possibleKeyWidthScalings {
-        { qtrc("notation", "Large"), LARGE_KEY_WIDTH_SCALING },
-        { qtrc("notation", "Normal"), NORMAL_KEY_WIDTH_SCALING },
-        { qtrc("notation", "Small"), SMALL_KEY_WIDTH_SCALING },
+    std::vector<std::pair<TranslatableString, qreal> > possibleKeyWidthScalings {
+        { TranslatableString("notation", "Large"), LARGE_KEY_WIDTH_SCALING },
+        { TranslatableString("notation", "Normal"), NORMAL_KEY_WIDTH_SCALING },
+        { TranslatableString("notation", "Small"), SMALL_KEY_WIDTH_SCALING },
     };
 
     for (auto [title, scaling] : possibleKeyWidthScalings) {
@@ -95,12 +96,12 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makeViewMenu()
 
     items << makeSeparator();
 
-    std::vector<std::pair<QString, int> > possibleNumbersOfKeys {
-        { qtrc("notation", "128 notes (full)"), 128 },
-        { qtrc("notation", "88 notes (piano)"), 88 },
-        { qtrc("notation", "61 notes"), 61 },
-        { qtrc("notation", "49 notes"), 49 },
-        { qtrc("notation", "25 notes"), 25 },
+    std::vector<std::pair<TranslatableString, int> > possibleNumbersOfKeys {
+        { TranslatableString("notation", "128 notes (full)"), 128 },
+        { TranslatableString("notation", "88 notes (piano)"), 88 },
+        { TranslatableString("notation", "61 notes"), 61 },
+        { TranslatableString("notation", "49 notes"), 49 },
+        { TranslatableString("notation", "25 notes"), 25 },
     };
 
     for (auto [title, numberOfKeys] : possibleNumbersOfKeys) {
@@ -119,10 +120,10 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makeViewMenu()
         configuration()->setPianoKeyboardNumberOfKeys(args.arg<int>(0));
     });
 
-    return makeMenu(qtrc("notation", "View"), items);
+    return makeMenu(TranslatableString("notation", "View"), items);
 }
 
-MenuItem* PianoKeyboardPanelContextMenuModel::makeKeyWidthScalingItem(const QString& title, qreal scaling)
+MenuItem* PianoKeyboardPanelContextMenuModel::makeKeyWidthScalingItem(const TranslatableString& title, qreal scaling)
 {
     UiAction action;
     action.title = title;
@@ -139,7 +140,7 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makeKeyWidthScalingItem(const QStr
     return item;
 }
 
-MenuItem* PianoKeyboardPanelContextMenuModel::makeNumberOfKeysItem(const QString& title, int numberOfKeys)
+MenuItem* PianoKeyboardPanelContextMenuModel::makeNumberOfKeysItem(const TranslatableString& title, int numberOfKeys)
 {
     UiAction action;
     action.title = title;

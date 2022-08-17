@@ -20,18 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __BB_H__
-#define __BB_H__
+#ifndef MU_IEX_BB_BB_H
+#define MU_IEX_BB_BB_H
 
 #include "engraving/compat/midi/event.h"
+#include "engraving/libmscore/score.h"
 #include "engraving/libmscore/sig.h"
 
-namespace Ms {
-const int MAX_BARS = 255;
+namespace mu::iex::bb {
+constexpr int MAX_BARS = 255;
 
 class BBFile;
 struct MNote;
-class Score;
 
 //---------------------------------------------------------
 //   BBTrack
@@ -40,22 +40,22 @@ class Score;
 class BBTrack
 {
     BBFile* bb;
-    EventList _events;
+    engraving::EventList _events;
     int _outChannel;
     bool _drumTrack;
 
-    void quantize(int startTick, int endTick, EventList* dst);
+    void quantize(int startTick, int endTick, engraving::EventList* dst);
 
 public:
     BBTrack(BBFile*);
     ~BBTrack();
     bool empty() const;
-    const EventList events() const { return _events; }
-    EventList& events() { return _events; }
+    const engraving::EventList events() const { return _events; }
+    engraving::EventList& events() { return _events; }
     int outChannel() const { return _outChannel; }
     void setOutChannel(int n) { _outChannel = n; }
-    void insert(const Event& e) { _events.insert(e); }
-    void append(const Event& e) { _events.push_back(e); }
+    void insert(const engraving::Event& e) { _events.insert(e); }
+    void append(const engraving::Event& e) { _events.push_back(e); }
 
     void findChords();
     int separateVoices(int);
@@ -141,7 +141,7 @@ class BBFile
     char* _styleName;
     QList<BBTrack*> _tracks;
     int _measures;
-    TimeSigMap _siglist;
+    engraving::TimeSigMap _siglist;
 
     QByteArray ba;
     const unsigned char* a;
@@ -150,7 +150,7 @@ class BBFile
 
     int timesigZ() { return styles[_style].timesigZ; }
     int timesigN() { return styles[_style].timesigN; }
-    Fraction processPendingNotes(Score*, QList<MNote*>* notes, const Fraction&, int);
+    engraving::Fraction processPendingNotes(engraving::Score*, QList<MNote*>* notes, const engraving::Fraction&, int);
 
 public:
     BBFile();
@@ -159,13 +159,14 @@ public:
     QList<BBTrack*>* tracks() { return &_tracks; }
     int measures() const { return _measures; }
     const char* title() const { return _title; }
-    TimeSigMap siglist() const { return _siglist; }
+    engraving::TimeSigMap siglist() const { return _siglist; }
     QList<BBChord> chords() { return _chords; }
     int startChorus() const { return _startChorus; }
     int endChorus() const { return _endChorus; }
     int repeats() const { return _repeats; }
     int key() const { return _key; }
-    void convertTrack(Score* score, BBTrack* track, int staffIdx);
+    void convertTrack(engraving::Score* score, BBTrack* track, int staffIdx);
 };
-} // namespace Ms
-#endif
+}
+
+#endif // MU_IEX_BB_BB_H

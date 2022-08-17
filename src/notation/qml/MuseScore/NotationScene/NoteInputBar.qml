@@ -46,7 +46,7 @@ Item {
         id: keynavSub
         name: "NoteInputBar"
         enabled: root.enabled && root.visible
-        accessible.name: qsTrc("notation", "Note Input toolbar")
+        accessible.name: qsTrc("notation", "Note input toolbar")
     }
 
     NoteInputBarModel {
@@ -118,7 +118,7 @@ Item {
             width: gridView.cellWidth
             height: gridView.cellWidth
 
-            enabled: Boolean(item) && item.enabled
+            enabled: noteInputModel.isInputAllowed
 
             accentButton: (Boolean(item) && item.checked) || menuLoader.isMenuOpened
             transparent: !accentButton
@@ -223,12 +223,15 @@ Item {
 
         icon: IconCode.SETTINGS_COG
         iconFont: ui.theme.toolbarIconsFont
-        toolTipTitle: qsTrc("notation", "Customise toolbar")
+        toolTipTitle: qsTrc("notation", "Customize toolbar")
         toolTipDescription: qsTrc("notation", "Show/hide toolbar buttons")
         transparent: true
+
+        enabled: noteInputModel.isInputAllowed
+
         navigation.panel: keynavSub
         navigation.order: 100
-        navigation.accessible.name: qsTrc("notation", "Customise toolbar")
+        navigation.accessible.name: qsTrc("notation", "Customize toolbar")
 
         onClicked: {
             customizePopup.toggleOpened()

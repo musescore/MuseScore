@@ -26,7 +26,7 @@
 
 #include "notation/tests/mocks/msczreadermock.h"
 #include "mocks/projectconfigurationmock.h"
-#include "system/tests/mocks/filesystemmock.h"
+#include "global/tests/mocks/filesystemmock.h"
 
 #include <QJsonDocument>
 #include <QJsonArray>
@@ -37,9 +37,9 @@ using ::testing::Return;
 using namespace mu;
 using namespace mu::project;
 using namespace mu::notation;
-using namespace mu::system;
+using namespace mu::io;
 
-class TemplatesRepositoryTest : public ::testing::Test
+class Project_TemplatesRepositoryTest : public ::testing::Test
 {
 protected:
     void SetUp() override
@@ -63,7 +63,7 @@ protected:
         return obj;
     }
 
-    Template buildTemplate(const QString& categoryTitle, const io::path& path) const
+    Template buildTemplate(const QString& categoryTitle, const io::path_t& path) const
     {
         Template templ;
         templ.categoryTitle = categoryTitle;
@@ -101,22 +101,22 @@ inline bool operator==(const Template& templ1, const Template& templ2)
 }
 }
 
-TEST_F(TemplatesRepositoryTest, Templates)
+TEST_F(Project_TemplatesRepositoryTest, Templates)
 {
     // [GIVEN] All template dirs
-    io::paths templateDirs {
+    io::paths_t templateDirs {
         "/path/to/standard/templates",
         "/path/to/user/templates",
         "/path/to/user/templates/without/categories_json"
     };
 
-    io::path otherUserTemplatesDir = templateDirs[2];
+    io::path_t otherUserTemplatesDir = templateDirs[2];
 
     ON_CALL(*m_configuration, availableTemplateDirs())
     .WillByDefault(Return(templateDirs));
 
     // [GIVEN] All files with categories
-    io::paths categoriesJsonPaths {
+    io::paths_t categoriesJsonPaths {
         "/path/to/standard/templates/categories.json",
         "/path/to/user/templates/categories.json"
     };
@@ -131,18 +131,18 @@ TEST_F(TemplatesRepositoryTest, Templates)
         }
     }
 
-    // [GIVEN] One dir has no caterogiers.json file
+    // [GIVEN] One dir has no categories.json file
     ON_CALL(*m_fileSystem, exists(otherUserTemplatesDir))
     .WillByDefault(Return(Ret(false)));
 
-    io::paths otherUserTemplates {
+    io::paths_t otherUserTemplates {
         "/path/to/user/templates/without/categories_json/AAA.mscz",
         "/path/to/user/templates/without/categories_json/BBB.mscx"
     };
 
-    QStringList filters = { "*.mscz", "*.mscx" };
-    ON_CALL(*m_fileSystem, scanFiles(otherUserTemplatesDir, filters, IFileSystem::ScanMode::IncludeSubdirs))
-    .WillByDefault(Return(RetVal<io::paths>::make_ok(otherUserTemplates)));
+    std::vector<std::string> filters = { "*.mscz", "*.mscx" };
+    ON_CALL(*m_fileSystem, scanFiles(otherUserTemplatesDir, filters, ScanMode::FilesInCurrentDirAndSubdirs))
+    .WillByDefault(Return(RetVal<io::paths_t>::make_ok(otherUserTemplates)));
 
     // [GIVEN] All templates
     QVariantList standardTemplates {
@@ -150,17 +150,17 @@ TEST_F(TemplatesRepositoryTest, Templates)
         buildCategory("Solo", { "Guitar.mscx" })
     };
 
-    QByteArray standardTemplatesJson = categoriesToJson(standardTemplates);
+    ByteArray standardTemplatesJson = ByteArray::fromQByteArray(categoriesToJson(standardTemplates));
     ON_CALL(*m_fileSystem, readFile(categoriesJsonPaths[0]))
-    .WillByDefault(Return(RetVal<QByteArray>::make_ok(standardTemplatesJson)));
+    .WillByDefault(Return(RetVal<ByteArray>::make_ok(standardTemplatesJson)));
 
     QVariantList userTemplates {
         buildCategory("Popular", { "Rock_Band.mscz" })
     };
 
-    QByteArray userTemplatesJson = categoriesToJson(userTemplates);
+    ByteArray userTemplatesJson = ByteArray::fromQByteArray(categoriesToJson(userTemplates));
     ON_CALL(*m_fileSystem, readFile(categoriesJsonPaths[1]))
-    .WillByDefault(Return(RetVal<QByteArray>::make_ok(userTemplatesJson)));
+    .WillByDefault(Return(RetVal<ByteArray>::make_ok(userTemplatesJson)));
 
     // [GIVEN] Expected templates after reading
     Templates expectedTemplates {
@@ -170,8 +170,8 @@ TEST_F(TemplatesRepositoryTest, Templates)
         buildTemplate("Popular", "/path/to/user/templates/Rock_Band.mscz")
     };
 
-    for (const io::path& otherTemplatePath : otherUserTemplates) {
-        expectedTemplates << buildTemplate("My Templates", otherTemplatePath);
+    for (const io::path_t& otherTemplatePath : otherUserTemplates) {
+        expectedTemplates << buildTemplate("My templates", otherTemplatePath);
     }
 
     for (const Template& templ : expectedTemplates) {

@@ -52,6 +52,7 @@ public:
     void handleMenuItem(const QString& menuItemId) override;
 
     const audio::AudioFxParams& params() const;
+    void setParams(const audio::AudioFxParams& params);
 
     QString title() const override;
     bool isBlank() const override;

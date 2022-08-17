@@ -27,26 +27,26 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString RWUNDORESET_DATA_DIR("readwriteundoreset_data/");
-
+using namespace mu;
 using namespace mu::engraving;
-using namespace Ms;
 
-class ReadWriteUndoResetTests : public ::testing::Test
+static const String RWUNDORESET_DATA_DIR("readwriteundoreset_data/");
+
+class Engraving_ReadWriteUndoResetTests : public ::testing::Test
 {
 };
 
-TEST_F(ReadWriteUndoResetTests, testReadWriteResetPositions)
+TEST_F(Engraving_ReadWriteUndoResetTests, testReadWriteResetPositions)
 {
-    QStringList files = {
-        "barlines",
-        "slurs",
-        "mmrestBarlineTextLinks" // see issue #296426
+    std::vector<const char16_t*> files = {
+        u"barlines",
+        u"slurs",
+        u"mmrestBarlineTextLinks" // see issue #296426
     };
 
-    for (const QString& file : files) {
-        QString readFile(RWUNDORESET_DATA_DIR + file + ".mscx");
-        QString writeFile(file + "-undoreset-test.mscx");
+    for (const char16_t* file : files) {
+        String readFile(RWUNDORESET_DATA_DIR + file + u".mscx");
+        String writeFile(String(file) + u"-undoreset-test.mscx");
 
         MasterScore* score = ScoreRW::readScore(readFile);
         EXPECT_TRUE(score);
@@ -69,14 +69,14 @@ TEST_F(ReadWriteUndoResetTests, testReadWriteResetPositions)
 ///   See issue #296426
 //---------------------------------------------------------
 
-TEST_F(ReadWriteUndoResetTests, testMMRestLinksRecreateMMRest)
+TEST_F(Engraving_ReadWriteUndoResetTests, testMMRestLinksRecreateMMRest)
 {
-    const QString file("mmrestBarlineTextLinks");
+    const String file("mmrestBarlineTextLinks");
 
-    QString readFile(RWUNDORESET_DATA_DIR + file + ".mscx");
-    QString writeFile(file + "-recreate-mmrest-test.mscx");
-    QString disableMMRestRefFile(RWUNDORESET_DATA_DIR + file + "-disable-mmrest-ref.mscx");
-    QString recreateMMRestRefFile(RWUNDORESET_DATA_DIR + file + "-recreate-mmrest-ref.mscx");
+    String readFile(RWUNDORESET_DATA_DIR + file + u".mscx");
+    String writeFile(file + u"-recreate-mmrest-test.mscx");
+    String disableMMRestRefFile(RWUNDORESET_DATA_DIR + file + u"-disable-mmrest-ref.mscx");
+    String recreateMMRestRefFile(RWUNDORESET_DATA_DIR + file + u"-recreate-mmrest-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     EXPECT_TRUE(score);

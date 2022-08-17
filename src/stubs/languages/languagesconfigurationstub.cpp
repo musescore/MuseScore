@@ -53,17 +53,17 @@ Ret LanguagesConfigurationStub::setLanguages(const LanguagesHash&)
     return make_ret(Ret::Code::NotSupported);
 }
 
-io::path LanguagesConfigurationStub::languagesUserAppDataPath() const
+io::path_t LanguagesConfigurationStub::languagesUserAppDataPath() const
 {
-    return io::path();
+    return io::path_t();
 }
 
-io::paths LanguagesConfigurationStub::languageFilePaths(const QString&) const
+io::paths_t LanguagesConfigurationStub::languageFilePaths(const QString&) const
 {
     return {};
 }
 
-io::path LanguagesConfigurationStub::languageArchivePath(const QString&) const
+io::path_t LanguagesConfigurationStub::languageArchivePath(const QString&) const
 {
-    return io::path();
+    return io::path_t();
 }

@@ -30,33 +30,33 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString CLEF_DATA_DIR("clef_data/");
-
+using namespace mu;
 using namespace mu::engraving;
-using namespace Ms;
 
-class ClefTests : public ::testing::Test
+static const String CLEF_DATA_DIR(u"clef_data/");
+
+class Engraving_ClefTests : public ::testing::Test
 {
 };
 
 //---------------------------------------------------------
 //    two clefs at tick position zero
 //---------------------------------------------------------
-TEST_F(ClefTests, clef1)
+TEST_F(Engraving_ClefTests, clef1)
 {
-    MasterScore* score = ScoreRW::readScore(CLEF_DATA_DIR + "clef-1.mscx");
+    MasterScore* score = ScoreRW::readScore(CLEF_DATA_DIR + u"clef-1.mscx");
     EXPECT_TRUE(score);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "clef-1.mscx", CLEF_DATA_DIR + "clef-1-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"clef-1.mscx", CLEF_DATA_DIR + u"clef-1-ref.mscx"));
     delete score;
 }
 
 //---------------------------------------------------------
 //    change timesig -> rewrite measures ->insertTime
 //---------------------------------------------------------
-TEST_F(ClefTests, clef2)
+TEST_F(Engraving_ClefTests, clef2)
 {
-    MasterScore* score = ScoreRW::readScore(CLEF_DATA_DIR + "clef-2.mscx");
+    MasterScore* score = ScoreRW::readScore(CLEF_DATA_DIR + u"clef-2.mscx");
     EXPECT_TRUE(score);
 
     Measure* m = score->firstMeasure();
@@ -67,22 +67,22 @@ TEST_F(ClefTests, clef2)
     score->cmdAddTimeSig(m, 0, ts, false);
 
     score->doLayout();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "clef-2.mscx", CLEF_DATA_DIR + "clef-2-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"clef-2.mscx", CLEF_DATA_DIR + u"clef-2-ref.mscx"));
     delete score;
 }
 
 //---------------------------------------------------------
 //    change the first clef of a score by changing the first measure's clef
 //---------------------------------------------------------
-TEST_F(ClefTests, clef3)
+TEST_F(Engraving_ClefTests, clef3)
 {
-    MasterScore* score = ScoreRW::readScore(CLEF_DATA_DIR + "clef-3.mscx");
+    MasterScore* score = ScoreRW::readScore(CLEF_DATA_DIR + u"clef-3.mscx");
     EXPECT_TRUE(score);
 
     Measure* m = score->firstMeasure();
     score->undoChangeClef(score->staff(0), m, ClefType::F);
 
     score->doLayout();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "clef-3.mscx", CLEF_DATA_DIR + "clef-3-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"clef-3.mscx", CLEF_DATA_DIR + u"clef-3-ref.mscx"));
     delete score;
 }

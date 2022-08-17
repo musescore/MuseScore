@@ -33,7 +33,13 @@
 #include "libmscore/repeatlist.h"
 #include "libmscore/synthesizerstate.h"
 
-namespace Ms {
+#include "engraving/compat/midi/event.h"
+
+#include "log.h"
+
+using namespace mu::engraving;
+
+namespace mu::iex::midi {
 //---------------------------------------------------------
 //   writeHeader
 //---------------------------------------------------------
@@ -53,17 +59,17 @@ void ExportMidi::writeHeader()
     for (auto& track1: m_midiFile.tracks()) {
         Staff* staff  = m_score->staff(staffIdx);
 
-        QByteArray partName = staff->partName().toUtf8();
-        int len = partName.length() + 1;
+        ByteArray partName = staff->partName().toUtf8();
+        size_t len = partName.size() + 1;
         unsigned char* data = new unsigned char[len];
 
-        memcpy(data, partName.data(), len);
+        memcpy(data, partName.constData(), len);
 
         MidiEvent ev;
         ev.setType(ME_META);
         ev.setMetaType(META_TRACK_NAME);
         ev.setEData(data);
-        ev.setLen(len);
+        ev.setLen(static_cast<int>(len));
 
         track1.insert(0, ev);
 
@@ -104,8 +110,8 @@ void ExportMidi::writeHeader()
                 break;
             default:
                 n = 2;
-                qDebug("ExportMidi: unknown time signature %s",
-                       qPrintable(ts.toString()));
+                LOGD("ExportMidi: unknown time signature %s",
+                     qPrintable(ts.toString()));
                 break;
             }
             data[1] = n;
@@ -181,14 +187,14 @@ void ExportMidi::writeHeader()
     //--------------------------------------------
 
     TempoMap* tempomap = m_pauseMap.tempomapWithPauses;
-    BeatsPerSecond relTempo = tempomap->relTempo();
+    BeatsPerSecond tempoMultiplier = tempomap->tempoMultiplier();
     for (auto it = tempomap->cbegin(); it != tempomap->cend(); ++it) {
         MidiEvent ev;
         ev.setType(ME_META);
         //
         // compute midi tempo: microseconds / quarter note
         //
-        int tempo = lrint((1.0 / it->second.tempo.val * relTempo.val) * 1000000.0);
+        int tempo = lrint((1.0 / it->second.tempo.val * tempoMultiplier.val) * 1000000.0);
 
         ev.setMetaType(META_TEMPO);
         ev.setLen(3);
@@ -215,7 +221,7 @@ void ExportMidi::writeHeader()
 
 bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs, const SynthesizerState& synthState)
 {
-    m_midiFile.setDivision(Constant::division);
+    m_midiFile.setDivision(Constants::division);
     m_midiFile.setFormat(1);
     std::vector<MidiTrack>& tracks = m_midiFile.tracks();
 
@@ -242,8 +248,8 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
             // Pass through the all channels of the instrument
             // "normal", "pizzicato", "tremolo" for Strings,
             // "normal", "mute" for Trumpet
-            for (const Channel* instrChan : pair.second->channel()) {
-                const Channel* ch = part->masterScore()->playbackChannel(instrChan);
+            for (const InstrChannel* instrChan : pair.second->channel()) {
+                const InstrChannel* ch = part->masterScore()->playbackChannel(instrChan);
                 char port    = part->masterScore()->midiPort(ch->channel());
                 char channel = part->masterScore()->midiChannel(ch->channel());
 
@@ -337,7 +343,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                         track.insert(m_pauseMap.addPauseTicks(i->first), MidiEvent(ME_PITCHBEND, channel,
                                                                                    event.dataA(), event.dataB()));
                     } else {
-                        qDebug("writeMidi: unknown midi event 0x%02x", event.type());
+                        LOGD("writeMidi: unknown midi event 0x%02x", event.type());
                     }
                 }
             }
@@ -383,7 +389,7 @@ void ExportMidi::PauseMap::calculate(const Score* s)
     this->insert(std::pair<const int, int>(0, 0));    // can't start with a pause
 
     tempomapWithPauses = new TempoMap();
-    tempomapWithPauses->setRelTempo(tempomap->relTempo());
+    tempomapWithPauses->setTempoMultiplier(tempomap->tempoMultiplier());
 
     for (const RepeatSegment* rs : s->repeatList()) {
         int startTick  = rs->tick;
@@ -407,7 +413,7 @@ void ExportMidi::PauseMap::calculate(const Score* s)
                 if (tick != startTick) {
                     Fraction timeSig(sigmap->timesig(tick).timesig());
                     qreal quarterNotesPerMeasure = (4.0 * timeSig.numerator()) / timeSig.denominator();
-                    int ticksPerMeasure =  quarterNotesPerMeasure * Constant::division;           // store a full measure of ticks to keep barlines in same places
+                    int ticksPerMeasure =  quarterNotesPerMeasure * Constants::division;           // store a full measure of ticks to keep barlines in same places
                     tempomapWithPauses->setTempo(this->addPauseTicks(utick), quarterNotesPerMeasure / it->second.pause);           // new tempo for pause
                     this->insert(std::pair<const int, int>(utick, ticksPerMeasure + this->offsetAtUTick(utick)));            // store running total of extra ticks
                     tempomapWithPauses->setTempo(this->addPauseTicks(utick), it->second.tempo);           // restore previous tempo

@@ -25,14 +25,14 @@
 
 #include "mscore.h"
 
-namespace Ms {
+namespace mu::engraving {
 class MidiNote;
 class Note;
 enum class Key;
 
 const int INVALID_PITCH      = -1;
 
-// a list of tpc's, with legal ranges, not really an enum, so no way to cnvert into a class
+// a list of tpc's, with legal ranges, not really an enum, so no way to convert into a class
 enum Tpc : signed char {
     TPC_INVALID = -9,
     TPC_F_BBB, TPC_C_BBB, TPC_G_BBB, TPC_D_BBB, TPC_A_BBB, TPC_E_BBB, TPC_B_BBB,
@@ -76,11 +76,11 @@ extern int pitch2tpc(int pitch, Key, Prefer prefer);
 
 extern int computeWindow(const std::vector<Note*>& notes, int start, int end);
 extern int tpc(int idx, int pitch, int opt);
-extern QString tpc2name(int tpc, NoteSpellingType spelling, NoteCaseType noteCase, bool explicitAccidental = false);
-extern void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QString& s, QString& acc,
-                     bool explicitAccidental = false);
-extern void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QString& s, AccidentalVal& acc);
-extern int step2tpc(const QString& stepName, AccidentalVal alter);
+extern String tpc2name(int tpc, NoteSpellingType spelling, NoteCaseType noteCase, bool explicitAccidental = false, bool full = false);
+extern void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, String& s, String& acc, bool explicitAccidental = false,
+                     bool full = false);
+extern void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, String& s, AccidentalVal& acc);
+extern int step2tpc(const String& stepName, AccidentalVal alter);
 extern int step2tpc(int step);
 extern int step2tpc(int step, AccidentalVal alter);
 extern int step2tpcByKey(int step, Key);
@@ -93,7 +93,7 @@ extern int absStep2pitchByKey(int step, Key);
 extern int tpc2degree(int tpc, Key key);
 extern int tpcInterval(int startTpc, int interval, int alter);
 extern int step2pitchInterval(int step, int alter);
-extern int function2Tpc(const QString& s, Key key);
+extern int function2Tpc(const String& s, Key key);
 
 //---------------------------------------------------------
 //   tpc2alter
@@ -104,8 +104,13 @@ inline static AccidentalVal tpc2alter(int tpc)
     return AccidentalVal(((tpc - Tpc::TPC_MIN) / TPC_DELTA_SEMITONE) + int(AccidentalVal::MIN));
 }
 
-extern QString tpc2stepName(int tpc);
+inline static int playingOctave(int pitch, int tpc)
+{
+    return ((pitch - static_cast<int>(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE) - 1;
+}
+
+extern Char tpc2stepName(int tpc);
 extern bool tpcIsValid(int val);
 inline bool pitchIsValid(int pitch) { return pitch >= 0 && pitch <= 127; }
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

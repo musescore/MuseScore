@@ -47,6 +47,8 @@ public:
     virtual QWindow* focusWindow() const = 0;
 
     virtual bool notify(QObject* object, QEvent* event) = 0;
+
+    virtual void restart() = 0;
 };
 }
 

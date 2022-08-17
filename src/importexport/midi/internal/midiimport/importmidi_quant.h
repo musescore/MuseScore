@@ -24,10 +24,13 @@
 
 #include "importmidi_operation.h"
 
-namespace Ms {
+namespace mu::engraving {
+class TimeSigMap;
+}
+
+namespace mu::iex::midi {
 class MidiChord;
 class MTrack;
-class TimeSigMap;
 class ReducedFraction;
 
 namespace Quantize {
@@ -83,7 +86,7 @@ ReducedFraction findOffTimeQuantError(
     const std::pair<const ReducedFraction, MidiChord>& chord, const ReducedFraction& offTime, const ReducedFraction& basicQuant);
 
 void setIfHumanPerformance(
-    const std::multimap<int, MTrack>& tracks, TimeSigMap* sigmap);
+    const std::multimap<int, MTrack>& tracks, engraving::TimeSigMap* sigmap);
 
 ReducedFraction quantizeValue(
     const ReducedFraction& value, const ReducedFraction& quant);
@@ -95,8 +98,8 @@ ReducedFraction quantizeToLarge(
     const ReducedFraction& time, const ReducedFraction& quant);
 
 void quantizeChords(
-    std::multimap<ReducedFraction, MidiChord>& chords, const TimeSigMap* sigmap, const ReducedFraction& basicQuant);
+    std::multimap<ReducedFraction, MidiChord>& chords, const engraving::TimeSigMap* sigmap, const ReducedFraction& basicQuant);
 } // namespace Quantize
-} // namespace Ms
+} // namespace mu::iex::midi
 
 #endif // IMPORTMIDI_QUANT_H

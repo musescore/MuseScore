@@ -26,9 +26,9 @@
 #include <map>
 #include <QByteArray>
 
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "modularity/ioc.h"
-#include "val.h"
+#include "types/val.h"
 
 class MQZipReader;
 class MQZipWriter;
@@ -36,12 +36,12 @@ class MQZipWriter;
 namespace mu::workspace {
 class WorkspaceFile
 {
-    INJECT(workspace, system::IFileSystem, fileSystem)
+    INJECT(workspace, io::IFileSystem, fileSystem)
 
 public:
-    WorkspaceFile(const io::path& filePath);
+    WorkspaceFile(const io::path_t& filePath);
 
-    io::path filePath() const;
+    io::path_t filePath() const;
 
     Ret load();
     Ret save();
@@ -66,7 +66,7 @@ private:
         static void read(MQZipReader& zip, std::map<std::string, Val>& meta);
     };
 
-    io::path m_filePath;
+    io::path_t m_filePath;
     std::map<std::string, Val> m_meta;
     std::map<std::string, QByteArray> m_data;
 };

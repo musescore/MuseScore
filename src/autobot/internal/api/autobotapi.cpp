@@ -28,6 +28,7 @@
 #include <QDateTime>
 
 #include "async/async.h"
+#include "io/fileinfo.h"
 
 #include "log.h"
 
@@ -109,20 +110,30 @@ void AutobotApi::fatal(const QString& msg)
 
 bool AutobotApi::openProject(const QString& name)
 {
-    io::path dir = autobotConfiguration()->testingFilesDirPath();
-    io::path filePath = dir + "/" + name;
+    TRACEFUNC;
+    io::paths_t dirs = autobotConfiguration()->testingFilesDirPaths();
+
+    io::path_t filePath;
+    for (const io::path_t& dir : dirs) {
+        filePath = dir + "/" + name;
+        if (io::FileInfo::exists(filePath)) {
+            break;
+        }
+    }
+
     Ret ret = projectFilesController()->openProject(filePath);
     return ret;
 }
 
 void AutobotApi::saveProject(const QString& name)
 {
-    io::path dir = autobotConfiguration()->savingFilesPath();
+    TRACEFUNC;
+    io::path_t dir = autobotConfiguration()->savingFilesPath();
     if (!QFileInfo::exists(dir.toQString())) {
         QDir().mkpath(dir.toQString());
     }
 
-    io::path filePath = dir + "/" + QDateTime::currentDateTime().toString("yyMMddhhmmss") + "_" + name;
+    io::path_t filePath = dir + "/" + QDateTime::currentDateTime().toString("yyMMddhhmmss") + "_" + name;
     projectFilesController()->saveProject(filePath);
 }
 
@@ -167,7 +178,7 @@ int AutobotApi::randomInt(int min, int max) const
 
 int AutobotApi::fileSize(const QString& pathStr) const
 {
-    RetVal<uint64_t> size = fileSystem()->fileSize(io::path(pathStr));
+    RetVal<uint64_t> size = fileSystem()->fileSize(io::path_t(pathStr));
     if (!size.ret) {
         LOGD() << "filed get file size, err: " << size.ret.toString();
     }

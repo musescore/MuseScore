@@ -48,30 +48,30 @@ void FontStyleSelect::_fontStyleChanged()
     emit fontStyleChanged(fontStyle());
 }
 
-Ms::FontStyle FontStyleSelect::fontStyle() const
+mu::engraving::FontStyle FontStyleSelect::fontStyle() const
 {
-    Ms::FontStyle fs = Ms::FontStyle::Normal;
+    mu::engraving::FontStyle fs = mu::engraving::FontStyle::Normal;
 
     if (bold->isChecked()) {
-        fs = fs + Ms::FontStyle::Bold;
+        fs = fs + mu::engraving::FontStyle::Bold;
     }
     if (italic->isChecked()) {
-        fs = fs + Ms::FontStyle::Italic;
+        fs = fs + mu::engraving::FontStyle::Italic;
     }
     if (underline->isChecked()) {
-        fs = fs + Ms::FontStyle::Underline;
+        fs = fs + mu::engraving::FontStyle::Underline;
     }
     if (strike->isChecked()) {
-        fs = fs + Ms::FontStyle::Strike;
+        fs = fs + mu::engraving::FontStyle::Strike;
     }
 
     return fs;
 }
 
-void FontStyleSelect::setFontStyle(Ms::FontStyle fs)
+void FontStyleSelect::setFontStyle(mu::engraving::FontStyle fs)
 {
-    bold->setChecked(fs & Ms::FontStyle::Bold);
-    italic->setChecked(fs & Ms::FontStyle::Italic);
-    underline->setChecked(fs & Ms::FontStyle::Underline);
-    strike->setChecked(fs & Ms::FontStyle::Strike);
+    bold->setChecked(fs & mu::engraving::FontStyle::Bold);
+    italic->setChecked(fs & mu::engraving::FontStyle::Italic);
+    underline->setChecked(fs & mu::engraving::FontStyle::Underline);
+    strike->setChecked(fs & mu::engraving::FontStyle::Strike);
 }

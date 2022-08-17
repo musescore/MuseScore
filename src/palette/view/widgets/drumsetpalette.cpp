@@ -40,7 +40,6 @@
 using namespace mu::notation;
 using namespace mu::engraving;
 using namespace mu::palette;
-using namespace Ms;
 
 DrumsetPalette::DrumsetPalette(QWidget* parent)
     : PaletteScrollArea(nullptr, parent)
@@ -144,7 +143,7 @@ void DrumsetPalette::updateDrumset()
         int shortcutCode = m_drumset->shortcut(pitch);
         QString shortcut = shortcutCode != 0 ? QChar(shortcutCode) : QString();
 
-        m_drumPalette->appendElement(chord, mu::qtrc("drumset", m_drumset->name(pitch).toUtf8().data()), 1.0, shortcut);
+        m_drumPalette->appendElement(chord, m_drumset->translatedName(pitch), 1.0, QPointF(0, 0), shortcut);
     }
 
     noteInput->setDrumNote(selectedDrumNote());
@@ -168,20 +167,15 @@ void DrumsetPalette::drumNoteSelected(int val)
         return;
     }
 
-    TRACEFUNC;
-
-    const Chord* ch = dynamic_cast<Chord*>(element.get());
+    const Chord* ch = mu::engraving::toChord(element.get());
     const Note* note = ch->downNote();
-    int pitch = note->pitch();
-    int voice = element->voice();
 
-    noteInput->setCurrentVoiceIndex(voice);
-    noteInput->setDrumNote(pitch);
+    track_idx_t track = (noteInput->state().currentTrack / mu::engraving::VOICES) * mu::engraving::VOICES + element->track();
 
-    QString voiceActionCode = QString("voice-%1").arg(voice + 1);
-    dispatcher()->dispatch(voiceActionCode.toStdString());
+    noteInput->setCurrentTrack(track);
+    noteInput->setDrumNote(note->pitch());
 
-    auto pitchCell = m_drumPalette->cellAt(val);
+    PaletteCellPtr pitchCell = m_drumPalette->cellAt(val);
     m_pitchNameChanged.send(pitchCell->name);
 }
 
@@ -213,6 +207,11 @@ void DrumsetPalette::changeEvent(QEvent* event)
 }
 
 void DrumsetPalette::mousePressEvent(QMouseEvent* event)
+{
+    m_drumPalette->handleEvent(event);
+}
+
+void DrumsetPalette::mouseDoubleClickEvent(QMouseEvent* event)
 {
     m_drumPalette->handleEvent(event);
 }

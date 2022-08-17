@@ -97,7 +97,7 @@ Item {
         text: qsTrc("instruments", "Family")
     }
 
-    Dropdown {
+    StyledDropdown {
         id: genreBox
 
         anchors.top: titleLabel.bottom
@@ -141,7 +141,7 @@ Item {
             navigation.row: 2 + model.index
             navigation.accessible.name: itemTitleLabel.text
 
-            onNavigationActived: {
+            onNavigationActivated: {
                 item.clicked(null)
             }
 

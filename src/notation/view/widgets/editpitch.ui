@@ -34,6 +34,9 @@
      <property name="dragDropOverwriteMode">
       <bool>false</bool>
      </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
      <property name="rowCount">
       <number>11</number>
      </property>

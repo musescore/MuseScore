@@ -23,6 +23,7 @@
 #define MU_AUDIO_AUDIOCONFIGURATION_H
 
 #include "../iaudioconfiguration.h"
+#include "io/ifilesystem.h"
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
 
@@ -30,6 +31,7 @@ namespace mu::audio {
 class AudioConfiguration : public IAudioConfiguration
 {
     INJECT(audio, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(audio, io::IFileSystem, fileSystem)
 public:
     AudioConfiguration() = default;
 
@@ -40,13 +42,24 @@ public:
     std::string currentAudioApi() const override;
     void setCurrentAudioApi(const std::string& name) override;
 
-    audioch_t audioChannelsCount() const override;
-    unsigned int driverBufferSize() const override;
+    std::string audioOutputDeviceId() const override;
+    void setAudioOutputDeviceId(const std::string& deviceId) override;
+    async::Notification audioOutputDeviceIdChanged() const override;
 
-    io::paths soundFontDirectories() const override;
-    io::paths userSoundFontDirectories() const override;
-    void setUserSoundFontDirectories(const io::paths& paths) override;
-    async::Channel<io::paths> soundFontDirectoriesChanged() const override;
+    audioch_t audioChannelsCount() const override;
+
+    unsigned int driverBufferSize() const override;
+    void setDriverBufferSize(unsigned int size) override;
+    async::Notification driverBufferSizeChanged() const override;
+
+    unsigned int sampleRate() const override;
+    void setSampleRate(unsigned int sampleRate) override;
+    async::Notification sampleRateChanged() const override;
+
+    io::paths_t soundFontDirectories() const override;
+    io::paths_t userSoundFontDirectories() const override;
+    void setUserSoundFontDirectories(const io::paths_t& paths) override;
+    async::Channel<io::paths_t> soundFontDirectoriesChanged() const override;
 
     AudioInputParams defaultAudioInputParams() const override;
 
@@ -57,15 +70,19 @@ public:
     async::Notification synthesizerStateGroupChanged(const std::string& groupName) const override;
 
 private:
-    async::Channel<io::paths> m_soundFontDirsChanged;
+    async::Channel<io::paths_t> m_soundFontDirsChanged;
 
-    io::path stateFilePath() const;
-    bool readState(const io::path& path, synth::SynthesizerState& state) const;
-    bool writeState(const io::path& path, const synth::SynthesizerState& state);
+    io::path_t stateFilePath() const;
+    bool readState(const io::path_t& path, synth::SynthesizerState& state) const;
+    bool writeState(const io::path_t& path, const synth::SynthesizerState& state);
 
     mutable synth::SynthesizerState m_state;
     async::Notification m_synthesizerStateChanged;
     mutable std::map<std::string, async::Notification> m_synthesizerStateGroupChanged;
+
+    async::Notification m_audioOutputDeviceIdChanged;
+    async::Notification m_driverBufferSizeChanged;
+    async::Notification m_driverSampleRateChanged;
 };
 }
 

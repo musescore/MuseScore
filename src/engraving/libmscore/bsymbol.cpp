@@ -34,15 +34,17 @@
 #include "measure.h"
 #include "factory.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   BSymbol
 //---------------------------------------------------------
 
-BSymbol::BSymbol(const Ms::ElementType& type, Ms::EngravingItem* parent, ElementFlags f)
+BSymbol::BSymbol(const ElementType& type, EngravingItem* parent, ElementFlags f)
     : EngravingItem(type, parent, f)
 {
     _align = { AlignH::LEFT, AlignV::BASELINE };
@@ -77,7 +79,7 @@ void BSymbol::writeProperties(XmlWriter& xml) const
 
 bool BSymbol::readProperties(XmlReader& e)
 {
-    const QStringRef& tag = e.name();
+    const AsciiStringView tag = e.name();
 
     if (EngravingItem::readProperties(e)) {
         return true;
@@ -114,7 +116,7 @@ void BSymbol::add(EngravingItem* e)
         toBSymbol(e)->setZ(z() - 1);        // draw on top of parent
         e->added();
     } else {
-        qDebug("BSymbol::add: unsupported type %s", e->typeName());
+        LOGD("BSymbol::add: unsupported type %s", e->typeName());
     }
 }
 
@@ -125,7 +127,7 @@ void BSymbol::add(EngravingItem* e)
 void BSymbol::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     func(data, this);
-    foreach (EngravingItem* e, _leafs) {
+    for (EngravingItem* e : _leafs) {
         e->scanElements(data, func, all);
     }
 }
@@ -140,10 +142,10 @@ void BSymbol::remove(EngravingItem* e)
         if (mu::remove(_leafs, e)) {
             e->removed();
         } else {
-            qDebug("BSymbol::remove: element <%s> not found", e->typeName());
+            LOGD("BSymbol::remove: element <%s> not found", e->typeName());
         }
     } else {
-        qDebug("BSymbol::remove: unsupported type %s", e->typeName());
+        LOGD("BSymbol::remove: unsupported type %s", e->typeName());
     }
 }
 
@@ -204,17 +206,17 @@ mu::RectF BSymbol::drag(EditData& ed)
         r.unite(e->canvasBoundingRect());
     }
 
-    qreal x = ed.delta.x();
-    qreal y = ed.delta.y();
+    double x = ed.delta.x();
+    double y = ed.delta.y();
 
-    qreal _spatium = spatium();
+    double _spatium = spatium();
     if (ed.hRaster) {
-        qreal hRaster = _spatium / MScore::hRaster();
+        double hRaster = _spatium / MScore::hRaster();
         int n = lrint(x / hRaster);
         x = hRaster * n;
     }
     if (ed.vRaster) {
-        qreal vRaster = _spatium / MScore::vRaster();
+        double vRaster = _spatium / MScore::vRaster();
         int n = lrint(y / vRaster);
         y = vRaster * n;
     }

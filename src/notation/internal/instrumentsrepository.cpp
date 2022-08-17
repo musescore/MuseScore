@@ -46,6 +46,44 @@ const InstrumentTemplateList& InstrumentsRepository::instrumentTemplates() const
     return m_instrumentTemplates;
 }
 
+const InstrumentTemplate& InstrumentsRepository::instrumentTemplate(const std::string& instrumentId) const
+{
+    const InstrumentTemplateList& templates = m_instrumentTemplates;
+
+    auto it = std::find_if(templates.begin(), templates.end(), [instrumentId](const InstrumentTemplate* templ) {
+        return templ->id == instrumentId;
+    });
+
+    if (it == m_instrumentTemplates.cend()) {
+        static InstrumentTemplate dummy;
+        return dummy;
+    }
+
+    const InstrumentTemplate* templ = *it;
+    return *templ;
+}
+
+const ScoreOrderList& InstrumentsRepository::orders() const
+{
+    return mu::engraving::instrumentOrders;
+}
+
+const ScoreOrder& InstrumentsRepository::order(const std::string& orderId) const
+{
+    const ScoreOrderList& orders = mu::engraving::instrumentOrders;
+
+    auto it = std::find_if(orders.begin(), orders.end(), [orderId](const ScoreOrder& order) {
+        return order.id == orderId;
+    });
+
+    if (it == orders.cend()) {
+        static ScoreOrder dummy;
+        return dummy;
+    }
+
+    return *it;
+}
+
 const InstrumentGenreList& InstrumentsRepository::genres() const
 {
     return m_genres;
@@ -56,13 +94,6 @@ const InstrumentGroupList& InstrumentsRepository::groups() const
     return m_groups;
 }
 
-const ScoreOrderList& InstrumentsRepository::orders() const
-{
-    static ScoreOrderList list;
-    list = ScoreOrderList(Ms::instrumentOrders.begin(), Ms::instrumentOrders.end());
-    return list;
-}
-
 void InstrumentsRepository::load()
 {
     TRACEFUNC;
@@ -70,19 +101,19 @@ void InstrumentsRepository::load()
     m_instrumentTemplates.clear();
     m_genres.clear();
     m_groups.clear();
-    Ms::clearInstrumentTemplates();
+    mu::engraving::clearInstrumentTemplates();
 
-    for (const io::path& filePath: configuration()->instrumentListPaths()) {
-        if (!Ms::loadInstrumentTemplates(filePath.toQString())) {
+    for (const io::path_t& filePath: configuration()->instrumentListPaths()) {
+        if (!mu::engraving::loadInstrumentTemplates(filePath.toQString())) {
             LOGE() << "Could not load instruments from " << filePath.toQString() << "!";
         }
     }
 
-    for (const InstrumentGenre* genre : Ms::instrumentGenres) {
+    for (const InstrumentGenre* genre : mu::engraving::instrumentGenres) {
         m_genres << genre;
     }
 
-    for (const InstrumentGroup* group : Ms::instrumentGroups) {
+    for (const InstrumentGroup* group : mu::engraving::instrumentGroups) {
         m_groups << group;
 
         for (InstrumentTemplate* templ : group->instrumentTemplates) {

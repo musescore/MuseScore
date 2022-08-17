@@ -23,16 +23,18 @@
 #ifndef MU_FRAMEWORK_LOG_H
 #define MU_FRAMEWORK_LOG_H
 
-#include "thirdparty/haw_profiler/src/profiler.h"
+#include <cassert>
 
-#ifndef HAW_LOGGER_QT_SUPPORT
-#define HAW_LOGGER_QT_SUPPORT
-#endif
+#include "thirdparty/haw_profiler/src/profiler.h"
 #include "thirdparty/haw_logger/logger/log_base.h"
+
+#define ASSERT_X(msg) \
+    LOGE() << "\"ASSERT!\": " << msg << ", file: " << __FILE__ << ", line: " << __LINE__; \
+    assert(false); \
 
 #define IF_ASSERT_FAILED_X(cond, msg) if (!(cond)) { \
         LOGE() << "\"ASSERT FAILED!\": " << msg << ", file: " << __FILE__ << ", line: " << __LINE__; \
-        Q_ASSERT(cond); \
+        assert(cond); \
 } \
     if (!(cond)) \
 
@@ -47,6 +49,13 @@
 
 #define UNREACHABLE \
     LOGE() << "\"UNREACHABLE!\": " << ", file: " << __FILE__ << ", line: " << __LINE__; \
-    Q_ASSERT_X(false, "UNREACHABLE", "UNREACHABLE was reached"); \
+    ASSERT_X("UNREACHABLE was reached"); \
+
+
+#if __has_cpp_attribute(fallthrough)
+#define MU_FALLTHROUGH() [[fallthrough]]
+#else
+#define MU_FALLTHROUGH() (void)0
+#endif
 
 #endif // MU_FRAMEWORK_LOG_H

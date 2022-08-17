@@ -559,7 +559,7 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
             drawRoundedRect(painter, option->rect, 1, NO_FILL, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
         }
 
-        //! NOTE: need for removing frame focus recangle
+        //! NOTE: need for removing frame focus rectangle
     } break;
 
     // Indicator icons

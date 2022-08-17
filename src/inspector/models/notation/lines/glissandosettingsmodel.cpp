@@ -26,7 +26,7 @@
 using namespace mu::inspector;
 
 GlissandoSettingsModel::GlissandoSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository, Ms::ElementType::GLISSANDO)
+    : AbstractInspectorModel(parent, repository, mu::engraving::ElementType::GLISSANDO)
 {
     setModelType(InspectorModelType::TYPE_GLISSANDO);
     setTitle(qtrc("inspector", "Glissando"));
@@ -52,14 +52,14 @@ PropertyItem* GlissandoSettingsModel::text() const
 
 QVariantList GlissandoSettingsModel::possibleLineTypes() const
 {
-    QMap<Ms::GlissandoType, QString> types {
-        { Ms::GlissandoType::STRAIGHT, mu::qtrc("inspector", "Straight") },
-        { Ms::GlissandoType::WAVY, mu::qtrc("inspector", "Wavy") }
+    QMap<mu::engraving::GlissandoType, QString> types {
+        { mu::engraving::GlissandoType::STRAIGHT, mu::qtrc("inspector", "Straight") },
+        { mu::engraving::GlissandoType::WAVY, mu::qtrc("inspector", "Wavy") }
     };
 
     QVariantList result;
 
-    for (Ms::GlissandoType type : types.keys()) {
+    for (mu::engraving::GlissandoType type : types.keys()) {
         QVariantMap obj;
 
         obj["text"] = types[type];
@@ -73,9 +73,9 @@ QVariantList GlissandoSettingsModel::possibleLineTypes() const
 
 void GlissandoSettingsModel::createProperties()
 {
-    m_lineType = buildPropertyItem(Ms::Pid::GLISS_TYPE);
-    m_showText = buildPropertyItem(Ms::Pid::GLISS_SHOW_TEXT);
-    m_text = buildPropertyItem(Ms::Pid::GLISS_TEXT);
+    m_lineType = buildPropertyItem(mu::engraving::Pid::GLISS_TYPE);
+    m_showText = buildPropertyItem(mu::engraving::Pid::GLISS_SHOW_TEXT);
+    m_text = buildPropertyItem(mu::engraving::Pid::GLISS_TEXT);
 }
 
 void GlissandoSettingsModel::loadProperties()

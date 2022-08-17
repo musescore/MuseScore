@@ -29,14 +29,16 @@ TextInputField {
     property string searchText: currentText
 
     onCurrentTextEdited: function(newTextValue) {
-        searchText = newTextValue
+        searchText = newTextValue.trim()
     }
 
     width: 220
     opacity: 0.8
 
-    hint: qsTrc("uicomponents", "Search")
+    hint: qsTrc("ui", "Search")
     hintIcon: IconCode.SEARCH
 
-    clearTextButtonVisible: Boolean(searchText)
+    accessible.name: hint
+
+    clearTextButtonVisible: Boolean(searchText) ?? false
 }

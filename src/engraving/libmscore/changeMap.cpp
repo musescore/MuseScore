@@ -28,13 +28,13 @@
 #include "changeMap.h"
 
 #include <cmath>
-#include <QDebug>
+#include <cassert>
 
 #include "containers.h"
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   interpolateVelocity
 ///   the maths looks complex, but is just a series of graph transformations.
@@ -43,7 +43,7 @@ namespace Ms {
 
 int ChangeMap::interpolate(Fraction& eventTick, ChangeEvent& event, Fraction& tick)
 {
-    Q_ASSERT(event.type == ChangeEventType::RAMP);
+    assert(event.type == ChangeEventType::RAMP);
 
     // Prevent zero-division error
     if (event.cachedStartVal == event.cachedEndVal || event.length.isZero()) {
@@ -217,7 +217,7 @@ void ChangeMap::cleanupStage0()
 
         if (int(rampEvents.size()) > 1) {
             // Sort rampEvents so that the longest ramps come first -
-            // this is important for when we remove ramps/fixes enclosed wihtin other
+            // this is important for when we remove ramps/fixes enclosed within other
             // ramps during stage 1.
             std::sort(rampEvents.begin(), rampEvents.end(), ChangeMap::compareRampEvents);
             for (auto& event : rampEvents) {
@@ -444,7 +444,7 @@ void ChangeMap::cleanup()
         return;
     }
 
-    // qDebug() << "Before cleanup:";
+    // LOGD() << "Before cleanup:";
     // dump();
 
     cleanupStage0();
@@ -452,7 +452,7 @@ void ChangeMap::cleanup()
     cleanupStage3();
     cleanedUp = true;
 
-    // qDebug() << "After cleanup:";
+    // LOGD() << "After cleanup:";
     // dump();
 }
 

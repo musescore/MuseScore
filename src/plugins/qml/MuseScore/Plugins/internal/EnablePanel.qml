@@ -46,6 +46,7 @@ InfoPanel {
             navigation.panel: root.contentNavigation
             navigation.column: 1
 
+            //: Edit the keyboard shortcut assigned to a plug-in
             text: qsTrc("plugins", "Edit shortcut")
 
             onClicked: {
@@ -67,7 +68,7 @@ InfoPanel {
                 }
             }
 
-            text: !root.isEnabled ? qsTrc("global", "Enable") : qsTrc("global", "Disable")
+            text: !root.isEnabled ? qsTrc("plugins", "Enable") : qsTrc("plugins", "Disable")
 
             Component.onCompleted: {
                 root.mainButton = mainButton

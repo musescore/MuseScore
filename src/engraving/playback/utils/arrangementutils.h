@@ -23,6 +23,7 @@
 #ifndef MU_ENGRAVING_ARRANGEMENTUTILS_H
 #define MU_ENGRAVING_ARRANGEMENTUTILS_H
 
+#include "global/realfn.h"
 #include "mpe/mpetypes.h"
 
 #include "libmscore/score.h"
@@ -31,31 +32,31 @@
 #include "types/constants.h"
 
 namespace mu::engraving {
-inline mpe::timestamp_t timestampFromTicks(const Ms::Score* score, const int tick)
+inline mpe::timestamp_t timestampFromTicks(const Score* score, const int tick)
 {
-    return score->repeatList().utick2utime(tick) * 1000;
+    return score->repeatList().utick2utime(tick) * 1000000;
 }
 
-inline mpe::duration_t durationFromTicks(const qreal beatsPerSecond, const int durationTicks, const int ticksPerBeat = Constants::division)
+inline mpe::duration_t durationFromTicks(const double beatsPerSecond, const int durationTicks, const int ticksPerBeat = Constants::division)
 {
     float beatsNumber = static_cast<float>(durationTicks) / static_cast<float>(ticksPerBeat);
 
-    return (beatsNumber / beatsPerSecond) * 1000;
+    return (beatsNumber / beatsPerSecond) * 1000000;
 }
 
-static constexpr int CROTCHET_TICKS = Ms::Constant::division;
-static constexpr int QUAVER_TICKS = Ms::Constant::division / 2;
-static constexpr int SEMIQUAVER_TICKS = Ms::Constant::division / 4;
-static constexpr int DEMISEMIQUAVER_TICKS = Ms::Constant::division / 8;
+static constexpr int CROTCHET_TICKS = Constants::division;
+static constexpr int QUAVER_TICKS = Constants::division / 2;
+static constexpr int SEMIQUAVER_TICKS = Constants::division / 4;
+static constexpr int DEMISEMIQUAVER_TICKS = Constants::division / 8;
 
-static constexpr qreal PRESTISSIMO_BPS_BOUND = 200 /*bpm*/ / 60.f /*secs*/;
-static constexpr qreal PRESTO_BPS_BOUND = 168 /*bpm*/ / 60.f /*secs*/;
-static constexpr qreal ALEGRO_BPS_BOUND = 120 /*bpm*/ / 60.f /*secs*/;
-static constexpr qreal MODERATO_BPS_BOUND = 108 /*bpm*/ / 60.f /*secs*/;
-static constexpr qreal ANDANTE_BPS_BOUND = 76 /*bpm*/ / 60.f /*secs*/;
-static constexpr qreal ADAGIO_BPS_BOUND = 66 /*bpm*/ / 60.f /*secs*/;
-static constexpr qreal LENTO_BPS_BOUND = 40 /*bpm*/ / 60.f /*secs*/;
-static constexpr qreal GRAVE_BPS_BOUND = 20 /*bpm*/ / 60.f /*secs*/;
+static const double PRESTISSIMO_BPS_BOUND = RealRound(200 /*bpm*/ / 60.f /*secs*/, 2);
+static const double PRESTO_BPS_BOUND = RealRound(168 /*bpm*/ / 60.f /*secs*/, 2);
+static const double ALLEGRO_BPS_BOUND = RealRound(120 /*bpm*/ / 60.f /*secs*/, 2);
+static const double MODERATO_BPS_BOUND = RealRound(108 /*bpm*/ / 60.f /*secs*/, 2);
+static const double ANDANTE_BPS_BOUND = RealRound(76 /*bpm*/ / 60.f /*secs*/, 2);
+static const double ADAGIO_BPS_BOUND = RealRound(66 /*bpm*/ / 60.f /*secs*/, 2);
+static const double LENTO_BPS_BOUND = RealRound(40 /*bpm*/ / 60.f /*secs*/, 2);
+static const double GRAVE_BPS_BOUND = RealRound(20 /*bpm*/ / 60.f /*secs*/, 2);
 }
 
 #endif // MU_ENGRAVING_ARRANGEMENTUTILS_H

@@ -25,7 +25,7 @@
 #include <vector>
 #include <map>
 
-namespace Ms {
+namespace mu::iex::midi {
 class ReducedFraction;
 class MidiChord;
 
@@ -38,6 +38,6 @@ std::vector<TupletInfo> detectTuplets(
     const ReducedFraction& startBarTick, const ReducedFraction& barFraction, std::multimap<ReducedFraction, MidiChord>& chords,
     const ReducedFraction& basicQuant, int barIndex);
 } // namespace MidiTuplet
-} // namespace Ms
+} // namespace mu::iex::midi
 
 #endif // IMPORTMIDI_TUPLET_DETECT_H

@@ -33,12 +33,8 @@
 
 namespace mu::engraving {
 class Factory;
-}
-
-namespace Ms {
-class XmlWriter;
-class MuseScoreView;
 class Segment;
+class XmlWriter;
 
 static const int NO_CLEF = -1000;
 
@@ -94,6 +90,8 @@ public:
 
 class Clef final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Clef)
+
     SymId symId;
     bool _showCourtesy = true;
     bool m_isSmall = false;
@@ -101,13 +99,15 @@ class Clef final : public EngravingItem
 
     ClefTypeList _clefTypes { ClefType::INVALID };
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Clef(Segment* parent);
+
+    bool neverKernable() const override { return true; }
 
 public:
 
     Clef* clone() const override { return new Clef(*this); }
-    qreal mag() const override;
+    double mag() const override;
 
     Segment* segment() const { return (Segment*)explicitParent(); }
     Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
@@ -141,16 +141,16 @@ public:
     void setConcertClef(ClefType val);
     void setTransposingClef(ClefType val);
     void setClefType(const ClefTypeList& ctl) { _clefTypes = ctl; }
-    void spatiumChanged(qreal oldValue, qreal newValue) override;
+    void spatiumChanged(double oldValue, double newValue) override;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid id) const override;
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
     void clear();
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

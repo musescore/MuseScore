@@ -29,7 +29,7 @@
 #include "imainwindow.h"
 #include "internal/iplatformtheme.h"
 
-#include "val.h"
+#include "types/val.h"
 #include "uiarrangement.h"
 #include "async/asyncable.h"
 
@@ -82,7 +82,8 @@ public:
     int defaultFontSize() const override;
 
     double guiScaling() const override;
-    double dpi() const override;
+    double physicalDpi() const override;
+    double logicalDpi() const override;
 
     void setPhysicalDotsPerInch(std::optional<double> dpi) override;
 

@@ -25,15 +25,13 @@
 #include <vector>
 #include "../types/dimension.h"
 
-namespace Ms {
+namespace mu::engraving {
 class MStyle;
 class System;
 class SysStaff;
 class Staff;
 class Spacer;
-}
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //   VerticalStretchData
 //    helper class for spreading staves over a page
@@ -44,21 +42,21 @@ class VerticalGapData
 private:
     bool _fixedHeight        { false };
     bool _fixedSpacer        { false };
-    qreal _factor               { 1.0 };
-    qreal _normalisedSpacing    { 0.0 };
-    qreal _maxActualSpacing     { 0.0 };
-    qreal _addedNormalisedSpace { 0.0 };
-    qreal _fillSpacing          { 0.0 };
-    qreal _lastStep             { 0.0 };
-    void  updateFactor(qreal factor);
+    double _factor               { 1.0 };
+    double _normalisedSpacing    { 0.0 };
+    double _maxActualSpacing     { 0.0 };
+    double _addedNormalisedSpace { 0.0 };
+    double _fillSpacing          { 0.0 };
+    double _lastStep             { 0.0 };
+    void  updateFactor(double factor);
 
 public:
-    Ms::MStyle* style { nullptr };
-    Ms::System* system { nullptr };
-    Ms::SysStaff* sysStaff { nullptr };
-    Ms::Staff* staff { nullptr };
+    MStyle* style { nullptr };
+    System* system { nullptr };
+    SysStaff* sysStaff { nullptr };
+    Staff* staff { nullptr };
 
-    VerticalGapData(Ms::MStyle* style, bool first, Ms::System* sys, Ms::Staff* st, Ms::SysStaff* sst, Ms::Spacer* nextSpacer, qreal y);
+    VerticalGapData(MStyle* style, bool first, System* sys, Staff* st, SysStaff* sst, Spacer* nextSpacer, double y);
 
     void addSpaceBetweenSections();
     void addSpaceAroundVBox(bool above);
@@ -66,14 +64,14 @@ public:
     void addSpaceAroundCurlyBracket();
     void insideCurlyBracket();
 
-    qreal factor() const;
-    qreal spacing() const;
-    qreal actualAddedSpace() const;
+    double factor() const;
+    double spacing() const;
+    double actualAddedSpace() const;
 
-    qreal addSpacing(qreal step);
+    double addSpacing(double step);
     bool isFixedHeight() const;
     void undoLastAddSpacing();
-    qreal addFillSpacing(qreal step, qreal maxFill);
+    double addFillSpacing(double step, double maxFill);
 };
 
 //---------------------------------------------------------
@@ -85,8 +83,8 @@ class VerticalGapDataList : public std::vector<VerticalGapData*>
 {
 public:
     void deleteAll();
-    qreal sumStretchFactor() const;
-    qreal smallest(qreal limit=-1.0) const;
+    double sumStretchFactor() const;
+    double smallest(double limit=-1.0) const;
 };
 }
 

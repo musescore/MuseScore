@@ -25,13 +25,13 @@
 
 #include <vector>
 
-#include "infrastructure/draw/font.h"
+#include "draw/types/font.h"
 
 #include "text.h"
 #include "pitchspelling.h"
 #include "realizedharmony.h"
 
-namespace Ms {
+namespace mu::engraving {
 struct ChordDescription;
 class ParsedChord;
 
@@ -41,22 +41,22 @@ class ParsedChord;
 
 struct TextSegment {
     mu::draw::Font m_font;
-    QString text;
-    qreal x, y;         // Position of segments relative to each other.
+    String text;
+    double x, y;         // Position of segments relative to each other.
     mu::PointF offset;     // Offset for placing within the TextBase.
     bool select;
 
-    qreal width() const;
+    double width() const;
     mu::RectF boundingRect() const;
     mu::RectF tightBoundingRect() const;
     mu::PointF pos() const { return mu::PointF(x, y) + offset; }
 
     TextSegment() { select = false; x = y = 0.0; }
-    TextSegment(const mu::draw::Font& f, qreal _x, qreal _y)
+    TextSegment(const mu::draw::Font& f, double _x, double _y)
         : m_font(f), x(_x), y(_y), select(false) {}
-    TextSegment(const QString&, const mu::draw::Font&, qreal x, qreal y);
-    void set(const QString&, const mu::draw::Font&, qreal x, qreal y, mu::PointF offset);
-    void setText(const QString& t) { text = t; }
+    TextSegment(const String&, const mu::draw::Font&, double x, double y);
+    void set(const String&, const mu::draw::Font&, double x, double y, mu::PointF offset);
+    void setText(const String& t) { text = t; }
 };
 
 //---------------------------------------------------------
@@ -82,19 +82,21 @@ class HDegree;
 
 class Harmony final : public TextBase
 {
+    OBJECT_ALLOCATOR(engraving, Harmony)
+
     int _rootTpc;               // root note for chord
     int _baseTpc;               // bass note or chord base; used for "slash" chords
                                 // or notation of base note in chord
     int _id;                    // >0 = id of matched chord from chord list, if applicable
                                 // -1 = invalid chord
                                 // <-10000 = private id of generated chord or matched chord with no id
-    QString _function;          // numeric representation of root for RNA or Nashville
-    QString _userName;          // name as typed by user if applicable
-    QString _textName;          // name recognized from chord list, read from score file, or constructed from imported source
+    String _function;          // numeric representation of root for RNA or Nashville
+    String _userName;          // name as typed by user if applicable
+    String _textName;          // name recognized from chord list, read from score file, or constructed from imported source
     ParsedChord* _parsedForm;   // parsed form of chord
     bool _isMisspelled = false; // show spell check warning
     HarmonyType _harmonyType;   // used to control rendering, transposition, export, etc.
-    qreal _harmonyHeight;       // used for calculating the the height is frame while editing.
+    double _harmonyHeight;       // used for calculating the height is frame while editing.
 
     mutable RealizedHarmony _realizedHarmony; // the realized harmony used for playback
 
@@ -113,9 +115,9 @@ class Harmony final : public TextBase
 
     void determineRootBaseSpelling();
     void draw(mu::draw::Painter*) const override;
-    void drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentViewScaling) override;
-    void render(const QString&, qreal&, qreal&);
-    void render(const std::list<RenderAction>& renderList, qreal&, qreal&, int tpc,
+    void drawEditMode(mu::draw::Painter* p, EditData& ed, double currentViewScaling) override;
+    void render(const String&, double&, double&);
+    void render(const std::list<RenderAction>& renderList, double&, double&, int tpc,
                 NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
     Sid getPropertyStyle(Pid) const override;
 
@@ -125,6 +127,8 @@ public:
     Harmony(Segment* parent = 0);
     Harmony(const Harmony&);
     ~Harmony();
+
+    KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
 
     Harmony* clone() const override { return new Harmony(*this); }
 
@@ -148,9 +152,9 @@ public:
     Segment* getParentSeg() const;
 
     const ChordDescription* descr() const;
-    const ChordDescription* descr(const QString&, const ParsedChord* pc = 0) const;
+    const ChordDescription* descr(const String&, const ParsedChord* pc = 0) const;
     const ChordDescription* getDescription();
-    const ChordDescription* getDescription(const QString&, const ParsedChord* pc = 0);
+    const ChordDescription* getDescription(const String&, const ParsedChord* pc = 0);
     const ChordDescription* generateDescription();
 
     RealizedHarmony& realizedHarmony();
@@ -171,17 +175,17 @@ public:
 
     bool isRealizable() const;
 
-    QString hFunction() const { return _function; }
-    QString hUserName() const { return _userName; }
-    QString hTextName() const { return _textName; }
+    String hFunction() const { return _function; }
+    String hUserName() const { return _userName; }
+    String hTextName() const { return _textName; }
     int baseTpc() const { return _baseTpc; }
     void setBaseTpc(int val) { _baseTpc = val; }
     int rootTpc() const { return _rootTpc; }
     void setRootTpc(int val) { _rootTpc = val; }
-    void setTextName(const QString& s) { _textName = s; }
-    void setFunction(const QString& s) { _function = s; }
-    QString rootName();
-    QString baseName();
+    void setTextName(const String& s) { _textName = s; }
+    void setFunction(const String& s) { _function = s; }
+    String rootName();
+    String baseName();
     void addDegree(const HDegree& d);
     size_t numberOfDegrees() const;
     HDegree degree(int i) const;
@@ -193,43 +197,43 @@ public:
 
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
-    QString harmonyName() const;
+    String harmonyName() const;
     void render();
 
-    const ChordDescription* parseHarmony(const QString& s, int* root, int* base, bool syntaxOnly = false);
+    const ChordDescription* parseHarmony(const String& s, int* root, int* base, bool syntaxOnly = false);
 
-    const QString& extensionName() const;
+    const String& extensionName() const;
 
-    QString xmlKind() const;
-    QString musicXmlText() const;
-    QString xmlSymbols() const;
-    QString xmlParens() const;
-    QStringList xmlDegrees() const;
+    String xmlKind() const;
+    String musicXmlText() const;
+    String xmlSymbols() const;
+    String xmlParens() const;
+    StringList xmlDegrees() const;
 
     void resolveDegreeList();
 
-    qreal baseLine() const override;
+    double baseLine() const override;
 
-    const ChordDescription* fromXml(const QString&, const QString&, const QString&, const QString&, const std::list<HDegree>&);
-    const ChordDescription* fromXml(const QString& s, const std::list<HDegree>&);
-    const ChordDescription* fromXml(const QString& s);
-    void spatiumChanged(qreal oldValue, qreal newValue) override;
-    void localSpatiumChanged(qreal oldValue, qreal newValue) override;
-    void setHarmony(const QString& s);
+    const ChordDescription* fromXml(const String&, const String&, const String&, const String&, const std::list<HDegree>&);
+    const ChordDescription* fromXml(const String& s, const std::list<HDegree>&);
+    const ChordDescription* fromXml(const String& s);
+    void spatiumChanged(double oldValue, double newValue) override;
+    void localSpatiumChanged(double oldValue, double newValue) override;
+    void setHarmony(const String& s);
     mu::PointF calculateBoundingRect();
-    qreal xShapeOffset() const;
+    double xShapeOffset() const;
 
-    QString typeUserName() const override;
-    QString accessibleInfo() const override;
-    QString generateScreenReaderInfo() const;
-    QString screenReaderInfo() const override;
+    TranslatableString typeUserName() const override;
+    String accessibleInfo() const override;
+    String generateScreenReaderInfo() const;
+    String screenReaderInfo() const override;
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& v) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue& v) override;
+    PropertyValue propertyDefault(Pid id) const override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

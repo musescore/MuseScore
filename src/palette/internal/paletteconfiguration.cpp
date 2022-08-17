@@ -38,10 +38,10 @@ static const Settings::Key IS_SINGLE_CLICK_TO_OPEN_PALETTE(MODULE_NAME, "applica
 void PaletteConfiguration::init()
 {
     settings()->setDefaultValue(PALETTE_SCALE, Val(1.0));
-    settings()->setCanBeMannualyEdited(PALETTE_SCALE, true);
+    settings()->setCanBeManuallyEdited(PALETTE_SCALE, true);
 
     settings()->setDefaultValue(PALETTE_USE_SINGLE, Val(false));
-    settings()->setCanBeMannualyEdited(PALETTE_USE_SINGLE, true);
+    settings()->setCanBeManuallyEdited(PALETTE_USE_SINGLE, true);
 
     m_isSinglePalette.val = settings()->value(PALETTE_USE_SINGLE).toBool();
     settings()->valueChanged(PALETTE_USE_SINGLE).onReceive(this, [this](const Val& newValue) {
@@ -49,7 +49,7 @@ void PaletteConfiguration::init()
     });
 
     settings()->setDefaultValue(IS_SINGLE_CLICK_TO_OPEN_PALETTE, Val(true));
-    settings()->setCanBeMannualyEdited(IS_SINGLE_CLICK_TO_OPEN_PALETTE, true);
+    settings()->setCanBeManuallyEdited(IS_SINGLE_CLICK_TO_OPEN_PALETTE, true);
 
     m_isSingleClickToOpenPalette.val = settings()->value(IS_SINGLE_CLICK_TO_OPEN_PALETTE).toBool();
     settings()->valueChanged(IS_SINGLE_CLICK_TO_OPEN_PALETTE).onReceive(this, [this](const Val& newValue) {
@@ -126,12 +126,12 @@ mu::async::Notification PaletteConfiguration::colorsChanged() const
     return uiConfiguration()->currentThemeChanged();
 }
 
-mu::io::path PaletteConfiguration::keySignaturesDirPath() const
+mu::io::path_t PaletteConfiguration::keySignaturesDirPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/keysigs";
 }
 
-mu::io::path PaletteConfiguration::timeSignaturesDirPath() const
+mu::io::path_t PaletteConfiguration::timeSignaturesDirPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/timesigs";
 }

@@ -24,10 +24,13 @@
 #define __AL_SIG_H__
 
 #include <map>
+#include <cassert>
 
+#include "global/allocator.h"
+#include "types/string.h"
 #include "types/fraction.h"
 
-namespace Ms {
+namespace mu::engraving {
 class XmlWriter;
 class XmlReader;
 
@@ -53,6 +56,7 @@ enum class BeatType : char {
 
 class TimeSigFrac : public Fraction
 {
+    OBJECT_ALLOCATOR(engraving, TimeSigFrac)
 public:
     using Fraction::Fraction;
     constexpr TimeSigFrac(int n = 0, int d = 1)
@@ -65,7 +69,7 @@ public:
 
     // isBeatedCompound? Note: Conductors will beat the simple unit at slow tempos (<60 compound units per minute)
     // However, the meter is still considered to be compound (at least for our purposes).
-    bool isBeatedCompound(qreal tempo) const { return tempo2beatsPerMinute(tempo) >= 60.0; }
+    bool isBeatedCompound(double tempo) const { return tempo2beatsPerMinute(tempo) >= 60.0; }
 
     int dUnitTicks()        const;
     int ticksPerMeasure()   const { return numerator() * dUnitTicks(); }
@@ -78,11 +82,11 @@ public:
     int maxSubbeatLevel()         const;
 
     bool isTriple()         const { return beatsPerMeasure() % 3 == 0; }
-    bool isDuple() const { Q_ASSERT(!isTriple()); return beatsPerMeasure() % 2 == 0; }   // note: always test isTriple() first
+    bool isDuple() const { assert(!isTriple()); return beatsPerMeasure() % 2 == 0; }   // note: always test isTriple() first
 
     // MuseScore stores tempos in quarter-notes-per-second, so conversions to conventional beats-per-minute format are provided here:
-    qreal tempo2beatsPerMinute(qreal tempo)   const { return tempo * denominator() * 15.0 / dUnitsPerBeat(); }
-    qreal beatsPerMinute2tempo(qreal bpm)     const { return bpm * dUnitsPerBeat() / (15.0 * denominator()); }
+    double tempo2beatsPerMinute(double tempo)   const { return tempo * denominator() * 15.0 / dUnitsPerBeat(); }
+    double beatsPerMinute2tempo(double bpm)     const { return bpm * dUnitsPerBeat() / (15.0 * denominator()); }
 
     BeatType rtick2beatType(int rtick)  const;
     int rtick2subbeatLevel(int rtick)   const;   // returns negative value if not on a well-defined subbeat
@@ -125,7 +129,7 @@ public:
 
     bool operator==(const SigEvent& e) const;
     bool valid() const { return _timesig.isValid(); }
-    QString print() const { return _timesig.toString(); }
+    String print() const { return _timesig.toString(); }
     TimeSigFrac timesig() const { return _timesig; }
     TimeSigFrac nominal() const { return _nominal; }
     void setNominal(const Fraction& f) { _nominal = f; }
@@ -139,6 +143,8 @@ public:
 
 class TimeSigMap : public std::map<int, SigEvent >
 {
+    OBJECT_ALLOCATOR(engraving, TimeSigMap)
+
     void normalize();
 
 public:
@@ -160,12 +166,12 @@ public:
 
     void tickValues(int t, int* bar, int* beat, int* tick) const;
     int bar2tick(int bar, int beat) const;
-    QString pos(int t) const;
+    String pos(int t) const;
 
     unsigned raster(unsigned tick, int raster) const;
     unsigned raster1(unsigned tick, int raster) const;      // round down
     unsigned raster2(unsigned tick, int raster) const;      // round up
     int rasterStep(unsigned tick, int raster) const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

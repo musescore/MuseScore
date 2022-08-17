@@ -24,10 +24,11 @@
 #define MU_NOTATION_LOOPMARKER_H
 
 #include "notation/inotationconfiguration.h"
-#include "notation/inotationstyle.h"
 #include "modularity/ioc.h"
 
-#include "engraving/infrastructure/draw/geometry.h"
+#include "notation/inotation.h"
+
+#include "draw/types/geometry.h"
 
 namespace mu::notation {
 class LoopMarker
@@ -37,17 +38,20 @@ class LoopMarker
 public:
     LoopMarker(LoopBoundaryType type);
 
-    void setRect(const RectF& rect);
+    void setNotation(INotationPtr notation);
     void setVisible(bool visible);
-    void setStyle(INotationStylePtr style);
+
+    void move(midi::tick_t tick);
 
     void paint(draw::Painter* painter);
 
 private:
+    RectF resolveMarkerRectByTick(midi::tick_t tick) const;
+
     LoopBoundaryType m_type = LoopBoundaryType::Unknown;
     RectF m_rect;
     bool m_visible = false;
-    INotationStylePtr m_style;
+    INotationPtr m_notation;
 };
 }
 

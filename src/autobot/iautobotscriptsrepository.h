@@ -24,7 +24,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "autobottypes.h"
-#include "retval.h"
+#include "types/retval.h"
 
 namespace mu::autobot {
 class IAutobotScriptsRepository : MODULE_EXPORT_INTERFACE

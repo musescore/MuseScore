@@ -80,8 +80,8 @@ StyledDialogView {
             StyledTextLabel {
                 id: titleLabel
                 text: root.visibility === CloudVisibility.Public
-                      ? qsTrc("project", "Publish to MuseScore.com")
-                      : qsTrc("project", "Save to cloud")
+                      ? qsTrc("project/save", "Publish to MuseScore.com")
+                      : qsTrc("project/save", "Save to cloud")
                 font: ui.theme.largeBodyBoldFont
                 horizontalAlignment: Text.AlignLeft
             }
@@ -97,7 +97,7 @@ StyledDialogView {
                     direction: NavigationPanel.Vertical
                     section: root.navigationSection
                     order: 1
-                    accessible.name: qsTrc("project", "Options")
+                    accessible.name: qsTrc("project/save", "Options")
                 }
 
                 ColumnLayout {
@@ -105,7 +105,7 @@ StyledDialogView {
 
                     StyledTextLabel {
                         Layout.fillWidth: true
-                        text: qsTrc("project", "Name")
+                        text: qsTrc("project/save", "Name")
                         horizontalAlignment: Text.AlignLeft
                     }
 
@@ -115,7 +115,7 @@ StyledDialogView {
 
                         navigation.panel: optionsNavPanel
                         navigation.row: 1
-                        accessible.name: titleLabel.text + ". " + qsTrc("project", "Name") + ": " + currentText
+                        accessible.name: titleLabel.text + ". " + qsTrc("project/save", "Name") + ": " + currentText
 
                         onCurrentTextEdited: function(newTextValue) {
                             root.name = newTextValue
@@ -128,23 +128,24 @@ StyledDialogView {
 
                     StyledTextLabel {
                         Layout.fillWidth: true
-                        text: qsTrc("project", "Visibility")
+                        //: visibility of a score on MuseScore.com: private or public
+                        text: qsTrc("project/save", "Visibility")
                         horizontalAlignment: Text.AlignLeft
                     }
 
-                    Dropdown {
+                    StyledDropdown {
                         Layout.fillWidth: true
 
                         model: [
-                            { value: CloudVisibility.Private, text: qsTrc("project", "Private") },
-                            { value: CloudVisibility.Public, text: qsTrc("project", "Public") }
+                            { value: CloudVisibility.Private, text: qsTrc("project/save", "Private") },
+                            { value: CloudVisibility.Public, text: qsTrc("project/save", "Public") }
                         ]
 
                         currentIndex: indexOfValue(root.visibility)
 
                         navigation.panel: optionsNavPanel
                         navigation.row: 2
-                        navigation.accessible.name: qsTrc("project", "Visibility") + ": " + currentText
+                        navigation.accessible.name: qsTrc("project/save", "Visibility") + ": " + currentText
 
                         onActivated: function(index, value) {
                             root.visibility = value
@@ -168,7 +169,7 @@ StyledDialogView {
                 }
 
                 FlatButton {
-                    text: qsTrc("project", "Save to computer")
+                    text: qsTrc("project/save", "Save to computer")
                     visible: root.canSaveToComputer
 
                     navigation.panel: buttonsNavPanel
@@ -192,7 +193,7 @@ StyledDialogView {
 
                 FlatButton {
                     id: saveButton
-                    text: qsTrc("project", "Save")
+                    text: qsTrc("project/save", "Save")
                     accentButton: enabled
                     enabled: Boolean(root.name)
 

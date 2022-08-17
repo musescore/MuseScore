@@ -3,6 +3,8 @@
 #include <QList>
 #include <QTimer>
 
+#include "stringutils.h"
+
 using namespace mu::playback;
 
 //!Note Some resources like VST plugins are not able to work in a couple of msecs
@@ -14,11 +16,32 @@ AbstractAudioResourceItem::AbstractAudioResourceItem(QObject* parent)
 {
 }
 
+AbstractAudioResourceItem::~AbstractAudioResourceItem()
+{
+    if (m_editorUri.isValid()) {
+        emit nativeEditorViewCloseRequested();
+    }
+}
+
 void AbstractAudioResourceItem::requestToLaunchNativeEditorView()
 {
     if (hasNativeEditorSupport()) {
-        QTimer::singleShot(EXPLICIT_DELAY_MSECS, this, &AbstractAudioResourceItem::nativeEditorViewLaunchRequested);
+        doRequestToLaunchNativeEditorView();
     }
+}
+
+void AbstractAudioResourceItem::updateNativeEditorView()
+{
+    if (hasNativeEditorSupport()) {
+        doRequestToLaunchNativeEditorView();
+    } else if (m_editorUri.isValid()) {
+        emit nativeEditorViewCloseRequested();
+    }
+}
+
+void AbstractAudioResourceItem::doRequestToLaunchNativeEditorView()
+{
+    QTimer::singleShot(EXPLICIT_DELAY_MSECS, this, &AbstractAudioResourceItem::nativeEditorViewLaunchRequested);
 }
 
 QString AbstractAudioResourceItem::title() const

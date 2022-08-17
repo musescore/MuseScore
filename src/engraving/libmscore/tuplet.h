@@ -26,7 +26,7 @@
 #include "duration.h"
 #include "property.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Text;
 class Spanner;
 enum class TupletNumberType : char;
@@ -44,6 +44,8 @@ enum class TupletBracketType : char;
 
 class Tuplet final : public DurationElement
 {
+    OBJECT_ALLOCATOR(engraving, Tuplet)
+
     std::vector<DurationElement*> _elements;
     DirectionV _direction;
     TupletNumberType _numberType;
@@ -150,9 +152,9 @@ public:
 
     void setVisible(bool f) override;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& v) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue& v) override;
+    PropertyValue propertyDefault(Pid id) const override;
 
     Shape shape() const override;
 
@@ -165,5 +167,5 @@ public:
     void sanitizeTuplet();
     void addMissingElements();
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

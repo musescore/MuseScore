@@ -26,20 +26,21 @@
 #include "libmscore/measure.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/chord.h"
+#include "libmscore/tremolo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString BEAM_DATA_DIR("beam_data/");
-
+using namespace mu;
 using namespace mu::engraving;
-using namespace Ms;
+
+static const String BEAM_DATA_DIR("beam_data/");
 
 //---------------------------------------------------------
 //   TestBeam
 //---------------------------------------------------------
 
-class BeamTests : public ::testing::Test
+class Engraving_BeamTests : public ::testing::Test
 {
 public:
     void beam(const char* path);
@@ -48,89 +49,89 @@ public:
 //---------------------------------------------------------
 //   beam
 //---------------------------------------------------------
-void BeamTests::beam(const char* path)
+void Engraving_BeamTests::beam(const char* path)
 {
-    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + path);
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + String::fromUtf8(path));
     EXPECT_TRUE(score);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, path, BEAM_DATA_DIR + path));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String::fromUtf8(path), BEAM_DATA_DIR + String::fromUtf8(path)));
     delete score;
 }
 
-TEST_F(BeamTests, beamA)
+TEST_F(Engraving_BeamTests, beamA)
 {
     beam("Beam-A.mscx");
 }
 
-TEST_F(BeamTests, beamB)
+TEST_F(Engraving_BeamTests, beamB)
 {
     beam("Beam-B.mscx");
 }
 
-TEST_F(BeamTests, beamC)
+TEST_F(Engraving_BeamTests, beamC)
 {
     beam("Beam-C.mscx");
 }
 
-TEST_F(BeamTests, beamD)
+TEST_F(Engraving_BeamTests, beamD)
 {
     beam("Beam-D.mscx");
 }
 
-TEST_F(BeamTests, beamE)
+TEST_F(Engraving_BeamTests, beamE)
 {
     beam("Beam-E.mscx");
 }
 
-TEST_F(BeamTests, beamF)
+TEST_F(Engraving_BeamTests, beamF)
 {
     beam("Beam-F.mscx");
 }
 
-TEST_F(BeamTests, beamG)
+TEST_F(Engraving_BeamTests, beamG)
 {
     beam("Beam-G.mscx");
 }
 
 // make sure the beam end positions are correct for 2+ beams
-TEST_F(BeamTests, beamPositions)
+TEST_F(Engraving_BeamTests, beamPositions)
 {
     beam("beamPositions.mscx");
 }
 
 // if the beamNoSlope style parameter is true, all beams are flat
-TEST_F(BeamTests, beamNoSlope)
+TEST_F(Engraving_BeamTests, beamNoSlope)
 {
     beam("beamNoSlope.mscx");
 }
 
-TEST_F(BeamTests, flippedDirection)
+TEST_F(Engraving_BeamTests, flippedDirection)
 {
     beam("flippedDirection.mscx");
 }
 
-TEST_F(BeamTests, wideBeams)
+TEST_F(Engraving_BeamTests, wideBeams)
 {
     beam("wideBeams.mscx");
 }
 
-TEST_F(BeamTests, flatBeams)
+TEST_F(Engraving_BeamTests, flatBeams)
 {
     beam("flatBeams.mscx");
 }
 
 // cross staff beaming is not yet supported
 // in the new beams code
-TEST_F(BeamTests, DISABLED_beamCrossMeasure2)
+TEST_F(Engraving_BeamTests, DISABLED_beamCrossMeasure2)
 {
     beam("Beam-CrossM2.mscx");
 }
 
-TEST_F(BeamTests, DISABLED_beamCrossMeasure3)
+TEST_F(Engraving_BeamTests, DISABLED_beamCrossMeasure3)
 {
     beam("Beam-CrossM3.mscx");
 }
 
-TEST_F(BeamTests, DISABLED_beamCrossMeasure4)
+TEST_F(Engraving_BeamTests, DISABLED_beamCrossMeasure4)
 {
     beam("Beam-CrossM4.mscx");
 }
@@ -144,9 +145,9 @@ TEST_F(BeamTests, DISABLED_beamCrossMeasure4)
 
 // cross measure beams are not yet supported
 // in the refactored beams code
-TEST_F(BeamTests, DISABLED_beamCrossMeasure1)
+TEST_F(Engraving_BeamTests, DISABLED_beamCrossMeasure1)
 {
-    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "Beam-CrossM1.mscx");
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + u"Beam-CrossM1.mscx");
     EXPECT_TRUE(score);
 
     Measure* first_measure = score->firstMeasure();
@@ -179,9 +180,9 @@ TEST_F(BeamTests, DISABLED_beamCrossMeasure1)
 //   all its chords and will not affect other beams in score
 //---------------------------------------------------------
 
-TEST_F(BeamTests, beamStemDir)
+TEST_F(Engraving_BeamTests, beamStemDir)
 {
-    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "beamStemDir.mscx");
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + u"beamStemDir.mscx");
     EXPECT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
@@ -192,7 +193,7 @@ TEST_F(BeamTests, beamStemDir)
     score->update();
     score->doLayout();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "beamStemDir-01.mscx", BEAM_DATA_DIR + "beamStemDir-01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"beamStemDir-01.mscx", BEAM_DATA_DIR + u"beamStemDir-01-ref.mscx"));
 
     delete score;
 }
@@ -204,9 +205,9 @@ TEST_F(BeamTests, beamStemDir)
 //   after using the flip command
 //---------------------------------------------------------
 
-TEST_F(BeamTests, flipBeamStemDir)
+TEST_F(Engraving_BeamTests, flipBeamStemDir)
 {
-    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "flipBeamStemDir.mscx");
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + u"flipBeamStemDir.mscx");
     EXPECT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
@@ -222,7 +223,38 @@ TEST_F(BeamTests, flipBeamStemDir)
     score->update();
     score->doLayout();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "flipBeamStemDir-01.mscx", BEAM_DATA_DIR + "flipBeamStemDir-01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"flipBeamStemDir-01.mscx", BEAM_DATA_DIR + u"flipBeamStemDir-01-ref.mscx"));
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   flipTremoloStemDir
+//   This method tests if a tremolo's stem direction will be set to
+//   all its chords and will not affect other tremolos in score
+//   after using the flip command
+//---------------------------------------------------------
+
+TEST_F(Engraving_BeamTests, flipTremoloStemDir)
+{
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "flipTremoloStemDir.mscx");
+    EXPECT_TRUE(score);
+
+    Measure* m1 = score->firstMeasure();
+    ChordRest* cr = toChordRest(m1->findSegment(SegmentType::ChordRest, m1->tick())->element(0));
+    Tremolo* t = toChord(cr)->tremolo();
+    Chord* c1 = t->chord1();
+    Chord* c2 = t->chord2();
+    EXPECT_TRUE(t->up() && c1->up() && c2->up());
+
+    score->select(c1->upNote());
+    score->startCmd();
+    score->cmdFlip();
+    score->endCmd();
+
+    score->update();
+    score->doLayout();
+    EXPECT_FALSE(t->up() || c1->up() || c2->up());
 
     delete score;
 }

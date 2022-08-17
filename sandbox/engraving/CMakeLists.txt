@@ -47,8 +47,6 @@ include_directories(
 
 set(THIRDPARTY_DIR ${MU_ROOT}/thirdparty)
 
-add_subdirectory(${MU_ROOT}/thirdparty/qzip qzip)
-
 add_definitions(
     -DNO_QT_SUPPORT
     -DNO_ENGRAVING_INTERACTIVE
@@ -73,7 +71,6 @@ add_executable(engraving_app
     main.cpp
 )
 
-set_target_properties(qzip PROPERTIES COMPILE_FLAGS "-fPIC")
 set_target_properties(engraving PROPERTIES COMPILE_FLAGS "-fPIC")
 set_target_properties(global PROPERTIES COMPILE_FLAGS "-fPIC")
 set_target_properties(engraving_app PROPERTIES COMPILE_FLAGS "-fPIC")

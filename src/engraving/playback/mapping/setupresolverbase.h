@@ -23,6 +23,8 @@
 #ifndef MU_ENGRAVING_SETUPRESOLVERBASE_H
 #define MU_ENGRAVING_SETUPRESOLVERBASE_H
 
+#include <cassert>
+
 #include "mpe/events.h"
 
 #include "libmscore/instrument.h"
@@ -32,23 +34,17 @@ template<class T>
 class SetupDataResolverBase
 {
 public:
-    static bool isAbleToResolve(const Ms::Instrument* instrument)
+    static bool resolve(const Instrument* instrument, mpe::PlaybackSetupData& result)
     {
-        IF_ASSERT_FAILED(instrument) {
+        assert(instrument);
+        if (!instrument) {
             return false;
-        }
-
-        return T::supportsInstrument(instrument);
-    }
-
-    static void resolve(const Ms::Instrument* instrument, mpe::PlaybackSetupData& result)
-    {
-        IF_ASSERT_FAILED(instrument) {
-            return;
         }
 
         result = T::doResolve(instrument);
         result.musicXmlSoundId = std::make_optional(instrument->instrumentId().toStdString());
+
+        return result.isValid();
     }
 };
 }

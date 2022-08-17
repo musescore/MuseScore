@@ -29,12 +29,51 @@ DockTabBar::DockTabBar(KDDockWidgets::TabWidget* parent)
 {
 }
 
-bool DockTabBar::event(QEvent* ev)
+bool DockTabBar::event(QEvent* event)
 {
+    switch (event->type()) {
     //! NOTE: see https://github.com/musescore/MuseScore/issues/8164
-    if (ev->type() == QEvent::MouseButtonDblClick) {
+    case QEvent::MouseButtonDblClick:
         return true;
+    case QEvent::MouseButtonPress: {
+        QQuickItem* tabBar = tabBarQmlItem();
+        if (tabBar) {
+            QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+            QPoint localPos = mouseEvent->pos();
+
+            int tabIndex = tabAt(localPos);
+            if (tabIndex < 0) {
+                return true;
+            }
+
+            tabBar->setProperty("currentIndex", tabIndex);
+            TabBar::onMousePress(localPos);
+        }
+
+        break;
+    }
+    default:
+        break;
     }
 
-    return KDDockWidgets::TabBarQuick::event(ev);
+    return KDDockWidgets::TabBarQuick::event(event);
+}
+
+bool DockTabBar::isPositionDraggable(QPoint localPos) const
+{
+    if (!m_draggableMouseArea) {
+        return false;
+    }
+
+    return m_draggableMouseArea->contains(localPos);
+}
+
+void DockTabBar::setDraggableMouseArea(QQuickItem* mouseArea)
+{
+    if (m_draggableMouseArea == mouseArea) {
+        return;
+    }
+
+    m_draggableMouseArea = mouseArea;
+    redirectMouseEvents(mouseArea);
 }

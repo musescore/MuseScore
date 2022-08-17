@@ -38,25 +38,33 @@ TremoloSettingsModel::TremoloSettingsModel(QObject* parent, IElementRepositorySe
 
 void TremoloSettingsModel::createProperties()
 {
-    m_style = buildPropertyItem(Ms::Pid::TREMOLO_STYLE);
+    m_style = buildPropertyItem(mu::engraving::Pid::TREMOLO_STYLE);
+    m_direction = buildPropertyItem(mu::engraving::Pid::STEM_DIRECTION);
 }
 
 void TremoloSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::TREMOLO);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::TREMOLO);
 }
 
 void TremoloSettingsModel::loadProperties()
 {
     loadPropertyItem(m_style);
+    loadPropertyItem(m_direction);
 }
 
 void TremoloSettingsModel::resetProperties()
 {
     m_style->resetToDefault();
+    m_direction->resetToDefault();
 }
 
 PropertyItem* TremoloSettingsModel::style() const
 {
     return m_style;
+}
+
+PropertyItem* TremoloSettingsModel::direction() const
+{
+    return m_direction;
 }

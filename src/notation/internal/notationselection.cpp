@@ -21,11 +21,14 @@
  */
 #include "notationselection.h"
 
+#include <QMimeData>
+
 #include "libmscore/masterscore.h"
 #include "libmscore/segment.h"
 #include "libmscore/measure.h"
 
 #include "notationselectionrange.h"
+#include "notationerrors.h"
 
 #include "log.h"
 
@@ -52,9 +55,17 @@ SelectionState NotationSelection::state() const
     return score()->selection().state();
 }
 
-bool NotationSelection::canCopy() const
+mu::Ret NotationSelection::canCopy() const
 {
-    return score()->selection().canCopy();
+    if (isNone()) {
+        return make_ret(Err::EmptySelection);
+    }
+
+    if (!score()->selection().canCopy()) {
+        return make_ret(Err::SelectCompleteTupletOrTremolo);
+    }
+
+    return make_ok();
 }
 
 QMimeData* NotationSelection::mimeData() const
@@ -65,7 +76,7 @@ QMimeData* NotationSelection::mimeData() const
     }
 
     QMimeData* mimeData = new QMimeData();
-    mimeData->setData(mimeType, score()->selection().mimeData());
+    mimeData->setData(mimeType, score()->selection().mimeData().toQByteArray());
 
     return mimeData;
 }
@@ -78,9 +89,9 @@ EngravingItem* NotationSelection::element() const
 std::vector<EngravingItem*> NotationSelection::elements() const
 {
     std::vector<EngravingItem*> els;
-    std::vector<Ms::EngravingItem*> list = score()->selection().elements();
+    std::vector<mu::engraving::EngravingItem*> list = score()->selection().elements();
     els.reserve(list.size());
-    for (Ms::EngravingItem* e : list) {
+    for (mu::engraving::EngravingItem* e : list) {
         els.push_back(e);
     }
     return els;
@@ -106,7 +117,7 @@ mu::RectF NotationSelection::canvasBoundingRect() const
         return RectF();
     }
 
-    if (const Ms::EngravingItem* element = score()->selection().element()) {
+    if (const mu::engraving::EngravingItem* element = score()->selection().element()) {
         return element->canvasBoundingRect();
     }
 
@@ -124,7 +135,7 @@ INotationSelectionRangePtr NotationSelection::range() const
     return m_range;
 }
 
-Ms::Score* NotationSelection::score() const
+mu::engraving::Score* NotationSelection::score() const
 {
     return m_getScore->score();
 }

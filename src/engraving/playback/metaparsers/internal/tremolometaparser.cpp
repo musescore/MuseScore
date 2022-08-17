@@ -27,34 +27,38 @@
 
 using namespace mu::engraving;
 
-void TremoloMetaParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
+void TremoloMetaParser::doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    IF_ASSERT_FAILED(item->type() == Ms::ElementType::TREMOLO) {
+    IF_ASSERT_FAILED(item->type() == ElementType::TREMOLO) {
         return;
     }
 
-    const Ms::Tremolo* tremolo = Ms::toTremolo(item);
+    const Tremolo* tremolo = toTremolo(item);
+
+    if (tremolo->twoNotes() && tremolo->chord2()->tick().ticks() == ctx.nominalPositionStartTick) {
+        return;
+    }
 
     mpe::ArticulationType type = mpe::ArticulationType::Undefined;
 
     switch (tremolo->tremoloType()) {
-    case Ms::TremoloType::R8:
-    case Ms::TremoloType::C8:
+    case TremoloType::R8:
+    case TremoloType::C8:
         type = mpe::ArticulationType::Tremolo8th;
         break;
 
-    case Ms::TremoloType::R16:
-    case Ms::TremoloType::C16:
+    case TremoloType::R16:
+    case TremoloType::C16:
         type = mpe::ArticulationType::Tremolo16th;
         break;
 
-    case Ms::TremoloType::R32:
-    case Ms::TremoloType::C32:
+    case TremoloType::R32:
+    case TremoloType::C32:
         type = mpe::ArticulationType::Tremolo32nd;
         break;
 
-    case Ms::TremoloType::R64:
-    case Ms::TremoloType::C64:
+    case TremoloType::R64:
+    case TremoloType::C64:
         type = mpe::ArticulationType::Tremolo64th;
         break;
 

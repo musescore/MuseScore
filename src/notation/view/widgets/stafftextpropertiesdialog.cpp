@@ -24,34 +24,49 @@
 #include <QSignalMapper>
 #include <QToolButton>
 
+#include "translation.h"
+
+#include "engraving/libmscore/instrtemplate.h" // for translateInstrumentName
 #include "engraving/libmscore/score.h"
-#include "engraving/libmscore/stafftext.h"
-#include "engraving/libmscore/system.h"
-#include "engraving/libmscore/staff.h"
 #include "engraving/libmscore/segment.h"
+#include "engraving/libmscore/staff.h"
+#include "engraving/libmscore/stafftextbase.h"
 
 #include "ui/view/widgetstatestore.h"
 
+using namespace mu;
 using namespace mu::notation;
 using namespace mu::ui;
+using namespace mu::engraving;
 
 static const QString STAFF_TEXT_PROPERTIES_DIALOG_NAME("StaffTextPropertiesDialog");
 
-namespace Ms {
+static QString untranslatedChannelName(const InstrChannel* channel)
+{
+    return channel->name().isEmpty() ? String::fromUtf8(InstrChannel::DEFAULT_NAME) : channel->name();
+}
+
+static QString translatedChannelName(const Instrument* instrument, const InstrChannel* channel)
+{
+    String name = channel->name();
+    if (name.isEmpty()) {
+        return qtrc("engraving/instruments", InstrChannel::DEFAULT_NAME);
+    }
+
+    return translateInstrumentName(instrument->id(), u"channel", name);
+}
+
 //---------------------------------------------------------
 // initChannelCombo
 //---------------------------------------------------------
 
 static void initChannelCombo(QComboBox* cb, StaffTextBase* st)
 {
-    Part* part = st->staff()->part();
-    Fraction tick = static_cast<Segment*>(st->explicitParent())->tick();
-    for (const Channel* a : part->instrument(tick)->channel()) {
-        QString name = a->name();
-        if (a->name().isEmpty()) {
-            name = Channel::DEFAULT_NAME;
-        }
-        cb->addItem(qApp->translate("InstrumentsXML", name.toUtf8().data()));
+    const Part* part = st->staff()->part();
+    const Fraction tick = st->segment()->tick();
+    const Instrument* instrument = part->instrument(tick);
+    for (const InstrChannel* channel : instrument->channel()) {
+        cb->addItem(translatedChannelName(instrument, channel));
     }
 }
 
@@ -68,7 +83,7 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     const INotationPtr notation = globalContext()->currentNotation();
     const INotationInteractionPtr interaction = notation ? notation->interaction() : nullptr;
     EngravingItem* element = interaction ? interaction->hitElementContext().element : nullptr;
-    StaffTextBase* st = element && element->isStaffTextBase() ? Ms::toStaffTextBase(element) : nullptr;
+    StaffTextBase* st = element && element->isStaffTextBase() ? toStaffTextBase(element) : nullptr;
 
     if (!st) {
         return;
@@ -77,13 +92,13 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     m_originStaffText = st;
 
     if (st->systemFlag()) {
-        setWindowTitle(tr("System Text Properties"));
+        setWindowTitle(qtrc("notation/stafftextproperties", "System text properties"));
         tabWidget->removeTab(tabWidget->indexOf(tabAeolusStops));     // Aeolus settings  for staff text only
         //if (!enableExperimental) tabWidget->removeTab(tabWidget->indexOf(tabMIDIAction));
         tabWidget->removeTab(tabWidget->indexOf(tabChangeChannel));     // Channel switching  for staff text only
         tabWidget->removeTab(tabWidget->indexOf(tabCapoSettings));     // Capos for staff text only
     } else {
-        setWindowTitle(tr("Staff Text Properties"));
+        setWindowTitle(qtrc("notation/stafftextproperties", "Staff text properties"));
         //tabWidget->removeTab(tabWidget->indexOf(tabSwingSettings)); // Swing settings for system text only, could be disabled here, if desired
 #ifndef AEOLUS
         tabWidget->removeTab(tabWidget->indexOf(tabAeolusStops));
@@ -136,7 +151,7 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
             continue;
         }
         for (size_t i = 0; i < n; ++i) {
-            const Channel* a = part->instrument(tick)->channel(static_cast<int>(i));
+            const InstrChannel* a = part->instrument(tick)->channel(static_cast<int>(i));
             if (a->name() != m_staffText->channelName(voice)) {
                 continue;
             }
@@ -149,7 +164,7 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
             }
             if (row == rows) {
                 m_vb[voice][rows]->setChecked(true);
-                m_channelCombo[row]->setCurrentIndex(i);
+                m_channelCombo[row]->setCurrentIndex(static_cast<int>(i));
                 ++rows;
             }
             break;
@@ -172,13 +187,13 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
         for (size_t col = 0; col < VOICES; ++col) {
             auto button = m_vb[col][row];
 
-            mapper->setMapping(button, (col << 8) + row);
+            mapper->setMapping(button, static_cast<int>((col << 8) + row));
             button->setAccessibleName(voiceLabel->text() + button->text());
 
             connect(button, SIGNAL(clicked()), mapper, SLOT(map()));
 
             connect(button, &QToolButton::toggled, this, [=](){
-                QColor color = button->isChecked() ? voicesColors[col] : voiceUncheckedColor;
+                QColor color = button->isChecked() ? voicesColors[static_cast<int>(col)] : voiceUncheckedColor;
                 QPalette palette;
                 palette.setColor(QPalette::Button, color);
                 button->setPalette(palette);
@@ -188,11 +203,11 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
 
     if (m_staffText->swing()) {
         setSwingBox->setChecked(true);
-        if (m_staffText->swingParameters().swingUnit == Constant::division / 2) {
+        if (m_staffText->swingParameters().swingUnit == Constants::division / 2) {
             swingBox->setEnabled(true);
             swingEighth->setChecked(true);
             swingBox->setValue(m_staffText->swingParameters().swingRatio);
-        } else if (m_staffText->swingParameters().swingUnit == Constant::division / 4) {
+        } else if (m_staffText->swingParameters().swingUnit == Constants::division / 4) {
             swingBox->setEnabled(true);
             swingSixteenth->setChecked(true);
             swingBox->setValue(m_staffText->swingParameters().swingRatio);
@@ -225,16 +240,12 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     //---------------------------------------------------
 
     QTreeWidgetItem* selectedItem = 0;
+    const Instrument* instrument = part->instrument(tick);
     for (size_t i = 0; i < n; ++i) {
-        const Channel* a = part->instrument(tick)->channel(i);
+        const InstrChannel* channel = instrument->channel(static_cast<int>(i));
         QTreeWidgetItem* item = new QTreeWidgetItem(channelList);
         item->setData(0, Qt::UserRole, static_cast<int>(i));
-        QString name = a->name();
-        if (a->name().isEmpty()) {
-            name = Channel::DEFAULT_NAME;
-        }
-        item->setText(0, qApp->translate("InstrumentsXML", name.toUtf8().data()));
-        item->setText(1, qApp->translate("InstrumentsXML", a->descr().toUtf8().data()));
+        item->setText(0, translatedChannelName(instrument, channel));
         if (i == 0) {
             selectedItem = item;
         }
@@ -449,29 +460,22 @@ void StaffTextPropertiesDialog::channelItemChanged(QTreeWidgetItem* item, QTreeW
     Part* part = m_staffText->staff()->part();
 
     int channelIdx      = item->data(0, Qt::UserRole).toInt();
-    Fraction tick = static_cast<Segment*>(m_staffText->explicitParent())->tick();
-    Channel* channel    = part->instrument(tick)->channel(channelIdx);
+    Fraction tick = m_staffText->segment()->tick();
+    const Instrument* instrument = part->instrument(tick);
+    const InstrChannel* channel    = instrument->channel(channelIdx);
     QString channelName = channel->name();
 
     for (const NamedEventList& e : part->instrument(tick)->midiActions()) {
         QTreeWidgetItem* ti = new QTreeWidgetItem(actionList);
-        QString name = e.name;
-        if (e.name.isEmpty()) {
-            name = Channel::DEFAULT_NAME;
-        }
-        ti->setText(0, qApp->translate("InstrumentsXML", name.toUtf8().data()));
-        ti->setData(0, Qt::UserRole, name);
-        ti->setText(1, qApp->translate("InstrumentsXML", e.descr.toUtf8().data()));
+        ti->setText(0, translatedChannelName(instrument, channel));
+        ti->setData(0, Qt::UserRole, untranslatedChannelName(channel));
+        ti->setText(1, qtrc("engraving/instruments", e.descr)); // TODO: context/disambiguation? MidiAction isn't used anymore at all?
     }
     for (const NamedEventList& e : channel->midiActions) {
         QTreeWidgetItem* ti = new QTreeWidgetItem(actionList);
-        QString name = e.name;
-        if (e.name.isEmpty()) {
-            name = Channel::DEFAULT_NAME;
-        }
-        ti->setText(0, qApp->translate("InstrumentsXML", name.toUtf8().data()));
-        ti->setData(0, Qt::UserRole, name);
-        ti->setText(1, qApp->translate("InstrumentsXML", e.descr.toUtf8().data()));
+        ti->setText(0, translatedChannelName(instrument, channel));
+        ti->setData(0, Qt::UserRole, untranslatedChannelName(channel));
+        ti->setText(1, qtrc("engraving/instruments", e.descr)); // TODO: context/disambiguation? MidiAction isn't used anymore at all?
     }
     for (const ChannelActions& ca : m_staffText->channelActions()) {
         if (ca.channel == channelIdx) {
@@ -534,10 +538,10 @@ void StaffTextPropertiesDialog::saveValues()
             m_staffText->setSwingParameters(0, swingBox->value());
             swingBox->setEnabled(false);
         } else if (swingEighth->isChecked()) {
-            m_staffText->setSwingParameters(Constant::division / 2, swingBox->value());
+            m_staffText->setSwingParameters(Constants::division / 2, swingBox->value());
             swingBox->setEnabled(true);
         } else if (swingSixteenth->isChecked()) {
-            m_staffText->setSwingParameters(Constant::division / 4, swingBox->value());
+            m_staffText->setSwingParameters(Constants::division / 4, swingBox->value());
             swingBox->setEnabled(true);
         }
     }
@@ -548,13 +552,26 @@ void StaffTextPropertiesDialog::saveValues()
         m_staffText->setCapo(0);
     }
 
+    INotationUndoStackPtr stack = undoStack();
+    IF_ASSERT_FAILED(stack) {
+        return;
+    }
+
     Score* score = m_originStaffText->score();
     StaffTextBase* nt = toStaffTextBase(m_staffText->clone());
     nt->setScore(score);
+
+    stack->prepareChanges();
     score->undoChangeElement(m_originStaffText, nt);
     score->masterScore()->updateChannel();
     score->updateCapo();
     score->updateSwing();
     score->setPlaylistDirty();
+    stack->commitChanges();
 }
+
+INotationUndoStackPtr StaffTextPropertiesDialog::undoStack() const
+{
+    INotationPtr notation = globalContext()->currentNotation();
+    return notation ? notation->undoStack() : nullptr;
 }

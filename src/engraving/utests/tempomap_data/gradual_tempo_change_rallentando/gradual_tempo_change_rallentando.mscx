@@ -260,8 +260,8 @@
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="TempoChangeRanged">
-            <TempoChangeRanged>
+          <Spanner type="GradualTempoChange">
+            <GradualTempoChange>
               <tempoChangeType>rallentando</tempoChangeType>
               <beginHookHeight>1.9</beginHookHeight>
               <endHookType>0</endHookType>
@@ -273,7 +273,7 @@
                 <offset x="0" y="0"/>
                 <off2 x="0.495815" y="0"/>
                 </Segment>
-              </TempoChangeRanged>
+              </GradualTempoChange>
             <next>
               <location>
                 <measures>2</measures>
@@ -344,7 +344,7 @@
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="TempoChangeRanged">
+          <Spanner type="GradualTempoChange">
             <prev>
               <location>
                 <measures>-2</measures>

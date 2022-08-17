@@ -159,7 +159,7 @@ ColumnLayout {
                 anchors.fill: parent
                 anchors.margins: 2
                 verticalAlignment: Text.AlignVCenter
-                text: val
+                text: String(val)
                 onEditingFinished: textControl.changed(text)
             }
         }

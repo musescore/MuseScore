@@ -22,7 +22,8 @@
 
 #include "ambitus.h"
 
-#include "draw/pen.h"
+#include "translation.h"
+#include "draw/types/pen.h"
 #include "rw/compat/read206.h"
 #include "rw/xml.h"
 
@@ -36,16 +37,18 @@
 #include "system.h"
 #include "utils.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 static const NoteHeadGroup NOTEHEADGROUP_DEFAULT = NoteHeadGroup::HEAD_NORMAL;
 static const NoteHeadType NOTEHEADTYPE_DEFAULT  = NoteHeadType::HEAD_AUTO;
 static const DirectionH DIR_DEFAULT     = DirectionH::AUTO;
 static const bool HASLINE_DEFAULT         = true;
 static const Spatium LINEWIDTH_DEFAULT(0.12);
-static const qreal LINEOFFSET_DEFAULT      = 0.8;               // the distance between notehead and line
+static const double LINEOFFSET_DEFAULT      = 0.8;               // the distance between notehead and line
 
 //---------------------------------------------------------
 //   Ambitus
@@ -100,7 +103,7 @@ Ambitus::~Ambitus()
 //   mag
 //---------------------------------------------------------
 
-qreal Ambitus::mag() const
+double Ambitus::mag() const
 {
     return staff() ? staff()->staffMag(tick()) : 1.0;
 }
@@ -241,28 +244,28 @@ void Ambitus::setBottomTpc(int val)
 
 void Ambitus::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
-    xml.tag(Pid::HEAD_GROUP, int(_noteHeadGroup), int(NOTEHEADGROUP_DEFAULT));
-    xml.tag(Pid::HEAD_TYPE,  int(_noteHeadType),  int(NOTEHEADTYPE_DEFAULT));
-    xml.tag(Pid::MIRROR_HEAD, int(_dir),           int(DIR_DEFAULT));
+    xml.startElement(this);
+    xml.tagProperty(Pid::HEAD_GROUP, int(_noteHeadGroup), int(NOTEHEADGROUP_DEFAULT));
+    xml.tagProperty(Pid::HEAD_TYPE,  int(_noteHeadType),  int(NOTEHEADTYPE_DEFAULT));
+    xml.tagProperty(Pid::MIRROR_HEAD, int(_dir),           int(DIR_DEFAULT));
     xml.tag("hasLine",    _hasLine, true);
-    xml.tag(Pid::LINE_WIDTH_SPATIUM, _lineWidth, LINEWIDTH_DEFAULT);
+    xml.tagProperty(Pid::LINE_WIDTH_SPATIUM, _lineWidth, LINEWIDTH_DEFAULT);
     xml.tag("topPitch",   _topPitch);
     xml.tag("topTpc",     _topTpc);
     xml.tag("bottomPitch", _bottomPitch);
     xml.tag("bottomTpc",  _bottomTpc);
     if (_topAccid->accidentalType() != AccidentalType::NONE) {
-        xml.startObject("topAccidental");
+        xml.startElement("topAccidental");
         _topAccid->write(xml);
-        xml.endObject();
+        xml.endElement();
     }
     if (_bottomAccid->accidentalType() != AccidentalType::NONE) {
-        xml.startObject("bottomAccidental");
+        xml.startElement("bottomAccidental");
         _bottomAccid->write(xml);
-        xml.endObject();
+        xml.endElement();
     }
     EngravingItem::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -284,7 +287,7 @@ void Ambitus::read(XmlReader& e)
 
 bool Ambitus::readProperties(XmlReader& e)
 {
-    const QStringRef& tag(e.name());
+    const AsciiStringView tag(e.name());
     if (tag == "head") {
         readProperty(e, Pid::HEAD_GROUP);
     } else if (tag == "headType") {
@@ -342,12 +345,12 @@ void Ambitus::layout()
 {
     int bottomLine, topLine;
     ClefType clf;
-    qreal headWdt     = headWidth();
+    double headWdt     = headWidth();
     Key key;
-    qreal lineDist;
+    double lineDist;
     int numOfLines;
     Segment* segm        = segment();
-    qreal _spatium    = spatium();
+    double _spatium    = spatium();
     Staff* stf         = nullptr;
     if (segm && track() != mu::nidx) {
         Fraction tick    = segm->tick();
@@ -364,11 +367,11 @@ void Ambitus::layout()
     //
     // NOTEHEADS Y POS
     //
-    // if pitch == INVALID_PITCH oor tpc == INALID_TPC, set to some default:
+    // if pitch == INVALID_PITCH or tpc == Tpc::TPC_INVALID, set to some default:
     // for use in palettes and when actual range cannot be calculated (new ambitus or no notes in staff)
     //
-    qreal xAccidOffTop    = 0;
-    qreal xAccidOffBottom = 0;
+    double xAccidOffTop    = 0;
+    double xAccidOffBottom = 0;
     if (stf) {
         key = stf->key(segm->tick());
     } else {
@@ -400,7 +403,7 @@ void Ambitus::layout()
         } else {
             _topAccid->setbbox(RectF());
         }
-        _topAccid->rypos() = _topPos.y();
+        _topAccid->setPosY(_topPos.y());
     }
 
     // bottom notehead
@@ -427,7 +430,7 @@ void Ambitus::layout()
         } else {
             _bottomAccid->setbbox(RectF());
         }
-        _bottomAccid->rypos() = _bottomPos.y();
+        _bottomAccid->setPosY(_bottomPos.y());
     }
 
     //
@@ -435,7 +438,7 @@ void Ambitus::layout()
     //
     // Note: manages colliding accidentals
     //
-    qreal accNoteDist = point(score()->styleS(Sid::accidentalNoteDistance));
+    double accNoteDist = point(score()->styleS(Sid::accidentalNoteDistance));
     xAccidOffTop      = _topAccid->width() + accNoteDist;
     xAccidOffBottom   = _bottomAccid->width() + accNoteDist;
 
@@ -459,33 +462,33 @@ void Ambitus::layout()
         // left align noteheads and right align accidentals 'hanging' on the left
         _topPos.setX(0.0);
         _bottomPos.setX(0.0);
-        _topAccid->rxpos()       = -xAccidOffTop;
-        _bottomAccid->rxpos()    = -xAccidOffBottom;
+        _topAccid->setPosX(-xAccidOffTop);
+        _bottomAccid->setPosX(-xAccidOffBottom);
         break;
     case DirectionH::LEFT:                       // top notehead at the left of bottom notehead
         // place top notehead at left margin; bottom notehead at right of top head;
         // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
         _topPos.setX(0.0);
         _bottomPos.setX(headWdt);
-        _topAccid->rxpos() = -xAccidOffTop;
-        _bottomAccid->rxpos() = collision ? -xAccidOffBottom : headWdt - xAccidOffBottom;
+        _topAccid->setPosX(-xAccidOffTop);
+        _bottomAccid->setPosX(collision ? -xAccidOffBottom : headWdt - xAccidOffBottom);
         break;
     case DirectionH::RIGHT:                      // top notehead at the right of bottom notehead
         // bottom notehead at left margin; top notehead at right of bottomnotehead
         // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
         _bottomPos.setX(0.0);
         _topPos.setX(headWdt);
-        _bottomAccid->rxpos() = -xAccidOffBottom;
-        _topAccid->rxpos() = headWdt - xAccidOffTop;
+        _bottomAccid->setPosX(-xAccidOffBottom);
+        _topAccid->setPosX(headWdt - xAccidOffTop);
         break;
     }
 
     // compute line from top note centre to bottom note centre
     mu::LineF fullLine(_topPos.x() + headWdt * 0.5, _topPos.y(), _bottomPos.x() + headWdt * 0.5, _bottomPos.y());
     // shorten line on each side by offsets
-    qreal yDelta = _bottomPos.y() - _topPos.y();
+    double yDelta = _bottomPos.y() - _topPos.y();
     if (yDelta != 0.0) {
-        qreal off = _spatium * LINEOFFSET_DEFAULT;
+        double off = _spatium * LINEOFFSET_DEFAULT;
         mu::PointF p1 = fullLine.pointAt(off / yDelta);
         mu::PointF p2 = fullLine.pointAt(1 - (off / yDelta));
         _line = mu::LineF(p1, p2);
@@ -508,8 +511,8 @@ void Ambitus::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
-    qreal _spatium = spatium();
-    qreal lw = lineWidth().val() * _spatium;
+    double _spatium = spatium();
+    double lw = lineWidth().val() * _spatium;
     painter->setPen(Pen(curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
     drawSymbol(noteHead(), painter, _topPos);
     drawSymbol(noteHead(), painter, _bottomPos);
@@ -521,26 +524,26 @@ void Ambitus::draw(mu::draw::Painter* painter) const
     if (segment() && track() != mu::nidx) {
         Fraction tick  = segment()->tick();
         Staff* staff   = score()->staff(staffIdx());
-        qreal lineDist = staff->lineDistance(tick);
+        double lineDist = staff->lineDistance(tick);
         int numOfLines = staff->lines(tick);
-        qreal step     = lineDist * _spatium;
-        qreal stepTolerance    = step * 0.1;
-        qreal ledgerLineLength = score()->styleS(Sid::ledgerLineLength).val() * _spatium;
-        qreal ledgerLineWidth  = score()->styleS(Sid::ledgerLineWidth).val() * _spatium;
+        double step     = lineDist * _spatium;
+        double stepTolerance    = step * 0.1;
+        double ledgerLineLength = score()->styleS(Sid::ledgerLineLength).val() * _spatium;
+        double ledgerLineWidth  = score()->styleS(Sid::ledgerLineWidth).val() * _spatium;
         painter->setPen(Pen(curColor(), ledgerLineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
 
         if (_topPos.y() - stepTolerance <= -step) {
-            qreal xMin = _topPos.x() - ledgerLineLength;
-            qreal xMax = _topPos.x() + headWidth() + ledgerLineLength;
-            for (qreal y = -step; y >= _topPos.y() - stepTolerance; y -= step) {
+            double xMin = _topPos.x() - ledgerLineLength;
+            double xMax = _topPos.x() + headWidth() + ledgerLineLength;
+            for (double y = -step; y >= _topPos.y() - stepTolerance; y -= step) {
                 painter->drawLine(mu::PointF(xMin, y), mu::PointF(xMax, y));
             }
         }
 
         if (_bottomPos.y() + stepTolerance >= numOfLines * step) {
-            qreal xMin = _bottomPos.x() - ledgerLineLength;
-            qreal xMax = _bottomPos.x() + headWidth() + ledgerLineLength;
-            for (qreal y = numOfLines * step; y <= _bottomPos.y() + stepTolerance; y += step) {
+            double xMin = _bottomPos.x() - ledgerLineLength;
+            double xMax = _bottomPos.x() + headWidth() + ledgerLineLength;
+            for (double y = numOfLines * step; y <= _bottomPos.y() + stepTolerance; y += step) {
                 painter->drawLine(mu::PointF(xMin, y), mu::PointF(xMax, y));
             }
         }
@@ -553,7 +556,7 @@ void Ambitus::draw(mu::draw::Painter* painter) const
 
 void Ambitus::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    Q_UNUSED(all);
+    UNUSED(all);
     func(data, this);
     if (_topAccid->accidentalType() != AccidentalType::NONE) {
         func(data, _topAccid);
@@ -579,7 +582,7 @@ SymId Ambitus::noteHead() const
 
     SymId t = Note::noteHead(hg, _noteHeadGroup, ht);
     if (t == SymId::noSym) {
-        qDebug("invalid notehead %d/%d", int(_noteHeadGroup), int(_noteHeadType));
+        LOGD("invalid notehead %d/%d", int(_noteHeadGroup), int(_noteHeadType));
         t = Note::noteHead(0, NoteHeadGroup::HEAD_NORMAL, ht);
     }
     return t;
@@ -591,10 +594,10 @@ SymId Ambitus::noteHead() const
 //    returns the width of the notehead symbol
 //---------------------------------------------------------
 
-qreal Ambitus::headWidth() const
+double Ambitus::headWidth() const
 {
 //      int head  = noteHead();
-//      qreal val = symbols[score()->symIdx()][head].width(magS());
+//      double val = symbols[score()->symIdx()][head].width(magS());
 //      return val;
     return symWidth(noteHead());
 }
@@ -609,7 +612,7 @@ mu::PointF Ambitus::pagePos() const
         return pos();
     }
     System* system = segment()->measure()->system();
-    qreal yp = y();
+    double yp = y();
     if (system) {
         yp += system->staff(staffIdx())->y() + system->y();
     }
@@ -853,14 +856,11 @@ EngravingItem* Ambitus::prevSegmentElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Ambitus::accessibleInfo() const
+String Ambitus::accessibleInfo() const
 {
-    return QObject::tr("%1; Top pitch: %2%3; Bottom pitch: %4%5").arg(EngravingItem::accessibleInfo(),
-                                                                      tpc2name(topTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO,
-                                                                               false),
-                                                                      QString::number(topOctave()),
-                                                                      tpc2name(bottomTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO,
-                                                                               false),
-                                                                      QString::number(bottomOctave()));
+    return EngravingItem::accessibleInfo() + u"; "
+           + mtrc("engraving", "Top pitch: %1; Bottom pitch: %2")
+           .arg(tpc2name(topTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false) + String::number(topOctave()),
+                tpc2name(bottomTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false) + String::number(bottomOctave()));
 }
 }

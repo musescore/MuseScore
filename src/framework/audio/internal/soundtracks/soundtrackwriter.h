@@ -34,26 +34,20 @@ namespace mu::audio::soundtrack {
 class SoundTrackWriter
 {
 public:
-    SoundTrackWriter(const io::path& destination, const SoundTrackFormat& format, const msecs_t totalDuration, IAudioSourcePtr source);
-    ~SoundTrackWriter();
+    SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format, const msecs_t totalDuration, IAudioSourcePtr source);
 
     bool write();
 
 private:
-    size_t requiredOutputBufferSize(const SoundTrackType type, const samples_t samplesPerChannel) const;
-    size_t encode(const SoundTrackFormat& format, samples_t samplesPerChannel, float* input, char* output);
-    size_t flush(char* output, size_t outputSize);
+    encode::AbstractAudioEncoderPtr createEncoder(const SoundTrackType& type) const;
     bool prepareInputBuffer();
-    bool writeEncodedOutput();
-    void completeOutput();
 
-    SoundTrackFormat m_format;
     IAudioSourcePtr m_source = nullptr;
-    std::FILE* m_fileStream = nullptr;
 
     std::vector<float> m_inputBuffer;
     std::vector<float> m_intermBuffer;
-    std::vector<char> m_outputBuffer;
+
+    encode::AbstractAudioEncoderPtr m_encoderPtr = nullptr;
 };
 }
 

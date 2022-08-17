@@ -4,13 +4,7 @@
         <file>qml/MuseScore/Plugins/PluginsPage.qml</file>
         <file>qml/MuseScore/Plugins/internal/PluginItem.qml</file>
         <file>qml/MuseScore/Plugins/internal/PluginsListView.qml</file>
-        <file>qml/MuseScore/Plugins/internal/placeholders/placeholder1.jpeg</file>
-        <file>qml/MuseScore/Plugins/internal/placeholders/placeholder2.jpeg</file>
-        <file>qml/MuseScore/Plugins/internal/placeholders/placeholder3.jpeg</file>
-        <file>qml/MuseScore/Plugins/internal/placeholders/placeholder4.jpeg</file>
-        <file>qml/MuseScore/Plugins/internal/placeholders/placeholder5.jpeg</file>
-        <file>qml/MuseScore/Plugins/internal/placeholders/placeholder6.jpeg</file>
-        <file>qml/MuseScore/Plugins/internal/placeholders/placeholder7.jpeg</file>
         <file>qml/MuseScore/Plugins/internal/EnablePanel.qml</file>
+        <file>qml/MuseScore/Plugins/internal/resources/placeholder.png</file>
     </qresource>
 </RCC>

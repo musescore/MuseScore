@@ -29,7 +29,7 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Drumset;
 }
 
@@ -60,6 +60,7 @@ private:
     void changeEvent(QEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;
+    void mouseDoubleClickEvent(QMouseEvent* event) override;
     void enterEvent(QEvent* event) override;
     void leaveEvent(QEvent* event) override;
 
@@ -69,7 +70,7 @@ private:
     mu::notation::INotationNoteInputPtr noteInput() const;
 
     PaletteWidget* m_drumPalette = nullptr;
-    const Ms::Drumset* m_drumset = nullptr;
+    const mu::engraving::Drumset* m_drumset = nullptr;
     mu::notation::INotationPtr m_notation;
     mu::async::Channel<QString> m_pitchNameChanged;
 };

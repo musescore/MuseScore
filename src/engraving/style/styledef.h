@@ -26,11 +26,12 @@
 #include <array>
 #include <vector>
 
-#include "property/propertyvalue.h"
+#include "types/string.h"
+#include "types/propertyvalue.h"
 #include "libmscore/property.h"
 #include "config.h"
 
-namespace Ms {
+namespace mu::engraving {
 // Needs to be duplicated here and in symid.h since moc doesn't handle macros from #include'd files
 #ifdef SCRIPT_INTERFACE
 #define BEGIN_QT_REGISTERED_ENUM(Name) \
@@ -194,12 +195,10 @@ enum class Sid {
     shortenStem,
     stemLength,
     stemLengthSmall,
-    shortStemProgression,
     shortStemStartLocation,
     shortestStem,
     minStaffSizeForAutoStems,
     smallStaffStemDirection,
-    preferStemDirectionMatchContext,
     beginRepeatLeftMargin,
     minNoteDistance,
     barNoteDistance,
@@ -226,6 +225,7 @@ enum class Sid {
     useWideBeams,
     beamMinLen,
     beamNoSlope,
+    snapCustomBeamsToGrid,
 
     dotMag,
     dotNoteDistance,
@@ -269,13 +269,16 @@ enum class Sid {
     hairpinDecrescContText,
     hairpinLineStyle,
     hairpinLineLineStyle,
+    hairpinLineDashLineLen,
+    hairpinLineDashGapLen,
 
     pedalPlacement,
     pedalPosAbove,
     pedalPosBelow,
     pedalLineWidth,
     pedalLineStyle,
-    pedalBeginTextOffset,
+    pedalDashLineLen,
+    pedalDashGapLen,
     pedalHookHeight,
     pedalFontFace,
     pedalFontSize,
@@ -409,6 +412,8 @@ enum class Sid {
 
     smallNoteMag,
     graceNoteMag,
+    graceToMainNoteDist,
+    graceToGraceNoteDist,
     smallStaffMag,
     smallClefMag,
     genClef,
@@ -472,6 +477,7 @@ enum class Sid {
     SlurDottedWidth,
     MinTieLength,
     SlurMinDistance,
+    HeaderToLineStartDistance, // determines start point of "dangling" lines (ties, gliss, lyrics...) at start of system
 
     SectionPause,
     MusicalSymbolFont,
@@ -501,6 +507,8 @@ enum class Sid {
     voltaHook,
     voltaLineWidth,
     voltaLineStyle,
+    voltaDashLineLen,
+    voltaDashGapLen,
     voltaFontFace,
     voltaFontSize,
     voltaLineSpacing,
@@ -555,6 +563,8 @@ enum class Sid {
     ottavaHookBelow,
     ottavaLineWidth,
     ottavaLineStyle,
+    ottavaDashLineLen,
+    ottavaDashGapLen,
     ottavaNumbersOnly,
     ottavaFontFace,
     ottavaFontSize,
@@ -562,7 +572,8 @@ enum class Sid {
     ottavaFontSpatiumDependent,
     ottavaFontStyle,
     ottavaColor,
-    ottavaTextAlign,
+    ottavaTextAlignAbove,
+    ottavaTextAlignBelow,
     ottavaFrameType,
     ottavaFramePadding,
     ottavaFrameWidth,
@@ -892,6 +903,8 @@ enum class Sid {
     tempoFrameBgColor,
     tempoChangeLineWidth,
     tempoChangeLineStyle,
+    tempoChangeDashLineLen,
+    tempoChangeDashGapLen,
 
     metronomeFontFace,
     metronomeFontSize,
@@ -1408,7 +1421,8 @@ enum class Sid {
     letRingPosBelow,
     letRingLineWidth,
     letRingLineStyle,
-    letRingBeginTextOffset,
+    letRingDashLineLen,
+    letRingDashGapLen,
     letRingText,
     letRingFrameType,
     letRingFramePadding,
@@ -1431,7 +1445,8 @@ enum class Sid {
     palmMutePosBelow,
     palmMuteLineWidth,
     palmMuteLineStyle,
-    palmMuteBeginTextOffset,
+    palmMuteDashLineLen,
+    palmMuteDashGapLen,
     palmMuteText,
     palmMuteFrameType,
     palmMuteFramePadding,
@@ -1462,6 +1477,37 @@ enum class Sid {
     voltaMinDistance,
     figuredBassMinDistance,
     tupletMinDistance,
+
+    /// Display options for tab elements (simple and common styles)
+
+    slurShowTabSimple,
+    slurShowTabCommon,
+    fermataShowTabSimple,
+    fermataShowTabCommon,
+    dynamicsShowTabSimple,
+    dynamicsShowTabCommon,
+    hairpinShowTabSimple,
+    hairpinShowTabCommon,
+    accentShowTabSimple,
+    accentShowTabCommon,
+    staccatoShowTabSimple,
+    staccatoShowTabCommon,
+    harmonicMarkShowTabSimple,
+    harmonicMarkShowTabCommon,
+    letRingShowTabSimple,
+    letRingShowTabCommon,
+    palmMuteShowTabSimple,
+    palmMuteShowTabCommon,
+    rasgueadoShowTabSimple,
+    rasgueadoShowTabCommon,
+    mordentShowTabSimple,
+    mordentShowTabCommon,
+    turnShowTabSimple,
+    turnShowTabCommon,
+    wahShowTabSimple,
+    wahShowTabCommon,
+    golpeShowTabSimple,
+    golpeShowTabCommon,
 
     autoplaceEnabled,
     defaultsVersion,
@@ -1502,15 +1548,15 @@ private:
 
     struct StyleValue {
         Sid _idx;
-        const char* _name;         // xml name for read()/write()
-        mu::engraving::PropertyValue _defaultValue;
+        AsciiStringView _name;         // xml name for read()/write()
+        PropertyValue _defaultValue;
 
     public:
         Sid  styleIdx() const { return _idx; }
         int idx() const { return int(_idx); }
-        const char* name() const { return _name; }
-        mu::engraving::P_TYPE valueType() const { return _defaultValue.type(); }
-        const mu::engraving::PropertyValue& defaultValue() const { return _defaultValue; }
+        const AsciiStringView& name() const { return _name; }
+        P_TYPE valueType() const { return _defaultValue.type(); }
+        const PropertyValue& defaultValue() const { return _defaultValue; }
     };
 
     static const std::array<StyleValue, size_t(Sid::STYLES)> styleValues;

@@ -21,12 +21,10 @@
  */
 #include "masterscore.h"
 
-#include <QDate>
-#include <QBuffer>
-#include <QRegularExpression>
-
-#include "io/mscreader.h"
-#include "io/mscwriter.h"
+#include "types/datetime.h"
+#include "io/buffer.h"
+#include "infrastructure/mscreader.h"
+#include "infrastructure/mscwriter.h"
 #include "rw/xml.h"
 #include "rw/writecontext.h"
 #include "style/defaultstyle.h"
@@ -37,7 +35,6 @@
 
 #include "repeatlist.h"
 #include "undo.h"
-#include "revisions.h"
 #include "imageStore.h"
 #include "audio.h"
 #include "utils.h"
@@ -48,8 +45,8 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::engraving;
-using namespace Ms;
 
 //---------------------------------------------------------
 //   MasterScore
@@ -64,7 +61,6 @@ MasterScore::MasterScore(std::weak_ptr<engraving::EngravingProject> project)
     _sigmap      = new TimeSigMap();
     _repeatList  = new RepeatList(this);
     _repeatList2 = new RepeatList(this);
-    _revisions   = new Revisions;
     setMasterScore(this);
 
     _pos[int(POS::CURRENT)] = Fraction(0, 1);
@@ -72,26 +68,26 @@ MasterScore::MasterScore(std::weak_ptr<engraving::EngravingProject> project)
     _pos[int(POS::RIGHT)]   = Fraction(0, 1);
 
 #if defined(Q_OS_WIN)
-    metaTags().insert({ "platform", "Microsoft Windows" });
+    metaTags().insert({ u"platform", u"Microsoft Windows" });
 #elif defined(Q_OS_MAC)
-    metaTags().insert({ "platform", "Apple Macintosh" });
+    metaTags().insert({ u"platform", u"Apple Macintosh" });
 #elif defined(Q_OS_LINUX)
-    metaTags().insert({ "platform", "Linux" });
+    metaTags().insert({ u"platform", u"Linux" });
 #else
-    metaTags().insert({ "platform", "Unknown" });
+    metaTags().insert({ u"platform", u"Unknown" });
 #endif
-    metaTags().insert({ "movementNumber", "" });
-    metaTags().insert({ "movementTitle", "" });
-    metaTags().insert({ "workNumber", "" });
-    metaTags().insert({ "workTitle", "" });
-    metaTags().insert({ "arranger", "" });
-    metaTags().insert({ "composer", "" });
-    metaTags().insert({ "lyricist", "" });
-    metaTags().insert({ "poet", "" });
-    metaTags().insert({ "translator", "" });
-    metaTags().insert({ "source", "" });
-    metaTags().insert({ "copyright", "" });
-    metaTags().insert({ "creationDate", QDate::currentDate().toString(Qt::ISODate) });
+    metaTags().insert({ u"movementNumber", u"" });
+    metaTags().insert({ u"movementTitle", u"" });
+    metaTags().insert({ u"workNumber", u"" });
+    metaTags().insert({ u"workTitle", u"" });
+    metaTags().insert({ u"arranger", u"" });
+    metaTags().insert({ u"composer", u"" });
+    metaTags().insert({ u"lyricist", u"" });
+    metaTags().insert({ u"poet", u"" });
+    metaTags().insert({ u"translator", u"" });
+    metaTags().insert({ u"source", u"" });
+    metaTags().insert({ u"copyright", u"" });
+    metaTags().insert({ u"creationDate", Date::currentDate().toString(DateFormat::ISODate) });
 }
 
 MasterScore::MasterScore(const MStyle& s, std::weak_ptr<engraving::EngravingProject> project)
@@ -106,13 +102,12 @@ MasterScore::~MasterScore()
         m_project.lock()->m_masterScore = nullptr;
     }
 
-    delete _revisions;
     delete _repeatList;
     delete _repeatList2;
     delete _sigmap;
     delete _tempomap;
     delete _undoStack;
-    qDeleteAll(_excerpts);
+    DeleteAll(_excerpts);
 }
 
 //---------------------------------------------------------
@@ -139,16 +134,6 @@ void MasterScore::setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider)
     m_fileInfoProvider = fileInfoProvider;
 }
 
-bool MasterScore::isNewlyCreated() const
-{
-    return m_isNewlyCreated;
-}
-
-void MasterScore::setNewlyCreated(bool val)
-{
-    m_isNewlyCreated = val;
-}
-
 bool MasterScore::saved() const
 {
     return m_saved;
@@ -169,9 +154,9 @@ void MasterScore::setAutosaveDirty(bool v)
     m_autosaveDirty = v;
 }
 
-QString MasterScore::name() const
+String MasterScore::name() const
 {
-    return fileInfo()->fileName(false).toQString();
+    return fileInfo()->fileName(false).toString();
 }
 
 //---------------------------------------------------------
@@ -239,9 +224,9 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
     {
         //! NOTE The style is writing to a separate file only for the master score.
         //! At the moment, the style for the parts is still writing to the score file.
-        QByteArray styleData;
-        QBuffer styleBuf(&styleData);
-        styleBuf.open(QIODevice::WriteOnly);
+        ByteArray styleData;
+        Buffer styleBuf(&styleData);
+        styleBuf.open(IODevice::WriteOnly);
         style().write(&styleBuf);
         mscWriter.writeStyleFile(styleData);
     }
@@ -250,9 +235,9 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
 
     // Write MasterScore
     {
-        QByteArray scoreData;
-        QBuffer scoreBuf(&scoreData);
-        scoreBuf.open(QIODevice::ReadWrite);
+        ByteArray scoreData;
+        Buffer scoreBuf(&scoreData);
+        scoreBuf.open(IODevice::ReadWrite);
 
         compat::WriteScoreHook hook;
         Score::writeScore(&scoreBuf, false, onlySelection, hook, ctx);
@@ -263,14 +248,14 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
     // Write Excerpts
     {
         if (!onlySelection) {
-            for (const Excerpt* excerpt : qAsConst(this->excerpts())) {
+            for (const Excerpt* excerpt : this->excerpts()) {
                 Score* partScore = excerpt->excerptScore();
                 if (partScore != this) {
                     // Write excerpt style
                     {
-                        QByteArray excerptStyleData;
-                        QBuffer styleStyleBuf(&excerptStyleData);
-                        styleStyleBuf.open(QIODevice::WriteOnly);
+                        ByteArray excerptStyleData;
+                        Buffer styleStyleBuf(&excerptStyleData);
+                        styleStyleBuf.open(IODevice::WriteOnly);
                         partScore->style().write(&styleStyleBuf);
 
                         mscWriter.addExcerptStyleFile(excerpt->name(), excerptStyleData);
@@ -278,9 +263,9 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
 
                     // Write excerpt
                     {
-                        QByteArray excerptData;
-                        QBuffer excerptBuf(&excerptData);
-                        excerptBuf.open(QIODevice::ReadWrite);
+                        ByteArray excerptData;
+                        Buffer excerptBuf(&excerptData);
+                        excerptBuf.open(IODevice::ReadWrite);
 
                         compat::WriteScoreHook hook;
                         excerpt->excerptScore()->writeScore(&excerptBuf, false, onlySelection, hook, ctx);
@@ -296,9 +281,9 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
     {
         ChordList* chordList = this->chordList();
         if (chordList->customChordList() && !chordList->empty()) {
-            QByteArray chlData;
-            QBuffer chlBuf(&chlData);
-            chlBuf.open(QIODevice::WriteOnly);
+            ByteArray chlData;
+            Buffer chlBuf(&chlData);
+            chlBuf.open(IODevice::WriteOnly);
             chordList->write(&chlBuf);
             mscWriter.writeChordListFile(chlData);
         }
@@ -310,7 +295,8 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
             if (!ip->isUsed(this)) {
                 continue;
             }
-            mscWriter.addImageFile(ip->hashName(), ip->buffer());
+            ByteArray data = ip->buffer();
+            mscWriter.addImageFile(ip->hashName(), data);
         }
     }
 
@@ -319,9 +305,9 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
         if (doCreateThumbnail && !pages().empty()) {
             auto pixmap = createThumbnail();
 
-            QByteArray ba;
-            QBuffer b(&ba);
-            b.open(QIODevice::WriteOnly);
+            ByteArray ba;
+            Buffer b(&ba);
+            b.open(IODevice::WriteOnly);
             imageProvider()->saveAsPng(pixmap, &b);
             mscWriter.writeThumbnailFile(ba);
         }
@@ -337,13 +323,13 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
     return true;
 }
 
-bool MasterScore::exportPart(mu::engraving::MscWriter& mscWriter, Score* partScore)
+bool MasterScore::exportPart(MscWriter& mscWriter, Score* partScore)
 {
     // Write excerpt style as main
     {
-        QByteArray excerptStyleData;
-        QBuffer styleStyleBuf(&excerptStyleData);
-        styleStyleBuf.open(QIODevice::WriteOnly);
+        ByteArray excerptStyleData;
+        Buffer styleStyleBuf(&excerptStyleData);
+        styleStyleBuf.open(IODevice::WriteOnly);
         partScore->style().write(&styleStyleBuf);
 
         mscWriter.writeStyleFile(excerptStyleData);
@@ -351,9 +337,9 @@ bool MasterScore::exportPart(mu::engraving::MscWriter& mscWriter, Score* partSco
 
     // Write excerpt as main score
     {
-        QByteArray excerptData;
-        QBuffer excerptBuf(&excerptData);
-        excerptBuf.open(QIODevice::WriteOnly);
+        ByteArray excerptData;
+        Buffer excerptBuf(&excerptData);
+        excerptBuf.open(IODevice::WriteOnly);
 
         compat::WriteScoreHook hook;
         partScore->writeScore(&excerptBuf, false, false, hook);
@@ -366,9 +352,9 @@ bool MasterScore::exportPart(mu::engraving::MscWriter& mscWriter, Score* partSco
         if (!partScore->pages().empty()) {
             auto pixmap = partScore->createThumbnail();
 
-            QByteArray ba;
-            QBuffer b(&ba);
-            b.open(QIODevice::WriteOnly);
+            ByteArray ba;
+            Buffer b(&ba);
+            b.open(IODevice::WriteOnly);
             imageProvider()->saveAsPng(pixmap, &b);
             mscWriter.writeThumbnailFile(ba);
         }
@@ -381,54 +367,13 @@ bool MasterScore::exportPart(mu::engraving::MscWriter& mscWriter, Score* partSco
 //   addExcerpt
 //---------------------------------------------------------
 
-void MasterScore::addExcerpt(Excerpt* ex, int index)
+void MasterScore::addExcerpt(Excerpt* ex, size_t index)
 {
-    Score* score = ex->excerptScore();
-
-    int nstaves { 1 }; // Initialise to 1 to force writing of the first part.
-    std::set<ID> assignedStavesIds;
-    for (Staff* excerptStaff : score->staves()) {
-        const LinkedObjects* ls = excerptStaff->links();
-        if (ls == 0) {
-            continue;
-        }
-
-        for (auto le : *ls) {
-            if (le->score() != this) {
-                continue;
-            }
-
-            Staff* linkedMasterStaff = toStaff(le);
-            if (mu::contains(assignedStavesIds, linkedMasterStaff->id())) {
-                continue;
-            }
-
-            Part* excerptPart = excerptStaff->part();
-            Part* masterPart = linkedMasterStaff->part();
-
-            //! NOTE: parts/staves of excerpt must have the same ID as parts/staves of the master score
-            //! In fact, excerpts are just viewers for the master score
-            excerptStaff->setId(linkedMasterStaff->id());
-            excerptPart->setId(masterPart->id());
-
-            assignedStavesIds.insert(linkedMasterStaff->id());
-
-            // For instruments with multiple staves, every staff will point to the
-            // same part. To prevent adding the same part several times to the excerpt,
-            // add only the part of the first staff pointing to the part.
-            if (!(--nstaves)) {
-                ex->parts().push_back(linkedMasterStaff->part());
-                nstaves = linkedMasterStaff->part()->nstaves();
-            }
-            break;
-        }
+    if (!ex->inited()) {
+        initParts(ex);
     }
 
-    if (ex->tracksMapping().empty()) {   // SHOULDN'T HAPPEN, protected in the UI, but it happens during read-in!!!
-        ex->updateTracksMapping();
-    }
-
-    excerpts().insert(excerpts().begin() + (index < 0 ? excerpts().size() : index), ex);
+    excerpts().insert(excerpts().begin() + (index == mu::nidx ? excerpts().size() : index), ex);
     setExcerptsChanged(true);
 }
 
@@ -442,7 +387,7 @@ void MasterScore::removeExcerpt(Excerpt* ex)
         setExcerptsChanged(true);
         // delete ex;
     } else {
-        qDebug("removeExcerpt:: ex not found");
+        LOGD("removeExcerpt:: ex not found");
     }
 }
 
@@ -452,23 +397,23 @@ void MasterScore::removeExcerpt(Excerpt* ex)
 
 MasterScore* MasterScore::clone()
 {
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
+    Buffer buffer;
+    buffer.open(IODevice::WriteOnly);
 
     WriteContext writeCtx;
-    XmlWriter xml(this, &buffer);
+    XmlWriter xml(&buffer);
     xml.setContext(&writeCtx);
-    xml.writeHeader();
+    xml.startDocument();
 
-    xml.startObject("museScore version=\"" MSC_VERSION "\"");
+    xml.startElement("museScore", { { "version", MSC_VERSION } });
 
     compat::WriteScoreHook hook;
     write(xml, false, hook);
-    xml.endObject();
+    xml.endElement();
 
     buffer.close();
 
-    QByteArray scoreData = buffer.buffer();
+    ByteArray scoreData = buffer.data();
     MasterScore* score = new MasterScore(style(), m_project);
 
     ReadContext readCtx(score);
@@ -513,7 +458,7 @@ void MasterScore::setPos(POS pos, Fraction tick)
     // so we should update cursor here
     // however, we must be careful not to call setPos() again while handling posChanged, or recursion results
     for (Score* s : scoreList()) {
-        emit s->posChanged(pos, unsigned(tick.ticks()));
+        s->notifyPosChanged(pos, unsigned(tick.ticks()));
     }
 }
 
@@ -525,11 +470,11 @@ void MasterScore::setPos(POS pos, Fraction tick)
 void MasterScore::setSoloMute()
 {
     for (unsigned i = 0; i < _midiMapping.size(); i++) {
-        Channel* b = _midiMapping[i].articulation();
+        InstrChannel* b = _midiMapping[i].articulation();
         if (b->solo()) {
             b->setSoloMute(false);
             for (unsigned j = 0; j < _midiMapping.size(); j++) {
-                Channel* a = _midiMapping[j].articulation();
+                InstrChannel* a = _midiMapping[j].articulation();
                 bool sameMidiMapping = _midiMapping[i].port() == _midiMapping[j].port()
                                        && _midiMapping[i].channel() == _midiMapping[j].channel();
                 a->setSoloMute((i != j && !a->solo() && !sameMidiMapping));
@@ -626,8 +571,8 @@ void MasterScore::setPlaybackScore(Score* score)
     for (Part* part : score->parts()) {
         for (const auto& pair : part->instruments()) {
             Instrument* instr = pair.second;
-            for (Channel* ch : instr->channel()) {
-                Channel* pChannel = playbackChannel(ch);
+            for (InstrChannel* ch : instr->channel()) {
+                InstrChannel* pChannel = playbackChannel(ch);
                 IF_ASSERT_FAILED(pChannel) {
                     continue;
                 }
@@ -650,7 +595,7 @@ void MasterScore::setPlaybackScore(Score* score)
 void MasterScore::updateExpressive(Synthesizer* synth)
 {
     SynthesizerState s = synthesizerState();
-    SynthesizerGroup g = s.group("master");
+    SynthesizerGroup g = s.group(u"master");
 
     int method = 1;
     for (const IdValue& idVal : g) {
@@ -671,7 +616,7 @@ void MasterScore::updateExpressive(Synthesizer* synth, bool expressive, bool for
 
     if (!force) {
         SynthesizerState s = synthesizerState();
-        SynthesizerGroup g = s.group("master");
+        SynthesizerGroup g = s.group(u"master");
 
         for (const IdValue& idVal : g) {
             if (idVal.id == 4) {

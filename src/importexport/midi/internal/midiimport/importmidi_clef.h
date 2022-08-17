@@ -24,15 +24,17 @@
 
 #include "engraving/types/types.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Staff;
 class InstrumentTemplate;
+}
 
+namespace mu::iex::midi {
 namespace MidiClef {
-bool hasGFclefs(const InstrumentTemplate* templ);
-void createClefs(Staff* staff, int indexOfOperation, bool isDrumTrack);
-ClefType clefTypeFromAveragePitch(int averagePitch);
+bool hasGFclefs(const engraving::InstrumentTemplate* templ);
+void createClefs(engraving::Staff* staff, int indexOfOperation, bool isDrumTrack);
+engraving::ClefType clefTypeFromAveragePitch(int averagePitch);
 } // namespace MidiClef
-} // namespace Ms
+} // namespace mu::iex::midi
 
 #endif // IMPORTMIDI_CLEF_H

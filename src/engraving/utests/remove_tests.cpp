@@ -31,12 +31,12 @@
 
 #include "log.h"
 
-static const QString REMOVE_DATA_DIR("remove_data/");
-
+using namespace mu;
 using namespace mu::engraving;
-using namespace Ms;
 
-class RemoveTests : public ::testing::Test
+static const String REMOVE_DATA_DIR("remove_data/");
+
+class Engraving_RemoveTests : public ::testing::Test
 {
 };
 
@@ -45,7 +45,7 @@ class RemoveTests : public ::testing::Test
 //---------------------------------------------------------
 
 struct StaffCheckData {
-    Ms::staff_idx_t staffIdx;
+    staff_idx_t staffIdx;
     bool staffHasElements;
 };
 
@@ -63,7 +63,7 @@ static void inStaff(void* staffCheckData, EngravingItem* e)
     }
 }
 
-static bool staffHasElements(Score* score, Ms::staff_idx_t staffIdx)
+static bool staffHasElements(Score* score, staff_idx_t staffIdx)
 {
     for (auto i = score->spannerMap().cbegin(); i != score->spannerMap().cend(); ++i) {
         Spanner* s = i->second;
@@ -74,7 +74,7 @@ static bool staffHasElements(Score* score, Ms::staff_idx_t staffIdx)
     }
     for (Spanner* s : score->unmanagedSpanners()) {
         if (s->staffIdx() == staffIdx) {
-            qDebug() << s->typeName() << " is in staff " << staffIdx;
+            LOGD() << s->typeName() << " is in staff " << staffIdx;
             return true;
         }
     }
@@ -89,9 +89,9 @@ static bool staffHasElements(Score* score, Ms::staff_idx_t staffIdx)
 //    belonging to it are not removed in excerpts.
 //---------------------------------------------------------
 
-TEST_F(RemoveTests, removeStaff)
+TEST_F(Engraving_RemoveTests, removeStaff)
 {
-    MasterScore* score = ScoreRW::readScore(REMOVE_DATA_DIR + "remove_staff.mscx");
+    MasterScore* score = ScoreRW::readScore(REMOVE_DATA_DIR + u"remove_staff.mscx");
     EXPECT_TRUE(score);
 
     // Remove the second staff and see what happens

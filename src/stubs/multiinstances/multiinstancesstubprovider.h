@@ -31,8 +31,8 @@ public:
     MultiInstancesStubProvider() = default;
 
     // Score opening
-    bool isProjectAlreadyOpened(const io::path& scorePath) const override;
-    void activateWindowWithProject(const io::path& scorePath) override;
+    bool isProjectAlreadyOpened(const io::path_t& scorePath) const override;
+    void activateWindowWithProject(const io::path_t& scorePath) override;
     bool openNewAppInstance(const QStringList& args) override;
 
     // Settings

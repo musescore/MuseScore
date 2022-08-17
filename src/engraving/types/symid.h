@@ -39,11 +39,4 @@ enum class SmuflAnchorId {
 #include "symid_p.h"
 }
 
-//! NOTE compat
-namespace Ms {
-using SymId = mu::engraving::SymId;
-using SymIdList = mu::engraving::SymIdList;
-using SmuflAnchorId = mu::engraving::SmuflAnchorId;
-}
-
 #endif // MU_ENGRAVING_SYMID_H

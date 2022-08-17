@@ -25,7 +25,7 @@
 
 #include "note.h"
 
-namespace Ms {
+namespace mu::engraving {
 class TimeSigFrac;
 enum class BeatType : char;
 
@@ -103,8 +103,10 @@ void populateRhythmicList(std::vector<TDuration>* dList, const Fraction& l, bool
                           const TimeSigFrac& nominal, int maxDots);
 void splitCompoundBeatsForList(std::vector<TDuration>* dList, const Fraction& l, bool isRest, const Fraction& rtickStart,
                                const TimeSigFrac& nominal, int maxDots);
-}     // namespace Ms
+} // namespace mu::engraving
 
-Q_DECLARE_METATYPE(Ms::TDuration);
+#ifndef NO_QT_SUPPORT
+Q_DECLARE_METATYPE(mu::engraving::TDuration);
+#endif
 
 #endif

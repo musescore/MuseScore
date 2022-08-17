@@ -28,7 +28,7 @@ namespace mu::framework {
 class MacOSInteractiveHelper
 {
 public:
-    static bool revealInFinder(const io::path& filePath);
+    static bool revealInFinder(const io::path_t& filePath);
 };
 }
 

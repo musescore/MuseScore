@@ -32,14 +32,14 @@ class IAutobotConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAutobotConfiguration() = default;
 
-    virtual io::paths scriptsDirPaths() const = 0;
-    virtual io::path testingFilesDirPath() const = 0;
+    virtual io::paths_t scriptsDirPaths() const = 0;
+    virtual io::paths_t testingFilesDirPaths() const = 0;
 
-    virtual io::path dataPath() const = 0;
-    virtual io::path savingFilesPath() const = 0;
-    virtual io::path reportsPath() const = 0;
-    virtual io::path drawDataPath() const = 0;
-    virtual io::path fileDrawDataPath(const io::path& filePath) const = 0;
+    virtual io::path_t dataPath() const = 0;
+    virtual io::path_t savingFilesPath() const = 0;
+    virtual io::path_t reportsPath() const = 0;
+    virtual io::path_t drawDataPath() const = 0;
+    virtual io::path_t fileDrawDataPath(const io::path_t& filePath) const = 0;
 };
 }
 

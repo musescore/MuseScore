@@ -30,7 +30,7 @@
 
 #include <set>
 
-namespace Ms {
+namespace mu::iex::midi {
 namespace MidiTuplet {
 int tupletVoiceLimit()
 {
@@ -38,12 +38,12 @@ int tupletVoiceLimit()
     const int currentTrack = midiImportOperations.currentTrack();
     const size_t allowedVoices = MidiVoice::toIntVoiceCount(opers.maxVoiceCount.value(currentTrack));
 
-    Q_ASSERT_X(allowedVoices <= VOICES,
+    Q_ASSERT_X(allowedVoices <= engraving::VOICES,
                "MidiTuplet::tupletVoiceLimit",
                "Allowed voice count exceeds MuseScore voice limit");
 
     // for multiple voices: one voice is reserved for non-tuplet chords
-    return (allowedVoices == 1) ? 1 : allowedVoices - 1;
+    return (allowedVoices == 1) ? 1 : static_cast<int>(allowedVoices) - 1;
 }
 
 std::pair<ReducedFraction, ReducedFraction>
@@ -923,4 +923,4 @@ void assignVoices(
 #endif
 }
 } // namespace MidiTuplet
-} // namespace Ms
+} // namespace mu::iex::midi

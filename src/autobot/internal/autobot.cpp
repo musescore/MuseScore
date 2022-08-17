@@ -34,17 +34,17 @@ void Autobot::init()
 {
     m_autobotInteractive = std::make_shared<AutobotInteractive>();
 
-    m_runner.stepStatusChanged().onReceive(this, [this](const QString& name, StepStatus stepStatus, const Ret& ret) {
-        if (stepStatus == StepStatus::Started) {
-            m_context->addStep(name);
+    m_runner.stepStatusChanged().onReceive(this, [this](const StepInfo& stepInfo, const Ret& ret) {
+        if (stepInfo.status == StepStatus::Started) {
+            m_context->addStep(stepInfo.name);
         }
 
-        m_report.onStepStatusChanged(name, stepStatus, m_context);
-        m_stepStatusChanged.send(name, stepStatus, ret);
+        m_report.onStepStatusChanged(stepInfo, m_context);
+        m_stepStatusChanged.send(stepInfo, ret);
 
-        if (stepStatus == StepStatus::Aborted) {
+        if (stepInfo.status == StepStatus::Aborted) {
             setStatus(Status::Aborted);
-        } else if (stepStatus == StepStatus::Error) {
+        } else if (stepInfo.status == StepStatus::Error) {
             setStatus(Status::Error);
         }
     });
@@ -90,7 +90,7 @@ void Autobot::restoreAffectOnServices()
     modularity::ioc()->registerExport<IInteractive>("autobot", realInteractive);
 }
 
-void Autobot::execScript(const io::path& path)
+void Autobot::execScript(const io::path_t& path)
 {
     LOGD() << path;
 
@@ -264,7 +264,7 @@ void Autobot::setStatus(Status st)
 
     m_status = st;
 
-    io::path path;
+    io::path_t path;
     if (m_engine) {
         path = m_engine->scriptPath();
     }
@@ -276,12 +276,12 @@ IAutobot::Status Autobot::status() const
     return m_status;
 }
 
-mu::async::Channel<mu::io::path, IAutobot::Status> Autobot::statusChanged() const
+mu::async::Channel<mu::io::path_t, IAutobot::Status> Autobot::statusChanged() const
 {
     return m_statusChanged;
 }
 
-mu::async::Channel<QString, StepStatus, mu::Ret> Autobot::stepStatusChanged() const
+mu::async::Channel<StepInfo, mu::Ret> Autobot::stepStatusChanged() const
 {
     return m_stepStatusChanged;
 }

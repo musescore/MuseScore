@@ -31,79 +31,82 @@ using namespace mu::inspector;
 using namespace mu::notation;
 using namespace mu::engraving;
 
-static const QMap<Ms::ElementType, InspectorModelType> NOTATION_ELEMENT_MODEL_TYPES = {
-    { Ms::ElementType::NOTE, InspectorModelType::TYPE_NOTE },
-    { Ms::ElementType::STEM, InspectorModelType::TYPE_NOTE },
-    { Ms::ElementType::NOTEDOT, InspectorModelType::TYPE_NOTE },
-    { Ms::ElementType::NOTEHEAD, InspectorModelType::TYPE_NOTE },
-    { Ms::ElementType::NOTELINE, InspectorModelType::TYPE_NOTE },
-    { Ms::ElementType::SHADOW_NOTE, InspectorModelType::TYPE_NOTE },
-    { Ms::ElementType::HOOK, InspectorModelType::TYPE_NOTE },
-    { Ms::ElementType::BEAM, InspectorModelType::TYPE_NOTE },
-    { Ms::ElementType::GLISSANDO, InspectorModelType::TYPE_GLISSANDO },
-    { Ms::ElementType::GLISSANDO_SEGMENT, InspectorModelType::TYPE_GLISSANDO },
-    { Ms::ElementType::VIBRATO, InspectorModelType::TYPE_VIBRATO },
-    { Ms::ElementType::VIBRATO_SEGMENT, InspectorModelType::TYPE_VIBRATO },
-    { Ms::ElementType::SLUR, InspectorModelType::TYPE_SLUR },
-    { Ms::ElementType::SLUR_SEGMENT, InspectorModelType::TYPE_SLUR },
-    { Ms::ElementType::TIE, InspectorModelType::TYPE_TIE },
-    { Ms::ElementType::TIE_SEGMENT, InspectorModelType::TYPE_TIE },
-    { Ms::ElementType::TEMPO_TEXT, InspectorModelType::TYPE_TEMPO },
-    { Ms::ElementType::FERMATA, InspectorModelType::TYPE_FERMATA },
-    { Ms::ElementType::LAYOUT_BREAK, InspectorModelType::TYPE_SECTIONBREAK },
-    { Ms::ElementType::BAR_LINE, InspectorModelType::TYPE_BARLINE },
-    { Ms::ElementType::MARKER, InspectorModelType::TYPE_MARKER },
-    { Ms::ElementType::JUMP, InspectorModelType::TYPE_JUMP },
-    { Ms::ElementType::KEYSIG, InspectorModelType::TYPE_KEYSIGNATURE },
-    { Ms::ElementType::ACCIDENTAL, InspectorModelType::TYPE_ACCIDENTAL },
-    { Ms::ElementType::FRET_DIAGRAM, InspectorModelType::TYPE_FRET_DIAGRAM },
-    { Ms::ElementType::PEDAL, InspectorModelType::TYPE_PEDAL },
-    { Ms::ElementType::PEDAL_SEGMENT, InspectorModelType::TYPE_PEDAL },
-    { Ms::ElementType::SPACER, InspectorModelType::TYPE_SPACER },
-    { Ms::ElementType::CLEF, InspectorModelType::TYPE_CLEF },
-    { Ms::ElementType::HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
-    { Ms::ElementType::HAIRPIN_SEGMENT, InspectorModelType::TYPE_HAIRPIN },
-    { Ms::ElementType::OTTAVA, InspectorModelType::TYPE_OTTAVA },
-    { Ms::ElementType::OTTAVA_SEGMENT, InspectorModelType::TYPE_OTTAVA },
-    { Ms::ElementType::VOLTA, InspectorModelType::TYPE_VOLTA },
-    { Ms::ElementType::VOLTA_SEGMENT, InspectorModelType::TYPE_VOLTA },
-    { Ms::ElementType::PALM_MUTE, InspectorModelType::TYPE_PALM_MUTE },
-    { Ms::ElementType::PALM_MUTE_SEGMENT, InspectorModelType::TYPE_PALM_MUTE },
-    { Ms::ElementType::LET_RING, InspectorModelType::TYPE_LET_RING },
-    { Ms::ElementType::LET_RING_SEGMENT, InspectorModelType::TYPE_LET_RING },
-    { Ms::ElementType::STAFFTYPE_CHANGE, InspectorModelType::TYPE_STAFF_TYPE_CHANGES },
-    { Ms::ElementType::TBOX, InspectorModelType::TYPE_TEXT_FRAME },// text frame
-    { Ms::ElementType::VBOX, InspectorModelType::TYPE_VERTICAL_FRAME },// vertical frame
-    { Ms::ElementType::HBOX, InspectorModelType::TYPE_HORIZONTAL_FRAME },// horizontal frame
-    { Ms::ElementType::ARTICULATION, InspectorModelType::TYPE_ARTICULATION },
-    { Ms::ElementType::IMAGE, InspectorModelType::TYPE_IMAGE },
-    { Ms::ElementType::HARMONY, InspectorModelType::TYPE_CHORD_SYMBOL },
-    { Ms::ElementType::AMBITUS, InspectorModelType::TYPE_AMBITUS },
-    { Ms::ElementType::BRACKET, InspectorModelType::TYPE_BRACKET },
-    { Ms::ElementType::TIMESIG, InspectorModelType::TYPE_TIME_SIGNATURE },
-    { Ms::ElementType::MMREST, InspectorModelType::TYPE_MMREST },
-    { Ms::ElementType::BEND, InspectorModelType::TYPE_BEND },
-    { Ms::ElementType::TREMOLOBAR, InspectorModelType::TYPE_TREMOLOBAR },
-    { Ms::ElementType::TREMOLO, InspectorModelType::TYPE_TREMOLO },
-    { Ms::ElementType::MEASURE_REPEAT, InspectorModelType::TYPE_MEASURE_REPEAT },
-    { Ms::ElementType::TUPLET, InspectorModelType::TYPE_TUPLET },
-    { Ms::ElementType::TEXTLINE, InspectorModelType::TYPE_TEXT_LINE },
-    { Ms::ElementType::TEXTLINE_SEGMENT, InspectorModelType::TYPE_TEXT_LINE },
-    { Ms::ElementType::INSTRUMENT_NAME, InspectorModelType::TYPE_INSTRUMENT_NAME }
+static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEMENT_MODEL_TYPES = {
+    { mu::engraving::ElementType::NOTE, InspectorModelType::TYPE_NOTE },
+    { mu::engraving::ElementType::STEM, InspectorModelType::TYPE_NOTE },
+    { mu::engraving::ElementType::NOTEDOT, InspectorModelType::TYPE_NOTE },
+    { mu::engraving::ElementType::NOTEHEAD, InspectorModelType::TYPE_NOTE },
+    { mu::engraving::ElementType::NOTELINE, InspectorModelType::TYPE_NOTE },
+    { mu::engraving::ElementType::SHADOW_NOTE, InspectorModelType::TYPE_NOTE },
+    { mu::engraving::ElementType::HOOK, InspectorModelType::TYPE_NOTE },
+    { mu::engraving::ElementType::BEAM, InspectorModelType::TYPE_NOTE },
+    { mu::engraving::ElementType::GLISSANDO, InspectorModelType::TYPE_GLISSANDO },
+    { mu::engraving::ElementType::GLISSANDO_SEGMENT, InspectorModelType::TYPE_GLISSANDO },
+    { mu::engraving::ElementType::VIBRATO, InspectorModelType::TYPE_VIBRATO },
+    { mu::engraving::ElementType::VIBRATO_SEGMENT, InspectorModelType::TYPE_VIBRATO },
+    { mu::engraving::ElementType::SLUR, InspectorModelType::TYPE_SLUR },
+    { mu::engraving::ElementType::SLUR_SEGMENT, InspectorModelType::TYPE_SLUR },
+    { mu::engraving::ElementType::TIE, InspectorModelType::TYPE_TIE },
+    { mu::engraving::ElementType::TIE_SEGMENT, InspectorModelType::TYPE_TIE },
+    { mu::engraving::ElementType::TEMPO_TEXT, InspectorModelType::TYPE_TEMPO },
+    { mu::engraving::ElementType::FERMATA, InspectorModelType::TYPE_FERMATA },
+    { mu::engraving::ElementType::LAYOUT_BREAK, InspectorModelType::TYPE_SECTIONBREAK },
+    { mu::engraving::ElementType::BAR_LINE, InspectorModelType::TYPE_BARLINE },
+    { mu::engraving::ElementType::MARKER, InspectorModelType::TYPE_MARKER },
+    { mu::engraving::ElementType::JUMP, InspectorModelType::TYPE_JUMP },
+    { mu::engraving::ElementType::KEYSIG, InspectorModelType::TYPE_KEYSIGNATURE },
+    { mu::engraving::ElementType::ACCIDENTAL, InspectorModelType::TYPE_ACCIDENTAL },
+    { mu::engraving::ElementType::FRET_DIAGRAM, InspectorModelType::TYPE_FRET_DIAGRAM },
+    { mu::engraving::ElementType::PEDAL, InspectorModelType::TYPE_PEDAL },
+    { mu::engraving::ElementType::PEDAL_SEGMENT, InspectorModelType::TYPE_PEDAL },
+    { mu::engraving::ElementType::SPACER, InspectorModelType::TYPE_SPACER },
+    { mu::engraving::ElementType::CLEF, InspectorModelType::TYPE_CLEF },
+    { mu::engraving::ElementType::HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
+    { mu::engraving::ElementType::HAIRPIN_SEGMENT, InspectorModelType::TYPE_HAIRPIN },
+    { mu::engraving::ElementType::OTTAVA, InspectorModelType::TYPE_OTTAVA },
+    { mu::engraving::ElementType::OTTAVA_SEGMENT, InspectorModelType::TYPE_OTTAVA },
+    { mu::engraving::ElementType::VOLTA, InspectorModelType::TYPE_VOLTA },
+    { mu::engraving::ElementType::VOLTA_SEGMENT, InspectorModelType::TYPE_VOLTA },
+    { mu::engraving::ElementType::PALM_MUTE, InspectorModelType::TYPE_PALM_MUTE },
+    { mu::engraving::ElementType::PALM_MUTE_SEGMENT, InspectorModelType::TYPE_PALM_MUTE },
+    { mu::engraving::ElementType::LET_RING, InspectorModelType::TYPE_LET_RING },
+    { mu::engraving::ElementType::LET_RING_SEGMENT, InspectorModelType::TYPE_LET_RING },
+    { mu::engraving::ElementType::STAFFTYPE_CHANGE, InspectorModelType::TYPE_STAFF_TYPE_CHANGES },
+    { mu::engraving::ElementType::TBOX, InspectorModelType::TYPE_TEXT_FRAME },// text frame
+    { mu::engraving::ElementType::VBOX, InspectorModelType::TYPE_VERTICAL_FRAME },// vertical frame
+    { mu::engraving::ElementType::HBOX, InspectorModelType::TYPE_HORIZONTAL_FRAME },// horizontal frame
+    { mu::engraving::ElementType::ARTICULATION, InspectorModelType::TYPE_ARTICULATION },
+    { mu::engraving::ElementType::IMAGE, InspectorModelType::TYPE_IMAGE },
+    { mu::engraving::ElementType::HARMONY, InspectorModelType::TYPE_CHORD_SYMBOL },
+    { mu::engraving::ElementType::AMBITUS, InspectorModelType::TYPE_AMBITUS },
+    { mu::engraving::ElementType::BRACKET, InspectorModelType::TYPE_BRACKET },
+    { mu::engraving::ElementType::TIMESIG, InspectorModelType::TYPE_TIME_SIGNATURE },
+    { mu::engraving::ElementType::MMREST, InspectorModelType::TYPE_MMREST },
+    { mu::engraving::ElementType::BEND, InspectorModelType::TYPE_BEND },
+    { mu::engraving::ElementType::TREMOLOBAR, InspectorModelType::TYPE_TREMOLOBAR },
+    { mu::engraving::ElementType::TREMOLO, InspectorModelType::TYPE_TREMOLO },
+    { mu::engraving::ElementType::MEASURE_REPEAT, InspectorModelType::TYPE_MEASURE_REPEAT },
+    { mu::engraving::ElementType::TUPLET, InspectorModelType::TYPE_TUPLET },
+    { mu::engraving::ElementType::TEXTLINE, InspectorModelType::TYPE_TEXT_LINE },
+    { mu::engraving::ElementType::TEXTLINE_SEGMENT, InspectorModelType::TYPE_TEXT_LINE },
+    { mu::engraving::ElementType::GRADUAL_TEMPO_CHANGE, InspectorModelType::TYPE_GRADUAL_TEMPO_CHANGE },
+    { mu::engraving::ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT, InspectorModelType::TYPE_GRADUAL_TEMPO_CHANGE },
+    { mu::engraving::ElementType::INSTRUMENT_NAME, InspectorModelType::TYPE_INSTRUMENT_NAME }
 };
 
-static QMap<Ms::HairpinType, InspectorModelType> HAIRPIN_ELEMENT_MODEL_TYPES = {
-    { Ms::HairpinType::CRESC_HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
-    { Ms::HairpinType::DECRESC_HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
-    { Ms::HairpinType::CRESC_LINE, InspectorModelType::TYPE_CRESCENDO },
-    { Ms::HairpinType::DECRESC_LINE, InspectorModelType::TYPE_DIMINUENDO },
+static QMap<mu::engraving::HairpinType, InspectorModelType> HAIRPIN_ELEMENT_MODEL_TYPES = {
+    { mu::engraving::HairpinType::CRESC_HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
+    { mu::engraving::HairpinType::DECRESC_HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
+    { mu::engraving::HairpinType::CRESC_LINE, InspectorModelType::TYPE_CRESCENDO },
+    { mu::engraving::HairpinType::DECRESC_LINE, InspectorModelType::TYPE_DIMINUENDO },
 };
 
-static QMap<Ms::LayoutBreakType, InspectorModelType> LAYOUT_BREAK_ELEMENT_MODEL_TYPES = {
-    { Ms::LayoutBreakType::SECTION, InspectorModelType::TYPE_SECTIONBREAK }
+static QMap<mu::engraving::LayoutBreakType, InspectorModelType> LAYOUT_BREAK_ELEMENT_MODEL_TYPES = {
+    { mu::engraving::LayoutBreakType::SECTION, InspectorModelType::TYPE_SECTIONBREAK }
 };
 
-AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType)
+AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository,
+                                               mu::engraving::ElementType elementType)
     : QObject(parent), m_elementType(elementType), m_updatePropertiesAllowed(true)
 {
     m_repository = repository;
@@ -114,7 +117,8 @@ AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementReposito
 
     setupCurrentNotationChangedConnection();
 
-    connect(m_repository->getQObject(), SIGNAL(elementsUpdated(const QList<Ms::EngravingItem*>&)), this, SLOT(updateProperties()));
+    connect(m_repository->getQObject(), SIGNAL(elementsUpdated(const QList<mu::engraving::EngravingItem*>&)), this,
+            SLOT(updateProperties()));
     connect(this, &AbstractInspectorModel::requestReloadPropertyItems, this, &AbstractInspectorModel::updateProperties);
 }
 
@@ -133,6 +137,11 @@ void AbstractInspectorModel::setupCurrentNotationChangedConnection()
 
             m_updatePropertiesAllowed = true;
         });
+
+        onStyleChanged();
+        notation->style()->styleChanged().onNotify(this, [this]() {
+            onStyleChanged();
+        });
     };
 
     listenNotationChanged();
@@ -143,6 +152,10 @@ void AbstractInspectorModel::setupCurrentNotationChangedConnection()
 }
 
 void AbstractInspectorModel::updatePropertiesOnNotationChanged()
+{
+}
+
+void AbstractInspectorModel::onStyleChanged()
 {
 }
 
@@ -173,17 +186,18 @@ InspectorModelType AbstractInspectorModel::modelType() const
 
 InspectorModelType AbstractInspectorModel::modelTypeByElementKey(const ElementKey& elementKey)
 {
-    if (elementKey.type == Ms::ElementType::HAIRPIN || elementKey.type == Ms::ElementType::HAIRPIN_SEGMENT) {
-        return HAIRPIN_ELEMENT_MODEL_TYPES.value(static_cast<Ms::HairpinType>(elementKey.subtype), InspectorModelType::TYPE_UNDEFINED);
+    if (elementKey.type == mu::engraving::ElementType::HAIRPIN || elementKey.type == mu::engraving::ElementType::HAIRPIN_SEGMENT) {
+        return HAIRPIN_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::HairpinType>(elementKey.subtype),
+                                                 InspectorModelType::TYPE_UNDEFINED);
     }
 
-    if (elementKey.type == Ms::ElementType::LAYOUT_BREAK) {
-        return LAYOUT_BREAK_ELEMENT_MODEL_TYPES.value(static_cast<Ms::LayoutBreakType>(elementKey.subtype),
+    if (elementKey.type == mu::engraving::ElementType::LAYOUT_BREAK) {
+        return LAYOUT_BREAK_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::LayoutBreakType>(elementKey.subtype),
                                                       InspectorModelType::TYPE_UNDEFINED);
     }
 
-    if (elementKey.type == Ms::ElementType::ARTICULATION) {
-        if (Ms::Articulation::isOrnament(elementKey.subtype)) {
+    if (elementKey.type == mu::engraving::ElementType::ARTICULATION) {
+        if (mu::engraving::Articulation::isOrnament(elementKey.subtype)) {
             return InspectorModelType::TYPE_ORNAMENT;
         }
     }
@@ -216,7 +230,7 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
             types << InspectorSectionType::SECTION_TEXT;
         }
 
-        if (key.type != Ms::ElementType::INSTRUMENT_NAME) {
+        if (key.type != mu::engraving::ElementType::INSTRUMENT_NAME) {
             types << InspectorSectionType::SECTION_GENERAL;
         }
     }
@@ -258,7 +272,7 @@ void AbstractInspectorModel::setModelType(InspectorModelType modelType)
     m_modelType = modelType;
 }
 
-void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVariant& newValue)
+void AbstractInspectorModel::onPropertyValueChanged(const mu::engraving::Pid pid, const QVariant& newValue)
 {
     if (isEmpty()) {
         return;
@@ -266,15 +280,15 @@ void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVa
 
     beginCommand();
 
-    for (Ms::EngravingItem* element : m_elementList) {
+    for (mu::engraving::EngravingItem* element : m_elementList) {
         IF_ASSERT_FAILED(element) {
             continue;
         }
 
-        Ms::PropertyFlags ps = element->propertyFlags(pid);
+        mu::engraving::PropertyFlags ps = element->propertyFlags(pid);
 
-        if (ps == Ms::PropertyFlags::STYLED) {
-            ps = Ms::PropertyFlags::UNSTYLED;
+        if (ps == mu::engraving::PropertyFlags::STYLED) {
+            ps = mu::engraving::PropertyFlags::UNSTYLED;
         }
 
         PropertyValue propValue = valueToElementUnits(pid, newValue, element);
@@ -298,19 +312,19 @@ void AbstractInspectorModel::updateProperties()
 
 void AbstractInspectorModel::requestElements()
 {
-    if (m_elementType != Ms::ElementType::INVALID) {
+    if (m_elementType != mu::engraving::ElementType::INVALID) {
         m_elementList = m_repository->findElementsByType(m_elementType);
     }
 }
 
-Ms::Sid AbstractInspectorModel::styleIdByPropertyId(const Ms::Pid pid) const
+mu::engraving::Sid AbstractInspectorModel::styleIdByPropertyId(const mu::engraving::Pid pid) const
 {
-    Ms::Sid result = Ms::Sid::NOSTYLE;
+    mu::engraving::Sid result = mu::engraving::Sid::NOSTYLE;
 
-    for (const Ms::EngravingItem* element : m_elementList) {
+    for (const mu::engraving::EngravingItem* element : m_elementList) {
         result = element->getPropertyStyle(pid);
 
-        if (result != Ms::Sid::NOSTYLE) {
+        if (result != mu::engraving::Sid::NOSTYLE) {
             break;
         }
     }
@@ -318,9 +332,9 @@ Ms::Sid AbstractInspectorModel::styleIdByPropertyId(const Ms::Pid pid) const
     return result;
 }
 
-void AbstractInspectorModel::updateStyleValue(const Ms::Sid& sid, const QVariant& newValue)
+void AbstractInspectorModel::updateStyleValue(const mu::engraving::Sid& sid, const QVariant& newValue)
 {
-    PropertyValue newVal = PropertyValue::fromQVariant(newValue, Ms::MStyle::valueType(sid));
+    PropertyValue newVal = PropertyValue::fromQVariant(newValue, mu::engraving::MStyle::valueType(sid));
     if (style() && style()->styleValue(sid) != newVal) {
         beginCommand();
         style()->setStyleValue(sid, newVal);
@@ -328,14 +342,15 @@ void AbstractInspectorModel::updateStyleValue(const Ms::Sid& sid, const QVariant
     }
 }
 
-QVariant AbstractInspectorModel::styleValue(const Ms::Sid& sid) const
+QVariant AbstractInspectorModel::styleValue(const mu::engraving::Sid& sid) const
 {
     return style() ? style()->styleValue(sid).toQVariant() : QVariant();
 }
 
-PropertyValue AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::EngravingItem* element) const
+PropertyValue AbstractInspectorModel::valueToElementUnits(const mu::engraving::Pid& pid, const QVariant& value,
+                                                          const mu::engraving::EngravingItem* element) const
 {
-    if (Ms::Pid::VERSE == pid) {
+    if (mu::engraving::Pid::VERSE == pid) {
         return value.toInt() - 1;
     }
 
@@ -343,13 +358,13 @@ PropertyValue AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, co
         return PointF::fromQPointF(v.value<QPointF>());
     };
 
-    P_TYPE type = Ms::propertyType(pid);
+    P_TYPE type = mu::engraving::propertyType(pid);
     switch (type) {
     case P_TYPE::POINT: {
         if (element->sizeIsSpatiumDependent()) {
             return toPoint(value) * element->spatium();
         } else {
-            return toPoint(value) * Ms::DPMM;
+            return toPoint(value) * mu::engraving::DPMM;
         }
     }
 
@@ -375,10 +390,10 @@ PropertyValue AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, co
     }
 }
 
-QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const PropertyValue& value,
-                                                       const Ms::EngravingItem* element) const
+QVariant AbstractInspectorModel::valueFromElementUnits(const mu::engraving::Pid& pid, const PropertyValue& value,
+                                                       const mu::engraving::EngravingItem* element) const
 {
-    if (Ms::Pid::VERSE == pid) {
+    if (mu::engraving::Pid::VERSE == pid) {
         return value.toInt() + 1;
     }
 
@@ -387,7 +402,7 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
         if (element->sizeIsSpatiumDependent()) {
             return value.value<PointF>().toQPointF() / element->spatium();
         } else {
-            return value.value<PointF>().toQPointF() / Ms::DPMM;
+            return value.value<PointF>().toQPointF() / mu::engraving::DPMM;
         }
     }
 
@@ -401,7 +416,7 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
         return value.value<BeatsPerSecond>().toBPM().val;
 
     case P_TYPE::DIRECTION_V:
-        return static_cast<int>(value.value<Ms::DirectionV>());
+        return static_cast<int>(value.value<mu::engraving::DirectionV>());
 
     case P_TYPE::INT_VEC: {
         QStringList strList;
@@ -419,27 +434,29 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
     }
 }
 
-void AbstractInspectorModel::setElementType(Ms::ElementType type)
+void AbstractInspectorModel::setElementType(mu::engraving::ElementType type)
 {
     m_elementType = type;
 }
 
-PropertyItem* AbstractInspectorModel::buildPropertyItem(const Ms::Pid& propertyId, std::function<void(const Ms::Pid propertyId,
-                                                                                                      const QVariant& newValue)> onPropertyChangedCallBack)
+PropertyItem* AbstractInspectorModel::buildPropertyItem(const mu::engraving::Pid& propertyId,
+                                                        std::function<void(const mu::engraving::Pid propertyId,
+                                                                           const QVariant& newValue)> onPropertyChangedCallBack)
 {
     PropertyItem* newPropertyItem = new PropertyItem(propertyId, this);
 
     auto callback = onPropertyChangedCallBack;
 
     if (!callback) {
-        callback = [this](const Ms::Pid propertyId, const QVariant& newValue) {
+        callback = [this](const mu::engraving::Pid propertyId, const QVariant& newValue) {
             onPropertyValueChanged(propertyId, newValue);
         };
     }
 
     connect(newPropertyItem, &PropertyItem::propertyModified, this, callback);
-    connect(newPropertyItem, &PropertyItem::applyToStyleRequested, this, [this](const Ms::Sid sid, const QVariant& newStyleValue) {
-        updateStyleValue(sid, newStyleValue);
+    connect(newPropertyItem, &PropertyItem::applyToStyleRequested, this, [this](const mu::engraving::Sid sid, const QVariant& newStyleValue) {
+        updateStyleValue(sid,
+                         newStyleValue);
 
         emit requestReloadPropertyItems();
     });
@@ -454,9 +471,9 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem,
         return;
     }
 
-    Ms::Pid pid = propertyItem->propertyId();
+    mu::engraving::Pid pid = propertyItem->propertyId();
 
-    Ms::Sid styleId = styleIdByPropertyId(pid);
+    mu::engraving::Sid styleId = styleIdByPropertyId(pid);
     propertyItem->setStyleId(styleId);
 
     QVariant propertyValue;
@@ -464,7 +481,7 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem,
 
     bool isUndefined = false;
 
-    for (const Ms::EngravingItem* element : m_elementList) {
+    for (const mu::engraving::EngravingItem* element : m_elementList) {
         IF_ASSERT_FAILED(element) {
             continue;
         }

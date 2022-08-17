@@ -116,9 +116,9 @@ void PianoKeyboardController::updateSelectedKeys()
         return;
     }
 
-    for (const Ms::Note* note : selection->notes()) {
+    for (const mu::engraving::Note* note : selection->notes()) {
         newKeysInSelection.insert(static_cast<piano_key_t>(note->epitch()));
-        for (const Ms::Note* otherNote : note->chord()->notes()) {
+        for (const mu::engraving::Note* otherNote : note->chord()->notes()) {
             newOtherNotesInSelectedChord.insert(static_cast<piano_key_t>(otherNote->epitch()));
         }
     }
@@ -137,7 +137,7 @@ void PianoKeyboardController::sendNoteOn(piano_key_t key)
     ev.setNote(key);
     ev.setVelocity(80);
 
-    notation->midiInput()->onMidiEventReceived(ev);
+    notation->midiInput()->onMidiEventsReceived({ ev });
 }
 
 void PianoKeyboardController::sendNoteOff(piano_key_t key)
@@ -152,7 +152,7 @@ void PianoKeyboardController::sendNoteOff(piano_key_t key)
     ev.setOpcode(Event::Opcode::NoteOff);
     ev.setNote(key);
 
-    notation->midiInput()->onMidiEventReceived(ev);
+    notation->midiInput()->onMidiEventsReceived({ ev });
 }
 
 INotationPtr PianoKeyboardController::currentNotation() const

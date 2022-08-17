@@ -25,8 +25,9 @@
 #include "../ishortcutsregister.h"
 #include "modularity/ioc.h"
 #include "ishortcutsconfiguration.h"
+#include "ui/iuiactionsregister.h"
 #include "async/asyncable.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "multiinstances/imultiinstancesprovider.h"
 
 namespace mu::framework {
@@ -38,8 +39,9 @@ namespace mu::shortcuts {
 class ShortcutsRegister : public IShortcutsRegister, public async::Asyncable
 {
     INJECT(shortcuts, IShortcutsConfiguration, configuration)
-    INJECT(shortcuts, system::IFileSystem, fileSystem)
+    INJECT(shortcuts, io::IFileSystem, fileSystem)
     INJECT(shortcuts, mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(shortcuts, ui::IUiActionsRegister, uiactionsRegister)
 
 public:
     ShortcutsRegister() = default;
@@ -61,8 +63,8 @@ public:
     bool isRegistered(const std::string& sequence) const override;
     ShortcutList shortcutsForSequence(const std::string& sequence) const override;
 
-    Ret importFromFile(const io::path& filePath) override;
-    Ret exportToFile(const io::path& filePath) const override;
+    Ret importFromFile(const io::path_t& filePath) override;
+    Ret exportToFile(const io::path_t& filePath) const override;
 
     bool active() override;
     void setActive(bool active) override;
@@ -70,10 +72,10 @@ public:
 
 private:
 
-    bool readFromFile(ShortcutList& shortcuts, const io::path& path) const;
+    bool readFromFile(ShortcutList& shortcuts, const io::path_t& path) const;
     Shortcut readShortcut(framework::XmlReader& reader) const;
 
-    bool writeToFile(const ShortcutList& shortcuts, const io::path& path) const;
+    bool writeToFile(const ShortcutList& shortcuts, const io::path_t& path) const;
     void writeShortcut(framework::XmlWriter& writer, const Shortcut& shortcut) const;
 
     void mergeShortcuts(ShortcutList& shortcuts, const ShortcutList& defaultShortcuts) const;

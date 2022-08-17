@@ -31,7 +31,7 @@
 #include "context/iglobalcontext.h"
 #include "notation/inotation.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Measure;
 }
 
@@ -57,16 +57,16 @@ private:
     void initMeasure();
 
     void apply();
-    Ms::Fraction len() const;
+    mu::engraving::Fraction len() const;
     bool isIrregular() const;
     int repeatCount() const;
     bool visible(int staffIdx);
     bool stemless(int staffIdx);
-    void setMeasure(Ms::Measure* measure);
+    void setMeasure(mu::engraving::Measure* measure);
 
     void hideEvent(QHideEvent*) override;
 
-    Ms::Measure* m_measure = nullptr;
+    mu::engraving::Measure* m_measure = nullptr;
     int m_measureIndex = -1;
 
     std::shared_ptr<INotation> m_notation;

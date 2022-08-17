@@ -59,7 +59,7 @@ Rectangle {
             }
         }
 
-        Dropdown {
+        StyledDropdown {
             anchors.right: parent.right
             anchors.rightMargin: 8
             anchors.verticalCenter: parent.verticalCenter

@@ -29,9 +29,6 @@
 
 namespace mu::engraving {
 class Factory;
-}
-
-namespace Ms {
 class Measure;
 class Segment;
 class ChordRest;
@@ -60,24 +57,33 @@ class System;
 //   @P tick            int               midi tick position (read only)
 //------------------------------------------------------------------------
 
+struct CrossStaffContent
+{
+    bool movedUp = false;
+    bool movedDown = false;
+};
+
 class Segment final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Segment)
+
     SegmentType _segmentType { SegmentType::Invalid };
     Fraction _tick;    // { Fraction(0, 1) };
     Fraction _ticks;   // { Fraction(0, 1) };
     Spatium _extraLeadingSpace;
-    qreal _stretch;
+    double _stretch;
 
     Segment* _next = nullptr;                       // linked list of segments inside a measure
     Segment* _prev = nullptr;
 
     std::vector<EngravingItem*> _annotations;
     std::vector<EngravingItem*> _elist;         // EngravingItem storage, size = staves * VOICES.
+    std::vector<EngravingItem*> _preAppendedItems; // Container for items appended to the left of this segment (example: grace notes), size = staves * VOICES.
     std::vector<Shape> _shapes;           // size = staves
-    std::vector<qreal> _dotPosX;          // size = staves
-    qreal m_spacing{ 0 };
+    std::vector<double> _dotPosX;          // size = staves
+    double m_spacing{ 0 };
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Segment(Measure* m = 0);
     Segment(Measure*, SegmentType, const Fraction&);
     Segment(const Segment&);
@@ -140,7 +146,7 @@ public:
 
     // a variant of the above function, specifically designed to be called from QML
     //@ returns the element at track 'track' (null if none)
-    Ms::EngravingItem* elementAt(track_idx_t track) const;
+    EngravingItem* elementAt(track_idx_t track) const;
 
     const std::vector<EngravingItem*>& elist() const { return _elist; }
     std::vector<EngravingItem*>& elist() { return _elist; }
@@ -151,8 +157,7 @@ public:
 
     Measure* measure() const { return toMeasure(explicitParent()); }
     System* system() const { return toSystem(explicitParent()->explicitParent()); }
-    qreal x() const override { return ipos().x(); }
-    void setX(qreal v) { rxpos() = v; }
+    double x() const override { return ipos().x(); }
 
     mu::RectF contentRect() const;
 
@@ -178,17 +183,17 @@ public:
 
     void fixStaffIdx();
 
-    qreal stretch() const { return _stretch; }
-    void setStretch(qreal v) { _stretch = v; }
+    double stretch() const { return _stretch; }
+    void setStretch(double v) { _stretch = v; }
 
     Fraction rtick() const override { return _tick; }
-    void setRtick(const Fraction& v) { Q_ASSERT(v >= Fraction(0, 1)); _tick = v; }
+    void setRtick(const Fraction& v) { assert(v >= Fraction(0, 1)); _tick = v; }
     Fraction tick() const override;
 
     Fraction ticks() const { return _ticks; }
     void setTicks(const Fraction& v) { _ticks = v; }
 
-    qreal widthInStaff(staff_idx_t staffIdx, SegmentType t = SegmentType::ChordRest) const;
+    double widthInStaff(staff_idx_t staffIdx, SegmentType t = SegmentType::ChordRest) const;
     Fraction ticksInStaff(staff_idx_t staffIdx) const;
 
     bool splitsTuplet() const;
@@ -197,14 +202,14 @@ public:
     void clearAnnotations();
     void removeAnnotation(EngravingItem* e);
     bool hasAnnotationOrElement(ElementType type, track_idx_t minTrack, track_idx_t maxTrack) const;
-    EngravingItem* findAnnotation(ElementType type, track_idx_t minTrack, track_idx_t maxTrack);
-    std::vector<EngravingItem*> findAnnotations(ElementType type, track_idx_t minTrack, track_idx_t maxTrack);
+    EngravingItem* findAnnotation(ElementType type, track_idx_t minTrack, track_idx_t maxTrack) const;
+    std::vector<EngravingItem*> findAnnotations(ElementType type, track_idx_t minTrack, track_idx_t maxTrack) const;
     bool hasElements() const;
     bool hasElements(track_idx_t minTrack, track_idx_t maxTrack) const;
     bool allElementsInvisible() const;
 
-    qreal dotPosX(staff_idx_t staffIdx) const { return _dotPosX[staffIdx]; }
-    void setDotPosX(staff_idx_t staffIdx, qreal val) { _dotPosX[staffIdx] = val; }
+    double dotPosX(staff_idx_t staffIdx) const { return _dotPosX[staffIdx]; }
+    void setDotPosX(staff_idx_t staffIdx, double val) { _dotPosX[staffIdx] = val; }
 
     Spatium extraLeadingSpace() const { return _extraLeadingSpace; }
     void setExtraLeadingSpace(Spatium v) { _extraLeadingSpace = v; }
@@ -212,14 +217,18 @@ public:
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
     bool operator<(const Segment&) const;
     bool operator>(const Segment&) const;
 
-    virtual QString accessibleExtraInfo() const override;
+    String accessibleExtraInfo() const override;
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr createAccessible() override;
+#endif
 
     EngravingItem* firstInNextSegments(staff_idx_t activeStaff);   //<
     EngravingItem* lastInPrevSegments(staff_idx_t activeStaff);     //<
@@ -247,28 +256,28 @@ public:
     Shape& staffShape(staff_idx_t staffIdx) { return _shapes[staffIdx]; }
     void createShapes();
     void createShape(staff_idx_t staffIdx);
-    qreal minRight() const;
-    qreal minLeft(const Shape&) const;
-    qreal minLeft() const;
-    qreal minHorizontalDistance(Segment*, bool isSystemGap) const;
-    qreal minHorizontalCollidingDistance(Segment* ns) const;
+    double minRight() const;
+    double minLeft(const Shape&) const;
+    double minLeft() const;
+    double minHorizontalDistance(Segment*, bool isSystemGap) const;
+    double minHorizontalCollidingDistance(Segment* ns) const;
 
-    qreal elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const;
-    qreal elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const;
+    double elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const;
+    double elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const;
 
     /*! \brief callulate width of segment and additional spacing of segment depends on duration of segment
      *  \return pair of {spacing, width}
      */
-    std::pair<qreal, qreal> computeCellWidth(const std::vector<int>& visibleParts) const;
+    std::pair<double, double> computeCellWidth(const std::vector<int>& visibleParts) const;
 
-    /*! \brief get among all ChordRests of segment the ChordRest with minimun ticks,
+    /*! \brief get among all ChordRests of segment the ChordRest with minimum ticks,
     * take into account visibleParts
     */
     static ChordRest* ChordRestWithMinDuration(const Segment* seg, const std::vector<int>& visibleParts);
 
     //! spacing is additional width of segment, for example accidental needs this spacing to avoid overlapping
-    void setSpacing(qreal);
-    qreal spacing() const;
+    void setSpacing(double);
+    double spacing() const;
 
     // some helper function
     ChordRest* cr(track_idx_t track) const { return toChordRest(_elist[track]); }
@@ -289,6 +298,14 @@ public:
     bool isMMRestSegment() const;
 
     Fraction shortestChordRest() const;
+    CrossStaffContent crossStaffContent() const;
+
+    bool hasAccidentals() const;
+
+    EngravingItem* preAppendedItem(int track) { return _preAppendedItems[track]; }
+    void preAppend(EngravingItem* item, int track) { _preAppendedItems[track] = item; }
+    void clearPreAppended(int track) { _preAppendedItems[track] = nullptr; }
+    void addPreAppendedToShape(int staffIdx, Shape& s);
 
     static constexpr SegmentType durationSegmentsMask = SegmentType::ChordRest;   // segment types which may have non-zero tick length
 };
@@ -344,8 +361,10 @@ inline Segment* Segment::prevEnabled() const
     }
     return ps;
 }
-}     // namespace Ms
+} // namespace mu::engraving
 
-Q_DECLARE_METATYPE(Ms::SegmentType);
+#ifndef NO_QT_SUPPORT
+Q_DECLARE_METATYPE(mu::engraving::SegmentType);
+#endif
 
 #endif

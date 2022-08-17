@@ -92,7 +92,7 @@ bool mu::ipc::writeToSocket(QLocalSocket* socket, const QByteArray& data)
     return ok;
 }
 
-bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByteArray& data)> onPackegReaded)
+bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByteArray& data)> onPackageRead)
 {
     qint64 bytesAvailable = socket->bytesAvailable();
     if (bytesAvailable < (qint64)sizeof(quint32)) {
@@ -102,13 +102,13 @@ bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByt
     int packageCount = 0;
     QDataStream stream(socket);
 
-    auto readPackage = [socket, &stream, onPackegReaded]() {
+    auto readPackage = [socket, &stream, onPackageRead]() {
         QByteArray data;
-        quint32 remaining;
+        uint32_t remaining;
         stream >> remaining;
         data.resize(remaining);
 
-        qint64 available = socket->bytesAvailable();
+        int64_t available = socket->bytesAvailable();
         if (available < remaining) {
             if (!socket->waitForReadyRead(ipc::TIMEOUT_MSEC)) {
                 LOGE() << "failed read, remaining: " << remaining << ", available: " << available << ", err: " << socket->errorString();
@@ -117,13 +117,13 @@ bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByt
         }
 
         char* ptr = data.data();
-        int readed = stream.readRawData(ptr, remaining);
-        if (quint32(readed) != remaining) {
+        int read = stream.readRawData(ptr, remaining);
+        if (quint32(read) != remaining) {
             LOGE() << "failed read from socket";
             return false;
         }
 
-        onPackegReaded(data);
+        onPackageRead(data);
         return true;
     };
 
@@ -136,7 +136,7 @@ bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByt
         }
     }
 
-    IPCLOG() << "readed package count: " << packageCount;
+    IPCLOG() << "read package count: " << packageCount;
 
     if (!ok) {
         LOGE() << "failed read package";

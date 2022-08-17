@@ -26,7 +26,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "async/channel.h"
-#include "retval.h"
+#include "types/retval.h"
 #include "io/path.h"
 #include "notationtypes.h"
 #include "global/globaltypes.h"
@@ -43,9 +43,9 @@ public:
     virtual void setBackgroundColor(const QColor& color) = 0;
     virtual void resetCurrentBackgroundColorToDefault() = 0;
 
-    virtual io::path backgroundWallpaperPath() const = 0;
+    virtual io::path_t backgroundWallpaperPath() const = 0;
     virtual const QPixmap& backgroundWallpaper() const = 0;
-    virtual void setBackgroundWallpaperPath(const io::path& path) = 0;
+    virtual void setBackgroundWallpaperPath(const io::path_t& path) = 0;
 
     virtual bool backgroundUseColor() const = 0;
     virtual void setBackgroundUseColor(bool value) = 0;
@@ -54,15 +54,15 @@ public:
     virtual QColor foregroundColor() const = 0;
     virtual void setForegroundColor(const QColor& color) = 0;
 
-    virtual io::path foregroundWallpaperPath() const = 0;
+    virtual io::path_t foregroundWallpaperPath() const = 0;
     virtual const QPixmap& foregroundWallpaper() const = 0;
-    virtual void setForegroundWallpaperPath(const io::path& path) = 0;
+    virtual void setForegroundWallpaperPath(const io::path_t& path) = 0;
 
     virtual bool foregroundUseColor() const = 0;
     virtual void setForegroundUseColor(bool value) = 0;
     virtual async::Notification foregroundChanged() const = 0;
 
-    virtual io::path wallpapersDefaultDirPath() const = 0;
+    virtual io::path_t wallpapersDefaultDirPath() const = 0;
 
     virtual QColor borderColor() const = 0;
     virtual int borderWidth() const = 0;
@@ -73,10 +73,12 @@ public:
     virtual QColor loopMarkerColor() const = 0;
     virtual int cursorOpacity() const = 0;
 
-    virtual QColor selectionColor(int voiceIndex = 0) const = 0;
+    virtual QColor selectionColor(engraving::voice_idx_t voiceIndex = 0) const = 0;
+
+    virtual QColor dropRectColor() const = 0;
 
     virtual int selectionProximity() const = 0;
-    virtual void setSelectionProximity(int proxymity) = 0;
+    virtual void setSelectionProximity(int proximity) = 0;
 
     virtual ZoomType defaultZoomType() const = 0;
     virtual void setDefaultZoomType(ZoomType zoomType) = 0;
@@ -84,10 +86,10 @@ public:
     virtual int defaultZoom() const = 0;
     virtual void setDefaultZoom(int zoomPercentage) = 0;
 
-    virtual ValCh<int> currentZoom() const = 0;
-    virtual void setCurrentZoom(int zoomPercentage) = 0;
-
     virtual QList<int> possibleZoomPercentageList() const = 0;
+
+    virtual qreal scalingFromZoomPercentage(int zoomPercentage) const = 0;
+    virtual int zoomPercentageFromScaling(qreal scaling) const = 0;
 
     virtual int mouseZoomPrecision() const = 0;
     virtual void setMouseZoomPrecision(int precision) = 0;
@@ -95,15 +97,15 @@ public:
     virtual std::string fontFamily() const = 0;
     virtual int fontSize() const = 0;
 
-    virtual io::path userStylesPath() const = 0;
-    virtual void setUserStylesPath(const io::path& path) = 0;
-    virtual async::Channel<io::path> userStylesPathChanged() const = 0;
+    virtual io::path_t userStylesPath() const = 0;
+    virtual void setUserStylesPath(const io::path_t& path) = 0;
+    virtual async::Channel<io::path_t> userStylesPathChanged() const = 0;
 
-    virtual io::path defaultStyleFilePath() const = 0;
-    virtual void setDefaultStyleFilePath(const io::path& path) = 0;
+    virtual io::path_t defaultStyleFilePath() const = 0;
+    virtual void setDefaultStyleFilePath(const io::path_t& path) = 0;
 
-    virtual io::path partStyleFilePath() const = 0;
-    virtual void setPartStyleFilePath(const io::path& path) = 0;
+    virtual io::path_t partStyleFilePath() const = 0;
+    virtual void setPartStyleFilePath(const io::path_t& path) = 0;
 
     virtual bool isMidiInputEnabled() const = 0;
     virtual void setIsMidiInputEnabled(bool enabled) = 0;
@@ -124,9 +126,6 @@ public:
     virtual double guiScaling() const = 0;
     virtual double notationScaling() const = 0;
 
-    virtual std::string notationRevision() const = 0;
-    virtual int notationDivision() const = 0;
-
     virtual ValCh<framework::Orientation> canvasOrientation() const = 0;
     virtual void setCanvasOrientation(framework::Orientation orientation) = 0;
 
@@ -134,8 +133,8 @@ public:
     virtual void setIsLimitCanvasScrollArea(bool limited) = 0;
     virtual async::Notification isLimitCanvasScrollAreaChanged() const = 0;
 
-    virtual bool colorNotesOusideOfUsablePitchRange() const = 0;
-    virtual void setColorNotesOusideOfUsablePitchRange(bool value) = 0;
+    virtual bool colorNotesOutsideOfUsablePitchRange() const = 0;
+    virtual void setColorNotesOutsideOfUsablePitchRange(bool value) = 0;
 
     virtual int delayBetweenNotesInRealTimeModeMilliseconds() const = 0;
     virtual void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs) = 0;
@@ -143,20 +142,20 @@ public:
     virtual int notePlayDurationMilliseconds() const = 0;
     virtual void setNotePlayDurationMilliseconds(int durationMs) = 0;
 
-    virtual void setTemplateModeEnalbed(bool enabled) = 0;
+    virtual void setTemplateModeEnabled(bool enabled) = 0;
     virtual void setTestModeEnabled(bool enabled) = 0;
 
-    virtual io::paths instrumentListPaths() const = 0;
+    virtual io::paths_t instrumentListPaths() const = 0;
     virtual async::Notification instrumentListPathsChanged() const = 0;
 
-    virtual io::paths userInstrumentListPaths() const = 0;
-    virtual void setUserInstrumentListPaths(const io::paths& paths) = 0;
+    virtual io::paths_t userInstrumentListPaths() const = 0;
+    virtual void setUserInstrumentListPaths(const io::paths_t& paths) = 0;
 
-    virtual io::paths scoreOrderListPaths() const = 0;
+    virtual io::paths_t scoreOrderListPaths() const = 0;
     virtual async::Notification scoreOrderListPathsChanged() const = 0;
 
-    virtual io::paths userScoreOrderListPaths() const = 0;
-    virtual void setUserScoreOrderListPaths(const io::paths& paths) = 0;
+    virtual io::paths_t userScoreOrderListPaths() const = 0;
+    virtual void setUserScoreOrderListPaths(const io::paths_t& paths) = 0;
 
     virtual bool isSnappedToGrid(framework::Orientation gridOrientation) const = 0;
     virtual void setIsSnappedToGrid(framework::Orientation gridOrientation, bool isSnapped) = 0;

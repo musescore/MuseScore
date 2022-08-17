@@ -21,22 +21,22 @@
  */
 #include "scorethumbnail.h"
 
-#include <QVariant>
-
 using namespace mu::project;
 
 ScoreThumbnail::ScoreThumbnail(QQuickItem* parent)
-    : QQuickPaintedItem(parent)
+    : uicomponents::QuickPaintedView(parent)
 {
 }
 
-void ScoreThumbnail::setThumbnail(QVariant pixmap)
+QPixmap ScoreThumbnail::thumbnail() const
 {
-    if (pixmap.isNull()) {
-        return;
-    }
+    return m_thumbnail;
+}
 
-    m_thumbnail = pixmap.value<QPixmap>();
+void ScoreThumbnail::setThumbnail(QPixmap pixmap)
+{
+    m_thumbnail = std::move(pixmap);
+    emit thumbnailChanged();
     update();
 }
 

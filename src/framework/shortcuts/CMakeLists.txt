@@ -52,5 +52,26 @@ set(MODULE_QRC shortcuts.qrc)
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
 
+if (OS_IS_MAC)
+    find_library(CARBON_LIBRARY Carbon)
+
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosshortcutsinstancemodel.mm
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosshortcutsinstancemodel.h
+    )
+
+    set_source_files_properties(
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosshortcutsinstancemodel.mm
+        PROPERTIES
+        SKIP_UNITY_BUILD_INCLUSION ON
+        SKIP_PRECOMPILE_HEADERS ON
+    )
+
+    set(MODULE_INCLUDE
+        ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
+        ${CARBON_LIBRARY}
+    )
+endif(OS_IS_MAC)
+
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 

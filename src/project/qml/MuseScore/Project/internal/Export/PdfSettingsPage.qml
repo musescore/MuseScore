@@ -30,7 +30,7 @@ ExportSettingsPage {
 
     ExportOptionItem {
         id: resolutionLabel
-        text: qsTrc("project", "Resolution:")
+        text: qsTrc("project/export", "Resolution:")
 
         IncrementalPropertyControl {
             Layout.preferredWidth: 80
@@ -46,7 +46,9 @@ ExportSettingsPage {
             maxValue: 2400
             step: 1
             decimals: 0
-            measureUnitsSymbol: qsTrc("project", "dpi")
+
+            //: Dots per inch
+            measureUnitsSymbol: qsTrc("global", "dpi")
 
             onValueEdited: function(newValue) {
                 root.model.pdfResolution = newValue

@@ -22,12 +22,11 @@
 #include "noteheadgroupsmodel.h"
 
 #include "engraving/libmscore/note.h"
-#include "engraving/libmscore/scorefont.h"
+#include "engraving/infrastructure/symbolfonts.h"
 #include "engraving/types/typesconv.h"
 
 using namespace mu::inspector;
 using namespace mu::engraving;
-using namespace Ms;
 
 NoteheadGroupsModel::NoteheadGroupsModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -61,10 +60,10 @@ QVariant NoteheadGroupsModel::data(const QModelIndex& index, int role) const
     case HeadGroupRole:
         return row;
     case HintRole:
-        return TConv::toUserName(group);
+        return TConv::translatedUserName(group).toQString();
     case IconCodeRole: {
         auto type = (group == NoteHeadGroup::HEAD_BREVIS_ALT) ? NoteHeadType::HEAD_BREVIS : NoteHeadType::HEAD_QUARTER;
-        return ScoreFont::fallbackFont()->symCode(Note::noteHead(0, group, type));
+        return SymbolFonts::fallbackFont()->symCode(Note::noteHead(0, group, type));
     }
     default: break;
     }

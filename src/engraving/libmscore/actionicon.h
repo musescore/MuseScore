@@ -25,7 +25,7 @@
 
 #include "engravingitem.h"
 
-namespace Ms {
+namespace mu::engraving {
 enum class ActionIconType {
     UNDEFINED = -1,
 
@@ -38,15 +38,15 @@ enum class ActionIconType {
     GRACE16_AFTER,
     GRACE32_AFTER,
 
-    BEAM_START,
-    BEAM_MID,
-    BEAM_NONE,
-    BEAM_BEGIN_32,
-    BEAM_BEGIN_64,
     BEAM_AUTO,
+    BEAM_NONE,
+    BEAM_BREAK_LEFT,
+    BEAM_BREAK_INNER_8TH,
+    BEAM_BREAK_INNER_16TH,
+    BEAM_JOIN,
 
-    BEAM_FEATHERED_SLOWER,
-    BEAM_FEATHERED_FASTER,
+    BEAM_FEATHERED_DECELERATE,
+    BEAM_FEATHERED_ACCELERATE,
 
     VFRAME,
     HFRAME,
@@ -61,6 +61,7 @@ enum class ActionIconType {
 //! Dummy element, used for drag&drop
 class ActionIcon final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, ActionIcon)
 public:
     ActionIcon(EngravingItem* score);
     ~ActionIcon() override = default;
@@ -73,18 +74,18 @@ public:
     void setActionType(ActionIconType val);
     void setAction(const std::string& actionCode, char16_t icon);
 
-    qreal fontSize() const;
-    void setFontSize(qreal size);
+    double fontSize() const;
+    void setFontSize(double size);
 
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
     void draw(mu::draw::Painter*) const override;
     void layout() override;
 
-    mu::engraving::PropertyValue getProperty(Pid) const override;
-    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
+    PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid, const PropertyValue&) override;
 
-    static constexpr qreal DEFAULT_FONT_SIZE = 16.0;
+    static constexpr double DEFAULT_FONT_SIZE = 16.0;
 
 private:
     ActionIconType m_actionType { ActionIconType::UNDEFINED };

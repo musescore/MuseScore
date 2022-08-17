@@ -50,18 +50,18 @@ PropertyItem* HairpinSettingsModel::height() const
     return m_height;
 }
 
-PropertyItem* HairpinSettingsModel::continiousHeight() const
+PropertyItem* HairpinSettingsModel::continuousHeight() const
 {
-    return m_continiousHeight;
+    return m_continuousHeight;
 }
 
 void HairpinSettingsModel::createProperties()
 {
     TextLineSettingsModel::createProperties();
 
-    m_isNienteCircleVisible = buildPropertyItem(Ms::Pid::HAIRPIN_CIRCLEDTIP);
-    m_height = buildPropertyItem(Ms::Pid::HAIRPIN_HEIGHT);
-    m_continiousHeight = buildPropertyItem(Ms::Pid::HAIRPIN_CONT_HEIGHT);
+    m_isNienteCircleVisible = buildPropertyItem(mu::engraving::Pid::HAIRPIN_CIRCLEDTIP);
+    m_height = buildPropertyItem(mu::engraving::Pid::HAIRPIN_HEIGHT);
+    m_continuousHeight = buildPropertyItem(mu::engraving::Pid::HAIRPIN_CONT_HEIGHT);
 
     isLineVisible()->setIsVisible(false);
     allowDiagonal()->setIsVisible(true);
@@ -74,7 +74,7 @@ void HairpinSettingsModel::loadProperties()
 
     loadPropertyItem(m_isNienteCircleVisible);
     loadPropertyItem(m_height, formatDoubleFunc);
-    loadPropertyItem(m_continiousHeight, formatDoubleFunc);
+    loadPropertyItem(m_continuousHeight, formatDoubleFunc);
 }
 
 void HairpinSettingsModel::resetProperties()
@@ -83,25 +83,21 @@ void HairpinSettingsModel::resetProperties()
 
     m_isNienteCircleVisible->resetToDefault();
     m_height->resetToDefault();
-    m_continiousHeight->resetToDefault();
+    m_continuousHeight->resetToDefault();
 }
 
 void HairpinSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::HAIRPIN, [](const Ms::EngravingItem* element) -> bool {
-        const Ms::Hairpin* hairpin = Ms::toHairpin(element);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::HAIRPIN, [](const mu::engraving::EngravingItem* element) -> bool {
+        const mu::engraving::Hairpin* hairpin = mu::engraving::toHairpin(
+            element);
 
         if (!hairpin) {
             return false;
         }
 
-        return hairpin->hairpinType() == Ms::HairpinType::CRESC_HAIRPIN || hairpin->hairpinType() == Ms::HairpinType::DECRESC_HAIRPIN;
+        return hairpin->hairpinType() == mu::engraving::HairpinType::CRESC_HAIRPIN || hairpin->hairpinType() == mu::engraving::HairpinType::DECRESC_HAIRPIN;
     });
-}
-
-void HairpinSettingsModel::updatePropertiesOnNotationChanged()
-{
-    loadPropertyItem(m_height, formatDoubleFunc);
 }
 
 bool HairpinSettingsModel::isTextVisible(TextType) const

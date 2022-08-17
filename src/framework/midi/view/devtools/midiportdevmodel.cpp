@@ -28,11 +28,14 @@ using namespace mu::midi;
 MidiPortDevModel::MidiPortDevModel(QObject* parent)
     : QObject(parent)
 {
-    midiInPort()->eventReceived().onReceive(this, [this](tick_t tick, const Event& event) {
-        QString str = "tick: " + QString::number(tick) + " " + QString::fromStdString(event.to_string());
-        LOGI() << str;
+    midiInPort()->eventsReceived().onReceive(this, [this](const std::vector<std::pair<tick_t, Event> >& events) {
+        for (auto it : events) {
+            QString str = "tick: " + QString::number(it.first) + " " + QString::fromStdString(it.second.to_string());
+            LOGI() << str;
 
-        m_inputEvents.prepend(str);
+            m_inputEvents.prepend(str);
+        }
+
         emit inputEventsChanged();
     });
 

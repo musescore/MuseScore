@@ -29,6 +29,7 @@
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 
+class QToolButton;
 class QWidget;
 
 namespace mu::ui {
@@ -38,15 +39,19 @@ class WidgetUtils
 
 public:
     template<class W>
-    static inline std::enable_if_t<std::is_base_of<QWidget, W>::value, void>
+    static inline std::enable_if_t<std::is_base_of_v<QWidget, W>, void>
     setWidgetIcon(W* widget, IconCode::Code iconCode)
     {
         QChar icon = iconCodeToChar(iconCode);
-        QString styleSheet = QString("font-family: %1; font-size: %2")
+        QString styleSheet = QString("font-family: %1; font-size: %2px")
                              .arg(QString::fromStdString(uiConfiguration()->iconsFontFamily()))
                              .arg(uiConfiguration()->iconsFontSize(IconSizeType::Regular));
         widget->setStyleSheet(styleSheet);
         widget->setText(icon);
+
+        if constexpr (std::is_same_v<W, QToolButton>) {
+            widget->setFixedSize(30, 30);
+        }
     }
 };
 }

@@ -22,9 +22,9 @@
 #ifndef MU_IMPORTEXPORT_EXPORTBRAILLE_H
 #define MU_IMPORTEXPORT_EXPORTBRAILLE_H
 
-#include "io/device.h"
+#include <QIODevice>
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 }
 
@@ -33,10 +33,10 @@ class ExportBrailleImpl;
 class ExportBraille
 {
 public:
-    ExportBraille(Ms::Score* score);
+    ExportBraille(mu::engraving::Score* score);
     ~ExportBraille();
 
-    bool write(io::Device& destinationDevice);
+    bool write(QIODevice& destinationDevice);
 
 private:
     ExportBrailleImpl* m_impl = nullptr;

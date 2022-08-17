@@ -21,7 +21,7 @@
  */
 #include "scorereader.h"
 
-#include <QBuffer>
+#include "io/buffer.h"
 
 #include "compat/readstyle.h"
 #include "compat/read114.h"
@@ -32,14 +32,13 @@
 #include "../libmscore/excerpt.h"
 #include "../libmscore/imageStore.h"
 #include "../libmscore/audio.h"
-#include "../libmscore/revisions.h"
 
 #include "log.h"
 
+using namespace mu::io;
 using namespace mu::engraving;
-using namespace Ms;
 
-Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::MscReader& mscReader, bool ignoreVersionError)
+Err ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, bool ignoreVersionError)
 {
     TRACEFUNC;
 
@@ -53,25 +52,29 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
 
     // Read style
     {
-        QByteArray styleData = mscReader.readStyleFile();
-        QBuffer buf(&styleData);
-        buf.open(QIODevice::ReadOnly);
-        masterScore->style().read(&buf);
+        ByteArray styleData = mscReader.readStyleFile();
+        if (!styleData.empty()) {
+            Buffer buf(&styleData);
+            buf.open(IODevice::ReadOnly);
+            masterScore->style().read(&buf);
+        }
     }
 
     // Read ChordList
     {
-        QByteArray styleData = mscReader.readChordListFile();
-        QBuffer buf(&styleData);
-        buf.open(QIODevice::ReadOnly);
-        masterScore->chordList()->read(&buf);
+        ByteArray chordListData = mscReader.readChordListFile();
+        if (!chordListData.empty()) {
+            Buffer buf(&chordListData);
+            buf.open(IODevice::ReadOnly);
+            masterScore->chordList()->read(&buf);
+        }
     }
 
     // Read images
     {
         if (!MScore::noImages) {
-            std::vector<QString> images = mscReader.imageFileNames();
-            for (const QString& name : images) {
+            std::vector<String> images = mscReader.imageFileNames();
+            for (const String& name : images) {
                 imageStore.add(name, mscReader.readImageFile(name));
             }
         }
@@ -84,8 +87,8 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
 
     // Read score
     {
-        QByteArray scoreData = mscReader.readScoreFile();
-        QString docName = masterScore->fileInfo()->fileName().toQString();
+        ByteArray scoreData = mscReader.readScoreFile();
+        String docName = masterScore->fileInfo()->fileName().toString();
 
         compat::ReadStyleHook styleHook(masterScore, scoreData, docName);
 
@@ -98,8 +101,8 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
 
     // Read excerpts
     if (masterScore->mscVersion() >= 400) {
-        std::vector<QString> excerptNames = mscReader.excerptNames();
-        for (const QString& excerptName : excerptNames) {
+        std::vector<String> excerptNames = mscReader.excerptNames();
+        for (const String& excerptName : excerptNames) {
             Score* partScore = masterScore->createScore();
 
             compat::ReadStyleHook::setupDefaultStyle(partScore);
@@ -107,12 +110,12 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
             Excerpt* ex = new Excerpt(masterScore);
             ex->setExcerptScore(partScore);
 
-            QByteArray excerptStyleData = mscReader.readExcerptStyleFile(excerptName);
-            QBuffer excerptStyleBuf(&excerptStyleData);
-            excerptStyleBuf.open(QIODevice::ReadOnly);
+            ByteArray excerptStyleData = mscReader.readExcerptStyleFile(excerptName);
+            Buffer excerptStyleBuf(&excerptStyleData);
+            excerptStyleBuf.open(IODevice::ReadOnly);
             partScore->style().read(&excerptStyleBuf);
 
-            QByteArray excerptData = mscReader.readExcerptFile(excerptName);
+            ByteArray excerptData = mscReader.readExcerptFile(excerptName);
 
             ReadContext ctx(partScore);
             ctx.initLinks(masterScoreCtx);
@@ -124,7 +127,7 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
             Read400::read400(partScore, xml, ctx);
 
             partScore->linkMeasures(masterScore);
-            ex->setTracksMapping(xml.tracks());
+            ex->setTracksMapping(xml.context()->tracks());
 
             ex->setName(excerptName);
 
@@ -135,7 +138,7 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
     //  Read audio
     {
         if (masterScore->audio()) {
-            QByteArray dbuf1 = mscReader.readAudioFile();
+            ByteArray dbuf1 = mscReader.readAudioFile();
             masterScore->audio()->setData(dbuf1);
         }
     }
@@ -147,8 +150,8 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
-            const QString& version = e.attribute("version");
-            QStringList sl = version.split('.');
+            const String& version = e.attribute("version");
+            StringList sl = version.split('.');
             score->setMscVersion(sl[0].toInt() * 100 + sl[1].toInt());
 
             if (!ctx.ignoreVersionError()) {
@@ -174,14 +177,11 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
 
             Err err = Err::NoError;
             if (score->mscVersion() <= 114) {
-                Score::FileError error = compat::Read114::read114(score, e, ctx);
-                err = scoreFileErrorToErr(error);
+                err = compat::Read114::read114(score, e, ctx);
             } else if (score->mscVersion() <= 207) {
-                Score::FileError error = compat::Read206::read206(score, e, ctx);
-                err = scoreFileErrorToErr(error);
+                err = compat::Read206::read206(score, e, ctx);
             } else if (score->mscVersion() < 400 || MScore::testMode) {
-                Score::FileError error = compat::Read302::read302(score, e, ctx);
-                err = scoreFileErrorToErr(error);
+                err = compat::Read302::read302(score, e, ctx);
             } else {
                 //! NOTE: make sure we have a chord list
                 //! Load the default chord list otherwise
@@ -190,8 +190,11 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
                 err = doRead(score, e, ctx);
             }
 
-            score->setNewlyCreated(false);
             score->setExcerptsChanged(false);
+
+            // don't autosave (as long as there's no change to the score)
+            score->setAutosaveDirty(false);
+
             return err;
         } else {
             e.unknown();
@@ -203,22 +206,20 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
 Err ScoreReader::doRead(MasterScore* score, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "programVersion") {
-            score->setMscoreVersion(e.readElementText());
+            score->setMscoreVersion(e.readText());
         } else if (tag == "programRevision") {
-            score->setMscoreRevision(e.readIntHex());
+            score->setMscoreRevision(e.readInt(nullptr, 16));
         } else if (tag == "Score") {
             if (!Read400::readScore400(score, e, ctx)) {
-                if (e.error() == QXmlStreamReader::CustomError) {
-                    return Err::FileCriticalCorrupted;
+                if (e.error() == XmlStreamReader::CustomError) {
+                    return Err::FileCriticallyCorrupted;
                 }
                 return Err::FileBadFormat;
             }
         } else if (tag == "Revision") {
-            Revision* revision = new Revision;
-            revision->read(e);
-            score->revisions()->add(revision);
+            e.skipCurrentElement();
         }
     }
 

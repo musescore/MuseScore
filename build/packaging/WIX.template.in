@@ -78,6 +78,7 @@
             <?if $(var.CPACK_WIX_FILE_ASSOCIATION) = ON ?>
                 <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\FileAssociations" Name=".mscz" Value="MuseScore.mscz" Type="string" />
                 <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\FileAssociations" Name=".mscx" Value="MuseScore.mscx" Type="string" />
+                <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\FileAssociations" Name=".mscs" Value="MuseScore.mscs" Type="string" />
 
                 <!-- TODO add more types?-->
             
@@ -95,6 +96,7 @@
             <!-- Extend to the "open with" list + Win7 jump menu pinning  -->
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mscz" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mscx" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mscs" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".xml" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".musicxml" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mxl" Value="" Type="string" />
@@ -125,7 +127,7 @@
 
             <!-- MyApp.Document ProgIDs -->
             <?if $(var.CPACK_WIX_FILE_ASSOCIATION) = ON ?>
-                <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.mscz" Value="Compressed MuseScore File" Type="string"/>
+                <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.mscz" Value="MuseScore File" Type="string"/>
                 <ProgId Id="MuseScore.mscz" Description="Compressed MuseScore File" Advertise="no" Icon="$(var.ExeId)" IconIndex="1">
                     <Extension Id="mscz" Advertise="no">
                         <Verb Id="open" TargetFile="$(var.ExeId)" Command="Open" Argument="&quot;%1&quot;" />
@@ -133,11 +135,18 @@
                     </Extension>
                 </ProgId>
 
-                <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.mscx" Value="MuseScore File" Type="string" />
-                <ProgId Id="MuseScore.mscx" Description="MuseScore File" Advertise="no" Icon="$(var.ExeId)" IconIndex="1">
+                <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.mscx" Value="MuseScore Uncompressed File" Type="string" />
+                <ProgId Id="MuseScore.mscx" Description="MuseScore File" Advertise="no" Icon="$(var.ExeId)" IconIndex="2">
                     <Extension Id="mscx" Advertise="no">
                         <Verb Id="open" TargetFile="$(var.ExeId)" Command="Open" Argument="&quot;%1&quot;" />
                         <MIME Advertise="no" ContentType="application/x-musescore+xml" Default="no" />
+                    </Extension>
+                </ProgId>
+
+                <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.mscs" Value="MuseScore Uncompressed File" Type="string" />
+                <ProgId Id="MuseScore.mscs" Description="MuseScore File" Advertise="no" Icon="$(var.ExeId)" IconIndex="1">
+                    <Extension Id="mscs" Advertise="no">
+                        <Verb Id="open" TargetFile="$(var.ExeId)" Command="Open" Argument="&quot;%1&quot;" />
                     </Extension>
                 </ProgId>
             <?endif?>

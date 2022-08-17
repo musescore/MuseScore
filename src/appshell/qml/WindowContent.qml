@@ -64,6 +64,7 @@ DockWindow {
             title: qsTrc("appshell", "Main toolbar")
 
             floatable: false
+            closable: false
 
             MainToolBar {
                 id: toolBar
@@ -90,7 +91,9 @@ DockWindow {
     ]
 
     pages: [
-        HomePage {},
+        HomePage {
+            window: root.window
+        },
 
         NotationPage {
             topToolKeyNavSec: root.topToolKeyNavSec

@@ -25,21 +25,22 @@
 
 #include "measurenumberbase.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   MeasureNumber
 //---------------------------------------------------------
 
 class MeasureNumber : public MeasureNumberBase
 {
+    OBJECT_ALLOCATOR(engraving, MeasureNumber)
 public:
     MeasureNumber(Measure* parent = nullptr, TextStyleType tid = TextStyleType::MEASURE_NUMBER);
     MeasureNumber(const MeasureNumber& other);
 
     virtual MeasureNumber* clone() const override { return new MeasureNumber(*this); }
 
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue propertyDefault(Pid id) const override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

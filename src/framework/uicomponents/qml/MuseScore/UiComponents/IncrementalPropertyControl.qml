@@ -49,7 +49,7 @@ Item {
     implicitHeight: 30
     implicitWidth: parent.width
 
-    navigation.name: root.objectName != "" ? root.objectName : "IncrementalControl"
+    navigation.name: Boolean(root.objectName) ? root.objectName : "IncrementalControl"
 
     function increment() {
         var value = root.isIndeterminate ? 0.0 : currentValue
@@ -154,31 +154,33 @@ Item {
         }
 
         mouseArea.onWheel: function(wheel) {
-            if (textInputField.activeFocus == true) {
-                let pixelY = wheel.pixelDelta.y
-                let angleY = wheel.angleDelta.y
-
-                // This is set below. For angleY, make sure it is <= 120,
-                // because in many actual mouse wheels, one scroll sets
-                // angleY to +/- 120.
-                let oneScroll = 0
-
-                if (pixelY != 0) {
-                    scrolled += pixelY
-                    oneScroll = 60
-                } else if (angleY != 0) {
-                    scrolled += angleY
-                    oneScroll = 120
-                }
-                if (scrolled >= oneScroll) {
-                    root.increment()
-                    scrolled = 0
-                } else if (scrolled <= -oneScroll) {
-                    root.decrement()
-                    scrolled = 0
-                }
-            } else {
+            if (!textInputField.activeFocus) {
                 wheel.accepted = false
+                return
+            }
+
+            let pixelY = wheel.pixelDelta.y
+            let angleY = wheel.angleDelta.y
+
+            // This is set below. For angleY, make sure it is <= 120,
+            // because in many actual mouse wheels, one scroll sets
+            // angleY to +/- 120.
+            let oneScroll = 0
+
+            if (pixelY !== 0) {
+                scrolled += pixelY
+                oneScroll = 60
+            } else if (angleY !== 0) {
+                scrolled += angleY
+                oneScroll = 120
+            }
+
+            if (scrolled >= oneScroll) {
+                root.increment()
+                scrolled = 0
+            } else if (scrolled <= -oneScroll) {
+                root.decrement()
+                scrolled = 0
             }
         }
 

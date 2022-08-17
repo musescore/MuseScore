@@ -26,19 +26,19 @@
 using namespace mu::framework;
 using namespace mu::iex::ove;
 
-static const Settings::Key IMPORT_OVERTUNE_CHARSET_KEY("iex_ove", "import/overture/charset");
+static const Settings::Key IMPORT_OVERTURE_CHARSET_KEY("iex_ove", "import/overture/charset");
 
 void OveConfiguration::init()
 {
-    settings()->setDefaultValue(IMPORT_OVERTUNE_CHARSET_KEY, Val("GBK"));
+    settings()->setDefaultValue(IMPORT_OVERTURE_CHARSET_KEY, Val("GBK"));
 }
 
-std::string OveConfiguration::importOvertuneCharset() const
+std::string OveConfiguration::importOvertureCharset() const
 {
-    return settings()->value(IMPORT_OVERTUNE_CHARSET_KEY).toString();
+    return settings()->value(IMPORT_OVERTURE_CHARSET_KEY).toString();
 }
 
-void OveConfiguration::setImportOvertuneCharset(const std::string& charset)
+void OveConfiguration::setImportOvertureCharset(const std::string& charset)
 {
-    settings()->setSharedValue(IMPORT_OVERTUNE_CHARSET_KEY, Val(charset));
+    settings()->setSharedValue(IMPORT_OVERTURE_CHARSET_KEY, Val(charset));
 }

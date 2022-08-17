@@ -21,17 +21,18 @@
  */
 #include "notationmidireader.h"
 
-#include "libmscore/masterscore.h"
-#include "notation/notationerrors.h"
-
-namespace Ms {
-extern Score::FileError importMidi(MasterScore*, const QString& name);
-}
+#include "libmscore/score.h"
+#include "engraving/engravingerrors.h"
 
 using namespace mu::iex::midi;
+using namespace mu::engraving;
 
-mu::Ret NotationMidiReader::read(Ms::MasterScore* score, const io::path& path, const Options&)
+namespace mu::iex::midi {
+extern Err importMidi(MasterScore*, const QString& name);
+}
+
+mu::Ret NotationMidiReader::read(MasterScore* score, const io::path_t& path, const Options&)
 {
-    Ms::Score::FileError err = Ms::importMidi(score, path.toQString());
-    return mu::notation::scoreFileErrorToRet(err, path);
+    Err err = importMidi(score, path.toQString());
+    return make_ret(err, path);
 }

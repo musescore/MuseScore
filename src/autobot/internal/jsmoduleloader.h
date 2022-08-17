@@ -28,7 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "iautobotconfiguration.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 
 namespace mu::autobot {
 class ScriptEngine;
@@ -38,7 +38,7 @@ class JsModuleLoader : public QObject
     Q_PROPERTY(QJSValue exports READ exports WRITE setExports)
 
     INJECT(autobot, IAutobotConfiguration, configuration)
-    INJECT(autobot, system::IFileSystem, fileSystem)
+    INJECT(autobot, io::IFileSystem, fileSystem)
 public:
     explicit JsModuleLoader(QObject* parent = 0);
 

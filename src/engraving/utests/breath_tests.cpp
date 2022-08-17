@@ -31,22 +31,22 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString BREATH_DATA_DIR("breath_data/");
-
+using namespace mu;
 using namespace mu::engraving;
-using namespace Ms;
 
-class BreathTests : public ::testing::Test
+static const String BREATH_DATA_DIR("breath_data/");
+
+class Engraving_BreathTests : public ::testing::Test
 {
 };
 
-TEST_F(BreathTests, breath)
+TEST_F(Engraving_BreathTests, breath)
 {
-    QString readFile(BREATH_DATA_DIR + "breath.mscx");
-    QString writeFile1("breath01-test.mscx");
-    QString reference1(BREATH_DATA_DIR + "breath01-ref.mscx");
-    QString writeFile2("breath02-test.mscx");
-    QString reference2(BREATH_DATA_DIR + "breath02-ref.mscx");
+    String readFile(BREATH_DATA_DIR + u"breath.mscx");
+    String writeFile1(u"breath01-test.mscx");
+    String reference1(BREATH_DATA_DIR + u"breath01-ref.mscx");
+    String writeFile2(u"breath02-test.mscx");
+    String reference2(BREATH_DATA_DIR + u"breath02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     EXPECT_TRUE(score);

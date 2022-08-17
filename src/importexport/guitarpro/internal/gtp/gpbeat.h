@@ -6,9 +6,9 @@
 #include <string>
 
 #include "gpnote.h"
-#include "gprhytm.h"
+#include "gprhythm.h"
 
-namespace Ms {
+namespace mu::engraving {
 class GPBeat
 {
 public:
@@ -42,8 +42,11 @@ public:
     enum class Wah {
         None, Open, Closed
     };
+    enum class Golpe {
+        None, Finger, Thumb
+    };
     enum class Rasgueado {
-        None, II_1, MII_1, MII_2, PMP_2, PEI_1, PEI_2, PAI_1, PAI_2, AMI_1,
+        None, II_1, MII_1, MII_2, PMP_1, PMP_2, PEI_1, PEI_2, PAI_1, PAI_2, AMI_1,
         AMI_2, PPP_1, AMII_1, AMIP_1, EAMI_1, EAMII_1, PEAMI_1
     };
 
@@ -51,9 +54,13 @@ public:
         None, ma15, va8, vb8, mb15
     };
 
+    enum class HarmonicMarkType {
+        None, Artificial, Pinch, Tap, Semi, FeedBack
+    };
+
     struct Tremolo {
-        int enumerator{ -1 };
-        int denumerator{ -1 };
+        int numerator{ -1 };
+        int denominator{ -1 };
     };
 
     struct Barre {
@@ -62,7 +69,7 @@ public:
     };
 
     void addGPNote(const std::shared_ptr<GPNote>& n) { _notes.push_back(n); }
-    void addGPRhytm(const std::shared_ptr<GPRhytm>& n) { _rhytm = n; }
+    void addGPRhythm(const std::shared_ptr<GPRhythm>& n) { _rhythm = n; }
     void setDynamic(GPBeat::DynamicType t) { _dynamic = t; }
     void setLegatoType(GPBeat::LegatoType t) { _legato = t; }
     void setOttavaType(GPBeat::OttavaType ottavaType) { _ottavaType = ottavaType; }
@@ -73,8 +80,17 @@ public:
     DynamicType dynamic() const { return _dynamic; }
     LegatoType legatoType() const { return _legato; }
 
-    std::pair<int, GPRhytm::RhytmType> lenth() const;
-    GPRhytm::Tuplet tuplet() const;
+    std::pair<int, GPRhythm::RhytmType> lenth() const;
+    GPRhythm::Tuplet tuplet() const;
+
+    void setLetRing(bool letRing) { _letRing = letRing; }
+    bool letRing() const { return _letRing; }
+
+    void setPalmMute(bool palmMute) { _palmMute = palmMute; }
+    bool palmMute() const { return _palmMute; }
+
+    void setHarmonicMarkType(HarmonicMarkType type) { _harmonicMarkType = type; }
+    HarmonicMarkType harmonicMarkType() const { return _harmonicMarkType; }
 
     void setSlapped(bool s) { _slapped = s; }
     bool slapped() const { return _slapped; }
@@ -94,8 +110,8 @@ public:
     void setGraceNotes(GraceNotes gn) { _graceNotes = gn; }
     GraceNotes graceNotes() const { return _graceNotes; }
 
-    void setFreeText(const QString& s) { _freeText = s; }
-    const QString& freeText() const { return _freeText; }
+    void setFreeText(const String& s) { _freeText = s; }
+    const String& freeText() const { return _freeText; }
 
     void setTime(int t) { _time = t; }
     int time() const { return _time; }
@@ -109,8 +125,8 @@ public:
     void setHairpin(Hairpin h) { _hairpin = h; }
     Hairpin hairpin() const { return _hairpin; }
 
-    void setRasgueado(Rasgueado r) { _rasqueado = r; }
-    Rasgueado rasgueado() const { return _rasqueado; }
+    void setRasgueado(Rasgueado r) { _rasgueado = r; }
+    Rasgueado rasgueado() const { return _rasgueado; }
 
     void setPickStroke(PickStroke p) { _pickStroke = p; }
     PickStroke pickStroke() const { return _pickStroke; }
@@ -121,12 +137,18 @@ public:
     void setWah(Wah w) { _wah = w; }
     Wah wah() const { return _wah; }
 
+    void setGolpe(Golpe g) { m_golpe = g; }
+    Golpe golpe() const { return m_golpe; }
+
     void setBarreFret(int v) { _barre.fret = v; }
     void setBarreString(int v) { _barre.string = v; }
     Barre barre() const { return _barre; }
 
     void setId(int id) { _id = id; }
     int id() const { return _id; }
+
+    void setDive(bool dive) { m_dive = dive; }
+    bool dive() const { return m_dive; }
 
     const std::vector<std::shared_ptr<GPNote> >& notes() const { return _notes; }
 
@@ -188,30 +210,35 @@ public:
     }
 
 private:
-    int _id{ -1 };
+    int _id = -1;
     std::vector<std::shared_ptr<GPNote> > _notes;
     std::map<Key, std::string> _lyrics;
     std::map<Key, int> _diagramIdx;
-    std::shared_ptr<GPRhytm> _rhytm;
-    DynamicType _dynamic{ DynamicType::MF };
-    LegatoType _legato{ LegatoType::None };
+    std::shared_ptr<GPRhythm> _rhythm;
+    DynamicType _dynamic = DynamicType::MF;
+    LegatoType _legato = LegatoType::None;
     OttavaType _ottavaType = OttavaType::None;
-    bool _slapped{ false };
-    bool _popped{ false };
-    Arpeggio _arpeggio{ Arpeggio::None };
-    Brush _brush{ Brush::None };
-    GraceNotes _graceNotes{ GraceNotes::None };
-    int _time{ -1 };
-    QString _freeText;
+    bool _letRing = false;
+    bool _palmMute = false;
+    HarmonicMarkType _harmonicMarkType = HarmonicMarkType::None;
+    bool _slapped = false;
+    bool _popped = false;
+    Arpeggio _arpeggio = Arpeggio::None;
+    Brush _brush = Brush::None;
+    GraceNotes _graceNotes = GraceNotes::None;
+    int _time = -1;
+    String _freeText;
     VibratoWTremBar _vibrato{ VibratoWTremBar::None };
-    Fadding _fadding{ Fadding::None };
-    Hairpin _hairpin{ Hairpin::None };
-    Rasgueado _rasqueado{ Rasgueado::None };
-    PickStroke _pickStroke{ PickStroke::None };
+    Fadding _fadding = Fadding::None;
+    Hairpin _hairpin = Hairpin::None;
+    Rasgueado _rasgueado = Rasgueado::None;
+    PickStroke _pickStroke = PickStroke::None;
     Tremolo _tremolo;
-    Wah _wah{ Wah::None };
+    Wah _wah = Wah::None;
+    Golpe m_golpe = Golpe::None;
     Barre _barre;
     double _arpeggioStretch = 0.0;
+    bool m_dive = false; // TODO-gp: implement dives
 };
 }
 

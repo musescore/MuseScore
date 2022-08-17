@@ -62,7 +62,7 @@ private:
         TitleRole = Qt::UserRole + 1,
         PathRole,
         DirRole,
-        IsMutliDirectoriesRole
+        IsMultiDirectoriesRole
     };
 
     enum class FolderType {
@@ -72,8 +72,7 @@ private:
         Templates,
         Plugins,
         SoundFonts,
-        VST3,
-        Images
+        VST3
     };
 
     enum class FolderValueType {
@@ -94,8 +93,8 @@ private:
     void setFolderPaths(FolderType folderType, const QString& paths);
     QModelIndex folderIndex(FolderType folderType);
 
-    QString pathsToString(const io::paths& paths) const;
-    io::paths pathsFromString(const QString& pathsStr) const;
+    QString pathsToString(const io::paths_t& paths) const;
+    io::paths_t pathsFromString(const QString& pathsStr) const;
 
     QList<FolderInfo> m_folders;
 };

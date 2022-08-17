@@ -35,17 +35,41 @@ using namespace mu::async;
 using namespace mu::notation;
 using namespace mu::engraving;
 
-static const Ms::Fraction DEFAULT_TICK = Ms::Fraction(0, 1);
+static const mu::engraving::Fraction DEFAULT_TICK = mu::engraving::Fraction(0, 1);
+
+static QString formatInstrumentTitleOnScore(const QString& instrumentName, const Trait& trait)
+{
+    // Comments for translators start with //:
+
+    if (trait.type == TraitType::Transposition && !trait.isHiddenOnScore) {
+        //: %1=name ("Horn"), %2=transposition ("C alto"). Example: "Horn in C alto"
+        return mu::qtrc("notation", "%1 in %2", "Transposing instrument displayed in the score")
+               .arg(instrumentName, trait.name);
+    }
+
+    return instrumentName; // Example: "Flute"
+}
 
 static QString formatInstrumentTitleOnScore(const QString& instrumentName, const Trait& trait, int instrumentNumber)
 {
-    QString numberPart = instrumentNumber > 0 ? " " + QString::number(instrumentNumber) : QString();
-
-    if (trait.type != TraitType::Transposition || trait.isHiddenOnScore) {
-        return instrumentName + numberPart;
+    if (instrumentNumber == 0) {
+        // Only one instance of this instrument in the score
+        return formatInstrumentTitleOnScore(instrumentName, trait);
     }
 
-    return mu::qtrc("notation", "%1 in %2%3").arg(instrumentName).arg(trait.name).arg(numberPart);
+    QString number = QString::number(instrumentNumber);
+
+    // Comments for translators start with //:
+
+    if (trait.type == TraitType::Transposition && !trait.isHiddenOnScore) {
+        //: %1=name ("Horn"), %2=transposition ("C alto"), %3=number ("2"). Example: "Horn in C alto 2"
+        return mu::qtrc("notation", "%1 in %2 %3", "One of several transposing instruments displayed in the score")
+               .arg(instrumentName, trait.name, number);
+    }
+
+    //: %1=name ("Flute"), %2=number ("2"). Example: "Flute 2"
+    return mu::qtrc("notation", "%1 %2", "One of several instruments displayed in the score")
+           .arg(instrumentName, number);
 }
 
 static QString formatPartTitle(const Part* part)
@@ -127,7 +151,7 @@ StaffConfig NotationParts::staffConfig(const ID& staffId) const
         return StaffConfig();
     }
 
-    Ms::StaffType* staffType = staff->staffType(DEFAULT_TICK);
+    mu::engraving::StaffType* staffType = staff->staffType(DEFAULT_TICK);
     if (!staffType) {
         return StaffConfig();
     }
@@ -166,6 +190,10 @@ std::vector<Staff*> NotationParts::staves(const IDList& stavesIds) const
 {
     std::vector<Staff*> staves;
 
+    if (stavesIds.empty()) {
+        return staves;
+    }
+
     for (Staff* staff : score()->staves()) {
         if (std::find(stavesIds.cbegin(), stavesIds.cend(), staff->id()) != stavesIds.cend()) {
             staves.push_back(staff);
@@ -186,6 +214,17 @@ std::vector<Part*> NotationParts::parts(const IDList& partsIds) const
     }
 
     return parts;
+}
+
+mu::engraving::InstrumentChange* NotationParts::findInstrumentChange(const Part* part, const Fraction& tick) const
+{
+    const mu::engraving::Segment* segment = score()->tick2segment(tick, true, mu::engraving::SegmentType::ChordRest);
+    if (!segment) {
+        return nullptr;
+    }
+
+    mu::engraving::EngravingItem* item = segment->findAnnotation(ElementType::INSTRUMENT_CHANGE, part->startTrack(), part->endTrack());
+    return item ? mu::engraving::toInstrumentChange(item) : nullptr;
 }
 
 void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& order)
@@ -236,7 +275,7 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
 
     startEdit();
 
-    part->undoChangeProperty(Ms::Pid::VISIBLE, visible);
+    part->undoChangeProperty(mu::engraving::Pid::VISIBLE, visible);
 
     apply();
 
@@ -258,7 +297,7 @@ void NotationParts::setPartName(const ID& partId, const QString& name)
 
     startEdit();
 
-    score()->undo(new Ms::ChangePart(part, new Ms::Instrument(*part->instrument()), name));
+    score()->undo(new mu::engraving::ChangePart(part, new mu::engraving::Instrument(*part->instrument()), name));
 
     apply();
 
@@ -275,15 +314,15 @@ void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFla
     }
 
     int shartFlatInt = static_cast<int>(sharpFlat);
-    if (part->getProperty(Ms::Pid::PREFER_SHARP_FLAT) == shartFlatInt) {
+    if (part->getProperty(mu::engraving::Pid::PREFER_SHARP_FLAT) == shartFlatInt) {
         return;
     }
 
     startEdit();
 
-    Ms::Interval oldTransposition = part->instrument()->transpose();
+    mu::engraving::Interval oldTransposition = part->instrument()->transpose();
 
-    part->undoChangeProperty(Ms::Pid::PREFER_SHARP_FLAT, shartFlatInt);
+    part->undoChangeProperty(mu::engraving::Pid::PREFER_SHARP_FLAT, shartFlatInt);
     score()->transpositionChanged(part, oldTransposition);
 
     apply();
@@ -301,37 +340,9 @@ void NotationParts::updatePartTitles()
 
 void NotationParts::doSetScoreOrder(const ScoreOrder& order)
 {
-    score()->undo(new Ms::ChangeScoreOrder(score(), order));
+    score()->undo(new mu::engraving::ChangeScoreOrder(score(), order));
 
     m_scoreOrderChanged.notify();
-}
-
-void NotationParts::doMoveStaves(const std::vector<Staff*>& staves, staff_idx_t destinationStaffIndex, Part* destinationPart)
-{
-    TRACEFUNC;
-
-    for (Staff* staff: staves) {
-        Staff* movedStaff = staff->clone();
-
-        if (destinationPart) {
-            movedStaff->setPart(destinationPart);
-        }
-
-        bool needUnlink = !staff->isLinked();
-
-        insertStaff(movedStaff, destinationStaffIndex);
-        Ms::Excerpt::cloneStaff(staff, movedStaff);
-
-        if (needUnlink) {
-            movedStaff->undoUnlink();
-        }
-
-        ++destinationStaffIndex;
-    }
-
-    for (Staff* staff: staves) {
-        score()->undoRemoveStaff(staff);
-    }
 }
 
 void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const QString& name)
@@ -343,7 +354,7 @@ void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const 
         return;
     }
 
-    const Ms::Instrument* instrument = part->instrument(instrumentKey.tick);
+    const mu::engraving::Instrument* instrument = part->instrument(instrumentKey.tick);
     if (!instrument) {
         return;
     }
@@ -355,7 +366,7 @@ void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const 
 
     startEdit();
 
-    score()->undo(new Ms::ChangeInstrumentLong(instrumentKey.tick, part, newNames));
+    score()->undo(new mu::engraving::ChangeInstrumentLong(instrumentKey.tick, part, newNames));
 
     apply();
 
@@ -371,18 +382,18 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
         return;
     }
 
-    const Ms::Instrument* instrument = part->instrument(instrumentKey.tick);
+    const mu::engraving::Instrument* instrument = part->instrument(instrumentKey.tick);
     if (!instrument) {
         return;
     }
 
-    if (instrument->abbreviature() == abbreviature) {
+    if (instrument->abbreviatureAsPlainText() == abbreviature) {
         return;
     }
 
     startEdit();
 
-    score()->undo(new Ms::ChangeInstrumentShort(instrumentKey.tick, part, { StaffName(abbreviature, 0) }));
+    score()->undo(new mu::engraving::ChangeInstrumentShort(instrumentKey.tick, part, { StaffName(abbreviature, 0) }));
 
     apply();
 
@@ -442,12 +453,12 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
     notifyAboutStaffChanged(staff);
 }
 
-void NotationParts::setStaffType(const ID& staffId, StaffType type)
+void NotationParts::setStaffType(const ID& staffId, StaffTypeId type)
 {
     TRACEFUNC;
 
     Staff* staff = staffModifiable(staffId);
-    const Ms::StaffType* staffType = Ms::StaffType::preset(type);
+    const mu::engraving::StaffType* staffType = mu::engraving::StaffType::preset(type);
 
     if (!staff || !staffType) {
         return;
@@ -459,7 +470,7 @@ void NotationParts::setStaffType(const ID& staffId, StaffType type)
 
     startEdit();
 
-    score()->undo(new Ms::ChangeStaffType(staff, *staffType));
+    score()->undo(new mu::engraving::ChangeStaffType(staff, *staffType));
 
     apply();
 
@@ -488,33 +499,40 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
     notifyAboutStaffChanged(staff);
 }
 
-void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
+bool NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 {
     TRACEFUNC;
 
+    IF_ASSERT_FAILED(staff) {
+        return false;
+    }
+
     Part* destinationPart = partModifiable(destinationPartId);
-    if (!staff || !destinationPart) {
-        return;
+    if (!destinationPart) {
+        return false;
     }
 
     startEdit();
-
     doAppendStaff(staff, destinationPart);
-    updateTracks();
-
     apply();
 
     notifyAboutStaffAdded(staff, destinationPartId);
+
+    return true;
 }
 
-void NotationParts::appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const mu::ID& destinationPartId)
+bool NotationParts::appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const mu::ID& destinationPartId)
 {
     TRACEFUNC;
 
+    IF_ASSERT_FAILED(staff) {
+        return false;
+    }
+
     Staff* sourceStaff = staffModifiable(sourceStaffId);
     Part* destinationPart = partModifiable(destinationPartId);
-    if (!staff || !sourceStaff || !destinationPart) {
-        return;
+    if (!sourceStaff || !destinationPart) {
+        return false;
     }
 
     startEdit();
@@ -523,13 +541,13 @@ void NotationParts::appendLinkedStaff(Staff* staff, const ID& sourceStaffId, con
 
     ///! NOTE: need to unlink before linking
     staff->setLinks(nullptr);
-    Ms::Excerpt::cloneStaff(sourceStaff, staff);
-
-    updateTracks();
+    mu::engraving::Excerpt::cloneStaff(sourceStaff, staff);
 
     apply();
 
     notifyAboutStaffAdded(staff, destinationPartId);
+
+    return true;
 }
 
 void NotationParts::insertPart(Part* part, size_t index)
@@ -560,7 +578,7 @@ void NotationParts::replacePart(const ID& partId, Part* newPart)
 
     startEdit();
 
-    int partIndex = mu::indexOf(score()->parts(), part);
+    size_t partIndex = mu::indexOf(score()->parts(), part);
     score()->cmdRemovePart(part);
     doInsertPart(newPart, partIndex);
 
@@ -580,25 +598,38 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
 
     startEdit();
 
-    Ms::Interval oldTranspose = part->instrument()->transpose();
+    bool isMainInstrument = part->instrumentId() == instrumentKey.instrumentId;
 
-    QString newInstrumentPartName = formatInstrumentTitle(newInstrument.trackName(), newInstrument.trait());
-    score()->undo(new Ms::ChangePart(part, new Ms::Instrument(newInstrument), newInstrumentPartName));
-    score()->transpositionChanged(part, oldTranspose);
+    if (isMainInstrument) {
+        mu::engraving::Interval oldTranspose = part->instrument()->transpose();
 
-    // Update clefs
-    for (staff_idx_t staffIdx = 0; staffIdx < part->nstaves(); ++staffIdx) {
-        Staff* staff = part->staves().at(staffIdx);
-        StaffConfig config = staffConfig(staff->id());
+        QString newInstrumentPartName = formatInstrumentTitle(newInstrument.trackName(), newInstrument.trait());
+        score()->undo(new mu::engraving::ChangePart(part, new mu::engraving::Instrument(newInstrument), newInstrumentPartName));
+        score()->transpositionChanged(part, oldTranspose);
 
-        Ms::ClefTypeList newClefTypeList = newInstrument.clefType(staffIdx);
+        // Update clefs
+        for (staff_idx_t staffIdx = 0; staffIdx < part->nstaves(); ++staffIdx) {
+            Staff* staff = part->staves().at(staffIdx);
+            StaffConfig config = staffConfig(staff->id());
 
-        if (config.clefTypeList == newClefTypeList) {
-            continue;
+            mu::engraving::ClefTypeList newClefTypeList = newInstrument.clefType(staffIdx);
+
+            if (config.clefTypeList == newClefTypeList) {
+                continue;
+            }
+
+            config.clefTypeList = newClefTypeList;
+            doSetStaffConfig(staff, config);
+        }
+    } else {
+        mu::engraving::InstrumentChange* instrumentChange = findInstrumentChange(part, instrumentKey.tick);
+        if (!instrumentChange) {
+            rollback();
+            return;
         }
 
-        config.clefTypeList = newClefTypeList;
-        doSetStaffConfig(staff, config);
+        instrumentChange->setInit(true);
+        instrumentChange->setupInstrument(&newInstrument);
     }
 
     apply();
@@ -613,14 +644,14 @@ void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Dru
         return;
     }
 
-    Ms::Instrument* instrument = part->instrument(instrumentKey.tick);
+    mu::engraving::Instrument* instrument = part->instrument(instrumentKey.tick);
     if (!instrument) {
         return;
     }
 
     startEdit();
 
-    score()->undo(new Ms::ChangeDrumset(instrument, &newDrumset));
+    score()->undo(new mu::engraving::ChangeDrumset(instrument, &newDrumset));
 
     apply();
 
@@ -637,7 +668,7 @@ Notification NotationParts::scoreOrderChanged() const
     return m_scoreOrderChanged;
 }
 
-Ms::Score* NotationParts::score() const
+mu::engraving::Score* NotationParts::score() const
 {
     return m_getScore->score();
 }
@@ -660,6 +691,11 @@ void NotationParts::apply()
     m_partsChanged.notify();
 }
 
+void NotationParts::rollback()
+{
+    undoStack()->rollbackChanges();
+}
+
 void NotationParts::removeParts(const IDList& partsIds)
 {
     TRACEFUNC;
@@ -675,7 +711,7 @@ void NotationParts::removeParts(const IDList& partsIds)
     doRemoveParts(partsToRemove);
 
     PartInstrumentList parts;
-    for (Ms::Part* part: score()->parts()) {
+    for (mu::engraving::Part* part: score()->parts()) {
         PartInstrument pi;
         pi.isExistingPart = true;
         pi.partId = part->id();
@@ -704,17 +740,18 @@ void NotationParts::doRemoveParts(const std::vector<Part*>& parts)
 
 void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart)
 {
-    size_t staffLocalIndex = destinationPart->nstaves();
-    Ms::KeyList keyList = score()->keyList();
+    staff_idx_t staffLocalIndex = destinationPart->nstaves();
+    mu::engraving::KeyList keyList = score()->keyList();
 
     staff->setScore(score());
     staff->setPart(destinationPart);
 
     insertStaff(staff, staffLocalIndex);
 
-    track_idx_t staffGlobalIndex = staff->idx();
+    staff_idx_t staffGlobalIndex = staff->idx();
     score()->adjustKeySigs(staffGlobalIndex, staffGlobalIndex + 1, keyList);
 
+    score()->updateBracesAndBarlines(destinationPart, staffLocalIndex);
     setBracketsAndBarlines();
 
     destinationPart->instrument()->setClefType(staffLocalIndex, staff->defaultClefType());
@@ -722,25 +759,25 @@ void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart)
 
 void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config)
 {
-    Ms::StaffType* staffType = staff->staffType(DEFAULT_TICK);
+    mu::engraving::StaffType* staffType = staff->staffType(DEFAULT_TICK);
     if (!staffType) {
         return;
     }
 
-    score()->undo(new Ms::ChangeStaff(staff, config.visible, config.clefTypeList, config.userDistance, config.hideMode,
-                                      config.showIfEmpty, config.cutaway, config.hideSystemBarline, config.mergeMatchingRests));
+    score()->undo(new mu::engraving::ChangeStaff(staff, config.visible, config.clefTypeList, config.userDistance, config.hideMode,
+                                                 config.showIfEmpty, config.cutaway, config.hideSystemBarline, config.mergeMatchingRests));
 
-    score()->undo(new Ms::ChangeStaffType(staff, config.staffType));
+    score()->undo(new mu::engraving::ChangeStaffType(staff, config.staffType));
 }
 
-void NotationParts::doInsertPart(Part* part, int index)
+void NotationParts::doInsertPart(Part* part, size_t index)
 {
     TRACEFUNC;
 
     std::vector<Staff*> stavesCopy(part->staves());
     part->clearStaves();
 
-    Ms::InstrumentList instrumentsCopy = part->instruments();
+    mu::engraving::InstrumentList instrumentsCopy = part->instruments();
     part->setInstruments({});
 
     score()->insertPart(part, index);
@@ -763,15 +800,14 @@ void NotationParts::doInsertPart(Part* part, int index)
         staffCopy->init(staff);
 
         insertStaff(staffCopy, static_cast<int>(staffIndex));
-        score()->undo(new Ms::Link(staffCopy, staff));
+        score()->undo(new mu::engraving::Link(staffCopy, staff));
 
-        Ms::Fraction startTick = staff->score()->firstMeasure()->tick();
-        Ms::Fraction endTick = staff->score()->lastMeasure()->tick();
-        Ms::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
+        mu::engraving::Fraction startTick = staff->score()->firstMeasure()->tick();
+        mu::engraving::Fraction endTick = staff->score()->lastMeasure()->tick();
+        mu::engraving::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
     }
 
     part->setScore(score());
-    updateTracks();
 }
 
 void NotationParts::removeStaves(const IDList& stavesIds)
@@ -787,7 +823,27 @@ void NotationParts::removeStaves(const IDList& stavesIds)
     startEdit();
 
     for (Staff* staff: stavesToRemove) {
+        class BracketData
+        {
+        public:
+            size_t column;
+            size_t span;
+
+            BracketData(size_t c, size_t s)
+                : column(c), span(s) {}
+        };
+
+        std::vector<BracketData> newBrackets;
+        staff_idx_t staffIdx = score()->staffIdx(staff);
+        for (BracketItem* bi : staff->brackets()) {
+            if ((bi->bracketType() == BracketType::BRACE) && (bi->bracketSpan() > 1)) {
+                newBrackets.push_back(BracketData(static_cast<int>(bi->column()), static_cast<int>(bi->bracketSpan()) - 1));
+            }
+        }
         score()->cmdRemoveStaff(staff->idx());
+        for (BracketData bd : newBrackets) {
+            score()->undoAddBracket(score()->staff(staffIdx), static_cast<int>(bd.column), BracketType::BRACE, bd.span);
+        }
     }
 
     setBracketsAndBarlines();
@@ -801,13 +857,15 @@ void NotationParts::removeStaves(const IDList& stavesIds)
 
 void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode)
 {
+    TRACEFUNC;
+
     std::vector<Part*> sourceParts = parts(sourcePartsIds);
     if (sourceParts.empty()) {
         return;
     }
 
     QList<ID> allScorePartIds;
-    for (Ms::Part* currentPart: score()->parts()) {
+    for (mu::engraving::Part* currentPart: score()->parts()) {
         allScorePartIds.push_back(currentPart->id());
     }
 
@@ -815,16 +873,17 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
         return;
     }
 
-    TRACEFUNC;
+    for (const ID& sourcePartId: sourcePartsIds) {
+        allScorePartIds.removeOne(sourcePartId);
+    }
 
-    for (const Part* sourcePart: sourceParts) {
-        int srcIndex = allScorePartIds.indexOf(sourcePart->id());
-        int dstIndex = allScorePartIds.indexOf(destinationPartId);
-        dstIndex += (mode == InsertMode::Before) && (srcIndex < dstIndex) ? -1 : 0;
+    int dstIndex = allScorePartIds.indexOf(destinationPartId);
+    if (mode == InsertMode::After) {
+        dstIndex++;
+    }
 
-        if (dstIndex >= 0 && dstIndex < allScorePartIds.size()) {
-            allScorePartIds.move(srcIndex, dstIndex);
-        }
+    for (size_t i = 0; i < sourcePartsIds.size(); ++i, ++dstIndex) {
+        allScorePartIds.insert(dstIndex, sourcePartsIds[i]);
     }
 
     PartInstrumentList parts;
@@ -839,7 +898,6 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
     startEdit();
 
     sortParts(parts, score()->staves());
-
     setBracketsAndBarlines();
 
     apply();
@@ -849,11 +907,7 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
 {
     TRACEFUNC;
 
-    if (sourceStavesIds.empty()) {
-        return;
-    }
-
-    Staff* destinationStaff = staffModifiable(destinationStaffId);
+    const Staff* destinationStaff = staffModifiable(destinationStaffId);
     if (!destinationStaff) {
         return;
     }
@@ -863,21 +917,43 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
         return;
     }
 
-    Part* destinationPart = destinationStaff->part();
-    staff_idx_t destinationStaffIndex = (mode == InsertMode::Before ? destinationStaff->idx() : destinationStaff->idx() + 1);
-    destinationStaffIndex -= score()->staffIdx(destinationPart); // NOTE: convert to local part's staff index
+    for (const Staff* staff : staves) {
+        IF_ASSERT_FAILED_X(staff->part() == destinationStaff->part(), "All staves must have the same part!") {
+            return;
+        }
+    }
 
     endInteractionWithScore();
     startEdit();
 
-    doMoveStaves(staves, destinationStaffIndex, destinationPart);
+    std::vector<Staff*> allStaves = score()->staves();
 
+    mu::remove_if(allStaves, [&staves](const Staff* staff) {
+        return std::find(staves.cbegin(), staves.cend(), staff) != staves.cend();
+    });
+
+    size_t dstIndex = mu::indexOf(allStaves, destinationStaff);
+    if (mode == InsertMode::After) {
+        dstIndex++;
+    }
+
+    for (staff_idx_t i = 0; i < staves.size(); ++i, ++dstIndex) {
+        allStaves.insert(allStaves.begin() + dstIndex, staves[i]);
+    }
+
+    std::vector<staff_idx_t> sortedIndexes;
+
+    for (const Staff* staff : allStaves) {
+        sortedIndexes.push_back(staff->idx());
+    }
+
+    score()->undo(new mu::engraving::SortStaves(score(), sortedIndexes));
     setBracketsAndBarlines();
 
     apply();
 }
 
-void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ, const Ms::KeyList& keyList)
+void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ, const mu::engraving::KeyList& keyList)
 {
     TRACEFUNC;
 
@@ -889,9 +965,9 @@ void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ, co
         staff_idx_t lastStaffIndex = !score()->staves().empty() ? score()->staves().back()->idx() : 0;
 
         Staff* staff = engraving::Factory::createStaff(part);
-        const Ms::StaffType* staffType = templ.staffTypePreset;
+        const mu::engraving::StaffType* staffType = templ.staffTypePreset;
         if (!staffType) {
-            staffType = Ms::StaffType::preset(StaffType::STANDARD);
+            staffType = mu::engraving::StaffType::preset(StaffTypeId::STANDARD);
         }
         initStaff(staff, templ, staffType, staffIndex);
 
@@ -918,16 +994,16 @@ void NotationParts::insertStaff(Staff* staff, staff_idx_t destinationStaffIndex)
     score()->undoInsertStaff(staff, destinationStaffIndex);
 }
 
-void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, const Ms::StaffType* staffType, int cleffIndex)
+void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, const mu::engraving::StaffType* staffType, size_t cleffIndex)
 {
     TRACEFUNC;
 
-    const Ms::StaffType* staffTypePreset = staffType ? staffType : templ.staffTypePreset;
+    const mu::engraving::StaffType* staffTypePreset = staffType ? staffType : templ.staffTypePreset;
     if (!staffTypePreset) {
-        staffTypePreset = Ms::StaffType::getDefaultPreset(templ.staffGroup);
+        staffTypePreset = mu::engraving::StaffType::getDefaultPreset(templ.staffGroup);
     }
 
-    Ms::StaffType* stt = staff->setStaffType(DEFAULT_TICK, *staffTypePreset);
+    mu::engraving::StaffType* stt = staff->setStaffType(DEFAULT_TICK, *staffTypePreset);
     if (cleffIndex >= MAX_STAVES) {
         stt->setSmall(false);
     } else {
@@ -969,7 +1045,7 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
     TRACEFUNC;
 
     size_t staffCount = 0;
-    Ms::KeyList keyList = score()->keyList();
+    mu::engraving::KeyList keyList = score()->keyList();
 
     for (const PartInstrument& pi: parts) {
         if (pi.isExistingPart) {
@@ -988,16 +1064,16 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
         int instrumentNumber = resolveNewInstrumentNumber(pi.instrumentTemplate, parts);
 
         QString formattedPartName = formatInstrumentTitle(instrument.trackName(), instrument.trait(), instrumentNumber);
-        QString longName = !longNames.empty() ? longNames.front().name() : QString();
+        QString longName = !longNames.empty() ? longNames.front().name().toQString() : QString();
         QString formattedLongName = formatInstrumentTitleOnScore(longName, instrument.trait(), instrumentNumber);
-        QString shortName = !shortNames.empty() ? shortNames.front().name() : QString();
+        QString shortName = !shortNames.empty() ? shortNames.front().name().toQString() : QString();
         QString formattedShortName = formatInstrumentTitleOnScore(shortName, instrument.trait(), instrumentNumber);
 
         part->setPartName(formattedPartName);
         part->setLongName(formattedLongName);
         part->setShortName(formattedShortName);
 
-        score()->undo(new Ms::InsertPart(part, staffCount));
+        score()->undo(new mu::engraving::InsertPart(part, static_cast<int>(staffCount)));
         appendStaves(part, pi.instrumentTemplate, keyList);
         staffCount += part->nstaves();
 
@@ -1013,25 +1089,25 @@ void NotationParts::updateSoloist(const PartInstrumentList& parts)
         Part* part = partModifiable(pi.partId);
 
         if (pi.isExistingPart && (pi.isSoloist != part->soloist())) {
-            score()->undo(new Ms::SetSoloist(part, pi.isSoloist));
+            score()->undo(new mu::engraving::SetSoloist(part, pi.isSoloist));
         }
     }
 }
 
-void NotationParts::sortParts(const PartInstrumentList& parts, const std::vector<Ms::Staff*>& originalStaves)
+void NotationParts::sortParts(const PartInstrumentList& parts, const std::vector<mu::engraving::Staff*>& originalStaves)
 {
     TRACEFUNC;
 
-    std::vector<Ms::staff_idx_t> staffMapping;
-    std::vector<Ms::staff_idx_t> trackMapping;
+    std::vector<mu::engraving::staff_idx_t> staffMapping;
+    std::vector<mu::engraving::staff_idx_t> trackMapping;
     int runningStaffIndex = 0;
 
     int partIndex = 0;
     for (const PartInstrument& pi: parts) {
-        Ms::Part* currentPart = pi.isExistingPart ? partModifiable(pi.partId) : score()->parts()[partIndex];
+        mu::engraving::Part* currentPart = pi.isExistingPart ? partModifiable(pi.partId) : score()->parts()[partIndex];
 
-        for (Ms::Staff* staff : currentPart->staves()) {
-            Ms::staff_idx_t actualStaffIndex = mu::indexOf(score()->staves(), staff);
+        for (mu::engraving::Staff* staff : currentPart->staves()) {
+            mu::engraving::staff_idx_t actualStaffIndex = mu::indexOf(score()->staves(), staff);
 
             trackMapping.push_back(mu::indexOf(originalStaves, staff));
             staffMapping.push_back(actualStaffIndex);
@@ -1040,18 +1116,9 @@ void NotationParts::sortParts(const PartInstrumentList& parts, const std::vector
         ++partIndex;
     }
 
-    score()->undo(new Ms::SortStaves(score(), staffMapping));
+    score()->undo(new mu::engraving::SortStaves(score(), staffMapping));
 
-    score()->undo(new Ms::MapExcerptTracks(score(), trackMapping));
-}
-
-void NotationParts::updateTracks()
-{
-    if (!score()->excerpt()) {
-        return;
-    }
-
-    score()->excerpt()->updateTracksMapping();
+    score()->undo(new mu::engraving::MapExcerptTracks(score(), trackMapping));
 }
 
 int NotationParts::resolveNewInstrumentNumber(const InstrumentTemplate& instrument,

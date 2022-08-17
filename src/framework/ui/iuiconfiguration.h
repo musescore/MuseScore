@@ -25,7 +25,7 @@
 
 #include <optional>
 
-#include "retval.h"
+#include "types/retval.h"
 #include "async/notification.h"
 
 #include "modularity/imoduleexport.h"
@@ -81,7 +81,8 @@ public:
     virtual int defaultFontSize() const = 0;
 
     virtual double guiScaling() const = 0;
-    virtual double dpi() const = 0;
+    virtual double physicalDpi() const = 0;
+    virtual double logicalDpi() const = 0;
 
     //! NOTE Maybe set from command line
     virtual void setPhysicalDotsPerInch(std::optional<double> dpi) = 0;

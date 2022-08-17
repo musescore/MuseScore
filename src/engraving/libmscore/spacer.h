@@ -24,13 +24,11 @@
 #define __SPACER_H__
 
 #include "engravingitem.h"
-#include "infrastructure/draw/painterpath.h"
+#include "draw/types/painterpath.h"
 
 namespace mu::engraving {
 class Factory;
-}
 
-namespace Ms {
 //---------------------------------------------------------
 //   SpacerType
 //---------------------------------------------------------
@@ -46,12 +44,14 @@ enum class SpacerType : char {
 
 class Spacer final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Spacer)
+
     SpacerType _spacerType;
     Millimetre _gap;
 
-    mu::PainterPath path;
+    mu::draw::PainterPath path;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Spacer(Measure* parent);
     Spacer(const Spacer&);
 
@@ -73,7 +73,7 @@ public:
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;
-    void spatiumChanged(qreal, qreal) override;
+    void spatiumChanged(double, double) override;
 
     void setGap(Millimetre sp);
     Millimetre gap() const { return _gap; }
@@ -84,9 +84,9 @@ public:
     Grip defaultGrip() const override { return Grip::START; }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid id) const override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

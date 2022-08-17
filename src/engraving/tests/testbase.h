@@ -25,7 +25,7 @@
 
 #include "libmscore/engravingitem.h"
 
-namespace Ms {
+namespace mu::engraving {
 class MScore;
 class MasterScore;
 class Score;
@@ -37,21 +37,21 @@ class Score;
 class MTest
 {
 protected:
-    Ms::MScore* mscore;
+    mu::engraving::MScore* mscore;
     QString root;       // root path of test source
-    Ms::Score* score;
+    mu::engraving::Score* score;
     EditData ed;
 
     MTest();
-    Ms::MasterScore* readScore(const QString& name);
-    Ms::MasterScore* readCreatedScore(const QString& name);
-    bool saveScore(Ms::Score*, const QString& name) const;
+    mu::engraving::MasterScore* readScore(const QString& name);
+    mu::engraving::MasterScore* readCreatedScore(const QString& name);
+    bool saveScore(mu::engraving::Score*, const QString& name) const;
     bool saveMimeData(QByteArray mimeData, const QString& saveName);
     bool compareFiles(const QString& saveName, const QString& compareWith) const;
-    bool saveCompareScore(Ms::Score*, const QString& saveName, const QString& compareWith) const;
+    bool saveCompareScore(mu::engraving::Score*, const QString& saveName, const QString& compareWith) const;
 
     bool saveCompareMimeData(QByteArray, const QString& saveName, const QString& compareWith);
-    Ms::EngravingItem* writeReadElement(Ms::EngravingItem* element);
+    mu::engraving::EngravingItem* writeReadElement(mu::engraving::EngravingItem* element);
     void initMTest();
 
 public:

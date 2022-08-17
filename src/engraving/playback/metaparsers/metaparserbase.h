@@ -20,24 +20,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAING_PARSERBASE_H
-#define MU_ENGRAING_PARSERBASE_H
+#ifndef MU_ENGRAVING_PARSERBASE_H
+#define MU_ENGRAVING_PARSERBASE_H
 
 #include "log.h"
 #include "mpe/mpetypes.h"
 
 #include "playback/renderingcontext.h"
 
-namespace Ms {
-class EngravingItem;
-}
-
 namespace mu::engraving {
+class EngravingItem;
+
 template<class T>
 class MetaParserBase
 {
 public:
-    static void parse(const Ms::EngravingItem* item, const RenderingContext& context, mpe::ArticulationMap& result)
+    static void parse(const EngravingItem* item, const RenderingContext& context, mpe::ArticulationMap& result)
     {
         IF_ASSERT_FAILED(item) {
             return;
@@ -54,4 +52,4 @@ protected:
 };
 }
 
-#endif // MU_ENGRAING_PARSERBASE_H
+#endif // MU_ENGRAVING_PARSERBASE_H

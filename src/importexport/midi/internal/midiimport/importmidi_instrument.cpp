@@ -20,21 +20,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "importmidi_instrument.h"
-#include "importmidi_chord.h"
-#include "importmidi_inner.h"
-#include "libmscore/instrtemplate.h"
-#include "libmscore/drumset.h"
-#include "libmscore/part.h"
-#include "libmscore/staff.h"
-#include "libmscore/masterscore.h"
-#include "importmidi_operations.h"
-#include "engraving/compat/midi/midiinstrument.h"
 
 #include <set>
 
-namespace Ms {
-extern std::vector<InstrumentGroup*> instrumentGroups;
+#include "importmidi_chord.h"
+#include "importmidi_inner.h"
+#include "importmidi_instrument_names.h"
+#include "importmidi_operations.h"
 
+#include "libmscore/drumset.h"
+#include "libmscore/instrtemplate.h"
+#include "libmscore/part.h"
+#include "libmscore/score.h"
+#include "libmscore/staff.h"
+
+using namespace mu::engraving;
+
+namespace mu::engraving {
+extern std::vector<InstrumentGroup*> instrumentGroups;
+}
+
+namespace mu::iex::midi {
 namespace MidiInstr {
 QString instrumentName(MidiType type, int program, bool isDrumTrack)
 {
@@ -144,7 +150,7 @@ std::set<int> findAllPitches(const MTrack& track)
 void findNotEmptyDrumPitches(std::set<int>& drumPitches, const InstrumentTemplate* templ)
 {
     for (int i = 0; i != DRUM_INSTRUMENTS; ++i) {
-        if (!templ->drumset->name(i).isEmpty()) {
+        if (!templ->drumset->name(i).empty()) {
             drumPitches.insert(i);
         }
     }
@@ -163,7 +169,7 @@ bool hasNotDefinedDrumPitch(const std::set<int>& trackPitches, const std::set<in
     return hasNotDefinedPitch;
 }
 
-const InstrumentTemplate* findInstrument(const QString& groupId, const QString& instrId)
+static const InstrumentTemplate* findInstrument(const String& groupId, const String& instrId)
 {
     const InstrumentTemplate* instr = nullptr;
 
@@ -254,27 +260,27 @@ std::vector<const InstrumentTemplate*> findInstrumentsForProgram(const MTrack& t
         // so we will find the most matching instrument
 
         if (program == 55) {             // GM "Orchestra Hit" sound
-            auto instr = findInstrument("electronic-instruments", "brass-synthesizer");
+            auto instr = findInstrument(u"electronic-instruments", u"brass-synthesizer");
             if (instr) {
                 suitableTemplates.push_back(instr);
             }
         } else if (program == 110) {          // GM "Fiddle" sound
-            auto instr = findInstrument("strings", "violin");
+            auto instr = findInstrument(u"strings", u"violin");
             if (instr) {
                 suitableTemplates.push_back(instr);
             }
         } else if (program >= 80 && program <= 103) {
             const InstrumentTemplate* instr = nullptr;
             if (track.mtrack->drumTrack()) {
-                instr = findInstrument("electronic-instruments", "percussion-synthesizer");
+                instr = findInstrument(u"electronic-instruments", u"percussion-synthesizer");
             } else {
-                instr = findInstrument("electronic-instruments", "effect-synth");
+                instr = findInstrument(u"electronic-instruments", u"effect-synth");
             }
             if (instr) {
                 suitableTemplates.push_back(instr);               // generic synth
             }
         } else if (program >= 112 && program <= 127) {
-            auto instr = findInstrument("unpitched-percussion", "snare-drum");
+            auto instr = findInstrument(u"unpitched-percussion", u"snare-drum");
             if (instr) {
                 suitableTemplates.push_back(instr);               // 1-line percussion staff
             }
@@ -282,11 +288,11 @@ std::vector<const InstrumentTemplate*> findInstrumentsForProgram(const MTrack& t
             // slightly improve slap bass match:
             // match to the instruments with program 33
             // instead of 35 according to the algorithm below
-            auto instr = findInstrument("plucked-strings", "electric-bass");
+            auto instr = findInstrument(u"plucked-strings", u"electric-bass");
             if (instr) {
                 suitableTemplates.push_back(instr);
             }
-            instr = findInstrument("plucked-strings", "5-string-electric-bass");
+            instr = findInstrument(u"plucked-strings", u"5-string-electric-bass");
             if (instr) {
                 suitableTemplates.push_back(instr);
             }
@@ -481,7 +487,7 @@ void createInstruments(Score* score, QList<MTrack>& tracks)
         if (instr) {
             for (size_t i = 0; i != part->nstaves(); ++i) {
                 if (instr->staffTypePreset) {
-                    part->staff(i)->init(instr, nullptr, i);
+                    part->staff(i)->init(instr, nullptr, static_cast<int>(i));
                     part->staff(i)->setStaffType(Fraction(0, 1), *(instr->staffTypePreset));
                 }
 //                        part->staff(i)->setLines(0, instr->staffLines[i]);
@@ -531,4 +537,4 @@ QString msInstrName(int trackIndex)
     return "";
 }
 } // namespace MidiInstr
-} // namespace Ms
+} // namespace mu::iex::midi

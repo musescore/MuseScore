@@ -28,7 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "iprojectconfiguration.h"
 
 #include "../iprojectautosaver.h"
@@ -37,7 +37,7 @@ namespace mu::project {
 class ProjectAutoSaver : public IProjectAutoSaver, public async::Asyncable
 {
     INJECT(project, context::IGlobalContext, globalContext)
-    INJECT(project, system::IFileSystem, fileSystem)
+    INJECT(project, io::IFileSystem, fileSystem)
     INJECT(project, IProjectConfiguration, configuration)
 
 public:
@@ -45,13 +45,13 @@ public:
 
     void init();
 
-    bool projectHasUnsavedChanges(const io::path& projectPath) const override;
-    void removeProjectUnsavedChanges(const io::path& projectPath) override;
+    bool projectHasUnsavedChanges(const io::path_t& projectPath) const override;
+    void removeProjectUnsavedChanges(const io::path_t& projectPath) override;
 
-    bool isAutosaveOfNewlyCreatedProject(const io::path& projectPath) const override;
+    bool isAutosaveOfNewlyCreatedProject(const io::path_t& projectPath) const override;
 
-    io::path projectOriginalPath(const io::path& projectAutoSavePath) const override;
-    io::path projectAutoSavePath(const io::path& projectPath) const override;
+    io::path_t projectOriginalPath(const io::path_t& projectAutoSavePath) const override;
+    io::path_t projectAutoSavePath(const io::path_t& projectPath) const override;
 
 private:
     INotationProjectPtr currentProject() const;
@@ -60,10 +60,10 @@ private:
 
     void onTrySave();
 
-    io::path projectPath(INotationProjectPtr project) const;
+    io::path_t projectPath(INotationProjectPtr project) const;
 
     QTimer m_timer;
-    io::path m_lastProjectPathNeedingAutosave;
+    io::path_t m_lastProjectPathNeedingAutosave;
 };
 }
 

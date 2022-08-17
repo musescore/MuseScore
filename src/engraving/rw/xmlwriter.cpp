@@ -20,169 +20,93 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "xml.h"
+#include "xmlwriter.h"
 
-#include "libmscore/property.h"
-
-#include "xmlvalue.h"
 #include "types/typesconv.h"
+#include "rw/writecontext.h"
+#include "libmscore/engravingitem.h"
+#include "libmscore/property.h"
 
 #include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rw;
 
-namespace Ms {
-//---------------------------------------------------------
-//   Xml
-//---------------------------------------------------------
-
-XmlWriter::XmlWriter(Score* s)
+namespace mu::engraving {
+XmlWriter::XmlWriter(mu::io::IODevice* device)
+    : XmlStreamWriter(device)
 {
-    _score = s;
-    setCodec("UTF-8");
 }
 
-XmlWriter::XmlWriter(Score* s, QIODevice* device)
-    : QTextStream(device)
+XmlWriter::~XmlWriter()
 {
-    _score = s;
-    setCodec("UTF-8");
-}
-
-//---------------------------------------------------------
-//   putLevel
-//---------------------------------------------------------
-
-void XmlWriter::putLevel()
-{
-    size_t level = stack.size();
-    for (size_t i = 0; i < level * 2; ++i) {
-        *this << ' ';
+    if (m_selfContext) {
+        delete m_context;
     }
 }
 
-//---------------------------------------------------------
-//   header
-//---------------------------------------------------------
-
-void XmlWriter::writeHeader()
+void XmlWriter::startElementRaw(const String& s)
 {
-    *this << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    XmlStreamWriter::startElementRaw(s);
 }
 
-//---------------------------------------------------------
-//   stag
-//    <mops attribute="value">
-//---------------------------------------------------------
-
-void XmlWriter::startObject(const QString& s)
+void XmlWriter::startElement(const AsciiStringView& name, const Attributes& attrs)
 {
-    putLevel();
-    *this << '<' << s << '>' << Qt::endl;
-    stack.push_back(s.split(' ')[0]);
+    XmlStreamWriter::startElement(name, attrs);
 }
 
-//---------------------------------------------------------
-//   stag
-//    <mops attribute="value">
-//---------------------------------------------------------
-
-void XmlWriter::startObject(const EngravingObject* se, const QString& attributes)
+void XmlWriter::startElement(const EngravingObject* se, const Attributes& attrs)
 {
-    startObject(se->typeName(), se, attributes);
+    startElement(se->typeName(), se, attrs);
 }
 
-//---------------------------------------------------------
-//   stag
-//    <mops attribute="value">
-//---------------------------------------------------------
-
-void XmlWriter::startObject(const QString& name, const EngravingObject* se, const QString& attributes)
+void XmlWriter::startElement(const AsciiStringView& name, const EngravingObject* se, const Attributes& attrs)
 {
-    putLevel();
-    *this << '<' << name;
-    if (!attributes.isEmpty()) {
-        *this << ' ' << attributes;
-    }
-    *this << '>' << Qt::endl;
-    stack.push_back(name);
+    XmlStreamWriter::startElement(name, attrs);
 
     if (_recordElements) {
         _elements.emplace_back(se, name);
     }
 }
 
-//---------------------------------------------------------
-//   etag
-//    </mops>
-//---------------------------------------------------------
-
-void XmlWriter::endObject()
+void XmlWriter::tag(const AsciiStringView& name, const Attributes& attrs)
 {
-    putLevel();
-    *this << "</" << mu::takeLast(stack) << '>' << Qt::endl;
+    XmlStreamWriter::element(name, attrs);
 }
 
-//---------------------------------------------------------
-//   tagE
-//    <mops attribute="value"/>
-//---------------------------------------------------------
-
-void XmlWriter::tagE(const char* format, ...)
+void XmlWriter::tag(const AsciiStringView& name, const Value& body)
 {
-    va_list args;
-    va_start(args, format);
-    putLevel();
-    *this << '<';
-    char buffer[BS];
-    vsnprintf(buffer, BS, format, args);
-    *this << buffer;
-    va_end(args);
-    *this << "/>" << Qt::endl;
+    XmlStreamWriter::element(name, body);
 }
 
-//---------------------------------------------------------
-//   tagE
-//---------------------------------------------------------
-
-void XmlWriter::tagE(const QString& s)
+void XmlWriter::tag(const AsciiStringView& name, const Value& val, const Value& def)
 {
-    putLevel();
-    *this << '<' << s << "/>\n";
+    if (val == def) {
+        return;
+    }
+    tag(name, val);
 }
 
-//---------------------------------------------------------
-//   ntag
-//    <mops> without newline
-//---------------------------------------------------------
-
-void XmlWriter::ntag(const char* name)
+void XmlWriter::tag(const AsciiStringView& name, const Attributes& attrs, const Value& body)
 {
-    putLevel();
-    *this << "<" << name << ">";
+    XmlStreamWriter::element(name, attrs, body);
 }
 
-//---------------------------------------------------------
-//   netag
-//    </mops>     without indentation
-//---------------------------------------------------------
-
-void XmlWriter::netag(const char* s)
+void XmlWriter::tagRaw(const String& elementWithAttrs, const Value& body)
 {
-    *this << "</" << s << '>' << Qt::endl;
+    XmlStreamWriter::elementRaw(elementWithAttrs, body);
 }
 
 //---------------------------------------------------------
 //   tag
 //---------------------------------------------------------
 
-void XmlWriter::tag(Pid id, const PropertyValue& val, const PropertyValue& def)
+void XmlWriter::tagProperty(Pid id, const PropertyValue& val, const PropertyValue& def)
 {
     if (val == def) {
         return;
     }
+
     const char* name = propertyName(id);
     if (name == 0) {
         return;
@@ -194,7 +118,7 @@ void XmlWriter::tag(Pid id, const PropertyValue& val, const PropertyValue& def)
         LOGD() << "property value type mismatch, prop: " << name;
     }
 
-    const QString writableVal(propertyToString(id, val, /* mscx */ true));
+    const String writableVal(propertyToString(id, val, /* mscx */ true));
     if (writableVal.isEmpty()) {
         //! NOTE The data type is MILLIMETRE, but we write SPATIUM
         //! (the conversion from Millimetre to Spatium occurred higher up the stack)
@@ -215,253 +139,160 @@ void XmlWriter::tag(Pid id, const PropertyValue& val, const PropertyValue& def)
     }
 }
 
-void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& data)
+void XmlWriter::tagProperty(const AsciiStringView& name, const PropertyValue& val, const PropertyValue& def)
 {
-    QString ename(QString(name).split(' ')[0]);
+    if (val == def) {
+        return;
+    }
 
+    tagProperty(name, val.type(), val);
+}
+
+void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const PropertyValue& data)
+{
     switch (type) {
     case P_TYPE::UNDEFINED:
         UNREACHABLE;
         break;
     // base
     case P_TYPE::BOOL:
-        putLevel();
-        *this << "<" << name << ">";
-        *this << int(data.value<bool>());
-        *this << "</" << ename << ">\n";
+        element(name, int(data.value<bool>()));
         break;
     case P_TYPE::INT:
-        putLevel();
-        *this << "<" << name << ">";
-        *this << data.value<int>();
-        *this << "</" << ename << ">\n";
+        element(name, data.value<int>());
         break;
     case P_TYPE::REAL:
-        putLevel();
-        *this << "<" << name << ">";
-        *this << data.value<qreal>();
-        *this << "</" << ename << ">\n";
+        element(name, data.value<double>());
         break;
     case P_TYPE::STRING:
-        putLevel();
-        *this << "<" << name << ">";
-        *this << xmlString(data.value<QString>());
-        *this << "</" << ename << ">\n";
+        element(name, data.value<String>());
         break;
     // geometry
     case P_TYPE::POINT: {
         PointF p = data.value<PointF>();
-        tag(name, p);
+        element(name, { { "x", p.x() }, { "y", p.y() } });
     }
     break;
     case P_TYPE::SIZE: {
-        putLevel();
         SizeF s = data.value<SizeF>();
-        *this << QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(s.width()).arg(s.height());
+        element(name, { { "w", s.width() }, { "h", s.height() } });
     }
     break;
     case P_TYPE::DRAW_PATH:
         UNREACHABLE; //! TODO
         break;
-    case P_TYPE::SCALE:
-        UNREACHABLE; //! TODO
-        break;
+    case P_TYPE::SCALE: {
+        ScaleF s = data.value<ScaleF>();
+        element(name, { { "w", s.width() }, { "h", s.height() } });
+    } break;
     case P_TYPE::SPATIUM:
-        putLevel();
-        *this << "<" << name << ">";
-        *this << data.value<Spatium>().val();
-        *this << "</" << ename << ">\n";
+        element(name, data.value<Spatium>().val());
         break;
     case P_TYPE::MILLIMETRE:
-        putLevel();
-        *this << "<" << name << ">";
-        *this << qreal(data.value<Millimetre>());
-        *this << "</" << ename << ">\n";
-        break;
+        element(name, data.value<Millimetre>().val());
         break;
 
     // draw
     case P_TYPE::SYMID: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << TConv::toXml(data.value<SymId>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<SymId>()));
     } break;
     case P_TYPE::COLOR: {
-        putLevel();
         Color color(data.value<Color>());
-        *this << QString("<%1 r=\"%2\" g=\"%3\" b=\"%4\" a=\"%5\"/>\n")
-            .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha());
+        element(name, { { "r", color.red() }, { "g", color.green() }, { "b", color.blue() }, { "a", color.alpha() } });
     }
     break;
     case P_TYPE::ORNAMENT_STYLE: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << XmlValue::toXml(data.value<OrnamentStyle>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<OrnamentStyle>()));
     } break;
     case P_TYPE::GLISS_STYLE: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << XmlValue::toXml(data.value<GlissandoStyle>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<GlissandoStyle>()));
     } break;
     case P_TYPE::ALIGN: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << TConv::toXml(data.value<Align>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<Align>()));
     }
     break;
     case P_TYPE::PLACEMENT_V: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << XmlValue::toXml(data.value<PlacementV>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<PlacementV>()));
     }
     break;
     case P_TYPE::PLACEMENT_H: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << XmlValue::toXml(data.value<PlacementH>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<PlacementH>()));
     }
     break;
     case P_TYPE::TEXT_PLACE: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << XmlValue::toXml(data.value<TextPlace>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<TextPlace>()));
     }
     break;
     case P_TYPE::DIRECTION_V: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << XmlValue::toXml(data.value<DirectionV>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<DirectionV>()));
     }
     break;
     case P_TYPE::DIRECTION_H: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << XmlValue::toXml(data.value<DirectionH>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<DirectionH>()));
     }
     break;
     case P_TYPE::ORIENTATION: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << TConv::toXml(data.value<Orientation>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<Orientation>()));
     }
     break;
     // time
     case P_TYPE::FRACTION: {
-        const Fraction& f = data.value<Fraction>();
-        tag(name, f);
+        tagFraction(name, data.value<Fraction>());
     }
     break;
     case P_TYPE::LAYOUTBREAK_TYPE: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << XmlValue::toXml(data.value<LayoutBreakType>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<LayoutBreakType>()));
     } break;
     case P_TYPE::VELO_TYPE: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << XmlValue::toXml(data.value<VeloType>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<VeloType>()));
     } break;
     case P_TYPE::BARLINE_TYPE: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << XmlValue::toXml(data.value<BarLineType>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<BarLineType>()));
     } break;
     case P_TYPE::NOTEHEAD_TYPE: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << TConv::toXml(data.value<NoteHeadType>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<NoteHeadType>()));
     } break;
     case P_TYPE::NOTEHEAD_SCHEME: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << TConv::toXml(data.value<NoteHeadScheme>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<NoteHeadScheme>()));
     } break;
     case P_TYPE::NOTEHEAD_GROUP: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << TConv::toXml(data.value<NoteHeadGroup>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<NoteHeadGroup>()));
     } break;
     case P_TYPE::CLEF_TYPE: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << TConv::toXml(data.value<ClefType>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<ClefType>()));
     } break;
     case P_TYPE::DYNAMIC_TYPE: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << TConv::toXml(data.value<DynamicType>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<DynamicType>()));
     } break;
     case P_TYPE::DYNAMIC_RANGE: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << TConv::toXml(data.value<DynamicRange>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<DynamicRange>()));
     } break;
     case P_TYPE::DYNAMIC_SPEED: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << TConv::toXml(data.value<DynamicSpeed>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<DynamicSpeed>()));
+    } break;
+    case P_TYPE::LINE_TYPE: {
+        element(name, TConv::toXml(data.value<LineType>()));
     } break;
     case P_TYPE::HOOK_TYPE: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << TConv::toXml(data.value<HookType>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<HookType>()));
     } break;
     case P_TYPE::KEY_MODE: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << TConv::toXml(data.value<KeyMode>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<KeyMode>()));
     } break;
     case P_TYPE::TEXT_STYLE: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << TConv::toXml(data.value<TextStyleType>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<TextStyleType>()));
     } break;
     case P_TYPE::CHANGE_METHOD: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << TConv::toXml(data.value<ChangeMethod>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<ChangeMethod>()));
     } break;
     case P_TYPE::ACCIDENTAL_ROLE: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << TConv::toXml(data.value<AccidentalRole>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<AccidentalRole>()));
     } break;
     case P_TYPE::PLAYTECH_TYPE: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << TConv::toXml(data.value<PlayingTechniqueType>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<PlayingTechniqueType>()));
     } break;
     case P_TYPE::TEMPOCHANGE_TYPE: {
-        putLevel();
-        *this << "<" << name << ">";
-        *this << TConv::toXml(data.value<TempoChangeType>());
-        *this << "</" << ename << ">\n";
+        element(name, TConv::toXml(data.value<GradualTempoChangeType>()));
     } break;
     default: {
         UNREACHABLE; //! TODO
@@ -470,238 +301,58 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
     }
 }
 
-void XmlWriter::tag(const char* name, const mu::PointF& p)
+void XmlWriter::tagPoint(const AsciiStringView& name, const mu::PointF& p)
 {
-    putLevel();
-    *this << QString("<%1 x=\"%2\" y=\"%3\"/>\n").arg(name).arg(p.x()).arg(p.y());
+    tag(name, { { "x", p.x() }, { "y", p.y() } });
 }
 
-void XmlWriter::tag(const char* name, const CustDef& cd)
-{
-    putLevel();
-    *this << QString("<%1 degree=\"%2\" xAlt=\"%3\" octAlt=\"%4\"/>\n").arg(name).arg(cd.degree).arg(cd.xAlt).arg(cd.octAlt);
-}
-
-void XmlWriter::tag(const char* name, const Fraction& v, const Fraction& def)
+void XmlWriter::tagFraction(const AsciiStringView& name, const Fraction& v, const Fraction& def)
 {
     if (v == def) {
         return;
     }
 
-    putLevel();
-    *this << QString("<%1>%2/%3</%1>\n").arg(name).arg(v.numerator()).arg(v.denominator());
+    element(name, v.toString());
 }
 
-//---------------------------------------------------------
-//   tag
-//    <mops>value</mops>
-//---------------------------------------------------------
-
-void XmlWriter::tag(const char* name, QVariant data, QVariant defaultData)
+void XmlWriter::writeXml(const String& name, String s)
 {
-    if (data != defaultData) {
-        tag(QString(name), data);
-    }
-}
-
-void XmlWriter::tag(const QString& name, QVariant data)
-{
-    QString ename(name.split(' ')[0]);
-
-    putLevel();
-    switch (data.type()) {
-    case QVariant::Bool:
-    case QVariant::Char:
-    case QVariant::Int:
-    case QVariant::UInt:
-        *this << "<" << name << ">";
-        *this << data.toInt();
-        *this << "</" << ename << ">\n";
-        break;
-    case QVariant::LongLong:
-        *this << "<" << name << ">";
-        *this << data.toLongLong();
-        *this << "</" << ename << ">\n";
-        break;
-    case QVariant::Double:
-        *this << "<" << name << ">";
-        *this << data.value<double>();
-        *this << "</" << ename << ">\n";
-        break;
-    case QVariant::String:
-        *this << "<" << name << ">";
-        *this << xmlString(data.value<QString>());
-        *this << "</" << ename << ">\n";
-        break;
-
-#ifndef NO_QT_SUPPORT
-    case QVariant::Color:
-    {
-        QColor color(data.value<QColor>());
-        *this << QString("<%1 r=\"%2\" g=\"%3\" b=\"%4\" a=\"%5\"/>\n")
-            .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha());
-    }
-    break;
-    case QVariant::Rect:
-    {
-        const QRect& r(data.value<QRect>());
-        *this << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
-    }
-    break;
-    case QVariant::RectF:
-    {
-        const QRectF& r(data.value<QRectF>());
-        *this << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
-    }
-    break;
-    case QVariant::PointF:
-    {
-        const QPointF& p(data.value<QPointF>());
-        *this << QString("<%1 x=\"%2\" y=\"%3\"/>\n").arg(name).arg(p.x()).arg(p.y());
-    }
-    break;
-    case QVariant::SizeF:
-    {
-        const QSizeF& p(data.value<QSizeF>());
-        *this << QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(p.width()).arg(p.height());
-    }
-    break;
-#endif
-    default: {
-        UNREACHABLE;
-    }
-    break;
-    }
-}
-
-//---------------------------------------------------------
-//   comment
-//---------------------------------------------------------
-
-void XmlWriter::comment(const QString& text)
-{
-    putLevel();
-    *this << "<!-- " << text << " -->" << Qt::endl;
-}
-
-//---------------------------------------------------------
-//   xmlString
-//---------------------------------------------------------
-
-QString XmlWriter::xmlString(ushort c)
-{
-    switch (c) {
-    case '<':
-        return QLatin1String("&lt;");
-    case '>':
-        return QLatin1String("&gt;");
-    case '&':
-        return QLatin1String("&amp;");
-    case '\"':
-        return QLatin1String("&quot;");
-    default:
-        // ignore invalid characters in xml 1.0
-        if ((c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D)) {
-            return QString();
-        }
-        return QString(QChar(c));
-    }
-}
-
-//---------------------------------------------------------
-//   xmlString
-//---------------------------------------------------------
-
-QString XmlWriter::xmlString(const QString& s)
-{
-    QString escaped;
-    escaped.reserve(s.size());
-    for (int i = 0; i < s.size(); ++i) {
-        ushort c = s.at(i).unicode();
-        escaped += xmlString(c);
-    }
-    return escaped;
-}
-
-//---------------------------------------------------------
-//   dump
-//---------------------------------------------------------
-
-void XmlWriter::dump(int len, const unsigned char* p)
-{
-    putLevel();
-    int col = 0;
-    setFieldWidth(5);
-    setNumberFlags(numberFlags() | QTextStream::ShowBase);
-    setIntegerBase(16);
-    for (int i = 0; i < len; ++i, ++col) {
-        if (col >= 16) {
-            setFieldWidth(0);
-            *this << Qt::endl;
-            col = 0;
-            putLevel();
-            setFieldWidth(5);
-        }
-        *this << (p[i] & 0xff);
-    }
-    if (col) {
-        *this << Qt::endl << Qt::dec;
-    }
-    setFieldWidth(0);
-    setIntegerBase(10);
-}
-
-//---------------------------------------------------------
-//   writeXml
-//    string s is already escaped (& -> "&amp;")
-//---------------------------------------------------------
-
-void XmlWriter::writeXml(const QString& name, QString s)
-{
-    QString ename(name.split(' ')[0]);
-    putLevel();
-    for (int i = 0; i < s.size(); ++i) {
-        ushort c = s.at(i).unicode();
+    for (size_t i = 0; i < s.size(); ++i) {
+        char16_t c = s.at(i).unicode();
         if (c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D) {
-            s[i] = '?';
+            s[i] = u'?';
         }
     }
-    *this << "<" << name << ">";
-    *this << s;
-    *this << "</" << ename << ">\n";
+
+    elementStringRaw(name, s);
 }
 
-//---------------------------------------------------------
-//   canWrite
-//---------------------------------------------------------
-
-bool XmlWriter::canWrite(const EngravingItem* e) const
+void XmlWriter::comment(const String& text)
 {
-    if (!_clipboardmode) {
-        return true;
+    XmlStreamWriter::comment(text);
+}
+
+String XmlWriter::xmlString(const String& s)
+{
+    return XmlStreamWriter::escapeString(s);
+}
+
+WriteContext* XmlWriter::context() const
+{
+    if (!m_context) {
+        m_context = new WriteContext();
+        m_selfContext = true;
     }
-    return _filter.canSelect(e);
-}
-
-//---------------------------------------------------------
-//   canWriteVoice
-//---------------------------------------------------------
-
-bool XmlWriter::canWriteVoice(track_idx_t track) const
-{
-    if (!_clipboardmode) {
-        return true;
-    }
-    return _filter.canSelectVoice(track);
-}
-
-mu::engraving::WriteContext* XmlWriter::context() const
-{
     return m_context;
 }
 
 void XmlWriter::setContext(WriteContext* context)
 {
+    if (m_context && m_selfContext) {
+        delete m_context;
+    }
+
     m_context = context;
+    m_selfContext = false;
 }
 }

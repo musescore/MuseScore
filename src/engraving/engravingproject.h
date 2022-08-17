@@ -25,9 +25,9 @@
 #include <memory>
 
 #include "engravingerrors.h"
-#include "infrastructure/io/mscreader.h"
-#include "infrastructure/io/mscwriter.h"
-#include "infrastructure/io/ifileinfoprovider.h"
+#include "infrastructure/mscreader.h"
+#include "infrastructure/mscwriter.h"
+#include "infrastructure/ifileinfoprovider.h"
 
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"
@@ -42,46 +42,44 @@
 //! we need to strive to ensure that there is work with the project everywhere;
 //! accordingly, only the project should create and load the master score.
 
-namespace Ms {
+namespace mu::engraving {
 class MasterScore;
 class MStyle;
-}
 
-namespace mu::engraving {
 class EngravingProject : public std::enable_shared_from_this<EngravingProject>
 {
-    INJECT(engraving, diagnostics::IEngravingElementsProvider, engravingElementsProvider)
+    INJECT_STATIC(engraving, diagnostics::IEngravingElementsProvider, engravingElementsProvider)
 
 public:
     ~EngravingProject();
 
     static std::shared_ptr<EngravingProject> create();
-    static std::shared_ptr<EngravingProject> create(const Ms::MStyle& style);
+    static std::shared_ptr<EngravingProject> create(const MStyle& style);
 
     IFileInfoProviderPtr fileInfoProvider() const;
     void setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider);
 
-    QString appVersion() const;
+    String appVersion() const;
     int mscVersion() const;
 
     bool readOnly() const;
 
-    Ms::MasterScore* masterScore() const;
-    Err setupMasterScore();
+    MasterScore* masterScore() const;
+    Err setupMasterScore(bool forceMode);
 
-    Err loadMscz(const mu::engraving::MscReader& msc, bool ignoreVersionError);
-    bool writeMscz(mu::engraving::MscWriter& writer, bool onlySelection, bool createThumbnail);
+    Err loadMscz(const MscReader& msc, bool ignoreVersionError);
+    bool writeMscz(MscWriter& writer, bool onlySelection, bool createThumbnail);
 
 private:
-    friend class Ms::MasterScore;
+    friend class MasterScore;
 
-    EngravingProject() = default;
+    EngravingProject();
 
-    void init(const Ms::MStyle& style);
+    void init(const MStyle& style);
 
-    Err doSetupMasterScore(Ms::MasterScore* score);
+    Err doSetupMasterScore(MasterScore* score, bool forceMode);
 
-    Ms::MasterScore* m_masterScore = nullptr;
+    MasterScore* m_masterScore = nullptr;
 };
 
 using EngravingProjectPtr = std::shared_ptr<EngravingProject>;

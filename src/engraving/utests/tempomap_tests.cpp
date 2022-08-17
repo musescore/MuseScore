@@ -30,9 +30,9 @@
 using namespace mu;
 using namespace mu::engraving;
 
-static const QString TEMPOMAP_TEST_FILES_DIR("tempomap_data/");
+static const String TEMPOMAP_TEST_FILES_DIR("tempomap_data/");
 
-class TempoMapTests : public ::testing::Test
+class Engraving_TempoMapTests : public ::testing::Test
 {
 protected:
     void SetUp() override {}
@@ -40,13 +40,13 @@ protected:
 
 /**
  * @brief TempoMapTests_DEFAULT_TEMPO
- * @details In this case we're loading a simple score with 8 measures (Viollin, 4/4, 120 bpm, Treble Cleff)
+ * @details In this case we're loading a simple score with 8 measures (Violin, 4/4, 120 bpm, Treble Cleff)
  *          There is no visible tempo marking on the score, so default tempo will be applied 120BPM
  */
-TEST_F(TempoMapTests, DEFAULT_TEMPO)
+TEST_F(Engraving_TempoMapTests, DEFAULT_TEMPO)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "default_tempo/default_tempo.mscx");
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "default_tempo/default_tempo.mscx");
 
     ASSERT_TRUE(score);
 
@@ -54,7 +54,7 @@ TEST_F(TempoMapTests, DEFAULT_TEMPO)
     BeatsPerSecond expectedTempo = Constants::defaultTempo;
 
     // [WHEN] We request score's tempomap it should contain only 1 value, which is our expected tempo
-    const Ms::TempoMap* tempoMap = score->tempomap();
+    const TempoMap* tempoMap = score->tempomap();
     EXPECT_EQ(tempoMap->size(), 1);
 
     // [THEN] Applied tempo matches our expectations
@@ -65,13 +65,13 @@ TEST_F(TempoMapTests, DEFAULT_TEMPO)
 
 /**
  * @brief TempoMapTests_ABSOLUTE_TEMPO_80_BPM
- * @details In this case we're loading a simple score with 8 measures (Viollin, 4/4, 80 bpm, Treble Cleff)
+ * @details In this case we're loading a simple score with 8 measures (Violin, 4/4, 80 bpm, Treble Cleff)
  *          Tempo marking (80 BPM) should be applied on the entire score
  */
-TEST_F(TempoMapTests, ABSOLUTE_TEMPO_80_BPM)
+TEST_F(Engraving_TempoMapTests, ABSOLUTE_TEMPO_80_BPM)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "custom_tempo_80_bpm/custom_tempo_80_bpm.mscx");
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "custom_tempo_80_bpm/custom_tempo_80_bpm.mscx");
 
     ASSERT_TRUE(score);
 
@@ -79,7 +79,7 @@ TEST_F(TempoMapTests, ABSOLUTE_TEMPO_80_BPM)
     BeatsPerSecond expectedTempo = BeatsPerSecond::fromBPM(BeatsPerMinute(80.f));
 
     // [WHEN] We request score's tempomap it should contain only 1 value, which is our expected tempo
-    const Ms::TempoMap* tempoMap = score->tempomap();
+    const TempoMap* tempoMap = score->tempomap();
     EXPECT_EQ(tempoMap->size(), 1);
 
     // [THEN] Applied tempo matches with our expectations
@@ -90,13 +90,14 @@ TEST_F(TempoMapTests, ABSOLUTE_TEMPO_80_BPM)
 
 /**
  * @brief TempoMapTests_ABSOLUTE_TEMPO_FROM_80_TO_120_BPM
- * @details In this case we're loading a simple score with 8 measures (Viollin, 4/4, 80 bpm, Treble Cleff)
+ * @details In this case we're loading a simple score with 8 measures (Violin, 4/4, 80 bpm, Treble Cleff)
  *          There is a tempo marking (80 BPM) on the very first measure. The 4-th measure marked by 120BPM tempo
  */
-TEST_F(TempoMapTests, ABSOLUTE_TEMPO_FROM_80_TO_120_BPM)
+TEST_F(Engraving_TempoMapTests, ABSOLUTE_TEMPO_FROM_80_TO_120_BPM)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 80 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "absolute_tempo_80_to_120_bpm/absolute_tempo_80_to_120_bpm.mscx");
+    // [GIVEN] Simple piece of score (Violin, 4/4, 80 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(
+        TEMPOMAP_TEST_FILES_DIR + "absolute_tempo_80_to_120_bpm/absolute_tempo_80_to_120_bpm.mscx");
 
     ASSERT_TRUE(score);
 
@@ -107,7 +108,7 @@ TEST_F(TempoMapTests, ABSOLUTE_TEMPO_FROM_80_TO_120_BPM)
     };
 
     // [WHEN] We request score's tempomap its size matches with our expectations
-    const Ms::TempoMap* tempoMap = score->tempomap();
+    const TempoMap* tempoMap = score->tempomap();
     EXPECT_EQ(tempoMap->size(), expectedTempoMap.size());
 
     // [THEN] Applied tempo matches with our expectations
@@ -117,15 +118,53 @@ TEST_F(TempoMapTests, ABSOLUTE_TEMPO_FROM_80_TO_120_BPM)
 }
 
 /**
+ * @brief TempoMapTests_TEMPO_MULTIPLIER
+ * @details In this case we're loading a simple score with 8 measures (Violin, 4/4, 80 bpm, Treble Cleff)
+ *          There is a tempo marking (80 BPM) on the very first measure. The 4-th measure marked by 120BPM tempo
+ *          Then we apply a global multiplier to all tempo marks
+ */
+TEST_F(Engraving_TempoMapTests, TEMPO_MULTIPLIER)
+{
+    // [GIVEN] Simple piece of score (Violin, 4/4, 80 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(
+        TEMPOMAP_TEST_FILES_DIR + "absolute_tempo_80_to_120_bpm/absolute_tempo_80_to_120_bpm.mscx");
+
+    ASSERT_TRUE(score);
+
+    // [WHEN] Apply a global tempo multiplier to all tempo marks
+    TempoMap* tempoMap = score->tempomap();
+
+    constexpr double multiplier = 2.2;
+    tempoMap->setTempoMultiplier(multiplier);
+
+    // [GIVEN] Expected tempomap
+    std::map<int, BeatsPerSecond> expectedTempoMap = {
+        { 0, BeatsPerSecond::fromBPM(BeatsPerMinute(80.0)) }, // first measure
+        { 4 * 4 * Constants::division, BeatsPerSecond::fromBPM(BeatsPerMinute(120.0)) } // 4-th measure
+    };
+
+    // [WHEN] We request score's tempomap its size matches with our expectations
+    EXPECT_EQ(tempoMap->size(), expectedTempoMap.size());
+
+    // [THEN] Applied tempo matches with our expectations
+    for (int tick : mu::keys(*tempoMap)) {
+        double expectedBps = expectedTempoMap[tick].val;
+
+        EXPECT_TRUE(RealIsEqual(RealRound(tempoMap->tempo(tick).val, 2), RealRound(expectedBps * multiplier, 2)));
+        EXPECT_TRUE(RealIsEqual(RealRound(tempoMap->at(tick).tempo.val, 2), RealRound(expectedBps, 2)));
+    }
+}
+
+/**
  * @brief TempoMapTests_GRADUAL_TEMPO_CHANGE_ACCELERANDO
- * @details In this case we're loading a simple score with 8 measures (Viollin, 4/4, 120 bpm, Treble Cleff)
+ * @details In this case we're loading a simple score with 8 measures (Violin, 4/4, 120 bpm, Treble Cleff)
  *          There is a tempo marking (120 BPM) on the very first measure. Additionally, there is "accelerando" tempo annotation
  *          above measures 5 and 6
  */
-TEST_F(TempoMapTests, GRADUAL_TEMPO_CHANGE_ACCELERANDO)
+TEST_F(Engraving_TempoMapTests, GRADUAL_TEMPO_CHANGE_ACCELERANDO)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score
         = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "gradual_tempo_change_accelerando/gradual_tempo_change_accelerando.mscx");
 
     ASSERT_TRUE(score);
@@ -133,11 +172,11 @@ TEST_F(TempoMapTests, GRADUAL_TEMPO_CHANGE_ACCELERANDO)
     // [GIVEN] Expected tempomap
     std::map<int, BeatsPerSecond> expectedTempoMap = {
         { 0, BeatsPerSecond::fromBPM(BeatsPerMinute(120.f)) }, // beginning of the first measure
-        { 6 * 4 * Constants::division, BeatsPerSecond::fromBPM(BeatsPerMinute(150.f)) } // beginning of the last measure
+        { 6 * 4 * Constants::division, BeatsPerSecond::fromBPM(BeatsPerMinute(159.6f)) } // beginning of the last measure
     };
 
     // [WHEN] We request score's tempomap its size matches with our expectations
-    const Ms::TempoMap* tempoMap = score->tempomap();
+    const TempoMap* tempoMap = score->tempomap();
     EXPECT_FALSE(tempoMap->empty());
 
     // [THEN] Applied tempo matches with our expectations
@@ -148,15 +187,14 @@ TEST_F(TempoMapTests, GRADUAL_TEMPO_CHANGE_ACCELERANDO)
 
 /**
  * @brief TempoMapTests_GRADUAL_TEMPO_CHANGE_RALLENTANDO
- * @details In this case we're loading a simple score with 8 measures (Viollin, 4/4, 120 bpm, Treble Cleff)
+ * @details In this case we're loading a simple score with 8 measures (Violin, 4/4, 120 bpm, Treble Cleff)
  *          There is a tempo marking (120 BPM) on the very first measure. Additionally, there is "rallentando" tempo annotation
  *          above measures 5 and 6
  */
-TEST_F(TempoMapTests, GRADUAL_TEMPO_CHANGE_RALLENTANDO)
+TEST_F(Engraving_TempoMapTests, GRADUAL_TEMPO_CHANGE_RALLENTANDO)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score
-        = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "gradual_tempo_change_rallentando/gradual_tempo_change_rallentando.mscx");
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "gradual_tempo_change_rallentando/gradual_tempo_change_rallentando.mscx");
 
     ASSERT_TRUE(score);
 
@@ -167,7 +205,7 @@ TEST_F(TempoMapTests, GRADUAL_TEMPO_CHANGE_RALLENTANDO)
     };
 
     // [WHEN] We request score's tempomap its size matches with our expectations
-    const Ms::TempoMap* tempoMap = score->tempomap();
+    const TempoMap* tempoMap = score->tempomap();
     EXPECT_FALSE(tempoMap->empty());
 
     // [THEN] Applied tempo matches with our expectations

@@ -49,19 +49,15 @@ public:
     void setEnabled(bool enabled) override;
 
 private:
-    const Ms::Score* score() const;
-    const Ms::Selection* selection() const;
+    const engraving::Score* score() const;
+    const engraving::Selection* selection() const;
 
     void updateAccessibilityInfo();
+
     void setAccessibilityInfo(const QString& info);
 
     QString rangeAccessibilityInfo() const;
     QString singleElementAccessibilityInfo() const;
-
-    std::pair<int, float> barbeat(const EngravingItem* element) const;
-    QString formatSingleElementBarsAndBeats(const EngravingItem* element) const;
-    QString formatStartBarsAndBeats(const EngravingItem* element) const;
-    QString formatEndBarsAndBeats(const EngravingItem* element) const;
 
     const IGetScore* m_getScore = nullptr;
     ValCh<std::string> m_accessibilityInfo;

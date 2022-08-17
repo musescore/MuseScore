@@ -25,181 +25,60 @@ import QtQuick 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
+import "internal"
+
 PopupView {
     id: root
 
-    default property alias contentData: contentBody.data
+    default property alias contentData: content.contentData
 
-    property alias background: contentBackground
+    property alias background: content.background
 
-    property alias width: rootContainer.width
-    property alias height: rootContainer.height
+    property alias width: content.width
+    property alias height: content.height
 
-    property int margins: 12 + contentBackground.border.width
+    property alias margins: content.margins
 
-    contentWidth: 240
-    contentHeight: contentBody.childrenRect.height
+    property alias animationEnabled: content.animationEnabled
 
-    property bool animationEnabled: false
+    property alias closeOnEscape: content.closeOnEscape
+    property alias navigationSection: content.navigationSection
+
+    property int contentWidth: 240
+    property int contentHeight: content.contentBodyHeight
 
     closePolicy: PopupView.CloseOnPressOutsideParent
 
     x: (root.parent.width / 2) - (root.width / 2)
     y: root.parent.height
 
-    property bool isCloseByEscape: true
-    property alias navigationSection: navSec
-
     onOpened: {
-        navSec.requestActive()
+        content.navigationSection.requestActive()
     }
 
     onClosed: {
-        rootContainer.focus = false
+        content.focus = false
     }
 
-    contentItem: FocusScope {
-        id: rootContainer
-        width: contentContainer.width + root.padding * 2
-        height: contentContainer.height + root.padding * 2
+    contentItem: PopupContent {
+        id: content
 
-        implicitWidth: contentContainer.implicitWidth + root.padding * 2
-        implicitHeight: contentContainer.implicitHeight + root.padding * 2
+        objectName: "Popup"
 
-        property alias cascadeAlign: root.cascadeAlign
+        contentWidth: root.contentWidth
+        contentHeight: root.contentHeight
 
-        focus: true
+        padding: root.padding
 
-        //! NOTE: must to be inside QQuickItem to define a window by parent
-        NavigationSection {
-            id: navSec
-            name: root.objectName !== "" ? root.objectName : "StyledPopupView"
-            type: NavigationSection.Exclusive
-            enabled: root.isOpened
-            order: 1
+        showArrow: root.showArrow
+        arrowX: root.arrowX
+        opensUpward: root.opensUpward
+        isOpened: root.isOpened
 
-            onActiveChanged: {
-                if (navSec.active) {
-                    rootContainer.forceActiveFocus()
-                }
-            }
+        enabled: root.isOpened
 
-            onNavigationEvent: function(event) {
-                if (event.type === NavigationEvent.Escape && root.isCloseByEscape) {
-                    root.close()
-                }
-            }
-        }
-
-        Item {
-            id: contentContainer
-            x: root.padding
-            y: root.padding
-            width: contentBody.width + root.margins * 2
-            height: contentBody.height + root.margins * 2
-
-            implicitWidth: contentBody.implicitWidth + root.margins * 2
-            implicitHeight: contentBody.implicitHeight + root.margins * 2
-
-            scale: root.animationEnabled ? 0.7 : 1.0
-            opacity: root.animationEnabled ? 0.5 : 1.0
-            transformOrigin: Item.Center
-
-            StyledDropShadow {
-                anchors.fill: parent
-                source: contentBackground
-                radius: 6
-            }
-
-            Rectangle {
-                id: contentBackground
-                anchors.fill: parent
-                color: ui.theme.popupBackgroundColor
-                radius: 4
-                border.width: 1
-                border.color: ui.theme.strokeColor
-            }
-
-            Canvas {
-                id: arrow
-
-                height: root.padding
-                width: root.padding * 2
-
-                visible: root.showArrow && arrow.height > 0
-                enabled: root.showArrow
-
-                x: root.arrowX - arrow.width / 2 - root.padding
-                y: root.opensUpward ? parent.y + parent.height - height - contentBackground.border.width
-                                    : -height + contentBackground.border.width
-
-                onPaint: {
-                    var ctx = getContext("2d");
-                    ctx.clearRect(0, 0, width, height)
-
-                    ctx.lineWidth = 2;
-                    ctx.fillStyle = contentBackground.color
-                    ctx.strokeStyle = contentBackground.border.color
-                    ctx.beginPath();
-
-                    if (opensUpward) {
-                        ctx.moveTo(0, 0);
-                        ctx.lineTo(width / 2, height - 1);
-                        ctx.lineTo(width, 0);
-                    } else {
-                        ctx.moveTo(0, height);
-                        ctx.lineTo(width / 2, 1);
-                        ctx.lineTo(width, height);
-                    }
-
-                    ctx.stroke();
-                    ctx.fill();
-                }
-
-                Connections {
-                    target: root
-                    function onOpensUpwardChanged() { arrow.requestPaint() }
-                }
-
-                Connections {
-                    target: contentBackground
-                    function onColorChanged() { arrow.requestPaint() }
-                }
-
-                Connections {
-                    target: contentBackground.border
-                    function onColorChanged() { arrow.requestPaint() }
-                }
-            }
-
-            Item {
-                id: contentBody
-                x: root.margins
-                y: root.margins
-                width: root.contentWidth
-                height: root.contentHeight
-
-                implicitWidth: root.contentWidth
-                implicitHeight: root.contentHeight
-            }
-        }
-
-        states: [
-            State {
-                name: "OPENED"
-                when: root.isOpened
-                PropertyChanges { target: contentContainer; scale: 1.0; opacity: 1.0 }
-            },
-
-            State {
-                name: "CLOSED"
-                when: !root.isOpened
-                PropertyChanges { target: contentContainer; scale: root.animationEnabled ? 0.7 : 1.0; opacity: root.animationEnabled ? 0.5 : 1.0 }
-            }
-        ]
-
-        transitions: Transition {
-            NumberAnimation { properties: "scale, opacity"; easing.type: Easing.OutQuint; duration: root.animationEnabled ? 300 : 0 }
+        onCloseRequested: {
+            root.close()
         }
     }
 }

@@ -41,7 +41,7 @@ public:
     RetVal<SaveLocation> askSaveLocation(INotationProjectPtr project, SaveMode mode,
                                          SaveLocationType preselectedType = SaveLocationType::Undefined) const override;
 
-    RetVal<io::path> askLocalPath(INotationProjectPtr project, SaveMode mode) const override;
+    RetVal<io::path_t> askLocalPath(INotationProjectPtr project, SaveMode mode) const override;
     RetVal<SaveLocation::CloudInfo> askCloudLocation(INotationProjectPtr project,
                                                      CloudProjectVisibility defaultVisibility = CloudProjectVisibility::Private) const
     override;

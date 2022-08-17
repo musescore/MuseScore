@@ -24,233 +24,227 @@
 #define MU_ENGRAVING_FACTORY_H
 
 #include <memory>
-#include <QStringRef>
-#include <QString>
 
 #include "engravingitem.h"
 #include "durationtype.h"
 #include "types.h"
 
-namespace Ms {
-class Instrument;
-}
-
 namespace mu::engraving {
+class Instrument;
 class RootItem;
+
 class Factory
 {
 public:
 
-    static Ms::ElementType name2type(const QStringRef& name, bool silent = false);
-    static Ms::ElementType name2type(const QString& name) { return name2type(QStringRef(&name)); }
-    static const char* name(Ms::ElementType type);
-    static const char* userName(Ms::ElementType type);
+    static EngravingItem* createItem(ElementType type, EngravingItem* parent, bool isAccessibleEnabled = true);
+    static EngravingItem* createItemByName(const AsciiStringView& name, EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static Ms::EngravingItem* createItem(Ms::ElementType type, Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
-    static Ms::EngravingItem* createItemByName(const QStringRef& name, Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Accidental* createAccidental(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Accidental> makeAccidental(EngravingItem* parent);
 
-    static Ms::Accidental* createAccidental(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Ms::Accidental> makeAccidental(Ms::EngravingItem* parent);
+    static Ambitus* createAmbitus(Segment* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Ambitus> makeAmbitus(Segment* parent);
 
-    static Ms::Ambitus* createAmbitus(Ms::Segment* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Ms::Ambitus> makeAmbitus(Ms::Segment* parent);
+    static Arpeggio* createArpeggio(Chord* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Arpeggio> makeArpeggio(Chord* parent);
 
-    static Ms::Arpeggio* createArpeggio(Ms::Chord* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Ms::Arpeggio> makeArpeggio(Ms::Chord* parent);
+    static Articulation* createArticulation(ChordRest* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Articulation> makeArticulation(ChordRest* parent);
 
-    static Ms::Articulation* createArticulation(Ms::ChordRest* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Ms::Articulation> makeArticulation(Ms::ChordRest* parent);
+    static BarLine* createBarLine(Segment* parent, bool isAccessibleEnabled = true);
+    static BarLine* copyBarLine(const BarLine& src);
+    static std::shared_ptr<BarLine> makeBarLine(Segment* parent);
 
-    static Ms::BarLine* createBarLine(Ms::Segment* parent, bool isAccessibleEnabled = true);
-    static Ms::BarLine* copyBarLine(const Ms::BarLine& src);
-    static std::shared_ptr<Ms::BarLine> makeBarLine(Ms::Segment* parent);
+    static Beam* createBeam(System* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Beam> makeBeam(System* parent);
 
-    static Ms::Beam* createBeam(Ms::System* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Ms::Beam> makeBeam(Ms::System* parent);
+    static Bend* createBend(Note* parent, ElementType type = ElementType::BEND, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Bend> makeBend(Note* parent);
 
-    static Ms::Bend* createBend(Ms::Note* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Ms::Bend> makeBend(Ms::Note* parent);
+    static StretchedBend* createStretchedBend(Note* parent, bool isAccessibleEnabled = true);
 
-    static Ms::Bracket* createBracket(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Ms::Bracket> makeBracket(Ms::EngravingItem* parent);
-    static Ms::BracketItem* createBracketItem(Ms::EngravingItem* parent);
-    static Ms::BracketItem* createBracketItem(Ms::EngravingItem* parent, Ms::BracketType a, int b);
+    static Bracket* createBracket(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Bracket> makeBracket(EngravingItem* parent);
+    static BracketItem* createBracketItem(EngravingItem* parent);
+    static BracketItem* createBracketItem(EngravingItem* parent, BracketType a, int b);
 
-    static Ms::Breath* createBreath(Ms::Segment* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Ms::Breath> makeBreath(Ms::Segment* parent);
+    static Breath* createBreath(Segment* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Breath> makeBreath(Segment* parent);
 
-    static Ms::Chord* createChord(Ms::Segment* parent, bool isAccessibleEnabled = true);
-    static Ms::Chord* copyChord(const Ms::Chord& src, bool link = false);
-    static std::shared_ptr<Ms::Chord> makeChord(Ms::Segment* parent);
+    static Chord* createChord(Segment* parent, bool isAccessibleEnabled = true);
+    static Chord* copyChord(const Chord& src, bool link = false);
+    static std::shared_ptr<Chord> makeChord(Segment* parent);
 
-    static Ms::ChordLine* createChordLine(Ms::Chord* parent, bool isAccessibleEnabled = true);
-    static Ms::ChordLine* copyChordLine(const Ms::ChordLine& src);
-    static std::shared_ptr<Ms::ChordLine> makeChordLine(Ms::Chord* parent);
+    static ChordLine* createChordLine(Chord* parent, bool isAccessibleEnabled = true);
+    static ChordLine* copyChordLine(const ChordLine& src);
+    static std::shared_ptr<ChordLine> makeChordLine(Chord* parent);
 
-    static Ms::Slide* createSlide(Ms::Chord* parent, bool isAccessibleEnabled = true);
-    static Ms::Slide* copySlide(const Ms::Slide& src);
-    static std::shared_ptr<Ms::Slide> makeSlide(Ms::Chord* parent);
+    static Clef* createClef(Segment* parent, bool isAccessibleEnabled = true);
+    static Clef* copyClef(const Clef& src);
+    static std::shared_ptr<Clef> makeClef(Segment* parent);
 
-    static Ms::Clef* createClef(Ms::Segment* parent, bool isAccessibleEnabled = true);
-    static Ms::Clef* copyClef(const Ms::Clef& src);
-    static std::shared_ptr<Ms::Clef> makeClef(Ms::Segment* parent);
+    static Fermata* createFermata(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Fermata> makeFermata(EngravingItem* parent);
 
-    static Ms::Fermata* createFermata(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Ms::Fermata> makeFermata(Ms::EngravingItem* parent);
+    static FiguredBass* createFiguredBass(Segment* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<FiguredBass> makeFiguredBass(Segment* parent);
 
-    static Ms::FiguredBass* createFiguredBass(Ms::Segment* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Ms::FiguredBass> makeFiguredBass(Ms::Segment* parent);
+    static FretDiagram* createFretDiagram(Segment* parent, bool isAccessibleEnabled = true);
+    static FretDiagram* copyFretDiagram(const FretDiagram& src);
+    static std::shared_ptr<FretDiagram> makeFretDiagram(Segment* parent);
 
-    static Ms::FretDiagram* createFretDiagram(Ms::Segment* parent, bool isAccessibleEnabled = true);
-    static Ms::FretDiagram* copyFretDiagram(const Ms::FretDiagram& src);
-    static std::shared_ptr<Ms::FretDiagram> makeFretDiagram(Ms::Segment* parent);
+    static KeySig* createKeySig(Segment* parent, bool isAccessibleEnabled = true);
+    static KeySig* copyKeySig(const KeySig& src);
+    static std::shared_ptr<KeySig> makeKeySig(Segment* parent);
 
-    static Ms::KeySig* createKeySig(Ms::Segment* parent, bool isAccessibleEnabled = true);
-    static Ms::KeySig* copyKeySig(const Ms::KeySig& src);
-    static std::shared_ptr<Ms::KeySig> makeKeySig(Ms::Segment* parent);
+    static LayoutBreak* createLayoutBreak(MeasureBase* parent, bool isAccessibleEnabled = true);
+    static LayoutBreak* copyLayoutBreak(const LayoutBreak& src);
+    static std::shared_ptr<LayoutBreak> makeLayoutBreak(MeasureBase* parent);
 
-    static Ms::LayoutBreak* createLayoutBreak(Ms::MeasureBase* parent, bool isAccessibleEnabled = true);
-    static Ms::LayoutBreak* copyLayoutBreak(const Ms::LayoutBreak& src);
-    static std::shared_ptr<Ms::LayoutBreak> makeLayoutBreak(Ms::MeasureBase* parent);
+    static Lyrics* createLyrics(ChordRest* parent, bool isAccessibleEnabled = true);
+    static Lyrics* copyLyrics(const Lyrics& src);
 
-    static Ms::Lyrics* createLyrics(Ms::ChordRest* parent, bool isAccessibleEnabled = true);
-    static Ms::Lyrics* copyLyrics(const Ms::Lyrics& src);
+    static Measure* createMeasure(System* parent, bool isAccessibleEnabled = true);
+    static Measure* copyMeasure(const Measure& src);
 
-    static Ms::Measure* createMeasure(Ms::System* parent, bool isAccessibleEnabled = true);
-    static Ms::Measure* copyMeasure(const Ms::Measure& src);
+    static MeasureRepeat* createMeasureRepeat(Segment* parent, bool isAccessibleEnabled = true);
+    static MeasureRepeat* copyMeasureRepeat(const MeasureRepeat& src);
 
-    static Ms::MeasureRepeat* createMeasureRepeat(Ms::Segment* parent, bool isAccessibleEnabled = true);
-    static Ms::MeasureRepeat* copyMeasureRepeat(const Ms::MeasureRepeat& src);
+    static Note* createNote(Chord* parent, bool isAccessibleEnabled = true);
+    static Note* copyNote(const Note& src, bool link = false);
+    static std::shared_ptr<Note> makeNote(Chord* parent);
 
-    static Ms::Note* createNote(Ms::Chord* parent, bool isAccessibleEnabled = true);
-    static Ms::Note* copyNote(const Ms::Note& src, bool link = false);
-    static std::shared_ptr<Ms::Note> makeNote(Ms::Chord* parent);
+    static NoteDot* createNoteDot(Note* parent, bool isAccessibleEnabled = true);
+    static NoteDot* createNoteDot(Rest* parent, bool isAccessibleEnabled = true);
+    static NoteDot* copyNoteDot(const NoteDot& src);
 
-    static Ms::NoteDot* createNoteDot(Ms::Note* parent, bool isAccessibleEnabled = true);
-    static Ms::NoteDot* createNoteDot(Ms::Rest* parent, bool isAccessibleEnabled = true);
-    static Ms::NoteDot* copyNoteDot(const Ms::NoteDot& src);
+    static Page* createPage(RootItem* parent, bool isAccessibleEnabled = true);
 
-    static Ms::Page* createPage(RootItem* parent, bool isAccessibleEnabled = true);
+    static Rest* createRest(Segment* parent, bool isAccessibleEnabled = true);
+    static Rest* createRest(Segment* parent, const TDuration& t, bool isAccessibleEnabled = true);
+    static Rest* copyRest(const Rest& src, bool link = false);
+    static MMRest* createMMRest(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static Ms::Rest* createRest(Ms::Segment* parent, bool isAccessibleEnabled = true);
-    static Ms::Rest* createRest(Ms::Segment* parent, const Ms::TDuration& t, bool isAccessibleEnabled = true);
-    static Ms::Rest* copyRest(const Ms::Rest& src, bool link = false);
-    static Ms::MMRest* createMMRest(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Segment* createSegment(Measure* parent, bool isAccessibleEnabled = true);
+    static Segment* createSegment(Measure* parent, SegmentType type, const Fraction& t, bool isAccessibleEnabled = true);
 
-    static Ms::Segment* createSegment(Ms::Measure* parent, bool isAccessibleEnabled = true);
-    static Ms::Segment* createSegment(Ms::Measure* parent, Ms::SegmentType type, const Ms::Fraction& t, bool isAccessibleEnabled = true);
+    static Slur* createSlur(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Slur> makeSlur(EngravingItem* parent);
 
-    static Ms::Slur* createSlur(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Ms::Slur> makeSlur(Ms::EngravingItem* parent);
+    static Spacer* createSpacer(Measure* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Spacer> makeSpacer(Measure* parent);
 
-    static Ms::Spacer* createSpacer(Ms::Measure* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Ms::Spacer> makeSpacer(Ms::Measure* parent);
+    static Staff* createStaff(Part* parent);
 
-    static Ms::Staff* createStaff(Ms::Part* parent);
+    static StaffLines* createStaffLines(Measure* parent, bool isAccessibleEnabled = true);
+    static StaffLines* copyStaffLines(const StaffLines& src);
 
-    static Ms::StaffLines* createStaffLines(Ms::Measure* parent, bool isAccessibleEnabled = true);
-    static Ms::StaffLines* copyStaffLines(const Ms::StaffLines& src);
+    static StaffState* createStaffState(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static Ms::StaffState* createStaffState(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static StaffTypeChange* createStaffTypeChange(MeasureBase* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<StaffTypeChange> makeStaffTypeChange(MeasureBase* parent);
 
-    static Ms::StaffTypeChange* createStaffTypeChange(Ms::MeasureBase* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Ms::StaffTypeChange> makeStaffTypeChange(Ms::MeasureBase* parent);
+    static StaffText* createStaffText(Segment* parent, TextStyleType textStyleType = TextStyleType::STAFF, bool isAccessibleEnabled = true);
 
-    static Ms::StaffText* createStaffText(Ms::Segment* parent, Ms::TextStyleType textStyleType = TextStyleType::STAFF,
-                                          bool isAccessibleEnabled = true);
+    static RehearsalMark* createRehearsalMark(Segment* parent, bool isAccessibleEnabled = true);
 
-    static Ms::RehearsalMark* createRehearsalMark(Ms::Segment* parent, bool isAccessibleEnabled = true);
+    static Stem* createStem(Chord* parent, bool isAccessibleEnabled = true);
+    static Stem* copyStem(const Stem& src);
 
-    static Ms::Stem* createStem(Ms::Chord* parent, bool isAccessibleEnabled = true);
-    static Ms::Stem* copyStem(const Ms::Stem& src);
+    static StemSlash* createStemSlash(Chord* parent, bool isAccessibleEnabled = true);
+    static StemSlash* copyStemSlash(const StemSlash& src);
 
-    static Ms::StemSlash* createStemSlash(Ms::Chord* parent, bool isAccessibleEnabled = true);
-    static Ms::StemSlash* copyStemSlash(const Ms::StemSlash& src);
+    static System* createSystem(Page* parent, bool isAccessibleEnabled = true);
+    static SystemText* createSystemText(Segment* parent, TextStyleType textStyleType = TextStyleType::SYSTEM,
+                                        ElementType type = ElementType::SYSTEM_TEXT, bool isAccessibleEnabled = true);
 
-    static Ms::System* createSystem(Ms::Page* parent, bool isAccessibleEnabled = true);
-    static Ms::SystemText* createSystemText(Ms::Segment* parent, Ms::TextStyleType textStyleType = Ms::TextStyleType::SYSTEM,
-                                            bool isAccessibleEnabled = true);
+    static InstrumentChange* createInstrumentChange(Segment* parent, bool isAccessibleEnabled = true);
+    static InstrumentChange* createInstrumentChange(Segment* parent, const Instrument& instrument, bool isAccessibleEnabled = true);
 
-    static Ms::InstrumentChange* createInstrumentChange(Ms::Segment* parent, bool isAccessibleEnabled = true);
-    static Ms::InstrumentChange* createInstrumentChange(Ms::Segment* parent, const Ms::Instrument& instrument,
-                                                        bool isAccessibleEnabled = true);
+    static Sticking* createSticking(Segment* parent, bool isAccessibleEnabled = true);
 
-    static Ms::Sticking* createSticking(Ms::Segment* parent, bool isAccessibleEnabled = true);
+    static Fingering* createFingering(Note* parent, bool isAccessibleEnabled = true);
+    static Fingering* createFingering(Note* parent, TextStyleType textStyleType, bool isAccessibleEnabled = true);
 
-    static Ms::Fingering* createFingering(Ms::Note* parent, bool isAccessibleEnabled = true);
-    static Ms::Fingering* createFingering(Ms::Note* parent, Ms::TextStyleType textStyleType, bool isAccessibleEnabled = true);
+    static Harmony* createHarmony(Segment* parent, bool isAccessibleEnabled = true);
 
-    static Ms::Harmony* createHarmony(Ms::Segment* parent, bool isAccessibleEnabled = true);
+    static TempoText* createTempoText(Segment* parent, bool isAccessibleEnabled = true);
 
-    static Ms::TempoText* createTempoText(Ms::Segment* parent, bool isAccessibleEnabled = true);
+    static Text* createText(EngravingItem* parent, TextStyleType tid = TextStyleType::DEFAULT, bool isAccessibleEnabled = true);
+    static Text* copyText(const Text& src);
 
-    static Ms::Text* createText(Ms::EngravingItem* parent, Ms::TextStyleType tid = Ms::TextStyleType::DEFAULT,
-                                bool isAccessibleEnabled = true);
-    static Ms::Text* copyText(const Ms::Text& src);
+    static Tie* createTie(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Tie* copyTie(const Tie& src);
 
-    static Ms::Tie* createTie(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
-    static Ms::Tie* copyTie(const Ms::Tie& src);
+    static TimeSig* createTimeSig(Segment* parent, bool isAccessibleEnabled = true);
+    static TimeSig* copyTimeSig(const TimeSig& src);
+    static std::shared_ptr<TimeSig> makeTimeSig(Segment* parent);
 
-    static Ms::TimeSig* createTimeSig(Ms::Segment* parent, bool isAccessibleEnabled = true);
-    static Ms::TimeSig* copyTimeSig(const Ms::TimeSig& src);
-    static std::shared_ptr<Ms::TimeSig> makeTimeSig(Ms::Segment* parent);
+    static Tremolo* createTremolo(Chord* parent, bool isAccessibleEnabled = true);
+    static Tremolo* copyTremolo(const Tremolo& src);
+    static std::shared_ptr<Tremolo> makeTremolo(Chord* parent);
 
-    static Ms::Tremolo* createTremolo(Ms::Chord* parent, bool isAccessibleEnabled = true);
-    static Ms::Tremolo* copyTremolo(const Ms::Tremolo& src);
-    static std::shared_ptr<Ms::Tremolo> makeTremolo(Ms::Chord* parent);
+    static TremoloBar* createTremoloBar(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<TremoloBar> makeTremoloBar(EngravingItem* parent);
 
-    static Ms::TremoloBar* createTremoloBar(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Ms::TremoloBar> makeTremoloBar(Ms::EngravingItem* parent);
+    static TripletFeel* createTripletFeel(Segment* parent, TripletFeelType type = TripletFeelType::NONE, bool isAccessibleEnabled = true);
 
-    static Ms::Tuplet* createTuplet(Ms::Measure* parent, bool isAccessibleEnabled = true);
-    static Ms::Tuplet* copyTuplet(const Ms::Tuplet& src);
+    static Tuplet* createTuplet(Measure* parent, bool isAccessibleEnabled = true);
+    static Tuplet* copyTuplet(const Tuplet& src);
 
-    static Ms::Hairpin* createHairpin(Ms::Segment* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Ms::Hairpin> makeHairpin(Ms::Segment* parent);
+    static Hairpin* createHairpin(Segment* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Hairpin> makeHairpin(Segment* parent);
 
-    static Ms::Glissando* createGlissando(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Ms::Glissando> makeGlissando(Ms::EngravingItem* parent);
+    static Glissando* createGlissando(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Glissando> makeGlissando(EngravingItem* parent);
 
-    static Ms::Jump* createJump(Ms::Measure* parent, bool isAccessibleEnabled = true);
+    static Jump* createJump(Measure* parent, bool isAccessibleEnabled = true);
 
-    static Ms::Trill* createTrill(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Trill* createTrill(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static Ms::Vibrato* createVibrato(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Vibrato* createVibrato(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static Ms::TextLine* createTextLine(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static TextLine* createTextLine(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static Ms::Ottava* createOttava(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Ottava* createOttava(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static Ms::LetRing* createLetRing(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static LetRing* createLetRing(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static Ms::Marker* createMarker(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Marker* createMarker(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static Ms::Marker* createMarker(Ms::EngravingItem* parent, TextStyleType tid, bool isAccessibleEnabled = true);
+    static Marker* createMarker(EngravingItem* parent, TextStyleType tid, bool isAccessibleEnabled = true);
 
-    static Ms::TempoChangeRanged* createTempoChangeRanged(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static GradualTempoChange* createGradualTempoChange(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static Ms::PalmMute* createPalmMute(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static PalmMute* createPalmMute(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static Ms::Volta* createVolta(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static WhammyBar* createWhammyBar(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static Ms::Pedal* createPedal(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Rasgueado* createRasgueado(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static Ms::Dynamic* createDynamic(Ms::Segment* parent, bool isAccessibleEnabled = true);
+    static HarmonicMark* createHarmonicMark(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static Ms::Harmony* createHarmony(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Volta* createVolta(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static Ms::VBox* createVBox(Ms::System* parent, bool isAccessibleEnabled = true);
+    static Pedal* createPedal(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static Ms::VBox* createVBox(const Ms::ElementType& type, Ms::System* parent, bool isAccessibleEnabled = true);
+    static Dynamic* createDynamic(Segment* parent, bool isAccessibleEnabled = true);
 
-    static Ms::HBox* createHBox(Ms::System* parent, bool isAccessibleEnabled = true);
+    static Harmony* createHarmony(EngravingItem* parent, bool isAccessibleEnabled = true);
 
-    static Ms::TBox* createTBox(Ms::System* parent, bool isAccessibleEnabled = true);
+    static VBox* createVBox(System* parent, bool isAccessibleEnabled = true);
 
-    static Ms::FBox* createFBox(Ms::System* parent, bool isAccessibleEnabled = true);
+    static VBox* createVBox(const ElementType& type, System* parent, bool isAccessibleEnabled = true);
+
+    static HBox* createHBox(System* parent, bool isAccessibleEnabled = true);
+
+    static TBox* createTBox(System* parent, bool isAccessibleEnabled = true);
+
+    static FBox* createFBox(System* parent, bool isAccessibleEnabled = true);
 
 private:
-    static Ms::EngravingItem* doCreateItem(Ms::ElementType type, Ms::EngravingItem* parent);
+    static EngravingItem* doCreateItem(ElementType type, EngravingItem* parent);
 };
 }
 

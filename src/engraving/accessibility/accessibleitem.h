@@ -22,6 +22,8 @@
 #ifndef MU_ENGRAVING_ACCESSIBLEITEM_H
 #define MU_ENGRAVING_ACCESSIBLEITEM_H
 
+#include "global/allocator.h"
+
 #include "accessibility/iaccessible.h"
 #include "modularity/ioc.h"
 #include "accessibility/iaccessibilitycontroller.h"
@@ -33,20 +35,22 @@
 
 namespace mu::engraving {
 class AccessibleRoot;
-class AccessibleItem : public accessibility::IAccessible
+class AccessibleItem : public accessibility::IAccessible, public std::enable_shared_from_this<AccessibleItem>
 {
+    OBJECT_ALLOCATOR(engraving, AccessibleItem)
+
     INJECT_STATIC(engraving, accessibility::IAccessibilityController, accessibilityController)
 
 public:
-    AccessibleItem(Ms::EngravingItem* e, Role role = Role::ElementOnScore);
+    AccessibleItem(EngravingItem* e, Role role = Role::ElementOnScore);
     virtual ~AccessibleItem();
-    virtual AccessibleItem* clone(Ms::EngravingItem* e) const;
+    virtual AccessibleItem* clone(EngravingItem* e) const;
 
     virtual void setup();
 
     AccessibleRoot* accessibleRoot() const;
 
-    const Ms::EngravingItem* element() const;
+    const EngravingItem* element() const;
 
     bool registered() const;
 
@@ -80,16 +84,18 @@ public:
 
     async::Channel<Property, Val> accessiblePropertyChanged() const override;
     async::Channel<State, bool> accessibleStateChanged() const override;
+
+    void setState(State state, bool arg) override;
     // ---
 
     static bool enabled;
 
 private:
-    Ms::TextCursor* textCursor() const;
+    TextCursor* textCursor() const;
 
 protected:
 
-    Ms::EngravingItem* m_element = nullptr;
+    EngravingItem* m_element = nullptr;
     bool m_registred = false;
 
     Role m_role = Role::ElementOnScore;
@@ -97,6 +103,8 @@ protected:
     mu::async::Channel<IAccessible::Property, Val> m_accessiblePropertyChanged;
     mu::async::Channel<IAccessible::State, bool> m_accessibleStateChanged;
 };
+using AccessibleItemPtr = std::shared_ptr<AccessibleItem>;
+using AccessibleItemWeakPtr = std::weak_ptr<AccessibleItem>;
 }
 
 #endif // MU_ENGRAVING_ACCESSIBLEITEM_H

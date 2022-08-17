@@ -27,7 +27,7 @@
 
 #include "engraving/types/types.h"
 
-namespace Ms::PluginAPI {
+namespace mu::engraving::PluginAPI {
 Q_NAMESPACE
 
 #include "engraving/types/symid_p.h"
@@ -172,6 +172,16 @@ enum class Tid {
 };
 Q_ENUM_NS(Tid);
 
+enum class Syllabic {
+    SINGLE, BEGIN, END, MIDDLE
+};
+Q_ENUM_NS(Syllabic);
+
+enum class Anchor {
+    SEGMENT, MEASURE, CHORD, NOTE
+};
+Q_ENUM_NS(Anchor);
+
 //! HACK to force the build system to run moc on this file
 class Mops : public QObject
 {
@@ -179,17 +189,20 @@ class Mops : public QObject
 };
 }
 
-Q_DECLARE_METATYPE(Ms::PluginAPI::OrnamentStyle);
-Q_DECLARE_METATYPE(Ms::PluginAPI::Align);
-Q_DECLARE_METATYPE(Ms::PluginAPI::Placement);
-Q_DECLARE_METATYPE(Ms::PluginAPI::Direction);
-Q_DECLARE_METATYPE(Ms::PluginAPI::DirectionH);
-Q_DECLARE_METATYPE(Ms::PluginAPI::LayoutBreakType);
-Q_DECLARE_METATYPE(Ms::PluginAPI::VeloType);
-Q_DECLARE_METATYPE(Ms::PluginAPI::BeamMode);
-Q_DECLARE_METATYPE(Ms::PluginAPI::GlissandoStyle);
-Q_DECLARE_METATYPE(Ms::PluginAPI::NoteHeadType);
-Q_DECLARE_METATYPE(Ms::PluginAPI::NoteHeadScheme);
-Q_DECLARE_METATYPE(Ms::PluginAPI::NoteHeadGroup);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::OrnamentStyle);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Align);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Placement);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Direction);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::DirectionH);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::LayoutBreakType);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::VeloType);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::BeamMode);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::GlissandoStyle);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::NoteHeadType);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::NoteHeadScheme);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::NoteHeadGroup);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Tid);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Syllabic);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Anchor);
 
 #endif // MU_PLUGINS_APITYPES_H

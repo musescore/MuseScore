@@ -29,6 +29,7 @@ install(FILES
       TC6_UsingInspector_Note.js
       TC7_UsingExport.js
       TC8_EngravingText.js
+      "TC9_BigScore(perfomance).js"
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}autobotscripts
       )
 
@@ -44,3 +45,8 @@ install(FILES
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}autobotscripts/steps
       )
 
+# Date
+install(FILES
+      data/Big_Score.mscz
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}autobotscripts/data
+      )

@@ -24,15 +24,15 @@
 
 #include "engraving/types/fraction.h"
 
-namespace Ms {
+namespace mu::iex::midi {
 class ReducedFraction
 {
 public:
     ReducedFraction();
     ReducedFraction(int z, int n);
-    explicit ReducedFraction(const Fraction&);
+    explicit ReducedFraction(const engraving::Fraction&);
 
-    Fraction fraction() const { return Fraction(numerator_, denominator_); }
+    engraving::Fraction fraction() const { return engraving::Fraction(numerator_, denominator_); }
     int numerator() const { return numerator_; }
     int denominator() const { return denominator_; }
 
@@ -74,6 +74,6 @@ private:
 };
 
 ReducedFraction toMuseScoreTicks(int tick, int oldDivision, bool isDivisionInTps);
-} // namespace Ms
+} // namespace mu::iex::midi
 
 #endif // IMPORTMIDI_FRACTION_H

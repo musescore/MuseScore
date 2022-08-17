@@ -23,9 +23,9 @@
 #ifndef __LETRING_H__
 #define __LETRING_H__
 
-#include "textlinebase.h"
+#include "chordtextlinebase.h"
 
-namespace Ms {
+namespace mu::engraving {
 class LetRing;
 
 //---------------------------------------------------------
@@ -34,6 +34,7 @@ class LetRing;
 
 class LetRingSegment final : public TextLineBaseSegment
 {
+    OBJECT_ALLOCATOR(engraving, LetRingSegment)
 public:
     LetRingSegment(LetRing* sp, System* parent);
 
@@ -50,11 +51,9 @@ public:
 //   @@ LetRing
 //---------------------------------------------------------
 
-class LetRing final : public TextLineBase
+class LetRing final : public ChordTextLineBase
 {
-protected:
-    mu::PointF linePos(Grip, System**) const override;
-
+    OBJECT_ALLOCATOR(engraving, LetRing)
 public:
     LetRing(EngravingItem* parent);
 
@@ -64,8 +63,8 @@ public:
 //      virtual void write(XmlWriter& xml) const override;
     LineSegment* createLineSegment(System* parent) override;
 
-    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid) const override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

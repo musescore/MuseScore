@@ -24,9 +24,11 @@
 #include "segment.h"
 #include "score.h"
 
+#include "log.h"
+
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   clone
 //---------------------------------------------------------
@@ -79,31 +81,31 @@ void SegmentList::check()
         case SegmentType::KeySigAnnounce:
             break;
         default:
-            qFatal("SegmentList::check: invalid segment type 0x%x", int(s->segmentType()));
+            ASSERT_X(String(u"SegmentList::check: invalid segment type: %1").arg(int(s->segmentType())));
             break;
         }
         Segment* ss = s->next();
         while (ss) {
             if (s == ss) {
-                qFatal("SegmentList::check: segment twice in list");
+                ASSERT_X("SegmentList::check: segment twice in list");
             }
             ss = ss->next();
         }
     }
     if (f != _first) {
-        qFatal("SegmentList::check: bad first");
+        ASSERT_X("SegmentList::check: bad first");
     }
     if (l != _last) {
-        qFatal("SegmentList::check: bad last");
+        ASSERT_X("SegmentList::check: bad last");
     }
     if (f && f->prev()) {
-        qFatal("SegmentList::check: first has prev");
+        ASSERT_X("SegmentList::check: first has prev");
     }
     if (l && l->next()) {
-        qFatal("SegmentList::check: last has next");
+        ASSERT_X("SegmentList::check: last has next");
     }
     if (n != _size) {
-        qFatal("SegmentList::check: counted %d but _size is %d", n, _size);
+        ASSERT_X(String(u"SegmentList::check: counted %1 but _size is %d2").arg(n, _size));
         _size = n;
     }
 }
@@ -147,7 +149,7 @@ void SegmentList::remove(Segment* e)
         }
     }
     if (!found) {
-        qFatal("segment %p %s not in list", e, e->subTypeName());
+        ASSERT_X(String(u"segment %1 not in list").arg(String::fromAscii(e->subTypeName())));
     }
 #endif
     --_size;

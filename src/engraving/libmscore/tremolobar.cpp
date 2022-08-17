@@ -21,7 +21,7 @@
  */
 
 #include "tremolobar.h"
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
 
@@ -34,7 +34,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   tremoloBarStyle
 //---------------------------------------------------------
@@ -79,7 +79,7 @@ TremoloBar::TremoloBar(EngravingItem* parent)
 
 void TremoloBar::layout()
 {
-    qreal _spatium = spatium();
+    double _spatium = spatium();
     if (explicitParent()) {
         setPos(0.0, -_spatium * 3.0);
     } else {
@@ -94,15 +94,15 @@ void TremoloBar::layout()
      *  consistently to values that make sense to draw with the
      *  Musescore scale. */
 
-    qreal timeFactor  = m_userMag / 1.0;
-    qreal pitchFactor = -_spatium * .02;
+    double timeFactor  = m_userMag / 1.0;
+    double pitchFactor = -_spatium * .02;
 
     m_polygon.clear();
-    for (auto v : qAsConst(m_points)) {
+    for (auto v : m_points) {
         m_polygon << PointF(v.time * timeFactor, v.pitch * pitchFactor);
     }
 
-    qreal w = m_lw.val();
+    double w = m_lw.val();
     setbbox(m_polygon.boundingRect().adjusted(-w, -w, w, w));
 }
 
@@ -125,14 +125,14 @@ void TremoloBar::draw(mu::draw::Painter* painter) const
 
 void TremoloBar::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     writeProperty(xml, Pid::MAG);
     writeProperty(xml, Pid::LINE_WIDTH);
     writeProperty(xml, Pid::PLAY);
     for (const PitchValue& v : m_points) {
-        xml.tagE(TConv::toXml(v));
+        xml.tag("point", { { "time", v.time }, { "pitch", v.pitch }, { "vibrato", v.vibrato } });
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -192,7 +192,7 @@ bool TremoloBar::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        setLineWidth(Spatium(v.value<qreal>()));
+        setLineWidth(Spatium(v.value<double>()));
         break;
     case Pid::MAG:
         setUserMag(v.toDouble());
@@ -256,9 +256,9 @@ TremoloBarType TremoloBar::parseTremoloBarTypeFromCurve(const PitchValues& curve
         return TremoloBarType::RETURN;
     } else if (curve == RELEASE_DOWN_CURVE) {
         return TremoloBarType::RELEASE_DOWN;
-    } else {
-        return TremoloBarType::CUSTOM;
     }
+
+    return TremoloBarType::CUSTOM;
 }
 
 void TremoloBar::updatePointsByTremoloBarType(const TremoloBarType type)
@@ -268,21 +268,21 @@ void TremoloBar::updatePointsByTremoloBarType(const TremoloBarType type)
         m_points = DIP_CURVE;
         break;
     case TremoloBarType::DIVE:
-        m_points = RELEASE_UP_CURVE;
+        m_points = DIVE_CURVE;
         break;
     case TremoloBarType::RELEASE_UP:
-        m_points = INVERTED_DIP_CURVE;
+        m_points = RELEASE_UP_CURVE;
         break;
     case TremoloBarType::INVERTED_DIP:
-        m_points = RETURN_CURVE;
+        m_points = INVERTED_DIP_CURVE;
         break;
     case TremoloBarType::RETURN:
-        m_points = RELEASE_DOWN_CURVE;
+        m_points = RETURN_CURVE;
         break;
     case TremoloBarType::RELEASE_DOWN:
         m_points = RELEASE_DOWN_CURVE;
         break;
-    default:
+    case TremoloBarType::CUSTOM:
         break;
     }
 }

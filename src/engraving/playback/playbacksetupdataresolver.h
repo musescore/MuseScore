@@ -25,16 +25,15 @@
 
 #include "mpe/events.h"
 
-namespace Ms {
-class Instrument;
-}
-
 namespace mu::engraving {
+class Instrument;
+
 class PlaybackSetupDataResolver
 {
 public:
-    void resolveSetupData(const Ms::Instrument* instrument, mpe::PlaybackSetupData& result) const;
+    void resolveSetupData(const Instrument* instrument, mpe::PlaybackSetupData& result) const;
     void resolveMetronomeSetupData(mpe::PlaybackSetupData& result) const;
+    void resolveChordSymbolsSetupData(mpe::PlaybackSetupData& result) const;
 };
 }
 

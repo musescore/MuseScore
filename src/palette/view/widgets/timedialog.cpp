@@ -38,7 +38,7 @@
 #include "translation.h"
 
 using namespace mu::palette;
-using namespace Ms;
+using namespace mu::engraving;
 
 TimeDialog::TimeDialog(QWidget* parent)
     : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))

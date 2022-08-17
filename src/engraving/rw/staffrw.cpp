@@ -22,6 +22,7 @@
 #include "staffrw.h"
 
 #include "rw/xml.h"
+#include "rw/writecontext.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/score.h"
@@ -30,29 +31,31 @@
 
 #include "measurerw.h"
 
-using namespace mu::engraving::rw;
-using namespace Ms;
+#include "log.h"
 
-void StaffRW::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
+using namespace mu::engraving::rw;
+using namespace mu::engraving;
+
+void StaffRW::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
 {
     int staff = e.intAttribute("id", 1) - 1;
     int measureIdx = 0;
-    e.setCurrentMeasureIndex(0);
-    e.setTick(Fraction(0, 1));
-    e.setTrack(staff * VOICES);
+    ctx.setCurrentMeasureIndex(0);
+    ctx.setTick(Fraction(0, 1));
+    ctx.setTrack(staff * VOICES);
 
     if (staff == 0) {
         while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
+            const AsciiStringView tag(e.name());
 
             if (tag == "Measure") {
                 Measure* measure = Factory::createMeasure(ctx.dummy()->system());
-                measure->setTick(e.tick());
-                e.setCurrentMeasureIndex(measureIdx++);
+                measure->setTick(ctx.tick());
+                ctx.setCurrentMeasureIndex(measureIdx++);
                 //
                 // inherit timesig from previous measure
                 //
-                Measure* m = e.lastMeasure();             // measure->prevMeasure();
+                Measure* m = ctx.lastMeasure();             // measure->prevMeasure();
                 Fraction f(m ? m->timesig() : Fraction(4, 4));
                 measure->setTicks(f);
                 measure->setTimesig(f);
@@ -61,12 +64,12 @@ void StaffRW::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
                 measure->checkMeasure(staff);
                 if (!measure->isMMRest()) {
                     score->measures()->add(measure);
-                    e.setLastMeasure(measure);
-                    e.setTick(measure->tick() + measure->ticks());
+                    ctx.setLastMeasure(measure);
+                    ctx.setTick(measure->tick() + measure->ticks());
                 } else {
                     // this is a multi measure rest
                     // always preceded by the first measure it replaces
-                    Measure* m1 = e.lastMeasure();
+                    Measure* m1 = ctx.lastMeasure();
 
                     if (m1) {
                         m1->setMMRest(measure);
@@ -76,10 +79,10 @@ void StaffRW::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
             } else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
                 MeasureBase* mb = toMeasureBase(Factory::createItemByName(tag, ctx.dummy()));
                 mb->read(e);
-                mb->setTick(e.tick());
+                mb->setTick(ctx.tick());
                 score->measures()->add(mb);
             } else if (tag == "tick") {
-                e.setTick(Fraction::fromTicks(ctx.fileDivision(e.readInt())));
+                ctx.setTick(Fraction::fromTicks(ctx.fileDivision(e.readInt())));
             } else {
                 e.unknown();
             }
@@ -87,23 +90,23 @@ void StaffRW::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
     } else {
         Measure* measure = score->firstMeasure();
         while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
+            const AsciiStringView tag(e.name());
 
             if (tag == "Measure") {
                 if (measure == 0) {
-                    qDebug("Score::readStaff(): missing measure!");
+                    LOGD("Score::readStaff(): missing measure!");
                     measure = Factory::createMeasure(ctx.dummy()->system());
-                    measure->setTick(e.tick());
+                    measure->setTick(ctx.tick());
                     score->measures()->add(measure);
                 }
-                e.setTick(measure->tick());
-                e.setCurrentMeasureIndex(measureIdx++);
+                ctx.setTick(measure->tick());
+                ctx.setCurrentMeasureIndex(measureIdx++);
                 MeasureRW::readMeasure(measure, e, ctx, staff);
                 measure->checkMeasure(staff);
                 if (measure->isMMRest()) {
-                    measure = e.lastMeasure()->nextMeasure();
+                    measure = ctx.lastMeasure()->nextMeasure();
                 } else {
-                    e.setLastMeasure(measure);
+                    ctx.setLastMeasure(measure);
                     if (measure->mmRest()) {
                         measure = measure->mmRest();
                     } else {
@@ -111,7 +114,7 @@ void StaffRW::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
                     }
                 }
             } else if (tag == "tick") {
-                e.setTick(Fraction::fromTicks(ctx.fileDivision(e.readInt())));
+                ctx.setTick(Fraction::fromTicks(ctx.fileDivision(e.readInt())));
             } else {
                 e.unknown();
             }
@@ -132,19 +135,19 @@ static void writeMeasure(XmlWriter& xml, MeasureBase* m, staff_idx_t staffIdx, b
         toMeasure(m)->mmRest()->write(xml, staffIdx, writeSystemElements, forceTimeSig);
     }
 
-    xml.setCurTick(m->endTick());
+    xml.context()->setCurTick(m->endTick());
 }
 
-void StaffRW::writeStaff(const Ms::Staff* staff, Ms::XmlWriter& xml,
-                         Ms::MeasureBase* measureStart, Ms::MeasureBase* measureEnd,
+void StaffRW::writeStaff(const Staff* staff, XmlWriter& xml,
+                         MeasureBase* measureStart, MeasureBase* measureEnd,
                          staff_idx_t staffStart, staff_idx_t staffIdx,
                          bool selectionOnly)
 {
-    xml.startObject(staff, QString("id=\"%1\"").arg(static_cast<int>(staffIdx + 1 - staffStart)));
+    xml.startElement(staff, { { "id", static_cast<int>(staffIdx + 1 - staffStart) } });
 
-    xml.setCurTick(measureStart->tick());
-    xml.setTickDiff(xml.curTick());
-    xml.setCurTrack(staffIdx * VOICES);
+    xml.context()->setCurTick(measureStart->tick());
+    xml.context()->setTickDiff(xml.context()->curTick());
+    xml.context()->setCurTrack(staffIdx * VOICES);
     bool writeSystemElements = (staffIdx == staffStart);
     bool firstMeasureWritten = false;
     bool forceTimeSig = false;
@@ -161,5 +164,5 @@ void StaffRW::writeStaff(const Ms::Staff* staff, Ms::XmlWriter& xml,
         writeMeasure(xml, m, staffIdx, writeSystemElements, forceTimeSig);
     }
 
-    xml.endObject();
+    xml.endElement();
 }

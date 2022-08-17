@@ -21,107 +21,60 @@
  */
 #include "dataformatter.h"
 
-#include <QString>
-#include <QDateTime>
-#include <QRegularExpression>
-
 #include "translation.h"
 
 using namespace mu;
 
 double DataFormatter::roundDouble(const double& val, const int decimals)
 {
-    return QString::number(val, 'f', decimals).toDouble();
+    return String::number(val, decimals).toDouble();
 }
 
-QString DataFormatter::formatReal(double val, int prec)
+String DataFormatter::formatReal(double val, int prec)
 {
-    return QString::number(val, 'f', prec);
+    return String::number(val, prec);
 }
 
-QString DataFormatter::formatTimeSince(const QDate& dateTime)
+String DataFormatter::formatTimeSince(const Date& date)
 {
-    QDateTime currentDateTime = QDateTime::currentDateTime();
-    int days = dateTime.daysTo(currentDateTime.date());
+    Date currentDate = DateTime::currentDateTime().date();
+    int days = date.daysTo(currentDate);
 
     if (days == 0) {
-        return qtrc("global", "Today");
+        return mtrc("global", "Today");
     }
 
     if (days == 1) {
-        return qtrc("global", "Yesterday");
+        return mtrc("global", "Yesterday");
     }
 
     if (days < 7) {
-        return qtrc("global", "%1 days ago").arg(days);
+        return mtrc("global", "%n day(s) ago", nullptr, days);
     }
 
     int weeks = days / 7;
 
     if (weeks == 1) {
-        return qtrc("global", "Last week");
+        return mtrc("global", "Last week");
     }
 
-    if (weeks == 2) {
-        return qtrc("global", "Two weeks ago");
+    if (weeks <= 4) {
+        return mtrc("global", "%n week(s) ago", nullptr, weeks);
     }
 
-    if (weeks == 3) {
-        return qtrc("global", "Three weeks ago");
-    }
+    constexpr int monthsInYear = 12;
 
-    if (weeks == 4) {
-        return qtrc("global", "Four weeks ago");
-    }
-
-    QDate currentDate = currentDateTime.date();
-    constexpr int monthInYear = 12;
-    int months = (currentDate.year() - dateTime.year()) * monthInYear + (currentDate.month() - dateTime.month());
+    int months = (currentDate.year() - date.year()) * monthsInYear + (currentDate.month() - date.month());
 
     if (months == 1) {
-        return qtrc("global", "Last month");
+        return mtrc("global", "Last month");
     }
 
-    if (months < monthInYear) {
-        return qtrc("global", "%1 months ago").arg(months);
+    if (months < monthsInYear) {
+        return mtrc("global", "%n month(s) ago", nullptr, months);
     }
 
-    int years = currentDate.year() - dateTime.year();
-    if (years == 1) {
-        return qtrc("global", "1 year ago");
-    }
+    int years = currentDate.year() - date.year();
 
-    return qtrc("global", "%1 years ago").arg(years);
-}
-
-QDateTime DataFormatter::dateTimeFromIsoFormat(const QString& dateTimeIso)
-{
-    // NOTE Available ISO8601 duration format: P#Y#M#DT#H#M#S
-
-    QRegularExpression regexp(QString("("
-                                      "P"
-                                      "((?<year>[0-9]+)Y)?"
-                                      "((?<month>[0-9]+)M)?"
-                                      "((?<day>[0-9]+)D)?"
-                                      "T"
-                                      "((?<hour>[0-9]+)H)?"
-                                      "((?<minute>[0-9]+)M)?"
-                                      "((?<second>[0-9]+)S)?"
-                                      ")"));
-
-    QRegularExpressionMatch match = regexp.match(dateTimeIso);
-
-    if (!match.hasMatch()) {
-        return QDateTime();
-    }
-
-    int year = match.captured("year").toInt();
-    int month = match.captured("month").toInt();
-    int day = match.captured("day").toInt();
-    int hour = match.captured("hour").toInt();
-    int minute = match.captured("minute").toInt();
-    int second = match.captured("second").toInt();
-
-    QDateTime dateTime(QDate(year, month, day), QTime(hour, minute, second));
-    return dateTime;
+    return mtrc("global", "%n year(s) ago", nullptr, years);
 }

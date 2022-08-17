@@ -26,7 +26,9 @@
 #include "libmscore/property.h"
 #include "libmscore/undo.h"
 
-namespace Ms {
+#include "log.h"
+
+namespace mu::engraving {
 namespace PluginAPI {
 //---------------------------------------------------------
 //   EngravingItem::setOffsetX
@@ -35,7 +37,7 @@ namespace PluginAPI {
 void EngravingItem::setOffsetX(qreal offX)
 {
     const qreal offY = element()->offset().y() / element()->spatium();
-    set(Ms::Pid::OFFSET, QPointF(offX, offY));
+    set(mu::engraving::Pid::OFFSET, QPointF(offX, offY));
 }
 
 //---------------------------------------------------------
@@ -45,7 +47,7 @@ void EngravingItem::setOffsetX(qreal offX)
 void EngravingItem::setOffsetY(qreal offY)
 {
     const qreal offX = element()->offset().x() / element()->spatium();
-    set(Ms::Pid::OFFSET, QPointF(offX, offY));
+    set(mu::engraving::Pid::OFFSET, QPointF(offX, offY));
 }
 
 //---------------------------------------------------------
@@ -66,7 +68,7 @@ QRectF EngravingItem::bbox() const
 
 EngravingItem* Segment::elementAt(int track)
 {
-    Ms::EngravingItem* el = segment()->elementAt(track);
+    mu::engraving::EngravingItem* el = segment()->elementAt(track);
     if (!el) {
         return nullptr;
     }
@@ -80,7 +82,7 @@ EngravingItem* Segment::elementAt(int track)
 void Note::setTpc(int val)
 {
     if (!tpcIsValid(val)) {
-        qWarning("PluginAPI::Note::setTpc: invalid tpc: %d", val);
+        LOGW("PluginAPI::Note::setTpc: invalid tpc: %d", val);
         return;
     }
 
@@ -97,7 +99,7 @@ void Note::setTpc(int val)
 ///   \since MuseScore 3.3.3
 //---------------------------------------------------------
 
-bool Note::isChildAllowed(Ms::ElementType elementType)
+bool Note::isChildAllowed(mu::engraving::ElementType elementType)
 {
     switch (elementType) {
     case ElementType::NOTEHEAD:
@@ -122,13 +124,13 @@ bool Note::isChildAllowed(Ms::ElementType elementType)
 ///   \since MuseScore 3.3.3
 //---------------------------------------------------------
 
-void Note::add(Ms::PluginAPI::EngravingItem* wrapped)
+void Note::add(mu::engraving::PluginAPI::EngravingItem* wrapped)
 {
-    Ms::EngravingItem* s = wrapped ? wrapped->element() : nullptr;
+    mu::engraving::EngravingItem* s = wrapped ? wrapped->element() : nullptr;
     if (s) {
         // Ensure that the object has the expected ownership
         if (wrapped->ownership() == Ownership::SCORE) {
-            qWarning("Note::add: Cannot add this element. The element is already part of the score.");
+            LOGW("Note::add: Cannot add this element. The element is already part of the score.");
             return;              // Don't allow operation.
         }
         // Score now owns the object.
@@ -143,7 +145,7 @@ void Note::add(Ms::PluginAPI::EngravingItem* wrapped)
 ///   \since MuseScore 3.3.3
 //---------------------------------------------------------
 
-void Note::addInternal(Ms::Note* note, Ms::EngravingItem* s)
+void Note::addInternal(mu::engraving::Note* note, mu::engraving::EngravingItem* s)
 {
     // Provide parentage for element.
     s->setScore(note->score());
@@ -154,7 +156,7 @@ void Note::addInternal(Ms::Note* note, Ms::EngravingItem* s)
         // Create undo op and add the element.
         toScore(note->score())->undoAddElement(s);
     } else if (s) {
-        qDebug("Note::add() not impl. %s", s->typeName());
+        LOGD("Note::add() not impl. %s", s->typeName());
     }
 }
 
@@ -163,17 +165,17 @@ void Note::addInternal(Ms::Note* note, Ms::EngravingItem* s)
 ///   \since MuseScore 3.3.3
 //---------------------------------------------------------
 
-void Note::remove(Ms::PluginAPI::EngravingItem* wrapped)
+void Note::remove(mu::engraving::PluginAPI::EngravingItem* wrapped)
 {
-    Ms::EngravingItem* s = wrapped->element();
+    mu::engraving::EngravingItem* s = wrapped->element();
     if (!s) {
-        qWarning("PluginAPI::Note::remove: Unable to retrieve element. %s", qPrintable(wrapped->name()));
+        LOGW("PluginAPI::Note::remove: Unable to retrieve element. %s", qPrintable(wrapped->name()));
     } else if (s->explicitParent() != note()) {
-        qWarning("PluginAPI::Note::remove: The element is not a child of this note. Use removeElement() instead.");
+        LOGW("PluginAPI::Note::remove: The element is not a child of this note. Use removeElement() instead.");
     } else if (isChildAllowed(s->type())) {
         note()->score()->deleteItem(s);     // Create undo op and remove the element.
     } else {
-        qDebug("Note::remove() not impl. %s", s->typeName());
+        LOGD("Note::remove() not impl. %s", s->typeName());
     }
 }
 
@@ -208,7 +210,7 @@ Tuplet* DurationElement::parentTuplet()
 //   Chord::setPlayEventType
 //---------------------------------------------------------
 
-void Chord::setPlayEventType(Ms::PlayEventType v)
+void Chord::setPlayEventType(mu::engraving::PlayEventType v)
 {
     // Only create undo operation if the value has changed.
     if (v != chord()->playEventType()) {
@@ -221,13 +223,13 @@ void Chord::setPlayEventType(Ms::PlayEventType v)
 //   Chord::add
 //---------------------------------------------------------
 
-void Chord::add(Ms::PluginAPI::EngravingItem* wrapped)
+void Chord::add(mu::engraving::PluginAPI::EngravingItem* wrapped)
 {
-    Ms::EngravingItem* s = wrapped ? wrapped->element() : nullptr;
+    mu::engraving::EngravingItem* s = wrapped ? wrapped->element() : nullptr;
     if (s) {
         // Ensure that the object has the expected ownership
         if (wrapped->ownership() == Ownership::SCORE) {
-            qWarning("Chord::add: Cannot add this element. The element is already part of the score.");
+            LOGW("Chord::add: Cannot add this element. The element is already part of the score.");
             return;              // Don't allow operation.
         }
         // Score now owns the object.
@@ -241,7 +243,7 @@ void Chord::add(Ms::PluginAPI::EngravingItem* wrapped)
 //   Chord::addInternal
 //---------------------------------------------------------
 
-void Chord::addInternal(Ms::Chord* chord, Ms::EngravingItem* s)
+void Chord::addInternal(mu::engraving::Chord* chord, mu::engraving::EngravingItem* s)
 {
     // Provide parentage for element.
     s->setScore(chord->score());
@@ -261,22 +263,22 @@ void Chord::addInternal(Ms::Chord* chord, Ms::EngravingItem* s)
 
 int Page::pagenumber() const
 {
-    return page()->no();
+    return static_cast<int>(page()->no());
 }
 
 //---------------------------------------------------------
 //   Chord::remove
 //---------------------------------------------------------
 
-void Chord::remove(Ms::PluginAPI::EngravingItem* wrapped)
+void Chord::remove(mu::engraving::PluginAPI::EngravingItem* wrapped)
 {
-    Ms::EngravingItem* s = wrapped->element();
+    mu::engraving::EngravingItem* s = wrapped->element();
     if (!s) {
-        qWarning("PluginAPI::Chord::remove: Unable to retrieve element. %s", qPrintable(wrapped->name()));
+        LOGW("PluginAPI::Chord::remove: Unable to retrieve element. %s", qPrintable(wrapped->name()));
     } else if (s->explicitParent() != chord()) {
-        qWarning("PluginAPI::Chord::remove: The element is not a child of this chord. Use removeElement() instead.");
+        LOGW("PluginAPI::Chord::remove: The element is not a child of this chord. Use removeElement() instead.");
     } else if (chord()->notes().size() <= 1 && s->type() == ElementType::NOTE) {
-        qWarning("PluginAPI::Chord::remove: Removal of final note is not allowed.");
+        LOGW("PluginAPI::Chord::remove: Removal of final note is not allowed.");
     } else {
         chord()->score()->deleteItem(s);     // Create undo op and remove the element.
     }
@@ -294,17 +296,17 @@ Part* Staff::part()
 //---------------------------------------------------------
 //   wrap
 ///   \cond PLUGIN_API \private \endcond
-///   Wraps Ms::EngravingItem choosing the correct wrapper type
+///   Wraps mu::engraving::EngravingItem choosing the correct wrapper type
 ///   at runtime based on the actual element type.
 //---------------------------------------------------------
 
-EngravingItem* wrap(Ms::EngravingItem* e, Ownership own)
+EngravingItem* wrap(mu::engraving::EngravingItem* e, Ownership own)
 {
     if (!e) {
         return nullptr;
     }
 
-    using Ms::ElementType;
+    using mu::engraving::ElementType;
     switch (e->type()) {
     case ElementType::NOTE:
         return wrap<Note>(toNote(e), own);

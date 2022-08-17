@@ -44,6 +44,7 @@ public:
     void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
+    void updatePropertiesOnNotationChanged() override;
 
     PropertyItem* frameHeight() const;
     PropertyItem* gapAbove() const;

@@ -85,13 +85,13 @@ private:
         rSelected
     };
 
-    void setStatus(const io::path& path, IAutobot::Status st);
+    void setStatus(const io::path_t& path, IAutobot::Status st);
     bool isAllSelected(const ScriptType& type) const;
 
     Scripts m_scripts;
     int m_currentTCIndex = -1;
     bool m_isRunAllTCMode = false;
-    QMap<io::path, IAutobot::Status> m_statuses;
+    QMap<io::path_t, IAutobot::Status> m_statuses;
     QMap<int, bool> m_selected;
 };
 }

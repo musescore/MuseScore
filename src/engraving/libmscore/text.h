@@ -25,25 +25,26 @@
 
 #include "textbase.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   Text
 //---------------------------------------------------------
 
 class Text final : public TextBase
 {
+    OBJECT_ALLOCATOR(engraving, Text)
 public:
 
     Text* clone() const override { return new Text(*this); }
     void read(XmlReader&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue propertyDefault(Pid id) const override;
 
-    static QString readXmlText(XmlReader& r, Score* score);
+    static String readXmlText(XmlReader& r, Score* score);
 
 private:
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Text(EngravingItem* parent, TextStyleType tid = TextStyleType::DEFAULT);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

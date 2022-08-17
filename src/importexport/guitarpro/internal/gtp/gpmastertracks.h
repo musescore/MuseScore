@@ -1,9 +1,10 @@
 #ifndef GPMASTERTRACKS_H
 #define GPMASTERTRACKS_H
 
+#include <stddef.h>
 #include <vector>
 
-namespace Ms {
+namespace mu::engraving {
 class GPMasterTracks
 {
 public:

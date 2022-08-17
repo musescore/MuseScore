@@ -32,11 +32,11 @@ class AlignSelect : public QWidget, public Ui::AlignSelect
 
 public:
     AlignSelect(QWidget* parent);
-    Ms::Align align() const;
-    void setAlign(Ms::Align);
+    mu::engraving::Align align() const;
+    void setAlign(mu::engraving::Align);
 
 signals:
-    void alignChanged(Ms::Align);
+    void alignChanged(mu::engraving::Align);
 
 private:
     QButtonGroup* g1;

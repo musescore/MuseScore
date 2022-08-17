@@ -46,7 +46,7 @@ public:
     QUrl loginApiUrl() const override;
     QUrl uploadingApiUrl() const override;
 
-    io::path tokensFilePath() const override;
+    io::path_t tokensFilePath() const override;
 
 private:
     QString apiRootUrl() const;

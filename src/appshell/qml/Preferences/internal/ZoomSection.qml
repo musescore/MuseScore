@@ -27,7 +27,7 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "Zoom")
+    title: qsTrc("appshell/preferences", "Zoom")
 
     navigation.direction: NavigationPanel.Both
 
@@ -45,7 +45,7 @@ BaseSection {
         ComboBoxWithTitle {
             id: defaultZoomTypesBox
 
-            title: qsTrc("appshell", "Default zoom:")
+            title: qsTrc("appshell/preferences", "Default zoom:")
             columnWidth: root.columnWidth
 
             control.textRole: "title"
@@ -91,7 +91,7 @@ BaseSection {
     IncrementalPropertyControlWithTitle {
         id: mouseZoomPrecisionControl
 
-        title: qsTrc("appshell", "Mouse zoom precision:")
+        title: qsTrc("appshell/preferences", "Mouse zoom precision:")
 
         columnWidth: root.columnWidth
         control.width: 60
@@ -99,7 +99,7 @@ BaseSection {
         minValue: 1
         maxValue: 16
 
-        navigation.name: "MouseZoomPercisionControl"
+        navigation.name: "MouseZoomPrecisionControl"
         navigation.panel: root.navigation
         navigation.row: 1
         navigation.column: 0

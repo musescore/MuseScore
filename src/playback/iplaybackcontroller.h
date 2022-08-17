@@ -25,6 +25,7 @@
 #include "modularity/imoduleexport.h"
 #include "async/notification.h"
 #include "async/channel.h"
+#include "global/progress.h"
 
 #include "notation/notationtypes.h"
 #include "audio/audiotypes.h"
@@ -55,9 +56,14 @@ public:
     virtual audio::TrackSequenceId currentTrackSequenceId() const = 0;
     virtual async::Notification currentTrackSequenceIdChanged() const = 0;
 
-    virtual engraving::InstrumentTrackId instrumentTrackIdForAudioTrackId(audio::TrackId trackId) const = 0;
+    using InstrumentTrackIdMap = std::unordered_map<engraving::InstrumentTrackId, audio::TrackId>;
+    virtual const InstrumentTrackIdMap& instrumentTrackIdMap() const = 0;
 
-    virtual void playElement(const notation::EngravingItem* element) = 0;
+    virtual async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackAdded() const = 0;
+    virtual async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackRemoved() const = 0;
+
+    virtual void playElements(const std::vector<const notation::EngravingItem*>& elements) = 0;
+    virtual void seekElement(const notation::EngravingItem* element) = 0;
 
     virtual bool actionChecked(const actions::ActionCode& actionCode) const = 0;
     virtual async::Channel<actions::ActionCode> actionCheckedChanged() const = 0;
@@ -70,6 +76,11 @@ public:
 
     virtual notation::MeasureBeat currentBeat() const = 0;
     virtual audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const = 0;
+
+    virtual double tempoMultiplier() const = 0;
+    virtual void setTempoMultiplier(double multiplier) = 0;
+
+    virtual framework::Progress loadingProgress() const = 0;
 };
 }
 

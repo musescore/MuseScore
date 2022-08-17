@@ -27,7 +27,7 @@
 
 #include "libmscore/masterscore.h"
 #include "libmscore/page.h"
-#include "engraving/paint/paint.h"
+#include "engraving/infrastructure/paint.h"
 
 #include "log.h"
 
@@ -41,7 +41,7 @@ std::vector<INotationWriter::UnitType> PngWriter::supportedUnitTypes() const
     return { UnitType::PER_PAGE };
 }
 
-mu::Ret PngWriter::write(INotationPtr notation, Device& destinationDevice, const Options& options)
+mu::Ret PngWriter::write(INotationPtr notation, QIODevice& destinationDevice, const Options& options)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -54,8 +54,8 @@ mu::Ret PngWriter::write(INotationPtr notation, Device& destinationDevice, const
     int height = std::lrint(pageSizeInch.height() * CANVAS_DPI);
 
     QImage image(width, height, QImage::Format_ARGB32_Premultiplied);
-    image.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / Ms::INCH));
-    image.setDotsPerMeterY(std::lrint((CANVAS_DPI * 1000) / Ms::INCH));
+    image.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / mu::engraving::INCH));
+    image.setDotsPerMeterY(std::lrint((CANVAS_DPI * 1000) / mu::engraving::INCH));
 
     const bool TRANSPARENT_BACKGROUND = options.value(OptionKey::TRANSPARENT_BACKGROUND, Val(false)).toBool();
     image.fill(TRANSPARENT_BACKGROUND ? Qt::transparent : Qt::white);
@@ -67,6 +67,7 @@ mu::Ret PngWriter::write(INotationPtr notation, Device& destinationDevice, const
     opt.toPage = opt.fromPage;
     opt.trimMarginPixelSize = configuration()->trimMarginPixelSize();
     opt.deviceDpi = CANVAS_DPI;
+    opt.printPageBackground = false; //Already printed
 
     notation->painting()->paintPng(&painter, opt);
 

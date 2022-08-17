@@ -26,7 +26,7 @@
 #include <QJSValue>
 
 #include "modularity/imoduleexport.h"
-#include "retval.h"
+#include "types/retval.h"
 #include "io/path.h"
 #include "async/channel.h"
 #include "autobottypes.h"
@@ -63,8 +63,8 @@ public:
     }
 
     virtual Status status() const = 0;
-    virtual async::Channel<io::path, Status> statusChanged() const = 0;
-    virtual async::Channel<QString /*name*/, StepStatus, Ret> stepStatusChanged() const = 0;
+    virtual async::Channel<io::path_t, Status> statusChanged() const = 0;
+    virtual async::Channel<StepInfo, Ret> stepStatusChanged() const = 0;
 
     virtual SpeedMode speedMode() const = 0;
     virtual void setSpeedMode(SpeedMode mode) = 0;
@@ -73,7 +73,7 @@ public:
     virtual int defaultIntervalMsec() const = 0;
     virtual int intervalMsec() const = 0;
 
-    virtual void execScript(const io::path& path) = 0;
+    virtual void execScript(const io::path_t& path) = 0;
     virtual void runTestCase(const TestCase& testCase) = 0;
     virtual void sleep(int msec) = 0;
     virtual void pause() = 0;

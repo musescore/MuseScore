@@ -41,26 +41,20 @@ using namespace mu::notation;
 using namespace mu::engraving;
 using namespace mu::ui;
 
-const char* g_groupNames[Ms::STAFF_GROUP_MAX] = {
-    QT_TRANSLATE_NOOP("notation", "STANDARD STAFF"),
-    QT_TRANSLATE_NOOP("notation", "PERCUSSION STAFF"),
-    QT_TRANSLATE_NOOP("notation", "TABLATURE STAFF")
-};
-
 //---------------------------------------------------------
 //   noteHeadSchemes
 //---------------------------------------------------------
 
-Ms::NoteHeadScheme noteHeadSchemes[] = {
-    Ms::NoteHeadScheme::HEAD_NORMAL,
-    Ms::NoteHeadScheme::HEAD_PITCHNAME,
-    Ms::NoteHeadScheme::HEAD_PITCHNAME_GERMAN,
-    Ms::NoteHeadScheme::HEAD_SOLFEGE,
-    Ms::NoteHeadScheme::HEAD_SOLFEGE_FIXED,
-    Ms::NoteHeadScheme::HEAD_SHAPE_NOTE_4,
-    Ms::NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN,
-    Ms::NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK,
-    Ms::NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER
+mu::engraving::NoteHeadScheme noteHeadSchemes[] = {
+    mu::engraving::NoteHeadScheme::HEAD_NORMAL,
+    mu::engraving::NoteHeadScheme::HEAD_PITCHNAME,
+    mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN,
+    mu::engraving::NoteHeadScheme::HEAD_SOLFEGE,
+    mu::engraving::NoteHeadScheme::HEAD_SOLFEGE_FIXED,
+    mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_4,
+    mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN,
+    mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK,
+    mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER
 };
 
 //---------------------------------------------------------
@@ -75,30 +69,30 @@ EditStaffType::EditStaffType(QWidget* parent)
     setupUi(this);
 
     // tab page configuration
-    std::vector<QString> fontNames = Ms::StaffType::fontNames(false);
-    foreach (const QString& fn, fontNames) {   // fill fret font name combo
-        fretFontName->addItem(fn);
+    std::vector<String> fontNames = mu::engraving::StaffType::fontNames(false);
+    for (const String& fn : fontNames) {   // fill fret font name combo
+        fretFontName->addItem(fn.toQString());
     }
     fretFontName->setCurrentIndex(0);
-    fontNames = Ms::StaffType::fontNames(true);
-    foreach (const QString& fn, fontNames) {  // fill duration font name combo
-        durFontName->addItem(fn);
+    fontNames = mu::engraving::StaffType::fontNames(true);
+    for (const String& fn : fontNames) {  // fill duration font name combo
+        durFontName->addItem(fn.toQString());
     }
     durFontName->setCurrentIndex(0);
 
     for (auto i : noteHeadSchemes) {
-        noteHeadScheme->addItem(TConv::toUserName(i), static_cast<int>(i));
+        noteHeadScheme->addItem(TConv::translatedUserName(i), static_cast<int>(i));
     }
 
     // load a sample standard score in preview
-    Ms::MasterScore* sc = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle();
+    mu::engraving::MasterScore* sc = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle();
     if (loadScore(sc, ":/view/resources/data/std_sample.mscx")) {
         standardPreview->setScore(sc);
     } else {
         Q_ASSERT_X(false, "EditStaffType::EditStaffType", "Error in opening sample standard file for preview");
     }
 
-    // load a sample tabulature score in preview
+    // load a sample tablature score in preview
     sc = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle();
     if (loadScore(sc, ":/view/resources/data/tab_sample.mscx")) {
         tabPreview->setScore(sc);
@@ -166,7 +160,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     setFocus();
 }
 
-void EditStaffType::setStaffType(const Ms::StaffType* stafftype)
+void EditStaffType::setStaffType(const mu::engraving::StaffType* stafftype)
 {
     this->staffType = *stafftype;
 
@@ -183,10 +177,10 @@ void EditStaffType::setInstrument(const Instrument& instrument)
     bool bPerc        = (instrument.drumset() != nullptr);
     bool bTab = (instrument.stringData()->frettedStrings() > 0);
     int idx           = 0;
-    for (const Ms::StaffType& t : Ms::StaffType::presets()) {
-        if ((t.group() == Ms::StaffGroup::STANDARD && bStandard)
-            || (t.group() == Ms::StaffGroup::PERCUSSION && bPerc)
-            || (t.group() == Ms::StaffGroup::TAB && bTab && t.lines() <= instrument.stringData()->frettedStrings())) {
+    for (const mu::engraving::StaffType& t : mu::engraving::StaffType::presets()) {
+        if ((t.group() == mu::engraving::StaffGroup::STANDARD && bStandard)
+            || (t.group() == mu::engraving::StaffGroup::PERCUSSION && bPerc)
+            || (t.group() == mu::engraving::StaffGroup::TAB && bTab && t.lines() <= instrument.stringData()->frettedStrings())) {
             templateCombo->addItem(t.name(), idx);
         }
         idx++;
@@ -194,24 +188,24 @@ void EditStaffType::setInstrument(const Instrument& instrument)
     templateCombo->setCurrentIndex(-1);
 }
 
-mu::Ret EditStaffType::loadScore(Ms::MasterScore* score, const mu::io::path& path)
+mu::Ret EditStaffType::loadScore(mu::engraving::MasterScore* score, const mu::io::path_t& path)
 {
-    Ms::ScoreLoad sl;
+    mu::engraving::ScoreLoad sl;
 
-    if (compat::loadMsczOrMscx(score, path.toQString()) != Ms::Score::FileError::FILE_NO_ERROR) {
+    if (compat::loadMsczOrMscx(score, path.toQString()) != engraving::Err::NoError) {
         return make_ret(Ret::Code::UnknownError);
     }
 
     score->connectTies();
 
-    for (Ms::Part* p : score->parts()) {
+    for (mu::engraving::Part* p : score->parts()) {
         p->updateHarmonyChannels(false);
     }
     score->rebuildMidiMapping();
     score->setSoloMute();
-    for (Ms::Score* s : score->scoreList()) {
+    for (mu::engraving::Score* s : score->scoreList()) {
         s->setPlaylistDirty();
-        s->addLayoutFlags(Ms::LayoutFlag::FIX_PITCH_VELO);
+        s->addLayoutFlags(mu::engraving::LayoutFlag::FIX_PITCH_VELO);
         s->setLayoutAll();
     }
     score->updateChannel();
@@ -219,8 +213,8 @@ mu::Ret EditStaffType::loadScore(Ms::MasterScore* score, const mu::io::path& pat
     score->setSaved(true);
     score->update();
 
-    if (!score->sanityCheck(QString())) {
-        return make_ret(Err::FileCorrupted, path);
+    if (!score->sanityCheck()) {
+        return make_ret(engraving::Err::FileCorrupted, path);
     }
 
     return make_ret(Ret::Code::Ok);
@@ -256,10 +250,10 @@ void EditStaffType::setValues()
 {
     blockSignals(true);
 
-    Ms::StaffGroup group = staffType.group();
+    mu::engraving::StaffGroup group = staffType.group();
     int i = int(group);
     stack->setCurrentIndex(i);
-    groupName->setText(qApp->translate("staff group header name", g_groupNames[i]));
+    groupName->setText(TConv::translatedUserName(group));
 //      groupCombo->setCurrentIndex(i);
 
     name->setText(staffType.name());
@@ -270,14 +264,14 @@ void EditStaffType::setValues()
     genTimesig->setChecked(staffType.genTimesig());
 
     switch (group) {
-    case Ms::StaffGroup::STANDARD:
+    case mu::engraving::StaffGroup::STANDARD:
         genKeysigPitched->setChecked(staffType.genKeysig());
         showLedgerLinesPitched->setChecked(staffType.showLedgerLines());
         stemlessPitched->setChecked(staffType.stemless());
         noteHeadScheme->setCurrentIndex(int(staffType.noteHeadScheme()));
         break;
 
-    case Ms::StaffGroup::TAB:
+    case mu::engraving::StaffGroup::TAB:
     {
         upsideDown->setChecked(staffType.upsideDown());
         showTabFingering->setChecked(staffType.showTabFingering());
@@ -305,21 +299,21 @@ void EditStaffType::setValues()
         durFontSize->setValue(staffType.durationFontSize());
         durY->setValue(staffType.durationFontUserY());
         // convert combined values of genDurations and slashStyle/stemless into noteValuesx radio buttons
-        // Sbove/Below, Beside/Through and minim are only used if stems-and-beams
+        // Above/Below, Beside/Through and minim are only used if stems-and-beams
         // but set them from stt values anyway, to ensure preset matching
         stemAboveRadio->setChecked(!staffType.stemsDown());
         stemBelowRadio->setChecked(staffType.stemsDown());
         stemBesideRadio->setChecked(!staffType.stemThrough());
         stemThroughRadio->setChecked(staffType.stemThrough());
-        Ms::TablatureMinimStyle minimStyle = staffType.minimStyle();
-        minimNoneRadio->setChecked(minimStyle == Ms::TablatureMinimStyle::NONE);
-        minimShortRadio->setChecked(minimStyle == Ms::TablatureMinimStyle::SHORTER);
-        minimSlashedRadio->setChecked(minimStyle == Ms::TablatureMinimStyle::SLASHED);
-        Ms::TablatureSymbolRepeat symRepeat = staffType.symRepeat();
-        valuesRepeatNever->setChecked(symRepeat == Ms::TablatureSymbolRepeat::NEVER);
-        valuesRepeatSystem->setChecked(symRepeat == Ms::TablatureSymbolRepeat::SYSTEM);
-        valuesRepeatMeasure->setChecked(symRepeat == Ms::TablatureSymbolRepeat::MEASURE);
-        valuesRepeatAlways->setChecked(symRepeat == Ms::TablatureSymbolRepeat::ALWAYS);
+        mu::engraving::TablatureMinimStyle minimStyle = staffType.minimStyle();
+        minimNoneRadio->setChecked(minimStyle == mu::engraving::TablatureMinimStyle::NONE);
+        minimShortRadio->setChecked(minimStyle == mu::engraving::TablatureMinimStyle::SHORTER);
+        minimSlashedRadio->setChecked(minimStyle == mu::engraving::TablatureMinimStyle::SLASHED);
+        mu::engraving::TablatureSymbolRepeat symRepeat = staffType.symRepeat();
+        valuesRepeatNever->setChecked(symRepeat == mu::engraving::TablatureSymbolRepeat::NEVER);
+        valuesRepeatSystem->setChecked(symRepeat == mu::engraving::TablatureSymbolRepeat::SYSTEM);
+        valuesRepeatMeasure->setChecked(symRepeat == mu::engraving::TablatureSymbolRepeat::MEASURE);
+        valuesRepeatAlways->setChecked(symRepeat == mu::engraving::TablatureSymbolRepeat::ALWAYS);
         if (staffType.genDurations()) {
             noteValuesNone->setChecked(false);
             noteValuesSymb->setChecked(true);
@@ -343,7 +337,7 @@ void EditStaffType::setValues()
     }
     break;
 
-    case Ms::StaffGroup::PERCUSSION:
+    case mu::engraving::StaffGroup::PERCUSSION:
         genKeysigPercussion->setChecked(staffType.genKeysig());
         showLedgerLinesPercussion->setChecked(staffType.showLedgerLines());
         stemlessPercussion->setChecked(staffType.stemless());
@@ -379,7 +373,7 @@ void EditStaffType::nameEdited(const QString& /*s*/)
 void EditStaffType::durFontNameChanged(int idx)
 {
     qreal size, yOff;
-    if (Ms::StaffType::fontData(true, idx, 0, 0, &size, &yOff)) {
+    if (mu::engraving::StaffType::fontData(true, idx, 0, 0, &size, &yOff)) {
         durFontSize->setValue(size);
         durY->setValue(yOff);
     }
@@ -389,7 +383,7 @@ void EditStaffType::durFontNameChanged(int idx)
 void EditStaffType::fretFontNameChanged(int idx)
 {
     qreal size, yOff;
-    if (Ms::StaffType::fontData(false, idx, 0, 0, &size, &yOff)) {
+    if (mu::engraving::StaffType::fontData(false, idx, 0, 0, &size, &yOff)) {
         fretFontSize->setValue(size);
         fretY->setValue(yOff);
     }
@@ -440,17 +434,17 @@ void EditStaffType::setFromDlg()
 {
     staffType.setName(name->text());
     staffType.setLines(lines->value());
-    staffType.setLineDistance(Ms::Spatium(lineDistance->value()));
+    staffType.setLineDistance(mu::engraving::Spatium(lineDistance->value()));
     staffType.setGenClef(genClef->isChecked());
     staffType.setShowBarlines(showBarlines->isChecked());
     staffType.setGenTimesig(genTimesig->isChecked());
-    if (staffType.group() == Ms::StaffGroup::STANDARD) {
+    if (staffType.group() == mu::engraving::StaffGroup::STANDARD) {
         staffType.setGenKeysig(genKeysigPitched->isChecked());
         staffType.setShowLedgerLines(showLedgerLinesPitched->isChecked());
         staffType.setStemless(stemlessPitched->isChecked());
         staffType.setNoteHeadScheme(static_cast<NoteHeadScheme>(noteHeadScheme->currentData().toInt()));
     }
-    if (staffType.group() == Ms::StaffGroup::PERCUSSION) {
+    if (staffType.group() == mu::engraving::StaffGroup::PERCUSSION) {
         staffType.setGenKeysig(genKeysigPercussion->isChecked());
         staffType.setShowLedgerLines(showLedgerLinesPercussion->isChecked());
         staffType.setStemless(stemlessPercussion->isChecked());
@@ -463,13 +457,14 @@ void EditStaffType::setFromDlg()
     staffType.setFretFontUserY(fretY->value());
     staffType.setLinesThrough(linesThroughRadio->isChecked());
     staffType.setShowBackTied(showBackTied->isChecked());
-    staffType.setMinimStyle(minimNoneRadio->isChecked() ? Ms::TablatureMinimStyle::NONE
-                            : (minimShortRadio->isChecked() ? Ms::TablatureMinimStyle::SHORTER : Ms::TablatureMinimStyle::
+    staffType.setMinimStyle(minimNoneRadio->isChecked() ? mu::engraving::TablatureMinimStyle::NONE
+                            : (minimShortRadio->isChecked() ? mu::engraving::TablatureMinimStyle::SHORTER : mu::engraving::
+                               TablatureMinimStyle::
                                SLASHED));
-    staffType.setSymbolRepeat(valuesRepeatNever->isChecked() ? Ms::TablatureSymbolRepeat::NEVER
-                              : (valuesRepeatSystem->isChecked() ? Ms::TablatureSymbolRepeat::SYSTEM
-                                 : valuesRepeatMeasure->isChecked() ? Ms::TablatureSymbolRepeat::MEASURE
-                                 : Ms::TablatureSymbolRepeat::ALWAYS));
+    staffType.setSymbolRepeat(valuesRepeatNever->isChecked() ? mu::engraving::TablatureSymbolRepeat::NEVER
+                              : (valuesRepeatSystem->isChecked() ? mu::engraving::TablatureSymbolRepeat::SYSTEM
+                                 : valuesRepeatMeasure->isChecked() ? mu::engraving::TablatureSymbolRepeat::MEASURE
+                                 : mu::engraving::TablatureSymbolRepeat::ALWAYS));
     staffType.setOnLines(onLinesRadio->isChecked());
     staffType.setShowRests(showRests->isChecked());
     staffType.setUpsideDown(upsideDown->isChecked());
@@ -478,7 +473,7 @@ void EditStaffType::setFromDlg()
     //note values
     staffType.setStemsDown(stemBelowRadio->isChecked());
     staffType.setStemsThrough(stemThroughRadio->isChecked());
-    if (staffType.group() == Ms::StaffGroup::TAB) {
+    if (staffType.group() == mu::engraving::StaffGroup::TAB) {
         staffType.setGenKeysig(false);
         staffType.setStemless(true);                       // assume no note values
         staffType.setGenDurations(false);                  //    "     "
@@ -625,14 +620,14 @@ void EditStaffType::tabStemThroughCompatibility(bool checked)
 void EditStaffType::updatePreview()
 {
     setFromDlg();
-    Ms::ExampleView* preview = nullptr;
-    if (staffType.group() == Ms::StaffGroup::TAB) {
+    ExampleView* preview = nullptr;
+    if (staffType.group() == mu::engraving::StaffGroup::TAB) {
         preview = tabPreview;
-    } else if (staffType.group() == Ms::StaffGroup::STANDARD) {
+    } else if (staffType.group() == mu::engraving::StaffGroup::STANDARD) {
         preview = standardPreview;
     }
     if (preview) {
-        preview->score()->staff(0)->setStaffType(Ms::Fraction(0, 1), staffType);
+        preview->score()->staff(0)->setStaffType(mu::engraving::Fraction(0, 1), staffType);
         preview->score()->doLayout();
         preview->updateAll();
         preview->update();
@@ -644,23 +639,23 @@ void EditStaffType::updatePreview()
 ///  create unique new name for StaffType
 //---------------------------------------------------------
 
-QString EditStaffType::createUniqueStaffTypeName(Ms::StaffGroup group)
+QString EditStaffType::createUniqueStaffTypeName(mu::engraving::StaffGroup group)
 {
     QString sn;
     for (int idx = 1;; ++idx) {
         switch (group) {
-        case Ms::StaffGroup::STANDARD:
+        case mu::engraving::StaffGroup::STANDARD:
             sn = QString("Standard-%1 [*]").arg(idx);
             break;
-        case Ms::StaffGroup::PERCUSSION:
+        case mu::engraving::StaffGroup::PERCUSSION:
             sn = QString("Perc-%1 [*]").arg(idx);
             break;
-        case Ms::StaffGroup::TAB:
+        case mu::engraving::StaffGroup::TAB:
             sn = QString("Tab-%1 [*]").arg(idx);
             break;
         }
         bool found = false;
-        for (const Ms::StaffType& st : Ms::StaffType::presets()) {
+        for (const mu::engraving::StaffType& st : mu::engraving::StaffType::presets()) {
             if (st.name() == sn) {
                 found = true;
                 break;
@@ -679,7 +674,7 @@ QString EditStaffType::createUniqueStaffTypeName(Ms::StaffGroup group)
 
 void EditStaffType::savePresets()
 {
-    qDebug("savePresets");
+    LOGD("savePresets");
 }
 
 //---------------------------------------------------------
@@ -688,14 +683,14 @@ void EditStaffType::savePresets()
 
 void EditStaffType::loadPresets()
 {
-    qDebug("loadPresets");
+    LOGD("loadPresets");
 }
 
 void EditStaffType::resetToTemplateClicked()
 {
     int idx = templateCombo->itemData(templateCombo->currentIndex()).toInt();
     if (idx >= 0) {
-        staffType = *(Ms::StaffType::preset(Ms::StaffTypes(idx)));
+        staffType = *(mu::engraving::StaffType::preset(mu::engraving::StaffTypes(idx)));
         setValues();
     }
 }
@@ -706,5 +701,5 @@ void EditStaffType::resetToTemplateClicked()
 
 void EditStaffType::addToTemplatesClicked()
 {
-    qDebug("not implemented: add to templates");
+    LOGD("not implemented: add to templates");
 }

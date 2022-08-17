@@ -22,6 +22,12 @@
 
 #include "editstaff.h"
 
+#include "translation.h"
+#include "global/utils.h"
+
+#include "ui/view/widgetstatestore.h"
+#include "ui/view/widgetutils.h"
+
 #include "editpitch.h"
 #include "editstafftype.h"
 #include "editstringdata.h"
@@ -36,11 +42,6 @@
 #include "libmscore/undo.h"
 #include "libmscore/instrumentname.h"
 #include "libmscore/system.h"
-
-#include "translation.h"
-
-#include "ui/view/widgetstatestore.h"
-#include "ui/view/widgetutils.h"
 
 #include "log.h"
 
@@ -131,7 +132,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     }
 
     Part* part = m_orgStaff->part();
-    Ms::Score* score = part->score();
+    mu::engraving::Score* score = part->score();
 
     m_instrument = *part->instrument(tick);
     m_orgInstrument = m_instrument;
@@ -141,7 +142,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     m_instrumentKey.tick = tick;
 
     m_staff = engraving::Factory::createStaff(part);
-    Ms::StaffType* stt = m_staff->setStaffType(Fraction(0, 1), *m_orgStaff->staffType(Fraction(0, 1)));
+    mu::engraving::StaffType* stt = m_staff->setStaffType(Fraction(0, 1), *m_orgStaff->staffType(Fraction(0, 1)));
     stt->setInvisible(m_orgStaff->staffType(Fraction(0, 1))->invisible());
     stt->setColor(m_orgStaff->staffType(Fraction(0, 1))->color());
     stt->setUserMag(m_orgStaff->staffType(Fraction(0, 1))->userMag());
@@ -181,7 +182,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     mergeMatchingRests->setChecked(m_staff->mergeMatchingRests());
     mag->setValue(stt->userMag() * 100.0);
 
-    updateStaffType(*m_staff->staffType(Ms::Fraction(0, 1)));
+    updateStaffType(*m_staff->staffType(mu::engraving::Fraction(0, 1)));
     updateInstrument();
     updateNextPreviousButtons();
 }
@@ -192,7 +193,7 @@ void EditStaff::hideEvent(QHideEvent* ev)
     QWidget::hideEvent(ev);
 }
 
-void EditStaff::updateStaffType(const Ms::StaffType& staffType)
+void EditStaff::updateStaffType(const mu::engraving::StaffType& staffType)
 {
     lines->setValue(staffType.lines());
     lineDistance->setValue(staffType.lineDistance().val());
@@ -201,28 +202,22 @@ void EditStaff::updateStaffType(const Ms::StaffType& staffType)
     showBarlines->setChecked(staffType.showBarlines());
     invisible->setChecked(staffType.invisible());
     isSmallCheckbox->setChecked(staffType.isSmall());
-    staffGroupName->setText(qtrc("Staff type group name", staffType.groupName()));
+    staffGroupName->setText(staffType.translatedGroupName());
 }
 
 void EditStaff::updateInstrument()
 {
     updateInterval(m_instrument.transpose());
 
-    std::list<Ms::StaffName>& snl = m_instrument.shortNames();
-    QString df = snl.empty() ? "" : snl.front().name();
-    shortName->setPlainText(df);
-
-    std::list<Ms::StaffName>& lnl = m_instrument.longNames();
-    df = lnl.empty() ? "" : lnl.front().name();
-
-    longName->setPlainText(df);
+    longName->setPlainText(m_instrument.nameAsPlainText());
+    shortName->setPlainText(m_instrument.abbreviatureAsPlainText());
 
     if (partName->text() == instrumentName->text()) {
         // Updates part name if no custom name has been set before
-        partName->setText(m_instrument.name());
+        partName->setText(m_instrument.nameAsPlainText());
     }
 
-    instrumentName->setText(m_instrument.name());
+    instrumentName->setText(m_instrument.nameAsPlainText());
 
     m_minPitchA = m_instrument.minPitchA();
     m_maxPitchA = m_instrument.maxPitchA();
@@ -244,7 +239,7 @@ void EditStaff::updateInstrument()
     preferSharpFlat->setCurrentIndex(int(m_orgStaff->part()->preferSharpFlat()));
 }
 
-void EditStaff::updateInterval(const Ms::Interval& iv)
+void EditStaff::updateInterval(const mu::engraving::Interval& iv)
 {
     int diatonic  = iv.diatonic;
     int chromatic = iv.chromatic;
@@ -263,9 +258,9 @@ void EditStaff::updateInterval(const Ms::Interval& iv)
     chromatic %= 12;
     diatonic  %= 7;
 
-    int interval = Ms::searchInterval(diatonic, chromatic);
+    int interval = mu::engraving::searchInterval(diatonic, chromatic);
     if (interval == -1) {
-        qDebug("EditStaff: unknown interval %d %d", diatonic, chromatic);
+        LOGD("EditStaff: unknown interval %d %d", diatonic, chromatic);
         interval = 0;
     }
     iList->setCurrentIndex(interval);
@@ -321,7 +316,7 @@ void EditStaff::bboxClicked(QAbstractButton* button)
         break;
 
     default:
-        qDebug("EditStaff: unknown button %d", int(br));
+        LOGD("EditStaff: unknown button %d", int(br));
         break;
     }
 }
@@ -380,7 +375,7 @@ void EditStaff::maxPitchPClicked()
 
 void EditStaff::lineDistanceChanged()
 {
-    m_staff->staffType(Fraction(0, 1))->setLineDistance(Ms::Spatium(lineDistance->value()));
+    m_staff->staffType(Fraction(0, 1))->setLineDistance(mu::engraving::Spatium(lineDistance->value()));
 }
 
 void EditStaff::numOfLinesChanged()
@@ -458,13 +453,13 @@ void EditStaff::initStaff()
 
     Fraction tick = { -1, 1 };
     if (element->isChordRest()) {
-        tick = Ms::toChordRest(element)->tick();
+        tick = mu::engraving::toChordRest(element)->tick();
     } else if (element->isNote()) {
-        tick = Ms::toNote(element)->chord()->tick();
+        tick = mu::engraving::toNote(element)->chord()->tick();
     } else if (element->isMeasure()) {
-        tick = Ms::toMeasure(element)->tick();
+        tick = mu::engraving::toMeasure(element)->tick();
     } else if (element->isInstrumentName()) {
-        const Ms::System* system = Ms::toSystem(Ms::toInstrumentName(element)->explicitParent());
+        const mu::engraving::System* system = mu::engraving::toSystem(mu::engraving::toInstrumentName(element)->explicitParent());
         const Measure* measure = system ? system->firstMeasure() : nullptr;
         staff = element->staff();
 
@@ -499,7 +494,7 @@ void EditStaff::applyStaffProperties()
     config.mergeMatchingRests = mergeMatchingRests->isChecked();
     config.hideMode = Staff::HideMode(hideMode->currentIndex());
     config.clefTypeList = m_instrument.clefType(m_orgStaff->rstaff());
-    config.staffType = *m_staff->staffType(Ms::Fraction(0, 1));
+    config.staffType = *m_staff->staffType(mu::engraving::Fraction(0, 1));
 
     notationParts()->setStaffConfig(m_orgStaff->id(), config);
 }
@@ -508,20 +503,22 @@ void EditStaff::applyPartProperties()
 {
     Part* part    = m_orgStaff->part();
 
-    QString sn = shortName->toPlainText();
-    QString ln = longName->toPlainText();
-    if (!Ms::Text::validateText(sn) || !Ms::Text::validateText(ln)) {
-        interactive()->warning(trc("notation", "Invalid instrument name"),
-                               trc("notation", "The instrument name is invalid."));
+    String _sn = shortName->toPlainText();
+    String _ln = longName->toPlainText();
+    if (!mu::engraving::Text::validateText(_sn) || !mu::engraving::Text::validateText(_ln)) {
+        interactive()->warning(trc("notation/staffpartproperties", "Invalid instrument name"),
+                               trc("notation/staffpartproperties", "The instrument name is invalid."));
         return;
     }
+    QString sn = _sn;
+    QString ln = _ln;
     shortName->setPlainText(sn);    // show the fixed text
     longName->setPlainText(ln);
 
     int intervalIdx = iList->currentIndex();
     bool upFlag     = up->isChecked();
 
-    Ms::Interval interval  = Ms::intervalList[intervalIdx];
+    mu::engraving::Interval interval  = mu::engraving::intervalList[intervalIdx];
     interval.diatonic  += static_cast<int8_t>(octave->value() * 7);
     interval.chromatic += static_cast<int8_t>(octave->value() * 12);
 
@@ -537,12 +534,12 @@ void EditStaff::applyPartProperties()
 
     m_instrument.shortNames().clear();
     if (sn.length() > 0) {
-        m_instrument.shortNames().push_back(Ms::StaffName(sn, 0));
+        m_instrument.shortNames().push_back(mu::engraving::StaffName(sn, 0));
     }
 
     m_instrument.longNames().clear();
     if (ln.length() > 0) {
-        m_instrument.longNames().push_back(Ms::StaffName(ln, 0));
+        m_instrument.longNames().push_back(mu::engraving::StaffName(ln, 0));
     }
 
     QString newPartName = partName->text().simplified();
@@ -581,12 +578,12 @@ void EditStaff::showReplaceInstrumentDialog()
 void EditStaff::editStringDataClicked()
 {
     int frets = m_instrument.stringData()->frets();
-    std::vector<Ms::instrString> stringList = m_instrument.stringData()->stringList();
+    std::vector<mu::engraving::instrString> stringList = m_instrument.stringData()->stringList();
 
     EditStringData* esd = new EditStringData(this, &stringList, &frets);
     esd->setWindowModality(Qt::WindowModal);
     if (esd->exec()) {
-        Ms::StringData stringData(frets, stringList);
+        mu::engraving::StringData stringData(frets, stringList);
 
         // update instrument pitch ranges as necessary
         if (stringList.size() > 0) {
@@ -595,7 +592,7 @@ void EditStaff::editStringDataClicked()
             int oldHighestStringPitch     = INT16_MIN;
             int highestStringPitch        = INT16_MIN;
             int lowestStringPitch         = INT16_MAX;
-            for (const Ms::instrString& str : stringList) {
+            for (const mu::engraving::instrString& str : stringList) {
                 if (str.pitch > highestStringPitch) {
                     highestStringPitch = str.pitch;
                 }
@@ -604,12 +601,12 @@ void EditStaff::editStringDataClicked()
                 }
             }
             // get old string range bottom
-            for (const Ms::instrString& str : m_instrument.stringData()->stringList()) {
+            for (const mu::engraving::instrString& str : m_instrument.stringData()->stringList()) {
                 if (str.pitch > oldHighestStringPitch) {
                     oldHighestStringPitch = str.pitch;
                 }
             }
-            // if there were no string, arbitrarely set old top to maxPitchA
+            // if there were no string, arbitrarily set old top to maxPitchA
             if (oldHighestStringPitch == INT16_MIN) {
                 oldHighestStringPitch = m_instrument.maxPitchA();
             }
@@ -636,29 +633,14 @@ void EditStaff::editStringDataClicked()
     }
 }
 
-static const char* s_es_noteNames[] = {
-    QT_TRANSLATE_NOOP("editstaff", "C"),
-    QT_TRANSLATE_NOOP("editstaff", "C♯"),
-    QT_TRANSLATE_NOOP("editstaff", "D"),
-    QT_TRANSLATE_NOOP("editstaff", "E♭"),
-    QT_TRANSLATE_NOOP("editstaff", "E"),
-    QT_TRANSLATE_NOOP("editstaff", "F"),
-    QT_TRANSLATE_NOOP("editstaff", "F♯"),
-    QT_TRANSLATE_NOOP("editstaff", "G"),
-    QT_TRANSLATE_NOOP("editstaff", "A♭"),
-    QT_TRANSLATE_NOOP("editstaff", "A"),
-    QT_TRANSLATE_NOOP("editstaff", "B♭"),
-    QT_TRANSLATE_NOOP("editstaff", "B")
-};
-
 QString EditStaff::midiCodeToStr(int midiCode)
 {
-    return QString("%1 %2").arg(qtrc("editstaff", s_es_noteNames[midiCode % 12])).arg(midiCode / 12 - 1);
+    return QString::fromStdString(mu::pitchToString(midiCode));
 }
 
 void EditStaff::showStaffTypeDialog()
 {
-    editStaffTypeDialog->setStaffType(m_staff->staffType(Ms::Fraction(0, 1)));
+    editStaffTypeDialog->setStaffType(m_staff->staffType(mu::engraving::Fraction(0, 1)));
     editStaffTypeDialog->setInstrument(m_instrument);
 
     if (editStaffTypeDialog->exec()) {

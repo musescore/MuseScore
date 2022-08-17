@@ -30,7 +30,7 @@ namespace mu::notation {
 class MsczReaderMock : public project::IMscMetaReader
 {
 public:
-    MOCK_METHOD(RetVal<project::ProjectMeta>, readMeta, (const io::path& filePath), (const, override));
+    MOCK_METHOD(RetVal<project::ProjectMeta>, readMeta, (const io::path_t& filePath), (const, override));
 };
 }
 

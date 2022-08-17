@@ -23,7 +23,7 @@
 #define MU_LANGUAGES_ILANGUAGESSERVICE_H
 
 #include "modularity/imoduleexport.h"
-#include "retval.h"
+#include "types/retval.h"
 
 #include "languagestypes.h"
 
@@ -37,6 +37,8 @@ public:
 
     virtual ValCh<LanguagesHash> languages() const = 0;
     virtual ValCh<Language> currentLanguage() const = 0;
+
+    virtual LanguageStatus::Status languageStatus(const QString& languageCode) const = 0;
 
     virtual RetCh<LanguageProgress> install(const QString& languageCode) = 0;
     virtual RetCh<LanguageProgress> update(const QString& languageCode) = 0;

@@ -28,7 +28,7 @@
 #include "context/iglobalcontext.h"
 #include "notation/inotationconfiguration.h"
 
-#include "engraving/infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
 namespace mu::notation {
 class NoteInputCursor

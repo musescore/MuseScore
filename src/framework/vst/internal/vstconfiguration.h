@@ -23,20 +23,25 @@
 #ifndef MU_VST_VSTCONFIGURATION_H
 #define MU_VST_VSTCONFIGURATION_H
 
+#include "modularity/ioc.h"
+#include "iglobalconfiguration.h"
+
 #include "ivstconfiguration.h"
 
 namespace mu::vst {
 class VstConfiguration : public IVstConfiguration
 {
+    INJECT(vst, framework::IGlobalConfiguration, globalConfig)
 public:
     void init();
 
-    io::paths userVstDirectories() const override;
-    void setUserVstDirectories(const io::paths& paths) override;
-    async::Channel<io::paths> userVstDirectoriesChanged() const override;
+    io::paths_t userVstDirectories() const override;
+    void setUserVstDirectories(const io::paths_t& paths) override;
+    async::Channel<io::paths_t> userVstDirectoriesChanged() const override;
+    io::path_t knownPluginsDir() const override;
 
 private:
-    async::Channel<io::paths> m_userVstDirsChanged;
+    async::Channel<io::paths_t> m_userVstDirsChanged;
 };
 }
 

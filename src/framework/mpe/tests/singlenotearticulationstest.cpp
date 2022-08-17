@@ -29,7 +29,7 @@ using namespace mu;
 using namespace mu::mpe;
 using namespace mu::mpe::tests;
 
-class SingleNoteArticulationsTest : public ::testing::Test
+class Engraving_SingleNoteArticulationsTest : public ::testing::Test
 {
 protected:
     void SetUp() override
@@ -43,7 +43,7 @@ protected:
         m_pitchClass = PitchClass::A;
         m_octave = 4;
 
-        // [GIVEN] Expression data of the note - no dynamic/articulations modificators
+        // [GIVEN] Expression data of the note - no dynamic/articulations modifiers
         m_nominalDynamic = dynamicLevelFromType(DynamicType::Natural);
 
         // [GIVEN] Articulation pattern "None", which means that note should be played without any modifications
@@ -69,7 +69,7 @@ protected:
  * @details In this case we're gonna build a simple note event without any articulation applied on the top of it
  *          So the actual PitchCurve and ExpressionCurve would be equal to the "StandardPattern" from the articulation Profile
  */
-TEST_F(SingleNoteArticulationsTest, StandardPattern)
+TEST_F(Engraving_SingleNoteArticulationsTest, StandardPattern)
 {
     // [GIVEN] No articulations applied on the top of the note
     ArticulationPattern scope;
@@ -110,7 +110,7 @@ TEST_F(SingleNoteArticulationsTest, StandardPattern)
  * @details In this case we're gonna build a simple note event with the staccato articulation applied on the top of it
  *          So the actual arrangement context of the note would reflect the parameters from staccato articulation pattern
  */
-TEST_F(SingleNoteArticulationsTest, StaccatoPattern)
+TEST_F(Engraving_SingleNoteArticulationsTest, StaccatoPattern)
 {
     // [GIVEN] Articulation pattern "Staccato", which instructs a performer to shorten duration of a note
     ArticulationPatternSegment staccatoArticulation;
@@ -156,7 +156,7 @@ TEST_F(SingleNoteArticulationsTest, StaccatoPattern)
  * @details In this case we're gonna build a simple note event with the accent articulation applied on the top of it
  *          So the actual expression context of the note would reflect the parameters from articulation pattern
  */
-TEST_F(SingleNoteArticulationsTest, AccentPattern)
+TEST_F(Engraving_SingleNoteArticulationsTest, AccentPattern)
 {
     // [GIVEN] Articulation pattern "Accent", which instructs a performer to play a note louder (usually on 1 dynamic level)
     ArticulationPatternSegment accentArticulation;
@@ -208,7 +208,7 @@ TEST_F(SingleNoteArticulationsTest, AccentPattern)
  *
  *          The note is marked by "mezzo forte" dynamic already, so accent articulation should increase this value up to one level - "fortissimo"
  */
-TEST_F(SingleNoteArticulationsTest, AccentPattern_Nominal_MezzoForte)
+TEST_F(Engraving_SingleNoteArticulationsTest, AccentPattern_Nominal_MezzoForte)
 {
     // [GIVEN] The note marked by mezzo forte dynamic
     m_nominalDynamic = dynamicLevelFromType(DynamicType::mf);
@@ -218,7 +218,8 @@ TEST_F(SingleNoteArticulationsTest, AccentPattern_Nominal_MezzoForte)
     accentArticulation.arrangementPattern = createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
     accentArticulation.pitchPattern = createSimplePitchPattern(0 /*increment_pitch_diff*/);
     accentArticulation.expressionPattern = createSimpleExpressionPattern(
-        dynamicLevelFromType(DynamicType::mf) /* increasing a note's dynamic on a single level from Natural dynamic*/);
+        dynamicLevelFromType(DynamicType::Natural)
+        + DYNAMIC_LEVEL_STEP /* increasing a note's dynamic on a single level from Natural dynamic*/);
 
     ArticulationPattern scope;
     scope.emplace(0, accentArticulation);
@@ -262,7 +263,7 @@ TEST_F(SingleNoteArticulationsTest, AccentPattern_Nominal_MezzoForte)
  *          applied on the top of it. So the actual expression context of the note would reflect the average parameters
  *          from articulation patterns
  */
-TEST_F(SingleNoteArticulationsTest, PocoTenuto)
+TEST_F(Engraving_SingleNoteArticulationsTest, PocoTenuto)
 {
     // [GIVEN] Articulation pattern "Staccato", which instructs a performer to shorten duration of a note
     ArticulationPatternSegment staccatoPattern;
@@ -328,7 +329,7 @@ TEST_F(SingleNoteArticulationsTest, PocoTenuto)
  *          applied on the top of it. So the actual pitch context of the note would reflect the
  *          parameters from articulation pattern
  */
-TEST_F(SingleNoteArticulationsTest, QuickFall)
+TEST_F(Engraving_SingleNoteArticulationsTest, QuickFall)
 {
     // [GIVEN] Articulation pattern "Tenuto", which instructs a performer to play a note for the whole nominal duration
     ArticulationPatternSegment quickFallPattern;
@@ -375,11 +376,11 @@ TEST_F(SingleNoteArticulationsTest, QuickFall)
  *          applied on the top of it. So the actual pitch context of the note would reflect the
  *          parameters from articulation pattern
  */
-TEST_F(SingleNoteArticulationsTest, Scoop)
+TEST_F(Engraving_SingleNoteArticulationsTest, Scoop)
 {
     // [GIVEN] Articulation pattern "Scoop", which instructs a performer to play ahead of a nominal duration,
     //         starting at a lower pitch, and then placing it on the note being played.
-    duration_percentage_t timestampOffset = -2.5 * TEN_PERCENT;
+    duration_percentage_t timestampOffset = static_cast<duration_percentage_t>(-2.5 * TEN_PERCENT);
     m_nominalTimestamp = 1000; //msecs
 
     ArticulationPatternSegment scoopPattern;

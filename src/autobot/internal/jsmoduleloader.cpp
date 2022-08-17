@@ -104,13 +104,13 @@ QString JsModuleLoader::resolvePath(const QString& basePath, const QString& modu
     QString moduleFile = module.endsWith(".js") ? module : (module + ".js");
 
     //! NOTE Check relative path
-    io::path path = basePath + "/" + moduleFile;
+    io::path_t path = basePath + "/" + moduleFile;
     bool ok = fileSystem()->exists(path);
     if (!ok) {
         //! NOTE Search module in default paths
-        static const io::paths defPaths = configuration()->scriptsDirPaths();
+        static const io::paths_t defPaths = configuration()->scriptsDirPaths();
 
-        for (const io::path& defPath : defPaths) {
+        for (const io::path_t& defPath : defPaths) {
             path = defPath + "/" + moduleFile;
             ok = fileSystem()->exists(path);
             if (ok) {

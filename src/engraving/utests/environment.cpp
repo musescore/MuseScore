@@ -24,35 +24,42 @@
 
 #include "engraving/engravingmodule.h"
 #include "engraving/libmscore/engravingitem.h"
-#include "framework/fonts/fontsmodule.h"
+#include "fonts/fontsmodule.h"
+#include "draw/drawmodule.h"
 
-#include "libmscore/masterscore.h"
+#include "libmscore/instrtemplate.h"
 #include "libmscore/musescoreCore.h"
 
 #include "mocks/engravingconfigurationmock.h"
+
+#include "utils/scorerw.h"
 
 #include "log.h"
 
 static mu::testing::SuiteEnvironment engraving_se(
 {
+    new mu::draw::DrawModule(),
     new mu::fonts::FontsModule(),
     new mu::engraving::EngravingModule()
 },
     []() {
     LOGI() << "engraving tests suite post init";
-    Ms::MScore::testMode = true;
-    Ms::MScore::noGui = true;
 
-    new Ms::MuseScoreCore;
-    Ms::MScore* mscore = new Ms::MScore();
+    mu::engraving::ScoreRW::setRootPath(mu::String::fromUtf8(engraving_utests_DATA_ROOT));
+
+    mu::engraving::MScore::testMode = true;
+    mu::engraving::MScore::noGui = true;
+
+    new mu::engraving::MuseScoreCore;
+    mu::engraving::MScore* mscore = new mu::engraving::MScore();
     mscore->init();
 
-    Ms::loadInstrumentTemplates(":/data/instruments.xml");
+    mu::engraving::loadInstrumentTemplates(":/data/instruments.xml");
 
     std::shared_ptr<testing::NiceMock<mu::engraving::EngravingConfigurationMock> > configurator
         = std::make_shared<testing::NiceMock<mu::engraving::EngravingConfigurationMock> >();
     ON_CALL(*configurator, isAccessibleEnabled()).WillByDefault(testing::Return(false));
     ON_CALL(*configurator, defaultColor()).WillByDefault(testing::Return(mu::draw::Color::black));
-    Ms::EngravingItem::setengravingConfiguration(configurator);
+    mu::engraving::EngravingItem::setengravingConfiguration(configurator);
 }
     );

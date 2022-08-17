@@ -22,8 +22,6 @@
 
 #include "projectfileinfoprovider.h"
 
-#include <QFileInfo>
-
 #include "notationproject.h"
 
 using namespace mu;
@@ -35,27 +33,27 @@ ProjectFileInfoProvider::ProjectFileInfoProvider(NotationProject* project)
 }
 
 //! TODO: maybe implement this class further for Cloud Projects
-io::path ProjectFileInfoProvider::path() const
+io::path_t ProjectFileInfoProvider::path() const
 {
     return m_project->path();
 }
 
-io::path ProjectFileInfoProvider::fileName(bool includingExtension) const
+io::path_t ProjectFileInfoProvider::fileName(bool includingExtension) const
 {
     return io::filename(path(), includingExtension);
 }
 
-io::path ProjectFileInfoProvider::absoluteDirPath() const
+io::path_t ProjectFileInfoProvider::absoluteDirPath() const
 {
     return io::absoluteDirpath(path());
 }
 
-QDateTime ProjectFileInfoProvider::birthTime() const
+DateTime ProjectFileInfoProvider::birthTime() const
 {
-    return QFileInfo(path().toQString()).birthTime();
+    return filesystem()->birthTime(path());
 }
 
-QDateTime ProjectFileInfoProvider::lastModified() const
+DateTime ProjectFileInfoProvider::lastModified() const
 {
-    return QFileInfo(path().toQString()).lastModified();
+    return filesystem()->lastModified(path());
 }

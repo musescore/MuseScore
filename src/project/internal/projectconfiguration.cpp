@@ -70,7 +70,7 @@ void ProjectConfiguration::init()
     });
 
     settings()->valueChanged(RECENT_PROJECTS_PATHS).onReceive(nullptr, [this](const Val& val) {
-        io::paths paths = parseRecentProjectsPaths(val);
+        io::paths_t paths = parseRecentProjectsPaths(val);
         m_recentProjectPathsChanged.send(paths);
     });
 
@@ -95,14 +95,14 @@ void ProjectConfiguration::init()
     settings()->setDefaultValue(SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT, Val(false));
 }
 
-io::paths ProjectConfiguration::recentProjectPaths() const
+io::paths_t ProjectConfiguration::recentProjectPaths() const
 {
     TRACEFUNC;
 
-    io::paths allPaths = parseRecentProjectsPaths(settings()->value(RECENT_PROJECTS_PATHS));
-    io::paths actualPaths;
+    io::paths_t allPaths = parseRecentProjectsPaths(settings()->value(RECENT_PROJECTS_PATHS));
+    io::paths_t actualPaths;
 
-    for (const io::path& path: allPaths) {
+    for (const io::path_t& path: allPaths) {
         if (fileSystem()->exists(path)) {
             actualPaths.push_back(path);
         }
@@ -119,12 +119,12 @@ io::paths ProjectConfiguration::recentProjectPaths() const
     return actualPaths;
 }
 
-void ProjectConfiguration::setRecentProjectPaths(const io::paths& recentScorePaths)
+void ProjectConfiguration::setRecentProjectPaths(const io::paths_t& recentScorePaths)
 {
     TRACEFUNC;
 
     QJsonArray jsonArray;
-    for (const io::path& path : recentScorePaths) {
+    for (const io::path_t& path : recentScorePaths) {
         jsonArray << path.toQString();
     }
 
@@ -134,15 +134,15 @@ void ProjectConfiguration::setRecentProjectPaths(const io::paths& recentScorePat
     settings()->setSharedValue(RECENT_PROJECTS_PATHS, value);
 }
 
-async::Channel<io::paths> ProjectConfiguration::recentProjectPathsChanged() const
+async::Channel<io::paths_t> ProjectConfiguration::recentProjectPathsChanged() const
 {
     return m_recentProjectPathsChanged;
 }
 
-io::paths ProjectConfiguration::parseRecentProjectsPaths(const Val& value) const
+io::paths_t ProjectConfiguration::parseRecentProjectsPaths(const Val& value) const
 {
     TRACEFUNC;
-    io::paths result;
+    io::paths_t result;
 
     if (value.isNull()) {
         return result;
@@ -170,24 +170,24 @@ io::paths ProjectConfiguration::parseRecentProjectsPaths(const Val& value) const
     return result;
 }
 
-io::path ProjectConfiguration::myFirstProjectPath() const
+io::path_t ProjectConfiguration::myFirstProjectPath() const
 {
     return appTemplatesPath() + "/My_First_Score.mscx";
 }
 
-io::path ProjectConfiguration::appTemplatesPath() const
+io::path_t ProjectConfiguration::appTemplatesPath() const
 {
     return globalConfiguration()->appDataPath() + "/templates";
 }
 
-io::paths ProjectConfiguration::availableTemplateDirs() const
+io::paths_t ProjectConfiguration::availableTemplateDirs() const
 {
-    io::paths dirs;
+    io::paths_t dirs;
 
-    io::path defaultTemplatesPath = this->appTemplatesPath();
+    io::path_t defaultTemplatesPath = this->appTemplatesPath();
     dirs.push_back(defaultTemplatesPath);
 
-    io::path userTemplatesPath = this->userTemplatesPath();
+    io::path_t userTemplatesPath = this->userTemplatesPath();
     if (!userTemplatesPath.empty() && userTemplatesPath != defaultTemplatesPath) {
         dirs.push_back(userTemplatesPath);
     }
@@ -195,89 +195,89 @@ io::paths ProjectConfiguration::availableTemplateDirs() const
     return dirs;
 }
 
-io::path ProjectConfiguration::templateCategoriesJsonPath(const io::path& templatesDir) const
+io::path_t ProjectConfiguration::templateCategoriesJsonPath(const io::path_t& templatesDir) const
 {
     return templatesDir + "/categories.json";
 }
 
-io::path ProjectConfiguration::userTemplatesPath() const
+io::path_t ProjectConfiguration::userTemplatesPath() const
 {
     return settings()->value(USER_TEMPLATES_PATH).toPath();
 }
 
-void ProjectConfiguration::setUserTemplatesPath(const io::path& path)
+void ProjectConfiguration::setUserTemplatesPath(const io::path_t& path)
 {
     settings()->setSharedValue(USER_TEMPLATES_PATH, Val(path));
 }
 
-async::Channel<io::path> ProjectConfiguration::userTemplatesPathChanged() const
+async::Channel<io::path_t> ProjectConfiguration::userTemplatesPathChanged() const
 {
     return m_userTemplatesPathChanged;
 }
 
-io::path ProjectConfiguration::defaultProjectsPath() const
+io::path_t ProjectConfiguration::defaultProjectsPath() const
 {
     return settings()->value(DEFAULT_PROJECTS_PATH).toPath();
 }
 
-void ProjectConfiguration::setDefaultProjectsPath(const io::path& path)
+void ProjectConfiguration::setDefaultProjectsPath(const io::path_t& path)
 {
     settings()->setSharedValue(DEFAULT_PROJECTS_PATH, Val(path));
 }
 
-io::path ProjectConfiguration::lastOpenedProjectsPath() const
+io::path_t ProjectConfiguration::lastOpenedProjectsPath() const
 {
     return settings()->value(LAST_OPENED_PROJECTS_PATH).toPath();
 }
 
-void ProjectConfiguration::setLastOpenedProjectsPath(const io::path& path)
+void ProjectConfiguration::setLastOpenedProjectsPath(const io::path_t& path)
 {
     settings()->setSharedValue(LAST_OPENED_PROJECTS_PATH, Val(path));
 }
 
-io::path ProjectConfiguration::lastSavedProjectsPath() const
+io::path_t ProjectConfiguration::lastSavedProjectsPath() const
 {
     return settings()->value(LAST_SAVED_PROJECTS_PATH).toPath();
 }
 
-void ProjectConfiguration::setLastSavedProjectsPath(const io::path& path)
+void ProjectConfiguration::setLastSavedProjectsPath(const io::path_t& path)
 {
     settings()->setSharedValue(LAST_SAVED_PROJECTS_PATH, Val(path));
 }
 
-io::path ProjectConfiguration::userProjectsPath() const
+io::path_t ProjectConfiguration::userProjectsPath() const
 {
     return settings()->value(USER_PROJECTS_PATH).toPath();
 }
 
-void ProjectConfiguration::setUserProjectsPath(const io::path& path)
+void ProjectConfiguration::setUserProjectsPath(const io::path_t& path)
 {
     settings()->setSharedValue(USER_PROJECTS_PATH, Val(path));
 }
 
-async::Channel<io::path> ProjectConfiguration::userProjectsPathChanged() const
+async::Channel<io::path_t> ProjectConfiguration::userProjectsPathChanged() const
 {
     return m_userScoresPathChanged;
 }
 
-io::path ProjectConfiguration::cloudProjectsPath() const
+io::path_t ProjectConfiguration::cloudProjectsPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/cloud_projects";
 }
 
-bool ProjectConfiguration::isCloudProject(const io::path& path) const
+bool ProjectConfiguration::isCloudProject(const io::path_t& path) const
 {
     return io::dirpath(path) == cloudProjectsPath();
 }
 
-io::path ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr project, const QString& filenameAddition,
-                                                     const QString& suffix) const
+io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr project, const QString& filenameAddition,
+                                                       const QString& suffix) const
 {
-    io::path folderPath;
-    io::path filename;
+    io::path_t folderPath;
+    io::path_t filename;
     QString theSuffix = suffix;
 
-    io::path projectPath = project->path();
+    io::path_t projectPath = project->path();
 
     if (project->isNewlyCreated()) {
         if (io::isAbsolute(projectPath)) {
@@ -288,6 +288,7 @@ io::path ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr project
     } else if (project->isCloudProject()) {
         // TODO(save-to-cloud)
     } else {
+        projectPath = engraving::containerPath(projectPath);
         folderPath = io::dirpath(projectPath);
         filename = io::filename(projectPath, false);
 
@@ -472,7 +473,7 @@ async::Channel<int> ProjectConfiguration::autoSaveIntervalChanged() const
     return m_autoSaveIntervalChanged;
 }
 
-io::path ProjectConfiguration::newProjectTemporaryPath() const
+io::path_t ProjectConfiguration::newProjectTemporaryPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/new_project" + DEFAULT_FILE_SUFFIX;
 }

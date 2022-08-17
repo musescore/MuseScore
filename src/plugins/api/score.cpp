@@ -31,7 +31,7 @@
 #include "libmscore/segment.h"
 #include "libmscore/text.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 //---------------------------------------------------------
 //   Score::newCursor
@@ -61,18 +61,18 @@ void Score::addText(const QString& type, const QString& txt)
         score()->insertMeasure(ElementType::VBOX, measure);
         measure = score()->first();
     }
-    Ms::TextStyleType tid = Ms::TextStyleType::DEFAULT;
+    mu::engraving::TextStyleType tid = mu::engraving::TextStyleType::DEFAULT;
     if (type == "title") {
-        tid = Ms::TextStyleType::TITLE;
+        tid = mu::engraving::TextStyleType::TITLE;
     } else if (type == "subtitle") {
-        tid = Ms::TextStyleType::SUBTITLE;
+        tid = mu::engraving::TextStyleType::SUBTITLE;
     } else if (type == "composer") {
-        tid = Ms::TextStyleType::COMPOSER;
+        tid = mu::engraving::TextStyleType::COMPOSER;
     } else if (type == "lyricist") {
-        tid = Ms::TextStyleType::POET;
+        tid = mu::engraving::TextStyleType::POET;
     }
 
-    Ms::Text* text = mu::engraving::Factory::createText(measure, tid);
+    mu::engraving::Text* text = mu::engraving::Factory::createText(measure, tid);
     text->setParent(measure);
     text->setXmlText(txt);
     score()->undoAddElement(text);
@@ -82,14 +82,14 @@ void Score::addText(const QString& type, const QString& txt)
 //   defaultInstrTemplate
 //---------------------------------------------------------
 
-static const Ms::InstrumentTemplate* defaultInstrTemplate()
+static const mu::engraving::InstrumentTemplate* defaultInstrTemplate()
 {
-    static Ms::InstrumentTemplate defaultInstrument;
+    static mu::engraving::InstrumentTemplate defaultInstrument;
     if (defaultInstrument.channel.empty()) {
-        Ms::Channel a;
+        mu::engraving::InstrChannel a;
         a.setChorus(0);
         a.setReverb(0);
-        a.setName(Ms::Channel::DEFAULT_NAME);
+        a.setName(String::fromUtf8(mu::engraving::InstrChannel::DEFAULT_NAME));
         a.setBank(0);
         a.setVolume(90);
         a.setPan(0);
@@ -106,10 +106,21 @@ const InstrumentTemplate* Score::instrTemplateFromName(const QString& name)
 {
     const InstrumentTemplate* t = searchTemplate(name);
     if (!t) {
-        qWarning("<%s> not found", qPrintable(name));
+        LOGW("<%s> not found", qPrintable(name));
         t = defaultInstrTemplate();
     }
     return t;
+}
+
+mu::notation::INotationPtr Score::notation() const
+{
+    return context()->currentNotation();
+}
+
+mu::notation::INotationUndoStackPtr Score::undoStack() const
+{
+    mu::notation::INotationPtr notation = context()->currentNotation();
+    return notation ? notation->undoStack() : nullptr;
 }
 
 //---------------------------------------------------------
@@ -121,7 +132,7 @@ void Score::appendPart(const QString& instrumentId)
     const InstrumentTemplate* t = searchTemplate(instrumentId);
 
     if (!t) {
-        qWarning("appendPart: <%s> not found", qPrintable(instrumentId));
+        LOGW("appendPart: <%s> not found", qPrintable(instrumentId));
         t = defaultInstrTemplate();
     }
 
@@ -137,7 +148,7 @@ void Score::appendPartByMusicXmlId(const QString& instrumentMusicXmlId)
     const InstrumentTemplate* t = searchTemplateForMusicXmlId(instrumentMusicXmlId);
 
     if (!t) {
-        qWarning("appendPart: <%s> not found", qPrintable(instrumentMusicXmlId));
+        LOGW("appendPart: <%s> not found", qPrintable(instrumentMusicXmlId));
         t = defaultInstrTemplate();
     }
 
@@ -150,7 +161,7 @@ void Score::appendPartByMusicXmlId(const QString& instrumentMusicXmlId)
 
 Segment* Score::firstSegment()
 {
-    return wrap<Segment>(score()->firstSegment(Ms::SegmentType::All), Ownership::SCORE);
+    return wrap<Segment>(score()->firstSegment(mu::engraving::SegmentType::All), Ownership::SCORE);
 }
 
 //---------------------------------------------------------
@@ -213,7 +224,26 @@ QQmlListProperty<Staff> Score::staves()
 
 void Score::startCmd()
 {
-    score()->startCmd();
+    IF_ASSERT_FAILED(undoStack()) {
+        return;
+    }
+
+    undoStack()->prepareChanges();
+}
+
+void Score::endCmd(bool rollback)
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        return;
+    }
+
+    if (rollback) {
+        undoStack()->rollbackChanges();
+    } else {
+        undoStack()->commitChanges();
+    }
+
+    notation()->notationChanged().notify();
 }
 }
 }

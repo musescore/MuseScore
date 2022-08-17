@@ -23,8 +23,8 @@
 #include "settings.h"
 #include "stringutils.h"
 
-#include "global/xmlreader.h"
-#include "global/xmlwriter.h"
+#include "global/deprecated/xmlreader.h"
+#include "global/deprecated/xmlwriter.h"
 
 #include "log.h"
 
@@ -40,11 +40,13 @@ static const audioch_t AUDIO_CHANNELS = 2;
 
 //TODO: add other setting: audio device etc
 static const Settings::Key AUDIO_API_KEY("audio", "io/audioApi");
-static const Settings::Key AUDIO_BUFFER_SIZE("audio", "driver_buffer");
+static const Settings::Key AUDIO_OUTPUT_DEVICE_ID_KEY("audio", "io/outputDevice");
+static const Settings::Key AUDIO_BUFFER_SIZE_KEY("audio", "io/bufferSize");
+static const Settings::Key AUDIO_SAMPLE_RATE_KEY("audio", "io/sampleRate");
 
 static const Settings::Key USER_SOUNDFONTS_PATHS("midi", "application/paths/mySoundfonts");
 
-static const AudioResourceId DEFAULT_SOUND_FONT_NAME = "MuseScore_General";     // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
+static const AudioResourceId DEFAULT_SOUND_FONT_NAME = "MS Basic";     // "GeneralUser GS v1.471.sf2"; // "MS Basic.sf3";
 static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META
     = { DEFAULT_SOUND_FONT_NAME, AudioResourceType::FluidSoundfont, "Fluid", false /*hasNativeEditor*/ };
 
@@ -56,14 +58,30 @@ void AudioConfiguration::init()
 #else
     defaultBufferSize = 1024;
 #endif
-    settings()->setDefaultValue(AUDIO_BUFFER_SIZE, Val(defaultBufferSize));
+    settings()->setDefaultValue(AUDIO_BUFFER_SIZE_KEY, Val(defaultBufferSize));
+    settings()->valueChanged(AUDIO_BUFFER_SIZE_KEY).onReceive(nullptr, [this](const Val&) {
+        m_driverBufferSizeChanged.notify();
+    });
 
     settings()->setDefaultValue(AUDIO_API_KEY, Val("Core Audio"));
 
-    settings()->setDefaultValue(USER_SOUNDFONTS_PATHS, Val(""));
+    settings()->valueChanged(AUDIO_OUTPUT_DEVICE_ID_KEY).onReceive(nullptr, [this](const Val&) {
+        m_audioOutputDeviceIdChanged.notify();
+    });
+
+    settings()->setDefaultValue(AUDIO_SAMPLE_RATE_KEY, Val(44100));
+    settings()->valueChanged(AUDIO_SAMPLE_RATE_KEY).onReceive(nullptr, [this](const Val&) {
+        m_driverSampleRateChanged.notify();
+    });
+
+    settings()->setDefaultValue(USER_SOUNDFONTS_PATHS, Val(globalConfiguration()->userDataPath() + "/SoundFonts"));
     settings()->valueChanged(USER_SOUNDFONTS_PATHS).onReceive(nullptr, [this](const Val&) {
         m_soundFontDirsChanged.send(soundFontDirectories());
     });
+
+    for (const auto& path : userSoundFontDirectories()) {
+        fileSystem()->makePath(path);
+    }
 }
 
 std::vector<std::string> AudioConfiguration::availableAudioApiList() const
@@ -88,6 +106,21 @@ void AudioConfiguration::setCurrentAudioApi(const std::string& name)
     settings()->setSharedValue(AUDIO_API_KEY, Val(name));
 }
 
+std::string AudioConfiguration::audioOutputDeviceId() const
+{
+    return settings()->value(AUDIO_OUTPUT_DEVICE_ID_KEY).toString();
+}
+
+void AudioConfiguration::setAudioOutputDeviceId(const std::string& deviceId)
+{
+    settings()->setSharedValue(AUDIO_OUTPUT_DEVICE_ID_KEY, Val(deviceId));
+}
+
+async::Notification AudioConfiguration::audioOutputDeviceIdChanged() const
+{
+    return m_audioOutputDeviceIdChanged;
+}
+
 audioch_t AudioConfiguration::audioChannelsCount() const
 {
     return AUDIO_CHANNELS;
@@ -95,7 +128,32 @@ audioch_t AudioConfiguration::audioChannelsCount() const
 
 unsigned int AudioConfiguration::driverBufferSize() const
 {
-    return settings()->value(AUDIO_BUFFER_SIZE).toInt();
+    return settings()->value(AUDIO_BUFFER_SIZE_KEY).toInt();
+}
+
+void AudioConfiguration::setDriverBufferSize(unsigned int size)
+{
+    settings()->setSharedValue(AUDIO_BUFFER_SIZE_KEY, Val(static_cast<int>(size)));
+}
+
+async::Notification AudioConfiguration::driverBufferSizeChanged() const
+{
+    return m_driverBufferSizeChanged;
+}
+
+unsigned int AudioConfiguration::sampleRate() const
+{
+    return settings()->value(AUDIO_SAMPLE_RATE_KEY).toInt();
+}
+
+void AudioConfiguration::setSampleRate(unsigned int sampleRate)
+{
+    settings()->setSharedValue(AUDIO_SAMPLE_RATE_KEY, Val(static_cast<int>(sampleRate)));
+}
+
+async::Notification AudioConfiguration::sampleRateChanged() const
+{
+    return m_driverSampleRateChanged;
 }
 
 SoundFontPaths AudioConfiguration::soundFontDirectories() const
@@ -106,18 +164,18 @@ SoundFontPaths AudioConfiguration::soundFontDirectories() const
     return paths;
 }
 
-io::paths AudioConfiguration::userSoundFontDirectories() const
+io::paths_t AudioConfiguration::userSoundFontDirectories() const
 {
     std::string pathsStr = settings()->value(USER_SOUNDFONTS_PATHS).toString();
     return io::pathsFromString(pathsStr);
 }
 
-void AudioConfiguration::setUserSoundFontDirectories(const io::paths& paths)
+void AudioConfiguration::setUserSoundFontDirectories(const io::paths_t& paths)
 {
     settings()->setSharedValue(USER_SOUNDFONTS_PATHS, Val(io::pathsToString(paths)));
 }
 
-async::Channel<io::paths> AudioConfiguration::soundFontDirectoriesChanged() const
+async::Channel<io::paths_t> AudioConfiguration::soundFontDirectoriesChanged() const
 {
     return m_soundFontDirsChanged;
 }
@@ -197,12 +255,12 @@ async::Notification AudioConfiguration::synthesizerStateGroupChanged(const std::
     return m_synthesizerStateGroupChanged[gname];
 }
 
-io::path AudioConfiguration::stateFilePath() const
+io::path_t AudioConfiguration::stateFilePath() const
 {
     return globalConfiguration()->userAppDataPath() + "/synthesizer.xml";
 }
 
-bool AudioConfiguration::readState(const io::path& path, SynthesizerState& state) const
+bool AudioConfiguration::readState(const io::path_t& path, SynthesizerState& state) const
 {
     XmlReader xml(path);
 
@@ -247,7 +305,7 @@ bool AudioConfiguration::readState(const io::path& path, SynthesizerState& state
     return xml.success();
 }
 
-bool AudioConfiguration::writeState(const io::path& path, const SynthesizerState& state)
+bool AudioConfiguration::writeState(const io::path_t& path, const SynthesizerState& state)
 {
     XmlWriter xml(path);
     xml.writeStartDocument();

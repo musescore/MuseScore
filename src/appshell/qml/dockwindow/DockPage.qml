@@ -38,9 +38,9 @@ DockPageView {
     property var panelTopDropDestination: { "dock": panelTopDockingHolder, "dropLocation": Location.Left }
     property var panelBottomDropDestination: { "dock": panelBottomDockingHolder, "dropLocation": Location.Left }
 
-    property bool complited: false
-    Component.onCompleted: root.complited = true
-    Component.onDestruction: root.complited = false
+    property bool completed: false
+    Component.onCompleted: root.completed = true
+    Component.onDestruction: root.completed = false
 
     centralDock: DockCentralView {
         objectName: root.objectName + "_central"
@@ -48,7 +48,7 @@ DockPageView {
         Loader {
             id: central
             anchors.fill: parent
-            sourceComponent: (root.complited && root.visible) ? root.central : null
+            sourceComponent: (root.completed && root.visible) ? root.central : null
         }
     }
 

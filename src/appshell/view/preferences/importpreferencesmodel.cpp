@@ -23,9 +23,8 @@
 
 #include <QTextCodec>
 
-#include "libmscore/mscore.h"
+#include "engraving/types/constants.h"
 
-#include "log.h"
 #include "translation.h"
 
 using namespace mu::appshell;
@@ -54,16 +53,18 @@ QVariantList ImportPreferencesModel::charsets() const
 
 QVariantList ImportPreferencesModel::shortestNotes() const
 {
+    constexpr int division =  engraving::Constants::division;
+
     QVariantList result = {
-        QVariantMap { { "title", qtrc("appshell", "Quarter") }, { "value", division() } },
-        QVariantMap { { "title", qtrc("appshell", "Eighth") }, { "value", division() / 2 } },
-        QVariantMap { { "title", qtrc("appshell", "16th") }, { "value", division() / 4 } },
-        QVariantMap { { "title", qtrc("appshell", "32nd") }, { "value", division() / 8 } },
-        QVariantMap { { "title", qtrc("appshell", "64th") }, { "value", division() / 16 } },
-        QVariantMap { { "title", qtrc("appshell", "128th") }, { "value", division() / 32 } },
-        QVariantMap { { "title", qtrc("appshell", "256th") }, { "value", division() / 64 } },
-        QVariantMap { { "title", qtrc("appshell", "512th") }, { "value", division() / 128 } },
-        QVariantMap { { "title", qtrc("appshell", "1024th") }, { "value", division() / 256 } }
+        QVariantMap { { "title", qtrc("appshell/preferences", "Quarter") }, { "value", division } },
+        QVariantMap { { "title", qtrc("appshell/preferences", "Eighth") }, { "value", division / 2 } },
+        QVariantMap { { "title", qtrc("appshell/preferences", "16th") }, { "value", division / 4 } },
+        QVariantMap { { "title", qtrc("appshell/preferences", "32nd") }, { "value", division / 8 } },
+        QVariantMap { { "title", qtrc("appshell/preferences", "64th") }, { "value", division / 16 } },
+        QVariantMap { { "title", qtrc("appshell/preferences", "128th") }, { "value", division / 32 } },
+        QVariantMap { { "title", qtrc("appshell/preferences", "256th") }, { "value", division / 64 } },
+        QVariantMap { { "title", qtrc("appshell/preferences", "512th") }, { "value", division / 128 } },
+        QVariantMap { { "title", qtrc("appshell/preferences", "1024th") }, { "value", division / 256 } }
     };
 
     return result;
@@ -71,12 +72,12 @@ QVariantList ImportPreferencesModel::shortestNotes() const
 
 QString ImportPreferencesModel::stylePathFilter() const
 {
-    return qtrc("appshell", "MuseScore Style File") + " (*.mss)";
+    return qtrc("appshell/preferences", "MuseScore style file") + " (*.mss)";
 }
 
 QString ImportPreferencesModel::styleChooseTitle() const
 {
-    return qtrc("appshell", "Choose default style for imports");
+    return qtrc("appshell/preferences", "Choose default style for imports");
 }
 
 QString ImportPreferencesModel::fileDirectory(const QString& filePath) const
@@ -89,14 +90,9 @@ QString ImportPreferencesModel::styleFileImportPath() const
     return musicXmlConfiguration()->styleFileImportPath().toQString();
 }
 
-QString ImportPreferencesModel::currentGuitarProCharset() const
+QString ImportPreferencesModel::currentOvertureCharset() const
 {
-    return QString::fromStdString(guitarProConfiguration()->importGuitarProCharset());
-}
-
-QString ImportPreferencesModel::currentOvertuneCharset() const
-{
-    return QString::fromStdString(oveConfiguration()->importOvertuneCharset());
+    return QString::fromStdString(oveConfiguration()->importOvertureCharset());
 }
 
 bool ImportPreferencesModel::importLayout() const
@@ -134,24 +130,14 @@ void ImportPreferencesModel::setStyleFileImportPath(QString path)
     emit styleFileImportPathChanged(path);
 }
 
-void ImportPreferencesModel::setCurrentGuitarProCharset(QString charset)
+void ImportPreferencesModel::setCurrentOvertureCharset(QString charset)
 {
-    if (charset == currentGuitarProCharset()) {
+    if (charset == currentOvertureCharset()) {
         return;
     }
 
-    guitarProConfiguration()->setImportGuitarProCharset(charset.toStdString());
-    emit currentGuitarProCharsetChanged(charset);
-}
-
-void ImportPreferencesModel::setCurrentOvertuneCharset(QString charset)
-{
-    if (charset == currentOvertuneCharset()) {
-        return;
-    }
-
-    oveConfiguration()->setImportOvertuneCharset(charset.toStdString());
-    emit currentOvertuneCharsetChanged(charset);
+    oveConfiguration()->setImportOvertureCharset(charset.toStdString());
+    emit currentOvertureCharsetChanged(charset);
 }
 
 void ImportPreferencesModel::setImportLayout(bool import)
@@ -202,9 +188,4 @@ void ImportPreferencesModel::setNeedAskAboutApplyingNewStyle(bool value)
 
     musicXmlConfiguration()->setNeedAskAboutApplyingNewStyle(value);
     emit needAskAboutApplyingNewStyleChanged(value);
-}
-
-int ImportPreferencesModel::division() const
-{
-    return notationConfiguration()->notationDivision();
 }

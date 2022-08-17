@@ -22,11 +22,11 @@
 #ifndef MU_PROJECT_PROJECTCONFIGURATION_H
 #define MU_PROJECT_PROJECTCONFIGURATION_H
 
-#include "global/val.h"
+#include "types/val.h"
 
 #include "modularity/ioc.h"
 #include "global/iglobalconfiguration.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "accessibility/iaccessibilityconfiguration.h"
 #include "notation/inotationconfiguration.h"
 
@@ -38,7 +38,7 @@ class ProjectConfiguration : public IProjectConfiguration
     INJECT(project, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(project, notation::INotationConfiguration, notationConfiguration)
     INJECT(project, accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
-    INJECT(project, system::IFileSystem, fileSystem)
+    INJECT(project, io::IFileSystem, fileSystem)
 
 public:
     static const QString DEFAULT_FILE_SUFFIX;
@@ -46,40 +46,40 @@ public:
 
     void init();
 
-    io::paths recentProjectPaths() const override;
-    void setRecentProjectPaths(const io::paths& recentScorePaths) override;
-    async::Channel<io::paths> recentProjectPathsChanged() const override;
+    io::paths_t recentProjectPaths() const override;
+    void setRecentProjectPaths(const io::paths_t& recentScorePaths) override;
+    async::Channel<io::paths_t> recentProjectPathsChanged() const override;
 
-    io::path myFirstProjectPath() const override;
+    io::path_t myFirstProjectPath() const override;
 
-    io::paths availableTemplateDirs() const override;
-    io::path templateCategoriesJsonPath(const io::path& templatesDir) const override;
+    io::paths_t availableTemplateDirs() const override;
+    io::path_t templateCategoriesJsonPath(const io::path_t& templatesDir) const override;
 
-    io::path userTemplatesPath() const override;
-    void setUserTemplatesPath(const io::path& path) override;
-    async::Channel<io::path> userTemplatesPathChanged() const override;
+    io::path_t userTemplatesPath() const override;
+    void setUserTemplatesPath(const io::path_t& path) override;
+    async::Channel<io::path_t> userTemplatesPathChanged() const override;
 
-    io::path defaultProjectsPath() const override;
-    void setDefaultProjectsPath(const io::path& path) override;
+    io::path_t defaultProjectsPath() const override;
+    void setDefaultProjectsPath(const io::path_t& path) override;
 
-    io::path lastOpenedProjectsPath() const override;
-    void setLastOpenedProjectsPath(const io::path& path) override;
+    io::path_t lastOpenedProjectsPath() const override;
+    void setLastOpenedProjectsPath(const io::path_t& path) override;
 
-    io::path lastSavedProjectsPath() const override;
-    void setLastSavedProjectsPath(const io::path& path) override;
+    io::path_t lastSavedProjectsPath() const override;
+    void setLastSavedProjectsPath(const io::path_t& path) override;
 
-    io::path userProjectsPath() const override;
-    void setUserProjectsPath(const io::path& path) override;
-    async::Channel<io::path> userProjectsPathChanged() const override;
+    io::path_t userProjectsPath() const override;
+    void setUserProjectsPath(const io::path_t& path) override;
+    async::Channel<io::path_t> userProjectsPathChanged() const override;
 
-    io::path cloudProjectsPath() const override;
-    bool isCloudProject(const io::path& path) const override;
+    io::path_t cloudProjectsPath() const override;
+    bool isCloudProject(const io::path_t& path) const override;
 
     bool shouldAskSaveLocationType() const override;
     void setShouldAskSaveLocationType(bool shouldAsk) override;
 
-    io::path defaultSavingFilePath(INotationProjectPtr project, const QString& filenameAddition = QString(),
-                                   const QString& suffix = QString()) const override;
+    io::path_t defaultSavingFilePath(INotationProjectPtr project,
+                                     const QString& filenameAddition = QString(), const QString& suffix = QString()) const override;
 
     SaveLocationType lastUsedSaveLocationType() const override;
     void setLastUsedSaveLocationType(SaveLocationType type) override;
@@ -104,7 +104,7 @@ public:
     void setAutoSaveInterval(int minutes) override;
     async::Channel<int> autoSaveIntervalChanged() const override;
 
-    io::path newProjectTemporaryPath() const override;
+    io::path_t newProjectTemporaryPath() const override;
 
     bool isAccessibleEnabled() const override;
 
@@ -112,13 +112,13 @@ public:
     void setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport) override;
 
 private:
-    io::paths parseRecentProjectsPaths(const mu::Val& value) const;
+    io::paths_t parseRecentProjectsPaths(const mu::Val& value) const;
 
-    io::path appTemplatesPath() const;
+    io::path_t appTemplatesPath() const;
 
-    async::Channel<io::paths> m_recentProjectPathsChanged;
-    async::Channel<io::path> m_userTemplatesPathChanged;
-    async::Channel<io::path> m_userScoresPathChanged;
+    async::Channel<io::paths_t> m_recentProjectPathsChanged;
+    async::Channel<io::path_t> m_userTemplatesPathChanged;
+    async::Channel<io::path_t> m_userScoresPathChanged;
 
     async::Channel<bool> m_autoSaveEnabledChanged;
     async::Channel<int> m_autoSaveIntervalChanged;

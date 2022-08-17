@@ -25,17 +25,11 @@
 
 #include "durationtype.h"
 #include "symbol.h"
-#include "infrastructure/draw/painterpath.h"
+#include "draw/types/painterpath.h"
+#include "types/types.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Chord;
-
-// Tremolo subtypes:
-enum class TremoloType : signed char {
-    INVALID_TREMOLO = -1,
-    R8 = 0, R16, R32, R64, BUZZ_ROLL,    // one note tremolo (repeat)
-    C8, C16, C32, C64       // two note tremolo (change)
-};
 
 // only applicable to minim two-note tremolo in non-TAB staves
 enum class TremoloStyle : signed char {
@@ -48,23 +42,27 @@ enum class TremoloStyle : signed char {
 
 class Tremolo final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Tremolo)
+
     TremoloType _tremoloType { TremoloType::R8 };
     Chord* _chord1 { nullptr };
     Chord* _chord2 { nullptr };
     TDuration _durationType;
-    mu::PainterPath path;
+    bool _up{ true };
+    DirectionV _direction;
+    mu::draw::PainterPath path;
 
     int _lines;         // derived from _subtype
     TremoloStyle _style { TremoloStyle::DEFAULT };
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Tremolo(Chord* parent);
     Tremolo(const Tremolo&);
 
-    mu::PainterPath basePath() const;
+    mu::draw::PainterPath basePath(double stretch = 0) const;
     void computeShape();
-    void layoutOneNoteTremolo(qreal x, qreal y, qreal h, qreal spatium);
-    void layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium);
+    void layoutOneNoteTremolo(double x, double y, double h, double spatium);
+    void layoutTwoNotesTremolo(double x, double y, double h, double spatium);
 
 public:
 
@@ -75,22 +73,17 @@ public:
     void setParent(Chord* ch);
 
     int subtype() const override { return static_cast<int>(_tremoloType); }
-    QString subtypeName() const override;
+    TranslatableString subtypeUserName() const override;
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
-
-    QString tremoloTypeName() const;
-    void setTremoloType(const QString& s);
-    static TremoloType name2Type(const QString& s);
-    static QString type2name(TremoloType t);
 
     void setTremoloType(TremoloType t);
     TremoloType tremoloType() const { return _tremoloType; }
 
-    qreal minHeight() const;
+    double minHeight() const;
 
-    qreal chordMag() const;
-    qreal mag() const override;
+    double chordMag() const;
+    double mag() const override;
     void draw(mu::draw::Painter*) const override;
     void layout() override;
     void layout2();
@@ -100,8 +93,8 @@ public:
     Chord* chord1() const { return _chord1; }
     Chord* chord2() const { return _chord2; }
 
-    TDuration durationType() const { return _durationType; }
-    void setDurationType(TDuration d) { _durationType = d; }
+    TDuration durationType() const;
+    void setDurationType(TDuration d);
 
     void setChords(Chord* c1, Chord* c2)
     {
@@ -113,26 +106,27 @@ public:
     bool isBuzzRoll() const { return _tremoloType == TremoloType::BUZZ_ROLL; }
     bool twoNotes() const { return _tremoloType >= TremoloType::C8; }    // is it a two note tremolo?
     int lines() const { return _lines; }
+    bool up() const { return _up; }
 
     bool placeMidStem() const;
 
     bool crossStaffBeamBetween() const;
 
-    void spatiumChanged(qreal oldValue, qreal newValue) override;
-    void localSpatiumChanged(qreal oldValue, qreal newValue) override;
+    void spatiumChanged(double oldValue, double newValue) override;
+    void localSpatiumChanged(double oldValue, double newValue) override;
     void styleChanged() override;
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
 
     TremoloStyle style() const { return _style; }
     void setStyle(TremoloStyle v) { _style = v; }
+    void setBeamDirection(DirectionV v);
 
     bool customStyleApplicable() const;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

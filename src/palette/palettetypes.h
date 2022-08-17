@@ -28,7 +28,7 @@
 namespace mu::palette {
 struct PaletteWorkspaceData : public workspace::AbstractData
 {
-    Ms::PaletteTreePtr tree;
+    mu::engraving::PaletteTreePtr tree;
 };
 
 using PaletteWorkspaceDataPtr = std::shared_ptr<PaletteWorkspaceData>;

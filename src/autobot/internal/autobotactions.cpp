@@ -22,6 +22,7 @@
 #include "autobotactions.h"
 
 #include "context/uicontext.h"
+#include "types/translatablestring.h"
 
 using namespace mu::ui;
 using namespace mu::actions;
@@ -30,11 +31,13 @@ using namespace mu::autobot;
 const UiActionList AutobotActions::m_actions = {
     UiAction("autobot-show-batchtests",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Show batch tests…")
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Show batch tests…")
              ),
     UiAction("autobot-show-scripts",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Show scripts…")
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Show &scripts…")
              ),
 };
 

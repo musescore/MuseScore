@@ -42,7 +42,7 @@ public:
 
     virtual void setContent(QQuickItem* item) = 0;
 
-    virtual void show(QScreen* screen, QPoint position, bool activateFocus) = 0;
+    virtual void show(QScreen* screen, QRect geometry, bool activateFocus) = 0;
     virtual void close() = 0;
     virtual void raise() = 0;
     virtual void setPosition(QPoint position) = 0;

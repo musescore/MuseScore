@@ -22,7 +22,7 @@
 
 #include "lyrics.h"
 
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 #include "rw/xml.h"
 
 #include "chord.h"
@@ -36,7 +36,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   searchNextLyrics
 //---------------------------------------------------------
@@ -228,7 +228,7 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
         System* s;
         PointF p1 = linePos(Grip::START, &s);
         PointF p2 = linePos(Grip::END,   &s);
-        qreal len = p2.x() - p1.x();
+        double len = p2.x() - p1.x();
         lineSegm->setPos(p1);
         lineSegm->setPos2(PointF(len, p2.y() - p1.y()));
     }
@@ -237,14 +237,14 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
         System* s;
         PointF p1 = linePos(Grip::START, &s);
         lineSegm->setPos(p1);
-        qreal x2 = system->lastNoteRestSegmentX(true);
+        double x2 = system->lastNoteRestSegmentX(true);
         lineSegm->setPos2(PointF(x2 - p1.x(), 0.0));
     }
     break;
     case SpannerSegmentType::MIDDLE: {
         bool leading = (anchor() == Anchor::SEGMENT || anchor() == Anchor::MEASURE);
-        qreal x1 = system->firstNoteRestSegmentX(leading);
-        qreal x2 = system->lastNoteRestSegmentX(true);
+        double x1 = system->firstNoteRestSegmentX(leading);
+        double x2 = system->lastNoteRestSegmentX(true);
         System* s;
         PointF p1 = linePos(Grip::START, &s);
         lineSegm->setPos(PointF(x1, p1.y()));
@@ -255,8 +255,8 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
         System* s;
         PointF p2 = linePos(Grip::END, &s);
         bool leading = (anchor() == Anchor::SEGMENT || anchor() == Anchor::MEASURE);
-        qreal x1 = system->firstNoteRestSegmentX(leading);
-        qreal len = p2.x() - x1;
+        double x1 = system->firstNoteRestSegmentX(leading);
+        double len = p2.x() - x1;
         lineSegm->setPos(PointF(p2.x() - len, p2.y()));
         lineSegm->setPos2(PointF(len, 0.0));
     }
@@ -352,9 +352,9 @@ void LyricsLineSegment::layout()
     bool isEndMelisma      = lyricsLine()->isEndMelisma();
     Lyrics* lyr               = 0;
     Lyrics* nextLyr           = 0;
-    qreal fromX             = 0;
-    qreal toX               = 0;                     // start and end point of intra-lyrics room
-    qreal sp                = spatium();
+    double fromX             = 0;
+    double toX               = 0;                     // start and end point of intra-lyrics room
+    double sp                = spatium();
     System* sys;
 
     if (lyricsLine()->ticks() <= Fraction(0, 1)) {     // if no span,
@@ -372,11 +372,11 @@ void LyricsLineSegment::layout()
         // if next lyrics is on a different system, this line segment is at the end of its system:
         // do not adjust for next lyrics position
         if (sys && !endOfSystem) {
-            qreal lyrX        = lyr->bbox().x();
-            qreal lyrXp       = lyr->pagePos().x();
-            qreal sysXp       = sys->pagePos().x();
+            double lyrX        = lyr->bbox().x();
+            double lyrXp       = lyr->pagePos().x();
+            double sysXp       = sys->pagePos().x();
             toX               = lyrXp - sysXp + lyrX;             // syst.rel. X pos.
-            qreal offsetX     = toX - pos().x() - pos2().x() - score()->styleMM(Sid::lyricsDashPad);
+            double offsetX     = toX - pos().x() - pos2().x() - score()->styleMM(Sid::lyricsDashPad);
             //                    delta from current end pos.| ending padding
             rxpos2()          += offsetX;
         }
@@ -385,32 +385,32 @@ void LyricsLineSegment::layout()
     lyr  = lyricsLine()->lyrics();
     sys  = lyr->segment()->system();
     if (sys && isSingleBeginType()) {
-        qreal lyrX        = lyr->bbox().x();
-        qreal lyrXp       = lyr->pagePos().x();
-        qreal lyrW        = lyr->bbox().width();
-        qreal sysXp       = sys->pagePos().x();
+        double lyrX        = lyr->bbox().x();
+        double lyrXp       = lyr->pagePos().x();
+        double lyrW        = lyr->bbox().width();
+        double sysXp       = sys->pagePos().x();
         fromX             = lyrXp - sysXp + lyrX + lyrW;
         //               syst.rel. X pos. | lyr.advance
-        qreal offsetX     = fromX - pos().x();
+        double offsetX     = fromX - pos().x();
         offsetX           += score()->styleMM(isEndMelisma ? Sid::lyricsMelismaPad : Sid::lyricsDashPad);
 
         //               delta from curr.pos. | add initial padding
-        rxpos()           += offsetX;
+        movePosX(offsetX);
         rxpos2()          -= offsetX;
     }
 
     // VERTICAL POSITION: at the base line of the syllable text
     if (!isEndType()) {
-        rypos() = lyr->ipos().y();
+        setPosY(lyr->ipos().y());
         ryoffset() = lyr->offset().y();
     } else {
         // use Y position of *next* syllable if there is one on same system
         Lyrics* nextLyr1 = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no(), lyr->placement());
         if (nextLyr1 && nextLyr1->segment()->system() == system()) {
-            rypos() = nextLyr1->ipos().y();
+            setPosY(nextLyr1->ipos().y());
             ryoffset() = nextLyr1->offset().y();
         } else {
-            rypos() = lyr->ipos().y();
+            setPosY(lyr->ipos().y());
             ryoffset() = lyr->offset().y();
         }
     }
@@ -426,7 +426,7 @@ void LyricsLineSegment::layout()
         } else {
             _numOfDashes = 1;
         }
-        rypos()      -= lyricsLine()->lineWidth() * .5;     // let the line 'sit on' the base line
+        movePosY(-lyricsLine()->lineWidth() * .5);     // let the line 'sit on' the base line
         // if not final segment, shorten it (why? -AS)
         /*
         if (isBeginType() || isMiddleType()) {
@@ -435,7 +435,7 @@ void LyricsLineSegment::layout()
         */
     } else {                              // dash(es)
         // set conventional dash Y pos
-        rypos() -= lyr->fontMetrics().xHeight() * score()->styleD(Sid::lyricsDashYposRatio);
+        movePosY(-lyr->fontMetrics().xHeight() * score()->styleD(Sid::lyricsDashYposRatio));
         _dashLength = score()->styleMM(Sid::lyricsDashMaxLength) * mag();      // and dash length
         if (len < minDashLen) {                                               // if no room for a dash
             // if at end of system or dash is forced
@@ -456,18 +456,18 @@ void LyricsLineSegment::layout()
         }
         // adjust next lyrics horiz. position if too little a space forced to skip the dash
         if (_numOfDashes == 0 && nextLyr != nullptr && len > 0) {
-            nextLyr->rxpos() -= (toX - fromX);
+            nextLyr->movePosX(-(toX - fromX));
         }
     }
 
     // apply yoffset for staff type change (keeps lyrics lines aligned with lyrics)
     if (staffType()) {
-        rypos() += staffType()->yoffset().val() * spatium();
+        movePosY(staffType()->yoffset().val() * spatium());
     }
 
     // set bounding box
     RectF r = RectF(0.0, 0.0, pos2().x(), pos2().y()).normalized();
-    qreal lw = lyricsLine()->lineWidth() * .5;
+    double lw = lyricsLine()->lineWidth() * .5;
     setbbox(r.adjusted(-lw, -lw, lw, lw));
 }
 
@@ -490,8 +490,8 @@ void LyricsLineSegment::draw(mu::draw::Painter* painter) const
     if (lyricsLine()->isEndMelisma()) {               // melisma
         painter->drawLine(PointF(), pos2());
     } else {                                          // dash(es)
-        qreal step  = pos2().x() / _numOfDashes;
-        qreal x     = step * .5 - _dashLength * .5;
+        double step  = pos2().x() / _numOfDashes;
+        double x     = step * .5 - _dashLength * .5;
         for (int i = 0; i < _numOfDashes; i++, x += step) {
             painter->drawLine(PointF(x, 0.0), PointF(x + _dashLength, 0.0));
         }

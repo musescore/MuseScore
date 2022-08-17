@@ -25,7 +25,7 @@
 
 #include "box.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Text;
 
 //---------------------------------------------------------
@@ -35,18 +35,18 @@ class Text;
 
 class TBox : public VBox
 {
-    Text* _text;
-
+    OBJECT_ALLOCATOR(engraving, TBox)
 public:
     TBox(System* parent);
     TBox(const TBox&);
-    ~TBox();
+    ~TBox() override;
 
-    Text* text() const { return _text; }
+    Text* text() const { return m_text; }
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
     EngravingObjectList scanChildren() const override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
 
     TBox* clone() const override { return new TBox(*this); }
 
@@ -58,13 +58,16 @@ public:
     void remove(EngravingItem* el) override;
 
     void layout() override;
-    QString accessibleExtraInfo() const override;
+    String accessibleExtraInfo() const override;
 
     int gripsCount() const override;
     Grip initialEditModeGrip() const override;
     Grip defaultGrip() const override;
 
     bool needStartEditingAfterSelecting() const override { return false; }
+
+private:
+    Text* m_text = nullptr;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

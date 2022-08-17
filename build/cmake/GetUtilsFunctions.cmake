@@ -33,7 +33,7 @@ function(fn__set_default
 endfunction()
 
 # Set a variable to value of an option from a list of command line arguments.
-# The variable will only recieve a value if the relevant option was provided.
+# The variable will only receive a value if the relevant option was provided.
 function(fn__get_option
   VAR_NAME # Name of the variable to set.
   OPT_NAME # Name of the option to search for (e.g. "-foo").

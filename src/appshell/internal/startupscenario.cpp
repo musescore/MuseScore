@@ -60,7 +60,7 @@ void StartupScenario::setModeType(const QString& modeType)
     m_modeTypeStr = modeType;
 }
 
-void StartupScenario::setStartupScorePath(const io::path& path)
+void StartupScenario::setStartupScorePath(const io::path_t& path)
 {
     m_startupScorePath = path;
 }
@@ -133,8 +133,8 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
         restoreLastSession();
         break;
     case StartupModeType::StartWithScore: {
-        io::path path = m_startupScorePath.empty() ? configuration()->startupScorePath()
-                        : m_startupScorePath;
+        io::path_t path = m_startupScorePath.empty() ? configuration()->startupScorePath()
+                          : m_startupScorePath;
         openScore(path);
     } break;
     }
@@ -159,9 +159,9 @@ mu::Uri StartupScenario::startupPageUri(StartupModeType modeType) const
     return HOME_URI;
 }
 
-void StartupScenario::openScore(const io::path& path)
+void StartupScenario::openScore(const io::path_t& path)
 {
-    dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(path));
+    dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path_t>(path));
 }
 
 void StartupScenario::restoreLastSession()
@@ -172,7 +172,7 @@ void StartupScenario::restoreLastSession()
     }
 
     IInteractive::Result result = interactive()->question(trc("appshell", "The previous session quit unexpectedly."),
-                                                          trc("appshell", "Restore session?"),
+                                                          trc("appshell", "Do you want to restore the session?"),
                                                           { IInteractive::Button::No, IInteractive::Button::Yes });
 
     if (result.button() == static_cast<int>(IInteractive::Button::Yes)) {
@@ -183,9 +183,9 @@ void StartupScenario::restoreLastSession()
     }
 }
 
-void StartupScenario::removeProjectsUnsavedChanges(const io::paths& projectsPaths)
+void StartupScenario::removeProjectsUnsavedChanges(const io::paths_t& projectsPaths)
 {
-    for (const io::path& path : projectsPaths) {
+    for (const io::path_t& path : projectsPaths) {
         projectAutoSaver()->removeProjectUnsavedChanges(path);
     }
 }

@@ -35,10 +35,10 @@ public:
 
     const ui::UiActionList& actionsList() const override;
 
-    bool actionEnabled(const ui::UiAction& acttion) const override;
+    bool actionEnabled(const ui::UiAction& action) const override;
     async::Channel<actions::ActionCodeList> actionEnabledChanged() const override;
 
-    bool actionChecked(const ui::UiAction& acttion) const override;
+    bool actionChecked(const ui::UiAction& action) const override;
     async::Channel<actions::ActionCodeList> actionCheckedChanged() const override;
 
 private:

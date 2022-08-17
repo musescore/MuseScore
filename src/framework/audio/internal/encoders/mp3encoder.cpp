@@ -46,6 +46,8 @@ struct LameHandler
             return true;
         }
 
+        m_format = format;
+
         lame_set_num_channels(flags, m_format.audioChannelsNumber);
         lame_set_in_samplerate(flags, m_format.sampleRate);
         lame_set_brate(flags, m_format.bitRate);
@@ -89,26 +91,29 @@ private:
     SoundTrackFormat m_format;
 };
 
-size_t Mp3Encoder::outputBufferSize(samples_t samplesPerChannel)
+size_t Mp3Encoder::requiredOutputBufferSize(samples_t totalSamplesNumber) const
 {
     //!Note See thirdparty/lame/API
 
-    return 1.25 * samplesPerChannel + 7200;
+    return totalSamplesNumber;
 }
 
-samples_t Mp3Encoder::doEncode(const SoundTrackFormat& format,
-                               samples_t samplesPerChannel, float* input, char* output)
+size_t Mp3Encoder::encode(samples_t samplesPerChannel, const float* input)
 {
-    LameHandler::instance()->updateSpec(format);
+    LameHandler::instance()->updateSpec(m_format);
 
-    return lame_encode_buffer_interleaved_ieee_float(LameHandler::instance()->flags, input, samplesPerChannel,
-                                                     reinterpret_cast<unsigned char*>(output),
-                                                     samplesPerChannel * format.audioChannelsNumber);
+    int encodedBytes = lame_encode_buffer_interleaved_ieee_float(LameHandler::instance()->flags, input, samplesPerChannel,
+                                                                 m_outputBuffer.data(),
+                                                                 static_cast<int>(m_outputBuffer.size()));
+
+    return std::fwrite(m_outputBuffer.data(), sizeof(unsigned char), encodedBytes, m_fileStream);
 }
 
-samples_t Mp3Encoder::doFlush(char* output, size_t outputSize)
+size_t Mp3Encoder::flush()
 {
-    return lame_encode_flush(LameHandler::instance()->flags,
-                             reinterpret_cast<unsigned char*>(output),
-                             static_cast<int>(outputSize));
+    int encodedBytes = lame_encode_flush(LameHandler::instance()->flags,
+                                         m_outputBuffer.data(),
+                                         static_cast<int>(m_outputBuffer.size()));
+
+    return std::fwrite(m_outputBuffer.data(), sizeof(unsigned char), encodedBytes, m_fileStream);
 }

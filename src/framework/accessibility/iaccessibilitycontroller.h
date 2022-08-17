@@ -39,6 +39,9 @@ public:
     virtual const IAccessible* accessibleRoot() const = 0;
 
     virtual const IAccessible* lastFocused() const = 0;
+
+    virtual bool needToVoicePanelInfo() const = 0;
+    virtual QString currentPanelAccessibleName() const = 0;
 };
 }
 

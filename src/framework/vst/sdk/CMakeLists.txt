@@ -110,6 +110,7 @@ set(VST_PLUGIN_INTERFACES_SRC
     ${VST3_SDK_PATH}/pluginterfaces/base/ucolorspec.h
     ${VST3_SDK_PATH}/pluginterfaces/base/ustring.cpp
     ${VST3_SDK_PATH}/pluginterfaces/base/ustring.h
+    ${VST3_SDK_PATH}/pluginterfaces/vst/ivstmidicontrollers.h
     )
 
 set(VST_SDK_COMMON_SRC

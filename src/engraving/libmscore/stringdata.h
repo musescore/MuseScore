@@ -23,10 +23,11 @@
 #ifndef __TABLATURE_H__
 #define __TABLATURE_H__
 
+#include <cstddef>
 #include <vector>
 #include <map>
 
-namespace Ms {
+namespace mu::engraving {
 class Chord;
 class Note;
 class XmlReader;
@@ -85,5 +86,5 @@ public:
     int         adjustBanjo5thFret(int fret) const;
     bool        isFiveStringBanjo() const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

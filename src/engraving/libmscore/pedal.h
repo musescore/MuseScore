@@ -25,7 +25,7 @@
 
 #include "textlinebase.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Pedal;
 
 //---------------------------------------------------------
@@ -34,6 +34,8 @@ class Pedal;
 
 class PedalSegment final : public TextLineBaseSegment
 {
+    OBJECT_ALLOCATOR(engraving, PedalSegment)
+
     Sid getPropertyStyle(Pid) const override;
 
 public:
@@ -52,14 +54,16 @@ public:
 
 class Pedal final : public TextLineBase
 {
+    OBJECT_ALLOCATOR(engraving, Pedal)
+
     Sid getPropertyStyle(Pid) const override;
 
 protected:
     mu::PointF linePos(Grip, System**) const override;
 
 public:
-    static const QString PEDAL_SYMBOL;
-    static const QString STAR_SYMBOL;
+    static const String PEDAL_SYMBOL;
+    static const String STAR_SYMBOL;
 
     Pedal(EngravingItem* parent);
 
@@ -69,9 +73,9 @@ public:
     void write(XmlWriter& xml) const override;
 
     LineSegment* createLineSegment(System* parent) override;
-    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
 
     friend class PedalLine;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

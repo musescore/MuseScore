@@ -51,6 +51,7 @@ for PNG_REF_FILE in $PNG_REF_LIST ; do
     FILE_NAME=${png_file_name%.png}
     PNG_CUR_FILE=$CURRENT_DIR/${FILE_NAME}.png
     PNG_DIFF_FILE=$OUTPUT_DIR/${FILE_NAME}.diff.png
+    GIF_DIFF_FILE=$OUTPUT_DIR/${FILE_NAME}.diff.gif
     
     if test -f $PNG_CUR_FILE; then
         code=$(compare -metric AE -fuzz 0.0% $PNG_REF_FILE $PNG_CUR_FILE $PNG_DIFF_FILE 2>&1)
@@ -62,6 +63,9 @@ for PNG_REF_FILE in $PNG_REF_LIST ; do
 
             cp $PNG_REF_FILE $OUTPUT_DIR/$FILE_NAME.ref.png
             cp $PNG_CUR_FILE $OUTPUT_DIR
+
+            # generate comparison gif
+            convert -delay 80 -loop 0 $PNG_CUR_FILE $PNG_REF_FILE $GIF_DIFF_FILE
         else
             echo "Equal: ref: $PNG_REF_FILE, current: $PNG_CUR_FILE"
             rm -f $PNG_DIFF_FILE 2>/dev/null
@@ -94,6 +98,7 @@ if [ "$VTEST_DIFF_FOUND" == "true" ]; then
         echo "      <img src=\"$DIFF_NAME.ref.png\">" >> $HTML
         echo "      <img src=\"$DIFF_NAME.png\">" >> $HTML
         echo "      <img src=\"$DIFF_NAME.diff.png\">" >> $HTML
+        echo "      <img src=\"$DIFF_NAME.diff.gif\">" >> $HTML
         echo "    </div>" >> $HTML
     done
 

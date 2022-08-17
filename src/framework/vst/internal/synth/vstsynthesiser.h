@@ -34,6 +34,7 @@
 #include "internal/vstaudioclient.h"
 #include "ivstpluginsregister.h"
 #include "ivstmodulesrepository.h"
+#include "vstsequencer.h"
 #include "vsttypes.h"
 
 namespace mu::vst {
@@ -54,9 +55,14 @@ public:
     void revokePlayingNotes() override;
     void flushSound() override;
 
-    bool hasAnythingToPlayback(const audio::msecs_t from, const audio::msecs_t to) const;
-
     void setupSound(const mpe::PlaybackSetupData& setupData) override;
+    void setupEvents(const mpe::PlaybackData& playbackData) override;
+
+    bool isActive() const override;
+    void setIsActive(const bool isActive) override;
+
+    audio::msecs_t playbackPosition() const override;
+    void setPlaybackPosition(const audio::msecs_t newPosition) override;
 
     // IAudioSource
     void setSampleRate(unsigned int sampleRate) override;
@@ -65,12 +71,8 @@ public:
     audio::samples_t process(float* buffer, audio::samples_t samplesPerChannel) override;
 
 private:
-    void handleMainStreamEvents(const audio::msecs_t nextMsecs);
-    void handleOffStreamEvents(const audio::msecs_t nextMsecs);
-
-    void handleAlreadyPlayingEvents(const audio::msecs_t from, const audio::msecs_t to);
-
     Ret init();
+    void toggleVolumeGain(const bool isActive);
 
     VstPluginPtr m_pluginPtr = nullptr;
 
@@ -79,7 +81,7 @@ private:
     async::Channel<unsigned int> m_streamsCountChanged;
     audio::samples_t m_samplesPerChannel = 0;
 
-    std::list<mpe::PlaybackEvent> m_playingEvents;
+    VstSequencer m_sequencer;
 };
 
 using VstSynthPtr = std::shared_ptr<VstSynthesiser>;

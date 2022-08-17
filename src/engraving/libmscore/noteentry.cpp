@@ -21,7 +21,7 @@
  */
 
 #include "translation.h"
-#include "interactive/messagebox.h"
+#include "infrastructure/messagebox.h"
 
 #include "factory.h"
 #include "utils.h"
@@ -44,10 +44,12 @@
 
 #include "masterscore.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   noteValForPosition
 //---------------------------------------------------------
@@ -113,7 +115,7 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
             nval.fret = stringData->frets();
         }
         // for open strings, only accepts fret 0 (strings in StringData are from bottom to top)
-        int strgDataIdx = stringData->strings() - line - 1;
+        size_t strgDataIdx = stringData->strings() - line - 1;
         if (nval.fret > 0 && stringData->stringList().at(strgDataIdx).open == true) {
             nval.fret = 0;
         }
@@ -139,7 +141,7 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
             if (v.isZero()) {
                 nval.tpc1 = nval.tpc2;
             } else {
-                nval.tpc1 = Ms::transposeTpc(nval.tpc2, v, true);
+                nval.tpc1 = mu::engraving::transposeTpc(nval.tpc2, v, true);
             }
         }
     }
@@ -160,7 +162,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
         ChordRest* c = toChordRest(is.lastSegment()->element(is.track()));
 
         if (c == 0 || !c->isChord()) {
-            qDebug("Score::addPitch: cr %s", c ? c->typeName() : "zero");
+            LOGD("Score::addPitch: cr %s", c ? c->typeName() : "zero");
             return 0;
         }
         Note* note = addNote(toChord(c), nval, /* forceAccidental */ false, is.articulationIds(), externalInputState);
@@ -224,7 +226,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
             std::vector<Note*> notes = chord->notes();
             // break all ties into current chord
             // these will exist only if user explicitly moved cursor to a tied-into note
-            // in ordinary use, cursor will autoamtically skip past these during note entry
+            // in ordinary use, cursor will automatically skip past these during note entry
             for (Note* n : notes) {
                 if (n->tieBack()) {
                     undoRemoveElement(n->tieBack());
@@ -305,7 +307,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
                 is.slur()->setEndElement(e);
             }
         } else {
-            qDebug("addPitch: cannot find slur note");
+            LOGD("addPitch: cannot find slur note");
         }
     }
     if (is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
@@ -335,7 +337,7 @@ void Score::putNote(const PointF& pos, bool replace, bool insert)
 {
     Position p;
     if (!getPosition(&p, pos, _is.voice())) {
-        qDebug("cannot put note here, get position failed");
+        LOGD("cannot put note here, get position failed");
         return;
     }
     Score* score = p.segment->score();
@@ -345,8 +347,8 @@ void Score::putNote(const PointF& pos, bool replace, bool insert)
     //  calculate actual clicked line from staffType offset and stepOffset
     Staff* ss = score->staff(p.staffIdx);
     int stepOffset = ss->staffType(p.segment->tick())->stepOffset();
-    qreal stYOffset = ss->staffType(p.segment->tick())->yoffset().val();
-    qreal lineDist = ss->staffType(p.segment->tick())->lineDistance().val();
+    double stYOffset = ss->staffType(p.segment->tick())->yoffset().val();
+    double lineDist = ss->staffType(p.segment->tick())->lineDistance().val();
     p.line -= stepOffset + 2 * stYOffset / lineDist;
 
     if (score->inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH) && !isTablature) {
@@ -368,9 +370,12 @@ void Score::putNote(const Position& p, bool replace)
     _is.setTrack(p.staffIdx * VOICES + _is.voice());
     _is.setSegment(s);
 
-    if (score()->excerpt() && !score()->excerpt()->tracksMapping().empty()
-        && mu::key(score()->excerpt()->tracksMapping(), _is.track(), mu::nidx) == mu::nidx) {
-        return;
+    if (mu::engraving::Excerpt* excerpt = score()->excerpt()) {
+        const TracksMap& tracks = excerpt->tracksMapping();
+
+        if (!tracks.empty() && mu::key(tracks, _is.track(), mu::nidx) == mu::nidx) {
+            return;
+        }
     }
 
     DirectionV stemDirection = DirectionV::AUTO;
@@ -385,8 +390,9 @@ void Score::putNote(const Position& p, bool replace)
     staff_idx_t staffIdx = track2staff(_is.track());
     if (m->isMeasureRepeatGroup(staffIdx)) {
         auto b = MessageBox::warning(trc("engraving", "Note input will remove measure repeat"),
-                                     trc("engraving", "There is a measure repeat here.")
-                                     + trc("engraving", "\nContinue with adding note and delete measure repeat?"));
+                                     trc("engraving", "This measure contains a measure repeat."
+                                                      " If you enter notes here, it will be deleted."
+                                                      " Do you want to continue?"));
         if (b == MessageBox::Cancel) {
             return;
         }
@@ -431,7 +437,7 @@ void Score::putNote(const Position& p, bool replace)
             && !_is.rest()) {
             if (st->isTabStaff(cr->tick())) {            // TAB
                 // if a note on same string already exists, update to new pitch/fret
-                foreach (Note* note, toChord(cr)->notes()) {
+                for (Note* note : toChord(cr)->notes()) {
                     if (note->string() == nval.string) {                 // if string is the same
                         // if adding a new digit will keep fret number within fret limit,
                         // add a digit to existing fret number
@@ -441,7 +447,7 @@ void Score::putNote(const Position& p, bool replace)
                                 nval.fret = fret;
                                 nval.pitch = stringData->getPitch(nval.string, nval.fret, st);
                             } else {
-                                qDebug("can't increase fret to %d", fret);
+                                LOGD("can't increase fret to %d", fret);
                             }
                         }
                         // set fret number (original or combined) in all linked notes
@@ -561,7 +567,7 @@ void Score::repitchNote(const Position& p, bool replace)
         std::vector<Note*> notes = chord->notes();
         // break all ties into current chord
         // these will exist only if user explicitly moved cursor to a tied-into note
-        // in ordinary use, cursor will autoamtically skip past these during note entry
+        // in ordinary use, cursor will automatically skip past these during note entry
         for (Note* n : notes) {
             if (n->tieBack()) {
                 undoRemoveElement(n->tieBack());
@@ -812,4 +818,4 @@ void Score::globalInsertChord(const Position& pos)
         }
     }
 }
-} // namespace Ms
+} // namespace mu::engraving

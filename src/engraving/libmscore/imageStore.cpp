@@ -20,24 +20,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QtCore/QCryptographicHash>
-#include <QFile>
-#include <QFileInfo>
+#include "io/fileinfo.h"
+#include "io/file.h"
 
 #include "imageStore.h"
 #include "score.h"
 #include "image.h"
 
-using namespace mu;
+#include "log.h"
 
-namespace Ms {
+using namespace mu;
+using namespace mu::io;
+
+namespace mu::engraving {
 ImageStore imageStore;  // the global image store
 
 //---------------------------------------------------------
 //   ImageStoreItem
 //---------------------------------------------------------
 
-ImageStoreItem::ImageStoreItem(const QString& p)
+ImageStoreItem::ImageStoreItem(const path_t& p)
 {
     setPath(p);
 }
@@ -83,26 +85,25 @@ bool ImageStoreItem::isUsed(Score* score) const
 
 void ImageStoreItem::load()
 {
-    if (!_buffer.isEmpty()) {
+    if (!_buffer.empty()) {
         return;
     }
-    QFile inFile(_path);
-    if (!inFile.open(QIODevice::ReadOnly)) {
-        qDebug("Cannot open picture file");
+    File inFile(_path);
+    if (!inFile.open(IODevice::ReadOnly)) {
+        LOGD("Cannot open picture file");
         return;
     }
     _buffer = inFile.readAll();
     inFile.close();
-    QCryptographicHash h(QCryptographicHash::Md4);
-    h.addData(_buffer);
-    _hash = h.result();
+
+    _hash = cryptographicHash()->hash(_buffer, ICryptographicHash::Algorithm::Md4);
 }
 
 //---------------------------------------------------------
 //   hashName
 //---------------------------------------------------------
 
-QString ImageStoreItem::hashName() const
+String ImageStoreItem::hashName() const
 {
     const char hex[17] = "0123456789abcdef";
     char p[33];
@@ -111,18 +112,17 @@ QString ImageStoreItem::hashName() const
         p[i * 2 + 1] = hex[_hash[i] & 0xf];
     }
     p[32] = 0;
-    return QString(p) + "." + _type;
+    return String::fromAscii(p) + u"." + _type;
 }
 
 //---------------------------------------------------------
 //   setPath
 //---------------------------------------------------------
 
-void ImageStoreItem::setPath(const QString& val)
+void ImageStoreItem::setPath(const path_t& val)
 {
     _path = val;
-    QFileInfo fi(_path);
-    _type = fi.suffix();
+    _type = FileInfo::suffix(_path);
 }
 
 //---------------------------------------------------------
@@ -143,16 +143,16 @@ inline static int toInt(char c)
 
 ImageStore::~ImageStore()
 {
-    qDeleteAll(_items);
+    DeleteAll(_items);
 }
 
 //---------------------------------------------------------
 //   getImage
 //---------------------------------------------------------
 
-ImageStoreItem* ImageStore::getImage(const QString& path) const
+ImageStoreItem* ImageStore::getImage(const path_t& path) const
 {
-    QString s = QFileInfo(path).completeBaseName();
+    String s = FileInfo(path).completeBaseName();
     if (s.size() != 32) {
         //
         // some limited support for backward compatibility
@@ -162,36 +162,28 @@ ImageStoreItem* ImageStore::getImage(const QString& path) const
                 return item;
             }
         }
-        qDebug("ImageStore::getImage(%s): bad base name <%s>",
-               qPrintable(path), qPrintable(s));
-        for (ImageStoreItem* item : _items) {
-            qDebug("    in store: <%s>", qPrintable(item->path()));
-        }
-
-        return 0;
+        return nullptr;
     }
-    QByteArray hash(16, 0);
+    ByteArray hash(16);
     for (int i = 0; i < 16; ++i) {
-        hash[i] = toInt(s[i * 2].toLatin1()) * 16 + toInt(s[i * 2 + 1].toLatin1());
+        hash[i] = toInt(s.at(i * 2).toAscii()) * 16 + toInt(s.at(i * 2 + 1).toAscii());
     }
     for (ImageStoreItem* item : _items) {
         if (item->hash() == hash) {
             return item;
         }
     }
-    qDebug("ImageStore::getImage(): not found <%s>", qPrintable(path));
-    return 0;
+    LOGW() << "image not found: " << path;
+    return nullptr;
 }
 
 //---------------------------------------------------------
 //   add
 //---------------------------------------------------------
 
-ImageStoreItem* ImageStore::add(const QString& path, const QByteArray& ba)
+ImageStoreItem* ImageStore::add(const path_t& path, const ByteArray& ba)
 {
-    QCryptographicHash h(QCryptographicHash::Md4);
-    h.addData(ba);
-    QByteArray hash = h.result();
+    ByteArray hash = cryptographicHash()->hash(ba, ICryptographicHash::Algorithm::Md4);
     for (ImageStoreItem* item : _items) {
         if (item->hash() == hash) {
             return item;

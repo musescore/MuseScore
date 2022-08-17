@@ -37,7 +37,7 @@
 #include "context/iglobalcontext.h"
 #include "iinteractive.h"
 
-namespace Ms {
+namespace mu::engraving {
 enum class ActionIconType;
 class XmlWriter;
 class XmlReader;
@@ -87,11 +87,13 @@ public:
     // Elements & Cells
     int actualCellCount() const;
     PaletteCellPtr cellAt(size_t index) const;
-    Ms::ElementPtr elementForCellAt(int idx) const;
+    mu::engraving::ElementPtr elementForCellAt(int idx) const;
 
-    PaletteCellPtr insertElement(int idx, Ms::ElementPtr element, const QString& name, qreal mag = 1.0, const QString& tag = "");
-    PaletteCellPtr appendElement(Ms::ElementPtr element, const QString& name, qreal mag = 1.0, const QString& tag = "");
-    PaletteCellPtr appendActionIcon(Ms::ActionIconType type, actions::ActionCode code);
+    PaletteCellPtr insertElement(int idx, mu::engraving::ElementPtr element, const QString& name, qreal mag = 1.0,
+                                 const QPointF offset = QPointF(), const QString& tag = "");
+    PaletteCellPtr appendElement(mu::engraving::ElementPtr element, const QString& name, qreal mag = 1.0,
+                                 const QPointF offset = QPointF(), const QString& tag = "");
+    PaletteCellPtr appendActionIcon(mu::engraving::ActionIconType type, actions::ActionCode code);
 
     void clear();
 
@@ -150,8 +152,8 @@ public:
     QSize sizeHint() const override;
 
     // Read/write
-    void read(Ms::XmlReader&);
-    void write(Ms::XmlWriter&) const;
+    void read(mu::engraving::XmlReader&);
+    void write(mu::engraving::XmlWriter&) const;
     bool readFromFile(const QString& path);
     void writeToFile(const QString& path) const;
 

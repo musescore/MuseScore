@@ -33,7 +33,7 @@
 
 class Chord;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   NoteList
 //---------------------------------------------------------
@@ -225,11 +225,11 @@ class ValidatorMessageHandler : public QAbstractMessageHandler
 public:
     ValidatorMessageHandler()
         : QAbstractMessageHandler(0) {}
-    QString getErrors() const { return errors; }
+    QString getErrors() const { return m_errors; }
 protected:
     virtual void handleMessage(QtMsgType type, const QString& description, const QUrl& identifier, const QSourceLocation& sourceLocation);
 private:
-    QString errors;
+    QString m_errors;
 };
 
 extern void domError(const QDomElement&);
@@ -242,7 +242,7 @@ extern SymId mxmlString2accSymId(const QString mxmlName);
 extern AccidentalType microtonalGuess(double val);
 extern bool isLaissezVibrer(const SymId id);
 extern const Articulation* findLaissezVibrer(const Chord* const chord);
-extern QString xmlReaderLocation(const QXmlStreamReader& e);
+extern QString errorStringWithLocation(int line, int col, const QString& error);
 extern QString checkAtEndElement(const QXmlStreamReader& e, const QString& expName);
 } // namespace Ms
 #endif

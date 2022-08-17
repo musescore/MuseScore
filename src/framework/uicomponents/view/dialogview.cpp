@@ -22,6 +22,7 @@
 
 #include "dialogview.h"
 
+#include <QScreen>
 #include <QWindow>
 
 #include "log.h"
@@ -34,7 +35,7 @@ DialogView::DialogView(QQuickItem* parent)
     : PopupView(parent)
 {
     setObjectName("DialogView");
-    m_closePolicy = NoAutoClose;
+    setClosePolicy(NoAutoClose);
 }
 
 bool DialogView::isDialog() const
@@ -49,11 +50,15 @@ void DialogView::beforeShow()
         return;
     }
 
-    QRect appRect = qMainWindow->geometry();
+    QRect referenceRect = qMainWindow->geometry();
+    if (referenceRect.isEmpty() && qMainWindow->screen()) {
+        referenceRect = qMainWindow->screen()->availableGeometry();
+    }
+
     const QRect& dlgRect = geometry();
 
-    m_globalPos.setX(appRect.x() + (appRect.width() / 2 - dlgRect.width() / 2));
-    m_globalPos.setY(appRect.y() + (appRect.height() / 2 - dlgRect.height() / 2) - DIALOG_WINDOW_FRAME_HEIGHT);
+    m_globalPos.setX(referenceRect.x() + (referenceRect.width() - dlgRect.width()) / 2);
+    m_globalPos.setY(referenceRect.y() + (referenceRect.height() - dlgRect.height()) / 2 - DIALOG_WINDOW_FRAME_HEIGHT);
 
     m_globalPos.setX(m_globalPos.x() + m_localPos.x());
     m_globalPos.setY(m_globalPos.y() + m_localPos.y());

@@ -39,12 +39,12 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString SPANNERS_DATA_DIR("spanners_data/");
-
-using namespace Ms;
+using namespace mu;
 using namespace mu::engraving;
 
-class SpannersTests : public ::testing::Test
+static const String SPANNERS_DATA_DIR("spanners_data/");
+
+class Engraving_SpannersTests : public ::testing::Test
 {
 };
 
@@ -52,7 +52,7 @@ class SpannersTests : public ::testing::Test
 //   Adds glissandi in several contexts.
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners01)
+TEST_F(Engraving_SpannersTests, spanners01)
 {
     EditData dropData(0);
     Glissando* gliss;
@@ -66,7 +66,7 @@ TEST_F(SpannersTests, spanners01)
     EXPECT_TRUE(msr);
     Segment* seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0, 1));
     EXPECT_TRUE(seg);
-    Ms::Chord* chord = static_cast<Ms::Chord*>(seg->element(0));
+    Chord* chord = static_cast<Chord*>(seg->element(0));
     EXPECT_TRUE(chord);
     EXPECT_EQ(chord->type(), ElementType::CHORD);
     Note* note  = chord->upNote();
@@ -83,7 +83,7 @@ TEST_F(SpannersTests, spanners01)
     EXPECT_TRUE(msr);
     seg   = msr->first();
     EXPECT_TRUE(seg);
-    chord = static_cast<Ms::Chord*>(seg->element(0));     // voice 0 of staff 0
+    chord = static_cast<Chord*>(seg->element(0));     // voice 0 of staff 0
     EXPECT_TRUE(chord);
     EXPECT_EQ(chord->type(), ElementType::CHORD);
     note  = chord->upNote();
@@ -100,7 +100,7 @@ TEST_F(SpannersTests, spanners01)
     EXPECT_TRUE(msr);
     seg   = msr->first();
     EXPECT_TRUE(seg);
-    chord = static_cast<Ms::Chord*>(seg->element(4));     // voice 0 of staff 1
+    chord = static_cast<Chord*>(seg->element(4));     // voice 0 of staff 1
     EXPECT_TRUE(chord);
     EXPECT_EQ(chord->type(), ElementType::CHORD);
     note  = chord->upNote();
@@ -117,7 +117,7 @@ TEST_F(SpannersTests, spanners01)
     EXPECT_TRUE(msr);
     seg   = msr->first();
     EXPECT_TRUE(seg);
-    chord = static_cast<Ms::Chord*>(seg->element(0));     // voice 0 of staff 0
+    chord = static_cast<Chord*>(seg->element(0));     // voice 0 of staff 0
     EXPECT_TRUE(chord);
     EXPECT_EQ(chord->type(), ElementType::CHORD);
     note  = chord->upNote();
@@ -134,7 +134,7 @@ TEST_F(SpannersTests, spanners01)
     EXPECT_TRUE(msr);
     seg   = msr->first();
     EXPECT_TRUE(seg);
-    chord = static_cast<Ms::Chord*>(seg->element(0));     // voice 0 of staff 0
+    chord = static_cast<Chord*>(seg->element(0));     // voice 0 of staff 0
     EXPECT_TRUE(chord);
     EXPECT_EQ(chord->type(), ElementType::CHORD);
     note  = chord->upNote();
@@ -145,7 +145,7 @@ TEST_F(SpannersTests, spanners01)
     dropData.dropElement  = gliss;
     note->drop(dropData);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "glissando01.mscx", SPANNERS_DATA_DIR + "glissando01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando01.mscx", SPANNERS_DATA_DIR + u"glissando01-ref.mscx"));
     delete score;
 }
 
@@ -156,24 +156,24 @@ TEST_F(SpannersTests, spanners01)
 //          glissando from a bass staff note to a treble staff note
 //    is loaded and laid out and saved: should be round-trip safe.
 //---------------------------------------------------------
-TEST_F(SpannersTests, spanners02)
+TEST_F(Engraving_SpannersTests, spanners02)
 {
-    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + "glissando-crossstaff01.mscx");
+    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"glissando-crossstaff01.mscx");
     EXPECT_TRUE(score);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "glissando-crossstaff01.mscx", SPANNERS_DATA_DIR + "glissando-crossstaff01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-crossstaff01.mscx", SPANNERS_DATA_DIR + u"glissando-crossstaff01-ref.mscx"));
     delete score;
 }
 
 //---------------------------------------------------------
 //   Loads a score with before- and after-grace notes and adds several glissandi from/to them.
 //---------------------------------------------------------
-TEST_F(SpannersTests, spanners03)
+TEST_F(Engraving_SpannersTests, spanners03)
 {
     EditData dropData(0);
     Glissando* gliss;
 
-    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + "glissando-graces01.mscx");
+    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"glissando-graces01.mscx");
     EXPECT_TRUE(score);
 
     // GLISSANDO FROM MAIN NOTE TO AFTER-GRACE
@@ -182,7 +182,7 @@ TEST_F(SpannersTests, spanners03)
     EXPECT_TRUE(msr);
     Segment* seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0, 1));
     EXPECT_TRUE(seg);
-    Ms::Chord* chord = static_cast<Ms::Chord*>(seg->element(0));
+    Chord* chord = static_cast<Chord*>(seg->element(0));
     EXPECT_TRUE(chord);
     EXPECT_EQ(chord->type(), ElementType::CHORD);
     Note* note  = chord->upNote();
@@ -195,7 +195,7 @@ TEST_F(SpannersTests, spanners03)
 
     // GLISSANDO FROM AFTER-GRACE TO BEFORE-GRACE OF NEXT CHORD
     // go to last after-grace of chord and drop a glissando on it
-    Ms::Chord* grace = chord->graceNotesAfter().back();
+    Chord* grace = chord->graceNotesAfter().back();
     EXPECT_TRUE(grace);
     EXPECT_EQ(grace->type(), ElementType::CHORD);
     note              = grace->upNote();
@@ -209,7 +209,7 @@ TEST_F(SpannersTests, spanners03)
     // go to next chord
     seg               = seg->nextCR(0);
     EXPECT_TRUE(seg);
-    chord             = static_cast<Ms::Chord*>(seg->element(0));
+    chord             = static_cast<Chord*>(seg->element(0));
     EXPECT_TRUE(chord);
     EXPECT_EQ(chord->type(), ElementType::CHORD);
     note              = chord->upNote();
@@ -223,7 +223,7 @@ TEST_F(SpannersTests, spanners03)
     // go to next chord
     seg               = seg->nextCR(0);
     EXPECT_TRUE(seg);
-    chord             = static_cast<Ms::Chord*>(seg->element(0));
+    chord             = static_cast<Chord*>(seg->element(0));
     EXPECT_TRUE(chord && chord->type() == ElementType::CHORD);
     // go to its last before-grace note
     grace             = chord->graceNotesBefore().back();
@@ -235,7 +235,7 @@ TEST_F(SpannersTests, spanners03)
     dropData.dropElement  = gliss;
     note->drop(dropData);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "glissando-graces01.mscx", SPANNERS_DATA_DIR + "glissando-graces01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-graces01.mscx", SPANNERS_DATA_DIR + u"glissando-graces01-ref.mscx"));
     delete score;
 }
 
@@ -243,9 +243,9 @@ TEST_F(SpannersTests, spanners03)
 //   Linking a staff to an existing staff containing a glissando
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners04)
+TEST_F(Engraving_SpannersTests, spanners04)
 {
-    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + "glissando-cloning01.mscx");
+    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"glissando-cloning01.mscx");
     EXPECT_TRUE(score);
 
     // add a linked staff to the existing staff
@@ -263,7 +263,7 @@ TEST_F(SpannersTests, spanners04)
     score->undoInsertStaff(newStaff, 1, false);
     Excerpt::cloneStaff(oldStaff, newStaff);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "glissando-cloning01.mscx", SPANNERS_DATA_DIR + "glissando-cloning01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-cloning01.mscx", SPANNERS_DATA_DIR + u"glissando-cloning01-ref.mscx"));
     delete score;
 }
 
@@ -272,9 +272,9 @@ TEST_F(SpannersTests, spanners04)
 ///   Creating part from an existing staff containing a glissando
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, DISABLED_spanners05)
+TEST_F(Engraving_SpannersTests, DISABLED_spanners05)
 {
-    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + "glissando-cloning02.mscx");
+    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"glissando-cloning02.mscx");
     EXPECT_TRUE(score);
 
     // create parts
@@ -291,7 +291,7 @@ TEST_F(SpannersTests, DISABLED_spanners05)
 
     score->Score::undo(new AddExcerpt(ex));
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "glissando-cloning02.mscx", SPANNERS_DATA_DIR + "glissando-cloning02-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-cloning02.mscx", SPANNERS_DATA_DIR + u"glissando-cloning02-ref.mscx"));
     delete score;
 }
 
@@ -300,7 +300,7 @@ TEST_F(SpannersTests, DISABLED_spanners05)
 ///   Drop a glissando on a staff with a linked staff
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners06)
+TEST_F(Engraving_SpannersTests, spanners06)
 {
     EditData dropData(0);
     Glissando* gliss;
@@ -313,7 +313,7 @@ TEST_F(SpannersTests, spanners06)
     EXPECT_TRUE(msr);
     Segment* seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0, 1));
     EXPECT_TRUE(seg);
-    Ms::Chord* chord = static_cast<Ms::Chord*>(seg->element(0));
+    Chord* chord = static_cast<Chord*>(seg->element(0));
     EXPECT_TRUE(chord && chord->type() == ElementType::CHORD);
     Note* note  = chord->upNote();
     EXPECT_TRUE(note);
@@ -323,7 +323,7 @@ TEST_F(SpannersTests, spanners06)
     dropData.dropElement  = gliss;
     note->drop(dropData);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "glissando-cloning03.mscx", SPANNERS_DATA_DIR + "glissando-cloning03-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-cloning03.mscx", SPANNERS_DATA_DIR + u"glissando-cloning03-ref.mscx"));
     delete score;
 }
 
@@ -332,12 +332,12 @@ TEST_F(SpannersTests, spanners06)
 ///   Drop a glissando on a staff with an excerpt
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners07)
+TEST_F(Engraving_SpannersTests, spanners07)
 {
     EditData dropData(0);
     Glissando* gliss;
 
-    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + "glissando-cloning04.mscx");
+    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"glissando-cloning04.mscx");
     EXPECT_TRUE(score);
 
     // DROP A GLISSANDO ON FIRST NOTE
@@ -345,7 +345,7 @@ TEST_F(SpannersTests, spanners07)
     EXPECT_TRUE(msr);
     Segment* seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0, 1));
     EXPECT_TRUE(seg);
-    Ms::Chord* chord = static_cast<Ms::Chord*>(seg->element(0));
+    Chord* chord = static_cast<Chord*>(seg->element(0));
     EXPECT_TRUE(chord && chord->type() == ElementType::CHORD);
     Note* note  = chord->upNote();
     EXPECT_TRUE(note);
@@ -355,7 +355,7 @@ TEST_F(SpannersTests, spanners07)
     dropData.dropElement  = gliss;
     note->drop(dropData);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "glissando-cloning04.mscx", SPANNERS_DATA_DIR + "glissando-cloning04-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-cloning04.mscx", SPANNERS_DATA_DIR + u"glissando-cloning04-ref.mscx"));
     delete score;
 }
 
@@ -368,9 +368,9 @@ TEST_F(SpannersTests, spanners07)
 //
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners09)
+TEST_F(Engraving_SpannersTests, spanners09)
 {
-    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + "lyricsline02.mscx");
+    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"lyricsline02.mscx");
     EXPECT_TRUE(score);
 
     // DELETE SECOND MEASURE AND VERIFY
@@ -382,13 +382,13 @@ TEST_F(SpannersTests, spanners09)
     score->select(msr);
     score->cmdTimeDelete();
     score->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "lyricsline02.mscx", SPANNERS_DATA_DIR + "lyricsline02-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline02.mscx", SPANNERS_DATA_DIR + u"lyricsline02-ref.mscx"));
 
     // UNDO AND VERIFY
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();   // measure needs to be renumbered
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "lyricsline02.mscx", SPANNERS_DATA_DIR + "lyricsline02.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline02.mscx", SPANNERS_DATA_DIR + u"lyricsline02.mscx"));
     delete score;
 }
 
@@ -401,9 +401,9 @@ TEST_F(SpannersTests, spanners09)
 //
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners10)
+TEST_F(Engraving_SpannersTests, spanners10)
 {
-    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + "lyricsline03.mscx");
+    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"lyricsline03.mscx");
     EXPECT_TRUE(score);
 
     // DELETE SECOND MEASURE AND VERIFY
@@ -415,13 +415,13 @@ TEST_F(SpannersTests, spanners10)
     score->select(msr);
     score->cmdTimeDelete();
     score->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "lyricsline03.mscx", SPANNERS_DATA_DIR + "lyricsline03-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline03.mscx", SPANNERS_DATA_DIR + u"lyricsline03-ref.mscx"));
 
     // UNDO AND VERIFY
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();   // measure needs to be renumbered
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "lyricsline03.mscx", SPANNERS_DATA_DIR + "lyricsline03.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline03.mscx", SPANNERS_DATA_DIR + u"lyricsline03.mscx"));
     delete score;
 }
 
@@ -434,9 +434,9 @@ TEST_F(SpannersTests, spanners10)
 //
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners11)
+TEST_F(Engraving_SpannersTests, spanners11)
 {
-    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + "lyricsline04.mscx");
+    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"lyricsline04.mscx");
     EXPECT_TRUE(score);
 
     // DELETE SECOND MEASURE AND VERIFY
@@ -448,13 +448,13 @@ TEST_F(SpannersTests, spanners11)
     score->select(msr);
     score->cmdTimeDelete();
     score->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "lyricsline04.mscx", SPANNERS_DATA_DIR + "lyricsline04-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline04.mscx", SPANNERS_DATA_DIR + u"lyricsline04-ref.mscx"));
 
     // UNDO AND VERIFY
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();   // measure needs to be renumbered
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "lyricsline04.mscx", SPANNERS_DATA_DIR + "lyricsline04.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline04.mscx", SPANNERS_DATA_DIR + u"lyricsline04.mscx"));
     delete score;
 }
 
@@ -467,9 +467,9 @@ TEST_F(SpannersTests, spanners11)
 //
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners12)
+TEST_F(Engraving_SpannersTests, spanners12)
 {
-    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + "lyricsline05.mscx");
+    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"lyricsline05.mscx");
     EXPECT_TRUE(score);
 
     // DELETE SECOND MEASURE AND VERIFY
@@ -481,13 +481,13 @@ TEST_F(SpannersTests, spanners12)
     score->select(msr);
     score->cmdTimeDelete();
     score->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "lyricsline05.mscx", SPANNERS_DATA_DIR + "lyricsline05-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline05.mscx", SPANNERS_DATA_DIR + u"lyricsline05-ref.mscx"));
 
     // UNDO AND VERIFY
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();   // measure needs to be renumbered
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "lyricsline05.mscx", SPANNERS_DATA_DIR + "lyricsline05.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline05.mscx", SPANNERS_DATA_DIR + u"lyricsline05.mscx"));
     delete score;
 }
 
@@ -497,12 +497,12 @@ TEST_F(SpannersTests, spanners12)
 //
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, DISABLED_spanners13)
+TEST_F(Engraving_SpannersTests, DISABLED_spanners13)
 {
     EditData dropData(0);
     LayoutBreak* brk;
 
-    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + "lyricsline06.mscx");
+    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"lyricsline06.mscx");
     EXPECT_TRUE(score);
 
     // DROP A BREAK AT FIRST MEASURE AND VERIFY
@@ -519,13 +519,13 @@ TEST_F(SpannersTests, DISABLED_spanners13)
     for (System* sys : score->systems()) {
         EXPECT_TRUE(sys->spannerSegments().size() == 1);
     }
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "lyricsline06.mscx", SPANNERS_DATA_DIR + "lyricsline06-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline06.mscx", SPANNERS_DATA_DIR + u"lyricsline06-ref.mscx"));
 
     // UNDO AND VERIFY
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();        // systems need to be re-computed
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "lyricsline06.mscx", SPANNERS_DATA_DIR + "lyricsline06.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline06.mscx", SPANNERS_DATA_DIR + u"lyricsline06.mscx"));
     delete score;
 }
 
@@ -534,9 +534,9 @@ TEST_F(SpannersTests, DISABLED_spanners13)
 ///   creating part from an existing grand staff containing a cross staff glissando
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, DISABLED_spanners14)
+TEST_F(Engraving_SpannersTests, DISABLED_spanners14)
 {
-    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + "glissando-cloning05.mscx");
+    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"glissando-cloning05.mscx");
     EXPECT_TRUE(score);
 
     // create parts
@@ -553,7 +553,7 @@ TEST_F(SpannersTests, DISABLED_spanners14)
 //      nscore->setName(parts.front()->partName());
 
     score->Score::undo(new AddExcerpt(ex));
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "glissando-cloning05.mscx", SPANNERS_DATA_DIR + "glissando-cloning05-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-cloning05.mscx", SPANNERS_DATA_DIR + u"glissando-cloning05-ref.mscx"));
     delete score;
 }
 
@@ -562,9 +562,9 @@ TEST_F(SpannersTests, DISABLED_spanners14)
 ///   set the color of a spanner and save
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners15)
+TEST_F(Engraving_SpannersTests, spanners15)
 {
-    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + "linecolor01.mscx");
+    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"linecolor01.mscx");
     EXPECT_TRUE(score);
 
     for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
@@ -577,7 +577,7 @@ TEST_F(SpannersTests, spanners15)
         }
     }
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "linecolor01.mscx", SPANNERS_DATA_DIR + "linecolor01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"linecolor01.mscx", SPANNERS_DATA_DIR + u"linecolor01-ref.mscx"));
     delete score;
 }
 
@@ -586,11 +586,11 @@ TEST_F(SpannersTests, spanners15)
 ///   read manually adjusted lines on a small staff and save
 //---------------------------------------------------------
 
-TEST_F(SpannersTests, spanners16)
+TEST_F(Engraving_SpannersTests, spanners16)
 {
-    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + "smallstaff01.mscx");
+    MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"smallstaff01.mscx");
     EXPECT_TRUE(score);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "smallstaff01.mscx", SPANNERS_DATA_DIR + "smallstaff01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"smallstaff01.mscx", SPANNERS_DATA_DIR + u"smallstaff01-ref.mscx"));
     delete score;
 }

@@ -46,18 +46,18 @@ class TextLineSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
 
-    Q_PROPERTY(PropertyItem * beginingText READ beginingText CONSTANT)
-    Q_PROPERTY(PropertyItem * beginingTextVerticalOffset READ beginingTextVerticalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * beginningText READ beginningText CONSTANT)
+    Q_PROPERTY(PropertyItem * beginningTextVerticalOffset READ beginningTextVerticalOffset CONSTANT)
 
-    Q_PROPERTY(PropertyItem * continiousText READ continiousText CONSTANT)
-    Q_PROPERTY(PropertyItem * continiousTextVerticalOffset READ continiousTextVerticalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * continuousText READ continuousText CONSTANT)
+    Q_PROPERTY(PropertyItem * continuousTextVerticalOffset READ continuousTextVerticalOffset CONSTANT)
 
     Q_PROPERTY(PropertyItem * endText READ endText CONSTANT)
     Q_PROPERTY(PropertyItem * endTextVerticalOffset READ endTextVerticalOffset CONSTANT)
 
 public:
     explicit TextLineSettingsModel(QObject* parent, IElementRepositoryService* repository,
-                                   Ms::ElementType elementType = Ms::ElementType::TEXTLINE);
+                                   mu::engraving::ElementType elementType = mu::engraving::ElementType::TEXTLINE);
 
     PropertyItem* isLineVisible() const;
     PropertyItem* allowDiagonal() const;
@@ -74,11 +74,11 @@ public:
 
     PropertyItem* placement() const;
 
-    PropertyItem* beginingText() const;
-    PropertyItem* beginingTextVerticalOffset() const;
+    PropertyItem* beginningText() const;
+    PropertyItem* beginningTextVerticalOffset() const;
 
-    PropertyItem* continiousText() const;
-    PropertyItem* continiousTextVerticalOffset() const;
+    PropertyItem* continuousText() const;
+    PropertyItem* continuousTextVerticalOffset() const;
 
     PropertyItem* endText() const;
     PropertyItem* endTextVerticalOffset() const;
@@ -88,8 +88,8 @@ public:
 
 protected:
     enum TextType {
-        BeginingText,
-        ContiniousText,
+        BeginningText,
+        ContinuousText,
         EndText
     };
 
@@ -98,7 +98,7 @@ protected:
         ui::IconCode::Code icon = ui::IconCode::Code::NONE;
         QString title;
 
-        HookTypeInfo(Ms::HookType type, ui::IconCode::Code icon, const QString& title)
+        HookTypeInfo(mu::engraving::HookType type, ui::IconCode::Code icon, const QString& title)
             : type(static_cast<int>(type)), icon(icon), title(title)
         {
         }
@@ -112,6 +112,7 @@ protected:
     void createProperties() override;
     void loadProperties() override;
     void resetProperties() override;
+    void updatePropertiesOnNotationChanged() override;
 
     virtual void onUpdateLinePropertiesAvailability();
     virtual bool isTextVisible(TextType type) const;
@@ -136,11 +137,11 @@ private:
     PropertyItem* m_endHookType = nullptr;
     PropertyItem* m_hookHeight = nullptr;
 
-    PropertyItem* m_beginingText = nullptr;
-    PropertyItem* m_beginingTextVerticalOffset = nullptr;
+    PropertyItem* m_beginningText = nullptr;
+    PropertyItem* m_beginningTextVerticalOffset = nullptr;
 
-    PropertyItem* m_continiousText = nullptr;
-    PropertyItem* m_continiousTextVerticalOffset = nullptr;
+    PropertyItem* m_continuousText = nullptr;
+    PropertyItem* m_continuousTextVerticalOffset = nullptr;
 
     PropertyItem* m_endText = nullptr;
     PropertyItem* m_endTextVerticalOffset = nullptr;

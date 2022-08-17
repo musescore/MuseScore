@@ -111,7 +111,7 @@ IWorkspacePtr WorkspaceManager::newWorkspace(const std::string& workspaceName) c
 
 WorkspacePtr WorkspaceManager::doNewWorkspace(const std::string& workspaceName) const
 {
-    io::path filePath = configuration()->userWorkspacesPath() + "/" + workspaceName + WORKSPACE_EXT;
+    io::path_t filePath = configuration()->userWorkspacesPath() + "/" + workspaceName + WORKSPACE_EXT;
     return std::make_shared<Workspace>(filePath);
 }
 
@@ -215,8 +215,8 @@ void WorkspaceManager::load()
 {
     m_workspaces.clear();
 
-    io::paths files = findWorkspaceFiles();
-    for (const io::path& file : files) {
+    io::paths_t files = findWorkspaceFiles();
+    for (const io::path_t& file : files) {
         auto workspace = std::make_shared<Workspace>(file);
         appendNewWorkspace(workspace);
     }
@@ -227,14 +227,14 @@ void WorkspaceManager::load()
     setupCurrentWorkspace();
 }
 
-io::paths WorkspaceManager::findWorkspaceFiles() const
+io::paths_t WorkspaceManager::findWorkspaceFiles() const
 {
-    io::paths result;
-    io::paths dirPaths = configuration()->workspacePaths();
+    io::paths_t result;
+    io::paths_t dirPaths = configuration()->workspacePaths();
 
-    for (const io::path& dirPath : dirPaths) {
-        QString filter = QString::fromStdString("*" + WORKSPACE_EXT);
-        RetVal<io::paths> files = fileSystem()->scanFiles(dirPath, { filter });
+    for (const io::path_t& dirPath : dirPaths) {
+        std::string filter = "*" + WORKSPACE_EXT;
+        RetVal<io::paths_t> files = fileSystem()->scanFiles(dirPath, { filter });
         if (!files.ret) {
             LOGE() << files.ret.toString();
             continue;
