@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/MuseScore/Cloud/qmldir</file>
-        <file>qml/MuseScore/Cloud/resources/mu_logo.svg</file>
+        <file>qml/MuseScore/Cloud/resources/mu_logo.png</file>
         <file>qml/MuseScore/Cloud/AccountInfoButton.qml</file>
         <file>qml/MuseScore/Cloud/AccountAvatar.qml</file>
         <file>qml/MuseScore/Cloud/internal/AccountBenefitsDescription.qml</file>
