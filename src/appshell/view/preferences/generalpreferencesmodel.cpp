@@ -35,12 +35,12 @@ void GeneralPreferencesModel::load()
 {
     languagesConfiguration()->currentLanguageCode().ch.onReceive(this, [this](const QString& languageCode) {
         emit currentLanguageCodeChanged(languageCode);
-        setIsNeedRestart(true);
     });
 
-    languagesService()->languages().ch.onReceive(this, [this](const LanguagesHash&) {
-        emit languagesChanged(languages());
-        setIsNeedRestart(true);
+    ValCh<bool> needRestart = languagesService()->needRestartToApplyLanguageChange();
+    setIsNeedRestart(needRestart.val);
+    needRestart.ch.onReceive(this, [this](bool need) {
+        setIsNeedRestart(need);
     });
 
     projectConfiguration()->autoSaveEnabledChanged().onReceive(this, [this](bool enabled) {
@@ -54,30 +54,17 @@ void GeneralPreferencesModel::load()
 
 void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
 {
-    QString currentLanguageCode = this->currentLanguageCode();
-    LanguageStatus::Status languageStatus = languagesService()->languageStatus(currentLanguageCode);
-    if (languageStatus != LanguageStatus::Status::NeedUpdate) {
-        Language currentLanguage = languagesService()->languages().val.value(currentLanguageCode);
-        QString msg = mu::qtrc("appshell/preferences", "Your version of %1 is up to date").arg(currentLanguage.name);
-        interactive()->info(msg.toStdString(), std::string());
-        return;
-    }
+    LanguageProgressChannel progress = languagesService()->update(currentLanguageCode());
 
-    RetCh<LanguageProgress> progress = languagesService()->update(currentLanguageCode);
-    if (!progress.ret) {
-        LOGE() << progress.ret.toString();
-        return;
-    }
-
-    progress.ch.onReceive(this, [this](const LanguageProgress& progress) {
+    progress.onReceive(this, [this](const LanguageProgress& progress) {
         emit receivingUpdateForCurrentLanguage(progress.current, progress.status);
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 }
 
 QVariantList GeneralPreferencesModel::languages() const
 {
-    ValCh<LanguagesHash> languages = languagesService()->languages();
-    QList<Language> languageList = languages.val.values();
+    LanguagesHash languages = languagesService()->languages();
+    QList<Language> languageList = languages.values();
 
     QVariantList result;
 
@@ -92,7 +79,7 @@ QVariantList GeneralPreferencesModel::languages() const
         return l.toMap().value("code").toString() < r.toMap().value("code").toString();
     });
 
-    if (!languagesConfiguration()->languageFilePaths(PLACEHOLDER_LANGUAGE_CODE).empty()) {
+    if (languagesService()->hasPlaceholderLanguage()) {
         QVariantMap placeholderLanguageObj;
         placeholderLanguageObj["code"] = PLACEHOLDER_LANGUAGE_CODE;
         placeholderLanguageObj["name"] = "«Placeholder translations»";
