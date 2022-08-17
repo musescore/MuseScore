@@ -76,6 +76,9 @@ public:
     MeasureBeat beat(midi::tick_t tick) const override;
     midi::tick_t beatToTick(int measureIndex, int beatIndex) const override;
 
+    double tempoMultiplier() const override;
+    void setTempoMultiplier(double multiplier) override;
+
 private:
     engraving::Score* score() const;
 

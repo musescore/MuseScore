@@ -36,6 +36,7 @@ Column {
     property string search: ""
     property string selectedCategory: ""
     property bool pluginIsEnabled: false
+    property string selectedPluginCodeKey: ""
 
     property var flickableItem: null
     property int headerHeight: titleLabel.height + spacing
@@ -48,10 +49,6 @@ Column {
 
     signal pluginClicked(var plugin, var navigationControl)
     signal navigationActivated(var itemRect)
-
-    function resetSelectedPlugin() {
-        view.currentIndex = -1
-    }
 
     function focusOnFirst() {
         view.itemAtIndex(0).requestActive()
@@ -136,7 +133,7 @@ Column {
 
                 name: model.name
                 thumbnailUrl: model.thumbnailUrl
-                selected: view.currentIndex === index
+                selected: model.codeKey === root.selectedPluginCodeKey
 
                 navigation.panel: root.navigationPanel
                 navigation.row: view.columns === 0 ? 0 : Math.floor(model.index / view.columns)
@@ -149,7 +146,6 @@ Column {
 
                 onClicked: {
                     forceActiveFocus()
-                    view.currentIndex = index
                     root.pluginClicked(model, navigation)
                 }
             }

@@ -327,7 +327,7 @@ void PlaybackController::onNotationChanged()
     });
 
     notationPlayback()->loopBoundariesChanged().onNotify(this, [this]() {
-        setLoop(notationPlayback()->loopBoundaries());
+        updateLoop();
     });
 
     m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
@@ -345,7 +345,7 @@ void PlaybackController::onSelectionChanged()
 
     if (!isRangeSelection) {
         if (selectionTypeChanged) {
-            setLoop(notationPlayback()->loopBoundaries());
+            updateLoop();
             updateMuteStates();
         }
 
@@ -577,11 +577,13 @@ void PlaybackController::addLoopBoundaryToTick(LoopBoundaryType type, int tick)
     }
 }
 
-void PlaybackController::setLoop(const LoopBoundaries& boundaries)
+void PlaybackController::updateLoop()
 {
-    IF_ASSERT_FAILED(playback()) {
+    IF_ASSERT_FAILED(notationPlayback() && playback()) {
         return;
     }
+
+    const LoopBoundaries& boundaries = notationPlayback()->loopBoundaries();
 
     if (!boundaries.visible) {
         hideLoop();
@@ -950,8 +952,11 @@ void PlaybackController::setupSequencePlayer()
             return;
         }
 
-        tick_t tick = notationPlayback()->secToTick(msecs / 1000.);
+        if (!isPlaying()) {
+            return;
+        }
 
+        tick_t tick = notationPlayback()->secToTick(msecs / 1000.);
         setCurrentTick(tick);
         m_tickPlayed.send(std::move(tick));
     });
@@ -1079,6 +1084,35 @@ msecs_t PlaybackController::beatToMilliseconds(int measureIndex, int beatIndex) 
 
     int tick = notationPlayback()->beatToTick(measureIndex, beatIndex);
     return tickToMsecs(tick);
+}
+
+double PlaybackController::tempoMultiplier() const
+{
+    INotationPlaybackPtr playback = notationPlayback();
+    return playback ? playback->tempoMultiplier() : 1.0;
+}
+
+void PlaybackController::setTempoMultiplier(double multiplier)
+{
+    INotationPlaybackPtr playback = notationPlayback();
+    if (!playback) {
+        return;
+    }
+
+    tick_t tick = m_currentTick;
+    bool playing = isPlaying();
+
+    if (playing) {
+        pause();
+    }
+
+    playback->setTempoMultiplier(multiplier);
+    seek(tick);
+    updateLoop();
+
+    if (playing) {
+        resume();
+    }
 }
 
 mu::framework::Progress PlaybackController::loadingProgress() const

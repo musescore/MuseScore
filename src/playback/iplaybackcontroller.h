@@ -77,6 +77,9 @@ public:
     virtual notation::MeasureBeat currentBeat() const = 0;
     virtual audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const = 0;
 
+    virtual double tempoMultiplier() const = 0;
+    virtual void setTempoMultiplier(double multiplier) = 0;
+
     virtual framework::Progress loadingProgress() const = 0;
 };
 }

@@ -27,6 +27,8 @@ import MuseScore.Ui 1.0
 Slider {
     id: root
 
+    property bool fillBackground: true
+
     implicitWidth: vertical ? prv.handleSize : prv.defaultLength
     implicitHeight: vertical ? prv.defaultLength : prv.handleSize
 
@@ -37,6 +39,7 @@ Slider {
         id: prv
 
         readonly property int lineSize: 4
+        readonly property int radius: 4
         readonly property int handleSize: 14
         readonly property int defaultLength: 220
     }
@@ -51,12 +54,13 @@ Slider {
 
             anchors.verticalCenter: parent.verticalCenter
 
-            width: handleBackground.x + handleBackground.width / 2
-            height: prv.lineSize
+            width: root.fillBackground ? handleBackground.x + handleBackground.width / 2 : 0
+            height: root.fillBackground ? prv.lineSize : 0
+            visible: root.fillBackground
 
             opacity: 1
             color: ui.theme.accentColor
-            radius: height
+            radius: prv.radius
         }
 
         Rectangle {
@@ -71,7 +75,7 @@ Slider {
 
             opacity: 0.5
             color: ui.theme.fontPrimaryColor
-            radius: filledBackground.radius
+            radius: prv.radius
         }
     }
 
@@ -146,8 +150,8 @@ Slider {
 
                 y: blankBackground.height
 
-                width: prv.lineSize
-                height: root.height - blankBackground.height
+                width: root.fillBackground ? prv.lineSize : 0
+                height: root.fillBackground ? root.height - blankBackground.height : 0
             }
 
             PropertyChanges {

@@ -74,6 +74,9 @@ public:
     virtual const Tempo& tempo(midi::tick_t tick) const = 0;
     virtual MeasureBeat beat(midi::tick_t tick) const = 0;
     virtual midi::tick_t beatToTick(int measureIndex, int beatIndex) const = 0;
+
+    virtual double tempoMultiplier() const = 0;
+    virtual void setTempoMultiplier(double multiplier) = 0;
 };
 
 using INotationPlaybackPtr = std::shared_ptr<INotationPlayback>;

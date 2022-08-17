@@ -82,10 +82,12 @@ public:
     async::Notification noteAdded() const override;
     async::Notification stateChanged() const override;
 
+    void setGetViewRectFunc(const std::function<RectF()>& func);
+
 private:
     mu::engraving::Score* score() const;
 
-    mu::engraving::EngravingItem* resolveNoteInputStartPosition() const;
+    EngravingItem* resolveNoteInputStartPosition() const;
 
     void startEdit();
     void apply();
@@ -108,6 +110,7 @@ private:
     async::Notification m_noteInputEnded;
 
     ScoreCallbacks* m_scoreCallbacks = nullptr;
+    std::function<RectF()> m_getViewRectFunc;
 };
 }
 

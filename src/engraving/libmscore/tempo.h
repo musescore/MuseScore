@@ -26,6 +26,7 @@
 #include <map>
 
 #include "global/allocator.h"
+#include "global/async/notification.h"
 #include "types/flags.h"
 #include "types/types.h"
 
@@ -71,9 +72,10 @@ class TempoMap : public std::map<int, TEvent>
 {
     OBJECT_ALLOCATOR(engraving, TempoMap)
 
-    int _tempoSN;             // serial no to track tempo changes
-    BeatsPerSecond _tempo;    // tempo if not using tempo list (beats per second)
-    BeatsPerSecond _relTempo;          // rel. tempo
+    int _tempoSN = 0; // serial no to track tempo changes
+    BeatsPerSecond _tempo; // tempo if not using tempo list (beats per second)
+    BeatsPerSecond _tempoMultiplier;
+    async::Notification _tempoMultiplierChanged;
 
     void normalize();
     void del(int tick);
@@ -98,8 +100,9 @@ public:
     void setPause(int t, double);
     void delTempo(int tick);
 
-    void setRelTempo(BeatsPerSecond val);
-    BeatsPerSecond relTempo() const { return _relTempo; }
+    BeatsPerSecond tempoMultiplier() const;
+    async::Notification tempoMultiplierChanged() const;
+    void setTempoMultiplier(BeatsPerSecond val);
 };
 } // namespace mu::engraving
 #endif

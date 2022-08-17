@@ -43,6 +43,7 @@ using namespace mu::mpe;
 
 static constexpr double FLUID_GLOBAL_VOLUME_GAIN = 4.8;
 static constexpr int DEFAULT_MIDI_VOLUME = 100;
+static constexpr msecs_t MIN_NOTE_LENGTH = 25;
 
 /// @note
 ///  Fluid does not support MONO, so they start counting audio channels from 1, which means "1 pair of audio channels"
@@ -323,8 +324,6 @@ bool FluidSynth::isActive() const
 
 void FluidSynth::setIsActive(const bool isActive)
 {
-    AbstractSynthesizer::setIsActive(isActive);
-
     m_sequencer.setActive(isActive);
     toggleExpressionController();
 }
@@ -378,7 +377,7 @@ void FluidSynth::toggleExpressionController()
 {
     int volume = DEFAULT_MIDI_VOLUME;
 
-    if (m_isActive) {
+    if (isActive()) {
         volume = m_currentExpressionLevel;
     }
 

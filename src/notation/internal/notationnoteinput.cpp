@@ -30,6 +30,7 @@
 #include "libmscore/articulation.h"
 #include "libmscore/system.h"
 #include "libmscore/stafftype.h"
+#include "libmscore/mscore.h"
 
 #include "scorecallbacks.h"
 
@@ -80,7 +81,7 @@ NoteInputState NotationNoteInput::state() const
     return noteInputState;
 }
 
-//! NOTE Coped from `void ScoreView::startNoteEntry()`
+//! NOTE Copied from `void ScoreView::startNoteEntry()`
 void NotationNoteInput::startNoteInput()
 {
     TRACEFUNC;
@@ -89,7 +90,7 @@ void NotationNoteInput::startNoteInput()
         return;
     }
 
-    mu::engraving::EngravingItem* el = resolveNoteInputStartPosition();
+    EngravingItem* el = resolveNoteInputStartPosition();
     if (!el) {
         return;
     }
@@ -141,9 +142,110 @@ void NotationNoteInput::startNoteInput()
     m_interaction->showItem(el);
 }
 
-mu::engraving::EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
+EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
 {
-    EngravingItem* el = score()->selection().element();
+    ChordRest* topLeftChordRest = nullptr;
+
+    if (score()->selection().isNone() && m_getViewRectFunc) {
+        // no selection
+        // choose page in current view (favor top left quadrant if possible)
+        // select first (top/left) chordrest of that page in current view
+        // or, CR at last selected position if that is in view
+        RectF viewRect = m_getViewRectFunc();
+        PointF topLeft = viewRect.topLeft();
+
+        std::vector<PointF> points;
+        points.push_back({ topLeft.x() + viewRect.width() * 0.25, topLeft.y() + viewRect.height() * 0.25 });
+        points.push_back(topLeft);
+        points.push_back(viewRect.bottomLeft());
+        points.push_back(viewRect.topRight());
+        points.push_back(viewRect.bottomRight());
+
+        Page* page = nullptr;
+        for (const PointF& point : points) {
+            page = score()->searchPage(point);
+            if (page) {
+                break;
+            }
+        }
+
+        if (page) {
+            qreal tlY = 0.0;
+            Fraction tlTick = Fraction(0, 1);
+            RectF pageRect  = page->bbox().translated(page->x(), page->y());
+            RectF intersect = viewRect & pageRect;
+            intersect.translate(-page->x(), -page->y());
+            std::vector<EngravingItem*> el = page->items(intersect);
+
+            const ChordRest* lastSelected = score()->selection().currentCR();
+
+            if (lastSelected && lastSelected->voice()) {
+                // if last selected CR was not in voice 1,
+                // find CR in voice 1 instead
+                int track = mu::engraving::trackZeroVoice(lastSelected->track());
+                const mu::engraving::Segment* s = lastSelected->segment();
+                if (s) {
+                    lastSelected = s->nextChordRest(track, true);
+                }
+            }
+
+            for (EngravingItem* e : el) {
+                // loop through visible elements
+                // looking for the CR in voice 1 with earliest tick and highest staff position
+                // but stop if we find the last selected CR
+                ElementType et = e->type();
+                if (et == ElementType::NOTE || et == ElementType::REST) {
+                    if (e->voice()) {
+                        continue;
+                    }
+                    ChordRest* cr;
+                    if (et == ElementType::NOTE) {
+                        cr = static_cast<ChordRest*>(e->parent());
+                        if (!cr) {
+                            continue;
+                        }
+                    } else {
+                        cr = static_cast<ChordRest*>(e);
+                    }
+                    if (cr == lastSelected) {
+                        topLeftChordRest = cr;
+                        break;
+                    }
+                    // compare ticks rather than x position
+                    // to make sure we favor earlier rather than later systems
+                    // even though later system might have note farther to left
+                    Fraction crTick = Fraction(0, 1);
+                    if (cr->segment()) {
+                        crTick = cr->segment()->tick();
+                    } else {
+                        continue;
+                    }
+                    // compare staff Y position rather than note Y position
+                    // to be sure we do not reject earliest note
+                    // just because it is lower in pitch than subsequent notes
+                    qreal crY = 0.0;
+                    if (cr->measure() && cr->measure()->system()) {
+                        crY = cr->measure()->system()->staffYpage(cr->staffIdx());
+                    } else {
+                        continue;
+                    }
+                    if (topLeftChordRest) {
+                        if (crTick <= tlTick && crY <= tlY) {
+                            topLeftChordRest = cr;
+                            tlTick = crTick;
+                            tlY = crY;
+                        }
+                    } else {
+                        topLeftChordRest = cr;
+                        tlTick = crTick;
+                        tlY = crY;
+                    }
+                }
+            }
+        }
+    }
+
+    EngravingItem* el = topLeftChordRest ? topLeftChordRest : score()->selection().element();
     if (!el) {
         el = score()->selection().firstChordRest();
     }
@@ -484,6 +586,11 @@ Notification NotationNoteInput::noteAdded() const
 Notification NotationNoteInput::stateChanged() const
 {
     return m_stateChanged;
+}
+
+void NotationNoteInput::setGetViewRectFunc(const std::function<RectF()>& func)
+{
+    m_getViewRectFunc = func;
 }
 
 mu::engraving::Score* NotationNoteInput::score() const
