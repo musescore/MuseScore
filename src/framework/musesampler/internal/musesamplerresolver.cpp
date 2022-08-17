@@ -61,6 +61,10 @@ AudioResourceMetaList MuseSamplerResolver::resolveResources() const
 {
     AudioResourceMetaList result;
 
+    if (!m_libHandler) {
+        return result;
+    }
+
     auto instrumentList = m_libHandler->getInstrumentList();
     while (auto instrument = m_libHandler->getNextInstrument(instrumentList))
     {

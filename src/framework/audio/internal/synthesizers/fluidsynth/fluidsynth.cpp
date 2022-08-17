@@ -324,8 +324,6 @@ bool FluidSynth::isActive() const
 
 void FluidSynth::setIsActive(const bool isActive)
 {
-    AbstractSynthesizer::setIsActive(isActive);
-
     m_sequencer.setActive(isActive);
     toggleExpressionController();
 }

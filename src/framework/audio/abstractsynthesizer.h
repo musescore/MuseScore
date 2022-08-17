@@ -37,7 +37,7 @@ class AbstractSynthesizer : public IAudioSource, public async::Asyncable
 {
 public:
     AbstractSynthesizer(const audio::AudioInputParams& params);
-    virtual ~AbstractSynthesizer();
+    virtual ~AbstractSynthesizer() = default;
 
     virtual std::string name() const = 0;
     virtual AudioSourceType type() const = 0;
