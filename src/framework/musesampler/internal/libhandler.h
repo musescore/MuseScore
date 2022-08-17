@@ -41,12 +41,14 @@ struct MuseSamplerLibHandler
     {
         return ms_contains_instrument(mpe_id, musicxml) == 1;
     }
+
     int getMatchingInstrumentId(const char* pack, const char* name) { reutrn ms_get_matching_instrument_id(pack, name); }
     ms_InstrumentList getInstrumentList() { return ms_get_instrument_list(); }
     ms_InstrumentList getMatchingInstrumentList(const char* mpe_id, const char* musicxml)
     {
         return ms_get_matching_instrument_list(mpe_id, musicxml);
     }
+
     ms_InstrumentInfo getNextInstrument(ms_InstrumentList instrument_list) { return ms_InstrumentList_get_next(instrument_list); }
     int getInstrumentId(ms_InstrumentInfo instrument) { return ms_Instrument_get_id(instrument); }
     const char* getInstrumentName(ms_InstrumentInfo instrument) { return ms_Instrument_get_name(instrument); }
@@ -74,6 +76,7 @@ struct MuseSamplerLibHandler
     {
         return ms_MuseSampler_add_track_dynamics_event(ms, track, evt);
     }
+
     ms_Result addNoteEvent(ms_MuseSampler ms, ms_Track track, ms_Event evt) { return ms_MuseSampler_add_track_note_event(ms, track, evt); }
 
     bool isRangedArticulation(ms_NoteArticulation art) { return ms_MuseSampler_is_ranged_articulation(art) == 1; }
@@ -81,6 +84,7 @@ struct MuseSamplerLibHandler
     {
         return ms_MuseSampler_add_track_event_range_start(ms, track, voice, art);
     }
+
     ms_Result addTrackEventRangeEnd(ms_MuseSampler ms, ms_Track track, int voice, ms_NoteArticulation art)
     {
         return ms_MuseSampler_add_track_event_range_end(ms, track, voice, art);
@@ -92,6 +96,7 @@ struct MuseSamplerLibHandler
     {
         return ms_MuseSampler_start_audition_note(ms, track, evt);
     }
+
     ms_Result stopAuditionNote(ms_MuseSampler ms, ms_Track track, ms_AuditionStopNoteEvent evt)
     {
         return ms_MuseSampler_stop_audition_note(ms, track, evt);
@@ -103,6 +108,7 @@ struct MuseSamplerLibHandler
     {
         return ms_MuseSampler_start_liveplay_note(ms, track, evt);
     }
+
     ms_Result stopLivePlayNote(ms_MuseSampler ms, ms_Track track, ms_LivePlayStopNoteEvent evt)
     {
         return ms_MuseSampler_stop_liveplay_note(ms, track, evt);
@@ -110,8 +116,9 @@ struct MuseSamplerLibHandler
 
     ms_Result startOfflineMode(ms_MuseSampler ms, double sample_rate)
     {
-        return ms_MuseSampler_start_offline_mode(ms, sample_rate); 
+        return ms_MuseSampler_start_offline_mode(ms, sample_rate);
     }
+
     ms_Result stopOfflineMode(ms_MuseSampler ms) { return ms_MuseSampler_stop_offline_mode(ms); }
     ms_Result processOffline(ms_MuseSampler ms, ms_OutputBuffer buff)
     {
