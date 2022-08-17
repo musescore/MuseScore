@@ -44,8 +44,6 @@ public:
 
 private:
     MuseSamplerLibHandlerPtr m_libHandler = nullptr;
-
-    mutable std::map<audio::TrackId, audio::synth::ISynthesizerPtr> m_samplersMap;
 };
 }
 

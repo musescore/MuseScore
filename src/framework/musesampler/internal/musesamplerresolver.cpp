@@ -24,6 +24,7 @@
 
 #include "log.h"
 
+#include "musesamplerutils.h"
 #include "musesamplerwrapper.h"
 
 using namespace mu;
@@ -39,18 +40,9 @@ MuseSamplerResolver::MuseSamplerResolver()
     m_libHandler = std::make_shared<MuseSamplerLibHandler>(path.c_str());
 }
 
-ISynthesizerPtr MuseSamplerResolver::resolveSynth(const audio::TrackId trackId, const audio::AudioInputParams& params) const
+ISynthesizerPtr MuseSamplerResolver::resolveSynth(const audio::TrackId /*trackId*/, const audio::AudioInputParams& params) const
 {
-    auto search = m_samplersMap.find(trackId);
-
-    if (search != m_samplersMap.cend()) {
-        return search->second;
-    }
-
-    MuseSamplerWrapperPtr sampler = std::make_shared<MuseSamplerWrapper>(m_libHandler, params);
-    m_samplersMap.emplace(trackId, sampler);
-
-    return sampler;
+    return std::make_shared<MuseSamplerWrapper>(m_libHandler, params);
 }
 
 bool MuseSamplerResolver::hasCompatibleResources(const audio::PlaybackSetupData& setup) const
@@ -59,23 +51,32 @@ bool MuseSamplerResolver::hasCompatibleResources(const audio::PlaybackSetupData&
         return false;
     }
 
-    if (!setup.musicXmlSoundId.has_value()) {
-        return false;
-    }
+    ByteArray idStr = setup.toString().toUtf8();
 
-    return m_libHandler->containsInstrument(setup.musicXmlSoundId.value().data());
+    return m_libHandler->containsInstrument(idStr.constChar(),
+                                            setup.musicXmlSoundId->c_str());
 }
 
 AudioResourceMetaList MuseSamplerResolver::resolveResources() const
 {
-    static AudioResourceMetaList result {
+    AudioResourceMetaList result;
+
+    auto instrumentList = m_libHandler->getInstrumentList();
+    while (auto instrument = m_libHandler->getNextInstrument(instrumentList))
+    {
+        int uniqueId = m_libHandler->getInstrumentId(instrument);
+        const char* internalName = m_libHandler->getInstrumentName(instrument);
+        const char* internalCategory = m_libHandler->getInstrumentCategory(instrument);
+        const char* instrumentPack = m_libHandler->getInstrumentPackage(instrument);
+
+        result.push_back(
         {
-            "MSO",
-            AudioResourceType::MuseSamplerSoundPack,
-            "Muse",
+            buildMuseInstrumentId(internalCategory, internalName, uniqueId), // id
+            AudioResourceType::MuseSamplerSoundPack, // type
+            instrumentPack, // vendor
             /*hasNativeEditorSupport*/ false
-        }
-    };
+        });
+    }
 
     return result;
 }
