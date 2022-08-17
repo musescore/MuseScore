@@ -6,12 +6,16 @@
 #include "translation.h"
 #include "stringutils.h"
 
+// Note that this isn't ideal to be a dependency here; however the audio resource structure is limited in data storage and
+// so MuseSampler packs extra info into the resourceMeta.id field.  Including the helper here avoids code duplication.
+#include "musesampler/internal/musesamplerutils.h"
+
 using namespace mu::playback;
 using namespace mu::audio;
 
 static const QString VST_MENU_ITEM_ID("VST3");
 static const QString SOUNDFONTS_MENU_ITEM_ID = QString::fromStdString(mu::trc("playback", "SoundFonts"));
-static const QString MUSE_MENU_ITEM_ID("Muse");
+static const QString MUSE_MENU_ITEM_ID("Muse Sounds");
 
 InputResourceItem::InputResourceItem(QObject* parent)
     : AbstractAudioResourceItem(parent)
@@ -96,6 +100,11 @@ void InputResourceItem::setParams(const audio::AudioInputParams& newParams)
 
 QString InputResourceItem::title() const
 {
+    if (m_currentInputParams.type() == mu::audio::AudioSourceType::MuseSampler)
+    {
+        if (auto id = musesampler::getMuseInstrumentNameFromId(m_currentInputParams.resourceMeta.id); id.has_value())
+            return QString::fromStdString(*id);
+    }
     return QString::fromStdString(m_currentInputParams.resourceMeta.id);
 }
 
@@ -116,16 +125,49 @@ bool InputResourceItem::hasNativeEditorSupport() const
 
 QVariantMap InputResourceItem::buildMuseMenuItem(const ResourceByVendorMap& resourcesByVendor) const
 {
+    std::string currentCategory;
+    if (auto category = musesampler::getMuseInstrumentCategoryFromId(m_currentInputParams.resourceMeta.id); category.has_value())
+        currentCategory = *category;
     QVariantList subItemsByType;
 
     for (const auto& pair : resourcesByVendor) {
-        for (const AudioResourceMeta& resourceMeta : pair.second) {
-            const QString& resourceId = QString::fromStdString(resourceMeta.id);
+        const QString& vendor = QString::fromStdString(pair.first);
 
-            subItemsByType << buildMenuItem(resourceId,
-                                            resourceId,
-                                            m_currentInputParams.resourceMeta.id == resourceMeta.id);
+        QVariantList subItemsByVendor;
+
+        std::map<std::string, std::vector<std::tuple<int, std::string, const AudioResourceMeta*>>> categoryMap;
+        for (const AudioResourceMeta& resourceMeta : pair.second) {
+            auto category = musesampler::getMuseInstrumentCategoryFromId(resourceMeta.id);
+            auto name = musesampler::getMuseInstrumentNameFromId(resourceMeta.id);
+            auto unique_id = musesampler::getMuseInstrumentUniqueIdFromId(resourceMeta.id);
+            if (category.has_value() && name.has_value() && unique_id.has_value())
+                categoryMap[*category].push_back({*unique_id, *name, &resourceMeta});
         }
+
+        for (const auto& category : categoryMap)
+        {
+            QVariantList subItemsByCategory;
+            for (auto& inst : category.second)
+            {
+                std::string myId = musesampler::buildMuseInstrumentId(category.first, std::get<1>(inst), std::get<0>(inst));
+                const QString& instName = QString::fromStdString(std::get<1>(inst));
+                const QString& instId = QString::fromStdString(myId);
+                subItemsByCategory << buildMenuItem(instId,
+                                                    instName,
+                                                    m_currentInputParams.resourceMeta.id == myId);
+            }
+
+            const QString& categoryString = QString::fromStdString(category.first);
+            subItemsByVendor << buildMenuItem(categoryString,
+                                              categoryString,
+                                              currentCategory == category.first,
+                                              subItemsByCategory);
+        }
+
+        subItemsByType << buildMenuItem(vendor,
+                                        vendor,
+                                        m_currentInputParams.resourceMeta.vendor == pair.first,
+                                        subItemsByVendor);
     }
 
     return buildMenuItem(MUSE_MENU_ITEM_ID,
