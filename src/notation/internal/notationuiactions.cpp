@@ -1949,6 +1949,13 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Note input: toggle ‘insert’ mode (increases measure duration)"),
              IconCode::Code::NOTE_PLUS
              ),
+    UiAction("realtime-advance",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Real-time advance"),
+             TranslatableString("action", "Real-time advance"),
+             IconCode::Code::METRONOME
+             ),
     UiAction("note-longa",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_STAFF_NOT_TAB,

@@ -79,6 +79,7 @@ public:
     async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackRemoved() const override;
 
     void playElements(const std::vector<const notation::EngravingItem*>& elements) override;
+    void playMetronome(int tick) override;
     void seekElement(const notation::EngravingItem* element) override;
 
     bool actionChecked(const actions::ActionCode& actionCode) const override;

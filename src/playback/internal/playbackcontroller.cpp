@@ -238,6 +238,11 @@ void PlaybackController::playElements(const std::vector<const notation::Engravin
     notationPlayback()->triggerEventsForItems(elementsForPlaying);
 }
 
+void PlaybackController::playMetronome(int tick)
+{
+    notationPlayback()->triggerMetronome(tick);
+}
+
 void PlaybackController::seekElement(const notation::EngravingItem* element)
 {
     IF_ASSERT_FAILED(element) {

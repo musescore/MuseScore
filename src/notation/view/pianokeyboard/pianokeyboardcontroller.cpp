@@ -137,7 +137,7 @@ void PianoKeyboardController::sendNoteOn(piano_key_t key)
     ev.setNote(key);
     ev.setVelocity(80);
 
-    notation->midiInput()->onMidiEventsReceived({ ev });
+    notation->midiInput()->onMidiEventReceived(ev);
 }
 
 void PianoKeyboardController::sendNoteOff(piano_key_t key)
@@ -152,7 +152,7 @@ void PianoKeyboardController::sendNoteOff(piano_key_t key)
     ev.setOpcode(Event::Opcode::NoteOff);
     ev.setNote(key);
 
-    notation->midiInput()->onMidiEventsReceived({ ev });
+    notation->midiInput()->onMidiEventReceived(ev);
 }
 
 INotationPtr PianoKeyboardController::currentNotation() const

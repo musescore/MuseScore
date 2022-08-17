@@ -57,6 +57,8 @@ public:
     void renderMetronome(const Score* score, const int measureStartTick, const int measureEndTick, const int ticksPositionOffset,
                          mpe::PlaybackEventsMap& result) const;
 
+    void renderMetronome(const Score* score, const int tick, const mpe::timestamp_t actualTimestamp, mpe::PlaybackEventsMap& result) const;
+
 private:
     void renderNoteEvents(const Chord* chord, const int tickPositionOffset, const mpe::dynamic_level_t nominalDynamicLevel,
                           const mpe::ArticulationType persistentArticulationApplied, const mpe::ArticulationsProfilePtr profile,

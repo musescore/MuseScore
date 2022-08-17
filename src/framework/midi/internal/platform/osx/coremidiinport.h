@@ -24,16 +24,16 @@
 
 #include <memory>
 
-#include "../../abstractmidiinport.h"
+#include "imidiinport.h"
 
 namespace mu::midi {
-class CoreMidiInPort : public AbstractMidiInPort
+class CoreMidiInPort : public IMidiInPort
 {
 public:
     CoreMidiInPort();
     ~CoreMidiInPort() override;
 
-    void init() override;
+    void init();
 
     MidiDeviceList availableDevices() const override;
     async::Notification availableDevicesChanged() const override;
@@ -43,6 +43,8 @@ public:
     bool isConnected() const override;
     MidiDeviceID deviceID() const override;
     async::Notification deviceChanged() const override;
+
+    async::Channel<tick_t, Event> eventReceived() const override;
 
 private:
     Ret run();
@@ -57,6 +59,8 @@ private:
     async::Notification m_availableDevicesChanged;
 
     bool m_running = false;
+
+    async::Channel<tick_t, Event > m_eventReceived;
 };
 }
 
