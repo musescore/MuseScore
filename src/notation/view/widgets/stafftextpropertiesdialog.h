@@ -47,7 +47,6 @@ public:
 
 private slots:
     void saveValues();
-    void tabChanged(int tab);
     void setSwingControls(bool);
 
 private:
@@ -57,8 +56,6 @@ private:
 
     engraving::StaffTextBase* m_originStaffText = nullptr;
     engraving::StaffTextBase* m_staffText = nullptr;
-    QPushButton* m_stops[4][16];
-    int m_curTabIndex = 0;
 };
 }
 
