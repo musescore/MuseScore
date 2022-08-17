@@ -38,11 +38,6 @@ enum class Err {
     ErrorLanguageNotFound,
     ErrorRemoveLanguageDirectory,
     ErrorAnotherOperationStarted,
-
-    UnpackDestinationReadOnly,
-    UnpackNoFreeSpace,
-    UnpackErrorRemovePreviousVersion,
-    UnpackError
 };
 
 inline Ret make_ret(Err e)
@@ -61,10 +56,6 @@ inline Ret make_ret(Err e)
     case Err::ErrorRemoveLanguageDirectory: return Ret(retCode, trc("languages", "Error while removing language directory"));
     case Err::ErrorAnotherOperationStarted: return Ret(retCode,
                                                        trc("languages", "Another operation on this language has already been started"));
-    case Err::UnpackDestinationReadOnly: return Ret(retCode, trc("languages", "Cannot import language on read-only storage"));
-    case Err::UnpackNoFreeSpace: return Ret(retCode, trc("languages", "Cannot import language due to lack of free disk space"));
-    case Err::UnpackErrorRemovePreviousVersion: return Ret(retCode, trc("languages", "Error while removing previous version of language"));
-    case Err::UnpackError: return Ret(retCode, trc("languages", "Error while unpacking language"));
     }
 
     return retCode;

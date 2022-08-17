@@ -25,7 +25,6 @@
 
 #include "internal/languagesconfiguration.h"
 #include "internal/languagesservice.h"
-#include "internal/languageunpacker.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -44,7 +43,6 @@ void LanguagesModule::registerExports()
 {
     ioc()->registerExport<ILanguagesConfiguration>(moduleName(), s_languagesConfiguration);
     ioc()->registerExport<ILanguagesService>(moduleName(), s_languagesService);
-    ioc()->registerExport<ILanguageUnpacker>(moduleName(), std::make_shared<LanguageUnpacker>());
 }
 
 void LanguagesModule::onInit(const framework::IApplication::RunMode& mode)
