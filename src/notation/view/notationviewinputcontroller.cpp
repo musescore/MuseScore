@@ -547,7 +547,11 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
     if (ctx.isHitGrip) {
         viewInteraction()->startEditGrip(ctx.logicClickPos);
         return;
-    } else if (ctx.hitElement && ctx.hitElement->needStartEditingAfterSelecting()) {
+    } else {
+        viewInteraction()->endEditGrip();
+    }
+
+    if (ctx.hitElement && ctx.hitElement->needStartEditingAfterSelecting()) {
         viewInteraction()->startEditElement(ctx.hitElement);
         return;
     }

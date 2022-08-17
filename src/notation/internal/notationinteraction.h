@@ -142,6 +142,7 @@ public:
     bool isHitGrip(const PointF& pos) const override;
     void startEditGrip(const PointF& pos) override;
     void startEditGrip(EngravingItem* element, mu::engraving::Grip grip) override;
+    void endEditGrip() override;
 
     bool isElementEditStarted() const override;
     void startEditElement(EngravingItem* element) override;

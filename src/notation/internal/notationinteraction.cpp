@@ -2869,6 +2869,31 @@ void NotationInteraction::startEditGrip(const PointF& pos)
     startEditGrip(selection()->element(), mu::engraving::Grip(grip));
 }
 
+void NotationInteraction::startEditGrip(EngravingItem* element, mu::engraving::Grip grip)
+{
+    if (m_editData.element == element && m_editData.curGrip == grip) {
+        return;
+    }
+
+    m_editData.element = element;
+    m_editData.curGrip = grip;
+
+    updateAnchorLines();
+    m_editData.element->startEdit(m_editData);
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::endEditGrip()
+{
+    if (m_editData.curGrip == Grip::NO_GRIP) {
+        return;
+    }
+
+    m_editData.curGrip = Grip::NO_GRIP;
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::updateAnchorLines()
 {
     std::vector<LineF> lines;
@@ -2885,21 +2910,6 @@ void NotationInteraction::updateAnchorLines()
     }
 
     setAnchorLines(lines);
-}
-
-void NotationInteraction::startEditGrip(EngravingItem* element, mu::engraving::Grip grip)
-{
-    if (m_editData.element == element && m_editData.curGrip == grip) {
-        return;
-    }
-
-    m_editData.element = element;
-    m_editData.curGrip = grip;
-
-    updateAnchorLines();
-    m_editData.element->startEdit(m_editData);
-
-    notifyAboutNotationChanged();
 }
 
 bool NotationInteraction::isElementEditStarted() const
