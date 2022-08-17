@@ -296,6 +296,16 @@ struct PlaybackSetupData
         return id != SoundId::Undefined
                && category != SoundCategory::Undefined;
     }
+
+    String toString() const
+    {
+        String result = String(u"%1.%2.%3")
+                              .arg(soundIdToString(id))
+                              .arg(soundCategoryToString(category))
+                              .arg(subCategorySet.toString());
+
+        return result;
+    }
 };
 
 struct PlaybackData {
