@@ -27,17 +27,44 @@
 #include <QBuffer>
 #include <QtConcurrent>
 
-#include "log.h"
 #include "dataformatter.h"
 #include "learnerrors.h"
+#include "log.h"
 
 using namespace mu::learn;
 using namespace mu::network;
 
+static int videoDurationSecs(const QString& durationInIsoFormat)
+{
+    // NOTE Available ISO8601 duration format: P#Y#M#DT#H#M#S
+
+    QRegularExpression regexp(QString("("
+                                      "P"
+                                      "((?<years>[0-9]+)Y)?"
+                                      "((?<months>[0-9]+)M)?"
+                                      "((?<days>[0-9]+)D)?"
+                                      "T"
+                                      "((?<hours>[0-9]+)H)?"
+                                      "((?<minutes>[0-9]+)M)?"
+                                      "((?<seconds>[0-9]+)S)?"
+                                      ")"));
+
+    QRegularExpressionMatch match = regexp.match(durationInIsoFormat);
+
+    if (!match.hasMatch()) {
+        return 0;
+    }
+
+    int hours = match.captured("hours").toInt();
+    int minutes = match.captured("minutes").toInt();
+    int seconds = match.captured("seconds").toInt();
+
+    return seconds + minutes * 60 + hours * 60 * 60;
+}
+
 void LearnService::refreshPlaylists()
 {
-    async::Channel<RetVal<Playlist> > startedPlaylistFinishChannel;
-    startedPlaylistFinishChannel.onReceive(this, [this](const RetVal<Playlist>& result) {
+    auto startedPlaylistCallBack = [this](const RetVal<Playlist>& result) {
         if (!result.ret) {
             LOGW() << result.ret.toString();
             return;
@@ -49,10 +76,9 @@ void LearnService::refreshPlaylists()
 
         m_startedPlaylist = result.val;
         m_startedPlaylistChannel.send(m_startedPlaylist);
-    });
+    };
 
-    async::Channel<RetVal<Playlist> > advancedPlaylistFinishChannel;
-    advancedPlaylistFinishChannel.onReceive(this, [this](const RetVal<Playlist>& result) {
+    auto advancedPlaylistCallBack = [this](const RetVal<Playlist>& result) {
         if (!result.ret) {
             LOGW() << result.ret.toString();
             return;
@@ -64,10 +90,10 @@ void LearnService::refreshPlaylists()
 
         m_advancedPlaylist = result.val;
         m_advancedPlaylistChannel.send(m_advancedPlaylist);
-    });
+    };
 
-    QtConcurrent::run(this, &LearnService::th_requestPlaylist, configuration()->startedPlaylistUrl(), startedPlaylistFinishChannel);
-    QtConcurrent::run(this, &LearnService::th_requestPlaylist, configuration()->advancedPlaylistUrl(), advancedPlaylistFinishChannel);
+    QtConcurrent::run(this, &LearnService::th_requestPlaylist, configuration()->startedPlaylistUrl(), startedPlaylistCallBack);
+    QtConcurrent::run(this, &LearnService::th_requestPlaylist, configuration()->advancedPlaylistUrl(), advancedPlaylistCallBack);
 }
 
 Playlist LearnService::startedPlaylist() const
@@ -95,7 +121,7 @@ void LearnService::openVideo(const QString& videoId) const
     openUrl(configuration()->videoOpenUrl(videoId));
 }
 
-void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<RetVal<Playlist> > finishChannel) const
+void LearnService::th_requestPlaylist(const QUrl& playlistUrl, std::function<void(RetVal<Playlist>)> callBack) const
 {
     TRACEFUNC;
 
@@ -105,7 +131,7 @@ void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<Re
     QBuffer playlistItemsData;
     Ret playlistItemsRet = networkManager->get(playlistUrl, &playlistItemsData, headers);
     if (!playlistItemsRet) {
-        finishChannel.send(playlistItemsRet);
+        callBack(playlistItemsRet);
         return;
     }
 
@@ -113,7 +139,7 @@ void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<Re
 
     QStringList playlistItemsIds = parsePlaylistItemsIds(playlistInfoDoc);
     if (playlistItemsIds.isEmpty()) {
-        finishChannel.send(make_ret(Err::PlaylistIsEmpty));
+        callBack(make_ret(Err::PlaylistIsEmpty));
         return;
     }
 
@@ -121,7 +147,7 @@ void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<Re
     QBuffer videosInfoData;
     Ret videosRet = networkManager->get(playlistVideosInfoUrl, &videosInfoData, headers);
     if (!videosRet) {
-        finishChannel.send(videosRet);
+        callBack(videosRet);
         return;
     }
 
@@ -131,7 +157,7 @@ void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<Re
     result.ret = make_ret(Ret::Code::Ok);
     result.val = parsePlaylist(videosInfoDoc);
 
-    finishChannel.send(result);
+    callBack(result);
 }
 
 void LearnService::openUrl(const QUrl& url) const
@@ -184,7 +210,7 @@ Playlist LearnService::parsePlaylist(const QJsonDocument& playlistDoc) const
 
         QJsonObject contentDetails = itemObj.value("contentDetails").toObject();
         QString durationInIsoFormat = contentDetails["duration"].toString();
-        item.durationSecs = DataFormatter::dateTimeFromIsoFormat(durationInIsoFormat).toSecsSinceEpoch();
+        item.durationSecs = videoDurationSecs(durationInIsoFormat);
 
         result << item;
     }

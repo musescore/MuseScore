@@ -26,8 +26,8 @@
 #include "types/typesconv.h"
 #include "segment.h"
 
+using namespace mu;
 using namespace mu::engraving;
-using namespace Ms;
 
 static const ElementStyle annotationStyle {
     { Sid::staffTextPlacement, Pid::PLACEMENT },
@@ -64,16 +64,16 @@ void PlayTechAnnotation::layout()
 
 void PlayTechAnnotation::write(XmlWriter& writer) const
 {
-    writer.startObject(this);
+    writer.startElement(this);
     writeProperty(writer, Pid::PLAY_TECH_TYPE);
     StaffTextBase::writeProperties(writer);
-    writer.endObject();
+    writer.endElement();
 }
 
 void PlayTechAnnotation::read(XmlReader& reader)
 {
     while (reader.readNextStartElement()) {
-        const QStringRef& tag(reader.name());
+        const AsciiStringView tag(reader.name());
 
         if (readProperty(tag, reader, Pid::PLAY_TECH_TYPE)) {
             continue;
@@ -95,7 +95,7 @@ PropertyValue PlayTechAnnotation::getProperty(Pid id) const
     }
 }
 
-bool PlayTechAnnotation::setProperty(Pid propertyId, const mu::engraving::PropertyValue& val)
+bool PlayTechAnnotation::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::PLAY_TECH_TYPE:

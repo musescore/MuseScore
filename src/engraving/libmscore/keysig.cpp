@@ -22,10 +22,10 @@
 
 #include "keysig.h"
 
-#include "translation.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
 #include "types/typesconv.h"
+#include "draw/types/pen.h"
 
 #include "staff.h"
 #include "clef.h"
@@ -36,29 +36,12 @@
 #include "undo.h"
 #include "masterscore.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
-const char* keyNames[] = {
-    QT_TRANSLATE_NOOP("MuseScore", "G major, E minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "C♭ major, A♭ minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "D major, B minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "G♭ major, E♭ minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "A major, F♯ minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "D♭ major, B♭ minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "E major, C♯ minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "A♭ major, F minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "B major, G♯ minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "E♭ major, C minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "F♯ major, D♯ minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "B♭ major, G minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "C♯ major, A♯ minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "F major, D minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "C major, A minor"),
-    QT_TRANSLATE_NOOP("MuseScore", "Open/Atonal")
-};
-
+namespace mu::engraving {
 //---------------------------------------------------------
 //   KeySig
 //---------------------------------------------------------
@@ -82,7 +65,7 @@ KeySig::KeySig(const KeySig& k)
 //   mag
 //---------------------------------------------------------
 
-qreal KeySig::mag() const
+double KeySig::mag() const
 {
     return staff() ? staff()->staffMag(tick()) : 1.0;
 }
@@ -93,29 +76,28 @@ qreal KeySig::mag() const
 
 void KeySig::addLayout(SymId sym, int line)
 {
-    qreal _spatium = spatium();
-    qreal step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() * 0.5 : 0.5);
+    double _spatium = spatium();
+    double step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() * 0.5 : 0.5);
     KeySym ks;
     ks.sym = sym;
-    qreal x = 0.0;
+    double x = 0.0;
     if (_sig.keySymbols().size() > 0) {
         KeySym& previous = _sig.keySymbols().back();
-        qreal accidentalGap = score()->styleS(Sid::keysigAccidentalDistance).val();
+        double accidentalGap = score()->styleS(Sid::keysigAccidentalDistance).val();
         if (previous.sym != sym) {
             accidentalGap *= 2;
         } else if (previous.sym == SymId::accidentalNatural && sym == SymId::accidentalNatural) {
             accidentalGap = score()->styleS(Sid::keysigNaturalDistance).val();
         }
-        // width is divided by mag() to get the staff-scaling-independent width of the symbols
-        qreal previousWidth = symWidth(previous.sym) / score()->spatium() / mag();
+        double previousWidth = symWidth(previous.sym) / _spatium;
         x = previous.xPos + previousWidth + accidentalGap;
         bool isAscending = line < previous.line;
         SmuflAnchorId currentCutout = isAscending ? SmuflAnchorId::cutOutSW : SmuflAnchorId::cutOutNW;
         SmuflAnchorId previousCutout = isAscending ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE;
         PointF cutout = symSmuflAnchor(sym, currentCutout);
-        qreal currentCutoutY = line * step + cutout.y();
-        qreal previousCoutoutY = previous.line * step + symSmuflAnchor(previous.sym, previousCutout).y();
-        if ((isAscending && currentCutoutY < previousCoutoutY) || (!isAscending && currentCutoutY > previousCoutoutY)) {
+        double currentCutoutY = line * step + cutout.y();
+        double previousCutoutY = previous.line * step + symSmuflAnchor(previous.sym, previousCutout).y();
+        if ((isAscending && currentCutoutY < previousCutoutY) || (!isAscending && currentCutoutY > previousCutoutY)) {
             x -= cutout.x() / _spatium;
         }
     }
@@ -130,8 +112,8 @@ void KeySig::addLayout(SymId sym, int line)
 
 void KeySig::layout()
 {
-    qreal _spatium = spatium();
-    qreal step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() * 0.5 : 0.5);
+    double _spatium = spatium();
+    double step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() * 0.5 : 0.5);
 
     setbbox(RectF());
 
@@ -163,7 +145,8 @@ void KeySig::layout()
     int t1 = int(_sig.key());
 
     if (isCustom() && !isAtonal()) {
-        // add standard key accidentals first, if neccesary
+        double accidentalGap = score()->styleS(Sid::keysigAccidentalDistance).val();
+        // add standard key accidentals first, if necessary
         for (int i = 1; i <= abs(t1) && abs(t1) <= 7; ++i) {
             bool drop = false;
             for (CustDef& cd: _sig.customKeyDefs()) {
@@ -179,7 +162,13 @@ void KeySig::layout()
                 int lineIndexOffset = t1 > 0 ? -1 : 6;
                 ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
                 ks.line = ClefInfo::lines(clef)[lineIndexOffset + i];
-                ks.xPos = _sig.keySymbols().size() * _sig.xstep();
+                if (_sig.keySymbols().size() > 0) {
+                    KeySym& previous = _sig.keySymbols().back();
+                    double previousWidth = symWidth(previous.sym) / _spatium;
+                    ks.xPos = previous.xPos + previousWidth + accidentalGap;
+                } else {
+                    ks.xPos = 0;
+                }
                 // TODO octave metters?
                 _sig.keySymbols().push_back(ks);
             }
@@ -187,11 +176,16 @@ void KeySig::layout()
         for (CustDef& cd: _sig.customKeyDefs()) {
             SymId sym = _sig.symInKey(cd.sym, cd.degree);
             int degree = _sig.degInKey(cd.degree);
-            bool flat = std::string(SymNames::nameForSymId(sym)).find("Flat") != std::string::npos;
+            bool flat = std::string(SymNames::nameForSymId(sym).ascii()).find("Flat") != std::string::npos;
             int accIdx = (degree * 2 + 1) % 7; // C D E F ... index to F C G D index
             accIdx = flat ? 13 - accIdx : accIdx;
             int line = ClefInfo::lines(clef)[accIdx] + cd.octAlt * 7;
-            double xpos = _sig.keySymbols().size() * _sig.xstep() + cd.xAlt;
+            double xpos = cd.xAlt;
+            if (_sig.keySymbols().size() > 0) {
+                KeySym& previous = _sig.keySymbols().back();
+                double previousWidth = symWidth(previous.sym) / _spatium;
+                xpos += previous.xPos + previousWidth + accidentalGap;
+            }
             // if translated symbol if out of range, add key accidental followed by untranslated symbol
             if (sym == SymId::noSym) {
                 KeySym ks;
@@ -219,7 +213,7 @@ void KeySig::layout()
         }
     } else {
         int accidentals = 0, naturals = 0;
-        switch (qAbs(t1)) {
+        switch (std::abs(t1)) {
         case 7: accidentals = 0x7f;
             break;
         case 6: accidentals = 0x3f;
@@ -237,7 +231,7 @@ void KeySig::layout()
         case 0: accidentals = 0;
             break;
         default:
-            qDebug("illegal t1 key %d", t1);
+            LOGD("illegal t1 key %d", t1);
             break;
         }
 
@@ -276,7 +270,7 @@ void KeySig::layout()
             if (t2 == Key::C) {
                 naturalsOn = false;
             } else {
-                switch (qAbs(int(t2))) {
+                switch (std::abs(int(t2))) {
                 case 7: naturals = 0x7f;
                     break;
                 case 6: naturals = 0x3f;
@@ -294,7 +288,7 @@ void KeySig::layout()
                 case 0: naturals = 0;
                     break;
                 default:
-                    qDebug("illegal t2 key %d", int(t2));
+                    LOGD("illegal t2 key %d", int(t2));
                     break;
                 }
                 // remove redundant naturals
@@ -333,7 +327,7 @@ void KeySig::layout()
                 addLayout(symbol, lines[lineIndexOffset + i]);
             }
         } else {
-            qDebug("illegal t1 key %d", t1);
+            LOGD("illegal t1 key %d", t1);
         }
 
         // add suffixed naturals, if any
@@ -347,14 +341,14 @@ void KeySig::layout()
 
         // Follow stepOffset
         if (staffType()) {
-            rypos() = staffType()->stepOffset() * 0.5 * _spatium;
+            setPosY(staffType()->stepOffset() * 0.5 * _spatium);
         }
     }
 
     // compute bbox
     for (KeySym& ks : _sig.keySymbols()) {
-        qreal x = ks.xPos * _spatium;
-        qreal y = ks.line * step;
+        double x = ks.xPos * _spatium;
+        double y = ks.line * step;
         addbbox(symBbox(ks.sym).translated(x, y));
     }
 }
@@ -366,13 +360,30 @@ void KeySig::layout()
 void KeySig::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     painter->setPen(curColor());
-    qreal _spatium = spatium();
-    qreal step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() * 0.5 : 0.5);
+    double _spatium = spatium();
+    double step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() * 0.5 : 0.5);
+    int lines = staff() ? staff()->staffTypeForElement(this)->lines() : 5;
+    double ledgerLineWidth = score()->styleMM(Sid::ledgerLineWidth) * mag();
+    double ledgerExtraLen = score()->styleS(Sid::ledgerLineLength).val() * _spatium;
     for (const KeySym& ks: _sig.keySymbols()) {
-        qreal x = ks.xPos * _spatium;
-        qreal y = ks.line * step;
+        double x = ks.xPos * _spatium;
+        double y = ks.line * step;
         drawSymbol(ks.sym, painter, PointF(x, y));
+        // ledger lines
+        double _symWidth = symWidth(ks.sym);
+        double x1 = x - ledgerExtraLen;
+        double x2 = x + _symWidth + ledgerExtraLen;
+        painter->setPen(Pen(curColor(), ledgerLineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
+        for (int i = -2; i >= ks.line; i -= 2) { // above
+            y = i * step;
+            painter->drawLine(LineF(x1, y, x2, y));
+        }
+        for (int i = lines * 2; i <= ks.line; i += 2) { // below
+            y = i * step;
+            painter->drawLine(LineF(x1, y, x2, y));
+        }
     }
     if (!explicitParent() && (isAtonal() || isCustom()) && _sig.keySymbols().empty()) {
         // empty custom or atonal key signature - draw something for palette
@@ -403,14 +414,14 @@ EngravingItem* KeySig::drop(EditData& data)
     }
     KeySigEvent k = ks->keySigEvent();
     delete ks;
-    if (data.modifiers & Qt::ControlModifier) {
+    if (data.modifiers & ControlModifier) {
         // apply only to this stave
         if (!(k == keySigEvent())) {
             score()->undoChangeKeySig(staff(), tick(), k);
         }
     } else {
         // apply to all staves:
-        foreach (Staff* s, score()->masterScore()->staves()) {
+        for (Staff* s : score()->masterScore()->staves()) {
             score()->undoChangeKeySig(s, tick(), k);
         }
     }
@@ -434,7 +445,7 @@ void KeySig::setKey(Key key)
 
 void KeySig::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     EngravingItem::writeProperties(xml);
     if (_sig.isAtonal()) {
         xml.tag("custom", 1);
@@ -442,10 +453,10 @@ void KeySig::write(XmlWriter& xml) const
         xml.tag("accidental", int(_sig.key()));
         xml.tag("custom", 1);
         for (const CustDef& cd : _sig.customKeyDefs()) {
-            xml.startObject("CustDef");
+            xml.startElement("CustDef");
             xml.tag("sym", SymNames::nameForSymId(cd.sym));
-            xml.tag("def", cd);
-            xml.endObject();
+            xml.tag("def", { { "degree", cd.degree }, { "xAlt", cd.xAlt }, { "octAlt", cd.octAlt } });
+            xml.endElement();
         }
     } else {
         xml.tag("accidental", int(_sig.key()));
@@ -461,7 +472,7 @@ void KeySig::write(XmlWriter& xml) const
     if (forInstrumentChange()) {
         xml.tag("forInstrumentChange", true);
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -474,13 +485,13 @@ void KeySig::read(XmlReader& e)
     int subtype = 0;
 
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "CustDef" || tag == "KeySym") {
             CustDef cd;
             while (e.readNextStartElement()) {
-                const QStringRef& t(e.name());
+                const AsciiStringView t(e.name());
                 if (t == "sym") {
-                    QString val(e.readElementText());
+                    AsciiStringView val(e.readAsciiText());
                     bool valid;
                     SymId id = SymId(val.toInt(&valid));
                     if (!valid) {
@@ -501,11 +512,16 @@ void KeySig::read(XmlReader& e)
                     cd.xAlt = e.doubleAttribute("xAlt", 0.0);
                     e.readNext();
                 } else if (t == "pos") { // for older files
-                    int idx = _sig.customKeyDefs().size();
-                    double xstep = _sig.xstep();
-                    bool flat = QString(SymNames::nameForSymId(cd.sym)).contains("Flat");
-                    // if x not there, use index
-                    cd.xAlt = e.doubleAttribute("x", idx * xstep) - idx * xstep;
+                    double prevx = 0;
+                    double accidentalGap = score()->styleS(Sid::keysigAccidentalDistance).val();
+                    double _spatium = spatium();
+                    // count default x position
+                    for (CustDef& cd: _sig.customKeyDefs()) {
+                        prevx += symWidth(cd.sym) / _spatium + accidentalGap + cd.xAlt;
+                    }
+                    bool flat = std::string(SymNames::nameForSymId(cd.sym).ascii()).find("Flat") != std::string::npos;
+                    // if x not there, use default step
+                    cd.xAlt = e.doubleAttribute("x", prevx) - prevx;
                     // if y not there, use middle line
                     int line = static_cast<int>(e.doubleAttribute("y", 2) * 2);
                     cd.degree = (3 - line) % 7;
@@ -530,7 +546,7 @@ void KeySig::read(XmlReader& e)
             e.readInt();
             _sig.setCustom(true);
         } else if (tag == "mode") {
-            QString m(e.readElementText());
+            String m(e.readText());
             if (m == "none") {
                 _sig.setMode(KeyMode::NONE);
             } else if (m == "major") {
@@ -629,7 +645,7 @@ SymId KeySig::convertFromOldId(int val) const
     case 57: symId = SymId::accidentalKoron;
         break;
     default:
-        qDebug("MuseScore 1.3 symbol id corresponding to <%d> not found", val);
+        LOGD("MuseScore 1.3 symbol id corresponding to <%d> not found", val);
         symId = SymId::noSym;
         break;
     }
@@ -786,24 +802,9 @@ EngravingItem* KeySig::prevSegmentElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString KeySig::accessibleInfo() const
+String KeySig::accessibleInfo() const
 {
-    QString keySigType;
-    if (isAtonal()) {
-        return QString("%1: %2").arg(EngravingItem::accessibleInfo(), qtrc("MuseScore", keyNames[15]));
-    } else if (isCustom()) {
-        return QObject::tr("%1: Custom").arg(EngravingItem::accessibleInfo());
-    }
-
-    if (key() == Key::C) {
-        return QString("%1: %2").arg(EngravingItem::accessibleInfo(), qtrc("MuseScore", keyNames[14]));
-    }
-    int keyInt = static_cast<int>(key());
-    if (keyInt < 0) {
-        keySigType = qtrc("MuseScore", keyNames[(7 + keyInt) * 2 + 1]);
-    } else {
-        keySigType = qtrc("MuseScore", keyNames[(keyInt - 1) * 2]);
-    }
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), keySigType);
+    String keySigType = TConv::translatedUserName(key(), isAtonal(), isCustom());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), keySigType);
 }
 }

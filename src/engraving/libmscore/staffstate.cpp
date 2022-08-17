@@ -21,7 +21,7 @@
  */
 
 #include "staffstate.h"
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 #include "rw/xml.h"
 #include "score.h"
 #include "instrtemplate.h"
@@ -29,10 +29,12 @@
 #include "staff.h"
 #include "part.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::draw;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   StaffState
 //---------------------------------------------------------
@@ -61,13 +63,13 @@ StaffState::~StaffState()
 
 void StaffState::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     xml.tag("subtype", int(_staffStateType));
     if (staffStateType() == StaffStateType::INSTRUMENT) {
         _instrument->write(xml, nullptr);
     }
     EngravingItem::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -77,7 +79,7 @@ void StaffState::write(XmlWriter& xml) const
 void StaffState::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             _staffStateType = StaffStateType(e.readInt());
         } else if (tag == "Instrument") {
@@ -111,12 +113,12 @@ void StaffState::draw(mu::draw::Painter* painter) const
 
 void StaffState::layout()
 {
-    qreal _spatium = spatium();
+    double _spatium = spatium();
     path      = PainterPath();
     lw        = _spatium * 0.3;
-    qreal h  = _spatium * 4;
-    qreal w  = _spatium * 2.5;
-//      qreal w1 = w * .6;
+    double h  = _spatium * 4;
+    double w  = _spatium * 2.5;
+//      double w1 = w * .6;
 
     switch (staffStateType()) {
     case StaffStateType::INSTRUMENT:
@@ -152,7 +154,7 @@ void StaffState::layout()
         break;
 
     default:
-        qDebug("unknown layout break symbol");
+        LOGD("unknown layout break symbol");
         break;
     }
     RectF bb(0, 0, w, h);
@@ -165,7 +167,7 @@ void StaffState::layout()
 //   setStaffStateType
 //---------------------------------------------------------
 
-void StaffState::setStaffStateType(const QString& s)
+void StaffState::setStaffStateType(const String& s)
 {
     if (s == "instrument") {
         setStaffStateType(StaffStateType::INSTRUMENT);
@@ -182,19 +184,19 @@ void StaffState::setStaffStateType(const QString& s)
 //   staffStateTypeName
 //---------------------------------------------------------
 
-QString StaffState::staffStateTypeName() const
+String StaffState::staffStateTypeName() const
 {
     switch (staffStateType()) {
     case StaffStateType::INSTRUMENT:
-        return "instrument";
+        return u"instrument";
     case StaffStateType::TYPE:
-        return "type";
+        return u"type";
     case StaffStateType::VISIBLE:
-        return "visible";
+        return u"visible";
     case StaffStateType::INVISIBLE:
-        return "invisible";
+        return u"invisible";
     default:
-        return "??";
+        return u"??";
     }
 }
 

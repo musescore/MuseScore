@@ -22,24 +22,26 @@
 #include "capellareader.h"
 
 #include "io/path.h"
-#include "libmscore/masterscore.h"
-#include "notation/notationerrors.h"
 
-namespace Ms {
-extern Score::FileError importCapella(MasterScore*, const QString& name);
-extern Score::FileError importCapXml(MasterScore*, const QString& name);
-}
+#include "libmscore/score.h"
+#include "engraving/engravingerrors.h"
 
 using namespace mu::iex::capella;
+using namespace mu::engraving;
 
-mu::Ret CapellaReader::read(Ms::MasterScore* score, const io::path& path, const Options&)
+namespace mu::iex::capella {
+extern Err importCapella(MasterScore*, const QString& name);
+extern Err importCapXml(MasterScore*, const QString& name);
+}
+
+mu::Ret CapellaReader::read(MasterScore* score, const io::path_t& path, const Options&)
 {
-    Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
-    std::string syffix = mu::io::suffix(path);
-    if (syffix == "cap") {
-        err = Ms::importCapella(score, path.toQString());
-    } else if (syffix == "capx") {
-        err = Ms::importCapXml(score, path.toQString());
+    Err err = Err::FileUnknownType;
+    std::string suffix = mu::io::suffix(path);
+    if (suffix == "cap") {
+        err = importCapella(score, path.toQString());
+    } else if (suffix == "capx") {
+        err = importCapXml(score, path.toQString());
     }
-    return mu::notation::scoreFileErrorToRet(err, path);
+    return make_ret(err, path);
 }

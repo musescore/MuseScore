@@ -37,7 +37,7 @@ RowLayout {
     property bool withIcon: false
     property alias iconCode: icon.iconCode
 
-    property bool withShowAgain: false
+    property alias withDontShowAgainCheckBox: dontShowAgainCheckBox.visible
 
     property var buttons: []
     property int defaultButtonId: 0
@@ -98,7 +98,7 @@ RowLayout {
     }
 
     //! NOTE By default accessibility for buttons ignored.
-    // On dialog open, set focus on accissibleInfo item, so Screen Reader reads completed info for dialog.
+    // On dialog open, set focus on accessibleInfo item, so Screen Reader reads completed info for dialog.
     // On button navigation active turned on accessibility for button.
     AccessibleItem {
         id: accessibleInfo
@@ -129,7 +129,7 @@ RowLayout {
         // Unclear why "+ 1" is needed; apparently implicitWidth is incorrect
         readonly property real textsImplicitWidth: Math.max(titleLabel.implicitWidth,
                                                             textLabel.implicitWidth,
-                                                            withShowAgainCheckBox.implicitWidth) + 1
+                                                            dontShowAgainCheckBox.implicitWidth) + 1
 
         // Allow the text to make the dialog wider, but not too much wider
         readonly property real textsImplicitWidthBounded: Math.min(420, textsImplicitWidth)
@@ -161,19 +161,19 @@ RowLayout {
                 width: parent.width
 
                 horizontalAlignment: Text.AlignLeft
-                maximumLineCount: 3
+                maximumLineCount: 5
                 wrapMode: Text.Wrap
 
                 visible: !isEmpty
             }
 
             CheckBox {
-                id: withShowAgainCheckBox
+                id: dontShowAgainCheckBox
                 width: parent.width
-                visible: Boolean(root.withShowAgain)
+                visible: false
 
-                text: qsTrc("ui", "Show this message again")
-                checked: true
+                text: qsTrc("global", "Don't show this message again")
+                checked: false
 
                 navigation.panel: navPanel
                 navigation.column: buttons.count + 1
@@ -214,7 +214,7 @@ RowLayout {
                 accentButton: Boolean(modelData.accent)
 
                 onClicked: {
-                    root.clicked(modelData.buttonId, withShowAgainCheckBox.checked)
+                    root.clicked(modelData.buttonId, !dontShowAgainCheckBox.checked)
                 }
             }
         }

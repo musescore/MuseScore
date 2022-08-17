@@ -67,7 +67,7 @@ public:
     Q_INVOKABLE void importShortcutsFromFile();
     Q_INVOKABLE void exportShortcutsToFile();
 
-    Q_INVOKABLE void applySequenceToCurrentShortcut(const QString& newSequence);
+    Q_INVOKABLE void applySequenceToCurrentShortcut(const QString& newSequence, int conflictShortcutIndex = -1);
 
     Q_INVOKABLE void clearSelectedShortcuts();
     Q_INVOKABLE void resetToDefaultSelectedShortcuts();
@@ -82,10 +82,12 @@ signals:
 
 private:
     const ui::UiAction& action(const std::string& actionCode) const;
-    const QString& actionTitle(const std::string& actionCode) const;
+    QString actionText(const std::string& actionCode) const;
 
     QModelIndex currentShortcutIndex() const;
     void notifyAboutShortcutChanged(const QModelIndex& index);
+
+    QVariant shortcutToObject(const Shortcut& shortcut) const;
 
     enum Roles {
         RoleTitle = Qt::UserRole + 1,

@@ -22,8 +22,10 @@
 #include "uicontextresolver.h"
 
 #include "diagnostics/diagnosticutils.h"
-#include "log.h"
+
+#include "shortcutcontext.h"
 #include "config.h"
+#include "log.h"
 
 using namespace mu::context;
 using namespace mu::ui;
@@ -54,7 +56,19 @@ void UiContextResolver::init()
                 notifyAboutContextChanged();
             });
 
+            notation->interaction()->textEditingEnded().onNotify(this, [this]() {
+                notifyAboutContextChanged();
+            });
+
             notation->undoStack()->stackChanged().onNotify(this, [this]() {
+                notifyAboutContextChanged();
+            });
+
+            notation->interaction()->noteInput()->noteInputStarted().onNotify(this, [this]() {
+                notifyAboutContextChanged();
+            });
+
+            notation->interaction()->noteInput()->noteInputEnded().onNotify(this, [this]() {
                 notifyAboutContextChanged();
             });
         }
@@ -146,16 +160,6 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
     //!     NotationFocused
     //!         NotationStaffTab
 
-    static const std::string CTX_ANY("any");
-    static const std::string CTX_NOTATION_OPENED("notation-opened");
-    static const std::string CTX_NOTATION_FOCUSED("notation-focused");
-
-    //! NOTE special context for navigation shortcuts because the notation has its own navigation system
-    static const std::string CTX_NOT_NOTATION_FOCUSED("not-notation-focused");
-
-    static const std::string CTX_NOTATION_STAFF_NOT_TAB("notation-staff-not-tab");
-    static const std::string CTX_NOTATION_STAFF_TAB("notation-staff-tab");
-
     if (CTX_NOTATION_OPENED == scContext) {
         return matchWithCurrent(context::UiCtxNotationOpened);
     } else if (CTX_NOTATION_FOCUSED == scContext) {
@@ -171,7 +175,7 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
             return false;
         }
 
-        return notation->interaction()->noteInput()->state().staffGroup != Ms::StaffGroup::TAB;
+        return notation->interaction()->noteInput()->state().staffGroup != mu::engraving::StaffGroup::TAB;
     } else if (CTX_NOTATION_STAFF_TAB == scContext) {
         if (!matchWithCurrent(context::UiCtxNotationFocused)) {
             return false;
@@ -180,7 +184,16 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
         if (!notation) {
             return false;
         }
-        return notation->interaction()->noteInput()->state().staffGroup == Ms::StaffGroup::TAB;
+        return notation->interaction()->noteInput()->state().staffGroup == mu::engraving::StaffGroup::TAB;
+    } else if (CTX_NOTATION_TEXT_EDITING == scContext) {
+        if (!matchWithCurrent(context::UiCtxNotationFocused)) {
+            return false;
+        }
+        auto notation = globalContext()->currentNotation();
+        if (!notation) {
+            return false;
+        }
+        return notation->interaction()->isTextEditingStarted();
     }
 
     IF_ASSERT_FAILED(CTX_ANY == scContext) {

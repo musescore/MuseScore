@@ -88,7 +88,7 @@ ECHO "INSTALL_DIR: %INSTALL_DIR%"
 ECHO "PACKAGE_TYPE: %PACKAGE_TYPE%"
 
 :: For MSI
-SET SIGNTOOL="C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe"
+SET SIGN="build\ci\windows\sign.bat"
 SET UUIDGEN="C:\Program Files (x86)\Windows Kits\10\bin\x64\uuidgen.exe"
 SET WIX_DIR=%WIX%
 
@@ -135,13 +135,7 @@ GOTO END_SUCCESS
 ECHO "Start msi packing..."
 :: sign dlls and exe files
 IF %DO_SIGN% == ON (
-    7z x -y build\ci\windows\resources\musescore.pfx.enc -obuild\ci\windows\resources\ -p%SIGN_CERTIFICATE_ENCRYPT_SECRET%
-
-    for /f "delims=" %%f in ('dir /a-d /b /s "%INSTALL_DIR%\*.dll" "%INSTALL_DIR%\*.exe"') do (
-        ECHO "Signing %%f"
-        %SIGNTOOL% sign /debug /f "build\ci\windows\resources\musescore.pfx" /t http://timestamp.digicert.com /p %SIGN_CERTIFICATE_PASSWORD% "%%f"
-    )
-
+    CALL %SIGN% --secret %SIGN_CERTIFICATE_ENCRYPT_SECRET% --pass %SIGN_CERTIFICATE_PASSWORD% --dir %INSTALL_DIR% || exit \b 1
 ) ELSE (
     ECHO "Sign disabled"
 )
@@ -163,7 +157,7 @@ cd "%BUILD_DIR%"
 cmake -DPACKAGE_FILE_ASSOCIATION=%PACKAGE_FILE_ASSOCIATION% ..
 
 SET PATH=%WIX_DIR%;%PATH% 
-cmake --build . --target package
+cmake --build . --target package || GOTO END_ERROR
 cd ..
 
 ECHO "Create logs dir"
@@ -192,13 +186,11 @@ IF %BUILD_MODE% == nightly_build (
 
 ECHO "Copy from %FILEPATH% to %ARTIFACT_NAME%"
 
-COPY %FILEPATH% %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y 
+COPY %FILEPATH% %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y || GOTO END_ERROR
 SET ARTIFACT_PATH=%ARTIFACTS_DIR%\%ARTIFACT_NAME%
 
 IF %DO_SIGN% == ON (
-    %SIGNTOOL% sign /debug /f "build\ci\windows\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p %SIGN_CERTIFICATE_PASSWORD% /d %ARTIFACT_NAME% %ARTIFACT_PATH%
-    :: verify signature
-    %SIGNTOOL% verify /pa %ARTIFACT_PATH%
+    CALL %SIGN% --secret %SIGN_CERTIFICATE_ENCRYPT_SECRET% --pass %SIGN_CERTIFICATE_PASSWORD% --name %ARTIFACT_NAME% --file %ARTIFACT_PATH% || exit \b 1
 )
 
 bash ./build/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%
@@ -210,6 +202,13 @@ GOTO END_SUCCESS
 :: ============================
 :PACK_PORTABLE
 ECHO "Start portable packing..."
+
+:: sign dlls and exe files
+IF %DO_SIGN% == ON (
+    CALL %SIGN% --secret %SIGN_CERTIFICATE_ENCRYPT_SECRET% --pass %SIGN_CERTIFICATE_PASSWORD% --dir %INSTALL_DIR% || exit \b 1
+) ELSE (
+    ECHO "Sign disabled"
+)
 
 :: Create launcher
 CALL C:\portableappslauncher\Launcher\PortableApps.comLauncherGenerator.exe %CD%\%INSTALL_DIR%
@@ -228,6 +227,11 @@ SET ARTIFACT_NAME=MuseScore-%BUILD_VERSION%-%TARGET_PROCESSOR_ARCH%.paf.exe
 
 ECHO "Copy from %FILEPATH% to %ARTIFACT_NAME%"
 COPY %FILEPATH% %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y 
+SET ARTIFACT_PATH=%ARTIFACTS_DIR%\%ARTIFACT_NAME%
+
+IF %DO_SIGN% == ON (
+    CALL %SIGN% --secret %SIGN_CERTIFICATE_ENCRYPT_SECRET% --pass %SIGN_CERTIFICATE_PASSWORD% --name %ARTIFACT_NAME% --file %ARTIFACT_PATH% || exit \b 1
+)
 
 bash ./build/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%
 

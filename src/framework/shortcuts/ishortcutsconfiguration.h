@@ -24,7 +24,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "io/path.h"
-#include "retval.h"
+#include "types/retval.h"
 
 namespace mu::shortcuts {
 class IShortcutsConfiguration : MODULE_EXPORT_INTERFACE
@@ -37,10 +37,10 @@ public:
     virtual QString currentKeyboardLayout() const = 0;
     virtual void setCurrentKeyboardLayout(const QString& layout) = 0;
 
-    virtual io::path shortcutsUserAppDataPath() const = 0;
-    virtual io::path shortcutsAppDataPath() const = 0;
+    virtual io::path_t shortcutsUserAppDataPath() const = 0;
+    virtual io::path_t shortcutsAppDataPath() const = 0;
 
-    virtual io::path midiMappingUserAppDataPath() const = 0;
+    virtual io::path_t midiMappingUserAppDataPath() const = 0;
 
     virtual bool advanceToNextNoteOnKeyRelease() const = 0;
     virtual void setAdvanceToNextNoteOnKeyRelease(bool value) = 0;

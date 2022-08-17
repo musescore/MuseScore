@@ -23,7 +23,6 @@
 #include "environment.h"
 
 #include "framework/global/globalmodule.h"
-#include "framework/system/systemmodule.h"
 
 using namespace mu::testing;
 
@@ -55,8 +54,6 @@ void Environment::setup()
     globalModule.registerResources();
     globalModule.registerExports();
     globalModule.registerUiTypes();
-
-    m_dependencyModules.push_back(new mu::system::SystemModule());
 
     for (mu::modularity::IModuleSetup* m : m_dependencyModules) {
         m->registerResources();

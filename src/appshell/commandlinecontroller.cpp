@@ -165,7 +165,7 @@ void CommandLineController::apply()
         }
     }
 
-    notationConfiguration()->setTemplateModeEnalbed(m_parser.isSet("template-mode"));
+    notationConfiguration()->setTemplateModeEnabled(m_parser.isSet("template-mode"));
     notationConfiguration()->setTestModeEnabled(m_parser.isSet("t"));
 
     QString modeType;
@@ -330,7 +330,7 @@ void CommandLineController::apply()
 
     if (application()->runMode() == IApplication::RunMode::Converter) {
         project::MigrationOptions migration;
-        migration.appVersion = Ms::MSCVERSION;
+        migration.appVersion = mu::engraving::MSCVERSION;
 
         //! NOTE Don't ask about migration in convert mode
         migration.isAskAgain = false;

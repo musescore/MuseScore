@@ -22,7 +22,7 @@
 #ifndef MU_AUDIO_AUDIOERRORS_H
 #define MU_AUDIO_AUDIOERRORS_H
 
-#include "ret.h"
+#include "types/ret.h"
 
 namespace mu::audio {
 enum class Err {
@@ -45,7 +45,7 @@ enum class Err {
     SoundFontFailedLoad = 332,
     SoundFontFailedUnload = 333,
     UndefinedSoundFontFormat = 334,
-    UknownSynthType = 335,
+    UnknownSynthType = 335,
 
     //common
     InvalidTrackId = 340,

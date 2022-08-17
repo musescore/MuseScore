@@ -37,12 +37,12 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString DURATIONTYPE_DATA_DIR("durationtype_data/");
-
+using namespace mu;
 using namespace mu::engraving;
-using namespace Ms;
 
-class DurationTypeTests : public ::testing::Test
+static const String DURATIONTYPE_DATA_DIR("durationtype_data/");
+
+class Engraving_DurationTypeTests : public ::testing::Test
 {
 private slots:
 
@@ -56,7 +56,7 @@ private slots:
 //    Simple tests for command "half-duration" (default shortcut "Q").
 //    starts with Whole note and repeatedly applies cmdHalfDuration()
 //---------------------------------------------------------
-TEST_F(DurationTypeTests, halfDuration)
+TEST_F(Engraving_DurationTypeTests, halfDuration)
 {
     MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
     EXPECT_TRUE(score);
@@ -68,7 +68,7 @@ TEST_F(DurationTypeTests, halfDuration)
 
     score->startCmd();
     score->cmdAddPitch(42, false, false);
-    Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+    Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
     EXPECT_EQ(c->ticks(), Fraction(1, 1));
     score->endCmd();
 
@@ -77,7 +77,7 @@ TEST_F(DurationTypeTests, halfDuration)
         score->startCmd();
         score->cmdHalfDuration();
         score->endCmd();
-        Ms::Chord* c2 = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+        Chord* c2 = score->firstMeasure()->findChord(Fraction(0, 1), 0);
         EXPECT_EQ(c2->ticks(), Fraction(i / 2, 128));
     }
 }
@@ -87,9 +87,9 @@ TEST_F(DurationTypeTests, halfDuration)
 //    Simple tests for command "double-duration" (default shortcut "W").
 //    Starts with 128th note and repeatedly applies cmdDoubleDuration() up to Whole note.
 //---------------------------------------------------------
-TEST_F(DurationTypeTests, doubleDuration)
+TEST_F(Engraving_DurationTypeTests, doubleDuration)
 {
-    MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
+    MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + u"empty.mscx");
     EXPECT_TRUE(score);
 
     score->inputState().setTrack(0);
@@ -104,7 +104,7 @@ TEST_F(DurationTypeTests, doubleDuration)
     // repeatedly double-duration from V_128 to V_WHOLE
     for (int i = 1; i < 128; i *= 2) {
         score->cmdDoubleDuration();
-        Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+        Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
         EXPECT_EQ(c->ticks(), Fraction(2 * i, 128));
     }
     score->endCmd();
@@ -115,9 +115,9 @@ TEST_F(DurationTypeTests, doubleDuration)
 //    Simple tests for command "dec-duration-dotted" (default shortcut "Shift+Q").
 //    Starts with Whole note and repeatedly applies cmdDecDurationDotted() down to 128th note.
 //---------------------------------------------------------
-TEST_F(DurationTypeTests, decDurationDotted)
+TEST_F(Engraving_DurationTypeTests, decDurationDotted)
 {
-    MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
+    MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + u"empty.mscx");
     EXPECT_TRUE(score);
 
     score->inputState().setTrack(0);
@@ -127,13 +127,13 @@ TEST_F(DurationTypeTests, decDurationDotted)
 
     score->startCmd();
     score->cmdAddPitch(42, false, false);
-    Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+    Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
     EXPECT_EQ(c->ticks(), Fraction(1, 1));
 
     // repeatedly dec-duration-dotted from V_WHOLE to V_128
     for (int i = 128; i > 1; i /= 2) {
         score->cmdDecDurationDotted();
-        Ms::Chord* c2 = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+        Chord* c2 = score->firstMeasure()->findChord(Fraction(0, 1), 0);
         EXPECT_EQ(c2->ticks(), Fraction(i + i / 2, 256));
 
         score->cmdDecDurationDotted();
@@ -148,9 +148,9 @@ TEST_F(DurationTypeTests, decDurationDotted)
 //    Simple tests for command "inc-duration-dotted" (default shortcut "Shift+W").
 //    Starts with 128th note and repeatedly applies cmdIncDurationDotted() up to Whole note.
 //---------------------------------------------------------
-TEST_F(DurationTypeTests, incDurationDotted)
+TEST_F(Engraving_DurationTypeTests, incDurationDotted)
 {
-    MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
+    MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + u"empty.mscx");
     EXPECT_TRUE(score);
 
     score->inputState().setTrack(0);

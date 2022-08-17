@@ -22,72 +22,71 @@
 
 #include "instrument.h"
 
+#include "translation.h"
 #include "rw/xml.h"
-#include "io/htmlparser.h"
+#include "infrastructure/htmlparser.h"
 #include "types/typesconv.h"
+
+#include "compat/midi/event.h"
 #include "compat/midi/midipatch.h"
 
-#include "drumset.h"
 #include "articulation.h"
-#include "utils.h"
-#include "stringdata.h"
+#include "drumset.h"
 #include "instrtemplate.h"
+#include "masterscore.h"
 #include "mscore.h"
 #include "part.h"
 #include "score.h"
-#include "masterscore.h"
+#include "stringdata.h"
+#include "textbase.h"
+#include "utils.h"
 
 #include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
-//: Channel name for otherwise unamed channels
-const char* Channel::DEFAULT_NAME = QT_TRANSLATE_NOOP("InstrumentsXML", "normal");
+namespace mu::engraving {
+//: Channel name for otherwise unnamed channels
+const char* InstrChannel::DEFAULT_NAME = QT_TRANSLATE_NOOP("engraving/instruments", "normal");
 //: Channel name for the chord symbols playback channel, best keep translation shorter than 11 letters
-const char* Channel::HARMONY_NAME = QT_TRANSLATE_NOOP("InstrumentsXML", "harmony");
+const char* InstrChannel::HARMONY_NAME = QT_TRANSLATE_NOOP("engraving/instruments", "harmony");
 
 Instrument InstrumentList::defaultInstrument;
-const std::initializer_list<Channel::Prop> PartChannelSettingsLink::excerptProperties {
-    Channel::Prop::SOLOMUTE,
-    Channel::Prop::SOLO,
-    Channel::Prop::MUTE,
+const std::initializer_list<InstrChannel::Prop> PartChannelSettingsLink::excerptProperties {
+    InstrChannel::Prop::SOLOMUTE,
+    InstrChannel::Prop::SOLO,
+    InstrChannel::Prop::MUTE,
 };
 
 static void midi_event_write(const MidiCoreEvent& e, XmlWriter& xml)
 {
     switch (e.type()) {
     case ME_NOTEON:
-        xml.tagE(QString("note-on  channel=\"%1\" pitch=\"%2\" velo=\"%3\"")
-                 .arg(e.channel()).arg(e.pitch()).arg(e.velo()));
+        xml.tag("note-on", { { "channel", e.channel() }, { "pitch", e.pitch() }, { "velo", e.velo() } });
         break;
 
     case ME_NOTEOFF:
-        xml.tagE(QString("note-off  channel=\"%1\" pitch=\"%2\" velo=\"%3\"")
-                 .arg(e.channel()).arg(e.pitch()).arg(e.velo()));
+        xml.tag("note-off", { { "channel", e.channel() }, { "pitch", e.pitch() }, { "velo", e.velo() } });
         break;
 
     case ME_CONTROLLER:
         if (e.controller() == CTRL_PROGRAM) {
             if (e.channel() == 0) {
-                xml.tagE(QString("program value=\"%1\"").arg(e.value()));
+                xml.tag("program", { { "value", e.value() } });
             } else {
-                xml.tagE(QString("program channel=\"%1\" value=\"%2\"")
-                         .arg(e.channel()).arg(e.value()));
+                xml.tag("program", { { "channel", e.channel() }, { "value", e.value() } });
             }
         } else {
             if (e.channel() == 0) {
-                xml.tagE(QString("controller ctrl=\"%1\" value=\"%2\"")
-                         .arg(e.controller()).arg(e.value()));
+                xml.tag("controller", { { "ctrl", e.controller() }, { "value", e.value() } });
             } else {
-                xml.tagE(QString("controller channel=\"%1\" ctrl=\"%2\" value=\"%3\"")
-                         .arg(e.channel()).arg(e.controller()).arg(e.value()));
+                xml.tag("controller", { { "channel", e.channel() }, { "ctrl", e.controller() }, { "value", e.value() } });
             }
         }
         break;
     default:
-        qDebug("MidiCoreEvent::write: unknown type");
+        LOGD("MidiCoreEvent::write: unknown type");
         break;
     }
 }
@@ -96,16 +95,16 @@ static void midi_event_write(const MidiCoreEvent& e, XmlWriter& xml)
 //   write
 //---------------------------------------------------------
 
-void NamedEventList::write(XmlWriter& xml, const QString& n) const
+void NamedEventList::write(XmlWriter& xml, const AsciiStringView& n) const
 {
-    xml.startObject(QString("%1 name=\"%2\"").arg(n, name));
-    if (!descr.isEmpty()) {
+    xml.startElement(n, { { "name", name } });
+    if (!descr.empty()) {
         xml.tag("descr", descr);
     }
     for (const MidiCoreEvent& e : events) {
         midi_event_write(e, xml);
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -116,7 +115,7 @@ void NamedEventList::read(XmlReader& e)
 {
     name = e.attribute("name");
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "program") {
             MidiCoreEvent ev(ME_CONTROLLER, 0, CTRL_PROGRAM, e.intAttribute("value", 0));
             events.push_back(ev);
@@ -129,7 +128,7 @@ void NamedEventList::read(XmlReader& e)
             events.push_back(ev);
             e.skipCurrentElement();
         } else if (tag == "descr") {
-            descr = e.readElementText();
+            descr = e.readText();
         } else {
             e.unknown();
         }
@@ -149,11 +148,11 @@ bool MidiArticulation::operator==(const MidiArticulation& i) const
 //   Instrument
 //---------------------------------------------------------
 
-Instrument::Instrument(QString id)
+Instrument::Instrument(String id)
 {
     _id = id;
-    Channel* a = new Channel;
-    a->setName(Channel::DEFAULT_NAME);
+    InstrChannel* a = new InstrChannel;
+    a->setName(String::fromUtf8(InstrChannel::DEFAULT_NAME));
     _channel.push_back(a);
 
     _minPitchA   = 0;
@@ -185,8 +184,8 @@ Instrument::Instrument(const Instrument& i)
     _midiActions  = i._midiActions;
     _articulation = i._articulation;
     _singleNoteDynamics = i._singleNoteDynamics;
-    for (Channel* c : i._channel) {
-        _channel.push_back(new Channel(*c));
+    for (InstrChannel* c : i._channel) {
+        _channel.push_back(new InstrChannel(*c));
     }
     _clefType     = i._clefType;
     _trait = i._trait;
@@ -194,7 +193,7 @@ Instrument::Instrument(const Instrument& i)
 
 void Instrument::operator=(const Instrument& i)
 {
-    qDeleteAll(_channel);
+    DeleteAll(_channel);
     _channel.clear();
     delete _drumset;
 
@@ -216,8 +215,8 @@ void Instrument::operator=(const Instrument& i)
     _midiActions  = i._midiActions;
     _articulation = i._articulation;
     _singleNoteDynamics = i._singleNoteDynamics;
-    for (Channel* c : i._channel) {
-        _channel.push_back(new Channel(*c));
+    for (InstrChannel* c : i._channel) {
+        _channel.push_back(new InstrChannel(*c));
     }
     _clefType     = i._clefType;
     _trait = i._trait;
@@ -229,7 +228,7 @@ void Instrument::operator=(const Instrument& i)
 
 Instrument::~Instrument()
 {
-    qDeleteAll(_channel);
+    DeleteAll(_channel);
     delete _drumset;
     _drumset = nullptr;
 }
@@ -238,10 +237,10 @@ Instrument::~Instrument()
 //   StaffName
 //---------------------------------------------------------
 
-StaffName::StaffName(const QString& s, int p)
-    : _name(s), _pos(p)
+StaffName::StaffName(const String& xmlText, int pos)
+    : _name(xmlText), _pos(pos)
 {
-    Text::validateText(_name);   // enforce HTML encoding
+    TextBase::validateText(_name);   // enforce HTML encoding
 }
 
 //---------------------------------------------------------
@@ -252,9 +251,9 @@ void StaffName::write(XmlWriter& xml, const char* tag) const
 {
     if (!name().isEmpty()) {
         if (pos() == 0) {
-            xml.writeXml(QString("%1").arg(tag), name());
+            xml.writeXml(String::fromUtf8(tag), name());
         } else {
-            xml.writeXml(QString("%1 pos=\"%2\"").arg(tag).arg(pos()), name());
+            xml.writeXml(String(u"%1 pos=\"%2\"").arg(String::fromUtf8(tag)).arg(pos()), name());
         }
     }
 }
@@ -267,9 +266,9 @@ void StaffName::read(XmlReader& e)
 {
     _pos  = e.intAttribute("pos", 0);
     _name = e.readXml();
-    if (_name.startsWith("<html>")) {
+    if (_name.startsWith(u"<html>")) {
         // compatibility to old html implementation:
-        _name = mu::engraving::HtmlParser::parse(_name);
+        _name = HtmlParser::parse(_name);
     }
 }
 
@@ -280,9 +279,9 @@ void StaffName::read(XmlReader& e)
 void Instrument::write(XmlWriter& xml, const Part* part) const
 {
     if (_id.isEmpty()) {
-        xml.startObject("Instrument");
+        xml.startElement("Instrument");
     } else {
-        xml.startObject(QString("Instrument id=\"%1\"").arg(_id));
+        xml.startElement("Instrument", { { "id", _id } });
     }
     _longNames.write(xml, "longName");
     _shortNames.write(xml, "shortName");
@@ -317,22 +316,19 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
         ClefTypeList ct = _clefType[i];
         if (ct._concertClef == ct._transposingClef) {
             if (ct._concertClef != ClefType::G) {
-                QString tag = TConv::toXml(ct._concertClef);
                 if (i) {
-                    xml.tag(QString("clef staff=\"%1\"").arg(i + 1), tag);
+                    xml.tag("clef", { { "staff", i + 1 } }, TConv::toXml(ct._concertClef));
                 } else {
-                    xml.tag("clef", tag);
+                    xml.tag("clef", TConv::toXml(ct._concertClef));
                 }
             }
         } else {
-            QString tag1 = TConv::toXml(ct._concertClef);
-            QString tag2 = TConv::toXml(ct._transposingClef);
             if (i) {
-                xml.tag(QString("concertClef staff=\"%1\"").arg(i + 1), tag1);
-                xml.tag(QString("transposingClef staff=\"%1\"").arg(i + 1), tag2);
+                xml.tag("concertClef", { { "staff", i + 1 } }, TConv::toXml(ct._concertClef));
+                xml.tag("transposingClef", { { "staff", i + 1 } }, TConv::toXml(ct._transposingClef));
             } else {
-                xml.tag("concertClef", tag1);
-                xml.tag("transposingClef", tag2);
+                xml.tag("concertClef", TConv::toXml(ct._concertClef));
+                xml.tag("transposingClef", TConv::toXml(ct._transposingClef));
             }
         }
     }
@@ -350,83 +346,130 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
     for (const MidiArticulation& a : _articulation) {
         a.write(xml);
     }
-    for (const Channel* a : _channel) {
+    for (const InstrChannel* a : _channel) {
         a->write(xml, part);
     }
-    xml.endObject();
+    xml.endElement();
 }
 
-QString Instrument::recognizeInstrumentId() const
+String Instrument::recognizeInstrumentId() const
 {
-    static const QString defaultInstrumentId("keyboard.piano");
+    static const String defaultInstrumentId(u"keyboard.piano");
 
-    std::list<QString> nameList;
+    std::list<String> nameList;
 
     nameList.push_back(_trackName);
     mu::join(nameList, _longNames.toStringList());
     mu::join(nameList, _shortNames.toStringList());
 
-    InstrumentTemplate* tmplByName = Ms::searchTemplateForInstrNameList(nameList);
+    const InstrumentTemplate* tmplByName = mu::engraving::searchTemplateForInstrNameList(nameList, _useDrumset);
 
     if (tmplByName && !tmplByName->musicXMLid.isEmpty()) {
         return tmplByName->musicXMLid;
     }
 
-    if (!channel(0)) {
+    const InstrChannel* channel = this->channel(0);
+
+    if (!channel) {
         return defaultInstrumentId;
     }
 
-    InstrumentTemplate* tmplMidiProgram = Ms::searchTemplateForMidiProgram(channel(0)->program(), useDrumset());
+    const InstrumentTemplate* tmplMidiProgram = mu::engraving::searchTemplateForMidiProgram(channel->bank(), channel->program(),
+                                                                                            _useDrumset);
 
     if (tmplMidiProgram && !tmplMidiProgram->musicXMLid.isEmpty()) {
         return tmplMidiProgram->musicXMLid;
     }
 
-    InstrumentTemplate* guessedTmpl = Ms::guessTemplateByNameData(nameList);
-
-    if (guessedTmpl && !guessedTmpl->musicXMLid.isEmpty()) {
-        return guessedTmpl->musicXMLid;
+    if (_useDrumset) {
+        static const String drumsetId(u"drumset");
+        return drumsetId;
     }
 
     return defaultInstrumentId;
 }
 
-QString Instrument::recognizeId() const
+String Instrument::recognizeId() const
 {
-    InstrumentTemplate* t = searchTemplateForMusicXmlId(_instrumentId);
+    // When reading a score create with pre-3.6, instruments doesn't
+    // have an id define in the instrument. So try to find the instrumentId
+    // based on MusicXMLid.
+    // This requires a hack for instruments using MusicXMLid "strings.group"
+    // because there are multiple instrument using this same id.
+    // For these instruments, use the value of controller 32 of the "arco"
+    // channel to find the correct instrument.
+    // There are some duplicate MusicXML IDs among other instruments too. In
+    // that case we check the pitch range and use the shortest ID that matches.
+    const String arco = String(u"arco");
+    const bool groupHack = instrumentId() == String(u"strings.group");
+    const int idxref = channelIdx(arco);
+    const int val32ref = (idxref < 0) ? -1 : channel(idxref)->bank();
+    String fallback;
+    int bestMatchStrength = 0;     // higher when fallback ID provides better match for instrument data
 
-    if (!t) {
-        static const QString defaultInstrumentId("piano");
-        return defaultInstrumentId;
+    for (InstrumentGroup* g : instrumentGroups) {
+        for (InstrumentTemplate* it : g->instrumentTemplates) {
+            if (it->musicXMLid != instrumentId()) {
+                continue;
+            }
+            if (groupHack) {
+                if (fallback.isEmpty()) {
+                    // Instrument "Strings" doesn't have bank defined so
+                    // if no "strings.group" instrument with requested bank
+                    // is found, assume "Strings".
+                    fallback = it->id;
+                }
+                for (const InstrChannel& chan : it->channel) {
+                    if ((chan.name() == arco) && (chan.bank() == val32ref)) {
+                        return it->id;
+                    }
+                }
+            } else {
+                int matchStrength = 0
+                                    + ((minPitchP() == it->minPitchP) ? 1 : 0)
+                                    + ((minPitchA() == it->minPitchA) ? 1 : 0)
+                                    + ((maxPitchA() == it->maxPitchA) ? 1 : 0)
+                                    + ((maxPitchP() == it->maxPitchP) ? 1 : 0);
+                const int perfectMatchStrength = 4;
+                assert(matchStrength <= perfectMatchStrength);
+                if (fallback.isEmpty() || matchStrength > bestMatchStrength) {
+                    // Set a fallback ID or update it because we've found a better one.
+                    fallback = it->id;
+                    bestMatchStrength = matchStrength;
+                    if (bestMatchStrength == perfectMatchStrength) {
+                        break;     // stop looking for matches
+                    }
+                } else if ((matchStrength == bestMatchStrength) && (it->id.size() < fallback.size())) {
+                    // Update fallback ID because we've found a shorter one that is equally good.
+                    // Shorter IDs tend to correspond to more generic instruments (e.g. "piano"
+                    // vs. "grand-piano") so it's better to use a shorter one if unsure.
+                    fallback = it->id;
+                }
+            }
+        }
     }
 
-    return t->id;
+    return fallback.isEmpty() ? String(u"piano") : fallback;
 }
 
 int Instrument::recognizeMidiProgram() const
 {
-    InstrumentTemplate* tmplInstrumentId = Ms::searchTemplateForMusicXmlId(_instrumentId);
+    InstrumentTemplate* tmplInstrumentId = mu::engraving::searchTemplateForMusicXmlId(_instrumentId);
 
     if (tmplInstrumentId && !tmplInstrumentId->channel.empty() && tmplInstrumentId->channel[0].program() >= 0) {
         return tmplInstrumentId->channel[0].program();
     }
 
-    std::list<QString> nameList;
+    std::list<String> nameList;
 
     nameList.push_back(_trackName);
     mu::join(nameList, _longNames.toStringList());
     mu::join(nameList, _shortNames.toStringList());
 
-    InstrumentTemplate* tmplByName = Ms::searchTemplateForInstrNameList(nameList);
+    InstrumentTemplate* tmplByName = mu::engraving::searchTemplateForInstrNameList(nameList);
 
     if (tmplByName && !tmplByName->channel.empty() && tmplByName->channel[0].program() >= 0) {
         return tmplByName->channel[0].program();
-    }
-
-    InstrumentTemplate* guessedTmpl = Ms::guessTemplateByNameData(nameList);
-
-    if (guessedTmpl && !guessedTmpl->channel.empty() && guessedTmpl->channel[0].program() >= 0) {
-        return guessedTmpl->channel[0].program();
     }
 
     return 0;
@@ -444,7 +487,7 @@ void Instrument::read(XmlReader& e, Part* part)
     _channel.clear();         // remove default channel
     _id = e.attribute("id");
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "singleNoteDynamics") {
             _singleNoteDynamics = e.readBool();
             readSingleNoteDynamics = true;
@@ -476,7 +519,7 @@ void Instrument::read(XmlReader& e, Part* part)
 
 bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
 {
-    const QStringRef& tag(e.name());
+    const AsciiStringView tag(e.name());
     if (tag == "longName") {
         StaffName name;
         name.read(e);
@@ -486,7 +529,7 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
         name.read(e);
         _shortNames.push_back(name);
     } else if (tag == "trackName") {
-        _trackName = e.readElementText();
+        _trackName = e.readText();
     } else if (tag == "minPitch") {      // obsolete
         _minPitchP = _minPitchA = e.readInt();
     } else if (tag == "maxPitch") {       // obsolete
@@ -507,7 +550,7 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
     } else if (tag == "transposeDiatonic") {
         _transpose.diatonic = e.readInt();
     } else if (tag == "instrumentId") {
-        _instrumentId = e.readElementText();
+        _instrumentId = e.readText();
     } else if (tag == "useDrumset") {
         _useDrumset = e.readInt();
         if (_useDrumset) {
@@ -538,19 +581,19 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
         a.read(e);
         _articulation.push_back(a);
     } else if (tag == "Channel" || tag == "channel") {
-        Channel* a = new Channel;
+        InstrChannel* a = new InstrChannel;
         a->read(e, part);
         _channel.push_back(a);
     } else if (tag == "clef") {           // sets both transposing and concert clef
         int idx = e.intAttribute("staff", 1) - 1;
-        ClefType ct = TConv::fromXml(e.readElementText(), ClefType::G);
+        ClefType ct = TConv::fromXml(e.readAsciiText(), ClefType::G);
         setClefType(idx, ClefTypeList(ct, ct));
     } else if (tag == "concertClef") {
         int idx = e.intAttribute("staff", 1) - 1;
-        setClefType(idx, ClefTypeList(TConv::fromXml(e.readElementText(), ClefType::G), clefType(idx)._transposingClef));
+        setClefType(idx, ClefTypeList(TConv::fromXml(e.readAsciiText(), ClefType::G), clefType(idx)._transposingClef));
     } else if (tag == "transposingClef") {
         int idx = e.intAttribute("staff", 1) - 1;
-        setClefType(idx, ClefTypeList(clefType(idx)._concertClef, TConv::fromXml(e.readElementText(), ClefType::G)));
+        setClefType(idx, ClefTypeList(clefType(idx)._concertClef, TConv::fromXml(e.readAsciiText(), ClefType::G)));
     } else {
         return false;
     }
@@ -562,17 +605,17 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
 //   action
 //---------------------------------------------------------
 
-NamedEventList* Instrument::midiAction(const QString& s, int channelIdx) const
+NamedEventList* Instrument::midiAction(const String& s, int channelIdx) const
 {
     // first look in channel list
 
-    foreach (const NamedEventList& a, _channel[channelIdx]->midiActions) {
+    for (const NamedEventList& a : _channel[channelIdx]->midiActions) {
         if (s == a.name) {
             return const_cast<NamedEventList*>(&a);
         }
     }
 
-    foreach (const NamedEventList& a, _midiActions) {
+    for (const NamedEventList& a : _midiActions) {
         if (s == a.name) {
             return const_cast<NamedEventList*>(&a);
         }
@@ -584,12 +627,12 @@ NamedEventList* Instrument::midiAction(const QString& s, int channelIdx) const
 //   Channel
 //---------------------------------------------------------
 
-Channel::Channel()
+InstrChannel::InstrChannel()
 {
     for (int i = 0; i < int(A::INIT_COUNT); ++i) {
         _init.push_back(MidiCoreEvent());
     }
-    _synti    = "Fluid";       // default synthesizer
+    _synti    = u"Fluid";       // default synthesizer
     _channel  = -1;
     _program  = -1;
     _bank     = 0;
@@ -603,14 +646,14 @@ Channel::Channel()
     _solo     = false;
     _soloMute = false;
 
-//      qDebug("construct Channel ");
+//      LOGD("construct Channel ");
 }
 
 //---------------------------------------------------------
 //   initList
 //---------------------------------------------------------
 
-std::vector<MidiCoreEvent>& Channel::initList() const
+std::vector<MidiCoreEvent>& InstrChannel::initList() const
 {
     if (_mustUpdateInit) {
         updateInitList();
@@ -623,7 +666,7 @@ std::vector<MidiCoreEvent>& Channel::initList() const
 //   setVolume
 //---------------------------------------------------------
 
-void Channel::setVolume(char value)
+void InstrChannel::setVolume(char value)
 {
     if (_volume != value) {
         _volume = value;
@@ -636,7 +679,7 @@ void Channel::setVolume(char value)
 //   setPan
 //---------------------------------------------------------
 
-void Channel::setPan(char value)
+void InstrChannel::setPan(char value)
 {
     if (_pan != value) {
         _pan = value;
@@ -649,7 +692,7 @@ void Channel::setPan(char value)
 //   setChorus
 //---------------------------------------------------------
 
-void Channel::setChorus(char value)
+void InstrChannel::setChorus(char value)
 {
     if (_chorus != value) {
         _chorus = value;
@@ -662,7 +705,7 @@ void Channel::setChorus(char value)
 //   setReverb
 //---------------------------------------------------------
 
-void Channel::setReverb(char value)
+void InstrChannel::setReverb(char value)
 {
     if (_reverb != value) {
         _reverb = value;
@@ -675,7 +718,7 @@ void Channel::setReverb(char value)
 //   setName
 //---------------------------------------------------------
 
-void Channel::setName(const QString& value)
+void InstrChannel::setName(const String& value)
 {
     if (_name != value) {
         _name = value;
@@ -684,22 +727,10 @@ void Channel::setName(const QString& value)
 }
 
 //---------------------------------------------------------
-//   setDescr
-//---------------------------------------------------------
-
-void Channel::setDescr(const QString& value)
-{
-    if (_descr != value) {
-        _descr = value;
-        firePropertyChanged(Prop::DESCR);
-    }
-}
-
-//---------------------------------------------------------
 //   setSynti
 //---------------------------------------------------------
 
-void Channel::setSynti(const QString& value)
+void InstrChannel::setSynti(const String& value)
 {
     if (_synti != value) {
         _synti = value;
@@ -711,7 +742,7 @@ void Channel::setSynti(const QString& value)
 //   setColor
 //---------------------------------------------------------
 
-void Channel::setColor(int value)
+void InstrChannel::setColor(int value)
 {
     if (_color != value) {
         _color = value;
@@ -723,7 +754,7 @@ void Channel::setColor(int value)
 //   setProgram
 //---------------------------------------------------------
 
-void Channel::setProgram(int value)
+void InstrChannel::setProgram(int value)
 {
     if (_program != value) {
         _program = value;
@@ -736,7 +767,7 @@ void Channel::setProgram(int value)
 //   setBank
 //---------------------------------------------------------
 
-void Channel::setBank(int value)
+void InstrChannel::setBank(int value)
 {
     if (_bank != value) {
         _bank = value;
@@ -749,7 +780,7 @@ void Channel::setBank(int value)
 //   setChannel
 //---------------------------------------------------------
 
-void Channel::setChannel(int value)
+void InstrChannel::setChannel(int value)
 {
     if (_channel != value) {
         _channel = value;
@@ -761,7 +792,7 @@ void Channel::setChannel(int value)
 //   setSoloMute
 //---------------------------------------------------------
 
-void Channel::setSoloMute(bool value)
+void InstrChannel::setSoloMute(bool value)
 {
     if (_soloMute != value) {
         _soloMute = value;
@@ -773,7 +804,7 @@ void Channel::setSoloMute(bool value)
 //   setMute
 //---------------------------------------------------------
 
-void Channel::setMute(bool value)
+void InstrChannel::setMute(bool value)
 {
     if (_mute != value) {
         _mute = value;
@@ -785,7 +816,7 @@ void Channel::setMute(bool value)
 //   setSolo
 //---------------------------------------------------------
 
-void Channel::setSolo(bool value)
+void InstrChannel::setSolo(bool value)
 {
     if (_solo != value) {
         _solo = value;
@@ -797,7 +828,7 @@ void Channel::setSolo(bool value)
 //   setUserBankController
 //---------------------------------------------------------
 
-void Channel::setUserBankController(bool val)
+void InstrChannel::setUserBankController(bool val)
 {
     if (_userBankController != val) {
         _userBankController = val;
@@ -809,15 +840,12 @@ void Channel::setUserBankController(bool val)
 //   write
 //---------------------------------------------------------
 
-void Channel::write(XmlWriter& xml, const Part* part) const
+void InstrChannel::write(XmlWriter& xml, const Part* part) const
 {
     if (_name.isEmpty() || _name == DEFAULT_NAME) {
-        xml.startObject("Channel");
+        xml.startElement("Channel");
     } else {
-        xml.startObject(QString("Channel name=\"%1\"").arg(_name));
-    }
-    if (!_descr.isEmpty()) {
-        xml.tag("descr", _descr);
+        xml.startElement("Channel", { { "name", _name } });
     }
     if (_color != DEFAULT_COLOR) {
         xml.tag("color", _color);
@@ -872,26 +900,26 @@ void Channel::write(XmlWriter& xml, const Part* part) const
     for (const MidiArticulation& a : articulation) {
         a.write(xml);
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
-void Channel::read(XmlReader& e, Part* part)
+void InstrChannel::read(XmlReader& e, Part* part)
 {
     // synti = 0;
     _name = e.attribute("name");
     if (_name == "") {
-        _name = DEFAULT_NAME;
+        _name = String::fromUtf8(DEFAULT_NAME);
     }
 
     int midiPort = -1;
     int midiChannel = -1;
 
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "program") {
             _program = e.intAttribute("value", -1);
             if (_program == -1) {
@@ -944,9 +972,7 @@ void Channel::read(XmlReader& e, Part* part)
             a.read(e);
             midiActions.push_back(a);
         } else if (tag == "synti") {
-            _synti = e.readElementText();
-        } else if (tag == "descr") {
-            _descr = e.readElementText();
+            _synti = e.readText();
         } else if (tag == "color") {
             _color = e.readInt();
         } else if (tag == "mute") {
@@ -975,11 +1001,11 @@ void Channel::read(XmlReader& e, Part* part)
 //    This works only with MuseScore General soundfont
 //---------------------------------------------------------
 
-void Channel::switchExpressive(Synthesizer* synth, bool expressive, bool force /* = false */)
+void InstrChannel::switchExpressive(Synthesizer* synth, bool expressive, bool force /* = false */)
 {
-    Q_UNUSED(synth);
-    Q_UNUSED(expressive);
-    Q_UNUSED(force);
+    UNUSED(synth);
+    UNUSED(expressive);
+    UNUSED(force);
     //! TODO Needs poting to MU4
     NOT_IMPLEMENTED;
 
@@ -998,8 +1024,8 @@ void Channel::switchExpressive(Synthesizer* synth, bool expressive, bool force /
 //        return;
 //    }
 //    const auto& info = fontsInfo.front();
-//    if (!info.fontName.contains("MuseScore_General", Qt::CaseInsensitive)) {
-//        qDebug().nospace() << "Soundfont '" << info.fontName << "' is not MuseScore General, cannot update expressive";
+//    if (!info.fontName.contains("MS Basic", Qt::CaseInsensitive)) {
+//        LOGD().nospace() << "Soundfont '" << info.fontName << "' is not MuseScore General, cannot update expressive";
 //        return;
 //    }
 
@@ -1048,7 +1074,7 @@ void Channel::switchExpressive(Synthesizer* synth, bool expressive, bool force /
 //   updateInitList
 //---------------------------------------------------------
 
-void Channel::updateInitList() const
+void InstrChannel::updateInitList() const
 {
     MidiCoreEvent e;
     if (_program != -1) {
@@ -1081,7 +1107,7 @@ void Channel::updateInitList() const
 //   addListener
 //---------------------------------------------------------
 
-void Channel::addListener(ChannelListener* l)
+void InstrChannel::addListener(ChannelListener* l)
 {
     _notifier.addListener(l);
 }
@@ -1090,7 +1116,7 @@ void Channel::addListener(ChannelListener* l)
 //   removeListener
 //---------------------------------------------------------
 
-void Channel::removeListener(ChannelListener* l)
+void InstrChannel::removeListener(ChannelListener* l)
 {
     _notifier.removeListener(l);
 }
@@ -1099,11 +1125,11 @@ void Channel::removeListener(ChannelListener* l)
 //   PartChannelSettingsLink
 //---------------------------------------------------------
 
-PartChannelSettingsLink::PartChannelSettingsLink(Channel* main, Channel* bound, bool excerpt)
+PartChannelSettingsLink::PartChannelSettingsLink(InstrChannel* main, InstrChannel* bound, bool excerpt)
     : _main(main), _bound(bound), _excerpt(excerpt)
 {
     if (excerpt) {
-        for (Channel::Prop p : excerptProperties) {
+        for (InstrChannel::Prop p : excerptProperties) {
             applyProperty(p, /* from */ bound, /* to */ main);
         }
     }
@@ -1144,7 +1170,7 @@ PartChannelSettingsLink& PartChannelSettingsLink::operator=(PartChannelSettingsL
 
 void swap(PartChannelSettingsLink& l1, PartChannelSettingsLink& l2)
 {
-    Ms::swap(static_cast<ChannelListener&>(l1), static_cast<ChannelListener&>(l2));
+    mu::engraving::swap(static_cast<ChannelListener&>(l1), static_cast<ChannelListener&>(l2));
     using std::swap;
     swap(l1._main, l2._main);
     swap(l1._bound, l2._bound);
@@ -1155,52 +1181,49 @@ void swap(PartChannelSettingsLink& l1, PartChannelSettingsLink& l2)
 //   PartChannelSettingsLink::applyProperty
 //---------------------------------------------------------
 
-void PartChannelSettingsLink::applyProperty(Channel::Prop p, const Channel* from, Channel* to)
+void PartChannelSettingsLink::applyProperty(InstrChannel::Prop p, const InstrChannel* from, InstrChannel* to)
 {
     switch (p) {
-    case Channel::Prop::VOLUME:
+    case InstrChannel::Prop::VOLUME:
         to->setVolume(from->volume());
         break;
-    case Channel::Prop::PAN:
+    case InstrChannel::Prop::PAN:
         to->setPan(from->pan());
         break;
-    case Channel::Prop::CHORUS:
+    case InstrChannel::Prop::CHORUS:
         to->setChorus(from->chorus());
         break;
-    case Channel::Prop::REVERB:
+    case InstrChannel::Prop::REVERB:
         to->setReverb(from->reverb());
         break;
-    case Channel::Prop::NAME:
+    case InstrChannel::Prop::NAME:
         to->setName(from->name());
         break;
-    case Channel::Prop::DESCR:
-        to->setDescr(from->descr());
-        break;
-    case Channel::Prop::PROGRAM:
+    case InstrChannel::Prop::PROGRAM:
         to->setProgram(from->program());
         break;
-    case Channel::Prop::BANK:
+    case InstrChannel::Prop::BANK:
         to->setBank(from->bank());
         break;
-    case Channel::Prop::COLOR:
+    case InstrChannel::Prop::COLOR:
         to->setColor(from->color());
         break;
-    case Channel::Prop::SOLOMUTE:
+    case InstrChannel::Prop::SOLOMUTE:
         to->setSoloMute(from->soloMute());
         break;
-    case Channel::Prop::SOLO:
+    case InstrChannel::Prop::SOLO:
         to->setSolo(from->solo());
         break;
-    case Channel::Prop::MUTE:
+    case InstrChannel::Prop::MUTE:
         to->setMute(from->mute());
         break;
-    case Channel::Prop::SYNTI:
+    case InstrChannel::Prop::SYNTI:
         to->setSynti(from->synti());
         break;
-    case Channel::Prop::CHANNEL:
+    case InstrChannel::Prop::CHANNEL:
         to->setChannel(from->channel());
         break;
-    case Channel::Prop::USER_BANK_CONTROL:
+    case InstrChannel::Prop::USER_BANK_CONTROL:
         to->setUserBankController(from->userBankController());
         break;
     }
@@ -1210,7 +1233,7 @@ void PartChannelSettingsLink::applyProperty(Channel::Prop p, const Channel* from
 //   PartChannelSettingsLink::propertyChanged
 //---------------------------------------------------------
 
-void PartChannelSettingsLink::propertyChanged(Channel::Prop p)
+void PartChannelSettingsLink::propertyChanged(InstrChannel::Prop p)
 {
     if (isExcerptProperty(p) == _excerpt) {
         applyProperty(p, _main, _bound);
@@ -1221,11 +1244,11 @@ void PartChannelSettingsLink::propertyChanged(Channel::Prop p)
 //   channelIdx
 //---------------------------------------------------------
 
-int Instrument::channelIdx(const QString& s) const
+int Instrument::channelIdx(const String& s) const
 {
     int idx = 0;
-    for (const Channel* a : _channel) {
-        if (a->name().isEmpty() && s == Channel::DEFAULT_NAME) {
+    for (const InstrChannel* a : _channel) {
+        if (a->name().isEmpty() && s == InstrChannel::DEFAULT_NAME) {
             return idx;
         }
         if (s == a->name()) {
@@ -1243,16 +1266,16 @@ int Instrument::channelIdx(const QString& s) const
 void MidiArticulation::write(XmlWriter& xml) const
 {
     if (name.isEmpty()) {
-        xml.startObject("Articulation");
+        xml.startElement("Articulation");
     } else {
-        xml.startObject(QString("Articulation name=\"%1\"").arg(name));
+        xml.startElement("Articulation", { { "name", name } });
     }
     if (!descr.isEmpty()) {
         xml.tag("descr", descr);
     }
     xml.tag("velocity", velocity);
     xml.tag("gateTime", gateTime);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -1263,21 +1286,21 @@ void MidiArticulation::read(XmlReader& e)
 {
     name = e.attribute("name");
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "velocity") {
-            QString text(e.readElementText());
-            if (text.endsWith("%")) {
+            String text(e.readText());
+            if (text.endsWith(u"%")) {
                 text = text.left(text.size() - 1);
             }
             velocity = text.toInt();
         } else if (tag == "gateTime") {
-            QString text(e.readElementText());
-            if (text.endsWith("%")) {
+            String text(e.readText());
+            if (text.endsWith(u"%")) {
                 text = text.left(text.size() - 1);
             }
             gateTime = text.toInt();
         } else if (tag == "descr") {
-            descr = e.readElementText();
+            descr = e.readText();
         } else {
             e.unknown();
         }
@@ -1288,7 +1311,7 @@ void MidiArticulation::read(XmlReader& e)
 //   updateVelocity
 //---------------------------------------------------------
 
-void Instrument::updateVelocity(int* velocity, int /*channelIdx*/, const QString& name)
+void Instrument::updateVelocity(int* velocity, int /*channelIdx*/, const String& name)
 {
     *velocity *= getVelocityMultiplier(name);
 }
@@ -1297,11 +1320,11 @@ void Instrument::updateVelocity(int* velocity, int /*channelIdx*/, const QString
 //   updateVelocity
 //---------------------------------------------------------
 
-qreal Instrument::getVelocityMultiplier(const QString& name)
+double Instrument::getVelocityMultiplier(const String& name)
 {
-    for (const MidiArticulation& a : qAsConst(_articulation)) {
+    for (const MidiArticulation& a : _articulation) {
         if (a.name == name) {
-            return qreal(a.velocity) / 100;
+            return double(a.velocity) / 100;
         }
     }
     return 1;
@@ -1311,9 +1334,9 @@ qreal Instrument::getVelocityMultiplier(const QString& name)
 //   updateGateTime
 //---------------------------------------------------------
 
-void Instrument::updateGateTime(int* gateTime, int /*channelIdx*/, const QString& name)
+void Instrument::updateGateTime(int* gateTime, int /*channelIdx*/, const String& name)
 {
-    for (const MidiArticulation& a : qAsConst(_articulation)) {
+    for (const MidiArticulation& a : _articulation) {
         if (a.name == name) {
             *gateTime = a.gateTime;
             break;
@@ -1332,7 +1355,7 @@ void Instrument::switchExpressive(MasterScore* score, Synthesizer* synth, bool e
         return;
     }
 
-    for (Channel* c : channel()) {
+    for (InstrChannel* c : channel()) {
         c->switchExpressive(synth, expressive, force);
         if (score->playbackChannel(c)) {
             score->playbackChannel(c)->switchExpressive(synth, expressive, force);
@@ -1346,21 +1369,33 @@ void Instrument::switchExpressive(MasterScore* score, Synthesizer* synth, bool e
 
 bool Instrument::operator==(const Instrument& i) const
 {
-    return i._longNames == _longNames
-           && i._shortNames == _shortNames
-           && i._channel == _channel
-           && i._minPitchA == _minPitchA
-           && i._maxPitchA == _maxPitchA
-           && i._minPitchP == _minPitchP
-           && i._maxPitchP == _maxPitchP
-           && i._useDrumset == _useDrumset
-           && i._midiActions == _midiActions
-           && i._articulation == _articulation
-           && i._transpose.diatonic == _transpose.diatonic
-           && i._transpose.chromatic == _transpose.chromatic
-           && i._trackName == _trackName
-           && *i.stringData() == *stringData()
-           && i._singleNoteDynamics == _singleNoteDynamics;
+    bool equal = i._longNames == _longNames;
+    equal &= i._shortNames == _shortNames;
+
+    if (i._channel.size() == _channel.size()) {
+        for (size_t cur = 0; cur < _channel.size(); cur++) {
+            if (*i._channel[cur] != *_channel[cur]) {
+                return false;
+            }
+        }
+    } else {
+        return false;
+    }
+
+    equal &= i._minPitchA == _minPitchA;
+    equal &= i._maxPitchA == _maxPitchA;
+    equal &= i._minPitchP == _minPitchP;
+    equal &= i._maxPitchP == _maxPitchP;
+    equal &= i._useDrumset == _useDrumset;
+    equal &= i._midiActions == _midiActions;
+    equal &= i._articulation == _articulation;
+    equal &= i._transpose.diatonic == _transpose.diatonic;
+    equal &= i._transpose.chromatic == _transpose.chromatic;
+    equal &= i._trackName == _trackName;
+    equal &= *i.stringData() == *stringData();
+    equal &= i._singleNoteDynamics == _singleNoteDynamics;
+
+    return equal;
 }
 
 bool Instrument::operator!=(const Instrument& i) const
@@ -1379,16 +1414,26 @@ bool Instrument::isDifferentInstrument(const Instrument& i) const
     return this->operator!=(i);
 }
 
-QString Instrument::family() const
+String Instrument::family() const
 {
     auto search = searchTemplateIndexForId(_id);
 
     if (!search.instrTemplate) {
-        static QString empty;
+        static String empty;
         return empty;
     }
 
     return search.instrTemplate->familyId();
+}
+
+String StaffName::toPlainText() const
+{
+    return TextBase::unEscape(_name);
+}
+
+StaffName StaffName::fromPlainText(const String& plainText, int pos)
+{
+    return { TextBase::plainToXmlText(plainText), pos };
 }
 
 //---------------------------------------------------------
@@ -1400,7 +1445,7 @@ bool StaffName::operator==(const StaffName& i) const
     return (i._pos == _pos) && (i._name == _name);
 }
 
-QString StaffName::toString() const
+String StaffName::toString() const
 {
     return _name;
 }
@@ -1438,10 +1483,10 @@ void Instrument::setDrumset(const Drumset* ds)
 //    f is in richtext format
 //---------------------------------------------------------
 
-void Instrument::setLongName(const QString& f)
+void Instrument::setLongName(const String& f)
 {
     _longNames.clear();
-    if (f.length() > 0) {
+    if (f.size() > 0) {
         _longNames.push_back(StaffName(f, 0));
     }
 }
@@ -1451,10 +1496,10 @@ void Instrument::setLongName(const QString& f)
 //    f is in richtext format
 //---------------------------------------------------------
 
-void Instrument::setShortName(const QString& f)
+void Instrument::setShortName(const String& f)
 {
     _shortNames.clear();
-    if (f.length() > 0) {
+    if (f.size() > 0) {
         _shortNames.push_back(StaffName(f, 0));
     }
 }
@@ -1549,7 +1594,7 @@ int Instrument::maxPitchA() const
 //   instrumentId
 //---------------------------------------------------------
 
-QString Instrument::instrumentId() const
+String Instrument::instrumentId() const
 {
     return _instrumentId;
 }
@@ -1650,24 +1695,34 @@ std::list<StaffName>& Instrument::shortNames()
 //   trackName
 //---------------------------------------------------------
 
-QString Instrument::trackName() const
+String Instrument::trackName() const
 {
     return _trackName;
 }
 
-void Instrument::setTrackName(const QString& s)
+void Instrument::setTrackName(const String& s)
 {
     _trackName = s;
 }
 
-QString Instrument::name() const
+String Instrument::nameAsXmlText() const
 {
-    return !_longNames.empty() ? _longNames.front().name() : QString();
+    return !_longNames.empty() ? _longNames.front().name() : String();
 }
 
-QString Instrument::abbreviature() const
+String Instrument::nameAsPlainText() const
 {
-    return !_shortNames.empty() ? _shortNames.front().name() : QString();
+    return !_longNames.empty() ? _longNames.front().toPlainText() : String();
+}
+
+String Instrument::abbreviatureAsXmlText() const
+{
+    return !_shortNames.empty() ? _shortNames.front().name() : String();
+}
+
+String Instrument::abbreviatureAsPlainText() const
+{
+    return !_shortNames.empty() ? _shortNames.front().toPlainText() : String();
 }
 
 //---------------------------------------------------------
@@ -1697,16 +1752,16 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* templ)
         instrument.setDrumset(templ->drumset ? templ->drumset : smDrumset);
     }
 
-    for (int i = 0; i < templ->staffCount; ++i) {
+    for (staff_idx_t i = 0; i < templ->staffCount; ++i) {
         instrument.setClefType(i, templ->clefTypes[i]);
     }
 
     instrument.setMidiActions(templ->midiActions);
-    instrument.setArticulation(templ->articulation);
+    instrument.setArticulation(templ->midiArticulations);
     instrument._channel.clear();
 
-    for (const Channel& c : templ->channel) {
-        instrument._channel.push_back(new Channel(c));
+    for (const InstrChannel& c : templ->channel) {
+        instrument._channel.push_back(new InstrChannel(c));
     }
 
     instrument.setStringData(templ->stringData);
@@ -1726,83 +1781,22 @@ void Instrument::setTrait(const Trait& trait)
     _trait = trait;
 }
 
-//---------------------------------------------------------
-//  updateInstrumentId
-//---------------------------------------------------------
-
 void Instrument::updateInstrumentId()
 {
-    if (!_id.isEmpty() || _instrumentId.isEmpty()) {
-        return;
+    if (_instrumentId.isEmpty()) {
+        _instrumentId = recognizeInstrumentId();
     }
 
-    // When reading a score create with pre-3.6, instruments doesn't
-    // have an id define in the instrument. So try to find the instrumentId
-    // based on MusicXMLid.
-    // This requires a hack for instruments using MusicXMLid "strings.group"
-    // because there are multiple instrument using this same id.
-    // For these instruments, use the value of controller 32 of the "arco"
-    // channel to find the correct instrument.
-    // There are some duplicate MusicXML IDs among other instruments too. In
-    // that case we check the pitch range and use the shortest ID that matches.
-    const QString arco = QString("arco");
-    const bool groupHack = instrumentId() == QString("strings.group");
-    const int idxref = channelIdx(arco);
-    const int val32ref = (idxref < 0) ? -1 : channel(idxref)->bank();
-    QString fallback;
-    int bestMatchStrength = 0; // higher when fallback ID provides better match for instrument data
-
-    for (InstrumentGroup* g : instrumentGroups) {
-        for (InstrumentTemplate* it : g->instrumentTemplates) {
-            if (it->musicXMLid != instrumentId()) {
-                continue;
-            }
-            if (groupHack) {
-                if (fallback.isEmpty()) {
-                    // Instrument "Strings" doesn't have bank defined so
-                    // if no "strings.group" instrument with requested bank
-                    // is found, assume "Strings".
-                    fallback = it->id;
-                }
-                for (const Channel& chan : it->channel) {
-                    if ((chan.name() == arco) && (chan.bank() == val32ref)) {
-                        _id = it->id;
-                        return;
-                    }
-                }
-            } else {
-                int matchStrength = 0
-                                    + ((minPitchP() == it->minPitchP) ? 1 : 0)
-                                    + ((minPitchA() == it->minPitchA) ? 1 : 0)
-                                    + ((maxPitchA() == it->maxPitchA) ? 1 : 0)
-                                    + ((maxPitchP() == it->maxPitchP) ? 1 : 0);
-                const int perfectMatchStrength = 4;
-                Q_ASSERT(matchStrength <= perfectMatchStrength);
-                if (fallback.isEmpty() || matchStrength > bestMatchStrength) {
-                    // Set a fallback ID or update it because we've found a better one.
-                    fallback = it->id;
-                    bestMatchStrength = matchStrength;
-                    if (bestMatchStrength == perfectMatchStrength) {
-                        break; // stop looking for matches
-                    }
-                } else if ((matchStrength == bestMatchStrength) && (it->id.length() < fallback.length())) {
-                    // Update fallback ID because we've found a shorter one that is equally good.
-                    // Shorter IDs tend to correspond to more generic instruments (e.g. "piano"
-                    // vs. "grand-piano") so it's better to use a shorter one if unsure.
-                    fallback = it->id;
-                }
-            }
-        }
+    if (_id.isEmpty()) {
+        _id = recognizeId();
     }
-
-    _id = fallback.isEmpty() ? QString("piano") : fallback;
 }
 
 //---------------------------------------------------------
 //   Instrument::playbackChannel
 //---------------------------------------------------------
 
-const Channel* Instrument::playbackChannel(int idx, const MasterScore* score) const
+const InstrChannel* Instrument::playbackChannel(int idx, const MasterScore* score) const
 {
     return score->playbackChannel(channel(idx));
 }
@@ -1811,7 +1805,7 @@ const Channel* Instrument::playbackChannel(int idx, const MasterScore* score) co
 //   Instrument::playbackChannel
 //---------------------------------------------------------
 
-Channel* Instrument::playbackChannel(int idx, MasterScore* score)
+InstrChannel* Instrument::playbackChannel(int idx, MasterScore* score)
 {
     return score->playbackChannel(channel(idx));
 }
@@ -1822,7 +1816,7 @@ Channel* Instrument::playbackChannel(int idx, MasterScore* score)
 
 bool Instrument::getSingleNoteDynamicsFromTemplate() const
 {
-    QString templateName = trackName().toLower().replace(" ", "-").replace("♭", "b");
+    String templateName = trackName().toLower().replace(u" ", u"-").replace(u"♭", u"b");
     InstrumentTemplate* tp = searchTemplate(templateName);
     if (tp) {
         return tp->singleNoteDynamics;
@@ -1850,9 +1844,9 @@ void StaffNameList::write(XmlWriter& xml, const char* name) const
     }
 }
 
-std::list<QString> StaffNameList::toStringList() const
+std::list<String> StaffNameList::toStringList() const
 {
-    std::list<QString> result;
+    std::list<String> result;
 
     for (const StaffName& name : *this) {
         result.push_back(name.toString());

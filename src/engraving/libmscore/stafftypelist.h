@@ -25,7 +25,7 @@
 
 #include "stafftype.h"
 
-namespace Ms {
+namespace mu::engraving {
 class XmlReader;
 
 //---------------------------------------------------------
@@ -45,6 +45,8 @@ public:
     const StaffType& staffType(const Fraction& f) const;
     StaffType* setStaffType(const Fraction&, const StaffType&);
     bool removeStaffType(const Fraction&);
+    bool isStaffTypeStartFrom(const Fraction&) const;
+    void moveStaffType(const Fraction& from, const Fraction& to);
 
     bool uniqueStaffType() const { return staffTypeChanges.empty(); }
     std::pair<int, int> staffTypeRange(const Fraction&) const;

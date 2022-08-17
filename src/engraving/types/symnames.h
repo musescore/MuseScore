@@ -25,28 +25,29 @@
 #include <vector>
 #include <array>
 #include <unordered_map>
-#include <QString>
 #include "symid.h"
+#include "types/string.h"
 
 namespace mu::engraving {
 struct SymNames {
-    static const char* nameForSymId(SymId id);
+    static AsciiStringView nameForSymId(SymId id);
     static const char* userNameForSymId(SymId id);
-    static QString translatedUserNameForSymId(SymId id);
+    static String translatedUserNameForSymId(SymId id);
 
-    static SymId symIdByName(const QString& name, SymId def = SymId::noSym);
-    static SymId symIdByOldName(const QString& oldName);
-    static SymId symIdByUserName(const QString& userName);
+    static SymId symIdByName(const AsciiStringView& name, SymId def = SymId::noSym);
+    static SymId symIdByName(const String& name, SymId def = SymId::noSym);
+    static SymId symIdByOldName(const AsciiStringView& oldName);
+    static SymId symIdByUserName(const String& userName);
 
 private:
     static void loadNameToSymIdHash();
 
-    static const std::array<const char*, size_t(SymId::lastSym) + 1> s_symNames;
+    static const std::array<AsciiStringView, size_t(SymId::lastSym) + 1> s_symNames;
     static const std::array<const char*, size_t(SymId::lastSym) + 1> s_symUserNames;
 
     //! Will be initialized when first used
-    static std::unordered_map<QString, SymId> s_nameToSymIdHash;
-    static const std::unordered_map<QString, SymId> s_oldNameToSymIdHash;
+    static std::map<AsciiStringView, SymId> s_nameToSymIdHash;
+    static const std::map<AsciiStringView, SymId> s_oldNameToSymIdHash;
 };
 }
 

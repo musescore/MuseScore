@@ -27,7 +27,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 BracketItem::BracketItem(EngravingItem* parent)
     : EngravingItem(ElementType::BRACKET_ITEM, parent)
 {
@@ -43,7 +43,7 @@ EngravingItem* BracketItem::clone() const
     return new BracketItem(*this);
 }
 
-mu::engraving::PropertyValue BracketItem::getProperty(Pid id) const
+PropertyValue BracketItem::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::SYSTEM_BRACKET:
@@ -57,7 +57,7 @@ mu::engraving::PropertyValue BracketItem::getProperty(Pid id) const
     }
 }
 
-bool BracketItem::setProperty(Pid id, const engraving::PropertyValue& v)
+bool BracketItem::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::SYSTEM_BRACKET:
@@ -76,7 +76,7 @@ bool BracketItem::setProperty(Pid id, const engraving::PropertyValue& v)
     return true;
 }
 
-engraving::PropertyValue BracketItem::propertyDefault(Pid id) const
+PropertyValue BracketItem::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SYSTEM_BRACKET:

@@ -31,7 +31,7 @@ using namespace mu;
 using namespace mu::draw;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   sectionBreakStyle
 //---------------------------------------------------------
@@ -50,7 +50,7 @@ LayoutBreak::LayoutBreak(MeasureBase* parent)
     _pause = 0.;
     _startWithLongNames = false;
     _startWithMeasureOne = false;
-    _firstSystemIdentation = false;
+    _firstSystemIndentation = false;
     _layoutBreakType = LayoutBreakType(propertyDefault(Pid::LAYOUT_BREAK).toInt());
 
     initElementStyle(&sectionBreakStyle);
@@ -65,12 +65,12 @@ LayoutBreak::LayoutBreak(MeasureBase* parent)
 LayoutBreak::LayoutBreak(const LayoutBreak& lb)
     : EngravingItem(lb)
 {
-    _layoutBreakType       = lb._layoutBreakType;
-    lw                     = lb.lw;
-    _pause                 = lb._pause;
-    _startWithLongNames    = lb._startWithLongNames;
-    _startWithMeasureOne   = lb._startWithMeasureOne;
-    _firstSystemIdentation = lb._firstSystemIdentation;
+    _layoutBreakType        = lb._layoutBreakType;
+    lw                      = lb.lw;
+    _pause                  = lb._pause;
+    _startWithLongNames     = lb._startWithLongNames;
+    _startWithMeasureOne    = lb._startWithMeasureOne;
+    _firstSystemIndentation = lb._firstSystemIndentation;
     layout0();
 }
 
@@ -85,7 +85,7 @@ void LayoutBreak::setParent(MeasureBase* parent)
 
 void LayoutBreak::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     EngravingItem::writeProperties(xml);
 
     for (auto id :
@@ -93,7 +93,7 @@ void LayoutBreak::write(XmlWriter& xml) const
         writeProperty(xml, id);
     }
 
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -103,7 +103,7 @@ void LayoutBreak::write(XmlWriter& xml) const
 void LayoutBreak::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             readProperty(e, Pid::LAYOUT_BREAK);
         } else if (tag == "pause") {
@@ -112,7 +112,8 @@ void LayoutBreak::read(XmlReader& e)
             readProperty(e, Pid::START_WITH_LONG_NAMES);
         } else if (tag == "startWithMeasureOne") {
             readProperty(e, Pid::START_WITH_MEASURE_ONE);
-        } else if (tag == "firstSystemIdentation") {
+        } else if (tag == "firstSystemIndentation"
+                   || tag == "firstSystemIdentation" /* pre-4.0 typo */) {
             readProperty(e, Pid::FIRST_SYSTEM_INDENTATION);
         } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
@@ -157,9 +158,9 @@ void LayoutBreak::draw(mu::draw::Painter* painter) const
 
 void LayoutBreak::layout0()
 {
-    qreal _spatium = spatium();
-    qreal w = _spatium * 2.5;
-    qreal h = w;
+    double _spatium = spatium();
+    double w = _spatium * 2.5;
+    double h = w;
 
     m_iconBorderRect = RectF(0.0, 0.0, w, h);
     m_iconPath = PainterPath();
@@ -215,7 +216,7 @@ void LayoutBreak::layout0()
         break;
 
     default:
-        qDebug("unknown layout break symbol");
+        LOGD("unknown layout break symbol");
         break;
     }
 
@@ -236,7 +237,7 @@ void LayoutBreak::setLayoutBreakType(LayoutBreakType val)
 //   spatiumChanged
 //---------------------------------------------------------
 
-void LayoutBreak::spatiumChanged(qreal, qreal)
+void LayoutBreak::spatiumChanged(double, double)
 {
     lw = spatium() * 0.3;
     layout0();
@@ -279,7 +280,7 @@ PropertyValue LayoutBreak::getProperty(Pid propertyId) const
     case Pid::START_WITH_MEASURE_ONE:
         return _startWithMeasureOne;
     case Pid::FIRST_SYSTEM_INDENTATION:
-        return _firstSystemIdentation;
+        return _firstSystemIndentation;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -306,7 +307,7 @@ bool LayoutBreak::setProperty(Pid propertyId, const PropertyValue& v)
         setStartWithMeasureOne(v.toBool());
         break;
     case Pid::FIRST_SYSTEM_INDENTATION:
-        setFirstSystemIdentation(v.toBool());
+        setFirstSystemIndentation(v.toBool());
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
@@ -339,18 +340,6 @@ PropertyValue LayoutBreak::propertyDefault(Pid id) const
     default:
         return EngravingItem::propertyDefault(id);
     }
-}
-
-//---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid LayoutBreak::propertyId(const QStringRef& name) const
-{
-    if (name == propertyName(Pid::LAYOUT_BREAK)) {
-        return Pid::LAYOUT_BREAK;
-    }
-    return EngravingItem::propertyId(name);
 }
 
 void LayoutBreak::added()

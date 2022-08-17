@@ -22,13 +22,15 @@
 #include "applicationactioncontroller.h"
 
 #include <QCoreApplication>
+#include <QApplication>
 #include <QCloseEvent>
 #include <QFileOpenEvent>
 #include <QWindow>
 #include <QMimeData>
 
-#include "translation.h"
+#include "audio/synthtypes.h"
 
+#include "translation.h"
 #include "log.h"
 
 using namespace mu::appshell;
@@ -40,6 +42,10 @@ void ApplicationActionController::init()
     dispatcher()->reg(this, "quit", [this](const ActionData& args) {
         bool isAllInstances = args.count() > 0 ? args.arg<bool>(0) : true;
         quit(isAllInstances);
+    });
+
+    dispatcher()->reg(this, "restart", [this]() {
+        restart();
     });
 
     dispatcher()->reg(this, "fullscreen", this, &ApplicationActionController::toggleFullScreen);
@@ -70,9 +76,10 @@ void ApplicationActionController::onDragMoveEvent(QDragMoveEvent* event)
     const QMimeData* mime = event->mimeData();
     QList<QUrl> urls = mime->urls();
     if (urls.count() > 0) {
-        QString file = urls.first().toLocalFile();
-        LOGD() << file;
-        if (projectFilesController()->isFileSupported(io::path(file))) {
+        io::path_t filePath = io::path_t(urls.first().toLocalFile());
+        LOGD() << filePath;
+
+        if (projectFilesController()->isFileSupported(filePath) || audio::synth::isSoundFont(filePath)) {
             event->setDropAction(Qt::LinkAction);
             event->acceptProposedAction();
         }
@@ -84,9 +91,17 @@ void ApplicationActionController::onDropEvent(QDropEvent* event)
     const QMimeData* mime = event->mimeData();
     QList<QUrl> urls = mime->urls();
     if (urls.count() > 0) {
-        QString file = urls.first().toLocalFile();
-        LOGD() << file;
-        Ret ret = projectFilesController()->openProject(io::path(file));
+        io::path_t filePath = io::path_t(urls.first().toLocalFile());
+        LOGD() << filePath;
+
+        Ret ret = make_ok();
+
+        if (projectFilesController()->isFileSupported(filePath)) {
+            ret = projectFilesController()->openProject(filePath);
+        } else if (audio::synth::isSoundFont(filePath)) {
+            ret = soundFontRepository()->addSoundFont(filePath);
+        }
+
         if (ret) {
             event->accept();
         } else {
@@ -109,7 +124,7 @@ bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
         QString filePath = openEvent->file();
 
         if (startupScenario()->startupCompleted()) {
-            dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(filePath));
+            dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path_t>(filePath));
         } else {
             startupScenario()->setStartupScorePath(filePath);
         }
@@ -137,6 +152,19 @@ void ApplicationActionController::quit(bool isAllInstances)
         }
 
         QCoreApplication::quit();
+    }
+}
+
+void ApplicationActionController::restart()
+{
+    if (projectFilesController()->closeOpenedProject()) {
+        if (multiInstancesProvider()->instances().size() == 1) {
+            application()->restart();
+        } else {
+            multiInstancesProvider()->quitAllAndRestartLast();
+
+            QCoreApplication::quit();
+        }
     }
 }
 
@@ -198,19 +226,40 @@ void ApplicationActionController::openPreferencesDialog()
 
 void ApplicationActionController::revertToFactorySettings()
 {
-    std::string question = trc("appshell", "This will reset all your preferences.\n"
-                                           "Custom palettes, custom shortcuts, and the list of recent scores will be deleted. "
-                                           "Reverting will not remove any scores from your computer.\n"
-                                           "Are you sure you want to proceed?");
+    std::string title = trc("appshell", "Are you sure you want to revert to factory settings?");
+    std::string question = trc("appshell", "This action will reset all your app preferences and delete all custom palettes and custom shortcuts. "
+                                           "The list of recent scores will also be cleared.\n\n"
+                                           "This action will not delete any of your scores.");
 
-    IInteractive::Result result = interactive()->question(std::string(), question, {
-        IInteractive::Button::Yes,
-        IInteractive::Button::No
-    });
+    int revertBtn = int(IInteractive::Button::CustomButton) + 1;
+    IInteractive::Result result = interactive()->warning(title, question,
+                                                         { interactive()->buttonData(IInteractive::Button::Cancel),
+                                                           IInteractive::ButtonData(revertBtn, trc("appshell", "Revert"), true) },
+                                                         revertBtn, IInteractive::WithIcon
+                                                         );
 
-    if (result.standardButton() == IInteractive::Button::Yes) {
-        configuration()->revertToFactorySettings();
+    if (result.standardButton() == IInteractive::Button::Cancel) {
+        return;
     }
+
+    static constexpr bool KEEP_DEFAULT_SETTINGS = false;
+    static constexpr bool NOTIFY_ABOUT_CHANGES = false;
+    configuration()->revertToFactorySettings(KEEP_DEFAULT_SETTINGS, NOTIFY_ABOUT_CHANGES);
+
+    title = trc("appshell", "Would you like to restart MuseScore now?");
+    question = trc("appshell", "MuseScore needs to be restarted for these changes to take effect.");
+
+    int restartBtn = int(IInteractive::Button::CustomButton) + 1;
+    result = interactive()->question(title, question,
+                                     { interactive()->buttonData(IInteractive::Button::Cancel),
+                                       IInteractive::ButtonData(restartBtn, trc("appshell", "Restart"), true) },
+                                     restartBtn);
+
+    if (result.standardButton() == IInteractive::Button::Cancel) {
+        return;
+    }
+
+    restart();
 }
 
 void ApplicationActionController::checkForUpdate()
@@ -218,4 +267,11 @@ void ApplicationActionController::checkForUpdate()
     NOT_IMPLEMENTED;
 
     interactive()->info(trc("appshell", "No update available"), "");
+}
+
+bool ApplicationActionController::canReceiveAction(const mu::actions::ActionCode& code) const
+{
+    Q_UNUSED(code);
+    auto focus = QGuiApplication::focusWindow();
+    return !focus || focus->modality() == Qt::WindowModality::NonModal;
 }

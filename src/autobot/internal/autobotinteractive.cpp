@@ -84,13 +84,13 @@ IInteractive::Result AutobotInteractive::error(const std::string& title, const T
     return m_real->error(title, text, buttons, defBtn, options);
 }
 
-io::path AutobotInteractive::selectOpeningFile(const QString& title, const io::path& dir, const QString& filter)
+io::path_t AutobotInteractive::selectOpeningFile(const QString& title, const io::path_t& dir, const QString& filter)
 {
     return m_real->selectOpeningFile(title, dir, filter);
 }
 
-io::path AutobotInteractive::selectSavingFile(const QString& title, const io::path& dir, const QString& filter,
-                                              bool confirmOverwrite)
+io::path_t AutobotInteractive::selectSavingFile(const QString& title, const io::path_t& dir, const QString& filter,
+                                                bool confirmOverwrite)
 {
     // return m_real->selectSavingFile(title, dir, filter, confirmOverwrite);
     LOGD() << title << " dir:" << dir << ", filter: " << filter << ", confirmOverwrite: " << confirmOverwrite;
@@ -99,14 +99,15 @@ io::path AutobotInteractive::selectSavingFile(const QString& title, const io::pa
     return m_selectedFilePath;
 }
 
-io::path AutobotInteractive::selectDirectory(const QString& title, const io::path& dir)
+io::path_t AutobotInteractive::selectDirectory(const QString& title, const io::path_t& dir)
 {
     return m_real->selectDirectory(title, dir);
 }
 
-io::paths AutobotInteractive::selectMultipleDirectories(const QString& title, const io::path& dir, const io::paths& initialyDirectories)
+io::paths_t AutobotInteractive::selectMultipleDirectories(const QString& title, const io::path_t& dir,
+                                                          const io::paths_t& initialDirectories)
 {
-    return m_real->selectMultipleDirectories(title, dir, initialyDirectories);
+    return m_real->selectMultipleDirectories(title, dir, initialDirectories);
 }
 
 RetVal<Val> AutobotInteractive::open(const std::string& uri) const
@@ -184,12 +185,12 @@ Ret AutobotInteractive::openUrl(const QUrl& url) const
     return m_real->openUrl(url);
 }
 
-Ret AutobotInteractive::revealInFileBrowser(const io::path& filePath) const
+Ret AutobotInteractive::revealInFileBrowser(const io::path_t& filePath) const
 {
     return m_real->revealInFileBrowser(filePath);
 }
 
-io::path AutobotInteractive::selectedFilePath() const
+io::path_t AutobotInteractive::selectedFilePath() const
 {
     return m_selectedFilePath;
 }

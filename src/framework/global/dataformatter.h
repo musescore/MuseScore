@@ -22,17 +22,17 @@
 #ifndef MU_FRAMEWORK_DATAFORMATTER_H
 #define MU_FRAMEWORK_DATAFORMATTER_H
 
-class QDate;
-class QDateTime;
-class QString;
+#include "types/string.h"
+#include "types/datetime.h"
 
+namespace mu {
 class DataFormatter
 {
 public:
     static double roundDouble(const double& val, const int decimals = 2);
-    static QString formatReal(double val, int prec = 2);
-    static QString formatTimeSince(const QDate& creationDate);
-    static QDateTime dateTimeFromIsoFormat(const QString& dateTimeIso);
+    static String formatReal(double val, int prec = 2);
+    static String formatTimeSince(const Date& date);
 };
+}
 
 #endif // MU_FRAMEWORK_DATAFORMATTER_H

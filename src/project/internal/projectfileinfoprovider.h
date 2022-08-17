@@ -22,21 +22,25 @@
 #ifndef MU_PROJECT_PROJECTFILEINFOPROVIDER_H
 #define MU_PROJECT_PROJECTFILEINFOPROVIDER_H
 
-#include "engraving/infrastructure/io/ifileinfoprovider.h"
+#include "engraving/infrastructure/ifileinfoprovider.h"
+
+#include "modularity/ioc.h"
+#include "io/ifilesystem.h"
 
 namespace mu::project {
 class NotationProject;
 class ProjectFileInfoProvider : public engraving::IFileInfoProvider
 {
+    INJECT(project, io::IFileSystem, filesystem)
 public:
     explicit ProjectFileInfoProvider(NotationProject* project);
 
-    io::path path() const override;
-    io::path fileName(bool includingExtension = true) const override;
-    io::path absoluteDirPath() const override;
+    io::path_t path() const override;
+    io::path_t fileName(bool includingExtension = true) const override;
+    io::path_t absoluteDirPath() const override;
 
-    QDateTime birthTime() const override;
-    QDateTime lastModified() const override;
+    DateTime birthTime() const override;
+    DateTime lastModified() const override;
 
 private:
     NotationProject* m_project = nullptr;

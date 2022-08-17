@@ -30,20 +30,7 @@ using namespace mu::audio::synth;
 
 ISynthesizerPtr VstiResolver::resolveSynth(const audio::TrackId trackId, const audio::AudioInputParams& params) const
 {
-    SynthPair& pair = m_synthMap[trackId];
-
-    if (pair.first == params.resourceMeta.id) {
-        return pair.second;
-    }
-
-    if (pair.second) {
-        pluginsRegister()->unregisterInstrPlugin(trackId, pair.first);
-    }
-
-    pair.first = params.resourceMeta.id;
-    pair.second = createSynth(trackId, params);
-
-    return pair.second;
+    return createSynth(trackId, params);
 }
 
 bool VstiResolver::hasCompatibleResources(const audio::PlaybackSetupData& /*setup*/) const
@@ -58,14 +45,12 @@ void VstiResolver::refresh()
 
 VstSynthPtr VstiResolver::createSynth(const audio::TrackId trackId, const audio::AudioInputParams& params) const
 {
-    PluginModulePtr modulePtr = pluginModulesRepo()->pluginModule(params.resourceMeta.id);
-
-    if (!modulePtr) {
+    if (!pluginModulesRepo()->exists(params.resourceMeta.id)) {
         return nullptr;
     }
 
-    VstPluginPtr pluginPtr = std::make_shared<VstPlugin>(modulePtr);
-    pluginsRegister()->registerInstrPlugin(trackId, params.resourceMeta.id, pluginPtr);
+    VstPluginPtr pluginPtr = std::make_shared<VstPlugin>(params.resourceMeta.id);
+    pluginsRegister()->registerInstrPlugin(trackId, pluginPtr);
 
     pluginPtr->load();
 

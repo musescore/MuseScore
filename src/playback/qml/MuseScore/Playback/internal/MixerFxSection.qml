@@ -28,6 +28,7 @@ import MuseScore.Audio 1.0
 MixerPanelSection {
     id: root
 
+    //: FX is an abbreviation of "effects".
     headerTitle: qsTrc("playback", "Audio FX")
     headerHeight: 24
 

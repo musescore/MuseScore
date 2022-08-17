@@ -22,9 +22,13 @@
 #ifndef MU_ENGRAVING_READ302_H
 #define MU_ENGRAVING_READ302_H
 
-#include "libmscore/masterscore.h"
+#include "engravingerrors.h"
 
-namespace Ms {
+namespace mu::engraving {
+class MasterScore;
+class Score;
+
+class ReadContext;
 class XmlReader;
 }
 
@@ -33,10 +37,10 @@ class Read302
 {
 public:
 
-    static Ms::Score::FileError read302(Ms::MasterScore* masterScore, Ms::XmlReader& e, ReadContext& ctx);
+    static Err read302(MasterScore* masterScore, XmlReader& e, ReadContext& ctx);
 
 private:
-    static bool readScore302(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx);
+    static bool readScore302(Score* score, XmlReader& e, ReadContext& ctx);
 };
 }
 

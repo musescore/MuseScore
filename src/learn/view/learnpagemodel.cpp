@@ -47,6 +47,8 @@ QVariantList LearnPageModel::advancedPlaylist() const
 
 void LearnPageModel::load()
 {
+    learnService()->refreshPlaylists();
+
     setStartedPlaylist(learnService()->startedPlaylist());
     learnService()->startedPlaylistChanged().onReceive(this, [this](const Playlist& playlist) {
         setStartedPlaylist(playlist);
@@ -85,19 +87,22 @@ QVariantMap LearnPageModel::classesAuthor() const
     QVariantMap author;
     author["name"] = qtrc("learn", "Marc Sabatella");
     author["role"] = qtrc("learn", "Instructor");
-    author["position"] = qtrc("learn", "Founder, Director of Mastering MuseScore School");
-    author["description"] = qtrc("learn", "My name is Marc Sabatella, and I am the founder and director of the Mastering MuseScore School. "
-                                          "I am one of the developers and chief ambassadors for MuseScore, "
-                                          "the world's most popular music notation software. "
-                                          "I have been teaching music online since the dawn of the World Wide Web, "
-                                          "and I have been teaching in person for even longer. "
-                                          "From the publication of my groundbreaking Jazz Improvisation Primer back in the 1990’s, "
-                                          "to my years on the faculty at major music schools, "
-                                          "and culminating in this Mastering MuseScore School, "
-                                          "I have dedicated most of my life to helping as many musicians as I can.");
+    author["position"] = qtrc("learn", "Creator, Mastering MuseScore");
+    author["description"] = qtrc("learn", "Welcome to Mastering MuseScore – the most comprehensive resource "
+                                          "for learning the world’s most popular music notation software! "
+                                          "My name is Marc Sabatella, and I have been helping develop, support, "
+                                          "and promote MuseScore since its initial release over ten years ago."
+                                          "\n\nWhether you are just getting started with music notation software, "
+                                          "or are a power user eager to explore advanced engraving and playback techniques, "
+                                          "my flagship online course Mastering MuseScore "
+                                          "covers everything you need to know to get the most out of MuseScore. "
+                                          "In addition, Mastering MuseScore features a supportive community of musicians, "
+                                          "with discussion spaces, live streams, "
+                                          "and other related courses and services to help you create your best music. "
+                                          "Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!");
     author["avatarUrl"] = "qrc:/qml/MuseScore/Learn/resources/marc_sabatella.JPG";
-    author["organizationName"] = qtrc("learn", "Mastering MuseScore School");
-    author["organizationUrl"] = "https://school.masteringmusescore.com/";
+    author["organizationName"] = qtrc("learn", "Mastering MuseScore");
+    author["organizationUrl"] = "https://www.masteringmusescore.com/musescore4";
 
     return author;
 }
@@ -127,12 +132,11 @@ QVariantList LearnPageModel::playlistToVariantList(const Playlist& playlist) con
     QVariantList result;
 
     auto formatDuration = [](int durationSecs) {
-        QTime duration = QDateTime::fromSecsSinceEpoch(durationSecs).time();
-        int hour = duration.hour();
-        int minute = duration.minute();
-        int second = duration.second();
+        int seconds = durationSecs;
+        int minutes = seconds / 60;
+        int hours = minutes / 60;
 
-        return (hour > 0 ? QString::number(hour) + ":" : "") + QString::number(minute) + ":" + QString::number(second);
+        return (hours > 0 ? QString::number(hours) + ":" : "") + QString::number(minutes % 60) + ":" + QString::number(seconds % 60);
     };
 
     for (const PlaylistItem& item : playlist) {

@@ -26,7 +26,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 }
 
@@ -52,9 +52,9 @@ private:
     void updateValues();
     void blockSignals(bool);
     void setMarginsMax(double);
-    void applyToScore(Ms::Score*);
+    void applyToScore(mu::engraving::Score*);
 
-    Ms::Score* score() const;
+    mu::engraving::Score* score() const;
     double styleValueDouble(StyleId styleId) const;
     bool styleValueBool(StyleId styleId) const;
     void setStyleValue(StyleId styleId, const PropertyValue& newValue) const;

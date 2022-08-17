@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __NOTE_GROUPS_H__
-#define __NOTE_GROUPS_H__
+#ifndef MU_PALETTE_NOTEGROUPS_H
+#define MU_PALETTE_NOTEGROUPS_H
 
 #include "ui_note_groups.h"
 
@@ -30,39 +30,38 @@
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Chord;
 class Score;
+}
 
-//---------------------------------------------------------
-//   NoteGroups
-//---------------------------------------------------------
-
+namespace mu::palette {
 class NoteGroups : public QGroupBox, Ui::NoteGroups
 {
     Q_OBJECT
 
-    INJECT(palette, mu::palette::IPaletteConfiguration, paletteConfiguration)
+    INJECT(palette, IPaletteConfiguration, paletteConfiguration)
 
-    std::vector<Chord*> chords8;
-    std::vector<Chord*> chords16;
-    std::vector<Chord*> chords32;
-    Groups _groups;
-    Fraction _sig;
+    std::vector<engraving::Chord*> chords8;
+    std::vector<engraving::Chord*> chords16;
+    std::vector<engraving::Chord*> chords32;
+    engraving::Groups _groups;
+    engraving::Fraction _sig;
     QString _z, _n;
 
-    Score* createScore(int n, DurationType t, std::vector<Chord*>* chords);
-    void updateBeams(Chord*, BeamMode);
+    engraving::Score* createScore(int n, engraving::DurationType t, std::vector<engraving::Chord*>* chords);
+    void updateBeams(engraving::Chord*, engraving::BeamMode);
 
 private slots:
     void resetClicked();
-    void noteClicked(Note*);
-    void beamPropertyDropped(Chord*, ActionIcon*);
+    void noteClicked(engraving::Note*);
+    void beamPropertyDropped(engraving::Chord*, engraving::ActionIcon*);
 
 public:
     NoteGroups(QWidget* parent);
-    void setSig(Fraction sig, const Groups&, const QString& zText, const QString& nText);
-    Groups groups();
+    void setSig(engraving::Fraction sig, const engraving::Groups&, const QString& zText, const QString& nText);
+    engraving::Groups groups();
 };
-} // namespace Ms
-#endif
+}
+
+#endif // MU_PALETTE_NOTEGROUPS_H

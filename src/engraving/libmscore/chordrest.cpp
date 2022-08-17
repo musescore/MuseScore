@@ -22,11 +22,10 @@
 
 #include "chordrest.h"
 
-#include <QDebug>
-
+#include "translation.h"
 #include "style/style.h"
 #include "rw/xml.h"
-#include "rw/xmlvalue.h"
+#include "rw/writecontext.h"
 #include "types/typesconv.h"
 
 #include "factory.h"
@@ -66,11 +65,13 @@
 #include "instrchange.h"
 #include "navigate.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   ChordRest
 //---------------------------------------------------------
@@ -132,8 +133,8 @@ void ChordRest::undoUnlink()
 
 ChordRest::~ChordRest()
 {
-    qDeleteAll(_lyrics);
-    qDeleteAll(_el);
+    DeleteAll(_lyrics);
+    DeleteAll(_el);
     delete _tabDur;
     if (_beam && _beam->contains(this)) {
         delete _beam;     // Beam destructor removes references to the deleted object
@@ -154,7 +155,7 @@ void ChordRest::writeProperties(XmlWriter& xml) const
     //    CHORD - BeamMode::AUTO
     //
     if ((isRest() && _beamMode != BeamMode::NONE) || (isChord() && _beamMode != BeamMode::AUTO)) {
-        xml.tag("BeamMode", XmlValue::toXml(_beamMode));
+        xml.tag("BeamMode", TConv::toXml(_beamMode));
     }
     writeProperty(xml, Pid::SMALL);
     if (actualDurationType().dots()) {
@@ -168,7 +169,7 @@ void ChordRest::writeProperties(XmlWriter& xml) const
 
     if (!ticks().isZero() && (!actualDurationType().fraction().isValid()
                               || (actualDurationType().fraction() != ticks()))) {
-        xml.tag("duration", ticks());
+        xml.tagFraction("duration", ticks());
         //xml.tagE("duration z=\"%d\" n=\"%d\"", ticks().numerator(), ticks().denominator());
     }
 
@@ -176,19 +177,19 @@ void ChordRest::writeProperties(XmlWriter& xml) const
         lyrics->write(xml);
     }
 
-    const int curTick = xml.curTick().ticks();
+    const int curTick = xml.context()->curTick().ticks();
 
     if (!isGrace()) {
         Fraction t(globalTicks());
         if (staff()) {
-            t /= staff()->timeStretch(xml.curTick());
+            t /= staff()->timeStretch(xml.context()->curTick());
         }
-        xml.incCurTick(t);
+        xml.context()->incCurTick(t);
     }
 
     for (auto i : score()->spannerMap().findOverlapping(curTick - 1, curTick + 1)) {
         Spanner* s = i.value;
-        if (s->generated() || !s->isSlur() || toSlur(s)->broken() || !xml.canWrite(s)) {
+        if (s->generated() || !s->isSlur() || toSlur(s)->broken() || !xml.context()->canWrite(s)) {
             continue;
         }
 
@@ -206,10 +207,10 @@ void ChordRest::writeProperties(XmlWriter& xml) const
 
 bool ChordRest::readProperties(XmlReader& e)
 {
-    const QStringRef& tag(e.name());
+    const AsciiStringView tag(e.name());
 
     if (tag == "durationType") {
-        setDurationType(TConv::fromXml(e.readElementText(), DurationType::V_QUARTER));
+        setDurationType(TConv::fromXml(e.readAsciiText(), DurationType::V_QUARTER));
         if (actualDurationType().type() != DurationType::V_MEASURE) {
             if (score()->mscVersion() < 112 && (type() == ElementType::REST)
                 &&            // for backward compatibility, convert V_WHOLE rests to V_MEASURE
@@ -229,26 +230,26 @@ bool ChordRest::readProperties(XmlReader& e)
             }
         } else {
             if (score()->mscVersion() <= 114) {
-                SigEvent event = score()->sigmap()->timesig(e.tick());
+                SigEvent event = score()->sigmap()->timesig(e.context()->tick());
                 setTicks(event.timesig());
             }
         }
     } else if (tag == "BeamMode") {
-        _beamMode = XmlValue::fromXml(e.readElementText(), BeamMode::AUTO);
+        _beamMode = TConv::fromXml(e.readAsciiText(), BeamMode::AUTO);
     } else if (tag == "Articulation") {
         Articulation* atr = Factory::createArticulation(this);
         atr->setTrack(track());
         atr->read(e);
         add(atr);
     } else if (tag == "leadingSpace" || tag == "trailingSpace") {
-        qDebug("ChordRest: %s obsolete", tag.toLocal8Bit().data());
+        LOGD("ChordRest: %s obsolete", tag.ascii());
         e.skipCurrentElement();
     } else if (tag == "small") {
         m_isSmall = e.readInt();
     } else if (tag == "duration") {
         setTicks(e.readFraction());
     } else if (tag == "ticklen") {      // obsolete (version < 1.12)
-        int mticks = score()->sigmap()->timesig(e.tick()).timesig().ticks();
+        int mticks = score()->sigmap()->timesig(e.context()->tick()).timesig().ticks();
         int i = e.readInt();
         if (i == 0) {
             i = mticks;
@@ -272,7 +273,7 @@ bool ChordRest::readProperties(XmlReader& e)
         Spanner::readSpanner(e, this, track());
     } else if (tag == "Lyrics") {
         EngravingItem* element = Factory::createLyrics(this);
-        element->setTrack(e.track());
+        element->setTrack(e.context()->track());
         element->read(e);
         add(element);
     } else if (tag == "pos") {
@@ -350,7 +351,7 @@ void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                 }
             }
         } else {
-            qDebug("ChordRest::readAddConnector(): Slur end is neither start nor end");
+            LOGD("ChordRest::readAddConnector(): Slur end is neither start nor end");
         }
     }
     break;
@@ -507,6 +508,7 @@ EngravingItem* ChordRest::drop(EditData& data)
     case ElementType::TEXT:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
+    case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::STICKING:
     case ElementType::STAFF_STATE:
@@ -526,7 +528,7 @@ EngravingItem* ChordRest::drop(EditData& data)
     }
     case ElementType::INSTRUMENT_CHANGE:
         if (part()->instruments().find(tick().ticks()) != part()->instruments().end()) {
-            qDebug() << "InstrumentChange already exists at tick = " << tick().ticks();
+            LOGD() << "InstrumentChange already exists at tick = " << tick().ticks();
             delete e;
             return 0;
         } else {
@@ -564,23 +566,23 @@ EngravingItem* ChordRest::drop(EditData& data)
     case ElementType::ACTION_ICON:
     {
         switch (toActionIcon(e)->actionType()) {
-        case ActionIconType::BEAM_START:
-            undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN);
-            break;
-        case ActionIconType::BEAM_MID:
-            undoChangeProperty(Pid::BEAM_MODE, BeamMode::MID);
+        case ActionIconType::BEAM_AUTO:
+            undoChangeProperty(Pid::BEAM_MODE, BeamMode::AUTO);
             break;
         case ActionIconType::BEAM_NONE:
             undoChangeProperty(Pid::BEAM_MODE, BeamMode::NONE);
             break;
-        case ActionIconType::BEAM_BEGIN_32:
+        case ActionIconType::BEAM_BREAK_LEFT:
+            undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN);
+            break;
+        case ActionIconType::BEAM_BREAK_INNER_8TH:
             undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN32);
             break;
-        case ActionIconType::BEAM_BEGIN_64:
+        case ActionIconType::BEAM_BREAK_INNER_16TH:
             undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN64);
             break;
-        case ActionIconType::BEAM_AUTO:
-            undoChangeProperty(Pid::BEAM_MODE, BeamMode::AUTO);
+        case ActionIconType::BEAM_JOIN:
+            undoChangeProperty(Pid::BEAM_MODE, BeamMode::MID);
             break;
         default:
             break;
@@ -609,7 +611,7 @@ EngravingItem* ChordRest::drop(EditData& data)
             score()->undoAddElement(spanner);
             return e;
         }
-        qDebug("cannot drop %s", e->typeName());
+        LOGD("cannot drop %s", e->typeName());
         delete e;
         return 0;
     }
@@ -651,61 +653,62 @@ void ChordRest::setDurationType(TDuration v)
 //   durationUserName
 //---------------------------------------------------------
 
-QString ChordRest::durationUserName() const
+String ChordRest::durationUserName() const
 {
-    QString tupletType = "";
+    String tupletType;
     if (tuplet()) {
         switch (tuplet()->ratio().numerator()) {
         case 2:
-            tupletType = QObject::tr("Duplet");
+            tupletType = mtrc("engraving", "Duplet");
             break;
         case 3:
-            tupletType = QObject::tr("Triplet");
+            tupletType = mtrc("engraving", "Triplet");
             break;
         case 4:
-            tupletType = QObject::tr("Quadruplet");
+            tupletType = mtrc("engraving", "Quadruplet");
             break;
         case 5:
-            tupletType = QObject::tr("Quintuplet");
+            tupletType = mtrc("engraving", "Quintuplet");
             break;
         case 6:
-            tupletType = QObject::tr("Sextuplet");
+            tupletType = mtrc("engraving", "Sextuplet");
             break;
         case 7:
-            tupletType = QObject::tr("Septuplet");
+            tupletType = mtrc("engraving", "Septuplet");
             break;
         case 8:
-            tupletType = QObject::tr("Octuplet");
+            tupletType = mtrc("engraving", "Octuplet");
             break;
         case 9:
-            tupletType = QObject::tr("Nonuplet");
+            tupletType = mtrc("engraving", "Nonuplet");
             break;
         default:
-            tupletType = QObject::tr("Custom tuplet");
+            //: %1 is tuplet ratio numerator (i.e. the number of notes in the tuplet)
+            tupletType = mtrc("engraving", "%1 note tuplet").arg(tuplet()->ratio().numerator());
         }
     }
-    QString dotString = "";
+    String dotString;
     if (!tupletType.isEmpty()) {
-        dotString += " ";
+        dotString += u' ';
     }
 
     switch (dots()) {
     case 1:
-        dotString += QObject::tr("Dotted %1").arg(TConv::toUserName(durationType().type())).trimmed();
+        dotString += mtrc("engraving", "Dotted %1").arg(TConv::translatedUserName(durationType().type()));
         break;
     case 2:
-        dotString += QObject::tr("Double dotted %1").arg(TConv::toUserName(durationType().type())).trimmed();
+        dotString += mtrc("engraving", "Double dotted %1").arg(TConv::translatedUserName(durationType().type()));
         break;
     case 3:
-        dotString += QObject::tr("Triple dotted %1").arg(TConv::toUserName(durationType().type())).trimmed();
+        dotString += mtrc("engraving", "Triple dotted %1").arg(TConv::translatedUserName(durationType().type()));
         break;
     case 4:
-        dotString += QObject::tr("Quadruple dotted %1").arg(TConv::toUserName(durationType().type())).trimmed();
+        dotString += mtrc("engraving", "Quadruple dotted %1").arg(TConv::translatedUserName(durationType().type()));
         break;
     default:
-        dotString += TConv::toUserName(durationType().type());
+        dotString += TConv::translatedUserName(durationType().type());
     }
-    return QString("%1%2").arg(tupletType, dotString);
+    return String(u"%1%2").arg(tupletType, dotString);
 }
 
 //---------------------------------------------------------
@@ -718,7 +721,7 @@ void ChordRest::add(EngravingItem* e)
     e->setTrack(track());
     switch (e->type()) {
     case ElementType::ARTICULATION:             // for backward compatibility
-        qDebug("ChordRest::add: unknown element %s", e->typeName());
+        LOGD("ChordRest::add: unknown element %s", e->typeName());
         break;
     case ElementType::LYRICS:
         if (e->isStyled(Pid::OFFSET)) {
@@ -728,7 +731,7 @@ void ChordRest::add(EngravingItem* e)
         e->added();
         break;
     default:
-        qFatal("ChordRest::add: unknown element %s", e->typeName());
+        ASSERT_X(u"ChordRest::add: unknown element " + String::fromAscii(e->typeName()));
         break;
     }
 }
@@ -747,12 +750,12 @@ void ChordRest::remove(EngravingItem* e)
             _lyrics.erase(i);
             e->removed();
         } else {
-            qDebug("ChordRest::remove: %s %p not found", e->typeName(), e);
+            LOGD("ChordRest::remove: %s %p not found", e->typeName(), e);
         }
     }
     break;
     default:
-        qFatal("ChordRest::remove: unknown element <%s>", e->typeName());
+        ASSERT_X(u"ChordRest::remove: unknown element " + String::fromAscii(e->typeName()));
     }
 }
 
@@ -795,16 +798,16 @@ void ChordRest::replaceBeam(Beam* newBeam)
 Slur* ChordRest::slur(const ChordRest* secondChordRest) const
 {
     if (secondChordRest == nullptr) {
-        secondChordRest = Ms::nextChordRest(const_cast<ChordRest*>(this));
+        secondChordRest = nextChordRest(const_cast<ChordRest*>(this));
     }
     int currentTick = tick().ticks();
-    Ms::Slur* result = nullptr;
+    Slur* result = nullptr;
     for (auto it : score()->spannerMap().findOverlapping(currentTick, currentTick + 1)) {
-        Ms::Spanner* spanner = it.value;
+        Spanner* spanner = it.value;
         if (!spanner->isSlur()) {
             continue;
         }
-        Ms::Slur* slur = Ms::toSlur(spanner);
+        Slur* slur = toSlur(spanner);
         if (slur->startElement() == this && slur->endElement() == secondChordRest) {
             if (slur->slurDirection() == DirectionV::AUTO) {
                 return slur;
@@ -828,7 +831,7 @@ void ChordRest::undoSetBeamMode(BeamMode mode)
 //   localSpatiumChanged
 //---------------------------------------------------------
 
-void ChordRest::localSpatiumChanged(qreal oldValue, qreal newValue)
+void ChordRest::localSpatiumChanged(double oldValue, double newValue)
 {
     DurationElement::localSpatiumChanged(oldValue, newValue);
     for (EngravingItem* e : lyrics()) {
@@ -1206,14 +1209,14 @@ EngravingItem* ChordRest::prevSegmentElement()
     return segment()->lastInPrevSegments(staffIdx());
 }
 
-QString ChordRest::accessibleExtraInfo() const
+String ChordRest::accessibleExtraInfo() const
 {
-    QString rez = "";
+    String rez;
     for (EngravingItem* l : lyrics()) {
         if (!score()->selectionFilter().canSelect(l)) {
             continue;
         }
-        rez = QString("%1 %2").arg(rez, l->screenReaderInfo());
+        rez = String(u"%1 %2").arg(rez, l->screenReaderInfo());
     }
 
     if (segment()) {
@@ -1222,7 +1225,7 @@ QString ChordRest::accessibleExtraInfo() const
                 continue;
             }
             if (e->track() == track()) {
-                rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
+                rez = String(u"%1 %2").arg(rez, e->screenReaderInfo());
             }
         }
 
@@ -1240,20 +1243,20 @@ QString ChordRest::accessibleExtraInfo() const
 
             if (s->type() == ElementType::SLUR) {
                 if (s->tick() == tick() && s->track() == track()) {
-                    rez = QObject::tr("%1 Start of %2").arg(rez, s->screenReaderInfo());
+                    rez += u" " + mtrc("engraving", "Start of %1").arg(s->screenReaderInfo());
                 }
                 if (s->tick2() == tick() && s->track2() == track()) {
-                    rez = QObject::tr("%1 End of %2").arg(rez, s->screenReaderInfo());
+                    rez += u" " + mtrc("engraving", "End of %1").arg(s->screenReaderInfo());
                 }
             } else if (s->staffIdx() == staffIdx()) {
                 bool start = s->tick() == tick();
                 bool end   = s->tick2() == tick() + ticks();
                 if (start && end) {
-                    rez = QObject::tr("%1 Start and end of %2").arg(rez, s->screenReaderInfo());
+                    rez += u" " + mtrc("engraving", "Start and end of %1").arg(s->screenReaderInfo());
                 } else if (start) {
-                    rez = QObject::tr("%1 Start of %2").arg(rez, s->screenReaderInfo());
+                    rez += u" " + mtrc("engraving", "Start of %1").arg(s->screenReaderInfo());
                 } else if (end) {
-                    rez = QObject::tr("%1 End of %2").arg(rez, s->screenReaderInfo());
+                    rez += u" " + mtrc("engraving", "End of %1").arg(s->screenReaderInfo());
                 }
             }
         }
@@ -1292,21 +1295,21 @@ Shape ChordRest::shape() const
 {
     Shape shape;
     {
-        qreal x1 = 1000000.0;
-        qreal x2 = -1000000.0;
+        double x1 = 1000000.0;
+        double x2 = -1000000.0;
         for (Lyrics* l : _lyrics) {
             if (!l || !l->addToSkyline()) {
                 continue;
             }
-            qreal lmargin = score()->styleS(Sid::lyricsMinDistance).val() * spatium() * 0.5;
-            qreal rmargin = lmargin;
+            double lmargin = score()->styleS(Sid::lyricsMinDistance).val() * spatium() * 0.5;
+            double rmargin = lmargin;
             Lyrics::Syllabic syl = l->syllabic();
             if ((syl == Lyrics::Syllabic::BEGIN || syl == Lyrics::Syllabic::MIDDLE) && score()->styleB(Sid::lyricsDashForce)) {
-                rmargin = qMax(rmargin, styleP(Sid::lyricsDashMinLength));
+                rmargin = std::max(rmargin, styleP(Sid::lyricsDashMinLength));
             }
             // for horizontal spacing we only need the lyrics width:
-            x1 = qMin(x1, l->bbox().x() - lmargin + l->pos().x());
-            x2 = qMax(x2, l->bbox().x() + l->bbox().width() + rmargin + l->pos().x());
+            x1 = std::min(x1, l->bbox().x() - lmargin + l->pos().x());
+            x2 = std::max(x2, l->bbox().x() + l->bbox().width() + rmargin + l->pos().x());
             if (l->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS)) {
                 x2 += spatium();
             }
@@ -1315,8 +1318,8 @@ Shape ChordRest::shape() const
     }
 
     {
-        qreal x1 = 1000000.0;
-        qreal x2 = -1000000.0;
+        double x1 = 1000000.0;
+        double x2 = -1000000.0;
         for (EngravingItem* e : segment()->annotations()) {
             if (!e || !e->addToSkyline()) {
                 continue;
@@ -1325,16 +1328,16 @@ Shape ChordRest::shape() const
                 Harmony* h = toHarmony(e);
                 // calculate bbox only (do not reset position)
                 h->layout1();
-                const qreal margin = styleP(Sid::minHarmonyDistance) * 0.5;
-                x1 = qMin(x1, e->bbox().x() - margin + e->pos().x());
-                x2 = qMax(x2, e->bbox().x() + e->bbox().width() + margin + e->pos().x());
+                const double margin = styleP(Sid::minHarmonyDistance) * 0.5;
+                x1 = std::min(x1, e->bbox().x() - margin + e->pos().x());
+                x2 = std::max(x2, e->bbox().x() + e->bbox().width() + margin + e->pos().x());
                 shape.addHorizontalSpacing(e, x1, x2);
             }
         }
     }
 
     if (isMelismaEnd()) {
-        qreal right = rightEdge();
+        double right = rightEdge();
         shape.addHorizontalSpacing(nullptr, right, right);
     }
 
@@ -1384,9 +1387,9 @@ int ChordRest::lastVerse(PlacementV p) const
 
 void ChordRest::removeMarkings(bool /* keepTremolo */)
 {
-    qDeleteAll(el());
+    DeleteAll(el());
     el().clear();
-    qDeleteAll(lyrics());
+    DeleteAll(lyrics());
     lyrics().clear();
 }
 

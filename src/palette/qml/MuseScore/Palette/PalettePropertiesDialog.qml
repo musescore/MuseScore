@@ -82,7 +82,7 @@ StyledDialogView {
                 model: [
                     { title: qsTrc("palette", "Width"), value: propertiesModel.cellWidth, incrementStep: 1 },
                     { title: qsTrc("palette", "Height"), value: propertiesModel.cellHeight, incrementStep: 1 },
-                    { title: qsTrc("palette", "Element offset"), value: propertiesModel.elementOffset, measureUnit: qsTrc("palette", "sp"), incrementStep: 0.1 },
+                    { title: qsTrc("palette", "Element offset"), value: propertiesModel.elementOffset, measureUnit: qsTrc("global", "sp"), incrementStep: 0.1 },
                     { title: qsTrc("palette", "Scale"), value: propertiesModel.scaleFactor, incrementStep: 0.1 }
                 ]
 

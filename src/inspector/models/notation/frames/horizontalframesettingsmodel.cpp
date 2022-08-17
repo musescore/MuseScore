@@ -37,15 +37,15 @@ HorizontalFrameSettingsModel::HorizontalFrameSettingsModel(QObject* parent, IEle
 
 void HorizontalFrameSettingsModel::createProperties()
 {
-    m_frameWidth = buildPropertyItem(Ms::Pid::BOX_WIDTH);
-    m_leftGap= buildPropertyItem(Ms::Pid::TOP_GAP);
-    m_rightGap = buildPropertyItem(Ms::Pid::BOTTOM_GAP);
-    m_shouldDisplayKeysAndBrackets = buildPropertyItem(Ms::Pid::CREATE_SYSTEM_HEADER);
+    m_frameWidth = buildPropertyItem(mu::engraving::Pid::BOX_WIDTH);
+    m_leftGap= buildPropertyItem(mu::engraving::Pid::TOP_GAP);
+    m_rightGap = buildPropertyItem(mu::engraving::Pid::BOTTOM_GAP);
+    m_shouldDisplayKeysAndBrackets = buildPropertyItem(mu::engraving::Pid::CREATE_SYSTEM_HEADER);
 }
 
 void HorizontalFrameSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::HBOX);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::HBOX);
 }
 
 void HorizontalFrameSettingsModel::loadProperties()
@@ -62,6 +62,11 @@ void HorizontalFrameSettingsModel::resetProperties()
     m_leftGap->resetToDefault();
     m_rightGap->resetToDefault();
     m_shouldDisplayKeysAndBrackets->resetToDefault();
+}
+
+void HorizontalFrameSettingsModel::updatePropertiesOnNotationChanged()
+{
+    loadProperties();
 }
 
 PropertyItem* HorizontalFrameSettingsModel::frameWidth() const

@@ -26,13 +26,13 @@
 #include "libmscore/noteevent.h"
 #include "elements.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 class Note;
 
 //---------------------------------------------------------
 //   PlayEvent
-//    Wrapper class for internal Ms::NoteEvent
+//    Wrapper class for internal mu::engraving::NoteEvent
 //
 //   This is based on the wrapper in excerpt.h.
 ///  \since MuseScore 3.3
@@ -61,12 +61,12 @@ class PlayEvent : public QObject
     /// \cond MS_INTERNAL
 
 protected:
-    Ms::NoteEvent* ne;
+    mu::engraving::NoteEvent* ne;
     Note* parentNote;
 
 public:
 
-    PlayEvent(Ms::NoteEvent* _ne = new Ms::NoteEvent(), Note* _parent = nullptr)
+    PlayEvent(mu::engraving::NoteEvent* _ne = new mu::engraving::NoteEvent(), Note* _parent = nullptr)
         : QObject(), ne(_ne), parentNote(_parent) {}
     // Delete the NoteEvent if parentless.
     virtual ~PlayEvent()
@@ -76,7 +76,7 @@ public:
         }
     }
 
-    const Ms::NoteEvent& getNoteEvent() { return *ne; }
+    const mu::engraving::NoteEvent& getNoteEvent() { return *ne; }
     void setParentNote(Note* parent) { this->parentNote = parent; }
     Note* note() { return parentNote; }
 
@@ -93,10 +93,10 @@ public:
 //---------------------------------------------------------
 //   wrap
 ///   \cond PLUGIN_API \private \endcond
-///   \relates Ms::NoteEvent
+///   \relates mu::engraving::NoteEvent
 //---------------------------------------------------------
 
-inline PlayEvent* playEventWrap(Ms::NoteEvent* t, Note* parent)
+inline PlayEvent* playEventWrap(mu::engraving::NoteEvent* t, Note* parent)
 {
     PlayEvent* w = t ? new PlayEvent(t, parent) : nullptr;
     // All wrapper objects should belong to JavaScript code.

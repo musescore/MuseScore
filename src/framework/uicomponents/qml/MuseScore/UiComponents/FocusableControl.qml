@@ -25,8 +25,8 @@ import MuseScore.Ui 1.0
 FocusScope {
     id: root
 
-    default property alias content: contentItemContaner.data
-    property alias contentItem: contentItemContaner
+    default property alias content: contentItemContainer.data
+    property alias contentItem: contentItemContainer
     property alias background: focusRectItem
     property alias focusBorder: focusBorderItem
 
@@ -34,7 +34,7 @@ FocusScope {
 
     property alias navigation: navCtrl
 
-    signal navigationActived()
+    signal navigationActivated()
     signal navigationTriggered()
 
     function ensureActiveFocus() {
@@ -59,7 +59,7 @@ FocusScope {
         onActiveChanged: {
             if (navCtrl.active) {
                 root.ensureActiveFocus()
-                root.navigationActived()
+                root.navigationActivated()
             }
         }
 
@@ -94,7 +94,7 @@ FocusScope {
     }
 
     Item {
-        id: contentItemContaner
+        id: contentItemContainer
         objectName: "FocusableControlContent"
         anchors.fill: focusRectItem
     }

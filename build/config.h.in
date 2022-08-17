@@ -40,7 +40,6 @@
 #cmakedefine LOGGER_DEBUGLEVEL_ENABLED
 
 #cmakedefine BUILD_SHORTCUTS_MODULE
-#cmakedefine BUILD_SYSTEM_MODULE
 #cmakedefine BUILD_NETWORK_MODULE
 #cmakedefine BUILD_AUDIO_MODULE
 #cmakedefine BUILD_LEARN_MODULE

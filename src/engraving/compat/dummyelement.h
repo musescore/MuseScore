@@ -23,20 +23,18 @@
 #define MU_ENGRAVING_DUMMYELEMENT_H
 
 #include <list>
-#include <QVariant>
 #include "libmscore/engravingitem.h"
 
-namespace Ms {
-enum class Pid : int;
-}
-
 namespace mu::engraving {
+enum class Pid : int;
+
 class RootItem;
 }
 
 namespace mu::engraving::compat {
-class DummyElement : public Ms::EngravingItem
+class DummyElement : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, DummyElement)
 public:
     DummyElement(EngravingObject* parent);
     ~DummyElement();
@@ -44,26 +42,30 @@ public:
     void init();
 
     RootItem* rootItem();
-    Ms::Page* page();
-    Ms::System* system();
-    Ms::Measure* measure();
-    Ms::Segment* segment();
-    Ms::Chord* chord();
-    Ms::Note* note();
+    Page* page();
+    System* system();
+    Measure* measure();
+    Segment* segment();
+    Chord* chord();
+    Note* note();
 
-    Ms::EngravingItem* clone() const override;
+    EngravingItem* clone() const override;
 
-    mu::engraving::PropertyValue getProperty(Ms::Pid) const override { return mu::engraving::PropertyValue(); }
-    bool setProperty(Ms::Pid, const mu::engraving::PropertyValue&) override { return false; }
+    PropertyValue getProperty(Pid) const override { return PropertyValue(); }
+    bool setProperty(Pid, const PropertyValue&) override { return false; }
 
 private:
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr createAccessible() override;
+#endif
+
     RootItem* m_root = nullptr;
-    Ms::Page* m_page = nullptr;
-    Ms::System* m_system = nullptr;
-    Ms::Measure* m_measure = nullptr;
-    Ms::Segment* m_segment = nullptr;
-    Ms::Chord* m_chord = nullptr;
-    Ms::Note* m_note = nullptr;
+    Page* m_page = nullptr;
+    System* m_system = nullptr;
+    Measure* m_measure = nullptr;
+    Segment* m_segment = nullptr;
+    Chord* m_chord = nullptr;
+    Note* m_note = nullptr;
 };
 }
 

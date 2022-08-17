@@ -112,6 +112,21 @@ Item {
             visible: palettesPanelHeader.isSearchOpened && !Boolean(palettesPanelHeader.searchText)
         }
 
+        StyledTextLabel {
+            id: notFoundHint
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.leftMargin: 8
+            Layout.rightMargin: 8
+
+            text: qsTrc("palette", "No results found")
+            verticalAlignment: Qt.AlignTop
+            wrapMode: Text.WordWrap
+
+            visible: !paletteTree.isResultFound
+        }
+
         PaletteTree {
             id: paletteTree
 

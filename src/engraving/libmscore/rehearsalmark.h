@@ -25,13 +25,14 @@
 
 #include "systemtext.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ RehearsalMark
 //---------------------------------------------------------
 
 class RehearsalMark final : public TextBase
 {
+    OBJECT_ALLOCATOR(engraving, RehearsalMark)
 public:
     enum class Type {
         Main = 0,
@@ -44,7 +45,7 @@ public:
 
     Segment* segment() const { return (Segment*)explicitParent(); }
     void layout() override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue propertyDefault(Pid id) const override;
 
     void setType(Type type);
     Type type() const { return _type; }
@@ -52,5 +53,5 @@ public:
 private:
     Type _type = Type::Main;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

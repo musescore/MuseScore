@@ -23,11 +23,11 @@ on:
         default: ''    
 
 env:
-    DEVELOPER_DIR: /Applications/Xcode_12.3.app/Contents/Developer
+    DEVELOPER_DIR: /Applications/Xcode_12.4.app/Contents/Developer
 
 jobs:
   build_mu4:    
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.9.1
@@ -80,6 +80,22 @@ jobs:
           fi
         fi
 
+        DO_UPDATE_TS='false'
+        if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
+            DO_UPDATE_TS='true'
+            if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then 
+              echo "warning: not set TRANSIFEX_API_TOKEN, update .ts disabled" 
+              DO_UPDATE_TS='false'
+            fi 
+        fi
+
+        DO_PLACEHOLDER_TRANSLATIONS='false'
+        if [[ "$DO_BUILD" == "true" ]]; then
+          if [[ "$BUILD_MODE" == "nightly_build" || "$BUILD_MODE" == "devel_build" ]]; then
+            DO_PLACEHOLDER_TRANSLATIONS='true'
+          fi
+        fi
+
         DO_UPLOAD_SYMBOLS='false'
         SENTRY_PROJECT=${{ github.event.inputs.sentry_project }}
         SENTRY_URL=""
@@ -107,6 +123,10 @@ jobs:
         echo "BUILD_MODE: $BUILD_MODE"
         echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
         echo "DO_BUILD: $DO_BUILD"
+        echo "DO_UPDATE_TS=$DO_UPDATE_TS" >> $GITHUB_ENV
+        echo "DO_UPDATE_TS: $DO_UPDATE_TS"
+        echo "DO_PLACEHOLDER_TRANSLATIONS=$DO_PLACEHOLDER_TRANSLATIONS" >> $GITHUB_ENV
+        echo "DO_PLACEHOLDER_TRANSLATIONS: $DO_PLACEHOLDER_TRANSLATIONS"
         echo "DO_NOTARIZE=$DO_NOTARIZE" >> $GITHUB_ENV
         echo "DO_NOTARIZE: $DO_NOTARIZE"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
@@ -124,6 +144,23 @@ jobs:
       if: env.DO_BUILD == 'true'
       run: |
         bash ./build/ci/macos/setup.sh  
+    - name: Generate _en.ts files
+      if: env.DO_BUILD == 'true'
+      run: |
+        bash ./build/ci/translation/run_lupdate.sh
+    - name: Update .ts files
+      if: env.DO_UPDATE_TS == 'true'
+      run: |
+        bash ./build/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s macos
+        bash ./build/ci/translation/tx_pull.sh
+    - name: Generate placeholder.ts files
+      if: env.DO_PLACEHOLDER_TRANSLATIONS == 'true'
+      run: |
+        python3 ./tools/translations/placeholder_translations.py
+    - name: Generate .qm files
+      if: env.DO_BUILD == 'true'
+      run: |
+        bash ./build/ci/translation/run_lrelease.sh      
     - name: Build
       if: env.DO_BUILD == 'true'    
       run: |

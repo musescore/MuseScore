@@ -25,10 +25,10 @@
 
 #include <deque>
 
-#include "infrastructure/draw/color.h"
+#include "draw/types/color.h"
 #include "engravingitem.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Spanner;
 
 //---------------------------------------------------------
@@ -46,6 +46,8 @@ enum class SpannerSegmentType {
 
 class SpannerSegment : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, SpannerSegment)
+
     Spanner* _spanner;
     SpannerSegmentType _spannerSegmentType;
 
@@ -62,7 +64,7 @@ public:
     // Score Tree functions
     virtual EngravingObject* scanParent() const override;
 
-    virtual qreal mag() const override;
+    virtual double mag() const override;
     virtual Fraction tick() const override;
 
     Spanner* spanner() const { return _spanner; }
@@ -82,9 +84,9 @@ public:
 
     const mu::PointF& userOff2() const { return _offset2; }
     void setUserOff2(const mu::PointF& o) { _offset2 = o; }
-    void setUserXoffset2(qreal x) { _offset2.setX(x); }
-    qreal& rUserXoffset2() { return _offset2.rx(); }
-    qreal& rUserYoffset2() { return _offset2.ry(); }
+    void setUserXoffset2(double x) { _offset2.setX(x); }
+    double& rUserXoffset2() { return _offset2.rx(); }
+    double& rUserYoffset2() { return _offset2.ry(); }
 
     void setPos2(const mu::PointF& p) { _p2 = p; }
     //TODO: rename to spanSegPosWithUserOffset()
@@ -92,20 +94,20 @@ public:
     //TODO: rename to spanSegPos()
     const mu::PointF& ipos2() const { return _p2; }
     mu::PointF& rpos2() { return _p2; }
-    qreal& rxpos2() { return _p2.rx(); }
-    qreal& rypos2() { return _p2.ry(); }
+    double& rxpos2() { return _p2.rx(); }
+    double& rypos2() { return _p2.ry(); }
 
     bool isEditable() const override { return true; }
 
-    QByteArray mimeData(const mu::PointF& dragOffset) const override;
+    mu::ByteArray mimeData(const mu::PointF& dragOffset) const override;
 
-    void spatiumChanged(qreal ov, qreal nv) override;
+    void spatiumChanged(double ov, double nv) override;
 
-    mu::engraving::PropertyValue getProperty(Pid id) const override;
-    bool setProperty(Pid id, const mu::engraving::PropertyValue& v) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid id) const override;
+    bool setProperty(Pid id, const PropertyValue& v) override;
+    PropertyValue propertyDefault(Pid id) const override;
     virtual EngravingItem* propertyDelegate(Pid) override;
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
 
     Sid getPropertyStyle(Pid id) const override;
@@ -122,9 +124,14 @@ public:
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
     void triggerLayout() const override;
     void autoplaceSpannerSegment();
+
+private:
+    String formatBarsAndBeats() const override;
+    String formatStartBarsAndBeats(const Segment* segment) const;
+    String formatEndBarsAndBeats(const Segment* segment) const;
 };
 
 //----------------------------------------------------------------------------------
@@ -140,12 +147,11 @@ public:
 
 class Spanner : public EngravingItem
 {
-    Q_GADGET
+    OBJECT_ALLOCATOR(engraving, Spanner)
 public:
     enum class Anchor {
         SEGMENT, MEASURE, CHORD, NOTE
     };
-    Q_ENUM(Anchor);
 private:
 
     EngravingItem* _startElement = nullptr;
@@ -179,6 +185,8 @@ protected:
 
     const std::vector<SpannerSegment*> spannerSegments() const { return segments; }
 
+    void moveToSystemTopIfNeed(SpannerSegment* segment);
+
 public:
 
     ~Spanner();
@@ -187,7 +195,7 @@ public:
     virtual EngravingObject* scanParent() const override;
     virtual EngravingObjectList scanChildren() const override;
 
-    virtual qreal mag() const override;
+    virtual double mag() const override;
 
     virtual void setScore(Score* s) override;
 
@@ -244,10 +252,10 @@ public:
     virtual void removeUnmanaged();
     virtual void insertTimeUnmanaged(const Fraction& tick, const Fraction& len);
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& v) override;
-    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
-    virtual void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue& v) override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
+    virtual void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
     void computeStartElement();
     void computeEndElement();
@@ -291,5 +299,5 @@ public:
     friend class SpannerSegment;
     using EngravingObject::undoChangeProperty;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

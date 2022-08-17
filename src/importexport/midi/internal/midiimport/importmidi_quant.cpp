@@ -23,7 +23,6 @@
 
 #include <set>
 #include <deque>
-#include <QDebug>
 
 #include "libmscore/sig.h"
 #include "importmidi_fraction.h"
@@ -40,11 +39,15 @@
 #include "modularity/ioc.h"
 #include "importexport/midi/imidiconfiguration.h"
 
-namespace Ms {
+#include "log.h"
+
+using namespace mu::engraving;
+
+namespace mu::iex::midi {
 namespace Quantize {
 ReducedFraction quantValueToFraction(MidiOperations::QuantValue quantValue)
 {
-    const auto division = ReducedFraction::fromTicks(Constant::division);
+    const auto division = ReducedFraction::fromTicks(Constants::division);
     ReducedFraction fraction;
 
     switch (quantValue) {
@@ -85,7 +88,7 @@ ReducedFraction quantValueToFraction(MidiOperations::QuantValue quantValue)
 
 MidiOperations::QuantValue fractionToQuantValue(const ReducedFraction& fraction)
 {
-    const auto division = ReducedFraction::fromTicks(Constant::division);
+    const auto division = ReducedFraction::fromTicks(Constants::division);
     MidiOperations::QuantValue quantValue = MidiOperations::QuantValue::Q_4;
 
     if (fraction == division) {
@@ -107,9 +110,9 @@ MidiOperations::QuantValue fractionToQuantValue(const ReducedFraction& fraction)
     } else if (fraction == division / 256) {
         quantValue = MidiOperations::QuantValue::Q_1024;
     } else {
-        qDebug("Unknown quant fraction %d/%d in division %d/%d.",
-               fraction.numerator(), fraction.denominator(),
-               division.numerator(), division.denominator());
+        LOGD("Unknown quant fraction %d/%d in division %d/%d.",
+             fraction.numerator(), fraction.denominator(),
+             division.numerator(), division.denominator());
         quantValue = MidiOperations::QuantValue::Q_INVALID;
     }
 
@@ -119,11 +122,11 @@ MidiOperations::QuantValue fractionToQuantValue(const ReducedFraction& fraction)
 MidiOperations::QuantValue defaultQuantValueFromPreferences()
 {
     auto conf = mu::modularity::ioc()->resolve<mu::iex::midi::IMidiImportExportConfiguration>("iex_midi");
-    int ticks = conf ? conf->midiShortestNote() : (Constant::division / 4);
+    int ticks = conf ? conf->midiShortestNote() : (Constants::division / 4);
     const auto fraction = ReducedFraction::fromTicks(ticks);
     MidiOperations::QuantValue quantValue = fractionToQuantValue(fraction);
     if (quantValue == MidiOperations::QuantValue::Q_INVALID) {
-        qDebug("Unknown shortestNote value %d in preferences, defaulting to 16th.", ticks);
+        LOGD("Unknown shortestNote value %d in preferences, defaulting to 16th.", ticks);
         quantValue = MidiOperations::QuantValue::Q_16;
     }
     return quantValue;
@@ -133,7 +136,7 @@ ReducedFraction shortestQuantizedNoteInRange(
     const std::multimap<ReducedFraction, MidiChord>::const_iterator& beg,
     const std::multimap<ReducedFraction, MidiChord>::const_iterator& end)
 {
-    const auto division = ReducedFraction::fromTicks(Constant::division);
+    const auto division = ReducedFraction::fromTicks(Constants::division);
     auto minDuration = division;
     for (auto it = beg; it != end; ++it) {
         for (const auto& note: it->second.notes) {
@@ -401,7 +404,7 @@ bool isHumanPerformance(
         return false;
     }
 
-    const auto basicQuant = ReducedFraction::fromTicks(Constant::division) / 4;      // 1/16
+    const auto basicQuant = ReducedFraction::fromTicks(Constants::division) / 4;      // 1/16
     int matches = 0;
     int count = 0;
 
@@ -473,7 +476,7 @@ void setIfHumanPerformance(
         if (opers.maxVoiceCount.canRedefineDefaultLater()) {
             opers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_2);
         }
-        const double ticksPerSec = MidiTempo::findBasicTempo(tracks, true) * Constant::division;
+        const double ticksPerSec = MidiTempo::findBasicTempo(tracks, true) * Constants::division;
         MidiBeat::findBeatLocations(allChords, sigmap, ticksPerSec);          // and set time sig
     }
 }
@@ -766,8 +769,8 @@ bool areTupletChordsConsistent(const std::multimap<ReducedFraction, MidiChord>& 
             }
             if (c.isInTuplet) {
                 if (!isInTuplet && prevTupletSet && c.tuplet == prevTuplet) {
-                    qDebug() << "Inconsistent tuplets, bar (from 1):"
-                             << (c.barIndex + 1);
+                    LOGD() << "Inconsistent tuplets, bar (from 1):"
+                           << (c.barIndex + 1);
                     return false;               // there is a non-tuplet chord inside tuplet
                 }
                 isInTuplet = true;
@@ -1512,4 +1515,4 @@ void quantizeChords(
     removeUselessTupletReferences(chords);
 }
 } // namespace Quantize
-} // namespace Ms
+} // namespace mu::iex::midi

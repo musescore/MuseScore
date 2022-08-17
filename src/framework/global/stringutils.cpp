@@ -104,8 +104,8 @@ std::string mu::strings::leftJustified(const std::string& val, size_t width)
 {
     std::string str;
     str.resize(width, ' ');
-    size_t lenght = width < val.size() ? width : val.size();
-    for (size_t i = 0; i < lenght; ++i) {
+    size_t length = width < val.size() ? width : val.size();
+    for (size_t i = 0; i < length; ++i) {
         str[i] = val[i];
     }
     return str;

@@ -45,6 +45,9 @@ public:
 
     virtual MidiDeviceID midiOutputDeviceId() const = 0;
     virtual void setMidiOutputDeviceId(const MidiDeviceID& deviceId) = 0;
+
+    virtual bool useMIDI20Output() const = 0;
+    virtual void setUseMIDI20Output(bool use) = 0;
 };
 }
 

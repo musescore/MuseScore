@@ -25,7 +25,7 @@
 #include <QString>
 
 #include "modularity/imoduleexport.h"
-#include "ret.h"
+#include "types/ret.h"
 #include "io/path.h"
 
 namespace mu::languages {
@@ -36,7 +36,7 @@ class ILanguageUnpacker : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ILanguageUnpacker() = default;
 
-    virtual Ret unpack(const QString& languageCode, const QString& source, const io::path& destination) const = 0;
+    virtual Ret unpack(const QString& languageCode, const QString& source, const io::path_t& destination) const = 0;
 };
 }
 

@@ -39,6 +39,8 @@ public:
 
     bool notify(QObject* object, QEvent* event) override;
 
+    void restart() override;
+
 private:
 
     RunMode m_runMode = RunMode::Editor;

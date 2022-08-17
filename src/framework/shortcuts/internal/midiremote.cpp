@@ -21,8 +21,8 @@
  */
 #include "midiremote.h"
 
-#include "global/xmlreader.h"
-#include "global/xmlwriter.h"
+#include "global/deprecated/xmlreader.h"
+#include "global/deprecated/xmlwriter.h"
 
 #include "multiinstances/resourcelockguard.h"
 
@@ -83,7 +83,7 @@ void MidiRemote::resetMidiMappings()
     m_midiMappingsChanged.notify();
 }
 
-mu::async::Notification MidiRemote::midiMappinsChanged() const
+mu::async::Notification MidiRemote::midiMappingsChanged() const
 {
     return m_midiMappingsChanged;
 }
@@ -126,7 +126,7 @@ void MidiRemote::readMidiMappings()
 {
     mi::ReadResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
 
-    io::path midiMappingsPath = configuration()->midiMappingUserAppDataPath();
+    io::path_t midiMappingsPath = configuration()->midiMappingUserAppDataPath();
     XmlReader reader(midiMappingsPath);
 
     reader.readNextStartElement();
@@ -178,7 +178,7 @@ bool MidiRemote::writeMidiMappings(const MidiMappingList& midiMappings) const
 
     mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
 
-    io::path midiMappingsPath = configuration()->midiMappingUserAppDataPath();
+    io::path_t midiMappingsPath = configuration()->midiMappingUserAppDataPath();
     XmlWriter writer(midiMappingsPath);
 
     writer.writeStartDocument();

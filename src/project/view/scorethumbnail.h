@@ -22,21 +22,27 @@
 #ifndef MU_PROJECT_SCORETHUMBNAIL_H
 #define MU_PROJECT_SCORETHUMBNAIL_H
 
-#include <QQuickPaintedItem>
 #include <QPainter>
+#include "uicomponents/view/quickpaintedview.h"
 
 namespace mu::project {
-class ScoreThumbnail : public QQuickPaintedItem
+class ScoreThumbnail : public uicomponents::QuickPaintedView
 {
     Q_OBJECT
+
+    Q_PROPERTY(QPixmap thumbnail READ thumbnail WRITE setThumbnail NOTIFY thumbnailChanged)
 
 public:
     ScoreThumbnail(QQuickItem* parent = nullptr);
 
-    Q_INVOKABLE void setThumbnail(QVariant pixmap);
+    QPixmap thumbnail() const;
+    void setThumbnail(QPixmap pixmap);
+
+signals:
+    void thumbnailChanged();
 
 protected:
-    virtual void paint(QPainter* painter) override;
+    void paint(QPainter* painter) override;
 
 private:
     QPixmap m_thumbnail;

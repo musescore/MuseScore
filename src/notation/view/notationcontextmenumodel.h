@@ -52,9 +52,17 @@ private:
     uicomponents::MenuItemList makeSelectItems();
     uicomponents::MenuItemList makeElementItems();
     uicomponents::MenuItemList makeInsertMeasuresItems();
+    uicomponents::MenuItemList makeChangeInstrumentItems();
 
     bool isSingleSelection() const;
+    bool canSelectSimilarInRange() const;
+    bool canSelectSimilar() const;
     bool isDrumsetStaff() const;
+
+    INotationInteractionPtr interaction() const;
+    INotationSelectionPtr selection() const;
+
+    const INotationInteraction::HitElementContext& hitElementContext() const;
 };
 }
 

@@ -22,7 +22,7 @@
 
 #include "tie.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 //---------------------------------------------------------
 //   Tie::startNote
@@ -40,6 +40,6 @@ Note* Tie::endNote() { return wrap<Note>(toTie(e)->endNote()); }
 //   tieWrap
 //---------------------------------------------------------
 
-Tie* tieWrap(Ms::Tie* tie) { return wrap<Tie>(tie); }
+Tie* tieWrap(mu::engraving::Tie* tie) { return wrap<Tie>(tie); }
 }
 }

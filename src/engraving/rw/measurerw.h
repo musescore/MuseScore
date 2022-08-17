@@ -29,12 +29,11 @@ class MeasureRW
 {
 public:
 
-    static void readMeasure(Ms::Measure* measure, Ms::XmlReader& xml, ReadContext& ctx, int staffIdx);
-    static void writeMeasure(const Ms::Measure* measure, Ms::XmlWriter& xml, staff_idx_t staff, bool writeSystemElements,
-                             bool forceTimeSig);
+    static void readMeasure(Measure* measure, XmlReader& xml, ReadContext& ctx, int staffIdx);
+    static void writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t staff, bool writeSystemElements, bool forceTimeSig);
 
 private:
-    static void readVoice(Ms::Measure* measure, Ms::XmlReader& e, ReadContext& ctx, int staffIdx, bool irregular);
+    static void readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int staffIdx, bool irregular);
 };
 }
 

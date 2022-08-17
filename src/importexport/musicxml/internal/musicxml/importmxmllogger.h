@@ -27,7 +27,7 @@
 
 class QXmlStreamReader;
 
-namespace Ms {
+namespace mu::engraving {
 class MxmlLogger
 {
 public:

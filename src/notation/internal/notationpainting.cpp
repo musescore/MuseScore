@@ -24,8 +24,8 @@
 #include <QScreen>
 
 #include "engraving/libmscore/score.h"
-#include "engraving/paint/paint.h"
-#include "engraving/paint/debugpaint.h"
+#include "engraving/infrastructure/paint.h"
+#include "engraving/infrastructure/debugpaint.h"
 
 #include "notation.h"
 #include "notationinteraction.h"
@@ -42,7 +42,7 @@ NotationPainting::NotationPainting(Notation* notation)
 {
 }
 
-Ms::Score* NotationPainting::score() const
+mu::engraving::Score* NotationPainting::score() const
 {
     return m_notation->score();
 }
@@ -78,7 +78,7 @@ int NotationPainting::pageCount() const
         return 0;
     }
 
-    return score()->npages();
+    return static_cast<int>(score()->npages());
 }
 
 SizeF NotationPainting::pageSizeInch() const
@@ -90,11 +90,11 @@ SizeF NotationPainting::pageSizeInch() const
     //! NOTE If now it is not PAGE view mode,
     //! then the page sizes will differ from the standard sizes (in PAGE view mode)
     if (score()->npages() > 0) {
-        const Ms::Page* page = score()->pages().front();
-        return SizeF(page->bbox().width() / Ms::DPI, page->bbox().height() / Ms::DPI);
+        const mu::engraving::Page* page = score()->pages().front();
+        return SizeF(page->bbox().width() / mu::engraving::DPI, page->bbox().height() / mu::engraving::DPI);
     }
 
-    return SizeF(score()->styleD(Ms::Sid::pageWidth), score()->styleD(Ms::Sid::pageHeight));
+    return SizeF(score()->styleD(mu::engraving::Sid::pageWidth), score()->styleD(mu::engraving::Sid::pageHeight));
 }
 
 bool NotationPainting::isPaintPageBorder() const
@@ -119,14 +119,14 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
         return;
     }
 
-    const std::vector<Ms::Page*>& pages = score()->pages();
+    const std::vector<mu::engraving::Page*>& pages = score()->pages();
     if (pages.empty()) {
         return;
     }
 
     //! NOTE This is DPI of paint device,  ex screen, image, printer and etc.
     //! Should be set, but if not set, we will use our default DPI.
-    const int DEVICE_DPI = opt.deviceDpi > 0 ? opt.deviceDpi : Ms::DPI;
+    const int DEVICE_DPI = opt.deviceDpi > 0 ? opt.deviceDpi : mu::engraving::DPI;
 
     //! NOTE Depending on the view mode,
     //! if the view mode is PAGE, then this is one page size (ex A4),
@@ -140,13 +140,13 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
     //! to draw on others (pdf, png, printer), we need to set the viewport
     if (opt.isSetViewport) {
         painter->setViewport(RectF(0.0, 0.0, pageSize.width() * DEVICE_DPI, pageSize.height() * DEVICE_DPI));
-        painter->setWindow(RectF(0.0, 0.0, pageSize.width() * Ms::DPI, pageSize.height() * Ms::DPI));
+        painter->setWindow(RectF(0.0, 0.0, pageSize.width() * mu::engraving::DPI, pageSize.height() * mu::engraving::DPI));
     }
 
     // Setup score draw system
-    Ms::MScore::pixelRatio = Ms::DPI / DEVICE_DPI;
+    mu::engraving::MScore::pixelRatio = mu::engraving::DPI / DEVICE_DPI;
     score()->setPrinting(opt.isPrinting);
-    Ms::MScore::pdfPrinting = opt.isPrinting;
+    mu::engraving::MScore::pdfPrinting = opt.isPrinting;
 
     // Setup page counts
     int fromPage = opt.fromPage >= 0 ? opt.fromPage : 0;
@@ -155,7 +155,7 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
     for (int copy = 0; copy < opt.copyCount; ++copy) {
         bool firstPage = true;
         for (int pi = fromPage; pi <= toPage; ++pi) {
-            Ms::Page* page = pages.at(pi);
+            mu::engraving::Page* page = pages.at(pi);
 
             PointF pagePos = page->pos();
             RectF pageRect = page->bbox();
@@ -197,7 +197,7 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
             }
 
             // Draw page sheet
-            paintPageSheet(painter, pageRect, pageContentRect, page->isOdd());
+            paintPageSheet(painter, pageRect, pageContentRect, page->isOdd(), opt.printPageBackground);
 
             // Draw page elements
             painter->setClipping(true);
@@ -231,10 +231,15 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
     }
 }
 
-void NotationPainting::paintPageSheet(Painter* painter, const RectF& pageRect, const RectF& pageContentRect, bool isOdd) const
+void NotationPainting::paintPageSheet(Painter* painter, const RectF& pageRect, const RectF& pageContentRect, bool isOdd,
+                                      bool printPageBackground) const
 {
     TRACEFUNC;
     if (score()->printing()) {
+        if (!printPageBackground) {
+            return;
+        }
+
         painter->fillRect(pageRect, Color::white);
         return;
     }
@@ -279,7 +284,7 @@ void NotationPainting::paintView(Painter* painter, const RectF& frameRect, bool 
     opt.isSetViewport = false;
     opt.isMultiPage = true;
     opt.frameRect = frameRect;
-    opt.deviceDpi = uiConfiguration()->dpi();
+    opt.deviceDpi = uiConfiguration()->logicalDpi();
     opt.isPrinting = isPrinting;
     doPaint(painter, opt);
 }

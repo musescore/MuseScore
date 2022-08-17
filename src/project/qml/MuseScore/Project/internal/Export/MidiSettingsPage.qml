@@ -28,7 +28,7 @@ ExportSettingsPage {
 
     CheckBox {
         width: parent.width
-        text: qsTrc("project", "Expand repeats")
+        text: qsTrc("project/export", "Expand repeats")
 
         navigation.name: "ExpandRepeatsCheckbox"
         navigation.panel: root.navigationPanel
@@ -42,7 +42,7 @@ ExportSettingsPage {
 
     CheckBox {
         width: parent.width
-        text: qsTrc("project", "Export RPNs")
+        text: qsTrc("project/export", "Export RPNs")
 
         navigation.name: "ExportRpnsCheckbox"
         navigation.panel: root.navigationPanel
@@ -56,7 +56,7 @@ ExportSettingsPage {
 
     StyledTextLabel {
         width: parent.width
-        text: qsTrc("project", "Each selected part will be exported as a separate MIDI file.")
+        text: qsTrc("project/export", "Each selected part will be exported as a separate MIDI file.")
         horizontalAlignment: Text.AlignLeft
         wrapMode: Text.WordWrap
     }

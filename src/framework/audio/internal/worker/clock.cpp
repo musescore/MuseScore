@@ -46,6 +46,9 @@ void Clock::forward(const msecs_t nextMsecs)
 
     if (m_timeLoopStart < m_timeLoopEnd && newTime >= m_timeLoopEnd) {
         seek(m_timeLoopStart);
+
+        //!Note No matter of the time loop boundaries, the current frame still should be handled
+        setCurrentTime(m_timeLoopStart + nextMsecs);
         return;
     }
 
@@ -65,7 +68,7 @@ void Clock::setCurrentTime(msecs_t time)
     }
 
     m_currentTime = time;
-    m_timeChanged.send(m_currentTime);
+    m_timeChangedInMilliSecs.send(m_currentTime / 1000);
 }
 
 void Clock::start()
@@ -141,7 +144,7 @@ bool Clock::isRunning() const
 
 async::Channel<msecs_t> Clock::timeChanged() const
 {
-    return m_timeChanged;
+    return m_timeChangedInMilliSecs;
 }
 
 async::Notification Clock::seekOccurred() const

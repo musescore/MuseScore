@@ -24,11 +24,12 @@
 
 #include <QObject>
 #include <QQuickView>
-#include "ipopupwindow.h"
 
 #include "modularity/ioc.h"
 #include "ui/iinteractiveprovider.h"
 #include "ui/imainwindow.h"
+
+#include "ipopupwindow.h"
 
 namespace mu::uicomponents {
 class PopupWindow_QQuickView : public IPopupWindow
@@ -46,7 +47,7 @@ public:
 
     void setContent(QQuickItem* item) override;
 
-    void show(QScreen* screen, QPoint position, bool activateFocus) override;
+    void show(QScreen* screen, QRect geometry, bool activateFocus) override;
     void close() override;
     void raise() override;
     void setPosition(QPoint position) override;
@@ -68,7 +69,6 @@ public:
     void setOnHidden(const std::function<void()>& callback) override;
 
 private:
-
     bool eventFilter(QObject* watched, QEvent* event) override;
 
     void updateSize(const QSize& newSize);

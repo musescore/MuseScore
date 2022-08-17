@@ -81,7 +81,7 @@ void PluginsModule::registerUiTypes()
 {
     qmlRegisterType<PluginsModel>("MuseScore.Plugins", 1, 0, "PluginsModel");
 
-    Ms::PluginAPI::PluginAPI::registerQmlTypes();
+    mu::engraving::PluginAPI::PluginAPI::registerQmlTypes();
 
     ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(plugins_QML_IMPORT);
 }

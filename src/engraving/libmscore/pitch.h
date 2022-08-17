@@ -24,8 +24,9 @@
 #define __PITCH_H__
 
 #include <map>
+#include "global/allocator.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 ///  PitchList
 ///  List of note pitch offsets
@@ -33,10 +34,11 @@ namespace Ms {
 
 class PitchList : public std::map<int, int>
 {
+    OBJECT_ALLOCATOR(engraving, PitchList)
 public:
     PitchList() {}
     int pitchOffset(int tick) const;
     void setPitchOffset(int tick, int offset) { insert_or_assign(tick, offset); }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

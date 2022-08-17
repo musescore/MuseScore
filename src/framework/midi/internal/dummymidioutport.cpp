@@ -66,6 +66,11 @@ MidiDeviceID DummyMidiOutPort::deviceID() const
     return m_connectedDeviceID;
 }
 
+bool DummyMidiOutPort::supportsMIDI20Output() const
+{
+    return false;
+}
+
 mu::Ret DummyMidiOutPort::sendEvent(const Event& e)
 {
     if (!isConnected()) {

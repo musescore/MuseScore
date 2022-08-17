@@ -30,7 +30,6 @@
 
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
-#include "../iinteractiveprovider.h"
 
 #include "../inavigationcontroller.h"
 
@@ -41,7 +40,6 @@ class NavigationSection : public AbstractNavigation, public INavigationSection
     Q_PROPERTY(QmlType type READ type_property WRITE setType NOTIFY typeChanged)
 
     INJECT(ui, framework::IApplication, application)
-    INJECT(ui, IInteractiveProvider, interactiveProvider)
     INJECT(ui, INavigationController, navigationController)
 
 public:
@@ -84,7 +82,7 @@ public:
     void setOnActiveRequested(const OnActiveRequested& func) override;
 
     //! NOTE Can be called from QML without args
-    Q_INVOKABLE void requestActive(INavigationPanel* panel = nullptr, INavigationControl* control = nullptr,
+    Q_INVOKABLE void requestActive(INavigationPanel* panel = nullptr, INavigationControl* control = nullptr, bool enableHighlight = false,
                                    ActivationType activationType = ActivationType::None) override;
 
 public slots:

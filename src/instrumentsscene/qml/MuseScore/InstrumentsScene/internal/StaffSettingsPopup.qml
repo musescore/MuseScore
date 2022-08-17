@@ -67,7 +67,7 @@ StyledPopupView {
             text: qsTrc("instruments", "Staff type")
         }
 
-        Dropdown {
+        StyledDropdown {
             id: staffTypesDropdown
 
             width: parent.width

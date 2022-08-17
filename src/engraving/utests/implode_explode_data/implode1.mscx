@@ -28,7 +28,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">implode1</metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -80,7 +80,7 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="2">
       <Staff id="2">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -131,7 +131,7 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="3">
       <Staff id="3">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -189,7 +189,7 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="4">
       <Staff id="4">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -698,8 +698,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-8</l1>
-            <l2>-6</l2>
+            <l1>-6</l1>
+            <l2>-4</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>

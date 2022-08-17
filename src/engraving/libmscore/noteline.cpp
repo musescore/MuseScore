@@ -23,7 +23,7 @@
 #include "noteline.h"
 #include "textline.h"
 
-namespace Ms {
+namespace mu::engraving {
 NoteLine::NoteLine(EngravingItem* parent)
     : TextLineBase(ElementType::NOTELINE, parent)
 {
@@ -45,4 +45,4 @@ LineSegment* NoteLine::createLineSegment(System* parent)
     seg->setTrack(track());
     return seg;
 }
-}     // namespace Ms
+} // namespace mu::engraving

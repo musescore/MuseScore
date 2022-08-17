@@ -30,9 +30,9 @@ class ScoreComp
 {
 public:
 
-    static bool saveCompareScore(Ms::Score*, const QString& saveName, const QString& compareWithLocalPath);
-    static bool saveCompareMimeData(QByteArray mimeData, const QString& saveName, const QString& compareWithLocalPath);
-    static bool compareFiles(const QString& fullPath1, const QString& fullPath2);
+    static bool saveCompareScore(Score*, const String& saveName, const String& compareWithLocalPath);
+    static bool saveCompareMimeData(mu::ByteArray mimeData, const String& saveName, const String& compareWithLocalPath);
+    static bool compareFiles(const String& fullPath1, const String& fullPath2);
 };
 }
 

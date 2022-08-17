@@ -37,7 +37,7 @@ public:
     bool supportsUnitType(UnitType unitType) const override;
 
     Ret write(project::INotationProjectPtr project, io::Device& device, const Options& options = Options()) override;
-    Ret write(project::INotationProjectPtr project, const io::path& filePath, const Options& options = Options()) override;
+    Ret write(project::INotationProjectPtr project, const io::path_t& filePath, const Options& options = Options()) override;
 
 private:
 
@@ -51,7 +51,7 @@ private:
         float trailingSec = 3.;
     };
 
-    Ret generatePagedOriginalVideo(project::INotationProjectPtr project, const io::path& filePath, const Config& config);
+    Ret generatePagedOriginalVideo(project::INotationProjectPtr project, const io::path_t& filePath, const Config& config);
 };
 }
 

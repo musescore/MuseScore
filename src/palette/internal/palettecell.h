@@ -29,7 +29,7 @@
 #include "modularity/ioc.h"
 #include "ui/iuiactionsregister.h"
 
-namespace Ms {
+namespace mu::engraving {
 class XmlReader;
 class XmlWriter;
 }
@@ -70,7 +70,8 @@ class PaletteCell : public QObject
 
 public:
     explicit PaletteCell(QObject* parent = nullptr);
-    PaletteCell(Ms::ElementPtr e, const QString& _name, qreal _mag = 1.0, const QString& tag = "", QObject* parent = nullptr);
+    PaletteCell(mu::engraving::ElementPtr e, const QString& _name, qreal _mag = 1.0,
+                const QPointF& offset = QPointF(), const QString& tag = "", QObject* parent = nullptr);
 
     static QAccessibleInterface* accessibleInterface(QObject* object);
 
@@ -82,29 +83,28 @@ public:
     void retranslate();
     void setElementTranslated(bool translate);
 
-    void write(Ms::XmlWriter& xml) const;
-    bool read(Ms::XmlReader&);
+    void write(mu::engraving::XmlWriter& xml) const;
+    bool read(mu::engraving::XmlReader&);
     QByteArray toMimeData() const;
 
     static PaletteCellPtr fromMimeData(const QByteArray& data);
     static PaletteCellPtr fromElementMimeData(const QByteArray& data);
 
-    Ms::ElementPtr element;
-    Ms::ElementPtr untranslatedElement;
+    mu::engraving::ElementPtr element;
+    mu::engraving::ElementPtr untranslatedElement;
     QString id;
+
     QString name; // used for tool tip
     qreal mag { 1.0 };
+    double xoffset { 0.0 }; // in spatium units of "gscore"
+    double yoffset { 0.0 };
     QString tag;
 
     bool drawStaff { false };
-    double xoffset { 0.0 }; // in spatium units of "gscore"
-    double yoffset { 0.0 };
     bool readOnly { false };
-
     bool visible { true };
     bool custom { false };
     bool active { false };
-
     bool focused { false };
 
 private:

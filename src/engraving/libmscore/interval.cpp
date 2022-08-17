@@ -23,7 +23,7 @@
 #include "interval.h"
 #include "utils.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   Interval
 //---------------------------------------------------------

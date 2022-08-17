@@ -26,7 +26,7 @@ HERE="$(dirname ${BASH_SOURCE[0]})"
 SCORES_DIR="$HERE/scores"
 OUTPUT_DIR="./vtest_pngs"
 MSCORE_BIN=build.debug/install/bin/mscore
-DPI=130
+DPI=180
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in

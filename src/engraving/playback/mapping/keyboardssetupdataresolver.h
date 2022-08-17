@@ -29,9 +29,7 @@ namespace mu::engraving {
 class KeyboardsSetupDataResolver : public SetupDataResolverBase<KeyboardsSetupDataResolver>
 {
 public:
-    static bool supportsInstrument(const Ms::Instrument* instrument);
-
-    static const mpe::PlaybackSetupData& doResolve(const Ms::Instrument* instrument);
+    static const mpe::PlaybackSetupData& doResolve(const Instrument* instrument);
 };
 }
 

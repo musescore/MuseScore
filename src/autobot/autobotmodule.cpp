@@ -32,7 +32,7 @@
 #include "view/autobotscriptsmodel.h"
 #include "view/testcaserunmodel.h"
 
-#include "engraving/infrastructure/draw/painter.h"
+#include "draw/painter.h"
 #include "internal/draw/abpaintprovider.h"
 #include "internal/autobotactionscontroller.h"
 #include "internal/autobotactions.h"
@@ -116,10 +116,12 @@ void AutobotModule::onInit(const framework::IApplication::RunMode&)
     //! --- Diagnostics ---
     auto pr = modularity::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        for (const io::path& p : s_configuration->scriptsDirPaths()) {
+        for (const io::path_t& p : s_configuration->scriptsDirPaths()) {
             pr->reg("autobotScriptsPath", p);
         }
-        pr->reg("autobotTestingFilesPath", s_configuration->testingFilesDirPath());
+        for (const io::path_t& p : s_configuration->testingFilesDirPaths()) {
+            pr->reg("autobotTestingFilesPath", p);
+        }
         pr->reg("autobotDataPath", s_configuration->dataPath());
         pr->reg("autobotSavingFilesPath", s_configuration->savingFilesPath());
         pr->reg("autobotReportsPath", s_configuration->reportsPath());

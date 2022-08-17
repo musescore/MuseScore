@@ -57,7 +57,7 @@ MidiDeviceID DummyMidiInPort::deviceID() const
     return m_deviceID;
 }
 
-async::Channel<tick_t, Event> DummyMidiInPort::eventReceived() const
+async::Channel<std::vector<std::pair<tick_t, Event> > > DummyMidiInPort::eventsReceived() const
 {
     return m_eventReceived;
 }

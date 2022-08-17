@@ -24,11 +24,14 @@
 
 #include "importmidi_inner.h"
 #include "importmidi_operation.h"
-#include "engraving/compat/midi/midifile.h"
+#include "../midishared/midifile.h"
 
-namespace Ms {
-class ReducedFraction;
+namespace mu::engraving {
 class InstrumentTemplate;
+}
+
+namespace mu::iex::midi {
+class ReducedFraction;
 
 namespace MidiCharset {
 QString defaultCharset();
@@ -165,9 +168,9 @@ struct Opers
     TrackOp<int> channel = TrackOp<int>(int());
     TrackOp<std::string> staffName = TrackOp<std::string>(std::string());         // will be converted to unicode later
     TrackOp<QString> midiInstrName = TrackOp<QString>(QString());
-    TrackOp<std::vector<const InstrumentTemplate*> > msInstrList
-        = TrackOp<std::vector<const InstrumentTemplate*> >(
-              std::vector<const InstrumentTemplate*>());
+    TrackOp<std::vector<const engraving::InstrumentTemplate*> > msInstrList
+        = TrackOp<std::vector<const engraving::InstrumentTemplate*> >(
+              std::vector<const engraving::InstrumentTemplate*>());
     TrackOp<bool> isDrumTrack = TrackOp<bool>(false);
 
     // operations for all tracks
@@ -315,6 +318,6 @@ private:
 } // namespace MidiOperations
 
 extern MidiOperations::Data midiImportOperations;
-} // namespace Ms
+} // namespace mu::iex::midi
 
 #endif // IMPORTMIDI_OPERATIONS_H

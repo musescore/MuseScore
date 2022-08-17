@@ -26,17 +26,22 @@
 
 using namespace mu::vst;
 
-mu::io::paths VstConfigurationStub::userVstDirectories() const
+mu::io::paths_t VstConfigurationStub::userVstDirectories() const
 {
     return {};
 }
 
-void VstConfigurationStub::setUserVstDirectories(const io::paths&)
+void VstConfigurationStub::setUserVstDirectories(const io::paths_t&)
 {
 }
 
-mu::async::Channel<mu::io::paths> VstConfigurationStub::userVstDirectoriesChanged() const
+mu::async::Channel<mu::io::paths_t> VstConfigurationStub::userVstDirectoriesChanged() const
 {
-    static mu::async::Channel<mu::io::paths> stub;
+    static mu::async::Channel<mu::io::paths_t> stub;
     return stub;
+}
+
+mu::io::path_t VstConfigurationStub::knownPluginsDir() const
+{
+    return mu::io::path_t();
 }

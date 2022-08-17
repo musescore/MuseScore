@@ -23,15 +23,15 @@
 #ifndef __MSCORE_H__
 #define __MSCORE_H__
 
-#include <QObject>
+#include "global/types/string.h"
+#include "global/containers.h"
+#include "draw/types/color.h"
+
+#include "engraving/types/types.h"
 
 #include "config.h"
 
-#include "infrastructure/draw/color.h"
-#include "containers.h"
-#include "types/types.h"
-
-namespace Ms {
+namespace mu::engraving {
 #define MSC_VERSION     "4.00"
 static constexpr int MSCVERSION = 400;
 
@@ -101,7 +101,7 @@ inline constexpr voice_idx_t track2voice(track_idx_t track)
     return track != mu::nidx ? track % VOICES : mu::nidx;
 }
 
-inline constexpr voice_idx_t trackZeroVoice(track_idx_t track)
+inline constexpr track_idx_t trackZeroVoice(track_idx_t track)
 {
     return track != mu::nidx ? (track / VOICES) * VOICES : mu::nidx;
 }
@@ -111,12 +111,12 @@ static constexpr int MAX_TAGS = 32;
 static constexpr int MAX_HEADERS = 3;
 static constexpr int MAX_FOOTERS = 3;
 
-static constexpr qreal INCH      = 25.4;
-static constexpr qreal PPI       = 72.0; // printer points per inch
-static constexpr qreal DPI_F     = 5;
-static constexpr qreal DPI       = 72.0 * DPI_F;
-static constexpr qreal SPATIUM20 = 5.0 * (DPI / 72.0);
-static constexpr qreal DPMM      = DPI / INCH;
+static constexpr double INCH      = 25.4;
+static constexpr double PPI       = 72.0; // printer points per inch
+static constexpr double DPI_F     = 5;
+static constexpr double DPI       = 72.0 * DPI_F;
+static constexpr double SPATIUM20 = 5.0 * (DPI / 72.0);
+static constexpr double DPMM      = DPI / INCH;
 
 static constexpr int MAX_STAVES = 4;
 
@@ -133,17 +133,7 @@ static constexpr int INVALID_FRET_INDEX   = -1; // no ordinal for a fret
 // (topmost in TAB varies according to visual order and presence of bass strings)
 static constexpr int VISUAL_INVALID_STRING_INDEX = -100;
 
-using ID = uint64_t;
 static constexpr ID INVALID_ID = 0;
-
-//---------------------------------------------------------
-//   BracketType
-//    System Brackets
-//---------------------------------------------------------
-
-enum class BracketType : signed char {
-    NORMAL, BRACE, SQUARE, LINE, NO_BRACKET = -1
-};
 
 //---------------------------------------------------------
 //   TransposeDirection
@@ -170,22 +160,6 @@ enum class SelectType : char {
 };
 
 //---------------------------------------------------------
-//    AccidentalVal
-//---------------------------------------------------------
-
-enum class AccidentalVal : signed char {
-    SHARP3  = 3,
-    SHARP2  = 2,
-    SHARP   = 1,
-    NATURAL = 0,
-    FLAT    = -1,
-    FLAT2   = -2,
-    FLAT3   = -3,
-    MIN     = FLAT3,
-    MAX     = SHARP3
-};
-
-//---------------------------------------------------------
 //    KeySigNaturals (positions of naturals in key sig. changes)
 //---------------------------------------------------------
 
@@ -202,15 +176,6 @@ enum class KeySigNatural : char {
 enum class UpDownMode : char {
     CHROMATIC, OCTAVE, DIATONIC
 };
-
-//---------------------------------------------------------
-//   StaffGroup
-//---------------------------------------------------------
-
-enum class StaffGroup : char {
-    STANDARD, PERCUSSION, TAB
-};
-constexpr int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1; // out of enum to avoid compiler complains about not handled switch cases
 
 //---------------------------------------------------------
 //   MScoreError
@@ -259,28 +224,23 @@ struct MScoreError {
 
 class MScore
 {
-    Q_GADGET
-
-    static QString _globalShare;
     static int _hRaster, _vRaster;
     static bool _verticalOrientation;
 
 public:
 
     static MsError _error;
-    static std::vector<MScoreError> errorList;
 
     static void init();
     static void registerUiTypes();
 
-    static const QString& globalShare() { return _globalShare; }
-    static qreal hRaster() { return _hRaster; }
-    static qreal vRaster() { return _vRaster; }
+    static double hRaster() { return _hRaster; }
+    static double vRaster() { return _vRaster; }
     static void setHRaster(int val) { _hRaster = val; }
     static void setVRaster(int val) { _vRaster = val; }
-    static void setNudgeStep(qreal val) { nudgeStep = val; }
-    static void setNudgeStep10(qreal val) { nudgeStep10 = val; }
-    static void setNudgeStep50(qreal val) { nudgeStep50 = val; }
+    static void setNudgeStep(double val) { nudgeStep = val; }
+    static void setNudgeStep10(double val) { nudgeStep10 = val; }
+    static void setNudgeStep50(double val) { nudgeStep50 = val; }
 
     static bool verticalOrientation() { return _verticalOrientation; }
     static void setVerticalOrientation(bool val) { _verticalOrientation = val; }
@@ -292,11 +252,10 @@ public:
     static bool harmonyPlayDisableNew;
     static bool playRepeats;
     static int playbackSpeedIncrement;
-    static qreal nudgeStep;
-    static qreal nudgeStep10;
-    static qreal nudgeStep50;
+    static double nudgeStep;
+    static double nudgeStep10;
+    static double nudgeStep50;
     static int defaultPlayDuration;
-    static QString lastError;
 
 // #ifndef NDEBUG
     static bool noHorizontalStretch;
@@ -305,6 +264,7 @@ public:
 // #endif
     static bool debugMode;
     static bool testMode;
+    static bool testWriteStyleToScore;
 
     static int sampleRate;
     static int mtcType;
@@ -319,20 +279,18 @@ public:
     static bool svgPrinting;
     static double pixelRatio;
 
-    static qreal verticalPageGap;
-    static qreal horizontalPageGapEven;
-    static qreal horizontalPageGapOdd;
+    static double verticalPageGap;
+    static double horizontalPageGapEven;
+    static double horizontalPageGapOdd;
 
     static void setError(MsError e) { _error = e; }
-    static const char* errorMessage();
-    static const char* errorGroup();
 };
 
 //---------------------------------------------------------
 //   center
 //---------------------------------------------------------
 
-static constexpr qreal center(qreal x1, qreal x2)
+static constexpr double center(double x1, double x2)
 {
     return x1 + (x2 - x1) * .5;
 }
@@ -351,6 +309,6 @@ static constexpr int limit(int val, int min, int max)
     }
     return val;
 }
-} // namespace Ms
+} // namespace mu::engraving
 
 #endif

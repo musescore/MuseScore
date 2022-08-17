@@ -2361,7 +2361,7 @@ The staff-spacing attribute specifies spacing between multiple staves in tenths 
 		<xs:annotation>
 			<xs:documentation>The link-attributes group includes all the simple XLink attributes supported in the MusicXML format. It is also used to connect a MusicXML score with MusicXML parts or a MusicXML opus.</xs:documentation>
 		</xs:annotation>
-		<!--<xs:attribute ref="xmnls:xlink" fixed="http://www.w3.org/1999/xlink"/>-->
+		<!--<xs:attribute ref="xmlns:xlink" fixed="http://www.w3.org/1999/xlink"/>-->
 		<xs:attribute ref="xlink:href" use="required"/>
 		<xs:attribute ref="xlink:type" fixed="simple"/>
 		<xs:attribute ref="xlink:role"/>
@@ -4421,7 +4421,7 @@ The optional latency attribute specifies a time in milliseconds that the listeni
 
 	<xs:complexType name="note-size">
 		<xs:annotation>
-			<xs:documentation>The note-size type indicates the percentage of the regular note size to use for notes with a cue and large size as defined in the type element. The grace type is used for notes of cue size that that include a grace element. The cue type is used for all other notes with cue size, whether defined explicitly or implicitly via a cue element. The large type is used for notes of large size. The text content represent the numeric percentage. A value of 100 would be identical to the size of a regular note as defined by the music font.</xs:documentation>
+			<xs:documentation>The note-size type indicates the percentage of the regular note size to use for notes with a cue and large size as defined in the type element. The grace type is used for notes of cue size that include a grace element. The cue type is used for all other notes with cue size, whether defined explicitly or implicitly via a cue element. The large type is used for notes of large size. The text content represent the numeric percentage. A value of 100 would be identical to the size of a regular note as defined by the music font.</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="non-negative-decimal">

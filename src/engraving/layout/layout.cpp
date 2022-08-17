@@ -27,7 +27,6 @@
 #include "libmscore/score.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
-#include "libmscore/scorefont.h"
 #include "libmscore/bracket.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/box.h"
@@ -55,8 +54,10 @@
 #include "layoutbeams.h"
 #include "layouttuplets.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
-using namespace Ms;
+
 //---------------------------------------------------------
 //   CmdStateLocker
 //---------------------------------------------------------
@@ -70,7 +71,7 @@ public:
     ~CmdStateLocker() { m_score->cmdState().unlock(); }
 };
 
-Layout::Layout(Ms::Score* score)
+Layout::Layout(Score* score)
     : m_score(score)
 {
 }
@@ -82,13 +83,13 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
 
     Fraction stick(st);
     Fraction etick(et);
-    Q_ASSERT(!(stick == Fraction(-1, 1) && etick == Fraction(-1, 1)));
+    assert(!(stick == Fraction(-1, 1) && etick == Fraction(-1, 1)));
 
     if (!m_score->last() || (options.isLinearMode() && !m_score->firstMeasure())) {
-        qDebug("empty score");
-        qDeleteAll(m_score->_systems);
+        LOGD("empty score");
+        DeleteAll(m_score->_systems);
         m_score->_systems.clear();
-        qDeleteAll(m_score->pages());
+        DeleteAll(m_score->pages());
         m_score->pages().clear();
         LayoutPage::getNextPage(options, ctx);
         return;
@@ -136,7 +137,7 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
     // rest which replaces the measure range
 
     if (!m->system() && m->isMeasure() && toMeasure(m)->hasMMRest()) {
-        qDebug("  don’t start with mmrest");
+        LOGD("  don’t start with mmrest");
         m = toMeasure(m)->mmRest();
     }
 
@@ -188,7 +189,7 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
             ctx.tick = ctx.nextMeasure->tick();
         }
     } else {
-        for (System* s : qAsConst(m_score->_systems)) {
+        for (System* s : m_score->_systems) {
             for (Bracket* b : s->brackets()) {
                 if (b->selected()) {
                     bool selected = b->selected();
@@ -206,10 +207,10 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
                 toMeasure(mb)->mmRest()->moveToDummy();
             }
         }
-        qDeleteAll(m_score->_systems);
+        DeleteAll(m_score->_systems);
         m_score->_systems.clear();
 
-        qDeleteAll(m_score->pages());
+        DeleteAll(m_score->pages());
         m_score->pages().clear();
 
         ctx.nextMeasure = options.showVBox ? m_score->first() : m_score->firstMeasure();
@@ -250,7 +251,7 @@ void Layout::doLayout(const LayoutOptions& options, LayoutContext& lc)
 
     if (!lc.curSystem) {
         // The end of the score. The remaining systems are not needed...
-        qDeleteAll(lc.systemList);
+        DeleteAll(lc.systemList);
         lc.systemList.clear();
         // ...and the remaining pages too
         while (lc.score()->npages() > lc.curPage) {
@@ -290,17 +291,17 @@ void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutCo
 {
     Page* page = 0;
     if (layoutAll) {
-        for (System* s : qAsConst(m_score->_systems)) {
+        for (System* s : m_score->_systems) {
             for (SpannerSegment* ss : s->spannerSegments()) {
                 ss->resetExplicitParent();
             }
         }
-        qDeleteAll(m_score->_systems);
+        DeleteAll(m_score->_systems);
         m_score->_systems.clear();
-        qDeleteAll(m_score->pages());
+        DeleteAll(m_score->pages());
         m_score->pages().clear();
         if (!m_score->firstMeasure()) {
-            qDebug("no measures");
+            LOGD("no measures");
             return;
         }
 
@@ -355,12 +356,15 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ct
     ctx.tick = Fraction(0, 1);
     LayoutMeasure::getNextMeasure(options, ctx);
 
-    static constexpr Fraction minTicks = Fraction(1, 16); // In continuous view, we cannot look fot the shortest note
+    static constexpr Fraction minTicks = Fraction(1, 16);
+    static constexpr Fraction maxTicks = Fraction(4, 4);
+    // CAUTION: In continuous view, we cannot look fot the shortest (or longest) note
     // of the system (as we do in page view), because the whole music is a single big system. Therefore,
-    // we simply assume a shortest note of 1/16. This ensures perfect spacing consistency.
+    // we simply assume a shortest note of 1/16 and longest of 4/4. This ensures perfect spacing consistency,
+    // even if the actual values may be be different.
 
     while (ctx.curMeasure) {
-        qreal ww = 0.0;
+        double ww = 0.0;
         if (ctx.curMeasure->isVBox() || ctx.curMeasure->isTBox()) {
             ctx.curMeasure->resetExplicitParent();
             LayoutMeasure::getNextMeasure(options, ctx);
@@ -398,7 +402,7 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ct
                     m->stretchMeasureInPracticeMode(ww);
                 } else {
                     m->createEndBarLines(false);
-                    m->computeWidth(minTicks, 1);
+                    m->computeWidth(minTicks, maxTicks, 1);
                     ww = m->width();
                     m->layoutMeasureElements();
                 }
@@ -419,7 +423,7 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ct
                             if (e) {
                                 ChordRest* cr = toChordRest(e);
                                 if (cr->beam() && cr->beam()->elements().front() == cr) {
-                                    cr->beam()->rpos() += p;
+                                    cr->beam()->movePos(p);
                                 }
                             }
                         }
@@ -523,7 +527,7 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
     // Set buffer space after the last system to avoid problems with mouse input.
     // Mouse input divides space between systems equally (see Score::searchSystem),
     // hence the choice of the value.
-    const qreal buffer = 0.5 * ctx.score()->styleS(Sid::maxSystemDistance).val() * ctx.score()->spatium();
+    const double buffer = 0.5 * ctx.score()->styleS(Sid::maxSystemDistance).val() * ctx.score()->spatium();
     ctx.page->setHeight(system->height() + system->pos().y() + buffer);
     ctx.page->invalidateBspTree();
 }

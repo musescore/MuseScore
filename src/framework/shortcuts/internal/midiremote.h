@@ -25,7 +25,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "actions/iactionsdispatcher.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #include "ishortcutsconfiguration.h"
@@ -41,7 +41,7 @@ class XmlWriter;
 namespace mu::shortcuts {
 class MidiRemote : public IMidiRemote, public async::Asyncable
 {
-    INJECT(shortcuts, system::IFileSystem, fileSystem)
+    INJECT(shortcuts, io::IFileSystem, fileSystem)
     INJECT(shortcuts, mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(shortcuts, actions::IActionsDispatcher, dispatcher)
     INJECT(shortcuts, IShortcutsConfiguration, configuration)
@@ -54,7 +54,7 @@ public:
     const MidiMappingList& midiMappings() const override;
     Ret setMidiMappings(const MidiMappingList& midiMappings) override;
     void resetMidiMappings() override;
-    async::Notification midiMappinsChanged() const override;
+    async::Notification midiMappingsChanged() const override;
 
     // Setting
     void setIsSettingMode(bool arg) override;

@@ -41,6 +41,10 @@ Row {
 
     spacing: 12
 
+    function indexOfValue(value) {
+        return comboBox.indexOfValue(value)
+    }
+
     StyledTextLabel {
         id: titleLabel
 
@@ -52,7 +56,7 @@ Row {
         maximumLineCount: 2
     }
 
-    Dropdown {
+    StyledDropdown {
         id: comboBox
 
         width: root.columnWidth

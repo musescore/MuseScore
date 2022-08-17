@@ -27,14 +27,14 @@
 #include "part.h"
 #include "staff.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   ChannelActions
 //---------------------------------------------------------
 
 struct ChannelActions {
     int channel;
-    QStringList midiActionNames;
+    StringList midiActionNames;
 };
 
 //---------------------------------------------------------
@@ -43,7 +43,9 @@ struct ChannelActions {
 
 class StaffTextBase : public TextBase
 {
-    QString _channelNames[4];
+    OBJECT_ALLOCATOR(engraving, StaffTextBase)
+
+    String _channelNames[4];
     std::vector<ChannelActions> _channelActions;
     SwingParameters _swingParameters;
     bool _setAeolusStops { false };
@@ -59,8 +61,8 @@ public:
     virtual bool readProperties(XmlReader&) override;
 
     Segment* segment() const;
-    QString channelName(int voice) const { return _channelNames[voice]; }
-    void setChannelName(int v, const QString& s) { _channelNames[v] = s; }
+    String channelName(voice_idx_t voice) const { return _channelNames[voice]; }
+    void setChannelName(voice_idx_t v, const String& s) { _channelNames[v] = s; }
     void setSwingParameters(int unit, int ratio)
     {
         _swingParameters.swingUnit = unit;
@@ -80,5 +82,5 @@ public:
     bool swing() const { return _swing; }
     int capo() const { return _capo; }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

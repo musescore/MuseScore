@@ -45,8 +45,8 @@ void StaffSettingsModel::load(const QString& staffId)
     m_type = staff->staffType()->type();
 
     m_voicesVisibility.clear();
-    for (const QVariant& voice: staff->visibilityVoices()) {
-        m_voicesVisibility << voice.toBool();
+    for (const bool& voice : staff->visibilityVoices()) {
+        m_voicesVisibility << voice;
     }
 
     emit cutawayEnabledChanged();
@@ -97,17 +97,17 @@ QVariantList StaffSettingsModel::allStaffTypes() const
         isPercussion = instrument->useDrumset();
     }
 
-    auto isTypeAllowed = [maxLines, isPercussion](const Ms::StaffType& type) {
+    auto isTypeAllowed = [maxLines, isPercussion](const mu::engraving::StaffType& type) {
         switch (type.group()) {
-        case Ms::StaffGroup::PERCUSSION: return isPercussion;
-        case Ms::StaffGroup::TAB: return type.lines() <= maxLines;
-        case Ms::StaffGroup::STANDARD: return true;
+        case mu::engraving::StaffGroup::PERCUSSION: return isPercussion;
+        case mu::engraving::StaffGroup::TAB: return type.lines() <= maxLines;
+        case mu::engraving::StaffGroup::STANDARD: return true;
         }
 
         return false;
     };
 
-    for (const Ms::StaffType& type : Ms::StaffType::presets()) {
+    for (const mu::engraving::StaffType& type : mu::engraving::StaffType::presets()) {
         if (isTypeAllowed(type)) {
             QVariantMap obj;
 
@@ -133,7 +133,7 @@ int StaffSettingsModel::staffType() const
 
 void StaffSettingsModel::setStaffType(int type)
 {
-    auto type_ = static_cast<StaffType>(type);
+    auto type_ = static_cast<StaffTypeId>(type);
 
     if (m_type == type_ || !notationParts()) {
         return;
@@ -214,7 +214,10 @@ void StaffSettingsModel::createLinkedStaff()
     }
 
     Staff* linkedStaff = sourceStaff->clone();
-    masterNotationParts()->appendLinkedStaff(linkedStaff, sourceStaff->id(), sourceStaff->part()->id());
+    if (!masterNotationParts()->appendLinkedStaff(linkedStaff, sourceStaff->id(), sourceStaff->part()->id())) {
+        linkedStaff->unlink();
+        delete linkedStaff;
+    }
 }
 
 INotationPartsPtr StaffSettingsModel::notationParts() const

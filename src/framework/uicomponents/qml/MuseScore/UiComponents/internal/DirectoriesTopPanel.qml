@@ -39,7 +39,10 @@ Item {
         name: "DirectoriesControlPanel"
         enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
-        accessible.name: qsTrc("uicomponents", "Directories control")
+
+        //: Accessibility description of the button group at the top of the "Choose Directories" dialog
+        accessible.name: qsTrc("ui", "Directories actions")
+
         onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()
@@ -51,12 +54,12 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: root.sideMargin
 
-        text: qsTrc("uicomponents", "Directories")
+        text: qsTrc("ui", "Directories")
         font: ui.theme.headerBoldFont
     }
 
     FlatButton {
-        text: qsTrc("uicomponents", "Add directory")
+        text: qsTrc("ui", "Add directory")
 
         anchors.right: deleteButton.left
         anchors.rightMargin: 8

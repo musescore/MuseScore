@@ -45,10 +45,6 @@ public:
 
 private:
     VstSynthPtr createSynth(const audio::TrackId trackId, const audio::AudioInputParams& params) const;
-
-    using SynthPair = std::pair<audio::AudioResourceId, VstSynthPtr>;
-
-    mutable std::map<audio::TrackId, SynthPair> m_synthMap;
 };
 }
 

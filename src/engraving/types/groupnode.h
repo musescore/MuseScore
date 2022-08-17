@@ -39,10 +39,4 @@ struct GroupNode {
 using GroupNodes = std::vector<GroupNode>;
 }
 
-//! NOTE compat
-namespace Ms {
-using GroupNode = mu::engraving::GroupNode;
-using GroupNodes = mu::engraving::GroupNodes;
-}
-
 #endif // MU_ENGRAVING_GROUPNODE_H

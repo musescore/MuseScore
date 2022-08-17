@@ -28,13 +28,14 @@
 
 #include "libmscore/engravingitem.h"
 
+#include "types/translatablestring.h"
 #include "actions/actiontypes.h"
 
 #include "modularity/ioc.h"
 #include "../ipaletteconfiguration.h"
 #include "iinteractive.h"
 
-namespace Ms {
+namespace mu::engraving {
 enum class ActionIconType;
 class XmlWriter;
 class XMLReader;
@@ -79,6 +80,9 @@ public:
         BagpipeEmbellishment,
         Layout,
         Beam,
+        Guitar,
+        Keyboard,
+        Pitch,
         Custom
     };
     Q_ENUM(Type)
@@ -99,9 +103,17 @@ public:
 
     Type contentType() const;
 
-    PaletteCellPtr insertElement(size_t idx, Ms::ElementPtr element, const QString& name, qreal mag = 1.0, const QString& tag = "");
-    PaletteCellPtr appendElement(Ms::ElementPtr element, const QString& name, qreal mag = 1.0, const QString& tag = "");
-    PaletteCellPtr appendActionIcon(Ms::ActionIconType type, actions::ActionCode code);
+    // TODO: Remove QString overload
+    PaletteCellPtr insertElement(size_t idx, engraving::ElementPtr element, const QString& name, qreal mag = 1.0,
+                                 const QPointF& offset = QPointF(), const QString& tag = "");
+    PaletteCellPtr insertElement(size_t idx, engraving::ElementPtr element, const TranslatableString& name, qreal mag = 1.0,
+                                 const QPointF& offset = QPointF(), const QString& tag = "");
+    // TODO: Remove QString overload
+    PaletteCellPtr appendElement(engraving::ElementPtr element, const QString& name, qreal mag = 1.0,
+                                 const QPointF& offset = QPointF(), const QString& tag = "");
+    PaletteCellPtr appendElement(engraving::ElementPtr element, const TranslatableString& name, qreal mag = 1.0,
+                                 const QPointF& offset = QPointF(), const QString& tag = "");
+    PaletteCellPtr appendActionIcon(engraving::ActionIconType type, actions::ActionCode code);
 
     bool insertCell(size_t idx, PaletteCellPtr cell);
     bool insertCells(size_t idx, std::vector<PaletteCellPtr> cells);
@@ -147,8 +159,8 @@ public:
     bool isExpanded() const { return m_isExpanded; }
     void setExpanded(bool val) { m_isExpanded = val; }
 
-    bool read(Ms::XmlReader&);
-    void write(Ms::XmlWriter&) const;
+    bool read(engraving::XmlReader&);
+    void write(engraving::XmlWriter&) const;
     static PalettePtr fromMimeData(const QByteArray& data);
     QByteArray toMimeData() const;
 

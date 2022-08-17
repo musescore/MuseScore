@@ -22,10 +22,9 @@
 #ifndef MU_NOTATION_PIANOKEYBOARDVIEW_H
 #define MU_NOTATION_PIANOKEYBOARDVIEW_H
 
-#include <QQuickPaintedItem>
-
 #include "async/asyncable.h"
 
+#include "uicomponents/view/quickpaintedview.h"
 #include "modularity/ioc.h"
 #include "inotationconfiguration.h"
 #include "ui/iuiconfiguration.h"
@@ -34,7 +33,7 @@
 
 namespace mu::notation {
 class PianoKeyboardController;
-class PianoKeyboardView : public QQuickPaintedItem, public async::Asyncable
+class PianoKeyboardView : public uicomponents::QuickPaintedView, public async::Asyncable
 {
     Q_OBJECT
 

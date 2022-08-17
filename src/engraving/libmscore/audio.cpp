@@ -25,7 +25,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   Audio
 //---------------------------------------------------------
@@ -42,7 +42,7 @@ void Audio::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "path") {
-            _path = e.readElementText();
+            _path = e.readText();
         } else {
             e.unknown();
         }
@@ -55,8 +55,8 @@ void Audio::read(XmlReader& e)
 
 void Audio::write(XmlWriter& xml) const
 {
-    xml.startObject("Audio");
+    xml.startElement("Audio");
     xml.tag("path", _path);
-    xml.endObject();
+    xml.endElement();
 }
 }

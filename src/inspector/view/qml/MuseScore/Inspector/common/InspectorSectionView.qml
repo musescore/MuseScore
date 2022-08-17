@@ -43,5 +43,5 @@ FocusScope {
         return root.navigationRowStart + row
     }
 
-    signal popupOpened(var openedPopup)
+    signal popupOpened(var openedPopup, var control)
 }

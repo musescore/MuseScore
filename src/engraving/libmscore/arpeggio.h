@@ -27,14 +27,7 @@
 
 namespace mu::engraving {
 class Factory;
-}
-
-namespace Ms {
 class Chord;
-
-enum class ArpeggioType : char {
-    NORMAL, UP, DOWN, BRACKET, UP_STRAIGHT, DOWN_STRAIGHT
-};
 
 //---------------------------------------------------------
 //   @@ Arpeggio
@@ -42,38 +35,36 @@ enum class ArpeggioType : char {
 
 class Arpeggio final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Arpeggio)
+
     ArpeggioType _arpeggioType;
-    qreal _userLen1;
-    qreal _userLen2;
-    qreal _height;
+    double _userLen1;
+    double _userLen2;
+    double _height;
     int _span;                // spanning staves
     SymIdList symbols;
     bool _playArpeggio;
 
-    qreal _stretch;
+    double _stretch;
 
-    bool _hidden = false;   // set in layout, will skip draw if true
-
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Arpeggio(Chord* parent);
 
     void symbolLine(SymId start, SymId fill);
 
-    void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+    void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
     std::vector<mu::LineF> dragAnchorLines() const override;
     std::vector<mu::LineF> gripAnchorLines(Grip) const override;
     void startEdit(EditData&) override;
 
-    qreal calcTop() const;
-    qreal calcBottom() const;
-
-    static const std::array<const char*, 6> arpeggioTypeNames;
+    double calcTop() const;
+    double calcBottom() const;
 
 private:
 
-    qreal insetTop() const;
-    qreal insetBottom() const;
-    qreal insetWidth() const;
+    double insetTop() const;
+    double insetBottom() const;
+    double insetWidth() const;
 
 public:
 
@@ -81,7 +72,7 @@ public:
 
     ArpeggioType arpeggioType() const { return _arpeggioType; }
     void setArpeggioType(ArpeggioType v) { _arpeggioType = v; }
-    QString arpeggioTypeName() const;
+    const TranslatableString& arpeggioTypeName() const;
 
     Chord* chord() const { return (Chord*)explicitParent(); }
 
@@ -100,25 +91,24 @@ public:
 
     int span() const { return _span; }
     void setSpan(int val) { _span = val; }
-    void setHeight(qreal) override;
+    void setHeight(double) override;
 
-    qreal userLen1() const { return _userLen1; }
-    qreal userLen2() const { return _userLen2; }
-    void setUserLen1(qreal v) { _userLen1 = v; }
-    void setUserLen2(qreal v) { _userLen2 = v; }
+    double userLen1() const { return _userLen1; }
+    double userLen2() const { return _userLen2; }
+    void setUserLen1(double v) { _userLen1 = v; }
+    void setUserLen2(double v) { _userLen2 = v; }
 
-    qreal insetDistance(std::vector<Accidental*>& accidentals, qreal mag_) const;
+    double insetDistance(std::vector<Accidental*>& accidentals, double mag_) const;
 
     bool playArpeggio() const { return _playArpeggio; }
     void setPlayArpeggio(bool p) { _playArpeggio = p; }
 
-    qreal Stretch() const { return _stretch; }
-    void setStretch(qreal val) { _stretch = val; }
+    double Stretch() const { return _stretch; }
+    void setStretch(double val) { _stretch = val; }
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
 
     // TODO: add a grip for moving the entire arpeggio
     bool needStartEditingAfterSelecting() const override { return true; }
@@ -127,5 +117,5 @@ public:
     Grip defaultGrip() const override { return Grip::START; }
     std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

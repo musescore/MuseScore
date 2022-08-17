@@ -28,9 +28,9 @@
 #include "mscore.h"
 #include "interval.h"
 
-#include "infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
 
-namespace Ms {
+namespace mu::engraving {
 enum class Key;
 
 //---------------------------------------------------------
@@ -57,9 +57,9 @@ extern mu::RectF handleRect(const mu::PointF& pos);
 extern int getStaff(System* system, const mu::PointF& p);
 extern int pitchKeyAdjust(int note, Key);
 extern int line2pitch(int line, ClefType clef, Key);
-extern int y2pitch(qreal y, ClefType clef, qreal spatium);
+extern int y2pitch(double y, ClefType clef, double spatium);
 extern int quantizeLen(int, int);
-extern QString pitch2string(int v);
+extern String pitch2string(int v);
 extern void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc, Interval, bool useDoubleSharpsFlats);
 extern int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats);
 
@@ -91,9 +91,10 @@ extern int relStep(int line, ClefType clef);
 extern int relStep(int pitch, int tpc, ClefType clef);
 extern int pitch2step(int pitch);
 extern int step2pitch(int step);
+int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalDiatonicSteps);
 
 extern Segment* skipTuplet(Tuplet* tuplet);
-extern SymIdList timeSigSymIdsFromString(const QString&);
+extern SymIdList timeSigSymIdsFromString(const String&);
 extern Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStretch);
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

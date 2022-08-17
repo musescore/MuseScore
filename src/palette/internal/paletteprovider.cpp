@@ -40,12 +40,12 @@
 #include "commonscene/commonscenetypes.h"
 
 #include "translation.h"
-#include "uri.h"
+#include "types/uri.h"
 
 using namespace mu::palette;
 using namespace mu::framework;
+using namespace mu::engraving;
 
-namespace Ms {
 // ========================================================
 // PaletteElementEditor
 // ========================================================
@@ -101,7 +101,7 @@ void PaletteElementEditor::onElementAdded(const ElementPtr element)
     }
 
     QVariantMap mimeData;
-    mimeData[mu::commonscene::MIME_SYMBOL_FORMAT] = element->mimeData(mu::PointF());
+    mimeData[mu::commonscene::MIME_SYMBOL_FORMAT] = element->mimeData(mu::PointF()).toQByteArray();
 
     _controller->insert(_paletteIndex, -1, mimeData, Qt::CopyAction);
 }
@@ -334,10 +334,10 @@ const
     int deleteButton = hideButton + 1;
 
     IInteractive::Result result = interactive()->question(std::string(), question, {
-            IInteractive::ButtonData(hideButton, mu::trc("palette", "Hide")),
-            IInteractive::ButtonData(deleteButton, mu::trc("palette", "Delete permanently")),
-            interactive()->buttonData(IInteractive::Button::Cancel)
-        });
+        IInteractive::ButtonData(hideButton, mu::trc("palette", "Hide")),
+        IInteractive::ButtonData(deleteButton, mu::trc("palette", "Delete permanently")),
+        interactive()->buttonData(IInteractive::Button::Cancel)
+    });
 
     RemoveAction action = RemoveAction::NoAction;
 
@@ -383,9 +383,9 @@ void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, in
                                    : mu::trc("palette", "Do you want to permanently delete these custom palette cells?");
 
             IInteractive::Result result = interactive()->question(std::string(), question, {
-                    IInteractive::Button::Yes,
-                    IInteractive::Button::No
-                });
+                IInteractive::Button::Yes,
+                IInteractive::Button::No
+            });
 
             if (result.standardButton() == IInteractive::Button::Yes) {
                 remove(removeIndices, RemoveAction::DeletePermanently);
@@ -593,10 +593,10 @@ bool UserPaletteController::applyPaletteElement(const QModelIndex& index, Qt::Ke
 
 void PaletteProvider::init()
 {
-    m_userPaletteModel = new Ms::PaletteTreeModel(std::make_shared<PaletteTree>(), this);
+    m_userPaletteModel = new PaletteTreeModel(std::make_shared<PaletteTree>(), this);
     connect(m_userPaletteModel, &PaletteTreeModel::treeChanged, this, &PaletteProvider::notifyAboutUserPaletteChanged);
 
-    m_masterPaletteModel = new Ms::PaletteTreeModel(PaletteCreator::newMasterPaletteTree());
+    m_masterPaletteModel = new PaletteTreeModel(PaletteCreator::newMasterPaletteTree());
     m_masterPaletteModel->setParent(this);
 
     m_searchFilterModel = new PaletteCellFilterProxyModel(this);
@@ -689,7 +689,7 @@ AbstractPaletteController* PaletteProvider::customElementsPaletteController()
     return m_customElementsPaletteController;
 }
 
-QModelIndex PaletteProvider::poolPaletteIndex(const QModelIndex& index, Ms::FilterPaletteTreeModel* poolPalette) const
+QModelIndex PaletteProvider::poolPaletteIndex(const QModelIndex& index, FilterPaletteTreeModel* poolPalette) const
 {
     const QModelIndex poolPaletteIndex = convertIndex(index, poolPalette);
     if (poolPaletteIndex.isValid()) {
@@ -810,8 +810,8 @@ bool PaletteProvider::removeCustomPalette(const QPersistentModelIndex& index)
 
         IInteractive::Result result
             = interactive()->question("", mu::trc("palette", "Do you want to permanently delete this custom palette?"), {
-                IInteractive::Button::Yes, IInteractive::Button::No
-            });
+            IInteractive::Button::Yes, IInteractive::Button::No
+        });
 
         if (result.standardButton() == IInteractive::Button::Yes) {
             return m_userPaletteModel->removeRow(index.row(), index.parent());
@@ -832,8 +832,8 @@ bool PaletteProvider::resetPalette(const QModelIndex& index)
     IInteractive::Result result
         = interactive()->question("", mu::trc("palette",
                                               "Do you want to restore this palette to its default state? All changes to this palette will be lost."), {
-            IInteractive::Button::No, IInteractive::Button::Yes
-        });
+        IInteractive::Button::No, IInteractive::Button::Yes
+    });
     if (result.standardButton() != IInteractive::Button::Yes) {
         return false;
     }
@@ -893,11 +893,11 @@ QString PaletteProvider::getPaletteFilename(bool open, const QString& name) cons
                  .arg(QCoreApplication::applicationName());
 #endif
     if (open) {
-        title  = mu::qtrc("palette", "Load palette");
+        title  = mu::qtrc("palette", "Load Palette");
         filter = mu::qtrc("palette", "MuseScore Palette") + " (*.mpal)";
     } else {
         title  = mu::qtrc("palette", "Save Palette");
-        filter = mu::qtrc("palette", "MuseScore palette") + " (*.mpal)";
+        filter = mu::qtrc("palette", "MuseScore Palette") + " (*.mpal)";
     }
 
     QFileInfo myPalettes(wd);
@@ -911,7 +911,7 @@ QString PaletteProvider::getPaletteFilename(bool open, const QString& name) cons
         defaultPath = myName.absoluteFilePath();
     }
 
-    mu::io::path fn;
+    mu::io::path_t fn;
     if (open) {
         fn = interactive()->selectOpeningFile(title, defaultPath, filter);
     } else {
@@ -1004,4 +1004,3 @@ bool PaletteProvider::read(XmlReader& e)
 
     return true;
 }
-} // namespace Ms

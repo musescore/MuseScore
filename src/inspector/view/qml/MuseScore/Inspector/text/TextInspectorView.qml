@@ -116,7 +116,7 @@ InspectorSectionView {
                 }
             }
 
-            DropdownPropertyView {
+            SpinBoxPropertyView {
                 id: sizeSection
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
@@ -127,23 +127,13 @@ InspectorSectionView {
                 navigationRowStart: styleSection.navigationRowEnd + 1
 
                 titleText: qsTrc("inspector", "Size")
+                measureUnitsSymbol: qsTrc("global", "pt")
                 propertyItem: root.model ? root.model.fontSize : null
 
-                model: [
-                    { text: "8",  value: 8 },
-                    { text: "9",  value: 9 },
-                    { text: "10", value: 10 },
-                    { text: "11", value: 11 },
-                    { text: "12", value: 12 },
-                    { text: "14", value: 14 },
-                    { text: "16", value: 16 },
-                    { text: "18", value: 18 },
-                    { text: "22", value: 22 },
-                    { text: "24", value: 24 },
-                    { text: "30", value: 30 },
-                    { text: "36", value: 36 },
-                    { text: "48", value: 48 }
-                ]
+                decimals: 1
+                step: 1
+                minValue: 1
+                maxValue: 99
             }
         }
 
@@ -285,8 +275,6 @@ InspectorSectionView {
             text: qsTrc("inspector", "More…")
             visible: root.model ? !root.model.isEmpty : false
 
-            notationView: root.notationView
-
             popupContent: TextSettings {
                 model: root.model
 
@@ -298,7 +286,7 @@ InspectorSectionView {
             }
 
             onPopupOpened: {
-                root.popupOpened(textAdvancedSettingsButton.popup)
+                root.popupOpened(popup, control)
             }
         }
     }

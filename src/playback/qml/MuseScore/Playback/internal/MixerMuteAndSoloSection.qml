@@ -80,7 +80,7 @@ MixerPanelSection {
                 navigation.name: "SoloButton"
                 navigation.panel: channelItem.panel
                 navigation.row: root.navigationRowStart + 1
-                navigation.accessible.name: content.accessibleName + " " + qsTrc("payback", "Solo")
+                navigation.accessible.name: content.accessibleName + " " + qsTrc("playback", "Solo")
                 navigation.onActiveChanged: {
                     if (navigation.active) {
                         root.navigateControlIndexChanged({row: navigation.row, column: navigation.column})

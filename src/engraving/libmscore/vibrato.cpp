@@ -23,7 +23,7 @@
 
 #include <cmath>
 
-#include "translation.h"
+#include "types/typesconv.h"
 #include "style/style.h"
 #include "rw/xml.h"
 
@@ -31,27 +31,17 @@
 #include "measure.h"
 #include "utils.h"
 #include "score.h"
-#include "scorefont.h"
+#include "symbolfont.h"
 #include "accidental.h"
 #include "segment.h"
 #include "staff.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
-//---------------------------------------------------------
-//   vibratoTable
-//    must be in sync with Vibrato::Type
-//---------------------------------------------------------
-
-const std::vector<VibratoTableItem> vibratoTable = {
-    { Vibrato::Type::GUITAR_VIBRATO,        "guitarVibrato",       QT_TRANSLATE_NOOP("vibratoType", "Guitar vibrato") },
-    { Vibrato::Type::GUITAR_VIBRATO_WIDE,   "guitarVibratoWide",   QT_TRANSLATE_NOOP("vibratoType", "Guitar vibrato wide") },
-    { Vibrato::Type::VIBRATO_SAWTOOTH,      "vibratoSawtooth",     QT_TRANSLATE_NOOP("vibratoType", "Vibrato sawtooth") },
-    { Vibrato::Type::VIBRATO_SAWTOOTH_WIDE, "vibratoSawtoothWide", QT_TRANSLATE_NOOP("vibratoType", "Tremolo sawtooth wide") }
-};
-
+namespace mu::engraving {
 VibratoSegment::VibratoSegment(Vibrato* sp, System* parent)
     : LineSegment(ElementType::VIBRATO_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
@@ -74,16 +64,16 @@ void VibratoSegment::draw(mu::draw::Painter* painter) const
 
 void VibratoSegment::symbolLine(SymId start, SymId fill)
 {
-    qreal x1 = 0;
-    qreal x2 = pos2().x();
-    qreal w   = x2 - x1;
-    qreal mag = magS();
-    ScoreFont* f = score()->scoreFont();
+    double x1 = 0;
+    double x2 = pos2().x();
+    double w   = x2 - x1;
+    double mag = magS();
+    SymbolFont* f = score()->symbolFont();
 
     _symbols.clear();
     _symbols.push_back(start);
-    qreal w1 = f->advance(start, mag);
-    qreal w2 = f->advance(fill, mag);
+    double w1 = f->advance(start, mag);
+    double w2 = f->advance(fill, mag);
     int n    = lrint((w - w1) / w2);
     for (int i = 0; i < n; ++i) {
         _symbols.push_back(fill);
@@ -94,17 +84,17 @@ void VibratoSegment::symbolLine(SymId start, SymId fill)
 
 void VibratoSegment::symbolLine(SymId start, SymId fill, SymId end)
 {
-    qreal x1 = 0;
-    qreal x2 = pos2().x();
-    qreal w   = x2 - x1;
-    qreal mag = magS();
-    ScoreFont* f = score()->scoreFont();
+    double x1 = 0;
+    double x2 = pos2().x();
+    double w   = x2 - x1;
+    double mag = magS();
+    SymbolFont* f = score()->symbolFont();
 
     _symbols.clear();
     _symbols.push_back(start);
-    qreal w1 = f->bbox(start, mag).width();
-    qreal w2 = f->width(fill, mag);
-    qreal w3 = f->width(end, mag);
+    double w1 = f->bbox(start, mag).width();
+    double w2 = f->width(fill, mag);
+    double w3 = f->width(end, mag);
     int n    = lrint((w - w1 - w3) / w2);
     for (int i = 0; i < n; ++i) {
         _symbols.push_back(fill);
@@ -124,21 +114,21 @@ void VibratoSegment::layout()
         setMag(staff()->staffMag(tick()));
     }
     if (spanner()->placeBelow()) {
-        rypos() = staff() ? staff()->height() : 0.0;
+        setPosY(staff() ? staff()->height() : 0.0);
     }
 
     if (isSingleType() || isBeginType()) {
         switch (vibrato()->vibratoType()) {
-        case Vibrato::Type::GUITAR_VIBRATO:
+        case VibratoType::GUITAR_VIBRATO:
             symbolLine(SymId::guitarVibratoStroke, SymId::guitarVibratoStroke);
             break;
-        case Vibrato::Type::GUITAR_VIBRATO_WIDE:
+        case VibratoType::GUITAR_VIBRATO_WIDE:
             symbolLine(SymId::guitarWideVibratoStroke, SymId::guitarWideVibratoStroke);
             break;
-        case Vibrato::Type::VIBRATO_SAWTOOTH:
+        case VibratoType::VIBRATO_SAWTOOTH:
             symbolLine(SymId::wiggleSawtooth, SymId::wiggleSawtooth);
             break;
-        case Vibrato::Type::VIBRATO_SAWTOOTH_WIDE:
+        case VibratoType::VIBRATO_SAWTOOTH_WIDE:
             symbolLine(SymId::wiggleSawtoothWide, SymId::wiggleSawtoothWide);
             break;
         }
@@ -190,7 +180,7 @@ Vibrato::Vibrato(EngravingItem* parent)
     : SLine(ElementType::VIBRATO, parent)
 {
     initElementStyle(&vibratoStyle);
-    _vibratoType = Type::GUITAR_VIBRATO;
+    _vibratoType = VibratoType::GUITAR_VIBRATO;
     setPlayArticulation(true);
 }
 
@@ -209,7 +199,7 @@ void Vibrato::layout()
         return;
     }
     if (spannerSegments().empty()) {
-        qDebug("Vibrato: no segments");
+        LOGD("Vibrato: no segments");
         return;
     }
 }
@@ -238,17 +228,17 @@ LineSegment* Vibrato::createLineSegment(System* parent)
 
 void Vibrato::write(XmlWriter& xml) const
 {
-    if (!xml.canWrite(this)) {
+    if (!xml.context()->canWrite(this)) {
         return;
     }
-    xml.startObject(this);
-    xml.tag("subtype", vibratoTypeName());
+    xml.startElement(this);
+    xml.tag("subtype", TConv::toXml(vibratoType()));
     writeProperty(xml, Pid::PLAY);
     for (const StyledProperty& spp : *styledProperties()) {
         writeProperty(xml, spp.pid);
     }
     SLine::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -260,9 +250,9 @@ void Vibrato::read(XmlReader& e)
     eraseSpannerSegments();
 
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "subtype") {
-            setVibratoType(e.readElementText());
+            setVibratoType(TConv::fromXml(e.readAsciiText(), VibratoType::GUITAR_VIBRATO));
         } else if (tag == "play") {
             setPlayArticulation(e.readBool());
         } else if (!SLine::readProperties(e)) {
@@ -272,51 +262,12 @@ void Vibrato::read(XmlReader& e)
 }
 
 //---------------------------------------------------------
-//   setVibratoType
-//---------------------------------------------------------
-
-void Vibrato::setVibratoType(const QString& s)
-{
-    for (VibratoTableItem i : vibratoTable) {
-        if (s.compare(i.name) == 0) {
-            _vibratoType = i.type;
-            return;
-        }
-    }
-    qDebug("Vibrato::setSubtype: unknown <%s>", qPrintable(s));
-}
-
-//---------------------------------------------------------
-//   type2name
-//---------------------------------------------------------
-
-QString Vibrato::type2name(Vibrato::Type t)
-{
-    for (VibratoTableItem i : vibratoTable) {
-        if (i.type == t) {
-            return i.name;
-        }
-    }
-    qDebug("unknown Vibrato subtype %d", int(t));
-    return "?";
-}
-
-//---------------------------------------------------------
 //   vibratoTypeName
 //---------------------------------------------------------
 
-QString Vibrato::vibratoTypeName() const
+String Vibrato::vibratoTypeUserName() const
 {
-    return type2name(vibratoType());
-}
-
-//---------------------------------------------------------
-//   vibratoTypeName
-//---------------------------------------------------------
-
-QString Vibrato::vibratoTypeUserName() const
-{
-    return qtrc("vibratoType", vibratoTable[static_cast<int>(vibratoType())].userName.toUtf8().constData());
+    return TConv::translatedUserName(vibratoType());
 }
 
 //---------------------------------------------------------
@@ -364,7 +315,7 @@ bool Vibrato::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::VIBRATO_TYPE:
-        setVibratoType(Type(val.toInt()));
+        setVibratoType(VibratoType(val.toInt()));
         break;
     case Pid::PLAY:
         setPlayArticulation(val.toBool());
@@ -401,22 +352,10 @@ PropertyValue Vibrato::propertyDefault(Pid propertyId) const
 }
 
 //---------------------------------------------------------
-//   propertyId
-//---------------------------------------------------------
-
-Pid Vibrato::propertyId(const QStringRef& name) const
-{
-    if (name == "subtype") {
-        return Pid::VIBRATO_TYPE;
-    }
-    return SLine::propertyId(name);
-}
-
-//---------------------------------------------------------
 //   undoSetVibratoType
 //---------------------------------------------------------
 
-void Vibrato::undoSetVibratoType(Type val)
+void Vibrato::undoSetVibratoType(VibratoType val)
 {
     undoChangeProperty(Pid::VIBRATO_TYPE, int(val));
 }
@@ -425,8 +364,8 @@ void Vibrato::undoSetVibratoType(Type val)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Vibrato::accessibleInfo() const
+String Vibrato::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), vibratoTypeUserName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), vibratoTypeUserName());
 }
 }

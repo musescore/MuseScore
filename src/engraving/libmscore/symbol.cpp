@@ -25,8 +25,8 @@
 #include "draw/fontmetrics.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
+#include "infrastructure/symbolfonts.h"
 
-#include "scorefont.h"
 #include "system.h"
 #include "staff.h"
 #include "measure.h"
@@ -34,10 +34,12 @@
 #include "score.h"
 #include "image.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   Symbol
 //---------------------------------------------------------
@@ -64,7 +66,7 @@ Symbol::Symbol(const Symbol& s)
 //   symName
 //---------------------------------------------------------
 
-QString Symbol::symName() const
+AsciiStringView Symbol::symName() const
 {
     return SymNames::nameForSymId(_sym);
 }
@@ -73,9 +75,9 @@ QString Symbol::symName() const
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Symbol::accessibleInfo() const
+String Symbol::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), SymNames::userNameForSymId(_sym));
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), String::fromUtf8(SymNames::userNameForSymId(_sym)));
 }
 
 //---------------------------------------------------------
@@ -89,7 +91,7 @@ void Symbol::layout()
     // foreach(EngravingItem* e, leafs())     done in BSymbol::layout() ?
     //      e->layout();
     setbbox(_scoreFont ? _scoreFont->bbox(_sym, magS()) : symBbox(_sym));
-    qreal w = width();
+    double w = width();
     PointF p;
     if (align() == AlignV::BOTTOM) {
         p.setY(-height());
@@ -130,13 +132,13 @@ void Symbol::draw(mu::draw::Painter* painter) const
 
 void Symbol::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     xml.tag("name", SymNames::nameForSymId(_sym));
     if (_scoreFont) {
         xml.tag("font", _scoreFont->name());
     }
     BSymbol::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -147,23 +149,23 @@ void Symbol::read(XmlReader& e)
 {
     PointF pos;
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "name") {
-            QString val(e.readElementText());
+            String val(e.readText());
             SymId symId = SymNames::symIdByName(val);
             if (val != "noSym" && symId == SymId::noSym) {
                 // if symbol name not found, fall back to user names
                 // TODO: does it make sense? user names are probably localized
                 symId = SymNames::symIdByUserName(val);
                 if (symId == SymId::noSym) {
-                    qDebug("unknown symbol <%s>, falling back to no symbol", qPrintable(val));
+                    LOGD("unknown symbol <%s>, falling back to no symbol", muPrintable(val));
                     // set a default symbol, or layout() will crash
                     symId = SymId::noSym;
                 }
             }
             setSym(symId);
         } else if (tag == "font") {
-            _scoreFont = ScoreFont::fontByName(e.readElementText());
+            _scoreFont = SymbolFonts::fontByName(e.readText());
         } else if (tag == "Symbol") {
             Symbol* s = new Symbol(this);
             s->read(e);
@@ -234,23 +236,47 @@ FSymbol::FSymbol(const FSymbol& s)
 }
 
 //---------------------------------------------------------
+//   toString
+// FSymbol is a single code point but code points above 2^16 cannot be
+// represented by a single Char, hence we return a String instead. Char
+// and String use the UTF-16 encoding internally (like QChar, QString).
+//---------------------------------------------------------
+
+String FSymbol::toString() const
+{
+    if (_code & 0xffff0000) {
+        String s;
+        s = Char(Char::highSurrogate(_code));
+        s += Char(Char::lowSurrogate(_code));
+        return s;
+    }
+    return Char(_code);
+}
+
+//---------------------------------------------------------
+//   accessibleInfo
+// Screen readers know how to pronounce the common font symbols so we can
+// return just the character itself. Similarly, common characters should
+// be rendered correctly by Braille terminals.
+//---------------------------------------------------------
+
+String FSymbol::accessibleInfo() const
+{
+    return toString();
+}
+
+//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
 void FSymbol::draw(mu::draw::Painter* painter) const
 {
-    QString s;
+    String s;
     mu::draw::Font f(_font);
     f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
     painter->setFont(f);
-    if (_code & 0xffff0000) {
-        s = QChar(QChar::highSurrogate(_code));
-        s += QChar(QChar::lowSurrogate(_code));
-    } else {
-        s = QChar(_code);
-    }
     painter->setPen(curColor());
-    painter->drawText(PointF(0, 0), s);
+    painter->drawText(PointF(0, 0), toString());
 }
 
 //---------------------------------------------------------
@@ -259,12 +285,12 @@ void FSymbol::draw(mu::draw::Painter* painter) const
 
 void FSymbol::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     xml.tag("font",     _font.family());
     xml.tag("fontsize", _font.pointSizeF());
     xml.tag("code",     _code);
     BSymbol::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -274,9 +300,9 @@ void FSymbol::write(XmlWriter& xml) const
 void FSymbol::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "font") {
-            _font.setFamily(e.readElementText());
+            _font.setFamily(e.readText());
         } else if (tag == "fontsize") {
             _font.setPointSizeF(e.readDouble());
         } else if (tag == "code") {
@@ -294,15 +320,7 @@ void FSymbol::read(XmlReader& e)
 
 void FSymbol::layout()
 {
-    QString s;
-    if (_code & 0xffff0000) {
-        s = QChar(QChar::highSurrogate(_code));
-        s += QChar(QChar::lowSurrogate(_code));
-    } else {
-        s = QChar(_code);
-    }
-
-    setbbox(mu::draw::FontMetrics::boundingRect(_font, s));
+    setbbox(mu::draw::FontMetrics::boundingRect(_font, toString()));
 }
 
 //---------------------------------------------------------

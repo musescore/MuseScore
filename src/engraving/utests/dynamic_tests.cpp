@@ -29,9 +29,8 @@
 #include "utils/scorerw.h"
 
 using namespace mu::engraving;
-using namespace Ms;
 
-class DynamicTests : public ::testing::Test
+class Engraving_DynamicTests : public ::testing::Test
 {
 };
 
@@ -39,7 +38,7 @@ class DynamicTests : public ::testing::Test
 //    read write test
 //---------------------------------------------------------
 
-TEST_F(DynamicTests, test1)
+TEST_F(Engraving_DynamicTests, test1)
 {
     MasterScore* score = compat::ScoreAccess::createMasterScore();
 

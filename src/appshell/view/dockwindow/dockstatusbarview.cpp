@@ -24,16 +24,13 @@
 using namespace mu::dock;
 
 DockStatusBarView::DockStatusBarView(QQuickItem* parent)
-    : DockBase(parent)
+    : DockBase(DockType::StatusBar, parent)
 {
     constexpr int STATUS_BAR_HEIGHT = 28;
 
     setMinimumHeight(STATUS_BAR_HEIGHT);
     setMaximumHeight(STATUS_BAR_HEIGHT);
     setHeight(STATUS_BAR_HEIGHT);
-}
 
-DockType DockStatusBarView::type() const
-{
-    return DockType::StatusBar;
+    setFloatable(false);
 }

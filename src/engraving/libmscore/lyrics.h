@@ -26,7 +26,7 @@
 #include "line.h"
 #include "text.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   Lyrics
 //---------------------------------------------------------
@@ -35,25 +35,24 @@ class LyricsLine;
 
 class Lyrics final : public TextBase
 {
-    Q_GADGET
+    OBJECT_ALLOCATOR(engraving, Lyrics)
 public:
     enum class Syllabic : char {
         ///.\{
         SINGLE, BEGIN, END, MIDDLE
         ///\}
     };
-    Q_ENUM(Syllabic)
 
     // MELISMA FIRST UNDERSCORE:
     // used as_ticks value to mark a melisma for which only the first chord has been spanned so far
-    // and to give the user a visible feedback that the undercore has been actually entered;
+    // and to give the user a visible feedback that the underscore has been actually entered;
     // it should be cleared to 0 at some point, so that it will not be carried over
     // if the melisma is not extended beyond a single chord, but no suitable place to do this
     // has been identified yet.
     static constexpr int TEMP_MELISMA_TICKS      = 1;
 
     // WORD_MIN_DISTANCE has never been implemented
-    // static constexpr qreal  LYRICS_WORD_MIN_DISTANCE = 0.33;     // min. distance between lyrics from different words
+    // static constexpr double  LYRICS_WORD_MIN_DISTANCE = 0.33;     // min. distance between lyrics from different words
 
 private:
     Fraction _ticks;          ///< if > 0 then draw an underline to tick() + _ticks
@@ -61,12 +60,12 @@ private:
     Syllabic _syllabic;
     LyricsLine* _separator;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Lyrics(ChordRest* parent);
     Lyrics(const Lyrics&);
 
     bool isMelisma() const;
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
 protected:
     int _no;                  ///< row index
@@ -74,6 +73,8 @@ protected:
 
 public:
     ~Lyrics();
+
+    KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
 
     Lyrics* clone() const override { return new Lyrics(*this); }
     bool acceptDrop(EditData&) const override;
@@ -92,7 +93,7 @@ public:
     void read(XmlReader&) override;
     bool readProperties(XmlReader&) override;
     int subtype() const override { return _no; }
-    QString subtypeName() const override { return QObject::tr("Verse %1").arg(_no + 1); }
+    TranslatableString subtypeUserName() const override;
     void setNo(int n) { _no = n; }
     int no() const { return _no; }
     bool isEven() const { return _no % 1; }
@@ -110,11 +111,11 @@ public:
     void removeFromScore();
 
     using EngravingObject::undoChangeProperty;
-    void paste(EditData& ed, const QString& txt) override;
+    void paste(EditData& ed, const String& txt) override;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid id) const override;
 };
 
 //---------------------------------------------------------
@@ -124,6 +125,7 @@ public:
 
 class LyricsLine final : public SLine
 {
+    OBJECT_ALLOCATOR(engraving, LyricsLine)
 protected:
     Lyrics* _nextLyrics;
 
@@ -141,7 +143,7 @@ public:
     Lyrics* nextLyrics() const { return _nextLyrics; }
     bool isEndMelisma() const { return lyrics()->ticks().isNotZero(); }
     bool isDash() const { return !isEndMelisma(); }
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& v) override;
+    bool setProperty(Pid propertyId, const PropertyValue& v) override;
     SpannerSegment* layoutSystem(System*) override;
 };
 
@@ -152,9 +154,10 @@ public:
 
 class LyricsLineSegment final : public LineSegment
 {
+    OBJECT_ALLOCATOR(engraving, LyricsLineSegment)
 protected:
     int _numOfDashes = 0;
-    qreal _dashLength = 0;
+    double _dashLength = 0;
 
 public:
     LyricsLineSegment(LyricsLine*, System* parent);
@@ -166,5 +169,5 @@ public:
     LyricsLine* lyricsLine() const { return toLyricsLine(spanner()); }
     Lyrics* lyrics() const { return lyricsLine()->lyrics(); }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

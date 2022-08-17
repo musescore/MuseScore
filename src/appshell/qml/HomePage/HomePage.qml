@@ -37,6 +37,8 @@ DockPage {
     property string section: "scores"
     property string subSection: ""
 
+    property var window: null
+
     objectName: "Home"
     uri: "musescore://home"
 
@@ -72,16 +74,25 @@ DockPage {
 
     panels: [
         DockPanel {
+            id: menuPanel
+
             objectName: "homeMenu"
 
-            width: maximumWidth
-            minimumWidth: 76
-            maximumWidth: 280
+            readonly property int maxFixedWidth: 260
+            readonly property int minFixedWidth: 76
+            readonly property bool iconsOnly: root.window ? root.window.width - root.window.minimumWidth < maxFixedWidth : false
+            readonly property int currentFixedWidth: iconsOnly ? minFixedWidth : maxFixedWidth
 
-            persistent: true
+            width: currentFixedWidth
+            minimumWidth: currentFixedWidth
+            maximumWidth: currentFixedWidth
+
+            floatable: false
+            closable: false
 
             HomeMenu {
                 currentPageName: root.section
+                iconsOnly: menuPanel.iconsOnly
 
                 onSelected: function(name) {
                     root.setCurrentCentral(name)

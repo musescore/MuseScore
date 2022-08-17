@@ -1,7 +1,7 @@
 #ifndef GPAUDIOTRACK_H
 #define GPAUDIOTRACK_H
 
-namespace Ms {
+namespace mu::engraving {
 class GPAudioTrack
 {
 public:

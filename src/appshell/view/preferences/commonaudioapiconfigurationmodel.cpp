@@ -22,77 +22,79 @@
 
 #include "commonaudioapiconfigurationmodel.h"
 
+#include "audio/audiotypes.h"
+
 #include "translation.h"
 #include "log.h"
 
 using namespace mu::appshell;
+using namespace mu::audio;
 
 CommonAudioApiConfigurationModel::CommonAudioApiConfigurationModel(QObject* parent)
     : QObject(parent)
 {
 }
 
-int CommonAudioApiConfigurationModel::currentDeviceIndex() const
+void CommonAudioApiConfigurationModel::load()
 {
-    return m_currentDeviceIndex;
+    audioDriver()->availableOutputDevicesChanged().onNotify(this, [this]() {
+        emit deviceListChanged();
+    });
+
+    audioDriver()->outputDeviceChanged().onNotify(this, [this]() {
+        emit currentDeviceIdChanged();
+        emit bufferSizeChanged();
+    });
+
+    audioDriver()->outputDeviceBufferSizeChanged().onNotify(this, [this]() {
+        emit bufferSizeChanged();
+    });
 }
 
-int CommonAudioApiConfigurationModel::currentSampleRateIndex() const
+QString CommonAudioApiConfigurationModel::currentDeviceId() const
 {
-    return m_currentSampleRateIndex;
+    return QString::fromStdString(audioDriver()->outputDevice());
 }
 
-void CommonAudioApiConfigurationModel::setCurrentDeviceIndex(int index)
+QVariantList CommonAudioApiConfigurationModel::deviceList() const
 {
-    NOT_IMPLEMENTED;
+    QVariantList result;
 
-    if (index == currentDeviceIndex()) {
-        return;
-    }
+    AudioDeviceList devices = audioDriver()->availableOutputDevices();
+    for (const AudioDevice& device : devices) {
+        QVariantMap obj;
+        obj["value"] = QString::fromStdString(device.id);
+        obj["text"] = QString::fromStdString(device.name);
 
-    m_currentDeviceIndex = index;
-    emit currentDeviceIndexChanged(index);
-}
-
-void CommonAudioApiConfigurationModel::setCurrentSampleRateIndex(int index)
-{
-    NOT_IMPLEMENTED;
-
-    if (index == currentDeviceIndex()) {
-        return;
-    }
-
-    m_currentSampleRateIndex = index;
-    emit currentSampleRateIndexChanged(index);
-}
-
-QStringList CommonAudioApiConfigurationModel::deviceList() const
-{
-    QStringList devices {
-        "Built-in Output",
-        "Test device 1",
-        "Test device 2"
-    };
-
-    return devices;
-}
-
-QStringList CommonAudioApiConfigurationModel::sampleRateHzList() const
-{
-    QList<int> sampleRateList {
-        192000,
-        96000,
-        88200,
-        48000,
-        44100,
-        32000,
-        22050
-    };
-
-    QStringList result;
-    for (int sampleRate : sampleRateList) {
-        result << QString::number(sampleRate) + " " + qtrc("global", "Hz");
+        result << obj;
     }
 
     return result;
+}
+
+void CommonAudioApiConfigurationModel::deviceSelected(const QString& deviceId)
+{
+    audioConfiguration()->setAudioOutputDeviceId(deviceId.toStdString());
+}
+
+unsigned int CommonAudioApiConfigurationModel::bufferSize() const
+{
+    return audioDriver()->outputDeviceBufferSize();
+}
+
+QList<unsigned int> CommonAudioApiConfigurationModel::bufferSizeList() const
+{
+    QList<unsigned int> result;
+    std::vector<unsigned int> bufferSizes = audioDriver()->availableOutputDeviceBufferSizes();
+
+    for (unsigned int bufferSize : bufferSizes) {
+        result << bufferSize;
+    }
+
+    return result;
+}
+
+void CommonAudioApiConfigurationModel::bufferSizeSelected(const QString& bufferSizeStr)
+{
+    audioConfiguration()->setDriverBufferSize(bufferSizeStr.toInt());
 }

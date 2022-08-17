@@ -27,13 +27,16 @@
 using namespace mu::iex::audioexport;
 using namespace mu::io;
 
-mu::Ret OggWriter::write(notation::INotationPtr notation, Device& destinationDevice, const Options& options)
+mu::Ret OggWriter::write(notation::INotationPtr, QIODevice& destinationDevice, const Options&)
 {
-    UNUSED(notation)
-    UNUSED(destinationDevice)
-    UNUSED(options)
+    static const audio::SoundTrackFormat format {
+        audio::SoundTrackType::OGG,
+        static_cast<audio::sample_rate_t>(configuration()->exportSampleRate()),
+        2 /* audioChannelsNumber */,
+        128 /* bitRate */
+    };
 
-    NOT_IMPLEMENTED;
+    doWriteAndWait(destinationDevice, format);
 
-    return make_ret(Ret::Code::NotImplemented);
+    return make_ret(Ret::Code::Ok);
 }

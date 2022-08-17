@@ -39,17 +39,19 @@ ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, IElementRe
 
 void ArticulationSettingsModel::createProperties()
 {
-    m_placement = buildPropertyItem(Ms::Pid::ARTICULATION_ANCHOR);
+    m_placement = buildPropertyItem(mu::engraving::Pid::ARTICULATION_ANCHOR);
 }
 
 void ArticulationSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::ARTICULATION, [](const Ms::EngravingItem* element) -> bool {
-        IF_ASSERT_FAILED(element) {
+    m_elementList
+        = m_repository->findElementsByType(mu::engraving::ElementType::ARTICULATION, [](const mu::engraving::EngravingItem* element) -> bool {
+        IF_ASSERT_FAILED(
+            element) {
             return false;
         }
 
-        const Ms::Articulation* articulation = Ms::toArticulation(element);
+        const mu::engraving::Articulation* articulation = mu::engraving::toArticulation(element);
         IF_ASSERT_FAILED(articulation) {
             return false;
         }

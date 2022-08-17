@@ -34,6 +34,21 @@
 using namespace mu::vst;
 using namespace Steinberg;
 
+::Steinberg::uint32 PLUGIN_API AbstractVstEditorView::addRef()
+{
+    return ::Steinberg::FUnknownPrivate::atomicAdd(__funknownRefCount, 1);
+}
+
+::Steinberg::uint32 PLUGIN_API AbstractVstEditorView::release()
+{
+    if (::Steinberg::FUnknownPrivate::atomicAdd(__funknownRefCount, -1) == 0) {
+        return 0;
+    }
+    return __funknownRefCount;
+}
+
+IMPLEMENT_QUERYINTERFACE(AbstractVstEditorView, IPlugFrame, IPlugFrame::iid)
+
 AbstractVstEditorView::AbstractVstEditorView(QWidget* parent)
     : TopLevelDialog(parent)
 {
@@ -44,11 +59,13 @@ AbstractVstEditorView::AbstractVstEditorView(QWidget* parent)
 AbstractVstEditorView::~AbstractVstEditorView()
 {
     if (m_view) {
+        m_view->setFrame(nullptr);
         m_view->removed();
     }
 
     if (m_pluginPtr) {
         m_pluginPtr->loadingCompleted().resetOnNotify(this);
+        m_pluginPtr->refreshConfig();
     }
 }
 
@@ -101,7 +118,7 @@ void AbstractVstEditorView::attachView(VstPluginPtr pluginPtr)
         return;
     }
 
-    FUnknownPtr<IPlugingContentScaleHandler> scalingHandler(m_view);
+    FUnknownPtr<IPluginContentScaleHandler> scalingHandler(m_view);
     if (scalingHandler) {
         scalingHandler->setContentScaleFactor(m_scalingFactor);
     }

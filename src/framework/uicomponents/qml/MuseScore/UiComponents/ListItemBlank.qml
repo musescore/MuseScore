@@ -74,7 +74,7 @@ FocusableControl {
     }
 
     mouseArea.onPressed: {
-        ui.tooltip.hide(root)
+        ui.tooltip.hide(root, true)
     }
 
     onNavigationTriggered: root.clicked(null)

@@ -38,10 +38,10 @@ void PaletteTree::append(PalettePtr palette)
     palettes.emplace_back(palette);
 }
 
-bool PaletteTree::read(Ms::XmlReader& e)
+bool PaletteTree::read(mu::engraving::XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "Palette") {
             PalettePtr p = std::make_shared<Palette>();
             p->read(e);
@@ -54,15 +54,15 @@ bool PaletteTree::read(Ms::XmlReader& e)
     return true;
 }
 
-void PaletteTree::write(Ms::XmlWriter& xml) const
+void PaletteTree::write(mu::engraving::XmlWriter& xml) const
 {
-    xml.startObject("PaletteBox"); // for compatibility with old palettes file format
+    xml.startElement("PaletteBox"); // for compatibility with old palettes file format
 
     for (PalettePtr palette : palettes) {
         palette->write(xml);
     }
 
-    xml.endObject();
+    xml.endElement();
 }
 
 void PaletteTree::retranslate()

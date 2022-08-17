@@ -21,16 +21,16 @@
  */
 #include <gtest/gtest.h>
 
-#include "uri.h"
+#include "types/uri.h"
 
 using namespace mu;
 
-class UriTests : public ::testing::Test
+class Global_UriTests : public ::testing::Test
 {
 public:
 };
 
-TEST_F(UriTests, Uri_Parce_Valid)
+TEST_F(Global_UriTests, Uri_Parce_Valid)
 {
     //! GIVEN Valid uri as string
 
@@ -42,7 +42,7 @@ TEST_F(UriTests, Uri_Parce_Valid)
     EXPECT_EQ(uri.toString(), "musescore://some/path");
 }
 
-TEST_F(UriTests, Uri_Parce_NotValid)
+TEST_F(Global_UriTests, Uri_Parce_NotValid)
 {
     //! GIVEN Not valid uri as string
 
@@ -51,7 +51,7 @@ TEST_F(UriTests, Uri_Parce_NotValid)
     EXPECT_FALSE(uri.isValid());
 }
 
-TEST_F(UriTests, Uri_Parce_QueryAsUri)
+TEST_F(Global_UriTests, Uri_Parce_QueryAsUri)
 {
     //! GIVEN Valid uriquery as string
 
@@ -63,7 +63,7 @@ TEST_F(UriTests, Uri_Parce_QueryAsUri)
     EXPECT_EQ(uri.toString(), "musescore://some/path");
 }
 
-TEST_F(UriTests, UriQuery_Parce)
+TEST_F(Global_UriTests, UriQuery_Parce)
 {
     //! GIVEN Valid uriquery as string
 
@@ -79,7 +79,7 @@ TEST_F(UriTests, UriQuery_Parce)
     EXPECT_EQ(q.param("param2"), Val("value2"));
 }
 
-TEST_F(UriTests, UriQuery_Parce_Quoted)
+TEST_F(Global_UriTests, UriQuery_Parce_Quoted)
 {
     //! GIVEN Valid uriquery as string
 

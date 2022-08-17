@@ -212,11 +212,11 @@
       <figured-bass>
         <figure>
           <figure-number>6</figure-number>
-          <extend type="start" />
+          <extend type="start"/>
           </figure>
         <figure>
           <prefix>sharp</prefix>
-          <extend type="start" />
+          <extend type="start"/>
           </figure>
         </figured-bass>
       <note>
@@ -232,10 +232,10 @@
         </note>
       <figured-bass>
         <figure>
-          <extend type="stop" />
+          <extend type="stop"/>
           </figure>
         <figure>
-          <extend type="stop" />
+          <extend type="stop"/>
           </figure>
         </figured-bass>
       <note>
@@ -479,7 +479,7 @@
       <figured-bass>
         <figure>
           <figure-number>6</figure-number>
-          <extend type="start" />
+          <extend type="start"/>
           </figure>
         </figured-bass>
       <note>
@@ -495,7 +495,7 @@
         </note>
       <figured-bass>
         <figure>
-          <extend type="stop" />
+          <extend type="stop"/>
           </figure>
         </figured-bass>
       <note>

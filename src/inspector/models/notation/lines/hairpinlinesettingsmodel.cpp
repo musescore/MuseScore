@@ -59,13 +59,14 @@ void HairpinLineSettingsModel::createProperties()
 
 void HairpinLineSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::HAIRPIN, [](const Ms::EngravingItem* element) -> bool {
-        const Ms::Hairpin* hairpin = Ms::toHairpin(element);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::HAIRPIN, [](const mu::engraving::EngravingItem* element) -> bool {
+        const mu::engraving::Hairpin* hairpin = mu::engraving::toHairpin(
+            element);
 
         if (!hairpin) {
             return false;
         }
 
-        return hairpin->hairpinType() == Ms::HairpinType::CRESC_LINE || hairpin->hairpinType() == Ms::HairpinType::DECRESC_LINE;
+        return hairpin->hairpinType() == mu::engraving::HairpinType::CRESC_LINE || hairpin->hairpinType() == mu::engraving::HairpinType::DECRESC_LINE;
     });
 }

@@ -31,7 +31,7 @@
 #include "engravingitem.h"
 #include "layoutbreak.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class System;
 class Measure;
@@ -72,6 +72,8 @@ constexpr bool operator&(Repeat t1, Repeat t2)
 
 class MeasureBase : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, MeasureBase)
+
     MeasureBase* _next    { 0 };
     MeasureBase* _prev    { 0 };
 
@@ -80,7 +82,7 @@ class MeasureBase : public EngravingItem
     Fraction _tick         { Fraction(0, 1) };
     int _no                { 0 };         ///< Measure number, counting from zero
     int _noOffset          { 0 };         ///< Offset to measure number
-    qreal m_oldWidth       { 0 };         ///< Used to restore layout during recalculations in Score::collectSystem()
+    double m_oldWidth       { 0 };         ///< Used to restore layout during recalculations in Score::collectSystem()
 
 protected:
 
@@ -112,15 +114,16 @@ public:
     void setPrev(MeasureBase* e) { _prev = e; }
     MeasureBase* top() const;
 
-    Ms::Measure* nextMeasure() const;
-    Ms::Measure* prevMeasure() const;
-    Ms::Measure* nextMeasureMM() const;
-    Ms::Measure* prevMeasureMM() const;
+    Measure* nextMeasure() const;
+    Measure* prevMeasure() const;
+    Measure* nextMeasureMM() const;
+    Measure* prevMeasureMM() const;
 
     virtual void write(XmlWriter&) const override = 0;
     virtual void write(XmlWriter&, staff_idx_t, bool, bool) const = 0;
 
     virtual void layout() override;
+    virtual void layoutCrossStaff() {}
 
     ElementList& el() { return _el; }
     const ElementList& el() const { return _el; }
@@ -142,7 +145,7 @@ public:
     virtual bool readProperties(XmlReader&) override;
 
     Fraction tick() const override;
-    void setTick(const Fraction& f) { _tick = f; }
+    void setTick(const Fraction& f);
 
     Fraction ticks() const { return _len; }
     void setTicks(const Fraction& f) { _len = f; }
@@ -151,11 +154,11 @@ public:
 
     void triggerLayout() const override;
 
-    qreal pause() const;
+    double pause() const;
 
-    mu::engraving::PropertyValue getProperty(Pid) const override;
-    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
     void clearElements();
     ElementList takeElements();
@@ -197,8 +200,8 @@ public:
     int index() const;
     int measureIndex() const;
 
-    void setOldWidth(qreal n) { m_oldWidth = n; }
-    qreal oldWidth() const { return m_oldWidth; }
+    void setOldWidth(double n) { m_oldWidth = n; }
+    double oldWidth() const { return m_oldWidth; }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

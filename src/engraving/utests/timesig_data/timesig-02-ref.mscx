@@ -22,7 +22,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Test invalid shortening of time signature</metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -73,7 +73,7 @@
           </Text>
         <Text>
           <style>subtitle</style>
-          <text>Attempt to convert a meaure in 4/4 with three minims as a triplet into 3/4</text>
+          <text>Attempt to convert a measure in 4/4 with three minims as a triplet into 3/4</text>
           </Text>
         </VBox>
       <Measure>

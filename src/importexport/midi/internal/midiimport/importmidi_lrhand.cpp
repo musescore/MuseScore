@@ -25,7 +25,7 @@
 #include "importmidi_chord.h"
 #include "importmidi_operations.h"
 
-namespace Ms {
+namespace mu::iex::midi {
 namespace LRHand {
 bool needToSplit(const std::multimap<ReducedFraction, MidiChord>& chords,
                  int midiProgram,
@@ -80,7 +80,7 @@ struct SplitTry {
 
 struct ChordSplitData {
     std::multimap<ReducedFraction, MidiChord>::iterator chord;
-    std::vector<SplitTry> possibleSplits;      // each index correspoinds to the same note index
+    std::vector<SplitTry> possibleSplits;      // each index corresponds to the same note index
 };
 
 int findLastSplitPoint(const std::vector<ChordSplitData>& splits)
@@ -432,7 +432,7 @@ void splitIntoLeftRightHands(std::multimap<int, MTrack>& tracks)
         }
         const auto& opers = midiImportOperations.data()->trackOpers;
         // iterator 'it' will change after track split to ++it
-        // C++11 guarantees that newely inserted item with equal key will go after:
+        // C++11 guarantees that newly inserted item with equal key will go after:
         //    "The relative ordering of elements with equivalent keys is preserved,
         //     and newly inserted elements follow those with equivalent keys
         //     already in the container"
@@ -442,4 +442,4 @@ void splitIntoLeftRightHands(std::multimap<int, MTrack>& tracks)
     }
 }
 } // namespace LRHand
-} // namespace Ms
+} // namespace mu::iex::midi

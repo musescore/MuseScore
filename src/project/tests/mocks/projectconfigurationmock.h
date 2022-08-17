@@ -30,36 +30,36 @@ namespace mu::project {
 class ProjectConfigurationMock : public project::IProjectConfiguration
 {
 public:
-    MOCK_METHOD(io::paths, recentProjectPaths, (), (const, override));
-    MOCK_METHOD(void, setRecentProjectPaths, (const io::paths&), (override));
-    MOCK_METHOD(async::Channel<io::paths>, recentProjectPathsChanged, (), (const, override));
+    MOCK_METHOD(io::paths_t, recentProjectPaths, (), (const, override));
+    MOCK_METHOD(void, setRecentProjectPaths, (const io::paths_t&), (override));
+    MOCK_METHOD(async::Channel<io::paths_t>, recentProjectPathsChanged, (), (const, override));
 
-    MOCK_METHOD(io::path, myFirstProjectPath, (), (const, override));
+    MOCK_METHOD(io::path_t, myFirstProjectPath, (), (const, override));
 
-    MOCK_METHOD(io::paths, availableTemplateDirs, (), (const, override));
-    MOCK_METHOD(io::path, templateCategoriesJsonPath, (const io::path&), (const, override));
+    MOCK_METHOD(io::paths_t, availableTemplateDirs, (), (const, override));
+    MOCK_METHOD(io::path_t, templateCategoriesJsonPath, (const io::path_t&), (const, override));
 
-    MOCK_METHOD(io::path, userTemplatesPath, (), (const, override));
-    MOCK_METHOD(void, setUserTemplatesPath, (const io::path&), (override));
-    MOCK_METHOD(async::Channel<io::path>, userTemplatesPathChanged, (), (const, override));
+    MOCK_METHOD(io::path_t, userTemplatesPath, (), (const, override));
+    MOCK_METHOD(void, setUserTemplatesPath, (const io::path_t&), (override));
+    MOCK_METHOD(async::Channel<io::path_t>, userTemplatesPathChanged, (), (const, override));
 
-    MOCK_METHOD(io::path, defaultProjectsPath, (), (const, override));
-    MOCK_METHOD(void, setDefaultProjectsPath, (const io::path&), (override));
+    MOCK_METHOD(io::path_t, defaultProjectsPath, (), (const, override));
+    MOCK_METHOD(void, setDefaultProjectsPath, (const io::path_t&), (override));
 
-    MOCK_METHOD(io::path, lastOpenedProjectsPath, (), (const, override));
-    MOCK_METHOD(void, setLastOpenedProjectsPath, (const io::path&), (override));
+    MOCK_METHOD(io::path_t, lastOpenedProjectsPath, (), (const, override));
+    MOCK_METHOD(void, setLastOpenedProjectsPath, (const io::path_t&), (override));
 
-    MOCK_METHOD(io::path, lastSavedProjectsPath, (), (const, override));
-    MOCK_METHOD(void, setLastSavedProjectsPath, (const io::path&), (override));
+    MOCK_METHOD(io::path_t, lastSavedProjectsPath, (), (const, override));
+    MOCK_METHOD(void, setLastSavedProjectsPath, (const io::path_t&), (override));
 
-    MOCK_METHOD(io::path, userProjectsPath, (), (const, override));
-    MOCK_METHOD(void, setUserProjectsPath, (const io::path&), (override));
-    MOCK_METHOD(async::Channel<io::path>, userProjectsPathChanged, (), (const, override));
+    MOCK_METHOD(io::path_t, userProjectsPath, (), (const, override));
+    MOCK_METHOD(void, setUserProjectsPath, (const io::path_t&), (override));
+    MOCK_METHOD(async::Channel<io::path_t>, userProjectsPathChanged, (), (const, override));
 
-    MOCK_METHOD(io::path, cloudProjectsPath, (), (const, override));
-    MOCK_METHOD(bool, isCloudProject, (const io::path&), (const, override));
+    MOCK_METHOD(io::path_t, cloudProjectsPath, (), (const, override));
+    MOCK_METHOD(bool, isCloudProject, (const io::path_t&), (const, override));
 
-    MOCK_METHOD(io::path, defaultSavingFilePath, (INotationProjectPtr, const QString&, const QString&), (const, override));
+    MOCK_METHOD(io::path_t, defaultSavingFilePath, (INotationProjectPtr, const QString&, const QString&), (const, override));
 
     MOCK_METHOD(bool, shouldAskSaveLocationType, (), (const, override));
     MOCK_METHOD(void, setShouldAskSaveLocationType, (bool), (override));
@@ -87,7 +87,7 @@ public:
     MOCK_METHOD(void, setAutoSaveInterval, (int), (override));
     MOCK_METHOD(async::Channel<int>, autoSaveIntervalChanged, (), (const, override));
 
-    MOCK_METHOD(io::path, newProjectTemporaryPath, (), (const, override));
+    MOCK_METHOD(io::path_t, newProjectTemporaryPath, (), (const, override));
 
     MOCK_METHOD(bool, isAccessibleEnabled, (), (const, override));
 

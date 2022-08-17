@@ -41,9 +41,10 @@ struct RenderingContext {
     int nominalPositionStartTick = 0;
     int nominalPositionEndTick = 0;
     int nominalDurationTicks = 0;
+    int positionTickOffset = 0;
 
     BeatsPerSecond beatsPerSecond = 0;
-    Ms::TimeSigFrac timeSignatureFraction;
+    TimeSigFrac timeSignatureFraction;
 
     mpe::ArticulationType persistentArticulation = mpe::ArticulationType::Undefined;
     mpe::ArticulationMap commonArticulations;
@@ -55,9 +56,10 @@ struct RenderingContext {
                               const mpe::duration_t duration,
                               const mpe::dynamic_level_t dynamicLevel,
                               const int posTick,
+                              const int posTickOffset,
                               const int durationTicks,
                               const BeatsPerSecond& bps,
-                              const Ms::TimeSigFrac& timeSig,
+                              const TimeSigFrac& timeSig,
                               const mpe::ArticulationType persistentArticulationType,
                               const mpe::ArticulationMap& articulations,
                               const mpe::ArticulationsProfilePtr profilePtr)
@@ -67,6 +69,7 @@ struct RenderingContext {
         nominalPositionStartTick(posTick),
         nominalPositionEndTick(posTick + durationTicks),
         nominalDurationTicks(durationTicks),
+        positionTickOffset(posTickOffset),
         beatsPerSecond(bps),
         timeSignatureFraction(timeSig),
         persistentArticulation(persistentArticulationType),
@@ -83,30 +86,29 @@ struct RenderingContext {
     }
 };
 
-inline bool isNotePlayable(const Ms::Note* note)
+inline bool isNotePlayable(const Note* note)
 {
     if (!note->play()) {
         return false;
     }
 
-    const Ms::Tie* tie = note->tieBack();
+    const Tie* tie = note->tieBack();
 
     if (tie) {
         if (!tie->startNote() || !tie->endNote()) {
             return false;
         }
 
-        const Ms::Chord* firstChord = tie->startNote()->chord();
-        const Ms::Chord* lastChord = tie->endNote()->chord();
+        const Chord* firstChord = tie->startNote()->chord();
+        const Chord* lastChord = tie->endNote()->chord();
 
-        return !firstChord->containsEqualArticulations(lastChord)
-               || !firstChord->containsEqualTremolo(lastChord);
+        return !firstChord->containsEqualTremolo(lastChord);
     }
 
     return true;
 }
 
-inline mpe::duration_t noteNominalDuration(const Ms::Note* note, const RenderingContext& ctx)
+inline mpe::duration_t noteNominalDuration(const Note* note, const RenderingContext& ctx)
 {
     return durationFromTicks(ctx.beatsPerSecond.val, note->playTicks());
 }
@@ -120,7 +122,7 @@ struct NominalNoteCtx {
 
     RenderingContext chordCtx;
 
-    explicit NominalNoteCtx(const Ms::Note* note, const RenderingContext& ctx)
+    explicit NominalNoteCtx(const Note* note, const RenderingContext& ctx)
         : voiceIdx(note->voice()),
         timestamp(ctx.nominalTimestamp),
         duration(noteNominalDuration(note, ctx)),
@@ -139,7 +141,7 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx)
                           ctx.chordCtx.commonArticulations);
 }
 
-inline mpe::NoteEvent buildNoteEvent(const Ms::Note* note, const RenderingContext& ctx)
+inline mpe::NoteEvent buildNoteEvent(const Note* note, const RenderingContext& ctx)
 {
     return mpe::NoteEvent(ctx.nominalTimestamp,
                           noteNominalDuration(note, ctx),
@@ -161,7 +163,7 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const mpe::duration_t
                           ctx.chordCtx.commonArticulations);
 }
 
-inline mpe::NoteEvent buildFixedNoteEvent(const Ms::Note* note, const mpe::timestamp_t actualTimestamp,
+inline mpe::NoteEvent buildFixedNoteEvent(const Note* note, const mpe::timestamp_t actualTimestamp,
                                           const mpe::duration_t actualDuration, const mpe::dynamic_level_t actualDynamicLevel,
                                           const mpe::ArticulationMap& articulations)
 {

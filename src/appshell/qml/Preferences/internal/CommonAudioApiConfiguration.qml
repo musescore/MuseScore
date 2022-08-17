@@ -40,43 +40,46 @@ Item {
         id: apiModel
     }
 
+    Component.onCompleted: {
+        apiModel.load()
+    }
+
     Column {
         id: content
 
         spacing: 12
 
         ComboBoxWithTitle {
-            title: qsTrc("appshell", "Audio device:")
+            title: qsTrc("appshell/preferences", "Audio device:")
             columnWidth: root.columnWidth
 
-            currentIndex: apiModel.currentDeviceIndex
-            model: apiModel.deviceList()
+            currentIndex: indexOfValue(apiModel.currentDeviceId)
+            model: apiModel.deviceList
 
             navigation.name: "AudioDeviceBox"
             navigation.panel: root.navigation
             navigation.row: root.navigationOrderStart
 
             onValueEdited: function(newIndex, newValue) {
-                apiModel.currentDeviceIndex = newIndex
+                apiModel.deviceSelected(newValue)
             }
         }
 
         ComboBoxWithTitle {
-            id: sampleRate
+            id: bufferSize
 
-            title: qsTrc("appshell", "Sample rate:")
+            title: qsTrc("appshell", "Buffer size:")
             columnWidth: root.columnWidth
 
-            currentIndex: apiModel.currentSampleRateIndex
-            model: apiModel.sampleRateHzList()
-            control.displayText: currentValue
+            currentIndex: indexOfValue(apiModel.bufferSize)
+            model: apiModel.bufferSizeList
 
-            navigation.name: "SampleRateBox"
+            navigation.name: "BufferSizeBox"
             navigation.panel: root.navigation
             navigation.row: root.navigationOrderStart + 1
 
             onValueEdited: function(newIndex, newValue) {
-                apiModel.currentSampleRateIndex = newIndex
+                apiModel.bufferSizeSelected(newValue)
             }
         }
     }

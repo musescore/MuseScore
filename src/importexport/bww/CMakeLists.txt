@@ -31,7 +31,6 @@ set(MODULE_SRC
     )
 
 set(MODULE_LINK
-    qzip
     engraving
     )
 

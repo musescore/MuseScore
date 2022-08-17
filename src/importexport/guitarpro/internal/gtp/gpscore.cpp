@@ -1,4 +1,4 @@
 #include "gpscore.h"
 
-namespace Ms {
+namespace mu::engraving {
 }

@@ -23,9 +23,9 @@
 #define MU_ENGRAVING_CHORDLIST_H
 
 #include <functional>
-#include <QString>
+#include "types/string.h"
 
-namespace Ms {
+namespace mu::engraving {
 class XmlReader;
 class Score;
 }
@@ -34,15 +34,15 @@ namespace mu::engraving::compat {
 class ReadChordListHook
 {
 public:
-    ReadChordListHook(Ms::Score* score);
+    ReadChordListHook(Score* score);
 
-    void read(Ms::XmlReader& e);
+    void read(XmlReader& e);
     void validate();
 
 private:
-    Ms::Score* m_score = nullptr;
+    Score* m_score = nullptr;
     bool m_chordListTag = false;
-    QString m_oldChordDescriptionFile;
+    String m_oldChordDescriptionFile;
 };
 }
 

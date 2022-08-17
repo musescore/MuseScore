@@ -57,17 +57,17 @@ Column {
         navigationRowStart: root.navigationRowStart
 
         model: [
-            { text: qsTrc("symUserNames", "Single barline"), value: BarlineTypes.TYPE_NORMAL },
-            { text: qsTrc("symUserNames", "Double barline"), value: BarlineTypes.TYPE_DOUBLE },
-            { text: qsTrc("symUserNames", "Left (start) repeat sign"), value: BarlineTypes.TYPE_START_REPEAT },
-            { text: qsTrc("symUserNames", "Right (end) repeat sign"), value: BarlineTypes.TYPE_END_REPEAT },
-            { text: qsTrc("symUserNames", "Right and left repeat sign"), value: BarlineTypes.TYPE_END_START_REPEAT },
-            { text: qsTrc("symUserNames", "Dashed barline"), value: BarlineTypes.TYPE_DASHED },
-            { text: qsTrc("symUserNames", "Final barline"), value: BarlineTypes.TYPE_FINAL },
-            { text: qsTrc("symUserNames", "Dotted barline"), value: BarlineTypes.TYPE_DOTTED },
-            { text: qsTrc("symUserNames", "Reverse final barline"), value: BarlineTypes.TYPE_REVERSE_END },
-            { text: qsTrc("symUserNames", "Heavy barline"), value: BarlineTypes.TYPE_HEAVY },
-            { text: qsTrc("symUserNames", "Heavy double barline"), value: BarlineTypes.TYPE_DOUBLE_HEAVY },
+            { text: qsTrc("inspector", "Single barline"), value: BarlineTypes.TYPE_NORMAL },
+            { text: qsTrc("inspector", "Double barline"), value: BarlineTypes.TYPE_DOUBLE },
+            { text: qsTrc("inspector", "Left (start) repeat sign"), value: BarlineTypes.TYPE_START_REPEAT },
+            { text: qsTrc("inspector", "Right (end) repeat sign"), value: BarlineTypes.TYPE_END_REPEAT },
+            { text: qsTrc("inspector", "Right and left repeat sign"), value: BarlineTypes.TYPE_END_START_REPEAT },
+            { text: qsTrc("inspector", "Dashed barline"), value: BarlineTypes.TYPE_DASHED },
+            { text: qsTrc("inspector", "Final barline"), value: BarlineTypes.TYPE_FINAL },
+            { text: qsTrc("inspector", "Dotted barline"), value: BarlineTypes.TYPE_DOTTED },
+            { text: qsTrc("inspector", "Reverse final barline"), value: BarlineTypes.TYPE_REVERSE_END },
+            { text: qsTrc("inspector", "Heavy barline"), value: BarlineTypes.TYPE_HEAVY },
+            { text: qsTrc("inspector", "Heavy double barline"), value: BarlineTypes.TYPE_DOUBLE_HEAVY },
         ]
     }
 

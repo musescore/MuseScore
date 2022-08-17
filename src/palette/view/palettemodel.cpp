@@ -38,8 +38,8 @@
 
 using namespace mu;
 using namespace mu::palette;
+using namespace mu::engraving;
 
-namespace Ms {
 //---------------------------------------------------------
 //   PaletteTreeModel::PaletteTreeModel
 //---------------------------------------------------------
@@ -355,7 +355,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
         case MimeDataRole: {
             QVariantMap map;
             if (cell->element) {
-                map[mu::commonscene::MIME_SYMBOL_FORMAT] = cell->element->mimeData(PointF());
+                map[mu::commonscene::MIME_SYMBOL_FORMAT] = cell->element->mimeData(PointF()).toQByteArray();
             }
             map[PaletteCell::mimeDataFormat] = cell->toMimeData();
             return map;
@@ -590,7 +590,7 @@ QMimeData* PaletteTreeModel::mimeData(const QModelIndexList& indexes) const
     if (const Palette* pp = findPalette(indexes[0])) {
         mime->setData(Palette::mimeDataFormat, pp->toMimeData());
     } else if (PaletteCellConstPtr cell = findCell(indexes[0])) {
-        mime->setData(mu::commonscene::MIME_SYMBOL_FORMAT, cell->element->mimeData(PointF()));
+        mime->setData(mu::commonscene::MIME_SYMBOL_FORMAT, cell->element->mimeData(PointF()).toQByteArray());
     }
 
     return mime;
@@ -833,7 +833,7 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
         beginInsertRows(parent, row, row + count - 1);
         for (int i = 0; i < count; ++i) {
             PalettePtr p = std::make_shared<Palette>(Palette::Type::Custom);
-            p->setName(QT_TRANSLATE_NOOP("palette", "Custom"));
+            p->setName(QT_TRANSLATE_NOOP("palette", "Untitled palette"));
             p->setGridSize(QSize(48, 48));
             p->setExpanded(true);
             palettes().insert(palettes().begin() + row, p);
@@ -1150,4 +1150,3 @@ bool PaletteCellFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
 
     return false;
 }
-} // namespace Ms

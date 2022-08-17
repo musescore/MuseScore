@@ -41,12 +41,12 @@ void MidiInputController::init()
         }
     });
 
-    midiInPort()->eventReceived().onReceive(this, [this](midi::tick_t tick, const midi::Event& event) {
+    midiInPort()->eventsReceived().onReceive(this, [this](const std::vector<std::pair<midi::tick_t, midi::Event> >& events) {
         if (!configuration()->isMidiInputEnabled()) {
             return;
         }
 
-        onMidiEventReceived(tick, event);
+        onMidiEventsReceived(events);
     });
 }
 
@@ -76,24 +76,32 @@ void MidiInputController::connectCurrentOutputDevice()
     }
 }
 
-void MidiInputController::onMidiEventReceived(midi::tick_t tick, const midi::Event& event)
+void MidiInputController::onMidiEventsReceived(const std::vector<std::pair<midi::tick_t, midi::Event> >& events)
 {
-    UNUSED(tick);
+    std::vector<midi::Event> midiEvents;
 
-    Ret ret = midiRemote()->process(event);
-    if (check_ret(ret, Ret::Code::Undefined)) {
-        //! NOTE Event not command, pass further
-        // pass
-    } else if (!ret) {
-        LOGE() << "failed midi remote process, err: " << ret.toString();
-        // pass
-    } else {
-        //! NOTE Success midi remote process (the event is command)
+    for (auto it : events) {
+        Ret ret = midiRemote()->process(it.second);
+        if (check_ret(ret, Ret::Code::Undefined)) {
+            //! NOTE Event not command, pass further
+            // pass
+        } else if (!ret) {
+            LOGE() << "failed midi remote process, err: " << ret.toString();
+            // pass
+        } else {
+            //! NOTE Success midi remote process (the event is command)
+            continue;
+        }
+
+        midiEvents.push_back(it.second);
+    }
+
+    if (midiEvents.empty()) {
         return;
     }
 
     auto notation = globalContext()->currentNotation();
     if (notation) {
-        notation->midiInput()->onMidiEventReceived(event);
+        notation->midiInput()->onMidiEventsReceived(midiEvents);
     }
 }

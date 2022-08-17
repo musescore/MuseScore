@@ -35,7 +35,7 @@ class SvgWriter : public AbstractImageWriter
 
 public:
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;
-    Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
+    Ret write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options& options = Options()) override;
 
 private:
     using BeatsColors = QHash<int /* beatIndex */, QColor>;

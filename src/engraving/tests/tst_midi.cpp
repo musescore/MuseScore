@@ -125,7 +125,7 @@ void TestMidi::events_data()
     QTest::newRow("testSwing16thDots") << "testSwing16thDots";
     QTest::newRow("testSwingOdd") << "testSwingOdd";
     QTest::newRow("testSwingPickup") << "testSwingPickup";
-    // Test Text Cominations
+    // Test Text Combinations
     QTest::newRow("testSwingStyleText") << "testSwingStyleText";
 //TODO::ws      QTest::newRow("testSwingTexts") <<  "testSwingTexts";
     // ornaments
@@ -463,11 +463,11 @@ void TestMidi::testTimeStretchFermataTempoEdit(MasterScore* score, const QString
     const QString reference(MIDI_DATA_DIR + file + "-%1-ref.mid");
 
     EngravingItem* tempo = score->firstSegment(SegmentType::ChordRest)->findAnnotation(ElementType::TEMPO_TEXT, -1, 3);
-    Q_ASSERT(tempo && tempo->isTempoText());
+    assert(tempo && tempo->isTempoText());
 
     const int scoreTempo = 200;
     const int defaultTempo = 120;
-    const qreal defaultTempoBps = defaultTempo / 60.0;
+    const double defaultTempoBps = defaultTempo / 60.0;
 
     testMidiExport(score, writeFile.arg("init"), reference.arg(scoreTempo));
 
@@ -600,7 +600,7 @@ void TestMidi::events()
 
 void TestMidi::testMidiExport(MasterScore* score, const QString& writeFile, const QString& refFile)
 {
-    Q_ASSERT(writeFile.endsWith(".mid") && refFile.endsWith(".mid"));
+    assert(writeFile.endsWith(".mid") && refFile.endsWith(".mid"));
     QVERIFY(saveMidi(score, writeFile));
     QVERIFY(compareFiles(writeFile, refFile));
 }

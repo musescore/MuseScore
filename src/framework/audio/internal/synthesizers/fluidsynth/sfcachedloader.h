@@ -38,13 +38,13 @@ extern "C" {
 #include "log.h"
 
 namespace mu::audio::synth {
-struct SounFontData
+struct SoundFontData
 {
     fluid_sfont_t* soundFontPtr = nullptr;
     std::FILE* fileStream = nullptr;
 };
 
-struct SoundFontCache : public std::map<std::string, SounFontData> {
+struct SoundFontCache : public std::map<std::string, SoundFontData> {
     static SoundFontCache* instance()
     {
         static SoundFontCache s;
@@ -82,7 +82,7 @@ void* openSoundFont(const char* filename)
 
     std::FILE* stream = std::fopen(filename, "r");
 
-    SounFontData sfData;
+    SoundFontData sfData;
     sfData.fileStream = stream;
 
     SoundFontCache::instance()->emplace(filename, std::move(sfData));
@@ -166,7 +166,7 @@ fluid_sfont_t* loadSoundFont(fluid_sfloader_t* loader, const char* filename)
         return nullptr;
     }
 
-    SounFontData& sfData = SoundFontCache::instance()->operator[](filename);
+    SoundFontData& sfData = SoundFontCache::instance()->operator[](filename);
     sfData.soundFontPtr = result;
 
     return result;

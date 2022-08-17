@@ -69,7 +69,8 @@ DockPage {
             minimumWidth: 200
             maximumWidth: 280
 
-            persistent: true
+            floatable: false
+            closable: false
 
             Rectangle {
                 anchors.fill: parent

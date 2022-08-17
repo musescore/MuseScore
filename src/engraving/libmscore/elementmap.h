@@ -25,7 +25,9 @@
 
 #include <unordered_map>
 
-namespace Ms {
+#include "global/allocator.h"
+
+namespace mu::engraving {
 class EngravingItem;
 
 //---------------------------------------------------------
@@ -34,10 +36,11 @@ class EngravingItem;
 
 class ElementMap : public std::unordered_map<EngravingItem*, EngravingItem*>
 {
+    OBJECT_ALLOCATOR(engraving, ElementMap)
 public:
     ElementMap() {}
     EngravingItem* findNew(EngravingItem* o) const;
     void add(EngravingItem* o, EngravingItem* n);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

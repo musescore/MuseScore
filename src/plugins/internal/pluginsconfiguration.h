@@ -25,9 +25,10 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #include "iglobalconfiguration.h"
+#include "ui/iuiconfiguration.h"
 
 #include "ipluginsconfiguration.h"
 
@@ -36,25 +37,28 @@ class PluginsConfiguration : public IPluginsConfiguration, public async::Asyncab
 {
     INJECT(plugins, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(plugins, mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(plugins, system::IFileSystem, fileSystem)
+    INJECT(plugins, io::IFileSystem, fileSystem)
+    INJECT(plugins, ui::IUiConfiguration, uiConfiguration)
 
 public:
     void init();
 
-    io::paths availablePluginsPaths() const override;
+    io::paths_t availablePluginsPaths() const override;
 
-    io::path userPluginsPath() const override;
-    void setUserPluginsPath(const io::path& path) override;
-    async::Channel<io::path> userPluginsPathChanged() const override;
+    io::path_t userPluginsPath() const override;
+    void setUserPluginsPath(const io::path_t& path) override;
+    async::Channel<io::path_t> userPluginsPathChanged() const override;
 
     const PluginsConfigurationHash& pluginsConfiguration() const override;
     Ret setPluginsConfiguration(const PluginsConfigurationHash& configuration) override;
 
-private:
-    io::path pluginsDataPath() const;
-    io::path pluginsFilePath() const;
+    QColor viewBackgroundColor() const override;
 
-    RetVal<QByteArray> readPluginsConfiguration() const;
+private:
+    io::path_t pluginsDataPath() const;
+    io::path_t pluginsFilePath() const;
+
+    RetVal<mu::ByteArray> readPluginsConfiguration() const;
     Ret writePluginsConfiguration(const QByteArray& data);
 
     PluginsConfigurationHash parsePluginsConfiguration(const QByteArray& json) const;
@@ -62,7 +66,7 @@ private:
     void updatePluginsConfiguration();
 
     async::Channel<CodeKeyList> m_configuredPluginsChanged;
-    async::Channel<io::path> m_userPluginsPathChanged;
+    async::Channel<io::path_t> m_userPluginsPathChanged;
 
     PluginsConfigurationHash m_pluginsConfiguration;
 };

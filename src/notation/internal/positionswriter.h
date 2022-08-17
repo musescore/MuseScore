@@ -31,7 +31,7 @@ namespace mu::framework {
 class XmlWriter;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 }
 
@@ -52,21 +52,18 @@ public:
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
-    Ret write(notation::INotationPtr notation, io::Device& device, const Options& options = Options()) override;
-    Ret writeList(const INotationPtrList& notations, io::Device& device, const Options& options = Options()) override;
-
-    void abort() override;
-    framework::ProgressChannel progress() const override;
+    Ret write(notation::INotationPtr notation, QIODevice& device, const Options& options = Options()) override;
+    Ret writeList(const INotationPtrList& notations, QIODevice& device, const Options& options = Options()) override;
 
 private:
     qreal pngDpiResolution() const;
-    QHash<void*, int> elementIds(const Ms::Score* score) const;
+    QHash<void*, int> elementIds(const mu::engraving::Score* score) const;
 
-    void writeElementsPositions(framework::XmlWriter& writer, const Ms::Score* score) const;
-    void writeSegmentsPositions(framework::XmlWriter& writer, const Ms::Score* score) const;
-    void writeMeasuresPositions(framework::XmlWriter& writer, const Ms::Score* score) const;
+    void writeElementsPositions(framework::XmlWriter& writer, const mu::engraving::Score* score) const;
+    void writeSegmentsPositions(framework::XmlWriter& writer, const mu::engraving::Score* score) const;
+    void writeMeasuresPositions(framework::XmlWriter& writer, const mu::engraving::Score* score) const;
 
-    void writeEventsPositions(framework::XmlWriter& writer, const Ms::Score* score) const;
+    void writeEventsPositions(framework::XmlWriter& writer, const mu::engraving::Score* score) const;
 
     ElementType m_elementType = ElementType::SEGMENT;
 };

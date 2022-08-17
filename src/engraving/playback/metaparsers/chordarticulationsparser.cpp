@@ -30,6 +30,7 @@
 #include "libmscore/chordline.h"
 
 #include "playback/utils/arrangementutils.h"
+#include "playback/filters/chordfilter.h"
 #include "internal/spannersmetaparser.h"
 #include "internal/symbolsmetaparser.h"
 #include "internal/annotationsmetaparser.h"
@@ -41,8 +42,7 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-void ChordArticulationsParser::buildChordArticulationMap(const Ms::Chord* chord, const RenderingContext& ctx,
-                                                         mpe::ArticulationMap& result)
+void ChordArticulationsParser::buildChordArticulationMap(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
     if (!chord || !ctx.isValid()) {
         LOGE() << "Unable to render playback events of invalid chord";
@@ -67,49 +67,53 @@ void ChordArticulationsParser::buildChordArticulationMap(const Ms::Chord* chord,
     result.preCalculateAverageData();
 }
 
-void ChordArticulationsParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx,
-                                       mpe::ArticulationMap& result)
+void ChordArticulationsParser::doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    IF_ASSERT_FAILED(item->type() == Ms::ElementType::CHORD) {
+    IF_ASSERT_FAILED(item->type() == ElementType::CHORD) {
         return;
     }
 
-    const Ms::Chord* chord = Ms::toChord(item);
+    const Chord* chord = toChord(item);
 
     parseSpanners(chord, ctx, result);
-    parseArticulationSymbols(chord, ctx, result);
     parseAnnotations(chord, ctx, result);
     parseTremolo(chord, ctx, result);
     parseArpeggio(chord, ctx, result);
     parseGraceNotes(chord, ctx, result);
     parseChordLine(chord, ctx, result);
+
+    parseArticulationSymbols(chord, ctx, result);
 }
 
-void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const RenderingContext& ctx,
-                                             mpe::ArticulationMap& result)
+void ChordArticulationsParser::parseSpanners(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    const Ms::Score* score = chord->score();
+    const Score* score = chord->score();
 
-    const std::multimap<int, Ms::Spanner*>& spannerMap = score->spanner();
-    auto startIt = spannerMap.lower_bound(ctx.nominalPositionStartTick);
-    auto endIt = spannerMap.upper_bound(ctx.nominalPositionEndTick);
-    for (auto it = startIt; it != endIt; ++it) {
-        Ms::Spanner* spanner = it->second;
+    const SpannerMap& spannerMap = score->spannerMap();
 
-        if (spanner->staffIdx() != chord->staffIdx()) {
+    if (spannerMap.empty()) {
+        return;
+    }
+
+    auto intervals = spannerMap.findOverlapping(ctx.nominalPositionStartTick, ctx.nominalPositionEndTick);
+
+    for (const auto& interval : intervals) {
+        Spanner* spanner = interval.value;
+
+        if (spanner->part() != chord->part()) {
             continue;
         }
 
-        int spannerFrom = spanner->startUniqueTicks();
-        int spannerTo = spanner->endUniqueTicks();
+        int spannerFrom = interval.start;
+        int spannerTo = interval.stop;
         int spannerDurationTicks = spannerTo - spannerFrom;
 
-        if (spannerDurationTicks == 0) {
+        if (spannerDurationTicks == 0 || spannerTo < ctx.nominalPositionStartTick) {
             continue;
         }
 
         RenderingContext spannerContext = ctx;
-        spannerContext.nominalTimestamp = timestampFromTicks(score, spannerFrom);
+        spannerContext.nominalTimestamp = timestampFromTicks(score, spannerFrom + ctx.positionTickOffset);
         spannerContext.nominalDuration = durationFromTicks(ctx.beatsPerSecond.val, spannerDurationTicks);
         spannerContext.nominalPositionStartTick = spannerFrom;
         spannerContext.nominalDurationTicks = spannerDurationTicks;
@@ -118,18 +122,18 @@ void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const Rende
     }
 }
 
-void ChordArticulationsParser::parseArticulationSymbols(const Ms::Chord* chord, const RenderingContext& ctx,
-                                                        mpe::ArticulationMap& result)
+void ChordArticulationsParser::parseArticulationSymbols(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    for (const Ms::Articulation* articulation : chord->articulations()) {
+    for (const Articulation* articulation : chord->articulations()) {
         SymbolsMetaParser::parse(articulation, ctx, result);
     }
+
+    ChordFilter::validateArticulations(chord, result);
 }
 
-void ChordArticulationsParser::parseAnnotations(const Ms::Chord* chord, const RenderingContext& ctx,
-                                                mpe::ArticulationMap& result)
+void ChordArticulationsParser::parseAnnotations(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    for (const Ms::EngravingItem* annotation : chord->segment()->annotations()) {
+    for (const EngravingItem* annotation : chord->segment()->annotations()) {
         if (annotation->staffIdx() != chord->staffIdx()) {
             continue;
         }
@@ -138,10 +142,9 @@ void ChordArticulationsParser::parseAnnotations(const Ms::Chord* chord, const Re
     }
 }
 
-void ChordArticulationsParser::parseTremolo(const Ms::Chord* chord, const RenderingContext& ctx,
-                                            mpe::ArticulationMap& result)
+void ChordArticulationsParser::parseTremolo(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    const Ms::Tremolo* tremolo = chord->tremolo();
+    const Tremolo* tremolo = chord->tremolo();
 
     if (!tremolo) {
         return;
@@ -150,10 +153,9 @@ void ChordArticulationsParser::parseTremolo(const Ms::Chord* chord, const Render
     TremoloMetaParser::parse(tremolo, ctx, result);
 }
 
-void ChordArticulationsParser::parseArpeggio(const Ms::Chord* chord, const RenderingContext& ctx,
-                                             mpe::ArticulationMap& result)
+void ChordArticulationsParser::parseArpeggio(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    const Ms::Arpeggio* arpeggio = chord->arpeggio();
+    const Arpeggio* arpeggio = chord->arpeggio();
 
     if (!arpeggio) {
         return;
@@ -166,17 +168,16 @@ void ChordArticulationsParser::parseArpeggio(const Ms::Chord* chord, const Rende
     ArpeggioMetaParser::parse(arpeggio, ctx, result);
 }
 
-void ChordArticulationsParser::parseGraceNotes(const Ms::Chord* chord, const RenderingContext& ctx,
-                                               mpe::ArticulationMap& result)
+void ChordArticulationsParser::parseGraceNotes(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    for (const Ms::Chord* graceChord : chord->graceNotes()) {
+    for (const Chord* graceChord : chord->graceNotes()) {
         GraceNotesMetaParser::parse(graceChord, ctx, result);
     }
 }
 
-void ChordArticulationsParser::parseChordLine(const Ms::Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
+void ChordArticulationsParser::parseChordLine(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    const Ms::ChordLine* chordLine = chord->chordLine();
+    const ChordLine* chordLine = chord->chordLine();
 
     if (!chordLine) {
         return;

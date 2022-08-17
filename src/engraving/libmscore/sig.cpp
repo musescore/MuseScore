@@ -23,18 +23,20 @@
 #include "sig.h"
 #include "rw/xml.h"
 
+#include "log.h"
+
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   ticks_beat
 //---------------------------------------------------------
 
 int ticks_beat(int n)
 {
-    int m = (Constant::division * 4) / n;
-    if ((Constant::division* 4) % n) {
-        qFatal("Mscore: ticks_beat(): bad divisor %d", n);
+    int m = (Constants::division * 4) / n;
+    if ((Constants::division* 4) % n) {
+        ASSERT_X(String(u"Mscore: ticks_beat(): bad divisor %1").arg(n));
     }
     return m;
 }
@@ -45,7 +47,7 @@ int ticks_beat(int n)
 
 static int ticks_measure(const Fraction& f)
 {
-    return (Constant::division * 4 * f.numerator()) / f.denominator();
+    return (Constants::division * 4 * f.numerator()) / f.denominator();
 }
 
 //---------------------------------------------------------
@@ -100,7 +102,7 @@ BeatType TimeSigFrac::rtick2beatType(int rtick) const
 
 BeatType TimeSigFrac::strongestBeatInRange(int rtick1, int rtick2, int* dUnitsCrossed, int* subbeatTick, bool saveLast) const
 {
-    Q_ASSERT(rtick2 > rtick1);
+    assert(rtick2 > rtick1);
 
     BeatType strongest = BeatType::SUBBEAT;
 
@@ -127,7 +129,7 @@ BeatType TimeSigFrac::strongestBeatInRange(int rtick1, int rtick2, int* dUnitsCr
 
 int TimeSigFrac::subbeatTicks(int level) const
 {
-    Q_ASSERT(level <= maxSubbeatLevel());
+    assert(level <= maxSubbeatLevel());
     int subbeatTicks = dUnitTicks();
     while (level > 0) {
         subbeatTicks /= 2;
@@ -192,7 +194,7 @@ int TimeSigFrac::rtick2subbeatLevel(int rtick) const
 
 int TimeSigFrac::strongestSubbeatLevelInRange(int rtick1, int rtick2, int* subbeatTick) const
 {
-    Q_ASSERT(rtick2 > rtick1);
+    assert(rtick2 > rtick1);
 
     for (int level = 0, subbeatTicks = dUnitTicks();;) {
         int n = rtick1 / subbeatTicks;
@@ -227,7 +229,7 @@ bool SigEvent::operator==(const SigEvent& e) const
 void TimeSigMap::add(int tick, const Fraction& f)
 {
     if (!f.isValid()) {
-        qDebug("illegal signature %d/%d", f.numerator(), f.denominator());
+        LOGD("illegal signature %d/%d", f.numerator(), f.denominator());
     }
     (*this)[tick] = SigEvent(f);
     normalize();
@@ -324,14 +326,14 @@ void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
     }
     auto e = upper_bound(t);
     if (empty() || e == begin()) {
-        qFatal("tickValue(0x%x) not found", t);
+        ASSERT_X(String(u"tickValue(0x%1) not found").arg(t));
     }
     --e;
     int delta  = t - e->first;
     int ticksB = ticks_beat(e->second.timesig().denominator());   // ticks in beat
     int ticksM = ticksB * e->second.timesig().numerator();        // ticks in measure (bar)
     if (ticksM == 0) {
-        qDebug("TimeSigMap::tickValues: at %d %s", t, qPrintable(e->second.timesig().toString()));
+        LOGD("TimeSigMap::tickValues: at %d %s", t, muPrintable(e->second.timesig().toString()));
         *bar  = 0;
         *beat = 0;
         *tick = 0;
@@ -349,11 +351,11 @@ void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
 //    This is not reentrant and only for debugging!
 //---------------------------------------------------------
 
-QString TimeSigMap::pos(int t) const
+String TimeSigMap::pos(int t) const
 {
     int bar, beat, tick;
     tickValues(t, &bar, &beat, &tick);
-    return QString("%1:%2:%3").arg(bar + 1).arg(beat).arg(tick);
+    return String(u"%1:%2:%3").arg(bar + 1, beat, tick);
 }
 
 //---------------------------------------------------------
@@ -374,9 +376,9 @@ int TimeSigMap::bar2tick(int bar, int beat) const
         }
     }
     if (empty() || e == begin()) {
-        qDebug("TimeSigMap::bar2tick(): not found(%d,%d) not found", bar, beat);
+        LOGD("TimeSigMap::bar2tick(): not found(%d,%d) not found", bar, beat);
         if (empty()) {
-            qDebug("   list is empty");
+            LOGD("   list is empty");
         }
         return 0;
     }
@@ -392,11 +394,11 @@ int TimeSigMap::bar2tick(int bar, int beat) const
 
 void TimeSigMap::write(XmlWriter& xml) const
 {
-    xml.startObject("siglist");
+    xml.startElement("siglist");
     for (auto i = begin(); i != end(); ++i) {
         i->second.write(xml, i->first);
     }
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -406,7 +408,7 @@ void TimeSigMap::write(XmlWriter& xml) const
 void TimeSigMap::read(XmlReader& e, int fileDivision)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "sig") {
             SigEvent t;
             int tick = t.read(e, fileDivision);
@@ -424,10 +426,10 @@ void TimeSigMap::read(XmlReader& e, int fileDivision)
 
 void SigEvent::write(XmlWriter& xml, int tick) const
 {
-    xml.startObject(QString("sig tick=\"%1\"").arg(tick));
+    xml.startElement("sig", { { "tick", tick } });
     xml.tag("nom",   _timesig.numerator());
     xml.tag("denom", _timesig.denominator());
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -437,7 +439,7 @@ void SigEvent::write(XmlWriter& xml, int tick) const
 int SigEvent::read(XmlReader& e, int fileDivision)
 {
     int tick  = e.intAttribute("tick", 0);
-    tick      = tick * Constant::division / fileDivision;
+    tick      = tick * Constants::division / fileDivision;
 
     int numerator = 1;
     int denominator = 1;
@@ -445,7 +447,7 @@ int SigEvent::read(XmlReader& e, int fileDivision)
     int numerator2   = -1;
 
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "nom") {
             numerator = e.readInt();
         } else if (tag == "denom") {
@@ -504,7 +506,7 @@ unsigned TimeSigMap::raster(unsigned t, int raster) const
     }
     auto e = upper_bound(t);
     if (e == end()) {
-        qDebug("TimeSigMap::raster(%x,)", t);
+        LOGD("TimeSigMap::raster(%x,)", t);
         return t;
     }
     auto timesig = e->second.timesig();
@@ -563,10 +565,10 @@ int TimeSigMap::rasterStep(unsigned t, int raster) const
 
 void TimeSigMap::dump() const
 {
-    qDebug("TimeSigMap:");
+    LOGD("TimeSigMap:");
     for (auto i = begin(); i != end(); ++i) {
-        qDebug("%6d timesig: %s measure: %d",
-               i->first, qPrintable(i->second.timesig().toString()), i->second.bar());
+        LOGD("%6d timesig: %s measure: %d",
+             i->first, muPrintable(i->second.timesig().toString()), i->second.bar());
     }
 }
 
@@ -576,6 +578,6 @@ void TimeSigMap::dump() const
 
 int TimeSigFrac::dUnitTicks() const
 {
-    return (4 * Constant::division) / denominator();
+    return (4 * Constants::division) / denominator();
 }
 }

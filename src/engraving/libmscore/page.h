@@ -32,9 +32,6 @@
 namespace mu::engraving {
 class RootItem;
 class Factory;
-}
-
-namespace Ms {
 class System;
 class Text;
 class Measure;
@@ -49,6 +46,8 @@ class MeasureBase;
 
 class Page final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Page)
+
     std::vector<System*> _systems;
     page_idx_t _no;                        // page number
 
@@ -57,15 +56,14 @@ class Page final : public EngravingItem
 
     void doRebuildBspTree();
 
-    friend class mu::engraving::Factory;
-    Page(mu::engraving::RootItem* parent);
+    friend class Factory;
+    Page(RootItem* parent);
 
-    QString replaceTextMacros(const QString&) const;
-    void drawHeaderFooter(mu::draw::Painter*, int area, const QString&) const;
-    Text* layoutHeaderFooter(int area, const QString& ss) const;
+    String replaceTextMacros(const String&) const;
+    void drawHeaderFooter(mu::draw::Painter*, int area, const String&) const;
+    Text* layoutHeaderFooter(int area, const String& ss) const;
 
 public:
-
     // Score Tree functions
     EngravingObject* scanParent() const override;
     EngravingObjectList scanChildren() const override;
@@ -83,12 +81,12 @@ public:
     page_idx_t no() const { return _no; }
     void setNo(page_idx_t n) { _no = n; }
     bool isOdd() const;
-    qreal tm() const;              // margins in pixel
-    qreal bm() const;
-    qreal lm() const;
-    qreal rm() const;
-    qreal headerExtension() const;
-    qreal footerExtension() const;
+    double tm() const;              // margins in pixel
+    double bm() const;
+    double lm() const;
+    double rm() const;
+    double headerExtension() const;
+    double footerExtension() const;
 
     void draw(mu::draw::Painter*) const override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
@@ -100,6 +98,10 @@ public:
     std::vector<EngravingItem*> elements() const;              ///< list of visible elements
     mu::RectF tbbox();                             // tight bounding box, excluding white space
     Fraction endTick() const;
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr createAccessible() override;
+#endif
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

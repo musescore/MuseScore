@@ -23,12 +23,11 @@
 #ifndef MU_PROJECT_IPROJECTWRITER_H
 #define MU_PROJECT_IPROJECTWRITER_H
 
-#include "ret.h"
-#include "val.h"
+#include "types/ret.h"
+#include "types/val.h"
 
 #include "async/channel.h"
 #include "global/progress.h"
-#include "io/device.h"
 #include "inotationproject.h"
 
 namespace mu::project {
@@ -56,8 +55,8 @@ public:
     virtual std::vector<UnitType> supportedUnitTypes() const = 0;
     virtual bool supportsUnitType(UnitType unitType) const = 0;
 
-    virtual Ret write(project::INotationProjectPtr project, io::Device& device, const Options& options = Options()) = 0;
-    virtual Ret write(project::INotationProjectPtr project, const io::path& filePath, const Options& options = Options()) = 0;
+    virtual Ret write(project::INotationProjectPtr project, QIODevice& device, const Options& options = Options()) = 0;
+    virtual Ret write(project::INotationProjectPtr project, const io::path_t& filePath, const Options& options = Options()) = 0;
 };
 
 using IProjectWriterPtr = std::shared_ptr<IProjectWriter>;

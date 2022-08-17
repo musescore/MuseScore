@@ -33,7 +33,7 @@ class INotationElements
 public:
     virtual ~INotationElements() = default;
 
-    virtual Ms::Score* msScore() const = 0;
+    virtual mu::engraving::Score* msScore() const = 0;
 
     virtual EngravingItem* search(const std::string& searchText) const = 0;
     virtual std::vector<EngravingItem*> elements(const FilterElementsOptions& elementOptions = FilterElementsOptions()) const = 0;
@@ -41,6 +41,7 @@ public:
     virtual Measure* measure(const int measureIndex) const = 0;
 
     virtual PageList pages() const = 0;
+    virtual const Page* pageByPoint(const PointF& point) const = 0;
 };
 
 using INotationElementsPtr = std::shared_ptr<INotationElements>;

@@ -27,7 +27,7 @@
 #include "engravingitem.h"
 #include "durationtype.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Tuplet;
 class Beam;
 class Spanner;
@@ -42,6 +42,7 @@ class Spanner;
 
 class DurationElement : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, DurationElement)
 public:
     ~DurationElement();
 
@@ -63,8 +64,8 @@ public:
     Fraction globalTicks() const;
     void setTicks(const Fraction& f) { _duration = f; }
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
 
 protected:
     DurationElement(const ElementType& type, EngravingItem* parent = 0, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
@@ -74,5 +75,5 @@ private:
     Fraction _duration;
     Tuplet* _tuplet;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

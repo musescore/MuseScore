@@ -50,8 +50,6 @@ InspectorSectionView {
 
                 anchorItem: root.anchorItem
 
-                notationView: root.notationView
-
                 navigation.panel: root.navigationPanel
                 navigation.name: "InsertMeasures"
                 navigation.row: root.navigationRowStart + 1
@@ -69,7 +67,7 @@ InspectorSectionView {
                 }
 
                 onPopupOpened: {
-                    root.popupOpened(insertMeasuresPopupButton.popup)
+                    root.popupOpened(popup, control)
                 }
             }
 

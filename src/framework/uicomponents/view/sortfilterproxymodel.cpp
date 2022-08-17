@@ -21,7 +21,7 @@
  */
 #include "sortfilterproxymodel.h"
 
-#include "val.h"
+#include "types/val.h"
 
 using namespace mu::uicomponents;
 

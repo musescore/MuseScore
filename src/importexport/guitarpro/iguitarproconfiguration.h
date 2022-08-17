@@ -32,9 +32,6 @@ class IGuitarProConfiguration : MODULE_EXPORT_INTERFACE
 
 public:
     virtual ~IGuitarProConfiguration() = default;
-
-    virtual std::string importGuitarProCharset() const = 0;
-    virtual void setImportGuitarProCharset(const std::string& charset) = 0;
 };
 }
 

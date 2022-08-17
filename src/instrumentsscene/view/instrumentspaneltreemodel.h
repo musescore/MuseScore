@@ -32,6 +32,7 @@
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
+#include "shortcuts/ishortcutsregister.h"
 
 namespace mu::uicomponents {
 class ItemMultiSelectionModel;
@@ -47,12 +48,14 @@ class InstrumentsPanelTreeModel : public QAbstractItemModel, public async::Async
     INJECT(instruments, context::IGlobalContext, context)
     INJECT(instruments, notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
     INJECT(instruments, actions::IActionsDispatcher, dispatcher)
+    INJECT(instruments, shortcuts::IShortcutsRegister, shortcutsRegister)
 
     Q_PROPERTY(bool isMovingUpAvailable READ isMovingUpAvailable NOTIFY isMovingUpAvailableChanged)
     Q_PROPERTY(bool isMovingDownAvailable READ isMovingDownAvailable NOTIFY isMovingDownAvailableChanged)
     Q_PROPERTY(bool isRemovingAvailable READ isRemovingAvailable NOTIFY isRemovingAvailableChanged)
     Q_PROPERTY(bool isAddingAvailable READ isAddingAvailable NOTIFY isAddingAvailableChanged)
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
+    Q_PROPERTY(QString addInstrumentsKeyboardShortcut READ addInstrumentsKeyboardShortcut NOTIFY addInstrumentsKeyboardShortcutChanged)
 
 public:
     explicit InstrumentsPanelTreeModel(QObject* parent = nullptr);
@@ -70,6 +73,7 @@ public:
     bool isRemovingAvailable() const;
     bool isAddingAvailable() const;
     bool isEmpty() const;
+    QString addInstrumentsKeyboardShortcut() const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void selectRow(const QModelIndex& rowIndex);
@@ -78,6 +82,7 @@ public:
     Q_INVOKABLE void moveSelectedRowsUp();
     Q_INVOKABLE void moveSelectedRowsDown();
     Q_INVOKABLE void removeSelectedRows();
+    Q_INVOKABLE void toggleVisibilityOfSelectedRows(bool visible);
 
     Q_INVOKABLE bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
                               int destinationChild) override;
@@ -90,6 +95,7 @@ signals:
     void isAddingAvailableChanged(bool isAddingAvailable);
     void isRemovingAvailableChanged(bool isRemovingAvailable);
     void isEmptyChanged();
+    void addInstrumentsKeyboardShortcutChanged();
 
 private slots:
     void updateRearrangementAvailability();

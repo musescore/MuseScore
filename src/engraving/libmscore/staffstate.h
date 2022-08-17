@@ -25,9 +25,9 @@
 
 #include "engravingitem.h"
 #include "instrument.h"
-#include "infrastructure/draw/painterpath.h"
+#include "draw/types/painterpath.h"
 
-namespace Ms {
+namespace mu::engraving {
 enum class StaffStateType : char {
     INSTRUMENT,
     TYPE,
@@ -41,13 +41,15 @@ enum class StaffStateType : char {
 
 class StaffState final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, StaffState)
+
     StaffStateType _staffStateType { StaffStateType::INVISIBLE };
-    qreal lw { 0.0 };
-    mu::PainterPath path;
+    double lw { 0.0 };
+    mu::draw::PainterPath path;
 
     Instrument* _instrument { nullptr };
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     StaffState(EngravingItem* parent);
     StaffState(const StaffState&);
 
@@ -60,10 +62,10 @@ public:
 
     StaffState* clone() const override { return new StaffState(*this); }
 
-    void setStaffStateType(const QString&);
+    void setStaffStateType(const String&);
     void setStaffStateType(StaffStateType st) { _staffStateType = st; }
     StaffStateType staffStateType() const { return _staffStateType; }
-    QString staffStateTypeName() const;
+    String staffStateTypeName() const;
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
@@ -76,5 +78,5 @@ public:
     void setInstrument(const Instrument&& i) { *_instrument = i; }
     Segment* segment() { return (Segment*)explicitParent(); }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

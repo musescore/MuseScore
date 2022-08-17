@@ -25,7 +25,7 @@
 #include <limits>
 #include <QtGlobal>
 
-namespace Ms {
+namespace mu::iex::midi {
 #ifdef QT_DEBUG
 
 //---------------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ namespace {
 
 static unsigned lcm(int a, int b)
 {
-    const int g =  mu::engraving::gcd(a, b);
+    const int g =  std::gcd(a, b);
 
 #ifdef QT_DEBUG
     Q_ASSERT_X(!isDivisionOverflow(a, g),
@@ -126,7 +126,7 @@ ReducedFraction::ReducedFraction(int z, int n)
 {
 }
 
-ReducedFraction::ReducedFraction(const Fraction& fraction)
+ReducedFraction::ReducedFraction(const engraving::Fraction& fraction)
     : numerator_(fraction.numerator())
     , denominator_(fraction.denominator())
 {
@@ -134,12 +134,12 @@ ReducedFraction::ReducedFraction(const Fraction& fraction)
 
 ReducedFraction ReducedFraction::fromTicks(int ticks)
 {
-    return ReducedFraction(ticks, Constant::division * 4).reduced();
+    return ReducedFraction(ticks, engraving::Constants::division * 4).reduced();
 }
 
 ReducedFraction ReducedFraction::reduced() const
 {
-    const int tmp = mu::engraving::gcd(numerator_, denominator_);
+    const int tmp = std::gcd(numerator_, denominator_);
 
 #ifdef QT_DEBUG
     Q_ASSERT_X(!isDivisionOverflow(numerator_, tmp),
@@ -155,7 +155,7 @@ int ReducedFraction::ticks() const
 {
     int integral = numerator_ / denominator_;
     int newNumerator = numerator_ % denominator_;
-    int division = Constant::division * 4;
+    int division = engraving::Constants::division * 4;
 
 #ifdef QT_DEBUG
     Q_ASSERT_X(!isMultiplicationOverflow(newNumerator, division),
@@ -184,7 +184,7 @@ void ReducedFraction::reduce()
         denominator_ = 1;
         return;
     }
-    const int tmp = mu::engraving::gcd(numerator_, denominator_);
+    const int tmp = std::gcd(numerator_, denominator_);
 
 #ifdef QT_DEBUG
     Q_ASSERT_X(!isDivisionOverflow(numerator_, tmp),
@@ -361,20 +361,20 @@ ReducedFraction toMuseScoreTicks(int tick, int oldDivision, bool isDivisionInTps
     const int integral = tick / oldDivision;
     const int remainder = tick % oldDivision;
 #ifdef QT_DEBUG
-    Q_ASSERT_X(!isMultiplicationOverflow(remainder, Constant::division),
+    Q_ASSERT_X(!isMultiplicationOverflow(remainder, engraving::Constants::division),
                "ReducedFraction::toMuseScoreTicks", "Multiplication overflow");
-    Q_ASSERT_X(!isAdditionOverflow(remainder * Constant::division, oldDivision / 2),
+    Q_ASSERT_X(!isAdditionOverflow(remainder * engraving::Constants::division, oldDivision / 2),
                "ReducedFraction::toMuseScoreTicks", "Addition overflow");
 #endif
-    const int tmp = remainder * Constant::division + oldDivision / 2;
+    const int tmp = remainder * engraving::Constants::division + oldDivision / 2;
 #ifdef QT_DEBUG
     Q_ASSERT_X(!isDivisionOverflow(tmp, oldDivision),
                "ReducedFraction::toMuseScoreTicks", "Division overflow");
-    Q_ASSERT_X(!isMultiplicationOverflow(integral, Constant::division),
+    Q_ASSERT_X(!isMultiplicationOverflow(integral, engraving::Constants::division),
                "ReducedFraction::toMuseScoreTicks", "Multiplication overflow");
-    Q_ASSERT_X(!isAdditionOverflow(tmp / oldDivision, integral * Constant::division),
+    Q_ASSERT_X(!isAdditionOverflow(tmp / oldDivision, integral * engraving::Constants::division),
                "ReducedFraction::toMuseScoreTicks", "Addition overflow");
 #endif
-    return ReducedFraction::fromTicks(tmp / oldDivision + integral * Constant::division);
+    return ReducedFraction::fromTicks(tmp / oldDivision + integral * engraving::Constants::division);
 }
-} // namespace Ms
+} // namespace mu::iex::midi

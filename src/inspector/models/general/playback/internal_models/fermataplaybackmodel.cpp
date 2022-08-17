@@ -38,14 +38,14 @@ FermataPlaybackModel::FermataPlaybackModel(QObject* parent, IElementRepositorySe
 
 void FermataPlaybackModel::createProperties()
 {
-    m_timeStretch = buildPropertyItem(Ms::Pid::TIME_STRETCH, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_timeStretch = buildPropertyItem(mu::engraving::Pid::TIME_STRETCH, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue.toDouble() / 100);
     });
 }
 
 void FermataPlaybackModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::FERMATA);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::FERMATA);
 }
 
 void FermataPlaybackModel::loadProperties()

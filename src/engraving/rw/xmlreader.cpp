@@ -35,111 +35,29 @@
 
 using namespace mu;
 
-namespace Ms {
-//---------------------------------------------------------
-//   ~XmlReader
-//---------------------------------------------------------
-
+namespace mu::engraving {
 XmlReader::~XmlReader()
 {
-    if (!_connectors.empty() || !_pendingConnectors.empty()) {
-        qDebug("XmlReader::~XmlReader: there are unpaired connectors left");
-        for (auto& c : _connectors) {
-            EngravingItem* conn = c->releaseConnector();
-            if (conn && !conn->isTuplet()) {     // tuplets are added to score even when not finished
-                delete conn;
-            }
-        }
-        for (auto& c : _pendingConnectors) {
-            delete c->releaseConnector();
-        }
+    if (m_selfContext) {
+        delete m_context;
     }
 }
-
-//---------------------------------------------------------
-//   intAttribute
-//---------------------------------------------------------
-
-int XmlReader::intAttribute(const char* s, int _default) const
-{
-    if (attributes().hasAttribute(s)) {
-        // return attributes().value(s).toString().toInt();
-        return attributes().value(s).toInt();
-    } else {
-        return _default;
-    }
-}
-
-int XmlReader::intAttribute(const char* s) const
-{
-    return attributes().value(s).toInt();
-}
-
-//---------------------------------------------------------
-//   doubleAttribute
-//---------------------------------------------------------
-
-double XmlReader::doubleAttribute(const char* s) const
-{
-    return attributes().value(s).toDouble();
-}
-
-double XmlReader::doubleAttribute(const char* s, double _default) const
-{
-    if (attributes().hasAttribute(s)) {
-        return attributes().value(s).toDouble();
-    } else {
-        return _default;
-    }
-}
-
-//---------------------------------------------------------
-//   attribute
-//---------------------------------------------------------
-
-QString XmlReader::attribute(const char* s, const QString& _default) const
-{
-    if (attributes().hasAttribute(s)) {
-        return attributes().value(s).toString();
-    } else {
-        return _default;
-    }
-}
-
-//---------------------------------------------------------
-//   hasAttribute
-//---------------------------------------------------------
-
-bool XmlReader::hasAttribute(const char* s) const
-{
-    return attributes().hasAttribute(s);
-}
-
-//---------------------------------------------------------
-//   readPoint
-//---------------------------------------------------------
 
 PointF XmlReader::readPoint()
 {
-    Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+    assert(tokenType() == XmlStreamReader::StartElement);
 #ifndef NDEBUG
-    if (!attributes().hasAttribute("x")) {
-        QXmlStreamAttributes map = attributes();
-        qDebug("XmlReader::readPoint: x attribute missing: %s (%d)",
-               name().toUtf8().data(), map.size());
-        for (int i = 0; i < map.size(); ++i) {
-            const QXmlStreamAttribute& a = map.at(i);
-            qDebug(" attr <%s> <%s>", a.name().toUtf8().data(), a.value().toUtf8().data());
-        }
+    if (!hasAttribute("x")) {
+        LOGD("XmlReader::readPoint: x attribute missing: %s", name().ascii());
         unknown();
     }
-    if (!attributes().hasAttribute("y")) {
-        qDebug("XmlReader::readPoint: y attribute missing: %s", name().toUtf8().data());
+    if (!hasAttribute("y")) {
+        LOGD("XmlReader::readPoint: y attribute missing: %s", name().ascii());
         unknown();
     }
 #endif
-    qreal x = doubleAttribute("x", 0.0);
-    qreal y = doubleAttribute("y", 0.0);
+    double x = doubleAttribute("x", 0.0);
+    double y = doubleAttribute("y", 0.0);
     readNext();
     return PointF(x, y);
 }
@@ -150,8 +68,8 @@ PointF XmlReader::readPoint()
 
 mu::draw::Color XmlReader::readColor()
 {
-    Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
-    mu::draw::Color c;
+    assert(tokenType() == XmlStreamReader::StartElement);
+    draw::Color c;
     c.setRed(intAttribute("r"));
     c.setGreen(intAttribute("g"));
     c.setBlue(intAttribute("b"));
@@ -166,7 +84,7 @@ mu::draw::Color XmlReader::readColor()
 
 SizeF XmlReader::readSize()
 {
-    Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+    assert(tokenType() == XmlStreamReader::StartElement);
     SizeF p;
     p.setWidth(doubleAttribute("w", 0.0));
     p.setHeight(doubleAttribute("h", 0.0));
@@ -176,7 +94,7 @@ SizeF XmlReader::readSize()
 
 ScaleF XmlReader::readScale()
 {
-    Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+    assert(tokenType() == XmlStreamReader::StartElement);
     ScaleF p;
     p.setWidth(doubleAttribute("w", 0.0));
     p.setHeight(doubleAttribute("h", 0.0));
@@ -190,7 +108,7 @@ ScaleF XmlReader::readScale()
 
 RectF XmlReader::readRect()
 {
-    Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+    assert(tokenType() == XmlStreamReader::StartElement);
     RectF p;
     p.setLeft(doubleAttribute("x", 0.0));
     p.setTop(doubleAttribute("y", 0.0));
@@ -209,17 +127,18 @@ RectF XmlReader::readRect()
 
 Fraction XmlReader::readFraction()
 {
-    Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
-    int z = attribute("z", "0").toInt();
-    int n = attribute("n", "1").toInt();
-    const QString& s(readElementText());
-    if (!s.isEmpty()) {
-        int i = s.indexOf('/');
-        if (i == -1) {
+    assert(tokenType() == XmlStreamReader::StartElement);
+    int z = intAttribute("z", 0);
+    int n = intAttribute("n", 1);
+    AsciiStringView s = readAsciiText();
+    if (!s.empty()) {
+        size_t i = s.indexOf('/');
+        if (i == mu::nidx) {
             return Fraction::fromTicks(s.toInt());
         } else {
-            z = s.leftRef(i).toInt();
-            n = s.midRef(i + 1).toInt();
+            String str = String::fromAscii(s.ascii());
+            z = str.left(i).toInt();
+            n = str.mid(i + 1).toInt();
         }
     }
     return Fraction(z, n);
@@ -232,106 +151,21 @@ Fraction XmlReader::readFraction()
 
 void XmlReader::unknown()
 {
-    if (QXmlStreamReader::error()) {
-        qDebug("%s ", qPrintable(errorString()));
+    if (XmlStreamReader::error()) {
+        LOGD("%s ", muPrintable(errorString()));
     }
-    if (!docName.isEmpty()) {
-        qDebug("tag in <%s> line %lld col %lld: %s",
-               qPrintable(docName), lineNumber() + _offsetLines, columnNumber(), name().toUtf8().data());
+    if (!m_docName.isEmpty()) {
+        LOGD("tag in <%s> line %ld col %lld: %s", muPrintable(m_docName), lineNumber() + m_offsetLines,
+             columnNumber(), name().ascii());
     } else {
-        qDebug("line %lld col %lld: %s", lineNumber() + _offsetLines, columnNumber(), name().toUtf8().data());
+        LOGD("line %lld col %ld: %s", lineNumber() + m_offsetLines, columnNumber(), name().ascii());
     }
     skipCurrentElement();
 }
 
-//---------------------------------------------------------
-//   location
-//---------------------------------------------------------
-
-Location XmlReader::location(bool forceAbsFrac) const
-{
-    Location l = Location::absolute();
-    fillLocation(l, forceAbsFrac);
-    return l;
-}
-
-//---------------------------------------------------------
-//   fillLocation
-//    fills location fields which have default values with
-//    values relevant for the current reader's position.
-//    When in paste mode (or forceAbsFrac is true) absolute
-//    fraction values are used and measure number is set to
-//    zero.
-//---------------------------------------------------------
-
-void XmlReader::fillLocation(Location& l, bool forceAbsFrac) const
-{
-    constexpr Location defaults = Location::absolute();
-    const bool absFrac = (pasteMode() || forceAbsFrac);
-    if (l.track() == defaults.track()) {
-        l.setTrack(track());
-    }
-    if (l.frac() == defaults.frac()) {
-        l.setFrac(absFrac ? tick() : rtick());
-    }
-    if (l.measure() == defaults.measure()) {
-        l.setMeasure(absFrac ? 0 : currentMeasureIndex());
-    }
-}
-
-//---------------------------------------------------------
-//   setLocation
-//    sets a new reading location, taking into account its
-//    type (absolute or relative).
-//---------------------------------------------------------
-
-void XmlReader::setLocation(const Location& l)
-{
-    if (l.isRelative()) {
-        Location newLoc = l;
-        newLoc.toAbsolute(location());
-        int intTicks = l.frac().ticks();
-        if (_tick == Fraction::fromTicks(_intTick + intTicks)) {
-            _intTick += intTicks;
-            setTrack(newLoc.track() - _trackOffset);
-            return;
-        }
-        setLocation(newLoc);     // recursion
-        return;
-    }
-    setTrack(l.track() - _trackOffset);
-    setTick(l.frac() - _tickOffset);
-    if (!pasteMode()) {
-        Q_ASSERT(l.measure() == currentMeasureIndex());
-        incTick(currentMeasure()->tick());
-    }
-}
-
-//---------------------------------------------------------
-//   addBeam
-//---------------------------------------------------------
-
-void XmlReader::addBeam(Beam* s)
-{
-    _beams.insert_or_assign(s->id(), s);
-}
-
-//---------------------------------------------------------
-//   addTuplet
-//---------------------------------------------------------
-
-void XmlReader::addTuplet(Tuplet* s)
-{
-    _tuplets.insert_or_assign(s->id(), s);
-}
-
-//---------------------------------------------------------
-//   readDouble
-//---------------------------------------------------------
-
 double XmlReader::readDouble(double min, double max)
 {
-    double val = readElementText().toDouble();
+    double val = readDouble();
     if (val < min) {
         val = min;
     } else if (val > max) {
@@ -341,78 +175,35 @@ double XmlReader::readDouble(double min, double max)
 }
 
 //---------------------------------------------------------
-//   readBool
-//---------------------------------------------------------
-
-bool XmlReader::readBool()
-{
-    bool val;
-    QXmlStreamReader::TokenType tt = readNext();
-    if (tt == QXmlStreamReader::Characters) {
-        val = text().toInt() != 0;
-        readNext();
-    } else {
-        val = true;
-    }
-    return val;
-}
-
-//---------------------------------------------------------
-//   checkTuplets
-//---------------------------------------------------------
-
-void XmlReader::checkTuplets()
-{
-    for (auto& p : tuplets()) {
-        Tuplet* tuplet = p.second;
-        if (tuplet->elements().empty()) {
-            // this should not happen and is a sign of input file corruption
-            qDebug("Measure:read(): empty tuplet id %d (%p), input file corrupted?",
-                   tuplet->id(), tuplet);
-            delete tuplet;
-        } else {
-            //sort tuplet elements. Needed for nested tuplets #22537
-            tuplet->sortElements();
-            tuplet->sanitizeTuplet();
-        }
-    }
-    // This requires a separate pass in case of nested tuplets that required sanitizing
-    for (auto& p : tuplets()) {
-        Tuplet* tuplet = p.second;
-        tuplet->addMissingElements();
-    }
-}
-
-//---------------------------------------------------------
 //   htmlToString
 //---------------------------------------------------------
 
-void XmlReader::htmlToString(int level, QString* s)
+void XmlReader::htmlToString(int level, String* s)
 {
-    *s += QString("<%1").arg(name().toString());
-    for (const QXmlStreamAttribute& a : attributes()) {
-        *s += QString(" %1=\"%2\"").arg(a.name().toString(), a.value().toString());
+    *s += u'<' + String::fromAscii(name().ascii());
+    for (const Attribute& a : attributes()) {
+        *s += u' ' + String::fromAscii(a.name.ascii()) + u"=\"" + a.value + u'\"';
     }
-    *s += ">";
+    *s += u'>';
     ++level;
     for (;;) {
-        QXmlStreamReader::TokenType t = readNext();
+        XmlStreamReader::TokenType t = readNext();
         switch (t) {
-        case QXmlStreamReader::StartElement:
+        case XmlStreamReader::StartElement:
             htmlToString(level, s);
             break;
-        case QXmlStreamReader::EndElement:
-            *s += QString("</%1>").arg(name().toString());
+        case XmlStreamReader::EndElement:
+            *s += u"</" + String::fromAscii(name().ascii()) + u'>';
             --level;
             return;
-        case QXmlStreamReader::Characters:
-            if (!s->isEmpty() || !isWhitespace()) {
-                *s += text().toString().toHtmlEscaped();
+        case XmlStreamReader::Characters:
+            if (!s->empty() || !isWhitespace()) {
+                *s += text().toXmlEscaped();
             } else {
                 LOGD() << "ignoring whitespace";
             }
             break;
-        case QXmlStreamReader::Comment:
+        case XmlStreamReader::Comment:
             break;
 
         default:
@@ -427,303 +218,49 @@ void XmlReader::htmlToString(int level, QString* s)
 //    read verbatim until end tag of current level is reached
 //-------------------------------------------------------------------
 
-QString XmlReader::readXml()
+String XmlReader::readXml()
 {
-    QString s;
+    String s;
     int level = 1;
-    for (QXmlStreamReader::TokenType t = readNext(); t != QXmlStreamReader::EndElement; t = readNext()) {
+    for (XmlStreamReader::TokenType t = readNext(); t != XmlStreamReader::EndElement; t = readNext()) {
         switch (t) {
-        case QXmlStreamReader::StartElement:
+        case XmlStreamReader::StartElement:
             htmlToString(level, &s);
             break;
-        case QXmlStreamReader::EndElement:
+        case XmlStreamReader::EndElement:
             break;
-        case QXmlStreamReader::Characters:
-            s += text().toString().toHtmlEscaped();
+        case XmlStreamReader::Characters:
+            if (!isWhitespace()) {
+                s += text().toXmlEscaped();
+            }
             break;
-        case QXmlStreamReader::Comment:
+        case XmlStreamReader::Comment:
             break;
 
         default:
-            qDebug("htmlToString: read token: %s", qPrintable(tokenString()));
+            LOGD() << "read token: " << tokenString();
             return s;
         }
     }
     return s;
 }
 
-//---------------------------------------------------------
-//   spannerValues
-//---------------------------------------------------------
-
-const SpannerValues* XmlReader::spannerValues(int id) const
-{
-    for (const SpannerValues& v : _spannerValues) {
-        if (v.spannerId == id) {
-            return &v;
-        }
-    }
-    return 0;
-}
-
-//---------------------------------------------------------
-//   addSpanner
-//---------------------------------------------------------
-
-void XmlReader::addSpanner(int id, Spanner* s)
-{
-    _spanner.push_back(std::pair<int, Spanner*>(id, s));
-}
-
-//---------------------------------------------------------
-//   removeSpanner
-//---------------------------------------------------------
-
-void XmlReader::removeSpanner(const Spanner* s)
-{
-    for (auto i : _spanner) {
-        if (i.second == s) {
-            mu::remove(_spanner, i);
-            return;
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   findSpanner
-//---------------------------------------------------------
-
-Spanner* XmlReader::findSpanner(int id)
-{
-    for (auto i : _spanner) {
-        if (i.first == id) {
-            return i.second;
-        }
-    }
-    return nullptr;
-}
-
-//---------------------------------------------------------
-//   spannerId
-//---------------------------------------------------------
-
-int XmlReader::spannerId(const Spanner* s)
-{
-    for (auto i : _spanner) {
-        if (i.second == s) {
-            return i.first;
-        }
-    }
-    qDebug("XmlReader::spannerId not found");
-    return -1;
-}
-
-//---------------------------------------------------------
-//   addUserTextStyle
-//    return false if mapping is not possible
-//      (too many user text styles)
-//---------------------------------------------------------
-
-TextStyleType XmlReader::addUserTextStyle(const QString& name)
-{
-    qDebug("%s", qPrintable(name));
-    TextStyleType id = TextStyleType::TEXT_TYPES;
-    if (userTextStyles.size() == 0) {
-        id = TextStyleType::USER1;
-    } else if (userTextStyles.size() == 1) {
-        id = TextStyleType::USER2;
-    } else if (userTextStyles.size() == 2) {
-        id = TextStyleType::USER3;
-    } else if (userTextStyles.size() == 3) {
-        id = TextStyleType::USER4;
-    } else if (userTextStyles.size() == 4) {
-        id = TextStyleType::USER5;
-    } else if (userTextStyles.size() == 5) {
-        id = TextStyleType::USER6;
-    } else if (userTextStyles.size() == 6) {
-        id = TextStyleType::USER7;
-    } else if (userTextStyles.size() == 7) {
-        id = TextStyleType::USER8;
-    } else if (userTextStyles.size() == 8) {
-        id = TextStyleType::USER9;
-    } else if (userTextStyles.size() == 9) {
-        id = TextStyleType::USER10;
-    } else if (userTextStyles.size() == 10) {
-        id = TextStyleType::USER11;
-    } else if (userTextStyles.size() == 11) {
-        id = TextStyleType::USER12;
-    } else {
-        qDebug("too many user defined textstyles");
-    }
-    if (id != TextStyleType::TEXT_TYPES) {
-        userTextStyles.push_back({ name, id });
-    }
-    return id;
-}
-
-//---------------------------------------------------------
-//   lookupUserTextStyle
-//---------------------------------------------------------
-
-TextStyleType XmlReader::lookupUserTextStyle(const QString& name) const
-{
-    for (const auto& i : userTextStyles) {
-        if (i.name == name) {
-            return i.ss;
-        }
-    }
-    return TextStyleType::TEXT_TYPES;         // not found
-}
-
-//---------------------------------------------------------
-//   addConnectorInfo
-//---------------------------------------------------------
-
-void XmlReader::addConnectorInfo(std::unique_ptr<ConnectorInfoReader> c)
-{
-    _connectors.push_back(std::move(c));
-    ConnectorInfoReader* c1 = _connectors.back().get();
-    c1->update();
-    for (std::unique_ptr<ConnectorInfoReader>& c2 : _connectors) {
-        if (c2->connect(c1)) {
-            if (c2->finished()) {
-                c2->addToScore(pasteMode());
-                removeConnector(c2.get());
-            }
-            break;
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   removeConnector
-//---------------------------------------------------------
-
-void XmlReader::removeConnector(const ConnectorInfoReader* c)
-{
-    while (c->prev()) {
-        c = c->prev();
-    }
-    while (c) {
-        ConnectorInfoReader* next = c->next();
-        for (auto it = _connectors.begin(); it != _connectors.end(); ++it) {
-            if (it->get() == c) {
-                _connectors.erase(it);
-                break;
-            }
-        }
-        c = next;
-    }
-}
-
-//---------------------------------------------------------
-//   checkConnectors
-//---------------------------------------------------------
-
-void XmlReader::checkConnectors()
-{
-    for (std::unique_ptr<ConnectorInfoReader>& c : _pendingConnectors) {
-        addConnectorInfo(std::move(c));
-    }
-    _pendingConnectors.clear();
-}
-
-//---------------------------------------------------------
-//   distanceSort
-//---------------------------------------------------------
-
-static bool distanceSort(const std::pair<int, std::pair<ConnectorInfoReader*, ConnectorInfoReader*> >& p1,
-                         const std::pair<int, std::pair<ConnectorInfoReader*, ConnectorInfoReader*> >& p2)
-{
-    return p1.first < p2.first;
-}
-
-//---------------------------------------------------------
-//   reconnectBrokenConnectors
-//---------------------------------------------------------
-
-void XmlReader::reconnectBrokenConnectors()
-{
-    if (_connectors.empty()) {
-        return;
-    }
-    qDebug("Reconnecting broken connectors (%d nodes)", int(_connectors.size()));
-    std::vector<std::pair<int, std::pair<ConnectorInfoReader*, ConnectorInfoReader*> > > brokenPairs;
-    for (size_t i = 1; i < _connectors.size(); ++i) {
-        for (size_t j = 0; j < i; ++j) {
-            ConnectorInfoReader* c1 = _connectors[i].get();
-            ConnectorInfoReader* c2 = _connectors[j].get();
-            int d = c1->connectionDistance(*c2);
-            if (d >= 0) {
-                brokenPairs.push_back(std::make_pair(d, std::make_pair(c1, c2)));
-            } else {
-                brokenPairs.push_back(std::make_pair(-d, std::make_pair(c2, c1)));
-            }
-        }
-    }
-    std::sort(brokenPairs.begin(), brokenPairs.end(), distanceSort);
-    for (auto& distPair : brokenPairs) {
-        if (distPair.first == INT_MAX) {
-            continue;
-        }
-        auto& pair = distPair.second;
-        if (pair.first->next() || pair.second->prev()) {
-            continue;
-        }
-        pair.first->forceConnect(pair.second);
-    }
-    QSet<ConnectorInfoReader*> reconnected;
-    for (auto& conn : _connectors) {
-        ConnectorInfoReader* c = conn.get();
-        if (c->finished()) {
-            reconnected.insert(static_cast<ConnectorInfoReader*>(c->start()));
-        }
-    }
-    for (ConnectorInfoReader* cptr : reconnected) {
-        cptr->addToScore(pasteMode());
-        removeConnector(cptr);
-    }
-    qDebug("reconnected %d broken connectors", reconnected.count());
-}
-
-//---------------------------------------------------------
-//   rtick
-//    return relative position in measure
-//---------------------------------------------------------
-
-Fraction XmlReader::rtick() const
-{
-    return _curMeasure ? _tick - _curMeasure->tick() : _tick;
-}
-
-//---------------------------------------------------------
-//   setTick
-//---------------------------------------------------------
-
-void XmlReader::setTick(const Fraction& f)
-{
-    _tick = f.reduced();
-    _intTick = _tick.ticks();
-}
-
-//---------------------------------------------------------
-//   incTick
-//---------------------------------------------------------
-
-void XmlReader::incTick(const Fraction& f)
-{
-    _tick += f;
-    _tick.reduce();
-    _intTick += f.ticks();
-}
-
 engraving::ReadContext* XmlReader::context() const
 {
+    if (!m_context) {
+        m_context = new engraving::ReadContext(nullptr);
+        m_selfContext = true;
+    }
     return m_context;
 }
 
-void XmlReader::setContext(mu::engraving::ReadContext* context)
+void XmlReader::setContext(ReadContext* context)
 {
+    if (m_context && m_selfContext) {
+        delete m_context;
+    }
+
     m_context = context;
+    m_selfContext = false;
 }
 }

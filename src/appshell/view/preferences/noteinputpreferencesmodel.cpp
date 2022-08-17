@@ -36,9 +36,9 @@ bool NoteInputPreferencesModel::advanceToNextNoteOnKeyRelease() const
     return shortcutsConfiguration()->advanceToNextNoteOnKeyRelease();
 }
 
-bool NoteInputPreferencesModel::colorNotesOusideOfUsablePitchRange() const
+bool NoteInputPreferencesModel::colorNotesOutsideOfUsablePitchRange() const
 {
-    return notationConfiguration()->colorNotesOusideOfUsablePitchRange();
+    return notationConfiguration()->colorNotesOutsideOfUsablePitchRange();
 }
 
 int NoteInputPreferencesModel::delayBetweenNotesInRealTimeModeMilliseconds() const
@@ -76,14 +76,14 @@ void NoteInputPreferencesModel::setAdvanceToNextNoteOnKeyRelease(bool value)
     emit advanceToNextNoteOnKeyReleaseChanged(value);
 }
 
-void NoteInputPreferencesModel::setColorNotesOusideOfUsablePitchRange(bool value)
+void NoteInputPreferencesModel::setColorNotesOutsideOfUsablePitchRange(bool value)
 {
-    if (value == colorNotesOusideOfUsablePitchRange()) {
+    if (value == colorNotesOutsideOfUsablePitchRange()) {
         return;
     }
 
-    notationConfiguration()->setColorNotesOusideOfUsablePitchRange(value);
-    emit colorNotesOusideOfUsablePitchRangeChanged(value);
+    notationConfiguration()->setColorNotesOutsideOfUsablePitchRange(value);
+    emit colorNotesOutsideOfUsablePitchRangeChanged(value);
 }
 
 void NoteInputPreferencesModel::setDelayBetweenNotesInRealTimeModeMilliseconds(int delay)

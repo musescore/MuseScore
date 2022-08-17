@@ -26,7 +26,7 @@
 #include <QTimer>
 #include <QEventLoop>
 
-#include "uri.h"
+#include "types/uri.h"
 #include "settings.h"
 #include "log.h"
 
@@ -48,6 +48,7 @@ static const QString METHOD_SETTINGS_COMMIT_TRANSACTION("SETTINGS_COMMIT_TRANSAC
 static const QString METHOD_SETTINGS_ROLLBACK_TRANSACTION("SETTINGS_ROLLBACK_TRANSACTION");
 static const QString METHOD_SETTINGS_SET_VALUE("SETTINGS_SET_VALUE");
 static const QString METHOD_QUIT("METHOD_QUIT");
+static const QString METHOD_QUIT_WITH_RESTART_LAST_INSTANCE("METHOD_QUIT_WITH_RESTART_LAST_INSTANCE");
 static const QString METHOD_RESOURCE_CHANGED("RESOURCE_CHANGED");
 
 MultiInstancesProvider::~MultiInstancesProvider()
@@ -86,12 +87,12 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
     // Project opening
     if (msg.type == MsgType::Request && msg.method == METHOD_PROJECT_IS_OPENED) {
         CHECK_ARGS_COUNT(1);
-        io::path scorePath = io::path(msg.args.at(0));
+        io::path_t scorePath = io::path_t(msg.args.at(0));
         bool isOpened = projectFilesController()->isProjectOpened(scorePath);
         m_ipcChannel->response(METHOD_PROJECT_IS_OPENED, { QString::number(isOpened) }, msg.srcID);
     } else if (msg.method == METHOD_ACTIVATE_WINDOW_WITH_PROJECT) {
         CHECK_ARGS_COUNT(1);
-        io::path scorePath = io::path(msg.args.at(0));
+        io::path_t scorePath = io::path_t(msg.args.at(0));
         bool isOpened = projectFilesController()->isProjectOpened(scorePath);
         if (isOpened) {
             mainWindow()->requestShowOnFront();
@@ -128,12 +129,14 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
         settings()->setLocalValue(key, val);
     } else if (msg.method == METHOD_QUIT) {
         dispatcher()->dispatch("quit", actions::ActionData::make_arg1<bool>(false));
+    } else if (msg.method == METHOD_QUIT_WITH_RESTART_LAST_INSTANCE) {
+        dispatcher()->dispatch("restart");
     } else if (msg.method == METHOD_RESOURCE_CHANGED) {
         resourceChanged().send(msg.args.at(0).toStdString());
     }
 }
 
-bool MultiInstancesProvider::isProjectAlreadyOpened(const io::path& projectPath) const
+bool MultiInstancesProvider::isProjectAlreadyOpened(const io::path_t& projectPath) const
 {
     if (!isInited()) {
         return false;
@@ -154,7 +157,7 @@ bool MultiInstancesProvider::isProjectAlreadyOpened(const io::path& projectPath)
     return ret;
 }
 
-void MultiInstancesProvider::activateWindowWithProject(const io::path& projectPath)
+void MultiInstancesProvider::activateWindowWithProject(const io::path_t& projectPath)
 {
     if (!isInited()) {
         return;
@@ -385,4 +388,13 @@ void MultiInstancesProvider::quitForAll()
     }
 
     m_ipcChannel->broadcast(METHOD_QUIT);
+}
+
+void MultiInstancesProvider::quitAllAndRestartLast()
+{
+    if (!isInited()) {
+        return;
+    }
+
+    m_ipcChannel->broadcast(METHOD_QUIT_WITH_RESTART_LAST_INSTANCE);
 }

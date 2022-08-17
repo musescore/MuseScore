@@ -23,11 +23,11 @@
 #include "stemslash.h"
 #include "score.h"
 #include "chord.h"
-#include "draw/pen.h"
+#include "draw/types/pen.h"
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 StemSlash::StemSlash(Chord* parent)
     : EngravingItem(ElementType::STEM_SLASH, parent)
 {
@@ -41,7 +41,7 @@ void StemSlash::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
-    qreal lw = score()->styleMM(Sid::stemWidth);
+    double lw = score()->styleMM(Sid::stemWidth);
     painter->setPen(Pen(curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->drawLine(line);
 }
@@ -53,7 +53,7 @@ void StemSlash::draw(mu::draw::Painter* painter) const
 void StemSlash::setLine(const LineF& l)
 {
     line = l;
-    qreal w = score()->styleMM(Sid::stemWidth) * .5;
+    double w = score()->styleMM(Sid::stemWidth) * .5;
     setbbox(RectF(line.p1(), line.p2()).normalized().adjusted(-w, -w, 2.0 * w, 2.0 * w));
 }
 
@@ -64,12 +64,12 @@ void StemSlash::setLine(const LineF& l)
 void StemSlash::layout()
 {
     Stem* stem = chord()->stem();
-    qreal h2;
-    qreal _spatium = spatium();
-    qreal l = chord()->up() ? _spatium : -_spatium;
+    double h2;
+    double _spatium = spatium();
+    double l = chord()->up() ? _spatium : -_spatium;
     PointF p(stem->flagPosition());
-    qreal x = p.x() + _spatium * .1;
-    qreal y = p.y();
+    double x = p.x() + _spatium * .1;
+    double y = p.y();
 
     if (chord()->beam()) {
         y += l * .3;
@@ -78,7 +78,7 @@ void StemSlash::layout()
         y += l * 1.2;
         h2 = l * .4;
     }
-    qreal w  = chord()->upNote()->bboxRightPos() * .7;
+    double w  = chord()->upNote()->bboxRightPos() * .7;
     setLine(LineF(PointF(x + w, y - h2), PointF(x - w, y + h2)));
 }
 }

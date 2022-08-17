@@ -27,7 +27,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 
-namespace Ms {
+namespace mu::engraving {
 class System;
 }
 
@@ -66,7 +66,7 @@ private:
     void apply() const;
     FilterElementsOptions elementOptions() const;
 
-    Ms::System* elementSystem(const EngravingItem* element) const;
+    mu::engraving::System* elementSystem(const EngravingItem* element) const;
 
     const EngravingItem* m_element = nullptr;
 };

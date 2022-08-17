@@ -26,4 +26,5 @@ DropShadow {
     color: "#40000000"
     verticalOffset: 4
     radius: 12
+    samples: 18
 }

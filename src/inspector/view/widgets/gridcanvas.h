@@ -23,15 +23,15 @@
 #ifndef MU_INSPECTOR_GRIDCANVAS_H
 #define MU_INSPECTOR_GRIDCANVAS_H
 
-#include <QQuickPaintedItem>
 #include <QPainter>
 
+#include "uicomponents/view/quickpaintedview.h"
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 #include "engraving/types/pitchvalue.h"
 
 namespace mu::inspector {
-class GridCanvas : public QQuickPaintedItem
+class GridCanvas : public uicomponents::QuickPaintedView
 {
     Q_OBJECT
 
@@ -83,7 +83,7 @@ private:
     void paint(QPainter* painter) override;
     void mousePressEvent(QMouseEvent*) override;
 
-    Ms::PitchValues m_points;
+    mu::engraving::PitchValues m_points;
 
     /// The number of rows and columns.
     /// This is in fact the number of lines that are to be drawn.

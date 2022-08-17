@@ -38,36 +38,36 @@ mu::RetVal<Templates> TemplatesRepository::templates() const
 
     Templates templates;
 
-    for (const io::path& dir : configuration()->availableTemplateDirs()) {
+    for (const io::path_t& dir : configuration()->availableTemplateDirs()) {
         templates << readTemplates(dir);
     }
 
     return RetVal<Templates>::make_ok(templates);
 }
 
-Templates TemplatesRepository::readTemplates(const io::path& dirPath) const
+Templates TemplatesRepository::readTemplates(const io::path_t& dirPath) const
 {
     TRACEFUNC;
 
-    io::path categoriesJsonPath = configuration()->templateCategoriesJsonPath(dirPath);
+    io::path_t categoriesJsonPath = configuration()->templateCategoriesJsonPath(dirPath);
 
     if (!fileSystem()->exists(categoriesJsonPath)) {
-        RetVal<io::paths> files = fileSystem()->scanFiles(dirPath, { "*.mscz", "*.mscx" });
+        RetVal<io::paths_t> files = fileSystem()->scanFiles(dirPath, { "*.mscz", "*.mscx" });
         if (!files.ret) {
             LOGE() << files.ret.toString();
             return Templates();
         }
 
-        return readTemplates(files.val, qtrc("project", "My Templates"));
+        return readTemplates(files.val, qtrc("project", "My templates"));
     }
 
-    RetVal<QByteArray> categoriesJson = fileSystem()->readFile(categoriesJsonPath);
+    RetVal<ByteArray> categoriesJson = fileSystem()->readFile(categoriesJsonPath);
     if (!categoriesJson.ret) {
         LOGE() << categoriesJson.ret.toString();
         return Templates();
     }
 
-    QJsonDocument document = QJsonDocument::fromJson(categoriesJson.val);
+    QJsonDocument document = QJsonDocument::fromJson(categoriesJson.val.toQByteArrayNoCopy());
     QVariantList categoryObjList = document.array().toVariantList();
 
     Templates templates;
@@ -77,20 +77,25 @@ Templates TemplatesRepository::readTemplates(const io::path& dirPath) const
         QString categoryTitle = qtrc("project", map["title"].toString().toUtf8().data());
         QStringList files = map["files"].toStringList();
 
-        templates << readTemplates(io::pathsFromStrings(files), categoryTitle, dirPath);
+        io::paths_t paths;
+        for (const QString& path : files) {
+            paths.push_back(path);
+        }
+
+        templates << readTemplates(paths, categoryTitle, dirPath);
     }
 
     return templates;
 }
 
-Templates TemplatesRepository::readTemplates(const io::paths& files, const QString& category, const io::path& dirPath) const
+Templates TemplatesRepository::readTemplates(const io::paths_t& files, const QString& category, const io::path_t& dirPath) const
 {
     TRACEFUNC;
 
     Templates templates;
 
-    for (const io::path& file : files) {
-        io::path path = dirPath.empty() ? file : dirPath + "/" + file;
+    for (const io::path_t& file : files) {
+        io::path_t path = dirPath.empty() ? file : dirPath + "/" + file;
         RetVal<ProjectMeta> meta = mscReader()->readMeta(path);
         if (!meta.ret) {
             LOGE() << QString("failed read template %1: %2")

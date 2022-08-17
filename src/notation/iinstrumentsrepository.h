@@ -24,7 +24,7 @@
 
 #include "modularity/imoduleexport.h"
 
-#include "retval.h"
+#include "types/retval.h"
 #include "notationtypes.h"
 
 namespace mu::notation {
@@ -36,9 +36,13 @@ public:
     virtual ~IInstrumentsRepository() = default;
 
     virtual const InstrumentTemplateList& instrumentTemplates() const = 0;
+    virtual const InstrumentTemplate& instrumentTemplate(const std::string& instrumentId) const = 0;
+
+    virtual const ScoreOrderList& orders() const = 0;
+    virtual const ScoreOrder& order(const std::string& orderId) const = 0;
+
     virtual const InstrumentGenreList& genres() const = 0;
     virtual const InstrumentGroupList& groups() const = 0;
-    virtual const ScoreOrderList& orders() const = 0;
 };
 }
 

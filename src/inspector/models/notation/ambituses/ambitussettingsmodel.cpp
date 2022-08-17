@@ -38,33 +38,33 @@ AmbitusSettingsModel::AmbitusSettingsModel(QObject* parent, IElementRepositorySe
 
 void AmbitusSettingsModel::createProperties()
 {
-    m_noteheadGroup = buildPropertyItem(Ms::Pid::HEAD_GROUP);
-    m_noteheadType = buildPropertyItem(Ms::Pid::HEAD_TYPE);
+    m_noteheadGroup = buildPropertyItem(mu::engraving::Pid::HEAD_GROUP);
+    m_noteheadType = buildPropertyItem(mu::engraving::Pid::HEAD_TYPE);
 
-    m_topTpc = buildPropertyItem(Ms::Pid::TPC1);
-    m_bottomTpc = buildPropertyItem(Ms::Pid::FBPARENTHESIS1);
-    m_topOctave = buildPropertyItem(Ms::Pid::FBPARENTHESIS3);
-    m_bottomOctave = buildPropertyItem(Ms::Pid::FBPARENTHESIS4);
+    m_topTpc = buildPropertyItem(mu::engraving::Pid::TPC1);
+    m_bottomTpc = buildPropertyItem(mu::engraving::Pid::FBPARENTHESIS1);
+    m_topOctave = buildPropertyItem(mu::engraving::Pid::FBPARENTHESIS3);
+    m_bottomOctave = buildPropertyItem(mu::engraving::Pid::FBPARENTHESIS4);
 
-    m_topPitch = buildPropertyItem(Ms::Pid::PITCH, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_topPitch = buildPropertyItem(mu::engraving::Pid::PITCH, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
 
-    m_bottomPitch = buildPropertyItem(Ms::Pid::FBPARENTHESIS2, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_bottomPitch = buildPropertyItem(mu::engraving::Pid::FBPARENTHESIS2, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
 
-    m_direction = buildPropertyItem(Ms::Pid::MIRROR_HEAD);
-    m_lineThickness = buildPropertyItem(Ms::Pid::LINE_WIDTH_SPATIUM);
+    m_direction = buildPropertyItem(mu::engraving::Pid::MIRROR_HEAD);
+    m_lineThickness = buildPropertyItem(mu::engraving::Pid::LINE_WIDTH_SPATIUM);
 }
 
 void AmbitusSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::AMBITUS);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::AMBITUS);
 }
 
 void AmbitusSettingsModel::loadProperties()

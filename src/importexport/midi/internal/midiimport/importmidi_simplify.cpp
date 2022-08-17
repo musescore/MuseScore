@@ -28,12 +28,14 @@
 #include "importmidi_voice.h"
 #include "importmidi_operations.h"
 #include "importmidi_tuplet_voice.h"
+#include "../midishared/midifile.h"
 
 #include "engraving/libmscore/sig.h"
 #include "engraving/libmscore/durationtype.h"
-#include "engraving/compat/midi/midifile.h"
 
-namespace Ms {
+using namespace mu::engraving;
+
+namespace mu::iex::midi {
 namespace Simplify {
 bool hasComplexBeamedDurations(const QList<std::pair<ReducedFraction, TDuration> >& list)
 {
@@ -189,7 +191,7 @@ void shortenDrumNote(
         }
         if (next != chords.end()) {
             const auto len = ReducedFraction::fromTicks(
-                Constant::division) / 8;                             // 1/32
+                Constants::division) / 8;                             // 1/32
             auto newOffTime = it->first + len;
             if (next->second.isInTuplet) {
                 const auto& tuplet = next->second.tuplet->second;

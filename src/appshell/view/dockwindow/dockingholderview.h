@@ -35,8 +35,6 @@ public:
 
 private:
     void componentComplete() override;
-
-    DockType type() const override;
 };
 }
 

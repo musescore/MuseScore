@@ -1,0 +1,815 @@
+{
+ "engravingDefaults": {
+  "arrowShaftThickness": 0.15, 
+  "barlineSeparation": 0.5, 
+  "beamSpacing": 0.25, 
+  "beamThickness": 0.5, 
+  "bracketThickness": 0.5, 
+  "dashedBarlineDashLength": 0.42, 
+  "dashedBarlineGapLength": 0.3, 
+  "dashedBarlineThickness": 0.15, 
+  "hairpinThickness": 0.15, 
+  "legerLineExtension": 0.25, 
+  "legerLineThickness": 0.19, 
+  "lyricLineThickness": 0.15, 
+  "octaveLineThickness": 0.15, 
+  "pedalLineThickness": 0.15, 
+  "repeatBarlineDotSeparation": 0.34, 
+  "repeatEndingLineThickness": 0.15, 
+  "slurEndpointThickness": 0.07, 
+  "slurMidpointThickness": 0.33, 
+  "staffLineThickness": 0.15, 
+  "stemThickness": 0.15, 
+  "subBracketThickness": 0.15, 
+  "textEnclosureThickness": 0.15, 
+  "thickBarlineThickness": 0.5, 
+  "thinBarlineThickness": 0.15,
+  "thinThickBarlineSeparation": 0.5, 
+  "tieEndpointThickness": 0.07, 
+  "tieMidpointThickness": 0.33, 
+  "tupletBracketThickness": 0.15
+ }, 
+ "fontName": "Finale Broadway Text", 
+ "fontVersion": 1.1, 
+ "glyphBBoxes": {
+  "U+F720": {
+   "bBoxNE": [
+    3.656, 
+    3.9
+   ], 
+   "bBoxSW": [
+    0.044, 
+    -0.852
+   ]
+  }, 
+  "U+F721": {
+   "bBoxNE": [
+    2.864, 
+    3.9
+   ], 
+   "bBoxSW": [
+    -0.04, 
+    -0.852
+   ]
+  }, 
+  "U+F722": {
+   "bBoxNE": [
+    1.344, 
+    3.9
+   ], 
+   "bBoxSW": [
+    -1.228, 
+    -0.852
+   ]
+  }, 
+  "U+F723": {
+   "bBoxNE": [
+    3.336, 
+    3.9
+   ], 
+   "bBoxSW": [
+    0.044, 
+    -0.776
+   ]
+  }, 
+  "U+F724": {
+   "bBoxNE": [
+    1.9, 
+    3.9
+   ], 
+   "bBoxSW": [
+    -0.04, 
+    3.516
+   ]
+  }, 
+  "U+F725": {
+   "bBoxNE": [
+    1.324, 
+    3.9
+   ], 
+   "bBoxSW": [
+    -1.532, 
+    -0.76
+   ]
+  }, 
+  "U+F726": {
+   "bBoxNE": [
+    1.9, 
+    3.9
+   ], 
+   "bBoxSW": [
+    -0.04, 
+    3.516
+   ]
+  }, 
+  "U+F727": {
+   "bBoxNE": [
+    1.68, 
+    3.9
+   ], 
+   "bBoxSW": [
+    -0.04, 
+    -0.852
+   ]
+  }, 
+  "U+F729": {
+   "bBoxNE": [
+    4.428, 
+    3.9
+   ], 
+   "bBoxSW": [
+    0.044, 
+    -0.852
+   ]
+  }, 
+  "U+F72A": {
+   "bBoxNE": [
+    3.72, 
+    3.9
+   ], 
+   "bBoxSW": [
+    -0.04, 
+    -0.852
+   ]
+  }, 
+  "U+F72B": {
+   "bBoxNE": [
+    1.32, 
+    3.9
+   ], 
+   "bBoxSW": [
+    -2.332, 
+    -0.852
+   ]
+  }, 
+  "U+F72C": {
+   "bBoxNE": [
+    5.032, 
+    3.9
+   ], 
+   "bBoxSW": [
+    0.044, 
+    -0.776
+   ]
+  }, 
+  "U+F72E": {
+   "bBoxNE": [
+    1.344, 
+    3.9
+   ], 
+   "bBoxSW": [
+    -2.024, 
+    -0.76
+   ]
+  }, 
+  "U+F731": {
+   "bBoxNE": [
+    1.388, 
+    3.752
+   ], 
+   "bBoxSW": [
+    -1.464, 
+    -0.852
+   ]
+  }, 
+  "U+F735": {
+   "bBoxNE": [
+    2.9, 
+    3.808
+   ], 
+   "bBoxSW": [
+    0.048, 
+    -0.852
+   ]
+  }, 
+  "U+F736": {
+   "bBoxNE": [
+    3.72, 
+    -0.468
+   ], 
+   "bBoxSW": [
+    -0.504, 
+    -0.852
+   ]
+  }, 
+  "U+F737": {
+   "bBoxNE": [
+    0.996, 
+    1.928
+   ], 
+   "bBoxSW": [
+    -1.08, 
+    -0.852
+   ]
+  }, 
+  "U+F73C": {
+   "bBoxNE": [
+    2.3, 
+    3.9
+   ], 
+   "bBoxSW": [
+    -0.04, 
+    -0.852
+   ]
+  }, 
+  "U+F741": {
+   "bBoxNE": [
+    2.9, 
+    3.9
+   ], 
+   "bBoxSW": [
+    0.044, 
+    -0.776
+   ]
+  }, 
+  "U+F743": {
+   "bBoxNE": [
+    0.76, 
+    3.9
+   ], 
+   "bBoxSW": [
+    -1.08, 
+    1.108
+   ]
+  }, 
+  "U+F744": {
+   "bBoxNE": [
+    5.032, 
+    3.9
+   ], 
+   "bBoxSW": [
+    0.044, 
+    -0.776
+   ]
+  }, 
+  "U+F745": {
+   "bBoxNE": [
+    2.8, 
+    3.9
+   ], 
+   "bBoxSW": [
+    -0.04, 
+    3.516
+   ]
+  }, 
+  "U+F746": {
+   "bBoxNE": [
+    0.76, 
+    3.9
+   ], 
+   "bBoxSW": [
+    -1.72, 
+    1.108
+   ]
+  }, 
+  "U+F747": {
+   "bBoxNE": [
+    3.776, 
+    3.808
+   ], 
+   "bBoxSW": [
+    0.048, 
+    -0.852
+   ]
+  }, 
+  "U+F748": {
+   "bBoxNE": [
+    5.064, 
+    -0.468
+   ], 
+   "bBoxSW": [
+    -0.04, 
+    -0.852
+   ]
+  }, 
+  "U+F749": {
+   "bBoxNE": [
+    0.996, 
+    1.928
+   ], 
+   "bBoxSW": [
+    -1.84, 
+    -0.852
+   ]
+  }, 
+  "U+F74A": {
+   "bBoxNE": [
+    3.296, 
+    3.812
+   ], 
+   "bBoxSW": [
+    -1.076, 
+    -0.756
+   ]
+  }, 
+  "U+F7C8": {
+   "bBoxNE": [
+    12.136, 
+    2.772
+   ], 
+   "bBoxSW": [
+    -0.048, 
+    -0.62
+   ]
+  }, 
+  "U+F810": {
+   "bBoxNE": [
+    2.8, 
+    3.9
+   ], 
+   "bBoxSW": [
+    -1.536, 
+    1.44
+   ]
+  }, 
+  "U+F811": {
+   "bBoxNE": [
+    2.8, 
+    1.824
+   ], 
+   "bBoxSW": [
+    -1.464, 
+    -0.852
+   ]
+  }, 
+  "U+F812": {
+   "bBoxNE": [
+    2.236, 
+    1.824
+   ], 
+   "bBoxSW": [
+    -0.028, 
+    1.44
+   ]
+  }, 
+  "U+F813": {
+   "bBoxNE": [
+    0.728, 
+    2.448
+   ], 
+   "bBoxSW": [
+    -1.26, 
+    0.692
+   ]
+  }, 
+  "U+F814": {
+   "bBoxNE": [
+    8.82, 
+    4.432
+   ], 
+   "bBoxSW": [
+    -0.672, 
+    2.104
+   ]
+  }, 
+  "U+F815": {
+   "bBoxNE": [
+    7.472, 
+    4.388
+   ], 
+   "bBoxSW": [
+    -0.796, 
+    1.704
+   ]
+  }, 
+  "U+F816": {
+   "bBoxNE": [
+    3.056, 
+    3.9
+   ], 
+   "bBoxSW": [
+    -0.788, 
+    1.216
+   ]
+  }, 
+  "U+F817": {
+   "bBoxNE": [
+    1.996, 
+    3.9
+   ], 
+   "bBoxSW": [
+    -0.04, 
+    3.516
+   ]
+  }, 
+  "U+F818": {
+   "bBoxNE": [
+    5.952, 
+    3.9
+   ], 
+   "bBoxSW": [
+    -0.04, 
+    3.516
+   ]
+  }, 
+  "U+F819": {
+   "bBoxNE": [
+    4.4, 
+    3.9
+   ], 
+   "bBoxSW": [
+    -1.928, 
+    1.76
+   ]
+  }, 
+  "U+F81A": {
+   "bBoxNE": [
+    3.88, 
+    4.04
+   ], 
+   "bBoxSW": [
+    -1.912, 
+    2.372
+   ]
+  }, 
+  "U+F81B": {
+   "bBoxNE": [
+    3.028, 
+    2.976
+   ], 
+   "bBoxSW": [
+    -1.84, 
+    -0.852
+   ]
+  }, 
+  "U+F81C": {
+   "bBoxNE": [
+    3.992, 
+    2.404
+   ], 
+   "bBoxSW": [
+    -1.464, 
+    -0.852
+   ]
+  }, 
+  "U+F81D": {
+   "bBoxNE": [
+    3.936, 
+    3.896
+   ], 
+   "bBoxSW": [
+    -1.536, 
+    0.868
+   ]
+  }, 
+  "U+F81E": {
+   "bBoxNE": [
+    3.052, 
+    3.896
+   ], 
+   "bBoxSW": [
+    -1.816, 
+    0.068
+   ]
+  }, 
+  "U+F81F": {
+   "bBoxNE": [
+    8.396, 
+    3.924
+   ], 
+   "bBoxSW": [
+    0.044, 
+    2.476
+   ]
+  }, 
+  "accidentalFlat": {
+   "bBoxNE": [
+    1.152, 
+    1.808
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -1.156
+   ]
+  }, 
+  "accidentalNatural": {
+   "bBoxNE": [
+    1.088, 
+    1.46
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -1.624
+   ]
+  }, 
+  "accidentalSharp": {
+   "bBoxNE": [
+    1.608, 
+    1.492
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -1.548
+   ]
+  }, 
+  "coda": {
+   "bBoxNE": [
+    2.928, 
+    2.98
+   ], 
+   "bBoxSW": [
+    0.02, 
+    -0.076
+   ]
+  }, 
+  "csymAugmented": {
+   "bBoxNE": [
+    1.524, 
+    1.484
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.04
+   ]
+  }, 
+  "csymDiminished": {
+   "bBoxNE": [
+    1.268, 
+    1.308
+   ], 
+   "bBoxSW": [
+    0.0, 
+    0.0
+   ]
+  }, 
+  "csymHalfDiminished": {
+   "bBoxNE": [
+    1.424, 
+    1.424
+   ], 
+   "bBoxSW": [
+    -0.136, 
+    -0.112
+   ]
+  }, 
+  "csymMajorSeventh": {
+   "bBoxNE": [
+    1.484, 
+    1.628
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.004
+   ]
+  }, 
+  "csymParensLeftTall": {
+   "bBoxNE": [
+    0.792, 
+    4.416
+   ], 
+   "bBoxSW": [
+    0.044, 
+    -1.744
+   ]
+  }, 
+  "csymParensRightTall": {
+   "bBoxNE": [
+    0.74, 
+    4.42
+   ], 
+   "bBoxSW": [
+    -0.044, 
+    -1.712
+   ]
+  }, 
+  "metNote16thUp": {
+   "bBoxNE": [
+    2.24, 
+    3.728
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.496
+   ]
+  }, 
+  "metNote8thUp": {
+   "bBoxNE": [
+    2.256, 
+    3.556
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.496
+   ]
+  }, 
+  "metNoteHalfUp": {
+   "bBoxNE": [
+    1.484, 
+    2.804
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.728
+   ]
+  }, 
+  "metNoteQuarterUp": {
+   "bBoxNE": [
+    1.292, 
+    2.96
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.48
+   ]
+  }, 
+  "metNoteWhole": {
+   "bBoxNE": [
+    1.576, 
+    0.624
+   ], 
+   "bBoxSW": [
+    0.0, 
+    -0.628
+   ]
+  }, 
+  "segno": {
+   "bBoxNE": [
+    2.26, 
+    3.188
+   ], 
+   "bBoxSW": [
+    0.016, 
+    -0.38
+   ]
+  }
+ }, 
+ "glyphsWithAnchors": {}, 
+ "optionalGlyphs": {
+  "U+F720": {
+   "classes": [], 
+   "codepoint": "U+F720"
+  }, 
+  "U+F721": {
+   "classes": [], 
+   "codepoint": "U+F721"
+  }, 
+  "U+F722": {
+   "classes": [], 
+   "codepoint": "U+F722"
+  }, 
+  "U+F723": {
+   "classes": [], 
+   "codepoint": "U+F723"
+  }, 
+  "U+F724": {
+   "classes": [], 
+   "codepoint": "U+F724"
+  }, 
+  "U+F725": {
+   "classes": [], 
+   "codepoint": "U+F725"
+  }, 
+  "U+F726": {
+   "classes": [], 
+   "codepoint": "U+F726"
+  }, 
+  "U+F727": {
+   "classes": [], 
+   "codepoint": "U+F727"
+  }, 
+  "U+F729": {
+   "classes": [], 
+   "codepoint": "U+F729"
+  }, 
+  "U+F72A": {
+   "classes": [], 
+   "codepoint": "U+F72A"
+  }, 
+  "U+F72B": {
+   "classes": [], 
+   "codepoint": "U+F72B"
+  }, 
+  "U+F72C": {
+   "classes": [], 
+   "codepoint": "U+F72C"
+  }, 
+  "U+F72E": {
+   "classes": [], 
+   "codepoint": "U+F72E"
+  }, 
+  "U+F731": {
+   "classes": [], 
+   "codepoint": "U+F731"
+  }, 
+  "U+F735": {
+   "classes": [], 
+   "codepoint": "U+F735"
+  }, 
+  "U+F736": {
+   "classes": [], 
+   "codepoint": "U+F736"
+  }, 
+  "U+F737": {
+   "classes": [], 
+   "codepoint": "U+F737"
+  }, 
+  "U+F73C": {
+   "classes": [], 
+   "codepoint": "U+F73C"
+  }, 
+  "U+F741": {
+   "classes": [], 
+   "codepoint": "U+F741"
+  }, 
+  "U+F743": {
+   "classes": [], 
+   "codepoint": "U+F743"
+  }, 
+  "U+F744": {
+   "classes": [], 
+   "codepoint": "U+F744"
+  }, 
+  "U+F745": {
+   "classes": [], 
+   "codepoint": "U+F745"
+  }, 
+  "U+F746": {
+   "classes": [], 
+   "codepoint": "U+F746"
+  }, 
+  "U+F747": {
+   "classes": [], 
+   "codepoint": "U+F747"
+  }, 
+  "U+F748": {
+   "classes": [], 
+   "codepoint": "U+F748"
+  }, 
+  "U+F749": {
+   "classes": [], 
+   "codepoint": "U+F749"
+  }, 
+  "U+F74A": {
+   "classes": [], 
+   "codepoint": "U+F74A"
+  }, 
+  "U+F7C8": {
+   "classes": [], 
+   "codepoint": "U+F7C8"
+  }, 
+  "U+F810": {
+   "classes": [], 
+   "codepoint": "U+F810"
+  }, 
+  "U+F811": {
+   "classes": [], 
+   "codepoint": "U+F811"
+  }, 
+  "U+F812": {
+   "classes": [], 
+   "codepoint": "U+F812"
+  }, 
+  "U+F813": {
+   "classes": [], 
+   "codepoint": "U+F813"
+  }, 
+  "U+F814": {
+   "classes": [], 
+   "codepoint": "U+F814"
+  }, 
+  "U+F815": {
+   "classes": [], 
+   "codepoint": "U+F815"
+  }, 
+  "U+F816": {
+   "classes": [], 
+   "codepoint": "U+F816"
+  }, 
+  "U+F817": {
+   "classes": [], 
+   "codepoint": "U+F817"
+  }, 
+  "U+F818": {
+   "classes": [], 
+   "codepoint": "U+F818"
+  }, 
+  "U+F819": {
+   "classes": [], 
+   "codepoint": "U+F819"
+  }, 
+  "U+F81A": {
+   "classes": [], 
+   "codepoint": "U+F81A"
+  }, 
+  "U+F81B": {
+   "classes": [], 
+   "codepoint": "U+F81B"
+  }, 
+  "U+F81C": {
+   "classes": [], 
+   "codepoint": "U+F81C"
+  }, 
+  "U+F81D": {
+   "classes": [], 
+   "codepoint": "U+F81D"
+  }, 
+  "U+F81E": {
+   "classes": [], 
+   "codepoint": "U+F81E"
+  }, 
+  "U+F81F": {
+   "classes": [], 
+   "codepoint": "U+F81F"
+  }
+ }
+}

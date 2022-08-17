@@ -22,27 +22,31 @@
 #ifndef MU_ENGRAVING_LAYOUTCHORDS_H
 #define MU_ENGRAVING_LAYOUTCHORDS_H
 
-#include <QtGlobal>
 #include <vector>
 
 #include "layoutcontext.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class Segment;
 class Note;
 class Staff;
 class MStyle;
-}
+class Measure;
+class Chord;
 
-namespace mu::engraving {
 class LayoutChords
 {
 public:
 
-    static void layoutChords1(Ms::Score* score, Ms::Segment* segment, staff_idx_t staffIdx);
-    static qreal layoutChords2(std::vector<Ms::Note*>& notes, bool up);
-    static void layoutChords3(const Ms::MStyle& style, std::vector<Ms::Note*>&, const Ms::Staff*, Ms::Segment*);
+    static void layoutChords1(Score* score, Segment* segment, staff_idx_t staffIdx);
+    static double layoutChords2(std::vector<Note*>& notes, bool up);
+    static void layoutChords3(const MStyle& style, std::vector<Note*>&, const Staff*, Segment*);
+    static void updateGraceNotes(Measure* measure);
+    static void repositionGraceNotesAfter(Segment* segment);
+    static void appendGraceNotes(Chord* chord);
+    static void updateLineAttachPoints(Measure* measure);
+    static void doUpdateLineAttachPoints(Chord* chord, bool isFirstInMeasure);
 };
 }
 

@@ -30,15 +30,17 @@
 #include "project/iprojectcreator.h"
 #include "notation/notationtypes.h"
 #include "context/iglobalcontext.h"
+#include "notation/iinstrumentsrepository.h"
 
 namespace mu::project {
 class NewScoreModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(scores, IProjectConfiguration, configuration)
-    INJECT(scores, IProjectCreator, notationCreator)
-    INJECT(scores, context::IGlobalContext, globalContext)
+    INJECT(project, IProjectConfiguration, configuration)
+    INJECT(project, IProjectCreator, notationCreator)
+    INJECT(project, context::IGlobalContext, globalContext)
+    INJECT(project, notation::IInstrumentsRepository, instrumentsRepository)
 
 public:
     explicit NewScoreModel(QObject* parent = nullptr);

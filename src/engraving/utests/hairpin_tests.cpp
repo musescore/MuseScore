@@ -28,14 +28,14 @@
 #include "engraving/compat/scoreaccess.h"
 #include "utils/scorerw.h"
 
+using namespace mu;
 using namespace mu::engraving;
-using namespace Ms;
 
-class HairpinTests : public ::testing::Test
+class Engraving_HairpinTests : public ::testing::Test
 {
 };
 
-TEST_F(HairpinTests, hairpin)
+TEST_F(Engraving_HairpinTests, hairpin)
 {
     MasterScore* score = compat::ScoreAccess::createMasterScore();
     Hairpin* hp = new Hairpin(score->dummy()->segment());

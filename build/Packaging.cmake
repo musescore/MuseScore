@@ -13,7 +13,13 @@ SET(CPACK_PACKAGE_VERSION_MAJOR "${MUSESCORE_VERSION_MAJOR}")
 SET(CPACK_PACKAGE_VERSION_MINOR "${MUSESCORE_VERSION_MINOR}")
 SET(CPACK_PACKAGE_VERSION_PATCH "${MUSESCORE_VERSION_PATCH}")
 SET(CPACK_PACKAGE_VERSION_BUILD "${CMAKE_BUILD_NUMBER}")
-SET(CPACK_PACKAGE_VERSION "${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR}.${MUSESCORE_VERSION_PATCH}.${CPACK_PACKAGE_VERSION_BUILD}")
+IF(MINGW OR MSVC)
+    # For Windows installer, don't include build number in version number
+    # https://github.com/musescore/MuseScore/pull/11556#issuecomment-1129089503
+    SET(CPACK_PACKAGE_VERSION "${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR}.${MUSESCORE_VERSION_PATCH}")
+ELSE()
+    SET(CPACK_PACKAGE_VERSION "${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR}.${MUSESCORE_VERSION_PATCH}.${CPACK_PACKAGE_VERSION_BUILD}")
+ENDIF()
 SET(CPACK_PACKAGE_INSTALL_DIRECTORY "MuseScore ${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR}")
 
 set(git_date_string "")
@@ -40,7 +46,7 @@ IF(MINGW OR MSVC)
     SET(MSCORE_EXECUTABLE_NAME ${MUSESCORE_NAME}${MUSESCORE_VERSION_MAJOR})
 
     # There is a bug in NSI that does not handle full unix paths properly. Make
-    # sure there is at least one set of four (4) backlasshes.
+    # sure there is at least one set of four (4) backslashes.
     SET(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}/build/packaging\\\\installer_head_nsis.bmp")
     SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\${MSCORE_EXECUTABLE_NAME}.exe,0")
     SET(CPACK_NSIS_DISPLAY_NAME "${MUSESCORE_NAME} ${MUSESCORE_VERSION_FULL}")
@@ -56,12 +62,14 @@ IF(MINGW OR MSVC)
       SET(CPACK_NSIS_DEFINES "!include ${PROJECT_SOURCE_DIR}/build/packaging\\\\FileAssociation.nsh")
 
       SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
-            \\\${registerExtension} \\\"MuseScore File\\\" \\\".mscx\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
-            \\\${registerExtension} \\\"Compressed MuseScore File\\\" \\\".mscz\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
+            \\\${registerExtension} \\\"MuseScore File\\\" \\\".mscz\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
+            \\\${registerExtension} \\\"MuseScore Uncompressed File\\\" \\\".mscx\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
+            \\\${registerExtension} \\\"MuseScore Uncompressde File\\\" \\\".mscs\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
       ")
       SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
-            \\\${unregisterExtension} \\\".mscx\\\" \\\"MuseScore File\\\"
-            \\\${unregisterExtension} \\\".mscz\\\" \\\"Compressed MuseScore File\\\"
+            \\\${unregisterExtension} \\\".mscz\\\" \\\"MuseScore File\\\"
+            \\\${unregisterExtension} \\\".mscx\\\" \\\"MuseScore Uncompressed File\\\"
+            \\\${unregisterExtension} \\\".mscs\\\" \\\"MuseScore Uncompressed File\\\"
       ")
 
       list(APPEND CPACK_WIX_CANDLE_EXTRA_FLAGS -dCPACK_WIX_FILE_ASSOCIATION=ON)
@@ -75,8 +83,8 @@ IF(MINGW OR MSVC)
     message(STATUS "[Packaging.cmake] CPACK_WIX_PRODUCT_GUID: ${CPACK_WIX_PRODUCT_GUID}")
     SET(CPACK_WIX_UPGRADE_GUID "11111111-1111-1111-1111-111111111111")
     message(STATUS "[Packaging.cmake] CPACK_WIX_UPGRADE_GUID: ${CPACK_WIX_UPGRADE_GUID}")
-    SET(CPACK_WIX_LICENSE_RTF   "${PROJECT_SOURCE_DIR}/LICENSE.rtf")
-    SET(CPACK_WIX_PRODUCT_ICON "${PROJECT_SOURCE_DIR}/src/main/res/mscore.ico")
+    SET(CPACK_WIX_LICENSE_RTF  "${PROJECT_SOURCE_DIR}/LICENSE.rtf")
+    SET(CPACK_WIX_PRODUCT_ICON "${PROJECT_SOURCE_DIR}/share/icons/AppIcon/MS4_AppIcon.ico")
     SET(CPACK_WIX_UI_BANNER "${PROJECT_SOURCE_DIR}/build/packaging/installer_banner_wix.png")
     SET(CPACK_WIX_UI_DIALOG "${PROJECT_SOURCE_DIR}/build/packaging/installer_background_wix.png")
     SET(CPACK_WIX_PROGRAM_MENU_FOLDER "${MUSESCORE_NAME_VERSION}")

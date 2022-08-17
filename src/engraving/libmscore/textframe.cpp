@@ -37,10 +37,12 @@
 #include "fret.h"
 #include "mscore.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   TBox
 //---------------------------------------------------------
@@ -49,20 +51,20 @@ TBox::TBox(System* parent)
     : VBox(ElementType::TBOX, parent)
 {
     setBoxHeight(Spatium(1));
-    _text  = Factory::createText(this, TextStyleType::FRAME);
-    _text->setLayoutToParentWidth(true);
-    _text->setParent(this);
+    m_text  = Factory::createText(this, TextStyleType::FRAME);
+    m_text->setLayoutToParentWidth(true);
+    m_text->setParent(this);
 }
 
 TBox::TBox(const TBox& tbox)
     : VBox(tbox)
 {
-    _text = Factory::copyText(*(tbox._text));
+    m_text = Factory::copyText(*(tbox.m_text));
 }
 
 TBox::~TBox()
 {
-    delete _text;
+    delete m_text;
 }
 
 //---------------------------------------------------------
@@ -75,16 +77,16 @@ void TBox::layout()
 {
     setPos(PointF());        // !?
     bbox().setRect(0.0, 0.0, system()->width(), 0);
-    _text->layout();
+    m_text->layout();
 
-    qreal h = 0.;
-    if (_text->empty()) {
-        h = mu::draw::FontMetrics::ascent(_text->font());
+    double h = 0.;
+    if (m_text->empty()) {
+        h = mu::draw::FontMetrics::ascent(m_text->font());
     } else {
-        h = _text->height();
+        h = m_text->height();
     }
-    qreal y = topMargin() * DPMM;
-    _text->setPos(leftMargin() * DPMM, y);
+    double y = topMargin() * DPMM;
+    m_text->setPos(leftMargin() * DPMM, y);
     h += topMargin() * DPMM + bottomMargin() * DPMM;
     bbox().setRect(0.0, 0.0, system()->width(), h);
 
@@ -97,10 +99,10 @@ void TBox::layout()
 
 void TBox::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     Box::writeProperties(xml);
-    _text->write(xml);
-    xml.endObject();
+    m_text->write(xml);
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -110,9 +112,9 @@ void TBox::write(XmlWriter& xml) const
 void TBox::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "Text") {
-            _text->read(e);
+            m_text->read(e);
         } else if (Box::readProperties(e)) {
         } else {
             e.unknown();
@@ -129,9 +131,9 @@ EngravingItem* TBox::drop(EditData& data)
     EngravingItem* e = data.dropElement;
     switch (e->type()) {
     case ElementType::TEXT:
-        _text->undoChangeProperty(Pid::TEXT, toText(e)->xmlText());
+        m_text->undoChangeProperty(Pid::TEXT, toText(e)->xmlText());
         delete e;
-        return _text;
+        return m_text;
     default:
         return VBox::drop(data);
     }
@@ -146,7 +148,7 @@ void TBox::add(EngravingItem* e)
 {
     if (e->isText()) {
         // does not normally happen, since drop() handles this directly
-        _text->undoChangeProperty(Pid::TEXT, toText(e)->xmlText());
+        m_text->undoChangeProperty(Pid::TEXT, toText(e)->xmlText());
         e->added();
     } else {
         VBox::add(e);
@@ -159,15 +161,15 @@ void TBox::add(EngravingItem* e)
 
 void TBox::remove(EngravingItem* el)
 {
-    if (el == _text) {
+    if (el == m_text) {
         // does not normally happen, since Score::deleteItem() handles this directly
         // but if it does:
         // replace with new empty text element
         // this keeps undo/redo happier than just clearing the text
-        qDebug("TBox::remove() - replacing _text");
-        _text = Factory::createText(this, TextStyleType::FRAME);
-        _text->setLayoutToParentWidth(true);
-        _text->setParent(this);
+        LOGD("TBox::remove() - replacing _text");
+        m_text = Factory::createText(this, TextStyleType::FRAME);
+        m_text->setLayoutToParentWidth(true);
+        m_text->setParent(this);
         el->removed();
     } else {
         VBox::remove(el);

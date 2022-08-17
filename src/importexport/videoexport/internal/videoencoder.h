@@ -33,7 +33,7 @@ public:
     VideoEncoder();
     ~VideoEncoder();
 
-    bool open(const io::path& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps);
+    bool open(const io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps);
     void close();
 
     bool encodeImage(const QImage& img);

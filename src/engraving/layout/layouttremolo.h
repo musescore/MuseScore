@@ -23,17 +23,14 @@
 #define MU_ENGRAVING_LAYOUTTREMOLO_H
 
 #include <utility>
-#include <QtGlobal>
-
-namespace Ms {
-class Tremolo;
-}
 
 namespace mu::engraving {
+class Tremolo;
+
 class LayoutTremolo
 {
 public:
-    static std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Ms::Tremolo* tremolo, qreal stemLen1, qreal stemLen2);
+    static std::pair<double, double> extendedStemLenWithTwoNoteTremolo(Tremolo* tremolo, double stemLen1, double stemLen2);
 };
 }
 

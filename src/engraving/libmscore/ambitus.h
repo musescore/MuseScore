@@ -29,15 +29,15 @@
 
 namespace mu::engraving {
 class Factory;
-}
 
-namespace Ms {
 //---------------------------------------------------------
 //   @@ Ambitus
 //---------------------------------------------------------
 
 class Ambitus final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, Ambitus)
+
     NoteHeadGroup _noteHeadGroup;
     NoteHeadType _noteHeadType;
     DirectionH _dir;
@@ -53,7 +53,7 @@ class Ambitus final : public EngravingItem
     mu::PointF _bottomPos;    // position of bottom note symbol
     mu::LineF _line;          // the drawn line
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Ambitus(Segment* parent);
     Ambitus(const Ambitus& a);
 
@@ -68,7 +68,7 @@ public:
     EngravingObject* scanParent() const override;
     EngravingObjectList scanChildren() const override;
 
-    qreal mag() const override;
+    double mag() const override;
 
     void initFrom(Ambitus* a);
 
@@ -98,7 +98,7 @@ public:
     // some utility functions
     Segment* segment() const { return (Segment*)explicitParent(); }
     SymId noteHead() const;
-    qreal headWidth() const;
+    double headWidth() const;
 
     // re-implemented virtual functions
     void      draw(mu::draw::Painter* painter) const override;
@@ -109,14 +109,14 @@ public:
     void      setTrack(track_idx_t val) override;
     void      write(XmlWriter&) const override;
     bool      readProperties(XmlReader&) override;
-    QString   accessibleInfo() const override;
+    String    accessibleInfo() const override;
 
     void remove(EngravingItem*) override;
 
     // properties
-    mu::engraving::PropertyValue getProperty(Pid) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid id) const override;
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
@@ -132,5 +132,5 @@ private:
 
     Ranges estimateRanges() const;                // scan staff up to next section break and update range pitches
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

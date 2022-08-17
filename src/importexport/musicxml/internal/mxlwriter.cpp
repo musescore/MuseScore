@@ -29,16 +29,16 @@
 using namespace mu::iex::musicxml;
 using namespace mu::io;
 
-mu::Ret MxlWriter::write(notation::INotationPtr notation, io::Device& destinationDevice, const Options&)
+mu::Ret MxlWriter::write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
     }
-    Ms::Score* score = notation->elements()->msScore();
+    mu::engraving::Score* score = notation->elements()->msScore();
 
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);
     }
 
-    return Ms::saveMxl(score, &destinationDevice);
+    return mu::engraving::saveMxl(score, &destinationDevice);
 }

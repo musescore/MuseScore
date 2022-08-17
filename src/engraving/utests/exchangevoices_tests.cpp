@@ -30,16 +30,16 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-static const QString EXCHVOICES_DATA_DIR("exchangevoices_data/");
-
+using namespace mu;
 using namespace mu::engraving;
-using namespace Ms;
 
-class ExchangevoicesTests : public ::testing::Test
+static const String EXCHVOICES_DATA_DIR("exchangevoices_data/");
+
+class Engraving_ExchangevoicesTests : public ::testing::Test
 {
 };
 
-TEST_F(ExchangevoicesTests, slurs)
+TEST_F(Engraving_ExchangevoicesTests, slurs)
 {
     Score* score = ScoreRW::readScore(EXCHVOICES_DATA_DIR + "exchangevoices-slurs.mscx");
     EXPECT_TRUE(score);
@@ -56,12 +56,12 @@ TEST_F(ExchangevoicesTests, slurs)
     score->endCmd();
 
     // compare
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "exchangevoices-slurs.mscx", EXCHVOICES_DATA_DIR + "exchangevoices-slurs-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-slurs.mscx", EXCHVOICES_DATA_DIR + u"exchangevoices-slurs-ref.mscx"));
 }
 
-TEST_F(ExchangevoicesTests, glissandi)
+TEST_F(Engraving_ExchangevoicesTests, glissandi)
 {
-    Score* score = ScoreRW::readScore(EXCHVOICES_DATA_DIR + "exchangevoices-gliss.mscx");
+    Score* score = ScoreRW::readScore(EXCHVOICES_DATA_DIR + u"exchangevoices-gliss.mscx");
     EXPECT_TRUE(score);
     score->doLayout();
 
@@ -76,16 +76,16 @@ TEST_F(ExchangevoicesTests, glissandi)
     score->endCmd();
 
     // compare
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "exchangevoices-gliss.mscx", EXCHVOICES_DATA_DIR + "exchangevoices-gliss-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-gliss.mscx", EXCHVOICES_DATA_DIR + u"exchangevoices-gliss-ref.mscx"));
 }
 
-TEST_F(ExchangevoicesTests, undoChangeVoice)
+TEST_F(Engraving_ExchangevoicesTests, undoChangeVoice)
 {
-    QString readFile(EXCHVOICES_DATA_DIR + "undoChangeVoice.mscx");
-    QString writeFile1("undoChangeVoice01-test.mscx");
-    QString reference1(EXCHVOICES_DATA_DIR + "undoChangeVoice01-ref.mscx");
-    QString writeFile2("undoChangeVoice02-test.mscx");
-    QString reference2(EXCHVOICES_DATA_DIR + "undoChangeVoice02-ref.mscx");
+    String readFile(EXCHVOICES_DATA_DIR + u"undoChangeVoice.mscx");
+    String writeFile1(u"undoChangeVoice01-test.mscx");
+    String reference1(EXCHVOICES_DATA_DIR + u"undoChangeVoice01-ref.mscx");
+    String writeFile2(u"undoChangeVoice02-test.mscx");
+    String reference2(EXCHVOICES_DATA_DIR + u"undoChangeVoice02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     EXPECT_TRUE(score);
@@ -97,7 +97,7 @@ TEST_F(ExchangevoicesTests, undoChangeVoice)
     for (Segment* s = score->firstSegment(SegmentType::ChordRest); s; s = s->next1()) {
         ChordRest* cr = static_cast<ChordRest*>(s->element(0));
         if (cr && cr->type() == ElementType::CHORD) {
-            Ms::Chord* c = static_cast<Ms::Chord*>(cr);
+            Chord* c = toChord(cr);
             score->select(c->downNote(), SelectType::ADD);
         }
     }

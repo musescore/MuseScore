@@ -25,7 +25,7 @@
 
 #include "line.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Vibrato;
 class Accidental;
 
@@ -35,6 +35,8 @@ class Accidental;
 
 class VibratoSegment final : public LineSegment
 {
+    OBJECT_ALLOCATOR(engraving, VibratoSegment)
+
     SymIdList _symbols;
 
     void symbolLine(SymId start, SymId fill);
@@ -64,14 +66,12 @@ public:
 
 class Vibrato final : public SLine
 {
+    OBJECT_ALLOCATOR(engraving, Vibrato)
+
     Sid getPropertyStyle(Pid) const override;
 
-public:
-    enum class Type : char {
-        GUITAR_VIBRATO, GUITAR_VIBRATO_WIDE, VIBRATO_SAWTOOTH, VIBRATO_SAWTOOTH_WIDE
-    };
 private:
-    Type _vibratoType;
+    VibratoType _vibratoType;
     bool _playArticulation;
 
 public:
@@ -86,38 +86,20 @@ public:
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 
-    void setVibratoType(const QString& s);
-    void undoSetVibratoType(Type val);
-    void setVibratoType(Type tt) { _vibratoType = tt; }
-    Type vibratoType() const { return _vibratoType; }
+    void undoSetVibratoType(VibratoType val);
+    void setVibratoType(VibratoType tt) { _vibratoType = tt; }
+    VibratoType vibratoType() const { return _vibratoType; }
     void setPlayArticulation(bool val) { _playArticulation = val; }
     bool playArticulation() const { return _playArticulation; }
-    static QString type2name(Vibrato::Type t);
-    QString vibratoTypeName() const;
-    QString vibratoTypeUserName() const;
+    String vibratoTypeUserName() const;
 
     Segment* segment() const { return (Segment*)explicitParent(); }
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
-    QString accessibleInfo() const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
+    String accessibleInfo() const override;
 };
-
-//---------------------------------------------------------
-//   VibratoTableItem
-//---------------------------------------------------------
-
-struct VibratoTableItem {
-    Vibrato::Type type;
-    const char* name;
-    QString userName;
-};
-
-extern const std::vector<VibratoTableItem> vibratoTable;
-}     // namespace Ms
-
-Q_DECLARE_METATYPE(Ms::Vibrato::Type);
+} // namespace mu::engraving
 
 #endif

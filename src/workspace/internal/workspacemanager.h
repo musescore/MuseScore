@@ -27,14 +27,14 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "../iworkspaceconfiguration.h"
-#include "../system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "workspace.h"
 
 namespace mu::workspace {
 class WorkspaceManager : public IWorkspaceManager, public async::Asyncable
 {
     INJECT(workspace, IWorkspaceConfiguration, configuration)
-    INJECT(workspace, system::IFileSystem, fileSystem)
+    INJECT(workspace, io::IFileSystem, fileSystem)
 
 public:
 
@@ -59,7 +59,7 @@ public:
 private:
     void load();
 
-    io::paths findWorkspaceFiles() const;
+    io::paths_t findWorkspaceFiles() const;
 
     WorkspacePtr doNewWorkspace(const std::string& workspaceName) const;
 

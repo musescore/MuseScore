@@ -80,27 +80,26 @@ IInteractive::ButtonData Interactive::buttonData(Button b) const
 
     switch (b) {
     case IInteractive::Button::NoButton:    return ButtonData(int(b), "");
-    case IInteractive::Button::Ok:          return ButtonData(int(b), trc("ui", "OK"));
-    case IInteractive::Button::Save:        return ButtonData(int(b), trc("ui", "Save"), accent);
-    case IInteractive::Button::SaveAll:     return ButtonData(int(b), trc("ui", "Save All"));
-    case IInteractive::Button::DontSave:    return ButtonData(int(b), trc("ui", "Don't save"));
-    case IInteractive::Button::Open:        return ButtonData(int(b), trc("ui", "Open"));
-    case IInteractive::Button::Yes:         return ButtonData(int(b), trc("ui", "Yes"), accent);
-    case IInteractive::Button::YesToAll:    return ButtonData(int(b), trc("ui", "Yes to All"), accent);
-    case IInteractive::Button::No:          return ButtonData(int(b), trc("ui", "No"));
-    case IInteractive::Button::NoToAll:     return ButtonData(int(b), trc("ui", "No to All"));
-    case IInteractive::Button::Abort:       return ButtonData(int(b), trc("ui", "Abort"));
-    case IInteractive::Button::Retry:       return ButtonData(int(b), trc("ui", "Retry"));
-    case IInteractive::Button::Ignore:      return ButtonData(int(b), trc("ui", "Ignore"));
-    case IInteractive::Button::Close:       return ButtonData(int(b), trc("ui", "Close"));
-    case IInteractive::Button::Cancel:      return ButtonData(int(b), trc("ui", "Cancel"));
-    case IInteractive::Button::Discard:     return ButtonData(int(b), trc("ui", "Discard"));
-    case IInteractive::Button::Help:        return ButtonData(int(b), trc("ui", "Help"));
-    case IInteractive::Button::Apply:       return ButtonData(int(b), trc("ui", "Apply"));
-    case IInteractive::Button::Reset:       return ButtonData(int(b), trc("ui", "Reset"));
-    case IInteractive::Button::RestoreDefaults: return ButtonData(int(b), trc("ui", "Restore Defaults"));
-    case IInteractive::Button::Continue:    return ButtonData(int(b), trc("ui", "Continue"));
-    case IInteractive::Button::CustomButton: return ButtonData(int(b), "");
+    case IInteractive::Button::Ok:          return ButtonData(int(b), trc("global", "OK"));
+    case IInteractive::Button::Save:        return ButtonData(int(b), trc("global", "Save"), accent);
+    case IInteractive::Button::SaveAll:     return ButtonData(int(b), trc("global", "Save all"));
+    case IInteractive::Button::DontSave:    return ButtonData(int(b), trc("global", "Don't save"));
+    case IInteractive::Button::Open:        return ButtonData(int(b), trc("global", "Open"));
+    case IInteractive::Button::Yes:         return ButtonData(int(b), trc("global", "Yes"), accent);
+    case IInteractive::Button::YesToAll:    return ButtonData(int(b), trc("global", "Yes to all"), accent);
+    case IInteractive::Button::No:          return ButtonData(int(b), trc("global", "No"));
+    case IInteractive::Button::NoToAll:     return ButtonData(int(b), trc("global", "No to all"));
+    case IInteractive::Button::Abort:       return ButtonData(int(b), trc("global", "Abort"));
+    case IInteractive::Button::Retry:       return ButtonData(int(b), trc("global", "Retry"));
+    case IInteractive::Button::Ignore:      return ButtonData(int(b), trc("global", "Ignore"));
+    case IInteractive::Button::Close:       return ButtonData(int(b), trc("global", "Close"));
+    case IInteractive::Button::Cancel:      return ButtonData(int(b), trc("global", "Cancel"));
+    case IInteractive::Button::Discard:     return ButtonData(int(b), trc("global", "Discard"));
+    case IInteractive::Button::Help:        return ButtonData(int(b), trc("global", "Help"));
+    case IInteractive::Button::Apply:       return ButtonData(int(b), trc("global", "Apply"));
+    case IInteractive::Button::Reset:       return ButtonData(int(b), trc("global", "Reset"));
+    case IInteractive::Button::Continue:    return ButtonData(int(b), trc("global", "Continue"));
+    case IInteractive::Button::CustomButton: break;
     }
 
     return ButtonData(int(b), "");
@@ -121,9 +120,9 @@ Interactive::Result Interactive::warning(const std::string& title, const std::st
 
 IInteractive::Result Interactive::warning(const std::string& title, const Text& text, const ButtonDatas& buttons,
                                           int defBtn,
-                                          const QFlags<IInteractive::Option>& options) const
+                                          const Options& options) const
 {
-    return standardDialogResult(provider()->warning(title, text.text, buttons, defBtn, options));
+    return standardDialogResult(provider()->warning(title, text, buttons, defBtn, options));
 }
 
 IInteractive::Result Interactive::error(const std::string& title, const std::string& text, const Buttons& buttons, const Button& defBtn,
@@ -136,16 +135,16 @@ IInteractive::Result Interactive::error(const std::string& title, const Text& te
                                         int defBtn,
                                         const Options& options) const
 {
-    return standardDialogResult(provider()->error(title, text.text, buttons, defBtn, options));
+    return standardDialogResult(provider()->error(title, text, buttons, defBtn, options));
 }
 
-mu::io::path Interactive::selectOpeningFile(const QString& title, const io::path& dir, const QString& filter)
+mu::io::path_t Interactive::selectOpeningFile(const QString& title, const io::path_t& dir, const QString& filter)
 {
     QString path = QFileDialog::getOpenFileName(nullptr, title, dir.toQString(), filter);
     return path;
 }
 
-io::path Interactive::selectSavingFile(const QString& title, const io::path& dir, const QString& filter, bool confirmOverwrite)
+io::path_t Interactive::selectSavingFile(const QString& title, const io::path_t& dir, const QString& filter, bool confirmOverwrite)
 {
     QFileDialog::Options options;
     options.setFlag(QFileDialog::DontConfirmOverwrite, !confirmOverwrite);
@@ -153,13 +152,13 @@ io::path Interactive::selectSavingFile(const QString& title, const io::path& dir
     return path;
 }
 
-io::path Interactive::selectDirectory(const QString& title, const io::path& dir)
+io::path_t Interactive::selectDirectory(const QString& title, const io::path_t& dir)
 {
     QString path = QFileDialog::getExistingDirectory(nullptr, title, dir.toQString());
     return path;
 }
 
-io::paths Interactive::selectMultipleDirectories(const QString& title, const io::path& dir, const io::paths& selectedDirectories)
+io::paths_t Interactive::selectMultipleDirectories(const QString& title, const io::path_t& dir, const io::paths_t& selectedDirectories)
 {
     QString directoriesStr = QString::fromStdString(io::pathsToString(selectedDirectories));
     QStringList params = {
@@ -170,15 +169,10 @@ io::paths Interactive::selectMultipleDirectories(const QString& title, const io:
 
     RetVal<Val> paths = open("musescore://interactive/selectMultipleDirectories?" + params.join("&").toStdString());
     if (!paths.ret) {
-        return io::paths();
+        return selectedDirectories;
     }
 
-    io::paths result;
-    for (const QString& path: paths.val.toQVariant().toStringList()) {
-        result.push_back(path.toStdString());
-    }
-
-    return result;
+    return io::pathsFromString(paths.val.toQString().toStdString());
 }
 
 RetVal<Val> Interactive::open(const std::string& uri) const
@@ -261,7 +255,7 @@ Ret Interactive::openUrl(const QUrl& url) const
     return QDesktopServices::openUrl(url);
 }
 
-Ret Interactive::revealInFileBrowser(const io::path& filePath) const
+Ret Interactive::revealInFileBrowser(const io::path_t& filePath) const
 {
 #ifdef Q_OS_MACOS
     if (MacOSInteractiveHelper::revealInFinder(filePath)) {
@@ -273,7 +267,7 @@ Ret Interactive::revealInFileBrowser(const io::path& filePath) const
         return true;
     }
 #endif
-    io::path dirPath = io::dirpath(filePath);
+    io::path_t dirPath = io::dirpath(filePath);
     return openUrl(QUrl::fromLocalFile(dirPath.toQString()));
 }
 

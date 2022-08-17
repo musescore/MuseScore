@@ -32,18 +32,15 @@
 namespace mu::palette {
 class PaletteWidget;
 class PaletteScrollArea;
-}
 
-namespace Ms {
-class KeySig;
 class KeyEditor : public QWidget, Ui::KeyEdit
 {
     Q_OBJECT
 
     Q_PROPERTY(bool showKeyPalette READ showKeyPalette WRITE setShowKeyPalette)
 
-    INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
-    INJECT(palette, mu::palette::IPaletteProvider, paletteProvider)
+    INJECT(palette, IPaletteConfiguration, configuration)
+    INJECT(palette, IPaletteProvider, paletteProvider)
 
 public:
     KeyEditor(QWidget* parent = 0);
@@ -63,11 +60,12 @@ private slots:
     void setDirty() { m_dirty = true; }
 
 private:
-    mu::palette::PaletteScrollArea* m_keySigArea = nullptr;
-    mu::palette::PaletteWidget* m_keySigPaletteWidget = nullptr;
-    mu::palette::PaletteWidget* m_accidentalsPaletteWidget = nullptr;
+    PaletteScrollArea* m_keySigArea = nullptr;
+    PaletteWidget* m_keySigPaletteWidget = nullptr;
+    PaletteWidget* m_accidentalsPaletteWidget = nullptr;
 
     bool m_dirty = false;
 };
-} // namespace Ms
+}
+
 #endif

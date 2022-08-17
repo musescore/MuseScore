@@ -57,6 +57,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/midierrors.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/abstractmidiinport.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/abstractmidiinport.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidioutport.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidioutport.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidiinport.cpp
@@ -65,10 +67,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/midideviceslistener.h
     ${CMAKE_CURRENT_LIST_DIR}/view/devtools/midiportdevmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/devtools/midiportdevmodel.h
-    )
-
-set(MODULE_LINK
-    qzip
     )
 
 if (OS_IS_MAC)

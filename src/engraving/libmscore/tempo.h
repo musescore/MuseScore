@@ -24,19 +24,21 @@
 #define __AL_TEMPO_H__
 
 #include <map>
-#include <QFlags>
 
+#include "global/allocator.h"
+#include "global/async/notification.h"
+#include "types/flags.h"
 #include "types/types.h"
 
-namespace Ms {
+namespace mu::engraving {
 class XmlWriter;
 
 enum class TempoType : char {
     INVALID = 0x0, PAUSE = 0x1, FIX = 0x2, RAMP = 0x4
 };
 
-typedef QFlags<TempoType> TempoTypes;
-Q_DECLARE_OPERATORS_FOR_FLAGS(TempoTypes);
+typedef Flags<TempoType> TempoTypes;
+DECLARE_OPERATORS_FOR_FLAGS(TempoTypes)
 
 //---------------------------------------------------------
 //   Tempo Event
@@ -45,12 +47,12 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(TempoTypes);
 struct TEvent {
     TempoTypes type;
     BeatsPerSecond tempo;       // beats per second
-    qreal pause;       // pause in seconds
-    qreal time;        // precomputed time for tick in sec
+    double pause;       // pause in seconds
+    double time;        // precomputed time for tick in sec
 
     TEvent();
     TEvent(const TEvent& e);
-    TEvent(BeatsPerSecond bps, qreal seconds, TempoType t);
+    TEvent(BeatsPerSecond bps, double seconds, TempoType t);
     bool valid() const;
 
     bool operator ==(const TEvent& other) const
@@ -68,9 +70,12 @@ struct TEvent {
 
 class TempoMap : public std::map<int, TEvent>
 {
-    int _tempoSN;             // serial no to track tempo changes
-    BeatsPerSecond _tempo;    // tempo if not using tempo list (beats per second)
-    BeatsPerSecond _relTempo;          // rel. tempo
+    OBJECT_ALLOCATOR(engraving, TempoMap)
+
+    int _tempoSN = 0; // serial no to track tempo changes
+    BeatsPerSecond _tempo; // tempo if not using tempo list (beats per second)
+    BeatsPerSecond _tempoMultiplier;
+    async::Notification _tempoMultiplierChanged;
 
     void normalize();
     void del(int tick);
@@ -84,19 +89,20 @@ public:
 
     BeatsPerSecond tempo(int tick) const;
 
-    qreal tick2time(int tick, int* sn = 0) const;
-    qreal tick2timeLC(int tick, int* sn) const;
-    qreal tick2time(int tick, qreal time, int* sn) const;
-    int time2tick(qreal time, int* sn = 0) const;
-    int time2tick(qreal time, int tick, int* sn) const;
+    double tick2time(int tick, int* sn = 0) const;
+    double tick2timeLC(int tick, int* sn) const;
+    double tick2time(int tick, double time, int* sn) const;
+    int time2tick(double time, int* sn = 0) const;
+    int time2tick(double time, int tick, int* sn) const;
     int tempoSN() const { return _tempoSN; }
 
     void setTempo(int t, BeatsPerSecond);
-    void setPause(int t, qreal);
+    void setPause(int t, double);
     void delTempo(int tick);
 
-    void setRelTempo(BeatsPerSecond val);
-    BeatsPerSecond relTempo() const { return _relTempo; }
+    BeatsPerSecond tempoMultiplier() const;
+    async::Notification tempoMultiplierChanged() const;
+    void setTempoMultiplier(BeatsPerSecond val);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

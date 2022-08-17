@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QDebug>
-
 #include "accidental.h"
 #include "ambitus.h"
 #include "arpeggio.h"
@@ -60,9 +58,11 @@
 #include "trill.h"
 #include "tuplet.h"
 
+#include "log.h"
+
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   Score
 //---------------------------------------------------------
@@ -226,7 +226,7 @@ EngravingObjectList Measure::scanChildren() const
         }
     }
 
-    const std::multimap<int, Ms::Spanner*>& spannerMap = score()->spanner();
+    const std::multimap<int, Spanner*>& spannerMap = score()->spanner();
     int start_tick = tick().ticks();
     for (auto i = spannerMap.lower_bound(start_tick); i != spannerMap.upper_bound(start_tick); ++i) {
         Spanner* s = i->second;
@@ -268,12 +268,12 @@ EngravingObjectList Segment::scanChildren() const
         }
     }
 
-    for (EngravingItem* anotation : _annotations) {
-        children.push_back(anotation);
+    for (EngravingItem* annotation : _annotations) {
+        children.push_back(annotation);
     }
 
     if (segmentType() == SegmentType::ChordRest) {
-        const std::multimap<int, Ms::Spanner*>& spannerMap = score()->spanner();
+        const std::multimap<int, Spanner*>& spannerMap = score()->spanner();
         int start_tick = tick().ticks();
         for (auto i = spannerMap.lower_bound(start_tick); i != spannerMap.upper_bound(start_tick); ++i) {
             Spanner* s = i->second;
@@ -333,7 +333,7 @@ EngravingObjectList ChordRest::scanChildren() const
         children.push_back(element);
     }
 
-    const std::multimap<int, Ms::Spanner*>& spannerMap = score()->spanner();
+    const std::multimap<int, Spanner*>& spannerMap = score()->spanner();
     int start_tick = tick().ticks();
     for (auto i = spannerMap.lower_bound(start_tick); i != spannerMap.upper_bound(start_tick); ++i) {
         Spanner* s = i->second;
@@ -673,11 +673,17 @@ EngravingObjectList TBox::scanChildren() const
 {
     EngravingObjectList children;
 
-    if (_text) {
-        children.push_back(_text);
+    if (m_text) {
+        children.push_back(m_text);
     }
 
     return children;
+}
+
+void TBox::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+{
+    m_text->scanElements(data, func, all);
+    Box::scanElements(data, func, all);
 }
 
 //---------------------------------------------------------
@@ -687,7 +693,6 @@ EngravingObjectList TBox::scanChildren() const
 
 void _dumpScoreTree(EngravingObject* s, int depth)
 {
-    qDebug() << qPrintable(QString(" ").repeated(4 * depth)) << s->typeName() << "at" << s;
     for (EngravingObject* child : s->scanChildren()) {
         _dumpScoreTree(child, depth + 1);
     }
@@ -697,4 +702,4 @@ void Score::dumpScoreTree()
 {
     _dumpScoreTree(this, 0);
 }
-}  // namespace Ms
+} // namespace mu::engraving

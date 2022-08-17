@@ -69,6 +69,12 @@ inline void multiplySamples(float* buffer, const audioch_t& audioChannelsCount,
         buffer[idx] *= multiplier;
     }
 }
+
+template<typename T>
+constexpr T convertFloatSamples(float value)
+{
+    return static_cast<T>(value * std::numeric_limits<T>::max() - 1);
+}
 }
 
 #endif // MU_AUDIO_AUDIOMATHUTILS_H

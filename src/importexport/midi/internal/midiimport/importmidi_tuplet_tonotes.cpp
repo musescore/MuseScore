@@ -21,8 +21,6 @@
  */
 #include "importmidi_tuplet_tonotes.h"
 
-#include <QDebug>
-
 #include "importmidi_tuplet.h"
 #include "importmidi_fraction.h"
 #include "importmidi_inner.h"
@@ -35,7 +33,11 @@
 #include "libmscore/mscore.h"
 #include "libmscore/chordrest.h"
 
-namespace Ms {
+#include "log.h"
+
+using namespace mu::engraving;
+
+namespace mu::iex::midi {
 namespace MidiTuplet {
 void addElementToTuplet(int voice,
                         const ReducedFraction& onTime,
@@ -47,8 +49,8 @@ void addElementToTuplet(int voice,
 
 #ifdef QT_DEBUG
     if (foundTuplets.size() > 1) {
-        qDebug() << "Measure number (from 1):" << el->measure()->no() + 1
-                 << ", staff index (from 0):" << el->staff()->idx();
+        LOGD() << "Measure number (from 1):" << el->measure()->no() + 1
+               << ", staff index (from 0):" << el->staff()->idx();
 
         Q_ASSERT_X(false, "MidiTuplet::addElementToTuplet",
                    "More than one tuplet contains specified duration");
@@ -99,9 +101,9 @@ void createTupletNotes(
 
 static void printInvalidTupletLocation(int measureIndex, staff_idx_t staffIndex)
 {
-    qDebug() << "Tuplet is invalid; measure number (from 1):"
-             << measureIndex + 1
-             << ", staff index (from 0):" << staffIndex;
+    LOGD() << "Tuplet is invalid; measure number (from 1):"
+           << measureIndex + 1
+           << ", staff index (from 0):" << staffIndex;
 }
 
 bool haveTupletsEnoughElements(const Staff* staff)
@@ -141,4 +143,4 @@ bool haveTupletsEnoughElements(const Staff* staff)
 
 #endif
 } // namespace MidiTuplet
-} // namespace Ms
+} // namespace mu::iex::midi

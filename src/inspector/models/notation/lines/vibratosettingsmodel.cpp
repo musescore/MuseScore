@@ -28,7 +28,7 @@
 using namespace mu::inspector;
 
 VibratoSettingsModel::VibratoSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository, Ms::ElementType::VIBRATO)
+    : AbstractInspectorModel(parent, repository, mu::engraving::ElementType::VIBRATO)
 {
     setModelType(InspectorModelType::TYPE_VIBRATO);
     setTitle(qtrc("inspector", "Vibrato"));
@@ -49,16 +49,16 @@ PropertyItem* VibratoSettingsModel::placement() const
 
 QVariantList VibratoSettingsModel::possibleLineTypes() const
 {
-    QMap<Ms::Vibrato::Type, QString> types {
-        { Ms::Vibrato::Type::GUITAR_VIBRATO, mu::qtrc("inspector", "Vibrato") },
-        { Ms::Vibrato::Type::GUITAR_VIBRATO_WIDE, mu::qtrc("inspector", "Vibrato wide") },
-        { Ms::Vibrato::Type::VIBRATO_SAWTOOTH, mu::qtrc("inspector", "Vibrato sawtooth") },
-        { Ms::Vibrato::Type::VIBRATO_SAWTOOTH_WIDE, mu::qtrc("inspector", "Vibrato sawtooth wide") }
+    QMap<mu::engraving::VibratoType, QString> types {
+        { mu::engraving::VibratoType::GUITAR_VIBRATO, mu::qtrc("inspector", "Vibrato") },
+        { mu::engraving::VibratoType::GUITAR_VIBRATO_WIDE, mu::qtrc("inspector", "Vibrato wide") },
+        { mu::engraving::VibratoType::VIBRATO_SAWTOOTH, mu::qtrc("inspector", "Vibrato sawtooth") },
+        { mu::engraving::VibratoType::VIBRATO_SAWTOOTH_WIDE, mu::qtrc("inspector", "Vibrato sawtooth wide") }
     };
 
     QVariantList result;
 
-    for (Ms::Vibrato::Type type : types.keys()) {
+    for (mu::engraving::VibratoType type : types.keys()) {
         QVariantMap obj;
 
         obj["text"] = types[type];
@@ -72,8 +72,8 @@ QVariantList VibratoSettingsModel::possibleLineTypes() const
 
 void VibratoSettingsModel::createProperties()
 {
-    m_lineType = buildPropertyItem(Ms::Pid::VIBRATO_TYPE);
-    m_placement = buildPropertyItem(Ms::Pid::PLACEMENT);
+    m_lineType = buildPropertyItem(mu::engraving::Pid::VIBRATO_TYPE);
+    m_placement = buildPropertyItem(mu::engraving::Pid::PLACEMENT);
 }
 
 void VibratoSettingsModel::loadProperties()

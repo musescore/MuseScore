@@ -62,12 +62,12 @@ public:
                  const Options& options = {}) const override;
 
     // files
-    io::path selectOpeningFile(const QString& title, const io::path& dir, const QString& filter) override;
-    io::path selectSavingFile(const QString& title, const io::path& dir, const QString& filter, bool confirmOverwrite = true) override;
+    io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const QString& filter) override;
+    io::path_t selectSavingFile(const QString& title, const io::path_t& dir, const QString& filter, bool confirmOverwrite = true) override;
 
     // dirs
-    io::path selectDirectory(const QString& title, const io::path& dir) override;
-    io::paths selectMultipleDirectories(const QString& title, const io::path& dir, const io::paths& initialyDirectories) override;
+    io::path_t selectDirectory(const QString& title, const io::path_t& dir) override;
+    io::paths_t selectMultipleDirectories(const QString& title, const io::path_t& dir, const io::paths_t& initialDirectories) override;
 
     // custom
     RetVal<Val> open(const std::string& uri) const override;
@@ -90,16 +90,16 @@ public:
     Ret openUrl(const std::string& url) const override;
     Ret openUrl(const QUrl& url) const override;
 
-    Ret revealInFileBrowser(const io::path& filePath) const override;
+    Ret revealInFileBrowser(const io::path_t& filePath) const override;
 
     // AutobotInteractive
-    io::path selectedFilePath() const; // last selected file path
+    io::path_t selectedFilePath() const; // last selected file path
 
 private:
 
     std::shared_ptr<framework::IInteractive> m_real = nullptr;
 
-    io::path m_selectedFilePath;
+    io::path_t m_selectedFilePath;
 };
 
 using AutobotInteractivePtr = std::shared_ptr<AutobotInteractive>;

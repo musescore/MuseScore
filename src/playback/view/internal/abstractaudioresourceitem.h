@@ -27,7 +27,7 @@
 
 #include "audio/audiotypes.h"
 
-#include "uri.h"
+#include "types/uri.h"
 
 namespace mu::playback {
 class AbstractAudioResourceItem : public QObject
@@ -41,6 +41,7 @@ class AbstractAudioResourceItem : public QObject
 
 public:
     explicit AbstractAudioResourceItem(QObject* parent);
+    ~AbstractAudioResourceItem() override;
 
     virtual Q_INVOKABLE void requestAvailableResources() {}
     virtual Q_INVOKABLE void requestToLaunchNativeEditorView();
@@ -61,6 +62,7 @@ signals:
     void hasNativeEditorSupportChanged();
 
     void nativeEditorViewLaunchRequested();
+    void nativeEditorViewCloseRequested();
     void availableResourceListResolved(const QVariantList& resources);
 
 protected:
@@ -71,7 +73,11 @@ protected:
 
     void sortResourcesList(audio::AudioResourceMetaList& list);
 
+    void updateNativeEditorView();
+
 private:
+    void doRequestToLaunchNativeEditorView();
+
     UriQuery m_editorUri;
 };
 }

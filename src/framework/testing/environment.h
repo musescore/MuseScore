@@ -25,7 +25,7 @@
 #include <functional>
 #include <vector>
 
-#include "framework/global/modularity/imodulesetup.h"
+#include "modularity/imodulesetup.h"
 
 namespace mu::testing {
 class Environment

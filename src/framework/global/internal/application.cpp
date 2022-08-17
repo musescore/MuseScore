@@ -22,6 +22,7 @@
 #include "application.h"
 
 #include <QApplication>
+#include <QProcess>
 
 using namespace mu::framework;
 
@@ -52,4 +53,16 @@ QWindow* Application::focusWindow() const
 bool Application::notify(QObject* object, QEvent* event)
 {
     return qApp->notify(object, event);
+}
+
+void Application::restart()
+{
+    QString program = qApp->arguments()[0];
+
+    // NOTE: remove the first argument - the program name
+    QStringList arguments = qApp->arguments().mid(1);
+
+    qApp->quit();
+
+    QProcess::startDetached(program, arguments);
 }

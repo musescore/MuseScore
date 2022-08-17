@@ -107,9 +107,9 @@ void PopupWindow_QQuickView::forceActiveFocus()
     }
 }
 
-void PopupWindow_QQuickView::show(QScreen* screen, QPoint position, bool activateFocus)
+void PopupWindow_QQuickView::show(QScreen* screen, QRect geometry, bool activateFocus)
 {
-    m_view->setPosition(position);
+    m_view->setGeometry(geometry);
     m_view->setScreen(screen);
 
     m_activeFocusOnParentOnClose = activateFocus;
@@ -120,6 +120,12 @@ void PopupWindow_QQuickView::show(QScreen* screen, QPoint position, bool activat
 
     QWindow* parent = m_parentWindow ? m_parentWindow : interactiveProvider()->topWindow();
     m_view->setTransientParent(parent);
+
+    connect(parent, &QWindow::visibleChanged, this, [this](){
+        if (!m_view->transientParent() || !m_view->transientParent()->isVisible()) {
+            close();
+        }
+    });
 
     m_view->show();
 

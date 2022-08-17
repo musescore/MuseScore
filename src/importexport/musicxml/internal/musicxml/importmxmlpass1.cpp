@@ -22,6 +22,8 @@
 
 #include <QRegularExpression>
 
+#include "engraving/infrastructure/symbolfonts.h"
+
 #include "engraving/libmscore/factory.h"
 #include "engraving/libmscore/box.h"
 #include "engraving/libmscore/chordrest.h"
@@ -29,7 +31,6 @@
 #include "engraving/libmscore/measure.h"
 #include "engraving/libmscore/page.h"
 #include "engraving/libmscore/part.h"
-#include "engraving/libmscore/scorefont.h"
 #include "engraving/libmscore/staff.h"
 #include "engraving/libmscore/stringdata.h"
 #include "engraving/libmscore/symbol.h"
@@ -51,6 +52,7 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::engraving;
 
 static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
@@ -70,7 +72,7 @@ static bool musicxmlImportLayout()
     return conf ? conf->musicxmlImportLayout() : true;
 }
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   allocateStaves
 //---------------------------------------------------------
@@ -228,8 +230,7 @@ void MusicXMLParserPass1::addError(const QString& error)
 {
     if (error != "") {
         _logger->logError(error, &_e);
-        QString errorWithLocation = xmlReaderLocation(_e) + ' ' + error + '\n';
-        _errors += errorWithLocation;
+        _errors += errorStringWithLocation(_e.lineNumber(), _e.columnNumber(), error) + '\n';
     }
 }
 
@@ -282,7 +283,7 @@ bool MusicXMLParserPass1::determineMeasureLength(QVector<Fraction>& ml) const
                 }
             }
         }
-        //qDebug("determineMeasureLength() measure %d %s (%d)", i, qPrintable(maxMeasDur.print()), maxMeasDur.ticks());
+        //LOGD("determineMeasureLength() measure %d %s (%d)", i, qPrintable(maxMeasDur.print()), maxMeasDur.ticks());
         ml.append(maxMeasDur);
     }
     return true;
@@ -393,7 +394,7 @@ bool MusicXMLParserPass1::determineStaffMoveVoice(const QString& id, const int m
 
     // Musicxml voices are unique within a part, but not across parts.
 
-    //qDebug("voice mapper before: voice='%s' staff=%d", qPrintable(mxVoice), mxStaff);
+    //LOGD("voice mapper before: voice='%s' staff=%d", qPrintable(mxVoice), mxStaff);
     int s;   // staff mapped by voice mapper
     int v;   // voice mapped by voice mapper
     if (voicelist.value(mxVoice).overlaps()) {
@@ -408,10 +409,10 @@ bool MusicXMLParserPass1::determineStaffMoveVoice(const QString& id, const int m
         v = voicelist.value(mxVoice).voice();
     }
 
-    //qDebug("voice mapper mapped: s=%d v=%d", s, v);
+    //LOGD("voice mapper mapped: s=%d v=%d", s, v);
     if (s < 0 || v < 0) {
-        qDebug("too many voices (staff=%d voice='%s' -> s=%d v=%d)",
-               mxStaff + 1, qPrintable(mxVoice), s, v);
+        LOGD("too many voices (staff=%d voice='%s' -> s=%d v=%d)",
+             mxStaff + 1, qPrintable(mxVoice), s, v);
         return false;
     }
 
@@ -424,9 +425,9 @@ bool MusicXMLParserPass1::determineStaffMoveVoice(const QString& id, const int m
         return false;
     }
     staff_idx_t scoreRelStaff = _score->staffIdx(part);   // zero-based number of parts first staff in the score
-    msTrack = (scoreRelStaff + s) * VOICES;
+    msTrack = static_cast<int>((scoreRelStaff + s) * VOICES);
 
-    //qDebug("voice mapper after: scoreRelStaff=%d partRelStaff=%d msMove=%d msTrack=%d msVoice=%d",
+    //LOGD("voice mapper after: scoreRelStaff=%d partRelStaff=%d msMove=%d msTrack=%d msVoice=%d",
     //       scoreRelStaff, s, msMove, msTrack, msVoice);
     // note: relStaff is the staff number relative to the parts first staff
     //       voice is the voice number in the staff
@@ -459,7 +460,7 @@ track_idx_t MusicXMLParserPass1::trackForPart(const QString& id) const
 {
     Part* part = _partMap.value(id);
     IF_ASSERT_FAILED(part) {
-        return -1;
+        return mu::nidx;
     }
     staff_idx_t scoreRelStaff = _score->staffIdx(part);   // zero-based number of parts first staff in the score
     return scoreRelStaff * VOICES;
@@ -753,7 +754,7 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
     std::vector<const CreditWords*> words;
     if (pageNr == 1) {
         // if there are more credit words in the footer than in header,
-        // swap heaer and footer, assuming this will result in a vertical
+        // swap header and footer, assuming this will result in a vertical
         // frame with the title on top of the page.
         // Sibelius (direct export) typically exports no header
         // and puts the title etc. in the footer
@@ -798,26 +799,26 @@ static void createDefaultHeader(Score* const score)
     QString strPoet;
     QString strTranslator;
 
-    if (!(score->metaTag("movementTitle").isEmpty() && score->metaTag("workTitle").isEmpty())) {
-        strTitle = score->metaTag("movementTitle");
+    if (!(score->metaTag(u"movementTitle").isEmpty() && score->metaTag(u"workTitle").isEmpty())) {
+        strTitle = score->metaTag(u"movementTitle");
         if (strTitle.isEmpty()) {
-            strTitle = score->metaTag("workTitle");
+            strTitle = score->metaTag(u"workTitle");
         }
     }
-    if (!(score->metaTag("movementNumber").isEmpty() && score->metaTag("workNumber").isEmpty())) {
-        strSubTitle = score->metaTag("movementNumber");
+    if (!(score->metaTag(u"movementNumber").isEmpty() && score->metaTag(u"workNumber").isEmpty())) {
+        strSubTitle = score->metaTag(u"movementNumber");
         if (strSubTitle.isEmpty()) {
-            strSubTitle = score->metaTag("workNumber");
+            strSubTitle = score->metaTag(u"workNumber");
         }
     }
-    QString metaComposer = score->metaTag("composer");
-    QString metaPoet = score->metaTag("poet");
-    QString metaTranslator = score->metaTag("translator");
+    QString metaComposer = score->metaTag(u"composer");
+    QString metaPoet = score->metaTag(u"poet");
+    QString metaTranslator = score->metaTag(u"translator");
     if (!metaComposer.isEmpty()) {
         strComposer = metaComposer;
     }
     if (metaPoet.isEmpty()) {
-        metaPoet = score->metaTag("lyricist");
+        metaPoet = score->metaTag(u"lyricist");
     }
     if (!metaPoet.isEmpty()) {
         strPoet = metaPoet;
@@ -944,13 +945,13 @@ static void fixupSigmap(MxmlLogger* logger, Score* score, const QVector<Fraction
  Parse MusicXML in \a device and extract pass 1 data.
  */
 
-Score::FileError MusicXMLParserPass1::parse(QIODevice* device)
+Err MusicXMLParserPass1::parse(QIODevice* device)
 {
     _logger->logDebugTrace("MusicXMLParserPass1::parse device");
     _parts.clear();
     _e.setDevice(device);
     auto res = parse();
-    if (res != Score::FileError::FILE_NO_ERROR) {
+    if (res != Err::NoError) {
         return res;
     }
 
@@ -973,7 +974,7 @@ Score::FileError MusicXMLParserPass1::parse(QIODevice* device)
  Start the parsing process, after verifying the top-level node is score-partwise
  */
 
-Score::FileError MusicXMLParserPass1::parse()
+Err MusicXMLParserPass1::parse()
 {
     _logger->logDebugTrace("MusicXMLParserPass1::parse");
 
@@ -986,16 +987,16 @@ Score::FileError MusicXMLParserPass1::parse()
             _logger->logError(QString("this is not a MusicXML score-partwise file (top-level node '%1')")
                               .arg(_e.name().toString()), &_e);
             _e.skipCurrentElement();
-            return Score::FileError::FILE_BAD_FORMAT;
+            return Err::FileBadFormat;
         }
     }
 
     if (!found) {
         _logger->logError("this is not a MusicXML score-partwise file, node <score-partwise> not found", &_e);
-        return Score::FileError::FILE_BAD_FORMAT;
+        return Err::FileBadFormat;
     }
 
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }
 
 //---------------------------------------------------------
@@ -1038,9 +1039,9 @@ void MusicXMLParserPass1::scorePartwise()
         } else if (_e.name() == "work") {
             while (_e.readNextStartElement()) {
                 if (_e.name() == "work-number") {
-                    _score->setMetaTag("workNumber", _e.readElementText());
+                    _score->setMetaTag(u"workNumber", _e.readElementText());
                 } else if (_e.name() == "work-title") {
-                    _score->setMetaTag("workTitle", _e.readElementText());
+                    _score->setMetaTag(u"workTitle", _e.readElementText());
                 } else {
                     skipLogCurrElem();
                 }
@@ -1050,9 +1051,9 @@ void MusicXMLParserPass1::scorePartwise()
         } else if (_e.name() == "defaults") {
             defaults();
         } else if (_e.name() == "movement-number") {
-            _score->setMetaTag("movementNumber", _e.readElementText());
+            _score->setMetaTag(u"movementNumber", _e.readElementText());
         } else if (_e.name() == "movement-title") {
-            _score->setMetaTag("movementTitle", _e.readElementText());
+            _score->setMetaTag(u"movementTitle", _e.readElementText());
         } else if (_e.name() == "credit") {
             credit(_credits);
         } else {
@@ -1063,10 +1064,10 @@ void MusicXMLParserPass1::scorePartwise()
     // add brackets where required
 
     /*
-     qDebug("partGroupList");
+     LOGD("partGroupList");
      for (size_t i = 0; i < partGroupList.size(); i++) {
      MusicXmlPartGroup* pg = partGroupList[i];
-     qDebug("part-group span %d start %d type %hhd barlinespan %d",
+     LOGD("part-group span %d start %d type %hhd barlinespan %d",
      pg->span, pg->start, pg->type, pg->barlineSpan);
      }
      */
@@ -1085,7 +1086,7 @@ void MusicXMLParserPass1::scorePartwise()
             partSet << il.at(pg->start);
         }
         // determine span in staves
-        int stavesSpan = 0;
+        size_t stavesSpan = 0;
         for (int j = 0; j < pg->span; j++) {
             stavesSpan += il.at(pg->start + j)->nstaves();
         }
@@ -1105,12 +1106,12 @@ void MusicXMLParserPass1::scorePartwise()
     // multi-staff parts w/o explicit brackets get a brace
     foreach (Part const* const p, il) {
         if (p->nstaves() > 1 && !partSet.contains(p)) {
-            const int column = p->staff(0)->bracketLevels() + 1;
+            const size_t column = p->staff(0)->bracketLevels() + 1;
             p->staff(0)->setBracketType(column, BracketType::BRACE);
             p->staff(0)->setBracketSpan(column, p->nstaves());
             if (allStaffGroupsIdentical(p)) {
                 // span only if the same types
-                p->staff(0)->setBarLineSpan(p->nstaves());
+                p->staff(0)->setBarLineSpan(static_cast<int>(p->nstaves()));
             }
         }
     }
@@ -1136,7 +1137,7 @@ void MusicXMLParserPass1::identification()
             QString strType = _e.attributes().value("type").toString();
             _score->setMetaTag(strType, _e.readElementText());
         } else if (_e.name() == "rights") {
-            _score->setMetaTag("copyright", _e.readElementText());
+            _score->setMetaTag(u"copyright", _e.readElementText());
         } else if (_e.name() == "encoding") {
             // TODO
             while (_e.readNextStartElement()) {
@@ -1148,10 +1149,10 @@ void MusicXMLParserPass1::identification()
             // _score->setMetaTag("encoding", _e.readElementText()); works with DOM but not with pull parser
             // temporarily fake the encoding tag (compliant with DOM parser) to help the autotester
             if (MScore::debugMode) {
-                _score->setMetaTag("encoding", "MuseScore 0.7.02007-09-10");
+                _score->setMetaTag(u"encoding", u"MuseScore 0.7.02007-09-10");
             }
         } else if (_e.name() == "source") {
-            _score->setMetaTag("source", _e.readElementText());
+            _score->setMetaTag(u"source", _e.readElementText());
         } else if (_e.name() == "miscellaneous") {
             // TODO
             _e.skipCurrentElement();        // skip but don't log
@@ -1178,7 +1179,7 @@ static QString text2syms(const QString& t)
     // note that this takes about 1 msec on a Core i5,
     // caching does not gain much
 
-    ScoreFont* sf = ScoreFont::fallbackFont();
+    SymbolFont* sf = SymbolFonts::fallbackFont();
     QMap<QString, SymId> map;
     int maxStringSize = 0;          // maximum string size found
 
@@ -1193,7 +1194,7 @@ static QString text2syms(const QString& t)
             maxStringSize = string.size();
         }
     }
-    //qDebug("text2syms map count %d maxsz %d filling time elapsed: %d ms",
+    //LOGD("text2syms map count %d maxsz %d filling time elapsed: %d ms",
     //       map.size(), maxStringSize, time.elapsed());
 
     // then look for matches
@@ -1203,7 +1204,7 @@ static QString text2syms(const QString& t)
     while (in != "") {
         // try to find the largest match possible
         int maxMatch = qMin(in.size(), maxStringSize);
-        QString sym;
+        AsciiStringView sym;
         while (maxMatch > 0) {
             QString toBeMatched = in.left(maxMatch);
             if (map.contains(toBeMatched)) {
@@ -1215,7 +1216,7 @@ static QString text2syms(const QString& t)
         if (maxMatch > 0) {
             // found a match, add sym to res and remove match from string in
             res += "<sym>";
-            res += sym;
+            res += sym.ascii();
             res += "</sym>";
             in.remove(0, maxMatch);
         } else {
@@ -1225,7 +1226,7 @@ static QString text2syms(const QString& t)
         }
     }
 
-    //qDebug("text2syms total time elapsed: %d ms, res '%s'", time.elapsed(), qPrintable(res));
+    //LOGD("text2syms total time elapsed: %d ms, res '%s'", time.elapsed(), qPrintable(res));
     return res;
 }
 
@@ -1335,7 +1336,7 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
     if (fontWeight == "bold") {
         importedtext += "</b>";
     }
-    //qDebug("importedtext '%s'", qPrintable(importedtext));
+    //LOGD("importedtext '%s'", qPrintable(importedtext));
     return importedtext;
 }
 
@@ -1540,7 +1541,7 @@ void MusicXMLParserPass1::defaults()
                     Spatium val(_e.readElementText().toDouble() / 10.0);
                     if (isImportLayout) {
                         _score->style().set(Sid::minSystemDistance, val);
-                        //qDebug("system distance %f", val.val());
+                        //LOGD("system distance %f", val.val());
                     }
                 } else if (_e.name() == "top-system-distance") {
                     _e.skipCurrentElement();            // skip but don't log
@@ -1577,7 +1578,7 @@ void MusicXMLParserPass1::defaults()
     }
 
     /*
-    qDebug("word font family '%s' size '%s' lyric font family '%s' size '%s'",
+    LOGD("word font family '%s' size '%s' lyric font family '%s' size '%s'",
            qPrintable(wordFontFamily), qPrintable(wordFontSize),
            qPrintable(lyricFontFamily), qPrintable(lyricFontSize));
     */
@@ -1718,10 +1719,10 @@ typedef std::map<int, MusicXmlPartGroup*> MusicXmlPartGroupMap;
 
 static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, QString s, bool barlineSpan)
 {
-    //qDebug("partGroupStart number=%d part=%d symbol=%s", n, p, qPrintable(s));
+    //LOGD("partGroupStart number=%d part=%d symbol=%s", n, p, qPrintable(s));
 
     if (pgs.count(n) > 0) {
-        qDebug("part-group number=%d already active", n);
+        LOGD("part-group number=%d already active", n);
         return;
     }
 
@@ -1739,7 +1740,7 @@ static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, QString s, b
     } else if (s == "square") {
         bracketType = BracketType::SQUARE;
     } else {
-        qDebug("part-group symbol=%s not supported", qPrintable(s));
+        LOGD("part-group symbol=%s not supported", qPrintable(s));
         return;
     }
 
@@ -1767,12 +1768,12 @@ static void partGroupStop(MusicXmlPartGroupMap& pgs, int n, int p,
                           MusicXmlPartGroupList& pgl)
 {
     if (pgs.count(n) == 0) {
-        qDebug("part-group number=%d not active", n);
+        LOGD("part-group number=%d not active", n);
         return;
     }
 
     pgs[n]->span = p - pgs[n]->start;
-    //qDebug("partgroupstop number=%d start=%d span=%d type=%hhd",
+    //LOGD("partgroupstop number=%d start=%d span=%d type=%hhd",
     //       n, pgs[n]->start, pgs[n]->span, pgs[n]->type);
     pgl.push_back(pgs[n]);
     pgs.erase(n);
@@ -1919,7 +1920,7 @@ void MusicXMLParserPass1::scoreInstrument(const QString& partId)
         } else if (_e.name() == "instrument-name") {
             QString instrName = _e.readElementText();
             /*
-            qDebug("partId '%s' instrId '%s' instrName '%s'",
+            LOGD("partId '%s' instrId '%s' instrName '%s'",
                    qPrintable(partId),
                    qPrintable(instrId),
                    qPrintable(instrName)
@@ -2044,7 +2045,7 @@ static void setNumberOfStavesForPart(Part* const part, const size_t staves)
     }
 
     if (staves > part->nstaves()) {
-        part->setStaves(staves);
+        part->setStaves(static_cast<int>(staves));
     }
 }
 
@@ -2203,7 +2204,7 @@ void MusicXMLParserPass1::measure(const QString& partId,
         }
 
         /*
-         qDebug("mTime %s (%s) mDura %s (%s)",
+         LOGD("mTime %s (%s) mDura %s (%s)",
          qPrintable(mTime.print()),
          qPrintable(mTime.reduced().print()),
          qPrintable(mDura.print()),
@@ -2271,7 +2272,7 @@ void MusicXMLParserPass1::measure(const QString& partId,
 
     // set measure number and duration
     /*
-    qDebug("part %s measure %s dura %s (%d)",
+    LOGD("part %s measure %s dura %s (%d)",
            qPrintable(partId), qPrintable(number), qPrintable(mdur.print()), mdur.ticks());
      */
     _parts[partId].addMeasureNumberAndDuration(number, mdur);
@@ -2502,7 +2503,7 @@ void MusicXMLParserPass1::transpose(const QString& partId, const Fraction& tick)
         }
         _parts[partId]._intervals[tick] = interval;
     } else {
-        qDebug("duplicate transpose at tick %s", qPrintable(tick.toString()));
+        LOGD("duplicate transpose at tick %s", qPrintable(tick.toString()));
     }
 }
 
@@ -2566,11 +2567,11 @@ void MusicXMLParserPass1::direction(const QString& partId, const Fraction cTime)
         if (_e.name() == "direction-type") {
             directionType(cTime, starts, stops);
         } else if (_e.name() == "staff") {
-            int nstaves = getPart(partId)->nstaves();
+            int nstaves = static_cast<int>(getPart(partId)->nstaves());
             QString strStaff = _e.readElementText();
             staff = strStaff.toInt() - 1;
             if (0 <= staff && staff < nstaves) {
-                //qDebug("direction staff %d", staff + 1);
+                //LOGD("direction staff %d", staff + 1);
             } else {
                 _logger->logError(QString("invalid staff %1").arg(strStaff), &_e);
                 staff = 0;
@@ -2644,7 +2645,7 @@ void MusicXMLParserPass1::directionType(const Fraction cTime,
             if (0 <= n && n < MAX_NUMBER_LEVEL) {
                 short size = _e.attributes().value("size").toShort();
                 QString type = _e.attributes().value("type").toString();
-                //qDebug("octave-shift type '%s' size %d number %d", qPrintable(type), size, n);
+                //LOGD("octave-shift type '%s' size %d number %d", qPrintable(type), size, n);
                 MxmlOctaveShiftDesc osDesc;
                 handleOctaveShift(cTime, type, size, osDesc);
                 osDesc.num = n;
@@ -2769,7 +2770,7 @@ static void smallestTypeAndCount(const TDuration durType, int& type, int& count)
         count = 7;
         break;
     default:
-        qDebug("smallestTypeAndCount() does not support more than 2 dots");
+        LOGD("smallestTypeAndCount() does not support more than 2 dots");
     }
 }
 
@@ -2807,7 +2808,7 @@ static void matchTypeAndCount(int& type1, int& count1, int& type2, int& count2)
 void MxmlTupletState::addDurationToTuplet(const Fraction duration, const Fraction timeMod)
 {
     /*
-    qDebug("1 duration %s timeMod %s -> state.tupletType %d state.tupletCount %d state.actualNotes %d state.normalNotes %d",
+    LOGD("1 duration %s timeMod %s -> state.tupletType %d state.tupletCount %d state.actualNotes %d state.normalNotes %d",
            qPrintable(duration.print()),
            qPrintable(timeMod.print()),
            m_tupletType,
@@ -2831,7 +2832,7 @@ void MxmlTupletState::addDurationToTuplet(const Fraction duration, const Fractio
     }
     m_duration += duration;
     /*
-    qDebug("2 duration %s -> state.tupletType %d state.tupletCount %d state.actualNotes %d state.normalNotes %d",
+    LOGD("2 duration %s -> state.tupletType %d state.tupletCount %d state.actualNotes %d state.normalNotes %d",
            qPrintable(duration.print()),
            m_tupletType,
            m_tupletCount,
@@ -2893,7 +2894,7 @@ void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& f
     }
 
     /*
-    qDebug("duration %s fraction %s fullDuration %s",
+    LOGD("duration %s fraction %s fullDuration %s",
            qPrintable(duration.toString()),
            qPrintable(fraction.toString()),
            qPrintable(fullDuration.toString())
@@ -2925,7 +2926,7 @@ static bool isTupletFilled(const MxmlTupletState& state, const TDuration normalT
     const auto actualNotes = state.m_actualNotes;
     /*
     const auto normalNotes = state.m_normalNotes;
-    qDebug("duration %s normalType %s timeMod %s normalNotes %d actualNotes %d",
+    LOGD("duration %s normalType %s timeMod %s normalNotes %d actualNotes %d",
            qPrintable(state.m_duration.toString()),
            qPrintable(normalType.fraction().toString()),
            qPrintable(timeMod.toString()),
@@ -2945,7 +2946,7 @@ static bool isTupletFilled(const MxmlTupletState& state, const TDuration normalT
         // ... result scenario (1)
         res = tupletCount >= matchedNormalCount;
         /*
-        qDebug("normalType valid tupletType %d tupletCount %d matchedNormalType %d matchedNormalCount %d res %d",
+        LOGD("normalType valid tupletType %d tupletCount %d matchedNormalType %d matchedNormalCount %d res %d",
                tupletType,
                tupletCount,
                matchedNormalType,
@@ -2957,7 +2958,7 @@ static bool isTupletFilled(const MxmlTupletState& state, const TDuration normalT
         // ... result scenario (2)
         res = tupletCount >= actualNotes;
         /*
-        qDebug("normalType not valid tupletCount %d actualNotes %d res %d",
+        LOGD("normalType not valid tupletCount %d actualNotes %d res %d",
                tupletCount,
                actualNotes,
                res
@@ -3009,7 +3010,7 @@ MxmlTupletFlags MxmlTupletState::determineTupletAction(const Fraction noteDurati
         // recover by simply stopping the current tuplet first
         if (!isTupletFilled(*this, normalType, timeMod)) {
             missingPreviousDuration = missingTupletDuration(m_duration);
-            //qDebug("tuplet incomplete, missing %s", qPrintable(missingPreviousDuration.print()));
+            //LOGD("tuplet incomplete, missing %s", qPrintable(missingPreviousDuration.print()));
         }
         *this = {};
         res |= MxmlTupletFlag::STOP_PREVIOUS;
@@ -3017,17 +3018,17 @@ MxmlTupletFlags MxmlTupletState::determineTupletAction(const Fraction noteDurati
 
     // check for obvious errors
     if (m_inTuplet && tupletStartStop == MxmlStartStop::START) {
-        qDebug("tuplet already started");
+        LOGD("tuplet already started");
         // recover by simply stopping the current tuplet first
         if (!isTupletFilled(*this, normalType, timeMod)) {
             missingPreviousDuration = missingTupletDuration(m_duration);
-            //qDebug("tuplet incomplete, missing %s", qPrintable(missingPreviousDuration.print()));
+            //LOGD("tuplet incomplete, missing %s", qPrintable(missingPreviousDuration.print()));
         }
         *this = {};
         res |= MxmlTupletFlag::STOP_PREVIOUS;
     }
     if (tupletStartStop == MxmlStartStop::STOP && !m_inTuplet) {
-        qDebug("tuplet stop but no tuplet started");           // TODO
+        LOGD("tuplet stop but no tuplet started");           // TODO
         // recovery handled later (automatically, no special case needed)
     }
 
@@ -3068,7 +3069,7 @@ MxmlTupletFlags MxmlTupletState::determineTupletAction(const Fraction noteDurati
             || (actualNotes == 1 && normalNotes == 1)) {           // incorrect ??? check scenario incomplete tuplet w/o start
             if (actualNotes > normalNotes && !isTupletFilled(*this, normalType, timeMod)) {
                 missingCurrentDuration = missingTupletDuration(m_duration);
-                qDebug("current tuplet incomplete, missing %s", qPrintable(missingCurrentDuration.toString()));
+                LOGD("current tuplet incomplete, missing %s", qPrintable(missingCurrentDuration.toString()));
             }
 
             *this = {};
@@ -3182,7 +3183,7 @@ void MusicXMLParserPass1::note(const QString& partId,
     QString prevInstrId = _parts[partId]._instrList.instrument(sTime);
     bool mustInsert = instrId != prevInstrId;
     /*
-    qDebug("tick %s (%d) staff %d voice '%s' previnst='%s' instrument '%s' mustInsert %d",
+    LOGD("tick %s (%d) staff %d voice '%s' previnst='%s' instrument '%s' mustInsert %d",
            qPrintable(sTime.print()),
            sTime.ticks(),
            staff + 1,
@@ -3199,7 +3200,7 @@ void MusicXMLParserPass1::note(const QString& partId,
     // check for timing error(s) and set dura
     // keep in this order as checkTiming() might change dura
     auto errorStr = mnd.checkTiming(type, bRest, grace);
-    dura = mnd.dura();
+    dura = mnd.duration();
     if (errorStr != "") {
         _logger->logError(errorStr, &_e);
     }
@@ -3216,7 +3217,7 @@ void MusicXMLParserPass1::note(const QString& partId,
         // do tuplet
         auto timeMod = mnd.timeMod();
         auto& tupletState = tupletStates[voice];
-        tupletState.determineTupletAction(mnd.dura(), timeMod, tupletStartStop, mnd.normalType(), missingPrev, missingCurr);
+        tupletState.determineTupletAction(mnd.duration(), timeMod, tupletStartStop, mnd.normalType(), missingPrev, missingCurr);
     }
 
     // store result
@@ -3296,7 +3297,7 @@ void MusicXMLParserPass1::duration(Fraction& dura)
     } else {
         _logger->logError("illegal duration", &_e);
     }
-    //qDebug("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
+    //LOGD("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
 }
 
 //---------------------------------------------------------

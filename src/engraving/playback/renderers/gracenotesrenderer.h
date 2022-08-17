@@ -27,35 +27,33 @@
 
 #include "renderbase.h"
 
-namespace Ms {
-class Chord;
-}
-
 namespace mu::engraving {
+class Chord;
+
 class GraceNotesRenderer : public RenderBase<GraceNotesRenderer>
 {
 public:
     static const mpe::ArticulationTypeSet& supportedTypes();
 
-    static void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType type, const RenderingContext& context,
+    static void doRender(const EngravingItem* item, const mpe::ArticulationType type, const RenderingContext& context,
                          mpe::PlaybackEventList& result);
 private:
     static bool isPlacedBeforePrincipalNote(const mpe::ArticulationType type);
 
-    static void renderPrependedGraceNotes(const Ms::Chord* chord, const RenderingContext& context, const mpe::ArticulationType type,
+    static void renderPrependedGraceNotes(const Chord* chord, const RenderingContext& context, const mpe::ArticulationType type,
                                           mpe::PlaybackEventList& result);
-    static void renderAppendedGraceNotes(const Ms::Chord* chord, const RenderingContext& context, const mpe::ArticulationType type,
+    static void renderAppendedGraceNotes(const Chord* chord, const RenderingContext& context, const mpe::ArticulationType type,
                                          mpe::PlaybackEventList& result);
 
     static mpe::duration_t graceNotesTotalDuration(const std::vector<NominalNoteCtx>& noteCtxList);
     static float graceNotesDurationRatio(const mpe::duration_t totalDuration, const mpe::duration_t maxAvailableDuration);
-    static std::vector<NominalNoteCtx> graceNotesCtxList(const std::vector<Ms::Chord*>& graceChords, const RenderingContext& context);
+    static std::vector<NominalNoteCtx> graceNotesCtxList(const std::vector<Chord*>& graceChords, const RenderingContext& context);
 
     static void buildGraceNoteEvents(std::vector<NominalNoteCtx>&& noteCtxList, const mpe::timestamp_t timestampFrom,
                                      const mpe::ArticulationType type, const mpe::duration_t availableDuration,
                                      mpe::PlaybackEventList& result);
 
-    static void buildPrincipalNoteEvents(const Ms::Chord* chord, const RenderingContext& context, const mpe::ArticulationType type,
+    static void buildPrincipalNoteEvents(const Chord* chord, const RenderingContext& context, const mpe::ArticulationType type,
                                          const mpe::duration_t duration, const mpe::timestamp_t timestamp, mpe::PlaybackEventList& result);
 
     static mpe::duration_t graceNotesMaxAvailableDuration(const mpe::ArticulationType type, const RenderingContext& ctx,

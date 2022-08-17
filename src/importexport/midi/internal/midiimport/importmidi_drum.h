@@ -25,15 +25,18 @@
 #include <map>
 #include <QList>
 
-namespace Ms {
-class MTrack;
+namespace mu::engraving {
 class TimeSigMap;
+}
+
+namespace mu::iex::midi {
+class MTrack;
 
 namespace MidiDrum {
 void splitDrumVoices(std::multimap<int, MTrack>& tracks);
 void splitDrumTracks(std::multimap<int, MTrack>& tracks);
 void setStaffBracketForDrums(QList<MTrack>& tracks);
 } // namespace MidiDrum
-} // namespace Ms
+} // namespace mu::iex::midi
 
 #endif // IMPORTMIDI_DRUM_H

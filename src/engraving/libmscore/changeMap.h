@@ -25,6 +25,7 @@
 
 #include <map>
 
+#include "global/allocator.h"
 #include "types/types.h"
 
 /**
@@ -32,7 +33,7 @@
  Definition of class ChangeMap.
 */
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 ///   ChangeEvent
 ///   item in ChangeMap
@@ -74,6 +75,8 @@ typedef std::vector<std::pair<Fraction, Fraction> > EndPointsVector;
 
 class ChangeMap : public std::multimap<Fraction, ChangeEvent>
 {
+    OBJECT_ALLOCATOR(engraving, ChangeMap)
+
     bool cleanedUp    { false };
     static const int DEFAULT_VALUE  { 80 };
 
@@ -100,5 +103,5 @@ public:
 
     static int interpolate(Fraction& eventTick, ChangeEvent& event, Fraction& tick);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

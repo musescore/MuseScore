@@ -26,34 +26,37 @@
 
 using namespace mu::autobot;
 
-mu::io::paths AutobotConfiguration::scriptsDirPaths() const
+mu::io::paths_t AutobotConfiguration::scriptsDirPaths() const
 {
-    io::path p = io::path(std::getenv("MU_AUTOBOT_SCRIPTS_PATH"));
+    io::path_t p = io::path_t(std::getenv("MU_AUTOBOT_SCRIPTS_PATH"));
     if (!p.empty()) {
         return { p };
     }
 
-    io::paths paths;
+    io::paths_t paths;
     paths.push_back(globalConfiguration()->appDataPath() + "/autobotscripts");
     paths.push_back(globalConfiguration()->userDataPath() + "/AutobotScripts");
 
     return paths;
 }
 
-mu::io::path AutobotConfiguration::testingFilesDirPath() const
+mu::io::paths_t AutobotConfiguration::testingFilesDirPaths() const
 {
-    io::path p = io::path(std::getenv("MU_AUTOBOT_FILES_PATH"));
+    io::path_t p = io::path_t(std::getenv("MU_AUTOBOT_FILES_PATH"));
     if (!p.empty()) {
-        return p;
+        return { p };
     }
 
-    p = globalConfiguration()->userDataPath() + "/AutobotTestingFiles";
-    return p;
+    io::paths_t paths;
+    paths.push_back(globalConfiguration()->appDataPath() + "/autobotscripts/data");
+    paths.push_back(globalConfiguration()->userDataPath() + "/AutobotTestingFiles");
+
+    return paths;
 }
 
-mu::io::path AutobotConfiguration::dataPath() const
+mu::io::path_t AutobotConfiguration::dataPath() const
 {
-    io::path p = io::path(std::getenv("MU_AUTOBOT_DATA_PATH"));
+    io::path_t p = io::path_t(std::getenv("MU_AUTOBOT_DATA_PATH"));
     if (!p.empty()) {
         return p;
     }
@@ -62,22 +65,22 @@ mu::io::path AutobotConfiguration::dataPath() const
     return p;
 }
 
-mu::io::path AutobotConfiguration::savingFilesPath() const
+mu::io::path_t AutobotConfiguration::savingFilesPath() const
 {
     return dataPath() + "/saving_files";
 }
 
-mu::io::path AutobotConfiguration::reportsPath() const
+mu::io::path_t AutobotConfiguration::reportsPath() const
 {
     return dataPath() + "/reports";
 }
 
-mu::io::path AutobotConfiguration::drawDataPath() const
+mu::io::path_t AutobotConfiguration::drawDataPath() const
 {
     return dataPath() + "/draw_data";
 }
 
-mu::io::path AutobotConfiguration::fileDrawDataPath(const io::path& filePath) const
+mu::io::path_t AutobotConfiguration::fileDrawDataPath(const io::path_t& filePath) const
 {
     return drawDataPath() + "/" + io::basename(filePath) + ".json";
 }

@@ -25,7 +25,7 @@
 using namespace mu::inspector;
 
 LetRingSettingsModel::LetRingSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : TextLineSettingsModel(parent, repository, Ms::ElementType::LET_RING)
+    : TextLineSettingsModel(parent, repository, mu::engraving::ElementType::LET_RING)
 {
     setModelType(InspectorModelType::TYPE_LET_RING);
     setTitle(qtrc("inspector", "Let ring"));

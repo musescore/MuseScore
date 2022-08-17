@@ -22,7 +22,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Beam Test</metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>Standard</name>
@@ -176,8 +176,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>2</l1>
-            <l2>0</l2>
+            <l1>10</l1>
+            <l2>6</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -261,7 +261,7 @@
             </Chord>
           <Beam>
             <StemDirection>up</StemDirection>
-            <l1>-6</l1>
+            <l1>-4</l1>
             <l2>-10</l2>
             </Beam>
           <Chord>
@@ -308,8 +308,8 @@
         <voice>
           <Beam>
             <StemDirection>up</StemDirection>
-            <l1>8</l1>
-            <l2>10</l2>
+            <l1>14</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -326,8 +326,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>8</l1>
-            <l2>10</l2>
+            <l1>14</l1>
+            <l2>18</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -345,8 +345,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>8</l1>
-            <l2>10</l2>
+            <l1>14</l1>
+            <l2>18</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -363,8 +363,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>8</l1>
-            <l2>10</l2>
+            <l1>14</l1>
+            <l2>18</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -386,8 +386,8 @@
       <Measure>
         <voice>
           <Beam>
-            <l1>8</l1>
-            <l2>10</l2>
+            <l1>14</l1>
+            <l2>18</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -404,8 +404,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>8</l1>
-            <l2>10</l2>
+            <l1>14</l1>
+            <l2>18</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -462,7 +462,7 @@
           <Beam>
             <StemDirection>up</StemDirection>
             <l1>-12</l1>
-            <l2>-6</l2>
+            <l2>-8</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -645,8 +645,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>22</l1>
-            <l2>24</l2>
+            <l1>14</l1>
+            <l2>18</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -689,8 +689,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>30</l1>
-            <l2>32</l2>
+            <l1>22</l1>
+            <l2>26</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -751,7 +751,7 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>32</l1>
+            <l1>36</l1>
             <l2>38</l2>
             </Beam>
           <Chord>
@@ -771,7 +771,7 @@
             </Chord>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>38</l1>
+            <l1>36</l1>
             <l2>42</l2>
             </Beam>
           <Chord>

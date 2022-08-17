@@ -62,6 +62,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iaudiostream.h
     ${CMAKE_CURRENT_LIST_DIR}/abstractsynthesizer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/abstractsynthesizer.h
+    ${CMAKE_CURRENT_LIST_DIR}/abstracteventsequencer.h
     ${CMAKE_CURRENT_LIST_DIR}/ifxprocessor.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiodriver.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiosource.h
@@ -73,6 +74,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/isynthresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/ifxresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/iplayback.h
+    ${CMAKE_CURRENT_LIST_DIR}/isoundfontrepository.h
 
     # Common internal
     ${CMAKE_CURRENT_LIST_DIR}/internal/iaudiobuffer.h
@@ -86,6 +88,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiosanitizer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiosanitizer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontrepository.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontrepository.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputdevicecontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputdevicecontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiodeviceslistener.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiodeviceslistener.h
 
     # Driver
     ${DRIVER_SRC}
@@ -152,6 +160,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/sfcachedloader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsynth.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsynth.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsequencer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsequencer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidresolver.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthresolver.cpp
@@ -193,6 +203,12 @@ if (ENABLE_AUDIO_EXPORT)
         # Encoders
         ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/mp3encoder.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/mp3encoder.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/oggencoder.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/oggencoder.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/flacencoder.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/flacencoder.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/wavencoder.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/wavencoder.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/abstractaudioencoder.h
 
         # SoundTracks
@@ -201,10 +217,10 @@ if (ENABLE_AUDIO_EXPORT)
         )
 
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/lame lame)
-    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/opus opus)
+    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/opusenc opusenc)
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/flac flac)
 
-    set(MODULE_LINK ${MODULE_LINK} lame opus flac)
+    set(MODULE_LINK ${MODULE_LINK} lame opusenc flac)
 endif()
 
 if (OS_IS_MAC)

@@ -25,9 +25,9 @@
 
 #include <list>
 
-#include "infrastructure/draw/painter.h"
+#include "draw/painter.h"
 
-namespace Ms {
+namespace mu::engraving {
 class EngravingItem;
 class Score;
 class Slur;
@@ -47,7 +47,7 @@ class MuseScoreView
 public:
     virtual ~MuseScoreView() = default;
 
-    virtual qreal selectionProximity() const { return 0.0f; }
+    virtual double selectionProximity() const { return 0.0f; }
 
     virtual void layoutChanged() {}
     virtual void dataChanged(const mu::RectF&) = 0;
@@ -55,7 +55,7 @@ public:
 
     virtual void moveCursor() {}
 
-    virtual void adjustCanvasPosition(const EngravingItem*, int /*staffIdx*/ = -1) {}
+    virtual Score* score() const { return m_score; }
     virtual void setScore(Score* s) { m_score = s; }
     virtual void removeScore() {}
 
@@ -70,13 +70,11 @@ public:
     virtual void lyricsMinus() {}
     virtual void lyricsUnderscore() {}
 
-    virtual void onElementDestruction(EngravingItem*) {}
-
     virtual const mu::Rect geometry() const = 0;
 
     const std::vector<EngravingItem*> elementsAt(const mu::PointF&) const;
     EngravingItem* elementNear(const mu::PointF& pos) const;
-    Score* score() const { return m_score; }
+    virtual void adjustCanvasPosition(const EngravingItem*, int /*staffIdx*/ = -1) {}
 
 protected:
     Score* m_score = nullptr;
@@ -86,6 +84,6 @@ private:
     EngravingItem* elementAt(const mu::PointF& p) const;
     const std::vector<EngravingItem*> elementsNear(const mu::PointF& pos) const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

@@ -34,6 +34,7 @@
 #include "audio/iaudiothreadsecurer.h"
 #include "audio/audiotypes.h"
 
+#include "ivstmodulesrepository.h"
 #include "vsttypes.h"
 #include "vstcomponenthandler.h"
 #include "vsterrors.h"
@@ -42,10 +43,12 @@ namespace mu::vst {
 class VstPlugin : public async::Asyncable
 {
     INJECT_STATIC(vst, audio::IAudioThreadSecurer, threadSecurer)
+    INJECT_STATIC(vst, IVstModulesRepository, modulesRepo)
 
 public:
-    VstPlugin(PluginModulePtr module);
+    VstPlugin(const audio::AudioResourceId& resourceId);
 
+    const audio::AudioResourceId& resourceId() const;
     const std::string& name() const;
 
     PluginViewPtr view() const;
@@ -53,6 +56,7 @@ public:
     bool isAbleForInput() const;
 
     void updatePluginConfig(const audio::AudioUnitConfig& config);
+    void refreshConfig();
 
     void load();
 
@@ -65,6 +69,8 @@ public:
 private:
     void rescanParams();
     void stateBufferFromString(VstMemoryStream& buffer, char* strData, const size_t strSize) const;
+
+    audio::AudioResourceId m_resourceId;
 
     PluginModulePtr m_module = nullptr;
     PluginProviderPtr m_pluginProvider = nullptr;

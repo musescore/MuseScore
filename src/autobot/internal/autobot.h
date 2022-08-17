@@ -29,7 +29,7 @@
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "../iautobotconfiguration.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "ui/inavigationcontroller.h"
 #include "shortcuts/ishortcutsregister.h"
 #include "iinteractive.h"
@@ -45,7 +45,7 @@ namespace mu::autobot {
 class Autobot : public IAutobot, public async::Asyncable
 {
     INJECT(autobot, IAutobotConfiguration, configuration)
-    INJECT(autobot, system::IFileSystem, fileSystem)
+    INJECT(autobot, io::IFileSystem, fileSystem)
     INJECT(autobot, ui::INavigationController, navigation)
     INJECT(autobot, shortcuts::IShortcutsRegister, shortcutsRegister)
     INJECT(autobot, framework::IInteractive, interactive)
@@ -57,8 +57,8 @@ public:
     void init();
 
     Status status() const override;
-    async::Channel<io::path, Status> statusChanged() const override;
-    async::Channel<QString, StepStatus, Ret> stepStatusChanged() const override;
+    async::Channel<io::path_t, Status> statusChanged() const override;
+    async::Channel<StepInfo, Ret> stepStatusChanged() const override;
 
     SpeedMode speedMode() const override;
     void setSpeedMode(SpeedMode mode) override;
@@ -67,7 +67,7 @@ public:
     int defaultIntervalMsec() const override;
     int intervalMsec() const override;
 
-    void execScript(const io::path& path) override;
+    void execScript(const io::path_t& path) override;
     void runTestCase(const TestCase& testCase) override;
     void sleep(int msec) override;
     void pause() override;
@@ -86,8 +86,8 @@ private:
     void setStatus(Status st);
 
     Status m_status = Status::Undefined;
-    async::Channel<io::path, Status> m_statusChanged;
-    async::Channel<QString, StepStatus, Ret> m_stepStatusChanged;
+    async::Channel<io::path_t, Status> m_statusChanged;
+    async::Channel<StepInfo, Ret> m_stepStatusChanged;
     ScriptEngine* m_engine = nullptr;
     ITestCaseContextPtr m_context = nullptr;
     TestCaseRunner m_runner;

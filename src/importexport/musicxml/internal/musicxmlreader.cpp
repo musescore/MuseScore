@@ -22,24 +22,24 @@
 #include "musicxmlreader.h"
 
 #include "io/path.h"
-#include "libmscore/masterscore.h"
-#include "notation/notationerrors.h"
+#include "engraving/engravingerrors.h"
 
-namespace Ms {
-extern Score::FileError importMusicXml(MasterScore*, const QString&);
-extern Score::FileError importCompressedMusicXml(MasterScore*, const QString&);
+namespace mu::engraving {
+extern Err importMusicXml(MasterScore*, const QString&);
+extern Err importCompressedMusicXml(MasterScore*, const QString&);
 }
 
 using namespace mu::iex::musicxml;
+using namespace mu::engraving;
 
-mu::Ret MusicXmlReader::read(Ms::MasterScore* score, const io::path& path, const Options&)
+mu::Ret MusicXmlReader::read(MasterScore* score, const io::path_t& path, const Options&)
 {
-    Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
-    std::string syffix = mu::io::suffix(path);
-    if (syffix == "xml" || syffix == "musicxml") {
-        err = Ms::importMusicXml(score, path.toQString());
-    } else if (syffix == "mxl") {
-        err = Ms::importCompressedMusicXml(score, path.toQString());
+    Err err = Err::FileUnknownType;
+    std::string suffix = mu::io::suffix(path);
+    if (suffix == "xml" || suffix == "musicxml") {
+        err = importMusicXml(score, path.toQString());
+    } else if (suffix == "mxl") {
+        err = importCompressedMusicXml(score, path.toQString());
     }
-    return mu::notation::scoreFileErrorToRet(err, path);
+    return make_ret(err, path);
 }

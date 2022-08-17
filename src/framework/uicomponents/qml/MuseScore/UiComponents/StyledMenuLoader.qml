@@ -21,12 +21,16 @@
  */
 import QtQuick 2.15
 
+import MuseScore.UiComponents 1.0
+
+import "internal"
+
 Loader {
     id: loader
 
     signal handleMenuItem(string itemId)
     signal opened()
-    signal closed()
+    signal closed(bool force)
 
     property alias menu: loader.item
     property var menuAnchorItem: null
@@ -40,9 +44,9 @@ Loader {
             loader.active = true
         }
 
-        function unloadMenu() {
+        function unloadMenu(force) {
             loader.active = false
-            Qt.callLater(loader.closed)
+            Qt.callLater(loader.closed, force)
         }
     }
 
@@ -51,13 +55,15 @@ Loader {
     sourceComponent: StyledMenu {
         id: itemMenu
 
+        openPolicy: PopupView.NoActivateFocus
+
         onHandleMenuItem: function(itemId) {
             itemMenu.close()
             Qt.callLater(loader.handleMenuItem, itemId)
         }
 
-        onClosed: {
-            Qt.callLater(prv.unloadMenu)
+        onClosed: function(force) {
+            Qt.callLater(prv.unloadMenu, force)
         }
 
         onOpened: {
@@ -65,7 +71,7 @@ Loader {
         }
     }
 
-    function open(model, x = 0, y = 0) {
+    function open(model, x = -1, y = -1) {
         prv.loadMenu()
 
         var menu = loader.menu
@@ -78,7 +84,7 @@ Loader {
         Qt.callLater(loader.opened)
     }
 
-    function toggleOpened(model, x = 0, y = 0) {
+    function toggleOpened(model, x = -1, y = -1) {
         prv.loadMenu()
 
         var menu = loader.menu
@@ -104,21 +110,25 @@ Loader {
         }
     }
 
-    function update(model, x = 0, y = 0) {
+    function update(model, x = -1, y = -1) {
         var menu = loader.menu
         if (!Boolean(menu)) {
             return
         }
 
-        menu.model = model
+        menu.closeSubMenu()
 
-        if (x !== 0) {
+        if (x !== -1) {
             menu.x = x
         }
 
-        if (y !== 0) {
+        if (y !== -1) {
             menu.y = y
         }
+
+        menu.model = model
+
+        menu.calculateSize()
     }
 
     Timer {

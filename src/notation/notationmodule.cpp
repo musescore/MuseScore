@@ -149,7 +149,7 @@ void NotationModule::resolveImports()
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<TupletDialog>("TupletDialog")));
 
         ir->registerUri(Uri("musescore://notation/stafftextproperties"),
-                        ContainerMeta(ContainerType::QWidgetDialog, Ms::StaffTextPropertiesDialog::static_metaTypeId()));
+                        ContainerMeta(ContainerType::QWidgetDialog, StaffTextPropertiesDialog::static_metaTypeId()));
 
         ir->registerUri(Uri("musescore://notation/parts"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/NotationScene/PartsDialog.qml"));
@@ -172,6 +172,8 @@ void NotationModule::registerResources()
 
 void NotationModule::registerUiTypes()
 {
+    qmlRegisterUncreatableType<AbstractNotationPaintView>("MuseScore.NotationScene", 1, 0, "AbstractNotationPaintView",
+                                                          "Not creatable as it is an abstract type");
     qmlRegisterType<NotationPaintView>("MuseScore.NotationScene", 1, 0, "NotationPaintView");
     qmlRegisterType<NotationContextMenuModel>("MuseScore.NotationScene", 1, 0, "NotationContextMenuModel");
     qmlRegisterType<NotationSwitchListModel>("MuseScore.NotationScene", 1, 0, "NotationSwitchListModel");
@@ -196,7 +198,7 @@ void NotationModule::registerUiTypes()
     qRegisterMetaType<EditStaff>("EditStaff");
     qRegisterMetaType<SelectNoteDialog>("SelectNoteDialog");
     qRegisterMetaType<SelectDialog>("SelectDialog");
-    qRegisterMetaType<Ms::StaffTextPropertiesDialog>("StaffTextPropertiesDialog");
+    qRegisterMetaType<StaffTextPropertiesDialog>("StaffTextPropertiesDialog");
 
     qmlRegisterUncreatableType<NoteInputBarCustomiseItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseItem", "Cannot create");
 
@@ -221,23 +223,23 @@ void NotationModule::onInit(const framework::IApplication::RunMode& mode)
 
     auto pr = modularity::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        io::paths instrPaths = s_configuration->instrumentListPaths();
-        for (const io::path& p : instrPaths) {
+        io::paths_t instrPaths = s_configuration->instrumentListPaths();
+        for (const io::path_t& p : instrPaths) {
             pr->reg("instruments", p);
         }
 
-        io::paths uinstrPaths = s_configuration->userInstrumentListPaths();
-        for (const io::path& p : uinstrPaths) {
+        io::paths_t uinstrPaths = s_configuration->userInstrumentListPaths();
+        for (const io::path_t& p : uinstrPaths) {
             pr->reg("user instruments", p);
         }
 
-        io::paths scoreOrderPaths = s_configuration->scoreOrderListPaths();
-        for (const io::path& p : scoreOrderPaths) {
+        io::paths_t scoreOrderPaths = s_configuration->scoreOrderListPaths();
+        for (const io::path_t& p : scoreOrderPaths) {
             pr->reg("scoreOrder", p);
         }
 
-        io::paths uscoreOrderPaths = s_configuration->userScoreOrderListPaths();
-        for (const io::path& p : uscoreOrderPaths) {
+        io::paths_t uscoreOrderPaths = s_configuration->userScoreOrderListPaths();
+        for (const io::path_t& p : uscoreOrderPaths) {
             pr->reg("user scoreOrder", p);
         }
     }

@@ -24,6 +24,7 @@
 #include <QGuiApplication>
 #include <QAccessible>
 #include <QWindow>
+#include <QTimer>
 
 #ifdef Q_OS_LINUX
 #include <QKeyEvent>
@@ -31,6 +32,7 @@
 #endif
 
 #include "accessibleobject.h"
+#include "accessiblestub.h"
 #include "accessibleiteminterface.h"
 #include "async/async.h"
 
@@ -69,7 +71,7 @@ static QAccessibleInterface* muAccessibleFactory(const QString& classname, QObje
         return interfaceGetter(object);
     }
 
-    return nullptr;
+    return AccessibleStub::accessibleInterface(object);
 }
 
 void AccessibilityController::init()
@@ -155,6 +157,17 @@ const IAccessible* AccessibilityController::lastFocused() const
     return m_lastFocused;
 }
 
+bool AccessibilityController::needToVoicePanelInfo() const
+{
+    return m_needToVoicePanelInfo;
+}
+
+QString AccessibilityController::currentPanelAccessibleName() const
+{
+    const IAccessible* focusedItemPanel = panel(m_lastFocused);
+    return focusedItemPanel ? focusedItemPanel->accessibleName() : "";
+}
+
 void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Property property, const Val& value)
 {
     const Item& it = findItem(item);
@@ -168,8 +181,16 @@ void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Pr
         return;
     case IAccessible::Property::Parent: etype = QAccessible::ParentChanged;
         break;
-    case IAccessible::Property::Name: etype = QAccessible::NameChanged;
+    case IAccessible::Property::Name: {
+#ifdef Q_OS_MAC
+        m_needToVoicePanelInfo = false;
+        etype = QAccessible::NameChanged;
         break;
+#else
+        triggerRevoicingOfChangedName(item);
+        return;
+#endif
+    }
     case IAccessible::Property::Description: etype = QAccessible::DescriptionChanged;
         break;
     case IAccessible::Property::Value: {
@@ -248,6 +269,7 @@ void AccessibilityController::stateChanged(IAccessible* aitem, State state, bool
     if (state == State::Focused) {
         if (arg) {
             cancelPreviousReading();
+            savePanelAccessibleName(m_lastFocused, item.item);
 
             QAccessibleEvent ev(item.object, QAccessible::Focus);
             sendEvent(&ev);
@@ -280,6 +302,101 @@ void AccessibilityController::cancelPreviousReading()
     QCoreApplicationPrivate::setEventSpontaneous(keyEvent, true);
     application()->notify(mainWindow()->qWindow(), keyEvent);
 #endif
+}
+
+void AccessibilityController::savePanelAccessibleName(const IAccessible* oldItem, const IAccessible* newItem)
+{
+    if (m_ignorePanelChangingVoice) {
+        m_needToVoicePanelInfo = false;
+        return;
+    }
+
+    const IAccessible* oldItemPanel = panel(oldItem);
+    QString oldItemPanelName = oldItemPanel ? oldItemPanel->accessibleName() : "";
+
+    const IAccessible* newItemPanel = panel(newItem);
+    QString newItemPanelName = newItemPanel ? newItemPanel->accessibleName() : "";
+
+    m_needToVoicePanelInfo = oldItemPanelName != newItemPanelName;
+}
+
+#ifndef Q_OS_MAC
+void AccessibilityController::triggerRevoicingOfChangedName(IAccessible* item)
+{
+    if (!configuration()->active()) {
+        return;
+    }
+
+    if (m_lastFocused != item) {
+        return;
+    }
+
+    m_ignorePanelChangingVoice = true;
+
+    item->setState(State::Focused, false);
+
+    const IAccessible* itemPanel = panel(item);
+    IAccessible* tmpFocusedItem = findSiblingItem(itemPanel, item);
+    if (!tmpFocusedItem) {
+        tmpFocusedItem = const_cast<IAccessible*>(itemPanel);
+    }
+
+    tmpFocusedItem->setState(State::Focused, true);
+    m_itemForRestoreFocus = item;
+
+    //! NOTE: Restore the focused element after some delay(this value was found experimentally)
+    QTimer::singleShot(200, [=]() {
+        m_lastFocused->setState(State::Focused, false);
+        m_itemForRestoreFocus->setState(State::Focused, true);
+        m_ignorePanelChangingVoice = false;
+    });
+}
+
+#endif
+
+const IAccessible* AccessibilityController::panel(const IAccessible* item) const
+{
+    if (!item) {
+        return nullptr;
+    }
+
+    const IAccessible* parent = item->accessibleParent();
+    while (parent) {
+        if (parent->accessibleRole() == IAccessible::Panel) {
+            return parent;
+        }
+
+        parent = parent->accessibleParent();
+    }
+
+    return nullptr;
+}
+
+IAccessible* AccessibilityController::findSiblingItem(const IAccessible* item, const IAccessible* currentItem) const
+{
+    TRACEFUNC;
+    size_t count = item->accessibleChildCount();
+    for (size_t i = 0; i < count; ++i) {
+        const IAccessible* ch = item->accessibleChild(i);
+        const Item& chIt = findItem(ch);
+        if (!chIt.isValid() || !chIt.iface || chIt.item->accessibleIgnored() || ch == currentItem) {
+            continue;
+        }
+
+        if (!chIt.iface->state().invisible && ch->accessibleRole() != IAccessible::Group
+            && ch->accessibleRole() != IAccessible::Panel) {
+            return chIt.item;
+        }
+
+        if (chIt.item->accessibleChildCount() > 0) {
+            IAccessible* subItem = findSiblingItem(chIt.item, currentItem);
+            if (subItem) {
+                return subItem;
+            }
+        }
+    }
+
+    return nullptr;
 }
 
 mu::async::Channel<QAccessibleEvent*> AccessibilityController::eventSent() const
@@ -515,4 +632,8 @@ mu::async::Channel<IAccessible::State, bool> AccessibilityController::accessible
 {
     static async::Channel<IAccessible::State, bool> ch;
     return ch;
+}
+
+void AccessibilityController::setState(State, bool)
+{
 }

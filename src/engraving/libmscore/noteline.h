@@ -25,7 +25,7 @@
 
 #include "textlinebase.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Note;
 
 //---------------------------------------------------------
@@ -34,6 +34,8 @@ class Note;
 
 class NoteLine final : public TextLineBase
 {
+    OBJECT_ALLOCATOR(engraving, NoteLine)
+
     Note* _startNote;
     Note* _endNote;
 
@@ -50,5 +52,5 @@ public:
     Note* endNote() const { return _endNote; }
     LineSegment* createLineSegment(System* parent) override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

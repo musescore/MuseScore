@@ -24,9 +24,11 @@
 #include "ui/view/iconcodes.h"
 #include "context/uicontext.h"
 
-#include "translation.h"
+#include "containers.h"
+#include "types/translatablestring.h"
 #include "log.h"
 
+using namespace mu;
 using namespace mu::plugins;
 using namespace mu::ui;
 using namespace mu::actions;
@@ -39,18 +41,21 @@ PluginsUiActions::PluginsUiActions(std::shared_ptr<PluginsService> service)
 static UiAction MANAGE_ACTION = UiAction(
     "manage-plugins",
     mu::context::UiCtxAny,
-    QT_TRANSLATE_NOOP("action", "Manage plugins…")
+    mu::context::CTX_ANY,
+    TranslatableString("action", "&Manage plugins…"),
+    TranslatableString("action", "Manage plugins…")
     );
 
 const mu::ui::UiActionList& PluginsUiActions::actionsList() const
 {
     UiActionList result;
 
-    for (const PluginInfo& plugin : m_service->plugins().val) {
+    for (const PluginInfo& plugin : values(m_service->plugins().val)) {
         UiAction action;
         action.code = codeFromQString(plugin.codeKey);
-        action.context = mu::context::UiCtxNotationOpened;
-        action.title = qtrc("plugins", "Run plugin") + " " + plugin.codeKey;
+        action.uiCtx = mu::context::UiCtxNotationOpened;
+        action.scCtx = mu::context::CTX_NOTATION_OPENED;
+        action.title = TranslatableString("plugins", "Run plugin %1").arg(plugin.codeKey);
 
         result.push_back(action);
     }

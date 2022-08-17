@@ -30,25 +30,23 @@ ListView {
     id: root
 
     property bool arrowControlsAvailable: false
+    property int scrollBarThickness: 8
+    property int scrollBarPolicy: ScrollBar.AsNeeded
 
     clip: true
     boundsBehavior: Flickable.StopAtBounds
     maximumFlickVelocity: ui.theme.flickableMaxVelocity
 
-    Component.onCompleted: {
-        if (!root.arrowControlsAvailable) {
-            var scrollBarVerticalObj = scrollBarComp.createObject(root)
-            var scrollBarHorizontalObj = scrollBarComp.createObject(root)
-
-            ScrollBar.vertical = scrollBarVerticalObj
-            ScrollBar.horizontal = scrollBarHorizontalObj
-        }
-    }
+    ScrollBar.vertical: root.arrowControlsAvailable ? null : scrollBarComp.createObject(root)
+    ScrollBar.horizontal: root.arrowControlsAvailable ? null : scrollBarComp.createObject(root)
 
     Component {
         id: scrollBarComp
 
-        StyledScrollBar {}
+        StyledScrollBar {
+            thickness: root.scrollBarThickness
+            policy: root.scrollBarPolicy
+        }
     }
 
     ArrowScrollButton {

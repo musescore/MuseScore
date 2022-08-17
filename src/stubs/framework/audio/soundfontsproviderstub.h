@@ -28,10 +28,10 @@ namespace mu::audio::synth {
 class SoundFontsProviderStub : public ISoundFontsProvider
 {
 public:
-    std::vector<io::path> soundFontPathsForSynth(const SynthName& synth) const override;
+    std::vector<io::path_t> soundFontPathsForSynth(const SynthName& synth) const override;
     async::Notification soundFontPathsForSynthChanged(const SynthName& synth) const override;
 
-    std::vector<io::path> soundFontPaths(SoundFontFormats formats) const override;
+    std::vector<io::path_t> soundFontPaths(SoundFontFormats formats) const override;
 };
 }
 

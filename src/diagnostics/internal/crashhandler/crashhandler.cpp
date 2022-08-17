@@ -39,7 +39,7 @@ CrashHandler::~CrashHandler()
     delete m_client;
 }
 
-bool CrashHandler::start(const io::path& handlerFilePath, const io::path& dumpsDir, const std::string& serverUrl)
+bool CrashHandler::start(const io::path_t& handlerFilePath, const io::path_t& dumpsDir, const std::string& serverUrl)
 {
     if (!fileSystem()->exists(handlerFilePath)) {
         LOGE() << "crash handler not exists, path: " << handlerFilePath;
@@ -91,21 +91,21 @@ bool CrashHandler::start(const io::path& handlerFilePath, const io::path& dumpsD
     return success;
 }
 
-void CrashHandler::removePendingLockFiles(const io::path& dumpsDir)
+void CrashHandler::removePendingLockFiles(const io::path_t& dumpsDir)
 {
 #ifdef _MSC_VER
     //! NOTE Different directory structure and no lock file on Windows
     (void)dumpsDir;
     return;
 #else
-    io::path pendingDir = dumpsDir + "/pending";
-    RetVal<io::paths> rv = fileSystem()->scanFiles(pendingDir, { "*.lock" }, system::IFileSystem::ScanMode::OnlyCurrentDir);
+    io::path_t pendingDir = dumpsDir + "/pending";
+    RetVal<io::paths_t> rv = fileSystem()->scanFiles(pendingDir, { "*.lock" }, io::ScanMode::FilesInCurrentDir);
     if (!rv.ret) {
         LOGE() << "failed get pending lock files, err: " << rv.ret.toString();
         return;
     }
 
-    for (const io::path& p : rv.val) {
+    for (const io::path_t& p : rv.val) {
         if (!fileSystem()->remove(p)) {
             LOGE() << "failed remove file: " << p;
         }

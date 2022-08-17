@@ -30,7 +30,7 @@
 #include "async/asyncable.h"
 #include "async/channel.h"
 #include "async/notification.h"
-#include "id.h"
+#include "types/id.h"
 #include "modularity/ioc.h"
 #include "mpe/events.h"
 #include "mpe/iarticulationprofilesrepository.h"
@@ -40,22 +40,20 @@
 #include "playbacksetupdataresolver.h"
 #include "playbackcontext.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class Note;
 class EngravingItem;
 class Segment;
 class Instrument;
 class RepeatList;
-}
 
-namespace mu::engraving {
 class PlaybackModel : public async::Asyncable
 {
     INJECT(engraving, mpe::IArticulationProfilesRepository, profilesRepository)
 
 public:
-    void load(Ms::Score* score);
+    void load(Score* score);
     void reload();
 
     async::Notification dataChanged() const;
@@ -64,16 +62,19 @@ public:
     void setPlayRepeats(const bool isEnabled);
 
     const InstrumentTrackId& metronomeTrackId() const;
+    const InstrumentTrackId& chordSymbolsTrackId() const;
 
     const mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
     const mpe::PlaybackData& resolveTrackPlaybackData(const ID& partId, const std::string& instrumentId);
-    void triggerEventsForItem(const Ms::EngravingItem* item);
+    void triggerEventsForItems(const std::vector<const EngravingItem*>& items);
 
+    InstrumentTrackIdSet existingTrackIdSet() const;
     async::Channel<InstrumentTrackId> trackAdded() const;
     async::Channel<InstrumentTrackId> trackRemoved() const;
 
 private:
     static const InstrumentTrackId METRONOME_TRACK_ID;
+    static const InstrumentTrackId CHORD_SYMBOLS_TRACK_ID;
 
     using ChangedTrackIdSet = InstrumentTrackIdSet;
 
@@ -89,9 +90,9 @@ private:
         track_idx_t trackTo = mu::nidx;
     };
 
-    InstrumentTrackId idKey(const Ms::EngravingItem* item) const;
-    InstrumentTrackId idKey(const ID& partId, const std::string& instrimentId) const;
-    InstrumentTrackIdSet existingTrackIdSet() const;
+    InstrumentTrackId idKey(const EngravingItem* item) const;
+    InstrumentTrackId idKey(const std::vector<const EngravingItem*>& items) const;
+    InstrumentTrackId idKey(const ID& partId, const std::string& instrumentId) const;
 
     void update(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                 ChangedTrackIdSet* trackChanges = nullptr);
@@ -100,24 +101,26 @@ private:
     void updateEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                       ChangedTrackIdSet* trackChanges = nullptr);
 
-    bool hasToReloadTracks(const std::unordered_set<Ms::ElementType>& changedTypes) const;
-    bool hasToReloadScore(const std::unordered_set<Ms::ElementType>& changedTypes) const;
+    bool hasToReloadTracks(const std::unordered_set<ElementType>& changedTypes) const;
+    bool hasToReloadScore(const std::unordered_set<ElementType>& changedTypes) const;
 
     bool containsTrack(const InstrumentTrackId& trackId) const;
     void clearExpiredTracks();
     void clearExpiredContexts(const track_idx_t trackFrom, const track_idx_t trackTo);
     void clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo);
     void collectChangesTracks(const InstrumentTrackId& trackId, ChangedTrackIdSet* result);
-    void notifyAboutChanges(ChangedTrackIdSet&& trackChanges, InstrumentTrackIdSet&& existingTracks);
+    void notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, const InstrumentTrackIdSet& changedTracks);
 
     void removeEvents(const InstrumentTrackId& trackId, const mpe::timestamp_t timestampFrom, const mpe::timestamp_t timestampTo);
 
-    TrackBoundaries trackBoundaries(const Ms::ScoreChangesRange& changesRange) const;
-    TickBoundaries tickBoundaries(const Ms::ScoreChangesRange& changesRange) const;
+    TrackBoundaries trackBoundaries(const ScoreChangesRange& changesRange) const;
+    TickBoundaries tickBoundaries(const ScoreChangesRange& changesRange) const;
 
-    const Ms::RepeatList& repeatList() const;
+    const RepeatList& repeatList() const;
 
-    Ms::Score* m_score = nullptr;
+    std::vector<const EngravingItem*> filterPlaybleItems(const std::vector<const EngravingItem*>& items) const;
+
+    Score* m_score = nullptr;
     bool m_expandRepeats = true;
 
     PlaybackEventsRenderer m_renderer;

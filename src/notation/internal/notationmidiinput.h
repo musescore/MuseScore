@@ -24,11 +24,13 @@
 
 #include "playback/iplaybackcontroller.h"
 
+#include <QTimer>
+
 #include "../inotationmidiinput.h"
 #include "igetscore.h"
 #include "inotationundostack.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 }
 
@@ -40,17 +42,21 @@ class NotationMidiInput : public INotationMidiInput
 public:
     NotationMidiInput(IGetScore* getScore, INotationUndoStackPtr undoStack);
 
-    void onMidiEventReceived(const midi::Event& e) override;
+    void onMidiEventsReceived(const std::vector<midi::Event>& events) override;
     async::Notification noteChanged() const override;
 
 private:
+    mu::engraving::Score* score() const;
 
-    Ms::Score* score() const;
-    void onNoteReceived(const midi::Event& e);
+    void doPlayNotes();
+    Note* onAddNote(const midi::Event& e);
 
     IGetScore* m_getScore = nullptr;
     INotationUndoStackPtr m_undoStack;
     async::Notification m_noteChanged;
+
+    QTimer m_playTimer;
+    std::vector<const EngravingItem*> m_playNotesQueue;
 };
 }
 

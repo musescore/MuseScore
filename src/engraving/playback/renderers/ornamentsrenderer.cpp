@@ -24,13 +24,13 @@
 
 #include "realfn.h"
 
-#include "libmscore/chord.h"
+#include "libmscore/utils.h"
 #include "playback/metaparsers/notearticulationsparser.h"
 
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-static const std::unordered_map<ArticulationType, DisclosureRule> DISCLOSURE_RULES = {
+static const std::unordered_map<ArticulationType, DisclosurePattern> DISCLOSURE_RULES = {
     {
         ArticulationType::Trill,
         {
@@ -38,9 +38,10 @@ static const std::unordered_map<ArticulationType, DisclosureRule> DISCLOSURE_RUL
             /*prefixPitchOffsets*/ {},
             /*isAlterationsRepeatAllowed*/ true,
             /*alterationStepPitchOffsets*/ { 0, PITCH_LEVEL_STEP },
-            /*suffixDurationTicks*/ DEMISEMIQUAVER_TICKS* 2,
-            /*suffixPitchOffsets*/ { 0, PITCH_LEVEL_STEP, 0 },
-            /*minSupportedNoteDurationTicks*/ DEMISEMIQUAVER_TICKS
+            /*suffixDurationTicks*/ 0,
+            /*suffixPitchOffsets*/ {},
+            /*minSupportedNoteDurationTicks*/ { QUAVER_TICKS / 10.f, DEMISEMIQUAVER_TICKS,
+                                                SEMIQUAVER_TICKS }
         }
     },
     {
@@ -52,7 +53,8 @@ static const std::unordered_map<ArticulationType, DisclosureRule> DISCLOSURE_RUL
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ DEMISEMIQUAVER_TICKS* 2,
             /*suffixPitchOffsets*/ { -PITCH_LEVEL_STEP, 0 },
-            /*minSupportedNoteDurationTicks*/ DEMISEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { QUAVER_TICKS / 10.f, DEMISEMIQUAVER_TICKS,
+                                                SEMIQUAVER_TICKS }
         }
     },
     {
@@ -64,7 +66,7 @@ static const std::unordered_map<ArticulationType, DisclosureRule> DISCLOSURE_RUL
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ DEMISEMIQUAVER_TICKS* 2,
             /*suffixPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
-            /*minSupportedNoteDurationTicks*/ DEMISEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { DEMISEMIQUAVER_TICKS, DEMISEMIQUAVER_TICKS, DEMISEMIQUAVER_TICKS }
         }
     },
     {
@@ -76,7 +78,7 @@ static const std::unordered_map<ArticulationType, DisclosureRule> DISCLOSURE_RUL
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ SEMIQUAVER_TICKS* 2,
             /*suffixPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
-            /*minSupportedNoteDurationTicks*/ DEMISEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { DEMISEMIQUAVER_TICKS, DEMISEMIQUAVER_TICKS, DEMISEMIQUAVER_TICKS }
         }
     },
     {
@@ -88,7 +90,7 @@ static const std::unordered_map<ArticulationType, DisclosureRule> DISCLOSURE_RUL
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ SEMIQUAVER_TICKS* 2,
             /*suffixPitchOffsets*/ { -PITCH_LEVEL_STEP, 0 },
-            /*minSupportedNoteDurationTicks*/ SEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { SEMIQUAVER_TICKS, SEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
     {
@@ -100,7 +102,7 @@ static const std::unordered_map<ArticulationType, DisclosureRule> DISCLOSURE_RUL
             /*alterationStepPitchOffsets*/ { 0 },
             /*suffixDurationTicks*/ 0,
             /*suffixPitchOffsets*/ {},
-            /*minSupportedNoteDurationTicks*/ DEMISEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { DEMISEMIQUAVER_TICKS / 2.f, DEMISEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
     {
@@ -112,7 +114,19 @@ static const std::unordered_map<ArticulationType, DisclosureRule> DISCLOSURE_RUL
             /*alterationStepPitchOffsets*/ { 0 },
             /*suffixDurationTicks*/ 0,
             /*suffixPitchOffsets*/ {},
-            /*minSupportedNoteDurationTicks*/ DEMISEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { DEMISEMIQUAVER_TICKS / 2.f, DEMISEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
+        }
+    },
+    {
+        ArticulationType::UpperMordentBaroque,
+        {
+            /*prefixDurationTicks*/ DEMISEMIQUAVER_TICKS* 3,
+            /*prefixPitchOffsets*/ { PITCH_LEVEL_STEP, 0, PITCH_LEVEL_STEP },
+            /*isAlterationsRepeatAllowed*/ false,
+            /*alterationStepPitchOffsets*/ { 0 },
+            /*suffixDurationTicks*/ 0,
+            /*suffixPitchOffsets*/ {},
+            /*minSupportedNoteDurationTicks*/ { DEMISEMIQUAVER_TICKS / 2.f, DEMISEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
     {
@@ -124,7 +138,7 @@ static const std::unordered_map<ArticulationType, DisclosureRule> DISCLOSURE_RUL
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ 0,
             /*suffixPitchOffsets*/ {},
-            /*minSupportedNoteDurationTicks*/ SEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { SEMIQUAVER_TICKS, SEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
     {
@@ -136,7 +150,7 @@ static const std::unordered_map<ArticulationType, DisclosureRule> DISCLOSURE_RUL
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ SEMIQUAVER_TICKS* 2,
             /*suffixPitchOffsets*/ { -PITCH_LEVEL_STEP, 0 },
-            /*minSupportedNoteDurationTicks*/ SEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { SEMIQUAVER_TICKS, SEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
     {
@@ -148,7 +162,7 @@ static const std::unordered_map<ArticulationType, DisclosureRule> DISCLOSURE_RUL
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ SEMIQUAVER_TICKS* 2,
             /*suffixPitchOffsets*/ { -PITCH_LEVEL_STEP, 0 },
-            /*minSupportedNoteDurationTicks*/ SEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { SEMIQUAVER_TICKS, SEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
     {
@@ -160,11 +174,47 @@ static const std::unordered_map<ArticulationType, DisclosureRule> DISCLOSURE_RUL
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ SEMIQUAVER_TICKS* 4,
             /*suffixPitchOffsets*/ { -PITCH_LEVEL_STEP, 0, 0, 0 },
-            /*minSupportedNoteDurationTicks*/ SEMIQUAVER_TICKS
+            /*minSupportedNoteDurationTicks*/ { SEMIQUAVER_TICKS, SEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
     {
         ArticulationType::Turn,
+        {
+            /*prefixDurationTicks*/ DEMISEMIQUAVER_TICKS* 3,
+            /*prefixPitchOffsets*/ { PITCH_LEVEL_STEP, 0, -PITCH_LEVEL_STEP },
+            /*isAlterationsRepeatAllowed*/ false,
+            /*alterationStepPitchOffsets*/ { 0 },
+            /*suffixDurationTicks*/ 0,
+            /*suffixPitchOffsets*/ {},
+            /*minSupportedNoteDurationTicks*/ { DEMISEMIQUAVER_TICKS / 2.f, DEMISEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
+        }
+    },
+    {
+        ArticulationType::InvertedTurn,
+        {
+            /*prefixDurationTicks*/ DEMISEMIQUAVER_TICKS* 3,
+            /*prefixPitchOffsets*/ { -PITCH_LEVEL_STEP, 0, PITCH_LEVEL_STEP },
+            /*isAlterationsRepeatAllowed*/ false,
+            /*alterationStepPitchOffsets*/ { 0 },
+            /*suffixDurationTicks*/ 0,
+            /*suffixPitchOffsets*/ {},
+            /*minSupportedNoteDurationTicks*/ { DEMISEMIQUAVER_TICKS / 2.f, DEMISEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
+        }
+    },
+    {
+        ArticulationType::Tremblement,
+        {
+            /*prefixDurationTicks*/ SEMIQUAVER_TICKS* 2,
+            /*prefixPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
+            /*isAlterationsRepeatAllowed*/ false,
+            /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0 },
+            /*suffixDurationTicks*/ 0,
+            /*suffixPitchOffsets*/ {},
+            /*minSupportedNoteDurationTicks*/ { SEMIQUAVER_TICKS, SEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
+        }
+    },
+    {
+        ArticulationType::PrallMordent,
         {
             /*prefixDurationTicks*/ 0,
             /*prefixPitchOffsets*/ {},
@@ -172,19 +222,7 @@ static const std::unordered_map<ArticulationType, DisclosureRule> DISCLOSURE_RUL
             /*alterationStepPitchOffsets*/ { PITCH_LEVEL_STEP, 0, -PITCH_LEVEL_STEP, 0 },
             /*suffixDurationTicks*/ 0,
             /*suffixPitchOffsets*/ {},
-            /*minSupportedNoteDurationTicks*/ 0
-        }
-    },
-    {
-        ArticulationType::InvertedTurn,
-        {
-            /*prefixDurationTicks*/ 0,
-            /*prefixPitchOffsets*/ {},
-            /*isAlterationsRepeatAllowed*/ false,
-            /*alterationStepPitchOffsets*/ { -PITCH_LEVEL_STEP, 0, PITCH_LEVEL_STEP, 0 },
-            /*suffixDurationTicks*/ 0,
-            /*suffixPitchOffsets*/ {},
-            /*minSupportedNoteDurationTicks*/ 0
+            /*minSupportedNoteDurationTicks*/ { SEMIQUAVER_TICKS, SEMIQUAVER_TICKS, SEMIQUAVER_TICKS }
         }
     },
 };
@@ -198,22 +236,32 @@ const ArticulationTypeSet& OrnamentsRenderer::supportedTypes()
         ArticulationType::LowerMordent, ArticulationType::MordentWithUpperPrefix,
         ArticulationType::DownMordent, ArticulationType::PrallUp,
         ArticulationType::PrallDown, ArticulationType::Turn,
-        ArticulationType::InvertedTurn
+        ArticulationType::InvertedTurn, ArticulationType::Tremblement,
+        ArticulationType::PrallMordent, ArticulationType::UpperMordentBaroque,
+        ArticulationType::LowerMordentBaroque
     };
 
     return types;
 }
 
-void OrnamentsRenderer::doRender(const Ms::EngravingItem* item, const ArticulationType preferredType, const RenderingContext& context,
+void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationType preferredType,
+                                 const RenderingContext& context,
                                  mpe::PlaybackEventList& result)
 {
-    const Ms::Chord* chord = Ms::toChord(item);
+    const Chord* chord = toChord(item);
 
     IF_ASSERT_FAILED(chord) {
         return;
     }
 
-    for (const Ms::Note* note : chord->notes()) {
+    auto search = DISCLOSURE_RULES.find(preferredType);
+    if (search == DISCLOSURE_RULES.end()) {
+        return;
+    }
+
+    const DisclosurePattern& nominalPattern = search->second;
+
+    for (const Note* note : chord->notes()) {
         if (!isNotePlayable(note)) {
             continue;
         }
@@ -221,68 +269,59 @@ void OrnamentsRenderer::doRender(const Ms::EngravingItem* item, const Articulati
         NominalNoteCtx noteCtx(note, context);
         NoteArticulationsParser::buildNoteArticulationMap(note, noteCtx.chordCtx, noteCtx.chordCtx.commonArticulations);
 
-        convert(preferredType, std::move(noteCtx), result);
+        convert(preferredType, nominalPattern.buildActualPattern(note, context.beatsPerSecond.val), std::move(noteCtx), result);
     }
 }
 
-void OrnamentsRenderer::convert(const ArticulationType type, NominalNoteCtx&& noteCtx, mpe::PlaybackEventList& result)
+void OrnamentsRenderer::convert(const ArticulationType type, const DisclosurePattern& pattern, NominalNoteCtx&& noteCtx,
+                                mpe::PlaybackEventList& result)
 {
-    auto search = DISCLOSURE_RULES.find(type);
-    if (search == DISCLOSURE_RULES.end()) {
-        return;
-    }
-
-    if (noteCtx.chordCtx.nominalDurationTicks <= search->second.minSupportedNoteDurationTicks) {
+    if (noteCtx.chordCtx.nominalDurationTicks <= pattern.boundaries.lowTempoDurationTicks) {
         result.push_back(buildNoteEvent(std::move(noteCtx)));
         return;
     }
 
     // convert prefix
-    if (!search->second.prefixPitchOffsets.empty()) {
-        createEvents(type, noteCtx, 1, search->second.prefixDurationTicks,
-                     noteCtx.chordCtx.nominalDurationTicks, search->second.prefixPitchOffsets, result);
+    if (!pattern.prefixPitchOffsets.empty()) {
+        createEvents(type, noteCtx, 1, pattern.prefixDurationTicks,
+                     noteCtx.chordCtx.nominalDurationTicks, pattern.prefixPitchOffsets, result);
     }
 
     // convert body
-    if (!search->second.alterationStepPitchOffsets.empty()) {
+    if (!pattern.alterationStepPitchOffsets.empty()) {
         int alterationsCount = 1;
 
-        if (search->second.isAlterationsRepeatAllowed) {
-            alterationsCount = alterationsNumberByTempo(noteCtx.chordCtx.beatsPerSecond.val, noteCtx.chordCtx.nominalDurationTicks);
+        if (pattern.isAlterationsRepeatAllowed) {
+            alterationsCount = alterationsNumberByTempo(noteCtx.chordCtx.beatsPerSecond.val,
+                                                        noteCtx.chordCtx.nominalDurationTicks,
+                                                        pattern);
         }
 
-        createEvents(type, noteCtx, alterationsCount,
-                     noteCtx.chordCtx.nominalDurationTicks - search->second.prefixDurationTicks - search->second.suffixDurationTicks,
-                     noteCtx.chordCtx.nominalDurationTicks,
-                     search->second.alterationStepPitchOffsets, result);
+        if (alterationsCount == 0) {
+            result.push_back(buildNoteEvent(std::move(noteCtx)));
+        } else {
+            createEvents(type, noteCtx, alterationsCount,
+                         noteCtx.chordCtx.nominalDurationTicks - pattern.prefixDurationTicks - pattern.suffixDurationTicks,
+                         noteCtx.chordCtx.nominalDurationTicks,
+                         pattern.alterationStepPitchOffsets, result);
+        }
     }
 
     // convert suffix
-    if (!search->second.suffixPitchOffsets.empty()) {
+    if (!pattern.suffixPitchOffsets.empty()) {
         createEvents(type, noteCtx, 1,
-                     search->second.suffixDurationTicks,
+                     pattern.suffixDurationTicks,
                      noteCtx.chordCtx.nominalDurationTicks,
-                     search->second.suffixPitchOffsets, result);
+                     pattern.suffixPitchOffsets, result);
     }
 }
 
-int OrnamentsRenderer::alterationsNumberByTempo(const qreal beatsPerSeconds, const int principalNoteDurationTicks)
+int OrnamentsRenderer::alterationsNumberByTempo(const double beatsPerSeconds, const int principalNoteDurationTicks,
+                                                const DisclosurePattern& pattern)
 {
-    float ratio = principalNoteDurationTicks / static_cast<float>(CROTCHET_TICKS);
+    float subNotesCount = principalNoteDurationTicks / pattern.subNoteDurationTicks(beatsPerSeconds);
 
-    if (RealIsEqualOrMore(beatsPerSeconds, PRESTISSIMO_BPS_BOUND)) {
-        return 0 * ratio;
-    }
-
-    if (RealIsEqualOrMore(beatsPerSeconds, PRESTO_BPS_BOUND)) {
-        return 1 * ratio;
-    }
-
-    if (RealIsEqualOrMore(beatsPerSeconds, MODERATO_BPS_BOUND)) {
-        return 2 * ratio;
-    }
-
-    return 3 * ratio;
+    return static_cast<int>(std::max(subNotesCount / 2, 0.f));
 }
 
 void OrnamentsRenderer::createEvents(const ArticulationType type, NominalNoteCtx& noteCtx, const int alterationsCount,
@@ -307,5 +346,41 @@ void OrnamentsRenderer::createEvents(const ArticulationType type, NominalNoteCtx
 
             noteCtx.timestamp += durationStep;
         }
+    }
+}
+
+float DisclosurePattern::subNoteDurationTicks(const double bps) const
+{
+    if (RealIsEqualOrMore(bps, PRESTISSIMO_BPS_BOUND)) {
+        return boundaries.highTempoDurationTicks;
+    }
+
+    if (RealIsEqualOrMore(bps, MODERATO_BPS_BOUND)) {
+        return boundaries.mediumTempoDurationTicks;
+    }
+
+    return boundaries.lowTempoDurationTicks;
+}
+
+DisclosurePattern DisclosurePattern::buildActualPattern(const Note* note, const double bps) const
+{
+    DisclosurePattern result = *this;
+
+    result.updatePitchOffsets(note, result.prefixPitchOffsets);
+    result.updatePitchOffsets(note, result.alterationStepPitchOffsets);
+    result.updatePitchOffsets(note, result.suffixPitchOffsets);
+
+    float subNoteTicks = subNoteDurationTicks(bps);
+
+    result.prefixDurationTicks = RealRound(prefixPitchOffsets.size() * subNoteTicks, 0);
+    result.suffixDurationTicks = RealRound(suffixPitchOffsets.size() * subNoteTicks, 0);
+
+    return result;
+}
+
+void DisclosurePattern::updatePitchOffsets(const Note* note, std::vector<mpe::pitch_level_t>& pitchOffsets)
+{
+    for (auto& pitchOffset : pitchOffsets) {
+        pitchOffset *= std::abs(chromaticPitchSteps(note, note, pitchOffset / mpe::PITCH_LEVEL_STEP));
     }
 }

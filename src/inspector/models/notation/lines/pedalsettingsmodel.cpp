@@ -30,28 +30,28 @@ using namespace mu::inspector;
 
 using IconCode = mu::ui::IconCode::Code;
 
-static constexpr int HOOK_STAR = static_cast<int>(Ms::HookType::HOOK_90T) + 1;
+static constexpr int HOOK_STAR = static_cast<int>(mu::engraving::HookType::HOOK_90T) + 1;
 
 PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : TextLineSettingsModel(parent, repository, Ms::ElementType::PEDAL)
+    : TextLineSettingsModel(parent, repository, mu::engraving::ElementType::PEDAL)
 {
     setModelType(InspectorModelType::TYPE_PEDAL);
     setTitle(qtrc("inspector", "Pedal"));
     setIcon(ui::IconCode::Code::PEDAL_MARKING);
 
     static const QList<HookTypeInfo> startHookTypes {
-        { Ms::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },
-        { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_START_HOOK, qtrc("inspector", "Hooked 45") },
-        { Ms::HookType::HOOK_90T, IconCode::LINE_WITH_T_LINE_START_HOOK, qtrc("inspector", "Hooked 90 T-style") }
+        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },
+        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_START_HOOK, qtrc("inspector", "Hooked 45") },
+        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LINE_START_HOOK, qtrc("inspector", "Hooked 90 T-style") }
     };
 
     setPossibleStartHookTypes(startHookTypes);
 
     static const QList<HookTypeInfo> endHookTypes {
-        { Ms::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },
-        { Ms::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, qtrc("inspector", "Hooked 90") },
-        { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, qtrc("inspector", "Hooked 45") },
-        { Ms::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK, qtrc("inspector", "Hooked 90 T-style") },
+        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },
+        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, qtrc("inspector", "Hooked 90") },
+        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, qtrc("inspector", "Hooked 45") },
+        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK, qtrc("inspector", "Hooked 90 T-style") },
         { HOOK_STAR, IconCode::LINE_PEDAL_STAR_ENDING, qtrc("inspector", "Asterisk") }
     };
 
@@ -67,7 +67,7 @@ PropertyItem* PedalSettingsModel::lineType() const
 
 bool PedalSettingsModel::pedalSymbolVisible() const
 {
-    return beginingText()->value().toString() == Ms::Pedal::PEDAL_SYMBOL;
+    return beginningText()->value().toString() == mu::engraving::Pedal::PEDAL_SYMBOL;
 }
 
 bool PedalSettingsModel::isChangingLineVisibilityAllowed() const
@@ -77,19 +77,19 @@ bool PedalSettingsModel::isChangingLineVisibilityAllowed() const
 
 bool PedalSettingsModel::isStarSymbolVisible() const
 {
-    return endText()->value().toString() == Ms::Pedal::STAR_SYMBOL;
+    return endText()->value().toString() == mu::engraving::Pedal::STAR_SYMBOL;
 }
 
 void PedalSettingsModel::setPedalSymbolVisible(bool visible)
 {
-    beginingText()->setValue(visible ? Ms::Pedal::PEDAL_SYMBOL : "");
+    beginningText()->setValue(visible ? mu::engraving::Pedal::PEDAL_SYMBOL.toQString() : "");
 }
 
 void PedalSettingsModel::createProperties()
 {
     TextLineSettingsModel::createProperties();
 
-    connect(beginingText(), &PropertyItem::isModifiedChanged, this, [this]() {
+    connect(beginningText(), &PropertyItem::isModifiedChanged, this, [this]() {
         emit pedalSymbolVisibleChanged();
     });
 
@@ -97,7 +97,7 @@ void PedalSettingsModel::createProperties()
         emit isChangingLineVisibilityAllowedChanged();
     });
 
-    m_lineType = buildPropertyItem(Ms::Pid::END, [this](const Ms::Pid, const QVariant& newValue) {
+    m_lineType = buildPropertyItem(mu::engraving::Pid::END, [this](const mu::engraving::Pid, const QVariant& newValue) {
         setLineType(newValue.toInt());
     });
 
@@ -113,9 +113,9 @@ void PedalSettingsModel::loadProperties()
     m_lineType->setIsEnabled(true);
 
     if (isStarSymbolVisible()) {
-        m_lineType->setValue(HOOK_STAR);
+        m_lineType->updateCurrentValue(HOOK_STAR);
     } else {
-        m_lineType->setValue(endHookType()->value());
+        m_lineType->updateCurrentValue(endHookType()->value());
     }
 }
 
@@ -126,8 +126,8 @@ void PedalSettingsModel::setLineType(int newType)
     QString text = QString();
 
     if (rosetteHookSelected) {
-        hookType = static_cast<int>(Ms::HookType::NONE);
-        text = Ms::Pedal::STAR_SYMBOL;
+        hookType = static_cast<int>(mu::engraving::HookType::NONE);
+        text = mu::engraving::Pedal::STAR_SYMBOL;
         startHookType()->setValue(hookType);
     }
 

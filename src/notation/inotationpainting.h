@@ -25,8 +25,7 @@
 #include <memory>
 #include "notationtypes.h"
 
-#include "infrastructure/draw/painter.h"
-#include "infrastructure/draw/paintdevice.h"
+#include "draw/painter.h"
 
 namespace mu::notation {
 class INotationPainting
@@ -39,6 +38,7 @@ public:
         bool isSetViewport = true;
         bool isPrinting = false;
         bool isMultiPage = false;
+        bool printPageBackground = true;
         RectF frameRect;
         int fromPage = -1; // 0 is first
         int toPage = -1;

@@ -53,9 +53,9 @@ void AudioConfigurationStub::setIsShowControlsInMixer(bool)
 }
 
 // synthesizers
-std::vector<io::path> AudioConfigurationStub::soundFontPaths() const
+std::vector<io::path_t> AudioConfigurationStub::soundFontPaths() const
 {
-    return std::vector<io::path>();
+    return std::vector<io::path_t>();
 }
 
 const synth::SynthesizerState& AudioConfigurationStub::synthesizerState() const

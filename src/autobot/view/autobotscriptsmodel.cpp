@@ -51,7 +51,7 @@ ScriptType typeFromString(const QString& str)
 AutobotScriptsModel::AutobotScriptsModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    autobot()->statusChanged().onReceive(this, [this](const io::path& path, const IAutobot::Status& status) {
+    autobot()->statusChanged().onReceive(this, [this](const io::path_t& path, const IAutobot::Status& status) {
         setStatus(path, status);
 
         if (status == IAutobot::Status::Error) {
@@ -127,7 +127,7 @@ void AutobotScriptsModel::load()
     endResetModel();
 }
 
-void AutobotScriptsModel::setStatus(const io::path& path, IAutobot::Status st)
+void AutobotScriptsModel::setStatus(const io::path_t& path, IAutobot::Status st)
 {
     m_statuses[path] = st;
     for (size_t i = 0; i < m_scripts.size(); ++i) {

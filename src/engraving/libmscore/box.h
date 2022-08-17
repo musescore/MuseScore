@@ -31,7 +31,7 @@
 #include "measurebase.h"
 #include "property.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ Box
 ///    virtual base class for frames "boxes"
@@ -39,16 +39,18 @@ namespace Ms {
 
 class Box : public MeasureBase
 {
+    OBJECT_ALLOCATOR(engraving, Box)
+
     Spatium _boxWidth             { Spatium(0) };      // only valid for HBox
     Spatium _boxHeight            { Spatium(0) };      // only valid for VBox
     Millimetre _topGap            { Millimetre(0.0) }; // distance from previous system (left border for hbox)
                                                        // initialized with Sid::systemFrameDistance
     Millimetre _bottomGap         { Millimetre(0.0) }; // distance to next system (right border for hbox)
                                                        // initialized with Sid::frameSystemDistance
-    qreal _leftMargin             { 0.0 };
-    qreal _rightMargin            { 0.0 };             // inner margins in metric mm
-    qreal _topMargin              { 0.0 };
-    qreal _bottomMargin           { 0.0 };
+    double _leftMargin             { 0.0 };
+    double _rightMargin            { 0.0 };             // inner margins in metric mm
+    double _topMargin              { 0.0 };
+    double _bottomMargin           { 0.0 };
     bool _isAutoSizeEnabled       { true };
 
 public:
@@ -78,14 +80,14 @@ public:
     void setBoxWidth(Spatium val) { _boxWidth = val; }
     Spatium boxHeight() const { return _boxHeight; }
     void setBoxHeight(Spatium val) { _boxHeight = val; }
-    qreal leftMargin() const { return _leftMargin; }
-    qreal rightMargin() const { return _rightMargin; }
-    qreal topMargin() const { return _topMargin; }
-    qreal bottomMargin() const { return _bottomMargin; }
-    void setLeftMargin(qreal val) { _leftMargin = val; }
-    void setRightMargin(qreal val) { _rightMargin = val; }
-    void setTopMargin(qreal val) { _topMargin = val; }
-    void setBottomMargin(qreal val) { _bottomMargin = val; }
+    double leftMargin() const { return _leftMargin; }
+    double rightMargin() const { return _rightMargin; }
+    double topMargin() const { return _topMargin; }
+    double bottomMargin() const { return _bottomMargin; }
+    void setLeftMargin(double val) { _leftMargin = val; }
+    void setRightMargin(double val) { _rightMargin = val; }
+    void setTopMargin(double val) { _topMargin = val; }
+    void setBottomMargin(double val) { _bottomMargin = val; }
     Millimetre topGap() const { return _topGap; }
     void setTopGap(Millimetre val) { _topGap = val; }
     Millimetre bottomGap() const { return _bottomGap; }
@@ -94,18 +96,18 @@ public:
     void setAutoSizeEnabled(const bool val) { _isAutoSizeEnabled = val; }
     void copyValues(Box* origin);
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
-    QString accessibleExtraInfo() const override;
+    String accessibleExtraInfo() const override;
 
     // TODO: add a grip for moving the entire box
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
-    std::vector<mu::PointF> gripsPositions(const EditData&) const override { return { mu::PointF() }; }   // overriden in descendants
+    std::vector<mu::PointF> gripsPositions(const EditData&) const override { return { mu::PointF() }; }   // overridden in descendants
 };
 
 //---------------------------------------------------------
@@ -115,6 +117,8 @@ public:
 
 class HBox final : public Box
 {
+    OBJECT_ALLOCATOR(engraving, HBox)
+
     bool _createSystemHeader { true };
 
 public:
@@ -136,9 +140,9 @@ public:
     bool createSystemHeader() const { return _createSystemHeader; }
     void setCreateSystemHeader(bool val) { _createSystemHeader = val; }
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 };
@@ -150,6 +154,7 @@ public:
 
 class VBox : public Box
 {
+    OBJECT_ALLOCATOR(engraving, VBox)
 public:
     VBox(const ElementType& type, System* parent);
     VBox(System* parent);
@@ -157,10 +162,10 @@ public:
 
     VBox* clone() const override { return new VBox(*this); }
 
-    qreal minHeight() const;
-    qreal maxHeight() const;
+    double minHeight() const;
+    double maxHeight() const;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
     void layout() override;
 
     void startEditDrag(EditData&) override;
@@ -178,6 +183,7 @@ private:
 
 class FBox : public VBox
 {
+    OBJECT_ALLOCATOR(engraving, FBox)
 public:
     FBox(System* parent)
         : VBox(ElementType::FBOX, parent) {}
@@ -188,5 +194,5 @@ public:
     void layout() override;
     void add(EngravingItem*) override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

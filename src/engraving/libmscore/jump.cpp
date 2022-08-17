@@ -22,8 +22,8 @@
 
 #include "jump.h"
 
-#include "translation.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
 #include "score.h"
 #include "measure.h"
@@ -31,7 +31,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   jumpStyle
 //---------------------------------------------------------
@@ -45,33 +45,23 @@ static const ElementStyle jumpStyle {
 //   JumpTypeTable
 //---------------------------------------------------------
 
-const JumpTypeTable jumpTypeTable[] = {
-    { Jump::Type::DC,         "D.C.",         "start", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "Da Capo") },
-    { Jump::Type::DC_AL_FINE, "D.C. al Fine", "start", "fine", "",      QT_TRANSLATE_NOOP("jumpType", "Da Capo al Fine") },
-    { Jump::Type::DC_AL_CODA, "D.C. al Coda", "start", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "Da Capo al Coda") },
-    { Jump::Type::DS_AL_CODA, "D.S. al Coda", "segno", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "D.S. al Coda") },
-    { Jump::Type::DS_AL_FINE, "D.S. al Fine", "segno", "fine", "",      QT_TRANSLATE_NOOP("jumpType", "D.S. al Fine") },
-    { Jump::Type::DS,         "D.S.",         "segno", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "D.S.") },
+const std::vector<JumpTypeTableItem> jumpTypeTable {
+    { JumpType::DC,         "D.C.",         "start", "end",  "" },
+    { JumpType::DC_AL_FINE, "D.C. al Fine", "start", "fine", "" },
+    { JumpType::DC_AL_CODA, "D.C. al Coda", "start", "coda", "codab" },
+    { JumpType::DS_AL_CODA, "D.S. al Coda", "segno", "coda", "codab" },
+    { JumpType::DS_AL_FINE, "D.S. al Fine", "segno", "fine", "" },
+    { JumpType::DS,         "D.S.",         "segno", "end",  "" },
 
-    { Jump::Type::DC_AL_DBLCODA,  "D.C. al Double Coda",   "start", "varcoda",  "codab", QT_TRANSLATE_NOOP("jumpType",
-                                                                                                           "Da Capo al Double Coda") },
-    { Jump::Type::DS_AL_DBLCODA,  "D.S. al Double Coda",   "segno", "varcoda",  "codab", QT_TRANSLATE_NOOP("jumpType",
-                                                                                                           "Da Segno al Double Coda") },
-    { Jump::Type::DSS,            "Dal Segno Segno",       "varsegno", "end",  "", QT_TRANSLATE_NOOP("jumpType", "Dal Segno Segno") },
-    { Jump::Type::DSS_AL_CODA,    "D.S.S. al Coda",        "varsegno", "coda",  "codab", QT_TRANSLATE_NOOP("jumpType",
-                                                                                                           "Dal Segno Segno al Coda") },
-    { Jump::Type::DSS_AL_DBLCODA, "D.S.S. al Double Coda", "varsegno", "varcoda", "codab", QT_TRANSLATE_NOOP("jumpType",
-                                                                                                             "Dal Segno Segno al Double Coda") },
-    { Jump::Type::DSS_AL_FINE,    "D.S.S. al Fine",        "varsegno", "fine",  "",
-      QT_TRANSLATE_NOOP("jumpType", "Dal Segno Segno al Fine") },
-    { Jump::Type::DCODA,          "Da Coda",               "coda", "end",  "", QT_TRANSLATE_NOOP("jumpType", "Da Coda") },
-    { Jump::Type::DDBLCODA,       "Da Double Coda",        "varcoda", "end",  "", QT_TRANSLATE_NOOP("jumpType", "Da Double Coda") }
+    { JumpType::DC_AL_DBLCODA,  "D.C. al Double Coda",   "start", "varcoda",  "codab" },
+    { JumpType::DS_AL_DBLCODA,  "D.S. al Double Coda",   "segno", "varcoda",  "codab" },
+    { JumpType::DSS,            "Dal Segno Segno",       "varsegno", "end",  "" },
+    { JumpType::DSS_AL_CODA,    "D.S.S. al Coda",        "varsegno", "coda",  "codab" },
+    { JumpType::DSS_AL_DBLCODA, "D.S.S. al Double Coda", "varsegno", "varcoda", "codab" },
+    { JumpType::DSS_AL_FINE,    "D.S.S. al Fine",        "varsegno", "fine",  "" },
+    { JumpType::DCODA,          "Da Coda",               "coda", "end",  "" },
+    { JumpType::DDBLCODA,       "Da Double Coda",        "varcoda", "end",  "" }
 };
-
-int jumpTypeTableSize()
-{
-    return sizeof(jumpTypeTable) / sizeof(JumpTypeTable);
-}
 
 //---------------------------------------------------------
 //   Jump
@@ -89,14 +79,14 @@ Jump::Jump(Measure* parent)
 //   setJumpType
 //---------------------------------------------------------
 
-void Jump::setJumpType(Type t)
+void Jump::setJumpType(JumpType t)
 {
-    for (const JumpTypeTable& p : jumpTypeTable) {
+    for (const JumpTypeTableItem& p : jumpTypeTable) {
         if (p.type == t) {
-            setXmlText(p.text);
-            setJumpTo(p.jumpTo);
-            setPlayUntil(p.playUntil);
-            setContinueAt(p.continueAt);
+            setXmlText(String::fromAscii(p.text.ascii()));
+            setJumpTo(String::fromAscii(p.jumpTo.ascii()));
+            setPlayUntil(String::fromAscii(p.playUntil.ascii()));
+            setContinueAt(String::fromAscii(p.continueAt.ascii()));
             initTextStyleType(TextStyleType::REPEAT_RIGHT);
             break;
         }
@@ -107,23 +97,19 @@ void Jump::setJumpType(Type t)
 //   jumpType
 //---------------------------------------------------------
 
-Jump::Type Jump::jumpType() const
+JumpType Jump::jumpType() const
 {
-    for (const JumpTypeTable& t : jumpTypeTable) {
+    for (const JumpTypeTableItem& t : jumpTypeTable) {
         if (_jumpTo == t.jumpTo && _playUntil == t.playUntil && _continueAt == t.continueAt) {
             return t.type;
         }
     }
-    return Type::USER;
+    return JumpType::USER;
 }
 
-QString Jump::jumpTypeUserName() const
+String Jump::jumpTypeUserName() const
 {
-    int idx = static_cast<int>(this->jumpType());
-    if (idx < jumpTypeTableSize()) {
-        return qtrc("jumpType", jumpTypeTable[idx].userText.toUtf8().constData());
-    }
-    return QObject::tr("Custom");
+    return TConv::translatedUserName(jumpType());
 }
 
 //---------------------------------------------------------
@@ -143,13 +129,13 @@ void Jump::layout()
 void Jump::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "jumpTo") {
-            _jumpTo = e.readElementText();
+            _jumpTo = e.readText();
         } else if (tag == "playUntil") {
-            _playUntil = e.readElementText();
+            _playUntil = e.readText();
         } else if (tag == "continueAt") {
-            _continueAt = e.readElementText();
+            _continueAt = e.readText();
         } else if (tag == "playRepeats") {
             _playRepeats = e.readBool();
         } else if (!TextBase::readProperties(e)) {
@@ -164,20 +150,20 @@ void Jump::read(XmlReader& e)
 
 void Jump::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     TextBase::writeProperties(xml);
     xml.tag("jumpTo", _jumpTo);
     xml.tag("playUntil", _playUntil);
     xml.tag("continueAt", _continueAt);
     writeProperty(xml, Pid::PLAY_REPEATS);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
 //   undoSetJumpTo
 //---------------------------------------------------------
 
-void Jump::undoSetJumpTo(const QString& s)
+void Jump::undoSetJumpTo(const String& s)
 {
     undoChangeProperty(Pid::JUMP_TO, s);
 }
@@ -186,7 +172,7 @@ void Jump::undoSetJumpTo(const QString& s)
 //   undoSetPlayUntil
 //---------------------------------------------------------
 
-void Jump::undoSetPlayUntil(const QString& s)
+void Jump::undoSetPlayUntil(const String& s)
 {
     undoChangeProperty(Pid::PLAY_UNTIL, s);
 }
@@ -195,7 +181,7 @@ void Jump::undoSetPlayUntil(const QString& s)
 //   undoSetContinueAt
 //---------------------------------------------------------
 
-void Jump::undoSetContinueAt(const QString& s)
+void Jump::undoSetContinueAt(const String& s)
 {
     undoChangeProperty(Pid::CONTINUE_AT, s);
 }
@@ -229,13 +215,13 @@ bool Jump::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::JUMP_TO:
-        setJumpTo(v.toString());
+        setJumpTo(v.value<String>());
         break;
     case Pid::PLAY_UNTIL:
-        setPlayUntil(v.toString());
+        setPlayUntil(v.value<String>());
         break;
     case Pid::CONTINUE_AT:
-        setContinueAt(v.toString());
+        setContinueAt(v.value<String>());
         break;
     case Pid::PLAY_REPEATS:
         setPlayRepeats(v.toInt());
@@ -261,7 +247,7 @@ PropertyValue Jump::propertyDefault(Pid propertyId) const
     case Pid::JUMP_TO:
     case Pid::PLAY_UNTIL:
     case Pid::CONTINUE_AT:
-        return QString("");
+        return String(u"");
     case Pid::PLAY_REPEATS:
         return false;
     case Pid::PLACEMENT:
@@ -295,8 +281,8 @@ EngravingItem* Jump::prevSegmentElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Jump::accessibleInfo() const
+String Jump::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), this->jumpTypeUserName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), this->jumpTypeUserName());
 }
 }

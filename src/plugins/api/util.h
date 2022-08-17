@@ -25,8 +25,9 @@
 
 #include <QDir>
 #include <QProcess>
-#include <QQuickPaintedItem>
 #include <QNetworkAccessManager>
+
+#include "uicomponents/view/quickpaintedview.h"
 
 #include "config.h"
 
@@ -35,7 +36,7 @@
 #include "libmscore/masterscore.h"
 #include "libmscore/utils.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 class Score;
 
@@ -150,7 +151,7 @@ public slots:
 ///    This is an GUI element to show a score. \since MuseScore 3.2
 //---------------------------------------------------------
 
-class ScoreView : public QQuickPaintedItem, public MuseScoreView
+class ScoreView : public uicomponents::QuickPaintedView, public MuseScoreView
 {
     Q_OBJECT
     /** Background color */
@@ -158,7 +159,7 @@ class ScoreView : public QQuickPaintedItem, public MuseScoreView
     /** Scaling factor */
     Q_PROPERTY(qreal scale READ scale WRITE setScale)
 
-    Ms::Score* score;
+    mu::engraving::Score* score;
     int _currentPage;
     QColor _color;
     qreal mag;
@@ -167,7 +168,7 @@ class ScoreView : public QQuickPaintedItem, public MuseScoreView
 
     QNetworkAccessManager* networkManager;
 
-    virtual void setScore(Ms::Score*) override;
+    virtual void setScore(mu::engraving::Score*) override;
 
     virtual void dataChanged(const mu::RectF&) override { update(); }
     virtual void updateAll() override { update(); }
@@ -179,7 +180,7 @@ class ScoreView : public QQuickPaintedItem, public MuseScoreView
 
 public slots:
     //@ --
-    Q_INVOKABLE void setScore(Ms::PluginAPI::Score*);
+    Q_INVOKABLE void setScore(mu::engraving::PluginAPI::Score*);
     //@ --
     Q_INVOKABLE void setCurrentPage(int n);
     //@ --

@@ -33,6 +33,10 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
+#ifdef Q_OS_WIN
+#include <QOperatingSystemVersion>
+#endif
+
 using namespace mu;
 using namespace mu::ui;
 using namespace mu::framework;
@@ -325,15 +329,19 @@ ThemeInfo UiConfiguration::makeStandardTheme(const ThemeCode& codeKey) const
     theme.codeKey = codeKey;
 
     if (codeKey == LIGHT_THEME_CODE) {
+        //: The name of the light ui theme
         theme.title = trc("ui", "Light");
         theme.values = LIGHT_THEME_VALUES;
     } else if (codeKey == DARK_THEME_CODE) {
+        //: The name of the dark ui theme
         theme.title = trc("ui", "Dark");
         theme.values = DARK_THEME_VALUES;
     } else if (codeKey == HIGH_CONTRAST_WHITE_THEME_CODE) {
+        //: The name of the high contrast light ui theme
         theme.title = trc("ui", "White");
         theme.values = HIGH_CONTRAST_WHITE_THEME_VALUES;
     } else if (codeKey == HIGH_CONTRAST_BLACK_THEME_CODE) {
+        //: The name of the high contrast dark ui theme
         theme.title = trc("ui", "Black");
         theme.values = HIGH_CONTRAST_BLACK_THEME_VALUES;
     }
@@ -347,7 +355,7 @@ ThemeList UiConfiguration::readThemes() const
 
     ThemeList result;
 
-    QByteArray json = settings()->value(UI_THEMES_KEY).toQString().toUtf8();
+    QByteArray json = QByteArray::fromStdString(settings()->value(UI_THEMES_KEY).toString());
     if (json.isEmpty()) {
         return result;
     }
@@ -644,7 +652,7 @@ int UiConfiguration::defaultFontSize() const
 
 double UiConfiguration::guiScaling() const
 {
-    const QScreen* screen = mainWindow()->screen();
+    const QScreen* screen = mainWindow() ? mainWindow()->screen() : nullptr;
     return screen ? screen->devicePixelRatio() : 1;
 }
 
@@ -653,14 +661,36 @@ void UiConfiguration::setPhysicalDotsPerInch(std::optional<double> dpi)
     m_customDPI = dpi;
 }
 
-double UiConfiguration::dpi() const
+double UiConfiguration::physicalDpi() const
 {
     if (m_customDPI) {
         return m_customDPI.value();
     }
 
-    const QScreen* screen = mainWindow()->screen();
-    return screen ? screen->logicalDotsPerInch() : 100;
+    const QScreen* screen = mainWindow() ? mainWindow()->screen() : nullptr;
+    if (!screen) {
+        constexpr double DEFAULT_DPI = 96;
+        return DEFAULT_DPI;
+    }
+
+#ifdef Q_OS_WIN
+    //! NOTE: copied from MU3, `MuseScore::MuseScore()`
+    if (QOperatingSystemVersion::current() <= QOperatingSystemVersion(QOperatingSystemVersion::Windows, 7)) {
+        return screen->logicalDotsPerInch() * screen->devicePixelRatio();
+    }
+#endif
+    return screen->physicalDotsPerInch();
+}
+
+double UiConfiguration::logicalDpi() const
+{
+    const QScreen* screen = mainWindow() ? mainWindow()->screen() : nullptr;
+    if (!screen) {
+        constexpr double DEFAULT_DPI = 96;
+        return DEFAULT_DPI;
+    }
+
+    return screen->logicalDotsPerInch();
 }
 
 mu::ValNt<QByteArray> UiConfiguration::pageState(const QString& pageName) const

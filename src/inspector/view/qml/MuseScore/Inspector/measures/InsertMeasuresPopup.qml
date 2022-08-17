@@ -70,7 +70,7 @@ Column {
             }
         }
 
-        Dropdown {
+        StyledDropdown {
             id: targetDropdown
             Layout.fillWidth: true
 

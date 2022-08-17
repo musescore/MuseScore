@@ -25,6 +25,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include "types/bytearray.h"
+
 using namespace mu;
 using namespace mu::project;
 using namespace mu::engraving;
@@ -69,8 +71,8 @@ static QString viewModeToString(ViewMode m)
 
 Ret ProjectViewSettings::read(const MscReader& reader)
 {
-    QByteArray json = reader.readViewSettingsJsonFile();
-    QJsonObject rootObj = QJsonDocument::fromJson(json).object();
+    ByteArray json = reader.readViewSettingsJsonFile();
+    QJsonObject rootObj = QJsonDocument::fromJson(json.toQByteArrayNoCopy()).object();
     QJsonObject notationObj = rootObj.value("notation").toObject();
 
     m_viewMode = viewModeFromString(notationObj.value("viewMode").toString());
@@ -87,7 +89,7 @@ Ret ProjectViewSettings::write(MscWriter& writer)
     rootObj["notation"] = notationObj;
 
     QByteArray json = QJsonDocument(rootObj).toJson();
-    writer.writeViewSettingsJsonFile(json);
+    writer.writeViewSettingsJsonFile(ByteArray::fromQByteArrayNoCopy(json));
 
     setNeedSave(false);
 

@@ -25,6 +25,7 @@
 #include <QKeyEvent>
 
 #include "translation.h"
+#include "global/utils.h"
 #include "ui/view/widgetstatestore.h"
 #include "ui/view/widgetnavigationfix.h"
 #include "editpitch.h"
@@ -39,33 +40,31 @@ using namespace mu::ui;
 //    To edit the string data (tuning and number of frets) for an instrument
 //---------------------------------------------------------
 
-EditStringData::EditStringData(QWidget* parent, std::vector<Ms::instrString>* strings, int* frets)
+EditStringData::EditStringData(QWidget* parent, std::vector<mu::engraving::instrString>* strings, int* frets)
     : QDialog(parent)
 {
     setObjectName("EditStringData");
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     _strings = strings;
-    QStringList hdrLabels;
-    int numOfStrings = _strings->size();
-    hdrLabels << tr("Open", "string data") << tr("Pitch", "string data");
-    stringList->setHorizontalHeaderLabels(hdrLabels);
+    stringList->setHorizontalHeaderLabels({ qtrc("notation/editstringdata", "Always open"),
+                                            qtrc("notation/editstringdata", "Pitch") });
+    int numOfStrings = static_cast<int>(_strings->size());
     stringList->setRowCount(numOfStrings);
     // if any string, insert into string list control and select the first one
 
     if (numOfStrings > 0) {
-        int i;
-        Ms::instrString strg;
+        mu::engraving::instrString strg;
         // insert into local working copy and into string list dlg control
         // IN REVERSED ORDER
-        for (i=0; i < numOfStrings; i++) {
+        for (int i = 0; i < numOfStrings; i++) {
             strg = (*_strings)[numOfStrings - i - 1];
             _stringsLoc.push_back(strg);
             QTableWidgetItem* newCheck = new QTableWidgetItem();
             newCheck->setFlags(Qt::ItemFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled));
             newCheck->setCheckState(strg.open ? Qt::Checked : Qt::Unchecked);
 
-            newCheck->setData(OPEN_ACCESSIBLE_TITLE_ROLE, qtrc("notation", "Open"));
+            newCheck->setData(OPEN_ACCESSIBLE_TITLE_ROLE, qtrc("notation/editstringdata", "Always open"));
             newCheck->setData(Qt::AccessibleTextRole, openColumnAccessibleText(newCheck));
 
             stringList->setItem(i, 0, newCheck);
@@ -126,7 +125,7 @@ bool EditStringData::eventFilter(QObject* obj, QEvent* event)
         QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
         if (keyEvent
             && WidgetNavigationFix::fixNavigationForTableWidget(
-                new WidgetNavigationFix::NavigationChain { stringList, newString, buttonBox },
+                WidgetNavigationFix::NavigationChain { stringList, newString, buttonBox },
                 keyEvent->key())) {
             return true;
         }
@@ -137,9 +136,8 @@ bool EditStringData::eventFilter(QObject* obj, QEvent* event)
 
 QString EditStringData::openColumnAccessibleText(const QTableWidgetItem* item) const
 {
-    QString accessibleText = item->data(OPEN_ACCESSIBLE_TITLE_ROLE).toString() + ": "
-                             + (item->checkState() == Qt::Checked ? tr("checked") : tr("unchecked"));
-    return accessibleText;
+    return item->data(OPEN_ACCESSIBLE_TITLE_ROLE).toString() + ": "
+           + (item->checkState() == Qt::Checked ? qtrc("ui", "checked", "checkstate") : qtrc("ui", "unchecked", "checkstate"));
 }
 
 //---------------------------------------------------------
@@ -216,7 +214,7 @@ void EditStringData::newStringClicked()
         }
 
         // insert in local string list and in dlg list control
-        Ms::instrString strg = { newCode, 0 };
+        mu::engraving::instrString strg = { newCode, 0 };
         _stringsLoc.insert(_stringsLoc.begin() + i, strg);
         stringList->insertRow(i);
 
@@ -247,7 +245,7 @@ void EditStringData::accept()
     // string tunings are copied in reversed order (from lowest to highest)
     if (_modified) {
         _strings->clear();
-        for (int i = _stringsLoc.size() - 1; i >= 0; i--) {
+        for (int i = static_cast<int>(_stringsLoc.size()) - 1; i >= 0; i--) {
             _strings->push_back(_stringsLoc[i]);
         }
     }
@@ -263,26 +261,7 @@ void EditStringData::accept()
     }
 }
 
-//---------------------------------------------------------
-//   midiCodeToStr
-//    Converts a MIDI numeric pitch code to human-readable note name
-//---------------------------------------------------------
-static const char* s_esd_noteNames[] = {
-    QT_TRANSLATE_NOOP("editstringdata", "C"),
-    QT_TRANSLATE_NOOP("editstringdata", "C♯"),
-    QT_TRANSLATE_NOOP("editstringdata", "D"),
-    QT_TRANSLATE_NOOP("editstringdata", "E♭"),
-    QT_TRANSLATE_NOOP("editstringdata", "E"),
-    QT_TRANSLATE_NOOP("editstringdata", "F"),
-    QT_TRANSLATE_NOOP("editstringdata", "F♯"),
-    QT_TRANSLATE_NOOP("editstringdata", "G"),
-    QT_TRANSLATE_NOOP("editstringdata", "A♭"),
-    QT_TRANSLATE_NOOP("editstringdata", "A"),
-    QT_TRANSLATE_NOOP("editstringdata", "B♭"),
-    QT_TRANSLATE_NOOP("editstringdata", "B")
-};
-
 QString EditStringData::midiCodeToStr(int midiCode)
 {
-    return QString("%1 %2").arg(qApp->translate("editstringdata", s_esd_noteNames[midiCode % 12])).arg(midiCode / 12 - 1);
+    return QString::fromStdString(mu::pitchToString(midiCode));
 }

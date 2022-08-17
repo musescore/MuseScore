@@ -25,7 +25,7 @@
 
 #include "engravingitem.h"
 
-namespace Ms {
+namespace mu::engraving {
 class StaffType;
 
 //---------------------------------------------------------
@@ -34,16 +34,18 @@ class StaffType;
 
 class StaffTypeChange final : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, StaffTypeChange)
+
     StaffType* m_staffType { nullptr };
     bool m_ownsStaffType = false;
-    qreal lw;
+    double lw;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     StaffTypeChange(MeasureBase* parent = 0);
     StaffTypeChange(const StaffTypeChange&);
 
     void layout() override;
-    void spatiumChanged(qreal oldValue, qreal newValue) override;
+    void spatiumChanged(double oldValue, double newValue) override;
     void draw(mu::draw::Painter*) const override;
 
 public:
@@ -59,10 +61,10 @@ public:
 
     Measure* measure() const { return toMeasure(explicitParent()); }
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

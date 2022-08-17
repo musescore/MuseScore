@@ -21,17 +21,18 @@
  */
 #include "notationbbreader.h"
 
-#include "libmscore/masterscore.h"
-#include "notation/notationerrors.h"
-
-namespace Ms {
-extern Score::FileError importBB(MasterScore*, const QString& name);
-}
+#include "engraving/libmscore/score.h"
+#include "engraving/engravingerrors.h"
 
 using namespace mu::iex::bb;
+using namespace mu::engraving;
 
-mu::Ret NotationBBReader::read(Ms::MasterScore* score, const io::path& path, const Options&)
+namespace mu::iex::bb {
+extern Err importBB(MasterScore* score, const QString& name);
+}
+
+mu::Ret NotationBBReader::read(MasterScore* score, const io::path_t& path, const Options&)
 {
-    Ms::Score::FileError err = Ms::importBB(score, path.toQString());
-    return mu::notation::scoreFileErrorToRet(err, path);
+    Err err = importBB(score, path.toQString());
+    return make_ret(err, path);
 }

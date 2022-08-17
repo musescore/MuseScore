@@ -24,10 +24,14 @@
 #define __IMAGE_CACHE_H__
 
 #include <list>
-#include <QString>
-#include <QByteArray>
+#include "types/string.h"
+#include "types/bytearray.h"
+#include "io/path.h"
 
-namespace Ms {
+#include "modularity/ioc.h"
+#include "global/icryptographichash.h"
+
+namespace mu::engraving {
 class Image;
 class Score;
 
@@ -37,28 +41,30 @@ class Score;
 
 class ImageStoreItem
 {
+    INJECT(engraving, ICryptographicHash, cryptographicHash)
+
     std::list<Image*> _references;
-    QString _path;                  // original location of image
-    QString _type;                  // image type (file extension)
-    QByteArray _buffer;
-    QByteArray _hash;               // 16 byte md4 hash of _buffer
+    io::path_t _path;                  // original location of image
+    String _type;                  // image type (file extension)
+    mu::ByteArray _buffer;
+    mu::ByteArray _hash;               // 16 byte md4 hash of _buffer
 
 public:
-    ImageStoreItem(const QString& p);
+    ImageStoreItem(const io::path_t& p);
     void dereference(Image*);
     void reference(Image*);
 
-    const QString& path() const { return _path; }
-    QByteArray& buffer() { return _buffer; }
-    const QByteArray& buffer() const { return _buffer; }
-    bool loaded() const { return !_buffer.isEmpty(); }
-    void setPath(const QString& val);
+    const io::path_t& path() const { return _path; }
+    mu::ByteArray& buffer() { return _buffer; }
+    const mu::ByteArray& buffer() const { return _buffer; }
+    bool loaded() const { return !_buffer.empty(); }
+    void setPath(const io::path_t& val);
     bool isUsed(Score*) const;
     bool isUsed() const { return !_references.empty(); }
     void load();
-    QString hashName() const;
-    const QByteArray& hash() const { return _hash; }
-    void set(const QByteArray& b, const QByteArray& h) { _buffer = b; _hash = h; }
+    String hashName() const;
+    const mu::ByteArray& hash() const { return _hash; }
+    void set(const mu::ByteArray& b, const mu::ByteArray& h) { _buffer = b; _hash = h; }
 };
 
 //---------------------------------------------------------
@@ -67,6 +73,8 @@ public:
 
 class ImageStore
 {
+    INJECT(engraving, ICryptographicHash, cryptographicHash)
+
     typedef std::vector<ImageStoreItem*> ItemList;
     ItemList _items;
 
@@ -76,8 +84,8 @@ public:
     ImageStore& operator=(const ImageStore&) = delete;
     ~ImageStore();
 
-    ImageStoreItem* getImage(const QString& path) const;
-    ImageStoreItem* add(const QString& path, const QByteArray&);
+    ImageStoreItem* getImage(const io::path_t& path) const;
+    ImageStoreItem* add(const io::path_t& path, const mu::ByteArray&);
     void clearUnused();
 
     typedef ItemList::iterator iterator;
@@ -90,5 +98,5 @@ public:
 };
 
 extern ImageStore imageStore;       // this is the global imageStore
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

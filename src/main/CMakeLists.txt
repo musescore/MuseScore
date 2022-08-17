@@ -37,23 +37,20 @@ if (OS_IS_WIN)
     set(MSCORE_OUTPUT_NAME ${MUSESCORE_NAME}${MUSESCORE_VERSION_MAJOR})
 
     include(GetCompilerInfo)
+
     if (CC_IS_MSVC)
         # MSVC recognizes a *.rc file and will invoke the resource compiler to link it
-        set (ICON_RES_FILE ${CMAKE_CURRENT_LIST_DIR}/res/mscore.rc)
-
-    endif(CC_IS_MSVC)
-
-    if (CC_IS_MINGW)
-        set(ICON_RES_FILE ${PROJECT_BINARY_DIR}/resfile.o)
+        set(WINDOWS_ICONS_RC ${PROJECT_SOURCE_DIR}/share/icons/windows_icons.rc)
+    elseif(CC_IS_MINGW)
+        set(WINDOWS_ICONS_RC ${PROJECT_BINARY_DIR}/windows_icons_rc.o)
         add_custom_command(
-           OUTPUT ${PROJECT_BINARY_DIR}/resfile.o
-           COMMAND ${CMAKE_RC_COMPILER} -i mscore.rc -o ${PROJECT_BINARY_DIR}/resfile.o
-           DEPENDS ${PROJECT_SOURCE_DIR}/src/main/res/mscore.rc
-           WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src/main/res
-           )
-        set_source_files_properties(${PROJECT_BINARY_DIR}/resfile.o PROPERTIES generated true)
-
-    endif(CC_IS_MINGW)
+            OUTPUT ${PROJECT_BINARY_DIR}/windows_icons_rc.o
+            COMMAND ${CMAKE_RC_COMPILER} -i windows_icons.rc -o ${PROJECT_BINARY_DIR}/windows_icons_rc.o
+            DEPENDS ${PROJECT_SOURCE_DIR}/share/icons/windows_icons.rc
+            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/share/icons
+            )
+        set_source_files_properties(${PROJECT_BINARY_DIR}/windows_icons_rc.o PROPERTIES generated true)
+    endif()
 
 elseif(OS_IS_LIN)
 
@@ -69,7 +66,7 @@ elseif(OS_IS_LIN)
 elseif(OS_IS_MAC)
 
     set(EXECUTABLE_NAME mscore MACOSX_BUNDLE)
-    set(MACOSX_BUNDLE_ICON_FILE mscore.icns)
+    set(MACOSX_BUNDLE_ICON_FILE AppIcon.icns)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER org.musescore.${MUSESCORE_NAME})
     set(MACOSX_BUNDLE_BUNDLE_NAME ${MUSESCORE_NAME})
     set(MACOSX_BUNDLE_LONG_VERSION_STRING ${MUSESCORE_VERSION_FULL})
@@ -129,10 +126,10 @@ endif (USE_SYSTEM_FREETYPE)
 set(LINK_LIB
     ${QT_LIBRARIES}
     global
+    draw
     ui
     uicomponents
     fonts
-    system
     network
 
     diagnostics
@@ -191,6 +188,11 @@ if (BUILD_MUSESAMPLER_MODULE)
 endif(BUILD_MUSESAMPLER_MODULE)
 
 set (MSCORE_APPEND_SRC)
+
+if (OS_IS_WIN) 
+    list(APPEND MSCORE_APPEND_SRC ${WINDOWS_ICONS_RC})
+endif()
+
 if (CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB wasmtest)
 
@@ -198,7 +200,6 @@ if (CC_IS_EMSCRIPTEN)
         list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:${link}>)
     endforeach()
 
-    list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:qzip>)
     list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:sndfile>)
     list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:fluidsynth>)
 endif()
@@ -208,7 +209,6 @@ endif()
 ###########################################
 
 add_executable(${EXECUTABLE_NAME}
-      ${ICON_RES_FILE}
       main.cpp
       ${MSCORE_APPEND_SRC}
       )
@@ -364,21 +364,7 @@ if (OS_IS_WIN)
         install(DIRECTORY ${PROJECT_SOURCE_DIR}/build/PortableApps/App DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
         install(DIRECTORY ${PROJECT_SOURCE_DIR}/build/PortableApps/Other DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
         install(FILES ${PROJECT_SOURCE_DIR}/build/PortableApps/help.html DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
-        set(MSCORE_ICON_BASE ${PROJECT_SOURCE_DIR}/assets/musescore-icon-round)
         configure_file(${PROJECT_SOURCE_DIR}/build/PortableApps/appinfo.ini.in     ${CMAKE_INSTALL_PREFIX}/../../App/AppInfo/appinfo.ini   @ONLY)
-        install(FILES ${PROJECT_SOURCE_DIR}/src/main/res/mscore.ico RENAME appicon.ico DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo)
-        install(FILES ${MSCORE_ICON_BASE}-16.png RENAME appicon_16.png DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo)
-        install(FILES ${MSCORE_ICON_BASE}-32.png RENAME appicon_32.png DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo)
-        install(FILES ${MSCORE_ICON_BASE}-128.png RENAME appicon_128.png DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo)
-        install( FILES   ${PROJECT_SOURCE_DIR}/assets/mscz-icon.ico RENAME mscz.ico DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # icon for .MSCZ files
-        install( FILES   ${PROJECT_SOURCE_DIR}/assets/mscz-icon-48.png RENAME mscz_48.png DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # PNG icon for .MSCZ files
-        install( FILES   ${PROJECT_SOURCE_DIR}/assets/mscx-icon.ico RENAME mscx.ico DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # icon for .MSCX files
-        install( FILES   ${PROJECT_SOURCE_DIR}/assets/mscx-icon-48.png RENAME mscx_48.png DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # PNG icon for .MSCX files
-        # use a custom icon for MusicXML files (there isn't a standard icon for MusicXML files)
-        # install( FILES   ${PROJECT_SOURCE_DIR}/assets/mxl-icon.svg RENAME mxl.svg DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # SVG icon for .MXL (compressed MusicXML) files
-        # install( FILES   ${PROJECT_SOURCE_DIR}/assets/mxl-icon-48.png RENAME mxl_48.png DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # PNG icon for .MXL (compressed MusicXML) files
-        # install( FILES   ${PROJECT_SOURCE_DIR}/assets/xml-icon.svg RENAME xml.svg DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # SVG icon for .XML (MusicXML) files
-        # install( FILES   ${PROJECT_SOURCE_DIR}/assets/xml-icon-48.png RENAME xml_48.png DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # PNG icon for .XML (MusicXML) files
     endif (WIN_PORTABLE)
 
 ###########################################
@@ -399,45 +385,12 @@ elseif(OS_IS_LIN)
        add_custom_target(mscore_alias ALL COMMAND echo "No symlink aliases will be created." VERBATIM )
     endif (LN_EXECUTABLE)
 
-    # Install MuseScore icons (use SVGs where possible, but install PNGs as backup for systems that don't support SVG)
-    set(MSCORE_ICON_BASE ${PROJECT_SOURCE_DIR}/assets/musescore-icon-round)
-    install(FILES ${MSCORE_ICON_BASE}.svg RENAME mscore${MSCORE_INSTALL_SUFFIX}.svg DESTINATION share/icons/hicolor/scalable/apps)
-    install(FILES ${MSCORE_ICON_BASE}-16.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/16x16/apps)
-    install(FILES ${MSCORE_ICON_BASE}-24.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/24x24/apps)
-    install(FILES ${MSCORE_ICON_BASE}-32.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/32x32/apps)
-    install(FILES ${MSCORE_ICON_BASE}-48.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/48x48/apps)
-    install(FILES ${MSCORE_ICON_BASE}-64.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/64x64/apps)
-    install(FILES ${MSCORE_ICON_BASE}-96.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/96x96/apps)
-    install(FILES ${MSCORE_ICON_BASE}-128.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/128x128/apps)
-    install(FILES ${MSCORE_ICON_BASE}-512.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/512x512/apps)
-    # Install MIME (filetype) icons for each mimetype on Linux
-    install( FILES   ${PROJECT_SOURCE_DIR}/assets/mscz-icon.svg RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}.svg
-       DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MSCZ files
-    install( FILES   ${PROJECT_SOURCE_DIR}/assets/mscz-icon-48.png RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}.png
-       DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .MSCZ files
-    install( FILES   ${PROJECT_SOURCE_DIR}/assets/mscx-icon.svg RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}+xml.svg
-       DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MSCX files
-    install( FILES   ${PROJECT_SOURCE_DIR}/assets/mscx-icon-48.png RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}+xml.png
-       DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .MSCX files
-    # use a custom icon for MusicXML files (there isn't a standard icon for MusicXML files)
-    install( FILES   ${PROJECT_SOURCE_DIR}/assets/mxl-icon.svg RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}.svg
-       DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MXL (compressed MusicXML) files
-    install( FILES   ${PROJECT_SOURCE_DIR}/assets/mxl-icon-48.png RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}.png
-       DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .MXL (compressed MusicXML) files
-    install( FILES   ${PROJECT_SOURCE_DIR}/assets/xml-icon.svg RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}+xml.svg
-       DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .XML (MusicXML) files
-    install( FILES   ${PROJECT_SOURCE_DIR}/assets/xml-icon-48.png RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}+xml.png
-       DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .XML (MusicXML) files
-    # Note: Must now run "gtk-update-icon-cache" to set the new icons.
-
 ###########################################
 # MacOS
 ###########################################
 elseif(OS_IS_MAC)
 
     install(TARGETS mscore BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
-    install(FILES "${PROJECT_SOURCE_DIR}/src/main/res/mscore.icns" DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
-    install(FILES "${PROJECT_SOURCE_DIR}/src/main/res/musescoreDocument.icns" DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
 
     install(FILES
             ${PROJECT_SOURCE_DIR}/fonts/bravura/BravuraText.otf
@@ -461,6 +414,8 @@ elseif(OS_IS_MAC)
             ${PROJECT_SOURCE_DIR}/fonts/musejazz/MuseJazzText.otf
             ${PROJECT_SOURCE_DIR}/fonts/petaluma/PetalumaScript.otf
             ${PROJECT_SOURCE_DIR}/fonts/petaluma/PetalumaText.otf
+            ${PROJECT_SOURCE_DIR}/fonts/finalemaestro/FinaleMaestroText-Regular.otf
+            ${PROJECT_SOURCE_DIR}/fonts/finalebroadway/FinaleBroadwayText.otf
             DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
     )
 

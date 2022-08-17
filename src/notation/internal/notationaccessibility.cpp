@@ -40,6 +40,7 @@
 using namespace mu::notation;
 using namespace mu::async;
 using namespace mu::engraving;
+using namespace mu::accessibility;
 
 NotationAccessibility::NotationAccessibility(const Notation* notation)
     : m_getScore(notation)
@@ -53,12 +54,12 @@ NotationAccessibility::NotationAccessibility(const Notation* notation)
     });
 }
 
-const Ms::Score* NotationAccessibility::score() const
+const mu::engraving::Score* NotationAccessibility::score() const
 {
     return m_getScore->score();
 }
 
-const Ms::Selection* NotationAccessibility::selection() const
+const mu::engraving::Selection* NotationAccessibility::selection() const
 {
     return &score()->selection();
 }
@@ -70,14 +71,44 @@ mu::ValCh<std::string> NotationAccessibility::accessibilityInfo() const
 
 void NotationAccessibility::setMapToScreenFunc(const AccessibleMapToScreenFunc& func)
 {
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     score()->rootItem()->accessible()->accessibleRoot()->setMapToScreenFunc(func);
     score()->dummy()->rootItem()->accessible()->accessibleRoot()->setMapToScreenFunc(func);
+#else
+    UNUSED(func)
+#endif
 }
 
 void NotationAccessibility::setEnabled(bool enabled)
 {
-    score()->rootItem()->accessible()->accessibleRoot()->setEnabled(enabled);
-    score()->dummy()->rootItem()->accessible()->accessibleRoot()->setEnabled(enabled);
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    std::vector<AccessibleRoot*> roots {
+        score()->rootItem()->accessible()->accessibleRoot(),
+        score()->dummy()->rootItem()->accessible()->accessibleRoot()
+    };
+
+    EngravingItem* selectedElement = selection()->element();
+    AccessibleItemPtr selectedElementAccItem = selectedElement ? selectedElement->accessible() : nullptr;
+
+    for (AccessibleRoot* root : roots) {
+        root->setEnabled(enabled);
+
+        if (!enabled) {
+            root->setFocusedElement(nullptr);
+            continue;
+        }
+
+        if (!selectedElementAccItem) {
+            continue;
+        }
+
+        if (selectedElementAccItem->accessibleRoot() == root) {
+            root->setFocusedElement(selectedElementAccItem);
+        }
+    }
+#else
+    UNUSED(enabled)
+#endif
 }
 
 void NotationAccessibility::updateAccessibilityInfo()
@@ -115,7 +146,7 @@ void NotationAccessibility::setAccessibilityInfo(const QString& info)
 
 QString NotationAccessibility::rangeAccessibilityInfo() const
 {
-    const Ms::Segment* endSegment = selection()->endSegment();
+    const mu::engraving::Segment* endSegment = selection()->endSegment();
 
     if (!endSegment) {
         endSegment = score()->lastSegment();
@@ -123,9 +154,19 @@ QString NotationAccessibility::rangeAccessibilityInfo() const
         endSegment = endSegment->prev1MM();
     }
 
-    return qtrc("notation", "Range selection %1 %2")
-           .arg(formatStartBarsAndBeats(selection()->startSegment()))
-           .arg(formatEndBarsAndBeats(endSegment));
+    std::pair<int, float> startBarbeat = selection()->startSegment()->barbeat();
+    QString start =  qtrc("notation", "Start measure: %1; Start beat: %2")
+                    .arg(startBarbeat.first)
+                    .arg(startBarbeat.second);
+
+    std::pair<int, float> endBarbeat = endSegment->barbeat();
+    QString end =  qtrc("notation", "End measure: %1; End beat: %2")
+                  .arg(endBarbeat.first)
+                  .arg(endBarbeat.second);
+
+    return qtrc("notation", "Range selection; %1; %2")
+           .arg(start)
+           .arg(end);
 }
 
 QString NotationAccessibility::singleElementAccessibilityInfo() const
@@ -136,7 +177,7 @@ QString NotationAccessibility::singleElementAccessibilityInfo() const
     }
 
     QString accessibilityInfo = element->accessibleInfo();
-    QString barsAndBeats = formatSingleElementBarsAndBeats(element);
+    QString barsAndBeats = element->formatBarsAndBeats();
 
     if (!barsAndBeats.isEmpty()) {
         accessibilityInfo += "; " + barsAndBeats;
@@ -158,95 +199,4 @@ QString NotationAccessibility::singleElementAccessibilityInfo() const
     }
 
     return accessibilityInfo;
-}
-
-QString NotationAccessibility::formatSingleElementBarsAndBeats(const EngravingItem* element) const
-{
-    const Ms::Spanner* spanner = nullptr;
-    if (element->isSpannerSegment()) {
-        spanner = static_cast<const Ms::SpannerSegment*>(element)->spanner();
-    }
-
-    if (spanner) {
-        const Ms::Segment* endSegment = spanner->endSegment();
-
-        if (!endSegment) {
-            endSegment = score()->lastSegment()->prev1MM(Ms::SegmentType::ChordRest);
-        }
-
-        if (endSegment->tick() != score()->lastSegment()->prev1MM(Ms::SegmentType::ChordRest)->tick()
-            && spanner->type() != ElementType::SLUR
-            && spanner->type() != ElementType::TIE) {
-            endSegment = endSegment->prev1MM(Ms::SegmentType::ChordRest);
-        }
-
-        return formatStartBarsAndBeats(spanner->startSegment()) + " " + formatEndBarsAndBeats(endSegment);
-    }
-
-    QString result;
-    std::pair<int, float> barbeat = this->barbeat(element);
-
-    if (barbeat.first != 0) {
-        result = qtrc("notation", "Measure: %1").arg(QString::number(barbeat.first));
-
-        if (!qFuzzyIsNull(barbeat.second)) {
-            result += qtrc("notation", "; Beat: %1").arg(QString::number(barbeat.second));
-        }
-    }
-
-    return result;
-}
-
-QString NotationAccessibility::formatStartBarsAndBeats(const EngravingItem* element) const
-{
-    std::pair<int, float> barbeat = this->barbeat(element);
-
-    return qtrc("notation", "Start measure: %1; Start beat: %2")
-           .arg(QString::number(barbeat.first))
-           .arg(QString::number(barbeat.second));
-}
-
-QString NotationAccessibility::formatEndBarsAndBeats(const EngravingItem* element) const
-{
-    std::pair<int, float> barbeat = this->barbeat(element);
-
-    return qtrc("notation", "End measure: %1; End beat: %2")
-           .arg(QString::number(barbeat.first))
-           .arg(QString::number(barbeat.second));
-}
-
-std::pair<int, float> NotationAccessibility::barbeat(const EngravingItem* element) const
-{
-    if (!element) {
-        return std::pair<int, float>(0, 0.0F);
-    }
-
-    const EngravingItem* parent = element;
-    while (parent && parent->type() != ElementType::SEGMENT && parent->type() != ElementType::MEASURE) {
-        parent = parent->parentItem();
-    }
-
-    if (!parent) {
-        return std::pair<int, float>(0, 0.0F);
-    }
-
-    int bar = 0;
-    int beat = 0;
-    int ticks = 0;
-
-    const Ms::TimeSigMap* timeSigMap = element->score()->sigmap();
-    int ticksB = Ms::ticks_beat(timeSigMap->timesig(0).timesig().denominator());
-
-    if (parent->type() == ElementType::SEGMENT) {
-        const Ms::Segment* segment = static_cast<const Ms::Segment*>(parent);
-        timeSigMap->tickValues(segment->tick().ticks(), &bar, &beat, &ticks);
-        ticksB = Ms::ticks_beat(timeSigMap->timesig(segment->tick().ticks()).timesig().denominator());
-    } else if (parent->type() == ElementType::MEASURE) {
-        const Measure* measure = static_cast<const Measure*>(parent);
-        bar = measure->no();
-        beat = -1;
-        ticks = 0;
-    }
-
-    return std::pair<int, float>(bar + 1, beat + 1 + ticks / static_cast<float>(ticksB));
 }

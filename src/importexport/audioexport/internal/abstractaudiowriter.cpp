@@ -21,11 +21,14 @@
  */
 #include "abstractaudiowriter.h"
 
+#include <QThread>
+
 #include "log.h"
 
 using namespace mu::iex::audioexport;
 using namespace mu::project;
 using namespace mu::notation;
+using namespace mu::framework;
 
 std::vector<INotationWriter::UnitType> AbstractAudioWriter::supportedUnitTypes() const
 {
@@ -38,7 +41,7 @@ bool AbstractAudioWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret AbstractAudioWriter::write(INotationPtr, io::Device&, const Options& options)
+mu::Ret AbstractAudioWriter::write(INotationPtr, QIODevice&, const Options& options)
 {
     IF_ASSERT_FAILED(unitTypeFromOptions(options) != UnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);
@@ -53,7 +56,7 @@ mu::Ret AbstractAudioWriter::write(INotationPtr, io::Device&, const Options& opt
     return Ret(Ret::Code::NotSupported);
 }
 
-mu::Ret AbstractAudioWriter::writeList(const INotationPtrList&, io::Device&, const Options& options)
+mu::Ret AbstractAudioWriter::writeList(const INotationPtrList&, QIODevice&, const Options& options)
 {
     IF_ASSERT_FAILED(unitTypeFromOptions(options) == UnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);
@@ -73,9 +76,53 @@ void AbstractAudioWriter::abort()
     NOT_IMPLEMENTED;
 }
 
-mu::framework::ProgressChannel AbstractAudioWriter::progress() const
+bool AbstractAudioWriter::supportsProgressNotifications() const
+{
+    return true;
+}
+
+mu::framework::Progress AbstractAudioWriter::progress() const
 {
     return m_progress;
+}
+
+void AbstractAudioWriter::doWriteAndWait(QIODevice& destinationDevice, const audio::SoundTrackFormat& format)
+{
+    //!Note Temporary workaround, since QIODevice is the alias for QIODevice, which falls with SIGSEGV
+    //!     on any call from background thread. Once we have our own implementation of QIODevice
+    //!     we can pass QIODevice directly into IPlayback::IAudioOutput::saveSoundTrack
+    QFile* file = qobject_cast<QFile*>(&destinationDevice);
+
+    QFileInfo info(*file);
+    QString path = info.absoluteFilePath();
+
+    m_isCompleted = false;
+
+    playback()->sequenceIdList()
+    .onResolve(this, [this, path, &format](const audio::TrackSequenceIdList& sequenceIdList) {
+        m_progress.started.notify();
+
+        for (const audio::TrackSequenceId sequenceId : sequenceIdList) {
+            playback()->audioOutput()->saveSoundTrack(sequenceId, io::path_t(path), std::move(format))
+            .onResolve(this, [this, path](const bool /*result*/) {
+                LOGD() << "Successfully saved sound track by path: " << path;
+                m_isCompleted = true;
+                m_progress.finished.send(make_ok());
+            })
+            .onReject(this, [this](int errorCode, const std::string& msg) {
+                m_isCompleted  = true;
+                m_progress.finished.send(make_ret(errorCode, msg));
+            });
+        }
+    })
+    .onReject(this, [](int errorCode, const std::string& msg) {
+        LOGE() << "errorCode: " << errorCode << ", " << msg;
+    });
+
+    while (!m_isCompleted) {
+        QApplication::instance()->processEvents();
+        QThread::yieldCurrentThread();
+    }
 }
 
 INotationWriter::UnitType AbstractAudioWriter::unitTypeFromOptions(const Options& options) const

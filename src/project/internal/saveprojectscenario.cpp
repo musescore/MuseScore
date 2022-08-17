@@ -55,7 +55,7 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
             return make_ret(Ret::Code::UnknownError);
 
         case SaveLocationType::Local: {
-            RetVal<io::path> path = askLocalPath(project, mode);
+            RetVal<io::path_t> path = askLocalPath(project, mode);
             switch (path.ret.code()) {
             case int(Ret::Code::Ok): {
                 SaveLocation::LocalInfo localInfo { path.val };
@@ -83,36 +83,50 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
         }
         }
     }
-
-    UNREACHABLE;
-    return make_ret(Ret::Code::InternalError);
 }
 
-RetVal<io::path> SaveProjectScenario::askLocalPath(INotationProjectPtr project, SaveMode saveMode) const
+RetVal<io::path_t> SaveProjectScenario::askLocalPath(INotationProjectPtr project, SaveMode saveMode) const
 {
-    QString dialogTitle = qtrc("project", "Save score");
+    QString dialogTitle = qtrc("project/save", "Save score");
     QString filenameAddition;
 
     if (saveMode == SaveMode::SaveCopy) {
         //: used to form a filename suggestion, like "originalFile - copy"
-        filenameAddition = " - " + qtrc("project", "copy", "a copy of a file");
+        filenameAddition = " - " + qtrc("project/save", "copy", "a copy of a file");
     } else if (saveMode == SaveMode::SaveSelection) {
-        filenameAddition = " - " + qtrc("project", "selection");
+        //: used to form a filename suggestion, like "originalFile - selection"
+        filenameAddition = " - " + qtrc("project/save", "selection");
     }
 
-    io::path defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition);
+    io::path_t defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition);
 
-    QString filter = qtrc("project", "MuseScore File") + " (*.mscz)";
+    QStringList filter {
+        qtrc("project", "MuseScore file") + " (*.mscz)",
+        qtrc("project", "Uncompressed MuseScore folder (experimental)")
+#ifdef Q_OS_MAC
+        + " (*)"
+#else
+        + " (*.)"
+#endif
+    };
 
-    io::path selectedPath = interactive()->selectSavingFile(dialogTitle, defaultPath, filter);
+    io::path_t selectedPath = interactive()->selectSavingFile(dialogTitle, defaultPath, filter.join(";;"));
 
     if (selectedPath.empty()) {
         return make_ret(Ret::Code::Cancel);
     }
 
+    if (!engraving::isMuseScoreFile(io::suffix(selectedPath))) {
+        // Then it must be that the user is trying to save a mscx file.
+        // At the selected path, a folder will be created,
+        // and inside the folder, a mscx file will be created.
+        // We should return the path to the mscx file.
+        selectedPath = selectedPath.appendingComponent(io::filename(selectedPath)).appendingSuffix(engraving::MSCX);
+    }
+
     configuration()->setLastSavedProjectsPath(io::dirpath(selectedPath));
 
-    return RetVal<io::path>::make_ok(selectedPath);
+    return RetVal<io::path_t>::make_ok(selectedPath);
 }
 
 RetVal<SaveLocationType> SaveProjectScenario::saveLocationType() const
@@ -203,17 +217,17 @@ bool SaveProjectScenario::warnBeforePublishing() const
 
     IInteractive::ButtonDatas buttons = {
         IInteractive::ButtonData(IInteractive::Button::Cancel, trc("global", "Cancel")),
-        IInteractive::ButtonData(IInteractive::Button::Ok, trc("project", "Publish online"), true)
+        IInteractive::ButtonData(IInteractive::Button::Ok, trc("project/save", "Publish online"), true)
     };
 
     IInteractive::Result result = interactive()->warning(
-        trc("project", "Publish this score online?"),
-        trc("project", "All saved changes will be publicly visible on MuseScore.com. "
-                       "If you want to make frequent changes, we recommend saving this "
-                       "score privately until you’re ready to share it to the world. "),
+        trc("project/save", "Publish this score online?"),
+        trc("project/save", "All saved changes will be publicly visible on MuseScore.com. "
+                            "If you want to make frequent changes, we recommend saving this "
+                            "score privately until you’re ready to share it to the world. "),
         buttons,
         int(IInteractive::Button::Ok),
-        IInteractive::Option::WithIcon | IInteractive::Option::WithShowAgain);
+        IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
 
     bool publish = result.standardButton() == IInteractive::Button::Ok;
     if (publish && !result.showAgain()) {

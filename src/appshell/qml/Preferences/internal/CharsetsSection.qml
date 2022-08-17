@@ -26,36 +26,18 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "Character set used when importing binary files")
+    title: qsTrc("appshell/preferences", "Character set used when importing binary files")
 
     property var charsets: null
-    property string currentGuitarProCharset: ""
-    property string currentOvertuneCharset: ""
+    property string currentOvertureCharset: ""
 
-    signal guitarProCharsetChangeRequested(string charset)
-    signal overtuneCharsetChangeRequested(string charset)
+    signal overtureCharsetChangeRequested(string charset)
 
     ComboBoxWithTitle {
-        title: qsTrc("appshell", "Guitar Pro import character set:")
+        title: qsTrc("appshell/preferences", "Overture import character set:")
         columnWidth: root.columnWidth
 
-        currentIndex: control.indexOfValue(root.currentGuitarProCharset)
-        model: root.charsets
-
-        navigation.name: "GuitarProBox"
-        navigation.panel: root.navigation
-        navigation.row: 0
-
-        onValueEdited: function(newIndex, newValue) {
-            root.guitarProCharsetChangeRequested(newValue)
-        }
-    }
-
-    ComboBoxWithTitle {
-        title: qsTrc("appshell", "Overture import character set:")
-        columnWidth: root.columnWidth
-
-        currentIndex: control.indexOfValue(root.currentOvertuneCharset)
+        currentIndex: control.indexOfValue(root.currentOvertureCharset)
         model: root.charsets
 
         navigation.name: "OvertureBox"
@@ -63,7 +45,7 @@ BaseSection {
         navigation.row: 1
 
         onValueEdited: function(newIndex, newValue) {
-            root.overtuneCharsetChangeRequested(newValue)
+            root.overtureCharsetChangeRequested(newValue)
         }
     }
 }

@@ -23,6 +23,7 @@
 #include "updatepreferencesmodel.h"
 
 #include "log.h"
+#include "translation.h"
 
 using namespace mu::appshell;
 
@@ -49,4 +50,9 @@ void UpdatePreferencesModel::setNeedCheckForNewAppVersion(bool value)
 
     configuration()->setNeedCheckForUpdate(value);
     emit needCheckForNewAppVersionChanged(value);
+}
+
+QString UpdatePreferencesModel::museScorePrivacyPolicyUrl() const
+{
+    return QString::fromStdString(configuration()->museScorePrivacyPolicyUrl());
 }

@@ -31,13 +31,9 @@ class LineTypes
 
 public:
     enum class LineStyle {
-        LINE_STYLE_NONE = 0,
         LINE_STYLE_SOLID,
         LINE_STYLE_DASHED,
-        LINE_STYLE_DOTTED,
-        LINE_STYLE_DASH_DOT,
-        LINE_STYLE_DASH_DOT_DOT,
-        LINE_STYLE_CUSTOM
+        LINE_STYLE_DOTTED
     };
 
     Q_ENUM(LineStyle)

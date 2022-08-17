@@ -35,14 +35,14 @@ class AutobotConfiguration : public IAutobotConfiguration
 public:
     AutobotConfiguration() = default;
 
-    io::paths scriptsDirPaths() const override;
-    io::path testingFilesDirPath() const override;
+    io::paths_t scriptsDirPaths() const override;
+    io::paths_t testingFilesDirPaths() const override;
 
-    io::path dataPath() const override;
-    io::path savingFilesPath() const override;
-    io::path reportsPath() const override;
-    io::path drawDataPath() const override;
-    io::path fileDrawDataPath(const io::path& filePath) const override;
+    io::path_t dataPath() const override;
+    io::path_t savingFilesPath() const override;
+    io::path_t reportsPath() const override;
+    io::path_t drawDataPath() const override;
+    io::path_t fileDrawDataPath(const io::path_t& filePath) const override;
 };
 }
 

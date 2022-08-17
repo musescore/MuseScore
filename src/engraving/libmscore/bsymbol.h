@@ -27,7 +27,7 @@
 
 #include "engravingitem.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ BSymbol
 ///    base class for Symbol and Image
@@ -35,6 +35,7 @@ namespace Ms {
 
 class BSymbol : public EngravingItem
 {
+    OBJECT_ALLOCATOR(engraving, BSymbol)
 public:
 
     Segment* segment() const { return (Segment*)explicitParent(); }
@@ -74,5 +75,5 @@ private:
     std::vector<EngravingItem*> _leafs;
     Align _align;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

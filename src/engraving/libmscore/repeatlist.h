@@ -23,11 +23,13 @@
 #ifndef __REPEATLIST_H__
 #define __REPEATLIST_H__
 
-#include <QtGlobal>
 #include <set>
 #include <vector>
 
-namespace Ms {
+#include "global/allocator.h"
+#include "types/string.h"
+
+namespace mu::engraving {
 class Score;
 class Measure;
 class Volta;
@@ -41,12 +43,13 @@ using RepeatListElementList = std::vector<RepeatListElement*>;
 
 class RepeatSegment
 {
+    OBJECT_ALLOCATOR(engraving, RepeatSegment)
 public:
     int tick;           // start tick
     int utick;
-    qreal utime;
-    qreal timeOffset;
-    qreal pause;
+    double utime;
+    double timeOffset;
+    double pause;
     int playbackCount;
 
     RepeatSegment(int playbackCount);
@@ -74,6 +77,8 @@ private:
 
 class RepeatList : public std::vector<RepeatSegment*>
 {
+    OBJECT_ALLOCATOR(engraving, RepeatList)
+
     Score* _score = nullptr;
     mutable unsigned idx1, idx2;     // cached values
 
@@ -85,7 +90,7 @@ class RepeatList : public std::vector<RepeatSegment*>
 
     void collectRepeatListElements();
     std::pair<std::vector<RepeatListElementList>::const_iterator, RepeatListElementList::const_iterator> findMarker(
-        QString label, std::vector<RepeatListElementList>::const_iterator referenceSectionIt,
+        String label, std::vector<RepeatListElementList>::const_iterator referenceSectionIt,
         RepeatListElementList::const_iterator referenceRepeatListElementIt) const;
 
     void performJump(std::vector<RepeatListElementList>::const_iterator sectionIt,
@@ -106,12 +111,12 @@ public:
 
     int utick2tick(int tick) const;
     int tick2utick(int tick) const;
-    int utime2utick(qreal secs) const;
-    qreal utick2utime(int) const;
+    int utime2utick(double secs) const;
+    double utick2utime(int) const;
     void updateTempo();
     int ticks() const;
 
     std::vector<RepeatSegment*>::const_iterator findRepeatSegmentFromUTick(int utick) const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

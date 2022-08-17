@@ -57,6 +57,8 @@ class DockWindow : public QQuickItem, public IDockWindow, public async::Asyncabl
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBarView> toolBars READ toolBarsProperty)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockPageView> pages READ pagesProperty)
 
+    Q_PROPERTY(QQuickWindow * window READ windowProperty NOTIFY windowPropertyChanged)
+
     INJECT(dock, ui::IUiConfiguration, uiConfiguration)
     INJECT(dock, workspace::IWorkspaceManager, workspaceManager)
     INJECT(dock, IDockWindowProvider, dockWindowProvider)
@@ -70,6 +72,8 @@ public:
 
     QQmlListProperty<mu::dock::DockToolBarView> toolBarsProperty();
     QQmlListProperty<mu::dock::DockPageView> pagesProperty();
+
+    QQuickWindow* windowProperty() const;
 
     Q_INVOKABLE void init();
     Q_INVOKABLE void loadPage(const QString& uri, const QVariantMap& params);
@@ -92,6 +96,7 @@ public:
 signals:
     void pageLoaded();
     void currentPageUriChanged(const QString& uri);
+    void windowPropertyChanged(QQuickWindow* window);
 
 private slots:
     void onQuit();
@@ -99,7 +104,7 @@ private slots:
 private:
     DockPageView* pageByUri(const QString& uri) const;
 
-    bool doLoadPage(const QString& uri, const QVariantMap& params);
+    bool doLoadPage(const QString& uri, const QVariantMap& params = {});
 
     void componentComplete() override;
     void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) override;
@@ -108,7 +113,7 @@ private:
     void loadToolBars(const DockPageView* page);
     void loadPanels(const DockPageView* page);
     void loadTopLevelToolBars(const DockPageView* page);
-    void alignToolBars(const DockPageView* page);
+    void alignTopLevelToolBars(const DockPageView* page);
 
     void addDock(DockBase* dock, Location location = Location::Left, const DockBase* relativeTo = nullptr);
     void registerDock(DockBase* dock);

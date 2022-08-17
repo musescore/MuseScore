@@ -30,7 +30,9 @@
 
 #include <set>
 
-namespace Ms {
+#include "log.h"
+
+namespace mu::iex::midi {
 namespace MChord {
 bool isGrandStaffProgram(int program)
 {
@@ -84,7 +86,7 @@ findFirstChordInRange(const std::multimap<ReducedFraction, MidiChord>& chords,
 
 const ReducedFraction& minAllowedDuration()
 {
-    const static auto minDuration = ReducedFraction::fromTicks(Constant::division) / 32;
+    const static auto minDuration = ReducedFraction::fromTicks(engraving::Constants::division) / 32;
     return minDuration;
 }
 
@@ -141,7 +143,7 @@ void removeOverlappingNotes(QList<MidiNote>& notes)
                     noteIt1->offTime = noteIt2->offTime;
                 }
                 noteIt2 = tempNotes.erase(noteIt2);
-                qDebug("Midi import: removeOverlappingNotes: note was removed");
+                LOGD() << "MIDI import: removeOverlappingNotes: note was removed";
                 continue;
             }
             ++noteIt2;
@@ -205,7 +207,7 @@ void removeOverlappingNotes(std::multimap<int, MTrack>& tracks)
                 }
                 if (note1.offTime - onTime1 < MChord::minAllowedDuration()) {
                     note1It = chord1.notes.erase(note1It);
-                    qDebug("Midi import: removeOverlappingNotes: note was removed");
+                    LOGD("MIDI import: removeOverlappingNotes: note was removed");
                     continue;
                 }
                 ++note1It;
@@ -640,7 +642,7 @@ void setBarIndexes(
     std::multimap<ReducedFraction, MidiChord>& chords,
     const ReducedFraction& basicQuant,
     const ReducedFraction& lastTick,
-    const TimeSigMap* sigmap)
+    const engraving::TimeSigMap* sigmap)
 {
     if (chords.empty()) {
         return;
@@ -676,4 +678,4 @@ void setBarIndexes(
 #endif
 }
 } // namespace MChord
-} // namespace Ms
+} // namespace mu::iex::midi

@@ -67,7 +67,6 @@ signals:
     void contextMenuModelChanged();
 
 private:
-    DockType type() const override;
     void componentComplete() override;
 
     QString m_groupName;

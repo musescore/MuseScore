@@ -31,6 +31,7 @@ Item {
     id: root
 
     property string currentPageName: ""
+    property bool iconsOnly: false
 
     signal selected(string name)
 
@@ -55,17 +56,19 @@ Item {
     ColumnLayout {
         anchors.fill: parent
 
-        spacing: 20
+        spacing: 0
 
         AccountInfoButton {
             Layout.fillWidth: true
             Layout.preferredHeight: 60
+            Layout.topMargin: 20
 
             navigation.name: "AccountInfo"
             navigation.panel: navPanel
             navigation.row: 1
 
             checked: root.currentPageName === "account"
+            iconOnly: root.iconsOnly
 
             onToggled: {
                 root.selected("account")
@@ -87,7 +90,7 @@ Item {
 
             model: [
                 { "name": "scores", "title": qsTrc("appshell", "Scores"), "icon": IconCode.MUSIC_NOTES },
-                { "name": "plugins", "title": qsTrc("appshell", "Plugins"), "icon":  IconCode.PLUS },
+                { "name": "plugins", "title": qsTrc("appshell", "Plugins"), "icon":  IconCode.PLUGIN },
                 // TODO: need to implement
                 // { "name": "audio", "title": qsTrc("appshell", "Audio"), "icon":  IconCode.AUDIO },
                 { "name": "learn", "title": qsTrc("appshell", "Learn"), "icon":  IconCode.MORTAR_BOARD }
@@ -112,6 +115,7 @@ Item {
                 checked: modelData["name"] === root.currentPageName
 
                 title: modelData["title"]
+                iconOnly: root.iconsOnly
 
                 iconComponent: StyledIconLabel {
                     iconCode: modelData["icon"]

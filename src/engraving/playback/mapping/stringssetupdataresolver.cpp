@@ -25,21 +25,7 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-bool StringsSetupDataResolver::supportsInstrument(const Ms::Instrument* instrument)
-{
-    static const std::unordered_set<std::string> STRINGS_FAMILY_SET = {
-        "harps", "guitars", "bass-guitars", "banjos",
-        "ukuleles", "mandolins", "mtn-dulcimers",  "lutes",
-        "balalaikas", "bouzoukis", "kotos", "ouds",
-        "shamisens", "sitars", "tamburicas", "bandurrias",
-        "lauds", "strings", "orchestral-strings", "viols",
-        "octobasses", "erhus", "nyckelharpas", "synths"
-    };
-
-    return STRINGS_FAMILY_SET.find(instrument->family().toStdString()) != STRINGS_FAMILY_SET.cend();
-}
-
-const PlaybackSetupData& StringsSetupDataResolver::doResolve(const Ms::Instrument* instrument)
+const PlaybackSetupData& StringsSetupDataResolver::doResolve(const Instrument* instrument)
 {
     static std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
         { "harp", { SoundId::Harp, SoundCategory::Strings, {}, {} } },
@@ -178,7 +164,7 @@ const PlaybackSetupData& StringsSetupDataResolver::doResolve(const Ms::Instrumen
         { "strings", { SoundId::StringsGroup, SoundCategory::Strings, {}, {} } },
         { "double-bass", { SoundId::Contrabass, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
         { "contrabass", { SoundId::Contrabass, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
-        { "contrabasses", { SoundId::ContrabasseSection, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
+        { "contrabasses", { SoundId::ContrabassSection, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
         { "violin", { SoundId::Violin, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
         { "violins", { SoundId::ViolinSection, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
         { "viola", { SoundId::Viola, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
@@ -202,7 +188,8 @@ const PlaybackSetupData& StringsSetupDataResolver::doResolve(const Ms::Instrumen
 
         { "bass-synthesizer", { SoundId::Synthesizer, SoundCategory::Strings, { SoundSubCategory::Electric,
                                                                                 SoundSubCategory::Bass }, {} } },
-        { "bowed-synth", { SoundId::Synthesizer, SoundCategory::Strings, { SoundSubCategory::Electric }, {} } },
+        { "bowed-synth", { SoundId::Synthesizer, SoundCategory::Strings, { SoundSubCategory::Electric,
+                                                                           SoundSubCategory::Bowed }, {} } },
     };
 
     auto search = SETUP_DATA_MAP.find(instrument->id().toStdString());

@@ -23,15 +23,15 @@
 #ifndef MU_INSPECTOR_FRETCANVAS_H
 #define MU_INSPECTOR_FRETCANVAS_H
 
-#include <QQuickPaintedItem>
 #include <QPainter>
 #include <QVariant>
 
+#include "uicomponents/view/quickpaintedview.h"
 #include "context/iglobalcontext.h"
 #include "fret.h"
 
 namespace mu::inspector {
-class FretCanvas : public QQuickPaintedItem
+class FretCanvas : public uicomponents::QuickPaintedView
 {
     INJECT(instruments, context::IGlobalContext, globalContext)
 
@@ -80,16 +80,16 @@ private:
     void mousePressEvent(QMouseEvent*) override;
     void hoverMoveEvent(QHoverEvent*) override;
 
-    void paintDotSymbol(QPainter* p, QPen& pen, qreal y, qreal x, qreal dotd, Ms::FretDotType dtype);
+    void paintDotSymbol(QPainter* p, QPen& pen, qreal y, qreal x, qreal dotd, mu::engraving::FretDotType dtype);
     void getPosition(const QPointF& pos, int* string, int* fret);
 
-    Ms::FretDiagram* m_diagram = nullptr;
+    mu::engraving::FretDiagram* m_diagram = nullptr;
 
     int m_cstring = 0;
     int m_cfret = 0;
 
     bool m_automaticDotType = false;
-    Ms::FretDotType m_currentDtype = Ms::FretDotType::NORMAL;
+    mu::engraving::FretDotType m_currentDtype = mu::engraving::FretDotType::NORMAL;
     bool m_barreMode = false;
     bool m_multidotMode = false;
 

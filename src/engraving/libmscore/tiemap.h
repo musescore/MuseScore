@@ -25,7 +25,7 @@
 
 #include "elementmap.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Tie;
 
 //---------------------------------------------------------
@@ -34,10 +34,11 @@ class Tie;
 
 class TieMap : public ElementMap
 {
+    OBJECT_ALLOCATOR(engraving, TieMap)
 public:
     TieMap() {}
     Tie* findNew(Tie* o) const { return (Tie*)(ElementMap::findNew((EngravingItem*)o)); }
     void add(Tie* _o, Tie* _n) { ElementMap::add((EngravingItem*)_o, (EngravingItem*)_n); }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

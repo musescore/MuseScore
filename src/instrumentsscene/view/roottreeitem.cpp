@@ -24,6 +24,11 @@
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 
+static inline bool isIndexInRange(int index, int start, int end)
+{
+    return start <= index && index < end;
+}
+
 RootTreeItem::RootTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
     : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::ROOT, masterNotation, notation, parent)
 {
@@ -35,23 +40,42 @@ void RootTreeItem::moveChildren(int sourceRow, int count, AbstractInstrumentsPan
     IDList partIds;
 
     for (int i = sourceRow; i < sourceRow + count; ++i) {
-        partIds.push_back(childAtRow(i)->id());
+        ID partId = childAtRow(i)->id();
+
+        if (notation()->parts()->partExists(partId)) {
+            partIds.push_back(partId);
+        }
     }
 
     int destinationRow_ = destinationRow;
+    int childCount = destinationParent->childCount();
+    bool moveDown = destinationRow > sourceRow;
     INotationParts::InsertMode moveMode = INotationParts::InsertMode::Before;
+    const AbstractInstrumentsPanelTreeItem* destinationPartItem = nullptr;
 
-    if (destinationRow_ == destinationParent->childCount()) {
-        destinationRow_--;
-        moveMode = INotationParts::InsertMode::After;
+    do {
+        destinationPartItem = destinationParent->childAtRow(destinationRow_);
+
+        if (destinationPartItem) {
+            if (notation()->parts()->partExists(destinationPartItem->id())) {
+                break;
+            }
+
+            destinationPartItem = nullptr;
+        }
+
+        if (moveDown) {
+            destinationRow_--;
+            moveMode = INotationParts::InsertMode::After;
+        } else {
+            destinationRow_++;
+            moveMode = INotationParts::InsertMode::Before;
+        }
+    } while (isIndexInRange(destinationRow_, 0, childCount) && !isIndexInRange(destinationRow_, sourceRow, sourceRow + count));
+
+    if (destinationPartItem) {
+        notation()->parts()->moveParts(partIds, destinationPartItem->id(), moveMode);
     }
-
-    const AbstractInstrumentsPanelTreeItem* destinationPartItem = destinationParent->childAtRow(destinationRow_);
-    if (!destinationPartItem) {
-        return;
-    }
-
-    notation()->parts()->moveParts(partIds, destinationPartItem->id(), moveMode);
 
     AbstractInstrumentsPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow);
 }

@@ -30,7 +30,7 @@
 #include "ilanguageunpacker.h"
 #include "iglobalconfiguration.h"
 #include "framework/network/inetworkmanagercreator.h"
-#include "framework/system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "ui/iuiengine.h"
 
 class QTranslator;
@@ -42,7 +42,7 @@ class LanguagesService : public ILanguagesService, public async::Asyncable
     INJECT(languages, ILanguageUnpacker, languageUnpacker)
     INJECT(languages, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(languages, network::INetworkManagerCreator, networkManagerCreator)
-    INJECT(languages, system::IFileSystem, fileSystem)
+    INJECT(languages, io::IFileSystem, fileSystem)
     INJECT(languages, ui::IUiEngine, uiEngine)
 
 public:
@@ -51,6 +51,8 @@ public:
 
     ValCh<LanguagesHash> languages() const override;
     ValCh<Language> currentLanguage() const override;
+
+    LanguageStatus::Status languageStatus(const QString& languageCode) const override;
 
     RetCh<LanguageProgress> install(const QString& languageCode) override;
     RetCh<LanguageProgress> update(const QString& languageCode) override;
@@ -67,15 +69,12 @@ private:
 
     Language language(const QString& languageCode) const;
 
-    RetVal<LanguagesHash> correctLanguagesStates(LanguagesHash& languages) const;
-    LanguageStatus::Status languageStatus(const Language& language) const;
-
     RetVal<QString> downloadLanguage(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel) const;
     Ret removeLanguage(const QString& languageCode) const;
 
     Ret loadLanguage(const QString& languageCode);
 
-    void resetLanguageToDefault();
+    void resetLanguageToSystemLanguage();
 
     void th_refreshLanguages();
     void th_install(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel, async::Channel<Ret>* finishChannel);

@@ -25,10 +25,11 @@
 
 #include "rest.h"
 
-namespace Ms {
+namespace mu::engraving {
 /// This class implements a multimeasure rest.
 class MMRest final : public Rest
 {
+    OBJECT_ALLOCATOR(engraving, MMRest)
 public:
     MMRest(Segment* s = 0);
     MMRest(const MMRest&, bool link = false);
@@ -38,14 +39,14 @@ public:
 
     void draw(mu::draw::Painter*) const override;
     void layout() override;
-    void setWidth(qreal width) override { m_width = width; }
-    qreal width() const override { return m_width; }
+    void setWidth(double width) override { m_width = width; }
+    double width() const override { return m_width; }
 
     void write(XmlWriter&) const override;
 
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
-    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue getProperty(Pid) const override;
+    PropertyValue propertyDefault(Pid) const override;
+    bool setProperty(Pid, const PropertyValue&) override;
+    PropertyValue getProperty(Pid) const override;
 
     Shape shape() const override;
 
@@ -55,13 +56,13 @@ private:
     mu::PointF numberPosition(const mu::RectF& numberBbox) const;
     mu::RectF numberRect() const override;
 
-    qreal m_width;        // width of multimeasure rest
+    double m_width;        // width of multimeasure rest
     int m_number;         // number of measures represented
     SymIdList m_numberSym;
-    qreal m_numberPos;    // vertical position of number relative to staff
+    double m_numberPos;    // vertical position of number relative to staff
     bool m_numberVisible; // show or hide number
     SymIdList m_restSyms; // stores symbols when using old-style rests
-    qreal m_symsWidth;    // width of symbols with spacing when using old-style
+    double m_symsWidth;    // width of symbols with spacing when using old-style
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

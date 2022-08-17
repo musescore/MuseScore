@@ -21,8 +21,7 @@
  */
 #include "playbacktoolbarmodel.h"
 
-#include "log.h"
-#include "translation.h"
+#include "types/translatablestring.h"
 
 #include "ui/view/musicalsymbolcodes.h"
 #include "playback/playbacktypes.h"
@@ -36,7 +35,6 @@ using namespace mu::notation;
 using namespace mu::audio;
 
 static const ActionCode PLAY_ACTION_CODE("play");
-static constexpr bool FORCE_END_EDIT_ELEMENT = true;
 
 static MusicalSymbolCodes::Code tempoDurationToNoteIcon(DurationType durationType)
 {
@@ -95,7 +93,7 @@ void PlaybackToolBarModel::updateActions()
     MenuItemList settingsItems;
 
     for (const UiAction& action : PlaybackUiActions::settingsActions()) {
-        settingsItems << makeActionWithDescriptionAsTitle(action.code);
+        settingsItems << makeMenuItem(action.code);
     }
 
     if (!m_isToolbarFloating) {
@@ -107,13 +105,13 @@ void PlaybackToolBarModel::updateActions()
     for (const ToolConfig::Item& item : config.items) {
         if (isAdditionalAction(item.action) && !m_isToolbarFloating) {
             //! NOTE In this case, we want to see the actions' description instead of the title
-            settingsItems << makeActionWithDescriptionAsTitle(item.action);
+            settingsItems << makeMenuItem(item.action);
         } else {
             result << makeMenuItem(item.action);
         }
     }
 
-    MenuItem* settingsItem = makeMenu(qtrc("action", "Playback settings"), settingsItems);
+    MenuItem* settingsItem = makeMenu(TranslatableString("action", "Playback settings"), settingsItems);
 
     UiAction action = settingsItem->action();
     action.iconCode = IconCode::Code::SETTINGS_COG;
@@ -122,9 +120,6 @@ void PlaybackToolBarModel::updateActions()
     result << settingsItem;
 
     setItems(result);
-
-    MenuItem& playItem = findItem(PLAY_ACTION_CODE);
-    playItem.setArgs(ActionData::make_arg1<bool>(FORCE_END_EDIT_ELEMENT));
 }
 
 void PlaybackToolBarModel::onActionsStateChanges(const actions::ActionCodeList& codes)
@@ -144,17 +139,6 @@ void PlaybackToolBarModel::onActionsStateChanges(const actions::ActionCodeList& 
 bool PlaybackToolBarModel::isAdditionalAction(const actions::ActionCode& actionCode) const
 {
     return PlaybackUiActions::loopBoundaryActions().contains(actionCode);
-}
-
-MenuItem* PlaybackToolBarModel::makeActionWithDescriptionAsTitle(const actions::ActionCode& actionCode)
-{
-    MenuItem* item = makeMenuItem(actionCode);
-
-    UiAction action = item->action();
-    action.title = item->action().description;
-    item->setAction(action);
-
-    return item;
 }
 
 bool PlaybackToolBarModel::isPlayAllowed() const
@@ -304,6 +288,16 @@ void PlaybackToolBarModel::setBeatNumber(int beatNumber)
     rewindToBeat(measureBeat);
 }
 
+void PlaybackToolBarModel::setTempoMultiplier(qreal multiplier)
+{
+    if (multiplier == tempoMultiplier()) {
+        return;
+    }
+
+    playbackController()->setTempoMultiplier(multiplier);
+    emit tempoChanged();
+}
+
 int PlaybackToolBarModel::maxBeatNumber() const
 {
     return measureBeat().maxBeatIndex + 1;
@@ -319,4 +313,9 @@ QVariant PlaybackToolBarModel::tempo() const
     obj["value"] = tempo.valueBpm;
 
     return obj;
+}
+
+qreal PlaybackToolBarModel::tempoMultiplier() const
+{
+    return playbackController()->tempoMultiplier();
 }

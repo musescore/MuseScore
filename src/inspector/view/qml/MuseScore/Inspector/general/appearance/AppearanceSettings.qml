@@ -46,7 +46,7 @@ Column {
     HorizontalSpacingSection {
         id: horizontalSpacingSection
         leadingSpace: model ? model.leadingSpace : null
-        barWidth: model ? model.barWidth : null
+        measureWidth: model ? model.measureWidth : null
 
         navigationPanel: root.navigationPanel
         navigationRowStart: 0
@@ -96,15 +96,27 @@ Column {
         navigationPanel: root.navigationPanel
         navigationRowStart: offsetSection.navigationRowEnd
 
-        onPushBackRequested: {
+        onPushBackwardsRequested: {
             if (root.model) {
-                root.model.pushBackInOrder()
+                root.model.pushBackwardsInOrder()
             }
         }
 
-        onPushFrontRequested: {
+        onPushForwardsRequested: {
             if (root.model) {
-                root.model.pushFrontInOrder()
+                root.model.pushForwardsInOrder()
+            }
+        }
+
+        onPushToBackRequested: {
+            if (root.model) {
+                root.model.pushToBackInOrder()
+            }
+        }
+
+        onPushToFrontRequested: {
+            if (root.model) {
+                root.model.pushToFrontInOrder()
             }
         }
     }

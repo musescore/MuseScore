@@ -21,17 +21,20 @@
  */
 #include "guitarproreader.h"
 
-#include "libmscore/masterscore.h"
-#include "notation/notationerrors.h"
+#include "io/file.h"
 
-namespace Ms {
-extern Score::FileError importGTP(MasterScore*, const QString& name);
+#include "libmscore/masterscore.h"
+#include "engraving/engravingerrors.h"
+
+namespace mu::engraving {
+extern Err importGTP(MasterScore*, mu::io::IODevice* io, bool createLinkedTabForce = false);
 }
 
 using namespace mu::iex::guitarpro;
 
-mu::Ret GuitarProReader::read(Ms::MasterScore* score, const io::path& path, const Options&)
+mu::Ret GuitarProReader::read(mu::engraving::MasterScore* score, const io::path_t& path, const Options&)
 {
-    Ms::Score::FileError err = Ms::importGTP(score, path.toQString());
-    return mu::notation::scoreFileErrorToRet(err, path);
+    mu::io::File file(path);
+    mu::engraving::Err err = mu::engraving::importGTP(score, &file);
+    return mu::engraving::make_ret(err, path);
 }

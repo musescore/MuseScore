@@ -50,7 +50,7 @@ using ::testing::DoAll;
 using namespace mu;
 using namespace mu::ui;
 
-class NavigationControllerTests : public ::testing::Test
+class Ui_NavigationControllerTests : public ::testing::Test
 {
 public:
     void SetUp() override
@@ -105,7 +105,7 @@ public:
         NavigationSection* section = nullptr;
         std::vector<Panel*> panels;
         std::set<INavigationPanel*> ipanels;
-        OnActiveRequested actveCallback;
+        OnActiveRequested activeCallback;
 
         ~Section()
         {
@@ -239,7 +239,7 @@ public:
     std::vector<INavigation::Index> m_idxsRefs;
 };
 
-TEST_F(NavigationControllerTests, FirstActiveOnNextSection)
+TEST_F(Ui_NavigationControllerTests, FirstActiveOnNextSection)
 {
     //! CASE Nothing active, and we call next section (F6)
 
@@ -265,7 +265,7 @@ TEST_F(NavigationControllerTests, FirstActiveOnNextSection)
     delete sect2;
 }
 
-TEST_F(NavigationControllerTests, FirstActiveOnNextSectionOnFocusedWindow)
+TEST_F(Ui_NavigationControllerTests, FirstActiveOnNextSectionOnFocusedWindow)
 {
     //! CASE Nothing active, and we call next section (F6)
 
@@ -297,7 +297,40 @@ TEST_F(NavigationControllerTests, FirstActiveOnNextSectionOnFocusedWindow)
     delete sect2;
 }
 
-TEST_F(NavigationControllerTests, FirstActiveOnNextSectionNonMainWindow)
+TEST_F(Ui_NavigationControllerTests, FirstActiveOnNextSectionExclusive)
+{
+    //! CASE Nothing active, and we call next section (F6)
+
+    //! [GIVEN] Two section, not active
+    Section* sect1 = make_section(1, 2, 3);
+    Section* sect2 = make_section(2, 2, 3);
+
+    m_controller->reg(sect1->section);
+    m_controller->reg(sect2->section);
+
+    //! [GIVEN] Section 2 is exclusive, not on focus window
+    //!         we have this behavior for menus and dropdowns
+    sect2->section->setType(NavigationSection::Exclusive);
+
+    QQuickWindow* newFocusWindow = new QQuickWindow();
+    ON_CALL(*m_applicationMock, focusWindow()).WillByDefault(Return(newFocusWindow));
+
+    //! [WHEN] Send action `nav-next-section` (usually F6)
+    m_dispatcher->dispatch("nav-next-section");
+
+    //! [THEN] The second section, the first panel, the first control must be activated
+    EXPECT_TRUE(sect2->section->active());
+    EXPECT_TRUE(sect2->panels[0]->panel->active());
+    EXPECT_TRUE(sect2->panels[0]->controls[0]->control->active());
+
+    //! [THEN] The second section must not be activated
+    EXPECT_FALSE(sect1->section->active());
+
+    delete sect1;
+    delete sect2;
+}
+
+TEST_F(Ui_NavigationControllerTests, FirstActiveOnNextSectionNonMainWindow)
 {
     //! CASE Nothing active, and we call next section (F6)
 
@@ -323,7 +356,7 @@ TEST_F(NavigationControllerTests, FirstActiveOnNextSectionNonMainWindow)
     delete sect2;
 }
 
-TEST_F(NavigationControllerTests, FirstActiveOnNextPanel)
+TEST_F(Ui_NavigationControllerTests, FirstActiveOnNextPanel)
 {
     //! CASE Nothing active, and we call next panel (Tab)
 
@@ -349,7 +382,7 @@ TEST_F(NavigationControllerTests, FirstActiveOnNextPanel)
     delete sect2;
 }
 
-TEST_F(NavigationControllerTests, FirstActiveOnPrevSection)
+TEST_F(Ui_NavigationControllerTests, FirstActiveOnPrevSection)
 {
     //! CASE Nothing active, and we call prev section (Shift+F6)
 
@@ -375,7 +408,7 @@ TEST_F(NavigationControllerTests, FirstActiveOnPrevSection)
     delete sect2;
 }
 
-TEST_F(NavigationControllerTests, FirstActiveOnPrevPanel)
+TEST_F(Ui_NavigationControllerTests, FirstActiveOnPrevPanel)
 {
     //! CASE Nothing active, and we call prev panel (Shift+Tab)
 
@@ -401,7 +434,7 @@ TEST_F(NavigationControllerTests, FirstActiveOnPrevPanel)
     delete sect2;
 }
 
-TEST_F(NavigationControllerTests, UserPressedSomeKeyHasActiveKey)
+TEST_F(Ui_NavigationControllerTests, UserPressedSomeKeyHasActiveKey)
 {
     //! [GIVEN] Two section, not active
     Section* sect1 = make_section(1, 2, 3);
@@ -427,7 +460,7 @@ TEST_F(NavigationControllerTests, UserPressedSomeKeyHasActiveKey)
     delete sect2;
 }
 
-TEST_F(NavigationControllerTests, UserClickedOnControlOnMainWindow)
+TEST_F(Ui_NavigationControllerTests, UserClickedOnControlOnMainWindow)
 {
     //! [GIVEN] Two section, not active
     Section* sect1 = make_section(1, 2, 3);
@@ -450,7 +483,7 @@ TEST_F(NavigationControllerTests, UserClickedOnControlOnMainWindow)
     delete sect2;
 }
 
-TEST_F(NavigationControllerTests, UserClickedOnControlOnNonMainWindow)
+TEST_F(Ui_NavigationControllerTests, UserClickedOnControlOnNonMainWindow)
 {
     //! [GIVEN] Two section, not active
     Section* sect1 = make_section(1, 2, 3);
@@ -474,7 +507,7 @@ TEST_F(NavigationControllerTests, UserClickedOnControlOnNonMainWindow)
     delete sect2;
 }
 
-TEST_F(NavigationControllerTests, UserClickedNotOnControl)
+TEST_F(Ui_NavigationControllerTests, UserClickedNotOnControl)
 {
     //! [GIVEN] Two section, not active
     Section* sect1 = make_section(1, 2, 3);
@@ -498,7 +531,7 @@ TEST_F(NavigationControllerTests, UserClickedNotOnControl)
     delete sect2;
 }
 
-TEST_F(NavigationControllerTests, UserClickedNotOnControlHasDefaultControl)
+TEST_F(Ui_NavigationControllerTests, UserClickedNotOnControlHasDefaultControl)
 {
     //! [GIVEN] Two section, not active
     Section* sect1 = make_section(1, 2, 3);
@@ -526,7 +559,7 @@ TEST_F(NavigationControllerTests, UserClickedNotOnControlHasDefaultControl)
     delete sect2;
 }
 
-TEST_F(NavigationControllerTests, UserClickedNotOnControlHasDefaultControlWithNotEnabledSection)
+TEST_F(Ui_NavigationControllerTests, UserClickedNotOnControlHasDefaultControlWithNotEnabledSection)
 {
     //! [GIVEN] Two section, not active
     Section* sect1 = make_section(1, 2, 3);

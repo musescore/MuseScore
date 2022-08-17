@@ -153,7 +153,7 @@ testVoicePiano1.xml      score with both a voice and a piano part
 testVolta1.xml           simple (one-measure) volta's
 testWedge1.xml           crescendo and diminuendo wedges
 testWords1.xml           the "words" direction
-test98.xml               9/8 time signature with dottet rests
+test98.xml               9/8 time signature with dotted rests
 
 -------------------------------------------------
       MuseData

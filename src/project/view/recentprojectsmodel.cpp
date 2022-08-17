@@ -24,16 +24,19 @@
 #include "translation.h"
 #include "actions/actiontypes.h"
 #include "dataformatter.h"
+#include "io/fileinfo.h"
+
+#include "engraving/infrastructure/mscio.h"
 
 #include "log.h"
 
 using namespace mu::project;
 using namespace mu::actions;
-using namespace mu::notation;
 
 namespace {
 const QString SCORE_NAME_KEY("name");
 const QString SCORE_PATH_KEY("path");
+const QString SCORE_SUFFIX_KEY("suffix");
 const QString SCORE_THUMBNAIL_KEY("thumbnail");
 const QString SCORE_TIME_SINCE_MODIFIED_KEY("timeSinceModified");
 const QString SCORE_ADD_NEW_KEY("isAddNew");
@@ -92,7 +95,7 @@ void RecentProjectsModel::openScore()
 
 void RecentProjectsModel::openRecentScore(const QString& scorePath)
 {
-    dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(io::path(scorePath)));
+    dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path_t>(io::path_t(scorePath)));
 }
 
 void RecentProjectsModel::setRecentScores(const QVariantList& recentScores)
@@ -110,23 +113,29 @@ void RecentProjectsModel::updateRecentScores(const ProjectMetaList& recentProjec
 {
     QVariantList recentScores;
 
+    QVariantMap addItem;
+    addItem[SCORE_NAME_KEY] = qtrc("project", "New score");
+    addItem[SCORE_ADD_NEW_KEY] = true;
+    recentScores << addItem;
+
     for (const ProjectMeta& meta : recentProjectsList) {
         QVariantMap obj;
 
-        obj[SCORE_NAME_KEY] = meta.fileName(false).toQString();
+        std::string suffix = io::suffix(meta.filePath);
+        bool isSuffixInteresting = suffix != engraving::MSCZ;
+        obj[SCORE_NAME_KEY] = meta.fileName(isSuffixInteresting).toQString();
         obj[SCORE_PATH_KEY] = meta.filePath.toQString();
-        obj[SCORE_THUMBNAIL_KEY] = meta.thumbnail;
-        obj[SCORE_TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(QFileInfo(meta.filePath.toQString()).lastModified().date());
+        obj[SCORE_SUFFIX_KEY] = QString::fromStdString(suffix);
+
+        if (!meta.thumbnail.isNull()) {
+            obj[SCORE_THUMBNAIL_KEY] = !meta.thumbnail.isNull() ? meta.thumbnail : QVariant();
+        }
+
+        obj[SCORE_TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(io::FileInfo(meta.filePath).lastModified().date()).toQString();
         obj[SCORE_ADD_NEW_KEY] = false;
 
         recentScores << obj;
     }
-
-    QVariantMap obj;
-    obj[SCORE_NAME_KEY] = qtrc("project", "New score");
-    obj[SCORE_ADD_NEW_KEY] = true;
-
-    recentScores.prepend(QVariant::fromValue(obj));
 
     setRecentScores(recentScores);
 }

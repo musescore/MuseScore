@@ -36,9 +36,9 @@ class IWorkspaceConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IWorkspaceConfiguration() = default;
 
-    virtual io::paths workspacePaths() const = 0;
+    virtual io::paths_t workspacePaths() const = 0;
 
-    virtual io::path userWorkspacesPath() const = 0;
+    virtual io::path_t userWorkspacesPath() const = 0;
 
     virtual std::string currentWorkspaceName() const = 0;
     virtual void setCurrentWorkspaceName(const std::string& workspaceName) = 0;

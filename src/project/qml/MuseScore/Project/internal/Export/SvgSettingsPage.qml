@@ -26,7 +26,7 @@ import MuseScore.UiComponents 1.0
 ExportSettingsPage {
     StyledTextLabel {
         width: parent.width
-        text: qsTrc("project", "Each page of the selected parts will be exported as a separate SVG file.")
+        text: qsTrc("project/export", "Each page of the selected parts will be exported as a separate %1 file.").arg("SVG")
         horizontalAlignment: Text.AlignLeft
         wrapMode: Text.WordWrap
     }

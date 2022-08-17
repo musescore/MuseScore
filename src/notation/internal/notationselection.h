@@ -26,7 +26,7 @@
 
 #include "igetscore.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 }
 
@@ -40,7 +40,7 @@ public:
     bool isRange() const override;
     SelectionState state() const override;
 
-    bool canCopy() const override;
+    Ret canCopy() const override;
     QMimeData* mimeData() const override;
 
     EngravingItem* element() const override;
@@ -57,7 +57,7 @@ public:
     void onElementHit(EngravingItem*);
 
 private:
-    Ms::Score* score() const;
+    mu::engraving::Score* score() const;
     EngravingItem* m_lastElementHit;
 
     IGetScore* m_getScore = nullptr;

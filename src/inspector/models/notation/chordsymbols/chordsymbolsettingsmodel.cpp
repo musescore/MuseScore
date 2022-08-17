@@ -36,14 +36,14 @@ ChordSymbolSettingsModel::ChordSymbolSettingsModel(QObject* parent, IElementRepo
 
 void ChordSymbolSettingsModel::createProperties()
 {
-    m_isLiteral = buildPropertyItem(Ms::Pid::HARMONY_VOICE_LITERAL);
-    m_voicingType = buildPropertyItem(Ms::Pid::HARMONY_VOICING);
-    m_durationType = buildPropertyItem(Ms::Pid::HARMONY_DURATION);
+    m_isLiteral = buildPropertyItem(mu::engraving::Pid::HARMONY_VOICE_LITERAL);
+    m_voicingType = buildPropertyItem(mu::engraving::Pid::HARMONY_VOICING);
+    m_durationType = buildPropertyItem(mu::engraving::Pid::HARMONY_DURATION);
 }
 
 void ChordSymbolSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::HARMONY);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::HARMONY);
 }
 
 void ChordSymbolSettingsModel::loadProperties()

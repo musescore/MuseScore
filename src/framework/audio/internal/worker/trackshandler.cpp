@@ -74,7 +74,7 @@ Promise<TrackName> TracksHandler::trackName(const TrackSequenceId sequenceId, co
 }
 
 Promise<TrackId, AudioParams> TracksHandler::addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
-                                                      io::Device* playbackData,
+                                                      QIODevice* playbackData,
                                                       AudioParams&& params)
 {
     return Promise<TrackId, AudioParams>([this, sequenceId, trackName, playbackData, params](auto resolve, auto reject) {

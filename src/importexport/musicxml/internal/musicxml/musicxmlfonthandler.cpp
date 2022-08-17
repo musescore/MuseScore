@@ -27,7 +27,7 @@
 #include "engraving/rw/xml.h"
 #include "musicxmlfonthandler.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   MScoreTextToMXML
 //---------------------------------------------------------
@@ -65,7 +65,7 @@ QString MScoreTextToMXML::toPlainText(const QString& text)
             }
         }
     }
-    //qDebug("MScoreTextToMXML::toPlainText('%s') res '%s'", qPrintable(text), qPrintable(res));
+    //LOGD("MScoreTextToMXML::toPlainText('%s') res '%s'", qPrintable(text), qPrintable(res));
     return res;
 }
 
@@ -119,8 +119,8 @@ static int plainTextPlusSymbolsListSize(const std::list<TextFragment>& list)
 bool MScoreTextToMXML::split(const std::list<TextFragment>& in, const int pos, const int len,
                              std::list<TextFragment>& left, std::list<TextFragment>& mid, std::list<TextFragment>& right)
 {
-    //qDebug("MScoreTextToMXML::split in size %d pos %d len %d", plainTextPlusSymbolsListSize(in), pos, len);
-    //qDebug("-> in");
+    //LOGD("MScoreTextToMXML::split in size %d pos %d len %d", plainTextPlusSymbolsListSize(in), pos, len);
+    //LOGD("-> in");
     //dumpText(in);
 
     if (pos < 0 || len < 0) {
@@ -176,11 +176,11 @@ bool MScoreTextToMXML::split(const std::list<TextFragment>& in, const int pos, c
     }
 
     /*
-    qDebug("-> left");
+    LOGD("-> left");
     dumpText(left);
-    qDebug("-> mid");
+    LOGD("-> mid");
     dumpText(mid);
-    qDebug("-> right");
+    LOGD("-> right");
     dumpText(right);
      */
 
@@ -193,13 +193,13 @@ bool MScoreTextToMXML::split(const std::list<TextFragment>& in, const int pos, c
 
 void MScoreTextToMXML::writeTextFragments(const std::list<TextFragment>& fr, XmlWriter& xml)
 {
-    //qDebug("MScoreTextToMXML::writeTextFragments defFmt %s", qPrintable(charFormat2QString(oldFormat)));
+    //LOGD("MScoreTextToMXML::writeTextFragments defFmt %s", qPrintable(charFormat2QString(oldFormat)));
     //dumpText(fr);
     bool firstTime = true;   // write additional attributes only the first time characters are written
     for (const TextFragment& f : fr) {
         newFormat = f.format;
         QString formatAttr = updateFormat();
-        xml.tag(tagname + (firstTime ? attribs : "") + formatAttr, f.text);
+        xml.tagRaw(tagname + (firstTime ? attribs : "") + formatAttr, f.text);
         firstTime = false;
     }
 }
@@ -241,7 +241,7 @@ QString MScoreTextToMXML::updateFormat()
     res += attribute(newFormat.fontFamily() != oldFormat.fontFamily(), true, QString("font-family=\"%1\"").arg(newFormat.fontFamily()), "");
     bool needSize = newFormat.fontSize() < 0.99 * oldFormat.fontSize() || newFormat.fontSize() > 1.01 * oldFormat.fontSize();
     res += attribute(needSize, true, QString("font-size=\"%1\"").arg(newFormat.fontSize()), "");
-    //qDebug("updateFormat() res '%s'", qPrintable(res));
+    //LOGD("updateFormat() res '%s'", qPrintable(res));
     oldFormat = newFormat;
     return res;
 }

@@ -61,21 +61,22 @@ ArticulationType PlaybackContext::persistentArticulationType(const int nominalPo
     return mpe::ArticulationType::Standard;
 }
 
-void PlaybackContext::update(const ID partId, const Ms::Score* score)
+void PlaybackContext::update(const ID partId, const Score* score)
 {
-    for (const Ms::RepeatSegment* repeatSegment : score->repeatList()) {
+    for (const RepeatSegment* repeatSegment : score->repeatList()) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
 
-        for (const Ms::Measure* measure : repeatSegment->measureList()) {
-            for (Ms::Segment* segment = measure->first(); segment; segment = segment->next()) {
+        for (const Measure* measure : repeatSegment->measureList()) {
+            for (Segment* segment = measure->first(); segment; segment = segment->next()) {
                 int segmentStartTick = segment->tick().ticks() + tickPositionOffset;
 
                 handleAnnotations(partId, segment, segmentStartTick);
             }
         }
-    }
 
-    handleSpanners(partId, score);
+        handleSpanners(partId, score, repeatSegment->tick,
+                       repeatSegment->tick + repeatSegment->len(), tickPositionOffset);
+    }
 }
 
 void PlaybackContext::clear()
@@ -84,7 +85,7 @@ void PlaybackContext::clear()
     m_playTechniquesMap.clear();
 }
 
-DynamicLevelMap PlaybackContext::dynamicLevelMap(const Ms::Score* score) const
+DynamicLevelMap PlaybackContext::dynamicLevelMap(const Score* score) const
 {
     DynamicLevelMap result;
 
@@ -110,9 +111,9 @@ dynamic_level_t PlaybackContext::nominalDynamicLevel(const int positionTick) con
     return search->second;
 }
 
-void PlaybackContext::updateDynamicMap(const Ms::Dynamic* dynamic, const Ms::Segment* segment, const int segmentPositionTick)
+void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* segment, const int segmentPositionTick)
 {
-    const Ms::DynamicType type = dynamic->dynamicType();
+    const DynamicType type = dynamic->dynamicType();
     if (isOrdinaryDynamicType(type)) {
         m_dynamicsMap[segmentPositionTick] = dynamicLevelFromType(type);
         return;
@@ -136,18 +137,18 @@ void PlaybackContext::updateDynamicMap(const Ms::Dynamic* dynamic, const Ms::Seg
     applyDynamicToNextSegment(segment, dynamicLevelFromType(transition.to));
 }
 
-void PlaybackContext::updatePlayTechMap(const Ms::PlayTechAnnotation* annotation, const int segmentPositionTick)
+void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick)
 {
-    const Ms::PlayingTechniqueType type = annotation->techniqueType();
+    const PlayingTechniqueType type = annotation->techniqueType();
 
-    if (type == Ms::PlayingTechniqueType::Undefined) {
+    if (type == PlayingTechniqueType::Undefined) {
         return;
     }
 
     m_playTechniquesMap[segmentPositionTick] = articulationFromPlayTechType(type);
 }
 
-void PlaybackContext::applyDynamicToNextSegment(const Ms::Segment* currentSegment, const mpe::dynamic_level_t dynamicLevel)
+void PlaybackContext::applyDynamicToNextSegment(const Segment* currentSegment, const mpe::dynamic_level_t dynamicLevel)
 {
     if (!currentSegment->next()) {
         return;
@@ -157,10 +158,17 @@ void PlaybackContext::applyDynamicToNextSegment(const Ms::Segment* currentSegmen
     m_dynamicsMap[nextSegmentPositionTick] = dynamicLevel;
 }
 
-void PlaybackContext::handleSpanners(const ID partId, const Ms::Score* score)
+void PlaybackContext::handleSpanners(const ID partId, const Score* score, const int segmentStartTick, const int segmentEndTick,
+                                     const int tickPositionOffset)
 {
-    for (const auto& pair : score->spanner()) {
-        const Ms::Spanner* spanner = pair.second;
+    const SpannerMap& spannerMap = score->spannerMap();
+    if (spannerMap.empty()) {
+        return;
+    }
+
+    auto intervals = spannerMap.findOverlapping(segmentStartTick, segmentEndTick);
+    for (const auto& interval : intervals) {
+        const Spanner* spanner = interval.value;
 
         if (!spanner->isHairpin()) {
             continue;
@@ -170,7 +178,7 @@ void PlaybackContext::handleSpanners(const ID partId, const Ms::Score* score)
             continue;
         }
 
-        int spannerFrom = score->repeatList().tick2utick(spanner->tick().ticks());
+        int spannerFrom = spanner->tick().ticks();
         int spannerTo = spannerFrom + std::abs(spanner->ticks().ticks());
 
         int spannerDurationTicks = spannerTo - spannerFrom;
@@ -179,13 +187,13 @@ void PlaybackContext::handleSpanners(const ID partId, const Ms::Score* score)
             continue;
         }
 
-        const Ms::Hairpin* hairpin = Ms::toHairpin(spanner);
+        const Hairpin* hairpin = toHairpin(spanner);
 
-        Ms::DynamicType dynamicTypeFrom = hairpin->dynamicTypeFrom();
-        Ms::DynamicType dynamicTypeTo = hairpin->dynamicTypeTo();
+        DynamicType dynamicTypeFrom = hairpin->dynamicTypeFrom();
+        DynamicType dynamicTypeTo = hairpin->dynamicTypeTo();
 
-        dynamic_level_t nominalLevelFrom = dynamicLevelFromType(dynamicTypeFrom, appliableDynamicLevel(spannerFrom));
-        dynamic_level_t nominalLevelTo = dynamicLevelFromType(dynamicTypeTo, nominalDynamicLevel(spannerTo));
+        dynamic_level_t nominalLevelFrom = dynamicLevelFromType(dynamicTypeFrom, appliableDynamicLevel(spannerFrom + tickPositionOffset));
+        dynamic_level_t nominalLevelTo = dynamicLevelFromType(dynamicTypeTo, nominalDynamicLevel(spannerTo + tickPositionOffset));
 
         dynamic_level_t overallDynamicRange = dynamicLevelRangeByTypes(dynamicTypeFrom,
                                                                        dynamicTypeTo,
@@ -199,14 +207,14 @@ void PlaybackContext::handleSpanners(const ID partId, const Ms::Score* score)
                                                                    hairpin->veloChangeMethod());
 
         for (const auto& pair : dynamicsCurve) {
-            m_dynamicsMap.insert_or_assign(spannerFrom + pair.first, nominalLevelFrom + pair.second);
+            m_dynamicsMap.insert_or_assign(spannerFrom + pair.first + tickPositionOffset, nominalLevelFrom + pair.second);
         }
     }
 }
 
-void PlaybackContext::handleAnnotations(const ID partId, const Ms::Segment* segment, const int segmentPositionTick)
+void PlaybackContext::handleAnnotations(const ID partId, const Segment* segment, const int segmentPositionTick)
 {
-    for (const Ms::EngravingItem* annotation : segment->annotations()) {
+    for (const EngravingItem* annotation : segment->annotations()) {
         if (!annotation || !annotation->part()) {
             continue;
         }
@@ -216,14 +224,18 @@ void PlaybackContext::handleAnnotations(const ID partId, const Ms::Segment* segm
         }
 
         if (annotation->isDynamic()) {
-            updateDynamicMap(Ms::toDynamic(annotation), segment, segmentPositionTick);
+            updateDynamicMap(toDynamic(annotation), segment, segmentPositionTick);
             return;
         }
 
         if (annotation->isPlayTechAnnotation()) {
-            updatePlayTechMap(Ms::toPlayTechAnnotation(annotation), segmentPositionTick);
+            updatePlayTechMap(toPlayTechAnnotation(annotation), segmentPositionTick);
             return;
         }
+    }
+
+    if (m_dynamicsMap.empty()) {
+        m_dynamicsMap.emplace(0, mpe::dynamicLevelFromType(mpe::DynamicType::Natural));
     }
 }
 

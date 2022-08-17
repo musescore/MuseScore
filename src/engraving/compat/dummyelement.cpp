@@ -30,13 +30,15 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
+#endif
 
 using namespace mu::engraving;
 using namespace mu::engraving::compat;
 
 DummyElement::DummyElement(EngravingObject* parent)
-    : Ms::EngravingItem(Ms::ElementType::DUMMY, parent)
+    : EngravingItem(ElementType::DUMMY, parent)
 {
 }
 
@@ -53,10 +55,16 @@ DummyElement::~DummyElement()
 
 void DummyElement::init()
 {
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     setupAccessible();
+#endif
+
     m_root = new RootItem(score());
     m_root->setParent(explicitParent());
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     m_root->setupAccessible();
+#endif
 
     m_page = Factory::createPage(m_root);
     m_page->setParent(explicitParent());
@@ -82,37 +90,45 @@ RootItem* DummyElement::rootItem()
     return m_root;
 }
 
-Ms::Page* DummyElement::page()
+Page* DummyElement::page()
 {
     return m_page;
 }
 
-Ms::System* DummyElement::system()
+System* DummyElement::system()
 {
     return m_system;
 }
 
-Ms::Measure* DummyElement::measure()
+Measure* DummyElement::measure()
 {
     return m_measure;
 }
 
-Ms::Segment* DummyElement::segment()
+Segment* DummyElement::segment()
 {
     return m_segment;
 }
 
-Ms::Chord* DummyElement::chord()
+Chord* DummyElement::chord()
 {
     return m_chord;
 }
 
-Ms::Note* DummyElement::note()
+Note* DummyElement::note()
 {
     return m_note;
 }
 
-Ms::EngravingItem* DummyElement::clone() const
+EngravingItem* DummyElement::clone() const
 {
     return nullptr;
 }
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+AccessibleItemPtr DummyElement::createAccessible()
+{
+    return std::make_shared<AccessibleItem>(this, accessibility::IAccessible::Panel);
+}
+
+#endif

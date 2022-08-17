@@ -38,7 +38,7 @@ BendSettingsModel::BendSettingsModel(QObject* parent, IElementRepositoryService*
 
 void BendSettingsModel::createProperties()
 {
-    m_bendType = buildPropertyItem(Ms::Pid::BEND_TYPE, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_bendType = buildPropertyItem(mu::engraving::Pid::BEND_TYPE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
         if (newValue.toInt() != static_cast<int>(BendTypes::BendType::TYPE_CUSTOM)) {
@@ -46,18 +46,18 @@ void BendSettingsModel::createProperties()
         }
     });
 
-    m_bendCurve = buildPropertyItem(Ms::Pid::BEND_CURVE, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_bendCurve = buildPropertyItem(mu::engraving::Pid::BEND_CURVE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
 
-    m_lineThickness = buildPropertyItem(Ms::Pid::LINE_WIDTH);
+    m_lineThickness = buildPropertyItem(mu::engraving::Pid::LINE_WIDTH);
 }
 
 void BendSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::BEND);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::BEND);
 
     emit areSettingsAvailableChanged(areSettingsAvailable());
 }

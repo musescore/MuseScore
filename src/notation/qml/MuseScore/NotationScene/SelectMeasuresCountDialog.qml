@@ -71,7 +71,7 @@ StyledDialogView {
                 navigation.name: "MeasuresCountInputField"
                 navigation.panel: measuresCountNavigationPanel
                 navigation.order: 0
-                navigation.accessible: hintLabel.text + " " + currentValue
+                navigation.accessible.name: hintLabel.text + " " + currentValue
 
                 currentValue: root.measuresCount
                 step: 1

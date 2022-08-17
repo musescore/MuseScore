@@ -24,7 +24,7 @@
 using namespace mu::inspector;
 
 PalmMuteSettingsModel::PalmMuteSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : TextLineSettingsModel(parent, repository, Ms::ElementType::PALM_MUTE)
+    : TextLineSettingsModel(parent, repository, mu::engraving::ElementType::PALM_MUTE)
 {
     setModelType(InspectorModelType::TYPE_PALM_MUTE);
     setTitle(qtrc("inspector", "Palm mute"));

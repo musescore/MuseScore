@@ -26,35 +26,35 @@
 
 using namespace mu::engraving;
 
-void GraceNotesMetaParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
+void GraceNotesMetaParser::doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    IF_ASSERT_FAILED(item->type() == Ms::ElementType::CHORD) {
+    IF_ASSERT_FAILED(item->type() == ElementType::CHORD) {
         return;
     }
 
     mpe::ArticulationType type = mpe::ArticulationType::Undefined;
 
-    const Ms::Chord* graceChord = Ms::toChord(item);
+    const Chord* graceChord = toChord(item);
 
     if (!graceChord->isChordPlayable()) {
         return;
     }
 
     switch (graceChord->noteType()) {
-    case Ms::NoteType::ACCIACCATURA:
+    case NoteType::ACCIACCATURA:
         type = mpe::ArticulationType::Acciaccatura;
         break;
 
-    case Ms::NoteType::APPOGGIATURA:
-    case Ms::NoteType::GRACE4:
-    case Ms::NoteType::GRACE16:
-    case Ms::NoteType::GRACE32:
+    case NoteType::APPOGGIATURA:
+    case NoteType::GRACE4:
+    case NoteType::GRACE16:
+    case NoteType::GRACE32:
         type = mpe::ArticulationType::PreAppoggiatura;
         break;
 
-    case Ms::NoteType::GRACE8_AFTER:
-    case Ms::NoteType::GRACE16_AFTER:
-    case Ms::NoteType::GRACE32_AFTER:
+    case NoteType::GRACE8_AFTER:
+    case NoteType::GRACE16_AFTER:
+    case NoteType::GRACE32_AFTER:
         type = mpe::ArticulationType::PostAppoggiatura;
         break;
     default:

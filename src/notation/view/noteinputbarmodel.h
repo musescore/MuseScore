@@ -38,6 +38,8 @@ class NoteInputBarModel : public uicomponents::AbstractMenuModel
     INJECT(notation, playback::IPlaybackController, playbackController)
     INJECT(notation, ui::IUiConfiguration, uiConfiguration)
 
+    Q_PROPERTY(bool isInputAllowed READ isInputAllowed NOTIFY isInputAllowedChanged)
+
 public:
     explicit NoteInputBarModel(QObject* parent = nullptr);
 
@@ -45,6 +47,11 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load() override;
+
+    bool isInputAllowed() const;
+
+signals:
+    void isInputAllowedChanged();
 
 private:
     enum NoteInputRoles {
@@ -58,7 +65,6 @@ private:
     void onNotationChanged();
 
     void updateItemStateChecked(uicomponents::MenuItem* item, bool checked);
-    void updateItemStateEnabled(uicomponents::MenuItem* item, bool enabled);
 
     void updateState();
     void updateNoteInputState();
@@ -71,7 +77,6 @@ private:
     void updateVoicesState();
     void updateArticulationsState();
     void updateRestState();
-    void updateTupletState();
     void updateAddState();
 
     bool isNoteInputModeAction(const actions::ActionCode& actionCode) const;
@@ -107,7 +112,6 @@ private:
     std::set<SymbolId> resolveCurrentArticulations() const;
     bool resolveRestSelected() const;
     DurationType resolveCurrentDurationType() const;
-    bool resolveTupletEnabled() const;
 
     bool isNoteInputMode() const;
     NoteInputState noteInputState() const;

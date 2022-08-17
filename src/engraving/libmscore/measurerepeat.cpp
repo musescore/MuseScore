@@ -21,7 +21,9 @@
  */
 
 #include "measurerepeat.h"
-#include "draw/pen.h"
+
+#include "translation.h"
+#include "draw/types/pen.h"
 #include "rw/xml.h"
 #include "barline.h"
 #include "measure.h"
@@ -33,7 +35,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 static const ElementStyle measureRepeatStyle {
     { Sid::measureRepeatNumberPos, Pid::MEASURE_REPEAT_NUMBER_POS },
 };
@@ -60,6 +62,7 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
+
     painter->setPen(curColor());
     drawSymbol(symId(), painter);
 
@@ -72,17 +75,17 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
         if (score()->styleB(Sid::fourMeasureRepeatShowExtenders) && numMeasures() == 4) {
             // TODO: add style settings specific to measure repeats
             // for now, using thickness and margin same as mmrests
-            qreal hBarThickness = score()->styleMM(Sid::mmRestHBarThickness);
+            double hBarThickness = score()->styleMM(Sid::mmRestHBarThickness);
             if (hBarThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
                 Pen pen(painter->pen());
                 pen.setCapStyle(PenCapStyle::FlatCap);
                 pen.setWidthF(hBarThickness);
                 painter->setPen(pen);
 
-                qreal twoMeasuresWidth = 2 * measure()->width();
-                qreal margin = score()->styleMM(Sid::multiMeasureRestMargin);
-                qreal xOffset = symBbox(symId()).width() * .5;
-                qreal gapDistance = (symBbox(symId()).width() + spatium()) * .5;
+                double twoMeasuresWidth = 2 * measure()->width();
+                double margin = score()->styleMM(Sid::multiMeasureRestMargin);
+                double xOffset = symBbox(symId()).width() * .5;
+                double gapDistance = (symBbox(symId()).width() + spatium()) * .5;
                 painter->drawLine(LineF(-twoMeasuresWidth + xOffset + margin, 0.0, xOffset - gapDistance, 0.0));
                 painter->drawLine(LineF(xOffset + gapDistance, 0.0, twoMeasuresWidth + xOffset - margin, 0.0));
             }
@@ -114,7 +117,7 @@ void MeasureRepeat::layout()
             }
             if (placeInSeries % score()->styleI(Sid::mrNumberEveryXMeasures) == 0) {
                 if (score()->styleB(Sid::mrNumberSeriesWithParentheses)) {
-                    m_numberSym = timeSigSymIdsFromString(QString("(%1)").arg(placeInSeries));
+                    m_numberSym = timeSigSymIdsFromString(String(u"(%1)").arg(placeInSeries));
                 } else {
                     setNumberSym(placeInSeries);
                 }
@@ -147,7 +150,7 @@ void MeasureRepeat::layout()
     if (track() != mu::nidx) { // if this is in score rather than a palette cell
         // For unknown reasons, the symbol has some offset in almost all SMuFL fonts
         // We compensate for it, to make sure the symbol is visually centered around the staff line
-        qreal offset = (-bbox.top() - bbox.bottom()) / 2.0;
+        double offset = (-bbox.top() - bbox.bottom()) / 2.0;
 
         const StaffType* staffType = this->staffType();
 
@@ -169,11 +172,11 @@ void MeasureRepeat::layout()
 
 PointF MeasureRepeat::numberPosition(const mu::RectF& numberBbox) const
 {
-    qreal x = (symBbox(symId()).width() - numberBbox.width()) * .5;
+    double x = (symBbox(symId()).width() - numberBbox.width()) * .5;
     // -pos().y(): relative to topmost staff line
     // - 0.5 * r.height(): relative to the baseline of the number symbol
     // (rather than the center)
-    qreal y = -pos().y() + m_numberPos * spatium() - 0.5 * numberBbox.height();
+    double y = -pos().y() + m_numberPos * spatium() - 0.5 * numberBbox.height();
 
     return PointF(x, y);
 }
@@ -203,11 +206,11 @@ Shape MeasureRepeat::shape() const
 
 void MeasureRepeat::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     writeProperty(xml, Pid::SUBTYPE);
     Rest::writeProperties(xml);
     el().write(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -217,7 +220,7 @@ void MeasureRepeat::write(XmlWriter& xml) const
 void MeasureRepeat::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "subtype") {
             setNumMeasures(e.readInt());
         } else if (!Rest::readProperties(e)) {
@@ -292,9 +295,9 @@ Fraction MeasureRepeat::ticks() const
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString MeasureRepeat::accessibleInfo() const
+String MeasureRepeat::accessibleInfo() const
 {
-    return QObject::tr("%1; Duration: %2 measure(s)").arg(EngravingItem::accessibleInfo()).arg(numMeasures());
+    return mtrc("engraving", "%1; Duration: %n measure(s)", nullptr, numMeasures()).arg(EngravingItem::accessibleInfo());
 }
 
 //---------------------------------------------------------

@@ -1,36 +1,37 @@
-#=============================================================================
-#  MuseScore
-#  Music Composition & Notation
+# SPDX-License-Identifier: GPL-3.0-only
+# MuseScore-CLA-applies
 #
-#  Copyright (C) 2020 MuseScore BVBA and others
+# MuseScore
+# Music Composition & Notation
 #
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License version 2.
+# Copyright (C) 2022 MuseScore BVBA and others
 #
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 3 as
+# published by the Free Software Foundation.
 #
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-#=============================================================================
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ## Setup
-# set(MODULE somename)          - set module (target) name
-# set(MODULE_INCLUDE ...)       - set include (by default see below include_directories)
-# set(MODULE_DEF ...)           - set definitions
-# set(MODULE_SRC ...)           - set sources and headers files
-# set(MODULE_LINK ...)          - set libraries for link
-# set(MODULE_NOT_LINK_GLOBAL ON) - set for not link global lib
-# set(MODULE_QRC somename.qrc)  - set resource (qrc) file
-# set(MODULE_BIG_QRC somename.qrc) - set big resource (qrc) file
-# set(MODULE_UI ...)            - set ui headers
-# set(MODULE_QML_IMPORT ...)    - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
-# set(MODULE_USE_PCH_NONE ON)   - set for disable PCH for module
-# set(MODULE_USE_UNITY_NONE ON) - set for disable UNITY BUILD for module
-# set(MODULE_OVERRIDEN_PCH ...) - set additional precompiled headers required for module
+# set(MODULE somename)                        - set module (target) name
+# set(MODULE_INCLUDE ...)                     - set include (by default see below include_directories)
+# set(MODULE_DEF ...)                         - set definitions
+# set(MODULE_SRC ...)                         - set sources and headers files
+# set(MODULE_LINK ...)                        - set libraries for link
+# set(MODULE_NOT_LINK_GLOBAL ON)              - set for not link global lib
+# set(MODULE_QRC somename.qrc)                - set resource (qrc) file
+# set(MODULE_BIG_QRC somename.qrc)            - set big resource (qrc) file
+# set(MODULE_UI ...)                          - set ui headers
+# set(MODULE_QML_IMPORT ...)                  - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
+# set(MODULE_USE_PCH_NONE ON)                 - set for disable PCH for module
+# set(MODULE_USE_UNITY_NONE ON)               - set for disable UNITY BUILD for module
+# set(MODULE_OVERRIDDEN_PCH ...)              - set additional precompiled headers required for module
 # set(PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR}) - set root dir for module
 
 # After all the settings you need to do:
@@ -42,11 +43,11 @@ if (NOT PROJECT_ROOT_DIR)
     set(PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
 endif()
 
-if (MODULE_QRC)
+if (MODULE_QRC AND NOT NO_QT_SUPPORT)
     qt5_add_resources(RCC_SOURCES ${MODULE_QRC})
 endif()
 
-if (MODULE_BIG_QRC)
+if (MODULE_BIG_QRC AND NOT NO_QT_SUPPORT)
     qt5_add_big_resources(RCC_BIG_SOURCES ${MODULE_BIG_QRC})
 endif()
 
@@ -78,11 +79,11 @@ if (BUILD_PCH)
         # disabled pch for current module
     else()
         if (NOT ${MODULE} MATCHES global)
-            if (NOT DEFINED MODULE_OVERRIDEN_PCH)
+            if (NOT DEFINED MODULE_OVERRIDDEN_PCH)
                 target_precompile_headers(${MODULE} REUSE_FROM global)
                 target_compile_definitions(${MODULE} PRIVATE global_EXPORTS=1)
             else()
-                target_precompile_headers(${MODULE} PRIVATE ${MODULE_OVERRIDEN_PCH})
+                target_precompile_headers(${MODULE} PRIVATE ${MODULE_OVERRIDDEN_PCH})
             endif()
             if (MODULE_NOT_LINK_GLOBAL)
                 set(MODULE_NOT_LINK_GLOBAL OFF)

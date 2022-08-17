@@ -24,7 +24,9 @@
 
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
-#include "engraving/infrastructure/draw/geometry.h"
+#include "draw/types/geometry.h"
+
+#include "notation/inotation.h"
 
 class QColor;
 
@@ -38,17 +40,22 @@ public:
 
     void paint(draw::Painter* painter);
 
-    const RectF& rect() const;
-    void setRect(const RectF& rect);
+    void setNotation(INotationPtr notation);
+    void move(midi::tick_t tick);
 
     bool visible() const;
     void setVisible(bool arg);
 
+    const RectF& rect() const;
+
 private:
     QColor color() const;
+    RectF resolveCursorRectByTick(midi::tick_t tick) const;
 
     bool m_visible = false;
     RectF m_rect;
+
+    INotationPtr m_notation;
 };
 }
 

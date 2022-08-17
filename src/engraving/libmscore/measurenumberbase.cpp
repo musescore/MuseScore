@@ -29,7 +29,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   MeasureNumberBase
 //---------------------------------------------------------
@@ -131,7 +131,7 @@ void MeasureNumberBase::layout()
     }
 
     if (placeBelow()) {
-        qreal yoff = bbox().height();
+        double yoff = bbox().height();
 
         // If there is only one line, the barline spans outside the staff lines, so the default position is not correct.
         if (staff()->constStaffType(measure()->tick())->lines() == 1) {
@@ -140,16 +140,16 @@ void MeasureNumberBase::layout()
             yoff += staff()->height();
         }
 
-        rypos() = yoff;
+        setPosY(yoff);
     } else {
-        qreal yoff = 0.0;
+        double yoff = 0.0;
 
         // If there is only one line, the barline spans outside the staff lines, so the default position is not correct.
         if (staff()->constStaffType(measure()->tick())->lines() == 1) {
             yoff -= 2.0 * spatium();
         }
 
-        rypos() = yoff;
+        setPosY(yoff);
     }
 
     if (hPlacement() == PlacementH::CENTER) {
@@ -189,12 +189,12 @@ void MeasureNumberBase::layout()
         }
 
         // if s1/s2 does not exist, it means there is no header/trailer segment. Align with start/end of measure.
-        qreal x1 = s1 ? s1->x() + s1->minRight() : 0;
-        qreal x2 = s2 ? s2->x() - s2->minLeft() : mea->width();
+        double x1 = s1 ? s1->x() + s1->minRight() : 0;
+        double x2 = s2 ? s2->x() - s2->minLeft() : mea->width();
 
-        rxpos() = (x1 + x2) * 0.5;
+        setPosX((x1 + x2) * 0.5);
     } else if (hPlacement() == PlacementH::RIGHT) {
-        rxpos() = measure()->width();
+        setPosX(measure()->width());
     }
 }
 } // namespace MS

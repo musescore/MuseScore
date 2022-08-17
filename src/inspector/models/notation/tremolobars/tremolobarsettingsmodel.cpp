@@ -39,7 +39,7 @@ TremoloBarSettingsModel::TremoloBarSettingsModel(QObject* parent, IElementReposi
 
 void TremoloBarSettingsModel::createProperties()
 {
-    m_type = buildPropertyItem(Ms::Pid::TREMOLOBAR_TYPE, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_type = buildPropertyItem(mu::engraving::Pid::TREMOLOBAR_TYPE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
         if (newValue.toInt() != static_cast<int>(TremoloBarTypes::TremoloBarType::TYPE_CUSTOM)) {
@@ -47,19 +47,19 @@ void TremoloBarSettingsModel::createProperties()
         }
     });
 
-    m_curve = buildPropertyItem(Ms::Pid::TREMOLOBAR_CURVE, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_curve = buildPropertyItem(mu::engraving::Pid::TREMOLOBAR_CURVE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
 
-    m_lineThickness = buildPropertyItem(Ms::Pid::LINE_WIDTH);
-    m_scale = buildPropertyItem(Ms::Pid::MAG);
+    m_lineThickness = buildPropertyItem(mu::engraving::Pid::LINE_WIDTH);
+    m_scale = buildPropertyItem(mu::engraving::Pid::MAG);
 }
 
 void TremoloBarSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::TREMOLOBAR);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::TREMOLOBAR);
 
     emit areSettingsAvailableChanged(areSettingsAvailable());
 }

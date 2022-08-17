@@ -30,7 +30,7 @@ class DiagnosticsPathsRegister : public IDiagnosticsPathsRegister
 public:
     DiagnosticsPathsRegister() = default;
 
-    void reg(const std::string& name, const io::path& path) override;
+    void reg(const std::string& name, const io::path_t& path) override;
     const std::vector<Item>& items() const override;
 
 private:

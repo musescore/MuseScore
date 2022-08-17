@@ -39,10 +39,8 @@ using namespace mu::languages;
 using namespace mu::framework;
 using namespace mu::network;
 
-static const QString DEFAULT_LANGUAGE("system");
-
 static const QStringList languageFileTypes = {
-    "mscore",
+    "musescore",
     "instruments"
 };
 
@@ -56,11 +54,9 @@ static QString downloadingStatusTitle()
 void LanguagesService::init()
 {
     ValCh<QString> languageCode = configuration()->currentLanguageCode();
-    loadLanguage(languageCode.val);
+    setCurrentLanguage(languageCode.val);
 
-    languageCode.ch.onReceive(this, [this](const QString& languageCode) {
-        setCurrentLanguage(languageCode);
-    });
+    //! NOTE To change the language at the moment, a restart is required
 
     m_inited = true;
 }
@@ -73,7 +69,6 @@ void LanguagesService::refreshLanguages()
 ValCh<LanguagesHash> LanguagesService::languages() const
 {
     ValCh<LanguagesHash> languagesHash = configuration()->languages();
-    languagesHash.val = correctLanguagesStates(languagesHash.val).val;
 
     return languagesHash;
 }
@@ -92,6 +87,21 @@ ValCh<Language> LanguagesService::currentLanguage() const
 
     result.val = languageHash[languageCode.val];
     return result;
+}
+
+LanguageStatus::Status LanguagesService::languageStatus(const QString& languageCode) const
+{
+    TRACEFUNC;
+    if (!isLanguageExists(languageCode)) {
+        return LanguageStatus::Status::NoInstalled;
+    }
+
+    Language language = languages().val[languageCode];
+    if (!checkLanguageFilesHash(languageCode, language.files)) {
+        return LanguageStatus::Status::NeedUpdate;
+    }
+
+    return LanguageStatus::Status::Installed;
 }
 
 RetCh<LanguageProgress> LanguagesService::install(const QString& languageCode)
@@ -117,18 +127,7 @@ RetCh<LanguageProgress> LanguagesService::install(const QString& languageCode)
     async::Channel<Ret>* languageFinishChannel = new async::Channel<Ret>();
     languageFinishChannel->onReceive(this, [this, languageCode, languageProgressStatus](const Ret& ret) {
         if (!ret) {
-            closeOperation(languageCode, languageProgressStatus);
-            return;
-        }
-
-        LanguagesHash languageHash = this->languages().val;
-
-        languageHash[languageCode].status = LanguageStatus::Status::Installed;
-
-        Ret updateConfigRet = configuration()->setLanguages(languageHash);
-        if (!updateConfigRet) {
-            LOGW() << updateConfigRet.toString();
-            closeOperation(languageCode, languageProgressStatus);
+            LOGE() << ret.toString();
             return;
         }
 
@@ -162,18 +161,7 @@ RetCh<LanguageProgress> LanguagesService::update(const QString& languageCode)
     async::Channel<Ret>* languageFinishChannel = new async::Channel<Ret>();
     languageFinishChannel->onReceive(this, [this, languageCode, languageProgressStatus](const Ret& ret) {
         if (!ret) {
-            closeOperation(languageCode, languageProgressStatus);
-            return;
-        }
-
-        LanguagesHash languageHash = this->languages().val;
-
-        languageHash[languageCode].status = LanguageStatus::Status::Installed;
-
-        Ret updateConfigRet = configuration()->setLanguages(languageHash);
-        if (!updateConfigRet) {
-            LOGW() << updateConfigRet.toString();
-            closeOperation(languageCode, languageProgressStatus);
+            LOGE() << ret.toString();
             return;
         }
 
@@ -198,14 +186,9 @@ Ret LanguagesService::uninstall(const QString& languageCode)
         return remove;
     }
 
-    if (languagesHash[languageCode].isCurrent) {
-        resetLanguageToDefault();
-    }
-
-    languagesHash[languageCode].status = LanguageStatus::Status::NoInstalled;
-    Ret ret = configuration()->setLanguages(languagesHash);
-    if (!ret) {
-        return ret;
+    QString currentLanguageCode = currentLanguage().val.code;
+    if (languageCode == currentLanguageCode) {
+        resetLanguageToSystemLanguage();
     }
 
     return make_ret(Err::NoError);
@@ -213,9 +196,17 @@ Ret LanguagesService::uninstall(const QString& languageCode)
 
 void LanguagesService::setCurrentLanguage(const QString& languageCode)
 {
-    if (languageCode == DEFAULT_LANGUAGE) {
-        resetLanguageToDefault();
+    if (languageCode == SYSTEM_LANGUAGE_CODE) {
+        resetLanguageToSystemLanguage();
         return;
+    }
+
+    if (languageCode == PLACEHOLDER_LANGUAGE_CODE) {
+        Ret load = loadLanguage(languageCode);
+        if (!load) {
+            LOGE() << load.toString();
+        }
+        return; // no hash for this language
     }
 
     LanguagesHash languageHash = languages().val;
@@ -231,8 +222,6 @@ void LanguagesService::setCurrentLanguage(const QString& languageCode)
     }
 
     Language& language = languageHash[languageCode];
-    language.isCurrent = true;
-
     m_currentLanguageChanged.send(language);
 }
 
@@ -262,7 +251,6 @@ RetVal<LanguagesHash> LanguagesService::parseLanguagesConfig(const QByteArray& j
         language.name = value.value("name").toString();
         language.archiveFileName = value.value("file_name").toString();
         language.files = parseLanguageFiles(value);
-        language.status = LanguageStatus::Status::Undefined;
 
         result.val.insert(key, language);
     }
@@ -287,13 +275,13 @@ LanguageFiles LanguagesService::parseLanguageFiles(const QJsonObject& languageOb
 
 bool LanguagesService::isLanguageExists(const QString& languageCode) const
 {
-    io::paths files = configuration()->languageFilePaths(languageCode);
+    io::paths_t files = configuration()->languageFilePaths(languageCode);
     return !files.empty();
 }
 
 bool LanguagesService::checkLanguageFilesHash(const QString& languageCode, const LanguageFiles& languageFiles) const
 {
-    io::paths filePaths = configuration()->languageFilePaths(languageCode);
+    io::paths_t filePaths = configuration()->languageFilePaths(languageCode);
     int filesSize = static_cast<int>(filePaths.size());
     if (filesSize != languageFiles.size()) {
         return false;
@@ -305,20 +293,20 @@ bool LanguagesService::checkLanguageFilesHash(const QString& languageCode, const
     }
 
     QCryptographicHash localHash(QCryptographicHash::Sha1);
-    for (const io::path& filePath: filePaths) {
+    for (const io::path_t& filePath: filePaths) {
         QString fileName = io::filename(filePath).toQString();
         if (!filesHash.contains(fileName)) {
             continue;
         }
 
-        RetVal<QByteArray> fileBytes = fileSystem()->readFile(filePath);
+        RetVal<ByteArray> fileBytes = fileSystem()->readFile(filePath);
         if (!fileBytes.ret) {
             LOGW() << fileBytes.ret.toString();
             return false;
         }
 
         localHash.reset();
-        localHash.addData(fileBytes.val);
+        localHash.addData(fileBytes.val.toQByteArrayNoCopy());
         QString fileHash = QString(localHash.result().toHex());
         QString actualHash = filesHash[fileName];
         if (actualHash != fileHash) {
@@ -334,49 +322,6 @@ Language LanguagesService::language(const QString& languageCode) const
     return languages().val[languageCode];
 }
 
-RetVal<LanguagesHash> LanguagesService::correctLanguagesStates(LanguagesHash& languages) const
-{
-    RetVal<LanguagesHash> result;
-    bool isNeedUpdate = false;
-
-    ValCh<QString> currentLanguageCode = configuration()->currentLanguageCode();
-
-    for (Language& language : languages) {
-        LanguageStatus::Status status = languageStatus(language);
-        if (status != language.status) {
-            language.status = status;
-            isNeedUpdate = true;
-        }
-
-        language.isCurrent = (language.code == currentLanguageCode.val);
-    }
-
-    if (isNeedUpdate) {
-        Ret update = configuration()->setLanguages(languages);
-        if (!update) {
-            result.ret = update;
-            return result;
-        }
-    }
-
-    result.ret = make_ret(Err::NoError);
-    result.val = languages;
-    return result;
-}
-
-LanguageStatus::Status LanguagesService::languageStatus(const Language& language) const
-{
-    if (!isLanguageExists(language.code)) {
-        return LanguageStatus::Status::NoInstalled;
-    }
-
-    if (!checkLanguageFilesHash(language.code, language.files)) {
-        return LanguageStatus::Status::NeedUpdate;
-    }
-
-    return LanguageStatus::Status::Installed;
-}
-
 RetVal<QString> LanguagesService::downloadLanguage(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel) const
 {
     RetVal<QString> result;
@@ -386,9 +331,9 @@ RetVal<QString> LanguagesService::downloadLanguage(const QString& languageCode, 
     QBuffer buff;
     INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
 
-    ProgressChannel downloadChannel = networkManagerPtr->progressChannel();
-    downloadChannel.onReceive(new async::Asyncable(), [&progressChannel](const Progress& progress) {
-        progressChannel->send(LanguageProgress(downloadingStatusTitle(), progress.current, progress.total));
+    networkManagerPtr->progress().progressChanged.onReceive(new async::Asyncable(),
+                                                            [&progressChannel](int64_t current, int64_t total, const std::string&) {
+        progressChannel->send(LanguageProgress(downloadingStatusTitle(), current, total));
     });
 
     Ret getLanguage = networkManagerPtr->get(configuration()->languageFileServerUrl(languageCode), &buff);
@@ -410,9 +355,9 @@ RetVal<QString> LanguagesService::downloadLanguage(const QString& languageCode, 
 
 Ret LanguagesService::removeLanguage(const QString& languageCode) const
 {
-    io::paths files = configuration()->languageFilePaths(languageCode);
+    io::paths_t files = configuration()->languageFilePaths(languageCode);
 
-    for (const io::path& filePath: files) {
+    for (const io::path_t& filePath: files) {
         Ret ret = fileSystem()->remove(filePath);
         if (!ret) {
             LOGE() << "Error remove file " << filePath << ret.toString();
@@ -425,7 +370,12 @@ Ret LanguagesService::removeLanguage(const QString& languageCode) const
 
 Ret LanguagesService::loadLanguage(const QString& languageCode)
 {
-    const io::paths files = configuration()->languageFilePaths(languageCode);
+    io::paths_t files = configuration()->languageFilePaths(languageCode);
+    if (files.empty()) {
+        QString shortLanguageCode = languageCode.left(languageCode.lastIndexOf("_"));
+        files = configuration()->languageFilePaths(shortLanguageCode);
+    }
+
     if (files.empty()) {
         return make_ret(Err::UnknownError);
     }
@@ -436,7 +386,7 @@ Ret LanguagesService::loadLanguage(const QString& languageCode)
     }
     m_translatorList.clear();
 
-    for (const io::path& filePath : files) {
+    for (const io::path_t& filePath : files) {
         QTranslator* translator = new QTranslator();
         bool ok = translator->load(filePath.toQString());
         if (ok) {
@@ -461,15 +411,13 @@ Ret LanguagesService::loadLanguage(const QString& languageCode)
     return make_ret(Err::NoError);
 }
 
-void LanguagesService::resetLanguageToDefault()
+void LanguagesService::resetLanguageToSystemLanguage()
 {
-    Ret load = loadLanguage(DEFAULT_LANGUAGE);
+    Ret load = loadLanguage(QLocale::system().name());
     if (!load) {
         LOGE() << load.toString();
         return;
     }
-
-    configuration()->setCurrentLanguageCode(DEFAULT_LANGUAGE);
 }
 
 void LanguagesService::th_refreshLanguages()
@@ -477,10 +425,10 @@ void LanguagesService::th_refreshLanguages()
     QBuffer buff;
     INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
 
-    Ret getLanguagessInfo = networkManagerPtr->get(configuration()->languagesUpdateUrl().toString(), &buff);
+    Ret getLanguagesInfo = networkManagerPtr->get(configuration()->languagesUpdateUrl().toString(), &buff);
 
-    if (!getLanguagessInfo) {
-        LOGE() << getLanguagessInfo.toString();
+    if (!getLanguagesInfo) {
+        LOGE() << getLanguagesInfo.toString();
         return;
     }
 
@@ -500,10 +448,7 @@ void LanguagesService::th_refreshLanguages()
         if (resultLanguages.contains(language.code)) {
             Language& savedLanguage = resultLanguages[language.code];
             savedLanguage = language;
-
-            savedLanguage.status = languageStatus(savedLanguage);
         } else {
-            language.status = LanguageStatus::Status::NoInstalled;
             resultLanguages.insert(language.code, language);
         }
     }

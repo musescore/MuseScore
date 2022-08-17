@@ -28,14 +28,8 @@ add_subdirectory(musicxml)
 add_subdirectory(ove)
 add_subdirectory(audioexport)
 add_subdirectory(imagesexport)
+add_subdirectory(guitarpro)
 
 if (BUILD_VIDEOEXPORT_MODULE)
     add_subdirectory(videoexport)
 endif()
-
-# We have two implementations for importing `gp` files
-# Old and new
-# The new one is more structured, imports more correctly, more amenable to improvements
-
-add_subdirectory(guitarpro)
-#add_subdirectory(guitarpro_old)

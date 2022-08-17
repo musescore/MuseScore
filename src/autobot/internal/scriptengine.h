@@ -29,8 +29,8 @@
 #include <QByteArray>
 
 #include "modularity/ioc.h"
-#include "system/ifilesystem.h"
-#include "ret.h"
+#include "io/ifilesystem.h"
+#include "types/ret.h"
 
 #include "api/iapiengine.h"
 #include "api/scriptapi.h"
@@ -39,7 +39,7 @@ namespace mu::autobot {
 class JsModuleLoader;
 class ScriptEngine : public api::IApiEngine
 {
-    INJECT(autobot, system::IFileSystem, fileSystem)
+    INJECT(autobot, io::IFileSystem, fileSystem)
 public:
     ScriptEngine();
     ~ScriptEngine();
@@ -49,8 +49,8 @@ public:
         QStringList args;
     };
 
-    void setScriptPath(const io::path& arg);
-    io::path scriptPath() const;
+    void setScriptPath(const io::path_t& arg);
+    io::path_t scriptPath() const;
 
     Ret evaluate();
 
@@ -76,8 +76,8 @@ private:
 
     ScriptEngine(ScriptEngine* engine);
 
-    RetVal<QByteArray> readScriptContent(const io::path& scriptPath) const;
-    RetVal<QJSValue> evaluateContent(const QByteArray& fileContent, const io::path& filePath);
+    RetVal<ByteArray> readScriptContent(const io::path_t& scriptPath) const;
+    RetVal<QJSValue> evaluateContent(const QByteArray& fileContent, const io::path_t& filePath);
     Ret jsValueToRet(const QJSValue& val) const;
     Ret doCall(const QString& funcName, const CallData& data, QJSValue* retVal);
 
@@ -90,7 +90,7 @@ private:
     api::ScriptApi* m_api = nullptr;
     JsModuleLoader* m_moduleLoader = nullptr;
     bool m_isRequireMode = false;
-    io::path m_scriptPath;
+    io::path_t m_scriptPath;
     QByteArray m_lastEvalScript;
     FuncData m_lastCallFunc;
 };

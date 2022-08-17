@@ -32,11 +32,11 @@
 #include <functional>
 #include <vector>
 
-#include "infrastructure/draw/color.h"
+#include "draw/types/color.h"
 #include "chordrest.h"
 #include "articulation.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Note;
 class Hook;
 class Arpeggio;
@@ -51,6 +51,26 @@ class AccidentalState;
 
 enum class TremoloChordType : char {
     TremoloSingle, TremoloFirstNote, TremoloSecondNote
+};
+
+class GraceNotesGroup final : public std::vector<Chord*>, public EngravingItem
+{
+    OBJECT_ALLOCATOR(engraving, GraceNotesGroup)
+public:
+    GraceNotesGroup* clone() const override { return new GraceNotesGroup(*this); }
+    GraceNotesGroup(Chord* c);
+
+    Chord* parent() const { return _parent; }
+    Shape shape() const override { return _shape; }
+    void layout() override;
+    void setPos(double x, double y) override;
+    Segment* appendedSegment() const { return _appendedSegment; }
+    void setAppendedSegment(Segment* s) { _appendedSegment = s; }
+
+private:
+    Chord* _parent = nullptr;
+    Shape _shape;
+    Segment* _appendedSegment = nullptr; // the graceNoteGroup is appended to this segment
 };
 
 //---------------------------------------------------------
@@ -70,6 +90,8 @@ enum class TremoloChordType : char {
 
 class Chord final : public ChordRest
 {
+    OBJECT_ALLOCATOR(engraving, Chord)
+
     std::vector<Note*> _notes;           // sorted to decreasing line step
     LedgerLine* _ledgerLines = nullptr;  // single linked list
 
@@ -80,7 +102,9 @@ class Chord final : public ChordRest
     Arpeggio* _arpeggio = nullptr;
     Tremolo* _tremolo = nullptr;
     bool _endsGlissando;                 ///< true if this chord is the ending point of a glissando (needed for layout)
-    std::vector<Chord*> _graceNotes;
+    std::vector<Chord*> _graceNotes; // storage for all grace notes
+    mutable GraceNotesGroup _graceNotesBefore = GraceNotesGroup(this); // will store before-chord grace notes
+    mutable GraceNotesGroup _graceNotesAfter = GraceNotesGroup(this); // will store after-chord grace notes
     size_t _graceIndex;                     ///< if this is a grace note, index in parent list
 
     DirectionV _stemDirection;
@@ -88,29 +112,30 @@ class Chord final : public ChordRest
     bool _noStem;
     PlayEventType _playEventType;        ///< play events were modified by user
 
-    qreal _spaceLw;
-    qreal _spaceRw;
+    double _spaceLw;
+    double _spaceRw;
 
-    qreal _defaultStemLength;
-    qreal _minStemLength;
+    double _defaultStemLength;
+    double _minStemLength;
+    double _relativeMag = 1; // mag() but relative to the staff size
 
     bool _isUiItem = false;
 
     std::vector<Articulation*> _articulations;
 
-    friend class mu::engraving::Factory;
+    friend class Factory;
     Chord(Segment* parent = 0);
     Chord(const Chord&, bool link = false);
 
-    qreal upPos()   const override;
-    qreal downPos() const override;
-    qreal centerX() const;
+    double upPos()   const override;
+    double downPos() const override;
+    double centerX() const;
     void addLedgerLines();
     void processSiblings(std::function<void(EngravingItem*)> func) const;
 
     void layoutPitched();
     void layoutTablature();
-    qreal noteHeadWidth() const;
+    double noteHeadWidth() const;
 
     bool shouldHaveStem() const;
     bool shouldHaveHook() const;
@@ -125,9 +150,8 @@ class Chord final : public ChordRest
     int stemOpticalAdjustment(int stemEndPosition) const;
     int calcMinStemLength();
     int calc4BeamsException(int stemLength) const;
-    qreal calcDefaultStemLength();
-
-    bool computeUpContext();
+    double calcDefaultStemLength();
+    void calcRelativeMag();
 
 public:
 
@@ -148,8 +172,9 @@ public:
     void undoUnlink() override;
 
     void setScore(Score* s) override;
-    qreal chordMag() const;
-    qreal mag() const override;
+    double chordMag() const;
+    double mag() const override;
+    double relativeMag() const { return _relativeMag; }
 
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
@@ -167,10 +192,11 @@ public:
 
     LedgerLine* ledgerLines() { return _ledgerLines; }
 
-    qreal defaultStemLength() const { return _defaultStemLength; }
-    qreal minStemLength() const { return _minStemLength; }
-    void setBeamExtension(qreal extension);
-    static int minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, qreal beamSpacing, bool useWideBeams);
+    double defaultStemLength() const { return _defaultStemLength; }
+    double minStemLength() const { return _minStemLength; }
+    void setBeamExtension(double extension);
+    static int minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, double beamSpacing, bool useWideBeams,
+                               bool isFullSize);
 
     void layoutStem();
     void layoutArpeggio2();
@@ -190,7 +216,7 @@ public:
     int downString() const;
     std::vector<int> noteDistances() const;
 
-    qreal maxHeadWidth() const;
+    double maxHeadWidth() const;
 
     Note* findNote(int pitch, int skip = 0) const;
 
@@ -210,8 +236,8 @@ public:
     const std::vector<Chord*>& graceNotes() const { return _graceNotes; }
     std::vector<Chord*>& graceNotes() { return _graceNotes; }
 
-    std::vector<Chord*> graceNotesBefore() const;
-    std::vector<Chord*> graceNotesAfter() const;
+    GraceNotesGroup& graceNotesBefore() const;
+    GraceNotesGroup& graceNotesAfter() const;
 
     size_t graceIndex() const { return _graceIndex; }
     void setGraceIndex(size_t val) { _graceIndex = val; }
@@ -220,21 +246,20 @@ public:
     int downLine() const override;
     mu::PointF stemPos() const override;            ///< page coordinates
     mu::PointF stemPosBeam() const override;        ///< page coordinates
-    qreal stemPosX() const override;
-    qreal rightEdge() const override;
+    double stemPosX() const override;
+    double rightEdge() const override;
 
     bool underBeam() const;
     Hook* hook() const { return _hook; }
 
     //@ add an element to the Chord
-    Q_INVOKABLE void add(Ms::EngravingItem*) override;
+    void add(EngravingItem*) override;
     //@ remove the element from the Chord
-    Q_INVOKABLE void remove(Ms::EngravingItem*) override;
+    void remove(EngravingItem*) override;
 
     Note* selectedNote() const;
     void layout() override;
     mu::PointF pagePos() const override;        ///< position in page coordinates
-    void layout2();
     void cmdUpdateNotes(AccidentalState*);
 
     NoteType noteType() const { return _noteType; }
@@ -247,7 +272,7 @@ public:
     void computeUp() override;
     static int computeAutoStemDirection(const std::vector<int>& noteDistances);
 
-    qreal dotPosX() const;
+    double dotPosX() const;
 
     bool noStem() const { return _noStem; }
     void setNoStem(bool val) { _noStem = val; }
@@ -274,10 +299,10 @@ public:
 
     void crossMeasureSetup(bool on) override;
 
-    void localSpatiumChanged(qreal oldValue, qreal newValue) override;
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    void localSpatiumChanged(double oldValue, double newValue) override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
     void reset() override;
 
@@ -287,17 +312,26 @@ public:
     void sortNotes();
 
     Chord* nextTiedChord(bool backwards = false, bool sameSize = true);
+    bool containsTieEnd() const;
+    bool containsTieStart() const;
 
     EngravingItem* nextElement() override;
     EngravingItem* prevElement() override;
     EngravingItem* nextSegmentElement() override;
     EngravingItem* lastElementBeforeSegment();
     EngravingItem* prevSegmentElement() override;
-    QString accessibleExtraInfo() const override;
+
+    String accessibleExtraInfo() const override;
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr createAccessible() override;
+#endif
 
     Shape shape() const override;
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue& newValue);
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue& newValue, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const PropertyValue& newValue);
+    void undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps) override;
+
+    bool isSlurStartEnd() const;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

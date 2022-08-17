@@ -21,7 +21,6 @@
  */
 
 #include <QGuiApplication>
-#include <QDebug>
 
 #include "qtestsuite.h"
 #include "environment.h"

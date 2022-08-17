@@ -29,7 +29,7 @@
 #include "textlinebase.h"
 #include "mscore.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class Hairpin;
 
@@ -47,9 +47,11 @@ enum class HairpinType : signed char {
 
 class HairpinSegment final : public TextLineBaseSegment
 {
+    OBJECT_ALLOCATOR(engraving, HairpinSegment)
+
     bool drawCircledTip;
     mu::PointF circledTip;
-    qreal circledTipRadius;
+    double circledTipRadius;
 
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;
@@ -74,7 +76,7 @@ public:
     void layout() override;
     Shape shape() const override;
 
-    int gripsCount() const override { return 4; }
+    int gripsCount() const override;
     std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
 
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
@@ -89,6 +91,8 @@ public:
 
 class Hairpin final : public TextLineBase
 {
+    OBJECT_ALLOCATOR(engraving, Hairpin)
+
     HairpinType _hairpinType { HairpinType::INVALID };
     int _veloChange;
     bool _hairpinCircledTip;
@@ -152,19 +156,20 @@ public:
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 
-    mu::engraving::PropertyValue getProperty(Pid id) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
+    PropertyValue getProperty(Pid id) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid id) const override;
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
     bool isLineType() const
     {
         return _hairpinType == HairpinType::CRESC_LINE || _hairpinType == HairpinType::DECRESC_LINE;
     }
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
-Q_DECLARE_METATYPE(Ms::HairpinType);
+#ifndef NO_QT_SUPPORT
+Q_DECLARE_METATYPE(mu::engraving::HairpinType);
+#endif
 
 #endif

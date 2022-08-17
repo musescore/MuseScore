@@ -325,7 +325,7 @@
         </ul>
         <p>Zerberus:</p>
         <ul>
-          <li>Fix #222031: remove ties and spanners when removing induvidual notes within a chord</li>
+          <li>Fix #222031: remove ties and spanners when removing individual notes within a chord</li>
           <li>Fix #271718: clicking noise fix</li>
           <li>Fix #271719: sound accumulation on noteOff</li>
           <li>Fix #271722: long release samples do not play in their entirety</li>

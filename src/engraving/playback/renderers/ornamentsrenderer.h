@@ -25,8 +25,12 @@
 
 #include "renderbase.h"
 
+namespace Ms {
+class Note;
+}
+
 namespace mu::engraving {
-struct DisclosureRule {
+struct DisclosurePattern {
     int prefixDurationTicks = 0;
     std::vector<mpe::pitch_level_t> prefixPitchOffsets;
 
@@ -36,7 +40,19 @@ struct DisclosureRule {
     int suffixDurationTicks = 0;
     std::vector<mpe::pitch_level_t> suffixPitchOffsets;
 
-    int minSupportedNoteDurationTicks = 0;
+    struct DurationBoundaries {
+        float lowTempoDurationTicks = 0.f;
+        float mediumTempoDurationTicks = 0.f;
+        float highTempoDurationTicks = 0.f;
+    };
+
+    DurationBoundaries boundaries;
+
+    float subNoteDurationTicks(const double bps) const;
+    DisclosurePattern buildActualPattern(const Note* note, const double bps) const;
+
+private:
+    void updatePitchOffsets(const Note* note, std::vector<mpe::pitch_level_t>& pitchOffsets);
 };
 
 class OrnamentsRenderer : public RenderBase<OrnamentsRenderer>
@@ -44,13 +60,15 @@ class OrnamentsRenderer : public RenderBase<OrnamentsRenderer>
 public:
     static const mpe::ArticulationTypeSet& supportedTypes();
 
-    static void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, const RenderingContext& context,
+    static void doRender(const EngravingItem* item, const mpe::ArticulationType preferredType, const RenderingContext& context,
                          mpe::PlaybackEventList& result);
 
 private:
-    static void convert(const mpe::ArticulationType type, NominalNoteCtx&& noteCtx, mpe::PlaybackEventList& result);
+    static void convert(const mpe::ArticulationType type, const DisclosurePattern& pattern, NominalNoteCtx&& noteCtx,
+                        mpe::PlaybackEventList& result);
 
-    static int alterationsNumberByTempo(const qreal beatsPerSeconds, const int principalNoteDurationTicks);
+    static int alterationsNumberByTempo(const double beatsPerSeconds, const int principalNoteDurationTicks,
+                                        const DisclosurePattern& pattern);
 
     static void createEvents(const mpe::ArticulationType type, NominalNoteCtx& noteCtx, const int alterationsCount,
                              const int availableDurationTicks, const int overallDurationTicks,

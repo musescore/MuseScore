@@ -25,12 +25,12 @@
 #include "modularity/imodulesetup.h"
 
 #include "modularity/ioc.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 
 namespace mu::diagnostics {
 class DiagnosticsModule : public modularity::IModuleSetup
 {
-    INJECT(diagnostics, system::IFileSystem, fileSystem)
+    INJECT(diagnostics, io::IFileSystem, fileSystem)
 
 public:
     std::string moduleName() const override;

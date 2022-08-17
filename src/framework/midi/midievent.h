@@ -147,6 +147,11 @@ struct Event {
         return operator!=(NOOP()) && isValid();
     }
 
+    bool operator <(const Event& other) const
+    {
+        return m_data < other.m_data;
+    }
+
     bool isChannelVoice() const { return messageType() == MessageType::ChannelVoice10 || messageType() == MessageType::ChannelVoice20; }
     bool isChannelVoice20() const { return messageType() == MessageType::ChannelVoice20; }
     bool isMessageTypeIn(const std::set<MessageType>& types) const { return types.find(messageType()) != types.end(); }
@@ -642,9 +647,9 @@ struct Event {
     }
 
     //!convert ChannelVoice from MIDI2.0 to MIDI1.0
-    std::list<Event> toMIDI10() const
+    std::vector<Event> toMIDI10() const
     {
-        std::list<Event> events;
+        std::vector<Event> events;
         switch (messageType()) {
         case MessageType::ChannelVoice10: events.push_back(*this);
             break;
@@ -680,7 +685,7 @@ struct Event {
             //D2.3
             case Opcode::AssignableController:
             case Opcode::RegisteredController: {
-                std::list<std::pair<uint8_t, uint8_t> > controlChanges = {
+                std::vector<std::pair<uint8_t, uint8_t> > controlChanges = {
                     { (opcode() == Opcode::RegisteredController ? 101 : 99), bank() },
                     { (opcode() == Opcode::RegisteredController ? 100 : 98), index() },
                     { 6,  (data() & 0x7FFFFFFF) >> 24 },
@@ -956,7 +961,7 @@ struct Event {
             dataToStr();
             break;
         case MessageType::SystemExclusiveData:
-            str += "MIDI System Exlusive";
+            str += "MIDI System Exclusive";
             dataToStr();
             break;
         case MessageType::Data:

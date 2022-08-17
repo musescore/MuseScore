@@ -27,7 +27,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 
-namespace Ms {
+namespace mu::engraving {
 struct NotePattern;
 class Note;
 }
@@ -68,7 +68,7 @@ private:
     void apply() const;
     FilterNotesOptions noteOptions() const;
 
-    const Ms::Note* m_note = nullptr;
+    const mu::engraving::Note* m_note = nullptr;
 };
 }
 

@@ -38,6 +38,9 @@ public:
 
     MidiDeviceID midiOutputDeviceId() const override;
     void setMidiOutputDeviceId(const MidiDeviceID& deviceId) override;
+
+    bool useMIDI20Output() const override;
+    void setUseMIDI20Output(bool use) override;
 };
 }
 

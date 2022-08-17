@@ -22,27 +22,37 @@
 #ifndef MU_IMPORTEXPORT_ABSTRACTAUDIOWRITER_H
 #define MU_IMPORTEXPORT_ABSTRACTAUDIOWRITER_H
 
+#include "modularity/ioc.h"
+#include "audio/iplayback.h"
+#include "audio/iaudiooutput.h"
+#include "async/asyncable.h"
+#include "iaudioexportconfiguration.h"
+
 #include "project/inotationwriter.h"
 
 namespace mu::iex::audioexport {
-class AbstractAudioWriter : public project::INotationWriter
+class AbstractAudioWriter : public project::INotationWriter, public async::Asyncable
 {
-public:
-    AbstractAudioWriter() = default;
-    virtual ~AbstractAudioWriter() = default;
+    INJECT(audioexport, audio::IPlayback, playback)
+    INJECT(audioexport, IAudioExportConfiguration, configuration)
 
+public:
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
-    Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
-    Ret writeList(const notation::INotationPtrList& notations, io::Device& destinationDevice, const Options& options = Options()) override;
+    Ret write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options& options = Options()) override;
+    Ret writeList(const notation::INotationPtrList& notations, QIODevice& destinationDevice, const Options& options = Options()) override;
 
+    bool supportsProgressNotifications() const override;
+    framework::Progress progress() const override;
     void abort() override;
-    framework::ProgressChannel progress() const override;
 
 protected:
+    void doWriteAndWait(QIODevice& destinationDevice, const audio::SoundTrackFormat& format);
+
     UnitType unitTypeFromOptions(const Options& options) const;
-    framework::ProgressChannel m_progress;
+    framework::Progress m_progress;
+    bool m_isCompleted = false;
 };
 }
 

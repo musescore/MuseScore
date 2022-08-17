@@ -21,6 +21,8 @@
  */
 #include "exportprojectscenario.h"
 
+#include "async/async.h"
+
 #include "translation.h"
 #include "log.h"
 
@@ -49,17 +51,17 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
         return false;
     }
 
-    io::path chosenPath = askExportPath(notations, exportType, unitType);
+    io::path_t chosenPath = askExportPath(notations, exportType, unitType);
     if (chosenPath.empty()) {
         return false;
     }
 
-    auto writer = writers()->writer(io::suffix(chosenPath));
-    if (!writer) {
+    m_currentWriter = writers()->writer(io::suffix(chosenPath));
+    if (!m_currentWriter) {
         return false;
     }
 
-    IF_ASSERT_FAILED(writer->supportsUnitType(unitType)) {
+    IF_ASSERT_FAILED(m_currentWriter->supportsUnitType(unitType)) {
         return false;
     }
 
@@ -81,12 +83,13 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
                       Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
                 };
 
-                io::path definitivePath = isCreatingOnlyOneFile
-                                          ? chosenPath
-                                          : completeExportPath(chosenPath, notation, isMainNotation(notation), static_cast<int>(page));
+                io::path_t definitivePath = isCreatingOnlyOneFile
+                                            ? chosenPath
+                                            : completeExportPath(chosenPath, notation, isMainNotation(notation), static_cast<int>(page));
 
-                auto exportFunction = [writer, notation, options](io::Device& destinationDevice) {
-                        return writer->write(notation, destinationDevice, options);
+                auto exportFunction = [this, notation, options](QIODevice& destinationDevice) {
+                        showExportProgressIfNeed();
+                        return m_currentWriter->write(notation, destinationDevice, options);
                     };
 
                 doExportLoop(definitivePath, exportFunction);
@@ -101,12 +104,13 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
                   Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
             };
 
-            io::path definitivePath = isCreatingOnlyOneFile
-                                      ? chosenPath
-                                      : completeExportPath(chosenPath, notation, isMainNotation(notation));
+            io::path_t definitivePath = isCreatingOnlyOneFile
+                                        ? chosenPath
+                                        : completeExportPath(chosenPath, notation, isMainNotation(notation));
 
-            auto exportFunction = [writer, notation, options](io::Device& destinationDevice) {
-                    return writer->write(notation, destinationDevice, options);
+            auto exportFunction = [this, notation, options](QIODevice& destinationDevice) {
+                    showExportProgressIfNeed();
+                    return m_currentWriter->write(notation, destinationDevice, options);
                 };
 
             doExportLoop(definitivePath, exportFunction);
@@ -118,8 +122,9 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
             { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
         };
 
-        auto exportFunction = [writer, notations, options](io::Device& destinationDevice) {
-                return writer->writeList(notations, destinationDevice, options);
+        auto exportFunction = [this, notations, options](QIODevice& destinationDevice) {
+                showExportProgressIfNeed();
+                return m_currentWriter->writeList(notations, destinationDevice, options);
             };
 
         doExportLoop(chosenPath, exportFunction);
@@ -131,6 +136,18 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
     }
 
     return true;
+}
+
+Progress ExportProjectScenario::progress() const
+{
+    return m_currentWriter ? m_currentWriter->progress() : Progress();
+}
+
+void ExportProjectScenario::abort()
+{
+    if (m_currentWriter) {
+        m_currentWriter->abort();
+    }
 }
 
 bool ExportProjectScenario::isCreatingOnlyOneFile(const INotationPtrList& notations, INotationWriter::UnitType unitType) const
@@ -152,8 +169,8 @@ bool ExportProjectScenario::isMainNotation(INotationPtr notation) const
     return context()->currentMasterNotation()->notation() == notation;
 }
 
-mu::io::path ExportProjectScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
-                                                  INotationWriter::UnitType unitType) const
+mu::io::path_t ExportProjectScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
+                                                    INotationWriter::UnitType unitType) const
 {
     INotationProjectPtr project = context()->currentProject();
 
@@ -172,9 +189,11 @@ mu::io::path ExportProjectScenario::askExportPath(const INotationPtrList& notati
         }) != notations.cend();
 
         if (containsMaster) {
-            filenameAddition = "-" + qtrc("project", "Score_and_Parts", "Used in export filename suggestion");
+            //: Used in export filename suggestion. Please use only characters that are valid for filenames.
+            filenameAddition = "-" + qtrc("project/export", "Score_and_Parts");
         } else {
-            filenameAddition = "-" + qtrc("project", "Parts", "Used in export filename suggestion");
+            //: Used in export filename suggestion. Please use only characters that are valid for filenames.
+            filenameAddition = "-" + qtrc("project/export", "Parts");
         }
     } else if (isExportingOnlyOneScore) {
         if (!isMainNotation(notations.front())) {
@@ -187,15 +206,16 @@ mu::io::path ExportProjectScenario::askExportPath(const INotationPtrList& notati
         }
     }
 
-    io::path defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition, exportType.suffixes.front());
+    io::path_t defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition, exportType.suffixes.front());
 
-    return interactive()->selectSavingFile(qtrc("project", "Export"), defaultPath,
+    return interactive()->selectSavingFile(qtrc("project/export", "Export"), defaultPath,
                                            exportType.filter(), isCreatingOnlyOneFile);
 }
 
-mu::io::path ExportProjectScenario::completeExportPath(const io::path& basePath, INotationPtr notation, bool isMain, int pageIndex) const
+mu::io::path_t ExportProjectScenario::completeExportPath(const io::path_t& basePath, INotationPtr notation, bool isMain,
+                                                         int pageIndex) const
 {
-    io::path result = io::dirpath(basePath) + "/" + io::basename(basePath);
+    io::path_t result = io::dirpath(basePath) + "/" + io::basename(basePath);
 
     if (!isMain) {
         result += "-" + io::escapeFileName(notation->name()).toStdString();
@@ -218,19 +238,19 @@ bool ExportProjectScenario::shouldReplaceFile(const QString& filename) const
     case FileConflictPolicy::SkipAll:
         return false;
     case FileConflictPolicy::Undefined: {
-        static const int Replace = static_cast<int>(IInteractive::Button::CustomButton) + 1;
-        static const int ReplaceAll = static_cast<int>(IInteractive::Button::CustomButton) + 2;
-        static const int Skip = static_cast<int>(IInteractive::Button::CustomButton) + 3;
-        static const int SkipAll = static_cast<int>(IInteractive::Button::CustomButton) + 4;
+        constexpr int Replace = static_cast<int>(IInteractive::Button::CustomButton) + 1;
+        constexpr int ReplaceAll = static_cast<int>(IInteractive::Button::CustomButton) + 2;
+        constexpr int Skip = static_cast<int>(IInteractive::Button::CustomButton) + 3;
+        constexpr int SkipAll = static_cast<int>(IInteractive::Button::CustomButton) + 4;
 
         IInteractive::Result result = interactive()->question(
-            trc("project", "File already exists"),
-            qtrc("project", "A file already exists with the filename %1. Do you want to replace it?")
+            trc("project/export", "File already exists"),
+            qtrc("project/export", "A file already exists with the filename %1. Do you want to replace it?")
             .arg(filename).toStdString(), {
-                IInteractive::ButtonData(Replace, trc("project", "Replace")),
-                IInteractive::ButtonData(ReplaceAll, trc("project", "Replace all")),
-                IInteractive::ButtonData(Skip, trc("project", "Skip")),
-                IInteractive::ButtonData(SkipAll, trc("project", "Skip all"))
+                IInteractive::ButtonData(Replace, trc("project/export", "Replace")),
+                IInteractive::ButtonData(ReplaceAll, trc("project/export", "Replace all")),
+                IInteractive::ButtonData(Skip, trc("project/export", "Skip")),
+                IInteractive::ButtonData(SkipAll, trc("project/export", "Skip all"))
             });
 
         switch (result.button()) {
@@ -253,14 +273,14 @@ bool ExportProjectScenario::shouldReplaceFile(const QString& filename) const
 bool ExportProjectScenario::askForRetry(const QString& filename) const
 {
     IInteractive::Result result = interactive()->question(
-        trc("project", "Error"),
-        qtrc("project", "An error occured while writing the file %1. Do you want to retry?")
+        trc("project/export", "Error"),
+        qtrc("project/export", "An error occurred while writing the file %1. Do you want to retry?")
         .arg(filename).toStdString(), { IInteractive::Button::Retry, IInteractive::Button::Abort });
 
     return result.standardButton() == IInteractive::Button::Retry;
 }
 
-bool ExportProjectScenario::doExportLoop(const io::path& scorePath, std::function<bool(io::Device&)> exportFunction) const
+bool ExportProjectScenario::doExportLoop(const io::path_t& scorePath, std::function<bool(QIODevice&)> exportFunction) const
 {
     IF_ASSERT_FAILED(exportFunction) {
         return false;
@@ -297,7 +317,16 @@ bool ExportProjectScenario::doExportLoop(const io::path& scorePath, std::functio
     return true;
 }
 
-void ExportProjectScenario::openFolder(const io::path& path) const
+void ExportProjectScenario::showExportProgressIfNeed() const
+{
+    if (m_currentWriter && m_currentWriter->supportsProgressNotifications()) {
+        async::Async::call(this, [this]() {
+            interactive()->open("musescore://project/export/progress");
+        });
+    }
+}
+
+void ExportProjectScenario::openFolder(const io::path_t& path) const
 {
     Ret ret = interactive()->revealInFileBrowser(path.toQString());
 

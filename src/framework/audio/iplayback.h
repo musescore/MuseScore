@@ -40,6 +40,9 @@ class IPlayback : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IPlayback() = default;
 
+    virtual void init() = 0;
+    virtual void deinit() = 0;
+
     // A quick guide how to playback something:
 
     // 1. Add Sequence

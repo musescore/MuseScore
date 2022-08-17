@@ -149,6 +149,11 @@ MidiDeviceID WinMidiOutPort::deviceID() const
     return m_deviceID;
 }
 
+bool WinMidiOutPort::supportsMIDI20Output() const
+{
+    return false;
+}
+
 mu::Ret WinMidiOutPort::sendEvent(const Event& e)
 {
     if (!isConnected()) {

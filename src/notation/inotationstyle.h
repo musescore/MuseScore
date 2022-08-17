@@ -44,8 +44,8 @@ public:
 
     virtual async::Notification styleChanged() const = 0;
 
-    virtual bool loadStyle(const mu::io::path&, bool allowAnyVersion) = 0;
-    virtual bool saveStyle(const mu::io::path&) = 0;
+    virtual bool loadStyle(const mu::io::path_t&, bool allowAnyVersion) = 0;
+    virtual bool saveStyle(const mu::io::path_t&) = 0;
 };
 
 using INotationStylePtr = std::shared_ptr<INotationStyle>;

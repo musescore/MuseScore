@@ -25,7 +25,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
@@ -33,7 +33,7 @@ namespace Ms {
 void NoteEvent::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "pitch") {
             _pitch = e.readInt();
         } else if (tag == "ontime") {
@@ -52,11 +52,11 @@ void NoteEvent::read(XmlReader& e)
 
 void NoteEvent::write(XmlWriter& xml) const
 {
-    xml.startObject("Event");
+    xml.startElement("Event");
     xml.tag("pitch", _pitch, 0);
     xml.tag("ontime", _ontime, 0);
     xml.tag("len", _len, NOTE_LENGTH);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------

@@ -30,12 +30,47 @@
 
 using namespace mu::notation;
 
+static constexpr int PLAY_INTERVAL = 20;
+
 NotationMidiInput::NotationMidiInput(IGetScore* getScore, INotationUndoStackPtr undoStack)
     : m_getScore(getScore), m_undoStack(undoStack)
 {
+    QObject::connect(&m_playTimer, &QTimer::timeout, [this]() { doPlayNotes(); });
 }
 
-Ms::Score* NotationMidiInput::score() const
+void NotationMidiInput::onMidiEventsReceived(const std::vector<midi::Event>& events)
+{
+    std::vector<midi::Event> midi10Events;
+    for (const midi::Event& event : events) {
+        std::vector<midi::Event> _events = { event };
+        if (event.isChannelVoice20()) {
+            _events = event.toMIDI10();
+        }
+
+        for (const midi::Event& event : _events) {
+            if (event.opcode() == midi::Event::Opcode::NoteOn || event.opcode() == midi::Event::Opcode::NoteOff) {
+                midi10Events.push_back(event);
+            }
+        }
+    }
+
+    for (const midi::Event& event : midi10Events) {
+        Note* note = onAddNote(event);
+        if (note) {
+            m_playNotesQueue.push_back(note);
+        }
+    }
+
+    if (m_playNotesQueue.empty()) {
+        return;
+    }
+
+    if (!m_playTimer.isActive()) {
+        m_playTimer.start(PLAY_INTERVAL);
+    }
+}
+
+mu::engraving::Score* NotationMidiInput::score() const
 {
     IF_ASSERT_FAILED(m_getScore) {
         return nullptr;
@@ -43,46 +78,38 @@ Ms::Score* NotationMidiInput::score() const
     return m_getScore->score();
 }
 
-void NotationMidiInput::onMidiEventReceived(const midi::Event& e)
+void NotationMidiInput::doPlayNotes()
 {
-    LOGI() << e.to_string();
-
-    if (e.isChannelVoice20()) {
-        auto events = e.toMIDI10();
-        for (auto& event : events) {
-            onMidiEventReceived(event);
-        }
-
-        return;
+    if (!m_playNotesQueue.empty()) {
+        playbackController()->playElements(m_playNotesQueue);
     }
 
-    if (e.opcode() == midi::Event::Opcode::NoteOn || e.opcode() == midi::Event::Opcode::NoteOff) {
-        onNoteReceived(e);
-    }
+    m_playNotesQueue.clear();
+    m_playTimer.stop();
 }
 
-void NotationMidiInput::onNoteReceived(const midi::Event& e)
+Note* NotationMidiInput::onAddNote(const midi::Event& e)
 {
-    Ms::Score* sc = score();
+    mu::engraving::Score* sc = score();
     if (!sc) {
-        return;
+        return nullptr;
     }
 
-    Ms::MidiInputEvent inputEv;
+    mu::engraving::MidiInputEvent inputEv;
     inputEv.pitch = e.note();
     inputEv.velocity = e.velocity();
 
-    sc->activeMidiPitches().remove_if([&inputEv](const Ms::MidiInputEvent& val) {
+    sc->activeMidiPitches().remove_if([&inputEv](const mu::engraving::MidiInputEvent& val) {
         return inputEv.pitch == val.pitch;
     });
 
     if (e.opcode() == midi::Event::Opcode::NoteOff || e.velocity() == 0) {
-        return;
+        return nullptr;
     }
 
-    const Ms::InputState& is = sc->inputState();
+    const mu::engraving::InputState& is = sc->inputState();
     if (!is.noteEntryMode()) {
-        return;
+        return nullptr;
     }
 
     if (sc->activeMidiPitches().empty()) {
@@ -93,7 +120,7 @@ void NotationMidiInput::onNoteReceived(const midi::Event& e)
 
     // holding shift while inputting midi will add the new pitch to the prior existing chord
     if (QGuiApplication::keyboardModifiers() & Qt::ShiftModifier) {
-        Ms::EngravingItem* cr = is.lastSegment()->element(is.track());
+        mu::engraving::EngravingItem* cr = is.lastSegment()->element(is.track());
         if (cr && cr->isChord()) {
             inputEv.chord = true;
         }
@@ -101,15 +128,14 @@ void NotationMidiInput::onNoteReceived(const midi::Event& e)
 
     m_undoStack->prepareChanges();
 
-    Ms::Note* note = sc->addMidiPitch(inputEv.pitch, inputEv.chord);
-    if (note) {
-        playbackController()->playElement(note);
-    }
+    mu::engraving::Note* note = sc->addMidiPitch(inputEv.pitch, inputEv.chord);
 
     sc->activeMidiPitches().push_back(inputEv);
     m_undoStack->commitChanges();
 
     m_noteChanged.notify();
+
+    return note;
 }
 
 mu::async::Notification NotationMidiInput::noteChanged() const

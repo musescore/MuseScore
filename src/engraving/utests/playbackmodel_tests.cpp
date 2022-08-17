@@ -44,9 +44,9 @@ using namespace mu::engraving;
 using namespace mu::mpe;
 using namespace mu;
 
-static const QString PLAYBACK_MODEL_TEST_FILES_DIR("playbackmodel_data/");
+static const String PLAYBACK_MODEL_TEST_FILES_DIR("playbackmodel_data/");
 
-class PlaybackModelTests : public ::testing::Test, public async::Asyncable
+class Engraving_PlaybackModelTests : public ::testing::Test, public async::Asyncable
 {
 protected:
     void SetUp() override
@@ -72,18 +72,18 @@ protected:
 
 /**
  * @brief PlaybackModelTests_SimpleRepeat
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 4 measures
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 4 measures
  *          Additionally, there is a simple repeat from measure 2 up to measure 3. In total, we'll be playing 6 measures overall
  */
-TEST_F(PlaybackModelTests, SimpleRepeat)
+TEST_F(Engraving_PlaybackModelTests, SimpleRepeat)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_range/repeat_range.mscx");
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_range/repeat_range.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -106,19 +106,19 @@ TEST_F(PlaybackModelTests, SimpleRepeat)
 
 /**
  * @brief PlaybackModelTests_Two_Ending_Repeat
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 6 measures
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 6 measures
  *          Additionally, there is a repeat at the end of the second measure. Measure 2 is the first ending of the repeat.
  *          Measure 3 is the second ending of the repeat. In total, we'll be playing 7 measures overall
  */
-TEST_F(PlaybackModelTests, Two_Ending_Repeat)
+TEST_F(Engraving_PlaybackModelTests, Two_Ending_Repeat)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_with_2_voltas/repeat_with_2_voltas.mscx");
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_with_2_voltas/repeat_with_2_voltas.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -141,19 +141,19 @@ TEST_F(PlaybackModelTests, Two_Ending_Repeat)
 
 /**
  * @brief PlaybackModelTests_Da_Capo_Al_Fine
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 6 measures
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 6 measures
  *          Additionally, there is a "D.C. Al Fine" marking at the end of the 6-th measure. Measure 2 is marked by "Fine"
  *          In total, we'll be playing 8 measures overall
  */
-TEST_F(PlaybackModelTests, Da_Capo_Al_Fine)
+TEST_F(Engraving_PlaybackModelTests, Da_Capo_Al_Fine)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "da_capo_al_fine/da_capo_al_fine.mscx");
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "da_capo_al_fine/da_capo_al_fine.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -176,20 +176,20 @@ TEST_F(PlaybackModelTests, Da_Capo_Al_Fine)
 
 /**
  * @brief PlaybackModelTests_Dal_Segno_Al_Coda
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 6 measures
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 6 measures
  *          Additionally, there is a "D.S. Al Coda" marking at the end of the 4-th measure. Measure 2 is marked by "Segno" marking.
  *          The end of the 3-rd measure is marked by "To Coda" marking. The beginning of the 5-th measure is marked by "Coda" sign
  *          In total, we'll be playing 8 measures overall
  */
-TEST_F(PlaybackModelTests, Dal_Segno_Al_Coda)
+TEST_F(Engraving_PlaybackModelTests, Dal_Segno_Al_Coda)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "dal_segno_al_coda/dal_segno_al_coda.mscx");
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "dal_segno_al_coda/dal_segno_al_coda.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -212,19 +212,19 @@ TEST_F(PlaybackModelTests, Dal_Segno_Al_Coda)
 
 /**
  * @brief PlaybackModelTests_Dal_Segno_Al_Fine
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 6 measures
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 6 measures
  *          Additionally, there is a "D.S. Al Fine" marking at the end of the 6-th measure. Measure 2 is marked by "Segno" marking.
  *          The end of the 4-th measure is marked by "Fine" marking. In total, we'll be playing 9 measures overall
  */
-TEST_F(PlaybackModelTests, Dal_Segno_Al_Fine)
+TEST_F(Engraving_PlaybackModelTests, Dal_Segno_Al_Fine)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "dal_segno_al_fine/dal_segno_al_fine.mscx");
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "dal_segno_al_fine/dal_segno_al_fine.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -247,19 +247,19 @@ TEST_F(PlaybackModelTests, Dal_Segno_Al_Fine)
 
 /**
  * @brief PlaybackModelTests_Da_Capo_Al_Coda
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 6 measures
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 6 measures
  *          Additionally, there is a "D.C. Al Coda" marking at the end of the 6-th measure. The end of the measure 2 is marked by "To Coda".
  *          The beginning of the 4-th measure is marked by "Coda" sign. In total, we'll be playing 11 measures overall
  */
-TEST_F(PlaybackModelTests, Da_Capo_Al_Coda)
+TEST_F(Engraving_PlaybackModelTests, Da_Capo_Al_Coda)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "da_capo_al_coda/da_capo_al_coda.mscx");
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "da_capo_al_coda/da_capo_al_coda.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -282,19 +282,19 @@ TEST_F(PlaybackModelTests, Da_Capo_Al_Coda)
 
 /**
  * @brief PlaybackModelTests_Da_Capo_Al_Coda
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 1 measure
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 1 measure
  *          Additionally, the first note is marked by "pizzicato" + "stacattissimo". The 3-rd note is marked by "arco"
  *          We'll be playing 4 events overall
  */
-TEST_F(PlaybackModelTests, Pizz_To_Arco_Technique)
+TEST_F(Engraving_PlaybackModelTests, Pizz_To_Arco_Technique)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "pizz_to_arco/pizz_to_arco.mscx");
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "pizz_to_arco/pizz_to_arco.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -315,45 +315,45 @@ TEST_F(PlaybackModelTests, Pizz_To_Arco_Technique)
     EXPECT_EQ(result.size(), expectedSize);
 
     // [THEN] The first note has Pizzicato and Staccatissimo articulations applied
-    const NoteEvent& firstNoteEvent = std::get<NoteEvent>(result.at(0).at(0));
+    const mu::mpe::NoteEvent& firstNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(0).at(0));
     EXPECT_EQ(firstNoteEvent.expressionCtx().articulations.size(), 2);
     EXPECT_TRUE(firstNoteEvent.expressionCtx().articulations.contains(ArticulationType::Pizzicato));
     EXPECT_TRUE(firstNoteEvent.expressionCtx().articulations.contains(ArticulationType::Staccatissimo));
 
     // [THEN] The second note has only Pizzicato articulation applied
-    const NoteEvent& secondNoteEvent = std::get<NoteEvent>(result.at(500).at(0));
+    const mu::mpe::NoteEvent& secondNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(500000).at(0));
     EXPECT_EQ(secondNoteEvent.expressionCtx().articulations.size(), 1);
     EXPECT_TRUE(secondNoteEvent.expressionCtx().articulations.contains(ArticulationType::Pizzicato));
 
     // [THEN] The third note has only Standard articulation applied
-    const NoteEvent& thirdNoteEvent = std::get<NoteEvent>(result.at(1000).at(0));
+    const mu::mpe::NoteEvent& thirdNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(1000000).at(0));
     EXPECT_EQ(thirdNoteEvent.expressionCtx().articulations.size(), 1);
     EXPECT_TRUE(thirdNoteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
 
     // [THEN] The fourth note has only Standard articulation applied
-    const NoteEvent& fourthNoteEvent = std::get<NoteEvent>(result.at(1500).at(0));
+    const mu::mpe::NoteEvent& fourthNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(1500000).at(0));
     EXPECT_EQ(fourthNoteEvent.expressionCtx().articulations.size(), 1);
     EXPECT_TRUE(fourthNoteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
 }
 
 /**
  * @brief PlaybackModelTests_Repeat_Last_Measure
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 6 measures
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 6 measures
  *          Additionally, there is a "repeat last measure" sign on the 6-th measure. In total, we'll be playing 7 measures overall
  *
  * @bug The test is currently disabled. At the moment it shows a flaw in libmscore - repeatSegments. RepeatSegments calculations don't
  *      take into account MeasureRepeat elements which leads to issues with playback model. Whenever the root issue will be finished, this test
  *      will be enabled
  */
-TEST_F(PlaybackModelTests, DISABLED_Repeat_Last_Measure)
+TEST_F(Engraving_PlaybackModelTests, DISABLED_Repeat_Last_Measure)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_last_measure/repeat_last_measure.mscx");
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_last_measure/repeat_last_measure.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -376,21 +376,21 @@ TEST_F(PlaybackModelTests, DISABLED_Repeat_Last_Measure)
 
 /**
  * @brief PlaybackModelTests_SimpleRepeat_Changes_Notification
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 4 measures
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 4 measures
  *          Additionally, there is a simple repeat from measure 2 up to measure 3. In total, we'll be playing 6 measures overall
  *
  *          When the model will be loaded we'll emulate a change notification on the 2-nd measure, so that there will be updated events
  *          on the main stream channel
  */
-TEST_F(PlaybackModelTests, SimpleRepeat_Changes_Notification)
+TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_range/repeat_range.mscx");
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_range/repeat_range.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -413,31 +413,31 @@ TEST_F(PlaybackModelTests, SimpleRepeat_Changes_Notification)
     });
 
     // [WHEN] Notation has been changed on the 2-nd measure
-    Ms::ScoreChangesRange range;
+    ScoreChangesRange range;
     range.tickFrom = 1920;
     range.tickTo = 3840;
     range.staffIdxFrom = 0;
     range.staffIdxTo = 0;
-    range.changedTypes = { Ms::ElementType::NOTE };
+    range.changedTypes = { ElementType::NOTE };
 
     score->changesChannel().send(range);
 }
 
 /**
  * @brief PlaybackModelTests_Metronome_4_4
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 4 measures
- *          Measure 1: 4 quarter notes, Measure 2: full measure rest, Measure 3: 8 eigth-notes, Measure 4: 16 sixteen-notes
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 4 measures
+ *          Measure 1: 4 quarter notes, Measure 2: full measure rest, Measure 3: 8 eighth-notes, Measure 4: 16 sixteen-notes
  *          So that we'll be playing 16 beats in total
  */
-TEST_F(PlaybackModelTests, Metronome_4_4)
+TEST_F(Engraving_PlaybackModelTests, Metronome_4_4)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "metronome_4_4/metronome_4_4.mscx");
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "metronome_4_4/metronome_4_4.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -460,18 +460,19 @@ TEST_F(PlaybackModelTests, Metronome_4_4)
 
 /**
  * @brief PlaybackModelTests_Metronome_6_4_Repeat
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 4 measures
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 4 measures
  *          Additionally, there is a simple repeat on measure 2. In total, we'll be playing 30 beats, including repeated measure
  */
-TEST_F(PlaybackModelTests, Metronome_6_4_Repeat)
+TEST_F(Engraving_PlaybackModelTests, Metronome_6_4_Repeat)
 {
-    // [GIVEN] Simple piece of score (Viollin, 6/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "metronome_6_4_with_repeat/metronome_6_4_with_repeat.mscx");
+    // [GIVEN] Simple piece of score (Violin, 6/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(
+        PLAYBACK_MODEL_TEST_FILES_DIR + "metronome_6_4_with_repeat/metronome_6_4_with_repeat.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -494,19 +495,20 @@ TEST_F(PlaybackModelTests, Metronome_6_4_Repeat)
 
 /**
  * @brief PlaybackModelTests_Note_Entry_Playback_Note
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 1 measure
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 1 measure
  *          Additionally, we'll emulate the situation where user clicks on the first note, so that we should playback it
  *
  */
-TEST_F(PlaybackModelTests, Note_Entry_Playback_Note)
+TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback_note/note_entry_playback_note.mscx");
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(
+        PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback_note/note_entry_playback_note.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -514,17 +516,17 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Note)
     ON_CALL(*m_repositoryMock, defaultProfile(_)).WillByDefault(Return(m_defaultProfile));
 
     // [GIVEN] The very first note of the score
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    const Ms::Chord* chord = Ms::toChord(firstSegment->nextChordRest(0));
+    const Chord* chord = toChord(firstSegment->nextChordRest(0));
     ASSERT_TRUE(chord);
     ASSERT_TRUE(chord->notes().size() == 1);
 
-    const Ms::Note* firstNote = chord->notes().front();
+    const Note* firstNote = chord->notes().front();
     mpe::timestamp_t firstNoteTimestamp = 0;
 
     // [GIVEN] The playback model requested to be loaded
@@ -535,7 +537,7 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Note)
     PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString());
 
     // [GIVEN] Expected note event
-    const mpe::NoteEvent& expectedEvent = std::get<mpe::NoteEvent>(result.originEvents.at(firstNoteTimestamp).front());
+    const mu::mpe::NoteEvent& expectedEvent = std::get<mu::mpe::NoteEvent>(result.originEvents.at(firstNoteTimestamp).front());
 
     // [THEN] Triggered events map will match our expectations
     result.offStream.onReceive(this, [firstNoteTimestamp, expectedEvent](const PlaybackEventsMap& triggeredEvents) {
@@ -545,7 +547,7 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Note)
 
         EXPECT_EQ(eventList.size(), 1);
 
-        const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(eventList.front());
+        const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(eventList.front());
 
         EXPECT_TRUE(noteEvent.arrangementCtx().actualTimestamp == expectedEvent.arrangementCtx().actualTimestamp);
         EXPECT_FALSE(noteEvent.expressionCtx() == expectedEvent.expressionCtx());
@@ -553,25 +555,26 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Note)
     });
 
     // [WHEN] User has clicked on the first note
-    model.triggerEventsForItem(firstNote);
+    model.triggerEventsForItems({ firstNote });
 }
 
 /**
  * @brief PlaybackModelTests_Note_Entry_Playback_Chord
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 1 measure
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 1 measure
  *          Additionally, we'll emulate the situation where user wants to playback the third chord and make sure that we'll sent
  *          all the necessary events into audio-engine
  *
  */
-TEST_F(PlaybackModelTests, Note_Entry_Playback_Chord)
+TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback_chord/note_entry_playback_chord.mscx");
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(
+        PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback_chord/note_entry_playback_chord.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -579,14 +582,14 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Chord)
     ON_CALL(*m_repositoryMock, defaultProfile(_)).WillByDefault(Return(m_defaultProfile));
 
     // [GIVEN] The third chord of the score
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
     size_t expectedNoteCount = 3;
     int thirdChordPositionTick = 480 * 2;
-    timestamp_t thirdChordTimestamp = 500 * 2;
+    timestamp_t thirdChordTimestamp = 500000 * 2;
 
-    const Ms::Chord* thirdChord = firstMeasure->findChord(Ms::Fraction::fromTicks(thirdChordPositionTick), 0);
+    const Chord* thirdChord = firstMeasure->findChord(Fraction::fromTicks(thirdChordPositionTick), 0);
     ASSERT_TRUE(thirdChord);
     ASSERT_TRUE(thirdChord->notes().size() == expectedNoteCount);
 
@@ -601,24 +604,24 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Chord)
     const PlaybackEventList& expectedEvents = result.originEvents.at(thirdChordTimestamp);
 
     // [THEN] Triggered events map will match our expectations
-    result.offStream.onReceive(this, [thirdChordTimestamp, expectedEvents](const PlaybackEventsMap& triggeredEvents) {
+    result.offStream.onReceive(this, [expectedEvents](const PlaybackEventsMap& triggeredEvents) {
         EXPECT_EQ(triggeredEvents.size(), 1);
 
-        const PlaybackEventList& actualEvents = triggeredEvents.at(thirdChordTimestamp);
+        const PlaybackEventList& actualEvents = triggeredEvents.at(0);
         EXPECT_EQ(actualEvents.size(), expectedEvents.size());
 
         for (size_t i = 0; i < expectedEvents.size(); ++i) {
-            const mpe::NoteEvent expectedNoteEvent = std::get<mpe::NoteEvent>(expectedEvents.at(i));
-            const mpe::NoteEvent actualNoteEvent = std::get<mpe::NoteEvent>(actualEvents.at(i));
+            const mu::mpe::NoteEvent expectedNoteEvent = std::get<mu::mpe::NoteEvent>(expectedEvents.at(i));
+            const mu::mpe::NoteEvent actualNoteEvent = std::get<mu::mpe::NoteEvent>(actualEvents.at(i));
 
-            EXPECT_TRUE(actualNoteEvent.arrangementCtx().actualTimestamp == expectedNoteEvent.arrangementCtx().actualTimestamp);
+            EXPECT_TRUE(actualNoteEvent.arrangementCtx().actualTimestamp == 0);
             EXPECT_FALSE(actualNoteEvent.expressionCtx() == expectedNoteEvent.expressionCtx());
             EXPECT_TRUE(actualNoteEvent.pitchCtx() == expectedNoteEvent.pitchCtx());
         }
     });
 
     // [WHEN] User has clicked on the first note
-    model.triggerEventsForItem(thirdChord);
+    model.triggerEventsForItems({ thirdChord });
 }
 
 /**
@@ -638,10 +641,11 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Chord)
  *
  *          We need to make sure that playback setup data will be properly prepared, so that the score will be played with appropriate sounds
  */
-TEST_F(PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
+TEST_F(Engraving_PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
 {
     // [GIVEN] Score with 12 instruments
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "playback_setup_instruments/playback_setup_instruments.mscx");
+    Score* score = ScoreRW::readScore(
+        PLAYBACK_MODEL_TEST_FILES_DIR + "playback_setup_instruments/playback_setup_instruments.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 12);
@@ -679,7 +683,7 @@ TEST_F(PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
     model.load(score);
 
     // [THEN] Result matches with our expectations
-    for (const Ms::Part* part : score->parts()) {
+    for (const Part* part : score->parts()) {
         for (const auto& pair : part->instruments()) {
             const std::string& instrumentId = pair.second->id().toStdString();
             const PlaybackData& result = model.resolveTrackPlaybackData(part->id(), instrumentId);

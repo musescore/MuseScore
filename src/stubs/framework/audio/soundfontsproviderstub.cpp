@@ -23,7 +23,7 @@
 
 using namespace mu::audio;
 
-std::vector<mu::io::path> synth::SoundFontsProviderStub::soundFontPathsForSynth(const synth::SynthName&) const
+std::vector<mu::io::path_t> synth::SoundFontsProviderStub::soundFontPathsForSynth(const synth::SynthName&) const
 {
     return {};
 }
@@ -33,7 +33,7 @@ mu::async::Notification synth::SoundFontsProviderStub::soundFontPathsForSynthCha
     return mu::async::Notification();
 }
 
-std::vector<mu::io::path> synth::SoundFontsProviderStub::soundFontPaths(synth::SoundFontFormats) const
+std::vector<mu::io::path_t> synth::SoundFontsProviderStub::soundFontPaths(synth::SoundFontFormats) const
 {
     return {};
 }

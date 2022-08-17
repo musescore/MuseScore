@@ -24,18 +24,16 @@
 
 #include <vector>
 
-namespace Ms {
+namespace mu::engraving {
 class System;
 class Segment;
-}
 
-namespace mu::engraving {
 class LayoutHarmonies
 {
 public:
 
-    static void layoutHarmonies(const std::vector<Ms::Segment*>& sl);
-    static void alignHarmonies(const Ms::System* system, const std::vector<Ms::Segment*>& sl, bool harmony, const double maxShiftAbove,
+    static void layoutHarmonies(const std::vector<Segment*>& sl);
+    static void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool harmony, const double maxShiftAbove,
                                const double maxShiftBelow);
 };
 }

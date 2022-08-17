@@ -25,7 +25,7 @@
 
 #include "text.h"
 
-namespace Ms {
+namespace mu::engraving {
 enum class InstrumentNameType : char {
     LONG, SHORT
 };
@@ -39,6 +39,8 @@ class SysStaff;
 
 class InstrumentName final : public TextBase
 {
+    OBJECT_ALLOCATOR(engraving, InstrumentName)
+
     InstrumentNameType _instrumentNameType;
     int _layoutPos { 0 };
     SysStaff* _sysStaff { nullptr };
@@ -51,10 +53,10 @@ public:
     int layoutPos() const { return _layoutPos; }
     void setLayoutPos(int val) { _layoutPos = val; }
 
-    QString instrumentNameTypeName() const;
+    String instrumentNameTypeName() const;
     InstrumentNameType instrumentNameType() const { return _instrumentNameType; }
     void setInstrumentNameType(InstrumentNameType v);
-    void setInstrumentNameType(const QString& s);
+    void setInstrumentNameType(const String& s);
 
     System* system() const { return toSystem(explicitParent()); }
 
@@ -63,9 +65,9 @@ public:
 
     Fraction playTick() const override;
     bool isEditable() const override { return false; }
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

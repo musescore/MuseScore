@@ -33,8 +33,8 @@ class IOveConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IOveConfiguration() = default;
 
-    virtual std::string importOvertuneCharset() const = 0;
-    virtual void setImportOvertuneCharset(const std::string& charset) = 0;
+    virtual std::string importOvertureCharset() const = 0;
+    virtual void setImportOvertureCharset(const std::string& charset) = 0;
 };
 }
 

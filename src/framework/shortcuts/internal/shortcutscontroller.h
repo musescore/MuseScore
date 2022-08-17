@@ -47,6 +47,9 @@ public:
 
     void activate(const std::string& sequence) override;
     bool isRegistered(const std::string& sequence) const override;
+
+private:
+    actions::ActionCode resolveAction(const std::string& sequence) const;
 };
 }
 

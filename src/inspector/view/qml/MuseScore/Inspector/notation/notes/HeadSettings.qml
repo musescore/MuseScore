@@ -126,6 +126,19 @@ FocusableItem {
 
                 spacing: 12
 
+                DropdownPropertyView {
+                    id: noteHeadSystemSection
+
+                    titleText: qsTrc("inspector", "Notehead system")
+                    propertyItem: root.model ? root.model.headSystem : null
+
+                    model: root.model.possibleHeadSystemTypes()
+
+                    navigationName: "NoteHeadSystemSection"
+                    navigationPanel: root.navigationPanel
+                    navigationRowStart: showItem.navigation.row + 1
+                }
+
                 NoteheadTypeSelector {
                     id: noteHeadTypeSection
                     titleText: qsTrc("inspector", "Notehead type (visual only)")
@@ -133,7 +146,7 @@ FocusableItem {
 
                     navigationName: "NoteHeadTypeSection"
                     navigationPanel: root.navigationPanel
-                    navigationRowStart: showItem.navigation.row + 1
+                    navigationRowStart: noteHeadSystemSection.navigationRowEnd + 1
                 }
 
                 DirectionSection {

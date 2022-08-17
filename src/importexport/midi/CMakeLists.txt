@@ -20,10 +20,12 @@
 
 set(MODULE iex_midi)
 
+include(${CMAKE_CURRENT_LIST_DIR}/internal/midishared/midishared.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/midiimport/midiimport.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/midiexport/midiexport.cmake)
 
 set(MODULE_SRC
+    ${MIDISHARED_SRC}
     ${MIDIIMPORT_SRC}
     ${MIDIEXPORT_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/midimodule.cpp
@@ -38,9 +40,8 @@ set(MODULE_SRC
     )
 
 set(MODULE_LINK
-    beatroot    # for midi
+    beatroot
     engraving
-    qzip
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

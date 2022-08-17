@@ -29,7 +29,7 @@ Item {
     id: root
 
     property var selectedSoundFonts: []
-    property var avalaibleSoundFonts: []
+    property var availableSoundFonts: []
 
     signal selectedUpClicked(var index)
     signal selectedDownClicked(var index)
@@ -42,7 +42,7 @@ Item {
     }
 
     Item {
-        id: avalaiblePanel
+        id: availablePanel
 
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -51,21 +51,21 @@ Item {
         width: (parent.width / 2) - 40
 
         StyledTextLabel {
-            id: headerAvalaible
+            id: headerAvailable
             anchors.left: parent.left
             anchors.leftMargin: 8
             width: parent.width
             height: 40
             font: ui.theme.bodyBoldFont
-            text: "Avalaible"
+            text: "Available"
         }
 
         ListView {
-            anchors.top: headerAvalaible.bottom
+            anchors.top: headerAvailable.bottom
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            model: root.avalaibleSoundFonts
+            model: root.availableSoundFonts
 
             delegate: Item {
                 width: parent.width
@@ -97,7 +97,7 @@ Item {
         id: separator
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        anchors.left: avalaiblePanel.right
+        anchors.left: availablePanel.right
         width: 4
         color: "#666666"
     }
@@ -111,7 +111,7 @@ Item {
         anchors.margins: 8
 
         StyledTextLabel {
-            id: headerSelecetd
+            id: headerSelected
             anchors.left: parent.left
             anchors.leftMargin: 8
             width: parent.width
@@ -122,11 +122,11 @@ Item {
 
         ListView {
             id: selectedView
-            anchors.top: headerSelecetd.bottom
+            anchors.top: headerSelected.bottom
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            model: root.avalaibleSoundFonts
+            model: root.availableSoundFonts
 
             delegate: Item {
                 width: parent.width

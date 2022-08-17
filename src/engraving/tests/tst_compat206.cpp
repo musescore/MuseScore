@@ -53,7 +53,7 @@ private slots:
     void hairpin() { compat("hairpin"); }
     void brlines() { compat("barlines"); }
     void lidEmptyText() { compat("lidemptytext"); }
-    void intrumentNameAlign() { compat("intrumentNameAlign"); }
+    void instrumentNameAlign() { compat("instrumentNameAlign"); }
     void fermata() { compat("fermata"); }
     void frame_utf8() { compat("frame_text2"); }
 };

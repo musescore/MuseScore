@@ -25,7 +25,7 @@
 
 #include "textlinebase.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Note;
 
 //---------------------------------------------------------
@@ -34,6 +34,8 @@ class Note;
 
 class TextLineSegment final : public TextLineBaseSegment
 {
+    OBJECT_ALLOCATOR(engraving, TextLineSegment)
+
     Sid getTextLinePos(bool above) const;
     Sid getPropertyStyle(Pid) const override;
 
@@ -54,6 +56,8 @@ public:
 
 class TextLine final : public TextLineBase
 {
+    OBJECT_ALLOCATOR(engraving, TextLine)
+
     Sid getTextLinePos(bool above) const;
     Sid getPropertyStyle(Pid) const override;
 
@@ -62,7 +66,7 @@ public:
     TextLine(const TextLine&);
     ~TextLine() {}
 
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     SpannerSegment* layoutSystem(System*) override;
 
     TextLine* clone() const override { return new TextLine(*this); }
@@ -73,8 +77,8 @@ public:
     void initStyle();
 
     LineSegment* createLineSegment(System* parent) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -222,6 +222,7 @@ FocusScope {
             Layout.preferredWidth: height
             Layout.margins: root.accessoriesPadding
 
+            toolTipTitle: qsTrc("global", "Clear")
             icon: IconCode.CLOSE_X_ROUNDED
             visible: root.clearTextButtonVisible
 
@@ -230,7 +231,6 @@ FocusScope {
 
             navigation.panel: navCtrl.panel
             navigation.order: navCtrl.order + 1
-            accessible.name: qsTrc("global", "Clear")
 
             onClicked: {
                 root.clear()

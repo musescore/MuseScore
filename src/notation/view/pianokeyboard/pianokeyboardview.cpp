@@ -53,7 +53,7 @@ static QColor mixedColors(QColor background, QColor foreground, qreal opacity)
 }
 
 PianoKeyboardView::PianoKeyboardView(QQuickItem* parent)
-    : QQuickPaintedItem(parent), m_controller(new PianoKeyboardController())
+    : uicomponents::QuickPaintedView(parent), m_controller(new PianoKeyboardController())
 {
     calculateKeyRects();
 

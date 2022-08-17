@@ -25,7 +25,7 @@
 #include <memory>
 #include <QByteArray>
 
-#include "retval.h"
+#include "types/retval.h"
 #include "workspacetypes.h"
 #include "async/channel.h"
 

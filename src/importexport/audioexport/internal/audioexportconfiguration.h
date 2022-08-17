@@ -28,8 +28,15 @@ namespace mu::iex::audioexport {
 class AudioExportConfiguration : public IAudioExportConfiguration
 {
 public:
-    int exportMp3Bitrate() override;
+    void init();
+
+    int exportMp3Bitrate() const override;
     void setExportMp3Bitrate(std::optional<int> bitrate) override;
+    const std::vector<int>& availableMp3BitRates() const override;
+
+    int exportSampleRate() const override;
+    void setExportSampleRate(int rate) override;
+    const std::vector<int>& availableSampleRates() const override;
 
 private:
     std::optional<int> m_exportMp3Bitrate = std::nullopt;

@@ -21,10 +21,8 @@
 set(COMPAT_MIDI_SRC
     ${CMAKE_CURRENT_LIST_DIR}/event.cpp
     ${CMAKE_CURRENT_LIST_DIR}/event.h
-    ${CMAKE_CURRENT_LIST_DIR}/midifile.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/midifile.h
-    ${CMAKE_CURRENT_LIST_DIR}/midiinstrument.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/midiinstrument.h
+    ${CMAKE_CURRENT_LIST_DIR}/midicoreevent.h
+    ${CMAKE_CURRENT_LIST_DIR}/midipatch.h
     )
 
 if (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)

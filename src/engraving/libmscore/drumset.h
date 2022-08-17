@@ -27,19 +27,13 @@
 #include "tremolo.h"
 #include "note.h"
 
-namespace Ms {
+namespace mu::engraving {
 class XmlWriter;
 
 struct DrumInstrumentVariant {
-    int pitch;
-    QString articulationName;
-    TremoloType tremolo;
-    DrumInstrumentVariant()
-    {
-        pitch = INVALID_PITCH;
-        tremolo = TremoloType::INVALID_TREMOLO;
-        articulationName = "";
-    }
+    int pitch = INVALID_PITCH;
+    TremoloType tremolo = TremoloType::INVALID_TREMOLO;
+    String articulationName;
 };
 
 //---------------------------------------------------------
@@ -47,7 +41,7 @@ struct DrumInstrumentVariant {
 //---------------------------------------------------------
 
 struct DrumInstrument {
-    QString name;
+    String name;
 
     // if notehead = HEAD_CUSTOM, custom, use noteheads
     NoteHeadGroup notehead = NoteHeadGroup::HEAD_INVALID;   ///< notehead symbol set
@@ -63,7 +57,7 @@ struct DrumInstrument {
     DrumInstrument() {}
     DrumInstrument(const char* s, NoteHeadGroup nh, int l, DirectionV d,
                    int v = 0, char sc = 0)
-        : name(s), notehead(nh), line(l), stemDirection(d), voice(v), shortcut(sc) {}
+        : name(String::fromUtf8(s)), notehead(nh), line(l), stemDirection(d), voice(v), shortcut(sc) {}
 
     void addVariant(DrumInstrumentVariant v) { variants.push_back(v); }
 };
@@ -81,13 +75,14 @@ class Drumset
     DrumInstrument _drum[DRUM_INSTRUMENTS];
 
 public:
-    bool isValid(int pitch) const { return !_drum[pitch].name.isEmpty(); }
+    bool isValid(int pitch) const { return !_drum[pitch].name.empty(); }
     NoteHeadGroup noteHead(int pitch) const { return _drum[pitch].notehead; }
     SymId noteHeads(int pitch, NoteHeadType t) const { return _drum[pitch].noteheads[int(t)]; }
     int line(int pitch) const { return _drum[pitch].line; }
     int voice(int pitch) const { return _drum[pitch].voice; }
     DirectionV stemDirection(int pitch) const { return _drum[pitch].stemDirection; }
-    const QString& name(int pitch) const { return _drum[pitch].name; }
+    const String& name(int pitch) const { return _drum[pitch].name; }
+    String translatedName(int pitch) const;
     int shortcut(int pitch) const { return _drum[pitch].shortcut; }
     std::list<DrumInstrumentVariant> variants(int pitch) const { return _drum[pitch].variants; }
 
@@ -100,10 +95,9 @@ public:
     DrumInstrument& drum(int i) { return _drum[i]; }
     const DrumInstrument& drum(int i) const { return _drum[i]; }
     DrumInstrumentVariant findVariant(int pitch, const std::vector<Articulation*> articulations, Tremolo* tremolo) const;
-    int pitch(int element, int variation, const QString& name) const;
 };
 
 extern Drumset* smDrumset;
 extern void initDrumset();
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

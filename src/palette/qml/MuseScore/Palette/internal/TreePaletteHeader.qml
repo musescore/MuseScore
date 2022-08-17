@@ -68,7 +68,11 @@ Item {
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRow
         navigation.column: 1
-        accessible.name: qsTrc("palette", "Expand")
+        navigation.accessible.name: root.expanded
+                                    //: Collapse a tree item
+                                    ? qsTrc("global", "Collapse")
+                                    //: Expand a tree item
+                                    : qsTrc("global", "Expand")
 
         onClicked: root.toggleExpandRequested()
     }

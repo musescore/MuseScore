@@ -31,19 +31,18 @@
 #include "engraving/libmscore/chord.h"
 #include "engraving/libmscore/measure.h"
 #include "engraving/libmscore/part.h"
-#include "engraving/libmscore/scorefont.h"
+#include "engraving/infrastructure/symbolfont.h"
 
-#include "commonscene/exampleview.h"
 #include "ui/view/musicalsymbolcodes.h"
 #include "ui/view/widgetstatestore.h"
 
 static QString TIME_SIGNATURE_PROPERTIES_DIALOG_NAME("TimeSignaturePropertiesDialog");
 
+using namespace mu::palette;
 using namespace mu::ui;
 using namespace mu::notation;
 using namespace mu::engraving;
 
-namespace Ms {
 //---------------------------------------------------------
 //    TimeSigProperties
 //---------------------------------------------------------
@@ -57,7 +56,7 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
     QString musicalFontFamily = QString::fromStdString(uiConfiguration()->musicalFontFamily());
     int musicalFontSize = uiConfiguration()->musicalFontSize();
 
-    QString radioButtonStyle = QString("QRadioButton { font-family: %1; font-size: %2pt }")
+    QString radioButtonStyle = QString("QRadioButton { font-family: %1; font-size: %2px }")
                                .arg(musicalFontFamily)
                                .arg(musicalFontSize);
 
@@ -91,20 +90,11 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
 
     Fraction nominal = m_editedTimeSig->sig() / m_editedTimeSig->stretch();
     nominal.reduce();
-    zNominal->setValue(nominal.numerator());
-    nNominal->setValue(nominal.denominator());
-    Fraction sig(m_editedTimeSig->sig());
-    zActual->setValue(sig.numerator());
-    nActual->setValue(sig.denominator());
-    zNominal->setEnabled(false);
-    nNominal->setEnabled(false);
 
     // TODO: fix https://musescore.org/en/node/42341
     // for now, editing of actual (local) time sig is disabled in dialog
     // but more importantly, the dialog should make it clear that this is "local" change only
     // and not normally the right way to add 7/4 to a score
-    zActual->setEnabled(false);
-    nActual->setEnabled(false);
     switch (m_editedTimeSig->timeSigType()) {
     case TimeSigType::NORMAL:
         textButton->setChecked(true);
@@ -135,15 +125,15 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
         SymId::mensuralProlation11, // tempus inperf., prol. perfecta, reversed
     };
 
-    ScoreFont* scoreFont = gpaletteScore->scoreFont();
+    SymbolFont* symbolFont = gpaletteScore->symbolFont();
 
     otherCombo->clear();
-    otherCombo->setStyleSheet(QString("QComboBox { font-family: \"%1 Text\"; font-size: %2pt; max-height: 30px } ")
-                              .arg(scoreFont->family()).arg(musicalFontSize));
+    otherCombo->setStyleSheet(QString("QComboBox { font-family: \"%1 Text\"; font-size: %2px; max-height: 30px } ")
+                              .arg(symbolFont->family()).arg(musicalFontSize));
 
     int idx = 0;
     for (SymId prolatio : prolatioList) {
-        const QString& str = scoreFont->toString(prolatio);
+        const QString& str = symbolFont->toString(prolatio);
         if (str.size() > 0) {
             otherCombo->addItem(str, int(prolatio));
 
@@ -212,10 +202,7 @@ void TimeSignaturePropertiesDialog::accept()
         ts = TimeSigType::ALLA_BREVE;
     }
 
-    Fraction actual(zActual->value(), nActual->value());
-    Fraction nominal(zNominal->value(), nNominal->value());
-    m_editedTimeSig->setSig(actual, ts);
-    m_editedTimeSig->setStretch(nominal / actual);
+    m_editedTimeSig->setProperty(mu::engraving::Pid::TIMESIG_TYPE, static_cast<int>(ts));
 
     if (zText->text() != m_editedTimeSig->numeratorString()) {
         m_editedTimeSig->setNumeratorString(zText->text());
@@ -225,10 +212,10 @@ void TimeSignaturePropertiesDialog::accept()
     }
 
     if (otherButton->isChecked()) {
-        ScoreFont* scoreFont = m_editedTimeSig->score()->scoreFont();
+        SymbolFont* symbolFont = m_editedTimeSig->score()->symbolFont();
         SymId symId = (SymId)(otherCombo->itemData(otherCombo->currentIndex()).toInt());
         // ...and set numerator to font string for symbol and denominator to empty string
-        m_editedTimeSig->setNumeratorString(scoreFont->toString(symId));
+        m_editedTimeSig->setNumeratorString(symbolFont->toString(symId));
         m_editedTimeSig->setDenominatorString(QString());
     }
 
@@ -257,5 +244,4 @@ void TimeSignaturePropertiesDialog::accept()
 INotationPtr TimeSignaturePropertiesDialog::notation() const
 {
     return globalContext()->currentNotation();
-}
 }

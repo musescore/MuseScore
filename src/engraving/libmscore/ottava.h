@@ -26,7 +26,7 @@
 #include "textlinebase.h"
 #include "property.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   OttavaE
 //---------------------------------------------------------
@@ -78,7 +78,9 @@ class Ottava;
 
 class OttavaSegment final : public TextLineBaseSegment
 {
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
+    OBJECT_ALLOCATOR(engraving, OttavaSegment)
+
+    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     Sid getPropertyStyle(Pid) const override;
 
 public:
@@ -97,12 +99,14 @@ public:
 
 class Ottava final : public TextLineBase
 {
+    OBJECT_ALLOCATOR(engraving, Ottava)
+
     OttavaType _ottavaType;
     bool _numbersOnly;
 
     void updateStyledProperties();
     Sid getPropertyStyle(Pid) const override;
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
 protected:
     friend class OttavaSegment;
@@ -128,14 +132,13 @@ public:
     void read(XmlReader& de) override;
     bool readProperties(XmlReader& e) override;
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
-    QString accessibleInfo() const override;
+    String accessibleInfo() const override;
     static const char* ottavaTypeName(OttavaType type);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

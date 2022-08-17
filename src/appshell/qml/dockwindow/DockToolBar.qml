@@ -30,16 +30,19 @@ DockToolBarView {
 
     default property alias contentComponent: contentLoader.sourceComponent
 
-    property alias floatable: gripButton.visible
-
     property int gripButtonPadding: 2
     property int contentTopPadding: 0
     property int contentBottomPadding: 0
 
-    readonly property bool isVertical: orientation === Qt.Vertical
+    property int thickness: 36
+
+    readonly property bool isVertical: root.orientation === Qt.Vertical
+
+    minimumWidth: root.inited ? Math.min(root.contentWidth, root.maximumWidth) : prv.minimumLength
+    minimumHeight: root.inited ? Math.min(root.contentHeight, root.maximumHeight) : prv.minimumLength
 
     onFloatingChanged: {
-        if (!floating) {
+        if (!root.floating) {
             //! NOTE: The dock widgets system determines the position of a toolbar
             //  when inserting the toolbar into the app window.
             //  It may be that the grip button can be moved to a different
@@ -53,29 +56,30 @@ DockToolBarView {
         }
     }
 
-    minimumWidth: Math.min(contentWidth, maximumWidth)
-    minimumHeight: Math.min(contentHeight, maximumHeight)
-
-    property int thickness: 36
-
     QtObject {
         id: prv
 
+        readonly property int minimumLength: 10
         readonly property int maximumLength: 16777215
-        readonly property int gripButtonWidth: gripButton.visible ? gripButton.width + 2 * gripButtonPadding : 0
-        readonly property int gripButtonHeight: gripButton.visible ? gripButton.height + 2 * gripButtonPadding : 0
+
+        readonly property int gripButtonWidth: gripButton.visible ? gripButton.width + 2 * root.gripButtonPadding : 0
+        readonly property int gripButtonHeight: gripButton.visible ? gripButton.height + 2 * root.gripButtonPadding : 0
     }
 
     Item {
         id: content
+
         anchors.fill: parent
         anchors.topMargin: root.contentTopPadding
         anchors.bottomMargin: root.contentBottomPadding
 
         FlatButton {
             id: gripButton
+
             width: root.isVertical ? 30 : 24
             height: root.isVertical ? 24 : 30
+
+            visible: root.floatable
 
             mouseArea.objectName: root.objectName + "_gripButton"
 
@@ -86,7 +90,7 @@ DockToolBarView {
             }
 
             Component.onCompleted: {
-                root.setDraggableMouseArea(mouseArea)
+                root.setDraggableMouseArea(gripButton.mouseArea)
             }
         }
 
@@ -104,10 +108,10 @@ DockToolBarView {
                 target: root
 
                 contentWidth: prv.gripButtonWidth + contentLoader.implicitWidth
-                contentHeight: Math.max(prv.gripButtonHeight, contentLoader.implicitHeight + contentBottomPadding + contentTopPadding)
+                contentHeight: Math.max(prv.gripButtonHeight, contentLoader.implicitHeight + root.contentBottomPadding + root.contentTopPadding)
 
-                maximumWidth: floating ? contentWidth : prv.maximumLength
-                maximumHeight: floating ? contentHeight : thickness
+                maximumWidth: root.floating ? root.contentWidth : prv.maximumLength
+                maximumHeight: root.floating ? root.contentHeight : root.thickness
             }
 
             PropertyChanges {
@@ -144,11 +148,11 @@ DockToolBarView {
             PropertyChanges {
                 target: root
 
-                contentWidth: Math.max(prv.gripButtonWidth, contentLoader.implicitWidth + contentBottomPadding + contentTopPadding)
+                contentWidth: Math.max(prv.gripButtonWidth, contentLoader.implicitWidth + root.contentBottomPadding + root.contentTopPadding)
                 contentHeight: prv.gripButtonHeight + contentLoader.implicitHeight
 
-                maximumWidth: thickness
-                maximumHeight: floating ? contentHeight : prv.maximumLength
+                maximumWidth: root.thickness
+                maximumHeight: root.floating ? root.contentHeight : prv.maximumLength
             }
 
             PropertyChanges {

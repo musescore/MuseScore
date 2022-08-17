@@ -16,7 +16,7 @@ FlatToggleButton 1.0 FlatToggleButton.qml
 IncrementalPropertyControl 1.0 IncrementalPropertyControl.qml
 RadioButtonGroup 1.0 RadioButtonGroup.qml
 SeparatorLine 1.0 SeparatorLine.qml
-Dropdown 1.0 Dropdown.qml
+StyledDropdown 1.0 StyledDropdown.qml
 Icon 1.0 Icon.qml
 TextInputField 1.0 TextInputField.qml
 ValueAdjustControl 1.0 ValueAdjustControl.qml
@@ -39,15 +39,13 @@ NumberInputField 1.0 NumberInputField.qml
 TimeInputField 1.0 TimeInputField.qml
 StyledPopupView 1.0 StyledPopupView.qml
 StyledDialogView 1.0 StyledDialogView.qml
-StyledMenu 1.0 StyledMenu.qml
-StyledMenuItem 1.0 StyledMenuItem.qml
 StyledMenuLoader 1.0 StyledMenuLoader.qml
+ContextMenuLoader 1.0 ContextMenuLoader.qml
 MenuButton 1.0 MenuButton.qml
 FilePicker 1.0 FilePicker.qml
 ValueList 1.0 ValueList.qml
 StyledDropShadow 1.0 StyledDropShadow.qml
 VisibilityBox 1.0 VisibilityBox.qml
-MenuMetrics 1.0 MenuMetrics.qml
 Utils 1.0 Utils.js
 StyledFlickable 1.0 StyledFlickable.qml
 StyledListView 1.0 StyledListView.qml

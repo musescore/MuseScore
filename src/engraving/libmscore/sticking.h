@@ -25,7 +25,7 @@
 
 #include "textbase.h"
 
-namespace Ms {
+namespace mu::engraving {
 //-----------------------------------------------------------------------------
 //   @@ Sticking
 ///    Drum sticking
@@ -33,7 +33,9 @@ namespace Ms {
 
 class Sticking final : public TextBase
 {
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    OBJECT_ALLOCATOR(engraving, Sticking)
+
+    PropertyValue propertyDefault(Pid id) const override;
 
 public:
     Sticking(Segment* parent);
@@ -50,5 +52,5 @@ public:
     bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -42,10 +42,12 @@
 #include "stafftype.h"
 #include "part.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 // table must be in sync with enum ClefType
 const ClefInfo ClefInfo::clefTable[] = {
 //                     line pOff|-lines for sharps---||---lines for flats--   |  symbol                | valid in staff group
@@ -102,9 +104,9 @@ Clef::Clef(Segment* parent)
 //   mag
 //---------------------------------------------------------
 
-qreal Clef::mag() const
+double Clef::mag() const
 {
-    qreal mag = staff() ? staff()->staffMag(tick()) : 1.0;
+    double mag = staff() ? staff()->staffMag(tick()) : 1.0;
     if (m_isSmall) {
         mag *= score()->styleD(Sid::smallClefMag);
     }
@@ -119,7 +121,7 @@ void Clef::layout()
 {
     // determine current number of lines and line distance
     int lines;
-    qreal lineDist;
+    double lineDist;
     Segment* clefSeg  = segment();
     int stepOffset;
 
@@ -150,8 +152,8 @@ void Clef::layout()
         if (!show) {
             setbbox(RectF());
             symId = SymId::noSym;
-            qDebug("Clef::layout(): invisible clef at tick %d(%d) staff %zu",
-                   segment()->tick().ticks(), segment()->tick().ticks() / 1920, staffIdx());
+            LOGD("Clef::layout(): invisible clef at tick %d(%d) staff %zu",
+                 segment()->tick().ticks(), segment()->tick().ticks() / 1920, staffIdx());
             return;
         }
         lines      = st->lines();             // init values from staff type
@@ -163,8 +165,8 @@ void Clef::layout()
         stepOffset = 0;
     }
 
-    qreal _spatium = spatium();
-    qreal yoff     = 0.0;
+    double _spatium = spatium();
+    double yoff     = 0.0;
     if (clefType() != ClefType::INVALID && clefType() != ClefType::MAX) {
         symId = ClefInfo::symId(clefType());
         yoff = lineDist * (5 - ClefInfo::line(clefType()));
@@ -179,7 +181,7 @@ void Clef::layout()
     case ClefType::TAB:                                    // TAB clef
         // on tablature, position clef at half the number of spaces * line distance
         yoff = lineDist * (lines - 1) * .5;
-        stepOffset = 0;           //  ignore stepOffset for TAB and pecussion clefs
+        stepOffset = 0;           //  ignore stepOffset for TAB and percussion clefs
         break;
     case ClefType::TAB4:                                    // TAB clef 4 strings
         // on tablature, position clef at half the number of spaces * line distance
@@ -206,7 +208,7 @@ void Clef::layout()
         break;
     case ClefType::INVALID:
     case ClefType::MAX:
-        qDebug("Clef::layout: invalid type");
+        LOGD("Clef::layout: invalid type");
         return;
     default:
         break;
@@ -214,7 +216,7 @@ void Clef::layout()
     // clefs on palette or at start of system/measure are left aligned
     // other clefs are right aligned
     RectF r(symBbox(symId));
-    qreal x = segment() && segment()->rtick().isNotZero() ? -r.right() : 0.0;
+    double x = segment() && segment()->rtick().isNotZero() ? -r.right() : 0.0;
     setPos(x, yoff * _spatium + (stepOffset * 0.5 * _spatium));
 
     setbbox(r);
@@ -295,11 +297,11 @@ void Clef::setSmall(bool val)
 void Clef::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "concertClefType") {
-            _clefTypes._concertClef = TConv::fromXml(e.readElementText(), ClefType::G);
+            _clefTypes._concertClef = TConv::fromXml(e.readAsciiText(), ClefType::G);
         } else if (tag == "transposingClefType") {
-            _clefTypes._transposingClef = TConv::fromXml(e.readElementText(), ClefType::G);
+            _clefTypes._transposingClef = TConv::fromXml(e.readAsciiText(), ClefType::G);
         } else if (tag == "showCourtesyClef") {
             _showCourtesy = e.readInt();
         } else if (tag == "forInstrumentChange") {
@@ -319,7 +321,7 @@ void Clef::read(XmlReader& e)
 
 void Clef::write(XmlWriter& xml) const
 {
-    xml.startObject(this);
+    xml.startElement(this);
     writeProperty(xml, Pid::CLEF_TYPE_CONCERT);
     writeProperty(xml, Pid::CLEF_TYPE_TRANSPOSING);
     if (!_showCourtesy) {
@@ -329,7 +331,7 @@ void Clef::write(XmlWriter& xml) const
         xml.tag("forInstrumentChange", _forInstrumentChange);
     }
     EngravingItem::writeProperties(xml);
-    xml.endObject();
+    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -386,7 +388,7 @@ ClefType Clef::clefType() const
 //   spatiumChanged
 //---------------------------------------------------------
 
-void Clef::spatiumChanged(qreal oldValue, qreal newValue)
+void Clef::spatiumChanged(double oldValue, double newValue)
 {
     EngravingItem::spatiumChanged(oldValue, newValue);
     layout();
@@ -516,13 +518,13 @@ EngravingItem* Clef::prevSegmentElement()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Clef::accessibleInfo() const
+String Clef::accessibleInfo() const
 {
     ClefType type = clefType();
     if (type == ClefType::INVALID) {
-        return QString();
+        return String();
     }
-    return qtrc("engraving", TConv::toUserName(clefType()).toUtf8().constData());
+    return mtrc("engraving", TConv::translatedUserName(clefType()));
 }
 
 //---------------------------------------------------------

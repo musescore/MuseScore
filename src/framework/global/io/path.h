@@ -22,75 +22,95 @@
 #ifndef MU_IO_PATH_H
 #define MU_IO_PATH_H
 
-#include <QString>
+#include <string>
+
+#include "types/string.h"
 #include "framework/global/logstream.h"
 
+#ifndef NO_QT_SUPPORT
+#include <QString>
+#endif
+
 namespace mu::io {
-struct path;
-using paths = std::vector<path>;
-struct path {
-    path() = default;
-    path(const QByteArray& s);
-    path(const QString& s);
-    path(const std::string& s);
-    path(const char* s);
+struct path_t;
+using paths_t = std::vector<path_t>;
+struct path_t {
+    path_t() = default;
+    path_t(const String& s);
+    path_t(const std::string& s);
+    path_t(const char* s);
 
     bool empty() const;
+    size_t size() const;
+    bool withSuffix(const char* str) const;
 
-    path appendingComponent(const path& other) const;
-    path appendingSuffix(const path& suffix) const;
+    path_t appendingComponent(const path_t& other) const;
+    path_t appendingSuffix(const path_t& suffix) const;
 
-    inline path& operator=(const QString& other) { m_path = other.toUtf8(); return *this; }
+    inline path_t& operator=(const String& other) { m_path = other.toStdString(); return *this; }
+    inline path_t& operator=(const char* other) { m_path = other; return *this; }
 
-    inline bool operator==(const path& other) const { return m_path == other.m_path; }
-    inline bool operator!=(const path& other) const { return !(m_path == other.m_path); }
+    inline bool operator==(const path_t& other) const { return m_path == other.m_path; }
+    inline bool operator!=(const path_t& other) const { return !(m_path == other.m_path); }
 
-    inline path operator+(const path& other) const { path p = *this; p += other; return p; }
-    inline path operator+(const QString& other) const { path p = *this; p += other; return p; }
-    inline path operator+(const char* other) const { path p = *this; p += other; return p; }
+    inline path_t operator+(const path_t& other) const { path_t p = *this; p += other; return p; }
+    inline path_t operator+(const String& other) const { path_t p = *this; p += other; return p; }
+    inline path_t operator+(const char* other) const { path_t p = *this; p += other; return p; }
+    inline path_t operator+(const char other) const { path_t p = *this; p += other; return p; }
 
-    inline path& operator+=(const path& other) { m_path += other.m_path; return *this; }
-    inline path& operator+=(const QString& other) { m_path += other.toUtf8(); return *this; }
-    inline path& operator+=(const char* other) { m_path += other; return *this; }
+    inline path_t& operator+=(const path_t& other) { m_path += other.m_path; return *this; }
+    inline path_t& operator+=(const String& other) { m_path += other.toStdString(); return *this; }
+    inline path_t& operator+=(const char* other) { m_path += other; return *this; }
+    inline path_t& operator+=(const char other) { m_path += other; return *this; }
 
-    inline bool operator<(const path& other) const { return m_path < other.m_path; }
+    inline bool operator<(const path_t& other) const { return m_path < other.m_path; }
 
-    QString toQString() const;
+    String toString() const;
     std::string toStdString() const;
-    std::wstring toStdWString() const;
     const char* c_str() const;
 
+#ifndef NO_QT_SUPPORT
+    path_t(const QString& s);
+    inline path_t& operator=(const QString& other) { m_path = other.toStdString(); return *this; }
+    inline path_t operator+(const QString& other) const { path_t p = *this; p += String::fromQString(other); return p; }
+    inline path_t& operator+=(const QString& other) { m_path += other.toStdString(); return *this; }
+    QString toQString() const;
+    std::wstring toStdWString() const;
+#endif
+
 private:
-    QByteArray m_path;
+    std::string m_path;
 };
 
-inline path operator+(const char* one, const path& other) { return path(one) + other; }
-inline path operator+(const QString& one, const path& other) { return path(one) + other; }
+inline path_t operator+(const String& one, const path_t& other) { return path_t(one) + other; }
+inline path_t operator+(const char* one, const path_t& other) { return path_t(one) + other; }
 
-inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::io::path& p)
+#ifndef NO_QT_SUPPORT
+inline path_t operator+(const QString& one, const path_t& other) { return path_t(one) + other; }
+#endif
+
+inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::io::path_t& p)
 {
-    s << p.c_str();
+    s << p.toStdString();
     return s;
 }
 
-std::string suffix(const path& path);
-path filename(const path& path, bool includingExtension = true);
-path basename(const path& path);
-path completeBasename(const path& path);
-path absolutePath(const path& path);
-path dirname(const path& path);
-path dirpath(const path& path);
-path absoluteDirpath(const path& path);
+std::string suffix(const path_t& path);
+path_t filename(const path_t& path, bool includingExtension = true);
+path_t basename(const path_t& path);
+path_t completeBasename(const path_t& path);
+path_t absolutePath(const path_t& path);
+//path_t dirname(const path_t& path);
+path_t dirpath(const path_t& path);
+path_t absoluteDirpath(const path_t& path);
 
-bool isAbsolute(const path& path);
+bool isAbsolute(const path_t& path);
 
-bool isAllowedFileName(const path& fn);
-path escapeFileName(const path& fn);
+bool isAllowedFileName(const path_t& fn);
+path_t escapeFileName(const path_t& fn);
 
-paths pathsFromStrings(const QStringList& list);
-
-paths pathsFromString(const std::string& str, const std::string& delim = ";");
-std::string pathsToString(const paths& ps, const std::string& delim = ";");
+paths_t pathsFromString(const std::string& str, const std::string& delim = ";");
+std::string pathsToString(const paths_t& ps, const std::string& delim = ";");
 }
 
 #endif // MU_IO_PATH_H

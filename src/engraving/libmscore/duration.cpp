@@ -32,7 +32,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   DurationElement
 //---------------------------------------------------------
@@ -135,7 +135,7 @@ void DurationElement::writeTupletStart(XmlWriter& xml) const
 void DurationElement::writeTupletEnd(XmlWriter& xml) const
 {
     if (tuplet() && tuplet()->elements().back() == this) {
-        xml.tagE("endTuplet");
+        xml.tag("endTuplet");
         tuplet()->writeTupletEnd(xml);               // recursion
     }
 }

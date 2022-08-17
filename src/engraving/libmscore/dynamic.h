@@ -26,7 +26,7 @@
 #include "text.h"
 #include "mscore.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Measure;
 class Segment;
 
@@ -39,6 +39,7 @@ class Segment;
 
 class Dynamic final : public TextBase
 {
+    OBJECT_ALLOCATOR(engraving, Dynamic)
 public:
 
     struct ChangeSpeedItem {
@@ -66,11 +67,12 @@ public:
     Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
 
     void setDynamicType(DynamicType val) { _dynamicType = val; }
-    void setDynamicType(const QString&);
+    void setDynamicType(const String&);
 
     DynamicType dynamicType() const { return _dynamicType; }
     int subtype() const override { return static_cast<int>(_dynamicType); }
-    QString subtypeName() const override;
+    TranslatableString subtypeUserName() const override;
+    String translatedSubtypeUserName() const override;
 
     void layout() override;
     void write(XmlWriter& xml) const override;
@@ -95,19 +97,18 @@ public:
     DynamicSpeed velChangeSpeed() const { return _velChangeSpeed; }
     void setVelChangeSpeed(DynamicSpeed val) { _velChangeSpeed = val; }
 
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
-    Pid propertyId(const QStringRef& xmlName) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid id) const override;
 
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
 
-    QString accessibleInfo() const override;
-    QString screenReaderInfo() const override;
+    String accessibleInfo() const override;
+    String screenReaderInfo() const override;
     void doAutoplace();
 
-    static QString dynamicText(DynamicType t);
+    static String dynamicText(DynamicType t);
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

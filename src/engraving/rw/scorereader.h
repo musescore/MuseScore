@@ -24,7 +24,7 @@
 
 #include "../engravingerrors.h"
 #include "xml.h"
-#include "../infrastructure/io/mscreader.h"
+#include "infrastructure/mscreader.h"
 #include "readcontext.h"
 #include "../libmscore/masterscore.h"
 
@@ -34,14 +34,14 @@ class ScoreReader
 public:
     ScoreReader() = default;
 
-    Err loadMscz(Ms::MasterScore* score, const mu::engraving::MscReader& mscReader, bool ignoreVersionError);
+    Err loadMscz(MasterScore* score, const MscReader& mscReader, bool ignoreVersionError);
 
 private:
 
-    friend class Ms::MasterScore;
+    friend class MasterScore;
 
-    Err read(Ms::MasterScore* score, Ms::XmlReader&, ReadContext& ctx, compat::ReadStyleHook* styleHook = nullptr);
-    Err doRead(Ms::MasterScore* score, Ms::XmlReader& e, ReadContext& ctx);
+    Err read(MasterScore* score, XmlReader&, ReadContext& ctx, compat::ReadStyleHook* styleHook = nullptr);
+    Err doRead(MasterScore* score, XmlReader& e, ReadContext& ctx);
 };
 }
 

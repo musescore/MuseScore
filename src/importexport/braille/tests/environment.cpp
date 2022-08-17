@@ -22,16 +22,34 @@
 
 #include "testing/environment.h"
 
-#include "log.h"
-#include "framework/fonts/fontsmodule.h"
+#include "fonts/fontsmodule.h"
+#include "draw/drawmodule.h"
 #include "engraving/engravingmodule.h"
+#include "engraving/utests/utils/scorerw.h"
+
+#include "libmscore/instrtemplate.h"
+#include "libmscore/musescoreCore.h"
+
+#include "log.h"
 
 static mu::testing::SuiteEnvironment importexport_se(
 {
+    new mu::draw::DrawModule(),
     new mu::fonts::FontsModule(), // needs for libmscore
     new mu::engraving::EngravingModule()
 },
     []() {
     LOGI() << "braille tests suite post init";
+
+    mu::engraving::ScoreRW::setRootPath(mu::String::fromUtf8(iex_braille_tests_DATA_ROOT));
+
+    mu::engraving::MScore::testMode = true;
+    mu::engraving::MScore::testWriteStyleToScore = false;
+    mu::engraving::MScore::noGui = true;
+
+    new mu::engraving::MuseScoreCore();
+    mu::engraving::MScore::init(); // initialize libmscore
+
+    mu::engraving::loadInstrumentTemplates(":/data/instruments.xml");
 }
     );

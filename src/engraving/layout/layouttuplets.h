@@ -22,18 +22,16 @@
 #ifndef MU_ENGRAVING_LAYOUTTUPLETS_H
 #define MU_ENGRAVING_LAYOUTTUPLETS_H
 
-namespace Ms {
+namespace mu::engraving {
 class ChordRest;
 class DurationElement;
-}
 
-namespace mu::engraving {
 class LayoutTuplets
 {
 public:
-    static void layout(Ms::DurationElement* de);
-    static bool isTopTuplet(Ms::ChordRest* cr);
-    static bool notTopTuplet(Ms::ChordRest* cr);
+    static void layout(DurationElement* de);
+    static bool isTopTuplet(ChordRest* cr);
+    static bool notTopTuplet(ChordRest* cr);
 };
 }
 

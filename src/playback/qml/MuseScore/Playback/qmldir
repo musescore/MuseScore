@@ -1,3 +1,4 @@
 module MuseScore.Playback
 PlaybackToolBar 1.0 PlaybackToolBar.qml
+PlaybackLoadingInfo 1.0 PlaybackLoadingInfo.qml
 MixerPanel 1.0 MixerPanel.qml

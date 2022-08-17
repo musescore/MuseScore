@@ -30,7 +30,11 @@
 #include "libmscore/factory.h"
 #include "importmidi_operations.h"
 
-namespace Ms {
+#include "log.h"
+
+using namespace mu::engraving;
+
+namespace mu::iex::midi {
 namespace MidiTempo {
 ReducedFraction time2Tick(double time, double ticksPerSec)
 {
@@ -78,12 +82,12 @@ void setTempoToScore(Score* score, int tick, double beatsPerSecond)
 
         Measure* measure = score->tick2measure(Fraction::fromTicks(tick));
         if (!measure) {
-            qDebug("MidiTempo::setTempoToScore: no measure for tick %d", tick);
+            LOGD("MidiTempo::setTempoToScore: no measure for tick %d", tick);
             return;
         }
         Segment* segment = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(tick));
         if (!segment) {
-            qDebug("MidiTempo::setTempoToScore: no chord/rest segment for tempo at %d", tick);
+            LOGD("MidiTempo::setTempoToScore: no chord/rest segment for tempo at %d", tick);
             return;
         }
 
@@ -105,7 +109,7 @@ void applyAllTempoEvents(const std::multimap<int, MTrack>& tracks, Score* score)
 {
     for (const auto& track: tracks) {
         if (track.second.isDivisionInTps) {         // ticks per second
-            const double ticksPerBeat = Constant::division;
+            const double ticksPerBeat = Constants::division;
             const double beatsPerSecond = roundToBpm(track.second.division / ticksPerBeat);
             setTempoToScore(score, 0, beatsPerSecond);
         } else {        // beats per second
@@ -145,7 +149,7 @@ void setTempo(const std::multimap<int, MTrack>& tracks, Score* score)
         int counter = 0;
         auto it = beats.begin();
         auto beatStart = *it;
-        const auto newBeatLen = ReducedFraction::fromTicks(Constant::division);
+        const auto newBeatLen = ReducedFraction::fromTicks(Constants::division);
 
         for (++it; it != beats.end(); ++it) {
             const auto& beatEnd = *it;
@@ -171,4 +175,4 @@ void setTempo(const std::multimap<int, MTrack>& tracks, Score* score)
     }
 }
 } // namespace MidiTempo
-} // namespace Ms
+} // namespace mu::iex::midi

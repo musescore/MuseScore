@@ -36,23 +36,23 @@ TextFrameSettingsModel::TextFrameSettingsModel(QObject* parent, IElementReposito
 
 void TextFrameSettingsModel::createProperties()
 {
-    m_gapAbove = buildPropertyItem(Ms::Pid::TOP_GAP);
-    m_gapBelow = buildPropertyItem(Ms::Pid::BOTTOM_GAP);
-    m_frameLeftMargin = buildPropertyItem(Ms::Pid::LEFT_MARGIN);
-    m_frameRightMargin = buildPropertyItem(Ms::Pid::RIGHT_MARGIN);
-    m_frameTopMargin = buildPropertyItem(Ms::Pid::TOP_MARGIN);
-    m_frameBottomMargin = buildPropertyItem(Ms::Pid::BOTTOM_MARGIN);
+    m_gapAbove = buildPropertyItem(mu::engraving::Pid::TOP_GAP);
+    m_gapBelow = buildPropertyItem(mu::engraving::Pid::BOTTOM_GAP);
+    m_frameLeftMargin = buildPropertyItem(mu::engraving::Pid::LEFT_MARGIN);
+    m_frameRightMargin = buildPropertyItem(mu::engraving::Pid::RIGHT_MARGIN);
+    m_frameTopMargin = buildPropertyItem(mu::engraving::Pid::TOP_MARGIN);
+    m_frameBottomMargin = buildPropertyItem(mu::engraving::Pid::BOTTOM_MARGIN);
 }
 
 void TextFrameSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::TBOX);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::TBOX);
 }
 
 void TextFrameSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_gapAbove);
-    loadPropertyItem(m_gapBelow);
+    loadPropertyItem(m_gapAbove, formatDoubleFunc);
+    loadPropertyItem(m_gapBelow, formatDoubleFunc);
     loadPropertyItem(m_frameLeftMargin);
     loadPropertyItem(m_frameRightMargin);
     loadPropertyItem(m_frameTopMargin);
@@ -67,6 +67,11 @@ void TextFrameSettingsModel::resetProperties()
     m_frameRightMargin->resetToDefault();
     m_frameTopMargin->resetToDefault();
     m_frameBottomMargin->resetToDefault();
+}
+
+void TextFrameSettingsModel::updatePropertiesOnNotationChanged()
+{
+    loadProperties();
 }
 
 PropertyItem* TextFrameSettingsModel::gapAbove() const

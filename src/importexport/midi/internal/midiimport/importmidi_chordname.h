@@ -25,13 +25,13 @@
 #include <map>
 #include <QList>
 
-namespace Ms {
+namespace mu::iex::midi {
 class MTrack;
 
 namespace MidiChordName {
 void findChordNames(const std::multimap<int, MTrack>& tracks);
 void setChordNames(QList<MTrack>& tracks);
 } // namespace MidiChordName
-} // namespace Ms
+} // namespace mu::iex::midi
 
 #endif // IMPORTMIDI_CHORDNAME_H

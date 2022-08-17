@@ -22,10 +22,10 @@
 
 #include "instrumentspanelcontextmenumodel.h"
 
-#include "log.h"
-#include "translation.h"
-
 #include "actions/actiontypes.h"
+#include "types/translatablestring.h"
+
+#include "log.h"
 
 using namespace mu::context;
 using namespace mu::instrumentsscene;
@@ -73,13 +73,15 @@ void InstrumentsPanelContextMenuModel::loadItems()
 
     ScoreOrder currentOrder = m_masterNotation->parts()->scoreOrder();
     m_orders = instrumentsRepository()->orders();
-    if (m_orders.isEmpty() || !m_orders.contains(customOrder())) {
-        m_orders.append(customOrder());
+
+    const ScoreOrder& custom = customOrder();
+    if (m_orders.empty() || !mu::contains(m_orders, custom)) {
+        m_orders.push_back(custom);
     }
 
-    if (!m_orders.contains(currentOrder)) {
+    if (!mu::contains(m_orders, currentOrder)) {
         currentOrder.customized = false;
-        m_orders.append(currentOrder);
+        m_orders.push_back(currentOrder);
     }
 
     buildMenu();
@@ -120,7 +122,7 @@ void InstrumentsPanelContextMenuModel::buildMenu()
     }
 
     MenuItemList items {
-        makeMenu(qtrc("instruments", "Instrument ordering"), orderItems, ORDERING_MENU_ID)
+        makeMenu(TranslatableString("instruments", "Instrument ordering"), orderItems, ORDERING_MENU_ID)
     };
 
     setItems(items);
@@ -132,7 +134,7 @@ void InstrumentsPanelContextMenuModel::setInstrumentsOrder(const actions::Action
         return;
     }
 
-    QString newOrderId = args.arg<QString>(0);
+    String newOrderId = String::fromQString(args.arg<QString>(0));
 
     for (const ScoreOrder& order : m_orders) {
         if (order.id == newOrderId) {

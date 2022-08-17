@@ -23,7 +23,7 @@
 #define MU_APPSHELL_IAPPSHELLCONFIGURATION_H
 
 #include "modularity/imoduleexport.h"
-#include "retval.h"
+#include "types/retval.h"
 
 #include "io/path.h"
 #include "appshelltypes.h"
@@ -43,10 +43,10 @@ public:
     virtual StartupModeType startupModeType() const = 0;
     virtual void setStartupModeType(StartupModeType type) = 0;
 
-    virtual io::path startupScorePath() const = 0;
-    virtual void setStartupScorePath(const io::path& scorePath) = 0;
+    virtual io::path_t startupScorePath() const = 0;
+    virtual void setStartupScorePath(const io::path_t& scorePath) = 0;
 
-    virtual io::path userDataPath() const = 0;
+    virtual io::path_t userDataPath() const = 0;
 
     virtual bool isAppUpdatable() const = 0;
 
@@ -60,6 +60,7 @@ public:
     virtual std::string museScoreUrl() const = 0;
     virtual std::string museScoreForumUrl() const = 0;
     virtual std::string museScoreContributionUrl() const = 0;
+    virtual std::string museScorePrivacyPolicyUrl() const = 0;
     virtual std::string musicXMLLicenseUrl() const = 0;
     virtual std::string musicXMLLicenseDeedUrl() const = 0;
 
@@ -77,10 +78,10 @@ public:
     virtual void applySettings() = 0;
     virtual void rollbackSettings() = 0;
 
-    virtual void revertToFactorySettings(bool keepDefaultSettings = false) const = 0;
+    virtual void revertToFactorySettings(bool keepDefaultSettings = false, bool notifyAboutChanges = true) const = 0;
 
-    virtual io::paths sessionProjectsPaths() const = 0;
-    virtual Ret setSessionProjectsPaths(const io::paths& paths) = 0;
+    virtual io::paths_t sessionProjectsPaths() const = 0;
+    virtual Ret setSessionProjectsPaths(const io::paths_t& paths) = 0;
 };
 }
 

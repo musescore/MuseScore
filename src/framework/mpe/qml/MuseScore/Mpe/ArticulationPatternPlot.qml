@@ -88,7 +88,7 @@ Item {
             return steps * prv.valuePerStep
         }
 
-        function applyXShiftToCoordindates(curvePoint, xShift, xSpanFactor) {
+        function applyXShiftToCoordinates(curvePoint, xShift, xSpanFactor) {
             return Qt.point(curvePoint.x *
                             coordinateValueToSteps(xSpanFactor) / 100 +
                             xShift, curvePoint.y)
@@ -108,15 +108,15 @@ Item {
             var result = []
 
             if (root.showArrangement) {
-                result.push({ title : qsTrc("mpe", "Time line"), color: root.arrangementLineColor})
+                result.push({ title : /*qsTrc*/ "Time line", color: root.arrangementLineColor})
             }
 
             if (root.showPitch) {
-                result.push({ title : qsTrc("mpe", "Pitch curve"), color: root.pitchLineColor})
+                result.push({ title : /*qsTrc*/ "Pitch curve", color: root.pitchLineColor})
             }
 
             if (root.showExpression) {
-                result.push({ title : qsTrc("mpe", "Expression curve"), color: root.expressionLineColor})
+                result.push({ title : /*qsTrc*/ "Expression curve", color: root.expressionLineColor})
             }
 
             return result
@@ -229,7 +229,7 @@ Item {
             ctx.beginPath()
 
             for (var i = 0; i < points.length; ++i) {
-                var position = prv.coordinatesToPixels(prv.applyXShiftToCoordindates(points[i], posXShift, spanFactor))
+                var position = prv.coordinatesToPixels(prv.applyXShiftToCoordinates(points[i], posXShift, spanFactor))
 
                 if (i == 0) {
                     ctx.moveTo(position.x, position.y)
@@ -247,7 +247,7 @@ Item {
             }
 
             for (var i = 0; i < points.length; ++i) {
-                var position = prv.coordinatesToPixels(prv.applyXShiftToCoordindates(points[i], posXShift, spanFactor))
+                var position = prv.coordinatesToPixels(prv.applyXShiftToCoordinates(points[i], posXShift, spanFactor))
 
                 var outerDiameter = prv.pointHandleDiameter
                 var innerDiameter = prv.pointHandleDiameter / 2

@@ -104,6 +104,8 @@ static const std::unordered_map<ArticulationType, QString> ARTICULATION_TYPE_NAM
     { ArticulationType::TrillBaroque, "TrillBaroque" },
     { ArticulationType::LowerMordent, "Mordent" },
     { ArticulationType::PrallMordent, "PrallMordent" },
+    { ArticulationType::UpperMordentBaroque, "UpperMordentBaroque" },
+    { ArticulationType::LowerMordentBaroque, "LowerMordentBaroque" },
     { ArticulationType::MordentWithUpperPrefix, "MordentWithUpperPrefix" },
     { ArticulationType::UpMordent, "UpMordent" },
     { ArticulationType::DownMordent, "DownMordent" },

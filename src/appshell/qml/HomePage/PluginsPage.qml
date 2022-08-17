@@ -94,7 +94,7 @@ FocusScope {
                 id: pageTitle
                 Layout.fillWidth: true
 
-                text: qsTrc("project", "Plugins")
+                text: qsTrc("appshell", "Plugins")
                 font: ui.theme.titleBoldFont
                 horizontalAlignment: Text.AlignLeft
             }
@@ -114,7 +114,7 @@ FocusScope {
                 }
             }
 
-            Dropdown {
+            StyledDropdown {
                 id: categoryDropdown
 
                 width: searchField.width
@@ -126,18 +126,19 @@ FocusScope {
                 readonly property string allCategoryValue: "ALL_CATEGORY"
                 property string selectedCategory: (currentValue !== allCategoryValue) ? currentValue : ""
 
-                displayText: qsTrc("appshell", "Category: ") + categoryDropdown.currentText
+                displayText: qsTrc("appshell", "Category:") + " " + categoryDropdown.currentText
                 currentIndex: indexOfValue(allCategoryValue)
 
                 function initModel() {
                     var categories = pluginsPage.categories()
                     var result = []
 
+                    //: The title of an option to display the plugins from all categories.
                     result.push({ "text": qsTrc("appshell", "All"), "value": allCategoryValue })
 
                     for (var i = 0; i < categories.length; ++i) {
                         var category = categories[i]
-                        result.push({ "text": category, "value": category })
+                        result.push({ "text": category.title, "value": category.code })
                     }
 
                     model = result

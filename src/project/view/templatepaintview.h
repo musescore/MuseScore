@@ -24,11 +24,11 @@
 
 #include "modularity/ioc.h"
 #include "project/iprojectcreator.h"
-#include "notation/view/notationpaintview.h"
+#include "notation/view/abstractnotationpaintview.h"
 #include "shortcuts/ishortcutsregister.h"
 
 namespace mu::project {
-class TemplatePaintView : public notation::NotationPaintView
+class TemplatePaintView : public notation::AbstractNotationPaintView
 {
     Q_OBJECT
 

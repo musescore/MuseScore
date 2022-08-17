@@ -24,15 +24,18 @@
 
 #include <QList>
 
-namespace Ms {
-class Staff;
-class MTrack;
+namespace mu::engraving {
 class KeyList;
+class Staff;
+}
+
+namespace mu::iex::midi {
+class MTrack;
 
 namespace MidiKey {
-void assignKeyListToStaff(const KeyList& kl, Staff* staff);
+void assignKeyListToStaff(const engraving::KeyList& kl, engraving::Staff* staff);
 void recognizeMainKeySig(QList<MTrack>& tracks);
 } // namespace MidiKey
-} // namespace Ms
+} // namespace mu::iex::midi
 
 #endif // IMPORTMIDI_KEY_H

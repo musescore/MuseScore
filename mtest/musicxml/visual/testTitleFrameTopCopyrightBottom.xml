@@ -5,7 +5,7 @@
     <work-title>Meta title</work-title>
     </work>
   <identification>
-    <creator type="composer">Meta conposer</creator>
+    <creator type="composer">Meta composer</creator>
     <creator type="lyricist">Meta lyricist</creator>
     <rights>Meta copyright</rights>
     <encoding>
@@ -49,7 +49,7 @@
     <credit-words default-x="595.44" default-y="1569.97" justify="center" valign="top" font-size="14">Subtitle</credit-words>
     </credit>
   <credit page="1">
-    <credit-words default-x="1134.19" default-y="1526.67" justify="right" valign="bottom" font-size="12">Conposer</credit-words>
+    <credit-words default-x="1134.19" default-y="1526.67" justify="right" valign="bottom" font-size="12">Composer</credit-words>
     </credit>
   <credit page="1">
     <credit-words default-x="56.6929" default-y="1526.67" justify="left" valign="bottom" font-size="12">Lyricist</credit-words>

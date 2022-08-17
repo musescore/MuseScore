@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __TIMELINE_H__
-#define __TIMELINE_H__
+#ifndef MU_NOTATION_TIMELINE_H
+#define MU_NOTATION_TIMELINE_H
 
 #include "libmscore/select.h"
 
@@ -35,15 +35,13 @@
 #include <QGraphicsView>
 #include <QSplitter>
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class Page;
-class Timeline;
-class ViewRect;
+}
 
-//---------------------------------------------------------
-//   TRowLabels
-//---------------------------------------------------------
+namespace mu::notation {
+class Timeline;
 
 class TRowLabels : public QGraphicsView
 {
@@ -102,26 +100,18 @@ public:
     QString cursorIsOn();
 };
 
-//---------------------------------------------------------
-//   TimelineTheme
-//---------------------------------------------------------
-
 struct TimelineTheme {
     QColor backgroundColor, labelsColor1, labelsColor2, labelsColor3, gridColor1, gridColor2;
     QColor measureMetaColor, selectionColor, nonVisiblePenColor, nonVisibleBrushColor, colorBoxColor;
     QColor metaValuePenColor, metaValueBrushColor;
 };
 
-//---------------------------------------------------------
-//   Timeline
-//---------------------------------------------------------
-
 class Timeline : public QGraphicsView, public mu::async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(Ms, mu::ui::IUiConfiguration, uiConfiguration)
-    INJECT(Ms, mu::actions::IActionsDispatcher, dispatcher)
+    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
+    INJECT(notation, actions::IActionsDispatcher, dispatcher)
 
 public:
     enum class ItemType {
@@ -137,7 +127,7 @@ public:
 
     void updateGridView() { updateGrid(-1, -1); }
     void updateGridFromCmdState();
-    void setNotation(mu::notation::INotationPtr notation);
+    void setNotation(INotationPtr notation);
 
     TRowLabels* labelsColumn() const;
 
@@ -165,13 +155,13 @@ private:
     std::tuple<int, qreal, EngravingItem*, EngravingItem*, bool> _repeatInfo;
     std::tuple<QGraphicsItem*, int, QColor> _oldHoverInfo;
 
-    std::map<BarLineType, QPixmap*> _barlines;
+    std::map<engraving::BarLineType, QPixmap*> _barlines;
     bool _isBarline { false };
 
     QSplitter* _splitter { nullptr };
     TRowLabels* _rowNames { nullptr };
 
-    mu::notation::INotationPtr m_notation;
+    INotationPtr m_notation;
 
     int gridRows = 0;
     int gridCols = 0;
@@ -190,19 +180,19 @@ private:
 
     bool _collapsedMeta { false };
 
-    std::vector<std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> > _metas;
-    void tempoMeta(Segment* seg, int* stagger, int pos);
-    void timeMeta(Segment* seg, int* stagger, int pos);
-    void measureMeta(Segment*, int*, int pos);
-    void rehearsalMeta(Segment* seg, int* stagger, int pos);
-    void keyMeta(Segment* seg, int* stagger, int pos);
-    void barlineMeta(Segment* seg, int* stagger, int pos);
-    void jumpMarkerMeta(Segment* seg, int* stagger, int pos);
+    std::vector<std::tuple<QString, void (Timeline::*)(engraving::Segment*, int*, int), bool> > _metas;
+    void tempoMeta(engraving::Segment* seg, int* stagger, int pos);
+    void timeMeta(engraving::Segment* seg, int* stagger, int pos);
+    void measureMeta(engraving::Segment*, int*, int pos);
+    void rehearsalMeta(engraving::Segment* seg, int* stagger, int pos);
+    void keyMeta(engraving::Segment* seg, int* stagger, int pos);
+    void barlineMeta(engraving::Segment* seg, int* stagger, int pos);
+    void jumpMarkerMeta(engraving::Segment* seg, int* stagger, int pos);
 
-    bool addMetaValue(int x, int pos, QString metaText, int row, ElementType elementType, EngravingItem* element, Segment* seg,
-                      Measure* measure, QString tooltip = "");
-    void setMetaData(QGraphicsItem* gi, int staff, ElementType et, Measure* m, bool full_measure, EngravingItem* e,
-                     QGraphicsItem* pairItem = nullptr, Segment* seg = nullptr);
+    bool addMetaValue(int x, int pos, QString metaText, int row, engraving::ElementType elementType, engraving::EngravingItem* element,
+                      engraving::Segment* seg, engraving::Measure* measure, QString tooltip = "");
+    void setMetaData(QGraphicsItem* gi, int staff, engraving::ElementType et, Measure* m, bool full_measure, engraving::EngravingItem* e,
+                     QGraphicsItem* pairItem = nullptr, engraving::Segment* seg = nullptr);
     unsigned getMetaRow(QString targetText);
 
     int _globalMeasureNumber { 0 };
@@ -220,9 +210,9 @@ private:
     void changeEvent(QEvent*) override;
 
     unsigned correctMetaRow(unsigned row);
-    staff_idx_t correctStave(staff_idx_t stave);
+    engraving::staff_idx_t correctStave(engraving::staff_idx_t stave);
 
-    QList<Part*> getParts();
+    QList<engraving::Part*> getParts();
 
     QRectF getMeasureRect(int measureIndex, int row, int numMetas)
     {
@@ -233,13 +223,13 @@ private:
 
     void updateGrid(int startMeasure = -1, int endMeasure = -1);
 
-    mu::notation::INotationInteractionPtr interaction() const;
-    Ms::Score* score() const;
+    INotationInteractionPtr interaction() const;
+    engraving::Score* score() const;
 
 private slots:
     void handleScroll(int value);
 
-    void changeSelection(SelState);
+    void changeSelection(engraving::SelState);
     void mouseOver(QPointF pos);
     void swapMeta(unsigned row, bool switchUp);
     void requestInstrumentDialog();
@@ -252,7 +242,7 @@ signals:
     void moved(QPointF);
 
 private:
-    int correctPart(staff_idx_t stave);
+    int correctPart(engraving::staff_idx_t stave);
 
     void updateView();
     void drawSelection();
@@ -275,12 +265,12 @@ private:
     bool collapsed() { return _collapsedMeta; }
     void setCollapsed(bool st) { _collapsedMeta = st; }
 
-    Staff* numToStaff(int staff);
+    engraving::Staff* numToStaff(int staff);
     void toggleShow(int staff);
     QString cursorIsOn(const QPoint& cursorPos);
 };
-} // namespace Ms
+}
 
-Q_DECLARE_METATYPE(Ms::TRowLabels::MouseOverValue);
+Q_DECLARE_METATYPE(mu::notation::TRowLabels::MouseOverValue);
 
-#endif
+#endif // MU_NOTATION_TIMELINE_H

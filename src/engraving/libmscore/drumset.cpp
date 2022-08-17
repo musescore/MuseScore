@@ -23,19 +23,25 @@
 #include "drumset.h"
 
 #include "rw/xml.h"
-#include "rw/xmlvalue.h"
+#include "translation.h"
 #include "types/typesconv.h"
 #include "types/symnames.h"
 
 #include "articulation.h"
 #include "note.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rw;
 
-namespace Ms {
+namespace mu::engraving {
 Drumset* smDrumset = nullptr;           // standard midi drumset
+
+String Drumset::translatedName(int pitch) const
+{
+    return mtrc("engraving/drumset", name(pitch));
+}
 
 //---------------------------------------------------------
 //   save
@@ -47,17 +53,17 @@ void Drumset::save(XmlWriter& xml) const
         if (!isValid(i)) {
             continue;
         }
-        xml.startObject(QString("Drum pitch=\"%1\"").arg(i));
+        xml.startElement("Drum", { { "pitch", i } });
         const NoteHeadGroup nh = noteHead(i);
         //write custom as Normal notehead group + noteheads tag to keep compatibility with 2.X versions
         const NoteHeadGroup saveNHValue = (nh == NoteHeadGroup::HEAD_CUSTOM) ? NoteHeadGroup::HEAD_NORMAL : nh;
         xml.tag("head", TConv::toXml(saveNHValue));
         if (nh == NoteHeadGroup::HEAD_CUSTOM) {
-            xml.startObject("noteheads");
+            xml.startElement("noteheads");
             for (int j = 0; j < int(NoteHeadType::HEAD_TYPES); j++) {
                 xml.tag(TConv::toXml(NoteHeadType(j)), SymNames::nameForSymId(noteHeads(i, NoteHeadType(j))));
             }
-            xml.endObject();
+            xml.endElement();
         }
         xml.tag("line", line(i));
         xml.tag("voice", voice(i));
@@ -80,26 +86,26 @@ void Drumset::save(XmlWriter& xml) const
             }
             break;
             default:
-                qDebug("illegal drum shortcut");
+                LOGD("illegal drum shortcut");
                 break;
             }
         }
-        auto vs = variants(i);
+        std::list<DrumInstrumentVariant> vs = variants(i);
         if (!vs.empty()) {
-            xml.startObject("variants");
-            for (const auto& v : qAsConst(vs)) {
-                xml.startObject(QString("variant pitch=\"%1\"").arg(v.pitch));
-                if (!v.articulationName.isEmpty()) {
+            xml.startElement("variants");
+            for (const auto& v : vs) {
+                xml.startElement("variant", { { "pitch", v.pitch } });
+                if (!v.articulationName.empty()) {
                     xml.tag("articulation", v.articulationName);
                 }
                 if (v.tremolo != TremoloType::INVALID_TREMOLO) {
-                    xml.tag("tremolo", Tremolo::type2name(v.tremolo));
+                    xml.tag("tremolo", TConv::toXml(v.tremolo));
                 }
-                xml.endObject();
+                xml.endElement();
             }
-            xml.endObject();
+            xml.endElement();
         }
-        xml.endObject();
+        xml.endElement();
     }
 }
 
@@ -109,45 +115,45 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
         return false;
     }
 
-    const QStringRef& tag(e.name());
+    const AsciiStringView tag(e.name());
     if (tag == "head") {
-        _drum[pitch].notehead = TConv::fromXml(e.readElementText(), NoteHeadGroup::HEAD_NORMAL);
+        _drum[pitch].notehead = TConv::fromXml(e.readAsciiText(), NoteHeadGroup::HEAD_NORMAL);
     } else if (tag == "noteheads") {
         _drum[pitch].notehead = NoteHeadGroup::HEAD_CUSTOM;
         while (e.readNextStartElement()) {
-            const QStringRef& nhTag(e.name());
-            int noteType = int(TConv::fromXml(nhTag.toString(), NoteHeadType::HEAD_AUTO));
+            const AsciiStringView nhTag(e.name());
+            int noteType = int(TConv::fromXml(nhTag, NoteHeadType::HEAD_AUTO));
             if (noteType > int(NoteHeadType::HEAD_TYPES) - 1 || noteType < 0) {
                 return false;
             }
 
-            _drum[pitch].noteheads[noteType] = SymNames::symIdByName(e.readElementText());
+            _drum[pitch].noteheads[noteType] = SymNames::symIdByName(e.readAsciiText());
         }
     } else if (tag == "line") {
         _drum[pitch].line = e.readInt();
     } else if (tag == "voice") {
         _drum[pitch].voice = e.readInt();
     } else if (tag == "name") {
-        _drum[pitch].name = e.readElementText();
+        _drum[pitch].name = e.readText();
     } else if (tag == "stem") {
         _drum[pitch].stemDirection = DirectionV(e.readInt());
     } else if (tag == "shortcut") {
         bool isNum;
-        QString val(e.readElementText());
+        AsciiStringView val = e.readAsciiText();
         int i = val.toInt(&isNum);
-        _drum[pitch].shortcut = isNum ? i : toupper(val[0].toLatin1());
+        _drum[pitch].shortcut = isNum ? i : val.at(0).toUpper();
     } else if (tag == "variants") {
         while (e.readNextStartElement()) {
-            const QStringRef& tagv(e.name());
+            const AsciiStringView tagv(e.name());
             if (tagv == "variant") {
                 DrumInstrumentVariant div;
                 div.pitch = e.attribute("pitch").toInt();
                 while (e.readNextStartElement()) {
-                    const QStringRef& taga(e.name());
+                    const AsciiStringView taga(e.name());
                     if (taga == "articulation") {
-                        div.articulationName = e.readElementText();
+                        div.articulationName = e.readText();
                     } else if (taga == "tremolo") {
-                        div.tremolo = Tremolo::name2Type(e.readElementText());
+                        div.tremolo = TConv::fromXml(e.readAsciiText(), TremoloType::INVALID_TREMOLO);
                     }
                 }
                 _drum[pitch].addVariant(div);
@@ -167,7 +173,7 @@ void Drumset::load(XmlReader& e)
 {
     int pitch = e.intAttribute("pitch", -1);
     if (pitch < 0 || pitch > 127) {
-        qDebug("load drumset: invalid pitch %d", pitch);
+        LOGD("load drumset: invalid pitch %d", pitch);
         return;
     }
     while (e.readNextStartElement()) {
@@ -185,7 +191,7 @@ void Drumset::load(XmlReader& e)
 void Drumset::clear()
 {
     for (int i = 0; i < 128; ++i) {
-        _drum[i].name = "";
+        _drum[i].name = u"";
         _drum[i].notehead = NoteHeadGroup::HEAD_INVALID;
         _drum[i].shortcut = 0;
         _drum[i].variants.clear();
@@ -241,7 +247,7 @@ DrumInstrumentVariant Drumset::findVariant(int p, const std::vector<Articulation
     auto vs = variants(p);
     for (const auto& v : vs) {
         bool matchTremolo = (!tremolo && v.tremolo == TremoloType::INVALID_TREMOLO) || (tremolo && v.tremolo == tremolo->tremoloType());
-        bool matchArticulation = v.articulationName.isEmpty() && articulations.empty();
+        bool matchArticulation = v.articulationName.empty() && articulations.empty();
         for (auto a : articulations) {
             matchArticulation = a->articulationName() == v.articulationName;
             if (!matchArticulation) {
@@ -254,22 +260,6 @@ DrumInstrumentVariant Drumset::findVariant(int p, const std::vector<Articulation
         }
     }
     return div;
-}
-
-//---------------------------------------------------------
-//   pitch
-/// find a variant for the given pitch with matching chord articulation and tremolo
-//---------------------------------------------------------
-int Drumset::pitch(int /*element*/, int /*variation*/, const QString& /*name*/) const
-{
-//    for (const auto& [key, drum] : _drum) {
-//        if (drum.element == element && drum.variation == variation) {
-//            if (drum._name.find(name) != std::string::npos)
-//                return key;
-//        }
-//    }
-
-    return 0;
 }
 
 //---------------------------------------------------------
@@ -287,62 +277,34 @@ void initDrumset()
         smDrumset->drum(i).voice    = 0;
         smDrumset->drum(i).stemDirection = DirectionV::UP;
     }
-    smDrumset->drum(35) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Acoustic Bass Drum"), NoteHeadGroup::HEAD_NORMAL,   7, DirectionV::DOWN, 1);
-    smDrumset->drum(36) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Bass Drum 1"),        NoteHeadGroup::HEAD_NORMAL,   7, DirectionV::DOWN, 1,
-                                         Qt::Key_B);
-    smDrumset->drum(37) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Side Stick"),         NoteHeadGroup::HEAD_CROSS,    3, DirectionV::UP);
-    smDrumset->drum(38) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Acoustic Snare"),     NoteHeadGroup::HEAD_NORMAL,   3, DirectionV::UP, 0,
-                                         Qt::Key_A);
-    smDrumset->drum(40) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Electric Snare"),     NoteHeadGroup::HEAD_NORMAL,   3, DirectionV::UP);
-    smDrumset->drum(41) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Low Floor Tom"),      NoteHeadGroup::HEAD_NORMAL,   5, DirectionV::UP);
-    smDrumset->drum(42) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Closed Hi-Hat"),      NoteHeadGroup::HEAD_CROSS,   -1, DirectionV::UP, 0,
-                                         Qt::Key_G);
-    smDrumset->drum(43) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "High Floor Tom"),     NoteHeadGroup::HEAD_NORMAL,   5, DirectionV::DOWN, 1);
-    smDrumset->drum(44) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Pedal Hi-Hat"),       NoteHeadGroup::HEAD_CROSS,    9, DirectionV::DOWN, 1,
-                                         Qt::Key_F);
-    smDrumset->drum(45) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Low Tom"),            NoteHeadGroup::HEAD_NORMAL,   2, DirectionV::UP);
-    smDrumset->drum(46) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Open Hi-Hat"),        NoteHeadGroup::HEAD_CROSS,    1, DirectionV::UP);
-    smDrumset->drum(47) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Low-Mid Tom"),        NoteHeadGroup::HEAD_NORMAL,   1, DirectionV::UP);
-    smDrumset->drum(48) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Hi-Mid Tom"),         NoteHeadGroup::HEAD_NORMAL,   0, DirectionV::UP);
-    smDrumset->drum(49) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Crash Cymbal 1"),     NoteHeadGroup::HEAD_CROSS,   -2, DirectionV::UP, 0,
-                                         Qt::Key_C);
-    smDrumset->drum(50) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "High Tom"),           NoteHeadGroup::HEAD_NORMAL,   0, DirectionV::UP, 0,
-                                         Qt::Key_E);
-    smDrumset->drum(51) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Ride Cymbal 1"),      NoteHeadGroup::HEAD_CROSS,    0, DirectionV::UP, 0,
-                                         Qt::Key_D);
-    smDrumset->drum(52) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Chinese Cymbal"),     NoteHeadGroup::HEAD_CROSS,   -3, DirectionV::UP);
-    smDrumset->drum(53) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Ride Bell"),          NoteHeadGroup::HEAD_DIAMOND,  0, DirectionV::UP);
-    smDrumset->drum(54) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Tambourine"),         NoteHeadGroup::HEAD_DIAMOND,  2, DirectionV::UP);
-    smDrumset->drum(55) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Splash Cymbal"),      NoteHeadGroup::HEAD_CROSS,   -3, DirectionV::UP);
-    smDrumset->drum(56) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Cowbell"),            NoteHeadGroup::HEAD_TRIANGLE_DOWN, 1, DirectionV::UP);
-    smDrumset->drum(57) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Crash Cymbal 2"),     NoteHeadGroup::HEAD_CROSS,   -3, DirectionV::UP);
-    smDrumset->drum(59) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Ride Cymbal 2"),      NoteHeadGroup::HEAD_CROSS,    2, DirectionV::UP);
-    smDrumset->drum(63) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Open Hi Conga"),      NoteHeadGroup::HEAD_CROSS,    4, DirectionV::UP);
-    smDrumset->drum(64) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Low Conga"),          NoteHeadGroup::HEAD_CROSS,    6, DirectionV::UP);
+    smDrumset->drum(35) = DrumInstrument(TConv::userName(DrumNum(35)), NoteHeadGroup::HEAD_NORMAL,   7, DirectionV::DOWN, 1);
+    smDrumset->drum(36) = DrumInstrument(TConv::userName(DrumNum(36)), NoteHeadGroup::HEAD_NORMAL,   7, DirectionV::DOWN, 1, Key_B);
+    smDrumset->drum(37) = DrumInstrument(TConv::userName(DrumNum(37)), NoteHeadGroup::HEAD_CROSS,    3, DirectionV::UP);
+    smDrumset->drum(38) = DrumInstrument(TConv::userName(DrumNum(38)), NoteHeadGroup::HEAD_NORMAL,   3, DirectionV::UP, 0, Key_A);
+
+    smDrumset->drum(40) = DrumInstrument(TConv::userName(DrumNum(40)), NoteHeadGroup::HEAD_NORMAL,   3, DirectionV::UP);
+    smDrumset->drum(41) = DrumInstrument(TConv::userName(DrumNum(41)), NoteHeadGroup::HEAD_NORMAL,   5, DirectionV::UP);
+    smDrumset->drum(42) = DrumInstrument(TConv::userName(DrumNum(42)), NoteHeadGroup::HEAD_CROSS,   -1, DirectionV::UP, 0, Key_G);
+    smDrumset->drum(43) = DrumInstrument(TConv::userName(DrumNum(43)), NoteHeadGroup::HEAD_NORMAL,   5, DirectionV::DOWN, 1);
+    smDrumset->drum(44) = DrumInstrument(TConv::userName(DrumNum(44)), NoteHeadGroup::HEAD_CROSS,    9, DirectionV::DOWN, 1, Key_F);
+    smDrumset->drum(45) = DrumInstrument(TConv::userName(DrumNum(45)), NoteHeadGroup::HEAD_NORMAL,   2, DirectionV::UP);
+    smDrumset->drum(46) = DrumInstrument(TConv::userName(DrumNum(46)), NoteHeadGroup::HEAD_CROSS,    1, DirectionV::UP);
+    smDrumset->drum(47) = DrumInstrument(TConv::userName(DrumNum(47)), NoteHeadGroup::HEAD_NORMAL,   1, DirectionV::UP);
+    smDrumset->drum(48) = DrumInstrument(TConv::userName(DrumNum(48)), NoteHeadGroup::HEAD_NORMAL,   0, DirectionV::UP);
+    smDrumset->drum(49) = DrumInstrument(TConv::userName(DrumNum(49)), NoteHeadGroup::HEAD_CROSS,   -2, DirectionV::UP, 0, Key_C);
+
+    smDrumset->drum(50) = DrumInstrument(TConv::userName(DrumNum(50)), NoteHeadGroup::HEAD_NORMAL,   0, DirectionV::UP, 0, Key_E);
+    smDrumset->drum(51) = DrumInstrument(TConv::userName(DrumNum(51)), NoteHeadGroup::HEAD_CROSS,    0, DirectionV::UP, 0, Key_D);
+    smDrumset->drum(52) = DrumInstrument(TConv::userName(DrumNum(52)), NoteHeadGroup::HEAD_CROSS,   -3, DirectionV::UP);
+    smDrumset->drum(53) = DrumInstrument(TConv::userName(DrumNum(53)), NoteHeadGroup::HEAD_DIAMOND,  0, DirectionV::UP);
+    smDrumset->drum(54) = DrumInstrument(TConv::userName(DrumNum(54)), NoteHeadGroup::HEAD_DIAMOND,  2, DirectionV::UP);
+    smDrumset->drum(55) = DrumInstrument(TConv::userName(DrumNum(55)), NoteHeadGroup::HEAD_CROSS,   -3, DirectionV::UP);
+    smDrumset->drum(56) = DrumInstrument(TConv::userName(DrumNum(56)), NoteHeadGroup::HEAD_TRIANGLE_DOWN, 1, DirectionV::UP);
+    smDrumset->drum(57) = DrumInstrument(TConv::userName(DrumNum(57)), NoteHeadGroup::HEAD_CROSS,   -3, DirectionV::UP);
+
+    smDrumset->drum(59) = DrumInstrument(TConv::userName(DrumNum(59)), NoteHeadGroup::HEAD_CROSS,    2, DirectionV::UP);
+
+    smDrumset->drum(63) = DrumInstrument(TConv::userName(DrumNum(63)), NoteHeadGroup::HEAD_CROSS,    4, DirectionV::UP);
+    smDrumset->drum(64) = DrumInstrument(TConv::userName(DrumNum(64)), NoteHeadGroup::HEAD_CROSS,    6, DirectionV::UP);
 }
 }

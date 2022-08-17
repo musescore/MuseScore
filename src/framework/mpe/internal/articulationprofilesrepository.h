@@ -24,7 +24,7 @@
 #define MU_MPE_ARTICULATIONPROFILESREPOSITORY_H
 
 #include "modularity/ioc.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "async/asyncable.h"
 
 #include "iarticulationprofilesrepository.h"
@@ -32,16 +32,16 @@
 namespace mu::mpe {
 class ArticulationProfilesRepository : public IArticulationProfilesRepository, public async::Asyncable
 {
-    INJECT(mpe, system::IFileSystem, fileSystem)
+    INJECT(mpe, io::IFileSystem, fileSystem)
 
 public:
     ArticulationProfilesRepository() = default;
 
     ArticulationsProfilePtr createNew() const override;
     ArticulationsProfilePtr defaultProfile(const ArticulationFamily family) const override;
-    ArticulationsProfilePtr loadProfile(const io::path& path) const override;
-    void saveProfile(const io::path& path, const ArticulationsProfilePtr profilePtr) override;
-    async::Channel<io::path> profileChanged() const override;
+    ArticulationsProfilePtr loadProfile(const io::path_t& path) const override;
+    void saveProfile(const io::path_t& path, const ArticulationsProfilePtr profilePtr) override;
+    async::Channel<io::path_t> profileChanged() const override;
 
 private:
     std::vector<ArticulationFamily> supportedFamiliesFromJson(const QJsonArray& array) const;
@@ -61,7 +61,7 @@ private:
 
     mutable std::unordered_map<ArticulationFamily, ArticulationsProfilePtr> m_defaultProfiles;
 
-    async::Channel<io::path> m_profileChanged;
+    async::Channel<io::path_t> m_profileChanged;
 };
 }
 

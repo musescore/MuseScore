@@ -36,12 +36,12 @@ AccidentalSettingsModel::AccidentalSettingsModel(QObject* parent, IElementReposi
 
 void AccidentalSettingsModel::createProperties()
 {
-    m_bracketType = buildPropertyItem(Ms::Pid::ACCIDENTAL_BRACKET);
+    m_bracketType = buildPropertyItem(mu::engraving::Pid::ACCIDENTAL_BRACKET);
 }
 
 void AccidentalSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::ACCIDENTAL);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::ACCIDENTAL);
 }
 
 void AccidentalSettingsModel::loadProperties()

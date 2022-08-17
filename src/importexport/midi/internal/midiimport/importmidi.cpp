@@ -22,14 +22,13 @@
 
 #include <set>
 
-#include <QMessageBox>
+#include <QFile>
 
-#include "engraving/compat/midi/midifile.h"
-#include "engraving/style/style.h"
+#include "engraving/engravingerrors.h"
 #include "engraving/rw/xml.h"
 
 #include "translation.h"
-#include "interactive/messagebox.h"
+#include "infrastructure/messagebox.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
@@ -81,10 +80,13 @@
 #include "importmidi_key.h"
 #include "importmidi_instrument.h"
 #include "importmidi_chordname.h"
+#include "../midishared/midifile.h"
+
+#include "log.h"
 
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::iex::midi {
 extern void updateNoteLines(Segment*, int track);
 
 void lengthenTooShortNotes(std::multimap<int, MTrack>& tracks)
@@ -290,7 +292,7 @@ void quantizeAllTracks(std::multimap<int, MTrack>& tracks,
 void MTrack::processMeta(int tick, const MidiEvent& mm)
 {
     if (!staff) {
-        qDebug("processMeta: no staff");
+        LOGD("processMeta: no staff");
         return;
     }
     const uchar* data = mm.edata();
@@ -321,7 +323,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
     {
         const signed char key = ((const signed char*)data)[0];
         if (key < -7 || key > 7) {
-            qDebug("ImportMidi: illegal key %d", key);
+            LOGD("ImportMidi: illegal key %d", key);
             break;
         }
         KeySigEvent ke;
@@ -357,7 +359,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
 
         MeasureBase* measure = cs->first();
         Text* text = Factory::createText(measure, ssid);
-        text->setPlainText((const char*)(mm.edata()));
+        text->setPlainText(String::fromUtf8((const char*)(mm.edata())));
 
         if (!measure->isVBox()) {
             measure = Factory::createVBox(cs->dummy()->system());
@@ -369,7 +371,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
     }
     break;
     case META_COPYRIGHT:
-        cs->setMetaTag("copyright", QString((const char*)(mm.edata())));
+        cs->setMetaTag(u"copyright", QString((const char*)(mm.edata())));
         break;
     case META_TIME_SIGNATURE:
         break;                                  // added earlier
@@ -378,7 +380,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
         break;
     default:
         if (MScore::debugMode) {
-            qDebug("unknown meta type 0x%02x", mm.metaType());
+            LOGD("unknown meta type 0x%02x", mm.metaType());
         }
         break;
     }
@@ -432,7 +434,7 @@ void MTrack::fillGapWithRests(Score* score,
                               int voice,
                               const ReducedFraction& startChordTickFrac,
                               const ReducedFraction& restLength,
-                              int track)
+                              track_idx_t track)
 {
     ReducedFraction startChordTick = startChordTickFrac;
     ReducedFraction restLen = restLength;
@@ -440,7 +442,7 @@ void MTrack::fillGapWithRests(Score* score,
         ReducedFraction len = restLen;
         Measure* measure = score->tick2measure(startChordTick.fraction());
         if (startChordTick >= ReducedFraction(measure->endTick())) {
-            qDebug("tick2measure: %d end of score?", startChordTick.ticks());
+            LOGD("tick2measure: %d end of score?", startChordTick.ticks());
             startChordTick += restLen;
             restLen = ReducedFraction(0, 1);
             break;
@@ -464,7 +466,7 @@ void MTrack::fillGapWithRests(Score* score,
             const auto dl = toDurationList(measure, voice, startChordTick, len,
                                            Meter::DurationType::REST);
             if (dl.isEmpty()) {
-                qDebug("cannot create duration list for len %d", len.ticks());
+                LOGD("cannot create duration list for len %d", len.ticks());
                 restLen = ReducedFraction(0, 1);              // fake
                 break;
             }
@@ -508,7 +510,7 @@ void setMusicNotesFromMidi(Score*,
 
         if (useDrumset) {
             if (!drumset->isValid(mn.pitch)) {
-                qDebug("unmapped drum note 0x%02x %d", mn.pitch, mn.pitch);
+                LOGD("unmapped drum note 0x%02x %d", mn.pitch, mn.pitch);
             } else {
                 DirectionV sd = drumset->stemDirection(mn.pitch);
                 chord->setStemDirection(sd);
@@ -1220,10 +1222,10 @@ void loadMidiData(MidiFile& mf)
     mf.setMidiType(mt);
 }
 
-Score::FileError importMidi(MasterScore* score, const QString& name)
+Err importMidi(MasterScore* score, const QString& name)
 {
     if (name.isEmpty()) {
-        return Score::FileError::FILE_NOT_FOUND;
+        return Err::FileNotFound;
     }
 
     auto& opers = midiImportOperations;
@@ -1236,8 +1238,8 @@ Score::FileError importMidi(MasterScore* score, const QString& name)
     if (opers.data()->processingsOfOpenedFile == 0) {
         QFile fp(name);
         if (!fp.open(QIODevice::ReadOnly)) {
-            qDebug("importMidi: file open error <%s>", qPrintable(name));
-            return Score::FileError::FILE_OPEN_ERROR;
+            LOGD("importMidi: file open error <%s>", qPrintable(name));
+            return Err::FileOpenError;
         }
         MidiFile mf;
         try {
@@ -1250,8 +1252,8 @@ Score::FileError importMidi(MasterScore* score, const QString& name)
                                     { MessageBox::Ok });
             }
             fp.close();
-            qDebug("importMidi: bad file format");
-            return Score::FileError::FILE_BAD_FORMAT;
+            LOGD("importMidi: bad file format");
+            return Err::FileBadFormat;
         }
         fp.close();
 
@@ -1262,6 +1264,6 @@ Score::FileError importMidi(MasterScore* score, const QString& name)
     opers.data()->tracks = convertMidi(score, opers.midiFile(name));
     ++opers.data()->processingsOfOpenedFile;
 
-    return Score::FileError::FILE_NO_ERROR;
+    return Err::NoError;
 }
 }

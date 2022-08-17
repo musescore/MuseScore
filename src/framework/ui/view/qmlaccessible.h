@@ -85,6 +85,7 @@ class AccessibleItem : public QObject, public QQmlParserStatus, public accessibi
 
 public:
 
+    STATE_PROPERTY(enabled, State::Enabled)
     STATE_PROPERTY(selected, State::Selected)
     STATE_PROPERTY(focused, State::Focused)
     STATE_PROPERTY(checked, State::Checked)
@@ -103,7 +104,7 @@ public:
     QQuickItem* visualItem() const;
 
     const IAccessible* accessibleRoot() const;
-    void setState(State st, bool arg);
+    void setState(State st, bool arg) override;
 
     AccessibleItem* accessibleParent_property() const;
     void setAccessibleParent(AccessibleItem* p);

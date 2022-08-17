@@ -27,15 +27,15 @@ import MuseScore.Ui 1.0
 Rectangle {
     id: root
 
-    property int orientation: Qt.Horizontal
+    property int orientation: privateProperties.parentIsHorizontal ? Qt.Vertical : Qt.Horizontal
 
     color: ui.theme.strokeColor
 
     QtObject {
         id: privateProperties
-        function parentIsLayout() {
-            return root.parent instanceof ColumnLayout || root.parent instanceof RowLayout
-        }
+
+        readonly property bool parentIsHorizontal: root.parent instanceof Row || root.parent instanceof RowLayout
+        readonly property bool parentIsLayout: root.parent instanceof ColumnLayout || root.parent instanceof RowLayout
     }
 
     states: [
@@ -51,7 +51,7 @@ Rectangle {
 
             StateChangeScript {
                 script: {
-                    if (privateProperties.parentIsLayout()) {
+                    if (privateProperties.parentIsLayout) {
                         root.Layout.fillWidth = true
                     } else {
                         root.anchors.left = root.parent.left
@@ -73,7 +73,7 @@ Rectangle {
 
             StateChangeScript {
                 script: {
-                    if (privateProperties.parentIsLayout()) {
+                    if (privateProperties.parentIsLayout) {
                         root.Layout.fillHeight = true
                     } else {
                         root.anchors.top = root.parent.top

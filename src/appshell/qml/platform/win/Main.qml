@@ -64,7 +64,7 @@ AppWindow {
         appWindow: root
 
         onShowWindowMinimizedRequested: {
-            root.showMinimized()
+            root.showMinimizedWithSavePreviousState()
         }
 
         onToggleWindowMaximizedRequested: {

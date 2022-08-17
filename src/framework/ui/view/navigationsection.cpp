@@ -21,8 +21,6 @@
  */
 #include "navigationsection.h"
 
-#include <algorithm>
-
 #include <QQuickWindow>
 #include <QApplication>
 
@@ -79,7 +77,7 @@ bool NavigationSection::enabled() const
     QWindow* topWindow = application()->focusWindow();
 
     if (sectionWindow && (topWindow != sectionWindow)) {
-        return false;
+        return type() == INavigationSection::Type::Exclusive;
     }
 
     bool enbl = false;
@@ -155,10 +153,11 @@ void NavigationSection::setOnActiveRequested(const OnActiveRequested& func)
     m_onActiveRequested = func;
 }
 
-void NavigationSection::requestActive(INavigationPanel* panel, INavigationControl* control, INavigation::ActivationType activationType)
+void NavigationSection::requestActive(INavigationPanel* panel, INavigationControl* control, bool enableHighlight,
+                                      INavigation::ActivationType activationType)
 {
     if (m_onActiveRequested) {
-        m_onActiveRequested(this, panel, control, activationType);
+        m_onActiveRequested(this, panel, control, enableHighlight, activationType);
     }
 }
 

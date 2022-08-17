@@ -62,7 +62,7 @@ VideoEncoder::~VideoEncoder()
     delete m_ffmpeg;
 }
 
-bool VideoEncoder::open(const io::path& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps)
+bool VideoEncoder::open(const io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps)
 {
     m_ffmpeg->ptsCounter = 0;
 

@@ -81,14 +81,14 @@ private:
         Item* child(int row) const { return m_children.at(row); }
         int childCount() const { return m_children.count(); }
 
-        void setElement(const Ms::EngravingObject* el) { m_element = el; }
-        const Ms::EngravingObject* element() const { return m_element; }
+        void setElement(const mu::engraving::EngravingObject* el) { m_element = el; }
+        const mu::engraving::EngravingObject* element() const { return m_element; }
 
         void setData(const QVariantMap& data) { m_data = data; }
         const QVariantMap& data() const { return m_data; }
 
     private:
-        const Ms::EngravingObject* m_element = nullptr;
+        const mu::engraving::EngravingObject* m_element = nullptr;
         Item* m_parent = nullptr;
         QList<Item*> m_children;
         QVariantMap m_data;
@@ -96,11 +96,11 @@ private:
 
     Item* createItem(Item* parent);
     Item* itemByModelIndex(const QModelIndex& index) const;
-    QVariantMap makeData(const Ms::EngravingObject* el) const;
+    QVariantMap makeData(const mu::engraving::EngravingObject* el) const;
 
     void load(const EngravingObjectList& elements, Item* root);
     void findAndAddLost(const EngravingObjectList& elements, Item* lossRoot);
-    const Item* findItem(const Ms::EngravingObject* el, const Item* root) const;
+    const Item* findItem(const mu::engraving::EngravingObject* el, const Item* root) const;
 
     void updateInfo();
 

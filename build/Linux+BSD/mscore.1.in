@@ -100,7 +100,7 @@ GNU General Public Licence (GPLv2).
 @MAN_PORTABLE@Create symbolic links to make it easier to launch
 @MAN_PORTABLE@MuseScore from the command line when needed.
 @MAN_PORTABLE@.It
-@MAN_PORTABLE@Make sure MSCZ, MSCX and MusicXML files are recognised
+@MAN_PORTABLE@Make sure .MSCZ, .MSCX, .MSCS and MusicXML files are recognised
 @MAN_PORTABLE@by the system and the correct icons are displayed.
 @MAN_PORTABLE@.El
 @MAN_PORTABLE@.Pp
@@ -350,10 +350,12 @@ internal file sanity check log (JSON)
 MPEG Layer III (lossy compressed audio)
 .It Li mpos
 measure positions (XML)
-.It Li mscx
-uncompressed MuseScore file
 .It Li mscz
-compressed MuseScore file
+MuseScore File
+.It Li mscx
+MuseScore Uncompressed File
+.It Li mscs
+MuseScore Uncompressed File
 .It Li musicxml
 uncompressed MusicXML file
 .It Li mxl

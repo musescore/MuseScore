@@ -34,13 +34,15 @@ class IProjectAutoSaver : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IProjectAutoSaver() = default;
 
-    virtual bool projectHasUnsavedChanges(const io::path& projectPath) const = 0;
-    virtual void removeProjectUnsavedChanges(const io::path& projectPath) = 0;
+    virtual bool projectHasUnsavedChanges(const io::path_t& projectPath) const = 0;
+    virtual void removeProjectUnsavedChanges(const io::path_t& projectPath) = 0;
 
-    virtual bool isAutosaveOfNewlyCreatedProject(const io::path& projectPath) const = 0;
+    virtual bool isAutosaveOfNewlyCreatedProject(const io::path_t& projectPath) const = 0;
 
-    virtual io::path projectOriginalPath(const io::path& projectAutoSavePath) const = 0;
-    virtual io::path projectAutoSavePath(const io::path& projectPath) const = 0;
+    virtual io::path_t projectOriginalPath(const io::path_t& projectAutoSavePath) const = 0;
+    virtual io::path_t projectAutoSavePath(const io::path_t& projectPath) const = 0;
+
+    static inline const std::string AUTOSAVE_SUFFIX = "autosave";
 };
 }
 

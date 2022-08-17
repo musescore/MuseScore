@@ -116,7 +116,12 @@ Item {
             Layout.leftMargin: 20
             Layout.rightMargin: 20
 
-            text: qsTrc("instruments", "There are no instruments in your score. To choose some, press <b>Add</b>, or use the shortcut <b>‘i’</b>")
+            text: Boolean(instrumentsTreeModel.addInstrumentsKeyboardShortcut)
+                  //: Keep in sync with the text of the "Add" button at the top of the Instruments panel (InstrumentsControlPanel.qml)
+                  ? qsTrc("instruments", "There are no instruments in your score. To choose some, press <b>Add</b>, or use the keyboard shortcut %1.")
+                    .arg("<b>" + instrumentsTreeModel.addInstrumentsKeyboardShortcut + "</b>")
+                  //: Keep in sync with the text of the "Add" button at the top of the Instruments panel (InstrumentsControlPanel.qml)
+                  : qsTrc("instruments", "There are no instruments in your score. To choose some, press <b>Add</b>.")
             visible: instrumentsTreeModel.isEmpty && instrumentsTreeModel.isAddingAvailable
 
             verticalAlignment: Qt.AlignTop
@@ -203,10 +208,8 @@ Item {
                     Loader {
                         id: treeItemDelegateLoader
 
-                        property var delegateType: model ? model.itemRole.type : InstrumentsTreeItemType.UNDEFINED
-                        property bool isExpandable: model ? model.itemRole.isExpandable : false
-                        property bool isEditable: model ? model.itemRole.isEditable : false
-                        property bool isSelectable: model ? model.itemRole.isSelectable : false
+                        property var item: model ? model.itemRole : null
+                        property int delegateType: model ? model.itemRole.type : InstrumentsTreeItemType.UNDEFINED
                         property bool isSelected: model ? model.itemRole.isSelected : false
 
                         height: parent.height
@@ -221,11 +224,7 @@ Item {
                             InstrumentsTreeItemDelegate {
                                 treeView: instrumentsTreeView
 
-                                type: treeItemDelegateLoader.delegateType
-                                isDragAvailable: treeItemDelegateLoader.isSelectable
-                                isSelected: treeItemDelegateLoader.isSelected
-                                isExpandable: treeItemDelegateLoader.isExpandable
-                                isEditable: treeItemDelegateLoader.isEditable
+                                item: treeItemDelegateLoader.item
 
                                 sideMargin: contentColumn.sideMargin
                                 popupAnchorItem: root
@@ -276,6 +275,10 @@ Item {
                                 onPopupClosed: {
                                     flickable.contentY = contentYBackup
                                 }
+
+                                onVisibilityChanged: function(visible) {
+                                    instrumentsTreeModel.toggleVisibilityOfSelectedRows(visible);
+                                }
                             }
                         }
 
@@ -298,7 +301,7 @@ Item {
                     }
 
                     onEntered: function(drag) {
-                        if (styleData.index === drag.source.index || !styleData.value.canAcceptDrop(drag.source.type)) {
+                        if (styleData.index === drag.source.index || !styleData.value.canAcceptDrop(drag.source.item)) {
                             return
                         }
 

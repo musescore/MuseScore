@@ -50,7 +50,7 @@ public:
     int currentOrderIndex() const;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void addInstruments(const QVariantList& instruments);
+    Q_INVOKABLE void addInstruments(const QStringList& instrumentIdList);
 
     Q_INVOKABLE QVariant currentOrder() const;
     Q_INVOKABLE QVariantList instruments() const;
@@ -72,7 +72,7 @@ private:
 
     void loadOrders();
 
-    int resolveInstrumentSequenceNumber(const QString& instrumentId) const;
+    int resolveInstrumentSequenceNumber(const String& instrumentId) const;
     void updateInstrumentsOrder();
     void sortInstruments(ItemList& instruments);
     void insertInstrument(ItemList& instruments, InstrumentItem* newInstrument);

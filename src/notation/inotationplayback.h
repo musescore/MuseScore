@@ -22,7 +22,7 @@
 #ifndef MU_NOTATION_INOTATIONPLAYBACK_H
 #define MU_NOTATION_INOTATIONPLAYBACK_H
 
-#include "retval.h"
+#include "types/retval.h"
 #include "midi/miditypes.h"
 #include "audio/audiotypes.h"
 #include "async/channel.h"
@@ -41,9 +41,12 @@ public:
     virtual void init(INotationUndoStackPtr undoStack) = 0;
 
     virtual const engraving::InstrumentTrackId& metronomeTrackId() const = 0;
-    virtual const mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const = 0;
-    virtual void triggerEventsForItem(const EngravingItem* item) = 0;
+    virtual const engraving::InstrumentTrackId& chordSymbolsTrackId() const = 0;
 
+    virtual const mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const = 0;
+    virtual void triggerEventsForItems(const std::vector<const EngravingItem*>& items) = 0;
+
+    virtual engraving::InstrumentTrackIdSet existingTrackIdSet() const = 0;
     virtual async::Channel<engraving::InstrumentTrackId> trackAdded() const = 0;
     virtual async::Channel<engraving::InstrumentTrackId> trackRemoved() const = 0;
 
@@ -51,11 +54,10 @@ public:
     virtual async::Channel<audio::msecs_t> totalPlayTimeChanged() const = 0;
 
     virtual float playedTickToSec(midi::tick_t tick) const = 0;
-    virtual midi::tick_t secToPlayedtick(float sec) const = 0;
+    virtual midi::tick_t secToPlayedTick(float sec) const = 0;
     virtual midi::tick_t secToTick(float sec) const = 0;
 
-    virtual RectF playbackCursorRectByTick(midi::tick_t tick) const = 0;
-
+    virtual RetVal<midi::tick_t> playPositionTickByRawTick(midi::tick_t tick) const = 0;
     virtual RetVal<midi::tick_t> playPositionTickByElement(const EngravingItem* element) const = 0;
 
     enum BoundaryTick : midi :: tick_t {
@@ -66,11 +68,15 @@ public:
 
     virtual void addLoopBoundary(LoopBoundaryType boundaryType, midi::tick_t tick) = 0;
     virtual void setLoopBoundariesVisible(bool visible) = 0;
-    virtual ValCh<LoopBoundaries> loopBoundaries() const = 0;
+    virtual const LoopBoundaries& loopBoundaries() const = 0;
+    virtual async::Notification loopBoundariesChanged() const = 0;
 
     virtual const Tempo& tempo(midi::tick_t tick) const = 0;
     virtual MeasureBeat beat(midi::tick_t tick) const = 0;
     virtual midi::tick_t beatToTick(int measureIndex, int beatIndex) const = 0;
+
+    virtual double tempoMultiplier() const = 0;
+    virtual void setTempoMultiplier(double multiplier) = 0;
 };
 
 using INotationPlaybackPtr = std::shared_ptr<INotationPlayback>;

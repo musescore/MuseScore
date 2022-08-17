@@ -27,7 +27,7 @@
 #include "beam.h"
 #include "types/groupnode.h"
 
-namespace Ms {
+namespace mu::engraving {
 class ChordRest;
 class XmlWriter;
 class XmlReader;
@@ -69,7 +69,7 @@ public:
     void dump(const char*) const;
 
     static const Groups& endings(const Fraction& f);
-    static BeamMode endBeam(ChordRest* cr, ChordRest* prev = 0);
+    static BeamMode endBeam(const ChordRest* cr, const ChordRest* prev = 0);
 
 private:
     GroupNodes m_nodes;
@@ -83,6 +83,6 @@ struct NoteGroup {
     Fraction timeSig;
     Groups endings;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 
 #endif

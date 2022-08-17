@@ -190,6 +190,7 @@ StyledGridView {
                 }
             }
 
+            //: Caption of a button to reveal more elements
             text: qsTrc("palette", "More")
 
             transparent: true
@@ -516,8 +517,6 @@ StyledGridView {
                 paletteView.updateSelection(true)
             }
 
-            navigation.onTriggered: paletteCell.clicked(null)
-
             IconView {
                 anchors.fill: parent
                 icon: model.decoration
@@ -541,9 +540,7 @@ StyledGridView {
             }
 
             onDoubleClicked: {
-                const index = paletteCell.modelIndex;
-                paletteView.selectionModel.setCurrentIndex(index, ItemSelectionModel.Current);
-                paletteView.paletteController.applyPaletteElement(index, ui.keyboardModifiers());
+                // Empty handler to avoid onClicked being triggered twice on double-click.
             }
 
             onRemoveSelectionRequested: {

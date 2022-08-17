@@ -22,8 +22,6 @@
 
 #include "importmidi_tie.h"
 
-#include <QDebug>
-
 #include "libmscore/engravingitem.h"
 #include "libmscore/segment.h"
 #include "libmscore/chordrest.h"
@@ -36,10 +34,14 @@
 #include "libmscore/measure.h"
 #endif
 
-namespace Ms {
+#include "log.h"
+
+using namespace mu::engraving;
+
+namespace mu::iex::midi {
 namespace MidiTie {
 static bool isTied(const Segment* seg, track_idx_t strack, voice_idx_t voice,
-                   Ms::Tie* (Note::* tieFunc)() const)
+                   mu::engraving::Tie* (Note::* tieFunc)() const)
 {
     ChordRest* cr = static_cast<ChordRest*>(seg->element(strack + voice));
     if (cr && cr->isChord()) {
@@ -64,7 +66,7 @@ bool isTiedBack(const Segment* seg, track_idx_t strack, voice_idx_t voice)
     return isTied(seg, strack, voice, &Note::tieBack);
 }
 
-void TieStateMachine::addSeg(const Segment* seg, int strack)
+void TieStateMachine::addSeg(const Segment* seg, track_idx_t strack)
 {
     bool isChord = false;
     for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
@@ -106,9 +108,9 @@ void TieStateMachine::addSeg(const Segment* seg, int strack)
 
 static void printInconsistentTieLocation(int measureIndex, staff_idx_t staffIndex)
 {
-    qDebug() << "Ties are inconsistent; measure number (from 1):"
-             << measureIndex + 1
-             << ", staff index (from 0):" << staffIndex;
+    LOGD() << "Ties are inconsistent; measure number (from 1):"
+           << measureIndex + 1
+           << ", staff index (from 0):" << staffIndex;
 }
 
 bool areTiesConsistent(const Staff* staff)
@@ -150,4 +152,4 @@ bool areTiesConsistent(const Staff* staff)
 
 #endif
 } // namespace MidiTie
-} // namespace Ms
+} // namespace mu::iex::midi

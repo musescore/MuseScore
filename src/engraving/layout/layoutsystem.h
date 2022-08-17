@@ -29,28 +29,25 @@
 #include "layoutoptions.h"
 #include "layoutcontext.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class System;
 class Spanner;
 class Chord;
-}
 
-namespace mu::engraving {
 class LayoutSystem
 {
 public:
-
-    static Ms::System* collectSystem(const LayoutOptions& options, LayoutContext& lc, Ms::Score* score);
-    static void layoutSystemElements(const LayoutOptions& options, LayoutContext& lc, Ms::Score* score, Ms::System* system);
+    static System* collectSystem(const LayoutOptions& options, LayoutContext& lc, Score* score);
+    static void layoutSystemElements(const LayoutOptions& options, LayoutContext& lc, Score* score, System* system);
 
 private:
-
-    static Ms::System* getNextSystem(LayoutContext& lc);
-    static void hideEmptyStaves(Ms::Score* score, Ms::System* system, bool isFirstSystem);
-    static void processLines(Ms::System* system, std::vector<Ms::Spanner*> lines, bool align);
-    static void layoutTies(Ms::Chord* ch, Ms::System* system, const Ms::Fraction& stick);
-    static void doLayoutTies(Ms::System* system, std::vector<Ms::Segment*> sl, const Fraction& stick, const Fraction& etick);
+    static System* getNextSystem(LayoutContext& lc);
+    static void hideEmptyStaves(Score* score, System* system, bool isFirstSystem);
+    static void processLines(System* system, std::vector<Spanner*> lines, bool align);
+    static void layoutTies(Chord* ch, System* system, const Fraction& stick);
+    static void doLayoutTies(System* system, std::vector<Segment*> sl, const Fraction& stick, const Fraction& etick);
+    static void justifySystem(System* system, double curSysWidth, double targetSystemWidth);
 };
 }
 

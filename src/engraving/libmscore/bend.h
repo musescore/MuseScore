@@ -23,7 +23,7 @@
 #ifndef __BEND_H__
 #define __BEND_H__
 
-#include "infrastructure/draw/font.h"
+#include "draw/types/font.h"
 #include "style/style.h"
 
 #include "engravingitem.h"
@@ -31,9 +31,7 @@
 
 namespace mu::engraving {
 class Factory;
-}
 
-namespace Ms {
 //---------------------------------------------------------
 //   @@ Bend
 //---------------------------------------------------------
@@ -47,10 +45,12 @@ enum class BendType {
     CUSTOM
 };
 
-class Bend final : public EngravingItem
+class Bend : public EngravingItem // TODO: bring back "final" keyword
 {
-    M_PROPERTY(QString,    fontFace,  setFontFace)
-    M_PROPERTY(qreal,      fontSize,  setFontSize)
+    OBJECT_ALLOCATOR(engraving, Bend)
+
+    M_PROPERTY(String,     fontFace,  setFontFace)
+    M_PROPERTY(double,      fontSize,  setFontSize)
     M_PROPERTY(FontStyle,  fontStyle, setFontStyle)
     M_PROPERTY(Millimetre, lineWidth, setLineWidth)
 
@@ -68,15 +68,15 @@ public:
     void setPlayBend(bool v) { m_playBend = v; }
 
     // property methods
-    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
-    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
-private:
-    friend class mu::engraving::Factory;
-    Bend(Note* parent);
+protected: /// TODO: bring back "private" keyword after removing StretchedBend class
+    friend class Factory;
+    Bend(Note* parent, ElementType type = ElementType::BEND);
 
-    mu::draw::Font font(qreal) const;
+    mu::draw::Font font(double) const;
     BendType parseBendTypeFromCurve() const;
     void updatePointsByBendType(const BendType bendType);
 
@@ -84,7 +84,8 @@ private:
     PitchValues m_points;
 
     mu::PointF m_notePos;
-    qreal m_noteWidth;
+    double m_noteWidth = 0;
+    double m_noteHeight = 0;
 };
-}     // namespace Ms
+} // namespace mu::engraving
 #endif

@@ -23,16 +23,18 @@
 #ifndef __MIDIPATCH_H__
 #define __MIDIPATCH_H__
 
-namespace Ms {
+#include "types/string.h"
+
+namespace mu::engraving {
 //---------------------------------------------------------
 //   MidiPatch
 //---------------------------------------------------------
 
 struct MidiPatch {
     bool drum;
-    QString synti;
+    String synti;
     int bank, prog, sfid;
-    QString name;
+    String name;
 };
 }
 #endif

@@ -59,13 +59,17 @@ inline T value(const std::vector<T>& vec, size_t idx)
 template<typename T>
 inline bool remove(std::vector<T>& vec, const T& v)
 {
-    return vec.erase(std::remove(vec.begin(), vec.end(), v), vec.end()) != vec.end();
+    size_t origSize = vec.size();
+    vec.erase(std::remove(vec.begin(), vec.end(), v), vec.end());
+    return origSize != vec.size();
 }
 
 template<typename T, typename Predicate>
 inline bool remove_if(std::vector<T>& vec, Predicate p)
 {
-    return vec.erase(std::remove_if(vec.begin(), vec.end(), p), vec.end()) != vec.end();
+    size_t origSize = vec.size();
+    vec.erase(std::remove_if(vec.begin(), vec.end(), p), vec.end());
+    return origSize != vec.size();
 }
 
 template<typename T>
@@ -249,8 +253,8 @@ inline auto key(const Map& m, const V& v) -> typename Map::key_type
     return def;
 }
 
-template<typename Map, typename K>
-inline auto value(const Map& m, const K& k) -> typename Map::mapped_type
+template<typename Map>
+inline auto value(const Map& m, const typename Map::key_type& k) -> typename Map::mapped_type
 {
     auto it = m.find(k);
     if (it != m.end()) {
@@ -260,8 +264,8 @@ inline auto value(const Map& m, const K& k) -> typename Map::mapped_type
     return def;
 }
 
-template<typename Map, typename K, typename V>
-inline auto value(const Map& m, const K& k, const V& def) -> typename Map::mapped_type
+template<typename Map>
+inline auto value(const Map& m, const typename Map::key_type& k, const typename Map::mapped_type& def) -> typename Map::mapped_type
 {
     auto it = m.find(k);
     if (it != m.end()) {
@@ -284,7 +288,7 @@ inline bool remove(Map& c, const T& v)
 template<typename Map, typename K>
 inline auto take(Map& m, const K& k) -> typename Map::mapped_type
 {
-    auto it = m.find(k);
+    auto it = m.find(static_cast<int>(k));
     if (it != m.end()) {
         auto v = it->second;
         m.erase(it);
@@ -313,6 +317,21 @@ inline auto values(const std::multimap<K, V>& mm, const K& key) -> std::vector<t
         result.push_back(it->second);
     }
     return result;
+}
+
+template<typename ForwardIterator>
+inline void DeleteAll(ForwardIterator begin, ForwardIterator end)
+{
+    while (begin != end) {
+        delete *begin;
+        ++begin;
+    }
+}
+
+template<typename Container>
+inline void DeleteAll(const Container& c)
+{
+    DeleteAll(c.begin(), c.end());
 }
 }
 

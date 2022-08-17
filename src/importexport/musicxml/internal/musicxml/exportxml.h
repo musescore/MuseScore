@@ -24,10 +24,11 @@
 #define MU_IMPORTEXPORT_EXPORTXML_H
 
 #include <QString>
+#include "io/iodevice.h"
 
 class QIODevice;
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 
 bool saveMxl(Score*, QIODevice*);

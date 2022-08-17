@@ -34,7 +34,7 @@ void ApiRegister::regApiCreator(const std::string& module, const std::string& ap
     }
 
     IF_ASSERT_FAILED(!ac.c) {
-        LOGE() << "already registred creator for api: " << api << ", before creator will deleted";
+        LOGE() << "already registered creator for api: " << api << ", before creator will deleted";
         delete ac.c;
     }
 
@@ -47,7 +47,7 @@ ApiObject* ApiRegister::createApi(const std::string& api, IApiEngine* e) const
 {
     auto it = m_creators.find(api);
     if (it == m_creators.end()) {
-        LOGE() << "not registred creator for api: " << api;
+        LOGE() << "not registered creator for api: " << api;
         return nullptr;
     }
     return it->second.c->create(e);

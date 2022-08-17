@@ -5,9 +5,11 @@
 #include <memory>
 #include <bitset>
 
+#include <global/types/string.h>
+
 #include "inoteproperty.h"
 
-namespace Ms {
+namespace mu::engraving {
 class GPNote
 {
 public:
@@ -26,10 +28,19 @@ public:
 
     struct Harmonic {
         enum class Type {
-            None, Natural, Artificial, Pinch, Tap, Semi, FeedBack
+            None, Natural, Artificial, Pinch, Tap, Semi, FeedBack, Types
         };
         float fret{ 0 };
         Type type{ Type::None };
+
+        static bool isArtificial(Type type)
+        {
+            return type == Type::Artificial
+                   || type == Type::Pinch
+                   || type == Type::Tap
+                   || type == Type::Semi
+                   || type == Type::FeedBack;
+        }
     };
     struct MidiPitch {
         int midi{ -1 };
@@ -100,11 +111,11 @@ public:
     void setSlides(const std::bitset<6>& s) { _slides = s; }
     const std::bitset<6>& slides() const { return _slides; }
 
-    void setLeftFingering(const QString& ch) { _leftFingering = ch; }
-    const QString& leftFingering() const { return _leftFingering; }
+    void setLeftFingering(const String& ch) { _leftFingering = ch; }
+    const String& leftFingering() const { return _leftFingering; }
 
-    void setRightFingering(const QString& ch) { _rightFingering = ch; }
-    const QString& rightFingering() const { return _rightFingering; }
+    void setRightFingering(const String& ch) { _rightFingering = ch; }
+    const String& rightFingering() const { return _rightFingering; }
 
     void setVibratoType(VibratoType v) { _vibrato = v; }
     VibratoType vibratoType() const { return _vibrato; }
@@ -143,8 +154,8 @@ private:
     std::bitset<4> _accent{ 0 };
     //[0] shifSlide, [1] - legatoSlide, [2] - slideDownWard, [3] - slidewUpWard, [4] - slideInFormBelow, [5] - slideInFormAbove
     std::bitset<6> _slides{ 0 };
-    QString _leftFingering;
-    QString _rightFingering;
+    String _leftFingering;
+    String _rightFingering;
     VibratoType _vibrato{ VibratoType::None };
     Trill _trill;
     Ornament _ornament{ Ornament::None };
