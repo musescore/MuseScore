@@ -163,31 +163,42 @@ void PlaybackEventsRenderer::renderMetronome(const Score* score, const int measu
     }
 
     TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(measureStartTick).timesig();
-    int ticksPerBeat = timeSignatureFraction.ticks() / timeSignatureFraction.numerator();
-
     BeatsPerSecond bps = score->tempomap()->tempo(measureStartTick);
 
     int step = timeSignatureFraction.isBeatedCompound(bps.val)
                ? timeSignatureFraction.beatTicks() : timeSignatureFraction.dUnitTicks();
 
     for (int tick = measureStartTick; tick < measureEndTick; tick += step) {
-        static ArticulationMap emptyArticulations;
-
         timestamp_t eventTimestamp = timestampFromTicks(score, tick + ticksPositionOffset);
 
-        BeatType beatType = score->tick2beatType(Fraction::fromTicks(tick));
-        pitch_level_t eventPitchLevel = pitchLevel(PitchClass::A, 4);
-        if (beatType == BeatType::DOWNBEAT && tick == 0) {
-            eventPitchLevel = pitchLevel(PitchClass::B, 4);
-        }
-
-        result[eventTimestamp].emplace_back(mpe::NoteEvent(eventTimestamp,
-                                                           durationFromTicks(bps.val, ticksPerBeat, ticksPerBeat),
-                                                           0,
-                                                           eventPitchLevel,
-                                                           dynamicLevelFromType(mpe::DynamicType::Natural),
-                                                           emptyArticulations));
+        renderMetronome(score, tick, eventTimestamp, result);
     }
+}
+
+void PlaybackEventsRenderer::renderMetronome(const Score* score, const int tick, const mpe::timestamp_t actualTimestamp,
+                                             mpe::PlaybackEventsMap& result) const
+{
+    IF_ASSERT_FAILED(score) {
+        return;
+    }
+
+    BeatsPerSecond bps = score->tempomap()->tempo(tick);
+    TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(tick).timesig();
+    int ticksPerBeat = timeSignatureFraction.ticks() / timeSignatureFraction.numerator();
+    static ArticulationMap emptyArticulations;
+
+    BeatType beatType = score->tick2beatType(Fraction::fromTicks(tick));
+    pitch_level_t eventPitchLevel = pitchLevel(PitchClass::A, 4);
+    if (beatType == BeatType::DOWNBEAT && tick == 0) {
+        eventPitchLevel = pitchLevel(PitchClass::B, 4);
+    }
+
+    result[actualTimestamp].emplace_back(mpe::NoteEvent(actualTimestamp,
+                                                        durationFromTicks(bps.val, ticksPerBeat, ticksPerBeat),
+                                                        0,
+                                                        eventPitchLevel,
+                                                        dynamicLevelFromType(mpe::DynamicType::Natural),
+                                                        emptyArticulations));
 }
 
 void PlaybackEventsRenderer::renderNoteEvents(const Chord* chord, const int tickPositionOffset,
