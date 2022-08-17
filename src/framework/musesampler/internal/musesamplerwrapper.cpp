@@ -24,6 +24,7 @@
 
 #include <cstring>
 
+#include "musesamplerutils.h"
 #include "realfn.h"
 
 using namespace mu;
@@ -31,43 +32,6 @@ using namespace mu::audio;
 using namespace mu::musesampler;
 
 static constexpr int AUDIO_CHANNELS_COUNT = 2;
-
-static const std::unordered_map<mpe::ArticulationType, ms_NoteArticulation> ARTICULATION_TYPES = {
-    { mpe::ArticulationType::Standard, ms_NoteArticulation_None },
-    { mpe::ArticulationType::Staccato, ms_NoteArticulation_Staccato },
-    { mpe::ArticulationType::Staccatissimo, ms_NoteArticulation_Staccatissimo },
-    { mpe::ArticulationType::Accent, ms_NoteArticulation_Accent },
-    { mpe::ArticulationType::Tenuto, ms_NoteArticulation_Tenuto },
-    { mpe::ArticulationType::Marcato, ms_NoteArticulation_Marcato },
-    { mpe::ArticulationType::Harmonic, ms_NoteArticulation_Harmonics },
-    { mpe::ArticulationType::Mute, ms_NoteArticulation_Mute },
-    { mpe::ArticulationType::Trill, ms_NoteArticulation_WholeTrill },
-    { mpe::ArticulationType::TrillBaroque, ms_NoteArticulation_WholeTrill },
-
-    // Turn, Mordent
-
-    { mpe::ArticulationType::Arpeggio, ms_NoteArticulation_ArpeggioUp },
-    { mpe::ArticulationType::ArpeggioUp, ms_NoteArticulation_ArpeggioUp },
-    { mpe::ArticulationType::ArpeggioDown, ms_NoteArticulation_ArpeggioDown },
-    { mpe::ArticulationType::Tremolo8th, ms_NoteArticulation_Tremolo1 },
-    { mpe::ArticulationType::Tremolo16th, ms_NoteArticulation_Tremolo2 },
-    { mpe::ArticulationType::Tremolo32nd, ms_NoteArticulation_Tremolo3 },
-    { mpe::ArticulationType::Tremolo64th, ms_NoteArticulation_Tremolo3 },
-
-    { mpe::ArticulationType::Scoop, ms_NoteArticulation_Scoop },
-    { mpe::ArticulationType::Plop, ms_NoteArticulation_Plop },
-    { mpe::ArticulationType::Doit, ms_NoteArticulation_Doit },
-    { mpe::ArticulationType::Fall, ms_NoteArticulation_Fall },
-    { mpe::ArticulationType::PreAppoggiatura, ms_NoteArticulation_Appoggiatura },
-    { mpe::ArticulationType::PostAppoggiatura, ms_NoteArticulation_Appoggiatura },
-    { mpe::ArticulationType::Acciaccatura, ms_NoteArticulation_Acciaccatura },
-
-    { mpe::ArticulationType::CrossNote, ms_NoteArticulation_XNote },
-    { mpe::ArticulationType::GhostNote, ms_NoteArticulation_Ghost },
-    { mpe::ArticulationType::CircleNote, ms_NoteArticulation_Circle },
-    { mpe::ArticulationType::TriangleNote, ms_NoteArticulation_Triangle },
-    { mpe::ArticulationType::DiamondNote, ms_NoteArticulation_Diamond }
-};
 
 MuseSamplerWrapper::MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const audio::AudioSourceParams& params)
     : AbstractSynthesizer(params), m_samplerLib(samplerLib)
@@ -101,6 +65,8 @@ void MuseSamplerWrapper::setSampleRate(unsigned int sampleRate)
     if (m_samplerLib->initSampler(m_sampler, m_sampleRate, 1024, AUDIO_CHANNELS_COUNT) != ms_Result_OK) {
         LOGE() << "Unable to init MuseSampler";
         return;
+    } else {
+        LOGI() << "Successfully initialized sampler";
     }
 
     static std::array<float, 1024> left;
@@ -132,17 +98,22 @@ samples_t MuseSamplerWrapper::process(float* buffer, audio::samples_t samplesPer
     }
 
     if (!isActive()) {
+        msecs_t nextMicros = samplesToMsecs(samplesPerChannel, m_sampleRate);
+
+        const MuseSamplerSequencer::EventSequence& sequence = m_sequencer.eventsToBePlayed(nextMicros);
+        for (const MuseSamplerSequencer::EventType& event : sequence) {
+            handleAuditionEvents(event);
+        }
+    }
+
+    if (m_samplerLib->process(m_sampler, m_bus, m_currentPosition) != ms_Result_OK) {
         return 0;
     }
 
-    if (m_samplerLib->process(m_sampler, m_bus, m_playbackPosition) != ms_Result_OK) {
-        return 0;
+    if (isActive()) {
+        extractOutputSamples(samplesPerChannel, buffer);
+        m_currentPosition += samplesPerChannel;
     }
-
-    extractOutputSamples(samplesPerChannel, buffer);
-
-    audio::msecs_t newPlaybackPosition = m_playbackPosition + samplesToMsecs(samplesPerChannel, m_sampleRate);
-    setPlaybackPosition(newPlaybackPosition);
 
     return samplesPerChannel;
 }
@@ -169,6 +140,17 @@ bool MuseSamplerWrapper::isValid() const
 
 void MuseSamplerWrapper::setupSound(const mpe::PlaybackSetupData& setupData)
 {
+    // Check by exact info:
+    if (auto unique_id = getMuseInstrumentUniqueIdFromId(params().resourceMeta.id); unique_id.has_value()) {
+        m_track = m_samplerLib->addTrack(m_sampler, *unique_id);
+        if (m_track != nullptr) {
+            m_sequencer.init(m_samplerLib, m_sampler, m_track);
+            return;
+        }
+        LOGE() << "Could not add instrument with ID of " << *unique_id;
+    }
+
+    LOGE() << "Something went wrong; falling back to MPE info.";
     IF_ASSERT_FAILED(m_samplerLib) {
         return;
     }
@@ -178,72 +160,127 @@ void MuseSamplerWrapper::setupSound(const mpe::PlaybackSetupData& setupData)
         return;
     }
 
-    auto instrumentList = m_samplerLib->getInstrumentList();
-    if (instrumentList == nullptr) {
+    String soundId = setupData.toString();
+
+    auto matchingInstrumentList = m_samplerLib->getMatchingInstrumentList(soundId.toAscii().constChar(),
+                                                                          setupData.musicXmlSoundId->c_str());
+
+    if (matchingInstrumentList == nullptr) {
         LOGE() << "Unable to get instrument list";
         return;
+    } else {
+        LOGI() << "Successfully got instrument list";
     }
 
+    int firstInternalId = -1;
     int internalId = -1;
 
-    while (auto instrument = m_samplerLib->getNextInstrument(instrumentList))
+    // TODO: display all of these in MuseScore, and let the user choose!
+    while (auto instrument = m_samplerLib->getNextInstrument(matchingInstrumentList))
     {
         internalId = m_samplerLib->getInstrumentId(instrument);
         const char* internalName = m_samplerLib->getInstrumentName(instrument);
+        const char* internalCategory = m_samplerLib->getInstrumentCategory(instrument);
+        const char* instrumentPack = m_samplerLib->getInstrumentPackage(instrument);
         const char* musicXmlId = m_samplerLib->getMusicXmlSoundId(instrument);
 
         LOGD() << internalId
+               << ": " << instrumentPack
+               << ": " << internalCategory
                << ": " << internalName
                << " - " << musicXmlId;
 
-        if (std::strcmp(setupData.musicXmlSoundId->data(), musicXmlId) == 0) {
-            break;
+        // For now, hack to just choose first instrument:
+        if (firstInternalId == -1) {
+            firstInternalId = internalId;
         }
     }
 
-    if (internalId == -1) {
-        LOGE() << "Unable to find sound for " << setupData.musicXmlSoundId.value();
+    if (firstInternalId == -1) {
+        LOGE() << "Unable to find sound for " << soundId;
         return;
     }
 
-    m_track = m_samplerLib->addTrack(m_sampler, internalId);
+    m_track = m_samplerLib->addTrack(m_sampler, firstInternalId);
+
+    m_sequencer.init(m_samplerLib, m_sampler, m_track);
 }
 
-void MuseSamplerWrapper::loadMainStreamEvents(const mpe::PlaybackEventsMap& events)
+void MuseSamplerWrapper::setupEvents(const mpe::PlaybackData& playbackData)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    m_sequencer.load(playbackData);
+}
+
+msecs_t MuseSamplerWrapper::playbackPosition() const
+{
+    return m_sequencer.playbackPosition();
+}
+
+void MuseSamplerWrapper::setPlaybackPosition(const audio::msecs_t newPosition)
+{
+    m_sequencer.setPlaybackPosition(newPosition);
+
+    setCurrentPosition(microSecsToSamples(newPosition, m_sampleRate));
+}
+
+bool MuseSamplerWrapper::isActive() const
+{
+    return m_sequencer.isActive();
+}
+
+void MuseSamplerWrapper::setIsActive(bool arg)
 {
     IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
         return;
     }
 
-    m_samplerLib->clearTrack(m_sampler, m_track);
-
-    for (const auto& pair : events) {
-        for (const auto& event : pair.second) {
-            if (!std::holds_alternative<mpe::NoteEvent>(event)) {
-                continue;
-            }
-
-            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
-
-            addNoteEvent(noteEvent);
-        }
+    if (isActive() == arg) {
+        return;
     }
 
-    if (m_samplerLib->finalizeScore(m_sampler) != ms_Result_OK) {
-        LOGE() << "Unable to finalize score";
+    m_sequencer.setActive(arg);
+
+    m_samplerLib->setPlaying(m_sampler, arg);
+
+    if (!isActive()) {
+        setCurrentPosition(m_currentPosition);
+        m_samplerLib->startAuditionMode(m_sampler);
+    } else {
+        m_samplerLib->stopAuditionMode(m_sampler);
+    }
+
+    LOGI() << "Toggled playing status, isPlaying: " << arg;
+}
+
+void MuseSamplerWrapper::handleAuditionEvents(const MuseSamplerSequencer::EventType& event)
+{
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
+        return;
+    }
+
+    if (std::holds_alternative<ms_AuditionStartNoteEvent>(event)) {
+        m_samplerLib->startAuditionNote(m_sampler, m_track, std::get<ms_AuditionStartNoteEvent>(event));
+        return;
+    }
+
+    if (std::holds_alternative<ms_AuditionStopNoteEvent>(event)) {
+        m_samplerLib->stopAuditionNote(m_sampler, m_track, std::get<ms_AuditionStopNoteEvent>(event));
+        return;
     }
 }
 
-void MuseSamplerWrapper::loadOffStreamEvents(const mpe::PlaybackEventsMap& events)
+void MuseSamplerWrapper::setCurrentPosition(const audio::samples_t samples)
 {
-    UNUSED(events);
-    NOT_IMPLEMENTED;
-}
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
+        return;
+    }
 
-void MuseSamplerWrapper::loadDynamicLevelChanges(const mpe::DynamicLevelMap& dynamicLevels)
-{
-    UNUSED(dynamicLevels);
-    NOT_IMPLEMENTED;
+    m_currentPosition = samples;
+    m_samplerLib->setPosition(m_sampler, m_currentPosition);
+
+    LOGI() << "Seek a new playback position, newPosition: " << m_currentPosition;
 }
 
 void MuseSamplerWrapper::extractOutputSamples(audio::samples_t samples, float* output)
@@ -254,61 +291,4 @@ void MuseSamplerWrapper::extractOutputSamples(audio::samples_t samples, float* o
             output[sampleIndex * m_bus._num_channels + audioChannelIndex] += sample;
         }
     }
-}
-
-void MuseSamplerWrapper::addNoteEvent(const mpe::NoteEvent& noteEvent)
-{
-    IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
-        return;
-    }
-
-    ms_Event event;
-    event._event_type = ms_EventTypeNote;
-    event._event._note = ms_NoteEvent();
-    event._event._note._voice = noteEvent.arrangementCtx().voiceLayerIndex;
-    event._event._note._location_ms = noteEvent.arrangementCtx().nominalTimestamp;
-    event._event._note._duration_ms = noteEvent.arrangementCtx().nominalDuration;
-    event._event._note._pitch = pitchIndex(noteEvent.pitchCtx().nominalPitchLevel);
-    event._event._note._articulation = noteArticulationTypes(noteEvent);
-
-    if (m_samplerLib->addTrackEvent(m_sampler, m_track, event) != ms_Result_OK) {
-        LOGE() << "Unable to add event for track";
-    }
-}
-
-int MuseSamplerWrapper::pitchIndex(const mpe::pitch_level_t pitchLevel) const
-{
-    static constexpr mpe::pitch_level_t MIN_SUPPORTED_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 0);
-    static constexpr int MIN_SUPPORTED_NOTE = 12; // equivalent for C0
-    static constexpr mpe::pitch_level_t MAX_SUPPORTED_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 8);
-    static constexpr int MAX_SUPPORTED_NOTE = 108; // equivalent for C8
-
-    if (pitchLevel <= MIN_SUPPORTED_LEVEL) {
-        return MIN_SUPPORTED_NOTE;
-    }
-
-    if (pitchLevel >= MAX_SUPPORTED_LEVEL) {
-        return MAX_SUPPORTED_NOTE;
-    }
-
-    float stepCount = MIN_SUPPORTED_NOTE + ((pitchLevel - MIN_SUPPORTED_LEVEL) / static_cast<float>(mpe::PITCH_LEVEL_STEP));
-
-    return RealRound(stepCount, 0);
-}
-
-ms_NoteArticulation MuseSamplerWrapper::noteArticulationTypes(const mpe::NoteEvent& noteEvent) const
-{
-    uint64_t result = 0;
-
-    for (const auto& pair : noteEvent.expressionCtx().articulations) {
-        auto search = ARTICULATION_TYPES.find(pair.first);
-
-        if (search == ARTICULATION_TYPES.cend()) {
-            continue;
-        }
-
-        result |= search->second;
-    }
-
-    return static_cast<ms_NoteArticulation>(result);
 }
