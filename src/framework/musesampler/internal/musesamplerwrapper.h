@@ -29,6 +29,7 @@
 #include "async/channel.h"
 
 #include "libhandler.h"
+#include "musesamplersequencer.h"
 
 namespace mu::musesampler {
 class MuseSamplerWrapper : public audio::synth::AbstractSynthesizer
@@ -49,16 +50,16 @@ public:
 
 protected:
     void setupSound(const mpe::PlaybackSetupData& setupData) override;
+    void setupEvents(const mpe::PlaybackData& playbackData) override;
 
-    void loadMainStreamEvents(const mpe::PlaybackEventsMap& events) override;
-    void loadOffStreamEvents(const mpe::PlaybackEventsMap& events) override;
-    void loadDynamicLevelChanges(const mpe::DynamicLevelMap& dynamicLevels) override;
+    audio::msecs_t playbackPosition() const override;
+    void setPlaybackPosition(const audio::msecs_t newPosition) override;
+    bool isActive() const override;
+    void setIsActive(bool arg) override;
 
+    void handleAuditionEvents(const MuseSamplerSequencer::EventType& event);
+    void setCurrentPosition(const audio::samples_t samples);
     void extractOutputSamples(audio::samples_t samples, float* output);
-    void addNoteEvent(const mpe::NoteEvent& noteEvent);
-    int pitchIndex(const mpe::pitch_level_t pitchLevel) const;
-
-    ms_NoteArticulation noteArticulationTypes(const mpe::NoteEvent& noteEvent) const;
 
     async::Channel<unsigned int> m_audioChannelsCountChanged;
 
@@ -66,6 +67,10 @@ protected:
     ms_MuseSampler m_sampler = nullptr;
     ms_Track m_track = nullptr;
     ms_OutputBuffer m_bus;
+
+    audio::samples_t m_currentPosition = 0;
+
+    MuseSamplerSequencer m_sequencer;
 };
 
 using MuseSamplerWrapperPtr = std::shared_ptr<MuseSamplerWrapper>;
