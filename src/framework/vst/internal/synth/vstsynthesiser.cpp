@@ -141,8 +141,6 @@ bool VstSynthesiser::isActive() const
 
 void VstSynthesiser::setIsActive(const bool isActive)
 {
-    AbstractSynthesizer::setIsActive(isActive);
-
     m_sequencer.setActive(isActive);
     toggleVolumeGain(isActive);
 }
