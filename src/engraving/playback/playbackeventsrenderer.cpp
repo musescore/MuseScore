@@ -333,7 +333,7 @@ void PlaybackEventsRenderer::renderNoteArticulations(const Chord* chord, const R
             const Note* lastTiedNote = note->lastTiedNote();
             noteCtx.duration += lastTiedNoteDurationOffset(lastTiedNote, ctx);
             result.emplace_back(buildNoteEvent(std::move(noteCtx)));
-            return;
+            continue;
         }
 
         if (noteCtx.chordCtx.commonArticulations.contains(ArticulationType::DiscreteGlissando)) {
