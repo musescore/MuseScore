@@ -1244,6 +1244,8 @@ void NotationActionController::startEditSelectedElement(const ActionData& args)
     if (interaction->textEditingAllowed(element)) {
         PointF cursorPos = !args.empty() ? args.arg<PointF>(0) : PointF();
         interaction->startEditText(element, cursorPos);
+    } else if (element->hasGrips()) {
+        interaction->startEditGrip(element, element->defaultGrip());
     } else {
         interaction->startEditElement(element);
     }
