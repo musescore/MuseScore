@@ -218,7 +218,7 @@ TEST_F(Engraving_SingleNoteArticulationsTest, AccentPattern_Nominal_MezzoForte)
     accentArticulation.arrangementPattern = createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
     accentArticulation.pitchPattern = createSimplePitchPattern(0 /*increment_pitch_diff*/);
     accentArticulation.expressionPattern = createSimpleExpressionPattern(
-        dynamicLevelFromType(DynamicType::mf) /* increasing a note's dynamic on a single level from Natural dynamic*/);
+        dynamicLevelFromType(DynamicType::Natural) + DYNAMIC_LEVEL_STEP /* increasing a note's dynamic on a single level from Natural dynamic*/);
 
     ArticulationPattern scope;
     scope.emplace(0, accentArticulation);
