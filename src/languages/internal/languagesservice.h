@@ -27,8 +27,6 @@
 
 #include "modularity/ioc.h"
 #include "ilanguagesconfiguration.h"
-#include "ilanguageunpacker.h"
-#include "iglobalconfiguration.h"
 #include "framework/network/inetworkmanagercreator.h"
 #include "io/ifilesystem.h"
 #include "ui/iuiengine.h"
@@ -39,72 +37,45 @@ namespace mu::languages {
 class LanguagesService : public ILanguagesService, public async::Asyncable
 {
     INJECT(languages, ILanguagesConfiguration, configuration)
-    INJECT(languages, ILanguageUnpacker, languageUnpacker)
-    INJECT(languages, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(languages, network::INetworkManagerCreator, networkManagerCreator)
     INJECT(languages, io::IFileSystem, fileSystem)
     INJECT(languages, ui::IUiEngine, uiEngine)
 
 public:
     void init();
-    void refreshLanguages();
 
-    ValCh<LanguagesHash> languages() const override;
+    const LanguagesHash& languages() const override;
     ValCh<Language> currentLanguage() const override;
 
-    LanguageStatus::Status languageStatus(const QString& languageCode) const override;
+    bool hasPlaceholderLanguage() const override;
+    const Language& placeholderLanguage() const override;
 
-    RetCh<LanguageProgress> install(const QString& languageCode) override;
-    RetCh<LanguageProgress> update(const QString& languageCode) override;
-    Ret uninstall(const QString& languageCode) override;
+    LanguageProgressChannel update(const QString& languageCode) override;
+
+    ValCh<bool> needRestartToApplyLanguageChange() const override;
 
 private:
-    RetVal<LanguagesHash> parseLanguagesConfig(const QByteArray& json) const;
-    LanguageFiles parseLanguageFiles(const QJsonObject& languageObject) const;
+    void loadLanguages();
 
     void setCurrentLanguage(const QString& languageCode);
+    QString effectiveLanguageCode(const QString& languageCode) const;
+    Ret loadLanguage(Language& lang);
 
-    bool isLanguageExists(const QString& languageCode) const;
-    bool checkLanguageFilesHash(const QString& languageCode, const LanguageFiles& languageFiles) const;
-
-    Language language(const QString& languageCode) const;
-
-    RetVal<QString> downloadLanguage(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel) const;
-    Ret removeLanguage(const QString& languageCode) const;
-
-    Ret loadLanguage(const QString& languageCode);
-
-    void resetLanguageToSystemLanguage();
-
-    void th_refreshLanguages();
-    void th_install(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel, async::Channel<Ret>* finishChannel);
-    void th_update(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel, async::Channel<Ret>* finishChannel);
-
-    void closeOperation(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel);
-
-    enum OperationType
-    {
-        None,
-        Install,
-        Update
-    };
-
-    struct Operation
-    {
-        OperationType type = OperationType::None;
-        async::Channel<LanguageProgress>* progressChannel = nullptr;
-
-        Operation() = default;
-        Operation(const OperationType& type, async::Channel<LanguageProgress>* progressChannel)
-            : type(type), progressChannel(progressChannel) {}
-    };
+    void th_update(const QString& languageCode, LanguageProgressChannel progressChannel, async::Channel<Ret> finishChannel);
+    bool canUpdate(const QString& languageCode);
+    Ret downloadLanguage(const QString& languageCode, LanguageProgressChannel progressChannel) const;
+    RetVal<QString> fileHash(const io::path_t& path);
 
 private:
-    async::Channel<Language> m_currentLanguageChanged;
-    QList<QTranslator*> m_translatorList;
-    bool m_inited = false;
+    LanguagesHash m_languagesHash;
+    Language m_placeholderLanguage;
+    ValCh<Language> m_currentLanguage;
 
-    mutable QHash<QString, Operation> m_operationsHash;
+    QSet<QTranslator*> m_translators;
+    mutable QHash<QString, LanguageProgressChannel > m_updateOperationsHash;
+
+    bool m_inited = false;
+    ValCh<bool> m_needRestartToApplyLanguageChange;
 };
 }
 

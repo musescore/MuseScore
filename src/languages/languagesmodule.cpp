@@ -64,8 +64,3 @@ void LanguagesModule::onInit(const framework::IApplication::RunMode& mode)
         pr->reg("languagesUserAppDataPath", s_languagesConfiguration->languagesUserAppDataPath());
     }
 }
-
-void LanguagesModule::onDelayedInit()
-{
-    s_languagesService->refreshLanguages();
-}

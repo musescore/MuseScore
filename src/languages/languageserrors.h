@@ -31,8 +31,10 @@ enum class Err {
     NoError         = int(Ret::Code::Ok),
     UnknownError    = int(Ret::Code::LanguagesFirst),
 
+    AlreadyUpToDate,
     ErrorParseConfig,
     ErrorDownloadLanguage,
+    ErrorWriteLanguage,
     ErrorLanguageNotFound,
     ErrorRemoveLanguageDirectory,
     ErrorAnotherOperationStarted,
@@ -51,8 +53,10 @@ inline Ret make_ret(Err e)
     case Err::Undefined: return Ret(retCode);
     case Err::NoError: return Ret(retCode);
     case Err::UnknownError: return Ret(retCode);
+    case Err::AlreadyUpToDate: return Ret(retCode, trc("languages", "Up to date"));
     case Err::ErrorParseConfig: return Ret(retCode, trc("languages", "Error while parsing response from server"));
     case Err::ErrorDownloadLanguage: return Ret(retCode, trc("languages", "Error while downloading language"));
+    case Err::ErrorWriteLanguage: return Ret(retCode, trc("languages", "Error while writing language files"));
     case Err::ErrorLanguageNotFound: return Ret(retCode, trc("languages", "Language not found"));
     case Err::ErrorRemoveLanguageDirectory: return Ret(retCode, trc("languages", "Error while removing language directory"));
     case Err::ErrorAnotherOperationStarted: return Ret(retCode,
