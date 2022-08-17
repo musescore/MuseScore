@@ -26,13 +26,6 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "inotationconfiguration.h"
-#include "ui/iuiconfiguration.h"
-
-class QPushButton;
-class QToolButton;
-class QComboBox;
-class QTreeWidgetItem;
 
 namespace mu::engraving {
 class StaffTextBase;
@@ -44,8 +37,6 @@ class StaffTextPropertiesDialog : public QDialog, public Ui::StaffTextProperties
     Q_OBJECT
 
     INJECT(notation, context::IGlobalContext, globalContext)
-    INJECT(notation, INotationConfiguration, configuration)
-    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
 
 public:
     StaffTextPropertiesDialog(QWidget* parent = nullptr);
@@ -56,22 +47,16 @@ public:
 
 private slots:
     void saveValues();
-    void channelItemChanged(QTreeWidgetItem*, QTreeWidgetItem*);
-    void voiceButtonClicked(int);
     void tabChanged(int tab);
     void setSwingControls(bool);
 
 private:
     void hideEvent(QHideEvent*) override;
 
-    void saveChannel(int channel);
-
     INotationUndoStackPtr undoStack() const;
 
     engraving::StaffTextBase* m_originStaffText = nullptr;
     engraving::StaffTextBase* m_staffText = nullptr;
-    QToolButton* m_vb[engraving::VOICES][engraving::VOICES];
-    QComboBox* m_channelCombo[engraving::VOICES];
     QPushButton* m_stops[4][16];
     int m_curTabIndex = 0;
 };
