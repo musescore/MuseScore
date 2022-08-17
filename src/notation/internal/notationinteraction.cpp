@@ -940,7 +940,6 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     m_dragData.mode = mode;
 
     PointF normalizedBegin = m_dragData.beginMove - m_dragData.elementOffset;
-
     PointF delta = toPos - normalizedBegin;
     PointF evtDelta = toPos - m_dragData.ed.pos;
 
@@ -2149,6 +2148,10 @@ void NotationInteraction::drawSelectionRange(draw::Painter* painter)
 
 void NotationInteraction::drawGripPoints(draw::Painter* painter)
 {
+    if (isDragStarted() && !isGripEditStarted()) {
+        return;
+    }
+
     mu::engraving::EngravingItem* editedElement = m_editData.element;
     int gripsCount = editedElement ? editedElement->gripsCount() : 0;
 
