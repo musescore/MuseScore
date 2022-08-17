@@ -982,7 +982,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
         m_dragData.ed.moveDelta = m_dragData.ed.delta - m_dragData.elementOffset;
         m_dragData.ed.addData(m_editData.getData(m_editData.element));
         m_editData.element->editDrag(m_dragData.ed);
-    } else if (isElementEditStarted()) {
+    } else if (m_editData.element && !m_editData.element->hasGrips()) {
         m_dragData.ed.delta = evtDelta;
         m_editData.element->editDrag(m_dragData.ed);
     } else {
@@ -2901,7 +2901,7 @@ void NotationInteraction::startEditGrip(EngravingItem* element, mu::engraving::G
 
 bool NotationInteraction::isElementEditStarted() const
 {
-    return m_editData.element != nullptr && (m_editData.grips == 0 || m_editData.curGrip != mu::engraving::Grip::NO_GRIP);
+    return m_editData.element != nullptr;
 }
 
 void NotationInteraction::startEditElement(EngravingItem* element)
@@ -2916,8 +2916,6 @@ void NotationInteraction::startEditElement(EngravingItem* element)
 
     if (element->isTextBase()) {
         startEditText(element);
-    } else if (element->hasGrips()) {
-        startEditGrip(element, element->defaultGrip());
     } else if (element->isEditable()) {
         element->startEdit(m_editData);
         m_editData.element = element;
