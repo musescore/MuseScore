@@ -23,7 +23,7 @@
 #define MU_LANGUAGES_ILANGUAGESSERVICE_H
 
 #include "modularity/imoduleexport.h"
-#include "types/retval.h"
+#include "async/notification.h"
 
 #include "languagestypes.h"
 
@@ -36,14 +36,16 @@ public:
     virtual ~ILanguagesService() = default;
 
     virtual const LanguagesHash& languages() const = 0;
-    virtual ValCh<Language> currentLanguage() const = 0;
+    virtual const Language& currentLanguage() const = 0;
+    virtual async::Notification currentLanguageChanged() const = 0;
 
     virtual bool hasPlaceholderLanguage() const = 0;
     virtual const Language& placeholderLanguage() const = 0;
 
     virtual LanguageProgressChannel update(const QString& languageCode) = 0;
 
-    virtual ValCh<bool> needRestartToApplyLanguageChange() const = 0;
+    virtual bool needRestartToApplyLanguageChange() const = 0;
+    virtual async::Channel<bool> needRestartToApplyLanguageChangeChanged() const = 0;
 };
 }
 

@@ -45,14 +45,16 @@ public:
     void init();
 
     const LanguagesHash& languages() const override;
-    ValCh<Language> currentLanguage() const override;
+    const Language& currentLanguage() const override;
+    async::Notification currentLanguageChanged() const override;
 
     bool hasPlaceholderLanguage() const override;
     const Language& placeholderLanguage() const override;
 
     LanguageProgressChannel update(const QString& languageCode) override;
 
-    ValCh<bool> needRestartToApplyLanguageChange() const override;
+    bool needRestartToApplyLanguageChange() const override;
+    async::Channel<bool> needRestartToApplyLanguageChangeChanged() const override;
 
 private:
     void loadLanguages();
@@ -68,14 +70,16 @@ private:
 
 private:
     LanguagesHash m_languagesHash;
+    Language m_currentLanguage;
+    async::Notification m_currentLanguageChanged;
     Language m_placeholderLanguage;
-    ValCh<Language> m_currentLanguage;
 
     QSet<QTranslator*> m_translators;
     mutable QHash<QString, LanguageProgressChannel > m_updateOperationsHash;
 
     bool m_inited = false;
-    ValCh<bool> m_needRestartToApplyLanguageChange;
+    bool m_needRestartToApplyLanguageChange = false;
+    async::Channel<bool> m_needRestartToApplyLanguageChangeChanged;
 };
 }
 

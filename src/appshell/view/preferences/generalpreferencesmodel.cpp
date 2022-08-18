@@ -37,9 +37,8 @@ void GeneralPreferencesModel::load()
         emit currentLanguageCodeChanged(languageCode);
     });
 
-    ValCh<bool> needRestart = languagesService()->needRestartToApplyLanguageChange();
-    setIsNeedRestart(needRestart.val);
-    needRestart.ch.onReceive(this, [this](bool need) {
+    setIsNeedRestart(languagesService()->needRestartToApplyLanguageChange());
+    languagesService()->needRestartToApplyLanguageChangeChanged().onReceive(this, [this](bool need) {
         setIsNeedRestart(need);
     });
 
