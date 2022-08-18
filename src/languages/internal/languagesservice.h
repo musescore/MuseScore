@@ -51,7 +51,7 @@ public:
     bool hasPlaceholderLanguage() const override;
     const Language& placeholderLanguage() const override;
 
-    LanguageProgressChannel update(const QString& languageCode) override;
+    framework::Progress update(const QString& languageCode) override;
 
     bool needRestartToApplyLanguageChange() const override;
     async::Channel<bool> needRestartToApplyLanguageChangeChanged() const override;
@@ -63,9 +63,9 @@ private:
     QString effectiveLanguageCode(const QString& languageCode) const;
     Ret loadLanguage(Language& lang);
 
-    void th_update(const QString& languageCode, LanguageProgressChannel progressChannel, async::Channel<Ret> finishChannel);
+    void th_update(const QString& languageCode, framework::Progress progress);
     bool canUpdate(const QString& languageCode);
-    Ret downloadLanguage(const QString& languageCode, LanguageProgressChannel progressChannel) const;
+    Ret downloadLanguage(const QString& languageCode, framework::Progress progress) const;
     RetVal<QString> fileHash(const io::path_t& path);
 
 private:
@@ -75,7 +75,7 @@ private:
     Language m_placeholderLanguage;
 
     QSet<QTranslator*> m_translators;
-    mutable QHash<QString, LanguageProgressChannel > m_updateOperationsHash;
+    mutable QHash<QString, framework::Progress> m_updateOperationsHash;
 
     bool m_inited = false;
     bool m_needRestartToApplyLanguageChange = false;

@@ -24,6 +24,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "async/notification.h"
+#include "progress.h"
 
 #include "languagestypes.h"
 
@@ -42,7 +43,7 @@ public:
     virtual bool hasPlaceholderLanguage() const = 0;
     virtual const Language& placeholderLanguage() const = 0;
 
-    virtual LanguageProgressChannel update(const QString& languageCode) = 0;
+    virtual framework::Progress update(const QString& languageCode) = 0;
 
     virtual bool needRestartToApplyLanguageChange() const = 0;
     virtual async::Channel<bool> needRestartToApplyLanguageChangeChanged() const = 0;

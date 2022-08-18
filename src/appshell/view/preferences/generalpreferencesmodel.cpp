@@ -53,11 +53,11 @@ void GeneralPreferencesModel::load()
 
 void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
 {
-    LanguageProgressChannel progress = languagesService()->update(currentLanguageCode());
+    framework::Progress progress = languagesService()->update(currentLanguageCode());
 
-    progress.onReceive(this, [this](const LanguageProgress& progress) {
-        emit receivingUpdateForCurrentLanguage(progress.current, progress.status);
-    }, Asyncable::AsyncMode::AsyncSetRepeat);
+    progress.progressChanged.onReceive(this, [this](int64_t current, int64_t total, const std::string& status) {
+        emit receivingUpdateForCurrentLanguage(current, total, QString::fromStdString(status));
+    });
 }
 
 QVariantList GeneralPreferencesModel::languages() const

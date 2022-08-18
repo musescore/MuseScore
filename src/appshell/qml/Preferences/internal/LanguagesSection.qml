@@ -39,9 +39,10 @@ BaseSection {
     signal languageSelected(string languageCode)
     signal checkForUpdateRequested()
 
-    function setUpdateProgress(progressValue, progressStatus) {
-        progressBtn.value = progressValue
-        progressBtn.progressStatus = progressStatus
+    function setUpdateProgress(current, total, status) {
+        progressBtn.to = total
+        progressBtn.value = current
+        progressBtn.progressStatus = status
     }
 
     Row {
