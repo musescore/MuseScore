@@ -5311,7 +5311,7 @@ constexpr const std::array<const char*, size_t(SymId::lastSym) + 1> SymNames::s_
     QT_TRANSLATE_NOOP("engraving/sym", "Trill"),
     QT_TRANSLATE_NOOP("engraving/sym", "Turn"),
     QT_TRANSLATE_NOOP("engraving/sym", "Inverted turn"),
-    "Turn with slash",
+    QT_TRANSLATE_NOOP("engraving/sym", "Turn with slash"),
     "Turn up",
     "Inverted turn up",
     "Curve above",
