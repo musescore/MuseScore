@@ -325,8 +325,10 @@ void PlaybackEventsRenderer::renderNoteArticulations(const Chord* chord, const R
         NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.chordCtx.commonArticulations);
 
         if (!swingDurationAdjustment.isNull()) {
-            noteCtx.timestamp = noteCtx.timestamp + noteCtx.duration * swingDurationAdjustment.remainingDurationMultiplier;
-            noteCtx.duration = noteCtx.duration * swingDurationAdjustment.durationMultiplier;
+            //! NOTE: Swing must be applied to the "raw" note duration, but not to the additional duration (e.g, from a tied note)
+            duration_t additionalDuration = noteCtx.duration - ctx.nominalDuration;
+            noteCtx.timestamp = noteCtx.timestamp + ctx.nominalDuration * swingDurationAdjustment.remainingDurationMultiplier;
+            noteCtx.duration = ctx.nominalDuration * swingDurationAdjustment.durationMultiplier + additionalDuration;
         }
 
         if (note->tieFor()) {
