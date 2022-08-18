@@ -37,8 +37,6 @@ static const Settings::Key LANGUAGE_KEY("languages", "language");
 static const QString LANGUAGES_SERVER_URL("http://extensions.musescore.org/4.0/languages/");
 static const io::path_t LANGUAGES_STATE_FILE("/languages.json");
 
-static const std::string LANGUAGES_RESOURCE_NAME("LANGUAGES");
-
 static const QString DEF_MUSESCORE_QM("musescore_%1.qm");
 static const QString DEF_INSTRUMENTS_QM("instruments_%1.qm");
 
