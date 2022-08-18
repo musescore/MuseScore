@@ -214,7 +214,7 @@ void AlsaMidiInPort::disconnect()
 
 bool AlsaMidiInPort::isConnected() const
 {
-    return m_alsa->midiIn && !m_deviceID.empty();
+    return m_alsa && m_alsa->midiIn && !m_deviceID.empty();
 }
 
 MidiDeviceID AlsaMidiInPort::deviceID() const

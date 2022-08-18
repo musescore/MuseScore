@@ -110,7 +110,7 @@ struct MidiData {
     }
 };
 
-static constexpr char NONE_DEVICE_ID[] = "none";
+static constexpr char NONE_DEVICE_ID[] = "-1";
 
 using MidiDeviceID = std::string;
 struct MidiDevice {

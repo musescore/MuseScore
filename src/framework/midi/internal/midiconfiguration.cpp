@@ -21,6 +21,8 @@
  */
 #include "midiconfiguration.h"
 
+#include "miditypes.h"
+
 #include "settings.h"
 
 using namespace mu::midi;
@@ -29,8 +31,8 @@ using namespace mu::framework;
 static const std::string module_name("midi");
 
 static const Settings::Key USE_REMOTE_CONTROL_KEY(module_name, "io/midi/useRemoteControl");
-static const Settings::Key MIDI_INPUT_DEVICE_ID(module_name, "io/portMidi/inputDevice");
-static const Settings::Key MIDI_OUTPUT_DEVICE_ID(module_name, "io/portMidi/outputDevice");
+static const Settings::Key MIDI_INPUT_DEVICE_ID(module_name, "io/inputDeviceId");
+static const Settings::Key MIDI_OUTPUT_DEVICE_ID(module_name, "io/outputDeviceId");
 static const Settings::Key USE_MIDI20_OUTPUT_KEY(module_name, "io/midi/useMIDI20Output");
 
 void MidiConfiguration::init()
@@ -42,7 +44,7 @@ void MidiConfiguration::init()
         m_midiInputDeviceIdChanged.notify();
     });
 
-    settings()->setDefaultValue(MIDI_OUTPUT_DEVICE_ID, Val(""));
+    settings()->setDefaultValue(MIDI_OUTPUT_DEVICE_ID, Val(NONE_DEVICE_ID));
     settings()->valueChanged(MIDI_OUTPUT_DEVICE_ID).onReceive(nullptr, [this](const Val&) {
         m_midiOutputDeviceIdChanged.notify();
     });
