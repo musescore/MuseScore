@@ -50,13 +50,6 @@ static const QStringList LANGUAGE_RESOURCE_NAMES = {
     "instruments"
 };
 
-namespace mu::languages {
-static QString downloadingStatusTitle()
-{
-    return qtrc("languages", "Downloading…");
-}
-}
-
 void LanguagesService::init()
 {
     TRACEFUNC;
@@ -276,7 +269,7 @@ Ret LanguagesService::loadLanguage(Language& lang)
     return make_ok();
 }
 
-LanguageProgressChannel LanguagesService::update(const QString& languageCode)
+Progress LanguagesService::update(const QString& languageCode)
 {
     QString effectiveLanguageCode = this->effectiveLanguageCode(languageCode);
     IF_ASSERT_FAILED(!effectiveLanguageCode.isEmpty()) {
@@ -287,22 +280,21 @@ LanguageProgressChannel LanguagesService::update(const QString& languageCode)
         return m_updateOperationsHash[effectiveLanguageCode];
     }
 
-    LanguageProgressChannel progressChannel;
+    Progress progress;
 
-    m_updateOperationsHash.insert(effectiveLanguageCode, progressChannel);
+    m_updateOperationsHash.insert(effectiveLanguageCode, progress);
 
-    async::Channel<Ret> languageFinishChannel;
-    languageFinishChannel.onReceive(this, [this, effectiveLanguageCode](const Ret& ret) {
-        if (!ret) {
+    progress.finished.onReceive(this, [this, effectiveLanguageCode](Ret ret) {
+        if (!ret && ret.code() != static_cast<int>(Err::AlreadyUpToDate)) {
             LOGE() << ret.toString();
         }
 
-        m_updateOperationsHash.take(effectiveLanguageCode).close();
-    }, Asyncable::AsyncMode::AsyncSetRepeat);
+        m_updateOperationsHash.remove(effectiveLanguageCode);
+    });
 
-    QtConcurrent::run(this, &LanguagesService::th_update, effectiveLanguageCode, progressChannel, languageFinishChannel);
+    QtConcurrent::run(this, &LanguagesService::th_update, effectiveLanguageCode, progress);
 
-    return progressChannel;
+    return progress;
 }
 
 bool LanguagesService::needRestartToApplyLanguageChange() const
@@ -315,24 +307,23 @@ async::Channel<bool> LanguagesService::needRestartToApplyLanguageChangeChanged()
     return m_needRestartToApplyLanguageChangeChanged;
 }
 
-void LanguagesService::th_update(const QString& languageCode, LanguageProgressChannel progressChannel,
-                                 async::Channel<Ret> finishChannel)
+void LanguagesService::th_update(const QString& languageCode, Progress progress)
 {
-    progressChannel.send(LanguageProgress(qtrc("languages", "Checking for updates…"), true));
+    progress.started.notify();
+
+    progress.progressChanged.send(0, 0, trc("languages", "Checking for updates…"));
 
     if (!canUpdate(languageCode)) {
-        finishChannel.send(make_ret(Err::AlreadyUpToDate));
+        progress.finished.send(make_ret(Err::AlreadyUpToDate));
         return;
     }
 
-    progressChannel.send(LanguageProgress(downloadingStatusTitle(), true));
-
-    downloadLanguage(languageCode, progressChannel);
+    downloadLanguage(languageCode, progress);
 
     m_needRestartToApplyLanguageChange = true;
     m_needRestartToApplyLanguageChangeChanged.send(m_needRestartToApplyLanguageChange);
 
-    finishChannel.send(make_ret(Err::NoError));
+    progress.finished.send(make_ret(Err::NoError));
 }
 
 bool LanguagesService::canUpdate(const QString& languageCode)
@@ -368,13 +359,17 @@ bool LanguagesService::canUpdate(const QString& languageCode)
     return false;
 }
 
-Ret LanguagesService::downloadLanguage(const QString& languageCode, LanguageProgressChannel progressChannel) const
+Ret LanguagesService::downloadLanguage(const QString& languageCode, Progress progress) const
 {
+    std::string downloadingStatusTitle = trc("languages", "Downloading…");
+    progress.progressChanged.send(0, 0, downloadingStatusTitle);
+
     QBuffer qbuff;
     INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
 
-    networkManagerPtr->progress().progressChanged.onReceive(this, [&progressChannel](int64_t current, int64_t total, const std::string&) {
-        progressChannel.send(LanguageProgress(downloadingStatusTitle(), current, total));
+    networkManagerPtr->progress().progressChanged.onReceive(
+        this, [&progress, &downloadingStatusTitle](int64_t current, int64_t total, const std::string&) {
+        progress.progressChanged.send(current, total, downloadingStatusTitle);
     });
 
     Ret ret = networkManagerPtr->get(configuration()->languageFileServerUrl(languageCode), &qbuff);
@@ -383,7 +378,7 @@ Ret LanguagesService::downloadLanguage(const QString& languageCode, LanguageProg
         return make_ret(Err::ErrorDownloadLanguage);
     }
 
-    progressChannel.send(LanguageProgress(downloadingStatusTitle(), true));
+    progress.progressChanged.send(0, 0, trc("languages", "Unpacking…"));
 
     ByteArray ba = ByteArray::fromQByteArrayNoCopy(qbuff.data());
     io::Buffer buff(&ba);

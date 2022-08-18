@@ -37,8 +37,8 @@ PreferencesPage {
     GeneralPreferencesModel {
         id: preferencesModel
 
-        onReceivingUpdateForCurrentLanguage: function(progressValue, progressStatus) {
-            languagesSection.setUpdateProgress(progressValue, progressStatus)
+        onReceivingUpdateForCurrentLanguage: function(current, total, status) {
+            languagesSection.setUpdateProgress(current, total, status)
         }
     }
 

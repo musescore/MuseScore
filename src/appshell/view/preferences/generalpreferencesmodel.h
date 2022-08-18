@@ -93,7 +93,7 @@ signals:
     void isOSCRemoteControlChanged(bool isOSCRemoteControl);
     void oscPortChanged(int oscPort);
 
-    void receivingUpdateForCurrentLanguage(int progressValue, QString progressStatus);
+    void receivingUpdateForCurrentLanguage(int current, int total, QString status);
     void isNeedRestartChanged();
 
 private:

@@ -26,29 +26,11 @@
 #include <QMap>
 #include <QString>
 
-#include "async/channel.h"
 #include "io/path.h"
 
 namespace mu::languages {
 const QString SYSTEM_LANGUAGE_CODE = "system";
 const QString PLACEHOLDER_LANGUAGE_CODE = "en@placeholder";
-
-struct LanguageProgress
-{
-    QString status;
-    bool indeterminate = true;
-
-    qint64 current = 0;
-    quint64 total = 0;
-
-    LanguageProgress() = default;
-    LanguageProgress(const QString& status, bool indeterminate)
-        : status(status), indeterminate(indeterminate) {}
-    LanguageProgress(const QString& status, qint64 current, qint64 total)
-        : status(status), indeterminate(false), current(current), total(total) {}
-};
-
-using LanguageProgressChannel = async::Channel<LanguageProgress>;
 
 using LanguageFilesMap = QMap<QString /*resourceName*/, io::path_t>;
 
