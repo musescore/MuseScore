@@ -13,7 +13,7 @@
     <accentShowTabCommon>1</accentShowTabCommon>
     <staccatoShowTabSimple>0</staccatoShowTabSimple>
     <staccatoShowTabCommon>1</staccatoShowTabCommon>
-    <harmonicMarkShowTabSimple>0</harmonicMarkShowTabSimple>
+    <harmonicMarkShowTabSimple>1</harmonicMarkShowTabSimple>
     <harmonicMarkShowTabCommon>1</harmonicMarkShowTabCommon>
     <letRingShowTabSimple>1</letRingShowTabSimple>
     <letRingShowTabCommon>1</letRingShowTabCommon>

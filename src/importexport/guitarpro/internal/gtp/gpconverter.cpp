@@ -1533,8 +1533,12 @@ void GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
         hnote->setString(note->string());
         hnote->setPitch(note->pitch());
         hnote->setFret(note->fret());
-        note->setDisplayFret(Note::DisplayFretOption::ArtificialHarmonic);
+
+        /// @note option to show or not additional harmonic fret in "<>" to be implemented
+        ///note->setDisplayFret(Note::DisplayFretOption::ArtificialHarmonic);
+        ///hnote->setDisplayFret(Note::DisplayFretOption::Hide);
         hnote->setDisplayFret(Note::DisplayFretOption::Hide);
+
         hnote->setTpcFromPitch();
         note->chord()->add(hnote);
         hnote->setPlay(false);
