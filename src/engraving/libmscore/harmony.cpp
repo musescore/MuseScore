@@ -2261,7 +2261,7 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
 {
     switch (pid) {
     case Pid::PLAY:
-        setPlay(v.toBool());
+        _play = v.toBool();
         break;
     case Pid::HARMONY_TYPE:
         setHarmonyType(HarmonyType(v.toInt()));
