@@ -318,7 +318,11 @@ void LanguagesService::th_update(const QString& languageCode, Progress progress)
         return;
     }
 
-    downloadLanguage(languageCode, progress);
+    Ret ret = downloadLanguage(languageCode, progress);
+    if (!ret) {
+        progress.finished.send(ret);
+        return;
+    }
 
     m_needRestartToApplyLanguageChange = true;
     m_needRestartToApplyLanguageChangeChanged.send(m_needRestartToApplyLanguageChange);
