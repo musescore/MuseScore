@@ -38,13 +38,14 @@ public:
 
     void init() override;
 
-    MidiDeviceList devices() const override;
-    async::Notification devicesChanged() const override;
+    MidiDeviceList availableDevices() const override;
+    async::Notification availableDevicesChanged() const override;
 
     Ret connect(const MidiDeviceID& deviceID) override;
     void disconnect() override;
     bool isConnected() const override;
     MidiDeviceID deviceID() const override;
+    async::Notification deviceChanged() const override;
 
     // internal;
     void doProcess(uint32_t message, tick_t timing);
@@ -57,8 +58,9 @@ private:
     std::shared_ptr<Win> m_win;
     MidiDeviceID m_deviceID;
     bool m_running = false;
+    async::Notification m_deviceChanged;
 
-    async::Notification m_devicesChanged;
+    async::Notification m_availableDevicesChanged;
     MidiDevicesListener m_devicesListener;
 
     mutable std::mutex m_devicesMutex;

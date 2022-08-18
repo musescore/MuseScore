@@ -31,7 +31,7 @@
 #include "internal/notation.h"
 #include "internal/notationactioncontroller.h"
 #include "internal/notationconfiguration.h"
-#include "internal/midiinputcontroller.h"
+#include "internal/midiinputoutputcontroller.h"
 #include "internal/notationuiactions.h"
 #include "internal/positionswriter.h"
 #include "internal/mscnotationwriter.h"
@@ -85,7 +85,7 @@ using namespace mu::uicomponents;
 static std::shared_ptr<NotationConfiguration> s_configuration = std::make_shared<NotationConfiguration>();
 static std::shared_ptr<NotationActionController> s_actionController = std::make_shared<NotationActionController>();
 static std::shared_ptr<NotationUiActions> s_notationUiActions = std::make_shared<NotationUiActions>(s_actionController);
-static std::shared_ptr<MidiInputController> s_midiInputController = std::make_shared<MidiInputController>();
+static std::shared_ptr<MidiInputOutputController> s_midiInputOutputController = std::make_shared<MidiInputOutputController>();
 static std::shared_ptr<InstrumentsRepository> s_instrumentsRepository = std::make_shared<InstrumentsRepository>();
 
 static void notationscene_init_qrc()
@@ -216,7 +216,7 @@ void NotationModule::onInit(const framework::IApplication::RunMode& mode)
     s_notationUiActions->init();
 
     if (mode == framework::IApplication::RunMode::Editor) {
-        s_midiInputController->init();
+        s_midiInputOutputController->init();
     }
 
     Notation::init();

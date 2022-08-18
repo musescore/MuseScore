@@ -27,8 +27,10 @@
 #include <CoreServices/CoreServices.h>
 #include <CoreMIDI/CoreMIDI.h>
 
-#include "log.h"
+#include "translation.h"
 #include "midierrors.h"
+#include "defer.h"
+#include "log.h"
 
 using namespace mu::midi;
 
@@ -105,7 +107,7 @@ void CoreMidiOutPort::initCore()
                 }
             }
 
-            self->devicesChanged().notify();
+            self->availableDevicesChanged().notify();
         } break;
 
         case kMIDIMsgPropertyChanged: {
@@ -123,7 +125,7 @@ void CoreMidiOutPort::initCore()
 
             if (CFStringCompare(propertyChangeNotification->propertyName, kMIDIPropertyDisplayName, 0) == kCFCompareEqualTo
                 || CFStringCompare(propertyChangeNotification->propertyName, kMIDIPropertyName, 0) == kCFCompareEqualTo) {
-                self->devicesChanged().notify();
+                self->availableDevicesChanged().notify();
             } else if (__builtin_available(macOS 11.0, *)) {
                 if (CFStringCompare(propertyChangeNotification->propertyName, kMIDIPropertyProtocolID, 0) == kCFCompareEqualTo
                     && self->isConnected() && propertyChangeNotification->object == self->m_core->destinationId) {
@@ -157,15 +159,25 @@ void CoreMidiOutPort::initCore()
     }
 }
 
-MidiDeviceList CoreMidiOutPort::devices() const
+MidiDeviceList CoreMidiOutPort::availableDevices() const
 {
     MidiDeviceList ret;
+
+    ret.push_back({ NONE_DEVICE_ID, trc("midi", "No device") });
 
     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, false);
     ItemCount destinations = MIDIGetNumberOfDestinations();
     for (ItemCount destIndex = 0; destIndex <= destinations; destIndex++) {
         MIDIEndpointRef destRef = MIDIGetDestination(destIndex);
         if (destRef != 0) {
+            MidiDevice dev;
+
+            SInt32 id = 0;
+            if (MIDIObjectGetIntegerProperty(destRef, kMIDIPropertyUniqueID, &id) != noErr) {
+                LOGE() << "Can't get property kMIDIPropertyUniqueID";
+                continue;
+            }
+
             CFStringRef stringRef = nullptr;
             char name[256];
 
@@ -176,8 +188,7 @@ MidiDeviceList CoreMidiOutPort::devices() const
             CFStringGetCString(stringRef, name, sizeof(name), kCFStringEncodingUTF8);
             CFRelease(stringRef);
 
-            MidiDevice dev;
-            dev.id = std::to_string(destIndex);
+            dev.id = std::to_string(id);
             dev.name = name;
 
             ret.push_back(std::move(dev));
@@ -187,34 +198,48 @@ MidiDeviceList CoreMidiOutPort::devices() const
     return ret;
 }
 
-mu::async::Notification CoreMidiOutPort::devicesChanged() const
+mu::async::Notification CoreMidiOutPort::availableDevicesChanged() const
 {
-    return m_devicesChanged;
+    return m_availableDevicesChanged;
 }
 
 mu::Ret CoreMidiOutPort::connect(const MidiDeviceID& deviceID)
 {
+    DEFER {
+        m_deviceChanged.notify();
+    };
+
     if (isConnected()) {
         disconnect();
     }
 
-    if (!m_core->client) {
-        return make_ret(Err::MidiFailedConnect, "failed create client");
-    }
+    if (!deviceID.empty() && deviceID != NONE_DEVICE_ID) {
+        if (!m_core->client) {
+            return make_ret(Err::MidiFailedConnect, "failed create client");
+        }
 
-    if (!m_core->outputPort) {
-        return make_ret(Err::MidiFailedConnect, "failed create port");
-    }
+        if (!m_core->outputPort) {
+            return make_ret(Err::MidiFailedConnect, "failed create port");
+        }
 
-    m_core->deviceID = std::stoi(deviceID);
-    m_core->destinationId = MIDIGetDestination(m_core->deviceID);
-    if (!m_core->destinationId) {
-        return make_ret(Err::MidiFailedConnect, "failed get destination");
-    }
+        MIDIObjectRef obj;
+        MIDIObjectType type;
 
-    getDestinationProtocolId();
+        OSStatus err = MIDIObjectFindByUniqueID(std::stoi(deviceID), &obj, &type);
+        if (err != noErr) {
+            return make_ret(Err::MidiFailedConnect, "failed get destination");
+        }
+
+        m_core->deviceID = std::stoi(deviceID);
+        m_core->destinationId = (MIDIEndpointRef)obj;
+
+        getDestinationProtocolId();
+    }
 
     m_deviceID = deviceID;
+
+    LOGD() << "Connected to " << m_deviceID;
+
     return Ret(true);
 }
 
@@ -228,6 +253,8 @@ void CoreMidiOutPort::disconnect()
         m_core->destinationId = 0;
     }
 
+    LOGD() << "Disconnected from " << m_deviceID;
+
     m_core->destinationId = 0;
     m_deviceID.clear();
 }
@@ -240,6 +267,11 @@ bool CoreMidiOutPort::isConnected() const
 std::string CoreMidiOutPort::deviceID() const
 {
     return m_deviceID;
+}
+
+mu::async::Notification CoreMidiOutPort::deviceChanged() const
+{
+    return m_deviceChanged;
 }
 
 bool CoreMidiOutPort::supportsMIDI20Output() const

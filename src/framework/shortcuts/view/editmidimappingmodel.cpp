@@ -78,7 +78,7 @@ QVariant EditMidiMappingModel::inputtedEvent() const
 
 QString EditMidiMappingModel::deviceName(const MidiDeviceID& deviceId) const
 {
-    for (const MidiDevice& device : midiInPort()->devices()) {
+    for (const MidiDevice& device : midiInPort()->availableDevices()) {
         if (device.id == deviceId) {
             return QString::fromStdString(device.name);
         }

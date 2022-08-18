@@ -37,13 +37,14 @@ class IMidiInPort : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMidiInPort() = default;
 
-    virtual MidiDeviceList devices() const = 0;
-    virtual async::Notification devicesChanged() const = 0;
+    virtual MidiDeviceList availableDevices() const = 0;
+    virtual async::Notification availableDevicesChanged() const = 0;
 
     virtual Ret connect(const MidiDeviceID& deviceID) = 0;
     virtual void disconnect() = 0;
     virtual bool isConnected() const = 0;
     virtual MidiDeviceID deviceID() const = 0;
+    virtual async::Notification deviceChanged() const = 0;
 
     virtual async::Channel<std::vector<std::pair<tick_t, Event> > > eventsReceived() const = 0;
 };

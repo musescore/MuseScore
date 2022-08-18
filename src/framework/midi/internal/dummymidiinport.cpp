@@ -28,7 +28,7 @@ void DummyMidiInPort::init()
 {
 }
 
-std::vector<MidiDevice> DummyMidiInPort::devices() const
+std::vector<MidiDevice> DummyMidiInPort::availableDevices() const
 {
     MidiDevice d;
     d.id = "dummy";

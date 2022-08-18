@@ -56,8 +56,8 @@ PreferencesPage {
         SeparatorLine {}
 
         MidiDevicesSection {
-            currentInputDeviceIndex: ioModel.currentMidiInputDeviceIndex
-            currentOutputDeviceIndex: ioModel.currentMidiOutputDeviceIndex
+            inputDeviceId: ioModel.midiInputDeviceId
+            outputDeviceId: ioModel.midiOutputDeviceId
             inputDevices: ioModel.midiInputDevices
             outputDevices: ioModel.midiOutputDevices
 
@@ -67,12 +67,12 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
 
-            onCurrentInputDeviceIndexChangeRequested: function(newIndex) {
-                ioModel.currentMidiInputDeviceIndex = newIndex
+            onInputDeviceIdChangeRequested: function(newId) {
+                ioModel.inputDeviceSelected(newId)
             }
 
-            onCurrentOutputDeviceIndexChangeRequested: function(newIndex) {
-                ioModel.currentMidiOutputDeviceIndex = newIndex
+            onOutputDeviceIdChangeRequested: function(newId) {
+                ioModel.outputDeviceSelected(newId)
             }
 
             onUseMIDI20OutputChangeRequested: function(use) {

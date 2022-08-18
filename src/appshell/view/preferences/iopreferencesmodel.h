@@ -43,13 +43,11 @@ class IOPreferencesModel : public QObject, public async::Asyncable
 
     Q_PROPERTY(int currentAudioApiIndex READ currentAudioApiIndex WRITE setCurrentAudioApiIndex NOTIFY currentAudioApiIndexChanged)
 
-    Q_PROPERTY(QStringList midiInputDevices READ midiInputDevices NOTIFY midiInputDevicesChanged)
-    Q_PROPERTY(
-        int currentMidiInputDeviceIndex READ currentMidiInputDeviceIndex WRITE setCurrentMidiInputDeviceIndex NOTIFY currentMidiInputDeviceIndexChanged)
+    Q_PROPERTY(QVariantList midiInputDevices READ midiInputDevices NOTIFY midiInputDevicesChanged)
+    Q_PROPERTY(QString midiInputDeviceId READ midiInputDeviceId NOTIFY midiInputDeviceIdChanged)
 
-    Q_PROPERTY(QStringList midiOutputDevices READ midiOutputDevices NOTIFY midiOutputDevicesChanged)
-    Q_PROPERTY(
-        int currentMidiOutputDeviceIndex READ currentMidiOutputDeviceIndex WRITE setCurrentMidiOutputDeviceIndex NOTIFY currentMidiOutputDeviceIndexChanged)
+    Q_PROPERTY(QVariantList midiOutputDevices READ midiOutputDevices NOTIFY midiOutputDevicesChanged)
+    Q_PROPERTY(QString midiOutputDeviceId READ midiOutputDeviceId NOTIFY midiOutputDeviceIdChanged)
 
     Q_PROPERTY(bool isMIDI20OutputSupported READ isMIDI20OutputSupported CONSTANT)
     Q_PROPERTY(bool useMIDI20Output READ useMIDI20Output WRITE setUseMIDI20Output NOTIFY useMIDI20OutputChanged)
@@ -57,33 +55,35 @@ class IOPreferencesModel : public QObject, public async::Asyncable
 public:
     explicit IOPreferencesModel(QObject* parent = nullptr);
 
-    int currentAudioApiIndex() const;
-    int currentMidiInputDeviceIndex() const;
-    int currentMidiOutputDeviceIndex() const;
-
     Q_INVOKABLE void init();
+
+    int currentAudioApiIndex() const;
+
+    QString midiInputDeviceId() const;
+    Q_INVOKABLE void inputDeviceSelected(const QString& deviceId);
+
+    QString midiOutputDeviceId() const;
+    Q_INVOKABLE void outputDeviceSelected(const QString& deviceId);
 
     Q_INVOKABLE QStringList audioApiList() const;
 
     Q_INVOKABLE void restartAudioAndMidiDevices();
 
-    QStringList midiInputDevices() const;
-    QStringList midiOutputDevices() const;
+    QVariantList midiInputDevices() const;
+    QVariantList midiOutputDevices() const;
 
     bool isMIDI20OutputSupported() const;
     bool useMIDI20Output() const;
 
 public slots:
     void setCurrentAudioApiIndex(int index);
-    void setCurrentMidiInputDeviceIndex(int index);
-    void setCurrentMidiOutputDeviceIndex(int index);
 
     void setUseMIDI20Output(bool use);
 
 signals:
     void currentAudioApiIndexChanged(int index);
-    void currentMidiInputDeviceIndexChanged();
-    void currentMidiOutputDeviceIndexChanged();
+    void midiInputDeviceIdChanged();
+    void midiOutputDeviceIdChanged();
 
     void midiInputDevicesChanged();
     void midiOutputDevicesChanged();
