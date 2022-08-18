@@ -75,6 +75,7 @@ std::vector<MidiDevice> AlsaMidiOutPort::availableDevices() const
 
     int streams = SND_SEQ_OPEN_OUTPUT;
     unsigned int cap = SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_READ;
+    unsigned int type = SND_SEQ_PORT_TYPE_PORT | SND_SEQ_PORT_TYPE_HARDWARE;
 
     std::vector<MidiDevice> ret;
 
@@ -107,7 +108,12 @@ std::vector<MidiDevice> AlsaMidiOutPort::availableDevices() const
 
         snd_seq_port_info_set_port(pinfo, -1);
         while (snd_seq_query_next_port(handle, pinfo) >= 0) {
-            if ((snd_seq_port_info_get_capability(pinfo) & cap) == cap) {
+            uint32_t types = snd_seq_port_info_get_type(pinfo);
+            uint32_t caps = snd_seq_port_info_get_capability(pinfo);
+
+            bool canConnect = ((caps & cap) == cap) && ((types & type) == type);
+
+            if (canConnect) {
                 MidiDevice dev;
                 dev.name = snd_seq_client_info_get_name(cinfo);
 
