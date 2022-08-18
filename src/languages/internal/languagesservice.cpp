@@ -79,6 +79,21 @@ const LanguagesHash& LanguagesService::languages() const
     return m_languagesHash;
 }
 
+const Language& LanguagesService::language(const QString& languageCode) const
+{
+    QString effectiveLanguageCode = this->effectiveLanguageCode(languageCode);
+    if (effectiveLanguageCode.isEmpty()) {
+        static Language dummy;
+        return dummy;
+    }
+
+    if (effectiveLanguageCode == PLACEHOLDER_LANGUAGE_CODE) {
+        return m_placeholderLanguage;
+    }
+
+    return m_languagesHash[effectiveLanguageCode];
+}
+
 const Language& LanguagesService::currentLanguage() const
 {
     return m_currentLanguage;

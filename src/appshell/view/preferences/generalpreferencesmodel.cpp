@@ -21,6 +21,8 @@
  */
 #include "generalpreferencesmodel.h"
 
+#include "languages/languageserrors.h"
+
 #include "log.h"
 
 using namespace mu::appshell;
@@ -53,10 +55,20 @@ void GeneralPreferencesModel::load()
 
 void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
 {
-    framework::Progress progress = languagesService()->update(currentLanguageCode());
+    QString languageCode = currentLanguageCode();
 
-    progress.progressChanged.onReceive(this, [this](int64_t current, int64_t total, const std::string& status) {
+    m_languageUpdateProgress = languagesService()->update(languageCode);
+
+    m_languageUpdateProgress.progressChanged.onReceive(this, [this](int64_t current, int64_t total, const std::string& status) {
         emit receivingUpdateForCurrentLanguage(current, total, QString::fromStdString(status));
+    });
+
+    m_languageUpdateProgress.finished.onReceive(this, [this, languageCode](Ret ret) {
+        if (ret.code() == static_cast<int>(Err::AlreadyUpToDate)) {
+            QString msg = mu::qtrc("appshell/preferences", "Your version of %1 is up to date.")
+                          .arg(languagesService()->language(languageCode).name);
+            interactive()->info(msg.toStdString(), std::string());
+        }
     });
 }
 

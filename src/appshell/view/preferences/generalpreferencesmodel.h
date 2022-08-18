@@ -24,6 +24,8 @@
 
 #include <QObject>
 
+#include "progress.h"
+
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
@@ -97,6 +99,8 @@ signals:
     void isNeedRestartChanged();
 
 private:
+    framework::Progress m_languageUpdateProgress;
+
     bool m_isNeedRestart = false;
 };
 }
