@@ -436,7 +436,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::maxHarmonyBarDistance,   false, maxHarmonyBarDistance,   0 },
         { StyleId::maxChordShiftAbove,      false, maxChordShiftAbove,      resetMaxChordShiftAbove },
         { StyleId::maxChordShiftBelow,      false, maxChordShiftBelow,      resetMaxChordShiftBelow },
-        { StyleId::harmonyPlay,             false, harmonyPlay,             0 },
         { StyleId::harmonyVoiceLiteral,     false, voicingSelectWidget->interpretBox, 0 },
         { StyleId::harmonyVoicing,          false, voicingSelectWidget->voicingBox, 0 },
         { StyleId::harmonyDuration,         false, voicingSelectWidget->durationBox, 0 },
@@ -753,8 +752,6 @@ EditStyle::EditStyle(QWidget* parent)
     // ====================================================
     // Chord Symbols
     // ====================================================
-
-    harmonyPlay->setChecked(true);
 
     voicingSelectWidget->interpretBox->clear();
     voicingSelectWidget->interpretBox->addItem(qtrc("notation/editstyle", "Jazz"), int(0));   // two-item combobox for boolean style variant

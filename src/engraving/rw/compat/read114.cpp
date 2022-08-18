@@ -2738,11 +2738,6 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
         }
     }
 
-    bool disableHarmonyPlay = MScore::harmonyPlayDisableCompatibility && !MScore::testMode;
-    if (disableHarmonyPlay) {
-        style->set(Sid::harmonyPlay, false);
-    }
-
     readChordListHook.validate();
 }
 
