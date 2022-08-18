@@ -59,8 +59,6 @@ double MScore::horizontalPageGapOdd = 50.0;
 bool MScore::warnPitchRange;
 int MScore::pedalEventsMinTicks;
 
-bool MScore::harmonyPlayDisableCompatibility;
-bool MScore::harmonyPlayDisableNew;
 bool MScore::playRepeats;
 int MScore::playbackSpeedIncrement;
 double MScore::nudgeStep;
