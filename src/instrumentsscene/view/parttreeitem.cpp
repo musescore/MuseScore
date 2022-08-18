@@ -104,9 +104,7 @@ size_t PartTreeItem::resolveNewPartIndex(const ID& partId) const
     bool partFound = false;
     ID firstVisiblePartId;
 
-    for (int i = 0; i < parentItem()->childCount(); ++i) {
-        const AbstractInstrumentsPanelTreeItem* item = parentItem()->childAtRow(i);
-
+    for (const AbstractInstrumentsPanelTreeItem* item : parentItem()->childItems()) {
         if (item->id() == partId) {
             partFound = true;
             continue;
