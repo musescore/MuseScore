@@ -99,6 +99,10 @@ MidiDeviceList WinMidiOutPort::availableDevices() const
         MIDIOUTCAPSW devCaps;
         midiOutGetDevCapsW(i, &devCaps, sizeof(MIDIOUTCAPSW));
 
+        if (devCaps.wTechnology == MOD_SWSYNTH) {
+            continue;
+        }
+
         std::wstring wstr(devCaps.szPname);
         std::string str(wstr.begin(), wstr.end());
 
