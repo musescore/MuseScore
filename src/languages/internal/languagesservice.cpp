@@ -183,11 +183,7 @@ void LanguagesService::setCurrentLanguage(const QString& languageCode)
     QLocale::setDefault(locale);
     qApp->setLayoutDirection(locale.textDirection());
 
-    if (m_inited) {
-        if (QQmlEngine* engine = uiEngine()->qmlEngine()) {
-            engine->retranslate();
-        }
-    }
+    // Currently, no need to retranslate the UI on language change, because we require restart
 
     m_currentLanguage = lang;
     m_currentLanguageChanged.notify();
