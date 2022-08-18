@@ -31,7 +31,7 @@ public:
 
     void init();
 
-    std::vector<MidiDevice> devices() const override;
+    std::vector<MidiDevice> availableDevices() const override;
 
     Ret connect(const MidiDeviceID& deviceID) override;
     void disconnect() override;
