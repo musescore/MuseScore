@@ -36,6 +36,8 @@
 #include "io/buffer.h"
 #include "serialization/zipreader.h"
 
+#include "multiinstances/resourcelockguard.h"
+
 #include "translation.h"
 
 #include "log.h"
@@ -49,6 +51,8 @@ static const QStringList LANGUAGE_RESOURCE_NAMES = {
     "musescore",
     "instruments"
 };
+
+static const std::string LANGUAGES_RESOURCE_NAME("LANGUAGES");
 
 void LanguagesService::init()
 {
@@ -105,7 +109,11 @@ void LanguagesService::loadLanguages()
 {
     TRACEFUNC;
 
-    RetVal<ByteArray> languagesJson = fileSystem()->readFile(configuration()->builtinLanguagesJsonPath());
+    RetVal<ByteArray> languagesJson;
+    {
+        mi::ReadResourceLockGuard lock_guard(multiInstancesProvider(), LANGUAGES_RESOURCE_NAME);
+        languagesJson = fileSystem()->readFile(configuration()->builtinLanguagesJsonPath());
+    }
     if (!languagesJson.ret) {
         LOGE() << "Failed to read languages.json: " << languagesJson.ret.toString();
         return;
@@ -394,12 +402,16 @@ Ret LanguagesService::downloadLanguage(const QString& languageCode, Progress pro
     io::Buffer buff(&ba);
     ZipReader zipReader(&buff);
 
-    for (const auto& info : zipReader.fileInfoList()) {
-        io::path_t userFilePath = configuration()->languagesUserAppDataPath().appendingComponent(info.filePath);
-        ret = fileSystem()->writeFile(userFilePath, zipReader.fileData(info.filePath.toStdString()));
-        if (!ret) {
-            LOGE() << "Error while writing to disk: " << ret.toString();
-            return make_ret(Err::ErrorWriteLanguage);
+    {
+        mi::WriteResourceLockGuard lock_guard(multiInstancesProvider(), LANGUAGES_RESOURCE_NAME);
+
+        for (const auto& info : zipReader.fileInfoList()) {
+            io::path_t userFilePath = configuration()->languagesUserAppDataPath().appendingComponent(info.filePath);
+            ret = fileSystem()->writeFile(userFilePath, zipReader.fileData(info.filePath.toStdString()));
+            if (!ret) {
+                LOGE() << "Error while writing to disk: " << ret.toString();
+                return make_ret(Err::ErrorWriteLanguage);
+            }
         }
     }
 
@@ -408,7 +420,11 @@ Ret LanguagesService::downloadLanguage(const QString& languageCode, Progress pro
 
 RetVal<QString> LanguagesService::fileHash(const io::path_t& path)
 {
-    RetVal<ByteArray> fileBytes = fileSystem()->readFile(path);
+    RetVal<ByteArray> fileBytes;
+    {
+        mi::ReadResourceLockGuard lock_guard(multiInstancesProvider(), LANGUAGES_RESOURCE_NAME);
+        fileBytes = fileSystem()->readFile(path);
+    }
     if (!fileBytes.ret) {
         return fileBytes.ret;
     }

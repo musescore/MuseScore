@@ -30,6 +30,7 @@
 #include "framework/network/inetworkmanagercreator.h"
 #include "io/ifilesystem.h"
 #include "ui/iuiengine.h"
+#include "multiinstances/imultiinstancesprovider.h"
 
 class QTranslator;
 
@@ -40,6 +41,7 @@ class LanguagesService : public ILanguagesService, public async::Asyncable
     INJECT(languages, network::INetworkManagerCreator, networkManagerCreator)
     INJECT(languages, io::IFileSystem, fileSystem)
     INJECT(languages, ui::IUiEngine, uiEngine)
+    INJECT(languages, mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
     void init();
