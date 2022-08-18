@@ -70,10 +70,10 @@ void LanguagesService::init()
 
     languageCode.ch.onReceive(this, [this](const QString&) {
         //! NOTE To change the language at the moment, a restart is required
-        m_needRestartToApplyLanguageChange.set(true);
+        m_needRestartToApplyLanguageChange = true;
+        m_needRestartToApplyLanguageChangeChanged.send(m_needRestartToApplyLanguageChange);
     });
 
-    m_needRestartToApplyLanguageChange.val = false;
     m_inited = true;
 }
 
@@ -82,9 +82,14 @@ const LanguagesHash& LanguagesService::languages() const
     return m_languagesHash;
 }
 
-ValCh<Language> LanguagesService::currentLanguage() const
+const Language& LanguagesService::currentLanguage() const
 {
     return m_currentLanguage;
+}
+
+async::Notification LanguagesService::currentLanguageChanged() const
+{
+    return m_currentLanguageChanged;
 }
 
 const Language& LanguagesService::placeholderLanguage() const
@@ -183,7 +188,8 @@ void LanguagesService::setCurrentLanguage(const QString& languageCode)
         }
     }
 
-    m_currentLanguage.set(lang);
+    m_currentLanguage = lang;
+    m_currentLanguageChanged.notify();
 }
 
 QString LanguagesService::effectiveLanguageCode(const QString& languageCode) const
@@ -299,9 +305,14 @@ LanguageProgressChannel LanguagesService::update(const QString& languageCode)
     return progressChannel;
 }
 
-ValCh<bool> LanguagesService::needRestartToApplyLanguageChange() const
+bool LanguagesService::needRestartToApplyLanguageChange() const
 {
     return m_needRestartToApplyLanguageChange;
+}
+
+async::Channel<bool> LanguagesService::needRestartToApplyLanguageChangeChanged() const
+{
+    return m_needRestartToApplyLanguageChangeChanged;
 }
 
 void LanguagesService::th_update(const QString& languageCode, LanguageProgressChannel progressChannel,
@@ -318,7 +329,8 @@ void LanguagesService::th_update(const QString& languageCode, LanguageProgressCh
 
     downloadLanguage(languageCode, progressChannel);
 
-    m_needRestartToApplyLanguageChange.set(true);
+    m_needRestartToApplyLanguageChange = true;
+    m_needRestartToApplyLanguageChangeChanged.send(m_needRestartToApplyLanguageChange);
 
     finishChannel.send(make_ret(Err::NoError));
 }
