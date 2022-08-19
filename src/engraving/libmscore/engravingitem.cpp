@@ -671,19 +671,7 @@ mu::draw::Color EngravingItem::curColor(bool isVisible, Color normalColor) const
     }
 
     if (selected() || marked) {
-        Color originalColor = engravingConfiguration()->selectionColor(track() == mu::nidx ? 0 : voice());
-
-        if (isVisible) {
-            return originalColor;
-        }
-
-        constexpr float tint = .6f; // Between 0 and 1. Higher means lighter, lower means darker
-
-        int red = originalColor.red();
-        int green = originalColor.green();
-        int blue = originalColor.blue();
-
-        return Color(red + tint * (255 - red), green + tint * (255 - green), blue + tint * (255 - blue));
+        return engravingConfiguration()->selectionColor(track() == mu::nidx ? 0 : voice(), isVisible);
     }
 
     if (!isVisible) {
