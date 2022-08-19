@@ -508,6 +508,7 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
                 const QString val = value.toString();
                 if (val != cell->action) {
                     cell->action = val;
+                    cell->shortcut.action = val.toStdString();
                     emit dataChanged(index, index, { CellActionRole });
                 }
                 return true;
