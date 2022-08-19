@@ -372,6 +372,7 @@ class Score : public EngravingObject
     OBJECT_ALLOCATOR(engraving, Score)
 
     INJECT(engraving, mu::draw::IImageProvider, imageProvider)
+    INJECT(engraving, mu::engraving::IEngravingConfiguration, configuration)
 
 private:
 
