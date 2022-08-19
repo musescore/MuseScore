@@ -63,6 +63,7 @@ public:
     virtual draw::Color formattingMarksColor() const = 0;
     virtual draw::Color thumbnailBackgroundColor() const = 0;
     virtual draw::Color noteBackgroundColor() const = 0;
+    virtual draw::Color fontPrimaryColor() const = 0;
 
     virtual double guiScaling() const = 0;
 
