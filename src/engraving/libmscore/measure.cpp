@@ -1528,6 +1528,9 @@ bool Measure::acceptDrop(EditData& data) const
         case ActionIconType::MEASURE:
             viewer->setDropRectangle(canvasBoundingRect());
             return true;
+        case ActionIconType::STAFF_TYPE_CHANGE:
+            viewer->setDropRectangle(staffR);
+            return true;
         default:
             break;
         }
@@ -1840,6 +1843,13 @@ EngravingItem* Measure::drop(EditData& data)
         case ActionIconType::MEASURE:
             score()->insertMeasure(ElementType::MEASURE, this);
             break;
+        case ActionIconType::STAFF_TYPE_CHANGE: {
+            EngravingItem* stc = Factory::createStaffTypeChange(this);
+            stc->setParent(this);
+            stc->setTrack(staffIdx * VOICES);
+            score()->undoAddElement(stc);
+            break;
+        }
         default:
             break;
         }

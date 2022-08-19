@@ -52,6 +52,7 @@ enum class ActionIconType {
     HFRAME,
     TFRAME,
     FFRAME,
+    STAFF_TYPE_CHANGE,
     MEASURE,
 
     PARENTHESES,

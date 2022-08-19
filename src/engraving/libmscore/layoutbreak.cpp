@@ -90,8 +90,10 @@ void LayoutBreak::draw(mu::draw::Painter* painter) const
         return;
     }
 
-    Pen pen;
-    pen.setColor(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor());
+    Pen pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor());
+    if (score()->isPaletteScore()) {
+        pen.setColor(engravingConfiguration()->fontPrimaryColor());
+    }
     pen.setWidthF(lw / 2);
     pen.setJoinStyle(PenJoinStyle::MiterJoin);
     pen.setCapStyle(PenCapStyle::SquareCap);

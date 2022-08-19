@@ -534,7 +534,7 @@ PalettePtr PaletteCreator::newLayoutPalette()
 
     lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
     lb->setLayoutBreakType(LayoutBreakType::NOBREAK);
-    cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "Group measures"));
+    cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "Keep measures on the same system"));
     cell->mag = 1.2;
 
     qreal _spatium = gpaletteScore->spatium();
@@ -556,15 +556,13 @@ PalettePtr PaletteCreator::newLayoutPalette()
     cell = sp->appendElement(spacer, QT_TRANSLATE_NOOP("palette", "Staff spacer fixed down"));
     cell->mag = .7;
 
-    auto stc = Factory::makeStaffTypeChange(gpaletteScore->dummy()->measure());
-    sp->appendElement(stc, QT_TRANSLATE_NOOP("palette", "Staff type change"));
-
     sp->appendActionIcon(ActionIconType::VFRAME, "insert-vbox");
     sp->appendActionIcon(ActionIconType::HFRAME, "insert-hbox");
     sp->appendActionIcon(ActionIconType::TFRAME, "insert-textframe");
     if (configuration()->enableExperimental()) {
         sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
     }
+    sp->appendActionIcon(ActionIconType::STAFF_TYPE_CHANGE, "insert-staff-type-change");
     sp->appendActionIcon(ActionIconType::MEASURE, "insert-measure");
 
     return sp;

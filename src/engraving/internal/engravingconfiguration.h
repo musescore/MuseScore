@@ -68,6 +68,7 @@ public:
     draw::Color formattingMarksColor() const override;
     draw::Color thumbnailBackgroundColor() const override;
     draw::Color noteBackgroundColor() const override;
+    draw::Color fontPrimaryColor() const override;
 
     double guiScaling() const override;
 

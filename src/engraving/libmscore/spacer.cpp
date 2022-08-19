@@ -63,8 +63,12 @@ void Spacer::draw(mu::draw::Painter* painter) const
     if (score()->printing() || !score()->showUnprintable()) {
         return;
     }
-    Pen pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(),
-            spatium() * 0.3);
+
+    Pen pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(), spatium() * 0.3);
+    if (score()->isPaletteScore()) {
+        pen.setColor(engravingConfiguration()->fontPrimaryColor());
+    }
+
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
     painter->drawPath(path);
