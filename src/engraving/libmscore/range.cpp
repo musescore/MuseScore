@@ -734,7 +734,7 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
         s->setTick(s->tick() + tick);
         if (s->isSlur()) {
             Slur* slur = toSlur(s);
-            if (slur->startCR()->isGrace()) {
+            if (slur->startCR() && slur->startCR()->isGrace()) {
                 Chord* sc = slur->startChord();
                 size_t idx = sc->graceIndex();
                 Chord* dc = toChord(score->findCR(s->tick(), s->track()));
@@ -742,7 +742,7 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
             } else {
                 s->setStartElement(0);
             }
-            if (slur->endCR()->isGrace()) {
+            if (slur->endCR() && slur->endCR()->isGrace()) {
                 Chord* sc = slur->endChord();
                 size_t idx = sc->graceIndex();
                 Chord* dc = toChord(score->findCR(s->tick2(), s->track2()));
