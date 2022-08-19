@@ -121,7 +121,7 @@ QUrl CloudConfiguration::userInfoApiUrl() const
     return apiRootUrl() + "/me";
 }
 
-QUrl CloudConfiguration::loginApiUrl() const
+QUrl CloudConfiguration::logoutApiUrl() const
 {
     return apiRootUrl() + "/oauth/logout";
 }

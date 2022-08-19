@@ -43,7 +43,7 @@ public:
     virtual QUrl accessTokenUrl() const = 0;
     virtual QUrl refreshApiUrl() const = 0;
     virtual QUrl userInfoApiUrl() const = 0;
-    virtual QUrl loginApiUrl() const = 0;
+    virtual QUrl logoutApiUrl() const = 0;
     virtual QUrl uploadingApiUrl() const = 0;
     virtual io::path_t tokensFilePath() const = 0;
 };
