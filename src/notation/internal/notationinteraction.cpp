@@ -3669,7 +3669,10 @@ void NotationInteraction::addTupletToSelectedChordRests(const TupletOptions& opt
 
     for (ChordRest* chordRest : score()->getSelectedChordRests()) {
         if (!chordRest->isGrace()) {
-            score()->addTuplet(chordRest, options.ratio, options.numberType, options.bracketType);
+            Fraction ratio = options.ratio;
+            // prevent weird dotted tuplets when adding tuplets to dotted durations
+            ratio.setDenominator(chordRest->dots() ? 3 : 2);
+            score()->addTuplet(chordRest, ratio, options.numberType, options.bracketType);
         }
     }
 
