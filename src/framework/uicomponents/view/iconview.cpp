@@ -31,16 +31,9 @@ IconView::IconView(QQuickItem* parent)
 {
 }
 
-void IconView::paint(QPainter* p)
+QVariant IconView::icon() const
 {
-    if (m_icon.isNull()) {
-        p->fillRect(0, 0, width(), height(), m_color);
-        return;
-    }
-
-    const QIcon::Mode mode = m_selected ? QIcon::Selected : QIcon::Active;
-    const QIcon::State state = m_active ? QIcon::On : QIcon::Off;
-    m_icon.paint(p, QRect(0, 0, width(), height()), Qt::AlignCenter, mode, state);
+    return QVariant::fromValue(m_icon);
 }
 
 void IconView::setIcon(QVariant v)
@@ -58,31 +51,36 @@ void IconView::setIcon(QVariant v)
     }
 
     update();
+    emit iconChanged(v);
 }
 
-QVariant IconView::icon() const
+QColor IconView::backgroundColor() const
 {
-    return QVariant::fromValue(m_icon);
+    return m_backgroundColor;
 }
 
-bool IconView::selected() const
+void IconView::setBackgroundColor(const QColor& color)
 {
-    return m_selected;
-}
+    if (m_backgroundColor == color) {
+        return;
+    }
 
-void IconView::setSelected(bool val)
-{
-    m_selected = val;
+    m_backgroundColor = color;
+
     update();
+    emit backgroundColorChanged(color);
 }
 
-bool IconView::active() const
+void IconView::paint(QPainter* p)
 {
-    return m_active;
-}
+    if (m_backgroundColor.isValid()) {
+        p->fillRect(0, 0, width(), height(), m_backgroundColor);
+    }
 
-void IconView::setActive(bool val)
-{
-    m_active = val;
-    update();
+    if (m_icon.isNull()) {
+        p->fillRect(0, 0, width(), height(), m_color);
+        return;
+    }
+
+    m_icon.paint(p, QRect(0, 0, width(), height()), Qt::AlignCenter);
 }
