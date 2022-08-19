@@ -232,8 +232,8 @@ solo concert</text>
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-6</l1>
-            <l2>-4</l2>
+            <l1>-8</l1>
+            <l2>-6</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
