@@ -1391,6 +1391,9 @@ void Chord::processSiblings(std::function<void(EngravingItem*)> func) const
     }
     for (Note* note : _notes) {
         func(note);
+        for (NoteDot* dot : note->dots()) {
+            func(dot);
+        }
     }
     for (EngravingItem* e : el()) {
         func(e);
@@ -3754,7 +3757,7 @@ void Chord::undoChangeProperty(Pid id, const PropertyValue& newValue)
 
 void Chord::undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps)
 {
-    if (id == Pid::VISIBLE) {
+    if (id == Pid::VISIBLE || id == Pid::COLOR) {
         processSiblings([=](EngravingItem* element) {
             element->undoChangeProperty(id, newValue, ps);
         });
