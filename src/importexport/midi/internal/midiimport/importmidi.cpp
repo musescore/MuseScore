@@ -921,7 +921,10 @@ void setTrackInfo(MidiType midiType, MTrack& mt)
 
 void createTimeSignatures(Score* score)
 {
-    for (auto is = score->sigmap()->begin(); is != score->sigmap()->end(); ++is) {
+    // Need to iterate over a copy, because adding a TimeSig modifies `score->sigmap()` (see TimeSig::added)
+    TimeSigMap sigmap = *score->sigmap();
+
+    for (auto is = sigmap.cbegin(); is != sigmap.cend(); ++is) {
         const SigEvent& se = is->second;
         const int tick = is->first;
         Measure* m = score->tick2measure(Fraction::fromTicks(tick));
@@ -933,9 +936,9 @@ void createTimeSignatures(Score* score)
         const auto& opers = midiImportOperations;
         const bool pickupMeasure = opers.data()->trackOpers.searchPickupMeasure.value();
 
-        if (pickupMeasure && is == score->sigmap()->begin()) {
+        if (pickupMeasure && is == sigmap.cbegin()) {
             auto next = std::next(is);
-            if (next != score->sigmap()->end()) {
+            if (next != sigmap.cend()) {
                 Measure* mm = score->tick2measure(Fraction::fromTicks(next->first));
                 if (m && mm && m == barFromIndex(score, 0) && mm == barFromIndex(score, 1)
                     && m->timesig() == mm->timesig() && newTimeSig != mm->timesig()) {
