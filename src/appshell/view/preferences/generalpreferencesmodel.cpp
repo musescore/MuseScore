@@ -74,21 +74,20 @@ void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
 
 QVariantList GeneralPreferencesModel::languages() const
 {
-    LanguagesHash languages = languagesService()->languages();
-    QList<Language> languageList = languages.values();
+    QList<Language> languages = languagesService()->languages().values();
+
+    std::sort(languages.begin(), languages.end(), [](const Language& l, const Language& r) {
+        return l.code < r.code;
+    });
 
     QVariantList result;
 
-    for (const Language& language : languageList) {
+    for (const Language& language : languages) {
         QVariantMap languageObj;
         languageObj["code"] = language.code;
         languageObj["name"] = language.name;
         result << languageObj;
     }
-
-    std::sort(result.begin(), result.end(), [](const QVariant& l, const QVariant& r) {
-        return l.toMap().value("code").toString() < r.toMap().value("code").toString();
-    });
 
     if (languagesService()->hasPlaceholderLanguage()) {
         QVariantMap placeholderLanguageObj;
