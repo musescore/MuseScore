@@ -414,6 +414,7 @@ bool PlaybackModel::hasToReloadTracks(const std::unordered_set<ElementType>& cha
 bool PlaybackModel::hasToReloadScore(const std::unordered_set<ElementType>& changedTypes) const
 {
     static const std::unordered_set<ElementType> REQUIRED_TYPES = {
+        ElementType::SCORE,
         ElementType::GRADUAL_TEMPO_CHANGE,
         ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT,
         ElementType::TEMPO_TEXT,
