@@ -796,7 +796,7 @@ void NotationActionController::putTuplet(int tupletCount)
 
     TupletOptions options;
     options.ratio.setNumerator(tupletCount);
-
+    options.autoBaseLen = true;
     putTuplet(options);
 }
 
