@@ -508,10 +508,6 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         viewInteraction()->select({ hitElement }, SelectType::ADD, hitStaffIndex);
     }
 
-    if (hitElement && !viewInteraction()->selection()->isRange()) {
-        playbackController()->seekElement(hitElement);
-    }
-
     if (button == Qt::LeftButton) {
         handleLeftClick(ctx);
     } else if (button == Qt::RightButton) {

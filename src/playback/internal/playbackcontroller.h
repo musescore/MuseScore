@@ -116,7 +116,9 @@ private:
     bool isPlaybackLooped() const;
 
     void onNotationChanged();
+
     void onSelectionChanged();
+    void seekListSelection();
     void seekRangeSelection();
 
     void togglePlay();
