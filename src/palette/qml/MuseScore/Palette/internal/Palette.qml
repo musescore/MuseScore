@@ -28,7 +28,7 @@ import MuseScore.Palette 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
-import "utils.js" as Utils
+import "utils.js" as PaletteUtils
 
 StyledGridView {
     id: paletteView
@@ -101,7 +101,7 @@ StyledGridView {
 
     readonly property int cellDefaultWidth: cellSize.width
     property bool stretchWidth: !(oneRow && showMoreButton)
-    cellWidth: stretchWidth ? Math.floor(Utils.stretched(cellDefaultWidth, width)) : cellDefaultWidth
+    cellWidth: stretchWidth ? Math.floor(PaletteUtils.stretched(cellDefaultWidth, width)) : cellDefaultWidth
     cellHeight: cellSize.height
 
     readonly property int nrows: Math.max(0, Math.floor(height / cellHeight))
@@ -261,7 +261,7 @@ StyledGridView {
                 onDragOverPaletteFinished();
 
                 // first check if controller allows dropping this item here
-                const mimeData = Utils.dropEventMimeData(drag);
+                const mimeData = PaletteUtils.dropEventMimeData(drag);
                 internal = (drag.source.parentModelIndex === paletteView.paletteRootIndex);
                 action = paletteView.paletteController.dropAction(mimeData, drag.proposedAction, paletteView.paletteRootIndex, internal);
                 proposedAction = drag.proposedAction;
@@ -316,7 +316,7 @@ StyledGridView {
                     srcRowIndex: drag.source.rowIndex,
                     paletteView: paletteView,
                     destIndex: destIndex,
-                    mimeData: Utils.dropEventMimeData(drop)
+                    mimeData: PaletteUtils.dropEventMimeData(drop)
                 };
 
                 if (typeof data.srcParentModelIndex !== "undefined") {
@@ -383,7 +383,7 @@ StyledGridView {
     }
 
     function removeSelectedCells() {
-        Utils.removeSelectedItems(paletteController, selectionModel, paletteRootIndex);
+        PaletteUtils.removeSelectedItems(paletteController, selectionModel, paletteRootIndex);
     }
 
     function focusFirstItem() {
@@ -451,22 +451,14 @@ StyledGridView {
         }
     }
 
-    Rectangle {
+    IconView {
         id: draggedIcon
 
         width: paletteView.cellWidth
         height: paletteView.cellHeight
 
-        color: ui.theme.textFieldColor
+        backgroundColor: Utils.colorWithAlpha(ui.theme.textFieldColor, 0.5)
         visible: false
-
-        property alias source: view.icon
-
-        IconView {
-            id: view
-
-            anchors.fill: parent
-        }
     }
 
     model: DelegateModel {
@@ -596,7 +588,7 @@ StyledGridView {
             }
 
             function beginDrag() {
-                draggedIcon.source = model.decoration
+                draggedIcon.icon = model.decoration
 
                 draggedIcon.grabToImage(function(result) {
                     Drag.imageSource = result.url
