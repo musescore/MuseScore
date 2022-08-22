@@ -274,6 +274,7 @@ private:
     void apply();
     void rollback();
 
+    bool needStartEditGrip(QKeyEvent* event) const;
     bool handleKeyPress(QKeyEvent* event);
 
     void doEndEditElement();

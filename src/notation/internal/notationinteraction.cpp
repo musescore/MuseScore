@@ -2695,6 +2695,26 @@ void NotationInteraction::editText(QInputMethodEvent* event)
     notifyAboutTextEditingChanged();
 }
 
+bool NotationInteraction::needStartEditGrip(QKeyEvent* event) const
+{
+    if (!m_editData.element || !m_editData.element->hasGrips()) {
+        return false;
+    }
+
+    if (isGripEditStarted()) {
+        return false;
+    }
+
+    static const std::set<Qt::Key> arrows {
+        Qt::Key_Left,
+        Qt::Key_Right,
+        Qt::Key_Up,
+        Qt::Key_Down
+    };
+
+    return mu::contains(arrows, static_cast<Qt::Key>(event->key()));
+}
+
 bool NotationInteraction::handleKeyPress(QKeyEvent* event)
 {
     if (event->modifiers() & Qt::KeyboardModifier::AltModifier) {
@@ -2744,10 +2764,6 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
     m_editData.evtDelta = m_editData.moveDelta = m_editData.delta;
     m_editData.hRaster = hRaster;
     m_editData.vRaster = vRaster;
-
-    if (m_editData.curGrip == mu::engraving::Grip::NO_GRIP) {
-        m_editData.curGrip = m_editData.element->defaultGrip();
-    }
 
     if (m_editData.curGrip != mu::engraving::Grip::NO_GRIP && int(m_editData.curGrip) < m_editData.grips) {
         m_editData.pos = m_editData.grip[int(m_editData.curGrip)].center() + m_editData.delta;
@@ -3024,6 +3040,10 @@ void NotationInteraction::editElement(QKeyEvent* event)
     }
 
     startEdit();
+
+    if (needStartEditGrip(event)) {
+        m_editData.curGrip = m_editData.element->defaultGrip();
+    }
 
     bool handled = m_editData.element->edit(m_editData);
     if (!handled) {
