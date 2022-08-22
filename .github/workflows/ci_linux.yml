@@ -38,7 +38,7 @@ jobs:
       run: |
         NOW=$(date -u +"%F-%T")
         echo "::set-output name=timestamp::${NOW}"
-    - name: Сcache cache files
+    - name: Ccache cache files
       uses: actions/cache@v2
       with:
         path: ~/.ccache

@@ -35,7 +35,7 @@ jobs:
         access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v2
-    - name: Сcache cache files
+    - name: Ccache cache files
       uses: actions/cache@v2
       with:
         path: ~/.ccache

@@ -59,7 +59,7 @@ jobs:
     steps:
     - name: Clone repository
       uses: actions/checkout@v2
-    - name: Сcache cache files
+    - name: Ccache cache files
       uses: actions/cache@v2
       with:
         path: ~/.ccache
@@ -96,7 +96,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         ref: ${{ needs.setup.outputs.reference_sha }}
-    - name: Сcache cache files
+    - name: Ccache cache files
       uses: actions/cache@v2
       with:
         path: ~/.ccache
