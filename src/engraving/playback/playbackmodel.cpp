@@ -392,8 +392,12 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
 bool PlaybackModel::hasToReloadTracks(const std::unordered_set<ElementType>& changedTypes) const
 {
     static const std::unordered_set<ElementType> REQUIRED_TYPES = {
-        ElementType::PLAYTECH_ANNOTATION, ElementType::DYNAMIC, ElementType::HAIRPIN,
-        ElementType::HAIRPIN_SEGMENT, ElementType::HARMONY, ElementType::STAFF_TEXT
+        ElementType::PLAYTECH_ANNOTATION,
+        ElementType::DYNAMIC,
+        ElementType::HAIRPIN,
+        ElementType::HAIRPIN_SEGMENT,
+        ElementType::HARMONY,
+        ElementType::STAFF_TEXT,
     };
 
     for (const ElementType type : REQUIRED_TYPES) {
@@ -410,12 +414,17 @@ bool PlaybackModel::hasToReloadTracks(const std::unordered_set<ElementType>& cha
 bool PlaybackModel::hasToReloadScore(const std::unordered_set<ElementType>& changedTypes) const
 {
     static const std::unordered_set<ElementType> REQUIRED_TYPES = {
-        ElementType::GRADUAL_TEMPO_CHANGE, ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT,
+        ElementType::GRADUAL_TEMPO_CHANGE,
+        ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT,
         ElementType::TEMPO_TEXT,
-        ElementType::LAYOUT_BREAK, ElementType::FERMATA,
-        ElementType::MEASURE_REPEAT, ElementType::VOLTA,
-        ElementType::VOLTA_SEGMENT, ElementType::SYSTEM_TEXT,
-        ElementType::JUMP, ElementType::MARKER
+        ElementType::LAYOUT_BREAK,
+        ElementType::FERMATA,
+        ElementType::MEASURE_REPEAT,
+        ElementType::VOLTA,
+        ElementType::VOLTA_SEGMENT,
+        ElementType::SYSTEM_TEXT,
+        ElementType::JUMP,
+        ElementType::MARKER,
     };
 
     for (const ElementType type : REQUIRED_TYPES) {
