@@ -8,7 +8,7 @@ on:
 jobs:
   setup:
     name: "Setup VTests workflow"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     outputs:
       do_run: ${{ steps.output_data.outputs.do_run }}
       reference_sha: ${{ steps.output_data.outputs.reference_sha }}
@@ -53,7 +53,7 @@ jobs:
 
   generate_current_pngs:
     name: "Generate current PNGs"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     needs: setup
     if: needs.setup.outputs.do_run == 'true' # Can't use env: see https://github.com/actions/runner/issues/480
     steps:
@@ -88,7 +88,7 @@ jobs:
 
   generate_reference_pngs:
     name: "Generate reference PNGs"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     needs: setup
     if: needs.setup.outputs.do_run == 'true'
     steps:
@@ -131,7 +131,7 @@ jobs:
 
   compare_pngs:
     name: "Compare PNGs"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     needs: [setup, generate_current_pngs, generate_reference_pngs]
     if: needs.setup.outputs.do_run == 'true'
     steps:

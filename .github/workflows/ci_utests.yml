@@ -7,7 +7,7 @@ on:
 
 jobs:
   run_tests:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     env:
         # Enable AddressSanitizer in the mtest build
         CFLAGS: "-fsanitize=address -fno-omit-frame-pointer"
