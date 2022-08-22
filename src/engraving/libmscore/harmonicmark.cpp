@@ -68,7 +68,9 @@ void HarmonicMarkSegment::layout()
 {
     const StaffType* stType = staffType();
 
-    if (stType && stType->isHiddenElementOnTab(score(), Sid::harmonicMarkShowTabCommon, Sid::harmonicMarkShowTabSimple)) {
+    if (stType
+        && (!stType->isTabStaff()
+            || stType->isHiddenElementOnTab(score(), Sid::harmonicMarkShowTabCommon, Sid::harmonicMarkShowTabSimple))) {
         setbbox(RectF());
         return;
     }

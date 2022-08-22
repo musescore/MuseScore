@@ -124,41 +124,6 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     return true;
 }
 
-void ProjectMigrator::fixInstrumentIds(mu::engraving::MasterScore* score)
-{
-    for (mu::engraving::Part* part : score->parts()) {
-        for (auto pair : part->instruments()) {
-            QString id = pair.second->id();
-            QString trackName = pair.second->trackName().toLower();
-
-            // incorrect instrument IDs in pre-4.0
-            if (id == "Winds") {
-                id = "winds";
-            } else if (id == "harmonica-d12high-g") {
-                id = "harmonica-d10high-g";
-            } else if (id == "harmonica-d12f") {
-                id = "harmonica-d10f";
-            } else if (id == "harmonica-d12d") {
-                id = "harmonica-d10d";
-            } else if (id == "harmonica-d12c") {
-                id = "harmonica-d10c";
-            } else if (id == "harmonica-d12a") {
-                id = "harmonica-d10a";
-            } else if (id == "harmonica-d12-g") {
-                id = "harmonica-d10g";
-            } else if (id == "drumset" && trackName == "percussion") {
-                id = "percussion";
-            } else if (id == "cymbal" && trackName == "cymbals") {
-                id = "marching-cymbals";
-            } else if (id == "bass-drum" && trackName == "bass drums") {
-                id = "marching-bass-drums";
-            }
-
-            pair.second->setId(id);
-        }
-    }
-}
-
 void ProjectMigrator::resetStyleSettings(mu::engraving::MasterScore* score)
 {
     // there are a few things that need to be updated no matter which version the score is from (#10499)
@@ -205,9 +170,7 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
     if (ok && opt.isApplyAutoSpacing) {
         ok = resetAllElementsPositions(score);
     }
-    if (score->mscVersion() <= 302) {
-        fixInstrumentIds(score);
-    }
+
     if (ok && score->mscVersion() != mu::engraving::MSCVERSION) {
         score->undo(new mu::engraving::ChangeMetaText(score, u"mscVersion", String::fromAscii(MSC_VERSION)));
     }

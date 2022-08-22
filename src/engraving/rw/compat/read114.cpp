@@ -1963,7 +1963,10 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
             Dynamic* dyn = Factory::createDynamic(segment);
             dyn->setTrack(ctx.track());
-            dyn->read(e);
+            dyn->read(e); // for 114 scores, dynamics are frontloaded in the measure with <tick> attributes.
+                          // so we need to reset its parent to the correct one after that element is read.
+            segment = m->getSegment(SegmentType::ChordRest, e.context()->tick());
+            dyn->setParent(segment);
             if (dyn->dynamicType() == DynamicType::OTHER && dyn->xmlText().isEmpty()) {
                 // if we add this dynamic, it will be an unselectable invisible object that
                 // messes with collision detection.
@@ -2482,13 +2485,7 @@ static void readInstrument(Instrument* i, Part* p, XmlReader& e)
         }
     }
 
-    if (i->instrumentId().isEmpty()) {
-        i->setInstrumentId(i->recognizeInstrumentId());
-    }
-
-    if (i->id().isEmpty()) {
-        i->setId(i->recognizeId());
-    }
+    i->updateInstrumentId();
 
     if (program == -1) {
         program = i->recognizeMidiProgram();

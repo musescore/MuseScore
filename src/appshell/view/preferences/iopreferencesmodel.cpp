@@ -56,89 +56,43 @@ void IOPreferencesModel::setCurrentAudioApiIndex(int index)
     emit currentAudioApiIndexChanged(index);
 }
 
-int IOPreferencesModel::currentMidiInputDeviceIndex() const
+QString IOPreferencesModel::midiInputDeviceId() const
 {
-    if (!midiInPort()->isConnected()) {
-        return INVALID_DEVICE_ID;
-    }
-
-    QString currentMidiInputDeviceId = QString::fromStdString(midiConfiguration()->midiInputDeviceId());
-    std::vector<MidiDevice> devices = midiInPort()->devices();
-    for (size_t i = 0; i < devices.size(); ++i) {
-        if (devices[i].id == currentMidiInputDeviceId.toStdString()) {
-            return static_cast<int>(i);
-        }
-    }
-
-    return INVALID_DEVICE_ID;
+    return QString::fromStdString(midiInPort()->deviceID());
 }
 
-void IOPreferencesModel::setCurrentMidiInputDeviceIndex(int index)
+void IOPreferencesModel::inputDeviceSelected(const QString& deviceId)
 {
-    if (index == currentMidiInputDeviceIndex()) {
-        return;
-    }
-
-    MidiDeviceID deviceId = midiInputDeviceId(index);
-
-    Ret ret = midiInPort()->connect(deviceId);
-    if (!ret) {
-        showMidiError(deviceId, ret.text());
-        return;
-    }
-
-    midiConfiguration()->setMidiInputDeviceId(deviceId);
-
-    emit currentMidiInputDeviceIndexChanged();
+    midiConfiguration()->setMidiInputDeviceId(deviceId.toStdString());
 }
 
-int IOPreferencesModel::currentMidiOutputDeviceIndex() const
+QString IOPreferencesModel::midiOutputDeviceId() const
 {
-    if (!midiOutPort()->isConnected()) {
-        return INVALID_DEVICE_ID;
-    }
+    return QString::fromStdString(midiOutPort()->deviceID());
+}
 
-    QString currentMidiOutputDeviceId = QString::fromStdString(midiConfiguration()->midiOutputDeviceId());
-    std::vector<MidiDevice> devices = midiOutPort()->devices();
-    for (size_t i = 0; i < devices.size(); ++i) {
-        if (devices[i].id == currentMidiOutputDeviceId.toStdString()) {
-            return static_cast<int>(i);
-        }
-    }
-
-    return INVALID_DEVICE_ID;
+void IOPreferencesModel::outputDeviceSelected(const QString& deviceId)
+{
+    midiConfiguration()->setMidiOutputDeviceId(deviceId.toStdString());
 }
 
 void IOPreferencesModel::init()
 {
-    midiInPort()->devicesChanged().onNotify(this, [this]() {
+    midiInPort()->availableDevicesChanged().onNotify(this, [this]() {
         emit midiInputDevicesChanged();
-        emit currentMidiInputDeviceIndexChanged();
     });
 
-    midiOutPort()->devicesChanged().onNotify(this, [this]() {
+    midiInPort()->deviceChanged().onNotify(this, [this]() {
+        emit midiInputDeviceIdChanged();
+    });
+
+    midiOutPort()->availableDevicesChanged().onNotify(this, [this]() {
         emit midiOutputDevicesChanged();
-        emit currentMidiOutputDeviceIndexChanged();
     });
-}
 
-void IOPreferencesModel::setCurrentMidiOutputDeviceIndex(int index)
-{
-    if (index == currentMidiOutputDeviceIndex()) {
-        return;
-    }
-
-    MidiDeviceID deviceId = midiOutputDeviceId(index);
-
-    Ret ret = midiOutPort()->connect(deviceId);
-    if (!ret) {
-        showMidiError(deviceId, ret.text());
-        return;
-    }
-
-    midiConfiguration()->setMidiOutputDeviceId(deviceId);
-
-    emit currentMidiOutputDeviceIndexChanged();
+    midiOutPort()->deviceChanged().onNotify(this, [this]() {
+        emit midiOutputDeviceIdChanged();
+    });
 }
 
 QStringList IOPreferencesModel::audioApiList() const
@@ -157,26 +111,36 @@ void IOPreferencesModel::restartAudioAndMidiDevices()
     NOT_IMPLEMENTED;
 }
 
-QStringList IOPreferencesModel::midiInputDevices() const
+QVariantList IOPreferencesModel::midiInputDevices() const
 {
-    QStringList list;
-    std::vector<MidiDevice> devices = midiInPort()->devices();
+    QVariantList result;
+
+    std::vector<MidiDevice> devices = midiInPort()->availableDevices();
     for (const MidiDevice& device : devices) {
-        list << QString::fromStdString(device.name);
+        QVariantMap obj;
+        obj["value"] = QString::fromStdString(device.id);
+        obj["text"] = QString::fromStdString(device.name);
+
+        result << obj;
     }
 
-    return list;
+    return result;
 }
 
-QStringList IOPreferencesModel::midiOutputDevices() const
+QVariantList IOPreferencesModel::midiOutputDevices() const
 {
-    QStringList list;
-    std::vector<MidiDevice> devices = midiOutPort()->devices();
+    QVariantList result;
+
+    std::vector<MidiDevice> devices = midiOutPort()->availableDevices();
     for (const MidiDevice& device : devices) {
-        list << QString::fromStdString(device.name);
+        QVariantMap obj;
+        obj["value"] = QString::fromStdString(device.id);
+        obj["text"] = QString::fromStdString(device.name);
+
+        result << obj;
     }
 
-    return list;
+    return result;
 }
 
 bool IOPreferencesModel::isMIDI20OutputSupported() const
@@ -197,26 +161,6 @@ void IOPreferencesModel::setUseMIDI20Output(bool use)
 
     midiConfiguration()->setUseMIDI20Output(use);
     emit useMIDI20OutputChanged();
-}
-
-mu::midi::MidiDeviceID IOPreferencesModel::midiInputDeviceId(int index) const
-{
-    std::vector<MidiDevice> devices = midiInPort()->devices();
-    if (0 > index || index > static_cast<int>(devices.size())) {
-        return MidiDeviceID();
-    }
-
-    return devices[index].id;
-}
-
-mu::midi::MidiDeviceID IOPreferencesModel::midiOutputDeviceId(int index) const
-{
-    std::vector<MidiDevice> devices = midiOutPort()->devices();
-    if (0 > index || index > static_cast<int>(devices.size())) {
-        return MidiDeviceID();
-    }
-
-    return devices[index].id;
 }
 
 void IOPreferencesModel::showMidiError(const MidiDeviceID& deviceId, const std::string& text) const

@@ -49,10 +49,12 @@ public:
     MOCK_METHOD(draw::Color, criticalColor, (), (const, override));
     MOCK_METHOD(draw::Color, criticalSelectedColor, (), (const, override));
     MOCK_METHOD(draw::Color, formattingMarksColor, (), (const, override));
+    MOCK_METHOD(draw::Color, thumbnailBackgroundColor, (), (const, override));
+    MOCK_METHOD(draw::Color, noteBackgroundColor, (), (const, override));
 
     MOCK_METHOD(double, guiScaling, (), (const, override));
 
-    MOCK_METHOD(draw::Color, selectionColor, (engraving::voice_idx_t), (const, override));
+    MOCK_METHOD(draw::Color, selectionColor, (engraving::voice_idx_t, bool), (const, override));
     MOCK_METHOD(void, setSelectionColor, (engraving::voice_idx_t, draw::Color), (override));
     MOCK_METHOD((async::Channel<engraving::voice_idx_t, draw::Color>), selectionColorChanged, (), (const, override));
 

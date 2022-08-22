@@ -30,7 +30,7 @@ void DummyMidiOutPort::init()
 {
 }
 
-MidiDeviceList DummyMidiOutPort::devices() const
+MidiDeviceList DummyMidiOutPort::availableDevices() const
 {
     MidiDevice d;
     d.id = "dummy";
@@ -38,7 +38,7 @@ MidiDeviceList DummyMidiOutPort::devices() const
     return { d };
 }
 
-mu::async::Notification DummyMidiOutPort::devicesChanged() const
+mu::async::Notification DummyMidiOutPort::availableDevicesChanged() const
 {
     return {};
 }

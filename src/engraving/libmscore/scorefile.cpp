@@ -292,7 +292,7 @@ std::shared_ptr<mu::draw::Pixmap> Score::createThumbnail()
 
     int dpm = lrint(DPMM * 1000.0);
 
-    auto pixmap = imageProvider()->createPixmap(w, h, dpm, mu::draw::Color::white);
+    auto pixmap = imageProvider()->createPixmap(w, h, dpm, configuration()->thumbnailBackgroundColor());
 
     double pr = MScore::pixelRatio;
     MScore::pixelRatio = 1.0;

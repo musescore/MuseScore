@@ -39,11 +39,11 @@ MidiPortDevModel::MidiPortDevModel(QObject* parent)
         emit inputEventsChanged();
     });
 
-    midiInPort()->devicesChanged().onNotify(this, [this]() {
+    midiInPort()->availableDevicesChanged().onNotify(this, [this]() {
         emit inputDevicesChanged();
     });
 
-    midiOutPort()->devicesChanged().onNotify(this, [this]() {
+    midiOutPort()->availableDevicesChanged().onNotify(this, [this]() {
         emit outputDevicesChanged();
     });
 }
@@ -51,7 +51,7 @@ MidiPortDevModel::MidiPortDevModel(QObject* parent)
 QVariantList MidiPortDevModel::outputDevices() const
 {
     QVariantList list;
-    std::vector<MidiDevice> devs = midiOutPort()->devices();
+    std::vector<MidiDevice> devs = midiOutPort()->availableDevices();
     for (const MidiDevice& d : devs) {
         QVariantMap item;
         item["id"] = QString::fromStdString(d.id);
@@ -87,7 +87,7 @@ void MidiPortDevModel::outputDeviceAction(const QString& deviceID, const QString
 QVariantList MidiPortDevModel::inputDevices() const
 {
     QVariantList list;
-    std::vector<MidiDevice> devs = midiInPort()->devices();
+    std::vector<MidiDevice> devs = midiInPort()->availableDevices();
     for (const MidiDevice& d : devs) {
         QVariantMap item;
         item["id"] = QString::fromStdString(d.id);

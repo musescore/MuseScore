@@ -136,9 +136,8 @@ FlatButton {
             numerator: enabled ? root.model.timeSignature.numerator : numerator
             denominator: enabled ? root.model.timeSignature.denominator : denominator
 
-            navigationPanel: radioButtonList.navigationPanel
-            navigationRowStart: 0
-            navigationColumnStart: 1
+            navigationSection: popup.navigationSection
+            navigationPanelOrderStart: 2
 
             onNumeratorSelected: function(value) {
                 root.model.setTimeSignatureNumerator(value)

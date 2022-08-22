@@ -42,9 +42,11 @@ public:
 
     virtual MidiDeviceID midiInputDeviceId() const = 0;
     virtual void setMidiInputDeviceId(const MidiDeviceID& deviceId) = 0;
+    virtual async::Notification midiInputDeviceIdChanged() const = 0;
 
     virtual MidiDeviceID midiOutputDeviceId() const = 0;
     virtual void setMidiOutputDeviceId(const MidiDeviceID& deviceId) = 0;
+    virtual async::Notification midiOutputDeviceIdChanged() const = 0;
 
     virtual bool useMIDI20Output() const = 0;
     virtual void setUseMIDI20Output(bool use) = 0;

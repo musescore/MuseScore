@@ -992,6 +992,18 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
     }
     connectTies(true);
 
+    // reset start and end elements for slurs that overlap the rewritten measures
+    for (auto spanner : _spanner.findOverlapping(fm->tick().ticks(), lm->tick().ticks())) {
+        Slur* slur = (spanner.value->isSlur() ? toSlur(spanner.value) : nullptr);
+        if (slur) {
+            EngravingItem* startEl = slur->startElement();
+            EngravingItem* endEl = slur->endElement();
+            if (!startEl || !endEl) {
+                continue;
+            }
+            undo(new ChangeStartEndSpanner(spanner.value, slur->findStartCR(), slur->findEndCR()));
+        }
+    }
     // Attempt to move tremolos to correct chords
     for (auto tremPair : tremoloChordTicks) {
         Fraction chord1Tick = std::get<0>(tremPair);

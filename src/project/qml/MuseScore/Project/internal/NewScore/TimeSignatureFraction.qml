@@ -34,9 +34,9 @@ Row {
     signal numeratorSelected(var value)
     signal denominatorSelected(var value)
 
-    property NavigationPanel navigationPanel: null
-    property int navigationRowStart: 0
-    property int navigationColumnStart: 0
+    property NavigationSection navigationSection: null
+    property int navigationPanelOrderStart: 0
+    property int navigationPanelOrderEnd: timeComboBox.navigation.panel.order
 
     spacing: 12
 
@@ -53,9 +53,12 @@ Row {
         minValue: 1
 
         navigation.name: "TimeControl"
-        navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowStart
-        navigation.column: root.navigationColumnStart
+        navigation.panel: NavigationPanel {
+            name: "TimeSignatureNumeratorPanel"
+            section: root.navigationSection
+            order: root.navigationPanelOrderStart
+        }
+        navigation.row: 0
 
         onValueEdited: function(newValue) {
             root.numeratorSelected(newValue)
@@ -78,9 +81,12 @@ Row {
         popupItemsCount: 4
 
         navigation.name: "TimeBox"
-        navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowStart
-        navigation.column: root.navigationColumnStart + 1
+        navigation.panel: NavigationPanel {
+            name: "TimeSignatureDenominatorPanel"
+            section: root.navigationSection
+            order: root.navigationPanelOrderStart + 1
+        }
+        navigation.row: 0
 
         currentIndex: timeComboBox.indexOfValue(root.denominator)
 

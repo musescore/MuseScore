@@ -1401,7 +1401,7 @@ void Note::draw(mu::draw::Painter* painter) const
                     view->drawBackground(painter, bb);
                 }
             } else {
-                painter->fillRect(bb, mu::draw::Color::white);
+                painter->fillRect(bb, engravingConfiguration()->noteBackgroundColor());
             }
 
             if (fretConflict() && !score()->printing() && score()->showUnprintable()) {                //on fret conflict, draw on red background
@@ -1439,7 +1439,7 @@ void Note::draw(mu::draw::Painter* painter) const
         // draw blank notehead to avoid staff and ledger lines
         if (_cachedSymNull != SymId::noSym) {
             painter->save();
-            painter->setPen(mu::draw::Color::white);
+            painter->setPen(engravingConfiguration()->noteBackgroundColor());
             drawSymbol(_cachedSymNull, painter);
             painter->restore();
         }
