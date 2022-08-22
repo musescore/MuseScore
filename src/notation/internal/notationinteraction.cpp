@@ -3671,7 +3671,12 @@ void NotationInteraction::addTupletToSelectedChordRests(const TupletOptions& opt
         if (!chordRest->isGrace()) {
             Fraction ratio = options.ratio;
             // prevent weird dotted tuplets when adding tuplets to dotted durations
-            ratio.setDenominator(chordRest->dots() ? 3 : 2);
+            if (options.autoBaseLen) {
+                ratio.setDenominator(chordRest->dots() ? 3 : 2);
+                while (ratio.numerator() >= ratio.denominator() * 2) {
+                    ratio.setDenominator(ratio.denominator() * 2);      // operator*= reduces, we don't want that here
+                }
+            }
             score()->addTuplet(chordRest, ratio, options.numberType, options.bracketType);
         }
     }
