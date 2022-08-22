@@ -23,9 +23,9 @@
 #ifndef MU_UICOMPONENTS_ICONVIEW_H
 #define MU_UICOMPONENTS_ICONVIEW_H
 
-#include <QQuickPaintedItem>
 #include <QIcon>
 #include <QColor>
+
 #include "quickpaintedview.h"
 
 namespace mu::uicomponents {
@@ -33,30 +33,29 @@ class IconView : public QuickPaintedView
 {
     Q_OBJECT
 
-    Q_PROPERTY(QVariant icon READ icon WRITE setIcon)
-    Q_PROPERTY(bool selected READ selected WRITE setSelected)
-    Q_PROPERTY(bool active READ active WRITE setActive)
+    Q_PROPERTY(QVariant icon READ icon WRITE setIcon NOTIFY iconChanged)
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
 
 public:
     IconView(QQuickItem* parent = nullptr);
 
     QVariant icon() const;
+    QColor backgroundColor() const;
+
+public slots:
     void setIcon(QVariant val);
+    void setBackgroundColor(const QColor& color);
 
-    bool selected() const;
-    void setSelected(bool val);
-
-    bool active() const;
-    void setActive(bool val);
-
-    void paint(QPainter*) override;
+signals:
+    void iconChanged(const QVariant& icon);
+    void backgroundColorChanged(const QColor& color);
 
 private:
+    void paint(QPainter*) override;
 
     QColor m_color;
+    QColor m_backgroundColor;
     QIcon m_icon;
-    bool m_selected { false };
-    bool m_active   { false };
 };
 }
 
