@@ -1216,8 +1216,9 @@ void LayoutChords::updateGraceNotes(Measure* measure)
         for (unsigned track = 0; track < score->staves().size() * VOICES; ++track) {
             EngravingItem* e = s.preAppendedItem(track);
             if (e && e->isGraceNotesGroup()) {
-                toGraceNotesGroup(e)->layout();
-                s.createShape(track2staff(track));
+                GraceNotesGroup* gng = toGraceNotesGroup(e);
+                gng->layout();
+                s.staffShape(track2staff(track)).add(gng->shape().translated(gng->pos()));
             }
         }
     }
