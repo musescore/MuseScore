@@ -5662,6 +5662,11 @@ void Score::createPaddingTable()
     }
     _paddingTable[ElementType::BAR_LINE][ElementType::CHORDLINE] = 0.65 * spatium();
     _paddingTable[ElementType::CHORDLINE][ElementType::BAR_LINE] = 0.65 * spatium();
+
+    // For the x -> fingering padding use the same values as x -> accidental
+    for (auto& elem : _paddingTable) {
+        elem.second[ElementType::FINGERING] = _paddingTable[elem.first][ElementType::ACCIDENTAL];
+    }
 }
 
 //--------------------------------------------------------
