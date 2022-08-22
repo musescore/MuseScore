@@ -23,6 +23,7 @@
 
 #include "log.h"
 #include "translation.h"
+#include "libmscore/excerpt.h"
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
@@ -101,6 +102,30 @@ void InstrumentSettingsModel::resetAllFormatting()
 
     const Part* masterPart = masterNotationParts()->part(m_instrumentKey.partId);
     notationParts()->replacePart(m_instrumentKey.partId, masterPart->clone());
+}
+
+void InstrumentSettingsModel::cloneInstrument()
+{
+    if (!notationParts()) {
+        return;
+    }
+
+    Part* part = notationParts()->part(m_instrumentKey.partId)->clone();
+
+    if (!part) {
+        return;
+    }
+
+    part->setPartName(part->partName() + String(" ") + mtrc("instruments", "(copy)"));
+
+    engraving::Excerpt* excerpt = engraving::Excerpt::createExcerptFromPart(part);
+    notation::IMasterNotationPtr masterNotation = context()->currentMasterNotation();
+
+    if (!excerpt || !masterNotation) {
+        return;
+    }
+
+    masterNotation->addExcerpt(excerpt);
 }
 
 QString InstrumentSettingsModel::instrumentName() const

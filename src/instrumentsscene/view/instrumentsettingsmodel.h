@@ -54,6 +54,7 @@ public:
     Q_INVOKABLE void load(const QVariant& instrument);
     Q_INVOKABLE void replaceInstrument();
     Q_INVOKABLE void resetAllFormatting();
+    Q_INVOKABLE void cloneInstrument();
 
     QString instrumentName() const;
     QString partName() const;

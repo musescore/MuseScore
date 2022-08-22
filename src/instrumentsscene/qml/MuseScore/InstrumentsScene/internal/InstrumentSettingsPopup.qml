@@ -143,6 +143,22 @@ StyledPopupView {
             navigation.panel: root.navigationPanel
             navigation.row: 4
 
+            text: qsTrc("instruments", "Clone instrument in part")
+
+            visible: !settingsModel.isMainScore
+
+            onClicked: {
+                root.close()
+                Qt.callLater(settingsModel.cloneInstrument)
+            }
+        }
+
+        FlatButton {
+            width: parent.width
+
+            navigation.panel: root.navigationPanel
+            navigation.row: 5
+
             text: qsTrc("instruments", "Reset all formatting")
 
             visible: !settingsModel.isMainScore

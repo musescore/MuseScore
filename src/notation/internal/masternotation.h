@@ -59,6 +59,7 @@ public:
     const ExcerptNotationList& potentialExcerpts() const override;
 
     void initExcerpts(const ExcerptNotationList& excerpts) override;
+    void addExcerpt(engraving::Excerpt* excerpt) override;
     void addExcerpts(const ExcerptNotationList& excerpts) override;
     void removeExcerpts(const ExcerptNotationList& excerpts) override;
 

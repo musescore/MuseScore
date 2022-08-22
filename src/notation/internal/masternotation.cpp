@@ -480,6 +480,16 @@ void MasterNotation::removeExcerpts(const ExcerptNotationList& excerpts)
     doSetExcerpts(m_excerpts.val);
 }
 
+void MasterNotation::addExcerpt(Excerpt* excerpt)
+{
+    if (!excerpt) {
+        return;
+    }
+
+    IExcerptNotationPtr excerptPtr = std::make_shared<ExcerptNotation>(excerpt);
+    addExcerpts({ excerptPtr });
+}
+
 void MasterNotation::setExcerptIsOpen(const INotationPtr excerptNotation, bool open)
 {
     excerptNotation->setIsOpen(open);
