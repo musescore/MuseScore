@@ -25,16 +25,14 @@
 #include "translation.h"
 #include "rw/xml.h"
 
+#include "keysig.h"
+#include "measure.h"
+#include "mscore.h"
+#include "part.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
-#include "part.h"
 #include "undo.h"
-#include "mscore.h"
-#include "measure.h"
-#include "system.h"
-#include "chord.h"
-#include "keysig.h"
 
 using namespace mu;
 

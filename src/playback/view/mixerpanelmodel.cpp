@@ -29,8 +29,9 @@
 
 using namespace mu::playback;
 using namespace mu::audio;
-using namespace mu::project;
 using namespace mu::engraving;
+using namespace mu::notation;
+using namespace mu::project;
 
 static constexpr int INVALID_INDEX = -1;
 

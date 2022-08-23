@@ -24,12 +24,11 @@
 #define __TIMESIG_H__
 
 #include "engravingitem.h"
-#include "sig.h"
-#include "mscore.h"
+
 #include "groups.h"
+#include "sig.h"
 
 namespace mu::engraving {
-class MuseScoreView;
 class Segment;
 
 //---------------------------------------------------------

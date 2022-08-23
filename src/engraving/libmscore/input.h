@@ -25,18 +25,25 @@
 
 #include <set>
 
-#include "mscore.h"
 #include "durationtype.h"
-#include "beam.h"
+#include "mscore.h"
+#include "types.h"
+
+#include "types/types.h"
 
 namespace mu::engraving {
-class EngravingItem;
-class Slur;
 class ChordRest;
 class Drumset;
-class Segment;
+class EngravingItem;
+class Note;
 class Score;
+class Segment;
 class Selection;
+class Slur;
+
+// no ordinal for the visual repres. of string
+// (topmost in TAB varies according to visual order and presence of bass strings)
+static constexpr int VISUAL_INVALID_STRING_INDEX = -100;
 
 //---------------------------------------------------------
 //   NoteEntryMethod

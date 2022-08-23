@@ -23,16 +23,19 @@
 #ifndef __TEXTLINEBASE_H__
 #define __TEXTLINEBASE_H__
 
-#include "style/style.h"
 #include "types/types.h"
 
 #include "line.h"
 #include "property.h"
+#include "types.h"
 
 namespace mu::engraving {
-class TextLineBase;
 class EngravingItem;
 class Text;
+class TextLineBase;
+
+class XmlReader;
+class XmlWriter;
 
 //---------------------------------------------------------
 //   @@ TextLineBaseSegment

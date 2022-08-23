@@ -23,22 +23,24 @@
 
 #include <cmath>
 
-#include "draw/types/transform.h"
-#include "draw/types/pen.h"
 #include "draw/types/brush.h"
+#include "draw/types/pen.h"
+#include "draw/types/transform.h"
 #include "rw/xml.h"
 
-#include "chord.h"
-#include "measure.h"
-#include "mscoreview.h"
-#include "score.h"
-#include "system.h"
-#include "undo.h"
+#include "accidental.h"
 #include "chord.h"
 #include "hook.h"
 #include "ledgerline.h"
-#include "accidental.h"
+#include "measure.h"
+#include "mscoreview.h"
+#include "note.h"
+#include "notedot.h"
+#include "score.h"
+#include "staff.h"
+#include "stafftype.h"
 #include "stem.h"
+#include "system.h"
 
 #include "log.h"
 

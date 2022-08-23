@@ -22,10 +22,9 @@
 
 #include "whammybar.h"
 #include "rw/xml.h"
-#include "system.h"
-#include "measure.h"
-#include "chordrest.h"
+
 #include "score.h"
+#include "system.h"
 
 using namespace mu;
 using namespace mu::engraving;

@@ -31,9 +31,6 @@ class XmlWriter;
 class Volta;
 class Measure;
 
-extern void vdebug(int n);
-extern LineSegment* voltaDebug;
-
 //---------------------------------------------------------
 //   @@ VoltaSegment
 //---------------------------------------------------------

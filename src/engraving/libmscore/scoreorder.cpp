@@ -26,11 +26,11 @@
 #include "rw/xml.h"
 #include "types/translatablestring.h"
 
-#include "libmscore/score.h"
-#include "libmscore/part.h"
-#include "libmscore/staff.h"
 #include "libmscore/bracketItem.h"
 #include "libmscore/instrtemplate.h"
+#include "libmscore/part.h"
+#include "libmscore/score.h"
+#include "libmscore/staff.h"
 #include "libmscore/undo.h"
 
 #include "log.h"

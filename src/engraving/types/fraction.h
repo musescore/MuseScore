@@ -24,6 +24,7 @@
 #define MU_ENGRAVING_FRACTION_H
 
 #include <cstdint>
+#include <limits>
 #include <numeric>
 
 #include "types/string.h"
@@ -48,8 +49,8 @@ public:
     int numerator() const { return static_cast<int>(m_numerator); }
     int denominator() const { return static_cast<int>(m_denominator); }
 
-    static constexpr Fraction max() { return Fraction(10000, 1); }
-    // Use this when you need to initialize a Fraction to an arbitrary high value
+    /// Use this when you need to initialize a Fraction to an arbitrary high value
+    static constexpr Fraction max() { return Fraction(std::numeric_limits<int>::max(), 1); }
 
     void setNumerator(int v) { m_numerator = v; }
     void setDenominator(int v)

@@ -21,6 +21,8 @@
  */
 
 #include "io/buffer.h"
+
+#include "imimedata.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
 
@@ -28,6 +30,7 @@
 #include "beam.h"
 #include "breath.h"
 #include "chord.h"
+#include "dynamic.h"
 #include "factory.h"
 #include "figuredbass.h"
 #include "fret.h"
@@ -38,20 +41,16 @@
 #include "measure.h"
 #include "measurerepeat.h"
 #include "mscoreview.h"
-#include "ottava.h"
 #include "part.h"
 #include "rest.h"
 #include "score.h"
 #include "sig.h"
-#include "slur.h"
 #include "staff.h"
 #include "tie.h"
 #include "tremolo.h"
 #include "tuplet.h"
 #include "undo.h"
 #include "utils.h"
-
-#include "factory.h"
 
 #include "log.h"
 

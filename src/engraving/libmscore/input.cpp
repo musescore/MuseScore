@@ -21,19 +21,20 @@
  */
 
 #include "input.h"
-#include "segment.h"
+
+#include "articulation.h"
+#include "chord.h"
+#include "durationtype.h"
+#include "hook.h"
+#include "measure.h"
+#include "note.h"
 #include "part.h"
+#include "rest.h"
+#include "score.h"
+#include "segment.h"
+#include "select.h"
 #include "staff.h"
 #include "stem.h"
-#include "hook.h"
-#include "score.h"
-#include "chord.h"
-#include "rest.h"
-#include "measure.h"
-#include "accidental.h"
-#include "durationtype.h"
-#include "select.h"
-#include "articulation.h"
 
 using namespace mu;
 

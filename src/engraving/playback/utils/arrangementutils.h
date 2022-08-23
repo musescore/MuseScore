@@ -28,7 +28,6 @@
 
 #include "libmscore/score.h"
 #include "libmscore/repeatlist.h"
-#include "libmscore/tempo.h"
 #include "types/constants.h"
 
 namespace mu::engraving {

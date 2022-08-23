@@ -33,9 +33,16 @@
 #include "async/channel.h"
 #include "io/iodevice.h"
 
+#include "modularity/ioc.h"
+#include "draw/iimageprovider.h"
+
+#include "layout/layout.h"
+#include "layout/layoutoptions.h"
+
+#include "style/style.h"
+
 #include "chordlist.h"
 #include "input.h"
-#include "layoutbreak.h"
 #include "mscore.h"
 #include "property.h"
 #include "scoreorder.h"
@@ -44,23 +51,8 @@
 #include "synthesizerstate.h"
 #include "rootitem.h"
 
-#include "infrastructure/mscwriter.h"
-#include "infrastructure/mscreader.h"
-#include "infrastructure/imimedata.h"
-#include "draw/iimageprovider.h"
-
-#include "rw/readcontext.h"
-
-#include "layout/layout.h"
-#include "layout/layoutoptions.h"
-
-#include "style/style.h"
-
-#include "modularity/ioc.h"
-
-class QMimeData;
-
 namespace mu::engraving {
+class IMimeData;
 class Read400;
 class WriteContext;
 }
@@ -120,7 +112,9 @@ class UndoStack;
 class XmlReader;
 class XmlWriter;
 class ShadowNote;
+
 struct Interval;
+struct NoteVal;
 
 enum class BeatType : char;
 enum class Key;
@@ -130,6 +124,7 @@ enum class OttavaType : char;
 enum class Voicing : signed char;
 enum class HDuration : signed char;
 enum class AccidentalType;
+enum class LayoutBreakType;
 
 enum class POS : char {
     CURRENT, LEFT, RIGHT
@@ -729,7 +724,6 @@ public:
     void removeElement(EngravingItem*);
 
     Note* addPitch(NoteVal&, bool addFlag, InputState* externalInputState = nullptr);
-    void addPitch(int pitch, bool addFlag, bool insert);
     Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord);
     Note* addMidiPitch(int pitch, bool addFlag);
     Note* addNote(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {},

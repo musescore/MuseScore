@@ -23,6 +23,7 @@
 #include "line.h"
 
 #include <vector>
+
 #include "containers.h"
 
 #include "rw/xml.h"
@@ -39,7 +40,6 @@
 #include "segment.h"
 #include "staff.h"
 #include "system.h"
-#include "textline.h"
 #include "utils.h"
 
 #include "log.h"

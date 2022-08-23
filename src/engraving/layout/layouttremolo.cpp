@@ -21,9 +21,9 @@
  */
 #include "layouttremolo.h"
 
-#include "libmscore/tremolo.h"
 #include "libmscore/chord.h"
 #include "libmscore/stem.h"
+#include "libmscore/tremolo.h"
 
 using namespace mu::engraving;
 

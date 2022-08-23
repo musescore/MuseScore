@@ -21,10 +21,11 @@
  */
 
 #include "actionicon.h"
-#include "rw/xml.h"
-#include "property.h"
 
 #include "draw/fontmetrics.h"
+#include "rw/xml.h"
+
+#include "property.h"
 
 #include "log.h"
 

@@ -23,16 +23,18 @@
 #include "harmony.h"
 
 #include "containers.h"
-#include "draw/fontmetrics.h"
-#include "draw/types/brush.h"
-#include "draw/types/pen.h"
-#include "rw/xml.h"
-#include "rw/writecontext.h"
 #include "translation.h"
 #include "types/translatablestring.h"
 
+#include "draw/fontmetrics.h"
+#include "draw/types/brush.h"
+#include "draw/types/pen.h"
+#include "rw/writecontext.h"
+#include "rw/xml.h"
+
 #include "chordlist.h"
 #include "fret.h"
+#include "linkedobjects.h"
 #include "measure.h"
 #include "mscore.h"
 #include "part.h"
@@ -41,9 +43,7 @@
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
-#include "system.h"
 #include "utils.h"
-#include "linkedobjects.h"
 
 #include "log.h"
 

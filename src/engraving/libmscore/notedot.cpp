@@ -21,11 +21,14 @@
  */
 
 #include "notedot.h"
+
 #include "rw/xml.h"
+
+#include "chord.h"
+#include "note.h"
+#include "rest.h"
 #include "score.h"
 #include "staff.h"
-#include "chord.h"
-#include "rest.h"
 
 using namespace mu;
 

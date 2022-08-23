@@ -27,30 +27,30 @@
 #include <vector>
 
 #include "engravingitem.h"
+
 #include "draw/types/color.h"
+
 #include "changeMap.h"
-#include "pitch.h"
 #include "cleflist.h"
-#include "keylist.h"
-#include "stafftypelist.h"
 #include "groups.h"
+#include "keylist.h"
+#include "pitch.h"
+#include "stafftypelist.h"
 
 namespace mu::engraving {
+class BracketItem;
+class Clef;
 class Factory;
 class InstrumentTemplate;
-class XmlWriter;
+class KeyList;
+class Note;
 class Part;
 class Score;
-class KeyList;
 class StaffType;
-class Staff;
-struct ClefTypeList;
-class Segment;
-class Clef;
 class TimeSig;
-class Ottava;
-class BracketItem;
-class Note;
+
+class XmlReader;
+class XmlWriter;
 
 enum class Key;
 

@@ -28,7 +28,6 @@
 
 namespace mu::engraving {
 class MasterScore;
-class Score;
 class TDuration;
 class TimeSig;
 class Chord;

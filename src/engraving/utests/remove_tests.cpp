@@ -27,7 +27,6 @@
 #include "libmscore/spanner.h"
 
 #include "utils/scorerw.h"
-#include "utils/scorecomp.h"
 
 #include "log.h"
 

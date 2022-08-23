@@ -25,12 +25,15 @@
 
 #include "containers.h"
 
-#include "libmscore/factory.h"
-#include "libmscore/score.h"
-#include "libmscore/staff.h"
+#include "libmscore/beam.h"
 #include "libmscore/chord.h"
-#include "libmscore/timesig.h"
+#include "libmscore/factory.h"
+#include "libmscore/measure.h"
+#include "libmscore/score.h"
+#include "libmscore/segment.h"
+#include "libmscore/staff.h"
 #include "libmscore/system.h"
+#include "libmscore/timesig.h"
 
 #include "layoutcontext.h"
 

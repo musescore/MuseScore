@@ -32,6 +32,7 @@ namespace mu::engraving {
 class Factory;
 
 class Chord;
+class Note;
 
 //---------------------------------------------------------
 //   @@ ChordLine

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_STEMTYPES_H
-#define MU_INSPECTOR_STEMTYPES_H
+#ifndef MU_INSPECTOR_DIRECTIONTYPES_H
+#define MU_INSPECTOR_DIRECTIONTYPES_H
 
 #include "qobjectdefs.h"
 
@@ -47,4 +47,4 @@ public:
 };
 }
 
-#endif // MU_INSPECTOR_STEMTYPES_H
+#endif // MU_INSPECTOR_DIRECTIONTYPES_H

@@ -118,4 +118,5 @@ public:
     std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
 };
 } // namespace mu::engraving
+
 #endif

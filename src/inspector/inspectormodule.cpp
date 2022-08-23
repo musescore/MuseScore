@@ -34,7 +34,7 @@
 #include "view/widgets/fretcanvas.h"
 #include "view/widgets/gridcanvas.h"
 
-#include "types/stemtypes.h"
+#include "types/directiontypes.h"
 #include "types/noteheadtypes.h"
 #include "types/beamtypes.h"
 #include "types/hairpintypes.h"

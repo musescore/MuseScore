@@ -22,13 +22,11 @@
 #include "engravingproject.h"
 
 #include "global/allocator.h"
-#include "async/async.h"
 
 #include "style/defaultstyle.h"
 #include "rw/scorereader.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/part.h"
-#include "libmscore/undo.h"
 
 #include "log.h"
 

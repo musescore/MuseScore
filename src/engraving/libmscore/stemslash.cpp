@@ -21,8 +21,12 @@
  */
 
 #include "stemslash.h"
-#include "score.h"
+
 #include "chord.h"
+#include "note.h"
+#include "score.h"
+#include "stem.h"
+
 #include "draw/types/pen.h"
 
 using namespace mu;

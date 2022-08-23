@@ -20,9 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "score.h"
 #include "rehearsalmark.h"
+
 #include "measure.h"
+#include "score.h"
 #include "system.h"
 
 using namespace mu;

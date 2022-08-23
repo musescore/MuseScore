@@ -22,13 +22,14 @@
 
 #include "drumset.h"
 
-#include "rw/xml.h"
 #include "translation.h"
+
+#include "rw/xml.h"
 #include "types/typesconv.h"
 #include "types/symnames.h"
 
 #include "articulation.h"
-#include "note.h"
+#include "tremolo.h"
 
 #include "log.h"
 

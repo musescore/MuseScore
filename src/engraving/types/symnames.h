@@ -25,8 +25,10 @@
 #include <vector>
 #include <array>
 #include <unordered_map>
-#include "symid.h"
+
 #include "types/string.h"
+
+#include "symid.h"
 
 namespace mu::engraving {
 struct SymNames {

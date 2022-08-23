@@ -22,18 +22,14 @@
 
 #include "playbackmodel.h"
 
-#include "libmscore/score.h"
-#include "libmscore/measure.h"
-#include "libmscore/repeatlist.h"
-#include "libmscore/segment.h"
-#include "libmscore/dynamic.h"
-#include "libmscore/part.h"
-#include "libmscore/staff.h"
-#include "libmscore/chord.h"
-#include "libmscore/instrument.h"
 #include "libmscore/fret.h"
-
-#include "utils/pitchutils.h"
+#include "libmscore/instrument.h"
+#include "libmscore/measure.h"
+#include "libmscore/part.h"
+#include "libmscore/repeatlist.h"
+#include "libmscore/score.h"
+#include "libmscore/segment.h"
+#include "libmscore/tempo.h"
 
 #include "log.h"
 

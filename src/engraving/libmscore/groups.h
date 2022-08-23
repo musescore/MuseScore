@@ -24,13 +24,13 @@
 #define __GROUPS__
 
 #include "durationtype.h"
-#include "beam.h"
+
 #include "types/groupnode.h"
 
 namespace mu::engraving {
 class ChordRest;
-class XmlWriter;
 class XmlReader;
+class XmlWriter;
 
 //---------------------------------------------------------
 //   @@ Groups
@@ -73,15 +73,6 @@ public:
 
 private:
     GroupNodes m_nodes;
-};
-
-//---------------------------------------------------------
-//   NoteGroup
-//---------------------------------------------------------
-
-struct NoteGroup {
-    Fraction timeSig;
-    Groups endings;
 };
 } // namespace mu::engraving
 

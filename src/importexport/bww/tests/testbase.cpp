@@ -26,7 +26,6 @@
 #include <QTextStream>
 
 #include "io/file.h"
-#include "io/buffer.h"
 
 #include "libmscore/instrtemplate.h"
 #include "libmscore/masterscore.h"

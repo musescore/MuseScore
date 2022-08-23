@@ -27,7 +27,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/masterscore.h"
 #include "engraving/types/fraction.h"
-#include "libmscore/duration.h"
+#include "libmscore/durationelement.h"
 #include "libmscore/measure.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/mscore.h"
