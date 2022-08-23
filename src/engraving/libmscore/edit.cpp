@@ -245,6 +245,10 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
     _ratio.setDenominator(ratio.denominator() != -1 ? ratio.denominator() : f.numerator());
 
     Fraction fr = f * Fraction(1, _ratio.denominator());
+    if (!TDuration::isValid(fr)) {
+        // todo: there needs to be some kind of user feedback for failure to add tuplet
+        return nullptr;
+    }
 
     Tuplet* tuplet = Factory::createTuplet(this->dummy()->measure());
     tuplet->setRatio(_ratio);
