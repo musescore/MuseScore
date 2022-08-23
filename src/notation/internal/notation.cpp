@@ -52,7 +52,7 @@ Notation::Notation(mu::engraving::Score* score)
     m_viewState = std::make_shared<NotationViewState>(this);
     m_undoStack = std::make_shared<NotationUndoStack>(this, m_notationChanged);
     m_interaction = std::make_shared<NotationInteraction>(this, m_undoStack);
-    m_midiInput = std::make_shared<NotationMidiInput>(this, m_undoStack);
+    m_midiInput = std::make_shared<NotationMidiInput>(this, m_interaction, m_undoStack);
     m_accessibility = std::make_shared<NotationAccessibility>(this);
     m_parts = std::make_shared<NotationParts>(this, m_interaction, m_undoStack);
     m_style = std::make_shared<NotationStyle>(this, m_undoStack);
