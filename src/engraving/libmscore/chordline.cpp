@@ -29,6 +29,7 @@
 #include "measure.h"
 #include "system.h"
 #include "note.h"
+#include "score.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -201,6 +202,8 @@ void ChordLine::read(XmlReader& e)
             setLengthX(e.readInt());
         } else if (tag == "lengthY") {
             setLengthY(e.readInt());
+        } else if (tag == "offset" && score()->mscVersion() < 400) { // default positions has changed in 4.0 so ignore previous offset
+            e.skipCurrentElement();
         } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
