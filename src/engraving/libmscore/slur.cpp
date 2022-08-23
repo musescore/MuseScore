@@ -416,10 +416,29 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
 
     // Collision clearance at the center of the slur
     double clearance = 0.75 * spatium(); // TODO: style
-    // balance: determines how much endpoint adjustment VS shape adjustment
-    // we will do (0 = only shape, 1 = only end point)
-    double leftBalance = isSingleBeginType() ? 0.4 : 0.9;
-    double rightBalance = isSingleEndType() ? 0.4 : 0.9;
+    // balance: determines how much endpoint adjustment VS shape adjustment we will do.
+    // 0 = end point is fixed, only the shape can be adjusted,
+    // 1 = shape is fixed, only end the point can be adjusted.
+    // left and right side of the slur may have different balance depending on context:
+    double leftBalance, rightBalance;
+    if (isSingleBeginType()) {
+        if (startCR->isChord() && toChord(startCR)->stem() && startCR->up() == slur()->up()) {
+            leftBalance = 0.1;
+        } else {
+            leftBalance = 0.4;
+        }
+    } else {
+        leftBalance = 0.9;
+    }
+    if (isSingleEndType()) {
+        if (endCR->isChord() && toChord(endCR)->stem() && endCR->up() == slur()->up()) {
+            rightBalance = 0.1;
+        } else {
+            rightBalance = 0.4;
+        }
+    } else {
+        rightBalance = 0.9;
+    }
 
     static constexpr unsigned maxIter = 30;     // Max iterations allowed
     const double vertClearance = slur()->up() ? clearance : -clearance;
