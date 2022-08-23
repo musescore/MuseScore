@@ -220,6 +220,7 @@ DropdownView {
                 navigation.name: label.text
                 navigation.panel: view.navigationPanel
                 navigation.row: model.index
+                navigation.accessible.name: label.text
                 navigation.onActiveChanged: {
                     if (navigation.highlight) {
                         view.positionViewAtIndex(model.index, ListView.Contain)
