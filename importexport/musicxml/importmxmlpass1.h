@@ -28,10 +28,10 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   PageFormat
+//   MxmlPageFormat
 //---------------------------------------------------------
 
-struct PageFormat {
+struct MxmlPageFormat {
       QSizeF size;
       qreal printableWidth;        // _width - left margin - right margin
       qreal evenLeftMargin;        // values in inch
@@ -125,7 +125,7 @@ public:
       void identification();
       void credit(CreditWordsList& credits);
       void defaults();
-      void pageLayout(PageFormat& pf, const qreal conversion);
+      void pageLayout(MxmlPageFormat& pf, const qreal conversion);
       void partList(MusicXmlPartGroupList& partGroupList);
       void partGroup(const int scoreParts, MusicXmlPartGroupList& partGroupList, MusicXmlPartGroupMap& partGroups);
       void scorePart();

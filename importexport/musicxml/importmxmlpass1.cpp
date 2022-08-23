@@ -1514,7 +1514,7 @@ static void updateStyles(Score* score,
 //   setPageFormat
 //---------------------------------------------------------
 
-static void setPageFormat(Score* score, const PageFormat& pf)
+static void setPageFormat(Score* score, const MxmlPageFormat& pf)
       {
       score->style().set(Sid::pageWidth, pf.size.width());
       score->style().set(Sid::pageHeight, pf.size.height());
@@ -1565,7 +1565,7 @@ void MusicXMLParserPass1::defaults()
                         _score->setSpatium(_spatium);
                   }
             else if (_e.name() == "page-layout") {
-                  PageFormat pf;
+                  MxmlPageFormat pf;
                   pageLayout(pf, millimeter / (tenths * INCH));
                   if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT))
                         setPageFormat(_score, pf);
@@ -1640,7 +1640,7 @@ void MusicXMLParserPass1::defaults()
  MusicXML file.
  */
 
-void MusicXMLParserPass1::pageLayout(PageFormat& pf, const qreal conversion)
+void MusicXMLParserPass1::pageLayout(MxmlPageFormat& pf, const qreal conversion)
       {
       _logger->logDebugTrace("MusicXMLParserPass1::pageLayout", &_e);
 
