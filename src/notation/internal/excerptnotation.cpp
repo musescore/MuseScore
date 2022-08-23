@@ -22,9 +22,10 @@
 
 #include "excerptnotation.h"
 
-#include "log.h"
-
 #include "libmscore/excerpt.h"
+#include "libmscore/text.h"
+
+#include "log.h"
 
 using namespace mu::notation;
 

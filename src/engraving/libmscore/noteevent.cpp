@@ -21,6 +21,7 @@
  */
 
 #include "noteevent.h"
+
 #include "rw/xml.h"
 
 using namespace mu;

@@ -23,12 +23,9 @@
 #ifndef __CLEFLIST_H__
 #define __CLEFLIST_H__
 
-#include "mscore.h"
 #include "clef.h"
 
 namespace mu::engraving {
-class Score;
-
 //---------------------------------------------------------
 //   ClefList
 //---------------------------------------------------------

@@ -22,13 +22,8 @@
 
 #include "event.h"
 
-#include "libmscore/harmony.h"
-#include "libmscore/instrument.h"
-#include "libmscore/masterscore.h"
 #include "libmscore/note.h"
-#include "libmscore/part.h"
 #include "libmscore/sig.h"
-#include "libmscore/staff.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------

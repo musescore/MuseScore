@@ -28,6 +28,9 @@
 
 #include "settings.h"
 #include "async/async.h"
+
+#include "engraving/infrastructure/mscio.h"
+
 #include "log.h"
 
 using namespace mu;

@@ -24,8 +24,10 @@
 
 #include <cmath>
 
-#include "libmscore/system.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/repeatlist.h"
+#include "libmscore/system.h"
+
 #include "engraving/types/types.h"
 
 #include "log.h"

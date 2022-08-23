@@ -24,15 +24,16 @@
 
 #include <unordered_map>
 
-#include "style/style.h"
-
-#include "draw/types/geometry.h"
-
 #include "modularity/ioc.h"
 #include "draw/ifontprovider.h"
+#include "draw/types/geometry.h"
+
 #include "io/path.h"
 
 #include "smufl.h"
+
+#include "style/styledef.h"
+#include "types/symid.h"
 
 namespace mu {
 class JsonObject;

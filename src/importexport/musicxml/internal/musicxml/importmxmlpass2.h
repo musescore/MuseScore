@@ -25,14 +25,16 @@
 
 #include <array>
 
-#include "libmscore/masterscore.h"
-#include "libmscore/tuplet.h"
-#include "importxmlfirstpass.h"
 #include "importmxmlpass1.h"
+#include "importxmlfirstpass.h"
 #include "musicxml.h" // a.o. for Slur
-#include "musicxmlsupport.h"
+
+#include "libmscore/types.h"
 
 namespace mu::engraving {
+class StringData;
+class Tuplet;
+
 //---------------------------------------------------------
 //   support enums / structs / classes
 //---------------------------------------------------------

@@ -23,11 +23,13 @@
 #ifndef __INSTRCHANGE_H__
 #define __INSTRCHANGE_H__
 
-#include "text.h"
+#include "textbase.h"
+
 #include "instrument.h"
-#include "clef.h"
 
 namespace mu::engraving {
+class Clef;
+
 //---------------------------------------------------------
 //   @@ InstrumentChange
 //---------------------------------------------------------

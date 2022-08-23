@@ -28,26 +28,28 @@
  Definition of classes Chord, HelpLine and NoteList.
 */
 
-#include <set>
 #include <functional>
+#include <set>
 #include <vector>
 
-#include "draw/types/color.h"
 #include "chordrest.h"
+
 #include "articulation.h"
+#include "types.h"
+
+#include "draw/types/color.h"
 
 namespace mu::engraving {
-class Note;
-class Hook;
-class Arpeggio;
-class Tremolo;
-class Chord;
-//class Glissando;
-class Stem;
-class Chord;
-class StemSlash;
-class LedgerLine;
 class AccidentalState;
+class Arpeggio;
+class Chord;
+class Hook;
+class LedgerLine;
+class Note;
+class NoteEventList;
+class Stem;
+class StemSlash;
+class Tremolo;
 
 enum class TremoloChordType : char {
     TremoloSingle, TremoloFirstNote, TremoloSecondNote

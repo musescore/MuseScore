@@ -24,18 +24,11 @@
 #include "draw/fontmetrics.h"
 #include "rw/xml.h"
 
-#include "factory.h"
 #include "box.h"
-#include "text.h"
-#include "score.h"
-#include "barline.h"
-#include "measurerepeat.h"
-#include "symbol.h"
-#include "system.h"
-#include "image.h"
-#include "layoutbreak.h"
-#include "fret.h"
+#include "factory.h"
 #include "mscore.h"
+#include "system.h"
+#include "text.h"
 
 #include "log.h"
 

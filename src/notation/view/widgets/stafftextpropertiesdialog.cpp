@@ -21,6 +21,7 @@
  */
 #include "stafftextpropertiesdialog.h"
 
+#include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/score.h"
 #include "engraving/libmscore/staff.h"
 #include "engraving/libmscore/stafftextbase.h"
@@ -96,7 +97,7 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
 
     connect(this, &QDialog::accepted, this, &StaffTextPropertiesDialog::saveValues);
 
-    WidgetStateStore::restoreGeometry(this);
+    ui::WidgetStateStore::restoreGeometry(this);
 }
 
 StaffTextPropertiesDialog::StaffTextPropertiesDialog(const StaffTextPropertiesDialog& other)
@@ -111,7 +112,7 @@ StaffTextPropertiesDialog::~StaffTextPropertiesDialog()
 
 void StaffTextPropertiesDialog::hideEvent(QHideEvent* event)
 {
-    WidgetStateStore::saveGeometry(this);
+    ui::WidgetStateStore::saveGeometry(this);
     QDialog::hideEvent(event);
 }
 

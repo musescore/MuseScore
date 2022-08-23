@@ -23,8 +23,9 @@
 #ifndef __BRACKET_ITEM_H__
 #define __BRACKET_ITEM_H__
 
-#include "engravingobject.h"
-#include "mscore.h"
+#include "engravingitem.h"
+
+#include "types/types.h"
 
 namespace mu::engraving {
 class Factory;

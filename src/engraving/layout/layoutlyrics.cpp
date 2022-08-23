@@ -23,11 +23,12 @@
 
 #include "style/styledef.h"
 
-#include "libmscore/system.h"
-#include "libmscore/segment.h"
-#include "libmscore/score.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/lyrics.h"
+#include "libmscore/measure.h"
+#include "libmscore/score.h"
+#include "libmscore/segment.h"
+#include "libmscore/system.h"
 
 using namespace mu;
 using namespace mu::engraving;

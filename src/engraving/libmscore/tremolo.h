@@ -23,8 +23,9 @@
 #ifndef __TREMOLO_H__
 #define __TREMOLO_H__
 
+#include "engravingitem.h"
+
 #include "durationtype.h"
-#include "symbol.h"
 #include "draw/types/painterpath.h"
 #include "types/types.h"
 

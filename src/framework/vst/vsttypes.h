@@ -23,6 +23,7 @@
 #define MU_VST_VSTTYPES_H
 
 #include <memory>
+#include <unordered_map>
 #include <vector>
 
 #include "public.sdk/source/vst/hosting/module.h"

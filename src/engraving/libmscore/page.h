@@ -25,7 +25,6 @@
 
 #include <vector>
 
-#include "config.h"
 #include "engravingitem.h"
 #include "bsp.h"
 

@@ -22,17 +22,14 @@
 
 #include "chordlist.h"
 
-#include "translation.h"
 #include "io/file.h"
 #include "io/fileinfo.h"
 
 #include "rw/xml.h"
+#include "style/style.h"
 
 #include "mscore.h"
 #include "pitchspelling.h"
-#include "score.h"
-
-#include "config.h"
 
 #include "log.h"
 

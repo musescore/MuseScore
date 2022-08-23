@@ -22,10 +22,10 @@
 #ifndef MU_ENGRAVING_READ400_H
 #define MU_ENGRAVING_READ400_H
 
-#include "libmscore/masterscore.h"
-#include "../engravingerrors.h"
-
 namespace mu::engraving {
+class Score;
+
+class ReadContext;
 class XmlReader;
 
 class Read400

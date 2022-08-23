@@ -25,17 +25,12 @@
 #include "rw/xml.h"
 
 #include "factory.h"
-#include "measure.h"
-#include "staff.h"
-#include "score.h"
-#include "chord.h"
-#include "note.h"
 #include "layoutbreak.h"
-#include "image.h"
-#include "segment.h"
-#include "tempo.h"
-#include "system.h"
+#include "measure.h"
+#include "score.h"
+#include "staff.h"
 #include "stafftypechange.h"
+#include "system.h"
 
 #include "log.h"
 

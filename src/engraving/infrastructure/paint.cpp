@@ -23,8 +23,6 @@
 
 #include "draw/painter.h"
 #include "libmscore/engravingitem.h"
-#include "libmscore/page.h"
-#include "libmscore/score.h"
 
 #include "debugpaint.h"
 

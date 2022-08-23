@@ -22,22 +22,22 @@
 
 #include "tremolo.h"
 
-#include "draw/types/transform.h"
-#include "draw/types/pen.h"
 #include "draw/types/brush.h"
-#include "style/style.h"
+#include "draw/types/pen.h"
+#include "draw/types/transform.h"
 #include "rw/xml.h"
+#include "style/style.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "layout/layouttremolo.h"
 
+#include "beam.h"
+#include "chord.h"
+#include "measure.h"
+#include "note.h"
 #include "score.h"
 #include "staff.h"
-#include "chord.h"
-#include "note.h"
-#include "measure.h"
-#include "segment.h"
 #include "stem.h"
 
 #include "log.h"

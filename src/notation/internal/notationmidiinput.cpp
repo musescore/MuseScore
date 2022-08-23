@@ -25,7 +25,7 @@
 
 #include "log.h"
 
-#include "libmscore/masterscore.h"
+#include "libmscore/note.h"
 #include "libmscore/segment.h"
 
 using namespace mu::notation;

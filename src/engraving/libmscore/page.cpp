@@ -22,27 +22,15 @@
 
 #include "page.h"
 
-#include "style/style.h"
 #include "rw/xml.h"
 
 #include "factory.h"
-#include "score.h"
-#include "text.h"
-#include "measure.h"
-#include "chord.h"
-#include "beam.h"
-#include "tuplet.h"
-#include "note.h"
-#include "barline.h"
-#include "slur.h"
-#include "hook.h"
-#include "bracket.h"
-#include "line.h"
-#include "staff.h"
-#include "system.h"
-#include "mscore.h"
-#include "segment.h"
 #include "masterscore.h"
+#include "measurebase.h"
+#include "mscore.h"
+#include "score.h"
+#include "system.h"
+#include "text.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"

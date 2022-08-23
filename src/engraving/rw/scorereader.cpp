@@ -29,9 +29,9 @@
 #include "compat/read302.h"
 #include "read400.h"
 
+#include "../libmscore/audio.h"
 #include "../libmscore/excerpt.h"
 #include "../libmscore/imageStore.h"
-#include "../libmscore/audio.h"
 
 #include "log.h"
 

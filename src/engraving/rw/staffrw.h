@@ -24,6 +24,10 @@
 
 #include "readcontext.h"
 
+namespace mu::engraving {
+class MeasureBase;
+}
+
 namespace mu::engraving::rw {
 class StaffRW
 {

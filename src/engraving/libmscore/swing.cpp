@@ -22,10 +22,12 @@
 
 #include "swing.h"
 
-#include "staff.h"
-#include "chord.h"
-#include "navigate.h"
 #include "realfn.h"
+
+#include "chord.h"
+#include "measure.h"
+#include "navigate.h"
+#include "staff.h"
 
 using namespace mu::engraving;
 

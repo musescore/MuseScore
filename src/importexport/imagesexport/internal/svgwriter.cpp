@@ -24,14 +24,16 @@
 
 #include "svggenerator.h"
 
-#include "libmscore/masterscore.h"
-#include "libmscore/page.h"
-#include "libmscore/system.h"
-#include "libmscore/staff.h"
-#include "libmscore/measure.h"
-#include "libmscore/stafflines.h"
-#include "libmscore/repeatlist.h"
 #include "engraving/infrastructure/paint.h"
+
+#include "libmscore/measure.h"
+#include "libmscore/note.h"
+#include "libmscore/page.h"
+#include "libmscore/repeatlist.h"
+#include "libmscore/score.h"
+#include "libmscore/staff.h"
+#include "libmscore/stafflines.h"
+#include "libmscore/system.h"
 
 #include "log.h"
 

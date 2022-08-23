@@ -25,7 +25,7 @@
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
-#include "libmscore/undo.h"
+#include "libmscore/timesig.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

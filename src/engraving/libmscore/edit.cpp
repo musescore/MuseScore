@@ -30,23 +30,19 @@
 #include "bracket.h"
 #include "breath.h"
 #include "chord.h"
-#include "chordline.h"
 #include "clef.h"
-#include "drumset.h"
 #include "excerpt.h"
 #include "factory.h"
-#include "fermata.h"
-#include "figuredbass.h"
 #include "fingering.h"
 #include "glissando.h"
 #include "hairpin.h"
 #include "harmony.h"
 #include "hook.h"
-#include "image.h"
-#include "instrumentname.h"
 #include "instrchange.h"
+#include "instrumentname.h"
 #include "key.h"
 #include "keysig.h"
+#include "layoutbreak.h"
 #include "linkedobjects.h"
 #include "lyrics.h"
 #include "masterscore.h"
@@ -56,7 +52,6 @@
 #include "navigate.h"
 #include "note.h"
 #include "ottava.h"
-#include "page.h"
 #include "part.h"
 #include "range.h"
 #include "rehearsalmark.h"
@@ -70,12 +65,14 @@
 #include "stem.h"
 #include "sticking.h"
 #include "system.h"
+#include "systemtext.h"
 #include "tempotext.h"
 #include "textframe.h"
 #include "textline.h"
 #include "tie.h"
 #include "tiemap.h"
 #include "timesig.h"
+#include "tremolo.h"
 #include "tuplet.h"
 #include "tupletmap.h"
 #include "undo.h"
@@ -2984,7 +2981,7 @@ ChordRest* Score::deleteRange(Segment* s1, Segment* s2, track_idx_t track1, trac
         bool fullMeasure = ss1 && (ss1->measure()->first(SegmentType::ChordRest) == ss1)
                            && (s2 == 0 || s2->isEndBarLineType());
 
-        Fraction tick2 = s2 ? s2->tick() : Fraction(INT_MAX, 1);
+        Fraction tick2 = s2 ? s2->tick() : Fraction::max();
 
         deleteSpannersFromRange(stick1, stick2, track1, track2, filter);
 

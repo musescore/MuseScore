@@ -29,7 +29,9 @@
 #include "rw/xml.h"
 
 #include "articulation.h"
+#include "beam.h"
 #include "chord.h"
+#include "hook.h"
 #include "measure.h"
 #include "mscoreview.h"
 #include "navigate.h"
@@ -39,7 +41,6 @@
 #include "system.h"
 #include "tie.h"
 #include "undo.h"
-#include "hook.h"
 
 // included for gonville/musejazz hook hack in SlurPos
 #include "symbolfont.h"

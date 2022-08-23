@@ -25,8 +25,8 @@
 #include <vector>
 
 namespace mu::engraving {
-class System;
 class Segment;
+class System;
 
 class LayoutHarmonies
 {

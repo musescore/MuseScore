@@ -25,18 +25,15 @@
 #include "io/file.h"
 #include "io/fileinfo.h"
 
-#include "draw/iimageprovider.h"
-
 #include "draw/types/pixmap.h"
 #include "draw/types/transform.h"
 #include "draw/svgrenderer.h"
 #include "rw/xml.h"
 
-#include "score.h"
-#include "undo.h"
-#include "mscore.h"
 #include "imageStore.h"
 #include "masterscore.h"
+#include "mscore.h"
+#include "score.h"
 
 #include "log.h"
 

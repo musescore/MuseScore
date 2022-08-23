@@ -24,8 +24,8 @@
 
 #include "infrastructure/ifileinfoprovider.h"
 
-#include "score.h"
 #include "instrument.h"
+#include "score.h"
 
 namespace mu::engraving {
 class EngravingProject;

@@ -26,17 +26,12 @@
 #include "rw/xml.h"
 
 #include "libmscore/articulation.h"
-#include "libmscore/chordlist.h"
-#include "libmscore/clef.h"
-#include "libmscore/harmony.h"
-#include "libmscore/masterscore.h"
 #include "libmscore/mscore.h"
-#include "libmscore/page.h"
-#include "libmscore/property.h"
-#include "libmscore/textlinebase.h"
+#include "libmscore/realizedharmony.h"
+#include "libmscore/textbase.h"
+#include "libmscore/tremolo.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/types.h"
-#include "libmscore/undo.h"
 
 using namespace mu;
 using namespace mu::engraving;

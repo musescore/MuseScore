@@ -26,26 +26,27 @@
 #include "draw/fontmetrics.h"
 #include "draw/types/pen.h"
 #include "draw/types/brush.h"
-#include "style/defaultstyle.h"
+
+#include "infrastructure/symbolfonts.h"
+
 #include "rw/xml.h"
+
+#include "style/defaultstyle.h"
+#include "style/textstyle.h"
+
 #include "types/symnames.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
-#include "infrastructure/symbolfonts.h"
 
-#include "text.h"
-#include "textedit.h"
-#include "jump.h"
-#include "marker.h"
-#include "score.h"
-#include "segment.h"
-#include "measure.h"
-#include "system.h"
 #include "box.h"
+#include "measure.h"
+#include "mscore.h"
 #include "page.h"
+#include "score.h"
+#include "system.h"
+#include "textedit.h"
 #include "textframe.h"
 #include "undo.h"
-#include "mscore.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"

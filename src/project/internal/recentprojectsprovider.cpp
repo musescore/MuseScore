@@ -21,10 +21,11 @@
  */
 #include "recentprojectsprovider.h"
 
+#include "engraving/infrastructure/mscio.h"
+
 #include "log.h"
 
 using namespace mu::project;
-using namespace mu::notation;
 
 void RecentProjectsProvider::init()
 {

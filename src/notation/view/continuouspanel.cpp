@@ -23,22 +23,25 @@
 
 #include "continuouspanel.h"
 
-#include "libmscore/score.h"
-#include "libmscore/measure.h"
-#include "libmscore/segment.h"
-#include "libmscore/system.h"
-#include "libmscore/staff.h"
-#include "libmscore/page.h"
-#include "libmscore/instrument.h"
-#include "libmscore/part.h"
-#include "libmscore/timesig.h"
-#include "libmscore/keysig.h"
 #include "libmscore/barline.h"
-#include "libmscore/rest.h"
-#include "libmscore/stafflines.h"
 #include "libmscore/factory.h"
+#include "libmscore/instrument.h"
+#include "libmscore/keysig.h"
+#include "libmscore/measure.h"
+#include "libmscore/page.h"
+#include "libmscore/part.h"
+#include "libmscore/rest.h"
+#include "libmscore/score.h"
+#include "libmscore/segment.h"
+#include "libmscore/staff.h"
+#include "libmscore/stafflines.h"
+#include "libmscore/system.h"
+#include "libmscore/text.h"
+#include "libmscore/timesig.h"
 
 #include "draw/painter.h"
+
+#include "log.h"
 
 using namespace mu::notation;
 

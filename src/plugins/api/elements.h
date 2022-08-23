@@ -28,6 +28,7 @@
 #include <QQmlListProperty>
 
 #include "libmscore/engravingitem.h"
+#include "libmscore/beam.h"
 #include "libmscore/chord.h"
 #include "libmscore/hook.h"
 #include "libmscore/lyrics.h"
@@ -41,11 +42,10 @@
 #include "libmscore/stemslash.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/accidental.h"
-#include "libmscore/musescoreCore.h"
-#include "libmscore/masterscore.h"
 #include "libmscore/undo.h"
-#include "playevent.h"
 #include "libmscore/types.h"
+
+#include "playevent.h"
 
 namespace mu::engraving {
 namespace PluginAPI {

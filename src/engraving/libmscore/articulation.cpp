@@ -22,21 +22,20 @@
 
 #include "articulation.h"
 
+#include "draw/fontmetrics.h"
 #include "rw/compat/read206.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
 #include "types/translatablestring.h"
 
-#include "score.h"
 #include "chordrest.h"
-#include "system.h"
+#include "masterscore.h"
 #include "measure.h"
+#include "page.h"
+#include "score.h"
 #include "staff.h"
 #include "stafftype.h"
-#include "undo.h"
-#include "page.h"
-#include "barline.h"
-#include "masterscore.h"
+#include "system.h"
 
 using namespace mu;
 using namespace mu::engraving;

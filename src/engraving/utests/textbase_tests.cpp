@@ -25,13 +25,12 @@
 
 #include <gtest/gtest.h>
 
+#include "libmscore/chordrest.h"
+#include "libmscore/dynamic.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/segment.h"
-#include "libmscore/dynamic.h"
 #include "libmscore/stafftext.h"
-#include "libmscore/chordrest.h"
 #include "libmscore/textedit.h"
-#include "libmscore/tie.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

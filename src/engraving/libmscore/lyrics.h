@@ -24,7 +24,7 @@
 #define __LYRICS_H__
 
 #include "line.h"
-#include "text.h"
+#include "textbase.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------

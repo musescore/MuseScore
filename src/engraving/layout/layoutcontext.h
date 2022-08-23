@@ -29,11 +29,11 @@
 #include "types/types.h"
 
 namespace mu::engraving {
-class Score;
-class Page;
-class System;
-class Spanner;
 class MeasureBase;
+class Page;
+class Score;
+class Spanner;
+class System;
 
 class LayoutContext
 {

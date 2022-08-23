@@ -29,6 +29,7 @@
 */
 
 #include "measurebase.h"
+
 #include "segmentlist.h"
 
 namespace mu::engraving::rw {
@@ -36,24 +37,21 @@ class MeasureRW;
 }
 
 namespace mu::engraving {
-class XmlWriter;
-class Beam;
-class Tuplet;
-class Staff;
-class Chord;
-class MeasureNumber;
-class MMRestRange;
-class ChordRest;
-class Score;
-class MuseScoreView;
-class System;
-class Note;
-class Spacer;
-class TieMap;
 class AccidentalState;
-class Spanner;
-class Part;
+class Chord;
+class ChordRest;
+class MMRestRange;
+class MeasureNumber;
 class MeasureRepeat;
+class Note;
+class Part;
+class Score;
+class Spacer;
+class Staff;
+class System;
+class TieMap;
+
+class XmlWriter;
 
 //---------------------------------------------------------
 //   MeasureNumberMode

@@ -27,7 +27,8 @@
 
 #include "draw/types/font.h"
 
-#include "text.h"
+#include "textbase.h"
+
 #include "pitchspelling.h"
 #include "realizedharmony.h"
 

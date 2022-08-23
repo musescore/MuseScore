@@ -24,28 +24,27 @@
 #define __BARLINE_H__
 
 #include "engravingitem.h"
-#include "mscore.h"
 
 namespace mu::engraving {
 class Factory;
 class Segment;
 
-static const int MIN_BARLINE_FROMTO_DIST        = 2;
-static const int MIN_BARLINE_SPAN_FROMTO        = -2;
+static constexpr int MIN_BARLINE_FROMTO_DIST        = 2;
+static constexpr int MIN_BARLINE_SPAN_FROMTO        = -2;
 
 // bar line span for 1-line staves is special: goes from 2sp above the line to 2sp below the line;
-static const int BARLINE_SPAN_1LINESTAFF_FROM   = -4;
-static const int BARLINE_SPAN_1LINESTAFF_TO     = 4;
+static constexpr int BARLINE_SPAN_1LINESTAFF_FROM   = -4;
+static constexpr int BARLINE_SPAN_1LINESTAFF_TO     = 4;
 
 // data for some preset bar line span types
-static const int BARLINE_SPAN_TICK1_FROM        = -1;
-static const int BARLINE_SPAN_TICK1_TO          = -7;
-static const int BARLINE_SPAN_TICK2_FROM        = -2;
-static const int BARLINE_SPAN_TICK2_TO          = -6;
-static const int BARLINE_SPAN_SHORT1_FROM       = 2;
-static const int BARLINE_SPAN_SHORT1_TO         = -2;
-static const int BARLINE_SPAN_SHORT2_FROM       = 1;
-static const int BARLINE_SPAN_SHORT2_TO         = -1;
+static constexpr int BARLINE_SPAN_TICK1_FROM        = -1;
+static constexpr int BARLINE_SPAN_TICK1_TO          = -7;
+static constexpr int BARLINE_SPAN_TICK2_FROM        = -2;
+static constexpr int BARLINE_SPAN_TICK2_TO          = -6;
+static constexpr int BARLINE_SPAN_SHORT1_FROM       = 2;
+static constexpr int BARLINE_SPAN_SHORT1_TO         = -2;
+static constexpr int BARLINE_SPAN_SHORT2_FROM       = 1;
+static constexpr int BARLINE_SPAN_SHORT2_TO         = -1;
 
 //---------------------------------------------------------
 //   BarLineTableItem

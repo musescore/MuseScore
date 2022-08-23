@@ -23,17 +23,19 @@
 #include "ambitus.h"
 
 #include "translation.h"
+
 #include "draw/types/pen.h"
 #include "rw/compat/read206.h"
 #include "rw/xml.h"
 
-#include "factory.h"
+#include "accidental.h"
 #include "chord.h"
+#include "factory.h"
 #include "measure.h"
+#include "note.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
-#include "stafftype.h"
 #include "system.h"
 #include "utils.h"
 

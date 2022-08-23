@@ -26,8 +26,6 @@
 #include "stafftype.h"
 
 namespace mu::engraving {
-class XmlReader;
-
 //---------------------------------------------------------
 //   StaffTypeList
 //    this list is instantiated for every staff

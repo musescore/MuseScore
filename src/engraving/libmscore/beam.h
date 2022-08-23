@@ -28,12 +28,11 @@
 #include "property.h"
 
 namespace mu::engraving {
-class Factory;
-class ChordRest;
-class MuseScoreView;
 class Chord;
-class System;
+class ChordRest;
+class Factory;
 class Skyline;
+class System;
 
 enum class ActionIconType;
 enum class SpannerSegmentType;

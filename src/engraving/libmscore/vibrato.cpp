@@ -24,17 +24,12 @@
 #include <cmath>
 
 #include "types/typesconv.h"
-#include "style/style.h"
 #include "rw/xml.h"
 
-#include "system.h"
-#include "measure.h"
-#include "utils.h"
 #include "score.h"
-#include "symbolfont.h"
-#include "accidental.h"
-#include "segment.h"
 #include "staff.h"
+#include "symbolfont.h"
+#include "system.h"
 
 #include "log.h"
 

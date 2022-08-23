@@ -33,13 +33,11 @@
 #include "modularity/ioc.h"
 #include "iengravingconfiguration.h"
 
-#include "types/symid.h"
 #include "types/fraction.h"
+#include "types/symid.h"
 #include "types/types.h"
 
-#include "mscore.h"
 #include "shape.h"
-#include "sig.h"
 #include "editdata.h"
 
 namespace mu::engraving {
@@ -54,7 +52,6 @@ enum class Pid;
 class StaffType;
 class XmlReader;
 class XmlWriter;
-class MuseScoreView;
 
 //---------------------------------------------------------
 //   OffsetChange
