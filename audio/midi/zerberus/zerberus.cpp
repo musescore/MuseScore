@@ -179,7 +179,7 @@ void Zerberus::play(const Ms::PlayEvent& event)
       {
       if (busy)
             return;
-      static_assert(MAX_CHANNELS - 1 >= std::numeric_limits<decltype(event.channel())>::max(), "need to add a check for a channel number range");
+      static_assert(MAX_CHANNELS - 1 <= std::numeric_limits<decltype(event.channel())>::max(), "need to add a check for a channel number range");
       //if (event.channel() >= MAX_CHANNELS)
       //      return;
       Channel* cp = _channel[event.channel()];
