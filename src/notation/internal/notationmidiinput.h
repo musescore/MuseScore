@@ -29,6 +29,7 @@
 #include "../inotationmidiinput.h"
 #include "igetscore.h"
 #include "inotationundostack.h"
+#include "inotationinteraction.h"
 
 namespace mu::engraving {
 class Score;
@@ -40,7 +41,7 @@ class NotationMidiInput : public INotationMidiInput
     INJECT(notation, playback::IPlaybackController, playbackController)
 
 public:
-    NotationMidiInput(IGetScore* getScore, INotationUndoStackPtr undoStack);
+    NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction, INotationUndoStackPtr undoStack);
 
     void onMidiEventsReceived(const std::vector<midi::Event>& events) override;
     async::Notification noteChanged() const override;
@@ -52,6 +53,7 @@ private:
     Note* onAddNote(const midi::Event& e);
 
     IGetScore* m_getScore = nullptr;
+    INotationInteractionPtr m_notationInteraction;
     INotationUndoStackPtr m_undoStack;
     async::Notification m_noteChanged;
 
