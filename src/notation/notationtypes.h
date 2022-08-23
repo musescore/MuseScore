@@ -641,6 +641,19 @@ constexpr bool isFretIndexValid(int fretIndex)
 {
     return 0 <= fretIndex && fretIndex < MAX_FRET;
 }
+
+inline bool isVerticalBoxTextStyle(TextStyleType type)
+{
+    static const std::set<TextStyleType> types {
+        TextStyleType::TITLE,
+        TextStyleType::SUBTITLE,
+        TextStyleType::COMPOSER,
+        TextStyleType::POET,
+        TextStyleType::INSTRUMENT_EXCERPT,
+    };
+
+    return mu::contains(types, type);
+}
 }
 
 #endif // MU_NOTATION_NOTATIONTYPES_H

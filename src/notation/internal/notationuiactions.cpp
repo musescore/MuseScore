@@ -1218,6 +1218,11 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "Add tied note to chord")
              ),
+    UiAction("add-image",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Image")
+             ),
     UiAction("title-text",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
@@ -1247,6 +1252,12 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&Part name"),
              TranslatableString("action", "Add text: part name")
+             ),
+    UiAction("frame-text",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Text"),
+             TranslatableString("action", "Add frame text")
              ),
     UiAction("system-text",
              mu::context::UiCtxNotationOpened,

@@ -53,6 +53,8 @@ private:
     uicomponents::MenuItemList makeElementItems();
     uicomponents::MenuItemList makeInsertMeasuresItems();
     uicomponents::MenuItemList makeChangeInstrumentItems();
+    uicomponents::MenuItemList makeVerticalBoxItems();
+    uicomponents::MenuItemList makeHorizontalBoxItems();
 
     bool isSingleSelection() const;
     bool canSelectSimilarInRange() const;
