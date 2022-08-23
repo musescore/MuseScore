@@ -372,6 +372,12 @@ void Beam::layout1()
     //
     // determine beam stem direction
     //
+    if (_elements.empty()) {
+        return;
+    }
+    ChordRest* firstNote = _elements.front();
+    Measure* measure = firstNote->measure();
+    bool hasMultipleVoices = measure->hasVoices(firstNote->staffIdx(), tick(), ticks());
     if (_direction != DirectionV::AUTO) {
         _up = _direction == DirectionV::UP;
     } else if (_maxMove > 0) {
@@ -379,11 +385,12 @@ void Beam::layout1()
     } else if (_minMove < 0) {
         _up = true;
     } else if (_isGrace) {
-        _up = true;
+        if (hasMultipleVoices) {
+            _up = firstNote->track() % 2 == 0;
+        } else {
+            _up = true;
+        }
     } else if (_notes.size()) {
-        ChordRest* firstNote = _elements.front();
-        Measure* measure = firstNote->measure();
-        bool hasMultipleVoices = measure->hasVoices(firstNote->staffIdx(), tick(), ticks());
         if (hasMultipleVoices) {
             _up = firstNote->track() % 2 == 0;
         } else {
@@ -399,7 +406,6 @@ void Beam::layout1()
         _up = true;
     }
 
-    ChordRest* firstNote = _elements.front();
     int middleStaffLine = firstNote->staffType()->middleLine();
     for (size_t i = 0; i < _notes.size(); i++) {
         _notes[i] += middleStaffLine;
