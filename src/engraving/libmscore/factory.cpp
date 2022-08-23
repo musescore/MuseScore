@@ -642,3 +642,11 @@ CREATE_ITEM_IMPL(HBox, ElementType::HBOX, System, isAccessibleEnabled)
 CREATE_ITEM_IMPL(TBox, ElementType::TBOX, System, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(FBox, ElementType::FBOX, System, isAccessibleEnabled)
+
+Image* Factory::createImage(EngravingItem * parent)
+{
+    Image* image = new Image(parent);
+    image->setParent(parent);
+
+    return image;
+}

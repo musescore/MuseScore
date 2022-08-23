@@ -105,6 +105,7 @@ private:
     bool isElementsSelected(const std::vector<ElementType>& elementsTypes) const;
 
     void addText(TextStyleType type);
+    void addImage();
     void addFiguredBass();
 
     void selectAllSimilarElements();
