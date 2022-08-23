@@ -483,11 +483,7 @@ bool Chord::containsEqualTremolo(const Chord* other) const
 
 double Chord::noteHeadWidth() const
 {
-    double nhw = score()->noteHeadWidth();
-    if (_noteType != NoteType::NORMAL) {
-        nhw *= score()->styleD(Sid::graceNoteMag);
-    }
-    return nhw * mag();
+    return score()->noteHeadWidth() * mag();
 }
 
 //! Returns Chord coordinates
