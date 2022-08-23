@@ -462,6 +462,10 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
                 secondStaffShape.translate(PointF(0.0, dist));
                 segShape.add(secondStaffShape);
             }
+
+            // HACK: ignore lyrics shape by removing them from the vector
+            mu::remove_if(segShape, [](ShapeElement& shapeEl){ return shapeEl.toItem && shapeEl.toItem->isLyrics(); });
+
             for (unsigned i=0; i < slurRects.size(); i++) {
                 bool leftSection = i < slurRects.size() / 3;
                 bool midSection = i >= slurRects.size() / 3 && i < 2 * slurRects.size() / 3;
