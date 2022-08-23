@@ -940,7 +940,6 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     m_dragData.mode = mode;
 
     PointF normalizedBegin = m_dragData.beginMove - m_dragData.elementOffset;
-
     PointF delta = toPos - normalizedBegin;
     PointF evtDelta = toPos - m_dragData.ed.pos;
 
@@ -982,7 +981,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
         m_dragData.ed.moveDelta = m_dragData.ed.delta - m_dragData.elementOffset;
         m_dragData.ed.addData(m_editData.getData(m_editData.element));
         m_editData.element->editDrag(m_dragData.ed);
-    } else if (isElementEditStarted()) {
+    } else if (m_editData.element && !m_editData.element->hasGrips()) {
         m_dragData.ed.delta = evtDelta;
         m_editData.element->editDrag(m_dragData.ed);
     } else {
@@ -2149,6 +2148,10 @@ void NotationInteraction::drawSelectionRange(draw::Painter* painter)
 
 void NotationInteraction::drawGripPoints(draw::Painter* painter)
 {
+    if (isDragStarted() && !isGripEditStarted()) {
+        return;
+    }
+
     mu::engraving::EngravingItem* editedElement = m_editData.element;
     int gripsCount = editedElement ? editedElement->gripsCount() : 0;
 
@@ -2692,6 +2695,26 @@ void NotationInteraction::editText(QInputMethodEvent* event)
     notifyAboutTextEditingChanged();
 }
 
+bool NotationInteraction::needStartEditGrip(QKeyEvent* event) const
+{
+    if (!m_editData.element || !m_editData.element->hasGrips()) {
+        return false;
+    }
+
+    if (isGripEditStarted()) {
+        return false;
+    }
+
+    static const std::set<Qt::Key> arrows {
+        Qt::Key_Left,
+        Qt::Key_Right,
+        Qt::Key_Up,
+        Qt::Key_Down
+    };
+
+    return mu::contains(arrows, static_cast<Qt::Key>(event->key()));
+}
+
 bool NotationInteraction::handleKeyPress(QKeyEvent* event)
 {
     if (event->modifiers() & Qt::KeyboardModifier::AltModifier) {
@@ -2741,10 +2764,6 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
     m_editData.evtDelta = m_editData.moveDelta = m_editData.delta;
     m_editData.hRaster = hRaster;
     m_editData.vRaster = vRaster;
-
-    if (m_editData.curGrip == mu::engraving::Grip::NO_GRIP) {
-        m_editData.curGrip = m_editData.element->defaultGrip();
-    }
 
     if (m_editData.curGrip != mu::engraving::Grip::NO_GRIP && int(m_editData.curGrip) < m_editData.grips) {
         m_editData.pos = m_editData.grip[int(m_editData.curGrip)].center() + m_editData.delta;
@@ -2866,6 +2885,31 @@ void NotationInteraction::startEditGrip(const PointF& pos)
     startEditGrip(selection()->element(), mu::engraving::Grip(grip));
 }
 
+void NotationInteraction::startEditGrip(EngravingItem* element, mu::engraving::Grip grip)
+{
+    if (m_editData.element == element && m_editData.curGrip == grip) {
+        return;
+    }
+
+    m_editData.element = element;
+    m_editData.curGrip = grip;
+
+    updateAnchorLines();
+    m_editData.element->startEdit(m_editData);
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::endEditGrip()
+{
+    if (m_editData.curGrip == Grip::NO_GRIP) {
+        return;
+    }
+
+    m_editData.curGrip = Grip::NO_GRIP;
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::updateAnchorLines()
 {
     std::vector<LineF> lines;
@@ -2884,24 +2928,9 @@ void NotationInteraction::updateAnchorLines()
     setAnchorLines(lines);
 }
 
-void NotationInteraction::startEditGrip(EngravingItem* element, mu::engraving::Grip grip)
-{
-    if (m_editData.element == element && m_editData.curGrip == grip) {
-        return;
-    }
-
-    m_editData.element = element;
-    m_editData.curGrip = grip;
-
-    updateAnchorLines();
-    m_editData.element->startEdit(m_editData);
-
-    notifyAboutNotationChanged();
-}
-
 bool NotationInteraction::isElementEditStarted() const
 {
-    return m_editData.element != nullptr && (m_editData.grips == 0 || m_editData.curGrip != mu::engraving::Grip::NO_GRIP);
+    return m_editData.element != nullptr;
 }
 
 void NotationInteraction::startEditElement(EngravingItem* element)
@@ -2916,8 +2945,6 @@ void NotationInteraction::startEditElement(EngravingItem* element)
 
     if (element->isTextBase()) {
         startEditText(element);
-    } else if (element->hasGrips()) {
-        startEditGrip(element, element->defaultGrip());
     } else if (element->isEditable()) {
         element->startEdit(m_editData);
         m_editData.element = element;
@@ -3013,6 +3040,10 @@ void NotationInteraction::editElement(QKeyEvent* event)
     }
 
     startEdit();
+
+    if (needStartEditGrip(event)) {
+        m_editData.curGrip = m_editData.element->defaultGrip();
+    }
 
     bool handled = m_editData.element->edit(m_editData);
     if (!handled) {

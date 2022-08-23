@@ -141,6 +141,7 @@ public:
     virtual bool isHitGrip(const PointF& pos) const = 0;
     virtual void startEditGrip(const PointF& pos) = 0;
     virtual void startEditGrip(EngravingItem* element, mu::engraving::Grip grip) = 0;
+    virtual void endEditGrip() = 0;
 
     virtual bool isElementEditStarted() const = 0;
     virtual void startEditElement(EngravingItem* element) = 0;
