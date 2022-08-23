@@ -121,6 +121,7 @@ using StaffType = mu::engraving::StaffType;
 using StaffTypeId = mu::engraving::StaffTypes;
 using StaffName = mu::engraving::StaffName;
 using StaffNameList = mu::engraving::StaffNameList;
+using Segment = mu::engraving::Segment;
 using MidiArticulation = mu::engraving::MidiArticulation;
 using TextStyleType = mu::engraving::TextStyleType;
 using Trait = mu::engraving::Trait;
@@ -267,6 +268,7 @@ struct NoteInputState
     engraving::track_idx_t currentTrack = 0;
     const Drumset* drumset = nullptr;
     StaffGroup staffGroup = StaffGroup::STANDARD;
+    Segment* segment = nullptr;
 };
 
 enum class NoteFilter

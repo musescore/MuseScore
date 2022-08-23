@@ -656,7 +656,7 @@ Note::Note(const Note& n, bool link)
 
     // types in _el: SYMBOL, IMAGE, FINGERING, TEXT, BEND
     const Staff* stf = staff();
-    bool tabFingering = stf->staffTypeForElement(this)->showTabFingering();
+    bool tabFingering = stf ? stf->staffTypeForElement(this)->showTabFingering() : false;
     for (EngravingItem* e : n._el) {
         if (e->isFingering() && staff()->isTabStaff(tick()) && !tabFingering) {      // tablature has no fingering
             continue;
