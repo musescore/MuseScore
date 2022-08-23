@@ -334,7 +334,7 @@ void SlurSegment::editDrag(EditData& ed)
 //---------------------------------------------------------
 void SlurSegment::adjustEndpoints()
 {
-    const double staffLineMargin = 0.15;
+    const double staffLineMargin = 0.175 + (0.5 * score()->styleS(Sid::staffLineWidth).val());
     PointF p1 = ups(Grip::START).p;
     PointF p2 = ups(Grip::END).p;
 
