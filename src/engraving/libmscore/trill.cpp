@@ -238,6 +238,21 @@ EngravingItem* TrillSegment::drop(EditData& data)
 }
 
 //---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void TrillSegment::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+{
+    func(data, this);
+    if (isSingleType() || isBeginType()) {
+        Accidental* a = trill()->accidental();
+        if (a) {
+            func(data, a);
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   propertyDelegate
 //---------------------------------------------------------
 
