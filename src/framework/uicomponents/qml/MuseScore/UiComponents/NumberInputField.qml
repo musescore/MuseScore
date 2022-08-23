@@ -31,6 +31,8 @@ FocusScope {
     property int maxValue: 999
     property int value: 0
 
+    property bool live: true
+
     property bool addLeadingZeros: true
     property int displayedNumberLength: maxValue.toString().length
 
@@ -81,9 +83,7 @@ FocusScope {
     }
 
     onValueChanged: {
-        if (textField.textAsInt() >= root.minValue) {
-            textField.text = prv.pad(root.value)
-        }
+        textField.text = prv.pad(root.value)
     }
 
     NavigationControl {
@@ -112,7 +112,7 @@ FocusScope {
         text: prv.pad(root.value)
 
         function textAsInt() {
-             return textField.text.length > 0 ? parseInt(textField.text) : 0
+            return textField.text.length > 0 ? parseInt(textField.text) : 0
         }
 
         onTextEdited: {
@@ -128,18 +128,21 @@ FocusScope {
             }
 
             newValue = Math.min(newValue, root.maxValue)
-
-            //! NOTE: displayed text can have a value less than minValue
-            // to allow the user to easily enter a new value
             textField.text = prv.pad(newValue)
-            newValue = Math.max(newValue, root.minValue)
 
-            root.valueEdited(newValue)
+            if (root.live) {
+                newValue = Math.max(newValue, root.minValue)
+                root.valueEdited(newValue)
+            }
         }
 
         onActiveFocusChanged: {
-            if (!activeFocus) {
-                textField.text = prv.pad(root.value)
+            if (!activeFocus && !root.live) {
+                //! NOTE do not adjust the value immediately to minValue,
+                // let the user enter the whole number
+                var newValue = Math.max(textField.textAsInt(), root.minValue)
+                textField.text = prv.pad(newValue)
+                root.valueEdited(newValue)
             }
         }
 
