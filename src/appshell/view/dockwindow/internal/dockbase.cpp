@@ -377,6 +377,8 @@ void DockBase::open()
 
     m_dockWidget->show();
     setVisible(true);
+
+    applySizeConstraints();
 }
 
 void DockBase::close()
