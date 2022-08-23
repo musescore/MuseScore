@@ -1005,39 +1005,39 @@ PalettePtr PaletteCreator::newArpeggioPalette()
 
     auto cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::FALL);
-    sp->appendElement(cl, TConv::userName(ChordLineType::FALL));
+    sp->appendElement(cl, cl->chordLineTypeName());
 
     cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::DOIT);
-    sp->appendElement(cl, TConv::userName(ChordLineType::DOIT));
+    sp->appendElement(cl, cl->chordLineTypeName());
 
     cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::PLOP);
-    sp->appendElement(cl, TConv::userName(ChordLineType::PLOP));
+    sp->appendElement(cl, cl->chordLineTypeName());
 
     cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::SCOOP);
-    sp->appendElement(cl, TConv::userName(ChordLineType::SCOOP));
+    sp->appendElement(cl, cl->chordLineTypeName());
 
     cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::FALL);
     cl->setStraight(true);
-    sp->appendElement(cl, QT_TRANSLATE_NOOP("palette", "Slide out down"));
+    sp->appendElement(cl, cl->chordLineTypeName());
 
     cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::DOIT);
     cl->setStraight(true);
-    sp->appendElement(cl, QT_TRANSLATE_NOOP("palette", "Slide out up"));
+    sp->appendElement(cl, cl->chordLineTypeName());
 
     cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::PLOP);
     cl->setStraight(true);
-    sp->appendElement(cl, QT_TRANSLATE_NOOP("palette", "Slide in above"));
+    sp->appendElement(cl, cl->chordLineTypeName());
 
     cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::SCOOP);
     cl->setStraight(true);
-    sp->appendElement(cl, QT_TRANSLATE_NOOP("palette", "Slide in below"));
+    sp->appendElement(cl, cl->chordLineTypeName());
 
     return sp;
 }

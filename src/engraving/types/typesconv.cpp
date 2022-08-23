@@ -2028,32 +2028,32 @@ size_t TConv::embellishmentsCount()
 }
 
 //! TODO Add xml names
-static const std::array<Item<ChordLineType>, 6> CHORDLINE_TYPES = { {
-    { ChordLineType::NOTYPE,    "0" },
-    { ChordLineType::FALL,      "1",     TranslatableString("engraving", "Fall") },
-    { ChordLineType::DOIT,      "2",     TranslatableString("engraving", "Doit") },
-    { ChordLineType::PLOP,      "3",     TranslatableString("engraving", "Plop") },
-    { ChordLineType::SCOOP,     "4",     TranslatableString("engraving", "Scoop") }
+static const std::array<Item<std::pair<ChordLineType, bool /*straight*/> >, 10> CHORDLINE_TYPES = { {
+    { { ChordLineType::NOTYPE, false },    "0" },
+    { { ChordLineType::FALL, false },      "1",     TranslatableString("engraving", "Fall") },
+    { { ChordLineType::DOIT, false },      "2",     TranslatableString("engraving", "Doit") },
+    { { ChordLineType::PLOP, false },      "3",     TranslatableString("engraving", "Plop") },
+    { { ChordLineType::SCOOP, false },     "4",     TranslatableString("engraving", "Scoop") },
+    { { ChordLineType::NOTYPE, true },     "0" },
+    { { ChordLineType::FALL, true },       "1",     TranslatableString("engraving", "Slide out down") },
+    { { ChordLineType::DOIT, true },       "2",     TranslatableString("engraving", "Slide out up") },
+    { { ChordLineType::PLOP, true },       "3",     TranslatableString("engraving", "Slide in above") },
+    { { ChordLineType::SCOOP, true },      "4",     TranslatableString("engraving", "Slide in below") }
 } };
 
-const TranslatableString& TConv::userName(ChordLineType v)
+const TranslatableString& TConv::userName(ChordLineType v, bool straight)
 {
-    return findUserNameByType<ChordLineType>(CHORDLINE_TYPES, v);
-}
-
-String TConv::translatedUserName(ChordLineType v)
-{
-    return userName(v).translated();
+    return findUserNameByType<std::pair<ChordLineType, bool> >(CHORDLINE_TYPES, { v, straight });
 }
 
 AsciiStringView TConv::toXml(ChordLineType v)
 {
-    return findXmlTagByType<ChordLineType>(CHORDLINE_TYPES, v);
+    return findXmlTagByType<std::pair<ChordLineType, bool> >(CHORDLINE_TYPES, { v, false });
 }
 
 ChordLineType TConv::fromXml(const AsciiStringView& tag, ChordLineType def)
 {
-    return findTypeByXmlTag<ChordLineType>(CHORDLINE_TYPES, tag, def);
+    return findTypeByXmlTag<std::pair<ChordLineType, bool> >(CHORDLINE_TYPES, tag, { def, false }).first;
 }
 
 struct DrumPitchItem {
