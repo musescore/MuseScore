@@ -25,12 +25,12 @@
 
 #include "internal/dockbase.h"
 
-#include "kddockwidgets/private/TitleBar_p.h"
+#include "thirdparty/KDDockWidgets/src/private/quick/TitleBarQuick_p.h"
 
 #include <QtGlobal>
 
 namespace mu::dock {
-class DockTitleBar : public KDDockWidgets::TitleBar
+class DockTitleBar : public KDDockWidgets::TitleBarQuick
 {
 public:
     explicit DockTitleBar(KDDockWidgets::Frame* parent);
