@@ -379,15 +379,18 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
     ChordRest* startCR = slur()->startCR();
     ChordRest* endCR = slur()->endCR();
 
+    if (!startCR || !endCR) {
+        return;
+    }
     Segment* startSeg = nullptr;
     if (isSingleBeginType()) {
-        startSeg = startCR ? startCR->segment() : nullptr; // first of the slur
+        startSeg = startCR->segment(); // first of the slur
     } else {
         startSeg = system()->firstMeasure()->findFirstR(SegmentType::ChordRest, Fraction(0, 0)); // first of the system
     }
     Segment* endSeg = nullptr;
     if (isSingleEndType()) {
-        endSeg = endCR ? endCR->segment() : nullptr; // last of the slur
+        endSeg = endCR->segment(); // last of the slur
     } else {
         endSeg = system()->lastMeasure()->last(); // last of the system
     }
