@@ -107,9 +107,9 @@ Item {
             navigation.panel: navPanel
             navigation.row: 2 + model.index
             navigation.accessible.name: titleLabel.text
+
             onNavigationActivated: {
                 prv.currentItemNavigationIndex = [navigation.row, navigation.column]
-                root.titleClicked(model.index)
             }
 
             StyledTextLabel {
