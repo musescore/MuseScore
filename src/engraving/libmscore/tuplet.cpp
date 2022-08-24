@@ -352,7 +352,7 @@ void Tuplet::layout()
         // special case: one of the bracket endpoints is
         // a rest
         //
-        if (cr1->isChord() && cr2->isChord()) {
+        if (!cr1->isChord() && cr2->isChord()) {
             if (p2.y() < p1.y()) {
                 p1.setY(p2.y());
             } else {
