@@ -135,12 +135,12 @@ int64_t Date::daysTo(const Date& d) const
     toTM(meTM, *this);
 
     std::tm otherTM = {};
-    toTM(otherTM, *this);
+    toTM(otherTM, d);
 
     std::time_t meTime = std::mktime(&meTM);
     std::time_t otherTime = std::mktime(&otherTM);
     if (meTime != (std::time_t)(-1) && otherTime != (std::time_t)(-1)) {
-        double difference = std::difftime(meTime, otherTime) / (60 * 60 * 24);
+        double difference = std::difftime(otherTime, meTime) / (60 * 60 * 24);
         return difference;
     }
     return 0;
