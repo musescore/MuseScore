@@ -3925,16 +3925,6 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
-         "toggle-insert-mode",
-         QT_TRANSLATE_NOOP("action","Toggle Insert Mode"),
-         QT_TRANSLATE_NOOP("action","Toggle 'Insert Mode'"),
-         0,
-         Icons::Invalid_ICON,
-         Qt::ApplicationShortcut
-         },
-      {
-         MsWidget::MAIN_WINDOW,
          STATE_ALL,
          "show-tours",
          QT_TRANSLATE_NOOP("action", "Show Tours"),

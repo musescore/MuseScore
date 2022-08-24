@@ -4299,7 +4299,6 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "pitch-down-diatonic-alterations", [](Score* cs, EditData&){ cs->transposeDiatonicAlterations(TransposeDirection::DOWN);}},
             { "delete",                     [](Score* cs, EditData&){ cs->cmdDeleteSelection();                                       }},
             { "full-measure-rest",          [](Score* cs, EditData&){ cs->cmdFullMeasureRest();                                       }},
-            { "toggle-insert-mode",         [](Score* cs, EditData&){ cs->_is.setInsertMode(!cs->_is.insertMode());                   }},
             { "pitch-up",                   [](Score* cs, EditData&){ cs->cmdPitchUp();                                               }},
             { "pitch-down",                 [](Score* cs, EditData&){ cs->cmdPitchDown();                                             }},
             { "time-delete",                [](Score* cs, EditData&){ cs->cmdTimeDelete();                                            }},
