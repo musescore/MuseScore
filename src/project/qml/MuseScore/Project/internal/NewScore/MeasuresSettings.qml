@@ -54,6 +54,8 @@ FlatButton {
         }
 
         font: ui.theme.largeBodyFont
+        //: Please provide a translation for the singular and all plural forms available in your language.
+        //: See https://github.com/musescore/MuseScore/wiki/Help-translate-MuseScore#plural-forms
         text: qsTrc("project/newscore", "%n measure(s),", "", model.measureCount) + "\n" + pickupMessage
     }
 

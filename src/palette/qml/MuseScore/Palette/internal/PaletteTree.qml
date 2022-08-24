@@ -407,6 +407,8 @@ StyledListView {
                 paletteTree.paletteController.remove(modelIndex);
             }
 
+            //: Please provide a translation for the singular and all plural forms available in your language.
+            //: See https://github.com/musescore/MuseScore/wiki/Help-translate-MuseScore#plural-forms
             text: filter.length ? qsTrc("palette", "%1, contains %n matching element(s)", "", mainPalette.count).arg(model.accessibleText)
                                 : model.expanded ? qsTrc("palette", "%1 expanded", "tree item not collapsed").arg(model.accessibleText)
                                                  : model.accessibleText

@@ -315,6 +315,10 @@ Fraction MeasureRepeat::ticks() const
 
 String MeasureRepeat::accessibleInfo() const
 {
+    //: Please provide a translation for the singular and all plural forms available in your language.
+    //: See https://github.com/musescore/MuseScore/wiki/Help-translate-MuseScore#plural-forms
+    //: You may translate singular case to the equivalent of "One measure" instead of the "1 meassures" form, but only do this
+    //: if you are sure that the translation is only used for a single value of "%n".
     return mtrc("engraving", "%1; Duration: %n measure(s)", nullptr, numMeasures()).arg(EngravingItem::accessibleInfo());
 }
 

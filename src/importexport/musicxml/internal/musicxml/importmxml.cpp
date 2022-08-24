@@ -90,6 +90,11 @@ Err importMusicXMLfromBuffer(Score* score, const QString& /*name*/, QIODevice* d
     const auto pass2_errors = pass2.errors();
     if (!(pass1_errors.isEmpty() && pass2_errors.isEmpty())) {
         if (!MScore::noGui) {
+            //: Please provide a translation for the singular and all plural forms available in your language.
+            //: See https://github.com/musescore/MuseScore/wiki/Help-translate-MuseScore#plural-forms
+            //: A possible translation for the 0 case is not used, yet mandatory.
+            //: You may translate singular case to the equivalent of "One error" instead of the "1 error" form, but only do this
+            //: if you are sure that the translation is only used for a single value of "%n".
             const QString text = qtrc("iex_musicxml", "%n error(s) found, import may be incomplete.",
                                       nullptr, pass1_errors.count() + pass2_errors.count());
             if (musicXMLImportErrorDialog(text, pass1.errors() + pass2.errors()) != QMessageBox::Yes) {

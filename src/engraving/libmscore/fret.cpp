@@ -1522,7 +1522,10 @@ String FretDiagram::screenReaderInfo() const
             }
         }
 
-        //: Omit the "%n " for the singular translation (and the "(s)" too)
+        //: Please provide a translation for the singular and all plural forms available in your language.
+        //: See https://github.com/musescore/MuseScore/wiki/Help-translate-MuseScore#plural-forms
+        //: You may translate singular case to the equivalent of "one dot" or even just "dot" instead of the "1 dot" form, but only do this
+        //: if you are sure that the translation is only used for a single value of "%n".
         String dotsInfo = mtrc("engraving", "%n dot(s) on fret(s) %1", "", dotsCount).arg(fretInfo);
 
         detailedInfo = String(u"%1 %2 %3 %4").arg(detailedInfo, stringIdent, markerName, dotsInfo);
@@ -1565,6 +1568,10 @@ String FretDiagram::screenReaderInfo() const
 
     String basicInfo = String(u"%1 %2").arg(translatedTypeUserName(), chordName);
 
+    //: Please provide a translation for the singular and all plural forms available in your language.
+    //: See https://github.com/musescore/MuseScore/wiki/Help-translate-MuseScore#plural-forms
+    //: You may translate singular case to the equivalent of "one string" instead of the "1 string" form, but only do this
+    //: if you are sure that the translation is only used for a single value of "%n".
     String generalInfo = mtrc("engraving", "%n string(s) total", "", _strings);
 
     String res = String(u"%1 %2 %3").arg(basicInfo, generalInfo, detailedInfo);
