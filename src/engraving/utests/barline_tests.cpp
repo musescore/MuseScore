@@ -22,13 +22,15 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/factory.h"
 #include "libmscore/barline.h"
-#include "libmscore/measure.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/system.h"
-#include "libmscore/undo.h"
 #include "libmscore/bracket.h"
+#include "libmscore/factory.h"
+#include "libmscore/layoutbreak.h"
+#include "libmscore/masterscore.h"
+#include "libmscore/measure.h"
+#include "libmscore/system.h"
+#include "libmscore/timesig.h"
+#include "libmscore/undo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

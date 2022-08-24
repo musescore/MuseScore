@@ -37,6 +37,7 @@
 #include "print/iprintprovider.h"
 #include "inotationreadersregister.h"
 #include "isaveprojectscenario.h"
+#include "io/ifilesystem.h"
 
 #include "async/asyncable.h"
 
@@ -62,6 +63,7 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
     INJECT(project, cloud::IUploadingService, uploadingService)
     INJECT(project, playback::IPlaybackController, playbackController)
     INJECT(project, print::IPrintProvider, printProvider)
+    INJECT(project, io::IFileSystem, fileSystem)
 
 public:
     void init();

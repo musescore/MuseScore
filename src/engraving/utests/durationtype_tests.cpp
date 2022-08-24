@@ -22,20 +22,12 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/mscore.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/note.h"
-#include "libmscore/accidental.h"
 #include "libmscore/chord.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
-#include "libmscore/tremolo.h"
-#include "libmscore/articulation.h"
-#include "libmscore/key.h"
-#include "libmscore/pitchspelling.h"
 
 #include "utils/scorerw.h"
-#include "utils/scorecomp.h"
 
 using namespace mu;
 using namespace mu::engraving;

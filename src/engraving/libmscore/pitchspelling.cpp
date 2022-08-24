@@ -29,12 +29,12 @@
 #include "translation.h"
 #include "types/typesconv.h"
 
-#include "note.h"
-#include "key.h"
-#include "staff.h"
 #include "chord.h"
-#include "score.h"
+#include "key.h"
+#include "note.h"
 #include "part.h"
+#include "score.h"
+#include "staff.h"
 #include "utils.h"
 
 #include "log.h"

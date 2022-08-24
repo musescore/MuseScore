@@ -21,13 +21,14 @@
  */
 
 #include "key.h"
+
 #include "rw/xml.h"
-#include "utils.h"
-#include "score.h"
-#include "pitchspelling.h"
-#include "keylist.h"
+
 #include "accidental.h"
 #include "part.h"
+#include "pitchspelling.h"
+#include "score.h"
+#include "utils.h"
 
 #include "log.h"
 

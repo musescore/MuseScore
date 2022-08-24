@@ -24,7 +24,7 @@
 #define __SLURTIE_H__
 
 #include "spanner.h"
-#include "mscore.h"
+
 #include "draw/types/painterpath.h"
 
 namespace mu::engraving {

@@ -96,7 +96,9 @@ const char* PaletteCell::translationContext() const
     switch (type) {
     case ElementType::ACTION_ICON:
         return "action";
+    case ElementType::ARPEGGIO:
     case ElementType::CHORDLINE:
+    case ElementType::GLISSANDO:
     case ElementType::HARMONY:
     case ElementType::JUMP:
     case ElementType::KEYSIG:

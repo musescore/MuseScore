@@ -20,14 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "duration.h"
+#include "durationelement.h"
+
 #include "rw/xml.h"
-#include "measure.h"
-#include "tuplet.h"
-#include "score.h"
-#include "undo.h"
-#include "staff.h"
+
 #include "property.h"
+#include "score.h"
+#include "staff.h"
+#include "tuplet.h"
+#include "undo.h"
 
 using namespace mu;
 using namespace mu::engraving;

@@ -23,7 +23,7 @@
 #ifndef __REHEARSALMARK_H__
 #define __REHEARSALMARK_H__
 
-#include "systemtext.h"
+#include "textbase.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------

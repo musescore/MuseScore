@@ -26,12 +26,12 @@
 #include <vector>
 
 #include "types/types.h"
-#include "draw/types/geometry.h"
 
 namespace mu::engraving {
-class XmlWriter;
 class Score;
 class XmlReader;
+class XmlWriter;
+
 enum class AccidentalVal : signed char;
 
 //---------------------------------------------------------
@@ -45,6 +45,7 @@ struct KeySym {
     double xPos;    // x position in staff spatium units
 };
 
+//---------------------------------------------------------
 //   CustDef
 //    definition of one symbol in Custom KeySig
 //---------------------------------------------------------
@@ -56,7 +57,6 @@ struct CustDef {
     int octAlt { 0 };       // octave alteration
 };
 
-//---------------------------------------------------------
 //---------------------------------------------------------
 //   KeySigEvent
 //---------------------------------------------------------

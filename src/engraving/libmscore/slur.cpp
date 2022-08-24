@@ -29,7 +29,9 @@
 #include "rw/xml.h"
 
 #include "articulation.h"
+#include "beam.h"
 #include "chord.h"
+#include "hook.h"
 #include "measure.h"
 #include "mscoreview.h"
 #include "navigate.h"
@@ -39,7 +41,6 @@
 #include "system.h"
 #include "tie.h"
 #include "undo.h"
-#include "hook.h"
 
 // included for gonville/musejazz hook hack in SlurPos
 #include "symbolfont.h"
@@ -333,7 +334,7 @@ void SlurSegment::editDrag(EditData& ed)
 //---------------------------------------------------------
 void SlurSegment::adjustEndpoints()
 {
-    const double staffLineMargin = 0.15;
+    const double staffLineMargin = 0.175 + (0.5 * score()->styleS(Sid::staffLineWidth).val());
     PointF p1 = ups(Grip::START).p;
     PointF p2 = ups(Grip::END).p;
 
@@ -462,6 +463,10 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
                 secondStaffShape.translate(PointF(0.0, dist));
                 segShape.add(secondStaffShape);
             }
+
+            // HACK: ignore lyrics shape by removing them from the vector
+            mu::remove_if(segShape, [](ShapeElement& shapeEl){ return shapeEl.toItem && shapeEl.toItem->isLyrics(); });
+
             for (unsigned i=0; i < slurRects.size(); i++) {
                 bool leftSection = i < slurRects.size() / 3;
                 bool midSection = i >= slurRects.size() / 3 && i < 2 * slurRects.size() / 3;

@@ -28,8 +28,6 @@ using namespace mu::appshell;
 using namespace mu::audio;
 using namespace mu::midi;
 
-static constexpr int INVALID_DEVICE_ID = -1;
-
 IOPreferencesModel::IOPreferencesModel(QObject* parent)
     : QObject(parent)
 {

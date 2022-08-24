@@ -24,6 +24,7 @@
 #define __IMAGE_CACHE_H__
 
 #include <list>
+
 #include "types/string.h"
 #include "types/bytearray.h"
 #include "io/path.h"

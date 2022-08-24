@@ -23,47 +23,40 @@
 #include "chordrest.h"
 
 #include "translation.h"
-#include "style/style.h"
-#include "rw/xml.h"
+
 #include "rw/writecontext.h"
+#include "rw/xml.h"
+#include "style/style.h"
 #include "types/typesconv.h"
 
-#include "factory.h"
-#include "chord.h"
-#include "system.h"
-#include "measure.h"
-#include "staff.h"
-#include "tuplet.h"
-#include "score.h"
-#include "slur.h"
+#include "actionicon.h"
+#include "articulation.h"
+#include "barline.h"
 #include "beam.h"
 #include "breath.h"
-#include "barline.h"
-#include "articulation.h"
-#include "tempo.h"
-#include "tempotext.h"
-#include "note.h"
-#include "arpeggio.h"
-#include "dynamic.h"
-#include "stafftext.h"
-#include "sig.h"
+#include "chord.h"
 #include "clef.h"
-#include "lyrics.h"
-#include "segment.h"
-#include "stafftype.h"
-#include "undo.h"
-#include "stem.h"
-#include "harmony.h"
-#include "hairpin.h"
+#include "factory.h"
 #include "figuredbass.h"
-#include "actionicon.h"
-#include "utils.h"
-#include "keysig.h"
-#include "page.h"
-#include "hook.h"
-#include "rehearsalmark.h"
+#include "harmony.h"
 #include "instrchange.h"
+#include "keysig.h"
+#include "lyrics.h"
+#include "measure.h"
 #include "navigate.h"
+#include "note.h"
+#include "page.h"
+#include "part.h"
+#include "rehearsalmark.h"
+#include "score.h"
+#include "segment.h"
+#include "sig.h"
+#include "slur.h"
+#include "staff.h"
+#include "stafftype.h"
+#include "system.h"
+#include "tuplet.h"
+#include "utils.h"
 
 #include "log.h"
 
@@ -616,6 +609,15 @@ EngravingItem* ChordRest::drop(EditData& data)
         return 0;
     }
     return 0;
+}
+
+//---------------------------------------------------------
+//   beam
+//---------------------------------------------------------
+
+Beam* ChordRest::beam() const
+{
+    return !(measure() && measure()->stemless(staffIdx())) ? _beam : nullptr;
 }
 
 //---------------------------------------------------------

@@ -25,29 +25,25 @@
 #include <cmath>
 #include <set>
 
-#include "translation.h"
 #include "containers.h"
-#include "style/style.h"
-#include "rw/xml.h"
 #include "realfn.h"
+#include "translation.h"
 
-#include "factory.h"
-#include "score.h"
-#include "utils.h"
-#include "tuplet.h"
-#include "stafftext.h"
+#include "rw/xml.h"
+
+#include "actionicon.h"
 #include "articulation.h"
 #include "chord.h"
-#include "note.h"
+#include "factory.h"
+#include "image.h"
 #include "measure.h"
 #include "measurerepeat.h"
-#include "undo.h"
-#include "staff.h"
-#include "harmony.h"
+#include "note.h"
+#include "score.h"
 #include "segment.h"
+#include "staff.h"
 #include "stafftype.h"
-#include "actionicon.h"
-#include "image.h"
+#include "undo.h"
 
 #include "log.h"
 

@@ -28,10 +28,8 @@
 #include "types/fraction.h"
 #include "types/types.h"
 #include "types/string.h"
-#include "mscore.h"
 
 namespace mu::engraving {
-class EngravingItem;
 class MasterScore;
 class Part;
 class Score;

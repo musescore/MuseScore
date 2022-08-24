@@ -24,16 +24,15 @@
 
 #include <vector>
 
-#include "libmscore/segment.h"
-
 #include "layoutoptions.h"
 #include "layoutcontext.h"
 
 namespace mu::engraving {
-class Score;
-class System;
-class Spanner;
 class Chord;
+class Score;
+class Segment;
+class Spanner;
+class System;
 
 class LayoutSystem
 {

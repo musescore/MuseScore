@@ -25,15 +25,15 @@
 
 #include "log.h"
 
-#include "libmscore/masterscore.h"
+#include "libmscore/note.h"
 #include "libmscore/segment.h"
 
 using namespace mu::notation;
 
 static constexpr int PLAY_INTERVAL = 20;
 
-NotationMidiInput::NotationMidiInput(IGetScore* getScore, INotationUndoStackPtr undoStack)
-    : m_getScore(getScore), m_undoStack(undoStack)
+NotationMidiInput::NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction, INotationUndoStackPtr undoStack)
+    : m_getScore(getScore), m_notationInteraction(notationInteraction), m_undoStack(undoStack)
 {
     QObject::connect(&m_playTimer, &QTimer::timeout, [this]() { doPlayNotes(); });
 }
@@ -134,6 +134,8 @@ Note* NotationMidiInput::onAddNote(const midi::Event& e)
     m_undoStack->commitChanges();
 
     m_noteChanged.notify();
+
+    m_notationInteraction->showItem(is.cr());
 
     return note;
 }

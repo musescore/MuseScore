@@ -22,16 +22,15 @@
 
 #include <gtest/gtest.h>
 
+#include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
 #include "libmscore/page.h"
 #include "libmscore/rest.h"
-#include "libmscore/masterscore.h"
 #include "libmscore/staff.h"
 #include "libmscore/system.h"
 #include "libmscore/tuplet.h"
 
 #include "utils/scorerw.h"
-#include "utils/scorecomp.h"
 
 #include "log.h"
 

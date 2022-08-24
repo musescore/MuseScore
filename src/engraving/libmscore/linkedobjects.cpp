@@ -21,9 +21,9 @@
  */
 #include "linkedobjects.h"
 
-#include "score.h"
 #include "masterscore.h"
 #include "measure.h"
+#include "score.h"
 #include "staff.h"
 
 #include "log.h"

@@ -23,19 +23,15 @@
 #include "bracket.h"
 
 #include "draw/types/brush.h"
-#include "style/style.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
 
+#include "bracketItem.h"
 #include "factory.h"
-#include "utils.h"
 #include "measure.h"
+#include "score.h"
 #include "staff.h"
 #include "system.h"
-#include "score.h"
-#include "system.h"
-#include "mscore.h"
-#include "bracketItem.h"
 
 #include "log.h"
 

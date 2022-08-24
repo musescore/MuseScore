@@ -141,7 +141,7 @@ public:
 //   SigList
 //---------------------------------------------------------
 
-class TimeSigMap : public std::map<int, SigEvent >
+class TimeSigMap : public std::map<int, SigEvent>
 {
     OBJECT_ALLOCATOR(engraving, TimeSigMap)
 

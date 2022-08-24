@@ -32,6 +32,7 @@ namespace mu::engraving {
 class Factory;
 
 class Chord;
+class Note;
 
 //---------------------------------------------------------
 //   @@ ChordLine
@@ -64,13 +65,16 @@ public:
 
     ChordLine* clone() const override { return new ChordLine(*this); }
 
+    Chord* chord() const { return (Chord*)(explicitParent()); }
+
     void setChordLineType(ChordLineType);
     ChordLineType chordLineType() const { return _chordLineType; }
-    Chord* chord() const { return (Chord*)(explicitParent()); }
     bool isStraight() const { return _straight; }
     void setStraight(bool straight) { _straight =  straight; }
     void setLengthX(double length) { _lengthX = length; }
     void setLengthY(double length) { _lengthY = length; }
+
+    const TranslatableString& chordLineTypeName() const;
 
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;

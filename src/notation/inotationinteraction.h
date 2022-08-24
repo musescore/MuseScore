@@ -141,6 +141,7 @@ public:
     virtual bool isHitGrip(const PointF& pos) const = 0;
     virtual void startEditGrip(const PointF& pos) = 0;
     virtual void startEditGrip(EngravingItem* element, mu::engraving::Grip grip) = 0;
+    virtual void endEditGrip() = 0;
 
     virtual bool isElementEditStarted() const = 0;
     virtual void startEditElement(EngravingItem* element) = 0;
@@ -191,8 +192,13 @@ public:
     virtual void changeSelectedNotesVoice(int voiceIndex) = 0;
     virtual void addAnchoredLineToSelectedNotes() = 0;
 
-    virtual Ret canAddText(TextStyleType type) const = 0;
-    virtual void addText(TextStyleType type) = 0;
+    virtual void addTextToTopFrame(TextStyleType type) = 0;
+
+    virtual Ret canAddTextToItem(TextStyleType type, const EngravingItem* item) const = 0;
+    virtual void addTextToItem(TextStyleType type, EngravingItem* item) = 0;
+
+    virtual Ret canAddImageToItem(const EngravingItem* item) const = 0;
+    virtual void addImageToItem(const io::path_t& imagePath, EngravingItem* item) = 0;
 
     virtual Ret canAddFiguredBass() const = 0;
     virtual void addFiguredBass() = 0;

@@ -20,12 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "imageStore.h"
+
 #include "io/fileinfo.h"
 #include "io/file.h"
 
-#include "imageStore.h"
-#include "score.h"
 #include "image.h"
+#include "score.h"
 
 #include "log.h"
 

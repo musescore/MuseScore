@@ -23,7 +23,7 @@
 #ifndef __TUPLET_H__
 #define __TUPLET_H__
 
-#include "duration.h"
+#include "durationelement.h"
 #include "property.h"
 
 namespace mu::engraving {

@@ -31,10 +31,8 @@ class Painter;
 }
 
 namespace mu::engraving {
-class Segment;
 class EngravingItem;
 class Score;
-class Measure;
 
 //---------------------------------------------------------
 //   ShapeElement

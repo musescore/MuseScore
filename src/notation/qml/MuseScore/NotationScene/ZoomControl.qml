@@ -93,6 +93,8 @@ RowLayout {
 
             anchors.verticalCenter: parent.verticalCenter
 
+            live: false
+
             addLeadingZeros: false
             font: ui.theme.bodyFont
 

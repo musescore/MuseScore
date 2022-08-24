@@ -54,6 +54,10 @@ MenuItemList NotationContextMenuModel::makeItemsByElementType(ElementType elemen
         return makeHarmonyItems();
     case ElementType::INSTRUMENT_CHANGE:
         return makeChangeInstrumentItems();
+    case ElementType::VBOX:
+        return makeVerticalBoxItems();
+    case ElementType::HBOX:
+        return makeHorizontalBoxItems();
     default:
         break;
     }
@@ -212,6 +216,37 @@ MenuItemList NotationContextMenuModel::makeChangeInstrumentItems()
     MenuItemList items = makeElementItems();
     items << makeSeparator();
     items << makeMenuItem("change-instrument");
+
+    return items;
+}
+
+MenuItemList NotationContextMenuModel::makeVerticalBoxItems()
+{
+    MenuItemList addMenuItems;
+    addMenuItems << makeMenuItem("frame-text");
+    addMenuItems << makeMenuItem("title-text");
+    addMenuItems << makeMenuItem("subtitle-text");
+    addMenuItems << makeMenuItem("composer-text");
+    addMenuItems << makeMenuItem("poet-text");
+    addMenuItems << makeMenuItem("part-text");
+    addMenuItems << makeMenuItem("add-image");
+
+    MenuItemList items = makeElementItems();
+    items << makeSeparator();
+    items << makeMenu(TranslatableString("notation", "Add"), addMenuItems);
+
+    return items;
+}
+
+MenuItemList NotationContextMenuModel::makeHorizontalBoxItems()
+{
+    MenuItemList addMenuItems;
+    addMenuItems << makeMenuItem("frame-text");
+    addMenuItems << makeMenuItem("add-image");
+
+    MenuItemList items = makeElementItems();
+    items << makeSeparator();
+    items << makeMenu(TranslatableString("notation", "Add"), addMenuItems);
 
     return items;
 }

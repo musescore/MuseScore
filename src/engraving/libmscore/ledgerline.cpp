@@ -26,9 +26,9 @@
 
 #include "chord.h"
 #include "measure.h"
+#include "score.h"
 #include "staff.h"
 #include "system.h"
-#include "score.h"
 
 using namespace mu;
 

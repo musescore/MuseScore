@@ -22,21 +22,13 @@
 
 #include <gtest/gtest.h>
 
+#include "libmscore/engravingitem.h"
 #include "libmscore/masterscore.h"
-#include "libmscore/excerpt.h"
-#include "libmscore/part.h"
-#include "libmscore/undo.h"
 #include "libmscore/measure.h"
 #include "libmscore/measurenumber.h"
-#include "libmscore/chord.h"
-#include "libmscore/note.h"
-#include "libmscore/breath.h"
+#include "libmscore/rest.h"
 #include "libmscore/segment.h"
-#include "libmscore/fingering.h"
-#include "libmscore/image.h"
-#include "libmscore/engravingitem.h"
-#include "libmscore/system.h"
-#include "libmscore/durationtype.h"
+#include "libmscore/undo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

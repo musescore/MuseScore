@@ -24,10 +24,11 @@
 #define __TEXTEDIT_H__
 
 #include "engravingitem.h"
-#include "text.h"
 #include "undo.h"
 
 namespace mu::engraving {
+class TextBase;
+
 //---------------------------------------------------------
 //   TextEditData
 //---------------------------------------------------------

@@ -24,10 +24,14 @@
 #define __DRUMSET_H__
 
 #include "mscore.h"
-#include "tremolo.h"
-#include "note.h"
+#include "pitchspelling.h"
+#include "types/types.h"
 
 namespace mu::engraving {
+class Articulation;
+class Tremolo;
+
+class XmlReader;
 class XmlWriter;
 
 struct DrumInstrumentVariant {

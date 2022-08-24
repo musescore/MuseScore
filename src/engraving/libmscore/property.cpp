@@ -23,26 +23,16 @@
 #include "property.h"
 
 #include "translation.h"
-#include "style/style.h"
+
 #include "rw/xml.h"
+#include "style/style.h"
 #include "types/typesconv.h"
 
 #include "accidental.h"
 #include "bracket.h"
-#include "clef.h"
-#include "dynamic.h"
-#include "mscore.h"
-#include "ottava.h"
-#include "tremolo.h"
-#include "trill.h"
-#include "vibrato.h"
-#include "layoutbreak.h"
 #include "groups.h"
 #include "note.h"
-#include "barline.h"
-#include "types/symnames.h"
-#include "changeMap.h"
-#include "fret.h"
+#include "ottava.h"
 
 #include "log.h"
 

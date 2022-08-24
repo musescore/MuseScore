@@ -22,19 +22,18 @@
 
 #include "keysig.h"
 
+#include "draw/types/pen.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
 #include "types/typesconv.h"
-#include "draw/types/pen.h"
 
-#include "staff.h"
 #include "clef.h"
-#include "measure.h"
-#include "segment.h"
-#include "score.h"
-#include "system.h"
-#include "undo.h"
 #include "masterscore.h"
+#include "measure.h"
+#include "score.h"
+#include "segment.h"
+#include "staff.h"
+#include "system.h"
 
 #include "log.h"
 

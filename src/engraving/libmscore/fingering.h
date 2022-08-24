@@ -23,9 +23,13 @@
 #ifndef __FINGERING_H__
 #define __FINGERING_H__
 
-#include "text.h"
+#include "textbase.h"
+
+#include "types/types.h"
 
 namespace mu::engraving {
+class Note;
+
 //---------------------------------------------------------
 //   @@ Fingering
 //---------------------------------------------------------

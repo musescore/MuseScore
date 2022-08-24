@@ -30,23 +30,19 @@
 #include "bracket.h"
 #include "breath.h"
 #include "chord.h"
-#include "chordline.h"
 #include "clef.h"
-#include "drumset.h"
 #include "excerpt.h"
 #include "factory.h"
-#include "fermata.h"
-#include "figuredbass.h"
 #include "fingering.h"
 #include "glissando.h"
 #include "hairpin.h"
 #include "harmony.h"
 #include "hook.h"
-#include "image.h"
-#include "instrumentname.h"
 #include "instrchange.h"
+#include "instrumentname.h"
 #include "key.h"
 #include "keysig.h"
+#include "layoutbreak.h"
 #include "linkedobjects.h"
 #include "lyrics.h"
 #include "masterscore.h"
@@ -56,7 +52,6 @@
 #include "navigate.h"
 #include "note.h"
 #include "ottava.h"
-#include "page.h"
 #include "part.h"
 #include "range.h"
 #include "rehearsalmark.h"
@@ -70,12 +65,14 @@
 #include "stem.h"
 #include "sticking.h"
 #include "system.h"
+#include "systemtext.h"
 #include "tempotext.h"
 #include "textframe.h"
 #include "textline.h"
 #include "tie.h"
 #include "tiemap.h"
 #include "timesig.h"
+#include "tremolo.h"
 #include "tuplet.h"
 #include "tupletmap.h"
 #include "undo.h"
@@ -87,6 +84,21 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
+static ChordRest* toChordOrRest(EngravingItem* el)
+{
+    if (el) {
+        if (el->isNote()) {
+            return toNote(el)->chord();
+        } else if (el->isRestFamily()) {
+            return toRest(el);
+        } else if (el->isChord()) {
+            return toChord(el);
+        }
+    }
+
+    return nullptr;
+}
+
 //---------------------------------------------------------
 //   getSelectedNote
 //---------------------------------------------------------
@@ -107,18 +119,12 @@ Note* Score::getSelectedNote()
 
 ChordRest* Score::getSelectedChordRest() const
 {
-    EngravingItem* el = selection().element();
-    if (el) {
-        if (el->isNote()) {
-            return toNote(el)->chord();
-        } else if (el->isRestFamily()) {
-            return toRest(el);
-        } else if (el->isChord()) {
-            return toChord(el);
-        }
+    ChordRest* cr = toChordRest(selection().element());
+    if (!cr) {
+        MScore::setError(MsError::NO_NOTE_REST_SELECTED);
     }
-    MScore::setError(MsError::NO_NOTE_REST_SELECTED);
-    return 0;
+
+    return cr;
 }
 
 //---------------------------------------------------------
@@ -590,7 +596,7 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
     return slur;
 }
 
-TextBase* Score::addText(TextStyleType type, bool addToAllScores)
+TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement, bool addToAllScores)
 {
     TextBase* textBox = nullptr;
 
@@ -600,73 +606,88 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
     case TextStyleType::COMPOSER:
     case TextStyleType::POET:
     case TextStyleType::INSTRUMENT_EXCERPT: {
-        MeasureBase* measure = first();
+        MeasureBase* frame = nullptr;
 
-        if (!measure || !measure->isVBox()) {
-            InsertMeasureOptions options;
-            options.addToAllScores = addToAllScores;
+        if (destinationElement && destinationElement->isVBox()) {
+            frame = toMeasureBase(destinationElement);
+        } else {
+            frame = first();
 
-            measure = insertMeasure(ElementType::VBOX, measure, options);
+            if (!frame || !frame->isVBox()) {
+                InsertMeasureOptions options;
+                options.addToAllScores = addToAllScores;
+
+                frame = insertMeasure(ElementType::VBOX, frame, options);
+            }
         }
 
-        textBox = Factory::createText(measure, type);
-        textBox->setParent(measure);
+        textBox = Factory::createText(frame, type);
+        textBox->setParent(frame);
+        undoAddElement(textBox);
+        break;
+    }
+    case TextStyleType::FRAME: {
+        if (!destinationElement) {
+            break;
+        }
+        textBox = Factory::createText(destinationElement, type);
+        textBox->setParent(destinationElement);
         undoAddElement(textBox);
         break;
     }
     case TextStyleType::REHEARSAL_MARK: {
-        ChordRest* chordRest = getSelectedChordRest();
+        ChordRest* chordRest = toChordOrRest(destinationElement);
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createRehearsalMark(this->dummy()->segment());
+        textBox = Factory::createRehearsalMark(dummy()->segment());
         chordRest->undoAddAnnotation(textBox);
         break;
     }
     case TextStyleType::STAFF: {
-        ChordRest* chordRest = getSelectedChordRest();
+        ChordRest* chordRest = toChordOrRest(destinationElement);
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createStaffText(this->dummy()->segment(), TextStyleType::STAFF);
+        textBox = Factory::createStaffText(dummy()->segment(), TextStyleType::STAFF);
         chordRest->undoAddAnnotation(textBox);
         break;
     }
     case TextStyleType::SYSTEM: {
-        ChordRest* chordRest = getSelectedChordRest();
+        ChordRest* chordRest = toChordOrRest(destinationElement);
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createSystemText(this->dummy()->segment(), TextStyleType::SYSTEM);
+        textBox = Factory::createSystemText(dummy()->segment(), TextStyleType::SYSTEM);
         chordRest->undoAddAnnotation(textBox);
         break;
     }
     case TextStyleType::EXPRESSION: {
-        ChordRest* chordRest = getSelectedChordRest();
+        ChordRest* chordRest = toChordOrRest(destinationElement);
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createStaffText(this->dummy()->segment(), TextStyleType::EXPRESSION);
+        textBox = Factory::createStaffText(dummy()->segment(), TextStyleType::EXPRESSION);
         textBox->setPlacement(PlacementV::BELOW);
         textBox->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
         chordRest->undoAddAnnotation(textBox);
         break;
     }
     case TextStyleType::INSTRUMENT_CHANGE: {
-        ChordRest* chordRest = getSelectedChordRest();
+        ChordRest* chordRest = toChordOrRest(destinationElement);
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createInstrumentChange(this->dummy()->segment());
+        textBox = Factory::createInstrumentChange(dummy()->segment());
         chordRest->undoAddAnnotation(textBox);
         break;
     }
     case TextStyleType::STICKING: {
-        ChordRest* chordRest = getSelectedChordRest();
+        ChordRest* chordRest = toChordOrRest(destinationElement);
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createSticking(this->dummy()->segment());
+        textBox = Factory::createSticking(dummy()->segment());
         chordRest->undoAddAnnotation(textBox);
         break;
     }
@@ -674,18 +695,20 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
     case TextStyleType::LH_GUITAR_FINGERING:
     case TextStyleType::RH_GUITAR_FINGERING:
     case TextStyleType::STRING_NUMBER: {
-        EngravingItem* element = getSelectedElement();
-        if (!element || !element->isNote()) {
+        if (!destinationElement || !destinationElement->isNote()) {
             break;
         }
-        bool isTablature = element->staff()->isTabStaff(element->tick());
-        bool tabFingering = element->staff()->staffType(element->tick())->showTabFingering();
+
+        const Staff* staff = destinationElement->staff();
+        bool isTablature = staff->isTabStaff(destinationElement->tick());
+        bool tabFingering = staff->staffType(destinationElement->tick())->showTabFingering();
         if (isTablature && !tabFingering) {
             break;
         }
-        textBox = Factory::createFingering(toNote(element), type);
-        textBox->setTrack(element->track());
-        textBox->setParent(element);
+
+        textBox = Factory::createFingering(toNote(destinationElement), type);
+        textBox->setTrack(destinationElement->track());
+        textBox->setParent(destinationElement);
         undoAddElement(textBox);
         break;
     }
@@ -694,13 +717,12 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
     case TextStyleType::HARMONY_NASHVILLE: {
         track_idx_t track = mu::nidx;
         Segment* newParent = nullptr;
-        EngravingItem* element = selection().element();
-        if (element && element->isFretDiagram()) {
-            FretDiagram* fretDiagram = toFretDiagram(element);
+        if (destinationElement && destinationElement->isFretDiagram()) {
+            FretDiagram* fretDiagram = toFretDiagram(destinationElement);
             track = fretDiagram->track();
             newParent = fretDiagram->segment();
         } else {
-            ChordRest* chordRest = getSelectedChordRest();
+            ChordRest* chordRest = toChordOrRest(destinationElement);
             if (chordRest) {
                 track = chordRest->track();
                 newParent = chordRest->segment();
@@ -727,20 +749,19 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         break;
     }
     case TextStyleType::LYRICS_ODD: {
-        EngravingItem* element = selection().element();
-        if (element == 0 || (!element->isNote() && !element->isLyrics() && !element->isRest())) {
+        if (!destinationElement || (!destinationElement->isNote() && !destinationElement->isLyrics() && !destinationElement->isRest())) {
             break;
         }
-        ChordRest* chordRest;
-        if (element->isNote()) {
-            chordRest = toNote(element)->chord();
+        ChordRest* chordRest = nullptr;
+        if (destinationElement->isNote()) {
+            chordRest = toNote(destinationElement)->chord();
             if (chordRest->isGrace()) {
                 chordRest = toChordRest(chordRest->explicitParent());
             }
-        } else if (element->isLyrics()) {
-            chordRest = toLyrics(element)->chordRest();
-        } else if (element->isRest()) {
-            chordRest = toChordRest(element);
+        } else if (destinationElement->isLyrics()) {
+            chordRest = toLyrics(destinationElement)->chordRest();
+        } else if (destinationElement->isRest()) {
+            chordRest = toChordRest(destinationElement);
         } else {
             break;
         }
@@ -756,7 +777,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         break;
     }
     case TextStyleType::TEMPO: {
-        ChordRest* chordRest = getSelectedChordRest();
+        ChordRest* chordRest = toChordOrRest(destinationElement);
         if (!chordRest) {
             break;
         }
@@ -2960,7 +2981,7 @@ ChordRest* Score::deleteRange(Segment* s1, Segment* s2, track_idx_t track1, trac
         bool fullMeasure = ss1 && (ss1->measure()->first(SegmentType::ChordRest) == ss1)
                            && (s2 == 0 || s2->isEndBarLineType());
 
-        Fraction tick2 = s2 ? s2->tick() : Fraction(INT_MAX, 1);
+        Fraction tick2 = s2 ? s2->tick() : Fraction::max();
 
         deleteSpannersFromRange(stick1, stick2, track1, track2, filter);
 

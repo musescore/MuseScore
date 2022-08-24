@@ -22,19 +22,18 @@
 
 #include "timesig.h"
 
-#include "translation.h"
-#include "style/style.h"
 #include "rw/xml.h"
-#include "log.h"
+#include "style/style.h"
+#include "translation.h"
 
 #include "score.h"
-#include "symbolfont.h"
-#include "symbol.h"
+#include "segment.h"
 #include "staff.h"
 #include "stafftype.h"
-#include "segment.h"
+#include "symbolfont.h"
 #include "utils.h"
-#include "masterscore.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;

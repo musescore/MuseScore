@@ -29,11 +29,11 @@
 */
 
 #include "engravingitem.h"
-#include "mscore.h"
 
 namespace mu::engraving {
 class Factory;
 class Segment;
+class XmlReader;
 class XmlWriter;
 
 static const int NO_CLEF = -1000;

@@ -25,8 +25,9 @@
 
 #include <memory>
 
-#include "types/string.h"
 #include "types/flags.h"
+#include "types/string.h"
+
 #include "draw/types/geometry.h"
 
 namespace mu::engraving {

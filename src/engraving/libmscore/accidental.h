@@ -31,7 +31,8 @@
 #include <vector>
 
 #include "engravingitem.h"
-#include "config.h"
+
+#include "types.h"
 
 namespace mu::engraving {
 class Factory;
@@ -138,9 +139,5 @@ public:
 
 extern AccidentalVal sym2accidentalVal(SymId id);
 } // namespace mu::engraving
-
-#ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::engraving::AccidentalRole);
-#endif
 
 #endif

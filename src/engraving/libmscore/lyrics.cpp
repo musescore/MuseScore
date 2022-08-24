@@ -26,8 +26,6 @@
 #include "translation.h"
 #include "types/translatablestring.h"
 
-#include "chord.h"
-#include "masterscore.h"
 #include "measure.h"
 #include "mscoreview.h"
 #include "score.h"

@@ -21,12 +21,12 @@
  */
 #include "staffrw.h"
 
-#include "rw/xml.h"
 #include "rw/writecontext.h"
+#include "rw/xml.h"
 
 #include "libmscore/factory.h"
-#include "libmscore/score.h"
 #include "libmscore/measure.h"
+#include "libmscore/score.h"
 #include "libmscore/staff.h"
 
 #include "measurerw.h"

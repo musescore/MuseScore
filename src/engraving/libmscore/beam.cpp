@@ -27,34 +27,28 @@
 #include <algorithm>
 
 #include "containers.h"
-
-#include "draw/types/brush.h"
-#include "style/style.h"
-#include "rw/xml.h"
 #include "realfn.h"
 
-#include "segment.h"
-#include "score.h"
+#include "draw/types/brush.h"
+#include "rw/xml.h"
+
+#include "actionicon.h"
 #include "chord.h"
-#include "sig.h"
-#include "note.h"
-#include "tuplet.h"
-#include "system.h"
-#include "tremolo.h"
+#include "groups.h"
 #include "measure.h"
-#include "undo.h"
+#include "mscore.h"
+#include "note.h"
+#include "score.h"
+#include "segment.h"
+#include "spanner.h"
 #include "staff.h"
 #include "stafftype.h"
 #include "stem.h"
-#include "hook.h"
-#include "mscore.h"
-#include "actionicon.h"
-#include "stemslash.h"
-#include "groups.h"
-#include "spanner.h"
+#include "system.h"
+#include "tremolo.h"
+#include "tuplet.h"
 
 #include "layout/layoutbeams.h"
-#include "layout/layoutchords.h"
 
 #include "log.h"
 
@@ -372,6 +366,12 @@ void Beam::layout1()
     //
     // determine beam stem direction
     //
+    if (_elements.empty()) {
+        return;
+    }
+    ChordRest* firstNote = _elements.front();
+    Measure* measure = firstNote->measure();
+    bool hasMultipleVoices = measure->hasVoices(firstNote->staffIdx(), tick(), ticks());
     if (_direction != DirectionV::AUTO) {
         _up = _direction == DirectionV::UP;
     } else if (_maxMove > 0) {
@@ -379,11 +379,12 @@ void Beam::layout1()
     } else if (_minMove < 0) {
         _up = true;
     } else if (_isGrace) {
-        _up = true;
+        if (hasMultipleVoices) {
+            _up = firstNote->track() % 2 == 0;
+        } else {
+            _up = true;
+        }
     } else if (_notes.size()) {
-        ChordRest* firstNote = _elements.front();
-        Measure* measure = firstNote->measure();
-        bool hasMultipleVoices = measure->hasVoices(firstNote->staffIdx(), tick(), ticks());
         if (hasMultipleVoices) {
             _up = firstNote->track() % 2 == 0;
         } else {
@@ -399,7 +400,6 @@ void Beam::layout1()
         _up = true;
     }
 
-    ChordRest* firstNote = _elements.front();
     int middleStaffLine = firstNote->staffType()->middleLine();
     for (size_t i = 0; i < _notes.size(); i++) {
         _notes[i] += middleStaffLine;

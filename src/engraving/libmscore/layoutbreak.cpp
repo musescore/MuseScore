@@ -22,10 +22,11 @@
 
 #include "log.h"
 
-#include "layoutbreak.h"
 #include "rw/xml.h"
-#include "score.h"
+
+#include "layoutbreak.h"
 #include "measurebase.h"
+#include "score.h"
 
 using namespace mu;
 using namespace mu::draw;

@@ -22,9 +22,9 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/masterscore.h"
 #include "libmscore/engravingitem.h"
 #include "libmscore/factory.h"
+#include "libmscore/masterscore.h"
 
 #include "utils/scorerw.h"
 #include "engraving/compat/scoreaccess.h"

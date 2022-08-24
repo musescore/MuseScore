@@ -25,8 +25,8 @@
 #include "engraving/style/style.h"
 
 #include "libmscore/chord.h"
-#include "libmscore/measure.h"
 #include "libmscore/masterscore.h"
+#include "libmscore/measure.h"
 #include "libmscore/undo.h"
 
 #include "utils/scorerw.h"

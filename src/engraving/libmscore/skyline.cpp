@@ -21,9 +21,10 @@
  */
 
 #include "skyline.h"
-#include "segment.h"
 
 #include "draw/painter.h"
+
+#include "shape.h"
 
 #include "realfn.h"
 

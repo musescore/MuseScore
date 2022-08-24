@@ -23,16 +23,16 @@
 #include "fingering.h"
 
 #include "translation.h"
+
 #include "rw/xml.h"
 
-#include "score.h"
-#include "staff.h"
-#include "undo.h"
 #include "chord.h"
-#include "part.h"
 #include "measure.h"
-#include "stem.h"
+#include "note.h"
+#include "part.h"
 #include "skyline.h"
+#include "staff.h"
+#include "stem.h"
 #include "system.h"
 
 using namespace mu;

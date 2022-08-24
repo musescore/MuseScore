@@ -135,7 +135,7 @@ Ret ProjectActionsController::openProject(const io::path_t& projectPath_)
     };
 
     //! Step 1. If no path is specified, ask the user to select a project
-    io::path_t projectPath = projectPath_;
+    io::path_t projectPath = fileSystem()->absoluteFilePath(projectPath_);
     if (projectPath.empty()) {
         projectPath = selectScoreOpeningFile();
 

@@ -24,18 +24,19 @@
 
 #include "io/file.h"
 
-#include "translation.h"
 #include "containers.h"
-#include "style/style.h"
+#include "translation.h"
+
 #include "rw/xml.h"
+#include "style/style.h"
 #include "types/typesconv.h"
 
 #include "bracket.h"
 #include "drumset.h"
+#include "scoreorder.h"
 #include "stafftype.h"
 #include "stringdata.h"
 #include "utils.h"
-#include "scoreorder.h"
 
 #include "log.h"
 
