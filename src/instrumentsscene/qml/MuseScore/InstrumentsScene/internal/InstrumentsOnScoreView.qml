@@ -155,10 +155,6 @@ Item {
             navigation.column: 0
             navigation.accessible.name: itemTitleLabel.text
 
-            onNavigationActivated: {
-                item.clicked(null)
-            }
-
             StyledTextLabel {
                 id: itemTitleLabel
                 anchors.left: parent.left
