@@ -418,7 +418,8 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
     double clearance = 0.75 * spatium(); // TODO: style
     // balance: determines how much endpoint adjustment VS shape adjustment
     // we will do (0 = only shape, 1 = only end point)
-    double balance = 0.4; // TODO: style (maybe?)
+    double leftBalance = isSingleBeginType() ? 0.4 : 0.9;
+    double rightBalance = isSingleEndType() ? 0.4 : 0.9;
 
     static constexpr unsigned maxIter = 30;     // Max iterations allowed
     const double vertClearance = slur()->up() ? clearance : -clearance;
@@ -493,34 +494,35 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
         }
         // In the even iterations, adjust the shape
         if (iter % 2 == 0) {
-            double shapeStep = (1 - balance) * step;
+            double shapeLeftStep = (1 - leftBalance) * step;
+            double shapeRightStep = (1 - rightBalance) * step;
             if (collision.left) {
                 // Move left Bezier point up(/down) and outwards
-                p3 += PointF(-abs(shapeStep), shapeStep);
+                p3 += PointF(-abs(shapeLeftStep), shapeLeftStep);
                 // and a bit also the right point to compensate asymmetry
-                p4 += PointF(abs(shapeStep), shapeStep) / 2.0;
+                p4 += PointF(abs(shapeLeftStep), shapeLeftStep) / 2.0;
             }
             if (collision.mid) {     // Move both Bezier points up(/down)
-                p3 += PointF(0.0, shapeStep);
-                p4 += PointF(0.0, shapeStep);
+                p3 += PointF(0.0, (shapeLeftStep + shapeRightStep) / 2);
+                p4 += PointF(0.0, (shapeLeftStep + shapeRightStep) / 2);
             }
             if (collision.right) {
                 // Move right Bezier point up(/down) and outwards
-                p4 += PointF(abs(shapeStep), shapeStep);
+                p4 += PointF(abs(shapeRightStep), shapeRightStep);
                 // and a bit also the left point to compensate asymmetry
-                p3 += PointF(-abs(shapeStep), shapeStep) / 2.0;
+                p3 += PointF(-abs(shapeRightStep), shapeRightStep) / 2.0;
             }
         } else if (!isEndPointsEdited()) {
             // In the odd iterations, adjust the end points
             // Slurs steeper than 45° are gently compensated
-            double steepLimit = M_PI / 4;
-            double endPointStep = balance * step;
-            if (collision.left || slurAngle < -steepLimit) {
+            static constexpr double steepLimit = M_PI / 4;
+            if (collision.left || collision.mid || slurAngle < -steepLimit) {
+                double endPointLeftStep = leftBalance * step;
                 // Lift the left end point, i.e. tilt the slur around p2
-                double stepX = sin(slurAngle) * endPointStep;
-                double stepY = cos(slurAngle) * endPointStep;
+                double stepX = sin(slurAngle) * endPointLeftStep;
+                double stepY = cos(slurAngle) * endPointLeftStep;
                 PointF pp1delta = PointF(stepX, stepY);
-                pp1 += PointF(0.0, endPointStep);
+                pp1 += PointF(0.0, endPointLeftStep);
                 p3 += pp1delta * (p2.x() - p3.x()) / p2.x();
                 p4 += pp1delta * (p2.x() - p4.x()) / p2.x();
                 // All points are expressed with respect to pp1, so we need
@@ -529,14 +531,11 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
                 p3 -= pp1delta;
                 p4 -= pp1delta;
             }
-            if (collision.mid && !(abs(slurAngle) > steepLimit)) {
-                // Lift the whole slur
-                pp1 += PointF(0.0, endPointStep);
-            }
-            if (collision.right || slurAngle > steepLimit) {
+            if (collision.right || collision.mid || slurAngle > steepLimit) {
+                double endPointRightStep = rightBalance * step;
                 // Lift the right end point, i.e. tilt the slur around p1
-                double stepX = sin(slurAngle) * endPointStep;
-                double stepY = cos(slurAngle) * endPointStep;
+                double stepX = sin(slurAngle) * endPointRightStep;
+                double stepY = cos(slurAngle) * endPointRightStep;
                 PointF p2delta = PointF(stepX, stepY);
                 p2 += p2delta;
                 p3 += p2delta * p3.x() / p2.x();
