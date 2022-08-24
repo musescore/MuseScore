@@ -3811,11 +3811,10 @@ void Chord::layoutArticulations()
         double y = 0.0;
         if (bottom) {
             if (!headSide && stem()) {
-                auto userLen = stem()->userLength();
                 if (_up) {
-                    y = downPos() - stem()->length() - userLen;
+                    y = downPos() + stem()->bbox().top();
                 } else {
-                    y = upPos() + stem()->length() - userLen;
+                    y = upPos() + stem()->bbox().bottom();
                 }
                 int line   = lrint((y + 0.49 * _spStaff) / _spStaff);
                 // hack: using 0.49 instead of 0.5 otherwise the result can be unpredictably
@@ -3848,11 +3847,10 @@ void Chord::layoutArticulations()
             y -= a->height() * .5;              // center symbol
         } else {
             if (!headSide && stem()) {
-                auto userLen = stem()->userLength();
                 if (_up) {
-                    y = downPos() - stem()->length() + userLen;
+                    y = downPos() + stem()->bbox().top();
                 } else {
-                    y = upPos() + stem()->length() + userLen;
+                    y = upPos() + stem()->bbox().bottom();
                 }
                 int line   = lrint((y - 0.49 * _spStaff) / _spStaff);
                 // hack: using 0.49 instead of 0.5 otherwise the result can be unpredictably
