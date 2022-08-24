@@ -422,7 +422,7 @@ DockPage {
         isMainView: true
 
         Component.onCompleted: {
-            root.notationView = notationView
+            root.notationView = notationView.paintView
 
             root.setDefaultNavigationControl(defaultNavigationControl)
         }
