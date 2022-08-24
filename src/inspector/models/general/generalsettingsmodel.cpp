@@ -51,9 +51,15 @@ void GeneralSettingsModel::requestElements()
 
 void GeneralSettingsModel::loadProperties()
 {
+    bool isMaster = isMasterNotation();
+    m_isPlayable->setIsVisible(isMaster);
+
+    if (isMaster) {
+        loadPropertyItem(m_isPlayable);
+    }
+
     loadPropertyItem(m_isVisible);
     loadPropertyItem(m_isAutoPlaceAllowed);
-    loadPropertyItem(m_isPlayable);
     loadPropertyItem(m_isSmall);
 }
 
