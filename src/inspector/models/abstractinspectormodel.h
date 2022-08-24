@@ -187,6 +187,7 @@ protected:
     void updateNotation();
     notation::INotationPtr currentNotation() const;
     async::Notification currentNotationChanged() const;
+    bool isMasterNotation() const;
 
     notation::INotationSelectionPtr selection() const;
 
