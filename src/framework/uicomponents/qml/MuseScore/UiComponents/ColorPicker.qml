@@ -23,6 +23,7 @@ import QtQuick 2.15
 import QtQuick.Dialogs 1.2
 
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
 import "Utils.js" as Utils
 
@@ -48,6 +49,19 @@ Rectangle {
     border.width: ui.theme.borderWidth
     border.color: ui.theme.strokeColor
 
+    ColorPickerModel {
+        id: colorPickerModel
+    }
+
+    QtObject {
+        id: prv
+
+        function selectColor() {
+            var selectedColor = colorPickerModel.selectColor(root.color)
+            root.newColorSelected(selectedColor)
+        }
+    }
+
     NavigationControl {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "ColorPicker"
@@ -55,7 +69,9 @@ Rectangle {
         accessible.role: MUAccessible.Button
         accessible.name: Utils.accessibleColorDescription(root.color)
 
-        onTriggered: colorDialog.open()
+        onTriggered: {
+            prv.selectColor()
+        }
     }
 
     StyledIconLabel {
@@ -72,32 +88,21 @@ Rectangle {
         onClicked: {
             navigation.requestActiveByInteraction()
 
-            colorDialog.open()
-        }
-    }
-
-    ColorDialog {
-        id: colorDialog
-
-        currentColor: root.color
-        modality: Qt.ApplicationModal
-
-        onAccepted: {
-            root.newColorSelected(colorDialog.color)
+            prv.selectColor()
         }
     }
 
     states: [
         State {
             name: "HOVERED"
-            when: clickableArea.containsMouse && !clickableArea.pressed && !colorDialog.visible
+            when: clickableArea.containsMouse && !clickableArea.pressed
 
             PropertyChanges { target: root; border.color: ui.theme.accentColor }
         },
 
         State {
             name: "PRESSED"
-            when: clickableArea.pressed || colorDialog.visible
+            when: clickableArea.pressed
 
             PropertyChanges { target: root; border.color: ui.theme.fontPrimaryColor }
         }
