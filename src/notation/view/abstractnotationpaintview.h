@@ -118,6 +118,8 @@ public:
     INotationInteractionPtr notationInteraction() const override;
     INotationPlaybackPtr notationPlayback() const override;
 
+    QQuickItem* asItem() override;
+
     qreal startHorizontalScrollPosition() const;
     qreal horizontalScrollbarSize() const;
     qreal startVerticalScrollPosition() const;

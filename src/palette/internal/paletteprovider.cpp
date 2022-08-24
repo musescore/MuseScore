@@ -101,7 +101,7 @@ void PaletteElementEditor::onElementAdded(const ElementPtr element)
     }
 
     QVariantMap mimeData;
-    mimeData[mu::commonscene::MIME_SYMBOL_FORMAT] = element->mimeData(mu::PointF()).toQByteArray();
+    mimeData[mu::commonscene::MIME_SYMBOL_FORMAT] = element->mimeData().toQByteArray();
 
     _controller->insert(_paletteIndex, -1, mimeData, Qt::CopyAction);
 }
