@@ -35,9 +35,9 @@ void PublishToolBarModel::load()
     AbstractMenuModel::load();
 
     MenuItemList items {
-        makeMenuItem("print"),
-        makeMenuItem("file-publish"),
-        makeMenuItem("file-export")
+        makeMenuItem("print", TranslatableString("action", "Print")),
+        makeMenuItem("file-publish", TranslatableString("action", "Publish to MuseScore.com")),
+        makeMenuItem("file-export", TranslatableString("action", "Export"))
     };
 
     setItems(items);
