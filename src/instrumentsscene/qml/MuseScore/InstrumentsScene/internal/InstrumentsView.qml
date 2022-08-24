@@ -110,10 +110,6 @@ Item {
             navigation.row: 2 + model.index
             navigation.accessible.name: itemTitleLabel.text
 
-            onNavigationActivated: {
-                root.instrumentsModel.selectInstrument(model.index)
-            }
-
             onNavigationTriggered: {
                 root.addSelectedInstrumentsToScoreRequested()
             }
