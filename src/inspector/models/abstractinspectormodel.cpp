@@ -378,8 +378,16 @@ PropertyValue AbstractInspectorModel::valueToElementUnits(const mu::engraving::P
         return BeatsPerSecond::fromBPM(BeatsPerMinute(value.toReal()));
 
     case P_TYPE::INT_VEC: {
-        QList<int> l = value.value<QList<int> >();
-        return std::vector<int>(l.begin(), l.end());
+        bool ok = true;
+        std::vector<int> res;
+
+        for (const QString& str : value.toString().split(',', Qt::SkipEmptyParts)) {
+            if (int i = str.simplified().toInt(&ok); ok) {
+                res.push_back(i);
+            }
+        }
+
+        return res;
     } break;
 
     case P_TYPE::COLOR:
