@@ -419,12 +419,7 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
     // the outer edge of the stems (non-default beam style)
     double x2 = _chord2->stemPosBeam().x();
     if (!stem2 && _chord2->up()) {
-        double nhw = score()->noteHeadWidth();
-        if (_chord2->noteType() != NoteType::NORMAL) {
-            nhw *= score()->styleD(Sid::graceNoteMag);
-        }
-        nhw *= _chord2->mag();
-        x2 -= nhw;
+        x2 -= _chord2->noteHeadWidth();
     } else if (stem2) {
         if (defaultStyle && _chord2->up()) {
             x2 -= stem2->lineWidthMag();
@@ -435,12 +430,7 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
 
     double x1 = _chord1->stemPosBeam().x();
     if (!stem1 && !_chord1->up()) {
-        double nhw = score()->noteHeadWidth();
-        if (_chord1->noteType() != NoteType::NORMAL) {
-            nhw *= score()->styleD(Sid::graceNoteMag);
-        }
-        nhw *= _chord1->mag();
-        x1 += nhw;
+        x1 += _chord1->noteHeadWidth();
     } else if (stem1) {
         if (defaultStyle && !_chord1->up()) {
             x1 += stem1->lineWidthMag();
@@ -565,9 +555,16 @@ void Tremolo::setBeamDirection(DirectionV d)
     if (d != DirectionV::AUTO) {
         _up = d == DirectionV::UP;
     }
-
-    _chord1->setStemDirection(d);
-    _chord2->setStemDirection(d);
+    if (twoNotes()) {
+        if (_chord1) {
+            _chord1->setStemDirection(d);
+        }
+        if (_chord2) {
+            _chord2->setStemDirection(d);
+        }
+    } else {
+        chord()->setStemDirection(d);
+    }
 }
 
 //---------------------------------------------------------
