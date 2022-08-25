@@ -1043,7 +1043,7 @@ void Slur::slurPos(SlurPos* sp)
                 // longer be used. for the time being fakeCutout describes a point on the line y=mx+b, out from the top of the stem
                 // where y = yadj, m = fakeCutoutSlope, and x = y/m + fakeCutout
                 fakeCutout = std::min(0.0, std::abs(yadj) - (hook->width() / fakeCutoutSlope));
-                pt.rx() = sc->stemPosX() / sc->magS() - fakeCutout;
+                pt.rx() = sc->stemPosX() - fakeCutout;
             }
         } else {
             Hook* hook = sc->hook();
@@ -1129,7 +1129,7 @@ void Slur::slurPos(SlurPos* sp)
                 } else {
                     po.ry() = sc->stemPos().y() - sc->pagePos().y() + sh;
                 }
-                po.rx() = (sc->stemPosX() / stem1->mag()) + (beamAnchorInset * _spatium * sc->mag()) + (stem1->lineWidthMag() / 2 * __up);
+                po.rx() = sc->stemPosX() + (beamAnchorInset * _spatium * sc->mag()) + (stem1->lineWidthMag() / 2 * __up);
 
                 // account for articulations
                 fixArticulations(po, sc, __up, true);
@@ -1248,7 +1248,7 @@ void Slur::slurPos(SlurPos* sp)
                         po.ry() = ec->stemPos().y() - ec->pagePos().y() + sh;
                     }
 
-                    po.rx() = (ec->stemPosX() / stem2->mag()) - (beamAnchorInset * _spatium * ec->mag())
+                    po.rx() = ec->stemPosX() - (beamAnchorInset * _spatium * ec->mag())
                               + (stem2->lineWidthMag() / 2 * __up);
 
                     // account for articulations
