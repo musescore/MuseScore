@@ -342,8 +342,9 @@ Page* Articulation::page() const
 
 void Articulation::layout()
 {
+    _skipDraw = false;
     if (isHiddenOnTabStaff()) {
-        setbbox(RectF());
+        _skipDraw = true;
         return;
     }
 

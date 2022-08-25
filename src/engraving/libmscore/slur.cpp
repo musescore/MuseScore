@@ -764,8 +764,9 @@ void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
 {
     const StaffType* stType = staffType();
 
+    _skipDraw = false;
     if (stType && stType->isHiddenElementOnTab(score(), Sid::slurShowTabCommon, Sid::slurShowTabSimple)) {
-        setbbox(RectF());
+        _skipDraw = true;
         return;
     }
 
