@@ -56,11 +56,11 @@ QObject* AccessibleItemInterface::object() const
 
 QWindow* AccessibleItemInterface::window() const
 {
-    //! NOTE Not worked at the moment
-//    QWindow* w = m_object->item()->accessibleWindow();
-//    if (w) {
-//        return w;
-//    }
+    QWindow* window = m_object->item()->accessibleWindow();
+    if (window) {
+        return window;
+    }
+
     return interactiveProvider()->topWindow();
 }
 

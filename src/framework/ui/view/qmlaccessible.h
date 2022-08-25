@@ -115,6 +115,7 @@ public:
     const IAccessible* accessibleParent() const override;
     size_t accessibleChildCount() const override;
     const IAccessible* accessibleChild(size_t i) const override;
+    QWindow* accessibleWindow() const override;
 
     IAccessible::Role accessibleRole() const override;
     QString accessibleName() const override;

@@ -64,6 +64,7 @@ public:
         const IAccessible* accessibleParent() const override { return m_parent; }
         size_t accessibleChildCount() const override { return 0; }
         const IAccessible* accessibleChild(size_t) const override { return nullptr; }
+        QWindow* accessibleWindow() const override { return nullptr; }
         IAccessible::Role accessibleRole() const override { return IAccessible::NoRole; }
         QString accessibleName() const override { return QString(); }
         QString accessibleDescription() const override { return QString(); }
