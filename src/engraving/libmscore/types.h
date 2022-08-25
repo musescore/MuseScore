@@ -27,6 +27,9 @@
 #include "types/types.h"
 #include "containers.h"
 
+#include "property.h"
+#include "style/styledef.h"
+
 #ifdef SCRIPT_INTERFACE
 #include <QObject>
 #endif
@@ -506,6 +509,8 @@ struct ScoreChangesRange {
     staff_idx_t staffIdxTo = mu::nidx;
 
     ElementTypeSet changedTypes;
+    PropertyIdSet changedPropertyIdSet;
+    StyleIdSet changedStyleIdSet;
 
     bool isValidBoundary() const
     {

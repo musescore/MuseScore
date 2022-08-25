@@ -56,6 +56,7 @@ public:
     bool isLocked() const override;
 
     async::Notification stackChanged() const override;
+    async::Channel<ChangesRange> changesChannel() const override;
 
 private:
     void notifyAboutNotationChanged();

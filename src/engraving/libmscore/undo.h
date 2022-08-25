@@ -165,8 +165,14 @@ public:
     const SelectionInfo& undoSelectionInfo() const;
     const SelectionInfo& redoSelectionInfo() const;
 
-    std::unordered_set<ElementType> changedTypes() const;
-    std::vector<const EngravingItem*> changedElements() const;
+    struct ChangesInfo {
+        ElementTypeSet changedObjectTypes;
+        std::vector<const EngravingItem*> changedItems;
+        StyleIdSet changedStyleIdSet;
+        PropertyIdSet changedPropertyIdSet;
+    };
+
+    ChangesInfo changesInfo() const;
 
     static bool canRecordSelectedElement(const EngravingItem* e);
 
@@ -547,7 +553,6 @@ public:
     UNDO_CHANGED_OBJECTS({ measure })
 };
 
-
 class CloneVoice : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, CloneVoice)
@@ -786,6 +791,8 @@ class ChangeStyleVal : public UndoCommand
 public:
     ChangeStyleVal(Score* s, Sid i, const PropertyValue& v)
         : score(s), idx(i), value(v) {}
+
+    Sid id() const { return idx; }
 
     UNDO_TYPE(CommandType::ChangeStyleVal)
     UNDO_NAME("ChangeStyleVal")
@@ -1097,6 +1104,7 @@ protected:
 public:
     ChangeProperty(EngravingObject* e, Pid i, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
         : element(e), id(i), property(v), flags(ps) {}
+
     Pid getId() const { return id; }
     EngravingObject* getElement() const { return element; }
     PropertyValue data() const { return property; }
