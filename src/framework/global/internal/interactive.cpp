@@ -24,6 +24,7 @@
 #include <QUrl>
 
 #include <QFileDialog>
+#include <QColorDialog>
 #include <QMainWindow>
 
 #include <QMessageBox>
@@ -173,6 +174,11 @@ io::paths_t Interactive::selectMultipleDirectories(const QString& title, const i
     }
 
     return io::pathsFromString(paths.val.toQString().toStdString());
+}
+
+QColor Interactive::selectColor(const QColor& color, const QString& title)
+{
+    return QColorDialog::getColor(color, nullptr, title);
 }
 
 RetVal<Val> Interactive::open(const std::string& uri) const
