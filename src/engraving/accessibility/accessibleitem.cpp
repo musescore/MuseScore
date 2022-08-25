@@ -167,6 +167,11 @@ const IAccessible* AccessibleItem::accessibleChild(size_t i) const
     return nullptr;
 }
 
+QWindow* AccessibleItem::accessibleWindow() const
+{
+    return nullptr;
+}
+
 IAccessible::Role AccessibleItem::accessibleRole() const
 {
     return m_role;

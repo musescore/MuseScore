@@ -115,6 +115,16 @@ const IAccessible* AccessibleItem::accessibleChild(size_t i) const
     return static_cast<const IAccessible*>(m_children.value(static_cast<int>(i), nullptr));
 }
 
+QWindow* AccessibleItem::accessibleWindow() const
+{
+    QQuickItem* visualItem = resolveVisualItem();
+    if (!visualItem) {
+        return nullptr;
+    }
+
+    return visualItem->window();
+}
+
 QQuickItem* AccessibleItem::resolveVisualItem() const
 {
     if (m_visualItem) {
