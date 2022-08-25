@@ -58,10 +58,6 @@ void StemSettingsModel::createProperties()
     m_verticalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
     });
-
-    context()->currentNotation()->style()->styleChanged().onNotify(this, [this]() {
-        emit useStraightNoteFlagsChanged();
-    });
 }
 
 void StemSettingsModel::requestElements()
@@ -159,6 +155,11 @@ void StemSettingsModel::onStemDirectionChanged(mu::engraving::DirectionV newDire
 
     endCommand();
     updateNotation();
+}
+
+void StemSettingsModel::onStyleChanged()
+{
+    emit useStraightNoteFlagsChanged();
 }
 
 void StemSettingsModel::updatePropertiesOnNotationChanged()
