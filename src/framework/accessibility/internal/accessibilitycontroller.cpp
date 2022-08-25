@@ -346,7 +346,10 @@ void AccessibilityController::triggerRevoicingOfChangedName(IAccessible* item)
 
     //! NOTE: Restore the focused element after some delay(this value was found experimentally)
     QTimer::singleShot(200, [=]() {
-        m_lastFocused->setState(State::Focused, false);
+        if (m_lastFocused) {
+            m_lastFocused->setState(State::Focused, false);
+        }
+
         m_itemForRestoreFocus->setState(State::Focused, true);
         m_ignorePanelChangingVoice = false;
     });
