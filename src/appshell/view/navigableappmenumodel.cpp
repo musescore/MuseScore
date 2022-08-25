@@ -423,9 +423,11 @@ void NavigableAppMenuModel::navigateToSubItem(const QString& menuId, const QSet<
         return;
     }
 
+    control->trigger();
+
     bool isMenu = !subItem.subitems().isEmpty();
-    if (isMenu) {
-        control->trigger();
+    if (!isMenu) {
+        resetNavigation();
     }
 }
 
