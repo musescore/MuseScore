@@ -42,8 +42,6 @@ class StemSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(bool useStraightNoteFlags READ useStraightNoteFlags WRITE setUseStraightNoteFlags NOTIFY useStraightNoteFlagsChanged)
 
-    INJECT(inspector, context::IGlobalContext, context)
-
 public:
     explicit StemSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
@@ -61,15 +59,14 @@ public:
 signals:
     void useStraightNoteFlagsChanged();
 
-protected:
+private:
+    void onStemDirectionChanged(mu::engraving::DirectionV newDirection);
+
     void createProperties() override;
     void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
-
-private:
-    void onStemDirectionChanged(mu::engraving::DirectionV newDirection);
-
+    void onStyleChanged() override;
     void updatePropertiesOnNotationChanged() override;
 
     PropertyItem* m_isStemHidden = nullptr;
