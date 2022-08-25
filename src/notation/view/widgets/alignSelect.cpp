@@ -49,9 +49,9 @@ AlignSelect::AlignSelect(QWidget* parent)
     WidgetUtils::setWidgetIcon(alignRight, IconCode::Code::TEXT_ALIGN_RIGHT);
     WidgetUtils::setWidgetIcon(alignHCenter, IconCode::Code::TEXT_ALIGN_CENTER);
     WidgetUtils::setWidgetIcon(alignVCenter, IconCode::Code::TEXT_ALIGN_MIDDLE);
-    WidgetUtils::setWidgetIcon(alignTop, IconCode::Code::TEXT_ALIGN_ABOVE);
+    WidgetUtils::setWidgetIcon(alignTop, IconCode::Code::TEXT_ALIGN_TOP);
     WidgetUtils::setWidgetIcon(alignBaseline, IconCode::Code::TEXT_ALIGN_BASELINE);
-    WidgetUtils::setWidgetIcon(alignBottom, IconCode::Code::TEXT_ALIGN_UNDER);
+    WidgetUtils::setWidgetIcon(alignBottom, IconCode::Code::TEXT_ALIGN_BOTTOM);
 
     connect(g1, QOverload<QAbstractButton*, bool>::of(&QButtonGroup::buttonToggled),
             this, &AlignSelect::_alignChanged);
