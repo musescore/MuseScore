@@ -78,10 +78,18 @@ void NavigableAppMenuModel::load()
 
 void NavigableAppMenuModel::openMenu(const QString& menuId, bool byHover)
 {
-    if (isNavigationStarted() || !isMenuOpened()) {
-        saveMUNavigationSystemState();
-    } else {
-        restoreMUNavigationSystemState();
+    bool navigationStarted = isNavigationStarted();
+    bool menuIsAlreadyOpened = m_openedMenuId == menuId;
+    if (!byHover && !menuIsAlreadyOpened) {
+        if (navigationStarted || !isMenuOpened()) {
+            saveMUNavigationSystemState();
+        } else {
+            restoreMUNavigationSystemState();
+        }
+    }
+
+    if (navigationStarted) {
+        setHighlightedMenuId(menuId);
     }
 
     emit openMenuRequested(menuId, byHover);
