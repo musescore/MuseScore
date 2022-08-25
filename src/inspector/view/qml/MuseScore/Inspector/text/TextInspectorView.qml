@@ -217,10 +217,10 @@ InspectorSectionView {
                     height: 30
 
                     model: [
-                        { iconRole: IconCode.TEXT_ALIGN_UNDER, typeRole: TextTypes.FONT_ALIGN_V_BOTTOM, title: qsTrc("inspector", "Bottom") },
+                        { iconRole: IconCode.TEXT_ALIGN_TOP, typeRole: TextTypes.FONT_ALIGN_V_TOP, title: qsTrc("inspector", "Top") },
                         { iconRole: IconCode.TEXT_ALIGN_MIDDLE, typeRole: TextTypes.FONT_ALIGN_V_CENTER, title: qsTrc("inspector", "Center") },
-                        { iconRole: IconCode.TEXT_ALIGN_BASELINE, typeRole: TextTypes.FONT_ALIGN_V_BASELINE, title: qsTrc("inspector", "Baseline") },
-                        { iconRole: IconCode.TEXT_ALIGN_ABOVE, typeRole: TextTypes.FONT_ALIGN_V_TOP, title: qsTrc("inspector", "Top") }
+                        { iconRole: IconCode.TEXT_ALIGN_BOTTOM, typeRole: TextTypes.FONT_ALIGN_V_BOTTOM, title: qsTrc("inspector", "Bottom") },
+                        { iconRole: IconCode.TEXT_ALIGN_BASELINE, typeRole: TextTypes.FONT_ALIGN_V_BASELINE, title: qsTrc("inspector", "Baseline") }
                     ]
 
                     delegate: FlatRadioButton {
