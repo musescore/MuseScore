@@ -24,6 +24,7 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <defaultClef>G8vb</defaultClef>
         </Staff>
       <trackName>Track 1</trackName>
       <Instrument id="cavaquinho">
@@ -57,10 +58,6 @@
         </VBox>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>

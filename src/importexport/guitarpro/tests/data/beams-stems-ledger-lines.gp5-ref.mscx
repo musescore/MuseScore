@@ -24,6 +24,7 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <defaultClef>G8vb</defaultClef>
         </Staff>
       <trackName>Acoustic (DADGAD)</trackName>
       <Instrument id="cavaquinho">
@@ -50,10 +51,6 @@
     <Staff id="1">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>

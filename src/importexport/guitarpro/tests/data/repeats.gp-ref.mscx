@@ -53,10 +53,6 @@
       <Measure>
         <endRepeat>3</endRepeat>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
