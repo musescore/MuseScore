@@ -115,8 +115,9 @@ void HairpinSegment::layout()
 {
     const StaffType* stType = staffType();
 
+    _skipDraw = false;
     if (stType && stType->isHiddenElementOnTab(score(), Sid::hairpinShowTabCommon, Sid::hairpinShowTabSimple)) {
-        setbbox(RectF());
+        _skipDraw = true;
         return;
     }
 
