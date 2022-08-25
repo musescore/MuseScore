@@ -1517,6 +1517,8 @@ enum class Sid {
 };
 END_QT_REGISTERED_ENUM(Sid)
 
+using StyleIdSet = std::unordered_set<Sid>;
+
 //---------------------------------------------------------
 //   VerticalAlignRange
 //---------------------------------------------------------

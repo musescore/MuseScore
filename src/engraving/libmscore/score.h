@@ -452,8 +452,6 @@ private:
 
     mu::async::Channel<POS, unsigned> m_posChanged;
 
-    ElementTypeSet changedTypes() const;
-    std::pair<int, int> changedTicksRange() const;
     ScoreChangesRange changesRange() const;
 
     Note* getSelectedNote();

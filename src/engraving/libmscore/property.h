@@ -396,6 +396,8 @@ enum class Pid {
     END
 };
 
+using PropertyIdSet = std::unordered_set<Pid>;
+
 extern PropertyValue readProperty(Pid type, XmlReader& e);
 extern PropertyValue propertyFromString(P_TYPE type, String value);
 extern String propertyToString(Pid, const PropertyValue& value, bool mscx);
