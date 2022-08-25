@@ -43,7 +43,7 @@ public:
     void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
-    void updatePropertiesOnNotationChanged() override;
+    void onNotationChanged() override;
 
     PropertyItem* gapAbove() const;
     PropertyItem* gapBelow() const;

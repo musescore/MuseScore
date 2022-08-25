@@ -63,7 +63,7 @@ private:
     void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
-    void updatePropertiesOnNotationChanged() override;
+    void onNotationChanged() override;
 
     PropertyItem* m_isVisible = nullptr;
     PropertyItem* m_isAutoPlaceAllowed = nullptr;

@@ -130,7 +130,7 @@ void AbstractInspectorModel::setupCurrentNotationChangedConnection()
 
         notation->notationChanged().onNotify(this, [this]() {
             if (m_updatePropertiesAllowed && !isEmpty()) {
-                updatePropertiesOnNotationChanged();
+                onNotationChanged();
             }
 
             m_updatePropertiesAllowed = true;
@@ -143,13 +143,12 @@ void AbstractInspectorModel::setupCurrentNotationChangedConnection()
     };
 
     listenNotationChanged();
-
     currentNotationChanged().onNotify(this, [listenNotationChanged]() {
         listenNotationChanged();
     });
 }
 
-void AbstractInspectorModel::updatePropertiesOnNotationChanged()
+void AbstractInspectorModel::onNotationChanged()
 {
 }
 

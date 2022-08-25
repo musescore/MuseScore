@@ -88,7 +88,7 @@ void AppearanceSettingsModel::resetProperties()
     m_verticalOffset->resetToDefault();
 }
 
-void AppearanceSettingsModel::updatePropertiesOnNotationChanged()
+void AppearanceSettingsModel::onNotationChanged()
 {
     loadPropertyItem(m_leadingSpace, formatDoubleFunc);
     loadOffsets();

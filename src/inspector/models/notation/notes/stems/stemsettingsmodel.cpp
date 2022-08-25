@@ -162,7 +162,7 @@ void StemSettingsModel::onStyleChanged()
     emit useStraightNoteFlagsChanged();
 }
 
-void StemSettingsModel::updatePropertiesOnNotationChanged()
+void StemSettingsModel::onNotationChanged()
 {
     loadPropertyItem(m_length, formatDoubleFunc);
 }

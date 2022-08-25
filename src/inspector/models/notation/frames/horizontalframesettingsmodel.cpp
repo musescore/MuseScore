@@ -64,7 +64,7 @@ void HorizontalFrameSettingsModel::resetProperties()
     m_shouldDisplayKeysAndBrackets->resetToDefault();
 }
 
-void HorizontalFrameSettingsModel::updatePropertiesOnNotationChanged()
+void HorizontalFrameSettingsModel::onNotationChanged()
 {
     loadProperties();
 }

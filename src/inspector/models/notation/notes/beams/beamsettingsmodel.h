@@ -84,7 +84,7 @@ protected:
     void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
-    void updatePropertiesOnNotationChanged() override;
+    void onNotationChanged() override;
 
 private:
     void loadBeamHeightProperties();

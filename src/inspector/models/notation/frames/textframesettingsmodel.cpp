@@ -69,7 +69,7 @@ void TextFrameSettingsModel::resetProperties()
     m_frameBottomMargin->resetToDefault();
 }
 
-void TextFrameSettingsModel::updatePropertiesOnNotationChanged()
+void TextFrameSettingsModel::onNotationChanged()
 {
     loadProperties();
 }
