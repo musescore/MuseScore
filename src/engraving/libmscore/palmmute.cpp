@@ -70,8 +70,9 @@ void PalmMuteSegment::layout()
 {
     const StaffType* stType = staffType();
 
+    _skipDraw = false;
     if (stType && stType->isHiddenElementOnTab(score(), Sid::palmMuteShowTabCommon, Sid::palmMuteShowTabSimple)) {
-        setbbox(RectF());
+        _skipDraw = true;
         return;
     }
 
