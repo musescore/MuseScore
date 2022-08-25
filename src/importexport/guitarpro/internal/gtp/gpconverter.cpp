@@ -1353,16 +1353,21 @@ void GPConverter::addClef(const GPBar* bar, int curTrack)
         return ClefType::G;
     };
 
-    if (_clefs.count(curTrack)) {
-        if (_clefs.at(curTrack) == bar->clef()) {
-            return;
-        }
+    Measure* lastMeasure = _score->lastMeasure();
+    Fraction tick = lastMeasure->tick();
+    ClefType clef = convertClef(bar->clef());
+
+    if (tick == Fraction{ 0, 1 }) {
+        _clefs[curTrack] = bar->clef();
+        Staff* s = _score->staff(track2staff(curTrack));
+        s->setDefaultClefType(ClefTypeList(clef, clef));
+        return;
     }
 
-    ClefType clef = convertClef(bar->clef());
-    auto lastMeasure = _score->lastMeasure();
+    if (_clefs.find(curTrack) != _clefs.end() && _clefs.at(curTrack) == bar->clef()) {
+        return;
+    }
 
-    auto tick = lastMeasure->tick();
     Segment* s = lastMeasure->getSegment(SegmentType::HeaderClef, tick);
     Clef* cl = mu::engraving::Factory::createClef(_score->dummy()->segment());
     cl->setTrack(curTrack);
