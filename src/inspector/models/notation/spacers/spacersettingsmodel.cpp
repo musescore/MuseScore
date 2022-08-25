@@ -56,7 +56,7 @@ void SpacerSettingsModel::resetProperties()
     m_spacerHeight->resetToDefault();
 }
 
-void SpacerSettingsModel::updatePropertiesOnNotationChanged()
+void SpacerSettingsModel::onNotationChanged()
 {
     loadPropertyItem(m_spacerHeight, formatDoubleFunc);
 }

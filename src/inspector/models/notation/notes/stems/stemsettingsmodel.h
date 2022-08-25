@@ -67,7 +67,7 @@ private:
     void loadProperties() override;
     void resetProperties() override;
     void onStyleChanged() override;
-    void updatePropertiesOnNotationChanged() override;
+    void onNotationChanged() override;
 
     PropertyItem* m_isStemHidden = nullptr;
     PropertyItem* m_thickness = nullptr;

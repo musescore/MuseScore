@@ -71,7 +71,7 @@ void GeneralSettingsModel::resetProperties()
     m_isSmall->resetToDefault();
 }
 
-void GeneralSettingsModel::updatePropertiesOnNotationChanged()
+void GeneralSettingsModel::onNotationChanged()
 {
     loadPropertyItem(m_isVisible);
 }

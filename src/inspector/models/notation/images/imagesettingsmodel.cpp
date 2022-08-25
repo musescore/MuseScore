@@ -101,7 +101,7 @@ void ImageSettingsModel::resetProperties()
     m_isImageFramed->resetToDefault();
 }
 
-void ImageSettingsModel::updatePropertiesOnNotationChanged()
+void ImageSettingsModel::onNotationChanged()
 {
     loadPropertyItem(m_height, formatDoubleFunc);
     loadPropertyItem(m_width, formatDoubleFunc);

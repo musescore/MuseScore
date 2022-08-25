@@ -74,7 +74,7 @@ void VerticalFrameSettingsModel::resetProperties()
     m_frameBottomMargin->resetToDefault();
 }
 
-void VerticalFrameSettingsModel::updatePropertiesOnNotationChanged()
+void VerticalFrameSettingsModel::onNotationChanged()
 {
     loadProperties();
 }

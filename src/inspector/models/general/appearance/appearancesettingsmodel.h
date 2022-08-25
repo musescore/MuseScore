@@ -74,7 +74,7 @@ signals:
     void isSnappedToGridChanged(bool isSnappedToGrid);
 
 private:
-    void updatePropertiesOnNotationChanged() override;
+    void onNotationChanged() override;
 
     void loadOffsets();
     mu::engraving::Page* getPage();

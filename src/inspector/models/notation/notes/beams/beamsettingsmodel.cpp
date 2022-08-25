@@ -86,7 +86,7 @@ void BeamSettingsModel::loadProperties()
     updateFeatheringMode(m_featheringHeightLeft->value().toDouble(), m_featheringHeightRight->value().toDouble());
 }
 
-void BeamSettingsModel::updatePropertiesOnNotationChanged()
+void BeamSettingsModel::onNotationChanged()
 {
     loadProperties();
 }

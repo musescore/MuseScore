@@ -57,7 +57,7 @@ signals:
     void maxBracketColumnPositionChanged();
 
 private:
-    void updatePropertiesOnNotationChanged() override;
+    void onNotationChanged() override;
 
     PropertyItem* m_bracketColumnPosition = nullptr;
     PropertyItem* m_bracketSpanStaves = nullptr;

@@ -112,7 +112,7 @@ protected:
     void createProperties() override;
     void loadProperties() override;
     void resetProperties() override;
-    void updatePropertiesOnNotationChanged() override;
+    void onNotationChanged() override;
 
     virtual void onUpdateLinePropertiesAvailability();
     virtual bool isTextVisible(TextType type) const;

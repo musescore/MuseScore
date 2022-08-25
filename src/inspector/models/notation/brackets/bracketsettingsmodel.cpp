@@ -67,7 +67,7 @@ void BracketSettingsModel::resetProperties()
     m_bracketSpanStaves->resetToDefault();
 }
 
-void BracketSettingsModel::updatePropertiesOnNotationChanged()
+void BracketSettingsModel::onNotationChanged()
 {
     loadPropertyItem(m_bracketSpanStaves);
 }
