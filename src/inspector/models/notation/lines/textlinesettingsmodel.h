@@ -112,7 +112,8 @@ protected:
     void createProperties() override;
     void loadProperties() override;
     void resetProperties() override;
-    void onNotationChanged() override;
+    void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                           const mu::engraving::StyleIdSet& changedStyleIdSet) override;
 
     virtual void onUpdateLinePropertiesAvailability();
     virtual bool isTextVisible(TextType type) const;
@@ -122,6 +123,8 @@ protected:
 
 private:
     QVariantList hookTypesToObjList(const QList<HookTypeInfo>& types) const;
+
+    void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
     PropertyItem* m_lineStyle = nullptr;
     PropertyItem* m_placement = nullptr;

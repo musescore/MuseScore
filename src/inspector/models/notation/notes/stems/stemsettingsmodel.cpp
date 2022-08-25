@@ -28,6 +28,7 @@
 #include "log.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 StemSettingsModel::StemSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -40,49 +41,43 @@ StemSettingsModel::StemSettingsModel(QObject* parent, IElementRepositoryService*
 
 void StemSettingsModel::createProperties()
 {
-    m_isStemHidden = buildPropertyItem(mu::engraving::Pid::VISIBLE, [this](const mu::engraving::Pid pid, const QVariant& isStemHidden) {
+    m_isStemHidden = buildPropertyItem(Pid::VISIBLE, [this](const Pid pid, const QVariant& isStemHidden) {
         onPropertyValueChanged(pid, !isStemHidden.toBool());
     });
 
-    m_thickness = buildPropertyItem(mu::engraving::Pid::LINE_WIDTH);
-    m_length = buildPropertyItem(mu::engraving::Pid::USER_LEN);
+    m_thickness = buildPropertyItem(Pid::LINE_WIDTH);
+    m_length = buildPropertyItem(Pid::USER_LEN);
 
-    m_stemDirection = buildPropertyItem(mu::engraving::Pid::STEM_DIRECTION, [this](const mu::engraving::Pid, const QVariant& newValue) {
+    m_stemDirection = buildPropertyItem(Pid::STEM_DIRECTION, [this](const Pid, const QVariant& newValue) {
         onStemDirectionChanged(static_cast<mu::engraving::DirectionV>(newValue.toInt()));
     });
 
-    m_horizontalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_horizontalOffset = buildPropertyItem(Pid::OFFSET, [this](const Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
     });
 
-    m_verticalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_verticalOffset = buildPropertyItem(Pid::OFFSET, [this](const Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
     });
 }
 
 void StemSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::STEM);
+    m_elementList = m_repository->findElementsByType(ElementType::STEM);
 }
 
 void StemSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_isStemHidden, [](const QVariant& isVisible) -> QVariant {
-        return !isVisible.toBool();
-    });
+    static const PropertyIdSet propertyIdSet {
+        Pid::VISIBLE,
+        Pid::LINE_WIDTH,
+        Pid::USER_LEN,
+        Pid::STEM_DIRECTION,
+        Pid::OFFSET,
+    };
 
-    loadPropertyItem(m_thickness, formatDoubleFunc);
-    loadPropertyItem(m_length, formatDoubleFunc);
-
-    loadPropertyItem(m_stemDirection);
-
-    loadPropertyItem(m_horizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
-    });
-
-    loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
-    });
+    loadProperties(propertyIdSet);
+    emit useStraightNoteFlagsChanged();
 }
 
 void StemSettingsModel::resetProperties()
@@ -127,42 +122,74 @@ PropertyItem* StemSettingsModel::stemDirection() const
 
 bool StemSettingsModel::useStraightNoteFlags() const
 {
-    return styleValue(mu::engraving::Sid::useStraightNoteFlags).toBool();
+    return styleValue(Sid::useStraightNoteFlags).toBool();
 }
 
 void StemSettingsModel::setUseStraightNoteFlags(bool use)
 {
-    updateStyleValue(mu::engraving::Sid::useStraightNoteFlags, use);
+    if (updateStyleValue(Sid::useStraightNoteFlags, use)) {
+        emit useStraightNoteFlagsChanged();
+    }
 }
 
-void StemSettingsModel::onStemDirectionChanged(mu::engraving::DirectionV newDirection)
+void StemSettingsModel::onStemDirectionChanged(DirectionV newDirection)
 {
     beginCommand();
 
-    for (mu::engraving::EngravingItem* element : m_elementList) {
-        mu::engraving::Stem* stem = mu::engraving::toStem(element);
+    for (EngravingItem* element : m_elementList) {
+        Stem* stem = toStem(element);
         IF_ASSERT_FAILED(stem) {
             continue;
         }
 
-        mu::engraving::EngravingItem* root = stem;
-        if (mu::engraving::Beam* beam = stem->chord()->beam()) {
+        EngravingItem* root = stem;
+        if (Beam* beam = stem->chord()->beam()) {
             root = beam;
         }
 
-        root->undoChangeProperty(mu::engraving::Pid::STEM_DIRECTION, newDirection);
+        root->undoChangeProperty(Pid::STEM_DIRECTION, newDirection);
     }
 
     endCommand();
     updateNotation();
 }
 
-void StemSettingsModel::onStyleChanged()
+void StemSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet& changedStyleIdSet)
 {
-    emit useStraightNoteFlagsChanged();
+    loadProperties(changedPropertyIdSet);
+
+    if (mu::contains(changedStyleIdSet, Sid::useStraightNoteFlags)) {
+        emit useStraightNoteFlagsChanged();
+    }
 }
 
-void StemSettingsModel::onNotationChanged()
+void StemSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
-    loadPropertyItem(m_length, formatDoubleFunc);
+    if (mu::contains(propertyIdSet, Pid::VISIBLE)) {
+        loadPropertyItem(m_isStemHidden, [](const QVariant& isVisible) -> QVariant {
+            return !isVisible.toBool();
+        });
+    }
+
+    if (mu::contains(propertyIdSet, Pid::LINE_WIDTH)) {
+        loadPropertyItem(m_thickness, formatDoubleFunc);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::USER_LEN)) {
+        loadPropertyItem(m_length, formatDoubleFunc);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::STEM_DIRECTION)) {
+        loadPropertyItem(m_stemDirection);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::OFFSET)) {
+        loadPropertyItem(m_horizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
+            return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
+        });
+
+        loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
+            return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
+        });
+    }
 }

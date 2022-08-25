@@ -40,12 +40,6 @@ class VerticalFrameSettingsModel : public AbstractInspectorModel
 public:
     explicit VerticalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
-    void createProperties() override;
-    void requestElements() override;
-    void loadProperties() override;
-    void resetProperties() override;
-    void onNotationChanged() override;
-
     PropertyItem* frameHeight() const;
     PropertyItem* gapAbove() const;
     PropertyItem* gapBelow() const;
@@ -55,6 +49,15 @@ public:
     PropertyItem* frameBottomMargin() const;
 
 private:
+    void createProperties() override;
+    void requestElements() override;
+    void loadProperties() override;
+    void resetProperties() override;
+    void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                           const mu::engraving::StyleIdSet& changedStyleIdSet) override;
+
+    void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
+
     PropertyItem* m_frameHeight = nullptr;
     PropertyItem* m_gapAbove = nullptr;
     PropertyItem* m_gapBelow = nullptr;

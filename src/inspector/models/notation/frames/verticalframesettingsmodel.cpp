@@ -26,6 +26,7 @@
 #include "translation.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 VerticalFrameSettingsModel::VerticalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -38,29 +39,33 @@ VerticalFrameSettingsModel::VerticalFrameSettingsModel(QObject* parent, IElement
 
 void VerticalFrameSettingsModel::createProperties()
 {
-    m_frameHeight = buildPropertyItem(mu::engraving::Pid::BOX_HEIGHT);
-    m_gapAbove = buildPropertyItem(mu::engraving::Pid::TOP_GAP);
-    m_gapBelow = buildPropertyItem(mu::engraving::Pid::BOTTOM_GAP);
-    m_frameLeftMargin = buildPropertyItem(mu::engraving::Pid::LEFT_MARGIN);
-    m_frameRightMargin = buildPropertyItem(mu::engraving::Pid::RIGHT_MARGIN);
-    m_frameTopMargin = buildPropertyItem(mu::engraving::Pid::TOP_MARGIN);
-    m_frameBottomMargin = buildPropertyItem(mu::engraving::Pid::BOTTOM_MARGIN);
+    m_frameHeight = buildPropertyItem(Pid::BOX_HEIGHT);
+    m_gapAbove = buildPropertyItem(Pid::TOP_GAP);
+    m_gapBelow = buildPropertyItem(Pid::BOTTOM_GAP);
+    m_frameLeftMargin = buildPropertyItem(Pid::LEFT_MARGIN);
+    m_frameRightMargin = buildPropertyItem(Pid::RIGHT_MARGIN);
+    m_frameTopMargin = buildPropertyItem(Pid::TOP_MARGIN);
+    m_frameBottomMargin = buildPropertyItem(Pid::BOTTOM_MARGIN);
 }
 
 void VerticalFrameSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::VBOX);
+    m_elementList = m_repository->findElementsByType(ElementType::VBOX);
 }
 
 void VerticalFrameSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_frameHeight, formatDoubleFunc);
-    loadPropertyItem(m_gapAbove, formatDoubleFunc);
-    loadPropertyItem(m_gapBelow, formatDoubleFunc);
-    loadPropertyItem(m_frameLeftMargin);
-    loadPropertyItem(m_frameRightMargin);
-    loadPropertyItem(m_frameTopMargin);
-    loadPropertyItem(m_frameBottomMargin);
+    static const PropertyIdSet propertyIdSet {
+        Pid::BOX_HEIGHT,
+        Pid::TOP_GAP,
+        Pid::BOTTOM_GAP,
+        Pid::LEFT_MARGIN,
+        Pid::RIGHT_MARGIN,
+        Pid::TOP_MARGIN,
+        Pid::BOTTOM_MARGIN,
+    };
+
+    loadProperties(propertyIdSet);
 }
 
 void VerticalFrameSettingsModel::resetProperties()
@@ -74,9 +79,40 @@ void VerticalFrameSettingsModel::resetProperties()
     m_frameBottomMargin->resetToDefault();
 }
 
-void VerticalFrameSettingsModel::onNotationChanged()
+void VerticalFrameSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
-    loadProperties();
+    loadProperties(changedPropertyIdSet);
+}
+
+void VerticalFrameSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)
+{
+    if (mu::contains(propertyIdSet, Pid::BOX_HEIGHT)) {
+        loadPropertyItem(m_frameHeight, formatDoubleFunc);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::TOP_GAP)) {
+        loadPropertyItem(m_gapAbove, formatDoubleFunc);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::BOTTOM_GAP)) {
+        loadPropertyItem(m_gapBelow, formatDoubleFunc);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::LEFT_MARGIN)) {
+        loadPropertyItem(m_frameLeftMargin);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::RIGHT_MARGIN)) {
+        loadPropertyItem(m_frameRightMargin);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::TOP_MARGIN)) {
+        loadPropertyItem(m_frameTopMargin);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::BOTTOM_MARGIN)) {
+        loadPropertyItem(m_frameBottomMargin);
+    }
 }
 
 PropertyItem* VerticalFrameSettingsModel::frameHeight() const

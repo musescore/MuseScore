@@ -40,7 +40,9 @@ bool ScoreAppearanceSettingsModel::hideEmptyStaves() const
 
 void ScoreAppearanceSettingsModel::setHideEmptyStaves(bool hide)
 {
-    updateStyleValue(StyleId::hideEmptyStaves, hide);
+    if (updateStyleValue(StyleId::hideEmptyStaves, hide)) {
+        emit hideEmptyStavesChanged();
+    }
 }
 
 bool ScoreAppearanceSettingsModel::dontHideEmptyStavesInFirstSystem() const
@@ -50,7 +52,9 @@ bool ScoreAppearanceSettingsModel::dontHideEmptyStavesInFirstSystem() const
 
 void ScoreAppearanceSettingsModel::setDontHideEmptyStavesInFirstSystem(bool dont)
 {
-    updateStyleValue(StyleId::dontHideStavesInFirstSystem, dont);
+    if (updateStyleValue(StyleId::dontHideStavesInFirstSystem, dont)) {
+        emit dontHideEmptyStavesInFirstSystemChanged();
+    }
 }
 
 bool ScoreAppearanceSettingsModel::showBracketsWhenSpanningSingleStaff() const
@@ -60,12 +64,38 @@ bool ScoreAppearanceSettingsModel::showBracketsWhenSpanningSingleStaff() const
 
 void ScoreAppearanceSettingsModel::setShowBracketsWhenSpanningSingleStaff(bool show)
 {
-    updateStyleValue(StyleId::alwaysShowBracketsWhenEmptyStavesAreHidden, show);
+    if (updateStyleValue(StyleId::alwaysShowBracketsWhenEmptyStavesAreHidden, show)) {
+        emit showBracketsWhenSpanningSingleStaffChanged();
+    }
 }
 
 bool ScoreAppearanceSettingsModel::isEmpty() const
 {
     return !isNotationExisting();
+}
+
+void ScoreAppearanceSettingsModel::onCurrentNotationChanged()
+{
+    AbstractInspectorModel::onCurrentNotationChanged();
+
+    emit hideEmptyStavesChanged();
+    emit dontHideEmptyStavesInFirstSystemChanged();
+    emit showBracketsWhenSpanningSingleStaffChanged();
+}
+
+void ScoreAppearanceSettingsModel::onNotationChanged(const engraving::PropertyIdSet&, const engraving::StyleIdSet& changedStyleIdSet)
+{
+    if (mu::contains(changedStyleIdSet, StyleId::hideEmptyStaves)) {
+        emit hideEmptyStavesChanged();
+    }
+
+    if (mu::contains(changedStyleIdSet, StyleId::dontHideStavesInFirstSystem)) {
+        emit dontHideEmptyStavesInFirstSystemChanged();
+    }
+
+    if (mu::contains(changedStyleIdSet, StyleId::alwaysShowBracketsWhenEmptyStavesAreHidden)) {
+        emit showBracketsWhenSpanningSingleStaffChanged();
+    }
 }
 
 void ScoreAppearanceSettingsModel::showPageSettings()
@@ -76,9 +106,4 @@ void ScoreAppearanceSettingsModel::showPageSettings()
 void ScoreAppearanceSettingsModel::showStyleSettings()
 {
     dispatcher()->dispatch("edit-style");
-}
-
-void ScoreAppearanceSettingsModel::onStyleChanged()
-{
-    emit styleChanged();
 }

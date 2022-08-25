@@ -59,53 +59,53 @@ void TextLineSettingsModel::createProperties()
         onUpdateLinePropertiesAvailability();
     };
 
-    m_isLineVisible = buildPropertyItem(mu::engraving::Pid::LINE_VISIBLE, applyPropertyValueAndUpdateAvailability);
+    m_isLineVisible = buildPropertyItem(Pid::LINE_VISIBLE, applyPropertyValueAndUpdateAvailability);
     m_isLineVisible->setIsVisible(false);
 
-    m_allowDiagonal = buildPropertyItem(mu::engraving::Pid::DIAGONAL);
+    m_allowDiagonal = buildPropertyItem(Pid::DIAGONAL);
     m_allowDiagonal->setIsVisible(false);
 
-    m_lineStyle = buildPropertyItem(mu::engraving::Pid::LINE_STYLE, applyPropertyValueAndUpdateAvailability);
+    m_lineStyle = buildPropertyItem(Pid::LINE_STYLE, applyPropertyValueAndUpdateAvailability);
 
-    m_startHookType = buildPropertyItem(mu::engraving::Pid::BEGIN_HOOK_TYPE, applyPropertyValueAndUpdateAvailability);
-    m_endHookType = buildPropertyItem(mu::engraving::Pid::END_HOOK_TYPE, applyPropertyValueAndUpdateAvailability);
+    m_startHookType = buildPropertyItem(Pid::BEGIN_HOOK_TYPE, applyPropertyValueAndUpdateAvailability);
+    m_endHookType = buildPropertyItem(Pid::END_HOOK_TYPE, applyPropertyValueAndUpdateAvailability);
 
-    m_thickness = buildPropertyItem(mu::engraving::Pid::LINE_WIDTH);
-    m_dashLineLength = buildPropertyItem(mu::engraving::Pid::DASH_LINE_LEN);
-    m_dashGapLength = buildPropertyItem(mu::engraving::Pid::DASH_GAP_LEN);
+    m_thickness = buildPropertyItem(Pid::LINE_WIDTH);
+    m_dashLineLength = buildPropertyItem(Pid::DASH_LINE_LEN);
+    m_dashGapLength = buildPropertyItem(Pid::DASH_GAP_LEN);
 
-    m_hookHeight = buildPropertyItem(mu::engraving::Pid::END_HOOK_HEIGHT, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_hookHeight = buildPropertyItem(Pid::END_HOOK_HEIGHT, [this](const Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
-        onPropertyValueChanged(mu::engraving::Pid::BEGIN_HOOK_HEIGHT, newValue);
+        onPropertyValueChanged(Pid::BEGIN_HOOK_HEIGHT, newValue);
     });
 
-    m_placement = buildPropertyItem(mu::engraving::Pid::PLACEMENT);
+    m_placement = buildPropertyItem(Pid::PLACEMENT);
     m_placement->setIsVisible(false);
 
     if (isTextVisible(BeginningText)) {
-        m_beginningText = buildPropertyItem(mu::engraving::Pid::BEGIN_TEXT);
+        m_beginningText = buildPropertyItem(Pid::BEGIN_TEXT);
 
         m_beginningTextVerticalOffset
-            = buildPropertyItem(mu::engraving::Pid::BEGIN_TEXT_OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+            = buildPropertyItem(Pid::BEGIN_TEXT_OFFSET, [this](const Pid pid, const QVariant& newValue) {
             onPropertyValueChanged(pid, QPointF(0, newValue.toDouble()));
         });
     }
 
     if (isTextVisible(ContinuousText)) {
-        m_continuousText = buildPropertyItem(mu::engraving::Pid::CONTINUE_TEXT);
+        m_continuousText = buildPropertyItem(Pid::CONTINUE_TEXT);
 
         m_continuousTextVerticalOffset
-            = buildPropertyItem(mu::engraving::Pid::CONTINUE_TEXT_OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+            = buildPropertyItem(Pid::CONTINUE_TEXT_OFFSET, [this](const Pid pid, const QVariant& newValue) {
             onPropertyValueChanged(pid, QPointF(0,
                                                 newValue.toDouble()));
         });
     }
 
     if (isTextVisible(EndText)) {
-        m_endText = buildPropertyItem(mu::engraving::Pid::END_TEXT);
+        m_endText = buildPropertyItem(Pid::END_TEXT);
 
         m_endTextVerticalOffset
-            = buildPropertyItem(mu::engraving::Pid::END_TEXT_OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+            = buildPropertyItem(Pid::END_TEXT_OFFSET, [this](const Pid pid, const QVariant& newValue) {
             onPropertyValueChanged(pid, QPointF(0, newValue.toDouble()));
         });
     }
@@ -113,37 +113,27 @@ void TextLineSettingsModel::createProperties()
 
 void TextLineSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_isLineVisible);
-    loadPropertyItem(m_allowDiagonal);
+    static const PropertyIdSet propertyIdSet {
+        Pid::LINE_VISIBLE,
+        Pid::DIAGONAL,
+        Pid::LINE_STYLE,
+        Pid::BEGIN_HOOK_TYPE,
+        Pid::END_HOOK_TYPE,
+        Pid::LINE_WIDTH,
+        Pid::DASH_LINE_LEN,
+        Pid::DASH_GAP_LEN,
+        Pid::END_HOOK_HEIGHT,
+        Pid::BEGIN_HOOK_HEIGHT,
+        Pid::PLACEMENT,
+        Pid::BEGIN_TEXT,
+        Pid::BEGIN_TEXT_OFFSET,
+        Pid::CONTINUE_TEXT,
+        Pid::CONTINUE_TEXT_OFFSET,
+        Pid::END_TEXT,
+        Pid::END_TEXT_OFFSET,
+    };
 
-    loadPropertyItem(m_lineStyle);
-
-    loadPropertyItem(m_thickness, formatDoubleFunc);
-    loadPropertyItem(m_dashLineLength, formatDoubleFunc);
-    loadPropertyItem(m_dashGapLength, formatDoubleFunc);
-
-    loadPropertyItem(m_startHookType);
-    loadPropertyItem(m_endHookType);
-    loadPropertyItem(m_hookHeight);
-
-    loadPropertyItem(m_placement);
-
-    loadPropertyItem(m_beginningText);
-    loadPropertyItem(m_beginningTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
-    });
-
-    loadPropertyItem(m_continuousText);
-    loadPropertyItem(m_continuousTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
-    });
-
-    loadPropertyItem(m_endText);
-    loadPropertyItem(m_endTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
-    });
-
-    onUpdateLinePropertiesAvailability();
+    loadProperties(propertyIdSet);
 }
 
 void TextLineSettingsModel::resetProperties()
@@ -319,7 +309,82 @@ void TextLineSettingsModel::setPossibleEndHookTypes(const QList<HookTypeInfo>& t
     m_possibleEndHookTypes = hookTypesToObjList(types);
 }
 
-void TextLineSettingsModel::onNotationChanged()
+void TextLineSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
-    loadProperties();
+    loadProperties(changedPropertyIdSet);
+}
+
+void TextLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
+{
+    if (mu::contains(propertyIdSet, Pid::LINE_VISIBLE)) {
+        loadPropertyItem(m_isLineVisible);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::DIAGONAL)) {
+        loadPropertyItem(m_allowDiagonal);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::LINE_STYLE)) {
+        loadPropertyItem(m_lineStyle);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::LINE_WIDTH)) {
+        loadPropertyItem(m_thickness, formatDoubleFunc);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::DASH_LINE_LEN)) {
+        loadPropertyItem(m_dashLineLength, formatDoubleFunc);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::DASH_GAP_LEN)) {
+        loadPropertyItem(m_dashGapLength, formatDoubleFunc);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::BEGIN_HOOK_TYPE)) {
+        loadPropertyItem(m_startHookType);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::END_HOOK_TYPE)) {
+        loadPropertyItem(m_endHookType);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::END_HOOK_HEIGHT)) {
+        loadPropertyItem(m_hookHeight);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::PLACEMENT)) {
+        loadPropertyItem(m_placement);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::BEGIN_TEXT)) {
+        loadPropertyItem(m_beginningText);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::BEGIN_TEXT_OFFSET)) {
+        loadPropertyItem(m_beginningTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
+            return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
+        });
+    }
+
+    if (mu::contains(propertyIdSet, Pid::CONTINUE_TEXT)) {
+        loadPropertyItem(m_continuousText);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::CONTINUE_TEXT_OFFSET)) {
+        loadPropertyItem(m_continuousTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
+            return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
+        });
+    }
+
+    if (mu::contains(propertyIdSet, Pid::END_TEXT)) {
+        loadPropertyItem(m_endText);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::END_TEXT_OFFSET)) {
+        loadPropertyItem(m_endTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
+            return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
+        });
+    }
+
+    onUpdateLinePropertiesAvailability();
 }
