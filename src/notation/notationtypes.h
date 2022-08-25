@@ -506,6 +506,7 @@ struct TupletOptions
     Fraction ratio = { -1, -1 };
     TupletNumberType numberType = TupletNumberType::SHOW_NUMBER;
     TupletBracketType bracketType = TupletBracketType::AUTO_BRACKET;
+    bool autoBaseLen = false;
 };
 
 enum class LoopBoundaryType
