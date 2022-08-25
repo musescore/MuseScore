@@ -69,6 +69,9 @@ public:
     io::path_t selectDirectory(const QString& title, const io::path_t& dir) override;
     io::paths_t selectMultipleDirectories(const QString& title, const io::path_t& dir, const io::paths_t& selectedDirectories) override;
 
+    // color
+    QColor selectColor(const QColor& color = Qt::white, const QString& title = "") override;
+
     // custom
     RetVal<Val> open(const std::string& uri) const override;
     RetVal<Val> open(const Uri& uri) const override;
