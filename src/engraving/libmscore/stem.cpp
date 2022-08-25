@@ -121,8 +121,11 @@ void Stem::layout()
     double lineX = isTabStaff ? 0.0 : _up * lineWidthCorrection;
     m_line.setLine(lineX, y1, lineX, y2);
 
+    // HACK: if there is a beam, extend the bounding box of the stem (NOT the stem itself) by half beam width.
+    // This way the bbox of the stem covers also the beam position. Hugely helps with all the collision checks.
+    double beamCorrection = chord()->beam() ? _up * score()->styleMM(Sid::beamWidth) * mag() / 2 : 0.0;
     // compute line and bounding rectangle
-    RectF rect(m_line.p1(), m_line.p2());
+    RectF rect(m_line.p1(), m_line.p2() + PointF(0.0, beamCorrection));
     setbbox(rect.normalized().adjusted(-lineWidthCorrection, 0, lineWidthCorrection, 0));
 }
 
