@@ -176,6 +176,11 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<WindowDropArea>("MuseScore.Ui", 1, 0, "WindowDropArea");
 }
 
+void AppShellModule::onPreInit(const framework::IApplication::RunMode&)
+{
+    s_applicationActionController->preInit();
+}
+
 void AppShellModule::onInit(const IApplication::RunMode&)
 {
     DockSetup::onInit();

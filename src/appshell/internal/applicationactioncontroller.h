@@ -57,6 +57,7 @@ class ApplicationActionController : public QObject, public IApplicationActionCon
     INJECT(appshell, framework::IApplication, application)
 
 public:
+    void preInit();
     void init();
 
     ValCh<bool> isFullScreen() const;
