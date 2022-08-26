@@ -772,7 +772,7 @@ ByteArray Selection::mimeData() const
     switch (_state) {
     case SelState::LIST:
         if (isSingle()) {
-            a = element()->mimeData(PointF());
+            a = element()->mimeData();
         } else {
             a = symbolListMimeData();
         }

@@ -37,6 +37,7 @@
 #include "playback/iplaybackcontroller.h"
 
 class QMouseEvent;
+class QQuickItem;
 
 namespace mu::notation {
 class IControlledView
@@ -71,6 +72,8 @@ public:
 
     virtual INotationInteractionPtr notationInteraction() const = 0;
     virtual INotationPlaybackPtr notationPlayback() const = 0;
+
+    virtual QQuickItem* asItem() = 0;
 };
 
 class NotationViewInputController : public actions::Actionable, public async::Asyncable
