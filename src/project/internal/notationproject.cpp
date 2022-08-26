@@ -448,6 +448,7 @@ mu::Ret NotationProject::writeToDevice(QIODevice* device)
     }
 
     Buffer buf;
+    buf.open(IODevice::OpenMode::ReadWrite);
 
     MscWriter::Params params;
     params.device = &buf;
@@ -459,6 +460,7 @@ mu::Ret NotationProject::writeToDevice(QIODevice* device)
 
     Ret ret = writeProject(msczWriter, false);
     if (ret) {
+        buf.seek(0);
         ByteArray ba = buf.readAll();
         device->write(ba.toQByteArrayNoCopy());
     }
