@@ -647,24 +647,6 @@ public:
 };
 
 //---------------------------------------------------------
-//   ChangeBracketType
-//---------------------------------------------------------
-
-class ChangeBracketType : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, ChangeBracketType)
-
-    Bracket* bracket;
-    BracketType type;
-    void flip(EditData*) override;
-
-public:
-    ChangeBracketType(Bracket*, BracketType type);
-    UNDO_NAME("ChangeBracketType")
-    UNDO_CHANGED_OBJECTS({ bracket });
-};
-
-//---------------------------------------------------------
 //   AddElement
 //---------------------------------------------------------
 
@@ -709,29 +691,6 @@ public:
     bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override;
 
     UNDO_CHANGED_OBJECTS({ element });
-};
-
-//---------------------------------------------------------
-//   EditText
-//---------------------------------------------------------
-
-class EditText : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, EditText)
-
-    Text* text;
-    String oldText;
-    //int undoLevel;
-
-    void undoRedo();
-
-public:
-    EditText(Text* t, const String& ot, int /*l*/)
-        : text(t), oldText(ot) /*, undoLevel(l)*/ {}
-    virtual void undo(EditData*) override;
-    virtual void redo(EditData*) override;
-    UNDO_NAME("EditText")
-    UNDO_CHANGED_OBJECTS({ text });
 };
 
 //---------------------------------------------------------
@@ -1099,66 +1058,6 @@ public:
 };
 
 //---------------------------------------------------------
-//   ChangeBend
-//---------------------------------------------------------
-
-class ChangeBend : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, ChangeBend)
-
-    Bend* bend;
-    PitchValues points;
-
-    void flip(EditData*) override;
-
-public:
-    ChangeBend(Bend* b, PitchValues p)
-        : bend(b), points(p) {}
-    UNDO_NAME("ChangeBend")
-    UNDO_CHANGED_OBJECTS({ bend });
-};
-
-//---------------------------------------------------------
-//   ChangeTremoloBar
-//---------------------------------------------------------
-
-class ChangeTremoloBar : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, ChangeTremoloBar)
-
-    TremoloBar* bend;
-    PitchValues points;
-
-    void flip(EditData*) override;
-
-public:
-    ChangeTremoloBar(TremoloBar* b, PitchValues p)
-        : bend(b), points(p) {}
-    UNDO_NAME("ChangeTremoloBar")
-    UNDO_CHANGED_OBJECTS({ bend });
-};
-
-//---------------------------------------------------------
-//   ChangeNoteEvents
-//---------------------------------------------------------
-
-class ChangeNoteEvents : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, ChangeNoteEvents)
-
-    Chord* chord = nullptr;
-    std::list<NoteEvent*> events;
-
-    void flip(EditData*) override;
-
-public:
-    ChangeNoteEvents(Chord* n, const std::list<NoteEvent*>& l)
-        : chord(n), events(l) {}
-    UNDO_NAME("ChangeNoteEvents")
-    UNDO_CHANGED_OBJECTS({ chord });
-};
-
-//---------------------------------------------------------
 //   ChangeNoteEventList
 //---------------------------------------------------------
 
@@ -1351,26 +1250,6 @@ public:
     ChangeMetaText(Score* s, const String& i, const String& t)
         : score(s), id(i), text(t) {}
     UNDO_NAME("ChangeMetaText")
-    UNDO_CHANGED_OBJECTS({ score });
-};
-
-//---------------------------------------------------------
-//   ChangeSynthesizerState
-//---------------------------------------------------------
-
-class ChangeSynthesizerState : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, ChangeSynthesizerState)
-
-    Score* score;
-    SynthesizerState state;
-
-    void flip(EditData*) override;
-
-public:
-    ChangeSynthesizerState(Score* s, const SynthesizerState& st)
-        : score(s), state(st) {}
-    UNDO_NAME("ChangeSynthesizerState")
     UNDO_CHANGED_OBJECTS({ score });
 };
 

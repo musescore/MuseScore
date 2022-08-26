@@ -1639,47 +1639,6 @@ void ChangeInstrumentLong::flip(EditData*)
 }
 
 //---------------------------------------------------------
-//   EditText::undo
-//---------------------------------------------------------
-
-void EditText::undo(EditData*)
-{
-/*      if (!text->styled()) {
-            for (int i = 0; i < undoLevel; ++i)
-                  text->undo();
-            }
-      */
-    undoRedo();
-}
-
-//---------------------------------------------------------
-//   EditText::redo
-//---------------------------------------------------------
-
-void EditText::redo(EditData*)
-{
-/*
-      if (!text->styled()) {
-            for (int i = 0; i < undoLevel; ++i)
-                  text->redo();
-            }
-      */
-    undoRedo();
-}
-
-//---------------------------------------------------------
-//   EditText::undoRedo
-//---------------------------------------------------------
-
-void EditText::undoRedo()
-{
-    String s = text->xmlText();
-    text->setXmlText(oldText);
-    oldText = s;
-    text->triggerLayout();
-}
-
-//---------------------------------------------------------
 //   ChangePatch
 //---------------------------------------------------------
 
@@ -2356,43 +2315,6 @@ void ChangeExcerptTitle::flip(EditData*)
 }
 
 //---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-
-void ChangeBend::flip(EditData*)
-{
-    PitchValues pv = bend->points();
-    bend->score()->addRefresh(bend->canvasBoundingRect());
-    bend->setPoints(points);
-    points = pv;
-    bend->layout();
-    bend->score()->addRefresh(bend->canvasBoundingRect());
-}
-
-//---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-
-void ChangeTremoloBar::flip(EditData*)
-{
-    PitchValues pv = bend->points();
-    bend->setPoints(points);
-    points = pv;
-}
-
-//---------------------------------------------------------
-//   ChangeNoteEvents::flip
-//---------------------------------------------------------
-
-void ChangeNoteEvents::flip(EditData*)
-{
-/*TODO:      std::list<NoteEvent*> e = chord->playEvents();
-      chord->setPlayEvents(events);
-      events = e;
-      */
-}
-
-//---------------------------------------------------------
 //   ChangeNoteEventList::flip
 //---------------------------------------------------------
 
@@ -2574,15 +2496,6 @@ void ChangeMetaText::flip(EditData*)
     String s = score->metaTag(id);
     score->setMetaTag(id, text);
     text = s;
-}
-
-//---------------------------------------------------------
-//   ChangeSynthesizerState::flip
-//---------------------------------------------------------
-
-void ChangeSynthesizerState::flip(EditData*)
-{
-    std::swap(state, score->_synthesizerState);
 }
 
 void AddBracket::redo(EditData*)
