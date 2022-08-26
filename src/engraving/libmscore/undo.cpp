@@ -2500,7 +2500,7 @@ void ChangeMetaText::flip(EditData*)
 
 void AddBracket::redo(EditData*)
 {
-    staff->setBracketType(level, type);
+    staff->setBracketType(level, bracketType);
     staff->setBracketSpan(level, span);
     staff->triggerLayout();
 }
@@ -2519,7 +2519,7 @@ void RemoveBracket::redo(EditData*)
 
 void RemoveBracket::undo(EditData*)
 {
-    staff->setBracketType(level, type);
+    staff->setBracketType(level, bracketType);
     staff->setBracketSpan(level, span);
     staff->triggerLayout();
 }
