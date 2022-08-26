@@ -68,8 +68,9 @@ void RasgueadoSegment::layout()
 {
     const StaffType* stType = staffType();
 
+    _skipDraw = false;
     if (stType && stType->isHiddenElementOnTab(score(), Sid::rasgueadoShowTabCommon, Sid::rasgueadoShowTabSimple)) {
-        setbbox(RectF());
+        _skipDraw = true;
         return;
     }
 

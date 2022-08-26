@@ -137,7 +137,6 @@ class Chord final : public ChordRest
 
     void layoutPitched();
     void layoutTablature();
-    double noteHeadWidth() const;
 
     bool shouldHaveStem() const;
     bool shouldHaveHook() const;
@@ -177,6 +176,7 @@ public:
     double chordMag() const;
     double mag() const override;
     double relativeMag() const { return _relativeMag; }
+    double noteHeadWidth() const;
 
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;

@@ -215,8 +215,9 @@ void Fermata::layout()
 {
     const StaffType* stType = staffType();
 
+    _skipDraw = false;
     if (stType && stType->isHiddenElementOnTab(score(), Sid::fermataShowTabCommon, Sid::fermataShowTabSimple)) {
-        setbbox(RectF());
+        _skipDraw = true;
         return;
     }
 

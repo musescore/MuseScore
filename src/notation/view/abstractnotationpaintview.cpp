@@ -382,6 +382,11 @@ INotationPlaybackPtr AbstractNotationPaintView::notationPlayback() const
     return globalContext()->currentMasterNotation() ? globalContext()->currentMasterNotation()->playback() : nullptr;
 }
 
+QQuickItem* AbstractNotationPaintView::asItem()
+{
+    return this;
+}
+
 INotationNoteInputPtr AbstractNotationPaintView::notationNoteInput() const
 {
     return notationInteraction() ? notationInteraction()->noteInput() : nullptr;

@@ -69,8 +69,9 @@ void LetRingSegment::layout()
 {
     const StaffType* stType = staffType();
 
+    _skipDraw = false;
     if (stType && stType->isHiddenElementOnTab(score(), Sid::letRingShowTabCommon, Sid::letRingShowTabSimple)) {
-        setbbox(RectF());
+        _skipDraw = true;
         return;
     }
 

@@ -88,6 +88,10 @@ public:
     virtual void endDrag() = 0;
     virtual async::Notification dragChanged() const = 0;
 
+    virtual bool isDragCopyStarted() const = 0;
+    virtual void startDragCopy(const EngravingItem* element, QObject* dragSource) = 0;
+    virtual void endDragCopy() = 0;
+
     // Drop
     //! TODO Change KeyboardModifiers to modes
     virtual void startDrop(const QByteArray& edata) = 0;

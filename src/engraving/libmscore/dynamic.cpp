@@ -280,8 +280,9 @@ void Dynamic::layout()
 {
     const StaffType* stType = staffType();
 
+    _skipDraw = false;
     if (stType && stType->isHiddenElementOnTab(score(), Sid::dynamicsShowTabCommon, Sid::dynamicsShowTabSimple)) {
-        setbbox(RectF());
+        _skipDraw = true;
         return;
     }
 

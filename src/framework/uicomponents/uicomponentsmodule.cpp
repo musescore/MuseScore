@@ -32,6 +32,7 @@
 #include "view/dropdownview.h"
 #include "view/menuview.h"
 #include "view/filepickermodel.h"
+#include "view/colorpickermodel.h"
 #include "view/itemmultiselectionmodel.h"
 #include "view/textinputfieldmodel.h"
 #include "view/selectmultipledirectoriesmodel.h"
@@ -98,6 +99,7 @@ void UiComponentsModule::registerUiTypes()
     qmlRegisterType<MenuView>("MuseScore.UiComponents", 1, 0, "MenuView");
 
     qmlRegisterType<FilePickerModel>("MuseScore.UiComponents", 1, 0, "FilePickerModel");
+    qmlRegisterType<ColorPickerModel>("MuseScore.UiComponents", 1, 0, "ColorPickerModel");
     qmlRegisterType<ItemMultiSelectionModel>("MuseScore.UiComponents", 1, 0, "ItemMultiSelectionModel");
 
     qmlRegisterType<TextInputFieldModel>("MuseScore.UiComponents", 1, 0, "TextInputFieldModel");

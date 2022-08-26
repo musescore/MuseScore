@@ -110,6 +110,11 @@ io::paths_t AutobotInteractive::selectMultipleDirectories(const QString& title, 
     return m_real->selectMultipleDirectories(title, dir, initialDirectories);
 }
 
+QColor AutobotInteractive::selectColor(const QColor& color, const QString& title)
+{
+    return m_real->selectColor(color, title);
+}
+
 RetVal<Val> AutobotInteractive::open(const std::string& uri) const
 {
     return m_real->open(uri);

@@ -767,6 +767,10 @@ ProjectMeta NotationProject::metaInfo() const
 
 void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
 {
+    if (meta == metaInfo()) {
+        return;
+    }
+
     std::map<String, String> tags {
         { WORK_TITLE_TAG, meta.title },
         { SUBTITLE_TAG, meta.subtitle },
@@ -784,11 +788,13 @@ void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
         tags[tag] = meta.additionalTags[tag].toString();
     }
 
-    mu::engraving::MasterScore* score = m_masterNotation->masterScore();
+    MasterScore* score = m_masterNotation->masterScore();
+
     if (undoable) {
         m_masterNotation->undoStack()->prepareChanges();
         score->undo(new mu::engraving::ChangeMetaTags(score, tags));
         m_masterNotation->undoStack()->commitChanges();
+        m_masterNotation->notation()->notationChanged().notify();
     } else {
         score->setMetaTags(tags);
     }

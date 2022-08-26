@@ -30,6 +30,7 @@
 #include <QApplication>
 #include <QKeyEvent>
 #include <QMimeData>
+#include <QDrag>
 
 #include "defer.h"
 #include "ptrutils.h"
@@ -1050,6 +1051,49 @@ mu::async::Notification NotationInteraction::dragChanged() const
     return m_dragChanged;
 }
 
+bool NotationInteraction::isDragCopyStarted() const
+{
+    return m_drag != nullptr;
+}
+
+//! NOTE: Copied from ScoreView::cloneElement
+void NotationInteraction::startDragCopy(const EngravingItem* element, QObject* dragSource)
+{
+    if (!element) {
+        return;
+    }
+
+    if (element->isMeasure() || element->isNote() || element->isVBox()) {
+        return;
+    }
+
+    if (isDragStarted()) {
+        endDragCopy();
+    }
+
+    if (element->isSpannerSegment()) {
+        element = toSpannerSegment(element)->spanner();
+    }
+
+    QMimeData* mimeData = new QMimeData();
+    mimeData->setData(mu::engraving::mimeSymbolFormat, element->mimeData().toQByteArray());
+
+    m_drag = new QDrag(dragSource);
+    m_drag->setMimeData(mimeData);
+
+    static QPixmap pixmap(2, 2); // null or 1x1 crashes on Linux under ChromeOS?!
+    pixmap.fill(Qt::white);
+
+    m_drag->setPixmap(pixmap);
+    m_drag->exec(Qt::CopyAction);
+}
+
+void NotationInteraction::endDragCopy()
+{
+    delete m_drag;
+    m_drag = nullptr;
+}
+
 //! NOTE Copied from ScoreView::dragEnterEvent
 void NotationInteraction::startDrop(const QByteArray& edata)
 {
@@ -1503,7 +1547,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             // TODO - handle cross-voice selections
             staff_idx_t idx = cr1->staffIdx();
 
-            ByteArray a = element->mimeData(PointF());
+            ByteArray a = element->mimeData();
 //printf("<<%s>>\n", a.data());
             mu::engraving::XmlReader e(a);
             mu::engraving::Fraction duration;        // dummy
@@ -1735,7 +1779,7 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
     if (target->acceptDrop(*dropData)) {
         // use same code path as drag&drop
 
-        ByteArray a = e->mimeData(PointF());
+        ByteArray a = e->mimeData();
 
         mu::engraving::XmlReader n(a);
         n.context()->setPasteMode(pasteMode);
@@ -3669,7 +3713,15 @@ void NotationInteraction::addTupletToSelectedChordRests(const TupletOptions& opt
 
     for (ChordRest* chordRest : score()->getSelectedChordRests()) {
         if (!chordRest->isGrace()) {
-            score()->addTuplet(chordRest, options.ratio, options.numberType, options.bracketType);
+            Fraction ratio = options.ratio;
+            // prevent weird dotted tuplets when adding tuplets to dotted durations
+            if (options.autoBaseLen) {
+                ratio.setDenominator(chordRest->dots() ? 3 : 2);
+                while (ratio.numerator() >= ratio.denominator() * 2) {
+                    ratio.setDenominator(ratio.denominator() * 2);      // operator*= reduces, we don't want that here
+                }
+            }
+            score()->addTuplet(chordRest, ratio, options.numberType, options.bracketType);
         }
     }
 

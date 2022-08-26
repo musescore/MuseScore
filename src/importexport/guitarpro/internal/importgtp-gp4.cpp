@@ -767,12 +767,18 @@ bool GuitarPro4::read(IODevice* io)
         } else {
             clefId = defaultClef(patch);
         }
+
         Measure* measure = score->firstMeasure();
-        Segment* segment = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
-        Clef* clef = Factory::createClef(segment);
-        clef->setClefType(clefId);
-        clef->setTrack(i * VOICES);
-        segment->add(clef);
+        if (measure->tick() != Fraction(0, 1)) {
+            Segment* segment = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
+
+            Clef* clef = Factory::createClef(segment);
+            clef->setClefType(clefId);
+            clef->setTrack(i * VOICES);
+            segment->add(clef);
+        } else {
+            staff->setDefaultClefType(ClefTypeList(clefId, clefId));
+        }
 
         if (capo > 0) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
