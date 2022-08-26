@@ -1881,7 +1881,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 LOGD("remove keysig c at tick 0");
                 if (ks->links()) {
                     if (ks->links()->size() == 1) {
-                        mu::remove(ctx.linkIds(), ks->links()->lid());
+                        mu::remove(e.context()->linkIds(), ks->links()->lid());
                     }
                 }
             } else {
