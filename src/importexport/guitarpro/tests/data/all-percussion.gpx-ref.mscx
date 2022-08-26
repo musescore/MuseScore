@@ -25,6 +25,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Hand Clap</trackName>
       <Instrument id="hand-clap">
@@ -510,6 +511,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Congas</trackName>
       <Instrument id="congas">
@@ -995,6 +997,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Timbale</trackName>
       <Instrument id="piano">
@@ -1480,6 +1483,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Agogo</trackName>
       <Instrument id="piano">
@@ -1965,6 +1969,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Cabasa</trackName>
       <Instrument id="cabasa">
@@ -2450,6 +2455,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Maracas</trackName>
       <Instrument id="maracas">
@@ -2935,6 +2941,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Whistle</trackName>
       <Instrument id="piano">
@@ -3420,6 +3427,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Bongos</trackName>
       <Instrument id="bongos">
@@ -3905,6 +3913,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Vibraslap</trackName>
       <Instrument id="vibraslap">
@@ -4390,6 +4399,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Tambourine</trackName>
       <Instrument id="tambourine">
@@ -4875,6 +4885,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Cuica</trackName>
       <Instrument id="cuica">
@@ -5360,6 +5371,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Triangle</trackName>
       <Instrument id="triangle">
@@ -5845,6 +5857,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Claves</trackName>
       <Instrument id="claves">
@@ -6330,6 +6343,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Shaker</trackName>
       <Instrument id="piano">
@@ -6815,6 +6829,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Jingle Bell</trackName>
       <Instrument id="piano">
@@ -7300,6 +7315,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Bell Tree</trackName>
       <Instrument id="piano">
@@ -7785,6 +7801,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Woodblock</trackName>
       <Instrument id="piano">
@@ -8270,6 +8287,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Guiro</trackName>
       <Instrument id="piano">
@@ -8755,6 +8773,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Castanets</trackName>
       <Instrument id="castanets">
@@ -9240,6 +9259,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Surdo</trackName>
       <Instrument id="piano">
@@ -9725,6 +9745,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Drumkit</trackName>
       <Instrument id="drumset">
@@ -10207,10 +10228,6 @@
     <Staff id="1">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -10548,10 +10565,6 @@
     <Staff id="2">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -10885,10 +10898,6 @@
     <Staff id="3">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -11221,10 +11230,6 @@
     <Staff id="4">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -11557,10 +11562,6 @@
     <Staff id="5">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -11889,10 +11890,6 @@
     <Staff id="6">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -12221,10 +12218,6 @@
     <Staff id="7">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -12557,10 +12550,6 @@
     <Staff id="8">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -12893,10 +12882,6 @@
     <Staff id="9">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -13225,10 +13210,6 @@
     <Staff id="10">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -13558,10 +13539,6 @@
     <Staff id="11">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -13894,10 +13871,6 @@
     <Staff id="12">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -14232,10 +14205,6 @@
     <Staff id="13">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -14564,10 +14533,6 @@
     <Staff id="14">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -14896,10 +14861,6 @@
     <Staff id="15">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -15228,10 +15189,6 @@
     <Staff id="16">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -15560,10 +15517,6 @@
     <Staff id="17">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -15896,10 +15849,6 @@
     <Staff id="18">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -16234,10 +16183,6 @@
     <Staff id="19">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -16566,10 +16511,6 @@
     <Staff id="20">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -16904,10 +16845,6 @@
     <Staff id="21">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>

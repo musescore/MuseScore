@@ -25,6 +25,7 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Percussions</trackName>
       <Instrument id="piano">
@@ -507,10 +508,6 @@
     <Staff id="1">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
