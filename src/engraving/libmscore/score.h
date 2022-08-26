@@ -1238,7 +1238,6 @@ public:
 
     void autoUpdateSpatium();
 
-    friend class ChangeSynthesizerState;
     friend class Chord;
 };
 
