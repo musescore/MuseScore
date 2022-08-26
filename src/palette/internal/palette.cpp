@@ -215,7 +215,7 @@ static bool isEquivalent(const EngravingItem& e1, const EngravingItem& e2)
 {
     return e1.type() == e2.type()
            && e1.subtype() == e2.subtype()
-           && e1.mimeData(PointF()) == e2.mimeData(PointF());
+           && e1.mimeData() == e2.mimeData();
 }
 
 int Palette::indexOfCell(const PaletteCell& cell, bool matchName) const

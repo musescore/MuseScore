@@ -487,6 +487,11 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         return;
     }
 
+    if (keyState == (Qt::ShiftModifier | Qt::ControlModifier)) {
+        viewInteraction()->startDragCopy(hitElement, m_view->asItem());
+        return;
+    }
+
     ClickContext ctx;
     ctx.logicClickPos = logicPos;
     ctx.hitElement = hitElement;
@@ -599,6 +604,10 @@ void NotationViewInputController::updateTextCursorPosition()
 
 void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 {
+    if (viewInteraction()->isDragCopyStarted()) {
+        return;
+    }
+
     PointF logicPos = m_view->toLogical(event->pos());
     Qt::KeyboardModifiers keyState = event->modifiers();
 
@@ -692,6 +701,10 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
 
     if (interaction->isDragStarted()) {
         interaction->endDrag();
+    }
+
+    if (interaction->isDragCopyStarted()) {
+        interaction->endDragCopy();
     }
 }
 

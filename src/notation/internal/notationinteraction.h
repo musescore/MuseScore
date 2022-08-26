@@ -41,6 +41,8 @@ namespace mu::engraving {
 class Lasso;
 }
 
+class QDrag;
+
 namespace mu::notation {
 class Notation;
 class NotationSelection;
@@ -94,6 +96,10 @@ public:
     void drag(const PointF& fromPos, const PointF& toPos, DragMode mode) override;
     void endDrag() override;
     async::Notification dragChanged() const override;
+
+    bool isDragCopyStarted() const override;
+    void startDragCopy(const EngravingItem* element, QObject* dragSource) override;
+    void endDragCopy() override;
 
     // Drop
     void startDrop(const QByteArray& edata) override;
@@ -399,6 +405,8 @@ private:
     DragData m_dragData;
     async::Notification m_dragChanged;
     std::vector<LineF> m_anchorLines;
+
+    QDrag* m_drag = nullptr;
 
     mu::engraving::EditData m_editData;
 
