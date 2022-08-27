@@ -2934,16 +2934,17 @@ static void createLinkedTabs(MasterScore* score)
             Staff* srcStaff = part->staff(i);
             Staff* dstStaff = part->staff(stavesNum + i);
 
-            StaffTypes tabType = StaffTypes::TAB_6COMMON;
+            Excerpt::cloneStaff(srcStaff, dstStaff);
+
+            StaffTypes tabType = StaffTypes::TAB_6SIMPLE;
             if (lines == 4) {
-                tabType = StaffTypes::TAB_4COMMON;
+                tabType = StaffTypes::TAB_4SIMPLE;
             } else if (lines == 5) {
-                tabType = StaffTypes::TAB_5COMMON;
+                tabType = StaffTypes::TAB_5SIMPLE;
             }
 
             dstStaff->setStaffType(fr, *StaffType::preset(tabType));
             dstStaff->setLines(fr, static_cast<int>(lines));
-            Excerpt::cloneStaff(srcStaff, dstStaff);
         }
     }
 }

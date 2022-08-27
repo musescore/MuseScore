@@ -1544,7 +1544,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
                 // there is a tie that starts on this chordrest
                 tie = nullptr;
             }
-            if (tie) {
+            if (tie && !tie->segmentsEmpty()) {
                 endPoint = tie->segmentAt(0)->ups(Grip::START).pos();
             }
             bool adjustedVertically = false;
