@@ -43,8 +43,6 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-extern MScore* mscore;
-
 //---------------------------------------------------------
 //   MCursor
 //---------------------------------------------------------
