@@ -79,7 +79,13 @@ const QVariant ShortcutsModel::SectionName(const Shortcut& shortcut) const
 
 QStringList ShortcutsModel::getSections() const
 {
-    return UiAction::categories;
+    QStringList returnValue;
+    for (TranslatableString category : UiAction::categories)
+    {
+        returnValue.push_back(category.qTranslated());
+    }
+
+    return returnValue;
 }
 
 const UiAction& ShortcutsModel::action(const std::string& actionCode) const

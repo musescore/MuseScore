@@ -216,11 +216,26 @@ enum class ActionCategory {
 
 struct UiAction
 {
-    inline static QStringList categories
-        = { "Undefined", "Internal", "Tablature", "Viewing & Navigation", "Playback", "Layout & Formatting", "Selecting & Editing",
-            "Application", "Accessibility", "File", "Selection & Navigation",
-            "Text & Lyrics", "Chord symbols & figured bass", "Measures", "Musical Symbols", "Dialogs & Panels",
-            "Note Input", "Workspace", "Plugins" };
+    inline static std::vector<TranslatableString> categories
+        = { TranslatableString("framework/actioncategory", "Undefined"),
+            TranslatableString("framework/actioncategory", "Internal"),
+            TranslatableString("framework/actioncategory", "Tablature"),
+            TranslatableString("framework/actioncategory", "Viewing & Navigation"),
+            TranslatableString("framework/actioncategory", "Playback"),
+            TranslatableString("framework/actioncategory", "Layout & Formatting"),
+            TranslatableString("framework/actioncategory", "Selecting & Editing"),
+            TranslatableString("framework/actioncategory", "Application"),
+            TranslatableString("framework/actioncategory", "Accessibility"),
+            TranslatableString("framework/actioncategory", "File"),
+            TranslatableString("framework/actioncategory", "Selection & Navigation"),
+            TranslatableString("framework/actioncategory", "Text & Lyrics"),
+            TranslatableString("framework/actioncategory", "Chord symbols & figured bass"),
+            TranslatableString("framework/actioncategory", "Measures"),
+            TranslatableString("framework/actioncategory", "Musical Symbols"),
+            TranslatableString("framework/actioncategory", "Dialogs & Panels"),
+            TranslatableString("framework/actioncategory", "Note Input"),
+            TranslatableString("framework/actioncategory", "Workspace"),
+            TranslatableString("framework/actioncategory", "Plugins") };
 
     actions::ActionCode code;
     UiContext uiCtx = UiCtxAny;
@@ -259,12 +274,10 @@ struct UiAction
 
     QString getCategory() const
     {
-        //LOGD() << "Categories: " << categories.length() << "| Requested Category: " << (int)category << " by: " << code;
-
-        if ((int)category + 1 >= 0 && (int)category + 1 < categories.length()) {
-            return categories[(int)category + 1];
+        if ((int)category + 1 >= 0 && (int)category + 1 < categories.size()) {
+            return categories[(int)category + 1].qTranslated();
         }
-
+        LOGE() << "Categories: " << categories.size() << "| Requested Category: " << (int)category << " by: " << code;
         return "NULL";
     }
 
