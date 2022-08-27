@@ -58,12 +58,6 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-#ifdef Q_OS_MAC
-#define CONTROL_MODIFIER Qt::AltModifier
-#else
-#define CONTROL_MODIFIER ControlModifier
-#endif
-
 static const double subScriptSize     = 0.6;
 static const double subScriptOffset   = 0.5;       // of x-height
 static const double superScriptOffset = -.9;      // of x-height

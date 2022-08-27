@@ -482,7 +482,7 @@ bool TextBase::edit(EditData& ed)
             break;
 
         case Key_Space:
-            if (ed.modifiers & CONTROL_MODIFIER) {
+            if (ed.modifiers & TextEditingControlModifier) {
                 s = String(Char(0xa0));               // non-breaking space
             } else {
                 if (isFingering() && ed.view()) {
