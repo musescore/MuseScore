@@ -3719,16 +3719,15 @@ void Measure::addSystemHeader(bool isFirstSystem)
                     cl = c->clefTypeList();
                 }
             }
-            Clef* clef;
+            Clef* clef = nullptr;
             if (!cSegment) {
                 cSegment = Factory::createSegment(this, SegmentType::HeaderClef, Fraction(0, 1));
                 cSegment->setHeader(true);
                 add(cSegment);
-                clef = 0;
             } else {
                 clef = toClef(cSegment->element(track));
             }
-            if (staff->staffType(tick())->genClef()) {
+            if (staff->staffTypeForElement(this)->genClef()) {
                 if (!clef) {
                     //
                     // create missing clef
