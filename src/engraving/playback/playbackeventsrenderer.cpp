@@ -66,8 +66,7 @@ void PlaybackEventsRenderer::render(const EngravingItem* item, const int tickPos
     }
 
     if (item->type() == ElementType::CHORD) {
-        renderNoteEvents(toChord(
-                             item), tickPositionOffset, nominalDynamicLevel, persistentArticulationApplied, profile, result);
+        renderNoteEvents(toChord(item), tickPositionOffset, nominalDynamicLevel, persistentArticulationApplied, profile, result);
     } else if (item->type() == ElementType::REST) {
         renderRestEvents(toRest(item), tickPositionOffset, result);
     }
