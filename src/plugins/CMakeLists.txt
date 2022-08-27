@@ -43,6 +43,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsactioncontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsactioncontroller.h
+
     ${CMAKE_CURRENT_LIST_DIR}/api/apitypes.h
     ${CMAKE_CURRENT_LIST_DIR}/api/cursor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/api/cursor.h
@@ -59,10 +60,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/api/part.h
     ${CMAKE_CURRENT_LIST_DIR}/api/playevent.cpp
     ${CMAKE_CURRENT_LIST_DIR}/api/playevent.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/qmlpluginapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/qmlpluginapi.h
     ${CMAKE_CURRENT_LIST_DIR}/api/qmlplugin.cpp
     ${CMAKE_CURRENT_LIST_DIR}/api/qmlplugin.h
+    ${CMAKE_CURRENT_LIST_DIR}/api/qmlpluginapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/api/qmlpluginapi.h
     ${CMAKE_CURRENT_LIST_DIR}/api/score.cpp
     ${CMAKE_CURRENT_LIST_DIR}/api/score.h
     ${CMAKE_CURRENT_LIST_DIR}/api/scoreelement.cpp
