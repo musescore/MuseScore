@@ -1513,7 +1513,7 @@ void Note::read(XmlReader& e)
         }
     }
     // ensure sane values:
-    _pitch = limit(_pitch, 0, 127);
+    _pitch = std::clamp(_pitch, 0, 127);
 
     if (!tpcIsValid(_tpc[0]) && !tpcIsValid(_tpc[1])) {
         Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
@@ -2756,7 +2756,7 @@ int Note::customizeVelocity(int velo) const
     } else if (veloType() == VeloType::USER_VAL) {
         velo = veloOffset();
     }
-    return limit(velo, 1, 127);
+    return std::clamp(velo, 1, 127);
 }
 
 //---------------------------------------------------------

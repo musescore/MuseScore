@@ -275,21 +275,6 @@ public:
 
     static void setError(MsError e) { _error = e; }
 };
-
-//---------------------------------------------------------
-//   limit
-//---------------------------------------------------------
-
-constexpr int limit(int val, int min, int max)
-{
-    if (val > max) {
-        return max;
-    }
-    if (val < min) {
-        return min;
-    }
-    return val;
-}
 } // namespace mu::engraving
 
 #endif
