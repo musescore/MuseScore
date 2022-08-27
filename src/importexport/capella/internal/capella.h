@@ -23,6 +23,8 @@
 #ifndef __CAPELLA_H__
 #define __CAPELLA_H__
 
+#include <QFont>
+
 #include "engraving/rw/xml.h"
 #include "engraving/types/types.h"
 
