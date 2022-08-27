@@ -55,11 +55,6 @@ extern int chromatic2diatonic(int val);
 
 int diatonicUpDown(Key, int pitch, int steps);
 
-extern int version();
-extern int majorVersion();
-extern int minorVersion();
-extern int patchVersion();
-
 extern Note* nextChordNote(Note* note);
 extern Note* prevChordNote(Note* note);
 extern Segment* nextSeg1(Segment* s, track_idx_t& track);

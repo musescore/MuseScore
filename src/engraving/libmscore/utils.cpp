@@ -636,61 +636,6 @@ int searchInterval(int steps, int semitones)
     return -1;
 }
 
-static int _majorVersion, _minorVersion, _patchVersion;
-
-/*!
- * Returns the program version
- *
- * @return
- *  Version in the format: MMmmpp
- *  Where M=Major, m=minor, and p=patch
- */
-
-int version()
-{
-    StringList l = String::fromAscii(VERSION).split(u'.');
-    if (l.size() > 2) {
-        _majorVersion = l.at(0).toInt();
-        _minorVersion = l.at(1).toInt();
-        _patchVersion = l.at(2).toInt();
-
-        return _majorVersion * 10000 + _minorVersion * 100 + _patchVersion;
-    }
-
-    LOGD() << "Could not parse version:" << VERSION;
-    return 0;
-}
-
-//---------------------------------------------------------
-//   majorVersion
-//---------------------------------------------------------
-
-int majorVersion()
-{
-    version();
-    return _majorVersion;
-}
-
-//---------------------------------------------------------
-//   minorVersion
-//---------------------------------------------------------
-
-int minorVersion()
-{
-    version();
-    return _minorVersion;
-}
-
-//---------------------------------------------------------
-//   patchVersion
-//---------------------------------------------------------
-
-int patchVersion()
-{
-    version();
-    return _patchVersion;
-}
-
 //---------------------------------------------------------
 //   diatonicUpDown
 //    used to find the second note of a trill, mordent etc.
