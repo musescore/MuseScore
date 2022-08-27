@@ -22,8 +22,6 @@
 
 #include "qmlplugin.h"
 
-#include "libmscore/musescoreCore.h"
-
 #include "log.h"
 
 namespace mu::engraving {

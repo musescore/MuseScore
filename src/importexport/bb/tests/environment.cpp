@@ -26,6 +26,9 @@
 #include "draw/drawmodule.h"
 #include "engraving/engravingmodule.h"
 
+#include "engraving/libmscore/instrtemplate.h"
+#include "engraving/libmscore/mscore.h"
+
 #include "log.h"
 
 static mu::testing::SuiteEnvironment importexport_se(
@@ -36,5 +39,10 @@ static mu::testing::SuiteEnvironment importexport_se(
 },
     []() {
     LOGI() << "bb tests suite post init";
+
+    mu::engraving::MScore::testMode = true;
+    mu::engraving::MScore::noGui = true;
+
+    mu::engraving::loadInstrumentTemplates(":/data/instruments.xml");
 }
     );

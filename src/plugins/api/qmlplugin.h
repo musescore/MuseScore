@@ -25,11 +25,7 @@
 
 #include <QQuickItem>
 
-#include "config.h"
-
-#include "libmscore/mscore.h"
 #include "libmscore/musescoreCore.h"
-#include "libmscore/utils.h"
 
 namespace mu::engraving {
 class MsProcess;

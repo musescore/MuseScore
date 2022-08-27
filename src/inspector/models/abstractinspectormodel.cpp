@@ -21,8 +21,6 @@
  */
 #include "abstractinspectormodel.h"
 
-#include "libmscore/musescoreCore.h"
-
 #include "types/texttypes.h"
 
 #include "log.h"

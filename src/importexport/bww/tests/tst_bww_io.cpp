@@ -86,7 +86,7 @@ private slots:
 
 void TestBwwIO::initTestCase()
 {
-    initMTest(QString(iex_bww_tests_DATA_ROOT));
+    setRootDir(QString(iex_bww_tests_DATA_ROOT));
 }
 
 //---------------------------------------------------------
