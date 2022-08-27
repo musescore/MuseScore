@@ -193,25 +193,25 @@ enum class Checkable {
 };
 
 enum class ActionCategory {
-    Undefined = -1,
-    Internal,
-    Tablature,
-    Viewingnavigation,
-    Playback,
-    Layoutformatting,
-    Selectingediting,
-    Application,
-    Accessibility,
-    File,
-    Selectionnavigation,
-    Textlyrics,
-    Chordsymbolsfiguredbass,
-    Measures,
-    Musicalsymbols,
-    Dialogspanels,
-    Noteinput,
-    Workspace,
-    Plugins
+    UNDEFINED = -1,
+    INTERNAL,
+    TABLATURE,
+    VIEWINGNAVIGATION,
+    PLAYBACK,
+    LAYOUTFORMATTING,
+    SELECTINGEDITING,
+    APPLICATION,
+    ACCESSIBILITY,
+    FILE,
+    SELECTIONNAVIGATION,
+    TEXTLYRICS,
+    CHORDSYMBOLSFIGUREDBASS,
+    MEASURES,
+    MUSICALSYMBOLS,
+    DIALOGSPANELS,
+    NOTEINPUT,
+    WORKSPACE,
+    PLUGINS
 };
 
 struct UiAction
@@ -242,7 +242,7 @@ struct UiAction
     std::string scCtx = "any";
     MnemonicString title;
     TranslatableString description;
-    ActionCategory category = ActionCategory::Internal;
+    ActionCategory category = ActionCategory::INTERNAL;
     IconCode::Code iconCode = IconCode::Code::NONE;
     Checkable checkable = Checkable::No;
     std::vector<std::string> shortcuts;

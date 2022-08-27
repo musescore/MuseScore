@@ -40,7 +40,7 @@ PluginsUiActions::PluginsUiActions(std::shared_ptr<PluginsService> service)
 
 static UiAction MANAGE_ACTION = UiAction(
     "manage-plugins",
-    ActionCategory::Plugins,
+    ActionCategory::PLUGINS,
     mu::context::UiCtxAny,
     mu::context::CTX_ANY,
     TranslatableString("action", "&Manage plugins…"),

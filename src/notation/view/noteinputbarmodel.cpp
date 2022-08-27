@@ -559,7 +559,7 @@ MenuItem* NoteInputBarModel::makeActionItem(const UiAction& action, const QStrin
 
 MenuItem* NoteInputBarModel::makeAddItem(const QString& section)
 {
-    static const UiAction addAction(ADD_ACTION_CODE, ActionCategory::Internal, UiCtxAny, mu::context::CTX_ANY, ADD_ACTION_TITLE,
+    static const UiAction addAction(ADD_ACTION_CODE, ActionCategory::INTERNAL, UiCtxAny, mu::context::CTX_ANY, ADD_ACTION_TITLE,
                                     ADD_ACTION_ICON_CODE);
     return makeActionItem(addAction, section, makeAddItems());
 }

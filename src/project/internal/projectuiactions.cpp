@@ -28,7 +28,7 @@ using namespace mu::ui;
 
 const UiActionList ProjectUiActions::m_actions = {
     UiAction("file-open",
-             ActionCategory::File,
+             ActionCategory::FILE,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Open…"),
@@ -36,7 +36,7 @@ const UiActionList ProjectUiActions::m_actions = {
              IconCode::Code::OPEN_FILE
              ),
     UiAction("file-new",
-             ActionCategory::File,
+             ActionCategory::FILE,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "&New…"),
@@ -103,7 +103,7 @@ const UiActionList ProjectUiActions::m_actions = {
              IconCode::Code::SHARE_FILE
              ),
     UiAction("file-import-pdf",
-             ActionCategory::Undefined,
+             ActionCategory::UNDEFINED,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Import P&DF…"),
@@ -118,7 +118,7 @@ const UiActionList ProjectUiActions::m_actions = {
              TranslatableString("action", "Project properties…")
              ),
     UiAction("print",
-             ActionCategory::File,
+             ActionCategory::FILE,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Print…"),
@@ -126,7 +126,7 @@ const UiActionList ProjectUiActions::m_actions = {
              IconCode::Code::PRINT
              ),
     UiAction("clear-recent",
-             ActionCategory::File,
+             ActionCategory::FILE,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Clear recent files"),

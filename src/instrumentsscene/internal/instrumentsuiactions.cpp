@@ -30,14 +30,14 @@ using namespace mu::ui;
 
 const UiActionList InstrumentsUiActions::m_actions = {
     UiAction("instruments",
-             ActionCategory::Dialogspanels,
+             ActionCategory::DIALOGSPANELS,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Add/remove instruments…"),
              TranslatableString("action", "Add/remove instruments…")
              ),
     UiAction("change-instrument",
-             ActionCategory::Dialogspanels,
+             ActionCategory::DIALOGSPANELS,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Select instrument…"),

@@ -29,13 +29,13 @@ using namespace mu::ui;
 
 const UiActionList WorkspaceUiActions::m_actions = {
     UiAction("select-workspace",
-             ActionCategory::Undefined,
+             ActionCategory::UNDEFINED,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Select workspace")
              ),
     UiAction("configure-workspaces",
-             ActionCategory::Viewingnavigation,
+             ActionCategory::VIEWINGNAVIGATION,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Configure workspace"),
