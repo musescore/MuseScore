@@ -114,8 +114,6 @@ static constexpr double DPMM      = DPI / INCH;
 
 static constexpr int MAX_STAVES = 4;
 
-static constexpr int SHADOW_NOTE_LIGHT = 135;
-
 static constexpr char mimeSymbolFormat[]     = "application/musescore/symbol";
 static constexpr char mimeSymbolListFormat[] = "application/musescore/symbollist";
 static constexpr char mimeStaffListFormat[]  = "application/musescore/stafflist";
