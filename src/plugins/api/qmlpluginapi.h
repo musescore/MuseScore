@@ -23,25 +23,22 @@
 #ifndef __QMLPLUGINAPI_H__
 #define __QMLPLUGINAPI_H__
 
-#include "config.h"
+#include <QFile>
+
 #include "qmlplugin.h"
 #include "enums.h"
-#include "libmscore/harmony.h"
-#include "libmscore/lyrics.h"
-#include "libmscore/mscore.h"
-#include "libmscore/utils.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/spanner.h"
 #include "framework/actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
 #include "modularity/ioc.h"
+
+#include "engraving/libmscore/types.h"
+#include "engraving/types/types.h"
 
 #include "apitypes.h"
 
 namespace mu::engraving {
 class EngravingItem;
 class MScore;
-class MuseScoreCore;
 
 /**
  * \namespace mu::engraving::PluginAPI
@@ -290,8 +287,8 @@ public:
 
     Q_INVOKABLE void quit();
 
-protected:
-    virtual MuseScoreCore* msc() const override;
+private:
+    mu::engraving::Score* currentScore() const;
 };
 
 #undef DECLARE_API_ENUM
