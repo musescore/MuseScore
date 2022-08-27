@@ -39,7 +39,7 @@ var testCase = {
         }},
         {name: "Create score with Flute", func: function() {
             NewScore.selectTab("instruments")
-            NewScore.сhooseInstrument("Woodwinds", "Flute")
+            NewScore.chooseInstrument("Woodwinds", "Flute")
             NewScore.done()
         }},
         {name: "Put notes", func: function() {
@@ -140,7 +140,7 @@ var testCase = {
             Instruments.openAddInstrumentsDialog()
         }},
         {name: "Select Oboe Instrument", func: function() {
-            Instruments.сhooseInstrument("Woodwinds", "Oboe")
+            Instruments.chooseInstrument("Woodwinds", "Oboe")
             Instruments.doneAddInstruments()
         }},
         {name: "Add StaffText to Oboe", func: function() {

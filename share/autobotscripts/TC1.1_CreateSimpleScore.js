@@ -38,9 +38,9 @@ var testCase = {
         }},
         {name: "Select Instruments", func: function() {
             NewScore.selectTab("instruments")
-            NewScore.сhooseInstrument("Woodwinds", "Flute")
+            NewScore.chooseInstrument("Woodwinds", "Flute")
             api.autobot.seeChanges()
-            NewScore.сhooseInstrument("Keyboards", "Piano")
+            NewScore.chooseInstrument("Keyboards", "Piano")
         }},
         {name: "Create score", func: function() {
             NewScore.done()
