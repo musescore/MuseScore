@@ -14,7 +14,7 @@
         <file>qml/DevTools/CrashHandler/CrashHandlerDevTools.qml</file>
         <file>qml/AboutDialog.qml</file>
         <file>qml/AboutMusicXMLDialog.qml</file>
-        <file>qml/resources/mu_logo.svg</file>
+        <file>qml/resources/mu_logo.png</file>
         <file>qml/shared/AccentColorsList.qml</file>
         <file>qml/shared/ThemeSamplesList.qml</file>
         <file>qml/shared/internal/ThemeSample.qml</file>
