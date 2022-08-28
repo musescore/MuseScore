@@ -1826,7 +1826,7 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
 //    symbols which were not available for use prior to 3.0
 //---------------------------------------------------------
 
-static void convertDoubleArticulations(Chord* chord, ReadContext& ctx)
+static void convertDoubleArticulations(Chord* chord, XmlReader& e)
 {
     std::vector<Articulation*> pairableArticulations;
     for (Articulation* a : chord->articulations()) {
@@ -1873,7 +1873,7 @@ static void convertDoubleArticulations(Chord* chord, ReadContext& ctx)
             chord->remove(a);
             if (a != newArtic) {
                 if (LinkedObjects* link = a->links()) {
-                    mu::remove(ctx.linkIds(), link->lid());
+                    mu::remove(e.context()->linkIds(), link->lid());
                 }
                 delete a;
             }
@@ -1944,7 +1944,7 @@ static void readChord(Chord* chord, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
-    convertDoubleArticulations(chord, ctx);
+    convertDoubleArticulations(chord, e);
     fixTies(chord);
 }
 
@@ -2653,7 +2653,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                     ctx.staff(staffIdx)->setDefaultClefType(clef->clefType());
                 }
                 if (clef->links() && clef->links()->size() == 1) {
-                    mu::remove(ctx.linkIds(), clef->links()->lid());
+                    mu::remove(e.context()->linkIds(), clef->links()->lid());
                     LOGD("remove link %d", clef->links()->lid());
                 }
                 delete clef;
@@ -2741,7 +2741,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 LOGD("remove keysig c at tick 0");
                 if (ks->links()) {
                     if (ks->links()->size() == 1) {
-                        mu::remove(ctx.linkIds(), ks->links()->lid());
+                        mu::remove(e.context()->linkIds(), ks->links()->lid());
                     }
                 }
                 delete ks;
@@ -3385,7 +3385,7 @@ Err Read206::read206(mu::engraving::MasterScore* masterScore, XmlReader& e, Read
     }
 
     int id = 1;
-    for (auto& p : ctx.linkIds()) {
+    for (auto& p : e.context()->linkIds()) {
         LinkedObjects* le = p.second;
         le->setLid(masterScore, id++);
     }

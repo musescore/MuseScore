@@ -157,6 +157,7 @@ protected slots:
 
 private slots:
     void updateFloatingStatus();
+    void onIsInMainWindowChanged();
 
 private:
     void listenFloatingChanges();
