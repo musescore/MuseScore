@@ -27,8 +27,9 @@
 
 namespace mu::engraving {
 class Score;
+}
 
-namespace PluginAPI {
+namespace mu::plugins::api {
 //---------------------------------------------------------
 //   MStyle
 ///   Provides an access to score style settings.
@@ -52,7 +53,7 @@ class MStyle : public QObject
     mu::engraving::MStyle* _style;
     mu::engraving::Score* _score;
 
-    static Sid keyToSid(const QString& key);
+    static engraving::Sid keyToSid(const QString& key);
 
 public:
     /// \cond MS_INTERNAL
@@ -65,7 +66,6 @@ public:
 };
 
 extern MStyle* wrap(mu::engraving::MStyle*, mu::engraving::Score*);
-} // namespace PluginAPI
-} // namespace Ms
+} // namespace mu::plugins::api
 
 #endif

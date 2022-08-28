@@ -27,8 +27,9 @@
 #include "libmscore/masterscore.h"
 #include "libmscore/undo.h"
 
-namespace mu::engraving {
-namespace PluginAPI {
+using namespace mu::engraving;
+
+namespace mu::plugins::api {
 //---------------------------------------------------------
 //   Channel::activeChannel
 //---------------------------------------------------------
@@ -163,5 +164,4 @@ ChannelListProperty Instrument::channels()
 {
     return ChannelListProperty(this);
 }
-} // namespace PluginAPI
-} // namespace Ms
+}

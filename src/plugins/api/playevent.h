@@ -28,8 +28,7 @@
 
 #include "libmscore/noteevent.h"
 
-namespace mu::engraving {
-namespace PluginAPI {
+namespace mu::plugins::api {
 class Note;
 
 //---------------------------------------------------------
@@ -119,13 +118,13 @@ inline PlayEvent* playEventWrap(mu::engraving::NoteEvent* t, Note* parent)
 class QmlPlayEventsListAccess : public QQmlListProperty<PlayEvent>
 {
 public:
-    QmlPlayEventsListAccess(QObject* obj, NoteEventList& container)
+    QmlPlayEventsListAccess(QObject* obj, engraving::NoteEventList& container)
         : QQmlListProperty<PlayEvent>(obj, &container, &append, &count, &at, &clear) {}
 
-    static int count(QQmlListProperty<PlayEvent>* l) { return int(static_cast<NoteEventList*>(l->data)->size()); }
+    static int count(QQmlListProperty<PlayEvent>* l) { return int(static_cast<engraving::NoteEventList*>(l->data)->size()); }
     static PlayEvent* at(QQmlListProperty<PlayEvent>* l, int i)
     {
-        return playEventWrap(&(*(static_cast<NoteEventList*>(l->data)))[i], reinterpret_cast<Note*>(l->object));
+        return playEventWrap(&(*(static_cast<engraving::NoteEventList*>(l->data)))[i], reinterpret_cast<Note*>(l->object));
     }
 
     static void clear(QQmlListProperty<PlayEvent>* l);
@@ -133,10 +132,10 @@ public:
 };
 
 /** \cond PLUGIN_API \private \endcond */
-inline QmlPlayEventsListAccess wrapPlayEventsContainerProperty(QObject* obj, NoteEventList& c)
+inline QmlPlayEventsListAccess wrapPlayEventsContainerProperty(QObject* obj, engraving::NoteEventList& c)
 {
     return QmlPlayEventsListAccess(obj, c);
 }
-} // namespace PluginAPI
-} // namespace Ms
+} // namespace mu::plugins::api
+
 #endif

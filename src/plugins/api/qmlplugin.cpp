@@ -28,7 +28,7 @@
 
 #include "log.h"
 
-namespace mu::engraving {
+namespace mu::plugins {
 //---------------------------------------------------------
 //   QmlPlugin
 //---------------------------------------------------------
@@ -139,7 +139,7 @@ bool QmlPlugin::requiresScore() const
 
 int QmlPlugin::division() const
 {
-    return Constants::division;
+    return engraving::Constants::division;
 }
 
 int QmlPlugin::mscoreVersion() const
@@ -164,6 +164,6 @@ int QmlPlugin::mscoreUpdateVersion() const
 
 qreal QmlPlugin::mscoreDPI() const
 {
-    return DPI;
+    return engraving::DPI;
 }
 }

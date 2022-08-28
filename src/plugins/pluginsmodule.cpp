@@ -80,7 +80,7 @@ void PluginsModule::registerUiTypes()
 {
     qmlRegisterType<PluginsModel>("MuseScore.Plugins", 1, 0, "PluginsModel");
 
-    mu::engraving::PluginAPI::PluginAPI::registerQmlTypes();
+    mu::plugins::api::PluginAPI::registerQmlTypes();
 
     auto ui = ioc()->resolve<IUiEngine>(moduleName());
     if (ui) {

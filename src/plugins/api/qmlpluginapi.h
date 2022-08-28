@@ -31,27 +31,29 @@
 #include "context/iglobalcontext.h"
 #include "modularity/ioc.h"
 
+#include "engraving/libmscore/score.h"
+#include "engraving/libmscore/types.h"
 #include "engraving/types/types.h"
 
 #include "apitypes.h"
 
 namespace mu::engraving {
 class EngravingItem;
-class MScore;
+}
 
 /**
- * \namespace mu::engraving::PluginAPI
+ * \namespace mu::plugins::api
  * Contains items exposed to the QML plugins framework.
  */
 
-namespace PluginAPI {
+namespace mu::plugins::api {
 class EngravingItem;
 class FractionWrapper;
 class MsProcess;
 class Score;
 
 #define DECLARE_API_ENUM(qmlName, cppName, enumName) \
-    Q_PROPERTY(mu::engraving::PluginAPI::Enum * qmlName READ get_##cppName CONSTANT) \
+    Q_PROPERTY(mu::plugins::api::Enum * qmlName READ get_##cppName CONSTANT) \
     static Enum* cppName; \
     static Enum* get_##cppName() { \
         if (!cppName) \
@@ -69,7 +71,7 @@ class Score;
 //   @P scores               array[mu::engraving::Score]  all currently open scores (read only)
 //---------------------------------------------------------
 
-class PluginAPI : public mu::engraving::QmlPlugin
+class PluginAPI : public QmlPlugin
 {
     Q_OBJECT
 
@@ -112,81 +114,81 @@ class PluginAPI : public mu::engraving::QmlPlugin
     /** (read-only) */
     Q_PROPERTY(qreal mscoreDPI READ mscoreDPI)
     /** Current score, if any (read only) */
-    Q_PROPERTY(mu::engraving::PluginAPI::Score * curScore READ curScore)
+    Q_PROPERTY(mu::plugins::api::Score * curScore READ curScore)
     /** List of currently open scores (read only).\n \since MuseScore 3.2 */
-    Q_PROPERTY(QQmlListProperty<mu::engraving::PluginAPI::Score> scores READ scores)
+    Q_PROPERTY(QQmlListProperty<mu::plugins::api::Score> scores READ scores)
 
     // Should be initialized in qmlpluginapi.cpp
     /// Contains mu::engraving::ElementType enumeration values
-    DECLARE_API_ENUM(Element,          elementTypeEnum,        mu::engraving::PluginAPI::Enums::ElementType)
+    DECLARE_API_ENUM(Element,          elementTypeEnum,        mu::plugins::api::enums::ElementType)
     /// Contains mu::engraving::AccidentalType enumeration values
-    DECLARE_API_ENUM(Accidental,       accidentalTypeEnum,     mu::engraving::PluginAPI::Enums::AccidentalType)
+    DECLARE_API_ENUM(Accidental,       accidentalTypeEnum,     mu::plugins::api::enums::AccidentalType)
     /// Contains mu::engraving::BeamMode enumeration values
-    DECLARE_API_ENUM(Beam,             beamModeEnum,           mu::engraving::PluginAPI::Enums::BeamMode)
+    DECLARE_API_ENUM(Beam,             beamModeEnum,           mu::plugins::api::enums::BeamMode)
     /// Contains mu::engraving::Placement enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// EngravingItem.ABOVE and EngravingItem.BELOW.
-    DECLARE_API_ENUM(Placement,        placementEnum,          mu::engraving::PluginAPI::Enums::Placement)
+    DECLARE_API_ENUM(Placement,        placementEnum,          mu::plugins::api::enums::Placement)
     /// Contains mu::engraving::GlissandoType enumeration values
-    DECLARE_API_ENUM(Glissando,        glissandoTypeEnum,      mu::engraving::PluginAPI::Enums::GlissandoType) // was probably absent in 2.X
+    DECLARE_API_ENUM(Glissando,        glissandoTypeEnum,      mu::plugins::api::enums::GlissandoType) // was probably absent in 2.X
     /// Contains mu::engraving::LayoutBreak::Type enumeration values
-    DECLARE_API_ENUM(LayoutBreak,      layoutBreakTypeEnum,    mu::engraving::PluginAPI::Enums::LayoutBreakType)
+    DECLARE_API_ENUM(LayoutBreak,      layoutBreakTypeEnum,    mu::plugins::api::enums::LayoutBreakType)
     /// Contains mu::engraving::Lyrics::Syllabic enumeration values
-    DECLARE_API_ENUM(Lyrics,           lyricsSyllabicEnum,     mu::engraving::PluginAPI::Enums::Syllabic)
+    DECLARE_API_ENUM(Lyrics,           lyricsSyllabicEnum,     mu::plugins::api::enums::Syllabic)
     /// Contains mu::engraving::Direction enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// MScore.UP, MScore.DOWN, MScore.AUTO.
-    DECLARE_API_ENUM(Direction,        directionEnum,          mu::engraving::PluginAPI::Enums::Direction)
+    DECLARE_API_ENUM(Direction,        directionEnum,          mu::plugins::api::enums::Direction)
     /// Contains mu::engraving::DirectionH enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// MScore.LEFT, MScore.RIGHT, MScore.AUTO.
-    DECLARE_API_ENUM(DirectionH,       directionHEnum,         mu::engraving::PluginAPI::Enums::DirectionH)
+    DECLARE_API_ENUM(DirectionH,       directionHEnum,         mu::plugins::api::enums::DirectionH)
     /// Contains mu::engraving::OrnamentStyle enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// MScore.DEFAULT, MScore.BAROQUE.
-    DECLARE_API_ENUM(OrnamentStyle,    ornamentStyleEnum,      mu::engraving::PluginAPI::Enums::OrnamentStyle)
+    DECLARE_API_ENUM(OrnamentStyle,    ornamentStyleEnum,      mu::plugins::api::enums::OrnamentStyle)
     /// Contains mu::engraving::GlissandoStyle enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// MScore.CHROMATIC, MScore.WHITE_KEYS, MScore.BLACK_KEYS,
     /// MScore.DIATONIC.
-    DECLARE_API_ENUM(GlissandoStyle,   glissandoStyleEnum,     mu::engraving::PluginAPI::Enums::GlissandoStyle)
+    DECLARE_API_ENUM(GlissandoStyle,   glissandoStyleEnum,     mu::plugins::api::enums::GlissandoStyle)
     /// Contains mu::engraving::Tid enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// TextStyleType (TextStyleType.TITLE etc.)
-    DECLARE_API_ENUM(Tid,              tidEnum,                mu::engraving::PluginAPI::Enums::Tid)
+    DECLARE_API_ENUM(Tid,              tidEnum,                mu::plugins::api::enums::Tid)
     /// Contains mu::engraving::Align enumeration values
     /// \since MuseScore 3.3
-    DECLARE_API_ENUM(Align,            alignEnum,              mu::engraving::PluginAPI::Enums::Align)
+    DECLARE_API_ENUM(Align,            alignEnum,              mu::plugins::api::enums::Align)
     /// Contains mu::engraving::NoteType enumeration values
     /// \since MuseScore 3.2.1
-    DECLARE_API_ENUM(NoteType,         noteTypeEnum,           mu::engraving::PluginAPI::Enums::NoteType)
+    DECLARE_API_ENUM(NoteType,         noteTypeEnum,           mu::plugins::api::enums::NoteType)
     /// Contains mu::engraving::PlayEventType enumeration values
     /// \since MuseScore 3.3
-    DECLARE_API_ENUM(PlayEventType,    playEventTypeEnum,      mu::engraving::PluginAPI::Enums::PlayEventType)
+    DECLARE_API_ENUM(PlayEventType,    playEventTypeEnum,      mu::plugins::api::enums::PlayEventType)
     /// Contains mu::engraving::NoteHead::Type enumeration values
     /// \note In MuseScore 2.X this enumeration was available in
     /// NoteHead class (e.g. NoteHead.HEAD_QUARTER).
-    DECLARE_API_ENUM(NoteHeadType,     noteHeadTypeEnum,       mu::engraving::PluginAPI::Enums::NoteHeadType)
+    DECLARE_API_ENUM(NoteHeadType,     noteHeadTypeEnum,       mu::plugins::api::enums::NoteHeadType)
     /// Contains mu::engraving::NoteHead::Scheme enumeration values
     /// \since MuseScore 3.5
-    DECLARE_API_ENUM(NoteHeadScheme,   noteHeadSchemeEnum,     mu::engraving::PluginAPI::Enums::NoteHeadScheme)
+    DECLARE_API_ENUM(NoteHeadScheme,   noteHeadSchemeEnum,     mu::plugins::api::enums::NoteHeadScheme)
     /// Contains mu::engraving::NoteHead::Group enumeration values
     /// \note In MuseScore 2.X this enumeration was available in
     /// NoteHead class (e.g. NoteHead.HEAD_TRIANGLE).
-    DECLARE_API_ENUM(NoteHeadGroup,    noteHeadGroupEnum,      mu::engraving::PluginAPI::Enums::NoteHeadGroup)
+    DECLARE_API_ENUM(NoteHeadGroup,    noteHeadGroupEnum,      mu::plugins::api::enums::NoteHeadGroup)
     /// Contains mu::engraving::ValueType enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// Note.OFFSET_VAL, Note.USER_VAL
-    DECLARE_API_ENUM(NoteValueType,    noteValueTypeEnum,      mu::engraving::PluginAPI::Enums::VeloType)
+    DECLARE_API_ENUM(NoteValueType,    noteValueTypeEnum,      mu::plugins::api::enums::VeloType)
     /// Contains mu::engraving::SegmentType enumeration values
-    DECLARE_API_ENUM(Segment,          segmentTypeEnum,        mu::engraving::PluginAPI::Enums::SegmentType)
-    DECLARE_API_ENUM(Spanner,          spannerAnchorEnum,      mu::engraving::PluginAPI::Enums::Anchor)           // probably unavailable in 2.X
+    DECLARE_API_ENUM(Segment,          segmentTypeEnum,        mu::plugins::api::enums::SegmentType)
+    DECLARE_API_ENUM(Spanner,          spannerAnchorEnum,      mu::plugins::api::enums::Anchor)           // probably unavailable in 2.X
     /// Contains mu::engraving::SymId enumeration values
     /// \since MuseScore 3.5
-    DECLARE_API_ENUM(SymId,            symIdEnum,              mu::engraving::PluginAPI::Enums::SymId)
+    DECLARE_API_ENUM(SymId,            symIdEnum,              mu::plugins::api::enums::SymId)
     /// Contains mu::engraving::HarmonyType enumeration values
     /// \since MuseScore 3.6
-    DECLARE_API_ENUM(HarmonyType,      harmonyTypeEnum,        mu::engraving::PluginAPI::Enums::HarmonyType)
+    DECLARE_API_ENUM(HarmonyType,      harmonyTypeEnum,        mu::plugins::api::enums::HarmonyType)
 
     QFile logFile;
 
@@ -266,15 +268,15 @@ public:
     QQmlListProperty<Score> scores();
     /// \endcond
 
-    Q_INVOKABLE mu::engraving::PluginAPI::Score* newScore(const QString& name, const QString& part, int measures);
-    Q_INVOKABLE mu::engraving::PluginAPI::EngravingItem* newElement(int);
-    Q_INVOKABLE void removeElement(mu::engraving::PluginAPI::EngravingItem* wrapped);
+    Q_INVOKABLE mu::plugins::api::Score* newScore(const QString& name, const QString& part, int measures);
+    Q_INVOKABLE mu::plugins::api::EngravingItem* newElement(int);
+    Q_INVOKABLE void removeElement(mu::plugins::api::EngravingItem* wrapped);
     Q_INVOKABLE void cmd(const QString&);
     /** \cond PLUGIN_API \private \endcond */
-    Q_INVOKABLE mu::engraving::PluginAPI::MsProcess* newQProcess();
-    Q_INVOKABLE bool writeScore(mu::engraving::PluginAPI::Score*, const QString& name, const QString& ext);
-    Q_INVOKABLE mu::engraving::PluginAPI::Score* readScore(const QString& name, bool noninteractive = false);
-    Q_INVOKABLE void closeScore(mu::engraving::PluginAPI::Score*);
+    Q_INVOKABLE mu::plugins::api::MsProcess* newQProcess();
+    Q_INVOKABLE bool writeScore(mu::plugins::api::Score*, const QString& name, const QString& ext);
+    Q_INVOKABLE mu::plugins::api::Score* readScore(const QString& name, bool noninteractive = false);
+    Q_INVOKABLE void closeScore(mu::plugins::api::Score*);
 
     Q_INVOKABLE void log(const QString&);
     Q_INVOKABLE void logn(const QString&);
@@ -282,7 +284,7 @@ public:
     Q_INVOKABLE void openLog(const QString&);
     Q_INVOKABLE void closeLog();
 
-    Q_INVOKABLE mu::engraving::PluginAPI::FractionWrapper* fraction(int numerator, int denominator) const;
+    Q_INVOKABLE mu::plugins::api::FractionWrapper* fraction(int numerator, int denominator) const;
 
     Q_INVOKABLE void quit();
 
@@ -291,6 +293,6 @@ private:
 };
 
 #undef DECLARE_API_ENUM
-} // namespace PluginAPI
-} // namespace Ms
+} // namespace mu::plugins::api
+
 #endif

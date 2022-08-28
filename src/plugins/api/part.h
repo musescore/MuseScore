@@ -26,8 +26,7 @@
 #include "scoreelement.h"
 #include "libmscore/part.h"
 
-namespace mu::engraving {
-namespace PluginAPI {
+namespace mu::plugins::api {
 class Instrument;
 class Part;
 
@@ -49,7 +48,7 @@ public:
 //   Part
 //---------------------------------------------------------
 
-class Part : public mu::engraving::PluginAPI::ScoreElement
+class Part : public mu::plugins::api::ScoreElement
 {
     Q_OBJECT
     Q_PROPERTY(int startTrack READ startTrack)
@@ -58,7 +57,7 @@ class Part : public mu::engraving::PluginAPI::ScoreElement
      * The string identifier
      * ([MusicXML Sound ID](https://www.musicxml.com/for-developers/standard-sounds/))
      * for the first instrument in this part.
-     * \see \ref mu::engraving::PluginAPI::Instrument::instrumentId "Instrument.instrumentId"
+     * \see \ref mu::plugins::api::Instrument::instrumentId "Instrument.instrumentId"
      * \since MuseScore 3.2
      */
     Q_PROPERTY(QString instrumentId READ instrumentId)
@@ -99,7 +98,7 @@ class Part : public mu::engraving::PluginAPI::ScoreElement
      * List of instruments in this part.
      * \since MuseScore 3.5
      */
-    Q_PROPERTY(QQmlListProperty<mu::engraving::PluginAPI::Instrument> instruments READ instruments);
+    Q_PROPERTY(QQmlListProperty<mu::plugins::api::Instrument> instruments READ instruments);
 
 public:
     /// \cond MS_INTERNAL
@@ -123,7 +122,7 @@ public:
     QString shortName() const { return part()->shortName(); }
     QString partName() const { return part()->partName(); }
     bool show() const { return part()->show(); }
-    void setShow(bool val) { set(Pid::VISIBLE, val); }
+    void setShow(bool val) { set(engraving::Pid::VISIBLE, val); }
 
     InstrumentListProperty instruments();
     /// \endcond
@@ -132,8 +131,8 @@ public:
      * Finds an instrument that is active in this part at the given \p tick.
      * \since MuseScore 3.5
      */
-    Q_INVOKABLE mu::engraving::PluginAPI::Instrument* instrumentAtTick(int tick);
+    Q_INVOKABLE mu::plugins::api::Instrument* instrumentAtTick(int tick);
 };
-} // namespace PluginAPI
-} // namespace Ms
+} // namespace mu::plugins::api
+
 #endif

@@ -27,16 +27,14 @@
 
 #include "score.h"
 
-#include "libmscore/masterscore.h"
 #include "libmscore/measurebase.h"
 #include "libmscore/page.h"
+#include "libmscore/score.h"
 #include "libmscore/system.h"
-#include "libmscore/staff.h"
 
 using namespace mu;
 
-namespace mu::engraving {
-namespace PluginAPI {
+namespace mu::plugins::api {
 //---------------------------------------------------------
 //   ScoreView
 //---------------------------------------------------------
@@ -141,7 +139,7 @@ int FileIO::modifiedTime()
 //   setScore
 //---------------------------------------------------------
 
-void ScoreView::setScore(mu::engraving::PluginAPI::Score* s)
+void ScoreView::setScore(mu::plugins::api::Score* s)
 {
     mu::engraving::Score* newScore = s ? s->score() : nullptr;
     setScore(newScore);
@@ -186,8 +184,8 @@ void ScoreView::paint(QPainter* qp)
 
     mu::engraving::Page* page = score->pages()[_currentPage];
     QList<const mu::engraving::EngravingItem*> el;
-    for (System* s : page->systems()) {
-        for (MeasureBase* m : s->measures()) {
+    for (engraving::System* s : page->systems()) {
+        for (engraving::MeasureBase* m : s->measures()) {
             m->scanElements(&el, mu::engraving::collectElements, false);
         }
     }
@@ -241,5 +239,4 @@ void ScoreView::prevPage()
 {
     setCurrentPage(_currentPage - 1);
 }
-}
-}
+} // namespace mu::plugins::api
