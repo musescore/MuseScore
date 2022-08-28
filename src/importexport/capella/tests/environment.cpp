@@ -38,6 +38,7 @@ static mu::testing::SuiteEnvironment importexport_se(
     new mu::fonts::FontsModule(), // needs for libmscore
     new mu::engraving::EngravingModule()
 },
+    nullptr,
     []() {
     LOGI() << "capella tests suite post init";
 

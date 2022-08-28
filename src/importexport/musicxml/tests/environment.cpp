@@ -44,6 +44,7 @@ static mu::testing::SuiteEnvironment musicxml_se(
     new mu::engraving::EngravingModule(),
     new mu::iex::musicxml::MusicXmlModule() // needs for init resources
 },
+    nullptr,
     []() {
     LOGI() << "musicxml tests suite post init";
 
