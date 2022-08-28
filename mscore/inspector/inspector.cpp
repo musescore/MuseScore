@@ -993,6 +993,7 @@ InspectorKeySig::InspectorKeySig(QWidget* parent)
       k.keysigMode->addItem(tr("Phrygian"),   int(KeyMode::PHRYGIAN));
       k.keysigMode->addItem(tr("Lydian"),     int(KeyMode::LYDIAN));
       k.keysigMode->addItem(tr("Mixolydian"), int(KeyMode::MIXOLYDIAN));
+      k.keysigMode->addItem(tr("Aeolian"),    int(KeyMode::AEOLIAN));
       k.keysigMode->addItem(tr("Ionian"),     int(KeyMode::IONIAN));
       k.keysigMode->addItem(tr("Locrian"),    int(KeyMode::LOCRIAN));
       mapSignals(iiList, ppList);

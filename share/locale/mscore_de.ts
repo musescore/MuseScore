@@ -13180,6 +13180,11 @@ fehlgeschlagen: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="996"/>
+        <source>Aeolian</source>
+        <translation>Aeolisch</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector.cpp" line="997"/>
         <source>Ionian</source>
         <translation>Ionisch</translation>
     </message>

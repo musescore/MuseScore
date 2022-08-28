@@ -13153,6 +13153,11 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="996"/>
+        <source>Aeolian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector.cpp" line="997"/>
         <source>Ionian</source>
         <translation>Ιωνικός</translation>
     </message>

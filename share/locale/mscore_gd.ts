@@ -13108,6 +13108,11 @@ fhosgladh: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="997"/>
+        <source>Ionian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector.cpp" line="998"/>
         <source>Locrian</source>
         <translation type="unfinished"></translation>
     </message>
