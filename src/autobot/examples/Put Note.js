@@ -66,7 +66,7 @@ function main()
 
                 // OR
                 // use New Score step module
-                NewScore.сhooseFluteAndPiano();
+                NewScore.chooseFluteAndPiano();
 
             }},
             {name: "Note input mode", func: function() {

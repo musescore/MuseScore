@@ -153,7 +153,7 @@ String XmlDomElement::text() const
 }
 
 // ================================================
-// XmlDomDoсument
+// XmlDomDocument
 // ================================================
 
 XmlDomDocument::XmlDomDocument()
