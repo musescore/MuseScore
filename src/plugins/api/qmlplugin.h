@@ -20,17 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __QMLPLUGIN_H__
-#define __QMLPLUGIN_H__
+#ifndef MU_PLUGINS_QMLPLUGIN_H
+#define MU_PLUGINS_QMLPLUGIN_H
 
 #include <QQuickItem>
 
-namespace mu::engraving {
-class EngravingItem;
-class MScore;
-class MsProcess;
-class Score;
-
+namespace mu::plugins {
 //---------------------------------------------------------
 //   QmlPlugin
 //   @@ MuseScore
@@ -108,5 +103,6 @@ public:
     int mscoreUpdateVersion() const;
     qreal mscoreDPI() const;
 };
-} // namespace Ms
-#endif
+}
+
+#endif // MU_PLUGINS_QMLPLUGIN_H

@@ -28,7 +28,7 @@
 #include "engraving/types/types.h"
 #include "engraving/libmscore/types.h"
 
-namespace mu::engraving::PluginAPI::Enums {
+namespace mu::plugins::api::enums {
 Q_NAMESPACE;
 
 enum class AccidentalType {
@@ -3565,27 +3565,27 @@ enum class SymId {
 Q_ENUM_NS(SymId);
 }
 
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::AccidentalType);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::ElementType);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::OrnamentStyle);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::Align);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::Placement);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::Direction);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::DirectionH);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::LayoutBreakType);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::VeloType);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::BeamMode);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::GlissandoType);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::GlissandoStyle);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::NoteHeadType);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::NoteHeadScheme);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::NoteHeadGroup);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::NoteType);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::PlayEventType);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::SegmentType);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::Tid);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::Syllabic);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::Anchor);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::SymId);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::AccidentalType);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::ElementType);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::OrnamentStyle);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::Align);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::Placement);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::Direction);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::DirectionH);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::LayoutBreakType);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::VeloType);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::BeamMode);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::GlissandoType);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::GlissandoStyle);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::NoteHeadType);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::NoteHeadScheme);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::NoteHeadGroup);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::NoteType);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::PlayEventType);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::SegmentType);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::Tid);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::Syllabic);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::Anchor);
+Q_DECLARE_METATYPE(mu::plugins::api::enums::SymId);
 
 #endif // MU_PLUGINS_APITYPES_H

@@ -23,8 +23,9 @@
 #include "part.h"
 #include "instrument.h"
 
-namespace mu::engraving {
-namespace PluginAPI {
+using namespace mu::engraving;
+
+namespace mu::plugins::api {
 //---------------------------------------------------------
 //   InstrumentListProperty
 //---------------------------------------------------------
@@ -76,5 +77,4 @@ Instrument* Part::instrumentAtTick(int tick)
 {
     return customWrap<Instrument>(part()->instrument(mu::engraving::Fraction::fromTicks(tick)), part());
 }
-} // namespace PluginAPI
-} // namespace Ms
+} // namespace mu::plugins::api

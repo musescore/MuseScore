@@ -24,14 +24,13 @@
 #include "elements.h"
 #include "score.h"
 #include "fraction.h"
-#include "libmscore/masterscore.h"
+#include "libmscore/score.h"
 #include "libmscore/engravingobject.h"
 
 using namespace mu;
 using namespace mu::engraving;
 
-namespace mu::engraving {
-namespace PluginAPI {
+namespace mu::plugins::api {
 //---------------------------------------------------------
 //   ScoreElement
 //---------------------------------------------------------
@@ -171,5 +170,4 @@ ScoreElement* wrap(mu::engraving::EngravingObject* se, Ownership own)
     }
     return wrap<ScoreElement>(se, own);
 }
-}
-}
+} // namespace mu::plugins::api

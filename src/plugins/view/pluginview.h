@@ -34,11 +34,9 @@
 class QQmlComponent;
 class QQuickView;
 
-namespace mu::engraving {
-class QmlPlugin;
-}
-
 namespace mu::plugins {
+class QmlPlugin;
+
 class PluginView : public QObject
 {
     Q_OBJECT
@@ -58,7 +56,7 @@ public:
     QString thumbnailName() const;
     QString categoryCode() const;
 
-    mu::engraving::QmlPlugin* qmlPlugin() const;
+    QmlPlugin* qmlPlugin() const;
 
     void run();
 
@@ -73,7 +71,7 @@ private:
 
     void destroyView();
 
-    mu::engraving::QmlPlugin* m_qmlPlugin = nullptr;
+    QmlPlugin* m_qmlPlugin = nullptr;
     QQmlComponent* m_component = nullptr;
     QQuickView* m_view = nullptr;
 };

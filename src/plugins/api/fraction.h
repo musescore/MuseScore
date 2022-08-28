@@ -27,8 +27,7 @@
 
 #include "engraving/types/fraction.h"
 
-namespace mu::engraving {
-namespace PluginAPI {
+namespace mu::plugins::api {
 //---------------------------------------------------------
 //   FractionWrapper
 ///   Fraction object available to QML plugins.
@@ -59,7 +58,7 @@ class FractionWrapper : public QObject
 
     /// \cond MS_INTERNAL
 public slots:
-    void setFraction(Fraction _f) { f = _f; }
+    void setFraction(engraving::Fraction _f) { f = _f; }
 
 public:
     FractionWrapper() = default;
@@ -87,7 +86,6 @@ inline FractionWrapper* wrap(mu::engraving::Fraction f)
     QQmlEngine::setObjectOwnership(w, QQmlEngine::JavaScriptOwnership);
     return w;
 }
-}     // namespace PluginAPI
-}     // namespace Ms
+} // namespace mu::plugins::api
 
 #endif

@@ -60,14 +60,14 @@ mu::Ret PluginView::load(const QUrl& url)
         return make_ret(Err::PluginLoadError);
     }
 
-    m_qmlPlugin = qobject_cast<mu::engraving::QmlPlugin*>(m_component->create());
+    m_qmlPlugin = qobject_cast<QmlPlugin*>(m_component->create());
 
     if (!m_qmlPlugin) {
         LOGE() << "Failed to create instance of QML plugin from " << url;
         return make_ret(Err::PluginLoadError);
     }
 
-    connect(m_qmlPlugin, &mu::engraving::QmlPlugin::closeRequested, [this]() {
+    connect(m_qmlPlugin, &QmlPlugin::closeRequested, [this]() {
         if (m_view && m_view->isVisible()) {
             m_view->close();
         }
@@ -143,7 +143,7 @@ QString PluginView::categoryCode() const
     return m_qmlPlugin->categoryCode();
 }
 
-mu::engraving::QmlPlugin* PluginView::qmlPlugin() const
+QmlPlugin* PluginView::qmlPlugin() const
 {
     return m_qmlPlugin;
 }
