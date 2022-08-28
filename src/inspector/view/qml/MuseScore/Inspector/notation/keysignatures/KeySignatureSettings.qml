@@ -71,6 +71,7 @@ Column {
             { text: qsTrc("inspector", "Phrygian"), value: KeySignatureTypes.MODE_PHRYGIAN },
             { text: qsTrc("inspector", "Lydian"), value: KeySignatureTypes.MODE_LYDIAN },
             { text: qsTrc("inspector", "Mixolydian"), value: KeySignatureTypes.MODE_MIXOLYDIAN },
+            { text: qsTrc("inspector", "Aeolian"), value: KeySignatureTypes.MODE_AEOLIAN },
             { text: qsTrc("inspector", "Ionian"), value: KeySignatureTypes.MODE_IONIAN },
             { text: qsTrc("inspector", "Locrian"), value: KeySignatureTypes.MODE_LOCRIAN }
         ]
