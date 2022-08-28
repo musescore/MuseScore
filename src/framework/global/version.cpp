@@ -21,6 +21,8 @@
  */
 #include "version.h"
 
+#include <array>
+
 #include "config.h"
 #include "stringutils.h"
 
@@ -28,21 +30,35 @@
 
 using namespace mu::framework;
 
-static int _majorVersion = -1, _minorVersion = -1, _patchVersion = -1;
+using version_components_t = std::array<int, 3>;
 
-static void parseVersion()
+static constexpr char versionString[] = VERSION;
+
+static constexpr std::pair<version_components_t, bool> parse_version()
 {
-    std::vector<std::string> versionComponents;
-    mu::strings::split(VERSION, versionComponents, ".");
+    version_components_t result { 0, 0, 0 };
 
-    IF_ASSERT_FAILED(versionComponents.size() == 3) {
-        _majorVersion = _minorVersion = _patchVersion = 0;
-    } else {
-        _majorVersion = std::stoi(versionComponents.at(0));
-        _minorVersion = std::stoi(versionComponents.at(1));
-        _patchVersion = std::stoi(versionComponents.at(2));
+    size_t componentIdx = 0;
+    int curNum = 0;
+
+    for (const char ch : versionString) {
+        if (ch == '.' || ch == '\0') {
+            result.at(componentIdx++) = curNum;
+            curNum = 0;
+        } else if ('0' <= ch && ch <= '9') {
+            curNum = curNum * 10 + (ch - '0');
+        } else {
+            return { result, false };
+        }
     }
+
+    return { result, true };
 }
+
+static constexpr std::pair<version_components_t, bool> parse_result = parse_version();
+static constexpr version_components_t version_components = parse_result.first;
+
+static_assert(parse_result.second, "Invalid VERSION");
 
 bool Version::unstable()
 {
@@ -55,12 +71,12 @@ bool Version::unstable()
 
 std::string Version::version()
 {
-    return VERSION;
+    return versionString;
 }
 
 std::string Version::fullVersion()
 {
-    std::string version(VERSION);
+    std::string version(versionString);
     std::string versionLabel(VERSION_LABEL);
     strings::replace(versionLabel, " ", "");
     if (!versionLabel.empty()) {
@@ -76,27 +92,15 @@ std::string Version::revision()
 
 int Version::majorVersion()
 {
-    if (_majorVersion < 0) {
-        parseVersion();
-    }
-
-    return _majorVersion;
+    return version_components.at(0);
 }
 
 int Version::minorVersion()
 {
-    if (_minorVersion < 0) {
-        parseVersion();
-    }
-
-    return _minorVersion;
+    return version_components.at(1);
 }
 
 int Version::patchVersion()
 {
-    if (_patchVersion < 0) {
-        parseVersion();
-    }
-
-    return _patchVersion;
+    return version_components.at(2);
 }
