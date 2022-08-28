@@ -42,6 +42,7 @@ static mu::testing::SuiteEnvironment engraving_se(
     new mu::fonts::FontsModule(),
     new mu::engraving::EngravingModule()
 },
+    nullptr,
     []() {
     LOGI() << "engraving tests suite post init";
 

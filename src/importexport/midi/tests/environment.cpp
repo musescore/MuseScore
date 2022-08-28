@@ -37,6 +37,7 @@ static mu::testing::SuiteEnvironment importexport_se(
     new mu::fonts::FontsModule(), // needs for libmscore
     new mu::engraving::EngravingModule()
 },
+    nullptr,
     []() {
     LOGI() << "midi tests suite post init";
 

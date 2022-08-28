@@ -43,6 +43,7 @@ static mu::testing::SuiteEnvironment importexport_se(
     new mu::engraving::EngravingModule(),
     new mu::iex::guitarpro::GuitarProModule()
 },
+    nullptr,
     []() {
     LOGI() << "guitarpro tests suite post init";
 
