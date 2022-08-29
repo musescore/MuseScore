@@ -208,7 +208,7 @@ RetVal<SaveLocation::CloudInfo> SaveProjectScenario::doAskCloudLocation(INotatio
         }
     }
 
-    return make_ret(Ret::Code::NotImplemented);
+    return make_ret(Ret::Code::Ok);
 }
 
 bool SaveProjectScenario::warnBeforePublishing() const

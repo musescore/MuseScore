@@ -139,9 +139,8 @@ MenuItem* AppMenuModel::makeFileMenu()
         makeMenuItem("file-save-as"),
         makeMenuItem("file-save-a-copy"),
         makeMenuItem("file-save-selection"),
-        // Todo(save-to-cloud): hidden until fully implemented
-        //makeMenuItem("file-save-to-cloud"),
-        //makeMenuItem("file-publish"),
+        makeMenuItem("file-save-to-cloud"),
+        makeMenuItem("file-publish"),
         makeSeparator(),
         makeMenuItem("file-import-pdf"),
         makeMenuItem("file-export"),
