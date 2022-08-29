@@ -37,23 +37,19 @@ class Score;
 class MTest
 {
 protected:
-    mu::engraving::MScore* mscore;
     QString root;       // root path of test source
 
-    MTest();
     mu::engraving::MasterScore* readScore(const QString& name);
     bool saveScore(mu::engraving::Score*, const QString& name) const;
 
     bool compareFiles(const QString& saveName, const QString& compareWith) const;
     bool saveCompareScore(mu::engraving::Score*, const QString& saveName, const QString& compareWith) const;
 
-    void initMTest(const QString& root);
+    void setRootDir(const QString& root);
 
 public:
     static bool compareFilesFromPaths(const QString& f1, const QString& f2);
 };
 }
-
-void initMuseScoreResources();
 
 #endif
