@@ -402,7 +402,7 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
     std::vector<Segment*> segList;
     Segment* seg = startSeg;
     while (seg && seg->tick() <= endSeg->tick()) {
-        if (seg != startCR->segment()) { // don't include first segment
+        if (seg->enabled() && seg != startCR->segment()) { // don't include first segment
             segList.push_back(seg);
         }
         if (seg->next() && !seg->next()->isEndBarLineType()) {
