@@ -79,12 +79,11 @@ const LanguagesHash& LanguagesService::languages() const
     return m_languagesHash;
 }
 
-const Language& LanguagesService::language(const QString& languageCode) const
+Language LanguagesService::language(const QString& languageCode) const
 {
     QString effectiveLanguageCode = this->effectiveLanguageCode(languageCode);
     if (effectiveLanguageCode.isEmpty()) {
-        static Language dummy;
-        return dummy;
+        return {};
     }
 
     if (effectiveLanguageCode == PLACEHOLDER_LANGUAGE_CODE) {

@@ -37,7 +37,7 @@ public:
     virtual ~ILanguagesService() = default;
 
     virtual const LanguagesHash& languages() const = 0;
-    virtual const Language& language(const QString& languageCode) const = 0;
+    virtual Language language(const QString& languageCode) const = 0;
     virtual const Language& currentLanguage() const = 0;
     virtual async::Notification currentLanguageChanged() const = 0;
 
