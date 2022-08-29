@@ -228,7 +228,13 @@ for name in "${extracted_appimages[@]}"; do
   extracted_appdir_path="$(dirname "${apprun}")"
   extracted_appdir_name="$(basename "${extracted_appdir_path}")"
   cp -r "${extracted_appdir_path}" "${appdir}/"
-  ln -s "../${extracted_appdir_name}/AppRun" "${appdir}/bin/${name}"
+  cat >"${appdir}/bin/${name}" <<EOF
+#!/bin/sh
+unset APPDIR APPIMAGE # clear outer values before running inner AppImage
+HERE="\$(dirname "\$(readlink -f "\$0")")"
+exec "\${HERE}/../${extracted_appdir_name}/AppRun" "\$@"
+EOF
+  chmod +x "${appdir}/bin/${name}"
 done
 
 # METHOD OF LAST RESORT
