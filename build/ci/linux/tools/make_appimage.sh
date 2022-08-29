@@ -19,7 +19,12 @@ mkdir -p $BUILD_TOOLS
 function download_github_release()
 {
   local -r repo_slug="$1" release_tag="$2" file="$3"
-  wget -q --show-progress "https://github.com/${repo_slug}/releases/download/${release_tag}/${file}"
+  if [[ "${release_tag}" == "latest" ]]; then
+    local -r url="https://github.com/${repo_slug}/releases/latest/download/${file}"
+  else
+    local -r url="https://github.com/${repo_slug}/releases/download/${release_tag}/${file}"
+  fi
+  wget -q --show-progress "${url}"
   chmod +x "${file}"
 }
 
@@ -45,8 +50,7 @@ function download_appimage_release()
 if [[ ! -d $BUILD_TOOLS/appimagetool ]]; then
   mkdir $BUILD_TOOLS/appimagetool
   cd $BUILD_TOOLS/appimagetool
-  # `12` and not `continuous` because see https://github.com/AppImage/AppImageKit/issues/1060
-  download_appimage_release AppImage/AppImageKit appimagetool 12
+  download_appimage_release AppImage/AppImageKit appimagetool continuous
   cd $ORIGIN_DIR
 fi
 export PATH="$BUILD_TOOLS/appimagetool:$PATH"
