@@ -36,6 +36,10 @@ RadioDelegate {
     property int iconCode: IconCode.NONE
     property int iconFontSize: ui.theme.iconsFont.pixelSize
 
+    property string toolTipTitle: ""
+    property string toolTipDescription: ""
+    property string toolTipShortcut: ""
+
     property alias radius: backgroundRect.radius
 
     property bool transparent: false
@@ -63,6 +67,22 @@ RadioDelegate {
         navigation.requestActiveByInteraction()
 
         root.ensureActiveFocus()
+    }
+
+    onPressedChanged: {
+        ui.tooltip.hide(root, true)
+    }
+
+    onHoveredChanged: {
+        if (!Boolean(root.toolTipTitle)) {
+            return
+        }
+
+        if (hovered) {
+            ui.tooltip.show(root, root.toolTipTitle, root.toolTipDescription, root.toolTipShortcut)
+        } else {
+            ui.tooltip.hide(root)
+        }
     }
 
     NavigationControl {
