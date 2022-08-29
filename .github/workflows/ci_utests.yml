@@ -7,7 +7,7 @@ on:
 
 jobs:
   run_tests:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     env:
         # Enable AddressSanitizer in the mtest build
         CFLAGS: "-fsanitize=address -fno-omit-frame-pointer"
@@ -19,7 +19,7 @@ jobs:
         access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v2
-    - name: Сcache cache files
+    - name: Ccache cache files
       uses: actions/cache@v2
       with:
         path: ~/.ccache

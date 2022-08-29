@@ -8,7 +8,7 @@ on:
 jobs:
   setup:
     name: "Setup VTests workflow"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     outputs:
       do_run: ${{ steps.output_data.outputs.do_run }}
       reference_sha: ${{ steps.output_data.outputs.reference_sha }}
@@ -53,13 +53,13 @@ jobs:
 
   generate_current_pngs:
     name: "Generate current PNGs"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     needs: setup
     if: needs.setup.outputs.do_run == 'true' # Can't use env: see https://github.com/actions/runner/issues/480
     steps:
     - name: Clone repository
       uses: actions/checkout@v2
-    - name: Сcache cache files
+    - name: Ccache cache files
       uses: actions/cache@v2
       with:
         path: ~/.ccache
@@ -70,7 +70,7 @@ jobs:
         bash ./build/ci/tools/setup_ccache.sh
     - name: Setup environment
       run: |
-        sudo bash ./build/ci/linux/setup.sh
+        bash ./build/ci/linux/setup.sh
     - name: Build
       run: |
         source $HOME/build_tools/environment.sh
@@ -88,7 +88,7 @@ jobs:
 
   generate_reference_pngs:
     name: "Generate reference PNGs"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     needs: setup
     if: needs.setup.outputs.do_run == 'true'
     steps:
@@ -96,7 +96,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         ref: ${{ needs.setup.outputs.reference_sha }}
-    - name: Сcache cache files
+    - name: Ccache cache files
       uses: actions/cache@v2
       with:
         path: ~/.ccache
@@ -107,14 +107,10 @@ jobs:
         bash ./build/ci/tools/setup_ccache.sh
     - name: Setup environment
       run: |
-        sudo bash ./build/ci/linux/setup.sh
+        bash ./build/ci/linux/setup.sh
     - name: Build
       run: |
-        if [[ -f $HOME/build_tools/environment.sh ]]; then 
-          source $HOME/build_tools/environment.sh
-        else 
-          source ./../musescore_environment.sh
-        fi
+        source $HOME/build_tools/environment.sh
         mkdir -p "$HOME/musescore_install"
         bash ninja_build.sh -t clean
         MUSESCORE_INSTALL_DIR="$HOME/musescore_install" bash ninja_build.sh -t installdebug
@@ -131,7 +127,7 @@ jobs:
 
   compare_pngs:
     name: "Compare PNGs"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     needs: [setup, generate_current_pngs, generate_reference_pngs]
     if: needs.setup.outputs.do_run == 'true'
     steps:

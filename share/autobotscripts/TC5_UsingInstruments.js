@@ -36,7 +36,7 @@ var testCase = {
         }},
         {name: "Create score with Flute", func: function() {
             NewScore.selectTab("instruments")
-            NewScore.сhooseInstrument("Woodwinds", "Flute")
+            NewScore.chooseInstrument("Woodwinds", "Flute")
             NewScore.done()
         }},
         {name: "Open Instruments panel", func: function() {
@@ -46,9 +46,9 @@ var testCase = {
             Instruments.openAddInstrumentsDialog()
         }},
         {name: "Add Instruments Piano and Flute(2)", func: function() {
-            Instruments.сhooseInstrument("Keyboards", "Piano")
+            Instruments.chooseInstrument("Keyboards", "Piano")
             seeChanges()
-            Instruments.сhooseInstrument("Woodwinds", "Flute")
+            Instruments.chooseInstrument("Woodwinds", "Flute")
             seeChanges()
             Instruments.doneAddInstruments()
         }},

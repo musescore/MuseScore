@@ -25,17 +25,11 @@
 
 #include <QQuickItem>
 
-#include "config.h"
-
-#include "libmscore/mscore.h"
-#include "libmscore/musescoreCore.h"
-#include "libmscore/utils.h"
-
 namespace mu::engraving {
-class MsProcess;
-class Score;
 class EngravingItem;
 class MScore;
+class MsProcess;
+class Score;
 
 //---------------------------------------------------------
 //   QmlPlugin
@@ -74,7 +68,6 @@ class QmlPlugin : public QQuickItem
 
 protected:
     QString _filePath;              // the path of the source file, without file name
-    virtual MuseScoreCore* msc() const = 0;
 
 public slots:
     virtual void endCmd(const QMap<QString, QVariant>&) = 0;

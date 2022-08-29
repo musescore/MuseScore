@@ -632,35 +632,34 @@ const UndoMacro::SelectionInfo& UndoMacro::redoSelectionInfo() const
     return m_redoSelectionInfo;
 }
 
-std::unordered_set<ElementType> UndoMacro::changedTypes() const
+UndoMacro::ChangesInfo UndoMacro::changesInfo() const
 {
-    std::unordered_set<ElementType> result;
+    ChangesInfo result;
 
     for (const UndoCommand* command : commands()) {
+        CommandType type = command->type();
+
+        if (type == CommandType::ChangeProperty) {
+            auto changeProperty = static_cast<const ChangeProperty*>(command);
+            result.changedPropertyIdSet.insert(changeProperty->getId());
+        } else if (type == CommandType::ChangeStyleVal) {
+            auto changeStyle = static_cast<const ChangeStyleVal*>(command);
+            result.changedStyleIdSet.insert(changeStyle->id());
+        }
+
         for (const EngravingObject* object : command->objectItems()) {
             if (!object) {
                 continue;
             }
 
-            result.insert(object->type());
-        }
-    }
+            result.changedObjectTypes.insert(object->type());
 
-    return result;
-}
-
-std::vector<const EngravingItem*> UndoMacro::changedElements() const
-{
-    std::vector<const EngravingItem*> result;
-
-    for (const UndoCommand* command : commands()) {
-        for (const EngravingObject* object : command->objectItems()) {
             auto item = dynamic_cast<const EngravingItem*>(object);
             if (!item) {
                 continue;
             }
 
-            result.push_back(item);
+            result.changedItems.push_back(item);
         }
     }
 
@@ -1639,47 +1638,6 @@ void ChangeInstrumentLong::flip(EditData*)
 }
 
 //---------------------------------------------------------
-//   EditText::undo
-//---------------------------------------------------------
-
-void EditText::undo(EditData*)
-{
-/*      if (!text->styled()) {
-            for (int i = 0; i < undoLevel; ++i)
-                  text->undo();
-            }
-      */
-    undoRedo();
-}
-
-//---------------------------------------------------------
-//   EditText::redo
-//---------------------------------------------------------
-
-void EditText::redo(EditData*)
-{
-/*
-      if (!text->styled()) {
-            for (int i = 0; i < undoLevel; ++i)
-                  text->redo();
-            }
-      */
-    undoRedo();
-}
-
-//---------------------------------------------------------
-//   EditText::undoRedo
-//---------------------------------------------------------
-
-void EditText::undoRedo()
-{
-    String s = text->xmlText();
-    text->setXmlText(oldText);
-    oldText = s;
-    text->triggerLayout();
-}
-
-//---------------------------------------------------------
 //   ChangePatch
 //---------------------------------------------------------
 
@@ -2356,43 +2314,6 @@ void ChangeExcerptTitle::flip(EditData*)
 }
 
 //---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-
-void ChangeBend::flip(EditData*)
-{
-    PitchValues pv = bend->points();
-    bend->score()->addRefresh(bend->canvasBoundingRect());
-    bend->setPoints(points);
-    points = pv;
-    bend->layout();
-    bend->score()->addRefresh(bend->canvasBoundingRect());
-}
-
-//---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-
-void ChangeTremoloBar::flip(EditData*)
-{
-    PitchValues pv = bend->points();
-    bend->setPoints(points);
-    points = pv;
-}
-
-//---------------------------------------------------------
-//   ChangeNoteEvents::flip
-//---------------------------------------------------------
-
-void ChangeNoteEvents::flip(EditData*)
-{
-/*TODO:      std::list<NoteEvent*> e = chord->playEvents();
-      chord->setPlayEvents(events);
-      events = e;
-      */
-}
-
-//---------------------------------------------------------
 //   ChangeNoteEventList::flip
 //---------------------------------------------------------
 
@@ -2576,18 +2497,9 @@ void ChangeMetaText::flip(EditData*)
     text = s;
 }
 
-//---------------------------------------------------------
-//   ChangeSynthesizerState::flip
-//---------------------------------------------------------
-
-void ChangeSynthesizerState::flip(EditData*)
-{
-    std::swap(state, score->_synthesizerState);
-}
-
 void AddBracket::redo(EditData*)
 {
-    staff->setBracketType(level, type);
+    staff->setBracketType(level, bracketType);
     staff->setBracketSpan(level, span);
     staff->triggerLayout();
 }
@@ -2606,7 +2518,7 @@ void RemoveBracket::redo(EditData*)
 
 void RemoveBracket::undo(EditData*)
 {
-    staff->setBracketType(level, type);
+    staff->setBracketType(level, bracketType);
     staff->setBracketSpan(level, span);
     staff->triggerLayout();
 }

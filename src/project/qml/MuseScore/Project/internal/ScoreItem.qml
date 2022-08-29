@@ -108,10 +108,7 @@ FocusScope {
                 NavigationFocusBorder {
                     navigationCtrl: navCtrl
 
-                    //! NOTE: the contrast between the navigation focus border and the thumbnail
-                    //! is very low, especially in dark mode. Add a small padding between the
-                    //! focus border and the thumbnail, to make the border easily visible.
-                    anchors.margins: -border.width - 2
+                    padding: 2
                 }
 
                 border.color: ui.theme.strokeColor

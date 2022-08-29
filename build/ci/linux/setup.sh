@@ -90,6 +90,7 @@ apt_packages_runtime=(
   libxcb-icccm4
   libxcb-image0
   libxcb-keysyms1
+  libxcb-randr0
   libxcb-render-util0
   libxcb-xinerama0
   )
@@ -135,7 +136,7 @@ echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
 
 # COMPILER
 
-gcc_version="7"
+gcc_version="11"
 sudo apt-get install -y --no-install-recommends "g++-${gcc_version}"
 sudo update-alternatives \
   --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
@@ -205,4 +206,3 @@ chmod +x "$ENV_FILE"
 
 df -h .
 echo "Setup script done"
-
