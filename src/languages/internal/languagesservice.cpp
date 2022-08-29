@@ -280,6 +280,12 @@ Progress LanguagesService::update(const QString& languageCode)
         return m_updateOperationsHash[effectiveLanguageCode];
     }
 
+    Language& lang = m_languagesHash[effectiveLanguageCode];
+
+    if (!lang.isLoaded()) {
+        loadLanguage(lang);
+    }
+
     Progress progress;
 
     m_updateOperationsHash.insert(effectiveLanguageCode, progress);
