@@ -933,7 +933,7 @@ void Beam::createBeamletSegment(ChordRest* cr, bool isBefore, int level)
     const double startX = chordBeamAnchorX(cr, isBefore ? ChordBeamAnchorType::End : ChordBeamAnchorType::Start);
 
     const double beamletLength = score()->styleMM(Sid::beamMinLen).val()
-                                 * mag()
+                                 * cr->mag()
                                  * cr->staff()->staffMag(cr);
 
     const double endX = startX + (isBefore ? -beamletLength : beamletLength);
