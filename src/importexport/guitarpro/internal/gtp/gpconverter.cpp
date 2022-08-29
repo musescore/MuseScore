@@ -8,7 +8,6 @@
 #include "gpdommodel.h"
 
 #include "libmscore/arpeggio.h"
-#include "libmscore/bend.h"
 #include "libmscore/box.h"
 #include "libmscore/bracketItem.h"
 #include "libmscore/chord.h"
@@ -47,6 +46,12 @@
 #include "libmscore/tripletfeel.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
+
+#ifdef ENGRAVING_USE_STRETCHED_BENDS
+#include "libmscore/stretchedbend.h"
+#else
+#include "libmscore/bend.h"
+#endif
 
 #include "types/symid.h"
 
