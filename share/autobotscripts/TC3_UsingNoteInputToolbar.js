@@ -35,7 +35,7 @@ var testCase = {
             NewScore.openNewScoreDialog()
         }},
         {name: "Create score", func: function() {
-            NewScore.сhooseInstrument("Woodwinds", "Flute")
+            NewScore.chooseInstrument("Woodwinds", "Flute")
             NewScore.done()
         }},
         {name: "Turn on note input", func: function() {

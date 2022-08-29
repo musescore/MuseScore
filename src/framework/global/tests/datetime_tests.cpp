@@ -52,7 +52,7 @@ TEST_F(Global_Types_DateTimeTests, DateTime_To_From_String)
         EXPECT_EQ(dt, DateTime(Date(2022, 6, 24), Time(14, 27, 35)));
     }
 
-    // to Local short (С locale)
+    // to Local short (C locale)
     {
         std::locale::global(std::locale());
         //! GIVEN Some date
@@ -86,7 +86,7 @@ TEST_F(Global_Types_DateTimeTests, Date_To_From_String)
         EXPECT_EQ(d, Date(2022, 6, 24));
     }
 
-    // to Local short (С locale)
+    // to Local short (C locale)
     {
         std::locale::global(std::locale());
         //! GIVEN Some date
@@ -120,7 +120,7 @@ TEST_F(Global_Types_DateTimeTests, Time_To_From_String)
         EXPECT_EQ(t, Time(14, 27, 35));
     }
 
-    // to Local short (С locale)
+    // to Local short (C locale)
     {
         std::locale::global(std::locale());
         //! GIVEN Some time

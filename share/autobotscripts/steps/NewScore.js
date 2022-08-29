@@ -35,7 +35,7 @@ module.exports = {
         Navigation.triggerControl("NewScoreDialog", "BottomPanel", "Done")
     },
 
-    сhooseInstrument: function(family, instrument)
+    chooseInstrument: function(family, instrument)
     {
         Navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Choose instruments")
         Navigation.goToControl("NewScoreDialog", "FamilyView", family)
