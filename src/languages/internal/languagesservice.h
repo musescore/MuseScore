@@ -45,7 +45,7 @@ public:
     void init();
 
     const LanguagesHash& languages() const override;
-    const Language& language(const QString& languageCode) const override;
+    Language language(const QString& languageCode) const override;
     const Language& currentLanguage() const override;
     async::Notification currentLanguageChanged() const override;
 
