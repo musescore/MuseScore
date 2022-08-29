@@ -66,6 +66,7 @@
 #ifdef Q_OS_MAC
 #include "view/appmenumodel.h"
 #include "view/internal/platform/macos/macosappmenumodelhook.h"
+#include "view/internal/platform/macos/macosscrollinghook.h"
 #else
 #include "view/navigableappmenumodel.h"
 #endif
@@ -80,6 +81,10 @@ static std::shared_ptr<ApplicationActionController> s_applicationActionControlle
 static std::shared_ptr<ApplicationUiActions> s_applicationUiActions = std::make_shared<ApplicationUiActions>(s_applicationActionController);
 static std::shared_ptr<AppShellConfiguration> s_appShellConfiguration = std::make_shared<AppShellConfiguration>();
 static std::shared_ptr<SessionsManager> s_sessionsManager = std::make_shared<SessionsManager>();
+
+#ifdef Q_OS_MAC
+static std::shared_ptr<MacOSScrollingHook> s_scrollingHook = std::make_shared<MacOSScrollingHook>();
+#endif
 
 static void appshell_init_qrc()
 {
@@ -189,6 +194,10 @@ void AppShellModule::onInit(const IApplication::RunMode&)
     s_applicationActionController->init();
     s_applicationUiActions->init();
     s_sessionsManager->init();
+
+#ifdef Q_OS_MAC
+    s_scrollingHook->init();
+#endif
 }
 
 void AppShellModule::onDeinit()
