@@ -33,9 +33,22 @@ NewWorkspaceModel::NewWorkspaceModel(QObject* parent)
 {
 }
 
-void NewWorkspaceModel::load(const QString& workspaceNames)
+void NewWorkspaceModel::load(const QString& workspaceNames, bool editWorkspace)
 {
     m_workspaceNames = workspaceNames.split(',');
+    m_editWorkspace = editWorkspace;
+
+    if (editWorkspace) {
+        IWorkspacePtr currentWorkspace = workspacesManager()->currentWorkspace();
+
+        setWorkspaceName(QString::fromStdString(currentWorkspace->name()));
+        setUseUiPreferences(currentWorkspace->isManaged(DataKey::UiSettings));
+        setUseUiArrangement(currentWorkspace->isManaged(DataKey::UiStates));
+        setUsePalettes(currentWorkspace->isManaged(DataKey::Palettes));
+        setUseToolbarCustomization(currentWorkspace->isManaged(DataKey::UiToolConfigs));
+
+        return;
+    }
 
     setWorkspaceName(qtrc("workspace", "My new workspace"));
     setUseUiPreferences(true);
@@ -94,7 +107,13 @@ void NewWorkspaceModel::validateWorkspaceName()
 {
     m_errorMessage.clear();
 
-    if (m_workspaceNames.contains(m_workspaceName)) {
+    QStringList workspaceNames = m_workspaceNames;
+
+    if (m_editWorkspace) {
+        workspaceNames.removeOne(QString::fromStdString(workspacesManager()->currentWorkspace()->name()));
+    }
+
+    if (workspaceNames.contains(m_workspaceName)) {
         m_errorMessage = qtrc("workspace", "A workspace with the name '%1' already exists. Please choose a different name.")
                          .arg(m_workspaceName);
         return;

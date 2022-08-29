@@ -32,6 +32,7 @@ StyledDialogView {
     id: root
 
     property string workspaceNames: ""
+    property bool editWorkspace: false
 
     contentWidth: 552
     contentHeight: 360
@@ -43,7 +44,7 @@ StyledDialogView {
     }
 
     Component.onCompleted: {
-        workspaceModel.load(root.workspaceNames)
+        workspaceModel.load(root.workspaceNames, root.editWorkspace)
     }
 
     onNavigationActivateRequested: {
@@ -63,7 +64,7 @@ StyledDialogView {
         }
 
         StyledTextLabel {
-            text: qsTrc("workspace", "Create new workspace")
+            text: root.editWorkspace ? qsTrc("workspace", "Edit workspace") : qsTrc("workspace", "Create new workspace")
             font: ui.theme.headerBoldFont
         }
 
@@ -111,7 +112,8 @@ StyledDialogView {
             Layout.topMargin: 24
             Layout.fillWidth: true
 
-            text: qsTrc("workspace", "Select the options you want remembered in your new workspace")
+            text: root.editWorkspace ? qsTrc("workspace", "Select the options you want remembered in your workspace")
+                                     : qsTrc("workspace", "Select the options you want remembered in your new workspace")
 
             horizontalAlignment: Qt.AlignLeft
         }

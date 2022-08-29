@@ -33,11 +33,22 @@ const UiActionList WorkspaceUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "Select workspace")
              ),
+    UiAction("edit-workspace",
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Edit workspace"),
+             TranslatableString("action", "Edit workspace…")
+             ),
     UiAction("configure-workspaces",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Configure workspace"),
              TranslatableString("action", "Configure workspace…")
+             ),
+    UiAction("reset-workspace",
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Reset workspace")
              )
 };
 

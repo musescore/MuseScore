@@ -612,7 +612,9 @@ MenuItemList AppMenuModel::makeWorkspacesItems()
     }
 
     items << makeSeparator()
-          << makeMenuItem("configure-workspaces");
+          << makeMenuItem("edit-workspace")
+          << makeMenuItem("configure-workspaces")
+          << makeMenuItem("reset-workspace");
 
     return items;
 }

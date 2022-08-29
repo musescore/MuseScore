@@ -26,10 +26,15 @@
 #include <QObject>
 #include <QVariant>
 
+#include "modularity/ioc.h"
+#include "iworkspacemanager.h"
+
 namespace mu::workspace {
 class NewWorkspaceModel : public QObject
 {
     Q_OBJECT
+
+    INJECT(workspace, IWorkspaceManager, workspacesManager)
 
     Q_PROPERTY(QString workspaceName READ workspaceName WRITE setWorkspaceName NOTIFY workspaceNameChanged)
     Q_PROPERTY(bool isWorkspaceNameAllowed READ isWorkspaceNameAllowed NOTIFY workspaceNameChanged)
@@ -44,7 +49,7 @@ class NewWorkspaceModel : public QObject
 public:
     explicit NewWorkspaceModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void load(const QString& workspaceNames);
+    Q_INVOKABLE void load(const QString& workspaceNames, bool editWorkspace);
     Q_INVOKABLE QVariant createWorkspace() const;
 
     QString workspaceName() const;
@@ -75,6 +80,8 @@ private:
 
     QString m_workspaceName;
     QString m_errorMessage;
+
+    bool m_editWorkspace = false;
 
     bool m_useUiPreferences = false;
     bool m_useUiArrangement = false;
