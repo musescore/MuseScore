@@ -27,6 +27,9 @@
 #include "types/types.h"
 #include "containers.h"
 
+#include "property.h"
+#include "style/styledef.h"
+
 #ifdef SCRIPT_INTERFACE
 #include <QObject>
 #endif
@@ -38,6 +41,112 @@
  */
 
 namespace mu::engraving {
+enum class CommandType {
+    Unknown = -1,
+
+    // Parts
+    InsertPart,
+    RemovePart,
+    SetSoloist,
+    ChangePart,
+
+    // Staves
+    InsertStaff,
+    RemoveStaff,
+    SortStaves,
+    ChangeStaff,
+    ChangeStaffType,
+
+    // MStaves
+    InsertMStaff,
+    RemoveMStaff,
+    InsertStaves,
+    RemoveStaves,
+    ChangeMStaffProperties,
+
+    // Instruments
+    ChangeInstrumentShort,
+    ChangeInstrumentLong,
+    ChangeInstrument,
+    ChangeDrumset,
+
+    // Measures
+    RemoveMeasures,
+    InsertMeasures,
+    ChangeMeasureLen,
+    ChangeMMRest,
+    ChangeMeasureRepeatCount,
+
+    // Elements
+    AddElement,
+    RemoveElement,
+    Unlink,
+    Link,
+    ChangeElement,
+    ChangeParent,
+
+    // Notes
+    ChangePitch,
+    ChangeFretting,
+    ChangeVelocity,
+
+    // ChordRest
+    ChangeChordStaffMove,
+    SwapCR,
+
+    // Brackets
+    RemoveBracket,
+    AddBracket,
+
+    // Fret
+    FretDot,
+    FretMarker,
+    FretBarre,
+    FretClear,
+
+    // Harmony
+    TransposeHarmony,
+
+    // KeySig
+    ChangeKeySig,
+
+    // Clef
+    ChangeClefType,
+
+    // Tremolo
+    MoveTremolo,
+
+    // Spanners
+    ChangeSpannerElements,
+    InsertTimeUnmanagedSpanner,
+    ChangeStartEndSpanner,
+
+    // Style
+    ChangeStyle,
+    ChangeStyleVal,
+
+    // Property
+    ChangeProperty,
+
+    // Voices
+    ExchangeVoice,
+    CloneVoice,
+
+    // Excerpts
+    MapExcerptTracks,
+    AddExcerpt,
+    RemoveExcerpt,
+    SwapExcerpt,
+    ChangeExcerptTitle,
+
+    // Meta info
+    ChangeMetaInfo,
+
+    // Other
+    InsertTime,
+    ChangeScoreOrder,
+};
+
 #ifdef SCRIPT_INTERFACE
 Q_NAMESPACE
 #endif
@@ -400,6 +509,8 @@ struct ScoreChangesRange {
     staff_idx_t staffIdxTo = mu::nidx;
 
     ElementTypeSet changedTypes;
+    PropertyIdSet changedPropertyIdSet;
+    StyleIdSet changedStyleIdSet;
 
     bool isValidBoundary() const
     {

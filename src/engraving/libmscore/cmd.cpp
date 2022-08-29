@@ -83,6 +83,47 @@ using namespace mu::io;
 using namespace mu::engraving;
 
 namespace mu::engraving {
+static UndoMacro::ChangesInfo changesInfo(const UndoStack* stack)
+{
+    IF_ASSERT_FAILED(stack) {
+        static UndoMacro::ChangesInfo empty;
+        return empty;
+    }
+
+    const UndoMacro* actualMacro = stack->current();
+
+    if (!actualMacro) {
+        actualMacro = stack->last();
+    }
+
+    if (!actualMacro) {
+        static UndoMacro::ChangesInfo empty;
+        return empty;
+    }
+
+    return actualMacro->changesInfo();
+}
+
+static std::pair<int, int> changedTicksRange(const CmdState& cmdState, const std::vector<const EngravingItem*>& changedItems)
+{
+    int startTick = cmdState.startTick().ticks();
+    int endTick = cmdState.endTick().ticks();
+
+    for (const EngravingItem* element : changedItems) {
+        int tick = element->tick().ticks();
+
+        if (startTick > tick) {
+            startTick = tick;
+        }
+
+        if (endTick < tick) {
+            endTick = tick;
+        }
+    }
+
+    return { startTick, endTick };
+}
+
 //---------------------------------------------------------
 //   reset
 //---------------------------------------------------------
@@ -255,7 +296,7 @@ void Score::undoRedo(bool undo, EditData* ed)
     //! NOTE: the order of operations is very important here
     //! 1. for the undo operation, the list of changed elements is available before undo()
     //! 2. for the redo operation, the list of changed elements will be available after redo()
-    ElementTypeSet changedElementTypes = changedTypes();
+    UndoMacro::ChangesInfo changes = changesInfo(undoStack());
 
     cmdState().reset();
     if (undo) {
@@ -268,8 +309,17 @@ void Score::undoRedo(bool undo, EditData* ed)
     updateSelection();
 
     ScoreChangesRange range = changesRange();
+
     if (range.changedTypes.empty()) {
-        range.changedTypes = std::move(changedElementTypes);
+        range.changedTypes = std::move(changes.changedObjectTypes);
+    }
+
+    if (range.changedPropertyIdSet.empty()) {
+        range.changedPropertyIdSet = std::move(changes.changedPropertyIdSet);
+    }
+
+    if (range.changedStyleIdSet.empty()) {
+        range.changedStyleIdSet = std::move(changes.changedStyleIdSet);
     }
 
     if (range.isValid()) {
@@ -325,61 +375,15 @@ mu::async::Channel<ScoreChangesRange> Score::changesChannel() const
     return m_changesRangeChannel;
 }
 
-ElementTypeSet Score::changedTypes() const
-{
-    IF_ASSERT_FAILED(undoStack()) {
-        static ElementTypeSet empty;
-        return empty;
-    }
-
-    const UndoMacro* actualMacro = undoStack()->current();
-
-    if (!actualMacro) {
-        actualMacro = undoStack()->last();
-    }
-
-    if (!actualMacro) {
-        static ElementTypeSet empty;
-        return empty;
-    }
-
-    return actualMacro->changedTypes();
-}
-
-std::pair<int, int> Score::changedTicksRange() const
-{
-    const UndoMacro* actualMacro = undoStack()->current();
-
-    if (!actualMacro) {
-        actualMacro = undoStack()->last();
-    }
-
-    const CmdState& cmdState = score()->cmdState();
-    int startTick = cmdState.startTick().ticks();
-    int endTick = cmdState.endTick().ticks();
-
-    if (actualMacro) {
-        auto elements = actualMacro->changedElements();
-        for (const EngravingItem* element : elements) {
-            if (startTick > element->tick().ticks()) {
-                startTick = element->tick().ticks();
-            }
-
-            if (endTick < element->tick().ticks()) {
-                endTick = element->tick().ticks();
-            }
-        }
-    }
-
-    return { startTick, endTick };
-}
-
 ScoreChangesRange Score::changesRange() const
 {
     const CmdState& cmdState = score()->cmdState();
-    auto ticksRange = changedTicksRange();
+    UndoMacro::ChangesInfo changes = changesInfo(undoStack());
+    auto ticksRange = changedTicksRange(cmdState, changes.changedItems);
+
     return { ticksRange.first, ticksRange.second,
-             cmdState.startStaff(), cmdState.endStaff(), changedTypes() };
+             cmdState.startStaff(), cmdState.endStaff(),
+             changes.changedObjectTypes, changes.changedPropertyIdSet, changes.changedStyleIdSet };
 }
 
 #ifndef NDEBUG
