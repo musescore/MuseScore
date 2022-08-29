@@ -2062,12 +2062,12 @@ void GPConverter::addLegato(const GPBeat* beat, ChordRest* cr)
 
 void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
 {
-    addLineElement(cr, m_ottavas[gpb->ottavaType()], ElementType::OTTAVA, ottavaToImportType(gpb->ottavaType()),
-                   gpb->ottavaType() != GPBeat::OttavaType::None);
-
     if (!cr->isChord() || gpb->ottavaType() == GPBeat::OttavaType::None) {
         return;
     }
+
+    addLineElement(cr, m_ottavas[gpb->ottavaType()], ElementType::OTTAVA, ottavaToImportType(gpb->ottavaType()),
+                   gpb->ottavaType() != GPBeat::OttavaType::None);
 
     const Chord* chord = toChord(cr);
     mu::engraving::OttavaType type = ottavaType(gpb->ottavaType());
