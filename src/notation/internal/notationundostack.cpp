@@ -154,6 +154,11 @@ mu::async::Notification NotationUndoStack::stackChanged() const
     return m_stackStateChanged;
 }
 
+mu::async::Channel<ChangesRange> NotationUndoStack::changesChannel() const
+{
+    return score() ? score()->changesChannel() : async::Channel<ChangesRange>();
+}
+
 mu::engraving::Score* NotationUndoStack::score() const
 {
     return m_getScore->score();

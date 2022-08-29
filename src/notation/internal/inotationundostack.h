@@ -56,6 +56,7 @@ public:
     virtual bool isLocked() const = 0;
 
     virtual async::Notification stackChanged() const = 0;
+    virtual async::Channel<ChangesRange> changesChannel() const = 0;
 };
 
 using INotationUndoStackPtr = std::shared_ptr<INotationUndoStack>;
