@@ -207,18 +207,6 @@ void PaletteModule::registerCellActions()
         }
     }
 
-    //for (int ii = 0; ii < s_paletteProvider->userPaletteModel()->rowCount(); ii++) {
-    //    LOGE() <<
-    //        s_paletteProvider->userPaletteModel()->data(s_paletteProvider->userPaletteModel()->index(ii, 0),
-    //                                                    Qt::DisplayRole).toString() << ": " <<
-    //        s_paletteProvider->userPaletteModel()->data(s_paletteProvider->userPaletteModel()->index(ii,
-    //                                                                                                 0),
-    //                                                    PaletteTreeModel::PaletteTreeModelRoles::VisibleRole).toBool() <<
-    //        " with number of cells:" <<
-    //        s_paletteProvider->userPaletteModel()->rowCount(s_paletteProvider->userPaletteModel()->index(ii, 0));
-    //}
-    //assert(false);
-
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(s_paletteUiActions, true);

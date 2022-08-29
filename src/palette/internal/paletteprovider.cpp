@@ -677,11 +677,16 @@ QAbstractItemModel* PaletteProvider::mainPaletteModel()
         m_mainPalette = m_visibilityFilterModel;
     }
 
-    LOGE() << "BEGIN ROW COUNT";
-    actionToItem.clear();
+    connectOnReceiveCells();
 
-    int ctr = 0;
-    for (PaletteCell* cell: PaletteCell::cells) {
+    return m_mainPalette;
+}
+
+void PaletteProvider::connectOnReceiveCells()
+{
+    actionToItem.clear();
+    LOGE() << "Cells in model: " << PaletteCell::cells.size();
+    for (PaletteCell* cell : PaletteCell::cells) {
         if (!cell || !cell->element) {
             continue;
         }
@@ -710,17 +715,12 @@ QAbstractItemModel* PaletteProvider::mainPaletteModel()
         });
 
         QString ac_name = cell->action;
-        ctr++;
         actionToItem[ac_name] = cell->element.get();
         dispatcher()->reg(this, ac_name.toStdString(), [this, ac_name]() {
             LOGE() << "You are trying to call: " << ac_name;
             globalContext()->currentNotation()->interaction()->applyPaletteElement(actionToItem[ac_name]);
         });
     }
-
-    LOGE() << ctr;
-    LOGE() << "END ROW COUNT";
-    return m_mainPalette;
 }
 
 AbstractPaletteController* PaletteProvider::mainPaletteController()
