@@ -45,7 +45,7 @@ module.exports = {
         })
     },
 
-    сhooseInstrument: function(family, instrument)
+    chooseInstrument: function(family, instrument)
     {
         Navigation.goToControl("DialogView", "FamilyView", family)
         Navigation.goToControl("DialogView", "InstrumentsView", instrument)
