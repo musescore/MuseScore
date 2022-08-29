@@ -27,9 +27,7 @@
 
 #include "io/file.h"
 
-#include "libmscore/instrtemplate.h"
 #include "libmscore/masterscore.h"
-#include "libmscore/musescoreCore.h"
 
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/scoreaccess.h"
@@ -47,11 +45,6 @@ extern Err importBB(MasterScore* score, const QString& name);
 }
 
 namespace mu::engraving {
-MTest::MTest()
-{
-    MScore::testMode = true;
-}
-
 MasterScore* MTest::readScore(const QString& name)
 {
     QString path = root + "/" + name;
@@ -133,15 +126,8 @@ bool MTest::saveCompareScore(Score* score, const QString& saveName, const QStrin
     return compareFiles(saveName, compareWith);
 }
 
-void MTest::initMTest(const QString& rootDir)
+void MTest::setRootDir(const QString& rootDir)
 {
-    MScore::noGui = true;
-
-    mscore = new MScore;
-    new MuseScoreCore;
-    mscore->init();
-
     root = rootDir;
-    loadInstrumentTemplates(":/data/instruments.xml");
 }
 }

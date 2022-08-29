@@ -27,8 +27,8 @@
 #include "engraving/engravingmodule.h"
 #include "engraving/utests/utils/scorerw.h"
 
-#include "libmscore/instrtemplate.h"
-#include "libmscore/musescoreCore.h"
+#include "engraving/libmscore/instrtemplate.h"
+#include "engraving/libmscore/mscore.h"
 
 #include "log.h"
 
@@ -38,6 +38,7 @@ static mu::testing::SuiteEnvironment importexport_se(
     new mu::fonts::FontsModule(), // needs for libmscore
     new mu::engraving::EngravingModule()
 },
+    nullptr,
     []() {
     LOGI() << "braille tests suite post init";
 
@@ -46,9 +47,6 @@ static mu::testing::SuiteEnvironment importexport_se(
     mu::engraving::MScore::testMode = true;
     mu::engraving::MScore::testWriteStyleToScore = false;
     mu::engraving::MScore::noGui = true;
-
-    new mu::engraving::MuseScoreCore();
-    mu::engraving::MScore::init(); // initialize libmscore
 
     mu::engraving::loadInstrumentTemplates(":/data/instruments.xml");
 }

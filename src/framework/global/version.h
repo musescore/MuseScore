@@ -32,6 +32,10 @@ public:
     static std::string version();
     static std::string fullVersion();  // e.g. 3.4.0-Beta
     static std::string revision();
+
+    static int majorVersion();
+    static int minorVersion();
+    static int patchVersion();
 };
 }
 

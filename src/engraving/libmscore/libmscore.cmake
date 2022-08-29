@@ -187,7 +187,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mscore.h
     ${CMAKE_CURRENT_LIST_DIR}/mscoreview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/mscoreview.h
-    ${CMAKE_CURRENT_LIST_DIR}/musescoreCore.h
     ${CMAKE_CURRENT_LIST_DIR}/navigate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/navigate.h
     ${CMAKE_CURRENT_LIST_DIR}/note.cpp
