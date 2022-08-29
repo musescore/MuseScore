@@ -348,14 +348,19 @@ void Articulation::layout()
         return;
     }
 
+    RectF bRect;
+
     if (m_textType != TextType::NO_TEXT) {
-        mu::draw::FontMetrics fm(m_font);
-        RectF b(fm.boundingRect(m_font, artTypeToInfo.at(m_textType).text));
-        setbbox(b.translated(-0.5 * b.width(), 0.0));
+        mu::draw::Font scaledFont(m_font);
+        scaledFont.setPointSizeF(m_font.pointSizeF() * magS());
+        mu::draw::FontMetrics fm(scaledFont);
+
+        bRect = fm.boundingRect(scaledFont, artTypeToInfo.at(m_textType).text);
     } else {
-        RectF b(symBbox(_symId));
-        setbbox(b.translated(-0.5 * b.width(), 0.0));
+        bRect = symBbox(_symId);
     }
+
+    setbbox(bRect.translated(-0.5 * bRect.width(), 0.0));
 }
 
 bool Articulation::isHiddenOnTabStaff() const
