@@ -1435,35 +1435,18 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     }
 
                     for (EngravingItem* e : oseg->annotations()) {
-                        if (e->generated() || e->systemFlag()) {
+                        if (e->generated()) {
                             continue;
                         }
                         if (e->track() != srcTrack) {
                             continue;
                         }
-                        switch (e->type()) {
-                        // exclude certain element types
-                        // this should be same list excluded in Score::undoAddElement()
-                        case ElementType::STAFF_TEXT:
-                        case ElementType::SYSTEM_TEXT:
-                        case ElementType::TRIPLET_FEEL:
-                        case ElementType::PLAYTECH_ANNOTATION:
-                        case ElementType::FRET_DIAGRAM:
-                        case ElementType::HARMONY:
-                        case ElementType::FIGURED_BASS:
-                        case ElementType::DYNAMIC:
-                        case ElementType::LYRICS:                     // not normally segment-attached
-                            continue;
-                        default:
-                            if (e->isTextLine() && toTextLine(e)->systemFlag()) {
-                                continue;
-                            }
-                            EngravingItem* ne1 = e->linkedClone();
-                            ne1->setTrack(dstTrack);
-                            ne1->setParent(ns);
-                            ne1->setScore(score);
-                            addElement(ne1);
-                        }
+
+                        EngravingItem* ne1 = e->linkedClone();
+                        ne1->setTrack(dstTrack);
+                        ne1->setParent(ns);
+                        ne1->setScore(score);
+                        addElement(ne1);
                     }
                     if (oe->isChord()) {
                         Chord* och = toChord(ocr);
