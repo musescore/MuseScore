@@ -24,6 +24,7 @@
 
 #include "timeline.h"
 
+#include <QApplication>
 #include <QSplitter>
 
 #include "log.h"
@@ -61,8 +62,7 @@ private:
 
     bool handleEvent(QEvent* e) override
     {
-        QMouseEvent* me = dynamic_cast<QMouseEvent*>(e);
-        if (me) {
+        if (QMouseEvent* me = dynamic_cast<QMouseEvent*>(e)) {
             return handleMouseEvent(me);
         }
 
@@ -72,20 +72,23 @@ private:
     bool handleMouseEvent(QMouseEvent* event)
     {
         QPoint pos = event ? event->pos() : QPoint();
-        TRowLabels* labelsColumn = m_msTimeline->labelsColumn();
 
-        if (m_msTimeline->geometry().contains(pos)) {
-            event->setLocalPos(m_msTimeline->mapFrom(this, pos));
-            return m_msTimeline->handleEvent(event);
-        } else if (labelsColumn->geometry().contains(pos)) {
-            event->setLocalPos(labelsColumn->mapFrom(this, pos));
-            return labelsColumn->handleEvent(event);
+        if (event->type() == QEvent::MouseButtonPress) {
+            m_mouseDownWidget = childAt(pos);
+        } else if (event->type() == QEvent::MouseButtonRelease) {
+            m_mouseDownWidget = nullptr;
+        }
+
+        if (QWidget* receiver = m_mouseDownWidget ? m_mouseDownWidget : childAt(pos)) {
+            event->setLocalPos(receiver->mapFrom(this, pos));
+            return qApp->notify(receiver, event);
         }
 
         return false;
     }
 
     Timeline* m_msTimeline = nullptr;
+    QWidget* m_mouseDownWidget = nullptr;
 };
 }
 
