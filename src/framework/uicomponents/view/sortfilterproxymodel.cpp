@@ -64,6 +64,21 @@ QQmlListProperty<SorterValue> SortFilterProxyModel::sorters()
     return m_sorters.property();
 }
 
+QList<int> SortFilterProxyModel::excludeIndexes()
+{
+    return m_excludeIndexes;
+}
+
+void SortFilterProxyModel::setExcludeIndexes(QList<int> excludeIndexes)
+{
+    if (excludeIndexes == m_excludeIndexes) {
+        return;
+    }
+
+    m_excludeIndexes = excludeIndexes;
+    emit excludeIndexesChanged(m_excludeIndexes);
+}
+
 void SortFilterProxyModel::refresh()
 {
     setFilterFixedString(filterRegularExpression().pattern());
@@ -72,6 +87,10 @@ void SortFilterProxyModel::refresh()
 
 bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {
+    if (m_excludeIndexes.contains(sourceRow)) {
+        return true;
+    }
+
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
 
     QHashIterator<int, FilterValue*> it(m_roleIdToFilterValueHash);
@@ -85,13 +104,13 @@ bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& so
             continue;
         }
 
-        CompareType::Type compreType = value->compareType().value<CompareType::Type>();
+        CompareType::Type compareType = value->compareType().value<CompareType::Type>();
 
-        if (CompareType::Contains == compreType) {
+        if (CompareType::Contains == compareType) {
             if (!data.toString().contains(value->roleValue().toString(), Qt::CaseInsensitive)) {
                 return false;
             }
-        } else if (CompareType::Equal == compreType) {
+        } else if (CompareType::Equal == compareType) {
             if (data != value->roleValue()) {
                 return false;
             }
