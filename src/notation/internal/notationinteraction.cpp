@@ -679,6 +679,12 @@ bool NotationInteraction::elementIsLess(const EngravingItem* e1, const Engraving
     if (e1->isBox() && e2->isText()) {
         return true;
     }
+    if (e1->isImage() && e2->isBox()) {
+        return false;
+    }
+    if (e1->isBox() && e2->isImage()) {
+        return true;
+    }
     if (e1->z() == e2->z()) {
         // same stacking order, prefer non-hidden elements
         if (e1->type() == e2->type()) {
