@@ -35,6 +35,7 @@ class IAuthorizationService : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAuthorizationService() = default;
 
+    virtual void signUp() = 0;
     virtual void signIn() = 0;
     virtual void signOut() = 0;
 

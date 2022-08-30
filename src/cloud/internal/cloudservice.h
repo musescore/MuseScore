@@ -55,6 +55,7 @@ public:
 
     void init();
 
+    void signUp() override;
     void signIn() override;
     void signOut() override;
 

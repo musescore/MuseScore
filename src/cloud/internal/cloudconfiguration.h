@@ -40,6 +40,7 @@ public:
     QByteArray uploadingLicense() const override;
 
     QUrl authorizationUrl() const override;
+    QUrl signUpUrl() const override;
     QUrl accessTokenUrl() const override;
     QUrl refreshApiUrl() const override;
     QUrl userInfoApiUrl() const override;
