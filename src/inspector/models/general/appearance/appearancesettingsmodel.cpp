@@ -44,7 +44,7 @@ AppearanceSettingsModel::AppearanceSettingsModel(QObject* parent, IElementReposi
 void AppearanceSettingsModel::createProperties()
 {
     m_leadingSpace = buildPropertyItem(Pid::LEADING_SPACE);
-    m_barWidth = buildPropertyItem(Pid::USER_STRETCH);
+    m_measureWidth = buildPropertyItem(Pid::USER_STRETCH);
     m_minimumDistance = buildPropertyItem(Pid::MIN_DISTANCE);
     m_color = buildPropertyItem(Pid::COLOR);
     m_arrangeOrder = buildPropertyItem(Pid::Z);
@@ -68,7 +68,7 @@ void AppearanceSettingsModel::loadProperties()
     loadPropertyItem(m_leadingSpace, formatDoubleFunc);
     loadPropertyItem(m_minimumDistance, formatDoubleFunc);
 
-    loadPropertyItem(m_barWidth);
+    loadPropertyItem(m_measureWidth);
     loadPropertyItem(m_color);
     loadPropertyItem(m_arrangeOrder);
 
@@ -81,7 +81,7 @@ void AppearanceSettingsModel::resetProperties()
 {
     m_leadingSpace->resetToDefault();
     m_minimumDistance->resetToDefault();
-    m_barWidth->resetToDefault();
+    m_measureWidth->resetToDefault();
     m_color->resetToDefault();
     m_arrangeOrder->resetToDefault();
     m_horizontalOffset->resetToDefault();
@@ -197,9 +197,9 @@ PropertyItem* AppearanceSettingsModel::leadingSpace() const
     return m_leadingSpace;
 }
 
-PropertyItem* AppearanceSettingsModel::barWidth() const
+PropertyItem* AppearanceSettingsModel::measureWidth() const
 {
-    return m_barWidth;
+    return m_measureWidth;
 }
 
 PropertyItem* AppearanceSettingsModel::minimumDistance() const
