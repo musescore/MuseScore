@@ -1382,6 +1382,10 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
 
     bool firstVoiceVisible = dstStaff->isVoiceVisible(0);
 
+    auto addElement = [score](EngravingItem* element) {
+        score->undoAddElement(element, false /*addToLinkedStaves*/);
+    };
+
     for (Measure* m = m1; m && (m != m2); m = m->nextMeasure()) {
         Measure* nm = score->tick2measure(m->tick());
         nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaffIdx), dstStaffIdx);
@@ -1398,7 +1402,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         ne->setTrack(trackZeroVoice(dstTrack));
                         ne->setParent(ns);
                         ne->setScore(score);
-                        score->undoAddElement(ne);
+                        addElement(ne);
                     }
                 }
 
@@ -1411,7 +1415,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 ne->setTrack(dstTrack);
                 ne->setParent(ns);
                 ne->setScore(score);
-                score->undoAddElement(ne);
+                addElement(ne);
                 if (oe->isChordRest()) {
                     ChordRest* ocr = toChordRest(oe);
                     ChordRest* ncr = toChordRest(ne);
@@ -1454,11 +1458,11 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                             if (e->isTextLine() && toTextLine(e)->systemFlag()) {
                                 continue;
                             }
-                            EngravingItem* ne1 = e->clone();
+                            EngravingItem* ne1 = e->linkedClone();
                             ne1->setTrack(dstTrack);
                             ne1->setParent(ns);
                             ne1->setScore(score);
-                            score->undoAddElement(ne1);
+                            addElement(ne1);
                         }
                     }
                     if (oe->isChord()) {
