@@ -237,7 +237,7 @@ Column {
             { text: qsTrc("inspector", "Title"), value: TextTypes.TEXT_TYPE_TITLE },
             { text: qsTrc("inspector", "Subtitle"), value: TextTypes.TEXT_TYPE_SUBTITLE},
             { text: qsTrc("inspector", "Composer"), value: TextTypes.TEXT_TYPE_COMPOSER },
-            { text: qsTrc("inspector", "Lyricist"), value: TextTypes.TEXT_TYPE_LYRICS_ODD },
+            { text: qsTrc("inspector", "Lyricist"), value: TextTypes.TEXT_TYPE_POET },
             { text: qsTrc("inspector", "Translator"), value: TextTypes.TEXT_TYPE_TRANSLATOR },
             { text: qsTrc("inspector", "Frame"), value: TextTypes.TEXT_TYPE_FRAME },
             { text: qsTrc("inspector", "Header"), value: TextTypes.TEXT_TYPE_HEADER },
