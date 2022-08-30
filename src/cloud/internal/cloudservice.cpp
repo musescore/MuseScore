@@ -21,6 +21,7 @@
  */
 
 #include "cloudservice.h"
+#include "config.h"
 
 #include <QOAuth2AuthorizationCodeFlow>
 #include <QOAuthHttpServerReplyHandler>
@@ -42,6 +43,8 @@ using namespace mu::framework;
 static const QString ACCESS_TOKEN_KEY("access_token");
 static const QString REFRESH_TOKEN_KEY("refresh_token");
 static const QString DEVICE_ID_KEY("device_id");
+static const QString EDITOR_SOURCE_KEY("editor_source");
+static const QString EDITOR_SOURCE_VALUE(QString("Musescore Editor %1").arg(VERSION));
 
 static const std::string CLOUD_ACCESS_TOKEN_RESOURCE_NAME("CLOUD_ACCESS_TOKEN");
 
@@ -74,6 +77,11 @@ void CloudService::init()
 
     m_oauth2->setAuthorizationUrl(configuration()->authorizationUrl());
     m_oauth2->setAccessTokenUrl(configuration()->accessTokenUrl());
+    m_oauth2->setModifyParametersFunction([](QAbstractOAuth::Stage stage, QVariantMap* parameters) {
+        if (stage == QAbstractOAuth::Stage::RequestingAuthorization) {
+            (*parameters).insert(EDITOR_SOURCE_KEY, EDITOR_SOURCE_VALUE);
+        }
+    });
     m_oauth2->setReplyHandler(m_replyHandler);
 
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, this, &CloudService::openUrl);
@@ -259,6 +267,16 @@ CloudService::RequestStatus CloudService::downloadUserInfo()
 void CloudService::signIn()
 {
     authorize();
+}
+
+void CloudService::signUp()
+{
+    QUrl signUpUrl = configuration()->signUpUrl();
+
+    QUrlQuery query;
+    query.addQueryItem(EDITOR_SOURCE_KEY, EDITOR_SOURCE_VALUE);
+    signUpUrl.setQuery(query);
+    openUrl(signUpUrl);
 }
 
 void CloudService::signOut()
