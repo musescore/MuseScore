@@ -657,10 +657,16 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
         shoulderW = 0.7;
     }
     shoulderH = sqrt(d / 4) * _spatium;
+
+    static constexpr double shoulderReduction = 0.75;
+    if (slur()->isOverBeams()) {
+        shoulderH *= shoulderReduction;
+    }
     shoulderH -= p6offset.y();
     if (!slur()->up()) {
         shoulderH = -shoulderH;
     }
+
     double c    = p2.x();
     double c1   = (c - c * shoulderW) * .5 + p6offset.x();
     double c2   = c1 + c * shoulderW + p6offset.x();
@@ -1913,5 +1919,40 @@ bool Slur::isCrossStaff()
     return startCR() && endCR()
            && (startCR()->staffMove() != 0 || endCR()->staffMove() != 0
                || startCR()->vStaffIdx() != endCR()->vStaffIdx());
+}
+
+//---------------------------------------------------------
+//   isOverBeams
+//    returns true if all the chords spanned by the slur are
+//    beamed, and all beams are on the same side of the slur
+//---------------------------------------------------------
+bool Slur::isOverBeams()
+{
+    if (!startCR() || !endCR()) {
+        return false;
+    }
+    if (startCR()->track() != endCR()->track()
+        || startCR()->tick() >= endCR()->tick()) {
+        return false;
+    }
+    size_t track = startCR()->track();
+    Segment* seg = startCR()->segment();
+    while (seg && seg->tick() <= endCR()->tick()) {
+        if (!seg->isChordRestType()
+            || !seg->elist().at(track)
+            || !seg->elist().at(track)->isChordRest()) {
+            return false;
+        }
+        ChordRest* cr = toChordRest(seg->elist().at(track));
+        if (!cr->beam() || cr->beam()->up() != up()) {
+            return false;
+        }
+        if ((!seg->next() || seg->next()->isEndBarLineType()) && seg->measure()->nextMeasure()) {
+            seg = seg->measure()->nextMeasure()->first();
+        } else {
+            seg = seg->next();
+        }
+    }
+    return true;
 }
 }
