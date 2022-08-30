@@ -100,6 +100,7 @@ public:
     const SlurSegment* segmentAt(int n) const { return toSlurSegment(Spanner::segmentAt(n)); }
 
     bool isCrossStaff();
+    bool isOverBeams();
 
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }
 };
