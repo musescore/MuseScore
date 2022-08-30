@@ -300,7 +300,6 @@ Item {
             property real lastX: 0
 
             acceptedButtons: Qt.MiddleButton
-            pressAndHoldInterval: 250
             scrollGestureEnabled: true
 
             onPressAndHold: function(mouse) {

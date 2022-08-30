@@ -67,7 +67,6 @@ Column {
 
             hoverEnabled: true
             preventStealing: true
-            pressAndHoldInterval: 200
 
             onClicked: { root.increaseButtonClicked() }
             onPressAndHold: { continuousIncreaseTimer.running = true }
@@ -133,7 +132,6 @@ Column {
 
             hoverEnabled: true
             preventStealing: true
-            pressAndHoldInterval: 200
 
             onClicked: { root.decreaseButtonClicked() }
             onPressAndHold: { continuousDecreaseTimer.running = true }
