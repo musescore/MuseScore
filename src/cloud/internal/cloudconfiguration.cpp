@@ -101,6 +101,11 @@ QUrl CloudConfiguration::authorizationUrl() const
     return QUrl("https://musescore.com/oauth/authorize");
 }
 
+QUrl CloudConfiguration::signUpUrl() const
+{
+    return QUrl("https://musescore.com/user/register");
+}
+
 QUrl CloudConfiguration::accessTokenUrl() const
 {
     return apiRootUrl() + "/oauth/token";
