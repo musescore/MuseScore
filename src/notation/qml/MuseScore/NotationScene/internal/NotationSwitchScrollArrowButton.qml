@@ -68,7 +68,6 @@ FlatButton {
     }
 
     mouseArea.preventStealing: true
-    mouseArea.pressAndHoldInterval: 200
 
     mouseArea.onClicked: { root.scrollRequested() }
     mouseArea.onPressAndHold: { timer.running = true }

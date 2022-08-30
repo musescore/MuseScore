@@ -142,7 +142,6 @@ Item {
                 }
             }
 
-            mouseArea.pressAndHoldInterval: 200
             mouseArea.acceptedButtons: hasMenu && itemModel.isMenuSecondary
                                        ? Qt.LeftButton | Qt.RightButton
                                        : Qt.LeftButton
