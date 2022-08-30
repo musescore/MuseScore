@@ -34,7 +34,7 @@ class AppearanceSettingsModel : public AbstractInspectorModel
     INJECT(inspector, notation::INotationConfiguration, notationConfiguration)
 
     Q_PROPERTY(PropertyItem * leadingSpace READ leadingSpace CONSTANT)
-    Q_PROPERTY(PropertyItem * barWidth READ barWidth CONSTANT)
+    Q_PROPERTY(PropertyItem * measureWidth READ measureWidth CONSTANT)
     Q_PROPERTY(PropertyItem * minimumDistance READ minimumDistance CONSTANT)
     Q_PROPERTY(PropertyItem * color READ color CONSTANT)
     Q_PROPERTY(PropertyItem * arrangeOrder READ arrangeOrder CONSTANT)
@@ -58,7 +58,7 @@ public:
     void resetProperties() override;
 
     PropertyItem* leadingSpace() const;
-    PropertyItem* barWidth() const;
+    PropertyItem* measureWidth() const;
     PropertyItem* minimumDistance() const;
     PropertyItem* color() const;
     PropertyItem* arrangeOrder() const;
@@ -82,7 +82,7 @@ private:
     std::vector<mu::engraving::EngravingItem*> getAllOverlappingElements();
 
     PropertyItem* m_leadingSpace = nullptr;
-    PropertyItem* m_barWidth = nullptr;
+    PropertyItem* m_measureWidth = nullptr;
     PropertyItem* m_minimumDistance = nullptr;
     PropertyItem* m_color = nullptr;
     PropertyItem* m_arrangeOrder = nullptr;
