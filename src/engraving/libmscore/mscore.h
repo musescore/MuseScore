@@ -114,8 +114,6 @@ static constexpr double DPMM      = DPI / INCH;
 
 static constexpr int MAX_STAVES = 4;
 
-static constexpr int SHADOW_NOTE_LIGHT = 135;
-
 static constexpr char mimeSymbolFormat[]     = "application/musescore/symbol";
 static constexpr char mimeSymbolListFormat[] = "application/musescore/symbollist";
 static constexpr char mimeStaffListFormat[]  = "application/musescore/stafflist";
@@ -275,21 +273,6 @@ public:
 
     static void setError(MsError e) { _error = e; }
 };
-
-//---------------------------------------------------------
-//   limit
-//---------------------------------------------------------
-
-constexpr int limit(int val, int min, int max)
-{
-    if (val > max) {
-        return max;
-    }
-    if (val < min) {
-        return min;
-    }
-    return val;
-}
 } // namespace mu::engraving
 
 #endif
