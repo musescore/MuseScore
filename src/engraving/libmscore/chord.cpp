@@ -979,6 +979,13 @@ void Chord::computeUp()
 
     _usesAutoUp = false;
 
+    const StaffType* tab = staff() ? staff()->staffTypeForElement(this) : 0;
+    bool isTabStaff = tab && tab->isTabStaff();
+    if (isTabStaff && (tab->stemless() || !tab->stemThrough())) {
+        _up = tab->stemless() ? false : !tab->stemsDown();
+        return;
+    }
+
     bool hasCustomStemDirection = _stemDirection != DirectionV::AUTO;
     if (hasCustomStemDirection && !(_beam && _beam->cross())) {
         _up = _stemDirection == DirectionV::UP;
@@ -1065,13 +1072,6 @@ void Chord::computeUp()
     if (staffHasMultipleVoices) {
         bool isTrackEven = track() % 2 == 0;
         _up = isTrackEven;
-        return;
-    }
-
-    const StaffType* tab = staff() ? staff()->staffTypeForElement(this) : 0;
-    bool isTabStaff  = tab && tab->isTabStaff();
-    if (isTabStaff && (tab->stemless() || !tab->stemThrough())) {
-        _up = tab->stemless() ? false : !tab->stemsDown();
         return;
     }
 
