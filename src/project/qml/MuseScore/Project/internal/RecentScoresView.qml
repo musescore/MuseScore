@@ -107,12 +107,14 @@ StyledGridView {
             suffix: score.suffix ?? ""
             thumbnail: score.thumbnail ?? null
             isAdd: score.isAddNew
-            timeSinceModified: !isAdd ? score.timeSinceModified : ""
+            isNoResultFound: score.isNoResultFound
+            timeSinceModified: (!isAdd && !isNoResultFound) ? score.timeSinceModified : ""
+            visible: !isNoResultFound ? true : root.count == 2              // New score and No result items
 
             onClicked: {
                 if (isAdd) {
                     root.addNewScoreRequested()
-                } else {
+                } else if (!isNoResultFound) {
                     root.openScoreRequested(score.path)
                 }
             }

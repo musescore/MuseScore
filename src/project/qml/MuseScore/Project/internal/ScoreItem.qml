@@ -34,6 +34,7 @@ FocusScope {
     property alias timeSinceModified: timeSinceModified.text
     property var thumbnail: null
     property bool isAdd: false
+    property bool isNoResultFound: false
 
     property alias navigation: navCtrl
 
@@ -80,6 +81,10 @@ FocusScope {
                 sourceComponent: {
                     if (root.isAdd) {
                         return addComp
+                    }
+
+                    if (root.isNoResultFound) {
+                        return noResultFoundComp
                     }
 
                     if (root.thumbnail) {
@@ -183,7 +188,7 @@ FocusScope {
 
                 font.capitalization: Font.AllUppercase
 
-                visible: !root.isAdd
+                visible: !root.isAdd && !root.isNoResultFound
             }
         }
     }
@@ -202,6 +207,20 @@ FocusScope {
 
                 font.pixelSize: 50
                 color: "black"
+            }
+        }
+    }
+
+    Component {
+        id: noResultFoundComp
+
+        Rectangle {
+            anchors.fill: parent
+            color: ui.theme.backgroundPrimaryColor
+
+            StyledTextLabel {
+                anchors.fill: parent
+                text: qsTrc("project", "No results found")
             }
         }
     }
