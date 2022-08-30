@@ -73,15 +73,22 @@ private:
     {
         QPoint pos = event ? event->pos() : QPoint();
 
-        if (QWidget* child = childAt(pos)) {
-            event->setLocalPos(child->mapFrom(this, pos));
-            return qApp->notify(child, event);
+        if (event->type() == QEvent::MouseButtonPress) {
+            m_mouseDownWidget = childAt(pos);
+        } else if (event->type() == QEvent::MouseButtonRelease) {
+            m_mouseDownWidget = nullptr;
+        }
+
+        if (QWidget* receiver = m_mouseDownWidget ? m_mouseDownWidget : childAt(pos)) {
+            event->setLocalPos(receiver->mapFrom(this, pos));
+            return qApp->notify(receiver, event);
         }
 
         return false;
     }
 
     Timeline* m_msTimeline = nullptr;
+    QWidget* m_mouseDownWidget = nullptr;
 };
 }
 
