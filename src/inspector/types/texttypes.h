@@ -24,6 +24,8 @@
 
 #include "qobjectdefs.h"
 
+#include "engraving/types/types.h"
+
 namespace mu::inspector {
 class TextTypes
 {

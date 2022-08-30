@@ -219,7 +219,7 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
     InspectorSectionTypeSet types;
 
     for (const ElementKey& key : elementKeySet) {
-        if (NOTATION_ELEMENT_MODEL_TYPES.keys().contains(key.type)
+        if (NOTATION_ELEMENT_MODEL_TYPES.contains(key.type)
             && (modelTypeByElementKey(key) != InspectorModelType::TYPE_UNDEFINED)) {
             types << InspectorSectionType::SECTION_NOTATION;
         }

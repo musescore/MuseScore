@@ -820,7 +820,7 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
         }
     }
     // ensure sane values:
-    note->setPitch(limit(note->pitch(), 0, 127));
+    note->setPitch(std::clamp(note->pitch(), 0, 127));
 
     if (note->concertPitch()) {
         note->setTpc2(Tpc::TPC_INVALID);

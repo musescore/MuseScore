@@ -785,7 +785,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 }
                 pitch += n.alteration;
                 pitch += score->staff(staffIdx)->part()->instrument()->transpose().chromatic;               // assume not in concert pitch
-                pitch = limit(pitch, 0, 127);
+                pitch = std::clamp(pitch, 0, 127);
 
                 chord->add(note);
                 note->setPitch(pitch);

@@ -44,7 +44,7 @@ std::shared_ptr<ElementEditData> EditData::getData(const EngravingItem* e) const
 bool EditData::control(bool textEditing) const
 {
     if (textEditing) {
-        return modifiers & CONTROL_MODIFIER;
+        return modifiers & TextEditingControlModifier;
     } else {
         return modifiers & ControlModifier;
     }

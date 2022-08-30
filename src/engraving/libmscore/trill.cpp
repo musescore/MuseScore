@@ -237,7 +237,7 @@ EngravingItem* TrillSegment::drop(EditData& data)
 //   scanElements
 //---------------------------------------------------------
 
-void TrillSegment::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void TrillSegment::scanElements(void* data, void (* func)(void*, EngravingItem*), bool)
 {
     func(data, this);
     if (isSingleType() || isBeginType()) {

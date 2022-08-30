@@ -1137,10 +1137,9 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
     }
 }
 
-void Beam::offsetBeamWithAnchorShortening(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, int beamCount, int staffLines,
-                                          bool isStartDictator, int stemLengthDictator, int stemLengthPointer) const
+void Beam::offsetBeamWithAnchorShortening(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, int staffLines,
+                                          bool isStartDictator, int stemLengthDictator) const
 {
-    UNUSED(stemLengthPointer);
     Chord* startChord = nullptr;
     Chord* endChord = nullptr;
     for (ChordRest* cr : chordRests) {
@@ -1243,11 +1242,10 @@ int Beam::getOuterBeamPosOffset(int innerBeam, int beamCount, int staffLines) co
 bool Beam::isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines) const
 {
     // outside the staff
-    bool isDictator = isFlat ? false : (isStart ? _up != isAscending : _up == isAscending);
-
     if (!isBeamInsideStaff(yPos, staffLines, false)) {
         return true;
     }
+
     // removes modulo weirdness with negative numbers (i.e., right above staff)
     yPos += 8;
     // is floater
@@ -1503,7 +1501,6 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
         int stemLengthStart = abs(round((startAnchorBase - _startAnchor.y()) / spatium() * 4));
         int stemLengthEnd = abs(round((endAnchorBase - _endAnchor.y()) / spatium() * 4));
         int stemLengthDictator = isStartDictator ? stemLengthStart : stemLengthEnd;
-        int stemLengthPointer = isStartDictator ? stemLengthEnd : stemLengthStart;
         bool isSmall = mag() < 1.;
         if (endAnchor.x() > startAnchor.x()) {
             /* When beam layout is called before horizontal spacing (see LayoutMeasure::getNextMeasure() to
@@ -1511,8 +1508,7 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
              * following function to get stuck in a loop. The if() condition avoids that case. */
             if (!isSmall) {
                 // Adjust anchor stems
-                offsetBeamWithAnchorShortening(chordRests, dictator, pointer, beamCount, staffLines, isStartDictator, stemLengthDictator,
-                                               stemLengthPointer);
+                offsetBeamWithAnchorShortening(chordRests, dictator, pointer, staffLines, isStartDictator, stemLengthDictator);
             }
             // Adjust inner stems
             offsetBeamToRemoveCollisions(chordRests, dictator, pointer, startAnchor.x(), endAnchor.x(), isFlat, isStartDictator);

@@ -58,17 +58,9 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-#ifdef Q_OS_MAC
-#define CONTROL_MODIFIER Qt::AltModifier
-#else
-#define CONTROL_MODIFIER ControlModifier
-#endif
-
-static const double subScriptSize     = 0.6;
-static const double subScriptOffset   = 0.5;       // of x-height
-static const double superScriptOffset = -.9;      // of x-height
-
-//static const double tempotextOffset = 0.4; // of x-height // 80% of 50% = 2 spatiums
+static constexpr double subScriptSize     = 0.6;
+static constexpr double subScriptOffset   = 0.5; // of x-height
+static constexpr double superScriptOffset = -.9; // of x-height
 
 //---------------------------------------------------------
 //   isSorted

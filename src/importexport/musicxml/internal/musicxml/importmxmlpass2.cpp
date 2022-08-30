@@ -264,7 +264,7 @@ static void xmlSetPitch(Note* n, int step, int alter, int octave, const int octa
     pitch += intval.chromatic;   // assume not in concert pitch
     pitch += 12 * octaveShift;   // correct for octave shift
     // ensure sane values
-    pitch = limit(pitch, 0, 127);
+    pitch = std::clamp(pitch, 0, 127);
 
     int tpc2 = step2tpc(step, AccidentalVal(alter));
     int tpc1 = mu::engraving::transposeTpc(tpc2, intval, true);
@@ -4389,7 +4389,7 @@ static void setPitch(Note* note, MusicXMLParserPass1& pass1, const QString& part
             // step and oct are display-step and ...-oct
             // get pitch from instrument definition in drumset instead
             int unpitched = instruments[instrumentId].unpitched;
-            note->setPitch(limit(unpitched, 0, 127));
+            note->setPitch(std::clamp(unpitched, 0, 127));
             // TODO - does this need to be key-aware?
             note->setTpc(pitch2tpc(unpitched, Key::C, Prefer::NEAREST));             // TODO: necessary ?
         } else {
