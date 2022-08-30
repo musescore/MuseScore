@@ -70,7 +70,7 @@ option(BUILD_AUTOBOT_MODULE "Build autobot module" ON)
 option(BUILD_MULTIINSTANCES_MODULE "Build multiinstances module" ON)
 option(BUILD_VIDEOEXPORT_MODULE "Build videoexport module" OFF) # currently work only on Ubuntu 18.04 (for backend)
 option(BUILD_DIAGNOSTICS "Build diagnostic code" ON)
-option(BUILD_CRASHPAD_CLIENT "Build crashpad client" ON)
+option(BUILD_CRASHPAD_CLIENT "Build crashpad client" OFF) # temporary disabled
 set(YOUTUBE_API_KEY "" CACHE STRING "YouTube API key")
 
 option(ENGRAVING_PAINT_DEBUGGER_ENABLED "Enable diagnostic engraving paint debugger" OFF)
