@@ -40,7 +40,14 @@ PluginView::PluginView(QObject* parent)
 PluginView::~PluginView()
 {
     destroyView();
-    delete m_component;
+
+    if (m_component) {
+        delete m_component;
+    }
+
+    if (m_qmlPlugin) {
+        delete m_qmlPlugin;
+    }
 }
 
 mu::Ret PluginView::load(const QUrl& url)
