@@ -749,6 +749,10 @@ void Selection::updateState()
 
 void Selection::setState(SelState s)
 {
+    if (_state == s) {
+        return;
+    }
+
     _state = s;
     _score->setSelectionChanged(true);
 }
@@ -764,6 +768,8 @@ String Selection::mimeType() const
     case SelState::RANGE:
         return String::fromAscii(mimeStaffListFormat);
     }
+
+    return String();
 }
 
 ByteArray Selection::mimeData() const

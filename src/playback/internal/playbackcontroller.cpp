@@ -256,6 +256,16 @@ void PlaybackController::seekElement(const notation::EngravingItem* element)
     seek(tick.val);
 }
 
+void PlaybackController::seekListSelection()
+{
+    const std::vector<EngravingItem*>& elements = selection()->elements();
+    if (elements.empty()) {
+        return;
+    }
+
+    seekElement(elements.back());
+}
+
 void PlaybackController::seekRangeSelection()
 {
     if (!selection()->isRange()) {
@@ -347,6 +357,10 @@ void PlaybackController::onSelectionChanged()
         if (selectionTypeChanged) {
             updateLoop();
             updateMuteStates();
+        }
+
+        if (!isPlaybackLooped()) {
+            seekListSelection();
         }
 
         return;
