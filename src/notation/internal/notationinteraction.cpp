@@ -3752,11 +3752,7 @@ void NotationInteraction::increaseDecreaseDuration(int steps, bool stepByDots)
 
 bool NotationInteraction::toggleLayoutBreakAvailable() const
 {
-    if (isGripEditStarted()) {
-        return true;
-    }
-
-    return !isElementEditStarted();
+    return !selection()->isNone() && !isTextEditingStarted();
 }
 
 void NotationInteraction::toggleLayoutBreak(LayoutBreakType breakType)
