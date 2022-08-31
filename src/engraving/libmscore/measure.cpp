@@ -3277,6 +3277,16 @@ void Measure::layoutMeasureElements()
                         tr->layout();
                     }
                 }
+                for (Chord* g : c->graceNotes()) {
+                    if (g->tremolo()) {
+                        Tremolo* tr = g->tremolo();
+                        Chord* c1 = tr->chord1();
+                        Chord* c2 = tr->chord2();
+                        if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
+                            tr->layout();
+                        }
+                    }
+                }
             } else if (e->isBarLine()) {
                 e->setPosY(0.0);
                 // for end barlines, x position was set in createEndBarLines
