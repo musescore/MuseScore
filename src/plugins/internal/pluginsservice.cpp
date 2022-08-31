@@ -253,7 +253,7 @@ mu::Ret PluginsService::run(const CodeKey& codeKey)
         return make_ret(Err::PluginNotFound);
     }
 
-    PluginView* view = new PluginView();
+    PluginView* view = new PluginView(this);
 
     Ret ret = view->load(info.url);
     if (!ret) {
