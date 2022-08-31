@@ -68,8 +68,8 @@ using FormatValue = std::variant<std::monostate, bool, int, double, String>;
 //   MultiClick
 //---------------------------------------------------------
 
-enum class MultiClick : char {
-    Double, Triple
+enum class SelectTextType : char {
+    Word, All
 };
 
 //---------------------------------------------------------
@@ -185,7 +185,7 @@ public:
     TextBlock& curLine() const;
     mu::RectF cursorRect() const;
     bool movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode mode = TextCursor::MoveMode::MoveAnchor, int count = 1);
-    void doubleClickSelect();
+    void selectWord();
     void moveCursorToEnd() { movePosition(TextCursor::MoveOperation::End); }
     void moveCursorToStart() { movePosition(TextCursor::MoveOperation::Start); }
     Char currentCharacter() const;
@@ -402,7 +402,7 @@ public:
     bool deleteSelectedText(EditData&);
 
     void selectAll(TextCursor*);
-    void multiClickSelect(EditData&, MultiClick);
+    void select(EditData&, SelectTextType);
     bool isPrimed() const { return _primed; }
     void setPrimed(bool primed) { _primed = primed; }
 

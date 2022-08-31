@@ -519,6 +519,13 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         return;
     }
 
+    if (m_tripleClickPending) {
+        if (viewInteraction()->isTextEditingStarted()) {
+            viewInteraction()->selectText(mu::engraving::SelectTextType::All);
+            return;
+        }
+    }
+
     m_beginPoint = logicPos;
 
     EngravingItem* hitElement = nullptr;
@@ -797,6 +804,17 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
 void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
 {
     if (m_view->isNoteEnterMode()) {
+        return;
+    }
+
+    QTimer::singleShot(QApplication::doubleClickInterval(), [this]() {
+        m_tripleClickPending = false;
+    });
+
+    m_tripleClickPending = true;
+
+    if (viewInteraction()->isTextEditingStarted()) {
+        viewInteraction()->selectText(mu::engraving::SelectTextType::Word);
         return;
     }
 

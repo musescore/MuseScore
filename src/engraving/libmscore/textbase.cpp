@@ -523,7 +523,7 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
 //   doubleClickSelect
 //---------------------------------------------------------
 
-void TextCursor::doubleClickSelect()
+void TextCursor::selectWord()
 {
     clearSelection();
 
@@ -2231,18 +2231,13 @@ void TextBase::selectAll(TextCursor* cursor)
     cursor->setColumn(cursor->curLine().columns());
 }
 
-//---------------------------------------------------------
-//   multiClickSelect
-//    for double and triple clicks
-//---------------------------------------------------------
-
-void TextBase::multiClickSelect(EditData& editData, MultiClick clicks)
+void TextBase::select(EditData& editData, SelectTextType type)
 {
-    switch (clicks) {
-    case MultiClick::Double:
-        cursorFromEditData(editData)->doubleClickSelect();
+    switch (type) {
+    case SelectTextType::Word:
+        cursorFromEditData(editData)->selectWord();
         break;
-    case MultiClick::Triple:
+    case SelectTextType::All:
         selectAll(cursorFromEditData(editData));
         break;
     }
