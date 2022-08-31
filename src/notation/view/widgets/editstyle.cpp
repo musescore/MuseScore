@@ -2171,7 +2171,7 @@ void EditStyle::textStyleChanged(int row)
 
 void EditStyle::textStyleValueChanged(Pid pid, QVariant value)
 {
-    TextStyleType tid = TextStyleType(textStyles->item(textStyles->currentRow())->data(Qt::UserRole).toInt());
+    TextStyleType tid = TextStyleType(textStyles->currentItem()->data(Qt::UserRole).toInt());
     const TextStyle* ts = textStyle(tid);
 
     for (const StyledProperty& a : *ts) {
@@ -2189,7 +2189,7 @@ void EditStyle::textStyleValueChanged(Pid pid, QVariant value)
 
 void EditStyle::resetTextStyle(Pid pid)
 {
-    TextStyleType tid = TextStyleType(textStyles->item(textStyles->currentRow())->data(Qt::UserRole).toInt());
+    TextStyleType tid = TextStyleType(textStyles->currentItem()->data(Qt::UserRole).toInt());
     const TextStyle* ts = textStyle(tid);
 
     for (const StyledProperty& a : *ts) {
