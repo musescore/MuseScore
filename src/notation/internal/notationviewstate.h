@@ -46,11 +46,15 @@ public:
 
     ValCh<int> zoomPercentage() const override;
 
+    ValCh<ZoomType> zoomType() const override;
+    void setZoomType(ZoomType type) override;
+
 private:
     bool m_isMatrixInited = false;
     draw::Transform m_matrix;
     async::Channel<draw::Transform, NotationPaintView*> m_matrixChanged;
     ValCh<int> m_zoomPercentage;
+    ValCh<ZoomType> m_zoomType;
 };
 }
 
