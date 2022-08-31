@@ -1032,7 +1032,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         if (!tag.isEmpty()) {
             painter.setPen(QColor(Qt::darkGray));
             Font font(painter.font());
-            font.setPointSizeF(uiConfiguration()->fontSize(ui::FontSizeType::BODY));
+            font.setPixelSize(uiConfiguration()->fontSize(ui::FontSizeType::BODY));
             painter.setFont(font);
             painter.drawText(rShift, Qt::AlignLeft | Qt::AlignTop, tag);
         }
