@@ -26,7 +26,8 @@
 #include "types/commontypes.h"
 #include "types/texttypes.h"
 
-#include "libmscore/textbase.h"
+#include "engraving/libmscore/textbase.h"
+#include "engraving/types/typesconv.h"
 
 #include "translation.h"
 #include "log.h"
@@ -157,6 +158,30 @@ void TextSettingsModel::resetProperties()
     m_textScriptAlignment->resetToDefault();
 }
 
+void TextSettingsModel::onNotationChanged(const PropertyIdSet&, const StyleIdSet& changedStyleIds)
+{
+    for (Sid s : {
+        Sid::user1Name,
+        Sid::user2Name,
+        Sid::user3Name,
+        Sid::user4Name,
+        Sid::user5Name,
+        Sid::user6Name,
+        Sid::user7Name,
+        Sid::user8Name,
+        Sid::user9Name,
+        Sid::user10Name,
+        Sid::user11Name,
+        Sid::user12Name
+    }) {
+        if (changedStyleIds.find(s) != changedStyleIds.cend()) {
+            m_textStyles.clear();
+            emit textStylesChanged();
+            return;
+        }
+    }
+}
+
 void TextSettingsModel::insertSpecialCharacters()
 {
     dispatcher()->dispatch("show-keys");
@@ -240,6 +265,28 @@ PropertyItem* TextSettingsModel::textPlacement() const
 PropertyItem* TextSettingsModel::textScriptAlignment() const
 {
     return m_textScriptAlignment;
+}
+
+QVariantList TextSettingsModel::textStyles()
+{
+    if (m_textStyles.empty()) {
+        m_textStyles.reserve(int(TextStyleType::TEXT_TYPES));
+
+        auto notation = currentNotation();
+        Score* score = notation ? notation->elements()->msScore() : nullptr;
+
+        for (int t = int(TextStyleType::DEFAULT) + 1; t < int(TextStyleType::TEXT_TYPES); ++t) {
+            QVariantMap style;
+            style["text"] = (score
+                             ? score->getTextStyleUserName(static_cast<TextStyleType>(t))
+                             : TConv::userName(static_cast<TextStyleType>(t)))
+                            .qTranslated();
+            style["value"] = t;
+            m_textStyles << style;
+        }
+    }
+
+    return m_textStyles;
 }
 
 bool TextSettingsModel::areStaffTextPropertiesAvailable() const
