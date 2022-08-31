@@ -1509,6 +1509,8 @@ enum class Sid {
     golpeShowTabSimple,
     golpeShowTabCommon,
 
+    chordlineThickness,
+
     autoplaceEnabled,
     defaultsVersion,
 
