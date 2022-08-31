@@ -655,7 +655,6 @@ void NotationActionController::addNote(NoteName note, NoteAddingMode addingMode)
 
     noteInput->addNote(note, addingMode);
 
-    seekSelectedElement();
     playSelectedElement();
 }
 
@@ -691,7 +690,6 @@ void NotationActionController::putNote(const actions::ActionData& args)
 
     noteInput->putNote(pos, replace, insert);
 
-    seekSelectedElement();
     playSelectedElement();
 }
 
@@ -900,7 +898,6 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         break;
     }
 
-    seekSelectedElement();
     playSelectedElement(playChord);
 }
 
@@ -1756,13 +1753,6 @@ void NotationActionController::toggleConcertPitch()
     bool enabled = style->styleValue(StyleId::concertPitch).toBool();
     style->setStyleValue(StyleId::concertPitch, !enabled);
     currentNotationUndoStack()->commitChanges();
-}
-
-void NotationActionController::seekSelectedElement()
-{
-    if (const EngravingItem* element = selectedElement()) {
-        playbackController()->seekElement(element);
-    }
 }
 
 void NotationActionController::playSelectedElement(bool playChord)
