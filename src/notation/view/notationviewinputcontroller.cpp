@@ -25,7 +25,6 @@
 #include <QtMath>
 
 #include "log.h"
-#include "abstractnotationpaintview.h"
 #include "commonscene/commonscenetypes.h"
 
 using namespace mu;
@@ -51,8 +50,8 @@ void NotationViewInputController::init()
         dispatcher()->reg(this, "zoom-page-width", this, &NotationViewInputController::zoomToPageWidth);
         dispatcher()->reg(this, "zoom-whole-page", this, &NotationViewInputController::zoomToWholePage);
         dispatcher()->reg(this, "zoom-two-pages", this, &NotationViewInputController::zoomToTwoPages);
-        dispatcher()->reg(this, "zoom100", [this]() { setZoom(100); });
-        dispatcher()->reg(this, "zoom-x-percent", [this](const ActionData& args) { setZoom(args.arg<int>(0)); });
+        dispatcher()->reg(this, "zoom100", [this]() { setZoom(100, findZoomFocusPoint()); });
+        dispatcher()->reg(this, "zoom-x-percent", [this](const ActionData& args) { setZoom(args.arg<int>(0), findZoomFocusPoint()); });
 
         dispatcher()->reg(this, "view-mode-page", [this]() {
             setViewMode(ViewMode::PAGE);
@@ -74,31 +73,58 @@ void NotationViewInputController::init()
         dispatcher()->reg(this, "page-end", this, &NotationViewInputController::endOfScore);
 
         dispatcher()->reg(this, "notation-context-menu", [this]() {
-            m_view->showContextMenu(selectionType(),
-                                    m_view->fromLogical(selectionElementPos()).toQPointF(), true);
+            m_view->showContextMenu(selectionType(), m_view->fromLogical(selectionElementPos()).toQPointF(), true);
         });
     }
 }
 
 void NotationViewInputController::initZoom()
 {
+    IF_ASSERT_FAILED(currentNotation()) {
+        return;
+    }
+
     ZoomType defaultZoomType = configuration()->defaultZoomType();
+
+    currentNotation()->viewState()->setZoomType(defaultZoomType);
+
     switch (defaultZoomType) {
     case ZoomType::Percentage:
         setZoom(configuration()->defaultZoom());
         break;
     case ZoomType::PageWidth:
-        zoomToPageWidth();
+        doZoomToPageWidth();
         break;
     case ZoomType::WholePage:
-        zoomToWholePage();
+        doZoomToWholePage();
         break;
     case ZoomType::TwoPages:
-        zoomToTwoPages();
+        doZoomToTwoPages();
         break;
     }
 
     currentNotation()->viewState()->setMatrixInited(true);
+}
+
+void NotationViewInputController::updateZoomAfterSizeChange()
+{
+    IF_ASSERT_FAILED(currentNotation()) {
+        return;
+    }
+
+    switch (currentNotation()->viewState()->zoomType().val) {
+    case ZoomType::Percentage:
+        break;
+    case ZoomType::PageWidth:
+        doZoomToPageWidth();
+        break;
+    case ZoomType::WholePage:
+        doZoomToWholePage();
+        break;
+    case ZoomType::TwoPages:
+        doZoomToTwoPages();
+        break;
+    }
 }
 
 bool NotationViewInputController::readonly() const
@@ -174,6 +200,16 @@ PointF NotationViewInputController::findZoomFocusPoint() const
 
 void NotationViewInputController::zoomToPageWidth()
 {
+    IF_ASSERT_FAILED(currentNotation()) {
+        return;
+    }
+
+    currentNotation()->viewState()->setZoomType(ZoomType::PageWidth);
+    doZoomToPageWidth();
+}
+
+void NotationViewInputController::doZoomToPageWidth()
+{
     if (!notationStyle()) {
         return;
     }
@@ -181,10 +217,20 @@ void NotationViewInputController::zoomToPageWidth()
     qreal pageWidth = notationStyle()->styleValue(mu::engraving::Sid::pageWidth).toDouble() * mu::engraving::DPI;
 
     qreal scale = m_view->width() / pageWidth;
-    setScaling(scale);
+    setScaling(scale, PointF(), false);
 }
 
 void NotationViewInputController::zoomToWholePage()
+{
+    IF_ASSERT_FAILED(currentNotation()) {
+        return;
+    }
+
+    currentNotation()->viewState()->setZoomType(ZoomType::WholePage);
+    doZoomToWholePage();
+}
+
+void NotationViewInputController::doZoomToWholePage()
 {
     if (!notationStyle()) {
         return;
@@ -197,10 +243,20 @@ void NotationViewInputController::zoomToWholePage()
     qreal pageHeightScale = m_view->height() / pageHeight;
 
     qreal scale = std::min(pageWidthScale, pageHeightScale);
-    setScaling(scale, PointF());
+    setScaling(scale, PointF(), false);
 }
 
 void NotationViewInputController::zoomToTwoPages()
+{
+    IF_ASSERT_FAILED(currentNotation()) {
+        return;
+    }
+
+    currentNotation()->viewState()->setZoomType(ZoomType::TwoPages);
+    doZoomToTwoPages();
+}
+
+void NotationViewInputController::doZoomToTwoPages()
 {
     if (!notationStyle()) {
         return;
@@ -225,7 +281,7 @@ void NotationViewInputController::zoomToTwoPages()
     }
 
     qreal scale = std::min(pageHeightScale, pageWidthScale);
-    setScaling(scale, PointF());
+    setScaling(scale, PointF(), false);
 }
 
 int NotationViewInputController::currentZoomIndex() const
@@ -244,13 +300,13 @@ int NotationViewInputController::currentZoomPercentage() const
     return zoomPercentageFromScaling(m_view->currentScaling());
 }
 
-void NotationViewInputController::setScaling(qreal scaling, const PointF& pos)
+void NotationViewInputController::setScaling(qreal scaling, const PointF& pos, bool overrideZoomType)
 {
     qreal minScaling = scalingFromZoomPercentage(m_possibleZoomPercentages.first());
     qreal maxScaling = scalingFromZoomPercentage(m_possibleZoomPercentages.last());
     qreal correctedScaling = std::clamp(scaling, minScaling, maxScaling);
 
-    m_view->setScaling(correctedScaling, pos);
+    m_view->setScaling(correctedScaling, pos, overrideZoomType);
 }
 
 void NotationViewInputController::setZoom(int zoomPercentage, const PointF& pos)

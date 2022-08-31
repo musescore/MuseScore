@@ -175,15 +175,21 @@ void NotationStatusBarModel::setCurrentZoomPercentage(int zoomPercentage)
         return;
     }
 
-    m_currentZoomType = ZoomType::Percentage;
-    dispatch(zoomTypeToActionCode(m_currentZoomType), ActionData::make_arg1<int>(zoomPercentage));
+    dispatch(zoomTypeToActionCode(ZoomType::Percentage), ActionData::make_arg1<int>(zoomPercentage));
+}
+
+ZoomType NotationStatusBarModel::currentZoomType() const
+{
+    if (!notation()) {
+        return ZoomType::Percentage;
+    }
+
+    return notation()->viewState()->zoomType().val;
 }
 
 void NotationStatusBarModel::load()
 {
     TRACEFUNC;
-
-    m_currentZoomType = notationConfiguration()->defaultZoomType();
 
     onCurrentNotationChanged();
     context()->currentNotationChanged().onNotify(this, [this]() {
@@ -229,6 +235,10 @@ void NotationStatusBarModel::onCurrentNotationChanged()
         emit availableZoomListChanged();
     });
 
+    notation()->viewState()->zoomType().ch.onReceive(this, [this](ZoomType) {
+        emit availableZoomListChanged();
+    });
+
     listenChangesInAccessibility();
 }
 
@@ -269,6 +279,7 @@ MenuItemList NotationStatusBarModel::makeAvailableZoomList()
     MenuItemList result;
 
     int currZoomPercentage = currentZoomPercentage();
+    ZoomType currZoomType = currentZoomType();
 
     auto zoomPercentageTitle = [](int percentage) {
         return TranslatableString::untranslatable("%1%").arg(percentage);
@@ -287,7 +298,7 @@ MenuItemList NotationStatusBarModel::makeAvailableZoomList()
         menuItem->setState(state);
 
         menuItem->setSelectable(true);
-        if (m_currentZoomType == type) {
+        if (currZoomType == type) {
             menuItem->setSelected(type == ZoomType::Percentage ? value == currZoomPercentage : true);
         }
 
@@ -306,7 +317,7 @@ MenuItemList NotationStatusBarModel::makeAvailableZoomList()
     result << buildZoomItem(ZoomType::WholePage);
     result << buildZoomItem(ZoomType::TwoPages);
 
-    bool isCustomZoom = m_currentZoomType == ZoomType::Percentage && !possibleZoomList.contains(currZoomPercentage);
+    bool isCustomZoom = currZoomType == ZoomType::Percentage && !possibleZoomList.contains(currZoomPercentage);
     if (isCustomZoom) {
         MenuItem* customZoom = buildZoomItem(ZoomType::Percentage, zoomPercentageTitle(currZoomPercentage), currZoomPercentage);
         customZoom->setSelected(true);
@@ -336,7 +347,6 @@ void NotationStatusBarModel::setCurrentZoom(const QString& zoomId)
     ZoomType type = zoom->args().arg<ZoomType>(0);
     int value = zoom->args().arg<int>(1);
 
-    m_currentZoomType = type;
     emit availableZoomListChanged();
 
     dispatch(zoomTypeToActionCode(type), ActionData::make_arg1<int>(value));
