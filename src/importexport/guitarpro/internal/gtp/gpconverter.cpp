@@ -215,6 +215,44 @@ static GPConverter::TextLineImportType ottavaToImportType(GPBeat::OttavaType t)
 GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
     : _score(score), _gpDom(std::move(gpDom))
 {
+    _drumExtension = {
+        { 91, 38 }, //Snare(rim shot)
+        { 92, 46 }, //Hi Hat (half)
+        { 93, 51 }, //Ride (edje)
+        { 94, 51 }, //Ride (choke)
+        { 95, 55 }, //Splash (choke)
+        { 96, 52 }, //Chine(choke)
+        { 97, 49 }, //Crash high (choke)
+        { 98, 57 }, //Crash medium (choke)
+        { 99, 56 }, //Cowbell low (hit)
+        { 100, 56 },//Cowbell low (tip)
+        { 101, 56 },//Cowbell medium (tip)
+        { 102, 56 },//Cowbell high (hit)
+        { 103, 56 },//Cowbell high (tip)
+        { 104, 60 },//Hand (mute)
+        { 105, 60 },//Hand (slap)
+        { 106, 61 },//Hand (mute)
+        { 107, 61 },//Hand (slap)
+        { 108, 64 },//Conga low (slap)
+        { 109, 64 },//Conga low (mute)
+        { 110, 63 },//Conga high (slap)
+        { 111, 54 },//Tambourine (return)
+        { 112, 54 },//Tambourine (roll)
+        { 113, 54 },//Tambourine (hand)
+        { 114, 41 },//Grancassa (hit)
+        { 115, 49 },//Piatti (hit)
+        { 116, 49 },//Piatti (hand)
+        { 117, 69 },//Cabasa (return)
+        { 118, 70 },//Left Maraca (return)
+        { 119, 70 },//Right Maraca (hit)
+        { 120, 70 },//Right Maraca (return)
+        { 122, 82 },//Shaker (return)
+        { 123, 83 },//Bell Tree (return)
+        { 124, 62 },//Golpe (thumb)
+        { 125, 62 },//Golpe (finger)
+        { 126, 59 },//Ride (middle)
+        { 127, 59 }//Ride (bell)
+    };
 }
 
 const std::unique_ptr<GPDomModel>& GPConverter::gpDom() const
@@ -256,17 +294,8 @@ void GPConverter::fixPercussion()
             continue;
         }
 
-        for (size_t j = 0; j < pInstrument->channel().size(); ++j) {
-            mu::engraving::InstrChannel* pChannel = pInstrument->channel()[j];
-            IF_ASSERT_FAILED(!!pChannel) {
-                continue;
-            }
-
-            if (!(pChannel->channel() == 9)) {
-                continue;
-            }
-
-            pChannel->setProgram(0);
+        if (pPart->midiChannel() == 9) {
+            pPart->setMidiProgram(0);
         }
     }
 }
@@ -1863,6 +1892,13 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
         musescoreString = getStringNumberFor(note, pitch);
 
         fret = note->part()->instrument()->stringData()->fret(pitch, musescoreString, nullptr);
+    }
+
+    if (note->part()->hasDrumStaff()) {
+        auto it = _drumExtension.find(pitch);
+        if (it != _drumExtension.end()) {
+            pitch =  it->second;
+        }
     }
 
     note->setFret(fret);
