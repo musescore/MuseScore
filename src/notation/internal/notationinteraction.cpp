@@ -2671,26 +2671,16 @@ void NotationInteraction::startEditText(EngravingItem* element, const PointF& cu
         return;
     }
 
-    if (isTextEditingStarted()) {
-        mu::engraving::TextBase* textBase = mu::engraving::toTextBase(m_editData.element);
-        m_editData.startMove = bindCursorPosToText(cursorPos, textBase);
+    m_editData.clear();
 
-        // double click on a textBase element that is being edited - select word
-        textBase->multiClickSelect(m_editData, mu::engraving::MultiClick::Double);
-        textBase->endHexState(m_editData);
-        textBase->setPrimed(false);
+    if (element->isTBox()) {
+        m_editData.element = toTBox(element)->text();
     } else {
-        m_editData.clear();
-
-        if (element->isTBox()) {
-            m_editData.element = toTBox(element)->text();
-        } else {
-            m_editData.element = element;
-        }
-
-        m_editData.startMove = bindCursorPosToText(cursorPos, m_editData.element);
-        m_editData.element->startEdit(m_editData);
+        m_editData.element = element;
     }
+
+    m_editData.startMove = bindCursorPosToText(cursorPos, m_editData.element);
+    m_editData.element->startEdit(m_editData);
 
     notifyAboutTextEditingStarted();
     notifyAboutTextEditingChanged();
@@ -2857,6 +2847,20 @@ void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
         QString txt = QGuiApplication::clipboard()->text(mode);
         textEl->paste(m_editData, txt);
     }
+
+    notifyAboutTextEditingChanged();
+}
+
+void NotationInteraction::selectText(mu::engraving::SelectTextType type)
+{
+    if (!isTextEditingStarted()) {
+        return;
+    }
+
+    mu::engraving::TextBase* text = mu::engraving::toTextBase(m_editData.element);
+    text->select(m_editData, type);
+    text->endHexState(m_editData);
+    text->setPrimed(false);
 
     notifyAboutTextEditingChanged();
 }

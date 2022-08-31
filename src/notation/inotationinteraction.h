@@ -132,6 +132,7 @@ public:
     virtual void editText(QInputMethodEvent* event) = 0;
     virtual void endEditText() = 0;
     virtual void changeTextCursorPosition(const PointF& newCursorPos) = 0;
+    virtual void selectText(mu::engraving::SelectTextType type) = 0;
     virtual const TextBase* editedText() const = 0;
     virtual async::Notification textEditingStarted() const = 0;
     virtual async::Notification textEditingChanged() const = 0;
