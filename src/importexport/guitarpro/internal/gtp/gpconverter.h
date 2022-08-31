@@ -203,6 +203,8 @@ private:
     std::map<GPBeat::HarmonicMarkType, std::vector<TextLineBase*> > m_harmonicMarks;
     std::map<GPBeat::OttavaType, std::vector<TextLineBase*> > m_ottavas;
 
+    std::map<uint16_t, uint16_t > _drumExtension;
+
     Volta* _lastVolta = nullptr;
 
     struct NextTupletInfo {
