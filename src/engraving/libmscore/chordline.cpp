@@ -247,7 +247,7 @@ void ChordLine::draw(mu::draw::Painter* painter) const
     TRACE_OBJ_DRAW;
     double _spatium = spatium();
     painter->scale(_spatium, _spatium);
-    painter->setPen(Pen(curColor(), .15, PenStyle::SolidLine));
+    painter->setPen(Pen(curColor(), score()->styleMM(Sid::chordlineThickness), PenStyle::SolidLine));
     painter->setBrush(BrushStyle::NoBrush);
     painter->drawPath(path);
     painter->scale(1.0 / _spatium, 1.0 / _spatium);
