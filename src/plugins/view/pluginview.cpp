@@ -24,29 +24,49 @@
 
 #include <QQmlComponent>
 
+#include "pluginserrors.h"
+
 #include "api/qmlplugin.h"
 
 #include "log.h"
 
 using namespace mu::plugins;
 
-PluginView::PluginView(const QUrl& url, QObject* parent)
+PluginView::PluginView(QObject* parent)
     : QObject(parent)
+{
+}
+
+PluginView::~PluginView()
+{
+    destroyView();
+
+    if (m_component) {
+        delete m_component;
+    }
+
+    if (m_qmlPlugin) {
+        delete m_qmlPlugin;
+    }
+}
+
+mu::Ret PluginView::load(const QUrl& url)
 {
     m_component = new QQmlComponent(engine(), url);
     m_qmlPlugin = qobject_cast<mu::engraving::QmlPlugin*>(m_component->create());
+
+    if (!m_qmlPlugin) {
+        LOGE() << "Failed to load QML plugin from " << url;
+        return make_ret(Err::PluginLoadError);
+    }
 
     connect(m_qmlPlugin, &mu::engraving::QmlPlugin::closeRequested, [this]() {
         if (m_view && m_view->isVisible()) {
             m_view->close();
         }
     });
-}
 
-PluginView::~PluginView()
-{
-    destroyView();
-    delete m_component;
+    return make_ok();
 }
 
 void PluginView::destroyView()

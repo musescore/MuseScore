@@ -23,6 +23,8 @@
 #ifndef MU_PLUGINS_PLUGINSSERVICE_H
 #define MU_PLUGINS_PLUGINSSERVICE_H
 
+#include <QObject>
+
 #include "io/path.h"
 #include "async/asyncable.h"
 
@@ -35,8 +37,10 @@
 #include "ipluginsservice.h"
 
 namespace mu::plugins {
-class PluginsService : public IPluginsService, public async::Asyncable
+class PluginsService : public QObject, public IPluginsService, public async::Asyncable
 {
+    Q_OBJECT
+
     INJECT(plugins, io::IFileSystem, fileSystem)
     INJECT(plugins, shortcuts::IShortcutsRegister, shortcutsRegister)
     INJECT(plugins, ui::IUiActionsRegister, uiActionsRegister)
