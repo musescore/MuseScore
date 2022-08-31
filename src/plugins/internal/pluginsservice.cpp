@@ -107,7 +107,11 @@ PluginInfoMap PluginsService::readPlugins() const
 
     for (const io::path_t& pluginPath: pluginsPaths) {
         QUrl url = QUrl::fromLocalFile(pluginPath.toQString());
-        PluginView view(url);
+        PluginView view;
+
+        if (!view.load(url)) {
+            continue;
+        }
 
         PluginInfo info;
         info.codeKey = io::basename(pluginPath).toQString();
@@ -249,7 +253,13 @@ mu::Ret PluginsService::run(const CodeKey& codeKey)
         return make_ret(Err::PluginNotFound);
     }
 
-    PluginView* view = new PluginView(info.url);
+    PluginView* view = new PluginView(this);
+
+    Ret ret = view->load(info.url);
+    if (!ret) {
+        return ret;
+    }
+
     view->run();
 
     QObject::connect(view, &PluginView::finished, view, &QObject::deleteLater);
