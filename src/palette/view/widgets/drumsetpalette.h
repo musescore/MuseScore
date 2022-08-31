@@ -28,6 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
+#include "playback/iplaybackcontroller.h"
 
 namespace mu::engraving {
 class Drumset;
@@ -39,6 +40,7 @@ class DrumsetPalette : public PaletteScrollArea
     Q_OBJECT
 
     INJECT(palette, actions::IActionsDispatcher, dispatcher)
+    INJECT(palette, playback::IPlaybackController, playback)
 
 public:
     explicit DrumsetPalette(QWidget* parent = nullptr);
@@ -52,7 +54,7 @@ public:
     PaletteWidget* paletteWidget() const;
 
 private slots:
-    void drumNoteSelected(int val);
+    void drumNoteClicked(int val);
 
 private:
     void clear();
@@ -66,6 +68,8 @@ private:
 
     int selectedDrumNote();
     void retranslate();
+
+    void previewSound(const mu::engraving::Chord* chord, bool newChordSelected, const notation::NoteInputState& inputState);
 
     mu::notation::INotationNoteInputPtr noteInput() const;
 
