@@ -339,6 +339,7 @@ void logError(HRESULT hr)
     case AUDCLNT_S_POSITION_STALLED: LOGE() << "AUDCLNT_S_POSITION_STALLED";
         break;
     case E_POINTER: LOGE() << "E_POINTER";
+        break;
     case E_INVALIDARG: LOGE() << "E_INVALIDARG";
         break;
     default:
