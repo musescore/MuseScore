@@ -726,9 +726,10 @@ void PaletteWidget::mousePressEvent(QMouseEvent* ev)
     if (m_selectable) {
         if (m_dragIdx != m_selectedIdx) {
             update(rectForCellAt(m_dragIdx) | rectForCellAt(m_selectedIdx));
-            m_selectedIdx = m_dragIdx;
         }
+
         emit boxClicked(m_dragIdx);
+        m_selectedIdx = m_dragIdx;
     }
 
     update();

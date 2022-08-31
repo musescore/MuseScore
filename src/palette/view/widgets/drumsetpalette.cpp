@@ -22,8 +22,6 @@
 
 #include "drumsetpalette.h"
 
-#include "translation.h"
-
 #include "engraving/libmscore/factory.h"
 #include "engraving/libmscore/chord.h"
 #include "engraving/libmscore/note.h"
@@ -35,7 +33,10 @@
 #include "engraving/libmscore/mscore.h"
 #include "engraving/libmscore/undo.h"
 
+#include "translation.h"
 #include "log.h"
+
+#include <QTimer>
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -57,7 +58,7 @@ DrumsetPalette::DrumsetPalette(QWidget* parent)
     setWidget(m_drumPalette);
     retranslate();
 
-    connect(m_drumPalette, &PaletteWidget::boxClicked, this, &DrumsetPalette::drumNoteSelected);
+    connect(m_drumPalette, &PaletteWidget::boxClicked, this, &DrumsetPalette::drumNoteClicked);
 }
 
 void DrumsetPalette::setNotation(INotationPtr notation)
@@ -155,7 +156,7 @@ void DrumsetPalette::clear()
     m_drumPalette->clear();
 }
 
-void DrumsetPalette::drumNoteSelected(int val)
+void DrumsetPalette::drumNoteClicked(int val)
 {
     INotationNoteInputPtr noteInput = this->noteInput();
     if (!noteInput) {
@@ -168,15 +169,41 @@ void DrumsetPalette::drumNoteSelected(int val)
     }
 
     const Chord* ch = mu::engraving::toChord(element.get());
-    const Note* note = ch->downNote();
+    bool newChordSelected = val != m_drumPalette->selectedIdx();
 
-    track_idx_t track = (noteInput->state().currentTrack / mu::engraving::VOICES) * mu::engraving::VOICES + element->track();
+    if (newChordSelected) {
+        const Note* note = ch->downNote();
 
-    noteInput->setCurrentTrack(track);
-    noteInput->setDrumNote(note->pitch());
+        track_idx_t track = (noteInput->state().currentTrack / mu::engraving::VOICES) * mu::engraving::VOICES + element->track();
 
-    PaletteCellPtr pitchCell = m_drumPalette->cellAt(val);
-    m_pitchNameChanged.send(pitchCell->name);
+        noteInput->setCurrentTrack(track);
+        noteInput->setDrumNote(note->pitch());
+
+        PaletteCellPtr pitchCell = m_drumPalette->cellAt(val);
+        m_pitchNameChanged.send(pitchCell->name);
+    }
+
+    previewSound(ch, newChordSelected, noteInput->state());
+}
+
+void DrumsetPalette::previewSound(const Chord* chord, bool newChordSelected, const notation::NoteInputState& inputState)
+{
+    //! NOTE: prevents "sound spam" after multiple clicks on a selected element
+    static QTimer soundPauseTimer;
+    if (soundPauseTimer.isActive() && !newChordSelected) {
+        return;
+    }
+
+    Chord* preview = chord->clone();
+    preview->setParent(inputState.segment);
+    preview->setStaffIdx(engraving::track2staff(inputState.currentTrack));
+
+    playback()->playElements({ preview });
+
+    delete preview;
+
+    soundPauseTimer.setSingleShot(true);
+    soundPauseTimer.start(200);
 }
 
 int DrumsetPalette::selectedDrumNote()
