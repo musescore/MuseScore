@@ -139,6 +139,8 @@ FocusScope {
 
         backgroundColor: background.color
 
+        isSearching: searchField.searchText.length != 0
+
         model: SortFilterProxyModel {
             sourceModel: recentScoresModel
 
