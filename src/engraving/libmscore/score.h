@@ -315,26 +315,6 @@ public:
     std::list<EngravingObject*> _deleteList;
 };
 
-//---------------------------------------------------------
-//   ScoreContentState
-//---------------------------------------------------------
-
-class ScoreContentState
-{
-    const Score* score;
-    int num;
-public:
-    ScoreContentState()
-        : score(nullptr), num(0) {}
-    ScoreContentState(const Score* s, int stateNum)
-        : score(s), num(stateNum) {}
-
-    bool operator==(const ScoreContentState& s2) const { return score == s2.score && num == s2.num; }
-    bool operator!=(const ScoreContentState& s2) const { return !(*this == s2); }
-
-    bool isNewerThan(const ScoreContentState& s2) const { return score == s2.score && num > s2.num; }
-};
-
 //---------------------------------------------------------------------------------------
 //   @@ Score
 //   @P composer        string            composer of the score (read only)
@@ -850,7 +830,6 @@ public:
     void setFileDivision(int t) { _fileDivision = t; }
 
     bool dirty() const;
-    ScoreContentState state() const;
     bool savedCapture() const { return _savedCapture; }
     void setSavedCapture(bool v) { _savedCapture = v; }
     bool printing() const { return _printing; }
