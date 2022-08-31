@@ -27,6 +27,7 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
+#include <QStyleHints>
 #ifndef Q_OS_WASM
 #include <QThreadPool>
 #endif
@@ -94,6 +95,8 @@ int AppShell::run(int argc, char** argv)
 #elif defined(Q_OS_WIN)
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 #endif
+
+    QGuiApplication::styleHints()->setMousePressAndHoldInterval(250);
 
     QApplication app(argc, argv);
     QCoreApplication::setApplicationName(appName);
