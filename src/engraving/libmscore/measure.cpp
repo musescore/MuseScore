@@ -3657,13 +3657,6 @@ double Measure::createEndBarLines(bool isLastMeasureInSystem)
         }
     }
 
-    // fix segment layout
-    Segment* s = seg->prevActive();
-    if (s) {
-        double x = s->xpos();
-        computeWidth(s, x, false, system()->minSysTicks(), system()->maxSysTicks(), layoutStretch());
-    }
-
     return width() - oldWidth;
 }
 
