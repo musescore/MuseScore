@@ -453,7 +453,7 @@ String Page::replaceTextMacros(const String& s) const
             break;
             case 'm':
                 if (score()->dirty()) {
-                    d += Date::currentDate().toString(DateFormat::LocaleShortFormat);
+                    d += Time::currentTime().toString(DateFormat::LocaleShortFormat);
                 } else {
                     d += masterScore()->fileInfo()->lastModified().time().toString(DateFormat::LocaleShortFormat);
                 }
