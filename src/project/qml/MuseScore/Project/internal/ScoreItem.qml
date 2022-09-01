@@ -262,6 +262,7 @@ FocusScope {
                     case "kar":
                         return "qrc:/resources/Placeholder_MIDI.png"
                     case "mxl":
+                    case "mxml":
                     case "musicxml":
                     case "xml":
                         return "qrc:/resources/Placeholder_MXML.png"
