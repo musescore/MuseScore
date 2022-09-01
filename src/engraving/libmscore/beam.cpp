@@ -837,7 +837,9 @@ void Beam::createBeamSegment(ChordRest* startCr, ChordRest* endCr, int level)
             addition = grow * (level - extraBeamAdjust) * _beamDist;
         }
 
-        extendStem(chord, addition);
+        if (level == 0 || !RealIsEqual(addition, 0.0)) {
+            extendStem(chord, addition);
+        }
 
         if (chord == endCr) {
             break;

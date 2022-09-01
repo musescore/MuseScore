@@ -1738,8 +1738,8 @@ Chord* Chord::next() const
 void Chord::setBeamExtension(double extension)
 {
     if (_stem) {
-        _stem->setBaseLength(_stem->baseLength() + Millimetre(extension));
-        _defaultStemLength += extension;
+        _stem->setBaseLength(std::max(_stem->baseLength() + Millimetre(extension), Millimetre { 0.0 }));
+        _defaultStemLength = std::max(_defaultStemLength + extension, _stem->baseLength().val());
     }
 }
 
