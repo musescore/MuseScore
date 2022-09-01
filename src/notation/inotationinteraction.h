@@ -233,7 +233,7 @@ public:
     virtual void resetShapesAndPosition() = 0;
 
     virtual ScoreConfig scoreConfig() const = 0;
-    virtual void setScoreConfig(ScoreConfig config) = 0;
+    virtual void setScoreConfig(const ScoreConfig& config) = 0;
 
     virtual void addMelisma() = 0;
     virtual void addLyricsVerse() = 0;

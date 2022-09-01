@@ -563,6 +563,17 @@ struct ScoreConfig
     bool isShowFrames = false;
     bool isShowPageMargins = false;
     bool isMarkIrregularMeasures = false;
+
+    bool operator==(const ScoreConfig& conf) const
+    {
+        bool equal = (isShowInvisibleElements == conf.isShowInvisibleElements);
+        equal &= (isShowUnprintableElements == conf.isShowUnprintableElements);
+        equal &= (isShowFrames == conf.isShowFrames);
+        equal &= (isShowPageMargins == conf.isShowPageMargins);
+        equal &= (isMarkIrregularMeasures == conf.isMarkIrregularMeasures);
+
+        return equal;
+    }
 };
 
 inline QString staffTypeToString(StaffTypeId type)

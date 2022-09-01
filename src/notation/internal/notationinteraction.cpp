@@ -4229,8 +4229,12 @@ ScoreConfig NotationInteraction::scoreConfig() const
     return config;
 }
 
-void NotationInteraction::setScoreConfig(ScoreConfig config)
+void NotationInteraction::setScoreConfig(const ScoreConfig& config)
 {
+    if (scoreConfig() == config) {
+        return;
+    }
+
     startEdit();
     score()->setShowInvisible(config.isShowInvisibleElements);
     score()->setShowUnprintable(config.isShowUnprintableElements);
