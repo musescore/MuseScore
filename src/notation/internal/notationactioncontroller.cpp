@@ -1074,7 +1074,8 @@ void NotationActionController::addSlur()
 
 IInteractive::Result NotationActionController::showErrorMessage(const std::string& message) const
 {
-    return interactive()->info(message, "", {}, 0, IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
+    return interactive()->info(message,
+                               std::string(), {}, 0, IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
 }
 
 void NotationActionController::addText(TextStyleType type)

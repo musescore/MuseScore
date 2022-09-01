@@ -204,11 +204,6 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "&Preferences"),
              TranslatableString("action", "Preferences…")
-             ),
-    UiAction("check-update",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "Check for &update")
              )
 };
 

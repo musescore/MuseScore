@@ -61,8 +61,6 @@ void ApplicationActionController::init()
 
     dispatcher()->reg(this, "revert-factory", this, &ApplicationActionController::revertToFactorySettings);
 
-    dispatcher()->reg(this, "check-update", this, &ApplicationActionController::checkForUpdate);
-
     qApp->installEventFilter(this);
 }
 
@@ -260,13 +258,6 @@ void ApplicationActionController::revertToFactorySettings()
     }
 
     restart();
-}
-
-void ApplicationActionController::checkForUpdate()
-{
-    NOT_IMPLEMENTED;
-
-    interactive()->info(trc("appshell", "No update available"), "");
 }
 
 bool ApplicationActionController::canReceiveAction(const mu::actions::ActionCode& code) const

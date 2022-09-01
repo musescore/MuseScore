@@ -34,12 +34,12 @@ UpdatePreferencesModel::UpdatePreferencesModel(QObject* parent)
 
 bool UpdatePreferencesModel::isAppUpdatable() const
 {
-    return configuration()->isAppUpdatable();
+    return updateConfiguration()->isAppUpdatable();
 }
 
 bool UpdatePreferencesModel::needCheckForNewAppVersion() const
 {
-    return configuration()->needCheckForUpdate();
+    return updateConfiguration()->needCheckForUpdate();
 }
 
 void UpdatePreferencesModel::setNeedCheckForNewAppVersion(bool value)
@@ -48,11 +48,11 @@ void UpdatePreferencesModel::setNeedCheckForNewAppVersion(bool value)
         return;
     }
 
-    configuration()->setNeedCheckForUpdate(value);
+    updateConfiguration()->setNeedCheckForUpdate(value);
     emit needCheckForNewAppVersionChanged(value);
 }
 
 QString UpdatePreferencesModel::museScorePrivacyPolicyUrl() const
 {
-    return QString::fromStdString(configuration()->museScorePrivacyPolicyUrl());
+    return QString::fromStdString(updateConfiguration()->museScorePrivacyPolicyUrl());
 }
