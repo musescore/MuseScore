@@ -580,7 +580,7 @@ static bool scoreContainsSpanner(const Score* score, Spanner* spanner)
     return false;
 }
 
-static void cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track_idx_t dstTrack2)
+void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track_idx_t dstTrack2)
 {
     // don’t clone system lines for track != 0
     if (isSystemTextLine(s) && s->track() != 0) {
@@ -1113,7 +1113,7 @@ void Excerpt::cloneMeasures(Score* oscore, Score* score)
 }
 
 //! NOTE For staves in the same score
-void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
+void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
 {
     Score* score = srcStaff->score();
     TieMap tieMap;
@@ -1255,14 +1255,16 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                             // add back spanners (going back from end to start spanner element
                             // makes sure the 'other' spanner anchor element is already set up)
                             // 'on' is the old spanner end note and 'nn' is the new spanner end note
-                            for (Spanner* oldSp : on->spannerBack()) {
-                                Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
-                                if (newStart != nullptr) {
-                                    Spanner* newSp = toSpanner(oldSp->linkedClone());
-                                    newSp->setNoteSpan(newStart, nn);
-                                    score->addElement(newSp);
-                                } else {
-                                    LOGD("cloneStaff: cannot find spanner start note");
+                            if (cloneSpanners) {
+                                for (Spanner* oldSp : on->spannerBack()) {
+                                    Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
+                                    if (newStart != nullptr) {
+                                        Spanner* newSp = toSpanner(oldSp->linkedClone());
+                                        newSp->setNoteSpan(newStart, nn);
+                                        score->addElement(newSp);
+                                    } else {
+                                        LOGD("cloneStaff: cannot find spanner start note");
+                                    }
                                 }
                             }
                         }
@@ -1295,22 +1297,24 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
         }
     }
 
-    for (auto i : score->spanner()) {
-        Spanner* s = i.second;
-        staff_idx_t staffIdx = s->staffIdx();
-        track_idx_t dstTrack = mu::nidx;
-        track_idx_t dstTrack2 = mu::nidx;
-        if (!isSystemTextLine(s)) {
-            //export other spanner if staffidx matches
-            if (srcStaffIdx == staffIdx) {
-                dstTrack = dstStaffIdx * VOICES + s->voice();
-                dstTrack2 = dstStaffIdx * VOICES + (s->track2() % VOICES);
+    if (cloneSpanners) {
+        for (auto i : score->spanner()) {
+            Spanner* s = i.second;
+            staff_idx_t staffIdx = s->staffIdx();
+            track_idx_t dstTrack = mu::nidx;
+            track_idx_t dstTrack2 = mu::nidx;
+            if (!isSystemTextLine(s)) {
+                //export other spanner if staffidx matches
+                if (srcStaffIdx == staffIdx) {
+                    dstTrack = dstStaffIdx * VOICES + s->voice();
+                    dstTrack2 = dstStaffIdx * VOICES + (s->track2() % VOICES);
+                }
             }
+            if (dstTrack == mu::nidx) {
+                continue;
+            }
+            cloneSpanner(s, score, dstTrack, dstTrack2);
         }
-        if (dstTrack == mu::nidx) {
-            continue;
-        }
-        cloneSpanner(s, score, dstTrack, dstTrack2);
     }
 }
 
