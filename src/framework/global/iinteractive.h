@@ -129,8 +129,11 @@ public:
     virtual ButtonData buttonData(Button b) const = 0;
 
     // info
-    virtual Result info(const std::string& title, const std::string& text, const ButtonDatas& buttons = {},
-                        int defBtn = int(Button::NoButton), const Options& options = {}) const = 0;
+    virtual Result info(const std::string& title, const std::string& text, const Buttons& buttons = {}, int defBtn = int(Button::NoButton),
+                        const Options& options = {}) const = 0;
+
+    virtual Result info(const std::string& title, const Text& text, const ButtonDatas& buttons = {}, int defBtn = int(Button::NoButton),
+                        const Options& options = {}) const = 0;
 
     // warning
     virtual Result warning(const std::string& title, const std::string& text, const Buttons& buttons = {},

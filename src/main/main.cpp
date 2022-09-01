@@ -144,6 +144,12 @@
 #include "stubs/multiinstances/multiinstancesstubmodule.h"
 #endif
 
+#ifdef BUILD_UPDATE_MODULE
+#include "update/updatemodule.h"
+#else
+#include "stubs/update/updatestubmodule.h"
+#endif
+
 #include "diagnostics/diagnosticsmodule.h"
 
 #ifdef BUILD_AUTOBOT_MODULE
@@ -280,6 +286,12 @@ int main(int argc, char** argv)
 #endif
 
     app.addModule(new mu::mi::MultiInstancesModule());
+
+#ifdef BUILD_UPDATE_MODULE
+    app.addModule(new mu::update::UpdateModule());
+#else
+    app.addModule(new mu::update::UpdateStubModule());
+#endif
 
 #ifdef BUILD_AUTOBOT_MODULE
     app.addModule(new mu::autobot::AutobotModule());

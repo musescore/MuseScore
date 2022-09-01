@@ -87,8 +87,6 @@ private:
 
     void revertToFactorySettings();
 
-    void checkForUpdate();
-
     async::Channel<bool> m_fullScreenChannel;
     async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };

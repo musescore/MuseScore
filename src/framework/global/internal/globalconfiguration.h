@@ -44,6 +44,8 @@ public:
     bool useFactorySettings() const override;
     bool enableExperimental() const override;
 
+    std::string museScoreUrl() const override;
+
 private:
     QString resolveAppDataPath() const;
     QString resolveUserAppDataPath() const;

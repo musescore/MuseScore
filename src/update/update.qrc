@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MuseScore/Update/ReleaseInfoDialog.qml</file>
+        <file>qml/MuseScore/Update/UpdateProgressDialog.qml</file>
+        <file>qml/MuseScore/Update/internal/ReleaseInfoBottomPanel.qml</file>
+        <file>qml/MuseScore/Update/internal/ReleaseNotesView.qml</file>
+    </qresource>
+</RCC>

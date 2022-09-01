@@ -26,6 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "iappshellconfiguration.h"
+#include "update/iupdateconfiguration.h"
 
 class QUrl;
 
@@ -35,6 +36,7 @@ class AboutModel : public QObject
     Q_OBJECT
 
     INJECT(appshell, IAppShellConfiguration, configuration)
+    INJECT(appshell, update::IUpdateConfiguration, updateConfiguration)
 
 public:
     explicit AboutModel(QObject* parent = nullptr);
