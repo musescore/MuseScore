@@ -61,7 +61,7 @@ Column {
 
         Image {
             sourceSize: Qt.size(110, 110)
-            source: "qrc:/qml/MuseScore/Cloud/resources/mu_logo.png"
+            source: "qrc:/qml/MuseScore/Cloud/resources/mu_logo.svg"
         }
 
         ListView {
