@@ -532,7 +532,7 @@ INotationElementsPtr NotationActionController::currentNotationElements() const
 
 mu::async::Notification NotationActionController::currentNotationChanged() const
 {
-    return globalContext()->currentMasterNotationChanged();
+    return globalContext()->currentNotationChanged();
 }
 
 INotationNoteInputPtr NotationActionController::currentNotationNoteInput() const
