@@ -58,7 +58,6 @@ set(ENGRAVING_NO_INTERNAL ON)
 set(ENGRAVING_NO_ACCESSIBILITY ON)
 add_subdirectory(${MU_ROOT}/src/engraving engraving)
 
-set(IEX_GUITARPRO_NO_INTERNAL ON)
 add_subdirectory(${MU_ROOT}/src/importexport/guitarpro guitarpro)
 
 

@@ -35,6 +35,6 @@ using namespace mu::iex::guitarpro;
 mu::Ret GuitarProReader::read(mu::engraving::MasterScore* score, const io::path_t& path, const Options&)
 {
     mu::io::File file(path);
-    mu::engraving::Err err = mu::engraving::importGTP(score, &file);
+    mu::engraving::Err err = mu::engraving::importGTP(score, &file, guitarProConfiguration()->linkedTabStaffCreated());
     return mu::engraving::make_ret(err, path);
 }
