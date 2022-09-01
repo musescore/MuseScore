@@ -21,11 +21,14 @@
  */
 #include "guitarproconfiguration.h"
 
-#include "settings.h"
-
-using namespace mu::framework;
-using namespace mu::iex::guitarpro;
-
-void GuitarProConfiguration::init()
+namespace mu::iex::guitarpro {
+bool GuitarProConfiguration::linkedTabStaffCreated() const
 {
+    return m_linkedTabStaffCreated;
+}
+
+void GuitarProConfiguration::setLinkedTabStaffCreated(bool created)
+{
+    m_linkedTabStaffCreated = created;
+}
 }
