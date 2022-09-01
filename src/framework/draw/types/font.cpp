@@ -58,6 +58,18 @@ double Font::pointSizeF() const
 void Font::setPointSizeF(double s)
 {
     m_pointSizeF = s;
+    m_pixelSize = -1;
+}
+
+int Font::pixelSize() const
+{
+    return m_pixelSize;
+}
+
+void Font::setPixelSize(int s)
+{
+    m_pixelSize = s;
+    m_pointSizeF = -1.0;
 }
 
 Font::Weight Font::weight() const
@@ -137,6 +149,8 @@ QFont Font::toQFont() const
 
     if (pointSizeF() > 0) {
         qf.setPointSizeF(pointSizeF());
+    } else if (pixelSize() > 0) {
+        qf.setPixelSize(pixelSize());
     }
     qf.setWeight(static_cast<QFont::Weight>(weight()));
     qf.setBold(bold());
@@ -154,7 +168,11 @@ QFont Font::toQFont() const
 Font Font::fromQFont(const QFont& qf)
 {
     mu::draw::Font f(qf.family());
-    f.setPointSizeF(qf.pointSizeF());
+    if (qf.pointSizeF() > 0) {
+        f.setPointSizeF(qf.pointSizeF());
+    } else if (qf.pixelSize() > 0) {
+        f.setPixelSize(qf.pixelSize());
+    }
     f.setWeight(static_cast<Font::Weight>(qf.weight()));
     f.setBold(qf.bold());
     f.setItalic(qf.italic());
