@@ -1987,17 +1987,6 @@ void Score::cmdAddOttava(OttavaType type)
 
 std::vector<Hairpin*> Score::addHairpins(HairpinType type)
 {
-    // special case for two selected chordrests on same staff
-    bool twoNotesSameStaff = false;
-
-    if (selection().isList() && selection().elements().size() == 2) {
-        ChordRest* cr1 = selection().firstChordRest();
-        ChordRest* cr2 = selection().lastChordRest();
-        if (cr1 && cr2 && cr1 != cr2 && cr1->staffIdx() == cr2->staffIdx()) {
-            twoNotesSameStaff = true;
-        }
-    }
-
     std::vector<Hairpin*> hairpins;
 
     // add hairpin on each staff if possible
@@ -2005,16 +1994,15 @@ std::vector<Hairpin*> Score::addHairpins(HairpinType type)
         for (staff_idx_t staffIdx = selection().staffStart(); staffIdx < selection().staffEnd(); ++staffIdx) {
             ChordRest* cr1 = selection().firstChordRest(staffIdx * VOICES);
             ChordRest* cr2 = selection().lastChordRest(staffIdx * VOICES);
-            hairpins.push_back(addHairpin(type, cr1, cr2, /* toCr2End */ true));
+            hairpins.push_back(addHairpin(type, cr1, cr2));
         }
-    } else if (selection().isRange() || selection().isSingle() || twoNotesSameStaff) {
+    } else {
         // for single staff range selection, or single selection,
         // find start & end elements elements
         ChordRest* cr1 = nullptr;
         ChordRest* cr2 = nullptr;
         getSelectedChordRest2(&cr1, &cr2);
-
-        hairpins.push_back(addHairpin(type, cr1, cr2, /* toCr2End */ !twoNotesSameStaff));
+        hairpins.push_back(addHairpin(type, cr1, cr2));
     }
 
     return hairpins;
@@ -3405,7 +3393,7 @@ Hairpin* Score::addHairpin(HairpinType t, const Fraction& tickStart, const Fract
 //   Score::addHairpin
 //---------------------------------------------------------
 
-Hairpin* Score::addHairpin(HairpinType type, ChordRest* cr1, ChordRest* cr2, bool toCr2End)
+Hairpin* Score::addHairpin(HairpinType type, ChordRest* cr1, ChordRest* cr2)
 {
     if (!cr1) {
         return nullptr;
@@ -3414,7 +3402,7 @@ Hairpin* Score::addHairpin(HairpinType type, ChordRest* cr1, ChordRest* cr2, boo
         cr2 = cr1;
     }
     assert(cr1->staffIdx() == cr2->staffIdx());
-    const Fraction end = toCr2End ? cr2->tick() + cr2->actualTicks() : cr2->tick();
+    const Fraction end = cr2->tick() + cr2->actualTicks();
     return addHairpin(type, cr1->tick(), end, cr1->track());
 }
 
