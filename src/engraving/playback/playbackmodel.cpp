@@ -190,7 +190,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
 
     constexpr timestamp_t actualTimestamp = 0;
     constexpr dynamic_level_t actualDynamicLevel = dynamicLevelFromType(mpe::DynamicType::Natural);
-    duration_t actualDuration = MScore::defaultPlayDuration;
+    duration_t actualDuration = MScore::defaultPlayDuration * 1000;
 
     for (const EngravingItem* item : playableItems) {
         if (item->isHarmony()) {
