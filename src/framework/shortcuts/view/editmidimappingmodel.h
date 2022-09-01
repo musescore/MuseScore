@@ -54,7 +54,6 @@ signals:
 
 private:
     QString deviceName(const midi::MidiDeviceID& deviceId) const;
-    QString eventName(const RemoteEvent& event) const;
 
     RemoteEvent m_event;
 };
