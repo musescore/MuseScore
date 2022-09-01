@@ -36,6 +36,7 @@
 #include "internal/istartupscenario.h"
 #include "notation/inotationconfiguration.h"
 #include "project/iprojectconfiguration.h"
+#include "importexport/guitarpro/iguitarproconfiguration.h"
 
 namespace mu::appshell {
 class CommandLineController
@@ -50,6 +51,7 @@ class CommandLineController
     INJECT(appshell, IStartupScenario, startupScenario)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, project::IProjectConfiguration, projectConfiguration)
+    INJECT(appshell, iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration);
 
 public:
     CommandLineController() = default;
