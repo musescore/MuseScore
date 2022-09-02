@@ -607,9 +607,13 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
         viewInteraction()->endEditGrip();
     }
 
-    if (ctx.hitElement && ctx.hitElement->needStartEditingAfterSelecting()) {
-        viewInteraction()->startEditElement(ctx.hitElement);
-        return;
+    INotationSelectionPtr selection = viewInteraction()->selection();
+
+    if (!selection->isRange()) {
+        if (ctx.hitElement && ctx.hitElement->needStartEditingAfterSelecting()) {
+            viewInteraction()->startEditElement(ctx.hitElement);
+            return;
+        }
     }
 
     if (!ctx.hitElement) {
@@ -777,6 +781,11 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
 
     INotationInteractionPtr interaction = viewInteraction();
     interaction->select({ ctx.element }, SelectType::SINGLE, staffIndex);
+
+    if (ctx.element && ctx.element->needStartEditingAfterSelecting()) {
+        viewInteraction()->startEditElement(ctx.element);
+        return;
+    }
 
     if (ctx.element != m_prevHitElement) {
         return;
