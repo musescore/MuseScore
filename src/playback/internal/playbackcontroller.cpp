@@ -84,6 +84,7 @@ void PlaybackController::init()
 
     m_totalPlayTimeChanged.onNotify(this, [this]() {
         updateCurrentTempo();
+        updateLoop();
     });
 
     m_playbackPositionChanged.onNotify(this, [this]() {
@@ -1166,7 +1167,6 @@ void PlaybackController::setTempoMultiplier(double multiplier)
 
     playback->setTempoMultiplier(multiplier);
     seek(tick);
-    updateLoop();
 
     if (playing) {
         resume();
