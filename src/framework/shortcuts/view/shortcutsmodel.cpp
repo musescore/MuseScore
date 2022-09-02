@@ -74,7 +74,7 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
 
 const QVariant ShortcutsModel::SectionName(const Shortcut& shortcut) const
 {
-    return this->getCategory(this->action(shortcut.action).category);
+    return getCategoryName(this->action(shortcut.action).category);
 }
 
 QStringList ShortcutsModel::getSections() const
@@ -191,13 +191,13 @@ QVariant ShortcutsModel::currentShortcut() const
     return shortcutToObject(sc);
 }
 
-QString ShortcutsModel::getCategory(ui::ActionCategory category) const
+QString ShortcutsModel::getCategoryName(ui::ActionCategory category) const
 {
-    if ((int)category + 1 >= 0 && (int)category + 1 < categories.size()) {
-        return categories[(int)category + 1].qTranslated();
+    size_t c = static_cast<int>(category) + 1;
+    IF_ASSERT_FAILED(c < categories.size()) {
+        return QString();
     }
-//    LOGE() << "Categories: " << categories.size() << "| Requested Category: " << (int)category << " by: " << code;
-    return "NULL";
+    return categories[c].qTranslated();
 }
 
 QModelIndex ShortcutsModel::currentShortcutIndex() const

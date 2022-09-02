@@ -81,7 +81,7 @@ public:
     QItemSelection selection() const;
     QVariant currentShortcut() const;
 
-    QString getCategory(ui::ActionCategory category) const;
+    QString getCategoryName(ui::ActionCategory category) const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE bool apply();
