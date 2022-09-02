@@ -236,7 +236,7 @@ public:
     void resetShapesAndPosition() override;
 
     ScoreConfig scoreConfig() const override;
-    void setScoreConfig(ScoreConfig config) override;
+    void setScoreConfig(const ScoreConfig& config) override;
     async::Channel<ScoreConfigType> scoreConfigChanged() const override;
 
     void navigateToLyrics(MoveDirection direction) override;
