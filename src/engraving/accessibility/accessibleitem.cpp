@@ -199,13 +199,7 @@ QString AccessibleItem::accessibleDescription() const
         return QString();
     }
 
-    QString result;
-#ifdef Q_OS_MACOS
-    result = accessibleName() + " ";
-#endif
-
-    result += readable(m_element->accessibleExtraInfo());
-    return result;
+    return readable(m_element->accessibleExtraInfo());
 }
 
 QVariant AccessibleItem::accessibleValue() const
