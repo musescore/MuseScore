@@ -295,9 +295,9 @@ Item {
 
             height: view.isSectionExpanded(model["ownerSection"]) ? 34 : 0
 
-            Behavior on height {
-                NumberAnimation {duration : 200 }
-            }
+//            Behavior on height {
+//                NumberAnimation {duration : 200 }
+//            }
 
             keyRoleName: root.keyRoleName
             valueRoleName: root.valueRoleName

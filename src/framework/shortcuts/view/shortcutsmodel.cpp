@@ -74,13 +74,13 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
 
 const QVariant ShortcutsModel::SectionName(const Shortcut& shortcut) const
 {
-    return this->action(shortcut.action).getCategory();
+    return this->getCategory(this->action(shortcut.action).category);
 }
 
 QStringList ShortcutsModel::getSections() const
 {
     QStringList returnValue;
-    for (TranslatableString category : UiAction::categories) {
+    for (TranslatableString category : categories) {
         returnValue.push_back(category.qTranslated());
     }
 
@@ -189,6 +189,15 @@ QVariant ShortcutsModel::currentShortcut() const
 
     const Shortcut& sc = m_shortcuts.at(index.row());
     return shortcutToObject(sc);
+}
+
+QString ShortcutsModel::getCategory(ui::ActionCategory category) const
+{
+    if ((int)category + 1 >= 0 && (int)category + 1 < categories.size()) {
+        return categories[(int)category + 1].qTranslated();
+    }
+//    LOGE() << "Categories: " << categories.size() << "| Requested Category: " << (int)category << " by: " << code;
+    return "NULL";
 }
 
 QModelIndex ShortcutsModel::currentShortcutIndex() const
