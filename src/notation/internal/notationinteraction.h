@@ -138,6 +138,7 @@ public:
     void editText(QInputMethodEvent* event) override;
     void endEditText() override;
     void changeTextCursorPosition(const PointF& newCursorPos) override;
+    void selectText(mu::engraving::SelectTextType type) override;
     const TextBase* editedText() const override;
     async::Notification textEditingStarted() const override;
     async::Notification textEditingChanged() const override;
