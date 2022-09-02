@@ -564,8 +564,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
             selectType = SelectType::ADD;
         }
         viewInteraction()->select({ hitElement }, selectType, hitStaffIndex);
-    } else if (hitElement && event->button() == Qt::LeftButton
-               && event->modifiers() == Qt::KeyboardModifier::ControlModifier) {
+    } else if (hitElement && button == Qt::LeftButton && keyState == Qt::ControlModifier) {
         viewInteraction()->select({ hitElement }, SelectType::ADD, hitStaffIndex);
     }
 
@@ -622,11 +621,9 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
         playbackController()->playElements({ ctx.hitElement });
     }
 
-    if (!viewInteraction()->isTextSelected()) {
-        return;
+    if (viewInteraction()->isTextSelected()) {
+        updateTextCursorPosition();
     }
-
-    updateTextCursorPosition();
 }
 
 void NotationViewInputController::handleRightClick(const ClickContext& ctx)
@@ -790,7 +787,7 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
     }
 
     if (interaction->textEditingAllowed(ctx.element)) {
-        dispatcher()->dispatch("edit-text", ActionData::make_arg1<PointF>(m_beginPoint));
+        interaction->startEditText(ctx.element, m_beginPoint);
     }
 }
 

@@ -697,7 +697,7 @@ void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, 
 
     if (needEndTextEditing(elements)) {
         endEditText();
-    } else if (isElementEditStarted() && (elements.size() != 1 || elements.front() != score()->selection().element())) {
+    } else if (needEndElementEditing(elements)) {
         endEditElement();
     }
 
@@ -4257,6 +4257,19 @@ bool NotationInteraction::needEndTextEditing(const std::vector<EngravingItem*>& 
     }
 
     return newSelectedElements.front() != m_editData.element;
+}
+
+bool NotationInteraction::needEndElementEditing(const std::vector<EngravingItem*>& newSelectedElements) const
+{
+    if (!isElementEditStarted()) {
+        return false;
+    }
+
+    if (newSelectedElements.size() != 1) {
+        return true;
+    }
+
+    return newSelectedElements.front() != score()->selection().element();
 }
 
 void NotationInteraction::resetGripEdit()
