@@ -59,9 +59,6 @@ Column {
         model: [
             { text: qsTrc("inspector", "Single barline"), value: BarlineTypes.TYPE_NORMAL },
             { text: qsTrc("inspector", "Double barline"), value: BarlineTypes.TYPE_DOUBLE },
-            { text: qsTrc("inspector", "Left (start) repeat sign"), value: BarlineTypes.TYPE_START_REPEAT },
-            { text: qsTrc("inspector", "Right (end) repeat sign"), value: BarlineTypes.TYPE_END_REPEAT },
-            { text: qsTrc("inspector", "Right and left repeat sign"), value: BarlineTypes.TYPE_END_START_REPEAT },
             { text: qsTrc("inspector", "Dashed barline"), value: BarlineTypes.TYPE_DASHED },
             { text: qsTrc("inspector", "Final barline"), value: BarlineTypes.TYPE_FINAL },
             { text: qsTrc("inspector", "Dotted barline"), value: BarlineTypes.TYPE_DOTTED },

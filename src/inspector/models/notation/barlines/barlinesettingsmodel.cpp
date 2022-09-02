@@ -83,6 +83,13 @@ void BarlineSettingsModel::resetProperties()
     m_hasToShowTips->resetToDefault();
 }
 
+void BarlineSettingsModel::updatePropertiesOnNotationChanged()
+{
+    loadPropertyItem(m_type, [](const QVariant& elementPropertyValue) -> QVariant {
+        return elementPropertyValue.toInt();
+    });
+}
+
 void BarlineSettingsModel::applySpanPreset(const int presetType)
 {
     BarlineTypes::SpanPreset type = static_cast<BarlineTypes::SpanPreset>(presetType);
