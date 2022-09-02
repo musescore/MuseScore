@@ -175,6 +175,7 @@ private:
 
     bool m_readonly = false;
     bool m_isCanvasDragged = false;
+    bool m_tripleClickPending = false;
 
     PointF m_beginPoint;
 
