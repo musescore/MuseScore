@@ -236,16 +236,29 @@ QString AccessibleItemInterface::text(QAccessible::Text textType) const
     switch (textType) {
     case QAccessible::Name: {
         QString name = m_object->item()->accessibleName();
+#if defined(Q_OS_MACOS)
+        // VoiceOver doesn't speak descriptions so add it to name instead.
+        QString description = m_object->item()->accessibleDescription();
+        if (!description.isEmpty() && description != name) {
+            name += ", " + description;
+        }
+#endif
         if (m_object->controller().lock()->needToVoicePanelInfo()) {
             QString panelName = m_object->controller().lock()->currentPanelAccessibleName();
             if (!panelName.isEmpty()) {
                 name.prepend(panelName + " " + qtrc("accessibility", "Panel") + ", ");
             }
         }
-
         return name;
     }
+#if defined(Q_OS_WINDOWS)
+    // Narrator doesn't read descriptions but it does read accelerators.
+    // NVDA reads both so it should be safe to give just an Accelerator.
+    case QAccessible::Accelerator: return m_object->item()->accessibleDescription();
+#elif !defined(Q_OS_MACOS)
+    //  Orca on Linux does read descriptions.
     case QAccessible::Description: return m_object->item()->accessibleDescription();
+#endif
     default: break;
     }
 
