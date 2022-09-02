@@ -1148,7 +1148,7 @@ public:
     void removeUnmanagedSpanner(Spanner*);
 
     Hairpin* addHairpin(HairpinType, const Fraction& tickStart, const Fraction& tickEnd, track_idx_t track);
-    Hairpin* addHairpin(HairpinType, ChordRest* cr1, ChordRest* cr2 = nullptr, bool toCr2End = true);
+    Hairpin* addHairpin(HairpinType, ChordRest* cr1, ChordRest* cr2 = nullptr);
 
     ChordRest* findCR(Fraction tick, track_idx_t track) const;
     ChordRest* findCRinStaff(const Fraction& tick, staff_idx_t staffIdx) const;
