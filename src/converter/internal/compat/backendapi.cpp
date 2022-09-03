@@ -54,7 +54,8 @@ static const std::string SVG_WRITER_NAME = "svg";
 static const std::string SEGMENTS_POSITIONS_WRITER_NAME = "spos";
 static const std::string MEASURES_POSITIONS_WRITER_NAME = "mpos";
 static const std::string PDF_WRITER_NAME = "pdf";
-static const std::string MIDI_WRITER_NAME = "midi";
+static const std::string MIDI_WRITER_NAME = "mid";
+static const std::string MIDI_JSON_NAME = "midi";
 static const std::string MUSICXML_WRITER_NAME = "mxl";
 static const std::string MUSICXML_JSON_NAME = "mxml";
 static const std::string META_DATA_NAME = "metadata";
@@ -413,7 +414,7 @@ Ret BackendApi::exportScoreMidi(const INotationPtr notation, BackendJsonWriter& 
         return writerRetVal.ret;
     }
 
-    jsonWriter.addKey(MIDI_WRITER_NAME.c_str());
+    jsonWriter.addKey(MIDI_JSON_NAME.c_str());
     jsonWriter.addValue(writerRetVal.val, addSeparator);
 
     return make_ret(Ret::Code::Ok);
