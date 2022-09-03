@@ -51,8 +51,8 @@ using namespace mu::io;
 
 static const std::string PNG_WRITER_NAME = "png";
 static const std::string SVG_WRITER_NAME = "svg";
-static const std::string SEGMENTS_POSITIONS_WRITER_NAME = "sposXML";
-static const std::string MEASURES_POSITIONS_WRITER_NAME = "mposXML";
+static const std::string SEGMENTS_POSITIONS_WRITER_NAME = "spos";
+static const std::string MEASURES_POSITIONS_WRITER_NAME = "mpos";
 static const std::string PDF_WRITER_NAME = "pdf";
 static const std::string MIDI_WRITER_NAME = "midi";
 static const std::string MUSICXML_WRITER_NAME = "mxl";
