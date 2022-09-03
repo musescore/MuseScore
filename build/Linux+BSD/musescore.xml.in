@@ -103,8 +103,7 @@
     <mime-type type="application/vnd.recordare.musicxml">
         <!-- See "Container file" at http://www.musicxml.com/for-developers/musicxml-dtd/ -->
         <comment>MusicXML compressed score</comment>
-        <glob pattern="*.mxl"/><!-- preferred extension must go first -->
-        <glob pattern="*.mxml" weight="40"/><!-- reduced weight (default 50) to avoid matching Macromedia XML files -->
+        <glob pattern="*.mxl"/>
         <sub-class-of type="application/zip"/>
         <icon name="application-vnd.recordare.musicxml@MSCORE_INSTALL_SUFFIX@"/>
     </mime-type>

@@ -38,7 +38,7 @@ mu::Ret MusicXmlReader::read(MasterScore* score, const io::path_t& path, const O
     std::string suffix = mu::io::suffix(path);
     if (suffix == "xml" || suffix == "musicxml") {
         err = importMusicXml(score, path.toQString());
-    } else if (suffix == "mxl" || suffix == "mxml") {
+    } else if (suffix == "mxl") {
         err = importCompressedMusicXml(score, path.toQString());
     }
     return make_ret(err, path);
