@@ -171,6 +171,14 @@ RetVal<SaveLocation::CloudInfo> SaveProjectScenario::askCloudLocation(INotationP
 RetVal<SaveLocation::CloudInfo> SaveProjectScenario::doAskCloudLocation(INotationProjectPtr project, bool canSaveLocallyInstead,
                                                                         CloudProjectVisibility defaultVisibility) const
 {
+    if (!authorizationService()->userAuthorized().val) {
+        Ret ret = authorizationService()->requireAuthorization(
+            trc("project/save", "Login or create a free account on musescore.com to save this score to the cloud."));
+        if (!ret) {
+            return ret;
+        }
+    }
+
     // TODO(save-to-cloud): better name?
     QString defaultName = project->displayName();
 

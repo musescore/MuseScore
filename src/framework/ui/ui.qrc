@@ -4,6 +4,6 @@
         <file>qml/MuseScore/Ui/InteractiveProvider.qml</file>
         <file>qml/MuseScore/Ui/ToolTipProvider.qml</file>
         <file>qml/MuseScore/Ui/internal/StandardDialog.qml</file>
-        <file>qml/MuseScore/Ui/internal/StandardDialogPanel.qml</file>
+        <file>qml/MuseScore/Ui/StandardDialogPanel.qml</file>
     </qresource>
 </RCC>
