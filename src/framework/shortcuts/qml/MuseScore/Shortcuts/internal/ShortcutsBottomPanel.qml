@@ -88,7 +88,7 @@ RowLayout {
 
         Layout.preferredWidth: root.buttonWidth
 
-        text: qsTrc("shortcuts", "Toggle Visibility")
+        text: qsTrc("shortcuts", "Expand/Collapse all")
 
         navigation.name: "VisibButton"
         navigation.panel: root.navigation

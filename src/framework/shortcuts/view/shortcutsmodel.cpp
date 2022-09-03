@@ -62,22 +62,22 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
                + sequencesToNativeText(shortcut.sequences);
     }
     case RoleSection:
-        return SectionName(shortcut);
+        return sectionName(shortcut);
     case RoleSectionValue:
-        return SectionName(shortcut).toString() + sequencesToNativeText(shortcut.sequences);
+        return sectionName(shortcut) + sequencesToNativeText(shortcut.sequences);
     case RoleSectionKey:
-        return SectionName(shortcut).toString() + this->action(shortcut.action).title.qTranslated();
+        return sectionName(shortcut) + this->action(shortcut.action).title.qTranslated();
     }
 
     return QVariant();
 }
 
-const QVariant ShortcutsModel::SectionName(const Shortcut& shortcut) const
+const QString ShortcutsModel::sectionName(const Shortcut& shortcut) const
 {
     return getCategoryName(this->action(shortcut.action).category);
 }
 
-QStringList ShortcutsModel::getSections() const
+QStringList ShortcutsModel::sections() const
 {
     QStringList returnValue;
     for (TranslatableString category : categories) {
@@ -147,7 +147,7 @@ void ShortcutsModel::load()
     });
 
     std::sort(m_shortcuts.begin(), m_shortcuts.end(), [this](const Shortcut& s1, const Shortcut& s2) {
-        return SectionName(s1).toString() + actionText(s1.action) < SectionName(s2).toString() + actionText(s2.action);
+        return sectionName(s1) + actionText(s1.action) < sectionName(s2) + actionText(s2.action);
     });
 
     endResetModel();

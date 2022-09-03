@@ -70,9 +70,5 @@ ListItemBlank {
                 horizontalAlignment: Text.AlignLeft
             }
         }
-
-
     }
-
-
 }

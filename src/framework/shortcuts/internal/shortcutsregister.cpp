@@ -22,9 +22,7 @@
 #include "shortcutsregister.h"
 
 #include <QKeySequence>
-#include <unordered_set>
 
-#include "framework/ui/uitypes.h"
 #include "global/deprecated/xmlreader.h"
 #include "global/deprecated/xmlwriter.h"
 #include "multiinstances/resourcelockguard.h"
@@ -34,7 +32,6 @@
 using namespace mu::shortcuts;
 using namespace mu::framework;
 using namespace mu::async;
-using namespace mu::ui;
 
 static constexpr std::string_view SHORTCUTS_TAG("Shortcuts");
 static constexpr std::string_view SHORTCUT_TAG("SC");

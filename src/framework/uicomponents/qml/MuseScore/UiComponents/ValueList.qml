@@ -214,10 +214,8 @@ Item {
         property var collapsed: ({})
         function toggleSection (section) {
             if (isSectionExpanded(section)) {
-                console.log("Hiding: " + section)
                 hideSection(section)
             } else {
-                console.log("Opening: " + section)
                 showSection(section)
             }
         }

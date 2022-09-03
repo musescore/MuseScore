@@ -74,7 +74,7 @@ public:
     explicit ShortcutsModel(QObject* parent = nullptr);
 
     QVariant data(const QModelIndex& index, int role) const override;
-    const QVariant SectionName(const Shortcut& shortcut) const;
+    const QString sectionName(const Shortcut& shortcut) const;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
@@ -96,7 +96,7 @@ public:
     Q_INVOKABLE void resetToDefaultSelectedShortcuts();
 
     Q_INVOKABLE QVariantList shortcuts() const;
-    Q_INVOKABLE QStringList getSections() const;
+    Q_INVOKABLE QStringList sections() const;
 
 public slots:
     void setSelection(const QItemSelection& selection);

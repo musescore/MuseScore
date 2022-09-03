@@ -27,7 +27,6 @@
 #include <cstring>
 #include <QString>
 #include <QMetaType>
-#include <set>
 
 #include "actions/actiontypes.h"
 #include "context/shortcutcontext.h"
@@ -39,7 +38,6 @@
 #include "view/iconcodes.h"
 #include "shortcuts/shortcutstypes.h"
 #include "context/shortcutcontext.h"
-#include "log.h"
 
 namespace mu::ui {
 using ThemeCode = std::string;

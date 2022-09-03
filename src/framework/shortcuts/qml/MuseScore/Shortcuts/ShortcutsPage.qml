@@ -54,8 +54,7 @@ Item {
     Component.onCompleted: {
         shortcutsModel.load()
 
-        shortcutsView.allSections = shortcutsModel.getSections()
-        console.log("All sections are: " + shortcutsView.allSections)
+        shortcutsView.allSections = shortcutsModel.sections()
         topPanel.setSearchText(root.shortcutCodeKey)
     }
 
