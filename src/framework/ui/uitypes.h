@@ -191,31 +191,31 @@ enum class Checkable {
 };
 
 enum class ActionCategory {
-    UNDEFINED = -1,
-    INTERNAL,
-    TABLATURE,
-    VIEWINGNAVIGATION,
-    PLAYBACK,
-    LAYOUTFORMATTING,
-    SELECTINGEDITING,
-    APPLICATION,
-    ACCESSIBILITY,
-    FILE,
-    SELECTIONNAVIGATION,
-    TEXTLYRICS,
-    CHORDSYMBOLSFIGUREDBASS,
-    MEASURES,
-    MUSICALSYMBOLS,
-    DIALOGSPANELS,
-    NOTEINPUT,
-    WORKSPACE,
-    PLUGINS
+    Undefined = -1,
+    Internal,
+    Tablature,
+    ViewingNavigation,
+    Playback,
+    LayoutFormatting,
+    SelectingEditing,
+    Application,
+    Accessibility,
+    File,
+    SelectionNavigation,
+    TextLyrics,
+    ChordsSymbolsFiguredBass,
+    Measures,
+    MusicalSymbols,
+    DialogsPanels,
+    NoteInput,
+    Workspace,
+    Plugins
 };
 
 struct UiAction
 {
     actions::ActionCode code;
-    ActionCategory category = ActionCategory::INTERNAL;
+    ActionCategory category = ActionCategory::Internal;
     UiContext uiCtx = UiCtxAny;
     std::string scCtx = "any";
     MnemonicString title;

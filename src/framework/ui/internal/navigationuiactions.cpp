@@ -28,87 +28,87 @@ using namespace mu::actions;
 
 const UiActionList NavigationUiActions::m_actions = {
     UiAction("nav-dev-show-controls",
-             ActionCategory::UNDEFINED,
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY
              ),
     UiAction("nav-next-section",
-             ActionCategory::UNDEFINED,
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY
              ),
     UiAction("nav-prev-section",
-             ActionCategory::UNDEFINED,
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY
              ),
     UiAction("nav-next-panel",
-             ActionCategory::UNDEFINED,
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY
              ),
     UiAction("nav-prev-panel",
-             ActionCategory::UNDEFINED,
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY
              ),
     UiAction("nav-next-tab",
-             ActionCategory::UNDEFINED,
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY
              ),
     UiAction("nav-prev-tab",
-             ActionCategory::UNDEFINED,
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY
              ),
     UiAction("nav-right",
-             ActionCategory::UNDEFINED,
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_NOT_NOTATION_FOCUSED
              ),
     UiAction("nav-left",
-             ActionCategory::UNDEFINED,
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_NOT_NOTATION_FOCUSED
              ),
     UiAction("nav-up",
-             ActionCategory::UNDEFINED,
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_NOT_NOTATION_FOCUSED
              ),
     UiAction("nav-down",
-             ActionCategory::UNDEFINED,
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_NOT_NOTATION_FOCUSED
              ),
     UiAction("nav-escape",
-             ActionCategory::UNDEFINED,
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_NOT_NOTATION_FOCUSED
              ),
     UiAction("nav-trigger-control",
-             ActionCategory::UNDEFINED,
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_NOT_NOTATION_FOCUSED
              ),
     UiAction("nav-first-control",
-             ActionCategory::UNDEFINED,
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_NOT_NOTATION_FOCUSED
              ),
     UiAction("nav-last-control",
-             ActionCategory::UNDEFINED,
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_NOT_NOTATION_FOCUSED
              ),
     UiAction("nav-nextrow-control",
-             ActionCategory::UNDEFINED,
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_NOT_NOTATION_FOCUSED
              ),
     UiAction("nav-prevrow-control",
-             ActionCategory::UNDEFINED,
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_NOT_NOTATION_FOCUSED
              )

@@ -32,7 +32,7 @@ static const mu::actions::ActionCode MASTERPALETTE_CODE("masterpalette");
 
 const UiActionList PaletteUiActions::m_actions = {
     UiAction(MASTERPALETTE_CODE,
-             ActionCategory::DIALOGSPANELS,
+             ActionCategory::DialogsPanels,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Master palette"),
@@ -40,28 +40,28 @@ const UiActionList PaletteUiActions::m_actions = {
              Checkable::Yes
              ),
     UiAction("palette-search",
-             ActionCategory::DIALOGSPANELS,
+             ActionCategory::DialogsPanels,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Palette search"),
              TranslatableString("action", "Search palettes")
              ),
     UiAction("time-signature-properties",
-             ActionCategory::DIALOGSPANELS,
+             ActionCategory::DialogsPanels,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Time signature properties…"),
              TranslatableString("action", "Time signature properties…")
              ),
     UiAction("edit-drumset",
-             ActionCategory::DIALOGSPANELS,
+             ActionCategory::DialogsPanels,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Edit drumset…"),
              TranslatableString("action", "Edit drumset…")
              ),
     UiAction("show-keys",
-             ActionCategory::TEXTLYRICS,
+             ActionCategory::TextLyrics,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_TEXT_EDITING,
              TranslatableString("action", "Insert special characters"),

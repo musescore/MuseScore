@@ -30,7 +30,7 @@ using namespace mu::mi;
 
 const UiActionList MultiInstancesUiActions::m_actions = {
     UiAction("multiinstances-dev-show-info",
-             ActionCategory::UNDEFINED,
+             ActionCategory::Undefined,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Multiinstances")
