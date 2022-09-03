@@ -236,7 +236,6 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>mxl</string>
-				<string>mxml</string>
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
