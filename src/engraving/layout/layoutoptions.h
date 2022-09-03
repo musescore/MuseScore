@@ -50,6 +50,9 @@ struct LayoutOptions
     double loHeight = 0;
     bool firstSystemIndent = true;
 
+    double maxChordShiftAbove = 0;
+    double maxChordShiftBelow = 0;
+
     double maxFretShiftAbove = 0;
     double maxFretShiftBelow = 0;
 
@@ -64,6 +67,9 @@ struct LayoutOptions
         loHeight = style.styleD(Sid::pageHeight) * DPI;
 
         firstSystemIndent = style.styleB(Sid::enableIndentationOnFirstSystem);
+
+        maxChordShiftAbove = style.styleMM(Sid::maxChordShiftAbove);
+        maxChordShiftBelow = style.styleMM(Sid::maxChordShiftBelow);
 
         maxFretShiftAbove = style.styleMM(Sid::maxFretShiftAbove);
         maxFretShiftBelow = style.styleMM(Sid::maxFretShiftBelow);
