@@ -100,7 +100,6 @@
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".xml" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".musicxml" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mxl" Value="" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mxml" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".cap" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".capx" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".scw" Value="" Type="string" />

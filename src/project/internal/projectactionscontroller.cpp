@@ -599,13 +599,13 @@ void ProjectActionsController::printScore()
 
 io::path_t ProjectActionsController::selectScoreOpeningFile()
 {
-    QString allExt = "*.mscz *.mxl *.mxml *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx "
+    QString allExt = "*.mscz *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx "
                      "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscx *.mscs *.mscz~";
 
     QStringList filter;
     filter << qtrc("project", "All supported files") + " (" + allExt + ")"
            << qtrc("project", "MuseScore files") + " (*.mscz)"
-           << qtrc("project", "MusicXML files") + " (*.mxl *.mxml *.musicxml *.xml)"
+           << qtrc("project", "MusicXML files") + " (*.mxl *.musicxml *.xml)"
            << qtrc("project", "MIDI files") + " (*.mid *.midi *.kar)"
            << qtrc("project", "MuseData files") + " (*.md)"
            << qtrc("project", "Capella files") + " (*.cap *.capx)"

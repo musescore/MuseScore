@@ -65,7 +65,7 @@ void MusicXmlModule::resolveImports()
 
     auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
-        readers->reg({ "xml", "musicxml", "mxl", "mxml" }, std::make_shared<MusicXmlReader>());
+        readers->reg({ "xml", "musicxml", "mxl" }, std::make_shared<MusicXmlReader>());
     }
 
     auto writers = modularity::ioc()->resolve<INotationWritersRegister>(moduleName());

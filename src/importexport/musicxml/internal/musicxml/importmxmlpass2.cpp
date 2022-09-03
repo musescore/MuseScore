@@ -3080,7 +3080,7 @@ void MusicXMLParserDirection::dashes(const QString& type, const int number,
         b->setLineStyle(LineType::DASHED);
         // TODO brackets and dashes now share the same storage
         // because they both use ElementType::TEXTLINE
-        // use mxml specific type instead
+        // use MusicXML specific type instead
         starts.append(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
     } else if (type == "stop") {
         auto b = spdesc._isStarted ? toTextLine(spdesc._sp) : Factory::createTextLine(_score->dummy());
