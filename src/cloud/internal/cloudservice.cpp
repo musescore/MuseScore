@@ -311,6 +311,13 @@ void CloudService::signOut()
     clearTokens();
 }
 
+mu::Ret CloudService::requireAuthorization(const std::string& text)
+{
+    UriQuery query("musescore://cloud/requireauthorization");
+    query.addParam("text", Val(text));
+    return interactive()->open(query).ret;
+}
+
 mu::ValCh<bool> CloudService::userAuthorized() const
 {
     return m_userAuthorized;

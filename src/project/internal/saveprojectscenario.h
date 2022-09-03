@@ -28,12 +28,14 @@
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
 #include "global/iinteractive.h"
+#include "cloud/iauthorizationservice.h"
 
 namespace mu::project {
 class SaveProjectScenario : public ISaveProjectScenario
 {
     INJECT(project, IProjectConfiguration, configuration)
     INJECT(project, framework::IInteractive, interactive)
+    INJECT(project, cloud::IAuthorizationService, authorizationService)
 
 public:
     SaveProjectScenario() = default;
