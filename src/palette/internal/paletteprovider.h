@@ -240,7 +240,7 @@ public:
     async::Channel<engraving::ElementPtr> addCustomItemRequested() const override;
 
     Q_INVOKABLE QModelIndex poolPaletteIndex(const QModelIndex& index, mu::palette::FilterPaletteTreeModel* poolPalette) const;
-    
+
     Q_INVOKABLE QModelIndex customElementsPaletteIndex(const QModelIndex& index);
 
     Q_INVOKABLE mu::palette::FilterPaletteTreeModel* poolPaletteModel(const QModelIndex& index) const;

@@ -177,7 +177,7 @@ void PaletteModule::onAllInited(const framework::IApplication::RunMode& mode)
 void PaletteModule::registerCellActions()
 {
     LOGE() << "Actions in cell prepped here" << PaletteCell::cells.size() << " where cells in userPaletteModel are: " <<
-    s_paletteProvider->userPaletteModel()->rowCount();
+        s_paletteProvider->userPaletteModel()->rowCount();
 
     for (int paletteIt = 0; paletteIt < s_paletteProvider->userPaletteModel()->rowCount(); paletteIt++) {
         for (int cellIt = 0;
