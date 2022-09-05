@@ -111,6 +111,7 @@ EngravingItem::EngravingItem(const EngravingItem& e)
 
     //! TODO Please don't remove (igor.korsukov@gmail.com)
     //m_accessible = e.m_accessible->clone(this);
+    m_accessibleEnabled = e.m_accessibleEnabled;
 }
 
 EngravingItem::~EngravingItem()
