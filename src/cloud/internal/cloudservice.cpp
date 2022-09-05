@@ -287,7 +287,7 @@ void CloudService::signOut()
 
     TRACEFUNC;
 
-    QUrl signOutUrl = prepareUrlForRequest(configuration()->loginApiUrl());
+    QUrl signOutUrl = prepareUrlForRequest(configuration()->logoutApiUrl());
     if (!signOutUrl.isEmpty()) {
         QUrlQuery query(signOutUrl.query());
         query.addQueryItem(REFRESH_TOKEN_KEY, m_refreshToken);
@@ -309,6 +309,13 @@ void CloudService::signOut()
     }
 
     clearTokens();
+}
+
+mu::Ret CloudService::requireAuthorization(const std::string& text)
+{
+    UriQuery query("musescore://cloud/requireauthorization");
+    query.addParam("text", Val(text));
+    return interactive()->open(query).ret;
 }
 
 mu::ValCh<bool> CloudService::userAuthorized() const
