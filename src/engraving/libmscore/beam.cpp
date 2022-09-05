@@ -306,6 +306,8 @@ void Beam::layout1()
         _maxMove = 0;
         for (ChordRest* cr : _elements) {
             if (cr->isChord()) {
+                _up = cr->up();
+                break;
             }
         }
         return;
@@ -319,7 +321,7 @@ void Beam::layout1()
         } else {
             for (ChordRest* cr :_elements) {
                 if (cr->isChord()) {
-                    _up = toChord(cr)->up();
+                    _up = cr->up();
                     break;
                 }
             }
@@ -697,7 +699,7 @@ double Beam::chordBeamAnchorY(const ChordRest* cr) const
     double beamOffset = _beamWidth / 2 * upValue;
 
     if (_isBesideTabStaff) {
-        double stemLength = _tab->chordStemLength(chord);
+        double stemLength = _tab->chordStemLength(chord) * (_up ? -1 : 1);
         double y = _tab->chordRestStemPosY(chord) + stemLength;
         y *= spatium();
         y -= beamOffset;
