@@ -333,7 +333,7 @@ MenuItem* AppMenuModel::makeHelpMenu()
     };
 
     // put on top
-    if (configuration()->isAppUpdatable()) {
+    if (updateConfiguration()->isAppUpdatable()) {
         helpItems.push_front(makeSeparator());
         helpItems.push_front(makeMenuItem("check-update"));
     }

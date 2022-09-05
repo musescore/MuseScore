@@ -65,6 +65,8 @@ public:
 
     virtual bool useFactorySettings() const = 0;
     virtual bool enableExperimental() const = 0;
+
+    virtual std::string museScoreUrl() const = 0;
 };
 }
 

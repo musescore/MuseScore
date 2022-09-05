@@ -54,8 +54,14 @@ IInteractive::ButtonData AutobotInteractive::buttonData(Button b) const
     return m_real->buttonData(b);
 }
 
-IInteractive::Result AutobotInteractive::info(const std::string& title, const std::string& text, const ButtonDatas& buttons,
+IInteractive::Result AutobotInteractive::info(const std::string& title, const std::string& text, const Buttons& buttons,
                                               int defBtn, const Options& options) const
+{
+    return m_real->info(title, text, buttons, defBtn, options);
+}
+
+IInteractive::Result AutobotInteractive::info(const std::string& title, const Text& text, const ButtonDatas& buttons, int defBtn,
+                                              const Options& options) const
 {
     return m_real->info(title, text, buttons, defBtn, options);
 }
