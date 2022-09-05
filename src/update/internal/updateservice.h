@@ -55,6 +55,8 @@ private:
     RetVal<io::path_t> downloadRelease();
     Ret installRelease(const io::path_t& installerPath);
 
+    void clear();
+
     ReleaseInfo m_lastCheckResult;
 
     network::INetworkManagerPtr m_networkManager;

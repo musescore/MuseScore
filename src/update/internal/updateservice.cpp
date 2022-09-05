@@ -58,7 +58,8 @@ mu::async::Promise<mu::RetVal<ReleaseInfo> > UpdateService::checkForUpdate()
 {
     return async::Promise<RetVal<ReleaseInfo> >([this](auto resolve, auto reject) {
         RetVal<ReleaseInfo> result;
-        m_lastCheckResult = ReleaseInfo();
+
+        clear();
 
         QBuffer buff;
         Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(configuration()->checkForUpdateUrl()), &buff,
@@ -171,7 +172,8 @@ mu::RetVal<mu::io::path_t> UpdateService::downloadRelease()
         return result;
     }
 
-    io::path_t installerPath = configuration()->userAppDataPath() + "/" + m_lastCheckResult.fileName;
+    io::path_t installerPath = configuration()->updateDataPath() + "/" + m_lastCheckResult.fileName;
+    fileSystem()->makePath(io::absoluteDirpath(installerPath));
 
     ret = fileSystem()->writeFile(installerPath, ByteArray::fromQByteArrayNoCopy(buff.data()));
     if (ret) {
@@ -185,4 +187,11 @@ mu::RetVal<mu::io::path_t> UpdateService::downloadRelease()
 mu::Ret UpdateService::installRelease(const io::path_t& installerPath)
 {
     return interactive()->openUrl(QUrl::fromLocalFile(installerPath.toQString()));
+}
+
+void UpdateService::clear()
+{
+    m_lastCheckResult = ReleaseInfo();
+
+    fileSystem()->remove(configuration()->updateDataPath());
 }
