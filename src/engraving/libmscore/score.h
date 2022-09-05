@@ -613,6 +613,8 @@ public:
     void cmdMoveRest(Rest*, DirectionV);
     void cmdMoveLyrics(Lyrics*, DirectionV);
 
+    void realtimeAdvance();
+
     void addRemoveBreaks(int interval, bool lock);
 
     bool transpose(Note* n, Interval, bool useSharpsFlats);

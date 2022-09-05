@@ -84,6 +84,8 @@ void NotationActionController::init()
     registerNoteInputAction("note-input-realtime-manual", NoteInputMethod::REALTIME_MANUAL);
     registerNoteInputAction("note-input-timewise", NoteInputMethod::TIMEWISE);
 
+    registerAction("realtime-advance", &Controller::realtimeAdvance, &Controller::isNoteInputMode);
+
     registerPadNoteAction("note-longa", Pad::NOTE00);
     registerPadNoteAction("note-breve", Pad::NOTE0);
     registerPadNoteAction("pad-note-1", Pad::NOTE1);
@@ -560,6 +562,16 @@ INotationUndoStackPtr NotationActionController::currentNotationUndoStack() const
     return notation->undoStack();
 }
 
+INotationMidiInputPtr NotationActionController::currentNotationMidiInput() const
+{
+    auto notation = currentNotation();
+    if (!notation) {
+        return nullptr;
+    }
+
+    return notation->midiInput();
+}
+
 INotationStylePtr NotationActionController::currentNotationStyle() const
 {
     auto notation = currentNotation();
@@ -836,6 +848,18 @@ void NotationActionController::halveNoteInputDuration()
     } else {
         interaction->increaseDecreaseDuration(1, false);
     }
+}
+
+void NotationActionController::realtimeAdvance()
+{
+    TRACEFUNC;
+
+    INotationMidiInputPtr midiInput = currentNotationMidiInput();
+    if (!midiInput) {
+        return;
+    }
+
+    midiInput->onRealtimeAdvance();
 }
 
 bool NotationActionController::moveSelectionAvailable(MoveSelectionType type) const

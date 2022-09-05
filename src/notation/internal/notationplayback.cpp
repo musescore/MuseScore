@@ -115,6 +115,11 @@ void NotationPlayback::triggerEventsForItems(const std::vector<const EngravingIt
     m_playbackModel.triggerEventsForItems(items);
 }
 
+void NotationPlayback::triggerMetronome(int tick)
+{
+    m_playbackModel.triggerMetronome(tick);
+}
+
 InstrumentTrackIdSet NotationPlayback::existingTrackIdSet() const
 {
     return m_playbackModel.existingTrackIdSet();

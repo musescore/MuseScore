@@ -63,6 +63,7 @@ public:
     virtual async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackRemoved() const = 0;
 
     virtual void playElements(const std::vector<const notation::EngravingItem*>& elements) = 0;
+    virtual void playMetronome(int tick) = 0;
     virtual void seekElement(const notation::EngravingItem* element) = 0;
 
     virtual bool actionChecked(const actions::ActionCode& actionCode) const = 0;

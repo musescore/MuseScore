@@ -52,7 +52,7 @@ private:
                          const midi::MidiDeviceList& availableDevices, const std::function<Ret(
                                                                                                const midi::MidiDeviceID&)>& connectCallback);
 
-    void onMidiEventsReceived(const std::vector<std::pair<midi::tick_t, midi::Event> >& events);
+    void onMidiEventReceived(const midi::tick_t tick, const midi::Event& event);
 
     midi::MidiDeviceID firstAvailableDeviceId(const midi::MidiDeviceList& devices) const;
 };

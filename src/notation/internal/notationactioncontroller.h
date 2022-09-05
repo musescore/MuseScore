@@ -69,6 +69,7 @@ private:
     INotationElementsPtr currentNotationElements() const;
     INotationSelectionPtr currentNotationSelection() const;
     INotationUndoStackPtr currentNotationUndoStack() const;
+    INotationMidiInputPtr currentNotationMidiInput() const;
 
     void toggleNoteInput();
     void toggleNoteInputMethod(NoteInputMethod method);
@@ -78,6 +79,7 @@ private:
     void removeNote(const actions::ActionData& args);
     void doubleNoteInputDuration();
     void halveNoteInputDuration();
+    void realtimeAdvance();
 
     void toggleAccidental(AccidentalType type);
     void addArticulation(SymbolId articulationSymbolId);
