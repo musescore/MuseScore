@@ -39,7 +39,7 @@ VoltaSettingsModel::VoltaSettingsModel(QObject* parent, IElementRepositoryServic
 
     static const QList<HookTypeInfo> hookTypes {
         { mu::engraving::HookType::NONE, IconCode::LINE_WITH_INVERTED_START_HOOK, qtrc("inspector", "Normal") },
-        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_TWO_INVERTED_HOOKS, qtrc("inspector", "Hooked 90") }
+        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_TWO_INVERTED_HOOKS, qtrc("inspector", "Hooked 90°") }
     };
 
     setPossibleEndHookTypes(hookTypes);
