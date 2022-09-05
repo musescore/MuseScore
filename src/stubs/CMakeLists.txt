@@ -59,3 +59,7 @@ endif (NOT BUILD_INSPECTOR_MODULE)
 if (NOT BUILD_MULTIINSTANCES_MODULE)
     add_subdirectory(multiinstances)
 endif()
+
+if (NOT BUILD_UPDATE_MODULE)
+    add_subdirectory(update)
+endif (NOT BUILD_UPDATE_MODULE)

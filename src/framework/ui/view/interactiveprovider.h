@@ -62,8 +62,8 @@ public:
                          const framework::IInteractive::ButtonDatas& buttons, int defBtn = int(framework::IInteractive::Button::NoButton),
                          const framework::IInteractive::Options& options = {}) override;
 
-    RetVal<Val> info(const std::string& title, const std::string& text, const framework::IInteractive::ButtonDatas& buttons,
-                     int defBtn = int(framework::IInteractive::Button::NoButton),
+    RetVal<Val> info(const std::string& title, const framework::IInteractive::Text& text,
+                     const framework::IInteractive::ButtonDatas& buttons, int defBtn = int(framework::IInteractive::Button::NoButton),
                      const framework::IInteractive::Options& options = {}) override;
 
     RetVal<Val> warning(const std::string& title, const framework::IInteractive::Text& text,

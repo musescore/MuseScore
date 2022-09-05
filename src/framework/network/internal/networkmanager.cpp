@@ -91,6 +91,7 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
     }
 
     QNetworkRequest request(url);
+    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, true);
 
     for (QNetworkRequest::KnownHeaders knownHeader: headers.knownHeaders.keys()) {
         request.setHeader(knownHeader, headers.knownHeaders[knownHeader]);
@@ -229,6 +230,7 @@ Ret NetworkManager::waitForReplyFinished(QNetworkReply* reply, int timeoutMs)
 {
     QTimer timeoutTimer;
     timeoutTimer.setSingleShot(true);
+    m_isAborted = false;
 
     bool isTimeout = false;
     connect(&timeoutTimer, &QTimer::timeout, this, [this, &isTimeout]() {

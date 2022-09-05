@@ -154,6 +154,7 @@ set(LINK_LIB
     instrumentsscene
     converter
     vst
+    update
     )
 
 if (NOT CC_IS_EMSCRIPTEN)

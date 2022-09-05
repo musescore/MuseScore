@@ -35,6 +35,8 @@ using namespace mu::framework;
 
 static const Settings::Key BACKUP_KEY("global", "application/backup/subfolder");
 
+static const std::string MUSESCORE_URL("https://www.musescore.org/");
+
 io::path_t GlobalConfiguration::appBinPath() const
 {
     return io::path_t(QCoreApplication::applicationDirPath());
@@ -120,4 +122,9 @@ bool GlobalConfiguration::useFactorySettings() const
 bool GlobalConfiguration::enableExperimental() const
 {
     return false;
+}
+
+std::string GlobalConfiguration::museScoreUrl() const
+{
+    return MUSESCORE_URL;
 }
