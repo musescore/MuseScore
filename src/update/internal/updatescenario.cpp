@@ -104,7 +104,7 @@ void UpdateScenario::processUpdateResult(int errorCode)
 void UpdateScenario::showNoUpdateMsg()
 {
     QString str = qtrc("update", "You already have the latest version of MuseScore. "
-                                 "Please visit <a href=\"%1\">musescore.org</a> for news on what's comming next.")
+                                 "Please visit <a href=\"%1\">musescore.org</a> for news on what's coming next.")
                   .arg(QString::fromStdString(configuration()->museScoreUrl()));
 
     IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);
