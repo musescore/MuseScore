@@ -480,6 +480,8 @@ bool Arpeggio::edit(EditData& ed)
     Chord* c = chord();
     setPosX(-(width() + spatium() * .5));
     c->layoutArpeggio2();
+    Fraction _tick = tick();
+    score()->setLayout(_tick, _tick, staffIdx(), staffIdx() + _span, this);
     return true;
 }
 
