@@ -293,10 +293,13 @@ void Beam::layout1()
 {
     resetExplicitParent();  // parent is System
 
+    const StaffType* staffType = this->staffType();
+    _tab = (staffType && staffType->isTabStaff()) ? staffType : nullptr;
+    _isBesideTabStaff = _tab && !_tab->stemless() && !_tab->stemThrough();
+
     // TAB's with stem beside staves have special layout
-    bool isTabStaff = staff()->isTabStaff(Fraction(0, 1)) && !staff()->staffType(Fraction(0, 1))->stemThrough();
-    if (isTabStaff) {
-        _up = !staff()->staffType(Fraction(0, 1))->stemsDown();
+    if (_isBesideTabStaff) {
+        _up = !_tab->stemsDown();
         _slope = 0.0;
         _cross = false;
         _minMove = 0;
@@ -1431,11 +1434,6 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
         _beamDist *= score()->styleD(Sid::graceNoteMag);
         _beamWidth *= score()->styleD(Sid::graceNoteMag);
     }
-
-    const Staff* staffItem = staff();
-    const StaffType* staffType = staffItem ? staffItem->staffTypeForElement(this) : nullptr;
-    _tab = (staffType && staffType->isTabStaff()) ? staffType : nullptr;
-    _isBesideTabStaff = _tab && !_tab->stemless() && !_tab->stemThrough();
 
     int fragmentIndex = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     if (_userModified[fragmentIndex]) {
