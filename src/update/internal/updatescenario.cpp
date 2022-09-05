@@ -30,7 +30,7 @@
 #include "config.h"
 #include "log.h"
 
-static constexpr int AUTO_CHECK_UPDATE_INTERVAL = 5000;
+static constexpr int AUTO_CHECK_UPDATE_INTERVAL = 1000;
 
 using namespace mu::update;
 using namespace mu::framework;
