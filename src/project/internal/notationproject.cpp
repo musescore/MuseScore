@@ -587,7 +587,7 @@ mu::Ret NotationProject::makeCurrentFileAsBackup()
     }
 
     Ret ret = fileSystem()->exists(filePath);
-    if (ret) {
+    if (!ret) {
         LOGE() << "project file does not exist";
         return ret;
     }
