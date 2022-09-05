@@ -1294,9 +1294,18 @@ void Segment::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
 {
     for (size_t track = 0; track < score()->nstaves() * VOICES; ++track) {
         size_t staffIdx = track / VOICES;
-        if (!all && !(measure()->visible(staffIdx) && score()->staff(staffIdx)->show())) {
-            track += VOICES - 1;
-            continue;
+        bool thisMeasureVisible = measure()->visible(staffIdx) && score()->staff(staffIdx)->show();
+        if (!all && !thisMeasureVisible) {
+            Measure* nextMeasure = measure()->nextMeasure();
+            bool nextMeasureVisible = nextMeasure
+                                      && nextMeasure->system() == measure()->system()
+                                      && nextMeasure->visible(staffIdx)
+                                      && score()->staff(staffIdx)->show();
+            if (!((isEndBarLineType() && (nextMeasureVisible || measure()->isCutawayClef(staffIdx)))
+                  || (isClefType() && measure()->isCutawayClef(staffIdx)))) {
+                track += VOICES - 1;
+                continue;
+            }
         }
         EngravingItem* e = element(track);
         if (e == 0) {
