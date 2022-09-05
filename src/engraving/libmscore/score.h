@@ -720,6 +720,7 @@ public:
 
     void addElement(EngravingItem*);
     void removeElement(EngravingItem*);
+    bool containsElement(const EngravingItem*) const;
 
     Note* addPitch(NoteVal&, bool addFlag, InputState* externalInputState = nullptr);
     Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord);
