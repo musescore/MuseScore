@@ -54,7 +54,8 @@ static const std::string SEGMENTS_POSITIONS_WRITER_NAME = "sposXML";
 static const std::string MEASURES_POSITIONS_WRITER_NAME = "mposXML";
 static const std::string PDF_WRITER_NAME = "pdf";
 static const std::string MIDI_WRITER_NAME = "midi";
-static const std::string MUSICXML_WRITER_NAME = "mxml";
+static const std::string MUSICXML_WRITER_NAME = "mxl";
+static const std::string MUSICXML_JSON_NAME = "mxml";
 static const std::string META_DATA_NAME = "metadata";
 
 static constexpr bool ADD_SEPARATOR = true;
@@ -421,7 +422,7 @@ Ret BackendApi::exportScoreMusicXML(const INotationPtr notation, BackendJsonWrit
         return writerRetVal.ret;
     }
 
-    jsonWriter.addKey(MUSICXML_WRITER_NAME.c_str());
+    jsonWriter.addKey(MUSICXML_JSON_NAME.c_str());
     jsonWriter.addValue(writerRetVal.val, addSeparator);
 
     return make_ret(Ret::Code::Ok);
