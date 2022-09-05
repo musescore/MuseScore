@@ -110,7 +110,7 @@ std::string UpdateConfiguration::museScorePrivacyPolicyUrl() const
     return globalConfiguration()->museScoreUrl() + PRIVACY_POLICY_URL_PATH;
 }
 
-mu::io::path_t UpdateConfiguration::userAppDataPath() const
+mu::io::path_t UpdateConfiguration::updateDataPath() const
 {
-    return globalConfiguration()->userAppDataPath();
+    return globalConfiguration()->userAppDataPath() + "/update";
 }
