@@ -110,7 +110,6 @@ Beam::Beam(const Beam& b)
     _maxMove          = b._maxMove;
     _isGrace          = b._isGrace;
     _cross            = b._cross;
-    _maxDuration      = b._maxDuration;
     _slope            = b._slope;
 }
 
@@ -294,8 +293,6 @@ void Beam::layout1()
 {
     resetExplicitParent();  // parent is System
 
-    _maxDuration.setType(DurationType::V_INVALID);
-
     // TAB's with stem beside staves have special layout
     bool isTabStaff = staff()->isTabStaff(Fraction(0, 1)) && !staff()->staffType(Fraction(0, 1))->stemThrough();
     if (isTabStaff) {
@@ -306,9 +303,6 @@ void Beam::layout1()
         _maxMove = 0;
         for (ChordRest* cr : _elements) {
             if (cr->isChord()) {
-                if (!_maxDuration.isValid() || (_maxDuration < cr->durationType())) {
-                    _maxDuration = cr->durationType();
-                }
             }
         }
         return;
@@ -355,9 +349,6 @@ void Beam::layout1()
             for (int distance : chord->noteDistances()) {
                 _notes.push_back(distance);
             }
-        }
-        if (!_maxDuration.isValid() || (_maxDuration < cr->durationType())) {
-            _maxDuration = cr->durationType();
         }
     }
 
