@@ -219,6 +219,18 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
     trackPlaybackData->second.offStream.send(std::move(result));
 }
 
+void PlaybackModel::triggerMetronome(int tick)
+{
+    auto trackPlaybackData = m_playbackDataMap.find(metronomeTrackId());
+    if (trackPlaybackData == m_playbackDataMap.cend()) {
+        return;
+    }
+
+    PlaybackEventsMap result;
+    m_renderer.renderMetronome(m_score, tick, 0, result);
+    trackPlaybackData->second.offStream.send(std::move(result));
+}
+
 InstrumentTrackIdSet PlaybackModel::existingTrackIdSet() const
 {
     InstrumentTrackIdSet result;

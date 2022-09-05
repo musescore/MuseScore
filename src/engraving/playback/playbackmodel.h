@@ -68,6 +68,8 @@ public:
     const mpe::PlaybackData& resolveTrackPlaybackData(const ID& partId, const std::string& instrumentId);
     void triggerEventsForItems(const std::vector<const EngravingItem*>& items);
 
+    void triggerMetronome(int tick);
+
     InstrumentTrackIdSet existingTrackIdSet() const;
     async::Channel<InstrumentTrackId> trackAdded() const;
     async::Channel<InstrumentTrackId> trackRemoved() const;

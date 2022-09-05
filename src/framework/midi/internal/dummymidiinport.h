@@ -38,11 +38,11 @@ public:
     bool isConnected() const override;
     MidiDeviceID deviceID() const override;
 
-    async::Channel<std::vector<std::pair<tick_t, Event> > > eventsReceived() const override;
+    async::Channel<tick_t, Event> eventReceived() const override;
 
 private:
     MidiDeviceID m_deviceID;
-    async::Channel<std::vector<std::pair<tick_t, Event> > > m_eventReceived;
+    async::Channel<tick_t, Event> m_eventReceived;
 };
 }
 

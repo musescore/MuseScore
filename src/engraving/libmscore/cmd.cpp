@@ -2919,6 +2919,49 @@ void Score::cmdMoveLyrics(Lyrics* lyrics, DirectionV dir)
 }
 
 //---------------------------------------------------------
+//   realtimeAdvance
+//---------------------------------------------------------
+
+void Score::realtimeAdvance()
+{
+    InputState& is = inputState();
+    if (!is.noteEntryMode()) {
+        return;
+    }
+
+    Fraction ticks2measureEnd = is.segment()->measure()->ticks() - is.segment()->rtick();
+    if (!is.cr() || (is.cr()->ticks() != is.duration().fraction() && is.duration() < ticks2measureEnd)) {
+        setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), DirectionV::AUTO);
+    }
+
+    ChordRest* prevCR = toChordRest(is.cr());
+    if (inputState().endOfScore()) {
+        appendMeasures(1);
+    }
+
+    is.moveToNextInputPos();
+
+    std::list<MidiInputEvent>& midiPitches = activeMidiPitches();
+    if (midiPitches.empty()) {
+        setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), DirectionV::AUTO);
+    } else {
+        Chord* prevChord = prevCR->isChord() ? toChord(prevCR) : 0;
+        bool partOfChord = false;
+        for (const MidiInputEvent& ev : midiPitches) {
+            addTiedMidiPitch(ev.pitch, partOfChord, prevChord);
+            partOfChord = true;
+        }
+    }
+
+    if (prevCR->measure() != is.segment()->measure()) {
+        // just advanced across barline. Now simplify tied notes.
+        score()->regroupNotesAndRests(prevCR->measure()->tick(), is.segment()->measure()->tick(), is.track());
+    }
+
+    return;
+}
+
+//---------------------------------------------------------
 //   cmdInsertClef
 //---------------------------------------------------------
 

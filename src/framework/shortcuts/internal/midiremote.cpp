@@ -107,7 +107,7 @@ void MidiRemote::setCurrentActionEvent(const Event& ev)
 mu::Ret MidiRemote::process(const Event& ev)
 {
     if (needIgnoreEvent(ev)) {
-        return make_ret(Ret::Code::Ok);
+        return Ret(Ret::Code::Undefined);
     }
 
     RemoteEvent event = remoteEventFromMidiEvent(ev);

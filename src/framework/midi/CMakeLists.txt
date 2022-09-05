@@ -57,8 +57,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/midierrors.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/abstractmidiinport.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/abstractmidiinport.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidioutport.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidioutport.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidiinport.cpp
