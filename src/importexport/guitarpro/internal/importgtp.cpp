@@ -2899,6 +2899,21 @@ static void addMetaInfo(MasterScore* score, GuitarPro* gp)
 
 static void createLinkedTabs(MasterScore* score)
 {
+    // store map of all initial spanners
+    std::unordered_map<staff_idx_t, std::vector<Spanner*> > spanners;
+    // for moving initial spanner to new index
+    std::unordered_map<staff_idx_t, staff_idx_t> indexMapping;
+    std::unordered_map<staff_idx_t, size_t> partSizes;
+
+    for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
+        Spanner* s = it->second;
+        spanners[s->staffIdx()].push_back(s);
+    }
+
+    size_t curStaffIdx = 0;
+    size_t stavesOperated = 0;
+
+    // creating linked staves and recalculating spanners indexes
     for (size_t partNum = 0; partNum < score->parts().size(); partNum++) {
         Part* part = score->parts()[partNum];
         Fraction fr = Fraction(0, 1);
@@ -2908,33 +2923,9 @@ static void createLinkedTabs(MasterScore* score)
         part->setStaves(static_cast<int>(stavesNum * 2));
 
         for (size_t i = 0; i < stavesNum; i++) {
-            staff_idx_t staffIdx = stavesNum + i;
-
-            for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
-                Spanner* s = it->second;
-
-                if (s->staffIdx() >= staffIdx) {
-                    track_idx_t t = s->track() + VOICES;
-                    if (t >= score->ntracks()) {
-                        t = score->ntracks() - 1;
-                    }
-
-                    s->setTrack(t);
-                    for (SpannerSegment* ss : s->spannerSegments()) {
-                        ss->setTrack(t);
-                    }
-
-                    if (s->track2() != mu::nidx) {
-                        t = s->track2() + VOICES;
-                        s->setTrack2(t < score->ntracks() ? t : s->track());
-                    }
-                }
-            }
-
             Staff* srcStaff = part->staff(i);
             Staff* dstStaff = part->staff(stavesNum + i);
-
-            Excerpt::cloneStaff(srcStaff, dstStaff);
+            Excerpt::cloneStaff(srcStaff, dstStaff, false);
 
             StaffTypes tabType = StaffTypes::TAB_6SIMPLE;
             if (lines == 4) {
@@ -2945,6 +2936,38 @@ static void createLinkedTabs(MasterScore* score)
 
             dstStaff->setStaffType(fr, *StaffType::preset(tabType));
             dstStaff->setLines(fr, static_cast<int>(lines));
+
+            // each spanner moves down to the staff with index,
+            // equal to number of spanners operated before it
+            indexMapping[curStaffIdx] = stavesOperated;
+            partSizes[curStaffIdx] = part->nstaves() / 2;
+            curStaffIdx++;
+        }
+
+        stavesOperated += part->nstaves();
+    }
+
+    // moving and copying spanner segments
+    for (auto& spannerMapElem : spanners) {
+        auto& spannerList = spannerMapElem.second;
+        staff_idx_t idx = spannerMapElem.first;
+        for (Spanner* s : spannerList) {
+            /// moving
+            staff_idx_t newIdx = indexMapping[idx];
+            track_idx_t newTrackIdx = staff2track(newIdx);
+            s->setTrack(newTrackIdx);
+            s->setTrack2(newTrackIdx);
+            for (SpannerSegment* ss : s->spannerSegments()) {
+                ss->setTrack(newTrackIdx);
+            }
+
+            /// copying
+            staff_idx_t dstStaffIdx = newIdx + partSizes[idx];
+
+            track_idx_t dstTrack = dstStaffIdx * VOICES + s->voice();
+            track_idx_t dstTrack2 = dstStaffIdx * VOICES + (s->track2() % VOICES);
+
+            Excerpt::cloneSpanner(s, score, dstTrack, dstTrack2);
         }
     }
 }
