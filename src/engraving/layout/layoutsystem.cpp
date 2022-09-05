@@ -1113,7 +1113,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
     if (!hasFretDiagram) {
         LayoutHarmonies::layoutHarmonies(sl);
-        LayoutHarmonies::alignHarmonies(system, sl, true, options.maxFretShiftAbove, options.maxFretShiftBelow);
+        LayoutHarmonies::alignHarmonies(system, sl, true, options.maxChordShiftAbove, options.maxChordShiftBelow);
     }
 
     //-------------------------------------------------------------
