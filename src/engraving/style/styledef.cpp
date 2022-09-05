@@ -196,6 +196,9 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::staffLineWidth,          "staffLineWidth",          Spatium(0.11) },
     { Sid::ledgerLineWidth,         "ledgerLineWidth",         Spatium(0.16) },     // 0.1875
     { Sid::ledgerLineLength,        "ledgerLineLength",        Spatium(0.35) },     // notehead width + this value
+    { Sid::stemSlashPosition,         "stemSlashPosition",         Spatium(2.0) },
+    { Sid::stemSlashAngle,          "stemSlashAngle",          40.0 },
+    { Sid::stemSlashThickness,          "stemSlashThickness",          Spatium(0.125), },
     { Sid::accidentalDistance,      "accidentalDistance",      Spatium(0.22) },
     { Sid::accidentalNoteDistance,  "accidentalNoteDistance",  Spatium(0.25) },
     { Sid::bracketedAccidentalPadding,  "bracketedAccidentalPadding",  Spatium(0.175) }, // Padding inside parentheses for bracketed accidentals
