@@ -920,8 +920,19 @@ void NavigationController::onEscape()
     }
 
     INavigationControl* activeCtrl = findActive(activePanel->controls());
-    if (activeCtrl) {
-        activeCtrl->onEvent(e);
+    if (!activeCtrl) {
+        return;
+    }
+
+    activeCtrl->onEvent(e);
+    if (e->accepted) {
+        return;
+    }
+
+    activeCtrl->setActive(false);
+
+    if (m_defaultNavigationControl) {
+        doActivateControl(m_defaultNavigationControl);
     }
 }
 
