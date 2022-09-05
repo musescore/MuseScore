@@ -4376,7 +4376,6 @@ void Measure::computeWidth(Fraction minTicks, Fraction maxTicks, double stretchC
     }
 
     LayoutChords::updateGraceNotes(this);
-    LayoutChords::updateLineAttachPoints(this);
 
     x = computeFirstSegmentXPosition(s);
     bool isSystemHeader = s->header();
