@@ -74,9 +74,11 @@ NoteInputState NotationNoteInput::state() const
     noteInputState.withSlur = inputState.slur() != nullptr;
     noteInputState.currentVoiceIndex = inputState.voice();
     noteInputState.currentTrack = inputState.track();
+    noteInputState.currentString = inputState.string();
     noteInputState.drumset = inputState.drumset();
     noteInputState.isRest = inputState.rest();
     noteInputState.staffGroup = inputState.staffGroup();
+    noteInputState.staff = score()->staff(mu::engraving::track2staff(inputState.track()));
     noteInputState.segment = inputState.segment();
 
     return noteInputState;
