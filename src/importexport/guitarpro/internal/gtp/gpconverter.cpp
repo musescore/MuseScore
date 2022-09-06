@@ -1888,6 +1888,8 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
                                                                  nullptr) + note->part()->instrument()->transpose().chromatic;
     }
 
+    pitch = std::clamp(pitch, 0, 127);
+
     if (musescoreString == -1) {
         musescoreString = getStringNumberFor(note, pitch);
 
