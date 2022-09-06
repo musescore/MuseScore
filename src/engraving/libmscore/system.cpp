@@ -376,22 +376,24 @@ void System::layoutSystem(const LayoutContext& ctx, double xo1, const bool isFir
     //---------------------------------------------------
     double maxNamesWidth = instrumentNamesWidth();
 
+    double indent = maxNamesWidth > 0 ? maxNamesWidth + instrumentNameOffset : 0.0;
     if (isFirstSystem && firstSystemIndent) {
-        maxNamesWidth = std::max(maxNamesWidth, styleP(Sid::firstSystemIndentationValue) * mag());
+        indent = std::max(indent, styleP(Sid::firstSystemIndentationValue) * mag());
+        maxNamesWidth = indent - instrumentNameOffset;
     }
 
     double maxBracketsWidth = totalBracketOffset(ctx);
     double bracketsWidth = layoutBrackets(ctx);
     double bracketWidthDifference = maxBracketsWidth - bracketsWidth;
 
-    if (RealIsNull(maxNamesWidth)) {
+    if (RealIsNull(indent)) {
         if (score()->styleB(Sid::alignSystemToMargin)) {
             _leftMargin = bracketWidthDifference;
         } else {
             _leftMargin = maxBracketsWidth;
         }
     } else {
-        _leftMargin = maxNamesWidth + instrumentNameOffset + bracketsWidth;
+        _leftMargin = indent + bracketsWidth;
     }
 
     int nVisible = 0;
