@@ -359,6 +359,7 @@ private:
     bool notesHaveActiculation(const std::vector<Note*>& notes, SymbolId articulationSymbolId) const;
 
     bool needEndTextEditing(const std::vector<EngravingItem*>& newSelectedElements) const;
+    bool needEndElementEditing(const std::vector<EngravingItem*>& newSelectedElements) const;
 
     void resetGripEdit();
     void resetHitElementContext();
