@@ -39,12 +39,20 @@ ListView {
 
     model: appMenuModel
 
+    function openedArea(menuLoader) {
+        if (menuLoader.isMenuOpened) {
+            if (menuLoader.menu.subMenuLoader && menuLoader.menu.subMenuLoader.isMenuOpened)
+                return openedArea(menuLoader.menu.subMenuLoader)
+            return Qt.rect(menuLoader.menu.x, menuLoader.menu.y, menuLoader.menu.width, menuLoader.menu.height)
+        }
+        return Qt.rect(0, 0, 0, 0)
+    } 
+
     AppMenuModel {
         id: appMenuModel
 
         appMenuAreaRect: Qt.rect(root.x, root.y, root.width, root.height)
-        openedMenuAreaRect: Boolean(menuLoader.isMenuOpened) ? Qt.rect(menuLoader.menu.x, menuLoader.menu.y, menuLoader.menu.width, menuLoader.menu.height)
-                                                             : Qt.rect(0, 0, 0, 0)
+        openedMenuAreaRect: openedArea(menuLoader)
 
         onOpenMenuRequested: {
             prv.openMenu(menuId)
