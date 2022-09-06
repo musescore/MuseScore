@@ -268,8 +268,10 @@ struct NoteInputState
     bool withSlur = false;
     engraving::voice_idx_t currentVoiceIndex = 0;
     engraving::track_idx_t currentTrack = 0;
+    int currentString = 0;
     const Drumset* drumset = nullptr;
     StaffGroup staffGroup = StaffGroup::STANDARD;
+    const Staff* staff = nullptr;
     Segment* segment = nullptr;
 };
 
