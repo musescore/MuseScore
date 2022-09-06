@@ -33,9 +33,11 @@
 #include "realfn.h"
 
 #include "barline.h"
+#include "beam.h"
 #include "box.h"
 #include "bracket.h"
 #include "bracketItem.h"
+#include "chord.h"
 #include "chordrest.h"
 #include "factory.h"
 #include "instrumentname.h"
@@ -2006,5 +2008,35 @@ Fraction System::maxSysTicks() const
         }
     }
     return maxTicks;
+}
+
+bool System::hasCrossStaffOrModifiedBeams()
+{
+    for (MeasureBase* mb : measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment& seg : toMeasure(mb)->segments()) {
+            if (!seg.isChordRestType()) {
+                continue;
+            }
+            for (EngravingItem* e : seg.elist()) {
+                if (!e || !e->isChordRest()) {
+                    continue;
+                }
+                if (toChordRest(e)->beam() && (toChordRest(e)->beam()->cross() || toChordRest(e)->beam()->userModified())) {
+                    return true;
+                }
+                if (e->isChord() && !toChord(e)->graceNotes().empty()) {
+                    for (Chord* grace : toChord(e)->graceNotes()) {
+                        if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return false;
 }
 }

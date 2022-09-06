@@ -4149,15 +4149,15 @@ void GraceNotesGroup::layout()
         Shape graceShape = grace->shape();
         double offset;
         offset = -std::max(graceShape.minHorizontalDistance(_shape, score()), 0.0);
-        // Adjust for cross-staff grace notes
+        // Adjust spacing for cross-beam situations
         if (i < this->size() - 1) {
             Chord* prevGrace = this->at(i + 1);
-            if (prevGrace->vStaffIdx() != grace->vStaffIdx()) {
+            if (prevGrace->up() != grace->up()) {
                 double crossCorrection = grace->notes().front()->headWidth() - grace->stem()->width();
-                if (prevGrace->vStaffIdx() < grace->vStaffIdx()) {
-                    offset -= crossCorrection;
-                } else {
+                if (prevGrace->up() && !grace->up()) {
                     offset += crossCorrection;
+                } else {
+                    offset -= crossCorrection;
                 }
             }
         }
