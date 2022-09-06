@@ -38,7 +38,7 @@ public:
     void setFocusedElement(AccessibleItemPtr e, bool voiceStaffInfoChange = true);
     AccessibleItemWeakPtr focusedElement() const;
 
-    void notifyAboutFocuedElemntNameChanged();
+    void notifyAboutFocusedElementNameChanged();
 
     void setMapToScreenFunc(const AccessibleMapToScreenFunc& func);
     RectF toScreenRect(const RectF& rect, bool* ok = nullptr) const;

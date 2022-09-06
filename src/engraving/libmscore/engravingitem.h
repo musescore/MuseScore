@@ -147,12 +147,6 @@ class EngravingItem : public EngravingObject
     ///< valid after call to layout()
     unsigned int _tag;                    ///< tag bitmask
 
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-    AccessibleItemPtr m_accessible;
-#endif
-
-    bool m_accessibleEnabled = false;
-
     bool m_colorsInversionEnabled = true;
 
     virtual bool sameVoiceKerningLimited() const { return false; }
@@ -171,6 +165,7 @@ protected:
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     virtual AccessibleItemPtr createAccessible();
+    void notifyAboutNameChanged();
 #endif
 
     virtual KerningType doComputeKerningType(const EngravingItem*) const { return KerningType::KERNING; }
@@ -195,7 +190,7 @@ public:
 
     void deleteLater();
 
-    EngravingItem* parentItem() const;
+    EngravingItem* parentItem(bool explicitParent = true) const;
     EngravingItemList childrenItems() const;
 
     EngravingItem* findAncestor(ElementType t);
@@ -562,6 +557,13 @@ public:
 
 private:
     void initAccessibleIfNeed();
+    void doInitAccessible();
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr m_accessible;
+#endif
+
+    bool m_accessibleEnabled = false;
 };
 
 using ElementPtr = std::shared_ptr<EngravingItem>;

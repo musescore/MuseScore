@@ -150,9 +150,9 @@ void EngravingItem::setAccessibleEnabled(bool enabled)
     m_accessibleEnabled = enabled;
 }
 
-EngravingItem* EngravingItem::parentItem() const
+EngravingItem* EngravingItem::parentItem(bool explicitParent) const
 {
-    EngravingObject* p = explicitParent();
+    EngravingObject* p = explicitParent ? this->explicitParent() : parent();
     if (p && p->isEngravingItem()) {
         return static_cast<EngravingItem*>(p);
     }
@@ -175,6 +175,18 @@ EngravingItemList EngravingItem::childrenItems() const
 AccessibleItemPtr EngravingItem::createAccessible()
 {
     return std::make_shared<AccessibleItem>(this);
+}
+
+void EngravingItem::notifyAboutNameChanged()
+{
+    if (!selected()) {
+        return;
+    }
+
+    if (m_accessible) {
+        doInitAccessible();
+        m_accessible->accessibleRoot()->notifyAboutFocusedElementNameChanged();
+    }
 }
 
 #endif
@@ -2653,15 +2665,22 @@ void EngravingItem::initAccessibleIfNeed()
         return;
     }
 
-    if (m_accessible || !m_accessibleEnabled) {
+    if (!m_accessibleEnabled) {
         return;
     }
 
+    doInitAccessible();
+#endif
+}
+
+void EngravingItem::doInitAccessible()
+{
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     EngravingItemList parents;
-    auto parent = parentItem();
+    auto parent = parentItem(false /*not explicit*/);
     while (parent) {
         parents.push_front(parent);
-        parent = parent->parentItem();
+        parent = parent->parentItem(false /*not explicit*/);
     }
 
     for (EngravingItem* parent : parents) {
