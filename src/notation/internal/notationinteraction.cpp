@@ -4305,6 +4305,7 @@ bool NotationInteraction::elementsSelected(const std::set<ElementType>& elements
     return element && mu::contains(elementsTypes, element->type());
 }
 
+//! NOTE: Copied from ScoreView::lyricsTab
 void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
 {
     if (!m_editData.element || !m_editData.element->isLyrics()) {
@@ -4435,6 +4436,7 @@ void NotationInteraction::navigateToLyrics(MoveDirection direction)
     navigateToLyrics(direction == MoveDirection::Left, true, false);
 }
 
+//! NOTE: Copied from ScoreView::lyricsTab
 void NotationInteraction::navigateToNextSyllable()
 {
     if (!m_editData.element || !m_editData.element->isLyrics()) {
@@ -4460,6 +4462,8 @@ void NotationInteraction::navigateToNextSyllable()
         return;
     }
 
+    endEditText();
+
     // look for the lyrics we are moving from; may be the current lyrics or a previous one
     // we are extending with several dashes
     mu::engraving::Lyrics* fromLyrics = 0;
@@ -4475,8 +4479,6 @@ void NotationInteraction::navigateToNextSyllable()
         }
         segment = segment->prev1(mu::engraving::SegmentType::ChordRest);
     }
-
-    endEditText();
 
     score()->startCmd();
     ChordRest* cr = toChordRest(nextSegment->element(track));
@@ -4531,6 +4533,7 @@ void NotationInteraction::navigateToNextSyllable()
     showItem(toLyrics);
 }
 
+//! NOTE: Copied from ScoreView::lyricsUpDown
 void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
 {
     if (!m_editData.element || !m_editData.element->isLyrics()) {
@@ -5032,6 +5035,7 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
     }
 }
 
+//! NOTE: Copied from ScoreView::lyricsUnderscore
 void NotationInteraction::addMelisma()
 {
     if (!m_editData.element || !m_editData.element->isLyrics()) {
@@ -5158,6 +5162,7 @@ void NotationInteraction::addMelisma()
     toLyrics->selectAll(toLyrics->cursor());
 }
 
+//! NOTE: Copied from ScoreView::lyricsReturn
 void NotationInteraction::addLyricsVerse()
 {
     if (!m_editData.element || !m_editData.element->isLyrics()) {
@@ -5169,8 +5174,7 @@ void NotationInteraction::addLyricsVerse()
     endEditText();
 
     score()->startCmd();
-    int newVerse;
-    newVerse = lyrics->no() + 1;
+    int newVerse = lyrics->no() + 1;
 
     mu::engraving::Lyrics* oldLyrics = lyrics;
     lyrics = Factory::createLyrics(oldLyrics->chordRest());
