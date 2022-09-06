@@ -24,7 +24,6 @@
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <barNoteDistance>1.2</barNoteDistance>
       <harmonyFretDist>0.5</harmonyFretDist>
-      <harmonyPlay>0</harmonyPlay>
       <showMeasureNumber>0</showMeasureNumber>
       <showFooter>0</showFooter>
       <defaultFramePadding>0.5</defaultFramePadding>

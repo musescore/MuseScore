@@ -58,13 +58,11 @@ signals:
     void playbackProxyModelChanged(QObject* playbackProxyModel);
     void appearanceSettingsModelChanged(QObject* appearanceSettingsModel);
 
-protected:
+private:
     void createProperties() override;
     void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
-
-private:
     void updatePropertiesOnNotationChanged() override;
 
     PropertyItem* m_isVisible = nullptr;

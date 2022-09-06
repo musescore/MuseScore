@@ -10933,10 +10933,10 @@ By default, they will be placed such as that their right end are at the same lev
                <item row="1" column="1" colspan="2">
                 <widget class="QGroupBox" name="harmonyPlay">
                  <property name="title">
-                  <string>Play</string>
+                  <string>Playback</string>
                  </property>
                  <property name="checkable">
-                  <bool>true</bool>
+                  <bool>false</bool>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_47">
                   <item row="0" column="0">

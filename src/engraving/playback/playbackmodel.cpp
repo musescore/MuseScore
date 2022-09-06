@@ -194,12 +194,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
 
     for (const EngravingItem* item : playableItems) {
         if (item->isHarmony()) {
-            const Harmony* chordSymbol = toHarmony(item);
-
-            if (chordSymbol->isRealizable()) {
-                m_renderer.renderChordSymbol(chordSymbol, actualTimestamp, actualDuration, result);
-            }
-
+            m_renderer.renderChordSymbol(toHarmony(item), actualTimestamp, actualDuration, result);
             continue;
         }
 
@@ -344,16 +339,20 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                     }
 
                     const Harmony* chordSymbol = findChordSymbol(item);
-                    if (!chordSymbol || !chordSymbol->isRealizable()) {
+                    if (!chordSymbol) {
                         continue;
                     }
 
                     ID partId = item->part()->id();
                     if (changedPartIdSet.find(partId) == changedPartIdSet.cend()) {
-                        return;
+                        continue;
                     }
 
-                    m_renderer.renderChordSymbol(chordSymbol, tickPositionOffset, m_playbackDataMap[CHORD_SYMBOLS_TRACK_ID].originEvents);
+                    if (chordSymbol->play()) {
+                        m_renderer.renderChordSymbol(chordSymbol, tickPositionOffset,
+                                                     m_playbackDataMap[CHORD_SYMBOLS_TRACK_ID].originEvents);
+                    }
+
                     collectChangesTracks(CHORD_SYMBOLS_TRACK_ID, trackChanges);
                 }
 

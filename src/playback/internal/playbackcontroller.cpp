@@ -484,6 +484,7 @@ InstrumentTrackIdSet PlaybackController::instrumentTrackIdSetForRangePlayback() 
     int startTicks = startTick.ticks();
 
     InstrumentTrackIdSet result;
+    bool hasChordSymbol = false;
 
     for (const Part* part: selectedParts) {
         if (const Instrument* startInstrument = part->instrument(startTick)) {
@@ -495,6 +496,14 @@ InstrumentTrackIdSet PlaybackController::instrumentTrackIdSetForRangePlayback() 
                 result.insert({ part->id(), instrument->id().toStdString() });
             }
         }
+
+        if (!hasChordSymbol && part->hasChordSymbol()) {
+            hasChordSymbol = true;
+        }
+    }
+
+    if (hasChordSymbol) {
+        result.insert(notationPlayback()->chordSymbolsTrackId());
     }
 
     return result;
@@ -996,52 +1005,48 @@ void PlaybackController::setupSequencePlayer()
 
 void PlaybackController::updateMuteStates()
 {
-    if (!masterNotationParts() || !audioSettings() || !playback()) {
+    if (!audioSettings() || !playback()) {
         return;
     }
 
-    NotifyList<const Part*> masterPartList = masterNotationParts()->partList();
+    InstrumentTrackIdSet existingTrackIdSet = notationPlayback()->existingTrackIdSet();
     bool hasSolo = false;
 
-    for (const Part* masterPart : masterPartList) {
-        for (const InstrumentTrackId& instrumentTrackId : masterPart->instrumentTrackIdSet()) {
-            if (audioSettings()->soloMuteState(instrumentTrackId).solo) {
-                hasSolo = true;
-                break;
-            }
+    for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
+        if (audioSettings()->soloMuteState(instrumentTrackId).solo) {
+            hasSolo = true;
+            break;
         }
     }
 
     INotationPartsPtr notationParts = m_notation->parts();
-
     InstrumentTrackIdSet allowedInstrumentTrackIdSet = instrumentTrackIdSetForRangePlayback();
     bool isRangePlaybackMode = selection()->isRange() && !allowedInstrumentTrackIdSet.empty();
+    const InstrumentTrackId& chordSymbolsTrackId = notationPlayback()->chordSymbolsTrackId();
 
-    for (const Part* masterPart : masterPartList) {
-        const Part* part = notationParts->part(masterPart->id());
-        bool isPartVisible = part && part->show();
-
-        for (const InstrumentTrackId& instrumentTrackId : masterPart->instrumentTrackIdSet()) {
-            if (!mu::contains(m_trackIdMap, instrumentTrackId)) {
-                continue;
-            }
-
-            auto soloMuteState = audioSettings()->soloMuteState(instrumentTrackId);
-
-            bool shouldBeMuted = soloMuteState.mute
-                                 || (hasSolo && !soloMuteState.solo)
-                                 || (!isPartVisible);
-
-            if (isRangePlaybackMode && !shouldBeMuted) {
-                shouldBeMuted = !mu::contains(allowedInstrumentTrackIdSet, instrumentTrackId);
-            }
-
-            AudioOutputParams params = trackOutputParams(instrumentTrackId);
-            params.muted = shouldBeMuted;
-
-            audio::TrackId trackId = m_trackIdMap.at(instrumentTrackId);
-            playback()->audioOutput()->setOutputParams(m_currentSequenceId, trackId, std::move(params));
+    for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
+        if (!mu::contains(m_trackIdMap, instrumentTrackId)) {
+            continue;
         }
+
+        const Part* part = notationParts->part(instrumentTrackId.partId);
+        bool isPartVisible = (part && part->show()) || instrumentTrackId == chordSymbolsTrackId;
+
+        auto soloMuteState = audioSettings()->soloMuteState(instrumentTrackId);
+
+        bool shouldBeMuted = soloMuteState.mute
+                             || (hasSolo && !soloMuteState.solo)
+                             || (!isPartVisible);
+
+        if (isRangePlaybackMode && !shouldBeMuted) {
+            shouldBeMuted = !mu::contains(allowedInstrumentTrackIdSet, instrumentTrackId);
+        }
+
+        AudioOutputParams params = trackOutputParams(instrumentTrackId);
+        params.muted = shouldBeMuted;
+
+        audio::TrackId trackId = m_trackIdMap.at(instrumentTrackId);
+        playback()->audioOutput()->setOutputParams(m_currentSequenceId, trackId, std::move(params));
     }
 }
 
