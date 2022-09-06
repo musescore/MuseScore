@@ -22,7 +22,9 @@
 
 #include "stemslash.h"
 
+#include "beam.h"
 #include "chord.h"
+#include "hook.h"
 #include "note.h"
 #include "score.h"
 #include "stem.h"
@@ -45,20 +47,8 @@ void StemSlash::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
-    double lw = score()->styleMM(Sid::stemWidth);
-    painter->setPen(Pen(curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
+    painter->setPen(Pen(curColor(), _width, PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->drawLine(line);
-}
-
-//---------------------------------------------------------
-//   setLine
-//---------------------------------------------------------
-
-void StemSlash::setLine(const LineF& l)
-{
-    line = l;
-    double w = score()->styleMM(Sid::stemWidth) * .5;
-    setbbox(RectF(line.p1(), line.p2()).normalized().adjusted(-w, -w, 2.0 * w, 2.0 * w));
 }
 
 //---------------------------------------------------------
@@ -67,22 +57,63 @@ void StemSlash::setLine(const LineF& l)
 
 void StemSlash::layout()
 {
-    Stem* stem = chord()->stem();
-    double h2;
-    double _spatium = spatium();
-    double l = chord()->up() ? _spatium : -_spatium;
-    PointF p(stem->flagPosition());
-    double x = p.x() + _spatium * .1;
-    double y = p.y();
-
-    if (chord()->beam()) {
-        y += l * .3;
-        h2 = l * .8;
-    } else {
-        y += l * 1.2;
-        h2 = l * .4;
+    if (!chord() || !chord()->stem()) {
+        return;
     }
-    double w  = chord()->upNote()->bboxRightPos() * .7;
-    setLine(LineF(PointF(x + w, y - h2), PointF(x - w, y + h2)));
+    Chord* c = chord();
+    Stem* stem = c->stem();
+    Hook* hook = c->hook();
+    Beam* beam = c->beam();
+
+    static constexpr double heightReduction = 0.66;
+    static constexpr double angleIncrease = 1.2;
+    static constexpr double lengthIncrease = 1.1;
+
+    double up = c->up() ? -1 : 1;
+    double stemTipY = c->up() ? stem->bbox().translated(stem->pos()).top() : stem->bbox().translated(stem->pos()).bottom();
+    double leftHang = score()->noteHeadWidth() * score()->styleD(Sid::graceNoteMag) / 2;
+    double angle = score()->styleD(Sid::stemSlashAngle) * M_PI / 180; // converting to radians
+    bool straight = score()->styleB(Sid::useStraightNoteFlags);
+    double graceNoteMag = score()->styleD(Sid::graceNoteMag);
+
+    double startX = stem->bbox().translated(stem->pos()).right() - leftHang;
+
+    double startY;
+    if (straight || beam) {
+        startY = stemTipY - up * graceNoteMag * score()->styleMM(Sid::stemSlashPosition) * heightReduction;
+    } else {
+        startY = stemTipY - up * graceNoteMag * score()->styleMM(Sid::stemSlashPosition);
+    }
+
+    double endX = 0;
+    double endY = 0;
+
+    if (hook) {
+        auto musicFont = score()->styleSt(Sid::MusicalSymbolFont);
+        // HACK: adjust slash angle for fonts with "fat" hooks. In future, we must use smufl cutOut
+        if (c->beams() >= 2 && !straight
+            && (musicFont == "Bravura" || musicFont == "Finale Maestro" || musicFont == "Gonville")) {
+            angle *= angleIncrease;
+        }
+        endX = hook->bbox().translated(hook->pos()).right(); // always ends at the right bbox margin of the hook
+        endY = startY + up * (endX - startX) * tan(angle);
+    }
+    if (beam) {
+        PointF p1 = beam->startAnchor();
+        PointF p2 = beam->endAnchor();
+        double beamAngle = p2.x() > p1.x() ? atan((p2.y() - p1.y()) / (p2.x() - p1.x())) : 0;
+        angle += up * beamAngle / 2;
+        double length = 2 * spatium();
+        bool obtuseAngle = (c->up() && beamAngle < 0) || (!c->up() && beamAngle > 0);
+        if (obtuseAngle) {
+            length *= lengthIncrease; // needs to be slightly longer
+        }
+        endX = startX + length * cos(angle);
+        endY = startY + up * length * sin(angle);
+    }
+
+    line = LineF(PointF(startX, startY), PointF(endX, endY));
+    _width = score()->styleMM(Sid::stemSlashThickness) * graceNoteMag;
+    setbbox(RectF(line.p1(), line.p2()).normalized().adjusted(-_width / 2, -_width / 2, _width, _width));
 }
 }

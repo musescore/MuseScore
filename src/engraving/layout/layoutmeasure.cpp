@@ -767,6 +767,14 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
                 Beam* b = cr->beam();
                 b->layout();
             }
+            if (cr->isChord() && !toChord(cr)->graceNotes().empty()) {
+                for (Chord* grace : toChord(cr)->graceNotes()) {
+                    if (LayoutBeams::isTopBeam(grace)) {
+                        Beam* b = grace->beam();
+                        b->layout();
+                    }
+                }
+            }
         }
     }
 
