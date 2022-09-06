@@ -1797,6 +1797,23 @@ void Score::removeElement(EngravingItem* element)
     }
 }
 
+bool Score::containsElement(const EngravingItem* element) const
+{
+    if (!element) {
+        return false;
+    }
+
+    EngravingItem* parent = element->parentItem();
+    if (!parent) {
+        return false;
+    }
+
+    std::vector<EngravingItem*> elements;
+    parent->scanElements(&elements, collectElements, false /*all*/);
+
+    return std::find(elements.cbegin(), elements.cend(), element) != elements.cend();
+}
+
 //---------------------------------------------------------
 //   firstMeasure
 //---------------------------------------------------------
