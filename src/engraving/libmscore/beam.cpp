@@ -110,7 +110,6 @@ Beam::Beam(const Beam& b)
     _maxMove          = b._maxMove;
     _isGrace          = b._isGrace;
     _cross            = b._cross;
-    _maxDuration      = b._maxDuration;
     _slope            = b._slope;
 }
 
@@ -294,21 +293,21 @@ void Beam::layout1()
 {
     resetExplicitParent();  // parent is System
 
-    _maxDuration.setType(DurationType::V_INVALID);
+    const StaffType* staffType = this->staffType();
+    _tab = (staffType && staffType->isTabStaff()) ? staffType : nullptr;
+    _isBesideTabStaff = _tab && !_tab->stemless() && !_tab->stemThrough();
 
     // TAB's with stem beside staves have special layout
-    bool isTabStaff = staff()->isTabStaff(Fraction(0, 1)) && !staff()->staffType(Fraction(0, 1))->stemThrough();
-    if (isTabStaff) {
-        _up = !staff()->staffType(Fraction(0, 1))->stemsDown();
+    if (_isBesideTabStaff) {
+        _up = !_tab->stemsDown();
         _slope = 0.0;
         _cross = false;
         _minMove = 0;
         _maxMove = 0;
         for (ChordRest* cr : _elements) {
             if (cr->isChord()) {
-                if (!_maxDuration.isValid() || (_maxDuration < cr->durationType())) {
-                    _maxDuration = cr->durationType();
-                }
+                _up = cr->up();
+                break;
             }
         }
         return;
@@ -322,7 +321,7 @@ void Beam::layout1()
         } else {
             for (ChordRest* cr :_elements) {
                 if (cr->isChord()) {
-                    _up = toChord(cr)->up();
+                    _up = cr->up();
                     break;
                 }
             }
@@ -355,9 +354,6 @@ void Beam::layout1()
             for (int distance : chord->noteDistances()) {
                 _notes.push_back(distance);
             }
-        }
-        if (!_maxDuration.isValid() || (_maxDuration < cr->durationType())) {
-            _maxDuration = cr->durationType();
         }
     }
 
@@ -703,7 +699,7 @@ double Beam::chordBeamAnchorY(const ChordRest* cr) const
     double beamOffset = _beamWidth / 2 * upValue;
 
     if (_isBesideTabStaff) {
-        double stemLength = _tab->chordStemLength(chord);
+        double stemLength = _tab->chordStemLength(chord) * (_up ? -1 : 1);
         double y = _tab->chordRestStemPosY(chord) + stemLength;
         y *= spatium();
         y -= beamOffset;
@@ -1440,11 +1436,6 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
         _beamDist *= score()->styleD(Sid::graceNoteMag);
         _beamWidth *= score()->styleD(Sid::graceNoteMag);
     }
-
-    const Staff* staffItem = staff();
-    const StaffType* staffType = staffItem ? staffItem->staffTypeForElement(this) : nullptr;
-    _tab = (staffType && staffType->isTabStaff()) ? staffType : nullptr;
-    _isBesideTabStaff = _tab && !_tab->stemless() && !_tab->stemThrough();
 
     int fragmentIndex = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     if (_userModified[fragmentIndex]) {

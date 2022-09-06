@@ -981,9 +981,21 @@ void Chord::computeUp()
 
     const StaffType* tab = staff() ? staff()->staffTypeForElement(this) : 0;
     bool isTabStaff = tab && tab->isTabStaff();
-    if (isTabStaff && (tab->stemless() || !tab->stemThrough())) {
-        _up = tab->stemless() ? false : !tab->stemsDown();
-        return;
+    if (isTabStaff) {
+        if (tab->stemless()) {
+            _up = false;
+            return;
+        }
+        if (!tab->stemThrough()) {
+            bool staffHasMultipleVoices = measure()->hasVoices(staffIdx(), tick(), actualTicks());
+            if (staffHasMultipleVoices) {
+                bool isTrackEven = track() % 2 == 0;
+                _up = isTrackEven;
+                return;
+            }
+            _up = !tab->stemsDown();
+            return;
+        }
     }
 
     bool hasCustomStemDirection = _stemDirection != DirectionV::AUTO;

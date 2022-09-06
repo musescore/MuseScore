@@ -82,7 +82,6 @@ class Beam final : public EngravingItem
 
     int _minMove             { 0 };                // set in layout1()
     int _maxMove             { 0 };
-    TDuration _maxDuration;
 
     bool _noSlope = false;
     double _slope             { 0.0 };
