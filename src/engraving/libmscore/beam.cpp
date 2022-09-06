@@ -44,6 +44,7 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "stem.h"
+#include "stemslash.h"
 #include "system.h"
 #include "tremolo.h"
 #include "tuplet.h"
@@ -1219,6 +1220,9 @@ void Beam::extendStem(Chord* chord, double addition)
     }
     if (chord->tremolo()) {
         chord->tremolo()->layout();
+    }
+    if (chord->stemSlash()) {
+        chord->stemSlash()->layout();
     }
 }
 

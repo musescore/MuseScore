@@ -41,11 +41,11 @@ class StemSlash final : public EngravingItem
 
     friend class Factory;
     StemSlash(Chord* parent = 0);
+    double _width;
 
 public:
 
     double mag() const override { return parentItem()->mag(); }
-    void setLine(const mu::LineF& l);
 
     StemSlash* clone() const override { return new StemSlash(*this); }
     void draw(mu::draw::Painter*) const override;
