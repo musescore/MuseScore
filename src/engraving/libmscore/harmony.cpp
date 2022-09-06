@@ -183,7 +183,6 @@ void Harmony::resolveDegreeList()
 const ElementStyle chordSymbolStyle {
     { Sid::harmonyPlacement, Pid::PLACEMENT },
     { Sid::minHarmonyDistance, Pid::MIN_DISTANCE },
-    { Sid::harmonyPlay, Pid::PLAY },
     { Sid::harmonyVoiceLiteral, Pid::HARMONY_VOICE_LITERAL },
     { Sid::harmonyVoicing, Pid::HARMONY_VOICING },
     { Sid::harmonyDuration, Pid::HARMONY_DURATION }
@@ -209,6 +208,7 @@ Harmony::Harmony(Segment* parent)
     _harmonyType = HarmonyType::STANDARD;
     _leftParen  = false;
     _rightParen = false;
+    _play = true;
     _realizedHarmony = RealizedHarmony(this);
     initElementStyle(&chordSymbolStyle);
 }
@@ -268,6 +268,7 @@ void Harmony::write(XmlWriter& xml) const
     }
     xml.startElement(this);
     writeProperty(xml, Pid::HARMONY_TYPE);
+    writeProperty(xml, Pid::PLAY);
     if (_leftParen) {
         xml.tag("leftParen");
     }
@@ -338,7 +339,7 @@ void Harmony::write(XmlWriter& xml) const
         xml.tag("function", _function);
     }
     TextBase::writeProperties(xml, false, true);
-    //Pid::PLAY, Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING, Pid::HARMONY_DURATION
+    //Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING, Pid::HARMONY_DURATION
     //written by the above function call because they are part of element style
     if (_rightParen) {
         xml.tag("rightParen");
@@ -2261,7 +2262,7 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
 {
     switch (pid) {
     case Pid::PLAY:
-        setPlay(v.toBool());
+        _play = v.toBool();
         break;
     case Pid::HARMONY_TYPE:
         setHarmonyType(HarmonyType(v.toInt()));
@@ -2313,6 +2314,9 @@ PropertyValue Harmony::propertyDefault(Pid id) const
         }
     }
     break;
+    case Pid::PLAY:
+        v = true;
+        break;
     case Pid::OFFSET:
         if (explicitParent() && explicitParent()->isFretDiagram()) {
             v = PropertyValue::fromValue(PointF(0.0, 0.0));

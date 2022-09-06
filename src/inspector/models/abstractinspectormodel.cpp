@@ -564,6 +564,16 @@ mu::async::Notification AbstractInspectorModel::currentNotationChanged() const
     return context()->currentNotationChanged();
 }
 
+bool AbstractInspectorModel::isMasterNotation() const
+{
+    INotationPtr notation = currentNotation();
+    if (!notation) {
+        return false;
+    }
+
+    return notation == context()->currentMasterNotation()->notation();
+}
+
 INotationSelectionPtr AbstractInspectorModel::selection() const
 {
     INotationPtr notation = currentNotation();

@@ -297,7 +297,6 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::harmonyPlacement,         "harmonyPlacement",           PlacementV::ABOVE },
     { Sid::romanNumeralPlacement,    "romanNumeralPlacement",      PlacementV::BELOW },
     { Sid::nashvilleNumberPlacement, "nashvilleNumberPlacement",   PlacementV::ABOVE },
-    { Sid::harmonyPlay,              "harmonyPlay",                true },
     { Sid::harmonyVoiceLiteral,      "harmonyVoiceLiteral",        true },
     { Sid::harmonyVoicing,           "harmonyVoicing",             int(Voicing::AUTO) },
     { Sid::harmonyDuration,          "harmonyDuration",            int(HDuration::UNTIL_NEXT_CHORD_SYMBOL) },

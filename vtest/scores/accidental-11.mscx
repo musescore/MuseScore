@@ -46,7 +46,6 @@
       <pedalLineWidth>0.15</pedalLineWidth>
       <pedalFontFace>FreeSerif</pedalFontFace>
       <harmonyFretDist>0.5</harmonyFretDist>
-      <harmonyPlay>0</harmonyPlay>
       <chordSymbolAFontFace>FreeSerif</chordSymbolAFontFace>
       <chordSymbolBFontFace>FreeSerif</chordSymbolBFontFace>
       <nashvilleNumberFontFace>FreeSerif</nashvilleNumberFontFace>

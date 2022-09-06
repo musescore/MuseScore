@@ -101,6 +101,10 @@ void PlaybackEventsRenderer::render(const EngravingItem* item, const mpe::timest
 void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
                                                const int ticksPositionOffset, mpe::PlaybackEventsMap& result) const
 {
+    if (!chordSymbol->isRealizable()) {
+        return;
+    }
+
     const RealizedHarmony& realized = chordSymbol->getRealizedHarmony();
     const RealizedHarmony::PitchMap& notes = realized.notes();
 
@@ -133,6 +137,10 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
 void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const mpe::timestamp_t actualTimestamp,
                                                const mpe::duration_t actualDuration, mpe::PlaybackEventsMap& result) const
 {
+    if (!chordSymbol->isRealizable()) {
+        return;
+    }
+
     const RealizedHarmony& realized = chordSymbol->getRealizedHarmony();
     const RealizedHarmony::PitchMap& notes = realized.notes();
 
