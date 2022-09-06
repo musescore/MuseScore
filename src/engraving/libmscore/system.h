@@ -233,6 +233,7 @@ public:
     Fraction maxSysTicks() const;
 
     double squeezableSpace() const;
+    bool hasCrossStaffOrModifiedBeams();
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;

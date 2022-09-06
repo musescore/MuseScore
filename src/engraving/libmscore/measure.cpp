@@ -4259,23 +4259,16 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
                 w -= std::max(ns->minHorizontalCollidingDistance(ns->next()), double(score()->styleMM(Sid::clefKeyRightMargin)));
             }
 
-            // Adjust the spacing for cross-staff beams situations
-            if (s->isChordRestType() && ns->isChordRestType()) {
-                CrossStaffContent thisCS = s->crossStaffContent();
-                CrossStaffContent nextCS = ns->crossStaffContent();
-                bool thisIsDown = thisCS.movedDown;
-                bool thisIsUp = thisCS.movedUp;
-                bool nextIsDown = nextCS.movedDown;
-                bool nextIsUp = nextCS.movedUp;
-                double displacement = score()->noteHeadWidth() - score()->styleMM(Sid::stemWidth);
-                if ((thisIsDown && !nextIsDown) || (nextIsUp && !thisIsUp)) {
-                    w += displacement;
-                    _squeezableSpace -= score()->noteHeadWidth();
-                }
-                if ((thisIsUp && !nextIsUp) || (nextIsDown && !thisIsDown)) {
-                    w -= displacement;
-                    _squeezableSpace -= score()->noteHeadWidth();
-                }
+            // Adjust spacing for cross-beam situations
+            CrossBeamType crossBeamType = s->crossBeamType();
+            double displacement = score()->noteHeadWidth() - score()->styleMM(Sid::stemWidth);
+            if (crossBeamType.upDown) {
+                w += displacement;
+                _squeezableSpace -= score()->noteHeadWidth();
+            }
+            if (crossBeamType.downUp) {
+                w -= displacement;
+                _squeezableSpace -= score()->noteHeadWidth();
             }
 
             // look back for collisions with previous segments
