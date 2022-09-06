@@ -843,7 +843,7 @@ String StaffType::tabBassStringPrefix(int strg, bool* hasFret) const
 //    rect    the rect of the 'blue rectangle' showing the input position
 //---------------------------------------------------------
 
-void StaffType::drawInputStringMarks(mu::draw::Painter* p, int string, int voice, const RectF& rect) const
+void StaffType::drawInputStringMarks(mu::draw::Painter* p, int string, voice_idx_t voice, const RectF& rect) const
 {
     if (_group != StaffGroup::TAB) {
         return;
