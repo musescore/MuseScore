@@ -58,10 +58,15 @@ class System;
 //   @P tick            int               midi tick position (read only)
 //------------------------------------------------------------------------
 
-struct CrossStaffContent
+struct CrossBeamType
 {
-    bool movedUp = false;
-    bool movedDown = false;
+    bool upDown = false; // This chord is stem-up, next chord is stem-down
+    bool downUp = false; // This chord is stem-down, next chord is stem-up
+    void reset()
+    {
+        upDown = false;
+        downUp = false;
+    }
 };
 
 class Segment final : public EngravingItem
@@ -83,6 +88,8 @@ class Segment final : public EngravingItem
     std::vector<Shape> _shapes;           // size = staves
     std::vector<double> _dotPosX;          // size = staves
     double m_spacing{ 0 };
+
+    CrossBeamType _crossBeamType; // Will affect segment-to-segment horizontal spacing
 
     friend class Factory;
     Segment(Measure* m = 0);
@@ -299,7 +306,8 @@ public:
     bool isMMRestSegment() const;
 
     Fraction shortestChordRest() const;
-    CrossStaffContent crossStaffContent() const;
+    void computeCrossBeamType(Segment* nextSeg);
+    CrossBeamType crossBeamType() const { return _crossBeamType; }
 
     bool hasAccidentals() const;
 

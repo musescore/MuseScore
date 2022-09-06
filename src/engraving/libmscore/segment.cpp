@@ -2715,28 +2715,63 @@ bool Segment::hasAccidentals() const
     return false;
 }
 
-CrossStaffContent Segment::crossStaffContent() const
+/************************************************************************
+ * computeCrossBeamType
+ * Looks at the chords of this segment and next segment to detect beams
+ * with alternating stem directions (upDown: this chord is up, next chord
+ * is down; downUp: this chord is down, next chord is up). Needed for
+ * correct horizontal spacing of cross-beam situations.
+ * **********************************************************************/
+
+void Segment::computeCrossBeamType(Segment* nextSeg)
 {
-    CrossStaffContent crossStaffContent;
-    for (EngravingItem* el : elist()) {
-        if (el && el->isChordRest()) {
-            if (toChordRest(el)->staffMove() == 0 && !toChordRest(el)->isFullMeasureRest()) {
-                crossStaffContent.movedDown = false;
-                crossStaffContent.movedUp = false;
-                break;
+    _crossBeamType.reset();
+    if (!isChordRestType() || !nextSeg || !nextSeg->isChordRestType()) {
+        return;
+    }
+    bool upDown = false;
+    bool downUp = false;
+    for (EngravingItem* e : elist()) {
+        if (!e || !e->isChordRest() || !e->staff()->visible()) {
+            continue;
+        }
+        ChordRest* thisCR = toChordRest(e);
+        if (!thisCR->visible() || thisCR->isFullMeasureRest()) {
+            continue;
+        }
+        if (!thisCR->beam()) {
+            return;
+        }
+        Beam* beam = thisCR->beam();
+        for (EngravingItem* ee : nextSeg->elist()) {
+            if (!ee || !ee->isChordRest() || !ee->staff()->visible()) {
+                continue;
             }
-            if (toChordRest(el)->staffMove() > 0 && toChordRest(el)->beam()) {
-                crossStaffContent.movedDown = true;
+            ChordRest* nextCR = toChordRest(ee);
+            if (!nextCR->visible() || nextCR->isFullMeasureRest()) {
+                continue;
             }
-            if (toChordRest(el)->staffMove() < 0 && toChordRest(el)->beam()) {
-                crossStaffContent.movedUp = true;
+            if (!nextCR->beam()) {
+                return;
+            }
+            if (nextCR->beam() != beam) {
+                continue;
+            }
+            if (thisCR->up() == nextCR->up()) {
+                return;
+            }
+            if (thisCR->up() && !nextCR->up()) {
+                upDown = true;
+            }
+            if (!thisCR->up() && nextCR->up()) {
+                downUp = true;
+            }
+            if (upDown && downUp) {
+                return;
             }
         }
     }
-    if (crossStaffContent.movedUp && crossStaffContent.movedDown) { // If this segment contains both up and down cross-staff, we don't correct for it
-        crossStaffContent.movedUp = false;
-        crossStaffContent.movedDown = false;
-    }
-    return crossStaffContent;
+    _crossBeamType.upDown = upDown;
+    _crossBeamType.downUp = downUp;
 }
 } // namespace mu::engraving

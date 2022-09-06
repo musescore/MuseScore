@@ -107,7 +107,9 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     while (ctx.curMeasure) {      // collect measure for system
         oldSystem = ctx.curMeasure->system();
         system->appendMeasure(ctx.curMeasure);
-
+        if (system->hasCrossStaffOrModifiedBeams()) {
+            updateCrossBeams(system, ctx);
+        }
         double ww  = 0;          // width of current measure
 
         // After appending a new measure, the shortest note in the system may change, in which case
@@ -150,6 +152,9 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             if (firstMeasure) {
                 layoutSystemMinWidth = curSysWidth;
                 system->layoutSystem(ctx, curSysWidth, ctx.firstSystem, ctx.firstSystemIndent);
+                if (system->hasCrossStaffOrModifiedBeams()) {
+                    updateCrossBeams(system, ctx);
+                }
                 curSysWidth += system->leftMargin();
                 if (m->repeatStart()) {
                     Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
@@ -1412,6 +1417,67 @@ void LayoutSystem::layoutTies(Chord* ch, System* system, const Fraction& stick)
                 if (ts && ts->addToSkyline()) {
                     staff->skyline().add(ts->shape().translated(ts->pos()));
                 }
+            }
+        }
+    }
+}
+
+/****************************************************************************
+ * updateCrossBeams
+ * Performs a pre-calculation of staff distances (final staff distances will
+ * be calculated at the very end of layout) and updates the up() property
+ * of cross-beam chords accordingly.
+ * *************************************************************************/
+
+void LayoutSystem::updateCrossBeams(System* system, const LayoutContext& ctx)
+{
+    system->layout2(ctx); // Computes staff distances, essential for the rest of the calculations
+    // Update grace cross beams
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment& seg : toMeasure(mb)->segments()) {
+            if (!seg.isChordRestType()) {
+                continue;
+            }
+            for (EngravingItem* e : seg.elist()) {
+                if (!e || !e->isChord()) {
+                    continue;
+                }
+                for (Chord* grace : toChord(e)->graceNotes()) {
+                    if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())) {
+                        grace->computeUp();
+                    }
+                }
+            }
+        }
+    }
+    // Update normal chords cross beams and respective segments
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment& seg : toMeasure(mb)->segments()) {
+            for (EngravingItem* e : seg.elist()) {
+                if (!e || !e->isChord()) {
+                    continue;
+                }
+                Chord* chord = toChord(e);
+                if (chord->beam() && (chord->beam()->cross() || chord->beam()->userModified())) {
+                    bool prevUp = chord->up();
+                    chord->computeUp();
+                    if (chord->up() != prevUp) {
+                        // If the chord has changed direction needs to be re-laid out
+                        LayoutChords::layoutChords1(chord->score(), &seg, chord->vStaffIdx());
+                        seg.createShape(chord->vStaffIdx());
+                    }
+                }
+            }
+        }
+        for (Segment& seg : toMeasure(mb)->segments()) {
+            if (seg.next()) {
+                seg.computeCrossBeamType(seg.next());
             }
         }
     }
