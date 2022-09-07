@@ -46,6 +46,7 @@ static const ActionCode MIDI_ON_CODE("midi-on");
 static const ActionCode COUNT_IN_CODE("countin");
 static const ActionCode PAN_CODE("pan");
 static const ActionCode REPEAT_CODE("repeat");
+static const ActionCode PLAY_CHORD_SYMBOLS_CODE("play-chord-symbols");
 
 void PlaybackController::init()
 {
@@ -56,6 +57,7 @@ void PlaybackController::init()
     dispatcher()->reg(this, LOOP_IN_CODE, [this]() { addLoopBoundary(LoopBoundaryType::LoopIn); });
     dispatcher()->reg(this, LOOP_OUT_CODE, [this]() { addLoopBoundary(LoopBoundaryType::LoopOut); });
     dispatcher()->reg(this, REPEAT_CODE, this, &PlaybackController::togglePlayRepeats);
+    dispatcher()->reg(this, PLAY_CHORD_SYMBOLS_CODE, this, &PlaybackController::togglePlayChordSymbols);
     dispatcher()->reg(this, PAN_CODE, this, &PlaybackController::toggleAutomaticallyPan);
     dispatcher()->reg(this, METRONOME_CODE, this, &PlaybackController::toggleMetronome);
     dispatcher()->reg(this, MIDI_ON_CODE, this, &PlaybackController::toggleMidiInput);
@@ -521,6 +523,19 @@ void PlaybackController::togglePlayRepeats()
     notifyActionCheckedChanged(REPEAT_CODE);
 }
 
+void PlaybackController::togglePlayChordSymbols()
+{
+    bool playChordSymbolsEnabled = notationConfiguration()->isPlayChordSymbolsEnabled();
+    notationConfiguration()->setIsPlayChordSymbolsEnabled(!playChordSymbolsEnabled);
+    notifyActionCheckedChanged(PLAY_CHORD_SYMBOLS_CODE);
+
+    for (auto it = m_trackIdMap.cbegin(); it != m_trackIdMap.cend(); ++it) {
+        if (notationPlayback()->isChordSymbolsTrack(it->first)) {
+            setTrackActivity(it->first, !playChordSymbolsEnabled);
+        }
+    }
+}
+
 void PlaybackController::toggleAutomaticallyPan()
 {
     bool panEnabled = notationConfiguration()->isAutomaticallyPanEnabled();
@@ -788,6 +803,10 @@ AudioOutputParams PlaybackController::trackOutputParams(const engraving::Instrum
         result.muted = !notationConfiguration()->isMetronomeEnabled();
     }
 
+    if (notationPlayback()->isChordSymbolsTrack(instrumentTrackId)) {
+        result.muted = !notationConfiguration()->isPlayChordSymbolsEnabled();
+    }
+
     return result;
 }
 
@@ -1050,6 +1069,7 @@ bool PlaybackController::actionChecked(const ActionCode& actionCode) const
         { LOOP_CODE, isLoopVisible() },
         { MIDI_ON_CODE, notationConfiguration()->isMidiInputEnabled() },
         { REPEAT_CODE, notationConfiguration()->isPlayRepeatsEnabled() },
+        { PLAY_CHORD_SYMBOLS_CODE, notationConfiguration()->isPlayChordSymbolsEnabled() },
         { PAN_CODE, notationConfiguration()->isAutomaticallyPanEnabled() },
         { METRONOME_CODE, notationConfiguration()->isMetronomeEnabled() },
         { COUNT_IN_CODE, notationConfiguration()->isCountInEnabled() }
