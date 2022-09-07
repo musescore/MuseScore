@@ -4441,9 +4441,9 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
     showItem(nextLyrics);
 }
 
-void NotationInteraction::navigateToLyrics(MoveDirection direction)
+void NotationInteraction::navigateToLyrics(MoveDirection direction, bool moveOnly)
 {
-    navigateToLyrics(direction == MoveDirection::Left, true, false);
+    navigateToLyrics(direction == MoveDirection::Left, moveOnly, false);
 }
 
 //! NOTE: Copied from ScoreView::lyricsTab

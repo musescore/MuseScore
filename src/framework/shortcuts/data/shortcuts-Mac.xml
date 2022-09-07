@@ -892,8 +892,12 @@
     <seq>Z</seq>
     </SC>
   <SC>
-    <key>next-text-element</key>
+    <key>next-word</key>
     <seq>Space</seq>
+    </SC>
+  <SC>
+    <key>next-text-element</key>
+    <seq>Right</seq>
     </SC>
   <SC>
     <key>prev-text-element</key>
