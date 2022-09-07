@@ -28,6 +28,7 @@
 
 #include "translation.h"
 #include "config.h"
+#include "defer.h"
 #include "log.h"
 
 static constexpr int AUTO_CHECK_UPDATE_INTERVAL = 1000;
@@ -66,20 +67,32 @@ void UpdateScenario::doCheckForUpdate(bool manual)
     m_progress = true;
 
     updateService()->checkForUpdate().onResolve(this, [this, manual](const mu::RetVal<ReleaseInfo>& releaseInfo) {
-        if (!manual && releaseInfo.val.version == configuration()->skippedReleaseVersion()) {
+        DEFER {
             m_progress = false;
+        };
+
+        bool noUpdate = releaseInfo.ret.code() == static_cast<int>(Err::NoUpdate);
+        if (!manual) {
+            bool shouldIgnoreUpdate = releaseInfo.val.version == configuration()->skippedReleaseVersion();
+            if (noUpdate || shouldIgnoreUpdate) {
+                return;
+            }
+        } else if (noUpdate) {
+            showNoUpdateMsg();
             return;
         }
 
         showReleaseInfo(releaseInfo.val);
-        m_progress = false;
     })
     .onReject(this, [this](int errCode, std::string text) {
+        DEFER {
+            m_progress = false;
+        };
+
         LOGE() << "unable to check for update, error code: " << errCode
                << ", " << text;
 
         processUpdateResult(errCode);
-        m_progress = false;
     });
 }
 
