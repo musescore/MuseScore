@@ -81,12 +81,17 @@ mu::async::Promise<mu::RetVal<ReleaseInfo> > UpdateService::checkForUpdate()
             return reject(result.ret.code(), result.ret.text());
         }
 
-        result.ret = make_ok();
-        if (QVersionNumber::fromString(QString::fromStdString(releaseInfo.val.version)) > QVersionNumber::fromString(VERSION)) {
-            result.val = releaseInfo.val;
+        QVersionNumber current = QVersionNumber::fromString(QString::fromStdString(VERSION));
+        QVersionNumber update = QVersionNumber::fromString(QString::fromStdString(releaseInfo.val.version));
+        if (current.normalized() >= update.normalized()) {
+            result.ret = make_ret(Err::NoUpdate);
+            return resolve(result);
         }
 
-        m_lastCheckResult = releaseInfo.val;
+        result.ret = make_ok();
+        result.val = releaseInfo.val;
+
+        m_lastCheckResult = result.val;
         return resolve(result);
     });
 }
