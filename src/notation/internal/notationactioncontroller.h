@@ -181,7 +181,8 @@ private:
     void prevTextElement();
     void nextBeatTextElement();
     void prevBeatTextElement();
-    void navigateToTextElement(MoveDirection direction, bool nearNoteOrRest = false);
+    void nextWord();
+    void navigateToTextElement(MoveDirection direction, bool nearNoteOrRest = false, bool moveOnly = true);
     void navigateToTextElementByFraction(const Fraction& fraction);
     void navigateToTextElementInNearMeasure(MoveDirection direction);
 

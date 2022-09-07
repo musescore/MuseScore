@@ -240,7 +240,7 @@ public:
     virtual void addLyricsVerse() = 0;
 
     // Text navigation
-    virtual void navigateToLyrics(MoveDirection direction) = 0;
+    virtual void navigateToLyrics(MoveDirection direction, bool moveOnly = false) = 0;
     virtual void navigateToLyricsVerse(MoveDirection direction) = 0;
 
     virtual void navigateToNextSyllable() = 0;

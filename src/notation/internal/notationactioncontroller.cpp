@@ -131,6 +131,7 @@ void NotationActionController::init()
 
     registerAction("next-text-element", &Controller::nextTextElement, &Controller::textNavigationAvailable);
     registerAction("prev-text-element", &Controller::prevTextElement, &Controller::textNavigationAvailable);
+    registerAction("next-word", &Controller::nextWord, &Controller::textNavigationAvailable);
     registerAction("next-beat-TEXT", &Controller::nextBeatTextElement, &Controller::textNavigationByBeatsAvailable);
     registerAction("prev-beat-TEXT", &Controller::prevBeatTextElement, &Controller::textNavigationByBeatsAvailable);
 
@@ -1611,6 +1612,11 @@ void NotationActionController::prevTextElement()
     navigateToTextElement(MoveDirection::Left, NEAR_NOTE_OR_REST);
 }
 
+void NotationActionController::nextWord()
+{
+    navigateToTextElement(MoveDirection::Right, NEAR_NOTE_OR_REST, false);
+}
+
 void NotationActionController::nextBeatTextElement()
 {
     navigateToTextElement(MoveDirection::Right);
@@ -1621,7 +1627,7 @@ void NotationActionController::prevBeatTextElement()
     navigateToTextElement(MoveDirection::Left);
 }
 
-void NotationActionController::navigateToTextElement(MoveDirection direction, bool nearNoteOrRest)
+void NotationActionController::navigateToTextElement(MoveDirection direction, bool nearNoteOrRest, bool moveOnly)
 {
     const mu::engraving::EngravingItem* element = selectedElement();
     if (!element) {
@@ -1629,7 +1635,7 @@ void NotationActionController::navigateToTextElement(MoveDirection direction, bo
     }
 
     if (element->isLyrics()) {
-        currentNotationInteraction()->navigateToLyrics(direction);
+        currentNotationInteraction()->navigateToLyrics(direction, moveOnly);
     } else if (element->isHarmony()) {
         const Harmony* chordSymbol = editedChordSymbol();
         currentNotationInteraction()->navigateToNearHarmony(direction, nearNoteOrRest);
