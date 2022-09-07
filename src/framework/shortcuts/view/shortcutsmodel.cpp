@@ -129,7 +129,7 @@ void ShortcutsModel::load()
     m_shortcuts.clear();
 
     for (const UiAction& action : uiactionsRegister()->getActions()) {
-        if (action.title.isEmpty() || action.description.isEmpty()) {
+        if (action.title.isEmpty() || action.description.isEmpty() || action.category == ActionCategory::Internal) {
             continue;
         }
 

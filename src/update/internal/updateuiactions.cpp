@@ -29,6 +29,7 @@ using namespace mu::ui;
 
 const UiActionList UpdateUiActions::m_actions = {
     UiAction("check-update",
+             ActionCategory::Application,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Check for &update")

@@ -240,7 +240,8 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Toggle 'insert mode'"),
-             TranslatableString("action", "Note input: toggle ‘insert’ mode")
+             TranslatableString("action", "Note input: toggle ‘insert’ mode"),
+             IconCode::Code::NOTE_PLUS
              ),
     UiAction("select-next-chord",
              ActionCategory::SelectingEditing,
@@ -2277,6 +2278,7 @@ const UiActionList NotationUiActions::m_actions = {
              IconCode::Code::NOTE_PLUS
              ),
     UiAction("realtime-advance",
+             ActionCategory::NoteInput,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Real-time advance"),
