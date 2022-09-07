@@ -50,7 +50,11 @@ public:
     void setType(Type type);
     Type type() const { return _type; }
 
+    void styleChanged() override;
+
 private:
+    void applyTypeStyle();
+
     Type _type = Type::Main;
 };
 } // namespace mu::engraving
