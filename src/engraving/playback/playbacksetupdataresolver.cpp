@@ -59,6 +59,23 @@ void PlaybackSetupDataResolver::resolveSetupData(const Instrument* instrument, m
            << ", family: " << instrument->family();
 }
 
+void PlaybackSetupDataResolver::resolveChordSymbolsSetupData(const Instrument* instrument, mpe::PlaybackSetupData& result) const
+{
+    if (instrument->hasStrings()) {
+        static const mpe::PlaybackSetupData CHORD_SYMBOLS_SETUP_DATA = {
+            SoundId::Guitar, SoundCategory::Strings, { SoundSubCategory::Acoustic, SoundSubCategory::Nylon }, {}
+        };
+
+        result = CHORD_SYMBOLS_SETUP_DATA;
+    } else {
+        static const mpe::PlaybackSetupData CHORD_SYMBOLS_SETUP_DATA = {
+            SoundId::Piano, SoundCategory::Keyboards, {}, {}
+        };
+
+        result = CHORD_SYMBOLS_SETUP_DATA;
+    }
+}
+
 void PlaybackSetupDataResolver::resolveMetronomeSetupData(mpe::PlaybackSetupData& result) const
 {
     static const mpe::PlaybackSetupData METRONOME_SETUP_DATA = {
@@ -66,13 +83,4 @@ void PlaybackSetupDataResolver::resolveMetronomeSetupData(mpe::PlaybackSetupData
     };
 
     result = METRONOME_SETUP_DATA;
-}
-
-void PlaybackSetupDataResolver::resolveChordSymbolsSetupData(mpe::PlaybackSetupData& result) const
-{
-    static const mpe::PlaybackSetupData CHORD_SYMBOLS_SETUP_DATA = {
-        SoundId::Piano, SoundCategory::Keyboards, {}, {}
-    };
-
-    result = CHORD_SYMBOLS_SETUP_DATA;
 }

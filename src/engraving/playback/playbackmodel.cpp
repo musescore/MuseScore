@@ -284,7 +284,7 @@ void PlaybackModel::updateSetupData()
 
         if (part->hasChordSymbol()) {
             InstrumentTrackId trackId = chordSymbolsTrackId(part->id());
-            m_setupResolver.resolveChordSymbolsSetupData(m_playbackDataMap[trackId].setupData);
+            m_setupResolver.resolveChordSymbolsSetupData(part->instrument(), m_playbackDataMap[trackId].setupData);
         }
     }
 
