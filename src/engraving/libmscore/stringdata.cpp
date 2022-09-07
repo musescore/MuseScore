@@ -476,8 +476,9 @@ void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* 
 
         // if note not fretted yet or current fretting no longer valid,
         // use most convenient string as key
+        int pitch = getPitch(string, fret + capoFret, pitchOffset);
         if (string <= INVALID_STRING_INDEX || fret <= INVALID_FRET_INDEX
-            || getPitch(string, fret + capoFret, pitchOffset) != note->pitch()) {
+            || (pitchIsValid(pitch) && pitch != note->pitch())) {
             note->setString(INVALID_STRING_INDEX);
             note->setFret(INVALID_FRET_INDEX);
             convertPitch(note->pitch(), pitchOffset, &string, &fret);
