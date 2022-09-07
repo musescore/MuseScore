@@ -593,9 +593,9 @@ mu::Ret NotationProject::makeCurrentFileAsBackup()
     }
 
     io::path_t backupFilePath = filePath + "~";
-    ret = fileSystem()->move(filePath, backupFilePath, true);
+    ret = fileSystem()->copy(filePath, backupFilePath, true);
     if (!ret) {
-        LOGE() << "failed to move from: " << filePath << ", to: " << backupFilePath;
+        LOGE() << "failed to copy: " << filePath << " to: " << backupFilePath;
         return ret;
     }
 
