@@ -71,6 +71,8 @@ void NotationPlayback::init(INotationUndoStackPtr undoStack)
     }
 
     m_playbackModel.setPlayRepeats(configuration()->isPlayRepeatsEnabled());
+    m_playbackModel.setPlayChordSymbols(configuration()->isPlayChordSymbolsEnabled());
+
     m_playbackModel.load(score());
 
     updateTotalPlayTime();
@@ -82,6 +84,14 @@ void NotationPlayback::init(INotationUndoStackPtr undoStack)
         bool expandRepeats = configuration()->isPlayRepeatsEnabled();
         if (expandRepeats != m_playbackModel.isPlayRepeatsEnabled()) {
             m_playbackModel.setPlayRepeats(expandRepeats);
+            m_playbackModel.reload();
+        }
+    });
+
+    configuration()->isPlayChordSymbolsChanged().onNotify(this, [this]() {
+        bool playChordSymbols = configuration()->isPlayChordSymbolsEnabled();
+        if (playChordSymbols != m_playbackModel.isPlayChordSymbolsEnabled()) {
+            m_playbackModel.setPlayChordSymbols(playChordSymbols);
             m_playbackModel.reload();
         }
     });

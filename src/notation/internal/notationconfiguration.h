@@ -123,6 +123,10 @@ public:
     void setIsPlayRepeatsEnabled(bool enabled) override;
     async::Notification isPlayRepeatsChanged() const override;
 
+    bool isPlayChordSymbolsEnabled() const override;
+    void setIsPlayChordSymbolsEnabled(bool enabled) override;
+    async::Notification isPlayChordSymbolsChanged() const override;
+
     bool isMetronomeEnabled() const override;
     void setIsMetronomeEnabled(bool enabled) override;
 
@@ -202,6 +206,7 @@ private:
     async::Notification m_scoreOrderListPathsChanged;
     async::Notification m_isLimitCanvasScrollAreaChanged;
     async::Notification m_isPlayRepeatsChanged;
+    async::Notification m_isPlayChordSymbolsChanged;
     ValCh<int> m_pianoKeyboardNumberOfKeys;
 };
 }

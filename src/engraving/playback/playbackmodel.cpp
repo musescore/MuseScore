@@ -133,6 +133,16 @@ void PlaybackModel::setPlayRepeats(const bool isEnabled)
     m_expandRepeats = isEnabled;
 }
 
+bool PlaybackModel::isPlayChordSymbolsEnabled() const
+{
+    return m_playChordSymbols;
+}
+
+void PlaybackModel::setPlayChordSymbols(const bool isEnabled)
+{
+    m_playChordSymbols = isEnabled;
+}
+
 const InstrumentTrackId& PlaybackModel::metronomeTrackId() const
 {
     return METRONOME_TRACK_ID;
