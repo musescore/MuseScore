@@ -497,8 +497,10 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
                 segShape.add(secondStaffShape);
             }
 
-            // HACK: ignore lyrics shape by removing them from the vector
-            mu::remove_if(segShape, [](ShapeElement& shapeEl){ return shapeEl.toItem && shapeEl.toItem->isLyrics(); });
+            // HACK: ignore lyrics and fingering shape by removing them from the vector
+            mu::remove_if(segShape, [](ShapeElement& shapeEl){
+                return shapeEl.toItem && (shapeEl.toItem->isLyrics() || shapeEl.toItem->isFingering());
+            });
 
             for (unsigned i=0; i < slurRects.size(); i++) {
                 bool leftSection = i < slurRects.size() / 3;
