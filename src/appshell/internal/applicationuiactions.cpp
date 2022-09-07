@@ -115,7 +115,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              Checkable::Yes
              ),
     UiAction("toggle-noteinput",
-             ActionCategory::DialogsPanels,
+             ActionCategory::Workspace,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Note input"),
@@ -125,7 +125,7 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Vertical panels
     UiAction("toggle-palettes",
-             ActionCategory::DialogsPanels,
+             ActionCategory::Workspace,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Palettes"),
@@ -133,7 +133,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              Checkable::Yes
              ),
     UiAction("toggle-instruments",
-             ActionCategory::DialogsPanels,
+             ActionCategory::File,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Instr&uments"),
@@ -141,7 +141,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              Checkable::Yes
              ),
     UiAction("inspector",
-             ActionCategory::DialogsPanels,
+             ActionCategory::Workspace,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Propert&ies"),
@@ -149,7 +149,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              Checkable::Yes
              ),
     UiAction("toggle-selection-filter",
-             ActionCategory::DialogsPanels,
+             ActionCategory::Workspace,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Se&lection filter"),
@@ -159,7 +159,7 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Navigator
     UiAction("toggle-navigator",
-             ActionCategory::DialogsPanels,
+             ActionCategory::Workspace,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Navigator"),
@@ -169,7 +169,7 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Horizontal panels
     UiAction("toggle-timeline",
-             ActionCategory::DialogsPanels,
+             ActionCategory::Workspace,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Tim&eline"),
@@ -177,7 +177,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              Checkable::Yes
              ),
     UiAction("toggle-mixer",
-             ActionCategory::DialogsPanels,
+             ActionCategory::Workspace,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Mixer"),
@@ -186,7 +186,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              Checkable::Yes
              ),
     UiAction("toggle-piano-keyboard",
-             ActionCategory::DialogsPanels,
+             ActionCategory::Workspace,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Piano &keyboard"),
@@ -203,7 +203,7 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Status bar
     UiAction("toggle-statusbar",
-             ActionCategory::DialogsPanels,
+             ActionCategory::Workspace,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&Status bar"),
@@ -212,7 +212,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
 
     UiAction("preference-dialog",
-             ActionCategory::DialogsPanels,
+             ActionCategory::Application,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Preferences"),

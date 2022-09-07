@@ -203,7 +203,7 @@ enum class ActionCategory {
     File,
     SelectionNavigation,
     TextLyrics,
-    ChordsSymbolsFiguredBass,
+    ChordSymbolsFiguredBass,
     Measures,
     MusicalSymbols,
     DialogsPanels,
