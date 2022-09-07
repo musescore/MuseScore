@@ -418,7 +418,17 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
     }
 
     // Collision clearance at the center of the slur
-    double clearance = 0.75 * spatium(); // TODO: style
+    double slurLength = abs(p2.x() / spatium());
+    double clearance;
+    if (slurLength < 4) {
+        clearance = 0.15 * spatium();
+    } else if (slurLength < 8) {
+        clearance = 0.4 * spatium();
+    } else if (slurLength < 12) {
+        clearance = 0.6 * spatium();
+    } else {
+        clearance = 0.75 * spatium();
+    }
     // balance: determines how much endpoint adjustment VS shape adjustment we will do.
     // 0 = end point is fixed, only the shape can be adjusted,
     // 1 = shape is fixed, only end the point can be adjusted.
