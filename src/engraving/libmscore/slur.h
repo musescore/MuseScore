@@ -91,6 +91,7 @@ public:
     SpannerSegment* layoutSystem(System*) override;
     void setTrack(track_idx_t val) override;
     void slurPos(SlurPos*) override;
+    void computeUp();
 
     SlurSegment* frontSegment() { return toSlurSegment(Spanner::frontSegment()); }
     const SlurSegment* frontSegment() const { return toSlurSegment(Spanner::frontSegment()); }
