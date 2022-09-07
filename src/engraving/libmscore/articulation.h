@@ -191,6 +191,8 @@ public:
     static bool isOrnament(int subtype);
 
     void doAutoplace();
+
+    void styleChanged() override;
 };
 } // namespace mu::engraving
 

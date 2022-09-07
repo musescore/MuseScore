@@ -854,6 +854,15 @@ void Articulation::setupShowOnTabStyles()
     }
 }
 
+void Articulation::styleChanged()
+{
+    bool isGolpeThumb = _symId == SymId::guitarGolpe && _anchor == ArticulationAnchor::BOTTOM_STAFF;
+    EngravingItem::styleChanged();
+    if (isGolpeThumb) {
+        setAnchor(ArticulationAnchor::BOTTOM_STAFF);
+    }
+}
+
 struct ArticulationGroup
 {
     SymId first;
