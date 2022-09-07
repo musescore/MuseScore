@@ -469,8 +469,16 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
     score()->expandVoice();
     mu::engraving::ChordRest* chordRest = inputState.cr();
     if (chordRest) {
+        Fraction ratio = options.ratio;
+        // prevent weird dotted tuplets when adding tuplets to dotted durations
+        if (options.autoBaseLen) {
+            ratio.setDenominator(inputState.duration().dots() ? 3 : 2);
+            while (ratio.numerator() >= ratio.denominator() * 2) {
+                ratio.setDenominator(ratio.denominator() * 2);      // operator*= reduces, we don't want that here
+            }
+        }
         score()->changeCRlen(chordRest, inputState.duration());
-        score()->addTuplet(chordRest, options.ratio, options.numberType, options.bracketType);
+        score()->addTuplet(chordRest, ratio, options.numberType, options.bracketType);
     }
     apply();
 
