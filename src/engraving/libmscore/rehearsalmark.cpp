@@ -71,11 +71,21 @@ void RehearsalMark::setType(RehearsalMark::Type type)
         return;
     }
     _type = type;
+    applyTypeStyle();
+}
 
+void RehearsalMark::applyTypeStyle()
+{
     const auto& elemStyleMap = (_type == Type::Main ? mainRehearsalMarkStyle : additionalRehearsalMarkStyle);
     for (const auto& elem : elemStyleMap) {
         setProperty(elem.pid, score()->styleV(elem.sid));
     }
+}
+
+void RehearsalMark::styleChanged()
+{
+    TextBase::styleChanged();
+    applyTypeStyle();
 }
 
 //---------------------------------------------------------
