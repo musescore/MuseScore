@@ -347,7 +347,7 @@ void SlurSegment::adjustEndpoints()
         double y1offset = ysp - floor(ysp);
         double adjust = 0;
         if (up) {
-            if (y1offset < 2 * staffLineMargin) {
+            if (y1offset < staffLineMargin) {
                 // endpoint too close to the line above
                 adjust = -(y1offset + staffLineMargin);
             } else if (y1offset > 1 - staffLineMargin) {
@@ -359,7 +359,7 @@ void SlurSegment::adjustEndpoints()
                 // endpoint too close to the line above
                 adjust = staffLineMargin - y1offset;
             }
-            if (y1offset > 1 - 2 * staffLineMargin) {
+            if (y1offset > 1 - staffLineMargin) {
                 // endpoint too close to the line below
                 adjust = (1 - y1offset) + staffLineMargin;
             }
