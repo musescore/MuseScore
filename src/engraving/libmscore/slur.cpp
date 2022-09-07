@@ -347,7 +347,7 @@ void SlurSegment::adjustEndpoints()
         double y1offset = ysp - floor(ysp);
         double adjust = 0;
         if (up) {
-            if (y1offset < 2 * staffLineMargin) {
+            if (y1offset < staffLineMargin) {
                 // endpoint too close to the line above
                 adjust = -(y1offset + staffLineMargin);
             } else if (y1offset > 1 - staffLineMargin) {
@@ -359,7 +359,7 @@ void SlurSegment::adjustEndpoints()
                 // endpoint too close to the line above
                 adjust = staffLineMargin - y1offset;
             }
-            if (y1offset > 1 - 2 * staffLineMargin) {
+            if (y1offset > 1 - staffLineMargin) {
                 // endpoint too close to the line below
                 adjust = (1 - y1offset) + staffLineMargin;
             }
@@ -418,7 +418,17 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
     }
 
     // Collision clearance at the center of the slur
-    double clearance = 0.75 * spatium(); // TODO: style
+    double slurLength = abs(p2.x() / spatium());
+    double clearance;
+    if (slurLength < 4) {
+        clearance = 0.15 * spatium();
+    } else if (slurLength < 8) {
+        clearance = 0.4 * spatium();
+    } else if (slurLength < 12) {
+        clearance = 0.6 * spatium();
+    } else {
+        clearance = 0.75 * spatium();
+    }
     // balance: determines how much endpoint adjustment VS shape adjustment we will do.
     // 0 = end point is fixed, only the shape can be adjusted,
     // 1 = shape is fixed, only end the point can be adjusted.
@@ -487,8 +497,10 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
                 segShape.add(secondStaffShape);
             }
 
-            // HACK: ignore lyrics shape by removing them from the vector
-            mu::remove_if(segShape, [](ShapeElement& shapeEl){ return shapeEl.toItem && shapeEl.toItem->isLyrics(); });
+            // HACK: ignore lyrics and fingering shape by removing them from the vector
+            mu::remove_if(segShape, [](ShapeElement& shapeEl){
+                return shapeEl.toItem && (shapeEl.toItem->isLyrics() || shapeEl.toItem->isFingering());
+            });
 
             for (unsigned i=0; i < slurRects.size(); i++) {
                 bool leftSection = i < slurRects.size() / 3;
@@ -1010,10 +1022,10 @@ void Slur::slurPos(SlurPos* sp)
         }
     } else if (ecr->segment()->system() != scr->segment()->system()) {
         // in the case of continued slurs, we anchor to stem when necessary
-        if (scr->up() == _up && stem1) {
+        if (scr->up() == _up && stem1 && !scr->beam()) {
             sa1 = SlurAnchor::STEM;
         }
-        if (ecr->up() == _up && stem2) {
+        if (ecr->up() == _up && stem2 && !ecr->beam()) {
             sa2 = SlurAnchor::STEM;
         }
     }
