@@ -484,7 +484,6 @@ InstrumentTrackIdSet PlaybackController::instrumentTrackIdSetForRangePlayback() 
     int startTicks = startTick.ticks();
 
     InstrumentTrackIdSet result;
-    bool hasChordSymbol = false;
 
     for (const Part* part: selectedParts) {
         if (const Instrument* startInstrument = part->instrument(startTick)) {
@@ -497,13 +496,9 @@ InstrumentTrackIdSet PlaybackController::instrumentTrackIdSetForRangePlayback() 
             }
         }
 
-        if (!hasChordSymbol && part->hasChordSymbol()) {
-            hasChordSymbol = true;
+        if (part->hasChordSymbol()) {
+            result.insert(notationPlayback()->chordSymbolsTrackId(part->id()));
         }
-    }
-
-    if (hasChordSymbol) {
-        result.insert(notationPlayback()->chordSymbolsTrackId());
     }
 
     return result;
@@ -692,11 +687,6 @@ void PlaybackController::setCurrentTick(const tick_t tick)
 
 void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, const TrackAddFinished& onFinished)
 {
-    if (notationPlayback()->chordSymbolsTrackId() == instrumentTrackId) {
-        doAddTrack(instrumentTrackId, trc("playback", "Chord symbols"), onFinished);
-        return;
-    }
-
     if (notationPlayback()->metronomeTrackId() == instrumentTrackId) {
         doAddTrack(instrumentTrackId, trc("playback", "Metronome"), onFinished);
         return;
@@ -704,6 +694,12 @@ void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, co
 
     const Part* part = masterNotationParts()->part(instrumentTrackId.partId);
     if (!part) {
+        return;
+    }
+
+    if (notationPlayback()->isChordSymbolsTrack(instrumentTrackId)) {
+        const std::string trackName = trc("playback", "Chords") + "." + part->partName().toStdString();
+        doAddTrack(instrumentTrackId, trackName, onFinished);
         return;
     }
 
@@ -809,8 +805,7 @@ InstrumentTrackIdSet PlaybackController::availableInstrumentTracks() const
 void PlaybackController::removeNonExistingTracks()
 {
     for (const InstrumentTrackId& instrumentTrackId : availableInstrumentTracks()) {
-        if (instrumentTrackId == notationPlayback()->metronomeTrackId()
-            || instrumentTrackId == notationPlayback()->chordSymbolsTrackId()) {
+        if (instrumentTrackId == notationPlayback()->metronomeTrackId()) {
             continue;
         }
 
@@ -1022,7 +1017,6 @@ void PlaybackController::updateMuteStates()
     INotationPartsPtr notationParts = m_notation->parts();
     InstrumentTrackIdSet allowedInstrumentTrackIdSet = instrumentTrackIdSetForRangePlayback();
     bool isRangePlaybackMode = selection()->isRange() && !allowedInstrumentTrackIdSet.empty();
-    const InstrumentTrackId& chordSymbolsTrackId = notationPlayback()->chordSymbolsTrackId();
 
     for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
         if (!mu::contains(m_trackIdMap, instrumentTrackId)) {
@@ -1030,7 +1024,7 @@ void PlaybackController::updateMuteStates()
         }
 
         const Part* part = notationParts->part(instrumentTrackId.partId);
-        bool isPartVisible = (part && part->show()) || instrumentTrackId == chordSymbolsTrackId;
+        bool isPartVisible = part && part->show();
 
         auto soloMuteState = audioSettings()->soloMuteState(instrumentTrackId);
 
