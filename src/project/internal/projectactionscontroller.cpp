@@ -492,7 +492,9 @@ void ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo&
     ProgressPtr progress = uploadingService()->uploadScore(*projectData, meta.title, meta.source);
 
     progress->progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
-        LOGD() << "Uploading progress: " << current << "/" << total;
+        if (total > 0) {
+            LOGD() << "Uploading progress: " << current << " / " << total << " bytes";
+        }
     });
 
     progress->finished.onReceive(this, [project, projectData](const ProgressResult& res) {
