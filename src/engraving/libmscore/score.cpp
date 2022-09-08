@@ -5531,7 +5531,7 @@ void Score::createPaddingTable()
     _paddingTable[ElementType::NOTE][ElementType::NOTE] = _minimumPaddingUnit;
     _paddingTable[ElementType::NOTE][ElementType::LEDGER_LINE] = 0.35 * spatium();
     _paddingTable[ElementType::NOTE][ElementType::ACCIDENTAL]
-        = std::max(static_cast<double>(styleMM(Sid::accidentalNoteDistance)), 0.4);
+        = std::max(static_cast<double>(styleMM(Sid::accidentalNoteDistance)), 0.35 * spatium());
     _paddingTable[ElementType::NOTE][ElementType::REST] = styleMM(Sid::minNoteDistance);
     _paddingTable[ElementType::NOTE][ElementType::CLEF] = 1.0 * spatium();
     _paddingTable[ElementType::NOTE][ElementType::ARPEGGIO] = 0.6 * spatium();
