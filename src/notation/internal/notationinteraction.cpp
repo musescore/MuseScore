@@ -144,6 +144,21 @@ static PointF bindCursorPosToText(const PointF& cursorPos, const EngravingItem* 
     return boundPos;
 }
 
+class EventFilter : public QObject
+{
+public:
+    EventFilter(std::function<void(QEvent*)> action, QObject* parent)
+        : QObject(parent) { m_action = action; }
+    virtual bool eventFilter(QObject* obj, QEvent* event)
+    {
+        m_action(event);
+        return QObject::eventFilter(obj, event);
+    }
+
+private:
+    std::function<void(QEvent*)> m_action;
+};
+
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
     : m_notation(notation), m_undoStack(undoStack), m_editData(&m_scoreCallbacks)
 {
@@ -176,6 +191,13 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
     m_notation->scoreInited().onNotify(this, [this]() {
         onScoreInited();
     });
+    auto filter = new EventFilter([this](QEvent* evt)
+    {
+        if (evt->type() == QEvent::Type::FocusIn) {
+            m_clipboardTextPos = 0;
+        }
+    }, qApp);
+    qApp->installEventFilter(filter);
 }
 
 mu::engraving::Score* NotationInteraction::score() const
@@ -3341,7 +3363,7 @@ void NotationInteraction::doEndEditElement()
     if (m_editData.element) {
         m_editData.element->endEdit(m_editData);
     }
-
+    m_clipboardTextPos = 0;
     m_editData.clear();
 }
 
@@ -3556,6 +3578,7 @@ void NotationInteraction::copySelection()
         }
         QApplication::clipboard()->setMimeData(mimeData);
     }
+    m_clipboardTextPos = 0;
 }
 
 mu::Ret NotationInteraction::repeatSelection()
@@ -3616,6 +3639,29 @@ void NotationInteraction::copyLyrics()
     QApplication::clipboard()->setText(text);
 }
 
+inline QString extractSyllable(const QString& txt, int& textPos)
+{
+    textPos = txt.indexOf(QRegExp("\\S"), textPos);
+    if (textPos == -1) {
+        textPos = 0;
+        return "";
+    }
+    static QString regex = QString("[^\\S") + QChar(0xa0) + QChar(0x202F) + "]+";
+    int splitPos = txt.indexOf(QRegExp(regex), textPos);
+    if (splitPos == -1) {
+        splitPos = txt.length();
+    }
+    QString result = txt.mid(textPos, splitPos - textPos);
+    int hyphPos = result.indexOf('-');
+    if (hyphPos != -1) {
+        result = result.mid(0, ++hyphPos);
+        textPos += hyphPos;
+    } else {
+        textPos = splitPos + 1;
+    }
+    return result;
+}
+
 void NotationInteraction::pasteSelection(const Fraction& scale)
 {
     startEdit();
@@ -3623,6 +3669,17 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     if (isTextEditingStarted()) {
         QString txt = QGuiApplication::clipboard()->text();
         toTextBase(m_editData.element)->paste(m_editData, txt);
+        if (!txt.isEmpty() && m_editData.element->isLyrics()) {
+            int clipTextPos = m_clipboardTextPos;
+            if (txt.endsWith('-')) {
+                navigateToNextSyllable();
+            } else if (txt.endsWith('_')) {
+                addMelisma();
+            } else {
+                navigateToLyrics(false, false, false);
+            }
+            m_clipboardTextPos = clipTextPos;
+        }
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         QMimeDataAdapter ma(mimeData);
@@ -4535,7 +4592,6 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
     if (nextSegment == 0) {
         return;
     }
-
     endEditText();
 
     // look for the lyrics we are moving from; may be the current lyrics or a previous one
@@ -5244,8 +5300,9 @@ void NotationInteraction::addMelisma()
     mu::engraving::PlacementV placement = lyrics->placement();
     mu::engraving::PropertyFlags pFlags = lyrics->propertyFlags(mu::engraving::Pid::PLACEMENT);
     Fraction endTick = segment->tick(); // a previous melisma cannot extend beyond this point
-
+    int clipTextPos = m_clipboardTextPos;
     endEditText();
+    m_clipboardTextPos = clipTextPos;
 
     // search next chord
     mu::engraving::Segment* nextSegment = segment;
