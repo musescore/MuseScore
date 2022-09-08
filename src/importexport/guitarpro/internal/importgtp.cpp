@@ -2927,14 +2927,17 @@ static void createLinkedTabs(MasterScore* score)
             Staff* dstStaff = part->staff(stavesNum + i);
             Excerpt::cloneStaff(srcStaff, dstStaff, false);
 
-            StaffTypes tabType = StaffTypes::TAB_6SIMPLE;
-            if (lines == 4) {
-                tabType = StaffTypes::TAB_4SIMPLE;
-            } else if (lines == 5) {
-                tabType = StaffTypes::TAB_5SIMPLE;
-            }
+            static const std::vector<StaffTypes> types {
+                StaffTypes::TAB_4SIMPLE,
+                StaffTypes::TAB_5SIMPLE,
+                StaffTypes::TAB_6SIMPLE,
+                StaffTypes::TAB_7SIMPLE,
+                StaffTypes::TAB_8SIMPLE
+            };
 
-            dstStaff->setStaffType(fr, *StaffType::preset(tabType));
+            int index = (lines >= 4 && lines <= 8) ? lines - 4 : 2;
+
+            dstStaff->setStaffType(fr, *StaffType::preset(types.at(index)));
             dstStaff->setLines(fr, static_cast<int>(lines));
 
             // each spanner moves down to the staff with index,

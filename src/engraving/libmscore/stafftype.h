@@ -177,6 +177,7 @@ enum class StaffTypes : signed char {
     TAB_UKULELE, TAB_BALALAJKA, TAB_DULCIMER,
     TAB_ITALIAN, TAB_FRENCH,
     TAB_7COMMON, TAB_8COMMON,
+    TAB_7SIMPLE, TAB_8SIMPLE,
     STAFF_TYPES,
     // some useful shorthands:
     PERC_DEFAULT = StaffTypes::PERC_5LINE,
