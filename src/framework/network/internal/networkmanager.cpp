@@ -294,5 +294,12 @@ Ret NetworkManager::errorFromReply(const QNetworkReply* reply) const
         return make_ret(Err::HostClosed);
     }
 
-    return make_ret(Err::NetworkError);
+    Ret ret = make_ret(Err::NetworkError);
+
+    QString errorString = reply->errorString();
+    if (!errorString.isEmpty()) {
+        ret.setText(errorString.toStdString());
+    }
+
+    return ret;
 }

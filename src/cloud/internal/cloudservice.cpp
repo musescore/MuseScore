@@ -33,6 +33,7 @@
 #include <QRandomGenerator>
 
 #include "network/networkerrors.h"
+#include "clouderrors.h"
 #include "multiinstances/resourcelockguard.h"
 
 #include "log.h"
@@ -199,7 +200,13 @@ void CloudService::onUserAuthorized()
 
     saveTokens();
 
-    if (downloadUserInfo() == RequestStatus::Ok && m_onUserAuthorizedCallback) {
+    Ret ret = downloadUserInfo();
+    if (!ret) {
+        LOGE() << ret.toString();
+        return;
+    }
+
+    if (m_onUserAuthorizedCallback) {
         m_onUserAuthorizedCallback();
         m_onUserAuthorizedCallback = OnUserAuthorizedCallback();
     }
@@ -216,10 +223,10 @@ void CloudService::authorize(const OnUserAuthorizedCallback& onUserAuthorizedCal
     m_oauth2->grant();
 }
 
-QUrl CloudService::prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params) const
+mu::RetVal<QUrl> CloudService::prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params) const
 {
     if (m_accessToken.isEmpty()) {
-        return QUrl();
+        return make_ret(cloud::Err::AccessTokenIsEmpty);
     }
 
     QUrlQuery query;
@@ -231,7 +238,7 @@ QUrl CloudService::prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params) 
 
     apiUrl.setQuery(query);
 
-    return apiUrl;
+    return RetVal<QUrl>::make_ok(apiUrl);
 }
 
 RequestHeaders CloudService::headers() const
@@ -239,25 +246,24 @@ RequestHeaders CloudService::headers() const
     return configuration()->headers();
 }
 
-CloudService::RequestStatus CloudService::downloadUserInfo()
+mu::Ret CloudService::downloadUserInfo()
 {
     TRACEFUNC;
 
-    QUrl userInfoUrl = prepareUrlForRequest(configuration()->userInfoApiUrl());
-    if (userInfoUrl.isEmpty()) {
-        return RequestStatus::Error;
+    RetVal<QUrl> userInfoUrl = prepareUrlForRequest(configuration()->userInfoApiUrl());
+    if (!userInfoUrl.ret) {
+        return userInfoUrl.ret;
     }
 
     QBuffer receivedData;
-    Ret ret = m_networkManager->get(userInfoUrl, &receivedData, headers());
+    Ret ret = m_networkManager->get(userInfoUrl.val, &receivedData, headers());
 
     if (ret.code() == USER_UNAUTHORIZED_ERR_CODE) {
-        return RequestStatus::UserUnauthorized;
+        return make_ret(cloud::Err::UserIsNotAuthorized);
     }
 
     if (!ret) {
-        LOGE() << ret.toString();
-        return RequestStatus::Error;
+        return ret;
     }
 
     QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
@@ -273,7 +279,7 @@ CloudService::RequestStatus CloudService::downloadUserInfo()
 
     setAccountInfo(info);
 
-    return RequestStatus::Ok;
+    return make_ok();
 }
 
 mu::RetVal<ScoreInfo> CloudService::downloadScoreInfo(int scoreId)
@@ -285,14 +291,14 @@ mu::RetVal<ScoreInfo> CloudService::downloadScoreInfo(int scoreId)
     QVariantMap params;
     params[SCORE_ID_KEY] = scoreId;
 
-    QUrl scoreInfoUrl = prepareUrlForRequest(configuration()->scoreInfoApiUrl(), params);
-    if (scoreInfoUrl.isEmpty()) {
-        result.ret = false;
+    RetVal<QUrl> scoreInfoUrl = prepareUrlForRequest(configuration()->scoreInfoApiUrl(), params);
+    if (!scoreInfoUrl.ret) {
+        result.ret = scoreInfoUrl.ret;
         return result;
     }
 
     QBuffer receivedData;
-    Ret ret = m_networkManager->get(scoreInfoUrl, &receivedData, headers());
+    Ret ret = m_networkManager->get(scoreInfoUrl.val, &receivedData, headers());
 
     if (!ret) {
         result.ret = ret;
@@ -344,14 +350,14 @@ void CloudService::signOut()
     QVariantMap params;
     params[REFRESH_TOKEN_KEY] = m_refreshToken;
 
-    QUrl signOutUrl = prepareUrlForRequest(configuration()->logoutApiUrl(), params);
-    if (signOutUrl.isEmpty()) {
+    RetVal<QUrl> signOutUrl = prepareUrlForRequest(configuration()->logoutApiUrl(), params);
+    if (!signOutUrl.ret) {
+        LOGE() << signOutUrl.ret.toString();
         return;
     }
 
     QBuffer receivedData;
-
-    Ret ret = m_networkManager->get(signOutUrl, &receivedData, headers());
+    Ret ret = m_networkManager->get(signOutUrl.val, &receivedData, headers());
     if (!ret) {
         LOGE() << ret.toString();
     }
@@ -407,11 +413,11 @@ void CloudService::uploadScore(QIODevice& scoreSourceDevice, const QString& titl
     executeRequest(uploadCallback);
 }
 
-CloudService::RequestStatus CloudService::doUploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
+mu::Ret CloudService::doUploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
 {
-    QUrl uploadUrl = prepareUrlForRequest(configuration()->uploadingApiUrl());
-    if (uploadUrl.isEmpty()) {
-        return RequestStatus::Error;
+    RetVal<QUrl> uploadUrl = prepareUrlForRequest(configuration()->uploadingApiUrl());
+    if (!uploadUrl.ret) {
+        return uploadUrl.ret;
     }
 
     int scoreId = scoreIdFromSourceUrl(sourceUrl);
@@ -425,7 +431,7 @@ CloudService::RequestStatus CloudService::doUploadScore(QIODevice& scoreSourceDe
             if (scoreInfo.ret.code() == static_cast<int>(network::Err::ResourceNotFound)) {
                 isScoreAlreadyUploaded = false;
             } else {
-                return RequestStatus::Error;
+                return scoreInfo.ret;
             }
         }
 
@@ -467,18 +473,17 @@ CloudService::RequestStatus CloudService::doUploadScore(QIODevice& scoreSourceDe
     OutgoingDevice device(&multiPart);
 
     if (isScoreAlreadyUploaded) { // score exists, update
-        ret = m_networkManager->put(uploadUrl, &device, &receivedData, headers());
+        ret = m_networkManager->put(uploadUrl.val, &device, &receivedData, headers());
     } else { // score doesn't exist, post a new score
-        ret = m_networkManager->post(uploadUrl, &device, &receivedData, headers());
+        ret = m_networkManager->post(uploadUrl.val, &device, &receivedData, headers());
     }
 
     if (ret.code() == USER_UNAUTHORIZED_ERR_CODE) {
-        return RequestStatus::UserUnauthorized;
+        return make_ret(cloud::Err::UserIsNotAuthorized);
     }
 
     if (!ret) {
-        LOGE() << ret.toString();
-        return RequestStatus::Error;
+        return ret;
     }
 
     QJsonObject scoreInfo = QJsonDocument::fromJson(receivedData.data()).object();
@@ -491,7 +496,7 @@ CloudService::RequestStatus CloudService::doUploadScore(QIODevice& scoreSourceDe
 
     openUrl(editUrl);
 
-    return RequestStatus::Ok;
+    return make_ok();
 }
 
 mu::async::Channel<QUrl> CloudService::sourceUrlReceived() const
@@ -506,12 +511,16 @@ Progress CloudService::uploadProgress() const
 
 void CloudService::executeRequest(const RequestCallback& requestCallback)
 {
-    if (requestCallback() != RequestStatus::UserUnauthorized) {
-        return;
+    Ret ret = requestCallback();
+
+    if (ret.code() == static_cast<int>(cloud::Err::UserIsNotAuthorized)) {
+        if (updateTokens()) {
+            ret = requestCallback();
+        }
     }
 
-    if (updateTokens()) {
-        requestCallback();
+    if (!ret) {
+        LOGE() << ret.toString();
     }
 }
 
