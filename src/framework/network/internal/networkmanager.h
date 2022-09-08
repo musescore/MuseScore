@@ -72,7 +72,7 @@ private:
     void prepareReplyTransmit(QNetworkReply* reply);
 
     Ret waitForReplyFinished(QNetworkReply* reply, int timeoutMs);
-    Ret errorFromReply(int err);
+    Ret errorFromReply(const QNetworkReply* reply) const;
 
 private:
     QNetworkAccessManager* m_manager = nullptr;

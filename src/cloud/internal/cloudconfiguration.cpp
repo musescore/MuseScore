@@ -126,6 +126,11 @@ QUrl CloudConfiguration::logoutApiUrl() const
     return apiRootUrl() + "/oauth/logout";
 }
 
+QUrl CloudConfiguration::scoreInfoApiUrl() const
+{
+    return apiRootUrl() + "/score/info";
+}
+
 QUrl CloudConfiguration::uploadingApiUrl() const
 {
     return apiRootUrl() + "/score/upload";

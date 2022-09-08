@@ -25,7 +25,7 @@
 #include "modularity/imoduleexport.h"
 #include "progress.h"
 
-class QByteArray;
+class QIODevice;
 class QUrl;
 class QString;
 

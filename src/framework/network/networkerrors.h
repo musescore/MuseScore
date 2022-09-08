@@ -36,6 +36,7 @@ enum class Err {
     NetworkError,
     HostClosed,
     HostNotFound,
+    ResourceNotFound,
     FiledOpenIODeviceRead,
     FiledOpenIODeviceWrite
 };
@@ -53,6 +54,7 @@ inline Ret make_ret(Err e)
     case Err::NetworkError: return Ret(retCode, trc("network", "An unknown network-related error occurred"));
     case Err::HostClosed: return Ret(retCode, trc("network", "The remote server closed the connection"));
     case Err::HostNotFound: return Ret(retCode, trc("network", "The remote host name was not found"));
+    case Err::ResourceNotFound: return Ret(retCode, trc("network", "Not Found"));
     case Err::FiledOpenIODeviceRead: return Ret(retCode, trc("network", "The I/O device was not opened for reading"));
     case Err::FiledOpenIODeviceWrite: return Ret(retCode, trc("network", "The I/O device was not opened for writing"));
     }

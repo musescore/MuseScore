@@ -32,6 +32,7 @@
 #include <QHttpMultiPart>
 #include <QRandomGenerator>
 
+#include "network/networkerrors.h"
 #include "multiinstances/resourcelockguard.h"
 
 #include "log.h"
@@ -43,6 +44,7 @@ using namespace mu::framework;
 static const QString ACCESS_TOKEN_KEY("access_token");
 static const QString REFRESH_TOKEN_KEY("refresh_token");
 static const QString DEVICE_ID_KEY("device_id");
+static const QString SCORE_ID_KEY("score_id");
 static const QString EDITOR_SOURCE_KEY("editor_source");
 static const QString EDITOR_SOURCE_VALUE(QString("Musescore Editor %1").arg(VERSION));
 static const QString PLATFORM_KEY("platform");
@@ -214,7 +216,7 @@ void CloudService::authorize(const OnUserAuthorizedCallback& onUserAuthorizedCal
     m_oauth2->grant();
 }
 
-QUrl CloudService::prepareUrlForRequest(QUrl apiUrl) const
+QUrl CloudService::prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params) const
 {
     if (m_accessToken.isEmpty()) {
         return QUrl();
@@ -222,6 +224,11 @@ QUrl CloudService::prepareUrlForRequest(QUrl apiUrl) const
 
     QUrlQuery query;
     query.addQueryItem(ACCESS_TOKEN_KEY, m_accessToken);
+
+    for (auto it = params.cbegin(); it != params.cend(); ++it) {
+        query.addQueryItem(it.key(), it.value().toString());
+    }
+
     apiUrl.setQuery(query);
 
     return apiUrl;
@@ -269,6 +276,49 @@ CloudService::RequestStatus CloudService::downloadUserInfo()
     return RequestStatus::Ok;
 }
 
+mu::RetVal<ScoreInfo> CloudService::downloadScoreInfo(int scoreId)
+{
+    TRACEFUNC;
+
+    RetVal<ScoreInfo> result = RetVal<ScoreInfo>::make_ok(ScoreInfo());
+
+    QVariantMap params;
+    params[SCORE_ID_KEY] = scoreId;
+
+    QUrl scoreInfoUrl = prepareUrlForRequest(configuration()->scoreInfoApiUrl(), params);
+    if (scoreInfoUrl.isEmpty()) {
+        result.ret = false;
+        return result;
+    }
+
+    QBuffer receivedData;
+    Ret ret = m_networkManager->get(scoreInfoUrl, &receivedData, headers());
+
+    if (!ret) {
+        result.ret = ret;
+        return result;
+    }
+
+    QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
+    QJsonObject scoreInfo = document.object();
+
+    result.val.id = scoreInfo.value("id").toInt();
+    result.val.title = scoreInfo.value("title").toString();
+    result.val.description = scoreInfo.value("description").toString();
+    result.val.license = scoreInfo.value("license").toString();
+    result.val.tags = scoreInfo.value("tags").toString().split(',');
+    result.val.isPrivate = scoreInfo.value("sharing").toString() == "private";
+    result.val.url = scoreInfo.value("custom_url").toString();
+
+    QJsonObject owner = scoreInfo.value("user").toObject();
+
+    result.val.owner.id = owner.value("uid").toInt();
+    result.val.owner.userName = owner.value("username").toString();
+    result.val.owner.profileUrl = owner.value("custom_url").toString();
+
+    return result;
+}
+
 void CloudService::signIn()
 {
     authorize();
@@ -291,23 +341,24 @@ void CloudService::signOut()
 
     TRACEFUNC;
 
-    QUrl signOutUrl = prepareUrlForRequest(configuration()->logoutApiUrl());
-    if (!signOutUrl.isEmpty()) {
-        QUrlQuery query(signOutUrl.query());
-        query.addQueryItem(REFRESH_TOKEN_KEY, m_refreshToken);
-        signOutUrl.setQuery(query);
+    QVariantMap params;
+    params[REFRESH_TOKEN_KEY] = m_refreshToken;
 
-        QBuffer receivedData;
-        Ret ret = m_networkManager->get(signOutUrl, &receivedData, headers());
+    QUrl signOutUrl = prepareUrlForRequest(configuration()->logoutApiUrl(), params);
+    if (signOutUrl.isEmpty()) {
+        return;
+    }
 
-        if (!ret) {
-            LOGE() << ret.toString();
-        }
+    QBuffer receivedData;
+
+    Ret ret = m_networkManager->get(signOutUrl, &receivedData, headers());
+    if (!ret) {
+        LOGE() << ret.toString();
     }
 
     mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
 
-    Ret ret = fileSystem()->remove(configuration()->tokensFilePath());
+    ret = fileSystem()->remove(configuration()->tokensFilePath());
     if (!ret) {
         LOGE() << ret.toString();
     }
@@ -365,6 +416,23 @@ CloudService::RequestStatus CloudService::doUploadScore(QIODevice& scoreSourceDe
 
     int scoreId = scoreIdFromSourceUrl(sourceUrl);
     bool isScoreAlreadyUploaded = scoreId != INVALID_SCORE_ID;
+
+    if (isScoreAlreadyUploaded) {
+        RetVal<ScoreInfo> scoreInfo = downloadScoreInfo(scoreId);
+        if (!scoreInfo.ret) {
+            LOGW() << scoreInfo.ret.toString();
+
+            if (scoreInfo.ret.code() == static_cast<int>(network::Err::ResourceNotFound)) {
+                isScoreAlreadyUploaded = false;
+            } else {
+                return RequestStatus::Error;
+            }
+        }
+
+        if (scoreInfo.val.owner.id != m_accountInfo.val.id) {
+            isScoreAlreadyUploaded = false;
+        }
+    }
 
     QHttpMultiPart multiPart(QHttpMultiPart::FormDataType);
 
