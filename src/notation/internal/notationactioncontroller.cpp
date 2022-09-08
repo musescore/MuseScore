@@ -810,7 +810,9 @@ void NotationActionController::putTuplet(int tupletCount)
 
     TupletOptions options;
     options.ratio.setNumerator(tupletCount);
+    options.ratio.setDenominator(2);
     options.autoBaseLen = true;
+
     putTuplet(options);
 }
 
