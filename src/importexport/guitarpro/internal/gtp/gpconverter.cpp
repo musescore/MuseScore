@@ -2486,7 +2486,6 @@ void GPConverter::addFadding(const GPBeat* beat, ChordRest* cr)
 
     Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
     art->setSymId(scoreFadding(beat->fadding()));
-    art->setAnchor(ArticulationAnchor::TOP_STAFF);
     if (!_score->toggleArticulation(static_cast<Chord*>(cr)->upNote(), art)) {
         delete art;
     }

@@ -29,5 +29,6 @@
     <wahShowTabCommon>1</wahShowTabCommon>
     <golpeShowTabSimple>0</golpeShowTabSimple>
     <golpeShowTabCommon>1</golpeShowTabCommon>
+    <articulationAnchorDefault>0</articulationAnchorDefault>
   </Style>
 </museScore>
