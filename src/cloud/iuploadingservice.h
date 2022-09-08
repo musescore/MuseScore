@@ -37,10 +37,7 @@ class IUploadingService : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IUploadingService() = default;
 
-    virtual void uploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) = 0;
-
-    virtual async::Channel<QUrl> sourceUrlReceived() const = 0;
-    virtual framework::Progress uploadProgress() const = 0;
+    virtual framework::ProgressPtr uploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) = 0;
 };
 }
 
