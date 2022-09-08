@@ -33,8 +33,10 @@
 #include <QRandomGenerator>
 
 #include "network/networkerrors.h"
-#include "clouderrors.h"
 #include "multiinstances/resourcelockguard.h"
+#include "global/async/async.h"
+
+#include "clouderrors.h"
 
 #include "log.h"
 
@@ -399,25 +401,43 @@ void CloudService::setAccountInfo(const AccountInfo& info)
     m_userAuthorized.set(info.isValid());
 }
 
-void CloudService::uploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
+ProgressPtr CloudService::uploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
 {
-    auto uploadCallback = [this, &scoreSourceDevice, title, sourceUrl]() {
-        return doUploadScore(scoreSourceDevice, title, sourceUrl);
+    ProgressPtr progress = std::make_shared<Progress>();
+
+    auto uploadCallback = [this, progress, &scoreSourceDevice, title, sourceUrl]() {
+        RetVal<QUrl> newSourceUrl = doUploadScore(scoreSourceDevice, title, sourceUrl);
+
+        ProgressResult result;
+        result.ret = newSourceUrl.ret;
+        result.val = Val(newSourceUrl.val.toString());
+        progress->finished.send(result);
+
+        return result.ret;
     };
 
-    if (!m_userAuthorized.val) {
-        authorize(uploadCallback);
-        return;
-    }
+    async::Async::call(this, [this, uploadCallback]() {
+        if (!m_userAuthorized.val) {
+            authorize(uploadCallback);
+            return;
+        }
 
-    executeRequest(uploadCallback);
+        executeRequest(uploadCallback);
+    });
+
+    return progress;
 }
 
-mu::Ret CloudService::doUploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
+mu::RetVal<QUrl> CloudService::doUploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
 {
+    TRACEFUNC;
+
+    RetVal<QUrl> result;
+
     RetVal<QUrl> uploadUrl = prepareUrlForRequest(configuration()->uploadingApiUrl());
     if (!uploadUrl.ret) {
-        return uploadUrl.ret;
+        result.ret = uploadUrl.ret;
+        return result;
     }
 
     int scoreId = scoreIdFromSourceUrl(sourceUrl);
@@ -431,7 +451,8 @@ mu::Ret CloudService::doUploadScore(QIODevice& scoreSourceDevice, const QString&
             if (scoreInfo.ret.code() == static_cast<int>(network::Err::ResourceNotFound)) {
                 isScoreAlreadyUploaded = false;
             } else {
-                return scoreInfo.ret;
+                result.ret = scoreInfo.ret;
+                return result;
             }
         }
 
@@ -483,30 +504,23 @@ mu::Ret CloudService::doUploadScore(QIODevice& scoreSourceDevice, const QString&
     }
 
     if (!ret) {
-        return ret;
+        result.ret = ret;
+        return result;
     }
 
     QJsonObject scoreInfo = QJsonDocument::fromJson(receivedData.data()).object();
     QUrl newSourceUrl = QUrl(scoreInfo.value("permalink").toString());
     QUrl editUrl = QUrl(scoreInfo.value("edit_url").toString());
 
-    if (newSourceUrl.isValid()) {
-        m_sourceUrlReceived.send(newSourceUrl);
+    if (!newSourceUrl.isValid()) {
+        result.ret = make_ret(cloud::Err::CouldNotReceiveSourceUrl);
+        return result;
     }
 
+    result.val = newSourceUrl;
     openUrl(editUrl);
 
-    return make_ok();
-}
-
-mu::async::Channel<QUrl> CloudService::sourceUrlReceived() const
-{
-    return m_sourceUrlReceived;
-}
-
-Progress CloudService::uploadProgress() const
-{
-    return m_networkManager->progress();
+    return result;
 }
 
 void CloudService::executeRequest(const RequestCallback& requestCallback)

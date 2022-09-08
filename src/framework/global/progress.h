@@ -25,15 +25,20 @@
 #include "async/channel.h"
 #include "async/notification.h"
 
-#include "types/ret.h"
+#include "types/retval.h"
+#include "types/val.h"
 
 namespace mu::framework {
+using ProgressResult = RetVal<Val>;
+
 struct Progress
 {
     async::Notification started;
     async::Channel<int64_t /*current*/, int64_t /*total*/, std::string /*title*/> progressChanged;
-    async::Channel<Ret> finished;
+    async::Channel<ProgressResult> finished;
 };
+
+using ProgressPtr = std::shared_ptr<Progress>;
 }
 
 #endif // MU_FRAMEWORK_PROGRESS_H

@@ -64,10 +64,7 @@ public:
     ValCh<bool> userAuthorized() const override;
     ValCh<AccountInfo> accountInfo() const override;
 
-    void uploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) override;
-
-    async::Channel<QUrl> sourceUrlReceived() const override;
-    framework::Progress uploadProgress() const override;
+    framework::ProgressPtr uploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) override;
 
 private slots:
     void onUserAuthorized();
@@ -91,7 +88,7 @@ private:
     Ret downloadUserInfo();
     RetVal<ScoreInfo> downloadScoreInfo(int scoreId);
 
-    Ret doUploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl());
+    RetVal<QUrl> doUploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl());
 
     using RequestCallback = std::function<Ret()>;
     void executeRequest(const RequestCallback& requestCallback);
@@ -107,7 +104,6 @@ private:
     QString m_refreshToken;
 
     OnUserAuthorizedCallback m_onUserAuthorizedCallback;
-    async::Channel<QUrl> m_sourceUrlReceived;
 };
 }
 

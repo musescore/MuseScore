@@ -466,14 +466,14 @@ bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, pr
     return true;
 }
 
-bool ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo& info, SaveMode saveMode)
+void ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo& info, SaveMode saveMode)
 {
     UNUSED(info)
     UNUSED(saveMode)
 
     INotationProjectPtr project = globalContext()->currentProject();
     if (!project) {
-        return false;
+        return;
     }
 
     QBuffer* projectData = new QBuffer();
@@ -483,23 +483,28 @@ bool ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo&
     if (!ret) {
         LOGE() << ret.toString();
         delete projectData;
-        return false;
     }
 
     projectData->close();
-
     projectData->open(QIODevice::ReadOnly);
 
-    uploadingService()->uploadProgress().progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
-        LOGD() << "Uploading progress: " << current << "/" << total;
-    }, Asyncable::AsyncMode::AsyncSetRepeat);
+    ProjectMeta meta = project->metaInfo();
+    ProgressPtr progress = uploadingService()->uploadScore(*projectData, meta.title, meta.source);
 
-    async::Channel<QUrl> sourceUrlCh = uploadingService()->sourceUrlReceived();
-    sourceUrlCh.onReceive(this, [project, projectData](const QUrl& url) {
+    progress->progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
+        LOGD() << "Uploading progress: " << current << "/" << total;
+    });
+
+    progress->finished.onReceive(this, [project, projectData](const ProgressResult& res) {
         projectData->deleteLater();
 
-        LOGD() << "Source url received: " << url;
-        QString newSource = url.toString();
+        if (!res.ret) {
+            LOGE() << res.ret.toString();
+            return;
+        }
+
+        QString newSource = QString::fromStdString(res.val.toString());
+        LOGD() << "Source url received: " << newSource;
 
         ProjectMeta meta = project->metaInfo();
         if (meta.source == newSource) {
@@ -507,18 +512,12 @@ bool ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo&
         }
 
         meta.source = newSource;
-        project->setMetaInfo(meta);
+        project->setMetaInfo(meta, false /*undoable*/);
 
         if (!project->isNewlyCreated()) {
             project->save();
         }
-    }, Asyncable::AsyncMode::AsyncSetRepeat);
-
-    ProjectMeta meta = project->metaInfo();
-    uploadingService()->uploadScore(*projectData, meta.title, meta.source);
-
-    // TODO(save-to-cloud): check whether upload was successful?
-    return true;
+    });
 }
 
 bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path_t& filePath)
