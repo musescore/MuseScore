@@ -396,7 +396,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::measureNumberAllStaves,  "measureNumberAllStaffs",  false }, // need to keep staffs and not staves here for backward compatibility
     { Sid::smallNoteMag,            "smallNoteMag",            PropertyValue(.7) },
     { Sid::graceNoteMag,            "graceNoteMag",            PropertyValue(0.7) },
-    { Sid::graceToMainNoteDist,     "graceToMainNoteDist",     Spatium(0.6) },
+    { Sid::graceToMainNoteDist,     "graceToMainNoteDist",     Spatium(0.45) },
     { Sid::graceToGraceNoteDist,    "graceToGraceNoteDist",    Spatium(0.3) },
     { Sid::smallStaffMag,           "smallStaffMag",           PropertyValue(0.7) },
     { Sid::smallClefMag,            "smallClefMag",            PropertyValue(0.8) },
