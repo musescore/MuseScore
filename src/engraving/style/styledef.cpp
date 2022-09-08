@@ -153,7 +153,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::dividerRightX,           "dividerRightX",           0.0 },
     { Sid::dividerRightY,           "dividerRightY",           0.0 },
 
-    { Sid::clefLeftMargin,          "clefLeftMargin",          Spatium(0.8) },     // 0.64 (gould: <= 1)
+    { Sid::clefLeftMargin,          "clefLeftMargin",          Spatium(0.75) },     // 0.64 (gould: <= 1)
     { Sid::keysigLeftMargin,        "keysigLeftMargin",        Spatium(0.5) },
     { Sid::ambitusMargin,           "ambitusMargin",           Spatium(0.5) },
 

@@ -103,7 +103,7 @@
     <dividerRightSym>systemDivider</dividerRightSym>
     <dividerRightX>0</dividerRightX>
     <dividerRightY>0</dividerRightY>
-    <clefLeftMargin>0.8</clefLeftMargin>
+    <clefLeftMargin>0.75</clefLeftMargin>
     <keysigLeftMargin>0.5</keysigLeftMargin>
     <ambitusMargin>0.5</ambitusMargin>
     <timesigLeftMargin>0.63</timesigLeftMargin>
