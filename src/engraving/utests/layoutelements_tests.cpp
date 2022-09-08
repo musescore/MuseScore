@@ -29,6 +29,8 @@
 #include "libmscore/staff.h"
 #include "libmscore/system.h"
 #include "libmscore/tuplet.h"
+#include "libmscore/chord.h"
+#include "libmscore/note.h"
 
 #include "utils/scorerw.h"
 
@@ -130,4 +132,23 @@ TEST_F(Engraving_LayoutElementsTests, tstLayoutMoonlight)
 TEST_F(Engraving_LayoutElementsTests, DISABLED_tstLayoutGoldberg)
 {
     tstLayoutAll(u"goldberg.mscx");
+}
+
+TEST_F(Engraving_LayoutElementsTests, tstLayoutCrossStaffArp)
+{
+    MasterScore* score = ScoreRW::readScore(ALL_ELEMENTS_DATA_DIR + "cross_staff_arp.mscx");
+    EXPECT_TRUE(score);
+
+    // the y-position where the bottom staff is
+    double staff1yPre = score->systems().front()->staves().at(1)->y();
+
+    // re-layout the score
+    score->update();
+    score->doLayout();
+
+    // the bottom staff should not have moved
+    double staff1yPost = score->systems().front()->staves().at(1)->y();
+    EXPECT_FLOAT_EQ(staff1yPre, staff1yPost);
+
+    delete score;
 }
