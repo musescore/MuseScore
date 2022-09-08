@@ -97,6 +97,17 @@ INotationSelectionPtr ProjectActionsController::currentNotationSelection() const
     return currentNotation() ? currentInteraction()->selection() : nullptr;
 }
 
+bool ProjectActionsController::canReceiveAction(const actions::ActionCode& code) const
+{
+    if (!m_saveToCloudAllowed) {
+        if (code == "file-save-to-cloud" || code == "file-publish") {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 bool ProjectActionsController::isFileSupported(const io::path_t& path) const
 {
     std::string suffix = io::suffix(path);
@@ -471,6 +482,10 @@ void ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo&
     UNUSED(info)
     UNUSED(saveMode)
 
+    if (!m_saveToCloudAllowed) {
+        return;
+    }
+
     INotationProjectPtr project = globalContext()->currentProject();
     if (!project) {
         return;
@@ -483,21 +498,27 @@ void ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo&
     if (!ret) {
         LOGE() << ret.toString();
         delete projectData;
+        return;
     }
 
     projectData->close();
     projectData->open(QIODevice::ReadOnly);
 
     ProjectMeta meta = project->metaInfo();
-    ProgressPtr progress = uploadingService()->uploadScore(*projectData, meta.title, meta.source);
+    m_uploadingProgress = uploadingService()->uploadScore(*projectData, meta.title, meta.source);
 
-    progress->progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
+    m_uploadingProgress->started.onNotify(this, [this]() {
+        m_saveToCloudAllowed = false;
+    });
+
+    m_uploadingProgress->progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
         if (total > 0) {
             LOGD() << "Uploading progress: " << current << " / " << total << " bytes";
         }
     });
 
-    progress->finished.onReceive(this, [project, projectData](const ProgressResult& res) {
+    m_uploadingProgress->finished.onReceive(this, [this, project, projectData](const ProgressResult& res) {
+        m_saveToCloudAllowed = true;
         projectData->deleteLater();
 
         if (!res.ret) {

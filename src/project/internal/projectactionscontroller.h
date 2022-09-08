@@ -68,6 +68,8 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
 public:
     void init();
 
+    bool canReceiveAction(const actions::ActionCode& code) const override;
+
     bool isFileSupported(const io::path_t& path) const override;
     Ret openProject(const io::path_t& projectPath) override;
     bool closeOpenedProject(bool quitApp = false) override;
@@ -123,6 +125,9 @@ private:
     bool hasSelection() const;
 
     bool m_isProjectProcessing = false;
+
+    bool m_saveToCloudAllowed = true;
+    framework::ProgressPtr m_uploadingProgress;
 };
 }
 
