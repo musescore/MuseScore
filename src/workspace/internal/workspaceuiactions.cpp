@@ -35,7 +35,7 @@ const UiActionList WorkspaceUiActions::m_actions = {
              TranslatableString("action", "Select workspace")
              ),
     UiAction("configure-workspaces",
-             ActionCategory::ViewingNavigation,
+             ActionCategory::Workspace,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Configure workspace"),
