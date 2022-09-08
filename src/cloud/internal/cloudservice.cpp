@@ -79,7 +79,6 @@ void CloudService::init()
 
     m_oauth2 = new QOAuth2AuthorizationCodeFlow(this);
     m_replyHandler = new QOAuthHttpServerReplyHandler(this);
-    m_networkManager = networkManagerCreator()->makeNetworkManager();
 
     m_oauth2->setAuthorizationUrl(configuration()->authorizationUrl());
     m_oauth2->setAccessTokenUrl(configuration()->accessTokenUrl());
@@ -169,7 +168,8 @@ bool CloudService::updateTokens()
     refreshApiUrl.setQuery(query);
 
     QBuffer receivedData;
-    Ret ret = m_networkManager->post(refreshApiUrl, nullptr, &receivedData, headers());
+    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    Ret ret = manager->post(refreshApiUrl, nullptr, &receivedData, headers());
 
     if (!ret) {
         LOGE() << ret.toString();
@@ -258,7 +258,8 @@ mu::Ret CloudService::downloadUserInfo()
     }
 
     QBuffer receivedData;
-    Ret ret = m_networkManager->get(userInfoUrl.val, &receivedData, headers());
+    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    Ret ret = manager->get(userInfoUrl.val, &receivedData, headers());
 
     if (ret.code() == USER_UNAUTHORIZED_ERR_CODE) {
         return make_ret(cloud::Err::UserIsNotAuthorized);
@@ -300,7 +301,8 @@ mu::RetVal<ScoreInfo> CloudService::downloadScoreInfo(int scoreId)
     }
 
     QBuffer receivedData;
-    Ret ret = m_networkManager->get(scoreInfoUrl.val, &receivedData, headers());
+    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    Ret ret = manager->get(scoreInfoUrl.val, &receivedData, headers());
 
     if (!ret) {
         result.ret = ret;
@@ -359,7 +361,8 @@ void CloudService::signOut()
     }
 
     QBuffer receivedData;
-    Ret ret = m_networkManager->get(signOutUrl.val, &receivedData, headers());
+    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    Ret ret = manager->get(signOutUrl.val, &receivedData, headers());
     if (!ret) {
         LOGE() << ret.toString();
     }
@@ -406,7 +409,14 @@ ProgressPtr CloudService::uploadScore(QIODevice& scoreSourceDevice, const QStrin
     ProgressPtr progress = std::make_shared<Progress>();
 
     auto uploadCallback = [this, progress, &scoreSourceDevice, title, sourceUrl]() {
-        RetVal<QUrl> newSourceUrl = doUploadScore(scoreSourceDevice, title, sourceUrl);
+        progress->started.notify();
+
+        INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+        manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
+            progress->progressChanged.send(current, total, message);
+        });
+
+        RetVal<QUrl> newSourceUrl = doUploadScore(manager, scoreSourceDevice, title, sourceUrl);
 
         ProgressResult result;
         result.ret = newSourceUrl.ret;
@@ -428,11 +438,12 @@ ProgressPtr CloudService::uploadScore(QIODevice& scoreSourceDevice, const QStrin
     return progress;
 }
 
-mu::RetVal<QUrl> CloudService::doUploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
+mu::RetVal<QUrl> CloudService::doUploadScore(INetworkManagerPtr uploadManager, QIODevice& scoreSourceDevice, const QString& title,
+                                             const QUrl& sourceUrl)
 {
     TRACEFUNC;
 
-    RetVal<QUrl> result;
+    RetVal<QUrl> result = RetVal<QUrl>::make_ok(QUrl());
 
     RetVal<QUrl> uploadUrl = prepareUrlForRequest(configuration()->uploadingApiUrl());
     if (!uploadUrl.ret) {
@@ -494,9 +505,9 @@ mu::RetVal<QUrl> CloudService::doUploadScore(QIODevice& scoreSourceDevice, const
     OutgoingDevice device(&multiPart);
 
     if (isScoreAlreadyUploaded) { // score exists, update
-        ret = m_networkManager->put(uploadUrl.val, &device, &receivedData, headers());
+        ret = uploadManager->put(uploadUrl.val, &device, &receivedData, headers());
     } else { // score doesn't exist, post a new score
-        ret = m_networkManager->post(uploadUrl.val, &device, &receivedData, headers());
+        ret = uploadManager->post(uploadUrl.val, &device, &receivedData, headers());
     }
 
     if (ret.code() == USER_UNAUTHORIZED_ERR_CODE) {

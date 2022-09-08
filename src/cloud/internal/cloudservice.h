@@ -88,14 +88,14 @@ private:
     Ret downloadUserInfo();
     RetVal<ScoreInfo> downloadScoreInfo(int scoreId);
 
-    RetVal<QUrl> doUploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl());
+    RetVal<QUrl> doUploadScore(network::INetworkManagerPtr uploadManager, QIODevice& scoreSourceDevice, const QString& title,
+                               const QUrl& sourceUrl = QUrl());
 
     using RequestCallback = std::function<Ret()>;
     void executeRequest(const RequestCallback& requestCallback);
 
     QOAuth2AuthorizationCodeFlow* m_oauth2 = nullptr;
     QOAuthHttpServerReplyHandler* m_replyHandler = nullptr;
-    network::INetworkManagerPtr m_networkManager;
 
     ValCh<bool> m_userAuthorized;
     ValCh<AccountInfo> m_accountInfo;
