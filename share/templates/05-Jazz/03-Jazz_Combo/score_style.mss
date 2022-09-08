@@ -103,7 +103,7 @@
     <dividerRightSym>systemDivider</dividerRightSym>
     <dividerRightX>0</dividerRightX>
     <dividerRightY>0</dividerRightY>
-    <clefLeftMargin>0.8</clefLeftMargin>
+    <clefLeftMargin>0.75</clefLeftMargin>
     <keysigLeftMargin>0.5</keysigLeftMargin>
     <ambitusMargin>0.5</ambitusMargin>
     <timesigLeftMargin>0.63</timesigLeftMargin>
@@ -129,7 +129,7 @@
     <minStaffSizeForAutoStems>4</minStaffSizeForAutoStems>
     <smallStaffStemDirection>1</smallStaffStemDirection>
     <beginRepeatLeftMargin>1</beginRepeatLeftMargin>
-    <minNoteDistance>0.6</minNoteDistance>
+    <minNoteDistance>0.5</minNoteDistance>
     <barNoteDistance>1.3</barNoteDistance>
     <barAccidentalDistance>0.65</barAccidentalDistance>
     <noteBarDistance>1.5</noteBarDistance>
@@ -151,7 +151,7 @@
     <keysigNaturalDistance>0.4</keysigNaturalDistance>
     <beamWidth>0.5</beamWidth>
     <beamDistance>0.33</beamDistance>
-    <beamMinLen>1.2</beamMinLen>
+    <beamMinLen>1.1</beamMinLen>
     <beamNoSlope>0</beamNoSlope>
     <dotMag>1</dotMag>
     <dotNoteDistance>0.5</dotNoteDistance>

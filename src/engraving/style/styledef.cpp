@@ -153,7 +153,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::dividerRightX,           "dividerRightX",           0.0 },
     { Sid::dividerRightY,           "dividerRightY",           0.0 },
 
-    { Sid::clefLeftMargin,          "clefLeftMargin",          Spatium(0.8) },     // 0.64 (gould: <= 1)
+    { Sid::clefLeftMargin,          "clefLeftMargin",          Spatium(0.75) },     // 0.64 (gould: <= 1)
     { Sid::keysigLeftMargin,        "keysigLeftMargin",        Spatium(0.5) },
     { Sid::ambitusMargin,           "ambitusMargin",           Spatium(0.5) },
 
@@ -181,7 +181,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::minStaffSizeForAutoStems, "minStaffSizeForAutoStems", 4 },
     { Sid::smallStaffStemDirection, "smallStaffStemDirection", DirectionV::UP },
     { Sid::beginRepeatLeftMargin,   "beginRepeatLeftMargin",   Spatium(1.0) },
-    { Sid::minNoteDistance,         "minNoteDistance",         Spatium(0.6) },
+    { Sid::minNoteDistance,         "minNoteDistance",         Spatium(0.5) },
     { Sid::barNoteDistance,         "barNoteDistance",         Spatium(1.3) },     // was 1.2
 
     { Sid::barAccidentalDistance,   "barAccidentalDistance",   Spatium(0.65) },
@@ -208,7 +208,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     { Sid::beamWidth,               "beamWidth",               Spatium(0.5) },      // was 0.48
     { Sid::useWideBeams,            "useWideBeams",            false },
-    { Sid::beamMinLen,              "beamMinLen",              Spatium(1.2) },
+    { Sid::beamMinLen,              "beamMinLen",              Spatium(1.1) },
     { Sid::beamNoSlope,             "beamNoSlope",             false },
     { Sid::snapCustomBeamsToGrid,   "snapCustomBeamsToGrid",   true },
 
@@ -396,7 +396,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::measureNumberAllStaves,  "measureNumberAllStaffs",  false }, // need to keep staffs and not staves here for backward compatibility
     { Sid::smallNoteMag,            "smallNoteMag",            PropertyValue(.7) },
     { Sid::graceNoteMag,            "graceNoteMag",            PropertyValue(0.7) },
-    { Sid::graceToMainNoteDist,     "graceToMainNoteDist",     Spatium(0.6) },
+    { Sid::graceToMainNoteDist,     "graceToMainNoteDist",     Spatium(0.45) },
     { Sid::graceToGraceNoteDist,    "graceToGraceNoteDist",    Spatium(0.3) },
     { Sid::smallStaffMag,           "smallStaffMag",           PropertyValue(0.7) },
     { Sid::smallClefMag,            "smallClefMag",            PropertyValue(0.8) },
