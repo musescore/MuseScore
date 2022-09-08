@@ -190,10 +190,10 @@ void Lyrics::layout2(int nAbove)
 
 void Lyrics::paste(EditData& ed, const String& txt)
 {
-    String correctedText = txt;
-    //! NOTE: Remove formating info. For example, for "<info><info>text" will be "text"
-    correctedText = correctedText.remove(std::regex("\\<(.*?)\\>"));
-
+    if (txt.startsWith('<') && txt.contains('>')) {
+        TextBase::paste(ed, txt);
+        return;
+    }
     String regex = String(u"[^\\S") + Char(0xa0) + Char(0x202F) + u"]+";
     StringList sl = correctedText.split(std::regex(regex.toStdString()), mu::SkipEmptyParts);
     if (sl.empty()) {
