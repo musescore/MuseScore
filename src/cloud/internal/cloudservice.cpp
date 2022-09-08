@@ -45,6 +45,7 @@ static const QString REFRESH_TOKEN_KEY("refresh_token");
 static const QString DEVICE_ID_KEY("device_id");
 static const QString EDITOR_SOURCE_KEY("editor_source");
 static const QString EDITOR_SOURCE_VALUE(QString("Musescore Editor %1").arg(VERSION));
+static const QString PLATFORM_KEY("platform");
 
 static const std::string CLOUD_ACCESS_TOKEN_RESOURCE_NAME("CLOUD_ACCESS_TOKEN");
 
@@ -77,10 +78,13 @@ void CloudService::init()
 
     m_oauth2->setAuthorizationUrl(configuration()->authorizationUrl());
     m_oauth2->setAccessTokenUrl(configuration()->accessTokenUrl());
-    m_oauth2->setModifyParametersFunction([](QAbstractOAuth::Stage stage, QVariantMap* parameters) {
-        if (stage == QAbstractOAuth::Stage::RequestingAuthorization) {
-            (*parameters).insert(EDITOR_SOURCE_KEY, EDITOR_SOURCE_VALUE);
-        }
+    m_oauth2->setModifyParametersFunction([](QAbstractOAuth::Stage, QVariantMap* parameters) {
+        parameters->insert(EDITOR_SOURCE_KEY, EDITOR_SOURCE_VALUE);
+        parameters->insert(PLATFORM_KEY, QString("%1 %2 %3")
+                           .arg(QSysInfo::productType())
+                           .arg(QSysInfo::productVersion())
+                           .arg(QSysInfo::currentCpuArchitecture())
+                           );
     });
     m_oauth2->setReplyHandler(m_replyHandler);
 
