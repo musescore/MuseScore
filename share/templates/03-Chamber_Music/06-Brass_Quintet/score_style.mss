@@ -151,7 +151,7 @@
     <keysigNaturalDistance>0.4</keysigNaturalDistance>
     <beamWidth>0.5</beamWidth>
     <beamDistance>0.5</beamDistance>
-    <beamMinLen>1.2</beamMinLen>
+    <beamMinLen>1.1</beamMinLen>
     <beamNoSlope>0</beamNoSlope>
     <dotMag>1</dotMag>
     <dotNoteDistance>0.5</dotNoteDistance>

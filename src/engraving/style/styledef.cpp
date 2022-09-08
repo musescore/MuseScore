@@ -208,7 +208,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     { Sid::beamWidth,               "beamWidth",               Spatium(0.5) },      // was 0.48
     { Sid::useWideBeams,            "useWideBeams",            false },
-    { Sid::beamMinLen,              "beamMinLen",              Spatium(1.2) },
+    { Sid::beamMinLen,              "beamMinLen",              Spatium(1.1) },
     { Sid::beamNoSlope,             "beamNoSlope",             false },
     { Sid::snapCustomBeamsToGrid,   "snapCustomBeamsToGrid",   true },
 
