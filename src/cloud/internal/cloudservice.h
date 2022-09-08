@@ -85,21 +85,15 @@ private:
 
     void openUrl(const QUrl& url);
 
-    enum class RequestStatus {
-        Ok,
-        UserUnauthorized,
-        Error
-    };
-
-    QUrl prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params = QVariantMap()) const;
+    RetVal<QUrl> prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params = QVariantMap()) const;
     network::RequestHeaders headers() const;
 
-    RequestStatus downloadUserInfo();
+    Ret downloadUserInfo();
     RetVal<ScoreInfo> downloadScoreInfo(int scoreId);
 
-    RequestStatus doUploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl());
+    Ret doUploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl());
 
-    using RequestCallback = std::function<RequestStatus()>;
+    using RequestCallback = std::function<Ret()>;
     void executeRequest(const RequestCallback& requestCallback);
 
     QOAuth2AuthorizationCodeFlow* m_oauth2 = nullptr;
