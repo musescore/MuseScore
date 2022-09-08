@@ -210,6 +210,7 @@ void CloudService::authorize(const OnUserAuthorizedCallback& onUserAuthorizedCal
     }
 
     m_onUserAuthorizedCallback = onUserAuthorizedCallback;
+    m_oauth2->setAuthorizationUrl(configuration()->authorizationUrl());
     m_oauth2->grant();
 }
 
@@ -275,12 +276,11 @@ void CloudService::signIn()
 
 void CloudService::signUp()
 {
-    QUrl signUpUrl = configuration()->signUpUrl();
-
-    QUrlQuery query;
-    query.addQueryItem(EDITOR_SOURCE_KEY, EDITOR_SOURCE_VALUE);
-    signUpUrl.setQuery(query);
-    openUrl(signUpUrl);
+    if (m_userAuthorized.val) {
+        return;
+    }
+    m_oauth2->setAuthorizationUrl(configuration()->signUpUrl());
+    m_oauth2->grant();
 }
 
 void CloudService::signOut()
