@@ -427,6 +427,8 @@ private:
     HitElementContext m_hitElementContext;
 
     async::Channel<ShowItemRequest> m_showItemRequested;
+
+    int m_clipboardTextPos;
 };
 }
 

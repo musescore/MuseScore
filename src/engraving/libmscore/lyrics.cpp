@@ -431,6 +431,10 @@ void Lyrics::layout2(int nAbove)
 
 void Lyrics::paste(EditData& ed, const String& txt)
 {
+    if (txt.startsWith('<') && txt.contains('>')) {
+        TextBase::paste(ed, txt);
+        return;
+    }
     MuseScoreView* scoreview = ed.view();
     String regex = String(u"[^\\S") + Char(0xa0) + Char(0x202F) + u"]+";
     StringList sl = txt.split(std::regex(regex.toStdString()), mu::SkipEmptyParts);
