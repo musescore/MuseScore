@@ -91,10 +91,12 @@ private:
         Error
     };
 
-    QUrl prepareUrlForRequest(QUrl apiUrl) const;
+    QUrl prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params = QVariantMap()) const;
     network::RequestHeaders headers() const;
 
     RequestStatus downloadUserInfo();
+    RetVal<ScoreInfo> downloadScoreInfo(int scoreId);
+
     RequestStatus doUploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl());
 
     using RequestCallback = std::function<RequestStatus()>;

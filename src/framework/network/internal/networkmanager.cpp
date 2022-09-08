@@ -263,18 +263,26 @@ Ret NetworkManager::waitForReplyFinished(QNetworkReply* reply, int timeoutMs)
         return make_ret(Err::Abort);
     }
 
-    if (reply) {
-        return errorFromReply(reply->error());
-    }
-
-    return errorFromReply(QNetworkReply::ServiceUnavailableError);
+    return errorFromReply(reply);
 }
 
-Ret NetworkManager::errorFromReply(int err)
+Ret NetworkManager::errorFromReply(const QNetworkReply* reply) const
 {
+    if (!reply) {
+        return make_ret(Err::NetworkError);
+    }
+
+    int code = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    if (code == 404) {
+        return make_ret(Err::ResourceNotFound);
+    }
+
+    int err = reply->error();
+
     if (err == QNetworkReply::NoError) {
         return make_ret(Err::NoError);
     }
+
     if (err >= QNetworkReply::ContentAccessDenied && err <= QNetworkReply::UnknownContentError) {
         return make_ret(Err::NoError);
     }
