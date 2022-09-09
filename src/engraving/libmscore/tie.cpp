@@ -624,6 +624,7 @@ void TieSegment::finalizeSegment()
 
 void TieSegment::adjustX()
 {
+    const bool adjustForHooks = false;
     double offsetMargin = spatium() * 0.25;
     double collisionYMargin = spatium() * 0.25;
     Note* sn = tie()->startNote();
@@ -662,7 +663,7 @@ void TieSegment::adjustX()
             for (Chord* chord : chords) {
                 double chordOffset = chord->x() - sc->x() - sn->x() - sn->width(); // sn for right-offset notes, width() to normalize to zero
                 // adjust for hooks
-                if (chord->hook() && chord->hook()->visible()) {
+                if (chord->hook() && chord->hook()->visible() && adjustForHooks) {
                     double hookHeight = chord->hook()->bbox().height();
                     // turn the hook upside down for downstems
                     double hookY = chord->hook()->pos().y() - (chord->up() ? 0 : hookHeight);
@@ -713,7 +714,7 @@ void TieSegment::adjustX()
         } else { // tie is outside
             if ((slurTie()->up() && sc->up()) || (!slurTie()->up() && !sc->up())) {
                 // outside ties may still require adjustment for hooks
-                if (sc->hook() && sc->hook()->visible()) {
+                if (sc->hook() && sc->hook()->visible() && adjustForHooks) {
                     double hookHeight = sc->hook()->bbox().height();
                     // turn the hook upside down for downstems
                     double hookY = sc->hook()->pos().y() - (sc->up() ? 0 : hookHeight);
