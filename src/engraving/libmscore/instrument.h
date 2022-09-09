@@ -399,6 +399,7 @@ public:
     void setArticulation(const std::vector<MidiArticulation>& l) { _articulation = l; }
     const StringData* stringData() const { return &_stringData; }
     void setStringData(const StringData& d) { _stringData.set(d); }
+    bool hasStrings() const { return _stringData.strings() > 0; }
 
     void setLongName(const String& f);
     void setShortName(const String& f);

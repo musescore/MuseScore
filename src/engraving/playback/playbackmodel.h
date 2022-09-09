@@ -61,8 +61,12 @@ public:
     bool isPlayRepeatsEnabled() const;
     void setPlayRepeats(const bool isEnabled);
 
+    bool isPlayChordSymbolsEnabled() const;
+    void setPlayChordSymbols(const bool isEnabled);
+
     const InstrumentTrackId& metronomeTrackId() const;
-    const InstrumentTrackId& chordSymbolsTrackId() const;
+    InstrumentTrackId chordSymbolsTrackId(const ID& partId) const;
+    bool isChordSymbolsTrack(const InstrumentTrackId& trackId) const;
 
     const mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
     const mpe::PlaybackData& resolveTrackPlaybackData(const ID& partId, const std::string& instrumentId);
@@ -124,6 +128,7 @@ private:
 
     Score* m_score = nullptr;
     bool m_expandRepeats = true;
+    bool m_playChordSymbols = true;
 
     PlaybackEventsRenderer m_renderer;
     PlaybackSetupDataResolver m_setupResolver;

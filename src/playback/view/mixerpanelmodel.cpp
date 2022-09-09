@@ -146,8 +146,10 @@ void MixerPanelModel::loadItems()
 
     addTrack(notationPlayback()->metronomeTrackId());
 
-    if (mu::contains(instrumentTrackIdMap, notationPlayback()->chordSymbolsTrackId())) {
-        addTrack(notationPlayback()->chordSymbolsTrackId());
+    for (auto it = instrumentTrackIdMap.cbegin(); it != instrumentTrackIdMap.cend(); ++it) {
+        if (notationPlayback()->isChordSymbolsTrack(it->first)) {
+            addTrack(it->first);
+        }
     }
 
     m_mixerChannelList.append(buildMasterChannelItem());
@@ -255,8 +257,7 @@ int MixerPanelModel::resolveInsertIndex(const engraving::InstrumentTrackId& newI
         return m_mixerChannelList.size() - 1;
     }
 
-    const InstrumentTrackId& chordSymbolsTrackId = notationPlayback()->chordSymbolsTrackId();
-    if (newInstrumentTrackId == chordSymbolsTrackId) {
+    if (notationPlayback()->isChordSymbolsTrack(newInstrumentTrackId)) {
         return m_mixerChannelList.size() - 1;
     }
 
@@ -280,7 +281,11 @@ int MixerPanelModel::resolveInsertIndex(const engraving::InstrumentTrackId& newI
             auto trackChannelItem = static_cast<const TrackMixerChannelItem*>(mixerChannelItem);
             const InstrumentTrackId& itemInstrumentTrackId = trackChannelItem->instrumentTrackId();
 
-            if (itemInstrumentTrackId == metronomeTrackId || itemInstrumentTrackId == chordSymbolsTrackId) {
+            if (itemInstrumentTrackId == metronomeTrackId) {
+                return mixerChannelListIdx;
+            }
+
+            if (notationPlayback()->isChordSymbolsTrack(itemInstrumentTrackId)) {
                 return mixerChannelListIdx;
             }
 

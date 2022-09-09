@@ -46,6 +46,7 @@ static const ActionCode MIDI_ON_CODE("midi-on");
 static const ActionCode COUNT_IN_CODE("countin");
 static const ActionCode PAN_CODE("pan");
 static const ActionCode REPEAT_CODE("repeat");
+static const ActionCode PLAY_CHORD_SYMBOLS_CODE("play-chord-symbols");
 
 void PlaybackController::init()
 {
@@ -56,6 +57,7 @@ void PlaybackController::init()
     dispatcher()->reg(this, LOOP_IN_CODE, [this]() { addLoopBoundary(LoopBoundaryType::LoopIn); });
     dispatcher()->reg(this, LOOP_OUT_CODE, [this]() { addLoopBoundary(LoopBoundaryType::LoopOut); });
     dispatcher()->reg(this, REPEAT_CODE, this, &PlaybackController::togglePlayRepeats);
+    dispatcher()->reg(this, PLAY_CHORD_SYMBOLS_CODE, this, &PlaybackController::togglePlayChordSymbols);
     dispatcher()->reg(this, PAN_CODE, this, &PlaybackController::toggleAutomaticallyPan);
     dispatcher()->reg(this, METRONOME_CODE, this, &PlaybackController::toggleMetronome);
     dispatcher()->reg(this, MIDI_ON_CODE, this, &PlaybackController::toggleMidiInput);
@@ -484,7 +486,6 @@ InstrumentTrackIdSet PlaybackController::instrumentTrackIdSetForRangePlayback() 
     int startTicks = startTick.ticks();
 
     InstrumentTrackIdSet result;
-    bool hasChordSymbol = false;
 
     for (const Part* part: selectedParts) {
         if (const Instrument* startInstrument = part->instrument(startTick)) {
@@ -497,13 +498,9 @@ InstrumentTrackIdSet PlaybackController::instrumentTrackIdSetForRangePlayback() 
             }
         }
 
-        if (!hasChordSymbol && part->hasChordSymbol()) {
-            hasChordSymbol = true;
+        if (part->hasChordSymbol()) {
+            result.insert(notationPlayback()->chordSymbolsTrackId(part->id()));
         }
-    }
-
-    if (hasChordSymbol) {
-        result.insert(notationPlayback()->chordSymbolsTrackId());
     }
 
     return result;
@@ -524,6 +521,19 @@ void PlaybackController::togglePlayRepeats()
     bool playRepeatsEnabled = notationConfiguration()->isPlayRepeatsEnabled();
     notationConfiguration()->setIsPlayRepeatsEnabled(!playRepeatsEnabled);
     notifyActionCheckedChanged(REPEAT_CODE);
+}
+
+void PlaybackController::togglePlayChordSymbols()
+{
+    bool playChordSymbolsEnabled = notationConfiguration()->isPlayChordSymbolsEnabled();
+    notationConfiguration()->setIsPlayChordSymbolsEnabled(!playChordSymbolsEnabled);
+    notifyActionCheckedChanged(PLAY_CHORD_SYMBOLS_CODE);
+
+    for (auto it = m_trackIdMap.cbegin(); it != m_trackIdMap.cend(); ++it) {
+        if (notationPlayback()->isChordSymbolsTrack(it->first)) {
+            setTrackActivity(it->first, !playChordSymbolsEnabled);
+        }
+    }
 }
 
 void PlaybackController::toggleAutomaticallyPan()
@@ -692,11 +702,6 @@ void PlaybackController::setCurrentTick(const tick_t tick)
 
 void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, const TrackAddFinished& onFinished)
 {
-    if (notationPlayback()->chordSymbolsTrackId() == instrumentTrackId) {
-        doAddTrack(instrumentTrackId, trc("playback", "Chord symbols"), onFinished);
-        return;
-    }
-
     if (notationPlayback()->metronomeTrackId() == instrumentTrackId) {
         doAddTrack(instrumentTrackId, trc("playback", "Metronome"), onFinished);
         return;
@@ -704,6 +709,12 @@ void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, co
 
     const Part* part = masterNotationParts()->part(instrumentTrackId.partId);
     if (!part) {
+        return;
+    }
+
+    if (notationPlayback()->isChordSymbolsTrack(instrumentTrackId)) {
+        const std::string trackName = trc("playback", "Chords") + "." + part->partName().toStdString();
+        doAddTrack(instrumentTrackId, trackName, onFinished);
         return;
     }
 
@@ -792,6 +803,10 @@ AudioOutputParams PlaybackController::trackOutputParams(const engraving::Instrum
         result.muted = !notationConfiguration()->isMetronomeEnabled();
     }
 
+    if (notationPlayback()->isChordSymbolsTrack(instrumentTrackId)) {
+        result.muted = !notationConfiguration()->isPlayChordSymbolsEnabled();
+    }
+
     return result;
 }
 
@@ -809,8 +824,7 @@ InstrumentTrackIdSet PlaybackController::availableInstrumentTracks() const
 void PlaybackController::removeNonExistingTracks()
 {
     for (const InstrumentTrackId& instrumentTrackId : availableInstrumentTracks()) {
-        if (instrumentTrackId == notationPlayback()->metronomeTrackId()
-            || instrumentTrackId == notationPlayback()->chordSymbolsTrackId()) {
+        if (instrumentTrackId == notationPlayback()->metronomeTrackId()) {
             continue;
         }
 
@@ -1022,7 +1036,6 @@ void PlaybackController::updateMuteStates()
     INotationPartsPtr notationParts = m_notation->parts();
     InstrumentTrackIdSet allowedInstrumentTrackIdSet = instrumentTrackIdSetForRangePlayback();
     bool isRangePlaybackMode = selection()->isRange() && !allowedInstrumentTrackIdSet.empty();
-    const InstrumentTrackId& chordSymbolsTrackId = notationPlayback()->chordSymbolsTrackId();
 
     for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
         if (!mu::contains(m_trackIdMap, instrumentTrackId)) {
@@ -1030,7 +1043,7 @@ void PlaybackController::updateMuteStates()
         }
 
         const Part* part = notationParts->part(instrumentTrackId.partId);
-        bool isPartVisible = (part && part->show()) || instrumentTrackId == chordSymbolsTrackId;
+        bool isPartVisible = part && part->show();
 
         auto soloMuteState = audioSettings()->soloMuteState(instrumentTrackId);
 
@@ -1056,6 +1069,7 @@ bool PlaybackController::actionChecked(const ActionCode& actionCode) const
         { LOOP_CODE, isLoopVisible() },
         { MIDI_ON_CODE, notationConfiguration()->isMidiInputEnabled() },
         { REPEAT_CODE, notationConfiguration()->isPlayRepeatsEnabled() },
+        { PLAY_CHORD_SYMBOLS_CODE, notationConfiguration()->isPlayChordSymbolsEnabled() },
         { PAN_CODE, notationConfiguration()->isAutomaticallyPanEnabled() },
         { METRONOME_CODE, notationConfiguration()->isMetronomeEnabled() },
         { COUNT_IN_CODE, notationConfiguration()->isCountInEnabled() }

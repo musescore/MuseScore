@@ -48,7 +48,8 @@ public:
     void init(INotationUndoStackPtr undoStack) override;
 
     const engraving::InstrumentTrackId& metronomeTrackId() const override;
-    const engraving::InstrumentTrackId& chordSymbolsTrackId() const override;
+    engraving::InstrumentTrackId chordSymbolsTrackId(const ID& partId) const override;
+    bool isChordSymbolsTrack(const engraving::InstrumentTrackId& trackId) const override;
 
     const mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const override;
     void triggerEventsForItems(const std::vector<const EngravingItem*>& items) override;
