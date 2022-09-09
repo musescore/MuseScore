@@ -900,7 +900,7 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
                    && interaction->noteInput()->state().staffGroup == mu::engraving::StaffGroup::TAB) {
             interaction->moveSelection(direction, MoveSelectionType::String);
             return;
-        } else if (!selectedElement) {
+        } else if (interaction->selection()->isNone()) {
             interaction->selectFirstElement(false);
         } else {
             interaction->movePitch(direction, quickly ? PitchMode::OCTAVE : PitchMode::CHROMATIC);
@@ -915,7 +915,7 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
 
         if (selectedElement && selectedElement->isTextBase()) {
             interaction->nudge(direction, quickly);
-        } else if (!selectedElement) {
+        } else if (interaction->selection()->isNone()) {
             interaction->selectFirstElement(false);
             playChord = true;
         } else {
