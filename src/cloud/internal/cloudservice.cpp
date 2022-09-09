@@ -273,7 +273,7 @@ mu::Ret CloudService::downloadUserInfo()
     QJsonObject user = document.object();
 
     AccountInfo info;
-    info.id = user.value("id").toString().toInt();
+    info.id = user.value("id").toInt();
     info.userName = user.value("name").toString();
     QString profileUrl = user.value("profile_url").toString();
     info.profileUrl = QUrl(profileUrl);
