@@ -235,9 +235,10 @@ void Measure::layoutStaffLines()
         if (isCutawayClef(staffIdx) && (score()->staff(staffIdx)->cutaway() || !visible(staffIdx))) {
             // draw short staff lines for a courtesy clef on a hidden measure
             Segment* clefSeg = findSegmentR(SegmentType::Clef, ticks());
-            double partialWidth = clefSeg ? width() - clefSeg->x() + clefSeg->minLeft() + score()->styleMM(Sid::clefLeftMargin)
+            double staffMag = score()->staff(staffIdx)->staffMag(tick());
+            double partialWidth = clefSeg ? width() - clefSeg->x() + clefSeg->minLeft() + score()->styleMM(Sid::clefLeftMargin) * staffMag
                                   : 0.0;
-            ms->lines()->layoutPartialWidth(width(), partialWidth / spatium(), true);
+            ms->lines()->layoutPartialWidth(width(), partialWidth / (spatium() * staffMag), true);
         } else {
             // normal staff lines
             ms->lines()->layout();
