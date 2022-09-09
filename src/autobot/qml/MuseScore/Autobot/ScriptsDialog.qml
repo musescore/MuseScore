@@ -37,8 +37,11 @@ StyledDialogView {
 
     x: 850
 
+    property var runTests
+
     ScriptsPanel {
         id: panel
         anchors.fill: parent
+        runTests: root.runTests
     }
 }

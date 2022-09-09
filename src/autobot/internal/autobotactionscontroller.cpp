@@ -31,7 +31,13 @@ static const mu::UriQuery SHOW_SCRIPTS_URI("musescore://autobot/scripts?sync=fal
 void AutobotActionsController::init()
 {
     dispatcher()->reg(this, "autobot-show-batchtests", [this]() { openUri(SHOW_BATCHTESTS_URI); });
-    dispatcher()->reg(this, "autobot-show-scripts", [this]() { openUri(SHOW_SCRIPTS_URI); });
+    dispatcher()->reg(this, "autobot-show-scripts", [this](const ActionData& args) {
+        bool runTests = false;
+        if (args.count() > 0) {
+            runTests = args.arg<bool>(0);
+        }
+        openAutobotTests(runTests);
+    });
 }
 
 void AutobotActionsController::openUri(const mu::UriQuery& uri, bool isSingle)
@@ -41,4 +47,11 @@ void AutobotActionsController::openUri(const mu::UriQuery& uri, bool isSingle)
     }
 
     interactive()->open(uri);
+}
+
+void AutobotActionsController::openAutobotTests(bool runTests)
+{
+    UriQuery uri = SHOW_SCRIPTS_URI;
+    uri.addParam("runTests", Val(runTests));
+    openUri(uri);
 }

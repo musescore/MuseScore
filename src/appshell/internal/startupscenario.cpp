@@ -99,6 +99,12 @@ void StartupScenario::run()
     });
 
     interactive()->open(startupUri);
+
+    bool result = false;
+    std::istringstream(std::getenv("MU_RUN_AUTOBOT_TESTS_ON_START")) >> result;
+    if (result) {
+        dispatcher()->dispatch("autobot-show-scripts", actions::ActionData::make_arg1<bool>(result));
+    }
 }
 
 bool StartupScenario::startupCompleted() const

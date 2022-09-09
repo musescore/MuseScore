@@ -24,10 +24,13 @@ import MuseScore.UiComponents 1.0
 import MuseScore.Autobot 1.0
 
 Rectangle {
+    id: root
 
     color: ui.theme.backgroundPrimaryColor
 
     objectName: "DiagnosticAutobotScriptPanel"
+
+    property var runTests
 
     AutobotScriptsModel {
         id: scriptsModel
@@ -37,6 +40,9 @@ Rectangle {
 
     Component.onCompleted: {
         scriptsModel.load()
+        if (root.runTests) {
+            runAllTestsButton.toggleTests()
+        }
     }
 
     Item {
@@ -46,11 +52,14 @@ Rectangle {
         height: 48
 
         FlatButton {
+            id: runAllTestsButton
             anchors.left: parent.left
             anchors.leftMargin: 8
             anchors.verticalCenter: parent.verticalCenter
             text: scriptsModel.isRunAllTCMode ? "Stop Run All TC" : "Run All TC"
-            onClicked: {
+            onClicked: toggleTests()
+
+            function toggleTests() {
                 if (scriptsModel.isRunAllTCMode) {
                     scriptsModel.stopRunAllTC()
                 } else {
