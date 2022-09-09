@@ -403,6 +403,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
                            || tag == "FiguredBass"
                            || tag == "Sticking"
                            || tag == "Fermata"
+                           || tag == "HarpPedalDiagram"
                            ) {
                     EngravingItem* el = Factory::createItemByName(tag, this->dummy());
                     el->setTrack(e.context()->track());                // a valid track might be necessary for el->read() to work
@@ -876,7 +877,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         } else {
                             undoAddElement(el);
                         }
-                    } else if (tag == "StaffText" || tag == "PlayTechAnnotation" || tag == "Sticking") {
+                    } else if (tag == "StaffText" || tag == "PlayTechAnnotation" || tag == "Sticking" || tag == "HarpPedalDiagram") {
                         EngravingItem* el = Factory::createItemByName(tag, this->dummy());
                         rw400::TRead::readItem(el, e, ctx);
                         el->setTrack(destTrack);

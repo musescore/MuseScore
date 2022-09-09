@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2022 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,43 +23,68 @@
 #ifndef __HARPPEDALDIAGRAM_H__
 #define __HARPPEDALDIAGRAM_H__
 
+#include "pitchspelling.h"
 #include "textbase.h"
 
+using namespace mu;
+using namespace mu::engraving;
+
 namespace mu::engraving {
+enum class PedalPosition : char {
+    FLAT,
+    NATURAL,
+    SHARP,
+
+    UNSET                   // Only used in setDiagramText to represent the beginning of a score
+};
+
+// Use for indexes of _pedalState
+enum HarpStringType : char {
+    D, C, B, E, F, G, A
+};
+
 class HarpPedalDiagram final : public TextBase
 {
-    enum HarpString {
-        D, C, B, E, F, G, A
-    };
+    std::array<PedalPosition, 7> _pedalState;
 
-    enum PedalPosition {
-        FLAT,
-        NATURAL,
-        SHARP
-    };
-
-    std::map<HarpString, PedalPosition> _pedalState;
+    std::vector<int> _playablePitches;
 
     bool _isDiagram = true;
 
 public:
-    // Constructors - too many?
-    HarpPedalDiagram();
-    HarpPedalDiagram(std::map<HarpString, PedalPosition>);
-    HarpPedalDiagram(PedalPosition d, PedalPosition c, PedalPosition b, PedalPosition e, PedalPosition f, PedalPosition g, PedalPosition a);
+    HarpPedalDiagram(Segment* parent);
+    HarpPedalDiagram(const HarpPedalDiagram& h);
 
-    EngravingItem* clone() const override { return new HarpPedalDiagram(*this); }
+    HarpPedalDiagram* clone() const override { return new HarpPedalDiagram(*this); }
     bool isEditable() const override { return false; }
 
-    void setIsDiagram(bool diagram) { _isDiagram = diagram; }
+    Segment* segment() const { return (Segment*)explicitParent(); }
+    Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
+
+    void layout() override;
+
+    void read(XmlReader&) override;
+    void write(XmlWriter& xml) const override;
+
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue& v) override;
+    PropertyValue propertyDefault(Pid id) const override;
+
+    String accessibleInfo() const override;
+    String screenReaderInfo() const override;
+
+    void setIsDiagram(bool diagram);
     bool isDiagram() { return _isDiagram; }
 
-    std::map<HarpString, PedalPosition> getPedalState() { return _pedalState; }
-    void setPedal(HarpString string, PedalPosition pedal);//TODO
+    std::array<PedalPosition, 7> getPedalState() { return _pedalState; }
 
-private:
-    friend class Factory;
+    void setPedalState(std::array<PedalPosition, 7> state);
+    void setPedal(HarpStringType harpString, PedalPosition pedal);
+
+    String createDiagramText();
+    void updateDiagramText();
+
+    bool isPitchPlayable(int pitch);
 };
 } // namespace mu::engraving
-
 #endif // __HARPPEDALDIAGRAM_H__

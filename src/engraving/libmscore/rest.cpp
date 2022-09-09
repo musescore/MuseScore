@@ -213,6 +213,7 @@ bool Rest::acceptDrop(EditData& data) const
         || (type == ElementType::TREMOLOBAR)
         || (type == ElementType::IMAGE)
         || (type == ElementType::SYMBOL)
+        || (type == ElementType::HARP_DIAGRAM)
         || (type == ElementType::MEASURE_REPEAT && durationType().type() == DurationType::V_MEASURE)
         ) {
         return true;

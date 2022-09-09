@@ -797,7 +797,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
     String family;
     draw::Font::Type fontType = draw::Font::Type::Unknown;
     if (format.fontFamily() == "ScoreText") {
-        if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA) {
+        if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA || t->textStyleType() == TextStyleType::HARP_PEDAL_DIAGRAM) {
             std::string fontName = engravingFonts()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont).toStdString())->family();
             family = String::fromStdString(fontName);
             fontType = draw::Font::Type::MusicSymbol;

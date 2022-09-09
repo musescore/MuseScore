@@ -1419,6 +1419,19 @@ static bool isTitleFrameStyle(const TextStyleType tid)
 }
 
 //---------------------------------------------------------
+//   isHarpDiagramStyle
+//---------------------------------------------------------
+
+/**
+ Determine if tid is a style type used in a harp pedal diagram
+ */
+
+static bool isHarpPedalStyle(const TextStyleType tid)
+{
+    return tid == TextStyleType::HARP_PEDAL_DIAGRAM || tid == TextStyleType::HARP_PEDAL_TEXT_DIAGRAM;
+}
+
+//---------------------------------------------------------
 //   updateStyles
 //---------------------------------------------------------
 
@@ -1443,13 +1456,14 @@ static void updateStyles(Score* score,
         // the word-font setting applies. Setting all sizes to the size specified
         // gives bad results, so a selection is made:
         // exclude lyrics odd and even lines (handled separately),
-        // Roman numeral analysis (special case, leave untouched)
+        // Roman numeral analysis and harp pedal diagrams (special case, leave untouched)
         // and text types used in the title frame
         // Some further tweaking may still be required.
 
         if (tid == TextStyleType::LYRICS_ODD || tid == TextStyleType::LYRICS_EVEN
             || tid == TextStyleType::HARMONY_ROMAN
-            || isTitleFrameStyle(tid)) {
+            || isTitleFrameStyle(tid)
+            || isHarpPedalStyle(tid)) {
             continue;
         }
         const TextStyle* ts = textStyle(tid);

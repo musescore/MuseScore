@@ -29,6 +29,7 @@
 #include "chordrest.h"
 #include "factory.h"
 #include "fret.h"
+#include "harppedaldiagram.h"
 #include "instrtemplate.h"
 #include "linkedobjects.h"
 #include "masterscore.h"
@@ -592,6 +593,94 @@ void Part::insertTime(const Fraction& tick, const Fraction& len)
         il[t + len.ticks()] = instrument;
     }
     _instruments.insert(il.begin(), il.end());
+}
+
+//---------------------------------------------------------
+//   addHarpDiagram
+//---------------------------------------------------------
+
+void Part::addHarpDiagram(HarpPedalDiagram* harpDiagram)
+{
+    harpDiagrams[harpDiagram->segment()->tick().ticks()] = harpDiagram;
+}
+
+//---------------------------------------------------------
+//   removeHarpDiagram
+//---------------------------------------------------------
+
+void Part::removeHarpDiagram(HarpPedalDiagram* harpDiagram)
+{
+    if (harpDiagrams[harpDiagram->segment()->tick().ticks()] == harpDiagram) {
+        harpDiagrams.erase(harpDiagram->segment()->tick().ticks());
+    }
+}
+
+//---------------------------------------------------------
+//   clearHarpDiagrams
+//---------------------------------------------------------
+
+void Part::clearHarpDiagrams()
+{
+    harpDiagrams.clear();
+}
+
+//---------------------------------------------------------
+//   currentHarpDiagram
+//---------------------------------------------------------
+
+HarpPedalDiagram* Part::currentHarpDiagram(const Fraction& tick) const
+{
+    auto i = harpDiagrams.upper_bound(tick.ticks());
+    if (i != harpDiagrams.begin()) {
+        --i;
+    }
+    if (i == harpDiagrams.end()) {
+        return nullptr;
+    } else if (tick < Fraction::fromTicks(i->first)) {
+        return nullptr;
+    }
+    return i->second;
+}
+
+//---------------------------------------------------------
+//   nextHarpDiagram
+//---------------------------------------------------------
+
+HarpPedalDiagram* Part::nextHarpDiagram(const Fraction& tick) const
+{
+    auto i = harpDiagrams.lower_bound(tick.ticks());
+    return (i->first == harpDiagrams.size()) ? nullptr : i->second;
+}
+
+//---------------------------------------------------------
+//   prevHarpDiagram
+//---------------------------------------------------------
+
+HarpPedalDiagram* Part::prevHarpDiagram(const Fraction& tick) const
+{
+    auto i = harpDiagrams.lower_bound(tick.ticks());
+    if (i == harpDiagrams.begin()) {
+        return nullptr;
+    }
+    i--;
+    return i->second;
+}
+
+//---------------------------------------------------------
+//   currentHarpDiagramTick
+//---------------------------------------------------------
+
+Fraction Part::currentHarpDiagramTick(const Fraction& tick) const
+{
+    if (harpDiagrams.empty()) {
+        return Fraction(0, 1);
+    }
+    auto i = harpDiagrams.upper_bound(tick.ticks());
+    if (i == harpDiagrams.begin()) {
+        return Fraction(0, 1);
+    }
+    --i;
+    return Fraction::fromTicks(i->first);
 }
 
 bool Part::isVisible() const

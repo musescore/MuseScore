@@ -83,6 +83,8 @@ class Part final : public EngravingObject
 
     PreferSharpFlat _preferSharpFlat = PreferSharpFlat::DEFAULT;
 
+    std::map<int, HarpPedalDiagram*> harpDiagrams;
+
     friend class compat::Read206;
 
 public:
@@ -163,6 +165,14 @@ public:
     const InstrumentList& instruments() const;
 
     void insertTime(const Fraction& tick, const Fraction& len);
+
+    void addHarpDiagram(HarpPedalDiagram*);
+    void removeHarpDiagram(HarpPedalDiagram*);
+    void clearHarpDiagrams();
+    HarpPedalDiagram* currentHarpDiagram(const Fraction&) const;
+    HarpPedalDiagram* nextHarpDiagram(const Fraction&) const;
+    HarpPedalDiagram* prevHarpDiagram(const Fraction&) const;
+    Fraction currentHarpDiagramTick(const Fraction&) const;
 
     String partName() const { return _partName; }
     void setPartName(const String& s) { _partName = s; }

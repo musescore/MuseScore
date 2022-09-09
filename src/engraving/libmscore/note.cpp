@@ -1701,6 +1701,7 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::FRET_DIAGRAM)
            || (type == ElementType::FIGURED_BASS)
            || (type == ElementType::LYRICS)
+           || (type == ElementType::HARP_DIAGRAM)
            || (type != ElementType::TIE && e->isSpanner());
 }
 

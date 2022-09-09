@@ -973,6 +973,8 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::LH_GUITAR_FINGERING, "guitar_fingering_lh", TranslatableString("engraving", "LH guitar fingering") },
     { TextStyleType::RH_GUITAR_FINGERING, "guitar_fingering_rh", TranslatableString("engraving", "RH guitar fingering") },
     { TextStyleType::STRING_NUMBER,     "string_number",        TranslatableString("engraving", "String number") },
+    { TextStyleType::HARP_PEDAL_DIAGRAM, "harp_pedal_diagram",  TranslatableString("engraving", "Harp pedal diagram") },
+    { TextStyleType::HARP_PEDAL_TEXT_DIAGRAM, "harp_pedal_text_diagram", TranslatableString("engraving", "Harp pedal text diagram") },
 
     { TextStyleType::TEXTLINE,          "textline",             TranslatableString("engraving", "Text line") },
     { TextStyleType::VOLTA,             "volta",                TranslatableString("engraving", "Volta") },
