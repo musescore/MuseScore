@@ -51,6 +51,23 @@ struct AccountInfo {
     }
 };
 
+struct ScoreOwnerInfo {
+    int id = 0;
+    QString userName;
+    QUrl profileUrl;
+
+    bool operator==(const ScoreOwnerInfo& info) const
+    {
+        bool equals = true;
+
+        equals &= (id == info.id);
+        equals &= (userName == info.userName);
+        equals &= (profileUrl == info.profileUrl);
+
+        return equals;
+    }
+};
+
 struct ScoreInfo {
     int id = 0;
     QString title;
@@ -59,6 +76,7 @@ struct ScoreInfo {
     QString license;
     QStringList tags;
     QString url;
+    ScoreOwnerInfo owner;
 
     bool operator==(const ScoreInfo& another) const
     {
@@ -70,6 +88,7 @@ struct ScoreInfo {
         equals &= (license == another.license);
         equals &= (tags == another.tags);
         equals &= (url == another.url);
+        equals &= (owner == another.owner);
 
         return equals;
     }

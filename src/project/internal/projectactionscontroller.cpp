@@ -97,6 +97,17 @@ INotationSelectionPtr ProjectActionsController::currentNotationSelection() const
     return currentNotation() ? currentInteraction()->selection() : nullptr;
 }
 
+bool ProjectActionsController::canReceiveAction(const actions::ActionCode& code) const
+{
+    if (!m_saveToCloudAllowed) {
+        if (code == "file-save-to-cloud" || code == "file-publish") {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 bool ProjectActionsController::isFileSupported(const io::path_t& path) const
 {
     std::string suffix = io::suffix(path);
@@ -466,14 +477,18 @@ bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, pr
     return true;
 }
 
-bool ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo& info, SaveMode saveMode)
+void ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo& info, SaveMode saveMode)
 {
     UNUSED(info)
     UNUSED(saveMode)
 
+    if (!m_saveToCloudAllowed) {
+        return;
+    }
+
     INotationProjectPtr project = globalContext()->currentProject();
     if (!project) {
-        return false;
+        return;
     }
 
     QBuffer* projectData = new QBuffer();
@@ -483,23 +498,36 @@ bool ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo&
     if (!ret) {
         LOGE() << ret.toString();
         delete projectData;
-        return false;
+        return;
     }
 
     projectData->close();
-
     projectData->open(QIODevice::ReadOnly);
 
-    uploadingService()->uploadProgress().progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
-        LOGD() << "Uploading progress: " << current << "/" << total;
-    }, Asyncable::AsyncMode::AsyncSetRepeat);
+    ProjectMeta meta = project->metaInfo();
+    m_uploadingProgress = uploadingService()->uploadScore(*projectData, meta.title, meta.source);
 
-    async::Channel<QUrl> sourceUrlCh = uploadingService()->sourceUrlReceived();
-    sourceUrlCh.onReceive(this, [project, projectData](const QUrl& url) {
+    m_uploadingProgress->started.onNotify(this, [this]() {
+        m_saveToCloudAllowed = false;
+    });
+
+    m_uploadingProgress->progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
+        if (total > 0) {
+            LOGD() << "Uploading progress: " << current << " / " << total << " bytes";
+        }
+    });
+
+    m_uploadingProgress->finished.onReceive(this, [this, project, projectData](const ProgressResult& res) {
+        m_saveToCloudAllowed = true;
         projectData->deleteLater();
 
-        LOGD() << "Source url received: " << url;
-        QString newSource = url.toString();
+        if (!res.ret) {
+            LOGE() << res.ret.toString();
+            return;
+        }
+
+        QString newSource = QString::fromStdString(res.val.toString());
+        LOGD() << "Source url received: " << newSource;
 
         ProjectMeta meta = project->metaInfo();
         if (meta.source == newSource) {
@@ -507,18 +535,12 @@ bool ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo&
         }
 
         meta.source = newSource;
-        project->setMetaInfo(meta);
+        project->setMetaInfo(meta, false /*undoable*/);
 
         if (!project->isNewlyCreated()) {
             project->save();
         }
-    }, Asyncable::AsyncMode::AsyncSetRepeat);
-
-    ProjectMeta meta = project->metaInfo();
-    uploadingService()->uploadScore(*projectData, meta.title, meta.source);
-
-    // TODO(save-to-cloud): check whether upload was successful?
-    return true;
+    });
 }
 
 bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path_t& filePath)

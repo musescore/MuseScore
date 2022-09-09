@@ -91,6 +91,9 @@ public:
         UpdateFirst  = 1700,
         UpdateLast   = 1799,
 
+        CloudFirst   = 1800,
+        CloudLast    = 1899,
+
         EngravingFirst  = 2000,
         EngravingLast   = 2999,
     };
