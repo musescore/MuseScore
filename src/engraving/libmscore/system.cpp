@@ -1503,6 +1503,10 @@ double System::minDistance(System* s2) const
         return double(s2->vbox()->topGap() + vbox()->bottomGap());
     }
 
+    if (_staves.empty() || s2->staves().empty()) {
+        return 0.0;
+    }
+
     double minVerticalDistance = score()->styleMM(Sid::minVerticalDistance);
     double dist = score()->enableVerticalSpread() ? styleP(Sid::minSystemSpread) : styleP(Sid::minSystemDistance);
     size_t firstStaff = 0;
