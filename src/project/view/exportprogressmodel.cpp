@@ -59,7 +59,9 @@ void ExportProgressModel::load()
         setProgress(current);
     });
 
-    progress.finished.onReceive(this, [this](const Ret& ret) {
+    progress.finished.onReceive(this, [this](const ProgressResult& res) {
+        const Ret& ret = res.ret;
+
         if (!ret && !ret.text().empty()) {
             LOGE() << ret.toString();
         }

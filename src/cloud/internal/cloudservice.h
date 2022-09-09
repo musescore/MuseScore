@@ -64,10 +64,7 @@ public:
     ValCh<bool> userAuthorized() const override;
     ValCh<AccountInfo> accountInfo() const override;
 
-    void uploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) override;
-
-    async::Channel<QUrl> sourceUrlReceived() const override;
-    framework::Progress uploadProgress() const override;
+    framework::ProgressPtr uploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) override;
 
 private slots:
     void onUserAuthorized();
@@ -85,24 +82,20 @@ private:
 
     void openUrl(const QUrl& url);
 
-    enum class RequestStatus {
-        Ok,
-        UserUnauthorized,
-        Error
-    };
-
-    QUrl prepareUrlForRequest(QUrl apiUrl) const;
+    RetVal<QUrl> prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params = QVariantMap()) const;
     network::RequestHeaders headers() const;
 
-    RequestStatus downloadUserInfo();
-    RequestStatus doUploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl());
+    Ret downloadUserInfo();
+    RetVal<ScoreInfo> downloadScoreInfo(int scoreId);
 
-    using RequestCallback = std::function<RequestStatus()>;
+    RetVal<QUrl> doUploadScore(network::INetworkManagerPtr uploadManager, QIODevice& scoreSourceDevice, const QString& title,
+                               const QUrl& sourceUrl = QUrl());
+
+    using RequestCallback = std::function<Ret()>;
     void executeRequest(const RequestCallback& requestCallback);
 
     QOAuth2AuthorizationCodeFlow* m_oauth2 = nullptr;
     QOAuthHttpServerReplyHandler* m_replyHandler = nullptr;
-    network::INetworkManagerPtr m_networkManager;
 
     ValCh<bool> m_userAuthorized;
     ValCh<AccountInfo> m_accountInfo;
@@ -111,7 +104,6 @@ private:
     QString m_refreshToken;
 
     OnUserAuthorizedCallback m_onUserAuthorizedCallback;
-    async::Channel<QUrl> m_sourceUrlReceived;
 };
 }
 

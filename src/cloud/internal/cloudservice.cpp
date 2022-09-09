@@ -32,7 +32,11 @@
 #include <QHttpMultiPart>
 #include <QRandomGenerator>
 
+#include "network/networkerrors.h"
 #include "multiinstances/resourcelockguard.h"
+#include "global/async/async.h"
+
+#include "clouderrors.h"
 
 #include "log.h"
 
@@ -43,6 +47,7 @@ using namespace mu::framework;
 static const QString ACCESS_TOKEN_KEY("access_token");
 static const QString REFRESH_TOKEN_KEY("refresh_token");
 static const QString DEVICE_ID_KEY("device_id");
+static const QString SCORE_ID_KEY("score_id");
 static const QString EDITOR_SOURCE_KEY("editor_source");
 static const QString EDITOR_SOURCE_VALUE(QString("Musescore Editor %1").arg(VERSION));
 static const QString PLATFORM_KEY("platform");
@@ -74,7 +79,6 @@ void CloudService::init()
 
     m_oauth2 = new QOAuth2AuthorizationCodeFlow(this);
     m_replyHandler = new QOAuthHttpServerReplyHandler(this);
-    m_networkManager = networkManagerCreator()->makeNetworkManager();
 
     m_oauth2->setAuthorizationUrl(configuration()->authorizationUrl());
     m_oauth2->setAccessTokenUrl(configuration()->accessTokenUrl());
@@ -164,7 +168,8 @@ bool CloudService::updateTokens()
     refreshApiUrl.setQuery(query);
 
     QBuffer receivedData;
-    Ret ret = m_networkManager->post(refreshApiUrl, nullptr, &receivedData, headers());
+    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    Ret ret = manager->post(refreshApiUrl, nullptr, &receivedData, headers());
 
     if (!ret) {
         LOGE() << ret.toString();
@@ -197,7 +202,13 @@ void CloudService::onUserAuthorized()
 
     saveTokens();
 
-    if (downloadUserInfo() == RequestStatus::Ok && m_onUserAuthorizedCallback) {
+    Ret ret = downloadUserInfo();
+    if (!ret) {
+        LOGE() << ret.toString();
+        return;
+    }
+
+    if (m_onUserAuthorizedCallback) {
         m_onUserAuthorizedCallback();
         m_onUserAuthorizedCallback = OnUserAuthorizedCallback();
     }
@@ -214,17 +225,22 @@ void CloudService::authorize(const OnUserAuthorizedCallback& onUserAuthorizedCal
     m_oauth2->grant();
 }
 
-QUrl CloudService::prepareUrlForRequest(QUrl apiUrl) const
+mu::RetVal<QUrl> CloudService::prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params) const
 {
     if (m_accessToken.isEmpty()) {
-        return QUrl();
+        return make_ret(cloud::Err::AccessTokenIsEmpty);
     }
 
     QUrlQuery query;
     query.addQueryItem(ACCESS_TOKEN_KEY, m_accessToken);
+
+    for (auto it = params.cbegin(); it != params.cend(); ++it) {
+        query.addQueryItem(it.key(), it.value().toString());
+    }
+
     apiUrl.setQuery(query);
 
-    return apiUrl;
+    return RetVal<QUrl>::make_ok(apiUrl);
 }
 
 RequestHeaders CloudService::headers() const
@@ -232,25 +248,25 @@ RequestHeaders CloudService::headers() const
     return configuration()->headers();
 }
 
-CloudService::RequestStatus CloudService::downloadUserInfo()
+mu::Ret CloudService::downloadUserInfo()
 {
     TRACEFUNC;
 
-    QUrl userInfoUrl = prepareUrlForRequest(configuration()->userInfoApiUrl());
-    if (userInfoUrl.isEmpty()) {
-        return RequestStatus::Error;
+    RetVal<QUrl> userInfoUrl = prepareUrlForRequest(configuration()->userInfoApiUrl());
+    if (!userInfoUrl.ret) {
+        return userInfoUrl.ret;
     }
 
     QBuffer receivedData;
-    Ret ret = m_networkManager->get(userInfoUrl, &receivedData, headers());
+    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    Ret ret = manager->get(userInfoUrl.val, &receivedData, headers());
 
     if (ret.code() == USER_UNAUTHORIZED_ERR_CODE) {
-        return RequestStatus::UserUnauthorized;
+        return make_ret(cloud::Err::UserIsNotAuthorized);
     }
 
     if (!ret) {
-        LOGE() << ret.toString();
-        return RequestStatus::Error;
+        return ret;
     }
 
     QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
@@ -266,7 +282,51 @@ CloudService::RequestStatus CloudService::downloadUserInfo()
 
     setAccountInfo(info);
 
-    return RequestStatus::Ok;
+    return make_ok();
+}
+
+mu::RetVal<ScoreInfo> CloudService::downloadScoreInfo(int scoreId)
+{
+    TRACEFUNC;
+
+    RetVal<ScoreInfo> result = RetVal<ScoreInfo>::make_ok(ScoreInfo());
+
+    QVariantMap params;
+    params[SCORE_ID_KEY] = scoreId;
+
+    RetVal<QUrl> scoreInfoUrl = prepareUrlForRequest(configuration()->scoreInfoApiUrl(), params);
+    if (!scoreInfoUrl.ret) {
+        result.ret = scoreInfoUrl.ret;
+        return result;
+    }
+
+    QBuffer receivedData;
+    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    Ret ret = manager->get(scoreInfoUrl.val, &receivedData, headers());
+
+    if (!ret) {
+        result.ret = ret;
+        return result;
+    }
+
+    QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
+    QJsonObject scoreInfo = document.object();
+
+    result.val.id = scoreInfo.value("id").toInt();
+    result.val.title = scoreInfo.value("title").toString();
+    result.val.description = scoreInfo.value("description").toString();
+    result.val.license = scoreInfo.value("license").toString();
+    result.val.tags = scoreInfo.value("tags").toString().split(',');
+    result.val.isPrivate = scoreInfo.value("sharing").toString() == "private";
+    result.val.url = scoreInfo.value("custom_url").toString();
+
+    QJsonObject owner = scoreInfo.value("user").toObject();
+
+    result.val.owner.id = owner.value("uid").toInt();
+    result.val.owner.userName = owner.value("username").toString();
+    result.val.owner.profileUrl = owner.value("custom_url").toString();
+
+    return result;
 }
 
 void CloudService::signIn()
@@ -291,23 +351,25 @@ void CloudService::signOut()
 
     TRACEFUNC;
 
-    QUrl signOutUrl = prepareUrlForRequest(configuration()->logoutApiUrl());
-    if (!signOutUrl.isEmpty()) {
-        QUrlQuery query(signOutUrl.query());
-        query.addQueryItem(REFRESH_TOKEN_KEY, m_refreshToken);
-        signOutUrl.setQuery(query);
+    QVariantMap params;
+    params[REFRESH_TOKEN_KEY] = m_refreshToken;
 
-        QBuffer receivedData;
-        Ret ret = m_networkManager->get(signOutUrl, &receivedData, headers());
+    RetVal<QUrl> signOutUrl = prepareUrlForRequest(configuration()->logoutApiUrl(), params);
+    if (!signOutUrl.ret) {
+        LOGE() << signOutUrl.ret.toString();
+        return;
+    }
 
-        if (!ret) {
-            LOGE() << ret.toString();
-        }
+    QBuffer receivedData;
+    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    Ret ret = manager->get(signOutUrl.val, &receivedData, headers());
+    if (!ret) {
+        LOGE() << ret.toString();
     }
 
     mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
 
-    Ret ret = fileSystem()->remove(configuration()->tokensFilePath());
+    ret = fileSystem()->remove(configuration()->tokensFilePath());
     if (!ret) {
         LOGE() << ret.toString();
     }
@@ -342,29 +404,73 @@ void CloudService::setAccountInfo(const AccountInfo& info)
     m_userAuthorized.set(info.isValid());
 }
 
-void CloudService::uploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
+ProgressPtr CloudService::uploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
 {
-    auto uploadCallback = [this, &scoreSourceDevice, title, sourceUrl]() {
-        return doUploadScore(scoreSourceDevice, title, sourceUrl);
+    ProgressPtr progress = std::make_shared<Progress>();
+
+    auto uploadCallback = [this, progress, &scoreSourceDevice, title, sourceUrl]() {
+        progress->started.notify();
+
+        INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+        manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
+            progress->progressChanged.send(current, total, message);
+        });
+
+        RetVal<QUrl> newSourceUrl = doUploadScore(manager, scoreSourceDevice, title, sourceUrl);
+
+        ProgressResult result;
+        result.ret = newSourceUrl.ret;
+        result.val = Val(newSourceUrl.val.toString());
+        progress->finished.send(result);
+
+        return result.ret;
     };
 
-    if (!m_userAuthorized.val) {
-        authorize(uploadCallback);
-        return;
-    }
+    async::Async::call(this, [this, uploadCallback]() {
+        if (!m_userAuthorized.val) {
+            authorize(uploadCallback);
+            return;
+        }
 
-    executeRequest(uploadCallback);
+        executeRequest(uploadCallback);
+    });
+
+    return progress;
 }
 
-CloudService::RequestStatus CloudService::doUploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
+mu::RetVal<QUrl> CloudService::doUploadScore(INetworkManagerPtr uploadManager, QIODevice& scoreSourceDevice, const QString& title,
+                                             const QUrl& sourceUrl)
 {
-    QUrl uploadUrl = prepareUrlForRequest(configuration()->uploadingApiUrl());
-    if (uploadUrl.isEmpty()) {
-        return RequestStatus::Error;
+    TRACEFUNC;
+
+    RetVal<QUrl> result = RetVal<QUrl>::make_ok(QUrl());
+
+    RetVal<QUrl> uploadUrl = prepareUrlForRequest(configuration()->uploadingApiUrl());
+    if (!uploadUrl.ret) {
+        result.ret = uploadUrl.ret;
+        return result;
     }
 
     int scoreId = scoreIdFromSourceUrl(sourceUrl);
     bool isScoreAlreadyUploaded = scoreId != INVALID_SCORE_ID;
+
+    if (isScoreAlreadyUploaded) {
+        RetVal<ScoreInfo> scoreInfo = downloadScoreInfo(scoreId);
+        if (!scoreInfo.ret) {
+            LOGW() << scoreInfo.ret.toString();
+
+            if (scoreInfo.ret.code() == static_cast<int>(network::Err::ResourceNotFound)) {
+                isScoreAlreadyUploaded = false;
+            } else {
+                result.ret = scoreInfo.ret;
+                return result;
+            }
+        }
+
+        if (scoreInfo.val.owner.id != m_accountInfo.val.id) {
+            isScoreAlreadyUploaded = false;
+        }
+    }
 
     QHttpMultiPart multiPart(QHttpMultiPart::FormDataType);
 
@@ -399,51 +505,47 @@ CloudService::RequestStatus CloudService::doUploadScore(QIODevice& scoreSourceDe
     OutgoingDevice device(&multiPart);
 
     if (isScoreAlreadyUploaded) { // score exists, update
-        ret = m_networkManager->put(uploadUrl, &device, &receivedData, headers());
+        ret = uploadManager->put(uploadUrl.val, &device, &receivedData, headers());
     } else { // score doesn't exist, post a new score
-        ret = m_networkManager->post(uploadUrl, &device, &receivedData, headers());
+        ret = uploadManager->post(uploadUrl.val, &device, &receivedData, headers());
     }
 
     if (ret.code() == USER_UNAUTHORIZED_ERR_CODE) {
-        return RequestStatus::UserUnauthorized;
+        return make_ret(cloud::Err::UserIsNotAuthorized);
     }
 
     if (!ret) {
-        LOGE() << ret.toString();
-        return RequestStatus::Error;
+        result.ret = ret;
+        return result;
     }
 
     QJsonObject scoreInfo = QJsonDocument::fromJson(receivedData.data()).object();
     QUrl newSourceUrl = QUrl(scoreInfo.value("permalink").toString());
     QUrl editUrl = QUrl(scoreInfo.value("edit_url").toString());
 
-    if (newSourceUrl.isValid()) {
-        m_sourceUrlReceived.send(newSourceUrl);
+    if (!newSourceUrl.isValid()) {
+        result.ret = make_ret(cloud::Err::CouldNotReceiveSourceUrl);
+        return result;
     }
 
+    result.val = newSourceUrl;
     openUrl(editUrl);
 
-    return RequestStatus::Ok;
-}
-
-mu::async::Channel<QUrl> CloudService::sourceUrlReceived() const
-{
-    return m_sourceUrlReceived;
-}
-
-Progress CloudService::uploadProgress() const
-{
-    return m_networkManager->progress();
+    return result;
 }
 
 void CloudService::executeRequest(const RequestCallback& requestCallback)
 {
-    if (requestCallback() != RequestStatus::UserUnauthorized) {
-        return;
+    Ret ret = requestCallback();
+
+    if (ret.code() == static_cast<int>(cloud::Err::UserIsNotAuthorized)) {
+        if (updateTokens()) {
+            ret = requestCallback();
+        }
     }
 
-    if (updateTokens()) {
-        requestCallback();
+    if (!ret) {
+        LOGE() << ret.toString();
     }
 }
 
