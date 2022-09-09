@@ -3758,7 +3758,9 @@ void Measure::addSystemHeader(bool isFirstSystem)
                 clef->layout();
             } else if (clef) {
                 clef->parentItem()->remove(clef);
-                delete clef;
+                if (clef->generated()) {
+                    delete clef;
+                }
             }
             //cSegment->createShape(staffIdx);
             cSegment->setEnabled(true);
