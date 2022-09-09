@@ -71,6 +71,8 @@ void NotationPlayback::init(INotationUndoStackPtr undoStack)
     }
 
     m_playbackModel.setPlayRepeats(configuration()->isPlayRepeatsEnabled());
+    m_playbackModel.setPlayChordSymbols(configuration()->isPlayChordSymbolsEnabled());
+
     m_playbackModel.load(score());
 
     updateTotalPlayTime();
@@ -82,6 +84,14 @@ void NotationPlayback::init(INotationUndoStackPtr undoStack)
         bool expandRepeats = configuration()->isPlayRepeatsEnabled();
         if (expandRepeats != m_playbackModel.isPlayRepeatsEnabled()) {
             m_playbackModel.setPlayRepeats(expandRepeats);
+            m_playbackModel.reload();
+        }
+    });
+
+    configuration()->isPlayChordSymbolsChanged().onNotify(this, [this]() {
+        bool playChordSymbols = configuration()->isPlayChordSymbolsEnabled();
+        if (playChordSymbols != m_playbackModel.isPlayChordSymbolsEnabled()) {
+            m_playbackModel.setPlayChordSymbols(playChordSymbols);
             m_playbackModel.reload();
         }
     });
@@ -100,9 +110,14 @@ const engraving::InstrumentTrackId& NotationPlayback::metronomeTrackId() const
     return m_playbackModel.metronomeTrackId();
 }
 
-const engraving::InstrumentTrackId& NotationPlayback::chordSymbolsTrackId() const
+engraving::InstrumentTrackId NotationPlayback::chordSymbolsTrackId(const ID& partId) const
 {
-    return m_playbackModel.chordSymbolsTrackId();
+    return m_playbackModel.chordSymbolsTrackId(partId);
+}
+
+bool NotationPlayback::isChordSymbolsTrack(const engraving::InstrumentTrackId& trackId) const
+{
+    return m_playbackModel.isChordSymbolsTrack(trackId);
 }
 
 const mpe::PlaybackData& NotationPlayback::trackPlaybackData(const engraving::InstrumentTrackId& trackId) const

@@ -137,6 +137,7 @@ private:
     void setCurrentPlaybackStatus(audio::PlaybackStatus status);
 
     void togglePlayRepeats();
+    void togglePlayChordSymbols();
     void toggleAutomaticallyPan();
     void toggleMetronome();
     void toggleMidiInput();

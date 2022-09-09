@@ -85,6 +85,14 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
              IconCode::Code::PLAY_REPEATS,
              Checkable::Yes
              ),
+    UiAction("play-chord-symbols",
+             mu::context::UiCtxAny,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Play chord symbols"),
+             TranslatableString("action", "Play chord symbols"),
+             IconCode::Code::CHORD_SYMBOL,
+             Checkable::Yes
+             ),
     UiAction("pan",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
