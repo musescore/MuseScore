@@ -135,7 +135,7 @@ bool ByteArray::empty() const
 
 void ByteArray::reserve(size_t nsize)
 {
-    if (nsize <= size()) {
+    if (nsize + 1 <= m_data->capacity()) {
         return;
     }
 
