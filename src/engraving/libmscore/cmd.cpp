@@ -3623,7 +3623,10 @@ void Score::cmdSlashRhythm()
 
 void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration durationType)
 {
-    const std::vector<EngravingItem*>& elist = selection().elements();
+    // Create copy, because setChord selects newly created chord and thus
+    // modifies selection().elements() while we're iterating over it
+    const std::vector<EngravingItem*> elist = selection().elements();
+
     for (EngravingItem* e : elist) {
         if (!e->isHarmony()) {
             continue;
