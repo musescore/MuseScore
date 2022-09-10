@@ -38,7 +38,7 @@ ByteArray::ByteArray(const uint8_t* data, size_t size)
     m_data = std::make_shared<Data>();
     m_data->resize(size + 1);
     m_data->operator [](size) = 0;
-    std::memcpy(&m_data->operator [](0), data, size);
+    std::memcpy(m_data->data(), data, size);
 }
 
 ByteArray::ByteArray(const char* str, size_t size)
@@ -47,7 +47,7 @@ ByteArray::ByteArray(const char* str, size_t size)
     m_data = std::make_shared<Data>();
     m_data->resize(size + 1);
     m_data->operator [](size) = 0;
-    std::memcpy(&m_data->operator [](0), str, size);
+    std::memcpy(m_data->data(), str, size);
 }
 
 ByteArray::ByteArray(size_t size)
@@ -73,7 +73,7 @@ ByteArray ByteArray::fromRawData(const char* data, size_t size)
 uint8_t* ByteArray::data()
 {
     detach();
-    return m_data->empty() ? nullptr : &m_data->operator [](0);
+    return m_data->data();
 }
 
 const uint8_t* ByteArray::constData() const
@@ -82,7 +82,7 @@ const uint8_t* ByteArray::constData() const
         return m_raw.data;
     }
 
-    return m_data->empty() ? nullptr : &m_data->operator [](0);
+    return m_data->data();
 }
 
 const char* ByteArray::constChar() const
@@ -108,7 +108,7 @@ void ByteArray::detach()
     if (m_raw.data) {
         m_data->resize(m_raw.size + 1);
         m_data->operator [](m_raw.size) = 0;
-        std::memcpy(&m_data->operator [](0), m_raw.data, m_raw.size);
+        std::memcpy(m_data->data(), m_raw.data, m_raw.size);
         m_raw.data = nullptr;
         return;
     }
@@ -191,7 +191,7 @@ void ByteArray::push_back(const uint8_t* b, size_t len)
     size_t nsize = start + len;
     Data& data = *m_data.get();
     data.resize(nsize + 1);
-    m_data->operator [](nsize) = 0;
+    data[nsize] = 0;
     for (size_t i = 0; i < len; ++i) {
         data[start + i] = b[i];
     }
