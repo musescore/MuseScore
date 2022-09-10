@@ -65,7 +65,7 @@ public:
         } \
         ~Item##size() \
         { \
-            LOGI() << "destroed: " << num; \
+            LOGI() << "destroyed: " << num; \
         } \
         uint8_t data[size]; \
     };
