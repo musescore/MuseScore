@@ -3881,7 +3881,7 @@ void NotationInteraction::addTextToTopFrame(TextStyleType type)
 mu::Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingItem* item) const
 {
     if (!item) {
-        return false;
+        return make_ret(Err::NoteOrRestIsNotSelected);
     }
 
     if (isVerticalBoxTextStyle(type)) {
