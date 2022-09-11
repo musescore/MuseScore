@@ -258,7 +258,6 @@ public:
     virtual bool setProperty(Pid, const PropertyValue&) = 0;
     virtual PropertyValue propertyDefault(Pid) const;
     virtual void resetProperty(Pid id);
-    PropertyValue propertyDefault(Pid pid, TextStyleType tid) const;
     virtual bool sizeIsSpatiumDependent() const { return true; }
     virtual bool offsetIsSpatiumDependent() const { return true; }
 

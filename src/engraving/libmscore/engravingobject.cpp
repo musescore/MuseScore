@@ -284,20 +284,6 @@ void EngravingObject::scanElements(void* data, void (* func)(void*, EngravingIte
 //   propertyDefault
 //---------------------------------------------------------
 
-PropertyValue EngravingObject::propertyDefault(Pid pid, TextStyleType tid) const
-{
-    for (const auto& spp : *textStyle(tid)) {
-        if (spp.pid == pid) {
-            return styleValue(pid, spp.sid);
-        }
-    }
-    return PropertyValue();
-}
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
 PropertyValue EngravingObject::propertyDefault(Pid pid) const
 {
     Sid sid = getPropertyStyle(pid);

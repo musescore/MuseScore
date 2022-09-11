@@ -24,6 +24,7 @@
 
 #include "draw/types/pen.h"
 #include "rw/xml.h"
+#include "style/textstyle.h"
 #include "types/typesconv.h"
 
 #include "beam.h"
@@ -1255,14 +1256,17 @@ PropertyValue Tuplet::propertyDefault(Pid id) const
     case Pid::SIZE_SPATIUM_DEPENDENT:
         return score()->styleV(Sid::tupletFontSpatiumDependent);
     default:
-    {
-        PropertyValue v = EngravingObject::propertyDefault(id, TextStyleType::DEFAULT);
-        if (v.isValid()) {
-            return v;
+        break;
+    }
+
+    // TODO: what does this do? Why TextStyleType::DEFAULT?
+    for (const auto& spp : *textStyle(TextStyleType::DEFAULT)) {
+        if (spp.pid == id) {
+            return styleValue(id, spp.sid);
         }
     }
-        return DurationElement::propertyDefault(id);
-    }
+
+    return DurationElement::propertyDefault(id);
 }
 
 //---------------------------------------------------------
