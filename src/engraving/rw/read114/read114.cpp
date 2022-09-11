@@ -3161,6 +3161,13 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 
     for (Part* p : masterScore->parts()) {
         p->updateHarmonyChannels(false);
+        if (!p->show()) {
+            // convert hidden instruments into hidden staves, to preserve playback
+            p->setShow(true);
+            for (Staff* s : p->staves()) {
+                s->setVisible(false);
+            }
+        }
     }
 
     masterScore->rebuildMidiMapping();
