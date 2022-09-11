@@ -2290,7 +2290,7 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
             writeProperty(xml, spp.pid);
         }
     }
-    for (const StyledProperty& spp : *textStyle(textStyleType())) {
+    for (const auto& spp : *textStyle(textStyleType())) {
         if (!isStyled(spp.pid) && spp.pid != Pid::FONT_FACE && spp.pid != Pid::FONT_SIZE && spp.pid != Pid::FONT_STYLE
             && spp.pid != Pid::TEXT_SCRIPT_ALIGN) {
             writeProperty(xml, spp.pid);
@@ -2920,7 +2920,7 @@ PropertyValue TextBase::propertyDefault(Pid id) const
     case Pid::TEXT_SCRIPT_ALIGN:
         return static_cast<int>(VerticalAlignment::AlignNormal);
     default:
-        for (const StyledProperty& p : *textStyle(TextStyleType::DEFAULT)) {
+        for (const auto& p : *textStyle(TextStyleType::DEFAULT)) {
             if (p.pid == id) {
                 return styleValue(id, p.sid);
             }
@@ -2943,7 +2943,7 @@ int TextBase::getPropertyFlagsIdx(Pid id) const
         }
         ++i;
     }
-    for (const StyledProperty& p : *textStyle(textStyleType())) {
+    for (const auto& p : *textStyle(textStyleType())) {
         if (p.pid == id) {
             return i;
         }
@@ -3112,7 +3112,7 @@ Sid TextBase::getPropertyStyle(Pid id) const
             return p.sid;
         }
     }
-    for (const StyledProperty& p : *textStyle(textStyleType())) {
+    for (const auto& p : *textStyle(textStyleType())) {
         if (p.pid == id) {
             return p.sid;
         }
@@ -3138,7 +3138,7 @@ void TextBase::styleChanged()
         }
         ++i;
     }
-    for (const StyledProperty& spp : *textStyle(textStyleType())) {
+    for (const auto& spp : *textStyle(textStyleType())) {
         PropertyFlags f = _propertyFlagsList[i];
         if (f == PropertyFlags::STYLED) {
             setProperty(spp.pid, styleValue(spp.pid, getPropertyStyle(spp.pid)));
@@ -3164,7 +3164,7 @@ void TextBase::initElementStyle(const ElementStyle* ss)
     for (const StyledProperty& p : *_elementStyle) {
         setProperty(p.pid, styleValue(p.pid, p.sid));
     }
-    for (const StyledProperty& p : *textStyle(textStyleType())) {
+    for (const auto& p : *textStyle(textStyleType())) {
         setProperty(p.pid, styleValue(p.pid, p.sid));
     }
 }
@@ -3179,7 +3179,7 @@ void TextBase::initTextStyleType(TextStyleType tid, bool preserveDifferent)
         initTextStyleType(tid);
     } else {
         setTextStyleType(tid);
-        for (const StyledProperty& p : *textStyle(tid)) {
+        for (const auto& p : *textStyle(tid)) {
             if (getProperty(p.pid) == propertyDefault(p.pid)) {
                 setProperty(p.pid, styleValue(p.pid, p.sid));
             }
@@ -3190,7 +3190,7 @@ void TextBase::initTextStyleType(TextStyleType tid, bool preserveDifferent)
 void TextBase::initTextStyleType(TextStyleType tid)
 {
     setTextStyleType(tid);
-    for (const StyledProperty& p : *textStyle(tid)) {
+    for (const auto& p : *textStyle(tid)) {
         setProperty(p.pid, styleValue(p.pid, p.sid));
     }
 }
