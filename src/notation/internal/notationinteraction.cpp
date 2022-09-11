@@ -3880,16 +3880,12 @@ void NotationInteraction::addTextToTopFrame(TextStyleType type)
 
 mu::Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingItem* item) const
 {
-    if (!item) {
-        return false;
-    }
-
     if (isVerticalBoxTextStyle(type)) {
-        return item->isVBox();
+        return item && item->isVBox();
     }
 
     if (type == TextStyleType::FRAME) {
-        return item->isBox();
+        return item && item->isBox() ? make_ok() : make_ret(Err::EmptySelection);
     }
 
     static const std::set<TextStyleType> needSelectNoteOrRestTypes {
@@ -3918,7 +3914,7 @@ mu::Ret NotationInteraction::canAddTextToItem(TextStyleType type, const Engravin
             ElementType::CHORD,
         };
 
-        bool isNoteOrRestSelected = mu::contains(requiredElementTypes, item->type());
+        bool isNoteOrRestSelected = item && mu::contains(requiredElementTypes, item->type());
         return isNoteOrRestSelected ? make_ok() : make_ret(Err::NoteOrRestIsNotSelected);
     }
 
