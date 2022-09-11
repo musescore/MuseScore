@@ -78,8 +78,8 @@
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>F8vb</defaultClef>
+        <isStaffVisible>0</isStaffVisible>
         </Staff>
-      <show>0</show>
       <trackName>Bass</trackName>
       <Instrument id="contrabass">
         <trackName>Contrabass</trackName>

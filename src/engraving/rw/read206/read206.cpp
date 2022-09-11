@@ -3362,6 +3362,13 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
 
     for (Part* p : score->parts()) {
         p->updateHarmonyChannels(false);
+        if (!p->show()) {
+            // convert hidden instruments into hidden staves, to preserve playback
+            p->setShow(true);
+            for (Staff* s : p->staves()) {
+                s->setVisible(false);
+            }
+        }
     }
 
     if (score->isMaster()) {
