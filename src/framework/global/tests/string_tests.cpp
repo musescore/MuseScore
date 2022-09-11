@@ -261,6 +261,15 @@ TEST_F(Global_Types_StringTests, String_Replace)
         //! CHECK
         EXPECT_EQ(str, u"abcdef");
     }
+
+    {
+        //! GIVEN Some String
+        String str = u"123deПыф";
+        //! DO
+        str.replace(u"", u"");
+        //! CHECK
+        EXPECT_EQ(str, u"123deПыф");
+    }
 }
 
 TEST_F(Global_Types_StringTests, String_PlusAssign)
