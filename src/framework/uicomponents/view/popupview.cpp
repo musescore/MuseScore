@@ -71,6 +71,9 @@ PopupView::PopupView(QQuickItem* parent)
 
 PopupView::~PopupView()
 {
+    if (m_window) {
+        m_window->setOnHidden(std::function<void()>());
+    }
     m_contentItem->deleteLater();
     delete m_closeController;
 }
