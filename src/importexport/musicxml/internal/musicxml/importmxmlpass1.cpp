@@ -1446,7 +1446,7 @@ static void updateStyles(Score* score,
             continue;
         }
         const TextStyle* ts = textStyle(tid);
-        for (const StyledProperty& a :*ts) {
+        for (const auto& a :*ts) {
             if (a.pid == Pid::FONT_FACE && wordFamily != "" && !needUseDefaultFont) {
                 score->style().set(a.sid, wordFamily);
             } else if (a.pid == Pid::FONT_SIZE && dblWordSize > epsilon) {

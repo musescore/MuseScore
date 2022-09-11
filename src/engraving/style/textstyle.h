@@ -26,9 +26,33 @@
 #include "types/types.h"
 
 namespace mu::engraving {
+enum class TextStylePropertyType : char {
+    Undefined = 0,
+    FontFace,
+    FontSize,
+    LineSpacing,
+    SizeSpatiumDependent,
+    FontStyle,
+    Color,
+    TextAlign,
+    Offset,
+    FrameType,
+    FramePadding,
+    FrameWidth,
+    FrameRound,
+    FrameBorderColor,
+    FrameFillColor
+};
+
+struct TextStyleProperty {
+    TextStylePropertyType type;
+    Sid sid;
+    Pid pid;
+};
+
 constexpr size_t TEXT_STYLE_SIZE = 14;
 
-typedef std::array<StyledProperty, TEXT_STYLE_SIZE> TextStyle;
+typedef std::array<TextStyleProperty, TEXT_STYLE_SIZE> TextStyle;
 
 const TextStyle* textStyle(TextStyleType);
 const std::vector<TextStyleType>& allTextStyles();

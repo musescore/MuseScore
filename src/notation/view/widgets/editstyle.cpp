@@ -886,120 +886,120 @@ EditStyle::EditStyle(QWidget* parent)
     // font face
     WidgetUtils::setWidgetIcon(resetTextStyleFontFace, IconCode::Code::UNDO);
     connect(resetTextStyleFontFace, &QToolButton::clicked, [=]() {
-        resetTextStyle(Pid::FONT_FACE);
+        resetTextStyle(TextStylePropertyType::FontFace);
     });
     connect(textStyleFontFace, &QFontComboBox::currentFontChanged, [=]() {
-        textStyleValueChanged(Pid::FONT_FACE, QVariant(textStyleFontFace->currentFont().family()));
+        textStyleValueChanged(TextStylePropertyType::FontFace, QVariant(textStyleFontFace->currentFont().family()));
     });
 
     // font size
     WidgetUtils::setWidgetIcon(resetTextStyleFontSize, IconCode::Code::UNDO);
     connect(resetTextStyleFontSize, &QToolButton::clicked, [=]() {
-        resetTextStyle(Pid::FONT_SIZE);
+        resetTextStyle(TextStylePropertyType::FontSize);
     });
     connect(textStyleFontSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
-        textStyleValueChanged(Pid::FONT_SIZE, QVariant(textStyleFontSize->value()));
+        textStyleValueChanged(TextStylePropertyType::FontSize, QVariant(textStyleFontSize->value()));
     });
 
     // line spacing
     WidgetUtils::setWidgetIcon(resetTextStyleLineSpacing, IconCode::Code::UNDO);
     connect(resetTextStyleLineSpacing, &QToolButton::clicked, [=]() {
-        resetTextStyle(Pid::TEXT_LINE_SPACING);
+        resetTextStyle(TextStylePropertyType::LineSpacing);
     });
     connect(textStyleLineSpacing, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
-        textStyleValueChanged(Pid::TEXT_LINE_SPACING, QVariant(textStyleLineSpacing->value()));
+        textStyleValueChanged(TextStylePropertyType::LineSpacing, QVariant(textStyleLineSpacing->value()));
     });
 
     // font style
     WidgetUtils::setWidgetIcon(resetTextStyleFontStyle, IconCode::Code::UNDO);
     connect(resetTextStyleFontStyle, &QToolButton::clicked, [=]() {
-        resetTextStyle(Pid::FONT_STYLE);
+        resetTextStyle(TextStylePropertyType::FontStyle);
     });
     connect(textStyleFontStyle, &FontStyleSelect::fontStyleChanged, [=]() {
-        textStyleValueChanged(Pid::FONT_STYLE, QVariant(int(textStyleFontStyle->fontStyle())));
+        textStyleValueChanged(TextStylePropertyType::FontStyle, QVariant(int(textStyleFontStyle->fontStyle())));
     });
 
     // align
     WidgetUtils::setWidgetIcon(resetTextStyleAlign, IconCode::Code::UNDO);
     connect(resetTextStyleAlign, &QToolButton::clicked, [=]() {
-        resetTextStyle(Pid::ALIGN);
+        resetTextStyle(TextStylePropertyType::TextAlign);
     });
     connect(textStyleAlign, &AlignSelect::alignChanged, [=]() {
-        textStyleValueChanged(Pid::ALIGN, PropertyValue(textStyleAlign->align()).toQVariant());
+        textStyleValueChanged(TextStylePropertyType::TextAlign, PropertyValue(textStyleAlign->align()).toQVariant());
     });
 
     // offset
     WidgetUtils::setWidgetIcon(resetTextStyleOffset, IconCode::Code::UNDO);
     connect(resetTextStyleOffset, &QToolButton::clicked, [=]() {
-        resetTextStyle(Pid::OFFSET);
+        resetTextStyle(TextStylePropertyType::Offset);
     });
     connect(textStyleOffset, &OffsetSelect::offsetChanged, [=]() {
-        textStyleValueChanged(Pid::OFFSET, QVariant(textStyleOffset->offset()));
+        textStyleValueChanged(TextStylePropertyType::Offset, QVariant(textStyleOffset->offset()));
     });
 
     // spatium dependent
     WidgetUtils::setWidgetIcon(resetTextStyleSpatiumDependent, IconCode::Code::UNDO);
     connect(resetTextStyleSpatiumDependent, &QToolButton::clicked, [=]() {
-        resetTextStyle(Pid::SIZE_SPATIUM_DEPENDENT);
+        resetTextStyle(TextStylePropertyType::SizeSpatiumDependent);
     });
     connect(textStyleSpatiumDependent, &QCheckBox::toggled, [=]() {
-        textStyleValueChanged(Pid::SIZE_SPATIUM_DEPENDENT, textStyleSpatiumDependent->isChecked());
+        textStyleValueChanged(TextStylePropertyType::SizeSpatiumDependent, textStyleSpatiumDependent->isChecked());
     });
 
     WidgetUtils::setWidgetIcon(resetTextStyleFrameType, IconCode::Code::UNDO);
     connect(resetTextStyleFrameType, &QToolButton::clicked, [=]() {
-        resetTextStyle(Pid::FRAME_TYPE);
+        resetTextStyle(TextStylePropertyType::FrameType);
     });
     connect(textStyleFrameType, QOverload<int>::of(&QComboBox::currentIndexChanged), [=]() {
-        textStyleValueChanged(Pid::FRAME_TYPE, textStyleFrameType->currentIndex());
+        textStyleValueChanged(TextStylePropertyType::FrameType, textStyleFrameType->currentIndex());
     });
 
     WidgetUtils::setWidgetIcon(resetTextStyleFramePadding, IconCode::Code::UNDO);
     connect(resetTextStyleFramePadding, &QToolButton::clicked, [=]() {
-        resetTextStyle(Pid::FRAME_PADDING);
+        resetTextStyle(TextStylePropertyType::FramePadding);
     });
     connect(textStyleFramePadding, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
-        textStyleValueChanged(Pid::FRAME_PADDING, textStyleFramePadding->value());
+        textStyleValueChanged(TextStylePropertyType::FramePadding, textStyleFramePadding->value());
     });
 
     WidgetUtils::setWidgetIcon(resetTextStyleFrameBorder, IconCode::Code::UNDO);
     connect(resetTextStyleFrameBorder, &QToolButton::clicked, [=]() {
-        resetTextStyle(Pid::FRAME_WIDTH);
+        resetTextStyle(TextStylePropertyType::FrameWidth);
     });
     connect(textStyleFrameBorder, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
-        textStyleValueChanged(Pid::FRAME_WIDTH, textStyleFrameBorder->value());
+        textStyleValueChanged(TextStylePropertyType::FrameWidth, textStyleFrameBorder->value());
     });
 
     WidgetUtils::setWidgetIcon(resetTextStyleFrameBorderRadius, IconCode::Code::UNDO);
     connect(resetTextStyleFrameBorderRadius, &QToolButton::clicked, [=]() {
-        resetTextStyle(Pid::FRAME_ROUND);
+        resetTextStyle(TextStylePropertyType::FrameRound);
     });
     connect(textStyleFrameBorderRadius, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
-        textStyleValueChanged(Pid::FRAME_ROUND, textStyleFrameBorderRadius->value());
+        textStyleValueChanged(TextStylePropertyType::FrameRound, textStyleFrameBorderRadius->value());
     });
 
     WidgetUtils::setWidgetIcon(resetTextStyleFrameForeground, IconCode::Code::UNDO);
     connect(resetTextStyleFrameForeground, &QToolButton::clicked, [=]() {
-        resetTextStyle(Pid::FRAME_FG_COLOR);
+        resetTextStyle(TextStylePropertyType::FrameBorderColor);
     });
     connect(textStyleFrameForeground, &Awl::ColorLabel::colorChanged, [=]() {
-        textStyleValueChanged(Pid::FRAME_FG_COLOR, textStyleFrameForeground->color());
+        textStyleValueChanged(TextStylePropertyType::FrameBorderColor, textStyleFrameForeground->color());
     });
 
     WidgetUtils::setWidgetIcon(resetTextStyleFrameBackground, IconCode::Code::UNDO);
     connect(resetTextStyleFrameBackground, &QToolButton::clicked, [=]() {
-        resetTextStyle(Pid::FRAME_BG_COLOR);
+        resetTextStyle(TextStylePropertyType::FrameFillColor);
     });
     connect(textStyleFrameBackground, &Awl::ColorLabel::colorChanged, [=]() {
-        textStyleValueChanged(Pid::FRAME_BG_COLOR, textStyleFrameBackground->color());
+        textStyleValueChanged(TextStylePropertyType::FrameFillColor, textStyleFrameBackground->color());
     });
 
     WidgetUtils::setWidgetIcon(resetTextStyleColor, IconCode::Code::UNDO);
     connect(resetTextStyleColor, &QToolButton::clicked, [=]() {
-        resetTextStyle(Pid::COLOR);
+        resetTextStyle(TextStylePropertyType::Color);
     });
     connect(textStyleColor, &Awl::ColorLabel::colorChanged, [=]() {
-        textStyleValueChanged(Pid::COLOR, textStyleColor->color());
+        textStyleValueChanged(TextStylePropertyType::Color, textStyleColor->color());
     });
 
     // TODO: bring back the tab styles button and make sure right styles are applied as default
@@ -2080,41 +2080,41 @@ void EditStyle::textStyleChanged(int row)
     TextStyleType tid = TextStyleType(textStyles->item(row)->data(Qt::UserRole).toInt());
     const TextStyle* ts = textStyle(tid);
 
-    for (const StyledProperty& a : *ts) {
-        switch (a.pid) {
-        case Pid::FONT_FACE: {
+    for (const auto& a : *ts) {
+        switch (a.type) {
+        case TextStylePropertyType::FontFace: {
             PropertyValue val = styleValue(a.sid);
             textStyleFontFace->setCurrentFont(QFont(val.value<String>()));
             resetTextStyleFontFace->setEnabled(val != defaultStyleValue(a.sid));
         }
         break;
 
-        case Pid::FONT_SIZE:
+        case TextStylePropertyType::FontSize:
             textStyleFontSize->setValue(styleValue(a.sid).toDouble());
             resetTextStyleFontSize->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case Pid::TEXT_LINE_SPACING:
+        case TextStylePropertyType::LineSpacing:
             textStyleLineSpacing->setValue(styleValue(a.sid).toDouble());
             resetTextStyleLineSpacing->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case Pid::FONT_STYLE:
+        case TextStylePropertyType::FontStyle:
             textStyleFontStyle->setFontStyle(FontStyle(styleValue(a.sid).toInt()));
             resetTextStyleFontStyle->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case Pid::ALIGN:
+        case TextStylePropertyType::TextAlign:
             textStyleAlign->setAlign(styleValue(a.sid).value<Align>());
             resetTextStyleAlign->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case Pid::OFFSET:
+        case TextStylePropertyType::Offset:
             textStyleOffset->setOffset(styleValue(a.sid).value<PointF>().toQPointF());
             resetTextStyleOffset->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case Pid::SIZE_SPATIUM_DEPENDENT: {
+        case TextStylePropertyType::SizeSpatiumDependent: {
             PropertyValue val = styleValue(a.sid);
             textStyleSpatiumDependent->setChecked(val.toBool());
             resetTextStyleSpatiumDependent->setEnabled(val != defaultStyleValue(a.sid));
@@ -2122,38 +2122,38 @@ void EditStyle::textStyleChanged(int row)
         }
         break;
 
-        case Pid::FRAME_TYPE:
+        case TextStylePropertyType::FrameType:
             textStyleFrameType->setCurrentIndex(styleValue(a.sid).toInt());
             resetTextStyleFrameType->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             frameWidget->setEnabled(styleValue(a.sid).toInt() != 0);             // disable if no frame
             break;
 
-        case Pid::FRAME_PADDING:
+        case TextStylePropertyType::FramePadding:
             textStyleFramePadding->setValue(styleValue(a.sid).toDouble());
             resetTextStyleFramePadding->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case Pid::FRAME_WIDTH:
+        case TextStylePropertyType::FrameWidth:
             textStyleFrameBorder->setValue(styleValue(a.sid).toDouble());
             resetTextStyleFrameBorder->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case Pid::FRAME_ROUND:
+        case TextStylePropertyType::FrameRound:
             textStyleFrameBorderRadius->setValue(double(styleValue(a.sid).toInt()));
             resetTextStyleFrameBorderRadius->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case Pid::FRAME_FG_COLOR:
+        case TextStylePropertyType::FrameBorderColor:
             textStyleFrameForeground->setColor(styleValue(a.sid).value<Color>().toQColor());
             resetTextStyleFrameForeground->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case Pid::FRAME_BG_COLOR:
+        case TextStylePropertyType::FrameFillColor:
             textStyleFrameBackground->setColor(styleValue(a.sid).value<Color>().toQColor());
             resetTextStyleFrameBackground->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case Pid::COLOR:
+        case TextStylePropertyType::Color:
             textStyleColor->setColor(styleValue(a.sid).value<Color>().toQColor());
             resetTextStyleColor->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
@@ -2174,13 +2174,13 @@ void EditStyle::textStyleChanged(int row)
 //   textStyleValueChanged
 //---------------------------------------------------------
 
-void EditStyle::textStyleValueChanged(Pid pid, QVariant value)
+void EditStyle::textStyleValueChanged(TextStylePropertyType type, QVariant value)
 {
     TextStyleType tid = TextStyleType(textStyles->currentItem()->data(Qt::UserRole).toInt());
     const TextStyle* ts = textStyle(tid);
 
-    for (const StyledProperty& a : *ts) {
-        if (a.pid == pid) {
+    for (const auto& a : *ts) {
+        if (a.type == type) {
             setStyleQVariantValue(a.sid, value);
             break;
         }
@@ -2192,13 +2192,13 @@ void EditStyle::textStyleValueChanged(Pid pid, QVariant value)
 //   resetTextStyle
 //---------------------------------------------------------
 
-void EditStyle::resetTextStyle(Pid pid)
+void EditStyle::resetTextStyle(TextStylePropertyType type)
 {
     TextStyleType tid = TextStyleType(textStyles->currentItem()->data(Qt::UserRole).toInt());
     const TextStyle* ts = textStyle(tid);
 
-    for (const StyledProperty& a : *ts) {
-        if (a.pid == pid) {
+    for (const auto& a : *ts) {
+        if (a.type == type) {
             setStyleValue(a.sid, defaultStyleValue(a.sid));
             break;
         }

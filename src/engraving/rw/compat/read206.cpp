@@ -1173,7 +1173,7 @@ static bool readTextPropertyStyle206(String xmlTag, const XmlReader& e, TextBase
             // Use User-1, since it has all the possible user style pids
             t->initTextStyleType(TextStyleType::DEFAULT);
             std::map<Sid, PropertyValue> styleVals = excessTextStyles206[s];
-            for (const StyledProperty& p : *textStyle(TextStyleType::USER1)) {
+            for (const auto& p : *textStyle(TextStyleType::USER1)) {
                 if (t->getProperty(p.pid) == t->propertyDefault(p.pid) && styleVals.find(p.sid) != styleVals.end()) {
                     t->setProperty(p.pid, styleVals[p.sid]);
                 }

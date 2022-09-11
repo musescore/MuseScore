@@ -1012,7 +1012,7 @@ FiguredBass::FiguredBass(Segment* parent)
     // but there is no specific text style to use as a basis for styled properties
     // (this is true for historical reasons due to the special layout of figured bass)
     // override the styled property definitions
-    for (const StyledProperty& p : *textStyle(textStyleType())) {
+    for (const auto& p : *textStyle(textStyleType())) {
         setPropertyFlags(p.pid, PropertyFlags::NOSTYLE);
     }
     for (const StyledProperty& p : figuredBassTextStyle) {
