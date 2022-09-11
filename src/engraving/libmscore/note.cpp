@@ -3359,12 +3359,14 @@ String Note::accessibleInfo() const
 
 String Note::screenReaderInfo() const
 {
+    const Instrument* instrument = part()->instrument(chord()->tick());
     String duration = chord()->durationUserName();
     Measure* m = chord()->measure();
     bool voices = m ? m->hasVoices(staffIdx()) : false;
     String voice = voices ? mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1) : u"";
     String pitchName;
-    const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
+    String pitchOutOfRangeWarning;
+    const Drumset* drumset = instrument->drumset();
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
         pitchName = chord()->noStem() ? mtrc("engraving", "Beat slash") : mtrc("engraving", "Rhythm slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
@@ -3382,8 +3384,19 @@ String Note::screenReaderInfo() const
         } else if (chord()->staffMove() > 0) {
             duration += u"; " + mtrc("engraving", "Cross-staff below");
         }
+
+        if (pitch() < instrument->minPitchP()) {
+            pitchOutOfRangeWarning = u" " + mtrc("engraving", "too low");
+        } else if (pitch() > instrument->maxPitchP()) {
+            pitchOutOfRangeWarning = u" " + mtrc("engraving", "too high");
+        } else if (pitch() < instrument->minPitchA()) {
+            pitchOutOfRangeWarning = u" " + mtrc("engraving", "too low for amateurs");
+        } else if (pitch() > instrument->maxPitchA()) {
+            pitchOutOfRangeWarning = u" " + mtrc("engraving", "too high for amateurs");
+        }
     }
-    return String(u"%1 %2 %3%4").arg(noteTypeUserName(), pitchName, duration, (chord()->isGrace() ? u"" : String(u"; %1").arg(voice)));
+    return String(u"%1 %2 %3%4%5").arg(noteTypeUserName(), pitchName, duration, pitchOutOfRangeWarning,
+                                       (chord()->isGrace() ? u"" : String(u"; %1").arg(voice)));
 }
 
 //---------------------------------------------------------
