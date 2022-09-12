@@ -35,7 +35,6 @@ public:
     virtual ~ICloudConfiguration() = default;
 
     virtual network::RequestHeaders headers() const = 0;
-    virtual QByteArray clientId() const = 0;
     virtual QByteArray uploadingLicense() const = 0;
 
     virtual QUrl authorizationUrl() const = 0;

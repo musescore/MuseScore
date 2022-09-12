@@ -80,15 +80,10 @@ RequestHeaders CloudConfiguration::headers() const
 {
     RequestHeaders headers;
     headers.rawHeaders["Accept"] = "application/json";
-    headers.rawHeaders["X-MS-CLIENT-ID"] = clientId();
+    headers.rawHeaders["X-MS-CLIENT-ID"] = QByteArray::fromStdString(settings()->value(CLIENT_ID_KEY).toString());
     headers.knownHeaders[QNetworkRequest::UserAgentHeader] = userAgent();
 
     return headers;
-}
-
-QByteArray CloudConfiguration::clientId() const
-{
-    return QByteArray::fromStdString(settings()->value(CLIENT_ID_KEY).toString());
 }
 
 QByteArray CloudConfiguration::uploadingLicense() const

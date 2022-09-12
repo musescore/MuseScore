@@ -272,33 +272,20 @@ Ret NetworkManager::errorFromReply(const QNetworkReply* reply) const
         return make_ret(Err::NetworkError);
     }
 
-    int code = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-    if (code == 404) {
-        return make_ret(Err::ResourceNotFound);
+    Ret ret = make_ok();
+
+    if (reply->error() != QNetworkReply::NoError) {
+        ret.setCode(static_cast<int>(Err::NetworkError));
     }
-
-    int err = reply->error();
-
-    if (err == QNetworkReply::NoError) {
-        return make_ret(Err::NoError);
-    }
-
-    if (err >= QNetworkReply::ContentAccessDenied && err <= QNetworkReply::UnknownContentError) {
-        return make_ret(Err::NoError);
-    }
-
-    switch (err) {
-    case QNetworkReply::HostNotFoundError:
-        return make_ret(Err::HostNotFound);
-    case QNetworkReply::RemoteHostClosedError:
-        return make_ret(Err::HostClosed);
-    }
-
-    Ret ret = make_ret(Err::NetworkError);
 
     QString errorString = reply->errorString();
     if (!errorString.isEmpty()) {
         ret.setText(errorString.toStdString());
+    }
+
+    QVariant status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+    if (status.isValid()) {
+        ret.setData("status", status.toInt());
     }
 
     return ret;
