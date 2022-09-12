@@ -149,10 +149,6 @@ static ChordRest* searchCR(Segment* segment, track_idx_t startTrack, track_idx_t
 
 bool SlurSegment::isEditAllowed(EditData& ed) const
 {
-    if (ed.key == Key_X && !ed.modifiers) {
-        return true;
-    }
-
     if (ed.key == Key_Home && !ed.modifiers) {
         return true;
     }
@@ -188,14 +184,10 @@ bool SlurSegment::edit(EditData& ed)
 
     Slur* sl = slur();
 
-    if (ed.key == Key_X && !ed.modifiers) {
-        sl->undoChangeProperty(Pid::SLUR_DIRECTION, PropertyValue::fromValue<DirectionV>(sl->up() ? DirectionV::DOWN : DirectionV::UP));
-        sl->layout();
-        return true;
-    }
     if (ed.key == Key_Home && !ed.modifiers) {
         ups(ed.curGrip).off = PointF();
         sl->layout();
+        triggerLayout();
         return true;
     }
 
