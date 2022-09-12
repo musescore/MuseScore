@@ -702,9 +702,7 @@ void Note::setPitch(int val)
         score()->setPlaylistDirty();
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
-        if (m_accessible) {
-            m_accessible->accessibleRoot()->notifyAboutFocuedElemntNameChanged();
-        }
+        notifyAboutNameChanged();
 #endif
     }
 }
