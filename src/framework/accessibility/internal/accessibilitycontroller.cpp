@@ -537,6 +537,11 @@ IAccessible* AccessibilityController::accessibleChild(size_t i) const
     return m_children.at(static_cast<int>(i));
 }
 
+QWindow* AccessibilityController::accessibleWindow() const
+{
+    return mainWindow()->qWindow();
+}
+
 IAccessible::Role AccessibilityController::accessibleRole() const
 {
     return IAccessible::Role::Application;
