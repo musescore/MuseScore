@@ -47,7 +47,7 @@ struct AccountInfo {
 
     bool isValid() const
     {
-        return !userName.isEmpty();
+        return id != 0 && !userName.isEmpty();
     }
 };
 

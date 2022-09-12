@@ -54,8 +54,16 @@ static const QString PLATFORM_KEY("platform");
 
 static const std::string CLOUD_ACCESS_TOKEN_RESOURCE_NAME("CLOUD_ACCESS_TOKEN");
 
-constexpr int USER_UNAUTHORIZED_ERR_CODE = 401;
-constexpr int INVALID_SCORE_ID = 0;
+static constexpr int USER_UNAUTHORIZED_STATUS_CODE = 401;
+static constexpr int NOT_FOUND_STATUS_CODE = 404;
+
+static constexpr int INVALID_SCORE_ID = 0;
+
+static int statusCode(const mu::Ret& ret)
+{
+    std::any status = ret.data("status");
+    return status.has_value() ? std::any_cast<int>(status) : 0;
+}
 
 static int scoreIdFromSourceUrl(const QUrl& sourceUrl)
 {
@@ -160,16 +168,18 @@ bool CloudService::updateTokens()
 {
     TRACEFUNC;
 
-    QUrlQuery query;
-    query.addQueryItem(REFRESH_TOKEN_KEY, m_refreshToken);
-    query.addQueryItem(DEVICE_ID_KEY, configuration()->clientId());
+    QHttpPart refreshTokenPart;
+    refreshTokenPart.setHeader(QNetworkRequest::ContentDispositionHeader, QString("form-data; name=\"refresh_token\""));
+    refreshTokenPart.setBody(m_refreshToken.toUtf8());
 
-    QUrl refreshApiUrl = configuration()->refreshApiUrl();
-    refreshApiUrl.setQuery(query);
+    QHttpMultiPart multiPart(QHttpMultiPart::FormDataType);
+    multiPart.append(refreshTokenPart);
 
     QBuffer receivedData;
+    OutgoingDevice device(&multiPart);
+
     INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-    Ret ret = manager->post(refreshApiUrl, nullptr, &receivedData, headers());
+    Ret ret = manager->post(configuration()->refreshApiUrl(), &device, &receivedData, headers());
 
     if (!ret) {
         LOGE() << ret.toString();
@@ -261,10 +271,6 @@ mu::Ret CloudService::downloadUserInfo()
     INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
     Ret ret = manager->get(userInfoUrl.val, &receivedData, headers());
 
-    if (ret.code() == USER_UNAUTHORIZED_ERR_CODE) {
-        return make_ret(cloud::Err::UserIsNotAuthorized);
-    }
-
     if (!ret) {
         return ret;
     }
@@ -280,7 +286,11 @@ mu::Ret CloudService::downloadUserInfo()
     info.avatarUrl = QUrl(user.value("avatar_url").toString());
     info.sheetmusicUrl = QUrl(profileUrl + "/sheetmusic");
 
-    setAccountInfo(info);
+    if (info.isValid()) {
+        setAccountInfo(info);
+    } else {
+        setAccountInfo(AccountInfo());
+    }
 
     return make_ok();
 }
@@ -456,10 +466,9 @@ mu::RetVal<QUrl> CloudService::doUploadScore(INetworkManagerPtr uploadManager, Q
 
     if (isScoreAlreadyUploaded) {
         RetVal<ScoreInfo> scoreInfo = downloadScoreInfo(scoreId);
-        if (!scoreInfo.ret) {
-            LOGW() << scoreInfo.ret.toString();
 
-            if (scoreInfo.ret.code() == static_cast<int>(network::Err::ResourceNotFound)) {
+        if (!scoreInfo.ret) {
+            if (statusCode(scoreInfo.ret) == NOT_FOUND_STATUS_CODE) {
                 isScoreAlreadyUploaded = false;
             } else {
                 result.ret = scoreInfo.ret;
@@ -510,10 +519,6 @@ mu::RetVal<QUrl> CloudService::doUploadScore(INetworkManagerPtr uploadManager, Q
         ret = uploadManager->post(uploadUrl.val, &device, &receivedData, headers());
     }
 
-    if (ret.code() == USER_UNAUTHORIZED_ERR_CODE) {
-        return make_ret(cloud::Err::UserIsNotAuthorized);
-    }
-
     if (!ret) {
         result.ret = ret;
         return result;
@@ -537,8 +542,11 @@ mu::RetVal<QUrl> CloudService::doUploadScore(INetworkManagerPtr uploadManager, Q
 void CloudService::executeRequest(const RequestCallback& requestCallback)
 {
     Ret ret = requestCallback();
+    if (ret) {
+        return;
+    }
 
-    if (ret.code() == static_cast<int>(cloud::Err::UserIsNotAuthorized)) {
+    if (statusCode(ret) == USER_UNAUTHORIZED_STATUS_CODE) {
         if (updateTokens()) {
             ret = requestCallback();
         }

@@ -31,7 +31,6 @@ enum class Err {
     NoError         = int(Ret::Code::Ok),
     UnknownError    = int(Ret::Code::CloudFirst),
 
-    UserIsNotAuthorized,
     AccessTokenIsEmpty,
     CouldNotReceiveSourceUrl,
 };
@@ -44,7 +43,6 @@ inline Ret make_ret(Err e)
     case Err::Undefined: return Ret(retCode);
     case Err::NoError: return Ret(retCode);
     case Err::UnknownError: return Ret(retCode);
-    case Err::UserIsNotAuthorized: return Ret(retCode, "User is not authorized");
     case Err::AccessTokenIsEmpty: return Ret(retCode, "Access token is empty");
     case Err::CouldNotReceiveSourceUrl: return Ret(retCode, "Could not receive source url");
     }
