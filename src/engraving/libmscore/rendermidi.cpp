@@ -1986,6 +1986,9 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
     // Check each note and apply gateTime
     for (unsigned i = 0; i < notes; ++i) {
         NoteEventList* el = &ell[i];
+        const double ticksPerSecond = chord->score()->tempo(chord->tick()).val * Constants::division;
+        constexpr double deadNoteDurationInSec = 0.05;
+        const double deadNoteDurationInTicks = ticksPerSecond * deadNoteDurationInSec;
         if (!shouldRenderNote(chord->notes()[i])) {
             el->clear();
             continue;
@@ -2000,7 +2003,7 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
         }
         if (trailtime == 0) {   // if trailtime is non-zero that means we have graceNotesAfter, so we don't need additional gate time.
             for (NoteEvent& e : ell[i]) {
-                e.setLen(e.len() * gateTime / 100);
+                e.setLen(chord->notes()[i]->deadNote() ? deadNoteDurationInTicks : e.len() * gateTime / 100);
             }
         }
     }
