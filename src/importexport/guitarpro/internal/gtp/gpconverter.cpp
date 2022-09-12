@@ -1576,7 +1576,9 @@ void GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
 
         hnote->setTpcFromPitch();
         note->chord()->add(hnote);
-        hnote->setPlay(false);
+        hnote->setPlay(true);
+        note->setPlay(false);
+
         addTie(gpnote, note);
         note->setHarmonicFret(note->fret() + gpnote->harmonic().fret);
     } else {
