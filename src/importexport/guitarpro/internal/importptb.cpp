@@ -807,6 +807,7 @@ void PowerTab::addToScore(ptSection& sec)
             part->instrument()->setStringData(stringData);
 
             part->setMidiProgram(info->instrument);
+            part->setMidiChannel(info->number);
 
             score->appendStaff(s);
             score->appendPart(part);
