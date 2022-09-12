@@ -404,7 +404,7 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
     } else {
         endSeg = system()->lastMeasure()->last(); // last of the system
     }
-    if (!startSeg || !endSeg || startSeg == endSeg) {
+    if (!startSeg || !endSeg) {
         return;
     }
 
@@ -412,7 +412,7 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
     std::vector<Segment*> segList;
     Segment* seg = startSeg;
     while (seg && seg->tick() <= endSeg->tick()) {
-        if (seg->enabled() && seg != startCR->segment()) { // don't include first segment
+        if (seg->enabled()) {
             segList.push_back(seg);
         }
         if (seg->next() && !seg->next()->isEndBarLineType()) {
@@ -507,9 +507,22 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
                 segShape.add(secondStaffShape);
             }
 
-            // HACK: ignore lyrics and fingering shape by removing them from the vector
-            mu::remove_if(segShape, [](ShapeElement& shapeEl){
-                return shapeEl.toItem && (shapeEl.toItem->isLyrics() || shapeEl.toItem->isFingering());
+            // Remove items that the slur shouldn't try to avoid
+            mu::remove_if(segShape, [startCR](ShapeElement& shapeEl){
+                if (!shapeEl.toItem) {
+                    return false;
+                }
+                // Lyrics and fingering
+                const EngravingItem* item = shapeEl.toItem;
+                if (item->isLyrics() || item->isFingering()) {
+                    return true;
+                }
+                // Items belonging to its own start chord
+                EngravingItem* parentItem = item->parentItem();
+                if (parentItem && parentItem->isChord() && toChord(parentItem) == startCR) {
+                    return true;
+                }
+                return false;
             });
 
             for (unsigned i=0; i < slurRects.size(); i++) {
