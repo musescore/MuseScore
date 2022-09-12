@@ -374,15 +374,33 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
     if (!startCR || !endCR) {
         return;
     }
+
+    // Determine start and end segments for collision checks
     Segment* startSeg = nullptr;
     if (isSingleBeginType()) {
-        startSeg = startCR->segment(); // first of the slur
+        if (startCR->isChord() && toChord(startCR)->isGraceAfter()) {
+            // if this is a grace-note-after, the shape is stored the *appended* segment
+            Chord* parent = toChord(startCR->parentItem());
+            if (parent) {
+                startSeg = parent->graceNotesAfter().appendedSegment();
+            }
+        } else {
+            startSeg = startCR->segment(); // first of the slur
+        }
     } else {
         startSeg = system()->firstMeasure()->findFirstR(SegmentType::ChordRest, Fraction(0, 0)); // first of the system
     }
     Segment* endSeg = nullptr;
     if (isSingleEndType()) {
-        endSeg = endCR->segment(); // last of the slur
+        if (endCR->isChord() && toChord(endCR)->isGraceAfter()) {
+            // if this is a grace-note-after, the shape is stored the *appended* segment
+            Chord* parent = toChord(endCR->parentItem());
+            if (parent) {
+                endSeg = parent->graceNotesAfter().appendedSegment();
+            }
+        } else {
+            endSeg = endCR->segment(); // last of the slur
+        }
     } else {
         endSeg = system()->lastMeasure()->last(); // last of the system
     }
