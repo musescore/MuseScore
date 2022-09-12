@@ -1015,7 +1015,7 @@ PropertyValue Segment::propertyDefault(Pid propertyId) const
     case Pid::LEADING_SPACE:
         return Spatium(0.0);
     default:
-        return EngravingItem::getProperty(propertyId);
+        return EngravingItem::propertyDefault(propertyId);
     }
 }
 
