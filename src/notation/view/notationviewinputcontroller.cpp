@@ -569,8 +569,6 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
             selectType = SelectType::ADD;
         }
         viewInteraction()->select({ hitElement }, selectType, hitStaffIndex);
-    } else if (hitElement && button == Qt::LeftButton && keyState == Qt::ControlModifier) {
-        viewInteraction()->select({ hitElement }, SelectType::ADD, hitStaffIndex);
     }
 
     if (hitElement && !viewInteraction()->selection()->isRange()) {
@@ -599,6 +597,8 @@ bool NotationViewInputController::needSelect(const ClickContext& ctx) const
     if (selection->isRange()) {
         return !selection->range()->containsPoint(ctx.logicClickPos);
     } else if (!ctx.hitElement->selected()) {
+        return true;
+    } else if (ctx.event->button() == Qt::LeftButton && ctx.event->modifiers() & Qt::ControlModifier) {
         return true;
     }
 
