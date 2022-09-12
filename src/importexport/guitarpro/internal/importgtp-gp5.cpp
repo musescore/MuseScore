@@ -1178,6 +1178,8 @@ bool GuitarPro5::readNoteEffects(Note* note)
             Note* harmonicNote = Factory::createNote(note->chord());
 
             harmonicNote->setHarmonic(true);
+            harmonicNote->setPlay(true);
+            note->setPlay(false);
             /// @note option to show or not additional harmonic fret in "<>" to be implemented
             ///harmonicNote->setDisplayFret(Note::DisplayFretOption::ArtificialHarmonic);
             ///note->setDisplayFret(Note::DisplayFretOption::Hide);
