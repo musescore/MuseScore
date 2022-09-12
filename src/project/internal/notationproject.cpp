@@ -391,6 +391,16 @@ bool NotationProject::isCloudProject() const
     return configuration()->isCloudProject(m_path);
 }
 
+CloudProjectInfo NotationProject::cloudInfo() const
+{
+    return m_cloudInfo;
+}
+
+void NotationProject::setCloudInfo(const CloudProjectInfo& info)
+{
+    m_cloudInfo = info;
+}
+
 mu::Ret NotationProject::save(const io::path_t& path, SaveMode saveMode)
 {
     TRACEFUNC;

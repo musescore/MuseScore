@@ -100,7 +100,8 @@ private:
 
     bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save);
     bool saveProjectLocally(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save);
-    void saveProjectToCloud(const SaveLocation::CloudInfo& info, SaveMode saveMode = SaveMode::Save);
+    bool saveProjectToCloud(const CloudProjectInfo& info, SaveMode saveMode = SaveMode::Save);
+    void uploadProject(const CloudProjectInfo& info);
 
     void importPdf();
 
@@ -126,7 +127,7 @@ private:
 
     bool m_isProjectProcessing = false;
 
-    bool m_saveToCloudAllowed = true;
+    bool m_isUploadingProject = false;
     framework::ProgressPtr m_uploadingProgress;
 };
 }

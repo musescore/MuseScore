@@ -33,7 +33,6 @@
 #include "inotationwritersregister.h"
 
 #include "engraving/engravingproject.h"
-#include "engraving/infrastructure/ifileinfoprovider.h"
 
 #include "notation/internal/masternotation.h"
 #include "projectaudiosettings.h"
@@ -68,6 +67,8 @@ public:
     QString displayName() const override;
 
     bool isCloudProject() const override;
+    CloudProjectInfo cloudInfo() const override;
+    void setCloudInfo(const CloudProjectInfo& info) override;
 
     bool isNewlyCreated() const override;
     void markAsNewlyCreated() override;
@@ -108,6 +109,8 @@ private:
 
     io::path_t m_path;
     async::Notification m_pathChanged;
+
+    CloudProjectInfo m_cloudInfo;
 
     async::Notification m_needSaveNotification;
 

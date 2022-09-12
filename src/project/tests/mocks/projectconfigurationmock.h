@@ -67,8 +67,8 @@ public:
     MOCK_METHOD(SaveLocationType, lastUsedSaveLocationType, (), (const, override));
     MOCK_METHOD(void, setLastUsedSaveLocationType, (SaveLocationType), (override));
 
-    MOCK_METHOD(bool, shouldWarnBeforePublishing, (), (const, override));
-    MOCK_METHOD(void, setShouldWarnBeforePublishing, (bool), (override));
+    MOCK_METHOD(bool, shouldWarnBeforeSavingPublicly, (), (const, override));
+    MOCK_METHOD(void, setShouldWarnBeforeSavingPublicly, (bool), (override));
 
     MOCK_METHOD(QColor, templatePreviewBackgroundColor, (), (const, override));
     MOCK_METHOD(async::Notification, templatePreviewBackgroundChanged, (), (const, override));
