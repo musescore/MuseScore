@@ -116,4 +116,26 @@ void StemSlash::layout()
     _width = score()->styleMM(Sid::stemSlashThickness) * graceNoteMag;
     setbbox(RectF(line.p1(), line.p2()).normalized().adjusted(-_width / 2, -_width / 2, _width, _width));
 }
+
+KerningType StemSlash::doComputeKerningType(const EngravingItem* nextItem) const
+{
+    if (!this->chord() || !this->chord()->beam() || !nextItem || !nextItem->parentItem()) {
+        return KerningType::KERNING;
+    }
+    EngravingItem* nextParent = nextItem->parentItem();
+    Chord* nextChord = nullptr;
+    if (nextParent->isChord()) {
+        nextChord = toChord(nextParent);
+    } else if (nextParent->isNote()) {
+        nextChord = toChord(nextParent->parentItem());
+    }
+    if (!nextChord) {
+        return KerningType::KERNING;
+    }
+    if (nextChord->beam() && nextChord->beam() == this->chord()->beam()) {
+        // Stem slash is allowed to collide with items from the same grace notes group
+        return KerningType::ALLOW_COLLISION;
+    }
+    return KerningType::KERNING;
 }
+} // namespace mu::engraving

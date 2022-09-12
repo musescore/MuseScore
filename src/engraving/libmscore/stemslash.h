@@ -42,6 +42,7 @@ class StemSlash final : public EngravingItem
     friend class Factory;
     StemSlash(Chord* parent = 0);
     double _width;
+    KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
 
 public:
 
