@@ -77,6 +77,8 @@ public:
     size_t accessibleChildCount() const override;
     IAccessible* accessibleChild(size_t i) const override;
 
+    QWindow* accessibleWindow() const override;
+
     Role accessibleRole() const override;
     QString accessibleName() const override;
     QString accessibleDescription() const override;
