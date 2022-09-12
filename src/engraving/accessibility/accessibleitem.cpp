@@ -116,12 +116,12 @@ const IAccessible* AccessibleItem::accessibleParent() const
         return nullptr;
     }
 
-    EngravingObject* p = m_element->parent();
-    if (!p || !p->isEngravingItem()) {
+    EngravingItem* p = m_element->parentItem(false /*not explicit*/);
+    if (!p) {
         return nullptr;
     }
 
-    return static_cast<EngravingItem*>(p)->accessible().get();
+    return p->accessible().get();
 }
 
 size_t AccessibleItem::accessibleChildCount() const

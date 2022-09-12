@@ -65,7 +65,7 @@ AccessibleItemWeakPtr AccessibleRoot::focusedElement() const
     return m_focusedElement;
 }
 
-void AccessibleRoot::notifyAboutFocuedElemntNameChanged()
+void AccessibleRoot::notifyAboutFocusedElementNameChanged()
 {
     m_staffInfo = "";
 
