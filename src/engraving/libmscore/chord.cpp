@@ -1555,7 +1555,11 @@ int Chord::maxReduction(int extensionOutsideStaff) const
         { 0, 1, 1, 1, 1 }, // 2 beams
         { 0, 0, 0, 1, 1 }, // 3 beams
     };
-    int beamCount = _hook ? 0 : beams();
+    bool hasTradHook = _hook && !score()->styleB(Sid::useStraightNoteFlags);
+    int beamCount = hasTradHook ? 0 : beams();
+    if (_hook && !hasTradHook) {
+        beamCount = std::min(beamCount, 2); // the straight glyphs extend outwards after 2 beams
+    }
     if (beamCount >= 4) {
         return 0;
     }
@@ -1565,7 +1569,7 @@ int Chord::maxReduction(int extensionOutsideStaff) const
     if (_relativeMag < 1) {
         // there is an exception for grace-sized stems with hooks.
         // reducing by the full amount puts the hooks too low. Limit reduction to 0.5sp
-        if (_hook) {
+        if (hasTradHook) {
             reduction = std::min(reduction, 1);
         }
     } else {
@@ -1579,8 +1583,10 @@ int Chord::maxReduction(int extensionOutsideStaff) const
             //    *extend* the stem rather than reduce it.
             reduction = 0;
         }
-        if (_hook) {
+        if (hasTradHook) {
             reduction = std::min(reduction, 1);
+        } else if (_hook && beams() > 2) {
+            reduction += 1;
         }
     }
     return reduction;
@@ -1848,6 +1854,14 @@ void Chord::calcRelativeMag()
 //! May be called again when the chord is added to or removed from a beam.
 void Chord::layoutStem()
 {
+    // Stem needs to know hook's bbox and SMuFL anchors.
+    // This is done before calcDefaultStemLength because the presence or absence of a hook affects stem length
+    if (shouldHaveHook()) {
+        layoutHook();
+    } else {
+        score()->undoRemoveElement(_hook);
+    }
+
     // we should calculate default stem length for this chord even if it doesn't have a stem
     // because this length is used for tremolos or other things that attach to where the stem WOULD be
     _defaultStemLength = calcDefaultStemLength();
@@ -1859,13 +1873,6 @@ void Chord::layoutStem()
     calcRelativeMag();
     if (!_stem) {
         createStem();
-    }
-
-    // Stem needs to know hook's bbox and SMuFL anchors.
-    if (shouldHaveHook()) {
-        layoutHook();
-    } else {
-        score()->undoRemoveElement(_hook);
     }
 
     _stem->setPosX(stemPosX());
