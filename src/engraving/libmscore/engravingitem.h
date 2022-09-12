@@ -112,6 +112,7 @@ enum class KerningType
     LIMITED_KERNING,
     SAME_VOICE_LIMIT,
     KERNING_UNTIL_ORIGIN,
+    ALLOW_COLLISION,
     NOT_SET,
 };
 
