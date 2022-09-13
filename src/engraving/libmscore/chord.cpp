@@ -1356,11 +1356,8 @@ double Chord::centerX() const
         return stt->chordStemPosX(this) * spatium();
     }
 
-    const Note* note = up() ? upNote() : downNote();
+    const Note* note = up() ? downNote() : upNote();
     double x = note->pos().x() + note->noteheadCenterX();
-    if (note->mirror()) {
-        x += (note->headBodyWidth()) * (up() ? -1.0 : 1.0);
-    }
     return x;
 }
 
