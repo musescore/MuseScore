@@ -505,9 +505,6 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info)
 
     // TODO(save-to-cloud): Show progress dialog
 
-    // TODO(save-to-cloud): respect private/public
-    UNUSED(info)
-
     // We can only be uploading one project at a time
     if (m_isUploadingProject) {
         return;
@@ -532,7 +529,10 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info)
     projectData->open(QIODevice::ReadOnly);
 
     ProjectMeta meta = project->metaInfo();
-    m_uploadingProgress = uploadingService()->uploadScore(*projectData, meta.title, meta.source);
+    QString title = info.name.isEmpty() ? meta.title : info.name;
+    bool isPrivate = info.visibility == CloudProjectVisibility::Private;
+
+    m_uploadingProgress = uploadingService()->uploadScore(*projectData, title, isPrivate, meta.source);
 
     m_uploadingProgress->started.onNotify(this, [this]() {
         m_isUploadingProject = true;

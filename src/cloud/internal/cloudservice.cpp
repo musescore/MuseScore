@@ -419,11 +419,11 @@ void CloudService::setAccountInfo(const AccountInfo& info)
     m_userAuthorized.set(info.isValid());
 }
 
-ProgressPtr CloudService::uploadScore(QIODevice& scoreData, const QString& title, const QUrl& sourceUrl)
+ProgressPtr CloudService::uploadScore(QIODevice& scoreData, const QString& title, bool isPrivate, const QUrl& sourceUrl)
 {
     ProgressPtr progress = std::make_shared<Progress>();
 
-    auto uploadCallback = [this, progress, &scoreData, title, sourceUrl]() {
+    auto uploadCallback = [this, progress, &scoreData, title, isPrivate, sourceUrl]() {
         progress->started.notify();
 
         INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
@@ -431,7 +431,7 @@ ProgressPtr CloudService::uploadScore(QIODevice& scoreData, const QString& title
             progress->progressChanged.send(current, total, message);
         });
 
-        RetVal<QUrl> newSourceUrl = doUploadScore(manager, scoreData, title, sourceUrl);
+        RetVal<QUrl> newSourceUrl = doUploadScore(manager, scoreData, title, isPrivate, sourceUrl);
 
         ProgressResult result;
         result.ret = newSourceUrl.ret;
@@ -484,7 +484,7 @@ ProgressPtr CloudService::uploadAudio(QIODevice& audioData, const QString& audio
 }
 
 mu::RetVal<QUrl> CloudService::doUploadScore(INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
-                                             const QUrl& sourceUrl)
+                                             bool isPrivate, const QUrl& sourceUrl)
 {
     TRACEFUNC;
 
@@ -537,6 +537,11 @@ mu::RetVal<QUrl> CloudService::doUploadScore(INetworkManagerPtr uploadManager, Q
     titlePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"title\""));
     titlePart.setBody(title.toUtf8());
     multiPart.append(titlePart);
+
+    QHttpPart privacyPart;
+    privacyPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"privacy\""));
+    privacyPart.setBody(QByteArray::number(isPrivate ? 1 : 0));
+    multiPart.append(privacyPart);
 
     QHttpPart licensePart;
     licensePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"license\""));
