@@ -33,10 +33,10 @@ Page {
 
     titleContentSpacing: 12
 
-    extraButtonTitle: qsTrc("appshell/gettingstarted", "Download")
+    extraButtonTitle: qsTrc("appshell/gettingstarted", "Watch video")
 
     onExtraButtonClicked: {
-        console.log("NOT_IMPLEMENTED!")
+        Qt.openUrlExternally("https://youtu.be/n7UgN69e2Y8")
     }
 
     Image {
