@@ -64,7 +64,7 @@ public:
     ValCh<bool> userAuthorized() const override;
     ValCh<AccountInfo> accountInfo() const override;
 
-    framework::ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, const QUrl& sourceUrl = QUrl()) override;
+    framework::ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, bool isPrivate = false, const QUrl& sourceUrl = QUrl()) override;
     framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) override;
 
 private slots:
@@ -90,7 +90,7 @@ private:
     RetVal<ScoreInfo> downloadScoreInfo(int scoreId);
 
     RetVal<QUrl> doUploadScore(network::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
-                               const QUrl& sourceUrl = QUrl());
+                               bool isPrivate = false, const QUrl& sourceUrl = QUrl());
     Ret doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl);
 
     using RequestCallback = std::function<Ret()>;

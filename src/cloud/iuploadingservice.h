@@ -38,7 +38,7 @@ class IUploadingService : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IUploadingService() = default;
 
-    virtual framework::ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, const QUrl& sourceUrl = QUrl()) = 0;
+    virtual framework::ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, bool isPrivate = false, const QUrl& sourceUrl = QUrl()) = 0;
     virtual framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) = 0;
 };
 }
