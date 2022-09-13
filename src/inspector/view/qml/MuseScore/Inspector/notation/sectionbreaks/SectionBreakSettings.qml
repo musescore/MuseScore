@@ -71,7 +71,7 @@ Column {
     }
 
     CheckBoxPropertyView {
-        text: qsTrc("inspector", "Reset bar numbers for new section")
+        text: qsTrc("inspector", "Reset measure numbers for new section")
         propertyItem: root.model ? root.model.shouldResetBarNums : null
 
         navigation.name: "ResetBarNumbers"
