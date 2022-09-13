@@ -80,6 +80,15 @@ static int generateFileNameNumber()
     return QRandomGenerator::global()->generate() % 100000;
 }
 
+static void printServerReply(const QBuffer& reply)
+{
+    const QByteArray& data = reply.data();
+
+    if (!data.isEmpty()) {
+        LOGD() << "Server reply: " << data;
+    }
+}
+
 CloudService::CloudService(QObject* parent)
     : QObject(parent)
 {
@@ -131,6 +140,7 @@ bool CloudService::readTokens()
 
     io::path_t tokensPath = configuration()->tokensFilePath();
     if (!fileSystem()->exists(tokensPath)) {
+        LOGW() << "Could not find the tokens file: " << tokensPath;
         return false;
     }
 
@@ -187,6 +197,7 @@ bool CloudService::updateTokens()
     Ret ret = manager->post(configuration()->refreshApiUrl(), &device, &receivedData, headers());
 
     if (!ret) {
+        printServerReply(receivedData);
         LOGE() << ret.toString();
         clearTokens();
         return false;
@@ -277,6 +288,7 @@ mu::Ret CloudService::downloadAccountInfo()
     Ret ret = manager->get(userInfoUrl.val, &receivedData, headers());
 
     if (!ret) {
+        printServerReply(receivedData);
         return ret;
     }
 
@@ -320,6 +332,7 @@ mu::RetVal<ScoreInfo> CloudService::downloadScoreInfo(int scoreId)
     Ret ret = manager->get(scoreInfoUrl.val, &receivedData, headers());
 
     if (!ret) {
+        printServerReply(receivedData);
         result.ret = ret;
         return result;
     }
@@ -379,6 +392,7 @@ void CloudService::signOut()
     INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
     Ret ret = manager->get(signOutUrl.val, &receivedData, headers());
     if (!ret) {
+        printServerReply(receivedData);
         LOGE() << ret.toString();
     }
 
@@ -559,6 +573,7 @@ mu::RetVal<QUrl> CloudService::doUploadScore(INetworkManagerPtr uploadManager, Q
     }
 
     if (!ret) {
+        printServerReply(receivedData);
         result.ret = ret;
         return result;
     }
@@ -578,7 +593,8 @@ mu::RetVal<QUrl> CloudService::doUploadScore(INetworkManagerPtr uploadManager, Q
     return result;
 }
 
-mu::Ret CloudService::doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl)
+mu::Ret CloudService::doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat,
+                                    const QUrl& sourceUrl)
 {
     TRACEFUNC;
 
@@ -592,8 +608,8 @@ mu::Ret CloudService::doUploadAudio(network::INetworkManagerPtr uploadManager, Q
     QHttpPart audioPart;
     audioPart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
     QString contentDisposition = QString("form-data; name=\"audio_data\"; filename=\"temp_%1.%2\"")
-            .arg(generateFileNameNumber())
-            .arg(audioFormat);
+                                 .arg(generateFileNameNumber())
+                                 .arg(audioFormat);
     audioPart.setHeader(QNetworkRequest::ContentDispositionHeader, contentDisposition);
     audioPart.setBodyDevice(&audioData);
     multiPart.append(audioPart);
@@ -607,6 +623,10 @@ mu::Ret CloudService::doUploadAudio(network::INetworkManagerPtr uploadManager, Q
     OutgoingDevice device(&multiPart);
 
     Ret ret = uploadManager->post(uploadUrl.val, &device, &receivedData, headers());
+
+    if (!ret) {
+        printServerReply(receivedData);
+    }
 
     return ret;
 }
