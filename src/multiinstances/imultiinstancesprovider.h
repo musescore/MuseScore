@@ -69,6 +69,7 @@ public:
     // Quit for all
     virtual void quitForAll() = 0;
     virtual void quitAllAndRestartLast() = 0;
+    virtual void quitAllAndRunInstallation(const io::path_t& installerPath) = 0;
 };
 }
 

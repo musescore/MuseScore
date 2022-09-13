@@ -96,17 +96,35 @@ mu::async::Promise<mu::RetVal<ReleaseInfo> > UpdateService::checkForUpdate()
     });
 }
 
-void UpdateService::update()
+mu::RetVal<mu::io::path_t> UpdateService::downloadRelease()
 {
-    mu::RetVal<mu::io::path_t> download = downloadRelease();
-    if (!download.ret) {
-        m_updateProgress.finished.send(download.ret);
-        return;
+    RetVal<io::path_t> result;
+
+    QBuffer buff;
+    QUrl fileUrl = QUrl::fromUserInput(QString::fromStdString(m_lastCheckResult.fileUrl));
+
+    m_updateProgress.started.notify();
+
+    m_networkManager->progress().progressChanged.onReceive(this, [this](int64_t current, int64_t total, const std::string&) {
+        m_updateProgress.progressChanged.send(current, total, trc("update", "Downloading MuseScore") + " " + m_lastCheckResult.version);
+    });
+
+    Ret ret = m_networkManager->get(fileUrl, &buff);
+    if (!ret) {
+        result.ret = ret;
+        return result;
     }
 
-    Ret install = installRelease(download.val);
+    io::path_t installerPath = configuration()->updateDataPath() + "/" + m_lastCheckResult.fileName;
+    fileSystem()->makePath(io::absoluteDirpath(installerPath));
 
-    m_updateProgress.finished.send(install);
+    ret = fileSystem()->writeFile(installerPath, ByteArray::fromQByteArrayNoCopy(buff.data()));
+    if (ret) {
+        result.ret = ret;
+        result.val = installerPath;
+    }
+
+    return result;
 }
 
 void UpdateService::cancelUpdate()
@@ -156,42 +174,6 @@ mu::RetVal<ReleaseInfo> UpdateService::parseRelease(const QByteArray& json) cons
     }
 
     return result;
-}
-
-mu::RetVal<mu::io::path_t> UpdateService::downloadRelease()
-{
-    RetVal<io::path_t> result;
-
-    QBuffer buff;
-    QUrl fileUrl = QUrl::fromUserInput(QString::fromStdString(m_lastCheckResult.fileUrl));
-
-    m_updateProgress.started.notify();
-
-    m_networkManager->progress().progressChanged.onReceive(this, [this](int64_t current, int64_t total, const std::string&) {
-        m_updateProgress.progressChanged.send(current, total, trc("update", "Downloading MuseScore") + " " + m_lastCheckResult.version);
-    });
-
-    Ret ret = m_networkManager->get(fileUrl, &buff);
-    if (!ret) {
-        result.ret = ret;
-        return result;
-    }
-
-    io::path_t installerPath = configuration()->updateDataPath() + "/" + m_lastCheckResult.fileName;
-    fileSystem()->makePath(io::absoluteDirpath(installerPath));
-
-    ret = fileSystem()->writeFile(installerPath, ByteArray::fromQByteArrayNoCopy(buff.data()));
-    if (ret) {
-        result.ret = ret;
-        result.val = installerPath;
-    }
-
-    return result;
-}
-
-mu::Ret UpdateService::installRelease(const io::path_t& installerPath)
-{
-    return interactive()->openUrl(QUrl::fromLocalFile(installerPath.toQString()));
 }
 
 void UpdateService::clear()

@@ -24,6 +24,7 @@
 
 #include "types/retval.h"
 #include "async/promise.h"
+#include "io/path.h"
 #include "progress.h"
 #include "updatetypes.h"
 
@@ -39,7 +40,7 @@ public:
 
     virtual async::Promise<mu::RetVal<ReleaseInfo> > checkForUpdate() = 0;
 
-    virtual void update() = 0;
+    virtual RetVal<io::path_t> downloadRelease() = 0;
     virtual void cancelUpdate() = 0;
     virtual framework::Progress updateProgress() = 0;
 };
