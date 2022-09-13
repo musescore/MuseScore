@@ -625,9 +625,9 @@ Sid Hairpin::getPropertyStyle(Pid pid) const
     case Pid::LINE_STYLE:
         return isLineType() ? Sid::hairpinLineLineStyle : Sid::hairpinLineStyle;
     case Pid::DASH_LINE_LEN:
-        return isLineType() ? Sid::hairpinLineDashLineLen : Sid::NOSTYLE;
+        return Sid::hairpinLineDashLineLen;
     case Pid::DASH_GAP_LEN:
-        return isLineType() ? Sid::hairpinLineDashGapLen : Sid::NOSTYLE;
+        return Sid::hairpinLineDashGapLen;
     default:
         break;
     }
@@ -643,9 +643,9 @@ Hairpin::Hairpin(Segment* parent)
 {
     initElementStyle(&hairpinStyle);
 
+    resetProperty(Pid::HAIRPIN_TYPE);
     resetProperty(Pid::BEGIN_TEXT_PLACE);
     resetProperty(Pid::CONTINUE_TEXT_PLACE);
-    resetProperty(Pid::HAIRPIN_TYPE);
     resetProperty(Pid::LINE_VISIBLE);
 
     _hairpinCircledTip     = false;
