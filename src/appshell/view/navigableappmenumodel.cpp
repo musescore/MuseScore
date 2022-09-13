@@ -78,10 +78,18 @@ void NavigableAppMenuModel::load()
 
 void NavigableAppMenuModel::openMenu(const QString& menuId, bool byHover)
 {
-    if (isNavigationStarted() || !isMenuOpened()) {
-        saveMUNavigationSystemState();
-    } else {
-        restoreMUNavigationSystemState();
+    bool navigationStarted = isNavigationStarted();
+    bool menuIsAlreadyOpened = m_openedMenuId == menuId;
+    if (!byHover && !menuIsAlreadyOpened) {
+        if (navigationStarted || !isMenuOpened()) {
+            saveMUNavigationSystemState();
+        } else {
+            restoreMUNavigationSystemState();
+        }
+    }
+
+    if (navigationStarted) {
+        setHighlightedMenuId(menuId);
     }
 
     emit openMenuRequested(menuId, byHover);
@@ -170,6 +178,17 @@ void NavigableAppMenuModel::setOpenedMenuAreaRect(QRect openedMenuAreaRect)
 bool NavigableAppMenuModel::eventFilter(QObject* watched, QEvent* event)
 {
     bool isMenuOpened = !m_openedMenuId.isEmpty();
+    if (event->type() == QEvent::MouseButtonPress && watched == appWindow()) {
+        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+        bool clickOutsideAppMenuAreaRect = !m_appMenuAreaRect.contains(mouseEvent->pos());
+        bool clickOutsideOpenedMenu = isMenuOpened ? !m_openedMenuAreaRect.contains(mouseEvent->pos()) : true;
+        if (clickOutsideAppMenuAreaRect && clickOutsideOpenedMenu) {
+            resetNavigation();
+            emit closeOpenedMenuRequested();
+            return false;
+        }
+    }
+
     if (isMenuOpened && watched && watched->isWindowType()) {
         return processEventForOpenedMenu(event);
     }
@@ -186,16 +205,6 @@ bool NavigableAppMenuModel::eventFilter(QObject* watched, QEvent* event)
 
 bool NavigableAppMenuModel::processEventForOpenedMenu(QEvent* event)
 {
-    if (event->type() == QEvent::MouseButtonPress) {
-        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-        if (!m_appMenuAreaRect.contains(mouseEvent->pos()) && !m_openedMenuAreaRect.contains(mouseEvent->pos())) {
-            emit closeOpenedMenuRequested();
-            return true;
-        }
-
-        return false;
-    }
-
     if (event->type() != QEvent::ShortcutOverride) {
         return false;
     }
@@ -414,9 +423,11 @@ void NavigableAppMenuModel::navigateToSubItem(const QString& menuId, const QSet<
         return;
     }
 
+    control->trigger();
+
     bool isMenu = !subItem.subitems().isEmpty();
-    if (isMenu) {
-        control->trigger();
+    if (!isMenu) {
+        resetNavigation();
     }
 }
 
