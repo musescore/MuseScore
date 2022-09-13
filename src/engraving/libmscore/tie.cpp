@@ -116,10 +116,6 @@ void TieSegment::draw(mu::draw::Painter* painter) const
 
 bool TieSegment::isEditAllowed(EditData& ed) const
 {
-    if (ed.key == Key_X && !ed.modifiers) {
-        return true;
-    }
-
     if (ed.key == Key_Home && !ed.modifiers) {
         return true;
     }
@@ -140,14 +136,10 @@ bool TieSegment::edit(EditData& ed)
 
     SlurTie* sl = tie();
 
-    if (ed.key == Key_X && !ed.modifiers) {
-        sl->setSlurDirection(sl->up() ? DirectionV::DOWN : DirectionV::UP);
-        sl->layout();
-        return true;
-    }
     if (ed.key == Key_Home && !ed.modifiers) {
         ups(ed.curGrip).off = PointF();
         sl->layout();
+        triggerLayout();
         return true;
     }
     return false;
