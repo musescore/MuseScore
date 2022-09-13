@@ -1173,12 +1173,12 @@ void Beam::offsetBeamWithAnchorShortening(std::vector<ChordRest*> chordRests, in
     int newDictator = dictator;
     int newPointer = pointer;
     int reduce = 0;
-    while (!isValidBeamPosition(newDictator, isStartDictator, isAscending, isFlat, staffLines)) {
+    while (!isValidBeamPosition(newDictator, isStartDictator, isAscending, isFlat, staffLines, true)) {
         if (++reduce > maxDictatorReduce) {
             // we can't shorten this stem at all. bring it back to default and start extending
             newDictator = dictator;
             newPointer = pointer;
-            while (!isValidBeamPosition(newDictator, isStartDictator, isAscending, isFlat, staffLines)) {
+            while (!isValidBeamPosition(newDictator, isStartDictator, isAscending, isFlat, staffLines, true)) {
                 newDictator += towardBeam;
                 newPointer += towardBeam;
             }
@@ -1191,8 +1191,8 @@ void Beam::offsetBeamWithAnchorShortening(std::vector<ChordRest*> chordRests, in
     // first, constrain pointer to valid position
     newPointer = _up ? std::min(newPointer, middleLine) : std::max(newPointer, middleLine);
     // walk it back beamwards until we get a position that satisfies both pointer and dictator
-    while (!isValidBeamPosition(newDictator, isStartDictator, isAscending, isFlat, staffLines)
-           || !isValidBeamPosition(newPointer, !isStartDictator, isAscending, isFlat, staffLines)) {
+    while (!isValidBeamPosition(newDictator, isStartDictator, isAscending, isFlat, staffLines, true)
+           || !isValidBeamPosition(newPointer, !isStartDictator, isAscending, isFlat, staffLines, true)) {
         if (isFlat) {
             newDictator += towardBeam;
             newPointer += towardBeam;
@@ -1230,10 +1230,10 @@ void Beam::extendStem(Chord* chord, double addition)
     }
 }
 
-bool Beam::isBeamInsideStaff(int yPos, int staffLines, bool isInner) const
+bool Beam::isBeamInsideStaff(int yPos, int staffLines, bool allowFloater) const
 {
-    int aboveStaff = isInner ? -2 : -3;
-    int belowStaff = (staffLines - 1) * 4 + (isInner ? 2 : 3);
+    int aboveStaff = allowFloater ? -2 : -3;
+    int belowStaff = (staffLines - 1) * 4 + (allowFloater ? 2 : 3);
     return yPos > aboveStaff && yPos < belowStaff;
 }
 
@@ -1249,10 +1249,10 @@ int Beam::getOuterBeamPosOffset(int innerBeam, int beamCount, int staffLines) co
     return offset;
 }
 
-bool Beam::isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines) const
+bool Beam::isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines, bool isOuter) const
 {
     // outside the staff
-    if (!isBeamInsideStaff(yPos, staffLines, false)) {
+    if (!isBeamInsideStaff(yPos, staffLines, isOuter && (isAscending == isStart || isFlat))) {
         return true;
     }
 
@@ -1294,12 +1294,12 @@ int Beam::findValidBeamOffset(int outer, int beamCount, int staffLines, bool isS
     int offset = 0;
     int innerBeam = outer + (beamCount - 1) * (_up ? _beamSpacing : -_beamSpacing);
     while (!isBeamValid) {
-        while (!isValidBeamPosition(innerBeam + offset, isStart, isAscending, isFlat, staffLines)) {
+        while (!isValidBeamPosition(innerBeam + offset, isStart, isAscending, isFlat, staffLines, false)) {
             offset += _up ? -1 : 1;
         }
         int outerMostBeam = innerBeam + offset + getOuterBeamPosOffset(innerBeam + offset, beamCount, staffLines);
         if (isValidBeamPosition(outerMostBeam, isStart, isAscending, isFlat,
-                                staffLines)
+                                staffLines, true)
             || (beamCount == 4 && is64thBeamPositionException(outerMostBeam, staffLines))) {
             isBeamValid = true;
         } else {
