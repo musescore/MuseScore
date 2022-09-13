@@ -115,6 +115,9 @@ ListView {
         onHighlightChanged: {
             if (highlight) {
                 forceActiveFocus()
+                accessibleInfo.readInfo()
+            } else {
+                accessibleInfo.resetFocus()
             }
         }
 
@@ -127,6 +130,24 @@ ListView {
 
         transparent: !isMenuOpened
         accentButton: isMenuOpened
+
+        AccessibleItem {
+            id: accessibleInfo
+
+            visualItem: radioButtonDelegate
+            role: MUAccessible.Button
+            name: Utils.removeAmpersands(radioButtonDelegate.title)
+
+            function readInfo() {
+                accessibleInfo.ignored = false
+                accessibleInfo.focused = true
+            }
+
+            function resetFocus() {
+                accessibleInfo.ignored = true
+                accessibleInfo.focused = false
+            }
+        }
 
         contentItem: StyledTextLabel {
             id: textLabel
@@ -168,9 +189,6 @@ ListView {
 
             color: radioButtonDelegate.normalColor
         }
-
-        Accessible.role: Accessible.Button
-        Accessible.name: Utils.removeAmpersands(title)
 
         mouseArea.onHoveredChanged: {
             if (!mouseArea.containsMouse) {
