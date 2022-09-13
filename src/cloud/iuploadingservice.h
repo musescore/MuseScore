@@ -22,11 +22,12 @@
 #ifndef MU_CLOUD_IUPLOADINGSERVICE_H
 #define MU_CLOUD_IUPLOADINGSERVICE_H
 
+#include <QUrl>
+
 #include "modularity/imoduleexport.h"
 #include "progress.h"
 
 class QIODevice;
-class QUrl;
 class QString;
 
 namespace mu::cloud {

@@ -99,7 +99,7 @@ INotationSelectionPtr ProjectActionsController::currentNotationSelection() const
 
 bool ProjectActionsController::canReceiveAction(const actions::ActionCode& code) const
 {
-    if (!m_saveToCloudAllowed) {
+    if (m_isUploadingProject) {
         if (code == "file-save-to-cloud" || code == "file-publish") {
             return false;
         }
@@ -373,6 +373,11 @@ bool ProjectActionsController::saveProject(const io::path_t& path)
         return false;
     }
 
+    // TODO(save-to-cloud):
+    // - check whether the score is *currently* public (might have been changed on .com)
+    //   (if yes, show warning)
+    // - save indeed to the cloud, generating MP3 as necessary
+
     if (!project->isNewlyCreated()) {
         return saveProjectLocally();
     }
@@ -443,23 +448,22 @@ void ProjectActionsController::saveToCloud()
 void ProjectActionsController::publish()
 {
     INotationProjectPtr project = currentNotationProject();
-    RetVal<SaveLocation::CloudInfo> info = saveProjectScenario()->askCloudLocation(project, CloudProjectVisibility::Public);
+    RetVal<CloudProjectInfo> info = saveProjectScenario()->askPublishLocation(project);
     if (!info.ret) {
         return;
     }
 
-    saveProjectToCloud(info.val, SaveMode::SaveAs);
+    uploadProject(info.val);
 }
 
 bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveMode saveMode)
 {
     if (location.isLocal()) {
-        return saveProjectLocally(location.localInfo().path, saveMode);
+        return saveProjectLocally(location.localPath(), saveMode);
     }
 
     if (location.isCloud()) {
-        NOT_IMPLEMENTED;
-        return false;
+        return saveProjectToCloud(location.cloudInfo(), saveMode);
     }
 
     return false;
@@ -477,12 +481,35 @@ bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, pr
     return true;
 }
 
-void ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo& info, SaveMode saveMode)
+bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, SaveMode saveMode)
 {
-    UNUSED(info)
     UNUSED(saveMode)
 
-    if (!m_saveToCloudAllowed) {
+    // TODO(save-to-cloud): handle additional logic for the "Save to cloud" flow here
+    // The following method should only do the uploading itself
+    uploadProject(info);
+
+    // TODO(save-to-cloud): finally, show the "Success!" dialog
+
+    // TODO(save-to-cloud): the caller expects us to return whether it was successful
+    return true;
+}
+
+void ProjectActionsController::uploadProject(const CloudProjectInfo& info)
+{
+    // TODO(save-to-cloud): This method does more than barely uploading; it basically implements the "Publish" flow.
+    // It should be stripped down to the basics, and "Publish" specific logic should be moved to the publish method,
+    // so that this basic method can also be used for the "Save to cloud" flow.
+
+    // TODO(save-to-cloud): Generate MP3 (or in separate method?)
+
+    // TODO(save-to-cloud): Show progress dialog
+
+    // TODO(save-to-cloud): respect private/public
+    UNUSED(info)
+
+    // We can only be uploading one project at a time
+    if (m_isUploadingProject) {
         return;
     }
 
@@ -508,7 +535,7 @@ void ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo&
     m_uploadingProgress = uploadingService()->uploadScore(*projectData, meta.title, meta.source);
 
     m_uploadingProgress->started.onNotify(this, [this]() {
-        m_saveToCloudAllowed = false;
+        m_isUploadingProject = true;
     });
 
     m_uploadingProgress->progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
@@ -518,7 +545,7 @@ void ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo&
     });
 
     m_uploadingProgress->finished.onReceive(this, [this, project, projectData](const ProgressResult& res) {
-        m_saveToCloudAllowed = true;
+        m_isUploadingProject = false;
         projectData->deleteLater();
 
         if (!res.ret) {

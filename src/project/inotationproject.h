@@ -49,6 +49,8 @@ public:
     virtual Ret createNew(const ProjectCreateOptions& projectInfo) = 0;
 
     virtual bool isCloudProject() const = 0;
+    virtual CloudProjectInfo cloudInfo() const = 0;
+    virtual void setCloudInfo(const CloudProjectInfo& info) = 0;
 
     virtual bool isNewlyCreated() const = 0;
     virtual void markAsNewlyCreated() = 0;
