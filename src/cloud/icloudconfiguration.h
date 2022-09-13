@@ -40,11 +40,14 @@ public:
     virtual QUrl authorizationUrl() const = 0;
     virtual QUrl signUpUrl() const = 0;
     virtual QUrl accessTokenUrl() const = 0;
+
     virtual QUrl refreshApiUrl() const = 0;
     virtual QUrl userInfoApiUrl() const = 0;
     virtual QUrl logoutApiUrl() const = 0;
     virtual QUrl scoreInfoApiUrl() const = 0;
-    virtual QUrl uploadingApiUrl() const = 0;
+    virtual QUrl uploadScoreApiUrl() const = 0;
+    virtual QUrl uploadAudioApiUrl() const = 0;
+
     virtual io::path_t tokensFilePath() const = 0;
 };
 }

@@ -126,9 +126,14 @@ QUrl CloudConfiguration::scoreInfoApiUrl() const
     return apiRootUrl() + "/score/info";
 }
 
-QUrl CloudConfiguration::uploadingApiUrl() const
+QUrl CloudConfiguration::uploadScoreApiUrl() const
 {
     return apiRootUrl() + "/score/upload";
+}
+
+QUrl CloudConfiguration::uploadAudioApiUrl() const
+{
+    return apiRootUrl() + "/score/audio";
 }
 
 mu::io::path_t CloudConfiguration::tokensFilePath() const

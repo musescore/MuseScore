@@ -41,11 +41,13 @@ public:
     QUrl authorizationUrl() const override;
     QUrl signUpUrl() const override;
     QUrl accessTokenUrl() const override;
+
     QUrl refreshApiUrl() const override;
     QUrl userInfoApiUrl() const override;
     QUrl logoutApiUrl() const override;
     QUrl scoreInfoApiUrl() const override;
-    QUrl uploadingApiUrl() const override;
+    QUrl uploadScoreApiUrl() const override;
+    QUrl uploadAudioApiUrl() const override;
 
     io::path_t tokensFilePath() const override;
 
