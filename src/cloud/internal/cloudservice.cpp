@@ -75,6 +75,11 @@ static int scoreIdFromSourceUrl(const QUrl& sourceUrl)
     return parts.last().toInt();
 }
 
+static int generateFileNameNumber()
+{
+    return QRandomGenerator::global()->generate() % 100000;
+}
+
 CloudService::CloudService(QObject* parent)
     : QObject(parent)
 {
@@ -114,7 +119,7 @@ void CloudService::init()
     });
 
     if (readTokens()) {
-        executeRequest([this]() { return downloadUserInfo(); });
+        executeRequest([this]() { return downloadAccountInfo(); });
     }
 }
 
@@ -212,7 +217,7 @@ void CloudService::onUserAuthorized()
 
     saveTokens();
 
-    Ret ret = downloadUserInfo();
+    Ret ret = downloadAccountInfo();
     if (!ret) {
         LOGE() << ret.toString();
         return;
@@ -258,7 +263,7 @@ RequestHeaders CloudService::headers() const
     return configuration()->headers();
 }
 
-mu::Ret CloudService::downloadUserInfo()
+mu::Ret CloudService::downloadAccountInfo()
 {
     TRACEFUNC;
 
@@ -414,11 +419,11 @@ void CloudService::setAccountInfo(const AccountInfo& info)
     m_userAuthorized.set(info.isValid());
 }
 
-ProgressPtr CloudService::uploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
+ProgressPtr CloudService::uploadScore(QIODevice& scoreData, const QString& title, const QUrl& sourceUrl)
 {
     ProgressPtr progress = std::make_shared<Progress>();
 
-    auto uploadCallback = [this, progress, &scoreSourceDevice, title, sourceUrl]() {
+    auto uploadCallback = [this, progress, &scoreData, title, sourceUrl]() {
         progress->started.notify();
 
         INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
@@ -426,7 +431,7 @@ ProgressPtr CloudService::uploadScore(QIODevice& scoreSourceDevice, const QStrin
             progress->progressChanged.send(current, total, message);
         });
 
-        RetVal<QUrl> newSourceUrl = doUploadScore(manager, scoreSourceDevice, title, sourceUrl);
+        RetVal<QUrl> newSourceUrl = doUploadScore(manager, scoreData, title, sourceUrl);
 
         ProgressResult result;
         result.ret = newSourceUrl.ret;
@@ -448,14 +453,44 @@ ProgressPtr CloudService::uploadScore(QIODevice& scoreSourceDevice, const QStrin
     return progress;
 }
 
-mu::RetVal<QUrl> CloudService::doUploadScore(INetworkManagerPtr uploadManager, QIODevice& scoreSourceDevice, const QString& title,
+ProgressPtr CloudService::uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl)
+{
+    ProgressPtr progress = std::make_shared<Progress>();
+
+    auto uploadCallback = [this, progress, &audioData, audioFormat, sourceUrl]() {
+        progress->started.notify();
+
+        INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+        manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
+            progress->progressChanged.send(current, total, message);
+        });
+
+        Ret ret = doUploadAudio(manager, audioData, audioFormat, sourceUrl);
+        progress->finished.send(ret);
+
+        return ret;
+    };
+
+    async::Async::call(this, [this, uploadCallback]() {
+        if (!m_userAuthorized.val) {
+            authorize(uploadCallback);
+            return;
+        }
+
+        executeRequest(uploadCallback);
+    });
+
+    return progress;
+}
+
+mu::RetVal<QUrl> CloudService::doUploadScore(INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
                                              const QUrl& sourceUrl)
 {
     TRACEFUNC;
 
     RetVal<QUrl> result = RetVal<QUrl>::make_ok(QUrl());
 
-    RetVal<QUrl> uploadUrl = prepareUrlForRequest(configuration()->uploadingApiUrl());
+    RetVal<QUrl> uploadUrl = prepareUrlForRequest(configuration()->uploadScoreApiUrl());
     if (!uploadUrl.ret) {
         result.ret = uploadUrl.ret;
         return result;
@@ -485,11 +520,10 @@ mu::RetVal<QUrl> CloudService::doUploadScore(INetworkManagerPtr uploadManager, Q
 
     QHttpPart filePart;
     filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
-    int fileNameNumber = QRandomGenerator::global()->generate() % 100000;
-    QString contentDisposition = QString("form-data; name=\"score_data\"; filename=\"temp_%1.mscz\"").arg(fileNameNumber);
+    QString contentDisposition = QString("form-data; name=\"score_data\"; filename=\"temp_%1.mscz\"").arg(generateFileNameNumber());
     filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(contentDisposition));
 
-    filePart.setBodyDevice(&scoreSourceDevice);
+    filePart.setBodyDevice(&scoreData);
     multiPart.append(filePart);
 
     if (isScoreAlreadyUploaded) {
@@ -537,6 +571,39 @@ mu::RetVal<QUrl> CloudService::doUploadScore(INetworkManagerPtr uploadManager, Q
     openUrl(editUrl);
 
     return result;
+}
+
+mu::Ret CloudService::doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl)
+{
+    TRACEFUNC;
+
+    RetVal<QUrl> uploadUrl = prepareUrlForRequest(configuration()->uploadAudioApiUrl());
+    if (!uploadUrl.ret) {
+        return uploadUrl.ret;
+    }
+
+    QHttpMultiPart multiPart(QHttpMultiPart::FormDataType);
+
+    QHttpPart audioPart;
+    audioPart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
+    QString contentDisposition = QString("form-data; name=\"audio_data\"; filename=\"temp_%1.%2\"")
+            .arg(generateFileNameNumber())
+            .arg(audioFormat);
+    audioPart.setHeader(QNetworkRequest::ContentDispositionHeader, contentDisposition);
+    audioPart.setBodyDevice(&audioData);
+    multiPart.append(audioPart);
+
+    QHttpPart scoreIdPart;
+    scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"score_id\""));
+    scoreIdPart.setBody(QString::number(scoreIdFromSourceUrl(sourceUrl)).toLatin1());
+    multiPart.append(scoreIdPart);
+
+    QBuffer receivedData;
+    OutgoingDevice device(&multiPart);
+
+    Ret ret = uploadManager->post(uploadUrl.val, &device, &receivedData, headers());
+
+    return ret;
 }
 
 void CloudService::executeRequest(const RequestCallback& requestCallback)
