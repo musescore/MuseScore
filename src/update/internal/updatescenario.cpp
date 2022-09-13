@@ -147,7 +147,7 @@ void UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
     QString actionCode = rv.val.toQString();
 
     if (actionCode == "install") {
-        installRelease();
+        downloadRelease();
     } else if (actionCode == "remindLater") {
         return;
     } else if (actionCode == "skip") {
@@ -162,10 +162,35 @@ void UpdateScenario::showServerErrorMsg()
                          IInteractive::Option::WithIcon);
 }
 
-void UpdateScenario::installRelease()
+void UpdateScenario::downloadRelease()
 {
-    RetVal<Val> rv = interactive()->open("musescore://update");
+    RetVal<Val> rv = interactive()->open("musescore://update?mode=download");
     if (!rv.ret) {
         processUpdateResult(rv.ret.code());
+        return;
     }
+
+    closeAppAndStartInstallation(rv.val.toString());
+}
+
+void UpdateScenario::closeAppAndStartInstallation(const io::path_t& installerPath)
+{
+    std::string info = trc("update", "MuseScore needs to close to complete the installation. "
+                                     "If you have any unsaved changes, you will be prompted to save them before MuseScore closes.");
+
+    int closeBtn = int(IInteractive::Button::CustomButton) + 1;
+    IInteractive::Result result = interactive()->info("", info,
+                                                      { interactive()->buttonData(IInteractive::Button::Cancel),
+                                                        IInteractive::ButtonData(closeBtn, trc("update", "Close"), true) },
+                                                      closeBtn);
+
+    if (result.standardButton() == IInteractive::Button::Cancel) {
+        return;
+    }
+
+    if (multiInstancesProvider()->instances().size() != 1) {
+        multiInstancesProvider()->quitAllAndRunInstallation(installerPath);
+    }
+
+    dispatcher()->dispatch("quit", actions::ActionData::make_arg2<bool, std::string>(false, installerPath.toStdString()));
 }

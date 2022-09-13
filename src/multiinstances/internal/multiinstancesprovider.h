@@ -81,6 +81,7 @@ public:
     // Quit for all
     void quitForAll() override;
     void quitAllAndRestartLast() override;
+    void quitAllAndRunInstallation(const io::path_t& installerPath) override;
 
 private:
 

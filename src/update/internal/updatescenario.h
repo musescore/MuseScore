@@ -26,6 +26,8 @@
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
+#include "actions/iactionsdispatcher.h"
+#include "multiinstances/imultiinstancesprovider.h"
 #include "../iupdateconfiguration.h"
 #include "../iupdateservice.h"
 
@@ -35,6 +37,8 @@ namespace mu::update {
 class UpdateScenario : public IUpdateScenario, public async::Asyncable
 {
     INJECT(update, framework::IInteractive, interactive)
+    INJECT(update, actions::IActionsDispatcher, dispatcher)
+    INJECT(update, mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(update, IUpdateConfiguration, configuration)
     INJECT(update, IUpdateService, updateService)
 
@@ -55,7 +59,8 @@ private:
 
     void showServerErrorMsg();
 
-    void installRelease();
+    void downloadRelease();
+    void closeAppAndStartInstallation(const io::path_t& installerPath);
 
     bool m_progress = false;
 };

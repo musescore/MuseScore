@@ -41,7 +41,8 @@ void ApplicationActionController::init()
 {
     dispatcher()->reg(this, "quit", [this](const ActionData& args) {
         bool isAllInstances = args.count() > 0 ? args.arg<bool>(0) : true;
-        quit(isAllInstances);
+        io::path_t installatorPath = args.count() > 1 ? args.arg<io::path_t>(1) : "";
+        quit(isAllInstances, installatorPath);
     });
 
     dispatcher()->reg(this, "restart", [this]() {
@@ -142,11 +143,15 @@ mu::ValCh<bool> ApplicationActionController::isFullScreen() const
     return result;
 }
 
-void ApplicationActionController::quit(bool isAllInstances)
+void ApplicationActionController::quit(bool isAllInstances, const io::path_t& installerPath)
 {
     if (projectFilesController()->closeOpenedProject()) {
         if (isAllInstances) {
             multiInstancesProvider()->quitForAll();
+        }
+
+        if (multiInstancesProvider()->instances().size() == 1 && !installerPath.empty()) {
+            interactive()->openUrl(QUrl::fromLocalFile(installerPath.toQString()));
         }
 
         QCoreApplication::quit();
