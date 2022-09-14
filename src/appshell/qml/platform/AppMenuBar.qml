@@ -63,6 +63,14 @@ ListView {
         }
     }
 
+    AccessibleItem {
+        id: panelAccessibleInfo
+
+        visualItem: root
+        role: MUAccessible.Panel
+        name: qsTrc("appshell", "Application menu")
+    }
+
     Component.onCompleted: {
         appMenuModel.load()
     }
@@ -131,9 +139,12 @@ ListView {
         transparent: !isMenuOpened
         accentButton: isMenuOpened
 
+        navigation.accessible.ignored: true
+
         AccessibleItem {
             id: accessibleInfo
 
+            accessibleParent: panelAccessibleInfo
             visualItem: radioButtonDelegate
             role: MUAccessible.Button
             name: Utils.removeAmpersands(radioButtonDelegate.title)
