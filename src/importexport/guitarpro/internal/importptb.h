@@ -200,6 +200,7 @@ class PowerTab
 
         ptBeat(int _staff, int _voice)
             : staff(_staff), voice(_voice) {}
+        ptBeat() = default;
         Type type() override
         {
             return Beat;
@@ -272,7 +273,7 @@ class PowerTab
         int notes_count{ 0 };
     };
 
-    typedef std::list<std::shared_ptr<ptBeat> > tBeatList;
+    typedef std::list<ptBeat> tBeatList;
 
     struct ptTrack;
     struct ptSection {
