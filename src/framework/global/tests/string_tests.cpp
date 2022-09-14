@@ -574,6 +574,28 @@ TEST_F(Global_Types_StringTests, String_ToInt)
         EXPECT_FALSE(ok);
         EXPECT_EQ(v, 0);
     }
+
+    {
+        //! GIVEN Some string
+        String s("123.456");
+        //! DO
+        bool ok = false;
+        int v = s.toInt(&ok);
+        //! CHECK
+        EXPECT_TRUE(ok);
+        EXPECT_EQ(v, 123);
+    }
+
+    {
+        //! GIVEN Some string
+        String s("123.456a");
+        //! DO
+        bool ok = false;
+        int v = s.toInt(&ok);
+        //! CHECK
+        EXPECT_FALSE(ok);
+        EXPECT_EQ(v, 0);
+    }
 }
 
 TEST_F(Global_Types_StringTests, AsciiString_Construct)
@@ -695,6 +717,28 @@ TEST_F(Global_Types_StringTests, AsciiString_ToInt)
         EXPECT_FALSE(ok);
         EXPECT_EQ(v, 0);
     }
+
+    {
+        //! GIVEN Some string
+        String s("123.456");
+        //! DO
+        bool ok = false;
+        int v = s.toInt(&ok);
+        //! CHECK
+        EXPECT_TRUE(ok);
+        EXPECT_EQ(v, 123);
+    }
+
+    {
+        //! GIVEN Some string
+        String s("123.456а");
+        //! DO
+        bool ok = false;
+        int v = s.toInt(&ok);
+        //! CHECK
+        EXPECT_FALSE(ok);
+        EXPECT_EQ(v, 0);
+    }
 }
 
 TEST_F(Global_Types_StringTests, AsciiString_ToDouble)
@@ -719,6 +763,50 @@ TEST_F(Global_Types_StringTests, AsciiString_ToDouble)
         //! CHECK
         EXPECT_TRUE(ok);
         EXPECT_DOUBLE_EQ(v, 2.1);
+    }
+
+    {
+        //! GIVEN Some string
+        AsciiStringView s("2.1a");
+        //! DO
+        bool ok = false;
+        double v = s.toDouble(&ok);
+        //! CHECK
+        EXPECT_TRUE(ok);
+        EXPECT_DOUBLE_EQ(v, 2.1);
+    }
+
+    {
+        //! GIVEN Some string
+        AsciiStringView s("234a1");
+        //! DO
+        bool ok = false;
+        double v = s.toDouble(&ok);
+        //! CHECK
+        EXPECT_TRUE(ok);
+        EXPECT_DOUBLE_EQ(v, 234.0);
+    }
+
+    {
+        //! GIVEN Some string
+        AsciiStringView s("2.");
+        //! DO
+        bool ok = false;
+        double v = s.toDouble(&ok);
+        //! CHECK
+        EXPECT_TRUE(ok);
+        EXPECT_DOUBLE_EQ(v, 2.0);
+    }
+
+    {
+        //! GIVEN Some string
+        AsciiStringView s(".2");
+        //! DO
+        bool ok = false;
+        double v = s.toDouble(&ok);
+        //! CHECK
+        EXPECT_TRUE(ok);
+        EXPECT_DOUBLE_EQ(v, 0.2);
     }
 
     {
