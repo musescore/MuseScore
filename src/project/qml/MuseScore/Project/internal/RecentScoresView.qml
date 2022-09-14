@@ -110,6 +110,7 @@ StyledGridView {
             thumbnail: score.thumbnail ?? null
             isAdd: score.isAddNew
             isNoResultFound: score.isNoResultFound
+            isCloud: score.isCloud
             timeSinceModified: (!isAdd && !isNoResultFound) ? score.timeSinceModified : ""
             visible: !isNoResultFound ? true : root.count == 2 && root.isSearching     // New score and No result items
 

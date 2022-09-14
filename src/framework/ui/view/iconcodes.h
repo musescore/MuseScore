@@ -370,6 +370,8 @@ public:
 
         INSERT_ONE_MEASURE = 0xF432,
 
+        CLOUD = 0xF435,
+
         CROSS_STAFF_BEAMING = 0xF43D,
 
         TEMPO_CHANGE = 0xF43F,
