@@ -252,12 +252,16 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
 
             if (separation == 1) {
                 // second
-                downOffset = maxUpWidth;
-                // align stems if present, leave extra room if not
-                if (topDownNote->chord()->stem() && bottomUpNote->chord()->stem()) {
-                    downOffset -= topDownNote->chord()->stem()->lineWidth();
+                if (upDots && !downDots) {
+                    upOffset = maxDownWidth + 0.1 * sp;
                 } else {
-                    downOffset += 0.1 * sp;
+                    downOffset = maxUpWidth;
+                    // align stems if present, leave extra room if not
+                    if (topDownNote->chord()->stem() && bottomUpNote->chord()->stem()) {
+                        downOffset -= topDownNote->chord()->stem()->lineWidth();
+                    } else {
+                        downOffset += 0.1 * sp;
+                    }
                 }
             } else if (separation < 1) {
                 // overlap (possibly unison)
@@ -363,6 +367,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
                     shareHeads = false;
                 }
 
+                bool conflict = conflictUnison || conflictSecondDownHigher || conflictSecondUpHigher;
                 // calculate offsets
                 if (shareHeads) {
                     for (int i = static_cast<int>(overlapNotes.size()) - 1; i >= 1; i -= 2) {
@@ -393,6 +398,8 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
                             // so better to solve the problem elsewhere
                         }
                     }
+                } else if (conflict && (upDots && !downDots)) {
+                    upOffset = maxDownWidth + 0.1 * sp;
                 } else if (conflictUnison && separation == 0 && (!downGrace || upGrace)) {
                     downOffset = maxUpWidth + 0.3 * sp;
                 } else if (conflictUnison) {
