@@ -91,6 +91,7 @@ public:
     SpannerSegment* layoutSystem(System*) override;
     void setTrack(track_idx_t val) override;
     void slurPos(SlurPos*) override;
+    void fixArticulations(PointF& pt, Chord* c, double up, bool stemSide);
     void computeUp();
 
     SlurSegment* frontSegment() { return toSlurSegment(Spanner::frontSegment()); }
