@@ -375,12 +375,11 @@ bool ProjectActionsController::saveProject(const io::path_t& path)
         return false;
     }
 
-    // TODO(save-to-cloud):
-    // - check whether the score is *currently* public (might have been changed on .com)
-    //   (if yes, show warning)
-    // - save indeed to the cloud, generating MP3 as necessary
-
     if (!project->isNewlyCreated()) {
+        if (project->isCloudProject()) {
+            return saveProjectToCloud(project->cloudInfo());
+        }
+
         return saveProjectLocally();
     }
 
@@ -486,17 +485,42 @@ bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, pr
     return true;
 }
 
-bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, SaveMode saveMode)
+bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, SaveMode)
 {
-    UNUSED(saveMode)
+    INotationProjectPtr project = currentNotationProject();
+    if (!project) {
+        return false;
+    }
 
-    // TODO(save-to-cloud): handle additional logic for the "Save to cloud" flow here
-    // The following method should only do the uploading itself
-    uploadProject(info);
+    project->setCloudInfo(info);
 
-    // TODO(save-to-cloud): finally, show the "Success!" dialog
+    io::path_t oldPath = project->path();
 
-    // TODO(save-to-cloud): the caller expects us to return whether it was successful
+    if (!saveProjectLocally(configuration()->cloudProjectPath(info.name.toStdString()))) {
+        return false;
+    }
+
+    if (!oldPath.empty() && oldPath != project->path()) {
+        Ret ret = fileSystem()->remove(oldPath);
+        if (!ret) {
+            LOGE() << ret.toString();
+        }
+
+        removeFromRecentScoreList(oldPath);
+    }
+
+    AudioFile audio;
+    bool isPublic = info.visibility == CloudProjectVisibility::Public;
+
+    if (isPublic) {
+        audio = exportMp3(project->masterNotation()->notation());
+        if (!audio.isValid()) {
+            return false;
+        }
+    }
+
+    uploadProject(info, audio, isPublic);
+
     return true;
 }
 
@@ -518,14 +542,8 @@ ProjectActionsController::AudioFile ProjectActionsController::exportMp3(const IN
     return audio;
 }
 
-void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const AudioFile& audio)
+void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl)
 {
-    // TODO(save-to-cloud): This method does more than barely uploading; it basically implements the "Publish" flow.
-    // It should be stripped down to the basics, and "Publish" specific logic should be moved to the publish method,
-    // so that this basic method can also be used for the "Save to cloud" flow.
-
-    // TODO(save-to-cloud): Show progress dialog
-
     // We can only be uploading one project at a time
     if (m_isUploadingProject) {
         return;
@@ -566,7 +584,7 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
         }
     });
 
-    m_uploadingProjectProgress->finished.onReceive(this, [this, project, projectData, audio](const ProgressResult& res) {
+    m_uploadingProjectProgress->finished.onReceive(this, [this, project, projectData, audio, openEditUrl](const ProgressResult& res) {
         m_isUploadingProject = false;
         projectData->deleteLater();
 
@@ -575,19 +593,24 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
             return;
         }
 
-        QString newSource = QString::fromStdString(res.val.toString());
-        LOGD() << "Source url received: " << newSource;
+        ValMap urlMap = res.val.toMap();
+        QString newSourceUrl = urlMap["sourceUrl"].toQString();
+        QString editUrl = openEditUrl ? urlMap["editUrl"].toQString() : QString();
+
+        LOGD() << "Source url received: " << newSourceUrl;
+
+        onProjectSuccessfullyUploaded(editUrl);
 
         if (audio.isValid()) {
-            uploadAudio(audio, newSource);
+            uploadAudio(audio, newSourceUrl);
         }
 
         ProjectMeta meta = project->metaInfo();
-        if (meta.source == newSource) {
+        if (meta.source == newSourceUrl) {
             return;
         }
 
-        meta.source = newSource;
+        meta.source = newSourceUrl;
         project->setMetaInfo(meta, false /*undoable*/);
 
         if (!project->isNewlyCreated()) {
@@ -625,6 +648,28 @@ void ProjectActionsController::uploadAudio(const AudioFile& audio, const QUrl& s
             LOGE() << res.ret.toString();
         }
     });
+}
+
+void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOpen)
+{
+    if (!urlToOpen.isEmpty()) {
+        interactive()->openUrl(urlToOpen);
+        return;
+    }
+
+    IInteractive::ButtonData viewOnlineBtn(IInteractive::Button::CustomButton, trc("project/save", "View online"));
+    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
+    okBtn.accent = true;
+
+    std::string msg = trc("project/save", "All saved changes will now update to the cloud. "
+                                          "You can manage this file in the score manager on musescore.com.");
+
+    int btn = interactive()->info(trc("global", "Success!"), msg, { viewOnlineBtn, okBtn },
+                                  static_cast<int>(IInteractive::Button::Ok)).button();
+
+    if (btn == viewOnlineBtn.btn) {
+        interactive()->openUrl(configuration()->scoreManagerUrl());
+    }
 }
 
 bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path_t& filePath)
@@ -755,6 +800,18 @@ void ProjectActionsController::prependToRecentScoreList(const io::path_t& filePa
     recentScorePaths.insert(recentScorePaths.begin(), filePath);
     configuration()->setRecentProjectPaths(recentScorePaths);
     platformRecentFilesController()->addRecentFile(filePath);
+}
+
+void ProjectActionsController::removeFromRecentScoreList(const io::path_t& filePath)
+{
+    if (filePath.empty()) {
+        return;
+    }
+
+    io::paths_t recentScorePaths = configuration()->recentProjectPaths();
+    mu::remove(recentScorePaths, filePath);
+
+    configuration()->setRecentProjectPaths(recentScorePaths);
 }
 
 bool ProjectActionsController::hasSelection() const

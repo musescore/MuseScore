@@ -39,6 +39,7 @@ public:
 
     virtual QUrl authorizationUrl() const = 0;
     virtual QUrl signUpUrl() const = 0;
+    virtual QUrl scoreManagerUrl() const = 0;
     virtual QUrl accessTokenUrl() const = 0;
 
     virtual QUrl refreshApiUrl() const = 0;

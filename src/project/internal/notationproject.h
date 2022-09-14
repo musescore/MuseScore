@@ -106,11 +106,10 @@ private:
     notation::MasterNotationPtr m_masterNotation = nullptr;
     ProjectAudioSettingsPtr m_projectAudioSettings = nullptr;
     ProjectViewSettingsPtr m_viewSettings = nullptr;
+    CloudProjectInfo m_cloudInfo;
 
     io::path_t m_path;
     async::Notification m_pathChanged;
-
-    CloudProjectInfo m_cloudInfo;
 
     async::Notification m_needSaveNotification;
 

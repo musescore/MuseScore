@@ -35,6 +35,7 @@ FocusScope {
     property var thumbnail: null
     property bool isAdd: false
     property bool isNoResultFound: false
+    property bool isCloud: false
 
     property alias navigation: navCtrl
 
@@ -190,6 +191,41 @@ FocusScope {
 
                 visible: !root.isAdd && !root.isNoResultFound
             }
+        }
+    }
+
+    Rectangle {
+        anchors.top: parent.top
+        anchors.topMargin: -width / 2
+        anchors.left: parent.left
+        anchors.leftMargin: -width / 2
+
+        width: 36
+        height: width
+        radius: width / 2
+
+        color: ui.theme.accentColor
+        visible: root.isCloud
+
+        Image {
+            id: cloudProjectIcon
+
+            anchors.centerIn: parent
+
+            width: 24
+            height: 16
+
+            source: "qrc:/resources/CloudProject.svg"
+        }
+
+        StyledDropShadow {
+            anchors.fill: cloudProjectIcon
+
+            horizontalOffset: 0
+            verticalOffset: 1
+            radius: 4
+
+            source: cloudProjectIcon
         }
     }
 

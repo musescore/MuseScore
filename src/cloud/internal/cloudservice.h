@@ -90,8 +90,8 @@ private:
     Ret downloadAccountInfo();
     RetVal<ScoreInfo> downloadScoreInfo(int scoreId);
 
-    RetVal<QUrl> doUploadScore(network::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
-                               bool isPrivate = false, const QUrl& sourceUrl = QUrl());
+    mu::RetVal<mu::ValMap> doUploadScore(network::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
+                                         bool isPrivate = false, const QUrl& sourceUrl = QUrl());
     Ret doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl);
 
     using RequestCallback = std::function<Ret()>;
