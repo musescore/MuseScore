@@ -56,7 +56,7 @@ private:
     ///     true -> this is part of a "Publish" action
     RetVal<CloudProjectInfo> doAskCloudLocation(INotationProjectPtr project, bool isPublish) const;
 
-    bool warnBeforePublishing(INotationProjectPtr project, bool isPublish) const;
+    bool warnBeforePublishing(INotationProjectPtr project, CloudProjectVisibility visibility, bool isPublish) const;
 };
 
 class QMLSaveLocationType

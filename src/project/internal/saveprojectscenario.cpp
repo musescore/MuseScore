@@ -211,16 +211,14 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
     result.name = vals["name"].toString();
     result.visibility = static_cast<CloudProjectVisibility>(vals["visibility"].toInt());
 
-    if (result.visibility == CloudProjectVisibility::Public) {
-        if (!warnBeforePublishing(project, isPublish)) {
-            return make_ret(Ret::Code::Cancel);
-        }
+    if (!warnBeforePublishing(project, result.visibility, isPublish)) {
+        return make_ret(Ret::Code::Cancel);
     }
 
     return RetVal<CloudProjectInfo>::make_ok(result);
 }
 
-bool SaveProjectScenario::warnBeforePublishing(INotationProjectPtr project, bool isPublish) const
+bool SaveProjectScenario::warnBeforePublishing(INotationProjectPtr project, CloudProjectVisibility visibility, bool isPublish) const
 {
     if (!isPublish && !configuration()->shouldWarnBeforeSavingPublicly()) {
         return true;
@@ -249,7 +247,7 @@ bool SaveProjectScenario::warnBeforePublishing(INotationProjectPtr project, bool
         }
 
         result = interactive()->warning(title, message, buttons, int(IInteractive::Button::Ok), IInteractive::Option::WithIcon);
-    } else {
+    } else if (visibility == CloudProjectVisibility::Public) {
         result = interactive()->warning(
             trc("project/save", "Publish this score online?"),
             trc("project/save", "All saved changes will be publicly visible on MuseScore.com. "

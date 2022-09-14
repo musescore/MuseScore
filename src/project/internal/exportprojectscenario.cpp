@@ -56,7 +56,13 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
         return false;
     }
 
-    m_currentWriter = writers()->writer(io::suffix(chosenPath));
+    return exportScores(notations, chosenPath, unitType, openDestinationFolderOnExport);
+}
+
+bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notations, const io::path_t& destinationPath,
+                                         INotationWriter::UnitType unitType, bool openDestinationFolderOnExport) const
+{
+    m_currentWriter = writers()->writer(io::suffix(destinationPath));
     if (!m_currentWriter) {
         return false;
     }
@@ -84,8 +90,9 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
                 };
 
                 io::path_t definitivePath = isCreatingOnlyOneFile
-                                            ? chosenPath
-                                            : completeExportPath(chosenPath, notation, isMainNotation(notation), static_cast<int>(page));
+                                            ? destinationPath
+                                            : completeExportPath(destinationPath, notation, isMainNotation(notation),
+                                                                 static_cast<int>(page));
 
                 auto exportFunction = [this, notation, options](QIODevice& destinationDevice) {
                         showExportProgressIfNeed();
@@ -105,8 +112,8 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
             };
 
             io::path_t definitivePath = isCreatingOnlyOneFile
-                                        ? chosenPath
-                                        : completeExportPath(chosenPath, notation, isMainNotation(notation));
+                                        ? destinationPath
+                                        : completeExportPath(destinationPath, notation, isMainNotation(notation));
 
             auto exportFunction = [this, notation, options](QIODevice& destinationDevice) {
                     showExportProgressIfNeed();
@@ -127,12 +134,12 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
                 return m_currentWriter->writeList(notations, destinationDevice, options);
             };
 
-        doExportLoop(chosenPath, exportFunction);
+        doExportLoop(destinationPath, exportFunction);
     } break;
     }
 
     if (openDestinationFolderOnExport) {
-        openFolder(chosenPath);
+        openFolder(destinationPath);
     }
 
     return true;
