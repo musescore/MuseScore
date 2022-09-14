@@ -36,7 +36,12 @@ public:
     virtual std::vector<project::INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const = 0;
 
     virtual bool exportScores(const notation::INotationPtrList& notations, const ExportType& exportType,
-                              project::INotationWriter::UnitType unitType, bool openDestinationFolderOnExport = false) const = 0;
+                              project::INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
+                              bool openDestinationFolderOnExport = false) const = 0;
+
+    virtual bool exportScores(const notation::INotationPtrList& notations, const io::path_t& destinationPath,
+                              project::INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
+                              bool openDestinationFolderOnExport = false) const = 0;
 
     virtual framework::Progress progress() const = 0;
 
