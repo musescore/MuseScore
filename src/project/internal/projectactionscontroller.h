@@ -38,6 +38,7 @@
 #include "inotationreadersregister.h"
 #include "isaveprojectscenario.h"
 #include "io/ifilesystem.h"
+#include "internal/iexportprojectscenario.h"
 
 #include "async/asyncable.h"
 
@@ -55,6 +56,7 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
     INJECT(project, IPlatformRecentFilesController, platformRecentFilesController)
     INJECT(project, IProjectAutoSaver, projectAutoSaver)
     INJECT(project, ISaveProjectScenario, saveProjectScenario)
+    INJECT(project, IExportProjectScenario, exportProjectScenario)
 
     INJECT(project, actions::IActionsDispatcher, dispatcher)
     INJECT(project, framework::IInteractive, interactive)
@@ -101,7 +103,23 @@ private:
     bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save);
     bool saveProjectLocally(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save);
     bool saveProjectToCloud(const CloudProjectInfo& info, SaveMode saveMode = SaveMode::Save);
-    void uploadProject(const CloudProjectInfo& info);
+
+    struct AudioFile {
+        QString format;
+        QIODevice* device = nullptr;
+
+        AudioFile() {}
+
+        bool isValid() const
+        {
+            return !format.isEmpty() && device != nullptr;
+        }
+    };
+
+    AudioFile exportMp3(const notation::INotationPtr notation) const;
+
+    void uploadProject(const CloudProjectInfo& info, const AudioFile& audio = AudioFile());
+    void uploadAudio(const AudioFile& audio, const QUrl& sourceUrl);
 
     void importPdf();
 
@@ -128,7 +146,10 @@ private:
     bool m_isProjectProcessing = false;
 
     bool m_isUploadingProject = false;
-    framework::ProgressPtr m_uploadingProgress;
+    bool m_isUploadingAudio = false;
+
+    framework::ProgressPtr m_uploadingProjectProgress;
+    framework::ProgressPtr m_uploadingAudioProgress;
 };
 }
 
