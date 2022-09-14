@@ -442,29 +442,14 @@ void PowerTab::readPosition(int staff, int voice, ptSection& sec)
 {
     auto position = readUInt8();
 
-    ptBeat* beat{ nullptr };
+    ptBeat beat = ptBeat();
+    beat.position = position;
+    beat.voice = voice;
     bool add = false;
-    if (voice == 0 || staff >= static_cast<int>(sec.beats.size()) || sec.beats[staff].empty()) {
-        beat = new ptBeat(staff, voice);
-        beat->position = position;
+    if (voice == 0 || staff >= sec.beats.size() || sec.beats[staff].empty()) {
+        beat = ptBeat(staff, voice);
+        beat.position = position;
         add = true;
-    } else {
-        auto pos = sec.beats[staff].begin();
-        auto end = sec.beats[staff].end();
-        while (pos != end && pos->get()->position < position) {
-            ++pos;
-        }
-        if (pos == end) {
-            beat = new ptBeat(staff, voice);
-            beat->position = position;
-            add = true;
-        } else if (pos->get()->position == position) {
-            beat = pos->get();
-        } else {
-            beat = new ptBeat(staff, voice);
-            beat->position = position;
-            sec.beats[staff].insert(pos, std::shared_ptr<ptBeat>(beat));
-        }
     }
     auto beaming = readUInt8();
     beaming = (((int)beaming - 128 < 0) ? beaming : beaming - 128);
@@ -489,38 +474,38 @@ void PowerTab::readPosition(int staff, int voice, ptSection& sec)
 
     auto itemCount = readHeaderItems();
     for (int i = 0; i < itemCount; ++i) {
-        readNote(beat);
+        readNote(&beat);
         if (i < itemCount - 1) {
             readShort();
         }
     }
     curTrack->infos[staff].notes_count += itemCount;
-    beat->mmrest = (itemCount == 0) ? multiBarRest : 1;
-    beat->vibrato = (((data1 & 0x08) != 0) || ((data1 & 0x10) != 0));
-    beat->grace = (data3 & 0x01) != 0;
-    beat->tuplet = (data3 & 0x20) != 0;
+    beat.mmrest = (itemCount == 0) ? multiBarRest : 1;
+    beat.vibrato = (((data1 & 0x08) != 0) || ((data1 & 0x10) != 0));
+    beat.grace = (data3 & 0x01) != 0;
+    beat.tuplet = (data3 & 0x20) != 0;
 
-    if (beat->duration != 0) {
-        durationValue = std::max((int)durationValue, beat->duration);
+    if (beat.duration != 0) {
+        durationValue = std::max((int)durationValue, beat.duration);
     }
 
-    beat->duration = durationValue;  //beat->duration == 0 ? durationValue : std::min(beat->duration, (int)durationValue);
-    beat->dotted = (data1 & 0x01);
-    beat->doubleDotted = (data1 & 0x02);
-    beat->arpeggioUp = (data1 & 0x20);
-    beat->arpeggioDown = (data1 & 0x40);
-    beat->enters = ((beaming - (beaming % 8)) / 8) + 1;
-    beat->times = (beaming % 8) + 1;
-    beat->isRest = (data1 & 0x04);
-    beat->palmMute = data2 & 0x20;
-    beat->accent = data2 & 0x04;
-    beat->staccato = data2 & 0x02;
+    beat.duration = durationValue;
+    beat.dotted = (data1 & 0x01);
+    beat.doubleDotted = (data1 & 0x02);
+    beat.arpeggioUp = (data1 & 0x20);
+    beat.arpeggioDown = (data1 & 0x40);
+    beat.enters = ((beaming - (beaming % 8)) / 8) + 1;
+    beat.times = (beaming % 8) + 1;
+    beat.isRest = (data1 & 0x04);
+    beat.palmMute = data2 & 0x20;
+    beat.accent = data2 & 0x04;
+    beat.staccato = data2 & 0x02;
 
     for (int i = int(sec.beats.size()); i < staff + 1; ++i) {
         sec.beats.push_back({});
     }
     if (add) {
-        sec.beats[staff].push_back(std::shared_ptr<ptBeat>(beat));
+        sec.beats[staff].push_back(beat);
     }
     //sec.getPosition(position).addComponent(beat);
 }
@@ -567,9 +552,10 @@ std::vector<int> PowerTab::getStaffMap(ptSection& sec)
         }
     }
 
-    for (auto i : slash) {
-        result.push_back(i);
-    }
+    // negative numbers
+//    for (auto i : slash) {
+//        result.push_back(i);
+//    }
 
     lastStaffMap = result;
     return result;
@@ -628,10 +614,10 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
     Chord* hammer{ nullptr };
 
     while (elist.size() && tick < endtick) {
-        auto beat = elist.front().get();
+        auto& beat = elist.front();
         auto segment = measure->getSegment(SegmentType::ChordRest, tick);
-        Fraction l(1, beat->duration);
-        int dots = beat->dotted ? (beat->doubleDotted ? 2 : 1) : (beat->doubleDotted ? 2 : 0);
+        Fraction l(1, beat.duration);
+        int dots = beat.dotted ? (beat.doubleDotted ? 2 : 1) : (beat.doubleDotted ? 2 : 0);
         switch (dots) {
         case 1:
             l = l + (l * Fraction(1, 2));
@@ -644,14 +630,14 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
         TDuration d(l);
         d.setDots(dots);
 
-        if (beat->tuplet || tupleBeatCounter) {
+        if (beat.tuplet || tupleBeatCounter) {
             Fraction nt = (l * Fraction(1, 3) * Fraction(2, 1));
             tick += nt;
         } else {
             tick += l;
         }
         ChordRest* cr;
-        if (beat->notes.empty()) {
+        if (beat.notes.empty()) {
             auto rest = Factory::createRest(segment);
             cr = rest;
             rest->setTrack(staff * VOICES);
@@ -666,21 +652,21 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
             chord->setDurationType(d);
             segment->add(chord);
 
-            if (beat->palmMute) {
+            if (beat.palmMute) {
                 addPalmMute(chord);
             }
-            if (beat->accent) {
+            if (beat.accent) {
                 auto accent = Factory::createArticulation(chord);
                 accent->setSymId(SymId::articAccentAbove);
                 chord->add(accent);
             }
-            if (beat->staccato) {
+            if (beat.staccato) {
                 auto st = Factory::createArticulation(chord);
                 st->setSymId(SymId::articStaccatoAbove);
                 chord->add(st);
             }
             bool has_hammer = false;
-            for (const auto& n : beat->notes) {
+            for (const auto& n : beat.notes) {
                 auto note = Factory::createNote(chord);
                 chord->add(note);
                 if (n.dead) {
@@ -753,7 +739,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
             tuple->add(cr);
         }
 
-        if (beat->tuplet && !tuple) {
+        if (beat.tuplet && !tuple) {
             tuple = Factory::createTuplet(measure);
             tuple->setParent(measure);
             tuple->setTrack(cr->track());
@@ -972,13 +958,13 @@ void PowerTab::ptSection::copyTracks(ptTrack* track)
                 signature = newSig;
             }
 
-            ptBeat* beat = new ptBeat(staff, 0);
-            beat->position = rt.position;
-            beat->duration = rt.duration;
-            beat->dotted = rt.dotted;
-            beat->doubleDotted = rt.doubleDotted;
-            beat->isRest = rt.is_rest;
-            beat->tuplet = rt.triplet;
+            ptBeat beat = ptBeat(staff, 0);
+            beat.position = rt.position;
+            beat.duration = rt.duration;
+            beat.dotted = rt.dotted;
+            beat.doubleDotted = rt.doubleDotted;
+            beat.isRest = rt.is_rest;
+            beat.tuplet = rt.triplet;
             if (!rt.is_rest) {
                 auto diagram = track->diagramMap.find({ { signature->second.key, signature->second.formula,
                                                           signature->second.formula_mod } });
@@ -996,7 +982,7 @@ void PowerTab::ptSection::copyTracks(ptTrack* track)
                             note.dead = true;
                             note.value = 0;
                         }
-                        beat->notes.emplace_back(note);
+                        beat.notes.emplace_back(note);
                     }
                 } else {
                     LOGD() << "diagram wasn't found";
@@ -1005,7 +991,7 @@ void PowerTab::ptSection::copyTracks(ptTrack* track)
             while (int(beats.size()) <= staff) {
                 beats.push_back({});
             }
-            beats[staff].push_back(std::shared_ptr<ptBeat>(beat));
+            beats[staff].push_back(beat);
         }
     }
 }
