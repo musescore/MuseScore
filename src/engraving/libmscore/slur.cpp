@@ -831,13 +831,17 @@ Slur::Slur(const Slur& s)
 //   fixArticulations
 //---------------------------------------------------------
 
-static void fixArticulations(PointF& pt, Chord* c, double _up, bool stemSide = false)
+void Slur::fixArticulations(PointF& pt, Chord* c, double up, bool stemSide = false)
 {
     //
     // handle special case of tenuto and staccato
     // yo = current offset of slur from chord position
     // return unchanged position, or position of outmost "close" articulation
     //
+    double slurTipToArticVertDist = c->spatium() * 0.5 * up;
+    double slurTipInwardAdjust = 0.1 * spatium();
+    bool start = startCR() && startCR() == c;
+    bool end = endCR() && endCR() == c;
     for (Articulation* a : c->articulations()) {
         if (!a->layoutCloseToNote() || !a->addToSkyline()) {
             continue;
@@ -846,13 +850,19 @@ static void fixArticulations(PointF& pt, Chord* c, double _up, bool stemSide = f
         if ((a->up() == c->up()) != stemSide) {
             continue;
         }
-        if (a->isTenuto()) {
-            pt.rx() = a->x();
+        // Correct x-position inwards
+        Note* note = c->up() ? c->downNote() : c->upNote();
+        pt.rx() = a->x() - note->x();
+        if (start) {
+            pt.rx() += slurTipInwardAdjust;
+        } else if (end) {
+            pt.rx() -= slurTipInwardAdjust;
         }
+        // Adjust y-position
         if (a->up()) {
-            pt.ry() = std::min(pt.y(), a->y() + (a->height() + c->score()->spatium() * .3) * _up);
+            pt.ry() = std::min(pt.y(), a->y() + a->height() / 2 * up + slurTipToArticVertDist);
         } else {
-            pt.ry() = std::max(pt.y(), a->y() + (a->height() + c->score()->spatium() * .3) * _up);
+            pt.ry() = std::max(pt.y(), a->y() + a->height() / 2 * up + slurTipToArticVertDist);
         }
     }
 }
