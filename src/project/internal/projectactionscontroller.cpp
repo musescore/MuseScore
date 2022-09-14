@@ -22,6 +22,8 @@
 #include "projectactionscontroller.h"
 
 #include <QBuffer>
+#include <QTemporaryFile>
+#include <QFileInfo>
 
 #include "translation.h"
 #include "defer.h"
@@ -99,7 +101,7 @@ INotationSelectionPtr ProjectActionsController::currentNotationSelection() const
 
 bool ProjectActionsController::canReceiveAction(const actions::ActionCode& code) const
 {
-    if (m_isUploadingProject) {
+    if (m_isUploadingProject || m_isUploadingAudio) {
         if (code == "file-save-to-cloud" || code == "file-publish") {
             return false;
         }
@@ -453,7 +455,10 @@ void ProjectActionsController::publish()
         return;
     }
 
-    uploadProject(info.val);
+    AudioFile audio = exportMp3(project->masterNotation()->notation());
+    if (audio.isValid()) {
+        uploadProject(info.val, audio);
+    }
 }
 
 bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveMode saveMode)
@@ -495,13 +500,29 @@ bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, 
     return true;
 }
 
-void ProjectActionsController::uploadProject(const CloudProjectInfo& info)
+ProjectActionsController::AudioFile ProjectActionsController::exportMp3(const INotationPtr notation) const
+{
+    QTemporaryFile* tempFile = new QTemporaryFile("audioFile_XXXXXX.mp3");
+    tempFile->open();
+
+    if (!exportProjectScenario()->exportScores({ notation }, QFileInfo(*tempFile).absoluteFilePath())) {
+        delete tempFile;
+        return AudioFile();
+    }
+
+    AudioFile audio;
+    audio.format = "mp3";
+    audio.device = tempFile;
+    audio.device->seek(0);
+
+    return audio;
+}
+
+void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const AudioFile& audio)
 {
     // TODO(save-to-cloud): This method does more than barely uploading; it basically implements the "Publish" flow.
     // It should be stripped down to the basics, and "Publish" specific logic should be moved to the publish method,
     // so that this basic method can also be used for the "Save to cloud" flow.
-
-    // TODO(save-to-cloud): Generate MP3 (or in separate method?)
 
     // TODO(save-to-cloud): Show progress dialog
 
@@ -532,19 +553,20 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info)
     QString title = info.name.isEmpty() ? meta.title : info.name;
     bool isPrivate = info.visibility == CloudProjectVisibility::Private;
 
-    m_uploadingProgress = uploadingService()->uploadScore(*projectData, title, isPrivate, meta.source);
+    m_uploadingProjectProgress = uploadingService()->uploadScore(*projectData, title, isPrivate, meta.source);
 
-    m_uploadingProgress->started.onNotify(this, [this]() {
+    m_uploadingProjectProgress->started.onNotify(this, [this]() {
         m_isUploadingProject = true;
+        LOGD() << "Uploading project started";
     });
 
-    m_uploadingProgress->progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
+    m_uploadingProjectProgress->progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
         if (total > 0) {
-            LOGD() << "Uploading progress: " << current << " / " << total << " bytes";
+            LOGD() << "Uploading project progress: " << current << " / " << total << " bytes";
         }
     });
 
-    m_uploadingProgress->finished.onReceive(this, [this, project, projectData](const ProgressResult& res) {
+    m_uploadingProjectProgress->finished.onReceive(this, [this, project, projectData, audio](const ProgressResult& res) {
         m_isUploadingProject = false;
         projectData->deleteLater();
 
@@ -556,6 +578,10 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info)
         QString newSource = QString::fromStdString(res.val.toString());
         LOGD() << "Source url received: " << newSource;
 
+        if (audio.isValid()) {
+            uploadAudio(audio, newSource);
+        }
+
         ProjectMeta meta = project->metaInfo();
         if (meta.source == newSource) {
             return;
@@ -566,6 +592,37 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info)
 
         if (!project->isNewlyCreated()) {
             project->save();
+        }
+    });
+}
+
+void ProjectActionsController::uploadAudio(const AudioFile& audio, const QUrl& sourceUrl)
+{
+    if (m_isUploadingAudio) {
+        return;
+    }
+
+    m_uploadingAudioProgress = uploadingService()->uploadAudio(*audio.device, audio.format, sourceUrl);
+
+    m_uploadingAudioProgress->started.onNotify(this, [this]() {
+        m_isUploadingAudio = true;
+        LOGD() << "Uploading audio started";
+    });
+
+    m_uploadingAudioProgress->progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
+        if (total > 0) {
+            LOGD() << "Uploading audio progress: " << current << " / " << total << " bytes";
+        }
+    });
+
+    m_uploadingAudioProgress->finished.onReceive(this, [this, audio](const ProgressResult& res) {
+        m_isUploadingAudio = false;
+        LOGD() << "Uploading audio finished";
+
+        audio.device->deleteLater();
+
+        if (!res.ret) {
+            LOGE() << res.ret.toString();
         }
     });
 }

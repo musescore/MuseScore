@@ -554,7 +554,7 @@ mu::RetVal<QUrl> CloudService::doUploadScore(INetworkManagerPtr uploadManager, Q
 
     QHttpPart privacyPart;
     privacyPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"privacy\""));
-    privacyPart.setBody(QByteArray::number(isPrivate ? 1 : 0));
+    privacyPart.setBody(QByteArray::number(isPrivate ? 2 : 0));
     multiPart.append(privacyPart);
 
     QHttpPart licensePart;
