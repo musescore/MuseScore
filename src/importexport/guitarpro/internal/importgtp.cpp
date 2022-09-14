@@ -211,13 +211,17 @@ String GuitarPro::readPascalString(int n)
 {
     uint8_t l = readUInt8();
     std::vector<char> s(l + 1);
-    //char s[l + 1];
     read(&s[0], l);
     s[l] = 0;
     if (n - l > 0) {
         skip(n - l);
     }
-    return String::fromUtf8(&s[0]);
+
+    try {
+        return String::fromUtf8(&s[0]);
+    } catch (...) {
+        return String::fromAscii(&s[0]);
+    }
 }
 
 //---------------------------------------------------------
@@ -228,7 +232,6 @@ String GuitarPro::readWordPascalString()
 {
     int l = readInt();
     std::vector<char> c(l + 1);
-    //char c[l+1];
     read(&c[0], l);
     c[l] = 0;
     return String::fromUtf8(&c[0]);
@@ -242,7 +245,6 @@ String GuitarPro::readBytePascalString()
 {
     int l = readUInt8();
     std::vector<char> c(l + 1);
-    //char c[l+1];
     read(&c[0], l);
     c[l] = 0;
     return String::fromUtf8(&c[0]);
@@ -261,14 +263,8 @@ String GuitarPro::readDelphiString()
         l = maxl - 1;
     }
     std::vector<char> c(l + 1);
-    //char c[l + 1];
     read(&c[0], l);
     c[l] = 0;
-    std::string g(&c[0]);
-    if (g.find("2nd ") == 0) {
-        //?? int k = 1;
-    }
-
     return String::fromAscii(&c[0]);
 }
 
