@@ -65,6 +65,9 @@ public:
 private:
     void reloadTrack();
 
+    void loadNoteEvents(const mpe::PlaybackEventsMap& changes);
+    void loadDynamicEvents(const mpe::DynamicLevelMap& changes);
+
     void addNoteEvent(const mpe::NoteEvent& noteEvent);
     int pitchIndex(const mpe::pitch_level_t pitchLevel) const;
     double dynamicLevelRatio(const mpe::dynamic_level_t level) const;
