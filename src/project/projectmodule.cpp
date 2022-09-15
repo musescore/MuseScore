@@ -123,6 +123,7 @@ void ProjectModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://project/export/progress"), "MuseScore/Project/ExportProgressDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/migration"), "MuseScore/Project/MigrationDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/properties"), "MuseScore/Project/ProjectPropertiesDialog.qml");
+        ir->registerQmlUri(Uri("musescore://project/uploaded"), "MuseScore/Project/ProjectUploadedDialog.qml");
     }
 }
 

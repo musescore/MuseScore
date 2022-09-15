@@ -54,6 +54,7 @@ static const Settings::Key MIGRATION_OPTIONS(module_name, "project/migration");
 static const Settings::Key AUTOSAVE_ENABLED_KEY(module_name, "project/autoSaveEnabled");
 static const Settings::Key AUTOSAVE_INTERVAL_KEY(module_name, "project/autoSaveInterval");
 static const Settings::Key SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT(module_name, "project/shouldDestinationFolderBeOpenedOnExport");
+static const Settings::Key SHOW_DETAILED_PROJECT_UPLOADED_DIALOG(module_name, "project/showDetailedProjectUploadedDialog");
 
 const QString ProjectConfiguration::DEFAULT_FILE_SUFFIX(".mscz");
 
@@ -94,6 +95,7 @@ void ProjectConfiguration::init()
     });
 
     settings()->setDefaultValue(SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT, Val(false));
+    settings()->setDefaultValue(SHOW_DETAILED_PROJECT_UPLOADED_DIALOG, Val(true));
 
     fileSystem()->makePath(userTemplatesPath());
     fileSystem()->makePath(defaultProjectsPath());
@@ -506,4 +508,14 @@ void ProjectConfiguration::setShouldDestinationFolderBeOpenedOnExport(bool shoul
 QUrl ProjectConfiguration::scoreManagerUrl() const
 {
     return cloudConfiguration()->scoreManagerUrl();
+}
+
+bool ProjectConfiguration::showDetailedProjectUploadedDialog() const
+{
+    return settings()->value(SHOW_DETAILED_PROJECT_UPLOADED_DIALOG).toBool();
+}
+
+void ProjectConfiguration::setShowDetailedProjectUploadedDialog(bool show)
+{
+    settings()->setSharedValue(SHOW_DETAILED_PROJECT_UPLOADED_DIALOG, Val(show));
 }
