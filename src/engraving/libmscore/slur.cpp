@@ -1130,7 +1130,7 @@ void Slur::slurPos(SlurPos* sp)
         } else {
             po.ry() = scr->bbox().top() + scr->height();
         }
-        po.ry() += _spatium * .9 * __up;
+        po.ry() += scr->mag() * _spatium * .9 * __up;
 
         // adjustments for stem and/or beam
 
@@ -1236,7 +1236,7 @@ void Slur::slurPos(SlurPos* sp)
             } else {
                 po.ry() = endCR()->bbox().top() + endCR()->height();
             }
-            po.ry() += _spatium * .9 * __up;
+            po.ry() += ecr->mag() * _spatium * .9 * __up;
 
             // adjustments for stem and/or beam
 
