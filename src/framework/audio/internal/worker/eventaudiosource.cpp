@@ -154,6 +154,8 @@ void EventAudioSource::applyInputParams(const AudioInputParams& requiredParams)
 
     if (ctx.isValid()) {
         restoreSynthCtx(std::move(ctx));
+    } else {
+        m_synth->setIsActive(false);
     }
 
     m_params = m_synth->params();

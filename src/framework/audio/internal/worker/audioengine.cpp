@@ -63,7 +63,7 @@ mu::Ret AudioEngine::init(IAudioBufferPtr bufferPtr)
     m_mixer = std::make_shared<Mixer>();
 
     m_buffer = std::move(bufferPtr);
-    setMode(Mode::RealTimeMode);
+    setMode(RenderMode::RealTimeMode);
 
     m_inited = true;
 
@@ -126,7 +126,14 @@ void AudioEngine::setAudioChannelsCount(const audioch_t count)
     m_mixer->setAudioChannelsCount(count);
 }
 
-void AudioEngine::setMode(const Mode newMode)
+RenderMode AudioEngine::mode() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return m_currentMode;
+}
+
+void AudioEngine::setMode(const RenderMode newMode)
 {
     if (newMode == m_currentMode) {
         return;
@@ -134,11 +141,20 @@ void AudioEngine::setMode(const Mode newMode)
 
     m_currentMode = newMode;
 
-    if (m_currentMode == Mode::RealTimeMode) {
+    if (m_currentMode == RenderMode::RealTimeMode) {
         m_buffer->setSource(m_mixer->mixedSource());
     } else {
         m_buffer->setSource(nullptr);
     }
+
+    m_modeChanges.notify();
+}
+
+mu::async::Notification AudioEngine::modeChanged() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return m_modeChanges;
 }
 
 MixerPtr AudioEngine::mixer() const
