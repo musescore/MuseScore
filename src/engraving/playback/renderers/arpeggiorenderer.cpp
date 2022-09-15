@@ -88,7 +88,7 @@ bool ArpeggioRenderer::isDirectionUp(const mpe::ArticulationType type)
 
 msecs_t ArpeggioRenderer::timestampOffsetStep(const RenderingContext& ctx)
 {
-    constexpr int MINIMAL_TIMESTAMP_OFFSET_STEP = 60;
+    constexpr int MINIMAL_TIMESTAMP_OFFSET_STEP = 60000;
 
     if (RealIsEqualOrMore(ctx.beatsPerSecond.val, PRESTISSIMO_BPS_BOUND)) {
         return MINIMAL_TIMESTAMP_OFFSET_STEP * 1.5;
