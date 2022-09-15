@@ -321,7 +321,7 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
     const bool isTraditionalAlternate = (_style == TremoloStyle::TRADITIONAL_ALTERNATE);
 
     // TODO: This should be a style setting, to replace tremoloStrokeLengthMultiplier
-    static constexpr double stemGapSp = 0.65;
+    static constexpr double stemGapSp = 1.0;
 
     // make sure both stems are in the same direction
     int up = 0;
@@ -442,8 +442,19 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
     x = (x2 + x1) * .5 - _chord1->pagePos().x();
 
     double slope = (y2 - y1) / (x2 - x1);
+    double gapSp = stemGapSp;
+    if (defaultStyle) {
+        // we can eat into the stemGapSp margin if the anchorpoints are sufficiently close together
+        double widthSp = (x2 - x1) / spatium - (stemGapSp * 2);
+        if (!RealIsEqualOrMore(widthSp, 0.6)) {
+            // tremolo beam is too short; we can eat into the gap spacing a little
+            gapSp = std::max(stemGapSp - ((0.6 - widthSp) * 0.5), 0.4);
+        }
+    } else {
+        gapSp = 0.0;
+    }
     // add offsets to the x endpoints
-    double offset = defaultStyle ? stemGapSp * spatium : 0.; // offset from stems (or original position)
+    double offset = gapSp * spatium; // offset from stems (or original position)
     x2 -= offset; // apply offset horizontally
     x1 += offset;
     // apply offset vertically to maintain the same slope
