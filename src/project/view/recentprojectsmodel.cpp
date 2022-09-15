@@ -98,6 +98,11 @@ void RecentProjectsModel::openRecentScore(const QString& scorePath)
     dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path_t>(io::path_t(scorePath)));
 }
 
+void RecentProjectsModel::openScoreManager()
+{
+    interactive()->openUrl(configuration()->scoreManagerUrl());
+}
+
 void RecentProjectsModel::setRecentScores(const QVariantList& recentScores)
 {
     if (m_recentScores == recentScores) {
