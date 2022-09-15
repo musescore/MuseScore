@@ -5152,7 +5152,7 @@ void Score::undoChangeInvisible(EngravingItem* e, bool v)
 //   undoAddElement
 //---------------------------------------------------------
 
-void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
+void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool ctrlModifier)
 {
     Staff* ostaff = element->staff();
     track_idx_t strack = mu::nidx;
@@ -5185,9 +5185,9 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
         || (et == ElementType::TEMPO_TEXT)
         || isSystemLine
         ) {
-        std::list<Staff* > staffList;
+        std::vector<Staff* > staffList;
 
-        if (ctrlModifier && isSystemLine) {
+        if (!addToLinkedStaves || (ctrlModifier && isSystemLine)) {
             element->setSystemFlag(false);
             staffList.push_back(element->staff());
         } else {
@@ -5364,11 +5364,18 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
     // For linked staves the length of staffList is always > 1 since the list contains the staff itself too!
     const bool linked = ostaff->staffList().size() > 1;
 
-    for (Staff* staff : ostaff->staffList()) {
+    std::list<Staff*> staves;
+    if (addToLinkedStaves) {
+        staves = ostaff->staffList();
+    } else {
+        staves.push_back(ostaff);
+    }
+
+    for (Staff* staff : staves) {
         Score* score = staff->score();
         staff_idx_t staffIdx = staff->idx();
 
-        std::list<track_idx_t> tr;
+        std::vector<track_idx_t> tr;
         if (!staff->score()->excerpt()) {
             // On masterScore.
             track_idx_t track = staff->idx() * VOICES + (strack % VOICES);

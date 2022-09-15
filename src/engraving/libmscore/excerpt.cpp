@@ -1386,6 +1386,10 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
 
     bool firstVoiceVisible = dstStaff->isVoiceVisible(0);
 
+    auto addElement = [score](EngravingItem* element) {
+        score->undoAddElement(element, false /*addToLinkedStaves*/);
+    };
+
     for (Measure* m = m1; m && (m != m2); m = m->nextMeasure()) {
         Measure* nm = score->tick2measure(m->tick());
         nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaffIdx), dstStaffIdx);
@@ -1402,7 +1406,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         ne->setTrack(trackZeroVoice(dstTrack));
                         ne->setParent(ns);
                         ne->setScore(score);
-                        score->undoAddElement(ne);
+                        addElement(ne);
                     }
                 }
 
@@ -1415,7 +1419,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 ne->setTrack(dstTrack);
                 ne->setParent(ns);
                 ne->setScore(score);
-                score->undoAddElement(ne);
+                addElement(ne);
                 if (oe->isChordRest()) {
                     ChordRest* ocr = toChordRest(oe);
                     ChordRest* ncr = toChordRest(ne);
@@ -1435,35 +1439,18 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     }
 
                     for (EngravingItem* e : oseg->annotations()) {
-                        if (e->generated() || e->systemFlag()) {
+                        if (e->generated()) {
                             continue;
                         }
                         if (e->track() != srcTrack) {
                             continue;
                         }
-                        switch (e->type()) {
-                        // exclude certain element types
-                        // this should be same list excluded in Score::undoAddElement()
-                        case ElementType::STAFF_TEXT:
-                        case ElementType::SYSTEM_TEXT:
-                        case ElementType::TRIPLET_FEEL:
-                        case ElementType::PLAYTECH_ANNOTATION:
-                        case ElementType::FRET_DIAGRAM:
-                        case ElementType::HARMONY:
-                        case ElementType::FIGURED_BASS:
-                        case ElementType::DYNAMIC:
-                        case ElementType::LYRICS:                     // not normally segment-attached
-                            continue;
-                        default:
-                            if (e->isTextLine() && toTextLine(e)->systemFlag()) {
-                                continue;
-                            }
-                            EngravingItem* ne1 = e->clone();
-                            ne1->setTrack(dstTrack);
-                            ne1->setParent(ns);
-                            ne1->setScore(score);
-                            score->undoAddElement(ne1);
-                        }
+
+                        EngravingItem* ne1 = e->linkedClone();
+                        ne1->setTrack(dstTrack);
+                        ne1->setParent(ns);
+                        ne1->setScore(score);
+                        addElement(ne1);
                     }
                     if (oe->isChord()) {
                         Chord* och = toChord(ocr);
