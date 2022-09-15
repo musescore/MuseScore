@@ -59,6 +59,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/icryptographichash.h
     ${CMAKE_CURRENT_LIST_DIR}/allocator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/allocator.h
+    ${CMAKE_CURRENT_LIST_DIR}/dlib.h
 
     ${CMAKE_CURRENT_LIST_DIR}/types/bytearray.cpp
     ${CMAKE_CURRENT_LIST_DIR}/types/bytearray.h
