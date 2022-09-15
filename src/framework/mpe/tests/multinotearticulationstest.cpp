@@ -121,7 +121,8 @@ TEST_F(Engraving_MultiNoteArticulationsTest, StandardPattern)
                             pair.second.voiceIdx,
                             pair.second.nominalPitchLevel,
                             pair.second.nominalDynamicLevel,
-                            appliedArticulations);
+                            appliedArticulations,
+                            0);
 
         noteEvents.emplace(pair.first, std::move(noteEvent));
     }
@@ -218,7 +219,8 @@ TEST_F(Engraving_MultiNoteArticulationsTest, GlissandoPattern)
                             pair.second.voiceIdx,
                             pair.second.nominalPitchLevel,
                             pair.second.nominalDynamicLevel,
-                            appliedArticulations[pair.first]);
+                            appliedArticulations[pair.first],
+                            0);
 
         noteEvents.emplace(pair.first, std::move(noteEvent));
     }
@@ -300,7 +302,8 @@ TEST_F(Engraving_MultiNoteArticulationsTest, CrescendoPattern)
                             pair.second.voiceIdx,
                             pair.second.nominalPitchLevel,
                             pair.second.nominalDynamicLevel,
-                            appliedArticulations[pair.first]);
+                            appliedArticulations[pair.first],
+                            0);
 
         noteEvents.emplace(pair.first, std::move(noteEvent));
     }
