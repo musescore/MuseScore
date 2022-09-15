@@ -117,6 +117,7 @@ struct NominalNoteCtx {
     voice_idx_t voiceIdx = 0;
     mpe::timestamp_t timestamp = 0;
     mpe::duration_t duration = 0;
+    BeatsPerSecond tempo = 0;
 
     mpe::pitch_level_t pitchLevel = 0;
 
@@ -126,6 +127,7 @@ struct NominalNoteCtx {
         : voiceIdx(note->voice()),
         timestamp(ctx.nominalTimestamp),
         duration(noteNominalDuration(note, ctx)),
+        tempo(ctx.beatsPerSecond),
         pitchLevel(notePitchLevel(note->playingTpc(), note->playingOctave())),
         chordCtx(ctx)
     {}
@@ -138,7 +140,8 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx)
                           static_cast<mpe::voice_layer_idx_t>(ctx.voiceIdx),
                           ctx.pitchLevel,
                           ctx.chordCtx.nominalDynamicLevel,
-                          ctx.chordCtx.commonArticulations);
+                          ctx.chordCtx.commonArticulations,
+                          ctx.tempo.val);
 }
 
 inline mpe::NoteEvent buildNoteEvent(const Note* note, const RenderingContext& ctx)
@@ -148,7 +151,8 @@ inline mpe::NoteEvent buildNoteEvent(const Note* note, const RenderingContext& c
                           static_cast<mpe::voice_layer_idx_t>(note->voice()),
                           notePitchLevel(note->playingTpc(), note->playingOctave()),
                           ctx.nominalDynamicLevel,
-                          ctx.commonArticulations);
+                          ctx.commonArticulations,
+                          ctx.beatsPerSecond.val);
 }
 
 inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const mpe::duration_t eventDuration,
@@ -160,7 +164,8 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const mpe::duration_t
                           static_cast<mpe::voice_layer_idx_t>(ctx.voiceIdx),
                           ctx.pitchLevel + pitchLevelOffset,
                           ctx.chordCtx.nominalDynamicLevel,
-                          ctx.chordCtx.commonArticulations);
+                          ctx.chordCtx.commonArticulations,
+                          ctx.tempo.val);
 }
 
 inline mpe::NoteEvent buildFixedNoteEvent(const Note* note, const mpe::timestamp_t actualTimestamp,
@@ -172,7 +177,8 @@ inline mpe::NoteEvent buildFixedNoteEvent(const Note* note, const mpe::timestamp
                           static_cast<mpe::voice_layer_idx_t>(note->voice()),
                           notePitchLevel(note->playingTpc(), note->playingOctave()),
                           actualDynamicLevel,
-                          articulations);
+                          articulations,
+                          1); // TBD: add tempo!
 }
 }
 

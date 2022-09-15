@@ -49,6 +49,7 @@ struct ArrangementContext
     duration_t nominalDuration = 0;
     duration_t actualDuration = 0;
     voice_layer_idx_t voiceLayerIndex = 0;
+    double bps = 0;
 
     bool operator==(const ArrangementContext& other) const
     {
@@ -56,7 +57,8 @@ struct ArrangementContext
                && actualTimestamp == other.actualTimestamp
                && nominalDuration == other.nominalDuration
                && actualDuration == other.actualDuration
-               && voiceLayerIndex == other.voiceLayerIndex;
+               && voiceLayerIndex == other.voiceLayerIndex
+               && bps == other.bps;
     }
 };
 
@@ -102,11 +104,13 @@ struct NoteEvent
                        const voice_layer_idx_t voiceIdx,
                        const pitch_level_t nominalPitchLevel,
                        const dynamic_level_t nominalDynamicLevel,
-                       const ArticulationMap& articulationsApplied)
+                       const ArticulationMap& articulationsApplied,
+                       const double/*engraving::BeatsPerSecond*/ bps)
     {
         m_arrangementCtx.nominalDuration = nominalDuration;
         m_arrangementCtx.nominalTimestamp = nominalTimestamp;
         m_arrangementCtx.voiceLayerIndex = voiceIdx;
+        m_arrangementCtx.bps = bps;
 
         m_pitchCtx.nominalPitchLevel = nominalPitchLevel;
 

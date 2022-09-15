@@ -93,7 +93,8 @@ TEST_F(Engraving_SingleNoteArticulationsTest, StandardPattern)
                     m_voiceIdx,
                     pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
-                    std::move(appliedArticulations));
+                    std::move(appliedArticulations),
+                    0);
 
     // [THEN] We expect that expression curve will be using default curve from standard patterns
     EXPECT_EQ(event.expressionCtx().expressionCurve,
@@ -142,7 +143,8 @@ TEST_F(Engraving_SingleNoteArticulationsTest, StaccatoPattern)
                     m_voiceIdx,
                     pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
-                    std::move(appliedArticulations));
+                    std::move(appliedArticulations),
+                    0);
 
     // [THEN] We expect the nominal duration of a note to be unchanged
     EXPECT_EQ(event.arrangementCtx().nominalDuration, m_nominalDuration);
@@ -188,7 +190,8 @@ TEST_F(Engraving_SingleNoteArticulationsTest, AccentPattern)
                     m_voiceIdx,
                     pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
-                    std::move(appliedArticulations));
+                    std::move(appliedArticulations),
+                    0);
 
     // [THEN] We expect the nominal duration of a note to be unchanged,
     //        since accent doesn't affect any arrangement data
@@ -244,7 +247,8 @@ TEST_F(Engraving_SingleNoteArticulationsTest, AccentPattern_Nominal_MezzoForte)
                     m_voiceIdx,
                     pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
-                    std::move(appliedArticulations));
+                    std::move(appliedArticulations),
+                    0);
 
     // [THEN] We expect the nominal duration of a note to be unchanged,
     //        since accent doesn't affect any arrangement data
@@ -314,7 +318,8 @@ TEST_F(Engraving_SingleNoteArticulationsTest, PocoTenuto)
                     m_voiceIdx,
                     pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
-                    std::move(appliedArticulations));
+                    std::move(appliedArticulations),
+                    0);
 
     // [THEN] We expect the nominal duration of a note to be unchanged
     EXPECT_EQ(event.arrangementCtx().nominalDuration, m_nominalDuration);
@@ -364,7 +369,8 @@ TEST_F(Engraving_SingleNoteArticulationsTest, QuickFall)
                     m_voiceIdx,
                     pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
-                    std::move(appliedArticulations));
+                    std::move(appliedArticulations),
+                    0);
 
     // [THEN] We expect the pitch curve of the note marked by quick fall articulation to be equal to the pitch curve from corresponding pattern
     EXPECT_EQ(event.pitchCtx().pitchCurve, quickFallPattern.pitchPattern.pitchOffsetMap);
@@ -414,7 +420,8 @@ TEST_F(Engraving_SingleNoteArticulationsTest, Scoop)
                     m_voiceIdx,
                     pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
-                    std::move(appliedArticulations));
+                    std::move(appliedArticulations),
+                    0);
 
     // [THEN] We expect the pitch curve of the note marked by scoop articulation to be equal to the pitch curve from corresponding pattern
     EXPECT_EQ(event.pitchCtx().pitchCurve, scoopPattern.pitchPattern.pitchOffsetMap);
