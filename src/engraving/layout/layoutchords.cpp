@@ -401,16 +401,16 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
                 } else if (conflict && (upDots && !downDots)) {
                     upOffset = maxDownWidth + 0.1 * sp;
                 } else if (conflictUnison && separation == 0 && (!downGrace || upGrace)) {
-                    downOffset = maxUpWidth + 0.3 * sp;
+                    downOffset = maxUpWidth + 0.15 * sp;
                 } else if (conflictUnison) {
-                    upOffset = maxDownWidth + 0.3 * sp;
+                    upOffset = maxDownWidth + 0.15 * sp;
                 } else if (conflictSecondUpHigher) {
-                    upOffset = maxDownWidth + 0.2 * sp;
+                    upOffset = maxDownWidth + 0.15 * sp;
                 } else if ((downHooks && !upHooks) && !(upDots && !downDots)) {
                     downOffset = maxUpWidth + 0.3 * sp;
                 } else if (conflictSecondDownHigher) {
                     if (downDots && !upDots) {
-                        downOffset = maxUpWidth + 0.3 * sp;
+                        downOffset = maxUpWidth + 0.2 * sp;
                     } else {
                         upOffset = maxDownWidth - 0.2 * sp;
                         if (downHooks) {
