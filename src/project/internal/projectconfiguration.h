@@ -115,6 +115,9 @@ public:
 
     QUrl scoreManagerUrl() const override;
 
+    bool showDetailedProjectUploadedDialog() const override;
+    void setShowDetailedProjectUploadedDialog(bool show) override;
+
 private:
     io::paths_t parseRecentProjectsPaths(const mu::Val& value) const;
 
