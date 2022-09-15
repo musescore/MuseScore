@@ -162,7 +162,7 @@ void ChordArticulationsParser::parseArpeggio(const Chord* chord, const Rendering
         return;
     }
 
-    if (chord->notes().empty() || chord->notes().size() == 1) {
+    if (chord->notes().empty()) {
         return;
     }
 
