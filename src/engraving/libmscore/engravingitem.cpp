@@ -2646,11 +2646,21 @@ void EngravingItem::setSelected(bool f)
 
             if (accRoot && currAccRoot == accRoot && accRoot->registered()) {
                 accRoot->setFocusedElement(m_accessible);
+
+                if (AccessibleItemPtr focusedElement = dummyAccRoot->focusedElement().lock()) {
+                    accRoot->updateStaffInfo(m_accessible, focusedElement);
+                }
+
                 dummyAccRoot->setFocusedElement(nullptr);
             }
 
             if (dummyAccRoot && currAccRoot == dummyAccRoot && dummyAccRoot->registered()) {
                 dummyAccRoot->setFocusedElement(m_accessible);
+
+                if (AccessibleItemPtr focusedElement = accRoot->focusedElement().lock()) {
+                    dummyAccRoot->updateStaffInfo(m_accessible, focusedElement);
+                }
+
                 accRoot->setFocusedElement(nullptr);
             }
         }

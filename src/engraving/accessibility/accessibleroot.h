@@ -51,10 +51,10 @@ public:
     void setEnabled(bool enabled);
 
     QString staffInfo() const;
-
-private:
     void updateStaffInfo(const AccessibleItemWeakPtr newAccessibleItem, const AccessibleItemWeakPtr oldAccessibleItem,
                          bool voiceStaffInfoChange = true);
+
+private:
 
     bool m_enabled = false;
 
