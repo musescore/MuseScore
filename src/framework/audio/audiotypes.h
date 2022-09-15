@@ -314,6 +314,12 @@ struct AudioDevice {
 };
 
 using AudioDeviceList = std::vector<AudioDevice>;
+
+enum class RenderMode {
+    Undefined = -1,
+    RealTimeMode,
+    OfflineMode
+};
 }
 
 #endif // MU_AUDIO_AUDIOTYPES_H
