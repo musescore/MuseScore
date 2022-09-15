@@ -29,6 +29,8 @@
 #ifdef USE_MUSESAMPLER_SRC
 #include "Api/musesampler_api.h"
 #else
+#include "dlib.h"
+
 #include "apitypes.h"
 #endif
 
@@ -174,8 +176,6 @@ struct MuseSamplerLibHandler
     ms_MuseSampler_add_track_event_range_start addTrackEventRangeStart = nullptr;
     ms_MuseSampler_add_track_event_range_end addTrackEventRangeEnd = nullptr;
 
-    ms_MuseSampler_start_audition_mode startAuditionMode = nullptr;
-    ms_MuseSampler_stop_audition_mode stopAuditionMode = nullptr;
     ms_MuseSampler_start_audition_note startAuditionNote = nullptr;
     ms_MuseSampler_stop_audition_note stopAuditionNote = nullptr;
 
@@ -191,67 +191,70 @@ struct MuseSamplerLibHandler
     ms_MuseSampler_set_position setPosition = nullptr;
     ms_MuseSampler_set_playing setPlaying = nullptr;
     ms_MuseSampler_process process = nullptr;
+    ms_MuseSampler_all_notes_off allNotesOff = nullptr;
 
-    MuseSamplerLibHandler(const char* path)
+    MuseSamplerLibHandler(const io::path_t& path)
     {
-        m_lib = dlopen(path, RTLD_LAZY);
+        m_lib = loadLib(path);
 
         if (!m_lib) {
             LOGE() << "Unable to open MuseSampler library, path: " << path;
             return;
         }
 
-        initLib = (ms_init)dlsym(m_lib, "ms_init");
-        containsInstrument = (ms_contains_instrument)dlsym(m_lib, "ms_contains_instrument");
-        getMatchingInstrumentId = (ms_get_matching_instrument_id)dlsym(m_lib, "ms_get_matching_instrument_id");
-        getInstrumentList = (ms_get_instrument_list)dlsym(m_lib, "ms_get_instrument_list");
-        getMatchingInstrumentList = (ms_get_matching_instrument_list)dlsym(m_lib, "ms_get_matching_instrument_list");
-        getNextInstrument = (ms_InstrumentList_get_next)dlsym(m_lib, "ms_InstrumentList_get_next");
-        getInstrumentId = (ms_Instrument_get_id)dlsym(m_lib, "ms_Instrument_get_id");
-        getInstrumentName = (ms_Instrument_get_name)dlsym(m_lib, "ms_Instrument_get_name");
-        getInstrumentCategory = (ms_Instrument_get_category)dlsym(m_lib, "ms_Instrument_get_category");
-        getInstrumentPackage = (ms_Instrument_get_package)dlsym(m_lib, "ms_Instrument_get_package");
-        getMusicXmlSoundId = (ms_Instrument_get_musicxml_sound)dlsym(m_lib, "ms_Instrument_get_musicxml_sound");
-        getMpeSoundId = (ms_Instrument_get_mpe_sound)dlsym(m_lib, "ms_Instrument_get_mpe_sound");
+        initLib = (ms_init)getLibFunc(m_lib, "ms_init");
+        containsInstrument = (ms_contains_instrument)getLibFunc(m_lib, "ms_contains_instrument");
+        getMatchingInstrumentId = (ms_get_matching_instrument_id)getLibFunc(m_lib, "ms_get_matching_instrument_id");
+        getInstrumentList = (ms_get_instrument_list)getLibFunc(m_lib, "ms_get_instrument_list");
+        getMatchingInstrumentList = (ms_get_matching_instrument_list)getLibFunc(m_lib, "ms_get_matching_instrument_list");
+        getNextInstrument = (ms_InstrumentList_get_next)getLibFunc(m_lib, "ms_InstrumentList_get_next");
+        getInstrumentId = (ms_Instrument_get_id)getLibFunc(m_lib, "ms_Instrument_get_id");
+        getInstrumentName = (ms_Instrument_get_name)getLibFunc(m_lib, "ms_Instrument_get_name");
+        getInstrumentCategory = (ms_Instrument_get_category)getLibFunc(m_lib, "ms_Instrument_get_category");
+        getInstrumentPackage = (ms_Instrument_get_package)getLibFunc(m_lib, "ms_Instrument_get_package");
+        getMusicXmlSoundId = (ms_Instrument_get_musicxml_sound)getLibFunc(m_lib, "ms_Instrument_get_musicxml_sound");
+        getMpeSoundId = (ms_Instrument_get_mpe_sound)getLibFunc(m_lib, "ms_Instrument_get_mpe_sound");
 
-        getPresetList = (ms_Instrument_get_preset_list)dlsym(m_lib, "ms_Instrument_get_preset_list");
-        getNextPreset = (ms_PresetList_get_next)dlsym(m_lib, "ms_PresetList_get_next");
+        getPresetList = (ms_Instrument_get_preset_list)getLibFunc(m_lib, "ms_Instrument_get_preset_list");
+        getNextPreset = (ms_PresetList_get_next)getLibFunc(m_lib, "ms_PresetList_get_next");
 
-        create = (ms_MuseSampler_create)dlsym(m_lib, "ms_MuseSampler_create");
-        destroy = (ms_MuseSampler_destroy)dlsym(m_lib, "ms_MuseSampler_destroy");
-        initSampler = (ms_MuseSampler_init)dlsym(m_lib, "ms_MuseSampler_init");
+        create = (ms_MuseSampler_create)getLibFunc(m_lib, "ms_MuseSampler_create");
+        destroy = (ms_MuseSampler_destroy)getLibFunc(m_lib, "ms_MuseSampler_destroy");
+        initSampler = (ms_MuseSampler_init)getLibFunc(m_lib, "ms_MuseSampler_init");
 
-        clearScore = (ms_MuseSampler_clear_score)dlsym(m_lib, "ms_MuseSampler_clear_score");
-        addTrack = (ms_MuseSampler_add_track)dlsym(m_lib, "ms_MuseSampler_add_track");
-        finalizeTrack = (ms_MuseSampler_finalize_track)dlsym(m_lib, "ms_MuseSampler_finalize_track");
-        clearTrack = (ms_MuseSampler_clear_track)dlsym(m_lib, "ms_MuseSampler_clear_track");
+        clearScore = (ms_MuseSampler_clear_score)getLibFunc(m_lib, "ms_MuseSampler_clear_score");
+        addTrack = (ms_MuseSampler_add_track)getLibFunc(m_lib, "ms_MuseSampler_add_track");
+        finalizeTrack = (ms_MuseSampler_finalize_track)getLibFunc(m_lib, "ms_MuseSampler_finalize_track");
+        clearTrack = (ms_MuseSampler_clear_track)getLibFunc(m_lib, "ms_MuseSampler_clear_track");
 
-        addDynamicsEvent = (ms_MuseSampler_add_track_dynamics_event)dlsym(m_lib, "ms_MuseSampler_add_track_dynamics_event");
-        addNoteEvent = (ms_MuseSampler_add_track_note_event)dlsym(m_lib, "ms_MuseSampler_add_track_note_event");
+        addDynamicsEvent = (ms_MuseSampler_add_track_dynamics_event)getLibFunc(m_lib, "ms_MuseSampler_add_track_dynamics_event");
+        addNoteEvent = (ms_MuseSampler_add_track_note_event)getLibFunc(m_lib, "ms_MuseSampler_add_track_note_event");
 
-        isRangedArticulation = (ms_MuseSampler_is_ranged_articulation)dlsym(m_lib, "ms_MuseSampler_is_ranged_articulation");
-        addTrackEventRangeStart = (ms_MuseSampler_add_track_event_range_start)dlsym(m_lib, "ms_MuseSampler_add_track_event_range_start");
-        addTrackEventRangeEnd = (ms_MuseSampler_add_track_event_range_end)dlsym(m_lib, "ms_MuseSampler_add_track_event_range_end");
+        isRangedArticulation = (ms_MuseSampler_is_ranged_articulation)getLibFunc(m_lib, "ms_MuseSampler_is_ranged_articulation");
+        addTrackEventRangeStart
+            = (ms_MuseSampler_add_track_event_range_start)getLibFunc(m_lib, "ms_MuseSampler_add_track_event_range_start");
+        addTrackEventRangeEnd = (ms_MuseSampler_add_track_event_range_end)getLibFunc(m_lib, "ms_MuseSampler_add_track_event_range_end");
 
-        startAuditionMode = (ms_MuseSampler_start_audition_mode)dlsym(m_lib, "ms_MuseSampler_start_audition_mode");
-        stopAuditionMode = (ms_MuseSampler_stop_audition_mode)dlsym(m_lib, "ms_MuseSampler_stop_audition_mode");
-        startAuditionNote = (ms_MuseSampler_start_audition_note)dlsym(m_lib, "ms_MuseSampler_start_audition_note");
-        stopAuditionNote = (ms_MuseSampler_stop_audition_note)dlsym(m_lib, "ms_MuseSampelr_stop_audition_note");
+        startAuditionNote = (ms_MuseSampler_start_audition_note)getLibFunc(m_lib, "ms_MuseSampler_start_audition_note");
+        stopAuditionNote = (ms_MuseSampler_stop_audition_note)getLibFunc(m_lib, "ms_MuseSampler_stop_audition_note");
 
-        startLivePlayMode = (ms_MuseSampler_start_liveplay_mode)dlsym(m_lib, "ms_MuseSampler_start_liveplay_mode");
-        stopLivePlayMode = (ms_MuseSampler_stop_liveplay_mode)dlsym(m_lib, "ms_MuseSampler_stop_liveplay_mode");
-        startLivePlayNote = (ms_MuseSampler_start_liveplay_note)dlsym(m_lib, "ms_MuseSampler_start_liveplay_note");
-        stopLivePlayNote = (ms_MuseSampler_stop_liveplay_note)dlsym(m_lib, "ms_MuseSampelr_stop_liveplay_note");
+        startLivePlayMode = (ms_MuseSampler_start_liveplay_mode)getLibFunc(m_lib, "ms_MuseSampler_start_liveplay_mode");
+        stopLivePlayMode = (ms_MuseSampler_stop_liveplay_mode)getLibFunc(m_lib, "ms_MuseSampler_stop_liveplay_mode");
+        startLivePlayNote = (ms_MuseSampler_start_liveplay_note)getLibFunc(m_lib, "ms_MuseSampler_start_liveplay_note");
+        stopLivePlayNote = (ms_MuseSampler_stop_liveplay_note)getLibFunc(m_lib, "ms_MuseSampler_stop_liveplay_note");
 
-        startOfflineMode = (ms_MuseSampler_start_offline_mode)dlsym(m_lib, "ms_MuseSampler_start_offline_mode");
-        stopOfflineMode = (ms_MuseSampler_stop_offline_mode)dlsym(m_lib, "ms_MuseSampler_stop_offline_mode");
-        processOffline = (ms_MuseSampler_process_offline)dlsym(m_lib, "ms_MuseSampler_process_offline");
+        startOfflineMode = (ms_MuseSampler_start_offline_mode)getLibFunc(m_lib, "ms_MuseSampler_start_offline_mode");
+        stopOfflineMode = (ms_MuseSampler_stop_offline_mode)getLibFunc(m_lib, "ms_MuseSampler_stop_offline_mode");
+        processOffline = (ms_MuseSampler_process_offline)getLibFunc(m_lib, "ms_MuseSampler_process_offline");
 
-        setPosition = (ms_MuseSampler_set_position)dlsym(m_lib, "ms_MuseSampler_set_position");
-        setPlaying = (ms_MuseSampler_set_playing)dlsym(m_lib, "ms_MuseSampler_set_playing");
-        process = (ms_MuseSampler_process)dlsym(m_lib, "ms_MuseSampler_process");
+        setPosition = (ms_MuseSampler_set_position)getLibFunc(m_lib, "ms_MuseSampler_set_position");
+        setPlaying = (ms_MuseSampler_set_playing)getLibFunc(m_lib, "ms_MuseSampler_set_playing");
+        process = (ms_MuseSampler_process)getLibFunc(m_lib, "ms_MuseSampler_process");
+        allNotesOff = (ms_MuseSampler_all_notes_off)getLibFunc(m_lib, "ms_MuseSampler_all_notes_off");
 
-        initLib();
+        if (initLib) {
+            initLib();
+        }
     }
 
     ~MuseSamplerLibHandler()
@@ -260,7 +263,7 @@ struct MuseSamplerLibHandler
             return;
         }
 
-        dlclose(m_lib);
+        closeLib(m_lib);
     }
 
     bool isValid() const
@@ -294,8 +297,6 @@ struct MuseSamplerLibHandler
                && isRangedArticulation
                && addTrackEventRangeStart
                && addTrackEventRangeEnd
-               && startAuditionMode
-               && stopAuditionMode
                && startAuditionNote
                && stopAuditionNote
                && startLivePlayMode
@@ -305,7 +306,8 @@ struct MuseSamplerLibHandler
                && startOfflineMode
                && stopOfflineMode
                && processOffline
-               && process;
+               && process
+               && allNotesOff;
     }
 
 private:
@@ -333,8 +335,6 @@ private:
                << "\n ms_MuseSampler_finalize_track - " << reinterpret_cast<uint64_t>(finalizeTrack)
                << "\n ms_MuseSampler_add_track_dynamics_event - " << reinterpret_cast<uint64_t>(addDynamicsEvent)
                << "\n ms_MuseSampler_add_track_note_event - " << reinterpret_cast<uint64_t>(addNoteEvent)
-               << "\n ms_MuseSampler_start_audition_mode - " << reinterpret_cast<uint64_t>(startAuditionMode)
-               << "\n ms_MuseSampler_stop_audition_mode - " << reinterpret_cast<uint64_t>(stopAuditionMode)
                << "\n ms_MuseSampler_start_audition_note - " << reinterpret_cast<uint64_t>(startAuditionNote)
                << "\n ms_MuseSampler_stop_audition_note - " << reinterpret_cast<uint64_t>(stopAuditionNote)
                << "\n ms_MuseSampler_start_liveplay_mode - " << reinterpret_cast<uint64_t>(startLivePlayMode)
@@ -346,7 +346,8 @@ private:
                << "\n ms_MuseSampler_process_offline - " << reinterpret_cast<uint64_t>(processOffline)
                << "\n ms_MuseSampler_set_position - " << reinterpret_cast<uint64_t>(setPosition)
                << "\n ms_MuseSampler_set_playing - " << reinterpret_cast<uint64_t>(setPlaying)
-               << "\n ms_MuseSampler_process - " << reinterpret_cast<uint64_t>(process);
+               << "\n ms_MuseSampler_process - " << reinterpret_cast<uint64_t>(process)
+               << "\n ms_MuseSampler_all_notes_off - " << reinterpret_cast<uint64_t>(allNotesOff);
     }
 
     MuseSamplerLib m_lib = nullptr;

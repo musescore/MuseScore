@@ -37,7 +37,12 @@ MuseSamplerResolver::MuseSamplerResolver()
 {
     io::path_t path = configuration()->libraryPath();
 
-    m_libHandler = std::make_shared<MuseSamplerLibHandler>(path.c_str());
+    m_libHandler = std::make_shared<MuseSamplerLibHandler>(path);
+
+    if (!m_libHandler->isValid()) {
+        LOGE() << "Incompatible MuseSampler library; ignoring\n";
+        m_libHandler.reset();
+    }
 }
 
 ISynthesizerPtr MuseSamplerResolver::resolveSynth(const audio::TrackId /*trackId*/, const audio::AudioInputParams& params) const
@@ -50,11 +55,7 @@ bool MuseSamplerResolver::hasCompatibleResources(const audio::PlaybackSetupData&
     if (!m_libHandler) {
         return false;
     }
-
-    ByteArray idStr = setup.toString().toUtf8();
-
-    return m_libHandler->containsInstrument(idStr.constChar(),
-                                            setup.musicXmlSoundId->c_str());
+    return true;
 }
 
 AudioResourceMetaList MuseSamplerResolver::resolveResources() const
