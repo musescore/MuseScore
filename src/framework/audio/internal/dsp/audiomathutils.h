@@ -31,7 +31,7 @@
 namespace mu::audio::dsp {
 inline float balanceGain(const balance_t balance, const int audioChannelNumber)
 {
-    return 0.5f * balance * ((audioChannelNumber * 2.f) - 1) + 0.5f;
+    return (audioChannelNumber * 2 - 1) * balance + 1.f;
 }
 
 inline float linearFromDecibels(const volume_dbfs_t volumeLevelDb)
