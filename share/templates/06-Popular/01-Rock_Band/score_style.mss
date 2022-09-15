@@ -479,9 +479,9 @@
     <tupletOufOfStaff>1</tupletOufOfStaff>
     <tupletVHeadDistance>0.5</tupletVHeadDistance>
     <tupletVStemDistance>0.5</tupletVStemDistance>
-    <tupletStemLeftDistance>0</tupletStemLeftDistance>
+    <tupletStemLeftDistance>0.5</tupletStemLeftDistance>
     <tupletStemRightDistance>0.5</tupletStemRightDistance>
-    <tupletNoteLeftDistance>-0.5</tupletNoteLeftDistance>
+    <tupletNoteLeftDistance>0.0</tupletNoteLeftDistance>
     <tupletNoteRightDistance>0</tupletNoteRightDistance>
     <tupletBracketWidth>0.1</tupletBracketWidth>
     <tupletDirection>0</tupletDirection>
