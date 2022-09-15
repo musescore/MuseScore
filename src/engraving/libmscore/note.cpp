@@ -1025,7 +1025,7 @@ double Note::outsideTieAttachX(bool up) const
     if (up) {
         double xNE = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutNE).x();
         double xNW = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutNW).x();
-        xo = ((xNE + xNW) / 2) * mag();
+        xo = ((xNE + xNW) / 2);
         if (xNE < xNW) {
             // musejazz is busted
             xo = 0;
@@ -1033,7 +1033,7 @@ double Note::outsideTieAttachX(bool up) const
     } else {
         double xSE = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutSE).x();
         double xSW = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutSW).x();
-        xo = ((xSE + xSW) / 2) * mag();
+        xo = ((xSE + xSW) / 2);
         if (xSE < xSW) {
             xo = 0;
         }
@@ -1042,7 +1042,7 @@ double Note::outsideTieAttachX(bool up) const
         return x() + xo;
     }
     // no cutout, not a slash head, default to middle of notehead
-    return x() + ((headWidth() / 2) * mag());
+    return x() + (headWidth() / 2);
 }
 
 void Note::updateHeadGroup(const NoteHeadGroup headGroup)

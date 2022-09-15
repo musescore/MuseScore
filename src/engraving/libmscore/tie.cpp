@@ -858,7 +858,7 @@ void Tie::slurPos(SlurPos* sp)
     const StaffType* staffType = this->staffType();
     bool useTablature = staffType->isTabStaff();
     double _spatium = spatium();
-    double hw = startNote()->tabHeadWidth(staffType) * mag(); // if staffType == 0, defaults to headWidth()
+    double hw = startNote()->tabHeadWidth(staffType); // if staffType == 0, defaults to headWidth()
     /* Inside-style and Outside-style ties
      Outside ties connect above the notehead, in the middle. Ideally, we'd use opticalcenter for this, but
      that Smufl anchor is not available for noteheads yet. For this reason, we rely on Note::outsideTieAttachX()
