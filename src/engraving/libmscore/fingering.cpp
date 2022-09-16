@@ -108,8 +108,9 @@ void Fingering::layout()
     if (explicitParent()) {
         Fraction tick = parentItem()->tick();
         const Staff* st = staff();
+        _skipDraw = false;
         if (st && st->isTabStaff(tick) && !st->staffType(tick)->showTabFingering()) {
-            setbbox(RectF());
+            _skipDraw = true;
             return;
         }
     }
