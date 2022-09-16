@@ -314,7 +314,8 @@ void MuseSamplerWrapper::extractOutputSamples(audio::samples_t samples, float* o
     }
 }
 
-void MuseSamplerWrapper::revokePlayingNotes() {
+void MuseSamplerWrapper::revokePlayingNotes()
+{
     if (m_samplerLib) {
         m_samplerLib->allNotesOff(m_sampler);
     }

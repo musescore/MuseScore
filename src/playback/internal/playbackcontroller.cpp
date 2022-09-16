@@ -710,7 +710,7 @@ void PlaybackController::setCurrentTick(const tick_t tick)
 void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, const TrackAddFinished& onFinished)
 {
     if (notationPlayback()->metronomeTrackId() == instrumentTrackId) {
-        //doAddTrack(instrumentTrackId, trc("playback", "Metronome"), onFinished);
+        doAddTrack(instrumentTrackId, trc("playback", "Metronome"), onFinished);
         return;
     }
 
