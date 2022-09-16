@@ -2899,7 +2899,8 @@ static void createLinkedTabs(MasterScore* score)
     std::unordered_map<staff_idx_t, std::vector<Spanner*> > spanners;
     // for moving initial spanner to new index
     std::unordered_map<staff_idx_t, staff_idx_t> indexMapping;
-    std::unordered_map<staff_idx_t, size_t> partSizes;
+    std::set<staff_idx_t> staffIndexesToCopy;
+    constexpr size_t stavesInPart = 2;
 
     for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
         Spanner* s = it->second;
@@ -2916,40 +2917,49 @@ static void createLinkedTabs(MasterScore* score)
         size_t lines = part->instrument()->stringData()->strings();
         size_t stavesNum = part->nstaves();
 
-        part->setStaves(static_cast<int>(stavesNum * 2));
+        if (stavesNum != 1) {
+            for (int i = 0; i < stavesNum; i++) {
+                indexMapping[curStaffIdx] = stavesOperated + i;
+                curStaffIdx++;
+            }
 
-        for (size_t i = 0; i < stavesNum; i++) {
-            Staff* srcStaff = part->staff(i);
-            Staff* dstStaff = part->staff(stavesNum + i);
-            Excerpt::cloneStaff(srcStaff, dstStaff, false);
-
-            static const std::vector<StaffTypes> types {
-                StaffTypes::TAB_4SIMPLE,
-                StaffTypes::TAB_5SIMPLE,
-                StaffTypes::TAB_6SIMPLE,
-                StaffTypes::TAB_7SIMPLE,
-                StaffTypes::TAB_8SIMPLE
-            };
-
-            int index = (lines >= 4 && lines <= 8) ? lines - 4 : 2;
-
-            dstStaff->setStaffType(fr, *StaffType::preset(types.at(index)));
-            dstStaff->setLines(fr, static_cast<int>(lines));
-
-            // each spanner moves down to the staff with index,
-            // equal to number of spanners operated before it
-            indexMapping[curStaffIdx] = stavesOperated;
-            partSizes[curStaffIdx] = part->nstaves() / 2;
-            curStaffIdx++;
+            stavesOperated += stavesNum;
+            continue;
         }
 
-        stavesOperated += part->nstaves();
+        part->setStaves(static_cast<int>(stavesInPart));
+
+        Staff* srcStaff = part->staff(0);
+        Staff* dstStaff = part->staff(1);
+        Excerpt::cloneStaff(srcStaff, dstStaff, false);
+
+        static const std::vector<StaffTypes> types {
+            StaffTypes::TAB_4SIMPLE,
+            StaffTypes::TAB_5SIMPLE,
+            StaffTypes::TAB_6SIMPLE,
+            StaffTypes::TAB_7SIMPLE,
+            StaffTypes::TAB_8SIMPLE
+        };
+
+        int index = (lines >= 4 && lines <= 8) ? lines - 4 : 2;
+
+        dstStaff->setStaffType(fr, *StaffType::preset(types.at(index)));
+        dstStaff->setLines(fr, static_cast<int>(lines));
+
+        // each spanner moves down to the staff with index,
+        // equal to number of spanners operated before it
+        indexMapping[curStaffIdx] = stavesOperated;
+        staffIndexesToCopy.insert(curStaffIdx);
+        curStaffIdx++;
+
+        stavesOperated += stavesInPart;
     }
 
     // moving and copying spanner segments
     for (auto& spannerMapElem : spanners) {
         auto& spannerList = spannerMapElem.second;
         staff_idx_t idx = spannerMapElem.first;
+        bool needsCopy = staffIndexesToCopy.find(idx) != staffIndexesToCopy.end();
         for (Spanner* s : spannerList) {
             /// moving
             staff_idx_t newIdx = indexMapping[idx];
@@ -2961,12 +2971,14 @@ static void createLinkedTabs(MasterScore* score)
             }
 
             /// copying
-            staff_idx_t dstStaffIdx = newIdx + partSizes[idx];
+            if (needsCopy) {
+                staff_idx_t dstStaffIdx = newIdx + 1;
 
-            track_idx_t dstTrack = dstStaffIdx * VOICES + s->voice();
-            track_idx_t dstTrack2 = dstStaffIdx * VOICES + (s->track2() % VOICES);
+                track_idx_t dstTrack = dstStaffIdx * VOICES + s->voice();
+                track_idx_t dstTrack2 = dstStaffIdx * VOICES + (s->track2() % VOICES);
 
-            Excerpt::cloneSpanner(s, score, dstTrack, dstTrack2);
+                Excerpt::cloneSpanner(s, score, dstTrack, dstTrack2);
+            }
         }
     }
 }
