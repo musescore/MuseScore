@@ -65,6 +65,13 @@ const UiActionList PlaybackUiActions::m_mainActions = {
              TranslatableString("action", "Toggle metronome playback"),
              IconCode::Code::METRONOME,
              Checkable::Yes
+             ),
+    UiAction("playback-setup",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Playback Setup"),
+             TranslatableString("action", "Open playback setup dialog"),
+             IconCode::Code::NONE
              )
 };
 

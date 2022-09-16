@@ -47,6 +47,12 @@ public:
 
     virtual bool isMixerSectionVisible(MixerSectionType sectionType) const = 0;
     virtual void setMixerSectionVisible(MixerSectionType sectionType, bool visible) = 0;
+
+    virtual const SoundProfileName& basicSoundProfileName() const = 0;
+    virtual const SoundProfileName& museSoundProfileName() const = 0;
+
+    virtual SoundProfileName defaultProfileForNewProjects() const = 0;
+    virtual void setDefaultProfileForNewProjects(const SoundProfileName& name) = 0;
 };
 }
 

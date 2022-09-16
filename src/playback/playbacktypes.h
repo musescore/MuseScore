@@ -83,6 +83,59 @@ inline audio::msecs_t timeToMilliseconds(const QTime& time)
 {
     return ZERO_TIME.msecsTo(time);
 }
+
+enum class SoundProfileType {
+    Undefined = -1,
+    Basic,
+    Muse,
+    Custom
+};
+
+using SoundProfileName = String;
+using SoundProfileData = std::map<mpe::PlaybackSetupData, audio::AudioResourceMeta>;
+
+struct SoundProfile {
+    SoundProfileType type = SoundProfileType::Undefined;
+    SoundProfileName name;
+
+    SoundProfileData data;
+
+    const audio::AudioResourceMeta& findResource(const mpe::PlaybackSetupData& key) const
+    {
+        auto search = data.find(key);
+        if (search != data.cend()) {
+            return search->second;
+        }
+
+        auto nearestMatch = std::find_if(data.cbegin(),
+                                         data.cend(),
+                                         [key](const auto& pair) {
+            return pair.first.id == key.id
+                   && pair.first.category == key.category;
+        });
+
+        if (nearestMatch != data.cend()) {
+            return nearestMatch->second;
+        }
+
+        static audio::AudioResourceMeta empty;
+        return empty;
+    }
+
+    bool isEnabled() const
+    {
+        return !data.empty();
+    }
+
+    bool isValid() const
+    {
+        return type != SoundProfileType::Undefined
+               && !name.isEmpty()
+               && isEnabled();
+    }
+};
+
+using SoundProfilesMap = std::map<SoundProfileName, SoundProfile>;
 }
 
 #endif // MU_PLAYBACK_PLAYBACKTYPES_H

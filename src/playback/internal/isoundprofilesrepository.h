@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2022 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,24 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PLAYBACK_PLAYBACKMODULE_H
-#define MU_PLAYBACK_PLAYBACKMODULE_H
 
-#include "modularity/imodulesetup.h"
+#ifndef MU_PLAYBACK_ISOUNDPROFILESREPOSITORY_H
+#define MU_PLAYBACK_ISOUNDPROFILESREPOSITORY_H
+
+#include "modularity/imoduleexport.h"
+
+#include "../playbacktypes.h"
 
 namespace mu::playback {
-class PlaybackModule : public modularity::IModuleSetup
+class ISoundProfilesRepository : MODULE_EXPORT_INTERFACE
 {
-public:
+    INTERFACE_ID(ISoundProfilesRepository)
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-    void onAllInited(const framework::IApplication::RunMode& mode) override;
+public:
+    virtual ~ISoundProfilesRepository() = default;
+
+    virtual void refresh() = 0;
+
+    virtual const SoundProfile& profile(const SoundProfileName& name) const = 0;
+    virtual const SoundProfilesMap& availableProfiles() const = 0;
+
+    virtual void addProfile(const SoundProfile& profile) = 0;
+    virtual void removeProfile(const SoundProfileName& name) = 0;
 };
 }
 
-#endif // MU_PLAYBACK_PLAYBACKMODULE_H
+#endif // MU_PLAYBACK_ISOUNDPROFILESREPOSITORY_H

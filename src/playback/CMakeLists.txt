@@ -41,6 +41,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/isoundprofilesrepository.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/soundprofilesrepository.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/soundprofilesrepository.h
 
     #view
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/mixerchannelitem.cpp
@@ -59,6 +62,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/playbacktoolbarmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/playbackloadingmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/playbackloadingmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/soundprofilesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/soundprofilesmodel.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
