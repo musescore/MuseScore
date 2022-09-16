@@ -43,6 +43,11 @@ public:
 
     bool isMixerSectionVisible(MixerSectionType sectionType) const override;
     void setMixerSectionVisible(MixerSectionType sectionType, bool visible) override;
+
+    const SoundProfileName& basicSoundProfileName() const override;
+    const SoundProfileName& museSoundProfileName() const override;
+    SoundProfileName defaultProfileForNewProjects() const override;
+    void setDefaultProfileForNewProjects(const SoundProfileName& name) override;
 };
 }
 

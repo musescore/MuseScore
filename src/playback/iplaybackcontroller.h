@@ -26,10 +26,11 @@
 #include "async/notification.h"
 #include "async/channel.h"
 #include "global/progress.h"
-
 #include "notation/notationtypes.h"
 #include "audio/audiotypes.h"
 #include "actions/actiontypes.h"
+
+#include "playbacktypes.h"
 
 namespace mu::playback {
 class IPlaybackController : MODULE_EXPORT_INTERFACE
@@ -82,6 +83,8 @@ public:
     virtual void setTempoMultiplier(double multiplier) = 0;
 
     virtual framework::Progress loadingProgress() const = 0;
+
+    virtual void applyProfile(const SoundProfileName& profileName) = 0;
 };
 }
 
