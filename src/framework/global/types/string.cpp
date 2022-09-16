@@ -881,7 +881,7 @@ void String::doArgs(std::u16string& out, const std::vector<std::u16string_view>&
                 } else {
                     // When there are 5 args, %6 becomes %1
                     out.push_back(u'%');
-                    out.push_back(u'1' + argIdxToInsertAfter - args.size());
+                    out.push_back(u'1' + static_cast<char16_t>(argIdxToInsertAfter - args.size()));
                 }
             }
         }

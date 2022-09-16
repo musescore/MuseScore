@@ -3062,7 +3062,7 @@ static void createLinkedTabs(MasterScore* score)
                 StaffTypes::TAB_8SIMPLE
             };
 
-            int index = (lines >= 4 && lines <= 8) ? lines - 4 : 2;
+            size_t index = (lines >= 4 && lines <= 8) ? lines - 4 : 2;
 
             dstStaff->setStaffType(fr, *StaffType::preset(types.at(index)));
             dstStaff->setLines(fr, static_cast<int>(lines));

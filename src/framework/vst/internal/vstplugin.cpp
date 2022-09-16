@@ -173,7 +173,7 @@ void VstPlugin::stateBufferFromString(VstMemoryStream& buffer, char* strData, co
     static Steinberg::int32 numBytesRead = 0;
 
     buffer.write(strData, strSize, &numBytesRead);
-    buffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
+    buffer.seek(0, static_cast<size_t>(Steinberg::IBStream::kIBSeekSet), nullptr);
 }
 
 PluginViewPtr VstPlugin::view() const
