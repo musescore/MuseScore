@@ -661,7 +661,7 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
                 Fraction fr = { 0, 1 };
                 int capo = staff->capo(fr);
 
-                if (capo != 0) {
+                if (capo != 0 && _score->styleB(Sid::showCapoOnStaff)) {
                     StaffText* st = Factory::createStaffText(s);
                     st->setTrack(curTrack);
                     String capoText = String(u"Capo fret %1").arg(capo);
