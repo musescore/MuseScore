@@ -63,7 +63,7 @@ public:
     GraceNotesGroup(Chord* c);
 
     Chord* parent() const { return _parent; }
-    Shape shape() const override { return _shape; }
+    Shape shape() const override;
     void layout() override;
     void setPos(double x, double y) override;
     Segment* appendedSegment() const { return _appendedSegment; }
@@ -71,7 +71,6 @@ public:
 
 private:
     Chord* _parent = nullptr;
-    Shape _shape;
     Segment* _appendedSegment = nullptr; // the graceNoteGroup is appended to this segment
 };
 
