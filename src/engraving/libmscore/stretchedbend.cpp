@@ -89,11 +89,11 @@ void StretchedBend::fillDrawPoints()
     }
 
     m_drawPoints.clear();
-    auto isExtraPointHelper = [this](int i, std::function<bool(int, int)> compare) {
+    auto isExtraPointHelper = [this](size_t i, std::function<bool(int, int)> compare) {
         return compare(m_points[i - 1].pitch, m_points[i].pitch) && compare(m_points[i].pitch, m_points[i + 1].pitch);
     };
 
-    auto isExtraPoint = [isExtraPointHelper](int i) {
+    auto isExtraPoint = [isExtraPointHelper](size_t i) {
         return isExtraPointHelper(i, std::less<int>())
                || isExtraPointHelper(i, std::greater<int>())
                || isExtraPointHelper(i, std::equal_to<int>());
