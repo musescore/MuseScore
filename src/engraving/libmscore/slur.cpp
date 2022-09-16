@@ -366,36 +366,88 @@ void SlurSegment::adjustEndpoints()
     }
 }
 
+Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* endCR)
+{
+    staff_idx_t startStaffIdx = startCR->staffIdx();
+    Shape segShape = seg->staffShape(startStaffIdx).translated(seg->pos() + seg->measure()->pos());
+    // If cross-staff, also add the shape of second staff
+    if (slur()->isCrossStaff() && seg != startCR->segment()) {
+        staff_idx_t endStaffIdx = (endCR->staffIdx() != startStaffIdx) ? endCR->staffIdx() : endCR->vStaffIdx();
+        SysStaff* startStaff = system()->staves().at(startStaffIdx);
+        SysStaff* endStaff = system()->staves().at(endStaffIdx);
+        double dist = endStaff->y() - startStaff->y();
+        Shape secondStaffShape = seg->staffShape(endStaffIdx).translated(seg->pos() + seg->measure()->pos()); // translate horizontally
+        secondStaffShape.translate(PointF(0.0, dist)); // translate vertically
+        segShape.add(secondStaffShape);
+    }
+    // Remove items that the slur shouldn't try to avoid
+    mu::remove_if(segShape, [startCR](ShapeElement& shapeEl){
+        if (!shapeEl.toItem) {
+            return false;
+        }
+        // Lyrics and fingering
+        const EngravingItem* item = shapeEl.toItem;
+        if (item->isLyrics() || item->isFingering()) {
+            return true;
+        }
+        // Items belonging to its own start chord
+        if (item->parentItem() == startCR) {
+            return true;
+        }
+        return false;
+    });
+    return segShape;
+}
+
 void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p4, Transform& toSystemCoordinates, double& slurAngle)
 {
+    TRACEFUNC;
     ChordRest* startCR = slur()->startCR();
     ChordRest* endCR = slur()->endCR();
 
     if (!startCR || !endCR) {
         return;
     }
+
+    // Determine start and end segments for collision checks
     Segment* startSeg = nullptr;
     if (isSingleBeginType()) {
-        startSeg = startCR->segment(); // first of the slur
+        if (startCR->isChord() && toChord(startCR)->isGraceAfter()) {
+            // if this is a grace-note-after, the shape is stored the *appended* segment
+            Chord* parent = toChord(startCR->parentItem());
+            if (parent) {
+                startSeg = parent->graceNotesAfter().appendedSegment();
+            }
+        } else {
+            startSeg = startCR->segment(); // first of the slur
+        }
     } else {
         startSeg = system()->firstMeasure()->findFirstR(SegmentType::ChordRest, Fraction(0, 0)); // first of the system
     }
     Segment* endSeg = nullptr;
     if (isSingleEndType()) {
-        endSeg = endCR->segment(); // last of the slur
+        if (endCR->isChord() && toChord(endCR)->isGraceAfter()) {
+            // if this is a grace-note-after, the shape is stored the *appended* segment
+            Chord* parent = toChord(endCR->parentItem());
+            if (parent) {
+                endSeg = parent->graceNotesAfter().appendedSegment();
+            }
+        } else {
+            endSeg = endCR->segment(); // last of the slur
+        }
     } else {
         endSeg = system()->lastMeasure()->last(); // last of the system
     }
-    if (!startSeg || !endSeg || startSeg == endSeg) {
+    if (!startSeg || !endSeg) {
         return;
     }
 
-    // Collect all the segments spanned by this slur segment in a single vector
-    std::vector<Segment*> segList;
+    // Collect all the segments shapes spanned by this slur segment in a single vector
+    std::vector<Shape> segShapes;
     Segment* seg = startSeg;
     while (seg && seg->tick() <= endSeg->tick()) {
-        if (seg->enabled() && seg != startCR->segment()) { // don't include first segment
-            segList.push_back(seg);
+        if (seg->enabled()) {
+            segShapes.push_back(getSegmentShape(seg, startCR, endCR));
         }
         if (seg->next() && !seg->next()->isEndBarLineType()) {
             seg = seg->next();
@@ -405,7 +457,7 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
             break;
         }
     }
-    if (segList.empty()) {
+    if (segShapes.empty()) {
         return;
     }
 
@@ -474,26 +526,7 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
             slurRects.push_back(RectF(clearancePoint1, clearancePoint2));
         }
         // Check collisions
-        for (Segment* seg : segList) {
-            staff_idx_t startStaffIdx = startCR->staffIdx();
-            Shape segShape = seg->staffShape(startStaffIdx).translated(seg->pos() + seg->measure()->pos());
-            // If cross-staff, also add the shape of second staff
-            if (slur()->isCrossStaff()) {
-                staff_idx_t endStaffIdx = (endCR->staffIdx() != startStaffIdx) ? endCR->staffIdx() : endCR->vStaffIdx();
-                SysStaff* startStaff = system()->staves().at(startStaffIdx);
-                SysStaff* endStaff = system()->staves().at(endStaffIdx);
-                double dist = endStaff->y() - startStaff->y();
-                Shape secondStaffShape;
-                secondStaffShape.add(seg->staffShape(endStaffIdx).translated(seg->pos() + seg->measure()->pos()));
-                secondStaffShape.translate(PointF(0.0, dist));
-                segShape.add(secondStaffShape);
-            }
-
-            // HACK: ignore lyrics and fingering shape by removing them from the vector
-            mu::remove_if(segShape, [](ShapeElement& shapeEl){
-                return shapeEl.toItem && (shapeEl.toItem->isLyrics() || shapeEl.toItem->isFingering());
-            });
-
+        for (Shape& segShape : segShapes) {
             for (unsigned i=0; i < slurRects.size(); i++) {
                 bool leftSection = i < slurRects.size() / 3;
                 bool midSection = i >= slurRects.size() / 3 && i < 2 * slurRects.size() / 3;
