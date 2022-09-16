@@ -86,7 +86,6 @@ class Segment final : public EngravingItem
     std::vector<EngravingItem*> _elist;         // EngravingItem storage, size = staves * VOICES.
     std::vector<EngravingItem*> _preAppendedItems; // Container for items appended to the left of this segment (example: grace notes), size = staves * VOICES.
     std::vector<Shape> _shapes;           // size = staves
-    std::vector<double> _dotPosX;          // size = staves
     double m_spacing{ 0 };
 
     CrossBeamType _crossBeamType; // Will affect segment-to-segment horizontal spacing
@@ -215,9 +214,6 @@ public:
     bool hasElements() const;
     bool hasElements(track_idx_t minTrack, track_idx_t maxTrack) const;
     bool allElementsInvisible() const;
-
-    double dotPosX(staff_idx_t staffIdx) const { return _dotPosX[staffIdx]; }
-    void setDotPosX(staff_idx_t staffIdx, double val) { _dotPosX[staffIdx] = val; }
 
     Spatium extraLeadingSpace() const { return _extraLeadingSpace; }
     void setExtraLeadingSpace(Spatium v) { _extraLeadingSpace = v; }

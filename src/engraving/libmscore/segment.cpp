@@ -174,7 +174,6 @@ Segment::Segment(const Segment& s)
         }
         _elist.push_back(ne);
     }
-    _dotPosX = s._dotPosX;
     _shapes  = s._shapes;
 }
 
@@ -247,7 +246,6 @@ void Segment::init()
     size_t tracks = staves * VOICES;
     _elist.assign(tracks, 0);
     _preAppendedItems.assign(tracks, 0);
-    _dotPosX.assign(staves, 0.0);
     _shapes.assign(staves, Shape());
 }
 
@@ -504,7 +502,6 @@ void Segment::insertStaff(staff_idx_t staff)
         _elist.insert(_elist.begin() + track, 0);
         _preAppendedItems.insert(_preAppendedItems.begin() + track, 0);
     }
-    _dotPosX.insert(_dotPosX.begin() + staff, 0.0);
     _shapes.insert(_shapes.begin() + staff, Shape());
 
     for (EngravingItem* e : _annotations) {
@@ -525,7 +522,6 @@ void Segment::removeStaff(staff_idx_t staff)
     track_idx_t track = staff * VOICES;
     _elist.erase(_elist.begin() + track, _elist.begin() + track + VOICES);
     _preAppendedItems.erase(_preAppendedItems.begin() + track, _preAppendedItems.begin() + track + VOICES);
-    _dotPosX.erase(_dotPosX.begin() + staff);
     _shapes.erase(_shapes.begin() + staff);
 
     for (EngravingItem* e : _annotations) {
