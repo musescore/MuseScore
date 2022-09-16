@@ -604,14 +604,23 @@ mu::Ret NotationProject::makeCurrentFileAsBackup()
         return ret;
     }
 
-    io::path_t backupFilePath = filePath + "~";
-    ret = fileSystem()->copy(filePath, backupFilePath, true);
+    io::path_t backupPath = configuration()->projectBackupPath(filePath);
+    io::path_t backupDir = io::absoluteDirpath(backupPath);
+    ret = fileSystem()->makePath(backupDir);
     if (!ret) {
-        LOGE() << "failed to copy: " << filePath << " to: " << backupFilePath;
+        LOGE() << "failed to create backup directory: " << backupDir;
         return ret;
     }
 
-    fileSystem()->setAttribute(backupFilePath, io::IFileSystem::Attribute::Hidden);
+    fileSystem()->setAttribute(backupDir, io::IFileSystem::Attribute::Hidden);
+
+    ret = fileSystem()->copy(filePath, backupPath, true);
+    if (!ret) {
+        LOGE() << "failed to copy: " << filePath << " to: " << backupPath;
+        return ret;
+    }
+
+    fileSystem()->setAttribute(backupPath, io::IFileSystem::Attribute::Hidden);
 
     return ret;
 }
