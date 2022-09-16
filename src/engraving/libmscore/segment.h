@@ -216,9 +216,6 @@ public:
     bool hasElements(track_idx_t minTrack, track_idx_t maxTrack) const;
     bool allElementsInvisible() const;
 
-    double dotPosX(staff_idx_t staffIdx) const { return _dotPosX[staffIdx]; }
-    void setDotPosX(staff_idx_t staffIdx, double val) { _dotPosX[staffIdx] = val; }
-
     Spatium extraLeadingSpace() const { return _extraLeadingSpace; }
     void setExtraLeadingSpace(Spatium v) { _extraLeadingSpace = v; }
 
