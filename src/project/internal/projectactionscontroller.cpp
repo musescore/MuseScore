@@ -502,10 +502,24 @@ bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, 
 
 ProjectActionsController::AudioFile ProjectActionsController::exportMp3(const INotationPtr notation) const
 {
-    QTemporaryFile* tempFile = new QTemporaryFile("audioFile_XXXXXX.mp3");
-    tempFile->open();
+    QTemporaryFile* tempFile = new QTemporaryFile(QDir::tempPath() + "/audioFile_XXXXXX.mp3");
+    if (!tempFile->open()) {
+        LOGE() << "Could not open a temp file";
+        delete tempFile;
+        return AudioFile();
+    }
 
-    if (!exportProjectScenario()->exportScores({ notation }, QFileInfo(*tempFile).absoluteFilePath())) {
+    QString mp3Path = QFileInfo(*tempFile).absoluteFilePath();
+    LOGD() << "mp3 path: " << mp3Path;
+
+    if (mp3Path.isEmpty()) {
+        LOGE() << "mp3 path is empty";
+        delete tempFile;
+        return AudioFile();
+    }
+
+    if (!exportProjectScenario()->exportScores({ notation }, mp3Path)) {
+        LOGE() << "Could not export an mp3";
         delete tempFile;
         return AudioFile();
     }
