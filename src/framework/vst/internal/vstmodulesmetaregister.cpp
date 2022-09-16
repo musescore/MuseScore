@@ -25,6 +25,7 @@
 #include <QJsonDocument>
 
 #include "io/file.h"
+#include "mpe/events.h"
 
 using namespace mu;
 using namespace mu::vst;
@@ -181,6 +182,7 @@ void VstModulesMetaRegister::load()
             QJsonValue metaJson = object.value(QStringLiteral("meta"));
 
             audio::AudioResourceMeta meta = metaFromJson(metaJson.toObject());
+            meta.attributes = { { u"playbackSetupData", mpe::GENERIC_SETUP_DATA_STRING } };
             VstPluginType type = pluginTypeFromString(object.value(QStringLiteral("type")).toString());
 
             m_metaMap[type].insert(std::move(meta));

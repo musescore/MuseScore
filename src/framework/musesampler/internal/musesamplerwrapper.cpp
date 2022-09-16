@@ -24,7 +24,6 @@
 
 #include <cstring>
 
-#include "musesamplerutils.h"
 #include "realfn.h"
 
 using namespace mu;
@@ -58,9 +57,15 @@ MuseSamplerWrapper::~MuseSamplerWrapper()
 
 void MuseSamplerWrapper::setSampleRate(unsigned int sampleRate)
 {
+    if (m_sampleRate == sampleRate) {
+        return;
+    }
+
     m_sampleRate = sampleRate;
 
-    m_sampler = m_samplerLib->create();
+    if (!m_sampler) {
+        m_sampler = m_samplerLib->create();
+    }
 
     if (!m_sampler) {
         return;
@@ -145,13 +150,13 @@ bool MuseSamplerWrapper::isValid() const
 void MuseSamplerWrapper::setupSound(const mpe::PlaybackSetupData& setupData)
 {
     // Check by exact info:
-    if (auto unique_id = getMuseInstrumentUniqueIdFromId(params().resourceMeta.id); unique_id.has_value()) {
-        m_track = m_samplerLib->addTrack(m_sampler, *unique_id);
-        if (m_track != nullptr) {
-            m_sequencer.init(m_samplerLib, m_sampler, m_track);
-            return;
-        }
-        LOGE() << "Could not add instrument with ID of " << *unique_id;
+    int unique_id = params().resourceMeta.attributeVal(u"museUID").toInt();
+    m_track = m_samplerLib->addTrack(m_sampler, unique_id);
+    if (m_track != nullptr) {
+        m_sequencer.init(m_samplerLib, m_sampler, m_track);
+        return;
+    } else {
+        LOGE() << "Could not add instrument with ID of " << unique_id;
     }
 
     LOGE() << "Something went wrong; falling back to MPE info.";

@@ -24,7 +24,6 @@
 
 #include "log.h"
 
-#include "musesamplerutils.h"
 #include "musesamplerwrapper.h"
 
 using namespace mu;
@@ -70,17 +69,27 @@ AudioResourceMetaList MuseSamplerResolver::resolveResources() const
     while (auto instrument = m_libHandler->getNextInstrument(instrumentList))
     {
         int uniqueId = m_libHandler->getInstrumentId(instrument);
-        const char* internalName = m_libHandler->getInstrumentName(instrument);
-        const char* internalCategory = m_libHandler->getInstrumentCategory(instrument);
-        const char* instrumentPack = m_libHandler->getInstrumentPackage(instrument);
+        String internalName = String::fromUtf8(m_libHandler->getInstrumentName(instrument));
+        String internalCategory = String::fromUtf8(m_libHandler->getInstrumentCategory(instrument));
+        String instrumentPack = String::fromUtf8(m_libHandler->getInstrumentPackage(instrument));
+        String instrumentSoundId = String::fromUtf8(m_libHandler->getMpeSoundId(instrument));
 
-        result.push_back(
-        {
-            buildMuseInstrumentId(internalCategory, internalName, uniqueId), // id
-            AudioResourceType::MuseSamplerSoundPack, // type
-            instrumentPack, // vendor
-            /*hasNativeEditorSupport*/ false
-        });
+        if (instrumentSoundId.empty()) {
+            LOGE() << "MISSING INSTRUMENT ID for: " << internalName;
+        }
+
+        AudioResourceMeta meta;
+        meta.id = buildMuseInstrumentId(internalCategory, internalName, uniqueId).toStdString();
+        meta.type = AudioResourceType::MuseSamplerSoundPack;
+        meta.vendor = instrumentPack.toStdString();
+        meta.attributes = {
+            { u"playbackSetupData", instrumentSoundId },
+            { u"museCategory", internalCategory },
+            { u"museName", internalName },
+            { u"museUID", String::fromStdString(std::to_string(uniqueId)) },
+        };
+
+        result.push_back(std::move(meta));
     }
 
     return result;
@@ -89,4 +98,14 @@ AudioResourceMetaList MuseSamplerResolver::resolveResources() const
 void MuseSamplerResolver::refresh()
 {
     NOT_SUPPORTED;
+}
+
+String MuseSamplerResolver::buildMuseInstrumentId(const String& category, const String& name, int uniqueId) const
+{
+    StringList list;
+    list.append(category);
+    list.append(name);
+    list.append(String::fromStdString(std::to_string(uniqueId)));
+
+    return list.join(u"\\");
 }
