@@ -29,6 +29,7 @@ class Chord;
 class ChordRest;
 class Measure;
 class Score;
+class Segment;
 
 class LayoutContext;
 class LayoutBeams
@@ -41,6 +42,7 @@ public:
     static void restoreBeams(Measure* m);
     static void breakCrossMeasureBeams(const LayoutContext& ctx, Measure* measure);
     static void respace(const std::vector<ChordRest*>& elements);
+    static void layoutNonCrossBeams(Segment* s);
 
 private:
     static void beamGraceNotes(Score* score, Chord* mainNote, bool after);
