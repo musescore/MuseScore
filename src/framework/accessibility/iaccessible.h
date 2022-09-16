@@ -143,6 +143,8 @@ public:
     virtual int accessibleCursorPosition() const = 0;
 
     virtual QString accessibleText(int startOffset, int endOffset) const = 0;
+    virtual QString accessibleTextBeforeOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const = 0;
+    virtual QString accessibleTextAfterOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const = 0;
     virtual QString accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const = 0;
     virtual int accessibleCharacterCount() const = 0;
 
