@@ -49,10 +49,10 @@ Painter::Painter(QPaintDevice* dp, const std::string& name)
     init();
 }
 
-Painter::Painter(QPainter* qp, const std::string& name, bool overship)
+Painter::Painter(QPainter* qp, const std::string& name, bool ownsQPainter)
     : m_name(name)
 {
-    m_provider = QPainterProvider::make(qp, overship);
+    m_provider = QPainterProvider::make(qp, ownsQPainter);
     init();
 }
 
@@ -68,6 +68,7 @@ void Painter::init()
     State st;
     st.worldTransform = m_provider->transform();
     st.isWxF = true;
+    st.transform = st.worldTransform;
 
     m_states = std::stack<State>();
     m_states.push(std::move(st));
@@ -265,7 +266,7 @@ void Painter::setWindow(const RectF& window)
     State& st = editableState();
     st.window = window;
     st.isVxF = true;
-    st.viewTransform = makeViewTransform();
+    updateViewTransform();
 }
 
 RectF Painter::viewport() const
@@ -278,7 +279,7 @@ void Painter::setViewport(const RectF& viewport)
     State& st = editableState();
     st.viewport = viewport;
     st.isVxF = true;
-    st.viewTransform = makeViewTransform();
+    updateViewTransform();
 }
 
 // drawing functions
@@ -496,12 +497,13 @@ const Painter::State& Painter::state() const
     return m_states.top();
 }
 
-Transform Painter::makeViewTransform() const
+void Painter::updateViewTransform()
 {
-    const State& st = state();
+    State& st = editableState();
     double scaleW = double(st.viewport.width()) / double(st.window.width());
     double scaleH = double(st.viewport.height()) / double(st.window.height());
-    return Transform(scaleW, 0, 0, scaleH, st.viewport.x() - st.window.x() * scaleW, st.viewport.y() - st.window.y() * scaleH);
+    st.viewTransform = Transform(scaleW, 0, 0, scaleH, st.viewport.x() - st.window.x() * scaleW, st.viewport.y() - st.window.y() * scaleH);
+    updateMatrix();
 }
 
 void Painter::updateMatrix()

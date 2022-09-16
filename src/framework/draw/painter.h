@@ -51,7 +51,7 @@ public:
 
 #ifndef NO_QT_SUPPORT
     Painter(QPaintDevice* dp, const std::string& name);
-    Painter(QPainter* qp, const std::string& name, bool overship = false);
+    Painter(QPainter* qp, const std::string& name, bool ownsQPainter = false);
 #endif
 
     ~Painter();
@@ -190,7 +190,7 @@ private:
     void init();
     State& editableState();
     const State& state() const;
-    Transform makeViewTransform() const;
+    void updateViewTransform();
     void updateMatrix();
 
     bool endTarget(bool endDraw);
