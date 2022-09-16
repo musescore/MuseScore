@@ -123,6 +123,8 @@ class Chord final : public ChordRest
 
     bool _isUiItem = false;
 
+    double _dotPosX = 0.0;
+
     std::vector<Articulation*> _articulations;
 
     friend class Factory;
@@ -274,7 +276,8 @@ public:
     void computeUp() override;
     static int computeAutoStemDirection(const std::vector<int>& noteDistances);
 
-    double dotPosX() const;
+    double dotPosX() const { return _dotPosX; }
+    void setDotPosX(double x) { _dotPosX = x; }
 
     bool noStem() const { return _noStem; }
     void setNoStem(bool val) { _noStem = val; }
