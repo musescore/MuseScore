@@ -1331,8 +1331,8 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
     if (segments.size() > 1) {
         //how far vertically an endpoint should adjust to avoid other slur endpoints:
         const double slurCollisionVertOffset = 0.65 * system->spatium();
-        const double slurCollisionHorizOffset = 0.15 * system->spatium();
-        const double fuzzyHorizCompare = 0.1 * system->spatium();
+        const double slurCollisionHorizOffset = 0.2 * system->spatium();
+        const double fuzzyHorizCompare = 0.25 * system->spatium();
         auto compare = [fuzzyHorizCompare](double x1, double x2) { return std::abs(x1 - x2) < fuzzyHorizCompare; };
         for (SpannerSegment* seg1 : segments) {
             if (!seg1->isSlurSegment()) {
