@@ -72,10 +72,18 @@ class AccessibleItem : public QObject, public QQmlParserStatus, public accessibi
     Q_PROPERTY(mu::ui::MUAccessible::Role role READ role WRITE setRole NOTIFY roleChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
+
     Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(QVariant maximumValue READ maximumValue WRITE setMaximumValue NOTIFY maximumValueChanged)
     Q_PROPERTY(QVariant minimumValue READ minimumValue WRITE setMinimumValue NOTIFY minimumValueChanged)
     Q_PROPERTY(QVariant stepSize READ stepSize WRITE setStepSize NOTIFY stepSizeChanged)
+
+    Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
+    Q_PROPERTY(QString selectedText READ selectedText WRITE setSelectedText NOTIFY selectedTextChanged)
+    Q_PROPERTY(int selectionStart READ selectionStart WRITE setSelectionStart NOTIFY selectionStartChanged)
+    Q_PROPERTY(int selectionEnd READ selectionEnd WRITE setSelectionEnd NOTIFY selectionEndChanged)
+    Q_PROPERTY(int cursorPosition READ cursorPosition WRITE setCursorPosition NOTIFY cursorPositionChanged)
+
     Q_PROPERTY(bool ignored READ ignored WRITE setIgnored NOTIFY ignoredChanged)
     Q_PROPERTY(QQuickItem * visualItem READ visualItem WRITE setVisualItem NOTIFY visualItemChanged)
 
@@ -96,10 +104,18 @@ public:
     MUAccessible::Role role() const;
     QString name() const;
     QString description() const;
+
     QVariant value() const;
     QVariant maximumValue() const;
     QVariant minimumValue() const;
     QVariant stepSize() const;
+
+    QString text() const;
+    QString selectedText() const;
+    int selectionStart() const;
+    int selectionEnd() const;
+    int cursorPosition() const;
+
     bool ignored() const;
     QQuickItem* visualItem() const;
 
@@ -137,6 +153,8 @@ public:
     int accessibleCursorPosition() const override;
 
     QString accessibleText(int startOffset, int endOffset) const override;
+    QString accessibleTextBeforeOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const override;
+    QString accessibleTextAfterOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const override;
     QString accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const override;
     int accessibleCharacterCount() const override;
 
@@ -156,6 +174,11 @@ public slots:
     void setMaximumValue(QVariant maximumValue);
     void setMinimumValue(QVariant minimumValue);
     void setStepSize(QVariant stepSize);
+    void setText(const QString& text);
+    void setSelectedText(const QString& selectedText);
+    void setSelectionStart(int selectionStart);
+    void setSelectionEnd(int selectionEnd);
+    void setCursorPosition(int cursorPosition);
     void setIgnored(bool ignored);
     void setVisualItem(QQuickItem* item);
 
@@ -168,12 +191,16 @@ signals:
     void maximumValueChanged(QVariant maximumValue);
     void minimumValueChanged(QVariant minimumValue);
     void stepSizeChanged(QVariant stepSize);
+    void textChanged();
+    void selectedTextChanged();
+    void selectionStartChanged();
+    void selectionEndChanged();
+    void cursorPositionChanged();
     void ignoredChanged(bool ignored);
     void visualItemChanged(QQuickItem* item);
     void stateChanged();
 
 private:
-
     QQuickItem* resolveVisualItem() const;
 
     bool m_registred = false;
@@ -186,6 +213,11 @@ private:
     QVariant m_maximumValue;
     QVariant m_minimumValue;
     QVariant m_stepSize;
+    QString m_text;
+    QString m_selectedText;
+    int m_selectionStart = 0;
+    int m_selectionEnd = 0;
+    int m_cursorPosition = 0;
     bool m_ignored = false;
     QQuickItem* m_visualItem = nullptr;
     QMap<State, bool> m_state;

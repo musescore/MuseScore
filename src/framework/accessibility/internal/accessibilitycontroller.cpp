@@ -620,6 +620,16 @@ QString AccessibilityController::accessibleText(int, int) const
     return QString();
 }
 
+QString AccessibilityController::accessibleTextBeforeOffset(int, TextBoundaryType, int*, int*) const
+{
+    return QString();
+}
+
+QString AccessibilityController::accessibleTextAfterOffset(int, TextBoundaryType, int*, int*) const
+{
+    return QString();
+}
+
 QString AccessibilityController::accessibleTextAtOffset(int, TextBoundaryType, int*, int*) const
 {
     return QString();
