@@ -2409,9 +2409,7 @@ void Chord::layoutTablature()
         rrr = stemX + halfHeadWidth;
     }
     // align dots to the widest fret mark (not needed in all TAB styles, but harmless anyway)
-    if (segment()) {
-        segment()->setDotPosX(staffIdx(), headWidth);
-    }
+    setDotPosX(headWidth);
 
     if (shouldHaveStem()) {
         // if stem is required but missing, add it;
@@ -2558,9 +2556,7 @@ void Chord::layoutTablature()
             else {
                 x = STAFFTYPE_TAB_DEFAULTDOTDIST_X * _spatium;
             }
-            if (segment()) {
-                segment()->setDotPosX(staffIdx(), x);
-            }
+            setDotPosX(x);
         }
         // if stems are through staff, use dot position computed above on fret mark widths
         else {
@@ -2909,10 +2905,6 @@ EngravingItem* Chord::drop(EditData& data)
     return 0;
 }
 
-//---------------------------------------------------------
-//   dotPosX
-//---------------------------------------------------------
-
 void Chord::setColor(const mu::draw::Color& color)
 {
     ChordRest::setColor(color);
@@ -2920,18 +2912,6 @@ void Chord::setColor(const mu::draw::Color& color)
     for (Note* note : _notes) {
         note->undoChangeProperty(Pid::COLOR, PropertyValue::fromValue(color));
     }
-}
-
-//---------------------------------------------------------
-//   dotPosX
-//---------------------------------------------------------
-
-double Chord::dotPosX() const
-{
-    if (explicitParent()) {
-        return segment()->dotPosX(vStaffIdx());
-    }
-    return -1000.0;
 }
 
 //---------------------------------------------------------
