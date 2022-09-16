@@ -128,6 +128,8 @@ public:
 
     io::path_t temporaryMp3FilePathTemplate() const override;
 
+    io::path_t projectBackupPath(const io::path_t& projectPath) const override;
+
 private:
     io::paths_t parseRecentProjectsPaths(const mu::Val& value) const;
 

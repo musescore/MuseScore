@@ -560,3 +560,11 @@ io::path_t ProjectConfiguration::temporaryMp3FilePathTemplate() const
 {
     return globalConfiguration()->userAppDataPath() + "/audioFile_XXXXXX.mp3";
 }
+
+io::path_t ProjectConfiguration::projectBackupPath(const io::path_t& projectPath) const
+{
+    io::path_t projectDir = io::absoluteDirpath(projectPath);
+    io::path_t projectName = io::filename(projectPath);
+
+    return projectDir + "/.mscbackup/." + projectName + "~";
+}
