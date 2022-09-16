@@ -727,6 +727,15 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                 Beam* b = cr->beam();
                 b->layout();
             }
+            if (!cr->isChord()) {
+                continue;
+            }
+            for (Chord* grace : toChord(cr)->graceNotes()) {
+                Beam* beam = grace->beam();
+                if (beam && !beam->elements().empty() && beam->elements().front() == grace) {
+                    beam->layout();
+                }
+            }
         }
         // Must recreate the shapes because stem lengths may have been changed!
         s->createShapes();
