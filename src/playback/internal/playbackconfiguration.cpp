@@ -22,7 +22,7 @@
 #include "playbackconfiguration.h"
 
 #include "settings.h"
-#include "strings.h"
+#include "types/string.h"
 
 #include "playbacktypes.h"
 
