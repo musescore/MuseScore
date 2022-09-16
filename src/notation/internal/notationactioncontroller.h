@@ -22,23 +22,27 @@
 #ifndef MU_NOTATION_NOTATIONACTIONCONTROLLER_H
 #define MU_NOTATION_NOTATIONACTIONCONTROLLER_H
 
-#include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
+#include "async/asyncable.h"
 #include "actions/actionable.h"
 #include "actions/actiontypes.h"
-#include "async/asyncable.h"
+
+#include "modularity/ioc.h"
+#include "iinteractive.h"
+#include "actions/iactionsdispatcher.h"
+#include "ui/iuiactionsregister.h"
 #include "context/iglobalcontext.h"
 #include "context/iuicontextresolver.h"
-#include "inotation.h"
-#include "iinteractive.h"
 #include "playback/iplaybackcontroller.h"
-#include "inotationconfiguration.h"
 #include "engraving/iengravingconfiguration.h"
+#include "inotationconfiguration.h"
+
+#include "inotation.h"
 
 namespace mu::notation {
 class NotationActionController : public actions::Actionable, public async::Asyncable
 {
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation, ui::IUiActionsRegister, actionRegister)
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, context::IUiContextResolver, uiContextResolver)
     INJECT(notation, framework::IInteractive, interactive)
@@ -60,6 +64,8 @@ public:
 
     INotationStylePtr currentNotationStyle() const;
     async::Notification currentNotationStyleChanged() const;
+
+    INotationAccessibilityPtr currentNotationAccessibility() const;
 
     using EngravingDebuggingOptions = engraving::IEngravingConfiguration::DebuggingOptions;
     static const std::unordered_map<actions::ActionCode, bool EngravingDebuggingOptions::*> engravingDebuggingActions;

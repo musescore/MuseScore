@@ -184,12 +184,14 @@ QString AccessibleItem::accessibleName() const
     }
 
     AccessibleRoot* root = accessibleRoot();
+    QString commandInfo = root ? root->commandInfo() : "";
     QString staffInfo = root ? root->staffInfo() : "";
     QString barsAndBeats = m_element->formatBarsAndBeats();
 
     barsAndBeats.remove(u';'); // Too many pauses in speech
 
-    QString name = QString("%1%2%3%4")
+    QString name = QString("%1%2%3%4%5")
+                   .arg(!commandInfo.isEmpty() ? (commandInfo + "; ") : "")
                    .arg(!staffInfo.isEmpty() ? (staffInfo + "; ") : "")
                    .arg(m_element->screenReaderInfo().toQString())
                    .arg(m_element->visible() ? "" : " " + qtrc("engraving", "invisible"))
