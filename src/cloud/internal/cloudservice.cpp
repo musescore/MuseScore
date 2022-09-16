@@ -445,11 +445,11 @@ ProgressPtr CloudService::uploadScore(QIODevice& scoreData, const QString& title
             progress->progressChanged.send(current, total, message);
         });
 
-        RetVal<QUrl> newSourceUrl = doUploadScore(manager, scoreData, title, isPrivate, sourceUrl);
+        RetVal<ValMap> urlMap = doUploadScore(manager, scoreData, title, isPrivate, sourceUrl);
 
         ProgressResult result;
-        result.ret = newSourceUrl.ret;
-        result.val = Val(newSourceUrl.val.toString());
+        result.ret = urlMap.ret;
+        result.val = Val(urlMap.val);
         progress->finished.send(result);
 
         return result.ret;
@@ -497,12 +497,12 @@ ProgressPtr CloudService::uploadAudio(QIODevice& audioData, const QString& audio
     return progress;
 }
 
-mu::RetVal<QUrl> CloudService::doUploadScore(INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
-                                             bool isPrivate, const QUrl& sourceUrl)
+mu::RetVal<mu::ValMap> CloudService::doUploadScore(INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
+                                                   bool isPrivate, const QUrl& sourceUrl)
 {
     TRACEFUNC;
 
-    RetVal<QUrl> result = RetVal<QUrl>::make_ok(QUrl());
+    RetVal<ValMap> result = RetVal<ValMap>::make_ok(ValMap());
 
     RetVal<QUrl> uploadUrl = prepareUrlForRequest(configuration()->uploadScoreApiUrl());
     if (!uploadUrl.ret) {
@@ -587,8 +587,8 @@ mu::RetVal<QUrl> CloudService::doUploadScore(INetworkManagerPtr uploadManager, Q
         return result;
     }
 
-    result.val = newSourceUrl;
-    openUrl(editUrl);
+    result.val["sourceUrl"] = Val(newSourceUrl.toString());
+    result.val["editUrl"] = Val(editUrl.toString());
 
     return result;
 }

@@ -63,10 +63,8 @@ void ProjectConfiguration::init()
     settings()->valueChanged(USER_TEMPLATES_PATH).onReceive(nullptr, [this](const Val& val) {
         m_userTemplatesPathChanged.send(val.toPath());
     });
-    fileSystem()->makePath(userTemplatesPath());
 
     settings()->setDefaultValue(DEFAULT_PROJECTS_PATH, Val(globalConfiguration()->userDataPath() + "/Scores"));
-    fileSystem()->makePath(defaultProjectsPath());
 
     settings()->valueChanged(USER_PROJECTS_PATH).onReceive(nullptr, [this](const Val& val) {
         m_userScoresPathChanged.send(val.toPath());
@@ -96,6 +94,10 @@ void ProjectConfiguration::init()
     });
 
     settings()->setDefaultValue(SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT, Val(false));
+
+    fileSystem()->makePath(userTemplatesPath());
+    fileSystem()->makePath(defaultProjectsPath());
+    fileSystem()->makePath(cloudProjectsPath());
 }
 
 io::paths_t ProjectConfiguration::recentProjectPaths() const
@@ -263,14 +265,19 @@ async::Channel<io::path_t> ProjectConfiguration::userProjectsPathChanged() const
     return m_userScoresPathChanged;
 }
 
+io::path_t ProjectConfiguration::cloudProjectPath(const io::path_t& projectName) const
+{
+    return cloudProjectsPath() + '/' + projectName + '.' + engraving::MSCZ;
+}
+
+bool ProjectConfiguration::isCloudProject(const io::path_t& projectPath) const
+{
+    return io::dirpath(projectPath) == cloudProjectsPath();
+}
+
 io::path_t ProjectConfiguration::cloudProjectsPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/cloud_projects";
-}
-
-bool ProjectConfiguration::isCloudProject(const io::path_t& path) const
-{
-    return io::dirpath(path) == cloudProjectsPath();
 }
 
 io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr project, const QString& filenameAddition,
@@ -494,4 +501,9 @@ bool ProjectConfiguration::shouldDestinationFolderBeOpenedOnExport() const
 void ProjectConfiguration::setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport)
 {
     settings()->setSharedValue(SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT, Val(shouldDestinationFolderBeOpenedOnExport));
+}
+
+QUrl ProjectConfiguration::scoreManagerUrl() const
+{
+    return cloudConfiguration()->scoreManagerUrl();
 }

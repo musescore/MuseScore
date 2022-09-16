@@ -50,5 +50,6 @@
         <file>resources/Placeholder_MIDI.png</file>
         <file>resources/Placeholder_MXML.png</file>
         <file>resources/Placeholder_Other.png</file>
+        <file>resources/CloudProject.svg</file>
     </qresource>
 </RCC>

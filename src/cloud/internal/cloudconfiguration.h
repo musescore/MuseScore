@@ -40,6 +40,7 @@ public:
 
     QUrl authorizationUrl() const override;
     QUrl signUpUrl() const override;
+    QUrl scoreManagerUrl() const override;
     QUrl accessTokenUrl() const override;
 
     QUrl refreshApiUrl() const override;
