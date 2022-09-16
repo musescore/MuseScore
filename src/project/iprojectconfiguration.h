@@ -66,8 +66,8 @@ public:
     virtual void setUserProjectsPath(const io::path_t& path) = 0;
     virtual async::Channel<io::path_t> userProjectsPathChanged() const = 0;
 
-    virtual io::path_t cloudProjectsPath() const = 0;
-    virtual bool isCloudProject(const io::path_t& path) const = 0;
+    virtual io::path_t cloudProjectPath(const io::path_t& projectName) const = 0;
+    virtual bool isCloudProject(const io::path_t& projectPath) const = 0;
 
     virtual io::path_t defaultSavingFilePath(INotationProjectPtr project,
                                              const QString& filenameAddition = QString(), const QString& suffix = QString()) const = 0;
@@ -109,6 +109,8 @@ public:
 
     virtual bool shouldDestinationFolderBeOpenedOnExport() const = 0;
     virtual void setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport) = 0;
+
+    virtual QUrl scoreManagerUrl() const = 0;
 };
 }
 

@@ -29,6 +29,7 @@
 #include "io/ifilesystem.h"
 #include "accessibility/iaccessibilityconfiguration.h"
 #include "notation/inotationconfiguration.h"
+#include "cloud/icloudconfiguration.h"
 
 #include "../iprojectconfiguration.h"
 
@@ -37,6 +38,7 @@ class ProjectConfiguration : public IProjectConfiguration
 {
     INJECT(project, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(project, notation::INotationConfiguration, notationConfiguration)
+    INJECT(project, cloud::ICloudConfiguration, cloudConfiguration)
     INJECT(project, accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
     INJECT(project, io::IFileSystem, fileSystem)
 
@@ -72,8 +74,8 @@ public:
     void setUserProjectsPath(const io::path_t& path) override;
     async::Channel<io::path_t> userProjectsPathChanged() const override;
 
-    io::path_t cloudProjectsPath() const override;
-    bool isCloudProject(const io::path_t& path) const override;
+    io::path_t cloudProjectPath(const io::path_t& projectName) const override;
+    bool isCloudProject(const io::path_t& projectPath) const override;
 
     bool shouldAskSaveLocationType() const override;
     void setShouldAskSaveLocationType(bool shouldAsk) override;
@@ -111,10 +113,13 @@ public:
     bool shouldDestinationFolderBeOpenedOnExport() const override;
     void setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport) override;
 
+    QUrl scoreManagerUrl() const override;
+
 private:
     io::paths_t parseRecentProjectsPaths(const mu::Val& value) const;
 
     io::path_t appTemplatesPath() const;
+    io::path_t cloudProjectsPath() const;
 
     async::Channel<io::paths_t> m_recentProjectPathsChanged;
     async::Channel<io::path_t> m_userTemplatesPathChanged;

@@ -118,8 +118,10 @@ private:
 
     AudioFile exportMp3(const notation::INotationPtr notation) const;
 
-    void uploadProject(const CloudProjectInfo& info, const AudioFile& audio = AudioFile());
+    void uploadProject(const CloudProjectInfo& info, const AudioFile& audio = AudioFile(), bool openEditUrl = true);
     void uploadAudio(const AudioFile& audio, const QUrl& sourceUrl);
+
+    void onProjectSuccessfullyUploaded(const QUrl& urlToOpen = QUrl());
 
     void importPdf();
 
@@ -140,6 +142,7 @@ private:
     void printScore();
 
     void prependToRecentScoreList(const io::path_t& filePath);
+    void removeFromRecentScoreList(const io::path_t& filePath);
 
     bool hasSelection() const;
 

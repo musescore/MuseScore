@@ -256,6 +256,8 @@ bool SaveProjectScenario::warnBeforePublishing(INotationProjectPtr project, Clou
             buttons,
             int(IInteractive::Button::Ok),
             IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
+    } else {
+        return true;
     }
 
     bool publish = result.standardButton() == IInteractive::Button::Ok;
