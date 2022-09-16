@@ -3229,6 +3229,7 @@ void Measure::layoutMeasureElements()
                 continue;
             }
             staff_idx_t staffIdx = e->staffIdx();
+            bool modernMMRest = e->isMMRest() && !score()->styleB(Sid::oldStyleMultiMeasureRests);
             if ((e->isRest() && toRest(e)->isFullMeasureRest()) || e->isMMRest() || e->isMeasureRepeat()) {
                 //
                 // element has to be centered in free space
@@ -3239,11 +3240,17 @@ void Measure::layoutMeasureElements()
                 for (s1 = s.prevActive(); s1 && s1->allElementsInvisible(); s1 = s1->prevActive()) {
                 }
                 Segment* s2;
-                for (s2 = s.nextActive(); s2; s2 = s2->nextActive()) {
-                    if (!s2->isChordRestType() && s2->element(staffIdx * VOICES)) {
-                        break;
+                if (modernMMRest) {
+                    for (s2 = s.nextActive(); s2; s2 = s2->nextActive()) {
+                        if (!s2->isChordRestType() && s2->element(staffIdx * VOICES)) {
+                            break;
+                        }
                     }
+                } else {
+                    // Ignore any stuff before the end bar line (such as courtesy clefs)
+                    s2 = findSegment(SegmentType::EndBarLine, endTick());
                 }
+
                 double x1 = s1 ? s1->x() + s1->minRight() : 0;
                 double x2 = s2 ? s2->x() - s2->minLeft() : width();
 
