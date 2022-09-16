@@ -96,8 +96,17 @@ public:
 
     MOCK_METHOD(QUrl, scoreManagerUrl, (), (const, override));
 
-    MOCK_METHOD(bool, showDetailedProjectUploadedDialog, (), (const, override));
-    MOCK_METHOD(void, setShowDetailedProjectUploadedDialog, (bool), (override));
+    MOCK_METHOD(bool, openDetailedProjectUploadedDialog, (), (const, override));
+    MOCK_METHOD(void, setOpenDetailedProjectUploadedDialog, (bool), (override));
+
+    MOCK_METHOD(bool, openAudioGenerationSettings, (), (const, override));
+    MOCK_METHOD(void, setOpenAudioGenerationSettings, (bool), (override));
+
+    MOCK_METHOD(GenerateAudioTimePeriodType, generateAudioTimePeriodType, (), (const, override));
+    MOCK_METHOD(void, setGenerateAudioTimePeriodType, (GenerateAudioTimePeriodType), (override));
+
+    MOCK_METHOD(int, numberOfSavesToGenerateAudio, (), (const, override));
+    MOCK_METHOD(void, setNumberOfSavesToGenerateAudio, (int), (override));
 };
 }
 
