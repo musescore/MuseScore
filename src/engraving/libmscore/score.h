@@ -726,6 +726,7 @@ public:
 
     Note* addPitch(NoteVal&, bool addFlag, InputState* externalInputState = nullptr);
     Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord);
+    NoteVal noteVal(int pitch) const;
     Note* addMidiPitch(int pitch, bool addFlag);
     Note* addNote(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {},
                   InputState* externalInputState = nullptr);

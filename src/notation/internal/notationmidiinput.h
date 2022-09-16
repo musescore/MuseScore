@@ -57,7 +57,8 @@ private:
     mu::engraving::Score* score() const;
 
     void doProcessEvents();
-    Note* onAddNote(const midi::Event& e);
+    Note* addNoteToScore(const midi::Event& e);
+    Note* makeNote(const midi::Event& e);
 
     void enableMetronome();
     void disableMetronome();
