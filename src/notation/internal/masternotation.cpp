@@ -566,8 +566,8 @@ void MasterNotation::sortExcerpts(ExcerptNotationList& excerpts)
         const ID& initialPart1 = get_impl(f)->excerpt()->initialPartId();
         const ID& initialPart2 = get_impl(s)->excerpt()->initialPartId();
 
-        int index1 = mu::indexOf(partIdList, initialPart1);
-        int index2 = mu::indexOf(partIdList, initialPart2);
+        size_t index1 = mu::indexOf(partIdList, initialPart1);
+        size_t index2 = mu::indexOf(partIdList, initialPart2);
 
         return index1 < index2;
     });

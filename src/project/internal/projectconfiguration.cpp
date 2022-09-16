@@ -314,7 +314,7 @@ io::path_t ProjectConfiguration::cloudProjectSavingFilePath(const io::path_t& pr
 {
     io::path_t savingPathWithoutSuffix = cloudProjectsPath() + '/' + projectName;
 
-    auto makeSavingPath = [savingPathWithoutSuffix](int num = 0) {
+    auto makeSavingPath = [savingPathWithoutSuffix](size_t num = 0) {
         std::string numPart = num > 0 ? ' ' + std::to_string(num) : "";
         return savingPathWithoutSuffix + numPart + DEFAULT_FILE_SUFFIX;
     };

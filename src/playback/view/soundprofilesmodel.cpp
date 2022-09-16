@@ -55,7 +55,7 @@ SoundProfilesModel::SoundProfilesModel(QObject* parent)
 
 int SoundProfilesModel::rowCount(const QModelIndex& /*parent*/) const
 {
-    return m_profiles.size();
+    return static_cast<int>(m_profiles.size());
 }
 
 QVariant SoundProfilesModel::data(const QModelIndex& index, int role) const
