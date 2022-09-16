@@ -28,10 +28,12 @@
 #include <set>
 #include <string>
 
+#include "types/string.h"
 #include "realfn.h"
 #include "midi/miditypes.h"
 #include "mpe/events.h"
 #include "io/path.h"
+#include "io/iodevice.h"
 #include "async/channel.h"
 
 namespace mu::audio {
@@ -52,23 +54,70 @@ using TrackId = int32_t;
 using TrackIdList = std::vector<TrackId>;
 using TrackName = std::string;
 
+using PlaybackData = std::variant<mpe::PlaybackData, io::IODevice*>;
+using PlaybackSetupData = mpe::PlaybackSetupData;
+
+enum class SoundTrackType {
+    Undefined = -1,
+    MP3,
+    OGG,
+    FLAC,
+    WAV
+};
+
+struct SoundTrackFormat {
+    SoundTrackType type = SoundTrackType::Undefined;
+    sample_rate_t sampleRate = 0;
+    audioch_t audioChannelsNumber = 0;
+    int bitRate = 0;
+
+    bool operator==(const SoundTrackFormat& other) const
+    {
+        return type == other.type
+               && sampleRate == other.sampleRate
+               && audioChannelsNumber == other.audioChannelsNumber
+               && bitRate == other.bitRate;
+    }
+
+    bool isValid() const
+    {
+        return type != SoundTrackType::Undefined
+               && sampleRate != 0
+               && audioChannelsNumber != 0;
+    }
+};
+
 using AudioSourceName = std::string;
 using AudioResourceId = std::string;
 using AudioResourceIdList = std::vector<AudioResourceId>;
 using AudioResourceVendor = std::string;
+using AudioResourceAttributes = std::map<String, String>;
 using AudioUnitConfig = std::map<std::string, std::string>;
 
 enum class AudioResourceType {
     Undefined = -1,
     FluidSoundfont,
     VstPlugin,
-    MuseSamplerSoundPack
+    MuseSamplerSoundPack,
+    SoundTrack,
 };
 
 struct AudioResourceMeta {
     AudioResourceId id;
     AudioResourceType type = AudioResourceType::Undefined;
     AudioResourceVendor vendor;
+    AudioResourceAttributes attributes;
+
+    const String& attributeVal(const String& key) const
+    {
+        auto search = attributes.find(key);
+        if (search != attributes.cend()) {
+            return search->second;
+        }
+
+        static String empty;
+        return empty;
+    }
 
     bool hasNativeEditorSupport = false;
 
@@ -84,7 +133,8 @@ struct AudioResourceMeta {
         return id == other.id
                && vendor == other.vendor
                && type == other.type
-               && hasNativeEditorSupport == other.hasNativeEditorSupport;
+               && hasNativeEditorSupport == other.hasNativeEditorSupport
+               && attributes == other.attributes;
     }
 
     bool operator<(const AudioResourceMeta& other) const
@@ -263,43 +313,10 @@ private:
     std::map<audioch_t, AudioSignalVal> m_signalValuesMap;
 };
 
-using PlaybackData = std::variant<mpe::PlaybackData, QIODevice*>;
-using PlaybackSetupData = mpe::PlaybackSetupData;
-
 enum class PlaybackStatus {
     Stopped = 0,
     Paused,
     Running
-};
-
-enum class SoundTrackType {
-    Undefined = -1,
-    MP3,
-    OGG,
-    FLAC,
-    WAV
-};
-
-struct SoundTrackFormat {
-    SoundTrackType type = SoundTrackType::Undefined;
-    sample_rate_t sampleRate = 0;
-    audioch_t audioChannelsNumber = 0;
-    int bitRate = 0;
-
-    bool operator==(const SoundTrackFormat& other) const
-    {
-        return type == other.type
-               && sampleRate == other.sampleRate
-               && audioChannelsNumber == other.audioChannelsNumber
-               && bitRate == other.bitRate;
-    }
-
-    bool isValid() const
-    {
-        return type != SoundTrackType::Undefined
-               && sampleRate != 0
-               && audioChannelsNumber != 0;
-    }
 };
 
 using AudioDeviceID = std::string;

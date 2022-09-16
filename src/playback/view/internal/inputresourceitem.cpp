@@ -6,10 +6,6 @@
 #include "translation.h"
 #include "stringutils.h"
 
-// Note that this isn't ideal to be a dependency here; however the audio resource structure is limited in data storage and
-// so MuseSampler packs extra info into the resourceMeta.id field.  Including the helper here avoids code duplication.
-#include "musesampler/internal/musesamplerutils.h"
-
 using namespace mu::playback;
 using namespace mu::audio;
 
@@ -31,9 +27,10 @@ void InputResourceItem::requestAvailableResources()
         QVariantList result;
 
         if (!isBlank()) {
-            const QString& currentResourceId = QString::fromStdString(m_currentInputParams.resourceMeta.id);
+            QString currentResourceId = QString::fromStdString(m_currentInputParams.resourceMeta.id);
+
             result << buildMenuItem(currentResourceId,
-                                    currentResourceId,
+                                    title(),
                                     true /*checked*/);
 
             result << buildSeparator();
@@ -100,10 +97,8 @@ void InputResourceItem::setParams(const audio::AudioInputParams& newParams)
 
 QString InputResourceItem::title() const
 {
-    if (m_currentInputParams.type() == mu::audio::AudioSourceType::MuseSampler)
-    {
-        if (auto id = musesampler::getMuseInstrumentNameFromId(m_currentInputParams.resourceMeta.id); id.has_value())
-            return QString::fromStdString(*id);
+    if (m_currentInputParams.type() == mu::audio::AudioSourceType::MuseSampler) {
+        return m_currentInputParams.resourceMeta.attributeVal(u"museName").toQString();
     }
     return QString::fromStdString(m_currentInputParams.resourceMeta.id);
 }
@@ -125,49 +120,36 @@ bool InputResourceItem::hasNativeEditorSupport() const
 
 QVariantMap InputResourceItem::buildMuseMenuItem(const ResourceByVendorMap& resourcesByVendor) const
 {
-    std::string currentCategory;
-    if (auto category = musesampler::getMuseInstrumentCategoryFromId(m_currentInputParams.resourceMeta.id); category.has_value())
-        currentCategory = *category;
+    String currentCategory = m_currentInputParams.resourceMeta.attributeVal(u"museCategory");
+
     QVariantList subItemsByType;
 
     for (const auto& pair : resourcesByVendor) {
-        const QString& vendor = QString::fromStdString(pair.first);
-
-        QVariantList subItemsByVendor;
-
-        std::map<std::string, std::vector<std::tuple<int, std::string, const AudioResourceMeta*>>> categoryMap;
+        std::map<String, std::vector<std::tuple<int, String, const AudioResourceMeta&> > > categoryMap;
         for (const AudioResourceMeta& resourceMeta : pair.second) {
-            auto category = musesampler::getMuseInstrumentCategoryFromId(resourceMeta.id);
-            auto name = musesampler::getMuseInstrumentNameFromId(resourceMeta.id);
-            auto unique_id = musesampler::getMuseInstrumentUniqueIdFromId(resourceMeta.id);
-            if (category.has_value() && name.has_value() && unique_id.has_value())
-                categoryMap[*category].push_back({*unique_id, *name, &resourceMeta});
+            const String& category = resourceMeta.attributeVal(u"museCategory");
+            const String& name = resourceMeta.attributeVal(u"museName");
+            int unique_id = resourceMeta.attributeVal(u"museUID").toInt();
+
+            categoryMap[category].push_back({ unique_id, name, resourceMeta });
         }
 
-        for (const auto& category : categoryMap)
-        {
+        for (const auto& category : categoryMap) {
             QVariantList subItemsByCategory;
-            for (auto& inst : category.second)
-            {
-                std::string myId = musesampler::buildMuseInstrumentId(category.first, std::get<1>(inst), std::get<0>(inst));
-                const QString& instName = QString::fromStdString(std::get<1>(inst));
-                const QString& instId = QString::fromStdString(myId);
-                subItemsByCategory << buildMenuItem(instId,
+            for (const auto& inst : category.second) {
+                QString instName = std::get<1>(inst).toQString();
+                auto instId = std::get<2>(inst).id;
+                subItemsByCategory << buildMenuItem(QString::fromStdString(instId),
                                                     instName,
-                                                    m_currentInputParams.resourceMeta.id == myId);
+                                                    m_currentInputParams.resourceMeta.id == instId);
             }
 
-            const QString& categoryString = QString::fromStdString(category.first);
-            subItemsByVendor << buildMenuItem(categoryString,
-                                              categoryString,
-                                              currentCategory == category.first,
-                                              subItemsByCategory);
+            QString categoryString = category.first.toQString();
+            subItemsByType << buildMenuItem(categoryString,
+                                            categoryString,
+                                            currentCategory == category.first,
+                                            subItemsByCategory);
         }
-
-        subItemsByType << buildMenuItem(vendor,
-                                        vendor,
-                                        m_currentInputParams.resourceMeta.vendor == pair.first,
-                                        subItemsByVendor);
     }
 
     return buildMenuItem(MUSE_MENU_ITEM_ID,

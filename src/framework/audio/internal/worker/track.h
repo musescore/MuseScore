@@ -193,7 +193,7 @@ struct SoundTrack : public Track
 
     bool setPlaybackData(const PlaybackData& data) override
     {
-        QIODevice* newDevice = std::get<QIODevice*>(data);
+        io::IODevice* newDevice = std::get<io::IODevice*>(data);
 
         if (m_ioDevice == newDevice) {
             return false;
@@ -207,7 +207,7 @@ struct SoundTrack : public Track
     }
 
 private:
-    QIODevice* m_ioDevice = nullptr;
+    io::IODevice* m_ioDevice = nullptr;
 };
 
 using TrackPtr = std::shared_ptr<Track>;

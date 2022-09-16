@@ -43,6 +43,8 @@ public:
     void refresh() override;
 
 private:
+    String buildMuseInstrumentId(const String& category, const String& name, int uniqueId) const;
+
     MuseSamplerLibHandlerPtr m_libHandler = nullptr;
 };
 }

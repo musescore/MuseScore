@@ -105,7 +105,7 @@ struct NoteEvent
                        const pitch_level_t nominalPitchLevel,
                        const dynamic_level_t nominalDynamicLevel,
                        const ArticulationMap& articulationsApplied,
-                       const double/*engraving::BeatsPerSecond*/ bps)
+                       const double bps)
     {
         m_arrangementCtx.nominalDuration = nominalDuration;
         m_arrangementCtx.nominalTimestamp = nominalTimestamp;
@@ -290,9 +290,15 @@ struct PlaybackSetupData
 
     bool operator<(const PlaybackSetupData& other) const
     {
-        return id < other.id
-               && category < other.category
-               && subCategorySet < other.subCategorySet;
+        if (id < other.id) {
+            return true;
+        }
+
+        if (category < other.category) {
+            return true;
+        }
+
+        return subCategorySet < other.subCategorySet;
     }
 
     bool isValid() const
@@ -310,7 +316,34 @@ struct PlaybackSetupData
 
         return result;
     }
+
+    static PlaybackSetupData fromString(const String& str)
+    {
+        if (str.empty()) {
+            return PlaybackSetupData();
+        }
+
+        StringList subStrList = str.split(u".");
+
+        PlaybackSetupData result = {
+            soundIdFromString(subStrList.at(0)),
+            soundCategoryFromString(subStrList.at(1)),
+            SoundSubCategories::fromString(subStrList.at(2)),
+            std::nullopt
+        };
+
+        return result;
+    }
 };
+
+static const PlaybackSetupData GENERIC_SETUP_DATA = {
+    SoundId::Last,
+    SoundCategory::Last,
+    { SoundSubCategory::Last },
+    std::nullopt
+};
+
+static const String GENERIC_SETUP_DATA_STRING = GENERIC_SETUP_DATA.toString();
 
 struct PlaybackData {
     PlaybackEventsMap originEvents;
