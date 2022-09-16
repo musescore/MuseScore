@@ -758,24 +758,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
         if (!s.isChordRestType()) {
             continue;
         }
-        for (EngravingItem* e : s.elist()) {
-            if (!e || !e->isChordRest() || !score->staff(e->staffIdx())->show()) {
-                continue;
-            }
-            ChordRest* cr = toChordRest(e);
-            if (LayoutBeams::isTopBeam(cr)) {
-                Beam* b = cr->beam();
-                b->layout();
-            }
-            if (cr->isChord() && !toChord(cr)->graceNotes().empty()) {
-                for (Chord* grace : toChord(cr)->graceNotes()) {
-                    if (LayoutBeams::isTopBeam(grace)) {
-                        Beam* b = grace->beam();
-                        b->layout();
-                    }
-                }
-            }
-        }
+        LayoutBeams::layoutNonCrossBeams(&s);
     }
 
     for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
