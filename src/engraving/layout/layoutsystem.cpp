@@ -110,14 +110,16 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         if (system->hasCrossStaffOrModifiedBeams()) {
             updateCrossBeams(system, ctx);
         }
-        double ww  = 0;          // width of current measure
-
-        // After appending a new measure, the shortest note in the system may change, in which case
-        // we need to recompute the layout of the previous measures. When updating the width of these
-        // measures, curSysWidth must be updated accordingly.
+        double ww  = 0; // width of current measure
         if (ctx.curMeasure->isMeasure()) {
-            Fraction curMinTicks = toMeasure(ctx.curMeasure)->shortestChordRest();
-            Fraction curMaxTicks = toMeasure(ctx.curMeasure)->maxTicks();
+            Measure* m = toMeasure(ctx.curMeasure);
+            LayoutChords::updateLineAttachPoints(m);
+
+            // After appending a new measure, the shortest note in the system may change, in which case
+            // we need to recompute the layout of the previous measures. When updating the width of these
+            // measures, curSysWidth must be updated accordingly.
+            Fraction curMinTicks = m->shortestChordRest();
+            Fraction curMaxTicks = m->maxTicks();
             if (curMinTicks < minTicks) {
                 prevMinTicks = minTicks; // We save the previous value in case we need to restore it (see later)
                 minTicks = curMinTicks;
@@ -134,21 +136,19 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             }
             if (minSysTicksChanged || maxSysTicksChanged) {
                 for (MeasureBase* mb : system->measures()) {
-                    if (mb == ctx.curMeasure) {
+                    if (mb == m) {
                         break; // Cause I want to change only previous measures, not current one
                     }
                     if (mb->isMeasure()) {
-                        double prevWidth = toMeasure(mb)->width();
-                        toMeasure(mb)->computeWidth(minTicks, maxTicks, 1);
-                        double newWidth = toMeasure(mb)->width();
+                        Measure* mm = toMeasure(mb);
+                        double prevWidth = mm->width();
+                        mm->computeWidth(minTicks, maxTicks, 1);
+                        double newWidth = mm->width();
                         curSysWidth += newWidth - prevWidth;
                     }
                 }
             }
-        }
 
-        if (ctx.curMeasure->isMeasure()) {
-            Measure* m = toMeasure(ctx.curMeasure);
             if (firstMeasure) {
                 layoutSystemMinWidth = curSysWidth;
                 system->layoutSystem(ctx, curSysWidth, ctx.firstSystem, ctx.firstSystemIndent);
@@ -182,7 +182,6 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             } else {
                 m->addSystemTrailer(m->nextMeasure());
             }
-            LayoutChords::updateLineAttachPoints(m);
             m->computeWidth(minTicks, maxTicks, 1);
             ww = m->width();
         } else if (ctx.curMeasure->isHBox()) {
@@ -372,8 +371,6 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                     }
                     m = m->nextMeasure();
                 }
-                // Restore the original state of ties and glissandos
-                LayoutChords::updateLineAttachPoints(m);
             }
             ctx.rangeDone = true;
         }
@@ -471,6 +468,12 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         ctx.firstSystem        = measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
         ctx.firstSystemIndent  = ctx.firstSystem && options.firstSystemIndent && layoutBreak->firstSystemIndentation();
         ctx.startWithLongNames = ctx.firstSystem && layoutBreak->startWithLongNames();
+    }
+
+    if (oldSystem) {
+        // We may have previously processed the ties of the next system (in LayoutChords::updateLineAttachPoints()).
+        // We need to restore them to the correct state.
+        LayoutSystem::restoreTies(oldSystem);
     }
 
     return system;
@@ -1482,4 +1485,22 @@ void LayoutSystem::updateCrossBeams(System* system, const LayoutContext& ctx)
             }
         }
     }
+}
+
+void LayoutSystem::restoreTies(System* system)
+{
+    std::vector<Segment*> segList;
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment& seg : toMeasure(mb)->segments()) {
+            if (seg.isChordRestType()) {
+                segList.push_back(&seg);
+            }
+        }
+    }
+    Fraction stick = system->measures().front()->tick();
+    Fraction etick = system->measures().back()->endTick();
+    doLayoutTies(system, segList, stick, etick);
 }
