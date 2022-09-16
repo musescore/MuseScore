@@ -28,6 +28,7 @@
 #include "libmscore/note.h"
 #include "libmscore/text.h"
 
+#include "translation.h"
 #include "log.h"
 
 using namespace mu::io;
@@ -589,6 +590,16 @@ mu::async::Notification NotationActionController::currentNotationStyleChanged() 
     return currentNotationStyle() ? currentNotationStyle()->styleChanged() : async::Notification();
 }
 
+INotationAccessibilityPtr NotationActionController::currentNotationAccessibility() const
+{
+    auto notation = currentNotation();
+    if (!notation) {
+        return nullptr;
+    }
+
+    return notation->accessibility();
+}
+
 void NotationActionController::resetState()
 {
     TRACEFUNC;
@@ -603,7 +614,7 @@ void NotationActionController::resetState()
     }
 
     if (noteInput->isNoteInputMode()) {
-        noteInput->endNoteInput();
+        toggleNoteInput();
         return;
     }
 
@@ -635,6 +646,15 @@ void NotationActionController::toggleNoteInput()
     } else {
         noteInput->startNoteInput();
     }
+
+    auto notationAccessibility = currentNotationAccessibility();
+    if (!notationAccessibility) {
+        return;
+    }
+
+    ui::UiActionState state = actionRegister()->actionState("note-input");
+    std::string stateTitle = state.checked ? trc("notation", "Note input mode") : trc("notation", "Normal mode");
+    notationAccessibility->setTriggeredCommand(stateTitle);
 }
 
 void NotationActionController::toggleNoteInputMethod(NoteInputMethod method)
@@ -648,7 +668,7 @@ void NotationActionController::toggleNoteInputMethod(NoteInputMethod method)
     if (!noteInput->isNoteInputMode()) {
         noteInput->startNoteInput();
     } else if (noteInput->state().method == method) {
-        noteInput->endNoteInput();
+        toggleNoteInput();
         return;
     }
 

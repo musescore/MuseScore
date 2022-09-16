@@ -331,11 +331,15 @@ void AccessibilityController::triggerRevoicingOfChangedName(IAccessible* item)
         return;
     }
 
+    const IAccessible* itemPanel = panel(item);
+    if (!itemPanel) {
+        return;
+    }
+
     m_ignorePanelChangingVoice = true;
 
     item->setState(State::Focused, false);
 
-    const IAccessible* itemPanel = panel(item);
     IAccessible* tmpFocusedItem = findSiblingItem(itemPanel, item);
     if (!tmpFocusedItem) {
         tmpFocusedItem = const_cast<IAccessible*>(itemPanel);

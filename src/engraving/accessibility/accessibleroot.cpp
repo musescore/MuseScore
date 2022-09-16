@@ -152,6 +152,20 @@ void AccessibleRoot::updateStaffInfo(const AccessibleItemWeakPtr newAccessibleIt
     }
 }
 
+QString AccessibleRoot::commandInfo() const
+{
+    return m_commandInfo;
+}
+
+void AccessibleRoot::setCommandInfo(const QString& command)
+{
+    m_commandInfo = command;
+
+    if (!m_commandInfo.isEmpty()) {
+        notifyAboutFocusedElementNameChanged();
+    }
+}
+
 void AccessibleRoot::setMapToScreenFunc(const AccessibleMapToScreenFunc& func)
 {
     m_accessibleMapToScreenFunc = func;
