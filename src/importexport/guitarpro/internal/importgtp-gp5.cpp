@@ -582,7 +582,7 @@ bool GuitarPro5::readTracks()
             staff->setDefaultClefType(ClefTypeList(clefId, clefId));
         }
 
-        if (capo > 0) {
+        if (capo > 0 && score->styleB(Sid::showCapoOnStaff)) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
             StaffText* st = new StaffText(s);
             st->setPlainText(u"Capo. fret " + String::number(capo));

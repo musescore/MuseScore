@@ -1699,7 +1699,7 @@ bool GuitarPro2::read(IODevice* io)
         clef->setTrack(i * VOICES);
         segment->add(clef);
 
-        if (capo > 0) {
+        if (capo > 0 && score->styleB(Sid::showCapoOnStaff)) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
             StaffText* st = new StaffText(s);
             //                  st->setTextStyleType(TextStyleType::STAFF);
