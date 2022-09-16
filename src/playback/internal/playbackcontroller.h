@@ -39,18 +39,22 @@
 #include "audio/iaudiooutput.h"
 #include "audio/iplayback.h"
 #include "audio/audiotypes.h"
+#include "iinteractive.h"
 
 #include "../iplaybackcontroller.h"
 #include "../iplaybackconfiguration.h"
+#include "isoundprofilesrepository.h"
 
 namespace mu::playback {
 class PlaybackController : public IPlaybackController, public actions::Actionable, public async::Asyncable
 {
-    INJECT(playback, actions::IActionsDispatcher, dispatcher)
-    INJECT(playback, context::IGlobalContext, globalContext)
-    INJECT(playback, IPlaybackConfiguration, configuration)
-    INJECT(playback, notation::INotationConfiguration, notationConfiguration)
+    INJECT_STATIC(playback, actions::IActionsDispatcher, dispatcher)
+    INJECT_STATIC(playback, context::IGlobalContext, globalContext)
+    INJECT_STATIC(playback, IPlaybackConfiguration, configuration)
+    INJECT_STATIC(playback, notation::INotationConfiguration, notationConfiguration)
     INJECT_STATIC(playback, audio::IPlayback, playback)
+    INJECT_STATIC(playback, ISoundProfilesRepository, profilesRepo)
+    INJECT_STATIC(playback, framework::IInteractive, interactive)
 
 public:
     void init();
@@ -99,6 +103,8 @@ public:
 
     framework::Progress loadingProgress() const override;
 
+    void applyProfile(const SoundProfileName& profileName) override;
+
 private:
     notation::INotationPlaybackPtr notationPlayback() const;
     notation::INotationPartsPtr masterNotationParts() const;
@@ -143,6 +149,8 @@ private:
     void toggleMidiInput();
     void toggleCountIn();
     void toggleLoopPlayback();
+
+    void openPlaybackSetupDialog();
 
     void addLoopBoundary(notation::LoopBoundaryType type);
     void addLoopBoundaryToTick(notation::LoopBoundaryType type, int tick);

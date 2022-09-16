@@ -47,6 +47,7 @@ static const ActionCode COUNT_IN_CODE("countin");
 static const ActionCode PAN_CODE("pan");
 static const ActionCode REPEAT_CODE("repeat");
 static const ActionCode PLAY_CHORD_SYMBOLS_CODE("play-chord-symbols");
+static const ActionCode PLAYBACK_SETUP("playback-setup");
 
 void PlaybackController::init()
 {
@@ -62,6 +63,7 @@ void PlaybackController::init()
     dispatcher()->reg(this, METRONOME_CODE, this, &PlaybackController::toggleMetronome);
     dispatcher()->reg(this, MIDI_ON_CODE, this, &PlaybackController::toggleMidiInput);
     dispatcher()->reg(this, COUNT_IN_CODE, this, &PlaybackController::toggleCountIn);
+    dispatcher()->reg(this, PLAYBACK_SETUP, this, &PlaybackController::openPlaybackSetupDialog);
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
@@ -598,6 +600,11 @@ void PlaybackController::toggleLoopPlayback()
     addLoopBoundaryToTick(LoopBoundaryType::LoopOut, loopOutTick);
 }
 
+void PlaybackController::openPlaybackSetupDialog()
+{
+    interactive()->open("musescore://playback/soundprofilesdialog");
+}
+
 void PlaybackController::addLoopBoundary(LoopBoundaryType type)
 {
     if (isPlaying()) {
@@ -703,7 +710,7 @@ void PlaybackController::setCurrentTick(const tick_t tick)
 void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, const TrackAddFinished& onFinished)
 {
     if (notationPlayback()->metronomeTrackId() == instrumentTrackId) {
-        doAddTrack(instrumentTrackId, trc("playback", "Metronome"), onFinished);
+        //doAddTrack(instrumentTrackId, trc("playback", "Metronome"), onFinished);
         return;
     }
 
@@ -738,12 +745,18 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
         return;
     }
 
+    mpe::PlaybackData playbackData = notationPlayback()->trackPlaybackData(instrumentTrackId);
+
     AudioInputParams inParams = audioSettings()->trackInputParams(instrumentTrackId);
     AudioOutputParams outParams = trackOutputParams(instrumentTrackId);
-    mpe::PlaybackData playbackData = notationPlayback()->trackPlaybackData(instrumentTrackId);
 
     if (!playbackData.isValid()) {
         return;
+    }
+
+    if (!inParams.isValid()) {
+        const SoundProfile& profile = profilesRepo()->profile(audioSettings()->activeSoundProfile());
+        inParams = { profile.findResource(playbackData.setupData), {} };
     }
 
     uint64_t notationPlaybackKey = reinterpret_cast<uint64_t>(notationPlayback().get());
@@ -1156,6 +1169,30 @@ void PlaybackController::setTempoMultiplier(double multiplier)
 mu::framework::Progress PlaybackController::loadingProgress() const
 {
     return m_loadingProgress;
+}
+
+void PlaybackController::applyProfile(const SoundProfileName& profileName)
+{
+    project::IProjectAudioSettingsPtr audioSettingsPtr = audioSettings();
+
+    IF_ASSERT_FAILED(audioSettingsPtr) {
+        return;
+    }
+
+    const SoundProfile& profile = profilesRepo()->profile(profileName);
+    if (!profile.isValid()) {
+        return;
+    }
+
+    for (const auto& pair : m_trackIdMap) {
+        const mpe::PlaybackData& playbackData = notationPlayback()->trackPlaybackData(pair.first);
+
+        AudioInputParams newInputParams { profile.findResource(playbackData.setupData), {} };
+
+        playback()->tracks()->setInputParams(m_currentSequenceId, pair.second, std::move(newInputParams));
+    }
+
+    audioSettingsPtr->setActiveSoundProfile(profileName);
 }
 
 msecs_t PlaybackController::tickToMsecs(int tick) const
