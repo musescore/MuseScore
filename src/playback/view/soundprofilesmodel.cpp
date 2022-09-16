@@ -82,7 +82,7 @@ QHash<int, QByteArray> SoundProfilesModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
         { RoleTitle, "titleRole" },
-        { RoleEnabled, "isEnabledRole"}
+        { RoleEnabled, "isEnabledRole" }
     };
 
     return roles;

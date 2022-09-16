@@ -145,7 +145,7 @@ void MuseSamplerSequencer::reloadTrack()
     LOGI() << "Requested to finalize track";
 }
 
-void MuseSamplerSequencer::loadNoteEvents(const mpe::PlaybackEventsMap &changes)
+void MuseSamplerSequencer::loadNoteEvents(const mpe::PlaybackEventsMap& changes)
 {
     IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
         return;
@@ -164,7 +164,7 @@ void MuseSamplerSequencer::loadNoteEvents(const mpe::PlaybackEventsMap &changes)
     }
 }
 
-void MuseSamplerSequencer::loadDynamicEvents(const mpe::DynamicLevelMap &changes)
+void MuseSamplerSequencer::loadDynamicEvents(const mpe::DynamicLevelMap& changes)
 {
     for (const auto& pair : changes) {
         m_samplerLib->addDynamicsEvent(m_sampler, m_track, { static_cast<long>(pair.first), dynamicLevelRatio(pair.second) });
