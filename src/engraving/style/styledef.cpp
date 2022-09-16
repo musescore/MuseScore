@@ -1497,6 +1497,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::golpeShowTabCommon, "golpeShowTabCommon", true },
 
     { Sid::chordlineThickness, "chordlineThickness", Spatium(0.006) },
+    { Sid::showCapoOnStaff, "showCapoOnStaff", true },
 
     { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
     { Sid::defaultsVersion,               "defaultsVersion",               MSCVERSION }
