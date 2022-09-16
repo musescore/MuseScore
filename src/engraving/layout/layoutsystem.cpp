@@ -110,17 +110,16 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         if (system->hasCrossStaffOrModifiedBeams()) {
             updateCrossBeams(system, ctx);
         }
+        double ww  = 0; // width of current measure
         if (ctx.curMeasure->isMeasure()) {
-            LayoutChords::updateLineAttachPoints(toMeasure(ctx.curMeasure));
-        }
-        double ww  = 0;          // width of current measure
+            Measure* m = toMeasure(ctx.curMeasure);
+            LayoutChords::updateLineAttachPoints(m);
 
-        // After appending a new measure, the shortest note in the system may change, in which case
-        // we need to recompute the layout of the previous measures. When updating the width of these
-        // measures, curSysWidth must be updated accordingly.
-        if (ctx.curMeasure->isMeasure()) {
-            Fraction curMinTicks = toMeasure(ctx.curMeasure)->shortestChordRest();
-            Fraction curMaxTicks = toMeasure(ctx.curMeasure)->maxTicks();
+            // After appending a new measure, the shortest note in the system may change, in which case
+            // we need to recompute the layout of the previous measures. When updating the width of these
+            // measures, curSysWidth must be updated accordingly.
+            Fraction curMinTicks = m->shortestChordRest();
+            Fraction curMaxTicks = m->maxTicks();
             if (curMinTicks < minTicks) {
                 prevMinTicks = minTicks; // We save the previous value in case we need to restore it (see later)
                 minTicks = curMinTicks;
@@ -137,21 +136,19 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             }
             if (minSysTicksChanged || maxSysTicksChanged) {
                 for (MeasureBase* mb : system->measures()) {
-                    if (mb == ctx.curMeasure) {
+                    if (mb == m) {
                         break; // Cause I want to change only previous measures, not current one
                     }
                     if (mb->isMeasure()) {
-                        double prevWidth = toMeasure(mb)->width();
-                        toMeasure(mb)->computeWidth(minTicks, maxTicks, 1);
-                        double newWidth = toMeasure(mb)->width();
+                        Measure* mm = toMeasure(mb);
+                        double prevWidth = mm->width();
+                        mm->computeWidth(minTicks, maxTicks, 1);
+                        double newWidth = mm->width();
                         curSysWidth += newWidth - prevWidth;
                     }
                 }
             }
-        }
 
-        if (ctx.curMeasure->isMeasure()) {
-            Measure* m = toMeasure(ctx.curMeasure);
             if (firstMeasure) {
                 layoutSystemMinWidth = curSysWidth;
                 system->layoutSystem(ctx, curSysWidth, ctx.firstSystem, ctx.firstSystemIndent);
