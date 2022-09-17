@@ -75,10 +75,12 @@ public:
     virtual draw::Color highlightSelectionColor(voice_idx_t voiceIndex = 0) const = 0;
 
     struct DebuggingOptions {
-        bool showSkylines = false;
+        bool showElementBoundingRects = false;
+        bool colorElementShapes = false;
         bool showSegmentShapes = false;
-        bool showBoundingRect = false;
-        bool showSystemBoundingRect = false;
+        bool colorSegmentShapes = false;
+        bool showSkylines = false;
+        bool showSystemBoundingRects = false;
         bool showCorruptedMeasures = true;
     };
 
