@@ -332,8 +332,9 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
         _direction = beam->beamDirection();
         // stem stuff is already taken care of by the beams
     } else {
+        bool hasVoices = _chord1->measure()->hasVoices(_chord1->staffIdx(), _chord1->tick(), _chord2->rtick() - _chord1->tick());
         if (_chord1->stemDirection() == DirectionV::AUTO && _chord2->stemDirection() == DirectionV::AUTO
-            && _chord1->staffMove() == _chord2->staffMove()) {
+            && _chord1->staffMove() == _chord2->staffMove() && !hasVoices) {
             std::vector<int> noteDistances;
             for (int distance : _chord1->noteDistances()) {
                 noteDistances.push_back(distance);
@@ -344,16 +345,16 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
             std::sort(noteDistances.begin(), noteDistances.end());
             up = Chord::computeAutoStemDirection(noteDistances);
             isUp = up > 0;
-        } else if (_chord1->staffMove() > 0 || _chord2->staffMove() > 0) {
-            isUp = false;
-        } else if (_chord1->staffMove() < 0 || _chord2->staffMove() < 0) {
-            isUp = true;
-        } else if (_chord1->measure()->hasVoices(_chord1->staffIdx(), _chord1->tick(), _chord2->rtick() - _chord1->tick())) {
-            isUp = _chord1->track() % 2 == 0;
         } else if (_chord1->stemDirection() != DirectionV::AUTO) {
             isUp = _chord1->stemDirection() == DirectionV::UP;
         } else if (_chord2->stemDirection() != DirectionV::AUTO) {
             isUp = _chord2->stemDirection() == DirectionV::UP;
+        } else if (_chord1->staffMove() > 0 || _chord2->staffMove() > 0) {
+            isUp = false;
+        } else if (_chord1->staffMove() < 0 || _chord2->staffMove() < 0) {
+            isUp = true;
+        } else if (hasVoices) {
+            isUp = _chord1->track() % 2 == 0;
         }
         _up = isUp;
         _chord1->setUp(_chord1->staffMove() == 0 ? isUp : !isUp); // if on a different staff, flip stem dir
