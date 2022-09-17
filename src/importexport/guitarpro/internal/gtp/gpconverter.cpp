@@ -2187,16 +2187,14 @@ void GPConverter::addHarmonicMark(const GPBeat* gpbeat, ChordRest* cr)
 
 void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Context& ctx)
 {
-    static int last_idx = -1;
-
     int GPTrackIdx = static_cast<int>(ctx.curTrack);
     int diaId = gpnote->diagramIdx(GPTrackIdx, ctx.masterBarIndex);
 
-    if (last_idx == diaId) {
+    if (_lastDiagramIdx == diaId) {
         return;
     }
 
-    last_idx = diaId;
+    _lastDiagramIdx = diaId;
 
     if (diaId == -1) {
         return;
@@ -2213,9 +2211,16 @@ void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Cont
 
     GPTrack::Diagram diagram = trackIt->second->diagram().at(diaId);
 
+    if (!_score->styleB(Sid::fretDiagramsAboveChords)) {
+        StaffText* staffText = Factory::createStaffText(cr->segment());
+        staffText->setTrack(cr->track());
+        staffText->setPlainText(diagram.name);
+        cr->segment()->add(staffText);
+        return;
+    }
+
     FretDiagram* fretDiagram = mu::engraving::Factory::createFretDiagram(_score->dummy()->segment());
     fretDiagram->setTrack(cr->track());
-    //TODO-ws      fretDiagram->setChordName(name);
     fretDiagram->setStrings(diagram.stringCount);
     fretDiagram->setFretOffset(diagram.baseFret);
 
