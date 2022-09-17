@@ -256,8 +256,10 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::DUMMY:
         break;
     }
-    LOGD("cannot create type %d <%s>", int(type), TConv::toXml(type));
-    return 0;
+
+    LOGD() << "Cannot create element of type " << static_cast<int>(type) << " (" << TConv::toXml(type) << ")";
+
+    return nullptr;
 }
 
 EngravingItem* Factory::createItemByName(const AsciiStringView& name, EngravingItem* parent, bool isAccessibleEnabled)
@@ -265,7 +267,7 @@ EngravingItem* Factory::createItemByName(const AsciiStringView& name, EngravingI
     ElementType type = TConv::fromXml(name, ElementType::INVALID, isAccessibleEnabled);
     if (type == ElementType::INVALID) {
         LOGE() << "Invalid type: " << name;
-        return 0;
+        return nullptr;
     }
     return createItem(type, parent, isAccessibleEnabled);
 }
