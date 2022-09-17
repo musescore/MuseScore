@@ -331,34 +331,6 @@ staff_idx_t System::firstVisibleStaff() const
 }
 
 //---------------------------------------------------------
-//   y2staff
-//---------------------------------------------------------
-
-/**
- Return staff number for canvas relative y position \a y
- or -1 if not found.
-
- To allow drag and drop above and below the staff, the actual y range
- considered "inside" the staff is increased by "margin".
-*/
-
-int System::y2staff(double y) const
-{
-    y -= pos().y();
-    int idx = 0;
-    double margin = spatium() * 2;
-    for (SysStaff* s : m_staves) {
-        double y1 = s->bbox().top() - margin;
-        double y2 = s->bbox().bottom() + margin;
-        if (y >= y1 && y < y2) {
-            return idx;
-        }
-        ++idx;
-    }
-    return -1;
-}
-
-//---------------------------------------------------------
 //   searchStaff
 ///   Finds a staff which y position is most close to the
 ///   given \p y.

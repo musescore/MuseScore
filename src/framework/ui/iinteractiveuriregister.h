@@ -22,7 +22,7 @@
 #ifndef MU_UI_IINTERACTIVEURIREGISTER_H
 #define MU_UI_IINTERACTIVEURIREGISTER_H
 
-#include <iostream>
+#include <type_traits>
 
 #include "modularity/imoduleinterface.h"
 #include "types/uri.h"
@@ -43,11 +43,6 @@ public:
     void registerQmlUri(const Uri& uri, const QString& qmlPath)
     {
         registerUri(uri, ContainerMeta(ContainerType::Type::QmlDialog, qmlPath));
-    }
-
-    void registerWidgetUri(const Uri& uri, int widgetMetaTypeId)
-    {
-        registerUri(uri, ContainerMeta(ContainerType::Type::QWidgetDialog, widgetMetaTypeId));
     }
 
     template<typename T>

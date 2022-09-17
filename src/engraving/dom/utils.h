@@ -43,7 +43,6 @@ enum class Key;
 
 extern mu::RectF handleRect(const mu::PointF& pos);
 
-extern int getStaff(System* system, const mu::PointF& p);
 extern int pitchKeyAdjust(int note, Key);
 extern int line2pitch(int line, ClefType clef, Key);
 extern int y2pitch(double y, ClefType clef, double spatium);

@@ -120,7 +120,6 @@ public:
 
     void clear(); ///< Clear measure list.
 
-    mu::RectF bboxStaff(int staff) const { return m_staves[staff]->bbox(); }
     std::vector<SysStaff*>& staves() { return m_staves; }
     const std::vector<SysStaff*>& staves() const { return m_staves; }
     double staffYpage(staff_idx_t staffIdx) const;
@@ -133,7 +132,6 @@ public:
     void removeStaff(int);
     void adjustStavesNumber(size_t nstaves);
 
-    int y2staff(double y) const;
     staff_idx_t searchStaff(double y, staff_idx_t preferredStaff = mu::nidx, double spacingFactor = 0.5) const;
     Fraction snap(const Fraction& tick, const mu::PointF p) const;
     Fraction snapNote(const Fraction& tick, const mu::PointF p, int staff) const;
