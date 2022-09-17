@@ -1400,31 +1400,39 @@ void GuitarPro::readChord(Segment* seg, int track, int numStrings, String name, 
 {
     int firstFret = readInt();
     if (firstFret || gpHeader) {
-        FretDiagram* fret = Factory::createFretDiagram(seg);
-        fret->setTrack(track);
-        fret->setStrings(numStrings);
-        fret->setFretOffset(firstFret - 1);
-        for (int i = 0; i < (gpHeader ? 7 : 6); ++i) {
-            int currentFret =  readInt();
-            // read the frets and add them to the fretboard
-            // subtract 1 extra from numStrings as we count from 0
-            if (i > numStrings - 1) {
-            } else if (currentFret > 0) {
-                fret->setDot(numStrings - 1 - i, currentFret - firstFret + 1, true);
-            } else if (currentFret == 0) {
-                fret->setDot(numStrings - 1 - i, 0, true);
-                fret->setMarker(numStrings - 1 - i, FretMarkerType::CIRCLE);
-            } else if (currentFret == -1) {
-                fret->setDot(numStrings - 1 - i, 0, true);
-                fret->setMarker(numStrings - 1 - i, FretMarkerType::CROSS);
+        if (!score->styleB(Sid::fretDiagramsAboveChords)) {
+            StaffText* staffText = Factory::createStaffText(seg);
+            staffText->setTrack(track);
+            staffText->setPlainText(name);
+            seg->add(staffText);
+            skip(4 * (gpHeader ? 7 : 6));
+        } else {
+            FretDiagram* fret = Factory::createFretDiagram(seg);
+            fret->setTrack(track);
+            fret->setStrings(numStrings);
+            fret->setFretOffset(firstFret - 1);
+            for (int i = 0; i < (gpHeader ? 7 : 6); ++i) {
+                int currentFret =  readInt();
+                // read the frets and add them to the fretboard
+                // subtract 1 extra from numStrings as we count from 0
+                if (i > numStrings - 1) {
+                } else if (currentFret > 0) {
+                    fret->setDot(numStrings - 1 - i, currentFret - firstFret + 1, true);
+                } else if (currentFret == 0) {
+                    fret->setDot(numStrings - 1 - i, 0, true);
+                    fret->setMarker(numStrings - 1 - i, FretMarkerType::CIRCLE);
+                } else if (currentFret == -1) {
+                    fret->setDot(numStrings - 1 - i, 0, true);
+                    fret->setMarker(numStrings - 1 - i, FretMarkerType::CROSS);
+                }
             }
-        }
-        seg->add(fret);
-        if (!name.isEmpty()) {
-            Harmony* harmony = new Harmony(seg);
-            harmony->setHarmony(name);
-            harmony->setTrack(track);
-            fret->add(harmony);
+            seg->add(fret);
+            if (!name.isEmpty()) {
+                Harmony* harmony = new Harmony(seg);
+                harmony->setHarmony(name);
+                harmony->setTrack(track);
+                fret->add(harmony);
+            }
         }
     } else if (!name.isEmpty()) {
         Harmony* harmony = new Harmony(seg);
