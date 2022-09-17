@@ -206,6 +206,7 @@ private:
     std::map<uint16_t, uint16_t > _drumExtension;
 
     Volta* _lastVolta = nullptr;
+    int _lastDiagramIdx = -1;
 
     struct NextTupletInfo {
         Fraction ratio;
