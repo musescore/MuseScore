@@ -112,7 +112,10 @@ using namespace mu::engraving;
 EngravingItem* Factory::createItem(ElementType type, EngravingItem* parent, bool isAccessibleEnabled)
 {
     EngravingItem* item = doCreateItem(type, parent);
-    item->setAccessibleEnabled(isAccessibleEnabled);
+
+    if (item) {
+        item->setAccessibleEnabled(isAccessibleEnabled);
+    }
 
     return item;
 }
