@@ -1711,8 +1711,12 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
 
             // A text should only be added at the start of the selection
             // There shouldn't be a text at each element
-            for (staff_idx_t staff = firstStaffIndex; staff < lastStaffIndex; staff++) {
-                applyDropPaletteElement(score, firstSegment->firstElement(staff), element, modifiers);
+            if (element->systemFlag()) {
+                applyDropPaletteElement(score, firstSegment->firstElement(0), element, modifiers);
+            } else {
+                for (staff_idx_t staff = firstStaffIndex; staff < lastStaffIndex; staff++) {
+                    applyDropPaletteElement(score, firstSegment->firstElement(staff), element, modifiers);
+                }
             }
         } else {
             track_idx_t track1 = sel.staffStart() * mu::engraving::VOICES;
