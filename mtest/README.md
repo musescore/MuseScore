@@ -21,7 +21,7 @@ To run only one test (for debugging purposes):
     cd libmscore/join/
     ./tst_join
 
-To see how the CI environment is doing it check `.travis.yml` and `build/run_tests.sh`
+To see how the CI environment is doing it, check the workflow files in `.github/workflows` and the scripts in `build/ci`.
 
 **Note: You need to have `diff` in your path. For Windows, get a copy of [diffutils for Windows](http://gnuwin32.sourceforge.net/packages/diffutils.htm "diffutils for Windows").**
 
