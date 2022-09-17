@@ -40,10 +40,10 @@ search for user custom data, as well as the default place for the 'Save as...' d
 **          -\Data\MuseScore4\Scores                 **
 *******************************************************
 
-The folder -\Data\settings contains MuseScore, QWebEngine, and Qml settings, as well as custom 
-workspaces, autosaved and recovered files. It also contains MuseScorePortable specific settings.
-This folder can be deleted to revert MuseScore to factory settings (note: any customization will 
-be lost in that case).
+The folder -\Data\settings contains MuseScore and Qml settings, as well as custom workspaces, 
+autosaved and recovered files. It also contains MuseScorePortable specific settings. This folder 
+can be deleted to revert MuseScore to factory settings (note: any customization will be lost in 
+that case).
 
 MUSESCOREPORTABLE.INI CONFIGURATION
 ====================================
