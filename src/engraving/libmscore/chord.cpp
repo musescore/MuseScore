@@ -4132,7 +4132,7 @@ GraceNotesGroup::GraceNotesGroup(Chord* c)
 
 void GraceNotesGroup::layout()
 {
-    _shape.clear();
+    Shape _shape;
     for (size_t i = this->size() - 1; i != mu::nidx; --i) {
         Chord* grace = this->at(i);
         Shape graceShape = grace->shape();
@@ -4178,5 +4178,14 @@ void GraceNotesGroup::setPos(double x, double y)
         Chord* chord = this->at(i);
         chord->movePos(PointF(x, y));
     }
+}
+
+Shape GraceNotesGroup::shape() const
+{
+    Shape shape;
+    for (Chord* grace : *this) {
+        shape.add(grace->shape().translated(grace->pos() - this->pos()));
+    }
+    return shape;
 }
 }

@@ -582,3 +582,35 @@ void LayoutBeams::respace(const std::vector<ChordRest*>& elements)
         cr->movePosX(dx);
     }
 }
+
+/************************************************************
+ * layoutNonCrossBeams()
+ * layout all non-cross-staff beams starting on this segment
+ * **********************************************************/
+
+void LayoutBeams::layoutNonCrossBeams(Segment* s)
+{
+    for (EngravingItem* e : s->elist()) {
+        if (!e || !e->isChordRest() || !e->score()->staff(e->staffIdx())->show()) {
+            // the beam and its system may still be referenced when selecting all,
+            // even if the staff is invisible. The old system is invalid and does cause problems in #284012
+            if (e && e->isChordRest() && !e->score()->staff(e->staffIdx())->show() && toChordRest(e)->beam()) {
+                toChordRest(e)->beam()->resetExplicitParent();
+            }
+            continue;
+        }
+        ChordRest* cr = toChordRest(e);
+        // layout beam
+        if (LayoutBeams::isTopBeam(cr)) {
+            cr->beam()->layout();
+        }
+        if (!cr->isChord()) {
+            continue;
+        }
+        for (Chord* grace : toChord(cr)->graceNotes()) {
+            if (LayoutBeams::isTopBeam(grace)) {
+                grace->beam()->layout();
+            }
+        }
+    }
+}

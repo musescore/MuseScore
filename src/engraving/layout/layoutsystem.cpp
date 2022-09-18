@@ -714,23 +714,10 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //-------------------------------------------------------------
 
     for (Segment* s : sl) {
-        for (EngravingItem* e : s->elist()) {
-            if (!e || !e->isChordRest() || !score->staff(e->staffIdx())->show()) {
-                // the beam and its system may still be referenced when selecting all,
-                // even if the staff is invisible. The old system is invalid and does cause problems in #284012
-                if (e && e->isChordRest() && !score->staff(e->staffIdx())->show() && toChordRest(e)->beam()) {
-                    toChordRest(e)->beam()->resetExplicitParent();
-                }
-                continue;
-            }
-            ChordRest* cr = toChordRest(e);
-
-            // layout beam
-            if (LayoutBeams::isTopBeam(cr)) {
-                Beam* b = cr->beam();
-                b->layout();
-            }
+        if (!s->isChordRestType()) {
+            continue;
         }
+        LayoutBeams::layoutNonCrossBeams(s);
         // Must recreate the shapes because stem lengths may have been changed!
         s->createShapes();
     }
