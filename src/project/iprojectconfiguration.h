@@ -123,6 +123,8 @@ public:
 
     virtual int numberOfSavesToGenerateAudio() const = 0;
     virtual void setNumberOfSavesToGenerateAudio(int number) = 0;
+
+    virtual io::path_t temporaryMp3FilePathTemplate() const = 0;
 };
 }
 

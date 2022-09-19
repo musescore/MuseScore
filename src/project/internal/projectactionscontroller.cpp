@@ -571,7 +571,7 @@ bool ProjectActionsController::needGenerateAudio(bool isPublicUpload) const
 
 ProjectActionsController::AudioFile ProjectActionsController::exportMp3(const INotationPtr notation) const
 {
-    QTemporaryFile* tempFile = new QTemporaryFile(QDir::tempPath() + "/audioFile_XXXXXX.mp3");
+    QTemporaryFile* tempFile = new QTemporaryFile(configuration()->temporaryMp3FilePathTemplate().toQString());
     if (!tempFile->open()) {
         LOGE() << "Could not open a temp file";
         delete tempFile;
