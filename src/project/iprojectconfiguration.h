@@ -111,6 +111,9 @@ public:
     virtual void setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport) = 0;
 
     virtual QUrl scoreManagerUrl() const = 0;
+
+    virtual bool showDetailedProjectUploadedDialog() const = 0;
+    virtual void setShowDetailedProjectUploadedDialog(bool show) = 0;
 };
 }
 
