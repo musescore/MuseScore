@@ -358,10 +358,12 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
     MenuItemList engravingItems {
         makeMenuItem("diagnostic-show-engraving-elements"),
         makeSeparator(),
-        makeMenuItem("show-skylines"),
+        makeMenuItem("show-element-bounding-rects"),
+        makeMenuItem("color-element-shapes"),
         makeMenuItem("show-segment-shapes"),
-        makeMenuItem("show-bounding-rect"),
-        makeMenuItem("show-system-bounding-rect"),
+        makeMenuItem("color-segment-shapes"),
+        makeMenuItem("show-skylines"),
+        makeMenuItem("show-system-bounding-rects"),
         makeMenuItem("show-corrupted-measures")
     };
 

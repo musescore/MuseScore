@@ -58,10 +58,12 @@ static const QMap<ActionCode, Fraction> DURATIONS_FOR_TEXT_NAVIGATION {
 
 using EngravingDebuggingOptions = NotationActionController::EngravingDebuggingOptions;
 const std::unordered_map<ActionCode, bool EngravingDebuggingOptions::*> NotationActionController::engravingDebuggingActions {
-    { "show-skylines", &EngravingDebuggingOptions::showSkylines },
+    { "show-element-bounding-rects", &EngravingDebuggingOptions::showElementBoundingRects },
+    { "color-element-shapes", &EngravingDebuggingOptions::colorElementShapes },
     { "show-segment-shapes", &EngravingDebuggingOptions::showSegmentShapes },
-    { "show-bounding-rect", &EngravingDebuggingOptions::showBoundingRect },
-    { "show-system-bounding-rect", &EngravingDebuggingOptions::showSystemBoundingRect },
+    { "color-segment-shapes", &EngravingDebuggingOptions::colorSegmentShapes },
+    { "show-skylines", &EngravingDebuggingOptions::showSkylines },
+    { "show-system-bounding-rects", &EngravingDebuggingOptions::showSystemBoundingRects },
     { "show-corrupted-measures", &EngravingDebuggingOptions::showCorruptedMeasures }
 };
 
