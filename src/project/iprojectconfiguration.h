@@ -112,8 +112,19 @@ public:
 
     virtual QUrl scoreManagerUrl() const = 0;
 
-    virtual bool showDetailedProjectUploadedDialog() const = 0;
-    virtual void setShowDetailedProjectUploadedDialog(bool show) = 0;
+    virtual bool openDetailedProjectUploadedDialog() const = 0;
+    virtual void setOpenDetailedProjectUploadedDialog(bool show) = 0;
+
+    virtual bool openAudioGenerationSettings() const = 0;
+    virtual void setOpenAudioGenerationSettings(bool open) = 0;
+
+    virtual GenerateAudioTimePeriodType generateAudioTimePeriodType() const = 0;
+    virtual void setGenerateAudioTimePeriodType(GenerateAudioTimePeriodType type) = 0;
+
+    virtual int numberOfSavesToGenerateAudio() const = 0;
+    virtual void setNumberOfSavesToGenerateAudio(int number) = 0;
+
+    virtual io::path_t temporaryMp3FilePathTemplate() const = 0;
 };
 }
 

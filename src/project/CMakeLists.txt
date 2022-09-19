@@ -134,7 +134,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/templatepaintview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/projectpropertiesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/projectpropertiesmodel.cpp
-
+    ${CMAKE_CURRENT_LIST_DIR}/view/audiogenerationsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/audiogenerationsettingsmodel.h
     )
 
 set(MODULE_LINK

@@ -116,6 +116,8 @@ private:
         }
     };
 
+    Ret openAudioGenerationSettings();
+    bool needGenerateAudio(bool isPublic) const;
     AudioFile exportMp3(const notation::INotationPtr notation) const;
 
     void uploadProject(const CloudProjectInfo& info, const AudioFile& audio = AudioFile(), bool openEditUrl = true);
@@ -153,6 +155,8 @@ private:
 
     framework::ProgressPtr m_uploadingProjectProgress;
     framework::ProgressPtr m_uploadingAudioProgress;
+
+    int m_numberOfSavesToCloud = 0;
 };
 }
 

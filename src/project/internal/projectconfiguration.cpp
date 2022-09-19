@@ -54,7 +54,10 @@ static const Settings::Key MIGRATION_OPTIONS(module_name, "project/migration");
 static const Settings::Key AUTOSAVE_ENABLED_KEY(module_name, "project/autoSaveEnabled");
 static const Settings::Key AUTOSAVE_INTERVAL_KEY(module_name, "project/autoSaveInterval");
 static const Settings::Key SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT(module_name, "project/shouldDestinationFolderBeOpenedOnExport");
-static const Settings::Key SHOW_DETAILED_PROJECT_UPLOADED_DIALOG(module_name, "project/showDetailedProjectUploadedDialog");
+static const Settings::Key OPEN_DETAILED_PROJECT_UPLOADED_DIALOG(module_name, "project/openDetailedProjectUploadedDialog");
+static const Settings::Key OPEN_AUDIO_GENERATION_SETTINGS(module_name, "project/openAudioGenerationSettings");
+static const Settings::Key GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY(module_name, "project/generateAudioTimePeriodType");
+static const Settings::Key NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY(module_name, "project/numberOfSavesToGenerateAudio");
 
 const QString ProjectConfiguration::DEFAULT_FILE_SUFFIX(".mscz");
 
@@ -95,7 +98,10 @@ void ProjectConfiguration::init()
     });
 
     settings()->setDefaultValue(SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT, Val(false));
-    settings()->setDefaultValue(SHOW_DETAILED_PROJECT_UPLOADED_DIALOG, Val(true));
+    settings()->setDefaultValue(OPEN_DETAILED_PROJECT_UPLOADED_DIALOG, Val(true));
+    settings()->setDefaultValue(OPEN_AUDIO_GENERATION_SETTINGS, Val(true));
+    settings()->setDefaultValue(GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY, Val(static_cast<int>(GenerateAudioTimePeriodType::Never)));
+    settings()->setDefaultValue(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY, Val(10));
 
     fileSystem()->makePath(userTemplatesPath());
     fileSystem()->makePath(defaultProjectsPath());
@@ -510,12 +516,47 @@ QUrl ProjectConfiguration::scoreManagerUrl() const
     return cloudConfiguration()->scoreManagerUrl();
 }
 
-bool ProjectConfiguration::showDetailedProjectUploadedDialog() const
+bool ProjectConfiguration::openDetailedProjectUploadedDialog() const
 {
-    return settings()->value(SHOW_DETAILED_PROJECT_UPLOADED_DIALOG).toBool();
+    return settings()->value(OPEN_DETAILED_PROJECT_UPLOADED_DIALOG).toBool();
 }
 
-void ProjectConfiguration::setShowDetailedProjectUploadedDialog(bool show)
+void ProjectConfiguration::setOpenDetailedProjectUploadedDialog(bool show)
 {
-    settings()->setSharedValue(SHOW_DETAILED_PROJECT_UPLOADED_DIALOG, Val(show));
+    settings()->setSharedValue(OPEN_DETAILED_PROJECT_UPLOADED_DIALOG, Val(show));
+}
+
+bool ProjectConfiguration::openAudioGenerationSettings() const
+{
+    return settings()->value(OPEN_AUDIO_GENERATION_SETTINGS).toBool();
+}
+
+void ProjectConfiguration::setOpenAudioGenerationSettings(bool open)
+{
+    settings()->setSharedValue(OPEN_AUDIO_GENERATION_SETTINGS, Val(open));
+}
+
+GenerateAudioTimePeriodType ProjectConfiguration::generateAudioTimePeriodType() const
+{
+    return static_cast<GenerateAudioTimePeriodType>(settings()->value(GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY).toInt());
+}
+
+void ProjectConfiguration::setGenerateAudioTimePeriodType(GenerateAudioTimePeriodType type)
+{
+    settings()->setSharedValue(GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY, Val(static_cast<int>(type)));
+}
+
+int ProjectConfiguration::numberOfSavesToGenerateAudio() const
+{
+    return settings()->value(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY).toInt();
+}
+
+void ProjectConfiguration::setNumberOfSavesToGenerateAudio(int number)
+{
+    settings()->setSharedValue(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY, Val(number));
+}
+
+io::path_t ProjectConfiguration::temporaryMp3FilePathTemplate() const
+{
+    return globalConfiguration()->userAppDataPath() + "/audioFile_XXXXXX.mp3";
 }

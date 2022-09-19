@@ -115,8 +115,18 @@ public:
 
     QUrl scoreManagerUrl() const override;
 
-    bool showDetailedProjectUploadedDialog() const override;
-    void setShowDetailedProjectUploadedDialog(bool show) override;
+    bool openDetailedProjectUploadedDialog() const override;
+    void setOpenDetailedProjectUploadedDialog(bool show) override;
+
+    bool openAudioGenerationSettings() const override;
+    void setOpenAudioGenerationSettings(bool open) override;
+
+    GenerateAudioTimePeriodType generateAudioTimePeriodType() const override;
+    void setGenerateAudioTimePeriodType(GenerateAudioTimePeriodType type) override;
+    int numberOfSavesToGenerateAudio() const override;
+    void setNumberOfSavesToGenerateAudio(int number) override;
+
+    io::path_t temporaryMp3FilePathTemplate() const override;
 
 private:
     io::paths_t parseRecentProjectsPaths(const mu::Val& value) const;
