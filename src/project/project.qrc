@@ -42,6 +42,7 @@
         <file>qml/MuseScore/Project/internal/SaveToCloud/images/Cloud.png</file>
         <file>qml/MuseScore/Project/internal/SaveToCloud/images/Laptop.png</file>
         <file>qml/MuseScore/Project/ProjectPropertiesDialog.qml</file>
+        <file>qml/MuseScore/Project/ProjectUploadedDialog.qml</file>
         <file>qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml</file>
         <file>qml/MuseScore/Project/internal/Properties/ProjectPropertiesBottomPanel.qml</file>
         <file>qml/MuseScore/Project/internal/Properties/ProjectPropertiesView.qml</file>
@@ -51,5 +52,6 @@
         <file>resources/Placeholder_MXML.png</file>
         <file>resources/Placeholder_Other.png</file>
         <file>resources/CloudProject.svg</file>
+        <file>resources/PublishScores.png</file>
     </qresource>
 </RCC>

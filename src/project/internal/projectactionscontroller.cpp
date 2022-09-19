@@ -671,6 +671,16 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
         return;
     }
 
+    QUrl scoreManagerUrl = configuration()->scoreManagerUrl();
+
+    if (configuration()->showDetailedProjectUploadedDialog()) {
+        UriQuery query("musescore://project/uploaded");
+        query.addParam("scoreManagerUrl", Val(scoreManagerUrl.toString()));
+        interactive()->open(query);
+        configuration()->setShowDetailedProjectUploadedDialog(false);
+        return;
+    }
+
     IInteractive::ButtonData viewOnlineBtn(IInteractive::Button::CustomButton, trc("project/save", "View online"));
     IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
     okBtn.accent = true;
@@ -682,7 +692,7 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
                                   static_cast<int>(IInteractive::Button::Ok)).button();
 
     if (btn == viewOnlineBtn.btn) {
-        interactive()->openUrl(configuration()->scoreManagerUrl());
+        interactive()->openUrl(scoreManagerUrl);
     }
 }
 
