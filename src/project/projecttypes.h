@@ -212,6 +212,21 @@ struct Template
 
 using Templates = QList<Template>;
 
+class GenerateAudioTimePeriod
+{
+    Q_GADGET
+
+public:
+    enum class Type {
+        Never = 0,
+        Always,
+        AfterCertainNumberOfSaves
+    };
+    Q_ENUM(Type)
+};
+
+using GenerateAudioTimePeriodType = GenerateAudioTimePeriod::Type;
+
 class Migration
 {
     Q_GADGET

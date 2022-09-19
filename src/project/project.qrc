@@ -43,6 +43,8 @@
         <file>qml/MuseScore/Project/internal/SaveToCloud/images/Laptop.png</file>
         <file>qml/MuseScore/Project/ProjectPropertiesDialog.qml</file>
         <file>qml/MuseScore/Project/ProjectUploadedDialog.qml</file>
+        <file>qml/MuseScore/Project/AudioGenerationSettingsDialog.qml</file>
+        <file>qml/MuseScore/Project/AudioGenerationSettings.qml</file>
         <file>qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml</file>
         <file>qml/MuseScore/Project/internal/Properties/ProjectPropertiesBottomPanel.qml</file>
         <file>qml/MuseScore/Project/internal/Properties/ProjectPropertiesView.qml</file>

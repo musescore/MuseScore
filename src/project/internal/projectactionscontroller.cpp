@@ -492,6 +492,13 @@ bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, 
         return false;
     }
 
+    if (project->isNewlyCreated()) {
+        Ret ret = openAudioGenerationSettings();
+        if (!ret) {
+            return false;
+        }
+    }
+
     project->setCloudInfo(info);
 
     io::path_t oldPath = project->path();
@@ -512,7 +519,7 @@ bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, 
     AudioFile audio;
     bool isPublic = info.visibility == CloudProjectVisibility::Public;
 
-    if (isPublic) {
+    if (needGenerateAudio(isPublic)) {
         audio = exportMp3(project->masterNotation()->notation());
         if (!audio.isValid()) {
             return false;
@@ -520,13 +527,51 @@ bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, 
     }
 
     uploadProject(info, audio, isPublic);
+    m_numberOfSavesToCloud++;
 
     return true;
 }
 
+Ret ProjectActionsController::openAudioGenerationSettings()
+{
+    if (configuration()->openAudioGenerationSettings()) {
+        RetVal<Val> res = interactive()->open("musescore://project/audiogenerationsettings");
+        if (!res.ret) {
+            return res.ret;
+        }
+
+        ValMap map = res.val.toMap();
+        bool askAgain = map["askAgain"].toBool();
+
+        configuration()->setOpenAudioGenerationSettings(askAgain);
+    }
+
+    return make_ok();
+}
+
+bool ProjectActionsController::needGenerateAudio(bool isPublicUpload) const
+{
+    if (isPublicUpload) {
+        return true;
+    }
+
+    switch (configuration()->generateAudioTimePeriodType()) {
+    case GenerateAudioTimePeriodType::Never:
+        return false;
+    case GenerateAudioTimePeriodType::Always:
+        return true;
+    case GenerateAudioTimePeriodType::AfterCertainNumberOfSaves: {
+        int requiredNumberOfSaves = configuration()->numberOfSavesToGenerateAudio();
+        return m_numberOfSavesToCloud % requiredNumberOfSaves == 0;
+    }
+    }
+
+    return false;
+}
+
 ProjectActionsController::AudioFile ProjectActionsController::exportMp3(const INotationPtr notation) const
 {
-    QTemporaryFile* tempFile = new QTemporaryFile(QDir::tempPath() + "/audioFile_XXXXXX.mp3");
+    QTemporaryFile* tempFile = new QTemporaryFile(configuration()->temporaryMp3FilePathTemplate().toQString());
     if (!tempFile->open()) {
         LOGE() << "Could not open a temp file";
         delete tempFile;
@@ -673,11 +718,11 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
 
     QUrl scoreManagerUrl = configuration()->scoreManagerUrl();
 
-    if (configuration()->showDetailedProjectUploadedDialog()) {
+    if (configuration()->openDetailedProjectUploadedDialog()) {
         UriQuery query("musescore://project/uploaded");
         query.addParam("scoreManagerUrl", Val(scoreManagerUrl.toString()));
         interactive()->open(query);
-        configuration()->setShowDetailedProjectUploadedDialog(false);
+        configuration()->setOpenDetailedProjectUploadedDialog(false);
         return;
     }
 

@@ -39,6 +39,7 @@
         <file>qml/Preferences/ImportPreferencesPage.qml</file>
         <file>qml/Preferences/MidiDeviceMappingPreferencesPage.qml</file>
         <file>qml/Preferences/IOPreferencesPage.qml</file>
+        <file>qml/Preferences/CloudPreferencesPage.qml</file>
         <file>qml/Preferences/PreferencesDialog.qml</file>
         <file>qml/Preferences/internal/PreferencesButtonsPanel.qml</file>
         <file>qml/Preferences/internal/PreferencesMenu.qml</file>
@@ -58,6 +59,7 @@
         <file>qml/Preferences/internal/ComboBoxWithTitle.qml</file>
         <file>qml/Preferences/internal/IncrementalPropertyControlWithTitle.qml</file>
         <file>qml/Preferences/internal/KeyboardLayoutsSection.qml</file>
+        <file>qml/Preferences/internal/AudioGenerationSection.qml</file>
         <file>qml/DevTools/Autobot/AutobotControl.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavExample.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSection.qml</file>
