@@ -10,25 +10,25 @@ on:
       publish:
         description: 'Publish: on - publish'
         required: false
-        default: 'off'  
+        default: 'off'
 
 jobs:
   build_mu4:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-18.04
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.9.1
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v2   
+      uses: actions/checkout@v2
 
     - name: "Configure workflow"
       run: |
         bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
         BUILD_NUMBER=${{ github.run_id }}
- 
+
         DO_PUBLISH='false'
         if [[ "${{ github.event.inputs.publish }}" == "on" ]]; then DO_PUBLISH='true'; fi
         if [ -z "${{ secrets.S3_KEY_CONVERTOR }}" ]; then DO_PUBLISH='false'; fi
@@ -56,7 +56,7 @@ jobs:
     - name: Build
       run: |
         sudo bash ./build/ci/backend/build.sh -n ${{ env.BUILD_NUMBER }} --build_videoexport
-    - name: Package 
+    - name: Package
       run: |
         sudo bash ./build/ci/backend/package.sh
     - name: Publish package
@@ -69,4 +69,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: ${{ env.GITHUB_ARTIFACT_NAME }}
-        path: ./build.artifacts/      
+        path: ./build.artifacts/
