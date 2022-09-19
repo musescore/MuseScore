@@ -1190,9 +1190,21 @@ bool Segment::allElementsInvisible() const
         return false;
     }
 
-    for (EngravingItem* e : _elist) {
-        if (e && e->visible() && !RealIsEqual(e->width(), 0.0)) {
-            return false;
+    System* sys = system();
+    for (staff_idx_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+        Staff* staff = score()->staves().at(staffIdx);
+        if (!staff->visible()) {
+            continue;
+        }
+        if (sys && staffIdx < sys->staves().size() && !sys->staves().at(staffIdx)->show()) {
+            continue;
+        }
+        track_idx_t endTrack = staffIdx * VOICES + VOICES;
+        for (track_idx_t track = staffIdx * VOICES; track < endTrack; ++track) {
+            EngravingItem* e = _elist[track];
+            if (e && e->visible() && !RealIsEqual(e->width(), 0.0)) {
+                return false;
+            }
         }
     }
 
