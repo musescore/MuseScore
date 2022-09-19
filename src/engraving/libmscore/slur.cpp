@@ -1561,24 +1561,14 @@ SpannerSegment* Slur::layoutSystem(System* system)
             setEndElement(startCR());
             setTick2(tick());
         }
-        switch (_slurDirection) {
-        case DirectionV::UP:
-            _up = true;
-            break;
-        case DirectionV::DOWN:
-            _up = false;
-            break;
-        case DirectionV::AUTO:
-            computeUp();
-            if (_sourceStemArrangement != -1) {
-                if (_sourceStemArrangement != calcStemArrangement(startCR(), endCR())) {
-                    // copy & paste from incompatible stem arrangement, so reset bezier points
-                    for (int g = 0; g < (int)Grip::GRIPS; ++g) {
-                        slurSegment->ups((Grip)g) = UP();
-                    }
+        computeUp();
+        if (_sourceStemArrangement != -1) {
+            if (_sourceStemArrangement != calcStemArrangement(startCR(), endCR())) {
+                // copy & paste from incompatible stem arrangement, so reset bezier points
+                for (int g = 0; g < (int)Grip::GRIPS; ++g) {
+                    slurSegment->ups((Grip)g) = UP();
                 }
             }
-            break;
         }
         sst = tick2() < etick ? SpannerSegmentType::SINGLE : SpannerSegmentType::BEGIN;
     } else if (tick() < stick && tick2() >= etick) {
@@ -1805,54 +1795,66 @@ SpannerSegment* Slur::layoutSystem(System* system)
 
 void Slur::computeUp()
 {
-    //
-    // assumption:
-    // slurs have only chords or rests as start/end elements
-    //
-    if (startCR() == 0 || endCR() == 0) {
+    switch (_slurDirection) {
+    case DirectionV::UP:
         _up = true;
-        return;
-    }
-    Chord* c1 = startCR()->isChord() ? toChord(startCR()) : 0;
-    Chord* c2 = endCR()->isChord() ? toChord(endCR()) : 0;
-    if (c2 && startCR()->measure()->system() != endCR()->measure()->system()) {
-        // If the end chord is in a different system its direction may
-        // have never been computed, so we need to compute it here.
-        c2->computeUp();
-    }
-
-    if (c1 && c1->beam() && c1->beam()->cross()) {
-        // TODO: stem direction is not finalized, so we cannot use it here
-        _up = true;
-        return;
-    }
-
-    _up = !(startCR()->up());
-
-    // Check if multiple voices
-    bool multipleVoices = false;
-    Measure* m1 = startCR()->measure();
-    while (m1 && m1->tick() <= endCR()->tick()) {
-        if ((m1->hasVoices(startCR()->staffIdx(), tick(), ticks() + endCR()->ticks()))
-            && c1) {
-            multipleVoices = true;
+        break;
+    case DirectionV::DOWN:
+        _up = false;
+        break;
+    case DirectionV::AUTO:
+    {
+        //
+        // assumption:
+        // slurs have only chords or rests as start/end elements
+        //
+        if (startCR() == 0 || endCR() == 0) {
+            _up = true;
             break;
         }
-        m1 = m1->nextMeasure();
-    }
-    if (multipleVoices) {
-        // slurs go on the stem side
-        if (startCR()->voice() > 0 || endCR()->voice() > 0) {
-            _up = false;
-        } else {
+        Chord* c1 = startCR()->isChord() ? toChord(startCR()) : 0;
+        Chord* c2 = endCR()->isChord() ? toChord(endCR()) : 0;
+        if (c2 && startCR()->measure()->system() != endCR()->measure()->system()) {
+            // If the end chord is in a different system its direction may
+            // have never been computed, so we need to compute it here.
+            c2->computeUp();
+        }
+
+        if (c1 && c1->beam() && c1->beam()->cross()) {
+            // TODO: stem direction is not finalized, so we cannot use it here
+            _up = true;
+            break;
+        }
+
+        _up = !(startCR()->up());
+
+        // Check if multiple voices
+        bool multipleVoices = false;
+        Measure* m1 = startCR()->measure();
+        while (m1 && m1->tick() <= endCR()->tick()) {
+            if ((m1->hasVoices(startCR()->staffIdx(), tick(), ticks() + endCR()->ticks()))
+                && c1) {
+                multipleVoices = true;
+                break;
+            }
+            m1 = m1->nextMeasure();
+        }
+        if (multipleVoices) {
+            // slurs go on the stem side
+            if (startCR()->voice() > 0 || endCR()->voice() > 0) {
+                _up = false;
+            } else {
+                _up = true;
+            }
+        } else if (c1 && c2 && !c1->isGrace() && isDirectionMixture(c1, c2)) {
+            // slurs go above if there are mixed direction stems between c1 and c2
+            // but grace notes are exceptions
+            _up = true;
+        } else if (c1 && c2 && c1->isGrace() && c2 != c1->parent() && isDirectionMixture(c1, c2)) {
             _up = true;
         }
-    } else if (c1 && c2 && !c1->isGrace() && isDirectionMixture(c1, c2)) {
-        // slurs go above if there are mixed direction stems between c1 and c2
-        // but grace notes are exceptions
-        _up = true;
-    } else if (c1 && c2 && c1->isGrace() && c2 != c1->parent() && isDirectionMixture(c1, c2)) {
-        _up = true;
+    }
+    break;
     }
 }
 
