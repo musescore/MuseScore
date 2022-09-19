@@ -126,6 +126,8 @@ public:
     int numberOfSavesToGenerateAudio() const override;
     void setNumberOfSavesToGenerateAudio(int number) override;
 
+    io::path_t temporaryMp3FilePathTemplate() const override;
+
 private:
     io::paths_t parseRecentProjectsPaths(const mu::Val& value) const;
 

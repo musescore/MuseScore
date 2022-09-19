@@ -555,3 +555,8 @@ void ProjectConfiguration::setNumberOfSavesToGenerateAudio(int number)
 {
     settings()->setSharedValue(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY, Val(number));
 }
+
+io::path_t ProjectConfiguration::temporaryMp3FilePathTemplate() const
+{
+    return globalConfiguration()->userAppDataPath() + "/audioFile_XXXXXX.mp3";
+}
