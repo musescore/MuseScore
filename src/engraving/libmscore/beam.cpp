@@ -1443,13 +1443,15 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
 
     int fragmentIndex = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     if (_userModified[fragmentIndex]) {
-        double startY = fragments[frag]->py1[fragmentIndex] + pagePos().y();
-        double endY = fragments[frag]->py2[fragmentIndex] + pagePos().y();
+        double startY = fragments[frag]->py1[fragmentIndex];
+        double endY = fragments[frag]->py2[fragmentIndex];
         if (score()->styleB(Sid::snapCustomBeamsToGrid)) {
             const double quarterSpace = spatium() / 4;
             startY = round(startY / quarterSpace) * quarterSpace;
             endY = round(endY / quarterSpace) * quarterSpace;
         }
+        startY += pagePos().y();
+        endY += pagePos().y();
         _startAnchor.setY(startY);
         _endAnchor.setY(endY);
         _slope = (_endAnchor.y() - _startAnchor.y()) / (_endAnchor.x() - _startAnchor.x());
