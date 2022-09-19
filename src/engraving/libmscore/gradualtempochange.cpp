@@ -149,14 +149,6 @@ LineSegment* GradualTempoChange::createLineSegment(System* parent)
     return lineSegment;
 }
 
-SpannerSegment* GradualTempoChange::layoutSystem(System* system)
-{
-    SpannerSegment* segment = TextLineBase::layoutSystem(system);
-    moveToSystemTopIfNeed(segment);
-
-    return segment;
-}
-
 GradualTempoChangeType GradualTempoChange::tempoChangeType() const
 {
     return m_tempoChangeType;
