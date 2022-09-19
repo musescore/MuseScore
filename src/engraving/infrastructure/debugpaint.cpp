@@ -38,6 +38,25 @@ using namespace mu::engraving;
 
 static const mu::draw::Color DEBUG_ELTREE_SELECTED_COLOR(164, 0, 0);
 
+/// Generates a seemingly random but stable color based on a pointer address.
+/// (If we would use really random colors, the would change on every redraw.)
+static Color colorForPointer(const void* ptr)
+{
+    static constexpr uint32_t rgbTotalMax = 600;
+    static constexpr uint32_t mask = 0xFFFF;
+    static constexpr double max = mask + 1.0;
+
+    auto hash = std::hash<const void*> {}(ptr);
+    uint32_t cmpnt1 = hash & mask;
+    uint32_t cmpnt2 = (hash >> 16) & mask;
+
+    uint32_t r = std::clamp(uint32_t(cmpnt1 / max * 255), 30u, 255u);
+    uint32_t g = std::clamp(uint32_t(cmpnt2 / max * 255), 30u, 255u);
+    uint32_t b = std::clamp(rgbTotalMax - r - g,          30u, 255u);
+
+    return Color(r, g, b, 128);
+}
+
 void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingItem* item,
                                    std::shared_ptr<PaintDebugger>& debugger)
 {
@@ -51,15 +70,32 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingIt
     PointF pos(item->pagePos());
     painter.translate(pos);
 
-    if ((isDiagnosticSelected || configuration()->debuggingOptions().showBoundingRect)
-        && !item->bbox().isEmpty()) {
-        double scaling = painter.worldTransform().m11() / configuration()->guiScaling();
-        draw::Pen borderPen(DEBUG_ELTREE_SELECTED_COLOR, (item->selected() ? 2.0 : 1.0) / scaling);
+    if (!item->bbox().isEmpty()) {
+        // Draw shape
+        if (configuration()->debuggingOptions().colorElementShapes
+            && !item->isPage() && !item->isSystem() && !item->isStaffLines() && !item->isBox()) {
+            PainterPath path;
+            path.setFillRule(PainterPath::FillRule::WindingFill);
+
+            Shape shape = item->shape();
+            for (const RectF& rect : shape) {
+                path.addRect(rect);
+            }
+
+            painter.setPen(PenStyle::NoPen);
+            painter.setBrush(colorForPointer(item));
+            painter.drawPath(path);
+        }
 
         // Draw bbox
-        painter.setPen(borderPen);
-        painter.setBrush(draw::BrushStyle::NoBrush);
-        painter.drawRect(item->bbox());
+        if (isDiagnosticSelected || configuration()->debuggingOptions().showElementBoundingRects) {
+            double scaling = painter.worldTransform().m11() / configuration()->guiScaling();
+            draw::Pen borderPen(DEBUG_ELTREE_SELECTED_COLOR, (item->selected() ? 2.0 : 1.0) / scaling);
+
+            painter.setPen(borderPen);
+            painter.setBrush(draw::BrushStyle::NoBrush);
+            painter.drawRect(item->bbox());
+        }
     }
 
     painter.translate(-pos);
@@ -105,7 +141,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
 
     auto options = configuration()->debuggingOptions();
 
-    if (options.showSystemBoundingRect) {
+    if (options.showSystemBoundingRects) {
         painter.setBrush(BrushStyle::NoBrush);
         painter.setPen(Pen(Color::black, 3.0 / scaling));
 
@@ -134,9 +170,8 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
         }
     }
 
-    if (options.showSegmentShapes) {
-        painter.setBrush(BrushStyle::NoBrush);
-        painter.setPen(Pen(Color(238, 238, 144), 2.0 / scaling));
+    if (options.colorSegmentShapes) {
+        painter.setPen(PenStyle::NoPen);
 
         for (const System* system : page->systems()) {
             for (const MeasureBase* mb : system->measures()) {
@@ -147,9 +182,51 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
                 const Measure* m = toMeasure(mb);
 
                 for (const Segment* s = m->first(); s; s = s->next()) {
-                    for (size_t i = 0; i < score->nstaves(); ++i) {
+                    if (!s->enabled()) {
+                        continue;
+                    }
+
+                    painter.setBrush(colorForPointer(s));
+
+                    for (staff_idx_t i = 0; i < score->nstaves(); ++i) {
+                        PainterPath path;
+                        path.setFillRule(PainterPath::FillRule::WindingFill);
+
+                        Shape shape = s->shapes().at(i);
+                        for (const RectF& rect : shape) {
+                            path.addRect(rect);
+                        }
+
                         PointF pt(s->pos().x() + m->pos().x() + system->pos().x(),
-                                  system->staffYpage(static_cast<int>(i)));
+                                  system->staffYpage(i));
+                        painter.translate(pt);
+                        painter.drawPath(path);
+                        painter.translate(-pt);
+                    }
+                }
+            }
+        }
+    }
+
+    if (options.showSegmentShapes) {
+        painter.setBrush(BrushStyle::NoBrush);
+        Pen pen(Color(238, 238, 144), 2.0 / scaling);
+
+        for (const System* system : page->systems()) {
+            for (const MeasureBase* mb : system->measures()) {
+                if (!mb->isMeasure()) {
+                    continue;
+                }
+
+                const Measure* m = toMeasure(mb);
+
+                for (const Segment* s = m->first(); s; s = s->next()) {
+                    pen.setStyle(s->enabled() ? PenStyle::SolidLine : PenStyle::DotLine);
+                    painter.setPen(pen);
+
+                    for (staff_idx_t i = 0; i < score->nstaves(); ++i) {
+                        PointF pt(s->pos().x() + m->pos().x() + system->pos().x(),
+                                  system->staffYpage(i));
                         painter.translate(pt);
                         s->shapes().at(i).paint(painter);
                         painter.translate(-pt);
