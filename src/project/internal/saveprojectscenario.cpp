@@ -89,14 +89,14 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
 RetVal<io::path_t> SaveProjectScenario::askLocalPath(INotationProjectPtr project, SaveMode saveMode) const
 {
     QString dialogTitle = qtrc("project/save", "Save score");
-    QString filenameAddition;
+    std::string filenameAddition;
 
     if (saveMode == SaveMode::SaveCopy) {
         //: used to form a filename suggestion, like "originalFile - copy"
-        filenameAddition = " - " + qtrc("project/save", "copy", "a copy of a file");
+        filenameAddition = " - " + trc("project/save", "copy", "a copy of a file");
     } else if (saveMode == SaveMode::SaveSelection) {
         //: used to form a filename suggestion, like "originalFile - selection"
-        filenameAddition = " - " + qtrc("project/save", "selection");
+        filenameAddition = " - " + trc("project/save", "selection");
     }
 
     io::path_t defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition);
