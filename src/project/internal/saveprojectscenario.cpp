@@ -71,7 +71,7 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
         }
 
         case SaveLocationType::Cloud: {
-            RetVal<CloudProjectInfo> info = askCloudLocation(project);
+            RetVal<CloudProjectInfo> info = askCloudLocation(project, mode);
             switch (info.ret.code()) {
             case int(Ret::Code::Ok):
                 return RetVal<SaveLocation>::make_ok(SaveLocation(info.val));
@@ -161,17 +161,17 @@ RetVal<SaveLocationType> SaveProjectScenario::askSaveLocationType() const
     return RetVal<SaveLocationType>::make_ok(type);
 }
 
-RetVal<CloudProjectInfo> SaveProjectScenario::askCloudLocation(INotationProjectPtr project) const
+RetVal<CloudProjectInfo> SaveProjectScenario::askCloudLocation(INotationProjectPtr project, SaveMode mode) const
 {
-    return doAskCloudLocation(project, false);
+    return doAskCloudLocation(project, mode, false);
 }
 
 RetVal<CloudProjectInfo> SaveProjectScenario::askPublishLocation(INotationProjectPtr project) const
 {
-    return doAskCloudLocation(project, true);
+    return doAskCloudLocation(project, SaveMode::Save, true);
 }
 
-RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjectPtr project, bool isPublish) const
+RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublish) const
 {
     if (!authorizationService()->userAuthorized().val) {
         Ret ret = authorizationService()->requireAuthorization(
@@ -213,6 +213,10 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
 
     if (!warnBeforePublishing(project, result.visibility, isPublish)) {
         return make_ret(Ret::Code::Cancel);
+    }
+
+    if (mode == SaveMode::Save) {
+        result.sourceUrl = project->cloudInfo().sourceUrl;
     }
 
     return RetVal<CloudProjectInfo>::make_ok(result);
