@@ -37,7 +37,6 @@ struct mu::iex::videoexport::FFmpeg {
     AVFormatContext* formatCtx = nullptr;
     AVStream* videoStream = nullptr;
     AVCodecContext* codecCtx = nullptr;
-    AVDictionary* options = nullptr;
     AVCodec* codec = nullptr;
     // Frame data
     AVFrame* ppicture = nullptr;
@@ -112,12 +111,12 @@ bool VideoEncoder::open(const io::path_t& fileName, unsigned width, unsigned hei
     m_ffmpeg->codecCtx->me_cmp = 1;
     m_ffmpeg->codecCtx->me_range = 16;
 
-    av_dict_set(&m_ffmpeg->options, "motion_est", "hex", 0);
+    m_ffmpeg->codecCtx->me_method = ME_HEX;
 
     m_ffmpeg->codecCtx->qmin = 10;
     m_ffmpeg->codecCtx->qmax = 51;
     m_ffmpeg->codecCtx->scenechange_threshold = 40;
-    m_ffmpeg->codecCtx->flags |= AV_CODEC_FLAG_LOOP_FILTER;
+    m_ffmpeg->codecCtx->flags |= CODEC_FLAG_LOOP_FILTER;
     m_ffmpeg->codecCtx->me_subpel_quality = 5;
     m_ffmpeg->codecCtx->i_quant_factor = 0.71;
     m_ffmpeg->codecCtx->qcompress = 0.6;
@@ -125,7 +124,7 @@ bool VideoEncoder::open(const io::path_t& fileName, unsigned width, unsigned hei
 
     // some formats want stream headers to be separate
     if (m_ffmpeg->formatCtx->oformat->flags & AVFMT_GLOBALHEADER) {
-        m_ffmpeg->codecCtx->flags |= AV_CODEC_FLAG_LOOP_FILTER;
+        m_ffmpeg->codecCtx->flags |= CODEC_FLAG_LOOP_FILTER;
     }
 
     //av_dump_format(m_ffmpeg->formatCtx, 0, fileName.c_str(), 1);
@@ -138,7 +137,7 @@ bool VideoEncoder::open(const io::path_t& fileName, unsigned width, unsigned hei
         return false;
     }
     // open the codec
-    if (avcodec_open2(m_ffmpeg->codecCtx, m_ffmpeg->codec, &m_ffmpeg->options) < 0) {
+    if (avcodec_open2(m_ffmpeg->codecCtx, m_ffmpeg->codec, 0) < 0) {
         LOGE() << "failed open codec";
         return false;
     }
