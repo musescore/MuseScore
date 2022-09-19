@@ -1160,48 +1160,48 @@ void BarLine::endEditDrag(EditData& ed)
 //   layoutWidth
 //---------------------------------------------------------
 
-double BarLine::layoutWidth(Score* score, BarLineType type)
+double BarLine::layoutWidth() const
 {
-    double dotwidth = score->symbolFont()->width(SymId::repeatDot, 1.0);
+    const double dotWidth = symWidth(SymId::repeatDot);
 
     double w { 0.0 };
-    switch (type) {
+    switch (barLineType()) {
     case BarLineType::DOUBLE:
-        w = (score->styleMM(Sid::doubleBarWidth) * 2.0)
-            + score->styleMM(Sid::doubleBarDistance);
+        w = score()->styleMM(Sid::doubleBarWidth) * 2.0
+            + score()->styleMM(Sid::doubleBarDistance);
         break;
     case BarLineType::DOUBLE_HEAVY:
-        w = (score->styleMM(Sid::endBarWidth) * 2.0)
-            + score->styleMM(Sid::endBarDistance);
+        w = score()->styleMM(Sid::endBarWidth) * 2.0
+            + score()->styleMM(Sid::endBarDistance);
         break;
     case BarLineType::END_START_REPEAT:
-        w = score->styleMM(Sid::endBarWidth)
-            + (score->styleMM(Sid::barWidth) * 2.0)
-            + (score->styleMM(Sid::endBarDistance) * 2.0)
-            + (score->styleMM(Sid::repeatBarlineDotSeparation) * 2.0)
-            + (dotwidth * 2);
+        w = score()->styleMM(Sid::endBarWidth)
+            + score()->styleMM(Sid::barWidth) * 2.0
+            + score()->styleMM(Sid::endBarDistance) * 2.0
+            + score()->styleMM(Sid::repeatBarlineDotSeparation) * 2.0
+            + dotWidth * 2;
         break;
     case BarLineType::START_REPEAT:
     case BarLineType::END_REPEAT:
-        w = score->styleMM(Sid::endBarWidth)
-            + score->styleMM(Sid::barWidth)
-            + score->styleMM(Sid::endBarDistance)
-            + score->styleMM(Sid::repeatBarlineDotSeparation)
-            + dotwidth;
+        w = score()->styleMM(Sid::endBarWidth)
+            + score()->styleMM(Sid::barWidth)
+            + score()->styleMM(Sid::endBarDistance)
+            + score()->styleMM(Sid::repeatBarlineDotSeparation)
+            + dotWidth;
         break;
     case BarLineType::END:
     case BarLineType::REVERSE_END:
-        w = score->styleMM(Sid::endBarWidth)
-            + score->styleMM(Sid::barWidth)
-            + score->styleMM(Sid::endBarDistance);
+        w = score()->styleMM(Sid::endBarWidth)
+            + score()->styleMM(Sid::barWidth)
+            + score()->styleMM(Sid::endBarDistance);
         break;
     case BarLineType::BROKEN:
     case BarLineType::NORMAL:
     case BarLineType::DOTTED:
-        w = score->styleMM(Sid::barWidth);
+        w = score()->styleMM(Sid::barWidth);
         break;
     case BarLineType::HEAVY:
-        w = score->styleMM(Sid::endBarWidth);
+        w = score()->styleMM(Sid::endBarWidth);
         break;
     }
     return w;
@@ -1276,7 +1276,7 @@ void BarLine::layout()
     y1 = _spatium * .5 * _spanFrom;
     y2 = _spatium * .5 * (8.0 + _spanTo);
 
-    double w = layoutWidth(score(), barLineType()) * mag();
+    double w = layoutWidth() * mag();
     RectF r(0.0, y1, w, y2 - y1);
 
     if (score()->styleB(Sid::repeatBarTips)) {
