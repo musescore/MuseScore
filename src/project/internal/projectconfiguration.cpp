@@ -56,8 +56,8 @@ static const Settings::Key AUTOSAVE_INTERVAL_KEY(module_name, "project/autoSaveI
 static const Settings::Key SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT(module_name, "project/shouldDestinationFolderBeOpenedOnExport");
 static const Settings::Key SHOW_DETAILED_PROJECT_UPLOADED_DIALOG(module_name, "project/showDetailedProjectUploadedDialog");
 
-static const QString DEFAULT_FILE_SUFFIX(".mscz");
-static const QString DEFAULT_FILE_FILTER("*.mscz");
+static const std::string DEFAULT_FILE_SUFFIX(".mscz");
+static const std::string DEFAULT_FILE_FILTER("*.mscz");
 
 void ProjectConfiguration::init()
 {
@@ -285,9 +285,14 @@ async::Channel<io::path_t> ProjectConfiguration::userProjectsPathChanged() const
     return m_userScoresPathChanged;
 }
 
-io::path_t ProjectConfiguration::cloudProjectPath(const io::path_t& projectName) const
+bool ProjectConfiguration::shouldAskSaveLocationType() const
 {
-    return cloudProjectsPath() + '/' + projectName + '.' + engraving::MSCZ;
+    return settings()->value(SHOULD_ASK_SAVE_LOCATION_TYPE).toBool();
+}
+
+void ProjectConfiguration::setShouldAskSaveLocationType(bool shouldAsk)
+{
+    settings()->setSharedValue(SHOULD_ASK_SAVE_LOCATION_TYPE, Val(shouldAsk));
 }
 
 bool ProjectConfiguration::isCloudProject(const io::path_t& projectPath) const
@@ -295,35 +300,63 @@ bool ProjectConfiguration::isCloudProject(const io::path_t& projectPath) const
     return io::dirpath(projectPath) == cloudProjectsPath();
 }
 
+io::path_t ProjectConfiguration::cloudProjectSavingFilePath(const io::path_t& projectName) const
+{
+    io::path_t savingPathWithoutSuffix = cloudProjectsPath() + '/' + projectName;
+
+    auto makeSavingPath = [savingPathWithoutSuffix](int num = 0) {
+        std::string numPart = num > 0 ? ' ' + std::to_string(num) : "";
+        return savingPathWithoutSuffix + numPart + DEFAULT_FILE_SUFFIX;
+    };
+
+    io::paths_t cloudProjectPaths = scanCloudProjects();
+    io::path_t savingPath = makeSavingPath();
+
+    if (!mu::contains(cloudProjectPaths, savingPath)) {
+        return savingPath;
+    }
+
+    for (size_t i = 0; i < cloudProjectPaths.size(); ++i) {
+        savingPath = makeSavingPath(i + 2);
+
+        if (!mu::contains(cloudProjectPaths, savingPath)) {
+            return savingPath;
+        }
+    }
+
+    return makeSavingPath(cloudProjectPaths.size() + 2);
+}
+
 io::path_t ProjectConfiguration::cloudProjectsPath() const
 {
     return globalConfiguration()->userDataPath() + "/Cloud Scores";
 }
 
-io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr project, const QString& filenameAddition,
-                                                       const QString& suffix) const
+io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition,
+                                                       const std::string& suffix) const
 {
     io::path_t folderPath;
     io::path_t filename;
-    QString theSuffix = suffix;
+    std::string theSuffix = suffix;
 
     io::path_t projectPath = project->path();
+    bool isLocalProject = !project->isCloudProject();
 
-    if (project->isNewlyCreated()) {
-        if (io::isAbsolute(projectPath)) {
+    if (isLocalProject) {
+        if (project->isNewlyCreated()) {
+            if (io::isAbsolute(projectPath)) {
+                folderPath = io::dirpath(projectPath);
+            }
+
+            filename = io::filename(projectPath, false);
+        } else {
+            projectPath = engraving::containerPath(projectPath);
             folderPath = io::dirpath(projectPath);
-        }
+            filename = io::filename(projectPath, false);
 
-        filename = io::filename(projectPath, false);
-    } else if (project->isCloudProject()) {
-        // TODO(save-to-cloud)
-    } else {
-        projectPath = engraving::containerPath(projectPath);
-        folderPath = io::dirpath(projectPath);
-        filename = io::filename(projectPath, false);
-
-        if (theSuffix.isEmpty()) {
-            theSuffix = QString::fromStdString(io::suffix(projectPath));
+            if (theSuffix.empty()) {
+                theSuffix = io::suffix(projectPath);
+            }
         }
     }
 
@@ -347,23 +380,13 @@ io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr proje
         filename = qtrc("project", "Untitled");
     }
 
-    if (theSuffix.isEmpty()) {
+    if (theSuffix.empty()) {
         theSuffix = DEFAULT_FILE_SUFFIX;
     }
 
     return folderPath
            .appendingComponent(filename + filenameAddition)
            .appendingSuffix(theSuffix);
-}
-
-bool ProjectConfiguration::shouldAskSaveLocationType() const
-{
-    return settings()->value(SHOULD_ASK_SAVE_LOCATION_TYPE).toBool();
-}
-
-void ProjectConfiguration::setShouldAskSaveLocationType(bool shouldAsk)
-{
-    settings()->setSharedValue(SHOULD_ASK_SAVE_LOCATION_TYPE, Val(shouldAsk));
 }
 
 SaveLocationType ProjectConfiguration::lastUsedSaveLocationType() const

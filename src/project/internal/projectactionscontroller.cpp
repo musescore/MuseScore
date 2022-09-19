@@ -473,7 +473,7 @@ bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveM
     return false;
 }
 
-bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, project::SaveMode saveMode)
+bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, SaveMode saveMode)
 {
     Ret ret = currentNotationProject()->save(filePath, saveMode);
     if (!ret) {
@@ -485,7 +485,7 @@ bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, pr
     return true;
 }
 
-bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, SaveMode)
+bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, SaveMode saveMode)
 {
     INotationProjectPtr project = currentNotationProject();
     if (!project) {
@@ -495,8 +495,19 @@ bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, 
     project->setCloudInfo(info);
 
     io::path_t oldPath = project->path();
+    io::path_t savingPath;
 
-    if (!saveProjectLocally(configuration()->cloudProjectPath(info.name.toStdString()))) {
+    if (project->isCloudProject()) {
+        if (saveMode == SaveMode::Save || saveMode == SaveMode::AutoSave) {
+            savingPath = oldPath;
+        }
+    }
+
+    if (savingPath.empty()) {
+        savingPath = configuration()->cloudProjectSavingFilePath(info.name.toStdString());
+    }
+
+    if (!saveProjectLocally(savingPath)) {
         return false;
     }
 

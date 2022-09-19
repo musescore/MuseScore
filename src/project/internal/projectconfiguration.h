@@ -71,14 +71,14 @@ public:
     void setUserProjectsPath(const io::path_t& path) override;
     async::Channel<io::path_t> userProjectsPathChanged() const override;
 
-    io::path_t cloudProjectPath(const io::path_t& projectName) const override;
-    bool isCloudProject(const io::path_t& projectPath) const override;
-
     bool shouldAskSaveLocationType() const override;
     void setShouldAskSaveLocationType(bool shouldAsk) override;
 
-    io::path_t defaultSavingFilePath(INotationProjectPtr project,
-                                     const QString& filenameAddition = QString(), const QString& suffix = QString()) const override;
+    bool isCloudProject(const io::path_t& projectPath) const override;
+
+    io::path_t cloudProjectSavingFilePath(const io::path_t& projectName) const override;
+    io::path_t defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition = "",
+                                     const std::string& suffix = "") const override;
 
     SaveLocationType lastUsedSaveLocationType() const override;
     void setLastUsedSaveLocationType(SaveLocationType type) override;

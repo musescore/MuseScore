@@ -181,7 +181,7 @@ mu::io::path_t ExportProjectScenario::askExportPath(const INotationPtrList& nota
 {
     INotationProjectPtr project = context()->currentProject();
 
-    QString filenameAddition;
+    std::string filenameAddition;
 
     // If only one file will be created, the filename will be exactly what the user
     // types in the save dialog and therefore we can put the file dialog in charge of
@@ -197,14 +197,14 @@ mu::io::path_t ExportProjectScenario::askExportPath(const INotationPtrList& nota
 
         if (containsMaster) {
             //: Used in export filename suggestion. Please use only characters that are valid for filenames.
-            filenameAddition = "-" + qtrc("project/export", "Score_and_Parts");
+            filenameAddition = "-" + trc("project/export", "Score_and_Parts");
         } else {
             //: Used in export filename suggestion. Please use only characters that are valid for filenames.
-            filenameAddition = "-" + qtrc("project/export", "Parts");
+            filenameAddition = "-" + trc("project/export", "Parts");
         }
     } else if (isExportingOnlyOneScore) {
         if (!isMainNotation(notations.front())) {
-            filenameAddition = "-" + io::escapeFileName(notations.front()->name()).toQString();
+            filenameAddition = "-" + io::escapeFileName(notations.front()->name()).toStdString();
         }
 
         if (unitType == INotationWriter::UnitType::PER_PAGE && isCreatingOnlyOneFile) {
@@ -213,7 +213,7 @@ mu::io::path_t ExportProjectScenario::askExportPath(const INotationPtrList& nota
         }
     }
 
-    io::path_t defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition, exportType.suffixes.front());
+    io::path_t defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition, exportType.suffixes.front().toStdString());
 
     return interactive()->selectSavingFile(qtrc("project/export", "Export"), defaultPath,
                                            exportType.filter(), isCreatingOnlyOneFile);
