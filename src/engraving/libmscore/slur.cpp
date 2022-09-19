@@ -382,16 +382,19 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
     }
     // Remove items that the slur shouldn't try to avoid
     mu::remove_if(segShape, [startCR](ShapeElement& shapeEl){
-        if (!shapeEl.toItem) {
+        if (!shapeEl.toItem || !shapeEl.toItem->parentItem()) {
             return false;
         }
-        // Lyrics and fingering
         const EngravingItem* item = shapeEl.toItem;
-        if (item->isLyrics() || item->isFingering()) {
+        const EngravingItem* parent = item->parentItem();
+        // Its own startCR or items belonging to it, lyrics, fingering, ledger lines
+        if (item == startCR || parent == startCR || item->isLyrics() || item->isFingering() || item->isLedgerLine()) {
             return true;
         }
-        // Items belonging to its own start chord
-        if (item->parentItem() == startCR) {
+        // Items that are on the start segment but in a different voice
+        if (((item->isChordRest() && toChordRest(item)->segment() == startCR->segment())
+             || (parent->isChordRest() && toChordRest(parent)->segment() == startCR->segment()))
+            && item->track() != startCR->track()) {
             return true;
         }
         return false;
@@ -449,7 +452,7 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
         if (seg->enabled()) {
             segShapes.push_back(getSegmentShape(seg, startCR, endCR));
         }
-        if (seg->next() && !seg->next()->isEndBarLineType()) {
+        if (seg->next() && !seg->next()->isType(SegmentType::BarLineType)) {
             seg = seg->next();
         } else if (seg->measure()->next() && seg->measure()->next()->isMeasure()) {
             seg = toMeasure(seg->measure()->next())->first();
