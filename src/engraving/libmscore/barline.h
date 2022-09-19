@@ -151,7 +151,7 @@ public:
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
 
-    static double layoutWidth(Score*, BarLineType);
+    double layoutWidth() const;
     mu::RectF layoutRect() const;
 
     EngravingItem* nextSegmentElement() override;
