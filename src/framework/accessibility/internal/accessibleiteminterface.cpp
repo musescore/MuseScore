@@ -335,18 +335,16 @@ QString AccessibleItemInterface::text(int startOffset, int endOffset) const
     return m_object->item()->accessibleText(startOffset, endOffset);
 }
 
-QString AccessibleItemInterface::textBeforeOffset(int, QAccessible::TextBoundaryType, int*, int*) const
+QString AccessibleItemInterface::textBeforeOffset(int offset, QAccessible::TextBoundaryType boundaryType, int* startOffset,
+                                                  int* endOffset) const
 {
-    NOT_IMPLEMENTED;
-
-    return QString();
+    return m_object->item()->accessibleTextBeforeOffset(offset, muBoundaryType(boundaryType), startOffset, endOffset);
 }
 
-QString AccessibleItemInterface::textAfterOffset(int, QAccessible::TextBoundaryType, int*, int*) const
+QString AccessibleItemInterface::textAfterOffset(int offset, QAccessible::TextBoundaryType boundaryType, int* startOffset,
+                                                 int* endOffset) const
 {
-    NOT_IMPLEMENTED;
-
-    return QString();
+    return m_object->item()->accessibleTextAfterOffset(offset, muBoundaryType(boundaryType), startOffset, endOffset);
 }
 
 QString AccessibleItemInterface::textAtOffset(int offset, QAccessible::TextBoundaryType boundaryType, int* startOffset,
