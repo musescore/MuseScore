@@ -357,17 +357,4 @@ void TextLine::undoChangeProperty(Pid id, const engraving::PropertyValue& v, Pro
     }
     TextLineBase::undoChangeProperty(id, v, ps);
 }
-
-//---------------------------------------------------------
-//   layoutSystem
-//    layout spannersegment for system
-//---------------------------------------------------------
-
-SpannerSegment* TextLine::layoutSystem(System* system)
-{
-    SpannerSegment* segment = TextLineBase::layoutSystem(system);
-    moveToSystemTopIfNeed(segment);
-
-    return segment;
-}
 } // namespace mu::engraving

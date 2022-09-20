@@ -1416,18 +1416,6 @@ SpannerSegment* Spanner::layoutSystem(System*)
     return 0;
 }
 
-void Spanner::moveToSystemTopIfNeed(SpannerSegment* segment)
-{
-    if (segment->spanner()) {
-        for (SpannerSegment* ss : segment->spanner()->spannerSegments()) {
-            ss->setFlag(ElementFlag::SYSTEM, systemFlag());
-            ss->setTrack(systemFlag() ? 0 : track());
-        }
-        segment->spanner()->setFlag(ElementFlag::SYSTEM, systemFlag());
-        segment->spanner()->setTrack(systemFlag() ? 0 : track());
-    }
-}
-
 //---------------------------------------------------------
 //   getNextLayoutSystemSegment
 //---------------------------------------------------------
