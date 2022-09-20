@@ -33,6 +33,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #include "cloud/iuploadingservice.h"
+#include "cloud/iauthorizationservice.h"
 #include "playback/iplaybackcontroller.h"
 #include "print/iprintprovider.h"
 #include "inotationreadersregister.h"
@@ -62,6 +63,7 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
     INJECT(project, framework::IInteractive, interactive)
     INJECT(project, context::IGlobalContext, globalContext)
     INJECT(project, mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(project, cloud::IAuthorizationService, authorizationService)
     INJECT(project, cloud::IUploadingService, uploadingService)
     INJECT(project, playback::IPlaybackController, playbackController)
     INJECT(project, print::IPrintProvider, printProvider)
@@ -124,6 +126,9 @@ private:
     void uploadAudio(const AudioFile& audio, const QUrl& sourceUrl);
 
     void onProjectSuccessfullyUploaded(const QUrl& urlToOpen = QUrl());
+
+    void warnCloudIsNotAvailable();
+    void warnPublishIsNotAvailable();
 
     void importPdf();
 
