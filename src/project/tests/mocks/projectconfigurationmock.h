@@ -109,6 +109,8 @@ public:
     MOCK_METHOD(void, setNumberOfSavesToGenerateAudio, (int), (override));
 
     MOCK_METHOD(io::path_t, temporaryMp3FilePathTemplate, (), (const, override));
+
+    MOCK_METHOD(io::path_t, projectBackupPath, (const io::path_t&), (const, override));
 };
 }
 
