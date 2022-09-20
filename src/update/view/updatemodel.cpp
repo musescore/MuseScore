@@ -56,7 +56,7 @@ void UpdateModel::load(const QString& mode)
         setProgressTitle(QString::fromStdString(title));
     });
 
-    progress.finished.onReceive(this, [this](const ProgressResult& res) {
+    progress.finished.onReceive(this, [](const ProgressResult& res) {
         const Ret& ret = res.ret;
 
         if (!ret && !ret.text().empty()) {

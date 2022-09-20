@@ -29,6 +29,7 @@
 
 #include "log.h"
 #include "io/path.h"
+#include "progress.h"
 
 #include "audiotypes.h"
 
@@ -68,6 +69,11 @@ public:
     virtual size_t encode(samples_t samplesPerChannel, const float* input) = 0;
     virtual size_t flush() = 0;
 
+    framework::Progress progress()
+    {
+        return m_progress;
+    }
+
 protected:
     virtual size_t requiredOutputBufferSize(samples_t totalSamplesNumber) const = 0;
 
@@ -98,6 +104,8 @@ protected:
     std::vector<unsigned char> m_outputBuffer;
 
     SoundTrackFormat m_format;
+
+    framework::Progress m_progress;
 };
 
 using AbstractAudioEncoderPtr = std::unique_ptr<AbstractAudioEncoder>;

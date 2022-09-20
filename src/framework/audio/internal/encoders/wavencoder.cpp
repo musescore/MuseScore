@@ -24,6 +24,8 @@
 
 #include <map>
 
+#include "async/async.h"
+
 using namespace mu::audio;
 using namespace mu::audio::encode;
 
@@ -97,10 +99,22 @@ size_t WavEncoder::encode(samples_t samplesPerChannel, const float* input)
 
     header.write(m_fileStream);
 
+    int total = header.samplesPerChannel;
+    int progressStep = (total * 5) / 100; // every 5%
+    QVector<samples_t> progressValues;
+    for (samples_t sampleIdx = 0; sampleIdx < header.samplesPerChannel;) {
+        progressValues << sampleIdx;
+        sampleIdx += progressStep;
+    }
+
     for (samples_t sampleIdx = 0; sampleIdx < header.samplesPerChannel; ++sampleIdx) {
         for (audioch_t audioChNum = 0; audioChNum < m_format.audioChannelsNumber; ++audioChNum) {
             int idx = sampleIdx * m_format.audioChannelsNumber + audioChNum;
             m_fileStream.write(reinterpret_cast<const char*>(input + idx), 4);
+        }
+
+        if (progressValues.contains(sampleIdx)) {
+            m_progress.progressChanged.send(sampleIdx, total, "");
         }
     }
 
