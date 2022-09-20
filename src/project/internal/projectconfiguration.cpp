@@ -56,7 +56,8 @@ static const Settings::Key AUTOSAVE_INTERVAL_KEY(module_name, "project/autoSaveI
 static const Settings::Key SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT(module_name, "project/shouldDestinationFolderBeOpenedOnExport");
 static const Settings::Key SHOW_DETAILED_PROJECT_UPLOADED_DIALOG(module_name, "project/showDetailedProjectUploadedDialog");
 
-const QString ProjectConfiguration::DEFAULT_FILE_SUFFIX(".mscz");
+static const QString DEFAULT_FILE_SUFFIX(".mscz");
+static const QString DEFAULT_FILE_FILTER("*.mscz");
 
 void ProjectConfiguration::init()
 {
@@ -107,6 +108,10 @@ io::paths_t ProjectConfiguration::recentProjectPaths() const
     TRACEFUNC;
 
     io::paths_t allPaths = parseRecentProjectsPaths(settings()->value(RECENT_PROJECTS_PATHS));
+    if (allPaths.empty()) {
+        allPaths = scanCloudProjects();
+    }
+
     io::paths_t actualPaths;
 
     for (const io::path_t& path: allPaths) {
@@ -175,6 +180,19 @@ io::paths_t ProjectConfiguration::parseRecentProjectsPaths(const Val& value) con
     }
 
     return result;
+}
+
+io::paths_t ProjectConfiguration::scanCloudProjects() const
+{
+    TRACEFUNC;
+
+    RetVal<io::paths_t> paths = fileSystem()->scanFiles(cloudProjectsPath(), { DEFAULT_FILE_FILTER }, io::ScanMode::FilesInCurrentDir);
+
+    if (!paths.ret) {
+        LOGE() << paths.ret.toString();
+    }
+
+    return paths.val;
 }
 
 io::path_t ProjectConfiguration::myFirstProjectPath() const
