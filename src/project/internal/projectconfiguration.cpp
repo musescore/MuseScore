@@ -279,7 +279,7 @@ bool ProjectConfiguration::isCloudProject(const io::path_t& projectPath) const
 
 io::path_t ProjectConfiguration::cloudProjectsPath() const
 {
-    return globalConfiguration()->userAppDataPath() + "/cloud_projects";
+    return globalConfiguration()->userDataPath() + "/Cloud Scores";
 }
 
 io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr project, const QString& filenameAddition,
