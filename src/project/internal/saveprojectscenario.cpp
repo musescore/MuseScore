@@ -236,19 +236,13 @@ bool SaveProjectScenario::warnBeforePublishing(INotationProjectPtr project, Clou
     IInteractive::Result result;
 
     if (isPublish) {
-        // TODO: differentiate message for whether score is being published for the first time or re-published to an existing URL
-        std::string title, message;
-
-        if (project->isCloudProject()) {
-            title = trc("project/save", "Publish changes online?");
-            message = trc("project/save", "Your saved changes will be publicly visible. We will also "
-                                          "need to generate a new MP3 for public playback. Depending on the size of "
-                                          "your score, this may take a few minutes. ");
-        } else {
-            title = trc("project/save", "Publish to MuseScore.com?");
-            message = trc("project/save", "MuseScore will generate an MP3 for web playback. Your file "
-                                          "will continue to remain locally stored on your computer. ");
+        if (!project->isCloudProject()) {
+            return true;
         }
+
+        std::string title = trc("project/save", "Publish changes online?");
+        std::string message = trc("project/save", "Your saved changes will be publicly visible. We will also "
+                                                  "need to generate a new MP3 for public playback.");
 
         result = interactive()->warning(title, message, buttons, int(IInteractive::Button::Ok), IInteractive::Option::WithIcon);
     } else if (visibility == CloudProjectVisibility::Public) {
