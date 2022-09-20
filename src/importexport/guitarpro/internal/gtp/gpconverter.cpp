@@ -1761,6 +1761,10 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
     }
 
     if (gpBend->destinationOffset <= 0) {
+        PitchValue fixGpxValue = PitchValue(50, gpBend->middleValue);
+        if (gpBend->middleValue > gpBend->destinationValue && bend->points().back() != fixGpxValue) {
+            bend->points().push_back(fixGpxValue);
+        }
         bend->points().push_back(PitchValue(100, gpBend->destinationValue)); //! In .gpx this value might be exist
     } else {
         if (PitchValue value(gpBend->destinationOffset, gpBend->destinationValue); value != lastPoint) {
