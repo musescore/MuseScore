@@ -38,7 +38,7 @@ public:
                                                  SaveLocationType preselectedType = SaveLocationType::Undefined) const = 0;
 
     virtual RetVal<io::path_t> askLocalPath(INotationProjectPtr project, SaveMode mode) const = 0;
-    virtual RetVal<CloudProjectInfo> askCloudLocation(INotationProjectPtr project) const = 0;
+    virtual RetVal<CloudProjectInfo> askCloudLocation(INotationProjectPtr project, SaveMode mode) const = 0;
     virtual RetVal<CloudProjectInfo> askPublishLocation(INotationProjectPtr project) const = 0;
 };
 }

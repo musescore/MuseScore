@@ -43,9 +43,6 @@ class ProjectConfiguration : public IProjectConfiguration
     INJECT(project, io::IFileSystem, fileSystem)
 
 public:
-    static const QString DEFAULT_FILE_SUFFIX;
-    static const QString DEFAULT_EXPORT_SUFFIX;
-
     void init();
 
     io::paths_t recentProjectPaths() const override;
@@ -74,14 +71,14 @@ public:
     void setUserProjectsPath(const io::path_t& path) override;
     async::Channel<io::path_t> userProjectsPathChanged() const override;
 
-    io::path_t cloudProjectPath(const io::path_t& projectName) const override;
-    bool isCloudProject(const io::path_t& projectPath) const override;
-
     bool shouldAskSaveLocationType() const override;
     void setShouldAskSaveLocationType(bool shouldAsk) override;
 
-    io::path_t defaultSavingFilePath(INotationProjectPtr project,
-                                     const QString& filenameAddition = QString(), const QString& suffix = QString()) const override;
+    bool isCloudProject(const io::path_t& projectPath) const override;
+
+    io::path_t cloudProjectSavingFilePath(const io::path_t& projectName) const override;
+    io::path_t defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition = "",
+                                     const std::string& suffix = "") const override;
 
     SaveLocationType lastUsedSaveLocationType() const override;
     void setLastUsedSaveLocationType(SaveLocationType type) override;
@@ -132,6 +129,7 @@ public:
 
 private:
     io::paths_t parseRecentProjectsPaths(const mu::Val& value) const;
+    io::paths_t scanCloudProjects() const;
 
     io::path_t appTemplatesPath() const;
     io::path_t cloudProjectsPath() const;
