@@ -67,7 +67,6 @@ public:
     ~TextLine() {}
 
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
-    SpannerSegment* layoutSystem(System*) override;
 
     TextLine* clone() const override { return new TextLine(*this); }
 
