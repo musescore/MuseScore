@@ -83,6 +83,9 @@ public:
         int accessibleCursorPosition() const override { return 0; }
 
         QString accessibleText(int, int) const override { return QString(); }
+
+        QString accessibleTextBeforeOffset(int, TextBoundaryType, int*, int*) const override { return QString(); }
+        QString accessibleTextAfterOffset(int, TextBoundaryType, int*, int*) const override { return QString(); }
         QString accessibleTextAtOffset(int, TextBoundaryType, int*, int*) const override { return QString(); }
         int accessibleCharacterCount() const override { return 0; }
 

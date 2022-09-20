@@ -286,6 +286,18 @@ QString AccessibleItem::accessibleText(int startOffset, int endOffset) const
     return text;
 }
 
+QString AccessibleItem::accessibleTextBeforeOffset(int, TextBoundaryType, int*, int*) const
+{
+    NOT_IMPLEMENTED;
+    return QString();
+}
+
+QString AccessibleItem::accessibleTextAfterOffset(int, TextBoundaryType, int*, int*) const
+{
+    NOT_IMPLEMENTED;
+    return QString();
+}
+
 QString AccessibleItem::accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const
 {
     if (!m_element || !m_element->isTextBase()) {
