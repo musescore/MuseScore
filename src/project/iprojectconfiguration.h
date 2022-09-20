@@ -66,14 +66,14 @@ public:
     virtual void setUserProjectsPath(const io::path_t& path) = 0;
     virtual async::Channel<io::path_t> userProjectsPathChanged() const = 0;
 
-    virtual io::path_t cloudProjectPath(const io::path_t& projectName) const = 0;
-    virtual bool isCloudProject(const io::path_t& projectPath) const = 0;
-
-    virtual io::path_t defaultSavingFilePath(INotationProjectPtr project,
-                                             const QString& filenameAddition = QString(), const QString& suffix = QString()) const = 0;
-
     virtual bool shouldAskSaveLocationType() const = 0;
     virtual void setShouldAskSaveLocationType(bool shouldAsk) = 0;
+
+    virtual bool isCloudProject(const io::path_t& projectPath) const = 0;
+
+    virtual io::path_t cloudProjectSavingFilePath(const io::path_t& projectName) const = 0;
+    virtual io::path_t defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition = "",
+                                             const std::string& suffix = "") const = 0;
 
     virtual SaveLocationType lastUsedSaveLocationType() const = 0;
     virtual void setLastUsedSaveLocationType(SaveLocationType type) = 0;

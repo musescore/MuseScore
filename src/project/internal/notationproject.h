@@ -67,7 +67,7 @@ public:
     QString displayName() const override;
 
     bool isCloudProject() const override;
-    CloudProjectInfo cloudInfo() const override;
+    const CloudProjectInfo& cloudInfo() const override;
     void setCloudInfo(const CloudProjectInfo& info) override;
 
     bool isNewlyCreated() const override;
@@ -106,7 +106,7 @@ private:
     notation::MasterNotationPtr m_masterNotation = nullptr;
     ProjectAudioSettingsPtr m_projectAudioSettings = nullptr;
     ProjectViewSettingsPtr m_viewSettings = nullptr;
-    CloudProjectInfo m_cloudInfo;
+    mutable CloudProjectInfo m_cloudInfo;
 
     io::path_t m_path;
     async::Notification m_pathChanged;

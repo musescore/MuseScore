@@ -473,7 +473,7 @@ bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveM
     return false;
 }
 
-bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, project::SaveMode saveMode)
+bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, SaveMode saveMode)
 {
     Ret ret = currentNotationProject()->save(filePath, saveMode);
     if (!ret) {
@@ -485,7 +485,7 @@ bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, pr
     return true;
 }
 
-bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, SaveMode)
+bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, SaveMode saveMode)
 {
     INotationProjectPtr project = currentNotationProject();
     if (!project) {
@@ -501,19 +501,20 @@ bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, 
 
     project->setCloudInfo(info);
 
-    io::path_t oldPath = project->path();
+    io::path_t savingPath;
 
-    if (!saveProjectLocally(configuration()->cloudProjectPath(info.name.toStdString()))) {
-        return false;
+    if (project->isCloudProject()) {
+        if (saveMode == SaveMode::Save || saveMode == SaveMode::AutoSave) {
+            savingPath = project->path();
+        }
     }
 
-    if (!oldPath.empty() && oldPath != project->path()) {
-        Ret ret = fileSystem()->remove(oldPath);
-        if (!ret) {
-            LOGE() << ret.toString();
-        }
+    if (savingPath.empty()) {
+        savingPath = configuration()->cloudProjectSavingFilePath(info.name.toStdString());
+    }
 
-        removeFromRecentScoreList(oldPath);
+    if (!saveProjectLocally(savingPath)) {
+        return false;
     }
 
     AudioFile audio;
@@ -626,11 +627,8 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
     projectData->close();
     projectData->open(QIODevice::ReadOnly);
 
-    ProjectMeta meta = project->metaInfo();
-    QString title = info.name.isEmpty() ? meta.title : info.name;
     bool isPrivate = info.visibility == CloudProjectVisibility::Private;
-
-    m_uploadingProjectProgress = uploadingService()->uploadScore(*projectData, title, isPrivate, meta.source);
+    m_uploadingProjectProgress = uploadingService()->uploadScore(*projectData, info.name, isPrivate, info.sourceUrl);
 
     m_uploadingProjectProgress->started.onNotify(this, [this]() {
         m_isUploadingProject = true;
@@ -664,13 +662,13 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
             uploadAudio(audio, newSourceUrl);
         }
 
-        ProjectMeta meta = project->metaInfo();
-        if (meta.source == newSourceUrl) {
+        CloudProjectInfo info = project->cloudInfo();
+        if (info.sourceUrl == newSourceUrl) {
             return;
         }
 
-        meta.source = newSourceUrl;
-        project->setMetaInfo(meta, false /*undoable*/);
+        info.sourceUrl = newSourceUrl;
+        project->setCloudInfo(info);
 
         if (!project->isNewlyCreated()) {
             project->save();
@@ -869,18 +867,6 @@ void ProjectActionsController::prependToRecentScoreList(const io::path_t& filePa
     recentScorePaths.insert(recentScorePaths.begin(), filePath);
     configuration()->setRecentProjectPaths(recentScorePaths);
     platformRecentFilesController()->addRecentFile(filePath);
-}
-
-void ProjectActionsController::removeFromRecentScoreList(const io::path_t& filePath)
-{
-    if (filePath.empty()) {
-        return;
-    }
-
-    io::paths_t recentScorePaths = configuration()->recentProjectPaths();
-    mu::remove(recentScorePaths, filePath);
-
-    configuration()->setRecentProjectPaths(recentScorePaths);
 }
 
 bool ProjectActionsController::hasSelection() const

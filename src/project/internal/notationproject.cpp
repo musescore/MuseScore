@@ -391,14 +391,21 @@ bool NotationProject::isCloudProject() const
     return configuration()->isCloudProject(m_path);
 }
 
-CloudProjectInfo NotationProject::cloudInfo() const
+const CloudProjectInfo& NotationProject::cloudInfo() const
 {
+    if (!m_cloudInfo.isValid()) {
+        auto tags = m_masterNotation->masterScore()->metaTags();
+        m_cloudInfo.name = tags[WORK_TITLE_TAG].toQString();
+        m_cloudInfo.sourceUrl = tags[SOURCE_TAG].toQString();
+    }
+
     return m_cloudInfo;
 }
 
 void NotationProject::setCloudInfo(const CloudProjectInfo& info)
 {
     m_cloudInfo = info;
+    m_masterNotation->masterScore()->setMetaTag(SOURCE_TAG, info.sourceUrl.toString());
 }
 
 mu::Ret NotationProject::save(const io::path_t& path, SaveMode saveMode)

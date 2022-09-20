@@ -71,7 +71,7 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
         }
 
         case SaveLocationType::Cloud: {
-            RetVal<CloudProjectInfo> info = askCloudLocation(project);
+            RetVal<CloudProjectInfo> info = askCloudLocation(project, mode);
             switch (info.ret.code()) {
             case int(Ret::Code::Ok):
                 return RetVal<SaveLocation>::make_ok(SaveLocation(info.val));
@@ -89,14 +89,14 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
 RetVal<io::path_t> SaveProjectScenario::askLocalPath(INotationProjectPtr project, SaveMode saveMode) const
 {
     QString dialogTitle = qtrc("project/save", "Save score");
-    QString filenameAddition;
+    std::string filenameAddition;
 
     if (saveMode == SaveMode::SaveCopy) {
         //: used to form a filename suggestion, like "originalFile - copy"
-        filenameAddition = " - " + qtrc("project/save", "copy", "a copy of a file");
+        filenameAddition = " - " + trc("project/save", "copy", "a copy of a file");
     } else if (saveMode == SaveMode::SaveSelection) {
         //: used to form a filename suggestion, like "originalFile - selection"
-        filenameAddition = " - " + qtrc("project/save", "selection");
+        filenameAddition = " - " + trc("project/save", "selection");
     }
 
     io::path_t defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition);
@@ -161,17 +161,17 @@ RetVal<SaveLocationType> SaveProjectScenario::askSaveLocationType() const
     return RetVal<SaveLocationType>::make_ok(type);
 }
 
-RetVal<CloudProjectInfo> SaveProjectScenario::askCloudLocation(INotationProjectPtr project) const
+RetVal<CloudProjectInfo> SaveProjectScenario::askCloudLocation(INotationProjectPtr project, SaveMode mode) const
 {
-    return doAskCloudLocation(project, false);
+    return doAskCloudLocation(project, mode, false);
 }
 
 RetVal<CloudProjectInfo> SaveProjectScenario::askPublishLocation(INotationProjectPtr project) const
 {
-    return doAskCloudLocation(project, true);
+    return doAskCloudLocation(project, SaveMode::Save, true);
 }
 
-RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjectPtr project, bool isPublish) const
+RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublish) const
 {
     if (!authorizationService()->userAuthorized().val) {
         Ret ret = authorizationService()->requireAuthorization(
@@ -215,6 +215,10 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
         return make_ret(Ret::Code::Cancel);
     }
 
+    if (mode == SaveMode::Save) {
+        result.sourceUrl = project->cloudInfo().sourceUrl;
+    }
+
     return RetVal<CloudProjectInfo>::make_ok(result);
 }
 
@@ -232,19 +236,13 @@ bool SaveProjectScenario::warnBeforePublishing(INotationProjectPtr project, Clou
     IInteractive::Result result;
 
     if (isPublish) {
-        // TODO: differentiate message for whether score is being published for the first time or re-published to an existing URL
-        std::string title, message;
-
-        if (project->isCloudProject()) {
-            title = trc("project/save", "Publish changes online?");
-            message = trc("project/save", "Your saved changes will be publicly visible. We will also "
-                                          "need to generate a new MP3 for public playback. Depending on the size of "
-                                          "your score, this may take a few minutes. ");
-        } else {
-            title = trc("project/save", "Publish to MuseScore.com?");
-            message = trc("project/save", "MuseScore will generate an MP3 for web playback. Your file "
-                                          "will continue to remain locally stored on your computer. ");
+        if (!project->isCloudProject()) {
+            return true;
         }
+
+        std::string title = trc("project/save", "Publish changes online?");
+        std::string message = trc("project/save", "Your saved changes will be publicly visible. We will also "
+                                                  "need to generate a new MP3 for public playback.");
 
         result = interactive()->warning(title, message, buttons, int(IInteractive::Button::Ok), IInteractive::Option::WithIcon);
     } else if (visibility == CloudProjectVisibility::Public) {

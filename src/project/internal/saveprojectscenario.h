@@ -44,7 +44,7 @@ public:
                                          SaveLocationType preselectedType = SaveLocationType::Undefined) const override;
 
     RetVal<io::path_t> askLocalPath(INotationProjectPtr project, SaveMode mode) const override;
-    RetVal<CloudProjectInfo> askCloudLocation(INotationProjectPtr project) const override;
+    RetVal<CloudProjectInfo> askCloudLocation(INotationProjectPtr project, SaveMode mode) const override;
     RetVal<CloudProjectInfo> askPublishLocation(INotationProjectPtr project) const override;
 
 private:
@@ -54,7 +54,7 @@ private:
     /// \param isPublish:
     ///     false -> this is part of a "Save to cloud" action
     ///     true -> this is part of a "Publish" action
-    RetVal<CloudProjectInfo> doAskCloudLocation(INotationProjectPtr project, bool isPublish) const;
+    RetVal<CloudProjectInfo> doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublish) const;
 
     bool warnBeforePublishing(INotationProjectPtr project, CloudProjectVisibility visibility, bool isPublish) const;
 };
