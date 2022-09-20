@@ -61,25 +61,18 @@ StyledDialogView {
             text: qsTrc("project/export", "Exporting…")
         }
 
-        Controls.ProgressBar {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 30
-
-            indeterminate: true
-        }
-
-        /* TODO
         ProgressBar {
             Layout.fillWidth: true
             Layout.preferredHeight: 30
 
             from: 0
-            to: 100
+            to: model.totalProgress
             value: model.progress
 
-            progressStatus: model.progress + "%"
+            progressStatus: Math.round(model.progress * 100 / model.totalProgress) + "%"
         }
 
+        /*
         FlatButton {
             Layout.alignment: Qt.AlignRight
 

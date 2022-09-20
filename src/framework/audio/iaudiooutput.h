@@ -25,6 +25,7 @@
 
 #include <memory>
 
+#include "progress.h"
 #include "async/promise.h"
 #include "async/channel.h"
 
@@ -51,6 +52,8 @@ public:
 
     virtual async::Promise<bool> saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination,
                                                 const SoundTrackFormat& format) = 0;
+
+    virtual framework::Progress saveSoundTrackProgress(const TrackSequenceId sequenceId) = 0;
 };
 
 using IAudioOutputPtr = std::shared_ptr<IAudioOutput>;
