@@ -975,7 +975,26 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
         }
 
         Staff* staff = part->staff(0);
-        staff->setStaffType(Fraction(0, 1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
+        StaffTypes type = StaffTypes::PERC_DEFAULT;
+        switch (tR->lineCount()) {
+            case 1:
+                type = StaffTypes::PERC_1LINE;
+                break;
+            case 2:
+                type = StaffTypes::PERC_2LINE;
+                break;
+            case 3:
+                type = StaffTypes::PERC_3LINE;
+                break;
+            case 5:
+                type = StaffTypes::PERC_5LINE;
+                break;
+            default:
+                type = StaffTypes::PERC_DEFAULT;
+                break;
+        }
+
+        staff->setStaffType(Fraction(0, 1), *StaffType::preset(type));
         part->instrument()->setDrumset(gpDrumset);
     }
 

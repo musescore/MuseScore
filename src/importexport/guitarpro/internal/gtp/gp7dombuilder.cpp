@@ -53,6 +53,11 @@ std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(XmlDomNod
             track->setTranspose(transpose);
         } else if (nodeName == u"Lyrics") {
             readLyrics(trackChildNode, track.get());
+        } else if (nodeName == u"NotationPatch") {
+            auto innerNode = trackChildNode.firstChildElement("LineCount");
+            if (!innerNode.isNull()) {
+                track->setLineCount(innerNode.toElement().text().toInt());
+            }
         } else if (sUnused.find(nodeName) != sUnused.end()) {
             // Ignored nodes
         } else {
