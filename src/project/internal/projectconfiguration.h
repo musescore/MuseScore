@@ -127,6 +127,9 @@ public:
 
     io::path_t projectBackupPath(const io::path_t& projectPath) const override;
 
+    bool showCloudIsNotAvailableWarning() const override;
+    void setShowCloudIsNotAvailableWarning(bool show) override;
+
 private:
     io::paths_t parseRecentProjectsPaths(const mu::Val& value) const;
     io::paths_t scanCloudProjects() const;

@@ -91,6 +91,11 @@ QByteArray CloudConfiguration::uploadingLicense() const
     return "all-rights-reserved";
 }
 
+QUrl CloudConfiguration::cloudUrl() const
+{
+    return QUrl("https://musescore.com");
+}
+
 QUrl CloudConfiguration::authorizationUrl() const
 {
     return QUrl("https://musescore.com/oauth/authorize");

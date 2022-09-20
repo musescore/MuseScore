@@ -43,6 +43,8 @@ public:
 
     virtual ValCh<bool> userAuthorized() const = 0;
     virtual ValCh<AccountInfo> accountInfo() const = 0;
+
+    virtual Ret checkCloudIsAvailable() const = 0;
 };
 }
 
