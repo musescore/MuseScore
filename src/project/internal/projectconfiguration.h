@@ -43,9 +43,6 @@ class ProjectConfiguration : public IProjectConfiguration
     INJECT(project, io::IFileSystem, fileSystem)
 
 public:
-    static const QString DEFAULT_FILE_SUFFIX;
-    static const QString DEFAULT_EXPORT_SUFFIX;
-
     void init();
 
     io::paths_t recentProjectPaths() const override;
@@ -120,6 +117,7 @@ public:
 
 private:
     io::paths_t parseRecentProjectsPaths(const mu::Val& value) const;
+    io::paths_t scanCloudProjects() const;
 
     io::path_t appTemplatesPath() const;
     io::path_t cloudProjectsPath() const;
