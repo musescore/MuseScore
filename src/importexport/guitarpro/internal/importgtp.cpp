@@ -2874,18 +2874,6 @@ static void addMetaInfo(MasterScore* score, GuitarPro* gp)
             if (!gp->subtitle.isEmpty()) {
                 str.append(gp->subtitle);
             }
-            if (!gp->artist.isEmpty()) {
-                if (!str.isEmpty()) {
-                    str.append(u'\n');
-                }
-                str.append(gp->artist);
-            }
-            if (!gp->album.isEmpty()) {
-                if (!str.isEmpty()) {
-                    str.append(u'\n');
-                }
-                str.append(gp->album);
-            }
             s->setPlainText(str);
             m->add(s);
         }

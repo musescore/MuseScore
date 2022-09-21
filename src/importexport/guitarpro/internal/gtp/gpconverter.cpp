@@ -899,18 +899,6 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
         if (!gpscore->subTitle().isEmpty()) {
             str.append(gpscore->subTitle());
         }
-        if (!gpscore->artist().isEmpty()) {
-            if (!str.isEmpty()) {
-                str.append(u'\n');
-            }
-            str.append(gpscore->artist());
-        }
-        if (!gpscore->album().isEmpty()) {
-            if (!str.isEmpty()) {
-                str.append(u'\n');
-            }
-            str.append(gpscore->album());
-        }
         s->setPlainText(str);
         m->add(s);
     }
