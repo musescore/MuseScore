@@ -28,9 +28,10 @@
 
 #include "translation.h"
 #include "config.h"
+#include "defer.h"
 #include "log.h"
 
-static constexpr int AUTO_CHECK_UPDATE_INTERVAL = 5000;
+static constexpr int AUTO_CHECK_UPDATE_INTERVAL = 1000;
 
 using namespace mu::update;
 using namespace mu::framework;
@@ -66,20 +67,32 @@ void UpdateScenario::doCheckForUpdate(bool manual)
     m_progress = true;
 
     updateService()->checkForUpdate().onResolve(this, [this, manual](const mu::RetVal<ReleaseInfo>& releaseInfo) {
-        if (!manual && releaseInfo.val.version == configuration()->skippedReleaseVersion()) {
+        DEFER {
             m_progress = false;
+        };
+
+        bool noUpdate = releaseInfo.ret.code() == static_cast<int>(Err::NoUpdate);
+        if (!manual) {
+            bool shouldIgnoreUpdate = releaseInfo.val.version == configuration()->skippedReleaseVersion();
+            if (noUpdate || shouldIgnoreUpdate) {
+                return;
+            }
+        } else if (noUpdate) {
+            showNoUpdateMsg();
             return;
         }
 
         showReleaseInfo(releaseInfo.val);
-        m_progress = false;
     })
     .onReject(this, [this](int errCode, std::string text) {
+        DEFER {
+            m_progress = false;
+        };
+
         LOGE() << "unable to check for update, error code: " << errCode
                << ", " << text;
 
         processUpdateResult(errCode);
-        m_progress = false;
     });
 }
 
@@ -134,7 +147,7 @@ void UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
     QString actionCode = rv.val.toQString();
 
     if (actionCode == "install") {
-        installRelease();
+        downloadRelease();
     } else if (actionCode == "remindLater") {
         return;
     } else if (actionCode == "skip") {
@@ -149,10 +162,35 @@ void UpdateScenario::showServerErrorMsg()
                          IInteractive::Option::WithIcon);
 }
 
-void UpdateScenario::installRelease()
+void UpdateScenario::downloadRelease()
 {
-    RetVal<Val> rv = interactive()->open("musescore://update");
+    RetVal<Val> rv = interactive()->open("musescore://update?mode=download");
     if (!rv.ret) {
         processUpdateResult(rv.ret.code());
+        return;
     }
+
+    closeAppAndStartInstallation(rv.val.toString());
+}
+
+void UpdateScenario::closeAppAndStartInstallation(const io::path_t& installerPath)
+{
+    std::string info = trc("update", "MuseScore needs to close to complete the installation. "
+                                     "If you have any unsaved changes, you will be prompted to save them before MuseScore closes.");
+
+    int closeBtn = int(IInteractive::Button::CustomButton) + 1;
+    IInteractive::Result result = interactive()->info("", info,
+                                                      { interactive()->buttonData(IInteractive::Button::Cancel),
+                                                        IInteractive::ButtonData(closeBtn, trc("update", "Close"), true) },
+                                                      closeBtn);
+
+    if (result.standardButton() == IInteractive::Button::Cancel) {
+        return;
+    }
+
+    if (multiInstancesProvider()->instances().size() != 1) {
+        multiInstancesProvider()->quitAllAndRunInstallation(installerPath);
+    }
+
+    dispatcher()->dispatch("quit", actions::ActionData::make_arg2<bool, std::string>(false, installerPath.toStdString()));
 }

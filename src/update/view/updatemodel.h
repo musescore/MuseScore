@@ -45,7 +45,7 @@ public:
     explicit UpdateModel(QObject* parent = nullptr);
     ~UpdateModel();
 
-    Q_INVOKABLE void load();
+    Q_INVOKABLE void load(const QString& mode);
 
     int currentProgress() const;
     int totalProgress() const;
@@ -53,7 +53,7 @@ public:
 
 signals:
     void started();
-    void finished(int errorCode);
+    void finished(int errorCode, const QString& installerPath);
 
     void currentProgressChanged();
     void totalProgressChanged();

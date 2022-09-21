@@ -45,17 +45,17 @@ public:
 
     async::Promise<RetVal<ReleaseInfo> > checkForUpdate() override;
 
-    void update() override;
+    RetVal<io::path_t> downloadRelease() override;
     void cancelUpdate() override;
     framework::Progress updateProgress() override;
 
 private:
     RetVal<ReleaseInfo> parseRelease(const QByteArray& json) const;
 
-    RetVal<io::path_t> downloadRelease();
-    Ret installRelease(const io::path_t& installerPath);
+    void clear();
 
     ReleaseInfo m_lastCheckResult;
+    io::path_t m_installatorPath;
 
     network::INetworkManagerPtr m_networkManager;
     framework::Progress m_updateProgress;

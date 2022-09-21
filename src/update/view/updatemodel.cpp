@@ -23,6 +23,7 @@
 #include "updatemodel.h"
 
 #include "async/async.h"
+#include "io/path.h"
 
 #include "translation.h"
 #include "log.h"
@@ -41,7 +42,7 @@ UpdateModel::~UpdateModel()
     service()->cancelUpdate();
 }
 
-void UpdateModel::load()
+void UpdateModel::load(const QString& mode)
 {
     Progress progress = service()->updateProgress();
 
@@ -61,12 +62,13 @@ void UpdateModel::load()
         if (!ret && !ret.text().empty()) {
             LOGE() << ret.toString();
         }
-
-        emit finished(ret.code());
     });
 
-    async::Async::call(this, [this]() {
-        service()->update();
+    async::Async::call(this, [this, mode]() {
+        if (mode == "download") {
+            RetVal<io::path_t> downloadRetVal = service()->downloadRelease();
+            emit finished(downloadRetVal.ret.code(), downloadRetVal.val.toQString());
+        }
     });
 }
 

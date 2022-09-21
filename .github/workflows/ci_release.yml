@@ -1,8 +1,7 @@
 name: Collect release info
 
 on:
-  release:
-    types: [ published ]
+  workflow_dispatch:
 
 defaults:
   run:
