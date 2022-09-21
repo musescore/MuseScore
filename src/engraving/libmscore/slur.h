@@ -115,6 +115,9 @@ public:
 
     bool isCrossStaff();
     bool isOverBeams();
+    bool stemSideForBeam(bool start);
+    bool stemSideStartForBeam() { return stemSideForBeam(true); }
+    bool stemSideEndForBeam() { return stemSideForBeam(false); }
     const StemFloated& stemFloated() const { return _stemFloated; }
 
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }

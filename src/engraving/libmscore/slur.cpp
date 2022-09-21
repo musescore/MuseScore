@@ -382,7 +382,7 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
         segShape.add(secondStaffShape);
     }
     // Remove items that the slur shouldn't try to avoid
-    mu::remove_if(segShape, [startCR](ShapeElement& shapeEl){
+    mu::remove_if(segShape, [startCR](ShapeElement& shapeEl) {
         if (!shapeEl.toItem || !shapeEl.toItem->parentItem()) {
             return false;
         }
@@ -1057,10 +1057,10 @@ void Slur::slurPos(SlurPos* sp)
         sa1 = SlurAnchor::STEM;
     }
     if (scr->up() == ecr->up() && scr->up() == _up) {
-        if (stem1 && (!scr->beam() || scr->beam()->elements().back() == scr)) {
+        if (stem1 && !stemSideStartForBeam()) {
             sa1 = SlurAnchor::STEM;
         }
-        if (stem2 && (!ecr->beam() || ecr->beam()->elements().front() == ecr)) {
+        if (stem2 && !stemSideEndForBeam()) {
             sa2 = SlurAnchor::STEM;
         }
     } else if (ecr->segment()->system() != scr->segment()->system()) {
@@ -1137,6 +1137,8 @@ void Slur::slurPos(SlurPos* sp)
         double yadj;
         if (ec->beam() && ec->beam()->elements().front() != ec) {
             yadj = 0.75;
+        } else if (ec->tremolo() && ec->tremolo()->twoNotes() && ec->tremolo()->chord2() == ec) {
+            yadj = 0.75;
         } else {
             yadj = -stemSideInset;
         }
@@ -1174,8 +1176,8 @@ void Slur::slurPos(SlurPos* sp)
         po.ry() += scr->mag() * _spatium * .9 * __up;
 
         // adjustments for stem and/or beam
-
-        if (stem1) {     //sc not null
+        Tremolo* trem = sc ? sc->tremolo() : nullptr;
+        if (stem1 || (trem && trem->twoNotes())) {     //sc not null
             Beam* beam1 = sc->beam();
             if (beam1 && (beam1->elements().back() != sc) && (sc->up() == _up)) {
                 beam1->layout();
@@ -1198,6 +1200,26 @@ void Slur::slurPos(SlurPos* sp)
 
                 // force end of slur to layout to stem as well,
                 // if start and end chords have same stem direction
+                stemPos = true;
+            } else if (trem && trem->twoNotes() && trem->chord2() != sc && sc->up() == _up) {
+                trem->layout();
+                Note* note = _up ? sc->upNote() : sc->downNote();
+                double stemHeight = stem1 ? stem1->length() : trem->defaultStemLengths().first;
+                double offset = std::max(beamClearance * sc->mag(), minOffset) * _spatium;
+                double sh = stemHeight + offset;
+
+                if (_up) {
+                    po.ry() = sc->stemPos().y() - sc->pagePos().y() - sh;
+                } else {
+                    po.ry() = sc->stemPos().y() - sc->pagePos().y() + sh;
+                }
+                if (!stem1) {
+                    po.rx() = note->noteheadCenterX();
+                } else {
+                    po.rx() = sc->stemPosX() + (beamAnchorInset * _spatium * sc->mag()) + (stem1->lineWidthMag() / 2. * __up);
+                }
+                fixArticulations(po, sc, __up, true);
+
                 stemPos = true;
             } else {
                 // start chord is not beamed or is last chord of beam group
@@ -1281,8 +1303,8 @@ void Slur::slurPos(SlurPos* sp)
             po.ry() += ecr->mag() * _spatium * .9 * __up;
 
             // adjustments for stem and/or beam
-
-            if (stem2) {       //ec can't be null
+            Tremolo* trem = ec ? ec->tremolo() : nullptr;
+            if (stem2 || trem && trem->twoNotes()) {       //ec can't be null
                 Beam* beam2 = ec->beam();
                 if ((stemPos && (scr->up() == ec->up()))
                     || (beam2
@@ -1291,9 +1313,13 @@ void Slur::slurPos(SlurPos* sp)
                         && (ec->up() == _up)
                         && sc && (sc->noteType() == NoteType::NORMAL)
                         )
+                    || (trem && trem->twoNotes() && ec->up() == up())
                     ) {
                     if (beam2) {
                         beam2->layout();
+                    }
+                    if (trem) {
+                        trem->layout();
                     }
                     // slur start was laid out to stem and start and end have same direction
                     // OR
@@ -1303,16 +1329,22 @@ void Slur::slurPos(SlurPos* sp)
 
                     // in these cases, layout end of slur to stem
                     double beamWidthSp = beam2 ? score()->styleS(Sid::beamWidth).val() : 0;
+                    Note* note = _up ? sc->upNote() : sc->downNote();
+                    double stemHeight = stem2 ? stem2->length() + (beamWidthSp / 2) : trem->defaultStemLengths().second;
                     double offset = std::max(beamClearance * ec->mag(), minOffset) * _spatium;
-                    double sh = stem2->length() + (beamWidthSp / 2) + offset;
+                    double sh = stemHeight + offset;
+
                     if (_up) {
                         po.ry() = ec->stemPos().y() - ec->pagePos().y() - sh;
                     } else {
                         po.ry() = ec->stemPos().y() - ec->pagePos().y() + sh;
                     }
-
-                    po.rx() = ec->stemPosX() - (beamAnchorInset * _spatium * ec->mag())
-                              + (stem2->lineWidthMag() / 2 * __up);
+                    if (!stem2) {
+                        // tremolo whole notes
+                        po.setX(note->noteheadCenterX());
+                    } else {
+                        po.setX(ec->stemPosX() + (stem2->lineWidthMag() / 2 * __up) - (beamAnchorInset * _spatium * ec->mag()));
+                    }
 
                     // account for articulations
                     fixArticulations(po, ec, __up, true);
@@ -1765,6 +1797,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
     }
 
     slurSegment->layoutSegment(p1, p2);
+
     return slurSegment;
 }
 
@@ -2001,6 +2034,37 @@ bool Slur::isCrossStaff()
 }
 
 //---------------------------------------------------------
+//   stemSideForBeam
+//    determines if the anchor point is exempted from the stem inset
+//    due to beams or tremolos.
+//---------------------------------------------------------
+
+bool Slur::stemSideForBeam(bool start)
+{
+    ChordRest* cr = start ? startCR() : endCR();
+    Chord* c = toChord(cr);
+    bool adjustForBeam = cr && cr->beam() && cr->up() == up();
+    if (start) {
+        adjustForBeam = adjustForBeam && cr->beam()->elements().back() != cr;
+    } else {
+        adjustForBeam = adjustForBeam && cr->beam()->elements().front() != cr;
+    }
+    if (adjustForBeam) {
+        return true;
+    }
+
+    bool adjustForTrem = false;
+    Tremolo* trem = c ? c->tremolo() : nullptr;
+    adjustForTrem = trem && trem->twoNotes() && trem->up() == up();
+    if (start) {
+        adjustForTrem = adjustForTrem && trem->chord2() != c;
+    } else {
+        adjustForTrem = adjustForTrem && trem->chord1() != c;
+    }
+    return adjustForTrem;
+}
+
+//---------------------------------------------------------
 //   isOverBeams
 //    returns true if all the chords spanned by the slur are
 //    beamed, and all beams are on the same side of the slur
@@ -2023,7 +2087,12 @@ bool Slur::isOverBeams()
             return false;
         }
         ChordRest* cr = toChordRest(seg->elist().at(track));
-        if (!cr->beam() || cr->beam()->up() != up()) {
+        bool hasBeam = cr->beam() && cr->up() == up();
+        bool hasTrem = false;
+        if (Chord* c = toChord(cr)) {
+            hasTrem = c->tremolo() && c->tremolo()->twoNotes() && c->up() == up();
+        }
+        if (!(hasBeam || hasTrem)) {
             return false;
         }
         if ((!seg->next() || seg->next()->isEndBarLineType()) && seg->measure()->nextMeasure()) {

@@ -406,7 +406,6 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
             y2 += _chord1->up() ? -lw / 2.0 : lw / 2.0;
         }
     }
-
     y = (y1 + y2) * .5;
     if (!_chord1->up()) {
         y -= isTraditionalAlternate ? lw * .5 : path.boundingRect().height() * .5;
@@ -550,6 +549,15 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
 
     setbbox(path.boundingRect());
     setPos(x, y + beamYOffset);
+}
+
+//---------------------------------------------------------
+//   defaultStemLengths()
+//---------------------------------------------------------
+
+std::pair<double, double> Tremolo::defaultStemLengths()
+{
+    return LayoutTremolo::extendedStemLenWithTwoNoteTremolo(this, _chord1->defaultStemLength(), _chord2->defaultStemLength());
 }
 
 //---------------------------------------------------------
