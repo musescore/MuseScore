@@ -50,9 +50,9 @@ std::pair<double, double> LayoutTremolo::extendedStemLenWithTwoNoteTremolo(Tremo
         const bool stem1Higher = stemTipDistance > 0.0;
         if (std::abs(stemTipDistance) > 1.0 * spatium) {
             if ((c1->up() && !stem1Higher) || (!c1->up() && stem1Higher)) {
-                return { stemLen1 + (sgn1 * (std::abs(stemTipDistance)) - 1.0 * spatium), stemLen2 };
+                return { stemLen1 + (std::abs(stemTipDistance) - spatium), stemLen2 };
             } else {   /* if ((c1->up() && stem1Higher) || (!c1->up() && !stem1Higher)) */
-                return { stemLen1, stemLen2 + (sgn2 * (std::abs(stemTipDistance)) - 1.0 * spatium) };
+                return { stemLen1, stemLen2 + (std::abs(stemTipDistance) - spatium) };
             }
         }
     }
