@@ -22,9 +22,10 @@
 #ifndef MU_UPDATE_UPDATECONFIGURATION_H
 #define MU_UPDATE_UPDATECONFIGURATION_H
 
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
-#include "async/asyncable.h"
 
 #include "../iupdateconfiguration.h"
 
@@ -50,7 +51,7 @@ public:
     std::string museScoreUrl() const override;
     std::string museScorePrivacyPolicyUrl() const override;
 
-    io::path_t userAppDataPath() const override;
+    io::path_t updateDataPath() const override;
 };
 }
 

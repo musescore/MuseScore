@@ -32,6 +32,7 @@ StyledDialogView {
     id: root
 
     property string version: ""
+    property string mode: ""
 
     contentWidth: 400
     contentHeight: 56
@@ -42,13 +43,13 @@ StyledDialogView {
         id: updateModel
 
         onFinished: {
-            root.ret = { errcode: errorCode }
+            root.ret = { errcode: errorCode, value: installerPath }
             root.hide()
         }
     }
 
     Component.onCompleted: {
-        updateModel.load()
+        updateModel.load(root.mode)
     }
 
     onOpened: {
