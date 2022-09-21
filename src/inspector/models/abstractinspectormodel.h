@@ -177,7 +177,7 @@ protected:
                                    const mu::engraving::EngravingItem* element) const;
 
     notation::INotationStylePtr style() const;
-    void updateStyleValue(const mu::engraving::Sid& sid, const QVariant& newValue);
+    bool updateStyleValue(const mu::engraving::Sid& sid, const QVariant& newValue);
     QVariant styleValue(const mu::engraving::Sid& sid) const;
 
     notation::INotationUndoStackPtr undoStack() const;
@@ -191,8 +191,9 @@ protected:
 
     notation::INotationSelectionPtr selection() const;
 
-    virtual void updatePropertiesOnNotationChanged();
-    virtual void onStyleChanged();
+    virtual void onCurrentNotationChanged();
+    virtual void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                                   const mu::engraving::StyleIdSet& changedStyleIdSet);
 
     IElementRepositoryService* m_repository = nullptr;
 
@@ -206,6 +207,7 @@ private:
     void setupCurrentNotationChangedConnection();
 
     mu::engraving::Sid styleIdByPropertyId(const mu::engraving::Pid pid) const;
+    mu::engraving::PropertyIdSet propertyIdSetFromStyleIdSet(const mu::engraving::StyleIdSet& styleIdSet) const;
 
     QString m_title;
     ui::IconCode::Code m_icon = ui::IconCode::Code::NONE;

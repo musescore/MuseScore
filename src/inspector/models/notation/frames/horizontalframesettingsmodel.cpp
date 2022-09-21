@@ -25,6 +25,7 @@
 #include "dataformatter.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 HorizontalFrameSettingsModel::HorizontalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -37,23 +38,27 @@ HorizontalFrameSettingsModel::HorizontalFrameSettingsModel(QObject* parent, IEle
 
 void HorizontalFrameSettingsModel::createProperties()
 {
-    m_frameWidth = buildPropertyItem(mu::engraving::Pid::BOX_WIDTH);
-    m_leftGap= buildPropertyItem(mu::engraving::Pid::TOP_GAP);
-    m_rightGap = buildPropertyItem(mu::engraving::Pid::BOTTOM_GAP);
-    m_shouldDisplayKeysAndBrackets = buildPropertyItem(mu::engraving::Pid::CREATE_SYSTEM_HEADER);
+    m_frameWidth = buildPropertyItem(Pid::BOX_WIDTH);
+    m_leftGap= buildPropertyItem(Pid::TOP_GAP);
+    m_rightGap = buildPropertyItem(Pid::BOTTOM_GAP);
+    m_shouldDisplayKeysAndBrackets = buildPropertyItem(Pid::CREATE_SYSTEM_HEADER);
 }
 
 void HorizontalFrameSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::HBOX);
+    m_elementList = m_repository->findElementsByType(ElementType::HBOX);
 }
 
 void HorizontalFrameSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_frameWidth, formatDoubleFunc);
-    loadPropertyItem(m_leftGap);
-    loadPropertyItem(m_rightGap);
-    loadPropertyItem(m_shouldDisplayKeysAndBrackets);
+    static const PropertyIdSet propertyIdSet {
+        Pid::BOX_WIDTH,
+        Pid::TOP_GAP,
+        Pid::BOTTOM_GAP,
+        Pid::CREATE_SYSTEM_HEADER,
+    };
+
+    loadProperties(propertyIdSet);
 }
 
 void HorizontalFrameSettingsModel::resetProperties()
@@ -64,9 +69,28 @@ void HorizontalFrameSettingsModel::resetProperties()
     m_shouldDisplayKeysAndBrackets->resetToDefault();
 }
 
-void HorizontalFrameSettingsModel::updatePropertiesOnNotationChanged()
+void HorizontalFrameSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
-    loadProperties();
+    loadProperties(changedPropertyIdSet);
+}
+
+void HorizontalFrameSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
+{
+    if (mu::contains(propertyIdSet, Pid::BOX_WIDTH)) {
+        loadPropertyItem(m_frameWidth, formatDoubleFunc);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::TOP_GAP)) {
+        loadPropertyItem(m_leftGap);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::BOTTOM_GAP)) {
+        loadPropertyItem(m_rightGap);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::CREATE_SYSTEM_HEADER)) {
+        loadPropertyItem(m_shouldDisplayKeysAndBrackets);
+    }
 }
 
 PropertyItem* HorizontalFrameSettingsModel::frameWidth() const

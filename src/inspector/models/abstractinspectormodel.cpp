@@ -122,38 +122,35 @@ AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementReposito
 
 void AbstractInspectorModel::setupCurrentNotationChangedConnection()
 {
-    auto listenNotationChanged = [this]() {
-        INotationPtr notation = currentNotation();
-        if (!notation) {
-            return;
-        }
-
-        notation->notationChanged().onNotify(this, [this]() {
-            if (m_updatePropertiesAllowed && !isEmpty()) {
-                updatePropertiesOnNotationChanged();
-            }
-
-            m_updatePropertiesAllowed = true;
-        });
-
-        onStyleChanged();
-        notation->style()->styleChanged().onNotify(this, [this]() {
-            onStyleChanged();
-        });
-    };
-
-    listenNotationChanged();
-
-    currentNotationChanged().onNotify(this, [listenNotationChanged]() {
-        listenNotationChanged();
+    onCurrentNotationChanged();
+    currentNotationChanged().onNotify(this, [this]() {
+        onCurrentNotationChanged();
     });
 }
 
-void AbstractInspectorModel::updatePropertiesOnNotationChanged()
+void AbstractInspectorModel::onCurrentNotationChanged()
 {
+    INotationPtr notation = currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    notation->undoStack()->changesChannel().onReceive(this, [this](const ChangesRange& range) {
+        if (range.changedPropertyIdSet.empty() && range.changedStyleIdSet.empty()) {
+            return;
+        }
+
+        if (m_updatePropertiesAllowed && !isEmpty()) {
+            PropertyIdSet expandedPropertyIdSet = propertyIdSetFromStyleIdSet(range.changedStyleIdSet);
+            expandedPropertyIdSet.insert(range.changedPropertyIdSet.cbegin(), range.changedPropertyIdSet.cend());
+            onNotationChanged(expandedPropertyIdSet, range.changedStyleIdSet);
+        }
+
+        m_updatePropertiesAllowed = true;
+    });
 }
 
-void AbstractInspectorModel::onStyleChanged()
+void AbstractInspectorModel::onNotationChanged(const PropertyIdSet&, const StyleIdSet&)
 {
 }
 
@@ -330,14 +327,41 @@ mu::engraving::Sid AbstractInspectorModel::styleIdByPropertyId(const mu::engravi
     return result;
 }
 
-void AbstractInspectorModel::updateStyleValue(const mu::engraving::Sid& sid, const QVariant& newValue)
+mu::engraving::PropertyIdSet AbstractInspectorModel::propertyIdSetFromStyleIdSet(const StyleIdSet& styleIdSet) const
+{
+    if (styleIdSet.empty()) {
+        return PropertyIdSet();
+    }
+
+    PropertyIdSet result;
+
+    for (const mu::engraving::EngravingItem* element : m_elementList) {
+        const mu::engraving::ElementStyle* style = element->styledProperties();
+        if (!style) {
+            continue;
+        }
+
+        for (const StyledProperty& property : *style) {
+            if (mu::contains(styleIdSet, property.sid)) {
+                result.insert(property.pid);
+            }
+        }
+    }
+
+    return result;
+}
+
+bool AbstractInspectorModel::updateStyleValue(const mu::engraving::Sid& sid, const QVariant& newValue)
 {
     PropertyValue newVal = PropertyValue::fromQVariant(newValue, mu::engraving::MStyle::valueType(sid));
     if (style() && style()->styleValue(sid) != newVal) {
         beginCommand();
         style()->setStyleValue(sid, newVal);
         endCommand();
+        return true;
     }
+
+    return false;
 }
 
 QVariant AbstractInspectorModel::styleValue(const mu::engraving::Sid& sid) const

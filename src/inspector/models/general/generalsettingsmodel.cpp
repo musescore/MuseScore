@@ -24,6 +24,7 @@
 #include "translation.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 GeneralSettingsModel::GeneralSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -38,10 +39,10 @@ GeneralSettingsModel::GeneralSettingsModel(QObject* parent, IElementRepositorySe
 
 void GeneralSettingsModel::createProperties()
 {
-    m_isVisible = buildPropertyItem(mu::engraving::Pid::VISIBLE);
-    m_isAutoPlaceAllowed = buildPropertyItem(mu::engraving::Pid::AUTOPLACE);
-    m_isPlayable = buildPropertyItem(mu::engraving::Pid::PLAY);
-    m_isSmall = buildPropertyItem(mu::engraving::Pid::SMALL);
+    m_isVisible = buildPropertyItem(Pid::VISIBLE);
+    m_isAutoPlaceAllowed = buildPropertyItem(Pid::AUTOPLACE);
+    m_isPlayable = buildPropertyItem(Pid::PLAY);
+    m_isSmall = buildPropertyItem(Pid::SMALL);
 }
 
 void GeneralSettingsModel::requestElements()
@@ -51,16 +52,14 @@ void GeneralSettingsModel::requestElements()
 
 void GeneralSettingsModel::loadProperties()
 {
-    bool isMaster = isMasterNotation();
-    m_isPlayable->setIsVisible(isMaster);
+    static const PropertyIdSet propertyIdSet {
+        Pid::VISIBLE,
+        Pid::AUTOPLACE,
+        Pid::PLAY,
+        Pid::SMALL,
+    };
 
-    if (isMaster) {
-        loadPropertyItem(m_isPlayable);
-    }
-
-    loadPropertyItem(m_isVisible);
-    loadPropertyItem(m_isAutoPlaceAllowed);
-    loadPropertyItem(m_isSmall);
+    loadProperties(propertyIdSet);
 }
 
 void GeneralSettingsModel::resetProperties()
@@ -71,9 +70,33 @@ void GeneralSettingsModel::resetProperties()
     m_isSmall->resetToDefault();
 }
 
-void GeneralSettingsModel::updatePropertiesOnNotationChanged()
+void GeneralSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
-    loadPropertyItem(m_isVisible);
+    loadProperties(changedPropertyIdSet);
+}
+
+void GeneralSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)
+{
+    if (mu::contains(propertyIdSet, Pid::VISIBLE)) {
+        loadPropertyItem(m_isVisible);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::AUTOPLACE)) {
+        loadPropertyItem(m_isAutoPlaceAllowed);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::PLAY)) {
+        bool isMaster = isMasterNotation();
+        m_isPlayable->setIsVisible(isMaster);
+
+        if (isMaster) {
+            loadPropertyItem(m_isPlayable);
+        }
+    }
+
+    if (mu::contains(propertyIdSet, Pid::SMALL)) {
+        loadPropertyItem(m_isSmall);
+    }
 }
 
 PropertyItem* GeneralSettingsModel::isVisible() const

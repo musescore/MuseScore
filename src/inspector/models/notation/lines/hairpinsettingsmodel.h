@@ -47,8 +47,11 @@ private:
     void loadProperties() override;
     void resetProperties() override;
     void requestElements() override;
-
+    void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                           const mu::engraving::StyleIdSet& changedStyleIdSet) override;
     bool isTextVisible(TextType type) const override;
+
+    void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
     PropertyItem* m_isNienteCircleVisible = nullptr;
 

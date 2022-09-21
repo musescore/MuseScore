@@ -57,8 +57,12 @@ void BracketSettingsModel::requestElements()
 
 void BracketSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_bracketColumnPosition);
-    loadPropertyItem(m_bracketSpanStaves);
+    static const PropertyIdSet propertyIdSet {
+        Pid::BRACKET_COLUMN,
+        Pid::BRACKET_SPAN,
+    };
+
+    loadProperties(propertyIdSet);
 }
 
 void BracketSettingsModel::resetProperties()
@@ -67,9 +71,20 @@ void BracketSettingsModel::resetProperties()
     m_bracketSpanStaves->resetToDefault();
 }
 
-void BracketSettingsModel::updatePropertiesOnNotationChanged()
+void BracketSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
-    loadPropertyItem(m_bracketSpanStaves);
+    loadProperties(changedPropertyIdSet);
+}
+
+void BracketSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
+{
+    if (mu::contains(propertyIdSet, Pid::BRACKET_COLUMN)) {
+        loadPropertyItem(m_bracketColumnPosition);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::BRACKET_SPAN)) {
+        loadPropertyItem(m_bracketSpanStaves);
+    }
 }
 
 PropertyItem* BracketSettingsModel::bracketColumnPosition() const
