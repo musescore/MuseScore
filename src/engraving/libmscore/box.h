@@ -132,7 +132,6 @@ public:
     bool readProperties(XmlReader&) override;
 
     mu::RectF drag(EditData&) override;
-    void endEditDrag(EditData&) override;
     void layout2();
     bool isMovable() const override;
     void computeMinWidth() override;

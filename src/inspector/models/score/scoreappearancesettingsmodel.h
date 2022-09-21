@@ -31,11 +31,11 @@ class ScoreAppearanceSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool hideEmptyStaves READ hideEmptyStaves WRITE setHideEmptyStaves NOTIFY styleChanged)
+    Q_PROPERTY(bool hideEmptyStaves READ hideEmptyStaves WRITE setHideEmptyStaves NOTIFY hideEmptyStavesChanged)
     Q_PROPERTY(
-        bool dontHideEmptyStavesInFirstSystem READ dontHideEmptyStavesInFirstSystem WRITE setDontHideEmptyStavesInFirstSystem NOTIFY styleChanged)
+        bool dontHideEmptyStavesInFirstSystem READ dontHideEmptyStavesInFirstSystem WRITE setDontHideEmptyStavesInFirstSystem NOTIFY dontHideEmptyStavesInFirstSystemChanged)
     Q_PROPERTY(
-        bool showBracketsWhenSpanningSingleStaff READ showBracketsWhenSpanningSingleStaff WRITE setShowBracketsWhenSpanningSingleStaff NOTIFY styleChanged)
+        bool showBracketsWhenSpanningSingleStaff READ showBracketsWhenSpanningSingleStaff WRITE setShowBracketsWhenSpanningSingleStaff NOTIFY showBracketsWhenSpanningSingleStaffChanged)
 
 public:
     explicit ScoreAppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -55,15 +55,19 @@ public:
     bool isEmpty() const override;
 
 signals:
-    void styleChanged();
+    void hideEmptyStavesChanged();
+    void dontHideEmptyStavesInFirstSystemChanged();
+    void showBracketsWhenSpanningSingleStaffChanged();
 
 private:
     void createProperties() override { }
     void requestElements() override { }
-    void loadProperties() override { }
     void resetProperties() override { }
+    void loadProperties() override {}
 
-    void onStyleChanged() override;
+    void onCurrentNotationChanged() override;
+    void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                           const mu::engraving::StyleIdSet& changedStyleIdSet) override;
 };
 }
 

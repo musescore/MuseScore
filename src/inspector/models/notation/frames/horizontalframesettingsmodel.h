@@ -37,18 +37,21 @@ class HorizontalFrameSettingsModel : public AbstractInspectorModel
 public:
     explicit HorizontalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
-    void createProperties() override;
-    void requestElements() override;
-    void loadProperties() override;
-    void resetProperties() override;
-    void updatePropertiesOnNotationChanged() override;
-
     PropertyItem* frameWidth() const;
     PropertyItem* leftGap() const;
     PropertyItem* rightGap() const;
     PropertyItem* shouldDisplayKeysAndBrackets() const;
 
 private:
+    void createProperties() override;
+    void requestElements() override;
+    void loadProperties() override;
+    void resetProperties() override;
+    void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                           const mu::engraving::StyleIdSet& changedStyleIdSet) override;
+
+    void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
+
     PropertyItem* m_frameWidth = nullptr;
     PropertyItem* m_leftGap = nullptr;
     PropertyItem* m_rightGap = nullptr;

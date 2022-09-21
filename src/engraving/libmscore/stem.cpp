@@ -262,6 +262,13 @@ void Stem::startEdit(EditData& ed)
     eed->pushProperty(Pid::USER_LEN);
 }
 
+void Stem::startEditDrag(EditData& ed)
+{
+    EngravingItem::startEditDrag(ed);
+    ElementEditDataPtr eed = ed.getData(this);
+    eed->pushProperty(Pid::USER_LEN);
+}
+
 void Stem::editDrag(EditData& ed)
 {
     double yDelta = ed.delta.y();
