@@ -404,7 +404,9 @@ void Beam::layout1()
     _cross = _minMove != _maxMove;
     if (_minMove == _maxMove && _minMove != 0) {
         setStaffIdx(staffIdx);
-        _up = _maxMove > 0;
+        if (_direction == DirectionV::AUTO) {
+            _up = _maxMove > 0;
+        }
     } else if (_elements.size()) {
         setStaffIdx(_elements.at(0)->staffIdx());
     }
@@ -518,8 +520,11 @@ int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int di
     if (startNote == endNote) {
         return 0;
     }
-    if (isSlopeConstrained(startNote, endNote) == 0) {
+    int slopeConstrained = isSlopeConstrained(startNote, endNote);
+    if (slopeConstrained == 0) {
         return 0;
+    } else if (slopeConstrained == 1) {
+        return dictator > pointer ? -1 : 1;
     }
 
     // calculate max slope based on distance between first and last chords
@@ -1093,8 +1098,6 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
     double startY = (isStartDictator ? dictator : pointer) * spatium() / 4 + tolerance;
     double endY = (isStartDictator ? pointer : dictator) * spatium() / 4 + tolerance;
 
-    // stems in the middle of the beam can be shortened to a minimum of.....
-    // 1 beam 2 beams etc
     for (ChordRest* chordRest : chordRests) {
         if (!chordRest->isChord() || chordRest == _elements.back() || chordRest == _elements.front()) {
             continue;
@@ -1107,11 +1110,11 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
         double reduction = 0.0;
         if (!isFlat) {
             if (slope <= 3) {
-                reduction = 0.25;
+                reduction = 0.25 * spatium();
             } else if (slope <= 6) {
-                reduction = 0.5;
+                reduction = 0.5 * spatium();
             } else { // slope > 6
-                reduction = 0.75;
+                reduction = 0.75 * spatium();
             }
         }
 
