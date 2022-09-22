@@ -111,6 +111,9 @@ public:
     MOCK_METHOD(io::path_t, temporaryMp3FilePathTemplate, (), (const, override));
 
     MOCK_METHOD(io::path_t, projectBackupPath, (const io::path_t&), (const, override));
+
+    MOCK_METHOD(bool, showCloudIsNotAvailableWarning, (), (const, override));
+    MOCK_METHOD(void, setShowCloudIsNotAvailableWarning, (bool), (override));
 };
 }
 

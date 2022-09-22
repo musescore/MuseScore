@@ -38,6 +38,7 @@ public:
     network::RequestHeaders headers() const override;
     QByteArray uploadingLicense() const override;
 
+    QUrl cloudUrl() const override;
     QUrl authorizationUrl() const override;
     QUrl signUpUrl() const override;
     QUrl scoreManagerUrl() const override;
