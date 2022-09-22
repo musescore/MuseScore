@@ -28,6 +28,8 @@
 #include "internal/encoders/flacencoder.h"
 #include "internal/encoders/wavencoder.h"
 
+#include "translation.h"
+
 using namespace mu;
 using namespace mu::audio;
 using namespace mu::audio::soundtrack;
@@ -35,6 +37,10 @@ using namespace mu::audio::soundtrack;
 static constexpr audioch_t SUPPORTED_AUDIO_CHANNELS_COUNT = 2;
 static constexpr samples_t SAMPLES_PER_CHANNEL = 1024;
 static constexpr size_t INTERNAL_BUFFER_SIZE = SUPPORTED_AUDIO_CHANNELS_COUNT * SAMPLES_PER_CHANNEL;
+
+static constexpr int WRITE_STEPS = 2;
+static constexpr int PREPARE_STEP = 0;
+static constexpr int ENCODE_STEP = 1;
 
 SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format, const msecs_t totalDuration,
                                    IAudioSourcePtr source)
@@ -55,6 +61,9 @@ SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTra
     }
 
     m_encoderPtr->init(destination, format, totalSamplesNumber);
+    m_encoderPtr->progress().progressChanged.onReceive(this, [this](int64_t current, int64_t total, std::string) {
+        sendStepProgress(ENCODE_STEP, current, total);
+    });
 }
 
 bool SoundTrackWriter::write()
@@ -88,6 +97,11 @@ bool SoundTrackWriter::write()
     return true;
 }
 
+framework::Progress SoundTrackWriter::progress()
+{
+    return m_progress;
+}
+
 encode::AbstractAudioEncoderPtr SoundTrackWriter::createEncoder(const SoundTrackType& type) const
 {
     switch (type) {
@@ -104,6 +118,8 @@ bool SoundTrackWriter::prepareInputBuffer()
     size_t inputBufferOffset = 0;
     size_t inputBufferMaxOffset = m_inputBuffer.size();
 
+    sendStepProgress(PREPARE_STEP, inputBufferOffset, inputBufferMaxOffset);
+
     while (inputBufferOffset < inputBufferMaxOffset) {
         m_source->process(m_intermBuffer.data(), SAMPLES_PER_CHANNEL);
 
@@ -114,6 +130,7 @@ bool SoundTrackWriter::prepareInputBuffer()
                   m_inputBuffer.begin() + inputBufferOffset);
 
         inputBufferOffset += samplesToCopy;
+        sendStepProgress(PREPARE_STEP, inputBufferOffset, inputBufferMaxOffset);
     }
 
     if (inputBufferOffset == 0) {
@@ -122,4 +139,12 @@ bool SoundTrackWriter::prepareInputBuffer()
     }
 
     return true;
+}
+
+void SoundTrackWriter::sendStepProgress(int step, int64_t current, int64_t total)
+{
+    int stepRange = step == PREPARE_STEP ? 80 : 20;
+    int stepProgressStart = step == PREPARE_STEP ? 0 : 80;
+    int stepCurrentProgress = stepProgressStart + ((current * 100 / total) * stepRange) / 100;
+    m_progress.progressChanged.send(stepCurrentProgress, 100, "");
 }

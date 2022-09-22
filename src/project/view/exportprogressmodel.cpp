@@ -22,6 +22,8 @@
 
 #include "exportprogressmodel.h"
 
+#include <QTimer>
+
 #include "log.h"
 
 using namespace mu::project;
@@ -37,6 +39,11 @@ int ExportProgressModel::progress() const
     return m_progress;
 }
 
+int ExportProgressModel::totalProgress() const
+{
+    return m_totalProgress;
+}
+
 void ExportProgressModel::setProgress(int progress)
 {
     if (m_progress == progress) {
@@ -47,6 +54,16 @@ void ExportProgressModel::setProgress(int progress)
     emit progressChanged();
 }
 
+void ExportProgressModel::setTotalProgress(int progress)
+{
+    if (m_totalProgress == progress) {
+        return;
+    }
+
+    m_totalProgress = progress;
+    emit totalProgressChanged();
+}
+
 void ExportProgressModel::load()
 {
     Progress progress = exportScenario()->progress();
@@ -55,8 +72,9 @@ void ExportProgressModel::load()
         setProgress(0);
     });
 
-    progress.progressChanged.onReceive(this, [this](int64_t current, int64_t, const std::string&) {
+    progress.progressChanged.onReceive(this, [this](int64_t current, int64_t total, const std::string&) {
         setProgress(current);
+        setTotalProgress(total);
     });
 
     progress.finished.onReceive(this, [this](const ProgressResult& res) {
@@ -66,7 +84,9 @@ void ExportProgressModel::load()
             LOGE() << ret.toString();
         }
 
-        emit exportFinished();
+        QTimer::singleShot(100, this, [this]() {
+            emit exportFinished();
+        });
     });
 }
 

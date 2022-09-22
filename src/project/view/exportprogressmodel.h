@@ -37,23 +37,28 @@ class ExportProgressModel : public QObject, public async::Asyncable
     INJECT(project, IExportProjectScenario, exportScenario)
 
     Q_PROPERTY(int progress READ progress NOTIFY progressChanged)
+    Q_PROPERTY(int totalProgress READ totalProgress NOTIFY totalProgressChanged)
 
 public:
     explicit ExportProgressModel(QObject* parent = nullptr);
 
     int progress() const;
+    int totalProgress() const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void cancel();
 
 signals:
     void progressChanged();
+    void totalProgressChanged();
     void exportFinished();
 
 private:
     void setProgress(int progress);
+    void setTotalProgress(int progress);
 
     int m_progress = 0;
+    int m_totalProgress = INT_MAX;
 };
 }
 
