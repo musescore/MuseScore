@@ -44,7 +44,7 @@ void EditMidiMappingModel::load(int originType, int originValue)
     midiRemote()->setIsSettingMode(true);
 
     midiInPort()->eventReceived().onReceive(this, [this](tick_t, const Event& event) {
-        if (event.opcode() == Event::Opcode::NoteOn || event.opcode() == Event::Opcode::ControlChange) {
+        if (event.opcode() == Event::Opcode::NoteOn) {
             m_event = remoteEventFromMidiEvent(event);
             emit mappingTitleChanged(mappingTitle());
         }
