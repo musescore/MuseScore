@@ -127,6 +127,9 @@ public:
     virtual io::path_t temporaryMp3FilePathTemplate() const = 0;
 
     virtual io::path_t projectBackupPath(const io::path_t& projectPath) const = 0;
+
+    virtual bool showCloudIsNotAvailableWarning() const = 0;
+    virtual void setShowCloudIsNotAvailableWarning(bool show) = 0;
 };
 }
 

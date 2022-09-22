@@ -37,6 +37,7 @@ public:
     virtual network::RequestHeaders headers() const = 0;
     virtual QByteArray uploadingLicense() const = 0;
 
+    virtual QUrl cloudUrl() const = 0;
     virtual QUrl authorizationUrl() const = 0;
     virtual QUrl signUpUrl() const = 0;
     virtual QUrl scoreManagerUrl() const = 0;

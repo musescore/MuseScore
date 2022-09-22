@@ -423,6 +423,19 @@ mu::ValCh<AccountInfo> CloudService::accountInfo() const
     return m_accountInfo;
 }
 
+mu::Ret CloudService::checkCloudIsAvailable() const
+{
+    QBuffer receivedData;
+    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    Ret ret = manager->get(configuration()->cloudUrl(), &receivedData, headers());
+
+    if (!ret) {
+        printServerReply(receivedData);
+    }
+
+    return ret;
+}
+
 void CloudService::setAccountInfo(const AccountInfo& info)
 {
     if (m_accountInfo.val == info) {

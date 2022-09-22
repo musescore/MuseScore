@@ -58,6 +58,7 @@ static const Settings::Key OPEN_DETAILED_PROJECT_UPLOADED_DIALOG(module_name, "p
 static const Settings::Key OPEN_AUDIO_GENERATION_SETTINGS(module_name, "project/openAudioGenerationSettings");
 static const Settings::Key GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY(module_name, "project/generateAudioTimePeriodType");
 static const Settings::Key NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY(module_name, "project/numberOfSavesToGenerateAudio");
+static const Settings::Key SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING(module_name, "project/showCloudIsNotAvailableWarning");
 
 static const std::string DEFAULT_FILE_SUFFIX(".mscz");
 static const std::string DEFAULT_FILE_FILTER("*.mscz");
@@ -103,6 +104,7 @@ void ProjectConfiguration::init()
     settings()->setDefaultValue(OPEN_AUDIO_GENERATION_SETTINGS, Val(true));
     settings()->setDefaultValue(GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY, Val(static_cast<int>(GenerateAudioTimePeriodType::Never)));
     settings()->setDefaultValue(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY, Val(10));
+    settings()->setDefaultValue(SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING, Val(true));
 
     fileSystem()->makePath(userTemplatesPath());
     fileSystem()->makePath(defaultProjectsPath());
@@ -608,4 +610,14 @@ io::path_t ProjectConfiguration::projectBackupPath(const io::path_t& projectPath
     io::path_t projectName = io::filename(projectPath);
 
     return projectDir + "/.mscbackup/." + projectName + "~";
+}
+
+bool ProjectConfiguration::showCloudIsNotAvailableWarning() const
+{
+    return settings()->value(SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING).toBool();
+}
+
+void ProjectConfiguration::setShowCloudIsNotAvailableWarning(bool show)
+{
+    settings()->setSharedValue(SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING, Val(show));
 }

@@ -442,12 +442,16 @@ void ProjectActionsController::saveToCloud()
         return;
     }
 
-    SaveLocation saveLocation = response.val;
-    saveProjectAt(saveLocation, SaveMode::SaveAs);
+    saveProjectAt(response.val, SaveMode::SaveAs);
 }
 
 void ProjectActionsController::publish()
 {
+    if (!authorizationService()->checkCloudIsAvailable()) {
+        warnPublishIsNotAvailable();
+        return;
+    }
+
     INotationProjectPtr project = currentNotationProject();
     RetVal<CloudProjectInfo> info = saveProjectScenario()->askPublishLocation(project);
     if (!info.ret) {
@@ -487,12 +491,17 @@ bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, Sa
 
 bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, SaveMode saveMode)
 {
+    bool isCloudAvailable = authorizationService()->checkCloudIsAvailable();
+    if (!isCloudAvailable) {
+        warnCloudIsNotAvailable();
+    }
+
     INotationProjectPtr project = currentNotationProject();
     if (!project) {
         return false;
     }
 
-    if (project->isNewlyCreated()) {
+    if (isCloudAvailable && project->isNewlyCreated()) {
         Ret ret = openAudioGenerationSettings();
         if (!ret) {
             return false;
@@ -515,6 +524,10 @@ bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, 
 
     if (!saveProjectLocally(savingPath)) {
         return false;
+    }
+
+    if (!isCloudAvailable) {
+        return true;
     }
 
     AudioFile audio;
@@ -737,6 +750,36 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
     if (btn == viewOnlineBtn.btn) {
         interactive()->openUrl(scoreManagerUrl);
     }
+}
+
+void ProjectActionsController::warnCloudIsNotAvailable()
+{
+    if (!configuration()->showCloudIsNotAvailableWarning()) {
+        return;
+    }
+
+    std::string title = trc("project/save", "Unable to connect to the cloud");
+    std::string msg = trc("project/save", "Your changes will be saved to a local file until the connection resumes.");
+
+    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
+    okBtn.accent = true;
+
+    IInteractive::Result result = interactive()->warning(title, msg,
+                                                         { okBtn }, okBtn.btn,
+                                                         IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
+
+    configuration()->setShowCloudIsNotAvailableWarning(result.showAgain());
+}
+
+void ProjectActionsController::warnPublishIsNotAvailable()
+{
+    std::string title = trc("project/save", "Unable to connect to MuseScore.com");
+    std::string msg = trc("project/save", "Please check your internet connection, or try again later.");
+
+    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
+    okBtn.accent = true;
+
+    interactive()->warning(title, msg, { okBtn }, okBtn.btn, IInteractive::Option::WithIcon);
 }
 
 bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path_t& filePath)
