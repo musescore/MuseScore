@@ -44,14 +44,14 @@ class ExportProjectScenario : public IExportProjectScenario, public async::Async
     INJECT(project, io::IFileSystem, fileSystem)
 
 public:
-    std::vector<project::INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const override;
+    std::vector<INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const override;
 
     bool exportScores(const notation::INotationPtrList& notations, const ExportType& exportType,
-                      project::INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
+                      INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
                       bool openDestinationFolderOnExport = false) const override;
 
     bool exportScores(const notation::INotationPtrList& notations, const io::path_t& destinationPath,
-                      project::INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
+                      INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
                       bool openDestinationFolderOnExport = false) const override;
 
     framework::Progress progress() const override;
@@ -65,12 +65,12 @@ private:
         ReplaceAll
     };
 
-    bool isCreatingOnlyOneFile(const notation::INotationPtrList& notations, project::INotationWriter::UnitType unitType) const;
+    bool isCreatingOnlyOneFile(const notation::INotationPtrList& notations, INotationWriter::UnitType unitType) const;
 
     bool isMainNotation(notation::INotationPtr notation) const;
 
     io::path_t askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
-                             project::INotationWriter::UnitType unitType) const;
+                             INotationWriter::UnitType unitType) const;
     io::path_t completeExportPath(const io::path_t& basePath, notation::INotationPtr notation, bool isMain, int pageIndex = -1) const;
 
     bool shouldReplaceFile(const QString& filename) const;
@@ -82,8 +82,9 @@ private:
 
     void openFolder(const io::path_t& path) const;
 
-    mutable FileConflictPolicy m_fileConflictPolicy;
+    mutable FileConflictPolicy m_fileConflictPolicy = FileConflictPolicy::Undefined;
     mutable INotationWriterPtr m_currentWriter;
+    mutable std::string m_currentSuffix;
 };
 }
 
