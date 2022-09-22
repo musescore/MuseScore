@@ -2282,7 +2282,12 @@ void Note::layout()
             setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
         }
         SymId nh = noteHead();
+        if (score()->styleB(Sid::crossHeadBlackOnly) && ((nh == SymId::noteheadXHalf) || (nh == SymId::noteheadXWhole))) {
+            nh = SymId::noteheadXBlack;
+        }
+
         _cachedNoteheadSym = nh;
+
         if (isNoteName()) {
             _cachedSymNull = SymId::noteEmptyBlack;
             NoteHeadType ht = _headType == NoteHeadType::HEAD_AUTO ? chord()->durationType().headType() : _headType;

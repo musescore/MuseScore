@@ -1514,6 +1514,7 @@ enum class Sid {
     chordlineThickness,
     showCapoOnStaff,
     fretDiagramsAboveChords,
+    crossHeadBlackOnly,
 
     autoplaceEnabled,
     defaultsVersion,
