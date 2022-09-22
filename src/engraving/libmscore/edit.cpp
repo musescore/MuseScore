@@ -2096,21 +2096,24 @@ void Score::cmdFlip()
 
     std::set<const EngravingItem*> alreadyFlippedElements;
     auto flipOnce = [&alreadyFlippedElements](const EngravingItem* element, std::function<void()> flipFunction) -> void {
-        if (alreadyFlippedElements.count(element) == 0) {
-            alreadyFlippedElements.insert(element);
+        if (alreadyFlippedElements.insert(element).second) {
             flipFunction();
         }
     };
+
     for (EngravingItem* e : el) {
         if (e->isNote() || e->isStem() || e->isHook()) {
             Chord* chord = nullptr;
             if (e->isNote()) {
-                auto note = toNote(e);
-                chord = note->chord();
+                chord = toNote(e)->chord();
             } else if (e->isStem()) {
                 chord = toStem(e)->chord();
             } else {
                 chord = toHook(e)->chord();
+            }
+
+            IF_ASSERT_FAILED(chord) {
+                continue;
             }
 
             if (chord->beam()) {
@@ -2188,69 +2191,87 @@ void Score::cmdFlip()
             Note* note = toNote(e->explicitParent());
             DirectionV d = note->dotIsUp() ? DirectionV::DOWN : DirectionV::UP;
             note->undoChangeProperty(Pid::DOT_POSITION, PropertyValue::fromValue<DirectionV>(d));
-        } else if (e->isTempoText()
+        } else if (e->isStaffText()
                    || e->isSystemText()
+                   || e->isTempoText()
                    || e->isTripletFeel()
                    || e->isJump()
                    || e->isMarker()
-                   || e->isStaffText()
+                   || e->isRehearsalMark()
+                   || e->isMeasureNumber()
+                   || e->isInstrumentChange()
                    || e->isPlayTechAnnotation()
                    || e->isSticking()
                    || e->isFingering()
                    || e->isDynamic()
                    || e->isHarmony()
-                   || e->isInstrumentChange()
-                   || e->isRehearsalMark()
-                   || e->isMeasureNumber()
                    || e->isFretDiagram()
                    || e->isHairpin()
                    || e->isHairpinSegment()
+                   || e->isOttava()
                    || e->isOttavaSegment()
-                   || e->isTextLineSegment()
-                   || e->isPedalSegment()
-                   || e->isLetRingSegment()
-                   || e->isGradualTempoChange()
-                   || e->isPalmMuteSegment()
-                   || e->isFermata()
-                   || e->isLyrics()
+                   || e->isTrill()
                    || e->isTrillSegment()
-                   || e->isBreath()) {
+                   || e->isTextLine()
+                   || e->isTextLineSegment()
+                   || e->isLetRing()
+                   || e->isLetRingSegment()
+                   || e->isVibrato()
+                   || e->isVibratoSegment()
+                   || e->isPalmMute()
+                   || e->isPalmMuteSegment()
+                   || e->isWhammyBar()
+                   || e->isWhammyBarSegment()
+                   || e->isRasgueado()
+                   || e->isRasgueadoSegment()
+                   || e->isHarmonicMark()
+                   || e->isHarmonicMarkSegment()
+                   || e->isGradualTempoChange()
+                   || e->isGradualTempoChangeSegment()
+                   || e->isPedal()
+                   || e->isPedalSegment()
+                   || e->isLyrics()
+                   || e->isBreath()
+                   || e->isFermata()) {
             e->undoChangeProperty(Pid::AUTOPLACE, true);
-            // getProperty() delegates call from spannerSegment to Spanner
-            PlacementV p = PlacementV(e->getProperty(Pid::PLACEMENT).toInt());
-            p = (p == PlacementV::ABOVE) ? PlacementV::BELOW : PlacementV::ABOVE;
             // TODO: undoChangeProperty() should probably do this directly
             // see https://musescore.org/en/node/281432
             EngravingItem* ee = e->propertyDelegate(Pid::PLACEMENT);
             if (!ee) {
                 ee = e;
             }
-            PropertyFlags pf = ee->propertyFlags(Pid::PLACEMENT);
-            if (pf == PropertyFlags::STYLED) {
-                pf = PropertyFlags::UNSTYLED;
-            }
-            double oldDefaultY = ee->propertyDefault(Pid::OFFSET).value<PointF>().y();
-            ee->undoChangeProperty(Pid::PLACEMENT, int(p), pf);
-            // flip and rebase user offset to new default now that placement has changed
-            double newDefaultY = ee->propertyDefault(Pid::OFFSET).value<PointF>().y();
-            if (ee->isSpanner()) {
-                Spanner* spanner = toSpanner(ee);
-                for (SpannerSegment* ss : spanner->spannerSegments()) {
-                    if (!ss->isStyled(Pid::OFFSET)) {
-                        PointF off = ss->getProperty(Pid::OFFSET).value<PointF>();
-                        double oldY = off.y() - oldDefaultY;
-                        off.ry() = newDefaultY - oldY;
-                        ss->undoChangeProperty(Pid::OFFSET, off);
-                        ss->setOffsetChanged(false);
-                    }
+
+            flipOnce(ee, [ee]() {
+                // getProperty() delegates call from spannerSegment to Spanner
+                PlacementV p = PlacementV(ee->getProperty(Pid::PLACEMENT).toInt());
+                p = (p == PlacementV::ABOVE) ? PlacementV::BELOW : PlacementV::ABOVE;
+                PropertyFlags pf = ee->propertyFlags(Pid::PLACEMENT);
+                if (pf == PropertyFlags::STYLED) {
+                    pf = PropertyFlags::UNSTYLED;
                 }
-            } else if (!ee->isStyled(Pid::OFFSET)) {
-                PointF off = ee->getProperty(Pid::OFFSET).value<PointF>();
-                double oldY = off.y() - oldDefaultY;
-                off.ry() = newDefaultY - oldY;
-                ee->undoChangeProperty(Pid::OFFSET, off);
-                ee->setOffsetChanged(false);
-            }
+                double oldDefaultY = ee->propertyDefault(Pid::OFFSET).value<PointF>().y();
+                ee->undoChangeProperty(Pid::PLACEMENT, int(p), pf);
+                // flip and rebase user offset to new default now that placement has changed
+                double newDefaultY = ee->propertyDefault(Pid::OFFSET).value<PointF>().y();
+                if (ee->isSpanner()) {
+                    Spanner* spanner = toSpanner(ee);
+                    for (SpannerSegment* ss : spanner->spannerSegments()) {
+                        if (!ss->isStyled(Pid::OFFSET)) {
+                            PointF off = ss->getProperty(Pid::OFFSET).value<PointF>();
+                            double oldY = off.y() - oldDefaultY;
+                            off.ry() = newDefaultY - oldY;
+                            ss->undoChangeProperty(Pid::OFFSET, off);
+                            ss->setOffsetChanged(false);
+                        }
+                    }
+                } else if (!ee->isStyled(Pid::OFFSET)) {
+                    PointF off = ee->getProperty(Pid::OFFSET).value<PointF>();
+                    double oldY = off.y() - oldDefaultY;
+                    off.ry() = newDefaultY - oldY;
+                    ee->undoChangeProperty(Pid::OFFSET, off);
+                    ee->setOffsetChanged(false);
+                }
+            });
         }
     }
 }
