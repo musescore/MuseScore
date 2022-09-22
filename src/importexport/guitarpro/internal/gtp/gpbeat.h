@@ -89,6 +89,9 @@ public:
     void setPalmMute(bool palmMute) { _palmMute = palmMute; }
     bool palmMute() const { return _palmMute; }
 
+    void setTrill(bool trill) { _trill = trill; }
+    bool trill() const { return _trill; }
+
     void setHarmonicMarkType(HarmonicMarkType type) { _harmonicMarkType = type; }
     HarmonicMarkType harmonicMarkType() const { return _harmonicMarkType; }
 
@@ -220,6 +223,7 @@ private:
     OttavaType _ottavaType = OttavaType::None;
     bool _letRing = false;
     bool _palmMute = false;
+    bool _trill = false;
     HarmonicMarkType _harmonicMarkType = HarmonicMarkType::None;
     bool _slapped = false;
     bool _popped = false;
