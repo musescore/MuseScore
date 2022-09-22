@@ -28,12 +28,31 @@ import MuseScore.Project 1.0
 RadioButtonGroup {
     id: root
 
-    AudioGenerationSettingsModel {
-        id: model
+    property var defaultSettingControl: null
+    property string defaultSettingControlText: ""
+
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "AudioGenerationSettingsContent"
+        direction: NavigationPanel.Both
     }
 
     orientation: Qt.Vertical
     spacing: 16
+
+    function focusOnDefaultSettingControl() {
+        var item = itemAtIndex(0)
+        if (item) {
+            root.defaultSettingControl = item
+            root.defaultSettingControlText = item.text
+            item.activateFocus()
+        }
+    }
+
+    signal accessibleInfoResetRequested()
+
+    AudioGenerationSettingsModel {
+        id: settingsModel
+    }
 
     model: [
         { text: qsTrc("project/save", "Never"), type: GenerateAudioTimePeriodType.Never },
@@ -42,12 +61,19 @@ RadioButtonGroup {
     ]
 
     delegate: Loader {
+        property string text: modelData["text"]
+
+        function activateFocus() {
+            item.activateFocus()
+        }
+
         sourceComponent: modelData["type"] === GenerateAudioTimePeriodType.AfterCertainNumberOfSaves ?
                              numberOfSavesComp : radioBtnComp
 
         onLoaded: {
             item.text = modelData["text"]
             item.type = modelData["type"]
+            item.index = model.index
         }
     }
 
@@ -58,11 +84,28 @@ RadioButtonGroup {
             anchors.verticalCenter: parent.verticalCenter
 
             property int type: 0
+            property int index: 0
 
-            checked: model.timePeriodType === type
+            checked: settingsModel.timePeriodType === type
+
+            navigation.panel: root.navigationPanel
+            navigation.row: index
+            navigation.column: 0
+            navigation.accessible.ignored: this === root.defaultSettingControl
+            navigation.onActiveChanged: {
+                if (!navigation.active) {
+                    navigation.accessible.ignored = false
+                    navigation.accessible.focused = true
+                    root.accessibleInfoResetRequested()
+                }
+            }
+
+            function activateFocus() {
+                navigation.requestActive()
+            }
 
             onToggled: {
-                model.timePeriodType = type
+                settingsModel.timePeriodType = type
             }
         }
     }
@@ -77,17 +120,28 @@ RadioButtonGroup {
 
             property string text: ""
             property int type: 0
+            property int index: 0
+
+            function activateFocus() {
+                button.navigation.requestActive()
+            }
 
             RoundedRadioButton {
+                id: button
+
                 anchors.verticalCenter: parent.verticalCenter
 
                 width: 120
 
                 text: numberOfSavesItem.text
-                checked: model.timePeriodType === numberOfSavesItem.type
+                checked: settingsModel.timePeriodType === numberOfSavesItem.type
+
+                navigation.panel: root.navigationPanel
+                navigation.row: index
+                navigation.column: 0
 
                 onToggled: {
-                    model.timePeriodType = numberOfSavesItem.type
+                    settingsModel.timePeriodType = numberOfSavesItem.type
                 }
             }
 
@@ -96,13 +150,17 @@ RadioButtonGroup {
 
                 minValue: 2
                 maxValue: 30
-                currentValue: model.numberOfSaves
+                currentValue: settingsModel.numberOfSaves
                 measureUnitsSymbol: qsTrc("project/save", "Saves")
                 step: 1
                 decimals: 0
 
+                navigation.panel: root.navigationPanel
+                navigation.row: index
+                navigation.column: 1
+
                 onValueEdited: function(newValue) {
-                    model.numberOfSaves = newValue
+                    settingsModel.numberOfSaves = newValue
                 }
             }
         }

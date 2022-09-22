@@ -35,6 +35,11 @@ StyledDialogView {
 
     objectName: "AudioGenerationSettingsDialog"
 
+    onOpened: {
+        settingsOptions.focusOnDefaultSettingControl()
+        accessibleInfo.readInfo()
+    }
+
     ColumnLayout {
         id: content
 
@@ -42,12 +47,37 @@ StyledDialogView {
 
         spacing: 0
 
+        AccessibleItem {
+            id: accessibleInfo
+
+            accessibleParent: buttons.navigationPanel.accessible
+            visualItem: content
+            role: MUAccessible.Button
+            name: "%1; %2; %3".arg(titleLabel.text)
+                              .arg(subtitleLabel.text)
+                              .arg(settingsOptions.defaultSettingControlText)
+
+            function readInfo() {
+                accessibleInfo.ignored = false
+                accessibleInfo.focused = true
+            }
+
+            function resetFocus() {
+                accessibleInfo.ignored = true
+                accessibleInfo.focused = false
+            }
+        }
+
         StyledTextLabel {
+            id: titleLabel
+
             text: qsTrc("project/save", "Generate MP3 audio for web playback?")
             font: ui.theme.largeBodyBoldFont
         }
 
         StyledTextLabel {
+            id: subtitleLabel
+
             Layout.fillWidth: true
             Layout.topMargin: 15
 
@@ -58,8 +88,17 @@ StyledDialogView {
         }
 
         AudioGenerationSettings {
+            id: settingsOptions
+
             Layout.fillWidth: true
             Layout.topMargin: 15
+
+            navigationPanel.order: 1
+            navigationPanel.section: root.navigationSection
+
+            onAccessibleInfoResetRequested: {
+                accessibleInfo.resetFocus()
+            }
         }
 
         SeparatorLine {
@@ -69,13 +108,25 @@ StyledDialogView {
         }
 
         RowLayout {
+            id: buttons
+
             Layout.fillWidth: true
             Layout.topMargin: 20
+
+            property NavigationPanel navigationPanel: NavigationPanel {
+                name: "AudioGenerationSettingsButtons"
+                direction: NavigationPanel.Horizontal
+                section: root.navigationSection
+                order: 2
+            }
 
             CheckBox {
                 id: dontAskAgain
 
                 text: qsTrc("global", "Don't ask again")
+
+                navigation.panel: buttons.navigationPanel
+                navigation.order: 2
 
                 onClicked: {
                     checked = !checked
@@ -89,6 +140,9 @@ StyledDialogView {
             FlatButton {
                 accentButton: true
                 text: qsTrc("global", "OK")
+
+                navigation.panel: buttons.navigationPanel
+                navigation.order: 1
 
                 onClicked: {
                     root.ret = { "errcode": 0, "value": { "askAgain": !dontAskAgain.checked }}
