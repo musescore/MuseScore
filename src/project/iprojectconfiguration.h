@@ -78,8 +78,11 @@ public:
     virtual SaveLocationType lastUsedSaveLocationType() const = 0;
     virtual void setLastUsedSaveLocationType(SaveLocationType type) = 0;
 
-    virtual bool shouldWarnBeforeSavingPublicly() const = 0;
-    virtual void setShouldWarnBeforeSavingPublicly(bool shouldWarn) = 0;
+    virtual bool shouldWarnBeforePublish() const = 0;
+    virtual void setShouldWarnBeforePublish(bool shouldWarn) = 0;
+
+    virtual bool shouldWarnBeforeSavingPubliclyToCloud() const = 0;
+    virtual void setShouldWarnBeforeSavingPubliclyToCloud(bool shouldWarn) = 0;
 
     virtual QColor templatePreviewBackgroundColor() const = 0;
     virtual async::Notification templatePreviewBackgroundChanged() const = 0;
