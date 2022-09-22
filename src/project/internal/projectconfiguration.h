@@ -83,8 +83,11 @@ public:
     SaveLocationType lastUsedSaveLocationType() const override;
     void setLastUsedSaveLocationType(SaveLocationType type) override;
 
-    bool shouldWarnBeforeSavingPublicly() const override;
-    void setShouldWarnBeforeSavingPublicly(bool shouldWarn) override;
+    bool shouldWarnBeforePublish() const override;
+    void setShouldWarnBeforePublish(bool shouldWarn) override;
+
+    bool shouldWarnBeforeSavingPubliclyToCloud() const override;
+    void setShouldWarnBeforeSavingPubliclyToCloud(bool shouldWarn) override;
 
     QColor templatePreviewBackgroundColor() const override;
     async::Notification templatePreviewBackgroundChanged() const override;
