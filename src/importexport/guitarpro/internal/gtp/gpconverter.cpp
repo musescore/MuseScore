@@ -177,14 +177,14 @@ static GPBeat::HarmonicMarkType harmonicTypeNoteToBeat(GPNote::Harmonic::Type t)
     return GPBeat::HarmonicMarkType::None;
 }
 
-static GPConverter::TextLineImportType harmonicMarkToImportType(GPBeat::HarmonicMarkType t)
+static GPConverter::LineImportType harmonicMarkToImportType(GPBeat::HarmonicMarkType t)
 {
-    static std::map<GPBeat::HarmonicMarkType, GPConverter::TextLineImportType> types {
-        { GPBeat::HarmonicMarkType::Artificial, GPConverter::TextLineImportType::HARMONIC_ARTIFICIAL },
-        { GPBeat::HarmonicMarkType::Pinch, GPConverter::TextLineImportType::HARMONIC_PINCH },
-        { GPBeat::HarmonicMarkType::Tap, GPConverter::TextLineImportType::HARMONIC_TAP },
-        { GPBeat::HarmonicMarkType::Semi, GPConverter::TextLineImportType::HARMONIC_SEMI },
-        { GPBeat::HarmonicMarkType::FeedBack, GPConverter::TextLineImportType::HARMONIC_FEEDBACK }
+    static std::map<GPBeat::HarmonicMarkType, GPConverter::LineImportType> types {
+        { GPBeat::HarmonicMarkType::Artificial, GPConverter::LineImportType::HARMONIC_ARTIFICIAL },
+        { GPBeat::HarmonicMarkType::Pinch, GPConverter::LineImportType::HARMONIC_PINCH },
+        { GPBeat::HarmonicMarkType::Tap, GPConverter::LineImportType::HARMONIC_TAP },
+        { GPBeat::HarmonicMarkType::Semi, GPConverter::LineImportType::HARMONIC_SEMI },
+        { GPBeat::HarmonicMarkType::FeedBack, GPConverter::LineImportType::HARMONIC_FEEDBACK }
     };
 
     if (types.find(t) != types.end()) {
@@ -192,16 +192,16 @@ static GPConverter::TextLineImportType harmonicMarkToImportType(GPBeat::Harmonic
     }
 
     //LOGE() << "wrong harmonic type"; TODO: fix
-    return GPConverter::TextLineImportType::NONE;
+    return GPConverter::LineImportType::NONE;
 }
 
-static GPConverter::TextLineImportType ottavaToImportType(GPBeat::OttavaType t)
+static GPConverter::LineImportType ottavaToImportType(GPBeat::OttavaType t)
 {
-    static std::map<GPBeat::OttavaType, GPConverter::TextLineImportType> types {
-        { GPBeat::OttavaType::ma15, GPConverter::TextLineImportType::OTTAVA_MA15 },
-        { GPBeat::OttavaType::va8, GPConverter::TextLineImportType::OTTAVA_VA8 },
-        { GPBeat::OttavaType::vb8, GPConverter::TextLineImportType::OTTAVA_VB8 },
-        { GPBeat::OttavaType::mb15, GPConverter::TextLineImportType::OTTAVA_MB15 }
+    static std::map<GPBeat::OttavaType, GPConverter::LineImportType> types {
+        { GPBeat::OttavaType::ma15, GPConverter::LineImportType::OTTAVA_MA15 },
+        { GPBeat::OttavaType::va8, GPConverter::LineImportType::OTTAVA_VA8 },
+        { GPBeat::OttavaType::vb8, GPConverter::LineImportType::OTTAVA_VB8 },
+        { GPBeat::OttavaType::mb15, GPConverter::LineImportType::OTTAVA_MB15 }
     };
 
     if (types.find(t) != types.end()) {
@@ -209,7 +209,7 @@ static GPConverter::TextLineImportType ottavaToImportType(GPBeat::OttavaType t)
     }
 
     // LOGE() << "wrong ottava type"; TODO: fix
-    return GPConverter::TextLineImportType::NONE;
+    return GPConverter::LineImportType::NONE;
 }
 
 GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
@@ -343,7 +343,7 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
     // glueing line segment elements separated with rests
     for (auto& trackMaps : m_elementsToAddToScore) {
         for (auto& typeMaps : trackMaps.second) {
-            for (TextLineBase* elem : typeMaps.second) {
+            for (SLine* elem : typeMaps.second) {
                 if (elem) {
                     _score->addElement(elem);
                 }
@@ -558,6 +558,7 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceG
     addOttava(beat, cr);
     addLetRing(beat, cr);
     addPalmMute(beat, cr);
+    addTrill(beat, cr);
     addRasgueado(beat, cr);
     addDive(beat, cr);
     addHarmonicMark(beat, cr);
@@ -1501,11 +1502,12 @@ void GPConverter::addTrill(const GPNote* gpnote, Note* note)
         return;
     }
 
-    Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
-    art->setSymId(SymId::ornamentTrill);
-    if (!note->score()->toggleArticulation(note, art)) {
-        delete art;
-    }
+    m_currentGPBeat->setTrill(true);
+}
+
+void GPConverter::addTrill(const GPBeat* gpbeat, ChordRest* cr)
+{
+    addLineElement(cr, _trillLines, ElementType::TRILL, LineImportType::TRILL, gpbeat->trill());
 }
 
 void GPConverter::addOrnament(const GPNote* gpnote, Note* note)
@@ -1777,7 +1779,7 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
     m_bends.push_back(bend);
 }
 
-void GPConverter::addLineElement(ChordRest* cr, std::vector<TextLineBase*>& elements, ElementType muType, TextLineImportType importType,
+void GPConverter::addLineElement(ChordRest* cr, std::vector<SLine*>& elements, ElementType muType, LineImportType importType,
                                  bool forceSplitByRests)
 {
     track_idx_t track = cr->track();
@@ -1796,7 +1798,7 @@ void GPConverter::addLineElement(ChordRest* cr, std::vector<TextLineBase*>& elem
             return;
         }
 
-        if (lastTypeForTrack != TextLineImportType::NONE) {
+        if (lastTypeForTrack != LineImportType::NONE) {
             auto& lastTypeElementsToAdd = m_elementsToAddToScore[track][lastTypeForTrack];
 
             /// adding nullptr to 'elements to be added' to track the REST
@@ -1821,13 +1823,13 @@ void GPConverter::addLineElement(ChordRest* cr, std::vector<TextLineBase*>& elem
         }
 
         if (elem->tick2() < tick) {
-            if (lastTypeForTrack != TextLineImportType::NONE) {
+            if (lastTypeForTrack != LineImportType::NONE) {
                 auto& lastTypeElementsToAdd = m_elementsToAddToScore[track][lastTypeForTrack];
 
                 /// removing info about the REST and updating last element's ticks
                 if (!lastTypeElementsToAdd.empty() && lastTypeElementsToAdd.back() == nullptr) {
                     lastTypeElementsToAdd.pop_back();
-                    TextLineBase* prevElem = lastTypeElementsToAdd.back();
+                    SLine* prevElem = lastTypeElementsToAdd.back();
                     if (!prevElem) {
                         LOGE() << "error while importing";
                         return;
@@ -1846,7 +1848,7 @@ void GPConverter::addLineElement(ChordRest* cr, std::vector<TextLineBase*>& elem
     if (!elem) {
         EngravingItem* engItem = Factory::createItem(muType, _score->dummy());
 
-        TextLineBase* newElem = dynamic_cast<TextLineBase*>(engItem);
+        SLine* newElem = dynamic_cast<SLine*>(engItem);
         IF_ASSERT_FAILED(newElem) {
             return;
         }
@@ -2115,9 +2117,8 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
 
     const Chord* chord = toChord(cr);
     mu::engraving::OttavaType type = ottavaType(gpb->ottavaType());
-
-    TextLineBase* textLineElem = m_ottavas[gpb->ottavaType()].back();
-    Ottava* ottava = dynamic_cast<Ottava*>(textLineElem);
+    SLine* lineElem = m_ottavas[gpb->ottavaType()].back();
+    Ottava* ottava = dynamic_cast<Ottava*>(lineElem);
 
     if (!ottava) {
         return;
@@ -2157,22 +2158,22 @@ void GPConverter::addPalmMute(const GPNote* gpnote, Note* /*note*/)
 
 void GPConverter::addLetRing(const GPBeat* gpbeat, ChordRest* cr)
 {
-    addLineElement(cr, m_letRings, ElementType::LET_RING, TextLineImportType::LET_RING, gpbeat->letRing());
+    addLineElement(cr, m_letRings, ElementType::LET_RING, LineImportType::LET_RING, gpbeat->letRing());
 }
 
 void GPConverter::addPalmMute(const GPBeat* gpbeat, ChordRest* cr)
 {
-    addLineElement(cr, m_palmMutes, ElementType::PALM_MUTE, TextLineImportType::PALM_MUTE, gpbeat->palmMute());
+    addLineElement(cr, m_palmMutes, ElementType::PALM_MUTE, LineImportType::PALM_MUTE, gpbeat->palmMute());
 }
 
 void GPConverter::addDive(const GPBeat* beat, ChordRest* cr)
 {
-    addLineElement(cr, m_dives, ElementType::WHAMMY_BAR, TextLineImportType::WHAMMY_BAR, beat->dive());
+    addLineElement(cr, m_dives, ElementType::WHAMMY_BAR, LineImportType::WHAMMY_BAR, beat->dive());
 }
 
 void GPConverter::addRasgueado(const GPBeat* beat, ChordRest* cr)
 {
-    addLineElement(cr, m_rasgueados, ElementType::RASGUEADO, TextLineImportType::RASGUEADO, beat->rasgueado() != GPBeat::Rasgueado::None);
+    addLineElement(cr, m_rasgueados, ElementType::RASGUEADO, LineImportType::RASGUEADO, beat->rasgueado() != GPBeat::Rasgueado::None);
 }
 
 void GPConverter::addHarmonicMark(const GPBeat* gpbeat, ChordRest* cr)
@@ -2183,8 +2184,8 @@ void GPConverter::addHarmonicMark(const GPBeat* gpbeat, ChordRest* cr)
                        harmonicMarkType), harmonicMarkType != GPBeat::HarmonicMarkType::None);
     if (!textLineElems.empty()) {
         auto& elem = textLineElems.back();
-        if (elem) {
-            elem->setBeginText(harmonicText(harmonicMarkType));
+        if (elem && elem->isTextLineBase()) {
+            toTextLineBase(elem)->setBeginText(harmonicText(harmonicMarkType));
         }
     }
 }
