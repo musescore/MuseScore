@@ -39,6 +39,8 @@ public:
     virtual void setMapToScreenFunc(const mu::engraving::AccessibleMapToScreenFunc& func) = 0;
 
     virtual void setEnabled(bool enabled) = 0;
+
+    virtual void setTriggeredCommand(const std::string& command) = 0;
 };
 
 using INotationAccessibilityPtr = std::shared_ptr<INotationAccessibility>;
