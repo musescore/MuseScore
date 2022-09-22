@@ -58,7 +58,8 @@ StyledDialogView {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter
 
-            text: qsTrc("project/export", "Exporting…")
+            text: root.title.length > 0 ? root.title : qsTrc("project/export", "Exporting…")
+            font: ui.theme.largeBodyBoldFont
         }
 
         ProgressBar {

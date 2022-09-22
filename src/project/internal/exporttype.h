@@ -22,6 +22,10 @@
 #ifndef MU_PROJECT_EXPORTTYPE_H
 #define MU_PROJECT_EXPORTTYPE_H
 
+#include <unordered_set>
+
+#include "containers.h"
+
 namespace mu::project {
 struct ExportType;
 class ExportTypeList : public QList<ExportType>
@@ -56,6 +60,15 @@ struct ExportType
     inline bool operator==(const ExportType& other) const { return id == other.id; }
     inline bool operator!=(const ExportType& other) const { return id != other.id; }
 };
+
+inline bool isAudioExport(const std::string& suffix)
+{
+    static const std::unordered_set<std::string> audioSuffixes {
+        "mp3", "wav", "ogg", "flac",
+    };
+
+    return mu::contains(audioSuffixes, suffix);
+}
 }
 
 #endif // MU_PROJECT_EXPORTTYPE_H
