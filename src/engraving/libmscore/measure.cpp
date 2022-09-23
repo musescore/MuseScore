@@ -4206,6 +4206,7 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
     double durStretch = 1;
 
     while (s) {
+        s->setWidthOffset(0.0);
         s->setPosX(x);
         // skip disabled / invisible segments
         // segments with all elements invisible are skipped, though these are already
@@ -4261,6 +4262,7 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
                         }
                     }
                     double minStretchedWidth = minNoteSpace * durStretch * usrStretch * stretchCoeff;
+                    s->setStretch(durStretch * usrStretch);
                     // NOTE: durStretch is the spacing factor purely determined by the duration of the note.
                     // usrStretch is the spacing factor determined by user settings.
                     // stretchCoeff is the spacing factor used to justify the systems, i.e. getting the systems to fill the page.
@@ -4271,17 +4273,22 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
             // Clefs (or breaths) are justified right-to-left. It is the clef (or breath) that needs to move left
             //(if there's space), not the following segment that needs to move right.
             if ((ns->isClefType() || ns->isBreathType()) && ns->next()) {
-                w -= std::max(ns->minHorizontalCollidingDistance(ns->next()), double(score()->styleMM(Sid::clefKeyRightMargin)));
+                double reduction = std::max(ns->minHorizontalCollidingDistance(ns->next()),
+                                            double(score()->styleMM(Sid::clefKeyRightMargin)));
+                w -= reduction;
+                s->setWidthOffset(s->widthOffset() - reduction);
             }
 
             // Adjust spacing for cross-beam situations
             CrossBeamType crossBeamType = s->crossBeamType();
             double displacement = score()->noteHeadWidth() - score()->styleMM(Sid::stemWidth);
             if (crossBeamType.upDown) {
+                s->setWidthOffset(s->widthOffset() + displacement);
                 w += displacement;
                 _squeezableSpace -= score()->noteHeadWidth();
             }
             if (crossBeamType.downUp) {
+                s->setWidthOffset(s->widthOffset() - displacement);
                 w -= displacement;
                 _squeezableSpace -= score()->noteHeadWidth();
             }
@@ -4349,6 +4356,14 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
     }
     setLayoutStretch(stretchCoeff);
     setWidth(x);
+    // Check against minimum width and increase if needed
+    double minWidth = computeMinMeasureWidth();
+    if (width() < minWidth) {
+        stretchToTargetWidth(minWidth);
+        setWidthLocked(true);
+    } else {
+        setWidthLocked(false);
+    }
 }
 
 void Measure::computeWidth(Fraction minTicks, Fraction maxTicks, double stretchCoeff)
@@ -4393,15 +4408,6 @@ void Measure::computeWidth(Fraction minTicks, Fraction maxTicks, double stretchC
 
     _squeezableSpace = 0;
     computeWidth(s, x, isSystemHeader, minTicks, maxTicks, stretchCoeff);
-
-    // Check against minimum width and increase if needed
-    double minWidth = computeMinMeasureWidth();
-    if (width() < minWidth) {
-        setWidthToTargetValue(s, x, isSystemHeader, minTicks, stretchCoeff, minWidth);
-        setWidthLocked(true);
-    } else {
-        setWidthLocked(false);
-    }
 }
 
 double Measure::computeMinMeasureWidth() const
@@ -4434,23 +4440,22 @@ double Measure::computeMinMeasureWidth() const
     return minWidth;
 }
 
-void Measure::setWidthToTargetValue(Segment* s, double x, bool isSystemHeader, Fraction minTicks, double stretchCoeff, double targetWidth)
+void Measure::stretchToTargetWidth(double targetWidth)
 {
-    // The input parameters of this method rely on Measure::computeWidth(), so always call this method from there
-    const double epsilon = 0.1 * spatium();
-    static constexpr double multiplier = 1.4; // Empirical value for fastest convergence of the following loop
-    static constexpr int maxIter = 50;
-    // Different measures need different numbers of iterations of the following loop to reach the target width.
-    // The average is about 2 iterations, and the maximum I've ever seen (very rare) is around 10-15 iterations.
-    // maxIter just serves as a safety exit to not get stuck in the loop in case a measure can't be justified
-    // (which can only happen if errors are made before getting here). It's set to a very high value to make
-    // sure that the measure really can't be justified, and it isn't just a "tricky" one needing more iterations.
-    int iter = 0;
-    for (double rest = targetWidth - width(); abs(rest) > epsilon && iter < maxIter; rest = targetWidth - width()) {
-        stretchCoeff *= (1 + multiplier * rest / width());
-        computeWidth(s, x, isSystemHeader, minTicks, system()->maxSysTicks(), stretchCoeff);
-        iter++;
+    if (targetWidth < width()) {
+        return;
     }
+    std::vector<Spring> springs;
+    for (Segment& s : m_segments) {
+        if (s.isChordRestType() && s.visible() && s.enabled() && !s.allElementsInvisible()) {
+            double springConst = 1 / s.stretch();
+            double width = s.width() - s.widthOffset();
+            double preTension = width * springConst;
+            springs.push_back(Spring(springConst, width, preTension, &s));
+        }
+    }
+    Segment::stretchSegmentsToWidth(springs, targetWidth - width());
+    respaceSegments();
 }
 
 void Measure::layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts)
@@ -4728,5 +4733,20 @@ Fraction Measure::shortestChordRest() const
         s = s->next();
     }
     return shortest;
+}
+
+void Measure::respaceSegments()
+{
+    double x = 0.0;
+    for (Segment& s : m_segments) {
+        if (!s.enabled() || s.allElementsInvisible()) {
+            continue;
+        }
+        x = s.x() + s.width();
+        if (s.next()) {
+            s.next()->setPosX(x);
+        }
+    }
+    setWidth(x);
 }
 }
