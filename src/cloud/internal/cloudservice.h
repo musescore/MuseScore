@@ -25,7 +25,6 @@
 #include <QObject>
 
 class QOAuth2AuthorizationCodeFlow;
-class QOAuthHttpServerReplyHandler;
 
 #include "iauthorizationservice.h"
 #include "iuploadingservice.h"
@@ -40,6 +39,8 @@ class QOAuthHttpServerReplyHandler;
 #include "iinteractive.h"
 
 namespace mu::cloud {
+class OAuthHttpServerReplyHandler;
+
 class CloudService : public QObject, public IAuthorizationService, public IUploadingService, public async::Asyncable
 {
     Q_OBJECT
@@ -100,7 +101,7 @@ private:
     void executeRequest(const RequestCallback& requestCallback);
 
     QOAuth2AuthorizationCodeFlow* m_oauth2 = nullptr;
-    QOAuthHttpServerReplyHandler* m_replyHandler = nullptr;
+    OAuthHttpServerReplyHandler* m_replyHandler = nullptr;
 
     ValCh<bool> m_userAuthorized;
     ValCh<AccountInfo> m_accountInfo;
