@@ -39,6 +39,10 @@ StyledDialogView {
         id: profilesListModel
     }
 
+    onOpened: {
+        profilesListView.itemAtIndex(0).navigation.requestActive()
+    }
+
     ColumnLayout {
         id: contentColumn
 
@@ -51,12 +55,24 @@ StyledDialogView {
             spacing: 24
 
             ColumnLayout {
+                id: profilesColumn
+
                 Layout.fillHeight: true
                 Layout.preferredWidth: root.width * 0.45
 
                 spacing: 20
 
+                property NavigationPanel navigationPanel: NavigationPanel {
+                    name: "ProfilesView"
+                    section: root.navigationSection
+                    direction: NavigationPanel.Vertical
+                    order: 1
+                    accessible.name: profilesTitleLabel.text
+                }
+
                 StyledTextLabel {
+                    id: profilesTitleLabel
+
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
 
@@ -75,55 +91,30 @@ StyledDialogView {
 
                     model: profilesListModel
 
-                    delegate: FlatButton {
+                    delegate: ListItemBlank {
                         id: profileButton
 
+                        height: 52
+
                         readonly property bool isActive: profilesListModel.activeProfile === titleRole
-                        readonly property bool isSelected: profilesListModel.currentlySelectedProfile === titleRole
+                        readonly property string activeTitle: isActive ? qsTrc("playback", "Active")
+                                                                       : qsTrc("playback", "Inactive")
+                        isSelected: profilesListModel.currentlySelectedProfile === titleRole
 
                         enabled: isEnabledRole
 
-                        backgroundItem: Rectangle {
-                            id: backgroundRect
+                        navigation.panel: profilesColumn.navigationPanel
+                        navigation.order: index
+                        navigation.accessible.name: titleRole + "; " + activeTitle
 
-                            color: profileButton.isSelected ? Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.accentOpacityHit)
-                                                            : Utils.colorWithAlpha(ui.theme.buttonColor, 0.0)
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.leftMargin: 2
+                            anchors.rightMargin: 2
+                            anchors.topMargin: 8
+                            anchors.bottomMargin: 8
 
-                            states: [
-                                State {
-                                    name: "PRESSED"
-                                    when: profileButton.mouseArea.pressed
-
-                                    PropertyChanges {
-                                        target: backgroundRect
-                                        color: profileButton.isSelected ? Utils.colorWithAlpha(ui.theme.accentColor, 1.0)
-                                                                        : Utils.colorWithAlpha(ui.theme.buttonColor, 1.0)
-                                    }
-                                },
-
-                                State {
-                                    name: "HOVERED"
-                                    when: !profileButton.mouseArea.pressed && profileButton.mouseArea.containsMouse
-
-                                    PropertyChanges {
-                                        target: backgroundRect
-                                        color: profileButton.isSelected ? Utils.colorWithAlpha(ui.theme.accentColor, 0.5)
-                                                                        : Utils.colorWithAlpha(ui.theme.buttonColor, 0.5)
-                                    }
-                                }
-                            ]
-                        }
-
-                        contentItem: RowLayout {
-
-                            height: 52
-                            width: 320
                             spacing: 12
-
-                            Layout.leftMargin: 2
-                            Layout.rightMargin: 2
-                            Layout.topMargin: 8
-                            Layout.bottomMargin: 8
 
                             Item {
                                 Layout.minimumHeight: 30
@@ -157,8 +148,7 @@ StyledDialogView {
 
                                     color: ui.theme.fontSecondaryColor
 
-                                    text: profileButton.isActive ? qsTrc("playback", "Active")
-                                                                 : qsTrc("playback", 'Inactive')
+                                    text: profileButton.activeTitle
                                 }
                             }
                         }
@@ -177,13 +167,25 @@ StyledDialogView {
             }
 
             ColumnLayout {
+                id: settingsColumn
+
                 Layout.fillHeight: true
                 Layout.preferredWidth: root.width * 0.45
                 Layout.alignment: Qt.AlignTop
 
                 spacing: 20
 
+                property NavigationPanel navigationPanel: NavigationPanel {
+                    name: "SettingsView"
+                    section: root.navigationSection
+                    direction: NavigationPanel.Vertical
+                    order: 2
+                    accessible.name: profilesTitleLabel.text
+                }
+
                 StyledTextLabel {
+                    id: settingsTitleLabel
+
                     Layout.fillWidth: true
 
                     font: ui.theme.bodyBoldFont
@@ -197,6 +199,9 @@ StyledDialogView {
                     checked: profilesListModel.currentlySelectedProfile == profilesListModel.defaultProjectsProfile
                     text: qsTrc("playback", "Set as default for new scores")
 
+                    navigation.panel: settingsColumn.navigationPanel
+                    navigation.order: 1
+
                     onClicked: {
                         if (defaultProfileCheckBox.checked) {
                             profilesListModel.defaultProjectsProfile = ""
@@ -209,9 +214,18 @@ StyledDialogView {
         }
 
         Row {
+            id: buttons
+
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
             spacing: 12
+
+            property NavigationPanel navigationPanel: NavigationPanel {
+                name: "ButtonsPanel"
+                section: root.navigationSection
+                direction: NavigationPanel.Vertical
+                order: 3
+            }
 
             FlatButton {
                 height: 30
@@ -220,6 +234,9 @@ StyledDialogView {
                 accentButton: true
                 visible: profilesListModel.currentlySelectedProfile != profilesListModel.activeProfile
                 text: qsTrc("playback", "Activate this profile")
+
+                navigation.panel: buttons.navigationPanel
+                navigation.order: 1
 
                 onClicked: {
                     profilesListModel.activeProfile = profilesListModel.currentlySelectedProfile
@@ -231,6 +248,9 @@ StyledDialogView {
                 width: 160
 
                 text: qsTrc("playback", "OK")
+
+                navigation.panel: buttons.navigationPanel
+                navigation.order: 2
 
                 onClicked: {
                     root.hide()
