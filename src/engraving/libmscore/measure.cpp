@@ -4119,69 +4119,6 @@ static bool hasAccidental(Segment* s)
 }
 
 //---------------------------------------------------------
-//      durationStretch
-//      Computes the stretch for a given segment depending
-//      on its duration with respect to the shortest one.
-//      Three different options proposed (see documentation).
-//---------------------------------------------------------
-float Measure::durationStretch(Fraction curTicks, const Fraction minTicks, const Fraction maxTicks) const
-{
-    double slope = score()->styleD(Sid::measureSpacing);
-
-    static constexpr int maxMMRestWidth = 20; // At most, MM rests will be spaced "as if" they were 20 bars long.
-    static double longNoteThreshold = Fraction(1, 16).ticks();
-
-    if (curTicks > m_timesig) { // This is the case of MM rests
-        curTicks = curTicks - m_timesig; // A 2-bar MM rests receives the same space as one bar.
-        if (curTicks > m_timesig * maxMMRestWidth) {
-            curTicks = m_timesig * maxMMRestWidth; // Avoids long MM rests being excessively wide.
-        }
-    }
-
-    //------------------------------------------------------------------------
-    // Prevent long notes from exploding in the presence of very short ones.
-    // maxRatio defines the maximum accepted ratio between the longest and
-    // shortest note of the system. If this ratio is exceeded, the subsequent
-    // calculations ensure that the highest ratio is renormalized to maxRatio
-    // and all other ratios are scaled accordingly.
-    //------------------------------------------------------------------------
-    static constexpr double maxRatio = 32.0;
-    double minSysTicks = double(minTicks.ticks());
-    double maxSysTicks = double(maxTicks.ticks());
-    double maxSysRatio = maxSysTicks / minSysTicks;
-    if ((maxSysTicks / minSysTicks >= 2) && minSysTicks < longNoteThreshold) {
-        /* HACK: we trick the system to ignore the shortest note and use the "next"
-         * shortest. For example, if the shortest is a 32nd, we make it a 16th. */
-        minSysTicks *= 2.0;
-    }
-    double ratio = double(curTicks.ticks()) / minSysTicks;
-    if (maxSysRatio > maxRatio) {
-        double A = (minSysTicks * (maxRatio - 1)) / (maxSysTicks - minSysTicks);
-        double B = (maxSysTicks - (maxRatio * minSysTicks)) / (maxSysTicks - minSysTicks);
-        ratio = A * ratio + B;
-    }
-
-    //TODO: choose formula in style settings
-    // Linear spacing
-    //double str = 1 - 0.112 * slope +  0.112 * slope * double(curTicks.ticks()) / double(minTicks.ticks());
-    // Logarithmic spacing (MS 3.6)
-    //double str = 1.0 + 0.721 * slope * log(double(curTicks.ticks()) / double(minTicks.ticks()));
-    // Quadratic spacing
-    // double str = 1 - slope + slope * sqrt(ratio);
-    // Custom spacing
-    double str = pow(slope, log2(ratio));
-
-    // Prevents long notes from being too narrow in the absence of shorter ones. The
-    // numeric factor and the formula itself are purely empirical. They "look good".
-    if (minSysTicks > longNoteThreshold) {
-        double empFactor = 0.6;
-        str = str * (1 - empFactor + empFactor * sqrt(minSysTicks / longNoteThreshold));
-    }
-
-    return str;
-}
-
-//---------------------------------------------------------
 //   computeWidth
 //   Computes the width of a measure depending on note durations
 //   (and given the shortest note of the system minTicks) and
@@ -4203,7 +4140,6 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
     double minNoteSpace = score()->noteHeadWidth() + spacingMultiplier * score()->styleMM(Sid::minNoteDistance);
     double usrStretch = std::max(userStretch(), double(0.1)); // Avoids stretch going to zero
     usrStretch = std::min(usrStretch, double(10)); // Higher values may cause the spacing to break (10 is already ridiculously high and no user should even use that)
-    double durStretch = 1;
 
     while (s) {
         s->setWidthOffset(0.0);
@@ -4229,14 +4165,7 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
             ns = s->next(SegmentType::BarLineType);
         }
 
-        Segment* ps = s->prevActive();
-
         double w;
-
-        bool hasAdjacent = (s->isChordRestType() && s->shortestChordRest() == s->ticks());
-        bool prevHasAdjacent = ps && (ps->isChordRestType() && ps->shortestChordRest() == ps->ticks());
-        // The actual duration of a segment, i.e. ticks(), can be shorter than its shortest note if
-        // another voice comes in. In such case, hasAdjacent = false. This info is key to correct spacing.
 
         if (ns) {
             if (isSystemHeader && (ns->isStartRepeatBarLineType() || ns->isChordRestType() || (ns->isClefType() && !ns->header()))) {
@@ -4245,28 +4174,15 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
                 isSystemHeader = false;
             } else {
                 w = s->minHorizontalDistance(ns, false);
-                // New spacing algorithm: we apply an additional spacing which depends on the duration of
-                // the note with respect to the shortest note *of the system*.
                 if (s->isChordRestType()) {
-                    if (hasAdjacent || isMMRest()) { // Normal segments
-                        durStretch = durationStretch(s->ticks(), minTicks, maxTicks);
-                    } else { // The following calculations are key to correct spacing of polyrythms
-                        Fraction curTicks = s->shortestChordRest();
-                        Fraction prevTicks = ps ? ps->shortestChordRest() : Fraction(0, 1);
-                        if (ps && !prevHasAdjacent && prevTicks < curTicks) {
-                            durStretch
-                                = durationStretch(prevTicks, minTicks, maxTicks) * (double(s->ticks().ticks()) / double(prevTicks.ticks()));
-                        } else {
-                            durStretch
-                                = durationStretch(curTicks, minTicks, maxTicks) * (double(s->ticks().ticks()) / double(curTicks.ticks()));
-                        }
-                    }
-                    double minStretchedWidth = minNoteSpace * durStretch * usrStretch * stretchCoeff;
+                    Segment* ps = s->prevActive();
+                    double durStretch = s->computeDurationStretch(ps, minTicks, maxTicks);
                     s->setStretch(durStretch * usrStretch);
-                    // NOTE: durStretch is the spacing factor purely determined by the duration of the note.
-                    // usrStretch is the spacing factor determined by user settings.
-                    // stretchCoeff is the spacing factor used to justify the systems, i.e. getting the systems to fill the page.
-                    _squeezableSpace += hasAdjacent ? minStretchedWidth - w : 0;
+                    // durStretch := spacing factor purely determined by the duration of the note.
+                    // usrStretch := spacing factor determined by user settings.
+                    // stretchCoeff := spacing factor used internally for computations
+                    double minStretchedWidth = minNoteSpace * durStretch * usrStretch * stretchCoeff;
+                    _squeezableSpace += s->shortestChordRest() == s->ticks() ? minStretchedWidth - w : 0;
                     w = std::max(w, minStretchedWidth);
                 }
             }

@@ -344,7 +344,6 @@ public:
     void triggerLayout() const override;
     double basicStretch() const;
     double basicWidth() const;
-    float durationStretch(Fraction curTicks, const Fraction minTicks, const Fraction maxTicks) const;
     void computeWidth(Fraction minTicks, Fraction maxTicks, double stretchCoeff);
     void stretchToTargetWidth(double targetWidth);
     void checkHeader();
