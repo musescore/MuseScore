@@ -299,12 +299,26 @@ UndoStack::~UndoStack()
     DeleteAll(list);
 }
 
+bool UndoStack::locked() const
+{
+    return isLocked;
+}
+
+void UndoStack::setLocked(bool val)
+{
+    isLocked = val;
+}
+
 //---------------------------------------------------------
 //   beginMacro
 //---------------------------------------------------------
 
 void UndoStack::beginMacro(Score* score)
 {
+    if (isLocked) {
+        return;
+    }
+
     if (curCmd) {
         LOGW("already active");
         return;
@@ -417,25 +431,15 @@ void UndoStack::pop()
 }
 
 //---------------------------------------------------------
-//   rollback
-//---------------------------------------------------------
-
-void UndoStack::rollback()
-{
-    LOG_UNDO() << "called";
-    assert(curCmd == 0);
-    assert(curIdx > 0);
-    size_t idx = curIdx - 1;
-    list[idx]->unwind();
-    remove(idx);
-}
-
-//---------------------------------------------------------
 //   endMacro
 //---------------------------------------------------------
 
 void UndoStack::endMacro(bool rollback)
 {
+    if (isLocked) {
+        return;
+    }
+
     if (curCmd == 0) {
         LOGW("not active");
         return;
@@ -463,6 +467,10 @@ void UndoStack::endMacro(bool rollback)
 
 void UndoStack::reopen()
 {
+    if (isLocked) {
+        return;
+    }
+
     LOG_UNDO() << "curIdx: " << curIdx << ", size: " << list.size();
     assert(curCmd == 0);
     assert(curIdx > 0);
@@ -472,15 +480,6 @@ void UndoStack::reopen()
     for (auto i : curCmd->commands()) {
         LOG_UNDO() << "   " << i->name();
     }
-}
-
-//---------------------------------------------------------
-//   setClean
-//---------------------------------------------------------
-
-void UndoStack::setClean()
-{
-    cleanState = state();
 }
 
 //---------------------------------------------------------

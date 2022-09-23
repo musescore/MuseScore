@@ -266,6 +266,10 @@ void CmdState::setUpdateMode(UpdateMode m)
 
 void Score::startCmd()
 {
+    if (undoStack()->locked()) {
+        return;
+    }
+
     if (MScore::debugMode) {
         LOGD("===startCmd()");
     }
@@ -335,6 +339,10 @@ void Score::undoRedo(bool undo, EditData* ed)
 
 void Score::endCmd(bool rollback)
 {
+    if (undoStack()->locked()) {
+        return;
+    }
+
     if (!undoStack()->active()) {
         LOGW() << "no command active";
         update();
