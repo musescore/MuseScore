@@ -97,7 +97,6 @@ Beam::Beam(const Beam& b)
     }
     _direction       = b._direction;
     _up              = b._up;
-    _distribute      = b._distribute;
     _userModified[0] = b._userModified[0];
     _userModified[1] = b._userModified[1];
     _grow1           = b._grow1;
@@ -1422,10 +1421,6 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
         // this beam will be deleted in LayoutBeams
         return;
     }
-    if (_distribute) {
-        // fix horizontal spacing of stems
-        LayoutBeams::respace(chordRests);
-    }
 
     _beamSpacing = score()->styleB(Sid::useWideBeams) ? 4 : 3;
     _beamDist = (_beamSpacing / 4.0) * spatium() * mag();
@@ -1797,7 +1792,6 @@ void Beam::write(XmlWriter& xml) const
     EngravingItem::writeProperties(xml);
 
     writeProperty(xml, Pid::STEM_DIRECTION);
-    writeProperty(xml, Pid::DISTRIBUTE);
     writeProperty(xml, Pid::BEAM_NO_SLOPE);
     writeProperty(xml, Pid::GROW_LEFT);
     writeProperty(xml, Pid::GROW_RIGHT);
@@ -1841,7 +1835,7 @@ void Beam::read(XmlReader& e)
         if (tag == "StemDirection") {
             readProperty(e, Pid::STEM_DIRECTION);
         } else if (tag == "distribute") {
-            setDistribute(e.readInt());
+            e.skipCurrentElement(); // obsolete
         } else if (readStyledProperty(e, tag)) {
         } else if (tag == "growLeft") {
             setGrowLeft(e.readDouble());
@@ -2009,9 +2003,6 @@ void Beam::setAsFeathered(const bool slower)
 
 void Beam::reset()
 {
-    if (distribute()) {
-        undoChangeProperty(Pid::DISTRIBUTE, false);
-    }
     if (growLeft() != 1.0) {
         undoChangeProperty(Pid::GROW_LEFT, 1.0);
     }
@@ -2175,7 +2166,6 @@ PropertyValue Beam::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::STEM_DIRECTION: return beamDirection();
-    case Pid::DISTRIBUTE:     return distribute();
     case Pid::GROW_LEFT:      return growLeft();
     case Pid::GROW_RIGHT:     return growRight();
     case Pid::USER_MODIFIED:  return userModified();
@@ -2195,9 +2185,6 @@ bool Beam::setProperty(Pid propertyId, const PropertyValue& v)
     switch (propertyId) {
     case Pid::STEM_DIRECTION:
         setBeamDirection(v.value<DirectionV>());
-        break;
-    case Pid::DISTRIBUTE:
-        setDistribute(v.toBool());
         break;
     case Pid::GROW_LEFT:
         setGrowLeft(v.toDouble());
@@ -2236,7 +2223,6 @@ PropertyValue Beam::propertyDefault(Pid id) const
     switch (id) {
 //            case Pid::SUB_STYLE:      return int(TextStyleName::BEAM);
     case Pid::STEM_DIRECTION: return DirectionV::AUTO;
-    case Pid::DISTRIBUTE:     return false;
     case Pid::GROW_LEFT:      return 1.0;
     case Pid::GROW_RIGHT:     return 1.0;
     case Pid::USER_MODIFIED:  return false;

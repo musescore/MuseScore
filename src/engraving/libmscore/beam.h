@@ -58,7 +58,6 @@ class Beam final : public EngravingItem
     DirectionV _direction    { DirectionV::AUTO };
 
     bool _up                { true };
-    bool _distribute        { false };                    // equal spacing of elements
 
     bool _userModified[2]   { false };                // 0: auto/down  1: up
     bool _isGrace           { false };
@@ -193,9 +192,6 @@ public:
     double growRight() const { return _grow2; }
     void setGrowLeft(double val) { _grow1 = val; }
     void setGrowRight(double val) { _grow2 = val; }
-
-    bool distribute() const { return _distribute; }
-    void setDistribute(bool val) { _distribute = val; }
 
     bool userModified() const;
     void setUserModified(bool val);
