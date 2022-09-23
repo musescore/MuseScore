@@ -22,6 +22,9 @@
 #ifndef MU_CONTEXT_SHORTCUTCONTEXT_H
 #define MU_CONTEXT_SHORTCUTCONTEXT_H
 
+#include <array>
+#include <string>
+
 #include "global/containers.h"
 
 namespace mu::context {
@@ -32,8 +35,10 @@ static const std::string CTX_NOTATION_FOCUSED("notation-focused");
 //! NOTE special context for navigation shortcuts because the notation has its own navigation system
 static const std::string CTX_NOT_NOTATION_FOCUSED("not-notation-focused");
 
-static const std::string CTX_NOTATION_STAFF_NOT_TAB("notation-staff-not-tab");
-static const std::string CTX_NOTATION_STAFF_TAB("notation-staff-tab");
+/// We're not [in note input on a TAB staff] (i.e. either not in note input mode, or in note input mode but not on a TAB staff)
+static const std::string CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB("notation-not-note-input-staff-tab");
+/// We're in note input on a TAB staff
+static const std::string CTX_NOTATION_NOTE_INPUT_STAFF_TAB("notation-note-input-staff-tab");
 
 static const std::string CTX_NOTATION_TEXT_EDITING("notation-text-editing");
 
@@ -46,8 +51,8 @@ inline bool shortcutContextHasLowerPriorityThan(const std::string& ctx1, const s
         CTX_NOT_NOTATION_FOCUSED,
         CTX_NOTATION_FOCUSED,
 
-        CTX_NOTATION_STAFF_NOT_TAB,
-        CTX_NOTATION_STAFF_TAB,
+        CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
+        CTX_NOTATION_NOTE_INPUT_STAFF_TAB,
 
         CTX_NOTATION_TEXT_EDITING
     };
