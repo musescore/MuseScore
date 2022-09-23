@@ -189,7 +189,6 @@ class EngravingItem : public mu::engraving::PluginAPI::ScoreElement
     API_PROPERTY(noStem,                  NO_STEM)
     API_PROPERTY(slurDirection,           SLUR_DIRECTION)
     API_PROPERTY(leadingSpace,            LEADING_SPACE)
-    API_PROPERTY(distribute,              DISTRIBUTE)
     API_PROPERTY(mirrorHead,              MIRROR_HEAD)
     API_PROPERTY(dotPosition,             DOT_POSITION)
     API_PROPERTY(tuning,                  TUNING)
