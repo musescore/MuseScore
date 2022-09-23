@@ -69,6 +69,16 @@ struct CrossBeamType
     }
 };
 
+struct Spring
+{
+    double springConst = 0;
+    double width = 0;
+    double preTension = 0;
+    Segment* segment = nullptr;
+    Spring(double sc, double w, double pt, Segment* s)
+        : springConst(sc), width(w), preTension(pt),  segment(s) {}
+};
+
 class Segment final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Segment)
@@ -78,6 +88,7 @@ class Segment final : public EngravingItem
     Fraction _ticks;   // { Fraction(0, 1) };
     Spatium _extraLeadingSpace;
     double _stretch;
+    double _widthOffset = 0; // part of the segment width that will not be stretched during system justification
 
     Segment* _next = nullptr;                       // linked list of segments inside a measure
     Segment* _prev = nullptr;
@@ -265,6 +276,11 @@ public:
     double minLeft() const;
     double minHorizontalDistance(Segment*, bool isSystemGap) const;
     double minHorizontalCollidingDistance(Segment* ns) const;
+
+    double widthOffset() const { return _widthOffset; }
+    void setWidthOffset(double w) { _widthOffset = w; }
+
+    static void stretchSegmentsToWidth(std::vector<Spring>& springs, double width);
 
     double elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const;
     double elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const;
