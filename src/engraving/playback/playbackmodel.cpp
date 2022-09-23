@@ -299,13 +299,22 @@ void PlaybackModel::updateContext(const track_idx_t trackFrom, const track_idx_t
         }
 
         for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
-            PlaybackContext& ctx = m_playbackCtxMap[trackId];
-            ctx.update(trackId.partId, m_score);
+            updateContext(trackId);
+        }
 
-            PlaybackData& trackData = m_playbackDataMap[trackId];
-            trackData.dynamicLevelMap = ctx.dynamicLevelMap(m_score);
+        if (part->hasChordSymbol()) {
+            updateContext(chordSymbolsTrackId(part->id()));
         }
     }
+}
+
+void PlaybackModel::updateContext(const InstrumentTrackId& trackId)
+{
+    PlaybackContext& ctx = m_playbackCtxMap[trackId];
+    ctx.update(trackId.partId, m_score);
+
+    PlaybackData& trackData = m_playbackDataMap[trackId];
+    trackData.dynamicLevelMap = ctx.dynamicLevelMap(m_score);
 }
 
 void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
@@ -504,6 +513,12 @@ void PlaybackModel::clearExpiredContexts(const track_idx_t trackFrom, const trac
         }
 
         for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
+            PlaybackContext& ctx = m_playbackCtxMap[trackId];
+            ctx.clear();
+        }
+
+        if (part->hasChordSymbol()) {
+            InstrumentTrackId trackId = chordSymbolsTrackId(part->id());
             PlaybackContext& ctx = m_playbackCtxMap[trackId];
             ctx.clear();
         }
