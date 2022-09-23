@@ -260,6 +260,8 @@ public:
         const size_t i = str.indexOf(u'/');
         return (i == mu::nidx) ? Fraction(str.toInt(), 1) : Fraction(str.left(i).toInt(), str.mid(i + 1).toInt());
     }
+
+    constexpr double toDouble() const { return static_cast<double>(m_numerator) / static_cast<double>(m_denominator); }
 };
 
 inline Fraction operator*(const Fraction& f, int v) { return Fraction(f) *= v; }
