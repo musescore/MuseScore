@@ -1664,10 +1664,12 @@ SpannerSegment* Slur::layoutSystem(System* system)
                     }
                 }
             }
-            if (!adjustedVertically && ec->notes()[0]->tieFor() && !ec->notes()[0]->tieFor()->isInside()
-                && ec->notes()[0]->tieFor()->up() == up()) {
+            Tie* tieFor = ec->notes()[0]->tieFor();
+            if (!adjustedVertically && tieFor && !tieFor->isInside() && tieFor->up() == up()) {
                 // there is a tie that starts on this chordrest
-                p2.rx() -= horizontalTieClearance;
+                if (std::abs(tieFor->frontSegment()->ups(Grip::START).pos().y() - p2.y()) < tieClearance) {
+                    p2.rx() -= horizontalTieClearance;
+                }
             }
         }
     } else {
