@@ -300,15 +300,10 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     setupScoreMetaTags(masterScore, projectOptions);
 
     // Setup new master score
-    m_masterNotation->undoStack()->lock();
-
     Ret ret = m_masterNotation->setupNewScore(masterScore, projectOptions.scoreOptions);
     if (!ret) {
-        m_masterNotation->undoStack()->unlock();
         return ret;
     }
-
-    m_masterNotation->undoStack()->unlock();
 
     // Setup other stuff
     m_projectAudioSettings->makeDefault();
