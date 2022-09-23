@@ -2817,4 +2817,69 @@ void Segment::stretchSegmentsToWidth(std::vector<Spring>& springs, double width)
         }
     }
 }
+
+double Segment::computeDurationStretch(Segment* prevSeg, Fraction minTicks, Fraction maxTicks)
+{
+    auto doComputeDurationStretch = [&] (Fraction curTicks) -> double
+    {
+        double slope = score()->styleD(Sid::measureSpacing);
+
+        static constexpr int maxMMRestWidth = 20; // At most, MM rests will be spaced "as if" they were 20 bars long.
+        static constexpr double longNoteThreshold = Fraction(1, 16).toDouble();
+
+        Fraction timeSig = measure()->timesig();
+        if (curTicks > timeSig) { // This is the case of MM rests
+            curTicks = curTicks - timeSig; // A 2-bar MM rests receives the same space as one bar.
+            if (curTicks > timeSig * maxMMRestWidth) {
+                curTicks = timeSig * maxMMRestWidth; // Avoids long MM rests being excessively wide.
+            }
+        }
+
+        // Prevent long notes from being too wide
+        static constexpr double maxRatio = 32.0;
+        double dMinTicks = minTicks.toDouble();
+        double dMaxTicks = maxTicks.toDouble();
+        double maxSysRatio = dMaxTicks / dMinTicks;
+        if ((dMaxTicks / dMinTicks >= 2) && dMinTicks < longNoteThreshold) {
+            /* HACK: we trick the system to ignore the shortest note and use the "next"
+             * shortest. For example, if the shortest is a 32nd, we make it a 16th. */
+            dMinTicks *= 2.0;
+        }
+        double ratio = curTicks.toDouble() / dMinTicks;
+        if (maxSysRatio > maxRatio) {
+            double A = (dMinTicks * (maxRatio - 1)) / (dMaxTicks - dMinTicks);
+            double B = (dMaxTicks - (maxRatio * dMinTicks)) / (dMaxTicks - dMinTicks);
+            ratio = A * ratio + B;
+        }
+
+        double str = pow(slope, log2(ratio));
+
+        // Prevents long notes from being too narrow.
+        if (dMinTicks > longNoteThreshold) {
+            double empFactor = 0.6;
+            str = str * (1 - empFactor + empFactor * sqrt(dMinTicks / longNoteThreshold));
+        }
+
+        return str;
+    };
+
+    bool hasAdjacent = isChordRestType() && shortestChordRest() == ticks();
+    bool prevHasAdjacent = prevSeg && (prevSeg->isChordRestType() && prevSeg->shortestChordRest() == prevSeg->ticks());
+    // The actual duration of a segment, i.e. ticks(), can be shorter than its shortest note if
+    // another voice comes in. In such case, hasAdjacent = false. This info is key to correct spacing.
+    double durStretch;
+    if (hasAdjacent || measure()->isMMRest()) { // Normal segments
+        durStretch = doComputeDurationStretch(ticks());
+    } else { // The following calculations are key to correct spacing of polyrythms
+        Fraction curShortest = shortestChordRest();
+        Fraction prevShortest = prevSeg ? prevSeg->shortestChordRest() : Fraction(0, 1);
+        if (prevSeg && !prevHasAdjacent && prevShortest < curShortest) {
+            durStretch = doComputeDurationStretch(prevShortest) * (ticks() / prevShortest).toDouble();
+        } else {
+            durStretch = doComputeDurationStretch(curShortest) * (ticks() / curShortest).toDouble();
+        }
+    }
+
+    return durStretch;
+}
 } // namespace mu::engraving
