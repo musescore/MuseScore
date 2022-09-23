@@ -76,8 +76,6 @@ private:
     async::Notification m_stackStateChanged;
     async::Notification m_undoNotification;
     async::Notification m_redoNotification;
-
-    bool m_isLocked = false;
 };
 }
 

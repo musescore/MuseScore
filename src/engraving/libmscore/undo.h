@@ -192,12 +192,13 @@ private:
 
 class UndoStack
 {
-    UndoMacro* curCmd;
+    UndoMacro* curCmd = nullptr;
     std::vector<UndoMacro*> list;
     std::vector<int> stateList;
-    int nextState;
-    int cleanState;
+    int nextState = 0;
+    int cleanState = 0;
     size_t curIdx = 0;
+    bool isLocked = false;
 
     void remove(size_t idx);
 
@@ -205,25 +206,23 @@ public:
     UndoStack();
     ~UndoStack();
 
+    bool locked() const;
+    void setLocked(bool val);
     bool active() const { return curCmd != 0; }
     void beginMacro(Score*);
     void endMacro(bool rollback);
     void push(UndoCommand*, EditData*);        // push & execute
     void push1(UndoCommand*);
     void pop();
-    void setClean();
     bool canUndo() const { return curIdx > 0; }
     bool canRedo() const { return curIdx < list.size(); }
-    int state() const { return stateList[curIdx]; }
-    bool isClean() const { return cleanState == state(); }
+    bool isClean() const { return cleanState == stateList[curIdx]; }
     size_t getCurIdx() const { return curIdx; }
-    bool empty() const { return !canUndo() && !canRedo(); }
     UndoMacro* current() const { return curCmd; }
     UndoMacro* last() const { return curIdx > 0 ? list[curIdx - 1] : 0; }
     UndoMacro* prev() const { return curIdx > 1 ? list[curIdx - 2] : 0; }
     void undo(EditData*);
     void redo(EditData*);
-    void rollback();
     void reopen();
 
     void mergeCommands(size_t startIdx);
