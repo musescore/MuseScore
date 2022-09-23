@@ -36,8 +36,7 @@ void PublishToolBarModel::load()
 
     MenuItemList items {
         makeMenuItem("print"),
-        // Todo(save-to-cloud): hidden until fully implemented
-        //makeMenuItem("file-publish"),
+        makeMenuItem("file-publish"),
         makeMenuItem("file-export")
     };
 

@@ -41,6 +41,8 @@ namespace mu::engraving {
 class Lasso;
 }
 
+class QDrag;
+
 namespace mu::notation {
 class Notation;
 class NotationSelection;
@@ -95,6 +97,10 @@ public:
     void endDrag() override;
     async::Notification dragChanged() const override;
 
+    bool isDragCopyStarted() const override;
+    void startDragCopy(const EngravingItem* element, QObject* dragSource) override;
+    void endDragCopy() override;
+
     // Drop
     void startDrop(const QByteArray& edata) override;
     bool startDrop(const QUrl& url) override;
@@ -132,6 +138,7 @@ public:
     void editText(QInputMethodEvent* event) override;
     void endEditText() override;
     void changeTextCursorPosition(const PointF& newCursorPos) override;
+    void selectText(mu::engraving::SelectTextType type) override;
     const TextBase* editedText() const override;
     async::Notification textEditingStarted() const override;
     async::Notification textEditingChanged() const override;
@@ -142,6 +149,7 @@ public:
     bool isHitGrip(const PointF& pos) const override;
     void startEditGrip(const PointF& pos) override;
     void startEditGrip(EngravingItem* element, mu::engraving::Grip grip) override;
+    void endEditGrip() override;
 
     bool isElementEditStarted() const override;
     void startEditElement(EngravingItem* element) override;
@@ -193,8 +201,13 @@ public:
     void changeSelectedNotesVoice(int voiceIndex) override;
     void addAnchoredLineToSelectedNotes() override;
 
-    Ret canAddText(TextStyleType type) const override;
-    void addText(TextStyleType type) override;
+    void addTextToTopFrame(TextStyleType type) override;
+
+    Ret canAddTextToItem(TextStyleType type, const EngravingItem* item) const override;
+    void addTextToItem(TextStyleType type, EngravingItem* item) override;
+
+    Ret canAddImageToItem(const EngravingItem* item) const override;
+    void addImageToItem(const io::path_t& imagePath, EngravingItem* item) override;
 
     Ret canAddFiguredBass() const override;
     void addFiguredBass() override;
@@ -224,7 +237,7 @@ public:
     void resetShapesAndPosition() override;
 
     ScoreConfig scoreConfig() const override;
-    void setScoreConfig(ScoreConfig config) override;
+    void setScoreConfig(const ScoreConfig& config) override;
     async::Channel<ScoreConfigType> scoreConfigChanged() const override;
 
     void navigateToLyrics(MoveDirection direction) override;
@@ -273,6 +286,7 @@ private:
     void apply();
     void rollback();
 
+    bool needStartEditGrip(QKeyEvent* event) const;
     bool handleKeyPress(QKeyEvent* event);
 
     void doEndEditElement();
@@ -301,6 +315,8 @@ private:
                                                  mu::engraving::TextStyleType textStyleType) const;
     mu::engraving::Harmony* createHarmony(mu::engraving::Segment* segment, engraving::track_idx_t track,
                                           mu::engraving::HarmonyType type) const;
+
+    void addText(TextStyleType type, EngravingItem* item = nullptr);
 
     void startEditText(mu::engraving::TextBase* text);
     bool needEndTextEdit() const;
@@ -343,11 +359,12 @@ private:
     bool notesHaveActiculation(const std::vector<Note*>& notes, SymbolId articulationSymbolId) const;
 
     bool needEndTextEditing(const std::vector<EngravingItem*>& newSelectedElements) const;
+    bool needEndElementEditing(const std::vector<EngravingItem*>& newSelectedElements) const;
 
     void resetGripEdit();
     void resetHitElementContext();
 
-    bool elementsSelected(const std::vector<ElementType>& elementsTypes) const;
+    bool elementsSelected(const std::set<ElementType>& elementsTypes) const;
 
     template<typename P>
     void execute(void (mu::engraving::Score::* function)(P), P param);
@@ -390,6 +407,8 @@ private:
     DragData m_dragData;
     async::Notification m_dragChanged;
     std::vector<LineF> m_anchorLines;
+
+    QDrag* m_drag = nullptr;
 
     mu::engraving::EditData m_editData;
 

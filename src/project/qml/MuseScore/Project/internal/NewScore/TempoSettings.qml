@@ -95,9 +95,12 @@ FlatButton {
                 text: qsTrc("project/newscore", "Show tempo marking on my score")
 
                 navigation.name: "WithTempoBox"
-                navigation.panel: content.navigationPanel
+                navigation.panel: NavigationPanel {
+                    name: "WithTempoBoxPanel"
+                    section: popup.navigationSection
+                    order: 1
+                }
                 navigation.row: 0
-                navigation.column: 0
 
                 onClicked: {
                     root.model.withTempo = !checked
@@ -109,6 +112,8 @@ FlatButton {
             }
 
             RadioButtonGroup {
+                id: tempoMarkingView
+
                 Layout.topMargin: 26
                 Layout.leftMargin: 32
                 Layout.rightMargin: 32
@@ -116,6 +121,12 @@ FlatButton {
                 height: 48
 
                 model: root.model.tempoNotes()
+
+                property NavigationPanel navigationPanel: NavigationPanel {
+                    name: "TempoMarkingPanel"
+                    section: popup.navigationSection
+                    order: 2
+                }
 
                 delegate: FlatRadioButton {
                     width: 48
@@ -125,7 +136,7 @@ FlatButton {
                     checked: model.index === root.model.currentTempoNoteIndex
 
                     navigation.name: modelData.noteSymbol
-                    navigation.panel: content.navigationPanel
+                    navigation.panel: tempoMarkingView.navigationPanel
                     navigation.row: 1
                     navigation.column: model.index
 
@@ -175,9 +186,12 @@ FlatButton {
                     maxValue: root.model.tempoValueRange().max
                     minValue: root.model.tempoValueRange().min
 
-                    navigation.panel: content.navigationPanel
-                    navigation.row: 2
-                    navigation.column: 0
+                    navigation.panel: NavigationPanel {
+                        name: "TempoPanel"
+                        section: popup.navigationSection
+                        order: 3
+                    }
+                    navigation.row: 0
 
                     onValueEdited: function(newValue) {
                         var tempo = root.model.tempo

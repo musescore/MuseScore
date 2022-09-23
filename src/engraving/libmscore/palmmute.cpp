@@ -21,12 +21,12 @@
  */
 
 #include "palmmute.h"
+
 #include "rw/xml.h"
-#include "system.h"
-#include "measure.h"
-#include "chordrest.h"
+
 #include "score.h"
 #include "stafftype.h"
+#include "system.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -70,8 +70,9 @@ void PalmMuteSegment::layout()
 {
     const StaffType* stType = staffType();
 
+    _skipDraw = false;
     if (stType && stType->isHiddenElementOnTab(score(), Sid::palmMuteShowTabCommon, Sid::palmMuteShowTabSimple)) {
-        setbbox(RectF());
+        _skipDraw = true;
         return;
     }
 

@@ -46,6 +46,7 @@ NotationAccessibility::NotationAccessibility(const Notation* notation)
     : m_getScore(notation)
 {
     notation->interaction()->selectionChanged().onNotify(this, [this]() {
+        setTriggeredCommand("");
         updateAccessibilityInfo();
     });
 
@@ -108,6 +109,16 @@ void NotationAccessibility::setEnabled(bool enabled)
     }
 #else
     UNUSED(enabled)
+#endif
+}
+
+void NotationAccessibility::setTriggeredCommand(const std::string& command)
+{
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    score()->rootItem()->accessible()->accessibleRoot()->setCommandInfo(QString::fromStdString(command));
+    score()->dummy()->rootItem()->accessible()->accessibleRoot()->setCommandInfo(QString::fromStdString(command));
+#else
+    UNUSED(command)
 #endif
 }
 

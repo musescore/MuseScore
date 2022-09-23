@@ -45,6 +45,7 @@ public:
 
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override;
+    void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;
 
     bool acceptDrop(EditData&) const override;

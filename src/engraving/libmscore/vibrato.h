@@ -27,7 +27,6 @@
 
 namespace mu::engraving {
 class Vibrato;
-class Accidental;
 
 //---------------------------------------------------------
 //   @@ VibratoSegment

@@ -34,6 +34,8 @@ FocusScope {
     property alias timeSinceModified: timeSinceModified.text
     property var thumbnail: null
     property bool isAdd: false
+    property bool isNoResultFound: false
+    property bool isCloud: false
 
     property alias navigation: navCtrl
 
@@ -82,6 +84,10 @@ FocusScope {
                         return addComp
                     }
 
+                    if (root.isNoResultFound) {
+                        return noResultFoundComp
+                    }
+
                     if (root.thumbnail) {
                         return scoreThumbnailComp
                     }
@@ -108,10 +114,7 @@ FocusScope {
                 NavigationFocusBorder {
                     navigationCtrl: navCtrl
 
-                    //! NOTE: the contrast between the navigation focus border and the thumbnail
-                    //! is very low, especially in dark mode. Add a small padding between the
-                    //! focus border and the thumbnail, to make the border easily visible.
-                    anchors.margins: -border.width - 2
+                    padding: 2
                 }
 
                 border.color: ui.theme.strokeColor
@@ -186,8 +189,43 @@ FocusScope {
 
                 font.capitalization: Font.AllUppercase
 
-                visible: !root.isAdd
+                visible: !root.isAdd && !root.isNoResultFound
             }
+        }
+    }
+
+    Rectangle {
+        anchors.top: parent.top
+        anchors.topMargin: -width / 2
+        anchors.left: parent.left
+        anchors.leftMargin: -width / 2
+
+        width: 36
+        height: width
+        radius: width / 2
+
+        color: ui.theme.accentColor
+        visible: root.isCloud
+
+        Image {
+            id: cloudProjectIcon
+
+            anchors.centerIn: parent
+
+            width: 24
+            height: 16
+
+            source: "qrc:/resources/CloudProject.svg"
+        }
+
+        StyledDropShadow {
+            anchors.fill: cloudProjectIcon
+
+            horizontalOffset: 0
+            verticalOffset: 1
+            radius: 4
+
+            source: cloudProjectIcon
         }
     }
 
@@ -205,6 +243,20 @@ FocusScope {
 
                 font.pixelSize: 50
                 color: "black"
+            }
+        }
+    }
+
+    Component {
+        id: noResultFoundComp
+
+        Rectangle {
+            anchors.fill: parent
+            color: ui.theme.backgroundPrimaryColor
+
+            StyledTextLabel {
+                anchors.fill: parent
+                text: qsTrc("project", "No results found")
             }
         }
     }

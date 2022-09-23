@@ -24,7 +24,7 @@
 #include <QPainter>
 
 #include "actions/actiontypes.h"
-#include "stringutils.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -129,7 +129,9 @@ void AbstractNotationPaintView::moveCanvasToCenter()
     }
 
     PointF canvasCenter = this->canvasCenter();
-    doMoveCanvas(canvasCenter.x(), canvasCenter.y());
+    if (doMoveCanvas(canvasCenter.x(), canvasCenter.y())) {
+        onMatrixChanged(m_matrix, false);
+    }
 }
 
 void AbstractNotationPaintView::scrollHorizontal(qreal position)
@@ -321,11 +323,13 @@ void AbstractNotationPaintView::setMatrix(const Transform& matrix)
         return;
     }
 
-    onMatrixChanged(m_matrix);
+    onMatrixChanged(m_matrix, false);
 }
 
-void AbstractNotationPaintView::onMatrixChanged(const Transform&)
+void AbstractNotationPaintView::onMatrixChanged(const Transform&, bool overrideZoomType)
 {
+    UNUSED(overrideZoomType);
+
     update();
 
     emit horizontalScrollChanged();
@@ -341,8 +345,12 @@ void AbstractNotationPaintView::onViewSizeChanged()
         return;
     }
 
-    if (viewport().isValid() && !notation()->viewState()->isMatrixInited()) {
-        m_inputController->initZoom();
+    if (viewport().isValid()) {
+        if (!notation()->viewState()->isMatrixInited()) {
+            m_inputController->initZoom();
+        } else {
+            m_inputController->updateZoomAfterSizeChange();
+        }
     }
 
     ensureViewportInsideScrollableArea();
@@ -380,6 +388,11 @@ INotationInteractionPtr AbstractNotationPaintView::notationInteraction() const
 INotationPlaybackPtr AbstractNotationPaintView::notationPlayback() const
 {
     return globalContext()->currentMasterNotation() ? globalContext()->currentMasterNotation()->playback() : nullptr;
+}
+
+QQuickItem* AbstractNotationPaintView::asItem()
+{
+    return this;
 }
 
 INotationNoteInputPtr AbstractNotationPaintView::notationNoteInput() const
@@ -820,7 +833,7 @@ bool AbstractNotationPaintView::ensureViewportInsideScrollableArea()
     }
 
     m_matrix.translate(dx, dy);
-    onMatrixChanged(m_matrix);
+    onMatrixChanged(m_matrix, false);
     return true;
 }
 
@@ -829,7 +842,12 @@ bool AbstractNotationPaintView::moveCanvasToPosition(const PointF& logicPos)
     TRACEFUNC;
 
     PointF viewTopLeft = viewportTopLeft();
-    return doMoveCanvas(viewTopLeft.x() - logicPos.x(), viewTopLeft.y() - logicPos.y());
+    if (doMoveCanvas(viewTopLeft.x() - logicPos.x(), viewTopLeft.y() - logicPos.y())) {
+        onMatrixChanged(m_matrix, false);
+        return true;
+    }
+
+    return false;
 }
 
 bool AbstractNotationPaintView::moveCanvas(qreal dx, qreal dy)
@@ -839,6 +857,8 @@ bool AbstractNotationPaintView::moveCanvas(qreal dx, qreal dy)
     bool moved = doMoveCanvas(dx, dy);
 
     if (moved) {
+        onMatrixChanged(m_matrix, false);
+
         m_autoScrollEnabled = false;
         m_enableAutoScrollTimer.start(2000);
     }
@@ -862,7 +882,6 @@ bool AbstractNotationPaintView::doMoveCanvas(qreal dx, qreal dy)
     }
 
     m_matrix.translate(correctedDX, correctedDY);
-    onMatrixChanged(m_matrix);
 
     return true;
 }
@@ -882,7 +901,7 @@ qreal AbstractNotationPaintView::currentScaling() const
     return m_matrix.m11();
 }
 
-void AbstractNotationPaintView::setScaling(qreal scaling, const PointF& pos)
+void AbstractNotationPaintView::setScaling(qreal scaling, const PointF& pos, bool overrideZoomType)
 {
     TRACEFUNC;
 
@@ -905,10 +924,10 @@ void AbstractNotationPaintView::setScaling(qreal scaling, const PointF& pos)
     }
 
     qreal deltaScaling = scaling / currentScaling;
-    scale(deltaScaling, pos);
+    scale(deltaScaling, pos, overrideZoomType);
 }
 
-void AbstractNotationPaintView::scale(qreal factor, const PointF& pos)
+void AbstractNotationPaintView::scale(qreal factor, const PointF& pos, bool overrideZoomType)
 {
     TRACEFUNC;
 
@@ -929,12 +948,9 @@ void AbstractNotationPaintView::scale(qreal factor, const PointF& pos)
     qreal dx = pointAfterScaling.x() - pointBeforeScaling.x();
     qreal dy = pointAfterScaling.y() - pointBeforeScaling.y();
 
-    // If canvas has moved, moveCanvas will call onMatrixChanged();
-    // Otherwise, it needs to be called here
-    if (!doMoveCanvas(dx, dy)) {
-        update();
-        onMatrixChanged(m_matrix);
-    }
+    doMoveCanvas(dx, dy);
+
+    onMatrixChanged(m_matrix, overrideZoomType);
 }
 
 void AbstractNotationPaintView::pinchToZoom(qreal scaleFactor, const QPointF& pos)
@@ -1110,7 +1126,7 @@ void AbstractNotationPaintView::clear()
     m_matrix = Transform();
     m_previousHorizontalScrollPosition = 0;
     m_previousVerticalScrollPosition = 0;
-    onMatrixChanged(m_matrix);
+    onMatrixChanged(m_matrix, false);
 }
 
 qreal AbstractNotationPaintView::width() const

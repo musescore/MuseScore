@@ -77,6 +77,8 @@ public:
     size_t accessibleChildCount() const override;
     IAccessible* accessibleChild(size_t i) const override;
 
+    QWindow* accessibleWindow() const override;
+
     Role accessibleRole() const override;
     QString accessibleName() const override;
     QString accessibleDescription() const override;
@@ -97,6 +99,8 @@ public:
     int accessibleCursorPosition() const override;
 
     QString accessibleText(int startOffset, int endOffset) const override;
+    QString accessibleTextBeforeOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const override;
+    QString accessibleTextAfterOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const override;
     QString accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const override;
     int accessibleCharacterCount() const override;
 

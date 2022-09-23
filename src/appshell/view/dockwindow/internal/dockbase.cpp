@@ -377,6 +377,8 @@ void DockBase::open()
 
     m_dockWidget->show();
     setVisible(true);
+
+    applySizeConstraints();
 }
 
 void DockBase::close()
@@ -620,10 +622,14 @@ void DockBase::listenFloatingChanges()
         //! and emit floatingChanged() after that
         QTimer::singleShot(0, this, [this]() {
             updateFloatingStatus();
+
+            if (m_floating) {
+                applySizeConstraints();
+            }
         });
 
-        *frameConn
-            = connect(frame, &KDDockWidgets::Frame::isInMainWindowChanged, this, &DockBase::updateFloatingStatus, Qt::UniqueConnection);
+        *frameConn = connect(frame, &KDDockWidgets::Frame::isInMainWindowChanged,
+                             this, &DockBase::onIsInMainWindowChanged, Qt::UniqueConnection);
     });
 
     connect(m_dockWidget->toggleAction(), &QAction::toggled, this, [this]() {
@@ -638,6 +644,12 @@ void DockBase::updateFloatingStatus()
     bool floating = m_dockWidget && m_dockWidget->floatingWindow();
 
     doSetFloating(floating);
+}
+
+void DockBase::onIsInMainWindowChanged()
+{
+    applySizeConstraints();
+    updateFloatingStatus();
 }
 
 void DockBase::doSetFloating(bool floating)

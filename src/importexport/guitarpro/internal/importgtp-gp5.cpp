@@ -569,14 +569,20 @@ bool GuitarPro5::readTracks()
         } else {
             clefId = defaultClef(patch);
         }
-        Measure* measure = score->firstMeasure();
-        Segment* segment = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
-        Clef* clef = Factory::createClef(segment);
-        clef->setClefType(clefId);
-        clef->setTrack(i * VOICES);
-        segment->add(clef);
 
-        if (capo > 0) {
+        Measure* measure = score->firstMeasure();
+        if (measure->tick() != Fraction(0, 1)) {
+            Segment* segment = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
+
+            Clef* clef = Factory::createClef(segment);
+            clef->setClefType(clefId);
+            clef->setTrack(i * VOICES);
+            segment->add(clef);
+        } else {
+            staff->setDefaultClefType(ClefTypeList(clefId, clefId));
+        }
+
+        if (capo > 0 && score->styleB(Sid::showCapoOnStaff)) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
             StaffText* st = new StaffText(s);
             st->setPlainText(u"Capo. fret " + String::number(capo));
@@ -1145,8 +1151,8 @@ bool GuitarPro5::readNoteEffects(Note* note)
 
     if (modMask2 & EFFECT_ARTIFICIAL_HARMONIC) {
         int type = readChar();
-        if (type == 1 || type == 3) {
-            int fret = type == 3 ? (readChar() - note->fret()) : note->fret();
+        if (type == HARMONIC_MARK_NATURAL) {
+            int fret = note->fret();
 
             note->setHarmonic(true);
             float harmonicFret = naturalHarmonicFromFret(fret);
@@ -1158,19 +1164,26 @@ bool GuitarPro5::readNoteEffects(Note* note)
 
             note->setPitch(std::clamp(pitch, 0, 127));
             note->setTpcFromPitch();
-        } else if (type == 2) {
-            int fret = note->fret();
+        } else if (type >= HARMONIC_MARK_ARTIFICIAL && type <= HARMONIC_MARK_SEMI) {
+            int fret = (type == HARMONIC_MARK_TAP ? (readChar() - note->fret()) : note->fret());
             float midi = note->pitch() + fret;
             int currentOctave = floor(midi / 12);
-            auto harmNote = readChar();
-            readChar();
-            auto octave = currentOctave + readChar();
+            auto harmNote = (type == HARMONIC_MARK_ARTIFICIAL ? readChar() : 0);
+            if (type == HARMONIC_MARK_ARTIFICIAL) {
+                readChar();
+            }
+
+            auto octave = currentOctave + (type == HARMONIC_MARK_ARTIFICIAL ? readChar() : 0);
 
             Note* harmonicNote = Factory::createNote(note->chord());
 
             harmonicNote->setHarmonic(true);
-            harmonicNote->setDisplayFret(Note::DisplayFretOption::ArtificialHarmonic);
-            note->setDisplayFret(Note::DisplayFretOption::Hide);
+            harmonicNote->setPlay(true);
+            note->setPlay(false);
+            /// @note option to show or not additional harmonic fret in "<>" to be implemented
+            ///harmonicNote->setDisplayFret(Note::DisplayFretOption::ArtificialHarmonic);
+            ///note->setDisplayFret(Note::DisplayFretOption::Hide);
+            harmonicNote->setDisplayFret(Note::DisplayFretOption::Hide);
 
             Staff* staff = note->staff();
             float harmonicFret = 0;
@@ -1211,7 +1224,25 @@ bool GuitarPro5::readNoteEffects(Note* note)
             harmonicNote->setPitch(std::clamp(pitch, 0, 127));
             harmonicNote->setTpcFromPitch();
             note->chord()->add(harmonicNote);
-            addTextToNote(u"A.H.", harmonicNote);
+
+            String harmonicText;
+
+            switch (type) {
+            case HARMONIC_MARK_ARTIFICIAL:
+                harmonicText = u"A.H.";
+                break;
+            case HARMONIC_MARK_TAP:
+                harmonicText = u"T.H.";
+                break;
+            case HARMONIC_MARK_PINCH:
+                harmonicText = u"P.H.";
+                break;
+            case HARMONIC_MARK_SEMI:
+                harmonicText = u"S.H.";
+                break;
+            }
+
+            addTextToNote(harmonicText, harmonicNote);
         }
     }
 

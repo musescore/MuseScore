@@ -28,6 +28,9 @@
 
 #include "settings.h"
 #include "async/async.h"
+
+#include "engraving/infrastructure/mscio.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -45,14 +48,20 @@ static const Settings::Key LAST_SAVED_PROJECTS_PATH(module_name, "application/pa
 static const Settings::Key USER_PROJECTS_PATH(module_name, "application/paths/myScores");
 static const Settings::Key SHOULD_ASK_SAVE_LOCATION_TYPE(module_name, "project/shouldAskSaveLocationType");
 static const Settings::Key LAST_USED_SAVE_LOCATION_TYPE(module_name, "project/lastUsedSaveLocationType");
-static const Settings::Key SHOULD_WARN_BEFORE_PUBLISHING(module_name, "project/shouldWarnBeforePublishing");
+static const Settings::Key SHOULD_WARN_BEFORE_SAVING_PUBLICLY(module_name, "project/shouldWarnBeforeSavingPublicly");
 static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "project/preferredScoreCreationMode");
 static const Settings::Key MIGRATION_OPTIONS(module_name, "project/migration");
 static const Settings::Key AUTOSAVE_ENABLED_KEY(module_name, "project/autoSaveEnabled");
 static const Settings::Key AUTOSAVE_INTERVAL_KEY(module_name, "project/autoSaveInterval");
 static const Settings::Key SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT(module_name, "project/shouldDestinationFolderBeOpenedOnExport");
+static const Settings::Key OPEN_DETAILED_PROJECT_UPLOADED_DIALOG(module_name, "project/openDetailedProjectUploadedDialog");
+static const Settings::Key OPEN_AUDIO_GENERATION_SETTINGS(module_name, "project/openAudioGenerationSettings");
+static const Settings::Key GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY(module_name, "project/generateAudioTimePeriodType");
+static const Settings::Key NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY(module_name, "project/numberOfSavesToGenerateAudio");
+static const Settings::Key SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING(module_name, "project/showCloudIsNotAvailableWarning");
 
-const QString ProjectConfiguration::DEFAULT_FILE_SUFFIX(".mscz");
+static const std::string DEFAULT_FILE_SUFFIX(".mscz");
+static const std::string DEFAULT_FILE_FILTER("*.mscz");
 
 void ProjectConfiguration::init()
 {
@@ -60,10 +69,8 @@ void ProjectConfiguration::init()
     settings()->valueChanged(USER_TEMPLATES_PATH).onReceive(nullptr, [this](const Val& val) {
         m_userTemplatesPathChanged.send(val.toPath());
     });
-    fileSystem()->makePath(userTemplatesPath());
 
     settings()->setDefaultValue(DEFAULT_PROJECTS_PATH, Val(globalConfiguration()->userDataPath() + "/Scores"));
-    fileSystem()->makePath(defaultProjectsPath());
 
     settings()->valueChanged(USER_PROJECTS_PATH).onReceive(nullptr, [this](const Val& val) {
         m_userScoresPathChanged.send(val.toPath());
@@ -80,7 +87,7 @@ void ProjectConfiguration::init()
     settings()->setDefaultValue(SHOULD_ASK_SAVE_LOCATION_TYPE, Val(true));
     settings()->setDefaultValue(LAST_USED_SAVE_LOCATION_TYPE, Val(SaveLocationType::Undefined));
 
-    settings()->setDefaultValue(SHOULD_WARN_BEFORE_PUBLISHING, Val(true));
+    settings()->setDefaultValue(SHOULD_WARN_BEFORE_SAVING_PUBLICLY, Val(true));
 
     settings()->setDefaultValue(AUTOSAVE_ENABLED_KEY, Val(true));
     settings()->valueChanged(AUTOSAVE_ENABLED_KEY).onReceive(nullptr, [this](const Val& val) {
@@ -93,6 +100,15 @@ void ProjectConfiguration::init()
     });
 
     settings()->setDefaultValue(SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT, Val(false));
+    settings()->setDefaultValue(OPEN_DETAILED_PROJECT_UPLOADED_DIALOG, Val(true));
+    settings()->setDefaultValue(OPEN_AUDIO_GENERATION_SETTINGS, Val(true));
+    settings()->setDefaultValue(GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY, Val(static_cast<int>(GenerateAudioTimePeriodType::Never)));
+    settings()->setDefaultValue(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY, Val(10));
+    settings()->setDefaultValue(SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING, Val(true));
+
+    fileSystem()->makePath(userTemplatesPath());
+    fileSystem()->makePath(defaultProjectsPath());
+    fileSystem()->makePath(cloudProjectsPath());
 }
 
 io::paths_t ProjectConfiguration::recentProjectPaths() const
@@ -100,6 +116,10 @@ io::paths_t ProjectConfiguration::recentProjectPaths() const
     TRACEFUNC;
 
     io::paths_t allPaths = parseRecentProjectsPaths(settings()->value(RECENT_PROJECTS_PATHS));
+    if (allPaths.empty()) {
+        allPaths = scanCloudProjects();
+    }
+
     io::paths_t actualPaths;
 
     for (const io::path_t& path: allPaths) {
@@ -168,6 +188,19 @@ io::paths_t ProjectConfiguration::parseRecentProjectsPaths(const Val& value) con
     }
 
     return result;
+}
+
+io::paths_t ProjectConfiguration::scanCloudProjects() const
+{
+    TRACEFUNC;
+
+    RetVal<io::paths_t> paths = fileSystem()->scanFiles(cloudProjectsPath(), { DEFAULT_FILE_FILTER }, io::ScanMode::FilesInCurrentDir);
+
+    if (!paths.ret) {
+        LOGE() << paths.ret.toString();
+    }
+
+    return paths.val;
 }
 
 io::path_t ProjectConfiguration::myFirstProjectPath() const
@@ -260,40 +293,78 @@ async::Channel<io::path_t> ProjectConfiguration::userProjectsPathChanged() const
     return m_userScoresPathChanged;
 }
 
+bool ProjectConfiguration::shouldAskSaveLocationType() const
+{
+    return settings()->value(SHOULD_ASK_SAVE_LOCATION_TYPE).toBool();
+}
+
+void ProjectConfiguration::setShouldAskSaveLocationType(bool shouldAsk)
+{
+    settings()->setSharedValue(SHOULD_ASK_SAVE_LOCATION_TYPE, Val(shouldAsk));
+}
+
+bool ProjectConfiguration::isCloudProject(const io::path_t& projectPath) const
+{
+    return io::dirpath(projectPath) == cloudProjectsPath();
+}
+
+io::path_t ProjectConfiguration::cloudProjectSavingFilePath(const io::path_t& projectName) const
+{
+    io::path_t savingPathWithoutSuffix = cloudProjectsPath() + '/' + projectName;
+
+    auto makeSavingPath = [savingPathWithoutSuffix](int num = 0) {
+        std::string numPart = num > 0 ? ' ' + std::to_string(num) : "";
+        return savingPathWithoutSuffix + numPart + DEFAULT_FILE_SUFFIX;
+    };
+
+    io::paths_t cloudProjectPaths = scanCloudProjects();
+    io::path_t savingPath = makeSavingPath();
+
+    if (!mu::contains(cloudProjectPaths, savingPath)) {
+        return savingPath;
+    }
+
+    for (size_t i = 0; i < cloudProjectPaths.size(); ++i) {
+        savingPath = makeSavingPath(i + 2);
+
+        if (!mu::contains(cloudProjectPaths, savingPath)) {
+            return savingPath;
+        }
+    }
+
+    return makeSavingPath(cloudProjectPaths.size() + 2);
+}
+
 io::path_t ProjectConfiguration::cloudProjectsPath() const
 {
-    return globalConfiguration()->userAppDataPath() + "/cloud_projects";
+    return globalConfiguration()->userDataPath() + "/Cloud Scores";
 }
 
-bool ProjectConfiguration::isCloudProject(const io::path_t& path) const
-{
-    return io::dirpath(path) == cloudProjectsPath();
-}
-
-io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr project, const QString& filenameAddition,
-                                                       const QString& suffix) const
+io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition,
+                                                       const std::string& suffix) const
 {
     io::path_t folderPath;
     io::path_t filename;
-    QString theSuffix = suffix;
+    std::string theSuffix = suffix;
 
     io::path_t projectPath = project->path();
+    bool isLocalProject = !project->isCloudProject();
 
-    if (project->isNewlyCreated()) {
-        if (io::isAbsolute(projectPath)) {
+    if (isLocalProject) {
+        if (project->isNewlyCreated()) {
+            if (io::isAbsolute(projectPath)) {
+                folderPath = io::dirpath(projectPath);
+            }
+
+            filename = io::filename(projectPath, false);
+        } else {
+            projectPath = engraving::containerPath(projectPath);
             folderPath = io::dirpath(projectPath);
-        }
+            filename = io::filename(projectPath, false);
 
-        filename = io::filename(projectPath, false);
-    } else if (project->isCloudProject()) {
-        // TODO(save-to-cloud)
-    } else {
-        projectPath = engraving::containerPath(projectPath);
-        folderPath = io::dirpath(projectPath);
-        filename = io::filename(projectPath, false);
-
-        if (theSuffix.isEmpty()) {
-            theSuffix = QString::fromStdString(io::suffix(projectPath));
+            if (theSuffix.empty()) {
+                theSuffix = io::suffix(projectPath);
+            }
         }
     }
 
@@ -317,23 +388,13 @@ io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr proje
         filename = qtrc("project", "Untitled");
     }
 
-    if (theSuffix.isEmpty()) {
+    if (theSuffix.empty()) {
         theSuffix = DEFAULT_FILE_SUFFIX;
     }
 
     return folderPath
            .appendingComponent(filename + filenameAddition)
            .appendingSuffix(theSuffix);
-}
-
-bool ProjectConfiguration::shouldAskSaveLocationType() const
-{
-    return settings()->value(SHOULD_ASK_SAVE_LOCATION_TYPE).toBool();
-}
-
-void ProjectConfiguration::setShouldAskSaveLocationType(bool shouldAsk)
-{
-    settings()->setSharedValue(SHOULD_ASK_SAVE_LOCATION_TYPE, Val(shouldAsk));
 }
 
 SaveLocationType ProjectConfiguration::lastUsedSaveLocationType() const
@@ -346,14 +407,14 @@ void ProjectConfiguration::setLastUsedSaveLocationType(SaveLocationType type)
     settings()->setSharedValue(LAST_USED_SAVE_LOCATION_TYPE, Val(type));
 }
 
-bool ProjectConfiguration::shouldWarnBeforePublishing() const
+bool ProjectConfiguration::shouldWarnBeforeSavingPublicly() const
 {
-    return settings()->value(SHOULD_WARN_BEFORE_PUBLISHING).toBool();
+    return settings()->value(SHOULD_WARN_BEFORE_SAVING_PUBLICLY).toBool();
 }
 
-void ProjectConfiguration::setShouldWarnBeforePublishing(bool shouldWarn)
+void ProjectConfiguration::setShouldWarnBeforeSavingPublicly(bool shouldWarn)
 {
-    settings()->setSharedValue(SHOULD_WARN_BEFORE_PUBLISHING, Val(shouldWarn));
+    settings()->setSharedValue(SHOULD_WARN_BEFORE_SAVING_PUBLICLY, Val(shouldWarn));
 }
 
 QColor ProjectConfiguration::templatePreviewBackgroundColor() const
@@ -491,4 +552,72 @@ bool ProjectConfiguration::shouldDestinationFolderBeOpenedOnExport() const
 void ProjectConfiguration::setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport)
 {
     settings()->setSharedValue(SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT, Val(shouldDestinationFolderBeOpenedOnExport));
+}
+
+QUrl ProjectConfiguration::scoreManagerUrl() const
+{
+    return cloudConfiguration()->scoreManagerUrl();
+}
+
+bool ProjectConfiguration::openDetailedProjectUploadedDialog() const
+{
+    return settings()->value(OPEN_DETAILED_PROJECT_UPLOADED_DIALOG).toBool();
+}
+
+void ProjectConfiguration::setOpenDetailedProjectUploadedDialog(bool show)
+{
+    settings()->setSharedValue(OPEN_DETAILED_PROJECT_UPLOADED_DIALOG, Val(show));
+}
+
+bool ProjectConfiguration::openAudioGenerationSettings() const
+{
+    return settings()->value(OPEN_AUDIO_GENERATION_SETTINGS).toBool();
+}
+
+void ProjectConfiguration::setOpenAudioGenerationSettings(bool open)
+{
+    settings()->setSharedValue(OPEN_AUDIO_GENERATION_SETTINGS, Val(open));
+}
+
+GenerateAudioTimePeriodType ProjectConfiguration::generateAudioTimePeriodType() const
+{
+    return static_cast<GenerateAudioTimePeriodType>(settings()->value(GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY).toInt());
+}
+
+void ProjectConfiguration::setGenerateAudioTimePeriodType(GenerateAudioTimePeriodType type)
+{
+    settings()->setSharedValue(GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY, Val(static_cast<int>(type)));
+}
+
+int ProjectConfiguration::numberOfSavesToGenerateAudio() const
+{
+    return settings()->value(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY).toInt();
+}
+
+void ProjectConfiguration::setNumberOfSavesToGenerateAudio(int number)
+{
+    settings()->setSharedValue(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY, Val(number));
+}
+
+io::path_t ProjectConfiguration::temporaryMp3FilePathTemplate() const
+{
+    return globalConfiguration()->userAppDataPath() + "/audioFile_XXXXXX.mp3";
+}
+
+io::path_t ProjectConfiguration::projectBackupPath(const io::path_t& projectPath) const
+{
+    io::path_t projectDir = io::absoluteDirpath(projectPath);
+    io::path_t projectName = io::filename(projectPath);
+
+    return projectDir + "/.mscbackup/." + projectName + "~";
+}
+
+bool ProjectConfiguration::showCloudIsNotAvailableWarning() const
+{
+    return settings()->value(SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING).toBool();
+}
+
+void ProjectConfiguration::setShowCloudIsNotAvailableWarning(bool show)
+{
+    settings()->setSharedValue(SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING, Val(show));
 }

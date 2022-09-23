@@ -21,24 +21,17 @@
  */
 
 #include "navigate.h"
-#include "engravingitem.h"
-#include "clef.h"
-#include "score.h"
-#include "note.h"
-#include "rest.h"
+
 #include "chord.h"
-#include "system.h"
-#include "segment.h"
-#include "harmony.h"
-#include "utils.h"
-#include "input.h"
+#include "engravingitem.h"
 #include "measure.h"
 #include "measurerepeat.h"
-#include "page.h"
+#include "note.h"
+#include "rest.h"
+#include "score.h"
+#include "segment.h"
 #include "spanner.h"
-#include "system.h"
 #include "staff.h"
-#include "barline.h"
 
 using namespace mu;
 

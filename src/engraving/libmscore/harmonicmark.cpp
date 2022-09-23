@@ -21,12 +21,12 @@
  */
 
 #include "harmonicmark.h"
+
 #include "rw/xml.h"
-#include "system.h"
-#include "measure.h"
-#include "chordrest.h"
+
 #include "score.h"
 #include "stafftype.h"
+#include "system.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -68,8 +68,11 @@ void HarmonicMarkSegment::layout()
 {
     const StaffType* stType = staffType();
 
-    if (stType && stType->isHiddenElementOnTab(score(), Sid::harmonicMarkShowTabCommon, Sid::harmonicMarkShowTabSimple)) {
-        setbbox(RectF());
+    _skipDraw = false;
+    if (stType
+        && (!stType->isTabStaff()
+            || stType->isHiddenElementOnTab(score(), Sid::harmonicMarkShowTabCommon, Sid::harmonicMarkShowTabSimple))) {
+        _skipDraw = true;
         return;
     }
 

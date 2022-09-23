@@ -23,6 +23,7 @@
 
 #include "async/async.h"
 
+#include "audiothread.h"
 #include "worker/audioengine.h"
 
 #include "log.h"

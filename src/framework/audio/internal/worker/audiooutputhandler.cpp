@@ -188,6 +188,11 @@ Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceI
         msecs_t totalDuration = s->player()->duration();
         SoundTrackWriter writer(destination, format, totalDuration, mixer());
 
+        framework::Progress progress = saveSoundTrackProgress(sequenceId);
+        writer.progress().progressChanged.onReceive(this, [&progress](int64_t current, int64_t total, std::string title){
+            progress.progressChanged.send(current, total, title);
+        });
+
         bool ok = writer.write();
         s->player()->seek(0);
 
@@ -196,6 +201,15 @@ Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceI
         return reject(static_cast<int>(Err::DisabledAudioExport), "audio export is disabled");
 #endif
     }, AudioThread::ID);
+}
+
+mu::framework::Progress AudioOutputHandler::saveSoundTrackProgress(const TrackSequenceId sequenceId)
+{
+    if (!m_saveSoundTracksMap.contains(sequenceId)) {
+        m_saveSoundTracksMap.insert(sequenceId, framework::Progress());
+    }
+
+    return m_saveSoundTracksMap[sequenceId];
 }
 
 std::shared_ptr<Mixer> AudioOutputHandler::mixer() const

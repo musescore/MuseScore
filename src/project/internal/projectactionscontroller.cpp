@@ -22,6 +22,8 @@
 #include "projectactionscontroller.h"
 
 #include <QBuffer>
+#include <QTemporaryFile>
+#include <QFileInfo>
 
 #include "translation.h"
 #include "defer.h"
@@ -97,6 +99,17 @@ INotationSelectionPtr ProjectActionsController::currentNotationSelection() const
     return currentNotation() ? currentInteraction()->selection() : nullptr;
 }
 
+bool ProjectActionsController::canReceiveAction(const actions::ActionCode& code) const
+{
+    if (m_isUploadingProject || m_isUploadingAudio) {
+        if (code == "file-save-to-cloud" || code == "file-publish") {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 bool ProjectActionsController::isFileSupported(const io::path_t& path) const
 {
     std::string suffix = io::suffix(path);
@@ -135,7 +148,7 @@ Ret ProjectActionsController::openProject(const io::path_t& projectPath_)
     };
 
     //! Step 1. If no path is specified, ask the user to select a project
-    io::path_t projectPath = projectPath_;
+    io::path_t projectPath = fileSystem()->absoluteFilePath(projectPath_);
     if (projectPath.empty()) {
         projectPath = selectScoreOpeningFile();
 
@@ -363,6 +376,10 @@ bool ProjectActionsController::saveProject(const io::path_t& path)
     }
 
     if (!project->isNewlyCreated()) {
+        if (project->isCloudProject()) {
+            return saveProjectToCloud(project->cloudInfo());
+        }
+
         return saveProjectLocally();
     }
 
@@ -425,36 +442,42 @@ void ProjectActionsController::saveToCloud()
         return;
     }
 
-    SaveLocation saveLocation = response.val;
-    saveProjectAt(saveLocation, SaveMode::SaveAs);
+    saveProjectAt(response.val, SaveMode::SaveAs);
 }
 
 void ProjectActionsController::publish()
 {
+    if (!authorizationService()->checkCloudIsAvailable()) {
+        warnPublishIsNotAvailable();
+        return;
+    }
+
     INotationProjectPtr project = currentNotationProject();
-    RetVal<SaveLocation::CloudInfo> info = saveProjectScenario()->askCloudLocation(project, CloudProjectVisibility::Public);
+    RetVal<CloudProjectInfo> info = saveProjectScenario()->askPublishLocation(project);
     if (!info.ret) {
         return;
     }
 
-    saveProjectToCloud(info.val, SaveMode::SaveAs);
+    AudioFile audio = exportMp3(project->masterNotation()->notation());
+    if (audio.isValid()) {
+        uploadProject(info.val, audio);
+    }
 }
 
 bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveMode saveMode)
 {
     if (location.isLocal()) {
-        return saveProjectLocally(location.localInfo().path, saveMode);
+        return saveProjectLocally(location.localPath(), saveMode);
     }
 
     if (location.isCloud()) {
-        NOT_IMPLEMENTED;
-        return false;
+        return saveProjectToCloud(location.cloudInfo(), saveMode);
     }
 
     return false;
 }
 
-bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, project::SaveMode saveMode)
+bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, SaveMode saveMode)
 {
     Ret ret = currentNotationProject()->save(filePath, saveMode);
     if (!ret) {
@@ -466,14 +489,142 @@ bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, pr
     return true;
 }
 
-bool ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo& info, SaveMode saveMode)
+bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, SaveMode saveMode)
 {
-    UNUSED(info)
-    UNUSED(saveMode)
+    bool isCloudAvailable = authorizationService()->checkCloudIsAvailable();
+    if (!isCloudAvailable) {
+        warnCloudIsNotAvailable();
+    }
+
+    INotationProjectPtr project = currentNotationProject();
+    if (!project) {
+        return false;
+    }
+
+    if (isCloudAvailable && project->isNewlyCreated()) {
+        Ret ret = openAudioGenerationSettings();
+        if (!ret) {
+            return false;
+        }
+    }
+
+    project->setCloudInfo(info);
+
+    io::path_t savingPath;
+
+    if (project->isCloudProject()) {
+        if (saveMode == SaveMode::Save || saveMode == SaveMode::AutoSave) {
+            savingPath = project->path();
+        }
+    }
+
+    if (savingPath.empty()) {
+        savingPath = configuration()->cloudProjectSavingFilePath(info.name.toStdString());
+    }
+
+    if (!saveProjectLocally(savingPath)) {
+        return false;
+    }
+
+    if (!isCloudAvailable) {
+        return true;
+    }
+
+    AudioFile audio;
+    bool isPublic = info.visibility == CloudProjectVisibility::Public;
+
+    if (needGenerateAudio(isPublic)) {
+        audio = exportMp3(project->masterNotation()->notation());
+        if (!audio.isValid()) {
+            return false;
+        }
+    }
+
+    uploadProject(info, audio, isPublic);
+    m_numberOfSavesToCloud++;
+
+    return true;
+}
+
+Ret ProjectActionsController::openAudioGenerationSettings()
+{
+    if (configuration()->openAudioGenerationSettings()) {
+        RetVal<Val> res = interactive()->open("musescore://project/audiogenerationsettings");
+        if (!res.ret) {
+            return res.ret;
+        }
+
+        ValMap map = res.val.toMap();
+        bool askAgain = map["askAgain"].toBool();
+
+        configuration()->setOpenAudioGenerationSettings(askAgain);
+    }
+
+    return make_ok();
+}
+
+bool ProjectActionsController::needGenerateAudio(bool isPublicUpload) const
+{
+    if (isPublicUpload) {
+        return true;
+    }
+
+    switch (configuration()->generateAudioTimePeriodType()) {
+    case GenerateAudioTimePeriodType::Never:
+        return false;
+    case GenerateAudioTimePeriodType::Always:
+        return true;
+    case GenerateAudioTimePeriodType::AfterCertainNumberOfSaves: {
+        int requiredNumberOfSaves = configuration()->numberOfSavesToGenerateAudio();
+        return m_numberOfSavesToCloud % requiredNumberOfSaves == 0;
+    }
+    }
+
+    return false;
+}
+
+ProjectActionsController::AudioFile ProjectActionsController::exportMp3(const INotationPtr notation) const
+{
+    QTemporaryFile* tempFile = new QTemporaryFile(configuration()->temporaryMp3FilePathTemplate().toQString());
+    if (!tempFile->open()) {
+        LOGE() << "Could not open a temp file";
+        delete tempFile;
+        return AudioFile();
+    }
+
+    QString mp3Path = QFileInfo(*tempFile).absoluteFilePath();
+    LOGD() << "mp3 path: " << mp3Path;
+
+    if (mp3Path.isEmpty()) {
+        LOGE() << "mp3 path is empty";
+        delete tempFile;
+        return AudioFile();
+    }
+
+    if (!exportProjectScenario()->exportScores({ notation }, mp3Path)) {
+        LOGE() << "Could not export an mp3";
+        delete tempFile;
+        return AudioFile();
+    }
+
+    AudioFile audio;
+    audio.format = "mp3";
+    audio.device = tempFile;
+    audio.device->seek(0);
+
+    return audio;
+}
+
+void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl)
+{
+    // We can only be uploading one project at a time
+    if (m_isUploadingProject) {
+        return;
+    }
 
     INotationProjectPtr project = globalContext()->currentProject();
     if (!project) {
-        return false;
+        return;
     }
 
     QBuffer* projectData = new QBuffer();
@@ -483,42 +634,152 @@ bool ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo&
     if (!ret) {
         LOGE() << ret.toString();
         delete projectData;
-        return false;
+        return;
     }
 
     projectData->close();
-
     projectData->open(QIODevice::ReadOnly);
 
-    uploadingService()->uploadProgress().progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
-        LOGD() << "Uploading progress: " << current << "/" << total;
-    }, Asyncable::AsyncMode::AsyncSetRepeat);
+    bool isPrivate = info.visibility == CloudProjectVisibility::Private;
+    m_uploadingProjectProgress = uploadingService()->uploadScore(*projectData, info.name, isPrivate, info.sourceUrl);
 
-    async::Channel<QUrl> sourceUrlCh = uploadingService()->sourceUrlReceived();
-    sourceUrlCh.onReceive(this, [project, projectData](const QUrl& url) {
+    m_uploadingProjectProgress->started.onNotify(this, [this]() {
+        m_isUploadingProject = true;
+        LOGD() << "Uploading project started";
+    });
+
+    m_uploadingProjectProgress->progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
+        if (total > 0) {
+            LOGD() << "Uploading project progress: " << current << " / " << total << " bytes";
+        }
+    });
+
+    m_uploadingProjectProgress->finished.onReceive(this, [this, project, projectData, audio, openEditUrl](const ProgressResult& res) {
+        m_isUploadingProject = false;
         projectData->deleteLater();
 
-        LOGD() << "Source url received: " << url;
-        QString newSource = url.toString();
-
-        ProjectMeta meta = project->metaInfo();
-        if (meta.source == newSource) {
+        if (!res.ret) {
+            LOGE() << res.ret.toString();
             return;
         }
 
-        meta.source = newSource;
-        project->setMetaInfo(meta);
+        ValMap urlMap = res.val.toMap();
+        QString newSourceUrl = urlMap["sourceUrl"].toQString();
+        QString editUrl = openEditUrl ? urlMap["editUrl"].toQString() : QString();
+
+        LOGD() << "Source url received: " << newSourceUrl;
+
+        onProjectSuccessfullyUploaded(editUrl);
+
+        if (audio.isValid()) {
+            uploadAudio(audio, newSourceUrl);
+        }
+
+        CloudProjectInfo info = project->cloudInfo();
+        if (info.sourceUrl == newSourceUrl) {
+            return;
+        }
+
+        info.sourceUrl = newSourceUrl;
+        project->setCloudInfo(info);
 
         if (!project->isNewlyCreated()) {
             project->save();
         }
-    }, Asyncable::AsyncMode::AsyncSetRepeat);
+    });
+}
 
-    ProjectMeta meta = project->metaInfo();
-    uploadingService()->uploadScore(*projectData, meta.title, meta.source);
+void ProjectActionsController::uploadAudio(const AudioFile& audio, const QUrl& sourceUrl)
+{
+    if (m_isUploadingAudio) {
+        return;
+    }
 
-    // TODO(save-to-cloud): check whether upload was successful?
-    return true;
+    m_uploadingAudioProgress = uploadingService()->uploadAudio(*audio.device, audio.format, sourceUrl);
+
+    m_uploadingAudioProgress->started.onNotify(this, [this]() {
+        m_isUploadingAudio = true;
+        LOGD() << "Uploading audio started";
+    });
+
+    m_uploadingAudioProgress->progressChanged.onReceive(this, [](int64_t current, int64_t total, const std::string&) {
+        if (total > 0) {
+            LOGD() << "Uploading audio progress: " << current << " / " << total << " bytes";
+        }
+    });
+
+    m_uploadingAudioProgress->finished.onReceive(this, [this, audio](const ProgressResult& res) {
+        m_isUploadingAudio = false;
+        LOGD() << "Uploading audio finished";
+
+        audio.device->deleteLater();
+
+        if (!res.ret) {
+            LOGE() << res.ret.toString();
+        }
+    });
+}
+
+void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOpen)
+{
+    if (!urlToOpen.isEmpty()) {
+        interactive()->openUrl(urlToOpen);
+        return;
+    }
+
+    QUrl scoreManagerUrl = configuration()->scoreManagerUrl();
+
+    if (configuration()->openDetailedProjectUploadedDialog()) {
+        UriQuery query("musescore://project/uploaded");
+        query.addParam("scoreManagerUrl", Val(scoreManagerUrl.toString()));
+        interactive()->open(query);
+        configuration()->setOpenDetailedProjectUploadedDialog(false);
+        return;
+    }
+
+    IInteractive::ButtonData viewOnlineBtn(IInteractive::Button::CustomButton, trc("project/save", "View online"));
+    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
+    okBtn.accent = true;
+
+    std::string msg = trc("project/save", "All saved changes will now update to the cloud. "
+                                          "You can manage this file in the score manager on musescore.com.");
+
+    int btn = interactive()->info(trc("global", "Success!"), msg, { viewOnlineBtn, okBtn },
+                                  static_cast<int>(IInteractive::Button::Ok)).button();
+
+    if (btn == viewOnlineBtn.btn) {
+        interactive()->openUrl(scoreManagerUrl);
+    }
+}
+
+void ProjectActionsController::warnCloudIsNotAvailable()
+{
+    if (!configuration()->showCloudIsNotAvailableWarning()) {
+        return;
+    }
+
+    std::string title = trc("project/save", "Unable to connect to the cloud");
+    std::string msg = trc("project/save", "Your changes will be saved to a local file until the connection resumes.");
+
+    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
+    okBtn.accent = true;
+
+    IInteractive::Result result = interactive()->warning(title, msg,
+                                                         { okBtn }, okBtn.btn,
+                                                         IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
+
+    configuration()->setShowCloudIsNotAvailableWarning(result.showAgain());
+}
+
+void ProjectActionsController::warnPublishIsNotAvailable()
+{
+    std::string title = trc("project/save", "Unable to connect to MuseScore.com");
+    std::string msg = trc("project/save", "Please check your internet connection, or try again later.");
+
+    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
+    okBtn.accent = true;
+
+    interactive()->warning(title, msg, { okBtn }, okBtn.btn, IInteractive::Option::WithIcon);
 }
 
 bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path_t& filePath)

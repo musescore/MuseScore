@@ -22,18 +22,15 @@
 
 #include "accidental.h"
 
+#include "infrastructure/symbolfont.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
-#include "infrastructure/symbolfont.h"
 
-#include "note.h"
-#include "symbol.h"
-#include "score.h"
 #include "actionicon.h"
-#include "staff.h"
-#include "undo.h"
+#include "note.h"
+#include "score.h"
 
 #include "log.h"
 

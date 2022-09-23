@@ -23,9 +23,6 @@
 #include <gtest/gtest.h>
 
 #include "libmscore/masterscore.h"
-#include "libmscore/measure.h"
-#include "libmscore/segment.h"
-#include "libmscore/chordrest.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

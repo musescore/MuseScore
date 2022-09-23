@@ -22,13 +22,12 @@
 
 #include "spannersmetaparser.h"
 
-#include "libmscore/spanner.h"
-#include "libmscore/trill.h"
 #include "libmscore/glissando.h"
 #include "libmscore/note.h"
+#include "libmscore/spanner.h"
+#include "libmscore/trill.h"
 
 #include "playback/utils/pitchutils.h"
-#include "playback/utils/expressionutils.h"
 
 using namespace mu::engraving;
 

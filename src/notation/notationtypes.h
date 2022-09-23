@@ -26,36 +26,37 @@
 #include <QDate>
 #include <unordered_set>
 
-#include "io/path.h"
 #include "translation.h"
+
 #include "types/id.h"
 #include "types/translatablestring.h"
-#include "midi/midievent.h"
 
-#include "libmscore/engravingitem.h"
-#include "libmscore/page.h"
-#include "libmscore/system.h"
-#include "libmscore/durationtype.h"
-#include "libmscore/mscore.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/timesig.h"
-#include "libmscore/key.h"
-#include "libmscore/part.h"
-#include "libmscore/staff.h"
-#include "libmscore/stafftype.h"
-#include "libmscore/chord.h"
 #include "libmscore/articulation.h"
-#include "libmscore/slur.h"
-#include "libmscore/rest.h"
-#include "libmscore/stem.h"
-#include "libmscore/hook.h"
-#include "libmscore/measure.h"
-#include "libmscore/ottava.h"
+#include "libmscore/chord.h"
+#include "libmscore/durationtype.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/harmony.h"
-#include "libmscore/realizedharmony.h"
-#include "libmscore/instrument.h"
+#include "libmscore/hook.h"
 #include "libmscore/instrtemplate.h"
+#include "libmscore/instrtemplate.h"
+#include "libmscore/instrument.h"
+#include "libmscore/key.h"
+#include "libmscore/measure.h"
+#include "libmscore/mscore.h"
+#include "libmscore/note.h"
+#include "libmscore/ottava.h"
+#include "libmscore/page.h"
+#include "libmscore/part.h"
+#include "libmscore/realizedharmony.h"
+#include "libmscore/rest.h"
+#include "libmscore/score.h"
+#include "libmscore/slur.h"
+#include "libmscore/staff.h"
+#include "libmscore/stafftype.h"
+#include "libmscore/stem.h"
+#include "libmscore/system.h"
+#include "libmscore/timesig.h"
 
 #include "engraving/layout/layoutoptions.h"
 
@@ -121,6 +122,7 @@ using StaffType = mu::engraving::StaffType;
 using StaffTypeId = mu::engraving::StaffTypes;
 using StaffName = mu::engraving::StaffName;
 using StaffNameList = mu::engraving::StaffNameList;
+using Segment = mu::engraving::Segment;
 using MidiArticulation = mu::engraving::MidiArticulation;
 using TextStyleType = mu::engraving::TextStyleType;
 using Trait = mu::engraving::Trait;
@@ -149,6 +151,7 @@ using InstrumentTrackId = mu::engraving::InstrumentTrackId;
 using InstrumentTrackIdSet = mu::engraving::InstrumentTrackIdSet;
 using voice_idx_t = mu::engraving::voice_idx_t;
 using track_idx_t = mu::engraving::track_idx_t;
+using ChangesRange = mu::engraving::ScoreChangesRange;
 
 static const String COMMON_GENRE_ID("common");
 
@@ -265,8 +268,11 @@ struct NoteInputState
     bool withSlur = false;
     engraving::voice_idx_t currentVoiceIndex = 0;
     engraving::track_idx_t currentTrack = 0;
+    int currentString = 0;
     const Drumset* drumset = nullptr;
     StaffGroup staffGroup = StaffGroup::STANDARD;
+    const Staff* staff = nullptr;
+    Segment* segment = nullptr;
 };
 
 enum class NoteFilter
@@ -505,6 +511,7 @@ struct TupletOptions
     Fraction ratio = { -1, -1 };
     TupletNumberType numberType = TupletNumberType::SHOW_NUMBER;
     TupletBracketType bracketType = TupletBracketType::AUTO_BRACKET;
+    bool autoBaseLen = false;
 };
 
 enum class LoopBoundaryType
@@ -558,6 +565,17 @@ struct ScoreConfig
     bool isShowFrames = false;
     bool isShowPageMargins = false;
     bool isMarkIrregularMeasures = false;
+
+    bool operator==(const ScoreConfig& conf) const
+    {
+        bool equal = (isShowInvisibleElements == conf.isShowInvisibleElements);
+        equal &= (isShowUnprintableElements == conf.isShowUnprintableElements);
+        equal &= (isShowFrames == conf.isShowFrames);
+        equal &= (isShowPageMargins == conf.isShowPageMargins);
+        equal &= (isMarkIrregularMeasures == conf.isMarkIrregularMeasures);
+
+        return equal;
+    }
 };
 
 inline QString staffTypeToString(StaffTypeId type)
@@ -640,6 +658,19 @@ constexpr bool isVoiceIndexValid(size_t voiceIndex)
 constexpr bool isFretIndexValid(int fretIndex)
 {
     return 0 <= fretIndex && fretIndex < MAX_FRET;
+}
+
+inline bool isVerticalBoxTextStyle(TextStyleType type)
+{
+    static const std::set<TextStyleType> types {
+        TextStyleType::TITLE,
+        TextStyleType::SUBTITLE,
+        TextStyleType::COMPOSER,
+        TextStyleType::POET,
+        TextStyleType::INSTRUMENT_EXCERPT,
+    };
+
+    return mu::contains(types, type);
 }
 }
 

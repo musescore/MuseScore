@@ -31,6 +31,7 @@
 using namespace mu::project;
 using namespace mu::audio;
 using namespace mu::engraving;
+using namespace mu::playback;
 
 static const std::map<AudioSourceType, QString> SOURCE_TYPE_MAP = {
     { AudioSourceType::Undefined, "undefined" },
@@ -171,6 +172,17 @@ mu::ValNt<bool> ProjectAudioSettings::needSave() const
     return needSave;
 }
 
+const SoundProfileName& ProjectAudioSettings::activeSoundProfile() const
+{
+    return m_activeSoundProfileName;
+}
+
+void ProjectAudioSettings::setActiveSoundProfile(const playback::SoundProfileName& profileName)
+{
+    m_activeSoundProfileName = profileName;
+    setNeedSave(true);
+}
+
 mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
 {
     ByteArray json = reader.readAudioSettingsJsonFile();
@@ -198,6 +210,11 @@ mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
         m_soloMuteStatesMap.emplace(id, std::move(soloMuteState));
     }
 
+    m_activeSoundProfileName = rootObj.value("activeSoundProfile").toString();
+    if (m_activeSoundProfileName.empty()) {
+        m_activeSoundProfileName = playbackConfig()->defaultProfileForNewProjects();
+    }
+
     return make_ret(Ret::Code::Ok);
 }
 
@@ -212,6 +229,7 @@ mu::Ret ProjectAudioSettings::write(engraving::MscWriter& writer)
     }
 
     rootObj["tracks"] = tracksArray;
+    rootObj["activeSoundProfile"] = m_activeSoundProfileName.toQString();
 
     QByteArray json = QJsonDocument(rootObj).toJson();
     writer.writeAudioSettingsJsonFile(ByteArray::fromQByteArrayNoCopy(json));
@@ -223,7 +241,7 @@ mu::Ret ProjectAudioSettings::write(engraving::MscWriter& writer)
 
 void ProjectAudioSettings::makeDefault()
 {
-    //TODO initialize default audio input params
+    m_activeSoundProfileName = playbackConfig()->defaultProfileForNewProjects();
 }
 
 AudioInputParams ProjectAudioSettings::inputParamsFromJson(const QJsonObject& object) const

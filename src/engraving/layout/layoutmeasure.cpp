@@ -21,21 +21,22 @@
  */
 #include "layoutmeasure.h"
 
-#include "libmscore/factory.h"
-#include "libmscore/score.h"
-#include "libmscore/measure.h"
-#include "libmscore/undo.h"
-#include "libmscore/mmrest.h"
 #include "libmscore/ambitus.h"
 #include "libmscore/barline.h"
+#include "libmscore/beam.h"
+#include "libmscore/factory.h"
 #include "libmscore/keysig.h"
-#include "libmscore/stem.h"
+#include "libmscore/layoutbreak.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/marker.h"
+#include "libmscore/measure.h"
+#include "libmscore/mmrest.h"
 #include "libmscore/part.h"
-#include "libmscore/textlinebase.h"
+#include "libmscore/score.h"
+#include "libmscore/stem.h"
+#include "libmscore/timesig.h"
+#include "libmscore/undo.h"
 
-#include "layout.h"
 #include "layoutcontext.h"
 #include "layoutbeams.h"
 #include "layoutchords.h"
@@ -757,16 +758,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
         if (!s.isChordRestType()) {
             continue;
         }
-        for (EngravingItem* e : s.elist()) {
-            if (!e || !e->isChordRest() || !score->staff(e->staffIdx())->show()) {
-                continue;
-            }
-            ChordRest* cr = toChordRest(e);
-            if (LayoutBeams::isTopBeam(cr)) {
-                Beam* b = cr->beam();
-                b->layout();
-            }
-        }
+        LayoutBeams::layoutNonCrossBeams(&s);
     }
 
     for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {

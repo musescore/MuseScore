@@ -21,18 +21,17 @@
  */
 #include "read400.h"
 
-#include "translation.h"
 #include "rw/xml.h"
 
-#include "libmscore/score.h"
-#include "libmscore/masterscore.h"
 #include "libmscore/audio.h"
-#include "libmscore/text.h"
-#include "libmscore/part.h"
-#include "libmscore/spanner.h"
 #include "libmscore/excerpt.h"
-#include "libmscore/staff.h"
 #include "libmscore/factory.h"
+#include "libmscore/masterscore.h"
+#include "libmscore/part.h"
+#include "libmscore/score.h"
+#include "libmscore/spanner.h"
+#include "libmscore/staff.h"
+#include "libmscore/text.h"
 
 #include "staffrw.h"
 
@@ -75,18 +74,6 @@ bool Read400::read400(Score* score, XmlReader& e, ReadContext& ctx)
 
 bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
 {
-    // HACK
-    // style setting compatibility settings for minor versions
-    // this allows new style settings to be added
-    // with different default values for older vs newer scores
-    // note: older templates get the default values for older scores
-    // these can be forced back in MuseScore::getNewFile() if necessary
-    String programVersion = score->masterScore()->mscoreVersion();
-    bool disableHarmonyPlay = MScore::harmonyPlayDisableCompatibility && !MScore::testMode;
-    if (!programVersion.isEmpty() && programVersion < u"3.5" && disableHarmonyPlay) {
-        score->style().set(Sid::harmonyPlay, false);
-    }
-
     std::vector<int> sysStaves;
     while (e.readNextStartElement()) {
         e.context()->setTrack(mu::nidx);

@@ -104,8 +104,8 @@ public:
     void moveCanvasHorizontal(qreal dx) override;
 
     qreal currentScaling() const override;
-    void setScaling(qreal scaling, const PointF& pos) override;
-    void scale(qreal factor, const PointF& pos);
+    void setScaling(qreal scaling, const PointF& pos, bool overrideZoomType = true) override;
+    void scale(qreal factor, const PointF& pos, bool overrideZoomType = true);
 
     Q_INVOKABLE void pinchToZoom(qreal scaleFactor, const QPointF& pos);
 
@@ -117,6 +117,8 @@ public:
 
     INotationInteractionPtr notationInteraction() const override;
     INotationPlaybackPtr notationPlayback() const override;
+
+    QQuickItem* asItem() override;
 
     qreal startHorizontalScrollPosition() const;
     qreal horizontalScrollbarSize() const;
@@ -167,7 +169,7 @@ protected:
     virtual void onLoadNotation(INotationPtr notation);
     virtual void onUnloadNotation(INotationPtr notation);
 
-    virtual void onMatrixChanged(const draw::Transform& matrix);
+    virtual void onMatrixChanged(const draw::Transform& matrix, bool overrideZoomType);
 
 protected slots:
     virtual void onViewSizeChanged();

@@ -110,7 +110,9 @@ bool VideoEncoder::open(const io::path_t& fileName, unsigned width, unsigned hei
 
     m_ffmpeg->codecCtx->me_cmp = 1;
     m_ffmpeg->codecCtx->me_range = 16;
+
     m_ffmpeg->codecCtx->me_method = ME_HEX;
+
     m_ffmpeg->codecCtx->qmin = 10;
     m_ffmpeg->codecCtx->qmax = 51;
     m_ffmpeg->codecCtx->scenechange_threshold = 40;
@@ -122,7 +124,7 @@ bool VideoEncoder::open(const io::path_t& fileName, unsigned width, unsigned hei
 
     // some formats want stream headers to be separate
     if (m_ffmpeg->formatCtx->oformat->flags & AVFMT_GLOBALHEADER) {
-        m_ffmpeg->codecCtx->flags |= CODEC_FLAG_GLOBAL_HEADER;
+        m_ffmpeg->codecCtx->flags |= CODEC_FLAG_LOOP_FILTER;
     }
 
     //av_dump_format(m_ffmpeg->formatCtx, 0, fileName.c_str(), 1);

@@ -74,6 +74,7 @@ public:
 
     AbstractInstrumentsPanelTreeItem* childAtId(const ID& id) const;
     AbstractInstrumentsPanelTreeItem* childAtRow(int row) const;
+    const QList<AbstractInstrumentsPanelTreeItem*>& childItems() const;
 
     void appendChild(AbstractInstrumentsPanelTreeItem* child);
     void insertChild(AbstractInstrumentsPanelTreeItem* child, int beforeRow);

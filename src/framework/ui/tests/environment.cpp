@@ -29,6 +29,7 @@ static mu::testing::SuiteEnvironment ui_senv(
 {
     new mu::actions::ActionsModule()
 },
+    nullptr,
     []() {
     LOGI() << "ui tests suite post init";
 }

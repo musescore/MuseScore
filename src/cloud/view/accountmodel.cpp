@@ -79,7 +79,7 @@ void AccountModel::setAccountInfo(const AccountInfo& info)
 
 void AccountModel::createAccount()
 {
-    NOT_IMPLEMENTED;
+    authorizationService()->signUp();
 }
 
 void AccountModel::signIn()

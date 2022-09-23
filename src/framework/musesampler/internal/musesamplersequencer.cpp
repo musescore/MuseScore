@@ -117,12 +117,38 @@ void MuseSamplerSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& c
 
 void MuseSamplerSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& changes)
 {
+    m_eventsMap = changes;
+
+    reloadTrack();
+}
+
+void MuseSamplerSequencer::updateDynamicChanges(const mpe::DynamicLevelMap& changes)
+{
+    m_dynamicLevelMap = changes;
+
+    reloadTrack();
+}
+
+void MuseSamplerSequencer::reloadTrack()
+{
     IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
         return;
     }
 
-    if (m_eventsMap != changes) {
-        m_eventsMap = changes;
+    m_samplerLib->clearTrack(m_sampler, m_track);
+    LOGI() << "Requested to clear track";
+
+    loadNoteEvents(m_eventsMap);
+    loadDynamicEvents(m_dynamicLevelMap);
+
+    m_samplerLib->finalizeTrack(m_sampler, m_track);
+    LOGI() << "Requested to finalize track";
+}
+
+void MuseSamplerSequencer::loadNoteEvents(const mpe::PlaybackEventsMap& changes)
+{
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
+        return;
     }
 
     for (const auto& pair : changes) {
@@ -138,27 +164,11 @@ void MuseSamplerSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& 
     }
 }
 
-void MuseSamplerSequencer::updateDynamicChanges(const mpe::DynamicLevelMap& changes)
+void MuseSamplerSequencer::loadDynamicEvents(const mpe::DynamicLevelMap& changes)
 {
     for (const auto& pair : changes) {
         m_samplerLib->addDynamicsEvent(m_sampler, m_track, { static_cast<long>(pair.first), dynamicLevelRatio(pair.second) });
     }
-}
-
-void MuseSamplerSequencer::reloadTrack()
-{
-    IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
-        return;
-    }
-
-    m_samplerLib->clearTrack(m_sampler, m_track);
-    LOGI() << "Requested to clear track";
-
-    updateMainStreamEvents(m_eventsMap);
-    updateDynamicChanges(m_dynamicLevelMap);
-
-    m_samplerLib->finalizeTrack(m_sampler, m_track);
-    LOGI() << "Requested to finalize track";
 }
 
 void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
@@ -169,10 +179,11 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
 
     ms_NoteEvent event{};
     event._voice = noteEvent.arrangementCtx().voiceLayerIndex;
-    event._location_ms = noteEvent.arrangementCtx().nominalTimestamp / 1000.f; // FIXME Avoid micros -> millis conversion
-    event._duration_ms = noteEvent.arrangementCtx().nominalDuration / 1000.f;
+    event._location_us = noteEvent.arrangementCtx().nominalTimestamp;
+    event._duration_us = noteEvent.arrangementCtx().nominalDuration;
     event._pitch = pitchIndex(noteEvent.pitchCtx().nominalPitchLevel);
-    event._tempo = 0.0;
+    // API expects BPM
+    event._tempo = noteEvent.arrangementCtx().bps * 60.0;
     event._articulation = noteArticulationTypes(noteEvent);
 
     for (auto& art : noteEvent.expressionCtx().articulations) {
@@ -193,8 +204,8 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
         LOGE() << "Unable to add event for track";
     } else {
         LOGI() << "Successfully added note event, pitch: " << event._pitch
-               << ", timestamp: " << event._location_ms
-               << ", duration: " << event._duration_ms
+               << ", timestamp: " << event._location_us
+               << ", duration: " << event._duration_us
                << ", articulations flag: " << event._articulation;
     }
 

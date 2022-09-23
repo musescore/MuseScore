@@ -26,23 +26,18 @@
 #include <unordered_set>
 
 #include "rw/xml.h"
-#include "types/symnames.h"
+#include "style/textstyle.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
-#include "score.h"
-#include "undo.h"
-#include "bracket.h"
 #include "bracketItem.h"
-#include "measure.h"
-#include "spanner.h"
-#include "musescoreCore.h"
-#include "masterscore.h"
 #include "factory.h"
 #include "linkedobjects.h"
+#include "masterscore.h"
+#include "score.h"
+#include "undo.h"
 
 #include "log.h"
-#include "config.h"
 
 using namespace mu;
 using namespace mu::engraving;

@@ -21,11 +21,12 @@
  */
 
 #include "stafflines.h"
-#include "system.h"
+
 #include "measure.h"
 #include "score.h"
-#include "stafftype.h"
 #include "staff.h"
+#include "stafftype.h"
+#include "system.h"
 
 using namespace mu;
 

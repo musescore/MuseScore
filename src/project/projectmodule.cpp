@@ -50,6 +50,7 @@
 #include "view/newscoremodel.h"
 #include "view/additionalinfomodel.h"
 #include "view/projectpropertiesmodel.h"
+#include "view/audiogenerationsettingsmodel.h"
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosrecentfilescontroller.h"
@@ -123,6 +124,8 @@ void ProjectModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://project/export/progress"), "MuseScore/Project/ExportProgressDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/migration"), "MuseScore/Project/MigrationDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/properties"), "MuseScore/Project/ProjectPropertiesDialog.qml");
+        ir->registerQmlUri(Uri("musescore://project/uploaded"), "MuseScore/Project/ProjectUploadedDialog.qml");
+        ir->registerQmlUri(Uri("musescore://project/audiogenerationsettings"), "MuseScore/Project/AudioGenerationSettingsDialog.qml");
     }
 }
 
@@ -140,6 +143,7 @@ void ProjectModule::registerUiTypes()
     qmlRegisterType<NewScoreModel>("MuseScore.Project", 1, 0, "NewScoreModel");
     qmlRegisterType<AdditionalInfoModel>("MuseScore.Project", 1, 0, "AdditionalInfoModel");
     qmlRegisterType<ProjectPropertiesModel>("MuseScore.Project", 1, 0, "ProjectPropertiesModel");
+    qmlRegisterType<AudioGenerationSettingsModel>("MuseScore.Project", 1, 0, "AudioGenerationSettingsModel");
 
     qmlRegisterType<ScoreThumbnail>("MuseScore.Project", 1, 0, "ScoreThumbnail");
     qmlRegisterType<TemplatesModel>("MuseScore.Project", 1, 0, "TemplatesModel");
@@ -151,6 +155,8 @@ void ProjectModule::registerUiTypes()
                                                    "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<QMLSaveToCloudResponse>("MuseScore.Project", 1, 0, "SaveToCloudResponse",
                                                        "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<GenerateAudioTimePeriod>("MuseScore.Project", 1, 0, "GenerateAudioTimePeriodType",
+                                                        "Not creatable as it is an enum type");
 
     qmlRegisterUncreatableType<Migration>("MuseScore.Project", 1, 0, "MigrationType",
                                           "Not creatable as it is an enum type");

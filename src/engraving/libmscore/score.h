@@ -33,9 +33,16 @@
 #include "async/channel.h"
 #include "io/iodevice.h"
 
+#include "modularity/ioc.h"
+#include "draw/iimageprovider.h"
+
+#include "layout/layout.h"
+#include "layout/layoutoptions.h"
+
+#include "style/style.h"
+
 #include "chordlist.h"
 #include "input.h"
-#include "layoutbreak.h"
 #include "mscore.h"
 #include "property.h"
 #include "scoreorder.h"
@@ -44,23 +51,8 @@
 #include "synthesizerstate.h"
 #include "rootitem.h"
 
-#include "infrastructure/mscwriter.h"
-#include "infrastructure/mscreader.h"
-#include "infrastructure/imimedata.h"
-#include "draw/iimageprovider.h"
-
-#include "rw/readcontext.h"
-
-#include "layout/layout.h"
-#include "layout/layoutoptions.h"
-
-#include "style/style.h"
-
-#include "modularity/ioc.h"
-
-class QMimeData;
-
 namespace mu::engraving {
+class IMimeData;
 class Read400;
 class WriteContext;
 }
@@ -120,7 +112,9 @@ class UndoStack;
 class XmlReader;
 class XmlWriter;
 class ShadowNote;
+
 struct Interval;
+struct NoteVal;
 
 enum class BeatType : char;
 enum class Key;
@@ -130,6 +124,7 @@ enum class OttavaType : char;
 enum class Voicing : signed char;
 enum class HDuration : signed char;
 enum class AccidentalType;
+enum class LayoutBreakType;
 
 enum class POS : char {
     CURRENT, LEFT, RIGHT
@@ -320,26 +315,6 @@ public:
     std::list<EngravingObject*> _deleteList;
 };
 
-//---------------------------------------------------------
-//   ScoreContentState
-//---------------------------------------------------------
-
-class ScoreContentState
-{
-    const Score* score;
-    int num;
-public:
-    ScoreContentState()
-        : score(nullptr), num(0) {}
-    ScoreContentState(const Score* s, int stateNum)
-        : score(s), num(stateNum) {}
-
-    bool operator==(const ScoreContentState& s2) const { return score == s2.score && num == s2.num; }
-    bool operator!=(const ScoreContentState& s2) const { return !(*this == s2); }
-
-    bool isNewerThan(const ScoreContentState& s2) const { return score == s2.score && num > s2.num; }
-};
-
 //---------------------------------------------------------------------------------------
 //   @@ Score
 //   @P composer        string            composer of the score (read only)
@@ -372,6 +347,7 @@ class Score : public EngravingObject
     OBJECT_ALLOCATOR(engraving, Score)
 
     INJECT(engraving, mu::draw::IImageProvider, imageProvider)
+    INJECT(engraving, mu::engraving::IEngravingConfiguration, configuration)
 
 private:
 
@@ -456,8 +432,6 @@ private:
 
     mu::async::Channel<POS, unsigned> m_posChanged;
 
-    ElementTypeSet changedTypes() const;
-    std::pair<int, int> changedTicksRange() const;
     ScoreChangesRange changesRange() const;
 
     Note* getSelectedNote();
@@ -619,6 +593,8 @@ public:
     void cmdMoveRest(Rest*, DirectionV);
     void cmdMoveLyrics(Lyrics*, DirectionV);
 
+    void realtimeAdvance();
+
     void addRemoveBreaks(int interval, bool lock);
 
     bool transpose(Note* n, Interval, bool useSharpsFlats);
@@ -654,7 +630,7 @@ public:
     Measure* pos2measure(const mu::PointF&, staff_idx_t* staffIdx, int* pitch, Segment**, mu::PointF* offset) const;
     void dragPosition(const mu::PointF&, staff_idx_t* staffIdx, Segment**, double spacingFactor = 0.5) const;
 
-    void undoAddElement(EngravingItem* element, bool ctrlModifier = false);
+    void undoAddElement(EngravingItem* element, bool addToLinkedStaves = true, bool ctrlModifier = false);
     void undoAddCR(ChordRest* element, Measure*, const Fraction& tick);
     void undoRemoveElement(EngravingItem* element);
     void undoChangeSpannerElements(Spanner* spanner, EngravingItem* startElement, EngravingItem* endElement);
@@ -726,10 +702,11 @@ public:
 
     void addElement(EngravingItem*);
     void removeElement(EngravingItem*);
+    bool containsElement(const EngravingItem*) const;
 
     Note* addPitch(NoteVal&, bool addFlag, InputState* externalInputState = nullptr);
-    void addPitch(int pitch, bool addFlag, bool insert);
     Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord);
+    NoteVal noteVal(int pitch) const;
     Note* addMidiPitch(int pitch, bool addFlag);
     Note* addNote(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {},
                   InputState* externalInputState = nullptr);
@@ -737,7 +714,7 @@ public:
     NoteVal noteValForPosition(Position pos, AccidentalType at, bool& error);
 
     Slur* addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const Slur* slurTemplate);
-    TextBase* addText(TextStyleType type, bool addToAllScores = true);
+    TextBase* addText(TextStyleType type, EngravingItem* destinationElement = nullptr, bool addToAllScores = true);
 
     void deleteItem(EngravingItem*);
     void deleteMeasures(MeasureBase* firstMeasure, MeasureBase* lastMeasure, bool preserveTies = false);
@@ -857,7 +834,6 @@ public:
     void setFileDivision(int t) { _fileDivision = t; }
 
     bool dirty() const;
-    ScoreContentState state() const;
     bool savedCapture() const { return _savedCapture; }
     void setSavedCapture(bool v) { _savedCapture = v; }
     bool printing() const { return _printing; }
@@ -1155,7 +1131,7 @@ public:
     void removeUnmanagedSpanner(Spanner*);
 
     Hairpin* addHairpin(HairpinType, const Fraction& tickStart, const Fraction& tickEnd, track_idx_t track);
-    Hairpin* addHairpin(HairpinType, ChordRest* cr1, ChordRest* cr2 = nullptr, bool toCr2End = true);
+    Hairpin* addHairpin(HairpinType, ChordRest* cr1, ChordRest* cr2 = nullptr);
 
     ChordRest* findCR(Fraction tick, track_idx_t track) const;
     ChordRest* findCRinStaff(const Fraction& tick, staff_idx_t staffIdx) const;
@@ -1243,7 +1219,6 @@ public:
 
     void autoUpdateSpatium();
 
-    friend class ChangeSynthesizerState;
     friend class Chord;
 };
 

@@ -20,24 +20,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <utility>
 #include <functional>
-#include <unordered_set>
 #include <map>
+#include <unordered_set>
+#include <utility>
 
-#include "types/string.h"
 #include "types/id.h"
+#include "types/string.h"
 
 #include "draw/types/color.h"
 #include "draw/types/geometry.h"
 #include "draw/types/painterpath.h"
 
+#include "bps.h"
 #include "dimension.h"
 #include "fraction.h"
-#include "symid.h"
-#include "pitchvalue.h"
-#include "bps.h"
 #include "groupnode.h"
+#include "pitchvalue.h"
+#include "symid.h"
 
 #ifndef MU_ENGRAVING_TYPES_H
 #define MU_ENGRAVING_TYPES_H

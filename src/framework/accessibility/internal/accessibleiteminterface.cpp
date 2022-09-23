@@ -56,11 +56,11 @@ QObject* AccessibleItemInterface::object() const
 
 QWindow* AccessibleItemInterface::window() const
 {
-    //! NOTE Not worked at the moment
-//    QWindow* w = m_object->item()->accessibleWindow();
-//    if (w) {
-//        return w;
-//    }
+    QWindow* window = m_object->item()->accessibleWindow();
+    if (window) {
+        return window;
+    }
+
     return interactiveProvider()->topWindow();
 }
 
@@ -236,16 +236,29 @@ QString AccessibleItemInterface::text(QAccessible::Text textType) const
     switch (textType) {
     case QAccessible::Name: {
         QString name = m_object->item()->accessibleName();
+#if defined(Q_OS_MACOS)
+        // VoiceOver doesn't speak descriptions so add it to name instead.
+        QString description = m_object->item()->accessibleDescription();
+        if (!description.isEmpty() && description != name) {
+            name += ", " + description;
+        }
+#endif
         if (m_object->controller().lock()->needToVoicePanelInfo()) {
             QString panelName = m_object->controller().lock()->currentPanelAccessibleName();
             if (!panelName.isEmpty()) {
                 name.prepend(panelName + " " + qtrc("accessibility", "Panel") + ", ");
             }
         }
-
         return name;
     }
+#if defined(Q_OS_WINDOWS)
+    // Narrator doesn't read descriptions but it does read accelerators.
+    // NVDA reads both so it should be safe to give just an Accelerator.
+    case QAccessible::Accelerator: return m_object->item()->accessibleDescription();
+#elif !defined(Q_OS_MACOS)
+    //  Orca on Linux does read descriptions.
     case QAccessible::Description: return m_object->item()->accessibleDescription();
+#endif
     default: break;
     }
 
@@ -322,18 +335,16 @@ QString AccessibleItemInterface::text(int startOffset, int endOffset) const
     return m_object->item()->accessibleText(startOffset, endOffset);
 }
 
-QString AccessibleItemInterface::textBeforeOffset(int, QAccessible::TextBoundaryType, int*, int*) const
+QString AccessibleItemInterface::textBeforeOffset(int offset, QAccessible::TextBoundaryType boundaryType, int* startOffset,
+                                                  int* endOffset) const
 {
-    NOT_IMPLEMENTED;
-
-    return QString();
+    return m_object->item()->accessibleTextBeforeOffset(offset, muBoundaryType(boundaryType), startOffset, endOffset);
 }
 
-QString AccessibleItemInterface::textAfterOffset(int, QAccessible::TextBoundaryType, int*, int*) const
+QString AccessibleItemInterface::textAfterOffset(int offset, QAccessible::TextBoundaryType boundaryType, int* startOffset,
+                                                 int* endOffset) const
 {
-    NOT_IMPLEMENTED;
-
-    return QString();
+    return m_object->item()->accessibleTextAfterOffset(offset, muBoundaryType(boundaryType), startOffset, endOffset);
 }
 
 QString AccessibleItemInterface::textAtOffset(int offset, QAccessible::TextBoundaryType boundaryType, int* startOffset,

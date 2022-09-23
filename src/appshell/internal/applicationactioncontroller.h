@@ -71,7 +71,7 @@ private:
 
     void setupConnections();
 
-    void quit(bool isAllInstances);
+    void quit(bool isAllInstances, const io::path_t& installerPath = io::path_t());
     void restart();
 
     void toggleFullScreen();
@@ -86,8 +86,6 @@ private:
     void openPreferencesDialog();
 
     void revertToFactorySettings();
-
-    void checkForUpdate();
 
     async::Channel<bool> m_fullScreenChannel;
     async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;

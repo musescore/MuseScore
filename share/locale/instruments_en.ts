@@ -742,35 +742,28 @@
         <location filename="../instruments/instrumentsxml.h" line="439"/>
         <source>Fife pitched in B♭ (when all 6 holes are covered), notated in A♭, sounding a minor sixth higher than written.</source>
         <comment>fife description</comment>
-        <extracomment>description for B♭ Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="441"/>
-        <source>B♭ Fife</source>
-        <comment>fife trackName</comment>
-        <extracomment>trackName for B♭ Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="443"/>
         <source>B♭ Fife</source>
         <comment>fife longName</comment>
-        <extracomment>longName for B♭ Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>longName for Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="445"/>
         <source>B♭ Fife</source>
         <comment>fife shortName</comment>
-        <extracomment>shortName for B♭ Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="447"/>
         <source>B♭</source>
         <comment>fife traitName</comment>
-        <extracomment>traitName for B♭ Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5166,453 +5159,460 @@
         <location filename="../instruments/instrumentsxml.h" line="1854"/>
         <source>10-hole diatonic harmonica pitched in high G.</source>
         <comment>harmonica-d10high-g description</comment>
-        <extracomment>description for 10 Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1856"/>
-        <source>10 Hole Diatonic Harmonica</source>
-        <comment>harmonica-d10high-g trackName</comment>
-        <extracomment>trackName for 10 Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1858"/>
-        <source>10 Hole High G Diatonic Harmonica</source>
-        <comment>harmonica-d10high-g longName</comment>
-        <extracomment>longName for 10 Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for 10-Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1860"/>
         <source>Harm.</source>
         <comment>harmonica-d10high-g shortName</comment>
-        <extracomment>shortName for 10 Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for 10-Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1862"/>
         <source>High G</source>
         <comment>harmonica-d10high-g traitName</comment>
-        <extracomment>traitName for 10 Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1865"/>
-        <source>10-hole diatonic harmonic pitched in F.</source>
-        <comment>harmonica-d10f description</comment>
-        <extracomment>description for 10 Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1867"/>
-        <source>10 Hole Diatonic Harmonica</source>
-        <comment>harmonica-d10f trackName</comment>
-        <extracomment>trackName for 10 Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1869"/>
-        <source>10 Hole F Diatonic Harmonica</source>
-        <comment>harmonica-d10f longName</comment>
-        <extracomment>longName for 10 Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for 10-Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1871"/>
         <source>Harm.</source>
         <comment>harmonica-d10f shortName</comment>
-        <extracomment>shortName for 10 Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for 10-Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1873"/>
         <source>F</source>
         <comment>harmonica-d10f traitName</comment>
-        <extracomment>traitName for 10 Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for 10-Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1876"/>
         <source>10-hole diatonic harmonica pitched in D.</source>
         <comment>harmonica-d10d description</comment>
-        <extracomment>description for 10 Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1878"/>
-        <source>10 Hole Diatonic Harmonica</source>
-        <comment>harmonica-d10d trackName</comment>
-        <extracomment>trackName for 10 Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1880"/>
-        <source>10 Hole D Diatonic Harmonica</source>
-        <comment>harmonica-d10d longName</comment>
-        <extracomment>longName for 10 Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for 10-Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1882"/>
         <source>Harm.</source>
         <comment>harmonica-d10d shortName</comment>
-        <extracomment>shortName for 10 Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for 10-Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1884"/>
         <source>D</source>
         <comment>harmonica-d10d traitName</comment>
-        <extracomment>traitName for 10 Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for 10-Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1887"/>
         <source>10-hole diatonic harmonica pitched in C.</source>
         <comment>harmonica-d10c description</comment>
-        <extracomment>description for 10 Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1889"/>
-        <source>10 Hole Diatonic Harmonica</source>
-        <comment>harmonica-d10c trackName</comment>
-        <extracomment>trackName for 10 Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1891"/>
-        <source>10 Hole C Diatonic Harmonica</source>
-        <comment>harmonica-d10c longName</comment>
-        <extracomment>longName for 10 Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for 10-Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1893"/>
         <source>Harm.</source>
         <comment>harmonica-d10c shortName</comment>
-        <extracomment>shortName for 10 Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for 10-Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1895"/>
         <source>*C</source>
         <comment>harmonica-d10c traitName</comment>
-        <extracomment>traitName for 10 Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for 10-Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1898"/>
         <source>10-hole diatonic harmonica pitched in A.</source>
         <comment>harmonica-d10a description</comment>
-        <extracomment>description for 10 Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1900"/>
-        <source>10 Hole Diatonic Harmonica</source>
-        <comment>harmonica-d10a trackName</comment>
-        <extracomment>trackName for 10 Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1902"/>
-        <source>10 Hole A Diatonic Harmonica</source>
-        <comment>harmonica-d10a longName</comment>
-        <extracomment>longName for 10 Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for 10-Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1904"/>
         <source>Harm.</source>
         <comment>harmonica-d10a shortName</comment>
-        <extracomment>shortName for 10 Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for 10-Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1906"/>
         <source>A</source>
         <comment>harmonica-d10a traitName</comment>
-        <extracomment>traitName for 10 Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for 10-Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1909"/>
         <source>10-hole diatonic harmonica pitched in G.</source>
         <comment>harmonica-d10g description</comment>
-        <extracomment>description for 10 Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1911"/>
-        <source>10 Hole Diatonic Harmonica</source>
-        <comment>harmonica-d10g trackName</comment>
-        <extracomment>trackName for 10 Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1913"/>
-        <source>10 Hole G Diatonic Harmonica</source>
-        <comment>harmonica-d10g longName</comment>
-        <extracomment>longName for 10 Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for 10-Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1915"/>
         <source>Harm.</source>
         <comment>harmonica-d10g shortName</comment>
-        <extracomment>shortName for 10 Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for 10-Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1917"/>
         <source>G</source>
         <comment>harmonica-d10g traitName</comment>
-        <extracomment>traitName for 10 Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for 10-Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1920"/>
         <source>10-hole diatonic harmonica pitched in low D.</source>
         <comment>harmonica-d10low-d description</comment>
-        <extracomment>description for 10 Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1922"/>
-        <source>10 Hole Diatonic Harmonica</source>
-        <comment>harmonica-d10low-d trackName</comment>
-        <extracomment>trackName for 10 Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1924"/>
-        <source>10 Hole Low D Diatonic Harmonica</source>
-        <comment>harmonica-d10low-d longName</comment>
-        <extracomment>longName for 10 Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for 10-Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1926"/>
         <source>Harm.</source>
         <comment>harmonica-d10low-d shortName</comment>
-        <extracomment>shortName for 10 Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for 10-Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1928"/>
         <source>Low D</source>
         <comment>harmonica-d10low-d traitName</comment>
-        <extracomment>traitName for 10 Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for 10-Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1931"/>
         <source>12-hole chromatic harmonica pitched in C.</source>
         <comment>harmonica-c12c description</comment>
-        <extracomment>description for 12 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1933"/>
-        <source>12 Hole Chromatic Harmonica</source>
-        <comment>harmonica-c12c trackName</comment>
-        <extracomment>trackName for 12 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1935"/>
-        <source>12 Hole C Chromatic Harmonica</source>
-        <comment>harmonica-c12c longName</comment>
-        <extracomment>longName for 12 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for 12-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1937"/>
         <source>Harm.</source>
         <comment>harmonica-c12c shortName</comment>
-        <extracomment>shortName for 12 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for 12-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1939"/>
         <source>*C</source>
         <comment>harmonica-c12c traitName</comment>
-        <extracomment>traitName for 12 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for 12-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1942"/>
         <source>12-hole chromatic harmonica pitched in G.</source>
         <comment>harmonica-c12g description</comment>
-        <extracomment>description for 12 Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1944"/>
-        <source>12 Hole Chromatic Harmonica</source>
-        <comment>harmonica-c12g trackName</comment>
-        <extracomment>trackName for 12 Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1946"/>
-        <source>12 Hole G Chromatic Harmonica</source>
-        <comment>harmonica-c12g longName</comment>
-        <extracomment>longName for 12 Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for 12-Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1948"/>
         <source>Harm.</source>
         <comment>harmonica-c12g shortName</comment>
-        <extracomment>shortName for 12 Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for 12-Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1950"/>
         <source>G</source>
         <comment>harmonica-c12g traitName</comment>
-        <extracomment>traitName for 12 Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for 12-Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1953"/>
         <source>12-hole chromatic tenor harmonica pitched in C.</source>
         <comment>harmonica-c12tenor-c description</comment>
-        <extracomment>description for 12 Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1955"/>
-        <source>12 Hole Chromatic Harmonica</source>
-        <comment>harmonica-c12tenor-c trackName</comment>
-        <extracomment>trackName for 12 Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1957"/>
-        <source>12 Hole Tenor C Chromatic Harmonica</source>
-        <comment>harmonica-c12tenor-c longName</comment>
-        <extracomment>longName for 12 Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for 12-Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1959"/>
         <source>Harm.</source>
         <comment>harmonica-c12tenor-c shortName</comment>
-        <extracomment>shortName for 12 Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for 12-Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1961"/>
         <source>Tenor C</source>
         <comment>harmonica-c12tenor-c traitName</comment>
-        <extracomment>traitName for 12 Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for 12-Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1964"/>
         <source>14-hole chromatic harmonica pitched in C.</source>
         <comment>harmonica-c14c description</comment>
-        <extracomment>description for 14 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1966"/>
-        <source>14 Hole Chromatic Harmonica</source>
-        <comment>harmonica-c14c trackName</comment>
-        <extracomment>trackName for 14 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1968"/>
-        <source>14 Hole C Chromatic Harmonica</source>
-        <comment>harmonica-c14c longName</comment>
-        <extracomment>longName for 14 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for 14-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1970"/>
         <source>Harm.</source>
         <comment>harmonica-c14c shortName</comment>
-        <extracomment>shortName for 14 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for 14-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1972"/>
         <source>*C</source>
         <comment>harmonica-c14c traitName</comment>
-        <extracomment>traitName for 14 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for 14-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1975"/>
         <source>16-hole chromatic harmonica pitched in C.</source>
         <comment>harmonica-c16c description</comment>
-        <extracomment>description for 16 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1977"/>
-        <source>16 Hole Chromatic Harmonica</source>
-        <comment>harmonica-c16c trackName</comment>
-        <extracomment>trackName for 16 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1979"/>
-        <source>16 Hole C Chromatic Harmonica</source>
-        <comment>harmonica-c16c longName</comment>
-        <extracomment>longName for 16 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for 16-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1981"/>
         <source>Harm.</source>
         <comment>harmonica-c16c shortName</comment>
-        <extracomment>shortName for 16 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for 16-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1983"/>
         <source>*C</source>
         <comment>harmonica-c16c traitName</comment>
-        <extracomment>traitName for 16 Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>traitName for 16-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1986"/>
         <source>Huang Chordet 20-hole double harmonica.</source>
         <comment>harmonica-chordet description</comment>
-        <extracomment>description for 20 Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1988"/>
-        <source>20 Hole Chordet Harmonica</source>
-        <comment>harmonica-chordet trackName</comment>
-        <extracomment>trackName for 20 Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1990"/>
-        <source>20 Hole Chordet Harmonica</source>
-        <comment>harmonica-chordet longName</comment>
-        <extracomment>longName for 20 Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for 20-Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1992"/>
         <source>Harm.</source>
         <comment>harmonica-chordet shortName</comment>
-        <extracomment>shortName for 20 Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for 20-Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="441"/>
+        <source>Fife</source>
+        <comment>fife trackName</comment>
+        <extracomment>trackName for Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1856"/>
+        <source>10-Hole Diatonic Harmonica</source>
+        <comment>harmonica-d10high-g trackName</comment>
+        <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1858"/>
+        <source>10-Hole High G Diatonic Harmonica</source>
+        <comment>harmonica-d10high-g longName</comment>
+        <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1865"/>
+        <source>10-hole diatonic harmonica pitched in F.</source>
+        <comment>harmonica-d10f description</comment>
+        <extracomment>description for 10-Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1867"/>
+        <source>10-Hole Diatonic Harmonica</source>
+        <comment>harmonica-d10f trackName</comment>
+        <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1869"/>
+        <source>10-Hole F Diatonic Harmonica</source>
+        <comment>harmonica-d10f longName</comment>
+        <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1878"/>
+        <source>10-Hole Diatonic Harmonica</source>
+        <comment>harmonica-d10d trackName</comment>
+        <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1880"/>
+        <source>10-Hole D Diatonic Harmonica</source>
+        <comment>harmonica-d10d longName</comment>
+        <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1889"/>
+        <source>10-Hole Diatonic Harmonica</source>
+        <comment>harmonica-d10c trackName</comment>
+        <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1891"/>
+        <source>10-Hole C Diatonic Harmonica</source>
+        <comment>harmonica-d10c longName</comment>
+        <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1900"/>
+        <source>10-Hole Diatonic Harmonica</source>
+        <comment>harmonica-d10a trackName</comment>
+        <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1902"/>
+        <source>10-Hole A Diatonic Harmonica</source>
+        <comment>harmonica-d10a longName</comment>
+        <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1911"/>
+        <source>10-Hole Diatonic Harmonica</source>
+        <comment>harmonica-d10g trackName</comment>
+        <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1913"/>
+        <source>10-Hole G Diatonic Harmonica</source>
+        <comment>harmonica-d10g longName</comment>
+        <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1922"/>
+        <source>10-Hole Diatonic Harmonica</source>
+        <comment>harmonica-d10low-d trackName</comment>
+        <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1924"/>
+        <source>10-Hole Low D Diatonic Harmonica</source>
+        <comment>harmonica-d10low-d longName</comment>
+        <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1933"/>
+        <source>12-Hole Chromatic Harmonica</source>
+        <comment>harmonica-c12c trackName</comment>
+        <extracomment>trackName for 12-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1935"/>
+        <source>12-Hole C Chromatic Harmonica</source>
+        <comment>harmonica-c12c longName</comment>
+        <extracomment>longName for 12-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1944"/>
+        <source>12-Hole Chromatic Harmonica</source>
+        <comment>harmonica-c12g trackName</comment>
+        <extracomment>trackName for 12-Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1946"/>
+        <source>12-Hole G Chromatic Harmonica</source>
+        <comment>harmonica-c12g longName</comment>
+        <extracomment>longName for 12-Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1955"/>
+        <source>12-Hole Chromatic Harmonica</source>
+        <comment>harmonica-c12tenor-c trackName</comment>
+        <extracomment>trackName for 12-Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1957"/>
+        <source>12-Hole Tenor C Chromatic Harmonica</source>
+        <comment>harmonica-c12tenor-c longName</comment>
+        <extracomment>longName for 12-Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1966"/>
+        <source>14-Hole Chromatic Harmonica</source>
+        <comment>harmonica-c14c trackName</comment>
+        <extracomment>trackName for 14-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1968"/>
+        <source>14-Hole C Chromatic Harmonica</source>
+        <comment>harmonica-c14c longName</comment>
+        <extracomment>longName for 14-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1977"/>
+        <source>16-Hole Chromatic Harmonica</source>
+        <comment>harmonica-c16c trackName</comment>
+        <extracomment>trackName for 16-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1979"/>
+        <source>16-Hole C Chromatic Harmonica</source>
+        <comment>harmonica-c16c longName</comment>
+        <extracomment>longName for 16-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1988"/>
+        <source>20-Hole Chordet Harmonica</source>
+        <comment>harmonica-chordet trackName</comment>
+        <extracomment>trackName for 20-Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1990"/>
+        <source>20-Hole Chordet Harmonica</source>
+        <comment>harmonica-chordet longName</comment>
+        <extracomment>longName for 20-Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1995"/>
-        <source>Hohner 31-hole bas harmonica.</source>
+        <source>Hohner 31-hole bass harmonica.</source>
         <comment>bass-harmonica-hohner description</comment>
         <extracomment>description for Bass Hohner Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
@@ -15377,9 +15377,51 @@
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5109"/>
-        <source>Acoustic steel-strung guitar (staff notation, with 8va bassa treble clef).</source>
+        <source>Acoustic steel-string guitar (staff notation, with 8va bassa treble clef).</source>
         <comment>guitar-steel description</comment>
         <extracomment>description for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5124"/>
+        <source>Acoustic steel-string guitar (staff notation, with normal treble clef).</source>
+        <comment>guitar-steel-treble-clef description</comment>
+        <extracomment>description for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5133"/>
+        <source>Acoustic nylon-string guitar (staff notation, with 8va bassa treble clef).</source>
+        <comment>guitar-nylon description</comment>
+        <extracomment>description for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5146"/>
+        <source>Acoustic nylon-string guitar (staff notation, with normal treble clef).</source>
+        <comment>guitar-nylon-treble-clef description</comment>
+        <extracomment>description for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5579"/>
+        <source>Very large mountain or Appalachian dulcimer, an octave lower than the regular dulcimer. (Tablature).</source>
+        <comment>mtn-dulcimer-bass-chrom-tab description</comment>
+        <extracomment>description for Mtn. Dulcimer - Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6143"/>
+        <source>Violone</source>
+        <comment>violone trackName</comment>
+        <extracomment>trackName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6160"/>
+        <source>Violone</source>
+        <comment>d-violone trackName</comment>
+        <extracomment>trackName for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -15425,13 +15467,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5124"/>
-        <source>Acoustic steel-strung guitar (staff notation, with normal treble clef).</source>
-        <comment>guitar-steel-treble-clef description</comment>
-        <extracomment>description for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="5126"/>
         <source>Acoustic Guitar (treble clef)</source>
         <comment>guitar-steel-treble-clef trackName</comment>
@@ -15450,13 +15485,6 @@
         <source>Guit.</source>
         <comment>guitar-steel-treble-clef shortName</comment>
         <extracomment>shortName for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="5133"/>
-        <source>Acoustic nylon-strung guitar (staff notation, with 8va bassa treble clef).</source>
-        <comment>guitar-nylon description</comment>
-        <extracomment>description for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -15492,13 +15520,6 @@
         <source>mute</source>
         <comment>guitar-nylon channel</comment>
         <extracomment>channel for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="5146"/>
-        <source>Acoustic nylon-strung guitar (staff notation, with normal treble clef).</source>
-        <comment>guitar-nylon-treble-clef description</comment>
-        <extracomment>description for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -16850,13 +16871,6 @@
         <source>Bs. M.D.</source>
         <comment>mtn-dulcimer-bass shortName</comment>
         <extracomment>shortName for Mtn. Dulcimer - Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="5579"/>
-        <source>Larger version of the mountain or Appalachian dulcimer. (Tablature).</source>
-        <comment>mtn-dulcimer-bass-chrom-tab description</comment>
-        <extracomment>description for Mtn. Dulcimer - Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -18634,242 +18648,242 @@
         <location filename="../instruments/instrumentsxml.h" line="6141"/>
         <source>Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol.</source>
         <comment>violone description</comment>
-        <extracomment>description for G Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6143"/>
-        <source>G Violone</source>
-        <comment>violone trackName</comment>
-        <extracomment>trackName for G Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6145"/>
         <source>G Violone</source>
         <comment>violone longName</comment>
-        <extracomment>longName for G Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>longName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6147"/>
         <source>G Vne.</source>
         <comment>violone shortName</comment>
-        <extracomment>shortName for G Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6149"/>
-        <source>arco</source>
-        <comment>violone channel</comment>
-        <extracomment>channel for G Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <source>*G</source>
+        <comment>violone traitName</comment>
+        <extracomment>traitName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6151"/>
-        <source>pizzicato</source>
+        <source>arco</source>
         <comment>violone channel</comment>
-        <extracomment>channel for G Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>channel for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6153"/>
-        <source>tremolo</source>
+        <source>pizzicato</source>
         <comment>violone channel</comment>
-        <extracomment>channel for G Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>channel for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6156"/>
-        <source>Large viol with the lowest string tuned to D. Sometimes called the D violone.</source>
-        <comment>d-violone description</comment>
-        <extracomment>description for D Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <location filename="../instruments/instrumentsxml.h" line="6155"/>
+        <source>tremolo</source>
+        <comment>violone channel</comment>
+        <extracomment>channel for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6158"/>
-        <source>D Violone</source>
-        <comment>d-violone trackName</comment>
-        <extracomment>trackName for D Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6160"/>
-        <source>D Violone</source>
-        <comment>d-violone longName</comment>
-        <extracomment>longName for D Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <source>Large viol with the lowest string tuned to D. Sometimes called the D violone.</source>
+        <comment>d-violone description</comment>
+        <extracomment>description for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6162"/>
-        <source>D Vne.</source>
-        <comment>d-violone shortName</comment>
-        <extracomment>shortName for D Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <source>D Violone</source>
+        <comment>d-violone longName</comment>
+        <extracomment>longName for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6164"/>
-        <source>arco</source>
-        <comment>d-violone channel</comment>
-        <extracomment>channel for D Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <source>D Vne.</source>
+        <comment>d-violone shortName</comment>
+        <extracomment>shortName for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6166"/>
-        <source>pizzicato</source>
-        <comment>d-violone channel</comment>
-        <extracomment>channel for D Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <source>D</source>
+        <comment>d-violone traitName</comment>
+        <extracomment>traitName for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6168"/>
-        <source>tremolo</source>
+        <source>arco</source>
         <comment>d-violone channel</comment>
-        <extracomment>channel for D Violone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>channel for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6171"/>
+        <location filename="../instruments/instrumentsxml.h" line="6170"/>
+        <source>pizzicato</source>
+        <comment>d-violone channel</comment>
+        <extracomment>channel for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6172"/>
+        <source>tremolo</source>
+        <comment>d-violone channel</comment>
+        <extracomment>channel for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6175"/>
         <source>Extremely large and rare bowed string instrument, essentially a larger version of the double bass.</source>
         <comment>octobass description</comment>
         <extracomment>description for Octobass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6173"/>
+        <location filename="../instruments/instrumentsxml.h" line="6177"/>
         <source>Octobass</source>
         <comment>octobass trackName</comment>
         <extracomment>trackName for Octobass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6175"/>
+        <location filename="../instruments/instrumentsxml.h" line="6179"/>
         <source>Octobass</source>
         <comment>octobass longName</comment>
         <extracomment>longName for Octobass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6177"/>
+        <location filename="../instruments/instrumentsxml.h" line="6181"/>
         <source>Otb.</source>
         <comment>octobass shortName</comment>
         <extracomment>shortName for Octobass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6179"/>
+        <location filename="../instruments/instrumentsxml.h" line="6183"/>
         <source>arco</source>
         <comment>octobass channel</comment>
         <extracomment>channel for Octobass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6181"/>
+        <location filename="../instruments/instrumentsxml.h" line="6185"/>
         <source>pizzicato</source>
         <comment>octobass channel</comment>
         <extracomment>channel for Octobass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6183"/>
+        <location filename="../instruments/instrumentsxml.h" line="6187"/>
         <source>tremolo</source>
         <comment>octobass channel</comment>
         <extracomment>channel for Octobass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6186"/>
+        <location filename="../instruments/instrumentsxml.h" line="6190"/>
         <source>Chinese two-stringed bowed instrument.</source>
         <comment>erhu description</comment>
         <extracomment>description for Erhu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6188"/>
+        <location filename="../instruments/instrumentsxml.h" line="6192"/>
         <source>Erhu</source>
         <comment>erhu trackName</comment>
         <extracomment>trackName for Erhu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6190"/>
+        <location filename="../instruments/instrumentsxml.h" line="6194"/>
         <source>Erhu</source>
         <comment>erhu longName</comment>
         <extracomment>longName for Erhu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6192"/>
+        <location filename="../instruments/instrumentsxml.h" line="6196"/>
         <source>Eh.</source>
         <comment>erhu shortName</comment>
         <extracomment>shortName for Erhu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6194"/>
+        <location filename="../instruments/instrumentsxml.h" line="6198"/>
         <source>arco</source>
         <comment>erhu channel</comment>
         <extracomment>channel for Erhu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6196"/>
+        <location filename="../instruments/instrumentsxml.h" line="6200"/>
         <source>pizzicato</source>
         <comment>erhu channel</comment>
         <extracomment>channel for Erhu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6198"/>
+        <location filename="../instruments/instrumentsxml.h" line="6202"/>
         <source>tremolo</source>
         <comment>erhu channel</comment>
         <extracomment>channel for Erhu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6201"/>
+        <location filename="../instruments/instrumentsxml.h" line="6205"/>
         <source>Swedish bowed instrument with keys to change the pitch of the strings.</source>
         <comment>nyckelharpa description</comment>
         <extracomment>description for Nyckelharpa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6203"/>
+        <location filename="../instruments/instrumentsxml.h" line="6207"/>
         <source>Nyckelharpa</source>
         <comment>nyckelharpa trackName</comment>
         <extracomment>trackName for Nyckelharpa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6205"/>
+        <location filename="../instruments/instrumentsxml.h" line="6209"/>
         <source>Nyckelharpa</source>
         <comment>nyckelharpa longName</comment>
         <extracomment>longName for Nyckelharpa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6207"/>
+        <location filename="../instruments/instrumentsxml.h" line="6211"/>
         <source>Nyh.</source>
         <comment>nyckelharpa shortName</comment>
         <extracomment>shortName for Nyckelharpa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6209"/>
+        <location filename="../instruments/instrumentsxml.h" line="6213"/>
         <source>arco</source>
         <comment>nyckelharpa channel</comment>
         <extracomment>channel for Nyckelharpa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6211"/>
+        <location filename="../instruments/instrumentsxml.h" line="6215"/>
         <source>pizzicato</source>
         <comment>nyckelharpa channel</comment>
         <extracomment>channel for Nyckelharpa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6213"/>
+        <location filename="../instruments/instrumentsxml.h" line="6217"/>
         <source>tremolo</source>
         <comment>nyckelharpa channel</comment>
         <extracomment>channel for Nyckelharpa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -19345,7 +19359,7 @@
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="181"/>
-        <source>Mtn Dulcimers</source>
+        <source>Mtn. Dulcimers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -19553,57 +19567,57 @@
 <context>
     <name>engraving/scoreorder</name>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6216"/>
+        <location filename="../instruments/instrumentsxml.h" line="6220"/>
         <source>Orchestral</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6217"/>
+        <location filename="../instruments/instrumentsxml.h" line="6221"/>
         <source>Choir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6218"/>
+        <location filename="../instruments/instrumentsxml.h" line="6222"/>
         <source>Marching Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6219"/>
+        <location filename="../instruments/instrumentsxml.h" line="6223"/>
         <source>Big Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6220"/>
+        <location filename="../instruments/instrumentsxml.h" line="6224"/>
         <source>Jazz Combo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6221"/>
+        <location filename="../instruments/instrumentsxml.h" line="6225"/>
         <source>Rock Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6222"/>
+        <location filename="../instruments/instrumentsxml.h" line="6226"/>
         <source>Concert Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6223"/>
+        <location filename="../instruments/instrumentsxml.h" line="6227"/>
         <source>Brass Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6224"/>
+        <location filename="../instruments/instrumentsxml.h" line="6228"/>
         <source>Woodwind Ensemble</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6225"/>
+        <location filename="../instruments/instrumentsxml.h" line="6229"/>
         <source>Brass Ensemble</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6226"/>
+        <location filename="../instruments/instrumentsxml.h" line="6230"/>
         <source>String Ensemble</source>
         <translation type="unfinished"></translation>
     </message>

@@ -30,48 +30,36 @@
 #include "rw/xml.h"
 #include "rw/writecontext.h"
 
-#include "mscore.h"
+#include "accidental.h"
 #include "arpeggio.h"
-#include "barline.h"
+#include "articulation.h"
 #include "beam.h"
 #include "chord.h"
 #include "dynamic.h"
 #include "engravingitem.h"
 #include "figuredbass.h"
-#include "glissando.h"
 #include "hairpin.h"
-#include "harmony.h"
-#include "fret.h"
 #include "hook.h"
-#include "input.h"
-#include "limits.h"
+#include "linkedobjects.h"
 #include "lyrics.h"
 #include "measure.h"
+#include "mscore.h"
 #include "note.h"
 #include "notedot.h"
-#include "page.h"
+#include "part.h"
 #include "rest.h"
 #include "score.h"
 #include "segment.h"
 #include "select.h"
 #include "sig.h"
-#include "slur.h"
+#include "staff.h"
+#include "stafftextbase.h"
 #include "stem.h"
 #include "stemslash.h"
+#include "sticking.h"
 #include "tie.h"
-#include "system.h"
-#include "text.h"
 #include "tremolo.h"
 #include "tuplet.h"
-#include "utils.h"
-#include "staff.h"
-#include "part.h"
-#include "accidental.h"
-#include "articulation.h"
-#include "stafftext.h"
-#include "sticking.h"
-#include "linkedobjects.h"
-#include "playtechannotation.h"
 
 #include "log.h"
 
@@ -761,6 +749,10 @@ void Selection::updateState()
 
 void Selection::setState(SelState s)
 {
+    if (_state == s) {
+        return;
+    }
+
     _state = s;
     _score->setSelectionChanged(true);
 }
@@ -776,6 +768,8 @@ String Selection::mimeType() const
     case SelState::RANGE:
         return String::fromAscii(mimeStaffListFormat);
     }
+
+    return String();
 }
 
 ByteArray Selection::mimeData() const
@@ -784,7 +778,7 @@ ByteArray Selection::mimeData() const
     switch (_state) {
     case SelState::LIST:
         if (isSingle()) {
-            a = element()->mimeData(PointF());
+            a = element()->mimeData();
         } else {
             a = symbolListMimeData();
         }

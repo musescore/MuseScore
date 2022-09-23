@@ -32,7 +32,6 @@
 #include "internal/pluginsactioncontroller.h"
 
 #include "view/pluginsmodel.h"
-#include "view/pluginview.h"
 #include "api/qmlpluginapi.h"
 
 #include "ui/iuiactionsregister.h"

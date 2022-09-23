@@ -45,7 +45,7 @@ public:
 
     const std::unique_ptr<GPDomModel>& gpDom() const;
 
-    enum class TextLineImportType {
+    enum class LineImportType {
         NONE,
         LET_RING,
         PALM_MUTE,
@@ -64,6 +64,9 @@ public:
         OTTAVA_VA8,
         OTTAVA_VB8,
         OTTAVA_MB15,
+
+        /// trill
+        TRILL
     };
 
 private:
@@ -145,6 +148,7 @@ private:
     void addTuplet(const GPBeat* beat, ChordRest* cr);
     void addLetRing(const GPBeat* gpbeat, ChordRest* cr);
     void addPalmMute(const GPBeat* gpbeat, ChordRest* cr);
+    void addTrill(const GPBeat* gpbeat, ChordRest* cr);
     void addDive(const GPBeat* beat, ChordRest* cr);
     void addHarmonicMark(const GPBeat* gpbeat, ChordRest* cr);
     void setupTupletStyle(Tuplet* tuplet);
@@ -168,7 +172,7 @@ private:
     void fillTuplet();
     bool tupletParamsChanged(const GPBeat* beat, const ChordRest* cr);
 
-    void addLineElement(ChordRest* cr, std::vector<TextLineBase*>& elements, ElementType muType, TextLineImportType importType,
+    void addLineElement(ChordRest* cr, std::vector<SLine*>& elements, ElementType muType, LineImportType importType,
                         bool forceSplitByRests = true);
 
     Score* _score;
@@ -191,19 +195,23 @@ private:
     std::unordered_map<track_idx_t, Slur*> _slurs; // map(track, slur)
 
     mutable GPBeat* m_currentGPBeat = nullptr; // used for passing info from notes
-    std::map<track_idx_t, std::map<ElementType, TextLineImportType> > m_lastImportTypes;
+    std::map<track_idx_t, std::map<ElementType, LineImportType> > m_lastImportTypes;
 
-    std::map<track_idx_t, std::map<TextLineImportType, std::vector<TextLineBase*> > > m_elementsToAddToScore;
+    std::map<track_idx_t, std::map<LineImportType, std::vector<SLine*> > > m_elementsToAddToScore;
 
-    std::vector<TextLineBase*> m_palmMutes;
-    std::vector<TextLineBase*> m_letRings;
-    std::vector<TextLineBase*> m_dives;
-    std::vector<TextLineBase*> m_rasgueados;
+    std::vector<SLine*> m_palmMutes;
+    std::vector<SLine*> m_letRings;
+    std::vector<SLine*> m_dives;
+    std::vector<SLine*> m_rasgueados;
     std::vector<Vibrato*> _vibratos;
-    std::map<GPBeat::HarmonicMarkType, std::vector<TextLineBase*> > m_harmonicMarks;
-    std::map<GPBeat::OttavaType, std::vector<TextLineBase*> > m_ottavas;
+    std::map<GPBeat::HarmonicMarkType, std::vector<SLine*> > m_harmonicMarks;
+    std::map<GPBeat::OttavaType, std::vector<SLine*> > m_ottavas;
+    std::vector<SLine*> _trillLines;
+
+    std::map<uint16_t, uint16_t > _drumExtension;
 
     Volta* _lastVolta = nullptr;
+    int _lastDiagramIdx = -1;
 
     struct NextTupletInfo {
         Fraction ratio;

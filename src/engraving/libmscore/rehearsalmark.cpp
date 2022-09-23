@@ -20,9 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "score.h"
 #include "rehearsalmark.h"
+
 #include "measure.h"
+#include "score.h"
 #include "system.h"
 
 using namespace mu;
@@ -70,11 +71,21 @@ void RehearsalMark::setType(RehearsalMark::Type type)
         return;
     }
     _type = type;
+    applyTypeStyle();
+}
 
+void RehearsalMark::applyTypeStyle()
+{
     const auto& elemStyleMap = (_type == Type::Main ? mainRehearsalMarkStyle : additionalRehearsalMarkStyle);
     for (const auto& elem : elemStyleMap) {
         setProperty(elem.pid, score()->styleV(elem.sid));
     }
+}
+
+void RehearsalMark::styleChanged()
+{
+    TextBase::styleChanged();
+    applyTypeStyle();
 }
 
 //---------------------------------------------------------

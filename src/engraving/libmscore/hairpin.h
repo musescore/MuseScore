@@ -23,14 +23,11 @@
 #ifndef __HAIRPIN_H__
 #define __HAIRPIN_H__
 
-#include "engravingitem.h"
-#include "dynamic.h"
-#include "line.h"
 #include "textlinebase.h"
-#include "mscore.h"
+
+#include "types/types.h"
 
 namespace mu::engraving {
-class Score;
 class Hairpin;
 
 enum class HairpinType : signed char {

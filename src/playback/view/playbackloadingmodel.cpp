@@ -45,7 +45,9 @@ void PlaybackLoadingModel::load()
         setProgressTitle(QString::fromStdString(title));
     });
 
-    progress.finished.onReceive(this, [this](const Ret& ret) {
+    progress.finished.onReceive(this, [this](const ProgressResult& res) {
+        const Ret& ret = res.ret;
+
         if (!ret && !ret.text().empty()) {
             LOGE() << ret.toString();
         }

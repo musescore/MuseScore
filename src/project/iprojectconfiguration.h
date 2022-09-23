@@ -66,20 +66,20 @@ public:
     virtual void setUserProjectsPath(const io::path_t& path) = 0;
     virtual async::Channel<io::path_t> userProjectsPathChanged() const = 0;
 
-    virtual io::path_t cloudProjectsPath() const = 0;
-    virtual bool isCloudProject(const io::path_t& path) const = 0;
-
-    virtual io::path_t defaultSavingFilePath(INotationProjectPtr project,
-                                             const QString& filenameAddition = QString(), const QString& suffix = QString()) const = 0;
-
     virtual bool shouldAskSaveLocationType() const = 0;
     virtual void setShouldAskSaveLocationType(bool shouldAsk) = 0;
+
+    virtual bool isCloudProject(const io::path_t& projectPath) const = 0;
+
+    virtual io::path_t cloudProjectSavingFilePath(const io::path_t& projectName) const = 0;
+    virtual io::path_t defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition = "",
+                                             const std::string& suffix = "") const = 0;
 
     virtual SaveLocationType lastUsedSaveLocationType() const = 0;
     virtual void setLastUsedSaveLocationType(SaveLocationType type) = 0;
 
-    virtual bool shouldWarnBeforePublishing() const = 0;
-    virtual void setShouldWarnBeforePublishing(bool shouldWarn) = 0;
+    virtual bool shouldWarnBeforeSavingPublicly() const = 0;
+    virtual void setShouldWarnBeforeSavingPublicly(bool shouldWarn) = 0;
 
     virtual QColor templatePreviewBackgroundColor() const = 0;
     virtual async::Notification templatePreviewBackgroundChanged() const = 0;
@@ -109,6 +109,27 @@ public:
 
     virtual bool shouldDestinationFolderBeOpenedOnExport() const = 0;
     virtual void setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport) = 0;
+
+    virtual QUrl scoreManagerUrl() const = 0;
+
+    virtual bool openDetailedProjectUploadedDialog() const = 0;
+    virtual void setOpenDetailedProjectUploadedDialog(bool show) = 0;
+
+    virtual bool openAudioGenerationSettings() const = 0;
+    virtual void setOpenAudioGenerationSettings(bool open) = 0;
+
+    virtual GenerateAudioTimePeriodType generateAudioTimePeriodType() const = 0;
+    virtual void setGenerateAudioTimePeriodType(GenerateAudioTimePeriodType type) = 0;
+
+    virtual int numberOfSavesToGenerateAudio() const = 0;
+    virtual void setNumberOfSavesToGenerateAudio(int number) = 0;
+
+    virtual io::path_t temporaryMp3FilePathTemplate() const = 0;
+
+    virtual io::path_t projectBackupPath(const io::path_t& projectPath) const = 0;
+
+    virtual bool showCloudIsNotAvailableWarning() const = 0;
+    virtual void setShowCloudIsNotAvailableWarning(bool show) = 0;
 };
 }
 

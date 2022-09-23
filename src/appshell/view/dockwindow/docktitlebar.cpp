@@ -26,12 +26,12 @@
 using namespace mu::dock;
 
 DockTitleBar::DockTitleBar(KDDockWidgets::Frame* parent)
-    : KDDockWidgets::TitleBar(parent)
+    : KDDockWidgets::TitleBarQuick(parent)
 {
 }
 
 DockTitleBar::DockTitleBar(KDDockWidgets::FloatingWindow* parent)
-    : KDDockWidgets::TitleBar(parent)
+    : KDDockWidgets::TitleBarQuick(parent)
 {
 }
 

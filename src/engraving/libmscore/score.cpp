@@ -34,7 +34,6 @@
 
 #include "style/style.h"
 #include "style/defaultstyle.h"
-#include "compat/writescorehook.h"
 #include "compat/dummyelement.h"
 #include "rw/xml.h"
 #include "types/translatablestring.h"
@@ -43,7 +42,6 @@
 
 #include "articulation.h"
 #include "audio.h"
-#include "barline.h"
 #include "beam.h"
 #include "box.h"
 #include "bracket.h"
@@ -54,19 +52,17 @@
 #include "factory.h"
 #include "fermata.h"
 #include "glissando.h"
+#include "gradualtempochange.h"
 #include "harmony.h"
 #include "imageStore.h"
 #include "instrchange.h"
 #include "instrtemplate.h"
 #include "key.h"
 #include "keysig.h"
-#include "layoutbreak.h"
-#include "line.h"
 #include "linkedobjects.h"
 #include "lyrics.h"
 #include "masterscore.h"
 #include "measure.h"
-#include "measurerepeat.h"
 #include "mscore.h"
 #include "mscoreview.h"
 #include "note.h"
@@ -80,24 +76,22 @@
 #include "scoreorder.h"
 #include "segment.h"
 #include "select.h"
+#include "shadownote.h"
 #include "sig.h"
 #include "slur.h"
 #include "staff.h"
-#include "stafftext.h"
 #include "stafftype.h"
 #include "synthesizerstate.h"
 #include "system.h"
 #include "tempo.h"
 #include "tempotext.h"
-#include "gradualtempochange.h"
 #include "text.h"
 #include "tie.h"
 #include "tiemap.h"
+#include "timesig.h"
 #include "tuplet.h"
 #include "undo.h"
 #include "utils.h"
-#include "volta.h"
-#include "shadownote.h"
 
 #include "config.h"
 
@@ -867,15 +861,6 @@ bool Score::readOnly() const
 bool Score::dirty() const
 {
     return !undoStack()->isClean();
-}
-
-//---------------------------------------------------------
-//   state
-//---------------------------------------------------------
-
-ScoreContentState Score::state() const
-{
-    return ScoreContentState(this, undoStack()->state());
 }
 
 //---------------------------------------------------------
@@ -1801,6 +1786,23 @@ void Score::removeElement(EngravingItem* element)
     default:
         break;
     }
+}
+
+bool Score::containsElement(const EngravingItem* element) const
+{
+    if (!element) {
+        return false;
+    }
+
+    EngravingItem* parent = element->parentItem();
+    if (!parent) {
+        return false;
+    }
+
+    std::vector<EngravingItem*> elements;
+    parent->scanElements(&elements, collectElements, false /*all*/);
+
+    return std::find(elements.cbegin(), elements.cend(), element) != elements.cend();
 }
 
 //---------------------------------------------------------
@@ -5520,7 +5522,7 @@ void Score::createPaddingTable()
     _paddingTable[ElementType::NOTE][ElementType::NOTE] = _minimumPaddingUnit;
     _paddingTable[ElementType::NOTE][ElementType::LEDGER_LINE] = 0.35 * spatium();
     _paddingTable[ElementType::NOTE][ElementType::ACCIDENTAL]
-        = std::max(static_cast<double>(styleMM(Sid::accidentalNoteDistance)), 0.4);
+        = std::max(static_cast<double>(styleMM(Sid::accidentalNoteDistance)), 0.35 * spatium());
     _paddingTable[ElementType::NOTE][ElementType::REST] = styleMM(Sid::minNoteDistance);
     _paddingTable[ElementType::NOTE][ElementType::CLEF] = 1.0 * spatium();
     _paddingTable[ElementType::NOTE][ElementType::ARPEGGIO] = 0.6 * spatium();
@@ -5662,6 +5664,11 @@ void Score::createPaddingTable()
     }
     _paddingTable[ElementType::BAR_LINE][ElementType::CHORDLINE] = 0.65 * spatium();
     _paddingTable[ElementType::CHORDLINE][ElementType::BAR_LINE] = 0.65 * spatium();
+
+    // For the x -> fingering padding use the same values as x -> accidental
+    for (auto& elem : _paddingTable) {
+        elem.second[ElementType::FINGERING] = _paddingTable[elem.first][ElementType::ACCIDENTAL];
+    }
 }
 
 //--------------------------------------------------------

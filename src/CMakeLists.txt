@@ -94,6 +94,10 @@ if (BUILD_AUTOBOT_MODULE)
     add_subdirectory(autobot)
 endif()
 
+if (BUILD_UPDATE_MODULE)
+    add_subdirectory(update)
+endif (BUILD_UPDATE_MODULE)
+
 # Stubs
 add_subdirectory(stubs)
 

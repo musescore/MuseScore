@@ -204,7 +204,7 @@ NoteHeadType TDuration::headType() const
 
 int TDuration::hooks() const
 {
-    static const int table[] = {
+    static constexpr int table[] = {
         // V_LONG, V_BREVE, V_WHOLE, V_HALF, V_QUARTER, V_EIGHTH, V_16TH,
         0,      0,       0,       0,      0,         1,        2,
         // V_32ND, V_64TH, V_128TH, V_256TH, V_512TH, V_1024TH,

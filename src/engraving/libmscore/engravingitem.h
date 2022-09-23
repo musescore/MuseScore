@@ -33,13 +33,11 @@
 #include "modularity/ioc.h"
 #include "iengravingconfiguration.h"
 
-#include "types/symid.h"
 #include "types/fraction.h"
+#include "types/symid.h"
 #include "types/types.h"
 
-#include "mscore.h"
 #include "shape.h"
-#include "sig.h"
 #include "editdata.h"
 
 namespace mu::engraving {
@@ -54,7 +52,6 @@ enum class Pid;
 class StaffType;
 class XmlReader;
 class XmlWriter;
-class MuseScoreView;
 
 //---------------------------------------------------------
 //   OffsetChange
@@ -115,6 +112,7 @@ enum class KerningType
     LIMITED_KERNING,
     SAME_VOICE_LIMIT,
     KERNING_UNTIL_ORIGIN,
+    ALLOW_COLLISION,
     NOT_SET,
 };
 
@@ -150,12 +148,6 @@ class EngravingItem : public EngravingObject
     ///< valid after call to layout()
     unsigned int _tag;                    ///< tag bitmask
 
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-    AccessibleItemPtr m_accessible;
-#endif
-
-    bool m_accessibleEnabled = false;
-
     bool m_colorsInversionEnabled = true;
 
     virtual bool sameVoiceKerningLimited() const { return false; }
@@ -174,6 +166,7 @@ protected:
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     virtual AccessibleItemPtr createAccessible();
+    void notifyAboutNameChanged();
 #endif
 
     virtual KerningType doComputeKerningType(const EngravingItem*) const { return KerningType::KERNING; }
@@ -198,7 +191,7 @@ public:
 
     void deleteLater();
 
-    EngravingItem* parentItem() const;
+    EngravingItem* parentItem(bool explicitParent = true) const;
     EngravingItemList childrenItems() const;
 
     EngravingItem* findAncestor(ElementType t);
@@ -432,7 +425,7 @@ public:
     static ElementType readType(XmlReader& node, PointF*, Fraction*);
     static EngravingItem* readMimeData(Score* score, const mu::ByteArray& data, PointF*, Fraction*);
 
-    virtual mu::ByteArray mimeData(const PointF&) const;
+    virtual mu::ByteArray mimeData(const PointF& dragOffset = PointF()) const;
 /**
  Return true if this element accepts a drop at canvas relative \a pos
  of given element \a type and \a subtype.
@@ -565,6 +558,13 @@ public:
 
 private:
     void initAccessibleIfNeed();
+    void doInitAccessible();
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    AccessibleItemPtr m_accessible;
+#endif
+
+    bool m_accessibleEnabled = false;
 };
 
 using ElementPtr = std::shared_ptr<EngravingItem>;

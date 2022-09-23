@@ -26,34 +26,30 @@
 #include "rw/xml.h"
 #include "types/typesconv.h"
 
-#include "mscore.h"
-#include "engravingitem.h"
-#include "chord.h"
-#include "note.h"
-#include "score.h"
-#include "beam.h"
-#include "tuplet.h"
-#include "text.h"
-#include "measure.h"
 #include "barline.h"
-#include "part.h"
-#include "measurerepeat.h"
-#include "staff.h"
-#include "line.h"
-#include "hairpin.h"
-#include "ottava.h"
-#include "sig.h"
-#include "keysig.h"
-#include "staffstate.h"
-#include "instrchange.h"
+#include "beam.h"
+#include "chord.h"
 #include "clef.h"
-#include "timesig.h"
-#include "system.h"
-#include "undo.h"
+#include "engravingitem.h"
+#include "factory.h"
 #include "harmony.h"
 #include "hook.h"
-#include "factory.h"
+#include "instrchange.h"
+#include "keysig.h"
 #include "masterscore.h"
+#include "measure.h"
+#include "mscore.h"
+#include "note.h"
+#include "part.h"
+#include "rest.h"
+#include "score.h"
+#include "sig.h"
+#include "staff.h"
+#include "staffstate.h"
+#include "system.h"
+#include "timesig.h"
+#include "tuplet.h"
+#include "undo.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -178,7 +174,6 @@ Segment::Segment(const Segment& s)
         }
         _elist.push_back(ne);
     }
-    _dotPosX = s._dotPosX;
     _shapes  = s._shapes;
 }
 
@@ -251,7 +246,6 @@ void Segment::init()
     size_t tracks = staves * VOICES;
     _elist.assign(tracks, 0);
     _preAppendedItems.assign(tracks, 0);
-    _dotPosX.assign(staves, 0.0);
     _shapes.assign(staves, Shape());
 }
 
@@ -508,7 +502,6 @@ void Segment::insertStaff(staff_idx_t staff)
         _elist.insert(_elist.begin() + track, 0);
         _preAppendedItems.insert(_preAppendedItems.begin() + track, 0);
     }
-    _dotPosX.insert(_dotPosX.begin() + staff, 0.0);
     _shapes.insert(_shapes.begin() + staff, Shape());
 
     for (EngravingItem* e : _annotations) {
@@ -529,7 +522,6 @@ void Segment::removeStaff(staff_idx_t staff)
     track_idx_t track = staff * VOICES;
     _elist.erase(_elist.begin() + track, _elist.begin() + track + VOICES);
     _preAppendedItems.erase(_preAppendedItems.begin() + track, _preAppendedItems.begin() + track + VOICES);
-    _dotPosX.erase(_dotPosX.begin() + staff);
     _shapes.erase(_shapes.begin() + staff);
 
     for (EngravingItem* e : _annotations) {
@@ -1019,7 +1011,7 @@ PropertyValue Segment::propertyDefault(Pid propertyId) const
     case Pid::LEADING_SPACE:
         return Spatium(0.0);
     default:
-        return EngravingItem::getProperty(propertyId);
+        return EngravingItem::propertyDefault(propertyId);
     }
 }
 
@@ -1198,9 +1190,21 @@ bool Segment::allElementsInvisible() const
         return false;
     }
 
-    for (EngravingItem* e : _elist) {
-        if (e && e->visible() && !RealIsEqual(e->width(), 0.0)) {
-            return false;
+    System* sys = system();
+    for (staff_idx_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+        Staff* staff = score()->staves().at(staffIdx);
+        if (!staff->visible()) {
+            continue;
+        }
+        if (sys && staffIdx < sys->staves().size() && !sys->staves().at(staffIdx)->show()) {
+            continue;
+        }
+        track_idx_t endTrack = staffIdx * VOICES + VOICES;
+        for (track_idx_t track = staffIdx * VOICES; track < endTrack; ++track) {
+            EngravingItem* e = _elist[track];
+            if (e && e->visible() && !RealIsEqual(e->width(), 0.0)) {
+                return false;
+            }
         }
     }
 
@@ -1298,9 +1302,18 @@ void Segment::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
 {
     for (size_t track = 0; track < score()->nstaves() * VOICES; ++track) {
         size_t staffIdx = track / VOICES;
-        if (!all && !(measure()->visible(staffIdx) && score()->staff(staffIdx)->show())) {
-            track += VOICES - 1;
-            continue;
+        bool thisMeasureVisible = measure()->visible(staffIdx) && score()->staff(staffIdx)->show();
+        if (!all && !thisMeasureVisible) {
+            Measure* nextMeasure = measure()->nextMeasure();
+            bool nextMeasureVisible = nextMeasure
+                                      && nextMeasure->system() == measure()->system()
+                                      && nextMeasure->visible(staffIdx)
+                                      && score()->staff(staffIdx)->show();
+            if (!((isEndBarLineType() && (nextMeasureVisible || measure()->isCutawayClef(staffIdx)))
+                  || (isClefType() && measure()->isCutawayClef(staffIdx)))) {
+                track += VOICES - 1;
+                continue;
+            }
         }
         EngravingItem* e = element(track);
         if (e == 0) {
@@ -2710,28 +2723,63 @@ bool Segment::hasAccidentals() const
     return false;
 }
 
-CrossStaffContent Segment::crossStaffContent() const
+/************************************************************************
+ * computeCrossBeamType
+ * Looks at the chords of this segment and next segment to detect beams
+ * with alternating stem directions (upDown: this chord is up, next chord
+ * is down; downUp: this chord is down, next chord is up). Needed for
+ * correct horizontal spacing of cross-beam situations.
+ * **********************************************************************/
+
+void Segment::computeCrossBeamType(Segment* nextSeg)
 {
-    CrossStaffContent crossStaffContent;
-    for (EngravingItem* el : elist()) {
-        if (el && el->isChordRest()) {
-            if (toChordRest(el)->staffMove() == 0 && !toChordRest(el)->isFullMeasureRest()) {
-                crossStaffContent.movedDown = false;
-                crossStaffContent.movedUp = false;
-                break;
+    _crossBeamType.reset();
+    if (!isChordRestType() || !nextSeg || !nextSeg->isChordRestType()) {
+        return;
+    }
+    bool upDown = false;
+    bool downUp = false;
+    for (EngravingItem* e : elist()) {
+        if (!e || !e->isChordRest() || !e->staff()->visible()) {
+            continue;
+        }
+        ChordRest* thisCR = toChordRest(e);
+        if (!thisCR->visible() || thisCR->isFullMeasureRest()) {
+            continue;
+        }
+        if (!thisCR->beam()) {
+            return;
+        }
+        Beam* beam = thisCR->beam();
+        for (EngravingItem* ee : nextSeg->elist()) {
+            if (!ee || !ee->isChordRest() || !ee->staff()->visible()) {
+                continue;
             }
-            if (toChordRest(el)->staffMove() > 0 && toChordRest(el)->beam()) {
-                crossStaffContent.movedDown = true;
+            ChordRest* nextCR = toChordRest(ee);
+            if (!nextCR->visible() || nextCR->isFullMeasureRest()) {
+                continue;
             }
-            if (toChordRest(el)->staffMove() < 0 && toChordRest(el)->beam()) {
-                crossStaffContent.movedUp = true;
+            if (!nextCR->beam()) {
+                return;
+            }
+            if (nextCR->beam() != beam) {
+                continue;
+            }
+            if (thisCR->up() == nextCR->up()) {
+                return;
+            }
+            if (thisCR->up() && !nextCR->up()) {
+                upDown = true;
+            }
+            if (!thisCR->up() && nextCR->up()) {
+                downUp = true;
+            }
+            if (upDown && downUp) {
+                return;
             }
         }
     }
-    if (crossStaffContent.movedUp && crossStaffContent.movedDown) { // If this segment contains both up and down cross-staff, we don't correct for it
-        crossStaffContent.movedUp = false;
-        crossStaffContent.movedDown = false;
-    }
-    return crossStaffContent;
+    _crossBeamType.upDown = upDown;
+    _crossBeamType.downUp = downUp;
 }
 } // namespace mu::engraving

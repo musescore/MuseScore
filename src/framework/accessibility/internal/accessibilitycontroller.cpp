@@ -331,11 +331,15 @@ void AccessibilityController::triggerRevoicingOfChangedName(IAccessible* item)
         return;
     }
 
+    const IAccessible* itemPanel = panel(item);
+    if (!itemPanel) {
+        return;
+    }
+
     m_ignorePanelChangingVoice = true;
 
     item->setState(State::Focused, false);
 
-    const IAccessible* itemPanel = panel(item);
     IAccessible* tmpFocusedItem = findSiblingItem(itemPanel, item);
     if (!tmpFocusedItem) {
         tmpFocusedItem = const_cast<IAccessible*>(itemPanel);
@@ -346,7 +350,10 @@ void AccessibilityController::triggerRevoicingOfChangedName(IAccessible* item)
 
     //! NOTE: Restore the focused element after some delay(this value was found experimentally)
     QTimer::singleShot(200, [=]() {
-        m_lastFocused->setState(State::Focused, false);
+        if (m_lastFocused) {
+            m_lastFocused->setState(State::Focused, false);
+        }
+
         m_itemForRestoreFocus->setState(State::Focused, true);
         m_ignorePanelChangingVoice = false;
     });
@@ -534,6 +541,11 @@ IAccessible* AccessibilityController::accessibleChild(size_t i) const
     return m_children.at(static_cast<int>(i));
 }
 
+QWindow* AccessibilityController::accessibleWindow() const
+{
+    return mainWindow()->qWindow();
+}
+
 IAccessible::Role AccessibilityController::accessibleRole() const
 {
     return IAccessible::Role::Application;
@@ -608,6 +620,16 @@ int AccessibilityController::accessibleCursorPosition() const
 }
 
 QString AccessibilityController::accessibleText(int, int) const
+{
+    return QString();
+}
+
+QString AccessibilityController::accessibleTextBeforeOffset(int, TextBoundaryType, int*, int*) const
+{
+    return QString();
+}
+
+QString AccessibilityController::accessibleTextAfterOffset(int, TextBoundaryType, int*, int*) const
 {
     return QString();
 }

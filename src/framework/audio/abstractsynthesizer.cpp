@@ -23,6 +23,7 @@
 #include "abstractsynthesizer.h"
 
 #include "internal/audiosanitizer.h"
+#include "internal/worker/audioengine.h"
 
 using namespace mu;
 using namespace mu::mpe;
@@ -33,6 +34,10 @@ AbstractSynthesizer::AbstractSynthesizer(const AudioInputParams& params)
     : m_params(params)
 {
     ONLY_AUDIO_WORKER_THREAD;
+
+    AudioEngine::instance()->modeChanged().onNotify(this, [this]() {
+        updateRenderingMode(AudioEngine::instance()->mode());
+    });
 }
 
 const AudioInputParams& AbstractSynthesizer::params() const
@@ -64,6 +69,11 @@ void AbstractSynthesizer::revokePlayingNotes()
     ONLY_AUDIO_WORKER_THREAD;
 }
 
+void AbstractSynthesizer::updateRenderingMode(const RenderMode /*mode*/)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+}
+
 audio::msecs_t AbstractSynthesizer::samplesToMsecs(const samples_t samplesPerChannel, const samples_t sampleRate) const
 {
     ONLY_AUDIO_WORKER_THREAD;
@@ -75,5 +85,5 @@ samples_t AbstractSynthesizer::microSecsToSamples(const msecs_t msec, const samp
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    return (msec / 1000.f) * sampleRate;
+    return (msec / 1000000.f) * sampleRate;
 }

@@ -23,8 +23,7 @@
 #ifndef __DYNAMICS_H__
 #define __DYNAMICS_H__
 
-#include "text.h"
-#include "mscore.h"
+#include "textbase.h"
 
 namespace mu::engraving {
 class Measure;

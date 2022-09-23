@@ -32,32 +32,29 @@
 #include "layout/layoutcontext.h"
 #include "realfn.h"
 
-#include "factory.h"
-#include "measure.h"
-#include "segment.h"
-#include "score.h"
-#include "sig.h"
-#include "key.h"
-#include "clef.h"
-#include "text.h"
-#include "navigate.h"
-#include "select.h"
-#include "staff.h"
-#include "part.h"
-#include "page.h"
-#include "bracket.h"
-#include "mscore.h"
 #include "barline.h"
-#include "system.h"
+#include "beam.h"
 #include "box.h"
+#include "bracket.h"
+#include "bracketItem.h"
+#include "chord.h"
 #include "chordrest.h"
+#include "factory.h"
 #include "instrumentname.h"
-#include "spanner.h"
+#include "measure.h"
+#include "mscore.h"
+#include "page.h"
+#include "part.h"
+#include "score.h"
+#include "segment.h"
+#include "select.h"
+#include "sig.h"
 #include "spacer.h"
+#include "spanner.h"
+#include "staff.h"
+#include "system.h"
 #include "systemdivider.h"
 #include "textframe.h"
-#include "stafflines.h"
-#include "bracketItem.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -381,22 +378,24 @@ void System::layoutSystem(const LayoutContext& ctx, double xo1, const bool isFir
     //---------------------------------------------------
     double maxNamesWidth = instrumentNamesWidth();
 
+    double indent = maxNamesWidth > 0 ? maxNamesWidth + instrumentNameOffset : 0.0;
     if (isFirstSystem && firstSystemIndent) {
-        maxNamesWidth = std::max(maxNamesWidth, styleP(Sid::firstSystemIndentationValue) * mag());
+        indent = std::max(indent, styleP(Sid::firstSystemIndentationValue) * mag());
+        maxNamesWidth = indent - instrumentNameOffset;
     }
 
     double maxBracketsWidth = totalBracketOffset(ctx);
     double bracketsWidth = layoutBrackets(ctx);
     double bracketWidthDifference = maxBracketsWidth - bracketsWidth;
 
-    if (RealIsNull(maxNamesWidth)) {
+    if (RealIsNull(indent)) {
         if (score()->styleB(Sid::alignSystemToMargin)) {
             _leftMargin = bracketWidthDifference;
         } else {
             _leftMargin = maxBracketsWidth;
         }
     } else {
-        _leftMargin = maxNamesWidth + instrumentNameOffset + bracketsWidth;
+        _leftMargin = indent + bracketsWidth;
     }
 
     int nVisible = 0;
@@ -1504,6 +1503,10 @@ double System::minDistance(System* s2) const
         return double(s2->vbox()->topGap() + vbox()->bottomGap());
     }
 
+    if (_staves.empty() || s2->staves().empty()) {
+        return 0.0;
+    }
+
     double minVerticalDistance = score()->styleMM(Sid::minVerticalDistance);
     double dist = score()->enableVerticalSpread() ? styleP(Sid::minSystemSpread) : styleP(Sid::minSystemDistance);
     size_t firstStaff = 0;
@@ -2011,5 +2014,35 @@ Fraction System::maxSysTicks() const
         }
     }
     return maxTicks;
+}
+
+bool System::hasCrossStaffOrModifiedBeams()
+{
+    for (MeasureBase* mb : measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment& seg : toMeasure(mb)->segments()) {
+            if (!seg.isChordRestType()) {
+                continue;
+            }
+            for (EngravingItem* e : seg.elist()) {
+                if (!e || !e->isChordRest()) {
+                    continue;
+                }
+                if (toChordRest(e)->beam() && (toChordRest(e)->beam()->cross() || toChordRest(e)->beam()->userModified())) {
+                    return true;
+                }
+                if (e->isChord() && !toChord(e)->graceNotes().empty()) {
+                    for (Chord* grace : toChord(e)->graceNotes()) {
+                        if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return false;
 }
 }

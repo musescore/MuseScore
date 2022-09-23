@@ -25,12 +25,15 @@
 
 #include "containers.h"
 
-#include "libmscore/factory.h"
-#include "libmscore/score.h"
-#include "libmscore/staff.h"
+#include "libmscore/beam.h"
 #include "libmscore/chord.h"
-#include "libmscore/timesig.h"
+#include "libmscore/factory.h"
+#include "libmscore/measure.h"
+#include "libmscore/score.h"
+#include "libmscore/segment.h"
+#include "libmscore/staff.h"
 #include "libmscore/system.h"
+#include "libmscore/timesig.h"
 
 #include "layoutcontext.h"
 
@@ -343,6 +346,10 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                 }
             }
 
+            if (cr->beam() && cr->beam()->hasAllRests()) {
+                cr->removeDeleteBeam(false);
+            }
+
             // handle grace notes and cross-measure beaming
             // (tied chords?)
             if (cr->isChord()) {
@@ -357,7 +364,7 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
             }
 
             if (cr->isRest() && cr->beamMode() == BeamMode::AUTO) {
-                bm = BeamMode::NONE;                   // do not beam rests set to BeamMode::AUTO
+                bm = BeamMode::NONE;                   // do not beam rests set to BeamMode::AUTO or with only other rests
             } else {
                 bm = Groups::endBeam(cr, prev);          // get defaults from time signature properties
             }
@@ -393,11 +400,11 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                 bm = BeamMode::NONE;
             }
 
-            if ((cr->isChord() && cr->durationType().type() <= DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
+            if ((cr->durationType().type() <= DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
                 bool removeBeam = true;
                 if (beam) {
                     beam->layout1();
-                    removeBeam = (beam->elements().size() <= 1);
+                    removeBeam = (beam->elements().size() <= 1 || beam->hasAllRests());
                     beam = 0;
                 }
                 if (a1) {
@@ -458,7 +465,8 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
             Measure* m = (nextTick >= measure->endTick() ? measure->nextMeasure() : measure);
             ChordRest* nextCR = (m ? m->findChordRest(nextTick, track) : nullptr);
             Beam* b = a1->beam();
-            if (!(b && !b->elements().empty() && b->elements().front() == a1 && nextCR && beamModeMid(nextCR->beamMode()))) {
+            if (!(b && !b->elements().empty() && !b->hasAllRests() && b->elements().front() == a1 && nextCR
+                  && beamModeMid(nextCR->beamMode()))) {
                 a1->removeDeleteBeam(false);
             }
         }
@@ -572,5 +580,37 @@ void LayoutBeams::respace(const std::vector<ChordRest*>& elements)
         ChordRest* cr = elements[i];
         double dx = x - cr->segment()->pos().x();
         cr->movePosX(dx);
+    }
+}
+
+/************************************************************
+ * layoutNonCrossBeams()
+ * layout all non-cross-staff beams starting on this segment
+ * **********************************************************/
+
+void LayoutBeams::layoutNonCrossBeams(Segment* s)
+{
+    for (EngravingItem* e : s->elist()) {
+        if (!e || !e->isChordRest() || !e->score()->staff(e->staffIdx())->show()) {
+            // the beam and its system may still be referenced when selecting all,
+            // even if the staff is invisible. The old system is invalid and does cause problems in #284012
+            if (e && e->isChordRest() && !e->score()->staff(e->staffIdx())->show() && toChordRest(e)->beam()) {
+                toChordRest(e)->beam()->resetExplicitParent();
+            }
+            continue;
+        }
+        ChordRest* cr = toChordRest(e);
+        // layout beam
+        if (LayoutBeams::isTopBeam(cr)) {
+            cr->beam()->layout();
+        }
+        if (!cr->isChord()) {
+            continue;
+        }
+        for (Chord* grace : toChord(cr)->graceNotes()) {
+            if (LayoutBeams::isTopBeam(grace)) {
+                grace->beam()->layout();
+            }
+        }
     }
 }

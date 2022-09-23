@@ -37,7 +37,7 @@ var testCase = {
             NewScore.openNewScoreDialog()
         }},
         {name: "Create score", func: function() {
-            NewScore.сhooseInstrument("Woodwinds", "Flute")
+            NewScore.chooseInstrument("Woodwinds", "Flute")
             NewScore.done()
         }},
         {name: "Open Inspector panel", func: function() {

@@ -211,13 +211,17 @@ String GuitarPro::readPascalString(int n)
 {
     uint8_t l = readUInt8();
     std::vector<char> s(l + 1);
-    //char s[l + 1];
     read(&s[0], l);
     s[l] = 0;
     if (n - l > 0) {
         skip(n - l);
     }
-    return String::fromUtf8(&s[0]);
+
+    try {
+        return String::fromUtf8(&s[0]);
+    } catch (...) {
+        return String::fromAscii(&s[0]);
+    }
 }
 
 //---------------------------------------------------------
@@ -228,7 +232,6 @@ String GuitarPro::readWordPascalString()
 {
     int l = readInt();
     std::vector<char> c(l + 1);
-    //char c[l+1];
     read(&c[0], l);
     c[l] = 0;
     return String::fromUtf8(&c[0]);
@@ -242,7 +245,6 @@ String GuitarPro::readBytePascalString()
 {
     int l = readUInt8();
     std::vector<char> c(l + 1);
-    //char c[l+1];
     read(&c[0], l);
     c[l] = 0;
     return String::fromUtf8(&c[0]);
@@ -261,14 +263,8 @@ String GuitarPro::readDelphiString()
         l = maxl - 1;
     }
     std::vector<char> c(l + 1);
-    //char c[l + 1];
     read(&c[0], l);
     c[l] = 0;
-    std::string g(&c[0]);
-    if (g.find("2nd ") == 0) {
-        //?? int k = 1;
-    }
-
     return String::fromAscii(&c[0]);
 }
 
@@ -1404,31 +1400,39 @@ void GuitarPro::readChord(Segment* seg, int track, int numStrings, String name, 
 {
     int firstFret = readInt();
     if (firstFret || gpHeader) {
-        FretDiagram* fret = Factory::createFretDiagram(seg);
-        fret->setTrack(track);
-        fret->setStrings(numStrings);
-        fret->setFretOffset(firstFret - 1);
-        for (int i = 0; i < (gpHeader ? 7 : 6); ++i) {
-            int currentFret =  readInt();
-            // read the frets and add them to the fretboard
-            // subtract 1 extra from numStrings as we count from 0
-            if (i > numStrings - 1) {
-            } else if (currentFret > 0) {
-                fret->setDot(numStrings - 1 - i, currentFret - firstFret + 1, true);
-            } else if (currentFret == 0) {
-                fret->setDot(numStrings - 1 - i, 0, true);
-                fret->setMarker(numStrings - 1 - i, FretMarkerType::CIRCLE);
-            } else if (currentFret == -1) {
-                fret->setDot(numStrings - 1 - i, 0, true);
-                fret->setMarker(numStrings - 1 - i, FretMarkerType::CROSS);
+        if (!score->styleB(Sid::fretDiagramsAboveChords)) {
+            StaffText* staffText = Factory::createStaffText(seg);
+            staffText->setTrack(track);
+            staffText->setPlainText(name);
+            seg->add(staffText);
+            skip(4 * (gpHeader ? 7 : 6));
+        } else {
+            FretDiagram* fret = Factory::createFretDiagram(seg);
+            fret->setTrack(track);
+            fret->setStrings(numStrings);
+            fret->setFretOffset(firstFret - 1);
+            for (int i = 0; i < (gpHeader ? 7 : 6); ++i) {
+                int currentFret =  readInt();
+                // read the frets and add them to the fretboard
+                // subtract 1 extra from numStrings as we count from 0
+                if (i > numStrings - 1) {
+                } else if (currentFret > 0) {
+                    fret->setDot(numStrings - 1 - i, currentFret - firstFret + 1, true);
+                } else if (currentFret == 0) {
+                    fret->setDot(numStrings - 1 - i, 0, true);
+                    fret->setMarker(numStrings - 1 - i, FretMarkerType::CIRCLE);
+                } else if (currentFret == -1) {
+                    fret->setDot(numStrings - 1 - i, 0, true);
+                    fret->setMarker(numStrings - 1 - i, FretMarkerType::CROSS);
+                }
             }
-        }
-        seg->add(fret);
-        if (!name.isEmpty()) {
-            Harmony* harmony = new Harmony(seg);
-            harmony->setHarmony(name);
-            harmony->setTrack(track);
-            fret->add(harmony);
+            seg->add(fret);
+            if (!name.isEmpty()) {
+                Harmony* harmony = new Harmony(seg);
+                harmony->setHarmony(name);
+                harmony->setTrack(track);
+                fret->add(harmony);
+            }
         }
     } else if (!name.isEmpty()) {
         Harmony* harmony = new Harmony(seg);
@@ -1703,7 +1707,7 @@ bool GuitarPro2::read(IODevice* io)
         clef->setTrack(i * VOICES);
         segment->add(clef);
 
-        if (capo > 0) {
+        if (capo > 0 && score->styleB(Sid::showCapoOnStaff)) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
             StaffText* st = new StaffText(s);
             //                  st->setTextStyleType(TextStyleType::STAFF);
@@ -2899,51 +2903,90 @@ static void addMetaInfo(MasterScore* score, GuitarPro* gp)
 
 static void createLinkedTabs(MasterScore* score)
 {
+    // store map of all initial spanners
+    std::unordered_map<staff_idx_t, std::vector<Spanner*> > spanners;
+    // for moving initial spanner to new index
+    std::unordered_map<staff_idx_t, staff_idx_t> indexMapping;
+    std::set<staff_idx_t> staffIndexesToCopy;
+    constexpr size_t stavesInPart = 2;
+
+    for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
+        Spanner* s = it->second;
+        spanners[s->staffIdx()].push_back(s);
+    }
+
+    size_t curStaffIdx = 0;
+    size_t stavesOperated = 0;
+
+    // creating linked staves and recalculating spanners indexes
     for (size_t partNum = 0; partNum < score->parts().size(); partNum++) {
         Part* part = score->parts()[partNum];
         Fraction fr = Fraction(0, 1);
         size_t lines = part->instrument()->stringData()->strings();
         size_t stavesNum = part->nstaves();
 
-        part->setStaves(static_cast<int>(stavesNum * 2));
-
-        for (size_t i = 0; i < stavesNum; i++) {
-            staff_idx_t staffIdx = stavesNum + i;
-
-            for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
-                Spanner* s = it->second;
-
-                if (s->staffIdx() >= staffIdx) {
-                    track_idx_t t = s->track() + VOICES;
-                    if (t >= score->ntracks()) {
-                        t = score->ntracks() - 1;
-                    }
-
-                    s->setTrack(t);
-                    for (SpannerSegment* ss : s->spannerSegments()) {
-                        ss->setTrack(t);
-                    }
-
-                    if (s->track2() != mu::nidx) {
-                        t = s->track2() + VOICES;
-                        s->setTrack2(t < score->ntracks() ? t : s->track());
-                    }
-                }
+        if (stavesNum != 1) {
+            for (int i = 0; i < stavesNum; i++) {
+                indexMapping[curStaffIdx] = stavesOperated + i;
+                curStaffIdx++;
             }
 
-            Staff* srcStaff = part->staff(i);
-            Staff* dstStaff = part->staff(stavesNum + i);
+            stavesOperated += stavesNum;
+            continue;
+        }
 
-            StaffTypes tabType = StaffTypes::TAB_6COMMON;
-            if (lines == 4) {
-                tabType = StaffTypes::TAB_4COMMON;
-            } else if (lines == 5) {
-                tabType = StaffTypes::TAB_5COMMON;
+        part->setStaves(static_cast<int>(stavesInPart));
+
+        Staff* srcStaff = part->staff(0);
+        Staff* dstStaff = part->staff(1);
+        Excerpt::cloneStaff(srcStaff, dstStaff, false);
+
+        static const std::vector<StaffTypes> types {
+            StaffTypes::TAB_4SIMPLE,
+            StaffTypes::TAB_5SIMPLE,
+            StaffTypes::TAB_6SIMPLE,
+            StaffTypes::TAB_7SIMPLE,
+            StaffTypes::TAB_8SIMPLE
+        };
+
+        int index = (lines >= 4 && lines <= 8) ? lines - 4 : 2;
+
+        dstStaff->setStaffType(fr, *StaffType::preset(types.at(index)));
+        dstStaff->setLines(fr, static_cast<int>(lines));
+
+        // each spanner moves down to the staff with index,
+        // equal to number of spanners operated before it
+        indexMapping[curStaffIdx] = stavesOperated;
+        staffIndexesToCopy.insert(curStaffIdx);
+        curStaffIdx++;
+
+        stavesOperated += stavesInPart;
+    }
+
+    // moving and copying spanner segments
+    for (auto& spannerMapElem : spanners) {
+        auto& spannerList = spannerMapElem.second;
+        staff_idx_t idx = spannerMapElem.first;
+        bool needsCopy = staffIndexesToCopy.find(idx) != staffIndexesToCopy.end();
+        for (Spanner* s : spannerList) {
+            /// moving
+            staff_idx_t newIdx = indexMapping[idx];
+            track_idx_t newTrackIdx = staff2track(newIdx);
+            s->setTrack(newTrackIdx);
+            s->setTrack2(newTrackIdx);
+            for (SpannerSegment* ss : s->spannerSegments()) {
+                ss->setTrack(newTrackIdx);
             }
 
-            dstStaff->setStaffType(fr, *StaffType::preset(tabType));
-            dstStaff->setLines(fr, static_cast<int>(lines));
-            Excerpt::cloneStaff(srcStaff, dstStaff);
+            /// copying
+            if (needsCopy) {
+                staff_idx_t dstStaffIdx = newIdx + 1;
+
+                track_idx_t dstTrack = dstStaffIdx * VOICES + s->voice();
+                track_idx_t dstTrack2 = dstStaffIdx * VOICES + (s->track2() % VOICES);
+
+                Excerpt::cloneSpanner(s, score, dstTrack, dstTrack2);
+            }
         }
     }
 }
@@ -2961,6 +3004,7 @@ static Err importScore(MasterScore* score, mu::io::IODevice* io)
     score->loadStyle(u":/engraving/styles/gp-style.mss");
     score->style().set(Sid::ArpeggioHiddenInStdIfTab, true);
 
+    io->seek(0);
     char header[5];
     io->read((uint8_t*)(header), 4);
     header[4] = 0;

@@ -21,10 +21,8 @@
  */
 
 #include "shape.h"
-#include "segment.h"
-#include "chord.h"
+
 #include "score.h"
-#include "system.h"
 
 #include "draw/painter.h"
 
@@ -118,7 +116,7 @@ double Shape::minHorizontalDistance(const Shape& a, Score* score) const
                 padding = item1->computePadding(item2);
                 kerningType = item1->computeKerningType(item2);
             }
-            if (intersection
+            if ((intersection && kerningType != KerningType::ALLOW_COLLISION)
                 || (r1.width() == 0 || r2.width() == 0) // Temporary hack: shapes of zero-width are assumed to collide with everyghin
                 || (!item1 && item2 && item2->isLyrics()) // Temporary hack: avoids collision with melisma line
                 || kerningType == KerningType::NON_KERNING) {

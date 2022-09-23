@@ -223,9 +223,7 @@ void ProjectPropertiesModel::saveProperties()
         }
     }
 
-    if (meta != project->metaInfo()) {
-        project->setMetaInfo(meta, true);
-    }
+    project->setMetaInfo(meta, true);
 }
 
 void ProjectPropertiesModel::openFileLocation()

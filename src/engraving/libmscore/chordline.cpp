@@ -23,12 +23,12 @@
 #include "chordline.h"
 
 #include "rw/xml.h"
+#include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "chord.h"
-#include "measure.h"
-#include "system.h"
 #include "note.h"
+#include "score.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -69,6 +69,11 @@ ChordLine::ChordLine(const ChordLine& cl)
 void ChordLine::setChordLineType(ChordLineType st)
 {
     _chordLineType = st;
+}
+
+const TranslatableString& ChordLine::chordLineTypeName() const
+{
+    return TConv::userName(_chordLineType, _straight);
 }
 
 //---------------------------------------------------------
@@ -201,6 +206,8 @@ void ChordLine::read(XmlReader& e)
             setLengthX(e.readInt());
         } else if (tag == "lengthY") {
             setLengthY(e.readInt());
+        } else if (tag == "offset" && score()->mscVersion() < 400) { // default positions has changed in 4.0 so ignore previous offset
+            e.skipCurrentElement();
         } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
@@ -240,7 +247,7 @@ void ChordLine::draw(mu::draw::Painter* painter) const
     TRACE_OBJ_DRAW;
     double _spatium = spatium();
     painter->scale(_spatium, _spatium);
-    painter->setPen(Pen(curColor(), .15, PenStyle::SolidLine));
+    painter->setPen(Pen(curColor(), score()->styleMM(Sid::chordlineThickness), PenStyle::SolidLine));
     painter->setBrush(BrushStyle::NoBrush);
     painter->drawPath(path);
     painter->scale(1.0 / _spatium, 1.0 / _spatium);
@@ -382,7 +389,7 @@ String ChordLine::accessibleInfo() const
 {
     String rez = EngravingItem::accessibleInfo();
     if (chordLineType() != ChordLineType::NOTYPE) {
-        rez = String(u"%1: %2").arg(rez, TConv::translatedUserName(chordLineType()));
+        rez = String(u"%1: %2").arg(rez, chordLineTypeName().translated());
     }
     return rez;
 }

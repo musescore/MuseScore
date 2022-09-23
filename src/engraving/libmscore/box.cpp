@@ -26,22 +26,18 @@
 
 #include "rw/xml.h"
 
+#include "actionicon.h"
 #include "factory.h"
-#include "textframe.h"
-#include "text.h"
-#include "score.h"
-#include "barline.h"
-#include "measurerepeat.h"
-#include "symbol.h"
-#include "system.h"
+#include "fret.h"
 #include "image.h"
 #include "layoutbreak.h"
-#include "fret.h"
 #include "mscore.h"
+#include "score.h"
 #include "stafftext.h"
-#include "actionicon.h"
-#include "measure.h"
-#include "undo.h"
+#include "symbol.h"
+#include "system.h"
+#include "text.h"
+#include "textframe.h"
 
 #include "log.h"
 
@@ -671,16 +667,6 @@ RectF HBox::drag(EditData& data)
     setOffset(PointF(x1, 0.0));
 //      setStartDragPosition(data.delta);
     return canvasBoundingRect().united(r);
-}
-
-//---------------------------------------------------------
-//   endEditDrag
-//---------------------------------------------------------
-
-void HBox::endEditDrag(EditData&)
-{
-    triggerLayout();
-    score()->update();
 }
 
 //---------------------------------------------------------

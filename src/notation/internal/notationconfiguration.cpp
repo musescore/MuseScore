@@ -60,6 +60,7 @@ static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/mySt
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
 static const Settings::Key IS_AUTOMATICALLY_PAN_ENABLED(module_name, "application/playback/panPlayback");
 static const Settings::Key IS_PLAY_REPEATS_ENABLED(module_name, "application/playback/playRepeats");
+static const Settings::Key IS_PLAY_CHORD_SYMBOLS_ENABLED(module_name, "application/playback/playChordSymbols");
 static const Settings::Key IS_METRONOME_ENABLED(module_name, "application/playback/metronomeEnabled");
 static const Settings::Key IS_COUNT_IN_ENABLED(module_name, "application/playback/countInEnabled");
 
@@ -157,8 +158,13 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(true));
     settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(true));
     settings()->setDefaultValue(IS_PLAY_REPEATS_ENABLED, Val(true));
+    settings()->setDefaultValue(IS_PLAY_CHORD_SYMBOLS_ENABLED, Val(true));
     settings()->setDefaultValue(IS_METRONOME_ENABLED, Val(false));
     settings()->setDefaultValue(IS_COUNT_IN_ENABLED, Val(false));
+
+    settings()->valueChanged(IS_PLAY_CHORD_SYMBOLS_ENABLED).onReceive(nullptr, [this](const Val&) {
+        m_isPlayChordSymbolsChanged.notify();
+    });
 
     settings()->setDefaultValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(false));
     settings()->valueChanged(IS_CANVAS_ORIENTATION_VERTICAL_KEY).onReceive(nullptr, [this](const Val&) {
@@ -551,6 +557,21 @@ void NotationConfiguration::setIsPlayRepeatsEnabled(bool enabled)
 Notification NotationConfiguration::isPlayRepeatsChanged() const
 {
     return m_isPlayRepeatsChanged;
+}
+
+bool NotationConfiguration::isPlayChordSymbolsEnabled() const
+{
+    return settings()->value(IS_PLAY_CHORD_SYMBOLS_ENABLED).toBool();
+}
+
+void NotationConfiguration::setIsPlayChordSymbolsEnabled(bool enabled)
+{
+    settings()->setSharedValue(IS_PLAY_CHORD_SYMBOLS_ENABLED, Val(enabled));
+}
+
+async::Notification NotationConfiguration::isPlayChordSymbolsChanged() const
+{
+    return m_isPlayChordSymbolsChanged;
 }
 
 bool NotationConfiguration::isMetronomeEnabled() const

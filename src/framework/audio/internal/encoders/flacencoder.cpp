@@ -34,8 +34,10 @@ using namespace mu::audio::encode;
 
 struct FlacHandler : public FLAC::Encoder::File
 {
-    FlacHandler()
-        : FLAC::Encoder::File() {}
+    using ProgressCallBack = std::function<void (int64_t /*current*/, int64_t /*total*/)>;
+
+    FlacHandler(const ProgressCallBack& progressCallBack)
+        : FLAC::Encoder::File(), m_callBack(progressCallBack) {}
 
     void progress_callback(FLAC__uint64 bytes_written,
                            FLAC__uint64 samples_written,
@@ -46,7 +48,11 @@ struct FlacHandler : public FLAC::Encoder::File
                << samples_written << " samples, "
                << frames_written << " frames\n"
                << "TOTAL FRAMES: " << total_frames_estimate;
+
+        m_callBack(frames_written * 4, total_frames_estimate);
     }
+
+    ProgressCallBack m_callBack;
 };
 
 bool FlacEncoder::init(const io::path_t& path, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
@@ -57,7 +63,9 @@ bool FlacEncoder::init(const io::path_t& path, const SoundTrackFormat& format, c
 
     m_format = format;
 
-    m_flac = new FlacHandler();
+    m_flac = new FlacHandler([this](int64_t current, int64_t total){
+        m_progress.progressChanged.send(current, total, "");
+    });
 
     if (!m_flac->set_verify(true)
         || !m_flac->set_compression_level(0)

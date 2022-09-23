@@ -25,8 +25,9 @@
 
 #include <memory>
 
-#include "types/string.h"
 #include "types/flags.h"
+#include "types/string.h"
+
 #include "draw/types/geometry.h"
 
 namespace mu::engraving {
@@ -45,9 +46,9 @@ DECLARE_FLAGS(KeyboardModifiers, KeyboardModifier)
 DECLARE_OPERATORS_FOR_FLAGS(KeyboardModifiers)
 
 #ifdef Q_OS_MAC
-#define CONTROL_MODIFIER Qt::AltModifier
+constexpr KeyboardModifier TextEditingControlModifier = AltModifier;
 #else
-#define CONTROL_MODIFIER ControlModifier
+constexpr KeyboardModifier TextEditingControlModifier = ControlModifier;
 #endif
 
 enum KeyboardKey {

@@ -26,13 +26,10 @@
 #include "draw/types/brush.h"
 #include "draw/fontmetrics.h"
 #include "rw/xml.h"
-#include "types/typesconv.h"
 
-#include "score.h"
-#include "undo.h"
-#include "staff.h"
-#include "chord.h"
 #include "note.h"
+#include "score.h"
+#include "staff.h"
 
 using namespace mu;
 using namespace mu::draw;

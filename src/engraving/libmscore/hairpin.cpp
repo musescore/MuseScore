@@ -25,24 +25,20 @@
 #include <cmath>
 
 #include "translation.h"
-#include "draw/types/transform.h"
+
 #include "draw/types/pen.h"
-#include "style/style.h"
+#include "draw/types/transform.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
 
+#include "dynamic.h"
 #include "dynamichairpingroup.h"
-#include "utils.h"
-#include "score.h"
 #include "measure.h"
+#include "score.h"
 #include "segment.h"
-#include "system.h"
-#include "undo.h"
 #include "staff.h"
-#include "mscore.h"
-#include "chord.h"
-#include "changeMap.h"
-#include "types/typesconv.h"
+#include "system.h"
+#include "text.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -119,8 +115,9 @@ void HairpinSegment::layout()
 {
     const StaffType* stType = staffType();
 
+    _skipDraw = false;
     if (stType && stType->isHiddenElementOnTab(score(), Sid::hairpinShowTabCommon, Sid::hairpinShowTabSimple)) {
-        setbbox(RectF());
+        _skipDraw = true;
         return;
     }
 

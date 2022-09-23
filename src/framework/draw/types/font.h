@@ -69,6 +69,9 @@ public:
     double pointSizeF() const;
     void setPointSizeF(double s);
 
+    int pixelSize() const;
+    void setPixelSize(int s);
+
     Weight weight() const;
     void setWeight(Weight w);
 
@@ -99,6 +102,7 @@ private:
 
     String m_family;
     double m_pointSizeF = -1.0;
+    int m_pixelSize = -1;
     Weight m_weight = Weight::Normal;
     Flags<Style> m_style{ Style::Normal };
     bool m_noFontMerging = false;

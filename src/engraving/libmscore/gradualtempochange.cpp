@@ -22,13 +22,12 @@
 
 #include "gradualtempochange.h"
 
+#include "rw/xml.h"
 #include "log.h"
 
+#include "measure.h"
 #include "score.h"
 #include "segment.h"
-#include "measure.h"
-#include "chordrest.h"
-#include "rw/xml.h"
 
 using namespace mu;
 using namespace mu::engraving;

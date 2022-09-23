@@ -23,14 +23,13 @@
 #define MU_ENGRAVING_VERTICALGAPDATALIST_H
 
 #include <vector>
-#include "../types/dimension.h"
 
 namespace mu::engraving {
 class MStyle;
-class System;
-class SysStaff;
-class Staff;
 class Spacer;
+class Staff;
+class SysStaff;
+class System;
 
 //---------------------------------------------------------
 //   VerticalStretchData

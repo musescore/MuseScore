@@ -37,6 +37,9 @@ FlatButton {
     isNarrow: true
     margins: 4
 
+    navigation.accessible.role: MUAccessible.CheckBox
+    navigation.accessible.checked: checked
+
     contentItem: Row {
         spacing: 6
 

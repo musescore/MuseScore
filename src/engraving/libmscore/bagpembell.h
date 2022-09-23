@@ -24,6 +24,7 @@
 #define __BAGPEMBELL_H__
 
 #include <vector>
+
 #include "engravingitem.h"
 
 namespace mu::engraving {
@@ -82,4 +83,5 @@ public:
     noteList getNoteList() const;
 };
 } // namespace mu::engraving
+
 #endif

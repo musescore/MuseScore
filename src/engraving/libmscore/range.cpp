@@ -22,23 +22,23 @@
 
 #include "range.h"
 
-#include "factory.h"
-#include "measure.h"
-#include "segment.h"
-#include "rest.h"
-#include "chord.h"
-#include "score.h"
-#include "slur.h"
-#include "tie.h"
-#include "note.h"
-#include "tuplet.h"
 #include "barline.h"
-#include "utils.h"
-#include "staff.h"
+#include "chord.h"
 #include "excerpt.h"
-#include "measurerepeat.h"
-#include "tremolo.h"
+#include "factory.h"
 #include "linkedobjects.h"
+#include "measure.h"
+#include "measurerepeat.h"
+#include "note.h"
+#include "rest.h"
+#include "score.h"
+#include "segment.h"
+#include "slur.h"
+#include "staff.h"
+#include "tie.h"
+#include "tremolo.h"
+#include "tuplet.h"
+#include "utils.h"
 
 #include "log.h"
 
@@ -734,7 +734,7 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
         s->setTick(s->tick() + tick);
         if (s->isSlur()) {
             Slur* slur = toSlur(s);
-            if (slur->startCR()->isGrace()) {
+            if (slur->startCR() && slur->startCR()->isGrace()) {
                 Chord* sc = slur->startChord();
                 size_t idx = sc->graceIndex();
                 Chord* dc = toChord(score->findCR(s->tick(), s->track()));
@@ -742,7 +742,7 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
             } else {
                 s->setStartElement(0);
             }
-            if (slur->endCR()->isGrace()) {
+            if (slur->endCR() && slur->endCR()->isGrace()) {
                 Chord* sc = slur->endChord();
                 size_t idx = sc->graceIndex();
                 Chord* dc = toChord(score->findCR(s->tick2(), s->track2()));

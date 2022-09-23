@@ -25,14 +25,14 @@
 #include <QObject>
 
 #include "modularity/ioc.h"
-#include "iappshellconfiguration.h"
+#include "update/iupdateconfiguration.h"
 
 namespace mu::appshell {
 class UpdatePreferencesModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(appshell, IAppShellConfiguration, configuration)
+    INJECT(appshell, update::IUpdateConfiguration, updateConfiguration)
 
     Q_PROPERTY(
         bool needCheckForNewAppVersion READ needCheckForNewAppVersion WRITE setNeedCheckForNewAppVersion NOTIFY needCheckForNewAppVersionChanged)

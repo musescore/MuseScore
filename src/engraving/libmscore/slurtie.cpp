@@ -25,13 +25,11 @@
 #include "rw/xml.h"
 
 #include "chord.h"
-#include "measure.h"
 #include "mscoreview.h"
+#include "note.h"
 #include "page.h"
 #include "score.h"
 #include "system.h"
-#include "tie.h"
-#include "undo.h"
 
 #include "log.h"
 

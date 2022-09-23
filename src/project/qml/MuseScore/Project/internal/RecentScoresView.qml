@@ -46,6 +46,8 @@ StyledGridView {
     property int rows: Math.max(0, Math.floor(root.height / root.cellHeight))
     property int columns: Math.max(0, Math.floor(root.width / root.cellWidth))
 
+    property bool isSearching: false
+
     NavigationPanel {
         id: navPanel
         name: "RecentScores"
@@ -107,12 +109,15 @@ StyledGridView {
             suffix: score.suffix ?? ""
             thumbnail: score.thumbnail ?? null
             isAdd: score.isAddNew
-            timeSinceModified: !isAdd ? score.timeSinceModified : ""
+            isNoResultFound: score.isNoResultFound
+            isCloud: score.isCloud
+            timeSinceModified: (!isAdd && !isNoResultFound) ? score.timeSinceModified : ""
+            visible: !isNoResultFound ? true : root.count == 2 && root.isSearching     // New score and No result items
 
             onClicked: {
                 if (isAdd) {
                     root.addNewScoreRequested()
-                } else {
+                } else if (!isNoResultFound) {
                     root.openScoreRequested(score.path)
                 }
             }

@@ -97,7 +97,7 @@ void NotationUndoStack::prepareChanges()
         return;
     }
 
-    if (m_isLocked) {
+    if (isLocked()) {
         return;
     }
 
@@ -110,7 +110,7 @@ void NotationUndoStack::rollbackChanges()
         return;
     }
 
-    if (m_isLocked) {
+    if (isLocked()) {
         return;
     }
 
@@ -120,11 +120,11 @@ void NotationUndoStack::rollbackChanges()
 
 void NotationUndoStack::commitChanges()
 {
-    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
+    IF_ASSERT_FAILED(score()) {
         return;
     }
 
-    if (m_isLocked) {
+    if (isLocked()) {
         return;
     }
 
@@ -136,22 +136,35 @@ void NotationUndoStack::commitChanges()
 
 void NotationUndoStack::lock()
 {
-    m_isLocked = true;
+    IF_ASSERT_FAILED(undoStack()) {
+        return;
+    }
+
+    undoStack()->setLocked(true);
 }
 
 void NotationUndoStack::unlock()
 {
-    m_isLocked = false;
+    IF_ASSERT_FAILED(undoStack()) {
+        return;
+    }
+
+    undoStack()->setLocked(false);
 }
 
 bool NotationUndoStack::isLocked() const
 {
-    return m_isLocked;
+    return undoStack()->locked();
 }
 
 mu::async::Notification NotationUndoStack::stackChanged() const
 {
     return m_stackStateChanged;
+}
+
+mu::async::Channel<ChangesRange> NotationUndoStack::changesChannel() const
+{
+    return score() ? score()->changesChannel() : async::Channel<ChangesRange>();
 }
 
 mu::engraving::Score* NotationUndoStack::score() const
@@ -176,10 +189,6 @@ void NotationUndoStack::notifyAboutNotationChanged()
 
 void NotationUndoStack::notifyAboutStateChanged()
 {
-    IF_ASSERT_FAILED(undoStack()) {
-        return;
-    }
-
     m_stackStateChanged.notify();
 }
 

@@ -32,6 +32,9 @@ class IGuitarProConfiguration : MODULE_EXPORT_INTERFACE
 
 public:
     virtual ~IGuitarProConfiguration() = default;
+
+    virtual bool linkedTabStaffCreated() const = 0;
+    virtual void setLinkedTabStaffCreated(bool created) = 0;
 };
 }
 

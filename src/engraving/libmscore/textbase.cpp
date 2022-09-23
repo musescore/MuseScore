@@ -26,26 +26,27 @@
 #include "draw/fontmetrics.h"
 #include "draw/types/pen.h"
 #include "draw/types/brush.h"
-#include "style/defaultstyle.h"
+
+#include "infrastructure/symbolfonts.h"
+
 #include "rw/xml.h"
+
+#include "style/defaultstyle.h"
+#include "style/textstyle.h"
+
 #include "types/symnames.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
-#include "infrastructure/symbolfonts.h"
 
-#include "text.h"
-#include "textedit.h"
-#include "jump.h"
-#include "marker.h"
-#include "score.h"
-#include "segment.h"
-#include "measure.h"
-#include "system.h"
 #include "box.h"
+#include "measure.h"
+#include "mscore.h"
 #include "page.h"
+#include "score.h"
+#include "system.h"
+#include "textedit.h"
 #include "textframe.h"
 #include "undo.h"
-#include "mscore.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -57,17 +58,9 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-#ifdef Q_OS_MAC
-#define CONTROL_MODIFIER Qt::AltModifier
-#else
-#define CONTROL_MODIFIER ControlModifier
-#endif
-
-static const double subScriptSize     = 0.6;
-static const double subScriptOffset   = 0.5;       // of x-height
-static const double superScriptOffset = -.9;      // of x-height
-
-//static const double tempotextOffset = 0.4; // of x-height // 80% of 50% = 2 spatiums
+static constexpr double subScriptSize     = 0.6;
+static constexpr double subScriptOffset   = 0.5; // of x-height
+static constexpr double superScriptOffset = -.9; // of x-height
 
 //---------------------------------------------------------
 //   isSorted
@@ -530,7 +523,7 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
 //   doubleClickSelect
 //---------------------------------------------------------
 
-void TextCursor::doubleClickSelect()
+void TextCursor::selectWord()
 {
     clearSelection();
 
@@ -2238,18 +2231,13 @@ void TextBase::selectAll(TextCursor* cursor)
     cursor->setColumn(cursor->curLine().columns());
 }
 
-//---------------------------------------------------------
-//   multiClickSelect
-//    for double and triple clicks
-//---------------------------------------------------------
-
-void TextBase::multiClickSelect(EditData& editData, MultiClick clicks)
+void TextBase::select(EditData& editData, SelectTextType type)
 {
-    switch (clicks) {
-    case MultiClick::Double:
-        cursorFromEditData(editData)->doubleClickSelect();
+    switch (type) {
+    case SelectTextType::Word:
+        cursorFromEditData(editData)->selectWord();
         break;
-    case MultiClick::Triple:
+    case SelectTextType::All:
         selectAll(cursorFromEditData(editData));
         break;
     }

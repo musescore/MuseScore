@@ -132,4 +132,6 @@ void WidgetView::updateSizeConstraints()
 void WidgetView::setWidget(std::shared_ptr<IDisplayableWidget> widget)
 {
     m_widget = widget;
+
+    updateSizeConstraints();
 }

@@ -25,8 +25,8 @@
 #include "engraving/engravingmodule.h"
 #include "framework/fonts/fontsmodule.h"
 
-#include "libmscore/masterscore.h"
-#include "libmscore/musescoreCore.h"
+#include "libmscore/instrtemplate.h"
+#include "libmscore/mscore.h"
 
 #include "log.h"
 
@@ -37,8 +37,10 @@ static mu::testing::SuiteEnvironment engraving_se(
 },
     []() {
     LOGI() << "engraving tests suite post init";
+
+    mu::engraving::MScore::testMode = true;
     mu::engraving::MScore::noGui = true;
 
-    new mu::engraving::MuseScoreCore();
+    mu::engraving::loadInstrumentTemplates(":/data/instruments.xml");
 }
     );

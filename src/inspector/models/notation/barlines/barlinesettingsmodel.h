@@ -42,11 +42,6 @@ public:
     Q_INVOKABLE void applySpanPreset(const int presetType);
     Q_INVOKABLE void setSpanIntervalAsStaffDefault();
 
-    void createProperties() override;
-    void requestElements() override;
-    void loadProperties() override;
-    void resetProperties() override;
-
     PropertyItem* type() const;
     PropertyItem* isSpanToNextStaff() const;
     PropertyItem* spanFrom() const;
@@ -59,6 +54,15 @@ signals:
     void isRepeatStyleChangingAllowedChanged();
 
 private:
+    void createProperties() override;
+    void requestElements() override;
+    void loadProperties() override;
+    void resetProperties() override;
+    void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                           const mu::engraving::StyleIdSet& changedStyleIdSet) override;
+
+    void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
+
     PropertyItem* m_type = nullptr;
     PropertyItem* m_isSpanToNextStaff = nullptr;
     PropertyItem* m_spanFrom = nullptr;

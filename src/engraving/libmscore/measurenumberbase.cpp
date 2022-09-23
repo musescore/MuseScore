@@ -21,9 +21,11 @@
  */
 
 #include "measurenumberbase.h"
+
 #include "rw/xml.h"
-#include "score.h"
+
 #include "measure.h"
+#include "score.h"
 #include "staff.h"
 
 using namespace mu;

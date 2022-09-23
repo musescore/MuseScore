@@ -438,7 +438,7 @@ private slots:
 
 void TestImportMidi::initTestCase()
 {
-    initMTest(QString(iex_midiimport_tests_DATA_ROOT));
+    setRootDir(QString(iex_midiimport_tests_DATA_ROOT));
 }
 
 //---------------------------------------------------------

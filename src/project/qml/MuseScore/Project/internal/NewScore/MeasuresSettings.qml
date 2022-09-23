@@ -110,6 +110,8 @@ FlatButton {
             }
 
             TimeSignatureFraction {
+                id: pickupMeasure
+
                 Layout.topMargin: 12
                 Layout.leftMargin: 32
 
@@ -118,9 +120,8 @@ FlatButton {
                 availableDenominators: root.model.timeSignatureDenominators()
                 enabled: withPickupMeasure.checked
 
-                navigationPanel: content.navigationPanel
-                navigationRowStart: 1
-                navigationColumnStart: 0
+                navigationSection: popup.navigationSection
+                navigationPanelOrderStart: 2
 
                 onNumeratorSelected: function(value) {
                     root.model.setPickupTimeSignatureNumerator(value)
@@ -161,7 +162,11 @@ FlatButton {
                 minValue: root.model.measureCountRange().min
 
                 navigation.name: "MeasuresCountControl"
-                navigation.panel: content.navigationPanel
+                navigation.panel: NavigationPanel {
+                    name: "MeasuresCountPanel"
+                    section: popup.navigationSection
+                    order: pickupMeasure.navigationPanelOrderEnd + 1
+                }
                 navigation.row: 2
                 navigation.column: 0
                 navigation.accessible.name: numberOfMeasuresLabel.text + " " + currentValue

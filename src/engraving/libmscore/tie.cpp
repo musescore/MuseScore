@@ -23,22 +23,24 @@
 
 #include <cmath>
 
-#include "draw/types/transform.h"
-#include "draw/types/pen.h"
 #include "draw/types/brush.h"
+#include "draw/types/pen.h"
+#include "draw/types/transform.h"
 #include "rw/xml.h"
 
-#include "chord.h"
-#include "measure.h"
-#include "mscoreview.h"
-#include "score.h"
-#include "system.h"
-#include "undo.h"
+#include "accidental.h"
 #include "chord.h"
 #include "hook.h"
 #include "ledgerline.h"
-#include "accidental.h"
+#include "measure.h"
+#include "mscoreview.h"
+#include "note.h"
+#include "notedot.h"
+#include "score.h"
+#include "staff.h"
+#include "stafftype.h"
 #include "stem.h"
+#include "system.h"
 
 #include "log.h"
 
@@ -114,10 +116,6 @@ void TieSegment::draw(mu::draw::Painter* painter) const
 
 bool TieSegment::isEditAllowed(EditData& ed) const
 {
-    if (ed.key == Key_X && !ed.modifiers) {
-        return true;
-    }
-
     if (ed.key == Key_Home && !ed.modifiers) {
         return true;
     }
@@ -138,14 +136,10 @@ bool TieSegment::edit(EditData& ed)
 
     SlurTie* sl = tie();
 
-    if (ed.key == Key_X && !ed.modifiers) {
-        sl->setSlurDirection(sl->up() ? DirectionV::DOWN : DirectionV::UP);
-        sl->layout();
-        return true;
-    }
     if (ed.key == Key_Home && !ed.modifiers) {
         ups(ed.curGrip).off = PointF();
         sl->layout();
+        triggerLayout();
         return true;
     }
     return false;
@@ -622,6 +616,7 @@ void TieSegment::finalizeSegment()
 
 void TieSegment::adjustX()
 {
+    const bool adjustForHooks = false;
     double offsetMargin = spatium() * 0.25;
     double collisionYMargin = spatium() * 0.25;
     Note* sn = tie()->startNote();
@@ -660,7 +655,7 @@ void TieSegment::adjustX()
             for (Chord* chord : chords) {
                 double chordOffset = chord->x() - sc->x() - sn->x() - sn->width(); // sn for right-offset notes, width() to normalize to zero
                 // adjust for hooks
-                if (chord->hook() && chord->hook()->visible()) {
+                if (chord->hook() && chord->hook()->visible() && adjustForHooks) {
                     double hookHeight = chord->hook()->bbox().height();
                     // turn the hook upside down for downstems
                     double hookY = chord->hook()->pos().y() - (chord->up() ? 0 : hookHeight);
@@ -711,7 +706,7 @@ void TieSegment::adjustX()
         } else { // tie is outside
             if ((slurTie()->up() && sc->up()) || (!slurTie()->up() && !sc->up())) {
                 // outside ties may still require adjustment for hooks
-                if (sc->hook() && sc->hook()->visible()) {
+                if (sc->hook() && sc->hook()->visible() && adjustForHooks) {
                     double hookHeight = sc->hook()->bbox().height();
                     // turn the hook upside down for downstems
                     double hookY = sc->hook()->pos().y() - (sc->up() ? 0 : hookHeight);
@@ -863,7 +858,7 @@ void Tie::slurPos(SlurPos* sp)
     const StaffType* staffType = this->staffType();
     bool useTablature = staffType->isTabStaff();
     double _spatium = spatium();
-    double hw = startNote()->tabHeadWidth(staffType) * mag(); // if staffType == 0, defaults to headWidth()
+    double hw = startNote()->tabHeadWidth(staffType); // if staffType == 0, defaults to headWidth()
     /* Inside-style and Outside-style ties
      Outside ties connect above the notehead, in the middle. Ideally, we'd use opticalcenter for this, but
      that Smufl anchor is not available for noteheads yet. For this reason, we rely on Note::outsideTieAttachX()

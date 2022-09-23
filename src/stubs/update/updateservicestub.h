@@ -19,36 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MIDI_ABSTRACTMIDIINPORT_H
-#define MU_MIDI_ABSTRACTMIDIINPORT_H
+#ifndef MU_UPDATE_UPDATESERVICESTUB_H
+#define MU_UPDATE_UPDATESERVICESTUB_H
 
-#include <QTimer>
+#include "update/iupdateservice.h"
 
-#include "async/asyncable.h"
-
-#include "imidiinport.h"
-
-namespace mu::midi {
-class AbstractMidiInPort : public IMidiInPort, public async::Asyncable
+namespace mu::update {
+class UpdateServiceStub : public IUpdateService
 {
 public:
-    virtual void init();
+    async::Promise<mu::RetVal<ReleaseInfo> > checkForUpdate() override;
 
-    async::Channel<std::vector<std::pair<tick_t, Event> > > eventsReceived() const override;
-
-protected:
-    void doEventsRecived(const std::vector<std::pair<tick_t, Event> >& events);
-
-private:
-    void doProcessEvents();
-
-    async::Channel<std::vector<std::pair<tick_t, Event> > > m_eventReceived;
-
-    QTimer m_processTimer;
-    std::vector<std::pair<tick_t, Event> > m_eventsQueue;
-
-    std::thread::id m_mainThreadID;
+    void update() override;
+    void cancelUpdate() override;
+    framework::Progress updateProgress() override;
 };
 }
 
-#endif // MU_MIDI_ABSTRACTMIDIINPORT_H
+#endif // MU_UPDATE_UPDATESERVICESTUB_H

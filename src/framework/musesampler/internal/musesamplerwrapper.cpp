@@ -24,7 +24,6 @@
 
 #include <cstring>
 
-#include "musesamplerutils.h"
 #include "realfn.h"
 
 using namespace mu;
@@ -41,6 +40,10 @@ MuseSamplerWrapper::MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, cons
     }
 
     m_samplerLib->initLib();
+
+    m_sequencer.flushedOffStreamEvents().onNotify(this, [this]() {
+        revokePlayingNotes();
+    });
 }
 
 MuseSamplerWrapper::~MuseSamplerWrapper()
@@ -54,9 +57,15 @@ MuseSamplerWrapper::~MuseSamplerWrapper()
 
 void MuseSamplerWrapper::setSampleRate(unsigned int sampleRate)
 {
+    if (m_sampleRate == sampleRate) {
+        return;
+    }
+
     m_sampleRate = sampleRate;
 
-    m_sampler = m_samplerLib->create();
+    if (!m_sampler) {
+        m_sampler = m_samplerLib->create();
+    }
 
     if (!m_sampler) {
         return;
@@ -109,9 +118,9 @@ samples_t MuseSamplerWrapper::process(float* buffer, audio::samples_t samplesPer
     if (m_samplerLib->process(m_sampler, m_bus, m_currentPosition) != ms_Result_OK) {
         return 0;
     }
+    extractOutputSamples(samplesPerChannel, buffer);
 
     if (isActive()) {
-        extractOutputSamples(samplesPerChannel, buffer);
         m_currentPosition += samplesPerChannel;
     }
 
@@ -141,13 +150,13 @@ bool MuseSamplerWrapper::isValid() const
 void MuseSamplerWrapper::setupSound(const mpe::PlaybackSetupData& setupData)
 {
     // Check by exact info:
-    if (auto unique_id = getMuseInstrumentUniqueIdFromId(params().resourceMeta.id); unique_id.has_value()) {
-        m_track = m_samplerLib->addTrack(m_sampler, *unique_id);
-        if (m_track != nullptr) {
-            m_sequencer.init(m_samplerLib, m_sampler, m_track);
-            return;
-        }
-        LOGE() << "Could not add instrument with ID of " << *unique_id;
+    int unique_id = params().resourceMeta.attributeVal(u"museUID").toInt();
+    m_track = m_samplerLib->addTrack(m_sampler, unique_id);
+    if (m_track != nullptr) {
+        m_sequencer.init(m_samplerLib, m_sampler, m_track);
+        return;
+    } else {
+        LOGE() << "Could not add instrument with ID of " << unique_id;
     }
 
     LOGE() << "Something went wrong; falling back to MPE info.";
@@ -213,6 +222,21 @@ void MuseSamplerWrapper::setupEvents(const mpe::PlaybackData& playbackData)
     m_sequencer.load(playbackData);
 }
 
+void MuseSamplerWrapper::updateRenderingMode(const audio::RenderMode mode)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    if (!m_samplerLib || !m_sampler) {
+        return;
+    }
+
+    if (mode == audio::RenderMode::OfflineMode) {
+        m_samplerLib->startOfflineMode(m_sampler, m_sampleRate);
+    } else {
+        m_samplerLib->stopOfflineMode(m_sampler);
+    }
+}
+
 msecs_t MuseSamplerWrapper::playbackPosition() const
 {
     return m_sequencer.playbackPosition();
@@ -246,9 +270,6 @@ void MuseSamplerWrapper::setIsActive(bool arg)
 
     if (!isActive()) {
         setCurrentPosition(m_currentPosition);
-        m_samplerLib->startAuditionMode(m_sampler);
-    } else {
-        m_samplerLib->stopAuditionMode(m_sampler);
     }
 
     LOGI() << "Toggled playing status, isPlaying: " << arg;
@@ -290,5 +311,12 @@ void MuseSamplerWrapper::extractOutputSamples(audio::samples_t samples, float* o
             float sample = m_bus._channels[audioChannelIndex][sampleIndex];
             output[sampleIndex * m_bus._num_channels + audioChannelIndex] += sample;
         }
+    }
+}
+
+void MuseSamplerWrapper::revokePlayingNotes()
+{
+    if (m_samplerLib) {
+        m_samplerLib->allNotesOff(m_sampler);
     }
 }

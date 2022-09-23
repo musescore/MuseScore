@@ -31,12 +31,14 @@
 
 #include "containers.h"
 #include "io/buffer.h"
+#include "translation.h"
+#include "types/translatablestring.h"
 
 #include "draw/types/pen.h"
+#include "infrastructure/symbolfont.h"
 #include "style/style.h"
 #include "rw/xml.h"
 #include "rw/writecontext.h"
-#include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -44,95 +46,25 @@
 #include "accessibility/accessibleroot.h"
 #endif
 
-#include "accidental.h"
-#include "ambitus.h"
-#include "arpeggio.h"
-#include "articulation.h"
-#include "bagpembell.h"
-#include "barline.h"
-#include "bend.h"
-#include "box.h"
-#include "bracket.h"
-#include "breath.h"
 #include "chord.h"
-#include "chordline.h"
-#include "chordrest.h"
-#include "clef.h"
-#include "connector.h"
-#include "dynamic.h"
-#include "figuredbass.h"
-#include "fingering.h"
-#include "fret.h"
-#include "glissando.h"
-#include "hairpin.h"
-#include "harmony.h"
-#include "actionicon.h"
-#include "image.h"
-#include "instrumentname.h"
-#include "instrchange.h"
-#include "jump.h"
-#include "keysig.h"
-#include "layoutbreak.h"
-#include "lyrics.h"
-#include "marker.h"
-#include "measure.h"
-#include "mmrest.h"
-#include "mscore.h"
-#include "notedot.h"
-#include "note.h"
-#include "noteline.h"
-#include "ottava.h"
-#include "page.h"
-#include "pedal.h"
-#include "rehearsalmark.h"
-#include "measurerepeat.h"
-#include "rest.h"
-#include "score.h"
-#include "symbolfont.h"
-#include "segment.h"
-#include "slur.h"
-#include "spacer.h"
-#include "staff.h"
-#include "staffstate.h"
-#include "stafftext.h"
-#include "systemtext.h"
-#include "stafftype.h"
-#include "stem.h"
-#include "sticking.h"
-#include "symbol.h"
-#include "system.h"
-#include "tempotext.h"
-#include "textframe.h"
-#include "text.h"
-#include "measurenumber.h"
-#include "mmrestrange.h"
-#include "textline.h"
-#include "tie.h"
-#include "timesig.h"
-#include "tremolobar.h"
-#include "tremolo.h"
-#include "trill.h"
-#include "undo.h"
-#include "utils.h"
-#include "volta.h"
-#include "systemdivider.h"
-#include "stafftypechange.h"
-#include "stafflines.h"
-#include "letring.h"
-#include "vibrato.h"
-#include "palmmute.h"
-#include "fermata.h"
-#include "shape.h"
 #include "factory.h"
+#include "fret.h"
 #include "linkedobjects.h"
-
 #include "masterscore.h"
+#include "measure.h"
+#include "mscore.h"
+#include "note.h"
+#include "page.h"
+#include "score.h"
+#include "segment.h"
+#include "shape.h"
+#include "sig.h"
+#include "staff.h"
+#include "stafflines.h"
+#include "stafftype.h"
+#include "system.h"
+#include "undo.h"
 
-//#include "musescoreCore.h"
-
-#include "config.h"
-
-#include "translation.h"
 #include "log.h"
 #define LOG_PROP() if (0) LOGD()
 
@@ -179,6 +111,7 @@ EngravingItem::EngravingItem(const EngravingItem& e)
 
     //! TODO Please don't remove (igor.korsukov@gmail.com)
     //m_accessible = e.m_accessible->clone(this);
+    m_accessibleEnabled = e.m_accessibleEnabled;
 }
 
 EngravingItem::~EngravingItem()
@@ -217,9 +150,9 @@ void EngravingItem::setAccessibleEnabled(bool enabled)
     m_accessibleEnabled = enabled;
 }
 
-EngravingItem* EngravingItem::parentItem() const
+EngravingItem* EngravingItem::parentItem(bool explicitParent) const
 {
-    EngravingObject* p = explicitParent();
+    EngravingObject* p = explicitParent ? this->explicitParent() : parent();
     if (p && p->isEngravingItem()) {
         return static_cast<EngravingItem*>(p);
     }
@@ -242,6 +175,18 @@ EngravingItemList EngravingItem::childrenItems() const
 AccessibleItemPtr EngravingItem::createAccessible()
 {
     return std::make_shared<AccessibleItem>(this);
+}
+
+void EngravingItem::notifyAboutNameChanged()
+{
+    if (!selected()) {
+        return;
+    }
+
+    if (m_accessible) {
+        doInitAccessible();
+        m_accessible->accessibleRoot()->notifyAboutFocusedElementNameChanged();
+    }
 }
 
 #endif
@@ -671,19 +616,7 @@ mu::draw::Color EngravingItem::curColor(bool isVisible, Color normalColor) const
     }
 
     if (selected() || marked) {
-        Color originalColor = engravingConfiguration()->selectionColor(track() == mu::nidx ? 0 : voice());
-
-        if (isVisible) {
-            return originalColor;
-        }
-
-        constexpr float tint = .6f; // Between 0 and 1. Higher means lighter, lower means darker
-
-        int red = originalColor.red();
-        int green = originalColor.green();
-        int blue = originalColor.blue();
-
-        return Color(red + tint * (255 - red), green + tint * (255 - green), blue + tint * (255 - blue));
+        return engravingConfiguration()->selectionColor(track() == mu::nidx ? 0 : voice(), isVisible);
     }
 
     if (!isVisible) {
@@ -2713,11 +2646,21 @@ void EngravingItem::setSelected(bool f)
 
             if (accRoot && currAccRoot == accRoot && accRoot->registered()) {
                 accRoot->setFocusedElement(m_accessible);
+
+                if (AccessibleItemPtr focusedElement = dummyAccRoot->focusedElement().lock()) {
+                    accRoot->updateStaffInfo(m_accessible, focusedElement);
+                }
+
                 dummyAccRoot->setFocusedElement(nullptr);
             }
 
             if (dummyAccRoot && currAccRoot == dummyAccRoot && dummyAccRoot->registered()) {
                 dummyAccRoot->setFocusedElement(m_accessible);
+
+                if (AccessibleItemPtr focusedElement = accRoot->focusedElement().lock()) {
+                    dummyAccRoot->updateStaffInfo(m_accessible, focusedElement);
+                }
+
                 accRoot->setFocusedElement(nullptr);
             }
         }
@@ -2732,15 +2675,22 @@ void EngravingItem::initAccessibleIfNeed()
         return;
     }
 
-    if (m_accessible || !m_accessibleEnabled) {
+    if (!m_accessibleEnabled) {
         return;
     }
 
+    doInitAccessible();
+#endif
+}
+
+void EngravingItem::doInitAccessible()
+{
+#ifndef ENGRAVING_NO_ACCESSIBILITY
     EngravingItemList parents;
-    auto parent = parentItem();
+    auto parent = parentItem(false /*not explicit*/);
     while (parent) {
         parents.push_front(parent);
-        parent = parent->parentItem();
+        parent = parent->parentItem(false /*not explicit*/);
     }
 
     for (EngravingItem* parent : parents) {

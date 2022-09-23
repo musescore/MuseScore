@@ -28,7 +28,7 @@ void DummyMidiInPort::init()
 {
 }
 
-std::vector<MidiDevice> DummyMidiInPort::devices() const
+std::vector<MidiDevice> DummyMidiInPort::availableDevices() const
 {
     MidiDevice d;
     d.id = "dummy";
@@ -57,7 +57,7 @@ MidiDeviceID DummyMidiInPort::deviceID() const
     return m_deviceID;
 }
 
-async::Channel<std::vector<std::pair<tick_t, Event> > > DummyMidiInPort::eventsReceived() const
+async::Channel<tick_t, Event> DummyMidiInPort::eventReceived() const
 {
     return m_eventReceived;
 }

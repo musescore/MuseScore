@@ -24,70 +24,76 @@
 
 #include <cmath>
 
-#include "translation.h"
-#include "style/style.h"
-#include "style/defaultstyle.h"
-#include "rw/xml.h"
-#include "types/typesconv.h"
-#include "types/symnames.h"
-#include "infrastructure/symbolfonts.h"
-
 #include "compat/pageformat.h"
 
-#include "libmscore/score.h"
-#include "libmscore/staff.h"
-#include "libmscore/part.h"
-#include "libmscore/page.h"
-#include "libmscore/arpeggio.h"
-#include "libmscore/audio.h"
-#include "libmscore/sig.h"
-#include "libmscore/barline.h"
-#include "libmscore/measure.h"
+#include "infrastructure/symbolfonts.h"
+
+#include "rw/xml.h"
+
+#include "style/style.h"
+#include "style/textstyle.h"
+
+#include "types/symnames.h"
+#include "types/typesconv.h"
+
+#include "libmscore/accidental.h"
 #include "libmscore/ambitus.h"
-#include "libmscore/bend.h"
-#include "libmscore/chordline.h"
-#include "libmscore/hook.h"
-#include "libmscore/tuplet.h"
-#include "libmscore/systemdivider.h"
-#include "libmscore/spacer.h"
-#include "libmscore/keysig.h"
-#include "libmscore/stafftext.h"
-#include "libmscore/dynamic.h"
-#include "libmscore/drumset.h"
-#include "libmscore/timesig.h"
-#include "libmscore/slur.h"
-#include "libmscore/tie.h"
-#include "libmscore/chord.h"
-#include "libmscore/rest.h"
-#include "libmscore/mmrest.h"
-#include "libmscore/breath.h"
-#include "libmscore/measurerepeat.h"
-#include "libmscore/utils.h"
-#include "libmscore/excerpt.h"
+#include "libmscore/arpeggio.h"
 #include "libmscore/articulation.h"
-#include "libmscore/volta.h"
-#include "libmscore/pedal.h"
-#include "libmscore/hairpin.h"
-#include "libmscore/glissando.h"
-#include "libmscore/ottava.h"
-#include "libmscore/trill.h"
-#include "libmscore/rehearsalmark.h"
+#include "libmscore/audio.h"
+#include "libmscore/barline.h"
+#include "libmscore/beam.h"
+#include "libmscore/bend.h"
 #include "libmscore/box.h"
-#include "libmscore/textframe.h"
-#include "libmscore/textline.h"
-#include "libmscore/fingering.h"
+#include "libmscore/breath.h"
+#include "libmscore/chord.h"
+#include "libmscore/chordline.h"
+#include "libmscore/drumset.h"
+#include "libmscore/dynamic.h"
+#include "libmscore/excerpt.h"
+#include "libmscore/factory.h"
 #include "libmscore/fermata.h"
+#include "libmscore/fingering.h"
+#include "libmscore/glissando.h"
+#include "libmscore/hairpin.h"
+#include "libmscore/hook.h"
 #include "libmscore/image.h"
-#include "libmscore/stem.h"
-#include "libmscore/stemslash.h"
-#include "libmscore/undo.h"
+#include "libmscore/keysig.h"
+#include "libmscore/linkedobjects.h"
 #include "libmscore/lyrics.h"
-#include "libmscore/tempotext.h"
-#include "libmscore/measurenumber.h"
 #include "libmscore/marker.h"
 #include "libmscore/masterscore.h"
-#include "libmscore/factory.h"
-#include "libmscore/linkedobjects.h"
+#include "libmscore/measure.h"
+#include "libmscore/measurenumber.h"
+#include "libmscore/measurerepeat.h"
+#include "libmscore/mmrest.h"
+#include "libmscore/ottava.h"
+#include "libmscore/page.h"
+#include "libmscore/part.h"
+#include "libmscore/pedal.h"
+#include "libmscore/rehearsalmark.h"
+#include "libmscore/rest.h"
+#include "libmscore/score.h"
+#include "libmscore/sig.h"
+#include "libmscore/slur.h"
+#include "libmscore/spacer.h"
+#include "libmscore/staff.h"
+#include "libmscore/staff.h"
+#include "libmscore/stafftext.h"
+#include "libmscore/stem.h"
+#include "libmscore/stemslash.h"
+#include "libmscore/systemdivider.h"
+#include "libmscore/systemtext.h"
+#include "libmscore/tempotext.h"
+#include "libmscore/textframe.h"
+#include "libmscore/textline.h"
+#include "libmscore/tie.h"
+#include "libmscore/timesig.h"
+#include "libmscore/trill.h"
+#include "libmscore/tuplet.h"
+#include "libmscore/undo.h"
+#include "libmscore/utils.h"
+#include "libmscore/volta.h"
 
 #include "readchordlisthook.h"
 #include "readstyle.h"
@@ -678,13 +684,7 @@ static void readInstrument206(Instrument* i, Part* p, XmlReader& e)
         }
     }
 
-    if (i->instrumentId().isEmpty()) {
-        i->setInstrumentId(i->recognizeInstrumentId());
-    }
-
-    if (i->id().isEmpty()) {
-        i->setId(i->recognizeId());
-    }
+    i->updateInstrumentId();
 
     // Read single-note dynamics from template
     i->setSingleNoteDynamicsFromTemplate();
@@ -816,7 +816,7 @@ static void readNote206(Note* note, XmlReader& e, ReadContext& ctx)
         }
     }
     // ensure sane values:
-    note->setPitch(limit(note->pitch(), 0, 127));
+    note->setPitch(std::clamp(note->pitch(), 0, 127));
 
     if (!tpcIsValid(note->tpc1()) && !tpcIsValid(note->tpc2())) {
         Key key = (note->staff() && note->chord()) ? note->staff()->key(note->chord()->tick()) : Key::C;
@@ -1826,7 +1826,7 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
 //    symbols which were not available for use prior to 3.0
 //---------------------------------------------------------
 
-static void convertDoubleArticulations(Chord* chord, ReadContext& ctx)
+static void convertDoubleArticulations(Chord* chord, XmlReader& e)
 {
     std::vector<Articulation*> pairableArticulations;
     for (Articulation* a : chord->articulations()) {
@@ -1873,7 +1873,7 @@ static void convertDoubleArticulations(Chord* chord, ReadContext& ctx)
             chord->remove(a);
             if (a != newArtic) {
                 if (LinkedObjects* link = a->links()) {
-                    mu::remove(ctx.linkIds(), link->lid());
+                    mu::remove(e.context()->linkIds(), link->lid());
                 }
                 delete a;
             }
@@ -1944,7 +1944,7 @@ static void readChord(Chord* chord, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
-    convertDoubleArticulations(chord, ctx);
+    convertDoubleArticulations(chord, e);
     fixTies(chord);
 }
 
@@ -2653,7 +2653,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                     ctx.staff(staffIdx)->setDefaultClefType(clef->clefType());
                 }
                 if (clef->links() && clef->links()->size() == 1) {
-                    mu::remove(ctx.linkIds(), clef->links()->lid());
+                    mu::remove(e.context()->linkIds(), clef->links()->lid());
                     LOGD("remove link %d", clef->links()->lid());
                 }
                 delete clef;
@@ -2741,7 +2741,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 LOGD("remove keysig c at tick 0");
                 if (ks->links()) {
                     if (ks->links()->size() == 1) {
-                        mu::remove(ctx.linkIds(), ks->links()->lid());
+                        mu::remove(e.context()->linkIds(), ks->links()->lid());
                     }
                 }
                 delete ks;
@@ -3172,11 +3172,6 @@ static void readStyle206(MStyle* style, XmlReader& e, ReadChordListHook& readCho
         }
     }
 
-    bool disableHarmonyPlay = MScore::harmonyPlayDisableCompatibility && !MScore::testMode;
-    if (disableHarmonyPlay) {
-        style->set(Sid::harmonyPlay, false);
-    }
-
     readChordListHook.validate();
 }
 
@@ -3385,7 +3380,7 @@ Err Read206::read206(mu::engraving::MasterScore* masterScore, XmlReader& e, Read
     }
 
     int id = 1;
-    for (auto& p : ctx.linkIds()) {
+    for (auto& p : e.context()->linkIds()) {
         LinkedObjects* le = p.second;
         le->setLid(masterScore, id++);
     }

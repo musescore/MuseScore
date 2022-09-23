@@ -24,8 +24,9 @@
 #define __SEGMENT_H__
 
 #include "engravingitem.h"
+
 #include "shape.h"
-#include "mscore.h"
+#include "types.h"
 
 namespace mu::engraving {
 class Factory;
@@ -57,10 +58,15 @@ class System;
 //   @P tick            int               midi tick position (read only)
 //------------------------------------------------------------------------
 
-struct CrossStaffContent
+struct CrossBeamType
 {
-    bool movedUp = false;
-    bool movedDown = false;
+    bool upDown = false; // This chord is stem-up, next chord is stem-down
+    bool downUp = false; // This chord is stem-down, next chord is stem-up
+    void reset()
+    {
+        upDown = false;
+        downUp = false;
+    }
 };
 
 class Segment final : public EngravingItem
@@ -80,8 +86,9 @@ class Segment final : public EngravingItem
     std::vector<EngravingItem*> _elist;         // EngravingItem storage, size = staves * VOICES.
     std::vector<EngravingItem*> _preAppendedItems; // Container for items appended to the left of this segment (example: grace notes), size = staves * VOICES.
     std::vector<Shape> _shapes;           // size = staves
-    std::vector<double> _dotPosX;          // size = staves
     double m_spacing{ 0 };
+
+    CrossBeamType _crossBeamType; // Will affect segment-to-segment horizontal spacing
 
     friend class Factory;
     Segment(Measure* m = 0);
@@ -208,9 +215,6 @@ public:
     bool hasElements(track_idx_t minTrack, track_idx_t maxTrack) const;
     bool allElementsInvisible() const;
 
-    double dotPosX(staff_idx_t staffIdx) const { return _dotPosX[staffIdx]; }
-    void setDotPosX(staff_idx_t staffIdx, double val) { _dotPosX[staffIdx] = val; }
-
     Spatium extraLeadingSpace() const { return _extraLeadingSpace; }
     void setExtraLeadingSpace(Spatium v) { _extraLeadingSpace = v; }
 
@@ -298,7 +302,8 @@ public:
     bool isMMRestSegment() const;
 
     Fraction shortestChordRest() const;
-    CrossStaffContent crossStaffContent() const;
+    void computeCrossBeamType(Segment* nextSeg);
+    CrossBeamType crossBeamType() const { return _crossBeamType; }
 
     bool hasAccidentals() const;
 

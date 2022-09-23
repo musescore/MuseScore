@@ -129,8 +129,11 @@ public:
     virtual ButtonData buttonData(Button b) const = 0;
 
     // info
-    virtual Result info(const std::string& title, const std::string& text, const ButtonDatas& buttons = {},
-                        int defBtn = int(Button::NoButton), const Options& options = {}) const = 0;
+    virtual Result info(const std::string& title, const std::string& text, const Buttons& buttons = {}, int defBtn = int(Button::NoButton),
+                        const Options& options = {}) const = 0;
+
+    virtual Result info(const std::string& title, const Text& text, const ButtonDatas& buttons = {}, int defBtn = int(Button::NoButton),
+                        const Options& options = {}) const = 0;
 
     // warning
     virtual Result warning(const std::string& title, const std::string& text, const Buttons& buttons = {},
@@ -154,6 +157,9 @@ public:
     // dirs
     virtual io::path_t selectDirectory(const QString& title, const io::path_t& dir) = 0;
     virtual io::paths_t selectMultipleDirectories(const QString& title, const io::path_t& dir, const io::paths_t& selectedDirectories) = 0;
+
+    // color
+    virtual QColor selectColor(const QColor& color = Qt::white, const QString& title = "") = 0;
 
     // custom
     virtual RetVal<Val> open(const std::string& uri) const = 0;

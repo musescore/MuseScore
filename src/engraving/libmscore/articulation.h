@@ -26,16 +26,15 @@
 #include <set>
 
 #include "engravingitem.h"
-#include "mscore.h"
 
 namespace mu::engraving {
 class Factory;
 
 class ChordRest;
-class Segment;
 class Measure;
-class System;
 class Page;
+class Segment;
+class System;
 
 //---------------------------------------------------------
 //   ArticulationInfo
@@ -192,6 +191,9 @@ public:
     static bool isOrnament(int subtype);
 
     void doAutoplace();
+
+    void styleChanged() override;
 };
 } // namespace mu::engraving
+
 #endif

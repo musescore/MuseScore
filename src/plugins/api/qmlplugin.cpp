@@ -22,7 +22,9 @@
 
 #include "qmlplugin.h"
 
-#include "libmscore/musescoreCore.h"
+#include "version.h"
+
+#include "engraving/libmscore/mscore.h"
 
 #include "log.h"
 
@@ -142,22 +144,22 @@ int QmlPlugin::division() const
 
 int QmlPlugin::mscoreVersion() const
 {
-    return mu::engraving::version();
+    return mscoreMajorVersion() * 10000 + mscoreMinorVersion() * 100 + mscoreUpdateVersion();
 }
 
 int QmlPlugin::mscoreMajorVersion() const
 {
-    return majorVersion();
+    return framework::Version::majorVersion();
 }
 
 int QmlPlugin::mscoreMinorVersion() const
 {
-    return minorVersion();
+    return framework::Version::minorVersion();
 }
 
 int QmlPlugin::mscoreUpdateVersion() const
 {
-    return patchVersion();
+    return framework::Version::patchVersion();
 }
 
 qreal QmlPlugin::mscoreDPI() const

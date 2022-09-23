@@ -300,15 +300,10 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     setupScoreMetaTags(masterScore, projectOptions);
 
     // Setup new master score
-    m_masterNotation->undoStack()->lock();
-
     Ret ret = m_masterNotation->setupNewScore(masterScore, projectOptions.scoreOptions);
     if (!ret) {
-        m_masterNotation->undoStack()->unlock();
         return ret;
     }
-
-    m_masterNotation->undoStack()->unlock();
 
     // Setup other stuff
     m_projectAudioSettings->makeDefault();
@@ -391,6 +386,23 @@ bool NotationProject::isCloudProject() const
     return configuration()->isCloudProject(m_path);
 }
 
+const CloudProjectInfo& NotationProject::cloudInfo() const
+{
+    if (!m_cloudInfo.isValid()) {
+        auto tags = m_masterNotation->masterScore()->metaTags();
+        m_cloudInfo.name = tags[WORK_TITLE_TAG].toQString();
+        m_cloudInfo.sourceUrl = tags[SOURCE_TAG].toQString();
+    }
+
+    return m_cloudInfo;
+}
+
+void NotationProject::setCloudInfo(const CloudProjectInfo& info)
+{
+    m_cloudInfo = info;
+    m_masterNotation->masterScore()->setMetaTag(SOURCE_TAG, info.sourceUrl.toString());
+}
+
 mu::Ret NotationProject::save(const io::path_t& path, SaveMode saveMode)
 {
     TRACEFUNC;
@@ -448,6 +460,7 @@ mu::Ret NotationProject::writeToDevice(QIODevice* device)
     }
 
     Buffer buf;
+    buf.open(IODevice::OpenMode::WriteOnly);
 
     MscWriter::Params params;
     params.device = &buf;
@@ -458,7 +471,10 @@ mu::Ret NotationProject::writeToDevice(QIODevice* device)
     msczWriter.open();
 
     Ret ret = writeProject(msczWriter, false);
+    msczWriter.close();
+
     if (ret) {
+        buf.open(IODevice::OpenMode::ReadOnly);
         ByteArray ba = buf.readAll();
         device->write(ba.toQByteArrayNoCopy());
     }
@@ -585,19 +601,28 @@ mu::Ret NotationProject::makeCurrentFileAsBackup()
     }
 
     Ret ret = fileSystem()->exists(filePath);
-    if (ret) {
+    if (!ret) {
         LOGE() << "project file does not exist";
         return ret;
     }
 
-    io::path_t backupFilePath = filePath + "~";
-    ret = fileSystem()->move(filePath, backupFilePath, true);
+    io::path_t backupPath = configuration()->projectBackupPath(filePath);
+    io::path_t backupDir = io::absoluteDirpath(backupPath);
+    ret = fileSystem()->makePath(backupDir);
     if (!ret) {
-        LOGE() << "failed to move from: " << filePath << ", to: " << backupFilePath;
+        LOGE() << "failed to create backup directory: " << backupDir;
         return ret;
     }
 
-    fileSystem()->setAttribute(backupFilePath, io::IFileSystem::Attribute::Hidden);
+    fileSystem()->setAttribute(backupDir, io::IFileSystem::Attribute::Hidden);
+
+    ret = fileSystem()->copy(filePath, backupPath, true);
+    if (!ret) {
+        LOGE() << "failed to copy: " << filePath << " to: " << backupPath;
+        return ret;
+    }
+
+    fileSystem()->setAttribute(backupPath, io::IFileSystem::Attribute::Hidden);
 
     return ret;
 }
@@ -767,6 +792,10 @@ ProjectMeta NotationProject::metaInfo() const
 
 void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
 {
+    if (meta == metaInfo()) {
+        return;
+    }
+
     std::map<String, String> tags {
         { WORK_TITLE_TAG, meta.title },
         { SUBTITLE_TAG, meta.subtitle },
@@ -784,11 +813,13 @@ void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
         tags[tag] = meta.additionalTags[tag].toString();
     }
 
-    mu::engraving::MasterScore* score = m_masterNotation->masterScore();
+    MasterScore* score = m_masterNotation->masterScore();
+
     if (undoable) {
         m_masterNotation->undoStack()->prepareChanges();
         score->undo(new mu::engraving::ChangeMetaTags(score, tags));
         m_masterNotation->undoStack()->commitChanges();
+        m_masterNotation->notation()->notationChanged().notify();
     } else {
         score->setMetaTags(tags);
     }

@@ -59,10 +59,12 @@ public:
     virtual draw::Color criticalColor() const = 0;
     virtual draw::Color criticalSelectedColor() const = 0;
     virtual draw::Color formattingMarksColor() const = 0;
+    virtual draw::Color thumbnailBackgroundColor() const = 0;
+    virtual draw::Color noteBackgroundColor() const = 0;
 
     virtual double guiScaling() const = 0;
 
-    virtual draw::Color selectionColor(voice_idx_t voiceIndex = 0) const = 0;
+    virtual draw::Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true) const = 0;
     virtual void setSelectionColor(voice_idx_t voiceIndex, draw::Color color) = 0;
     virtual async::Channel<voice_idx_t, draw::Color> selectionColorChanged() const = 0;
 
@@ -73,10 +75,12 @@ public:
     virtual draw::Color highlightSelectionColor(voice_idx_t voiceIndex = 0) const = 0;
 
     struct DebuggingOptions {
-        bool showSkylines = false;
+        bool showElementBoundingRects = false;
+        bool colorElementShapes = false;
         bool showSegmentShapes = false;
-        bool showBoundingRect = false;
-        bool showSystemBoundingRect = false;
+        bool colorSegmentShapes = false;
+        bool showSkylines = false;
+        bool showSystemBoundingRects = false;
         bool showCorruptedMeasures = true;
     };
 

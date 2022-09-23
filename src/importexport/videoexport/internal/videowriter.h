@@ -36,7 +36,7 @@ public:
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
-    Ret write(project::INotationProjectPtr project, io::Device& device, const Options& options = Options()) override;
+    Ret write(project::INotationProjectPtr project, QIODevice& device, const Options& options = Options()) override;
     Ret write(project::INotationProjectPtr project, const io::path_t& filePath, const Options& options = Options()) override;
 
 private:

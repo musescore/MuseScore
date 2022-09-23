@@ -149,14 +149,36 @@ Color EngravingConfiguration::formattingMarksColor() const
     return "#A0A0A4";
 }
 
+Color EngravingConfiguration::thumbnailBackgroundColor() const
+{
+    return Color::white;
+}
+
+Color EngravingConfiguration::noteBackgroundColor() const
+{
+    return Color::white;
+}
+
 double EngravingConfiguration::guiScaling() const
 {
     return uiConfiguration()->guiScaling();
 }
 
-Color EngravingConfiguration::selectionColor(voice_idx_t voice) const
+Color EngravingConfiguration::selectionColor(voice_idx_t voice, bool itemVisible) const
 {
-    return voiceColorKeys[voice].color;
+    Color color = voiceColorKeys[voice].color;
+
+    if (itemVisible) {
+        return color;
+    }
+
+    constexpr float tint = .6f; // Between 0 and 1. Higher means lighter, lower means darker
+
+    int red = color.red();
+    int green = color.green();
+    int blue = color.blue();
+
+    return Color(red + tint * (255 - red), green + tint * (255 - green), blue + tint * (255 - blue));
 }
 
 void EngravingConfiguration::setSelectionColor(voice_idx_t voiceIndex, Color color)

@@ -22,15 +22,13 @@
 
 #include "instrument.h"
 
-#include "translation.h"
 #include "rw/xml.h"
 #include "infrastructure/htmlparser.h"
 #include "types/typesconv.h"
 
 #include "compat/midi/event.h"
-#include "compat/midi/midipatch.h"
+//#include "compat/midi/midipatch.h"
 
-#include "articulation.h"
 #include "drumset.h"
 #include "instrtemplate.h"
 #include "masterscore.h"
@@ -240,7 +238,7 @@ Instrument::~Instrument()
 StaffName::StaffName(const String& xmlText, int pos)
     : _name(xmlText), _pos(pos)
 {
-    TextBase::validateText(_name);   // enforce HTML encoding
+    TextBase::validateText(_name); // enforce HTML encoding
 }
 
 //---------------------------------------------------------
@@ -1535,7 +1533,7 @@ ClefTypeList Instrument::clefType(size_t staffIdx) const
 {
     if (staffIdx >= _clefType.size()) {
         if (_clefType.empty()) {
-            return ClefTypeList(staffIdx == 1 ? ClefType::F : ClefType::G);
+            return ClefTypeList(staffIdx == 1 ? ClefType::G : ClefType::F);
         }
         return _clefType[0];
     }

@@ -29,7 +29,9 @@
 #include "rw/xml.h"
 
 #include "articulation.h"
+#include "beam.h"
 #include "chord.h"
+#include "hook.h"
 #include "measure.h"
 #include "mscoreview.h"
 #include "navigate.h"
@@ -39,7 +41,6 @@
 #include "system.h"
 #include "tie.h"
 #include "undo.h"
-#include "hook.h"
 
 // included for gonville/musejazz hook hack in SlurPos
 #include "symbolfont.h"
@@ -148,10 +149,6 @@ static ChordRest* searchCR(Segment* segment, track_idx_t startTrack, track_idx_t
 
 bool SlurSegment::isEditAllowed(EditData& ed) const
 {
-    if (ed.key == Key_X && !ed.modifiers) {
-        return true;
-    }
-
     if (ed.key == Key_Home && !ed.modifiers) {
         return true;
     }
@@ -187,14 +184,10 @@ bool SlurSegment::edit(EditData& ed)
 
     Slur* sl = slur();
 
-    if (ed.key == Key_X && !ed.modifiers) {
-        sl->undoChangeProperty(Pid::SLUR_DIRECTION, PropertyValue::fromValue<DirectionV>(sl->up() ? DirectionV::DOWN : DirectionV::UP));
-        sl->layout();
-        return true;
-    }
     if (ed.key == Key_Home && !ed.modifiers) {
         ups(ed.curGrip).off = PointF();
         sl->layout();
+        triggerLayout();
         return true;
     }
 
@@ -333,7 +326,7 @@ void SlurSegment::editDrag(EditData& ed)
 //---------------------------------------------------------
 void SlurSegment::adjustEndpoints()
 {
-    const double staffLineMargin = 0.15;
+    const double staffLineMargin = 0.175 + (0.5 * score()->styleS(Sid::staffLineWidth).val());
     PointF p1 = ups(Grip::START).p;
     PointF p2 = ups(Grip::END).p;
 
@@ -346,7 +339,7 @@ void SlurSegment::adjustEndpoints()
         double y1offset = ysp - floor(ysp);
         double adjust = 0;
         if (up) {
-            if (y1offset < 2 * staffLineMargin) {
+            if (y1offset < staffLineMargin) {
                 // endpoint too close to the line above
                 adjust = -(y1offset + staffLineMargin);
             } else if (y1offset > 1 - staffLineMargin) {
@@ -358,7 +351,7 @@ void SlurSegment::adjustEndpoints()
                 // endpoint too close to the line above
                 adjust = staffLineMargin - y1offset;
             }
-            if (y1offset > 1 - 2 * staffLineMargin) {
+            if (y1offset > 1 - staffLineMargin) {
                 // endpoint too close to the line below
                 adjust = (1 - y1offset) + staffLineMargin;
             }
@@ -373,35 +366,93 @@ void SlurSegment::adjustEndpoints()
     }
 }
 
+Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* endCR)
+{
+    staff_idx_t startStaffIdx = startCR->staffIdx();
+    Shape segShape = seg->staffShape(startStaffIdx).translated(seg->pos() + seg->measure()->pos());
+    // If cross-staff, also add the shape of second staff
+    if (slur()->isCrossStaff() && seg != startCR->segment()) {
+        staff_idx_t endStaffIdx = (endCR->staffIdx() != startStaffIdx) ? endCR->staffIdx() : endCR->vStaffIdx();
+        SysStaff* startStaff = system()->staves().at(startStaffIdx);
+        SysStaff* endStaff = system()->staves().at(endStaffIdx);
+        double dist = endStaff->y() - startStaff->y();
+        Shape secondStaffShape = seg->staffShape(endStaffIdx).translated(seg->pos() + seg->measure()->pos()); // translate horizontally
+        secondStaffShape.translate(PointF(0.0, dist)); // translate vertically
+        segShape.add(secondStaffShape);
+    }
+    // Remove items that the slur shouldn't try to avoid
+    mu::remove_if(segShape, [startCR](ShapeElement& shapeEl){
+        if (!shapeEl.toItem || !shapeEl.toItem->parentItem()) {
+            return false;
+        }
+        const EngravingItem* item = shapeEl.toItem;
+        const EngravingItem* parent = item->parentItem();
+        // Its own startCR or items belonging to it, lyrics, fingering, ledger lines
+        if (item == startCR || parent == startCR || item->isLyrics() || item->isFingering() || item->isLedgerLine()) {
+            return true;
+        }
+        // Items that are on the start segment but in a different voice
+        if (((item->isChordRest() && toChordRest(item)->segment() == startCR->segment())
+             || (parent->isChordRest() && toChordRest(parent)->segment() == startCR->segment()))
+            && item->track() != startCR->track()) {
+            return true;
+        }
+        return false;
+    });
+    return segShape;
+}
+
 void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p4, Transform& toSystemCoordinates, double& slurAngle)
 {
+    TRACEFUNC;
     ChordRest* startCR = slur()->startCR();
     ChordRest* endCR = slur()->endCR();
 
+    if (!startCR || !endCR) {
+        return;
+    }
+
+    // Determine start and end segments for collision checks
     Segment* startSeg = nullptr;
     if (isSingleBeginType()) {
-        startSeg = startCR ? startCR->segment() : nullptr; // first of the slur
+        if (startCR->isChord() && toChord(startCR)->isGraceAfter()) {
+            // if this is a grace-note-after, the shape is stored the *appended* segment
+            Chord* parent = toChord(startCR->parentItem());
+            if (parent) {
+                startSeg = parent->graceNotesAfter().appendedSegment();
+            }
+        } else {
+            startSeg = startCR->segment(); // first of the slur
+        }
     } else {
         startSeg = system()->firstMeasure()->findFirstR(SegmentType::ChordRest, Fraction(0, 0)); // first of the system
     }
     Segment* endSeg = nullptr;
     if (isSingleEndType()) {
-        endSeg = endCR ? endCR->segment() : nullptr; // last of the slur
+        if (endCR->isChord() && toChord(endCR)->isGraceAfter()) {
+            // if this is a grace-note-after, the shape is stored the *appended* segment
+            Chord* parent = toChord(endCR->parentItem());
+            if (parent) {
+                endSeg = parent->graceNotesAfter().appendedSegment();
+            }
+        } else {
+            endSeg = endCR->segment(); // last of the slur
+        }
     } else {
         endSeg = system()->lastMeasure()->last(); // last of the system
     }
-    if (!startSeg || !endSeg || startSeg == endSeg) {
+    if (!startSeg || !endSeg) {
         return;
     }
 
-    // Collect all the segments spanned by this slur segment in a single vector
-    std::vector<Segment*> segList;
+    // Collect all the segments shapes spanned by this slur segment in a single vector
+    std::vector<Shape> segShapes;
     Segment* seg = startSeg;
     while (seg && seg->tick() <= endSeg->tick()) {
-        if (seg != startCR->segment()) { // don't include first segment
-            segList.push_back(seg);
+        if (seg->enabled()) {
+            segShapes.push_back(getSegmentShape(seg, startCR, endCR));
         }
-        if (seg->next() && !seg->next()->isEndBarLineType()) {
+        if (seg->next() && !seg->next()->isType(SegmentType::BarLineType)) {
             seg = seg->next();
         } else if (seg->measure()->next() && seg->measure()->next()->isMeasure()) {
             seg = toMeasure(seg->measure()->next())->first();
@@ -409,15 +460,45 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
             break;
         }
     }
-    if (segList.empty()) {
+    if (segShapes.empty()) {
         return;
     }
 
     // Collision clearance at the center of the slur
-    double clearance = 0.75 * spatium(); // TODO: style
-    // balance: determines how much endpoint adjustment VS shape adjustment
-    // we will do (0 = only shape, 1 = only end point)
-    double balance = 0.4; // TODO: style (maybe?)
+    double slurLength = abs(p2.x() / spatium());
+    double clearance;
+    if (slurLength < 4) {
+        clearance = 0.15 * spatium();
+    } else if (slurLength < 8) {
+        clearance = 0.4 * spatium();
+    } else if (slurLength < 12) {
+        clearance = 0.6 * spatium();
+    } else {
+        clearance = 0.75 * spatium();
+    }
+    // balance: determines how much endpoint adjustment VS shape adjustment we will do.
+    // 0 = end point is fixed, only the shape can be adjusted,
+    // 1 = shape is fixed, only end the point can be adjusted.
+    // left and right side of the slur may have different balance depending on context:
+    double leftBalance, rightBalance;
+    if (isSingleBeginType()) {
+        if (startCR->isChord() && toChord(startCR)->stem() && startCR->up() == slur()->up()) {
+            leftBalance = 0.1;
+        } else {
+            leftBalance = 0.4;
+        }
+    } else {
+        leftBalance = 0.9;
+    }
+    if (isSingleEndType()) {
+        if (endCR->isChord() && toChord(endCR)->stem() && endCR->up() == slur()->up()) {
+            rightBalance = 0.1;
+        } else {
+            rightBalance = 0.4;
+        }
+    } else {
+        rightBalance = 0.9;
+    }
 
     static constexpr unsigned maxIter = 30;     // Max iterations allowed
     const double vertClearance = slur()->up() ? clearance : -clearance;
@@ -448,20 +529,7 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
             slurRects.push_back(RectF(clearancePoint1, clearancePoint2));
         }
         // Check collisions
-        for (Segment* seg : segList) {
-            staff_idx_t startStaffIdx = startCR->staffIdx();
-            Shape segShape = seg->staffShape(startStaffIdx).translated(seg->pos() + seg->measure()->pos());
-            // If cross-staff, also add the shape of second staff
-            if (slur()->isCrossStaff()) {
-                staff_idx_t endStaffIdx = (endCR->staffIdx() != startStaffIdx) ? endCR->staffIdx() : endCR->vStaffIdx();
-                SysStaff* startStaff = system()->staves().at(startStaffIdx);
-                SysStaff* endStaff = system()->staves().at(endStaffIdx);
-                double dist = endStaff->y() - startStaff->y();
-                Shape secondStaffShape;
-                secondStaffShape.add(seg->staffShape(endStaffIdx).translated(seg->pos() + seg->measure()->pos()));
-                secondStaffShape.translate(PointF(0.0, dist));
-                segShape.add(secondStaffShape);
-            }
+        for (Shape& segShape : segShapes) {
             for (unsigned i=0; i < slurRects.size(); i++) {
                 bool leftSection = i < slurRects.size() / 3;
                 bool midSection = i >= slurRects.size() / 3 && i < 2 * slurRects.size() / 3;
@@ -488,34 +556,35 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
         }
         // In the even iterations, adjust the shape
         if (iter % 2 == 0) {
-            double shapeStep = (1 - balance) * step;
+            double shapeLeftStep = (1 - leftBalance) * step;
+            double shapeRightStep = (1 - rightBalance) * step;
             if (collision.left) {
                 // Move left Bezier point up(/down) and outwards
-                p3 += PointF(-abs(shapeStep), shapeStep);
+                p3 += PointF(-abs(shapeLeftStep), shapeLeftStep);
                 // and a bit also the right point to compensate asymmetry
-                p4 += PointF(abs(shapeStep), shapeStep) / 2.0;
+                p4 += PointF(abs(shapeLeftStep), shapeLeftStep) / 2.0;
             }
             if (collision.mid) {     // Move both Bezier points up(/down)
-                p3 += PointF(0.0, shapeStep);
-                p4 += PointF(0.0, shapeStep);
+                p3 += PointF(0.0, (shapeLeftStep + shapeRightStep) / 2);
+                p4 += PointF(0.0, (shapeLeftStep + shapeRightStep) / 2);
             }
             if (collision.right) {
                 // Move right Bezier point up(/down) and outwards
-                p4 += PointF(abs(shapeStep), shapeStep);
+                p4 += PointF(abs(shapeRightStep), shapeRightStep);
                 // and a bit also the left point to compensate asymmetry
-                p3 += PointF(-abs(shapeStep), shapeStep) / 2.0;
+                p3 += PointF(-abs(shapeRightStep), shapeRightStep) / 2.0;
             }
         } else if (!isEndPointsEdited()) {
             // In the odd iterations, adjust the end points
             // Slurs steeper than 45° are gently compensated
-            double steepLimit = M_PI / 4;
-            double endPointStep = balance * step;
-            if (collision.left || slurAngle < -steepLimit) {
+            static constexpr double steepLimit = M_PI / 4;
+            if (collision.left || collision.mid || slurAngle < -steepLimit) {
+                double endPointLeftStep = leftBalance * step;
                 // Lift the left end point, i.e. tilt the slur around p2
-                double stepX = sin(slurAngle) * endPointStep;
-                double stepY = cos(slurAngle) * endPointStep;
+                double stepX = sin(slurAngle) * endPointLeftStep;
+                double stepY = cos(slurAngle) * endPointLeftStep;
                 PointF pp1delta = PointF(stepX, stepY);
-                pp1 += PointF(0.0, endPointStep);
+                pp1 += PointF(0.0, endPointLeftStep);
                 p3 += pp1delta * (p2.x() - p3.x()) / p2.x();
                 p4 += pp1delta * (p2.x() - p4.x()) / p2.x();
                 // All points are expressed with respect to pp1, so we need
@@ -524,14 +593,11 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
                 p3 -= pp1delta;
                 p4 -= pp1delta;
             }
-            if (collision.mid && !(abs(slurAngle) > steepLimit)) {
-                // Lift the whole slur
-                pp1 += PointF(0.0, endPointStep);
-            }
-            if (collision.right || slurAngle > steepLimit) {
+            if (collision.right || collision.mid || slurAngle > steepLimit) {
+                double endPointRightStep = rightBalance * step;
                 // Lift the right end point, i.e. tilt the slur around p1
-                double stepX = sin(slurAngle) * endPointStep;
-                double stepY = cos(slurAngle) * endPointStep;
+                double stepX = sin(slurAngle) * endPointRightStep;
+                double stepY = cos(slurAngle) * endPointRightStep;
                 PointF p2delta = PointF(stepX, stepY);
                 p2 += p2delta;
                 p3 += p2delta * p3.x() / p2.x();
@@ -631,10 +697,16 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
         shoulderW = 0.7;
     }
     shoulderH = sqrt(d / 4) * _spatium;
+
+    static constexpr double shoulderReduction = 0.75;
+    if (slur()->isOverBeams()) {
+        shoulderH *= shoulderReduction;
+    }
     shoulderH -= p6offset.y();
     if (!slur()->up()) {
         shoulderH = -shoulderH;
     }
+
     double c    = p2.x();
     double c1   = (c - c * shoulderW) * .5 + p6offset.x();
     double c2   = c1 + c * shoulderW + p6offset.x();
@@ -738,8 +810,9 @@ void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
 {
     const StaffType* stType = staffType();
 
+    _skipDraw = false;
     if (stType && stType->isHiddenElementOnTab(score(), Sid::slurShowTabCommon, Sid::slurShowTabSimple)) {
-        setbbox(RectF());
+        _skipDraw = true;
         return;
     }
 
@@ -786,13 +859,17 @@ Slur::Slur(const Slur& s)
 //   fixArticulations
 //---------------------------------------------------------
 
-static void fixArticulations(PointF& pt, Chord* c, double _up, bool stemSide = false)
+void Slur::fixArticulations(PointF& pt, Chord* c, double up, bool stemSide = false)
 {
     //
     // handle special case of tenuto and staccato
     // yo = current offset of slur from chord position
     // return unchanged position, or position of outmost "close" articulation
     //
+    double slurTipToArticVertDist = c->spatium() * 0.5 * up;
+    double slurTipInwardAdjust = 0.1 * spatium();
+    bool start = startCR() && startCR() == c;
+    bool end = endCR() && endCR() == c;
     for (Articulation* a : c->articulations()) {
         if (!a->layoutCloseToNote() || !a->addToSkyline()) {
             continue;
@@ -801,13 +878,19 @@ static void fixArticulations(PointF& pt, Chord* c, double _up, bool stemSide = f
         if ((a->up() == c->up()) != stemSide) {
             continue;
         }
-        if (a->isTenuto()) {
-            pt.rx() = a->x();
+        // Correct x-position inwards
+        Note* note = c->up() ? c->downNote() : c->upNote();
+        pt.rx() = a->x() - note->x();
+        if (start) {
+            pt.rx() += slurTipInwardAdjust;
+        } else if (end) {
+            pt.rx() -= slurTipInwardAdjust;
         }
+        // Adjust y-position
         if (a->up()) {
-            pt.ry() = std::min(pt.y(), a->y() + (a->height() + c->score()->spatium() * .3) * _up);
+            pt.ry() = std::min(pt.y(), a->y() + a->height() / 2 * up + slurTipToArticVertDist);
         } else {
-            pt.ry() = std::max(pt.y(), a->y() + (a->height() + c->score()->spatium() * .3) * _up);
+            pt.ry() = std::max(pt.y(), a->y() + a->height() / 2 * up + slurTipToArticVertDist);
         }
     }
 }
@@ -977,10 +1060,10 @@ void Slur::slurPos(SlurPos* sp)
         }
     } else if (ecr->segment()->system() != scr->segment()->system()) {
         // in the case of continued slurs, we anchor to stem when necessary
-        if (scr->up() == _up && stem1) {
+        if (scr->up() == _up && stem1 && !scr->beam()) {
             sa1 = SlurAnchor::STEM;
         }
-        if (ecr->up() == _up && stem2) {
+        if (ecr->up() == _up && stem2 && !ecr->beam()) {
             sa2 = SlurAnchor::STEM;
         }
     }
@@ -1017,7 +1100,7 @@ void Slur::slurPos(SlurPos* sp)
                 // longer be used. for the time being fakeCutout describes a point on the line y=mx+b, out from the top of the stem
                 // where y = yadj, m = fakeCutoutSlope, and x = y/m + fakeCutout
                 fakeCutout = std::min(0.0, std::abs(yadj) - (hook->width() / fakeCutoutSlope));
-                pt.rx() = sc->stemPosX() / sc->magS() - fakeCutout;
+                pt.rx() = sc->stemPosX() - fakeCutout;
             }
         } else {
             Hook* hook = sc->hook();
@@ -1083,7 +1166,7 @@ void Slur::slurPos(SlurPos* sp)
         } else {
             po.ry() = scr->bbox().top() + scr->height();
         }
-        po.ry() += _spatium * .9 * __up;
+        po.ry() += scr->mag() * _spatium * .9 * __up;
 
         // adjustments for stem and/or beam
 
@@ -1103,7 +1186,7 @@ void Slur::slurPos(SlurPos* sp)
                 } else {
                     po.ry() = sc->stemPos().y() - sc->pagePos().y() + sh;
                 }
-                po.rx() = (sc->stemPosX() / stem1->mag()) + (beamAnchorInset * _spatium * sc->mag()) + (stem1->lineWidthMag() / 2 * __up);
+                po.rx() = sc->stemPosX() + (beamAnchorInset * _spatium * sc->mag()) + (stem1->lineWidthMag() / 2 * __up);
 
                 // account for articulations
                 fixArticulations(po, sc, __up, true);
@@ -1189,7 +1272,7 @@ void Slur::slurPos(SlurPos* sp)
             } else {
                 po.ry() = endCR()->bbox().top() + endCR()->height();
             }
-            po.ry() += _spatium * .9 * __up;
+            po.ry() += ecr->mag() * _spatium * .9 * __up;
 
             // adjustments for stem and/or beam
 
@@ -1222,7 +1305,7 @@ void Slur::slurPos(SlurPos* sp)
                         po.ry() = ec->stemPos().y() - ec->pagePos().y() + sh;
                     }
 
-                    po.rx() = (ec->stemPosX() / stem2->mag()) - (beamAnchorInset * _spatium * ec->mag())
+                    po.rx() = ec->stemPosX() - (beamAnchorInset * _spatium * ec->mag())
                               + (stem2->lineWidthMag() / 2 * __up);
 
                     // account for articulations
@@ -1300,7 +1383,7 @@ Slur::Slur(EngravingItem* parent)
 
 int calcStemArrangement(EngravingItem* start, EngravingItem* end)
 {
-    return (start && toChord(start)->stem() && toChord(start)->stem()->up() ? 2 : 0)
+    return (start && start->isChord() && toChord(start)->stem() && toChord(start)->stem()->up() ? 2 : 0)
            + (end && end->isChord() && toChord(end)->stem() && toChord(end)->stem()->up() ? 4 : 0);
 }
 
@@ -1427,67 +1510,16 @@ SpannerSegment* Slur::layoutSystem(System* system)
             _up = false;
             break;
         case DirectionV::AUTO:
-        {
-            //
-            // assumption:
-            // slurs have only chords or rests as start/end elements
-            //
-            if (startCR() == 0 || endCR() == 0) {
-                _up = true;
-                break;
-            }
-            Chord* c1 = startCR()->isChord() ? toChord(startCR()) : 0;
-            Chord* c2 = endCR()->isChord() ? toChord(endCR()) : 0;
-            if (c2 && startCR()->measure()->system() != endCR()->measure()->system()) {
-                // If the end chord is in a different system its direction may
-                // have never been computed, so we need to compute it here.
-                c2->computeUp();
-            }
-
+            computeUp();
             if (_sourceStemArrangement != -1) {
-                if (_sourceStemArrangement != calcStemArrangement(c1, c2)) {
+                if (_sourceStemArrangement != calcStemArrangement(startCR(), endCR())) {
                     // copy & paste from incompatible stem arrangement, so reset bezier points
                     for (int g = 0; g < (int)Grip::GRIPS; ++g) {
                         slurSegment->ups((Grip)g) = UP();
                     }
                 }
             }
-
-            if (c1 && c1->beam() && c1->beam()->cross()) {
-                // TODO: stem direction is not finalized, so we cannot use it here
-                _up = true;
-                break;
-            }
-
-            _up = !(startCR()->up());
-
-            // Check if multiple voices
-            bool multipleVoices = false;
-            Measure* m1 = startCR()->measure();
-            while (m1 && m1->tick() <= endCR()->tick()) {
-                if ((m1->hasVoices(startCR()->staffIdx(), tick(), ticks() + endCR()->ticks()))
-                    && c1) {
-                    multipleVoices = true;
-                    break;
-                }
-                m1 = m1->nextMeasure();
-            }
-            if (multipleVoices) {
-                // slurs go on the stem side
-                if (startCR()->voice() > 0 || endCR()->voice() > 0) {
-                    _up = false;
-                } else {
-                    _up = true;
-                }
-            } else if (c1 && c2 && !c1->isGrace() && isDirectionMixture(c1, c2)) {
-                // slurs go above if there are mixed direction stems between c1 and c2
-                // but grace notes are exceptions
-                _up = true;
-            } else if (c1 && c2 && c1->isGrace() && c2 != c1->parent() && isDirectionMixture(c1, c2)) {
-                _up = true;
-            }
-        }
-        break;
+            break;
         }
         sst = tick2() < etick ? SpannerSegmentType::SINGLE : SpannerSegmentType::BEGIN;
     } else if (tick() < stick && tick2() >= etick) {
@@ -1517,7 +1549,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
                 // there is a tie that starts on this chordrest
                 tie = nullptr;
             }
-            if (tie) {
+            if (tie && !tie->segmentsEmpty()) {
                 endPoint = tie->segmentAt(0)->ups(Grip::START).pos();
             }
             bool adjustedVertically = false;
@@ -1632,10 +1664,12 @@ SpannerSegment* Slur::layoutSystem(System* system)
                     }
                 }
             }
-            if (!adjustedVertically && ec->notes()[0]->tieFor() && !ec->notes()[0]->tieFor()->isInside()
-                && ec->notes()[0]->tieFor()->up() == up()) {
+            Tie* tieFor = ec->notes()[0]->tieFor();
+            if (!adjustedVertically && tieFor && !tieFor->isInside() && tieFor->up() == up()) {
                 // there is a tie that starts on this chordrest
-                p2.rx() -= horizontalTieClearance;
+                if (std::abs(tieFor->frontSegment()->ups(Grip::START).pos().y() - p2.y()) < tieClearance) {
+                    p2.rx() -= horizontalTieClearance;
+                }
             }
         }
     } else {
@@ -1707,6 +1741,59 @@ SpannerSegment* Slur::layoutSystem(System* system)
 
     slurSegment->layoutSegment(p1, p2);
     return slurSegment;
+}
+
+void Slur::computeUp()
+{
+    //
+    // assumption:
+    // slurs have only chords or rests as start/end elements
+    //
+    if (startCR() == 0 || endCR() == 0) {
+        _up = true;
+        return;
+    }
+    Chord* c1 = startCR()->isChord() ? toChord(startCR()) : 0;
+    Chord* c2 = endCR()->isChord() ? toChord(endCR()) : 0;
+    if (c2 && startCR()->measure()->system() != endCR()->measure()->system()) {
+        // If the end chord is in a different system its direction may
+        // have never been computed, so we need to compute it here.
+        c2->computeUp();
+    }
+
+    if (c1 && c1->beam() && c1->beam()->cross()) {
+        // TODO: stem direction is not finalized, so we cannot use it here
+        _up = true;
+        return;
+    }
+
+    _up = !(startCR()->up());
+
+    // Check if multiple voices
+    bool multipleVoices = false;
+    Measure* m1 = startCR()->measure();
+    while (m1 && m1->tick() <= endCR()->tick()) {
+        if ((m1->hasVoices(startCR()->staffIdx(), tick(), ticks() + endCR()->ticks()))
+            && c1) {
+            multipleVoices = true;
+            break;
+        }
+        m1 = m1->nextMeasure();
+    }
+    if (multipleVoices) {
+        // slurs go on the stem side
+        if (startCR()->voice() > 0 || endCR()->voice() > 0) {
+            _up = false;
+        } else {
+            _up = true;
+        }
+    } else if (c1 && c2 && !c1->isGrace() && isDirectionMixture(c1, c2)) {
+        // slurs go above if there are mixed direction stems between c1 and c2
+        // but grace notes are exceptions
+        _up = true;
+    } else if (c1 && c2 && c1->isGrace() && c2 != c1->parent() && isDirectionMixture(c1, c2)) {
+        _up = true;
+    }
 }
 
 //---------------------------------------------------------
@@ -1886,5 +1973,40 @@ bool Slur::isCrossStaff()
     return startCR() && endCR()
            && (startCR()->staffMove() != 0 || endCR()->staffMove() != 0
                || startCR()->vStaffIdx() != endCR()->vStaffIdx());
+}
+
+//---------------------------------------------------------
+//   isOverBeams
+//    returns true if all the chords spanned by the slur are
+//    beamed, and all beams are on the same side of the slur
+//---------------------------------------------------------
+bool Slur::isOverBeams()
+{
+    if (!startCR() || !endCR()) {
+        return false;
+    }
+    if (startCR()->track() != endCR()->track()
+        || startCR()->tick() >= endCR()->tick()) {
+        return false;
+    }
+    size_t track = startCR()->track();
+    Segment* seg = startCR()->segment();
+    while (seg && seg->tick() <= endCR()->tick()) {
+        if (!seg->isChordRestType()
+            || !seg->elist().at(track)
+            || !seg->elist().at(track)->isChordRest()) {
+            return false;
+        }
+        ChordRest* cr = toChordRest(seg->elist().at(track));
+        if (!cr->beam() || cr->beam()->up() != up()) {
+            return false;
+        }
+        if ((!seg->next() || seg->next()->isEndBarLineType()) && seg->measure()->nextMeasure()) {
+            seg = seg->measure()->nextMeasure()->first();
+        } else {
+            seg = seg->next();
+        }
+    }
+    return true;
 }
 }

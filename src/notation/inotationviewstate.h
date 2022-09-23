@@ -29,6 +29,8 @@
 
 #include "draw/types/transform.h"
 
+#include "notationtypes.h"
+
 namespace mu::notation {
 class NotationPaintView;
 class INotationViewState
@@ -44,6 +46,9 @@ public:
     virtual void setMatrix(const draw::Transform& matrix, NotationPaintView* sender) = 0;
 
     virtual ValCh<int> zoomPercentage() const = 0;
+
+    virtual ValCh<ZoomType> zoomType() const = 0;
+    virtual void setZoomType(ZoomType type) = 0;
 };
 
 using INotationViewStatePtr = std::shared_ptr<INotationViewState>;

@@ -28,26 +28,28 @@
  Definition of classes Chord, HelpLine and NoteList.
 */
 
-#include <set>
 #include <functional>
+#include <set>
 #include <vector>
 
-#include "draw/types/color.h"
 #include "chordrest.h"
+
 #include "articulation.h"
+#include "types.h"
+
+#include "draw/types/color.h"
 
 namespace mu::engraving {
-class Note;
-class Hook;
-class Arpeggio;
-class Tremolo;
-class Chord;
-//class Glissando;
-class Stem;
-class Chord;
-class StemSlash;
-class LedgerLine;
 class AccidentalState;
+class Arpeggio;
+class Chord;
+class Hook;
+class LedgerLine;
+class Note;
+class NoteEventList;
+class Stem;
+class StemSlash;
+class Tremolo;
 
 enum class TremoloChordType : char {
     TremoloSingle, TremoloFirstNote, TremoloSecondNote
@@ -61,7 +63,7 @@ public:
     GraceNotesGroup(Chord* c);
 
     Chord* parent() const { return _parent; }
-    Shape shape() const override { return _shape; }
+    Shape shape() const override;
     void layout() override;
     void setPos(double x, double y) override;
     Segment* appendedSegment() const { return _appendedSegment; }
@@ -69,7 +71,6 @@ public:
 
 private:
     Chord* _parent = nullptr;
-    Shape _shape;
     Segment* _appendedSegment = nullptr; // the graceNoteGroup is appended to this segment
 };
 
@@ -121,6 +122,8 @@ class Chord final : public ChordRest
 
     bool _isUiItem = false;
 
+    double _dotPosX = 0.0;
+
     std::vector<Articulation*> _articulations;
 
     friend class Factory;
@@ -135,7 +138,6 @@ class Chord final : public ChordRest
 
     void layoutPitched();
     void layoutTablature();
-    double noteHeadWidth() const;
 
     bool shouldHaveStem() const;
     bool shouldHaveHook() const;
@@ -175,6 +177,7 @@ public:
     double chordMag() const;
     double mag() const override;
     double relativeMag() const { return _relativeMag; }
+    double noteHeadWidth() const;
 
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
@@ -272,7 +275,8 @@ public:
     void computeUp() override;
     static int computeAutoStemDirection(const std::vector<int>& noteDistances);
 
-    double dotPosX() const;
+    double dotPosX() const { return _dotPosX; }
+    void setDotPosX(double x) { _dotPosX = x; }
 
     bool noStem() const { return _noStem; }
     void setNoStem(bool val) { _noStem = val; }

@@ -21,12 +21,12 @@
  */
 
 #include "letring.h"
+
 #include "rw/xml.h"
-#include "system.h"
-#include "measure.h"
-#include "chordrest.h"
+
 #include "score.h"
 #include "stafftype.h"
+#include "system.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -69,8 +69,9 @@ void LetRingSegment::layout()
 {
     const StaffType* stType = staffType();
 
+    _skipDraw = false;
     if (stType && stType->isHiddenElementOnTab(score(), Sid::letRingShowTabCommon, Sid::letRingShowTabSimple)) {
-        setbbox(RectF());
+        _skipDraw = true;
         return;
     }
 

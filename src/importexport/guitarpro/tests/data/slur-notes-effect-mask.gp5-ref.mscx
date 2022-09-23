@@ -24,6 +24,7 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <defaultClef>F8vb</defaultClef>
         </Staff>
       <trackName>Bass</trackName>
       <Instrument id="bass">
@@ -48,10 +49,6 @@
     <Staff id="1">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>F8vb</concertClefType>
-            <transposingClefType>F8vb</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>

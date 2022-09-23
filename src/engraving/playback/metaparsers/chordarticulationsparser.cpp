@@ -22,12 +22,13 @@
 
 #include "chordarticulationsparser.h"
 
-#include "libmscore/score.h"
+#include "libmscore/arpeggio.h"
 #include "libmscore/chord.h"
+#include "libmscore/chordline.h"
+#include "libmscore/score.h"
+#include "libmscore/segment.h"
 #include "libmscore/spanner.h"
 #include "libmscore/tremolo.h"
-#include "libmscore/arpeggio.h"
-#include "libmscore/chordline.h"
 
 #include "playback/utils/arrangementutils.h"
 #include "playback/filters/chordfilter.h"
@@ -161,7 +162,7 @@ void ChordArticulationsParser::parseArpeggio(const Chord* chord, const Rendering
         return;
     }
 
-    if (chord->notes().empty() || chord->notes().size() == 1) {
+    if (chord->notes().empty()) {
         return;
     }
 

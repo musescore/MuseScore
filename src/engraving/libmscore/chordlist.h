@@ -30,8 +30,6 @@
 #include "containers.h"
 #include "io/iodevice.h"
 
-#include "style/style.h"
-
 #include "modularity/ioc.h"
 #include "iengravingconfiguration.h"
 
@@ -40,9 +38,10 @@ class ReadChordListHook;
 }
 
 namespace mu::engraving {
-class XmlWriter;
-class XmlReader;
 class ChordList;
+class MStyle;
+class XmlReader;
+class XmlWriter;
 
 //---------------------------------------------------------
 //   class HDegree

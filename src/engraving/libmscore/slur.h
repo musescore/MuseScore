@@ -62,6 +62,7 @@ public:
     Slur* slur() const { return toSlur(spanner()); }
     void adjustEndpoints();
     void computeBezier(mu::PointF so = mu::PointF()) override;
+    Shape getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* endCR);
     void avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p4, mu::draw::Transform& toSystemCoordinates, double& slurAngle);
 };
 
@@ -91,6 +92,8 @@ public:
     SpannerSegment* layoutSystem(System*) override;
     void setTrack(track_idx_t val) override;
     void slurPos(SlurPos*) override;
+    void fixArticulations(PointF& pt, Chord* c, double up, bool stemSide);
+    void computeUp();
 
     SlurSegment* frontSegment() { return toSlurSegment(Spanner::frontSegment()); }
     const SlurSegment* frontSegment() const { return toSlurSegment(Spanner::frontSegment()); }
@@ -100,6 +103,7 @@ public:
     const SlurSegment* segmentAt(int n) const { return toSlurSegment(Spanner::segmentAt(n)); }
 
     bool isCrossStaff();
+    bool isOverBeams();
 
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }
 };

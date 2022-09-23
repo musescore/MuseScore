@@ -28,7 +28,6 @@
 
 #include "io/iodevice.h"
 
-#include "libmscore/types.h"
 #include "types/dimension.h"
 
 #include "types/propertyvalue.h"

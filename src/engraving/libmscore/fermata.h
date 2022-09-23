@@ -24,7 +24,6 @@
 #define __FERMATA_H__
 
 #include "engravingitem.h"
-#include "mscore.h"
 
 #include "types/types.h"
 

@@ -22,11 +22,12 @@
 #ifndef MU_CLOUD_IUPLOADINGSERVICE_H
 #define MU_CLOUD_IUPLOADINGSERVICE_H
 
+#include <QUrl>
+
 #include "modularity/imoduleexport.h"
 #include "progress.h"
 
-class QByteArray;
-class QUrl;
+class QIODevice;
 class QString;
 
 namespace mu::cloud {
@@ -37,10 +38,9 @@ class IUploadingService : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IUploadingService() = default;
 
-    virtual void uploadScore(QIODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) = 0;
-
-    virtual async::Channel<QUrl> sourceUrlReceived() const = 0;
-    virtual framework::Progress uploadProgress() const = 0;
+    virtual framework::ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, bool isPrivate = false,
+                                               const QUrl& sourceUrl = QUrl()) = 0;
+    virtual framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) = 0;
 };
 }
 

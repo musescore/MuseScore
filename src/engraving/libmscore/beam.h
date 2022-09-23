@@ -28,12 +28,11 @@
 #include "property.h"
 
 namespace mu::engraving {
-class Factory;
-class ChordRest;
-class MuseScoreView;
 class Chord;
-class System;
+class ChordRest;
+class Factory;
 class Skyline;
+class System;
 
 enum class ActionIconType;
 enum class SpannerSegmentType;
@@ -83,7 +82,6 @@ class Beam final : public EngravingItem
 
     int _minMove             { 0 };                // set in layout1()
     int _maxMove             { 0 };
-    TDuration _maxDuration;
 
     bool _noSlope = false;
     double _slope             { 0.0 };
@@ -101,11 +99,11 @@ class Beam final : public EngravingItem
     int getBeamCount(std::vector<ChordRest*> chordRests) const;
     void offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, const double startX,
                                       const double endX, bool isFlat, bool isStartDictator) const;
-    void offsetBeamWithAnchorShortening(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, int beamCount, int staffLines,
-                                        bool isStartDictator, int stemLengthDictator, int stemLengthPointer) const;
-    bool isBeamInsideStaff(int yPos, int staffLines, bool isDictator) const;
+    void offsetBeamWithAnchorShortening(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, int staffLines,
+                                        bool isStartDictator, int stemLengthDictator) const;
+    bool isBeamInsideStaff(int yPos, int staffLines, bool isInner) const;
     int getOuterBeamPosOffset(int innerBeam, int beamCount, int staffLines) const;
-    bool isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines, int beamCount) const;
+    bool isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines) const;
     bool is64thBeamPositionException(int& yPos, int staffLines) const;
     int findValidBeamOffset(int outer, int beamCount, int staffLines, bool isStart, bool isAscending, bool isFlat) const;
     void setValidBeamPositions(int& dictator, int& pointer, int beamCount, int staffLines, bool isStartDictator, bool isFlat,
@@ -114,10 +112,11 @@ class Beam final : public EngravingItem
     void add8thSpaceSlant(mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount, int interval, int middleLine, bool Flat);
     void extendStem(Chord* chord, double addition);
     bool calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break) const;
-    void createBeamSegment(Chord* startChord, Chord* endChord, int level);
-    void createBeamletSegment(Chord* chord, bool isBefore, int level);
+    void createBeamSegment(ChordRest* startChord, ChordRest* endChord, int level);
+    void createBeamletSegment(ChordRest* chord, bool isBefore, int level);
     void createBeamSegments(const std::vector<ChordRest*>& chordRests);
     void layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag);
+    bool layout2Cross(const std::vector<ChordRest*>& chordRests, int frag);
     void addChordRest(ChordRest* a);
     void removeChordRest(ChordRest* a);
 
@@ -157,9 +156,9 @@ public:
         Start, End, Middle
     };
 
-    double chordBeamAnchorX(const Chord* chord, ChordBeamAnchorType anchorType) const;
-    double chordBeamAnchorY(const Chord* chord) const;
-    PointF chordBeamAnchor(const Chord* chord, ChordBeamAnchorType anchorType) const;
+    double chordBeamAnchorX(const ChordRest* chord, ChordBeamAnchorType anchorType) const;
+    double chordBeamAnchorY(const ChordRest* chord) const;
+    PointF chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anchorType) const;
 
     const std::vector<ChordRest*>& elements() const { return _elements; }
     void clear() { _elements.clear(); }
@@ -234,6 +233,8 @@ public:
     mu::RectF drag(EditData&) override;
     bool isMovable() const override;
     void startDrag(EditData&) override;
+
+    bool hasAllRests();
 
 private:
     void initBeamEditData(EditData& ed);

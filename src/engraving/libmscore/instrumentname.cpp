@@ -20,13 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "score.h"
 #include "instrumentname.h"
+
 #include "measure.h"
-#include "staff.h"
 #include "system.h"
-#include "part.h"
-#include "undo.h"
 
 #include "log.h"
 

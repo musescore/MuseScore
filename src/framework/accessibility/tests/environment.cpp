@@ -31,6 +31,7 @@ static mu::testing::SuiteEnvironment accessibility_senv(
 {
     new mu::accessibility::AccessibilityModule()
 },
+    nullptr,
     []() {
     LOGI() << "accessibility tests suite post init";
 }

@@ -39,12 +39,20 @@ ListView {
 
     model: appMenuModel
 
+    function openedArea(menuLoader) {
+        if (menuLoader.isMenuOpened) {
+            if (menuLoader.menu.subMenuLoader && menuLoader.menu.subMenuLoader.isMenuOpened)
+                return openedArea(menuLoader.menu.subMenuLoader)
+            return Qt.rect(menuLoader.menu.x, menuLoader.menu.y, menuLoader.menu.width, menuLoader.menu.height)
+        }
+        return Qt.rect(0, 0, 0, 0)
+    } 
+
     AppMenuModel {
         id: appMenuModel
 
         appMenuAreaRect: Qt.rect(root.x, root.y, root.width, root.height)
-        openedMenuAreaRect: Boolean(menuLoader.isMenuOpened) ? Qt.rect(menuLoader.menu.x, menuLoader.menu.y, menuLoader.menu.width, menuLoader.menu.height)
-                                                             : Qt.rect(0, 0, 0, 0)
+        openedMenuAreaRect: openedArea(menuLoader)
 
         onOpenMenuRequested: {
             prv.openMenu(menuId)
@@ -53,6 +61,14 @@ ListView {
         onCloseOpenedMenuRequested: {
             menuLoader.close()
         }
+    }
+
+    AccessibleItem {
+        id: panelAccessibleInfo
+
+        visualItem: root
+        role: MUAccessible.Panel
+        name: qsTrc("appshell", "Application menu")
     }
 
     Component.onCompleted: {
@@ -107,6 +123,9 @@ ListView {
         onHighlightChanged: {
             if (highlight) {
                 forceActiveFocus()
+                accessibleInfo.readInfo()
+            } else {
+                accessibleInfo.resetFocus()
             }
         }
 
@@ -119,6 +138,27 @@ ListView {
 
         transparent: !isMenuOpened
         accentButton: isMenuOpened
+
+        navigation.accessible.ignored: true
+
+        AccessibleItem {
+            id: accessibleInfo
+
+            accessibleParent: panelAccessibleInfo
+            visualItem: radioButtonDelegate
+            role: MUAccessible.Button
+            name: Utils.removeAmpersands(radioButtonDelegate.title)
+
+            function readInfo() {
+                accessibleInfo.ignored = false
+                accessibleInfo.focused = true
+            }
+
+            function resetFocus() {
+                accessibleInfo.ignored = true
+                accessibleInfo.focused = false
+            }
+        }
 
         contentItem: StyledTextLabel {
             id: textLabel
@@ -160,9 +200,6 @@ ListView {
 
             color: radioButtonDelegate.normalColor
         }
-
-        Accessible.role: Accessible.Button
-        Accessible.name: Utils.removeAmpersands(title)
 
         mouseArea.onHoveredChanged: {
             if (!mouseArea.containsMouse) {

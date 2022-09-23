@@ -22,22 +22,22 @@
 
 #include "tremolo.h"
 
-#include "draw/types/transform.h"
-#include "draw/types/pen.h"
 #include "draw/types/brush.h"
-#include "style/style.h"
+#include "draw/types/pen.h"
+#include "draw/types/transform.h"
 #include "rw/xml.h"
+#include "style/style.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "layout/layouttremolo.h"
 
+#include "beam.h"
+#include "chord.h"
+#include "measure.h"
+#include "note.h"
 #include "score.h"
 #include "staff.h"
-#include "chord.h"
-#include "note.h"
-#include "measure.h"
-#include "segment.h"
 #include "stem.h"
 
 #include "log.h"
@@ -332,8 +332,9 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
         _direction = beam->beamDirection();
         // stem stuff is already taken care of by the beams
     } else {
+        bool hasVoices = _chord1->measure()->hasVoices(_chord1->staffIdx(), _chord1->tick(), _chord2->rtick() - _chord1->tick());
         if (_chord1->stemDirection() == DirectionV::AUTO && _chord2->stemDirection() == DirectionV::AUTO
-            && _chord1->staffMove() == _chord2->staffMove()) {
+            && _chord1->staffMove() == _chord2->staffMove() && !hasVoices) {
             std::vector<int> noteDistances;
             for (int distance : _chord1->noteDistances()) {
                 noteDistances.push_back(distance);
@@ -344,16 +345,16 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
             std::sort(noteDistances.begin(), noteDistances.end());
             up = Chord::computeAutoStemDirection(noteDistances);
             isUp = up > 0;
-        } else if (_chord1->staffMove() > 0 || _chord2->staffMove() > 0) {
-            isUp = false;
-        } else if (_chord1->staffMove() < 0 || _chord2->staffMove() < 0) {
-            isUp = true;
-        } else if (_chord1->measure()->hasVoices(_chord1->staffIdx(), _chord1->tick(), _chord2->rtick() - _chord1->tick())) {
-            isUp = _chord1->track() % 2 == 0;
         } else if (_chord1->stemDirection() != DirectionV::AUTO) {
             isUp = _chord1->stemDirection() == DirectionV::UP;
         } else if (_chord2->stemDirection() != DirectionV::AUTO) {
             isUp = _chord2->stemDirection() == DirectionV::UP;
+        } else if (_chord1->staffMove() > 0 || _chord2->staffMove() > 0) {
+            isUp = false;
+        } else if (_chord1->staffMove() < 0 || _chord2->staffMove() < 0) {
+            isUp = true;
+        } else if (hasVoices) {
+            isUp = _chord1->track() % 2 == 0;
         }
         _up = isUp;
         _chord1->setUp(_chord1->staffMove() == 0 ? isUp : !isUp); // if on a different staff, flip stem dir
@@ -419,12 +420,7 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
     // the outer edge of the stems (non-default beam style)
     double x2 = _chord2->stemPosBeam().x();
     if (!stem2 && _chord2->up()) {
-        double nhw = score()->noteHeadWidth();
-        if (_chord2->noteType() != NoteType::NORMAL) {
-            nhw *= score()->styleD(Sid::graceNoteMag);
-        }
-        nhw *= _chord2->mag();
-        x2 -= nhw;
+        x2 -= _chord2->noteHeadWidth();
     } else if (stem2) {
         if (defaultStyle && _chord2->up()) {
             x2 -= stem2->lineWidthMag();
@@ -435,12 +431,7 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
 
     double x1 = _chord1->stemPosBeam().x();
     if (!stem1 && !_chord1->up()) {
-        double nhw = score()->noteHeadWidth();
-        if (_chord1->noteType() != NoteType::NORMAL) {
-            nhw *= score()->styleD(Sid::graceNoteMag);
-        }
-        nhw *= _chord1->mag();
-        x1 += nhw;
+        x1 += _chord1->noteHeadWidth();
     } else if (stem1) {
         if (defaultStyle && !_chord1->up()) {
             x1 += stem1->lineWidthMag();
@@ -565,9 +556,16 @@ void Tremolo::setBeamDirection(DirectionV d)
     if (d != DirectionV::AUTO) {
         _up = d == DirectionV::UP;
     }
-
-    _chord1->setStemDirection(d);
-    _chord2->setStemDirection(d);
+    if (twoNotes()) {
+        if (_chord1) {
+            _chord1->setStemDirection(d);
+        }
+        if (_chord2) {
+            _chord2->setStemDirection(d);
+        }
+    } else {
+        chord()->setStemDirection(d);
+    }
 }
 
 //---------------------------------------------------------

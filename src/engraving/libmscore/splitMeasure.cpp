@@ -20,12 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "score.h"
-#include "measure.h"
-#include "segment.h"
 #include "chordrest.h"
+#include "measure.h"
 #include "range.h"
-#include "tuplet.h"
+#include "score.h"
+#include "segment.h"
 #include "spanner.h"
 #include "tie.h"
 #include "undo.h"

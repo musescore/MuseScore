@@ -1218,6 +1218,11 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "Add tied note to chord")
              ),
+    UiAction("add-image",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Image")
+             ),
     UiAction("title-text",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
@@ -1247,6 +1252,12 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&Part name"),
              TranslatableString("action", "Add text: part name")
+             ),
+    UiAction("frame-text",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Text"),
+             TranslatableString("action", "Add frame text")
              ),
     UiAction("system-text",
              mu::context::UiCtxNotationOpened,
@@ -1938,6 +1949,13 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Note input: toggle ‘insert’ mode (increases measure duration)"),
              IconCode::Code::NOTE_PLUS
              ),
+    UiAction("realtime-advance",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Real-time advance"),
+             TranslatableString("action", "Real-time advance"),
+             IconCode::Code::METRONOME
+             ),
     UiAction("note-longa",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_STAFF_NOT_TAB,
@@ -2314,34 +2332,46 @@ const UiActionList NotationUiActions::m_scoreConfigActions = {
 };
 
 const UiActionList NotationUiActions::m_engravingDebuggingActions = {
-    UiAction("show-skylines",
+    UiAction("show-element-bounding-rects",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Show &skylines"),
+             TranslatableString::untranslatable("Show element bounding rectangles"),
+             Checkable::Yes
+             ),
+    UiAction("color-element-shapes",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString::untranslatable("Color element shapes"),
              Checkable::Yes
              ),
     UiAction("show-segment-shapes",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Show s&egment shapes"),
+             TranslatableString::untranslatable("Show segment shapes"),
              Checkable::Yes
              ),
-    UiAction("show-bounding-rect",
+    UiAction("color-segment-shapes",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Show &bounding rectangles"),
+             TranslatableString::untranslatable("Color segment shapes"),
              Checkable::Yes
              ),
-    UiAction("show-system-bounding-rect",
+    UiAction("show-skylines",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Show s&ystem bounding rectangles"),
+             TranslatableString::untranslatable("Show skylines"),
+             Checkable::Yes
+             ),
+    UiAction("show-system-bounding-rects",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString::untranslatable("Show system bounding rectangles"),
              Checkable::Yes
              ),
     UiAction("show-corrupted-measures",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Show &corrupted measures"),
+             TranslatableString::untranslatable("Show corrupted measures"),
              Checkable::Yes
              )
 };

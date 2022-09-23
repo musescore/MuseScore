@@ -39,39 +39,31 @@ BarlineSettingsModel::BarlineSettingsModel(QObject* parent, IElementRepositorySe
 
 void BarlineSettingsModel::createProperties()
 {
-    m_type = buildPropertyItem(mu::engraving::Pid::BARLINE_TYPE);
-    m_isSpanToNextStaff = buildPropertyItem(mu::engraving::Pid::BARLINE_SPAN);
-    m_spanFrom = buildPropertyItem(mu::engraving::Pid::BARLINE_SPAN_FROM);
-    m_spanTo = buildPropertyItem(mu::engraving::Pid::BARLINE_SPAN_TO);
-    m_hasToShowTips = buildPropertyItem(mu::engraving::Pid::BARLINE_SHOW_TIPS);
+    m_type = buildPropertyItem(Pid::BARLINE_TYPE);
+    m_isSpanToNextStaff = buildPropertyItem(Pid::BARLINE_SPAN);
+    m_spanFrom = buildPropertyItem(Pid::BARLINE_SPAN_FROM);
+    m_spanTo = buildPropertyItem(Pid::BARLINE_SPAN_TO);
+    m_hasToShowTips = buildPropertyItem(Pid::BARLINE_SHOW_TIPS);
 
     connect(m_type, &PropertyItem::valueChanged, this, &BarlineSettingsModel::isRepeatStyleChangingAllowedChanged);
 }
 
 void BarlineSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::BAR_LINE);
+    m_elementList = m_repository->findElementsByType(ElementType::BAR_LINE);
 }
 
 void BarlineSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_type, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toInt();
-    });
+    static const PropertyIdSet propertyIdSet {
+        Pid::BARLINE_TYPE,
+        Pid::BARLINE_SPAN,
+        Pid::BARLINE_SPAN_FROM,
+        Pid::BARLINE_SPAN_TO,
+        Pid::BARLINE_SHOW_TIPS,
+    };
 
-    loadPropertyItem(m_isSpanToNextStaff, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toBool();
-    });
-
-    loadPropertyItem(m_spanFrom, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toInt();
-    });
-
-    loadPropertyItem(m_spanTo, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toInt();
-    });
-
-    loadPropertyItem(m_hasToShowTips);
+    loadProperties(propertyIdSet);
 }
 
 void BarlineSettingsModel::resetProperties()
@@ -81,6 +73,43 @@ void BarlineSettingsModel::resetProperties()
     m_spanFrom->resetToDefault();
     m_spanTo->resetToDefault();
     m_hasToShowTips->resetToDefault();
+}
+
+void BarlineSettingsModel::onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                                             const mu::engraving::StyleIdSet&)
+{
+    loadProperties(changedPropertyIdSet);
+}
+
+void BarlineSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)
+{
+    if (mu::contains(propertyIdSet, Pid::BARLINE_TYPE)) {
+        loadPropertyItem(m_type, [](const QVariant& elementPropertyValue) -> QVariant {
+            return elementPropertyValue.toInt();
+        });
+    }
+
+    if (mu::contains(propertyIdSet, Pid::BARLINE_SPAN)) {
+        loadPropertyItem(m_isSpanToNextStaff, [](const QVariant& elementPropertyValue) -> QVariant {
+            return elementPropertyValue.toBool();
+        });
+    }
+
+    if (mu::contains(propertyIdSet, Pid::BARLINE_SPAN_FROM)) {
+        loadPropertyItem(m_spanFrom, [](const QVariant& elementPropertyValue) -> QVariant {
+            return elementPropertyValue.toInt();
+        });
+    }
+
+    if (mu::contains(propertyIdSet, Pid::BARLINE_SPAN_TO)) {
+        loadPropertyItem(m_spanTo, [](const QVariant& elementPropertyValue) -> QVariant {
+            return elementPropertyValue.toInt();
+        });
+    }
+
+    if (mu::contains(propertyIdSet, Pid::BARLINE_SHOW_TIPS)) {
+        loadPropertyItem(m_hasToShowTips);
+    }
 }
 
 void BarlineSettingsModel::applySpanPreset(const int presetType)

@@ -24,7 +24,6 @@
 
 #include "translation.h"
 #include "io/file.h"
-#include "io/fileinfo.h"
 #include "draw/fontmetrics.h"
 #include "draw/types/pen.h"
 #include "rw/xml.h"
@@ -237,6 +236,9 @@ StaffTypes StaffType::type() const
 
         { u"tab7StrCommon", StaffTypes::TAB_7COMMON },
         { u"tab8StrCommon", StaffTypes::TAB_8COMMON },
+
+        { u"tab7StrSimple", StaffTypes::TAB_7SIMPLE },
+        { u"tab8StrSimple", StaffTypes::TAB_8SIMPLE },
     };
 
     return mu::value(xmlNameToType, _xmlName, StaffTypes::STANDARD);
@@ -821,6 +823,64 @@ String StaffType::tabBassStringPrefix(int strg, bool* hasFret) const
         String prefix    = bassStrgIdx > 1
                            ? String(_fretFonts[_fretFontIdx].slashChar[bassStrgIdx - 2]) : String();
         return prefix;
+    }
+}
+
+//---------------------------------------------------------
+//   drawInputStringMarks
+//
+//    in TAB's, draws the marks within the input 'blue cursor' required to identify the current target input string.
+//
+//    Implements the specific of historic TAB styles for instruments with more strings than TAB lines.
+//    For strings normally represented by TAB lines, no mark is required.
+//    For strings not represented by TAB lines (e.g. bass strings in lutes and similar),
+//    either a sequence of slashes OR some ledger line-like lines OR the ordinal of the string
+//    are used, according to the TAB style (French or Italian) and the string position.
+//
+//    Note: assumes the string parameter is within legal bounds, i.e.:
+//    0 <= string <= [instrument strings] - 1
+//
+//    p       the Painter to draw into
+//    string  the instrument physical string for which to draw the mark (0 = top string)
+//    voice   the current input voice (affects mark colour)
+//    rect    the rect of the 'blue rectangle' showing the input position
+//---------------------------------------------------------
+
+void StaffType::drawInputStringMarks(mu::draw::Painter* p, int string, voice_idx_t voice, const RectF& rect) const
+{
+    if (_group != StaffGroup::TAB) {
+        return;
+    }
+
+    static constexpr double LEDGER_LINE_THICKNESS = 0.15; // in sp
+    static constexpr double LEDGER_LINE_LEFTX = 0.25; // in % of cursor rectangle width
+    static constexpr double LEDGER_LINE_RIGHTX = 0.75; // in % of cursor rectangle width
+
+    double spatium = SPATIUM20;
+    double lineDist = _lineDistance.val() * spatium;
+    bool hasFret = false;
+    String text = tabBassStringPrefix(string, &hasFret);
+    double lw = LEDGER_LINE_THICKNESS * spatium; // use a fixed width
+    mu::draw::Pen pen(engravingConfiguration()->selectionColor(voice), lw);
+    p->setPen(pen);
+    // draw conventional 'ledger lines', if required
+    int numOfLedgerLines  = numOfTabLedgerLines(string);
+    double x1 = rect.x() + rect.width() * LEDGER_LINE_LEFTX;
+    double x2 = rect.x() + rect.width() * LEDGER_LINE_RIGHTX;
+    // cursor rect is 1 line dist. high, and it is:
+    // centred on the line for "frets on strings"    => lower top ledger line 1/2 line dist.
+    // sitting on the line for "frets above strings" => lower top ledger line 1 full line dist
+    double y = rect.top() + lineDist * (_onLines ? 0.5 : 1.0);
+    for (int i = 0; i < numOfLedgerLines; i++) {
+        p->drawLine(LineF(x1, y, x2, y));
+        y += lineDist / numOfLedgerLines;     // insert other lines between top line and tab body
+    }
+    // draw the text, if any
+    if (!text.isEmpty()) {
+        mu::draw::Font f = fretFont();
+        f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+        p->setFont(f);
+        p->drawText(PointF(rect.left(), rect.top() + lineDist), text);
     }
 }
 
@@ -1448,6 +1508,8 @@ void StaffType::initStaffTypes()
         StaffType(StaffGroup::TAB, u"tab6StrFrench", mtrc("engraving", "Tab. 6-str. French"), 6, 0,     1.5, false, true, true,  true, false,  engravingConfiguration()->defaultColor(),  u"MuseScore Tab French", 15, 0, true,  u"MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   false, false, false, false, false, false, false, false),
         StaffType(StaffGroup::TAB, u"tab7StrCommon", mtrc("engraving", "Tab. 7-str. common"), 7, 0,     1.5, true,  true, false, false, false,  engravingConfiguration()->defaultColor(), u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true, true,  false, false, true, true, true),
         StaffType(StaffGroup::TAB, u"tab8StrCommon", mtrc("engraving", "Tab. 8-str. common"), 8, 0,     1.5, true,  true, false, false, false,  engravingConfiguration()->defaultColor(), u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true, true,  false, false, true, true, true),
+        StaffType(StaffGroup::TAB, u"tab7StrSimple", mtrc("engraving", "Tab. 7-str. simple"), 7, 0,     1.5, true,  true, true, false, false,  engravingConfiguration()->defaultColor(), u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,true,  false, true,  false, false, false, true, false),
+        StaffType(StaffGroup::TAB, u"tab8StrSimple", mtrc("engraving", "Tab. 8-str. simple"), 8, 0,     1.5, true,  true, true, false, false,  engravingConfiguration()->defaultColor(), u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,true,  false, true,  false, false, false, true, false),
     };
 }
 /* *INDENT-ON* */

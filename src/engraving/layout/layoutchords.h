@@ -27,13 +27,13 @@
 #include "layoutcontext.h"
 
 namespace mu::engraving {
-class Score;
-class Segment;
-class Note;
-class Staff;
+class Chord;
 class MStyle;
 class Measure;
-class Chord;
+class Note;
+class Score;
+class Segment;
+class Staff;
 
 class LayoutChords
 {
@@ -41,7 +41,7 @@ public:
 
     static void layoutChords1(Score* score, Segment* segment, staff_idx_t staffIdx);
     static double layoutChords2(std::vector<Note*>& notes, bool up);
-    static void layoutChords3(const MStyle& style, std::vector<Note*>&, const Staff*, Segment*);
+    static void layoutChords3(const MStyle& style, const std::vector<Chord*>&, std::vector<Note*>&, const Staff*);
     static void updateGraceNotes(Measure* measure);
     static void repositionGraceNotesAfter(Segment* segment);
     static void appendGraceNotes(Chord* chord);

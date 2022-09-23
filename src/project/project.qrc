@@ -37,11 +37,13 @@
         <file>qml/MuseScore/Project/internal/NewScore/TimeSignatureView.qml</file>
         <file>qml/MuseScore/Project/internal/NewScore/TitleListView.qml</file>
         <file>qml/MuseScore/Project/MigrationDialog.qml</file>
-        <file>qml/MuseScore/Project/migration.png</file>
         <file>qml/MuseScore/Project/internal/SaveToCloud/SaveLocationOption.qml</file>
         <file>qml/MuseScore/Project/internal/SaveToCloud/images/Cloud.png</file>
         <file>qml/MuseScore/Project/internal/SaveToCloud/images/Laptop.png</file>
         <file>qml/MuseScore/Project/ProjectPropertiesDialog.qml</file>
+        <file>qml/MuseScore/Project/ProjectUploadedDialog.qml</file>
+        <file>qml/MuseScore/Project/AudioGenerationSettingsDialog.qml</file>
+        <file>qml/MuseScore/Project/AudioGenerationSettings.qml</file>
         <file>qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml</file>
         <file>qml/MuseScore/Project/internal/Properties/ProjectPropertiesBottomPanel.qml</file>
         <file>qml/MuseScore/Project/internal/Properties/ProjectPropertiesView.qml</file>
@@ -50,5 +52,10 @@
         <file>resources/Placeholder_MIDI.png</file>
         <file>resources/Placeholder_MXML.png</file>
         <file>resources/Placeholder_Other.png</file>
+        <file>resources/CloudProject.svg</file>
+        <file>resources/PublishScores.png</file>
+        <file>qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml</file>
+        <file>qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml</file>
+        <file>qml/MuseScore/Project/internal/Migration/migration.png</file>
     </qresource>
 </RCC>

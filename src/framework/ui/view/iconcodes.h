@@ -99,8 +99,8 @@ public:
         ARROW_UP = 0xEF37,
         POSITION_ARROWS = 0xEF38,
         TEXT_ALIGN_BASELINE = 0xEF39,
-        TEXT_ALIGN_ABOVE = 0xEF3A,
-        TEXT_ALIGN_UNDER = 0xEF3B,
+        TEXT_ALIGN_BOTTOM = 0xEF3A,
+        TEXT_ALIGN_TOP = 0xEF3B,
         TEXT_ALIGN_MIDDLE = 0xEF3C,
         TEXT_ALIGN_LEFT = 0xEF3D,
         TEXT_ALIGN_CENTER = 0xEF3E,
@@ -369,6 +369,8 @@ public:
         MEASURE_REPEAT = 0xF431,
 
         INSERT_ONE_MEASURE = 0xF432,
+
+        CLOUD = 0xF435,
 
         CROSS_STAFF_BEAMING = 0xF43D,
 

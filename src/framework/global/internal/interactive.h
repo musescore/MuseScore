@@ -44,7 +44,10 @@ public:
     ButtonData buttonData(Button b) const override;
 
     // info
-    Result info(const std::string& title, const std::string& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
+    Result info(const std::string& title, const std::string& text, const Buttons& buttons, int defBtn = int(Button::NoButton),
+                const Options& options = {}) const override;
+
+    Result info(const std::string& title, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
                 const Options& options = {}) const override;
 
     // warning
@@ -68,6 +71,9 @@ public:
     // dirs
     io::path_t selectDirectory(const QString& title, const io::path_t& dir) override;
     io::paths_t selectMultipleDirectories(const QString& title, const io::path_t& dir, const io::paths_t& selectedDirectories) override;
+
+    // color
+    QColor selectColor(const QColor& color = Qt::white, const QString& title = "") override;
 
     // custom
     RetVal<Val> open(const std::string& uri) const override;

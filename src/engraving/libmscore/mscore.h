@@ -23,13 +23,9 @@
 #ifndef __MSCORE_H__
 #define __MSCORE_H__
 
-#include "global/types/string.h"
 #include "global/containers.h"
-#include "draw/types/color.h"
 
 #include "engraving/types/types.h"
-
-#include "config.h"
 
 namespace mu::engraving {
 #define MSC_VERSION     "4.00"
@@ -82,8 +78,6 @@ static constexpr int MSCVERSION = 400;
 //       - The style is stored in a separate file (inside mscz)
 //       - The ChordList is stored in a separate file (inside mscz)
 
-enum class HairpinType : signed char;
-
 static constexpr size_t VOICES = 4;
 
 inline constexpr track_idx_t staff2track(staff_idx_t staffIdx, voice_idx_t voiceIdx = 0)
@@ -120,18 +114,12 @@ static constexpr double DPMM      = DPI / INCH;
 
 static constexpr int MAX_STAVES = 4;
 
-static constexpr int SHADOW_NOTE_LIGHT = 135;
-
 static constexpr char mimeSymbolFormat[]     = "application/musescore/symbol";
 static constexpr char mimeSymbolListFormat[] = "application/musescore/symbollist";
 static constexpr char mimeStaffListFormat[]  = "application/musescore/stafflist";
 
 static constexpr int INVALID_STRING_INDEX = -1; // no ordinal for a physical string (0 = topmost in instrument)
 static constexpr int INVALID_FRET_INDEX   = -1; // no ordinal for a fret
-
-// no ordinal for the visual repres. of string
-// (topmost in TAB varies according to visual order and presence of bass strings)
-static constexpr int VISUAL_INVALID_STRING_INDEX = -100;
 
 static constexpr ID INVALID_ID = 0;
 
@@ -248,8 +236,6 @@ public:
     static bool warnPitchRange;
     static int pedalEventsMinTicks;
 
-    static bool harmonyPlayDisableCompatibility;
-    static bool harmonyPlayDisableNew;
     static bool playRepeats;
     static int playbackSpeedIncrement;
     static double nudgeStep;
@@ -285,30 +271,6 @@ public:
 
     static void setError(MsError e) { _error = e; }
 };
-
-//---------------------------------------------------------
-//   center
-//---------------------------------------------------------
-
-static constexpr double center(double x1, double x2)
-{
-    return x1 + (x2 - x1) * .5;
-}
-
-//---------------------------------------------------------
-//   limit
-//---------------------------------------------------------
-
-static constexpr int limit(int val, int min, int max)
-{
-    if (val > max) {
-        return max;
-    }
-    if (val < min) {
-        return min;
-    }
-    return val;
-}
 } // namespace mu::engraving
 
 #endif
