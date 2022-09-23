@@ -245,6 +245,8 @@ mu::Ret MasterNotation::setupNewScore(mu::engraving::MasterScore* score, const S
 
     setScore(score);
 
+    undoStack()->lock();
+
     parts()->setParts(scoreOptions.parts, scoreOptions.order);
 
     score->checkChordList();
@@ -255,6 +257,8 @@ mu::Ret MasterNotation::setupNewScore(mu::engraving::MasterScore* score, const S
     m_notationPlayback->init(m_undoStack);
     initExcerptNotations(score->excerpts());
     addExcerptsToMasterScore(score->excerpts());
+
+    undoStack()->unlock();
 
     return make_ret(Err::NoError);
 }
