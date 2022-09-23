@@ -1825,7 +1825,7 @@ PalettePtr PaletteCreator::newGuitarPalette()
     capoLine->setLen(w);
     capoLine->setBeginText(u"VII");
     capoLine->setEndHookType(HookType::HOOK_90);
-    sp->appendElement(capoLine, QT_TRANSLATE_NOOP("palette", "Capo line"), 0.8);
+    sp->appendElement(capoLine, QT_TRANSLATE_NOOP("palette", "Barre line"), 0.8);
 
     auto pm = makeElement<PalmMute>(gpaletteScore);
     pm->setLen(w);
