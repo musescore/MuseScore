@@ -35,7 +35,14 @@ StyledDialogView {
 
     property string scoreManagerUrl: ""
 
+    onOpened: {
+        watchVideoButton.navigation.requestActive()
+        accessibleInfo.readInfo()
+    }
+
     Item {
+        id: content
+
         anchors.fill: parent
 
         NavigationPanel {
@@ -67,12 +74,39 @@ StyledDialogView {
 
             spacing: 0
 
+            AccessibleItem {
+                id: accessibleInfo
+
+                accessibleParent: buttonsNavPanel.accessible
+                visualItem: content
+                role: MUAccessible.Button
+                name: "%1; %2; %3; %4; %5".arg(titleLabel.text)
+                                          .arg(subtitleLabel.text)
+                                          .arg(publishTitleLabel.text)
+                                          .arg(repeater.contentText())
+                                          .arg(watchVideoButton.text)
+
+                function readInfo() {
+                    accessibleInfo.ignored = false
+                    accessibleInfo.focused = true
+                }
+
+                function resetFocus() {
+                    accessibleInfo.ignored = true
+                    accessibleInfo.focused = false
+                }
+            }
+
             StyledTextLabel {
+                id: titleLabel
+
                 text: qsTrc("global", "Success!")
                 font: ui.theme.tabBoldFont
             }
 
             StyledTextLabel {
+                id: subtitleLabel
+
                 Layout.topMargin: 6
 
                 text: qsTrc("project", "All saved changes will now update to the cloud")
@@ -98,6 +132,8 @@ StyledDialogView {
                     z: 1000
 
                     StyledTextLabel {
+                        id: publishTitleLabel
+
                         text: qsTrc("project", "Publish your finished scores on MuseScore.com")
                         font: ui.theme.largeBodyBoldFont
                     }
@@ -108,6 +144,18 @@ StyledDialogView {
                         spacing: 14
 
                         Repeater {
+                            id: repeater
+
+                            function contentText() {
+                                var result = ""
+                                for (var i = 0; i < repeater.count; ++i) {
+                                    var item = itemAt(i)
+                                    result += item.title + "; "
+                                }
+
+                                return result
+                            }
+
                             model: [
                                 qsTrc("project", "Create a portfolio to showcase your music"),
                                 qsTrc("project", "Gain followers and receive score comments and ratings"),
@@ -116,6 +164,8 @@ StyledDialogView {
 
                             Row {
                                 spacing: 10
+
+                                property string title: modelData
 
                                 Rectangle {
                                     anchors.verticalCenter: parent.verticalCenter
@@ -128,13 +178,15 @@ StyledDialogView {
                                 }
 
                                 StyledTextLabel {
-                                    text: modelData
+                                    text: title
                                 }
                             }
                         }
                     }
 
                     FlatButton {
+                        id: watchVideoButton
+
                         Layout.alignment: Qt.AlignLeft
 
                         accentButton: true
@@ -142,6 +194,14 @@ StyledDialogView {
 
                         navigation.panel: buttonsNavPanel
                         navigation.column: 1
+                        navigation.accessible.ignored: true
+                        navigation.onActiveChanged: {
+                            if (!navigation.active) {
+                                accessible.ignored = false
+                                accessible.focused = true
+                                accessibleInfo.resetFocus()
+                            }
+                        }
 
                         onClicked: {
                             root.hide()
