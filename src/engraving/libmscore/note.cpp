@@ -29,60 +29,49 @@
 
 #include <assert.h>
 
-#include "translation.h"
 #include "draw/types/brush.h"
 #include "rw/xml.h"
+#include "translation.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "accidental.h"
 #include "actionicon.h"
-#include "arpeggio.h"
 #include "articulation.h"
 #include "bagpembell.h"
+#include "beam.h"
 #include "bend.h"
 #include "chord.h"
 #include "chordline.h"
-#include "clef.h"
 #include "drumset.h"
 #include "factory.h"
 #include "fingering.h"
-#include "fret.h"
 #include "glissando.h"
-#include "hairpin.h"
-#include "harmony.h"
+#include "hook.h"
 #include "image.h"
 #include "linkedobjects.h"
 #include "measure.h"
 #include "mscoreview.h"
 #include "notedot.h"
-#include "page.h"
 #include "part.h"
 #include "pitchspelling.h"
 #include "score.h"
-#include "symbolfont.h"
 #include "segment.h"
-#include "slur.h"
 #include "spanner.h"
 #include "staff.h"
 #include "stafftype.h"
 #include "stringdata.h"
-#include "system.h"
-#include "text.h"
-#include "textline.h"
+#include "symbolfont.h"
 #include "tie.h"
 #include "tremolo.h"
-#include "tuplet.h"
 #include "undo.h"
 #include "utils.h"
-#include "hook.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
 #include "accessibility/accessibleroot.h"
 #endif
 
-#include "config.h"
 #include "log.h"
 
 using namespace mu;
@@ -656,7 +645,7 @@ Note::Note(const Note& n, bool link)
 
     // types in _el: SYMBOL, IMAGE, FINGERING, TEXT, BEND
     const Staff* stf = staff();
-    bool tabFingering = stf->staffTypeForElement(this)->showTabFingering();
+    bool tabFingering = stf ? stf->staffTypeForElement(this)->showTabFingering() : false;
     for (EngravingItem* e : n._el) {
         if (e->isFingering() && staff()->isTabStaff(tick()) && !tabFingering) {      // tablature has no fingering
             continue;
@@ -713,9 +702,7 @@ void Note::setPitch(int val)
         score()->setPlaylistDirty();
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
-        if (m_accessible) {
-            m_accessible->accessibleRoot()->notifyAboutFocuedElemntNameChanged();
-        }
+        notifyAboutNameChanged();
 #endif
     }
 }
@@ -1038,7 +1025,7 @@ double Note::outsideTieAttachX(bool up) const
     if (up) {
         double xNE = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutNE).x();
         double xNW = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutNW).x();
-        xo = ((xNE + xNW) / 2) * mag();
+        xo = ((xNE + xNW) / 2);
         if (xNE < xNW) {
             // musejazz is busted
             xo = 0;
@@ -1046,7 +1033,7 @@ double Note::outsideTieAttachX(bool up) const
     } else {
         double xSE = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutSE).x();
         double xSW = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutSW).x();
-        xo = ((xSE + xSW) / 2) * mag();
+        xo = ((xSE + xSW) / 2);
         if (xSE < xSW) {
             xo = 0;
         }
@@ -1055,7 +1042,7 @@ double Note::outsideTieAttachX(bool up) const
         return x() + xo;
     }
     // no cutout, not a slash head, default to middle of notehead
-    return x() + ((headWidth() / 2) * mag());
+    return x() + (headWidth() / 2);
 }
 
 void Note::updateHeadGroup(const NoteHeadGroup headGroup)
@@ -1401,7 +1388,7 @@ void Note::draw(mu::draw::Painter* painter) const
                     view->drawBackground(painter, bb);
                 }
             } else {
-                painter->fillRect(bb, mu::draw::Color::white);
+                painter->fillRect(bb, engravingConfiguration()->noteBackgroundColor());
             }
 
             if (fretConflict() && !score()->printing() && score()->showUnprintable()) {                //on fret conflict, draw on red background
@@ -1439,7 +1426,7 @@ void Note::draw(mu::draw::Painter* painter) const
         // draw blank notehead to avoid staff and ledger lines
         if (_cachedSymNull != SymId::noSym) {
             painter->save();
-            painter->setPen(mu::draw::Color::white);
+            painter->setPen(engravingConfiguration()->noteBackgroundColor());
             drawSymbol(_cachedSymNull, painter);
             painter->restore();
         }
@@ -1524,7 +1511,7 @@ void Note::read(XmlReader& e)
         }
     }
     // ensure sane values:
-    _pitch = limit(_pitch, 0, 127);
+    _pitch = std::clamp(_pitch, 0, 127);
 
     if (!tpcIsValid(_tpc[0]) && !tpcIsValid(_tpc[1])) {
         Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
@@ -2295,7 +2282,12 @@ void Note::layout()
             setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
         }
         SymId nh = noteHead();
+        if (score()->styleB(Sid::crossHeadBlackOnly) && ((nh == SymId::noteheadXHalf) || (nh == SymId::noteheadXWhole))) {
+            nh = SymId::noteheadXBlack;
+        }
+
         _cachedNoteheadSym = nh;
+
         if (isNoteName()) {
             _cachedSymNull = SymId::noteEmptyBlack;
             NoteHeadType ht = _headType == NoteHeadType::HEAD_AUTO ? chord()->durationType().headType() : _headType;
@@ -2767,7 +2759,7 @@ int Note::customizeVelocity(int velo) const
     } else if (veloType() == VeloType::USER_VAL) {
         velo = veloOffset();
     }
-    return limit(velo, 1, 127);
+    return std::clamp(velo, 1, 127);
 }
 
 //---------------------------------------------------------
@@ -3370,12 +3362,14 @@ String Note::accessibleInfo() const
 
 String Note::screenReaderInfo() const
 {
+    const Instrument* instrument = part()->instrument(chord()->tick());
     String duration = chord()->durationUserName();
     Measure* m = chord()->measure();
     bool voices = m ? m->hasVoices(staffIdx()) : false;
     String voice = voices ? mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1) : u"";
     String pitchName;
-    const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
+    String pitchOutOfRangeWarning;
+    const Drumset* drumset = instrument->drumset();
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
         pitchName = chord()->noStem() ? mtrc("engraving", "Beat slash") : mtrc("engraving", "Rhythm slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
@@ -3393,8 +3387,19 @@ String Note::screenReaderInfo() const
         } else if (chord()->staffMove() > 0) {
             duration += u"; " + mtrc("engraving", "Cross-staff below");
         }
+
+        if (pitch() < instrument->minPitchP()) {
+            pitchOutOfRangeWarning = u" " + mtrc("engraving", "too low");
+        } else if (pitch() > instrument->maxPitchP()) {
+            pitchOutOfRangeWarning = u" " + mtrc("engraving", "too high");
+        } else if (pitch() < instrument->minPitchA()) {
+            pitchOutOfRangeWarning = u" " + mtrc("engraving", "too low for amateurs");
+        } else if (pitch() > instrument->maxPitchA()) {
+            pitchOutOfRangeWarning = u" " + mtrc("engraving", "too high for amateurs");
+        }
     }
-    return String(u"%1 %2 %3%4").arg(noteTypeUserName(), pitchName, duration, (chord()->isGrace() ? u"" : String(u"; %1").arg(voice)));
+    return String(u"%1 %2 %3%4%5").arg(noteTypeUserName(), pitchName, duration, pitchOutOfRangeWarning,
+                                       (chord()->isGrace() ? u"" : String(u"; %1").arg(voice)));
 }
 
 //---------------------------------------------------------

@@ -73,3 +73,15 @@ ValCh<int> NotationViewState::zoomPercentage() const
 {
     return m_zoomPercentage;
 }
+
+ValCh<ZoomType> NotationViewState::zoomType() const
+{
+    return m_zoomType;
+}
+
+void NotationViewState::setZoomType(ZoomType type)
+{
+    if (m_zoomType.val != type) {
+        m_zoomType.set(type);
+    }
+}

@@ -20,51 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "translation.h"
-#include "style/style.h"
-#include "io/dir.h"
-
-#include "musescoreCore.h"
 #include "mscore.h"
-#include "engravingitem.h"
-#include "dynamic.h"
-#include "accidental.h"
+
 #include "figuredbass.h"
-#include "stafftype.h"
-#include "note.h"
-#include "spanner.h"
-#include "volta.h"
-#include "ottava.h"
-#include "trill.h"
-#include "measurerepeat.h"
-#include "jump.h"
-#include "marker.h"
-#include "layoutbreak.h"
 #include "hairpin.h"
-#include "glissando.h"
-#include "page.h"
-#include "slur.h"
 #include "lyrics.h"
-#include "accidental.h"
-#include "notedot.h"
-#include "tie.h"
-#include "staff.h"
-#include "beam.h"
-#include "timesig.h"
-#include "part.h"
-#include "measure.h"
+#include "ottava.h"
 #include "score.h"
-#include "keysig.h"
-#include "harmony.h"
-#include "stafftext.h"
-#include "chord.h"
-#include "hook.h"
-#include "stem.h"
-#include "stemslash.h"
-#include "excerpt.h"
-#include "barline.h"
-#include "skyline.h"
-#include "symbolfont.h"
+#include "spanner.h"
+#include "stafftype.h"
+#include "volta.h"
 
 #include "config.h"
 
@@ -94,8 +59,6 @@ double MScore::horizontalPageGapOdd = 50.0;
 bool MScore::warnPitchRange;
 int MScore::pedalEventsMinTicks;
 
-bool MScore::harmonyPlayDisableCompatibility;
-bool MScore::harmonyPlayDisableNew;
 bool MScore::playRepeats;
 int MScore::playbackSpeedIncrement;
 double MScore::nudgeStep;

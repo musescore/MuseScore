@@ -26,6 +26,7 @@
 #include <vector>
 
 #include "draw/types/geometry.h"
+#include "shape.h"
 
 namespace mu::draw {
 class Painter;
@@ -33,7 +34,6 @@ class Painter;
 
 namespace mu::engraving {
 class Segment;
-class Shape;
 
 //---------------------------------------------------------
 //   SkylineSegment
@@ -43,9 +43,10 @@ struct SkylineSegment {
     double x;
     double y;
     double w;
+    int staffSpan;
 
-    SkylineSegment(double _x, double _y, double _w)
-        : x(_x), y(_y), w(_w) {}
+    SkylineSegment(double _x, double _y, double _w, int _staffSpan = 0)
+        : x(_x), y(_y), w(_w), staffSpan(_staffSpan) {}
 };
 
 //---------------------------------------------------------
@@ -59,8 +60,8 @@ class SkylineLine
     typedef std::vector<SkylineSegment>::iterator SegIter;
     typedef std::vector<SkylineSegment>::const_iterator SegConstIter;
 
-    SegIter insert(SegIter i, double x, double y, double w);
-    void append(double x, double y, double w);
+    SegIter insert(SegIter i, double x, double y, double w, int span);
+    void append(double x, double y, double w, int span);
     SegIter find(double x);
     SegConstIter find(double x) const;
 
@@ -68,8 +69,10 @@ public:
     SkylineLine(bool n)
         : north(n) {}
     void add(const Shape& s);
-    void add(const mu::RectF& r);
-    void add(double x, double y, double w);
+    void add(const ShapeElement& r);
+    void add(double x, double y, double w, int span = 0);
+    void add(const RectF& r) { add(ShapeElement(r)); }
+
     void clear() { seg.clear(); }
     void paint(mu::draw::Painter& painter) const;
     void dump() const;
@@ -100,7 +103,8 @@ public:
 
     void clear();
     void add(const Shape& s);
-    void add(const mu::RectF& r);
+    void add(const ShapeElement& r);
+    void add(const RectF& r) { add(ShapeElement(r)); }
 
     double minDistance(const Skyline&) const;
 

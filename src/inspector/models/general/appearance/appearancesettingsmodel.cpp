@@ -44,7 +44,7 @@ AppearanceSettingsModel::AppearanceSettingsModel(QObject* parent, IElementReposi
 void AppearanceSettingsModel::createProperties()
 {
     m_leadingSpace = buildPropertyItem(Pid::LEADING_SPACE);
-    m_barWidth = buildPropertyItem(Pid::USER_STRETCH);
+    m_measureWidth = buildPropertyItem(Pid::USER_STRETCH);
     m_minimumDistance = buildPropertyItem(Pid::MIN_DISTANCE);
     m_color = buildPropertyItem(Pid::COLOR);
     m_arrangeOrder = buildPropertyItem(Pid::Z);
@@ -65,57 +65,80 @@ void AppearanceSettingsModel::requestElements()
 
 void AppearanceSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_leadingSpace, formatDoubleFunc);
-    loadPropertyItem(m_minimumDistance, formatDoubleFunc);
+    static const PropertyIdSet propertyIdSet {
+        Pid::LEADING_SPACE,
+        Pid::USER_STRETCH,
+        Pid::MIN_DISTANCE,
+        Pid::COLOR,
+        Pid::Z,
+        Pid::OFFSET,
+    };
 
-    loadPropertyItem(m_barWidth);
-    loadPropertyItem(m_color);
-    loadPropertyItem(m_arrangeOrder);
-
-    loadOffsets();
-
-    emit isSnappedToGridChanged(isSnappedToGrid());
+    loadProperties(propertyIdSet);
 }
 
 void AppearanceSettingsModel::resetProperties()
 {
     m_leadingSpace->resetToDefault();
     m_minimumDistance->resetToDefault();
-    m_barWidth->resetToDefault();
+    m_measureWidth->resetToDefault();
     m_color->resetToDefault();
     m_arrangeOrder->resetToDefault();
     m_horizontalOffset->resetToDefault();
     m_verticalOffset->resetToDefault();
 }
 
-void AppearanceSettingsModel::updatePropertiesOnNotationChanged()
+void AppearanceSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
-    loadPropertyItem(m_leadingSpace, formatDoubleFunc);
-    loadOffsets();
+    loadProperties(changedPropertyIdSet);
 }
 
-void AppearanceSettingsModel::loadOffsets()
+void AppearanceSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
-    loadPropertyItem(m_horizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
-    });
+    if (mu::contains(propertyIdSet, Pid::LEADING_SPACE)) {
+        loadPropertyItem(m_leadingSpace, formatDoubleFunc);
+    }
 
-    loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
-    });
+    if (mu::contains(propertyIdSet, Pid::USER_STRETCH)) {
+        loadPropertyItem(m_measureWidth);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::MIN_DISTANCE)) {
+        loadPropertyItem(m_minimumDistance, formatDoubleFunc);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::COLOR)) {
+        loadPropertyItem(m_color);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::Z)) {
+        loadPropertyItem(m_arrangeOrder);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::OFFSET)) {
+        loadPropertyItem(m_horizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
+            return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
+        });
+
+        loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
+            return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
+        });
+    }
+
+    emit isSnappedToGridChanged(isSnappedToGrid());
 }
 
-Page* AppearanceSettingsModel::getPage()
+Page* AppearanceSettingsModel::page() const
 {
     return toPage(m_elementList.first()->findAncestor(ElementType::PAGE));
 }
 
-std::vector<EngravingItem*> AppearanceSettingsModel::getAllElementsInPage()
+std::vector<EngravingItem*> AppearanceSettingsModel::allElementsInPage() const
 {
-    return getPage()->elements();
+    return page()->elements();
 }
 
-std::vector<EngravingItem*> AppearanceSettingsModel::getAllOverlappingElements()
+std::vector<EngravingItem*> AppearanceSettingsModel::allOverlappingElements() const
 {
     RectF bbox = m_elementList.first()->abbox();
     for (EngravingItem* element : m_elementList) {
@@ -123,14 +146,14 @@ std::vector<EngravingItem*> AppearanceSettingsModel::getAllOverlappingElements()
     }
     if (bbox.width() == 0 || bbox.height() == 0) {
         LOGD() << "Bounding box appears to have a size of 0, so we'll get all the elements in the page";
-        return getAllElementsInPage();
+        return allElementsInPage();
     }
-    return getPage()->items(bbox);
+    return page()->items(bbox);
 }
 
 void AppearanceSettingsModel::pushBackwardsInOrder()
 {
-    std::vector<EngravingItem*> elements = getAllOverlappingElements();
+    std::vector<EngravingItem*> elements = allOverlappingElements();
     std::sort(elements.begin(), elements.end(), elementLessThan);
 
     int minZ = (*std::min_element(m_elementList.begin(), m_elementList.end(), elementLessThan))->z();
@@ -147,7 +170,7 @@ void AppearanceSettingsModel::pushBackwardsInOrder()
 
 void AppearanceSettingsModel::pushForwardsInOrder()
 {
-    std::vector<EngravingItem*> elements = getAllOverlappingElements();
+    std::vector<EngravingItem*> elements = allOverlappingElements();
     std::sort(elements.begin(), elements.end(), elementLessThan);
 
     int maxZ = (*std::max_element(m_elementList.begin(), m_elementList.end(), elementLessThan))->z();
@@ -165,7 +188,7 @@ void AppearanceSettingsModel::pushForwardsInOrder()
 
 void AppearanceSettingsModel::pushToBackInOrder()
 {
-    std::vector<EngravingItem*> elements = getAllElementsInPage();
+    std::vector<EngravingItem*> elements = allElementsInPage();
     EngravingItem* minElement = *std::min_element(elements.begin(), elements.end(), elementLessThan);
 
     if (m_elementList.contains(minElement)) {
@@ -177,7 +200,7 @@ void AppearanceSettingsModel::pushToBackInOrder()
 
 void AppearanceSettingsModel::pushToFrontInOrder()
 {
-    std::vector<EngravingItem*> elements = getAllElementsInPage();
+    std::vector<EngravingItem*> elements = allElementsInPage();
     EngravingItem* maxElement = *std::max_element(elements.begin(), elements.end(), elementLessThan);
 
     if (m_elementList.contains(maxElement)) {
@@ -197,9 +220,9 @@ PropertyItem* AppearanceSettingsModel::leadingSpace() const
     return m_leadingSpace;
 }
 
-PropertyItem* AppearanceSettingsModel::barWidth() const
+PropertyItem* AppearanceSettingsModel::measureWidth() const
 {
-    return m_barWidth;
+    return m_measureWidth;
 }
 
 PropertyItem* AppearanceSettingsModel::minimumDistance() const

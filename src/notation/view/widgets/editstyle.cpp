@@ -35,11 +35,13 @@
 #include "fontStyleSelect.h"
 #include "offsetSelect.h"
 
-#include "engraving/types/symnames.h"
-#include "engraving/types/typesconv.h"
 #include "engraving/libmscore/figuredbass.h"
 #include "engraving/infrastructure/symbolfonts.h"
 #include "engraving/libmscore/realizedharmony.h"
+#include "engraving/libmscore/text.h"
+#include "engraving/style/textstyle.h"
+#include "engraving/types/symnames.h"
+#include "engraving/types/typesconv.h"
 
 #include "ui/view/widgetstatestore.h"
 #include "ui/view/widgetutils.h"
@@ -218,13 +220,13 @@ EditStyle::EditStyle(QWidget* parent)
     fretNumGroup->addButton(radioFretNumRight, 1);
 
     QButtonGroup* ksng = new QButtonGroup(this);
-    ksng->addButton(radioKeySigNatNone, int(mu::engraving::KeySigNatural::NONE));
-    ksng->addButton(radioKeySigNatBefore, int(mu::engraving::KeySigNatural::BEFORE));
-    ksng->addButton(radioKeySigNatAfter, int(mu::engraving::KeySigNatural::AFTER));
+    ksng->addButton(radioKeySigNatNone, int(KeySigNatural::NONE));
+    ksng->addButton(radioKeySigNatBefore, int(KeySigNatural::BEFORE));
+    ksng->addButton(radioKeySigNatAfter, int(KeySigNatural::AFTER));
 
     QButtonGroup* ctg = new QButtonGroup(this);
-    ctg->addButton(clefTab1, int(mu::engraving::ClefType::TAB));
-    ctg->addButton(clefTab2, int(mu::engraving::ClefType::TAB_SERIF));
+    ctg->addButton(clefTab1, int(ClefType::TAB));
+    ctg->addButton(clefTab2, int(ClefType::TAB_SERIF));
 
     QButtonGroup* fbAlign = new QButtonGroup(this);
     fbAlign->addButton(radioFBTop, 0);
@@ -434,7 +436,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::maxHarmonyBarDistance,   false, maxHarmonyBarDistance,   0 },
         { StyleId::maxChordShiftAbove,      false, maxChordShiftAbove,      resetMaxChordShiftAbove },
         { StyleId::maxChordShiftBelow,      false, maxChordShiftBelow,      resetMaxChordShiftBelow },
-        { StyleId::harmonyPlay,             false, harmonyPlay,             0 },
         { StyleId::harmonyVoiceLiteral,     false, voicingSelectWidget->interpretBox, 0 },
         { StyleId::harmonyVoicing,          false, voicingSelectWidget->voicingBox, 0 },
         { StyleId::harmonyDuration,         false, voicingSelectWidget->durationBox, 0 },
@@ -659,8 +660,8 @@ EditStyle::EditStyle(QWidget* parent)
 
     for (QComboBox* cb : verticalPlacementComboBoxes) {
         cb->clear();
-        cb->addItem(qtrc("notation/editstyle", "Above"), int(mu::engraving::PlacementV::ABOVE));
-        cb->addItem(qtrc("notation/editstyle", "Below"), int(mu::engraving::PlacementV::BELOW));
+        cb->addItem(qtrc("notation/editstyle", "Above"), int(PlacementV::ABOVE));
+        cb->addItem(qtrc("notation/editstyle", "Below"), int(PlacementV::BELOW));
     }
 
     horizontalPlacementComboBoxes = {
@@ -670,20 +671,20 @@ EditStyle::EditStyle(QWidget* parent)
 
     for (QComboBox* cb : horizontalPlacementComboBoxes) {
         cb->clear();
-        cb->addItem(qtrc("notation/editstyle", "Left"),   int(mu::engraving::PlacementH::LEFT));
-        cb->addItem(qtrc("notation/editstyle", "Center"), int(mu::engraving::PlacementH::CENTER));
-        cb->addItem(qtrc("notation/editstyle", "Right"),  int(mu::engraving::PlacementH::RIGHT));
+        cb->addItem(qtrc("notation/editstyle", "Left"),   int(PlacementH::LEFT));
+        cb->addItem(qtrc("notation/editstyle", "Center"), int(PlacementH::CENTER));
+        cb->addItem(qtrc("notation/editstyle", "Right"),  int(PlacementH::RIGHT));
     }
 
     mmRestRangeBracketType->clear();
-    mmRestRangeBracketType->addItem(qtrc("notation/editstyle", "None"),        int(mu::engraving::MMRestRangeBracketType::NONE));
-    mmRestRangeBracketType->addItem(qtrc("notation/editstyle", "Brackets"),    int(mu::engraving::MMRestRangeBracketType::BRACKETS));
-    mmRestRangeBracketType->addItem(qtrc("notation/editstyle", "Parentheses"), int(mu::engraving::MMRestRangeBracketType::PARENTHESES));
+    mmRestRangeBracketType->addItem(qtrc("notation/editstyle", "None"),        int(MMRestRangeBracketType::NONE));
+    mmRestRangeBracketType->addItem(qtrc("notation/editstyle", "Brackets"),    int(MMRestRangeBracketType::BRACKETS));
+    mmRestRangeBracketType->addItem(qtrc("notation/editstyle", "Parentheses"), int(MMRestRangeBracketType::PARENTHESES));
 
     autoplaceVerticalAlignRange->clear();
-    autoplaceVerticalAlignRange->addItem(qtrc("notation/editstyle", "Segment"), int(mu::engraving::VerticalAlignRange::SEGMENT));
-    autoplaceVerticalAlignRange->addItem(qtrc("notation/editstyle", "Measure"), int(mu::engraving::VerticalAlignRange::MEASURE));
-    autoplaceVerticalAlignRange->addItem(qtrc("notation/editstyle", "System"),  int(mu::engraving::VerticalAlignRange::SYSTEM));
+    autoplaceVerticalAlignRange->addItem(qtrc("notation/editstyle", "Segment"), int(VerticalAlignRange::SEGMENT));
+    autoplaceVerticalAlignRange->addItem(qtrc("notation/editstyle", "Measure"), int(VerticalAlignRange::MEASURE));
+    autoplaceVerticalAlignRange->addItem(qtrc("notation/editstyle", "System"),  int(VerticalAlignRange::SYSTEM));
 
     tupletNumberType->clear();
     tupletNumberType->addItem(qtrc("notation/editstyle", "Number"), int(TupletNumberType::SHOW_NUMBER));
@@ -697,15 +698,15 @@ EditStyle::EditStyle(QWidget* parent)
 
     musicalSymbolFont->clear();
     int idx = 0;
-    for (auto i : mu::engraving::SymbolFonts::scoreFonts()) {
+    for (auto i : SymbolFonts::scoreFonts()) {
         musicalSymbolFont->addItem(i.name().toQString(), i.name().toQString());
         ++idx;
     }
 
-    static const mu::engraving::SymId ids[] = {
-        mu::engraving::SymId::systemDivider, mu::engraving::SymId::systemDividerLong, mu::engraving::SymId::systemDividerExtraLong
+    static const SymId ids[] = {
+        SymId::systemDivider, SymId::systemDividerLong, SymId::systemDividerExtraLong
     };
-    for (mu::engraving::SymId id : ids) {
+    for (SymId id : ids) {
         const QString& un = SymNames::translatedUserNameForSymId(id);
         AsciiStringView n = SymNames::nameForSymId(id);
         dividerLeftSym->addItem(un,  QVariant(QString(n.toQLatin1String())));
@@ -741,7 +742,7 @@ EditStyle::EditStyle(QWidget* parent)
     // Figured Bass
     // ====================================================
 
-    std::list<String> fbFontNames = mu::engraving::FiguredBass::fontNames();
+    std::list<String> fbFontNames = FiguredBass::fontNames();
     for (const String& family : fbFontNames) {
         comboFBFont->addItem(family);
     }
@@ -752,28 +753,26 @@ EditStyle::EditStyle(QWidget* parent)
     // Chord Symbols
     // ====================================================
 
-    harmonyPlay->setChecked(true);
-
     voicingSelectWidget->interpretBox->clear();
     voicingSelectWidget->interpretBox->addItem(qtrc("notation/editstyle", "Jazz"), int(0));   // two-item combobox for boolean style variant
     voicingSelectWidget->interpretBox->addItem(qtrc("notation/editstyle", "Literal"), int(1));   // true = literal
 
     voicingSelectWidget->voicingBox->clear();
-    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Automatic"), int(mu::engraving::Voicing::AUTO));
-    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Root only"), int(mu::engraving::Voicing::ROOT_ONLY));
-    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Close"), int(mu::engraving::Voicing::CLOSE));
-    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Drop two"), int(mu::engraving::Voicing::DROP_2));
-    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Six note"), int(mu::engraving::Voicing::SIX_NOTE));
-    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Four note"), int(mu::engraving::Voicing::FOUR_NOTE));
-    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Three note"), int(mu::engraving::Voicing::THREE_NOTE));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Automatic"), int(Voicing::AUTO));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Root only"), int(Voicing::ROOT_ONLY));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Close"), int(Voicing::CLOSE));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Drop two"), int(Voicing::DROP_2));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Six note"), int(Voicing::SIX_NOTE));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Four note"), int(Voicing::FOUR_NOTE));
+    voicingSelectWidget->voicingBox->addItem(qtrc("notation/editstyle", "Three note"), int(Voicing::THREE_NOTE));
 
     voicingSelectWidget->durationBox->clear();
     voicingSelectWidget->durationBox->addItem(qtrc("notation/editstyle", "Until next chord symbol"),
-                                              int(mu::engraving::HDuration::UNTIL_NEXT_CHORD_SYMBOL));
+                                              int(HDuration::UNTIL_NEXT_CHORD_SYMBOL));
     voicingSelectWidget->durationBox->addItem(qtrc("notation/editstyle", "Until end of measure"),
-                                              int(mu::engraving::HDuration::STOP_AT_MEASURE_END));
+                                              int(HDuration::STOP_AT_MEASURE_END));
     voicingSelectWidget->durationBox->addItem(qtrc("notation/editstyle", "Chord/rest duration"),
-                                              int(mu::engraving::HDuration::SEGMENT_DURATION));
+                                              int(HDuration::SEGMENT_DURATION));
 
     // ====================================================
     // Miscellaneous
@@ -817,7 +816,7 @@ EditStyle::EditStyle(QWidget* parent)
     const auto mapFunction = QOverload<>::of(&QSignalMapper::map);
 
     for (const StyleWidget& sw : styleWidgets) {
-        P_TYPE type = mu::engraving::MStyle::valueType(sw.idx);
+        P_TYPE type = MStyle::valueType(sw.idx);
 
         if (P_TYPE::DIRECTION_V == type) {
             QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
@@ -865,16 +864,16 @@ EditStyle::EditStyle(QWidget* parent)
     connect(resetSignalMapper, &QSignalMapper::mappedInt, this, &EditStyle::resetStyleValue);
 
     textStyles->clear();
-    for (auto ss : mu::engraving::allTextStyles()) {
+    for (auto ss : allTextStyles()) {
         QListWidgetItem* item = new QListWidgetItem(TConv::translatedUserName(ss));
         item->setData(Qt::UserRole, int(ss));
         textStyles->addItem(item);
     }
 
     textStyleFrameType->clear();
-    textStyleFrameType->addItem(qtrc("notation/editstyle", "None", "no frame for text"), int(mu::engraving::FrameType::NO_FRAME));
-    textStyleFrameType->addItem(qtrc("notation/editstyle", "Rectangle"), int(mu::engraving::FrameType::SQUARE));
-    textStyleFrameType->addItem(qtrc("notation/editstyle", "Circle"), int(mu::engraving::FrameType::CIRCLE));
+    textStyleFrameType->addItem(qtrc("notation/editstyle", "None", "no frame for text"), int(FrameType::NO_FRAME));
+    textStyleFrameType->addItem(qtrc("notation/editstyle", "Rectangle"), int(FrameType::SQUARE));
+    textStyleFrameType->addItem(qtrc("notation/editstyle", "Circle"), int(FrameType::CIRCLE));
 
     WidgetUtils::setWidgetIcon(resetTextStyleName, IconCode::Code::UNDO);
     connect(resetTextStyleName, &QToolButton::clicked, this, &EditStyle::resetUserStyleName);
@@ -884,120 +883,120 @@ EditStyle::EditStyle(QWidget* parent)
     // font face
     WidgetUtils::setWidgetIcon(resetTextStyleFontFace, IconCode::Code::UNDO);
     connect(resetTextStyleFontFace, &QToolButton::clicked, [=]() {
-        resetTextStyle(mu::engraving::Pid::FONT_FACE);
+        resetTextStyle(Pid::FONT_FACE);
     });
     connect(textStyleFontFace, &QFontComboBox::currentFontChanged, [=]() {
-        textStyleValueChanged(mu::engraving::Pid::FONT_FACE, QVariant(textStyleFontFace->currentFont().family()));
+        textStyleValueChanged(Pid::FONT_FACE, QVariant(textStyleFontFace->currentFont().family()));
     });
 
     // font size
     WidgetUtils::setWidgetIcon(resetTextStyleFontSize, IconCode::Code::UNDO);
     connect(resetTextStyleFontSize, &QToolButton::clicked, [=]() {
-        resetTextStyle(mu::engraving::Pid::FONT_SIZE);
+        resetTextStyle(Pid::FONT_SIZE);
     });
     connect(textStyleFontSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
-        textStyleValueChanged(mu::engraving::Pid::FONT_SIZE, QVariant(textStyleFontSize->value()));
+        textStyleValueChanged(Pid::FONT_SIZE, QVariant(textStyleFontSize->value()));
     });
 
     // line spacing
     WidgetUtils::setWidgetIcon(resetTextStyleLineSpacing, IconCode::Code::UNDO);
     connect(resetTextStyleLineSpacing, &QToolButton::clicked, [=]() {
-        resetTextStyle(mu::engraving::Pid::TEXT_LINE_SPACING);
+        resetTextStyle(Pid::TEXT_LINE_SPACING);
     });
     connect(textStyleLineSpacing, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
-        textStyleValueChanged(mu::engraving::Pid::TEXT_LINE_SPACING, QVariant(textStyleLineSpacing->value()));
+        textStyleValueChanged(Pid::TEXT_LINE_SPACING, QVariant(textStyleLineSpacing->value()));
     });
 
     // font style
     WidgetUtils::setWidgetIcon(resetTextStyleFontStyle, IconCode::Code::UNDO);
     connect(resetTextStyleFontStyle, &QToolButton::clicked, [=]() {
-        resetTextStyle(mu::engraving::Pid::FONT_STYLE);
+        resetTextStyle(Pid::FONT_STYLE);
     });
     connect(textStyleFontStyle, &FontStyleSelect::fontStyleChanged, [=]() {
-        textStyleValueChanged(mu::engraving::Pid::FONT_STYLE, QVariant(int(textStyleFontStyle->fontStyle())));
+        textStyleValueChanged(Pid::FONT_STYLE, QVariant(int(textStyleFontStyle->fontStyle())));
     });
 
     // align
     WidgetUtils::setWidgetIcon(resetTextStyleAlign, IconCode::Code::UNDO);
     connect(resetTextStyleAlign, &QToolButton::clicked, [=]() {
-        resetTextStyle(mu::engraving::Pid::ALIGN);
+        resetTextStyle(Pid::ALIGN);
     });
     connect(textStyleAlign, &AlignSelect::alignChanged, [=]() {
-        textStyleValueChanged(mu::engraving::Pid::ALIGN, PropertyValue(textStyleAlign->align()).toQVariant());
+        textStyleValueChanged(Pid::ALIGN, PropertyValue(textStyleAlign->align()).toQVariant());
     });
 
     // offset
     WidgetUtils::setWidgetIcon(resetTextStyleOffset, IconCode::Code::UNDO);
     connect(resetTextStyleOffset, &QToolButton::clicked, [=]() {
-        resetTextStyle(mu::engraving::Pid::OFFSET);
+        resetTextStyle(Pid::OFFSET);
     });
     connect(textStyleOffset, &OffsetSelect::offsetChanged, [=]() {
-        textStyleValueChanged(mu::engraving::Pid::OFFSET, QVariant(textStyleOffset->offset()));
+        textStyleValueChanged(Pid::OFFSET, QVariant(textStyleOffset->offset()));
     });
 
     // spatium dependent
     WidgetUtils::setWidgetIcon(resetTextStyleSpatiumDependent, IconCode::Code::UNDO);
     connect(resetTextStyleSpatiumDependent, &QToolButton::clicked, [=]() {
-        resetTextStyle(mu::engraving::Pid::SIZE_SPATIUM_DEPENDENT);
+        resetTextStyle(Pid::SIZE_SPATIUM_DEPENDENT);
     });
     connect(textStyleSpatiumDependent, &QCheckBox::toggled, [=]() {
-        textStyleValueChanged(mu::engraving::Pid::SIZE_SPATIUM_DEPENDENT, textStyleSpatiumDependent->isChecked());
+        textStyleValueChanged(Pid::SIZE_SPATIUM_DEPENDENT, textStyleSpatiumDependent->isChecked());
     });
 
     WidgetUtils::setWidgetIcon(resetTextStyleFrameType, IconCode::Code::UNDO);
     connect(resetTextStyleFrameType, &QToolButton::clicked, [=]() {
-        resetTextStyle(mu::engraving::Pid::FRAME_TYPE);
+        resetTextStyle(Pid::FRAME_TYPE);
     });
     connect(textStyleFrameType, QOverload<int>::of(&QComboBox::currentIndexChanged), [=]() {
-        textStyleValueChanged(mu::engraving::Pid::FRAME_TYPE, textStyleFrameType->currentIndex());
+        textStyleValueChanged(Pid::FRAME_TYPE, textStyleFrameType->currentIndex());
     });
 
     WidgetUtils::setWidgetIcon(resetTextStyleFramePadding, IconCode::Code::UNDO);
     connect(resetTextStyleFramePadding, &QToolButton::clicked, [=]() {
-        resetTextStyle(mu::engraving::Pid::FRAME_PADDING);
+        resetTextStyle(Pid::FRAME_PADDING);
     });
     connect(textStyleFramePadding, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
-        textStyleValueChanged(mu::engraving::Pid::FRAME_PADDING, textStyleFramePadding->value());
+        textStyleValueChanged(Pid::FRAME_PADDING, textStyleFramePadding->value());
     });
 
     WidgetUtils::setWidgetIcon(resetTextStyleFrameBorder, IconCode::Code::UNDO);
     connect(resetTextStyleFrameBorder, &QToolButton::clicked, [=]() {
-        resetTextStyle(mu::engraving::Pid::FRAME_WIDTH);
+        resetTextStyle(Pid::FRAME_WIDTH);
     });
     connect(textStyleFrameBorder, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
-        textStyleValueChanged(mu::engraving::Pid::FRAME_WIDTH, textStyleFrameBorder->value());
+        textStyleValueChanged(Pid::FRAME_WIDTH, textStyleFrameBorder->value());
     });
 
     WidgetUtils::setWidgetIcon(resetTextStyleFrameBorderRadius, IconCode::Code::UNDO);
     connect(resetTextStyleFrameBorderRadius, &QToolButton::clicked, [=]() {
-        resetTextStyle(mu::engraving::Pid::FRAME_ROUND);
+        resetTextStyle(Pid::FRAME_ROUND);
     });
     connect(textStyleFrameBorderRadius, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
-        textStyleValueChanged(mu::engraving::Pid::FRAME_ROUND, textStyleFrameBorderRadius->value());
+        textStyleValueChanged(Pid::FRAME_ROUND, textStyleFrameBorderRadius->value());
     });
 
     WidgetUtils::setWidgetIcon(resetTextStyleFrameForeground, IconCode::Code::UNDO);
     connect(resetTextStyleFrameForeground, &QToolButton::clicked, [=]() {
-        resetTextStyle(mu::engraving::Pid::FRAME_FG_COLOR);
+        resetTextStyle(Pid::FRAME_FG_COLOR);
     });
     connect(textStyleFrameForeground, &Awl::ColorLabel::colorChanged, [=]() {
-        textStyleValueChanged(mu::engraving::Pid::FRAME_FG_COLOR, textStyleFrameForeground->color());
+        textStyleValueChanged(Pid::FRAME_FG_COLOR, textStyleFrameForeground->color());
     });
 
     WidgetUtils::setWidgetIcon(resetTextStyleFrameBackground, IconCode::Code::UNDO);
     connect(resetTextStyleFrameBackground, &QToolButton::clicked, [=]() {
-        resetTextStyle(mu::engraving::Pid::FRAME_BG_COLOR);
+        resetTextStyle(Pid::FRAME_BG_COLOR);
     });
     connect(textStyleFrameBackground, &Awl::ColorLabel::colorChanged, [=]() {
-        textStyleValueChanged(mu::engraving::Pid::FRAME_BG_COLOR, textStyleFrameBackground->color());
+        textStyleValueChanged(Pid::FRAME_BG_COLOR, textStyleFrameBackground->color());
     });
 
     WidgetUtils::setWidgetIcon(resetTextStyleColor, IconCode::Code::UNDO);
     connect(resetTextStyleColor, &QToolButton::clicked, [=]() {
-        resetTextStyle(mu::engraving::Pid::COLOR);
+        resetTextStyle(Pid::COLOR);
     });
     connect(textStyleColor, &Awl::ColorLabel::colorChanged, [=]() {
-        textStyleValueChanged(mu::engraving::Pid::COLOR, textStyleColor->color());
+        textStyleValueChanged(Pid::COLOR, textStyleColor->color());
     });
 
     // TODO: bring back the tab styles button and make sure right styles are applied as default
@@ -1118,7 +1117,7 @@ void EditStyle::retranslate()
     setHeaderFooterToolTip();
 
     int idx = 0;
-    for (auto ss : mu::engraving::allTextStyles()) {
+    for (auto ss : allTextStyles()) {
         QString name = TConv::translatedUserName(ss);
         textStyles->item(idx)->setText(name);
         ++idx;
@@ -1232,8 +1231,8 @@ EditStyle::EditStylePage EditStyle::pageForElement(EngravingItem* e)
     case ElementType::PAGE:
         return &EditStyle::PagePage;
     case ElementType::TEXT:
-        if (toText(e)->textStyleType() == mu::engraving::TextStyleType::FOOTER
-            || toText(e)->textStyleType() == mu::engraving::TextStyleType::HEADER) {
+        if (toText(e)->textStyleType() == TextStyleType::FOOTER
+            || toText(e)->textStyleType() == TextStyleType::HEADER) {
             return &EditStyle::PageHeaderFooter;
         }
         return nullptr;
@@ -1426,7 +1425,7 @@ void EditStyle::on_comboFBFont_currentIndexChanged(int index)
 {
     qreal size, lineHeight;
 
-    if (mu::engraving::FiguredBass::fontData(index, 0, 0, &size, &lineHeight)) {
+    if (FiguredBass::fontData(index, 0, 0, &size, &lineHeight)) {
         doubleSpinFBSize->setValue(size);
         spinFBLineHeight->setValue(static_cast<int>(lineHeight * 100.0));
     }
@@ -1472,8 +1471,8 @@ void EditStyle::on_resetTabStylesButton_clicked()
 
 void EditStyle::unhandledType(const StyleWidget sw)
 {
-    P_TYPE type = mu::engraving::MStyle::valueType(sw.idx);
-    ASSERT_X(QString::asprintf("%d <%s>: widget: %s\n", int(type), mu::engraving::MStyle::valueName(sw.idx),
+    P_TYPE type = MStyle::valueType(sw.idx);
+    ASSERT_X(QString::asprintf("%d <%s>: widget: %s\n", int(type), MStyle::valueName(sw.idx),
                                sw.widget->metaObject()->className()));
 }
 
@@ -1485,11 +1484,11 @@ void EditStyle::unhandledType(const StyleWidget sw)
 PropertyValue EditStyle::getValue(StyleId idx)
 {
     const StyleWidget& sw = styleWidget(idx);
-    P_TYPE type = mu::engraving::MStyle::valueType(idx);
+    P_TYPE type = MStyle::valueType(idx);
     switch (type) {
     case P_TYPE::SPATIUM: {
         QDoubleSpinBox* sb = qobject_cast<QDoubleSpinBox*>(sw.widget);
-        return mu::engraving::Spatium(sb->value() * (sw.showPercent ? 0.01 : 1.0));
+        return Spatium(sb->value() * (sw.showPercent ? 0.01 : 1.0));
     } break;
     case P_TYPE::REAL: {
         QVariant v = sw.widget->property("value");
@@ -1559,7 +1558,7 @@ PropertyValue EditStyle::getValue(StyleId idx)
     case P_TYPE::DIRECTION_V: {
         QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
         if (cb) {
-            return mu::engraving::DirectionV(cb->currentIndex());
+            return DirectionV(cb->currentIndex());
         } else {
             ASSERT_X("unhandled Direction");
         }
@@ -1645,7 +1644,7 @@ void EditStyle::setValues()
                     }
                 }
             } else if (FontStyleSelect* fontStyle = qobject_cast<FontStyleSelect*>(sw.widget)) {
-                fontStyle->setFontStyle(mu::engraving::FontStyle(value));
+                fontStyle->setFontStyle(FontStyle(value));
             } else {
                 unhandledType(sw);
             }
@@ -1671,14 +1670,14 @@ void EditStyle::setValues()
         case P_TYPE::DIRECTION_V: {
             QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
             if (cb) {
-                cb->setCurrentIndex(int(val.value<mu::engraving::DirectionV>()));
+                cb->setCurrentIndex(int(val.value<DirectionV>()));
             } else {
                 unhandledType(sw);
             }
         } break;
         case P_TYPE::ALIGN: {
             AlignSelect* as = qobject_cast<AlignSelect*>(sw.widget);
-            as->setAlign(val.value<mu::engraving::Align>());
+            as->setAlign(val.value<Align>());
         } break;
         case P_TYPE::POINT: {
             OffsetSelect* as = qobject_cast<OffsetSelect*>(sw.widget);
@@ -1701,15 +1700,15 @@ void EditStyle::setValues()
     //TODO: convert the rest:
 
     ByteArray ba = styleValue(StyleId::swingUnit).value<String>().toAscii();
-    mu::engraving::DurationType unit = TConv::fromXml(ba.constChar(), mu::engraving::DurationType::V_INVALID);
+    DurationType unit = TConv::fromXml(ba.constChar(), DurationType::V_INVALID);
 
-    if (unit == mu::engraving::DurationType::V_EIGHTH) {
+    if (unit == DurationType::V_EIGHTH) {
         swingEighth->setChecked(true);
         swingBox->setEnabled(true);
-    } else if (unit == mu::engraving::DurationType::V_16TH) {
+    } else if (unit == DurationType::V_16TH) {
         swingSixteenth->setChecked(true);
         swingBox->setEnabled(true);
-    } else if (unit == mu::engraving::DurationType::V_ZERO) {
+    } else if (unit == DurationType::V_ZERO) {
         swingOff->setChecked(true);
         swingBox->setEnabled(false);
     }
@@ -1741,7 +1740,7 @@ void EditStyle::setValues()
 
     QString mfont(styleValue(StyleId::MusicalSymbolFont).value<String>());
     int idx = 0;
-    for (const auto& i : mu::engraving::SymbolFonts::scoreFonts()) {
+    for (const auto& i : SymbolFonts::scoreFonts()) {
         if (i.name().toLower() == mfont.toLower()) {
             musicalSymbolFont->setCurrentIndex(idx);
             break;
@@ -1833,7 +1832,7 @@ bool EditStyle::hasDefaultStyleValue(StyleId id) const
 
 void EditStyle::setStyleQVariantValue(StyleId id, const QVariant& value)
 {
-    setStyleValue(id, PropertyValue::fromQVariant(value, mu::engraving::MStyle::valueType(id)));
+    setStyleValue(id, PropertyValue::fromQVariant(value, MStyle::valueType(id)));
 }
 
 void EditStyle::setStyleValue(StyleId id, const PropertyValue& value)
@@ -2036,7 +2035,7 @@ void EditStyle::valueChanged(int i)
     PropertyValue val  = getValue(idx);
     bool setValue = false;
     if (idx == StyleId::MusicalSymbolFont && optimizeStyleCheckbox->isChecked()) {
-        mu::engraving::SymbolFont* scoreFont = mu::engraving::SymbolFonts::fontByName(val.value<String>());
+        SymbolFont* scoreFont = SymbolFonts::fontByName(val.value<String>());
         if (scoreFont) {
             for (auto j : scoreFont->engravingDefaults()) {
                 setStyleValue(j.first, j.second);
@@ -2074,44 +2073,44 @@ void EditStyle::resetStyleValue(int i)
 
 void EditStyle::textStyleChanged(int row)
 {
-    mu::engraving::TextStyleType tid = mu::engraving::TextStyleType(textStyles->item(row)->data(Qt::UserRole).toInt());
-    const mu::engraving::TextStyle* ts = mu::engraving::textStyle(tid);
+    TextStyleType tid = TextStyleType(textStyles->item(row)->data(Qt::UserRole).toInt());
+    const TextStyle* ts = textStyle(tid);
 
-    for (const mu::engraving::StyledProperty& a : *ts) {
+    for (const StyledProperty& a : *ts) {
         switch (a.pid) {
-        case mu::engraving::Pid::FONT_FACE: {
+        case Pid::FONT_FACE: {
             PropertyValue val = styleValue(a.sid);
             textStyleFontFace->setCurrentFont(QFont(val.value<String>()));
             resetTextStyleFontFace->setEnabled(val != defaultStyleValue(a.sid));
         }
         break;
 
-        case mu::engraving::Pid::FONT_SIZE:
+        case Pid::FONT_SIZE:
             textStyleFontSize->setValue(styleValue(a.sid).toDouble());
             resetTextStyleFontSize->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case mu::engraving::Pid::TEXT_LINE_SPACING:
+        case Pid::TEXT_LINE_SPACING:
             textStyleLineSpacing->setValue(styleValue(a.sid).toDouble());
             resetTextStyleLineSpacing->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case mu::engraving::Pid::FONT_STYLE:
-            textStyleFontStyle->setFontStyle(mu::engraving::FontStyle(styleValue(a.sid).toInt()));
+        case Pid::FONT_STYLE:
+            textStyleFontStyle->setFontStyle(FontStyle(styleValue(a.sid).toInt()));
             resetTextStyleFontStyle->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case mu::engraving::Pid::ALIGN:
-            textStyleAlign->setAlign(styleValue(a.sid).value<mu::engraving::Align>());
+        case Pid::ALIGN:
+            textStyleAlign->setAlign(styleValue(a.sid).value<Align>());
             resetTextStyleAlign->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case mu::engraving::Pid::OFFSET:
+        case Pid::OFFSET:
             textStyleOffset->setOffset(styleValue(a.sid).value<PointF>().toQPointF());
             resetTextStyleOffset->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case mu::engraving::Pid::SIZE_SPATIUM_DEPENDENT: {
+        case Pid::SIZE_SPATIUM_DEPENDENT: {
             PropertyValue val = styleValue(a.sid);
             textStyleSpatiumDependent->setChecked(val.toBool());
             resetTextStyleSpatiumDependent->setEnabled(val != defaultStyleValue(a.sid));
@@ -2119,38 +2118,38 @@ void EditStyle::textStyleChanged(int row)
         }
         break;
 
-        case mu::engraving::Pid::FRAME_TYPE:
+        case Pid::FRAME_TYPE:
             textStyleFrameType->setCurrentIndex(styleValue(a.sid).toInt());
             resetTextStyleFrameType->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             frameWidget->setEnabled(styleValue(a.sid).toInt() != 0);             // disable if no frame
             break;
 
-        case mu::engraving::Pid::FRAME_PADDING:
+        case Pid::FRAME_PADDING:
             textStyleFramePadding->setValue(styleValue(a.sid).toDouble());
             resetTextStyleFramePadding->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case mu::engraving::Pid::FRAME_WIDTH:
+        case Pid::FRAME_WIDTH:
             textStyleFrameBorder->setValue(styleValue(a.sid).toDouble());
             resetTextStyleFrameBorder->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case mu::engraving::Pid::FRAME_ROUND:
+        case Pid::FRAME_ROUND:
             textStyleFrameBorderRadius->setValue(double(styleValue(a.sid).toInt()));
             resetTextStyleFrameBorderRadius->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case mu::engraving::Pid::FRAME_FG_COLOR:
+        case Pid::FRAME_FG_COLOR:
             textStyleFrameForeground->setColor(styleValue(a.sid).value<Color>().toQColor());
             resetTextStyleFrameForeground->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case mu::engraving::Pid::FRAME_BG_COLOR:
+        case Pid::FRAME_BG_COLOR:
             textStyleFrameBackground->setColor(styleValue(a.sid).value<Color>().toQColor());
             resetTextStyleFrameBackground->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case mu::engraving::Pid::COLOR:
+        case Pid::COLOR:
             textStyleColor->setColor(styleValue(a.sid).value<Color>().toQColor());
             resetTextStyleColor->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
@@ -2161,7 +2160,7 @@ void EditStyle::textStyleChanged(int row)
     }
 
     styleName->setText(TConv::translatedUserName(tid));
-    styleName->setEnabled(int(tid) >= int(mu::engraving::TextStyleType::USER1));
+    styleName->setEnabled(int(tid) >= int(TextStyleType::USER1));
     resetTextStyleName->setEnabled(false);
 }
 
@@ -2169,12 +2168,12 @@ void EditStyle::textStyleChanged(int row)
 //   textStyleValueChanged
 //---------------------------------------------------------
 
-void EditStyle::textStyleValueChanged(mu::engraving::Pid pid, QVariant value)
+void EditStyle::textStyleValueChanged(Pid pid, QVariant value)
 {
-    mu::engraving::TextStyleType tid = mu::engraving::TextStyleType(textStyles->item(textStyles->currentRow())->data(Qt::UserRole).toInt());
-    const mu::engraving::TextStyle* ts = mu::engraving::textStyle(tid);
+    TextStyleType tid = TextStyleType(textStyles->item(textStyles->currentRow())->data(Qt::UserRole).toInt());
+    const TextStyle* ts = textStyle(tid);
 
-    for (const mu::engraving::StyledProperty& a : *ts) {
+    for (const StyledProperty& a : *ts) {
         if (a.pid == pid) {
             setStyleQVariantValue(a.sid, value);
             break;
@@ -2187,12 +2186,12 @@ void EditStyle::textStyleValueChanged(mu::engraving::Pid pid, QVariant value)
 //   resetTextStyle
 //---------------------------------------------------------
 
-void EditStyle::resetTextStyle(mu::engraving::Pid pid)
+void EditStyle::resetTextStyle(Pid pid)
 {
-    mu::engraving::TextStyleType tid = mu::engraving::TextStyleType(textStyles->item(textStyles->currentRow())->data(Qt::UserRole).toInt());
-    const mu::engraving::TextStyle* ts = mu::engraving::textStyle(tid);
+    TextStyleType tid = TextStyleType(textStyles->item(textStyles->currentRow())->data(Qt::UserRole).toInt());
+    const TextStyle* ts = textStyle(tid);
 
-    for (const mu::engraving::StyledProperty& a : *ts) {
+    for (const StyledProperty& a : *ts) {
         if (a.pid == pid) {
             setStyleValue(a.sid, defaultStyleValue(a.sid));
             break;
@@ -2208,7 +2207,7 @@ void EditStyle::resetTextStyle(mu::engraving::Pid pid)
 void EditStyle::editUserStyleName()
 {
     int row = textStyles->currentRow();
-    mu::engraving::TextStyleType tid = mu::engraving::TextStyleType(textStyles->item(row)->data(Qt::UserRole).toInt());
+    TextStyleType tid = TextStyleType(textStyles->item(row)->data(Qt::UserRole).toInt());
     textStyles->item(row)->setText(styleName->text());
     resetTextStyleName->setEnabled(styleName->text() != TConv::translatedUserName(tid));
 }
@@ -2220,9 +2219,9 @@ void EditStyle::editUserStyleName()
 void EditStyle::endEditUserStyleName()
 {
     int row = textStyles->currentRow();
-    mu::engraving::TextStyleType tid = mu::engraving::TextStyleType(textStyles->item(row)->data(Qt::UserRole).toInt());
-    int idx = int(tid) - int(mu::engraving::TextStyleType::USER1);
-    if (int(tid) < int(mu::engraving::TextStyleType::USER1) || int(tid) > int(mu::engraving::TextStyleType::USER12)) {
+    TextStyleType tid = TextStyleType(textStyles->item(row)->data(Qt::UserRole).toInt());
+    int idx = int(tid) - int(TextStyleType::USER1);
+    if (int(tid) < int(TextStyleType::USER1) || int(tid) > int(TextStyleType::USER12)) {
         LOGD("User style index %d outside of range.", idx);
         return;
     }

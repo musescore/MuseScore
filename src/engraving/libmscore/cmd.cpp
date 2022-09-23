@@ -28,69 +28,53 @@
 #include <assert.h>
 
 #include "translation.h"
+
 #include "infrastructure/messagebox.h"
 #include "style/style.h"
 #include "rw/xml.h"
-#include "types/symnames.h"
 
-#include "factory.h"
-#include "types.h"
-#include "musescoreCore.h"
-#include "score.h"
-#include "utils.h"
-#include "key.h"
-#include "clef.h"
-#include "navigate.h"
-#include "slur.h"
-#include "tie.h"
-#include "note.h"
-#include "rest.h"
-#include "chord.h"
-#include "text.h"
-#include "sig.h"
-#include "staff.h"
-#include "part.h"
-#include "page.h"
-#include "barline.h"
-#include "tuplet.h"
-#include "ottava.h"
-#include "trill.h"
-#include "pedal.h"
-#include "hairpin.h"
-#include "textline.h"
-#include "keysig.h"
-#include "volta.h"
-#include "dynamic.h"
-#include "box.h"
-#include "harmony.h"
-#include "system.h"
-#include "stafftext.h"
-#include "articulation.h"
-#include "layoutbreak.h"
-#include "drumset.h"
-#include "beam.h"
-#include "lyrics.h"
-#include "pitchspelling.h"
-#include "measure.h"
-#include "tempo.h"
-#include "undo.h"
-#include "timesig.h"
-#include "measurerepeat.h"
-#include "tempotext.h"
-#include "noteevent.h"
-#include "breath.h"
-#include "stringdata.h"
-#include "stafftype.h"
-#include "segment.h"
-#include "chordlist.h"
-#include "mscore.h"
 #include "accidental.h"
-#include "tremolo.h"
-#include "rehearsalmark.h"
+#include "articulation.h"
+#include "barline.h"
+#include "box.h"
+#include "chord.h"
+#include "clef.h"
+#include "drumset.h"
+#include "dynamic.h"
+#include "factory.h"
+#include "hairpin.h"
+#include "harmony.h"
+#include "key.h"
 #include "linkedobjects.h"
-#include "mscoreview.h"
+#include "lyrics.h"
 #include "masterscore.h"
+#include "measure.h"
+#include "measurerepeat.h"
+#include "mscore.h"
+#include "mscoreview.h"
+#include "navigate.h"
+#include "note.h"
+#include "page.h"
+#include "part.h"
+#include "pitchspelling.h"
+#include "rehearsalmark.h"
+#include "rest.h"
+#include "score.h"
+#include "segment.h"
+#include "sig.h"
+#include "slur.h"
+#include "staff.h"
+#include "stafftype.h"
 #include "stem.h"
+#include "stringdata.h"
+#include "system.h"
+#include "tie.h"
+#include "timesig.h"
+#include "tremolo.h"
+#include "tuplet.h"
+#include "types.h"
+#include "undo.h"
+#include "utils.h"
 
 #include "log.h"
 
@@ -99,6 +83,47 @@ using namespace mu::io;
 using namespace mu::engraving;
 
 namespace mu::engraving {
+static UndoMacro::ChangesInfo changesInfo(const UndoStack* stack)
+{
+    IF_ASSERT_FAILED(stack) {
+        static UndoMacro::ChangesInfo empty;
+        return empty;
+    }
+
+    const UndoMacro* actualMacro = stack->current();
+
+    if (!actualMacro) {
+        actualMacro = stack->last();
+    }
+
+    if (!actualMacro) {
+        static UndoMacro::ChangesInfo empty;
+        return empty;
+    }
+
+    return actualMacro->changesInfo();
+}
+
+static std::pair<int, int> changedTicksRange(const CmdState& cmdState, const std::vector<const EngravingItem*>& changedItems)
+{
+    int startTick = cmdState.startTick().ticks();
+    int endTick = cmdState.endTick().ticks();
+
+    for (const EngravingItem* element : changedItems) {
+        int tick = element->tick().ticks();
+
+        if (startTick > tick) {
+            startTick = tick;
+        }
+
+        if (endTick < tick) {
+            endTick = tick;
+        }
+    }
+
+    return { startTick, endTick };
+}
+
 //---------------------------------------------------------
 //   reset
 //---------------------------------------------------------
@@ -241,6 +266,10 @@ void CmdState::setUpdateMode(UpdateMode m)
 
 void Score::startCmd()
 {
+    if (undoStack()->locked()) {
+        return;
+    }
+
     if (MScore::debugMode) {
         LOGD("===startCmd()");
     }
@@ -271,7 +300,7 @@ void Score::undoRedo(bool undo, EditData* ed)
     //! NOTE: the order of operations is very important here
     //! 1. for the undo operation, the list of changed elements is available before undo()
     //! 2. for the redo operation, the list of changed elements will be available after redo()
-    ElementTypeSet changedElementTypes = changedTypes();
+    UndoMacro::ChangesInfo changes = changesInfo(undoStack());
 
     cmdState().reset();
     if (undo) {
@@ -284,8 +313,17 @@ void Score::undoRedo(bool undo, EditData* ed)
     updateSelection();
 
     ScoreChangesRange range = changesRange();
+
     if (range.changedTypes.empty()) {
-        range.changedTypes = std::move(changedElementTypes);
+        range.changedTypes = std::move(changes.changedObjectTypes);
+    }
+
+    if (range.changedPropertyIdSet.empty()) {
+        range.changedPropertyIdSet = std::move(changes.changedPropertyIdSet);
+    }
+
+    if (range.changedStyleIdSet.empty()) {
+        range.changedStyleIdSet = std::move(changes.changedStyleIdSet);
     }
 
     if (range.isValid()) {
@@ -301,6 +339,10 @@ void Score::undoRedo(bool undo, EditData* ed)
 
 void Score::endCmd(bool rollback)
 {
+    if (undoStack()->locked()) {
+        return;
+    }
+
     if (!undoStack()->active()) {
         LOGW() << "no command active";
         update();
@@ -341,61 +383,15 @@ mu::async::Channel<ScoreChangesRange> Score::changesChannel() const
     return m_changesRangeChannel;
 }
 
-ElementTypeSet Score::changedTypes() const
-{
-    IF_ASSERT_FAILED(undoStack()) {
-        static ElementTypeSet empty;
-        return empty;
-    }
-
-    const UndoMacro* actualMacro = undoStack()->current();
-
-    if (!actualMacro) {
-        actualMacro = undoStack()->last();
-    }
-
-    if (!actualMacro) {
-        static ElementTypeSet empty;
-        return empty;
-    }
-
-    return actualMacro->changedTypes();
-}
-
-std::pair<int, int> Score::changedTicksRange() const
-{
-    const UndoMacro* actualMacro = undoStack()->current();
-
-    if (!actualMacro) {
-        actualMacro = undoStack()->last();
-    }
-
-    const CmdState& cmdState = score()->cmdState();
-    int startTick = cmdState.startTick().ticks();
-    int endTick = cmdState.endTick().ticks();
-
-    if (actualMacro) {
-        auto elements = actualMacro->changedElements();
-        for (const EngravingItem* element : elements) {
-            if (startTick > element->tick().ticks()) {
-                startTick = element->tick().ticks();
-            }
-
-            if (endTick < element->tick().ticks()) {
-                endTick = element->tick().ticks();
-            }
-        }
-    }
-
-    return { startTick, endTick };
-}
-
 ScoreChangesRange Score::changesRange() const
 {
     const CmdState& cmdState = score()->cmdState();
-    auto ticksRange = changedTicksRange();
+    UndoMacro::ChangesInfo changes = changesInfo(undoStack());
+    auto ticksRange = changedTicksRange(cmdState, changes.changedItems);
+
     return { ticksRange.first, ticksRange.second,
-             cmdState.startStaff(), cmdState.endStaff(), changedTypes() };
+             cmdState.startStaff(), cmdState.endStaff(),
+             changes.changedObjectTypes, changes.changedPropertyIdSet, changes.changedStyleIdSet };
 }
 
 #ifndef NDEBUG
@@ -535,7 +531,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool systemStaves
     spanner->eraseSpannerSegments();
 
     bool ctrlModifier = isSystemTextLine(spanner) && !systemStavesOnly;
-    undoAddElement(spanner, ctrlModifier);
+    undoAddElement(spanner, true /*addToLinkedStaves*/, ctrlModifier);
     select(spanner, SelectType::SINGLE, 0);
 }
 
@@ -1471,6 +1467,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
     }
 
     deselectAll();
+    EngravingItem* elementToSelect = nullptr;
 
     Fraction tick  = cr->tick();
     Fraction f     = dstF;
@@ -1498,7 +1495,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
                 r = setRest(tick, track, f2, false, tuplet);
             }
             if (first) {
-                select(r, SelectType::SINGLE, 0);
+                elementToSelect = r;
                 first = false;
             }
             tick += actualTicks(f2, tuplet, timeStretch);
@@ -1509,7 +1506,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
 
             if (((tick - etick).ticks() % dList[0].ticks().ticks()) == 0) {
                 for (TDuration du : dList) {
-                    Chord* cc;
+                    Chord* cc = nullptr;
                     if (oc) {
                         cc = oc;
                         oc = addChord(tick, du, cc, true, tuplet);
@@ -1519,11 +1516,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
                         oc = cc;
                     }
                     if (oc && first) {
-                        if (!selElement) {
-                            select(oc, SelectType::SINGLE, 0);
-                        } else {
-                            select(selElement, SelectType::SINGLE, 0);
-                        }
+                        elementToSelect = selElement ? selElement : oc;
                         first = false;
                     }
                     if (oc) {
@@ -1542,10 +1535,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
                         oc = cc;
                     }
                     if (first) {
-                        // select(oc, SelectType::SINGLE, 0);
-                        if (selElement) {
-                            select(selElement, SelectType::SINGLE, 0);
-                        }
+                        elementToSelect = selElement;
                         first = false;
                     }
                     tick += oc->actualTicks();
@@ -1562,6 +1552,12 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
         cr1 = toChordRest(s->element(track));
     }
     connectTies();
+
+    if (elementToSelect) {
+        if (containsElement(elementToSelect)) {
+            select(elementToSelect, SelectType::SINGLE, 0);
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -2928,6 +2924,49 @@ void Score::cmdMoveLyrics(Lyrics* lyrics, DirectionV dir)
         return;
     }
     lyrics->undoChangeProperty(Pid::VERSE, verse);
+}
+
+//---------------------------------------------------------
+//   realtimeAdvance
+//---------------------------------------------------------
+
+void Score::realtimeAdvance()
+{
+    InputState& is = inputState();
+    if (!is.noteEntryMode()) {
+        return;
+    }
+
+    Fraction ticks2measureEnd = is.segment()->measure()->ticks() - is.segment()->rtick();
+    if (!is.cr() || (is.cr()->ticks() != is.duration().fraction() && is.duration() < ticks2measureEnd)) {
+        setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), DirectionV::AUTO);
+    }
+
+    ChordRest* prevCR = toChordRest(is.cr());
+    if (inputState().endOfScore()) {
+        appendMeasures(1);
+    }
+
+    is.moveToNextInputPos();
+
+    std::list<MidiInputEvent>& midiPitches = activeMidiPitches();
+    if (midiPitches.empty()) {
+        setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), DirectionV::AUTO);
+    } else {
+        Chord* prevChord = prevCR->isChord() ? toChord(prevCR) : 0;
+        bool partOfChord = false;
+        for (const MidiInputEvent& ev : midiPitches) {
+            addTiedMidiPitch(ev.pitch, partOfChord, prevChord);
+            partOfChord = true;
+        }
+    }
+
+    if (prevCR->measure() != is.segment()->measure()) {
+        // just advanced across barline. Now simplify tied notes.
+        score()->regroupNotesAndRests(prevCR->measure()->tick(), is.segment()->measure()->tick(), is.track());
+    }
+
+    return;
 }
 
 //---------------------------------------------------------

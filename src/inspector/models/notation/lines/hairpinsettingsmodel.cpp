@@ -29,6 +29,7 @@
 #include "translation.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 HairpinSettingsModel::HairpinSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : TextLineSettingsModel(parent, repository)
@@ -72,9 +73,13 @@ void HairpinSettingsModel::loadProperties()
 {
     TextLineSettingsModel::loadProperties();
 
-    loadPropertyItem(m_isNienteCircleVisible);
-    loadPropertyItem(m_height, formatDoubleFunc);
-    loadPropertyItem(m_continuousHeight, formatDoubleFunc);
+    const static PropertyIdSet propertyIdSet {
+        Pid::HAIRPIN_CIRCLEDTIP,
+        Pid::HAIRPIN_HEIGHT,
+        Pid::HAIRPIN_CONT_HEIGHT,
+    };
+
+    loadProperties(propertyIdSet);
 }
 
 void HairpinSettingsModel::resetProperties()
@@ -100,7 +105,28 @@ void HairpinSettingsModel::requestElements()
     });
 }
 
+void HairpinSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet& changedStyleIdSet)
+{
+    TextLineSettingsModel::onNotationChanged(changedPropertyIdSet, changedStyleIdSet);
+    loadProperties(changedPropertyIdSet);
+}
+
 bool HairpinSettingsModel::isTextVisible(TextType) const
 {
     return true;
+}
+
+void HairpinSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
+{
+    if (mu::contains(propertyIdSet, Pid::HAIRPIN_CIRCLEDTIP)) {
+        loadPropertyItem(m_isNienteCircleVisible);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::HAIRPIN_HEIGHT)) {
+        loadPropertyItem(m_height, formatDoubleFunc);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::HAIRPIN_CONT_HEIGHT)) {
+        loadPropertyItem(m_continuousHeight, formatDoubleFunc);
+    }
 }

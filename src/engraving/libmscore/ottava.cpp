@@ -22,17 +22,12 @@
 
 #include "ottava.h"
 
-#include "style/style.h"
 #include "rw/xml.h"
 
-#include "system.h"
-#include "measure.h"
-#include "utils.h"
 #include "score.h"
-#include "text.h"
 #include "staff.h"
-#include "segment.h"
-#include "musescoreCore.h"
+#include "system.h"
+#include "text.h"
 
 #include "log.h"
 

@@ -38,7 +38,7 @@ public:
     void setFocusedElement(AccessibleItemPtr e, bool voiceStaffInfoChange = true);
     AccessibleItemWeakPtr focusedElement() const;
 
-    void notifyAboutFocuedElemntNameChanged();
+    void notifyAboutFocusedElementNameChanged();
 
     void setMapToScreenFunc(const AccessibleMapToScreenFunc& func);
     RectF toScreenRect(const RectF& rect, bool* ok = nullptr) const;
@@ -51,10 +51,13 @@ public:
     void setEnabled(bool enabled);
 
     QString staffInfo() const;
-
-private:
     void updateStaffInfo(const AccessibleItemWeakPtr newAccessibleItem, const AccessibleItemWeakPtr oldAccessibleItem,
                          bool voiceStaffInfoChange = true);
+
+    QString commandInfo() const;
+    void setCommandInfo(const QString& command);
+
+private:
 
     bool m_enabled = false;
 
@@ -63,6 +66,7 @@ private:
     AccessibleMapToScreenFunc m_accessibleMapToScreenFunc;
 
     QString m_staffInfo;
+    QString m_commandInfo;
 };
 }
 

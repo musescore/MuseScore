@@ -24,7 +24,6 @@
 
 #include "draw/types/pen.h"
 #include "rw/xml.h"
-#include "types/symnames.h"
 
 #include "measure.h"
 #include "score.h"

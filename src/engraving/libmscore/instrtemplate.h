@@ -27,18 +27,18 @@
 
 #include "io/path.h"
 
-#include "mscore.h"
-#include "instrument.h"
 #include "clef.h"
+#include "instrument.h"
+#include "mscore.h"
 #include "stringdata.h"
 
 namespace mu::engraving {
-class XmlWriter;
 class Part;
 class Staff;
-class StringData;
 class StaffType;
 struct ScoreOrder;
+
+class XmlWriter;
 
 //---------------------------------------------------------
 //   InstrumentGenre
@@ -183,6 +183,5 @@ extern InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String
 extern InstrumentTemplate* searchTemplateForMidiProgram(int bank, int program, bool useDrumset = false);
 extern InstrumentGroup* searchInstrumentGroup(const String& name);
 extern ClefType defaultClef(int patch);
-extern String translateInstrumentName(const String& instrumentId, const String& nameType, const String& text);
 } // namespace mu::engraving
 #endif

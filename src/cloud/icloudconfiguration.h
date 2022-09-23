@@ -35,15 +35,21 @@ public:
     virtual ~ICloudConfiguration() = default;
 
     virtual network::RequestHeaders headers() const = 0;
-    virtual QByteArray clientId() const = 0;
     virtual QByteArray uploadingLicense() const = 0;
 
+    virtual QUrl cloudUrl() const = 0;
     virtual QUrl authorizationUrl() const = 0;
+    virtual QUrl signUpUrl() const = 0;
+    virtual QUrl scoreManagerUrl() const = 0;
     virtual QUrl accessTokenUrl() const = 0;
+
     virtual QUrl refreshApiUrl() const = 0;
     virtual QUrl userInfoApiUrl() const = 0;
-    virtual QUrl loginApiUrl() const = 0;
-    virtual QUrl uploadingApiUrl() const = 0;
+    virtual QUrl logoutApiUrl() const = 0;
+    virtual QUrl scoreInfoApiUrl() const = 0;
+    virtual QUrl uploadScoreApiUrl() const = 0;
+    virtual QUrl uploadAudioApiUrl() const = 0;
+
     virtual io::path_t tokensFilePath() const = 0;
 };
 }

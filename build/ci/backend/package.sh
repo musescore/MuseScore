@@ -79,6 +79,7 @@ mv squashfs-root "$APP_DIR"
 
 # Add offscreen platform plugin
 cp $QT_PATH/plugins/platforms/libqoffscreen.so $APP_DIR/plugins/platforms/libqoffscreen.so
+cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 $APP_DIR/lib/libstdc++.so.6
 
 # Add run file
 cp $HERE/convertor.in $APP_DIR/convertor

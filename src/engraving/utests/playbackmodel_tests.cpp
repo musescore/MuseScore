@@ -24,8 +24,8 @@
 #include <gmock/gmock.h>
 #include <memory>
 
-#include "async/channel.h"
 #include "async/asyncable.h"
+#include "async/channel.h"
 #include "mpe/tests/utils/articulationutils.h"
 #include "mpe/tests/mocks/articulationprofilesrepositorymock.h"
 

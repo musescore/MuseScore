@@ -215,6 +215,9 @@ enum class Sid {
     staffLineWidth,
     ledgerLineWidth,
     ledgerLineLength,
+    stemSlashPosition,
+    stemSlashAngle,
+    stemSlashThickness,
     accidentalDistance,
     accidentalNoteDistance,
     bracketedAccidentalPadding,
@@ -311,7 +314,6 @@ enum class Sid {
     harmonyPlacement,
     romanNumeralPlacement,
     nashvilleNumberPlacement,
-    harmonyPlay,
     harmonyVoiceLiteral,
     harmonyVoicing,
     harmonyDuration,
@@ -1509,6 +1511,11 @@ enum class Sid {
     golpeShowTabSimple,
     golpeShowTabCommon,
 
+    chordlineThickness,
+    showCapoOnStaff,
+    fretDiagramsAboveChords,
+    crossHeadBlackOnly,
+
     autoplaceEnabled,
     defaultsVersion,
 
@@ -1516,6 +1523,8 @@ enum class Sid {
     ///\}
 };
 END_QT_REGISTERED_ENUM(Sid)
+
+using StyleIdSet = std::unordered_set<Sid>;
 
 //---------------------------------------------------------
 //   VerticalAlignRange

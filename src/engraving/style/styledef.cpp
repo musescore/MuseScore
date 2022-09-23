@@ -26,17 +26,12 @@
 #include "rw/xml.h"
 
 #include "libmscore/articulation.h"
-#include "libmscore/chordlist.h"
-#include "libmscore/clef.h"
-#include "libmscore/harmony.h"
-#include "libmscore/masterscore.h"
 #include "libmscore/mscore.h"
-#include "libmscore/page.h"
-#include "libmscore/property.h"
-#include "libmscore/textlinebase.h"
+#include "libmscore/realizedharmony.h"
+#include "libmscore/textbase.h"
+#include "libmscore/tremolo.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/types.h"
-#include "libmscore/undo.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -158,7 +153,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::dividerRightX,           "dividerRightX",           0.0 },
     { Sid::dividerRightY,           "dividerRightY",           0.0 },
 
-    { Sid::clefLeftMargin,          "clefLeftMargin",          Spatium(0.8) },     // 0.64 (gould: <= 1)
+    { Sid::clefLeftMargin,          "clefLeftMargin",          Spatium(0.75) },     // 0.64 (gould: <= 1)
     { Sid::keysigLeftMargin,        "keysigLeftMargin",        Spatium(0.5) },
     { Sid::ambitusMargin,           "ambitusMargin",           Spatium(0.5) },
 
@@ -186,7 +181,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::minStaffSizeForAutoStems, "minStaffSizeForAutoStems", 4 },
     { Sid::smallStaffStemDirection, "smallStaffStemDirection", DirectionV::UP },
     { Sid::beginRepeatLeftMargin,   "beginRepeatLeftMargin",   Spatium(1.0) },
-    { Sid::minNoteDistance,         "minNoteDistance",         Spatium(0.6) },
+    { Sid::minNoteDistance,         "minNoteDistance",         Spatium(0.5) },
     { Sid::barNoteDistance,         "barNoteDistance",         Spatium(1.3) },     // was 1.2
 
     { Sid::barAccidentalDistance,   "barAccidentalDistance",   Spatium(0.65) },
@@ -201,6 +196,9 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::staffLineWidth,          "staffLineWidth",          Spatium(0.11) },
     { Sid::ledgerLineWidth,         "ledgerLineWidth",         Spatium(0.16) },     // 0.1875
     { Sid::ledgerLineLength,        "ledgerLineLength",        Spatium(0.35) },     // notehead width + this value
+    { Sid::stemSlashPosition,         "stemSlashPosition",         Spatium(2.0) },
+    { Sid::stemSlashAngle,          "stemSlashAngle",          40.0 },
+    { Sid::stemSlashThickness,          "stemSlashThickness",          Spatium(0.125), },
     { Sid::accidentalDistance,      "accidentalDistance",      Spatium(0.22) },
     { Sid::accidentalNoteDistance,  "accidentalNoteDistance",  Spatium(0.25) },
     { Sid::bracketedAccidentalPadding,  "bracketedAccidentalPadding",  Spatium(0.175) }, // Padding inside parentheses for bracketed accidentals
@@ -210,7 +208,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     { Sid::beamWidth,               "beamWidth",               Spatium(0.5) },      // was 0.48
     { Sid::useWideBeams,            "useWideBeams",            false },
-    { Sid::beamMinLen,              "beamMinLen",              Spatium(1.2) },
+    { Sid::beamMinLen,              "beamMinLen",              Spatium(1.1) },
     { Sid::beamNoSlope,             "beamNoSlope",             false },
     { Sid::snapCustomBeamsToGrid,   "snapCustomBeamsToGrid",   true },
 
@@ -299,7 +297,6 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::harmonyPlacement,         "harmonyPlacement",           PlacementV::ABOVE },
     { Sid::romanNumeralPlacement,    "romanNumeralPlacement",      PlacementV::BELOW },
     { Sid::nashvilleNumberPlacement, "nashvilleNumberPlacement",   PlacementV::ABOVE },
-    { Sid::harmonyPlay,              "harmonyPlay",                true },
     { Sid::harmonyVoiceLiteral,      "harmonyVoiceLiteral",        true },
     { Sid::harmonyVoicing,           "harmonyVoicing",             int(Voicing::AUTO) },
     { Sid::harmonyDuration,          "harmonyDuration",            int(HDuration::UNTIL_NEXT_CHORD_SYMBOL) },
@@ -399,7 +396,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::measureNumberAllStaves,  "measureNumberAllStaffs",  false }, // need to keep staffs and not staves here for backward compatibility
     { Sid::smallNoteMag,            "smallNoteMag",            PropertyValue(.7) },
     { Sid::graceNoteMag,            "graceNoteMag",            PropertyValue(0.7) },
-    { Sid::graceToMainNoteDist,     "graceToMainNoteDist",     Spatium(0.6) },
+    { Sid::graceToMainNoteDist,     "graceToMainNoteDist",     Spatium(0.45) },
     { Sid::graceToGraceNoteDist,    "graceToGraceNoteDist",    Spatium(0.3) },
     { Sid::smallStaffMag,           "smallStaffMag",           PropertyValue(0.7) },
     { Sid::smallClefMag,            "smallClefMag",            PropertyValue(0.8) },
@@ -591,9 +588,9 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::tupletOufOfStaff,        "tupletOufOfStaff",        true },
     { Sid::tupletVHeadDistance,     "tupletVHeadDistance",     Spatium(.5) },
     { Sid::tupletVStemDistance,     "tupletVStemDistance",     Spatium(.5) },
-    { Sid::tupletStemLeftDistance,  "tupletStemLeftDistance",  Spatium(0.0) },
+    { Sid::tupletStemLeftDistance,  "tupletStemLeftDistance",  Spatium(.5) },
     { Sid::tupletStemRightDistance, "tupletStemRightDistance", Spatium(.5) },
-    { Sid::tupletNoteLeftDistance,  "tupletNoteLeftDistance",  Spatium(-0.5) },
+    { Sid::tupletNoteLeftDistance,  "tupletNoteLeftDistance",  Spatium(0.0) },
     { Sid::tupletNoteRightDistance, "tupletNoteRightDistance", Spatium(0.0) },
     { Sid::tupletBracketWidth,      "tupletBracketWidth",      Spatium(0.1) },
     { Sid::tupletDirection,         "tupletDirection",         DirectionV::AUTO },
@@ -1498,6 +1495,11 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::wahShowTabCommon, "wahShowTabCommon", true },
     { Sid::golpeShowTabSimple, "golpeShowTabSimple", true },
     { Sid::golpeShowTabCommon, "golpeShowTabCommon", true },
+
+    { Sid::chordlineThickness, "chordlineThickness", Spatium(0.006) },
+    { Sid::showCapoOnStaff, "showCapoOnStaff", true },
+    { Sid::fretDiagramsAboveChords, "fretDiagramsAboveChords", true },
+    { Sid::crossHeadBlackOnly, "crossHeadBlackOnly", false },
 
     { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
     { Sid::defaultsVersion,               "defaultsVersion",               MSCVERSION }

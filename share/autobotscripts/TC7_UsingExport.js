@@ -37,7 +37,7 @@ var testCase = {
         }},
         {name: "Create score with Flute", func: function() {
             NewScore.selectTab("instruments")
-            NewScore.сhooseInstrument("Woodwinds", "Flute")
+            NewScore.chooseInstrument("Woodwinds", "Flute")
             NewScore.done()
         }},
         {name: "Turn on note input", func: function() {

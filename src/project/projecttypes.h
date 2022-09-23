@@ -23,7 +23,9 @@
 #define MU_PROJECT_PROJECTTYPES_H
 
 #include <variant>
+
 #include <QString>
+#include <QUrl>
 
 #include "io/path.h"
 #include "log.h"
@@ -75,33 +77,39 @@ enum class SaveLocationType
 };
 
 enum class CloudProjectVisibility {
+    Undefined,
     Private,
     Public
 };
 
+struct CloudProjectInfo {
+    QUrl sourceUrl;
+    QString name;
+
+    CloudProjectVisibility visibility = CloudProjectVisibility::Undefined;
+
+    bool isValid() const
+    {
+        return !name.isEmpty();
+    }
+};
+
 struct SaveLocation
 {
-    struct LocalInfo {
-        io::path_t path;
-    };
-
-    struct CloudInfo {
-        // TODO(save-to-cloud)
-    };
-
     SaveLocationType type = SaveLocationType::Undefined;
-    std::variant<LocalInfo, CloudInfo> info;
+
+    std::variant<io::path_t, CloudProjectInfo> data;
 
     bool isLocal() const
     {
         return type == SaveLocationType::Local
-               && std::holds_alternative<LocalInfo>(info);
+               && std::holds_alternative<io::path_t>(data);
     }
 
     bool isCloud() const
     {
         return type == SaveLocationType::Cloud
-               && std::holds_alternative<CloudInfo>(info);
+               && std::holds_alternative<CloudProjectInfo>(data);
     }
 
     bool isValid() const
@@ -109,33 +117,33 @@ struct SaveLocation
         return isLocal() || isCloud();
     }
 
-    const LocalInfo& localInfo() const
+    const io::path_t& localPath() const
     {
         IF_ASSERT_FAILED(isLocal()) {
-            static LocalInfo null;
+            static io::path_t null;
             return null;
         }
 
-        return std::get<LocalInfo>(info);
+        return std::get<io::path_t>(data);
     }
 
-    const CloudInfo& cloudInfo() const
+    const CloudProjectInfo& cloudInfo() const
     {
         IF_ASSERT_FAILED(isCloud()) {
-            static CloudInfo null;
+            static CloudProjectInfo null;
             return null;
         }
 
-        return std::get<CloudInfo>(info);
+        return std::get<CloudProjectInfo>(data);
     }
 
     SaveLocation() = default;
 
-    SaveLocation(const LocalInfo& localInfo)
-        : type(SaveLocationType::Local), info(localInfo) {}
+    SaveLocation(const io::path_t& localPath)
+        : type(SaveLocationType::Local), data(localPath) {}
 
-    SaveLocation(const CloudInfo& cloudInfo)
-        : type(SaveLocationType::Cloud), info(cloudInfo) {}
+    SaveLocation(const CloudProjectInfo& cloudInfo)
+        : type(SaveLocationType::Cloud), data(cloudInfo) {}
 };
 
 struct ProjectMeta
@@ -203,6 +211,21 @@ struct Template
 };
 
 using Templates = QList<Template>;
+
+class GenerateAudioTimePeriod
+{
+    Q_GADGET
+
+public:
+    enum class Type {
+        Never = 0,
+        Always,
+        AfterCertainNumberOfSaves
+    };
+    Q_ENUM(Type)
+};
+
+using GenerateAudioTimePeriodType = GenerateAudioTimePeriod::Type;
 
 class Migration
 {

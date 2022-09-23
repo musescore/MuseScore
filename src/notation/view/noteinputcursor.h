@@ -37,17 +37,10 @@ class NoteInputCursor
     INJECT(notation, INotationConfiguration, configuration)
 
 public:
-    NoteInputCursor() = default;
-
     void paint(draw::Painter* painter);
 
 private:
     INotationNoteInputPtr currentNoteInput() const;
-
-    bool isNoteInputMode() const;
-    RectF rect() const;
-    QColor cursorColor() const;
-    QColor fillColor() const;
 };
 }
 

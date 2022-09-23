@@ -22,10 +22,13 @@
 
 #include "stretchedbend.h"
 
-#include "staff.h"
-#include "score.h"
 #include "chord.h"
+#include "note.h"
+#include "score.h"
+#include "segment.h"
+
 #include "draw/fontmetrics.h"
+
 #include "log.h"
 
 using namespace mu;

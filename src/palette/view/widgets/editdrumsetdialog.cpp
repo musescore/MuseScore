@@ -24,18 +24,19 @@
 
 #include "io/file.h"
 
-#include "engraving/rw/xml.h"
-#include "engraving/types/typesconv.h"
-#include "engraving/types/symnames.h"
 #include "engraving/infrastructure/smufl.h"
-#include "engraving/infrastructure/symbolfont.h"
+#include "engraving/infrastructure/symbolfonts.h"
+#include "engraving/rw/xml.h"
+#include "engraving/types/symnames.h"
+#include "engraving/types/typesconv.h"
 
-#include "libmscore/factory.h"
-#include "libmscore/utils.h"
 #include "libmscore/chord.h"
-#include "libmscore/score.h"
+#include "libmscore/factory.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/note.h"
+#include "libmscore/score.h"
 #include "libmscore/stem.h"
+#include "libmscore/utils.h"
 
 #include "draw/types/geometry.h"
 

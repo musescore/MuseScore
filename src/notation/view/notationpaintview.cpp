@@ -52,11 +52,15 @@ void NotationPaintView::onUnloadNotation(INotationPtr notation)
     notation->viewState()->matrixChanged().resetOnReceive(this);
 }
 
-void NotationPaintView::onMatrixChanged(const Transform& matrix)
+void NotationPaintView::onMatrixChanged(const Transform& matrix, bool overrideZoomType)
 {
-    AbstractNotationPaintView::onMatrixChanged(matrix);
+    AbstractNotationPaintView::onMatrixChanged(matrix, overrideZoomType);
 
     if (!m_isLoadingNotation && notation()) {
         notation()->viewState()->setMatrix(matrix, this);
+
+        if (overrideZoomType) {
+            notation()->viewState()->setZoomType(ZoomType::Percentage);
+        }
     }
 }

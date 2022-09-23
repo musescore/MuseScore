@@ -23,22 +23,21 @@
 #include "tuplet.h"
 
 #include "draw/types/pen.h"
-#include "style/style.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
 
-#include "factory.h"
-#include "score.h"
-#include "chord.h"
-#include "note.h"
-#include "staff.h"
-#include "text.h"
-#include "engravingitem.h"
-#include "undo.h"
-#include "stem.h"
 #include "beam.h"
+#include "chord.h"
+#include "engravingitem.h"
+#include "factory.h"
 #include "measure.h"
+#include "note.h"
+#include "rest.h"
+#include "score.h"
+#include "stafftype.h"
+#include "stem.h"
 #include "system.h"
+#include "text.h"
 
 #include "log.h"
 
@@ -278,10 +277,10 @@ void Tuplet::layout()
     bool outOfStaff     = score()->styleB(Sid::tupletOufOfStaff);
     double vHeadDistance = score()->styleMM(Sid::tupletVHeadDistance);
     double vStemDistance = score()->styleMM(Sid::tupletVStemDistance);
-    double stemLeft      = score()->styleMM(Sid::tupletStemLeftDistance);
-    double stemRight     = score()->styleMM(Sid::tupletStemRightDistance);
-    double noteLeft      = score()->styleMM(Sid::tupletNoteLeftDistance);
-    double noteRight     = score()->styleMM(Sid::tupletNoteRightDistance);
+    double stemLeft      = score()->styleMM(Sid::tupletStemLeftDistance) - score()->styleMM(Sid::tupletBracketWidth) / 2;
+    double stemRight     = score()->styleMM(Sid::tupletStemRightDistance) - score()->styleMM(Sid::tupletBracketWidth) / 2;
+    double noteLeft      = score()->styleMM(Sid::tupletNoteLeftDistance) - score()->styleMM(Sid::tupletBracketWidth) / 2;
+    double noteRight     = score()->styleMM(Sid::tupletNoteRightDistance) - score()->styleMM(Sid::tupletBracketWidth) / 2;
 
     int move = 0;
     setStaffIdx(cr1->vStaffIdx());
@@ -316,12 +315,15 @@ void Tuplet::layout()
 
     double xx1 = p1.x();   // use to center the number on the beam
 
-    // follow beam angle if one beam extends over entire tuplet
-    bool followBeam = false;
-    double beamAdjust = 0.0;
-    if (cr1->beam() && cr1->beam() == cr2->beam()) {
-        followBeam = true;
-        beamAdjust = point(score()->styleS(Sid::beamWidth)) * 0.5 * mag();
+    double leftNoteEdge = 0.0; // page coordinates
+    double rightNoteEdge = 0.0;
+    if (cr1->isChord()) {
+        const Chord* chord1 = toChord(cr1);
+        leftNoteEdge = chord1->up() ? chord1->downNote()->abbox().left() : chord1->upNote()->abbox().left();
+    }
+    if (cr2->isChord()) {
+        const Chord* chord2 = toChord(cr2);
+        rightNoteEdge = chord2->up() ? chord2->downNote()->abbox().right() : chord2->upNote()->abbox().right();
     }
 
     if (_isUp) {
@@ -331,24 +333,13 @@ void Tuplet::layout()
             if (stem) {
                 xx1 = stem->abbox().x();
             }
-            if (chord1->up()) {
-                if (stem) {
-                    if (followBeam) {
-                        p1.ry() = stem->abbox().y() - beamAdjust;
-                    } else if (chord1->beam()) {
-                        p1.ry() = chord1->beam()->abbox().y();
-                    } else {
-                        p1.ry() = stem->abbox().y();
-                    }
-                    l2l = vStemDistance;
-                } else {
-                    p1.ry() = chord1->upNote()->abbox().top();           // whole note
-                }
-            } else if (!chord1->up()) {
+            if (chord1->up() && stem) {
+                p1.ry() = stem->abbox().y();
+                l2l = vStemDistance;
+                p1.rx() = stem->abbox().left() - stemLeft;
+            } else {
                 p1.ry() = chord1->upNote()->abbox().top();
-                if (stem) {
-                    p1.rx() = cr1->pagePos().x() - stemLeft;
-                }
+                p1.rx() = leftNoteEdge - noteLeft;
             }
         }
 
@@ -356,24 +347,19 @@ void Tuplet::layout()
             const Chord* chord2 = toChord(cr2);
             Stem* stem = chord2->stem();
             if (stem && chord2->up()) {
-                if (followBeam) {
-                    p2.ry() = stem->abbox().top() - beamAdjust;
-                } else if (chord2->beam() && !chord2->staffMove() && !chord2->beam()->cross()) {
-                    p2.ry() = chord2->beam()->abbox().top();
-                } else {
-                    p2.ry() = stem->abbox().top();
-                }
+                p2.ry() = stem->abbox().top();
                 l2r = vStemDistance;
-                p2.rx() = chord2->pagePos().x() + chord2->maxHeadWidth() + stemRight;
+                p2.rx() = stem->abbox().right() + stemRight;
             } else {
                 p2.ry() = chord2->upNote()->abbox().top();
+                p2.rx() = rightNoteEdge + noteRight;
             }
         }
         //
         // special case: one of the bracket endpoints is
         // a rest
         //
-        if (cr1->isChord() && cr2->isChord()) {
+        if (!cr1->isChord() && cr2->isChord()) {
             if (p2.y() < p1.y()) {
                 p1.setY(p2.y());
             } else {
@@ -441,22 +427,13 @@ void Tuplet::layout()
             if (stem) {
                 xx1 = stem->abbox().x();
             }
-            if (!chord1->up()) {
-                if (stem) {
-                    if (followBeam) {
-                        p1.ry() = stem->abbox().bottom() + beamAdjust;
-                    } else if (chord1->beam()) {
-                        p1.ry() = chord1->beam()->abbox().bottom();
-                    } else {
-                        p1.ry() = stem->abbox().bottom();
-                    }
-                    l2l = vStemDistance;
-                    p1.rx() = cr1->pagePos().x() - stemLeft;
-                } else {
-                    p1.ry() = chord1->downNote()->abbox().bottom();           // whole note
-                }
-            } else if (chord1->up()) {
+            if (!chord1->up() && stem) {
+                p1.ry() = stem->abbox().bottom();
+                l2l = vStemDistance;
+                p1.rx() = stem->abbox().left() - stemLeft;
+            } else {
                 p1.ry() = chord1->downNote()->abbox().bottom();
+                p1.rx() = leftNoteEdge - noteLeft;
             }
         }
 
@@ -464,22 +441,12 @@ void Tuplet::layout()
             const Chord* chord2 = toChord(cr2);
             Stem* stem = chord2->stem();
             if (stem && !chord2->up()) {
-                // if (chord2->beam())
-                //      p2.setX(stem->abbox().x());
-                if (followBeam) {                                                //??
-                    p2.ry() = stem->abbox().bottom() + beamAdjust;               //??
-                }
-                if (chord2->beam() && !chord2->staffMove() && !chord2->beam()->cross()) {
-                    p2.ry() = chord2->beam()->abbox().bottom();
-                } else {
-                    p2.ry() = stem->abbox().bottom();
-                }
+                p2.ry() = stem->abbox().bottom();
                 l2r = vStemDistance;
+                p2.rx() = stem->abbox().right() + stemRight;
             } else {
                 p2.ry() = chord2->downNote()->abbox().bottom();
-                if (stem) {
-                    p2.rx() = chord2->pagePos().x() + chord2->maxHeadWidth() + stemRight;
-                }
+                p2.rx() = rightNoteEdge + noteRight;
             }
         }
         //
@@ -545,6 +512,13 @@ void Tuplet::layout()
                 }
             }
         }
+    }
+
+    if (!cr1->isChord()) {
+        p1.rx() = cr1->abbox().left() - noteLeft;
+    }
+    if (!cr2->isChord()) {
+        p2.rx() = cr2->abbox().right() + noteRight;
     }
 
     setPos(0.0, 0.0);

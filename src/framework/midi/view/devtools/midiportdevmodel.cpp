@@ -28,22 +28,19 @@ using namespace mu::midi;
 MidiPortDevModel::MidiPortDevModel(QObject* parent)
     : QObject(parent)
 {
-    midiInPort()->eventsReceived().onReceive(this, [this](const std::vector<std::pair<tick_t, Event> >& events) {
-        for (auto it : events) {
-            QString str = "tick: " + QString::number(it.first) + " " + QString::fromStdString(it.second.to_string());
-            LOGI() << str;
+    midiInPort()->eventReceived().onReceive(this, [this](tick_t tick, const Event& event) {
+        QString str = "tick: " + QString::number(tick) + " " + QString::fromStdString(event.to_string());
+        LOGI() << str;
 
-            m_inputEvents.prepend(str);
-        }
-
+        m_inputEvents.prepend(str);
         emit inputEventsChanged();
     });
 
-    midiInPort()->devicesChanged().onNotify(this, [this]() {
+    midiInPort()->availableDevicesChanged().onNotify(this, [this]() {
         emit inputDevicesChanged();
     });
 
-    midiOutPort()->devicesChanged().onNotify(this, [this]() {
+    midiOutPort()->availableDevicesChanged().onNotify(this, [this]() {
         emit outputDevicesChanged();
     });
 }
@@ -51,7 +48,7 @@ MidiPortDevModel::MidiPortDevModel(QObject* parent)
 QVariantList MidiPortDevModel::outputDevices() const
 {
     QVariantList list;
-    std::vector<MidiDevice> devs = midiOutPort()->devices();
+    std::vector<MidiDevice> devs = midiOutPort()->availableDevices();
     for (const MidiDevice& d : devs) {
         QVariantMap item;
         item["id"] = QString::fromStdString(d.id);
@@ -87,7 +84,7 @@ void MidiPortDevModel::outputDeviceAction(const QString& deviceID, const QString
 QVariantList MidiPortDevModel::inputDevices() const
 {
     QVariantList list;
-    std::vector<MidiDevice> devs = midiInPort()->devices();
+    std::vector<MidiDevice> devs = midiInPort()->availableDevices();
     for (const MidiDevice& d : devs) {
         QVariantMap item;
         item["id"] = QString::fromStdString(d.id);

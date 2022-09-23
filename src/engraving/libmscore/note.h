@@ -31,22 +31,19 @@
 #include "containers.h"
 
 #include "engravingitem.h"
-#include "symbol.h"
+
 #include "noteevent.h"
 #include "pitchspelling.h"
 #include "shape.h"
-#include "key.h"
-#include "iengravingconfiguration.h"
-#include "modularity/ioc.h"
+#include "symbol.h"
+#include "types.h"
 
 namespace mu::engraving {
 class Factory;
 class Tie;
 class Chord;
-class NoteEvent;
 class Text;
 class Score;
-class MuseScoreView;
 class Bend;
 class AccidentalState;
 class Accidental;

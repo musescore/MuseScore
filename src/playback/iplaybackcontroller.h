@@ -26,10 +26,11 @@
 #include "async/notification.h"
 #include "async/channel.h"
 #include "global/progress.h"
-
 #include "notation/notationtypes.h"
 #include "audio/audiotypes.h"
 #include "actions/actiontypes.h"
+
+#include "playbacktypes.h"
 
 namespace mu::playback {
 class IPlaybackController : MODULE_EXPORT_INTERFACE
@@ -63,6 +64,7 @@ public:
     virtual async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackRemoved() const = 0;
 
     virtual void playElements(const std::vector<const notation::EngravingItem*>& elements) = 0;
+    virtual void playMetronome(int tick) = 0;
     virtual void seekElement(const notation::EngravingItem* element) = 0;
 
     virtual bool actionChecked(const actions::ActionCode& actionCode) const = 0;
@@ -81,6 +83,8 @@ public:
     virtual void setTempoMultiplier(double multiplier) = 0;
 
     virtual framework::Progress loadingProgress() const = 0;
+
+    virtual void applyProfile(const SoundProfileName& profileName) = 0;
 };
 }
 

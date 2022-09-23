@@ -52,10 +52,6 @@
     <Staff id="1">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -92,11 +88,18 @@
               <string>2</string>
               </Note>
             </Chord>
+          <Spanner type="Trill">
+            <Trill>
+              <subtype>trill</subtype>
+              </Trill>
+            <next>
+              <location>
+                <fractions>1/4</fractions>
+                </location>
+              </next>
+            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>ornamentTrill</subtype>
-              </Articulation>
             <Note>
               <pitch>65</pitch>
               <tpc>13</tpc>
@@ -104,6 +107,13 @@
               <string>1</string>
               </Note>
             </Chord>
+          <Spanner type="Trill">
+            <prev>
+              <location>
+                <fractions>-1/4</fractions>
+                </location>
+              </prev>
+            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
             <Note>

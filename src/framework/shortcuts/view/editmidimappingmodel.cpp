@@ -43,14 +43,10 @@ void EditMidiMappingModel::load(int originType, int originValue)
 {
     midiRemote()->setIsSettingMode(true);
 
-    midiInPort()->eventsReceived().onReceive(this, [this](const std::vector<std::pair<tick_t, Event> >& events) {
-        for (auto it : events) {
-            midi::Event event = it.second;
-
-            if (event.opcode() == Event::Opcode::NoteOn || event.opcode() == Event::Opcode::ControlChange) {
-                m_event = remoteEventFromMidiEvent(event);
-                emit mappingTitleChanged(mappingTitle());
-            }
+    midiInPort()->eventReceived().onReceive(this, [this](tick_t, const Event& event) {
+        if (event.opcode() == Event::Opcode::NoteOn || event.opcode() == Event::Opcode::ControlChange) {
+            m_event = remoteEventFromMidiEvent(event);
+            emit mappingTitleChanged(mappingTitle());
         }
     });
 
@@ -65,7 +61,7 @@ QString EditMidiMappingModel::mappingTitle() const
         return qtrc("shortcuts", "Waiting…");
     }
 
-    return deviceName(currentMidiInDeviceId) + " > " + eventName(m_event);
+    return deviceName(currentMidiInDeviceId) + " > " + m_event.name().toQString();
 }
 
 QVariant EditMidiMappingModel::inputtedEvent() const
@@ -78,27 +74,11 @@ QVariant EditMidiMappingModel::inputtedEvent() const
 
 QString EditMidiMappingModel::deviceName(const MidiDeviceID& deviceId) const
 {
-    for (const MidiDevice& device : midiInPort()->devices()) {
+    for (const MidiDevice& device : midiInPort()->availableDevices()) {
         if (device.id == deviceId) {
             return QString::fromStdString(device.name);
         }
     }
 
     return QString();
-}
-
-QString EditMidiMappingModel::eventName(const RemoteEvent& event) const
-{
-    QString title;
-
-    if (event.type == RemoteEventType::Note) {
-        //: A MIDI remote event, namely a note event
-        return qtrc("shortcuts", "Note %1").arg(QString::fromStdString(pitchToString(event.value)));
-    } else if (event.type == RemoteEventType::Controller) {
-        //: A MIDI remote event, namely a MIDI controller event
-        return qtrc("shortcuts", "Controller %1").arg(QString::number(event.value));
-    }
-
-    //: No MIDI remote event
-    return qtrc("shortcuts", "None");
 }

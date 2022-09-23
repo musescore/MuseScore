@@ -26,8 +26,8 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
-    property alias currentInputDeviceIndex: inputDevicesBox.currentIndex
-    property alias currentOutputDeviceIndex: outputDevicesBox.currentIndex
+    property string inputDeviceId: ""
+    property string outputDeviceId: ""
 
     property alias inputDevices: inputDevicesBox.model
     property alias outputDevices: outputDevicesBox.model
@@ -35,8 +35,8 @@ BaseSection {
     property alias isMIDI20OutputSupported: useMIDI20OutputCheckbox.visible
     property alias useMIDI20Output: useMIDI20OutputCheckbox.checked
 
-    signal currentInputDeviceIndexChangeRequested(int newIndex)
-    signal currentOutputDeviceIndexChangeRequested(int newIndex)
+    signal inputDeviceIdChangeRequested(string newId)
+    signal outputDeviceIdChangeRequested(string newId)
     signal useMIDI20OutputChangeRequested(bool use)
 
     title: qsTrc("appshell/preferences", "MIDI")
@@ -45,6 +45,7 @@ BaseSection {
         id: inputDevicesBox
 
         title: qsTrc("appshell/preferences", "MIDI input:")
+        currentIndex: indexOfValue(root.inputDeviceId)
         columnWidth: root.columnWidth
 
         navigation.name: "MidiInputBox"
@@ -52,7 +53,7 @@ BaseSection {
         navigation.row: 1
 
         onValueEdited: function(newIndex, newValue) {
-            root.currentInputDeviceIndexChangeRequested(newIndex)
+            root.inputDeviceIdChangeRequested(newValue)
         }
     }
 
@@ -60,6 +61,7 @@ BaseSection {
         id: outputDevicesBox
 
         title: qsTrc("appshell/preferences", "MIDI output:")
+        currentIndex: indexOfValue(root.outputDeviceId)
         columnWidth: root.columnWidth
 
         navigation.name: "MidiOutputBox"
@@ -67,7 +69,7 @@ BaseSection {
         navigation.row: 2
 
         onValueEdited: function(newIndex, newValue) {
-            root.currentOutputDeviceIndexChangeRequested(newIndex)
+            root.outputDeviceIdChangeRequested(newValue)
         }
     }
 

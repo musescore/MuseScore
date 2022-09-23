@@ -117,6 +117,10 @@ public:
     virtual void setIsPlayRepeatsEnabled(bool enabled) = 0;
     virtual async::Notification isPlayRepeatsChanged() const = 0;
 
+    virtual bool isPlayChordSymbolsEnabled() const = 0;
+    virtual void setIsPlayChordSymbolsEnabled(bool enabled) = 0;
+    virtual async::Notification isPlayChordSymbolsChanged() const = 0;
+
     virtual bool isMetronomeEnabled() const = 0;
     virtual void setIsMetronomeEnabled(bool enabled) = 0;
 

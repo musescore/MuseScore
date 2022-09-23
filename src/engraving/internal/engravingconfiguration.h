@@ -62,10 +62,12 @@ public:
     draw::Color criticalColor() const override;
     draw::Color criticalSelectedColor() const override;
     draw::Color formattingMarksColor() const override;
+    draw::Color thumbnailBackgroundColor() const override;
+    draw::Color noteBackgroundColor() const override;
 
     double guiScaling() const override;
 
-    draw::Color selectionColor(voice_idx_t voiceIndex = 0) const override;
+    draw::Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true) const override;
     void setSelectionColor(voice_idx_t voiceIndex, draw::Color color) override;
     async::Channel<voice_idx_t, draw::Color> selectionColorChanged() const override;
 

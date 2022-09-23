@@ -21,8 +21,6 @@
  */
 #include "abstractinspectormodel.h"
 
-#include "libmscore/musescoreCore.h"
-
 #include "types/texttypes.h"
 
 #include "log.h"
@@ -124,38 +122,35 @@ AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementReposito
 
 void AbstractInspectorModel::setupCurrentNotationChangedConnection()
 {
-    auto listenNotationChanged = [this]() {
-        INotationPtr notation = currentNotation();
-        if (!notation) {
-            return;
-        }
-
-        notation->notationChanged().onNotify(this, [this]() {
-            if (m_updatePropertiesAllowed && !isEmpty()) {
-                updatePropertiesOnNotationChanged();
-            }
-
-            m_updatePropertiesAllowed = true;
-        });
-
-        onStyleChanged();
-        notation->style()->styleChanged().onNotify(this, [this]() {
-            onStyleChanged();
-        });
-    };
-
-    listenNotationChanged();
-
-    currentNotationChanged().onNotify(this, [listenNotationChanged]() {
-        listenNotationChanged();
+    onCurrentNotationChanged();
+    currentNotationChanged().onNotify(this, [this]() {
+        onCurrentNotationChanged();
     });
 }
 
-void AbstractInspectorModel::updatePropertiesOnNotationChanged()
+void AbstractInspectorModel::onCurrentNotationChanged()
 {
+    INotationPtr notation = currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    notation->undoStack()->changesChannel().onReceive(this, [this](const ChangesRange& range) {
+        if (range.changedPropertyIdSet.empty() && range.changedStyleIdSet.empty()) {
+            return;
+        }
+
+        if (m_updatePropertiesAllowed && !isEmpty()) {
+            PropertyIdSet expandedPropertyIdSet = propertyIdSetFromStyleIdSet(range.changedStyleIdSet);
+            expandedPropertyIdSet.insert(range.changedPropertyIdSet.cbegin(), range.changedPropertyIdSet.cend());
+            onNotationChanged(expandedPropertyIdSet, range.changedStyleIdSet);
+        }
+
+        m_updatePropertiesAllowed = true;
+    });
 }
 
-void AbstractInspectorModel::onStyleChanged()
+void AbstractInspectorModel::onNotationChanged(const PropertyIdSet&, const StyleIdSet&)
 {
 }
 
@@ -221,7 +216,7 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
     InspectorSectionTypeSet types;
 
     for (const ElementKey& key : elementKeySet) {
-        if (NOTATION_ELEMENT_MODEL_TYPES.keys().contains(key.type)
+        if (NOTATION_ELEMENT_MODEL_TYPES.contains(key.type)
             && (modelTypeByElementKey(key) != InspectorModelType::TYPE_UNDEFINED)) {
             types << InspectorSectionType::SECTION_NOTATION;
         }
@@ -332,14 +327,41 @@ mu::engraving::Sid AbstractInspectorModel::styleIdByPropertyId(const mu::engravi
     return result;
 }
 
-void AbstractInspectorModel::updateStyleValue(const mu::engraving::Sid& sid, const QVariant& newValue)
+mu::engraving::PropertyIdSet AbstractInspectorModel::propertyIdSetFromStyleIdSet(const StyleIdSet& styleIdSet) const
+{
+    if (styleIdSet.empty()) {
+        return PropertyIdSet();
+    }
+
+    PropertyIdSet result;
+
+    for (const mu::engraving::EngravingItem* element : m_elementList) {
+        const mu::engraving::ElementStyle* style = element->styledProperties();
+        if (!style) {
+            continue;
+        }
+
+        for (const StyledProperty& property : *style) {
+            if (mu::contains(styleIdSet, property.sid)) {
+                result.insert(property.pid);
+            }
+        }
+    }
+
+    return result;
+}
+
+bool AbstractInspectorModel::updateStyleValue(const mu::engraving::Sid& sid, const QVariant& newValue)
 {
     PropertyValue newVal = PropertyValue::fromQVariant(newValue, mu::engraving::MStyle::valueType(sid));
     if (style() && style()->styleValue(sid) != newVal) {
         beginCommand();
         style()->setStyleValue(sid, newVal);
         endCommand();
+        return true;
     }
+
+    return false;
 }
 
 QVariant AbstractInspectorModel::styleValue(const mu::engraving::Sid& sid) const
@@ -378,8 +400,16 @@ PropertyValue AbstractInspectorModel::valueToElementUnits(const mu::engraving::P
         return BeatsPerSecond::fromBPM(BeatsPerMinute(value.toReal()));
 
     case P_TYPE::INT_VEC: {
-        QList<int> l = value.value<QList<int> >();
-        return std::vector<int>(l.begin(), l.end());
+        bool ok = true;
+        std::vector<int> res;
+
+        for (const QString& str : value.toString().split(',', Qt::SkipEmptyParts)) {
+            if (int i = str.simplified().toInt(&ok); ok) {
+                res.push_back(i);
+            }
+        }
+
+        return res;
     } break;
 
     case P_TYPE::COLOR:
@@ -564,6 +594,16 @@ INotationPtr AbstractInspectorModel::currentNotation() const
 mu::async::Notification AbstractInspectorModel::currentNotationChanged() const
 {
     return context()->currentNotationChanged();
+}
+
+bool AbstractInspectorModel::isMasterNotation() const
+{
+    INotationPtr notation = currentNotation();
+    if (!notation) {
+        return false;
+    }
+
+    return notation == context()->currentMasterNotation()->notation();
 }
 
 INotationSelectionPtr AbstractInspectorModel::selection() const

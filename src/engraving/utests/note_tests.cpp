@@ -22,20 +22,19 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/factory.h"
-#include "libmscore/articulation.h"
-#include "libmscore/mscore.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/note.h"
-#include "libmscore/chordrest.h"
 #include "libmscore/accidental.h"
+#include "libmscore/articulation.h"
+#include "libmscore/articulation.h"
 #include "libmscore/chord.h"
+#include "libmscore/chordrest.h"
+#include "libmscore/factory.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
+#include "libmscore/mscore.h"
+#include "libmscore/note.h"
+#include "libmscore/pitchspelling.h"
 #include "libmscore/segment.h"
 #include "libmscore/tremolo.h"
-#include "libmscore/articulation.h"
-#include "libmscore/key.h"
-#include "libmscore/pitchspelling.h"
 
 #include "engraving/compat/scoreaccess.h"
 #include "utils/scorerw.h"

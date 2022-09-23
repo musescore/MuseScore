@@ -51,6 +51,10 @@ Column {
     signal navigationActivated(var itemRect)
 
     function focusOnFirst() {
+        // Force the view to load the items. Without this, `view.itemAtIndex(0)` might be null even when `count > 0`,
+        // causing navigation to break when calling this function from `resetNavigationFocus()` in `PluginsPage`.
+        view.forceLayout()
+
         view.itemAtIndex(0).requestActive()
     }
 

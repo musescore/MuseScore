@@ -135,7 +135,6 @@ Rectangle {
         }
 
         style: TreeViewStyle {
-            indentation: styleData.depth
             rowDelegate: Rectangle {
                 height: 48
                 width: parent.width

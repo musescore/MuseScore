@@ -26,6 +26,7 @@
 #include "translation.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 ImageSettingsModel::ImageSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -38,16 +39,16 @@ ImageSettingsModel::ImageSettingsModel(QObject* parent, IElementRepositoryServic
 
 void ImageSettingsModel::createProperties()
 {
-    m_isAspectRatioLocked = buildPropertyItem(mu::engraving::Pid::LOCK_ASPECT_RATIO);
+    m_isAspectRatioLocked = buildPropertyItem(Pid::LOCK_ASPECT_RATIO);
 
     m_shouldScaleToFrameSize
-        = buildPropertyItem(mu::engraving::Pid::AUTOSCALE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+        = buildPropertyItem(Pid::AUTOSCALE, [this](const Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
 
-    m_height = buildPropertyItem(mu::engraving::Pid::IMAGE_HEIGHT, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_height = buildPropertyItem(Pid::IMAGE_HEIGHT, [this](const Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
         if (m_isAspectRatioLocked->value().toBool()) {
@@ -55,7 +56,7 @@ void ImageSettingsModel::createProperties()
         }
     });
 
-    m_width = buildPropertyItem(mu::engraving::Pid::IMAGE_WIDTH, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_width = buildPropertyItem(Pid::IMAGE_WIDTH, [this](const Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
         if (m_isAspectRatioLocked->value().toBool()) {
@@ -64,31 +65,32 @@ void ImageSettingsModel::createProperties()
     });
 
     m_isSizeInSpatiums
-        = buildPropertyItem(mu::engraving::Pid::SIZE_IS_SPATIUM, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+        = buildPropertyItem(Pid::SIZE_IS_SPATIUM, [this](const Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
 
-    m_isImageFramed = buildPropertyItem(mu::engraving::Pid::IMAGE_FRAMED);
+    m_isImageFramed = buildPropertyItem(Pid::IMAGE_FRAMED);
 }
 
 void ImageSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::IMAGE);
+    m_elementList = m_repository->findElementsByType(ElementType::IMAGE);
 }
 
 void ImageSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_shouldScaleToFrameSize);
-    loadPropertyItem(m_height, formatDoubleFunc);
-    loadPropertyItem(m_width, formatDoubleFunc);
+    static const PropertyIdSet propertyIdSet {
+        Pid::LOCK_ASPECT_RATIO,
+        Pid::AUTOSCALE,
+        Pid::IMAGE_HEIGHT,
+        Pid::IMAGE_WIDTH,
+        Pid::SIZE_IS_SPATIUM,
+        Pid::IMAGE_FRAMED,
+    };
 
-    loadPropertyItem(m_isAspectRatioLocked);
-    loadPropertyItem(m_isSizeInSpatiums);
-    loadPropertyItem(m_isImageFramed);
-
-    updateFrameScalingAvailability();
+    loadProperties(propertyIdSet);
 }
 
 void ImageSettingsModel::resetProperties()
@@ -101,10 +103,43 @@ void ImageSettingsModel::resetProperties()
     m_isImageFramed->resetToDefault();
 }
 
-void ImageSettingsModel::updatePropertiesOnNotationChanged()
+void ImageSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
-    loadPropertyItem(m_height, formatDoubleFunc);
-    loadPropertyItem(m_width, formatDoubleFunc);
+    loadProperties(changedPropertyIdSet);
+}
+
+void ImageSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)
+{
+    if (mu::contains(propertyIdSet, Pid::AUTOSCALE)) {
+        loadPropertyItem(m_shouldScaleToFrameSize);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::IMAGE_HEIGHT)) {
+        loadPropertyItem(m_height, formatDoubleFunc);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::IMAGE_WIDTH)) {
+        loadPropertyItem(m_width, formatDoubleFunc);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::SIZE)) {
+        loadPropertyItem(m_height, formatDoubleFunc);
+        loadPropertyItem(m_width, formatDoubleFunc);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::LOCK_ASPECT_RATIO)) {
+        loadPropertyItem(m_isAspectRatioLocked);
+    }
+
+    if (mu::contains(propertyIdSet, mu::engraving::Pid::SIZE_IS_SPATIUM)) {
+        loadPropertyItem(m_isSizeInSpatiums);
+    }
+
+    if (mu::contains(propertyIdSet, Pid::IMAGE_FRAMED)) {
+        loadPropertyItem(m_isImageFramed);
+    }
+
+    updateFrameScalingAvailability();
 }
 
 PropertyItem* ImageSettingsModel::shouldScaleToFrameSize() const

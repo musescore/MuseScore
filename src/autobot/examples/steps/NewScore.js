@@ -29,7 +29,7 @@ function openNewScoreDialog()
     api.navigation.trigger()
 }
 
-function сhooseFluteAndPiano()
+function chooseFluteAndPiano()
 {
     // Flute
     api.navigation.goToControl("NewScoreDialog", "FamilyView", "Woodwinds")
@@ -53,5 +53,5 @@ function сhooseFluteAndPiano()
 
 module.exports = {
     openNewScoreDialog: openNewScoreDialog,
-    сhooseFluteAndPiano: сhooseFluteAndPiano
+    chooseFluteAndPiano: chooseFluteAndPiano
 }

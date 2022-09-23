@@ -31,6 +31,7 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Acoustic Piano</trackName>
       <Instrument id="piano">
@@ -49,10 +50,6 @@
     <Staff id="1">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>
@@ -118,10 +115,6 @@
     <Staff id="2">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>F</concertClefType>
-            <transposingClefType>F</transposingClefType>
-            </Clef>
           <KeySig>
             <accidental>0</accidental>
             </KeySig>

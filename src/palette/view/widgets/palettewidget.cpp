@@ -726,9 +726,10 @@ void PaletteWidget::mousePressEvent(QMouseEvent* ev)
     if (m_selectable) {
         if (m_dragIdx != m_selectedIdx) {
             update(rectForCellAt(m_dragIdx) | rectForCellAt(m_selectedIdx));
-            m_selectedIdx = m_dragIdx;
         }
+
         emit boxClicked(m_dragIdx);
+        m_selectedIdx = m_dragIdx;
     }
 
     update();
@@ -751,7 +752,7 @@ void PaletteWidget::mouseMoveEvent(QMouseEvent* ev)
             QMimeData* mimeData = new QMimeData;
             const ElementPtr el   = cell->element;
 
-            mimeData->setData(mu::commonscene::MIME_SYMBOL_FORMAT, el->mimeData(PointF()).toQByteArray());
+            mimeData->setData(mu::commonscene::MIME_SYMBOL_FORMAT, el->mimeData().toQByteArray());
             drag->setMimeData(mimeData);
 
             drag->setPixmap(pixmapForCellAt(m_currentIdx));
@@ -1031,7 +1032,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         if (!tag.isEmpty()) {
             painter.setPen(QColor(Qt::darkGray));
             Font font(painter.font());
-            font.setPointSizeF(uiConfiguration()->fontSize(ui::FontSizeType::BODY));
+            font.setPixelSize(uiConfiguration()->fontSize(ui::FontSizeType::BODY));
             painter.setFont(font);
             painter.drawText(rShift, Qt::AlignLeft | Qt::AlignTop, tag);
         }

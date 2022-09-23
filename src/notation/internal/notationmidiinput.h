@@ -22,12 +22,16 @@
 #ifndef MU_NOTATION_NOTATIONMIDIINPUT_H
 #define MU_NOTATION_NOTATIONMIDIINPUT_H
 
-#include "playback/iplaybackcontroller.h"
-
 #include <QTimer>
+
+#include "modularity/ioc.h"
+#include "playback/iplaybackcontroller.h"
+#include "inotationconfiguration.h"
+#include "actions/iactionsdispatcher.h"
 
 #include "../inotationmidiinput.h"
 #include "igetscore.h"
+#include "inotationinteraction.h"
 #include "inotationundostack.h"
 
 namespace mu::engraving {
@@ -38,25 +42,53 @@ namespace mu::notation {
 class NotationMidiInput : public INotationMidiInput
 {
     INJECT(notation, playback::IPlaybackController, playbackController)
+    INJECT(notation, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation, INotationConfiguration, configuration)
 
 public:
-    NotationMidiInput(IGetScore* getScore, INotationUndoStackPtr undoStack);
+    NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction, INotationUndoStackPtr undoStack);
 
-    void onMidiEventsReceived(const std::vector<midi::Event>& events) override;
+    void onMidiEventReceived(const midi::Event& event) override;
     async::Notification noteChanged() const override;
+
+    void onRealtimeAdvance() override;
 
 private:
     mu::engraving::Score* score() const;
 
-    void doPlayNotes();
-    Note* onAddNote(const midi::Event& e);
+    void doProcessEvents();
+    Note* addNoteToScore(const midi::Event& e);
+    Note* makeNote(const midi::Event& e);
+
+    void enableMetronome();
+    void disableMetronome();
+
+    void runRealtime();
+    void stopRealtime();
+
+    void doRealtimeAdvance();
+    void doExtendCurrentNote();
+
+    NoteInputMethod noteInputMethod() const;
+    bool isRealtime() const;
+    bool isRealtimeAuto() const;
+    bool isRealtimeManual() const;
+
+    bool isNoteInputMode() const;
 
     IGetScore* m_getScore = nullptr;
+    INotationInteractionPtr m_notationInteraction;
     INotationUndoStackPtr m_undoStack;
     async::Notification m_noteChanged;
 
-    QTimer m_playTimer;
-    std::vector<const EngravingItem*> m_playNotesQueue;
+    QTimer m_processTimer;
+    std::vector<midi::Event> m_eventsQueue;
+
+    QTimer m_realtimeTimer;
+    QTimer m_extendNoteTimer;
+    bool m_allowRealtimeRests = false;
+
+    bool m_shouldDisableMetronome = false;
 };
 }
 

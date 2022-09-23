@@ -36,64 +36,45 @@
 
 #include "infrastructure/symbolfonts.h"
 
+#include "bend.h"
+#include "bracket.h"
+#include "chord.h"
+#include "clef.h"
+#include "clef.h"
 #include "engravingitem.h"
+#include "excerpt.h"
+#include "fret.h"
+#include "harmony.h"
+#include "input.h"
+#include "instrchange.h"
+#include "key.h"
+#include "keysig.h"
+#include "linkedobjects.h"
+#include "masterscore.h"
+#include "measure.h"
 #include "note.h"
+#include "noteevent.h"
+#include "page.h"
+#include "part.h"
+#include "rest.h"
 #include "score.h"
 #include "segment.h"
-#include "measure.h"
-#include "system.h"
 #include "select.h"
-#include "input.h"
-#include "slur.h"
-#include "tie.h"
-#include "clef.h"
-#include "staff.h"
-#include "chord.h"
 #include "sig.h"
-#include "key.h"
-#include "barline.h"
-#include "volta.h"
-#include "tuplet.h"
-#include "harmony.h"
-#include "pitchspelling.h"
-#include "part.h"
-#include "beam.h"
-#include "dynamic.h"
-#include "page.h"
-#include "keysig.h"
-#include "image.h"
-#include "hairpin.h"
-#include "rest.h"
-#include "bend.h"
-#include "tremolobar.h"
-#include "articulation.h"
-#include "noteevent.h"
-#include "slur.h"
-#include "tempotext.h"
-#include "instrchange.h"
-#include "box.h"
-#include "stafftype.h"
-#include "accidental.h"
-#include "layoutbreak.h"
 #include "spanner.h"
-#include "breath.h"
-#include "fingering.h"
-#include "rehearsalmark.h"
-#include "excerpt.h"
-#include "stafftext.h"
-#include "chordline.h"
-#include "tremolo.h"
-#include "utils.h"
-#include "glissando.h"
+#include "staff.h"
 #include "stafflines.h"
-#include "bracket.h"
-#include "fret.h"
+#include "stafftype.h"
+#include "stafftypechange.h"
+#include "system.h"
+#include "tempotext.h"
 #include "textedit.h"
 #include "textline.h"
-#include "linkedobjects.h"
-#include "stafftypechange.h"
-
-#include "masterscore.h"
+#include "tie.h"
+#include "tremolo.h"
+#include "tremolobar.h"
+#include "tuplet.h"
+#include "utils.h"
 
 #include "log.h"
 #define LOG_UNDO() if (0) LOGD()
@@ -318,12 +299,26 @@ UndoStack::~UndoStack()
     DeleteAll(list);
 }
 
+bool UndoStack::locked() const
+{
+    return isLocked;
+}
+
+void UndoStack::setLocked(bool val)
+{
+    isLocked = val;
+}
+
 //---------------------------------------------------------
 //   beginMacro
 //---------------------------------------------------------
 
 void UndoStack::beginMacro(Score* score)
 {
+    if (isLocked) {
+        return;
+    }
+
     if (curCmd) {
         LOGW("already active");
         return;
@@ -436,25 +431,15 @@ void UndoStack::pop()
 }
 
 //---------------------------------------------------------
-//   rollback
-//---------------------------------------------------------
-
-void UndoStack::rollback()
-{
-    LOG_UNDO() << "called";
-    assert(curCmd == 0);
-    assert(curIdx > 0);
-    size_t idx = curIdx - 1;
-    list[idx]->unwind();
-    remove(idx);
-}
-
-//---------------------------------------------------------
 //   endMacro
 //---------------------------------------------------------
 
 void UndoStack::endMacro(bool rollback)
 {
+    if (isLocked) {
+        return;
+    }
+
     if (curCmd == 0) {
         LOGW("not active");
         return;
@@ -482,6 +467,10 @@ void UndoStack::endMacro(bool rollback)
 
 void UndoStack::reopen()
 {
+    if (isLocked) {
+        return;
+    }
+
     LOG_UNDO() << "curIdx: " << curIdx << ", size: " << list.size();
     assert(curCmd == 0);
     assert(curIdx > 0);
@@ -491,15 +480,6 @@ void UndoStack::reopen()
     for (auto i : curCmd->commands()) {
         LOG_UNDO() << "   " << i->name();
     }
-}
-
-//---------------------------------------------------------
-//   setClean
-//---------------------------------------------------------
-
-void UndoStack::setClean()
-{
-    cleanState = state();
 }
 
 //---------------------------------------------------------
@@ -651,35 +631,34 @@ const UndoMacro::SelectionInfo& UndoMacro::redoSelectionInfo() const
     return m_redoSelectionInfo;
 }
 
-std::unordered_set<ElementType> UndoMacro::changedTypes() const
+UndoMacro::ChangesInfo UndoMacro::changesInfo() const
 {
-    std::unordered_set<ElementType> result;
+    ChangesInfo result;
 
     for (const UndoCommand* command : commands()) {
+        CommandType type = command->type();
+
+        if (type == CommandType::ChangeProperty) {
+            auto changeProperty = static_cast<const ChangeProperty*>(command);
+            result.changedPropertyIdSet.insert(changeProperty->getId());
+        } else if (type == CommandType::ChangeStyleVal) {
+            auto changeStyle = static_cast<const ChangeStyleVal*>(command);
+            result.changedStyleIdSet.insert(changeStyle->id());
+        }
+
         for (const EngravingObject* object : command->objectItems()) {
             if (!object) {
                 continue;
             }
 
-            result.insert(object->type());
-        }
-    }
+            result.changedObjectTypes.insert(object->type());
 
-    return result;
-}
-
-std::vector<const EngravingItem*> UndoMacro::changedElements() const
-{
-    std::vector<const EngravingItem*> result;
-
-    for (const UndoCommand* command : commands()) {
-        for (const EngravingObject* object : command->objectItems()) {
             auto item = dynamic_cast<const EngravingItem*>(object);
             if (!item) {
                 continue;
             }
 
-            result.push_back(item);
+            result.changedItems.push_back(item);
         }
     }
 
@@ -1658,47 +1637,6 @@ void ChangeInstrumentLong::flip(EditData*)
 }
 
 //---------------------------------------------------------
-//   EditText::undo
-//---------------------------------------------------------
-
-void EditText::undo(EditData*)
-{
-/*      if (!text->styled()) {
-            for (int i = 0; i < undoLevel; ++i)
-                  text->undo();
-            }
-      */
-    undoRedo();
-}
-
-//---------------------------------------------------------
-//   EditText::redo
-//---------------------------------------------------------
-
-void EditText::redo(EditData*)
-{
-/*
-      if (!text->styled()) {
-            for (int i = 0; i < undoLevel; ++i)
-                  text->redo();
-            }
-      */
-    undoRedo();
-}
-
-//---------------------------------------------------------
-//   EditText::undoRedo
-//---------------------------------------------------------
-
-void EditText::undoRedo()
-{
-    String s = text->xmlText();
-    text->setXmlText(oldText);
-    oldText = s;
-    text->triggerLayout();
-}
-
-//---------------------------------------------------------
 //   ChangePatch
 //---------------------------------------------------------
 
@@ -2252,7 +2190,6 @@ void InsertRemoveMeasures::removeMeasures()
                 sp->removeUnmanaged();
             }
         }
-        score->connectTies(true);       // ??
     }
 
     // remove empty systems
@@ -2373,43 +2310,6 @@ void ChangeExcerptTitle::flip(EditData*)
     title = excerpt->name();
     excerpt->setName(s);
     excerpt->masterScore()->setExcerptsChanged(true);
-}
-
-//---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-
-void ChangeBend::flip(EditData*)
-{
-    PitchValues pv = bend->points();
-    bend->score()->addRefresh(bend->canvasBoundingRect());
-    bend->setPoints(points);
-    points = pv;
-    bend->layout();
-    bend->score()->addRefresh(bend->canvasBoundingRect());
-}
-
-//---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-
-void ChangeTremoloBar::flip(EditData*)
-{
-    PitchValues pv = bend->points();
-    bend->setPoints(points);
-    points = pv;
-}
-
-//---------------------------------------------------------
-//   ChangeNoteEvents::flip
-//---------------------------------------------------------
-
-void ChangeNoteEvents::flip(EditData*)
-{
-/*TODO:      std::list<NoteEvent*> e = chord->playEvents();
-      chord->setPlayEvents(events);
-      events = e;
-      */
 }
 
 //---------------------------------------------------------
@@ -2596,18 +2496,9 @@ void ChangeMetaText::flip(EditData*)
     text = s;
 }
 
-//---------------------------------------------------------
-//   ChangeSynthesizerState::flip
-//---------------------------------------------------------
-
-void ChangeSynthesizerState::flip(EditData*)
-{
-    std::swap(state, score->_synthesizerState);
-}
-
 void AddBracket::redo(EditData*)
 {
-    staff->setBracketType(level, type);
+    staff->setBracketType(level, bracketType);
     staff->setBracketSpan(level, span);
     staff->triggerLayout();
 }
@@ -2626,7 +2517,7 @@ void RemoveBracket::redo(EditData*)
 
 void RemoveBracket::undo(EditData*)
 {
-    staff->setBracketType(level, type);
+    staff->setBracketType(level, bracketType);
     staff->setBracketSpan(level, span);
     staff->triggerLayout();
 }

@@ -30,7 +30,7 @@ import MuseScore.Cloud 1.0
 StyledDialogView {
     id: root
 
-    property bool canSaveToComputer: true
+    property bool isPublish: false
     property string name
     property int visibility: CloudVisibility.Private
 
@@ -79,7 +79,7 @@ StyledDialogView {
 
             StyledTextLabel {
                 id: titleLabel
-                text: root.visibility === CloudVisibility.Public
+                text: root.isPublish
                       ? qsTrc("project/save", "Publish to MuseScore.com")
                       : qsTrc("project/save", "Save to cloud")
                 font: ui.theme.largeBodyBoldFont
@@ -170,7 +170,7 @@ StyledDialogView {
 
                 FlatButton {
                     text: qsTrc("project/save", "Save to computer")
-                    visible: root.canSaveToComputer
+                    visible: !root.isPublish
 
                     navigation.panel: buttonsNavPanel
                     navigation.column: 2
@@ -193,7 +193,7 @@ StyledDialogView {
 
                 FlatButton {
                     id: saveButton
-                    text: qsTrc("project/save", "Save")
+                    text: root.isPublish ? qsTrc("project/save", "Publish") : qsTrc("project/save", "Save")
                     accentButton: enabled
                     enabled: Boolean(root.name)
 

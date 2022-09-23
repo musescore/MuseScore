@@ -80,15 +80,10 @@ RequestHeaders CloudConfiguration::headers() const
 {
     RequestHeaders headers;
     headers.rawHeaders["Accept"] = "application/json";
-    headers.rawHeaders["X-MS-CLIENT-ID"] = clientId();
+    headers.rawHeaders["X-MS-CLIENT-ID"] = QByteArray::fromStdString(settings()->value(CLIENT_ID_KEY).toString());
     headers.knownHeaders[QNetworkRequest::UserAgentHeader] = userAgent();
 
     return headers;
-}
-
-QByteArray CloudConfiguration::clientId() const
-{
-    return QByteArray::fromStdString(settings()->value(CLIENT_ID_KEY).toString());
 }
 
 QByteArray CloudConfiguration::uploadingLicense() const
@@ -96,9 +91,24 @@ QByteArray CloudConfiguration::uploadingLicense() const
     return "all-rights-reserved";
 }
 
+QUrl CloudConfiguration::cloudUrl() const
+{
+    return QUrl("https://musescore.com");
+}
+
 QUrl CloudConfiguration::authorizationUrl() const
 {
     return QUrl("https://musescore.com/oauth/authorize");
+}
+
+QUrl CloudConfiguration::signUpUrl() const
+{
+    return QUrl("https://musescore.com/oauth/authorize-new");
+}
+
+QUrl CloudConfiguration::scoreManagerUrl() const
+{
+    return QUrl("https://musescore.com/my-scores");
 }
 
 QUrl CloudConfiguration::accessTokenUrl() const
@@ -116,14 +126,24 @@ QUrl CloudConfiguration::userInfoApiUrl() const
     return apiRootUrl() + "/me";
 }
 
-QUrl CloudConfiguration::loginApiUrl() const
+QUrl CloudConfiguration::logoutApiUrl() const
 {
     return apiRootUrl() + "/oauth/logout";
 }
 
-QUrl CloudConfiguration::uploadingApiUrl() const
+QUrl CloudConfiguration::scoreInfoApiUrl() const
+{
+    return apiRootUrl() + "/score/info";
+}
+
+QUrl CloudConfiguration::uploadScoreApiUrl() const
 {
     return apiRootUrl() + "/score/upload";
+}
+
+QUrl CloudConfiguration::uploadAudioApiUrl() const
+{
+    return apiRootUrl() + "/score/audio";
 }
 
 mu::io::path_t CloudConfiguration::tokensFilePath() const

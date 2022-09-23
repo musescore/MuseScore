@@ -22,7 +22,8 @@
 #include "qmltooltip.h"
 
 #include <QGuiApplication>
-#include <QStyleHints>
+
+static constexpr int INTERVAL = 500;
 
 using namespace mu::ui;
 
@@ -52,8 +53,7 @@ void QmlToolTip::show(QQuickItem* item, const QString& title, const QString& des
         m_item = item;
         connect(m_item, &QObject::destroyed, this, &QmlToolTip::doHide);
 
-        const int interval = item ? qApp->styleHints()->mousePressAndHoldInterval() : 100;
-        m_openTimer.start(interval);
+        m_openTimer.start(INTERVAL);
     } else {
         m_item = item;
         doShow();
@@ -75,7 +75,7 @@ void QmlToolTip::hide(QQuickItem* item, bool force)
         return;
     }
 
-    m_closeTimer.start(500);
+    m_closeTimer.start(INTERVAL);
 }
 
 void QmlToolTip::doShow()

@@ -23,7 +23,7 @@
 #ifndef __INSTRUMENTNAME_H__
 #define __INSTRUMENTNAME_H__
 
-#include "text.h"
+#include "textbase.h"
 
 namespace mu::engraving {
 enum class InstrumentNameType : char {

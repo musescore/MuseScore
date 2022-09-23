@@ -47,7 +47,12 @@ public:
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const override;
 
     bool exportScores(const notation::INotationPtrList& notations, const ExportType& exportType,
-                      project::INotationWriter::UnitType unitType, bool openDestinationFolderOnExport = false) const override;
+                      project::INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
+                      bool openDestinationFolderOnExport = false) const override;
+
+    bool exportScores(const notation::INotationPtrList& notations, const io::path_t& destinationPath,
+                      project::INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
+                      bool openDestinationFolderOnExport = false) const override;
 
     framework::Progress progress() const override;
 

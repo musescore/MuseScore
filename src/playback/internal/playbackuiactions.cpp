@@ -65,6 +65,13 @@ const UiActionList PlaybackUiActions::m_mainActions = {
              TranslatableString("action", "Toggle metronome playback"),
              IconCode::Code::METRONOME,
              Checkable::Yes
+             ),
+    UiAction("playback-setup",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Playback Setup"),
+             TranslatableString("action", "Open playback setup dialog"),
+             IconCode::Code::NONE
              )
 };
 
@@ -83,6 +90,14 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
              TranslatableString("action", "Play repeats"),
              TranslatableString("action", "Play repeats"),
              IconCode::Code::PLAY_REPEATS,
+             Checkable::Yes
+             ),
+    UiAction("play-chord-symbols",
+             mu::context::UiCtxAny,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Play chord symbols"),
+             TranslatableString("action", "Play chord symbols"),
+             IconCode::Code::CHORD_SYMBOL,
              Checkable::Yes
              ),
     UiAction("pan",

@@ -22,18 +22,14 @@
 
 #include "playbackmodel.h"
 
-#include "libmscore/score.h"
-#include "libmscore/measure.h"
-#include "libmscore/repeatlist.h"
-#include "libmscore/segment.h"
-#include "libmscore/dynamic.h"
-#include "libmscore/part.h"
-#include "libmscore/staff.h"
-#include "libmscore/chord.h"
-#include "libmscore/instrument.h"
 #include "libmscore/fret.h"
-
-#include "utils/pitchutils.h"
+#include "libmscore/instrument.h"
+#include "libmscore/measure.h"
+#include "libmscore/part.h"
+#include "libmscore/repeatlist.h"
+#include "libmscore/score.h"
+#include "libmscore/segment.h"
+#include "libmscore/tempo.h"
 
 #include "log.h"
 
@@ -46,7 +42,6 @@ static const std::string METRONOME_INSTRUMENT_ID("metronome");
 static const std::string CHORD_SYMBOLS_INSTRUMENT_ID("chord_symbols");
 
 const InstrumentTrackId PlaybackModel::METRONOME_TRACK_ID = { 999, METRONOME_INSTRUMENT_ID };
-const InstrumentTrackId PlaybackModel::CHORD_SYMBOLS_TRACK_ID = { 1000, CHORD_SYMBOLS_INSTRUMENT_ID };
 
 static const Harmony* findChordSymbol(const EngravingItem* item)
 {
@@ -138,14 +133,29 @@ void PlaybackModel::setPlayRepeats(const bool isEnabled)
     m_expandRepeats = isEnabled;
 }
 
+bool PlaybackModel::isPlayChordSymbolsEnabled() const
+{
+    return m_playChordSymbols;
+}
+
+void PlaybackModel::setPlayChordSymbols(const bool isEnabled)
+{
+    m_playChordSymbols = isEnabled;
+}
+
 const InstrumentTrackId& PlaybackModel::metronomeTrackId() const
 {
     return METRONOME_TRACK_ID;
 }
 
-const InstrumentTrackId& PlaybackModel::chordSymbolsTrackId() const
+InstrumentTrackId PlaybackModel::chordSymbolsTrackId(const ID& partId) const
 {
-    return CHORD_SYMBOLS_TRACK_ID;
+    return { partId, CHORD_SYMBOLS_INSTRUMENT_ID };
+}
+
+bool PlaybackModel::isChordSymbolsTrack(const InstrumentTrackId& trackId) const
+{
+    return trackId == chordSymbolsTrackId(trackId.partId);
 }
 
 const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const InstrumentTrackId& trackId)
@@ -194,16 +204,11 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
 
     constexpr timestamp_t actualTimestamp = 0;
     constexpr dynamic_level_t actualDynamicLevel = dynamicLevelFromType(mpe::DynamicType::Natural);
-    duration_t actualDuration = MScore::defaultPlayDuration;
+    duration_t actualDuration = MScore::defaultPlayDuration * 1000;
 
     for (const EngravingItem* item : playableItems) {
         if (item->isHarmony()) {
-            const Harmony* chordSymbol = toHarmony(item);
-
-            if (chordSymbol->isRealizable()) {
-                m_renderer.renderChordSymbol(chordSymbol, actualTimestamp, actualDuration, result);
-            }
-
+            m_renderer.renderChordSymbol(toHarmony(item), actualTimestamp, actualDuration, result);
             continue;
         }
 
@@ -220,6 +225,18 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
                           result);
     }
 
+    trackPlaybackData->second.offStream.send(std::move(result));
+}
+
+void PlaybackModel::triggerMetronome(int tick)
+{
+    auto trackPlaybackData = m_playbackDataMap.find(metronomeTrackId());
+    if (trackPlaybackData == m_playbackDataMap.cend()) {
+        return;
+    }
+
+    PlaybackEventsMap result;
+    m_renderer.renderMetronome(m_score, tick, 0, result);
     trackPlaybackData->second.offStream.send(std::move(result));
 }
 
@@ -254,8 +271,6 @@ void PlaybackModel::update(const int tickFrom, const int tickTo, const track_idx
 
 void PlaybackModel::updateSetupData()
 {
-    bool hasChordSymbols = false;
-
     for (const Part* part : m_score->parts()) {
         for (const auto& pair : part->instruments()) {
             InstrumentTrackId trackId = idKey(part->id(), pair.second->id().toStdString());
@@ -267,16 +282,13 @@ void PlaybackModel::updateSetupData()
             m_setupResolver.resolveSetupData(pair.second, m_playbackDataMap[trackId].setupData);
         }
 
-        if (!hasChordSymbols && part->hasChordSymbol()) {
-            hasChordSymbols = true;
+        if (part->hasChordSymbol()) {
+            InstrumentTrackId trackId = chordSymbolsTrackId(part->id());
+            m_setupResolver.resolveChordSymbolsSetupData(part->instrument(), m_playbackDataMap[trackId].setupData);
         }
     }
 
     m_setupResolver.resolveMetronomeSetupData(m_playbackDataMap[METRONOME_TRACK_ID].setupData);
-
-    if (hasChordSymbols) {
-        m_setupResolver.resolveChordSymbolsSetupData(m_playbackDataMap[CHORD_SYMBOLS_TRACK_ID].setupData);
-    }
 }
 
 void PlaybackModel::updateContext(const track_idx_t trackFrom, const track_idx_t trackTo)
@@ -336,17 +348,23 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                     }
 
                     const Harmony* chordSymbol = findChordSymbol(item);
-                    if (!chordSymbol || !chordSymbol->isRealizable()) {
+                    if (!chordSymbol) {
                         continue;
                     }
 
                     ID partId = item->part()->id();
                     if (changedPartIdSet.find(partId) == changedPartIdSet.cend()) {
-                        return;
+                        continue;
                     }
 
-                    m_renderer.renderChordSymbol(chordSymbol, tickPositionOffset, m_playbackDataMap[CHORD_SYMBOLS_TRACK_ID].originEvents);
-                    collectChangesTracks(CHORD_SYMBOLS_TRACK_ID, trackChanges);
+                    InstrumentTrackId trackId = chordSymbolsTrackId(partId);
+
+                    if (chordSymbol->play()) {
+                        m_renderer.renderChordSymbol(chordSymbol, tickPositionOffset,
+                                                     m_playbackDataMap[trackId].originEvents);
+                    }
+
+                    collectChangesTracks(trackId, trackChanges);
                 }
 
                 for (const EngravingItem* item : segment->elist()) {
@@ -392,8 +410,12 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
 bool PlaybackModel::hasToReloadTracks(const std::unordered_set<ElementType>& changedTypes) const
 {
     static const std::unordered_set<ElementType> REQUIRED_TYPES = {
-        ElementType::PLAYTECH_ANNOTATION, ElementType::DYNAMIC, ElementType::HAIRPIN,
-        ElementType::HAIRPIN_SEGMENT, ElementType::HARMONY, ElementType::STAFF_TEXT
+        ElementType::PLAYTECH_ANNOTATION,
+        ElementType::DYNAMIC,
+        ElementType::HAIRPIN,
+        ElementType::HAIRPIN_SEGMENT,
+        ElementType::HARMONY,
+        ElementType::STAFF_TEXT,
     };
 
     for (const ElementType type : REQUIRED_TYPES) {
@@ -410,12 +432,18 @@ bool PlaybackModel::hasToReloadTracks(const std::unordered_set<ElementType>& cha
 bool PlaybackModel::hasToReloadScore(const std::unordered_set<ElementType>& changedTypes) const
 {
     static const std::unordered_set<ElementType> REQUIRED_TYPES = {
-        ElementType::GRADUAL_TEMPO_CHANGE, ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT,
+        ElementType::SCORE,
+        ElementType::GRADUAL_TEMPO_CHANGE,
+        ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT,
         ElementType::TEMPO_TEXT,
-        ElementType::LAYOUT_BREAK, ElementType::FERMATA,
-        ElementType::MEASURE_REPEAT, ElementType::VOLTA,
-        ElementType::VOLTA_SEGMENT, ElementType::SYSTEM_TEXT,
-        ElementType::JUMP, ElementType::MARKER
+        ElementType::LAYOUT_BREAK,
+        ElementType::FERMATA,
+        ElementType::MEASURE_REPEAT,
+        ElementType::VOLTA,
+        ElementType::VOLTA_SEGMENT,
+        ElementType::SYSTEM_TEXT,
+        ElementType::JUMP,
+        ElementType::MARKER,
     };
 
     for (const ElementType type : REQUIRED_TYPES) {
@@ -436,37 +464,35 @@ bool PlaybackModel::containsTrack(const InstrumentTrackId& trackId) const
 
 void PlaybackModel::clearExpiredTracks()
 {
+    auto needRemoveTrack = [this](const InstrumentTrackId& trackId) {
+        const Part* part = m_score->partById(trackId.partId.toUint64());
+
+        if (!part) {
+            return true;
+        }
+
+        if (trackId.instrumentId == CHORD_SYMBOLS_INSTRUMENT_ID) {
+            return !part->hasChordSymbol();
+        }
+
+        return !part->instruments().contains(trackId.instrumentId);
+    };
+
     auto it = m_playbackDataMap.cbegin();
-    bool hasChordSymbols = false;
 
     while (it != m_playbackDataMap.cend()) {
-        if (it->first == METRONOME_TRACK_ID || it->first == CHORD_SYMBOLS_TRACK_ID) {
+        if (it->first == METRONOME_TRACK_ID) {
             ++it;
             continue;
         }
 
-        const Part* part = m_score->partById(it->first.partId.toUint64());
-
-        if (!part || !part->instruments().contains(it->first.instrumentId)) {
+        if (needRemoveTrack(it->first)) {
             m_trackRemoved.send(it->first);
             it = m_playbackDataMap.erase(it);
             continue;
         }
 
-        if (!hasChordSymbols && part->hasChordSymbol()) {
-            hasChordSymbols = true;
-        }
-
         ++it;
-    }
-
-    if (!hasChordSymbols) {
-        it = m_playbackDataMap.find(CHORD_SYMBOLS_TRACK_ID);
-
-        if (it != m_playbackDataMap.cend()) {
-            m_trackRemoved.send(CHORD_SYMBOLS_TRACK_ID);
-            m_playbackDataMap.erase(it);
-        }
     }
 }
 
@@ -497,10 +523,11 @@ void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, con
         for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
             removeEvents(trackId, timestampFrom, timestampTo);
         }
+
+        removeEvents(chordSymbolsTrackId(part->id()), timestampFrom, timestampTo);
     }
 
     removeEvents(METRONOME_TRACK_ID, timestampFrom, timestampTo);
-    removeEvents(CHORD_SYMBOLS_TRACK_ID, timestampFrom, timestampTo);
 }
 
 void PlaybackModel::collectChangesTracks(const InstrumentTrackId& trackId, ChangedTrackIdSet* result)
@@ -623,7 +650,7 @@ std::vector<const EngravingItem*> PlaybackModel::filterPlaybleItems(const std::v
 InstrumentTrackId PlaybackModel::idKey(const EngravingItem* item) const
 {
     if (item->isHarmony()) {
-        return CHORD_SYMBOLS_TRACK_ID;
+        return chordSymbolsTrackId(item->part()->id());
     }
 
     return { item->part()->id(),

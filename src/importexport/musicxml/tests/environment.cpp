@@ -29,8 +29,8 @@
 
 #include "engraving/utests/utils/scorerw.h"
 
-#include "libmscore/instrtemplate.h"
-#include "libmscore/musescoreCore.h"
+#include "engraving/libmscore/instrtemplate.h"
+#include "engraving/libmscore/mscore.h"
 
 #include "log.h"
 
@@ -44,6 +44,7 @@ static mu::testing::SuiteEnvironment musicxml_se(
     new mu::engraving::EngravingModule(),
     new mu::iex::musicxml::MusicXmlModule() // needs for init resources
 },
+    nullptr,
     []() {
     LOGI() << "musicxml tests suite post init";
 
@@ -51,9 +52,6 @@ static mu::testing::SuiteEnvironment musicxml_se(
 
     mu::engraving::MScore::testMode = true;
     mu::engraving::MScore::noGui = true;
-
-    new mu::engraving::MuseScoreCore();
-    mu::engraving::MScore::init(); // initialize libmscore
 
     loadInstrumentTemplates(":/data/instruments.xml");
 }

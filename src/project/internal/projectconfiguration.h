@@ -29,6 +29,7 @@
 #include "io/ifilesystem.h"
 #include "accessibility/iaccessibilityconfiguration.h"
 #include "notation/inotationconfiguration.h"
+#include "cloud/icloudconfiguration.h"
 
 #include "../iprojectconfiguration.h"
 
@@ -37,13 +38,11 @@ class ProjectConfiguration : public IProjectConfiguration
 {
     INJECT(project, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(project, notation::INotationConfiguration, notationConfiguration)
+    INJECT(project, cloud::ICloudConfiguration, cloudConfiguration)
     INJECT(project, accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
     INJECT(project, io::IFileSystem, fileSystem)
 
 public:
-    static const QString DEFAULT_FILE_SUFFIX;
-    static const QString DEFAULT_EXPORT_SUFFIX;
-
     void init();
 
     io::paths_t recentProjectPaths() const override;
@@ -72,20 +71,20 @@ public:
     void setUserProjectsPath(const io::path_t& path) override;
     async::Channel<io::path_t> userProjectsPathChanged() const override;
 
-    io::path_t cloudProjectsPath() const override;
-    bool isCloudProject(const io::path_t& path) const override;
-
     bool shouldAskSaveLocationType() const override;
     void setShouldAskSaveLocationType(bool shouldAsk) override;
 
-    io::path_t defaultSavingFilePath(INotationProjectPtr project,
-                                     const QString& filenameAddition = QString(), const QString& suffix = QString()) const override;
+    bool isCloudProject(const io::path_t& projectPath) const override;
+
+    io::path_t cloudProjectSavingFilePath(const io::path_t& projectName) const override;
+    io::path_t defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition = "",
+                                     const std::string& suffix = "") const override;
 
     SaveLocationType lastUsedSaveLocationType() const override;
     void setLastUsedSaveLocationType(SaveLocationType type) override;
 
-    bool shouldWarnBeforePublishing() const override;
-    void setShouldWarnBeforePublishing(bool shouldWarn) override;
+    bool shouldWarnBeforeSavingPublicly() const override;
+    void setShouldWarnBeforeSavingPublicly(bool shouldWarn) override;
 
     QColor templatePreviewBackgroundColor() const override;
     async::Notification templatePreviewBackgroundChanged() const override;
@@ -111,10 +110,32 @@ public:
     bool shouldDestinationFolderBeOpenedOnExport() const override;
     void setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport) override;
 
+    QUrl scoreManagerUrl() const override;
+
+    bool openDetailedProjectUploadedDialog() const override;
+    void setOpenDetailedProjectUploadedDialog(bool show) override;
+
+    bool openAudioGenerationSettings() const override;
+    void setOpenAudioGenerationSettings(bool open) override;
+
+    GenerateAudioTimePeriodType generateAudioTimePeriodType() const override;
+    void setGenerateAudioTimePeriodType(GenerateAudioTimePeriodType type) override;
+    int numberOfSavesToGenerateAudio() const override;
+    void setNumberOfSavesToGenerateAudio(int number) override;
+
+    io::path_t temporaryMp3FilePathTemplate() const override;
+
+    io::path_t projectBackupPath(const io::path_t& projectPath) const override;
+
+    bool showCloudIsNotAvailableWarning() const override;
+    void setShowCloudIsNotAvailableWarning(bool show) override;
+
 private:
     io::paths_t parseRecentProjectsPaths(const mu::Val& value) const;
+    io::paths_t scanCloudProjects() const;
 
     io::path_t appTemplatesPath() const;
+    io::path_t cloudProjectsPath() const;
 
     async::Channel<io::paths_t> m_recentProjectPathsChanged;
     async::Channel<io::path_t> m_userTemplatesPathChanged;

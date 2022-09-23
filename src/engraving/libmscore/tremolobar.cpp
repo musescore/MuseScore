@@ -21,15 +21,11 @@
  */
 
 #include "tremolobar.h"
+
 #include "draw/types/pen.h"
 #include "rw/xml.h"
-#include "types/typesconv.h"
 
 #include "score.h"
-#include "undo.h"
-#include "staff.h"
-#include "chord.h"
-#include "note.h"
 
 using namespace mu;
 using namespace mu::engraving;

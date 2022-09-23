@@ -56,7 +56,13 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
         return false;
     }
 
-    m_currentWriter = writers()->writer(io::suffix(chosenPath));
+    return exportScores(notations, chosenPath, unitType, openDestinationFolderOnExport);
+}
+
+bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notations, const io::path_t& destinationPath,
+                                         INotationWriter::UnitType unitType, bool openDestinationFolderOnExport) const
+{
+    m_currentWriter = writers()->writer(io::suffix(destinationPath));
     if (!m_currentWriter) {
         return false;
     }
@@ -84,8 +90,9 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
                 };
 
                 io::path_t definitivePath = isCreatingOnlyOneFile
-                                            ? chosenPath
-                                            : completeExportPath(chosenPath, notation, isMainNotation(notation), static_cast<int>(page));
+                                            ? destinationPath
+                                            : completeExportPath(destinationPath, notation, isMainNotation(notation),
+                                                                 static_cast<int>(page));
 
                 auto exportFunction = [this, notation, options](QIODevice& destinationDevice) {
                         showExportProgressIfNeed();
@@ -105,8 +112,8 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
             };
 
             io::path_t definitivePath = isCreatingOnlyOneFile
-                                        ? chosenPath
-                                        : completeExportPath(chosenPath, notation, isMainNotation(notation));
+                                        ? destinationPath
+                                        : completeExportPath(destinationPath, notation, isMainNotation(notation));
 
             auto exportFunction = [this, notation, options](QIODevice& destinationDevice) {
                     showExportProgressIfNeed();
@@ -127,12 +134,12 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
                 return m_currentWriter->writeList(notations, destinationDevice, options);
             };
 
-        doExportLoop(chosenPath, exportFunction);
+        doExportLoop(destinationPath, exportFunction);
     } break;
     }
 
     if (openDestinationFolderOnExport) {
-        openFolder(chosenPath);
+        openFolder(destinationPath);
     }
 
     return true;
@@ -174,7 +181,7 @@ mu::io::path_t ExportProjectScenario::askExportPath(const INotationPtrList& nota
 {
     INotationProjectPtr project = context()->currentProject();
 
-    QString filenameAddition;
+    std::string filenameAddition;
 
     // If only one file will be created, the filename will be exactly what the user
     // types in the save dialog and therefore we can put the file dialog in charge of
@@ -190,14 +197,14 @@ mu::io::path_t ExportProjectScenario::askExportPath(const INotationPtrList& nota
 
         if (containsMaster) {
             //: Used in export filename suggestion. Please use only characters that are valid for filenames.
-            filenameAddition = "-" + qtrc("project/export", "Score_and_Parts");
+            filenameAddition = "-" + trc("project/export", "Score_and_Parts");
         } else {
             //: Used in export filename suggestion. Please use only characters that are valid for filenames.
-            filenameAddition = "-" + qtrc("project/export", "Parts");
+            filenameAddition = "-" + trc("project/export", "Parts");
         }
     } else if (isExportingOnlyOneScore) {
         if (!isMainNotation(notations.front())) {
-            filenameAddition = "-" + io::escapeFileName(notations.front()->name()).toQString();
+            filenameAddition = "-" + io::escapeFileName(notations.front()->name()).toStdString();
         }
 
         if (unitType == INotationWriter::UnitType::PER_PAGE && isCreatingOnlyOneFile) {
@@ -206,7 +213,7 @@ mu::io::path_t ExportProjectScenario::askExportPath(const INotationPtrList& nota
         }
     }
 
-    io::path_t defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition, exportType.suffixes.front());
+    io::path_t defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition, exportType.suffixes.front().toStdString());
 
     return interactive()->selectSavingFile(qtrc("project/export", "Export"), defaultPath,
                                            exportType.filter(), isCreatingOnlyOneFile);

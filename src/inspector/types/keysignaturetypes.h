@@ -39,6 +39,7 @@ public:
         MODE_PHRYGIAN,
         MODE_LYDIAN,
         MODE_MIXOLYDIAN,
+        MODE_AEOLIAN,
         MODE_IONIAN,
         MODE_LOCRIAN
     };

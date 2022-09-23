@@ -767,14 +767,20 @@ bool GuitarPro4::read(IODevice* io)
         } else {
             clefId = defaultClef(patch);
         }
-        Measure* measure = score->firstMeasure();
-        Segment* segment = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
-        Clef* clef = Factory::createClef(segment);
-        clef->setClefType(clefId);
-        clef->setTrack(i * VOICES);
-        segment->add(clef);
 
-        if (capo > 0) {
+        Measure* measure = score->firstMeasure();
+        if (measure->tick() != Fraction(0, 1)) {
+            Segment* segment = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
+
+            Clef* clef = Factory::createClef(segment);
+            clef->setClefType(clefId);
+            clef->setTrack(i * VOICES);
+            segment->add(clef);
+        } else {
+            staff->setDefaultClefType(ClefTypeList(clefId, clefId));
+        }
+
+        if (capo > 0 && score->styleB(Sid::showCapoOnStaff)) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
             StaffText* st = new StaffText(s);
             st->setPlainText(String(u"Capo. fret ") + String::number(capo));

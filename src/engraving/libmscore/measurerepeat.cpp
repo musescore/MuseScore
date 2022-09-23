@@ -22,15 +22,13 @@
 
 #include "measurerepeat.h"
 
-#include "translation.h"
 #include "draw/types/pen.h"
 #include "rw/xml.h"
-#include "barline.h"
+#include "translation.h"
+
 #include "measure.h"
-#include "mscore.h"
 #include "score.h"
 #include "staff.h"
-#include "system.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -52,6 +50,15 @@ MeasureRepeat::MeasureRepeat(Segment* parent)
     if (parent) {
         initElementStyle(&measureRepeatStyle);
     }
+}
+
+//---------------------------------------------------------
+//   firstMeasureOfGroup
+//---------------------------------------------------------
+
+Measure* MeasureRepeat::firstMeasureOfGroup() const
+{
+    return measure()->firstOfMeasureRepeatGroup(staffIdx());
 }
 
 //---------------------------------------------------------

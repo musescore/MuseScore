@@ -74,9 +74,12 @@ NoteInputState NotationNoteInput::state() const
     noteInputState.withSlur = inputState.slur() != nullptr;
     noteInputState.currentVoiceIndex = inputState.voice();
     noteInputState.currentTrack = inputState.track();
+    noteInputState.currentString = inputState.string();
     noteInputState.drumset = inputState.drumset();
     noteInputState.isRest = inputState.rest();
     noteInputState.staffGroup = inputState.staffGroup();
+    noteInputState.staff = score()->staff(mu::engraving::track2staff(inputState.track()));
+    noteInputState.segment = inputState.segment();
 
     return noteInputState;
 }
@@ -182,7 +185,7 @@ EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
             if (lastSelected && lastSelected->voice()) {
                 // if last selected CR was not in voice 1,
                 // find CR in voice 1 instead
-                int track = mu::engraving::trackZeroVoice(lastSelected->track());
+                track_idx_t track = mu::engraving::trackZeroVoice(lastSelected->track());
                 const mu::engraving::Segment* s = lastSelected->segment();
                 if (s) {
                     lastSelected = s->nextChordRest(track, true);
@@ -466,8 +469,16 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
     score()->expandVoice();
     mu::engraving::ChordRest* chordRest = inputState.cr();
     if (chordRest) {
+        Fraction ratio = options.ratio;
+        // prevent weird dotted tuplets when adding tuplets to dotted durations
+        if (options.autoBaseLen) {
+            ratio.setDenominator(inputState.duration().dots() ? 3 : 2);
+            while (ratio.numerator() >= ratio.denominator() * 2) {
+                ratio.setDenominator(ratio.denominator() * 2);      // operator*= reduces, we don't want that here
+            }
+        }
         score()->changeCRlen(chordRest, inputState.duration());
-        score()->addTuplet(chordRest, options.ratio, options.numberType, options.bracketType);
+        score()->addTuplet(chordRest, ratio, options.numberType, options.bracketType);
     }
     apply();
 

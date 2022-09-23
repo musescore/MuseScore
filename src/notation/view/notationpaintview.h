@@ -34,7 +34,7 @@ private:
     void onLoadNotation(INotationPtr notation) override;
     void onUnloadNotation(INotationPtr notation) override;
 
-    void onMatrixChanged(const draw::Transform& matrix) override;
+    void onMatrixChanged(const draw::Transform& matrix, bool overrideZoomType = true) override;
 
     bool m_isLoadingNotation = false;
 };

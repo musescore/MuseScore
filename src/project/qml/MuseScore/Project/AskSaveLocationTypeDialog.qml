@@ -86,9 +86,6 @@ You can share drafts with others and publish your finished scores publicly too."
                 navigation.accessible.name: qsTrc("project/save", "Save to the cloud (free)")
                 navigation.accessible.description: description
 
-                // Todo(save-to-cloud): disabled until fully implemented
-                enabled: false
-
                 onButtonClicked: {
                     root.done(SaveLocationType.Cloud)
                 }

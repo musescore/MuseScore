@@ -26,6 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "async/notification.h"
 #include "types/retval.h"
 
 #include "../../iaudiodriver.h"
@@ -40,12 +41,6 @@ public:
 
     static AudioEngine* instance();
 
-    enum class Mode {
-        Undefined = -1,
-        RealTimeMode,
-        OfflineMode
-    };
-
     Ret init(IAudioBufferPtr bufferPtr);
     void deinit();
 
@@ -54,7 +49,10 @@ public:
     void setSampleRate(unsigned int sampleRate);
     void setReadBufferSize(uint16_t readBufferSize);
     void setAudioChannelsCount(const audioch_t count);
-    void setMode(const Mode newMode);
+
+    RenderMode mode() const;
+    void setMode(const RenderMode newMode);
+    async::Notification modeChanged() const;
 
     MixerPtr mixer() const;
 
@@ -68,7 +66,8 @@ private:
     MixerPtr m_mixer = nullptr;
     IAudioBufferPtr m_buffer = nullptr;
 
-    Mode m_currentMode = Mode::Undefined;
+    RenderMode m_currentMode = RenderMode::Undefined;
+    async::Notification m_modeChanges;
 };
 }
 

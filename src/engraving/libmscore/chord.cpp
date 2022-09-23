@@ -31,42 +31,36 @@
 #include "style/style.h"
 #include "rw/xml.h"
 
-#include "factory.h"
-#include "note.h"
-#include "segment.h"
-#include "text.h"
-#include "measure.h"
-#include "system.h"
-#include "tuplet.h"
-#include "hook.h"
-#include "tie.h"
+#include "accidental.h"
 #include "arpeggio.h"
-#include "score.h"
-#include "tremolo.h"
-#include "glissando.h"
-#include "staff.h"
-#include "part.h"
-#include "utils.h"
 #include "articulation.h"
-#include "undo.h"
+#include "beam.h"
 #include "chordline.h"
-#include "lyrics.h"
+#include "drumset.h"
+#include "factory.h"
+#include "fingering.h"
+#include "hook.h"
+#include "key.h"
+#include "ledgerline.h"
+#include "measure.h"
+#include "mscore.h"
 #include "navigate.h"
+#include "note.h"
+#include "noteevent.h"
+#include "part.h"
+#include "score.h"
+#include "segment.h"
+#include "slur.h"
+#include "staff.h"
 #include "stafftype.h"
 #include "stem.h"
-#include "mscore.h"
-#include "accidental.h"
-#include "noteevent.h"
-#include "pitchspelling.h"
 #include "stemslash.h"
-#include "ledgerline.h"
-#include "drumset.h"
-#include "key.h"
 #include "stringdata.h"
-#include "beam.h"
-#include "slur.h"
-#include "fingering.h"
-#include "layout/layoutchords.h"
+#include "system.h"
+#include "tie.h"
+#include "tremolo.h"
+#include "tuplet.h"
+#include "undo.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -489,11 +483,7 @@ bool Chord::containsEqualTremolo(const Chord* other) const
 
 double Chord::noteHeadWidth() const
 {
-    double nhw = score()->noteHeadWidth();
-    if (_noteType != NoteType::NORMAL) {
-        nhw *= score()->styleD(Sid::graceNoteMag);
-    }
-    return nhw * mag();
+    return score()->noteHeadWidth() * mag();
 }
 
 //! Returns Chord coordinates
@@ -989,6 +979,25 @@ void Chord::computeUp()
 
     _usesAutoUp = false;
 
+    const StaffType* tab = staff() ? staff()->staffTypeForElement(this) : 0;
+    bool isTabStaff = tab && tab->isTabStaff();
+    if (isTabStaff) {
+        if (tab->stemless()) {
+            _up = false;
+            return;
+        }
+        if (!tab->stemThrough()) {
+            bool staffHasMultipleVoices = measure()->hasVoices(staffIdx(), tick(), actualTicks());
+            if (staffHasMultipleVoices) {
+                bool isTrackEven = track() % 2 == 0;
+                _up = isTrackEven;
+                return;
+            }
+            _up = !tab->stemsDown();
+            return;
+        }
+    }
+
     bool hasCustomStemDirection = _stemDirection != DirectionV::AUTO;
     if (hasCustomStemDirection && !(_beam && _beam->cross())) {
         _up = _stemDirection == DirectionV::UP;
@@ -1075,13 +1084,6 @@ void Chord::computeUp()
     if (staffHasMultipleVoices) {
         bool isTrackEven = track() % 2 == 0;
         _up = isTrackEven;
-        return;
-    }
-
-    const StaffType* tab = staff() ? staff()->staffTypeForElement(this) : 0;
-    bool isTabStaff  = tab && tab->isTabStaff();
-    if (isTabStaff && (tab->stemless() || !tab->stemThrough())) {
-        _up = tab->stemless() ? false : !tab->stemsDown();
         return;
     }
 
@@ -1354,11 +1356,8 @@ double Chord::centerX() const
         return stt->chordStemPosX(this) * spatium();
     }
 
-    const Note* note = up() ? upNote() : downNote();
+    const Note* note = up() ? downNote() : upNote();
     double x = note->pos().x() + note->noteheadCenterX();
-    if (note->mirror()) {
-        x += (note->headBodyWidth()) * (up() ? -1.0 : 1.0);
-    }
     return x;
 }
 
@@ -1748,8 +1747,8 @@ Chord* Chord::next() const
 void Chord::setBeamExtension(double extension)
 {
     if (_stem) {
-        _stem->setBaseLength(_stem->baseLength() + Millimetre(extension));
-        _defaultStemLength += extension;
+        _stem->setBaseLength(std::max(_stem->baseLength() + Millimetre(extension), Millimetre { 0.0 }));
+        _defaultStemLength = std::max(_defaultStemLength + extension, _stem->baseLength().val());
     }
 }
 
@@ -2410,9 +2409,7 @@ void Chord::layoutTablature()
         rrr = stemX + halfHeadWidth;
     }
     // align dots to the widest fret mark (not needed in all TAB styles, but harmless anyway)
-    if (segment()) {
-        segment()->setDotPosX(staffIdx(), headWidth);
-    }
+    setDotPosX(headWidth);
 
     if (shouldHaveStem()) {
         // if stem is required but missing, add it;
@@ -2559,9 +2556,7 @@ void Chord::layoutTablature()
             else {
                 x = STAFFTYPE_TAB_DEFAULTDOTDIST_X * _spatium;
             }
-            if (segment()) {
-                segment()->setDotPosX(staffIdx(), x);
-            }
+            setDotPosX(x);
         }
         // if stems are through staff, use dot position computed above on fret mark widths
         else {
@@ -2910,10 +2905,6 @@ EngravingItem* Chord::drop(EditData& data)
     return 0;
 }
 
-//---------------------------------------------------------
-//   dotPosX
-//---------------------------------------------------------
-
 void Chord::setColor(const mu::draw::Color& color)
 {
     ChordRest::setColor(color);
@@ -2921,18 +2912,6 @@ void Chord::setColor(const mu::draw::Color& color)
     for (Note* note : _notes) {
         note->undoChangeProperty(Pid::COLOR, PropertyValue::fromValue(color));
     }
-}
-
-//---------------------------------------------------------
-//   dotPosX
-//---------------------------------------------------------
-
-double Chord::dotPosX() const
-{
-    if (explicitParent()) {
-        return segment()->dotPosX(vStaffIdx());
-    }
-    return -1000.0;
 }
 
 //---------------------------------------------------------
@@ -3817,11 +3796,10 @@ void Chord::layoutArticulations()
         double y = 0.0;
         if (bottom) {
             if (!headSide && stem()) {
-                auto userLen = stem()->userLength();
                 if (_up) {
-                    y = downPos() - stem()->length() - userLen;
+                    y = downPos() + stem()->bbox().top();
                 } else {
-                    y = upPos() + stem()->length() - userLen;
+                    y = upPos() + stem()->bbox().bottom();
                 }
                 int line   = lrint((y + 0.49 * _spStaff) / _spStaff);
                 // hack: using 0.49 instead of 0.5 otherwise the result can be unpredictably
@@ -3854,11 +3832,10 @@ void Chord::layoutArticulations()
             y -= a->height() * .5;              // center symbol
         } else {
             if (!headSide && stem()) {
-                auto userLen = stem()->userLength();
                 if (_up) {
-                    y = downPos() - stem()->length() + userLen;
+                    y = downPos() + stem()->bbox().top();
                 } else {
-                    y = upPos() + stem()->length() + userLen;
+                    y = upPos() + stem()->bbox().bottom();
                 }
                 int line   = lrint((y - 0.49 * _spStaff) / _spStaff);
                 // hack: using 0.49 instead of 0.5 otherwise the result can be unpredictably
@@ -4155,21 +4132,21 @@ GraceNotesGroup::GraceNotesGroup(Chord* c)
 
 void GraceNotesGroup::layout()
 {
-    _shape.clear();
+    Shape _shape;
     for (size_t i = this->size() - 1; i != mu::nidx; --i) {
         Chord* grace = this->at(i);
         Shape graceShape = grace->shape();
         double offset;
         offset = -std::max(graceShape.minHorizontalDistance(_shape, score()), 0.0);
-        // Adjust for cross-staff grace notes
+        // Adjust spacing for cross-beam situations
         if (i < this->size() - 1) {
             Chord* prevGrace = this->at(i + 1);
-            if (prevGrace->vStaffIdx() != grace->vStaffIdx()) {
+            if (prevGrace->up() != grace->up()) {
                 double crossCorrection = grace->notes().front()->headWidth() - grace->stem()->width();
-                if (prevGrace->vStaffIdx() < grace->vStaffIdx()) {
-                    offset -= crossCorrection;
-                } else {
+                if (prevGrace->up() && !grace->up()) {
                     offset += crossCorrection;
+                } else {
+                    offset -= crossCorrection;
                 }
             }
         }
@@ -4201,5 +4178,14 @@ void GraceNotesGroup::setPos(double x, double y)
         Chord* chord = this->at(i);
         chord->movePos(PointF(x, y));
     }
+}
+
+Shape GraceNotesGroup::shape() const
+{
+    Shape shape;
+    for (Chord* grace : *this) {
+        shape.add(grace->shape().translated(grace->pos() - this->pos()));
+    }
+    return shape;
 }
 }

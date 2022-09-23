@@ -48,11 +48,6 @@ public:
 
     virtual io::path_t userDataPath() const = 0;
 
-    virtual bool isAppUpdatable() const = 0;
-
-    virtual bool needCheckForUpdate() const = 0;
-    virtual void setNeedCheckForUpdate(bool needCheck) = 0;
-
     virtual std::string handbookUrl() const = 0;
     virtual std::string askForHelpUrl() const = 0;
     virtual std::string bugReportUrl() const = 0;
@@ -60,7 +55,6 @@ public:
     virtual std::string museScoreUrl() const = 0;
     virtual std::string museScoreForumUrl() const = 0;
     virtual std::string museScoreContributionUrl() const = 0;
-    virtual std::string museScorePrivacyPolicyUrl() const = 0;
     virtual std::string musicXMLLicenseUrl() const = 0;
     virtual std::string musicXMLLicenseDeedUrl() const = 0;
 

@@ -25,20 +25,18 @@
 
 #include <QQuickView>
 
-#include "io/path.h"
+#include "types/ret.h"
 
 #include "modularity/ioc.h"
 #include "framework/ui/iuiengine.h"
 #include "ipluginsconfiguration.h"
 
-#include "plugins/pluginstypes.h"
+class QQmlComponent;
+class QQuickView;
 
 namespace mu::engraving {
 class QmlPlugin;
 }
-
-class QQuickView;
-class QQmlComponent;
 
 namespace mu::plugins {
 class PluginView : public QObject
@@ -49,8 +47,10 @@ class PluginView : public QObject
     INJECT(plugins, IPluginsConfiguration, configuration)
 
 public:
-    PluginView(const QUrl& url, QObject* parent = nullptr);
+    PluginView(QObject* parent = nullptr);
     ~PluginView();
+
+    Ret load(const QUrl& url);
 
     QString name() const;
     QString description() const;

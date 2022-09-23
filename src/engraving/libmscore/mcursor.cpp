@@ -24,19 +24,18 @@
 
 #include "compat/scoreaccess.h"
 
-#include "factory.h"
-#include "part.h"
-#include "staff.h"
-#include "note.h"
 #include "chord.h"
-#include "rest.h"
 #include "durationtype.h"
-#include "measure.h"
-#include "segment.h"
+#include "factory.h"
 #include "instrtemplate.h"
 #include "keysig.h"
-#include "timesig.h"
 #include "masterscore.h"
+#include "measure.h"
+#include "note.h"
+#include "part.h"
+#include "segment.h"
+#include "staff.h"
+#include "timesig.h"
 
 #include "log.h"
 
@@ -44,8 +43,6 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-extern MScore* mscore;
-
 //---------------------------------------------------------
 //   MCursor
 //---------------------------------------------------------

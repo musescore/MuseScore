@@ -28,6 +28,7 @@
 #include "../midishared/midifile.h"
 
 #include "engraving/libmscore/durationtype.h"
+#include "engraving/libmscore/sig.h"
 
 namespace mu::iex::midi {
 MTrack::MTrack()

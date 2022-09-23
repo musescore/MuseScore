@@ -20,4 +20,4 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
-bash $HERE/../linux/setup.sh 
+bash $HERE/../linux/setup.sh --gcc_version 7

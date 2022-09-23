@@ -25,18 +25,14 @@
 #include <cmath>
 
 #include "types/typesconv.h"
-#include "style/style.h"
 #include "rw/xml.h"
 
-#include "factory.h"
-#include "system.h"
-#include "measure.h"
-#include "utils.h"
-#include "score.h"
-#include "symbolfont.h"
 #include "accidental.h"
-#include "segment.h"
+#include "factory.h"
+#include "score.h"
 #include "staff.h"
+#include "symbolfont.h"
+#include "system.h"
 
 #include "log.h"
 
@@ -235,6 +231,21 @@ EngravingItem* TrillSegment::drop(EditData& data)
         break;
     }
     return e;
+}
+
+//---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void TrillSegment::scanElements(void* data, void (* func)(void*, EngravingItem*), bool)
+{
+    func(data, this);
+    if (isSingleType() || isBeginType()) {
+        Accidental* a = trill()->accidental();
+        if (a) {
+            func(data, a);
+        }
+    }
 }
 
 //---------------------------------------------------------

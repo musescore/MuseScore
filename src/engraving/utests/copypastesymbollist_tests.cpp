@@ -29,11 +29,10 @@
 #include "internal/qmimedataadapter.h"
 
 #include "engraving/rw/xml.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/system.h"
-#include "libmscore/measure.h"
-#include "libmscore/chord.h"
+
 #include "libmscore/factory.h"
+#include "libmscore/masterscore.h"
+#include "libmscore/measure.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

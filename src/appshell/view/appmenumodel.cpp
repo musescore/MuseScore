@@ -139,9 +139,8 @@ MenuItem* AppMenuModel::makeFileMenu()
         makeMenuItem("file-save-as"),
         makeMenuItem("file-save-a-copy"),
         makeMenuItem("file-save-selection"),
-        // Todo(save-to-cloud): hidden until fully implemented
-        //makeMenuItem("file-save-to-cloud"),
-        //makeMenuItem("file-publish"),
+        makeMenuItem("file-save-to-cloud"),
+        makeMenuItem("file-publish"),
         makeSeparator(),
         makeMenuItem("file-import-pdf"),
         makeMenuItem("file-export"),
@@ -196,6 +195,7 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-timeline"),
         makeMenuItem("toggle-mixer"),
         makeMenuItem("toggle-piano-keyboard"),
+        makeMenuItem("playback-setup"),
         //makeMenuItem("toggle-scorecmp-tool"), // not implemented
         makeSeparator(),
         makeMenu(TranslatableString("appshell", "&Toolbars"), makeToolbarsItems(), "menu-toolbars"),
@@ -334,7 +334,7 @@ MenuItem* AppMenuModel::makeHelpMenu()
     };
 
     // put on top
-    if (configuration()->isAppUpdatable()) {
+    if (updateConfiguration()->isAppUpdatable()) {
         helpItems.push_front(makeSeparator());
         helpItems.push_front(makeMenuItem("check-update"));
     }
@@ -358,10 +358,12 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
     MenuItemList engravingItems {
         makeMenuItem("diagnostic-show-engraving-elements"),
         makeSeparator(),
-        makeMenuItem("show-skylines"),
+        makeMenuItem("show-element-bounding-rects"),
+        makeMenuItem("color-element-shapes"),
         makeMenuItem("show-segment-shapes"),
-        makeMenuItem("show-bounding-rect"),
-        makeMenuItem("show-system-bounding-rect"),
+        makeMenuItem("color-segment-shapes"),
+        makeMenuItem("show-skylines"),
+        makeMenuItem("show-system-bounding-rects"),
         makeMenuItem("show-corrupted-measures")
     };
 

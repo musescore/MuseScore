@@ -36,15 +36,20 @@ public:
     void init();
 
     network::RequestHeaders headers() const override;
-    QByteArray clientId() const override;
     QByteArray uploadingLicense() const override;
 
+    QUrl cloudUrl() const override;
     QUrl authorizationUrl() const override;
+    QUrl signUpUrl() const override;
+    QUrl scoreManagerUrl() const override;
     QUrl accessTokenUrl() const override;
+
     QUrl refreshApiUrl() const override;
     QUrl userInfoApiUrl() const override;
-    QUrl loginApiUrl() const override;
-    QUrl uploadingApiUrl() const override;
+    QUrl logoutApiUrl() const override;
+    QUrl scoreInfoApiUrl() const override;
+    QUrl uploadScoreApiUrl() const override;
+    QUrl uploadAudioApiUrl() const override;
 
     io::path_t tokensFilePath() const override;
 

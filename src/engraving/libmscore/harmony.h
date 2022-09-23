@@ -27,7 +27,8 @@
 
 #include "draw/types/font.h"
 
-#include "text.h"
+#include "textbase.h"
+
 #include "pitchspelling.h"
 #include "realizedharmony.h"
 
@@ -135,7 +136,6 @@ public:
     void setId(int d) { _id = d; }
     int id() const { return _id; }
 
-    void setPlay(bool p) { _play = p; }
     bool play() const { return _play; }
 
     void setBaseCase(NoteCaseType c) { _baseCase = c; }

@@ -92,8 +92,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscnotationwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationplayback.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationplayback.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/midiinputcontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/midiinputcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midiinputoutputcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midiinputoutputcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidiinput.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidiinput.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationparts.cpp

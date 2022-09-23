@@ -41,15 +41,15 @@ static const Settings::Key HAS_COMPLETED_FIRST_LAUNCH_SETUP(module_name, "applic
 static const Settings::Key STARTUP_MODE_TYPE(module_name, "application/startup/modeStart");
 static const Settings::Key STARTUP_SCORE_PATH(module_name, "application/startup/startScore");
 
-static const Settings::Key CHECK_FOR_UPDATE_KEY(module_name, "application/checkForUpdate");
-
-static const std::string ONLINE_HANDBOOK_URL("https://musescore.org/redirect/help?tag=handbook&locale=");
-static const std::string ASK_FOR_HELP_URL("https://musescore.org/redirect/post/question?locale=");
-static const std::string BUG_REPORT_URL("https://musescore.org/redirect/post/bug-report?locale=");
-static const std::string LEAVE_FEEDBACK_URL("https://musescore.com/content/editor-feedback?");
-static const std::string MUSESCORE_URL("https://www.musescore.org/");
-static const std::string MUSICXML_LICENSE_URL("https://www.w3.org/community/about/process/final/");
-static const std::string MUSICXML_LICENSE_DEED_URL("https://www.w3.org/community/about/process/fsa-deed/");
+static const std::string MUSESCORE_ONLINE_HANDBOOK_URL_PATH("/redirect/help");
+static const std::string MUSESCORE_ASK_FOR_HELP_URL_PATH("/redirect/post/question");
+static const std::string MUSESCORE_BUG_REPORT_URL_PATH("/redirect/post/bug-report?locale=");
+static const std::string MUSESCORE_FORUM_URL_PATH("/forum");
+static const std::string MUSESCORE_CONTRIBUTE_URL_PATH("/contribute");
+static const std::string LEAVE_FEEDBACK_URL("https://musescore.com/content/editor-feedback");
+static const std::string MUSICXML_URL("https://w3.org");
+static const std::string MUSICXML_LICENSE_URL(MUSICXML_URL + "/community/about/process/final/");
+static const std::string MUSICXML_LICENSE_DEED_URL(MUSICXML_URL + "/community/about/process/fsa-deed/");
 
 static const std::string UTM_MEDIUM_MENU("menu");
 
@@ -65,8 +65,6 @@ void AppShellConfiguration::init()
 
     settings()->setDefaultValue(STARTUP_MODE_TYPE, Val(StartupModeType::StartEmpty));
     settings()->setDefaultValue(STARTUP_SCORE_PATH, Val(projectConfiguration()->myFirstProjectPath().toStdString()));
-
-    settings()->setDefaultValue(CHECK_FOR_UPDATE_KEY, Val(isAppUpdatable()));
 
     fileSystem()->makePath(sessionDataPath());
 }
@@ -106,72 +104,70 @@ mu::io::path_t AppShellConfiguration::userDataPath() const
     return globalConfiguration()->userDataPath();
 }
 
-bool AppShellConfiguration::isAppUpdatable() const
-{
-#ifdef APP_UPDATABLE
-    return true;
-#else
-    return false;
-#endif
-}
-
-bool AppShellConfiguration::needCheckForUpdate() const
-{
-    return settings()->value(CHECK_FOR_UPDATE_KEY).toBool();
-}
-
-void AppShellConfiguration::setNeedCheckForUpdate(bool needCheck)
-{
-    settings()->setSharedValue(CHECK_FOR_UPDATE_KEY, Val(needCheck));
-}
-
 std::string AppShellConfiguration::handbookUrl() const
 {
     std::string utm = utmParameters(UTM_MEDIUM_MENU);
     std::string languageCode = currentLanguageCode();
 
-    return ONLINE_HANDBOOK_URL + languageCode + "&" + utm;
+    QStringList params = {
+        "tag=handbook",
+        "locale=" + QString::fromStdString(languageCode),
+        QString::fromStdString(utm)
+    };
+
+    return MUSESCORE_ONLINE_HANDBOOK_URL_PATH + "?" + params.join("&").toStdString();
 }
 
 std::string AppShellConfiguration::askForHelpUrl() const
 {
     std::string languageCode = currentLanguageCode();
-    return ASK_FOR_HELP_URL + languageCode;
+
+    QStringList params = {
+        "locale=" + QString::fromStdString(languageCode)
+    };
+
+    return MUSESCORE_ASK_FOR_HELP_URL_PATH + "?" + params.join("&").toStdString();
 }
 
 std::string AppShellConfiguration::bugReportUrl() const
 {
     std::string utm = utmParameters(UTM_MEDIUM_MENU);
+    std::string _sha = sha();
     std::string languageCode = currentLanguageCode();
 
-    return BUG_REPORT_URL + languageCode + "&" + utm + "&" + sha();
+    QStringList params = {
+        "locale=" + QString::fromStdString(languageCode),
+        QString::fromStdString(utm),
+        QString::fromStdString(_sha)
+    };
+
+    return MUSESCORE_BUG_REPORT_URL_PATH + "?" + params.join("&").toStdString();
 }
 
 std::string AppShellConfiguration::leaveFeedbackUrl() const
 {
     std::string utm = utmParameters(UTM_MEDIUM_MENU);
 
-    return LEAVE_FEEDBACK_URL + utm;
+    QStringList params = {
+        QString::fromStdString(utm)
+    };
+
+    return LEAVE_FEEDBACK_URL + "?" + params.join("&").toStdString();
 }
 
 std::string AppShellConfiguration::museScoreUrl() const
 {
-    return MUSESCORE_URL;
+    return globalConfiguration()->museScoreUrl();
 }
 
 std::string AppShellConfiguration::museScoreForumUrl() const
 {
-    return MUSESCORE_URL + "forum";
+    return globalConfiguration()->museScoreUrl() + MUSESCORE_FORUM_URL_PATH;
 }
 
 std::string AppShellConfiguration::museScoreContributionUrl() const
 {
-    return MUSESCORE_URL + "contribute";
-}
-
-std::string AppShellConfiguration::museScorePrivacyPolicyUrl() const
-{
-    return MUSESCORE_URL + "about/desktop-privacy-policy";
+    return globalConfiguration()->museScoreUrl() + MUSESCORE_CONTRIBUTE_URL_PATH;
 }
 
 std::string AppShellConfiguration::musicXMLLicenseUrl() const

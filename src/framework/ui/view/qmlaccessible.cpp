@@ -23,6 +23,7 @@
 #include "qmlaccessible.h"
 
 #include <QQuickWindow>
+#include <QTextBoundaryFinder>
 
 #include "log.h"
 
@@ -115,6 +116,16 @@ const IAccessible* AccessibleItem::accessibleChild(size_t i) const
     return static_cast<const IAccessible*>(m_children.value(static_cast<int>(i), nullptr));
 }
 
+QWindow* AccessibleItem::accessibleWindow() const
+{
+    QQuickItem* visualItem = resolveVisualItem();
+    if (!visualItem) {
+        return nullptr;
+    }
+
+    return visualItem->window();
+}
+
 QQuickItem* AccessibleItem::resolveVisualItem() const
 {
     if (m_visualItem) {
@@ -170,33 +181,217 @@ QVariant AccessibleItem::accessibleValueStepSize() const
     return m_stepSize;
 }
 
-void AccessibleItem::accessibleSelection(int, int*, int*) const
+void AccessibleItem::accessibleSelection(int selectionIndex, int* startOffset, int* endOffset) const
 {
+    if (selectionIndex == 0) {
+        *startOffset = m_selectionStart;
+        *endOffset = m_selectionEnd;
+    } else {
+        *startOffset = 0;
+        *endOffset = 0;
+    }
 }
 
 int AccessibleItem::accessibleSelectionCount() const
 {
-    return 0;
+    return m_selectedText.size();
 }
 
 int AccessibleItem::accessibleCursorPosition() const
 {
-    return 0;
+    return cursorPosition();
 }
 
-QString AccessibleItem::accessibleText(int, int) const
+QString AccessibleItem::accessibleText(int start, int end) const
 {
-    return QString();
+#if defined(Q_OS_LINUX)
+    return text().mid(start, end - start + 1);
+#else
+    return text().mid(start, end - start);
+#endif
 }
 
-QString AccessibleItem::accessibleTextAtOffset(int, TextBoundaryType, int*, int*) const
+//! NOTE: qaccessible.cpp - textLineBoundary
+static QString textLineBoundary(int beforeAtAfter, const QString& text, int offset, int* startOffset, int* endOffset)
 {
-    return QString();
+    Q_ASSERT(beforeAtAfter >= -1 && beforeAtAfter <= 1);
+    Q_ASSERT(*startOffset == -1 && *endOffset == -1);
+    int length = text.length();
+    Q_ASSERT(offset >= 0 && offset <= length);
+
+    // move offset into the right range (if asking for line before or after
+    if (beforeAtAfter == 1) {
+        offset = text.indexOf(QChar::LineFeed, qMin(offset, length - 1));
+        if (offset < 0) {
+            return QString(); // after the last line comes nothing
+        }
+        ++offset; // move after the newline
+    } else if (beforeAtAfter == -1) {
+        offset = text.lastIndexOf(QChar::LineFeed, qMax(offset - 1, 0));
+        if (offset < 0) {
+            return QString(); // before first line comes nothing
+        }
+    }
+
+    if (offset > 0) {
+        *startOffset = text.lastIndexOf(QChar::LineFeed, offset - 1);
+    }
+    ++*startOffset; // move to the char after the newline (0 if lastIndexOf returned -1)
+
+    *endOffset = text.indexOf(QChar::LineFeed, qMin(offset, length - 1)) + 1; // include newline char
+    if (*endOffset <= 0 || *endOffset > length) {
+        *endOffset = length; // if the text doesn't end with a newline it ends at length
+    }
+    return text.mid(*startOffset, *endOffset - *startOffset);
+}
+
+//! NOTE: qaccessible.cpp - textBeforeOffset
+QString AccessibleItem::accessibleTextBeforeOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const
+{
+    const QString txt = accessibleText(0, accessibleCharacterCount());
+
+    if (offset == -1) {
+        offset = txt.length();
+    }
+
+    *startOffset = *endOffset = -1;
+    if (txt.isEmpty() || offset < 0 || offset >= txt.length()) {
+        return QString();
+    }
+
+    // type initialized just to silence a compiler warning [-Werror=maybe-uninitialized]
+    QTextBoundaryFinder::BoundaryType type = QTextBoundaryFinder::Grapheme;
+    switch (boundaryType) {
+    case TextBoundaryType::CharBoundary:
+        type = QTextBoundaryFinder::Grapheme;
+        break;
+    case TextBoundaryType::WordBoundary:
+        type = QTextBoundaryFinder::Word;
+        break;
+    case TextBoundaryType::SentenceBoundary:
+        type = QTextBoundaryFinder::Sentence;
+        break;
+    case TextBoundaryType::LineBoundary:
+    case TextBoundaryType::ParagraphBoundary:
+        // Lines can not use QTextBoundaryFinder since Line there means any potential line-break.
+        return textLineBoundary(-1, txt, offset, startOffset, endOffset);
+    case TextBoundaryType::NoBoundary:
+        // return empty, this function currently only supports single lines, so there can be no line after
+        return QString();
+    default:
+        Q_UNREACHABLE();
+    }
+
+    // keep behavior in sync with QTextCursor::movePosition()!
+
+    QTextBoundaryFinder boundary(type, txt);
+    boundary.setPosition(offset);
+
+    do {
+        if ((boundary.boundaryReasons() & (QTextBoundaryFinder::StartOfItem | QTextBoundaryFinder::EndOfItem))) {
+            break;
+        }
+    } while (boundary.toPreviousBoundary() > 0);
+    Q_ASSERT(boundary.position() >= 0);
+    *endOffset = boundary.position();
+
+    while (boundary.toPreviousBoundary() > 0) {
+        if ((boundary.boundaryReasons() & (QTextBoundaryFinder::StartOfItem | QTextBoundaryFinder::EndOfItem))) {
+            break;
+        }
+    }
+    Q_ASSERT(boundary.position() >= 0);
+    *startOffset = boundary.position();
+
+    return txt.mid(*startOffset, *endOffset - *startOffset);
+}
+
+//! NOTE: qaccessible.cpp - textAfterOffset
+QString AccessibleItem::accessibleTextAfterOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const
+{
+    const QString txt = accessibleText(0, accessibleCharacterCount());
+
+    if (offset == -1) {
+        offset = txt.length();
+    }
+
+    *startOffset = *endOffset = -1;
+    if (txt.isEmpty() || offset < 0 || offset >= txt.length()) {
+        return QString();
+    }
+
+    // type initialized just to silence a compiler warning [-Werror=maybe-uninitialized]
+    QTextBoundaryFinder::BoundaryType type = QTextBoundaryFinder::Grapheme;
+    switch (boundaryType) {
+    case TextBoundaryType::CharBoundary:
+        type = QTextBoundaryFinder::Grapheme;
+        break;
+    case TextBoundaryType::WordBoundary:
+        type = QTextBoundaryFinder::Word;
+        break;
+    case TextBoundaryType::SentenceBoundary:
+        type = QTextBoundaryFinder::Sentence;
+        break;
+    case TextBoundaryType::LineBoundary:
+    case TextBoundaryType::ParagraphBoundary:
+        // Lines can not use QTextBoundaryFinder since Line there means any potential line-break.
+        return textLineBoundary(1, txt, offset, startOffset, endOffset);
+    case TextBoundaryType::NoBoundary:
+        // return empty, this function currently only supports single lines, so there can be no line after
+        return QString();
+    default:
+        Q_UNREACHABLE();
+    }
+
+    // keep behavior in sync with QTextCursor::movePosition()!
+
+    QTextBoundaryFinder boundary(type, txt);
+    boundary.setPosition(offset);
+
+    while (true) {
+        int toNext = boundary.toNextBoundary();
+        if ((boundary.boundaryReasons() & (QTextBoundaryFinder::StartOfItem | QTextBoundaryFinder::EndOfItem))) {
+            break;
+        }
+        if (toNext < 0 || toNext >= txt.length()) {
+            break; // not found, the boundary might not exist
+        }
+    }
+    Q_ASSERT(boundary.position() <= txt.length());
+    *startOffset = boundary.position();
+
+    while (true) {
+        int toNext = boundary.toNextBoundary();
+        if ((boundary.boundaryReasons() & (QTextBoundaryFinder::StartOfItem | QTextBoundaryFinder::EndOfItem))) {
+            break;
+        }
+        if (toNext < 0 || toNext >= txt.length()) {
+            break; // not found, the boundary might not exist
+        }
+    }
+    Q_ASSERT(boundary.position() <= txt.length());
+    *endOffset = boundary.position();
+
+    if ((*startOffset == -1) || (*endOffset == -1) || (*startOffset == *endOffset)) {
+        *endOffset = -1;
+        *startOffset = -1;
+    }
+
+    return txt.mid(*startOffset, *endOffset - *startOffset);
+}
+
+QString AccessibleItem::accessibleTextAtOffset(int, TextBoundaryType, int* startOffset, int* endOffset) const
+{
+    //! NOTE: very simplified selection mode
+    *startOffset = m_selectionStart;
+    *endOffset = m_selectionEnd;
+
+    return accessibleText(*startOffset, *endOffset);
 }
 
 int AccessibleItem::accessibleCharacterCount() const
 {
-    return 0;
+    return text().size();
 }
 
 mu::async::Channel<IAccessible::Property, mu::Val> AccessibleItem::accessiblePropertyChanged() const
@@ -328,6 +523,63 @@ void AccessibleItem::setStepSize(QVariant stepSize)
     emit stepSizeChanged(m_stepSize);
 }
 
+void AccessibleItem::setText(const QString& text)
+{
+    if (m_text == text) {
+        return;
+    }
+
+    m_text = text;
+
+#if defined(Q_OS_MACOS)
+    //! NOTE: For VoiceOver, text must also be in value
+    setValue(text);
+#endif
+
+    emit textChanged();
+}
+
+void AccessibleItem::setSelectedText(const QString& selectedText)
+{
+    if (m_selectedText == selectedText) {
+        return;
+    }
+
+    m_selectedText = selectedText;
+    emit selectedTextChanged();
+}
+
+void AccessibleItem::setSelectionStart(int selectionStart)
+{
+    if (m_selectionStart == selectionStart) {
+        return;
+    }
+
+    m_selectionStart = selectionStart;
+    emit selectionStartChanged();
+}
+
+void AccessibleItem::setSelectionEnd(int selectionEnd)
+{
+    if (m_selectionEnd == selectionEnd) {
+        return;
+    }
+
+    m_selectionEnd = selectionEnd;
+    emit selectionEndChanged();
+}
+
+void AccessibleItem::setCursorPosition(int cursorPosition)
+{
+    if (m_cursorPosition == cursorPosition) {
+        return;
+    }
+
+    m_cursorPosition = cursorPosition;
+    emit cursorPositionChanged();
+    m_accessiblePropertyChanged.send(IAccessible::Property::TextCursor, Val());
+}
+
 QString AccessibleItem::name() const
 {
     return m_name;
@@ -356,6 +608,31 @@ QVariant AccessibleItem::minimumValue() const
 QVariant AccessibleItem::stepSize() const
 {
     return m_stepSize;
+}
+
+QString AccessibleItem::text() const
+{
+    return m_text;
+}
+
+QString AccessibleItem::selectedText() const
+{
+    return m_selectedText;
+}
+
+int AccessibleItem::selectionStart() const
+{
+    return m_selectionStart;
+}
+
+int AccessibleItem::selectionEnd() const
+{
+    return m_selectionEnd;
+}
+
+int AccessibleItem::cursorPosition() const
+{
+    return m_cursorPosition;
 }
 
 void AccessibleItem::setIgnored(bool ignored)

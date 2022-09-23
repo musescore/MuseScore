@@ -22,10 +22,10 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/masterscore.h"
-#include "libmscore/undo.h"
 #include "libmscore/chord.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/segment.h"
+#include "libmscore/undo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

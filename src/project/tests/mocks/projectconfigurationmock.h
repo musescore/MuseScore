@@ -56,19 +56,19 @@ public:
     MOCK_METHOD(void, setUserProjectsPath, (const io::path_t&), (override));
     MOCK_METHOD(async::Channel<io::path_t>, userProjectsPathChanged, (), (const, override));
 
-    MOCK_METHOD(io::path_t, cloudProjectsPath, (), (const, override));
-    MOCK_METHOD(bool, isCloudProject, (const io::path_t&), (const, override));
-
-    MOCK_METHOD(io::path_t, defaultSavingFilePath, (INotationProjectPtr, const QString&, const QString&), (const, override));
-
     MOCK_METHOD(bool, shouldAskSaveLocationType, (), (const, override));
     MOCK_METHOD(void, setShouldAskSaveLocationType, (bool), (override));
+
+    MOCK_METHOD(bool, isCloudProject, (const io::path_t&), (const, override));
+
+    MOCK_METHOD(io::path_t, cloudProjectSavingFilePath, (const io::path_t&), (const, override));
+    MOCK_METHOD(io::path_t, defaultSavingFilePath, (INotationProjectPtr, const std::string&, const std::string&), (const, override));
 
     MOCK_METHOD(SaveLocationType, lastUsedSaveLocationType, (), (const, override));
     MOCK_METHOD(void, setLastUsedSaveLocationType, (SaveLocationType), (override));
 
-    MOCK_METHOD(bool, shouldWarnBeforePublishing, (), (const, override));
-    MOCK_METHOD(void, setShouldWarnBeforePublishing, (bool), (override));
+    MOCK_METHOD(bool, shouldWarnBeforeSavingPublicly, (), (const, override));
+    MOCK_METHOD(void, setShouldWarnBeforeSavingPublicly, (bool), (override));
 
     MOCK_METHOD(QColor, templatePreviewBackgroundColor, (), (const, override));
     MOCK_METHOD(async::Notification, templatePreviewBackgroundChanged, (), (const, override));
@@ -93,6 +93,27 @@ public:
 
     MOCK_METHOD(bool, shouldDestinationFolderBeOpenedOnExport, (), (const, override));
     MOCK_METHOD(void, setShouldDestinationFolderBeOpenedOnExport, (bool), (override));
+
+    MOCK_METHOD(QUrl, scoreManagerUrl, (), (const, override));
+
+    MOCK_METHOD(bool, openDetailedProjectUploadedDialog, (), (const, override));
+    MOCK_METHOD(void, setOpenDetailedProjectUploadedDialog, (bool), (override));
+
+    MOCK_METHOD(bool, openAudioGenerationSettings, (), (const, override));
+    MOCK_METHOD(void, setOpenAudioGenerationSettings, (bool), (override));
+
+    MOCK_METHOD(GenerateAudioTimePeriodType, generateAudioTimePeriodType, (), (const, override));
+    MOCK_METHOD(void, setGenerateAudioTimePeriodType, (GenerateAudioTimePeriodType), (override));
+
+    MOCK_METHOD(int, numberOfSavesToGenerateAudio, (), (const, override));
+    MOCK_METHOD(void, setNumberOfSavesToGenerateAudio, (int), (override));
+
+    MOCK_METHOD(io::path_t, temporaryMp3FilePathTemplate, (), (const, override));
+
+    MOCK_METHOD(io::path_t, projectBackupPath, (const io::path_t&), (const, override));
+
+    MOCK_METHOD(bool, showCloudIsNotAvailableWarning, (), (const, override));
+    MOCK_METHOD(void, setShowCloudIsNotAvailableWarning, (bool), (override));
 };
 }
 

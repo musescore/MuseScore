@@ -25,17 +25,19 @@
 #include <memory>
 #include <string>
 
-#include "../iprojectaudiosettings.h"
-
+#include "modularity/ioc.h"
+#include "playback/iplaybackconfiguration.h"
 #include "types/ret.h"
 #include "engraving/infrastructure/mscreader.h"
 #include "engraving/infrastructure/mscwriter.h"
 
+#include "../iprojectaudiosettings.h"
+
 namespace mu::project {
 class ProjectAudioSettings : public IProjectAudioSettings
 {
+    INJECT_STATIC(project, playback::IPlaybackConfiguration, playbackConfig)
 public:
-
     audio::AudioOutputParams masterAudioOutputParams() const override;
     void setMasterAudioOutputParams(const audio::AudioOutputParams& params) override;
 
@@ -52,6 +54,9 @@ public:
     void removeTrackParams(const engraving::InstrumentTrackId& partId) override;
 
     mu::ValNt<bool> needSave() const override;
+
+    const playback::SoundProfileName& activeSoundProfile() const override;
+    void setActiveSoundProfile(const playback::SoundProfileName& profileName) override;
 
     Ret read(const engraving::MscReader& reader);
     Ret write(engraving::MscWriter& writer);
@@ -99,6 +104,8 @@ private:
 
     bool m_needSave = false;
     async::Notification m_needSaveNotification;
+
+    mu::playback::SoundProfileName m_activeSoundProfileName;
 };
 
 using ProjectAudioSettingsPtr = std::shared_ptr<ProjectAudioSettings>;

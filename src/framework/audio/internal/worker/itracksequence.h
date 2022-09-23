@@ -42,7 +42,8 @@ public:
 
     virtual RetVal2<TrackId, AudioParams> addTrack(const std::string& trackName, const mpe::PlaybackData& playbackData,
                                                    const AudioParams& requiredParams) = 0;
-    virtual RetVal2<TrackId, AudioParams> addTrack(const std::string& trackName, QIODevice* device, const AudioParams& requiredParams) = 0;
+    virtual RetVal2<TrackId, AudioParams> addTrack(const std::string& trackName, io::IODevice* device,
+                                                   const AudioParams& requiredParams) = 0;
 
     virtual TrackName trackName(const TrackId id) const = 0;
     virtual TrackIdList trackIdList() const = 0;

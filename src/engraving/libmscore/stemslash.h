@@ -24,9 +24,10 @@
 #define __STEMSLASH_H__
 
 #include "engravingitem.h"
-#include "stem.h"
 
 namespace mu::engraving {
+class Chord;
+
 //---------------------------------------------------------
 //   @@ StemSlash
 ///    used for grace notes of type acciaccatura
@@ -40,11 +41,12 @@ class StemSlash final : public EngravingItem
 
     friend class Factory;
     StemSlash(Chord* parent = 0);
+    double _width;
+    KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
 
 public:
 
     double mag() const override { return parentItem()->mag(); }
-    void setLine(const mu::LineF& l);
 
     StemSlash* clone() const override { return new StemSlash(*this); }
     void draw(mu::draw::Painter*) const override;

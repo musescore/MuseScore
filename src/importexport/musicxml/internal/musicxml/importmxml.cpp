@@ -29,6 +29,9 @@
 #include "importmxmlpass1.h"
 #include "importmxmlpass2.h"
 
+#include "libmscore/part.h"
+#include "libmscore/score.h"
+
 namespace mu::engraving {
 //---------------------------------------------------------
 //   musicXMLImportErrorDialog

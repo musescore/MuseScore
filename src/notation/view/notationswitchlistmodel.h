@@ -75,7 +75,8 @@ private:
 
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
-        RoleNeedSave
+        RoleNeedSave,
+        RoleIsCloud
     };
 
     QList<INotationPtr> m_notations;

@@ -26,8 +26,6 @@
 
 namespace mu::engraving {
 class Score;
-class System;
-class Tremolo;
 
 class LayoutContext;
 class Layout

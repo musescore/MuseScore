@@ -105,7 +105,7 @@ RetVal<Val> InteractiveProvider::question(const std::string& title, const IInter
     return openStandardDialog("QUESTION", QString::fromStdString(title), text, buttons, defBtn, options);
 }
 
-RetVal<Val> InteractiveProvider::info(const std::string& title, const std::string& text, const IInteractive::ButtonDatas& buttons,
+RetVal<Val> InteractiveProvider::info(const std::string& title, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
                                       int defBtn,
                                       const IInteractive::Options& options)
 {

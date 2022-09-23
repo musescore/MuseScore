@@ -28,13 +28,13 @@
 
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
-#include "infrastructure/symbolfont.h"
+#include "infrastructure/symbolfonts.h"
 
-#include "libmscore/factory.h"
 #include "libmscore/accidental.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/articulation.h"
 #include "libmscore/barline.h"
+#include "libmscore/beam.h"
 #include "libmscore/breath.h"
 #include "libmscore/chord.h"
 #include "libmscore/chordline.h"
@@ -42,6 +42,7 @@
 #include "libmscore/chordrest.h"
 #include "libmscore/drumset.h"
 #include "libmscore/dynamic.h"
+#include "libmscore/factory.h"
 #include "libmscore/fermata.h"
 #include "libmscore/figuredbass.h"
 #include "libmscore/fingering.h"
@@ -57,7 +58,6 @@
 #include "libmscore/lyrics.h"
 #include "libmscore/marker.h"
 #include "libmscore/measure.h"
-#include "libmscore/measurerepeat.h"
 #include "libmscore/mscore.h"
 #include "libmscore/note.h"
 #include "libmscore/ottava.h"
@@ -65,6 +65,7 @@
 #include "libmscore/pedal.h"
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/rest.h"
+#include "libmscore/score.h"
 #include "libmscore/slur.h"
 #include "libmscore/staff.h"
 #include "libmscore/stafftext.h"
@@ -75,6 +76,7 @@
 #include "libmscore/timesig.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/trill.h"
+#include "libmscore/tuplet.h"
 #include "libmscore/utils.h"
 #include "libmscore/volta.h"
 
@@ -262,7 +264,7 @@ static void xmlSetPitch(Note* n, int step, int alter, int octave, const int octa
     pitch += intval.chromatic;   // assume not in concert pitch
     pitch += 12 * octaveShift;   // correct for octave shift
     // ensure sane values
-    pitch = limit(pitch, 0, 127);
+    pitch = std::clamp(pitch, 0, 127);
 
     int tpc2 = step2tpc(step, AccidentalVal(alter));
     int tpc1 = mu::engraving::transposeTpc(tpc2, intval, true);
@@ -3078,7 +3080,7 @@ void MusicXMLParserDirection::dashes(const QString& type, const int number,
         b->setLineStyle(LineType::DASHED);
         // TODO brackets and dashes now share the same storage
         // because they both use ElementType::TEXTLINE
-        // use mxml specific type instead
+        // use MusicXML specific type instead
         starts.append(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
     } else if (type == "stop") {
         auto b = spdesc._isStarted ? toTextLine(spdesc._sp) : Factory::createTextLine(_score->dummy());
@@ -4387,7 +4389,7 @@ static void setPitch(Note* note, MusicXMLParserPass1& pass1, const QString& part
             // step and oct are display-step and ...-oct
             // get pitch from instrument definition in drumset instead
             int unpitched = instruments[instrumentId].unpitched;
-            note->setPitch(limit(unpitched, 0, 127));
+            note->setPitch(std::clamp(unpitched, 0, 127));
             // TODO - does this need to be key-aware?
             note->setTpc(pitch2tpc(unpitched, Key::C, Prefer::NEAREST));             // TODO: necessary ?
         } else {

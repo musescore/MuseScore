@@ -29,14 +29,8 @@
 
 namespace mu::engraving {
 class EngravingItem;
-class Score;
-class Slur;
-class Note;
 class Page;
-class ChordRest;
-
-enum class Grip : int;
-enum class HairpinType : signed char;
+class Score;
 
 //---------------------------------------------------------
 //   MuseScoreView

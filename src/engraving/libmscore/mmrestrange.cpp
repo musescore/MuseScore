@@ -21,9 +21,11 @@
  */
 
 #include "mmrestrange.h"
+
 #include "rw/xml.h"
-#include "score.h"
+
 #include "measure.h"
+#include "score.h"
 
 using namespace mu;
 using namespace mu::engraving;

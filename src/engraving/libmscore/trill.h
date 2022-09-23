@@ -55,6 +55,8 @@ public:
     EngravingItem* drop(EditData&) override;
     void layout() override;
 
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all) override;
+
     EngravingItem* propertyDelegate(Pid) override;
 
     void add(EngravingItem*) override;

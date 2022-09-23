@@ -139,8 +139,12 @@ FocusScope {
 
         backgroundColor: background.color
 
+        isSearching: searchField.searchText.length != 0
+
         model: SortFilterProxyModel {
             sourceModel: recentScoresModel
+
+            excludeIndexes: [0, recentScoresModel.rowCount() - 1]           // New score and no result items
 
             filters: [
                 FilterValue {
@@ -201,6 +205,23 @@ FocusScope {
             accessible.name: qsTrc("project", "Scores actions")
         }
 
+        FlatButton {
+            anchors.left: parent.left
+            anchors.leftMargin: prv.sideMargin
+            anchors.verticalCenter: parent.verticalCenter
+
+            navigation.name: "ScoreManager"
+            navigation.panel: navBottomPanel
+            navigation.column: 1
+
+            width: 216
+            text: qsTrc("project", "Score manager (online)")
+
+            onClicked: {
+                recentScoresModel.openScoreManager()
+            }
+        }
+
         Row {
             anchors.right : parent.right
             anchors.rightMargin: prv.sideMargin
@@ -212,7 +233,7 @@ FocusScope {
 
                 navigation.name: "NewScore"
                 navigation.panel: navBottomPanel
-                navigation.column: 1
+                navigation.column: 2
 
                 width: prv.buttonWidth
                 text: qsTrc("project", "New")
@@ -225,7 +246,7 @@ FocusScope {
             FlatButton {
                 navigation.name: "Open other Score"
                 navigation.panel: navBottomPanel
-                navigation.column: 2
+                navigation.column: 3
 
                 width: prv.buttonWidth
                 text: qsTrc("project", "Open other…")

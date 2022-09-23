@@ -22,15 +22,15 @@
 
 #include "playbackcontext.h"
 
-#include "libmscore/score.h"
-#include "libmscore/spanner.h"
-#include "libmscore/measure.h"
-#include "libmscore/hairpin.h"
-#include "libmscore/spannermap.h"
-#include "libmscore/repeatlist.h"
-#include "libmscore/segment.h"
 #include "libmscore/dynamic.h"
+#include "libmscore/hairpin.h"
+#include "libmscore/measure.h"
+#include "libmscore/part.h"
 #include "libmscore/playtechannotation.h"
+#include "libmscore/repeatlist.h"
+#include "libmscore/score.h"
+#include "libmscore/segment.h"
+#include "libmscore/spanner.h"
 
 #include "utils/arrangementutils.h"
 #include "utils/expressionutils.h"

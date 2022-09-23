@@ -22,18 +22,17 @@
 
 #include "repeatlist.h"
 
-#include "jump.h"
-#include "marker.h"
-#include "measure.h"
-#include "score.h"
-#include "segment.h"
-#include "tempo.h"
-#include "types.h"
-#include "volta.h"
-
 #include <algorithm>
 #include <list>
 #include <utility> // std::pair
+
+#include "jump.h"
+#include "layoutbreak.h"
+#include "marker.h"
+#include "measure.h"
+#include "score.h"
+#include "tempo.h"
+#include "volta.h"
 
 #include "log.h"
 

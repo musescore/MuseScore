@@ -31,10 +31,8 @@ class Painter;
 }
 
 namespace mu::engraving {
-class Segment;
 class EngravingItem;
 class Score;
-class Measure;
 
 //---------------------------------------------------------
 //   ShapeElement
@@ -68,8 +66,7 @@ public:
     };
 
     Shape() {}
-    Shape(const mu::RectF& r, const EngravingItem* p) { add(r, p); }
-    Shape(const mu::RectF& r) { add(r); }
+    Shape(const mu::RectF& r, const EngravingItem* p = nullptr) { add(r, p); }
 
     void add(const Shape& s) { insert(end(), s.begin(), s.end()); }
     void add(const mu::RectF& r, const EngravingItem* p) { push_back(ShapeElement(r, p)); }

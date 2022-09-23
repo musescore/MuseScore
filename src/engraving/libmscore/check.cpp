@@ -20,20 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "translation.h"
-#include "io/file.h"
-
-#include "factory.h"
-#include "score.h"
-#include "slur.h"
-#include "measure.h"
-#include "tuplet.h"
 #include "chordrest.h"
+#include "factory.h"
+#include "keysig.h"
+#include "measure.h"
 #include "rest.h"
+#include "score.h"
 #include "segment.h"
 #include "staff.h"
-#include "keysig.h"
-#include "clef.h"
+#include "tuplet.h"
 #include "utils.h"
 
 #include "log.h"

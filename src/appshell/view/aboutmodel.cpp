@@ -69,7 +69,7 @@ QVariantMap AboutModel::museScoreContributionUrl() const
 
 QVariantMap AboutModel::museScorePrivacyPolicyUrl() const
 {
-    QUrl museScorePrivacyPolicyUrl(QString::fromStdString(configuration()->museScorePrivacyPolicyUrl()));
+    QUrl museScorePrivacyPolicyUrl(QString::fromStdString(updateConfiguration()->museScorePrivacyPolicyUrl()));
     return makeUrl(museScorePrivacyPolicyUrl);
 }
 

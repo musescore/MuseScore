@@ -100,6 +100,11 @@ FocusScope {
         accessible.role: MUAccessible.EditableText
         accessible.name: Boolean(valueInput.text) ? valueInput.text + " " + measureUnitsLabel.text : valueInput.placeholderText
         accessible.visualItem: root
+        accessible.text: valueInput.text
+        accessible.selectedText: valueInput.selectedText
+        accessible.selectionStart: valueInput.selectionStart
+        accessible.selectionEnd: valueInput.selectionEnd
+        accessible.cursorPosition: valueInput.cursorPosition
 
         onActiveChanged: {
             if (navCtrl.active) {

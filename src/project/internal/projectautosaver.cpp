@@ -21,6 +21,8 @@
  */
 #include "projectautosaver.h"
 
+#include "engraving/infrastructure/mscio.h"
+
 #include "log.h"
 
 using namespace mu::project;

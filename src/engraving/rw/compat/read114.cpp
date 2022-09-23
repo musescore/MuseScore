@@ -24,63 +24,66 @@
 
 #include <cmath>
 
-#include "style/style.h"
-#include "style/defaultstyle.h"
 #include "compat/pageformat.h"
+
 #include "infrastructure/htmlparser.h"
+
 #include "rw/xml.h"
+
+#include "style/defaultstyle.h"
+#include "style/style.h"
+
 #include "types/typesconv.h"
 
-#include "libmscore/factory.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/slur.h"
-#include "libmscore/staff.h"
-#include "libmscore/excerpt.h"
-#include "libmscore/chord.h"
-#include "libmscore/rest.h"
-#include "libmscore/mmrest.h"
-#include "libmscore/keysig.h"
-#include "libmscore/volta.h"
-#include "libmscore/measure.h"
+#include "libmscore/accidental.h"
+#include "libmscore/barline.h"
 #include "libmscore/beam.h"
-#include "libmscore/segment.h"
-#include "libmscore/ottava.h"
-#include "libmscore/stafftype.h"
-#include "libmscore/text.h"
-#include "libmscore/measurenumber.h"
-#include "libmscore/part.h"
-#include "libmscore/sig.h"
 #include "libmscore/box.h"
-#include "libmscore/dynamic.h"
+#include "libmscore/bracketItem.h"
+#include "libmscore/breath.h"
+#include "libmscore/chord.h"
+#include "libmscore/clef.h"
 #include "libmscore/drumset.h"
+#include "libmscore/dynamic.h"
+#include "libmscore/excerpt.h"
+#include "libmscore/factory.h"
+#include "libmscore/fingering.h"
+#include "libmscore/harmony.h"
+#include "libmscore/image.h"
+#include "libmscore/jump.h"
+#include "libmscore/keysig.h"
+#include "libmscore/linkedobjects.h"
+#include "libmscore/lyrics.h"
+#include "libmscore/marker.h"
+#include "libmscore/masterscore.h"
+#include "libmscore/measure.h"
+#include "libmscore/measurenumber.h"
+#include "libmscore/measurerepeat.h"
+#include "libmscore/mmrest.h"
+#include "libmscore/note.h"
+#include "libmscore/ottava.h"
+#include "libmscore/part.h"
+#include "libmscore/pedal.h"
+#include "libmscore/rest.h"
+#include "libmscore/segment.h"
+#include "libmscore/sig.h"
+#include "libmscore/slur.h"
+#include "libmscore/spacer.h"
+#include "libmscore/staff.h"
+#include "libmscore/stafftext.h"
+#include "libmscore/stafftype.h"
 #include "libmscore/stringdata.h"
 #include "libmscore/tempo.h"
 #include "libmscore/tempotext.h"
-#include "libmscore/clef.h"
-#include "libmscore/barline.h"
-#include "libmscore/timesig.h"
-#include "libmscore/tuplet.h"
-#include "libmscore/spacer.h"
-#include "libmscore/stafftext.h"
-#include "libmscore/measurerepeat.h"
-#include "libmscore/breath.h"
-#include "libmscore/tremolo.h"
-#include "libmscore/utils.h"
-#include "libmscore/accidental.h"
-#include "libmscore/fingering.h"
-#include "libmscore/marker.h"
-#include "libmscore/bracketItem.h"
-#include "libmscore/harmony.h"
-#include "libmscore/lyrics.h"
-#include "libmscore/image.h"
+#include "libmscore/text.h"
 #include "libmscore/textframe.h"
-#include "libmscore/jump.h"
 #include "libmscore/textline.h"
-#include "libmscore/pedal.h"
-#include "libmscore/factory.h"
-#include "libmscore/linkedobjects.h"
+#include "libmscore/timesig.h"
+#include "libmscore/tremolo.h"
+#include "libmscore/tuplet.h"
+#include "libmscore/utils.h"
+#include "libmscore/volta.h"
 
-#include "compat/pageformat.h"
 #include "readchordlisthook.h"
 #include "readstyle.h"
 #include "read206.h"
@@ -817,7 +820,7 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
         }
     }
     // ensure sane values:
-    note->setPitch(limit(note->pitch(), 0, 127));
+    note->setPitch(std::clamp(note->pitch(), 0, 127));
 
     if (note->concertPitch()) {
         note->setTpc2(Tpc::TPC_INVALID);
@@ -1878,7 +1881,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 LOGD("remove keysig c at tick 0");
                 if (ks->links()) {
                     if (ks->links()->size() == 1) {
-                        mu::remove(ctx.linkIds(), ks->links()->lid());
+                        mu::remove(e.context()->linkIds(), ks->links()->lid());
                     }
                 }
             } else {
@@ -1963,7 +1966,10 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
             Dynamic* dyn = Factory::createDynamic(segment);
             dyn->setTrack(ctx.track());
-            dyn->read(e);
+            dyn->read(e); // for 114 scores, dynamics are frontloaded in the measure with <tick> attributes.
+                          // so we need to reset its parent to the correct one after that element is read.
+            segment = m->getSegment(SegmentType::ChordRest, e.context()->tick());
+            dyn->setParent(segment);
             if (dyn->dynamicType() == DynamicType::OTHER && dyn->xmlText().isEmpty()) {
                 // if we add this dynamic, it will be an unselectable invisible object that
                 // messes with collision detection.
@@ -2482,13 +2488,7 @@ static void readInstrument(Instrument* i, Part* p, XmlReader& e)
         }
     }
 
-    if (i->instrumentId().isEmpty()) {
-        i->setInstrumentId(i->recognizeInstrumentId());
-    }
-
-    if (i->id().isEmpty()) {
-        i->setId(i->recognizeId());
-    }
+    i->updateInstrumentId();
 
     if (program == -1) {
         program = i->recognizeMidiProgram();
@@ -2736,11 +2736,6 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
                 e.skipCurrentElement();
             }
         }
-    }
-
-    bool disableHarmonyPlay = MScore::harmonyPlayDisableCompatibility && !MScore::testMode;
-    if (disableHarmonyPlay) {
-        style->set(Sid::harmonyPlay, false);
     }
 
     readChordListHook.validate();

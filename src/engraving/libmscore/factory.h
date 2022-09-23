@@ -243,6 +243,8 @@ public:
 
     static FBox* createFBox(System* parent, bool isAccessibleEnabled = true);
 
+    static Image* createImage(EngravingItem* parent);
+
 private:
     static EngravingItem* doCreateItem(ElementType type, EngravingItem* parent);
 };

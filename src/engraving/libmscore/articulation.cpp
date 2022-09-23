@@ -22,21 +22,20 @@
 
 #include "articulation.h"
 
+#include "draw/fontmetrics.h"
 #include "rw/compat/read206.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
 #include "types/translatablestring.h"
 
-#include "score.h"
 #include "chordrest.h"
-#include "system.h"
+#include "masterscore.h"
 #include "measure.h"
+#include "page.h"
+#include "score.h"
 #include "staff.h"
 #include "stafftype.h"
-#include "undo.h"
-#include "page.h"
-#include "barline.h"
-#include "masterscore.h"
+#include "system.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -343,19 +342,25 @@ Page* Articulation::page() const
 
 void Articulation::layout()
 {
+    _skipDraw = false;
     if (isHiddenOnTabStaff()) {
-        setbbox(RectF());
+        _skipDraw = true;
         return;
     }
 
+    RectF bRect;
+
     if (m_textType != TextType::NO_TEXT) {
-        mu::draw::FontMetrics fm(m_font);
-        RectF b(fm.boundingRect(m_font, artTypeToInfo.at(m_textType).text));
-        setbbox(b.translated(-0.5 * b.width(), 0.0));
+        mu::draw::Font scaledFont(m_font);
+        scaledFont.setPointSizeF(m_font.pointSizeF() * magS());
+        mu::draw::FontMetrics fm(scaledFont);
+
+        bRect = fm.boundingRect(scaledFont, artTypeToInfo.at(m_textType).text);
     } else {
-        RectF b(symBbox(_symId));
-        setbbox(b.translated(-0.5 * b.width(), 0.0));
+        bRect = symBbox(_symId);
     }
+
+    setbbox(bRect.translated(-0.5 * bRect.width(), 0.0));
 }
 
 bool Articulation::isHiddenOnTabStaff() const
@@ -846,6 +851,15 @@ void Articulation::setupShowOnTabStyles()
     /// golpe
     if (_symId == SymId::guitarGolpe) {
         m_showOnTabStyles = { Sid::golpeShowTabCommon, Sid::golpeShowTabSimple };
+    }
+}
+
+void Articulation::styleChanged()
+{
+    bool isGolpeThumb = _symId == SymId::guitarGolpe && _anchor == ArticulationAnchor::BOTTOM_STAFF;
+    EngravingItem::styleChanged();
+    if (isGolpeThumb) {
+        setAnchor(ArticulationAnchor::BOTTOM_STAFF);
     }
 }
 

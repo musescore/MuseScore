@@ -88,6 +88,10 @@ public:
     virtual void endDrag() = 0;
     virtual async::Notification dragChanged() const = 0;
 
+    virtual bool isDragCopyStarted() const = 0;
+    virtual void startDragCopy(const EngravingItem* element, QObject* dragSource) = 0;
+    virtual void endDragCopy() = 0;
+
     // Drop
     //! TODO Change KeyboardModifiers to modes
     virtual void startDrop(const QByteArray& edata) = 0;
@@ -128,6 +132,7 @@ public:
     virtual void editText(QInputMethodEvent* event) = 0;
     virtual void endEditText() = 0;
     virtual void changeTextCursorPosition(const PointF& newCursorPos) = 0;
+    virtual void selectText(mu::engraving::SelectTextType type) = 0;
     virtual const TextBase* editedText() const = 0;
     virtual async::Notification textEditingStarted() const = 0;
     virtual async::Notification textEditingChanged() const = 0;
@@ -141,6 +146,7 @@ public:
     virtual bool isHitGrip(const PointF& pos) const = 0;
     virtual void startEditGrip(const PointF& pos) = 0;
     virtual void startEditGrip(EngravingItem* element, mu::engraving::Grip grip) = 0;
+    virtual void endEditGrip() = 0;
 
     virtual bool isElementEditStarted() const = 0;
     virtual void startEditElement(EngravingItem* element) = 0;
@@ -191,8 +197,13 @@ public:
     virtual void changeSelectedNotesVoice(int voiceIndex) = 0;
     virtual void addAnchoredLineToSelectedNotes() = 0;
 
-    virtual Ret canAddText(TextStyleType type) const = 0;
-    virtual void addText(TextStyleType type) = 0;
+    virtual void addTextToTopFrame(TextStyleType type) = 0;
+
+    virtual Ret canAddTextToItem(TextStyleType type, const EngravingItem* item) const = 0;
+    virtual void addTextToItem(TextStyleType type, EngravingItem* item) = 0;
+
+    virtual Ret canAddImageToItem(const EngravingItem* item) const = 0;
+    virtual void addImageToItem(const io::path_t& imagePath, EngravingItem* item) = 0;
 
     virtual Ret canAddFiguredBass() const = 0;
     virtual void addFiguredBass() = 0;
@@ -223,7 +234,7 @@ public:
     virtual void resetShapesAndPosition() = 0;
 
     virtual ScoreConfig scoreConfig() const = 0;
-    virtual void setScoreConfig(ScoreConfig config) = 0;
+    virtual void setScoreConfig(const ScoreConfig& config) = 0;
 
     virtual void addMelisma() = 0;
     virtual void addLyricsVerse() = 0;

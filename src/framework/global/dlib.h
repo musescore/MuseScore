@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2022 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,32 +19,45 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_STEMTYPES_H
-#define MU_INSPECTOR_STEMTYPES_H
 
-#include "qobjectdefs.h"
+#ifndef MU_GLOBAL_DLIB_H
+#define MU_GLOBAL_DLIB_H
 
-namespace mu::inspector {
-class DirectionTypes
+#ifdef Q_OS_WIN
+#include <windows.h>
+#else
+#include <dlfcn.h>
+#endif
+
+#include "io/path.h"
+
+namespace mu {
+inline void* loadLib(const io::path_t& path)
 {
-    Q_GADGET
-
-public:
-    enum VerticalDirection {
-        VERTICAL_AUTO,
-        VERTICAL_UP,
-        VERTICAL_DOWN
-    };
-
-    enum HorizontalDirection {
-        HORIZONTAL_AUTO,
-        HORIZONTAL_LEFT,
-        HORIZONTAL_RIGHT
-    };
-
-    Q_ENUM(VerticalDirection)
-    Q_ENUM(HorizontalDirection)
-};
+#ifdef Q_OS_WIN
+    return LoadLibrary(path.toStdWString().c_str());
+#else
+    return dlopen(path.c_str(), RTLD_LAZY);
+#endif
 }
 
-#endif // MU_INSPECTOR_STEMTYPES_H
+inline void* getLibFunc(void* libHandle, const char* funcName)
+{
+#ifdef Q_OS_WIN
+    return GetProcAddress((HINSTANCE)libHandle, funcName);
+#else
+    return dlsym(libHandle, funcName);
+#endif
+}
+
+inline void closeLib(void* libHandle)
+{
+#ifdef Q_OS_WIN
+    return;
+#else
+    dlclose(libHandle);
+#endif
+}
+}
+
+#endif // MU_GLOBAL_DLIB_H

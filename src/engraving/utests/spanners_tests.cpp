@@ -22,19 +22,18 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/factory.h"
 #include "libmscore/chord.h"
 #include "libmscore/excerpt.h"
+#include "libmscore/factory.h"
 #include "libmscore/glissando.h"
 #include "libmscore/layoutbreak.h"
-#include "libmscore/lyrics.h"
+#include "libmscore/line.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
-#include "libmscore/masterscore.h"
 #include "libmscore/system.h"
 #include "libmscore/undo.h"
-#include "libmscore/line.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

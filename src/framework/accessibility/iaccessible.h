@@ -121,6 +121,7 @@ public:
     virtual const IAccessible* accessibleParent() const = 0;
     virtual size_t accessibleChildCount() const = 0;
     virtual const IAccessible* accessibleChild(size_t i) const = 0;
+    virtual QWindow* accessibleWindow() const = 0;
 
     virtual IAccessible::Role accessibleRole() const = 0;
     virtual QString accessibleName() const = 0;
@@ -142,6 +143,8 @@ public:
     virtual int accessibleCursorPosition() const = 0;
 
     virtual QString accessibleText(int startOffset, int endOffset) const = 0;
+    virtual QString accessibleTextBeforeOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const = 0;
+    virtual QString accessibleTextAfterOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const = 0;
     virtual QString accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const = 0;
     virtual int accessibleCharacterCount() const = 0;
 

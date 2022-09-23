@@ -31,37 +31,25 @@
 
 #include "realfn.h"
 
-#include "style/style.h"
-#include "rw/xml.h"
+#include "layout/layoutchords.h"
 #include "rw/measurerw.h"
+#include "rw/xml.h"
+#include "style/style.h"
 
 #include "accidental.h"
 #include "actionicon.h"
-#include "ambitus.h"
-#include "articulation.h"
 #include "barline.h"
 #include "beam.h"
-#include "box.h"
 #include "bracket.h"
 #include "bracketItem.h"
-#include "breath.h"
 #include "chord.h"
 #include "clef.h"
-#include "drumset.h"
-#include "duration.h"
-#include "dynamic.h"
+#include "durationelement.h"
 #include "factory.h"
-#include "fermata.h"
-#include "fret.h"
-#include "glissando.h"
-#include "hairpin.h"
-#include "harmony.h"
 #include "hook.h"
-#include "image.h"
 #include "key.h"
 #include "keysig.h"
 #include "layoutbreak.h"
-#include "layout/layoutchords.h"
 #include "linkedobjects.h"
 #include "masterscore.h"
 #include "measure.h"
@@ -71,38 +59,29 @@
 #include "mmrestrange.h"
 #include "mscoreview.h"
 #include "note.h"
-#include "ottava.h"
 #include "page.h"
 #include "part.h"
-#include "pedal.h"
 #include "pitchspelling.h"
 #include "rest.h"
 #include "score.h"
 #include "segment.h"
 #include "select.h"
 #include "sig.h"
-#include "slur.h"
 #include "spacer.h"
 #include "staff.h"
 #include "stafflines.h"
-#include "stafftext.h"
 #include "stafftype.h"
 #include "stafftypechange.h"
 #include "stem.h"
-#include "stringdata.h"
 #include "system.h"
-#include "systemdivider.h"
-#include "tempotext.h"
 #include "tie.h"
 #include "tiemap.h"
 #include "timesig.h"
 #include "tremolo.h"
-#include "trill.h"
 #include "tuplet.h"
 #include "tupletmap.h"
 #include "undo.h"
 #include "utils.h"
-#include "volta.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -255,7 +234,11 @@ void Measure::layoutStaffLines()
     for (MStaff* ms : m_mstaves) {
         if (isCutawayClef(staffIdx) && (score()->staff(staffIdx)->cutaway() || !visible(staffIdx))) {
             // draw short staff lines for a courtesy clef on a hidden measure
-            ms->lines()->layoutPartialWidth(width(), 4.0, true);
+            Segment* clefSeg = findSegmentR(SegmentType::Clef, ticks());
+            double staffMag = score()->staff(staffIdx)->staffMag(tick());
+            double partialWidth = clefSeg ? width() - clefSeg->x() + clefSeg->minLeft() + score()->styleMM(Sid::clefLeftMargin) * staffMag
+                                  : 0.0;
+            ms->lines()->layoutPartialWidth(width(), partialWidth / (spatium() * staffMag), true);
         } else {
             // normal staff lines
             ms->lines()->layout();
@@ -2165,7 +2148,7 @@ void Measure::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
     MeasureBase::scanElements(data, func, all);
 
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        if (!all && !(visible(staffIdx) && score()->staff(staffIdx)->show())) {
+        if (!all && !(visible(staffIdx) && score()->staff(staffIdx)->show()) && !isCutawayClef(staffIdx)) {
             continue;
         }
         MStaff* ms = m_mstaves[staffIdx];
@@ -3246,6 +3229,7 @@ void Measure::layoutMeasureElements()
                 continue;
             }
             staff_idx_t staffIdx = e->staffIdx();
+            bool modernMMRest = e->isMMRest() && !score()->styleB(Sid::oldStyleMultiMeasureRests);
             if ((e->isRest() && toRest(e)->isFullMeasureRest()) || e->isMMRest() || e->isMeasureRepeat()) {
                 //
                 // element has to be centered in free space
@@ -3256,11 +3240,17 @@ void Measure::layoutMeasureElements()
                 for (s1 = s.prevActive(); s1 && s1->allElementsInvisible(); s1 = s1->prevActive()) {
                 }
                 Segment* s2;
-                for (s2 = s.nextActive(); s2; s2 = s2->nextActive()) {
-                    if (!s2->isChordRestType() && s2->element(staffIdx * VOICES)) {
-                        break;
+                if (modernMMRest) {
+                    for (s2 = s.nextActive(); s2; s2 = s2->nextActive()) {
+                        if (!s2->isChordRestType() && s2->element(staffIdx * VOICES)) {
+                            break;
+                        }
                     }
+                } else {
+                    // Ignore any stuff before the end bar line (such as courtesy clefs)
+                    s2 = findSegment(SegmentType::EndBarLine, endTick());
                 }
+
                 double x1 = s1 ? s1->x() + s1->minRight() : 0;
                 double x2 = s2 ? s2->x() - s2->minLeft() : width();
 
@@ -3296,6 +3286,16 @@ void Measure::layoutMeasureElements()
                     Chord* c2 = tr->chord2();
                     if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
                         tr->layout();
+                    }
+                }
+                for (Chord* g : c->graceNotes()) {
+                    if (g->tremolo()) {
+                        Tremolo* tr = g->tremolo();
+                        Chord* c1 = tr->chord1();
+                        Chord* c2 = tr->chord2();
+                        if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
+                            tr->layout();
+                        }
                     }
                 }
             } else if (e->isBarLine()) {
@@ -3740,16 +3740,15 @@ void Measure::addSystemHeader(bool isFirstSystem)
                     cl = c->clefTypeList();
                 }
             }
-            Clef* clef;
+            Clef* clef = nullptr;
             if (!cSegment) {
                 cSegment = Factory::createSegment(this, SegmentType::HeaderClef, Fraction(0, 1));
                 cSegment->setHeader(true);
                 add(cSegment);
-                clef = 0;
             } else {
                 clef = toClef(cSegment->element(track));
             }
-            if (staff->staffType(tick())->genClef()) {
+            if (staff->staffTypeForElement(this)->genClef()) {
                 if (!clef) {
                     //
                     // create missing clef
@@ -3767,7 +3766,9 @@ void Measure::addSystemHeader(bool isFirstSystem)
                 clef->layout();
             } else if (clef) {
                 clef->parentItem()->remove(clef);
-                delete clef;
+                if (clef->generated()) {
+                    delete clef;
+                }
             }
             //cSegment->createShape(staffIdx);
             cSegment->setEnabled(true);
@@ -3933,7 +3934,9 @@ void Measure::addSystemTrailer(Measure* nm)
                     s->setTrailer(true);
                     add(s);
                 }
+
                 s->setEnabled(true);
+
                 for (track_idx_t track = 0; track < nstaves * VOICES; track += VOICES) {
                     TimeSig* nts = toTimeSig(tss->element(track));
                     if (!nts) {
@@ -3946,6 +3949,7 @@ void Measure::addSystemTrailer(Measure* nm)
                         ts->setGenerated(true);
                         ts->setParent(s);
                         score()->undoAddElement(ts);
+                        s->setTrailer(true);
                     }
                     ts->setFrom(nts);
                     ts->layout();
@@ -3978,6 +3982,7 @@ void Measure::addSystemTrailer(Measure* nm)
                 s->setTrailer(true);
                 add(s);
             }
+
             KeySig* ks = toKeySig(s->element(track));
             KeySigEvent key2 = staff->keySigEvent(endTick());
 
@@ -3987,6 +3992,7 @@ void Measure::addSystemTrailer(Measure* nm)
                 ks->setGenerated(true);
                 ks->setParent(s);
                 s->add(ks);
+                s->setTrailer(true);
             }
             //else if (!(ks->keySigEvent() == key2)) {
             //      score()->undo(new ChangeKeySig(ks, key2, ks->showCourtesy()));
@@ -4268,23 +4274,16 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
                 w -= std::max(ns->minHorizontalCollidingDistance(ns->next()), double(score()->styleMM(Sid::clefKeyRightMargin)));
             }
 
-            // Adjust the spacing for cross-staff beams situations
-            if (s->isChordRestType() && ns->isChordRestType()) {
-                CrossStaffContent thisCS = s->crossStaffContent();
-                CrossStaffContent nextCS = ns->crossStaffContent();
-                bool thisIsDown = thisCS.movedDown;
-                bool thisIsUp = thisCS.movedUp;
-                bool nextIsDown = nextCS.movedDown;
-                bool nextIsUp = nextCS.movedUp;
-                double displacement = score()->noteHeadWidth() - score()->styleMM(Sid::stemWidth);
-                if ((thisIsDown && !nextIsDown) || (nextIsUp && !thisIsUp)) {
-                    w += displacement;
-                    _squeezableSpace -= score()->noteHeadWidth();
-                }
-                if ((thisIsUp && !nextIsUp) || (nextIsDown && !thisIsDown)) {
-                    w -= displacement;
-                    _squeezableSpace -= score()->noteHeadWidth();
-                }
+            // Adjust spacing for cross-beam situations
+            CrossBeamType crossBeamType = s->crossBeamType();
+            double displacement = score()->noteHeadWidth() - score()->styleMM(Sid::stemWidth);
+            if (crossBeamType.upDown) {
+                w += displacement;
+                _squeezableSpace -= score()->noteHeadWidth();
+            }
+            if (crossBeamType.downUp) {
+                w -= displacement;
+                _squeezableSpace -= score()->noteHeadWidth();
             }
 
             // look back for collisions with previous segments
@@ -4388,7 +4387,6 @@ void Measure::computeWidth(Fraction minTicks, Fraction maxTicks, double stretchC
     }
 
     LayoutChords::updateGraceNotes(this);
-    LayoutChords::updateLineAttachPoints(this);
 
     x = computeFirstSegmentXPosition(s);
     bool isSystemHeader = s->header();

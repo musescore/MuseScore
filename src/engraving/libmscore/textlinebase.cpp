@@ -25,17 +25,14 @@
 #include <cmath>
 
 #include "draw/types/pen.h"
-#include "style/style.h"
 #include "rw/xml.h"
+#include "style/style.h"
 
 #include "factory.h"
-#include "system.h"
-#include "measure.h"
-#include "utils.h"
 #include "score.h"
-#include "text.h"
-#include "mscore.h"
 #include "staff.h"
+#include "system.h"
+#include "text.h"
 
 #include "log.h"
 

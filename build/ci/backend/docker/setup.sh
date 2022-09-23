@@ -63,6 +63,7 @@ apt_packages_runtime=(
   libxcb-icccm4
   libxcb-image0
   libxcb-keysyms1
+  libxcb-randr0
   libxcb-render-util0
   libxcb-xinerama0
   xvfb

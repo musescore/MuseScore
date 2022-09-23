@@ -28,23 +28,23 @@
 #include "containers.h"
 #include "types/string.h"
 
-#include "stringdata.h"
-#include "mscore.h"
-#include "notifier.hpp"
-#include "interval.h"
 #include "clef.h"
+#include "interval.h"
+#include "notifier.h"
+#include "stringdata.h"
 
 #include "compat/midi/midicoreevent.h"
 
 namespace mu::engraving {
+class ChannelListener;
+class Drumset;
 class InstrumentTemplate;
 class MasterScore;
-class XmlWriter;
-class XmlReader;
-class Drumset;
+class Part;
 class StringData;
-class ChannelListener;
 class Synthesizer;
+class XmlReader;
+class XmlWriter;
 
 //---------------------------------------------------------
 //   StaffName
@@ -399,6 +399,7 @@ public:
     void setArticulation(const std::vector<MidiArticulation>& l) { _articulation = l; }
     const StringData* stringData() const { return &_stringData; }
     void setStringData(const StringData& d) { _stringData.set(d); }
+    bool hasStrings() const { return _stringData.strings() > 0; }
 
     void setLongName(const String& f);
     void setShortName(const String& f);

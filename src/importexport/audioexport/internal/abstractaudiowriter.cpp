@@ -103,6 +103,11 @@ void AbstractAudioWriter::doWriteAndWait(QIODevice& destinationDevice, const aud
         m_progress.started.notify();
 
         for (const audio::TrackSequenceId sequenceId : sequenceIdList) {
+            playback()->audioOutput()->saveSoundTrackProgress(sequenceId).progressChanged
+            .onReceive(this, [this](int64_t current, int64_t total, std::string title) {
+                m_progress.progressChanged.send(current, total, title);
+            });
+
             playback()->audioOutput()->saveSoundTrack(sequenceId, io::path_t(path), std::move(format))
             .onResolve(this, [this, path](const bool /*result*/) {
                 LOGD() << "Successfully saved sound track by path: " << path;

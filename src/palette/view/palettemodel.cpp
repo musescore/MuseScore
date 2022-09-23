@@ -355,7 +355,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
         case MimeDataRole: {
             QVariantMap map;
             if (cell->element) {
-                map[mu::commonscene::MIME_SYMBOL_FORMAT] = cell->element->mimeData(PointF()).toQByteArray();
+                map[mu::commonscene::MIME_SYMBOL_FORMAT] = cell->element->mimeData().toQByteArray();
             }
             map[PaletteCell::mimeDataFormat] = cell->toMimeData();
             return map;
@@ -590,7 +590,7 @@ QMimeData* PaletteTreeModel::mimeData(const QModelIndexList& indexes) const
     if (const Palette* pp = findPalette(indexes[0])) {
         mime->setData(Palette::mimeDataFormat, pp->toMimeData());
     } else if (PaletteCellConstPtr cell = findCell(indexes[0])) {
-        mime->setData(mu::commonscene::MIME_SYMBOL_FORMAT, cell->element->mimeData(PointF()).toQByteArray());
+        mime->setData(mu::commonscene::MIME_SYMBOL_FORMAT, cell->element->mimeData().toQByteArray());
     }
 
     return mime;

@@ -24,6 +24,7 @@
 #include <QUrl>
 
 #include <QFileDialog>
+#include <QColorDialog>
 #include <QMainWindow>
 
 #include <QMessageBox>
@@ -105,8 +106,14 @@ IInteractive::ButtonData Interactive::buttonData(Button b) const
     return ButtonData(int(b), "");
 }
 
-IInteractive::Result Interactive::info(const std::string& title, const std::string& text, const ButtonDatas& buttons,
+IInteractive::Result Interactive::info(const std::string& title, const std::string& text, const Buttons& buttons,
                                        int defBtn,
+                                       const Options& options) const
+{
+    return standardDialogResult(provider()->info(title, text, buttonDataList(buttons), defBtn, options));
+}
+
+IInteractive::Result Interactive::info(const std::string& title, const Text& text, const ButtonDatas& buttons, int defBtn,
                                        const Options& options) const
 {
     return standardDialogResult(provider()->info(title, text, buttons, defBtn, options));
@@ -173,6 +180,11 @@ io::paths_t Interactive::selectMultipleDirectories(const QString& title, const i
     }
 
     return io::pathsFromString(paths.val.toQString().toStdString());
+}
+
+QColor Interactive::selectColor(const QColor& color, const QString& title)
+{
+    return QColorDialog::getColor(color, nullptr, title);
 }
 
 RetVal<Val> Interactive::open(const std::string& uri) const

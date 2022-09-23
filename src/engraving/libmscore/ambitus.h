@@ -24,10 +24,13 @@
 #define __AMBITUS_H__
 
 #include "engravingitem.h"
-#include "note.h"
-#include "accidental.h"
+
+#include "pitchspelling.h"
+
+#include "types/types.h"
 
 namespace mu::engraving {
+class Accidental;
 class Factory;
 
 //---------------------------------------------------------
@@ -133,4 +136,5 @@ private:
     Ranges estimateRanges() const;                // scan staff up to next section break and update range pitches
 };
 } // namespace mu::engraving
+
 #endif

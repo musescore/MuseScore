@@ -24,16 +24,15 @@
 
 #include <vector>
 
-#include "libmscore/segment.h"
-
 #include "layoutoptions.h"
 #include "layoutcontext.h"
 
 namespace mu::engraving {
-class Score;
-class System;
-class Spanner;
 class Chord;
+class Score;
+class Segment;
+class Spanner;
+class System;
 
 class LayoutSystem
 {
@@ -48,6 +47,8 @@ private:
     static void layoutTies(Chord* ch, System* system, const Fraction& stick);
     static void doLayoutTies(System* system, std::vector<Segment*> sl, const Fraction& stick, const Fraction& etick);
     static void justifySystem(System* system, double curSysWidth, double targetSystemWidth);
+    static void updateCrossBeams(System* system, const LayoutContext& ctx);
+    static void restoreTies(System* system);
 };
 }
 

@@ -88,6 +88,8 @@ void CommandLineController::parse(const QStringList& args)
     m_parser.addOption(QCommandLineOption("resolution", "Resolution [2160p, 1440p, 1080p, 720p, 480p, 360p]", "1080p"));
     m_parser.addOption(QCommandLineOption("fps", "Frame per second [60, 30, 24]", "24"));
 
+    m_parser.addOption(QCommandLineOption("gp-linked", "create tabulature linked staves for guitar pro"));
+
     //! NOTE Currently only implemented `full` mode
     m_parser.addOption(QCommandLineOption("migration", "Whether to do migration with given mode, `full` - full migration", "mode"));
 
@@ -355,6 +357,10 @@ void CommandLineController::apply()
         if (!scorefiles.isEmpty()) {
             startupScenario()->setStartupScorePath(scorefiles[0]);
         }
+    }
+
+    if (m_parser.isSet("gp-linked")) {
+        guitarProConfiguration()->setLinkedTabStaffCreated(true);
     }
 }
 

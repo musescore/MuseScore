@@ -22,20 +22,21 @@
 
 #include "fermata.h"
 
-#include "log.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
 #include "types/translatablestring.h"
 
-#include "score.h"
+#include "chord.h"
 #include "chordrest.h"
-#include "system.h"
 #include "measure.h"
+#include "note.h"
+#include "page.h"
+#include "score.h"
 #include "staff.h"
 #include "stafftype.h"
-#include "undo.h"
-#include "page.h"
-#include "barline.h"
+#include "system.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -214,8 +215,9 @@ void Fermata::layout()
 {
     const StaffType* stType = staffType();
 
+    _skipDraw = false;
     if (stType && stType->isHiddenElementOnTab(score(), Sid::fermataShowTabCommon, Sid::fermataShowTabSimple)) {
-        setbbox(RectF());
+        _skipDraw = true;
         return;
     }
 

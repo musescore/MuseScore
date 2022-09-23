@@ -59,6 +59,7 @@ protected:
 
     virtual void setupSound(const mpe::PlaybackSetupData& setupData) = 0;
     virtual void setupEvents(const mpe::PlaybackData& playbackData) = 0;
+    virtual void updateRenderingMode(const RenderMode mode);
 
     msecs_t samplesToMsecs(const samples_t samplesPerChannel, const samples_t sampleRate) const;
     samples_t microSecsToSamples(const msecs_t msec, const samples_t sampleRate) const;

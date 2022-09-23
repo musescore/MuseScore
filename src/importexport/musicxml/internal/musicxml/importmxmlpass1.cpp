@@ -24,28 +24,26 @@
 
 #include "engraving/infrastructure/symbolfonts.h"
 
-#include "engraving/libmscore/factory.h"
 #include "engraving/libmscore/box.h"
-#include "engraving/libmscore/chordrest.h"
-#include "engraving/libmscore/instrtemplate.h"
+#include "engraving/libmscore/factory.h"
+#include "engraving/libmscore/layoutbreak.h"
 #include "engraving/libmscore/measure.h"
 #include "engraving/libmscore/page.h"
 #include "engraving/libmscore/part.h"
+#include "engraving/libmscore/score.h"
 #include "engraving/libmscore/staff.h"
-#include "engraving/libmscore/stringdata.h"
-#include "engraving/libmscore/symbol.h"
+#include "engraving/libmscore/text.h"
 #include "engraving/libmscore/timesig.h"
-#include "engraving/libmscore/spanner.h"
-#include "engraving/libmscore/bracketItem.h"
 #include "engraving/libmscore/utils.h"
 
-#include "engraving/types/symnames.h"
 #include "engraving/style/style.h"
+#include "engraving/style/textstyle.h"
+
+#include "engraving/types/symnames.h"
 
 #include "importmxmllogger.h"
 #include "importmxmlnoteduration.h"
 #include "importmxmlpass1.h"
-#include "importmxmlpass2.h"
 
 #include "modularity/ioc.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"

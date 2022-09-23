@@ -27,7 +27,9 @@
 
 #include <algorithm>
 
+#include "translation.h"
 #include "midierrors.h"
+#include "defer.h"
 #include "log.h"
 
 using namespace mu;
@@ -41,7 +43,7 @@ struct mu::midi::CoreMidiInPort::Core {
 };
 
 CoreMidiInPort::CoreMidiInPort()
-    : AbstractMidiInPort(), m_core(std::make_unique<Core>())
+    : m_core(std::make_unique<Core>())
 {
 }
 
@@ -63,22 +65,29 @@ CoreMidiInPort::~CoreMidiInPort()
 void CoreMidiInPort::init()
 {
     initCore();
-
-    AbstractMidiInPort::init();
 }
 
-MidiDeviceList CoreMidiInPort::devices() const
+MidiDeviceList CoreMidiInPort::availableDevices() const
 {
     MidiDeviceList ret;
+
+    ret.push_back({ NONE_DEVICE_ID, trc("midi", "No device") });
 
     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, false);
     ItemCount sources = MIDIGetNumberOfSources();
     for (ItemCount sourceIndex = 0; sourceIndex <= sources; sourceIndex++) {
         MIDIEndpointRef sourceRef = MIDIGetSource(sourceIndex);
         if (sourceRef != 0) {
+            MidiDevice dev;
+
+            SInt32 id = 0;
+            if (MIDIObjectGetIntegerProperty(sourceRef, kMIDIPropertyUniqueID, &id) != noErr) {
+                LOGE() << "Can't get property kMIDIPropertyUniqueID";
+                continue;
+            }
+
             CFStringRef stringRef = 0;
             char name[256];
-
             if (MIDIObjectGetStringProperty(sourceRef, kMIDIPropertyDisplayName, &stringRef) != noErr) {
                 LOGE() << "Can't get property kMIDIPropertyDisplayName";
                 continue;
@@ -86,8 +95,7 @@ MidiDeviceList CoreMidiInPort::devices() const
             CFStringGetCString(stringRef, name, sizeof(name), kCFStringEncodingUTF8);
             CFRelease(stringRef);
 
-            MidiDevice dev;
-            dev.id = std::to_string(sourceIndex);
+            dev.id = std::to_string(id);
             dev.name = name;
 
             ret.push_back(std::move(dev));
@@ -97,9 +105,9 @@ MidiDeviceList CoreMidiInPort::devices() const
     return ret;
 }
 
-async::Notification CoreMidiInPort::devicesChanged() const
+async::Notification CoreMidiInPort::availableDevicesChanged() const
 {
-    return m_devicesChanged;
+    return m_availableDevicesChanged;
 }
 
 void CoreMidiInPort::initCore()
@@ -134,7 +142,7 @@ void CoreMidiInPort::initCore()
                 }
             }
 
-            self->devicesChanged().notify();
+            self->availableDevicesChanged().notify();
         } break;
 
         case kMIDIMsgPropertyChanged: {
@@ -152,7 +160,7 @@ void CoreMidiInPort::initCore()
 
             if (CFStringCompare(propertyChangeNotification->propertyName, kMIDIPropertyDisplayName, 0) == kCFCompareEqualTo
                 || CFStringCompare(propertyChangeNotification->propertyName, kMIDIPropertyName, 0) == kCFCompareEqualTo) {
-                self->devicesChanged().notify();
+                self->availableDevicesChanged().notify();
             }
         } break;
 
@@ -178,14 +186,12 @@ void CoreMidiInPort::initCore()
     if (__builtin_available(macOS 11.0, *)) {
         MIDIReceiveBlock receiveBlock = ^ (const MIDIEventList* eventList, void* /*srcConnRefCon*/) {
             const MIDIEventPacket* packet = eventList->packet;
-            std::vector<std::pair<tick_t, Event> > events;
-
             for (UInt32 index = 0; index < eventList->numPackets; index++) {
                 // Handle packet
                 if (packet->wordCount != 0 && packet->wordCount <= 4) {
                     Event e = Event::fromRawData(packet->words, packet->wordCount);
                     if (e) {
-                        events.push_back({ (tick_t)packet->timeStamp, e });
+                        m_eventReceived.send((tick_t)packet->timeStamp, e);
                     }
                 } else if (packet->wordCount > 4) {
                     LOGW() << "unsupported midi message size " << packet->wordCount << " bytes";
@@ -193,8 +199,6 @@ void CoreMidiInPort::initCore()
 
                 packet = MIDIEventPacketNext(packet);
             }
-
-            doEventsRecived(events);
         };
 
         result
@@ -203,8 +207,6 @@ void CoreMidiInPort::initCore()
         MIDIReadBlock readBlock = ^ (const MIDIPacketList* packetList, void* /*srcConnRefCon*/)
         {
             const MIDIPacket* packet = packetList->packet;
-            std::vector<std::pair<tick_t, Event> > events;
-
             for (UInt32 index = 0; index < packetList->numPackets; index++) {
                 if (packet->length != 0 && packet->length <= 4) {
                     uint32_t message(0);
@@ -212,7 +214,7 @@ void CoreMidiInPort::initCore()
 
                     auto e = Event::fromMIDI10Package(message).toMIDI20();
                     if (e) {
-                        events.push_back({ (tick_t)packet->timeStamp, e });
+                        m_eventReceived.send((tick_t)packet->timeStamp, e);
                     }
                 } else if (packet->length > 4) {
                     LOGW() << "unsupported midi message size " << packet->length << " bytes";
@@ -220,8 +222,6 @@ void CoreMidiInPort::initCore()
 
                 packet = MIDIPacketNext(packet);
             }
-
-            doEventsRecived(events);
         };
 
         result = MIDIInputPortCreateWithBlock(m_core->client, portName.toCFString(), &m_core->inputPort, readBlock);
@@ -234,26 +234,47 @@ void CoreMidiInPort::initCore()
 
 Ret CoreMidiInPort::connect(const MidiDeviceID& deviceID)
 {
+    DEFER {
+        m_deviceChanged.notify();
+    };
+
     if (isConnected()) {
         disconnect();
     }
 
-    if (!m_core->client) {
-        return make_ret(Err::MidiFailedConnect, "failed create client");
+    Ret ret = make_ok();
+
+    if (!deviceID.empty() && deviceID != NONE_DEVICE_ID) {
+        if (!m_core->client) {
+            return make_ret(Err::MidiFailedConnect, "failed create client");
+        }
+
+        if (!m_core->inputPort) {
+            return make_ret(Err::MidiFailedConnect, "failed create port");
+        }
+
+        MIDIObjectRef obj;
+        MIDIObjectType type;
+
+        OSStatus err = MIDIObjectFindByUniqueID(std::stoi(deviceID), &obj, &type);
+        if (err != noErr) {
+            return make_ret(Err::MidiFailedConnect, "failed get source");
+        }
+
+        m_core->deviceID = std::stoi(deviceID);
+        m_core->sourceId = (MIDIEndpointRef)obj;
+
+        m_deviceID = deviceID;
+        ret = run();
+    } else {
+        m_deviceID = deviceID;
     }
 
-    if (!m_core->inputPort) {
-        return make_ret(Err::MidiFailedConnect, "failed create port");
+    if (ret) {
+        LOGD() << "Connected to " << m_deviceID;
     }
 
-    m_core->deviceID = std::stoi(deviceID);
-    m_core->sourceId = MIDIGetSource(m_core->deviceID);
-    if (m_core->sourceId == 0) {
-        return make_ret(Err::MidiFailedConnect, "failed get source");
-    }
-
-    m_deviceID = deviceID;
-    return run();
+    return ret;
 }
 
 void CoreMidiInPort::disconnect()
@@ -263,6 +284,8 @@ void CoreMidiInPort::disconnect()
     }
 
     stop();
+
+    LOGD() << "Disconnected from " << m_deviceID;
 
     m_core->sourceId = 0;
     m_deviceID.clear();
@@ -276,6 +299,16 @@ bool CoreMidiInPort::isConnected() const
 MidiDeviceID CoreMidiInPort::deviceID() const
 {
     return m_deviceID;
+}
+
+async::Notification CoreMidiInPort::deviceChanged() const
+{
+    return m_deviceChanged;
+}
+
+async::Channel<tick_t, Event> CoreMidiInPort::eventReceived() const
+{
+    return m_eventReceived;
 }
 
 Ret CoreMidiInPort::run()

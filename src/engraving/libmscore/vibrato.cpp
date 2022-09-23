@@ -24,17 +24,12 @@
 #include <cmath>
 
 #include "types/typesconv.h"
-#include "style/style.h"
 #include "rw/xml.h"
 
-#include "system.h"
-#include "measure.h"
-#include "utils.h"
 #include "score.h"
-#include "symbolfont.h"
-#include "accidental.h"
-#include "segment.h"
 #include "staff.h"
+#include "symbolfont.h"
+#include "system.h"
 
 #include "log.h"
 
@@ -117,24 +112,21 @@ void VibratoSegment::layout()
         setPosY(staff() ? staff()->height() : 0.0);
     }
 
-    if (isSingleType() || isBeginType()) {
-        switch (vibrato()->vibratoType()) {
-        case VibratoType::GUITAR_VIBRATO:
-            symbolLine(SymId::guitarVibratoStroke, SymId::guitarVibratoStroke);
-            break;
-        case VibratoType::GUITAR_VIBRATO_WIDE:
-            symbolLine(SymId::guitarWideVibratoStroke, SymId::guitarWideVibratoStroke);
-            break;
-        case VibratoType::VIBRATO_SAWTOOTH:
-            symbolLine(SymId::wiggleSawtooth, SymId::wiggleSawtooth);
-            break;
-        case VibratoType::VIBRATO_SAWTOOTH_WIDE:
-            symbolLine(SymId::wiggleSawtoothWide, SymId::wiggleSawtoothWide);
-            break;
-        }
-    } else {
-        symbolLine(SymId::wiggleVibrato, SymId::wiggleVibrato);
+    switch (vibrato()->vibratoType()) {
+    case VibratoType::GUITAR_VIBRATO:
+        symbolLine(SymId::guitarVibratoStroke, SymId::guitarVibratoStroke);
+        break;
+    case VibratoType::GUITAR_VIBRATO_WIDE:
+        symbolLine(SymId::guitarWideVibratoStroke, SymId::guitarWideVibratoStroke);
+        break;
+    case VibratoType::VIBRATO_SAWTOOTH:
+        symbolLine(SymId::wiggleSawtooth, SymId::wiggleSawtooth);
+        break;
+    case VibratoType::VIBRATO_SAWTOOTH_WIDE:
+        symbolLine(SymId::wiggleSawtoothWide, SymId::wiggleSawtoothWide);
+        break;
     }
+
     if (isStyled(Pid::OFFSET)) {
         roffset() = vibrato()->propertyDefault(Pid::OFFSET).value<PointF>();
     }

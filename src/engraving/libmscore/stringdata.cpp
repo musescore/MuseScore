@@ -29,10 +29,8 @@
 #include "chord.h"
 #include "note.h"
 #include "part.h"
-#include "score.h"
-#include "staff.h"
-#include "undo.h"
 #include "segment.h"
+#include "staff.h"
 
 using namespace mu;
 
@@ -469,13 +467,18 @@ void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* 
     int capoFret = chord->staff()->part()->capoFret();
 
     for (Note* note : chord->notes()) {
+        if (note->displayFret() != Note::DisplayFretOption::NoHarmonic) {
+            continue;
+        }
+
         int string = note->string();
         int fret = note->fret();
 
         // if note not fretted yet or current fretting no longer valid,
         // use most convenient string as key
+        int pitch = getPitch(string, fret + capoFret, pitchOffset);
         if (string <= INVALID_STRING_INDEX || fret <= INVALID_FRET_INDEX
-            || getPitch(string, fret + capoFret, pitchOffset) != note->pitch()) {
+            || (pitchIsValid(pitch) && pitch != note->pitch())) {
             note->setString(INVALID_STRING_INDEX);
             note->setFret(INVALID_FRET_INDEX);
             convertPitch(note->pitch(), pitchOffset, &string, &fret);

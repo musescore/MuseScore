@@ -23,7 +23,7 @@
 #ifndef __SYSTEMTEXT_H__
 #define __SYSTEMTEXT_H__
 
-#include "stafftext.h"
+#include "stafftextbase.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------
