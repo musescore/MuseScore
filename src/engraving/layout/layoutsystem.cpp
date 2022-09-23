@@ -101,7 +101,9 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     Fraction maxTicks = Fraction(0, 1); // Initializing at lowest possible value
     Fraction prevMaxTicks = Fraction(1, 1);
     bool maxSysTicksChanged = false;
+    static constexpr double squeezability = 0.3; // We may consider exposing in Style settings (M.S.)
     double oldStretch = 1;
+    double oldWidth = 0;
     System* oldSystem = nullptr;
 
     while (ctx.curMeasure) {      // collect measure for system
@@ -197,7 +199,6 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
 
         // check if lc.curMeasure fits, remove if not
         // collect at least one measure and the break
-        static constexpr double squeezability = 0.3; // We may consider exposing in Style settings (M.S.)
         double acceptanceRange = squeezability * system->squeezableSpace();
         bool doBreak = (system->measures().size() > 1) && ((curSysWidth + ww) > targetSystemWidth + acceptanceRange);
         /* acceptanceRange allows some systems to be initially slightly larger than the margins and be
@@ -307,6 +308,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             }
             if (nmb->isMeasure()) {
                 oldStretch = toMeasure(nmb)->layoutStretch();
+                oldWidth = toMeasure(nmb)->width();
             }
             if (!ctx.curMeasure->noBreak()) {
                 // current measure is not a nobreak,
@@ -364,6 +366,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                         m->removeSystemTrailer();
                     }
                     m->computeWidth(m->system()->minSysTicks(), m->system()->maxSysTicks(), oldStretch);
+                    m->stretchToTargetWidth(oldWidth);
                     m->layoutMeasureElements();
                     LayoutBeams::restoreBeams(m);
                     if (m == nm || !m->noBreak()) {
@@ -376,45 +379,58 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         }
     }
 
-    //
-    // now we have a complete set of measures for this system
-    //
-    // prevMeasure is the last measure in the system
+    /*************************************************************
+     * SYSTEM NOW HAS A COMPLETE SET OF MEASURES
+     * Now perform all operation to finalize system.
+     * **********************************************************/
+
+    // Brake cross-measure beams
+    // Create end barlines
     if (ctx.prevMeasure && ctx.prevMeasure->isMeasure()) {
-        LayoutBeams::breakCrossMeasureBeams(ctx, toMeasure(ctx.prevMeasure));
-        double w = toMeasure(ctx.prevMeasure)->createEndBarLines(true);
-        curSysWidth += w;
+        Measure* pm = toMeasure(ctx.prevMeasure);
+        LayoutBeams::breakCrossMeasureBeams(ctx, pm);
+        pm->createEndBarLines(true);
     }
 
+    // hide empty staves
     hideEmptyStaves(score, system, ctx.firstSystem);
-    // Relayout system decorations to reuse space properly for
-    // hidden staves' instrument names or other hidden elements.
+    // Relayout system to account for newly hidden/unhidden staves
     curSysWidth -= system->leftMargin();
     system->layoutSystem(ctx, layoutSystemMinWidth, ctx.firstSystem, ctx.firstSystemIndent);
     curSysWidth += system->leftMargin();
 
-    //-------------------------------------------------------
-    //    add system trailer if needed
-    //    (cautionary time/key signatures etc)
-    //-------------------------------------------------------
-
+    // add system trailer if needed (cautionary time/key signatures etc)
     Measure* lm  = system->lastMeasure();
     if (lm) {
         Measure* nm = lm->nextMeasure();
         if (nm) {
-            double w = lm->width();
             lm->addSystemTrailer(nm);
-            if (lm->trailer()) {
-                lm->computeWidth(minTicks, maxTicks, 1);
-            }
-            curSysWidth += lm->width() - w;
         }
     }
 
+    // Recompute measure widths to account for the last changes (barlines, hidden staves, etc)
+    double preStretch = targetSystemWidth > curSysWidth ? 1 : 1 - squeezability;
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        Measure* m = toMeasure(mb);
+        double oldWidth = m->width();
+        // If system is currently larger than margin (because of acceptanceRange) compute width
+        // with a reduced pre-stretch, because justifySystem expects curSysWidth < targetWidth
+        if (targetSystemWidth > curSysWidth) {
+            m->computeWidth(minTicks, maxTicks, preStretch);
+        } else {
+            m->computeWidth(minTicks, maxTicks, preStretch);
+        }
+        curSysWidth += m->width() - oldWidth;
+    }
+
     // JUSTIFY SYSTEM
+    // Do not justify last system of a section if curSysWidth is <= lastSystemFillLimit
     if (!((ctx.curMeasure == 0 || (lm && lm->sectionBreak()))
-          && ((curSysWidth / targetSystemWidth) <= score->styleD(Sid::lastSystemFillLimit))) // Do not justify last system of a section if curSysWidth is <= lastSystemFillLimit
-        && !MScore::noHorizontalStretch) {     // debug feature
+          && ((curSysWidth / targetSystemWidth) <= score->styleD(Sid::lastSystemFillLimit)))
+        && !MScore::noHorizontalStretch) { // debug feature
         justifySystem(system, curSysWidth, targetSystemWidth);
     }
 
@@ -479,64 +495,41 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     return system;
 }
 
-/***********************************************************************
- * justifySystem()
- * runs a bisection algorithm which adjusts the stretch coefficient
- * of all measures until the width of the system coincides with the
- * desidered one, within a given tolerance.
- * ********************************************************************/
-
 void LayoutSystem::justifySystem(System* system, double curSysWidth, double targetSystemWidth)
 {
     double rest = targetSystemWidth - curSysWidth;
-    double tolerance = system->score()->spatium() * 0.05; // For reference: this is smaller than the width of a note stem
-    if (abs(rest) < tolerance) {
+    if (rest == 0) {
         return;
     }
-    // Find longest and shortest note/rest of the system
-    Fraction minTicks = system->minSysTicks();
-    Fraction maxTicks = system->maxSysTicks();
-    // Define upper and lower bounds for stretchCoeff
-    double lowerBound, upperBound;
     if (rest < 0) {
-        lowerBound = 0;
-        upperBound = 1;
-    } else {
-        lowerBound = 1;
-        upperBound = 0; // intentionally invalid value: needs to be defined later
+        LOGE("*** System justification error ***");
+        return;
     }
-    // Begin binary search
-    double stretchCoeff = 1;
-    double prevWidth = 0;
-    int iter = 0;
-    static constexpr double multiplier = 1.5; // empirical value which optimizes convergence of the algorithm
-    static constexpr int maxIter = 50;
-    while (abs(rest) > tolerance && iter < maxIter) {
-        if (!upperBound) {
-            stretchCoeff *= multiplier;
-        } else {
-            stretchCoeff = (upperBound + lowerBound) / 2;
+
+    std::vector<Spring> springs;
+
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
         }
-        for (MeasureBase* mb : system->measures()) {
-            if (mb->isMeasure()) {
-                Measure* m = toMeasure(mb);
-                if (!(m->isWidthLocked() && stretchCoeff < m->layoutStretch())) { // It would be pointless to re-compute the layout of a measure
-                    prevWidth = m->width();                                       // that is already widthLocked to a larger value.
-                    m->computeWidth(minTicks, maxTicks, stretchCoeff);
-                    curSysWidth += m->width() - prevWidth;
-                }
+        for (Segment& s : toMeasure(mb)->segments()) {
+            if (s.isChordRestType() && s.visible() && s.enabled() && !s.allElementsInvisible()) {
+                double springConst = 1 / s.stretch();
+                double width = s.width() - s.widthOffset();
+                double preTension = width * springConst;
+                springs.push_back(Spring(springConst, width, preTension, &s));
             }
         }
-        rest = targetSystemWidth - curSysWidth;
-        if (rest > 0) {
-            lowerBound = stretchCoeff;
-        } else {
-            upperBound = stretchCoeff;
-        }
-        iter++;
     }
-    if (iter == maxIter) {
-        LOGE() << "**************** CAUTION: System may not be well justified ***************** ";
+
+    Segment::stretchSegmentsToWidth(springs, rest);
+
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        Measure* m = toMeasure(mb);
+        m->respaceSegments();
     }
 }
 

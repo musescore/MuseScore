@@ -2782,4 +2782,39 @@ void Segment::computeCrossBeamType(Segment* nextSeg)
     _crossBeamType.upDown = upDown;
     _crossBeamType.downUp = downUp;
 }
+
+/***********************************************
+ * stretchSegmentsToWidth
+ * Stretch a group of (chordRestType) segments
+ * by the specified amount. Uses the spring-rod
+ * method.
+ * *********************************************/
+
+void Segment::stretchSegmentsToWidth(std::vector<Spring>& springs, double width)
+{
+    if (width <= 0) {
+        return;
+    }
+
+    std::sort(springs.begin(), springs.end(), [](Spring& a, Spring& b){ return a.preTension < b.preTension; });
+    double inverseSpringConst = 0.0;
+    double force = 0.0;
+    double curForce = 0.0;
+    for (auto spring = springs.begin(); spring != springs.end(); ++spring) {
+        inverseSpringConst += 1 / spring->springConst;
+        width += spring->width;
+        curForce = width / inverseSpringConst;
+        if (curForce < (spring + 1)->preTension) {
+            break;
+        }
+    }
+    force = curForce;
+
+    for (Spring spring : springs) {
+        if (force > spring.preTension) {
+            double newWidth = force / spring.springConst;
+            spring.segment->setWidth(newWidth + spring.segment->widthOffset());
+        }
+    }
+}
 } // namespace mu::engraving

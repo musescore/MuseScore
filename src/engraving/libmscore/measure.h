@@ -346,6 +346,7 @@ public:
     double basicWidth() const;
     float durationStretch(Fraction curTicks, const Fraction minTicks, const Fraction maxTicks) const;
     void computeWidth(Fraction minTicks, Fraction maxTicks, double stretchCoeff);
+    void stretchToTargetWidth(double targetWidth);
     void checkHeader();
     void checkTrailer();
     void layoutStaffLines();
@@ -369,6 +370,8 @@ public:
     void stretchMeasureInPracticeMode(double stretch);
     double squeezableSpace() const { return _isWidthLocked ? 0.0 : _squeezableSpace; }
 
+    void respaceSegments();
+
 private:
     double _squeezableSpace = 0;
     friend class Factory;
@@ -382,7 +385,6 @@ private:
 
     void fillGap(const Fraction& pos, const Fraction& len, track_idx_t track, const Fraction& stretch, bool useGapRests = true);
     void computeWidth(Segment* s, double x, bool isSystemHeader, Fraction minTicks, Fraction maxTicks, double stretchCoeff);
-    void setWidthToTargetValue(Segment* s, double x, bool isSystemHeader, Fraction minTicks, double stretchCoeff, double targetWidth);
     double computeMinMeasureWidth() const;
 
     MStaff* mstaff(staff_idx_t staffIndex) const;
