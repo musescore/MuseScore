@@ -2559,6 +2559,15 @@ void Score::removePart(Part* part)
             break;
         }
     }
+    for (auto excerpt : masterScore()->excerpts()) {
+        if (!excerpt) {
+            continue;
+        }
+        if (excerpt->containsPart(part)) {
+            masterScore()->removeExcerpt(excerpt);
+            break;
+        }
+    }
 
     masterScore()->rebuildMidiMapping();
     setInstrumentsChanged(true);
