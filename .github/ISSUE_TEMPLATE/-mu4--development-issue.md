@@ -23,6 +23,9 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
+**Workaround**
+If applicable, add a workaround
+
 **Platform information**
  - OS: [e.g. macOS, Windows, Linux]
 
