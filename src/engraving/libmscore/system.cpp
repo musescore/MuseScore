@@ -330,10 +330,9 @@ double System::layoutBrackets(const LayoutContext& ctx)
 
     double totalBracketWidth = 0.0;
 
-    double bd = score()->styleMM(Sid::bracketDistance);
     if (!_brackets.empty()) {
         for (double w : bracketWidth) {
-            totalBracketWidth += w + bd;
+            totalBracketWidth += w;
         }
     }
 
