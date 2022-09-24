@@ -343,18 +343,75 @@ double System::layoutBrackets(const LayoutContext& ctx)
 //   totalBracketOffset
 //---------------------------------------------------------
 
-double System::totalBracketOffset(const LayoutContext& ctx)
+/// Calculates the total width of all brackets together that
+/// would be visible when all staves are visible.
+/// The logic in this method is closely related to the logic in
+/// System::layoutBrackets and System::createBracket.
+double System::totalBracketOffset(LayoutContext& ctx)
 {
-    // TODO: This trick doesn't work
-    // just toggling the style setting does nothing, so this method
-    // will return the same result as a plain call to layoutBrackets.
-    bool hideEmptyStaves = score()->styleB(Sid::hideEmptyStaves);
-    score()->setStyleValue(Sid::hideEmptyStaves, false);
+    if (ctx.totalBracketsWidth >= 0) {
+        return ctx.totalBracketsWidth;
+    }
 
-    double offset = layoutBrackets(ctx);
+    size_t columns = 0;
+    for (const Staff* staff : ctx.score()->staves()) {
+        for (auto bi : staff->brackets()) {
+            columns = std::max(columns, bi->column() + 1);
+        }
+    }
 
-    score()->setStyleValue(Sid::hideEmptyStaves, hideEmptyStaves);
-    return offset;
+    std::vector<double> bracketWidth(columns, 0.0);
+
+    size_t nstaves = ctx.score()->nstaves();
+    for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        const Staff* staff = ctx.score()->staff(staffIdx);
+        for (auto bi : staff->brackets()) {
+            if (bi->bracketType() == BracketType::NO_BRACKET) {
+                continue;
+            }
+
+            //! This logic is partially copied from System::createBracket.
+            //! Of course, we don't need to worry about invisible staves,
+            //! but we do need to worry about brackets that span past the
+            //! last staff.
+            staff_idx_t firstStaff = staffIdx;
+            staff_idx_t lastStaff = staffIdx + bi->bracketSpan() - 1;
+            if (lastStaff >= nstaves) {
+                lastStaff = nstaves - 1;
+            }
+
+            for (; firstStaff <= lastStaff; ++firstStaff) {
+                if (ctx.score()->staff(firstStaff)->show()) {
+                    break;
+                }
+            }
+            for (; lastStaff >= firstStaff; --lastStaff) {
+                if (ctx.score()->staff(lastStaff)->show()) {
+                    break;
+                }
+            }
+
+            size_t span = lastStaff - firstStaff + 1;
+            if (span > 1
+                || (bi->bracketSpan() == span)
+                || (span == 1 && ctx.score()->styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden))) {
+                Bracket* dummyBr = Factory::createBracket(ctx.score()->dummy(), /*isAccessibleEnabled=*/ false);
+                dummyBr->setBracketItem(bi);
+                dummyBr->setStaffSpan(firstStaff, lastStaff);
+                dummyBr->layout();
+                bracketWidth[bi->column()] = std::max(bracketWidth[bi->column()], dummyBr->width());
+                delete dummyBr;
+            }
+        }
+    }
+
+    ctx.totalBracketsWidth = 0.0;
+
+    for (double w : bracketWidth) {
+        ctx.totalBracketsWidth += w;
+    }
+
+    return ctx.totalBracketsWidth;
 }
 
 //---------------------------------------------------------
@@ -362,7 +419,7 @@ double System::totalBracketOffset(const LayoutContext& ctx)
 ///   Layout the System
 //---------------------------------------------------------
 
-void System::layoutSystem(const LayoutContext& ctx, double xo1, const bool isFirstSystem, bool firstSystemIndent)
+void System::layoutSystem(LayoutContext& ctx, double xo1, const bool isFirstSystem, bool firstSystemIndent)
 {
     if (_staves.empty()) {                 // ignore vbox
         return;
@@ -383,18 +440,17 @@ void System::layoutSystem(const LayoutContext& ctx, double xo1, const bool isFir
         maxNamesWidth = indent - instrumentNameOffset;
     }
 
+    layoutBrackets(ctx);
     double maxBracketsWidth = totalBracketOffset(ctx);
-    double bracketsWidth = layoutBrackets(ctx);
-    double bracketWidthDifference = maxBracketsWidth - bracketsWidth;
 
     if (RealIsNull(indent)) {
         if (score()->styleB(Sid::alignSystemToMargin)) {
-            _leftMargin = bracketWidthDifference;
+            _leftMargin = 0.0;
         } else {
             _leftMargin = maxBracketsWidth;
         }
     } else {
-        _leftMargin = indent + bracketsWidth;
+        _leftMargin = indent + maxBracketsWidth;
     }
 
     int nVisible = 0;
@@ -715,9 +771,8 @@ Bracket* System::createBracket(const LayoutContext& ctx, BracketItem* bi, size_t
 size_t System::getBracketsColumnsCount()
 {
     size_t columns = 0;
-    size_t nstaves = _staves.size();
-    for (staff_idx_t idx = 0; idx < nstaves; ++idx) {
-        for (auto bi : score()->staff(idx)->brackets()) {
+    for (const Staff* staff : score()->staves()) {
+        for (auto bi : staff->brackets()) {
             columns = std::max(columns, bi->column() + 1);
         }
     }
