@@ -33,13 +33,17 @@ ScoreSettingsModel::ScoreSettingsModel(QObject* parent, IElementRepositoryServic
     setSectionType(InspectorSectionType::SECTION_SCORE_DISPLAY);
     setTitle(qtrc("inspector", "Show"));
     createProperties();
+}
 
-    m_shouldShowInvisible = isNotationExisting() ? scoreConfig().isShowInvisibleElements : true;
-    m_shouldShowFormatting = isNotationExisting() ? scoreConfig().isShowUnprintableElements : true;
-    m_shouldShowFrames = isNotationExisting() ? scoreConfig().isShowFrames : true;
-    m_shouldShowPageMargins = isNotationExisting() ? scoreConfig().isShowPageMargins : false;
+void ScoreSettingsModel::onCurrentNotationChanged()
+{
+    updateAll();
 
-    setupConnections();
+    if (auto notation = currentNotation()) {
+        notation->interaction()->scoreConfigChanged().onReceive(this, [this](ScoreConfigType configType) {
+            updateFromConfig(configType);
+        });
+    }
 }
 
 void ScoreSettingsModel::createProperties()
@@ -58,10 +62,7 @@ bool ScoreSettingsModel::isEmpty() const
 
 void ScoreSettingsModel::loadProperties()
 {
-    emit shouldShowInvisibleChanged(shouldShowInvisible());
-    emit shouldShowFormattingChanged(shouldShowFormatting());
-    emit shouldShowFramesChanged(shouldShowFrames());
-    emit shouldShowPageMarginsChanged(shouldShowPageMargins());
+    updateAll();
 }
 
 void ScoreSettingsModel::resetProperties()
@@ -74,28 +75,11 @@ void ScoreSettingsModel::resetProperties()
 
 ScoreConfig ScoreSettingsModel::scoreConfig() const
 {
-    IF_ASSERT_FAILED(context()) {
+    if (!currentNotation()) {
         return ScoreConfig();
     }
 
-    if (!context()->currentNotation()) {
-        return ScoreConfig();
-    }
-
-    return context()->currentNotation()->interaction()->scoreConfig();
-}
-
-mu::async::Channel<ScoreConfigType> ScoreSettingsModel::scoreConfigChanged() const
-{
-    IF_ASSERT_FAILED(context()) {
-        return mu::async::Channel<ScoreConfigType>();
-    }
-
-    if (!context()->currentNotation()) {
-        return mu::async::Channel<ScoreConfigType>();
-    }
-
-    return context()->currentNotation()->interaction()->scoreConfigChanged();
+    return currentNotation()->interaction()->scoreConfig();
 }
 
 bool ScoreSettingsModel::shouldShowInvisible() const
@@ -220,27 +204,10 @@ void ScoreSettingsModel::updateFromConfig(ScoreConfigType configType)
 
 void ScoreSettingsModel::updateAll()
 {
-    updateShouldShowInvisible(scoreConfig().isShowInvisibleElements);
-    updateShouldShowFormatting(scoreConfig().isShowUnprintableElements);
-    updateShouldShowFrames(scoreConfig().isShowFrames);
-    updateShouldShowPageMargins(scoreConfig().isShowPageMargins);
-}
+    auto config = scoreConfig();
 
-void ScoreSettingsModel::setupConnections()
-{
-    if (isNotationExisting()) {
-        updateAll();
-
-        scoreConfigChanged().onReceive(this, [this](ScoreConfigType configType) {
-            updateFromConfig(configType);
-        });
-    }
-
-    currentNotationChanged().onNotify(this, [this]() {
-        updateAll();
-
-        scoreConfigChanged().onReceive(this, [this](ScoreConfigType configType) {
-            updateFromConfig(configType);
-        });
-    });
+    updateShouldShowInvisible(config.isShowInvisibleElements);
+    updateShouldShowFormatting(config.isShowUnprintableElements);
+    updateShouldShowFrames(config.isShowFrames);
+    updateShouldShowPageMargins(config.isShowPageMargins);
 }
