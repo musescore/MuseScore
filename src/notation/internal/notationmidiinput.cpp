@@ -72,9 +72,9 @@ void NotationMidiInput::onMidiEventReceived(const midi::Event& event)
     }
 }
 
-mu::async::Notification NotationMidiInput::noteChanged() const
+mu::async::Channel<std::vector<const Note*> > NotationMidiInput::notesReceived() const
 {
-    return m_noteChanged;
+    return m_notesReceivedChannel;
 }
 
 void NotationMidiInput::onRealtimeAdvance()
@@ -115,7 +115,7 @@ void NotationMidiInput::doProcessEvents()
         return;
     }
 
-    std::vector<const EngravingItem*> notes;
+    std::vector<const Note*> notes;
 
     for (size_t i = 0; i < m_eventsQueue.size(); ++i) {
         const midi::Event& event = m_eventsQueue.at(i);
@@ -134,7 +134,13 @@ void NotationMidiInput::doProcessEvents()
     }
 
     if (!notes.empty()) {
-        playbackController()->playElements(notes);
+        std::vector<const EngravingItem*> notesItems;
+        for (const Note* note : notes) {
+            notesItems.push_back(note);
+        }
+
+        playbackController()->playElements(notesItems);
+        m_notesReceivedChannel.send(notes);
     }
 
     m_eventsQueue.clear();
@@ -163,7 +169,6 @@ Note* NotationMidiInput::addNoteToScore(const midi::Event& e)
 
     DEFER {
         m_undoStack->commitChanges();
-        m_noteChanged.notify();
     };
 
     m_undoStack->prepareChanges();

@@ -74,7 +74,7 @@ Notation::Notation(mu::engraving::Score* score)
         notifyAboutNotationChanged();
     });
 
-    m_midiInput->noteChanged().onNotify(this, [this]() {
+    m_midiInput->notesReceived().onReceive(this, [this](const std::vector<const Note*>&){
         notifyAboutNotationChanged();
     });
 
