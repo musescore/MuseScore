@@ -24,7 +24,6 @@
 #include "config.h"
 
 #include <QOAuth2AuthorizationCodeFlow>
-#include <QOAuthHttpServerReplyHandler>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QUrlQuery>
@@ -37,6 +36,7 @@
 #include "global/async/async.h"
 
 #include "clouderrors.h"
+#include "oauthhttpserverreplyhandler.h"
 
 #include "log.h"
 
@@ -100,7 +100,7 @@ void CloudService::init()
     TRACEFUNC;
 
     m_oauth2 = new QOAuth2AuthorizationCodeFlow(this);
-    m_replyHandler = new QOAuthHttpServerReplyHandler(this);
+    m_replyHandler = new OAuthHttpServerReplyHandler(this);
 
     m_oauth2->setAuthorizationUrl(configuration()->authorizationUrl());
     m_oauth2->setAccessTokenUrl(configuration()->accessTokenUrl());
