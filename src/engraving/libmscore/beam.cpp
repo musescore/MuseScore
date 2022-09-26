@@ -402,7 +402,9 @@ void Beam::layout1()
     }
 
     _cross = _minMove != _maxMove;
+    bool isEntirelyMoved = false;
     if (_minMove == _maxMove && _minMove != 0) {
+        isEntirelyMoved = true;
         setStaffIdx(staffIdx);
         if (_direction == DirectionV::AUTO) {
             _up = _maxMove > 0;
@@ -419,7 +421,7 @@ void Beam::layout1()
             if (cr->up() != _up) {
                 if (cr->isChord()) {
                     Chord* c = toChord(cr);
-                    c->setUp(_up != staffMove);
+                    c->setUp(isEntirelyMoved ? _up : (_up != staffMove));
                     c->layoutStem();
                 }
             }
