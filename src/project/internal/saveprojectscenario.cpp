@@ -211,7 +211,7 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
     result.name = vals["name"].toString();
     result.visibility = static_cast<CloudProjectVisibility>(vals["visibility"].toInt());
 
-    if (!warnBeforePublishing(project, result.visibility, isPublish)) {
+    if (!warnBeforePublishing(isPublish, result.visibility)) {
         return make_ret(Ret::Code::Cancel);
     }
 
@@ -222,46 +222,49 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
     return RetVal<CloudProjectInfo>::make_ok(result);
 }
 
-bool SaveProjectScenario::warnBeforePublishing(INotationProjectPtr project, CloudProjectVisibility visibility, bool isPublish) const
+bool SaveProjectScenario::warnBeforePublishing(bool isPublish, CloudProjectVisibility visibility) const
 {
-    if (!isPublish && !configuration()->shouldWarnBeforeSavingPublicly()) {
-        return true;
+    if (isPublish) {
+        if (!configuration()->shouldWarnBeforePublish()) {
+            return true;
+        }
+    } else {
+        if (!configuration()->shouldWarnBeforeSavingPubliclyToCloud()) {
+            return true;
+        }
     }
+
+    std::string title, message;
 
     IInteractive::ButtonDatas buttons = {
         IInteractive::ButtonData(IInteractive::Button::Cancel, trc("global", "Cancel")),
         IInteractive::ButtonData(IInteractive::Button::Ok, trc("project/save", "Publish"), true)
     };
 
-    IInteractive::Result result;
+    IInteractive::Options options = IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox;
 
     if (isPublish) {
-        if (!project->isCloudProject()) {
-            return true;
-        }
-
-        std::string title = trc("project/save", "Publish changes online?");
-        std::string message = trc("project/save", "Your saved changes will be publicly visible. We will also "
-                                                  "need to generate a new MP3 for public playback.");
-
-        result = interactive()->warning(title, message, buttons, int(IInteractive::Button::Ok), IInteractive::Option::WithIcon);
+        title = trc("project/save", "Publish changes online?");
+        message = trc("project/save", "We will need to generate a new MP3 for web playback.");
     } else if (visibility == CloudProjectVisibility::Public) {
-        result = interactive()->warning(
-            trc("project/save", "Publish this score online?"),
-            trc("project/save", "All saved changes will be publicly visible on MuseScore.com. "
-                                "If you want to make frequent changes, we recommend saving this "
-                                "score privately until you’re ready to share it to the world. "),
-            buttons,
-            int(IInteractive::Button::Ok),
-            IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
+        title = trc("project/save", "Publish this score online?"),
+        message = trc("project/save", "All saved changes will be publicly visible on MuseScore.com. "
+                                      "If you want to make frequent changes, we recommend saving this "
+                                      "score privately until you’re ready to share it to the world.");
     } else {
         return true;
     }
 
-    bool publish = result.standardButton() == IInteractive::Button::Ok;
-    if (publish && !result.showAgain()) {
-        configuration()->setShouldWarnBeforeSavingPublicly(false);
+    IInteractive::Result result = interactive()->warning(title, message, buttons, int(IInteractive::Button::Ok), options);
+
+    bool ok = result.standardButton() == IInteractive::Button::Ok;
+    if (ok && !result.showAgain()) {
+        if (isPublish) {
+            configuration()->setShouldWarnBeforePublish(false);
+        } else {
+            configuration()->setShouldWarnBeforeSavingPubliclyToCloud(false);
+        }
     }
 
-    return publish;
+    return ok;
 }

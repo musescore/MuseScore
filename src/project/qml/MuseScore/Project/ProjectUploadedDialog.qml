@@ -28,7 +28,7 @@ import MuseScore.UiComponents 1.0
 StyledDialogView {
     id: root
 
-    contentHeight: 500
+    contentHeight: 470
     contentWidth: 750
 
     objectName: "ProjectUploadedDialog"
