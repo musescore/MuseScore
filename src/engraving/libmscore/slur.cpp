@@ -481,7 +481,7 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
     // 1 = shape is fixed, only end the point can be adjusted.
     // left and right side of the slur may have different balance depending on context:
     double leftBalance, rightBalance;
-    if (isSingleBeginType()) {
+    if (isSingleBeginType() && !slur()->stemFloated().left) {
         if (startCR->isChord() && toChord(startCR)->stem() && startCR->up() == slur()->up()) {
             leftBalance = 0.1;
         } else {
@@ -490,7 +490,7 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
     } else {
         leftBalance = 0.9;
     }
-    if (isSingleEndType()) {
+    if (isSingleEndType() && !slur()->stemFloated().right) {
         if (endCR->isChord() && toChord(endCR)->stem() && endCR->up() == slur()->up()) {
             rightBalance = 0.1;
         } else {
@@ -961,6 +961,7 @@ void Slur::slurPosChord(SlurPos* sp)
 
 void Slur::slurPos(SlurPos* sp)
 {
+    _stemFloated.reset();
     double _spatium = spatium();
     const double stemSideInset = 0.5;
     const double stemOffsetX = 0.35;
@@ -1212,6 +1213,7 @@ void Slur::slurPos(SlurPos* sp)
                 //              stem down - stem up
                 //
                 if ((sc->up() != ecr->up()) && (sc->up() == _up)) {
+                    _stemFloated.left = true;
                     // start and end chord have opposite direction
                     // and slur direction is same as start chord
                     // (so slur starts on stem side)
@@ -1327,6 +1329,7 @@ void Slur::slurPos(SlurPos* sp)
                     //              stem down - stem up
                     //
                     if ((scr->up() != ec->up()) && (ec->up() == _up)) {
+                        _stemFloated.right = true;
                         // start and end chord have opposite direction
                         // and slur direction is same as end chord
                         // (so slur end on stem side)
