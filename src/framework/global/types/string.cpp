@@ -730,6 +730,9 @@ StringList String::split(const std::regex& re, SplitBehavior behavior) const
 
 String& String::replace(const String& before, const String& after)
 {
+    if (before == after) {
+        return *this;
+    }
     Mutator h = mutStr();
     std::u16string& str = h.s;
     size_t start_pos = 0;
