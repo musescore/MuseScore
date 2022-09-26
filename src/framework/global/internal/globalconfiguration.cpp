@@ -87,9 +87,7 @@ io::path_t GlobalConfiguration::userAppDataPath() const
 QString GlobalConfiguration::resolveUserAppDataPath() const
 {
 #if defined(WIN_PORTABLE)
-    return QDir::cleanPath(QString("%1/../../../Data/settings")
-                           .arg(QCoreApplication::applicationDirPath())
-                           .arg(QCoreApplication::applicationName()));
+    return QDir::cleanPath(QString("%1/../../../Data/settings").arg(QCoreApplication::applicationDirPath()));
 #elif defined(Q_OS_WASM)
     return QString("/files/data");
 #else

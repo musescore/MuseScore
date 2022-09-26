@@ -41,10 +41,6 @@ IF %TARGET_PROCESSOR_BITS% == 32 (
     SET INSTALL_DIR=msvc.install_x86
 )  
 
-IF %BUILD_WIN_PORTABLE% == ON (
-    SET INSTALL_DIR=MuseScorePortable
-)
-
 :: Setup package type
 IF %BUILD_WIN_PORTABLE% == ON    ( SET PACKAGE_TYPE="portable") ELSE (
 IF %BUILD_MODE% == devel_build   ( SET PACKAGE_TYPE="7z") ELSE (
@@ -67,9 +63,6 @@ IF %PACKAGE_TYPE% == "msi" (
         ECHO "warning: not set SIGN_CERTIFICATE_PASSWORD"
     )
 )
-
-:: Temporary disabled, while we getting a new certificate
-:: SET DO_SIGN=OFF
 
 SET /p BUILD_VERSION=<%ARTIFACTS_DIR%\env\build_version.env
 SET /p BUILD_DATETIME=<%ARTIFACTS_DIR%\env\build_datetime.env
@@ -211,10 +204,12 @@ IF %DO_SIGN% == ON (
 )
 
 :: Create launcher
+ECHO "Start comLauncherGenerator..."
 CALL C:\portableappslauncher\Launcher\PortableApps.comLauncherGenerator.exe %CD%\%INSTALL_DIR%
 ECHO "Finished comLauncherGenerator"
 
 :: Create Installer
+ECHO "Start comInstaller..."
 CALL C:\portableappsinstaller\Installer\PortableApps.comInstaller.exe %CD%\%INSTALL_DIR%
 ECHO "Finished comInstaller"
 
