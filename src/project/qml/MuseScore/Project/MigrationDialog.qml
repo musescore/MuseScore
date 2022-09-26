@@ -101,8 +101,7 @@ StyledDialogView {
     }
 
     function watchVideo() {
-        var link = Qt.locale().name === "zh_CN" ? "https://www.bilibili.com/video/BV1FT4y1K7UM" : "https://youtu.be/qLR40BGNy68"
-        Qt.openUrlExternally(link)
+        Qt.openUrlExternally("https://youtu.be/U7dagae87eM")
     }
 
     Loader {
