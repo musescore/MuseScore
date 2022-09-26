@@ -54,6 +54,8 @@ private:
     void sendNoteOn(piano_key_t key);
     void sendNoteOff(piano_key_t key);
 
+    void startNoteInputIfNeed();
+
     std::optional<piano_key_t> m_pressedKey = std::nullopt;
     std::unordered_set<piano_key_t> m_keysInSelection;
     std::unordered_set<piano_key_t> m_otherNotesInSelectedChord;
