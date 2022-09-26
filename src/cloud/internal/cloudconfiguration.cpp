@@ -106,6 +106,12 @@ QUrl CloudConfiguration::signUpUrl() const
     return QUrl("https://musescore.com/oauth/authorize-new");
 }
 
+QUrl CloudConfiguration::signInSuccessUrl() const
+{
+    // TODO
+    return QUrl("https://musescore.com");
+}
+
 QUrl CloudConfiguration::scoreManagerUrl() const
 {
     return QUrl("https://musescore.com/my-scores");

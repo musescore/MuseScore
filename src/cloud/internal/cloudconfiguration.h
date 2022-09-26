@@ -41,6 +41,7 @@ public:
     QUrl cloudUrl() const override;
     QUrl authorizationUrl() const override;
     QUrl signUpUrl() const override;
+    QUrl signInSuccessUrl() const override;
     QUrl scoreManagerUrl() const override;
     QUrl accessTokenUrl() const override;
 

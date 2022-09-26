@@ -38,6 +38,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/cloudservice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/cloudconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/cloudconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/oauthhttpserverreplyhandler.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/oauthhttpserverreplyhandler.cpp
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

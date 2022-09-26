@@ -40,6 +40,7 @@ public:
     virtual QUrl cloudUrl() const = 0;
     virtual QUrl authorizationUrl() const = 0;
     virtual QUrl signUpUrl() const = 0;
+    virtual QUrl signInSuccessUrl() const = 0;
     virtual QUrl scoreManagerUrl() const = 0;
     virtual QUrl accessTokenUrl() const = 0;
 
