@@ -42,11 +42,11 @@ KeyState PianoKeyboardController::keyState(piano_key_t key) const
         return KeyState::Played;
     }
 
-    if (m_keysInSelection.find(key) != m_keysInSelection.cend()) {
+    if (m_keys.find(key) != m_keys.cend()) {
         return KeyState::Selected;
     }
 
-    if (m_otherNotesInSelectedChord.find(key) != m_otherNotesInSelectedChord.cend()) {
+    if (m_otherNotesInChord.find(key) != m_otherNotesInChord.cend()) {
         return KeyState::OtherInSelectedChord;
     }
 
@@ -83,43 +83,50 @@ void PianoKeyboardController::setPressedKey(std::optional<piano_key_t> key)
 
 void PianoKeyboardController::onNotationChanged()
 {
-    updateSelectedKeys();
-
     if (auto notation = currentNotation()) {
         notation->interaction()->selectionChanged().onNotify(this, [this]() {
-            updateSelectedKeys();
+            auto notation = currentNotation();
+            if (!notation) {
+                return;
+            }
+
+            auto selection = notation->interaction()->selection();
+            if (selection->isNone()) {
+                return;
+            }
+
+            std::vector<const Note*> notes;
+            for (const mu::engraving::Note* note : selection->notes()) {
+                notes.push_back(note);
+            }
+
+            updateNotesKeys(notes);
+        });
+
+        notation->midiInput()->notesReceived().onReceive(this, [this](const std::vector<const Note *>& notes) {
+            updateNotesKeys(notes);
         });
     }
 }
 
-void PianoKeyboardController::updateSelectedKeys()
+void PianoKeyboardController::updateNotesKeys(const std::vector<const Note *>& receivedNotes)
 {
-    std::unordered_set<piano_key_t> newKeysInSelection;
-    std::unordered_set<piano_key_t> newOtherNotesInSelectedChord;
+    std::unordered_set<piano_key_t> newKeys;
+    std::unordered_set<piano_key_t> newOtherNotesInChord;
 
     DEFER {
-        if (newKeysInSelection != m_keysInSelection
-            || newOtherNotesInSelectedChord != m_otherNotesInSelectedChord) {
-            m_keysInSelection = newKeysInSelection;
-            m_otherNotesInSelectedChord = newOtherNotesInSelectedChord;
+        if (newKeys != m_keys
+            || newOtherNotesInChord != m_otherNotesInChord) {
+            m_keys = newKeys;
+            m_otherNotesInChord = newOtherNotesInChord;
             m_keyStatesChanged.notify();
         }
     };
 
-    auto notation = currentNotation();
-    if (!notation) {
-        return;
-    }
-
-    auto selection = notation->interaction()->selection();
-    if (selection->isNone()) {
-        return;
-    }
-
-    for (const mu::engraving::Note* note : selection->notes()) {
-        newKeysInSelection.insert(static_cast<piano_key_t>(note->epitch()));
+    for (const mu::engraving::Note* note : receivedNotes) {
+        newKeys.insert(static_cast<piano_key_t>(note->epitch()));
         for (const mu::engraving::Note* otherNote : note->chord()->notes()) {
-            newOtherNotesInSelectedChord.insert(static_cast<piano_key_t>(otherNote->epitch()));
+            newOtherNotesInChord.insert(static_cast<piano_key_t>(otherNote->epitch()));
         }
     }
 }

@@ -49,7 +49,7 @@ public:
     NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction, INotationUndoStackPtr undoStack);
 
     void onMidiEventReceived(const midi::Event& event) override;
-    async::Notification noteChanged() const override;
+    async::Channel<std::vector<const Note*> > notesReceived() const override;
 
     void onRealtimeAdvance() override;
 
@@ -79,7 +79,7 @@ private:
     IGetScore* m_getScore = nullptr;
     INotationInteractionPtr m_notationInteraction;
     INotationUndoStackPtr m_undoStack;
-    async::Notification m_noteChanged;
+    async::Channel<std::vector<const Note*> > m_notesReceivedChannel;
 
     QTimer m_processTimer;
     std::vector<midi::Event> m_eventsQueue;

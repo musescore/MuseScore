@@ -49,7 +49,7 @@ private:
     INotationPtr currentNotation() const;
 
     void onNotationChanged();
-    void updateSelectedKeys();
+    void updateNotesKeys(const std::vector<const Note *>& receivedNotes);
 
     void sendNoteOn(piano_key_t key);
     void sendNoteOff(piano_key_t key);
@@ -57,8 +57,8 @@ private:
     void startNoteInputIfNeed();
 
     std::optional<piano_key_t> m_pressedKey = std::nullopt;
-    std::unordered_set<piano_key_t> m_keysInSelection;
-    std::unordered_set<piano_key_t> m_otherNotesInSelectedChord;
+    std::unordered_set<piano_key_t> m_keys;
+    std::unordered_set<piano_key_t> m_otherNotesInChord;
 
     async::Notification m_keyStatesChanged;
 };
