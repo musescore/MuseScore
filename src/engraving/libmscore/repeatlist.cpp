@@ -866,7 +866,6 @@ void RepeatList::unwind()
                     && ((*repeatListElementIt)->getRepeatCount() < (*repeatListElementIt)->measure->repeatCount())
                     ) {
                     // Honor the repeat
-                    Q_ASSERT(rs != nullptr);
                     if ((rs != nullptr) && (!rs->isEmpty())) {
                         push_back(rs);
                     }
