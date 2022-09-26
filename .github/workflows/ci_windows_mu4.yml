@@ -193,157 +193,82 @@ jobs:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\ 
   
-  # Builds x32 and portable currently disabled 
-  # They need to be enabled when we switch to mu4 by default and decide to make a release.      
 
-  # build_x32:
-  #   runs-on: windows-2019
-  #   steps:
-  #   - name: Cancel Previous Runs
-  #     uses: styfle/cancel-workflow-action@0.9.1
-  #     with:
-  #       access_token: ${{ github.token }}
-  #   - name: Clone repository
-  #     uses: actions/checkout@v2
-  #     with:
-  #       fetch-depth: 3
-  #   - name: Fetch submodules
-  #     run: |
-  #       git submodule update --init --recursive
-  #   - name: "Configure workflow"
-  #     shell: bash
-  #     env:
-  #       pull_request_title: ${{ github.event.pull_request.title }}
-  #     run: |
-  #       bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
-  #       BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+  build_portable:
+    runs-on: windows-2019
+    steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.9.1
+      with:
+        access_token: ${{ github.token }}
+    - name: Clone repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 3
+    - name: Fetch submodules
+      run: |
+        git submodule update --init --recursive
+    - name: "Configure workflow"
+      shell: bash
+      env:
+        pull_request_title: ${{ github.event.pull_request.title }}
+      run: |
+        bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
+        BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
 
-  #       DO_BUILD='false'
-  #       if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
-  #         DO_BUILD='true'  
-  #       fi
-  #       echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
-  #       echo "DO_BUILD: $DO_BUILD"
+        DO_BUILD='false'
+        if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
+          DO_BUILD='true'  
+        fi
 
-  #       # Publish disabled for build x32
-  #       DO_PUBLISH='false'
-  #       echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
-  #       echo "DO_PUBLISH: $DO_PUBLISH"
+        DO_PUBLISH='false'
 
-  #       if [ "${{ github.event_name }}" == "pull_request" ]; then PR_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
-  #       UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${{ github.run_id }}_Win_x86${PR_INFO}")"
-  #       echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
-  #       echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
+        if [ "${{ github.event_name }}" == "pull_request" ]; then PR_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${{ github.run_id }}_Win${PR_INFO}_portable")"
 
-  #   - name: Setup environment
-  #     if: env.DO_BUILD == 'true'
-  #     run: |
-  #       build\ci\windows\setup.bat -b 32
-  #   - name: Build
-  #     if: env.DO_BUILD == 'true'
-  #     shell: cmd
-  #     run: |
-  #       IF ${{ secrets.SENTRY_SERVER_SANDBOX_KEY != 0 }} == true ( SET C_KEY=${{ secrets.SENTRY_SERVER_SANDBOX_KEY }} ) ELSE ( SET C_KEY="''" )
-  #       IF ${{ secrets.YOUTUBE_API_KEY != 0 }} == true ( SET YT_API_KEY=${{ secrets.YOUTUBE_API_KEY }} ) ELSE ( SET YT_API_KEY="''" )
-  #       build\ci\windows\build.bat -b 32 -n ${{ github.run_id }} --youtube_api_key %YT_API_KEY% --sentrykey %C_KEY%
-  #   - name: Package
-  #     if: env.DO_BUILD == 'true'
-  #     shell: cmd
-  #     run: |
-  #       IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="''" )
-  #       IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="''" )
-  #       build\ci\windows\package.bat -b 32 --signsecret %S_S% --signpass %S_P%
-  #   - name: Checksum 
-  #     if: env.DO_BUILD == 'true'
-  #     run: |
-  #       bash ./build/ci/tools/checksum.sh         
-  #   - name: Publish package
-  #     if: env.DO_PUBLISH == 'true'
-  #     shell: cmd
-  #     run: |
-  #       build\ci\windows\publish.bat --secret ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}
-  #   - name: AppCast
-  #     shell: bash
-  #     run: |
-  #       bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows 
-  #   - name: Upload artifacts on GitHub
-  #     if: env.DO_BUILD == 'true'
-  #     uses: actions/upload-artifact@v2
-  #     with:
-  #       name: ${{ env.UPLOAD_ARTIFACT_NAME }}
-  #       path: build.artifacts\     
-  # build_portable:
-  #   runs-on: windows-2019
-  #   steps:
-  #   - name: Cancel Previous Runs
-  #     uses: styfle/cancel-workflow-action@0.9.1
-  #     with:
-  #       access_token: ${{ github.token }}
-  #   - name: Clone repository
-  #     uses: actions/checkout@v2
-  #     with:
-  #       fetch-depth: 3
-  #   - name: Fetch submodules
-  #     run: |
-  #       git submodule update --init --recursive
-  #   - name: "Configure workflow"
-  #     shell: bash
-  #     env:
-  #       pull_request_title: ${{ github.event.pull_request.title }}
-  #     run: |
-  #       bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
-  #       BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
-  #       echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
+        echo "github.repository: ${{ github.repository }}"
+        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
+        echo "BUILD_MODE: $BUILD_MODE"
+        echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
+        echo "DO_BUILD: $DO_BUILD"
+        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
+        echo "DO_PUBLISH: $DO_PUBLISH"    
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
-  #       DO_BUILD='true'
-  #       # if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
-  #       #   DO_BUILD='true'  
-  #       # fi
-  #       echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
-  #       echo "DO_BUILD: $DO_BUILD"
-
-  #       # Publish disabled for build x32
-  #       DO_PUBLISH='false'
-  #       echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
-  #       echo "DO_PUBLISH: $DO_PUBLISH"    
-
-  #       if [ "${{ github.event_name }}" == "pull_request" ]; then PR_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
-  #       UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${{ github.run_id }}_Win_Portable${PR_INFO}")"
-  #       echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
-  #       echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
-
-  #   - name: Setup environment
-  #     if: env.DO_BUILD == 'true'
-  #     run: |
-  #       build\ci\windows\setup.bat --portable ON
-  #   - name: Build
-  #     if: env.DO_BUILD == 'true'
-  #     shell: cmd
-  #     run: |
-  #       IF ${{ secrets.SENTRY_SERVER_SANDBOX_KEY != 0 }} == true ( SET C_KEY=${{ secrets.SENTRY_SERVER_SANDBOX_KEY }} ) ELSE ( SET C_KEY="''" )
-  #       IF ${{ secrets.YOUTUBE_API_KEY != 0 }} == true ( SET YT_API_KEY=${{ secrets.YOUTUBE_API_KEY }} ) ELSE ( SET YT_API_KEY="''" )
-  #       build\ci\windows\build.bat --portable ON -n ${{ github.run_id }} --youtube_api_key %YT_API_KEY% --sentrykey %C_KEY%
-  #   - name: Package
-  #     if: env.DO_BUILD == 'true'
-  #     shell: cmd
-  #     run: |      
-  #       build\ci\windows\package.bat --portable ON 
-  #   - name: Checksum 
-  #     if: env.DO_BUILD == 'true'
-  #     run: |
-  #       bash ./build/ci/tools/checksum.sh     
-  #   - name: Publish package
-  #     if: env.DO_PUBLISH == 'true'
-  #     run: |
-  #       build\ci\windows\publish.bat --secret ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
-  #     shell: cmd
-  #   - name: AppCast
-  #     shell: bash
-  #     run: |
-  #       bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows 
-  #   - name: Upload artifacts on GitHub
-  #     if: env.DO_BUILD == 'true'
-  #     uses: actions/upload-artifact@v2
-  #     with:
-  #       name: ${{ env.UPLOAD_ARTIFACT_NAME }}
-  #       path: build.artifacts\
+    - name: Setup environment
+      if: env.DO_BUILD == 'true'
+      run: |
+        build\ci\windows\setup.bat --portable ON
+    - name: Make environment file
+      if: env.DO_BUILD == 'true'
+      shell: bash
+      run: |
+        bash ./build/ci/windows/make_environment.sh      
+    - name: Build
+      if: env.DO_BUILD == 'true'
+      shell: cmd
+      run: |
+        IF ${{ env.SENTRY_URL != 0 }} == true ( SET C_URL="${{ env.SENTRY_URL }}" ) ELSE ( SET C_URL="" )
+        IF ${{ secrets.YOUTUBE_API_KEY != 0 }} == true ( SET YT_API_KEY=${{ secrets.YOUTUBE_API_KEY }} ) ELSE ( SET YT_API_KEY="" )
+        build\ci\windows\build.bat --portable ON -n ${{ github.run_id }} --youtube_api_key %YT_API_KEY% --crash_log_url %C_URL%
+    - name: Package
+      if: env.DO_BUILD == 'true'
+      shell: cmd
+      run: |      
+        build\ci\windows\package.bat --portable ON 
+    - name: Checksum 
+      if: env.DO_BUILD == 'true'
+      run: |
+        bash ./build/ci/tools/checksum.sh     
+    - name: Publish package
+      if: env.DO_PUBLISH == 'true'
+      run: |
+        build\ci\windows\publish.bat --secret ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
+      shell: cmd
+    - name: Upload artifacts on GitHub
+      if: env.DO_BUILD == 'true'
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.UPLOAD_ARTIFACT_NAME }}
+        path: build.artifacts\
