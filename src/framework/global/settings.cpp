@@ -209,9 +209,7 @@ void Settings::writeValue(const Key& key, const Val& value)
 QString Settings::dataPath() const
 {
 #if defined(WIN_PORTABLE)
-    return QDir::cleanPath(QString("%1/../../../Data/settings")
-                           .arg(QCoreApplication::applicationDirPath())
-                           .arg(QCoreApplication::applicationName()));
+    return QDir::cleanPath(QString("%1/../../../Data/settings").arg(QCoreApplication::applicationDirPath()));
 #else
     return QStandardPaths::writableLocation(QStandardPaths::DataLocation);
 #endif
