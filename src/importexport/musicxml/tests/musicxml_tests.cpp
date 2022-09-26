@@ -550,6 +550,9 @@ TEST_F(Musicxml_Tests, graceAfter3) {
 TEST_F(Musicxml_Tests, DISABLED_graceAfter4) {
     mxmlIoTest("testGraceAfter4");
 }
+TEST_F(Musicxml_Tests, graceFermata) {
+    mxmlIoTest("testGraceFermata");
+}
 TEST_F(Musicxml_Tests, hairpinDynamics) {
     mxmlMscxExportTestRef("testHairpinDynamics");
 }

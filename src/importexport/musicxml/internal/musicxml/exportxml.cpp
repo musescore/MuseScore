@@ -2948,13 +2948,15 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
 void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technical& technical,
                                      TrillHash& trillStart, TrillHash& trillStop)
 {
-    QVector<EngravingItem*> fl;
-    for (EngravingItem* e : chord->segment()->annotations()) {
-        if (e->track() == chord->track() && e->isFermata()) {
-            fl.push_back(e);
+    if (!chord->isGrace()) {
+        QVector<EngravingItem*> fl;
+        for (EngravingItem* e : chord->segment()->annotations()) {
+            if (e->track() == chord->track() && e->isFermata()) {
+                fl.push_back(e);
+            }
         }
+        fermatas(fl, _xml, notations);
     }
-    fermatas(fl, _xml, notations);
 
     const std::vector<Articulation*> na = chord->articulations();
     // first the attributes whose elements are children of <articulations>
