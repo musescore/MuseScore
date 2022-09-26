@@ -74,6 +74,7 @@ PianoKeyboardView::PianoKeyboardView(QQuickItem* parent)
     m_controller->init();
 
     m_controller->keyStatesChanged().onNotify(this, [this]() {
+        updateKeyStateColors();
         update();
     });
 
@@ -160,10 +161,11 @@ void PianoKeyboardView::updateKeyStateColors()
     auto themeValues = uiConfiguration()->currentTheme().values;
 
     QColor accentColor = themeValues[ui::ACCENT_COLOR].toString();
+    bool isKeysFromMidiInput = m_controller->isFromMidi();
 
     m_whiteKeyStateColors[KeyState::None] = Qt::white;
     m_whiteKeyStateColors[KeyState::OtherInSelectedChord] = mixedColors(Qt::white, accentColor, 0.25);
-    m_whiteKeyStateColors[KeyState::Selected] = mixedColors(Qt::white, accentColor, 0.5);
+    m_whiteKeyStateColors[KeyState::Selected] = mixedColors(Qt::white, accentColor, isKeysFromMidiInput ? 0.8 : 0.5);
     m_whiteKeyStateColors[KeyState::Played] = mixedColors(Qt::white, accentColor, 0.8);
 
     QColor blackKeyTopPieceBaseColor(78, 78, 78);

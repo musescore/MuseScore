@@ -58,6 +58,11 @@ mu::async::Notification PianoKeyboardController::keyStatesChanged() const
     return m_keyStatesChanged;
 }
 
+bool PianoKeyboardController::isFromMidi() const
+{
+    return m_isFromMidi;
+}
+
 std::optional<piano_key_t> PianoKeyboardController::pressedKey() const
 {
     return m_pressedKey;
@@ -100,16 +105,18 @@ void PianoKeyboardController::onNotationChanged()
                 notes.push_back(note);
             }
 
+            m_isFromMidi = false;
             updateNotesKeys(notes);
         });
 
-        notation->midiInput()->notesReceived().onReceive(this, [this](const std::vector<const Note *>& notes) {
+        notation->midiInput()->notesReceived().onReceive(this, [this](const std::vector<const Note*>& notes) {
+            m_isFromMidi = true;
             updateNotesKeys(notes);
         });
     }
 }
 
-void PianoKeyboardController::updateNotesKeys(const std::vector<const Note *>& receivedNotes)
+void PianoKeyboardController::updateNotesKeys(const std::vector<const Note*>& receivedNotes)
 {
     std::unordered_set<piano_key_t> newKeys;
     std::unordered_set<piano_key_t> newOtherNotesInChord;
@@ -119,8 +126,9 @@ void PianoKeyboardController::updateNotesKeys(const std::vector<const Note *>& r
             || newOtherNotesInChord != m_otherNotesInChord) {
             m_keys = newKeys;
             m_otherNotesInChord = newOtherNotesInChord;
-            m_keyStatesChanged.notify();
         }
+
+        m_keyStatesChanged.notify();
     };
 
     for (const mu::engraving::Note* note : receivedNotes) {
