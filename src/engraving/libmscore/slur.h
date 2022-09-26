@@ -76,6 +76,17 @@ class Slur final : public SlurTie
 
     void slurPosChord(SlurPos*);
     int _sourceStemArrangement = -1;
+    struct StemFloated
+    {
+        bool left = false;
+        bool right = false;
+        void reset()
+        {
+            left = false;
+            right = false;
+        }
+    };
+    StemFloated _stemFloated; // end point position is attached to stem but floated towards the note
 
     friend class Factory;
     Slur(EngravingItem* parent);
@@ -104,6 +115,7 @@ public:
 
     bool isCrossStaff();
     bool isOverBeams();
+    const StemFloated& stemFloated() const { return _stemFloated; }
 
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }
 };
