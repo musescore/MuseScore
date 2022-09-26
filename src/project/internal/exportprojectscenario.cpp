@@ -62,7 +62,9 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
 bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notations, const io::path_t& destinationPath,
                                          INotationWriter::UnitType unitType, bool openDestinationFolderOnExport) const
 {
-    m_currentWriter = writers()->writer(io::suffix(destinationPath));
+    m_currentSuffix = io::suffix(destinationPath);
+    m_currentWriter = writers()->writer(m_currentSuffix);
+
     if (!m_currentWriter) {
         return false;
     }
@@ -328,7 +330,13 @@ void ExportProjectScenario::showExportProgressIfNeed() const
 {
     if (m_currentWriter && m_currentWriter->supportsProgressNotifications()) {
         async::Async::call(this, [this]() {
-            interactive()->open("musescore://project/export/progress");
+            UriQuery query("musescore://project/export/progress");
+
+            if (isAudioExport(m_currentSuffix)) {
+                query.addParam("title", Val(trc("project/export", "Exporting audio…")));
+            }
+
+            interactive()->open(query);
         });
     }
 }

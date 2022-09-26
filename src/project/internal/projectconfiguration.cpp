@@ -48,7 +48,8 @@ static const Settings::Key LAST_SAVED_PROJECTS_PATH(module_name, "application/pa
 static const Settings::Key USER_PROJECTS_PATH(module_name, "application/paths/myScores");
 static const Settings::Key SHOULD_ASK_SAVE_LOCATION_TYPE(module_name, "project/shouldAskSaveLocationType");
 static const Settings::Key LAST_USED_SAVE_LOCATION_TYPE(module_name, "project/lastUsedSaveLocationType");
-static const Settings::Key SHOULD_WARN_BEFORE_SAVING_PUBLICLY(module_name, "project/shouldWarnBeforeSavingPublicly");
+static const Settings::Key SHOULD_WARN_BEFORE_PUBLISH(module_name, "project/shouldWarnBeforePublish");
+static const Settings::Key SHOULD_WARN_BEFORE_SAVING_PUBLICLY_TO_CLOUD(module_name, "project/shouldWarnBeforeSavingPubliclyToCloud");
 static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "project/preferredScoreCreationMode");
 static const Settings::Key MIGRATION_OPTIONS(module_name, "project/migration");
 static const Settings::Key AUTOSAVE_ENABLED_KEY(module_name, "project/autoSaveEnabled");
@@ -87,7 +88,8 @@ void ProjectConfiguration::init()
     settings()->setDefaultValue(SHOULD_ASK_SAVE_LOCATION_TYPE, Val(true));
     settings()->setDefaultValue(LAST_USED_SAVE_LOCATION_TYPE, Val(SaveLocationType::Undefined));
 
-    settings()->setDefaultValue(SHOULD_WARN_BEFORE_SAVING_PUBLICLY, Val(true));
+    settings()->setDefaultValue(SHOULD_WARN_BEFORE_PUBLISH, Val(true));
+    settings()->setDefaultValue(SHOULD_WARN_BEFORE_SAVING_PUBLICLY_TO_CLOUD, Val(true));
 
     settings()->setDefaultValue(AUTOSAVE_ENABLED_KEY, Val(true));
     settings()->valueChanged(AUTOSAVE_ENABLED_KEY).onReceive(nullptr, [this](const Val& val) {
@@ -407,14 +409,24 @@ void ProjectConfiguration::setLastUsedSaveLocationType(SaveLocationType type)
     settings()->setSharedValue(LAST_USED_SAVE_LOCATION_TYPE, Val(type));
 }
 
-bool ProjectConfiguration::shouldWarnBeforeSavingPublicly() const
+bool ProjectConfiguration::shouldWarnBeforePublish() const
 {
-    return settings()->value(SHOULD_WARN_BEFORE_SAVING_PUBLICLY).toBool();
+    return settings()->value(SHOULD_WARN_BEFORE_PUBLISH).toBool();
 }
 
-void ProjectConfiguration::setShouldWarnBeforeSavingPublicly(bool shouldWarn)
+void ProjectConfiguration::setShouldWarnBeforePublish(bool shouldWarn)
 {
-    settings()->setSharedValue(SHOULD_WARN_BEFORE_SAVING_PUBLICLY, Val(shouldWarn));
+    return settings()->setSharedValue(SHOULD_WARN_BEFORE_PUBLISH, Val(shouldWarn));
+}
+
+bool ProjectConfiguration::shouldWarnBeforeSavingPubliclyToCloud() const
+{
+    return settings()->value(SHOULD_WARN_BEFORE_SAVING_PUBLICLY_TO_CLOUD).toBool();
+}
+
+void ProjectConfiguration::setShouldWarnBeforeSavingPubliclyToCloud(bool shouldWarn)
+{
+    settings()->setSharedValue(SHOULD_WARN_BEFORE_SAVING_PUBLICLY_TO_CLOUD, Val(shouldWarn));
 }
 
 QColor ProjectConfiguration::templatePreviewBackgroundColor() const
