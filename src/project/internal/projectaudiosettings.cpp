@@ -302,6 +302,7 @@ AudioResourceMeta ProjectAudioSettings::resourceMetaFromJson(const QJsonObject& 
     result.hasNativeEditorSupport = object.value("hasNativeEditorSupport").toBool();
     result.vendor = object.value("vendor").toString().toStdString();
     result.type = resourceTypeFromString(object.value("type").toString());
+    result.attributes = attributesFromJson(object.value("attributes").toObject());
 
     return result;
 }
@@ -313,6 +314,17 @@ AudioUnitConfig ProjectAudioSettings::unitConfigFromJson(const QJsonObject& obje
     for (const QString& key : object.keys()) {
         QByteArray base = QByteArray::fromBase64(object.value(key).toString().toUtf8());
         result.emplace(key.toStdString(), base.toStdString());
+    }
+
+    return result;
+}
+
+AudioResourceAttributes ProjectAudioSettings::attributesFromJson(const QJsonObject& object) const
+{
+    AudioResourceAttributes result;
+
+    for (const QString& key : object.keys()) {
+        result.emplace(String::fromQString(key), String::fromQString(object.value(key).toString()));
     }
 
     return result;
@@ -375,6 +387,7 @@ QJsonObject ProjectAudioSettings::resourceMetaToJson(const audio::AudioResourceM
     result.insert("hasNativeEditorSupport", meta.hasNativeEditorSupport);
     result.insert("vendor", QString::fromStdString(meta.vendor));
     result.insert("type", resourceTypeToString(meta.type));
+    result.insert("attributes", attributesToJson(meta.attributes));
 
     return result;
 }
@@ -386,6 +399,17 @@ QJsonObject ProjectAudioSettings::unitConfigToJson(const audio::AudioUnitConfig&
     for (const auto& pair : config) {
         QByteArray byteArray = QByteArray::fromRawData(pair.second.c_str(), static_cast<int>(pair.second.size()));
         result.insert(QString::fromStdString(pair.first), QString(byteArray.toBase64()));
+    }
+
+    return result;
+}
+
+QJsonObject ProjectAudioSettings::attributesToJson(const audio::AudioResourceAttributes& attributes) const
+{
+    QJsonObject result;
+
+    for (const auto& pair : attributes) {
+        result.insert(pair.first.toQString(), pair.second.toQString());
     }
 
     return result;
