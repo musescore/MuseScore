@@ -141,6 +141,11 @@ async::Notification AudioConfiguration::driverBufferSizeChanged() const
     return m_driverBufferSizeChanged;
 }
 
+samples_t AudioConfiguration::renderStep() const
+{
+    return 512;
+}
+
 unsigned int AudioConfiguration::sampleRate() const
 {
     return settings()->value(AUDIO_SAMPLE_RATE_KEY).toInt();

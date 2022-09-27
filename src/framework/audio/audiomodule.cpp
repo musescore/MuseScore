@@ -168,7 +168,8 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
     s_audioConfiguration->init();
     s_soundFontRepository->init();
 
-    s_audioBuffer->init(s_audioConfiguration->audioChannelsCount());
+    s_audioBuffer->init(s_audioConfiguration->audioChannelsCount(),
+                        s_audioConfiguration->renderStep());
 
     s_audioOutputController->init();
 
