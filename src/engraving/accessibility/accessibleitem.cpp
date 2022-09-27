@@ -190,12 +190,13 @@ QString AccessibleItem::accessibleName() const
 
     barsAndBeats.remove(u';'); // Too many pauses in speech
 
-    QString name = QString("%1%2%3%4%5")
+    QString name = QString("%1%2%3%4%5%6")
                    .arg(!commandInfo.isEmpty() ? (commandInfo + "; ") : "")
                    .arg(!staffInfo.isEmpty() ? (staffInfo + "; ") : "")
                    .arg(m_element->screenReaderInfo().toQString())
                    .arg(m_element->visible() ? "" : " " + qtrc("engraving", "invisible"))
-                   .arg(!barsAndBeats.isEmpty() ? ("; " + barsAndBeats) : "");
+                   .arg(!barsAndBeats.isEmpty() ? ("; " + barsAndBeats) : "")
+                   .arg(root->isRangeSelection() ? ("; " + qtrc("engraving", "selected")) : "");
 
     return readable(name);
 }
@@ -204,6 +205,11 @@ QString AccessibleItem::accessibleDescription() const
 {
     if (!m_element) {
         return QString();
+    }
+
+    AccessibleRoot* root = accessibleRoot();
+    if (root->isRangeSelection()) {
+        return readable(root->rangeSelectionInfo());
     }
 
     return readable(m_element->accessibleExtraInfo());

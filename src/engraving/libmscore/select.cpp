@@ -699,7 +699,16 @@ void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, staf
 void Selection::update()
 {
     for (EngravingItem* e : _el) {
-        e->setSelected(true);
+        e->setSelected(true); // also tells accessibility that e has focus
+    }
+    // Only one element can have focus at a time, so currently the final
+    // element in _el has focus. That's ok for a LIST selection because it
+    // corresponds to the last element the user clicked on.
+    if (ChordRest* cr = activeCR()) {
+        // User is performing a RANGE selection. Let's focus a note/rest in the activeCR.
+        EngravingItem* e = cr->isChord() ? toChord(cr)->upNote() : toEngravingItem(cr);
+        assert(e->selected()); // was selected in loop above (e is somewhere in _el)
+        e->setSelected(true); // HACK: select it again so accessibility thinks it has focus
     }
     updateState();
 }
