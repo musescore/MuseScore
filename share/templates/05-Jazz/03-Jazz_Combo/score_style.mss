@@ -34,7 +34,7 @@
     <lyricsPosAbove x="0" y="-2"/>
     <lyricsPosBelow x="0" y="3"/>
     <lyricsMinTopDistance>1</lyricsMinTopDistance>
-    <lyricsMinBottomDistance>2</lyricsMinBottomDistance>
+    <lyricsMinBottomDistance>1.5</lyricsMinBottomDistance>
     <lyricsMinDistance>0.25</lyricsMinDistance>
     <lyricsLineHeight>1</lyricsLineHeight>
     <lyricsDashMinLength>0.4</lyricsDashMinLength>
@@ -92,8 +92,8 @@
     <startBarlineSingle>0</startBarlineSingle>
     <startBarlineMultiple>1</startBarlineMultiple>
     <bracketWidth>0.44</bracketWidth>
-    <bracketDistance>0.1</bracketDistance>
-    <akkoladeWidth>1.6</akkoladeWidth>
+    <bracketDistance>0.2</bracketDistance>
+    <akkoladeWidth>1.5</akkoladeWidth>
     <akkoladeBarDistance>0.4</akkoladeBarDistance>
     <dividerLeft>0</dividerLeft>
     <dividerLeftSym>systemDivider</dividerLeftSym>
@@ -1236,7 +1236,7 @@
     <letRingPlacement>1</letRingPlacement>
     <letRingPosAbove x="0" y="0"/>
     <letRingPosBelow x="0" y="0"/>
-    <letRingLineWidth>0.15</letRingLineWidth>
+    <letRingLineWidth>0.11</letRingLineWidth>
     <letRingLineStyle>2</letRingLineStyle>
     <letRingBeginTextOffset x="0" y="0.15"/>
     <letRingText>let ring</letRingText>
@@ -1258,7 +1258,7 @@
     <palmMutePlacement>1</palmMutePlacement>
     <palmMutePosAbove x="0" y="-4"/>
     <palmMutePosBelow x="0" y="4"/>
-    <palmMuteLineWidth>0.15</palmMuteLineWidth>
+    <palmMuteLineWidth>0.11</palmMuteLineWidth>
     <palmMuteLineStyle>2</palmMuteLineStyle>
     <palmMuteBeginTextOffset x="0" y="0.15"/>
     <palmMuteText>P.M.</palmMuteText>
