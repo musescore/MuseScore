@@ -209,11 +209,7 @@ bool MidiRemote::needIgnoreEvent(const Event& event) const
         return true;
     }
 
-    static const QList<Event::Opcode> releaseOps {
-        Event::Opcode::NoteOff
-    };
-
-    bool release = releaseOps.contains(event.opcode());
+    bool release = event.opcode() == Event::Opcode::NoteOff;
     if (release) {
         bool advanceToNextNoteOnKeyRelease = configuration()->advanceToNextNoteOnKeyRelease();
         if (!advanceToNextNoteOnKeyRelease) {
@@ -227,7 +223,7 @@ bool MidiRemote::needIgnoreEvent(const Event& event) const
         }
     }
 
-    return false;
+    return event.opcode() != Event::Opcode::NoteOn;
 }
 
 RemoteEvent MidiRemote::remoteEvent(const std::string& action) const
