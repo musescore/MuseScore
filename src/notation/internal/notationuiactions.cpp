@@ -1794,32 +1794,32 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("sharp2-post",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Double ♯ (non-toggle)"),
-             TranslatableString("action", "Apply accidental retrospectively: double sharp")
+             TranslatableString("action", "Add double-sharp"),
+             TranslatableString("action", "Add accidental: double-sharp")
              ),
     UiAction("sharp-post",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "♯ (non-toggle)"),
-             TranslatableString("action", "Apply accidental retrospectively: sharp")
+             TranslatableString("action", "Add sharp"),
+             TranslatableString("action", "Apply accidental: sharp")
              ),
     UiAction("nat-post",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "♮ (non-toggle)"),
-             TranslatableString("action", "Apply accidental retrospectively: natural")
+             TranslatableString("action", "Add natural"),
+             TranslatableString("action", "Add accidental: natural")
              ),
     UiAction("flat-post",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "♭ (non-toggle)"),
-             TranslatableString("action", "Apply accidental retrospectively: flat")
+             TranslatableString("action", "Add flat"),
+             TranslatableString("action", "Add accidental: flat")
              ),
     UiAction("flat2-post",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Double ♭ (non-toggle)"),
-             TranslatableString("action", "Apply accidental retrospectively: double flat")
+             TranslatableString("action", "Add double-flat"),
+             TranslatableString("action", "Add accidental: double-flat")
              ),
     UiAction("transpose-up",
              mu::context::UiCtxNotationOpened,
@@ -2173,36 +2173,36 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("flat",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Flat"),
+             TranslatableString("action", "Toggle flat"),
              TranslatableString("action", "Toggle accidental: flat"),
              IconCode::Code::FLAT
              ),
     UiAction("flat2",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Double flat"),
-             TranslatableString("action", "Toggle accidental: double flat"),
+             TranslatableString("action", "Toggle double-flat"),
+             TranslatableString("action", "Toggle accidental: double-flat"),
              IconCode::Code::FLAT_DOUBLE
              ),
     UiAction("nat",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Natural"),
+             TranslatableString("action", "Toggle natural"),
              TranslatableString("action", "Toggle accidental: natural"),
              IconCode::Code::NATURAL
              ),
     UiAction("sharp",
              mu::context::UiCtxNotationOpened,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "Sharp"),
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Toggle sharp"),
              TranslatableString("action", "Toggle accidental: sharp"),
              IconCode::Code::SHARP
              ),
     UiAction("sharp2",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Double sharp"),
-             TranslatableString("action", "Toggle accidental: double sharp"),
+             TranslatableString("action", "Toggle double-sharp"),
+             TranslatableString("action", "Toggle accidental: double-sharp"),
              IconCode::Code::SHARP_DOUBLE
              ),
     UiAction("tie",
