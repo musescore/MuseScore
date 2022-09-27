@@ -57,37 +57,38 @@ MuseSamplerWrapper::~MuseSamplerWrapper()
 
 void MuseSamplerWrapper::setSampleRate(unsigned int sampleRate)
 {
-    if (m_sampleRate == sampleRate) {
-        return;
-    }
-
     m_sampleRate = sampleRate;
 
     if (!m_sampler) {
         m_sampler = m_samplerLib->create();
+
+        samples_t renderStep = config()->renderStep();
+
+        if (m_samplerLib->initSampler(m_sampler, m_sampleRate, renderStep, AUDIO_CHANNELS_COUNT) != ms_Result_OK) {
+            LOGE() << "Unable to init MuseSampler";
+            return;
+        } else {
+            LOGD() << "Successfully initialized sampler";
+        }
+
+        static std::vector<float> left;
+        static std::vector<float> right;
+
+        left.resize(renderStep);
+        right.resize(renderStep);
+
+        m_bus._num_channels = AUDIO_CHANNELS_COUNT;
+        m_bus._num_data_pts = renderStep;
+
+        static std::array<float*, AUDIO_CHANNELS_COUNT> channels;
+        channels[0] = left.data();
+        channels[1] = right.data();
+        m_bus._channels = channels.data();
     }
 
-    if (!m_sampler) {
-        return;
+    if (currentRenderMode() == audio::RenderMode::OfflineMode) {
+        m_samplerLib->startOfflineMode(m_sampler, m_sampleRate);
     }
-
-    if (m_samplerLib->initSampler(m_sampler, m_sampleRate, 1024, AUDIO_CHANNELS_COUNT) != ms_Result_OK) {
-        LOGE() << "Unable to init MuseSampler";
-        return;
-    } else {
-        LOGI() << "Successfully initialized sampler";
-    }
-
-    static std::array<float, 1024> left;
-    static std::array<float, 1024> right;
-
-    m_bus._num_channels = AUDIO_CHANNELS_COUNT;
-    m_bus._num_data_pts = 1024;
-
-    static std::array<float*, AUDIO_CHANNELS_COUNT> channels;
-    channels[0] = left.data();
-    channels[1] = right.data();
-    m_bus._channels = channels.data();
 }
 
 unsigned int MuseSamplerWrapper::audioChannelsCount() const
@@ -115,8 +116,14 @@ samples_t MuseSamplerWrapper::process(float* buffer, audio::samples_t samplesPer
         }
     }
 
-    if (m_samplerLib->process(m_sampler, m_bus, m_currentPosition) != ms_Result_OK) {
-        return 0;
+    if (currentRenderMode() == audio::RenderMode::OfflineMode) {
+        if (m_samplerLib->processOffline(m_sampler, m_bus) != ms_Result_OK) {
+            return 0;
+        }
+    } else {
+        if (m_samplerLib->process(m_sampler, m_bus, m_currentPosition) != ms_Result_OK) {
+            return 0;
+        }
     }
     extractOutputSamples(samplesPerChannel, buffer);
 
@@ -178,7 +185,7 @@ void MuseSamplerWrapper::setupSound(const mpe::PlaybackSetupData& setupData)
         LOGE() << "Unable to get instrument list";
         return;
     } else {
-        LOGI() << "Successfully got instrument list";
+        LOGD() << "Successfully got instrument list";
     }
 
     int firstInternalId = -1;
@@ -230,9 +237,7 @@ void MuseSamplerWrapper::updateRenderingMode(const audio::RenderMode mode)
         return;
     }
 
-    if (mode == audio::RenderMode::OfflineMode) {
-        m_samplerLib->startOfflineMode(m_sampler, m_sampleRate);
-    } else {
+    if (mode != audio::RenderMode::OfflineMode) {
         m_samplerLib->stopOfflineMode(m_sampler);
     }
 }
@@ -272,7 +277,7 @@ void MuseSamplerWrapper::setIsActive(bool arg)
         setCurrentPosition(m_currentPosition);
     }
 
-    LOGI() << "Toggled playing status, isPlaying: " << arg;
+    LOGD() << "Toggled playing status, isPlaying: " << arg;
 }
 
 void MuseSamplerWrapper::handleAuditionEvents(const MuseSamplerSequencer::EventType& event)
@@ -301,7 +306,7 @@ void MuseSamplerWrapper::setCurrentPosition(const audio::samples_t samples)
     m_currentPosition = samples;
     m_samplerLib->setPosition(m_sampler, m_currentPosition);
 
-    LOGI() << "Seek a new playback position, newPosition: " << m_currentPosition;
+    LOGD() << "Seek a new playback position, newPosition: " << m_currentPosition;
 }
 
 void MuseSamplerWrapper::extractOutputSamples(audio::samples_t samples, float* output)
