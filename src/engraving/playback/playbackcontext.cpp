@@ -202,7 +202,7 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
                                                                        hairpin->isCrescendo());
 
         std::map<int, int> dynamicsCurve = TConv::easingValueCurve(spannerDurationTicks,
-                                                                   24,
+                                                                   24 /*stepsCount*/,
                                                                    static_cast<int>(overallDynamicRange),
                                                                    hairpin->veloChangeMethod());
 
