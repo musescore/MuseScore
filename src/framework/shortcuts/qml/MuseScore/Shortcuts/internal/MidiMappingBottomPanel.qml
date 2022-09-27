@@ -87,7 +87,7 @@ Row {
         navigation.column: 2
 
         onClicked: {
-            root.clearAllActions()
+            root.clearAllActionsRequested()
         }
     }
 }
