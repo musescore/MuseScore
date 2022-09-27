@@ -1052,6 +1052,9 @@ void Slur::slurPos(SlurPos* sp)
     SlurAnchor sa1 = SlurAnchor::NONE;
     SlurAnchor sa2 = SlurAnchor::NONE;
 
+    if (sc && sc->hook() && sc->up() == _up) {
+        sa1 = SlurAnchor::STEM;
+    }
     if (scr->up() == ecr->up() && scr->up() == _up) {
         if (stem1 && (!scr->beam() || scr->beam()->elements().back() == scr)) {
             sa1 = SlurAnchor::STEM;
