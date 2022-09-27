@@ -40,9 +40,10 @@ using namespace mu::io;
 using namespace mu::framework;
 
 constexpr std::string_view SCORE_TAG("score");
-constexpr std::string_view ELEMENT_TAG("elements");
 constexpr std::string_view ELEMENTS_TAG("elements");
+constexpr std::string_view ELEMENT_TAG("element");
 constexpr std::string_view EVENTS_TAG("events");
+constexpr std::string_view EVENT_TAG("event");
 
 static void writeElementPosition(mu::framework::XmlWriter& writer, const std::string& id, const mu::PointF& pos, const mu::PointF& sPos,
                                  page_idx_t pageIndex)
@@ -59,7 +60,7 @@ static void writeElementPosition(mu::framework::XmlWriter& writer, const std::st
 
 static void writeEventPosition(mu::framework::XmlWriter& writer, const std::string& id, int time)
 {
-    writer.writeStartElement(EVENTS_TAG);
+    writer.writeStartElement(EVENT_TAG);
     writer.writeAttribute("elid", id);
     writer.writeAttribute("position", std::to_string(time));
     writer.writeEndElement();
