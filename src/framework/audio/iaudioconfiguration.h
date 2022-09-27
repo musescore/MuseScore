@@ -52,6 +52,7 @@ public:
     virtual unsigned int driverBufferSize() const = 0; // samples
     virtual void setDriverBufferSize(unsigned int size) = 0;
     virtual async::Notification driverBufferSizeChanged() const = 0;
+    virtual samples_t renderStep() const = 0;
 
     virtual unsigned int sampleRate() const = 0;
     virtual void setSampleRate(unsigned int sampleRate) = 0;

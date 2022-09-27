@@ -33,14 +33,10 @@
 namespace mu::audio {
 class AudioBuffer : public IAudioBuffer
 {
-    static const samples_t DEFAULT_SIZE = 16384;
-    static const samples_t FILL_SAMPLES = 1024;
-    static const samples_t FILL_OVER    = 1024;
-
 public:
     AudioBuffer() = default;
 
-    void init(const audioch_t audioChannelsCount, const samples_t samplesPerChannel = DEFAULT_SIZE);
+    void init(const audioch_t audioChannelsCount, const samples_t renderStep);
 
     void setSource(std::shared_ptr<IAudioSource> source) override;
     void forward() override;
@@ -55,11 +51,13 @@ private:
     void updateWriteIndex(const unsigned int samplesPerChannel);
 
     std::mutex m_mutex;
-    size_t m_minSampleLag = FILL_SAMPLES;
+    size_t m_minSampleLag = 0;
     size_t m_writeIndex = 0;
     size_t m_readIndex = 0;
     samples_t m_samplesPerChannel = 0;
     audioch_t m_audioChannelsCount = 0;
+
+    samples_t m_renderStep = 0;
 
     std::vector<float> m_data = {};
     std::shared_ptr<IAudioSource> m_source = nullptr;

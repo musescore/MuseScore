@@ -74,6 +74,13 @@ void AbstractSynthesizer::updateRenderingMode(const RenderMode /*mode*/)
     ONLY_AUDIO_WORKER_THREAD;
 }
 
+RenderMode AbstractSynthesizer::currentRenderMode() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return AudioEngine::instance()->mode();
+}
+
 audio::msecs_t AbstractSynthesizer::samplesToMsecs(const samples_t samplesPerChannel, const samples_t sampleRate) const
 {
     ONLY_AUDIO_WORKER_THREAD;

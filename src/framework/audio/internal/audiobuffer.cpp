@@ -27,12 +27,15 @@
 
 using namespace mu::audio;
 
-void AudioBuffer::init(const audioch_t audioChannelsCount, const samples_t samplesPerChannel)
+static constexpr size_t DEFAULT_SIZE_PER_CHANNEL = 1024 * 16;
+
+void AudioBuffer::init(const audioch_t audioChannelsCount, const samples_t renderStep)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
 
-    m_samplesPerChannel = samplesPerChannel;
+    m_samplesPerChannel = DEFAULT_SIZE_PER_CHANNEL;
     m_audioChannelsCount = audioChannelsCount;
+    m_renderStep = renderStep;
 
     m_data.resize(m_samplesPerChannel * m_audioChannelsCount, 0.f);
 }
@@ -90,9 +93,16 @@ void AudioBuffer::fillup()
         return;
     }
 
-    while (sampleLag() < m_minSampleLag + FILL_OVER) {
-        m_source->process(m_data.data() + m_writeIndex, FILL_SAMPLES);
-        updateWriteIndex(FILL_SAMPLES);
+    static bool hasAnyDataWritten = false;
+    if (!hasAnyDataWritten) {
+        hasAnyDataWritten = true;
+        m_readIndex = 0;
+        m_writeIndex = 0;
+    }
+
+    while (sampleLag() < m_minSampleLag) {
+        m_source->process(m_data.data() + m_writeIndex, m_renderStep);
+        updateWriteIndex(m_renderStep);
     }
 }
 
