@@ -3002,7 +3002,6 @@ static Err importScore(MasterScore* score, mu::io::IODevice* io)
     }
 
     score->loadStyle(u":/engraving/styles/gp-style.mss");
-    score->style().set(Sid::ArpeggioHiddenInStdIfTab, true);
 
     io->seek(0);
     char header[5];
