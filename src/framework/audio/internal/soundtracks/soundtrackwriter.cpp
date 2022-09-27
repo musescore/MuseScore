@@ -34,10 +34,6 @@ using namespace mu;
 using namespace mu::audio;
 using namespace mu::audio::soundtrack;
 
-static constexpr audioch_t SUPPORTED_AUDIO_CHANNELS_COUNT = 2;
-static constexpr samples_t SAMPLES_PER_CHANNEL = 1024;
-static constexpr size_t INTERNAL_BUFFER_SIZE = SUPPORTED_AUDIO_CHANNELS_COUNT * SAMPLES_PER_CHANNEL;
-
 static constexpr int WRITE_STEPS = 2;
 static constexpr int PREPARE_STEP = 0;
 static constexpr int ENCODE_STEP = 1;
@@ -52,7 +48,7 @@ SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTra
 
     samples_t totalSamplesNumber = (totalDuration / 1000000.f) * sizeof(float) * format.sampleRate;
     m_inputBuffer.resize(totalSamplesNumber);
-    m_intermBuffer.resize(INTERNAL_BUFFER_SIZE);
+    m_intermBuffer.resize(config()->renderStep() * config()->audioChannelsCount());
 
     m_encoderPtr = createEncoder(format.type);
 
@@ -89,10 +85,10 @@ bool SoundTrackWriter::write()
 
     m_encoderPtr->flush();
 
+    AudioEngine::instance()->setMode(RenderMode::RealTimeMode);
+
     m_source->setSampleRate(AudioEngine::instance()->sampleRate());
     m_source->setIsActive(false);
-
-    AudioEngine::instance()->setMode(RenderMode::RealTimeMode);
 
     return true;
 }
@@ -120,10 +116,12 @@ bool SoundTrackWriter::prepareInputBuffer()
 
     sendStepProgress(PREPARE_STEP, inputBufferOffset, inputBufferMaxOffset);
 
-    while (inputBufferOffset < inputBufferMaxOffset) {
-        m_source->process(m_intermBuffer.data(), SAMPLES_PER_CHANNEL);
+    samples_t renderStep = config()->renderStep();
 
-        size_t samplesToCopy = std::min(INTERNAL_BUFFER_SIZE, inputBufferMaxOffset - inputBufferOffset);
+    while (inputBufferOffset < inputBufferMaxOffset) {
+        m_source->process(m_intermBuffer.data(), renderStep);
+
+        size_t samplesToCopy = std::min(m_intermBuffer.size(), inputBufferMaxOffset - inputBufferOffset);
 
         std::copy(m_intermBuffer.begin(),
                   m_intermBuffer.begin() + samplesToCopy,

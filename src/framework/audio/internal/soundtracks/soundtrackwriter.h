@@ -27,6 +27,9 @@
 #include <cstdio>
 
 #include "async/asyncable.h"
+#include "modularity/ioc.h"
+
+#include "audio/iaudioconfiguration.h"
 #include "audiotypes.h"
 #include "iaudiosource.h"
 #include "internal/encoders/abstractaudioencoder.h"
@@ -34,6 +37,7 @@
 namespace mu::audio::soundtrack {
 class SoundTrackWriter : public async::Asyncable
 {
+    INJECT_STATIC(audio, IAudioConfiguration, config)
 public:
     SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format, const msecs_t totalDuration, IAudioSourcePtr source);
 

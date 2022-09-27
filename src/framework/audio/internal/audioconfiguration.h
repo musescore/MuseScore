@@ -51,6 +51,7 @@ public:
     unsigned int driverBufferSize() const override;
     void setDriverBufferSize(unsigned int size) override;
     async::Notification driverBufferSizeChanged() const override;
+    samples_t renderStep() const override;
 
     unsigned int sampleRate() const override;
     void setSampleRate(unsigned int sampleRate) override;

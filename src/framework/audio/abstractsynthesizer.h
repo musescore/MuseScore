@@ -26,15 +26,18 @@
 #include "async/channel.h"
 #include "async/asyncable.h"
 #include "mpe/events.h"
+#include "modularity/ioc.h"
 
 #include "synthtypes.h"
 #include "audiotypes.h"
 #include "iaudiosource.h"
+#include "iaudioconfiguration.h"
 #include "abstracteventsequencer.h"
 
 namespace mu::audio::synth {
 class AbstractSynthesizer : public IAudioSource, public async::Asyncable
 {
+    INJECT_STATIC(audio, IAudioConfiguration, config)
 public:
     AbstractSynthesizer(const audio::AudioInputParams& params);
     virtual ~AbstractSynthesizer() = default;
@@ -60,6 +63,8 @@ protected:
     virtual void setupSound(const mpe::PlaybackSetupData& setupData) = 0;
     virtual void setupEvents(const mpe::PlaybackData& playbackData) = 0;
     virtual void updateRenderingMode(const RenderMode mode);
+
+    audio::RenderMode currentRenderMode() const;
 
     msecs_t samplesToMsecs(const samples_t samplesPerChannel, const samples_t sampleRate) const;
     samples_t microSecsToSamples(const msecs_t msec, const samples_t sampleRate) const;
