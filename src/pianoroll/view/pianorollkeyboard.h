@@ -63,6 +63,10 @@ public:
     int pitchToPixelY(double pitch) const;
     double pixelYToPitch(int tick) const;
 
+    void sendNoteOn(uint8_t key);
+    void sendNoteOff(uint8_t key);
+    void startNoteInputIfNeed();
+
 signals:
     void noteHeightChanged();
     void centerYChanged();
