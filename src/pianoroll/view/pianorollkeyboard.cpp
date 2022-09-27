@@ -31,6 +31,7 @@
 
 using namespace mu::pianoroll;
 using namespace mu::engraving;
+using namespace mu::midi;
 
 struct KeyShape
 {
@@ -256,6 +257,56 @@ void PianorollKeyboard::paint(QPainter* p)
     }
 }
 
+void PianorollKeyboard::sendNoteOn(uint8_t key)
+{
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    Event ev;
+    ev.setMessageType(Event::MessageType::ChannelVoice10);
+    ev.setOpcode(Event::Opcode::NoteOn);
+    ev.setNote(key);
+    ev.setVelocity(80);
+
+    startNoteInputIfNeed();
+
+    notation->midiInput()->onMidiEventReceived(ev);
+}
+
+void PianorollKeyboard::sendNoteOff(uint8_t key)
+{
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    Event ev;
+    ev.setMessageType(Event::MessageType::ChannelVoice10);
+    ev.setOpcode(Event::Opcode::NoteOff);
+    ev.setNote(key);
+
+    notation->midiInput()->onMidiEventReceived(ev);
+}
+
+void PianorollKeyboard::startNoteInputIfNeed()
+{
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    auto noteInput = notation->interaction()->noteInput();
+    if (!noteInput) {
+        return;
+    }
+
+    if (!noteInput->isNoteInputMode()) {
+        noteInput->startNoteInput();
+    }
+}
+
 void PianorollKeyboard::mousePressEvent(QMouseEvent* event)
 {
     int pitch = pixelYToPitch(event->pos().y());
@@ -273,7 +324,8 @@ void PianorollKeyboard::mousePressEvent(QMouseEvent* event)
         bool highlight = controller()->isPitchHighlight(pitch);
         controller()->setPitchHighlight(pitch, !highlight);
     } else {
-        emit keyPressed(pitch);
+//        emit keyPressed(pitch);
+        sendNoteOn(pitch);
     }
 
     update();
@@ -282,7 +334,8 @@ void PianorollKeyboard::mousePressEvent(QMouseEvent* event)
 void PianorollKeyboard::mouseReleaseEvent(QMouseEvent*)
 {
     if (m_curKeyPressed != -1) {
-        emit keyReleased(m_curKeyPressed);
+//        emit keyReleased(m_curKeyPressed);
+        sendNoteOff(m_curKeyPressed);
         m_curKeyPressed = -1;
         update();
     }
@@ -314,9 +367,11 @@ void PianorollKeyboard::mouseMoveEvent(QMouseEvent* event)
 //        emit pitchChanged(m_curPitch);
 
         if ((m_curKeyPressed != -1) && (m_curKeyPressed != pitch)) {
-            emit keyReleased(m_curKeyPressed);
+            sendNoteOff(m_curKeyPressed);
+//            emit keyReleased(m_curKeyPressed);
             m_curKeyPressed = pitch;
-            emit keyPressed(m_curKeyPressed);
+            sendNoteOn(m_curKeyPressed);
+//            emit keyPressed(m_curKeyPressed);
         }
 
         update();

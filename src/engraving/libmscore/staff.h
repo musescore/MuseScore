@@ -157,7 +157,6 @@ public:
     void setBracketSpan(size_t idx, size_t val);
     void swapBracket(size_t oldIdx, size_t newIdx);
     void changeBracketColumn(size_t oldColumn, size_t newColumn);
-
     void addBracket(BracketItem*);
     const std::vector<BracketItem*>& brackets() const { return _brackets; }
     std::vector<BracketItem*>& brackets() { return _brackets; }
