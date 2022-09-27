@@ -136,13 +136,13 @@ void MuseSamplerSequencer::reloadTrack()
     }
 
     m_samplerLib->clearTrack(m_sampler, m_track);
-    LOGI() << "Requested to clear track";
+    LOGN() << "Requested to clear track";
 
     loadNoteEvents(m_eventsMap);
     loadDynamicEvents(m_dynamicLevelMap);
 
     m_samplerLib->finalizeTrack(m_sampler, m_track);
-    LOGI() << "Requested to finalize track";
+    LOGN() << "Requested to finalize track";
 }
 
 void MuseSamplerSequencer::loadNoteEvents(const mpe::PlaybackEventsMap& changes)
@@ -194,7 +194,7 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
                 if (m_samplerLib->addTrackEventRangeStart(m_sampler, m_track, event._voice, ms_art) != ms_Result_OK) {
                     LOGE() << "Unable to add ranged articulation range start";
                 } else {
-                    LOGI() << "added start range for: " << static_cast<int>(ms_art);
+                    LOGN() << "added start range for: " << static_cast<int>(ms_art);
                 }
             }
         }
@@ -203,7 +203,7 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
     if (m_samplerLib->addNoteEvent(m_sampler, m_track, event) != ms_Result_OK) {
         LOGE() << "Unable to add event for track";
     } else {
-        LOGI() << "Successfully added note event, pitch: " << event._pitch
+        LOGN() << "Successfully added note event, pitch: " << event._pitch
                << ", timestamp: " << event._location_us
                << ", duration: " << event._duration_us
                << ", articulations flag: " << event._articulation;
@@ -213,12 +213,12 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
         auto ms_art = convertArticulationType(art.first);
         if (m_samplerLib->isRangedArticulation(ms_art)) {
             // If this ends an articulation range, indicate the end
-            LOGI() << "range: " << art.second.occupiedFrom << " to " << art.second.occupiedTo;
+            LOGN() << "range: " << art.second.occupiedFrom << " to " << art.second.occupiedTo;
             if (art.second.occupiedFrom != 0 && art.second.occupiedTo == mpe::HUNDRED_PERCENT) {
                 if (m_samplerLib->addTrackEventRangeEnd(m_sampler, m_track, event._voice, ms_art) != ms_Result_OK) {
                     LOGE() << "Unable to add ranged articulation range end";
                 } else {
-                    LOGI() << "added end range for: " << static_cast<int>(ms_art);
+                    LOGN() << "added end range for: " << static_cast<int>(ms_art);
                 }
             }
         }
