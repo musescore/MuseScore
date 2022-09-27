@@ -48,9 +48,12 @@ class Part;
 class Score;
 class StaffType;
 class TimeSig;
-
 class XmlReader;
 class XmlWriter;
+class Ottava;
+class BracketItem;
+class Note;
+class AutomationTrack;
 
 enum class Key;
 
@@ -110,6 +113,8 @@ private:
     bool _playbackVoice[VOICES] { true, true, true, true };
     std::array<bool, VOICES> _visibilityVoices { true, true, true, true };
 
+    QList<AutomationTrack*> _automationTracks;
+
     ChangeMap _velocities;           ///< cached value
     ChangeMap _velocityMultiplications;         ///< cached value
     PitchList _pitchOffsets;        ///< cached value
@@ -155,6 +160,13 @@ public:
     void setBracketSpan(size_t idx, size_t val);
     void swapBracket(size_t oldIdx, size_t newIdx);
     void changeBracketColumn(size_t oldColumn, size_t newColumn);
+
+    const QList<AutomationTrack*>& automationTracks() const { return _automationTracks; }
+    QList<AutomationTrack*>& automationTracks() { return _automationTracks; }
+    void insertAutomationTrack(AutomationTrack* track, int index);
+    void moveAutomationTrack(int indexFrom, int indexTo);
+    void deleteAutomationTrack(int index);
+
     void addBracket(BracketItem*);
     const std::vector<BracketItem*>& brackets() const { return _brackets; }
     std::vector<BracketItem*>& brackets() { return _brackets; }

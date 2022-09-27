@@ -24,6 +24,7 @@ import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Pianoroll 1.0
 
 BaseSection {
     id: root
