@@ -1263,7 +1263,14 @@ void GPConverter::addTempoMap()
             int realTemp = realTempo(tempIt->second);
             TempoText* tt = Factory::createTempoText(segment);
             tt->setTempo((double)realTemp / 60);
-            tt->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(realTemp));
+            String& labelText = tempIt->second.text;
+            String tempoText = String(u"<sym>metNoteQuarterUp</sym> = %1").arg(realTemp);
+
+            if (!labelText.isEmpty()) {
+                tempoText.prepend(labelText.append(Char(' ')));
+            }
+
+            tt->setXmlText(tempoText);
             tt->setTrack(0);
             segment->add(tt);
             _score->setTempo(tick, tt->tempo());

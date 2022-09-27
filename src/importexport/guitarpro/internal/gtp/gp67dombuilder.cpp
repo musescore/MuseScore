@@ -285,6 +285,11 @@ std::vector<GPMasterTracks::Automation> GP67DomBuilder::readTempoMap(XmlDomNode*
                 tempo.bar = currentAutomation.firstChildElement("Bar").text().toInt();
                 tempo.position = currentAutomation.firstChildElement("Position").text().toFloat();
                 tempo.linear = (ln.toElement().text() == u"true");
+                XmlDomElement labelElem = currentAutomation.firstChildElement("Text");
+                if (labelElem.hasChildNodes()) {
+                    tempo.text = labelElem.toElement().text();
+                }
+
                 tempoMap.push_back(tempo);
             }
         }
