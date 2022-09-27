@@ -65,6 +65,7 @@ static const ElementStyle tempoStyle {
 };
 
 static const ElementStyle tempoSegmentStyle {
+    { Sid::tempoPosAbove, Pid::OFFSET },
     { Sid::tempoMinDistance, Pid::MIN_DISTANCE }
 };
 
@@ -136,6 +137,7 @@ void GradualTempoChange::write(XmlWriter& writer) const
     writeProperty(writer, Pid::TEMPO_CHANGE_TYPE);
     writeProperty(writer, Pid::TEMPO_EASING_METHOD);
     writeProperty(writer, Pid::TEMPO_CHANGE_FACTOR);
+    writeProperty(writer, Pid::PLACEMENT);
     TextLineBase::writeProperties(writer);
     writer.endElement();
 }
@@ -144,7 +146,6 @@ LineSegment* GradualTempoChange::createLineSegment(System* parent)
 {
     GradualTempoChangeSegment* lineSegment = new GradualTempoChangeSegment(this, parent);
     lineSegment->setTrack(track());
-    lineSegment->initElementStyle(&tempoSegmentStyle);
     return lineSegment;
 }
 
@@ -285,6 +286,12 @@ Sid GradualTempoChange::getPropertyStyle(Pid id) const
         return Sid::tempoAlign;
     case Pid::BEGIN_TEXT:
         return Sid::letRingText;
+    case Pid::OFFSET:
+        if (placeAbove()) {
+            return Sid::tempoPosAbove;
+        } else {
+            return Sid::tempoPosBelow;
+        }
     default:
         break;
     }
@@ -314,6 +321,7 @@ GradualTempoChangeSegment::GradualTempoChangeSegment(GradualTempoChange* annotat
     : TextLineBaseSegment(ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT, annotation, parent,
                           ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
+    initElementStyle(&tempoSegmentStyle);
 }
 
 GradualTempoChangeSegment* GradualTempoChangeSegment::clone() const
@@ -326,9 +334,25 @@ GradualTempoChange* GradualTempoChangeSegment::tempoChange() const
     return static_cast<GradualTempoChange*>(spanner());
 }
 
+Sid GradualTempoChangeSegment::getPropertyStyle(Pid id) const
+{
+    if (id == Pid::OFFSET) {
+        if (placeAbove()) {
+            return Sid::tempoPosAbove;
+        } else {
+            return Sid::tempoPosBelow;
+        }
+    }
+    return TextLineBaseSegment::getPropertyStyle(id);
+}
+
 void GradualTempoChangeSegment::layout()
 {
     TextLineBaseSegment::layout();
+    movePosY(-tempoChange()->lineWidth() / 2); // correct y-pos for linewidth
+    if (isStyled(Pid::OFFSET)) {
+        roffset() = tempoChange()->propertyDefault(Pid::OFFSET).value<PointF>();
+    }
     autoplaceSpannerSegment();
 }
 
