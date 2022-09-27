@@ -20,29 +20,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __AUTOMATIONVERTEX_H__
-#define __AUTOMATIONVERTEX_H__
+#ifndef __ANIMATIONKEY_H__
+#define __ANIMATIONKEY_H__
 
 #include "engravingitem.h"
 #include "mscore.h"
 
 namespace Ms {
-class AutomationTrack;
+class AnimationTrack;
 
-class AutomationVertex : public EngravingItem
+class AnimationKey : public EngravingItem
 {
     float _value;
-    int _ticks;  //Number of whole notes offset from start of score
 
 public:
-    AutomationVertex(AutomationTrack* parent);
-    ~AutomationVertex();
+    AnimationKey(AnimationTrack* parent);
+    ~AnimationKey();
 
     float value() { return _value; }
     void setValue(float value);
-
-//    int ticks() { return _ticks; }
-//    void setTicks(int value);
 };
 }
-#endif // __AUTOMATIONVERTEX_H__
+#endif // __ANIMATIONKEY_H__

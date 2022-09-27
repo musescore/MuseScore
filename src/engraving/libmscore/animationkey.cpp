@@ -20,24 +20,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "automationvertex.h"
+#include "animationkey.h"
 
-#include "automationtrack.h"
+#include "animationtrack.h"
 
 using namespace mu;
 using namespace mu::engraving;
 
 namespace Ms {
-AutomationVertex::AutomationVertex(AutomationTrack* parent)
-    : EngravingItem(ElementType::AUTOMATION_VERTEX, parent)
+AnimationKey::AnimationKey(AnimationTrack* parent)
+    : EngravingItem(ElementType::ANIMATION_KEY, parent)
 {
 }
 
-AutomationVertex::~AutomationVertex()
+AnimationKey::~AnimationKey()
 {
 }
 
-void AutomationVertex::setValue(float value)
+void AnimationKey::setValue(float value)
 {
     _value = value;
 }

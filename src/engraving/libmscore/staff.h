@@ -53,7 +53,7 @@ class XmlWriter;
 class Ottava;
 class BracketItem;
 class Note;
-class AutomationTrack;
+class AnimationTrack;
 
 enum class Key;
 
@@ -113,7 +113,7 @@ private:
     bool _playbackVoice[VOICES] { true, true, true, true };
     std::array<bool, VOICES> _visibilityVoices { true, true, true, true };
 
-    QList<AutomationTrack*> _automationTracks;
+    QList<AnimationTrack*> _automationTracks;
 
     ChangeMap _velocities;           ///< cached value
     ChangeMap _velocityMultiplications;         ///< cached value

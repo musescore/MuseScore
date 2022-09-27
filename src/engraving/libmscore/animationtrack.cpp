@@ -20,74 +20,79 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "automationtrack.h"
+#include "animationtrack.h"
 
-#include "automationvertex.h"
+#include "animationkey.h"
 #include <algorithm>
 
 using namespace mu;
 using namespace mu::engraving;
 
 namespace Ms {
-AutomationTrack::AutomationTrack(Staff* parent)
-    : EngravingItem(ElementType::AUTOMATION_TRACK, parent)
+AnimationTrack::AnimationTrack(EngravingItem* parent)
+    : EngravingItem(ElementType::ANIMATION_TRACK, parent)
 {
 }
 
-AutomationTrack::~AutomationTrack()
+AnimationTrack::~AnimationTrack()
 {
     //qDelete(_el);
 }
 
-void AutomationTrack::setDataType(AutomationDataType value)
-{
-    _dataType = value;
-}
+//void AnimationTrack::setDataType(AutomationDataType value)
+//{
+//    _dataType = value;
+//}
 
-void AutomationTrack::setEnabled(bool value)
+//void AnimationTrack::setEnabled(bool value)
+//{
+//    _enabled = value;
+//}
+
+void AnimationTrack::setPropertyName(QString value)
 {
-    _enabled = value;
+    _propertyName = value;
 }
 
 //Return index of vertex at or immediately before given tick
-int AutomationTrack::vertexIndexForTick(Fraction tick)
+int AnimationTrack::keyIndexForTick(Fraction tick)
 {
-    for (int i = 0; i < _vertices.size(); ++i) {
-        AutomationVertex* v = _vertices.at(0);
+    for (int i = 0; i < _keys.size(); ++i) {
+        AnimationKey* v = _keys.at(0);
         if (v->tick() > tick) {
             return i - 1;
         }
     }
 
-    return _vertices.size() - 1;
+    return _keys.size() - 1;
 }
 
-bool AutomationTrack::isVertexAt(Fraction tick)
+bool AnimationTrack::isKeyAt(Fraction tick)
 {
-    int idx = vertexIndexForTick(tick);
+    int idx = keyIndexForTick(tick);
     if (idx == -1) {
         return false;
     }
 
-    return _vertices.at(idx)->tick() == tick;
+    return _keys.at(idx)->tick() == tick;
 }
 
-void AutomationTrack::addVertex(AutomationVertex* vertex)
+void AnimationTrack::addKey(AnimationKey* vertex)
 {
-    int prevIdx = vertexIndexForTick(vertex->tick());
+    int prevIdx = keyIndexForTick(vertex->tick());
 
     if (prevIdx == -1) {
-        _vertices.push_front(vertex);
+        _keys.push_front(vertex);
         return;
     }
 
-    AutomationVertex* prevVert = _vertices.at(prevIdx);
+    AnimationKey* prevVert = _keys.at(prevIdx);
     if (prevVert->tick() == vertex->tick()) {
         prevVert->setValue(vertex->value());
         delete vertex;
         return;
     }
 
-    _vertices.insert(prevIdx + 1, vertex);
+    _keys.insert(prevIdx + 1, vertex);
 }
 }
