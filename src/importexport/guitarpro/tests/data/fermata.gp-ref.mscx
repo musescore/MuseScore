@@ -102,7 +102,6 @@
             </Chord>
           <Fermata>
             <subtype>fermataAbove</subtype>
-            <timeStretch>2</timeStretch>
             </Fermata>
           <Chord>
             <durationType>quarter</durationType>
@@ -136,7 +135,6 @@
         <voice>
           <Fermata>
             <subtype>fermataAbove</subtype>
-            <timeStretch>2</timeStretch>
             </Fermata>
           <Chord>
             <durationType>quarter</durationType>
@@ -150,14 +148,12 @@
             </Chord>
           <Fermata>
             <subtype>fermataAbove</subtype>
-            <timeStretch>2</timeStretch>
             </Fermata>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
           <Fermata>
             <subtype>fermataAbove</subtype>
-            <timeStretch>2</timeStretch>
             </Fermata>
           <Chord>
             <durationType>quarter</durationType>
@@ -181,7 +177,6 @@
         <voice>
           <Fermata>
             <subtype>fermataAbove</subtype>
-            <timeStretch>2</timeStretch>
             </Fermata>
           <Chord>
             <durationType>quarter</durationType>
