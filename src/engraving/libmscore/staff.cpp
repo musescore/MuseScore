@@ -44,7 +44,7 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "timesig.h"
-#include "automationtrack.h"
+#include "animationtrack.h"
 
 // #define DEBUG_CLEFS
 
@@ -117,7 +117,7 @@ void Staff::triggerLayout(const Fraction& tick)
 //   insertAutomationTrack
 //---------------------------------------------------------
 
-void Staff::insertAutomationTrack(AutomationTrack* track, int index)
+void Staff::insertAutomationTrack(AnimationTrack* track, int index)
 {
     _automationTracks.insert(index, track);
 }
@@ -128,7 +128,7 @@ void Staff::insertAutomationTrack(AutomationTrack* track, int index)
 
 void Staff::moveAutomationTrack(int indexFrom, int indexTo)
 {
-    AutomationTrack* track = _automationTracks.at(indexFrom);
+    AnimationTrack* track = _automationTracks.at(indexFrom);
     _automationTracks.removeAt(indexFrom);
 
     _automationTracks.insert(indexTo, track);
@@ -140,7 +140,7 @@ void Staff::moveAutomationTrack(int indexFrom, int indexTo)
 
 void Staff::deleteAutomationTrack(int index)
 {
-    AutomationTrack* track = _automationTracks.at(index);
+    AnimationTrack* track = _automationTracks.at(index);
     _automationTracks.removeAt(index);
 
     delete track;
