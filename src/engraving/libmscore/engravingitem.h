@@ -52,6 +52,7 @@ enum class Pid;
 class StaffType;
 class XmlReader;
 class XmlWriter;
+class AnimationTrack;
 
 //---------------------------------------------------------
 //   OffsetChange
@@ -149,6 +150,7 @@ class EngravingItem : public EngravingObject
     unsigned int _tag;                    ///< tag bitmask
 
     bool m_colorsInversionEnabled = true;
+    QList<AnimationTrack*> _animationTracks;
 
     virtual bool sameVoiceKerningLimited() const { return false; }
     virtual bool neverKernable() const { return false; }
@@ -324,6 +326,12 @@ public:
 
     virtual void draw(mu::draw::Painter*) const {}
     void drawAt(mu::draw::Painter* p, const PointF& pt) const { p->translate(pt); draw(p); p->translate(-pt); }
+
+    const QList<AnimationTrack*>& animationTracks() const { return _animationTracks; }
+    QList<AnimationTrack*>& animationTracks() { return _animationTracks; }
+    void insertAnimationTrack(AnimationTrack* track, int index);
+    void moveAnimationTrack(int indexFrom, int indexTo);
+    void deleteAnimationTrack(int index);
 
     virtual void writeProperties(XmlWriter& xml) const;
     virtual bool readProperties(XmlReader&);
