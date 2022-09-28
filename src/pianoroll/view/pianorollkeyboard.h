@@ -41,6 +41,7 @@ class PianorollKeyboard : public QQuickPaintedItem, public async::Asyncable
     Q_PROPERTY(double noteHeight READ noteHeight WRITE setNoteHeight NOTIFY noteHeightChanged)
     Q_PROPERTY(double centerY READ centerY WRITE setCenterY NOTIFY centerYChanged)
     Q_PROPERTY(double displayObjectHeight READ displayObjectHeight WRITE setDisplayObjectHeight NOTIFY displayObjectHeightChanged)
+    Q_PROPERTY(QString tooltipText READ tooltipText WRITE setTooltipText NOTIFY tooltipTextChanged)
 
 public:
     PianorollKeyboard(QQuickItem* parent = nullptr);
@@ -63,6 +64,9 @@ public:
     int pitchToPixelY(double pitch) const;
     double pixelYToPitch(int tick) const;
 
+    QString tooltipText() { return m_tooltipText; }
+    void setTooltipText(QString value);
+
     void sendNoteOn(uint8_t key);
     void sendNoteOff(uint8_t key);
     void startNoteInputIfNeed();
@@ -71,6 +75,7 @@ signals:
     void noteHeightChanged();
     void centerYChanged();
     void displayObjectHeightChanged();
+    void tooltipTextChanged();
 
     void keyPressed(int pitch);
     void keyReleased(int pitch);
@@ -81,12 +86,16 @@ private:
     void onSelectionChanged();
     void updateBoundingSize();
 
+    engraving::Staff* getActiveStaff();
+
     int m_curKeyPressed = -1;
     int m_curPitch = -1;
 
     double m_centerY = 0;  //fraction of note grid camera is focused on
     double m_displayObjectHeight = 0;  //Set to note grid in pixels
-    double m_noteHeight;
+    double m_noteHeight = 20;
+
+    QString m_tooltipText = "";
 
     QColor m_colorText = Qt::black;
     QColor m_colorGridLines = Qt::black;
