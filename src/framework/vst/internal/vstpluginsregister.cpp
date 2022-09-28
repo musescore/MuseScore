@@ -46,7 +46,7 @@ void VstPluginsRegister::registerFxPlugin(const audio::TrackId trackId, const au
     std::lock_guard lock(m_mutex);
 
     VstFxInstancesMap& instancesMap = m_vstFxPluginsMap[trackId];
-    instancesMap.emplace(std::make_pair(resourceId, chainOrder), pluginPtr);
+    instancesMap.insert_or_assign(std::make_pair(resourceId, chainOrder), pluginPtr);
 }
 
 void VstPluginsRegister::registerMasterFxPlugin(const audio::AudioResourceId& resourceId, const AudioFxChainOrder chainOrder,
@@ -56,7 +56,7 @@ void VstPluginsRegister::registerMasterFxPlugin(const audio::AudioResourceId& re
 
     std::lock_guard lock(m_mutex);
 
-    m_masterPluginsMap.emplace(std::make_pair(resourceId, chainOrder), pluginPtr);
+    m_masterPluginsMap.insert_or_assign(std::make_pair(resourceId, chainOrder), pluginPtr);
 }
 
 VstPluginPtr VstPluginsRegister::instrumentPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) const
