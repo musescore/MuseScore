@@ -216,9 +216,9 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::dotNoteDistance,         "dotNoteDistance",         Spatium(0.5) },
     { Sid::dotRestDistance,         "dotRestDistance",         Spatium(0.25) },
     { Sid::dotDotDistance,          "dotDotDistance",          Spatium(0.65) },
-    { Sid::propertyDistanceHead,    "propertyDistanceHead",    Spatium(0.5) },
-    { Sid::propertyDistanceStem,    "propertyDistanceStem",    Spatium(0.5) },
-    { Sid::propertyDistance,        "propertyDistance",        Spatium(0.5) },
+    { Sid::propertyDistanceHead,    "propertyDistanceHead",    Spatium(0.4) },
+    { Sid::propertyDistanceStem,    "propertyDistanceStem",    Spatium(0.4) },
+    { Sid::propertyDistance,        "propertyDistance",        Spatium(0.4) },
 
     { Sid::articulationMag,         "articulationMag",         PropertyValue(1.0) },
     { Sid::articulationPosAbove,    "articulationPosAbove",    PointF(0.0, 0.0) },
@@ -1451,7 +1451,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     { Sid::fingeringPlacement,            "fingeringPlacement",            PlacementV::ABOVE },
 
-    { Sid::articulationMinDistance,       "articulationMinDistance",       Spatium(0.5) },
+    { Sid::articulationMinDistance,       "articulationMinDistance",       Spatium(0.4) },
     { Sid::fingeringMinDistance,          "fingeringMinDistance",          Spatium(0.5) },
     { Sid::hairpinMinDistance,            "hairpinMinDistance",            Spatium(0.7) },
     { Sid::letRingMinDistance,            "letRingMinDistance",            Spatium(0.7) },
