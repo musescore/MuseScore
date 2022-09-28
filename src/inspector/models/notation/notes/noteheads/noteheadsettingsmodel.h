@@ -37,8 +37,7 @@ class NoteheadSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * headType READ headType CONSTANT)
     Q_PROPERTY(PropertyItem * headSystem READ headSystem CONSTANT)
     Q_PROPERTY(PropertyItem * dotPosition READ dotPosition CONSTANT)
-    Q_PROPERTY(PropertyItem * horizontalOffset READ horizontalOffset CONSTANT)
-    Q_PROPERTY(PropertyItem * verticalOffset READ verticalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * offset READ offset CONSTANT)
 
 public:
     explicit NoteheadSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -51,8 +50,7 @@ public:
     PropertyItem* headType() const;
     PropertyItem* headSystem() const;
     PropertyItem* dotPosition() const;
-    PropertyItem* horizontalOffset() const;
-    PropertyItem* verticalOffset() const;
+    PropertyItem* offset() const;
 
     Q_INVOKABLE QVariantList possibleHeadSystemTypes() const;
 
@@ -70,8 +68,7 @@ private:
     PropertyItem* m_headType = nullptr;
     PropertyItem* m_headSystem = nullptr;
     PropertyItem* m_dotPosition = nullptr;
-    PropertyItem* m_horizontalOffset = nullptr;
-    PropertyItem* m_verticalOffset = nullptr;
+    PointFPropertyItem* m_offset = nullptr;
 };
 }
 

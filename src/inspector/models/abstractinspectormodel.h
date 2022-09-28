@@ -27,10 +27,7 @@
 
 #include "async/asyncable.h"
 
-#include "engraving/style/style.h"
-
 #include "libmscore/engravingitem.h"
-#include "libmscore/masterscore.h"
 #include "libmscore/property.h"
 
 #include "internal/interfaces/ielementrepositoryservice.h"
@@ -39,6 +36,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "modularity/ioc.h"
 #include "models/propertyitem.h"
+#include "models/pointfpropertyitem.h"
 #include "ui/view/iconcodes.h"
 #include "types/commontypes.h"
 
@@ -166,6 +164,8 @@ protected:
 
     PropertyItem* buildPropertyItem(const mu::engraving::Pid& pid, std::function<void(const mu::engraving::Pid propertyId,
                                                                                       const QVariant& newValue)> onPropertyChangedCallBack = nullptr);
+    PointFPropertyItem* buildPointFPropertyItem(const mu::engraving::Pid& pid, std::function<void(const mu::engraving::Pid propertyId,
+                                                                                                  const QVariant& newValue)> onPropertyChangedCallBack = nullptr);
 
     void loadPropertyItem(PropertyItem* propertyItem, std::function<QVariant(const QVariant&)> convertElementPropertyValueFunc = nullptr);
 
@@ -205,6 +205,9 @@ protected slots:
 
 private:
     void setupCurrentNotationChangedConnection();
+
+    void initPropertyItem(PropertyItem* propertyItem, std::function<void(const mu::engraving::Pid propertyId,
+                                                                         const QVariant& newValue)> onPropertyChangedCallBack = nullptr);
 
     mu::engraving::Sid styleIdByPropertyId(const mu::engraving::Pid pid) const;
     mu::engraving::PropertyIdSet propertyIdSetFromStyleIdSet(const mu::engraving::StyleIdSet& styleIdSet) const;

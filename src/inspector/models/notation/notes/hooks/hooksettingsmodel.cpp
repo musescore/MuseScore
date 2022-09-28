@@ -21,8 +21,6 @@
  */
 #include "hooksettingsmodel.h"
 
-#include "dataformatter.h"
-
 #include "translation.h"
 
 using namespace mu::inspector;
@@ -38,13 +36,7 @@ HookSettingsModel::HookSettingsModel(QObject* parent, IElementRepositoryService*
 
 void HookSettingsModel::createProperties()
 {
-    m_horizontalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
-    });
-
-    m_verticalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
-    });
+    m_offset = buildPointFPropertyItem(mu::engraving::Pid::OFFSET);
 }
 
 void HookSettingsModel::requestElements()
@@ -54,27 +46,15 @@ void HookSettingsModel::requestElements()
 
 void HookSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_horizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
-    });
-
-    loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
-    });
+    loadPropertyItem(m_offset);
 }
 
 void HookSettingsModel::resetProperties()
 {
-    m_horizontalOffset->resetToDefault();
-    m_verticalOffset->resetToDefault();
+    m_offset->resetToDefault();
 }
 
-PropertyItem* HookSettingsModel::horizontalOffset() const
+PropertyItem* HookSettingsModel::offset() const
 {
-    return m_horizontalOffset;
-}
-
-PropertyItem* HookSettingsModel::verticalOffset() const
-{
-    return m_verticalOffset;
+    return m_offset;
 }

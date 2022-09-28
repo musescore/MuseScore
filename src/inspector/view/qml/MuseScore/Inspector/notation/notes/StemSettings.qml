@@ -199,8 +199,7 @@ FocusableItem {
                 OffsetSection {
                     id: stemOffsetSection
                     titleText: qsTrc("inspector", "Stem offset")
-                    horizontalOffset: root.stemModel ? root.stemModel.horizontalOffset : null
-                    verticalOffset: root.stemModel ? root.stemModel.verticalOffset : null
+                    propertyItem: root.stemModel ? root.stemModel.offset : null
 
                     navigationName: "StemOffset"
                     navigationPanel: root.navigationPanel
@@ -209,8 +208,7 @@ FocusableItem {
 
                 OffsetSection {
                     titleText: qsTrc("inspector", "Flag offset")
-                    horizontalOffset: root.hookModel ? root.hookModel.horizontalOffset : null
-                    verticalOffset: root.hookModel ? root.hookModel.verticalOffset : null
+                    propertyItem: root.hookModel ? root.hookModel.offset : null
 
                     navigationName: "FlagOffset"
                     navigationPanel: root.navigationPanel

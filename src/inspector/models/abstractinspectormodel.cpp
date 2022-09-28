@@ -475,6 +475,26 @@ PropertyItem* AbstractInspectorModel::buildPropertyItem(const mu::engraving::Pid
 {
     PropertyItem* newPropertyItem = new PropertyItem(propertyId, this);
 
+    initPropertyItem(newPropertyItem, onPropertyChangedCallBack);
+
+    return newPropertyItem;
+}
+
+PointFPropertyItem* AbstractInspectorModel::buildPointFPropertyItem(const mu::engraving::Pid& propertyId,
+                                                                    std::function<void(const mu::engraving::Pid propertyId,
+                                                                                       const QVariant& newValue)> onPropertyChangedCallBack)
+{
+    PointFPropertyItem* newPropertyItem = new PointFPropertyItem(propertyId, this);
+
+    initPropertyItem(newPropertyItem, onPropertyChangedCallBack);
+
+    return newPropertyItem;
+}
+
+void AbstractInspectorModel::initPropertyItem(PropertyItem* propertyItem,
+                                              std::function<void(const mu::engraving::Pid propertyId,
+                                                                 const QVariant& newValue)> onPropertyChangedCallBack)
+{
     auto callback = onPropertyChangedCallBack;
 
     if (!callback) {
@@ -483,15 +503,12 @@ PropertyItem* AbstractInspectorModel::buildPropertyItem(const mu::engraving::Pid
         };
     }
 
-    connect(newPropertyItem, &PropertyItem::propertyModified, this, callback);
-    connect(newPropertyItem, &PropertyItem::applyToStyleRequested, this, [this](const mu::engraving::Sid sid, const QVariant& newStyleValue) {
-        updateStyleValue(sid,
-                         newStyleValue);
+    connect(propertyItem, &PropertyItem::propertyModified, this, callback);
+    connect(propertyItem, &PropertyItem::applyToStyleRequested, this, [this](const mu::engraving::Sid sid, const QVariant& newStyleValue) {
+        updateStyleValue(sid, newStyleValue);
 
         emit requestReloadPropertyItems();
     });
-
-    return newPropertyItem;
 }
 
 void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem,

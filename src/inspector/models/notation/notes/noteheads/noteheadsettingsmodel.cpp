@@ -21,8 +21,7 @@
  */
 #include "noteheadsettingsmodel.h"
 
-#include "note.h"
-#include "dataformatter.h"
+#include "engraving/types/types.h"
 
 #include "translation.h"
 
@@ -50,14 +49,7 @@ void NoteheadSettingsModel::createProperties()
     m_headType = buildPropertyItem(mu::engraving::Pid::HEAD_TYPE);
     m_headSystem = buildPropertyItem(mu::engraving::Pid::HEAD_SCHEME);
     m_dotPosition = buildPropertyItem(mu::engraving::Pid::DOT_POSITION);
-
-    m_horizontalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
-    });
-
-    m_verticalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
-    });
+    m_offset = buildPointFPropertyItem(mu::engraving::Pid::OFFSET);
 }
 
 void NoteheadSettingsModel::requestElements()
@@ -78,14 +70,7 @@ void NoteheadSettingsModel::loadProperties()
     loadPropertyItem(m_headType);
     loadPropertyItem(m_headSystem);
     loadPropertyItem(m_dotPosition);
-
-    loadPropertyItem(m_horizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
-    });
-
-    loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
-    });
+    loadPropertyItem(m_offset);
 }
 
 void NoteheadSettingsModel::resetProperties()
@@ -98,8 +83,7 @@ void NoteheadSettingsModel::resetProperties()
     m_headType->resetToDefault();
     m_headSystem->resetToDefault();
     m_dotPosition->resetToDefault();
-    m_horizontalOffset->resetToDefault();
-    m_verticalOffset->resetToDefault();
+    m_offset->resetToDefault();
 }
 
 PropertyItem* NoteheadSettingsModel::isHeadHidden() const
@@ -142,14 +126,9 @@ PropertyItem* NoteheadSettingsModel::dotPosition() const
     return m_dotPosition;
 }
 
-PropertyItem* NoteheadSettingsModel::horizontalOffset() const
+PropertyItem* NoteheadSettingsModel::offset() const
 {
-    return m_horizontalOffset;
-}
-
-PropertyItem* NoteheadSettingsModel::verticalOffset() const
-{
-    return m_verticalOffset;
+    return m_offset;
 }
 
 QVariantList NoteheadSettingsModel::possibleHeadSystemTypes() const
