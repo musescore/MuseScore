@@ -224,14 +224,16 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
     emit currentPageUriChanged(uri);
 
     if (isFirstOpening) {
-        if (!m_hasGeometryBeenRestored
-            || (m_mainWindow->windowHandle()->windowStates() & QWindow::FullScreen)) {
-            //! NOTE: show window as maximized if no geometry has been restored
-            //! or if the user had closed app in FullScreen mode
-            m_mainWindow->windowHandle()->showMaximized();
-        } else {
-            m_mainWindow->windowHandle()->setVisible(true);
-        }
+        async::Async::call(this, [this]() {
+            if (!m_hasGeometryBeenRestored
+                || (m_mainWindow->windowHandle()->windowStates() & QWindow::FullScreen)) {
+                //! NOTE: show window as maximized if no geometry has been restored
+                //! or if the user had closed app in FullScreen mode
+                m_mainWindow->windowHandle()->showMaximized();
+            } else {
+                m_mainWindow->windowHandle()->setVisible(true);
+            }
+        });
     }
 
     emit pageLoaded();
