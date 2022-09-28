@@ -89,7 +89,7 @@ const UiActionList ProjectUiActions::m_actions = {
     UiAction("file-export",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Export…"),
+             TranslatableString("action", "&Export…"),
              TranslatableString("action", "Export…"),
              IconCode::Code::SHARE_FILE
              ),
@@ -97,6 +97,7 @@ const UiActionList ProjectUiActions::m_actions = {
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Import P&DF…"),
+             TranslatableString("action", "Import PDF…"),
              IconCode::Code::IMPORT
              ),
     UiAction("project-properties",
@@ -108,14 +109,15 @@ const UiActionList ProjectUiActions::m_actions = {
     UiAction("print",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             TranslatableString("action", "Print…"),
+             TranslatableString("action", "&Print…"),
              TranslatableString("action", "Print…"),
              IconCode::Code::PRINT
              ),
     UiAction("clear-recent",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             TranslatableString("action", "&Clear recent files")
+             TranslatableString("action", "&Clear recent files"),
+             TranslatableString("action", "Clear recent files")
              )
 };
 
