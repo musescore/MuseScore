@@ -749,7 +749,7 @@ void PianorollView::drawNoteBlock(QPainter* p, NoteBlock* block)
 
     for (NoteEvent& e : note->playEvents()) {
         QRect bounds = boundingRect(note, &e, displayEventAdjustment());
-        p->drawRect(bounds);
+        p->drawRoundedRect(bounds, m_noteRectRoundedRadius, m_noteRectRoundedRadius);
 
         //Pitch name
         if (bounds.width() >= 20 && bounds.height() >= 12) {
