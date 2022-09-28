@@ -172,15 +172,11 @@ bool FluidSynth::handleEvent(const midi::Event& event)
         ret = fluid_synth_noteoff(m_fluid->synth, event.channel(), event.note());
     } break;
     case Event::Opcode::ControlChange: {
-        int currentValue = 0;
-        fluid_synth_get_cc(m_fluid->synth, event.channel(), event.index(), &currentValue);
-
-        if (event.data() == static_cast<uint32_t>(currentValue)) {
-            break;
+        if (event.index() == midi::EXPRESSION_CONTROLLER) {
+            ret = setCurrentExpressionLevel(event.data());
+        } else {
+            ret = setControllerValue(event);
         }
-
-        ret = fluid_synth_cc(m_fluid->synth, event.channel(), event.index(), event.data());
-        updateCurrentExpressionLevel(event);
     } break;
     case Event::Opcode::ProgramChange: {
         fluid_synth_program_change(m_fluid->synth, event.channel(), event.program());
@@ -197,13 +193,6 @@ bool FluidSynth::handleEvent(const midi::Event& event)
     midiOutPort()->sendEvent(event);
 
     return ret == FLUID_OK;
-}
-
-void FluidSynth::updateCurrentExpressionLevel(const midi::Event& event)
-{
-    if (event.index() == 11) {
-        m_currentExpressionLevel = event.data();
-    }
 }
 
 void FluidSynth::setSampleRate(unsigned int sampleRate)
@@ -382,6 +371,33 @@ void FluidSynth::toggleExpressionController()
     }
 
     for (const auto& pair : m_channels) {
-        fluid_synth_cc(m_fluid->synth, pair.first, 11, volume);
+        fluid_synth_cc(m_fluid->synth, pair.first, midi::EXPRESSION_CONTROLLER, volume);
     }
+}
+
+int FluidSynth::setCurrentExpressionLevel(int level)
+{
+    if (m_currentExpressionLevel == level) {
+        return FLUID_OK;
+    }
+
+    for (const auto& pair : m_channels) {
+        fluid_synth_cc(m_fluid->synth, pair.first, midi::EXPRESSION_CONTROLLER, level);
+    }
+
+    m_currentExpressionLevel = level;
+
+    return FLUID_OK;
+}
+
+int FluidSynth::setControllerValue(const midi::Event& event)
+{
+    int currentValue = 0;
+    fluid_synth_get_cc(m_fluid->synth, event.channel(), event.index(), &currentValue);
+
+    if (event.data() == static_cast<uint32_t>(currentValue)) {
+        return FLUID_OK;
+    }
+
+    return fluid_synth_cc(m_fluid->synth, event.channel(), event.index(),  event.data());
 }
