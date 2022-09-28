@@ -335,7 +335,12 @@ bool VstAudioClient::fillOutputBuffer(unsigned int samples, float* output)
         for (audio::samples_t sampleIndex = 0; sampleIndex < samples; ++sampleIndex) {
             for (audio::audioch_t audioChannelIndex = 0; audioChannelIndex < bus.numChannels; ++audioChannelIndex) {
                 float sample = bus.channelBuffers32[audioChannelIndex][sampleIndex];
-                output[sampleIndex * m_audioChannelsCount + audioChannelIndex] += sample * m_volumeGain;
+
+                if (m_type == VstPluginType::Instrument) {
+                    output[sampleIndex * m_audioChannelsCount + audioChannelIndex] += sample * m_volumeGain;
+                } else {
+                    output[sampleIndex * m_audioChannelsCount + audioChannelIndex] = sample * m_volumeGain;
+                }
 
                 if (hasMeaningSamples) {
                     continue;
