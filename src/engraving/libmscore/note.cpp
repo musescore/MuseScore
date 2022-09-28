@@ -1061,11 +1061,10 @@ void Note::updateHeadGroup(const NoteHeadGroup headGroup)
     if (links()) {
         for (EngravingObject* scoreElement : *links()) {
             scoreElement->undoChangeProperty(Pid::HEAD_GROUP, static_cast<int>(group));
-
             Note* note = toNote(scoreElement);
 
-            if (note->staff() && note->staff()->isTabStaff(chord()->tick()) && group == NoteHeadGroup::HEAD_CROSS) {
-                scoreElement->undoChangeProperty(Pid::GHOST, true);
+            if (note->staff() && !note->staff()->isDrumStaff(chord()->tick()) && group == NoteHeadGroup::HEAD_CROSS) {
+                scoreElement->undoChangeProperty(Pid::DEAD, true);
             }
         }
     } else {
@@ -1475,7 +1474,7 @@ void Note::write(XmlWriter& xml) const
     }
     for (Pid id : { Pid::PITCH, Pid::TPC1, Pid::TPC2, Pid::SMALL, Pid::MIRROR_HEAD, Pid::DOT_POSITION,
                     Pid::HEAD_SCHEME, Pid::HEAD_GROUP, Pid::VELO_OFFSET, Pid::PLAY, Pid::TUNING, Pid::FRET, Pid::STRING,
-                    Pid::GHOST, Pid::HEAD_TYPE, Pid::VELO_TYPE, Pid::FIXED, Pid::FIXED_LINE }) {
+                    Pid::GHOST, Pid::DEAD, Pid::HEAD_TYPE, Pid::VELO_TYPE, Pid::FIXED, Pid::FIXED_LINE }) {
         writeProperty(xml, id);
     }
 
@@ -1645,6 +1644,8 @@ bool Note::readProperties(XmlReader& e)
         setString(e.readInt());
     } else if (tag == "ghost") {
         setGhost(e.readInt());
+    } else if (tag == "dead") {
+        setDeadNote(e.readInt());
     } else if (tag == "headType") {
         readProperty(e, Pid::HEAD_TYPE);
     } else if (tag == "veloType") {
@@ -1958,12 +1959,15 @@ EngravingItem* Note::drop(EditData& data)
                 for (EngravingObject* se : *links()) {
                     se->undoChangeProperty(Pid::HEAD_GROUP, int(group));
                     Note* note = toNote(se);
-                    if (note->staff() && note->staff()->isTabStaff(ch->tick()) && group == NoteHeadGroup::HEAD_CROSS) {
-                        se->undoChangeProperty(Pid::GHOST, true);
+                    if (note->staff() && !note->staff()->isDrumStaff(ch->tick())) {
+                        se->undoChangeProperty(Pid::DEAD, group == NoteHeadGroup::HEAD_CROSS);
                     }
                 }
             } else {
                 undoChangeProperty(Pid::HEAD_GROUP, int(group));
+                if (!staff()->isDrumStaff(ch->tick())) {
+                    undoChangeProperty(Pid::DEAD, group == NoteHeadGroup::HEAD_CROSS);
+                }
             }
         }
     }
@@ -3111,6 +3115,8 @@ PropertyValue Note::getProperty(Pid propertyId) const
         return string();
     case Pid::GHOST:
         return ghost();
+    case Pid::DEAD:
+        return deadNote();
     case Pid::HEAD_TYPE:
         return headType();
     case Pid::VELO_TYPE:
@@ -3168,6 +3174,16 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::HEAD_GROUP:
         setHeadGroup(v.value<NoteHeadGroup>());
+        if (links()) {
+            for (EngravingObject* scoreElement : *links()) {
+                Note* note = toNote(scoreElement);
+                note->setDeadNote(_headGroup == NoteHeadGroup::HEAD_CROSS);
+                note->setHeadGroup(_headGroup);
+            }
+        } else {
+            setDeadNote(_headGroup == NoteHeadGroup::HEAD_CROSS);
+            setHeadGroup(_headGroup);
+        }
         break;
     case Pid::VELO_OFFSET:
         setVeloOffset(v.toInt());
@@ -3185,6 +3201,9 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::GHOST:
         setGhost(v.toBool());
+        break;
+    case Pid::DEAD:
+        setDeadNote(v.toBool());
         break;
     case Pid::HEAD_TYPE:
         setHeadType(v.value<NoteHeadType>());
@@ -3228,6 +3247,7 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::GHOST:
+    case Pid::DEAD:
     case Pid::SMALL:
         return false;
     case Pid::MIRROR_HEAD:
