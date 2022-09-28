@@ -57,17 +57,20 @@ Column {
         height: childrenRect.height
         width: parent.width
 
-        OffsetSection {
+        SpinBoxPropertyView {
             id: sizeOffset
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
-            verticalOffset: root.model ? root.model.verticalOffset : null
+            titleText: qsTrc("inspector", "Offset")
+            propertyItem: root.model ? root.model.verticalOffset : null
 
-            verticalOffsetControl.decimals: 1
-            verticalOffsetControl.maxValue: 20
-            verticalOffsetControl.minValue: -20
+            measureUnitsSymbol: qsTrc("global", "sp")
+            step: 0.25
+            decimals: 1
+            maxValue: 20
+            minValue: -20
 
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 1

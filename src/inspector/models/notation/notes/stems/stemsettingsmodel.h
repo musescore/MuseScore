@@ -24,10 +24,6 @@
 
 #include "models/abstractinspectormodel.h"
 
-#include "async/asyncable.h"
-#include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
-
 namespace mu::inspector {
 class StemSettingsModel : public AbstractInspectorModel
 {
@@ -36,8 +32,7 @@ class StemSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * isStemHidden READ isStemHidden CONSTANT)
     Q_PROPERTY(PropertyItem * thickness READ thickness CONSTANT)
     Q_PROPERTY(PropertyItem * length READ length CONSTANT)
-    Q_PROPERTY(PropertyItem * horizontalOffset READ horizontalOffset CONSTANT)
-    Q_PROPERTY(PropertyItem * verticalOffset READ verticalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * offset READ offset CONSTANT)
     Q_PROPERTY(PropertyItem * stemDirection READ stemDirection CONSTANT)
 
     Q_PROPERTY(bool useStraightNoteFlags READ useStraightNoteFlags WRITE setUseStraightNoteFlags NOTIFY useStraightNoteFlagsChanged)
@@ -49,8 +44,7 @@ public:
     PropertyItem* thickness() const;
     PropertyItem* length() const;
 
-    PropertyItem* horizontalOffset() const;
-    PropertyItem* verticalOffset() const;
+    PropertyItem* offset() const;
     PropertyItem* stemDirection() const;
 
     bool useStraightNoteFlags() const;
@@ -74,8 +68,7 @@ private:
     PropertyItem* m_isStemHidden = nullptr;
     PropertyItem* m_thickness = nullptr;
     PropertyItem* m_length = nullptr;
-    PropertyItem* m_horizontalOffset = nullptr;
-    PropertyItem* m_verticalOffset = nullptr;
+    PointFPropertyItem* m_offset = nullptr;
     PropertyItem* m_stemDirection = nullptr;
 };
 }

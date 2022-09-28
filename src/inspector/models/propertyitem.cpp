@@ -50,7 +50,7 @@ void PropertyItem::updateCurrentValue(const QVariant& currentValue)
     m_currentValue = currentValue;
 
     emit isUndefinedChanged(isUndefined());
-    emit valueChanged(m_currentValue);
+    emit valueChanged();
 }
 
 void PropertyItem::resetToDefault()

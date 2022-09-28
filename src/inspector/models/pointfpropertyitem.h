@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2022 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,32 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_HOOKSETTINGSMODEL_H
-#define MU_INSPECTOR_HOOKSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_POINTFPROPERTYITEM_H
+#define MU_INSPECTOR_POINTFPROPERTYITEM_H
 
-#include "models/abstractinspectormodel.h"
+#include "propertyitem.h"
 
 namespace mu::inspector {
-class HookSettingsModel : public AbstractInspectorModel
+class PointFPropertyItem : public PropertyItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem * offset READ offset CONSTANT)
+    Q_PROPERTY(qreal x READ x_property WRITE setX NOTIFY valueChanged)
+    Q_PROPERTY(qreal y READ y_property WRITE setY NOTIFY valueChanged)
 
 public:
-    explicit HookSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit PointFPropertyItem(const mu::engraving::Pid propertyId, QObject* parent = nullptr);
 
-    PropertyItem* offset() const;
+    qreal x_property() const;
+    qreal x() const;
+    void setX(qreal newX);
 
-protected:
-    void createProperties() override;
-    void requestElements() override;
-    void loadProperties() override;
-    void resetProperties() override;
-
-private:
-    PointFPropertyItem* m_offset = nullptr;
+    qreal y_property() const;
+    qreal y() const;
+    void setY(qreal newY);
 };
 }
 
-#endif // MU_INSPECTOR_HOOKSETTINGSMODEL_H
+#endif // MU_INSPECTOR_POINTFPROPERTYITEM_H
