@@ -157,9 +157,9 @@
     <dotNoteDistance>0.5</dotNoteDistance>
     <dotRestDistance>0.25</dotRestDistance>
     <dotDotDistance>0.65</dotDotDistance>
-    <propertyDistanceHead>0.5</propertyDistanceHead>
-    <propertyDistanceStem>0.5</propertyDistanceStem>
-    <propertyDistance>0.5</propertyDistance>
+    <propertyDistanceHead>0.4</propertyDistanceHead>
+    <propertyDistanceStem>0.4</propertyDistanceStem>
+    <propertyDistance>0.4</propertyDistance>
     <articulationMag>1</articulationMag>
     <articulationPosAbove x="0" y="0"/>
     <articulationAnchorDefault>2</articulationAnchorDefault>
@@ -1273,7 +1273,7 @@
     <fermataPosBelow x="0" y="0.5"/>
     <fermataMinDistance>0.4</fermataMinDistance>
     <fingeringPlacement>0</fingeringPlacement>
-    <articulationMinDistance>0.5</articulationMinDistance>
+    <articulationMinDistance>0.4</articulationMinDistance>
     <fingeringMinDistance>0.5</fingeringMinDistance>
     <hairpinMinDistance>0.7</hairpinMinDistance>
     <letRingMinDistance>0.7</letRingMinDistance>
