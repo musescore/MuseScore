@@ -253,6 +253,8 @@ private:
     QColor m_colorNoteDrag = QColor(0xffbb33);
     QColor m_colorText = QColor(0x111111);
     QColor m_colorTie = QColor(0xff0000);
+
+    float m_noteRectRoundedRadius = 3;
 };
 }
 

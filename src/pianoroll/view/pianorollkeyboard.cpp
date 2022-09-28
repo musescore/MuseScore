@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
@@ -54,6 +54,21 @@ static const KeyShape keyShapes[] {
     { true, -.5, 1.5 },
     { false, 0, 1 },
     { true, -.5, 1 },
+};
+
+static const QString pitchNames[]{
+    "C",
+    "C♯/D♭",
+    "D",
+    "D♯/E♭",
+    "E",
+    "F",
+    "F♯/G♭",
+    "G",
+    "G♯/A♭",
+    "A",
+    "A♯/B♭",
+    "B",
 };
 
 PianorollKeyboard::PianorollKeyboard(QQuickItem* parent)
@@ -146,13 +161,20 @@ double PianorollKeyboard::pixelYToPitch(int pixY) const
     return 128 - ((pixY + m_centerY * m_displayObjectHeight - height() / 2) / m_noteHeight);
 }
 
-void PianorollKeyboard::paint(QPainter* p)
+void PianorollKeyboard::setTooltipText(QString value)
 {
-    p->fillRect(0, 0, width(), height(), m_colorBackground);
+    if (m_tooltipText == value)
+        return;
+    
+    m_tooltipText = value;
+    emit m_tooltipText;
+}
 
+Staff* PianorollKeyboard::getActiveStaff()
+{
     notation::INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
-        return;
+        return nullptr;
     }
 
     //Find staff to draw from
@@ -160,7 +182,7 @@ void PianorollKeyboard::paint(QPainter* p)
     std::vector<EngravingItem*> selectedElements = notation->interaction()->selection()->elements();
     std::vector<int> selectedStaves;
     int activeStaff = -1;
-    for (EngravingItem* e: selectedElements) {
+    for (EngravingItem* e : selectedElements) {
         int idx = e->staffIdx();
         qDebug() << "ele idx " << idx;
         activeStaff = idx;
@@ -173,6 +195,14 @@ void PianorollKeyboard::paint(QPainter* p)
         activeStaff = 0;
     }
     Staff* staff = score->staff(activeStaff);
+    return staff;
+}
+
+void PianorollKeyboard::paint(QPainter* p)
+{
+    p->fillRect(0, 0, width(), height(), m_colorBackground);
+
+    Staff* staff = getActiveStaff();
     Part* part = staff->part();
 
     //Check for drumset, if any
@@ -352,16 +382,21 @@ void PianorollKeyboard::mouseMoveEvent(QMouseEvent* event)
     if (pitch != m_curPitch) {
         m_curPitch = pitch;
 
-//        //Set tooltip
-//        int degree = curPitch % 12;
-//        int octave = curPitch / 12;
-//        QString text = qApp->translate("utils", pitchNames[degree]) + QString::number(octave - 1);
-//        Part* part = _staff->part();
-//        Drumset* ds = part->instrument()->drumset();
-//        if (ds)
-//            text += " - " + qApp->translate("drumset", ds->name(curPitch).toUtf8().constData());
+        //Set tooltip
+        int degree = m_curPitch % 12;
+        int octave = m_curPitch / 12;
 
-//        setToolTip(text);
+        Staff* staff = getActiveStaff();
+        if (staff) {
+            Part* part = staff->part();
+            Drumset* ds = part->instrument()->drumset();
+            if (ds) {
+                setTooltipText(ds->name(m_curPitch));
+            }
+            else {
+                setTooltipText(pitchNames[degree] + QString::number(octave - 1));
+            }
+        }
 
         //Send event
 //        emit pitchChanged(m_curPitch);
