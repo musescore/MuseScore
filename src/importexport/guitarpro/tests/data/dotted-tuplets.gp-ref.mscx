@@ -61,7 +61,7 @@
             </TimeSig>
           <Tempo>
             <tempo>1.666667</tempo>
-            <text><sym>metNoteQuarterUp</sym> = 100</text>
+            <text>Moderate <sym>metNoteQuarterUp</sym> = 100</text>
             </Tempo>
           <Rest>
             <durationType>half</durationType>

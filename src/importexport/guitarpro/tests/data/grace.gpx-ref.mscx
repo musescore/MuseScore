@@ -67,7 +67,7 @@
             </Dynamic>
           <Tempo>
             <tempo>3.166667</tempo>
-            <text><sym>metNoteQuarterUp</sym> = 190</text>
+            <text>Moderate <sym>metNoteQuarterUp</sym> = 190</text>
             </Tempo>
           <Chord>
             <durationType>eighth</durationType>
