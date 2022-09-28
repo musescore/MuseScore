@@ -61,7 +61,6 @@ void WinFramelessWindowController::init()
     DwmExtendFrameIntoClientArea(s_hwnd, &shadow_on);
 
     SetWindowPos(s_hwnd, nullptr, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE);
-    ShowWindow(s_hwnd, SW_SHOW);
 }
 
 bool WinFramelessWindowController::nativeEventFilter(const QByteArray& eventType, void* message, long* result)
