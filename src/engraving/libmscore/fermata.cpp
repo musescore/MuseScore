@@ -241,7 +241,7 @@ void Fermata::layout()
             double offset = chord->xpos() + note->xpos() + note->headWidth() / 2;
             movePosX(offset);
         } else {
-            movePosX(e->x() + e->width() * staff()->staffMag(Fraction(0, 1)) * .5);
+            movePosX(e->x() - e->shape().left() + e->width() * staff()->staffMag(Fraction(0, 1)) * .5);
         }
     }
 
