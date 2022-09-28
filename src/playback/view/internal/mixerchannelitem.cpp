@@ -178,13 +178,17 @@ void MixerChannelItem::loadOutputResourceItemList(const AudioFxChain& fxChain)
 
 void MixerChannelItem::updateOutputResourceItemList(const audio::AudioFxChain& fxChain)
 {
-    for (auto it = fxChain.cbegin(); it != fxChain.cend(); ++it) {
-        if (m_outputResourceItemList.size() < it->first) {
-            LOGW() << "Can't find item " << it->first;
+    for (const auto& pair : fxChain) {
+        if (m_outputResourceItemList.size() < pair.first) {
+            LOGW() << "Can't find item " << pair.first;
             continue;
         }
 
-        m_outputResourceItemList[it->first]->setParams(it->second);
+        if (!pair.second.isValid()) {
+            continue;
+        }
+
+        m_outputResourceItemList[pair.first]->setParams(pair.second);
     }
 }
 
