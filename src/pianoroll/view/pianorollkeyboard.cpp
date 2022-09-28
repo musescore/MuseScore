@@ -166,7 +166,7 @@ void PianorollKeyboard::setTooltipText(QString value)
     if (m_tooltipText == value) {
         return;
     }
-    
+
     m_tooltipText = value;
     emit m_tooltipText;
 }
