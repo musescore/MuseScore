@@ -100,7 +100,9 @@ void AudioBuffer::fillup()
         m_writeIndex = 0;
     }
 
-    while (sampleLag() < m_minSampleLag) {
+    samples_t sampleToReserve = m_minSampleLag * 2;
+
+    while (sampleLag() < sampleToReserve) {
         m_source->process(m_data.data() + m_writeIndex, m_renderStep);
         updateWriteIndex(m_renderStep);
     }
