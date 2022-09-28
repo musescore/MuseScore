@@ -30,7 +30,7 @@ import MuseScore.Playback 1.0
 StyledDialogView {
     id: root
 
-    title: qsTrc("playback", "Playback Setup")
+    title: qsTrc("playback", "Playback setup")
 
     contentWidth: 896
     contentHeight: 424
@@ -247,7 +247,7 @@ StyledDialogView {
                 height: 30
                 width: 160
 
-                text: qsTrc("playback", "OK")
+                text: qsTrc("global", "OK")
 
                 navigation.panel: buttons.navigationPanel
                 navigation.order: 2
