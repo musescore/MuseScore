@@ -69,7 +69,7 @@ const UiActionList PlaybackUiActions::m_mainActions = {
     UiAction("playback-setup",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_FOCUSED,
-             TranslatableString("action", "Playback Setup"),
+             TranslatableString("action", "Playback setup"),
              TranslatableString("action", "Open playback setup dialog"),
              IconCode::Code::NONE
              )
