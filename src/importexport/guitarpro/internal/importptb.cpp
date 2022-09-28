@@ -1256,8 +1256,6 @@ Err PowerTab::read()
         }
     }
 
-    score->style().set(Sid::ArpeggioHiddenInStdIfTab, true);
-
     MeasureBase* m;
     if (!score->measures()->first()) {
         m = Factory::createVBox(score->dummy()->system());
