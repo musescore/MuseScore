@@ -199,6 +199,7 @@
               <head>cross</head>
               <fret>0</fret>
               <string>1</string>
+              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
@@ -221,6 +222,7 @@
               <head>cross</head>
               <fret>0</fret>
               <string>2</string>
+              <dead>1</dead>
               </Note>
             </Chord>
           <Rest>
@@ -241,6 +243,7 @@
               <head>cross</head>
               <fret>0</fret>
               <string>2</string>
+              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
@@ -266,6 +269,7 @@
               <head>cross</head>
               <fret>0</fret>
               <string>2</string>
+              <dead>1</dead>
               </Note>
             </Chord>
           <BarLine>
