@@ -49,17 +49,17 @@ void QmlToolTip::show(QQuickItem* item, const QString& title, const QString& des
 
     bool toolTipNotOpened = m_item == nullptr;
     bool openTimerStarted = m_openTimer.isActive();
+
+    m_item = item;
+    m_shouldBeClosed = false;
+
     if (toolTipNotOpened || openTimerStarted) {
-        m_item = item;
         connect(m_item, &QObject::destroyed, this, &QmlToolTip::doHide);
 
         m_openTimer.start(INTERVAL);
     } else {
-        m_item = item;
         doShow();
     }
-
-    m_shouldBeClosed = false;
 }
 
 void QmlToolTip::hide(QQuickItem* item, bool force)
@@ -81,8 +81,15 @@ void QmlToolTip::hide(QQuickItem* item, bool force)
 void QmlToolTip::doShow()
 {
     m_openTimer.stop();
+    m_closeTimer.stop();
 
     if (!m_item) {
+        return;
+    }
+
+    if (m_shouldBeClosed) {
+        m_item = nullptr;
+        m_shouldBeClosed = false;
         return;
     }
 
@@ -98,6 +105,8 @@ void QmlToolTip::doHide()
     disconnect(m_item, &QObject::destroyed, this, &QmlToolTip::doHide);
 
     m_openTimer.stop();
+    m_closeTimer.stop();
+
     m_item = nullptr;
     m_title = QString();
     m_description = QString();
