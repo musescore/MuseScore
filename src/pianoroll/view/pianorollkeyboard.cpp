@@ -163,8 +163,9 @@ double PianorollKeyboard::pixelYToPitch(int pixY) const
 
 void PianorollKeyboard::setTooltipText(QString value)
 {
-    if (m_tooltipText == value)
+    if (m_tooltipText == value) {
         return;
+    }
     
     m_tooltipText = value;
     emit m_tooltipText;
@@ -392,8 +393,7 @@ void PianorollKeyboard::mouseMoveEvent(QMouseEvent* event)
             Drumset* ds = part->instrument()->drumset();
             if (ds) {
                 setTooltipText(ds->name(m_curPitch));
-            }
-            else {
+            } else {
                 setTooltipText(pitchNames[degree] + QString::number(octave - 1));
             }
         }
