@@ -1164,7 +1164,7 @@ void Beam::offsetBeamWithAnchorShortening(std::vector<ChordRest*> chordRests, in
     // min stem lengths according to how many beams there are (starting with 1)
     static const int minStemLengths[] = { 11, 13, 15, 18, 21 };
     const int middleLine = getMiddleStaffLine(startChord, endChord, staffLines);
-    int maxDictatorReduce = stemLengthDictator - minStemLengths[(isStartDictator ? endChord : startChord)->beams() - 1];
+    int maxDictatorReduce = stemLengthDictator - minStemLengths[(isStartDictator ? startChord : endChord)->beams() - 1];
     maxDictatorReduce = std::min(abs(dictator - middleLine), maxDictatorReduce);
 
     bool isFlat = dictator == pointer;
@@ -1309,51 +1309,60 @@ int Beam::findValidBeamOffset(int outer, int beamCount, int staffLines, bool isS
     return offset;
 }
 
-void Beam::setValidBeamPositions(int& dictator, int& pointer, int beamCount, int staffLines, bool isStartDictator,
+void Beam::setValidBeamPositions(int& dictator, int& pointer, int beamCountD, int beamCountP, int staffLines, bool isStartDictator,
                                  bool isFlat, bool isAscending)
 {
     if (_cross) {
         return;
     }
-    int beamCountDictator = isStartDictator ? _elements.front()->beams() : _elements.back()->beams();
-    int beamCountPointer = isStartDictator ? _elements.back()->beams() : _elements.front()->beams();
     bool areBeamsValid = false;
-    bool has3BeamsInsideStaff = beamCount >= 3;
+    bool has3BeamsInsideStaff = beamCountD >= 3 || beamCountP >= 3;
     while (!areBeamsValid && has3BeamsInsideStaff && _beamSpacing != 4) {
-        int dictatorInner = dictator + (beamCount - 1) * (_up ? _beamSpacing : -_beamSpacing);
+        int dictatorInner = dictator + (beamCountD - 1) * (_up ? _beamSpacing : -_beamSpacing);
         // use dictatorInner for both to simulate flat beams
-        int outerDictatorOffset = getOuterBeamPosOffset(dictatorInner, beamCount, staffLines);
+        int outerDictatorOffset = getOuterBeamPosOffset(dictatorInner, beamCountD, staffLines);
         if (std::abs(outerDictatorOffset) <= _beamSpacing) {
             has3BeamsInsideStaff = false;
             break;
         }
-        // use dictator for both to simulate flat beams
-        int offset = findValidBeamOffset(dictator, beamCount, staffLines, isStartDictator, false, true);
+        int offsetD = findValidBeamOffset(dictator, beamCountD, staffLines, isStartDictator, false, true);
+        int offsetP = findValidBeamOffset(pointer, beamCountP, staffLines, isStartDictator, false, true);
+        int offset = (offsetD == 0 ? offsetP : offsetD);
         dictator += offset;
         pointer = dictator;
         if (offset == 0) {
             areBeamsValid = true;
         }
     }
+    if (isFlat) {
+        // flat beams need more checks (non-dictator/pointer notes with floater inner beams)
+        areBeamsValid = false;
+    }
     while (!areBeamsValid) {
-        int fullOffset = isFlat ? findValidBeamOffset(dictator, beamCount, staffLines, isStartDictator, isAscending, isFlat) : 0;
-        int dictatorOffset = fullOffset != 0 ? fullOffset : findValidBeamOffset(dictator, beamCountDictator, staffLines, isStartDictator,
-                                                                                isAscending, isFlat);
+        int dictatorOffset = findValidBeamOffset(dictator, beamCountD, staffLines, isStartDictator, isAscending, isFlat);
         dictator += dictatorOffset;
         pointer += dictatorOffset;
         if (isFlat) {
             pointer = dictator;
-            fullOffset = isFlat ? findValidBeamOffset(pointer, beamCount, staffLines, !isStartDictator, isAscending, isFlat) : 0;
-            int pointerOffset = fullOffset != 0 ? fullOffset
-                                : findValidBeamOffset(pointer, beamCountPointer, staffLines, !isStartDictator, isAscending, isFlat);
-            if (pointerOffset == 0) {
+            int currOffset = 0;
+            for (ChordRest* cr : _elements) {
+                if (!cr->isChord() && (cr != _elements.front() && cr != _elements.back())) {
+                    continue;
+                }
+                // we can use dictator beam position because all of the notes have the same beam position
+                if (currOffset = findValidBeamOffset(dictator, cr->beams(), staffLines, isStartDictator, isAscending, isFlat)) {
+                    break;
+                }
+            }
+
+            if (currOffset == 0) {
                 areBeamsValid = true;
             } else {
-                dictator += pointerOffset;
-                pointer += pointerOffset;
+                dictator += currOffset;
+                pointer += currOffset;
             }
         } else {
-            pointer += findValidBeamOffset(pointer, beamCountPointer, staffLines, !isStartDictator, isAscending, isFlat);
+            pointer += findValidBeamOffset(pointer, beamCountP, staffLines, !isStartDictator, isAscending, isFlat);
             if ((_up && pointer <= dictator) || (!_up && pointer >= dictator)) {
                 dictator = pointer + (_up ? -1 : 1);
             } else {
@@ -1499,8 +1508,8 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
             pointer = dictator + slant;
         }
         bool isAscending = startNote > endNote;
-        int beamCount = getBeamCount(chordRests);
-
+        int beamCountD = (isStartDictator ? startChord : endChord)->beams();
+        int beamCountP = (isStartDictator ? endChord : startChord)->beams();
         int stemLengthStart = abs(round((startAnchorBase - _startAnchor.y()) / spatium() * 4));
         int stemLengthEnd = abs(round((endAnchorBase - _endAnchor.y()) / spatium() * 4));
         int stemLengthDictator = isStartDictator ? stemLengthStart : stemLengthEnd;
@@ -1516,9 +1525,10 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
             // Adjust inner stems
             offsetBeamToRemoveCollisions(chordRests, dictator, pointer, startAnchor.x(), endAnchor.x(), isFlat, isStartDictator);
         }
+        int beamCount = std::max(beamCountD, beamCountP);
         if (!_tab) {
             if (!_isGrace) {
-                setValidBeamPositions(dictator, pointer, beamCount, staffLines, isStartDictator, isFlat, isAscending);
+                setValidBeamPositions(dictator, pointer, beamCountD, beamCountP, staffLines, isStartDictator, isFlat, isAscending);
             }
             if (!forceFlat) {
                 addMiddleLineSlant(dictator, pointer, beamCount, middleLine, interval, smallSlant ? 1 : slant);
