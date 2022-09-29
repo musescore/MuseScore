@@ -55,7 +55,7 @@ void FluidSequencer::updateDynamicChanges(const mpe::DynamicLevelMap& changes)
 
     for (const auto& pair : changes) {
         midi::Event event(midi::Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
-        event.setIndex(11);
+        event.setIndex(midi::EXPRESSION_CONTROLLER);
         event.setData(expressionLevel(pair.second));
 
         m_dynamicEvents[pair.first].emplace(std::move(event));

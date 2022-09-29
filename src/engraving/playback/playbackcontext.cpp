@@ -225,12 +225,12 @@ void PlaybackContext::handleAnnotations(const ID partId, const Segment* segment,
 
         if (annotation->isDynamic()) {
             updateDynamicMap(toDynamic(annotation), segment, segmentPositionTick);
-            return;
+            continue;
         }
 
         if (annotation->isPlayTechAnnotation()) {
             updatePlayTechMap(toPlayTechAnnotation(annotation), segmentPositionTick);
-            return;
+            continue;
         }
     }
 
