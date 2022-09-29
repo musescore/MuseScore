@@ -909,8 +909,8 @@
           </LayoutBreak>
         <voice>
           <Beam>
-            <l1>18</l1>
-            <l2>18</l2>
+            <l1>10</l1>
+            <l2>10</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -930,8 +930,8 @@
             <durationType>16th</durationType>
             </Rest>
           <Beam>
-            <l1>18</l1>
-            <l2>18</l2>
+            <l1>10</l1>
+            <l2>10</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -951,8 +951,8 @@
             <durationType>16th</durationType>
             </Rest>
           <Beam>
-            <l1>14</l1>
-            <l2>14</l2>
+            <l1>10</l1>
+            <l2>10</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -1253,8 +1253,8 @@
       <Measure>
         <voice>
           <Beam>
-            <l1>18</l1>
-            <l2>18</l2>
+            <l1>22</l1>
+            <l2>22</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -1274,8 +1274,8 @@
             <durationType>16th</durationType>
             </Rest>
           <Beam>
-            <l1>14</l1>
-            <l2>14</l2>
+            <l1>22</l1>
+            <l2>22</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -1295,8 +1295,8 @@
             <durationType>16th</durationType>
             </Rest>
           <Beam>
-            <l1>14</l1>
-            <l2>14</l2>
+            <l1>22</l1>
+            <l2>22</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -1316,8 +1316,8 @@
             <durationType>16th</durationType>
             </Rest>
           <Beam>
-            <l1>14</l1>
-            <l2>14</l2>
+            <l1>22</l1>
+            <l2>22</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -1344,8 +1344,8 @@
       <Measure>
         <voice>
           <Beam>
-            <l1>16</l1>
-            <l2>16</l2>
+            <l1>6</l1>
+            <l2>6</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
@@ -1729,8 +1729,8 @@
             <durationType>32nd</durationType>
             </Rest>
           <Beam>
-            <l1>16</l1>
-            <l2>16</l2>
+            <l1>26</l1>
+            <l2>26</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>

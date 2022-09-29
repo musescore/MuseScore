@@ -254,7 +254,7 @@
             <durationType>16th</durationType>
             </Rest>
           <Beam>
-            <l1>8</l1>
+            <l1>6</l1>
             <l2>10</l2>
             </Beam>
           <Chord>
@@ -297,7 +297,7 @@
             </Rest>
           <Beam>
             <l1>10</l1>
-            <l2>8</l2>
+            <l2>6</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -823,8 +823,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>18</l1>
-            <l2>18</l2>
+            <l1>10</l1>
+            <l2>10</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -890,8 +890,8 @@
           </LayoutBreak>
         <voice>
           <Beam>
-            <l1>14</l1>
-            <l2>14</l2>
+            <l1>2</l1>
+            <l2>2</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
@@ -1020,8 +1020,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>14</l1>
-            <l2>14</l2>
+            <l1>22</l1>
+            <l2>22</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -1087,8 +1087,8 @@
           </LayoutBreak>
         <voice>
           <Beam>
-            <l1>18</l1>
-            <l2>18</l2>
+            <l1>30</l1>
+            <l2>30</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
