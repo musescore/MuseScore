@@ -1552,7 +1552,7 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
             // Adjust inner stems
             offsetBeamToRemoveCollisions(chordRests, dictator, pointer, startAnchor.x(), endAnchor.x(), isFlat, isStartDictator);
         }
-        int beamCount = std::max(beamCountD, beamCountP);
+        int beamCount = _up ? std::min(beamCountD, beamCountP) : std::max(beamCountD, beamCountP);
         if (!_tab) {
             if (!_isGrace) {
                 setValidBeamPositions(dictator, pointer, beamCountD, beamCountP, staffLines, isStartDictator, isFlat, isAscending);
