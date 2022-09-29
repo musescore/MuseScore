@@ -1667,7 +1667,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
             Tie* tieFor = ec->notes()[0]->tieFor();
             if (!adjustedVertically && tieFor && !tieFor->isInside() && tieFor->up() == up()) {
                 // there is a tie that starts on this chordrest
-                if (std::abs(tieFor->frontSegment()->ups(Grip::START).pos().y() - p2.y()) < tieClearance) {
+                if (!tieFor->segmentsEmpty() && std::abs(tieFor->frontSegment()->ups(Grip::START).pos().y() - p2.y()) < tieClearance) {
                     p2.rx() -= horizontalTieClearance;
                 }
             }
