@@ -504,7 +504,16 @@ int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int di
     if (noSlope()) {
         return 0;
     }
-    if (dictator == middleLine && pointer == middleLine) {
+    int dictatorExtension = middleLine - dictator; // we need to make sure that beams extended to the middle line
+    int pointerExtension = middleLine - pointer;  // are properly treated as flat.
+    if (_up) {
+        dictatorExtension = std::min(dictatorExtension, 0);
+        pointerExtension = std::min(pointerExtension, 0);
+    } else {
+        dictatorExtension = std::max(dictatorExtension, 0);
+        pointerExtension = std::max(pointerExtension, 0);
+    }
+    if (dictator + dictatorExtension == middleLine && pointer + pointerExtension == middleLine) {
         return 0;
     }
     if (startNote == endNote) {
