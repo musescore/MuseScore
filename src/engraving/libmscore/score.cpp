@@ -524,9 +524,15 @@ void Score::addMeasure(MeasureBase* m, MeasureBase* pos)
 
 void Score::setUpTempoMap()
 {
+    if (!isMaster()) {
+        return;
+    }
+
+    TRACEFUNC;
+
     Fraction tick = Fraction(0, 1);
     Measure* fm = firstMeasure();
-    if (fm == 0) {
+    if (!fm) {
         return;
     }
 
@@ -534,11 +540,9 @@ void Score::setUpTempoMap()
         staff->clearTimeSig();
     }
 
-    if (isMaster()) {
-        tempomap()->clear();
-        sigmap()->clear();
-        sigmap()->add(0, SigEvent(fm->ticks(),  fm->timesig(), 0));
-    }
+    tempomap()->clear();
+    sigmap()->clear();
+    sigmap()->add(0, SigEvent(fm->ticks(),  fm->timesig(), 0));
 
     for (MeasureBase* mb = first(); mb; mb = mb->next()) {
         if (mb->type() != ElementType::MEASURE) {
