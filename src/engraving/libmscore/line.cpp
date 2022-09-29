@@ -937,7 +937,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                 } else {
                     x = spatium() - score()->styleMM(Sid::minNoteDistance);
                 }
-            } else if (isHairpin() || isTrill() || isVibrato() || isTextLine() || isLyricsLine()) {
+            } else if (isHairpin() || isTrill() || isVibrato() || isTextLine() || isLyricsLine() || isGradualTempoChange()) {
                 // (for LYRICSLINE, this is hyphen; melisma line is handled above)
                 // lay out to just before next chordrest on this staff, or barline
                 // tick2 actually tells us the right chordrest to look for
