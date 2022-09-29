@@ -1500,6 +1500,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::showCapoOnStaff, "showCapoOnStaff", true },
     { Sid::fretDiagramsAboveChords, "fretDiagramsAboveChords", true },
     { Sid::crossHeadBlackOnly, "crossHeadBlackOnly", false },
+    { Sid::parenthesisHeadGhostNote, "parenthesisHeadGhostNote", false },
 
     { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
     { Sid::defaultsVersion,               "defaultsVersion",               MSCVERSION }

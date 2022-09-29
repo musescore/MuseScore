@@ -1402,7 +1402,12 @@ void Note::draw(mu::draw::Painter* painter) const
         f.setPointSizeF(f.pointSizeF() * magS() * MScore::pixelRatio);
         painter->setFont(f);
         painter->setPen(c);
-        painter->drawText(PointF(bbox().x(), tab->fretFontYOffset() * magS()), _fretString);
+        double startPosX = bbox().x();
+        if (score()->styleB(Sid::parenthesisHeadGhostNote)) {
+            startPosX += symWidth(SymId::noteheadParenthesisLeft);
+        }
+
+        painter->drawText(PointF(startPosX, tab->fretFontYOffset() * magS()), _fretString);
     }
     // NOT tablature
     else {
@@ -2274,11 +2279,15 @@ void Note::layout()
                 _fretString = String(u"<%1>").arg(String::number(m_harmonicFret));
             }
         }
-        if (parenthesis) {
+        if (parenthesis && !score()->styleB(Sid::parenthesisHeadGhostNote)) {
             _fretString = String(u"(%1)").arg(_fretString);
         }
         double w = tabHeadWidth(tab);     // !! use _fretString
-        bbox().setRect(0.0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
+        bbox().setRect(0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
+
+        if (score()->styleB(Sid::parenthesisHeadGhostNote)) {
+            bbox().setWidth(w + symWidth(SymId::noteheadParenthesisLeft) + symWidth(SymId::noteheadParenthesisRight));
+        }
     } else {
         if (_deadNote) {
             setHeadGroup(NoteHeadGroup::HEAD_CROSS);
@@ -2371,9 +2380,16 @@ void Note::layout2()
                     const StaffType* tab = st->staffTypeForElement(this);
                     w = tabHeadWidth(tab);
                 }
-                e->movePosX(w);
+
+                if (score()->styleB(Sid::parenthesisHeadGhostNote) && staff()->isTabStaff(e->tick())) {
+                    e->movePosX(w + symWidth(SymId::noteheadParenthesisRight));
+                } else {
+                    e->movePosX(w);
+                }
             } else if (sym->sym() == SymId::noteheadParenthesisLeft) {
-                e->movePosX(-symWidth(SymId::noteheadParenthesisLeft));
+                if (!score()->styleB(Sid::parenthesisHeadGhostNote) || !staff()->isTabStaff(e->tick())) {
+                    e->movePosX(-symWidth(SymId::noteheadParenthesisLeft));
+                }
             }
         } else if (e->isFingering()) {
             // don't set mag; fingerings should not scale with note
