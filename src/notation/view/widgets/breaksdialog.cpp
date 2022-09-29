@@ -37,6 +37,20 @@ BreaksDialog::BreaksDialog(QWidget* parent)
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     intervalButton->setChecked(true);
     intervalBox->setValue(DEFAULT_INTERVAL);
+
+    //: `%1` will be replaced with a number input field.
+    //: Text before it will appear before that number field, text after will appear after the field.
+    QString text = qtrc("notation/add-remove-system-breaks", "Break systems every %1 measures");
+    QStringList pieces = text.split(QStringLiteral("%1"));
+
+    IF_ASSERT_FAILED(pieces.size() >= 2) {
+        return;
+    }
+
+    QString part1 = pieces[0].trimmed();
+    QString part2 = pieces[1].trimmed();
+    intervalButton->setText(part1);
+    intervalLabel2->setText(part2);
 }
 
 BreaksDialog::BreaksDialog(const BreaksDialog& dialog)
