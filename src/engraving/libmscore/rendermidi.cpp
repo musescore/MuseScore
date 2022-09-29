@@ -1999,7 +1999,7 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
         // If we are here then we still need to render the note.
         // Render its body if necessary and apply gateTime.
         if (el->size() == 0 && chord->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
-            el->push_back(NoteEvent(0, ontime, 1000 - ontime - trailtime));
+            el->push_back(NoteEvent(0, ontime, 1000 - trailtime));
         }
         if (trailtime == 0) {   // if trailtime is non-zero that means we have graceNotesAfter, so we don't need additional gate time.
             for (NoteEvent& e : ell[i]) {
