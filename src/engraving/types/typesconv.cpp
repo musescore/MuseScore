@@ -906,7 +906,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::TITLE,             "title",                TranslatableString("engraving", "Title") },
     { TextStyleType::SUBTITLE,          "subtitle",             TranslatableString("engraving", "Subtitle") },
     { TextStyleType::COMPOSER,          "composer",             TranslatableString("engraving", "Composer") },
-    { TextStyleType::POET,              "poet",                 TranslatableString("engraving", "Poet") },
+    { TextStyleType::POET,              "poet",                 TranslatableString("engraving", "Lyricist") },
     { TextStyleType::TRANSLATOR,        "translator",           TranslatableString("engraving", "Translator") },
     { TextStyleType::FRAME,             "frame",                TranslatableString("engraving", "Frame") },
     { TextStyleType::INSTRUMENT_EXCERPT, "instrument_excerpt",  TranslatableString("engraving", "Instrument name (Part)") },

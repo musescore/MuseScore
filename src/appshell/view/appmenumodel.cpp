@@ -132,7 +132,7 @@ MenuItem* AppMenuModel::makeFileMenu()
     MenuItemList fileItems {
         makeMenuItem("file-new"),
         makeMenuItem("file-open"),
-        makeMenu(TranslatableString("appshell", "Open &recent"), recentScoresList, "menu-file-open", openRecentEnabled),
+        makeMenu(TranslatableString("appshell/menu/file", "Open &recent"), recentScoresList, "menu-file-open", openRecentEnabled),
         makeSeparator(),
         makeMenuItem("file-close"),
         makeMenuItem("file-save"),
@@ -153,7 +153,7 @@ MenuItem* AppMenuModel::makeFileMenu()
         makeMenuItem("quit", MenuItemRole::QuitRole)
     };
 
-    return makeMenu(TranslatableString("appshell", "&File"), fileItems, "menu-file");
+    return makeMenu(TranslatableString("appshell/menu/file", "&File"), fileItems, "menu-file");
 }
 
 MenuItem* AppMenuModel::makeEditMenu()
@@ -177,7 +177,7 @@ MenuItem* AppMenuModel::makeEditMenu()
         makeMenuItem("preference-dialog", MenuItemRole::PreferencesRole)
     };
 
-    return makeMenu(TranslatableString("appshell", "&Edit"), editItems, "menu-edit");
+    return makeMenu(TranslatableString("appshell/menu/edit", "&Edit"), editItems, "menu-edit");
 }
 
 MenuItem* AppMenuModel::makeViewMenu()
@@ -198,31 +198,31 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("playback-setup"),
         //makeMenuItem("toggle-scorecmp-tool"), // not implemented
         makeSeparator(),
-        makeMenu(TranslatableString("appshell", "&Toolbars"), makeToolbarsItems(), "menu-toolbars"),
-        makeMenu(TranslatableString("appshell", "W&orkspaces"), makeWorkspacesItems(), "menu-workspaces"),
+        makeMenu(TranslatableString("appshell/menu/view", "&Toolbars"), makeToolbarsItems(), "menu-toolbars"),
+        makeMenu(TranslatableString("appshell/menu/view", "W&orkspaces"), makeWorkspacesItems(), "menu-workspaces"),
         makeSeparator(),
-        makeMenu(TranslatableString("appshell", "&Show"), makeShowItems(), "menu-show"),
+        makeMenu(TranslatableString("appshell/menu/view", "&Show"), makeShowItems(), "menu-show"),
         makeSeparator(),
         makeMenuItem("dock-restore-default-layout")
     };
 
-    return makeMenu(TranslatableString("appshell", "&View"), viewItems, "menu-view");
+    return makeMenu(TranslatableString("appshell/menu/view", "&View"), viewItems, "menu-view");
 }
 
 MenuItem* AppMenuModel::makeAddMenu()
 {
     MenuItemList addItems {
-        makeMenu(TranslatableString("appshell", "&Notes"), makeNotesItems(), "menu-notes"),
-        makeMenu(TranslatableString("appshell", "&Intervals"), makeIntervalsItems(), "menu-intervals"),
-        makeMenu(TranslatableString("appshell", "T&uplets"), makeTupletsItems(), "menu-tuplets"),
+        makeMenu(TranslatableString("appshell/menu/add", "&Notes"), makeNotesItems(), "menu-notes"),
+        makeMenu(TranslatableString("appshell/menu/add", "&Intervals"), makeIntervalsItems(), "menu-intervals"),
+        makeMenu(TranslatableString("appshell/menu/add", "T&uplets"), makeTupletsItems(), "menu-tuplets"),
         makeSeparator(),
-        makeMenu(TranslatableString("appshell", "&Measures"), makeMeasuresItems(), "menu-measures"),
-        makeMenu(TranslatableString("appshell", "&Frames"), makeFramesItems(), "menu-frames"),
-        makeMenu(TranslatableString("appshell", "&Text"), makeTextItems(), "menu-notes"),
-        makeMenu(TranslatableString("appshell", "&Lines"), makeLinesItems(), "menu-lines"),
+        makeMenu(TranslatableString("appshell/menu/add", "&Measures"), makeMeasuresItems(), "menu-measures"),
+        makeMenu(TranslatableString("appshell/menu/add", "&Frames"), makeFramesItems(), "menu-frames"),
+        makeMenu(TranslatableString("appshell/menu/add", "&Text"), makeTextItems(), "menu-notes"),
+        makeMenu(TranslatableString("appshell/menu/add", "&Lines"), makeLinesItems(), "menu-lines"),
     };
 
-    return makeMenu(TranslatableString("appshell", "&Add"), addItems, "menu-add");
+    return makeMenu(TranslatableString("appshell/menu/add", "&Add"), addItems, "menu-add");
 }
 
 MenuItem* AppMenuModel::makeFormatMenu()
@@ -238,7 +238,7 @@ MenuItem* AppMenuModel::makeFormatMenu()
         makeMenuItem("page-settings"),
         makeSeparator(),
         makeMenuItem("add-remove-breaks"),
-        makeMenu(TranslatableString("appshell", "Str&etch"), stretchItems, "menu-stretch"),
+        makeMenu(TranslatableString("appshell/menu/format", "Str&etch"), stretchItems, "menu-stretch"),
         makeSeparator(),
         makeMenuItem("reset-text-style-overrides"),
         makeMenuItem("reset-beammode"),
@@ -248,7 +248,7 @@ MenuItem* AppMenuModel::makeFormatMenu()
         makeMenuItem("save-style")
     };
 
-    return makeMenu(TranslatableString("appshell", "F&ormat"), formatItems, "menu-format");
+    return makeMenu(TranslatableString("appshell/menu/format", "F&ormat"), formatItems, "menu-format");
 }
 
 MenuItem* AppMenuModel::makeToolsMenu()
@@ -273,8 +273,8 @@ MenuItem* AppMenuModel::makeToolsMenu()
         makeMenuItem("explode"),
         makeMenuItem("implode"),
         makeMenuItem("realize-chord-symbols"),
-        makeMenu(TranslatableString("appshell", "&Voices"), voicesItems, "menu-voices"),
-        makeMenu(TranslatableString("appshell", "&Measures"), measuresItems, "menu-tools-measures"),
+        makeMenu(TranslatableString("appshell/menu/tools", "&Voices"), voicesItems, "menu-voices"),
+        makeMenu(TranslatableString("appshell/menu/tools", "&Measures"), measuresItems, "menu-tools-measures"),
         makeMenuItem("time-delete"),
         makeSeparator(),
         makeMenuItem("slash-fill"),
@@ -292,12 +292,12 @@ MenuItem* AppMenuModel::makeToolsMenu()
         makeMenuItem("del-empty-measures"),
     };
 
-    return makeMenu(TranslatableString("appshell", "&Tools"), toolsItems, "menu-tools");
+    return makeMenu(TranslatableString("appshell/menu/tools", "&Tools"), toolsItems, "menu-tools");
 }
 
 MenuItem* AppMenuModel::makePluginsMenu()
 {
-    return makeMenu(TranslatableString("appshell", "&Plugins"), makePluginsMenuSubitems(), "menu-plugins");
+    return makeMenu(TranslatableString("appshell/menu/plugins", "&Plugins"), makePluginsMenuSubitems(), "menu-plugins");
 }
 
 MenuItemList AppMenuModel::makePluginsMenuSubitems()
@@ -339,7 +339,7 @@ MenuItem* AppMenuModel::makeHelpMenu()
         helpItems.push_front(makeMenuItem("check-update"));
     }
 
-    return makeMenu(TranslatableString("appshell", "&Help"), helpItems, "menu-help");
+    return makeMenu(TranslatableString("appshell/menu/help", "&Help"), helpItems, "menu-help");
 }
 
 MenuItem* AppMenuModel::makeDiagnosticMenu()
@@ -372,14 +372,14 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
     };
 
     MenuItemList items {
-        makeMenu(TranslatableString("appshell", "&System"), systemItems, "menu-system"),
-        makeMenu(TranslatableString("appshell", "&Accessibility"), accessibilityItems, "menu-accessibility"),
-        makeMenu(TranslatableString("appshell", "&Engraving"), engravingItems, "menu-engraving"),
-        makeMenu(TranslatableString("appshell", "Auto&bot"), autobotItems, "menu-autobot"),
+        makeMenu(TranslatableString("appshell/menu/diagnostic", "&System"), systemItems, "menu-system"),
+        makeMenu(TranslatableString("appshell/menu/diagnostic", "&Accessibility"), accessibilityItems, "menu-accessibility"),
+        makeMenu(TranslatableString("appshell/menu/diagnostic", "&Engraving"), engravingItems, "menu-engraving"),
+        makeMenu(TranslatableString("appshell/menu/diagnostic", "Auto&bot"), autobotItems, "menu-autobot"),
         makeMenuItem("multiinstances-dev-show-info")
     };
 
-    return makeMenu(TranslatableString("appshell", "&Diagnostic"), items, "menu-diagnostic");
+    return makeMenu(TranslatableString("appshell/menu/diagnostic", "&Diagnostic"), items, "menu-diagnostic");
 }
 
 MenuItemList AppMenuModel::makeRecentScoresItems()

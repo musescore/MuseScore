@@ -25,6 +25,7 @@
 #include <QPainter>
 #include <QSvgRenderer>
 
+#include "translation.h"
 #include "version.h"
 
 using namespace mu::appshell;
@@ -48,8 +49,9 @@ SplashScreen::SplashScreen()
 {
     setAttribute(Qt::WA_TranslucentBackground);
 
-    // Can't make translatable, because translation system not yet initialized
-    showMessage("Loading…");
+    // TODO: this is just to make it translatable, but translation won't
+    // actually work here because translation system not yet initialized
+    showMessage(qtrc("appshell", "Loading…"));
 }
 
 void SplashScreen::drawContents(QPainter* painter)
@@ -81,5 +83,5 @@ void SplashScreen::drawContents(QPainter* painter)
 
     painter->drawText(websiteRect.translated(0.0, -websiteBoundingRect.height() - versionNumberSpacing),
                       Qt::AlignBottom | Qt::AlignRight | Qt::TextDontClip,
-                      QString("Version %1").arg(QString::fromStdString(framework::Version::fullVersion())));
+                      qtrc("appshell", "Version %1").arg(QString::fromStdString(framework::Version::fullVersion())));
 }
