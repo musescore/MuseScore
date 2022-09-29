@@ -354,8 +354,7 @@ void PlaybackEventsRenderer::renderNoteArticulations(const Chord* chord, const R
         }
 
         if (note->tieFor()) {
-            const Note* lastTiedNote = note->lastTiedNote();
-            noteCtx.duration += lastTiedNoteDurationOffset(lastTiedNote, ctx);
+            noteCtx.duration = tiedNotesTotalDuration(note, ctx.positionTickOffset);
             result.emplace_back(buildNoteEvent(std::move(noteCtx)));
             continue;
         }
@@ -374,14 +373,21 @@ void PlaybackEventsRenderer::renderNoteArticulations(const Chord* chord, const R
     }
 }
 
-duration_t PlaybackEventsRenderer::lastTiedNoteDurationOffset(const Note* lastTiedNote, const RenderingContext& ctx) const
+duration_t PlaybackEventsRenderer::tiedNotesTotalDuration(const Note* firstNote, const int tickPositionOffset) const
 {
-    NominalNoteCtx lastTiedNoteCtx(lastTiedNote, ctx);
-    lastTiedNoteCtx.duration = durationFromTicks(ctx.beatsPerSecond.val, lastTiedNote->chord()->ticks().ticks());
+    mpe::duration_t result = 0;
 
-    ChordArticulationsParser::buildChordArticulationMap(lastTiedNote->chord(), ctx, lastTiedNoteCtx.chordCtx.commonArticulations);
+    const Score* score = firstNote->score();
+    const std::vector<Note*> tiedNotes = firstNote->tiedNotes();
 
-    mpe::NoteEvent lastTiedNoteEvent = buildNoteEvent(std::move(lastTiedNoteCtx));
+    for (const Note* tiedNote : tiedNotes) {
+        if (!tiedNote || !tiedNote->chord()) {
+            continue;
+        }
 
-    return lastTiedNoteEvent.arrangementCtx().actualDuration - lastTiedNoteEvent.arrangementCtx().nominalDuration;
+        BeatsPerSecond bps = score->tempomap()->tempo(tiedNote->tick().ticks() + tickPositionOffset);
+        result += durationFromTicks(bps.val, tiedNote->chord()->durationTypeTicks().ticks());
+    }
+
+    return result;
 }
