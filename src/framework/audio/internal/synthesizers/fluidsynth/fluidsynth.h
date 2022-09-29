@@ -77,7 +77,7 @@ private:
 
     void toggleExpressionController();
 
-    int setCurrentExpressionLevel(int level);
+    int setExpressionLevel(int level);
     int setControllerValue(const midi::Event& event);
 
     std::shared_ptr<Fluid> m_fluid = nullptr;
@@ -86,8 +86,6 @@ private:
     ArticulationMapping m_articulationMapping;
 
     async::Channel<unsigned int> m_streamsCountChanged;
-
-    int m_currentExpressionLevel = 0;
 
     FluidSequencer m_sequencer;
     std::set<io::path_t> m_sfontPaths;
