@@ -24,7 +24,7 @@
           <string>Break systems every X measures</string>
          </property>
          <property name="text">
-          <string>Break systems every</string>
+          <string notr="true">[Break systems every]</string>
          </property>
         </widget>
        </item>
@@ -42,9 +42,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="intervalLabel2">
          <property name="text">
-          <string>measures</string>
+          <string notr="true">[measures]</string>
          </property>
         </widget>
        </item>
