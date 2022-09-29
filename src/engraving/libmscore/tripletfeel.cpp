@@ -150,7 +150,6 @@ void TripletFeel::setTripletProperty()
         break;
 
     case TripletFeelType::NONE:
-        setSwing(false);
         setSwingParameters(0, zeroRatio);
         break;
     }
