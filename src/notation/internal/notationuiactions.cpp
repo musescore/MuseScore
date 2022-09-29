@@ -1801,7 +1801,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Add sharp"),
-             TranslatableString("action", "Apply accidental: sharp")
+             TranslatableString("action", "Add accidental: sharp")
              ),
     UiAction("nat-post",
              mu::context::UiCtxNotationOpened,
