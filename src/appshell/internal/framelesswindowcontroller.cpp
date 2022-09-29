@@ -28,14 +28,6 @@ void FramelessWindowController::init()
 {
 }
 
-bool FramelessWindowController::nativeEventFilter(const QByteArray& eventType, void* message, long* result)
-{
-    Q_UNUSED(eventType)
-    Q_UNUSED(message)
-    Q_UNUSED(result)
-    return true;
-}
-
 QRect FramelessWindowController::windowTitleBarMoveArea() const
 {
     return m_windowTitleBarMoveArea;
@@ -44,4 +36,12 @@ QRect FramelessWindowController::windowTitleBarMoveArea() const
 void FramelessWindowController::setWindowTitleBarMoveArea(const QRect& area)
 {
     m_windowTitleBarMoveArea = area;
+}
+
+bool FramelessWindowController::nativeEventFilter(const QByteArray& eventType, void* message, long* result)
+{
+    Q_UNUSED(eventType)
+    Q_UNUSED(message)
+    Q_UNUSED(result)
+    return true;
 }
