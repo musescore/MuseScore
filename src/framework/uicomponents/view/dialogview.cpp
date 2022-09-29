@@ -29,8 +29,6 @@
 
 using namespace mu::uicomponents;
 
-static const int DIALOG_WINDOW_FRAME_HEIGHT(20);
-
 DialogView::DialogView(QQuickItem* parent)
     : PopupView(parent)
 {
@@ -57,11 +55,7 @@ void DialogView::beforeShow()
 
     const QRect& dlgRect = geometry();
 
-    m_globalPos.setX(referenceRect.x() + (referenceRect.width() - dlgRect.width()) / 2);
-    m_globalPos.setY(referenceRect.y() + (referenceRect.height() - dlgRect.height()) / 2 - DIALOG_WINDOW_FRAME_HEIGHT);
-
-    m_globalPos.setX(m_globalPos.x() + m_localPos.x());
-    m_globalPos.setY(m_globalPos.y() + m_localPos.y());
+    m_globalPos = referenceRect.center() - QPointF(dlgRect.width() / 2, dlgRect.height() / 2) + m_localPos;
 
     //! NOTE ok will be if they call accept
     setErrCode(Ret::Code::Cancel);
