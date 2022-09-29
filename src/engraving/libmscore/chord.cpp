@@ -3748,7 +3748,7 @@ void Chord::layoutArticulations()
     const StaffType* staffType = st->staffTypeForElement(this);
     double mag            = (staffType->isSmall() ? score()->styleD(Sid::smallStaffMag) : 1.0) * staffType->userMag();
     double _spatium       = score()->spatium() * mag;
-    double _spStaff       = _spatium * staffType->lineDistance().val();
+    double _lineDist       = _spatium * staffType->lineDistance().val() / 2;
 
     //
     //    determine direction
@@ -3783,18 +3783,24 @@ void Chord::layoutArticulations()
         double y = 0.0;
         if (bottom) {
             if (!headSide && stem()) {
-                if (_up) {
-                    y = downPos() + stem()->bbox().top();
+                // Check if there's a hook, because the tip of the hook always extends slightly past the end of the stem
+                if (hook()) {
+                    y = hook()->bbox().translated(hook()->pos()).bottom();
                 } else {
-                    y = upPos() + stem()->bbox().bottom();
+                    y = stem()->bbox().translated(stem()->pos()).bottom();
                 }
-                int line   = lrint((y + 0.49 * _spStaff) / _spStaff);
-                // hack: using 0.49 instead of 0.5 otherwise the result can be unpredictably
-                // rounded to upper or lower integer depending on rounding errors
-                if (line < staffType->lines()) {        // align between staff lines
-                    y = line * _spStaff + _spatium * .5;
+                int line   = round((y + _lineDist) / _lineDist);
+                int lines = 2 * (staffType->lines() - 1);
+                if (line < lines && !(line % 2)) {
+                    line += 1;
+                }
+                if (line < lines) {        // align between staff lines
+                    y = line * _lineDist;
+                    y -= a->height() * .5;
+                } else if (line == lines) {
+                    y = score()->styleMM(Sid::propertyDistanceStem) + lines * _lineDist;
                 } else {
-                    y += score()->styleMM(Sid::propertyDistanceStem) + 0.5 * a->height();
+                    y += score()->styleMM(Sid::propertyDistanceStem);
                 }
                 if (a->isStaccato() && articulations().size() == 1) {
                     if (_up) {
@@ -3806,31 +3812,36 @@ void Chord::layoutArticulations()
             } else {
                 int line = downLine();
                 int lines = (staffType->lines() - 1) * 2;
-                if (line < lines) {
-                    y = ((line & ~1) + 3) * _spStaff;
+                if (line < lines - 1) {
+                    y = ((line & ~1) + 3) * _lineDist;
+                    y -= a->height() * .5;
                 } else {
-                    y = line * _spStaff + 2 * _spatium;
+                    y = downPos() + 0.5 * downNote()->headHeight() + score()->styleMM(Sid::propertyDistanceHead);
                 }
-                y *= .5;
             }
             if (prevArticulation && (prevArticulation->up() == a->up())) {
                 y += _spatium;
             }
-            y -= a->height() * .5;              // center symbol
+            // center symbol
         } else {
             if (!headSide && stem()) {
-                if (_up) {
-                    y = downPos() + stem()->bbox().top();
+                // Check if there's a hook, because the tip of the hook always extends slightly past the end of the stem
+                if (hook()) {
+                    y = hook()->bbox().translated(hook()->pos()).top();
                 } else {
-                    y = upPos() + stem()->bbox().bottom();
+                    y = stem()->bbox().translated(stem()->pos()).top();
                 }
-                int line   = lrint((y - 0.49 * _spStaff) / _spStaff);
-                // hack: using 0.49 instead of 0.5 otherwise the result can be unpredictably
-                // rounded to upper or lower integer depending on rounding errors
-                if (line >= 0) {        // align between staff lines
-                    y = line * _spStaff - _spatium * .5;
+                int line   = round((y - _lineDist) / _lineDist);
+                if (line > 0 && !(line % 2)) {
+                    line -= 1;
+                }
+                if (line > 0) {        // align between staff lines
+                    y = line * _lineDist;
+                    y += a->height() * .5;
+                } else if (line == 0) {
+                    y = -score()->styleMM(Sid::propertyDistanceStem);
                 } else {
-                    y -= score()->styleMM(Sid::propertyDistanceStem) + 0.5 * a->height();
+                    y -= score()->styleMM(Sid::propertyDistanceStem);
                 }
                 if (a->isStaccato() && articulations().size() == 1) {
                     if (_up) {
@@ -3841,17 +3852,16 @@ void Chord::layoutArticulations()
                 }
             } else {
                 int line = upLine();
-                if (line > 0) {
-                    y = (((line + 1) & ~1) - 3) * _spStaff;
+                if (line > 1) {
+                    y = (((line + 1) & ~1) - 3) * _lineDist;
+                    y += a->height() * .5;
                 } else {
-                    y = line * _spStaff - 2 * _spatium;
+                    y = upPos() - 0.5 * downNote()->headHeight() - score()->styleMM(Sid::propertyDistanceHead);
                 }
-                y *= .5;
             }
             if (prevArticulation && (prevArticulation->up() == a->up())) {
                 y -= _spatium;
             }
-            y += a->height() * .5;              // center symbol
         }
         a->setPos(x, y);
         prevArticulation = a;
@@ -3891,12 +3901,13 @@ void Chord::layoutArticulations2()
     // gap between note and staff articulation is distance0 + 0.5 spatium
 
     if (stem()) {
-        double y = stem()->pos().y() + pos().y();
-        y += up() ? -stem()->length() : stem()->length();
+        // Check if there's a hook, because the tip of the hook always extends slightly past the end of the stem
         if (up()) {
-            chordTopY = y;
+            double tip = hook() ? hook()->bbox().translated(hook()->pos()).top() : stem()->bbox().translated(stem()->pos()).top();
+            chordTopY = tip;
         } else {
-            chordBotY = y;
+            double tip = hook() ? hook()->bbox().translated(hook()->pos()).bottom() : stem()->bbox().translated(stem()->pos()).bottom();
+            chordBotY = tip;
         }
     }
 
