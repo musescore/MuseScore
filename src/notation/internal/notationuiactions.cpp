@@ -845,7 +845,7 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("interval1",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
-             TranslatableString("action", "&Unison above"),
+             TranslatableString("action", "&Unison"),
              TranslatableString("action", "Enter interval: unison")
              ),
     UiAction("interval2",
