@@ -213,3 +213,46 @@ TEST_F(Engraving_TempoMapTests, GRADUAL_TEMPO_CHANGE_RALLENTANDO)
         EXPECT_TRUE(RealIsEqual(RealRound(tempoMap->at(pair.first).tempo.val, 2), RealRound(pair.second.val, 2)));
     }
 }
+
+/**
+ * @brief TempoMapTests_GRADUAL_TEMPO_CHANGE_DOESNT_OVERWRITE_OTHER_TEMPO
+ * @details In this case we're loading a simple score with 3 measures (Piano, 4/4, Treble Cleff)
+ *          There is a "ritardando" tempo annotation on the very first measure, which continues throughout the second measure.
+ *          There is a tempo marking at the end of the first measure (80 BPM).
+ *          Additionally, there is "presto" tempo annotation at the beginning of the third measure.
+ *
+ *          Check that the "ritardando" tempo doesn't overwrite the tempo marking (80 BMP) and the "presto" tempo
+ *          See: https://github.com/musescore/MuseScore/issues/12140
+ */
+TEST_F(Engraving_TempoMapTests, GRADUAL_TEMPO_CHANGE_DOESNT_OVERWRITE_OTHER_TEMPO)
+{
+    // [GIVEN] Simple piece of score (Piano, 4/4, Treble Cleff)
+    Score* score = ScoreRW::readScore(
+        TEMPOMAP_TEST_FILES_DIR
+        + "gradual_tempo_change_doesnt_overwrite_other_tempo/gradual_tempo_change_doesnt_overwrite_other_tempo.mscx");
+
+    ASSERT_TRUE(score);
+
+    // [GIVEN] Expected tempomap
+    std::map<int, BeatsPerSecond> expectedTempoMap = {
+        // ritardando (beginning of the first measure)
+        { 0, BeatsPerSecond::fromBPM(BeatsPerMinute(120.f)) },
+        { 960, BeatsPerSecond::fromBPM(BeatsPerMinute(112.5f)) },
+        // tempo marking (80 BPM, the first measure)
+        { 1440, BeatsPerSecond::fromBPM(BeatsPerMinute(80.f)) },
+        // ritardando (the second measure)
+        { 1920, BeatsPerSecond::fromBPM(BeatsPerMinute(105.f)) },
+        { 2880, BeatsPerSecond::fromBPM(BeatsPerMinute(97.5f)) },
+        // presto (beginning of the third measure)
+        { 3840, BeatsPerSecond::fromBPM(BeatsPerMinute(187.2f)) },
+    };
+
+    // [WHEN] We request score's tempomap its size matches with our expectations
+    const TempoMap* tempoMap = score->tempomap();
+    EXPECT_FALSE(tempoMap->empty());
+
+    // [THEN] Applied tempo matches with our expectations
+    for (const auto& pair : expectedTempoMap) {
+        EXPECT_TRUE(RealIsEqual(RealRound(tempoMap->at(pair.first).tempo.val, 2), RealRound(pair.second.val, 2)));
+    }
+}

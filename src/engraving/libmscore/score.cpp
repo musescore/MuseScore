@@ -575,12 +575,16 @@ void Score::setUpTempoMap()
         BeatsPerSecond newBps = currentBps * tempoChange->tempoChangeFactor();
 
         std::map<int, double> tempoCurve = TConv::easingValueCurve(tempoChange->ticks().ticks(),
-                                                                   4,
+                                                                   4 /*stepsCount*/,
                                                                    newBps.val - currentBps.val,
                                                                    tempoChange->easingMethod());
 
         for (const auto& pair : tempoCurve) {
-            tempomap()->setTempo(tickPositionFrom + pair.first, BeatsPerSecond(currentBps.val + pair.second));
+            int tick = tickPositionFrom + pair.first;
+
+            if (tempomap()->find(tick) == tempomap()->end()) {
+                tempomap()->setTempo(tick, BeatsPerSecond(currentBps.val + pair.second));
+            }
         }
     }
 
