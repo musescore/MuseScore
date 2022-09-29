@@ -75,8 +75,10 @@ private:
 
     bool handleEvent(const midi::Event& event);
 
-    void updateCurrentExpressionLevel(const midi::Event& event);
     void toggleExpressionController();
+
+    int setCurrentExpressionLevel(int level);
+    int setControllerValue(const midi::Event& event);
 
     std::shared_ptr<Fluid> m_fluid = nullptr;
 
