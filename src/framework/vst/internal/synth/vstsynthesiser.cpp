@@ -153,6 +153,10 @@ audio::msecs_t VstSynthesiser::playbackPosition() const
 void VstSynthesiser::setPlaybackPosition(const audio::msecs_t newPosition)
 {
     m_sequencer.setPlaybackPosition(newPosition);
+
+    if (isActive()) {
+        m_vstAudioClient->setVolumeGain(m_sequencer.currentGain());
+    }
 }
 
 void VstSynthesiser::setSampleRate(unsigned int sampleRate)

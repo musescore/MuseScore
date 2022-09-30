@@ -323,6 +323,10 @@ msecs_t FluidSynth::playbackPosition() const
 void FluidSynth::setPlaybackPosition(const msecs_t newPosition)
 {
     m_sequencer.setPlaybackPosition(newPosition);
+
+    if (isActive()) {
+        setExpressionLevel(m_sequencer.currentExpressionLevel());
+    }
 }
 
 unsigned int FluidSynth::audioChannelsCount() const
