@@ -71,7 +71,16 @@ AbstractVstEditorView::~AbstractVstEditorView()
 
 tresult AbstractVstEditorView::resizeView(IPlugView* view, ViewRect* newSize)
 {
+    view->checkSizeConstraint(newSize);
+
+    //! NOTE: newSize already includes the UI scaling on Windows, so we have to remove it before setting the fixed size.
+    //! Otherwise, the user will get an extremely large window and won't be able to resize it
+#ifdef Q_OS_WIN
+    setFixedSize(newSize->getWidth() / m_scalingFactor, newSize->getHeight() / m_scalingFactor);
+#else
     setFixedSize(newSize->getWidth(), newSize->getHeight());
+#endif
+
     view->onSize(newSize);
 
     update();
