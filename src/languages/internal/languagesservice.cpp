@@ -308,9 +308,9 @@ Progress LanguagesService::update(const QString& languageCode)
 
     m_updateOperationsHash.insert(effectiveLanguageCode, progress);
 
-    progress.finished.onReceive(this, [this, effectiveLanguageCode](Ret ret) {
-        if (!ret && ret.code() != static_cast<int>(Err::AlreadyUpToDate)) {
-            LOGE() << ret.toString();
+    progress.finished.onReceive(this, [this, effectiveLanguageCode](const ProgressResult& res) {
+        if (!res.ret && res.ret.code() != static_cast<int>(Err::AlreadyUpToDate)) {
+            LOGE() << res.ret.toString();
         }
 
         m_updateOperationsHash.remove(effectiveLanguageCode);

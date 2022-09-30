@@ -26,6 +26,7 @@
 #include "log.h"
 
 using namespace mu::appshell;
+using namespace mu::framework;
 using namespace mu::languages;
 
 GeneralPreferencesModel::GeneralPreferencesModel(QObject* parent)
@@ -63,8 +64,8 @@ void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
         emit receivingUpdateForCurrentLanguage(current, total, QString::fromStdString(status));
     });
 
-    m_languageUpdateProgress.finished.onReceive(this, [this, languageCode](Ret ret) {
-        if (ret.code() == static_cast<int>(Err::AlreadyUpToDate)) {
+    m_languageUpdateProgress.finished.onReceive(this, [this, languageCode](const ProgressResult& res) {
+        if (res.ret.code() == static_cast<int>(Err::AlreadyUpToDate)) {
             QString msg = mu::qtrc("appshell/preferences", "Your version of %1 is up to date.")
                           .arg(languagesService()->language(languageCode).name);
             interactive()->info(msg.toStdString(), std::string());
