@@ -57,6 +57,9 @@ public:
     QString commandInfo() const;
     void setCommandInfo(const QString& command);
 
+    bool isRangeSelection() const;
+    QString rangeSelectionInfo();
+
 private:
 
     bool m_enabled = false;
