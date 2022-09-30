@@ -58,9 +58,10 @@
             <sigN>12</sigN>
             <sigD>8</sigD>
             </TimeSig>
-          <RehearsalMark>
+          <SystemText>
+            <style>tempo</style>
             <text>Verse 1</text>
-            </RehearsalMark>
+            </SystemText>
           <FretDiagram>
             <Harmony>
               <root>16</root>

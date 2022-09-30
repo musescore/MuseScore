@@ -103,9 +103,10 @@
               <marker>79</marker>
               </string>
             </FretDiagram>
-          <RehearsalMark>
+          <SystemText>
+            <style>tempo</style>
             <text>Verse 1</text>
-            </RehearsalMark>
+            </SystemText>
           <Tempo>
             <tempo>1.683333</tempo>
             <text><sym>metNoteQuarterUp</sym> = 101</text>

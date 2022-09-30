@@ -10235,9 +10235,10 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <RehearsalMark>
+          <SystemText>
+            <style>tempo</style>
             <text>tempo 144</text>
-            </RehearsalMark>
+            </SystemText>
           <Tempo>
             <tempo>2.4</tempo>
             <text><sym>metNoteQuarterUp</sym> = 144</text>

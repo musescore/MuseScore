@@ -775,16 +775,23 @@ void GPConverter::addSection(const GPMasterBar* mB, Measure* measure)
         Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
         RehearsalMark* t = Factory::createRehearsalMark(_score->dummy()->segment());
         t->setPlainText(mB->section().first);
-        t->setType(RehearsalMark::Type::Main);
         t->setTrack(0);
         s->add(t);
     }
     if (!mB->section().second.isEmpty()) {
-        Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-        RehearsalMark* t = Factory::createRehearsalMark(_score->dummy()->segment());
+        SystemText* t = Factory::createSystemText(_score->dummy()->segment(), TextStyleType::TEMPO);
         t->setPlainText(mB->section().second);
-        t->setType(RehearsalMark::Type::Additional);
         t->setTrack(0);
+
+        Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
+
+        // moving the second part of section to another segment, cause it doesn't fit
+        // TODO-gp: implement as extended rehearsal mark
+        if (!mB->section().first.isEmpty()) {
+            Fraction midTick = s->tick() + Fraction(1, 32);
+            s = measure->getSegment(SegmentType::ChordRest, midTick);
+        }
+
         s->add(t);
     }
 }

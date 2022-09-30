@@ -47,11 +47,11 @@
 #include "libmscore/note.h"
 #include "libmscore/notedot.h"
 #include "libmscore/part.h"
-#include "libmscore/rehearsalmark.h"
 #include "libmscore/rest.h"
 #include "libmscore/segment.h"
 #include "libmscore/slur.h"
 #include "libmscore/staff.h"
+#include "libmscore/systemtext.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/stafftype.h"
 #include "libmscore/stringdata.h"
@@ -625,11 +625,10 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
 
         if (!gpbar.marker.isEmpty()) {
             Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            RehearsalMark* s = Factory::createRehearsalMark(segment);
-            s->setType(RehearsalMark::Type::Additional);
-            s->setPlainText(gpbar.marker.trimmed());
-            s->setTrack(0);
-            segment->add(s);
+            SystemText* text = Factory::createSystemText(score->dummy()->segment(), TextStyleType::TEMPO);
+            text->setPlainText(gpbar.marker.trimmed());
+            text->setTrack(0);
+            segment->add(text);
         }
 
         std::vector<Tuplet*> tuplets(staves * 2);

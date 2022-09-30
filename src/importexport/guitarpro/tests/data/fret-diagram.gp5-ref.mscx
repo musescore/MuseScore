@@ -76,9 +76,10 @@
         </Measure>
       <Measure>
         <voice>
-          <RehearsalMark>
+          <SystemText>
+            <style>tempo</style>
             <text>Intro</text>
-            </RehearsalMark>
+            </SystemText>
           <Beam>
             <l1>-28</l1>
             <l2>-28</l2>
