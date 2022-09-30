@@ -27,11 +27,9 @@
 
 #include "modularity/ioc.h"
 #include "ilanguagesconfiguration.h"
-#include "ilanguageunpacker.h"
-#include "iglobalconfiguration.h"
 #include "framework/network/inetworkmanagercreator.h"
 #include "io/ifilesystem.h"
-#include "ui/iuiengine.h"
+#include "multiinstances/imultiinstancesprovider.h"
 
 class QTranslator;
 
@@ -39,72 +37,50 @@ namespace mu::languages {
 class LanguagesService : public ILanguagesService, public async::Asyncable
 {
     INJECT(languages, ILanguagesConfiguration, configuration)
-    INJECT(languages, ILanguageUnpacker, languageUnpacker)
-    INJECT(languages, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(languages, network::INetworkManagerCreator, networkManagerCreator)
     INJECT(languages, io::IFileSystem, fileSystem)
-    INJECT(languages, ui::IUiEngine, uiEngine)
+    INJECT(languages, mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
     void init();
-    void refreshLanguages();
 
-    ValCh<LanguagesHash> languages() const override;
-    ValCh<Language> currentLanguage() const override;
+    const LanguagesHash& languages() const override;
+    Language language(const QString& languageCode) const override;
+    const Language& currentLanguage() const override;
+    async::Notification currentLanguageChanged() const override;
 
-    LanguageStatus::Status languageStatus(const QString& languageCode) const override;
+    bool hasPlaceholderLanguage() const override;
+    const Language& placeholderLanguage() const override;
 
-    RetCh<LanguageProgress> install(const QString& languageCode) override;
-    RetCh<LanguageProgress> update(const QString& languageCode) override;
-    Ret uninstall(const QString& languageCode) override;
+    framework::Progress update(const QString& languageCode) override;
+
+    bool needRestartToApplyLanguageChange() const override;
+    async::Channel<bool> needRestartToApplyLanguageChangeChanged() const override;
 
 private:
-    RetVal<LanguagesHash> parseLanguagesConfig(const QByteArray& json) const;
-    LanguageFiles parseLanguageFiles(const QJsonObject& languageObject) const;
+    void loadLanguages();
 
     void setCurrentLanguage(const QString& languageCode);
+    QString effectiveLanguageCode(const QString& languageCode) const;
+    Ret loadLanguage(Language& lang);
 
-    bool isLanguageExists(const QString& languageCode) const;
-    bool checkLanguageFilesHash(const QString& languageCode, const LanguageFiles& languageFiles) const;
-
-    Language language(const QString& languageCode) const;
-
-    RetVal<QString> downloadLanguage(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel) const;
-    Ret removeLanguage(const QString& languageCode) const;
-
-    Ret loadLanguage(const QString& languageCode);
-
-    void resetLanguageToSystemLanguage();
-
-    void th_refreshLanguages();
-    void th_install(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel, async::Channel<Ret>* finishChannel);
-    void th_update(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel, async::Channel<Ret>* finishChannel);
-
-    void closeOperation(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel);
-
-    enum OperationType
-    {
-        None,
-        Install,
-        Update
-    };
-
-    struct Operation
-    {
-        OperationType type = OperationType::None;
-        async::Channel<LanguageProgress>* progressChannel = nullptr;
-
-        Operation() = default;
-        Operation(const OperationType& type, async::Channel<LanguageProgress>* progressChannel)
-            : type(type), progressChannel(progressChannel) {}
-    };
+    void th_update(const QString& languageCode, framework::Progress progress);
+    bool canUpdate(const QString& languageCode);
+    Ret downloadLanguage(const QString& languageCode, framework::Progress progress) const;
+    RetVal<QString> fileHash(const io::path_t& path);
 
 private:
-    async::Channel<Language> m_currentLanguageChanged;
-    QList<QTranslator*> m_translatorList;
-    bool m_inited = false;
+    LanguagesHash m_languagesHash;
+    Language m_currentLanguage;
+    async::Notification m_currentLanguageChanged;
+    Language m_placeholderLanguage;
 
-    mutable QHash<QString, Operation> m_operationsHash;
+    QSet<QTranslator*> m_translators;
+    mutable QHash<QString, framework::Progress> m_updateOperationsHash;
+
+    bool m_inited = false;
+    bool m_needRestartToApplyLanguageChange = false;
+    async::Channel<bool> m_needRestartToApplyLanguageChangeChanged;
 };
 }
 

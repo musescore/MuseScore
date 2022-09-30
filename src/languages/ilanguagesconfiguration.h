@@ -25,7 +25,6 @@
 #include "modularity/imoduleexport.h"
 #include "types/retval.h"
 #include "io/path.h"
-#include "languagestypes.h"
 
 namespace mu::languages {
 class ILanguagesConfiguration : MODULE_EXPORT_INTERFACE
@@ -41,13 +40,12 @@ public:
     virtual QUrl languagesUpdateUrl() const = 0;
     virtual QUrl languageFileServerUrl(const QString& languageCode) const = 0;
 
-    virtual ValCh<LanguagesHash> languages() const = 0;
-    virtual Ret setLanguages(const LanguagesHash& languages) = 0;
-
+    virtual io::path_t languagesAppDataPath() const = 0;
     virtual io::path_t languagesUserAppDataPath() const = 0;
 
-    virtual io::paths_t languageFilePaths(const QString& languageCode) const = 0;
-    virtual io::path_t languageArchivePath(const QString& languageCode) const = 0;
+    virtual io::path_t builtinLanguagesJsonPath() const = 0;
+    virtual io::path_t builtinLanguageFilePath(const QString& resourceName, const QString& languageCode) const = 0;
+    virtual io::path_t userLanguageFilePath(const QString& resourceName, const QString& languageCode) const = 0;
 };
 }
 

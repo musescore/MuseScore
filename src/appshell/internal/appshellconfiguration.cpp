@@ -21,6 +21,7 @@
  */
 #include "appshellconfiguration.h"
 
+#include <QJsonArray>
 #include <QJsonDocument>
 
 #include "config.h"

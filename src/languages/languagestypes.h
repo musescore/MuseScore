@@ -22,86 +22,28 @@
 #ifndef MU_LANGUAGES_LANGUAGESTYPES_H
 #define MU_LANGUAGES_LANGUAGESTYPES_H
 
+#include <QHash>
+#include <QMap>
 #include <QString>
-#include <QVersionNumber>
-#include <QJsonObject>
-#include <QObject>
-#include <QMetaObject>
-#include <QJsonArray>
+
+#include "io/path.h"
 
 namespace mu::languages {
 const QString SYSTEM_LANGUAGE_CODE = "system";
 const QString PLACEHOLDER_LANGUAGE_CODE = "en@placeholder";
 
-class LanguageStatus
-{
-    Q_GADGET
-public:
-    enum class Status {
-        Undefined = 0,
-        Installed,
-        NoInstalled,
-        NeedUpdate
-    };
-    Q_ENUM(Status)
-};
-
-struct LanguageProgress
-{
-    QString status;
-    bool indeterminate = true;
-
-    qint64 current = 0;
-    quint64 total = 0;
-
-    LanguageProgress() = default;
-    LanguageProgress(const QString& status, bool indeterminate)
-        : status(status), indeterminate(indeterminate) {}
-    LanguageProgress(const QString& status, qint64 current, qint64 total)
-        : status(status), indeterminate(false), current(current), total(total) {}
-};
-
-struct LanguageFile
-{
-    QString name;
-    QString hash;
-
-    LanguageFile() = default;
-    LanguageFile(const QString& name, const QString& hash)
-        : name(name), hash(hash) {}
-
-    QJsonObject toJson() const
-    {
-        return { { "name", name },
-            { "hash", hash } };
-    }
-};
-using LanguageFiles = QList<LanguageFile>;
+using LanguageFilesMap = QMap<QString /*resourceName*/, io::path_t>;
 
 struct Language
 {
     QString code;
     QString name;
-    QString archiveFileName;
 
-    LanguageFiles files;
+    LanguageFilesMap files;
 
-    Language() = default;
-
-    QJsonObject toJson() const
+    bool isLoaded() const
     {
-        QJsonObject obj = {
-            { "name", name },
-            { "fileName", archiveFileName }
-        };
-
-        QJsonArray filesArray;
-        for (const LanguageFile& file: files) {
-            filesArray << file.toJson();
-        }
-        obj["files"] = filesArray;
-
-        return obj;
+        return !files.empty();
     }
 };
 

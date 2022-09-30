@@ -31,6 +31,7 @@ template<typename T>
 struct RetVal {
     Ret ret;
     T val;
+
     RetVal() = default;
     RetVal(const Ret& r)
         : ret(r) {}
