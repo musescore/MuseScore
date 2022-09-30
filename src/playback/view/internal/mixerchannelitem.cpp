@@ -155,11 +155,30 @@ void MixerChannelItem::loadOutputParams(AudioOutputParams&& newParams)
         emit mutedChanged();
     }
 
-    if (m_outputResourceItemList.empty()) {
-        loadOutputResourceItemList(newParams.fxChain);
-    } else {
-        updateOutputResourceItemList(newParams.fxChain);
+    for (int i = 0; i < m_outputResourceItemList.count(); ++i) {
+        if (newParams.fxChain.find(i) == newParams.fxChain.cend()) {
+            OutputResourceItem* item = m_outputResourceItemList.at(i);
+            item->disconnect();
+            item->deleteLater();
+            m_outputResourceItemList.removeAt(i);
+        }
     }
+
+    for (const auto& pair : newParams.fxChain) {
+        OutputResourceItem* item = m_outputResourceItemList.value(pair.first, nullptr);
+        if (!item) {
+            m_outputResourceItemList << buildOutputResourceItem(pair.second);
+            continue;
+        }
+
+        if (item->params() != pair.second) {
+            item->blockSignals(true);
+            item->setParams(pair.second);
+            item->blockSignals(false);
+        }
+    }
+
+    emit outputResourceItemListChanged(m_outputResourceItemList);
 
     ensureBlankOutputResourceSlot();
 }
