@@ -83,8 +83,8 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     Fraction lcmTick = ctx.curMeasure->tick();
     system->setInstrumentNames(ctx, ctx.startWithLongNames, lcmTick);
 
-    double curSysWidth    = 0;
-    double layoutSystemMinWidth = 0;
+    double curSysWidth    = 0.0;
+    double layoutSystemMinWidth = 0.0;
     bool firstMeasure = true;
     bool createHeader = false;
     double targetSystemWidth = score->styleD(Sid::pagePrintableWidth) * DPI;
@@ -102,8 +102,8 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     Fraction prevMaxTicks = Fraction(1, 1);
     bool maxSysTicksChanged = false;
     static constexpr double squeezability = 0.3; // We may consider exposing in Style settings (M.S.)
-    double oldStretch = 1;
-    double oldWidth = 0;
+    double oldStretch = 1.0;
+    double oldWidth = 0.0;
     System* oldSystem = nullptr;
 
     while (ctx.curMeasure) {      // collect measure for system
@@ -112,7 +112,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         if (system->hasCrossStaffOrModifiedBeams()) {
             updateCrossBeams(system, ctx);
         }
-        double ww  = 0; // width of current measure
+        double ww  = 0.0; // width of current measure
         if (ctx.curMeasure->isMeasure()) {
             Measure* m = toMeasure(ctx.curMeasure);
             LayoutChords::updateLineAttachPoints(m);
@@ -409,27 +409,23 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     }
 
     // Recompute measure widths to account for the last changes (barlines, hidden staves, etc)
-    double preStretch = targetSystemWidth > curSysWidth ? 1 : 1 - squeezability;
+    // If system is currently larger than margin (because of acceptanceRange) compute width
+    // with a reduced pre-stretch, because justifySystem expects curSysWidth < targetWidth
+    double preStretch = targetSystemWidth > curSysWidth ? 1.0 : 1 - squeezability;
     for (MeasureBase* mb : system->measures()) {
         if (!mb->isMeasure()) {
             continue;
         }
         Measure* m = toMeasure(mb);
         double oldWidth = m->width();
-        // If system is currently larger than margin (because of acceptanceRange) compute width
-        // with a reduced pre-stretch, because justifySystem expects curSysWidth < targetWidth
-        if (targetSystemWidth > curSysWidth) {
-            m->computeWidth(minTicks, maxTicks, preStretch);
-        } else {
-            m->computeWidth(minTicks, maxTicks, preStretch);
-        }
+        m->computeWidth(minTicks, maxTicks, preStretch);
         curSysWidth += m->width() - oldWidth;
     }
 
     // JUSTIFY SYSTEM
-    // Do not justify last system of a section if curSysWidth is <= lastSystemFillLimit
+    // Do not justify last system of a section if curSysWidth is < lastSystemFillLimit
     if (!((ctx.curMeasure == 0 || (lm && lm->sectionBreak()))
-          && ((curSysWidth / targetSystemWidth) <= score->styleD(Sid::lastSystemFillLimit)))
+          && ((curSysWidth / targetSystemWidth) < score->styleD(Sid::lastSystemFillLimit)))
         && !MScore::noHorizontalStretch) { // debug feature
         justifySystem(system, curSysWidth, targetSystemWidth);
     }
@@ -498,7 +494,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
 void LayoutSystem::justifySystem(System* system, double curSysWidth, double targetSystemWidth)
 {
     double rest = targetSystemWidth - curSysWidth;
-    if (rest == 0) {
+    if (RealIsNull(rest)) {
         return;
     }
     if (rest < 0) {
