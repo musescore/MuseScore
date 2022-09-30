@@ -71,9 +71,9 @@ struct CrossBeamType
 
 struct Spring
 {
-    double springConst = 0;
-    double width = 0;
-    double preTension = 0;
+    double springConst = 0.0;
+    double width = 0.0;
+    double preTension = 0.0;
     Segment* segment = nullptr;
     Spring(double sc, double w, double pt, Segment* s)
         : springConst(sc), width(w), preTension(pt),  segment(s) {}
@@ -88,7 +88,7 @@ class Segment final : public EngravingItem
     Fraction _ticks;   // { Fraction(0, 1) };
     Spatium _extraLeadingSpace;
     double _stretch;
-    double _widthOffset = 0; // part of the segment width that will not be stretched during system justification
+    double _widthOffset = 0.0; // part of the segment width that will not be stretched during system justification
 
     Segment* _next = nullptr;                       // linked list of segments inside a measure
     Segment* _prev = nullptr;

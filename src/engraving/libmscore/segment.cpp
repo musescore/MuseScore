@@ -2792,7 +2792,7 @@ void Segment::computeCrossBeamType(Segment* nextSeg)
 
 void Segment::stretchSegmentsToWidth(std::vector<Spring>& springs, double width)
 {
-    if (width <= 0) {
+    if (RealIsEqualOrLess(width, 0.0)) {
         return;
     }
 
@@ -2840,7 +2840,7 @@ double Segment::computeDurationStretch(Segment* prevSeg, Fraction minTicks, Frac
         double dMinTicks = minTicks.toDouble();
         double dMaxTicks = maxTicks.toDouble();
         double maxSysRatio = dMaxTicks / dMinTicks;
-        if ((dMaxTicks / dMinTicks >= 2) && dMinTicks < longNoteThreshold) {
+        if (RealIsEqualOrMore(dMaxTicks / dMinTicks, 2.0) && dMinTicks < longNoteThreshold) {
             /* HACK: we trick the system to ignore the shortest note and use the "next"
              * shortest. For example, if the shortest is a 32nd, we make it a 16th. */
             dMinTicks *= 2.0;

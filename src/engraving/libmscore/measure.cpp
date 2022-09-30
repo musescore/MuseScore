@@ -4182,7 +4182,7 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
                     // usrStretch := spacing factor determined by user settings.
                     // stretchCoeff := spacing factor used internally for computations
                     double minStretchedWidth = minNoteSpace * durStretch * usrStretch * stretchCoeff;
-                    _squeezableSpace += s->shortestChordRest() == s->ticks() ? minStretchedWidth - w : 0;
+                    _squeezableSpace += s->shortestChordRest() == s->ticks() ? minStretchedWidth - w : 0.0;
                     w = std::max(w, minStretchedWidth);
                 }
             }
