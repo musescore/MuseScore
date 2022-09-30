@@ -46,7 +46,27 @@ MuseSamplerResolver::MuseSamplerResolver()
 
 ISynthesizerPtr MuseSamplerResolver::resolveSynth(const audio::TrackId /*trackId*/, const audio::AudioInputParams& params) const
 {
-    return std::make_shared<MuseSamplerWrapper>(m_libHandler, params);
+    if (!m_libHandler) {
+        return nullptr;
+    }
+
+    auto instrumentList = m_libHandler->getInstrumentList();
+    while (auto instrument = m_libHandler->getNextInstrument(instrumentList)) {
+        String uniqueId = String::fromStdString(std::to_string(m_libHandler->getInstrumentId(instrument)));
+        String internalName = String::fromUtf8(m_libHandler->getInstrumentName(instrument));
+        String internalCategory = String::fromUtf8(m_libHandler->getInstrumentCategory(instrument));
+        String instrumentSoundId = String::fromUtf8(m_libHandler->getMpeSoundId(instrument));
+
+        if (params.resourceMeta.attributeVal(u"playbackSetupData") == instrumentSoundId
+            && params.resourceMeta.attributeVal(u"museCategory") == internalCategory
+            && params.resourceMeta.attributeVal(u"museName") == internalName
+            && params.resourceMeta.attributeVal(u"museUID") == uniqueId) {
+
+            return std::make_shared<MuseSamplerWrapper>(m_libHandler, params);
+        }
+    }
+
+    return nullptr;
 }
 
 bool MuseSamplerResolver::hasCompatibleResources(const audio::PlaybackSetupData& setup) const
