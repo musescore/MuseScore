@@ -7830,6 +7830,11 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1804"/>
+        <source>Add accidental: sharp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1828"/>
         <source>Transpose up half a step</source>
         <translation type="unfinished"></translation>
@@ -9317,11 +9322,6 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1803"/>
         <source>Add sharp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationuiactions.cpp" line="1804"/>
-        <source>Apply accidental: sharp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -22281,18 +22281,18 @@ Whether you are just getting started with music notation software, or are a powe
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="896"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="895"/>
         <source>Load Palette</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="897"/>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="900"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="896"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="899"/>
         <source>MuseScore Palette</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="899"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="898"/>
         <source>Save Palette</source>
         <translation type="unfinished"></translation>
     </message>
