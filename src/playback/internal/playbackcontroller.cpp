@@ -881,7 +881,6 @@ void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceI
     playback()->tracks()->removeAllTracks(m_currentSequenceId);
 
     m_currentSequenceId = sequenceId;
-    m_currentSequenceIdChanged.notify();
 
     if (!notationPlayback()) {
         return;
@@ -893,6 +892,8 @@ void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceI
     subscribeOnAudioParamsChanges();
     setupSequenceTracks();
     setupSequencePlayer();
+
+    m_currentSequenceIdChanged.notify();
 }
 
 void PlaybackController::subscribeOnAudioParamsChanges()
