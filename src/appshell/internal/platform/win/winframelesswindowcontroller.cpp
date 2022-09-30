@@ -38,9 +38,15 @@ using namespace mu::appshell;
 
 static HWND s_hwnd = 0;
 
+static void updateWindowPosition()
+{
+    SetWindowPos(s_hwnd, nullptr, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE);
+}
+
 WinFramelessWindowController::WinFramelessWindowController()
     : FramelessWindowController()
 {
+    qApp->installEventFilter(this);
     qApp->installNativeEventFilter(this);
 }
 
@@ -60,7 +66,32 @@ void WinFramelessWindowController::init()
     const MARGINS shadow_on = { 1, 1, 1, 1 };
     DwmExtendFrameIntoClientArea(s_hwnd, &shadow_on);
 
-    SetWindowPos(s_hwnd, nullptr, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE);
+    updateWindowPosition();
+}
+
+bool WinFramelessWindowController::eventFilter(QObject* watched, QEvent* event)
+{
+    if (event->type() != QEvent::Move || !watched->isWindowType()) {
+        return false;
+    }
+
+    QWindow* window = dynamic_cast<QWindow*>(watched);
+    if (!window) {
+        return false;
+    }
+
+    if (!m_screen) {
+        m_screen = window->screen();
+        return false;
+    }
+
+    if (m_screen != window->screen()) {
+        m_screen = window->screen();
+        //! Redrawing a window by updating a position
+        updateWindowPosition();
+    }
+
+    return false;
 }
 
 bool WinFramelessWindowController::nativeEventFilter(const QByteArray& eventType, void* message, long* result)
