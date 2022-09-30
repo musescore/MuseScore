@@ -37,7 +37,7 @@
 
 using namespace mu::notation;
 
-static constexpr int PROCESS_INTERVAL = 20;
+static constexpr int PROCESS_INTERVAL = 100;
 
 NotationMidiInput::NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction, INotationUndoStackPtr undoStack)
     : m_getScore(getScore), m_notationInteraction(notationInteraction), m_undoStack(undoStack)
