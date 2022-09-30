@@ -21,6 +21,8 @@
  */
 #include "generalpreferencesmodel.h"
 
+#include "languages/languageserrors.h"
+
 #include "log.h"
 
 using namespace mu::appshell;
@@ -35,12 +37,11 @@ void GeneralPreferencesModel::load()
 {
     languagesConfiguration()->currentLanguageCode().ch.onReceive(this, [this](const QString& languageCode) {
         emit currentLanguageCodeChanged(languageCode);
-        setIsNeedRestart(true);
     });
 
-    languagesService()->languages().ch.onReceive(this, [this](const LanguagesHash&) {
-        emit languagesChanged(languages());
-        setIsNeedRestart(true);
+    setIsNeedRestart(languagesService()->needRestartToApplyLanguageChange());
+    languagesService()->needRestartToApplyLanguageChangeChanged().onReceive(this, [this](bool need) {
+        setIsNeedRestart(need);
     });
 
     projectConfiguration()->autoSaveEnabledChanged().onReceive(this, [this](bool enabled) {
@@ -54,45 +55,41 @@ void GeneralPreferencesModel::load()
 
 void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
 {
-    QString currentLanguageCode = this->currentLanguageCode();
-    LanguageStatus::Status languageStatus = languagesService()->languageStatus(currentLanguageCode);
-    if (languageStatus != LanguageStatus::Status::NeedUpdate) {
-        Language currentLanguage = languagesService()->languages().val.value(currentLanguageCode);
-        QString msg = mu::qtrc("appshell/preferences", "Your version of %1 is up to date").arg(currentLanguage.name);
-        interactive()->info(msg.toStdString(), std::string());
-        return;
-    }
+    QString languageCode = currentLanguageCode();
 
-    RetCh<LanguageProgress> progress = languagesService()->update(currentLanguageCode);
-    if (!progress.ret) {
-        LOGE() << progress.ret.toString();
-        return;
-    }
+    m_languageUpdateProgress = languagesService()->update(languageCode);
 
-    progress.ch.onReceive(this, [this](const LanguageProgress& progress) {
-        emit receivingUpdateForCurrentLanguage(progress.current, progress.status);
-    }, Asyncable::AsyncMode::AsyncSetRepeat);
+    m_languageUpdateProgress.progressChanged.onReceive(this, [this](int64_t current, int64_t total, const std::string& status) {
+        emit receivingUpdateForCurrentLanguage(current, total, QString::fromStdString(status));
+    });
+
+    m_languageUpdateProgress.finished.onReceive(this, [this, languageCode](Ret ret) {
+        if (ret.code() == static_cast<int>(Err::AlreadyUpToDate)) {
+            QString msg = mu::qtrc("appshell/preferences", "Your version of %1 is up to date.")
+                          .arg(languagesService()->language(languageCode).name);
+            interactive()->info(msg.toStdString(), std::string());
+        }
+    });
 }
 
 QVariantList GeneralPreferencesModel::languages() const
 {
-    ValCh<LanguagesHash> languages = languagesService()->languages();
-    QList<Language> languageList = languages.val.values();
+    QList<Language> languages = languagesService()->languages().values();
+
+    std::sort(languages.begin(), languages.end(), [](const Language& l, const Language& r) {
+        return l.code < r.code;
+    });
 
     QVariantList result;
 
-    for (const Language& language : languageList) {
+    for (const Language& language : languages) {
         QVariantMap languageObj;
         languageObj["code"] = language.code;
         languageObj["name"] = language.name;
         result << languageObj;
     }
 
-    std::sort(result.begin(), result.end(), [](const QVariant& l, const QVariant& r) {
-        return l.toMap().value("code").toString() < r.toMap().value("code").toString();
-    });
-
-    if (!languagesConfiguration()->languageFilePaths(PLACEHOLDER_LANGUAGE_CODE).empty()) {
+    if (languagesService()->hasPlaceholderLanguage()) {
         QVariantMap placeholderLanguageObj;
         placeholderLanguageObj["code"] = PLACEHOLDER_LANGUAGE_CODE;
         placeholderLanguageObj["name"] = "«Placeholder translations»";

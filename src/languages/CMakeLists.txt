@@ -27,13 +27,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/languageserrors.h
     ${CMAKE_CURRENT_LIST_DIR}/ilanguagesconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/ilanguagesservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/ilanguageunpacker.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/languagesconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/languagesconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/languagesservice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/languagesservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/languageunpacker.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/languageunpacker.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
