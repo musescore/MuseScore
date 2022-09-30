@@ -304,9 +304,9 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
     RectF bg(m_rect);
     bg.setWidth(widthClef + widthKeySig + widthTimeSig + leftMarginTotal + panelRightPadding);
 
-    const QPixmap& wallpaper = notationConfiguration()->backgroundWallpaper();
+    const QPixmap& wallpaper = notationConfiguration()->foregroundWallpaper();
 
-    if (notationConfiguration()->backgroundUseColor() || wallpaper.isNull()) {
+    if (notationConfiguration()->foregroundUseColor() || wallpaper.isNull()) {
         painter.fillRect(bg, notationConfiguration()->foregroundColor());
     } else {
         painter.drawTiledPixmap(bg, wallpaper, bg.topLeft() - PointF(lrint(ctx.xOffset), lrint(ctx.yOffset)));
