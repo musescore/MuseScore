@@ -120,19 +120,6 @@ StyledDialogView {
                 order: 2
             }
 
-            CheckBox {
-                id: dontAskAgain
-
-                text: qsTrc("global", "Don't ask again")
-
-                navigation.panel: buttons.navigationPanel
-                navigation.order: 2
-
-                onClicked: {
-                    checked = !checked
-                }
-            }
-
             Item {
                 Layout.fillWidth: true
             }
@@ -145,7 +132,7 @@ StyledDialogView {
                 navigation.order: 1
 
                 onClicked: {
-                    root.ret = { "errcode": 0, "value": { "askAgain": !dontAskAgain.checked }}
+                    root.ret = { "errcode": 0 }
                     root.hide()
                 }
             }
