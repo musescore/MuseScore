@@ -100,6 +100,7 @@ void Articulation::setSymId(SymId id)
     setupShowOnTabStyles();
     _anchor = ArticulationAnchor(propertyDefault(Pid::ARTICULATION_ANCHOR).toInt());
     m_textType = TextType::NO_TEXT;
+    computeCategories();
 }
 
 //---------------------------------------------------------
@@ -676,49 +677,39 @@ double Articulation::mag() const
     return explicitParent() ? parentItem()->mag() * score()->styleD(Sid::articulationMag) : 1.0;
 }
 
-bool Articulation::isTenuto() const
+void Articulation::computeCategories()
 {
-    return _symId == SymId::articTenutoAbove || _symId == SymId::articTenutoBelow;
-}
+    m_categories.setFlag(ArticulationCategory::DOUBLE,
+                         _symId == SymId::articMarcatoStaccatoAbove || _symId == SymId::articMarcatoStaccatoBelow
+                         || _symId == SymId::articTenutoStaccatoAbove || _symId == SymId::articTenutoStaccatoBelow
+                         || _symId == SymId::articAccentStaccatoAbove || _symId == SymId::articAccentStaccatoBelow
+                         || _symId == SymId::articMarcatoTenutoAbove || _symId == SymId::articMarcatoTenutoBelow
+                         || _symId == SymId::articTenutoAccentAbove || _symId == SymId::articTenutoAccentBelow);
 
-bool Articulation::isStaccato() const
-{
-    return _symId == SymId::articStaccatoAbove || _symId == SymId::articStaccatoBelow
-           || _symId == SymId::articMarcatoStaccatoAbove || _symId == SymId::articMarcatoStaccatoBelow
-           || _symId == SymId::articAccentStaccatoAbove || _symId == SymId::articAccentStaccatoBelow;
-}
+    m_categories.setFlag(ArticulationCategory::TENUTO,
+                         _symId == SymId::articTenutoAbove || _symId == SymId::articTenutoBelow
+                         || _symId == SymId::articMarcatoTenutoAbove || _symId == SymId::articMarcatoTenutoBelow
+                         || _symId == SymId::articTenutoAccentAbove || _symId == SymId::articTenutoAccentBelow);
 
-bool Articulation::isAccent() const
-{
-    return _symId == SymId::articAccentAbove || _symId == SymId::articAccentBelow
-           || _symId == SymId::articAccentStaccatoAbove || _symId == SymId::articAccentStaccatoBelow;
-}
+    m_categories.setFlag(ArticulationCategory::STACCATO,
+                         _symId == SymId::articStaccatoAbove || _symId == SymId::articStaccatoBelow
+                         || _symId == SymId::articMarcatoStaccatoAbove || _symId == SymId::articMarcatoStaccatoBelow
+                         || _symId == SymId::articTenutoStaccatoAbove || _symId == SymId::articTenutoStaccatoBelow
+                         || _symId == SymId::articAccentStaccatoAbove || _symId == SymId::articAccentStaccatoBelow);
 
-bool Articulation::isMarcato() const
-{
-    return _symId == SymId::articMarcatoAbove || _symId == SymId::articMarcatoBelow
-           || _symId == SymId::articMarcatoStaccatoAbove || _symId == SymId::articMarcatoStaccatoBelow
-           || _symId == SymId::articMarcatoTenutoAbove || _symId == SymId::articMarcatoTenutoBelow;
-}
+    m_categories.setFlag(ArticulationCategory::ACCENT,
+                         _symId == SymId::articAccentAbove || _symId == SymId::articAccentBelow
+                         || _symId == SymId::articAccentStaccatoAbove || _symId == SymId::articAccentStaccatoBelow);
 
-bool Articulation::isDouble() const
-{
-    return _symId == SymId::articMarcatoStaccatoAbove || _symId == SymId::articMarcatoStaccatoBelow
-           || _symId == SymId::articAccentStaccatoAbove || _symId == SymId::articAccentStaccatoBelow
-           || _symId == SymId::articMarcatoTenutoAbove || _symId == SymId::articMarcatoTenutoBelow;
-}
+    m_categories.setFlag(ArticulationCategory::MARCATO,
+                         _symId == SymId::articMarcatoAbove || _symId == SymId::articMarcatoBelow
+                         || _symId == SymId::articMarcatoStaccatoAbove || _symId == SymId::articMarcatoStaccatoBelow
+                         || _symId == SymId::articMarcatoTenutoAbove || _symId == SymId::articMarcatoTenutoBelow);
 
-//---------------------------------------------------------
-//   isLuteFingering
-//---------------------------------------------------------
-
-bool Articulation::isLuteFingering() const
-{
-    return _symId == SymId::stringsThumbPosition
-           || _symId == SymId::luteFingeringRHThumb
-           || _symId == SymId::luteFingeringRHFirst
-           || _symId == SymId::luteFingeringRHSecond
-           || _symId == SymId::luteFingeringRHThird;
+    m_categories.setFlag(ArticulationCategory::LUTE_FINGERING,
+                         _symId == SymId::stringsThumbPosition || _symId == SymId::luteFingeringRHThumb
+                         || _symId == SymId::luteFingeringRHFirst || _symId == SymId::luteFingeringRHSecond
+                         || _symId == SymId::luteFingeringRHThird);
 }
 
 //---------------------------------------------------------
