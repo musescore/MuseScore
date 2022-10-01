@@ -89,7 +89,8 @@ const PlaybackSetupData& StringsSetupDataResolver::doResolve(const Instrument* i
         { "bass-guitar-tablature", { SoundId::BassGuitar, SoundCategory::Strings, { SoundSubCategory::Electric }, {} } },
         { "electric-bass-4-str-tab", { SoundId::BassGuitar, SoundCategory::Strings, { SoundSubCategory::Electric }, {} } },
         { "electric-bass", { SoundId::BassGuitar, SoundCategory::Strings, { SoundSubCategory::Electric }, {} } },
-        { "fretless-electric-bass", { SoundId::BassGuitar, SoundCategory::Strings, { SoundSubCategory::Electric }, {} } },
+        { "fretless-electric-bass", { SoundId::BassGuitar, SoundCategory::Strings, { SoundSubCategory::Electric,
+                                                                                     SoundSubCategory::Fretless }, {} } },
         { "acoustic-bass", { SoundId::BassGuitar, SoundCategory::Strings, { SoundSubCategory::Acoustic }, {} } },
 
         { "banjo", { SoundId::Banjo, SoundCategory::Strings, {}, {} } },

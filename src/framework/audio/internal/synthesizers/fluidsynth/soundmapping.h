@@ -159,6 +159,8 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::BassGuitar,  { mpe::SoundSubCategory::Electric,
                                          mpe::SoundSubCategory::Tenor } }, { midi::Program(0, 33) } },
         { { mpe::SoundId::BassGuitar,  { mpe::SoundSubCategory::Electric } }, { midi::Program(0, 33) } },
+        { { mpe::SoundId::BassGuitar,  { mpe::SoundSubCategory::Electric,
+                                         mpe::SoundSubCategory::Fretless } }, { midi::Program(0, 35) } },
         { { mpe::SoundId::BassGuitar,  { mpe::SoundSubCategory::Acoustic } }, { midi::Program(0, 32) } },
 
         { { mpe::SoundId::Banjo,  {} }, { midi::Program(0, 105) } },
