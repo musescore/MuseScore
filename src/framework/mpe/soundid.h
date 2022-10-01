@@ -315,6 +315,7 @@ enum class SoundSubCategory
 
     Electric,
     Acoustic,
+    Fretless,
     Pedal,
     Steel,
     Metal,
@@ -703,6 +704,7 @@ static const std::unordered_map<SoundSubCategory, String> SUBCATEGORY_STRINGS
 
     { SoundSubCategory::Electric, String(u"Electric") },
     { SoundSubCategory::Acoustic, String(u"Acoustic") },
+    { SoundSubCategory::Fretless, String(u"Fretless") },
     { SoundSubCategory::Pedal, String(u"Pedal") },
     { SoundSubCategory::Steel, String(u"Steel") },
     { SoundSubCategory::Metal, String(u"Metal") },
