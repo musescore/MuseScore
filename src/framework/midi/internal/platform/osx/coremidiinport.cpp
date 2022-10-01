@@ -49,6 +49,15 @@ CoreMidiInPort::CoreMidiInPort()
 
 CoreMidiInPort::~CoreMidiInPort()
 {
+}
+
+void CoreMidiInPort::init()
+{
+    initCore();
+}
+
+void CoreMidiInPort::deinit()
+{
     if (isConnected()) {
         disconnect();
     }
@@ -60,11 +69,6 @@ CoreMidiInPort::~CoreMidiInPort()
     if (m_core->client) {
         MIDIClientDispose(m_core->client);
     }
-}
-
-void CoreMidiInPort::init()
-{
-    initCore();
 }
 
 MidiDeviceList CoreMidiInPort::availableDevices() const

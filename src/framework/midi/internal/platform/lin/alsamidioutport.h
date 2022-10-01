@@ -33,9 +33,10 @@ class AlsaMidiOutPort : public IMidiOutPort, public async::Asyncable
 {
 public:
     AlsaMidiOutPort() = default;
-    ~AlsaMidiOutPort() override;
+    ~AlsaMidiOutPort() = default;
 
     void init();
+    void deinit();
 
     MidiDeviceList availableDevices() const override;
     async::Notification availableDevicesChanged() const override;
