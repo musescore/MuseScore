@@ -127,12 +127,12 @@ QStringList AppearancePreferencesModel::accentColors() const
     return uiConfiguration()->possibleAccentColors();
 }
 
-void AppearancePreferencesModel::resetThemeToDefault()
+void AppearancePreferencesModel::resetAppearancePreferencesToDefault()
 {
-    uiConfiguration()->resetCurrentThemeToDefault(currentTheme().codeKey);
-    notationConfiguration()->resetCurrentBackgroundColorToDefault();
-    emit backgroundColorChanged();
-    emit themesChanged();
+    uiConfiguration()->resetThemes();
+    uiConfiguration()->resetFonts();
+    notationConfiguration()->resetBackground();
+    notationConfiguration()->resetForeground();
 }
 
 void AppearancePreferencesModel::setNewColor(const QColor& newColor, ColorType colorType)
@@ -145,6 +145,7 @@ void AppearancePreferencesModel::setNewColor(const QColor& newColor, ColorType c
         uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::FONT_PRIMARY_COLOR, Val(newColor));
         break;
     case DisabledColor:
+        NOT_IMPLEMENTED;
         return;
     case BorderColor:
         uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::STROKE_COLOR, Val(newColor));
@@ -177,7 +178,6 @@ void AppearancePreferencesModel::setHighContrastEnabled(bool enabled)
     }
 
     uiConfiguration()->setIsHighContrast(enabled);
-    emit highContrastEnabledChanged();
 }
 
 QString AppearancePreferencesModel::currentThemeCode() const

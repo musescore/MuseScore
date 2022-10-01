@@ -41,7 +41,7 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
     Q_PROPERTY(bool isFollowSystemThemeAvailable READ isFollowSystemThemeAvailable CONSTANT)
     Q_PROPERTY(bool isFollowSystemTheme READ isFollowSystemTheme WRITE setFollowSystemTheme NOTIFY isFollowSystemThemeChanged)
 
-    Q_PROPERTY(bool highContrastEnabled READ highContrastEnabled WRITE setHighContrastEnabled NOTIFY highContrastEnabledChanged)
+    Q_PROPERTY(bool highContrastEnabled READ highContrastEnabled WRITE setHighContrastEnabled NOTIFY themesChanged)
     Q_PROPERTY(QVariantList generalThemes READ generalThemes NOTIFY themesChanged)
     Q_PROPERTY(QVariantList highContrastThemes READ highContrastThemes NOTIFY themesChanged)
     Q_PROPERTY(QStringList accentColors READ accentColors NOTIFY themesChanged)
@@ -102,7 +102,7 @@ public:
 
     bool scoreInversionEnabled() const;
 
-    Q_INVOKABLE void resetThemeToDefault();
+    Q_INVOKABLE void resetAppearancePreferencesToDefault();
     Q_INVOKABLE void setNewColor(const QColor& newColor, ColorType colorType);
     Q_INVOKABLE QStringList allFonts() const;
     Q_INVOKABLE QString wallpaperPathFilter() const;
@@ -125,7 +125,6 @@ public slots:
 
 signals:
     void isFollowSystemThemeChanged();
-    void highContrastEnabledChanged();
     void themesChanged();
     void currentFontIndexChanged();
     void bodyTextSizeChanged();

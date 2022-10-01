@@ -220,7 +220,7 @@ PreferencesPage {
             navigation.order: root.navigationOrderStart + 7
 
             onResetThemeToDefaultRequested: {
-                appearanceModel.resetThemeToDefault()
+                appearanceModel.resetAppearancePreferencesToDefault()
             }
 
             onFocusChanged: {
