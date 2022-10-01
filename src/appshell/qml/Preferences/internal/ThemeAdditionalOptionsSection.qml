@@ -33,6 +33,7 @@ BaseSection {
 
     CheckBox {
         id: scoreInversionEnable
+        width: parent.width
 
         text: qsTrc("appshell/preferences", "Invert score")
 
