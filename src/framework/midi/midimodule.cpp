@@ -27,8 +27,6 @@
 
 #include "internal/midiconfiguration.h"
 
-#include "internal/platform/lin/alsamidioutport.h"
-
 #include "ui/iuiengine.h"
 #include "view/devtools/midiportdevmodel.h"
 
@@ -41,26 +39,26 @@ static std::shared_ptr<MidiConfiguration> s_configuration = std::make_shared<Mid
 #ifdef Q_OS_LINUX
 #include "internal/platform/lin/alsamidioutport.h"
 #include "internal/platform/lin/alsamidiinport.h"
-static std::shared_ptr<AlsaMidiOutPort> midiOutPort = std::make_shared<AlsaMidiOutPort>();
-static std::shared_ptr<AlsaMidiInPort> midiInPort = std::make_shared<AlsaMidiInPort>();
+static std::shared_ptr<AlsaMidiOutPort> s_midiOutPort = std::make_shared<AlsaMidiOutPort>();
+static std::shared_ptr<AlsaMidiInPort> s_midiInPort = std::make_shared<AlsaMidiInPort>();
 
 #elif defined(Q_OS_WIN)
 #include "internal/platform/win/winmidioutport.h"
 #include "internal/platform/win/winmidiinport.h"
-static std::shared_ptr<WinMidiOutPort> midiOutPort = std::make_shared<WinMidiOutPort>();
-static std::shared_ptr<WinMidiInPort> midiInPort = std::make_shared<WinMidiInPort>();
+static std::shared_ptr<WinMidiOutPort> s_midiOutPort = std::make_shared<WinMidiOutPort>();
+static std::shared_ptr<WinMidiInPort> s_midiInPort = std::make_shared<WinMidiInPort>();
 
 #elif defined(Q_OS_MACOS)
 #include "internal/platform/osx/coremidioutport.h"
 #include "internal/platform/osx/coremidiinport.h"
-static std::shared_ptr<CoreMidiOutPort> midiOutPort = std::make_shared<CoreMidiOutPort>();
-static std::shared_ptr<CoreMidiInPort> midiInPort = std::make_shared<CoreMidiInPort>();
+static std::shared_ptr<CoreMidiOutPort> s_midiOutPort = std::make_shared<CoreMidiOutPort>();
+static std::shared_ptr<CoreMidiInPort> s_midiInPort = std::make_shared<CoreMidiInPort>();
 
 #else
 #include "internal/dummymidioutport.h"
 #include "internal/dummymidiinport.h"
-static std::shared_ptr<DummyMidiOutPort> midiOutPort = std::make_shared<DummyMidiOutPort>();
-static std::shared_ptr<DummyMidiInPort> midiInPort = std::make_shared<DummyMidiInPort>();
+static std::shared_ptr<DummyMidiOutPort> s_midiOutPort = std::make_shared<DummyMidiOutPort>();
+static std::shared_ptr<DummyMidiInPort> s_midiInPort = std::make_shared<DummyMidiInPort>();
 #endif
 
 std::string MidiModule::moduleName() const
@@ -71,8 +69,8 @@ std::string MidiModule::moduleName() const
 void MidiModule::registerExports()
 {
     modularity::ioc()->registerExport<IMidiConfiguration>(moduleName(), s_configuration);
-    modularity::ioc()->registerExport<IMidiOutPort>(moduleName(), midiOutPort);
-    modularity::ioc()->registerExport<IMidiInPort>(moduleName(), midiInPort);
+    modularity::ioc()->registerExport<IMidiOutPort>(moduleName(), s_midiOutPort);
+    modularity::ioc()->registerExport<IMidiInPort>(moduleName(), s_midiInPort);
 }
 
 void MidiModule::registerUiTypes()
@@ -85,7 +83,13 @@ void MidiModule::onInit(const framework::IApplication::RunMode& mode)
     s_configuration->init();
 
     if (mode == framework::IApplication::RunMode::Editor) {
-        midiOutPort->init();
-        midiInPort->init();
+        s_midiOutPort->init();
+        s_midiInPort->init();
     }
+}
+
+void MidiModule::onDeinit()
+{
+    s_midiOutPort->deinit();
+    s_midiInPort->deinit();
 }

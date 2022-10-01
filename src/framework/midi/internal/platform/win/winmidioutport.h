@@ -33,9 +33,10 @@ class WinMidiOutPort : public IMidiOutPort, public async::Asyncable
 {
 public:
     WinMidiOutPort() = default;
-    ~WinMidiOutPort() override;
+    ~WinMidiOutPort() = default;
 
     void init();
+    void deinit();
 
     MidiDeviceList availableDevices() const override;
     async::Notification availableDevicesChanged() const override;

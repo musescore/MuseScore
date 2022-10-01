@@ -49,6 +49,15 @@ CoreMidiOutPort::CoreMidiOutPort()
 
 CoreMidiOutPort::~CoreMidiOutPort()
 {
+}
+
+void CoreMidiOutPort::init()
+{
+    initCore();
+}
+
+void CoreMidiOutPort::deinit()
+{
     if (isConnected()) {
         disconnect();
     }
@@ -56,14 +65,10 @@ CoreMidiOutPort::~CoreMidiOutPort()
     if (m_core->outputPort) {
         MIDIPortDispose(m_core->outputPort);
     }
+
     if (m_core->client) {
         MIDIClientDispose(m_core->client);
     }
-}
-
-void CoreMidiOutPort::init()
-{
-    initCore();
 }
 
 void CoreMidiOutPort::getDestinationProtocolId()
