@@ -329,7 +329,7 @@ QString AdditionalInfoModel::tempoAccessibleName(int noteIcon, bool withDot) con
     case MusicalSymbolCode::SEMIQUAVER:
         return withDot ? qtrc("project/newscore", "Dotted 16th note") : qtrc("project/newscore", "16th note");
     case MusicalSymbolCode::QUAVER:
-        return withDot ? qtrc("project/newscore", "Dotted eight note") : qtrc("project/newscore", "Eight note");
+        return withDot ? qtrc("project/newscore", "Dotted eighth note") : qtrc("project/newscore", "Eighth note");
     case MusicalSymbolCode::CROTCHET:
         return withDot ? qtrc("project/newscore", "Dotted quarter note") : qtrc("project/newscore", "Quarter note");
     case MusicalSymbolCode::MINIM:
