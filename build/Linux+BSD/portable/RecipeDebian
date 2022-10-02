@@ -65,7 +65,6 @@ fetch-build-dependencies() {
     qtscript5-dev:$ARCH \
     libqt5xmlpatterns5-dev:$ARCH \
     libqt5svg5-dev:$ARCH \
-    libqt5webkit5-dev:$ARCH \
     qttools5-dev-tools:$ARCH \
     cross-gcc-dev \
     binutils-arm-linux-gnueabihf \
@@ -101,7 +100,6 @@ fetch-package-dependencies() {
     libqt5multimediawidgets5 $ARCH \
     libqt5positioning5 $ARCH \
     libqt5sensors5 $ARCH \
-    libqt5webkit5 $ARCH \
     libpulse0 $ARCH \
     libjson-c-dev $ARCH \
     libexpat1-dev $ARCH \
