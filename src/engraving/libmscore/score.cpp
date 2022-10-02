@@ -3872,6 +3872,9 @@ void Score::selectSimilar(EngravingItem* e, bool sameStaff)
         } else {
             pattern.subtype = e->subtype();
         }
+    } else if (e->type() == ElementType::HAIRPIN_SEGMENT) {
+        pattern.subtype = e->subtype();
+        pattern.subtypeValid = true;
     }
     pattern.staffStart = sameStaff ? e->staffIdx() : mu::nidx;
     pattern.staffEnd = sameStaff ? e->staffIdx() + 1 : mu::nidx;
@@ -3904,6 +3907,9 @@ void Score::selectSimilarInRange(EngravingItem* e)
         } else {
             pattern.subtype = e->subtype();
         }
+        pattern.subtypeValid = true;
+    } else if (e->type() == ElementType::HAIRPIN_SEGMENT) {
+        pattern.subtype = e->subtype();
         pattern.subtypeValid = true;
     }
     pattern.staffStart = selection().staffStart();

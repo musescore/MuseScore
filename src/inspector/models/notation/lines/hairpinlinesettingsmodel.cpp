@@ -45,6 +45,8 @@ HairpinLineSettingsModel::HairpinLineSettingsModel(QObject* parent, IElementRepo
         setIcon(ui::IconCode::Code::CRESCENDO);
     }
 
+    m_hairpinType = lineType == Crescendo ? engraving::HairpinType::CRESC_LINE : engraving::HairpinType::DECRESC_LINE;
+
     createProperties();
 }
 
@@ -59,7 +61,7 @@ void HairpinLineSettingsModel::createProperties()
 
 void HairpinLineSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::HAIRPIN, [](const mu::engraving::EngravingItem* element) -> bool {
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::HAIRPIN, [this](const mu::engraving::EngravingItem* element) -> bool {
         const mu::engraving::Hairpin* hairpin = mu::engraving::toHairpin(
             element);
 
@@ -67,6 +69,6 @@ void HairpinLineSettingsModel::requestElements()
             return false;
         }
 
-        return hairpin->hairpinType() == mu::engraving::HairpinType::CRESC_LINE || hairpin->hairpinType() == mu::engraving::HairpinType::DECRESC_LINE;
+        return hairpin->hairpinType() == m_hairpinType;
     });
 }
