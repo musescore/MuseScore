@@ -33,6 +33,11 @@ void FluidSequencer::init(const ArticulationMapping& mapping, const std::unorder
     m_channels = channels;
 }
 
+int FluidSequencer::currentExpressionLevel() const
+{
+    return expressionLevel(dynamicLevel(m_playbackPosition));
+}
+
 void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
 {
     m_offStreamEvents.clear();
