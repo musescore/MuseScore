@@ -123,6 +123,9 @@ void ScoreSettingsModel::setShouldShowInvisible(bool shouldShowInvisible)
     if (m_shouldShowInvisible == shouldShowInvisible) {
         return;
     }
+    else if (context()->currentNotation() == nullptr) {
+        return;
+    }
 
     dispatcher()->dispatch("show-invisible");
     updateShouldShowInvisible(shouldShowInvisible);
@@ -131,6 +134,9 @@ void ScoreSettingsModel::setShouldShowInvisible(bool shouldShowInvisible)
 void ScoreSettingsModel::setShouldShowFormatting(bool shouldShowFormatting)
 {
     if (m_shouldShowFormatting == shouldShowFormatting) {
+        return;
+    }
+    else if (context()->currentNotation() == nullptr) {
         return;
     }
 
@@ -143,6 +149,9 @@ void ScoreSettingsModel::setShouldShowFrames(bool shouldShowFrames)
     if (m_shouldShowFrames == shouldShowFrames) {
         return;
     }
+    else if (context()->currentNotation() == nullptr) {
+        return;
+    }
 
     dispatcher()->dispatch("show-frames");
     updateShouldShowFrames(shouldShowFrames);
@@ -151,6 +160,9 @@ void ScoreSettingsModel::setShouldShowFrames(bool shouldShowFrames)
 void ScoreSettingsModel::setShouldShowPageMargins(bool shouldShowPageMargins)
 {
     if (m_shouldShowPageMargins == shouldShowPageMargins) {
+        return;
+    }
+    else if (context()->currentNotation() == nullptr) {
         return;
     }
 

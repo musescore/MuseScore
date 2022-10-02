@@ -25,10 +25,14 @@
 #include "models/abstractinspectormodel.h"
 #include "async/asyncable.h"
 #include "notation/notationtypes.h"
+#include "modularity/ioc.h"
+#include "iglobalcontext.h" 
 
 namespace mu::inspector {
 class ScoreSettingsModel : public AbstractInspectorModel
 {
+    INJECT(ScoreSettingsModel, context::IGlobalContext, context)
+
     Q_OBJECT
 
     Q_PROPERTY(bool shouldShowInvisible READ shouldShowInvisible WRITE setShouldShowInvisible NOTIFY shouldShowInvisibleChanged)
