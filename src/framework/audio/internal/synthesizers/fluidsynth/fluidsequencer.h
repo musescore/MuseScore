@@ -35,6 +35,8 @@ class FluidSequencer : public AbstractEventSequencer<midi::Event>
 public:
     void init(const ArticulationMapping& mapping, const std::unordered_map<midi::channel_t, midi::Program>& channels);
 
+    int currentExpressionLevel() const;
+
     void updateOffStreamEvents(const mpe::PlaybackEventsMap& changes) override;
     void updateMainStreamEvents(const mpe::PlaybackEventsMap& changes) override;
     void updateDynamicChanges(const mpe::DynamicLevelMap& changes) override;
