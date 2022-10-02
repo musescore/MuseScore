@@ -143,6 +143,15 @@ QString PluginView::categoryCode() const
     return m_qmlPlugin->categoryCode();
 }
 
+bool PluginView::requiresScore() const
+{
+    IF_ASSERT_FAILED(m_qmlPlugin) {
+        return false;
+    }
+
+    return m_qmlPlugin->requiresScore();
+}
+
 QmlPlugin* PluginView::qmlPlugin() const
 {
     return m_qmlPlugin;
