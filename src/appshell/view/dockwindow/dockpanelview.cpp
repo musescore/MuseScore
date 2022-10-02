@@ -271,6 +271,23 @@ void DockPanelView::addPanelAsTab(DockPanelView* tab)
     tab->setVisible(true);
 }
 
+void DockPanelView::toggleTabSelection(DockPanelView* tab)
+{
+    IF_ASSERT_FAILED(tab && dockWidget()) {
+        return;
+    }
+    
+    if (!isTabAllowed(tab)) {
+        return;
+    }
+
+    if (!tab->dockWidget()->isCurrentTab()) {
+        tab->dockWidget()->setAsCurrentTab();
+    } else {
+        tab->close();
+    }
+}
+
 void DockPanelView::setCurrentTabIndex(int index)
 {
     IF_ASSERT_FAILED(dockWidget()) {

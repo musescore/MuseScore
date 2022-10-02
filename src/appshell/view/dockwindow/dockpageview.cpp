@@ -27,6 +27,7 @@
 #include "dockcentralview.h"
 #include "dockpanelview.h"
 #include "dockstatusbarview.h"
+#include "appshelltypes.h"
 
 #include "ui/view/navigationcontrol.h"
 
@@ -178,7 +179,7 @@ bool DockPageView::isDockOpen(const QString& dockName) const
 
 void DockPageView::toggleDock(const QString& dockName)
 {
-    setDockOpen(dockName, !isDockOpen(dockName));
+        setDockOpen(dockName, !isDockOpen(dockName));
 }
 
 void DockPageView::setDockOpen(const QString& dockName, bool open)
@@ -188,7 +189,13 @@ void DockPageView::setDockOpen(const QString& dockName, bool open)
         return;
     }
 
-    if (!open) {
+    bool relevantPanel =
+        (dockName == mu::appshell::INSTRUMENTS_PANEL_NAME
+        || dockName == mu::appshell::PALETTES_PANEL_NAME
+        || dockName == mu::appshell::INSPECTOR_PANEL_NAME
+        || dockName == mu::appshell::SELECTION_FILTERS_PANEL_NAME);
+
+    if (!open && !relevantPanel) {
         dock->close();
         return;
     }
@@ -202,6 +209,9 @@ void DockPageView::setDockOpen(const QString& dockName, bool open)
     DockPanelView* destinationPanel = findPanelForTab(panel);
     if (destinationPanel) {
         destinationPanel->addPanelAsTab(panel);
+        if (!open && relevantPanel) {
+            destinationPanel->toggleTabSelection(panel);
+        }
     } else {
         panel->open();
     }
