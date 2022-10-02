@@ -377,6 +377,7 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
                   }
             }
       else if (cmd == "resizePage") {
+            _foto->setOffset(0, 0);
             QRectF r = _foto->bbox();
             Page* page = point2page(r.center());
             if (page) {
