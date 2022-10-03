@@ -2796,7 +2796,7 @@ void Segment::stretchSegmentsToWidth(std::vector<Spring>& springs, double width)
         return;
     }
 
-    std::sort(springs.begin(), springs.end(), [](Spring& a, Spring& b){ return a.preTension < b.preTension; });
+    std::sort(springs.begin(), springs.end(), [](const Spring& a, const Spring& b) { return a.preTension < b.preTension; });
     double inverseSpringConst = 0.0;
     double force = 0.0;
     double curForce = 0.0;
@@ -2812,7 +2812,7 @@ void Segment::stretchSegmentsToWidth(std::vector<Spring>& springs, double width)
 
     force = curForce;
 
-    for (Spring spring : springs) {
+    for (const Spring& spring : springs) {
         if (force > spring.preTension) {
             double newWidth = force / spring.springConst;
             spring.segment->setWidth(newWidth + spring.segment->widthOffset());
