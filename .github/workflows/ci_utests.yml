@@ -47,3 +47,5 @@ jobs:
         sudo docker system prune -a -f
         sudo rm -rf /usr/local/lib/android
         sudo bash ./build/ci/linux/runutests.sh
+      env: 
+        ASAN_OPTIONS: "detect_leaks=0"
