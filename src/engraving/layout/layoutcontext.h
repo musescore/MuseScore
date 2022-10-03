@@ -69,6 +69,8 @@ public:
     Fraction startTick;
     Fraction endTick;
 
+    double totalBracketsWidth = -1.0;
+
 private:
     Score* m_score = nullptr;
 };
