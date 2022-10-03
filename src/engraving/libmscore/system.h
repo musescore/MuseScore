@@ -123,7 +123,7 @@ class System final : public EngravingItem
 
     double instrumentNamesWidth();
     double layoutBrackets(const LayoutContext& ctx);
-    double totalBracketOffset(const LayoutContext& ctx);
+    static double totalBracketOffset(LayoutContext& ctx);
 
 public:
     ~System();
@@ -150,7 +150,7 @@ public:
 
     Page* page() const { return (Page*)explicitParent(); }
 
-    void layoutSystem(const LayoutContext& ctx, double xo1, const bool isFirstSystem = false, bool firstSystemIndent = false);
+    void layoutSystem(LayoutContext& ctx, double xo1, const bool isFirstSystem = false, bool firstSystemIndent = false);
 
     void setMeasureHeight(double height);
     void layoutBracketsVertical();
