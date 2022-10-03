@@ -5719,6 +5719,7 @@ TempoMap* Score::tempomap() const { return _masterScore->tempomap(); }
 TimeSigMap* Score::sigmap() const { return _masterScore->sigmap(); }
 //QQueue<MidiInputEvent>* Score::midiInputQueue() { return _masterScore->midiInputQueue(); }
 std::list<MidiInputEvent>& Score::activeMidiPitches() { return _masterScore->activeMidiPitches(); }
+async::Channel<ScoreChangesRange> Score::changesChannel() const { return _masterScore->changesChannel(); }
 
 void Score::setUpdateAll() { _masterScore->setUpdateAll(); }
 

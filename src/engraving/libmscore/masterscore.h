@@ -88,6 +88,7 @@ class MasterScore : public Score
     std::vector<Excerpt*> _excerpts;
     std::vector<PartChannelSettingsLink> _playbackSettingsLinks;
     Score* _playbackScore = nullptr;
+    async::Channel<ScoreChangesRange> m_changesRangeChannel;
 
     bool _readOnly = false;
 
@@ -151,6 +152,7 @@ public:
     UndoStack* undoStack() const override { return _undoStack; }
     TimeSigMap* sigmap() const override { return _sigmap; }
     TempoMap* tempomap() const override { return _tempomap; }
+    async::Channel<ScoreChangesRange> changesChannel() const override { return m_changesRangeChannel; }
 
     bool playlistDirty() const override { return _playlistDirty; }
     void setPlaylistDirty() override;
