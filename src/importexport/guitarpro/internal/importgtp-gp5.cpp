@@ -1297,6 +1297,9 @@ bool GuitarPro5::readNote(int string, Note* note)
 
     if (noteBits & NOTE_GHOST) {
         note->setGhost(true);
+        if (score->styleB(Sid::parenthesisHeadGhostNote)) {
+            note->setHeadHasParentheses(true);
+        }
     }
 
     bool tieNote = false;
@@ -1392,7 +1395,7 @@ bool GuitarPro5::readNote(int string, Note* note)
     if (fretNumber == 255 || fretNumber < 0) {
         fretNumber = 0;
         note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
-        note->setGhost(true);
+        note->setDeadNote(true);
     }
     int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber + note->part()->capoFret(), nullptr);
     note->setFret(fretNumber);
