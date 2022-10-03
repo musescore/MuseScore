@@ -2799,18 +2799,15 @@ void Segment::stretchSegmentsToWidth(std::vector<Spring>& springs, double width)
     std::sort(springs.begin(), springs.end(), [](const Spring& a, const Spring& b) { return a.preTension < b.preTension; });
     double inverseSpringConst = 0.0;
     double force = 0.0;
-    double curForce = 0.0;
 
     //! NOTE springs.cbegin() != springs.cend() because of the emptiness check at the top
     auto spring = springs.cbegin();
     do {
         inverseSpringConst += 1 / spring->springConst;
         width += spring->width;
-        curForce = width / inverseSpringConst;
+        force = width / inverseSpringConst;
         ++spring;
-    } while (spring != springs.cend() && !(curForce < spring->preTension));
-
-    force = curForce;
+    } while (spring != springs.cend() && !(force < spring->preTension));
 
     for (const Spring& spring : springs) {
         if (force > spring.preTension) {
