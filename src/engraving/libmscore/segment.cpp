@@ -2792,7 +2792,7 @@ void Segment::computeCrossBeamType(Segment* nextSeg)
 
 void Segment::stretchSegmentsToWidth(std::vector<Spring>& springs, double width)
 {
-    if (RealIsEqualOrLess(width, 0.0)) {
+    if (springs.empty() || RealIsEqualOrLess(width, 0.0)) {
         return;
     }
 
@@ -2800,14 +2800,16 @@ void Segment::stretchSegmentsToWidth(std::vector<Spring>& springs, double width)
     double inverseSpringConst = 0.0;
     double force = 0.0;
     double curForce = 0.0;
-    for (auto spring = springs.begin(); spring != springs.end(); ++spring) {
+
+    //! NOTE springs.cbegin() != springs.cend() because of the emptiness check at the top
+    auto spring = springs.cbegin();
+    do {
         inverseSpringConst += 1 / spring->springConst;
         width += spring->width;
         curForce = width / inverseSpringConst;
-        if (curForce < (spring + 1)->preTension) {
-            break;
-        }
-    }
+        ++spring;
+    } while (spring != springs.cend() && !(curForce < spring->preTension));
+
     force = curForce;
 
     for (Spring spring : springs) {
