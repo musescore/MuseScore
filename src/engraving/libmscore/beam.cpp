@@ -1200,26 +1200,50 @@ void Beam::offsetBeamWithAnchorShortening(std::vector<ChordRest*> chordRests, in
     int newDictator = dictator;
     int newPointer = pointer;
     int reduce = 0;
-    while (!isValidBeamPosition(newDictator, isStartDictator, isAscending, isFlat, staffLines, true)) {
+    int innerOffsetD = ((isStartDictator ? startChord : endChord)->beams() - 1) * _beamSpacing * (_up ? 1 : -1);
+    int innerOffsetP = ((isStartDictator ? endChord : startChord)->beams() - 1) * _beamSpacing * (_up ? 1 : -1);
+    bool dictatorValid = isValidBeamPosition(newDictator, isStartDictator, isAscending, isFlat, staffLines, true)
+                         && isValidBeamPosition(newDictator + innerOffsetD, isStartDictator, isAscending, isFlat, staffLines, true);
+    bool pointerValid = isValidBeamPosition(newPointer, !isStartDictator, isAscending, isFlat, staffLines, true)
+                        && isValidBeamPosition(newPointer + innerOffsetP, !isStartDictator, isAscending, isFlat, staffLines, true);
+    while (!dictatorValid || !pointerValid) {
         if (++reduce > maxDictatorReduce) {
             // we can't shorten this stem at all. bring it back to default and start extending
             newDictator = dictator;
             newPointer = pointer;
-            while (!isValidBeamPosition(newDictator, isStartDictator, isAscending, isFlat, staffLines, true)) {
+
+            // SPECIAL CASE!
+            // If the pointer can be lengthened by 1 to create a valid flat beam, it should be
+            if (dictator == pointer + towardBeam) {
+                if (isValidBeamPosition(newDictator, isStartDictator, isAscending, true, staffLines, true)
+                    && isValidBeamPosition(newDictator, !isStartDictator, isAscending, true, staffLines, true)) {
+                    newPointer += towardBeam;
+                    break;
+                }
+            }
+            while (!isValidBeamPosition(newDictator, isStartDictator, isAscending, newDictator == newPointer, staffLines, true)) {
                 newDictator += towardBeam;
                 newPointer += towardBeam;
             }
             break;
         }
         newDictator += -towardBeam;
+        bool flat = newDictator == newPointer;
+        dictatorValid = isValidBeamPosition(newDictator, isStartDictator, isAscending, flat, staffLines, true)
+                        && isValidBeamPosition(newDictator + innerOffsetD, isStartDictator, isAscending, flat, staffLines, true);
+        bool pointerValid = isValidBeamPosition(newPointer, !isStartDictator, isAscending, flat, staffLines, true)
+                            && isValidBeamPosition(newPointer + innerOffsetP, !isStartDictator, isAscending, flat, staffLines, true);
+        if (dictatorValid && pointerValid) {
+            break;
+        }
         newPointer += -towardBeam;
     }
     // newDictator is guaranteed either valid, or ==dictator
     // first, constrain pointer to valid position
     newPointer = _up ? std::min(newPointer, middleLine) : std::max(newPointer, middleLine);
     // walk it back beamwards until we get a position that satisfies both pointer and dictator
-    while (!isValidBeamPosition(newDictator, isStartDictator, isAscending, isFlat, staffLines, true)
-           || !isValidBeamPosition(newPointer, !isStartDictator, isAscending, isFlat, staffLines, true)) {
+    while (!isValidBeamPosition(newDictator, isStartDictator, isAscending, newPointer == newDictator, staffLines, true)
+           || !isValidBeamPosition(newPointer, !isStartDictator, isAscending, newPointer == newDictator, staffLines, true)) {
         if (isFlat) {
             newDictator += towardBeam;
             newPointer += towardBeam;
@@ -1346,6 +1370,7 @@ void Beam::setValidBeamPositions(int& dictator, int& pointer, int beamCountD, in
     bool has3BeamsInsideStaff = beamCountD >= 3 || beamCountP >= 3;
     while (!areBeamsValid && has3BeamsInsideStaff && _beamSpacing != 4) {
         int dictatorInner = dictator + (beamCountD - 1) * (_up ? _beamSpacing : -_beamSpacing);
+        int pointerInner = pointer + (beamCountP - 1) * (_up ? _beamSpacing : -_beamSpacing);
         // use dictatorInner for both to simulate flat beams
         int outerDictatorOffset = getOuterBeamPosOffset(dictatorInner, beamCountD, staffLines);
         if (std::abs(outerDictatorOffset) <= _beamSpacing) {
@@ -1366,10 +1391,10 @@ void Beam::setValidBeamPositions(int& dictator, int& pointer, int beamCountD, in
         areBeamsValid = false;
     }
     while (!areBeamsValid) {
-        int dictatorOffset = findValidBeamOffset(dictator, beamCountD, staffLines, isStartDictator, isAscending, isFlat);
+        int dictatorOffset = findValidBeamOffset(dictator, beamCountD, staffLines, isStartDictator, isAscending, dictator == pointer);
         dictator += dictatorOffset;
         pointer += dictatorOffset;
-        if (isFlat) {
+        if (isFlat || dictator == pointer) {
             pointer = dictator;
             int currOffset = 0;
             for (ChordRest* cr : _elements) {
@@ -1377,7 +1402,8 @@ void Beam::setValidBeamPositions(int& dictator, int& pointer, int beamCountD, in
                     continue;
                 }
                 // we can use dictator beam position because all of the notes have the same beam position
-                if (currOffset = findValidBeamOffset(dictator, cr->beams(), staffLines, isStartDictator, isAscending, isFlat)) {
+                if (currOffset
+                        = findValidBeamOffset(dictator, cr->beams(), staffLines, isStartDictator, isAscending, dictator == pointer)) {
                     break;
                 }
             }
