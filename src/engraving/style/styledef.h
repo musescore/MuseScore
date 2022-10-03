@@ -1515,6 +1515,7 @@ enum class Sid {
     showCapoOnStaff,
     fretDiagramsAboveChords,
     crossHeadBlackOnly,
+    parenthesisHeadGhostNote,
 
     autoplaceEnabled,
     defaultsVersion,

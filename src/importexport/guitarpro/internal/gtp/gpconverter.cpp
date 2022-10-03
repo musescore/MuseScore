@@ -596,6 +596,10 @@ void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
     addLetRing(gpnote, note);
     addPalmMute(gpnote, note);
     note->setGhost(gpnote->ghostNote());
+    if (_score->styleB(Sid::parenthesisHeadGhostNote)) {
+        note->setHeadHasParentheses(gpnote->ghostNote());
+    }
+
     note->setDeadNote(gpnote->muted());
     addAccent(gpnote, note);
     addSlide(gpnote, note);
