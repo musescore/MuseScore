@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Window 2.15
 
 Loader {
     id: loader
@@ -65,6 +66,8 @@ Loader {
 
         textRole: loader.textRole
         valueRole: loader.valueRole
+
+        accessibleWindow: loader.Window.window
 
         onHandleItem: function(index, value) {
             item.close()
