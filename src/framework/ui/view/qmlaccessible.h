@@ -87,6 +87,8 @@ class AccessibleItem : public QObject, public QQmlParserStatus, public accessibi
     Q_PROPERTY(bool ignored READ ignored WRITE setIgnored NOTIFY ignoredChanged)
     Q_PROPERTY(QQuickItem * visualItem READ visualItem WRITE setVisualItem NOTIFY visualItemChanged)
 
+    Q_PROPERTY(QWindow * window READ window WRITE setWindow NOTIFY windowChanged)
+
     Q_INTERFACES(QQmlParserStatus)
 
     INJECT(ui, accessibility::IAccessibilityController, accessibilityController)
@@ -118,6 +120,8 @@ public:
 
     bool ignored() const;
     QQuickItem* visualItem() const;
+
+    QWindow* window() const;
 
     const IAccessible* accessibleRoot() const;
     void setState(State st, bool arg) override;
@@ -181,6 +185,7 @@ public slots:
     void setCursorPosition(int cursorPosition);
     void setIgnored(bool ignored);
     void setVisualItem(QQuickItem* item);
+    void setWindow(QWindow* window);
 
 signals:
     void accessiblePrnChanged();
@@ -199,6 +204,7 @@ signals:
     void ignoredChanged(bool ignored);
     void visualItemChanged(QQuickItem* item);
     void stateChanged();
+    void windowChanged();
 
 private:
     QQuickItem* resolveVisualItem() const;
@@ -220,6 +226,7 @@ private:
     int m_cursorPosition = 0;
     bool m_ignored = false;
     QQuickItem* m_visualItem = nullptr;
+    QWindow* m_window = nullptr;
     QMap<State, bool> m_state;
     async::Channel<Property, Val> m_accessiblePropertyChanged;
     async::Channel<State, bool> m_accessibleStateChanged;

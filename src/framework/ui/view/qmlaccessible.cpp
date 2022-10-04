@@ -118,6 +118,10 @@ const IAccessible* AccessibleItem::accessibleChild(size_t i) const
 
 QWindow* AccessibleItem::accessibleWindow() const
 {
+    if (m_window) {
+        return m_window;
+    }
+
     QQuickItem* visualItem = resolveVisualItem();
     if (!visualItem) {
         return nullptr;
@@ -663,4 +667,19 @@ void AccessibleItem::setVisualItem(QQuickItem* item)
 QQuickItem* AccessibleItem::visualItem() const
 {
     return m_visualItem;
+}
+
+QWindow* AccessibleItem::window() const
+{
+    return m_window;
+}
+
+void AccessibleItem::setWindow(QWindow* window)
+{
+    if (m_window == window) {
+        return;
+    }
+
+    m_window = window;
+    emit windowChanged();
 }
