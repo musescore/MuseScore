@@ -415,9 +415,15 @@ Score::~Score()
     _spanner.clear();
 
     DeleteAll(_parts);
+    _parts.clear();
+
     DeleteAll(_staves);
+    _staves.clear();
+
     DeleteAll(_pages);
-    _masterScore = 0;
+    _pages.clear();
+
+    _masterScore = nullptr;
 
     imageStore.clearUnused();
 
