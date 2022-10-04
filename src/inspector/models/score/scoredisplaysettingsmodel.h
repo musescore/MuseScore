@@ -70,11 +70,10 @@ private:
     void updateShouldShowPageMargins(bool isVisible);
 
     notation::ScoreConfig scoreConfig() const;
-    async::Channel<notation::ScoreConfigType> scoreConfigChanged() const;
 
     void updateFromConfig(mu::notation::ScoreConfigType configType);
     void updateAll();
-    void setupConnections();
+    void onCurrentNotationChanged() override;
 
     bool m_shouldShowInvisible = false;
     bool m_shouldShowFormatting = false;
