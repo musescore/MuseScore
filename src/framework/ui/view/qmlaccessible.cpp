@@ -52,21 +52,6 @@ AccessibleItem::~AccessibleItem()
     }
 }
 
-void AccessibleItem::classBegin()
-{
-}
-
-void AccessibleItem::componentComplete()
-{
-    accessibilityController()->reg(this);
-    m_registred = true;
-}
-
-const IAccessible* AccessibleItem::accessibleRoot() const
-{
-    return accessibilityController()->accessibleRoot();
-}
-
 const IAccessible* AccessibleItem::accessibleParent() const
 {
     if (m_accessibleParent) {
@@ -96,16 +81,6 @@ bool AccessibleItem::accessibleState(State st) const
     return m_state.value(st, false);
 }
 
-void AccessibleItem::addChild(AccessibleItem* item)
-{
-    m_children.append(item);
-}
-
-void AccessibleItem::removeChild(AccessibleItem* item)
-{
-    m_children.removeOne(item);
-}
-
 size_t AccessibleItem::accessibleChildCount() const
 {
     return static_cast<size_t>(m_children.size());
@@ -128,24 +103,6 @@ QWindow* AccessibleItem::accessibleWindow() const
     }
 
     return visualItem->window();
-}
-
-QQuickItem* AccessibleItem::resolveVisualItem() const
-{
-    if (m_visualItem) {
-        return m_visualItem;
-    }
-
-    QObject* prn = parent();
-    while (prn) {
-        QQuickItem* vitem = qobject_cast<QQuickItem*>(prn);
-        if (vitem) {
-            return vitem;
-        }
-        prn = prn->parent();
-    }
-
-    return nullptr;
 }
 
 QRect AccessibleItem::accessibleRect() const
@@ -408,9 +365,108 @@ mu::async::Channel<IAccessible::State, bool> AccessibleItem::accessibleStateChan
     return m_accessibleStateChanged;
 }
 
+void AccessibleItem::classBegin()
+{
+}
+
+void AccessibleItem::componentComplete()
+{
+    accessibilityController()->reg(this);
+    m_registred = true;
+}
+
 AccessibleItem* AccessibleItem::accessibleParent_property() const
 {
     return m_accessibleParent;
+}
+
+MUAccessible::Role AccessibleItem::role() const
+{
+    return m_role;
+}
+
+QString AccessibleItem::name() const
+{
+    return m_name;
+}
+
+QString AccessibleItem::description() const
+{
+    return m_description;
+}
+
+QVariant AccessibleItem::value() const
+{
+    return m_value;
+}
+
+QVariant AccessibleItem::maximumValue() const
+{
+    return m_maximumValue;
+}
+
+QVariant AccessibleItem::minimumValue() const
+{
+    return m_minimumValue;
+}
+
+QVariant AccessibleItem::stepSize() const
+{
+    return m_stepSize;
+}
+
+QString AccessibleItem::text() const
+{
+    return m_text;
+}
+
+QString AccessibleItem::selectedText() const
+{
+    return m_selectedText;
+}
+
+int AccessibleItem::selectionStart() const
+{
+    return m_selectionStart;
+}
+
+int AccessibleItem::selectionEnd() const
+{
+    return m_selectionEnd;
+}
+
+int AccessibleItem::cursorPosition() const
+{
+    return m_cursorPosition;
+}
+
+bool AccessibleItem::ignored() const
+{
+    return m_ignored;
+}
+
+QQuickItem* AccessibleItem::visualItem() const
+{
+    return m_visualItem;
+}
+
+QWindow* AccessibleItem::window() const
+{
+    return m_window;
+}
+
+void AccessibleItem::setState(IAccessible::State st, bool arg)
+{
+    if (m_state.value(st, false) == arg) {
+        return;
+    }
+
+    m_state[st] = arg;
+    emit stateChanged();
+
+    if (!m_ignored) {
+        m_accessibleStateChanged.send(st, arg);
+    }
 }
 
 void AccessibleItem::setAccessibleParent(AccessibleItem* p)
@@ -433,20 +489,6 @@ void AccessibleItem::setAccessibleParent(AccessibleItem* p)
     m_accessiblePropertyChanged.send(IAccessible::Property::Parent, Val());
 }
 
-void AccessibleItem::setState(IAccessible::State st, bool arg)
-{
-    if (m_state.value(st, false) == arg) {
-        return;
-    }
-
-    m_state[st] = arg;
-    emit stateChanged();
-
-    if (!m_ignored) {
-        m_accessibleStateChanged.send(st, arg);
-    }
-}
-
 void AccessibleItem::setRole(MUAccessible::Role role)
 {
     if (m_role == role) {
@@ -457,11 +499,6 @@ void AccessibleItem::setRole(MUAccessible::Role role)
     emit roleChanged(m_role);
 
     m_state[State::Enabled] = true;
-}
-
-MUAccessible::Role AccessibleItem::role() const
-{
-    return m_role;
 }
 
 void AccessibleItem::setName(QString name)
@@ -584,61 +621,6 @@ void AccessibleItem::setCursorPosition(int cursorPosition)
     m_accessiblePropertyChanged.send(IAccessible::Property::TextCursor, Val());
 }
 
-QString AccessibleItem::name() const
-{
-    return m_name;
-}
-
-QString AccessibleItem::description() const
-{
-    return m_description;
-}
-
-QVariant AccessibleItem::value() const
-{
-    return m_value;
-}
-
-QVariant AccessibleItem::maximumValue() const
-{
-    return m_maximumValue;
-}
-
-QVariant AccessibleItem::minimumValue() const
-{
-    return m_minimumValue;
-}
-
-QVariant AccessibleItem::stepSize() const
-{
-    return m_stepSize;
-}
-
-QString AccessibleItem::text() const
-{
-    return m_text;
-}
-
-QString AccessibleItem::selectedText() const
-{
-    return m_selectedText;
-}
-
-int AccessibleItem::selectionStart() const
-{
-    return m_selectionStart;
-}
-
-int AccessibleItem::selectionEnd() const
-{
-    return m_selectionEnd;
-}
-
-int AccessibleItem::cursorPosition() const
-{
-    return m_cursorPosition;
-}
-
 void AccessibleItem::setIgnored(bool ignored)
 {
     if (m_ignored == ignored) {
@@ -647,11 +629,6 @@ void AccessibleItem::setIgnored(bool ignored)
 
     m_ignored = ignored;
     emit ignoredChanged(m_ignored);
-}
-
-bool AccessibleItem::ignored() const
-{
-    return m_ignored;
 }
 
 void AccessibleItem::setVisualItem(QQuickItem* item)
@@ -664,16 +641,6 @@ void AccessibleItem::setVisualItem(QQuickItem* item)
     emit visualItemChanged(item);
 }
 
-QQuickItem* AccessibleItem::visualItem() const
-{
-    return m_visualItem;
-}
-
-QWindow* AccessibleItem::window() const
-{
-    return m_window;
-}
-
 void AccessibleItem::setWindow(QWindow* window)
 {
     if (m_window == window) {
@@ -682,4 +649,37 @@ void AccessibleItem::setWindow(QWindow* window)
 
     m_window = window;
     emit windowChanged();
+}
+
+const IAccessible* AccessibleItem::accessibleRoot() const
+{
+    return accessibilityController()->accessibleRoot();
+}
+
+void AccessibleItem::addChild(AccessibleItem* item)
+{
+    m_children.append(item);
+}
+
+void AccessibleItem::removeChild(AccessibleItem* item)
+{
+    m_children.removeOne(item);
+}
+
+QQuickItem* AccessibleItem::resolveVisualItem() const
+{
+    if (m_visualItem) {
+        return m_visualItem;
+    }
+
+    QObject* prn = parent();
+    while (prn) {
+        QQuickItem* vitem = qobject_cast<QQuickItem*>(prn);
+        if (vitem) {
+            return vitem;
+        }
+        prn = prn->parent();
+    }
+
+    return nullptr;
 }
