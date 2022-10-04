@@ -4654,15 +4654,21 @@ Fraction Measure::shortestChordRest() const
 void Measure::respaceSegments()
 {
     double x = 0.0;
+    // Find starting x position (i.e. position of first relevant segment)
     for (Segment& s : m_segments) {
-        if (!s.enabled() || s.allElementsInvisible()) {
-            continue;
-        }
-        x = s.x() + s.width();
-        if (s.next()) {
-            s.next()->setPosX(x);
+        if (s.enabled() && s.visible() && !s.allElementsInvisible()) {
+            x = s.x();
+            break;
         }
     }
+    // Start respacing segments
+    for (Segment& s : m_segments) {
+        s.setPosX(x);
+        if (s.enabled() && s.visible() && !s.allElementsInvisible()) {
+            x += s.width();
+        }
+    }
+    // Update measure width
     setWidth(x);
 }
 }
