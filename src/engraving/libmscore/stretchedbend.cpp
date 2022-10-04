@@ -83,33 +83,51 @@ StretchedBend::StretchedBend(Note* parent)
 
 void StretchedBend::fillSegments()
 {
+    if (m_points.size() < 2) {
+        return;
+    }
+
     m_bendSegments.clear();
-    size_t n = m_points.size();
+
+    auto isExtraPointHelper = [this](int i, std::function<bool(int, int)> compare) {
+        return compare(m_points[i - 1].pitch, m_points[i].pitch) && compare(m_points[i].pitch, m_points[i + 1].pitch);
+    };
+
+    auto isExtraPoint = [this, isExtraPointHelper](int i) {
+        return isExtraPointHelper(i, std::less<int>())
+               || isExtraPointHelper(i, std::greater<int>())
+               || isExtraPointHelper(i, std::equal_to<int>());
+    };
+
+    std::vector<int> drawPoints;
+
+    drawPoints.push_back(m_points[0].pitch);
+    for (size_t i = 1; i < m_points.size() - 1; i++) {
+        if (!isExtraPoint(i)) {
+            drawPoints.push_back(m_points[i].pitch);
+        }
+    }
+    drawPoints.push_back(m_points[m_points.size() - 1].pitch);
+
+    size_t n = drawPoints.size();
     if (n < 2) {
         return;
     }
 
-    PointF src = (m_points[0].pitch == 0)
+    PointF src = (drawPoints[0] == 0)
                  ? PointF(m_noteWidth + m_spatium * .8, 0)
                  : PointF(m_noteWidth * .5, -m_noteHeight * .5 - m_spatium * .2);
 
     PointF dest(0, 0);
 
-    int lastPointPitch = m_points.back().pitch;
+    int lastPointPitch = drawPoints.back();
     m_releasedToInitial = (0 == lastPointPitch);
 
     double baseBendHeight = m_spatium * 1.5;
 
-    bool skipNext = false; // need to skip some points
-
     for (size_t pt = 0; pt < n - 1; pt++) {
-        if (skipNext) {
-            skipNext = false;
-            continue;
-        }
-
-        int pitch = m_points[pt].pitch;
-        int nextPitch = m_points[pt + 1].pitch;
+        int pitch = drawPoints[pt];
+        int nextPitch = drawPoints[pt + 1];
 
         BendSegmentType type = BendSegmentType::NO_TYPE;
         int tone = bendTone(nextPitch);
@@ -125,24 +143,11 @@ void StretchedBend::fillSegments()
 
         /// PRE-BEND - - -
         if (pitch == nextPitch) {
-            if (pt == (n - 2)) {
-                break;
-            }
-
             if (pt == 0) {
                 type = BendSegmentType::LINE_STROKED;
             }
         } else {
             bool bendUp = pitch < nextPitch;
-
-            if (pt < n - 2) {
-                double nextNextPitch = m_points[pt + 2].pitch;
-                bool nextBendUp = nextPitch < nextNextPitch;
-                if (bendUp == nextBendUp) {
-                    nextPitch = nextNextPitch;
-                    skipNext = true;
-                }
-            }
 
             if (bendUp) {
                 double minY = std::min(-m_notePos.y(), src.y());
