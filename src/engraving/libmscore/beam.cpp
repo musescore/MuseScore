@@ -1202,25 +1202,38 @@ void Beam::offsetBeamWithAnchorShortening(std::vector<ChordRest*> chordRests, in
     int reduce = 0;
     int innerOffsetD = ((isStartDictator ? startChord : endChord)->beams() - 1) * _beamSpacing * (_up ? 1 : -1);
     int innerOffsetP = ((isStartDictator ? endChord : startChord)->beams() - 1) * _beamSpacing * (_up ? 1 : -1);
-    bool dictatorValid = isValidBeamPosition(newDictator, isStartDictator, isAscending, isFlat, staffLines, true)
-                         && isValidBeamPosition(newDictator + innerOffsetD, isStartDictator, isAscending, isFlat, staffLines, true);
-    bool pointerValid = isValidBeamPosition(newPointer, !isStartDictator, isAscending, isFlat, staffLines, true)
-                        && isValidBeamPosition(newPointer + innerOffsetP, !isStartDictator, isAscending, isFlat, staffLines, true);
+    auto isFullBeamValid = [this](int yPos, int innerOffset, bool isStart, bool isAscending, bool isFlat, int staffLines, bool isOuter) {
+        return isValidBeamPosition(yPos, isStart, isAscending, isFlat, staffLines, isOuter)
+               && isValidBeamPosition(yPos + innerOffset, isStart, isAscending, isFlat, staffLines, isOuter);
+    };
+    bool dictatorValid = isFullBeamValid(newDictator, innerOffsetD, isStartDictator, isAscending, isFlat, staffLines, true);
+    bool pointerValid = isFullBeamValid(newPointer, innerOffsetP, !isStartDictator, isAscending, isFlat, staffLines, true);
+
     while (!dictatorValid || !pointerValid) {
         if (++reduce > maxDictatorReduce) {
             // we can't shorten this stem at all. bring it back to default and start extending
             newDictator = dictator;
             newPointer = pointer;
 
-            // SPECIAL CASE!
-            // If the pointer can be lengthened by 1 to create a valid flat beam, it should be
-            if (dictator == pointer + towardBeam) {
-                if (isValidBeamPosition(newDictator, isStartDictator, isAscending, true, staffLines, true)
-                    && isValidBeamPosition(newDictator, !isStartDictator, isAscending, true, staffLines, true)) {
-                    newPointer += towardBeam;
-                    break;
+            pointerValid = isFullBeamValid(newPointer, innerOffsetP, !isStartDictator, isAscending, isFlat, staffLines, true);
+            bool moveBeamDictatorValid = isFullBeamValid(newDictator + towardBeam, innerOffsetD, !isStartDictator, isAscending, isFlat,
+                                                         staffLines, true);
+            bool moveBeamPointerValid = isFullBeamValid(newPointer + towardBeam, innerOffsetP, !isStartDictator, isAscending, isFlat,
+                                                        staffLines, true);
+            if (!(moveBeamPointerValid && moveBeamDictatorValid)) {
+                // SPECIAL CASE!
+                // If the pointer can be lengthened by 1 to create a valid flat beam, it should be
+                if (dictator == pointer + towardBeam) {
+                    // REMOVEME: This code will make the beam flat which is super nice when we're already in the correct position
+                    // for that, but when the beam needs to be made flat and THEN moved, this is no good
+                    if (isFullBeamValid(newDictator, innerOffsetD, isStartDictator, isAscending, true, staffLines, true)
+                        && isFullBeamValid(newDictator, innerOffsetP, !isStartDictator, isAscending, true, staffLines, true)) {
+                        newPointer += towardBeam;
+                        break;
+                    }
                 }
             }
+            // otherwise, move beam down wholesale preserving slope
             while (!isValidBeamPosition(newDictator, isStartDictator, isAscending, newDictator == newPointer, staffLines, true)) {
                 newDictator += towardBeam;
                 newPointer += towardBeam;
@@ -1581,6 +1594,7 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
         int beamCount = _up ? std::min(beamCountD, beamCountP) : std::max(beamCountD, beamCountP);
         if (!_tab) {
             if (!_isGrace) {
+                // REMOVEME: this probably needs the ability to walk down pointer and dictator instead of moving beam wholesale
                 setValidBeamPositions(dictator, pointer, beamCountD, beamCountP, staffLines, isStartDictator, isFlat, isAscending);
             }
             if (!forceFlat) {
