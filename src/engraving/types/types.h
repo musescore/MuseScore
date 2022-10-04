@@ -189,6 +189,8 @@ enum class ElementType {
     ///\}
 };
 
+constexpr size_t TOT_ELEMENT_TYPES = static_cast<size_t>(ElementType::MAXTYPE);
+
 using ElementTypeSet = std::unordered_set<ElementType>;
 
 // ========================================

@@ -5519,9 +5519,9 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
 
 void Score::createPaddingTable()
 {
-    for (int i=0; i < int(ElementType::MAXTYPE); ++i) {
-        for (int j=0; j < int(ElementType::MAXTYPE); ++j) {
-            _paddingTable[ElementType(i)][ElementType(j)] = _minimumPaddingUnit;
+    for (size_t i=0; i < TOT_ELEMENT_TYPES; ++i) {
+        for (size_t j=0; j < TOT_ELEMENT_TYPES; ++j) {
+            _paddingTable[i][j] = _minimumPaddingUnit;
         }
     }
 
@@ -5638,12 +5638,11 @@ void Score::createPaddingTable()
     _paddingTable[ElementType::TIMESIG][ElementType::TIMESIG] = 1.0 * spatium();
 
     // Obtain the Stem -> * and * -> Stem values from the note equivalents
-    for (auto& elem : _paddingTable[ElementType::STEM]) {
-        elem.second = _paddingTable[ElementType::NOTE][elem.first];
-    }
+    _paddingTable[ElementType::STEM] = _paddingTable[ElementType::NOTE];
     for (auto& elem: _paddingTable) {
-        elem.second[ElementType::STEM] = _paddingTable[elem.first][ElementType::NOTE];
+        elem[ElementType::STEM] = elem[ElementType::NOTE];
     }
+
     _paddingTable[ElementType::STEM][ElementType::NOTE] = styleMM(Sid::minNoteDistance);
     _paddingTable[ElementType::STEM][ElementType::STEM] = 0.85 * spatium();
     _paddingTable[ElementType::STEM][ElementType::ACCIDENTAL] = 0.35 * spatium();
@@ -5651,37 +5650,31 @@ void Score::createPaddingTable()
     _paddingTable[ElementType::LEDGER_LINE][ElementType::STEM] = 0.35 * spatium();
 
     // Ambitus
-    for (auto& elem : _paddingTable[ElementType::AMBITUS]) {
-        elem.second = styleMM(Sid::ambitusMargin);
-    }
+    _paddingTable[ElementType::AMBITUS].fill(styleMM(Sid::ambitusMargin));
     for (auto& elem: _paddingTable) {
-        elem.second[ElementType::AMBITUS] = styleMM(Sid::ambitusMargin);
+        elem[ElementType::AMBITUS] = styleMM(Sid::ambitusMargin);
     }
 
     // Breath
-    for (auto& elem : _paddingTable[ElementType::BREATH]) {
-        elem.second = 1.0 * spatium();
-    }
+    _paddingTable[ElementType::BREATH].fill(1.0 * spatium());
     for (auto& elem: _paddingTable) {
-        elem.second[ElementType::BREATH] = 1.0 * spatium();
+        elem[ElementType::BREATH] = 1.0 * spatium();
     }
 
     // Temporary hack, because some padding is already constructed inside the lyrics themselves.
     _paddingTable[ElementType::BAR_LINE][ElementType::LYRICS] = 0.0 * spatium();
 
     // Chordlines
-    for (auto& elem : _paddingTable[ElementType::CHORDLINE]) {
-        elem.second = 0.35 * spatium();
-    }
+    _paddingTable[ElementType::CHORDLINE].fill(0.35 * spatium());
     for (auto& elem: _paddingTable) {
-        elem.second[ElementType::CHORDLINE] = 0.35 * spatium();
+        elem[ElementType::CHORDLINE] = 0.35 * spatium();
     }
     _paddingTable[ElementType::BAR_LINE][ElementType::CHORDLINE] = 0.65 * spatium();
     _paddingTable[ElementType::CHORDLINE][ElementType::BAR_LINE] = 0.65 * spatium();
 
     // For the x -> fingering padding use the same values as x -> accidental
     for (auto& elem : _paddingTable) {
-        elem.second[ElementType::FINGERING] = _paddingTable[elem.first][ElementType::ACCIDENTAL];
+        elem[ElementType::FINGERING] = elem[ElementType::ACCIDENTAL];
     }
 }
 
