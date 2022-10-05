@@ -55,6 +55,11 @@ DropdownView {
     property int contentWidth: root.itemWidth
     property int contentHeight: content.contentBodyHeight
 
+    //! NOTE: Due to the fact that the dropdown window opens without activating focus,
+    //!       for all items in the dropdown, the accessible window must be the window
+    //!       of the element from which the dropdown was opened
+    required property var accessibleWindow
+
     x: 0
     y: 0
 
@@ -142,6 +147,7 @@ DropdownView {
                 section: root.navigationSection
                 direction: NavigationPanel.Vertical
                 order: 1
+                accessible.window: root.accessibleWindow
 
                 onNavigationEvent: function(event) {
                     if (event.type === NavigationEvent.AboutActive) {
@@ -221,6 +227,7 @@ DropdownView {
                 navigation.panel: view.navigationPanel
                 navigation.row: model.index
                 navigation.accessible.name: label.text
+                navigation.accessible.window: root.accessibleWindow
                 navigation.onActiveChanged: {
                     if (navigation.highlight) {
                         view.positionViewAtIndex(model.index, ListView.Contain)
