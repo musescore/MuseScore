@@ -58,7 +58,7 @@ public:
     async::Notification currentThemeChanged() const override;
     void setCurrentTheme(const ThemeCode& codeKey) override;
     void setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val) override;
-    void resetCurrentThemeToDefault(const ThemeCode& codeKey) override;
+    void resetThemes() override;
 
     bool isFollowSystemThemeAvailable() const override;
     ValNt<bool> isFollowSystemTheme() const override;
@@ -80,6 +80,8 @@ public:
 
     std::string defaultFontFamily() const override;
     int defaultFontSize() const override;
+
+    void resetFonts() override;
 
     double guiScaling() const override;
     double physicalDpi() const override;
