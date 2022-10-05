@@ -1428,7 +1428,7 @@ int Chord::calcMinStemLength()
         // buzz roll's height is actually half of the visual height,
         // so we need to multiply it by 2 to get the actual height
         int buzzRollMultiplier = _tremolo->isBuzzRoll() ? 2 : 1;
-        minStemLength += ceil(_tremolo->minHeight() * 4.0 * buzzRollMultiplier);
+        minStemLength += floor(_tremolo->minHeight() * 4.0 * buzzRollMultiplier);
         int outSidePadding = score()->styleMM(Sid::tremoloOutSidePadding).val() / _spatium * 4.0 * _relativeMag;
         int noteSidePadding = score()->styleMM(Sid::tremoloNoteSidePadding).val() / _spatium * 4.0 * _relativeMag;
 
@@ -1458,7 +1458,7 @@ int Chord::calcMinStemLength()
                 cutout -= 2;
             }
             if (score()->styleB(Sid::useStraightNoteFlags)) {
-                cutout = 0;
+                //cutout = 0;
             }
             if (minStemLength < cutout) {
                 minStemLength = hookOffset;
