@@ -1498,7 +1498,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     { Sid::chordlineThickness, "chordlineThickness", Spatium(0.006) },
     { Sid::showCapoOnStaff, "showCapoOnStaff", true },
-    { Sid::fretDiagramsAboveChords, "fretDiagramsAboveChords", true },
+    { Sid::fretDiagramsAboveChords, "fretDiagramsAboveChords", false },
     { Sid::crossHeadBlackOnly, "crossHeadBlackOnly", false },
     { Sid::parenthesisHeadGhostNote, "parenthesisHeadGhostNote", false },
 
