@@ -2969,7 +2969,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Horizontal placement' to default</string>
+              <string>Reset 'Horizontal placement' value</string>
              </property>
             </widget>
            </item>
@@ -2989,7 +2989,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Vertical placement' to default</string>
+              <string>Reset 'Vertical placement' value</string>
              </property>
             </widget>
            </item>
@@ -3050,7 +3050,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Bracket type' to default</string>
+              <string>Reset 'Bracket type' value</string>
              </property>
             </widget>
            </item>
@@ -3124,7 +3124,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Vertical placement' to default</string>
+              <string>Reset 'Vertical placement' value</string>
              </property>
             </widget>
            </item>
@@ -3144,7 +3144,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Horizontal placement' to default</string>
+              <string>Reset 'Horizontal placement' value</string>
              </property>
             </widget>
            </item>
@@ -3389,7 +3389,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Bracket thickness' to default</string>
+              <string>Reset 'Bracket thickness' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
