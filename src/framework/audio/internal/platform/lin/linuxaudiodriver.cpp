@@ -291,7 +291,7 @@ std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceBufferSizes() c
     std::vector<unsigned int> result;
 
     unsigned int n = 4096;
-    while (n >= 256) {
+    while (n >= MINIMUM_BUFFER_SIZE) {
         result.push_back(n);
         n /= 2;
     }
