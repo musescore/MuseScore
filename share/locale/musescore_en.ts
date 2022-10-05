@@ -2838,12 +2838,6 @@ space unit</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3114"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6256"/>
-        <source>Bracket type:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3222"/>
         <source>System Brackets</source>
         <translation type="unfinished"></translation>
@@ -2867,6 +2861,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3379"/>
         <source>Bracket thickness:</source>
+        <comment>System bracket</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3392"/>
+        <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>System bracket</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -3171,6 +3171,12 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6380"/>
+        <source>Reset &apos;Bracket thickness&apos; value</source>
+        <comment>Tuplet bracket</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6735"/>
         <source>Do not show arpeggios in standard notation when displayed in tablature</source>
         <translation type="unfinished"></translation>
@@ -3191,23 +3197,6 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2972"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3147"/>
-        <source>Reset &apos;Horizontal placement&apos; to default</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2992"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3127"/>
-        <source>Reset &apos;Vertical placement&apos; to default</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3053"/>
-        <source>Reset &apos;Bracket type&apos; to default</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3285"/>
         <source>Reset &apos;Bracket distance&apos; value</source>
         <translation type="unfinished"></translation>
@@ -3220,11 +3209,6 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3369"/>
         <source>Reset &apos;Brace distance&apos; value</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3392"/>
-        <source>Reset &apos;Bracket thickness&apos; to default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3610,11 +3594,6 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6246"/>
-        <source>Reset &apos;Bracket type&apos; value</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6272"/>
         <source>Bracket</source>
         <translation type="unfinished"></translation>
@@ -3648,8 +3627,39 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6380"/>
-        <source>Reset &apos;Bracket thickness&apos; value</source>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2972"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3147"/>
+        <source>Reset &apos;Horizontal placement&apos; value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2992"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3127"/>
+        <source>Reset &apos;Vertical placement&apos; value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3053"/>
+        <source>Reset &apos;Bracket type&apos; value</source>
+        <comment>Bracket type for measure number ranges for multi-measure rests</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="3114"/>
+        <source>Bracket type:</source>
+        <comment>Bracket type for measure number ranges for multi-measure rests</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6246"/>
+        <source>Reset &apos;Bracket type&apos; value</source>
+        <comment>Bracket type for tuplets</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6256"/>
+        <source>Bracket type:</source>
+        <comment>Bracket type for tuplets</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -19918,8 +19928,8 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/framework/midi/internal/platform/lin/alsamidiinport.cpp" line="83"/>
         <location filename="../../src/framework/midi/internal/platform/lin/alsamidioutport.cpp" line="82"/>
-        <location filename="../../src/framework/midi/internal/platform/osx/coremidiinport.cpp" line="74"/>
-        <location filename="../../src/framework/midi/internal/platform/osx/coremidioutport.cpp" line="166"/>
+        <location filename="../../src/framework/midi/internal/platform/osx/coremidiinport.cpp" line="78"/>
+        <location filename="../../src/framework/midi/internal/platform/osx/coremidioutport.cpp" line="171"/>
         <location filename="../../src/framework/midi/internal/platform/win/winmidiinport.cpp" line="96"/>
         <location filename="../../src/framework/midi/internal/platform/win/winmidioutport.cpp" line="91"/>
         <source>No device</source>
