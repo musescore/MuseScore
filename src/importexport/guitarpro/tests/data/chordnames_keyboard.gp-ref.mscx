@@ -61,46 +61,9 @@
             <subtype>mf</subtype>
             <velocity>80</velocity>
             </Dynamic>
-          <FretDiagram>
-            <fretDiagram>
-              <string no="0">
-                <marker>cross</marker>
-                </string>
-              <string no="1">
-                <marker>cross</marker>
-                </string>
-              <string no="2">
-                <marker>cross</marker>
-                </string>
-              <string no="3">
-                <marker>cross</marker>
-                </string>
-              <string no="4">
-                <marker>cross</marker>
-                </string>
-              <string no="5">
-                <marker>cross</marker>
-                </string>
-              </fretDiagram>
-            <string no="0">
-              <marker>88</marker>
-              </string>
-            <string no="1">
-              <marker>88</marker>
-              </string>
-            <string no="2">
-              <marker>88</marker>
-              </string>
-            <string no="3">
-              <marker>88</marker>
-              </string>
-            <string no="4">
-              <marker>88</marker>
-              </string>
-            <string no="5">
-              <marker>88</marker>
-              </string>
-            </FretDiagram>
+          <StaffText>
+            <text>G</text>
+            </StaffText>
           <Tempo>
             <tempo>2</tempo>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
