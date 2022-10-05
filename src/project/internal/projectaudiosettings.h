@@ -86,7 +86,6 @@ private:
     QJsonObject unitConfigToJson(const audio::AudioUnitConfig& config) const;
     QJsonObject attributesToJson(const audio::AudioResourceAttributes& attributes) const;
 
-
     audio::AudioSourceType sourceTypeFromString(const QString& string) const;
     audio::AudioResourceType resourceTypeFromString(const QString& string) const;
 
