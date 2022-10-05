@@ -61,52 +61,9 @@
           <RehearsalMark>
             <text>Verse 1</text>
             </RehearsalMark>
-          <FretDiagram>
-            <Harmony>
-              <root>16</root>
-              <name>add11</name>
-              <base>20</base>
-              <align>center,top</align>
-              </Harmony>
-            <fretDiagram>
-              <string no="0">
-                <dot fret="4">normal</dot>
-                </string>
-              <string no="1">
-                <dot fret="5">normal</dot>
-                </string>
-              <string no="2">
-                <dot fret="4">normal</dot>
-                </string>
-              <string no="3">
-                <marker>circle</marker>
-                </string>
-              <string no="4">
-                <marker>circle</marker>
-                </string>
-              <string no="5">
-                <marker>circle</marker>
-                </string>
-              </fretDiagram>
-            <string no="0">
-              <dot>4</dot>
-              </string>
-            <string no="1">
-              <dot>5</dot>
-              </string>
-            <string no="2">
-              <dot>4</dot>
-              </string>
-            <string no="3">
-              <marker>79</marker>
-              </string>
-            <string no="4">
-              <marker>79</marker>
-              </string>
-            <string no="5">
-              <marker>79</marker>
-              </string>
-            </FretDiagram>
+          <StaffText>
+            <text>Dadd11/F#</text>
+            </StaffText>
           <Beam>
             <l1>-16</l1>
             <l2>-16</l2>
@@ -437,52 +394,9 @@
               <string>0</string>
               </Note>
             </Chord>
-          <FretDiagram>
-            <Harmony>
-              <root>15</root>
-              <name>add9</name>
-              <base>18</base>
-              <align>center,top</align>
-              </Harmony>
-            <fretDiagram>
-              <string no="0">
-                <dot fret="2">normal</dot>
-                </string>
-              <string no="1">
-                <dot fret="2">normal</dot>
-                </string>
-              <string no="2">
-                <marker>circle</marker>
-                </string>
-              <string no="3">
-                <marker>circle</marker>
-                </string>
-              <string no="4">
-                <marker>circle</marker>
-                </string>
-              <string no="5">
-                <marker>circle</marker>
-                </string>
-              </fretDiagram>
-            <string no="0">
-              <dot>2</dot>
-              </string>
-            <string no="1">
-              <dot>2</dot>
-              </string>
-            <string no="2">
-              <marker>79</marker>
-              </string>
-            <string no="3">
-              <marker>79</marker>
-              </string>
-            <string no="4">
-              <marker>79</marker>
-              </string>
-            <string no="5">
-              <marker>79</marker>
-              </string>
-            </FretDiagram>
+          <StaffText>
+            <text>Gadd9/E</text>
+            </StaffText>
           <Beam>
             <l1>-16</l1>
             <l2>-16</l2>
