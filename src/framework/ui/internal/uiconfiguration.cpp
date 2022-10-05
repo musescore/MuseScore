@@ -436,22 +436,16 @@ QStringList UiConfiguration::possibleAccentColors() const
     return lightAccentColors;
 }
 
-void UiConfiguration::resetCurrentThemeToDefault(const ThemeCode& codeKey)
+void UiConfiguration::resetThemes()
 {
-    for (ThemeInfo& theme : m_themes) {
-        if (theme.codeKey != codeKey) {
-            continue;
-        }
-
-        theme = makeStandardTheme(codeKey);
-        writeThemes(m_themes);
-
-        if (theme.codeKey == currentThemeCodeKey()) {
-            notifyAboutCurrentThemeChanged();
-        }
-
-        return;
+    m_themes.clear();
+    for (const ThemeCode& codeKey : allStandardThemeCodes()) {
+        m_themes.push_back(makeStandardTheme(codeKey));
     }
+
+    writeThemes(m_themes);
+
+    notifyAboutCurrentThemeChanged();
 }
 
 const ThemeInfo& UiConfiguration::currentTheme() const
@@ -648,6 +642,15 @@ std::string UiConfiguration::defaultFontFamily() const
 int UiConfiguration::defaultFontSize() const
 {
     return 12;
+}
+
+void UiConfiguration::resetFonts()
+{
+    settings()->setSharedValue(UI_FONT_FAMILY_KEY, settings()->defaultValue(UI_FONT_FAMILY_KEY));
+    settings()->setSharedValue(UI_FONT_SIZE_KEY, settings()->defaultValue(UI_FONT_SIZE_KEY));
+    settings()->setSharedValue(UI_ICONS_FONT_FAMILY_KEY, settings()->defaultValue(UI_ICONS_FONT_FAMILY_KEY));
+    settings()->setSharedValue(UI_MUSICAL_FONT_FAMILY_KEY, settings()->defaultValue(UI_MUSICAL_FONT_FAMILY_KEY));
+    settings()->setSharedValue(UI_MUSICAL_FONT_SIZE_KEY, settings()->defaultValue(UI_MUSICAL_FONT_SIZE_KEY));
 }
 
 double UiConfiguration::guiScaling() const

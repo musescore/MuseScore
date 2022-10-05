@@ -257,19 +257,6 @@ void NotationConfiguration::setBackgroundColor(const QColor& color)
     }
 }
 
-void NotationConfiguration::resetCurrentBackgroundColorToDefault()
-{
-    if (uiConfiguration()->currentTheme().codeKey == LIGHT_THEME_CODE) {
-        settings()->setSharedValue(LIGHT_SCORE_BACKGROUND_COLOR, settings()->defaultValue(LIGHT_SCORE_BACKGROUND_COLOR));
-    } else if (uiConfiguration()->currentTheme().codeKey == DARK_THEME_CODE) {
-        settings()->setSharedValue(DARK_SCORE_BACKGROUND_COLOR, settings()->defaultValue(DARK_SCORE_BACKGROUND_COLOR));
-    } else if (uiConfiguration()->currentTheme().codeKey == HIGH_CONTRAST_BLACK_THEME_CODE) {
-        settings()->setSharedValue(HC_BLACK_SCORE_BACKGROUND_COLOR, settings()->defaultValue(HC_BLACK_SCORE_BACKGROUND_COLOR));
-    } else {
-        settings()->setSharedValue(HC_WHITE_SCORE_BACKGROUND_COLOR, settings()->defaultValue(HC_WHITE_SCORE_BACKGROUND_COLOR));
-    }
-}
-
 io::path_t NotationConfiguration::backgroundWallpaperPath() const
 {
     return settings()->value(BACKGROUND_WALLPAPER_PATH).toString();
@@ -306,6 +293,18 @@ bool NotationConfiguration::backgroundUseColor() const
 void NotationConfiguration::setBackgroundUseColor(bool value)
 {
     settings()->setSharedValue(BACKGROUND_USE_COLOR, Val(value));
+}
+
+void NotationConfiguration::resetBackground()
+{
+    settings()->setSharedValue(LIGHT_SCORE_BACKGROUND_COLOR, settings()->defaultValue(LIGHT_SCORE_BACKGROUND_COLOR));
+    settings()->setSharedValue(DARK_SCORE_BACKGROUND_COLOR, settings()->defaultValue(DARK_SCORE_BACKGROUND_COLOR));
+    settings()->setSharedValue(HC_BLACK_SCORE_BACKGROUND_COLOR, settings()->defaultValue(HC_BLACK_SCORE_BACKGROUND_COLOR));
+    settings()->setSharedValue(HC_WHITE_SCORE_BACKGROUND_COLOR, settings()->defaultValue(HC_WHITE_SCORE_BACKGROUND_COLOR));
+
+    settings()->setSharedValue(BACKGROUND_USE_COLOR, settings()->defaultValue(BACKGROUND_USE_COLOR));
+
+    settings()->setSharedValue(BACKGROUND_WALLPAPER_PATH, settings()->defaultValue(BACKGROUND_WALLPAPER_PATH));
 }
 
 async::Notification NotationConfiguration::backgroundChanged() const
@@ -363,6 +362,15 @@ bool NotationConfiguration::foregroundUseColor() const
 void NotationConfiguration::setForegroundUseColor(bool value)
 {
     settings()->setSharedValue(FOREGROUND_USE_COLOR, Val(value));
+}
+
+void NotationConfiguration::resetForeground()
+{
+    settings()->setSharedValue(FOREGROUND_COLOR, settings()->defaultValue(FOREGROUND_COLOR));
+    settings()->setSharedValue(FOREGROUND_USE_COLOR, settings()->defaultValue(FOREGROUND_USE_COLOR));
+    settings()->setSharedValue(FOREGROUND_WALLPAPER_PATH, settings()->defaultValue(FOREGROUND_WALLPAPER_PATH));
+
+    engravingConfiguration()->setScoreInversionEnabled(false);
 }
 
 async::Notification NotationConfiguration::foregroundChanged() const

@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-subdirs(autobotscripts icons templates wallpaper locale styles sound manual instruments)
+subdirs(autobotscripts icons templates wallpapers locale styles sound manual instruments)
 
 install (DIRECTORY
       plugins

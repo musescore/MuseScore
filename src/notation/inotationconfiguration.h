@@ -41,7 +41,6 @@ public:
 
     virtual QColor backgroundColor() const = 0;
     virtual void setBackgroundColor(const QColor& color) = 0;
-    virtual void resetCurrentBackgroundColorToDefault() = 0;
 
     virtual io::path_t backgroundWallpaperPath() const = 0;
     virtual const QPixmap& backgroundWallpaper() const = 0;
@@ -49,6 +48,9 @@ public:
 
     virtual bool backgroundUseColor() const = 0;
     virtual void setBackgroundUseColor(bool value) = 0;
+
+    virtual void resetBackground() = 0;
+
     virtual async::Notification backgroundChanged() const = 0;
 
     virtual QColor foregroundColor() const = 0;
@@ -60,6 +62,9 @@ public:
 
     virtual bool foregroundUseColor() const = 0;
     virtual void setForegroundUseColor(bool value) = 0;
+
+    virtual void resetForeground() = 0;
+
     virtual async::Notification foregroundChanged() const = 0;
 
     virtual io::path_t wallpapersDefaultDirPath() const = 0;

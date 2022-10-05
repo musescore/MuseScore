@@ -57,7 +57,7 @@ public:
     virtual async::Notification currentThemeChanged() const = 0;
     virtual void setCurrentTheme(const ThemeCode& codeKey) = 0;
     virtual void setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val) = 0;
-    virtual void resetCurrentThemeToDefault(const ThemeCode& codeKey) = 0;
+    virtual void resetThemes() = 0;
 
     virtual bool isFollowSystemThemeAvailable() const = 0;
     virtual ValNt<bool> isFollowSystemTheme() const = 0;
@@ -79,6 +79,8 @@ public:
 
     virtual std::string defaultFontFamily() const = 0;
     virtual int defaultFontSize() const = 0;
+
+    virtual void resetFonts() = 0;
 
     virtual double guiScaling() const = 0;
     virtual double physicalDpi() const = 0;
