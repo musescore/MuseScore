@@ -57,6 +57,8 @@ using TrackName = std::string;
 using PlaybackData = std::variant<mpe::PlaybackData, io::IODevice*>;
 using PlaybackSetupData = mpe::PlaybackSetupData;
 
+static constexpr int MINIMUM_BUFFER_SIZE = 1024;
+
 enum class SoundTrackType {
     Undefined = -1,
     MP3,
