@@ -418,58 +418,9 @@
               <string>1</string>
               </Note>
             </Chord>
-          <FretDiagram>
-            <Harmony>
-              <root>17</root>
-              <name>sus4</name>
-              <base>18</base>
-              <align>center,top</align>
-              </Harmony>
-            <fretDiagram>
-              <string no="0">
-                <marker>cross</marker>
-                </string>
-              <string no="1">
-                <dot fret="2">normal</dot>
-                </string>
-              <string no="2">
-                <marker>circle</marker>
-                </string>
-              <string no="3">
-                <marker>circle</marker>
-                </string>
-              <string no="4">
-                <dot fret="2">normal</dot>
-                </string>
-              <string no="5">
-                <marker>circle</marker>
-                </string>
-              <string no="6">
-                <dot fret="2">normal</dot>
-                </string>
-              </fretDiagram>
-            <string no="0">
-              <marker>88</marker>
-              </string>
-            <string no="1">
-              <dot>2</dot>
-              </string>
-            <string no="2">
-              <marker>79</marker>
-              </string>
-            <string no="3">
-              <marker>79</marker>
-              </string>
-            <string no="4">
-              <dot>2</dot>
-              </string>
-            <string no="5">
-              <marker>79</marker>
-              </string>
-            <string no="6">
-              <dot>2</dot>
-              </string>
-            </FretDiagram>
+          <StaffText>
+            <text>Asus4/E</text>
+            </StaffText>
           <Beam>
             <l1>-36</l1>
             <l2>-36</l2>
