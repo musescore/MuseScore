@@ -526,8 +526,8 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("staff-properties",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Staff/part properties…"),
-             TranslatableString("action", "Staff/part properties…")
+             TranslatableString("action", "Staff/Part properties…"),
+             TranslatableString("action", "Staff/Part properties…")
              ),
     UiAction("staff-text-properties",
              mu::context::UiCtxNotationOpened,
