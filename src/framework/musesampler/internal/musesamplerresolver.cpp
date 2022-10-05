@@ -61,7 +61,6 @@ ISynthesizerPtr MuseSamplerResolver::resolveSynth(const audio::TrackId /*trackId
             && params.resourceMeta.attributeVal(u"museCategory") == internalCategory
             && params.resourceMeta.attributeVal(u"museName") == internalName
             && params.resourceMeta.attributeVal(u"museUID") == uniqueId) {
-
             return std::make_shared<MuseSamplerWrapper>(m_libHandler, params);
         }
     }
