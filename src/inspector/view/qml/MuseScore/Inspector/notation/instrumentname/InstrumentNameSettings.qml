@@ -63,7 +63,7 @@ Column {
     FlatButton {
         width: parent.width
 
-        text: qsTrc("inspector", "Staff/part properties")
+        text: qsTrc("inspector", "Staff/Part properties")
 
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 2
