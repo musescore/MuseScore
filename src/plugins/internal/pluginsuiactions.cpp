@@ -55,8 +55,8 @@ const mu::ui::UiActionList& PluginsUiActions::actionsList() const
         action.code = codeFromQString(plugin.codeKey);
         action.uiCtx = mu::context::UiCtxNotationOpened;
         action.scCtx = mu::context::CTX_NOTATION_OPENED;
-        action.title = TranslatableString("plugins", "Run plugin %1").arg(plugin.codeKey);
-        action.description = action.title;
+        action.description = TranslatableString("plugins", "Run plugin %1").arg(plugin.codeKey);
+        action.title = action.description;
 
         result.push_back(action);
     }

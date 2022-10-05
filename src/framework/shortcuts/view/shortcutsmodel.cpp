@@ -22,9 +22,11 @@
 
 #include "shortcutsmodel.h"
 
+#include "ui/types/mnemonicstring.h"
 #include "ui/view/iconcodes.h"
 #include "translation.h"
 #include "types/translatablestring.h"
+
 #include "log.h"
 
 using namespace mu::shortcuts;
@@ -54,7 +56,7 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
     case RoleSequence: return sequencesToNativeText(shortcut.sequences);
     case RoleSearchKey: {
         const UiAction& action = this->action(shortcut.action);
-        return QString::fromStdString(action.code) + action.title.qTranslated() + action.description.qTranslated()
+        return QString::fromStdString(action.code) + action.title.qTranslatedWithoutMnemonic() + action.description.qTranslated()
                + sequencesToNativeText(shortcut.sequences);
     }
     }
@@ -72,7 +74,7 @@ QString ShortcutsModel::actionText(const std::string& actionCode) const
     const UiAction& action = this->action(actionCode);
 
     if (action.description.isEmpty()) {
-        return action.title.qTranslated();
+        return action.title.qTranslatedWithoutMnemonic();
     }
 
     return action.description.qTranslated();
