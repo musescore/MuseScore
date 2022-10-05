@@ -2964,7 +2964,14 @@
             <widget class="mu::notation::OffsetSelect" name="measureNumberPosAbove" native="true"/>
            </item>
            <item row="1" column="6">
-            <widget class="QToolButton" name="resetMeasureNumberHPlacement"/>
+            <widget class="QToolButton" name="resetMeasureNumberHPlacement">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Horizontal placement' to default</string>
+             </property>
+            </widget>
            </item>
            <item row="4" column="4" rowspan="2" colspan="2">
             <widget class="mu::notation::OffsetSelect" name="measureNumberPosBelow" native="true"/>
@@ -2977,7 +2984,14 @@
             </widget>
            </item>
            <item row="0" column="6">
-            <widget class="QToolButton" name="resetMeasureNumberVPlacement"/>
+            <widget class="QToolButton" name="resetMeasureNumberVPlacement">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Vertical placement' to default</string>
+             </property>
+            </widget>
            </item>
            <item row="1" column="4" colspan="2">
             <widget class="QComboBox" name="measureNumberHPlacement"/>
@@ -3031,7 +3045,14 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_48">
            <item row="0" column="2">
-            <widget class="QToolButton" name="resetMmRestRangeBracketType"/>
+            <widget class="QToolButton" name="resetMmRestRangeBracketType">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Bracket type' to default</string>
+             </property>
+            </widget>
            </item>
            <item row="0" column="1">
             <widget class="QComboBox" name="mmRestRangeBracketType"/>
@@ -3098,7 +3119,14 @@
             </widget>
            </item>
            <item row="1" column="2">
-            <widget class="QToolButton" name="resetMmRestRangeVPlacement"/>
+            <widget class="QToolButton" name="resetMmRestRangeVPlacement">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Vertical placement' to default</string>
+             </property>
+            </widget>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_166">
@@ -3111,7 +3139,14 @@
             </widget>
            </item>
            <item row="2" column="2">
-            <widget class="QToolButton" name="resetMmRestRangeHPlacement"/>
+            <widget class="QToolButton" name="resetMmRestRangeHPlacement">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Horizontal placement' to default</string>
+             </property>
+            </widget>
            </item>
            <item row="4" column="0">
             <widget class="QLabel" name="mmRestRangePosBelowLabel">
@@ -3354,7 +3389,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Vertical align range' value</string>
+              <string>Reset 'Bracket thickness' to default</string>
              </property>
              <property name="text">
               <string notr="true"/>
