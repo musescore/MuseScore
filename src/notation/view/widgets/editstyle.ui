@@ -3050,7 +3050,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Bracket type' value</string>
+              <string comment="Bracket type for measure number ranges for multi-measure rests">Reset 'Bracket type' value</string>
              </property>
             </widget>
            </item>
@@ -3111,7 +3111,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_164">
              <property name="text">
-              <string>Bracket type:</string>
+              <string comment="Bracket type for measure number ranges for multi-measure rests">Bracket type:</string>
              </property>
              <property name="buddy">
               <cstring>mmRestRangeBracketType</cstring>
@@ -3389,7 +3389,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Bracket thickness' value</string>
+              <string comment="System bracket">Reset 'Bracket thickness' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -6243,7 +6243,7 @@ By default, they will be placed such as that their right end are at the same lev
                      <string>Reset to default</string>
                     </property>
                     <property name="accessibleName">
-                     <string>Reset 'Bracket type' value</string>
+                     <string comment="Bracket type for tuplets">Reset 'Bracket type' value</string>
                     </property>
                     <property name="text">
                      <string notr="true"/>
@@ -6253,7 +6253,7 @@ By default, they will be placed such as that their right end are at the same lev
                   <item row="2" column="0">
                    <widget class="QLabel" name="label_116">
                     <property name="text">
-                     <string>Bracket type:</string>
+                     <string comment="Bracket type for tuplets">Bracket type:</string>
                     </property>
                     <property name="buddy">
                      <cstring>tupletBracketType</cstring>
@@ -6377,7 +6377,7 @@ By default, they will be placed such as that their right end are at the same lev
                      <string>Reset to default</string>
                     </property>
                     <property name="accessibleName">
-                     <string>Reset 'Bracket thickness' value</string>
+                     <string comment="Tuplet bracket">Reset 'Bracket thickness' value</string>
                     </property>
                     <property name="text">
                      <string notr="true"/>
