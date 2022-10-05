@@ -454,16 +454,16 @@ void System::layoutSystem(LayoutContext& ctx, double xo1, const bool isFirstSyst
     //---------------------------------------------------
     //  find x position of staves
     //---------------------------------------------------
+    layoutBrackets(ctx);
+    double maxBracketsWidth = totalBracketOffset(ctx);
+
     double maxNamesWidth = instrumentNamesWidth();
 
     double indent = maxNamesWidth > 0 ? maxNamesWidth + instrumentNameOffset : 0.0;
     if (isFirstSystem && firstSystemIndent) {
-        indent = std::max(indent, styleP(Sid::firstSystemIndentationValue) * mag());
+        indent = std::max(indent, styleP(Sid::firstSystemIndentationValue) * mag() - maxBracketsWidth);
         maxNamesWidth = indent - instrumentNameOffset;
     }
-
-    layoutBrackets(ctx);
-    double maxBracketsWidth = totalBracketOffset(ctx);
 
     if (RealIsNull(indent)) {
         if (score()->styleB(Sid::alignSystemToMargin)) {
