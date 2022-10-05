@@ -345,7 +345,7 @@ std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceBufferSizes() con
         return {};
     }
 
-    unsigned int minimum = std::max(static_cast<int>(range.mMinimum), 32);
+    unsigned int minimum = std::max(static_cast<int>(range.mMinimum), MINIMUM_BUFFER_SIZE);
 
     std::vector<unsigned int> result;
     for (unsigned int bufferSize = range.mMaximum; bufferSize >= minimum;) {
