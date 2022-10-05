@@ -57,13 +57,6 @@ static std::string errorString(MMRESULT ret)
 }
 }
 
-WinMidiInPort::~WinMidiInPort()
-{
-    if (isConnected()) {
-        disconnect();
-    }
-}
-
 void WinMidiInPort::init()
 {
     m_win = std::make_shared<Win>();
@@ -86,6 +79,13 @@ void WinMidiInPort::init()
 
         m_availableDevicesChanged.notify();
     });
+}
+
+void WinMidiInPort::deinit()
+{
+    if (isConnected()) {
+        disconnect();
+    }
 }
 
 MidiDeviceList WinMidiInPort::availableDevices() const

@@ -52,13 +52,6 @@ static std::string errorString(MMRESULT ret)
     return "UNKNOWN";
 }
 
-WinMidiOutPort::~WinMidiOutPort()
-{
-    if (isConnected()) {
-        disconnect();
-    }
-}
-
 void WinMidiOutPort::init()
 {
     m_win = std::make_shared<Win>();
@@ -81,6 +74,13 @@ void WinMidiOutPort::init()
 
         m_availableDevicesChanged.notify();
     });
+}
+
+void WinMidiOutPort::deinit()
+{
+    if (isConnected()) {
+        disconnect();
+    }
 }
 
 MidiDeviceList WinMidiOutPort::availableDevices() const
