@@ -39,9 +39,11 @@ void VstFxProcessor::init()
 
     if (m_pluginPtr->isLoaded()) {
         m_pluginPtr->updatePluginConfig(m_params.configuration);
+        m_inited = true;
     } else {
         m_pluginPtr->loadingCompleted().onNotify(this, [this]() {
             m_pluginPtr->updatePluginConfig(m_params.configuration);
+            m_inited = true;
         });
     }
 
@@ -87,7 +89,7 @@ void VstFxProcessor::setActive(bool active)
 
 void VstFxProcessor::process(float* buffer, unsigned int sampleCount)
 {
-    if (!buffer) {
+    if (!buffer || !m_inited) {
         return;
     }
 

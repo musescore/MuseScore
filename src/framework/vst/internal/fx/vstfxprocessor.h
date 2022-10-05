@@ -27,6 +27,8 @@ public:
     void process(float* buffer, unsigned int sampleCount) override;
 
 private:
+    bool m_inited = false;
+
     VstPluginPtr m_pluginPtr = nullptr;
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
 
