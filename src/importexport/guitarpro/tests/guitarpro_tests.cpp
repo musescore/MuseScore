@@ -459,6 +459,9 @@ TEST_F(GuitarPro_Tests, gpGraceOn) {
 TEST_F(GuitarPro_Tests, gpxGraceOn) {
     gpReadTest("grace-on-beat", "gpx");
 }
+TEST_F(GuitarPro_Tests, gpGraceDurations) {
+    gpReadTest("grace-durations", "gp");
+}
 TEST_F(GuitarPro_Tests, gpPalmMute) {
     gpReadTest("palm-mute", "gp");
 }
