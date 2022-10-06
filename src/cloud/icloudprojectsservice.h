@@ -27,6 +27,8 @@
 #include "modularity/imoduleexport.h"
 #include "progress.h"
 
+#include "cloudtypes.h"
+
 class QIODevice;
 class QString;
 
@@ -41,6 +43,8 @@ public:
     virtual framework::ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, bool isPrivate = false,
                                                const QUrl& sourceUrl = QUrl()) = 0;
     virtual framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) = 0;
+
+    virtual RetVal<ScoreInfo> downloadScoreInfo(const QUrl& sourceUrl) = 0;
 };
 }
 

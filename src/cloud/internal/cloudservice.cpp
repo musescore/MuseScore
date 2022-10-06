@@ -317,6 +317,11 @@ mu::Ret CloudService::downloadAccountInfo()
     return make_ok();
 }
 
+mu::RetVal<ScoreInfo> CloudService::downloadScoreInfo(const QUrl& sourceUrl)
+{
+    return downloadScoreInfo(scoreIdFromSourceUrl(sourceUrl));
+}
+
 mu::RetVal<ScoreInfo> CloudService::downloadScoreInfo(int scoreId)
 {
     TRACEFUNC;

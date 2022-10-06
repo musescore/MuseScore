@@ -547,7 +547,26 @@ bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, 
     }
 
     bool generateAudio = false;
+
     bool isPublic = info.visibility == CloudProjectVisibility::Public;
+
+    if (saveMode == SaveMode::Save && isCloudAvailable) {
+        // Get up-to-date visibility information
+        RetVal<cloud::ScoreInfo> scoreInfo = cloudProjectsService()->downloadScoreInfo(info.sourceUrl);
+        if (scoreInfo.ret) {
+            isPublic = !scoreInfo.val.isPrivate;
+        } else {
+            LOGE() << "Failed to download up-to-date score info for " << info.sourceUrl
+                   << "; falling back to last known visibility setting, namely " << static_cast<int>(info.visibility);
+        }
+
+        if (isPublic) {
+            if (!saveProjectScenario()->warnBeforeSavingToExistingPubliclyVisibleCloudProject()) {
+                return false;
+            }
+        }
+    }
+
     if (isCloudAvailable) {
         RetVal<bool> need = needGenerateAudio(isPublic);
         if (!need.ret) {

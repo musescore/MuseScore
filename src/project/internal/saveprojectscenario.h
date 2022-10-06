@@ -47,6 +47,8 @@ public:
     RetVal<CloudProjectInfo> askCloudLocation(INotationProjectPtr project, SaveMode mode) const override;
     RetVal<CloudProjectInfo> askPublishLocation(INotationProjectPtr project) const override;
 
+    bool warnBeforeSavingToExistingPubliclyVisibleCloudProject() const override;
+
 private:
     RetVal<SaveLocationType> saveLocationType() const;
     RetVal<SaveLocationType> askSaveLocationType() const;
