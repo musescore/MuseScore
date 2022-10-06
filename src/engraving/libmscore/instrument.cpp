@@ -1533,7 +1533,7 @@ ClefTypeList Instrument::clefType(size_t staffIdx) const
 {
     if (staffIdx >= _clefType.size()) {
         if (_clefType.empty()) {
-            return ClefTypeList(staffIdx == 1 ? ClefType::G : ClefType::F);
+            return ClefTypeList();
         }
         return _clefType[0];
     }
