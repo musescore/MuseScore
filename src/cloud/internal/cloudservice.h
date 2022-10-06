@@ -71,6 +71,8 @@ public:
                                        const QUrl& sourceUrl = QUrl()) override;
     framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) override;
 
+    RetVal<ScoreInfo> downloadScoreInfo(const QUrl& sourceUrl) override;
+
 private slots:
     void onUserAuthorized();
 
