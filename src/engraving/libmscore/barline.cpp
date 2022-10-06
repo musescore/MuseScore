@@ -1272,9 +1272,13 @@ void BarLine::layout()
     }
 
     setMag(score()->styleB(Sid::scaleBarlines) && staff() ? staff()->staffMag(tick()) : 1.0);
+    // Note: the true values of y1 and y2 are computed in layout2() (can be done only
+    // after staff distances are known). This is a temporary layout.
     double _spatium = spatium();
     y1 = _spatium * .5 * _spanFrom;
-    y2 = _spatium * .5 * (8.0 + _spanTo);
+    if (RealIsEqual(y2, 0.0)) {
+        y2 = _spatium * .5 * (8.0 + _spanTo);
+    }
 
     double w = layoutWidth() * mag();
     RectF r(0.0, y1, w, y2 - y1);
