@@ -29,6 +29,7 @@
 #include "dynamichairpingroup.h"
 #include "measure.h"
 #include "mscore.h"
+#include "rest.h"
 #include "score.h"
 #include "segment.h"
 #include "system.h"
@@ -293,7 +294,7 @@ void Dynamic::layout()
         track_idx_t t = track() & ~0x3;
         for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
             EngravingItem* e = s->element(t + voice);
-            if (!e) {
+            if (!e || (e->isRest() && toRest(e)->ticks() >= measure()->ticks() && measure()->hasVoices(e->staffIdx()))) {
                 continue;
             }
             if (e->isChord() && (align() == AlignH::HCENTER)) {
