@@ -1979,9 +1979,9 @@ void Beam::setBeamDirection(DirectionV d)
         _up = d == DirectionV::UP;
     }
 
-    for (ChordRest* rest : elements()) {
-        if (Chord* chord = toChord(rest)) {
-            chord->setStemDirection(d);
+    for (ChordRest* e : elements()) {
+        if (e->isChord()) {
+            toChord(e)->setStemDirection(d);
         }
     }
 }
