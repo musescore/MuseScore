@@ -1518,7 +1518,7 @@ void GPConverter::addTrill(const GPNote* gpnote, Note* note)
 
 void GPConverter::addTrill(const GPBeat* gpbeat, ChordRest* cr)
 {
-    addLineElement(cr, _trillLines, ElementType::TRILL, LineImportType::TRILL, gpbeat->trill());
+    addLineElement(cr, _trillLines, ElementType::TRILL, LineImportType::TRILL, gpbeat->trill(), true);
 }
 
 void GPConverter::addOrnament(const GPNote* gpnote, Note* note)
@@ -1791,7 +1791,7 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
 }
 
 void GPConverter::addLineElement(ChordRest* cr, std::vector<SLine*>& elements, ElementType muType, LineImportType importType,
-                                 bool forceSplitByRests)
+                                 bool elemExists, bool splitByRests)
 {
     track_idx_t track = cr->track();
 
@@ -1803,7 +1803,13 @@ void GPConverter::addLineElement(ChordRest* cr, std::vector<SLine*>& elements, E
 
     auto& elem = elements[track];
 
-    if (!forceSplitByRests) {
+    if (cr->isRest() && splitByRests) {
+        lastTypeForTrack = LineImportType::NONE;
+        elem = nullptr;
+        return;
+    }
+
+    if (!elemExists) {
         if (!cr->isRest()) {
             elem = nullptr; // should start new element
             return;
@@ -1856,7 +1862,7 @@ void GPConverter::addLineElement(ChordRest* cr, std::vector<SLine*>& elements, E
         }
     }
 
-    if (!elem) {
+    if (!elem && cr->isChord()) {
         EngravingItem* engItem = Factory::createItem(muType, _score->dummy());
 
         SLine* newElem = dynamic_cast<SLine*>(engItem);
@@ -2119,12 +2125,12 @@ void GPConverter::addLegato(const GPBeat* beat, ChordRest* cr)
 
 void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
 {
+    addLineElement(cr, m_ottavas[gpb->ottavaType()], ElementType::OTTAVA, ottavaToImportType(gpb->ottavaType()),
+                   gpb->ottavaType() != GPBeat::OttavaType::None);
+
     if (!cr->isChord() || gpb->ottavaType() == GPBeat::OttavaType::None) {
         return;
     }
-
-    addLineElement(cr, m_ottavas[gpb->ottavaType()], ElementType::OTTAVA, ottavaToImportType(gpb->ottavaType()),
-                   gpb->ottavaType() != GPBeat::OttavaType::None);
 
     const Chord* chord = toChord(cr);
     mu::engraving::OttavaType type = ottavaType(gpb->ottavaType());
@@ -2192,7 +2198,7 @@ void GPConverter::addHarmonicMark(const GPBeat* gpbeat, ChordRest* cr)
     auto harmonicMarkType = gpbeat->harmonicMarkType();
     auto& textLineElems = m_harmonicMarks[harmonicMarkType];
     addLineElement(cr, textLineElems, ElementType::HARMONIC_MARK, harmonicMarkToImportType(
-                       harmonicMarkType), harmonicMarkType != GPBeat::HarmonicMarkType::None);
+                       harmonicMarkType), harmonicMarkType != GPBeat::HarmonicMarkType::None, true);
     if (!textLineElems.empty()) {
         auto& elem = textLineElems.back();
         if (elem && elem->isTextLineBase()) {
