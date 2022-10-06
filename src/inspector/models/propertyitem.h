@@ -68,7 +68,7 @@ public slots:
     void setIsVisible(bool isVisible);
 
 signals:
-    void valueChanged(QVariant value);
+    void valueChanged();
     void defaultValueChanged(QVariant defaultValue);
     void isUndefinedChanged(bool isUndefined);
     void isEnabledChanged(bool isEnabled);

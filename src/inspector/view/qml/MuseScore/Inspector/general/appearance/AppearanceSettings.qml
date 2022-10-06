@@ -68,8 +68,7 @@ Column {
     AppearanceOffsetSection {
         id: offsetSection
 
-        horizontalOffset: model ? model.horizontalOffset : null
-        verticalOffset: model ? model.verticalOffset : null
+        offset: model ? model.offset : null
         isSnappedToGrid: model ? model.isSnappedToGrid : null
 
         navigationPanel: root.navigationPanel

@@ -48,14 +48,7 @@ void AppearanceSettingsModel::createProperties()
     m_minimumDistance = buildPropertyItem(Pid::MIN_DISTANCE);
     m_color = buildPropertyItem(Pid::COLOR);
     m_arrangeOrder = buildPropertyItem(Pid::Z);
-
-    m_horizontalOffset = buildPropertyItem(Pid::OFFSET, [this](const Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
-    });
-
-    m_verticalOffset = buildPropertyItem(Pid::OFFSET, [this](const Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
-    });
+    m_offset = buildPointFPropertyItem(Pid::OFFSET);
 }
 
 void AppearanceSettingsModel::requestElements()
@@ -84,8 +77,7 @@ void AppearanceSettingsModel::resetProperties()
     m_measureWidth->resetToDefault();
     m_color->resetToDefault();
     m_arrangeOrder->resetToDefault();
-    m_horizontalOffset->resetToDefault();
-    m_verticalOffset->resetToDefault();
+    m_offset->resetToDefault();
 }
 
 void AppearanceSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
@@ -116,13 +108,7 @@ void AppearanceSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     }
 
     if (mu::contains(propertyIdSet, Pid::OFFSET)) {
-        loadPropertyItem(m_horizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-            return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
-        });
-
-        loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-            return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
-        });
+        loadPropertyItem(m_offset);
     }
 
     emit isSnappedToGridChanged(isSnappedToGrid());
@@ -240,14 +226,9 @@ PropertyItem* AppearanceSettingsModel::arrangeOrder() const
     return m_arrangeOrder;
 }
 
-PropertyItem* AppearanceSettingsModel::horizontalOffset() const
+PropertyItem* AppearanceSettingsModel::offset() const
 {
-    return m_horizontalOffset;
-}
-
-PropertyItem* AppearanceSettingsModel::verticalOffset() const
-{
-    return m_verticalOffset;
+    return m_offset;
 }
 
 bool AppearanceSettingsModel::isSnappedToGrid() const

@@ -23,7 +23,6 @@
 
 #include "engraving/libmscore/beam.h"
 
-#include "dataformatter.h"
 #include "translation.h"
 #include "log.h"
 
@@ -52,13 +51,7 @@ void StemSettingsModel::createProperties()
         onStemDirectionChanged(static_cast<mu::engraving::DirectionV>(newValue.toInt()));
     });
 
-    m_horizontalOffset = buildPropertyItem(Pid::OFFSET, [this](const Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
-    });
-
-    m_verticalOffset = buildPropertyItem(Pid::OFFSET, [this](const Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
-    });
+    m_offset = buildPointFPropertyItem(Pid::OFFSET);
 }
 
 void StemSettingsModel::requestElements()
@@ -86,8 +79,7 @@ void StemSettingsModel::resetProperties()
     m_thickness->resetToDefault();
     m_length->resetToDefault();
     m_stemDirection->resetToDefault();
-    m_horizontalOffset->resetToDefault();
-    m_verticalOffset->resetToDefault();
+    m_offset->resetToDefault();
 }
 
 PropertyItem* StemSettingsModel::isStemHidden() const
@@ -105,14 +97,9 @@ PropertyItem* StemSettingsModel::length() const
     return m_length;
 }
 
-PropertyItem* StemSettingsModel::horizontalOffset() const
+PropertyItem* StemSettingsModel::offset() const
 {
-    return m_horizontalOffset;
-}
-
-PropertyItem* StemSettingsModel::verticalOffset() const
-{
-    return m_verticalOffset;
+    return m_offset;
 }
 
 PropertyItem* StemSettingsModel::stemDirection() const
@@ -184,12 +171,6 @@ void StemSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     }
 
     if (mu::contains(propertyIdSet, Pid::OFFSET)) {
-        loadPropertyItem(m_horizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-            return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
-        });
-
-        loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-            return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
-        });
+        loadPropertyItem(m_offset);
     }
 }
