@@ -172,8 +172,8 @@ private:
     void fillTuplet();
     bool tupletParamsChanged(const GPBeat* beat, const ChordRest* cr);
 
-    void addLineElement(ChordRest* cr, std::vector<SLine*>& elements, ElementType muType, LineImportType importType,
-                        bool forceSplitByRests = true);
+    void addLineElement(ChordRest* cr, std::vector<SLine*>& elements, ElementType muType, LineImportType importType, bool elemExists,
+                        bool splitByRests = false);
 
     Score* _score;
     std::unique_ptr<GPDomModel> _gpDom;
