@@ -483,17 +483,17 @@ void GPConverter::convertVoice(const GPVoice* voice, Context ctx)
 
 void GPConverter::convertBeats(const std::vector<std::shared_ptr<GPBeat> >& beats, Context ctx)
 {
-    ChordRestContainer graceGhords;
+    ChordRestContainer graceChords;
     for (const auto& beat : beats) {
         m_currentGPBeat = beat.get();
-        ctx.curTick = convertBeat(beat.get(), graceGhords, ctx);
+        ctx.curTick = convertBeat(beat.get(), graceChords, ctx);
     }
 
     fillUncompletedMeasure(ctx);
-    clearDefectedGraceChord(graceGhords);
+    clearDefectedGraceChord(graceChords);
 }
 
-Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceGhords, Context ctx)
+Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceChords, Context ctx)
 {
     Measure* lastMeasure = _score->lastMeasure();
 
@@ -513,7 +513,7 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceG
         curSegment->add(cr);
 
         configureGraceChord(beat, cr);
-        graceGhords.push_back({ cr, beat });
+        graceChords.push_back({ cr, beat });
 
         return ctx.curTick;
     }
@@ -522,17 +522,21 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceG
 
     convertNotes(beat->notes(), cr);
 
-    if (!graceGhords.empty()) {
+    if (!graceChords.empty()) {
         int grIndex = 0;
-        for (auto [pGrChord, pBeat] : graceGhords) {
+        for (auto [pGrChord, pBeat] : graceChords) {
             if (pGrChord->type() == ElementType::CHORD) {
                 static_cast<Chord*>(pGrChord)->setGraceIndex(grIndex++);
             }
+
+            Fraction fr(1, (graceChords.size() == 1 ? 1 : 2) * 8);
+            pGrChord->setDurationType(TDuration(fr));
+
             cr->add(pGrChord);
             addLegato(pBeat, pGrChord);
         }
     }
-    graceGhords.clear();
+    graceChords.clear();
 
     addTuplet(beat, cr);
     addTimer(beat, cr);
@@ -617,9 +621,6 @@ void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
 void GPConverter::configureGraceChord(const GPBeat* beat, ChordRest* cr)
 {
     convertNotes(beat->notes(), cr);
-
-    Fraction fr(1, 8);
-    cr->setDurationType(TDuration(fr));
 
     if (cr->type() == ElementType::CHORD) {
         Chord* grChord = static_cast<Chord*>(cr);
