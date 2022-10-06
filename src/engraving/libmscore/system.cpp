@@ -28,6 +28,7 @@
 #include "system.h"
 
 #include "style/style.h"
+#include "style/defaultstyle.h"
 #include "rw/xml.h"
 #include "layout/layoutcontext.h"
 #include "realfn.h"
@@ -425,7 +426,28 @@ void System::layoutSystem(LayoutContext& ctx, double xo1, const bool isFirstSyst
         return;
     }
 
+    // Get standard instrument name distance
     double instrumentNameOffset = score()->styleMM(Sid::instrumentNameOffset);
+    // Now scale it depending on the text size (which also may not follow staff scaling)
+    double textSizeScaling = 1.0;
+    double actualSize = 0.0;
+    double defaultSize = 0.0;
+    bool followStaffSize = true;
+    if (ctx.startWithLongNames) {
+        actualSize = score()->styleD(Sid::longInstrumentFontSize);
+        defaultSize = DefaultStyle::defaultStyle().value(Sid::longInstrumentFontSize).toDouble();
+        followStaffSize = score()->styleB(Sid::longInstrumentFontSpatiumDependent);
+    } else {
+        actualSize = score()->styleD(Sid::shortInstrumentFontSize);
+        defaultSize = DefaultStyle::defaultStyle().value(Sid::shortInstrumentFontSize).toDouble();
+        followStaffSize = score()->styleB(Sid::shortInstrumentFontSpatiumDependent);
+    }
+    textSizeScaling = actualSize / defaultSize;
+    if (!followStaffSize) {
+        textSizeScaling *= DefaultStyle::defaultStyle().value(Sid::spatium).toDouble() / score()->styleD(Sid::spatium);
+    }
+    textSizeScaling = std::max(textSizeScaling, 1.0);
+    instrumentNameOffset *= textSizeScaling;
 
     size_t nstaves  = _staves.size();
 
