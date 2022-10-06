@@ -3995,7 +3995,7 @@ void Chord::layoutArticulations2()
                 //r.translate((r.width() - w) * 0.5, 0.0);
                 //r.setWidth(w);
                 if (!score()->lineMode()) {
-                    s->staffShape(staffIdx()).add(r);
+                    s->staffShape(staffIdx()).add(r, a);
                 }
                 r.translate(s->pos() + m->pos());
                 m->system()->staff(vStaffIdx())->skyline().add(r);

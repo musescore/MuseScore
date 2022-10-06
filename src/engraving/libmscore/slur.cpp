@@ -382,9 +382,9 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
         segShape.add(secondStaffShape);
     }
     // Remove items that the slur shouldn't try to avoid
-    mu::remove_if(segShape, [startCR](ShapeElement& shapeEl) {
+    mu::remove_if(segShape, [&](ShapeElement& shapeEl){
         if (!shapeEl.toItem || !shapeEl.toItem->parentItem()) {
-            return false;
+            return true;
         }
         const EngravingItem* item = shapeEl.toItem;
         const EngravingItem* parent = item->parentItem();
@@ -393,9 +393,8 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
             return true;
         }
         // Items that are on the start segment but in a different voice
-        if (((item->isChordRest() && toChordRest(item)->segment() == startCR->segment())
-             || (parent->isChordRest() && toChordRest(parent)->segment() == startCR->segment()))
-            && item->track() != startCR->track()) {
+        if ((item->tick() == startCR->tick() && item->track() != startCR->track())
+            || (item->tick() == endCR->tick() && item->track() != endCR->track())) {
             return true;
         }
         return false;
