@@ -27,7 +27,7 @@
 class QOAuth2AuthorizationCodeFlow;
 
 #include "iauthorizationservice.h"
-#include "iuploadingservice.h"
+#include "icloudprojectsservice.h"
 
 #include "async/asyncable.h"
 
@@ -41,7 +41,7 @@ class QOAuth2AuthorizationCodeFlow;
 namespace mu::cloud {
 class OAuthHttpServerReplyHandler;
 
-class CloudService : public QObject, public IAuthorizationService, public IUploadingService, public async::Asyncable
+class CloudService : public QObject, public IAuthorizationService, public ICloudProjectsService, public async::Asyncable
 {
     Q_OBJECT
 

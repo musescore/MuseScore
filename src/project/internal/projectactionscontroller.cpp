@@ -691,7 +691,7 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
     projectData->open(QIODevice::ReadOnly);
 
     bool isPrivate = info.visibility == CloudProjectVisibility::Private;
-    m_uploadingProjectProgress = uploadingService()->uploadScore(*projectData, info.name, isPrivate, info.sourceUrl);
+    m_uploadingProjectProgress = cloudProjectsService()->uploadScore(*projectData, info.name, isPrivate, info.sourceUrl);
 
     m_uploadingProjectProgress->started.onNotify(this, [this]() {
         m_isUploadingProject = true;
@@ -747,7 +747,7 @@ void ProjectActionsController::uploadAudio(const AudioFile& audio, const QUrl& s
         return;
     }
 
-    m_uploadingAudioProgress = uploadingService()->uploadAudio(*audio.device, audio.format, sourceUrl);
+    m_uploadingAudioProgress = cloudProjectsService()->uploadAudio(*audio.device, audio.format, sourceUrl);
 
     m_uploadingAudioProgress->started.onNotify(this, [this]() {
         m_isUploadingAudio = true;
