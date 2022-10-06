@@ -426,8 +426,6 @@ private:
 
     mu::async::Channel<EngravingItem*> m_elementDestroyed;
 
-    mu::async::Channel<ScoreChangesRange> m_changesRangeChannel;
-
     ShadowNote* m_shadowNote = nullptr;
 
     mu::async::Channel<POS, unsigned> m_posChanged;
@@ -738,7 +736,7 @@ public:
     void update() { update(true); }
     void undoRedo(bool undo, EditData*);
 
-    mu::async::Channel<ScoreChangesRange> changesChannel() const;
+    virtual mu::async::Channel<ScoreChangesRange> changesChannel() const;
 
     void cmdRemoveTimeSig(TimeSig*);
     void cmdAddTimeSig(Measure*, staff_idx_t staffIdx, TimeSig*, bool local);
