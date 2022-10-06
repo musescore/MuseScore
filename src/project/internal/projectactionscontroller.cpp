@@ -534,7 +534,7 @@ bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, Sa
     return true;
 }
 
-bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, SaveMode saveMode)
+bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode)
 {
     bool isCloudAvailable = authorizationService()->checkCloudIsAvailable();
     if (!isCloudAvailable) {
@@ -555,6 +555,7 @@ bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, 
         RetVal<cloud::ScoreInfo> scoreInfo = cloudProjectsService()->downloadScoreInfo(info.sourceUrl);
         if (scoreInfo.ret) {
             isPublic = !scoreInfo.val.isPrivate;
+            info.visibility = isPublic ? CloudProjectVisibility::Public : CloudProjectVisibility::Private;
         } else {
             LOGE() << "Failed to download up-to-date score info for " << info.sourceUrl
                    << "; falling back to last known visibility setting, namely " << static_cast<int>(info.visibility);
@@ -709,7 +710,7 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
     projectData->close();
     projectData->open(QIODevice::ReadOnly);
 
-    bool isPrivate = info.visibility == CloudProjectVisibility::Private;
+    bool isPrivate = info.visibility != CloudProjectVisibility::Public;
     m_uploadingProjectProgress = cloudProjectsService()->uploadScore(*projectData, info.name, isPrivate, info.sourceUrl);
 
     m_uploadingProjectProgress->started.onNotify(this, [this]() {

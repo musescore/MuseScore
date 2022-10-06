@@ -106,7 +106,7 @@ private:
 
     bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save);
     bool saveProjectLocally(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save);
-    bool saveProjectToCloud(const CloudProjectInfo& info, SaveMode saveMode = SaveMode::Save);
+    bool saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode = SaveMode::Save);
 
     struct AudioFile {
         QString format;
