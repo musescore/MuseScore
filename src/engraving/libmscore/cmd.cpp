@@ -327,7 +327,7 @@ void Score::undoRedo(bool undo, EditData* ed)
     }
 
     if (range.isValid()) {
-        m_changesRangeChannel.send(range);
+        changesChannel().send(range);
     }
 }
 
@@ -374,13 +374,8 @@ void Score::endCmd(bool rollback)
     cmdState().reset();
 
     if (!rollback && range.isValid()) {
-        m_changesRangeChannel.send(range);
+        changesChannel().send(range);
     }
-}
-
-mu::async::Channel<ScoreChangesRange> Score::changesChannel() const
-{
-    return m_changesRangeChannel;
 }
 
 ScoreChangesRange Score::changesRange() const
