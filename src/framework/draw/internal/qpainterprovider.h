@@ -22,7 +22,7 @@
 #ifndef MU_DRAW_QPAINTERPROVIDER_H
 #define MU_DRAW_QPAINTERPROVIDER_H
 
-#include "ipaintprovider.h"
+#include "../ipaintprovider.h"
 
 class QPainter;
 class QImage;
