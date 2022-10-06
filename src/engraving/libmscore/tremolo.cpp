@@ -290,8 +290,14 @@ void Tremolo::layoutOneNoteTremolo(double x, double y, double h, double spatium)
 
     int beams = chord()->beams();
     if (chord()->hook()) {
-        yOffset -= up ? 1.75 * spatium : 1.25 * spatium;
-        yOffset -= beams >= 2 ? 0.5 * spatium : 0.0;
+        bool straightFlags = score()->styleB(Sid::useStraightNoteFlags);
+        if (straightFlags) {
+            yOffset -= up ? 0.75 * spatium : 0.75 * spatium;
+        } else {
+            yOffset -= up ? 1.5 * spatium : 1.0 * spatium;
+        }
+        double beamOffset = straightFlags ? 0.75 : 0.5;
+        yOffset -= beams >= 2 ? beamOffset * spatium : 0.0;
     } else if (beams) {
         yOffset -= (beams * (score()->styleB(Sid::useWideBeams) ? 1.0 : 0.75) - 0.25) * spatium;
     }
