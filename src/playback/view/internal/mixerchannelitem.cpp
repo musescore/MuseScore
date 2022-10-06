@@ -155,19 +155,26 @@ void MixerChannelItem::loadOutputParams(AudioOutputParams&& newParams)
         emit mutedChanged();
     }
 
-    for (int i = 0; i < m_outputResourceItemList.count(); ++i) {
-        if (newParams.fxChain.find(i) == newParams.fxChain.cend()) {
-            OutputResourceItem* item = m_outputResourceItemList.at(i);
+    QMap<AudioFxChainOrder, OutputResourceItem*> newItems = m_outputResourceItems;
+
+    for (AudioFxChainOrder chainOrder : m_outputResourceItems.keys()) {
+        OutputResourceItem* item = m_outputResourceItems.value(chainOrder);
+
+        if (item->isBlank()) {
+            continue;
+        }
+
+        if (newParams.fxChain.find(chainOrder) == newParams.fxChain.cend()) {
             item->disconnect();
             item->deleteLater();
-            m_outputResourceItemList.removeAt(i);
+            newItems.remove(chainOrder);
         }
     }
 
     for (const auto& pair : newParams.fxChain) {
-        OutputResourceItem* item = m_outputResourceItemList.value(pair.first, nullptr);
+        OutputResourceItem* item = newItems.value(pair.first, nullptr);
         if (!item) {
-            m_outputResourceItemList << buildOutputResourceItem(pair.second);
+            newItems.insert(pair.first, buildOutputResourceItem(pair.second));
             continue;
         }
 
@@ -178,37 +185,12 @@ void MixerChannelItem::loadOutputParams(AudioOutputParams&& newParams)
         }
     }
 
-    emit outputResourceItemListChanged(m_outputResourceItemList);
+    if (m_outputResourceItems != newItems) {
+        m_outputResourceItems = std::move(newItems);
+        emit outputResourceItemListChanged();
+    }
 
     ensureBlankOutputResourceSlot();
-}
-
-void MixerChannelItem::loadOutputResourceItemList(const AudioFxChain& fxChain)
-{
-    qDeleteAll(m_outputResourceItemList);
-    m_outputResourceItemList.clear();
-
-    for (auto it = fxChain.cbegin(); it != fxChain.cend(); ++it) {
-        m_outputResourceItemList << buildOutputResourceItem(it->second);
-    }
-
-    emit outputResourceItemListChanged(m_outputResourceItemList);
-}
-
-void MixerChannelItem::updateOutputResourceItemList(const audio::AudioFxChain& fxChain)
-{
-    for (const auto& pair : fxChain) {
-        if (m_outputResourceItemList.size() < pair.first) {
-            LOGW() << "Can't find item " << pair.first;
-            continue;
-        }
-
-        if (!pair.second.isValid()) {
-            continue;
-        }
-
-        m_outputResourceItemList[pair.first]->setParams(pair.second);
-    }
 }
 
 void MixerChannelItem::loadSoloMuteState(project::IProjectAudioSettings::SoloMuteState&& newState)
@@ -342,14 +324,12 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
     connect(newItem, &OutputResourceItem::fxParamsChanged, this, [this]() {
         m_outParams.fxChain.clear();
 
-        for (const OutputResourceItem* item : m_outputResourceItemList) {
+        for (const OutputResourceItem* item : m_outputResourceItems) {
             m_outParams.fxChain.insert({ item->params().chainOrder, item->params() });
         }
 
         emit outputParamsChanged(m_outParams);
     });
-
-    connect(newItem, &OutputResourceItem::isBlankChanged, this, &MixerChannelItem::ensureBlankOutputResourceSlot);
 
     connect(newItem, &OutputResourceItem::nativeEditorViewLaunchRequested, this, [this, newItem]() {
         if (newItem->params().type() != AudioFxType::VstFx) {
@@ -399,49 +379,75 @@ void MixerChannelItem::ensureBlankOutputResourceSlot()
 {
     removeRedundantEmptySlots();
 
-    if (m_outputResourceItemList.count() >= OUTPUT_RESOURCE_COUNT_LIMIT) {
+    if (m_outputResourceItems.count() >= OUTPUT_RESOURCE_COUNT_LIMIT) {
         return;
     }
 
-    if (!m_outputResourceItemList.empty() && m_outputResourceItemList.last()->isBlank()) {
+    if (!m_outputResourceItems.empty() && m_outputResourceItems.last()->isBlank()) {
         return;
     }
 
     AudioFxParams params;
-    params.chainOrder = m_outputResourceItemList.count();
-    m_outputResourceItemList << buildOutputResourceItem(std::move(params));
+    params.chainOrder = resolveNewBlankOutputResourceItemOrder();
+    m_outputResourceItems.insert(params.chainOrder, buildOutputResourceItem(std::move(params)));
 
-    emit outputResourceItemListChanged(m_outputResourceItemList);
+    emit outputResourceItemListChanged();
 }
 
-QList<OutputResourceItem*> MixerChannelItem::emptySlotsToRemove() const
+void MixerChannelItem::removeRedundantEmptySlots()
 {
-    QList<OutputResourceItem*> result;
+    for (AudioFxChainOrder order : emptySlotsToRemove()) {
+        OutputResourceItem* item = m_outputResourceItems.take(order);
+        closeEditor(item);
+        item->disconnect();
+        item->deleteLater();
+    }
+}
 
-    for (OutputResourceItem* item : m_outputResourceItemList) {
-        if (!item->isBlank()) {
+QList<AudioFxChainOrder> MixerChannelItem::emptySlotsToRemove() const
+{
+    QList<AudioFxChainOrder> result;
+
+    if (m_outputResourceItems.empty()) {
+        return result;
+    }
+
+    AudioFxChainOrder lastChainOrder = m_outputResourceItems.lastKey();
+
+    for (auto it = m_outputResourceItems.cbegin(); it != m_outputResourceItems.cend(); ++it) {
+        if (!it.value()->isBlank()) {
             result.clear();
             continue;
         }
 
-        if (result.empty() && item == m_outputResourceItemList.last()) {
+        if (result.empty() && it.key() == lastChainOrder) {
             continue;
         }
 
-        result << item;
+        result << it.key();
     }
 
     return result;
 }
 
-void MixerChannelItem::removeRedundantEmptySlots()
+AudioFxChainOrder MixerChannelItem::resolveNewBlankOutputResourceItemOrder() const
 {
-    for (OutputResourceItem* itemToRemove : emptySlotsToRemove()) {
-        m_outputResourceItemList.removeOne(itemToRemove);
-        closeEditor(itemToRemove);
-        itemToRemove->disconnect();
-        itemToRemove->deleteLater();
+    if (m_outputResourceItems.empty()) {
+        return 0;
     }
+
+    AudioFxChainOrder lastChainOrder = m_outputResourceItems.lastKey();
+    if (lastChainOrder < OUTPUT_RESOURCE_COUNT_LIMIT - 1) {
+        return lastChainOrder + 1;
+    }
+
+    for (AudioFxChainOrder order = 0; order < OUTPUT_RESOURCE_COUNT_LIMIT; ++order) {
+        if (!m_outputResourceItems.contains(order)) {
+            return order;
+        }
+    }
+
+    return OUTPUT_RESOURCE_COUNT_LIMIT - 1;
 }
 
 bool MixerChannelItem::outputOnly() const
@@ -449,14 +455,10 @@ bool MixerChannelItem::outputOnly() const
     return isMasterChannel();
 }
 
-const QList<OutputResourceItem*>& MixerChannelItem::outputResourceItemList() const
+QList<OutputResourceItem*> MixerChannelItem::outputResourceItemList() const
 {
-    return m_outputResourceItemList;
+    return m_outputResourceItems.values();
 }
-
-//================================
-// TrackMixerChannelItem
-//================================
 
 TrackMixerChannelItem::TrackMixerChannelItem(QObject* parent, audio::TrackId trackId, const engraving::InstrumentTrackId& instrumentTrackId,
                                              bool isPrimary)
@@ -515,10 +517,6 @@ InputResourceItem* TrackMixerChannelItem::inputResourceItem() const
 {
     return m_inputResourceItem;
 }
-
-//================================
-// MasterMixerChannelItem
-//================================
 
 MasterMixerChannelItem::MasterMixerChannelItem(QObject* parent)
     : MixerChannelItem(parent)
