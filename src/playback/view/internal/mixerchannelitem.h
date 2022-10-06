@@ -92,7 +92,7 @@ public:
 
     bool outputOnly() const;
 
-    const QList<OutputResourceItem*>& outputResourceItemList() const;
+    QList<OutputResourceItem*> outputResourceItemList() const;
 
 public slots:
     void setTitle(QString title);
@@ -123,7 +123,7 @@ signals:
     void outputParamsChanged(const audio::AudioOutputParams& params);
     void soloMuteStateChanged(const project::IProjectAudioSettings::SoloMuteState& state);
 
-    void outputResourceItemListChanged(QList<OutputResourceItem*> itemList);
+    void outputResourceItemListChanged();
 
 protected:
     void setAudioChannelVolumePressure(const audio::audioch_t chNum, const float newValue);
@@ -132,14 +132,12 @@ protected:
     void applyMuteToOutputParams(const bool isMuted);
 
     OutputResourceItem* buildOutputResourceItem(const audio::AudioFxParams& fxParams);
-    void ensureBlankOutputResourceSlot();
 
-    bool hasToCleanUpEmptySlots() const;
-    QList<OutputResourceItem*> emptySlotsToRemove() const;
     void removeRedundantEmptySlots();
+    QList<audio::AudioFxChainOrder> emptySlotsToRemove() const;
 
-    void loadOutputResourceItemList(const audio::AudioFxChain& fxChain);
-    void updateOutputResourceItemList(const audio::AudioFxChain& fxChain);
+    void ensureBlankOutputResourceSlot();
+    audio::AudioFxChainOrder resolveNewBlankOutputResourceItemOrder() const;
 
     void openEditor(AbstractAudioResourceItem* item, const UriQuery& editorUri);
     void closeEditor(AbstractAudioResourceItem* item);
@@ -149,7 +147,7 @@ protected:
     audio::AudioOutputParams m_outParams;
     project::IProjectAudioSettings::SoloMuteState m_soloMuteState;
 
-    QList<OutputResourceItem*> m_outputResourceItemList;
+    QMap<audio::AudioFxChainOrder, OutputResourceItem*> m_outputResourceItems;
 
     audio::AudioSignalChanges m_audioSignalChanges;
 
