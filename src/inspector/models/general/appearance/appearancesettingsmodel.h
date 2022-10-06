@@ -38,8 +38,7 @@ class AppearanceSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * minimumDistance READ minimumDistance CONSTANT)
     Q_PROPERTY(PropertyItem * color READ color CONSTANT)
     Q_PROPERTY(PropertyItem * arrangeOrder READ arrangeOrder CONSTANT)
-    Q_PROPERTY(PropertyItem * horizontalOffset READ horizontalOffset CONSTANT)
-    Q_PROPERTY(PropertyItem * verticalOffset READ verticalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * offset READ offset CONSTANT)
     Q_PROPERTY(bool isSnappedToGrid READ isSnappedToGrid WRITE setIsSnappedToGrid NOTIFY isSnappedToGridChanged)
 
 public:
@@ -62,8 +61,7 @@ public:
     PropertyItem* minimumDistance() const;
     PropertyItem* color() const;
     PropertyItem* arrangeOrder() const;
-    PropertyItem* horizontalOffset() const;
-    PropertyItem* verticalOffset() const;
+    PropertyItem* offset() const;
 
     bool isSnappedToGrid() const;
 
@@ -88,8 +86,7 @@ private:
     PropertyItem* m_minimumDistance = nullptr;
     PropertyItem* m_color = nullptr;
     PropertyItem* m_arrangeOrder = nullptr;
-    PropertyItem* m_horizontalOffset = nullptr;
-    PropertyItem* m_verticalOffset = nullptr;
+    PointFPropertyItem* m_offset = nullptr;
 };
 }
 

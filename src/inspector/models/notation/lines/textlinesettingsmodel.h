@@ -47,13 +47,13 @@ class TextLineSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
 
     Q_PROPERTY(PropertyItem * beginningText READ beginningText CONSTANT)
-    Q_PROPERTY(PropertyItem * beginningTextVerticalOffset READ beginningTextVerticalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * beginningTextOffset READ beginningTextOffset CONSTANT)
 
     Q_PROPERTY(PropertyItem * continuousText READ continuousText CONSTANT)
-    Q_PROPERTY(PropertyItem * continuousTextVerticalOffset READ continuousTextVerticalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * continuousTextOffset READ continuousTextOffset CONSTANT)
 
     Q_PROPERTY(PropertyItem * endText READ endText CONSTANT)
-    Q_PROPERTY(PropertyItem * endTextVerticalOffset READ endTextVerticalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * endTextOffset READ endTextOffset CONSTANT)
 
 public:
     explicit TextLineSettingsModel(QObject* parent, IElementRepositoryService* repository,
@@ -75,13 +75,13 @@ public:
     PropertyItem* placement() const;
 
     PropertyItem* beginningText() const;
-    PropertyItem* beginningTextVerticalOffset() const;
+    PropertyItem* beginningTextOffset() const;
 
     PropertyItem* continuousText() const;
-    PropertyItem* continuousTextVerticalOffset() const;
+    PropertyItem* continuousTextOffset() const;
 
     PropertyItem* endText() const;
-    PropertyItem* endTextVerticalOffset() const;
+    PropertyItem* endTextOffset() const;
 
     Q_INVOKABLE QVariantList possibleStartHookTypes() const;
     Q_INVOKABLE QVariantList possibleEndHookTypes() const;
@@ -141,13 +141,13 @@ private:
     PropertyItem* m_hookHeight = nullptr;
 
     PropertyItem* m_beginningText = nullptr;
-    PropertyItem* m_beginningTextVerticalOffset = nullptr;
+    PointFPropertyItem* m_beginningTextOffset = nullptr;
 
     PropertyItem* m_continuousText = nullptr;
-    PropertyItem* m_continuousTextVerticalOffset = nullptr;
+    PointFPropertyItem* m_continuousTextOffset = nullptr;
 
     PropertyItem* m_endText = nullptr;
-    PropertyItem* m_endTextVerticalOffset = nullptr;
+    PointFPropertyItem* m_endTextOffset = nullptr;
 
     QVariantList m_possibleStartHookTypes;
     QVariantList m_possibleEndHookTypes;

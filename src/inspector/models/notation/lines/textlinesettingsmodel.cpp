@@ -84,30 +84,17 @@ void TextLineSettingsModel::createProperties()
 
     if (isTextVisible(BeginningText)) {
         m_beginningText = buildPropertyItem(Pid::BEGIN_TEXT);
-
-        m_beginningTextVerticalOffset
-            = buildPropertyItem(Pid::BEGIN_TEXT_OFFSET, [this](const Pid pid, const QVariant& newValue) {
-            onPropertyValueChanged(pid, QPointF(0, newValue.toDouble()));
-        });
+        m_beginningTextOffset = buildPointFPropertyItem(Pid::BEGIN_TEXT_OFFSET);
     }
 
     if (isTextVisible(ContinuousText)) {
         m_continuousText = buildPropertyItem(Pid::CONTINUE_TEXT);
-
-        m_continuousTextVerticalOffset
-            = buildPropertyItem(Pid::CONTINUE_TEXT_OFFSET, [this](const Pid pid, const QVariant& newValue) {
-            onPropertyValueChanged(pid, QPointF(0,
-                                                newValue.toDouble()));
-        });
+        m_continuousTextOffset = buildPointFPropertyItem(Pid::CONTINUE_TEXT_OFFSET);
     }
 
     if (isTextVisible(EndText)) {
         m_endText = buildPropertyItem(Pid::END_TEXT);
-
-        m_endTextVerticalOffset
-            = buildPropertyItem(Pid::END_TEXT_OFFSET, [this](const Pid pid, const QVariant& newValue) {
-            onPropertyValueChanged(pid, QPointF(0, newValue.toDouble()));
-        });
+        m_endTextOffset = buildPointFPropertyItem(Pid::END_TEXT_OFFSET);
     }
 }
 
@@ -150,11 +137,11 @@ void TextLineSettingsModel::resetProperties()
         m_hookHeight,
         m_placement,
         m_beginningText,
-        m_beginningTextVerticalOffset,
+        m_beginningTextOffset,
         m_continuousText,
-        m_continuousTextVerticalOffset,
+        m_continuousTextOffset,
         m_endText,
-        m_endTextVerticalOffset
+        m_endTextOffset
     };
 
     for (PropertyItem* property : allProperties) {
@@ -219,9 +206,9 @@ PropertyItem* TextLineSettingsModel::beginningText() const
     return m_beginningText;
 }
 
-PropertyItem* TextLineSettingsModel::beginningTextVerticalOffset() const
+PropertyItem* TextLineSettingsModel::beginningTextOffset() const
 {
-    return m_beginningTextVerticalOffset;
+    return m_beginningTextOffset;
 }
 
 PropertyItem* TextLineSettingsModel::continuousText() const
@@ -229,9 +216,9 @@ PropertyItem* TextLineSettingsModel::continuousText() const
     return m_continuousText;
 }
 
-PropertyItem* TextLineSettingsModel::continuousTextVerticalOffset() const
+PropertyItem* TextLineSettingsModel::continuousTextOffset() const
 {
-    return m_continuousTextVerticalOffset;
+    return m_continuousTextOffset;
 }
 
 PropertyItem* TextLineSettingsModel::endText() const
@@ -239,9 +226,9 @@ PropertyItem* TextLineSettingsModel::endText() const
     return m_endText;
 }
 
-PropertyItem* TextLineSettingsModel::endTextVerticalOffset() const
+PropertyItem* TextLineSettingsModel::endTextOffset() const
 {
-    return m_endTextVerticalOffset;
+    return m_endTextOffset;
 }
 
 QVariantList TextLineSettingsModel::possibleStartHookTypes() const
@@ -361,9 +348,7 @@ void TextLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     }
 
     if (mu::contains(propertyIdSet, Pid::BEGIN_TEXT_OFFSET)) {
-        loadPropertyItem(m_beginningTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-            return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
-        });
+        loadPropertyItem(m_beginningTextOffset);
     }
 
     if (mu::contains(propertyIdSet, Pid::CONTINUE_TEXT)) {
@@ -371,9 +356,7 @@ void TextLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     }
 
     if (mu::contains(propertyIdSet, Pid::CONTINUE_TEXT_OFFSET)) {
-        loadPropertyItem(m_continuousTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-            return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
-        });
+        loadPropertyItem(m_continuousTextOffset);
     }
 
     if (mu::contains(propertyIdSet, Pid::END_TEXT)) {
@@ -381,9 +364,7 @@ void TextLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     }
 
     if (mu::contains(propertyIdSet, Pid::END_TEXT_OFFSET)) {
-        loadPropertyItem(m_endTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-            return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
-        });
+        loadPropertyItem(m_endTextOffset);
     }
 
     onUpdateLinePropertiesAvailability();
