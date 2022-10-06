@@ -47,6 +47,7 @@ endif(BUILD_MUSESAMPLER_MODULE)
 
 if (BUILD_UNIT_TESTS)
     add_subdirectory(global/tests)
+    add_subdirectory(draw/tests)
     add_subdirectory(mpe/tests)
     add_subdirectory(ui/tests)
     add_subdirectory(accessibility/tests)

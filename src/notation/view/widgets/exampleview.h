@@ -31,7 +31,6 @@
 #include "libmscore/mscoreview.h"
 
 #include "modularity/ioc.h"
-#include "ui/iuiconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "draw/types/transform.h"
 
@@ -45,7 +44,6 @@ class ExampleView : public QFrame, public engraving::MuseScoreView
 {
     Q_OBJECT
 
-    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
     INJECT(notation, notation::INotationConfiguration, notationConfiguration)
 
 public:

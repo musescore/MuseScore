@@ -21,6 +21,8 @@
  */
 #include "palettecelliconengine.h"
 
+#include <QPainter>
+
 #include "draw/types/geometry.h"
 #include "draw/painter.h"
 #include "draw/types/pen.h"
@@ -47,18 +49,16 @@ QIconEngine* PaletteCellIconEngine::clone() const
 
 void PaletteCellIconEngine::paint(QPainter* qp, const QRect& rect, QIcon::Mode mode, QIcon::State state)
 {
+    qreal dpi = qp->device()->logicalDpiX();
     Painter p(qp, "palettecell");
     p.save();
     p.setAntialiasing(true);
-    paintCell(p, RectF::fromQRectF(rect), mode == QIcon::Selected, state == QIcon::On);
+    paintCell(p, RectF::fromQRectF(rect), mode == QIcon::Selected, state == QIcon::On, dpi);
     p.restore();
 }
 
-void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool selected, bool current) const
+void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool selected, bool current, qreal dpi) const
 {
-    double guiScaling = uiConfiguration()->guiScaling();
-    painter.scale(guiScaling, guiScaling);
-
     paintBackground(painter, rect, selected, current);
 
     if (!m_cell) {
@@ -89,7 +89,7 @@ void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool 
     painter.translate(origin);
     painter.translate(m_cell->xoffset * spatium, m_cell->yoffset * spatium); // additional offset for element onlym
 
-    paintScoreElement(painter, element, spatium, drawStaff);
+    paintScoreElement(painter, element, spatium, drawStaff, dpi);
 }
 
 void PaletteCellIconEngine::paintBackground(Painter& painter, const RectF& rect, bool selected, bool current) const
@@ -156,7 +156,7 @@ qreal PaletteCellIconEngine::paintStaff(Painter& painter, const RectF& rect, qre
 /// system. If alignToStaff is true then the element is only centered horizontally;
 /// i.e. vertical alignment is unchanged from the default so that item will appear
 /// at the correct height on the staff.
-void PaletteCellIconEngine::paintScoreElement(Painter& painter, EngravingItem* element, qreal spatium, bool alignToStaff) const
+void PaletteCellIconEngine::paintScoreElement(Painter& painter, EngravingItem* element, qreal spatium, bool alignToStaff, qreal dpi) const
 {
     IF_ASSERT_FAILED(element && !element->isActionIcon()) {
         return;
@@ -164,7 +164,7 @@ void PaletteCellIconEngine::paintScoreElement(Painter& painter, EngravingItem* e
 
     painter.save();
 
-    mu::engraving::MScore::pixelRatio = mu::engraving::DPI / uiConfiguration()->logicalDpi();
+    mu::engraving::MScore::pixelRatio = mu::engraving::DPI / dpi;
 
     const qreal sizeRatio = spatium / gpaletteScore->spatium();
     painter.scale(sizeRatio, sizeRatio); // scale coordinates so element is drawn at correct size

@@ -45,6 +45,7 @@ QPainterProvider::QPainterProvider(QPainter* painter, bool ownsPainter)
         m_font = Font::fromQFont(m_painter->font());
         m_pen = Pen::fromQPen(m_painter->pen());
         m_brush = Brush::fromQBrush(m_painter->brush());
+        m_transform = Transform::fromQTransform(m_painter->transform());
     }
 }
 
@@ -173,6 +174,7 @@ void QPainterProvider::restore()
     m_font = Font::fromQFont(m_painter->font());
     m_pen = Pen::fromQPen(m_painter->pen());
     m_brush = Brush::fromQBrush(m_painter->brush());
+    m_transform = Transform::fromQTransform(m_painter->transform());
 }
 
 void QPainterProvider::setTransform(const Transform& transform)
