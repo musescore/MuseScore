@@ -309,7 +309,7 @@ void Tremolo::layoutOneNoteTremolo(double x, double y, double h, double spatium)
 
     if (up) {
         double height = isBuzzRoll() ? 0 : minHeight();
-        y = std::min(y, ((staff()->lines(tick()) - 1) - height) * spatium);
+        y = std::min(y, ((staff()->lines(tick()) - 1) - height) * spatium / mag);
     } else {
         y = std::max(y, 0.0);
     }

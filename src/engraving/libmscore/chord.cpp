@@ -1428,9 +1428,9 @@ int Chord::calcMinStemLength()
         // buzz roll's height is actually half of the visual height,
         // so we need to multiply it by 2 to get the actual height
         int buzzRollMultiplier = _tremolo->isBuzzRoll() ? 2 : 1;
-        minStemLength += ceil(_tremolo->minHeight() * 4.0 * buzzRollMultiplier);
-        int outSidePadding = score()->styleMM(Sid::tremoloOutSidePadding).val() / _spatium * 4.0 * _relativeMag;
-        int noteSidePadding = score()->styleMM(Sid::tremoloNoteSidePadding).val() / _spatium * 4.0 * _relativeMag;
+        minStemLength += ceil(_tremolo->minHeight() / _relativeMag * 4.0 * buzzRollMultiplier);
+        int outSidePadding = score()->styleMM(Sid::tremoloOutSidePadding).val() / _spatium * 4.0;
+        int noteSidePadding = score()->styleMM(Sid::tremoloNoteSidePadding).val() / _spatium * 4.0;
 
         Note* lineNote = _up ? upNote() : downNote();
         if (lineNote->line() == INVALID_LINE) {
@@ -1454,7 +1454,7 @@ int Chord::calcMinStemLength()
             int hookOffset = (_hook->height() + smuflAnchor) / _spatium * 4 - (straightFlags ? 0 : 2);
             // TODO: when the SMuFL metadata includes a cutout for flags, replace this with that metadata
             // https://github.com/w3c/smufl/issues/203
-            int cutout = floor(up() ? 5 * _relativeMag : 7 * _relativeMag);
+            int cutout = up() ? 5 : 7;
             if (straightFlags) {
                 cutout = 0;
             } else if (beams() >= 2) {
@@ -1464,7 +1464,7 @@ int Chord::calcMinStemLength()
             minStemLength += hookOffset - cutout;
 
             if (isGrace()) {
-                minStemLength += 2;
+                minStemLength += straightFlags ? 0 : 3;
             }
             // hooks with trems inside them no longer ceil (snap) to nearest 0.5sp.
             // if we want to add that back in, here is the place to do it
