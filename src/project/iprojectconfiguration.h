@@ -118,8 +118,8 @@ public:
     virtual bool openDetailedProjectUploadedDialog() const = 0;
     virtual void setOpenDetailedProjectUploadedDialog(bool show) = 0;
 
-    virtual bool openAudioGenerationSettings() const = 0;
-    virtual void setOpenAudioGenerationSettings(bool open) = 0;
+    virtual bool hasAskedAudioGenerationSettings() const = 0;
+    virtual void setHasAskedAudioGenerationSettings(bool has) = 0;
 
     virtual GenerateAudioTimePeriodType generateAudioTimePeriodType() const = 0;
     virtual void setGenerateAudioTimePeriodType(GenerateAudioTimePeriodType type) = 0;

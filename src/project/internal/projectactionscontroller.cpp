@@ -501,11 +501,15 @@ bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, 
         return false;
     }
 
-    if (isCloudAvailable && project->isNewlyCreated()) {
-        Ret ret = openAudioGenerationSettings();
-        if (!ret) {
+    bool generateAudio = false;
+    bool isPublic = info.visibility == CloudProjectVisibility::Public;
+    if (isCloudAvailable) {
+        RetVal<bool> need = needGenerateAudio(isPublic);
+        if (!need.ret) {
             return false;
         }
+
+        generateAudio = need.val;
     }
 
     project->setCloudInfo(info);
@@ -531,9 +535,8 @@ bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, 
     }
 
     AudioFile audio;
-    bool isPublic = info.visibility == CloudProjectVisibility::Public;
 
-    if (needGenerateAudio(isPublic)) {
+    if (generateAudio) {
         audio = exportMp3(project->masterNotation()->notation());
         if (!audio.isValid()) {
             return false;
@@ -546,41 +549,43 @@ bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, 
     return true;
 }
 
-Ret ProjectActionsController::openAudioGenerationSettings()
+Ret ProjectActionsController::askAudioGenerationSettings() const
 {
-    if (configuration()->openAudioGenerationSettings()) {
-        RetVal<Val> res = interactive()->open("musescore://project/audiogenerationsettings");
-        if (!res.ret) {
-            return res.ret;
-        }
-
-        ValMap map = res.val.toMap();
-        bool askAgain = map["askAgain"].toBool();
-
-        configuration()->setOpenAudioGenerationSettings(askAgain);
+    RetVal<Val> res = interactive()->open("musescore://project/audiogenerationsettings");
+    if (!res.ret) {
+        return res.ret;
     }
+
+    configuration()->setHasAskedAudioGenerationSettings(true);
 
     return make_ok();
 }
 
-bool ProjectActionsController::needGenerateAudio(bool isPublicUpload) const
+RetVal<bool> ProjectActionsController::needGenerateAudio(bool isPublicUpload) const
 {
     if (isPublicUpload) {
-        return true;
+        return RetVal<bool>::make_ok(true);
+    }
+
+    if (!configuration()->hasAskedAudioGenerationSettings()) {
+        Ret ret = askAudioGenerationSettings();
+        if (!ret) {
+            return ret;
+        }
     }
 
     switch (configuration()->generateAudioTimePeriodType()) {
     case GenerateAudioTimePeriodType::Never:
-        return false;
+        return RetVal<bool>::make_ok(false);
     case GenerateAudioTimePeriodType::Always:
-        return true;
+        return RetVal<bool>::make_ok(true);
     case GenerateAudioTimePeriodType::AfterCertainNumberOfSaves: {
         int requiredNumberOfSaves = configuration()->numberOfSavesToGenerateAudio();
-        return m_numberOfSavesToCloud % requiredNumberOfSaves == 0;
+        return RetVal<bool>::make_ok(m_numberOfSavesToCloud % requiredNumberOfSaves == 0);
     }
     }
 
-    return false;
+    return RetVal<bool>::make_ok(false);
 }
 
 ProjectActionsController::AudioFile ProjectActionsController::exportMp3(const INotationPtr notation) const
