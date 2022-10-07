@@ -28,7 +28,7 @@
 #include "engraving/types/types.h"
 #include "engraving/libmscore/types.h"
 
-namespace mu::engraving::PluginAPI {
+namespace mu::engraving::PluginAPI::Enums {
 Q_NAMESPACE;
 
 enum class AccidentalType {
@@ -3565,27 +3565,27 @@ enum class SymId {
 Q_ENUM_NS(SymId);
 }
 
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::AccidentalType);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::ElementType);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::OrnamentStyle);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Align);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Placement);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Direction);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::DirectionH);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::LayoutBreakType);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::VeloType);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::BeamMode);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::GlissandoType);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::GlissandoStyle);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::NoteHeadType);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::NoteHeadScheme);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::NoteHeadGroup);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::NoteType);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::PlayEventType);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::SegmentType);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Tid);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Syllabic);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Anchor);
-Q_DECLARE_METATYPE(mu::engraving::PluginAPI::SymId);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::AccidentalType);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::ElementType);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::OrnamentStyle);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::Align);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::Placement);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::Direction);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::DirectionH);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::LayoutBreakType);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::VeloType);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::BeamMode);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::GlissandoType);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::GlissandoStyle);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::NoteHeadType);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::NoteHeadScheme);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::NoteHeadGroup);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::NoteType);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::PlayEventType);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::SegmentType);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::Tid);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::Syllabic);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::Anchor);
+Q_DECLARE_METATYPE(mu::engraving::PluginAPI::Enums::SymId);
 
 #endif // MU_PLUGINS_APITYPES_H
