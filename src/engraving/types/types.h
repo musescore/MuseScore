@@ -20,6 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#ifndef MU_ENGRAVING_TYPES_H
+#define MU_ENGRAVING_TYPES_H
+
 #include <functional>
 #include <map>
 #include <unordered_set>
@@ -38,9 +41,6 @@
 #include "groupnode.h"
 #include "pitchvalue.h"
 #include "symid.h"
-
-#ifndef MU_ENGRAVING_TYPES_H
-#define MU_ENGRAVING_TYPES_H
 
 namespace mu::engraving {
 using staff_idx_t = size_t;
