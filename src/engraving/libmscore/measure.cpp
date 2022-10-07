@@ -3273,6 +3273,7 @@ void Measure::layoutMeasureElements()
                     e->setPosX(measureWidth - .5 * e->width());
                 } else {
                     // full measure rest or one-measure repeat, center within this measure
+                    e->layout();
                     e->setPosX((x2 - x1 - e->width()) * .5 + x1 - s.x() - e->bbox().x());
                 }
                 s.createShape(staffIdx);            // DEBUG
