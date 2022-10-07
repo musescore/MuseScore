@@ -62,6 +62,8 @@ StyledDialogView {
     }
 
     ColumnLayout {
+        id: content
+
         anchors.fill: parent
         anchors.leftMargin: 28
         anchors.rightMargin: 28
@@ -83,32 +85,75 @@ StyledDialogView {
 
             onLoaded: {
                 item.navigationSection = root.navigationSection
+                item.activeButtonTitle = buttons.activeButton.text
+
+                navigationActiveTimer.start()
+            }
+
+            Timer {
+                id: navigationActiveTimer
+
+                interval: 1000
+                repeat: false
+
+                onTriggered: {
+                    buttons.activeButton.navigation.accessible.ignored = true
+                    buttons.activeButton.navigation.requestActive()
+                    pageLoader.item.readInfo()
+                }
             }
         }
 
         RowLayout {
+            id: buttons
+
             spacing: 12
 
-            NavigationPanel {
-                id: buttonsNavigationPanel
-                name: "Buttons"
-                enabled: parent.enabled && parent.visible
+            property var lastPressedButton: null
+            property var activeButton: {
+                if (Boolean(lastPressedButton) && lastPressedButton.visible === true) {
+                    return lastPressedButton
+                } else if (nextStepButton.visible === true) {
+                    return nextStepButton
+                } else {
+                    return backButton
+                }
+            }
+
+            property NavigationPanel navigationPanel: NavigationPanel {
+                name: "ButtonsPanel"
+                enabled: buttons.enabled && buttons.visible
                 section: root.navigationSection
-                order: 10000 // Higher than pages
+                order: 1 // Lower than pages
                 direction: NavigationPanel.Horizontal
             }
 
             FlatButton {
+                id: backButton
+
                 Layout.alignment: Qt.AlignLeft
 
                 text: qsTrc("global", "Back")
                 visible: model.canGoBack
 
                 navigation.name: "BackButton"
-                navigation.panel: buttonsNavigationPanel
+                navigation.panel: buttons.navigationPanel
                 navigation.column: 3
+                navigation.onActiveChanged: {
+                    if (!navigation.active) {
+                        accessible.ignored = false
+                        accessible.focused = true
+                        pageLoader.item.resetFocus()
+                    }
+                }
 
                 onClicked: {
+                    if (Boolean(buttons.lastPressedButton)) {
+                        buttons.lastPressedButton.navigation.accessible.ignored = true
+                    }
+
+                    buttons.lastPressedButton = backButton
+                    pageLoader.item.resetFocus()
                     model.currentPageIndex--
                 }
             }
@@ -128,7 +173,7 @@ StyledDialogView {
                 text: root.currentPage ? root.currentPage.extraButtonTitle : ""
 
                 navigation.name: "ExtraButton"
-                navigation.panel: buttonsNavigationPanel
+                navigation.panel: buttons.navigationPanel
                 navigation.column: 1
 
                 onClicked: {
@@ -139,6 +184,8 @@ StyledDialogView {
             }
 
             FlatButton {
+                id: nextStepButton
+
                 Layout.alignment: Qt.AlignRight
 
                 text: model.canFinish ? qsTrc("appshell/gettingstarted", "Finish")
@@ -146,8 +193,15 @@ StyledDialogView {
                 accentButton: !extraButton.visible
 
                 navigation.name: "NextButton"
-                navigation.panel: buttonsNavigationPanel
+                navigation.panel: buttons.navigationPanel
                 navigation.column: 2
+                navigation.onActiveChanged: {
+                    if (!navigation.active) {
+                        accessible.ignored = false
+                        accessible.focused = true
+                        pageLoader.item.resetFocus()
+                    }
+                }
 
                 onClicked: {
                     if (model.canFinish) {
@@ -156,6 +210,12 @@ StyledDialogView {
                         return
                     }
 
+                    if (Boolean(buttons.lastPressedButton)) {
+                        buttons.lastPressedButton.navigation.accessible.ignored = true
+                    }
+
+                    buttons.lastPressedButton = nextStepButton
+                    pageLoader.item.resetFocus()
                     model.currentPageIndex++
                 }
             }
