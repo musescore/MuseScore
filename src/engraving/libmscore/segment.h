@@ -316,7 +316,6 @@ public:
     bool isEndBarLineType() const { return _segmentType == SegmentType::EndBarLine; }
     bool isKeySigAnnounceType() const { return _segmentType == SegmentType::KeySigAnnounce; }
     bool isTimeSigAnnounceType() const { return _segmentType == SegmentType::TimeSigAnnounce; }
-    bool isMMRestSegment() const;
 
     Fraction shortestChordRest() const;
     void computeCrossBeamType(Segment* nextSeg);
