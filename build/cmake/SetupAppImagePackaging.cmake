@@ -5,8 +5,21 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
     #     set library search path for runtime linker to load the same
     #     qt libraries as we used at compile time
     #
+    set(DESKTOP_LAUNCHER_NAME "${MUSESCORE_NAME}")
+
+    if (${MSCORE_INSTALL_SUFFIX} MATCHES "-dev")
+        set(DESKTOP_LAUNCHER_NAME "${DESKTOP_LAUNCHER_NAME}Dev")
+    elseif (${MSCORE_INSTALL_SUFFIX} MATCHES "-nightly")
+        set(DESKTOP_LAUNCHER_NAME "${DESKTOP_LAUNCHER_NAME}Nightly")
+    elseif (${MSCORE_INSTALL_SUFFIX} MATCHES "-testing")
+        set(DESKTOP_LAUNCHER_NAME "${DESKTOP_LAUNCHER_NAME}Testing")
+    endif(${MSCORE_INSTALL_SUFFIX} MATCHES "-dev")
+
+    set(DESKTOP_LAUNCHER_NAME "${DESKTOP_LAUNCHER_NAME} ${MUSESCORE_VERSION}")
+
     string(TOUPPER "mscore${MSCORE_INSTALL_SUFFIX}" MAN_MSCORE_UPPER) # Command name shown in uppercase in man pages by convention
     if (${MSCORE_INSTALL_SUFFIX} MATCHES "portable") # Note: "-portable-anything" would match
+      set(DESKTOP_LAUNCHER_NAME "${DESKTOP_LAUNCHER_NAME} Portable")
       # Build portable AppImage as per https://github.com/probonopd/AppImageKit
       add_subdirectory(build/Linux+BSD/portable)
       if (NOT DEFINED ARCH)
@@ -29,8 +42,9 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
                        build/rm-empty-dirs              DESTINATION bin COMPONENT portable)
       install(FILES    build/Linux+BSD/portable/qt.conf DESTINATION bin COMPONENT portable)
     else (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
-      set(MAN_PORTABLE .\\\") # comment out lines in man page that are only relevant to the portable version
+      set(MAN_PORTABLE ".\\\"") # comment out lines in man page that are only relevant to the portable version
     endif (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
+
     # Install desktop file (perform variable substitution first)
     configure_file(build/Linux+BSD/mscore.desktop.in mscore${MSCORE_INSTALL_SUFFIX}.desktop)
     install( FILES ${PROJECT_BINARY_DIR}/mscore${MSCORE_INSTALL_SUFFIX}.desktop DESTINATION share/applications)
