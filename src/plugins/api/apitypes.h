@@ -150,6 +150,8 @@ enum class NoteHeadGroup {
     HEAD_CIRCLED_LARGE = int(mu::engraving::NoteHeadGroup::HEAD_CIRCLED_LARGE),
     HEAD_LARGE_ARROW = int(mu::engraving::NoteHeadGroup::HEAD_LARGE_ARROW),
     HEAD_BREVIS_ALT = int(mu::engraving::NoteHeadGroup::HEAD_BREVIS_ALT),
+    HEAD_SLASH = int(mu::engraving::NoteHeadGroup::HEAD_SLASH),
+    HEAD_LARGE_DIAMOND = int(mu::engraving::NoteHeadGroup::HEAD_LARGE_DIAMOND),
     HEAD_HEAVY_CROSS = int(mu::engraving::NoteHeadGroup::HEAD_HEAVY_CROSS),
     HEAD_HEAVY_CROSS_HAT = int(mu::engraving::NoteHeadGroup::HEAD_HEAVY_CROSS_HAT)
 };

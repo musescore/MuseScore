@@ -119,6 +119,8 @@ static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS) - 1][int(NoteHea
 
         { SymId::noteheadSlashWhiteWhole,     SymId::noteheadSlashWhiteHalf,      SymId::noteheadSlashHorizontalEnds,
           SymId::noteheadSlashWhiteWhole },
+        { SymId::noteheadSlashDiamondWhite,   SymId::noteheadSlashDiamondWhite,   SymId::noteheadSlashHorizontalEnds,
+          SymId::noteheadSlashWhiteWhole },
 
         { SymId::noteShapeRoundWhite,         SymId::noteShapeRoundWhite,         SymId::noteShapeRoundBlack,
           SymId::noteShapeRoundDoubleWhole },
@@ -229,6 +231,8 @@ static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS) - 1][int(NoteHea
           SymId::noteheadDoubleWholeSquare },
 
         { SymId::noteheadSlashWhiteWhole,     SymId::noteheadSlashWhiteHalf,      SymId::noteheadSlashHorizontalEnds,
+          SymId::noteheadSlashWhiteDoubleWhole },
+        { SymId::noteheadSlashDiamondWhite,   SymId::noteheadSlashDiamondWhite,   SymId::noteheadSlashHorizontalEnds,
           SymId::noteheadSlashWhiteDoubleWhole },
 
         { SymId::noteShapeRoundWhite,         SymId::noteShapeRoundWhite,         SymId::noteShapeRoundBlack,
