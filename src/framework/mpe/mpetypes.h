@@ -806,6 +806,10 @@ private:
             for (auto& pair : m_averageDynamicOffsetMap) {
                 pair.second /= dynamicChangesCount;
             }
+        } else if (dynamicChangesCount == 0) {
+            m_averageMaxAmplitudeLevel = cbegin()->second.appliedPatternSegment.expressionPattern.maxAmplitudeLevel();
+            m_averageDynamicRange = cbegin()->second.meta.overallDynamicChangesRange;
+            m_averageDynamicOffsetMap = cbegin()->second.appliedPatternSegment.expressionPattern.dynamicOffsetMap;
         }
 
         if (pitchChangesCount > 0) {
@@ -814,6 +818,9 @@ private:
             for (auto& pair : m_averagePitchOffsetMap) {
                 pair.second /= pitchChangesCount;
             }
+        } else if (pitchChangesCount == 0) {
+            m_averagePitchRange = cbegin()->second.meta.overallPitchChangesRange;
+            m_averagePitchOffsetMap = cbegin()->second.appliedPatternSegment.pitchPattern.pitchOffsetMap;
         }
     }
 
