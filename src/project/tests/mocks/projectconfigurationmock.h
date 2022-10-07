@@ -102,8 +102,8 @@ public:
     MOCK_METHOD(bool, openDetailedProjectUploadedDialog, (), (const, override));
     MOCK_METHOD(void, setOpenDetailedProjectUploadedDialog, (bool), (override));
 
-    MOCK_METHOD(bool, openAudioGenerationSettings, (), (const, override));
-    MOCK_METHOD(void, setOpenAudioGenerationSettings, (bool), (override));
+    MOCK_METHOD(bool, hasAskedAudioGenerationSettings, (), (const, override));
+    MOCK_METHOD(void, setHasAskedAudioGenerationSettings, (bool), (override));
 
     MOCK_METHOD(GenerateAudioTimePeriodType, generateAudioTimePeriodType, (), (const, override));
     MOCK_METHOD(void, setGenerateAudioTimePeriodType, (GenerateAudioTimePeriodType), (override));

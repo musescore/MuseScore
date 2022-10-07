@@ -118,8 +118,8 @@ private:
         }
     };
 
-    Ret openAudioGenerationSettings();
-    bool needGenerateAudio(bool isPublic) const;
+    Ret askAudioGenerationSettings() const;
+    RetVal<bool> needGenerateAudio(bool isPublic) const;
     AudioFile exportMp3(const notation::INotationPtr notation) const;
 
     void uploadProject(const CloudProjectInfo& info, const AudioFile& audio = AudioFile(), bool openEditUrl = true);

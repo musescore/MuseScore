@@ -118,8 +118,8 @@ public:
     bool openDetailedProjectUploadedDialog() const override;
     void setOpenDetailedProjectUploadedDialog(bool show) override;
 
-    bool openAudioGenerationSettings() const override;
-    void setOpenAudioGenerationSettings(bool open) override;
+    bool hasAskedAudioGenerationSettings() const override;
+    void setHasAskedAudioGenerationSettings(bool has) override;
 
     GenerateAudioTimePeriodType generateAudioTimePeriodType() const override;
     void setGenerateAudioTimePeriodType(GenerateAudioTimePeriodType type) override;

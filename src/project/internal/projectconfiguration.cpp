@@ -56,7 +56,7 @@ static const Settings::Key AUTOSAVE_ENABLED_KEY(module_name, "project/autoSaveEn
 static const Settings::Key AUTOSAVE_INTERVAL_KEY(module_name, "project/autoSaveInterval");
 static const Settings::Key SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT(module_name, "project/shouldDestinationFolderBeOpenedOnExport");
 static const Settings::Key OPEN_DETAILED_PROJECT_UPLOADED_DIALOG(module_name, "project/openDetailedProjectUploadedDialog");
-static const Settings::Key OPEN_AUDIO_GENERATION_SETTINGS(module_name, "project/openAudioGenerationSettings");
+static const Settings::Key HAS_ASKED_AUDIO_GENERATION_SETTINGS(module_name, "project/hasAskedAudioGenerationSettings");
 static const Settings::Key GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY(module_name, "project/generateAudioTimePeriodType");
 static const Settings::Key NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY(module_name, "project/numberOfSavesToGenerateAudio");
 static const Settings::Key SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING(module_name, "project/showCloudIsNotAvailableWarning");
@@ -103,7 +103,7 @@ void ProjectConfiguration::init()
 
     settings()->setDefaultValue(SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT, Val(false));
     settings()->setDefaultValue(OPEN_DETAILED_PROJECT_UPLOADED_DIALOG, Val(true));
-    settings()->setDefaultValue(OPEN_AUDIO_GENERATION_SETTINGS, Val(true));
+    settings()->setDefaultValue(HAS_ASKED_AUDIO_GENERATION_SETTINGS, Val(false));
     settings()->setDefaultValue(GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY, Val(static_cast<int>(GenerateAudioTimePeriodType::Never)));
     settings()->setDefaultValue(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY, Val(10));
     settings()->setDefaultValue(SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING, Val(true));
@@ -581,14 +581,14 @@ void ProjectConfiguration::setOpenDetailedProjectUploadedDialog(bool show)
     settings()->setSharedValue(OPEN_DETAILED_PROJECT_UPLOADED_DIALOG, Val(show));
 }
 
-bool ProjectConfiguration::openAudioGenerationSettings() const
+bool ProjectConfiguration::hasAskedAudioGenerationSettings() const
 {
-    return settings()->value(OPEN_AUDIO_GENERATION_SETTINGS).toBool();
+    return settings()->value(HAS_ASKED_AUDIO_GENERATION_SETTINGS).toBool();
 }
 
-void ProjectConfiguration::setOpenAudioGenerationSettings(bool open)
+void ProjectConfiguration::setHasAskedAudioGenerationSettings(bool has)
 {
-    settings()->setSharedValue(OPEN_AUDIO_GENERATION_SETTINGS, Val(open));
+    settings()->setSharedValue(HAS_ASKED_AUDIO_GENERATION_SETTINGS, Val(has));
 }
 
 GenerateAudioTimePeriodType ProjectConfiguration::generateAudioTimePeriodType() const
