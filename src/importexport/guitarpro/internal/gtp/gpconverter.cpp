@@ -19,6 +19,7 @@
 #include "libmscore/fermata.h"
 #include "libmscore/fingering.h"
 #include "libmscore/fret.h"
+#include "libmscore/fretcircle.h"
 #include "libmscore/glissando.h"
 #include "libmscore/gradualtempochange.h"
 #include "libmscore/hairpin.h"
@@ -580,7 +581,12 @@ void GPConverter::convertNotes(const std::vector<std::shared_ptr<GPNote> >& note
 
     //! NOTE: later notes order is used in linked staff to create ties, glissando
     if (cr->isChord()) {
-        static_cast<Chord*>(cr)->sortNotes();
+        Chord* ch = static_cast<Chord*>(cr);
+        ch->sortNotes();
+        if (_score->styleB(Sid::circledNotesOnCommonTab)) {
+            FretCircle* c = Factory::createFretCircle(ch);
+            ch->add(c);
+        }
     }
 }
 
