@@ -408,6 +408,7 @@ enum class NoteHeadGroup : signed char {
     HEAD_BREVIS_ALT,
 
     HEAD_SLASH,
+    HEAD_LARGE_DIAMOND,
 
     HEAD_SOL,
     HEAD_LA,
