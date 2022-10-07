@@ -181,6 +181,7 @@ enum class ElementType {
     BAGPIPE_EMBELLISHMENT,
     STICKING,
     GRACE_NOTES_GROUP,
+    FRET_CIRCLE,
 
     ROOT_ITEM,
     DUMMY,

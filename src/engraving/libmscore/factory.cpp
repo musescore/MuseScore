@@ -43,6 +43,7 @@
 #include "figuredbass.h"
 #include "fingering.h"
 #include "fret.h"
+#include "fretcircle.h"
 #include "glissando.h"
 #include "gradualtempochange.h"
 #include "hairpin.h"
@@ -206,6 +207,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::AMBITUS:           return new Ambitus(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::STICKING:          return new Sticking(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::TRIPLET_FEEL:      return new TripletFeel(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::FRET_CIRCLE:       return new FretCircle(parent->isChord() ? toChord(parent) : dummy->chord());
 
     case ElementType::LYRICSLINE:
     case ElementType::TEXTLINE_BASE:
@@ -595,6 +597,8 @@ TripletFeel* Factory::createTripletFeel(Segment * parent, TripletFeelType type, 
 
     return t;
 }
+
+CREATE_ITEM_IMPL(FretCircle, ElementType::FRET_CIRCLE, Chord, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(Vibrato, ElementType::VIBRATO, EngravingItem, isAccessibleEnabled)
 

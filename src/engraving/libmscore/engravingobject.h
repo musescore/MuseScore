@@ -172,6 +172,7 @@ class Volta;
 class VoltaSegment;
 class WhammyBar;
 class WhammyBarSegment;
+class FretCircle;
 
 class XmlReader;
 class XmlWriter;
@@ -418,6 +419,7 @@ public:
     CONVERT(Lasso,         LASSO)
     CONVERT(Sticking,      STICKING)
     CONVERT(GraceNotesGroup, GRACE_NOTES_GROUP)
+    CONVERT(FretCircle, FRET_CIRCLE)
 #undef CONVERT
 
     virtual bool isEngravingItem() const { return false; }   // overridden in element.h
@@ -743,6 +745,7 @@ CONVERT(Lasso)
 CONVERT(BagpipeEmbellishment)
 CONVERT(Sticking)
 CONVERT(GraceNotesGroup)
+CONVERT(FretCircle)
 #undef CONVERT
 }
 
