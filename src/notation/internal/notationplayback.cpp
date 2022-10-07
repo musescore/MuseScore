@@ -50,6 +50,8 @@ using namespace mu::midi;
 using namespace mu::async;
 using namespace mu::engraving;
 
+static constexpr int PLAYBACK_TAIL_SECS = 3;
+
 NotationPlayback::NotationPlayback(IGetScore* getScore,
                                    async::Notification notationChanged)
     : m_getScore(getScore)
@@ -172,6 +174,7 @@ void NotationPlayback::updateTotalPlayTime()
 
     int lastTick = score->repeatList().ticks();
     qreal secs = score->utick2utime(lastTick);
+    secs += PLAYBACK_TAIL_SECS;
 
     audio::msecs_t newPlayTime = secs * 1000.f;
 
