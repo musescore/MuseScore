@@ -354,11 +354,8 @@ void PluginAPI::registerQmlTypes()
         return;
     }
 
-    const char* enumErr = "You can't create an enumeration";
     qmlRegisterType<MsProcess>("MuseScore", 3, 0, "QProcess");
     qmlRegisterType<FileIO, 1>("FileIO",    3, 0, "FileIO");
-    //-----------mscore bindings
-    qmlRegisterUncreatableMetaObject(mu::engraving::staticMetaObject, "MuseScore", 3, 0, "Ms", enumErr);
 
     if (-1 == qmlRegisterType<PluginAPI>("MuseScore", 3, 0, "MuseScore")) {
         LOGW("qmlRegisterType failed: MuseScore");
