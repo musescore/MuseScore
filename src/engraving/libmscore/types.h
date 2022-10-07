@@ -23,22 +23,13 @@
 #ifndef __TYPES_H__
 #define __TYPES_H__
 
-#include "config.h"
-#include "types/types.h"
+#include <unordered_set>
+
 #include "containers.h"
+#include "types/types.h"
 
 #include "property.h"
 #include "style/styledef.h"
-
-#ifdef SCRIPT_INTERFACE
-#include <QObject>
-#endif
-
-#include <unordered_set>
-
-/**
- * \namespace Ms .
- */
 
 namespace mu::engraving {
 enum class CommandType {
@@ -146,10 +137,6 @@ enum class CommandType {
     InsertTime,
     ChangeScoreOrder,
 };
-
-#ifdef SCRIPT_INTERFACE
-Q_NAMESPACE
-#endif
 
 //---------------------------------------------------------
 //   AccidentalType
@@ -525,16 +512,6 @@ struct ScoreChangesRange {
         return isValidBoundary() || !changedTypes.empty();
     }
 };
-
-#ifdef SCRIPT_INTERFACE
-Q_ENUM_NS(ElementType);
-Q_ENUM_NS(GlissandoType);
-Q_ENUM_NS(SegmentType);
-Q_ENUM_NS(NoteType);
-Q_ENUM_NS(PlayEventType);
-Q_ENUM_NS(AccidentalType);
-Q_ENUM_NS(HarmonyType);
-#endif
 } // namespace mu::engraving
 
 #ifndef NO_QT_SUPPORT
