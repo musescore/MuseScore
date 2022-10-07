@@ -685,7 +685,10 @@ void PlaybackController::resetCurrentSequence()
     playback()->player()->playbackPositionMsecs().resetOnReceive(this);
     playback()->player()->playbackStatusChanged().resetOnReceive(this);
 
+    playback()->tracks()->clearSources();
     playback()->tracks()->inputParamsChanged().resetOnReceive(this);
+
+    playback()->audioOutput()->clearAllFx();
     playback()->audioOutput()->outputParamsChanged().resetOnReceive(this);
     playback()->audioOutput()->masterOutputParamsChanged().resetOnReceive(this);
 

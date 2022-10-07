@@ -48,6 +48,7 @@ public:
     std::vector<audio::IFxProcessorPtr> resolveMasterFxList(const audio::AudioFxChain& fxChain) override;
     audio::AudioResourceMetaList resolveResources() const override;
     void refresh() override;
+    void clearAllFx() override;
 
 private:
     using FxMap = std::unordered_map<audio::AudioFxChainOrder, VstFxPtr>;

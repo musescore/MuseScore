@@ -42,6 +42,8 @@ public:
 
     void registerResolver(const AudioSourceType type, IResolverPtr resolver) override;
 
+    void clearSources() override;
+
 private:
     using SynthPair = std::pair<audio::AudioResourceId, ISynthesizerPtr>;
 

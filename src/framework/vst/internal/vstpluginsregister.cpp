@@ -165,3 +165,22 @@ void VstPluginsRegister::unregisterMasterFxPlugin(const audio::AudioResourceId& 
 
     m_masterPluginsMap.erase({ resourceId, chainOrder });
 }
+
+void VstPluginsRegister::unregisterAllInstrPlugin()
+{
+    ONLY_MAIN_THREAD(threadSecurer);
+
+    std::lock_guard lock(m_mutex);
+
+    m_vstiPluginsMap.clear();
+}
+
+void VstPluginsRegister::unregisterAllFx()
+{
+    ONLY_MAIN_THREAD(threadSecurer);
+
+    std::lock_guard lock(m_mutex);
+
+    m_vstFxPluginsMap.clear();
+    m_masterPluginsMap.clear();
+}

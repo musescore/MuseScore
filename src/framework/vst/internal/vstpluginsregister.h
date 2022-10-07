@@ -52,6 +52,9 @@ public:
                             const audio::AudioFxChainOrder chainOrder) override;
     void unregisterMasterFxPlugin(const audio::AudioResourceId& resourceId, const audio::AudioFxChainOrder chainOrder) override;
 
+    void unregisterAllInstrPlugin() override;
+    void unregisterAllFx() override;
+
 private:
     mutable std::mutex m_mutex;
 
