@@ -95,3 +95,7 @@ void FluidResolver::refresh()
         m_resourcesCache.emplace(io::basename(path).toStdString(), path);
     }
 }
+
+void FluidResolver::clearSources()
+{
+}

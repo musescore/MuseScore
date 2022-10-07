@@ -118,3 +118,14 @@ void FxResolver::registerResolver(const AudioFxType type, IResolverPtr resolver)
 
     m_resolvers.insert_or_assign(type, std::move(resolver));
 }
+
+void FxResolver::clearAllFx()
+{
+    ONLY_AUDIO_MAIN_THREAD;
+
+    std::lock_guard lock(m_mutex);
+
+    for (auto it = m_resolvers.begin(); it != m_resolvers.end(); ++it) {
+        it->second->clearAllFx();
+    }
+}

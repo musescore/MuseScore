@@ -61,3 +61,8 @@ AudioResourceMetaList VstiResolver::resolveResources() const
 {
     return pluginModulesRepo()->instrumentModulesMeta();
 }
+
+void VstiResolver::clearSources()
+{
+    pluginsRegister()->unregisterAllInstrPlugin();
+}

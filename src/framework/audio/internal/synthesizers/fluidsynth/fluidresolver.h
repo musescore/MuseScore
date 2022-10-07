@@ -45,6 +45,7 @@ public:
     audio::AudioResourceMetaList resolveResources() const override;
 
     void refresh() override;
+    void clearSources() override;
 
 private:
     FluidSynthPtr createSynth(const audio::AudioResourceId& resourceId) const;

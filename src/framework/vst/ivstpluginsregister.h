@@ -28,6 +28,9 @@ public:
     virtual void unregisterFxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId,
                                     const audio::AudioFxChainOrder chainOrder) = 0;
     virtual void unregisterMasterFxPlugin(const audio::AudioResourceId& resourceId, const audio::AudioFxChainOrder chainOrder) = 0;
+
+    virtual void unregisterAllInstrPlugin() = 0;
+    virtual void unregisterAllFx() = 0;
 };
 }
 

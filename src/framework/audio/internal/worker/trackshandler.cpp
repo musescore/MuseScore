@@ -214,6 +214,11 @@ Channel<TrackSequenceId, TrackId, AudioInputParams> TracksHandler::inputParamsCh
     return m_inputParamsChanged;
 }
 
+void TracksHandler::clearSources()
+{
+    resolver()->clearSources();
+}
+
 ITrackSequencePtr TracksHandler::sequence(const TrackSequenceId id) const
 {
     ONLY_AUDIO_WORKER_THREAD;

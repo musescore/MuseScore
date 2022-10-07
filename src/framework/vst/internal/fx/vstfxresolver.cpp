@@ -75,6 +75,14 @@ void VstFxResolver::refresh()
     pluginModulesRepo()->refresh();
 }
 
+void VstFxResolver::clearAllFx()
+{
+    pluginsRegister()->unregisterAllFx();
+
+    m_tracksFxMap.clear();
+    m_masterFxMap.clear();
+}
+
 VstFxPtr VstFxResolver::createMasterFx(const audio::AudioFxParams& fxParams) const
 {
     if (!pluginModulesRepo()->exists(fxParams.resourceMeta.id)) {
