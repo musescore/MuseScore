@@ -38,6 +38,7 @@
 #include "keysig.h"
 #include "masterscore.h"
 #include "measure.h"
+#include "mmrest.h"
 #include "mscore.h"
 #include "note.h"
 #include "part.h"
@@ -2297,6 +2298,9 @@ void Segment::createShape(staff_idx_t staffIdx)
                 // A full measure rest in a measure with multiple voices must be ignored
                 continue;
             }
+            if (e->isMMRest()) {
+                continue;
+            }
             if (e->addToSkyline()) {
                 s.add(e->shape().translated(e->pos()));
             }
@@ -2601,15 +2605,6 @@ double Segment::elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const
 }
 
 //---------------------------------------------------------
-// isMMRestSegment()
-//  true if the segment is a MM rest
-//---------------------------------------------------------
-bool Segment::isMMRestSegment() const
-{
-    return measure()->isMMRest() && isChordRestType();
-}
-
-//---------------------------------------------------------
 //   minHorizontalDistance
 //    calculate the minimum layout distance to Segment ns
 //---------------------------------------------------------
@@ -2619,11 +2614,7 @@ double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
     double ww = -1000000.0;          // can remain negative
     double d = 0.0;
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
-        if (!isMMRestSegment() && !ns->isMMRestSegment()) {
-            // MM rest segments must be treated separately because
-            // the associated shapes have variable width
-            d = ns ? staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx), score()) : 0.0;
-        }
+        d = ns ? staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx), score()) : 0.0;
         // first chordrest of a staff should clear the widest header for any staff
         // so make sure segment is as wide as it needs to be
         if (systemHeaderGap) {
@@ -2827,15 +2818,12 @@ double Segment::computeDurationStretch(Segment* prevSeg, Fraction minTicks, Frac
     {
         double slope = score()->styleD(Sid::measureSpacing);
 
-        static constexpr int maxMMRestWidth = 20; // At most, MM rests will be spaced "as if" they were 20 bars long.
         static constexpr double longNoteThreshold = Fraction(1, 16).toDouble();
 
-        Fraction timeSig = measure()->timesig();
-        if (curTicks > timeSig) { // This is the case of MM rests
-            curTicks = curTicks - timeSig; // A 2-bar MM rests receives the same space as one bar.
-            if (curTicks > timeSig * maxMMRestWidth) {
-                curTicks = timeSig * maxMMRestWidth; // Avoids long MM rests being excessively wide.
-            }
+        if (measure()->isMMRest() && isChordRestType()) { // This is an MM rest segment
+            int count = measure()->mmRestCount();
+            Fraction timeSig = measure()->timesig();
+            curTicks = timeSig + Fraction(count, timeSig.denominator());
         }
 
         // Prevent long notes from being too wide
