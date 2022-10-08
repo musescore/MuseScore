@@ -163,7 +163,7 @@ constexpr inline pitch_level_t pitchLevelDiff(const PitchClass fClass, const oct
 constexpr inline size_t pitchStepsCount(const pitch_level_t pitchRange)
 {
     size_t range = pitchRange > 0 ? pitchRange : -pitchRange;
-    return range / PITCH_LEVEL_STEP + 1;
+    return range / PITCH_LEVEL_STEP;
 }
 
 // Expression
