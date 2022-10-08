@@ -3,7 +3,7 @@
         "Accent": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 9900,
+                    "durationFactor": 9000,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -14,35 +14,35 @@
                         },
                         {
                             "offsetPosition": 1000,
-                            "offsetValue": 1500
+                            "offsetValue": 2000
                         },
                         {
                             "offsetPosition": 2000,
-                            "offsetValue": 3000
+                            "offsetValue": 4000
                         },
                         {
                             "offsetPosition": 3000,
-                            "offsetValue": 4000
+                            "offsetValue": 7000
                         },
                         {
                             "offsetPosition": 4000,
-                            "offsetValue": 5000
+                            "offsetValue": 5500
                         },
                         {
                             "offsetPosition": 5000,
-                            "offsetValue": 6500
-                        },
-                        {
-                            "offsetPosition": 6000,
                             "offsetValue": 5000
                         },
                         {
+                            "offsetPosition": 6000,
+                            "offsetValue": 4500
+                        },
+                        {
                             "offsetPosition": 7000,
-                            "offsetValue": 4000
+                            "offsetValue": 3500
                         },
                         {
                             "offsetPosition": 8000,
-                            "offsetValue": 3000
+                            "offsetValue": 2500
                         },
                         {
                             "offsetPosition": 9000,
@@ -838,6 +838,111 @@
                 }
             }
         ],
+        "Bend": [
+            {
+                "arrangementPattern": {
+                    "durationFactor": 9900,
+                    "timestampOffset": 0
+                },
+                "expressionPattern": {
+                    "dynamicOffsets": [
+                        {
+                            "offsetPosition": 0,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 1000,
+                            "offsetValue": 1500
+                        },
+                        {
+                            "offsetPosition": 2000,
+                            "offsetValue": 2500
+                        },
+                        {
+                            "offsetPosition": 3000,
+                            "offsetValue": 3500
+                        },
+                        {
+                            "offsetPosition": 4000,
+                            "offsetValue": 4500
+                        },
+                        {
+                            "offsetPosition": 5000,
+                            "offsetValue": 5000
+                        },
+                        {
+                            "offsetPosition": 6000,
+                            "offsetValue": 4500
+                        },
+                        {
+                            "offsetPosition": 7000,
+                            "offsetValue": 3500
+                        },
+                        {
+                            "offsetPosition": 8000,
+                            "offsetValue": 2500
+                        },
+                        {
+                            "offsetPosition": 9000,
+                            "offsetValue": 1500
+                        },
+                        {
+                            "offsetPosition": 10000,
+                            "offsetValue": 0
+                        }
+                    ]
+                },
+                "patternPosition": 0,
+                "pitchPattern": {
+                    "pitchOffsets": [
+                        {
+                            "offsetPosition": 0,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 1000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 2000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 3000,
+                            "offsetValue": -50
+                        },
+                        {
+                            "offsetPosition": 4000,
+                            "offsetValue": -100
+                        },
+                        {
+                            "offsetPosition": 5000,
+                            "offsetValue": -100
+                        },
+                        {
+                            "offsetPosition": 6000,
+                            "offsetValue": -100
+                        },
+                        {
+                            "offsetPosition": 7000,
+                            "offsetValue": -50
+                        },
+                        {
+                            "offsetPosition": 8000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 9000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 10000,
+                            "offsetValue": 0
+                        }
+                    ]
+                }
+            }
+        ],
         "ColLegno": [
             {
                 "arrangementPattern": {
@@ -1573,6 +1678,111 @@
                 }
             }
         ],
+        "Doit": [
+            {
+                "arrangementPattern": {
+                    "durationFactor": 9900,
+                    "timestampOffset": 0
+                },
+                "expressionPattern": {
+                    "dynamicOffsets": [
+                        {
+                            "offsetPosition": 0,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 1000,
+                            "offsetValue": 1500
+                        },
+                        {
+                            "offsetPosition": 2000,
+                            "offsetValue": 2500
+                        },
+                        {
+                            "offsetPosition": 3000,
+                            "offsetValue": 3500
+                        },
+                        {
+                            "offsetPosition": 4000,
+                            "offsetValue": 4000
+                        },
+                        {
+                            "offsetPosition": 5000,
+                            "offsetValue": 4500
+                        },
+                        {
+                            "offsetPosition": 6000,
+                            "offsetValue": 5000
+                        },
+                        {
+                            "offsetPosition": 7000,
+                            "offsetValue": 4700
+                        },
+                        {
+                            "offsetPosition": 8000,
+                            "offsetValue": 3700
+                        },
+                        {
+                            "offsetPosition": 9000,
+                            "offsetValue": 2500
+                        },
+                        {
+                            "offsetPosition": 10000,
+                            "offsetValue": 0
+                        }
+                    ]
+                },
+                "patternPosition": 0,
+                "pitchPattern": {
+                    "pitchOffsets": [
+                        {
+                            "offsetPosition": 0,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 1000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 2000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 3000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 4000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 5000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 6000,
+                            "offsetValue": 100
+                        },
+                        {
+                            "offsetPosition": 7000,
+                            "offsetValue": 200
+                        },
+                        {
+                            "offsetPosition": 8000,
+                            "offsetValue": 300
+                        },
+                        {
+                            "offsetPosition": 9000,
+                            "offsetValue": 400
+                        },
+                        {
+                            "offsetPosition": 10000,
+                            "offsetValue": 500
+                        }
+                    ]
+                }
+            }
+        ],
         "DownBow": [
             {
                 "arrangementPattern": {
@@ -1988,6 +2198,111 @@
                         {
                             "offsetPosition": 10000,
                             "offsetValue": 0
+                        }
+                    ]
+                }
+            }
+        ],
+        "Fall": [
+            {
+                "arrangementPattern": {
+                    "durationFactor": 9900,
+                    "timestampOffset": 0
+                },
+                "expressionPattern": {
+                    "dynamicOffsets": [
+                        {
+                            "offsetPosition": 0,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 1000,
+                            "offsetValue": 1500
+                        },
+                        {
+                            "offsetPosition": 2000,
+                            "offsetValue": 3200
+                        },
+                        {
+                            "offsetPosition": 3000,
+                            "offsetValue": 4300
+                        },
+                        {
+                            "offsetPosition": 4000,
+                            "offsetValue": 5000
+                        },
+                        {
+                            "offsetPosition": 5000,
+                            "offsetValue": 4500
+                        },
+                        {
+                            "offsetPosition": 6000,
+                            "offsetValue": 3500
+                        },
+                        {
+                            "offsetPosition": 7000,
+                            "offsetValue": 2500
+                        },
+                        {
+                            "offsetPosition": 8000,
+                            "offsetValue": 1500
+                        },
+                        {
+                            "offsetPosition": 9000,
+                            "offsetValue": 500
+                        },
+                        {
+                            "offsetPosition": 10000,
+                            "offsetValue": 0
+                        }
+                    ]
+                },
+                "patternPosition": 0,
+                "pitchPattern": {
+                    "pitchOffsets": [
+                        {
+                            "offsetPosition": 0,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 1000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 2000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 3000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 4000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 5000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 6000,
+                            "offsetValue": -100
+                        },
+                        {
+                            "offsetPosition": 7000,
+                            "offsetValue": -200
+                        },
+                        {
+                            "offsetPosition": 8000,
+                            "offsetValue": -300
+                        },
+                        {
+                            "offsetPosition": 9000,
+                            "offsetValue": -400
+                        },
+                        {
+                            "offsetPosition": 10000,
+                            "offsetValue": -500
                         }
                     ]
                 }
@@ -3673,6 +3988,111 @@
                 }
             }
         ],
+        "Plop": [
+            {
+                "arrangementPattern": {
+                    "durationFactor": 12900,
+                    "timestampOffset": -3000
+                },
+                "expressionPattern": {
+                    "dynamicOffsets": [
+                        {
+                            "offsetPosition": 0,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 1000,
+                            "offsetValue": 1500
+                        },
+                        {
+                            "offsetPosition": 2000,
+                            "offsetValue": 2500
+                        },
+                        {
+                            "offsetPosition": 3000,
+                            "offsetValue": 3500
+                        },
+                        {
+                            "offsetPosition": 4000,
+                            "offsetValue": 4500
+                        },
+                        {
+                            "offsetPosition": 5000,
+                            "offsetValue": 5000
+                        },
+                        {
+                            "offsetPosition": 6000,
+                            "offsetValue": 4500
+                        },
+                        {
+                            "offsetPosition": 7000,
+                            "offsetValue": 3500
+                        },
+                        {
+                            "offsetPosition": 8000,
+                            "offsetValue": 2500
+                        },
+                        {
+                            "offsetPosition": 9000,
+                            "offsetValue": 1500
+                        },
+                        {
+                            "offsetPosition": 10000,
+                            "offsetValue": 0
+                        }
+                    ]
+                },
+                "patternPosition": 0,
+                "pitchPattern": {
+                    "pitchOffsets": [
+                        {
+                            "offsetPosition": 0,
+                            "offsetValue": 200
+                        },
+                        {
+                            "offsetPosition": 1000,
+                            "offsetValue": 100
+                        },
+                        {
+                            "offsetPosition": 2000,
+                            "offsetValue": 50
+                        },
+                        {
+                            "offsetPosition": 3000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 4000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 5000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 6000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 7000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 8000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 9000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 10000,
+                            "offsetValue": 0
+                        }
+                    ]
+                }
+            }
+        ],
         "Pop": [
             {
                 "arrangementPattern": {
@@ -4303,6 +4723,111 @@
                 }
             }
         ],
+        "QuickFall": [
+            {
+                "arrangementPattern": {
+                    "durationFactor": 9900,
+                    "timestampOffset": 0
+                },
+                "expressionPattern": {
+                    "dynamicOffsets": [
+                        {
+                            "offsetPosition": 0,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 1000,
+                            "offsetValue": 1500
+                        },
+                        {
+                            "offsetPosition": 2000,
+                            "offsetValue": 2900
+                        },
+                        {
+                            "offsetPosition": 3000,
+                            "offsetValue": 4000
+                        },
+                        {
+                            "offsetPosition": 4000,
+                            "offsetValue": 4800
+                        },
+                        {
+                            "offsetPosition": 5000,
+                            "offsetValue": 5000
+                        },
+                        {
+                            "offsetPosition": 6000,
+                            "offsetValue": 4500
+                        },
+                        {
+                            "offsetPosition": 7000,
+                            "offsetValue": 3200
+                        },
+                        {
+                            "offsetPosition": 8000,
+                            "offsetValue": 1500
+                        },
+                        {
+                            "offsetPosition": 9000,
+                            "offsetValue": 500
+                        },
+                        {
+                            "offsetPosition": 10000,
+                            "offsetValue": 0
+                        }
+                    ]
+                },
+                "patternPosition": 0,
+                "pitchPattern": {
+                    "pitchOffsets": [
+                        {
+                            "offsetPosition": 0,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 1000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 2000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 3000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 4000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 5000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 6000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 7000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 8000,
+                            "offsetValue": -150
+                        },
+                        {
+                            "offsetPosition": 9000,
+                            "offsetValue": -300
+                        },
+                        {
+                            "offsetPosition": 10000,
+                            "offsetValue": -500
+                        }
+                    ]
+                }
+            }
+        ],
         "RandomPizzicato": [
             {
                 "arrangementPattern": {
@@ -4371,6 +4896,111 @@
                         {
                             "offsetPosition": 2000,
                             "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 3000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 4000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 5000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 6000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 7000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 8000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 9000,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 10000,
+                            "offsetValue": 0
+                        }
+                    ]
+                }
+            }
+        ],
+        "Scoop": [
+            {
+                "arrangementPattern": {
+                    "durationFactor": 12900,
+                    "timestampOffset": -3000
+                },
+                "expressionPattern": {
+                    "dynamicOffsets": [
+                        {
+                            "offsetPosition": 0,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 1000,
+                            "offsetValue": 1500
+                        },
+                        {
+                            "offsetPosition": 2000,
+                            "offsetValue": 2500
+                        },
+                        {
+                            "offsetPosition": 3000,
+                            "offsetValue": 3500
+                        },
+                        {
+                            "offsetPosition": 4000,
+                            "offsetValue": 4500
+                        },
+                        {
+                            "offsetPosition": 5000,
+                            "offsetValue": 5000
+                        },
+                        {
+                            "offsetPosition": 6000,
+                            "offsetValue": 4500
+                        },
+                        {
+                            "offsetPosition": 7000,
+                            "offsetValue": 3500
+                        },
+                        {
+                            "offsetPosition": 8000,
+                            "offsetValue": 2500
+                        },
+                        {
+                            "offsetPosition": 9000,
+                            "offsetValue": 1500
+                        },
+                        {
+                            "offsetPosition": 10000,
+                            "offsetValue": 0
+                        }
+                    ]
+                },
+                "patternPosition": 0,
+                "pitchPattern": {
+                    "pitchOffsets": [
+                        {
+                            "offsetPosition": 0,
+                            "offsetValue": -200
+                        },
+                        {
+                            "offsetPosition": 1000,
+                            "offsetValue": -100
+                        },
+                        {
+                            "offsetPosition": 2000,
+                            "offsetValue": -50
                         },
                         {
                             "offsetPosition": 3000,
@@ -5356,7 +5986,7 @@
         "SoftAccent": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 9900,
+                    "durationFactor": 9000,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -5367,35 +5997,35 @@
                         },
                         {
                             "offsetPosition": 1000,
-                            "offsetValue": 1500
+                            "offsetValue": 2000
                         },
                         {
                             "offsetPosition": 2000,
-                            "offsetValue": 3000
+                            "offsetValue": 4000
                         },
                         {
                             "offsetPosition": 3000,
-                            "offsetValue": 4000
+                            "offsetValue": 7000
                         },
                         {
                             "offsetPosition": 4000,
-                            "offsetValue": 4800
+                            "offsetValue": 5500
                         },
                         {
                             "offsetPosition": 5000,
-                            "offsetValue": 6000
+                            "offsetValue": 5000
                         },
                         {
                             "offsetPosition": 6000,
-                            "offsetValue": 4800
+                            "offsetValue": 4500
                         },
                         {
                             "offsetPosition": 7000,
-                            "offsetValue": 4000
+                            "offsetValue": 3500
                         },
                         {
                             "offsetPosition": 8000,
-                            "offsetValue": 3000
+                            "offsetValue": 2500
                         },
                         {
                             "offsetPosition": 9000,
@@ -7759,636 +8389,6 @@
                         {
                             "offsetPosition": 9000,
                             "offsetValue": -50
-                        },
-                        {
-                            "offsetPosition": 10000,
-                            "offsetValue": 0
-                        }
-                    ]
-                }
-            }
-        ],
-        "Fall": [
-            {
-                "arrangementPattern": {
-                    "durationFactor": 9900,
-                    "timestampOffset": 0
-                },
-                "expressionPattern": {
-                    "dynamicOffsets": [
-                        {
-                            "offsetPosition": 0,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 1000,
-                            "offsetValue": 1500
-                        },
-                        {
-                            "offsetPosition": 2000,
-                            "offsetValue": 3200
-                        },
-                        {
-                            "offsetPosition": 3000,
-                            "offsetValue": 4300
-                        },
-                        {
-                            "offsetPosition": 4000,
-                            "offsetValue": 5000
-                        },
-                        {
-                            "offsetPosition": 5000,
-                            "offsetValue": 4500
-                        },
-                        {
-                            "offsetPosition": 6000,
-                            "offsetValue": 3500
-                        },
-                        {
-                            "offsetPosition": 7000,
-                            "offsetValue": 2500
-                        },
-                        {
-                            "offsetPosition": 8000,
-                            "offsetValue": 1500
-                        },
-                        {
-                            "offsetPosition": 9000,
-                            "offsetValue": 500
-                        },
-                        {
-                            "offsetPosition": 10000,
-                            "offsetValue": 0
-                        }
-                    ]
-                },
-                "patternPosition": 0,
-                "pitchPattern": {
-                    "pitchOffsets": [
-                        {
-                            "offsetPosition": 0,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 1000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 2000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 3000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 4000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 5000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 6000,
-                            "offsetValue": -100
-                        },
-                        {
-                            "offsetPosition": 7000,
-                            "offsetValue": -200
-                        },
-                        {
-                            "offsetPosition": 8000,
-                            "offsetValue": -300
-                        },
-                        {
-                            "offsetPosition": 9000,
-                            "offsetValue": -400
-                        },
-                        {
-                            "offsetPosition": 10000,
-                            "offsetValue": -500
-                        }
-                    ]
-                }
-            }
-        ],
-        "Scoop": [
-            {
-                "arrangementPattern": {
-                    "durationFactor": 12900,
-                    "timestampOffset": -3000
-                },
-                "expressionPattern": {
-                    "dynamicOffsets": [
-                        {
-                            "offsetPosition": 0,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 1000,
-                            "offsetValue": 1500
-                        },
-                        {
-                            "offsetPosition": 2000,
-                            "offsetValue": 2500
-                        },
-                        {
-                            "offsetPosition": 3000,
-                            "offsetValue": 3500
-                        },
-                        {
-                            "offsetPosition": 4000,
-                            "offsetValue": 4500
-                        },
-                        {
-                            "offsetPosition": 5000,
-                            "offsetValue": 5000
-                        },
-                        {
-                            "offsetPosition": 6000,
-                            "offsetValue": 4500
-                        },
-                        {
-                            "offsetPosition": 7000,
-                            "offsetValue": 3500
-                        },
-                        {
-                            "offsetPosition": 8000,
-                            "offsetValue": 2500
-                        },
-                        {
-                            "offsetPosition": 9000,
-                            "offsetValue": 1500
-                        },
-                        {
-                            "offsetPosition": 10000,
-                            "offsetValue": 0
-                        }
-                    ]
-                },
-                "patternPosition": 0,
-                "pitchPattern": {
-                    "pitchOffsets": [
-                        {
-                            "offsetPosition": 0,
-                            "offsetValue": -200
-                        },
-                        {
-                            "offsetPosition": 1000,
-                            "offsetValue": -100
-                        },
-                        {
-                            "offsetPosition": 2000,
-                            "offsetValue": -50
-                        },
-                        {
-                            "offsetPosition": 3000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 4000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 5000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 6000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 7000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 8000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 9000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 10000,
-                            "offsetValue": 0
-                        }
-                    ]
-                }
-            }
-        ],
-        "QuickFall": [
-            {
-                "arrangementPattern": {
-                    "durationFactor": 9900,
-                    "timestampOffset": 0
-                },
-                "expressionPattern": {
-                    "dynamicOffsets": [
-                        {
-                            "offsetPosition": 0,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 1000,
-                            "offsetValue": 1500
-                        },
-                        {
-                            "offsetPosition": 2000,
-                            "offsetValue": 2900
-                        },
-                        {
-                            "offsetPosition": 3000,
-                            "offsetValue": 4000
-                        },
-                        {
-                            "offsetPosition": 4000,
-                            "offsetValue": 4800
-                        },
-                        {
-                            "offsetPosition": 5000,
-                            "offsetValue": 5000
-                        },
-                        {
-                            "offsetPosition": 6000,
-                            "offsetValue": 4500
-                        },
-                        {
-                            "offsetPosition": 7000,
-                            "offsetValue": 3200
-                        },
-                        {
-                            "offsetPosition": 8000,
-                            "offsetValue": 1500
-                        },
-                        {
-                            "offsetPosition": 9000,
-                            "offsetValue": 500
-                        },
-                        {
-                            "offsetPosition": 10000,
-                            "offsetValue": 0
-                        }
-                    ]
-                },
-                "patternPosition": 0,
-                "pitchPattern": {
-                    "pitchOffsets": [
-                        {
-                            "offsetPosition": 0,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 1000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 2000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 3000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 4000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 5000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 6000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 7000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 8000,
-                            "offsetValue": -150
-                        },
-                        {
-                            "offsetPosition": 9000,
-                            "offsetValue": -300
-                        },
-                        {
-                            "offsetPosition": 10000,
-                            "offsetValue": -500
-                        }
-                    ]
-                }
-            }
-        ],
-        "Doit": [
-            {
-                "arrangementPattern": {
-                    "durationFactor": 9900,
-                    "timestampOffset": 0
-                },
-                "expressionPattern": {
-                    "dynamicOffsets": [
-                        {
-                            "offsetPosition": 0,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 1000,
-                            "offsetValue": 1500
-                        },
-                        {
-                            "offsetPosition": 2000,
-                            "offsetValue": 2500
-                        },
-                        {
-                            "offsetPosition": 3000,
-                            "offsetValue": 3500
-                        },
-                        {
-                            "offsetPosition": 4000,
-                            "offsetValue": 4000
-                        },
-                        {
-                            "offsetPosition": 5000,
-                            "offsetValue": 4500
-                        },
-                        {
-                            "offsetPosition": 6000,
-                            "offsetValue": 5000
-                        },
-                        {
-                            "offsetPosition": 7000,
-                            "offsetValue": 4700
-                        },
-                        {
-                            "offsetPosition": 8000,
-                            "offsetValue": 3700
-                        },
-                        {
-                            "offsetPosition": 9000,
-                            "offsetValue": 2500
-                        },
-                        {
-                            "offsetPosition": 10000,
-                            "offsetValue": 0
-                        }
-                    ]
-                },
-                "patternPosition": 0,
-                "pitchPattern": {
-                    "pitchOffsets": [
-                        {
-                            "offsetPosition": 0,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 1000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 2000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 3000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 4000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 5000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 6000,
-                            "offsetValue": 100
-                        },
-                        {
-                            "offsetPosition": 7000,
-                            "offsetValue": 200
-                        },
-                        {
-                            "offsetPosition": 8000,
-                            "offsetValue": 300
-                        },
-                        {
-                            "offsetPosition": 9000,
-                            "offsetValue": 400
-                        },
-                        {
-                            "offsetPosition": 10000,
-                            "offsetValue": 500
-                        }
-                    ]
-                }
-            }
-        ],
-        "Plop": [
-            {
-                "arrangementPattern": {
-                    "durationFactor": 12900,
-                    "timestampOffset": -3000
-                },
-                "expressionPattern": {
-                    "dynamicOffsets": [
-                        {
-                            "offsetPosition": 0,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 1000,
-                            "offsetValue": 1500
-                        },
-                        {
-                            "offsetPosition": 2000,
-                            "offsetValue": 2500
-                        },
-                        {
-                            "offsetPosition": 3000,
-                            "offsetValue": 3500
-                        },
-                        {
-                            "offsetPosition": 4000,
-                            "offsetValue": 4500
-                        },
-                        {
-                            "offsetPosition": 5000,
-                            "offsetValue": 5000
-                        },
-                        {
-                            "offsetPosition": 6000,
-                            "offsetValue": 4500
-                        },
-                        {
-                            "offsetPosition": 7000,
-                            "offsetValue": 3500
-                        },
-                        {
-                            "offsetPosition": 8000,
-                            "offsetValue": 2500
-                        },
-                        {
-                            "offsetPosition": 9000,
-                            "offsetValue": 1500
-                        },
-                        {
-                            "offsetPosition": 10000,
-                            "offsetValue": 0
-                        }
-                    ]
-                },
-                "patternPosition": 0,
-                "pitchPattern": {
-                    "pitchOffsets": [
-                        {
-                            "offsetPosition": 0,
-                            "offsetValue": 200
-                        },
-                        {
-                            "offsetPosition": 1000,
-                            "offsetValue": 100
-                        },
-                        {
-                            "offsetPosition": 2000,
-                            "offsetValue": 50
-                        },
-                        {
-                            "offsetPosition": 3000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 4000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 5000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 6000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 7000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 8000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 9000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 10000,
-                            "offsetValue": 0
-                        }
-                    ]
-                }
-            }
-        ],
-        "Bend": [
-            {
-                "arrangementPattern": {
-                    "durationFactor": 9900,
-                    "timestampOffset": 0
-                },
-                "expressionPattern": {
-                    "dynamicOffsets": [
-                        {
-                            "offsetPosition": 0,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 1000,
-                            "offsetValue": 1500
-                        },
-                        {
-                            "offsetPosition": 2000,
-                            "offsetValue": 2500
-                        },
-                        {
-                            "offsetPosition": 3000,
-                            "offsetValue": 3500
-                        },
-                        {
-                            "offsetPosition": 4000,
-                            "offsetValue": 4500
-                        },
-                        {
-                            "offsetPosition": 5000,
-                            "offsetValue": 5000
-                        },
-                        {
-                            "offsetPosition": 6000,
-                            "offsetValue": 4500
-                        },
-                        {
-                            "offsetPosition": 7000,
-                            "offsetValue": 3500
-                        },
-                        {
-                            "offsetPosition": 8000,
-                            "offsetValue": 2500
-                        },
-                        {
-                            "offsetPosition": 9000,
-                            "offsetValue": 1500
-                        },
-                        {
-                            "offsetPosition": 10000,
-                            "offsetValue": 0
-                        }
-                    ]
-                },
-                "patternPosition": 0,
-                "pitchPattern": {
-                    "pitchOffsets": [
-                        {
-                            "offsetPosition": 0,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 1000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 2000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 3000,
-                            "offsetValue": -50
-                        },
-                        {
-                            "offsetPosition": 4000,
-                            "offsetValue": -100
-                        },
-                        {
-                            "offsetPosition": 5000,
-                            "offsetValue": -100
-                        },
-                        {
-                            "offsetPosition": 6000,
-                            "offsetValue": -100
-                        },
-                        {
-                            "offsetPosition": 7000,
-                            "offsetValue": -50
-                        },
-                        {
-                            "offsetPosition": 8000,
-                            "offsetValue": 0
-                        },
-                        {
-                            "offsetPosition": 9000,
-                            "offsetValue": 0
                         },
                         {
                             "offsetPosition": 10000,
