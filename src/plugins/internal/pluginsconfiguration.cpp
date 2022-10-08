@@ -54,11 +54,13 @@ void PluginsConfiguration::init()
 
     fileSystem()->makePath(pluginsDataPath());
 
-    multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName){
-        if (resourceName == PLUGINS_RESOURCE_NAME) {
-            updatePluginsConfiguration();
-        }
-    });
+    if (multiInstancesProvider()) {
+        multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName){
+            if (resourceName == PLUGINS_RESOURCE_NAME) {
+                updatePluginsConfiguration();
+            }
+        });
+    }
 
     updatePluginsConfiguration();
 }

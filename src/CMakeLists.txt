@@ -102,10 +102,8 @@ endif (BUILD_UPDATE_MODULE)
 add_subdirectory(stubs)
 
 if (BUILD_UNIT_TESTS)
-#    add_subdirectory(notation/tests) no tests at moment
-    add_subdirectory(project/tests)
-
     add_subdirectory(engraving/utests)
+
     add_subdirectory(importexport/bb/tests)
     add_subdirectory(importexport/braille/tests)
     add_subdirectory(importexport/bww/tests)
@@ -113,6 +111,11 @@ if (BUILD_UNIT_TESTS)
     add_subdirectory(importexport/guitarpro/tests)
     add_subdirectory(importexport/midi/tests)
     add_subdirectory(importexport/musicxml/tests)
+
+    #add_subdirectory(notation/tests) no tests at moment
+    add_subdirectory(project/tests)
+
+    add_subdirectory(plugins/tests)
 endif(BUILD_UNIT_TESTS)
 
 if (OS_IS_WASM)
