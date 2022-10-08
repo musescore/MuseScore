@@ -29,7 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "framework/ui/iuiengine.h"
-#include "ipluginsconfiguration.h"
+#include "plugins/ipluginsconfiguration.h"
 
 class QQmlComponent;
 class QQuickView;
@@ -57,6 +57,8 @@ public:
     QVersionNumber version() const;
     QString thumbnailName() const;
     QString categoryCode() const;
+
+    mu::engraving::QmlPlugin* qmlPlugin() const;
 
     void run();
 

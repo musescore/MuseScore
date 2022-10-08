@@ -82,7 +82,10 @@ void PluginsModule::registerUiTypes()
 
     mu::engraving::PluginAPI::PluginAPI::registerQmlTypes();
 
-    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(plugins_QML_IMPORT);
+    auto ui = ioc()->resolve<IUiEngine>(moduleName());
+    if (ui) {
+        ui->addSourceImportPath(plugins_QML_IMPORT);
+    }
 }
 
 void PluginsModule::onInit(const framework::IApplication::RunMode& mode)
