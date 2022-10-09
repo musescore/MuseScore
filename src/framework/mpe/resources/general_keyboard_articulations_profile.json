@@ -14,35 +14,35 @@
                         },
                         {
                             "offsetPosition": 1000,
-                            "offsetValue": 1500
+                            "offsetValue": 2000
                         },
                         {
                             "offsetPosition": 2000,
-                            "offsetValue": 3000
+                            "offsetValue": 4000
                         },
                         {
                             "offsetPosition": 3000,
-                            "offsetValue": 4000
+                            "offsetValue": 6000
                         },
                         {
                             "offsetPosition": 4000,
-                            "offsetValue": 5000
-                        },
-                        {
-                            "offsetPosition": 5000,
                             "offsetValue": 5500
                         },
                         {
-                            "offsetPosition": 6000,
+                            "offsetPosition": 5000,
                             "offsetValue": 5000
                         },
                         {
+                            "offsetPosition": 6000,
+                            "offsetValue": 4500
+                        },
+                        {
                             "offsetPosition": 7000,
-                            "offsetValue": 4000
+                            "offsetValue": 3500
                         },
                         {
                             "offsetPosition": 8000,
-                            "offsetValue": 3000
+                            "offsetValue": 2500
                         },
                         {
                             "offsetPosition": 9000,
@@ -3158,35 +3158,35 @@
                         },
                         {
                             "offsetPosition": 1000,
-                            "offsetValue": 1500
+                            "offsetValue": 2000
                         },
                         {
                             "offsetPosition": 2000,
-                            "offsetValue": 3000
+                            "offsetValue": 4000
                         },
                         {
                             "offsetPosition": 3000,
-                            "offsetValue": 4000
+                            "offsetValue": 6000
                         },
                         {
                             "offsetPosition": 4000,
-                            "offsetValue": 4800
+                            "offsetValue": 5500
                         },
                         {
                             "offsetPosition": 5000,
-                            "offsetValue": 5200
+                            "offsetValue": 5000
                         },
                         {
                             "offsetPosition": 6000,
-                            "offsetValue": 4800
+                            "offsetValue": 4500
                         },
                         {
                             "offsetPosition": 7000,
-                            "offsetValue": 4000
+                            "offsetValue": 3500
                         },
                         {
                             "offsetPosition": 8000,
-                            "offsetValue": 3000
+                            "offsetValue": 2500
                         },
                         {
                             "offsetPosition": 9000,
