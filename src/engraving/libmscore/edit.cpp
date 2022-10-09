@@ -119,12 +119,13 @@ Note* Score::getSelectedNote()
 
 ChordRest* Score::getSelectedChordRest() const
 {
-    ChordRest* cr = toChordRest(selection().element());
-    if (!cr) {
+    EngravingItem* e = selection().element();
+    if (!e || !e->isChordRest()) {
         MScore::setError(MsError::NO_NOTE_REST_SELECTED);
+        return nullptr;
     }
 
-    return cr;
+    return toChordRest(e);
 }
 
 //---------------------------------------------------------
