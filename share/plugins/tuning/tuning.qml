@@ -190,7 +190,7 @@ MuseScore {
 
     function filterNotes(element)
     {
-        return element.type == Ms.CHORD
+        return element.type == Element.CHORD
     }
 
     function annotate(chord, cursor)
