@@ -53,7 +53,7 @@ EOF
 }
 
 function printVersion() {
-  local pretty=$(sed -rn "s|^Name=([^#]*)|\1|p" "${APPDIR}/mscore@MSCORE_INSTALL_SUFFIX@.desktop")
+  local pretty=$(sed -rn "s|^Name=([^#]*)|\1|p" "${APPDIR}/org.musescore.MuseScore@MSCORE_INSTALL_SUFFIX@.desktop")
   local long=$("${APPDIR}/bin/mscore@MSCORE_INSTALL_SUFFIX@" --long-version 2>&1 | tail -n 1)
   if [ "$1" == "centered" ]; then
     printf "%*s\n" "$(((${#pretty}+80)/2))" "$pretty"
@@ -183,7 +183,7 @@ EOF
       echo "Please enter 'm', 'c', 'n', or 'h'. ('h' shows help)"
     done
   fi
-  sed -ri "s|^Exec=[^#%]*(.*)\$|Exec=${APPIMAGE} \1|" "share/applications/mscore@MSCORE_INSTALL_SUFFIX@.desktop"
+  sed -ri "s|^Exec=[^#%]*(.*)\$|Exec=${APPIMAGE} \1|" "share/applications/org.musescore.MuseScore@MSCORE_INSTALL_SUFFIX@.desktop"
   echo "Finished installing MuseScore to $prefix"
 cat <<EOF
 Step 3 of 3.

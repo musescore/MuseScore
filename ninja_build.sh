@@ -153,12 +153,12 @@ case $TARGET in
 
         ln -sf . usr # we installed into the root of our AppImage but some tools expect a "usr" subdirectory
         mscore="mscore${MUSESCORE_INSTALL_SUFFIX}"
-        dsktp="${mscore}.desktop" 
+        desktop="org.musescore.MuseScore${MUSESCORE_INSTALL_SUFFIX}.desktop"
         icon="${mscore}.svg" 
         mani="install_manifest.txt" 
-        cp "share/applications/${dsktp}" "${dsktp}" 
+        cp "share/applications/${desktop}" "${desktop}"
         cp "share/icons/hicolor/scalable/apps/${icon}" "${icon}" 
-        <"$build_dir/${mani}" >"${mani}" sed -rn 's/.*(share\/)(man|mime|icons|applications)(.*)/\1\2\3/p'
+        <"$build_dir/${mani}" >"${mani}" sed -rn 's/.*(share\/)(applications|icons|man|metainfo|mime)(.*)/\1\2\3/p'
 
         ;;     
 
