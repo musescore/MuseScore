@@ -3392,7 +3392,7 @@ mu::Ret NotationInteraction::repeatSelection()
     if (!selection.isRange()) {
         ChordRest* cr = score()->getSelectedChordRest();
         if (!cr) {
-            return make_ret(Err::EmptySelection);
+            return make_ret(Err::NoteOrRestIsNotSelected);
         }
         score()->select(cr, SelectType::RANGE);
     }
