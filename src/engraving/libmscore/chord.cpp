@@ -673,6 +673,7 @@ void Chord::add(EngravingItem* e)
         _hook = toHook(e);
         break;
     case ElementType::CHORDLINE:
+    case ElementType::FRET_CIRCLE:
         el().push_back(e);
         break;
     case ElementType::STEM_SLASH:
@@ -770,6 +771,7 @@ void Chord::remove(EngravingItem* e)
         _stemSlash = 0;
         break;
     case ElementType::CHORDLINE:
+    case ElementType::FRET_CIRCLE:
         el().remove(e);
         break;
     case ElementType::CHORD:
