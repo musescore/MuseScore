@@ -31,6 +31,16 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
     else (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
       set(MAN_PORTABLE .\\\") # comment out lines in man page that are only relevant to the portable version
     endif (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
+
+    # Identify MuseScore's main window so that it receives the correct name
+    # and icon in the OS dock / taskbar. Run `xprop WM_CLASS` and click on
+    # MuseScore's main window to find out what string to use here.
+    if (MSCORE_UNSTABLE)
+        set(WINDOW_MANAGER_CLASS "MuseScore4Development")
+    else (MSCORE_UNSTABLE)
+        set(WINDOW_MANAGER_CLASS "MuseScore4")
+    endif(MSCORE_UNSTABLE)
+
     # Install desktop file (perform variable substitution first)
     configure_file(build/Linux+BSD/org.musescore.MuseScore.desktop.in org.musescore.MuseScore${MSCORE_INSTALL_SUFFIX}.desktop)
     install( FILES ${PROJECT_BINARY_DIR}/org.musescore.MuseScore${MSCORE_INSTALL_SUFFIX}.desktop DESTINATION share/applications)
