@@ -58,7 +58,7 @@ private:
     ///     true -> this is part of a "Publish" action
     RetVal<CloudProjectInfo> doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublish) const;
 
-    bool warnBeforePublishing(bool isPublish, CloudProjectVisibility visibility) const;
+    bool warnBeforePublishing(bool isPublish, cloud::Visibility visibility) const;
 };
 
 class QMLSaveLocationType
@@ -80,8 +80,8 @@ class QMLCloudVisibility
 
 public:
     enum CloudVisibility {
-        Private = int(CloudProjectVisibility::Private),
-        Public = int(CloudProjectVisibility::Public)
+        Private = int(cloud::Visibility::Private),
+        Public = int(cloud::Visibility::Public)
     };
     Q_ENUM(CloudVisibility);
 };

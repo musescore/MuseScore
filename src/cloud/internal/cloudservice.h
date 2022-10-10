@@ -67,7 +67,7 @@ public:
 
     Ret checkCloudIsAvailable() const override;
 
-    framework::ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, bool isPrivate = false,
+    framework::ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility = Visibility::Private,
                                        const QUrl& sourceUrl = QUrl()) override;
     framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) override;
 
@@ -96,7 +96,7 @@ private:
     RetVal<ScoreInfo> downloadScoreInfo(int scoreId);
 
     mu::RetVal<mu::ValMap> doUploadScore(network::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
-                                         bool isPrivate = false, const QUrl& sourceUrl = QUrl());
+                                         Visibility visibility, const QUrl& sourceUrl = QUrl());
     Ret doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl);
 
     using RequestCallback = std::function<Ret()>;

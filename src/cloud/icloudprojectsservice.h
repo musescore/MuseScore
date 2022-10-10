@@ -40,7 +40,7 @@ class ICloudProjectsService : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ICloudProjectsService() = default;
 
-    virtual framework::ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, bool isPrivate = false,
+    virtual framework::ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility = Visibility::Private,
                                                const QUrl& sourceUrl = QUrl()) = 0;
     virtual framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) = 0;
 
