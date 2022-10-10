@@ -5,8 +5,26 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
     #     set library search path for runtime linker to load the same
     #     qt libraries as we used at compile time
     #
-    string(TOUPPER "mscore${MSCORE_INSTALL_SUFFIX}" MAN_MSCORE_UPPER) # Command name shown in uppercase in man pages by convention
-    if (${MSCORE_INSTALL_SUFFIX} MATCHES "portable") # Note: "-portable-anything" would match
+
+    if (MSCORE_UNSTABLE)
+        # Use short name to avoid truncation by GNOME launcher. Save room for
+        # a suffix in case multiple dev/nightly builds are installed.
+        set(DESKTOP_LAUNCHER_NAME "MU ${MUSESCORE_VERSION}") # MU X.Y
+    else (MSCORE_UNSTABLE)
+        # Use full name for stable releases
+        set(DESKTOP_LAUNCHER_NAME "${MUSESCORE_NAME} ${MUSESCORE_VERSION}") # MuseScore X.Y
+    endif(MSCORE_UNSTABLE)
+
+    if (${MSCORE_INSTALL_SUFFIX} MATCHES "dev")
+        set(DESKTOP_LAUNCHER_NAME "${DESKTOP_LAUNCHER_NAME} Dev")
+    elseif (${MSCORE_INSTALL_SUFFIX} MATCHES "nightly")
+        set(DESKTOP_LAUNCHER_NAME "${DESKTOP_LAUNCHER_NAME} Nightly")
+    elseif (${MSCORE_INSTALL_SUFFIX} MATCHES "testing")
+        set(DESKTOP_LAUNCHER_NAME "${DESKTOP_LAUNCHER_NAME} Testing")
+    endif(${MSCORE_INSTALL_SUFFIX} MATCHES "dev")
+
+    if (${MSCORE_INSTALL_SUFFIX} MATCHES "portable") # Note: "portableanything" would match
+      set(DESKTOP_LAUNCHER_NAME "${DESKTOP_LAUNCHER_NAME} Portable") # distinguish our build from distro packages
       # Build portable AppImage as per https://github.com/probonopd/AppImageKit
       add_subdirectory(build/Linux+BSD/portable)
       if (NOT DEFINED ARCH)
@@ -29,7 +47,7 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
                        build/rm-empty-dirs              DESTINATION bin COMPONENT portable)
       install(FILES    build/Linux+BSD/portable/qt.conf DESTINATION bin COMPONENT portable)
     else (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
-      set(MAN_PORTABLE .\\\") # comment out lines in man page that are only relevant to the portable version
+      set(MAN_PORTABLE ".\\\"") # comment out lines in man page that are only relevant to the portable version
     endif (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
 
     # Identify MuseScore's main window so that it receives the correct name
@@ -45,6 +63,13 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
     configure_file(build/Linux+BSD/org.musescore.MuseScore.desktop.in org.musescore.MuseScore${MSCORE_INSTALL_SUFFIX}.desktop)
     install( FILES ${PROJECT_BINARY_DIR}/org.musescore.MuseScore${MSCORE_INSTALL_SUFFIX}.desktop DESTINATION share/applications)
     # Install appdata file (perform variable substitution first)
+    if ("${MSCORE_INSTALL_SUFFIX}" MATCHES "-")
+        message(FATAL_ERROR
+            "MSCORE_INSTALL_SUFFIX='${MSCORE_INSTALL_SUFFIX}'\n"
+            "MSCORE_INSTALL_SUFFIX must not contain hyphen characters. It will be used "
+            "inside the <id> tag in *.appdata.xml and hyphens are discouraged there."
+        )
+    endif ("${MSCORE_INSTALL_SUFFIX}" MATCHES "-")
     configure_file(build/Linux+BSD/org.musescore.MuseScore.appdata.xml.in org.musescore.MuseScore${MSCORE_INSTALL_SUFFIX}.appdata.xml)
     install( FILES ${PROJECT_BINARY_DIR}/org.musescore.MuseScore${MSCORE_INSTALL_SUFFIX}.appdata.xml DESTINATION share/metainfo)
     # Substitute variables within man pages
@@ -55,6 +80,7 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
     set(MAN_FULL_ALIAS ${MAN_ALIAS}${MSCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
     set(MAN_TARGET ${PROJECT_SOURCE_DIR}/build/Linux+BSD/${MAN_NAME}${MAN_EXTENSION}.in)
     set(MAN_BUILD ${PROJECT_BINARY_DIR}/${MAN_FULL_NAME})
+    string(TOUPPER "mscore${MSCORE_INSTALL_SUFFIX}" MAN_MSCORE_UPPER) # Command name shown in uppercase in man pages by convention
     configure_file(${MAN_TARGET} ${MAN_BUILD})
     # Compress man pages if gzip is installed (don't on OpenBSD)
     # Note: Compressing man pages is normal on Linux but not OpenBSD
