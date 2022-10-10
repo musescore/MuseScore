@@ -1451,23 +1451,26 @@ int Chord::calcMinStemLength()
         if (_hook) {
             bool straightFlags = score()->styleB(Sid::useStraightNoteFlags);
             double smuflAnchor = _hook->smuflAnchor().y() * (_up ? 1 : -1);
-            int hookOffset = (_hook->height() + smuflAnchor) / _spatium * 4 - (straightFlags ? 0 : 2);
+            int hookOffset = floor((_hook->height() / _relativeMag + smuflAnchor) / _spatium * 4) - (straightFlags ? 0 : 2);
+            // some fonts have hooks that extend very far down (making the height of the hook very large)
+            // so we constrain to a reasonable maximum for hook length
+            hookOffset = std::min(hookOffset, 11);
             // TODO: when the SMuFL metadata includes a cutout for flags, replace this with that metadata
             // https://github.com/w3c/smufl/issues/203
             int cutout = up() ? 5 : 7;
             if (straightFlags) {
+                // don't need cutout for straight flags (they are similar to beams)
                 cutout = 0;
             } else if (beams() >= 2) {
+                // beams greater than two extend outwards and thus don't factor into the cutout
                 cutout -= 2;
             }
 
             minStemLength += hookOffset - cutout;
 
-            if (isGrace()) {
-                minStemLength += straightFlags ? 0 : 3;
-            }
             // hooks with trems inside them no longer ceil (snap) to nearest 0.5sp.
-            // if we want to add that back in, here is the place to do it
+            // if we want to add that back in, here is the place to do it:
+            // minStemLength = ceil(minStemLength / 2.0) * 2;
         }
     }
     if (_beam) {
@@ -4121,7 +4124,7 @@ void Chord::setNoteEventLists(std::vector<NoteEventList>& ell)
 //---------------------------------------------------------
 void Chord::styleChanged()
 {
-    auto updateElementsStyle = [] (void*, EngravingItem* e) {
+    auto updateElementsStyle = [](void*, EngravingItem* e) {
         e->styleChanged();
     };
     scanElements(0, updateElementsStyle);
