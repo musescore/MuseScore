@@ -665,7 +665,7 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
         // the line will just push away other systems according to autoplacement
         // rules if necessary.
         PointF cpos = canvasPos();
-        cpos.setY(l->startSegment()->system()->staffCanvasYpage(l->staffIdx()));           // prevent cross-system move
+        cpos.setY(system()->staffCanvasYpage(l->staffIdx()));           // prevent cross-system move
 
         Segment* seg1 = findSegmentForGrip(Grip::START, cpos);
         Segment* seg2 = findSegmentForGrip(Grip::END, cpos + pos2());
