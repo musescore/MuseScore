@@ -30,6 +30,7 @@
 #define MUSESCORE_REVISION     "${MUSESCORE_REVISION}"
 #define INSTALL_NAME           "${Mscore_INSTALL_NAME}"
 #define INSTPREFIX             "${CMAKE_INSTALL_PREFIX}"
+#define INSTSUFFIX             "${MSCORE_INSTALL_SUFFIX}"
 #define VERSION                "${MUSESCORE_VERSION_FULL}"
 #define VERSION_LABEL          "${MUSESCORE_VERSION_LABEL}"
 #define BUILD_NUMBER           "${CMAKE_BUILD_NUMBER}"

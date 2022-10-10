@@ -104,6 +104,11 @@ int AppShell::run(int argc, char** argv)
     QCoreApplication::setOrganizationDomain("musescore.org");
     QCoreApplication::setApplicationVersion(QString::fromStdString(framework::Version::fullVersion()));
 
+#if !defined(Q_OS_WIN) && !defined(Q_OS_DARWIN) && !defined(Q_OS_WASM)
+    // Any OS that uses Freedesktop.org Desktop Entry Specification (e.g. Linux, BSD)
+    QGuiApplication::setDesktopFileName("org.musescore.MuseScore" INSTSUFFIX ".desktop");
+#endif
+
     // ====================================================
     // Setup modules: Resources, Exports, Imports, UiTypes
     // ====================================================
