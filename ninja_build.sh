@@ -138,7 +138,7 @@ case $TARGET in
 
     appimage)
         MUSESCORE_INSTALL_DIR=../MuseScore 
-        MUSESCORE_INSTALL_SUFFIX="-portable${MUSESCORE_INSTALL_SUFFIX}" # e.g. "-portable" or "-portable-nightly"
+        MUSESCORE_INSTALL_SUFFIX="4portable${MUSESCORE_INSTALL_SUFFIX}" # e.g. "4portable" or "4portablenightly"
         MUSESCORE_LABEL="Portable AppImage" 
         MUSESCORE_NO_RPATH=ON 
 

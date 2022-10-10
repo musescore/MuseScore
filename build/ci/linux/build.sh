@@ -29,7 +29,7 @@ BUILD_TOOLS=$HOME/build_tools
 ARTIFACTS_DIR=build.artifacts
 CRASH_REPORT_URL=""
 BUILD_MODE=""
-SUFFIX="" # appended to `mscore` command name to avoid conflicts (e.g. `mscore-dev`)
+SUFFIX="" # appended to `mscore` command name to avoid conflicts (e.g. `mscoredev`)
 YOUTUBE_API_KEY=""
 
 while [[ "$#" -gt 0 ]]; do
@@ -50,9 +50,9 @@ if [ -z "$YOUTUBE_API_KEY" ]; then YOUTUBE_API_KEY=""; fi
 MUSESCORE_BUILD_CONFIG=dev
 BUILD_UNIT_TESTS=OFF
 case "${BUILD_MODE}" in
-"devel_build")   MUSESCORE_BUILD_CONFIG=dev; SUFFIX=-dev;;
-"nightly_build") MUSESCORE_BUILD_CONFIG=dev; SUFFIX=-nightly;;
-"testing_build") MUSESCORE_BUILD_CONFIG=testing; SUFFIX=-testing;;
+"devel_build")   MUSESCORE_BUILD_CONFIG=dev; SUFFIX=dev;;
+"nightly_build") MUSESCORE_BUILD_CONFIG=dev; SUFFIX=nightly;;
+"testing_build") MUSESCORE_BUILD_CONFIG=testing; SUFFIX=testing;;
 "stable_build")  MUSESCORE_BUILD_CONFIG=release; SUFFIX="";;
 "mtests")        MUSESCORE_BUILD_CONFIG=dev; BUILDTYPE=installdebug; OPTIONS="USE_SYSTEM_FREETYPE=ON UPDATE_CACHE=FALSE PREFIX=$ARTIFACTS_DIR/software";;
 esac
