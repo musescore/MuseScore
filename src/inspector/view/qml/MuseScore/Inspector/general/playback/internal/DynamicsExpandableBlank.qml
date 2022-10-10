@@ -49,22 +49,6 @@ ExpandableBlank {
 
         spacing: 12
 
-        DropdownPropertyView {
-            id: appliesToSection
-            titleText: qsTrc("inspector", "Applies to")
-            propertyItem: root.model ? root.model.scopeType : null
-
-            navigationName: "Dynamic Applies to"
-            navigationPanel: root.navigation.panel
-            navigationRowStart: root.navigation.row + 1
-
-            model: [
-                { text: qsTrc("inspector", "Staff"), value: Dynamic.SCOPE_STAFF },
-                { text: qsTrc("inspector", "Single instrument"), value: Dynamic.SCOPE_SINGLE_INSTRUMENT },
-                { text: qsTrc("inspector", "All instruments"), value: Dynamic.SCOPE_ALL_INSTRUMENTS }
-            ]
-        }
-
         Item {
             height: childrenRect.height
             width: parent.width
@@ -77,7 +61,7 @@ ExpandableBlank {
 
                 navigationName: "Velocity"
                 navigationPanel: root.navigation.panel
-                navigationRowStart: appliesToSection.navigationRowEnd + 1
+                navigationRowStart: root.navigation.row + 1
 
                 titleText: qsTrc("inspector", "Velocity")
                 propertyItem: root.model ? root.model.velocity : null
