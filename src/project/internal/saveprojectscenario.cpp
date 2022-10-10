@@ -183,7 +183,7 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
 
     // TODO(save-to-cloud): better name?
     QString defaultName = project->displayName();
-    CloudProjectVisibility defaultVisibility = isPublish ? CloudProjectVisibility::Public : CloudProjectVisibility::Private;
+    cloud::Visibility defaultVisibility = isPublish ? cloud::Visibility::Public : cloud::Visibility::Private;
 
     UriQuery query("musescore://project/savetocloud");
     query.addParam("isPublish", Val(isPublish));
@@ -209,7 +209,7 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
 
     CloudProjectInfo result;
     result.name = vals["name"].toString();
-    result.visibility = static_cast<CloudProjectVisibility>(vals["visibility"].toInt());
+    result.visibility = static_cast<cloud::Visibility>(vals["visibility"].toInt());
 
     if (!warnBeforePublishing(isPublish, result.visibility)) {
         return make_ret(Ret::Code::Cancel);
@@ -222,7 +222,7 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
     return RetVal<CloudProjectInfo>::make_ok(result);
 }
 
-bool SaveProjectScenario::warnBeforePublishing(bool isPublish, CloudProjectVisibility visibility) const
+bool SaveProjectScenario::warnBeforePublishing(bool isPublish, cloud::Visibility visibility) const
 {
     if (isPublish) {
         if (!configuration()->shouldWarnBeforePublish()) {
@@ -246,7 +246,7 @@ bool SaveProjectScenario::warnBeforePublishing(bool isPublish, CloudProjectVisib
     if (isPublish) {
         title = trc("project/save", "Publish changes online?");
         message = trc("project/save", "We will need to generate a new MP3 for web playback.");
-    } else if (visibility == CloudProjectVisibility::Public) {
+    } else if (visibility == cloud::Visibility::Public) {
         title = trc("project/save", "Publish this score online?"),
         message = trc("project/save", "All saved changes will be publicly visible on MuseScore.com. "
                                       "If you want to make frequent changes, we recommend saving this "
