@@ -4,7 +4,7 @@
 Type=Application
 # Version of Desktop Entry Spec, not MuseScore version. Don't upgrade prematurely.
 Version=1.2
-Name=@MUSESCORE_NAME@ @MUSESCORE_VERSION@@MSCORE_INSTALL_SUFFIX@
+Name=@DESKTOP_LAUNCHER_NAME@
 GenericName=Music notation
 GenericName[de]=Notensatz
 GenericName[fr]=Notation musicale
