@@ -188,6 +188,30 @@ double Arpeggio::calcTop() const
 }
 
 //---------------------------------------------------------
+//   computeHeight
+//---------------------------------------------------------
+
+void Arpeggio::computeHeight(bool includeCrossStaffHeight)
+{
+    Chord* topChord = chord();
+    if (!topChord) {
+        return;
+    }
+    double y = topChord->upNote()->pagePos().y() - topChord->upNote()->headHeight() * .5;
+
+    Note* bottomNote = topChord->downNote();
+    if (includeCrossStaffHeight) {
+        track_idx_t bottomTrack = track() + (_span - 1) * VOICES;
+        EngravingItem* element = topChord->segment()->element(bottomTrack);
+        Chord* bottomChord = (element && element->isChord()) ? toChord(element) : topChord;
+        bottomNote = bottomChord->downNote();
+    }
+
+    double h = bottomNote->pagePos().y() + bottomNote->headHeight() * .5 - y;
+    setHeight(h);
+}
+
+//---------------------------------------------------------
 //   calcBottom
 //---------------------------------------------------------
 

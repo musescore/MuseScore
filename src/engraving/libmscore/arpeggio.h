@@ -92,6 +92,7 @@ public:
     int span() const { return _span; }
     void setSpan(int val) { _span = val; }
     void setHeight(double) override;
+    void computeHeight(bool includeCrossStaffHeight = false);
 
     double userLen1() const { return _userLen1; }
     double userLen2() const { return _userLen2; }
