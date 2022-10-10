@@ -64,7 +64,7 @@ ARTIFACT_NAME=MuseScore-${BUILD_VERSION}
 
 # Make AppImage
 bash ./build/ci/linux/tools/make_appimage.sh "${INSTALL_DIR}" "${APP_IMAGE_NAME}.AppImage"
-mv "${BUILD_DIR}/${APP_IMAGE_NAME}.AppImage" "${ARTIFACTS_DIR}/"
+mv "${INSTALL_DIR}/../${ARTIFACT_NAME}.AppImage" "${ARTIFACTS_DIR}/"
 
 cd $ARTIFACTS_DIR
 
