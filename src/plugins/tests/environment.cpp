@@ -44,6 +44,10 @@ static mu::testing::SuiteEnvironment plugins_env(
 
     ON_CALL(*uiEngine, qmlEngine()).WillByDefault(testing::Return(qmlEngine));
 
+#if (defined (_MSCVER) || defined (_MSC_VER))
+// "the usage of 'method' requires the compiler to capture 'this' but the current default capture mode does not allow it"
+#pragma warning(disable: 4573)
+#endif
     QObject::connect(qmlEngine, &QQmlEngine::warnings, [](const QList<QQmlError>& warnings) {
         for (const QQmlError& e : warnings) {
             LOGE() << "error: " << e.toString() << "\n";
