@@ -486,18 +486,18 @@ enum class NoteHeadGroup {
 };
 Q_ENUM_NS(NoteHeadGroup);
 
-enum class NoteType : char {
+enum class NoteType {
     ///.\{
-    NORMAL        = char(mu::engraving::NoteType::NORMAL),
-    ACCIACCATURA  = char(mu::engraving::NoteType::ACCIACCATURA),
-    APPOGGIATURA  = char(mu::engraving::NoteType::APPOGGIATURA),
-    GRACE4        = char(mu::engraving::NoteType::GRACE4),
-    GRACE16       = char(mu::engraving::NoteType::GRACE16),
-    GRACE32       = char(mu::engraving::NoteType::GRACE32),
-    GRACE8_AFTER  = char(mu::engraving::NoteType::GRACE8_AFTER),
-    GRACE16_AFTER = char(mu::engraving::NoteType::GRACE16_AFTER),
-    GRACE32_AFTER = char(mu::engraving::NoteType::GRACE32_AFTER),
-    INVALID       = char(mu::engraving::NoteType::INVALID)
+    NORMAL        = (int)(mu::engraving::NoteType::NORMAL),
+    ACCIACCATURA  = (int)(mu::engraving::NoteType::ACCIACCATURA),
+    APPOGGIATURA  = (int)(mu::engraving::NoteType::APPOGGIATURA),
+    GRACE4        = (int)(mu::engraving::NoteType::GRACE4),
+    GRACE16       = (int)(mu::engraving::NoteType::GRACE16),
+    GRACE32       = (int)(mu::engraving::NoteType::GRACE32),
+    GRACE8_AFTER  = (int)(mu::engraving::NoteType::GRACE8_AFTER),
+    GRACE16_AFTER = (int)(mu::engraving::NoteType::GRACE16_AFTER),
+    GRACE32_AFTER = (int)(mu::engraving::NoteType::GRACE32_AFTER),
+    INVALID       = (int)(mu::engraving::NoteType::INVALID)
                     ///\}
 };
 Q_ENUM_NS(NoteType);
