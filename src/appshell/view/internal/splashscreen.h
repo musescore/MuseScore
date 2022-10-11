@@ -23,7 +23,7 @@
 #ifndef MU_APPSHELL_SPLASHSCREEN_H
 #define MU_APPSHELL_SPLASHSCREEN_H
 
-#include <QSplashScreen>
+#include <QWidget>
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
@@ -31,7 +31,7 @@
 class QSvgRenderer;
 
 namespace mu::appshell {
-class SplashScreen : public QSplashScreen
+class SplashScreen : public QWidget
 {
     Q_OBJECT
 
@@ -43,8 +43,12 @@ public:
     SplashScreen();
 
 private:
-    void drawContents(QPainter* painter) override;
+    bool event(QEvent* event) override;
+    void repaint();
+    void draw(QPainter* painter);
+    void setSize(const QSize& size);
 
+    QString m_message;
     QSvgRenderer* m_backgroundRenderer = nullptr;
 };
 }

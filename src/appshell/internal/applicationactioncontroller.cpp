@@ -37,6 +37,11 @@ using namespace mu::appshell;
 using namespace mu::framework;
 using namespace mu::actions;
 
+void ApplicationActionController::preInit()
+{
+    qApp->installEventFilter(this);
+}
+
 void ApplicationActionController::init()
 {
     dispatcher()->reg(this, "quit", [this](const ActionData& args) {
@@ -61,8 +66,6 @@ void ApplicationActionController::init()
     dispatcher()->reg(this, "preference-dialog", this, &ApplicationActionController::openPreferencesDialog);
 
     dispatcher()->reg(this, "revert-factory", this, &ApplicationActionController::revertToFactorySettings);
-
-    qApp->installEventFilter(this);
 }
 
 void ApplicationActionController::onDragEnterEvent(QDragEnterEvent* event)
