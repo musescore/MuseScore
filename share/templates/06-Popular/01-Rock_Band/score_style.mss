@@ -91,10 +91,10 @@
     <repeatBarTips>0</repeatBarTips>
     <startBarlineSingle>0</startBarlineSingle>
     <startBarlineMultiple>1</startBarlineMultiple>
-    <bracketWidth>0.44</bracketWidth>
-    <bracketDistance>0.2</bracketDistance>
+    <bracketWidth>0.45</bracketWidth>
+    <bracketDistance>0.45</bracketDistance>
     <akkoladeWidth>1.5</akkoladeWidth>
-    <akkoladeBarDistance>0.4</akkoladeBarDistance>
+    <akkoladeBarDistance>0.35</akkoladeBarDistance>
     <dividerLeft>0</dividerLeft>
     <dividerLeftSym>systemDivider</dividerLeftSym>
     <dividerLeftX>0</dividerLeftX>
