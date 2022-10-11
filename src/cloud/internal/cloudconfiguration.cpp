@@ -108,8 +108,7 @@ QUrl CloudConfiguration::signUpUrl() const
 
 QUrl CloudConfiguration::signInSuccessUrl() const
 {
-    // TODO
-    return QUrl("https://musescore.com");
+    return QUrl("https://musescore.com/desktop-signin-success");
 }
 
 QUrl CloudConfiguration::scoreManagerUrl() const
