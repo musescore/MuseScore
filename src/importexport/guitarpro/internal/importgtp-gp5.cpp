@@ -65,6 +65,7 @@
 #include "libmscore/tremolobar.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
+#include "libmscore/fretcircle.h"
 
 #include "log.h"
 
@@ -383,6 +384,12 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
     int rr = readChar();
     if (cr && cr->isChord()) {
         Chord* chord = toChord(cr);
+
+        if (score->styleB(Sid::circledNotesOnCommonTab)) {
+            FretCircle* c = Factory::createFretCircle(chord);
+            chord->add(c);
+        }
+
         do {
             applyBeatEffects(chord, beatEffects % 100);
         } while (beatEffects /= 100);
