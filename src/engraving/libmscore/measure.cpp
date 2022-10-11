@@ -3881,12 +3881,27 @@ void Measure::addSystemHeader(bool isFirstSystem)
         kSegment->createShapes();
     }
 
-    //
-    // create systemic barline
-    //
+    createSystemBeginBarLine();
+
+    checkHeader();
+}
+
+void Measure::createSystemBeginBarLine()
+{
+    if (!system()) {
+        return;
+    }
     Segment* s  = findSegment(SegmentType::BeginBarLine, tick());
-    size_t n = score()->nstaves();
-    if ((n > 1 && score()->styleB(Sid::startBarlineMultiple)) || (n == 1 && score()->styleB(Sid::startBarlineSingle))) {
+    size_t n = 0;
+    if (system()) {
+        for (SysStaff* sysStaff : system()->staves()) {
+            if (sysStaff->show()) {
+                ++n;
+            }
+        }
+    }
+    if ((n > 1 && score()->styleB(Sid::startBarlineMultiple))
+        || (n == 1 && (score()->styleB(Sid::startBarlineSingle) || system()->brackets().size()))) {
         if (!s) {
             s = Factory::createSegment(this, SegmentType::BeginBarLine, Fraction(0, 1));
             add(s);
@@ -3911,7 +3926,6 @@ void Measure::addSystemHeader(bool isFirstSystem)
     } else if (s) {
         s->setEnabled(false);
     }
-    checkHeader();
 }
 
 //---------------------------------------------------------
