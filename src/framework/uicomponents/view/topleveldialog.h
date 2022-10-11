@@ -37,7 +37,7 @@ public:
     explicit TopLevelDialog(QWidget* parent = nullptr);
     TopLevelDialog(const TopLevelDialog& dialog);
 
-private:
+protected:
     bool event(QEvent* e) override;
 };
 }

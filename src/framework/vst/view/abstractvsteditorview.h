@@ -73,7 +73,8 @@ private:
     void setupWindowGeometry();
     void moveViewToMainWindowCenter();
 
-    void showEvent(QShowEvent* event) override;
+    void showEvent(QShowEvent* ev) override;
+    bool event(QEvent* ev) override;
 
     FIDString currentPlatformUiType() const;
 
