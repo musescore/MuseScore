@@ -69,13 +69,18 @@ void Environment::setup()
         m->resolveImports();
     }
 
-    globalModule.onInit(runMode);
+    globalModule.onPreInit(runMode);
     //! NOTE Now we can use logger and profiler
+
+    for (mu::modularity::IModuleSetup* m : m_dependencyModules) {
+        m->onPreInit(runMode);
+    }
 
     if (m_preInit) {
         m_preInit();
     }
 
+    globalModule.onInit(runMode);
     for (mu::modularity::IModuleSetup* m : m_dependencyModules) {
         m->onInit(runMode);
     }
