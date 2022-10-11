@@ -2382,7 +2382,7 @@ bool GuitarPro3::read(IODevice* io)
         for (int j = strings; j < GP_MAX_STRING_NUMBER; ++j) {
             readInt();
         }
-        /*int midiPort     =*/ readInt();     // - 1;
+        int midiPort     = readInt() - 1;
         int midiChannel  = readInt() - 1;
         /*int midiChannel2 =*/ readInt();     // - 1;
         int frets        = readInt();
@@ -2444,6 +2444,7 @@ bool GuitarPro3::read(IODevice* io)
         ch->setPan(channelDefaults[midiChannel].pan);
         ch->setChorus(channelDefaults[midiChannel].chorus);
         ch->setReverb(channelDefaults[midiChannel].reverb);
+        staff->part()->setMidiChannel(midiChannel, midiPort);
         // missing: phase, tremolo
     }
 
