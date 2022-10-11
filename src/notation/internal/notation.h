@@ -76,6 +76,7 @@ public:
     async::Notification notationChanged() const override;
 
 protected:
+    mu::engraving::Score* score() override { return m_score; }
     mu::engraving::Score* score() const override;
     void setScore(mu::engraving::Score* score);
     async::Notification scoreInited() const override;

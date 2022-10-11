@@ -56,6 +56,13 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
         return false;
     }
 
+    // Parts that are closed may have never been laid out, so we lay them out now
+    for (INotationPtr notation : notations) {
+        if (!notation->isOpen()) {
+            notation->score()->doLayout();
+        }
+    }
+
     return exportScores(notations, chosenPath, unitType, openDestinationFolderOnExport);
 }
 

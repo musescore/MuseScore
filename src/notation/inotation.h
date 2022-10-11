@@ -96,6 +96,9 @@ public:
 
     // notify
     virtual async::Notification notationChanged() const = 0;
+
+    // score
+    virtual mu::engraving::Score* score() = 0;
 };
 }
 
