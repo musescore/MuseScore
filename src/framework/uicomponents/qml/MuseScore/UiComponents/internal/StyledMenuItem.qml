@@ -92,7 +92,7 @@ ListItemBlank {
             text += " " + qsTrc("ui", "Menu")
         }
 
-        return Utils.removeAmpersands(text)
+        return text
     }
 
     QtObject {
@@ -101,6 +101,7 @@ ListItemBlank {
         property string id: Boolean(modelData) && Boolean(modelData.id) ? modelData.id : ""
 
         property string title: Boolean(modelData) && Boolean(modelData.title) ? modelData.title : ""
+        property string titleWithMnemonicUnderline: Boolean(modelData) && Boolean(modelData.titleWithMnemonicUnderline) ? modelData.titleWithMnemonicUnderline : ""
 
         property bool hasShortcuts: Boolean(modelData) && Boolean(modelData.shortcuts)
         property string shortcuts: hasShortcuts ? modelData.shortcuts : ""
@@ -194,7 +195,7 @@ ListItemBlank {
             Layout.fillWidth: true
             horizontalAlignment: Text.AlignLeft
 
-            text: Utils.makeMnemonicText(itemPrv.title)
+            text: itemPrv.titleWithMnemonicUnderline
 
             textFormat: Text.RichText
             //! If the rich text format is set, then the component intercepts the hover state

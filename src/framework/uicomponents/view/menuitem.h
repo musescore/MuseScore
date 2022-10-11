@@ -56,6 +56,7 @@ class MenuItem : public QObject, public async::Asyncable
     Q_PROPERTY(QString portableShortcuts READ portableShortcuts NOTIFY actionChanged)
 
     Q_PROPERTY(QString title READ translatedTitle NOTIFY actionChanged)
+    Q_PROPERTY(QString titleWithMnemonicUnderline READ titleWithMnemonicUnderline NOTIFY actionChanged)
     Q_PROPERTY(QString description READ description_property NOTIFY actionChanged)
     Q_PROPERTY(QString section READ section NOTIFY sectionChanged)
 
@@ -78,8 +79,8 @@ public:
     MenuItem(const ui::UiAction& action, QObject* parent = nullptr);
 
     QString id() const;
-    TranslatableString title() const;
     QString translatedTitle() const;
+    QString titleWithMnemonicUnderline() const;
     QString section() const;
 
     bool selectable() const;
