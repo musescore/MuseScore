@@ -316,7 +316,7 @@
         "Arpeggio": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -419,7 +419,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 1000
                 },
                 "expressionPattern": {
@@ -522,7 +522,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 2000
                 },
                 "expressionPattern": {
@@ -625,7 +625,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 3000
                 },
                 "expressionPattern": {
@@ -730,7 +730,7 @@
         "ArpeggioDown": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -833,7 +833,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 1000
                 },
                 "expressionPattern": {
@@ -936,7 +936,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 2000
                 },
                 "expressionPattern": {
@@ -1039,7 +1039,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 3000
                 },
                 "expressionPattern": {
@@ -1144,7 +1144,7 @@
         "ArpeggioStraightDown": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -1247,7 +1247,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 1000
                 },
                 "expressionPattern": {
@@ -1350,7 +1350,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 2000
                 },
                 "expressionPattern": {
@@ -1453,7 +1453,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 3000
                 },
                 "expressionPattern": {
@@ -1558,7 +1558,7 @@
         "ArpeggioStraightUp": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -1661,7 +1661,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 1000
                 },
                 "expressionPattern": {
@@ -1764,7 +1764,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 2000
                 },
                 "expressionPattern": {
@@ -1867,7 +1867,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 3000
                 },
                 "expressionPattern": {
@@ -1972,7 +1972,7 @@
         "ArpeggioUp": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -2075,7 +2075,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 1000
                 },
                 "expressionPattern": {
@@ -2178,7 +2178,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 2000
                 },
                 "expressionPattern": {
@@ -2281,7 +2281,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 3000
                 },
                 "expressionPattern": {
@@ -2491,7 +2491,7 @@
         "Crescendo": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -2594,7 +2594,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -2697,7 +2697,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -2800,7 +2800,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -3010,7 +3010,7 @@
         "Decrescendo": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -3113,7 +3113,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -3216,7 +3216,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -3319,7 +3319,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -3529,7 +3529,7 @@
         "DownMordent": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -3739,7 +3739,7 @@
         "InvertedTurn": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -3844,7 +3844,7 @@
         "LaissezVibrer": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 30000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -3949,7 +3949,7 @@
         "Legato": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -4054,7 +4054,7 @@
         "LinePrall": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -4264,7 +4264,7 @@
         "MoltoVibrato": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -4369,7 +4369,7 @@
         "Mordent": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -4474,7 +4474,7 @@
         "MordentWithUpperPrefix": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -4789,7 +4789,7 @@
         "PrallDown": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -4894,7 +4894,7 @@
         "PrallMordent": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -4999,7 +4999,7 @@
         "PrallUp": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -5209,7 +5209,7 @@
         "ShortTrill": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -5839,7 +5839,7 @@
         "Tenuto": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -5944,7 +5944,7 @@
         "Tremblement": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -6049,7 +6049,7 @@
         "Tremolo16th": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -6154,7 +6154,7 @@
         "Tremolo32nd": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -6259,7 +6259,7 @@
         "Tremolo64th": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -6364,7 +6364,7 @@
         "Tremolo8th": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -6574,7 +6574,7 @@
         "Trill": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -6679,7 +6679,7 @@
         "Turn": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -6889,7 +6889,7 @@
         "UpMordent": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -6994,7 +6994,7 @@
         "UpPrall": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -7099,7 +7099,7 @@
         "Vibrato": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -7204,7 +7204,7 @@
         "WideVibrato": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9900,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
