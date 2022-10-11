@@ -59,11 +59,14 @@ public:
     void refreshConfig();
 
     void load();
+    void unload();
 
     bool isValid() const;
     bool isLoaded() const;
 
     async::Notification loadingCompleted() const;
+    async::Notification unloadingCompleted() const;
+
     async::Channel<audio::AudioUnitConfig> pluginSettingsChanged() const;
 
 private:
@@ -85,6 +88,7 @@ private:
 
     std::atomic_bool m_isLoaded = false;
     async::Notification m_loadingCompleted;
+    async::Notification m_unloadingCompleted;
 
     mutable std::mutex m_mutex;
 };

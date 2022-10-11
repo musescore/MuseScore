@@ -28,8 +28,10 @@
 #include <vector>
 #include <functional>
 
-#include "modularity/ioc.h"
 #include "audio/ifxresolver.h"
+#include "async/asyncable.h"
+
+#include "modularity/ioc.h"
 #include "audio/audiotypes.h"
 #include "audio/ifxprocessor.h"
 
@@ -38,7 +40,7 @@
 #include "ivstmodulesrepository.h"
 
 namespace mu::vst {
-class VstFxResolver : public audio::fx::IFxResolver::IResolver
+class VstFxResolver : public audio::fx::IFxResolver::IResolver, public async::Asyncable
 {
     INJECT(vst, IVstModulesRepository, pluginModulesRepo)
     INJECT(vst, IVstPluginsRegister, pluginsRegister)
@@ -64,8 +66,11 @@ private:
     void fxChainToCreate(const audio::AudioFxChain& currentFxChain, const audio::AudioFxChain& newFxChain,
                          audio::AudioFxChain& resultChain);
 
+    void unloadPlugin(VstPluginPtr plugin);
+
     std::map<audio::TrackId, FxMap> m_tracksFxMap;
     FxMap m_masterFxMap;
+    std::vector<VstPluginPtr> m_pluginsToUnload;
 };
 }
 

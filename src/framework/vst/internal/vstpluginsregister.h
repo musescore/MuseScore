@@ -30,9 +30,10 @@
 #include "audio/iaudiothreadsecurer.h"
 
 #include "ivstpluginsregister.h"
+#include "async/asyncable.h"
 
 namespace mu::vst {
-class VstPluginsRegister : public IVstPluginsRegister
+class VstPluginsRegister : public IVstPluginsRegister, public async::Asyncable
 {
     INJECT_STATIC(vst, audio::IAudioThreadSecurer, threadSecurer)
 public:
