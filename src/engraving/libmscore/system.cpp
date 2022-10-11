@@ -815,18 +815,32 @@ size_t System::getBracketsColumnsCount()
 
 void System::setBracketsXPosition(const double xPosition)
 {
-    double bracketDistance = score()->styleMM(Sid::bracketDistance);
     for (Bracket* b1 : _brackets) {
+        // Obtain correct distance
+        double bracketDistance = 0.0;
+        BracketType bracketType = b1->bracketType();
+        if (bracketType == BracketType::NORMAL || bracketType == BracketType::LINE) {
+            bracketDistance = score()->styleMM(Sid::bracketDistance);
+        } else if (bracketType == BracketType::BRACE) {
+            bracketDistance = score()->styleMM(Sid::akkoladeBarDistance);
+        }
+        // For brackets that are drawn, we must correct for half line width
+        double lineWidthCorrection = 0.0;
+        if (bracketType == BracketType::NORMAL || bracketType == BracketType::LINE) {
+            lineWidthCorrection = score()->styleMM(Sid::bracketWidth) / 2;
+        }
+        // Compute offset cause by other stacked brackets
         double xOffset = 0;
         for (const Bracket* b2 : _brackets) {
             bool b1FirstStaffInB2 = (b1->firstStaff() >= b2->firstStaff() && b1->firstStaff() <= b2->lastStaff());
             bool b1LastStaffInB2 = (b1->lastStaff() >= b2->firstStaff() && b1->lastStaff() <= b2->lastStaff());
             if (b1->column() > b2->column()
                 && (b1FirstStaffInB2 || b1LastStaffInB2)) {
-                xOffset += b2->width() + bracketDistance;
+                xOffset += b2->width();
             }
         }
-        b1->setPosX(xPosition - xOffset - b1->width());
+        // Set position
+        b1->setPosX(xPosition - xOffset - b1->width() + lineWidthCorrection);
     }
 }
 
