@@ -463,6 +463,7 @@ enum class Sid {
     enableIndentationOnFirstSystem,
     firstSystemIndentationValue,
     alwaysShowBracketsWhenEmptyStavesAreHidden,
+    alwaysShowSquareBracketsWhenEmptyStavesAreHidden,
     hideInstrumentNameIfOneInstrument,
     gateTime,
     tenutoGateTime,
