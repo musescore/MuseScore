@@ -361,9 +361,8 @@ double System::totalBracketOffset(LayoutContext& ctx)
         }
     }
 
-    std::vector<double> bracketWidth(columns, 0.0);
-
     size_t nstaves = ctx.score()->nstaves();
+    std::vector < double > bracketWidth(nstaves, 0.0);
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         const Staff* staff = ctx.score()->staff(staffIdx);
         for (auto bi : staff->brackets()) {
@@ -400,17 +399,17 @@ double System::totalBracketOffset(LayoutContext& ctx)
                 dummyBr->setBracketItem(bi);
                 dummyBr->setStaffSpan(firstStaff, lastStaff);
                 dummyBr->layout();
-                bracketWidth[bi->column()] = std::max(bracketWidth[bi->column()], dummyBr->width());
+                bracketWidth[staffIdx] += dummyBr->width();
                 delete dummyBr;
             }
         }
     }
 
-    ctx.totalBracketsWidth = 0.0;
-
+    double totalBracketsWidth = 0.0;
     for (double w : bracketWidth) {
-        ctx.totalBracketsWidth += w;
+        totalBracketsWidth = std::max(totalBracketsWidth, w);
     }
+    ctx.totalBracketsWidth = totalBracketsWidth;
 
     return ctx.totalBracketsWidth;
 }
