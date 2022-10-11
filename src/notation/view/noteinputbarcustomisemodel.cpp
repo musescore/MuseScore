@@ -218,7 +218,7 @@ NoteInputBarCustomiseItem* NoteInputBarCustomiseModel::makeItem(const UiAction& 
 
     NoteInputBarCustomiseItem* item = new NoteInputBarCustomiseItem(NoteInputBarCustomiseItem::ItemType::ACTION, this);
     item->setId(QString::fromStdString(action.code));
-    item->setTitle(action.title.qTranslated());
+    item->setTitle(action.title.qTranslatedWithoutMnemonic());
     item->setIcon(action.iconCode);
     item->setChecked(checked);
 

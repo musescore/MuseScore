@@ -46,14 +46,14 @@ QString MenuItem::id() const
     return m_id;
 }
 
-mu::TranslatableString MenuItem::title() const
-{
-    return m_action.title;
-}
-
 QString MenuItem::translatedTitle() const
 {
-    return m_action.title.qTranslated();
+    return m_action.title.qTranslatedWithoutMnemonic();
+}
+
+QString MenuItem::titleWithMnemonicUnderline() const
+{
+    return m_action.title.qTranslatedWithMnemonicUnderline();
 }
 
 QString MenuItem::section() const

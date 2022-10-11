@@ -116,6 +116,7 @@ ListView {
         property var item: model ? model.itemRole : null
         property string menuId: Boolean(item) ? item.id : ""
         property string title: Boolean(item) ? item.title : ""
+        property string titleWithMnemonicUnderline: Boolean(item) ? item.titleWithMnemonicUnderline : ""
 
         property bool isMenuOpened: menuLoader.isMenuOpened && menuLoader.parent === this
 
@@ -147,7 +148,7 @@ ListView {
             accessibleParent: panelAccessibleInfo
             visualItem: radioButtonDelegate
             role: MUAccessible.Button
-            name: Utils.removeAmpersands(radioButtonDelegate.title)
+            name: radioButtonDelegate.title
 
             function readInfo() {
                 accessibleInfo.ignored = false
@@ -165,7 +166,7 @@ ListView {
 
             width: textMetrics.width
 
-            text: correctText(radioButtonDelegate.title)
+            text: appMenuModel.isNavigationStarted ? radioButtonDelegate.titleWithMnemonicUnderline : radioButtonDelegate.title
             textFormat: Text.RichText
             font: ui.theme.defaultFont
 
@@ -173,23 +174,7 @@ ListView {
                 id: textMetrics
 
                 font: textLabel.font
-                text: textLabel.removeAmpersands(radioButtonDelegate.title)
-            }
-
-            function correctText(text) {
-                if (!appMenuModel.isNavigationStarted) {
-                    return removeAmpersands(text)
-                }
-
-                return makeMnemonicText(text)
-            }
-
-            function removeAmpersands(text) {
-                return Utils.removeAmpersands(text)
-            }
-
-            function makeMnemonicText(text) {
-                return Utils.makeMnemonicText(text)
+                text: radioButtonDelegate.title
             }
         }
 
