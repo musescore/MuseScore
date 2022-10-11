@@ -118,7 +118,8 @@
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>49</pitch>
-              <tpc>21</tpc>
+              <tpc>-9</tpc>
+              <tpc2>21</tpc2>
               <fret>2</fret>
               <string>1</string>
               </Note>
@@ -191,7 +192,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>45</pitch>
-              <tpc>17</tpc>
+              <tpc>-9</tpc>
+              <tpc2>17</tpc2>
               <fret>2</fret>
               <string>2</string>
               </Note>
@@ -207,7 +209,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>57</pitch>
-              <tpc>17</tpc>
+              <tpc>-9</tpc>
+              <tpc2>17</tpc2>
               <fret>2</fret>
               <string>2</string>
               </Note>
@@ -216,7 +219,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>57</pitch>
-              <tpc>17</tpc>
+              <tpc>-9</tpc>
+              <tpc2>17</tpc2>
               <fret>2</fret>
               <string>2</string>
               </Note>

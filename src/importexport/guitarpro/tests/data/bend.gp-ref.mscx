@@ -72,7 +72,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>55</pitch>
-              <tpc>15</tpc>
+              <tpc>-9</tpc>
+              <tpc2>15</tpc2>
               <fret>5</fret>
               <string>3</string>
               </Note>
@@ -99,7 +100,8 @@
                   </next>
                 </Spanner>
               <pitch>65</pitch>
-              <tpc>13</tpc>
+              <tpc>-9</tpc>
+              <tpc2>13</tpc2>
               <fret>6</fret>
               <string>1</string>
               </Note>
@@ -129,7 +131,8 @@
                   </prev>
                 </Spanner>
               <pitch>65</pitch>
-              <tpc>13</tpc>
+              <tpc>-9</tpc>
+              <tpc2>13</tpc2>
               <fret>6</fret>
               <string>1</string>
               </Note>
@@ -150,7 +153,8 @@
                   </prev>
                 </Spanner>
               <pitch>65</pitch>
-              <tpc>13</tpc>
+              <tpc>-9</tpc>
+              <tpc2>13</tpc2>
               <fret>6</fret>
               <string>1</string>
               </Note>
@@ -169,7 +173,8 @@
                 <point time="75" pitch="0" vibrato="0"/>
                 </Bend>
               <pitch>57</pitch>
-              <tpc>17</tpc>
+              <tpc>-9</tpc>
+              <tpc2>17</tpc2>
               <fret>2</fret>
               <string>2</string>
               </Note>
@@ -182,7 +187,8 @@
                 <point time="50" pitch="100" vibrato="0"/>
                 </Bend>
               <pitch>60</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>1</fret>
               <string>1</string>
               </Note>
@@ -200,7 +206,8 @@
                 <point time="100" pitch="100" vibrato="0"/>
                 </Bend>
               <pitch>57</pitch>
-              <tpc>17</tpc>
+              <tpc>-9</tpc>
+              <tpc2>17</tpc2>
               <fret>2</fret>
               <string>2</string>
               </Note>
@@ -214,7 +221,8 @@
                 <point time="66" pitch="0" vibrato="0"/>
                 </Bend>
               <pitch>53</pitch>
-              <tpc>13</tpc>
+              <tpc>-9</tpc>
+              <tpc2>13</tpc2>
               <fret>3</fret>
               <string>3</string>
               </Note>

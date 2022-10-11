@@ -74,7 +74,8 @@
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>61</pitch>
-              <tpc>21</tpc>
+              <tpc>-9</tpc>
+              <tpc2>21</tpc2>
               <fret>2</fret>
               <string>1</string>
               </Note>
@@ -83,7 +84,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>-9</tpc>
+              <tpc2>16</tpc2>
               <fret>3</fret>
               <string>1</string>
               </Note>
@@ -92,7 +94,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>65</pitch>
-              <tpc>13</tpc>
+              <tpc>-9</tpc>
+              <tpc2>13</tpc2>
               <fret>1</fret>
               <string>0</string>
               </Note>
@@ -106,7 +109,8 @@
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>68</pitch>
-              <tpc>22</tpc>
+              <tpc>-9</tpc>
+              <tpc2>22</tpc2>
               <fret>4</fret>
               <string>0</string>
               </Note>
@@ -115,7 +119,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>69</pitch>
-              <tpc>17</tpc>
+              <tpc>-9</tpc>
+              <tpc2>17</tpc2>
               <fret>5</fret>
               <string>0</string>
               </Note>
@@ -124,7 +129,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>65</pitch>
-              <tpc>13</tpc>
+              <tpc>-9</tpc>
+              <tpc2>13</tpc2>
               <fret>1</fret>
               <string>0</string>
               </Note>
@@ -161,7 +167,8 @@
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>61</pitch>
-              <tpc>21</tpc>
+              <tpc>-9</tpc>
+              <tpc2>21</tpc2>
               <fret>2</fret>
               <string>1</string>
               <Spanner type="Glissando">
@@ -188,7 +195,8 @@
               </Spanner>
             <Note>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>-9</tpc>
+              <tpc2>16</tpc2>
               <fret>3</fret>
               <string>1</string>
               <Spanner type="Glissando">
@@ -204,7 +212,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>65</pitch>
-              <tpc>13</tpc>
+              <tpc>-9</tpc>
+              <tpc2>13</tpc2>
               <fret>1</fret>
               <string>0</string>
               </Note>
@@ -229,7 +238,8 @@
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>66</pitch>
-              <tpc>20</tpc>
+              <tpc>-9</tpc>
+              <tpc2>20</tpc2>
               <fret>2</fret>
               <string>0</string>
               </Note>
@@ -245,7 +255,8 @@
               </Spanner>
             <Note>
               <pitch>67</pitch>
-              <tpc>15</tpc>
+              <tpc>-9</tpc>
+              <tpc2>15</tpc2>
               <fret>3</fret>
               <string>0</string>
               </Note>
@@ -254,10 +265,11 @@
             <durationType>quarter</durationType>
             <Note>
               <Accidental>
-                <subtype>accidentalFlat</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>70</pitch>
-              <tpc>12</tpc>
+              <tpc>-9</tpc>
+              <tpc2>24</tpc2>
               <fret>6</fret>
               <string>0</string>
               </Note>
@@ -286,7 +298,8 @@
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>68</pitch>
-              <tpc>22</tpc>
+              <tpc>-9</tpc>
+              <tpc2>22</tpc2>
               <fret>4</fret>
               <string>0</string>
               </Note>
@@ -295,7 +308,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>69</pitch>
-              <tpc>17</tpc>
+              <tpc>-9</tpc>
+              <tpc2>17</tpc2>
               <fret>5</fret>
               <string>0</string>
               </Note>

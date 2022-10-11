@@ -137,6 +137,7 @@ private:
     void collectHammerOn(const GPNote* gpnote, Note* note);
     void addBend(const GPNote* gpnote, Note* note);
     void setPitch(Note* note, const GPNote::MidiPitch& midiPitch);
+    void setTpc(Note* note, int accidental);
     int calculateDrumPitch(int element, int variation, const String& instrumentName);
     void addTextToNote(String string, Note* note);
 

@@ -77,7 +77,8 @@
             <durationType>whole</durationType>
             <Note>
               <pitch>60</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>15</fret>
               <string>4</string>
               </Note>
