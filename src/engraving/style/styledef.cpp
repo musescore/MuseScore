@@ -139,10 +139,10 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::startBarlineSingle,      "startBarlineSingle",      false },
     { Sid::startBarlineMultiple,    "startBarlineMultiple",    true },
 
-    { Sid::bracketWidth,            "bracketWidth",            Spatium(0.44) },
-    { Sid::bracketDistance,         "bracketDistance",         Spatium(0.2) },
+    { Sid::bracketWidth,            "bracketWidth",            Spatium(0.45) },
+    { Sid::bracketDistance,         "bracketDistance",         Spatium(0.45) },
     { Sid::akkoladeWidth,           "akkoladeWidth",           Spatium(1.5) },
-    { Sid::akkoladeBarDistance,     "akkoladeBarDistance",     Spatium(.4) },
+    { Sid::akkoladeBarDistance,     "akkoladeBarDistance",     Spatium(.35) },
 
     { Sid::dividerLeft,             "dividerLeft",             false },
     { Sid::dividerLeftSym,          "dividerLeftSym",          String(u"systemDivider") },
