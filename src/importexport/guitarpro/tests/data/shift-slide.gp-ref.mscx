@@ -74,7 +74,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>57</pitch>
-              <tpc>17</tpc>
+              <tpc>-9</tpc>
+              <tpc2>17</tpc2>
               <fret>7</fret>
               <string>3</string>
               <Spanner type="Glissando">
@@ -99,7 +100,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>59</pitch>
-              <tpc>19</tpc>
+              <tpc>-9</tpc>
+              <tpc2>19</tpc2>
               <fret>9</fret>
               <string>3</string>
               <Spanner type="Glissando">

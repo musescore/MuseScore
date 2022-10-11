@@ -731,6 +731,22 @@ std::pair<int, std::shared_ptr<GPNote> > GP67DomBuilder::createGPNote(XmlDomNode
     auto innerNode = noteNode->firstChild();
     while (!innerNode.isNull()) {
         String nodeName = innerNode.nodeName();
+
+        if (nodeName == u"Accidental") {
+            std::map<String, int> accidentals = {
+                { u"DoubleFlat", -2 },
+                { u"Flat", -1 },
+                { u"Natural", 0 },
+                { u"Sharp", +1 },
+                { u"DoubleSharp", +2 }
+            };
+
+            String accidentalName = innerNode.toElement().text();
+
+            if (accidentals.find(accidentalName) != accidentals.end()) {
+                note->setAccidental(accidentals[accidentalName]);
+            }
+        }
         if (nodeName == u"InstrumentArticulation") {
         }
         if (nodeName == u"Properties") {
@@ -886,66 +902,88 @@ void GP67DomBuilder::readNoteProperties(XmlDomNode* propertiesNode, GPNote* note
 {
     std::unordered_set<std::unique_ptr<INoteProperty> > properties;
 
-    auto propetryNode = propertiesNode->firstChild();
+    auto propertyNode = propertiesNode->firstChild();
 
-    while (!propetryNode.isNull()) {
-        auto propertyName = propetryNode.attribute("name");
+    while (!propertyNode.isNull()) {
+        auto propertyName = propertyNode.attribute("name");
 
         if (propertyName == u"Midi") {
-            int midi = propetryNode.firstChild().toElement().text().toInt();
+            int midi = propertyNode.firstChild().toElement().text().toInt();
             note->setMidi(midi);
         }
         if (propertyName == u"Variation") {
-            note->setVariation(propetryNode.firstChild().toElement().text().toInt());
+            note->setVariation(propertyNode.firstChild().toElement().text().toInt());
         }
         if (propertyName == u"Element") {
-            note->setElement(propetryNode.firstChild().toElement().text().toInt());
+            note->setElement(propertyNode.firstChild().toElement().text().toInt());
         } else if (propertyName == u"String") {
-            int string = propetryNode.firstChild().toElement().text().toInt();
+            int string = propertyNode.firstChild().toElement().text().toInt();
             note->setString(string);
         } else if (propertyName == u"Fret") {
-            int fret = propetryNode.firstChild().toElement().text().toInt();
+            int fret = propertyNode.firstChild().toElement().text().toInt();
             note->setFret(fret);
         } else if (propertyName == u"Octave") {
-            int octave = propetryNode.firstChild().toElement().text().toInt();
+            int octave = propertyNode.firstChild().toElement().text().toInt();
             note->setOctave(octave);
+        } else if (propertyName == u"ConcertPitch") {
+            auto pitchNode = propertyNode.firstChild();
+            auto innerNode = pitchNode.firstChild();
+            while (!innerNode.isNull()) {
+                String nodeName = innerNode.nodeName();
+                if (nodeName == u"Accidental") {
+                    std::map<String, int> accidentals = {
+                        { u"bb", -2 },
+                        { u"b",  -1 },
+                        { u"#",  +1 },
+                        { u"x",  +2 },
+                    };
+
+                    String accidentalName = innerNode.toElement().text();
+                    if (!accidentalName.isEmpty() && accidentals.find(accidentalName) != accidentals.end()) {
+                        note->setAccidental(accidentals[accidentalName]);
+                    } else {
+                        note->setAccidental(0);
+                    }
+                }
+
+                innerNode = innerNode.nextSibling();
+            }
         } else if (propertyName == u"Tone") {
-            int tone = propetryNode.firstChild().toElement().text().toInt();
+            int tone = propertyNode.firstChild().toElement().text().toInt();
             note->setTone(tone);
         } else if (propertyName == u"Bended") {
-            if (propetryNode.firstChild().nodeName() == "Enable") {
-                note->setBend(createBend(&propetryNode));
+            if (propertyNode.firstChild().nodeName() == "Enable") {
+                note->setBend(createBend(&propertyNode));
             }
         } else if (propertyName == u"Harmonic"
                    || propertyName == u"HarmonicFret"
                    || propertyName == u"HarmonicType") {
-            readHarmonic(&propetryNode, note);
+            readHarmonic(&propertyNode, note);
         } else if (propertyName == u"PalmMuted") {
-            if (propetryNode.firstChild().nodeName() == "Enable") {
+            if (propertyNode.firstChild().nodeName() == "Enable") {
                 note->setPalmMute(true);
             }
         } else if (propertyName == u"Muted") {
             //! property muted in GP means dead note
-            if (propetryNode.firstChild().nodeName() == "Enable") {
+            if (propertyNode.firstChild().nodeName() == "Enable") {
                 note->setMute(true);
             }
         } else if (propertyName == u"Slide") {
-            note->setSlides(propetryNode.firstChild().toElement().text().toUInt());
+            note->setSlides(propertyNode.firstChild().toElement().text().toUInt());
         } else if (propertyName == u"HopoOrigin") {
             note->setHammerOn(GPNote::HammerOn::Start);
         } else if (propertyName == u"Tapped") {
-            if (propetryNode.firstChild().nodeName() == "Enable") {
+            if (propertyNode.firstChild().nodeName() == "Enable") {
                 note->setTapping(true);
             }
         } else if (propertyName == u"LeftHandTapped") {
-            if (propetryNode.firstChild().nodeName() == "Enable") {
+            if (propertyNode.firstChild().nodeName() == "Enable") {
                 note->setLeftHandTapped(true);
             }
         } else {
             //LOGD() << "unknown GP Note Property tag" << propertyName << "\n";
         }
-
-        propetryNode = propetryNode.nextSibling();
+        propertyNode = propertyNode.nextSibling();
     }
 
     note->addProperties(std::move(properties));

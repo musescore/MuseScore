@@ -87,7 +87,8 @@
               </Spanner>
             <Note>
               <pitch>55</pitch>
-              <tpc>15</tpc>
+              <tpc>-9</tpc>
+              <tpc2>15</tpc2>
               <fret>12</fret>
               <string>0</string>
               </Note>
@@ -108,7 +109,8 @@
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>54</pitch>
-              <tpc>20</tpc>
+              <tpc>-9</tpc>
+              <tpc2>20</tpc2>
               <fret>11</fret>
               <string>0</string>
               </Note>
@@ -133,7 +135,8 @@
               </Spanner>
             <Note>
               <pitch>52</pitch>
-              <tpc>18</tpc>
+              <tpc>-9</tpc>
+              <tpc2>18</tpc2>
               <fret>9</fret>
               <string>0</string>
               </Note>
@@ -155,7 +158,8 @@
               </Spanner>
             <Note>
               <pitch>47</pitch>
-              <tpc>19</tpc>
+              <tpc>-9</tpc>
+              <tpc2>19</tpc2>
               <fret>9</fret>
               <string>1</string>
               </Note>
@@ -183,7 +187,8 @@
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>49</pitch>
-              <tpc>21</tpc>
+              <tpc>-9</tpc>
+              <tpc2>21</tpc2>
               <fret>11</fret>
               <string>1</string>
               </Note>
@@ -195,7 +200,8 @@
               </Articulation>
             <Note>
               <pitch>38</pitch>
-              <tpc>16</tpc>
+              <tpc>-9</tpc>
+              <tpc2>16</tpc2>
               <head>cross</head>
               <fret>0</fret>
               <string>1</string>
@@ -209,7 +215,8 @@
               </Articulation>
             <Note>
               <pitch>52</pitch>
-              <tpc>18</tpc>
+              <tpc>-9</tpc>
+              <tpc2>18</tpc2>
               <fret>9</fret>
               <string>0</string>
               </Note>
@@ -218,7 +225,8 @@
             <durationType>16th</durationType>
             <Note>
               <pitch>33</pitch>
-              <tpc>17</tpc>
+              <tpc>-9</tpc>
+              <tpc2>17</tpc2>
               <head>cross</head>
               <fret>0</fret>
               <string>2</string>
@@ -239,7 +247,8 @@
               </Articulation>
             <Note>
               <pitch>33</pitch>
-              <tpc>17</tpc>
+              <tpc>-9</tpc>
+              <tpc2>17</tpc2>
               <head>cross</head>
               <fret>0</fret>
               <string>2</string>
@@ -253,7 +262,8 @@
               </Articulation>
             <Note>
               <pitch>52</pitch>
-              <tpc>18</tpc>
+              <tpc>-9</tpc>
+              <tpc2>18</tpc2>
               <fret>9</fret>
               <string>0</string>
               </Note>
@@ -265,7 +275,8 @@
               </Articulation>
             <Note>
               <pitch>33</pitch>
-              <tpc>17</tpc>
+              <tpc>-9</tpc>
+              <tpc2>17</tpc2>
               <head>cross</head>
               <fret>0</fret>
               <string>2</string>

@@ -71,10 +71,11 @@
             <durationType>half</durationType>
             <Note>
               <Accidental>
-                <subtype>accidentalFlat</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>58</pitch>
-              <tpc>12</tpc>
+              <tpc>-9</tpc>
+              <tpc2>24</tpc2>
               <fret>3</fret>
               <string>2</string>
               </Note>
@@ -83,7 +84,8 @@
             <durationType>half</durationType>
             <Note>
               <pitch>47</pitch>
-              <tpc>19</tpc>
+              <tpc>-9</tpc>
+              <tpc2>19</tpc2>
               <fret>2</fret>
               <string>4</string>
               </Note>

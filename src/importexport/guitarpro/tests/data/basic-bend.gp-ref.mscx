@@ -78,7 +78,8 @@
                 <point time="50" pitch="100" vibrato="0"/>
                 </Bend>
               <pitch>66</pitch>
-              <tpc>20</tpc>
+              <tpc>-9</tpc>
+              <tpc2>20</tpc2>
               <fret>2</fret>
               <string>0</string>
               </Note>
