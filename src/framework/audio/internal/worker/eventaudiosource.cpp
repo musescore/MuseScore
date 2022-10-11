@@ -39,6 +39,10 @@ EventAudioSource::EventAudioSource(const TrackId trackId, const mpe::PlaybackDat
     m_playbackData.mainStream.onReceive(this, [this](const PlaybackEventsMap& events) {
         m_playbackData.originEvents = events;
     });
+
+    m_playbackData.dynamicLevelChanges.onReceive(this, [this](const DynamicLevelMap& changes) {
+        m_playbackData.dynamicLevelMap = changes;
+    });
 }
 
 EventAudioSource::~EventAudioSource()
