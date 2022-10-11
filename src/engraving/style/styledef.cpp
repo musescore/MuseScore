@@ -449,6 +449,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::firstSystemIndentationValue, "firstSystemIndentationValue", Spatium(5.0) },
     { Sid::alwaysShowBracketsWhenEmptyStavesAreHidden,
       "alwaysShowBracketsWhenEmptyStavesAreHidden", false },
+    { Sid::alwaysShowSquareBracketsWhenEmptyStavesAreHidden,
+      "alwaysShowSquareBracketsWhenEmptyStavesAreHidden", false },
     { Sid::hideInstrumentNameIfOneInstrument,
       "hideInstrumentNameIfOneInstrument", true },
     { Sid::gateTime,                "gateTime",                PropertyValue(100) },
