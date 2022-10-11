@@ -31,6 +31,11 @@
 
 class QItemSelectionModel;
 
+#if (defined(_MSCVER) || defined(_MSC_VER))
+// unreferenced function with internal linkage has been removed
+#pragma warning(disable: 4505)
+#endif
+
 namespace mu::notation {
 class NoteInputBarCustomiseItem;
 class NoteInputBarCustomiseModel : public uicomponents::SelectableItemListModel, public async::Asyncable

@@ -35,6 +35,11 @@
 
 #include "abstractaudioresourceitem.h"
 
+#if (defined(_MSCVER) || defined(_MSC_VER))
+// unreferenced function with internal linkage has been removed
+#pragma warning(disable: 4505)
+#endif
+
 namespace mu::playback {
 class OutputResourceItem : public AbstractAudioResourceItem, public async::Asyncable
 {
