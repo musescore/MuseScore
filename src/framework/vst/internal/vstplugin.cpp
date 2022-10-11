@@ -113,9 +113,30 @@ void VstPlugin::load()
     }, threadSecurer()->mainThreadId());
 }
 
+void VstPlugin::unload()
+{
+    Async::call(this, [this]() {
+        ONLY_MAIN_THREAD(threadSecurer);
+
+        std::lock_guard lock(m_mutex);
+
+        m_module = nullptr;
+        m_pluginProvider = nullptr;
+        m_classInfo = ClassInfo();
+        m_pluginView = nullptr;
+        m_isLoaded = false;
+        m_unloadingCompleted.notify();
+    }, threadSecurer()->mainThreadId());
+}
+
 void VstPlugin::rescanParams()
 {
     ONLY_AUDIO_OR_MAIN_THREAD(threadSecurer);
+
+    if (!m_pluginProvider) {
+        LOGE() << "Plugin provider is not initialized";
+        return;
+    }
 
     auto component = m_pluginProvider->getComponent();
     auto controller = m_pluginProvider->getController();
@@ -203,6 +224,11 @@ void VstPlugin::updatePluginConfig(const audio::AudioUnitConfig& config)
 
     std::lock_guard lock(m_mutex);
 
+    if (!m_pluginProvider) {
+        LOGE() << "Plugin provider is not initialized";
+        return;
+    }
+
     auto controller = m_pluginProvider->getController();
     auto component = m_pluginProvider->getComponent();
 
@@ -270,6 +296,11 @@ bool VstPlugin::isLoaded() const
 Notification VstPlugin::loadingCompleted() const
 {
     return m_loadingCompleted;
+}
+
+Notification VstPlugin::unloadingCompleted() const
+{
+    return m_unloadingCompleted;
 }
 
 async::Channel<audio::AudioUnitConfig> VstPlugin::pluginSettingsChanged() const
