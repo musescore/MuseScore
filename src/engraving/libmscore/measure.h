@@ -269,6 +269,8 @@ public:
     void barLinesSetSpan(Segment*);
     void setEndBarLineType(BarLineType val, track_idx_t track, bool visible = true, mu::draw::Color color = mu::draw::Color());
 
+    void createSystemBeginBarLine();
+
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     void createVoice(int track);
     void adjustToLen(Fraction, bool appendRestsIfNecessary = true);

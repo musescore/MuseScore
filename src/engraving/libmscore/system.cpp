@@ -525,6 +525,16 @@ void System::layoutSystem(LayoutContext& ctx, double xo1, const bool isFirstSyst
             }
         }
     }
+
+    for (MeasureBase* mb : measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        Measure* m = toMeasure(mb);
+        if (m == measures().front() || (m->prev() && m->prev()->isHBox())) {
+            m->createSystemBeginBarLine();
+        }
+    }
 }
 
 //---------------------------------------------------------
