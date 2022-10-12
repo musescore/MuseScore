@@ -41,7 +41,7 @@ ExpandableBlank {
     width: parent.width
 
     contentItemComponent: Column {
-        property int navigationRowEnd: overrideDynamicsSection.navigation.row
+        property int navigationRowEnd: tuningsSection.navigationRowEnd
 
         spacing: 12
 
@@ -84,17 +84,6 @@ ExpandableBlank {
                 titleText: qsTrc("inspector", "Tuning (cents)")
                 propertyItem: root.model ? root.model.tuning : null
             }
-        }
-
-        CheckBoxPropertyView {
-            id: overrideDynamicsSection
-
-            navigation.name: "Override dynamics"
-            navigation.panel: root.navigation.panel
-            navigation.row: tuningsSection.navigationRowEnd + 1
-
-            text: qsTrc("inspector", "Override dynamics")
-            propertyItem: root.model ? root.model.overrideDynamics : null
         }
     }
 }
