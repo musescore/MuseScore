@@ -40,7 +40,7 @@ jobs:
     #   with:
     #     ref: <rc branch name>
     - name: Ccache cache files
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ~/.ccache
         key: ${{github.workflow}}-ccache-$(date -u +"%F-%T")
