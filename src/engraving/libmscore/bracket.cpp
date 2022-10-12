@@ -107,7 +107,7 @@ double Bracket::width() const
         w = score()->styleMM(Sid::bracketWidth) + score()->styleMM(Sid::bracketDistance);
         break;
     case BracketType::SQUARE:
-        w = score()->styleMM(Sid::staffLineWidth) + spatium() * .5;
+        w = score()->styleMM(Sid::staffLineWidth) / 2 + 0.5 * spatium();
         break;
     case BracketType::LINE:
         w = 0.67 * score()->styleMM(Sid::bracketWidth) + score()->styleMM(Sid::bracketDistance);
@@ -300,13 +300,13 @@ void Bracket::draw(mu::draw::Painter* painter) const
     break;
     case BracketType::SQUARE: {
         double h = 2 * h2;
-        double _spatium = spatium();
-        double w = score()->styleMM(Sid::staffLineWidth);
-        Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::SquareCap);
+        double lineW = score()->styleMM(Sid::staffLineWidth);
+        double bracketWidth = width() - lineW / 2;
+        Pen pen(curColor(), lineW, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
         painter->drawLine(LineF(0.0, 0.0, 0.0, h));
-        painter->drawLine(LineF(0.0, 0.0, w + .5 * _spatium, 0.0));
-        painter->drawLine(LineF(0.0, h, w + .5 * _spatium, h));
+        painter->drawLine(LineF(-lineW / 2, 0.0, lineW / 2 + bracketWidth, 0.0));
+        painter->drawLine(LineF(-lineW / 2, h, lineW / 2 + bracketWidth, h));
     }
     break;
     case BracketType::LINE: {
