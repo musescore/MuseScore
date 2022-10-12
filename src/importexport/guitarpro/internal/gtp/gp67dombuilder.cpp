@@ -77,8 +77,7 @@ void GP67DomBuilder::buildGPScore(XmlDomNode* scoreNode)
     static const std::set<String> sUnusedNodes = {
         u"FirstPageFooter", u"FirstPageHeader",
         u"PageFooter", u"PageHeader",
-        u"ScoreSystemsDefaultLayout", u"ScoreSystemsLayout", u"PageSetup",
-        u"MultiVoice"
+        u"ScoreSystemsDefaultLayout", u"ScoreSystemsLayout", u"PageSetup"
     };
 
     std::unique_ptr<GPScore> score = std::make_unique<GPScore>();
@@ -103,6 +102,8 @@ void GP67DomBuilder::buildGPScore(XmlDomNode* scoreNode)
             // Currently we ignore Tabber info
         } else if (nodeName == u"Instructions" || nodeName == u"Notices") {
             // Currently we ignore score unrelated texts
+        } else if (nodeName == u"MultiVoice") {
+            score->setMultiVoice(currentNode.toElement().text().toInt());
         } else if (sUnusedNodes.find(nodeName) != sUnusedNodes.end()) {
             // Ignored nodes, which specify unused specifics (e.g. default layout, footers e.t.c.)
         } else {

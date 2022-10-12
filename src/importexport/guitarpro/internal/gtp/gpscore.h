@@ -20,6 +20,8 @@ public:
     String poet() const { return _poet; }
     void setComposer(const String& composer) { _composer = composer; }
     String composer() const { return _composer; }
+    void setMultiVoice(bool multiVoice) { _multiVoice = multiVoice; }
+    bool multiVoice() const { return _multiVoice; }
 
 private:
     String _title;
@@ -28,6 +30,7 @@ private:
     String _album;
     String _poet;
     String _composer;
+    bool _multiVoice = false;
 };
 }
 

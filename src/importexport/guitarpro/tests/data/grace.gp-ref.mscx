@@ -131,18 +131,15 @@
             </Chord>
           </voice>
         <voice>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
           </voice>
         </Measure>
       <Measure>
@@ -267,18 +264,15 @@
             </Chord>
           </voice>
         <voice>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
           </voice>
         </Measure>
       <Measure>
@@ -320,18 +314,15 @@
             </BarLine>
           </voice>
         <voice>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
           </voice>
         </Measure>
       </Staff>
