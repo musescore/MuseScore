@@ -39,7 +39,6 @@ void NotePlaybackModel::createProperties()
 {
     m_tuning = buildPropertyItem(mu::engraving::Pid::TUNING);
     m_velocity = buildPropertyItem(mu::engraving::Pid::VELO_OFFSET);
-    m_overrideDynamics = buildPropertyItem(mu::engraving::Pid::VELO_TYPE);
 }
 
 void NotePlaybackModel::requestElements()
@@ -50,19 +49,13 @@ void NotePlaybackModel::requestElements()
 void NotePlaybackModel::loadProperties()
 {
     loadPropertyItem(m_tuning, formatDoubleFunc);
-
     loadPropertyItem(m_velocity);
-
-    loadPropertyItem(m_overrideDynamics, [](const QVariant& elementValue) -> QVariant {
-        return static_cast<bool>(elementValue.toInt());
-    });
 }
 
 void NotePlaybackModel::resetProperties()
 {
     m_tuning->resetToDefault();
     m_velocity->resetToDefault();
-    m_overrideDynamics->resetToDefault();
 }
 
 PropertyItem* NotePlaybackModel::tuning() const
@@ -73,9 +66,4 @@ PropertyItem* NotePlaybackModel::tuning() const
 PropertyItem* NotePlaybackModel::velocity() const
 {
     return m_velocity;
-}
-
-PropertyItem* NotePlaybackModel::overrideDynamics() const
-{
-    return m_overrideDynamics;
 }
