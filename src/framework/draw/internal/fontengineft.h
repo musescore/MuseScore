@@ -22,6 +22,7 @@
 #ifndef MU_DRAW_FONTENGINEFT_H
 #define MU_DRAW_FONTENGINEFT_H
 
+#include <QRectF>
 #include "io/path.h"
 
 namespace mu::draw {
