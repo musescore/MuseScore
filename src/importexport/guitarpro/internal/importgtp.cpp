@@ -1362,33 +1362,24 @@ int GuitarPro::harmonicOvertone(Note* note, float harmonicValue, int harmonicTyp
 //   setTempo
 //---------------------------------------------------------
 
-void GuitarPro::setTempo(int temp, Measure* measure)
+void GuitarPro::setTempo(int newTempo, Measure* measure)
 {
-    if (!last_measure) {
-        last_measure = measure;
-        last_tempo = temp;
-    } else if (last_measure == measure) {
-        last_tempo = temp;
-    } else {
-        std::swap(last_tempo, temp);
-        std::swap(last_measure, measure);
+    if (!measure || measure == last_measure) {
+        return;
+    }
 
+    last_measure = measure;
+
+    if (previousTempo != tempo) {
         Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
-        for (EngravingItem* e : segment->annotations()) {
-            if (e->isTempoText()) {
-                LOGD("already there");
-                return;
-            }
-        }
-
-        TempoText* tt = new TempoText(segment);
-        tt->setTempo(double(temp) / 60.0);
-        tt->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(temp));
+        TempoText* tt = Factory::createTempoText(segment);
+        tt->setTempo(double(newTempo) / 60.0);
+        tt->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(newTempo));
         tt->setTrack(0);
-
         segment->add(tt);
-        score->setTempo(measure->tick(), tt->tempo());
-        previousTempo = temp;
+        tempo = newTempo;
+        previousTempo = newTempo;
+        score->setTempo(measure->tick(), newTempo);
     }
 }
 

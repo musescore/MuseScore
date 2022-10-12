@@ -63,10 +63,6 @@
             <subtype>f</subtype>
             <velocity>96</velocity>
             </Dynamic>
-          <Tempo>
-            <tempo>2</tempo>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
           <Spanner type="Volta">
             <Volta>
               <beginText>1</beginText>
