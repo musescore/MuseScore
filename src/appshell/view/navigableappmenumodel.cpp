@@ -491,7 +491,7 @@ QString NavigableAppMenuModel::openedMenuId() const
 QString NavigableAppMenuModel::menuItemId(const MenuItemList& items, const QSet<int>& activatePossibleKeys)
 {
     for (const MenuItem* item : items) {
-        QString title = item->action().title.qTranslatedWithMnemonicAmpersand();
+        QString title = item->action().title.translated();
 
         int activateKeyIndex = title.indexOf('&');
         if (activateKeyIndex == -1) {

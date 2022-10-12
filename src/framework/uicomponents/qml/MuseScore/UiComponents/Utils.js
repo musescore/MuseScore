@@ -82,3 +82,20 @@ function getItemValue(model, index, roleName, def) {
 
     return item
 }
+
+function makeMnemonicText(text) {
+    var index = text.indexOf("&")
+    if (index !== -1) {
+        if (index === text.length - 1) {
+            text = removeAmpersands(text)
+        } else {
+            text = text.replace(text.substr(index, 2), ("<u>" + text.substr(index + 1, 1) + "</u>"))
+        }
+    }
+
+    return text
+}
+
+function removeAmpersands(text) {
+    return text.replace('&', '')
+}
