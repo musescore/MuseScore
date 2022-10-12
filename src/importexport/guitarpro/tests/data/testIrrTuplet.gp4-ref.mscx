@@ -60,10 +60,6 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Tempo>
-            <tempo>1.2</tempo>
-            <text><sym>metNoteQuarterUp</sym> = 72</text>
-            </Tempo>
           <Rest>
             <durationType>half</durationType>
             </Rest>
