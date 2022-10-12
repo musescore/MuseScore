@@ -59,13 +59,13 @@
             <sigN>12</sigN>
             <sigD>8</sigD>
             </TimeSig>
-          <StaffText>
-            <text>Capo. fret 6</text>
-            </StaffText>
           <Tempo>
             <tempo>1.683333</tempo>
             <text><sym>metNoteQuarterUp</sym> = 101</text>
             </Tempo>
+          <StaffText>
+            <text>Capo. fret 6</text>
+            </StaffText>
           <Rest>
             <durationType>whole</durationType>
             </Rest>
