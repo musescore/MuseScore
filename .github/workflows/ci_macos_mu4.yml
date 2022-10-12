@@ -217,7 +217,7 @@ jobs:
         bash ./build/ci/tools/sparkle_appcast_gen.sh -p macos   
     - name: Upload artifacts on GitHub
       if: env.DO_BUILD == 'true'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: ./build.artifacts/

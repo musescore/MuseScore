@@ -44,7 +44,7 @@ jobs:
         sudo bash ./build/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
         sudo bash ./build/ci/translation/tx_push.sh
     - name: Upload artifacts on GitHub
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: MuseScore_tsfiles_${{ env.BUILD_NUMBER }}
         path: ./share/locale
