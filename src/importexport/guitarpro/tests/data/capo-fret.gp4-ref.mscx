@@ -72,6 +72,10 @@
             <subtype>f</subtype>
             <velocity>96</velocity>
             </Dynamic>
+          <Tempo>
+            <tempo>1.166667</tempo>
+            <text><sym>metNoteQuarterUp</sym> = 70</text>
+            </Tempo>
           <Chord>
             <durationType>half</durationType>
             <Note>
