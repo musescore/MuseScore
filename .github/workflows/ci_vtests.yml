@@ -88,7 +88,7 @@ jobs:
       run: |
         xvfb-run ./vtest/vtest-generate-pngs.sh -o ./current_pngs -m $HOME/musescore_install/bin/mscore
     - name: Upload PNGs
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: Current PNGs
         path: ./current_pngs
@@ -127,7 +127,7 @@ jobs:
       run: |
         xvfb-run ./vtest/vtest-generate-pngs.sh -o ./reference_pngs -m $HOME/musescore_install/bin/mscore
     - name: Upload PNGs
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: Reference PNGs
         path: ./reference_pngs
@@ -156,7 +156,7 @@ jobs:
         ./vtest/vtest-compare-pngs.sh
     - name: Upload comparison
       if: env.VTEST_DIFF_FOUND == 'true'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ needs.setup.outputs.artifact_name }}
         path: ./comparison

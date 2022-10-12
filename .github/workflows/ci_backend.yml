@@ -68,7 +68,7 @@ jobs:
 
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ env.GITHUB_ARTIFACT_NAME }}
         path: ./build.artifacts/

@@ -116,7 +116,7 @@ jobs:
         bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: MuseScore_x64_${{ github.run_id }}
         path: build.artifacts\ 
