@@ -3305,12 +3305,6 @@ void Score::padToggle(Pad p, const EditData& ed)
             undoChangeChordRestLen(cr, _is.duration());
         } else {
             changeCRlen(cr, _is.duration());
-
-            for (const SymId& articulationId: _is.articulationIds()) {
-                Articulation* na = Factory::createArticulation(cr);
-                na->setSymId(articulationId);
-                toggleArticulation(cr, na);
-            }
         }
     }
 }
