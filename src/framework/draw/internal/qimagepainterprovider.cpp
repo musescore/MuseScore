@@ -22,6 +22,8 @@
 
 #include "qimagepainterprovider.h"
 
+#include <QPainter>
+
 #include "log.h"
 
 namespace mu::draw {
