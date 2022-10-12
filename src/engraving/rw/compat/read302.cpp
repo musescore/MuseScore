@@ -219,7 +219,6 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
     }
 
     score->connectTies();
-    score->relayoutForStyles(); // force relayout if certain style settings are enabled
 
     score->_fileDivision = Constants::division;
 
