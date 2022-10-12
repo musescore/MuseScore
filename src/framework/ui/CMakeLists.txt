@@ -67,9 +67,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inavigation.h
     ${CMAKE_CURRENT_LIST_DIR}/inavigationcontroller.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/types/mnemonicstring.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/types/mnemonicstring.h
-
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiengine.cpp
