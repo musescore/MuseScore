@@ -168,6 +168,7 @@ private:
     void addFermatas();
     void addTempoMap();
     void fillUncompletedMeasure(const Context& ctx);
+    void hideRestsInEmptyMeasures(track_idx_t track);
     int getStringNumberFor(Note* pNote, int pitch) const;
     void fillTuplet();
     bool tupletParamsChanged(const GPBeat* beat, const ChordRest* cr);
@@ -233,8 +234,13 @@ private:
     std::vector<Bend*> m_bends;
 #endif
 
+    static constexpr voice_idx_t VOICES = 4;
+
     Measure* _lastMeasure = nullptr;
     bool m_showCapo = true; // TODO-gp : settings
+    bool m_multiVoice = false;
+    std::unordered_map<Measure*, std::array<int, VOICES> > m_chordsInMeasureByVoice; /// if measure has any chord for specific voice, rests are hidden
+    std::unordered_map<Measure*, size_t> m_chordsInMeasure;
 };
 } //end Ms namespace
 #endif // SCOREDOMBUILDER_H
