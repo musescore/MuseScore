@@ -59,14 +59,14 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Dynamic>
-            <subtype>f</subtype>
-            <velocity>96</velocity>
-            </Dynamic>
           <Tempo>
             <tempo>2</tempo>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            </Dynamic>
           <Spanner type="Volta">
             <Volta>
               <beginText>1</beginText>

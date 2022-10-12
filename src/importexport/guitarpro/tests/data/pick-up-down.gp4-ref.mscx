@@ -58,14 +58,14 @@
             <sigN>5</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Dynamic>
-            <subtype>mf</subtype>
-            <velocity>80</velocity>
-            </Dynamic>
           <Tempo>
             <tempo>2</tempo>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            </Dynamic>
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>

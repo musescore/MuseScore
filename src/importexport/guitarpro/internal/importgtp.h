@@ -223,18 +223,18 @@ protected:
     Hairpin** hairpins = nullptr;
     MasterScore* score = nullptr;
     mu::io::IODevice* f = nullptr;
-    int curPos;
-    int previousTempo;
-    int previousDynamic;
+    int curPos = 0;
+    int previousTempo = -1;
+    int previousDynamic = -1;
     std::vector<int> ottavaFound;
     std::vector<String> ottavaValue;
     std::map<int, std::pair<int, bool> > tempoMap;
-    int tempo;
+    int tempo = -1;
     std::map<int, int> slides;
 
     GPLyrics gpLyrics;
-    int slide;
-    int voltaSequence;
+    int slide = 0;
+    int voltaSequence = 0;
     Slur** slurs       { nullptr };
 
 #ifdef ENGRAVING_USE_STRETCHED_BENDS
