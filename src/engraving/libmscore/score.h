@@ -1014,7 +1014,6 @@ public:
     Segment* lastSegmentMM() const;
 
     void connectTies(bool silent = false);
-    void relayoutForStyles();
 
     double point(const Spatium sp) const { return sp.val() * spatium(); }
 
