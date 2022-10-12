@@ -84,7 +84,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static ChordRest* toChordOrRest(EngravingItem* el)
+static ChordRest* chordOrRest(EngravingItem* el)
 {
     if (el) {
         if (el->isNote()) {
@@ -119,13 +119,12 @@ Note* Score::getSelectedNote()
 
 ChordRest* Score::getSelectedChordRest() const
 {
-    EngravingItem* e = selection().element();
-    if (!e || !e->isChordRest()) {
+    ChordRest* cr = chordOrRest(selection().element());
+    if (!cr) {
         MScore::setError(MsError::NO_NOTE_REST_SELECTED);
-        return nullptr;
     }
 
-    return toChordRest(e);
+    return cr;
 }
 
 //---------------------------------------------------------
@@ -637,7 +636,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement, 
         break;
     }
     case TextStyleType::REHEARSAL_MARK: {
-        ChordRest* chordRest = toChordOrRest(destinationElement);
+        ChordRest* chordRest = chordOrRest(destinationElement);
         if (!chordRest) {
             break;
         }
@@ -646,7 +645,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement, 
         break;
     }
     case TextStyleType::STAFF: {
-        ChordRest* chordRest = toChordOrRest(destinationElement);
+        ChordRest* chordRest = chordOrRest(destinationElement);
         if (!chordRest) {
             break;
         }
@@ -655,7 +654,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement, 
         break;
     }
     case TextStyleType::SYSTEM: {
-        ChordRest* chordRest = toChordOrRest(destinationElement);
+        ChordRest* chordRest = chordOrRest(destinationElement);
         if (!chordRest) {
             break;
         }
@@ -664,7 +663,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement, 
         break;
     }
     case TextStyleType::EXPRESSION: {
-        ChordRest* chordRest = toChordOrRest(destinationElement);
+        ChordRest* chordRest = chordOrRest(destinationElement);
         if (!chordRest) {
             break;
         }
@@ -675,7 +674,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement, 
         break;
     }
     case TextStyleType::INSTRUMENT_CHANGE: {
-        ChordRest* chordRest = toChordOrRest(destinationElement);
+        ChordRest* chordRest = chordOrRest(destinationElement);
         if (!chordRest) {
             break;
         }
@@ -684,7 +683,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement, 
         break;
     }
     case TextStyleType::STICKING: {
-        ChordRest* chordRest = toChordOrRest(destinationElement);
+        ChordRest* chordRest = chordOrRest(destinationElement);
         if (!chordRest) {
             break;
         }
@@ -723,7 +722,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement, 
             track = fretDiagram->track();
             newParent = fretDiagram->segment();
         } else {
-            ChordRest* chordRest = toChordOrRest(destinationElement);
+            ChordRest* chordRest = chordOrRest(destinationElement);
             if (chordRest) {
                 track = chordRest->track();
                 newParent = chordRest->segment();
@@ -778,7 +777,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement, 
         break;
     }
     case TextStyleType::TEMPO: {
-        ChordRest* chordRest = toChordOrRest(destinationElement);
+        ChordRest* chordRest = chordOrRest(destinationElement);
         if (!chordRest) {
             break;
         }
