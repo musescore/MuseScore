@@ -335,6 +335,10 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
                    && defaultStyleVersion() < 400) {
             // Ignoring pre-4.0 articulation style settings. Using the new defaults instead
             e.skipCurrentElement();
+        } else if ((tag == "bracketDistance")
+                   && defaultStyleVersion() < 400) {
+            // Ignoring pre-4.0 brackets distance settings. Using the new defaults instead.
+            e.skipCurrentElement();
         } else if (!readProperties(e)) {
             e.unknown();
         }
