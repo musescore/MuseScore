@@ -419,6 +419,9 @@ void Score::update(bool resetCmdState)
         ms->deletePostponed();
         if (cs.layoutRange()) {
             for (Score* s : ms->scoreList()) {
+                if (!s->isOpen() && !ms->scoreList().size() == 1) {
+                    continue;
+                }
                 s->doLayoutRange(cs.startTick(), cs.endTick());
             }
             updateAll = true;
