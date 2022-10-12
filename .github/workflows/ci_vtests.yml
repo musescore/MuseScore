@@ -19,7 +19,7 @@ jobs:
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: "Configure workflow"
       run: |
         sudo bash ./build/ci/tools/make_build_number.sh
@@ -65,7 +65,7 @@ jobs:
     if: needs.setup.outputs.do_run == 'true' # Can't use env: see https://github.com/actions/runner/issues/480
     steps:
     - name: Clone repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Ccache cache files
       uses: actions/cache@v2
       with:
@@ -100,7 +100,7 @@ jobs:
     if: needs.setup.outputs.do_run == 'true'
     steps:
     - name: Clone repository and checkout reference commit
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: ${{ needs.setup.outputs.reference_sha }}
     - name: Ccache cache files
@@ -122,7 +122,7 @@ jobs:
         bash ninja_build.sh -t clean
         MUSESCORE_INSTALL_DIR="$HOME/musescore_install" bash ninja_build.sh -t installdebug
     - name: Checkout current commit
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Generate reference PNGs
       run: |
         xvfb-run ./vtest/vtest-generate-pngs.sh -o ./reference_pngs -m $HOME/musescore_install/bin/mscore
@@ -139,7 +139,7 @@ jobs:
     if: needs.setup.outputs.do_run == 'true'
     steps:
     - name: Clone repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Download current PNGs
       uses: actions/download-artifact@v2
       with:
