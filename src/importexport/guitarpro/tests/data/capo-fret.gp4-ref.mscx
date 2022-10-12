@@ -65,6 +65,10 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Tempo>
+            <tempo>1.166667</tempo>
+            <text><sym>metNoteQuarterUp</sym> = 70</text>
+            </Tempo>
           <StaffText>
             <text>Capo. fret 1</text>
             </StaffText>
@@ -72,10 +76,6 @@
             <subtype>f</subtype>
             <velocity>96</velocity>
             </Dynamic>
-          <Tempo>
-            <tempo>1.166667</tempo>
-            <text><sym>metNoteQuarterUp</sym> = 70</text>
-            </Tempo>
           <Chord>
             <durationType>half</durationType>
             <Note>
