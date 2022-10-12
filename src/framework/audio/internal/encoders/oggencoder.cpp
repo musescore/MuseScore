@@ -32,15 +32,18 @@ using namespace mu::audio::encode;
 size_t OggEncoder::encode(samples_t samplesPerChannel, const float* input)
 {
     m_progress.progressChanged.send(0, 100, "");
-    size_t result = ope_encoder_write_float(m_opusEncoder, input, samplesPerChannel + m_format.sampleRate * 2);
+    if (ope_encoder_write_float(m_opusEncoder, input, samplesPerChannel + m_format.sampleRate * 2)) {
+        return 0; // FIX: failed encode will still confuse musescore
+    }
     m_progress.progressChanged.send(100, 100, "");
 
-    return result;
+    return 1;
 }
 
 size_t OggEncoder::flush()
 {
-    return ope_encoder_flush_header(m_opusEncoder);
+    ope_encoder_drain(m_opusEncoder);
+    return 0;
 }
 
 size_t OggEncoder::requiredOutputBufferSize(samples_t /*totalSamplesNumber*/) const
