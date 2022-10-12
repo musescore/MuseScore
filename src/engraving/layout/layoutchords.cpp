@@ -602,6 +602,9 @@ double LayoutChords::layoutChords2(std::vector<Note*>& notes, bool up)
             }
         }
         note->setMirror(mirror);
+        if (chord->stem()) {
+            chord->stem()->layout(); // needed because mirroring can cause stem position to change
+        }
 
         // accumulate return value
         if (!mirror) {
