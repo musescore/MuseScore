@@ -177,7 +177,8 @@ void TrackList::append(EngravingItem* e)
                 ChordRest* src = toChordRest(e);
                 Segment* s1 = src->segment();
                 for (EngravingItem* ee : s1->annotations()) {
-                    if (ee->track() == e->track()) {
+                    bool addSysObject = ee->systemFlag() && !ee->isLinked() && ee->track() == 0 && e->track() == 0;
+                    if (addSysObject || (!ee->systemFlag() && ee->track() == e->track())) {
                         _range->annotations.push_back({ s1->tick(), ee->clone() });
                     }
                 }
