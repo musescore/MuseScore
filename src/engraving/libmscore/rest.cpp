@@ -398,9 +398,18 @@ void Rest::layout()
     int lines      = st ? st->lines() : 5;
     int lineOffset = computeLineOffset(lines);
 
+    int snappedLineOffset = voice() & 1 ? ceil((double)lineOffset / 2.) : floor((double)lineOffset / 2.);
+
     int yo;
-    m_sym = getSymbol(durationType().type(), lineOffset / 2 + userLine, lines, &yo);
-    setPosY((double(yo) + double(lineOffset) * .5) * lineDist * _spatium);
+    m_sym = getSymbol(durationType().type(), snappedLineOffset + userLine, lines, &yo);
+    double yOffset = double(yo) + double(snappedLineOffset);
+    if (yOffset < -1.0 && (lineOffset & 1)) {
+        yOffset += 0.5;
+    } else if (yOffset > double(lines) && (lineOffset & 1)) {
+        yOffset -= 0.5;
+    }
+    setPosY(yOffset * lineDist * _spatium);
+
     if (!shouldNotBeDrawn()) {
         setbbox(symBbox(m_sym));
     }
@@ -570,6 +579,14 @@ int Rest::computeLineOffset(int lines)
             while (seg) {
                 for (const track_idx_t track : { firstTrack + upOffset, firstTrack + 2 + upOffset }) {
                     EngravingItem* e = seg->element(track);
+                    if (!e) {
+                        Segment* startSeg = seg;
+                        while (startSeg && !e) {
+                            if (startSeg = startSeg->prev()) {
+                                e = startSeg->element(track);
+                            }
+                        }
+                    }
                     if (e && e->isChord()) {
                         Chord* chord = toChord(e);
                         StaffGroup staffGroup = staff()->staffType(chord->tick())->group();
@@ -659,16 +676,6 @@ int Rest::computeLineOffset(int lines)
         // adjust offsets for staves with other than five lines
         if (lines != 5) {
             lineOffset += centerDiff;
-            if (centerDiff & 1) {
-                // round to line
-                if (lines == 2 && staff() && staff()->lineDistance(tick()) < 2.0) {
-                    // leave alone
-                } else if (lines <= 6) {
-                    lineOffset += lineOffset > 0 ? -1 : 1;              // round inward
-                } else {
-                    lineOffset += lineOffset > 0 ? 1 : -1;              // round outward
-                }
-            }
         }
     } else {
         // Gould says to center rests on middle line or space
