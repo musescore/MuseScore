@@ -25,6 +25,9 @@
 using namespace mu;
 using namespace mu::vst;
 
+static constexpr ControllIdx SUSTAIN_IDX = static_cast<ControllIdx>(Steinberg::Vst::kCtrlSustainOnOff);
+static const mpe::ArticulationTypeSet PEDAL_CC_SUPPORTED_TYPES { mpe::ArticulationType::Pedal };
+
 void VstSequencer::init(ParamsMapping&& mapping)
 {
     m_mapping = std::move(mapping);
@@ -83,11 +86,41 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
 
             destination[timestampFrom].emplace(buildEvent(VstEvent::kNoteOnEvent, noteId, velocityFraction));
             destination[timestampTo].emplace(buildEvent(VstEvent::kNoteOffEvent, noteId, velocityFraction));
+
+            appendControlSwitch(destination, noteEvent, PEDAL_CC_SUPPORTED_TYPES, SUSTAIN_IDX);
         }
     }
 }
 
-VstEvent VstSequencer::buildEvent(const VstEvent::EventTypes type, const int32_t noteIdx, const float velocityFraction)
+void VstSequencer::appendControlSwitch(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
+                                       const mpe::ArticulationTypeSet& appliableTypes, const ControllIdx controlIdx)
+{
+    auto controlIt = m_mapping.find(controlIdx);
+    if (controlIt == m_mapping.cend()) {
+        return;
+    }
+
+    mpe::ArticulationType currentType = mpe::ArticulationType::Undefined;
+
+    for (const mpe::ArticulationType type : appliableTypes) {
+        if (noteEvent.expressionCtx().articulations.contains(type)) {
+            currentType = type;
+            break;
+        }
+    }
+
+    if (currentType != mpe::ArticulationType::Undefined) {
+        const mpe::ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(currentType);
+        const mpe::ArticulationMeta& articulationMeta = articulationData.meta;
+
+        destination[noteEvent.arrangementCtx().actualTimestamp].emplace(buildParamInfo(controlIt->second, 1 /*on*/));
+        destination[articulationMeta.timestamp + articulationMeta.overallDuration].emplace(buildParamInfo(controlIt->second, 0 /*off*/));
+    } else {
+        destination[noteEvent.arrangementCtx().actualTimestamp].emplace(buildParamInfo(controlIt->second, 0 /*off*/));
+    }
+}
+
+VstEvent VstSequencer::buildEvent(const VstEvent::EventTypes type, const int32_t noteIdx, const float velocityFraction) const
 {
     VstEvent result;
 
@@ -112,6 +145,15 @@ VstEvent VstSequencer::buildEvent(const VstEvent::EventTypes type, const int32_t
     }
 
     return result;
+}
+
+PluginParamInfo VstSequencer::buildParamInfo(const PluginParamId id, const PluginParamValue value) const
+{
+    PluginParamInfo info;
+    info.id = id;
+    info.defaultNormalizedValue = value;
+
+    return info;
 }
 
 int32_t VstSequencer::noteIndex(const mpe::pitch_level_t pitchLevel) const
