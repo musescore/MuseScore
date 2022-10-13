@@ -52,6 +52,9 @@ public:
     virtual void setExcerptIsOpen(const INotationPtr excerptNotation, bool opened) = 0;
 
     virtual INotationPartsPtr parts() const = 0;
+    virtual bool hasParts() const = 0;
+    virtual async::Notification hasPartsChanged() const = 0;
+
     virtual INotationPlaybackPtr playback() const = 0;
 };
 
