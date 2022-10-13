@@ -149,6 +149,11 @@ void ProjectAutoSaver::onTrySave()
         return;
     }
 
+    if (!project->canSave()) {
+        LOGD() << "[autosave] project could not be saved";
+        return;
+    }
+
     io::path_t projectPath = this->projectPath(project);
     io::path_t savePath = project->isNewlyCreated() ? projectPath : projectAutoSavePath(projectPath);
 

@@ -752,6 +752,11 @@ mu::ValNt<bool> NotationProject::needSave() const
     return needSave;
 }
 
+bool NotationProject::canSave() const
+{
+    return m_masterNotation->hasParts();
+}
+
 ProjectMeta NotationProject::metaInfo() const
 {
     TRACEFUNC;
