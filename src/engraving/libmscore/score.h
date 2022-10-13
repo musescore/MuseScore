@@ -477,7 +477,7 @@ private:
                                     const SelectionFilter& filter);
     ChordRest* deleteRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd, const SelectionFilter& filter);
 
-    void update(bool resetCmdState);
+    void update(bool resetCmdState, bool layoutAllParts = false);
 
     ID newStaffId() const;
     ID newPartId() const;
@@ -744,7 +744,7 @@ public:
     void timeDelete(Measure*, Segment*, const Fraction&);
 
     void startCmd();                    // start undoable command
-    void endCmd(bool rollback = false); // end undoable command
+    void endCmd(bool rollback = false, bool layoutAllParts = false); // end undoable command
     void update() { update(true); }
     void undoRedo(bool undo, EditData*);
 

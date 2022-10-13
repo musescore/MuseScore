@@ -903,6 +903,9 @@ bool Score::isOpen() const
 void Score::setIsOpen(bool open)
 {
     _isOpen = open;
+    if (open) {
+        doLayout();
+    }
 }
 
 //---------------------------------------------------------

@@ -431,6 +431,12 @@ mu::ValNt<bool> MasterNotation::needSave() const
 
 void MasterNotation::initExcerpts(const ExcerptNotationList& excerpts)
 {
+    // Scores that are closed may have never been laid out, so we lay them out now
+    for (auto score : masterScore()->scoreList()) {
+        if (!score->isOpen()) {
+            score->doLayout();
+        }
+    }
     for (IExcerptNotationPtr excerptNotation : excerpts) {
         ExcerptNotation* impl = get_impl(excerptNotation);
 
