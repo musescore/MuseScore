@@ -96,7 +96,7 @@ TEST_F(Engraving_RemoveTests, removeStaff)
     // Remove the second staff and see what happens
     score->startCmd();
     score->cmdRemoveStaff(1);
-    score->endCmd();
+    score->endCmd(false, /*layoutAllParts = */ true);
 
     EXPECT_FALSE(staffHasElements(score, 1));
     for (Excerpt* ex : score->excerpts()) {
