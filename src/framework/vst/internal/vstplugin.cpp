@@ -118,6 +118,8 @@ void VstPlugin::unload()
     Async::call(this, [this]() {
         ONLY_MAIN_THREAD(threadSecurer);
 
+        modulesRepo()->removePluginModule(m_resourceId);
+
         std::lock_guard lock(m_mutex);
 
         m_module = nullptr;
