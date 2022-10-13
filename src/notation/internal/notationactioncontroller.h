@@ -72,6 +72,7 @@ public:
 
 private:
     INotationPtr currentNotation() const;
+    IMasterNotationPtr currentMasterNotation() const;
     INotationElementsPtr currentNotationElements() const;
     INotationSelectionPtr currentNotationSelection() const;
     INotationUndoStackPtr currentNotationUndoStack() const;
