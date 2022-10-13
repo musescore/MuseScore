@@ -24,6 +24,7 @@
 
 #include <QWindow>
 #include <QTimer>
+#include <QKeyEvent>
 
 #include "vsttypes.h"
 #include "internal/vstplugin.h"
@@ -157,11 +158,27 @@ void AbstractVstEditorView::moveViewToMainWindowCenter()
     move(x, y);
 }
 
-void AbstractVstEditorView::showEvent(QShowEvent* event)
+void AbstractVstEditorView::showEvent(QShowEvent* ev)
 {
     moveViewToMainWindowCenter();
 
-    QDialog::showEvent(event);
+    TopLevelDialog::showEvent(ev);
+}
+
+bool AbstractVstEditorView::event(QEvent* ev)
+{
+    if (ev && ev->spontaneous() && ev->type() == QEvent::ShortcutOverride) {
+        if (QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(ev)) {
+            int key = keyEvent->key();
+
+            if (key == 0 || key == static_cast<int>(Qt::Key_unknown)) {
+                keyEvent->accept();
+                return true;
+            }
+        }
+    }
+
+    return TopLevelDialog::event(ev);
 }
 
 FIDString AbstractVstEditorView::currentPlatformUiType() const
