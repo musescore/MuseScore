@@ -105,11 +105,12 @@ void MixerPanelContextMenuModel::load()
         viewMenuItems << buildViewMenuItem(sectionType);
     }
 
-    MenuItemList viewMenu {
+    MenuItemList items {
+        makeMenuItem("playback-setup"),
         makeMenu(TranslatableString("playback", "View"), viewMenuItems, VIEW_MENU_ID)
     };
 
-    setItems(viewMenu);
+    setItems(items);
 }
 
 bool MixerPanelContextMenuModel::isSectionVisible(MixerSectionType sectionType) const
