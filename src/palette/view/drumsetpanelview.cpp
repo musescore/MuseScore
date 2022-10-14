@@ -97,6 +97,10 @@ void DrumsetPanelView::componentComplete()
 
     m_adapter = std::make_shared<DrumsetPaletteAdapter>();
 
+    m_adapter->pitchNameChanged().onReceive(this, [this](const QString& pitchName) {
+        setPitchName(pitchName);
+    });
+
     initDrumsetPalette();
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         initDrumsetPalette();
@@ -105,10 +109,6 @@ void DrumsetPanelView::componentComplete()
     updateColors();
     notationConfiguration()->foregroundChanged().onNotify(this, [this]() {
         updateColors();
-    });
-
-    m_adapter->pitchNameChanged().onReceive(this, [this](const QString& pitchName) {
-        setPitchName(pitchName);
     });
 
     setWidget(m_adapter);
