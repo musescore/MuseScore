@@ -58,6 +58,7 @@
 #include "slur.h"
 #include "staff.h"
 #include "stafftextbase.h"
+#include "stretchedbend.h"
 #include "swing.h"
 #include "synthesizerstate.h"
 #include "tempo.h"
@@ -490,7 +491,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, double 
 
     // Bends
     for (EngravingItem* e : note->el()) {
-        if (e == 0 || e->type() != ElementType::BEND) {
+        if (e == 0 || (e->type() != ElementType::BEND && e->type() != ElementType::STRETCHED_BEND)) {
             continue;
         }
         Bend* bend = toBend(e);
