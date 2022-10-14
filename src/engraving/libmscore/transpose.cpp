@@ -344,6 +344,9 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             if (!e->staff() || e->staff()->staffType(e->tick())->group() == StaffGroup::PERCUSSION) {
                 continue;
             }
+            if (e->staff()->primaryStaff() && e->staff()->primaryStaff()->staffType(Fraction(0, 1))->group() == StaffGroup::PERCUSSION) {
+                continue;
+            }
             if (e->isNote()) {
                 Note* note = toNote(e);
                 if (mode == TransposeMode::DIATONICALLY) {
@@ -397,6 +400,9 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
     for (staff_idx_t staffIdx = _selection.staffStart(); staffIdx < _selection.staffEnd(); ++staffIdx) {
         Staff* s = staff(staffIdx);
         if (s->staffType(Fraction(0, 1))->group() == StaffGroup::PERCUSSION) {        // ignore percussion staff
+            continue;
+        }
+        if (s->primaryStaff() && s->primaryStaff()->staffType(Fraction(0, 1))->group() == StaffGroup::PERCUSSION) {
             continue;
         }
         if (mu::contains(sl, s)) {
