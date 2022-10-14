@@ -222,8 +222,8 @@ void NotationActionController::init()
     registerAction("chord-tie", &Controller::chordTie);
     registerAction("add-slur", &Controller::addSlur);
 
-    registerAction("undo", &Interaction::undo, &Controller::canUndo);
-    registerAction("redo", &Interaction::redo, &Controller::canRedo);
+    registerAction(UNDO_ACTION_CODE, &Interaction::undo, &Controller::canUndo);
+    registerAction(REDO_ACTION_CODE, &Interaction::redo, &Controller::canRedo);
 
     registerAction("select-next-chord", &Interaction::addToSelection, MoveDirection::Right, MoveSelectionType::Chord, PlayMode::NoPlay,
                    &Controller::isNotNoteInputMode);
@@ -502,8 +502,13 @@ bool NotationActionController::canReceiveAction(const actions::ActionCode& code)
     TRACEFUNC;
 
     //! NOTE If the notation is not loaded, we cannot process anything.
-    if (!currentNotation()) {
+    auto masterNotation = currentMasterNotation();
+    if (!masterNotation) {
         return false;
+    }
+
+    if (!masterNotation->hasParts()) {
+        return code == UNDO_ACTION_CODE || code == REDO_ACTION_CODE;
     }
 
     auto iter = m_isEnabledMap.find(code);
@@ -518,6 +523,11 @@ bool NotationActionController::canReceiveAction(const actions::ActionCode& code)
 INotationPtr NotationActionController::currentNotation() const
 {
     return globalContext()->currentNotation();
+}
+
+IMasterNotationPtr NotationActionController::currentMasterNotation() const
+{
+    return globalContext()->currentMasterNotation();
 }
 
 INotationInteractionPtr NotationActionController::currentNotationInteraction() const

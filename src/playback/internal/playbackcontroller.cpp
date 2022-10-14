@@ -114,7 +114,7 @@ int PlaybackController::currentTick() const
 
 bool PlaybackController::isPlayAllowed() const
 {
-    return m_notation != nullptr && isLoaded();
+    return m_notation != nullptr && m_masterNotation->hasParts() && isLoaded();
 }
 
 Notification PlaybackController::isPlayAllowedChanged() const
@@ -331,10 +331,9 @@ void PlaybackController::onNotationChanged()
         return;
     }
 
-    INotationPartsPtr notationParts = m_notation->parts();
-
     updateMuteStates();
 
+    INotationPartsPtr notationParts = m_notation->parts();
     NotifyList<const Part*> partList = notationParts->partList();
 
     partList.onItemAdded(this, [this](const Part*) {
@@ -343,6 +342,10 @@ void PlaybackController::onNotationChanged()
 
     partList.onItemChanged(this, [this](const Part*) {
         updateMuteStates();
+    });
+
+    m_masterNotation->hasPartsChanged().onNotify(this, [this]() {
+        m_isPlayAllowedChanged.notify();
     });
 
     notationPlayback()->loopBoundariesChanged().onNotify(this, [this]() {
@@ -1194,6 +1197,11 @@ void PlaybackController::applyProfile(const SoundProfileName& profileName)
     }
 
     audioSettingsPtr->setActiveSoundProfile(profileName);
+}
+
+bool PlaybackController::canReceiveAction(const actions::ActionCode&) const
+{
+    return m_masterNotation != nullptr && m_masterNotation->hasParts();
 }
 
 msecs_t PlaybackController::tickToMsecs(int tick) const
