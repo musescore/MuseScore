@@ -33,6 +33,7 @@ void VstSequencer::init(ParamsMapping&& mapping)
     m_mapping = std::move(mapping);
 
     updateDynamicChanges(m_dynamicLevelMap);
+    updateMainStreamEvents(m_playbackEventsMap);
 }
 
 void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
