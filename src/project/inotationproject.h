@@ -58,6 +58,7 @@ public:
     virtual void markAsUnsaved() = 0;
 
     virtual ValNt<bool> needSave() const = 0;
+    virtual bool canSave() const = 0;
 
     virtual Ret save(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save) = 0;
     virtual Ret writeToDevice(QIODevice* device) = 0;

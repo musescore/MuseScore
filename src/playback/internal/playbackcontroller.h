@@ -105,6 +105,8 @@ public:
 
     void applyProfile(const SoundProfileName& profileName) override;
 
+    bool canReceiveAction(const actions::ActionCode& code) const override;
+
 private:
     notation::INotationPlaybackPtr notationPlayback() const;
     notation::INotationPartsPtr masterNotationParts() const;

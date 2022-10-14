@@ -21,10 +21,12 @@
  */
 #include "noteinputbarmodel.h"
 
-#include "log.h"
+#include "async/notifylist.h"
 #include "types/translatablestring.h"
 
 #include "internal/notationuiactions.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::notation;
@@ -156,7 +158,8 @@ void NoteInputBarModel::load()
 
 bool NoteInputBarModel::isInputAllowed() const
 {
-    return notation() != nullptr;
+    auto currentMasterNotation = masterNotation();
+    return currentMasterNotation != nullptr && currentMasterNotation->hasParts();
 }
 
 int NoteInputBarModel::findNoteInputModeItemIndex() const
@@ -185,6 +188,10 @@ void NoteInputBarModel::onNotationChanged()
 
         undoStack()->stackChanged().onNotify(this, [this]() {
             updateState();
+        });
+
+        masterNotation()->hasPartsChanged().onNotify(this, [this]() {
+            emit isInputAllowedChanged();
         });
     }
 
@@ -761,6 +768,11 @@ bool NoteInputBarModel::isMenuSecondary(const ActionCode& actionCode) const
 INotationPtr NoteInputBarModel::notation() const
 {
     return context()->currentNotation();
+}
+
+IMasterNotationPtr NoteInputBarModel::masterNotation() const
+{
+    return context()->currentMasterNotation();
 }
 
 INotationInteractionPtr NoteInputBarModel::interaction() const
