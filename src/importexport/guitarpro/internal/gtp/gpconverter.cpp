@@ -525,11 +525,9 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
 
     curSegment->add(cr);
 
-    if (!_score->styleB(Sid::guitarProMultiVoiceSupport) || m_multiVoice) {
-        if (cr->isChord()) {
-            m_chordsInMeasureByVoice[lastMeasure][cr->voice()]++;
-            m_chordsInMeasure[lastMeasure]++;
-        }
+    if (cr->isChord()) {
+        m_chordsInMeasureByVoice[lastMeasure][cr->voice()]++;
+        m_chordsInMeasure[lastMeasure]++;
     }
 
     convertNotes(beat->notes(), cr);
@@ -886,7 +884,7 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
 
 void GPConverter::setUpGPScore(const GPScore* gpscore)
 {
-    m_multiVoice = gpscore->multiVoice();
+    m_multiVoice = gpscore->multiVoice(); /// TODO: multivoice recognition
 
     std::vector<String> fieldNames = { gpscore->title(), gpscore->subTitle(), gpscore->artist(),
                                        gpscore->album(), gpscore->composer(), gpscore->poet() };
@@ -1084,15 +1082,13 @@ void GPConverter::fillUncompletedMeasure(const Context& ctx)
 void GPConverter::hideRestsInEmptyMeasures(track_idx_t track)
 {
     Measure* lastMeasure = _score->lastMeasure();
-    if (!_score->styleB(Sid::guitarProMultiVoiceSupport) || m_multiVoice) {
-        for (Segment* segment = lastMeasure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
-            EngravingItem* element = segment->element(track);
-            if (element && element->isRest()) {
-                if (m_chordsInMeasureByVoice[lastMeasure][element->voice()] == 0) {
-                    bool measureHasChords = m_chordsInMeasure[lastMeasure] != 0;
-                    if (measureHasChords || (!measureHasChords && element->voice() != 0)) {
-                        toRest(element)->setGap(true);
-                    }
+    for (Segment* segment = lastMeasure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+        EngravingItem* element = segment->element(track);
+        if (element && element->isRest()) {
+            if (m_chordsInMeasureByVoice[lastMeasure][element->voice()] == 0) {
+                bool measureHasChords = m_chordsInMeasure[lastMeasure] != 0;
+                if (measureHasChords || (!measureHasChords && element->voice() != 0)) {
+                    toRest(element)->setGap(true);
                 }
             }
         }
