@@ -631,6 +631,18 @@ static inline const StaffTextBase* toStaffTextBase(const EngravingObject* e)
     return (const StaffTextBase*)e;
 }
 
+static inline Bend* toBend(EngravingObject* e)
+{
+    assert(e == 0 || e->isBend() || e->isStretchedBend());
+    return (Bend*)e;
+}
+
+static inline const Bend* toBend(const EngravingObject* e)
+{
+    assert(e == 0 || e->isBend() || e->isStretchedBend());
+    return (const Bend*)e;
+}
+
 #define CONVERT(a)  \
     static inline a* to##a(EngravingObject * e) { assert(e == 0 || e->is##a()); return (a*)e; } \
     static inline const a* to##a(const EngravingObject * e) { assert(e == 0 || e->is##a()); return (const a*)e; }
@@ -689,7 +701,6 @@ CONVERT(MeasureNumber)
 CONVERT(MMRestRange)
 CONVERT(Hairpin)
 CONVERT(HairpinSegment)
-CONVERT(Bend)
 CONVERT(StretchedBend)
 CONVERT(TremoloBar)
 CONVERT(MeasureRepeat)
