@@ -270,7 +270,7 @@ const PlaybackSetupData& WindsSetupDataResolver::doResolve(const Instrument* ins
         { "e-horn", { SoundId::Horn, SoundCategory::Winds, {}, {} } },
         { "eb-horn", { SoundId::Horn, SoundCategory::Winds, {}, {} } },
         { "d-horn", { SoundId::Horn, SoundCategory::Winds, {}, {} } },
-        { "horn", { SoundId::Horn, SoundCategory::Winds, {}, {} } },
+        { "horn", { SoundId::Horn, SoundCategory::Winds, { SoundSubCategory::French }, {} } },
         { "c-horn", { SoundId::Horn, SoundCategory::Winds, {}, {} } },
         { "c-horn-bass", { SoundId::Horn, SoundCategory::Winds, { SoundSubCategory::Bass }, {} } },
         { "bb-horn-basso", { SoundId::Horn, SoundCategory::Winds, { SoundSubCategory::Bass }, {} } },

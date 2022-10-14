@@ -412,6 +412,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::BrassGroup,  {} }, { midi::Program(0, 61) } },
 
         { { mpe::SoundId::Horn,  {} }, { midi::Program(0, 60), midi::Program(0, 59) } },
+        { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::French } }, { midi::Program(0, 60), midi::Program(0, 59) } },
         { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::Alto } }, { midi::Program(0, 60), midi::Program(0, 59) } },
         { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::Bass } }, { midi::Program(0, 60), midi::Program(0, 59) } },
         { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::Vienna } }, { midi::Program(0, 60), midi::Program(0, 59) } },
