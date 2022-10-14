@@ -53,6 +53,7 @@ private:
 
     QList<mu::engraving::EngravingItem*> findChords() const;
     QList<mu::engraving::EngravingItem*> findNotes() const;
+    QList<mu::engraving::EngravingItem*> findElementsForNotes() const;
     QList<mu::engraving::EngravingItem*> findNoteHeads() const;
     QList<mu::engraving::EngravingItem*> findStems() const;
     QList<mu::engraving::EngravingItem*> findHooks() const;
