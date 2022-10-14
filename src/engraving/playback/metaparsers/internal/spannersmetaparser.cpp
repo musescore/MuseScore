@@ -26,12 +26,28 @@
 #include "libmscore/note.h"
 #include "libmscore/spanner.h"
 #include "libmscore/trill.h"
+#include "libmscore/pedal.h"
+#include "libmscore/tempo.h"
 
 #include "playback/utils/pitchutils.h"
 
 using namespace mu::engraving;
 
-void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
+bool SpannersMetaParser::isAbleToParse(const EngravingItem* spannerItem)
+{
+    static const std::unordered_set<ElementType> SUPPORTED_TYPES = {
+        ElementType::SLUR,
+        ElementType::PEDAL,
+        ElementType::LET_RING,
+        ElementType::PALM_MUTE,
+        ElementType::TRILL,
+        ElementType::GLISSANDO,
+    };
+
+    return SUPPORTED_TYPES.find(spannerItem->type()) != SUPPORTED_TYPES.cend();
+}
+
+void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingContext& spannerCtx, mpe::ArticulationMap& result)
 {
     IF_ASSERT_FAILED(item->isSpanner()) {
         return;
@@ -43,7 +59,7 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
 
     mpe::pitch_level_t overallPitchRange = 0;
     mpe::dynamic_level_t overallDynamicRange = 0;
-    int overallDurationTicks = spanner->ticks().ticks();
+    int overallDurationTicks = spannerCtx.nominalDurationTicks;
 
     switch (spanner->type()) {
     case ElementType::SLUR: {
@@ -64,9 +80,15 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
 
         break;
     }
-    case ElementType::PEDAL:
+    case ElementType::PEDAL: {
         type = mpe::ArticulationType::Pedal;
+        const Pedal* pedal = toPedal(spanner);
+        if (pedal->endHookType() == HookType::HOOK_45) {
+            overallDurationTicks -= Constants::division / 4;
+        }
+
         break;
+    }
     case ElementType::LET_RING:
         type = mpe::ArticulationType::LaissezVibrer;
         break;
@@ -90,7 +112,7 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
         } else if (trill->trillType() == TrillType::PRALLPRALL_LINE) {
             type = mpe::ArticulationType::LinePrall;
         }
-        overallDurationTicks = ctx.nominalDurationTicks;
+        overallDurationTicks = spannerCtx.nominalDurationTicks;
         break;
     }
     case ElementType::GLISSANDO: {
@@ -135,11 +157,32 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
 
     mpe::ArticulationMeta articulationMeta;
     articulationMeta.type = type;
-    articulationMeta.pattern = ctx.profile->pattern(type);
-    articulationMeta.timestamp = ctx.nominalTimestamp;
+    articulationMeta.pattern = spannerCtx.profile->pattern(type);
+    articulationMeta.timestamp = spannerCtx.nominalTimestamp;
     articulationMeta.overallPitchChangesRange = overallPitchRange;
     articulationMeta.overallDynamicChangesRange = overallDynamicRange;
-    articulationMeta.overallDuration = durationFromTicks(ctx.beatsPerSecond.val, overallDurationTicks);
+    articulationMeta.overallDuration = spannerDuration(spanner->score(),
+                                                       spannerCtx.nominalPositionStartTick,
+                                                       overallDurationTicks);
 
     appendArticulationData(std::move(articulationMeta), result);
+}
+
+mu::mpe::duration_t SpannersMetaParser::spannerDuration(const Score* score, const int positionTick, const int durationTicks)
+{
+    if (!score) {
+        return 0;
+    }
+
+    BeatsPerSecond startBps = score->tempomap()->tempo(positionTick);
+    BeatsPerSecond endBps = score->tempomap()->tempo(positionTick + durationTicks);
+
+    if (startBps == endBps) {
+        return durationFromTicks(startBps.val, durationTicks);
+    }
+
+    mpe::duration_t result = (durationFromTicks(startBps.val, durationTicks) +
+                              durationFromTicks(endBps.val, durationTicks)) / 2;
+
+    return result;
 }

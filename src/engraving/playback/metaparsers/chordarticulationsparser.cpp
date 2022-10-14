@@ -96,10 +96,16 @@ void ChordArticulationsParser::parseSpanners(const Chord* chord, const Rendering
         return;
     }
 
-    auto intervals = spannerMap.findOverlapping(ctx.nominalPositionStartTick, ctx.nominalPositionEndTick);
+    auto intervals = spannerMap.findOverlapping(ctx.nominalPositionStartTick,
+                                                ctx.nominalPositionEndTick,
+                                                /*excludeCollisions*/ true);
 
     for (const auto& interval : intervals) {
         Spanner* spanner = interval.value;
+
+        if (!SpannersMetaParser::isAbleToParse(spanner)) {
+            continue;
+        }
 
         if (spanner->part() != chord->part()) {
             continue;
@@ -115,7 +121,6 @@ void ChordArticulationsParser::parseSpanners(const Chord* chord, const Rendering
 
         RenderingContext spannerContext = ctx;
         spannerContext.nominalTimestamp = timestampFromTicks(score, spannerFrom + ctx.positionTickOffset);
-        spannerContext.nominalDuration = durationFromTicks(ctx.beatsPerSecond.val, spannerDurationTicks);
         spannerContext.nominalPositionStartTick = spannerFrom;
         spannerContext.nominalDurationTicks = spannerDurationTicks;
 

@@ -22,6 +22,7 @@
 
 #include "spannermap.h"
 #include "spanner.h"
+#include "part.h"
 
 #include "log.h"
 
@@ -45,11 +46,13 @@ SpannerMap::SpannerMap()
 
 void SpannerMap::update() const
 {
-    std::vector<interval_tree::Interval<Spanner*> > intervals;
-    for (auto i : *this) {
-        intervals.push_back(interval_tree::Interval<Spanner*>(i.second->tick().ticks(), i.second->tick2().ticks(), i.second));
-    }
-    tree = interval_tree::IntervalTree<Spanner*>(intervals);
+    IntervalList regularIntervals;
+    IntervalList collisionFreeIntervals;
+
+    collectIntervals(regularIntervals, collisionFreeIntervals);
+
+    tree = interval_tree::IntervalTree<Spanner*>(regularIntervals);
+    collisionFreeTree = interval_tree::IntervalTree<Spanner*>(collisionFreeIntervals);
     dirty = false;
 }
 
@@ -57,13 +60,20 @@ void SpannerMap::update() const
 //   findContained
 //---------------------------------------------------------
 
-const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findContained(int start, int stop) const
+const SpannerMap::IntervalList& SpannerMap::findContained(int start, int stop, bool excludeCollisions) const
 {
     if (dirty) {
         update();
     }
+
     results.clear();
-    tree.findContained(start, stop, results);
+
+    if (excludeCollisions) {
+        collisionFreeTree.findContained(start, stop, results);
+    } else {
+        tree.findContained(start, stop, results);
+    }
+
     return results;
 }
 
@@ -71,14 +81,65 @@ const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findContained
 //   findOverlapping
 //---------------------------------------------------------
 
-const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findOverlapping(int start, int stop) const
+const SpannerMap::IntervalList& SpannerMap::findOverlapping(int start, int stop, bool excludeCollisions) const
 {
     if (dirty) {
         update();
     }
+
     results.clear();
-    tree.findOverlapping(start, stop, results);
+
+    if (excludeCollisions) {
+        collisionFreeTree.findOverlapping(start, stop, results);
+    } else {
+        tree.findOverlapping(start, stop, results);
+    }
+
     return results;
+}
+
+void SpannerMap::collectIntervals(IntervalList& regularIntervals, IntervalList& collisionFreeIntervals) const
+{
+    using IntervalsByType = std::map<ElementType, IntervalList>;
+    using IntervalsByPart = std::map<ID, IntervalsByType>;
+
+    IntervalsByPart intervalsByPart;
+
+    //!Note Because of the current UX of spanners adjustments spanners collision is a regular thing,
+    //!     so we have to manage those cases when two similar spanners (e.g. Pedal line) are overlapping
+    //!     with each other.
+    constexpr int collidingSpannersPadding = 1;
+
+    for (const auto& pair : *this) {
+        int newSpannerStartTick = pair.second->tick().ticks();
+        int newSpannerEndTick = pair.second->tick2().ticks();
+
+        IntervalsByType& intervalsByType = intervalsByPart[pair.second->part()->id()];
+        IntervalList& intervalList = intervalsByType[pair.second->type()];
+
+        if (!intervalList.empty()) {
+            auto lastIntervalIt = intervalList.rbegin();
+            if (lastIntervalIt->stop >= newSpannerStartTick) {
+                lastIntervalIt->stop = newSpannerStartTick - collidingSpannersPadding;
+            }
+        }
+
+        intervalList.emplace_back(interval_tree::Interval<Spanner*>(newSpannerStartTick,
+                                                                    newSpannerEndTick,
+                                                                    pair.second));
+
+        regularIntervals.push_back(interval_tree::Interval(newSpannerStartTick,
+                                                           newSpannerEndTick,
+                                                           pair.second));
+    }
+
+    for (const auto& pair : intervalsByPart) {
+        for (const auto& intervals : pair.second) {
+            collisionFreeIntervals.insert(collisionFreeIntervals.end(),
+                                          intervals.second.begin(),
+                                          intervals.second.end());
+        }
+    }
 }
 
 //---------------------------------------------------------

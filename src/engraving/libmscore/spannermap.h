@@ -37,17 +37,23 @@ class SpannerMap : std::multimap<int, Spanner*>
 {
     mutable bool dirty;
     mutable interval_tree::IntervalTree<Spanner*> tree;
+    mutable interval_tree::IntervalTree<Spanner*> collisionFreeTree;
     mutable std::vector<interval_tree::Interval<Spanner*> > results;
 
 public:
     typedef typename std::multimap<int, Spanner*>::const_reverse_iterator const_reverse_it;
     typedef typename std::multimap<int, Spanner*>::const_iterator const_it;
 
+    using IntervalList = std::vector<interval_tree::Interval<Spanner*> >;
+
     SpannerMap();
 
-    const std::vector<interval_tree::Interval<Spanner*> >& findContained(int start, int stop) const;
-    const std::vector<interval_tree::Interval<Spanner*> >& findOverlapping(int start, int stop) const;
+    const IntervalList& findContained(int start, int stop, bool excludeCollisions = false) const;
+    const IntervalList& findOverlapping(int start, int stop, bool excludeCollisions = false) const;
     const std::multimap<int, Spanner*>& map() const { return *this; }
+
+    void collectIntervals(IntervalList& regularIntervals, IntervalList& collisionFreeIntervals) const;
+
     const_reverse_it crbegin() const { return std::multimap<int, Spanner*>::crbegin(); }
     const_reverse_it crend() const { return std::multimap<int, Spanner*>::crend(); }
     const_it cbegin() const { return std::multimap<int, Spanner*>::cbegin(); }
