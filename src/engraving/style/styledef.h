@@ -1517,6 +1517,7 @@ enum class Sid {
     crossHeadBlackOnly,
     parenthesisHeadGhostNote,
     circledNotesOnCommonTab,
+    guitarProMultiVoiceSupport,
 
     autoplaceEnabled,
     defaultsVersion,
