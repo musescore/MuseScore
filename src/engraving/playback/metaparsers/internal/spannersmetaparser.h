@@ -25,13 +25,21 @@
 
 #include "playback/metaparsers/metaparserbase.h"
 
+namespace Ms {
+class Score;
+}
+
 namespace mu::engraving {
 class SpannersMetaParser : public MetaParserBase<SpannersMetaParser>
 {
+public:
+    static bool isAbleToParse(const EngravingItem* spannerItem);
+
 protected:
     friend MetaParserBase;
 
-    static void doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result);
+    static void doParse(const EngravingItem* item, const RenderingContext& spannerCtx, mpe::ArticulationMap& result);
+    static mpe::duration_t spannerDuration(const Score* score, const int positionTick, const int durationTicks);
 };
 }
 
