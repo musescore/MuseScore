@@ -44,6 +44,12 @@ const UiActionList PaletteUiActions::m_actions = {
              TranslatableString("action", "Palette search"),
              TranslatableString("action", "Search palettes")
              ),
+    UiAction("apply-current-palette-element",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Apply current palette element"),
+             TranslatableString("action", "Apply current palette element")
+             ),
     UiAction("time-signature-properties",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
