@@ -144,6 +144,7 @@ bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
     snd_pcm_t* handle;
     rc = snd_pcm_open(&handle, outputDevice().c_str(), SND_PCM_STREAM_PLAYBACK, 0);
     if (rc < 0) {
+        LOGE() << "ALSA ERROR during snd_pcm_open: " << snd_strerror(rc);
         return false;
     }
 
@@ -162,17 +163,28 @@ bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
     int dir = 0;
     rc = snd_pcm_hw_params_set_rate_near(handle, params, &val, &dir);
     if (rc < 0) {
+        LOGE() << "ALSA ERROR during snd_pcm_hw_params_set_rate_near: " << snd_strerror(rc);
         return false;
     }
 
-    snd_pcm_hw_params_set_buffer_size_near(handle, params, &s_alsaData->samples);
+    rc = snd_pcm_hw_params_set_buffer_size_near(handle, params, &s_alsaData->samples);
+    if (rc < 0) {
+        LOGE() << "ALSA ERROR during snd_pcm_hw_params_set_buffer_size_near: " << snd_strerror(rc)
+               << " (requested buffer size: " << s_alsaData->samples << ")";
+        return false;
+    }
 
     rc = snd_pcm_hw_params(handle, params);
     if (rc < 0) {
+        LOGE() << "ALSA ERROR during snd_pcm_hw_params: " << snd_strerror(rc);
         return false;
     }
 
-    snd_pcm_hw_params_get_rate(params, &val, &dir);
+    rc = snd_pcm_hw_params_get_rate(params, &val, &dir);
+    if (rc < 0) {
+        LOGE() << "ALSA ERROR during snd_pcm_hw_params_get_rate: " << snd_strerror(rc);
+        return false;
+    }
     aSamplerate = val;
 
     s_alsaData->buffer = new float[s_alsaData->samples * s_alsaData->channels];
