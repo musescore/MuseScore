@@ -65,6 +65,10 @@ Item {
         onPaletteSearchRequested: {
             palettesPanelHeader.startSearch()
         }
+        
+        onApplyCurrentPaletteElementRequested: {
+            root.applyCurrentPaletteElement()
+        }
     }
 
     ColumnLayout {
