@@ -83,6 +83,7 @@ class Part final : public EngravingObject
     int _color = 0;                  ///User specified color for helping to label parts
 
     PreferSharpFlat _preferSharpFlat = PreferSharpFlat::DEFAULT;
+    int _lastDrumPitch = -1;         ///< for drumset parts: last selected note pitch
 
     friend class compat::Read206;
 
@@ -188,6 +189,11 @@ public:
 
     PreferSharpFlat preferSharpFlat() const { return _preferSharpFlat; }
     void setPreferSharpFlat(PreferSharpFlat v) { _preferSharpFlat = v; }
+
+    int lastDrumPitch() const { return _lastDrumPitch; }
+    void setLastDrumPitch(int p) { _lastDrumPitch = p; }
+
+    int preferredDrumPitch();
 
     // Allows not reading the same instrument twice on importing 2.X scores.
     // TODO: do we need instruments info in parts at all?

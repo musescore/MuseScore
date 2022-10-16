@@ -73,6 +73,15 @@ void DrumsetPalette::retranslate()
 
 void DrumsetPalette::updateDrumset()
 {
+    auto selectCell = [this](int cell) {
+        m_drumPalette->setSelected(cell);
+        m_drumPalette->setCurrentIdx(cell);
+        m_drumPalette->update();
+
+        PaletteCellPtr pitchCell = m_drumPalette->cellAt(cell);
+        m_pitchNameChanged.send(pitchCell->name);
+    };
+
     INotationNoteInputPtr noteInput = this->noteInput();
     if (!noteInput) {
         clear();
@@ -90,6 +99,8 @@ void DrumsetPalette::updateDrumset()
     if (!m_drumset) {
         return;
     }
+
+    int preferredPitch = state.staff->part()->preferredDrumPitch();
 
     TRACEFUNC;
 
@@ -145,17 +156,15 @@ void DrumsetPalette::updateDrumset()
         QString shortcut = shortcutCode != 0 ? QChar(shortcutCode) : QString();
 
         m_drumPalette->appendElement(chord, m_drumset->translatedName(pitch), 1.0, QPointF(0, 0), shortcut);
+
+        if (pitch == preferredPitch) {
+            selectCell(m_drumPalette->actualCellCount() - 1);
+        }
     }
 
-    // https://github.com/musescore/MuseScore/issues/13725
     // only one note in palette: select it by default
     if (m_drumPalette->actualCellCount() == 1) {
-        m_drumPalette->setSelected(0);
-        m_drumPalette->setCurrentIdx(0);
-        m_drumPalette->update();
-
-        PaletteCellPtr pitchCell = m_drumPalette->cellAt(0);
-        m_pitchNameChanged.send(pitchCell->name);
+        selectCell(0);
     }
 
     noteInput->setDrumNote(selectedDrumNote());

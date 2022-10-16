@@ -408,6 +408,7 @@ void Score::putNote(const Position& p, bool replace)
 
     switch (staffGroup) {
     case StaffGroup::PERCUSSION: {
+        st->part()->setLastDrumPitch(nval.pitch);
         const Drumset* ds = st->part()->instrument(s->tick())->drumset();
         stemDirection     = ds->stemDirection(nval.pitch);
         break;

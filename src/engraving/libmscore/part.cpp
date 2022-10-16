@@ -35,6 +35,7 @@
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
+#include "libmscore/note.h"
 
 #include "log.h"
 
@@ -173,7 +174,9 @@ bool Part::readProperties(XmlReader& e)
         _soloist = e.readInt();
     } else if (tag == "preferSharpFlat") {
         _preferSharpFlat
-            =e.readText() == "sharps" ? PreferSharpFlat::SHARPS : PreferSharpFlat::FLATS;
+            = e.readText() == "sharps" ? PreferSharpFlat::SHARPS : PreferSharpFlat::FLATS;
+    } else if (tag == "lastDrumPitch") {
+        _lastDrumPitch = e.readInt();
     } else {
         return false;
     }
@@ -230,6 +233,10 @@ void Part::write(XmlWriter& xml) const
     }
 
     instrument()->write(xml, this);
+
+    if (instrument()->useDrumset() && _lastDrumPitch > -1) {
+        xml.tag("lastDrumPitch", _lastDrumPitch);
+    }
 
     xml.endElement();
 }
@@ -577,6 +584,8 @@ PropertyValue Part::getProperty(Pid id) const
         return instrument()->useDrumset();
     case Pid::PREFER_SHARP_FLAT:
         return int(preferSharpFlat());
+    case Pid::LAST_DRUM_PITCH:
+        return int(lastDrumPitch());
     default:
         return PropertyValue();
     }
@@ -597,6 +606,9 @@ bool Part::setProperty(Pid id, const PropertyValue& property)
         break;
     case Pid::PREFER_SHARP_FLAT:
         setPreferSharpFlat(PreferSharpFlat(property.toInt()));
+        break;
+    case Pid::LAST_DRUM_PITCH:
+        setLastDrumPitch(property.toInt());
         break;
     default:
         LOGD("Part::setProperty: unknown id %d", int(id));
@@ -859,5 +871,22 @@ bool Part::hasDrumStaff() const
         }
     }
     return false;
+}
+
+//---------------------------------------------------------
+//   preferredDrumPitch
+//---------------------------------------------------------
+
+int Part::preferredDrumPitch()
+{
+    // prefer pitch of first drum note in selection if there is any
+    for (auto* e : m_score->selection().elements()) {
+        if (e->isNote()) {
+            _lastDrumPitch = toNote(e)->pitch();
+            break;
+        }
+    }
+
+    return _lastDrumPitch;
 }
 }

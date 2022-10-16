@@ -392,6 +392,7 @@ enum class Pid {
     TEMPO_CHANGE_TYPE,
     TEMPO_EASING_METHOD,
     TEMPO_CHANGE_FACTOR,
+    LAST_DRUM_PITCH,
 
     END
 };
