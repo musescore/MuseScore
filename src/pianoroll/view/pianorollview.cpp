@@ -68,6 +68,18 @@ const BarPattern PianorollView::barPatterns[] = {
     { QT_TRANSLATE_NOOP("BarPattern", "D♭ Augmented"),  { 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0 } },
     { QT_TRANSLATE_NOOP("BarPattern", "D Augmented"),   { 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0 } },
     { QT_TRANSLATE_NOOP("BarPattern", "E♭ Augmented"),  { 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1 } },
+    { QT_TRANSLATE_NOOP("BarPattern", "C major / A minor pentatonic"),  { 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0 } },
+    { QT_TRANSLATE_NOOP("BarPattern", "D♭ major / B♭ minor pentatonic"),  { 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0 } },
+    { QT_TRANSLATE_NOOP("BarPattern", "D major / B minor pentatonic"),  { 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1 } },
+    { QT_TRANSLATE_NOOP("BarPattern", "E♭ major / C minor pentatonic"),  { 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0 } },
+    { QT_TRANSLATE_NOOP("BarPattern", "E major / C♯ minor pentatonic"),  { 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1 } },
+    { QT_TRANSLATE_NOOP("BarPattern", "F major / D minor pentatonic"),  { 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0 } },
+    { QT_TRANSLATE_NOOP("BarPattern", "G♭ major / E♭ minor pentatonic"),  { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 } },
+    { QT_TRANSLATE_NOOP("BarPattern", "G major / E minor pentatonic"),  { 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1 } },
+    { QT_TRANSLATE_NOOP("BarPattern", "A♭ major / F minor pentatonic"),  { 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0 } },
+    { QT_TRANSLATE_NOOP("BarPattern", "A major / F♯ minor pentatonic"),  { 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1 } },
+    { QT_TRANSLATE_NOOP("BarPattern", "B♭ major / G minor pentatonic"),  { 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0 } },
+    { QT_TRANSLATE_NOOP("BarPattern", "B major / G♯ minor pentatonic"),  { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1 } },
     { "",              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } }
 };
 
