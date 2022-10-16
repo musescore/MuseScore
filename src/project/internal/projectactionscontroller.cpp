@@ -367,13 +367,30 @@ IInteractive::Button ProjectActionsController::askAboutSavingScore(INotationProj
     return result.standardButton();
 }
 
-bool ProjectActionsController::saveProject(const io::path_t& path)
+bool ProjectActionsController::canSaveProject() const
 {
     auto project = currentNotationProject();
     if (!project) {
         LOGW() << "no current project";
         return false;
     }
+
+    if (!project->canSave()) {
+        LOGW() << "project could not be saved";
+        return false;
+    }
+
+    return true;
+}
+
+bool ProjectActionsController::saveProject(const io::path_t& path)
+{
+    if (!canSaveProject()) {
+        warnSaveIsNotAvailable();
+        return false;
+    }
+
+    auto project = currentNotationProject();
 
     if (!project->isNewlyCreated()) {
         if (project->isCloudProject()) {
@@ -397,6 +414,11 @@ bool ProjectActionsController::saveProject(const io::path_t& path)
 
 void ProjectActionsController::saveProjectAs()
 {
+    if (!canSaveProject()) {
+        warnSaveIsNotAvailable();
+        return;
+    }
+
     auto project = currentNotationProject();
 
     RetVal<SaveLocation> location = saveProjectScenario()->askSaveLocation(project, SaveMode::SaveAs);
@@ -409,6 +431,11 @@ void ProjectActionsController::saveProjectAs()
 
 void ProjectActionsController::saveProjectCopy()
 {
+    if (!canSaveProject()) {
+        warnSaveIsNotAvailable();
+        return;
+    }
+
     auto project = currentNotationProject();
 
     RetVal<SaveLocation> location = saveProjectScenario()->askSaveLocation(project, SaveMode::SaveCopy);
@@ -421,6 +448,11 @@ void ProjectActionsController::saveProjectCopy()
 
 void ProjectActionsController::saveSelection()
 {
+    if (!canSaveProject()) {
+        warnSaveIsNotAvailable();
+        return;
+    }
+
     auto project = currentNotationProject();
 
     RetVal<io::path_t> path = saveProjectScenario()->askLocalPath(project, SaveMode::SaveSelection);
@@ -436,7 +468,13 @@ void ProjectActionsController::saveSelection()
 
 void ProjectActionsController::saveToCloud()
 {
-    INotationProjectPtr project = currentNotationProject();
+    if (!canSaveProject()) {
+        warnSaveIsNotAvailable();
+        return;
+    }
+
+    auto project = currentNotationProject();
+
     RetVal<SaveLocation> response = saveProjectScenario()->askSaveLocation(project, SaveMode::SaveAs, SaveLocationType::Cloud);
     if (!response.ret) {
         return;
@@ -447,12 +485,18 @@ void ProjectActionsController::saveToCloud()
 
 void ProjectActionsController::publish()
 {
+    if (!canSaveProject()) {
+        warnSaveIsNotAvailable();
+        return;
+    }
+
     if (!authorizationService()->checkCloudIsAvailable()) {
         warnPublishIsNotAvailable();
         return;
     }
 
-    INotationProjectPtr project = currentNotationProject();
+    auto project = currentNotationProject();
+
     RetVal<CloudProjectInfo> info = saveProjectScenario()->askPublishLocation(project);
     if (!info.ret) {
         return;
@@ -780,6 +824,21 @@ void ProjectActionsController::warnPublishIsNotAvailable()
 {
     std::string title = trc("project/save", "Unable to connect to MuseScore.com");
     std::string msg = trc("project/save", "Please check your internet connection, or try again later.");
+
+    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
+    okBtn.accent = true;
+
+    interactive()->warning(title, msg, { okBtn }, okBtn.btn, IInteractive::Option::WithIcon);
+}
+
+void ProjectActionsController::warnSaveIsNotAvailable()
+{
+    std::string title = trc("project/save", "Your score could not be saved");
+    std::string msg;
+
+    if (!currentMasterNotation()->hasParts()) {
+        msg = trc("project/save", "Please add at least one instrument to enable saving.");
+    }
 
     IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
     okBtn.accent = true;

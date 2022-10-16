@@ -96,6 +96,8 @@ private:
     bool checkCanIgnoreError(const Ret& ret, const io::path_t& filePath);
     framework::IInteractive::Button askAboutSavingScore(INotationProjectPtr project);
 
+    bool canSaveProject() const;
+
     void saveProjectAs();
     void saveProjectCopy();
     void saveSelection();
@@ -129,6 +131,7 @@ private:
 
     void warnCloudIsNotAvailable();
     void warnPublishIsNotAvailable();
+    void warnSaveIsNotAvailable();
 
     void importPdf();
 

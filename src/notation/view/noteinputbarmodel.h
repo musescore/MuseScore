@@ -61,6 +61,7 @@ private:
     };
 
     INotationPtr notation() const;
+    IMasterNotationPtr masterNotation() const;
 
     void onNotationChanged();
 
