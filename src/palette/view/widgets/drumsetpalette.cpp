@@ -167,17 +167,6 @@ void DrumsetPalette::updateDrumset()
         selectCell(0);
     }
 
-    // https://github.com/musescore/MuseScore/issues/13725
-    // only one note in palette: select it by default
-    if (m_drumPalette->actualCellCount() == 1) {
-        m_drumPalette->setSelected(0);
-        m_drumPalette->setCurrentIdx(0);
-        m_drumPalette->update();
-
-        PaletteCellPtr pitchCell = m_drumPalette->cellAt(0);
-        m_pitchNameChanged.send(pitchCell->name);
-    }
-
     noteInput->setDrumNote(selectedDrumNote());
 }
 
