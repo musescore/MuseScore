@@ -70,6 +70,20 @@ MasterNotation::MasterNotation()
         notifyAboutNotationChanged();
     });
 
+    async::NotifyList<const Part*> partList = m_parts->partList();
+
+    partList.onChanged(this, [this]() {
+        m_hasPartsChanged.notify();
+    });
+
+    partList.onItemAdded(this, [this](const Part*) {
+        m_hasPartsChanged.notify();
+    });
+
+    partList.onItemRemoved(this, [this](const Part*) {
+        m_hasPartsChanged.notify();
+    });
+
     undoStack()->stackChanged().onNotify(this, [this]() {
         updateExcerpts();
         notifyAboutNeedSaveChanged();
@@ -598,6 +612,16 @@ mu::ValCh<ExcerptNotationList> MasterNotation::excerpts() const
 INotationPartsPtr MasterNotation::parts() const
 {
     return m_parts;
+}
+
+bool MasterNotation::hasParts() const
+{
+    return m_parts ? !m_parts->partList().empty() : false;
+}
+
+Notification MasterNotation::hasPartsChanged() const
+{
+    return m_hasPartsChanged;
 }
 
 INotationPlaybackPtr MasterNotation::playback() const

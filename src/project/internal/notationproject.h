@@ -76,6 +76,7 @@ public:
     void markAsUnsaved() override;
 
     ValNt<bool> needSave() const override;
+    bool canSave() const override;
 
     Ret save(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save) override;
     Ret writeToDevice(QIODevice* device) override;

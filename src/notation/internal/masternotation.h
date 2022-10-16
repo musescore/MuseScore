@@ -65,6 +65,9 @@ public:
     void setExcerptIsOpen(const INotationPtr excerptNotation, bool open) override;
 
     INotationPartsPtr parts() const override;
+    bool hasParts() const override;
+    async::Notification hasPartsChanged() const override;
+
     INotationPlaybackPtr playback() const override;
 
 private:
@@ -90,6 +93,7 @@ private:
     ValCh<ExcerptNotationList> m_excerpts;
     INotationPlaybackPtr m_notationPlayback = nullptr;
     async::Notification m_needSaveNotification;
+    async::Notification m_hasPartsChanged;
 
     mutable bool m_needUpdatePotentialExcerpts = false;
     mutable ExcerptNotationList m_potentialExcerpts;

@@ -99,8 +99,10 @@ NotifyList<const Part*> NotationParts::partList() const
     NotifyList<const Part*> result;
     result.setNotify(m_partChangedNotifier.notify());
 
-    for (const Part* part: score()->parts()) {
-        result.push_back(part);
+    if (Score* _score = score()) {
+        for (const Part* part: _score->parts()) {
+            result.push_back(part);
+        }
     }
 
     return result;
