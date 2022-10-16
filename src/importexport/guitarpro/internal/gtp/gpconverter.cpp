@@ -213,6 +213,20 @@ static GPConverter::LineImportType ottavaToImportType(GPBeat::OttavaType t)
     return GPConverter::LineImportType::NONE;
 }
 
+static GPConverter::LineImportType hairpinToImportType(GPBeat::Hairpin t)
+{
+    static std::map<GPBeat::Hairpin, GPConverter::LineImportType> types {
+        { GPBeat::Hairpin::Crescendo, GPConverter::LineImportType::CRESCENDO },
+        { GPBeat::Hairpin::Decrescendo, GPConverter::LineImportType::DIMINUENDO }
+    };
+
+    if (types.find(t) != types.end()) {
+        return types[t];
+    }
+
+    return GPConverter::LineImportType::NONE;
+}
+
 GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
     : _score(score), _gpDom(std::move(gpDom))
 {
@@ -1552,7 +1566,7 @@ void GPConverter::addTrill(const GPNote* gpnote, Note* note)
 
 void GPConverter::addTrill(const GPBeat* gpbeat, ChordRest* cr)
 {
-    addLineElement(cr, _trillLines, ElementType::TRILL, LineImportType::TRILL, gpbeat->trill(), true);
+    addLineElement(cr, m_trillLines, ElementType::TRILL, LineImportType::TRILL, gpbeat->trill(), true);
 }
 
 void GPConverter::addOrnament(const GPNote* gpnote, Note* note)
@@ -2557,31 +2571,17 @@ void GPConverter::addFadding(const GPBeat* beat, ChordRest* cr)
 
 void GPConverter::addHairPin(const GPBeat* beat, ChordRest* cr)
 {
-    if (beat->hairpin() == GPBeat::Hairpin::None) {
-        _lastHairpin = nullptr;
-        return;
-    }
+    auto& hairpins = m_hairpins[beat->hairpin()];
+    addLineElement(cr, hairpins, ElementType::HAIRPIN, hairpinToImportType(
+                       beat->hairpin()), beat->hairpin() != GPBeat::Hairpin::None);
 
-    auto scoreHairpin = [](const auto& h) {
-        if (h == GPBeat::Hairpin::Crescendo) {
-            return HairpinType::CRESC_HAIRPIN;
-        } else {
-            return HairpinType::DECRESC_HAIRPIN;
+    if (!hairpins.empty()) {
+        auto& elem = hairpins.back();
+        if (elem && elem->isHairpin()) {
+            toHairpin(elem)->setHairpinType(
+                beat->hairpin() == GPBeat::Hairpin::Crescendo ? HairpinType::CRESC_HAIRPIN : HairpinType::DECRESC_HAIRPIN);
         }
-    };
-
-    if (!_lastHairpin) {
-        _lastHairpin = Factory::createHairpin(_score->dummy()->segment());
-        _lastHairpin->setTick(cr->tick());
-        _lastHairpin->setTick2(cr->tick());
-        _lastHairpin->setHairpinType(scoreHairpin(beat->hairpin()));
-        _lastHairpin->setTrack(cr->track());
-        _lastHairpin->setTrack2(cr->track());
-        _score->addSpanner(_lastHairpin);
     }
-
-    _lastHairpin->setTick2(cr->tick());
-    _lastHairpin->setEndElement(cr);
 }
 
 void GPConverter::addPickStroke(const GPBeat* beat, ChordRest* cr)
