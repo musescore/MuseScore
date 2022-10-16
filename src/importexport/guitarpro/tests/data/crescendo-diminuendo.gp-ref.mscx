@@ -82,7 +82,8 @@
               </HairPin>
             <next>
               <location>
-                <fractions>1/2</fractions>
+                <measures>1</measures>
+                <fractions>-1/4</fractions>
                 </location>
               </next>
             </Spanner>
@@ -95,13 +96,6 @@
               <string>3</string>
               </Note>
             </Chord>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <fractions>-1/2</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -115,6 +109,14 @@
         </Measure>
       <Measure>
         <voice>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>1/4</fractions>
+                </location>
+              </prev>
+            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -130,7 +132,7 @@
               </HairPin>
             <next>
               <location>
-                <fractions>1/2</fractions>
+                <fractions>3/4</fractions>
                 </location>
               </next>
             </Spanner>
@@ -143,13 +145,6 @@
               <string>3</string>
               </Note>
             </Chord>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <fractions>-1/2</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -162,6 +157,13 @@
           <BarLine>
             <subtype>end</subtype>
             </BarLine>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <fractions>-3/4</fractions>
+                </location>
+              </prev>
+            </Spanner>
           </voice>
         </Measure>
       </Staff>
