@@ -98,6 +98,7 @@ public:
     MOCK_METHOD(void, setShouldDestinationFolderBeOpenedOnExport, (bool), (override));
 
     MOCK_METHOD(QUrl, scoreManagerUrl, (), (const, override));
+    MOCK_METHOD(QUrl, supportForumUrl, (), (const, override));
 
     MOCK_METHOD(bool, openDetailedProjectUploadedDialog, (), (const, override));
     MOCK_METHOD(void, setOpenDetailedProjectUploadedDialog, (bool), (override));
