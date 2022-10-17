@@ -254,34 +254,24 @@ public:
     // A very small fraction, corresponds to 1 MIDI tick
     static Fraction eps() { return Fraction(1, Constants::division * 4); }
 
-    static Fraction fromFloat(float ticks)
-    {
-        return Fraction((int)(ticks * Constants::division * 4), Constants::division * 4).reduced();
-    }
-
-    static Fraction fromDouble(double ticks)
-    {
-        return Fraction((int)(ticks * Constants::division * 4), Constants::division * 4).reduced();
-    }
-
-    float toFloat()
-    {
-        return m_numerator / (float)m_denominator;
-    }
-
-    double toDouble()
-    {
-        return m_numerator / (double)m_denominator;
-    }
-
-    String toString() const { return String(u"%1/%2").arg(m_numerator, m_denominator); }
+    const String toString() const { return String(u"%1/%2").arg(m_numerator, m_denominator); }
     static Fraction fromString(const String& str)
     {
         const size_t i = str.indexOf(u'/');
         return (i == mu::nidx) ? Fraction(str.toInt(), 1) : Fraction(str.left(i).toInt(), str.mid(i + 1).toInt());
     }
 
+    constexpr double toFloat() const { return static_cast<float>(m_numerator) / static_cast<float>(m_denominator); }
+    static Fraction fromFloat(double ticks)
+    {
+        return Fraction((int)(ticks * Constants::division * 4), Constants::division * 4).reduced();
+    }
+
     constexpr double toDouble() const { return static_cast<double>(m_numerator) / static_cast<double>(m_denominator); }
+    static Fraction fromDouble(double ticks)
+    {
+        return Fraction((int)(ticks * Constants::division * 4), Constants::division * 4).reduced();
+    }
 };
 
 inline Fraction operator*(const Fraction& f, int v) { return Fraction(f) *= v; }

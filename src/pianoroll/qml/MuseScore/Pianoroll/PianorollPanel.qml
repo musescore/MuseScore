@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
@@ -49,7 +49,6 @@ Rectangle {
                 RowLayout {
                     id: tools
 
-
                     ToolButton {
                         text: qsTr("Select")
                         icon: IconCode.COPY
@@ -65,8 +64,6 @@ Rectangle {
                         onClicked: {
                             pianoView.tool = PianorollView.SELECT
                         }
-
-
                     }
 
                     ToolButton {
@@ -162,6 +159,59 @@ Rectangle {
                             pianoView.tuplet = currentValue
                         }
                     }
+
+                    Label {
+                        text: qsTr("Stripes:")
+                    }
+
+                    ComboBox {
+                        id: stripePatternCombo
+                        textRole: "text"
+                        valueRole: "value"
+
+                        model: [
+                            { text: qsTr("C major / A minor"), value: PianorollView.C_MAJ },
+                            { text: qsTr("D♭ major / B♭ minor"), value: PianorollView.DF_MAJ },
+                            { text: qsTr("D major / B minor"), value: PianorollView.D_MAJ },
+                            { text: qsTr("E♭ major / C minor"), value: PianorollView.DF_MAJ },
+                            { text: qsTr("E major / C♯ minor"), value: PianorollView.E_MAJ },
+                            { text: qsTr("F major / D minor"), value: PianorollView.F_MAJ },
+                            { text: qsTr("G♭ major / E♭ minor"), value: PianorollView.GF_MAJ },
+                            { text: qsTr("G major / E minor"), value: PianorollView.G_MAJ },
+                            { text: qsTr("A♭ major / F minor"), value: PianorollView.AF_MAJ },
+                            { text: qsTr("A major / F♯ minor"), value: PianorollView.A_MAJ },
+                            { text: qsTr("B♭ major / G minor"), value: PianorollView.BF_MAJ },
+                            { text: qsTr("B major / G♯ minor"), value: PianorollView.B_MAJ },
+                            { text: qsTr("C Diminished"), value: PianorollView.C_DIM },
+                            { text: qsTr("D♭ Diminished"), value: PianorollView.DF_DIM },
+                            { text: qsTr("D Diminished"), value: PianorollView.D_DIM },
+                            { text: qsTr("C Half/Whole"), value: PianorollView.C_HW },
+                            { text: qsTr("D♭ Half/Whole"), value: PianorollView.DF_HW },
+                            { text: qsTr("D Half/Whole"), value: PianorollView.D_HW },
+                            { text: qsTr("C Whole tone"), value: PianorollView.C_W },
+                            { text: qsTr("D♭ Whole tone"), value: PianorollView.DF_W },
+                            { text: qsTr("C Augmented"), value: PianorollView.C_AUG },
+                            { text: qsTr("D♭ Augmented"), value: PianorollView.DF_AUG },
+                            { text: qsTr("D Augmented"), value: PianorollView.D_AUG },
+                            { text: qsTr("E♭ Augmented"), value: PianorollView.EF_AUG },
+                            { text: qsTr("C major / A minor pentatonic"), value: PianorollView.C_MAJ_P },
+                            { text: qsTr("D♭ major / B♭ minor pentatonic"), value: PianorollView.DF_MAJ_P },
+                            { text: qsTr("D major / B minor pentatonic"), value: PianorollView.D_MAJ_P },
+                            { text: qsTr("E♭ major / C minor pentatonic"), value: PianorollView.EF_MAJ_P },
+                            { text: qsTr("E major / C♯ minor pentatonic"), value: PianorollView.E_MAJ_P },
+                            { text: qsTr("F major / D minor pentatonic"), value: PianorollView.F_MAJ_P },
+                            { text: qsTr("G♭ major / E♭ minor pentatonic"), value: PianorollView.GF_MAJ_P },
+                            { text: qsTr("G major / E minor pentatonic"), value: PianorollView.G_MAJ_P },
+                            { text: qsTr("A♭ major / F minor pentatonic"), value: PianorollView.AF_MAJ_P },
+                            { text: qsTr("A major / F♯ minor pentatonic"), value: PianorollView.A_MAJ_P },
+                            { text: qsTr("B♭ major / G minor"), value: PianorollView.BF_MAJ_P },
+                            { text: qsTr("B major / G♯ minor pentatonic"), value: PianorollView.B_MAJ_P }
+                        ]
+
+                        onActivated: {
+                            pianoView.stripePattern = currentValue
+                        }
+                    }
                 }
 
                 RowLayout {
@@ -193,7 +243,6 @@ Rectangle {
             }
         }
 
-
         SplitView {
             //anchors.fill: parent
             Layout.fillHeight: true
@@ -206,7 +255,6 @@ Rectangle {
                 columnSpacing: 0
                 SplitView.minimumHeight: 100
                 SplitView.fillHeight: true
-
 
                 //-------
                 //Row
@@ -269,7 +317,6 @@ Rectangle {
                     }
                 }
 
-
                 PianorollScrollbar{
                     id: scrollViewY
                     diretion: PianorollScrollbar.VERTICAL
@@ -278,7 +325,6 @@ Rectangle {
                     Layout.minimumWidth: 12
                     Layout.fillHeight: true
                 }
-
 
                 //-------
                 //Row
@@ -317,11 +363,9 @@ Rectangle {
                 m_wholeNoteWidth: horizZoom.value
 
                 onRowAddClicked: {
-
                 }
 
                 onRowRemoveClicked: {
-
                 }
             }
         }
