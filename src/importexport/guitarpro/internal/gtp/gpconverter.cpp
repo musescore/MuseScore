@@ -23,6 +23,7 @@
 #include "libmscore/glissando.h"
 #include "libmscore/gradualtempochange.h"
 #include "libmscore/hairpin.h"
+#include "libmscore/instrchange.h"
 #include "libmscore/jump.h"
 #include "libmscore/keysig.h"
 #include "libmscore/lyrics.h"
@@ -375,6 +376,8 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
 
     addTempoMap();
 
+    addInstrumentChanges();
+
 #ifdef ENGRAVING_USE_STRETCHED_BENDS
     StretchedBend::prepareBends(m_bends);
 #endif
@@ -426,7 +429,7 @@ void GPConverter::convertBar(const GPBar* bar, Context ctx)
     }
     convertVoices(bar->voices(), ctx);
 
-    for (int i = ctx.curTrack; i < ctx.curTrack + VOICES; i++) {
+    for (track_idx_t i = ctx.curTrack; i < ctx.curTrack + VOICES; i++) {
         hideRestsInEmptyMeasures(i);
     }
 }
@@ -1364,6 +1367,36 @@ void GPConverter::addTempoMap()
     }
 }
 
+void GPConverter::addInstrumentChanges()
+{
+    for (const auto& track : _gpDom->tracks()) {
+        for (const auto& soundAutomation : track.second->soundAutomations()) {
+            int bar = soundAutomation.second.bar;
+            if (bar == 0) {
+                //!@NOTE bar 0 is a main instrument. Already added in setupTrack
+                continue;
+            }
+
+            auto it = track.second->sounds().find(soundAutomation.second.value);
+            if (it == track.second->sounds().end()) {
+                continue;
+            }
+
+            Instrument instr;
+            instr.channel(0)->setProgram(it->second.programm);
+            InstrumentChange* instrCh =  Factory::createInstrumentChange(_score->dummy()->segment(), instr);
+
+            int trackIdx = track.second->idx();
+            instrCh->setTrack(trackIdx * VOICES);
+            instrCh->setXmlText(it->second.name);
+
+            Measure* m = _score->crMeasure(bar);
+            Segment* seg = m->first(SegmentType::ChordRest);
+            seg->add(instrCh);
+        }
+    }
+}
+
 bool GPConverter::addSimileMark(const GPBar* bar, int curTrack)
 {
     if (bar->simileMark() == GPBar::SimileMark::None) {
@@ -1557,6 +1590,7 @@ void GPConverter::addFingering(const GPNote* gpnote, Note* note)
 
 void GPConverter::addTrill(const GPNote* gpnote, Note* note)
 {
+    UNUSED(note);
     if (gpnote->trill().auxillaryFret == -1) {
         return;
     }

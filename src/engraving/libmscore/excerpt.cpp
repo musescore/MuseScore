@@ -1204,6 +1204,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                         case ElementType::HARMONY:
                         case ElementType::FIGURED_BASS:
                         case ElementType::DYNAMIC:
+                        case ElementType::INSTRUMENT_CHANGE:
                         case ElementType::LYRICS:                     // not normally segment-attached
                             continue;
                         case ElementType::FERMATA:

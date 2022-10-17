@@ -41,6 +41,21 @@ public:
         // which cant be used in MU
     };
 
+    struct Sound {
+        int programm{ 0 };
+        String name;
+        String label;
+        String path;
+        String role;
+    };
+
+    struct SoundAutomation {
+        String type;
+        String value;
+        int bar{ 0 };
+        bool linear{ 0 };
+    };
+
     GPTrack(int idx)
         : _idx(idx) {}
     virtual ~GPTrack() = default;
@@ -68,6 +83,11 @@ public:
 
     void addStaffProperty(const StaffProperty& st) { _staffProperty.push_back(st); }
     const std::vector<StaffProperty>& staffProperty() const { return _staffProperty; }
+
+    void addSound(Sound sound);
+    void addSoundAutomation(SoundAutomation val) { _automations.insert({ val.bar, val }); }
+    const std::unordered_map<String, Sound>& sounds() { return _sounds; }
+    const std::map<int, SoundAutomation>& soundAutomations() { return _automations; }
 
     std::vector<InstrumentString> strings() const
     {
@@ -113,6 +133,8 @@ protected:
     int _idx{ -1 };
     size_t _staffCount{ 1 };
     std::vector<StaffProperty> _staffProperty;
+    std::unordered_map<String, Sound> _sounds;
+    std::map<int, SoundAutomation> _automations;
     int _transpose{ 0 };
     std::unordered_map<int, Diagram> _diagrams;
     std::string _lyrics;
