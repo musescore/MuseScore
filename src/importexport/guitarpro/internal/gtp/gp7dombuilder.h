@@ -15,6 +15,8 @@ private:
 
     int readMidiChannel(XmlDomNode* trackChildNode) const;
     int readMidiProgramm(XmlDomNode* trackChildNode) const;
+    GPTrack::Sound readSounds(XmlDomNode* trackChildNode) const;
+    GPTrack::SoundAutomation readTrackAutomation(XmlDomNode* automationNode) const;
 };
 } //end Ms namespace
 #endif // GP7DOMBUILDER_H

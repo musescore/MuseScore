@@ -33,6 +33,13 @@ std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(XmlDomNod
             track->setShortName(trackChildNode.toElement().text());
         } else if (nodeName == u"Sounds") {
             int programm = readMidiProgramm(&trackChildNode);
+            auto soundNode = trackChildNode.firstChild();
+            while (!soundNode.isNull()) {
+                GPTrack::Sound sound = readSounds(&soundNode);
+                track->addSound(sound);
+
+                soundNode = soundNode.nextSibling();
+            }
             track->setProgramm(programm);
         } else if (nodeName == u"Staves") {
             auto staffNode = trackChildNode.firstChild();
@@ -53,6 +60,15 @@ std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(XmlDomNod
             track->setTranspose(transpose);
         } else if (nodeName == u"Lyrics") {
             readLyrics(trackChildNode, track.get());
+        } else if (nodeName == u"Automations") {
+            auto automationNode = trackChildNode.firstChild();
+            while (!automationNode.isNull()) {
+                GPTrack::SoundAutomation automation =  readTrackAutomation(&automationNode);
+                if (!automation.type.isEmpty()) {
+                    track->addSoundAutomation(automation);
+                }
+                automationNode = automationNode.nextSibling();
+            }
         } else if (sUnused.find(nodeName) != sUnused.end()) {
             // Ignored nodes
         } else {
@@ -82,5 +98,37 @@ int GP7DomBuilder::readMidiProgramm(XmlDomNode* trackChildNode) const
                    .text().toInt();
 
     return programm;
+}
+
+GPTrack::Sound GP7DomBuilder::readSounds(XmlDomNode* soundNode) const
+{
+    GPTrack::Sound result;
+
+    result.programm = soundNode->firstChildElement("MIDI")
+                      .firstChildElement("Program")
+                      .text().toInt();
+    result.name = soundNode->firstChildElement("Name").text();
+    result.label = soundNode->firstChildElement("Label").text();
+    result.path = soundNode->firstChildElement("Path").text();
+    result.role = soundNode->firstChildElement("Role").text();
+
+    return result;
+}
+
+GPTrack::SoundAutomation GP7DomBuilder::readTrackAutomation(XmlDomNode* automationNode) const
+{
+    GPTrack::SoundAutomation result;
+
+    String type = automationNode->firstChildElement("Type").text();
+    if (type != u"Sound") {
+        return result;
+    }
+
+    result.type = type;
+    result.linear = automationNode->firstChildElement("Linear").text() == u"true";
+    result.bar = automationNode->firstChildElement("Bar").text().toInt();
+    result.value = automationNode->firstChildElement("Value").text();
+
+    return result;
 }
 } //end Ms namespace
