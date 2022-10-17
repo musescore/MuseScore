@@ -264,16 +264,17 @@ void PianorollRuler::paint(QPainter* p)
     const QPen penLineMinor = QPen(m_colorGridLine, 1.0, Qt::SolidLine);
 
     //Draw lines
-    const int minGap = 60;
-
-    int measureSkip = ceil(minGap / m_wholeNoteWidth);
+    const int minGap = 50;
+    int lastDrawPos = -1;
 
     for (MeasureBase* m = score->first(); m; m = m->next()) {
-        if ((m->no() % measureSkip) != 0) {
+        int posX = floor(wholeNoteToPixelX(m->tick().toDouble()));
+
+        if (m->no() != 0 && posX - lastDrawPos < minGap) {
             continue;
         }
 
-        int posX = wholeNoteToPixelX(m->tick().toDouble());
+        lastDrawPos = posX;
 
         p->setPen(penLineMajor);
         p->drawLine(posX, 0, posX, height());
