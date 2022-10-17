@@ -15,7 +15,7 @@ void GP67DomBuilder::buildGPDomModel(XmlDomElement* domElem)
 {
     XmlDomNode revision;
     // Score node
-    XmlDomNode scoreNode,        masterTrack,      eachTrack,
+    XmlDomNode scoreNode,        masterTrack,      audioTracks, eachTrack,
                masterBars,       bars,             voices,
                beats,            notes,            rhythms;
 
@@ -27,6 +27,7 @@ void GP67DomBuilder::buildGPDomModel(XmlDomElement* domElem)
         { u"GPRevision",    &revision },
         { u"Score",         &scoreNode },
         { u"MasterTrack",   &masterTrack },
+        { u"AudioTracks",   &audioTracks },
         { u"Tracks",        &eachTrack },
         { u"MasterBars",    &masterBars },
         { u"Bars",          &bars },
@@ -62,7 +63,7 @@ void GP67DomBuilder::buildGPDomModel(XmlDomElement* domElem)
 
     buildGPScore(&scoreNode);
     buildGPMasterTracks(&masterTrack);
-    buildGPAudioTracks(&eachTrack);
+    buildGPAudioTracks(&audioTracks);
     buildGPTracks(&eachTrack);
 }
 

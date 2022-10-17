@@ -167,6 +167,7 @@ private:
     void addContinuousSlideHammerOn();
     void addFermatas();
     void addTempoMap();
+    void addInstrumentChanges();
     void fillUncompletedMeasure(const Context& ctx);
     void hideRestsInEmptyMeasures(track_idx_t track);
     int getStringNumberFor(Note* pNote, int pitch) const;
