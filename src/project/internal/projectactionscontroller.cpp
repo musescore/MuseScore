@@ -812,10 +812,18 @@ void ProjectActionsController::onProjectUploadFailed(const Ret& ret, bool publis
 
     std::string msg;
 
+    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
+    okBtn.accent = true;
+
+    IInteractive::ButtonData helpBtn { IInteractive::Button::CustomButton, trc("project/save", "Get help") };
+
+    IInteractive::ButtonDatas buttons { helpBtn, okBtn };
+
     switch (ret.code()) {
     case int(cloud::Err::AccountNotActivated):
         msg = trc("project/save", "Your musescore.com account needs to be verified first. "
                                   "Please activate your account via the link in the activation email.");
+        buttons = { okBtn };
         break;
     case int(cloud::Err::NetworkError):
         msg = cloud::cloudNetworkErrorUserDescription(ret);
@@ -829,10 +837,10 @@ void ProjectActionsController::onProjectUploadFailed(const Ret& ret, bool publis
         break;
     }
 
-    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
-    okBtn.accent = true;
-
-    interactive()->warning(title, msg, { okBtn }, okBtn.btn, IInteractive::Option::WithIcon);
+    IInteractive::Result result = interactive()->warning(title, msg, buttons, okBtn.btn, IInteractive::Option::WithIcon);
+    if (result.button() == helpBtn.btn) {
+        interactive()->openUrl(configuration()->supportForumUrl());
+    }
 }
 
 void ProjectActionsController::warnCloudIsNotAvailable()
