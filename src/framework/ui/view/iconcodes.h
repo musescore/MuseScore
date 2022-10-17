@@ -377,6 +377,7 @@ public:
         TEMPO_CHANGE = 0xF43F,
 
         PLUGIN = 0xF440,
+        LYRICS = 0xF441,
 
         NONE = 0xFFFF
     };

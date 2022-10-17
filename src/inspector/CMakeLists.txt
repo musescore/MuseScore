@@ -160,6 +160,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/ornaments/ornamentsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/pedalsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/pedalsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lyrics/lyricssettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lyrics/lyricssettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/sectionbreaks/sectionbreaksettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/sectionbreaks/sectionbreaksettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/spacers/spacersettingsmodel.cpp
