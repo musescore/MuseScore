@@ -265,28 +265,25 @@ void PianorollRuler::paint(QPainter* p)
 
     //Draw lines
     const int minGap = 60;
-    int lastDrawPos = -1;
-    int measureIndex = 0;
+
+    int measureSkip = ceil(minGap / m_wholeNoteWidth);
 
     for (MeasureBase* m = score->first(); m; m = m->next()) {
-        measureIndex++;
-        Fraction start = m->tick();  //fraction representing number of whole notes since start of score.  Expressed in terms of the note getting the beat in this bar
-
-        int pos = wholeNoteToPixelX(start);
-
-        if (lastDrawPos == -1 || pos - lastDrawPos >= minGap) {
-            lastDrawPos = pos;
-
-            p->setPen(penLineMajor);
-            p->drawLine(pos, 0, pos, height());
-
-            p->setFont(m_font2);
-            p->setPen(m_colorText);
-            QString text;
-            text.setNum(measureIndex);
-            int pixelSize = m_font2.pixelSize();
-            p->drawText(pos + 4, pixelSize + 2, text);
+        if ((m->no() % measureSkip) != 0) {
+            continue;
         }
+
+        int posX = wholeNoteToPixelX(m->tick().toDouble());
+
+        p->setPen(penLineMajor);
+        p->drawLine(posX, 0, posX, height());
+
+        p->setFont(m_font2);
+        p->setPen(m_colorText);
+        QString text;
+        text.setNum(m->no() + 1);
+        int pixelSize = m_font2.pixelSize();
+        p->drawText(posX + 4, pixelSize + 2, text);
     }
 
     //Draw playhead
