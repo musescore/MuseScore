@@ -31,14 +31,12 @@ class NotePlaybackModel : public AbstractInspectorModel
 
     Q_PROPERTY(PropertyItem * tuning READ tuning CONSTANT)
     Q_PROPERTY(PropertyItem * velocity READ velocity CONSTANT)
-    Q_PROPERTY(PropertyItem * overrideDynamics READ overrideDynamics CONSTANT)
 
 public:
     explicit NotePlaybackModel(QObject* parent, IElementRepositoryService* repository);
 
     PropertyItem* tuning() const;
     PropertyItem* velocity() const;
-    PropertyItem* overrideDynamics() const;
 
 protected:
     void createProperties() override;
@@ -49,7 +47,6 @@ protected:
 private:
     PropertyItem* m_tuning = nullptr;
     PropertyItem* m_velocity = nullptr;
-    PropertyItem* m_overrideDynamics = nullptr;
 };
 }
 
