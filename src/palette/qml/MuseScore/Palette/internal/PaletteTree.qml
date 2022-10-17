@@ -117,8 +117,8 @@ StyledListView {
             const parentIndex = paletteTreeDelegateModel.modelIndex(0);
             index = paletteModel.index(0, 0, parentIndex);
         } else if (!index.valid) {
-            // no cell selected and not in search: use current index from previous click
-            index = currentIndex;
+            // no cell selected: use current item index
+            index = currentItem.modelIndex;
         }
 
         paletteController.applyPaletteElement(index, Qt.NoModifier);
