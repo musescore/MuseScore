@@ -58,7 +58,7 @@ public:
     void setDisplayObjectWidth(double value);
     void paint(QPainter*) override;
 
-    int wholeNoteToPixelX(engraving::Fraction tick) const { return wholeNoteToPixelX(tick.numerator() / (double)tick.denominator()); }
+    int wholeNoteToPixelX(engraving::Fraction tick) const { return wholeNoteToPixelX(tick.toDouble()); }
     int wholeNoteToPixelX(double tick) const;
     double pixelXToWholeNote(int pixelX) const;
 
