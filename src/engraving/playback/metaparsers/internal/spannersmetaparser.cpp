@@ -181,8 +181,8 @@ mu::mpe::duration_t SpannersMetaParser::spannerDuration(const Score* score, cons
         return durationFromTicks(startBps.val, durationTicks);
     }
 
-    mpe::duration_t result = (durationFromTicks(startBps.val, durationTicks) +
-                              durationFromTicks(endBps.val, durationTicks)) / 2;
+    mpe::duration_t result = (durationFromTicks(startBps.val, durationTicks)
+                              + durationFromTicks(endBps.val, durationTicks)) / 2;
 
     return result;
 }
