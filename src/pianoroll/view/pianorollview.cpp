@@ -259,6 +259,17 @@ void PianorollView::setSubdivision(int value)
     emit subdivisionChanged();
 }
 
+void PianorollView::setStripePattern(PianorollStripePattern value)
+{
+    if (value == m_stripePattern) {
+        return;
+    }
+    m_stripePattern = value;
+    update();
+
+    emit stripePatternChanged();
+}
+
 void PianorollView::setCenterX(double value)
 {
     if (value == m_centerX) {
@@ -403,7 +414,7 @@ void PianorollView::paint(QPainter* p)
         double y = pitchToPixelY(pitch + 1);
 
         int degree = (pitch - transp.chromatic + 60) % 12;
-        const BarPattern& pat = barPatterns[m_barPattern];
+        const BarPattern& pat = barPatterns[(int)m_stripePattern];
 
         if (controller()->isPitchHighlight(pitch)) {
             p->fillRect(x1, y, x2 - x1, m_noteHeight, m_colorKeyHighlight);
