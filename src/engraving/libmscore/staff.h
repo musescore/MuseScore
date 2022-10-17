@@ -48,11 +48,11 @@ class Part;
 class Score;
 class StaffType;
 class TimeSig;
-class XmlReader;
-class XmlWriter;
 class Ottava;
 class BracketItem;
-class Note;
+
+class XmlReader;
+class XmlWriter;
 
 enum class Key;
 
