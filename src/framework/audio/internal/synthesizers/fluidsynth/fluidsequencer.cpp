@@ -125,7 +125,7 @@ void FluidSequencer::appendControlSwitch(EventSequenceMap& destination, const mp
         start.setIndex(midiControlIdx);
         start.setData(127);
 
-        destination[articulationMeta.timestamp].emplace(std::move(start));
+        destination[noteEvent.arrangementCtx().actualTimestamp].emplace(std::move(start));
 
         midi::Event end(Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
         end.setIndex(midiControlIdx);
