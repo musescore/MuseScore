@@ -187,21 +187,34 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findChords() cons
 
 QList<mu::engraving::EngravingItem*> ElementRepositoryService::findNotes() const
 {
-    QList<mu::engraving::EngravingItem*> resultList;
+    QList<mu::engraving::EngravingItem*> result;
 
-    for (const mu::engraving::EngravingItem* element : findChords()) {
-        const mu::engraving::Chord* chord = mu::engraving::toChord(element);
-
-        if (!chord) {
+    for (engraving::EngravingItem* element : m_rawElementList) {
+        if (element->isNote()) {
+            result << element;
             continue;
         }
 
-        for (mu::engraving::EngravingItem* note : chord->notes()) {
-            resultList << note;
+        engraving::EngravingItem* elementBase = element->elementBase();
+
+        if (elementBase->isChord()) {
+            engraving::Chord* chord = engraving::toChord(elementBase);
+
+            for (mu::engraving::Note* note : chord->notes()) {
+                result << note;
+            }
+        } else if (elementBase->isBeam()) {
+            const mu::engraving::Beam* beam = mu::engraving::toBeam(elementBase);
+
+            for (mu::engraving::ChordRest* chordRest : beam->elements()) {
+                for (mu::engraving::Note* note : engraving::toChord(chordRest)->notes()) {
+                    result << note;
+                }
+            }
         }
     }
 
-    return resultList;
+    return result;
 }
 
 QList<mu::engraving::EngravingItem*> ElementRepositoryService::findNoteHeads() const
