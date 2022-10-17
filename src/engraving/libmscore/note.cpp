@@ -1407,7 +1407,7 @@ void Note::draw(mu::draw::Painter* painter) const
         painter->setFont(f);
         painter->setPen(c);
         double startPosX = bbox().x();
-        if (score()->styleB(Sid::parenthesisHeadGhostNote)) {
+        if (_ghost && score()->styleB(Sid::parenthesisHeadGhostNote)) {
             startPosX += symWidth(SymId::noteheadParenthesisLeft);
         }
 
@@ -2263,15 +2263,7 @@ void Note::layout()
         const Staff* st = staff();
         const StaffType* tab = st->staffTypeForElement(this);
         double mags = magS();
-        bool parenthesis = false;
-        if (tieBack()) {
-            if (chord()->measure() != tieBack()->startNote()->chord()->measure() || !el().empty()) {
-                parenthesis = true;
-            }
-        }
-        if (_ghost) {
-            parenthesis = true;
-        }
+        bool backTiedParenthesis = false;
         // not complete but we need systems to be laid out to add parenthesis
         if (_fixed) {
             _fretString = u"/";
@@ -2283,14 +2275,21 @@ void Note::layout()
                 _fretString = String(u"<%1>").arg(String::number(m_harmonicFret));
             }
         }
-        if (parenthesis && !score()->styleB(Sid::parenthesisHeadGhostNote)) {
+        if (tieBack() && (chord()->measure() != tieBack()->startNote()->chord()->measure() || !el().empty())) {
+            backTiedParenthesis = true;
+        }
+
+        if ((_ghost && !score()->styleB(Sid::parenthesisHeadGhostNote)) || backTiedParenthesis) {
             _fretString = String(u"(%1)").arg(_fretString);
         }
+
         double w = tabHeadWidth(tab);     // !! use _fretString
         bbox().setRect(0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
 
-        if (score()->styleB(Sid::parenthesisHeadGhostNote)) {
-            bbox().setWidth(w + symWidth(SymId::noteheadParenthesisLeft) + symWidth(SymId::noteheadParenthesisRight));
+        if (_ghost && score()->styleB(Sid::parenthesisHeadGhostNote)) {
+            bbox().setWidth(w + symWidth(SymId::noteheadParenthesisLeft) + symWidth(SymId::noteheadParenthesisRight) * 1.25);
+        } else {
+            bbox().setWidth(w);
         }
     } else {
         if (_deadNote) {
@@ -2386,7 +2385,7 @@ void Note::layout2()
                 }
 
                 if (score()->styleB(Sid::parenthesisHeadGhostNote) && staff()->isTabStaff(e->tick())) {
-                    e->movePosX(w + symWidth(SymId::noteheadParenthesisRight));
+                    e->movePosX(w + symWidth(SymId::noteheadParenthesisRight) * 1.5);
                 } else {
                     e->movePosX(w);
                 }
