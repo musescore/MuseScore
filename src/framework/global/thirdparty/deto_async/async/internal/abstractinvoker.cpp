@@ -55,9 +55,15 @@ void AbstractInvoker::invoke(int type, const NotifyData& data)
 void AbstractInvoker::invokeCallback(int type, const CallBack& c, const NotifyData& data)
 {
     assert(c.threadID == std::this_thread::get_id());
+
+    if (!containsReceiver(c.receiver)) {
+        return;
+    }
+
     if (c.receiver && !c.receiver->isConnectedAsync()) {
         return;
     }
+
     doInvoke(type, c.call, data);
 }
 
@@ -191,4 +197,17 @@ void AbstractInvoker::removeQInvoker(QInvoker* qi)
 {
     std::lock_guard<std::mutex> lock(m_qInvokersMutex);
     m_qInvokers.remove(qi);
+}
+
+bool AbstractInvoker::containsReceiver(Asyncable* receiver) const
+{
+    for (auto it = m_callbacks.begin(); it != m_callbacks.end(); ++it) {
+        for (const CallBack& c : it->second) {
+            if (c.receiver == receiver) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
