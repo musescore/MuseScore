@@ -151,6 +151,8 @@ protected:
     void addQInvoker(QInvoker* qi);
     void removeQInvoker(QInvoker* qi);
 
+    bool containsReceiver(Asyncable* receiver) const;
+
     std::map<int /*type*/, CallBacks > m_callbacks;
 
     std::mutex m_qInvokersMutex;
