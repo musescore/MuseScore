@@ -66,7 +66,11 @@ public:
         OTTAVA_MB15,
 
         /// trill
-        TRILL
+        TRILL,
+
+        /// hairpin
+        CRESCENDO,
+        DIMINUENDO,
     };
 
 private:
@@ -207,7 +211,8 @@ private:
     std::vector<Vibrato*> _vibratos;
     std::map<GPBeat::HarmonicMarkType, std::vector<SLine*> > m_harmonicMarks;
     std::map<GPBeat::OttavaType, std::vector<SLine*> > m_ottavas;
-    std::vector<SLine*> _trillLines;
+    std::map<GPBeat::Hairpin, std::vector<SLine*> > m_hairpins;
+    std::vector<SLine*> m_trillLines;
 
     std::map<uint16_t, uint16_t > _drumExtension;
 
@@ -224,9 +229,6 @@ private:
         int lowestBase = LOWEST_BASE;     // expected denominator
         static constexpr int LOWEST_BASE = 1024;
     } m_nextTupletInfo;
-
-    Hairpin* _lastHairpin = nullptr;
-    std::vector<Ottava*> m_lastOttavas;
 
 #ifdef ENGRAVING_USE_STRETCHED_BENDS
     std::vector<StretchedBend*> m_bends;
