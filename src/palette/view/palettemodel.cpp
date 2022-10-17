@@ -68,7 +68,7 @@ void PaletteTreeModel::onDataChanged(const QModelIndex& topLeft, const QModelInd
 {
     Q_UNUSED(topLeft);
     Q_UNUSED(bottomRight);
-    static const std::set<int> nonPersistentRoles({ CellActiveRole, PaletteExpandedRole });
+    static const std::set<int> nonPersistentRoles({ CellActiveRole, PaletteExpandedRole, Qt::DecorationRole });
 
     bool treeChanged = false;
     for (int role : roles) {
