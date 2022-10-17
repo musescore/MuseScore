@@ -46,7 +46,7 @@ const UiActionList PaletteUiActions::m_actions = {
              ),
     UiAction("apply-current-palette-element",
              mu::context::UiCtxNotationOpened,
-             mu::context::CTX_ANY,
+             mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Apply current palette element"),
              TranslatableString("action", "Apply current palette element")
              ),
