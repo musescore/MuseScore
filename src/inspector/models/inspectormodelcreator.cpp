@@ -67,6 +67,7 @@
 #include "notation/measurerepeats/measurerepeatsettingsmodel.h"
 #include "notation/tuplets/tupletsettingsmodel.h"
 #include "notation/instrumentname/instrumentnamesettingsmodel.h"
+#include "notation/lyrics/lyricssettingsmodel.h"
 
 using namespace mu::inspector;
 
@@ -172,6 +173,8 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
         return new TupletSettingsModel(parent, repository);
     case InspectorModelType::TYPE_INSTRUMENT_NAME:
         return new InstrumentNameSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_LYRICS:
+        return new LyricsSettingsModel(parent, repository);
     case InspectorModelType::TYPE_BREATH:
     case InspectorModelType::TYPE_ARPEGGIO:
     case InspectorModelType::TYPE_DYNAMIC:
