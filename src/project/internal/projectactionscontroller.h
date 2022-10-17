@@ -124,10 +124,11 @@ private:
     RetVal<bool> needGenerateAudio(bool isPublic) const;
     AudioFile exportMp3(const notation::INotationPtr notation) const;
 
-    void uploadProject(const CloudProjectInfo& info, const AudioFile& audio = AudioFile(), bool openEditUrl = true);
+    void uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode);
     void uploadAudio(const AudioFile& audio, const QUrl& sourceUrl);
 
     void onProjectSuccessfullyUploaded(const QUrl& urlToOpen = QUrl());
+    void onProjectUploadFailed(const Ret& ret, bool publishMode);
 
     void warnCloudIsNotAvailable();
     void warnPublishIsNotAvailable();
