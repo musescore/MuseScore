@@ -144,9 +144,6 @@ public:
 
     std::vector<Chunk> chunksFromRange(const int fromTick, const int toTick);
 };
-
-class Spanner;
-extern bool glissandoPitchOffsets(const Spanner* spanner, std::vector<int>& pitchOffsets);
 } // namespace mu::engraving
 
 #endif
