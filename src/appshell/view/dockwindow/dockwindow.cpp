@@ -221,10 +221,14 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
         return;
     }
 
-    emit currentPageUriChanged(uri);
+    auto notifyAboutPageLoaded = [this, &uri]() {
+        emit currentPageUriChanged(uri);
+        emit pageLoaded();
+        notifyAboutDocksOpenStatus();
+    };
 
     if (isFirstOpening) {
-        async::Async::call(this, [this]() {
+        async::Async::call(this, [this, notifyAboutPageLoaded]() {
             if (!m_hasGeometryBeenRestored
                 || (m_mainWindow->windowHandle()->windowStates() & QWindow::FullScreen)) {
                 //! NOTE: show window as maximized if no geometry has been restored
@@ -233,12 +237,12 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
             } else {
                 m_mainWindow->windowHandle()->setVisible(true);
             }
+
+            notifyAboutPageLoaded();
         });
+    } else {
+        notifyAboutPageLoaded();
     }
-
-    emit pageLoaded();
-
-    notifyAboutDocksOpenStatus();
 }
 
 bool DockWindow::isDockOpen(const QString& dockName) const
