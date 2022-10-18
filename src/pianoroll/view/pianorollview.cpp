@@ -43,46 +43,6 @@
 using namespace mu::pianoroll;
 using namespace mu::engraving;
 
-const BarPattern PianorollView::barPatterns[] = {
-    { QT_TRANSLATE_NOOP("BarPattern", "C major / A minor"),   { 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "D♭ major / B♭ minor"), { 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "D major / B minor"),   { 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "E♭ major / C minor"),  { 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "E major / C♯ minor"),  { 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "F major / D minor"),   { 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "G♭ major / E♭ minor"), { 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "G major / E minor"),   { 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "A♭ major / F minor"),  { 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "A major / F♯ minor"),  { 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "B♭ major / G minor"),  { 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "B major / G♯ minor"),  { 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "C Diminished"),  { 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "D♭ Diminished"), { 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "D Diminished"),  { 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "C Half/Whole"),  { 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "D♭ Half/Whole"), { 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "D Half/Whole"),  { 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "C Whole tone"),  { 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "D♭ Whole tone"), { 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "C Augmented"),   { 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "D♭ Augmented"),  { 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "D Augmented"),   { 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "E♭ Augmented"),  { 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "C major / A minor pentatonic"),  { 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "D♭ major / B♭ minor pentatonic"),  { 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "D major / B minor pentatonic"),  { 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "E♭ major / C minor pentatonic"),  { 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "E major / C♯ minor pentatonic"),  { 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "F major / D minor pentatonic"),  { 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "G♭ major / E♭ minor pentatonic"),  { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "G major / E minor pentatonic"),  { 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "A♭ major / F minor pentatonic"),  { 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "A major / F♯ minor pentatonic"),  { 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "B♭ major / G minor pentatonic"),  { 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0 } },
-    { QT_TRANSLATE_NOOP("BarPattern", "B major / G♯ minor pentatonic"),  { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1 } },
-    { "",              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } }
-};
-
 static const qreal MIN_DRAG_DIST_SQ = 9;
 
 //--------------------
@@ -259,7 +219,7 @@ void PianorollView::setSubdivision(int value)
     emit subdivisionChanged();
 }
 
-void PianorollView::setStripePattern(PianorollStripePattern value)
+void PianorollView::setStripePattern(int value)
 {
     if (value == m_stripePattern) {
         return;
@@ -414,11 +374,11 @@ void PianorollView::paint(QPainter* p)
         double y = pitchToPixelY(pitch + 1);
 
         int degree = (pitch - transp.chromatic + 60) % 12;
-        const BarPattern& pat = barPatterns[(int)m_stripePattern];
+        bool isWhite = (m_stripePattern & (1 << degree)) > 0;
 
         if (controller()->isPitchHighlight(pitch)) {
             p->fillRect(x1, y, x2 - x1, m_noteHeight, m_colorKeyHighlight);
-        } else if (!pat.isWhiteKey[degree]) {
+        } else if (!isWhite) {
             p->fillRect(x1, y, x2 - x1, m_noteHeight, m_colorKeyBlack);
         } else {
             p->fillRect(x1, y, x2 - x1, m_noteHeight, m_colorKeyWhite);

@@ -80,18 +80,6 @@ public:
     };
     Q_ENUM(PianorollTool)
 
-    enum class PianorollStripePattern : char {
-        C_MAJ, DF_MAJ, D_MAJ, EF_MAJ, E_MAJ, F_MAJ, GF_MAJ, G_MAJ, AF_MAJ, A_MAJ, BF_MAJ, B_MAJ,
-        C_DIM, DF_DIM, D_DIM,
-        C_HW, DF_HW, D_HW,
-        C_W, DF_W,
-        C_AUG, DF_AUG, D_AUG, EF_AUG,
-        C_MAJ_P, DF_MAJ_P, D_MAJ_P, EF_MAJ_P, E_MAJ_P, F_MAJ_P, GF_MAJ_P, G_MAJ_P, AF_MAJ_P, A_MAJ_P, BF_MAJ_P, B_MAJ_P,
-    };
-    Q_ENUM(PianorollStripePattern)
-
-    static const BarPattern barPatterns[];
-
 private:
     INJECT(pianoroll, context::IGlobalContext, globalContext)
     INJECT(pianoroll, IPianorollController, controller)
@@ -102,7 +90,7 @@ private:
     Q_PROPERTY(PianorollTool tool READ tool WRITE setTool NOTIFY toolChanged)
     Q_PROPERTY(int tuplet READ tuplet WRITE setTuplet NOTIFY tupletChanged)
     Q_PROPERTY(int subdivision READ subdivision WRITE setSubdivision NOTIFY subdivisionChanged)
-    Q_PROPERTY(PianorollStripePattern stripePattern READ stripePattern WRITE setStripePattern NOTIFY stripePatternChanged)
+    Q_PROPERTY(int stripePattern READ stripePattern WRITE setStripePattern NOTIFY stripePatternChanged)
     Q_PROPERTY(double centerX READ centerX WRITE setCenterX NOTIFY centerXChanged)
     Q_PROPERTY(double centerY READ centerY WRITE setCenterY NOTIFY centerYChanged)
     Q_PROPERTY(double displayObjectWidth READ displayObjectWidth WRITE setDisplayObjectWidth NOTIFY displayObjectWidthChanged)
@@ -127,8 +115,8 @@ public:
     void setTuplet(int value);
     int subdivision() const { return m_subdivision; }
     void setSubdivision(int value);
-    PianorollStripePattern stripePattern() const { return m_stripePattern; }
-    void setStripePattern(PianorollStripePattern value);
+    int stripePattern() const { return m_stripePattern; }
+    void setStripePattern(int value);
     double centerX() const { return m_centerX; }
     void setCenterX(double value);
     double centerY() const { return m_centerY; }
@@ -229,7 +217,7 @@ private:
     double m_noteHeight;
     int m_tuplet = 1;
     int m_subdivision = 0;
-    PianorollStripePattern m_stripePattern = PianorollStripePattern::C_MAJ;
+    int m_stripePattern = 0b101010110101;  //bitflag indicating which rows are indicated as white keys
     PianorollTool m_tool = PianorollTool::SELECT;
 
     int m_editNoteVoice = 0;  //Voice to use when adding notes
