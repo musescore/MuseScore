@@ -571,6 +571,18 @@ QUrl ProjectConfiguration::scoreManagerUrl() const
     return cloudConfiguration()->scoreManagerUrl();
 }
 
+QUrl ProjectConfiguration::supportForumUrl() const
+{
+    if (languagesService()->currentLanguage().code.startsWith("en")) {
+        // The English support forum
+        return QUrl("https://musescore.org/forum/6");
+    }
+
+    // The general forum page, where the support forum is linked at the top
+    // (except in English; there you have the Announcements forum)
+    return QUrl("https://musescore.org/forum");
+}
+
 bool ProjectConfiguration::openDetailedProjectUploadedDialog() const
 {
     return settings()->value(OPEN_DETAILED_PROJECT_UPLOADED_DIALOG).toBool();

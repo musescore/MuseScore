@@ -30,6 +30,7 @@
 #include "accessibility/iaccessibilityconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "cloud/icloudconfiguration.h"
+#include "languages/ilanguagesservice.h"
 
 #include "../iprojectconfiguration.h"
 
@@ -41,6 +42,7 @@ class ProjectConfiguration : public IProjectConfiguration
     INJECT(project, cloud::ICloudConfiguration, cloudConfiguration)
     INJECT(project, accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
     INJECT(project, io::IFileSystem, fileSystem)
+    INJECT(project, languages::ILanguagesService, languagesService)
 
 public:
     void init();
@@ -114,6 +116,7 @@ public:
     void setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport) override;
 
     QUrl scoreManagerUrl() const override;
+    QUrl supportForumUrl() const override;
 
     bool openDetailedProjectUploadedDialog() const override;
     void setOpenDetailedProjectUploadedDialog(bool show) override;

@@ -31,6 +31,7 @@
 #include "projectconfiguration.h"
 #include "engraving/infrastructure/mscio.h"
 #include "engraving/engravingerrors.h"
+#include "cloud/clouderrors.h"
 
 #include "log.h"
 
@@ -504,7 +505,7 @@ void ProjectActionsController::publish()
 
     AudioFile audio = exportMp3(project->masterNotation()->notation());
     if (audio.isValid()) {
-        uploadProject(info.val, audio);
+        uploadProject(info.val, audio, /*openEditUrl=*/ true, /*publishMode=*/ true);
     }
 }
 
@@ -587,7 +588,7 @@ bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, 
         }
     }
 
-    uploadProject(info, audio, isPublic);
+    uploadProject(info, audio, /*openEditUrl=*/ isPublic, /*publishMode=*/ false);
     m_numberOfSavesToCloud++;
 
     return true;
@@ -664,7 +665,7 @@ ProjectActionsController::AudioFile ProjectActionsController::exportMp3(const IN
     return audio;
 }
 
-void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl)
+void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode)
 {
     // We can only be uploading one project at a time
     if (m_isUploadingProject) {
@@ -703,12 +704,14 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
         }
     });
 
-    m_uploadingProjectProgress->finished.onReceive(this, [this, project, projectData, audio, openEditUrl](const ProgressResult& res) {
+    m_uploadingProjectProgress->finished.onReceive(
+        this, [this, project, projectData, audio, openEditUrl, publishMode](const ProgressResult& res) {
         m_isUploadingProject = false;
         projectData->deleteLater();
 
         if (!res.ret) {
             LOGE() << res.ret.toString();
+            onProjectUploadFailed(res.ret, publishMode);
             return;
         }
 
@@ -798,6 +801,45 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
 
     if (btn == viewOnlineBtn.btn) {
         interactive()->openUrl(scoreManagerUrl);
+    }
+}
+
+void ProjectActionsController::onProjectUploadFailed(const Ret& ret, bool publishMode)
+{
+    std::string title = publishMode
+                        ? trc("project/save", "Your score could not be published")
+                        : trc("project/save", "Your score could not be saved to the cloud");
+
+    std::string msg;
+
+    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
+    okBtn.accent = true;
+
+    IInteractive::ButtonData helpBtn { IInteractive::Button::CustomButton, trc("project/save", "Get help") };
+
+    IInteractive::ButtonDatas buttons { helpBtn, okBtn };
+
+    switch (ret.code()) {
+    case int(cloud::Err::AccountNotActivated):
+        msg = trc("project/save", "Your musescore.com account needs to be verified first. "
+                                  "Please activate your account via the link in the activation email.");
+        buttons = { okBtn };
+        break;
+    case int(cloud::Err::NetworkError):
+        msg = cloud::cloudNetworkErrorUserDescription(ret);
+        if (!msg.empty()) {
+            msg += "\n\n" + trc("project/save", "Please try again later, or get help for this problem on musescore.org.");
+            break;
+        }
+    // FALLTHROUGH
+    default:
+        msg = trc("project/save", "Please try again later, or get help for this problem on musescore.org.");
+        break;
+    }
+
+    IInteractive::Result result = interactive()->warning(title, msg, buttons, okBtn.btn, IInteractive::Option::WithIcon);
+    if (result.button() == helpBtn.btn) {
+        interactive()->openUrl(configuration()->supportForumUrl());
     }
 }
 
