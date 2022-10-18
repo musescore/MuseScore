@@ -73,7 +73,7 @@ private:
     void renderArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const;
     bool renderChordArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const;
     void renderNoteArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const;
-    mpe::duration_t tiedNotesTotalDuration(const Note* firstNote, const int tickPositionOffset) const;
+    mpe::duration_t tiedNotesTotalDuration(const Note* firstNote) const;
 };
 }
 
