@@ -1256,16 +1256,14 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                             // add back spanners (going back from end to start spanner element
                             // makes sure the 'other' spanner anchor element is already set up)
                             // 'on' is the old spanner end note and 'nn' is the new spanner end note
-                            if (cloneSpanners) {
-                                for (Spanner* oldSp : on->spannerBack()) {
-                                    Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
-                                    if (newStart != nullptr) {
-                                        Spanner* newSp = toSpanner(oldSp->linkedClone());
-                                        newSp->setNoteSpan(newStart, nn);
-                                        score->addElement(newSp);
-                                    } else {
-                                        LOGD("cloneStaff: cannot find spanner start note");
-                                    }
+                            for (Spanner* oldSp : on->spannerBack()) {
+                                Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
+                                if (newStart != nullptr) {
+                                    Spanner* newSp = toSpanner(oldSp->linkedClone());
+                                    newSp->setNoteSpan(newStart, nn);
+                                    score->addElement(newSp);
+                                } else {
+                                    LOGD("cloneStaff: cannot find spanner start note");
                                 }
                             }
                         }
