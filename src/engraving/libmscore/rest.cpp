@@ -397,56 +397,71 @@ void Rest::layout()
     int userLine   = yOff == 0.0 ? 0 : lrint(yOff / (lineDist * _spatium));
     int lines      = st ? st->lines() : 5;
     int lineOffset = computeLineOffset(lines);
-
-    int snappedLineOffset = voice() & 1 ? ceil((double)lineOffset / 2.) : floor((double)lineOffset / 2.);
-
+    bool up = !(voice() & 1);
+    DurationType dType = durationType().type();
+    bool hasLedger
+        = (dType == DurationType::V_WHOLE || dType == DurationType::V_MEASURE || dType == DurationType::V_BREVE
+           || dType == DurationType::V_HALF);
+    bool biasDown = !up;
+    if (biasDown && hasLedger) {
+        biasDown = false;
+    }
+    // (note: ceil actually brings us downwards as it is an offset)
+    int snappedLineOffset = biasDown ? ceil((double)lineOffset / 2.) : floor((double)lineOffset / 2.);
+    double finalLineOffset = double(lineOffset) / 2.;
     int yo;
     m_sym = getSymbol(durationType().type(), snappedLineOffset + userLine, lines, &yo);
-    double yOffset = double(yo) + double(snappedLineOffset);
+    if (hasLedger) {
+        // whole rests, breves, half rests, etc always snap to 1sp
+        finalLineOffset = snappedLineOffset;
+    } else if (lines > 2) {
+        // only snap when inside the staff for lines > 2. for lines == 2, the rests can live in the space
+        // rather than having to be on a line as usual.
 
-    // figure out where the top or bottom of the staff is, because different sized glyphs
-    // stay in the staff for different strectches of vertical position
-    double borderTop = -1.0;
-    bool adjustHalf = (lineOffset & 1);
-    double borderBottom = double(lines);
-    DurationType dType = durationType().type();
-    switch (dType) {
-    case DurationType::V_16TH:
-        --borderTop;
-        break;
-    case DurationType::V_32ND:
-        --borderTop;
-        ++borderBottom;
-        break;
-    case DurationType::V_64TH:
-        borderTop -= 2;
-        borderBottom += 1;
-        break;
-    case DurationType::V_128TH:
-        borderTop -= 2;
-        borderBottom += 2;
-        break;
-    case DurationType::V_256TH:
-        borderTop -= 3;
-        borderBottom += 2;
-        break;
-    case DurationType::V_512TH:
-        borderTop -= 3;
-        borderBottom += 3;
-        break;
-    case DurationType::V_1024TH:
-        borderTop -= 3;
-        borderBottom += 4;
-        break;
-    default:
-        break;
+        // figure out where the top or bottom of the staff is, because different sized glyphs
+        // stay in the staff for different strectches of vertical position
+        double borderTop = -1.0;
+        double borderBottom = double(lines);
+        switch (dType) {
+        case DurationType::V_16TH:
+            --borderTop;
+            break;
+        case DurationType::V_32ND:
+            --borderTop;
+            ++borderBottom;
+            break;
+        case DurationType::V_64TH:
+            borderTop -= 2;
+            borderBottom += 1;
+            break;
+        case DurationType::V_128TH:
+            borderTop -= 2;
+            borderBottom += 2;
+            break;
+        case DurationType::V_256TH:
+            borderTop -= 3;
+            borderBottom += 2;
+            break;
+        case DurationType::V_512TH:
+            borderTop -= 3;
+            borderBottom += 3;
+            break;
+        case DurationType::V_1024TH:
+            borderTop -= 3;
+            borderBottom += 4;
+            break;
+        default:
+            break;
+        }
+
+        if (finalLineOffset + double(yo) >= borderTop && finalLineOffset + double(yo) <= borderBottom) {
+            // if we are inside the staff, use the 1sp snapping
+            finalLineOffset = snappedLineOffset;
+        }
+        // otherwise, keep the unsnapped one (which will be in increments of 0.5sp)
     }
-    // snap to 0.5sp if the rests are outside of the staff
-    if (yOffset < borderTop && adjustHalf) {
-        yOffset += 0.5;
-    } else if (yOffset > borderBottom && adjustHalf) {
-        yOffset -= 0.5;
-    }
+    double yOffset = double(yo) + finalLineOffset;
+
     setPosY(yOffset * lineDist * _spatium);
 
     if (!shouldNotBeDrawn()) {
@@ -598,16 +613,22 @@ int Rest::computeLineOffset(int lines)
     int assumedCenter = 4;
     int actualCenter  = (lines - 1);
     int centerDiff    = actualCenter - assumedCenter;
-    int nLineAdjust = 0;
+    int headRestGap = 0; // space between notehead and rest
     DurationType dType = durationType().type();
     if (offsetVoices) {
         // move rests in a multi voice context
         bool up = (voice() == 0) || (voice() == 2);         // TODO: use style values
         if (dType == DurationType::V_32ND || dType == DurationType::V_64TH || dType == DurationType::V_128TH
             || dType == DurationType::V_256TH || dType == DurationType::V_512TH || dType == DurationType::V_1024TH) {
-            nLineAdjust = 2 * (up ? -1 : 1);
+            headRestGap = 2 * (up ? -1 : 1);
         } else if (up && dType == DurationType::V_16TH) {
-            nLineAdjust = -2;
+            headRestGap = -2;
+        } else if (dType == DurationType::V_QUARTER) {
+            headRestGap = up ? -2 : 1;
+        } else if (dType == DurationType::V_HALF) {
+            headRestGap = up ? -1 : 1;
+        } else if (dType == DurationType::V_WHOLE || dType == DurationType::V_MEASURE) {
+            headRestGap = up ? -2 : 1;
         }
         // Calculate extra offset to move rests above the highest resp. below the lowest note
         // of this segment (for measure rests, of the whole measure) in all opposite voices.
@@ -618,7 +639,7 @@ int Rest::computeLineOffset(int lines)
         // For compatibility reasons apply automatic collision avoidance only if y-offset is unchanged
         if (RealIsNull(offset().y()) && autoplace()) {
             track_idx_t firstTrack = staffIdx() * 4;
-            int extraOffsetForFewLines = lines < 5 ? 2 : 0;
+            int extraOffsetForFewLines = lines < 5 ? (lines & 1 ? 0 : up ? -1 : 0) : 0;
             bool isMeasureRest = durationType().type() == DurationType::V_MEASURE;
             Segment* seg = isMeasureRest ? measure()->first() : s;
             while (seg) {
@@ -639,15 +660,17 @@ int Rest::computeLineOffset(int lines)
                             int nline = staffGroup == StaffGroup::TAB
                                         ? note->string() * 2
                                         : note->line();
-                            nline = nline + nLineAdjust - centerDiff;
+                            nline = nline + headRestGap - centerDiff;
                             if (up && nline <= line) {
                                 line = nline - extraOffsetForFewLines;
-                                if (note->accidentalType() != AccidentalType::NONE) {
+                                if ((dType == DurationType::V_HALF || dType == DurationType::V_WHOLE)
+                                    && note->accidentalType() != AccidentalType::NONE) {
                                     line--;
                                 }
                             } else if (!up && nline >= line) {
                                 line = nline + extraOffsetForFewLines;
-                                if (note->accidentalType() != AccidentalType::NONE) {
+                                if ((dType == DurationType::V_HALF || dType == DurationType::V_WHOLE)
+                                    && note->accidentalType() != AccidentalType::NONE) {
                                     line++;
                                 }
                             }
@@ -660,32 +683,32 @@ int Rest::computeLineOffset(int lines)
 
         switch (durationType().type()) {
         case DurationType::V_LONG:
-            lineOffset = up ? -3 : 5;
+            lineOffset = up ? (lines == 4 || lines == 2 ? 1 : 0) - 3 : 5;
             lineOffset += up ? (line < 5 ? line - 5 : 0) : (line > 5 ? line - 5 : 0);
             break;
         case DurationType::V_BREVE:
-            lineOffset = up ? -3 : 5;
+            lineOffset = up ? (lines == 4 || lines == 2 ? 1 : 0) - 3 : 5;
             lineOffset += up ? (line < 3 ? line - 3 : 0) : (line > 5 ? line - 5 : 0);
             break;
         case DurationType::V_MEASURE:
             if (ticks() >= Fraction(2, 1)) {     // breve symbol
-                lineOffset = up ? -3 : 5;
+                lineOffset = up ? (lines == 4 || lines == 2 ? 1 : 0) - 3 : 5;
                 lineOffset += up ? (line < 3 ? line - 3 : 0) : (line > 5 ? line - 4 : 0);
             } else {
-                lineOffset = up ? -4 : 6;                   // whole symbol
+                lineOffset = up ? (lines == 4 || lines == 2 ? 1 : 0) - 2 : 6;                   // whole symbol
                 lineOffset += up ? (line < 3 ? line - 2 : 0) : (line > 6 ? line - 5 : 0);
             }
             break;
         case DurationType::V_WHOLE:
-            lineOffset = up ? -4 : 6;
+            lineOffset = up ? (lines == 4 || lines == 2 ? 1 : 0) - 2 : 6;
             lineOffset += up ? (line < 3 ? line - 2 : 0) : (line > 6 ? line - 5 : 0);
             break;
         case DurationType::V_HALF:
-            lineOffset = up ? -4 : 4;
+            lineOffset = up ? (lines == 4 || lines == 2 ? 1 : 0) - 4 : 4;
             lineOffset += up ? (line < 2 ? line - 3 : 0) : (line > 5 ? line - 4 : 0);
             break;
         case DurationType::V_QUARTER:
-            lineOffset = up ? -4 : 4;
+            lineOffset = up ? -3 : 4;
             lineOffset += up ? (line < 5 ? line - 4 : 0) : (line > 3 ? line - 3 : 0);
             break;
         case DurationType::V_EIGHTH:
