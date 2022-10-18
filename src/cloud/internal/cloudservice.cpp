@@ -31,15 +31,19 @@
 #include <QHttpMultiPart>
 #include <QRandomGenerator>
 
-#include "network/networkerrors.h"
-#include "multiinstances/resourcelockguard.h"
-#include "global/async/async.h"
+#include "async/async.h"
+#include "containers.h"
+#include "types/translatablestring.h"
 
 #include "clouderrors.h"
+#include "multiinstances/resourcelockguard.h"
+#include "network/networkerrors.h"
+
 #include "oauthhttpserverreplyhandler.h"
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::cloud;
 using namespace mu::network;
 using namespace mu::framework;
@@ -55,6 +59,7 @@ static const QString PLATFORM_KEY("platform");
 static const std::string CLOUD_ACCESS_TOKEN_RESOURCE_NAME("CLOUD_ACCESS_TOKEN");
 
 static constexpr int USER_UNAUTHORIZED_STATUS_CODE = 401;
+static constexpr int FORBIDDEN_CODE = 403;
 static constexpr int NOT_FOUND_STATUS_CODE = 404;
 
 static constexpr int INVALID_SCORE_ID = 0;
@@ -510,6 +515,31 @@ ProgressPtr CloudService::uploadAudio(QIODevice& audioData, const QString& audio
     return progress;
 }
 
+static Ret uploadingRetFromRawUploadingRet(const Ret& rawRet, bool isScoreAlreadyUploaded)
+{
+    int code = statusCode(rawRet);
+
+    if (!isScoreAlreadyUploaded && code == FORBIDDEN_CODE) {
+        return make_ret(cloud::Err::AccountNotActivated);
+    }
+
+    static const std::map<int, mu::TranslatableString> codes {
+        { 400, mu::TranslatableString("cloud", "Invalid request") },
+        { 403, mu::TranslatableString("cloud", "Forbidden. User is not owner of the score.") },
+        { 422, mu::TranslatableString("cloud", "Validation is failed") },
+        { 500, mu::TranslatableString("cloud", "Internal server error") },
+    };
+
+    std::string userDescription = qtrc("cloud", "Error %1: %2")
+                                  .arg(code)
+                                  .arg(mu::value(codes, code, TranslatableString("cloud", "Unknown error")).qTranslated())
+                                  .toStdString();
+
+    Ret ret = make_ret(cloud::Err::NetworkError);
+    ret.setData(CLOUD_NETWORK_ERROR_USER_DESCRIPTION_KEY, userDescription);
+    return ret;
+}
+
 mu::RetVal<mu::ValMap> CloudService::doUploadScore(INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
                                                    bool isPrivate, const QUrl& sourceUrl)
 {
@@ -587,7 +617,9 @@ mu::RetVal<mu::ValMap> CloudService::doUploadScore(INetworkManagerPtr uploadMana
 
     if (!ret) {
         printServerReply(receivedData);
-        result.ret = ret;
+
+        result.ret = uploadingRetFromRawUploadingRet(ret, isScoreAlreadyUploaded);
+
         return result;
     }
 
