@@ -178,8 +178,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
     // insert note
     DirectionV stemDirection = DirectionV::AUTO;
     track_idx_t track = is.track();
-    if (is.drumNote() != -1) {
-        nval.pitch        = is.drumNote();
+    if (is.drumset()) {
         const Drumset* ds = is.drumset();
         nval.headGroup    = ds->noteHead(nval.pitch);
         stemDirection     = ds->stemDirection(nval.pitch);
@@ -187,6 +186,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
         is.setTrack(track);
         expandVoice(is.segment(), is.track());
     }
+
     if (!is.cr()) {
         return 0;
     }
