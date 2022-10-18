@@ -109,9 +109,9 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
     const RealizedHarmony::PitchMap& notes = realized.notes();
 
     const Score* score = chordSymbol->score();
-    int positionTick = chordSymbol->tick().ticks() + ticksPositionOffset;
+    int positionTick = chordSymbol->tick().ticks();
 
-    timestamp_t eventTimestamp = timestampFromTicks(score, positionTick);
+    timestamp_t eventTimestamp = timestampFromTicks(score, positionTick + ticksPositionOffset);
     PlaybackEventList& events = result[eventTimestamp];
 
     int durationTicks = realized.getActualDuration(positionTick).ticks();
@@ -220,7 +220,7 @@ void PlaybackEventsRenderer::renderNoteEvents(const Chord* chord, const int tick
         return;
     }
 
-    int chordPosTick = chord->tick().ticks() + tickPositionOffset;
+    int chordPosTick = chord->tick().ticks();
     int chordDurationTicks = chord->durationTypeTicks().ticks();
 
     const Score* score = chord->score();
@@ -230,7 +230,7 @@ void PlaybackEventsRenderer::renderNoteEvents(const Chord* chord, const int tick
 
     static ArticulationMap articulations;
 
-    RenderingContext ctx(timestampFromTicks(chord->score(), chordPosTick),
+    RenderingContext ctx(timestampFromTicks(chord->score(), chordPosTick + tickPositionOffset),
                          durationFromTicks(bps.val, chordDurationTicks),
                          nominalDynamicLevel,
                          chord->tick().ticks(),
@@ -277,11 +277,11 @@ void PlaybackEventsRenderer::renderRestEvents(const Rest* rest, const int tickPo
         return;
     }
 
-    int positionTick = rest->tick().ticks() + tickPositionOffset;
+    int positionTick = rest->tick().ticks();
     int durationTicks = rest->ticks().ticks();
     double beatsPerSecond = rest->score()->tempomap()->tempo(positionTick).val;
 
-    timestamp_t nominalTimestamp = timestampFromTicks(rest->score(), positionTick);
+    timestamp_t nominalTimestamp = timestampFromTicks(rest->score(), positionTick + tickPositionOffset);
     duration_t nominalDuration = durationFromTicks(beatsPerSecond, durationTicks);
 
     result[nominalTimestamp].emplace_back(mpe::RestEvent(nominalTimestamp, nominalDuration, static_cast<voice_layer_idx_t>(rest->voice())));
@@ -354,7 +354,7 @@ void PlaybackEventsRenderer::renderNoteArticulations(const Chord* chord, const R
         }
 
         if (note->tieFor()) {
-            noteCtx.duration = tiedNotesTotalDuration(note, ctx.positionTickOffset);
+            noteCtx.duration = tiedNotesTotalDuration(note);
             result.emplace_back(buildNoteEvent(std::move(noteCtx)));
             continue;
         }
@@ -373,7 +373,7 @@ void PlaybackEventsRenderer::renderNoteArticulations(const Chord* chord, const R
     }
 }
 
-duration_t PlaybackEventsRenderer::tiedNotesTotalDuration(const Note* firstNote, const int tickPositionOffset) const
+duration_t PlaybackEventsRenderer::tiedNotesTotalDuration(const Note* firstNote) const
 {
     mpe::duration_t result = 0;
 
@@ -385,7 +385,7 @@ duration_t PlaybackEventsRenderer::tiedNotesTotalDuration(const Note* firstNote,
             continue;
         }
 
-        BeatsPerSecond bps = score->tempomap()->tempo(tiedNote->tick().ticks() + tickPositionOffset);
+        BeatsPerSecond bps = score->tempomap()->tempo(tiedNote->tick().ticks());
         result += durationFromTicks(bps.val, tiedNote->chord()->durationTypeTicks().ticks());
     }
 
