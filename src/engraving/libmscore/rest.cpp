@@ -403,9 +403,48 @@ void Rest::layout()
     int yo;
     m_sym = getSymbol(durationType().type(), snappedLineOffset + userLine, lines, &yo);
     double yOffset = double(yo) + double(snappedLineOffset);
-    if (yOffset < -1.0 && (lineOffset & 1)) {
+
+    // figure out where the top or bottom of the staff is, because different sized glyphs
+    // stay in the staff for different strectches of vertical position
+    double borderTop = -1.0;
+    bool adjustHalf = (lineOffset & 1);
+    double borderBottom = double(lines);
+    DurationType dType = durationType().type();
+    switch (dType) {
+    case DurationType::V_16TH:
+        --borderTop;
+        break;
+    case DurationType::V_32ND:
+        --borderTop;
+        ++borderBottom;
+        break;
+    case DurationType::V_64TH:
+        borderTop -= 2;
+        borderBottom += 1;
+        break;
+    case DurationType::V_128TH:
+        borderTop -= 2;
+        borderBottom += 2;
+        break;
+    case DurationType::V_256TH:
+        borderTop -= 3;
+        borderBottom += 2;
+        break;
+    case DurationType::V_512TH:
+        borderTop -= 3;
+        borderBottom += 3;
+        break;
+    case DurationType::V_1024TH:
+        borderTop -= 3;
+        borderBottom += 4;
+        break;
+    default:
+        break;
+    }
+    // snap to 0.5sp if the rests are outside of the staff
+    if (yOffset < borderTop && adjustHalf) {
         yOffset += 0.5;
-    } else if (yOffset > double(lines) && (lineOffset & 1)) {
+    } else if (yOffset > borderBottom && adjustHalf) {
         yOffset -= 0.5;
     }
     setPosY(yOffset * lineDist * _spatium);
@@ -559,11 +598,17 @@ int Rest::computeLineOffset(int lines)
     int assumedCenter = 4;
     int actualCenter  = (lines - 1);
     int centerDiff    = actualCenter - assumedCenter;
-
+    int nLineAdjust = 0;
+    DurationType dType = durationType().type();
     if (offsetVoices) {
         // move rests in a multi voice context
         bool up = (voice() == 0) || (voice() == 2);         // TODO: use style values
-
+        if (dType == DurationType::V_32ND || dType == DurationType::V_64TH || dType == DurationType::V_128TH
+            || dType == DurationType::V_256TH || dType == DurationType::V_512TH || dType == DurationType::V_1024TH) {
+            nLineAdjust = 2 * (up ? -1 : 1);
+        } else if (up && dType == DurationType::V_16TH) {
+            nLineAdjust = -2;
+        }
         // Calculate extra offset to move rests above the highest resp. below the lowest note
         // of this segment (for measure rests, of the whole measure) in all opposite voices.
         // Ignore stems and articulations, because which multi-voice they are at the opposite end.
@@ -594,7 +639,7 @@ int Rest::computeLineOffset(int lines)
                             int nline = staffGroup == StaffGroup::TAB
                                         ? note->string() * 2
                                         : note->line();
-                            nline = nline - centerDiff;
+                            nline = nline + nLineAdjust - centerDiff;
                             if (up && nline <= line) {
                                 line = nline - extraOffsetForFewLines;
                                 if (note->accidentalType() != AccidentalType::NONE) {
@@ -648,25 +693,31 @@ int Rest::computeLineOffset(int lines)
             lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
             break;
         case DurationType::V_16TH:
-            lineOffset = up ? -6 : 4;
+            lineOffset = up ? -4 : 4;
             lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
             break;
         case DurationType::V_32ND:
-            lineOffset = up ? -6 : 6;
+            lineOffset = up ? -4 : 4;
             lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
             break;
         case DurationType::V_64TH:
-            lineOffset = up ? -8 : 6;
+            lineOffset = up ? -6 : 4;
             lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
             break;
         case DurationType::V_128TH:
+            lineOffset = up ? -6 : 6;
+            lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
+            break;
+        case DurationType::V_256TH:
+            lineOffset = up ? -8 : 6;
+            lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
+            break;
+        case DurationType::V_512TH:
             lineOffset = up ? -8 : 8;
             lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
             break;
         case DurationType::V_1024TH:
-        case DurationType::V_512TH:
-        case DurationType::V_256TH:
-            lineOffset = up ? -10 : 6;
+            lineOffset = up ? -8 : 10;
             lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
             break;
         default:
