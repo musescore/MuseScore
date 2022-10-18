@@ -628,6 +628,7 @@ void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
     note->setTrack(cr->track());
     cr->add(note);
     setPitch(note, gpnote->midiPitch());
+    setTpc(note, gpnote->accidental());
     addBend(gpnote, note);
     addLetRing(gpnote, note);
     addPalmMute(gpnote, note);
@@ -2014,7 +2015,26 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
     note->setString(musescoreString);
 
     note->setPitch(pitch);
-    note->setTpcFromPitch();
+}
+
+void GPConverter::setTpc(Note* note, int accidental)
+{
+    std::map<int, int> toneToTpc = {
+        { 0, 14 },
+        { 2, 16 },
+        { 4, 18 },
+        { 5, 13 },
+        { 7, 15 },
+        { 9, 17 },
+        { 11, 19 },
+    };
+
+    if (accidental == GPNote::invalidAccidental) {
+        note->setTpcFromPitch();
+    } else {
+        int tone = (note->pitch() - accidental + 12) % 12;
+        note->setTpc(toneToTpc[tone] + accidental * 7);
+    }
 }
 
 int GPConverter::calculateDrumPitch(int element, int variation, const String& /*instrumentName*/)

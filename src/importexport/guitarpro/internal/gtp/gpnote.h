@@ -79,6 +79,9 @@ public:
     void setVariation(int t) { _midiPitch.variation = t; }
     void setElement(int t) { _midiPitch.element = t; }
 
+    void setAccidental(int acc) { _accidental = acc; }
+    int accidental() const { return _accidental; }
+
     void setHarmonicFret(float f) { _harmonic.fret = f; }
     void setHarmonicType(Harmonic::Type t) { _harmonic.type = t; }
     const Harmonic& harmonic() const { return _harmonic; }
@@ -137,12 +140,15 @@ public:
     int id() const { return _id; }
 
     const std::unordered_set<std::unique_ptr<INoteProperty> >& properties() const { return _properties; }
+    static constexpr int invalidAccidental = -10;
 
 private:
     int _id{ -1 };
     TieType _tie{ TieType::None };
     std::unordered_set<std::unique_ptr<INoteProperty> > _properties;
     MidiPitch _midiPitch;
+
+    int _accidental = invalidAccidental;
     Harmonic _harmonic;
     std::unique_ptr<Bend> _bend;
     bool _letRing{ false };

@@ -73,7 +73,8 @@
             <acciaccatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -82,7 +83,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>74</pitch>
-              <tpc>16</tpc>
+              <tpc>-9</tpc>
+              <tpc2>16</tpc2>
               <fret>15</fret>
               <string>1</string>
               </Note>
@@ -93,7 +95,8 @@
             <appoggiatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -102,7 +105,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>74</pitch>
-              <tpc>16</tpc>
+              <tpc>-9</tpc>
+              <tpc2>16</tpc2>
               <fret>15</fret>
               <string>1</string>
               </Note>
@@ -124,7 +128,8 @@
             <acciaccatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -135,7 +140,8 @@
             <acciaccatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -144,7 +150,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>74</pitch>
-              <tpc>16</tpc>
+              <tpc>-9</tpc>
+              <tpc2>16</tpc2>
               <fret>15</fret>
               <string>1</string>
               </Note>
@@ -159,7 +166,8 @@
             <appoggiatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -170,7 +178,8 @@
             <appoggiatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -179,7 +188,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>74</pitch>
-              <tpc>16</tpc>
+              <tpc>-9</tpc>
+              <tpc2>16</tpc2>
               <fret>15</fret>
               <string>1</string>
               </Note>
@@ -201,7 +211,8 @@
             <acciaccatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -212,7 +223,8 @@
             <acciaccatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -223,7 +235,8 @@
             <acciaccatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -232,7 +245,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>74</pitch>
-              <tpc>16</tpc>
+              <tpc>-9</tpc>
+              <tpc2>16</tpc2>
               <fret>15</fret>
               <string>1</string>
               </Note>
@@ -247,7 +261,8 @@
             <appoggiatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -258,7 +273,8 @@
             <appoggiatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -269,7 +285,8 @@
             <appoggiatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -278,7 +295,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>74</pitch>
-              <tpc>16</tpc>
+              <tpc>-9</tpc>
+              <tpc2>16</tpc2>
               <fret>15</fret>
               <string>1</string>
               </Note>
@@ -300,7 +318,8 @@
             <acciaccatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -311,7 +330,8 @@
             <acciaccatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -322,7 +342,8 @@
             <acciaccatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -333,7 +354,8 @@
             <acciaccatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -342,7 +364,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>74</pitch>
-              <tpc>16</tpc>
+              <tpc>-9</tpc>
+              <tpc2>16</tpc2>
               <fret>15</fret>
               <string>1</string>
               </Note>
@@ -357,7 +380,8 @@
             <appoggiatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -368,7 +392,8 @@
             <appoggiatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -379,7 +404,8 @@
             <appoggiatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -390,7 +416,8 @@
             <appoggiatura/>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -399,7 +426,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>74</pitch>
-              <tpc>16</tpc>
+              <tpc>-9</tpc>
+              <tpc2>16</tpc2>
               <fret>15</fret>
               <string>1</string>
               </Note>
