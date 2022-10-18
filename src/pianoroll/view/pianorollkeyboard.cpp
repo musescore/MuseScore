@@ -224,13 +224,15 @@ void PianorollKeyboard::paint(QPainter* p)
         //MIDI notes span [0, 127] and map to pitches with MIDI pitch 0 being the note C-1
 
         //Colored stripes
+        const int stripePattern = 0b101010110101;  //bitflag for C major notes
+
         for (int pitch = 0; pitch < PianorollView::NUM_PITCHES; ++pitch) {
             double y = pitchToPixelY(pitch + 1);
 
             int degree = (pitch - transp.chromatic + 60) % 12;
-            const BarPattern& pat = PianorollView::barPatterns[0];
+            bool isWhite = (stripePattern & (1 << degree)) > 0;
 
-            if (!pat.isWhiteKey[degree]) {
+            if (!isWhite) {
                 p->fillRect(0, y, width(), m_noteHeight, pitch == m_curKeyPressed ? m_colorDrumHighlight : m_colorDrumBlack);
             } else {
                 p->fillRect(0, y, width(), m_noteHeight, pitch == m_curKeyPressed ? m_colorDrumHighlight : m_colorDrumWhite);
