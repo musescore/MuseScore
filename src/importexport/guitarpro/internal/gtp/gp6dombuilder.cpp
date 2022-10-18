@@ -30,6 +30,16 @@ std::pair<int, std::unique_ptr<GPTrack> > GP6DomBuilder::createGPTrack(XmlDomNod
         } else if (nodeName == u"RSE") {
             GPTrack::RSE rse = readTrackRSE(&trackChildNode);
             track->setRSE(rse);
+
+            XmlDomNode bankChangesNode = trackChildNode.firstChildElement("BankChanges");
+            if (!bankChangesNode.isNull()) {
+                XmlDomNode bankChange = bankChangesNode.firstChild();
+                while (!bankChange.isNull()) {
+                    GPTrack::SoundAutomation automation =  readRsePickUp(bankChange);
+                    track->addSoundAutomation(automation);
+                    bankChange = bankChange.nextSibling();
+                }
+            }
         } else if (nodeName == u"GeneralMidi") {
             if (trackChildNode.hasChildNodes()) {
                 auto programm = trackChildNode.firstChildElement("Program").text().toInt();
@@ -71,5 +81,15 @@ void GP6DomBuilder::setUpInstrument(XmlDomNode* trackChildNode, GPTrack* track)
 
         track->setIsGuitar(true);
     }
+}
+
+GPTrack::SoundAutomation GP6DomBuilder::readRsePickUp(XmlDomNode& bankChangesNode) const
+{
+    GPTrack::SoundAutomation result;
+
+    result.bar = bankChangesNode.attribute("barIndex").toInt();
+    result.value = bankChangesNode.attribute("bankId");
+
+    return result;
 }
 } //ebd Ms namespace

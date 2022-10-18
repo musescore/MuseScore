@@ -14,6 +14,7 @@ public:
 private:
     virtual std::pair<int, std::unique_ptr<GPTrack> > createGPTrack(XmlDomNode* trackNode);
     void setUpInstrument(XmlDomNode* trackChildNode, GPTrack* track);
+    GPTrack::SoundAutomation readRsePickUp(XmlDomNode& rseNode) const;
 };
 } //end Ms namespace
 #endif // GP6DOMBUILDER_H

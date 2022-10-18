@@ -1377,21 +1377,29 @@ void GPConverter::addInstrumentChanges()
                 continue;
             }
 
+            Measure* m = _score->crMeasure(bar);
+            Segment* seg = m->first(SegmentType::ChordRest);
+            int trackIdx = track.second->idx();
+
+            int midiProgramm = 0;
+            String instrName;
+
             auto it = track.second->sounds().find(soundAutomation.second.value);
             if (it == track.second->sounds().end()) {
-                continue;
+                midiProgramm = track.second->programm();
+                instrName = soundAutomation.second.value;
+            } else {
+                midiProgramm = it->second.programm;
+                instrName = it->second.name;
             }
 
             Instrument instr;
-            instr.channel(0)->setProgram(it->second.programm);
+            instr.setTranspose(track.second->transpose());
+            instr.setStringData(*_score->parts()[trackIdx]->instrument()->stringData());
+            instr.channel(0)->setProgram(midiProgramm);
             InstrumentChange* instrCh =  Factory::createInstrumentChange(_score->dummy()->segment(), instr);
-
-            int trackIdx = track.second->idx();
             instrCh->setTrack(trackIdx * VOICES);
-            instrCh->setXmlText(it->second.name);
-
-            Measure* m = _score->crMeasure(bar);
-            Segment* seg = m->first(SegmentType::ChordRest);
+            instrCh->setXmlText(instrName);
             seg->add(instrCh);
         }
     }
