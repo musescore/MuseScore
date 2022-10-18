@@ -80,7 +80,8 @@
               </Articulation>
             <Note>
               <pitch>59</pitch>
-              <tpc>19</tpc>
+              <tpc>-9</tpc>
+              <tpc2>19</tpc2>
               <fret>0</fret>
               <string>1</string>
               </Note>

@@ -91,7 +91,8 @@
             <durationType>eighth</durationType>
             <Note>
               <pitch>71</pitch>
-              <tpc>19</tpc>
+              <tpc>-9</tpc>
+              <tpc2>19</tpc2>
               <fret>7</fret>
               <string>0</string>
               </Note>
@@ -101,7 +102,8 @@
             <durationType>eighth</durationType>
             <Note>
               <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>8</fret>
               <string>0</string>
               </Note>
@@ -120,7 +122,8 @@
                   </next>
                 </Spanner>
               <pitch>74</pitch>
-              <tpc>16</tpc>
+              <tpc>-9</tpc>
+              <tpc2>16</tpc2>
               <fret>10</fret>
               <string>0</string>
               </Note>
@@ -137,7 +140,8 @@
                   </prev>
                 </Spanner>
               <pitch>74</pitch>
-              <tpc>16</tpc>
+              <tpc>-9</tpc>
+              <tpc2>16</tpc2>
               <fret>10</fret>
               <string>0</string>
               </Note>

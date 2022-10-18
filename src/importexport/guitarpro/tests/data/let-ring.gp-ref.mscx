@@ -80,7 +80,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>60</pitch>
-              <tpc>14</tpc>
+              <tpc>-9</tpc>
+              <tpc2>14</tpc2>
               <fret>5</fret>
               <string>2</string>
               </Note>
@@ -96,7 +97,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>57</pitch>
-              <tpc>17</tpc>
+              <tpc>-9</tpc>
+              <tpc2>17</tpc2>
               <fret>2</fret>
               <string>2</string>
               </Note>
@@ -105,7 +107,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>59</pitch>
-              <tpc>19</tpc>
+              <tpc>-9</tpc>
+              <tpc2>19</tpc2>
               <fret>4</fret>
               <string>2</string>
               </Note>
@@ -114,7 +117,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>-9</tpc>
+              <tpc2>16</tpc2>
               <fret>7</fret>
               <string>2</string>
               </Note>

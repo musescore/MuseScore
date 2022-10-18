@@ -110,7 +110,8 @@ Innuendo</text>
             <durationType>quarter</durationType>
             <Note>
               <pitch>74</pitch>
-              <tpc>16</tpc>
+              <tpc>-9</tpc>
+              <tpc2>16</tpc2>
               <fret>15</fret>
               <string>1</string>
               <Spanner type="Glissando">
@@ -138,7 +139,8 @@ Innuendo</text>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>66</pitch>
-              <tpc>20</tpc>
+              <tpc>-9</tpc>
+              <tpc2>20</tpc2>
               <fret>7</fret>
               <string>1</string>
               <Spanner type="Glissando">

@@ -112,7 +112,8 @@ solo concert</text>
             <durationType>eighth</durationType>
             <Note>
               <pitch>66</pitch>
-              <tpc>20</tpc>
+              <tpc>-9</tpc>
+              <tpc2>20</tpc2>
               <fret>2</fret>
               <string>0</string>
               </Note>
@@ -134,7 +135,8 @@ solo concert</text>
             <durationType>eighth</durationType>
             <Note>
               <pitch>66</pitch>
-              <tpc>20</tpc>
+              <tpc>-9</tpc>
+              <tpc2>20</tpc2>
               <fret>2</fret>
               <string>0</string>
               </Note>
@@ -320,7 +322,8 @@ solo concert</text>
                 <subtype>accidentalNatural</subtype>
                 </Accidental>
               <pitch>53</pitch>
-              <tpc>13</tpc>
+              <tpc>-9</tpc>
+              <tpc2>13</tpc2>
               <fret>3</fret>
               <string>3</string>
               </Note>
@@ -497,7 +500,8 @@ solo concert</text>
               </Spanner>
             <Note>
               <pitch>42</pitch>
-              <tpc>20</tpc>
+              <tpc>-9</tpc>
+              <tpc2>20</tpc2>
               <fret>2</fret>
               <string>5</string>
               </Note>
@@ -521,7 +525,8 @@ solo concert</text>
             <durationType>half</durationType>
             <Note>
               <pitch>54</pitch>
-              <tpc>20</tpc>
+              <tpc>-9</tpc>
+              <tpc2>20</tpc2>
               <fret>4</fret>
               <string>3</string>
               </Note>
@@ -565,10 +570,11 @@ solo concert</text>
               </Note>
             <Note>
               <Accidental>
-                <subtype>accidentalFlat</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>58</pitch>
-              <tpc>12</tpc>
+              <tpc>-9</tpc>
+              <tpc2>24</tpc2>
               <fret>3</fret>
               <string>2</string>
               </Note>
@@ -586,11 +592,15 @@ solo concert</text>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>51</pitch>
-              <tpc>23</tpc>
+              <tpc>-9</tpc>
+              <tpc2>23</tpc2>
               <fret>1</fret>
               <string>3</string>
               </Note>
             <Note>
+              <Accidental>
+                <subtype>accidentalNatural</subtype>
+                </Accidental>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>

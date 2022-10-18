@@ -81,7 +81,8 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>-9</tpc>
+              <tpc2>16</tpc2>
               <fret>12</fret>
               <string>3</string>
               </Note>
