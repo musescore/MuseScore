@@ -97,6 +97,8 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
     void addLineAttachPoints();
+
+    static bool pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffsets);
 };
 } // namespace mu::engraving
 

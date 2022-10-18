@@ -1781,63 +1781,6 @@ bool noteHasGlissando(Note* note)
 }
 
 //---------------------------------------------------------
-//   glissandoPitchOffsets
-//---------------------------------------------------------
-
-bool glissandoPitchOffsets(const Spanner* spanner, std::vector<int>& pitchOffsets)
-{
-    if (!spanner->endElement()->isNote()) {
-        return false;
-    }
-    const Glissando* glissando = toGlissando(spanner);
-    if (!glissando->playGlissando()) {
-        return false;
-    }
-    GlissandoStyle glissandoStyle = glissando->glissandoStyle();
-    if (glissandoStyle == GlissandoStyle::PORTAMENTO) {
-        return false;
-    }
-    // only consider glissando connected to NOTE.
-    const Note* noteStart = toNote(spanner->startElement());
-    const Note* noteEnd = toNote(spanner->endElement());
-    int pitchStart = noteStart->ppitch();
-    int pitchEnd = noteEnd->ppitch();
-    if (pitchEnd == pitchStart) {
-        return false;
-    }
-    int direction = pitchEnd > pitchStart ? 1 : -1;
-    pitchOffsets.clear();
-    if (glissandoStyle == GlissandoStyle::DIATONIC) {
-        int lineStart = noteStart->line();
-        // scale obeying accidentals
-        for (int line = lineStart, pitch = pitchStart; (direction == 1) ? (pitch < pitchEnd) : (pitch > pitchEnd); line -= direction) {
-            int halfSteps = chromaticPitchSteps(noteStart, noteEnd, lineStart - line);
-            pitch = pitchStart + halfSteps;
-            if ((direction == 1) ? (pitch < pitchEnd) : (pitch > pitchEnd)) {
-                pitchOffsets.push_back(halfSteps);
-            }
-        }
-        return pitchOffsets.size() > 0;
-    }
-    if (glissandoStyle == GlissandoStyle::CHROMATIC) {
-        for (int pitch = pitchStart; pitch != pitchEnd; pitch += direction) {
-            pitchOffsets.push_back(pitch - pitchStart);
-        }
-        return true;
-    }
-    static std::vector<bool> whiteNotes = { true, false, true, false, true, true, false, true, false, true, false, true };
-    int Cnote = 60;   // pitch of middle C
-    bool notePick = glissandoStyle == GlissandoStyle::WHITE_KEYS;
-    for (int pitch = pitchStart; pitch != pitchEnd; pitch += direction) {
-        int idx = ((pitch - Cnote) + 1200) % 12;
-        if (whiteNotes[idx] == notePick) {
-            pitchOffsets.push_back(pitch - pitchStart);
-        }
-    }
-    return true;
-}
-
-//---------------------------------------------------------
 //   renderGlissando
 //---------------------------------------------------------
 
@@ -1848,7 +1791,7 @@ void renderGlissando(NoteEventList* events, Note* notestart)
     for (Spanner* spanner : notestart->spannerFor()) {
         if (spanner->type() == ElementType::GLISSANDO
             && toGlissando(spanner)->playGlissando()
-            && glissandoPitchOffsets(spanner, body)) {
+            && Glissando::pitchSteps(spanner, body)) {
             renderNoteArticulation(events, notestart, true, Constants::division, empty, body, false, true, empty, 16, 0);
         }
     }
