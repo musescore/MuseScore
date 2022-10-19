@@ -84,6 +84,7 @@ private:
     std::vector<int> m_activeInputBusses;
 
     VstEventList m_eventList;
+    VstParameterChanges m_paramChanges;
     VstProcessData m_processData;
     VstProcessContext m_processContext;
 

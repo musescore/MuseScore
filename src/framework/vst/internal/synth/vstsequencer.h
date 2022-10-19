@@ -68,7 +68,11 @@ public:
 private:
     void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes);
 
-    VstEvent buildEvent(const Steinberg::Vst::Event::EventTypes type, const int32_t noteIdx, const float velocityFraction);
+    void appendControlSwitch(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationTypeSet& appliableTypes,
+                             const ControllIdx controlIdx);
+
+    VstEvent buildEvent(const Steinberg::Vst::Event::EventTypes type, const int32_t noteIdx, const float velocityFraction) const;
+    PluginParamInfo buildParamInfo(const PluginParamId id, const PluginParamValue value) const;
 
     int32_t noteIndex(const mpe::pitch_level_t pitchLevel) const;
     float noteVelocityFraction(const mpe::NoteEvent& noteEvent) const;

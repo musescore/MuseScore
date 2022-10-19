@@ -109,6 +109,7 @@ static constexpr std::string_view External { "External" };
 
 using VstEventList = Steinberg::Vst::EventList;
 using VstEvent = Steinberg::Vst::Event;
+using VstParameterChanges = Steinberg::Vst::ParameterChanges;
 using VstProcessData = Steinberg::Vst::HostProcessData;
 using VstProcessContext = Steinberg::Vst::ProcessContext;
 using VstProcessSetup = Steinberg::Vst::ProcessSetup;

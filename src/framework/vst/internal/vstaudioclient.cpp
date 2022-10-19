@@ -69,12 +69,11 @@ bool VstAudioClient::handleParamChange(const PluginParamInfo& param)
 
     ensureActivity();
 
-    Steinberg::Vst::IEditController* controller = m_pluginPtr->provider()->getController();
-    if (!controller) {
-        return false;
+    Steinberg::int32 dummyIdx = 0;
+    Steinberg::Vst::IParamValueQueue* queue = m_paramChanges.addParameterData(param.id, dummyIdx);
+    if (queue) {
+        queue->addPoint(0, param.defaultNormalizedValue, dummyIdx);
     }
-
-    controller->setParamNormalized(param.id, param.defaultNormalizedValue);
 
     return true;
 }
@@ -116,6 +115,7 @@ audio::samples_t VstAudioClient::process(float* output, audio::samples_t samples
 
     if (m_type == VstPluginType::Instrument) {
         m_eventList.clear();
+        m_paramChanges.clearQueue();
     }
 
     if (!fillOutputBuffer(samplesPerChannel, output)) {
@@ -132,6 +132,7 @@ void VstAudioClient::flush()
     disableActivity();
 
     m_eventList.clear();
+    m_paramChanges.clearQueue();
 }
 
 void VstAudioClient::setBlockSize(unsigned int samples)
@@ -215,6 +216,7 @@ void VstAudioClient::setUpProcessData()
     m_processContext.sampleRate = m_samplesInfo.sampleRate;
 
     m_processData.inputEvents = &m_eventList;
+    m_processData.inputParameterChanges = &m_paramChanges;
     m_processData.processContext = &m_processContext;
 
     if (m_needUnprepareProcessData) {
