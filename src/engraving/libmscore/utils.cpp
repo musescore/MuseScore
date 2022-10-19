@@ -1045,20 +1045,6 @@ int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalD
         if (chord->vStaffIdx() != chordL->vStaffIdx()) {
             continue;
         }
-        for (Note* note : chord->notes()) {
-            if (note->tieBack()) {
-                continue;
-            }
-            int pc = (note->line() + 700) % 7;
-            int pc2 = (lineL2 + 700) % 7;
-            if (pc2 == pc) {
-                // e.g., if there is an F# note at this staff/tick, then force every F to be F#.
-                int octaves = (note->line() - lineL2) / 7;
-                halfsteps = note->epitch() + 12 * octaves - epitchL;
-                done = true;
-                break;
-            }
-        }
         if (!done) {
             if (staffL->isPitchedStaff(segment->tick())) {
                 bool error = false;
