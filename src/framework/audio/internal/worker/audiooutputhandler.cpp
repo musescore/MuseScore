@@ -212,6 +212,11 @@ mu::framework::Progress AudioOutputHandler::saveSoundTrackProgress(const TrackSe
     return m_saveSoundTracksMap[sequenceId];
 }
 
+void AudioOutputHandler::clearAllFx()
+{
+    fxResolver()->clearAllFx();
+}
+
 std::shared_ptr<Mixer> AudioOutputHandler::mixer() const
 {
     return AudioEngine::instance()->mixer();

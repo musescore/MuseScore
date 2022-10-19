@@ -39,6 +39,7 @@ public:
     virtual bool exists(const audio::AudioResourceId& resourceId) const = 0;
     virtual PluginModulePtr pluginModule(const audio::AudioResourceId& resourceId) const = 0;
     virtual void addPluginModule(const audio::AudioResourceId& resourceId) = 0;
+    virtual void removePluginModule(const audio::AudioResourceId& resourceId) = 0;
     virtual audio::AudioResourceMetaList instrumentModulesMeta() const = 0;
     virtual audio::AudioResourceMetaList fxModulesMeta() const = 0;
     virtual void refresh() = 0;

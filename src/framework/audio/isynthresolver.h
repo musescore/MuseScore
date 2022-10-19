@@ -47,6 +47,7 @@ public:
         virtual bool hasCompatibleResources(const audio::PlaybackSetupData& setup) const = 0;
         virtual audio::AudioResourceMetaList resolveResources() const = 0;
         virtual void refresh() = 0;
+        virtual void clearSources() = 0;
     };
     using IResolverPtr = std::shared_ptr<IResolver>;
 
@@ -58,6 +59,7 @@ public:
     virtual AudioInputParams resolveDefaultInputParams() const = 0;
     virtual audio::AudioResourceMetaList resolveAvailableResources() const = 0;
     virtual void registerResolver(const AudioSourceType type, IResolverPtr resolver) = 0;
+    virtual void clearSources() = 0;
 };
 
 using ISynthResolverPtr = std::shared_ptr<ISynthResolver>;

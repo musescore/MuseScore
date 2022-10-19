@@ -57,6 +57,8 @@ public:
 
     framework::Progress saveSoundTrackProgress(const TrackSequenceId sequenceId) override;
 
+    void clearAllFx() override;
+
 private:
     std::shared_ptr<Mixer> mixer() const;
     ITrackSequencePtr sequence(const TrackSequenceId id) const;

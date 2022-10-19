@@ -30,9 +30,10 @@
 #include "audio/iaudiothreadsecurer.h"
 
 #include "ivstpluginsregister.h"
+#include "async/asyncable.h"
 
 namespace mu::vst {
-class VstPluginsRegister : public IVstPluginsRegister
+class VstPluginsRegister : public IVstPluginsRegister, public async::Asyncable
 {
     INJECT_STATIC(vst, audio::IAudioThreadSecurer, threadSecurer)
 public:
@@ -51,6 +52,9 @@ public:
     void unregisterFxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId,
                             const audio::AudioFxChainOrder chainOrder) override;
     void unregisterMasterFxPlugin(const audio::AudioResourceId& resourceId, const audio::AudioFxChainOrder chainOrder) override;
+
+    void unregisterAllInstrPlugin() override;
+    void unregisterAllFx() override;
 
 private:
     mutable std::mutex m_mutex;
