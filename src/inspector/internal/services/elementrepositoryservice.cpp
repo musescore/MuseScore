@@ -207,6 +207,10 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findNotes() const
             const mu::engraving::Beam* beam = mu::engraving::toBeam(elementBase);
 
             for (mu::engraving::ChordRest* chordRest : beam->elements()) {
+                if (!chordRest->isChord()) {
+                    continue;
+                }
+
                 for (mu::engraving::Note* note : engraving::toChord(chordRest)->notes()) {
                     result << note;
                 }
