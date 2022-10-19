@@ -540,7 +540,7 @@ ZipContainer::FileInfo ZipContainer::Impl::fillFileInfo(int index) const
         fileInfo.filePath = fileInfo.filePath.substr(1);
     }
     while (!fileInfo.filePath.empty() && fileInfo.filePath.back() == '/') {
-        fileInfo.filePath = fileInfo.filePath.substr(fileInfo.filePath.size() - 1);
+        fileInfo.filePath = fileInfo.filePath.substr(0, fileInfo.filePath.size() - 1);
     }
     return fileInfo;
 }
