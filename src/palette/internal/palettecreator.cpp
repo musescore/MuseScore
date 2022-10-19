@@ -1579,6 +1579,16 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     overdrive->setTechniqueType(PlayingTechniqueType::Overdrive);
     sp->appendElement(overdrive, QT_TRANSLATE_NOOP("palette", "Overdrive"))->setElementTranslated(true);
 
+    auto harmonics = makeElement<PlayTechAnnotation>(gpaletteScore);
+    harmonics->setXmlText(QT_TRANSLATE_NOOP("palette", "harmonics"));
+    harmonics->setTechniqueType(PlayingTechniqueType::Harmonics);
+    sp->appendElement(harmonics, QT_TRANSLATE_NOOP("palette", "Harmonics"))->setElementTranslated(true);
+
+    auto jazzTone = makeElement<PlayTechAnnotation>(gpaletteScore);
+    jazzTone->setXmlText(QT_TRANSLATE_NOOP("palette", "jazz tone"));
+    jazzTone->setTechniqueType(PlayingTechniqueType::JazzTone);
+    sp->appendElement(jazzTone, QT_TRANSLATE_NOOP("palette", "Jazz tone"))->setElementTranslated(true);
+
     auto normal = makeElement<PlayTechAnnotation>(gpaletteScore);
     normal->setXmlText(QT_TRANSLATE_NOOP("palette", "normal"));
     normal->setTechniqueType(PlayingTechniqueType::Natural);
@@ -1902,6 +1912,16 @@ PalettePtr PaletteCreator::newGuitarPalette()
     overdrive->setXmlText(QT_TRANSLATE_NOOP("palette", "overdrive"));
     overdrive->setTechniqueType(PlayingTechniqueType::Overdrive);
     sp->appendElement(overdrive, QT_TRANSLATE_NOOP("palette", "Overdrive"), 0.8)->setElementTranslated(true);
+
+    auto harmonics = makeElement<PlayTechAnnotation>(gpaletteScore);
+    harmonics->setXmlText(QT_TRANSLATE_NOOP("palette", "harmonics"));
+    harmonics->setTechniqueType(PlayingTechniqueType::Harmonics);
+    sp->appendElement(harmonics, QT_TRANSLATE_NOOP("palette", "Harmonics"), 0.8)->setElementTranslated(true);
+
+    auto jazzTone = makeElement<PlayTechAnnotation>(gpaletteScore);
+    jazzTone->setXmlText(QT_TRANSLATE_NOOP("palette", "jazz tone"));
+    jazzTone->setTechniqueType(PlayingTechniqueType::JazzTone);
+    sp->appendElement(jazzTone, QT_TRANSLATE_NOOP("palette", "Jazz tone"), 0.8)->setElementTranslated(true);
 
     return sp;
 }

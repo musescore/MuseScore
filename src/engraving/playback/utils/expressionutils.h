@@ -167,7 +167,9 @@ inline mpe::ArticulationType articulationFromPlayTechType(const PlayingTechnique
         { PlayingTechniqueType::SulPonticello, mpe::ArticulationType::SulPont },
         { PlayingTechniqueType::SulTasto, mpe::ArticulationType::SulTasto },
         { PlayingTechniqueType::Distortion, mpe::ArticulationType::Distortion },
-        { PlayingTechniqueType::Overdrive, mpe::ArticulationType::Overdrive }
+        { PlayingTechniqueType::Overdrive, mpe::ArticulationType::Overdrive },
+        { PlayingTechniqueType::Harmonics, mpe::ArticulationType::Harmonic },
+        { PlayingTechniqueType::JazzTone, mpe::ArticulationType::JazzTone },
     };
 
     auto search = PLAYING_TECH_TYPES.find(technique);

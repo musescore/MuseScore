@@ -661,3 +661,12 @@ Image* Factory::createImage(EngravingItem * parent)
 
     return image;
 }
+
+PlayTechAnnotation* Factory::createPlayTechAnnotation(Segment* parent, PlayingTechniqueType techniqueType, TextStyleType styleType,
+                                                      bool isAccessibleEnabled)
+{
+    PlayTechAnnotation* annotation = new PlayTechAnnotation(parent, techniqueType, styleType);
+    annotation->setAccessibleEnabled(isAccessibleEnabled);
+
+    return annotation;
+}
