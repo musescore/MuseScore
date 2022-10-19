@@ -56,6 +56,8 @@ public:
     void setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params) override;
     async::Channel<TrackSequenceId, TrackId, AudioInputParams> inputParamsChanged() const override;
 
+    void clearSources() override;
+
 private:
     ITrackSequencePtr sequence(const TrackSequenceId id) const;
     void ensureSubscriptions(const ITrackSequencePtr s) const;

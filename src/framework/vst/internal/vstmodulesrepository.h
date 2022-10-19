@@ -53,6 +53,7 @@ public:
     bool exists(const audio::AudioResourceId& resourceId) const override;
     PluginModulePtr pluginModule(const audio::AudioResourceId& resourceId) const override;
     void addPluginModule(const audio::AudioResourceId& resourceId) override;
+    void removePluginModule(const audio::AudioResourceId& resourceId) override;
 
     audio::AudioResourceMetaList instrumentModulesMeta() const override;
     audio::AudioResourceMetaList fxModulesMeta() const override;

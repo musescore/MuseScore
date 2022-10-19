@@ -103,6 +103,20 @@ void VstModulesRepository::addPluginModule(const audio::AudioResourceId& resourc
     m_modules.emplace(resourceId, std::move(module));
 }
 
+void VstModulesRepository::removePluginModule(const audio::AudioResourceId& resourceId)
+{
+    ONLY_MAIN_THREAD(threadSecurer);
+
+    std::lock_guard lock(m_mutex);
+
+    auto search = m_modules.find(resourceId);
+    if (search != m_modules.end()) {
+        return;
+    }
+
+    m_modules.erase(search);
+}
+
 audio::AudioResourceMetaList VstModulesRepository::instrumentModulesMeta() const
 {
     ONLY_AUDIO_THREAD(threadSecurer);
