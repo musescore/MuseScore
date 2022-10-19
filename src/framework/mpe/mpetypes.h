@@ -189,6 +189,7 @@ enum class ArticulationType {
     FadeOut,
 
     Harmonic,
+    JazzTone,
     Mute,
     Open,
     Pizzicato,

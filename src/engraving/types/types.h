@@ -700,7 +700,9 @@ enum class PlayingTechniqueType {
     Vibrato,
     Legato,
     Distortion,
-    Overdrive
+    Overdrive,
+    Harmonics,
+    JazzTone,
 };
 
 enum class GradualTempoChangeType {
