@@ -558,6 +558,7 @@ Note::Note(Chord* ch)
     _playEvents.push_back(NoteEvent());      // add default play event
     _cachedNoteheadSym = SymId::noSym;
     _cachedSymNull = SymId::noSym;
+    _fretConflictResolveSupported = score()->styleB(Sid::fretConflictResolveSupported);
 }
 
 Note::~Note()
@@ -640,6 +641,7 @@ Note::Note(const Note& n, bool link)
     _fixedLine         = n._fixedLine;
     _accidental        = 0;
     _harmonic          = n._harmonic;
+    _fretConflictResolveSupported = n._fretConflictResolveSupported;
     _cachedNoteheadSym = n._cachedNoteheadSym;
     _cachedSymNull     = n._cachedSymNull;
 
@@ -1363,7 +1365,9 @@ void Note::draw(mu::draw::Painter* painter) const
         return;
     }
 
-    Color c(curColor());
+    bool negativeFret = !_fretConflictResolveSupported && _fret < 0 && staff()->isTabStaff(tick());
+
+    Color c(negativeFret ? engravingConfiguration()->criticalColor() : curColor());
     painter->setPen(c);
     bool tablature = staff() && staff()->isTabStaff(chord()->tick());
 
@@ -2268,7 +2272,14 @@ void Note::layout()
         if (_fixed) {
             _fretString = u"/";
         } else {
-            _fretString = tab->fretString(_fret, _string, _deadNote);
+            const bool negativeFret = (_fret < 0) && !_fretConflictResolveSupported;
+
+            _fretString = tab->fretString(fabs(_fret), _string, _deadNote);
+
+            if (negativeFret) {
+                _fretString = u"-" + _fretString;
+            }
+
             if (m_displayFret == DisplayFretOption::ArtificialHarmonic) {
                 _fretString = String(u"%1 <%2>").arg(_fretString, String::number(m_harmonicFret));
             } else if (m_displayFret == DisplayFretOption::NaturalHarmonic) {
