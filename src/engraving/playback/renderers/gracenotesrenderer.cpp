@@ -128,7 +128,7 @@ std::vector<NominalNoteCtx> GraceNotesRenderer::graceNotesCtxList(const std::vec
 
     for (const Chord* graceChord : graceChords) {
         for (const Note* graceNote : graceChord->notes()) {
-            if (!isNotePlayable(graceNote)) {
+            if (!isNotePlayable(graceNote, context.commonArticulations)) {
                 continue;
             }
 
@@ -163,7 +163,7 @@ void GraceNotesRenderer::buildPrincipalNoteEvents(const Chord* chord, const Rend
                                                   mpe::PlaybackEventList& result)
 {
     for (const Note* note : chord->notes()) {
-        if (!isNotePlayable(note)) {
+        if (!isNotePlayable(note, context.commonArticulations)) {
             continue;
         }
 
