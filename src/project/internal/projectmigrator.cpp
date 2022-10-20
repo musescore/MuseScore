@@ -25,7 +25,6 @@
 
 #include "engraving/libmscore/score.h"
 #include "engraving/libmscore/excerpt.h"
-#include "engraving/libmscore/part.h"
 #include "engraving/libmscore/undo.h"
 
 #include "rw/compat/readstyle.h"
@@ -107,7 +106,6 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     query.addParam("migrationType", Val(migrationType));
     query.addParam("isApplyLeland", Val(out.isApplyLeland));
     query.addParam("isApplyEdwin", Val(out.isApplyEdwin));
-    query.addParam("isApplyAutomaticPlacement", Val(out.isApplyAutomaticPlacement));
     RetVal<Val> rv = interactive()->open(query);
     if (!rv.ret) {
         return rv.ret;
@@ -119,7 +117,6 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     out.isAskAgain = vals.value("isAskAgain").toBool();
     out.isApplyLeland = vals.value("isApplyLeland").toBool();
     out.isApplyEdwin = vals.value("isApplyEdwin").toBool();
-    out.isApplyAutomaticPlacement = vals.value("isApplyAutomaticPlacement").toBool();
 
     return true;
 }
@@ -167,7 +164,7 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
         m_resetStyleSettings = false;
     }
 
-    if (ok && opt.isApplyAutomaticPlacement) {
+    if (ok && score->mscVersion() < 300) {
         ok = resetAllElementsPositions(score);
     }
 
