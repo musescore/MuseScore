@@ -58,6 +58,10 @@ public:
                               int defBtn = int(framework::IInteractive::Button::NoButton),
                               const framework::IInteractive::Options& options = {}) = 0;
 
+    virtual RetVal<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir, const std::string& filter) = 0;
+    virtual RetVal<io::path_t> selectSavingFile(const std::string& title, const io::path_t& dir, const std::string& filter, bool confirmOverwrite) = 0;
+    virtual RetVal<io::path_t> selectDirectory(const std::string& title, const io::path_t& dir) = 0;
+
     virtual RetVal<Val> open(const UriQuery& uri) = 0;
     virtual RetVal<bool> isOpened(const Uri& uri) const = 0;
     virtual RetVal<bool> isOpened(const UriQuery& uri) const = 0;

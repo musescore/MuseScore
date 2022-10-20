@@ -74,6 +74,11 @@ public:
                       const framework::IInteractive::ButtonDatas& buttons, int defBtn = int(framework::IInteractive::Button::NoButton),
                       const framework::IInteractive::Options& options = {}) override;
 
+    RetVal<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
+    RetVal<io::path_t> selectSavingFile(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter,
+                                        bool confirmOverwrite) override;
+    RetVal<io::path_t> selectDirectory(const std::string& title, const io::path_t& dir) override;
+
     RetVal<Val> open(const UriQuery& uri) override;
     RetVal<bool> isOpened(const Uri& uri) const override;
     RetVal<bool> isOpened(const UriQuery& uri) const override;
@@ -87,7 +92,7 @@ public:
     ValCh<Uri> currentUri() const override;
     std::vector<Uri> stack() const override;
 
-    QWindow* topWindow() const override;
+    Q_INVOKABLE QWindow* topWindow() const override;
     bool topWindowIsWidget() const override;
 
     Q_INVOKABLE QString objectId(const QVariant& val) const;
@@ -96,11 +101,12 @@ public:
     Q_INVOKABLE void onClose(const QString& objectId, const QVariant& rv);
 
 signals:
-    void fireOpen(QmlLaunchData* data);
+    void fireOpen(mu::ui::QmlLaunchData* data);
     void fireClose(QVariant data);
     void fireRaise(QVariant data);
 
-    void fireOpenStandardDialog(QmlLaunchData* data);
+    void fireOpenStandardDialog(mu::ui::QmlLaunchData* data);
+    void fireOpenFileDialog(mu::ui::QmlLaunchData* data);
 
 private:
     struct OpenData
@@ -116,6 +122,12 @@ private:
         QObject* window = nullptr;
     };
 
+    enum class FileDialogType {
+        SelectOpenningFile,
+        SelectSavingFile,
+        SelectDirectory
+    };
+
     void raiseWindowInStack(QObject* newActiveWindow);
 
     void fillData(QmlLaunchData* data, const UriQuery& q) const;
@@ -123,6 +135,8 @@ private:
     void fillStandardDialogData(QmlLaunchData* data, const QString& type, const QString& title, const framework::IInteractive::Text& text,
                                 const framework::IInteractive::ButtonDatas& buttons, int defBtn,
                                 const framework::IInteractive::Options& options) const;
+    void fillFileDialogData(QmlLaunchData* data, FileDialogType type, const std::string& title, const io::path_t& dir,
+                            const std::string& filter = std::string(), bool confirmOverwrite = true) const;
 
     Ret toRet(const QVariant& jsr) const;
     RetVal<Val> toRetVal(const QVariant& jsrv) const;
@@ -133,6 +147,9 @@ private:
                                    const framework::IInteractive::ButtonDatas& buttons,
                                    int defBtn = int(framework::IInteractive::Button::NoButton),
                                    const framework::IInteractive::Options& options = {});
+
+    RetVal<io::path_t> openFileDialog(FileDialogType type, const std::string& title, const io::path_t& dir,
+                                      const std::string& filter = std::string(), bool confirmOverwrite = true);
 
     void closeObject(const ObjectInfo& obj);
 
@@ -151,6 +168,8 @@ private:
     async::Channel<Uri> m_currentUriChanged;
     QMap<QString, RetVal<Val> > m_retvals;
     async::Channel<Uri> m_opened;
+
+    QEventLoop m_fileDialogEventLoop;
 };
 }
 
