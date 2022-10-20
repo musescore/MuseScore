@@ -69,8 +69,8 @@ class BarLine final : public EngravingItem
     int _spanFrom           { 0 };         // line number on start and end staves
     int _spanTo             { 0 };
     BarLineType _barLineType { BarLineType::NORMAL };
-    mutable double y1;
-    mutable double y2;
+    mutable double y1 = 0.0;
+    mutable double y2 = 0.0;
     ElementList _el;          ///< fermata or other articulations
 
     friend class Factory;
