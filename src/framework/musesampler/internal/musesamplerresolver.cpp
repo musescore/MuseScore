@@ -119,6 +119,11 @@ void MuseSamplerResolver::refresh()
     NOT_SUPPORTED;
 }
 
+void MuseSamplerResolver::clearSources()
+{
+    NOT_SUPPORTED;
+}
+
 String MuseSamplerResolver::buildMuseInstrumentId(const String& category, const String& name, int uniqueId) const
 {
     StringList list;

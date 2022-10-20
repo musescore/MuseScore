@@ -41,6 +41,7 @@ public:
     bool hasCompatibleResources(const audio::PlaybackSetupData& setup) const override;
     audio::AudioResourceMetaList resolveResources() const override;
     void refresh() override;
+    void clearSources() override;
 
 private:
     String buildMuseInstrumentId(const String& category, const String& name, int uniqueId) const;
