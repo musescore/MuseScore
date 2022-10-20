@@ -1287,7 +1287,9 @@ static const std::vector<Item<PlayingTechniqueType> > PLAY_TECH_TYPES = {
     { PlayingTechniqueType::Vibrato,             "vibrato" },
     { PlayingTechniqueType::Legato,              "legato" },
     { PlayingTechniqueType::Distortion,          "distortion" },
-    { PlayingTechniqueType::Overdrive,           "overdrive" }
+    { PlayingTechniqueType::Overdrive,           "overdrive" },
+    { PlayingTechniqueType::Harmonics,           "harmonics" },
+    { PlayingTechniqueType::JazzTone,            "jazz_tone" },
 };
 
 AsciiStringView TConv::toXml(PlayingTechniqueType v)

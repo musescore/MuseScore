@@ -247,6 +247,9 @@ public:
 
     static Image* createImage(EngravingItem* parent);
 
+    static PlayTechAnnotation* createPlayTechAnnotation(Segment* parent, PlayingTechniqueType techniqueType, TextStyleType styleType,
+                                                        bool isAccessibleEnabled = true);
+
 private:
     static EngravingItem* doCreateItem(ElementType type, EngravingItem* parent);
 };

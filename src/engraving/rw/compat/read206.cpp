@@ -29,6 +29,7 @@
 #include "infrastructure/symbolfonts.h"
 
 #include "rw/xml.h"
+#include "rw/compat/compatutils.h"
 
 #include "style/style.h"
 #include "style/textstyle.h"
@@ -3356,8 +3357,9 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         MasterScore* ms = static_cast<MasterScore*>(score);
         ms->rebuildMidiMapping();
         ms->updateChannel();
-        //           ms->createPlayEvents();
     }
+
+    CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(score);
 
     return true;
 }
