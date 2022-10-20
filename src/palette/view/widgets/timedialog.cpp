@@ -46,6 +46,8 @@ TimeDialog::TimeDialog(QWidget* parent)
     setupUi(this);
     setWindowTitle(mu::qtrc("palette", "Time signatures"));
 
+    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     QLayout* l = new QVBoxLayout();
     l->setContentsMargins(0, 0, 0, 0);
     frame->setLayout(l);
