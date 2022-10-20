@@ -95,7 +95,7 @@ Bend::Bend(Note* parent, ElementType type)
 
 mu::draw::Font Bend::font(double sp) const
 {
-    mu::draw::Font f(_fontFace);
+    mu::draw::Font f(_fontFace, Font::Type::Unknown);
     f.setBold(_fontStyle & FontStyle::Bold);
     f.setItalic(_fontStyle & FontStyle::Italic);
     f.setUnderline(_fontStyle & FontStyle::Underline);

@@ -81,7 +81,7 @@ Articulation::Articulation(ChordRest* parent)
     _up            = true;
     _ornamentStyle = OrnamentStyle::DEFAULT;
 
-    m_font.setFamily(u"FreeSans");
+    m_font.setFamily(u"FreeSans", draw::Font::Type::Tablature);
     m_font.setPointSizeF(7.0);
     m_font.setBold(true);
 

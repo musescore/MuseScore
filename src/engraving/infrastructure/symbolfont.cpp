@@ -102,7 +102,7 @@ void SymbolFont::load()
 
     m_font.setWeight(mu::draw::Font::Normal);
     m_font.setItalic(false);
-    m_font.setFamily(m_family);
+    m_font.setFamily(m_family, Font::Type::MusicSymbol);
     m_font.setNoFontMerging(true);
     m_font.setHinting(mu::draw::Font::Hinting::PreferVerticalHinting);
 

@@ -128,7 +128,7 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
     }
 
     if (glissando()->showText()) {
-        mu::draw::Font f(glissando()->fontFace());
+        mu::draw::Font f(glissando()->fontFace(), draw::Font::Type::Unknown);
         f.setPointSizeF(glissando()->fontSize() * _spatium / SPATIUM20);
         f.setBold(glissando()->fontStyle() & FontStyle::Bold);
         f.setItalic(glissando()->fontStyle() & FontStyle::Italic);

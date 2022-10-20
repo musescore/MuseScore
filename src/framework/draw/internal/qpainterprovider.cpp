@@ -42,7 +42,7 @@ QPainterProvider::QPainterProvider(QPainter* painter, bool ownsPainter)
     : m_painter(painter), m_ownsPainter(ownsPainter), m_drawObjectsLogger(new DrawObjectsLogger())
 {
     if (painter->isActive()) {
-        m_font = Font::fromQFont(m_painter->font());
+        m_font = Font::fromQFont(m_painter->font(), Font::Type::Undefined);
         m_pen = Pen::fromQPen(m_painter->pen());
         m_brush = Brush::fromQBrush(m_painter->brush());
         m_transform = Transform::fromQTransform(m_painter->transform());
@@ -171,7 +171,7 @@ void QPainterProvider::save()
 void QPainterProvider::restore()
 {
     m_painter->restore();
-    m_font = Font::fromQFont(m_painter->font());
+    m_font = Font::fromQFont(m_painter->font(), Font::Type::Undefined);
     m_pen = Pen::fromQPen(m_painter->pen());
     m_brush = Brush::fromQBrush(m_painter->brush());
     m_transform = Transform::fromQTransform(m_painter->transform());
