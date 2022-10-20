@@ -739,6 +739,7 @@ inline const midi::Programs& findPrograms(const mpe::PlaybackSetupData& setupDat
 inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupData& setupData)
 {
     static ArticulationMapping ELECTRIC_GUITAR = {
+        { mpe::ArticulationType::JazzTone, midi::Program(0, 26) },
         { mpe::ArticulationType::Mute, midi::Program(0, 28) },
         { mpe::ArticulationType::Harmonic, midi::Program(0, 31) },
         { mpe::ArticulationType::Distortion, midi::Program(0, 30) },
@@ -746,6 +747,7 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
     };
 
     static ArticulationMapping ACOUSTIC_GUITAR = {
+        { mpe::ArticulationType::JazzTone, midi::Program(0, 26) },
         { mpe::ArticulationType::Mute, midi::Program(0, 28) },
         { mpe::ArticulationType::Harmonic, midi::Program(8, 31) }
     };

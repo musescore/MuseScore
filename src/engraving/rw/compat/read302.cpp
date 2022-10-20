@@ -23,6 +23,7 @@
 
 #include "infrastructure/symbolfonts.h"
 #include "rw/xml.h"
+#include "rw/compat/compatutils.h"
 #include "style/style.h"
 
 #include "libmscore/audio.h"
@@ -252,7 +253,8 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
         staff->updateOttava();
     }
 
-//      createPlayEvents();
+    CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(score);
+
     return true;
 }
 
