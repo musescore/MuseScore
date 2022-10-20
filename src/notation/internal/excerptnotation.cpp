@@ -36,6 +36,8 @@ ExcerptNotation::ExcerptNotation(mu::engraving::Excerpt* excerpt)
 
 ExcerptNotation::~ExcerptNotation()
 {
+    //! NOTE: do not destroy the score here, because it may be stored in UndoStack
+    //! (after opening an excerpt via the Parts dialog and pressing ctrl + z)
     setScore(nullptr);
 }
 
