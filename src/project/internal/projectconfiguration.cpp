@@ -449,6 +449,18 @@ void ProjectConfiguration::setPreferredScoreCreationMode(PreferredScoreCreationM
     settings()->setSharedValue(PREFERRED_SCORE_CREATION_MODE_KEY, Val(mode));
 }
 
+static MigrationType migrationTypeFromString(const QString& str)
+{
+    if (str == "Pre_3_6") {
+        return MigrationType::Pre_3_6;
+    }
+    if (str == "Ver_3_6") {
+        return MigrationType::Ver_3_6;
+    }
+    LOGE() << "Unknown migration type string: " << str;
+    return MigrationType::Unknown;
+}
+
 MigrationOptions ProjectConfiguration::migrationOptions(MigrationType type) const
 {
     auto it = m_migrationOptions.find(type);
@@ -463,7 +475,12 @@ MigrationOptions ProjectConfiguration::migrationOptions(MigrationType type) cons
 
     for (const QVariant& obj : array.toVariantList()) {
         QVariantMap map = obj.toMap();
-        auto migrationType = static_cast<MigrationType>(map["migrationType"].toInt());
+
+        auto migrationType = migrationTypeFromString(map["migrationType"].toString());
+        if (migrationType == MigrationType::Unknown) {
+            continue;
+        }
+
         QVariantMap optionsObj = map["options"].toMap();
 
         MigrationOptions opt;
@@ -472,7 +489,6 @@ MigrationOptions ProjectConfiguration::migrationOptions(MigrationType type) cons
         opt.isAskAgain = optionsObj.value("isAskAgain", false).toBool();
         opt.isApplyLeland = optionsObj.value("isApplyLeland", false).toBool();
         opt.isApplyEdwin = optionsObj.value("isApplyEdwin", false).toBool();
-        opt.isApplyAutomaticPlacement = optionsObj.value("isApplyAutomaticPlacement", false).toBool();
 
         m_migrationOptions[migrationType] = opt;
 
@@ -482,6 +498,19 @@ MigrationOptions ProjectConfiguration::migrationOptions(MigrationType type) cons
     }
 
     return result;
+}
+
+static QString migrationTypeToString(MigrationType type)
+{
+    switch (type) {
+    case MigrationType::Pre_3_6:
+        return QStringLiteral("Pre_3_6");
+    case MigrationType::Ver_3_6:
+        return QStringLiteral("Ver_3_6");
+    case MigrationType::Unknown:
+        break;
+    }
+    return QString();
 }
 
 void ProjectConfiguration::setMigrationOptions(MigrationType type, const MigrationOptions& opt, bool persistent)
@@ -505,7 +534,7 @@ void ProjectConfiguration::setMigrationOptions(MigrationType type, const Migrati
         options["isApplyEdwin"] = o.isApplyEdwin;
 
         QVariantMap map;
-        map["migrationType"] = static_cast<int>(it->first);
+        map["migrationType"] = migrationTypeToString(it->first);
         map["options"] = options;
 
         objList << map;

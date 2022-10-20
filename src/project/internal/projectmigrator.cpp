@@ -47,16 +47,12 @@ static MigrationType migrationTypeFromAppVersion(const QString& appVersion)
     int major = version.majorVersion();
     int minor = version.minorVersion();
 
-    if (major < 3) {
-        return MigrationType::Pre300;
-    }
-
-    if (major >= 3 && minor < 6) {
-        return MigrationType::Post300AndPre362;
+    if (major < 3 || (major == 3 && minor < 6)) {
+        return MigrationType::Pre_3_6;
     }
 
     if (major < 4) {
-        return MigrationType::Ver362;
+        return MigrationType::Ver_3_6;
     }
 
     UNREACHABLE;

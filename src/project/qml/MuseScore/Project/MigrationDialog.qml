@@ -39,14 +39,12 @@ StyledDialogView {
 
     property bool isApplyLeland: true
     property bool isApplyEdwin: true
-    property bool isApplyAutomaticPlacement: true
     property bool isAskAgain: true
 
     contentHeight: {
         switch (dialog.migrationType) {
-        case MigrationType.Pre300: return 588
-        case MigrationType.Post300AndPre362: return 556
-        case MigrationType.Ver362: return 208
+        case MigrationType.Pre_3_6: return 556
+        case MigrationType.Ver_3_6: return 208
         case MigrationType.Unknown: return 0
         }
         return 600
@@ -54,9 +52,8 @@ StyledDialogView {
 
     contentWidth:  {
         switch (dialog.migrationType) {
-        case MigrationType.Pre300: return 600
-        case MigrationType.Post300AndPre362: return 600
-        case MigrationType.Ver362: return 480
+        case MigrationType.Pre_3_6: return 600
+        case MigrationType.Ver_3_6: return 480
         case MigrationType.Unknown: return 0
         }
         return 600
@@ -64,20 +61,15 @@ StyledDialogView {
 
     modal: true
 
-    //! NOTE Can be set three a fixed version, for each version different dialog content
+    //! NOTE Different dialogs for different migration versions
     onOpened: {
         switch(dialog.migrationType) {
-        case MigrationType.Pre300:
+        case MigrationType.Pre_3_6:
             loader.sourceComponent = migrComp
             break;
-        case MigrationType.Post300AndPre362:
-            isApplyAutomaticPlacement = false
-            loader.sourceComponent = migrComp
-            break;
-        case MigrationType.Ver362:
+        case MigrationType.Ver_3_6:
             isApplyLeland = false
             isApplyEdwin = false
-            isApplyAutomaticPlacement = false
             loader.sourceComponent = noteComp
             break;
         default:
@@ -93,7 +85,6 @@ StyledDialogView {
                 isAskAgain: dialog.isAskAgain,
                 isApplyLeland: dialog.isApplyLeland,
                 isApplyEdwin: dialog.isApplyEdwin,
-                isApplyAutomaticPlacement: dialog.isApplyAutomaticPlacement
             }
         }
 
@@ -153,9 +144,6 @@ StyledDialogView {
 
             isApplyLeland: dialog.isApplyLeland
             isApplyEdwin: dialog.isApplyEdwin
-            isApplyAutomaticPlacement: dialog.isApplyAutomaticPlacement
-
-            isPre300: dialog.migrationType === MigrationType.Pre300
 
             navigationSection: dialog.navigationSection
 
@@ -165,10 +153,6 @@ StyledDialogView {
 
             onIsApplyLelandChangeRequested: function(applyLeland) {
                 dialog.isApplyLeland = applyLeland
-            }
-
-            onIsApplyAutomaticPlacementChangeRequested: function(applyAutomaticPlacement) {
-                dialog.isApplyAutomaticPlacement = applyAutomaticPlacement
             }
 
             onIsAskAgainChangeRequested: function(askAgain) {
