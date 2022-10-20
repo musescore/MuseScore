@@ -172,7 +172,7 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
             }
 
             percentage_t positionDistance = nextToCurrent->first - it->first;
-            int stepsCount = positionDistance / (mpe::ONE_PERCENT * 5);
+            int stepsCount = positionDistance / (mpe::ONE_PERCENT * 2);
             float posStep = positionDistance / static_cast<float>(stepsCount);
             float pitchStep = (nextToCurrent->second - it->second) / static_cast<float>(stepsCount);
 
@@ -180,7 +180,8 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
                 timestamp_t currentPoint = timestampFrom + noteEvent.arrangementCtx().actualDuration
                                            * percentageToFactor(it->first + (i * posStep));
 
-                event.setData(pitchBendLevel(it->second + (i * pitchStep)));
+                int pitchBendVal = pitchBendLevel(it->second + (i * pitchStep));
+                event.setData(pitchBendVal);
                 destination[currentPoint].emplace(event);
             }
 
