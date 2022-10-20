@@ -589,7 +589,7 @@ void StaffType::setDurationFontName(const String& name)
     if (idx >= _durationFonts.size()) {
         idx = 0;              // if name not found, use first font
     }
-    _durationFont.setFamily(_durationFonts[idx].family);
+    _durationFont.setFamily(_durationFonts[idx].family, draw::Font::Type::Tablature);
     _durationFontIdx = idx;
     _durationMetricsValid = false;
 }
@@ -610,7 +610,7 @@ void StaffType::setFretFontName(const String& name)
     if (idx >= _fretFonts.size()) {
         idx = 0;              // if name not found, use first font
     }
-    _fretFont.setFamily(_fretFonts[idx].family);
+    _fretFont.setFamily(_fretFonts[idx].family, draw::Font::Type::Tablature);
     _fretFontIdx = idx;
     _fretMetricsValid = false;
 }

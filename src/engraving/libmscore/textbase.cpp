@@ -251,7 +251,7 @@ RectF TextCursor::cursorRect() const
 
     mu::draw::Font _font  = fragment ? fragment->font(_text) : _text->font();
     if (_font.family() == _text->score()->styleSt(Sid::MusicalSymbolFont)) {
-        _font.setFamily(_text->score()->styleSt(Sid::MusicalTextFont));
+        _font.setFamily(_text->score()->styleSt(Sid::MusicalTextFont), draw::Font::Type::MusicSymbolText);
         _font.setPointSizeF(fragment->format.fontSize());
     }
     double ascent = mu::draw::FontMetrics::ascent(_font);
@@ -788,20 +788,24 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
     }
 
     String family;
+    draw::Font::Type fontType = draw::Font::Type::Unknown;
     if (format.fontFamily() == "ScoreText") {
         if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA) {
             family = SymbolFonts::fontByName(t->score()->styleSt(Sid::MusicalSymbolFont))->family();
+            fontType = draw::Font::Type::MusicSymbol;
             // to keep desired size ratio (based on 20pt symbol size to 10pt text size)
             m *= 2;
         } else if (t->isTempoText()) {
             family = t->score()->styleSt(Sid::MusicalTextFont);
+            fontType = draw::Font::Type::MusicSymbolText;
             // to keep desired size ratio (based on 20pt symbol size to 12pt text size)
             m *= 5.0 / 3.0;
         } else {
             family = t->score()->styleSt(Sid::MusicalTextFont);
+            fontType = draw::Font::Type::MusicSymbolText;
         }
         // check if all symbols are available
-        font.setFamily(family);
+        font.setFamily(family, fontType);
         mu::draw::FontMetrics fm(font);
 
         bool fail = false;
@@ -827,16 +831,18 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
         }
         if (fail) {
             family = String::fromUtf8(SymbolFonts::fallbackTextFont());
+            fontType = draw::Font::Type::MusicSymbolText;
         }
     } else {
         family = format.fontFamily();
+        fontType = draw::Font::Type::Unknown;
         font.setBold(format.bold());
         font.setItalic(format.italic());
         font.setUnderline(format.underline());
         font.setStrike(format.strike());
     }
 
-    font.setFamily(family);
+    font.setFamily(family, fontType);
     assert(m > 0.0);
 
     font.setPointSizeF(m * t->mag());
@@ -2757,7 +2763,7 @@ mu::draw::Font TextBase::font() const
     if (sizeIsSpatiumDependent()) {
         m *= spatium() / SPATIUM20;
     }
-    mu::draw::Font f(family());
+    mu::draw::Font f(family(), draw::Font::Type::Unknown);
     f.setPointSizeF(m);
     f.setBold(bold());
     f.setItalic(italic());

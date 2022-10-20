@@ -33,7 +33,20 @@ namespace mu::draw {
 class Font
 {
 public:
-    Font(const String& family = String());
+    enum class Type {
+        Undefined = 0,
+        Unknown,
+        Icon,
+        Text,
+        MusicSymbolText,
+        MusicSymbol,
+        Tablature,
+        Figuredbass,
+        Harmony
+    };
+
+    Font() = default;
+    Font(const String& family, Type type);
 
     enum class Style {
         //Undefined   = -1,
@@ -63,8 +76,9 @@ public:
         Black    = 87    // 900
     };
 
-    void setFamily(const String& family);
+    void setFamily(const String& family, Type type);
     String family() const;
+    Type type() const;
 
     double pointSizeF() const;
     void setPointSizeF(double s);
@@ -95,12 +109,13 @@ public:
 
 #ifndef NO_QT_SUPPORT
     QFont toQFont() const;
-    static Font fromQFont(const QFont& qf);
+    static Font fromQFont(const QFont& qf, Type type);
 #endif
 
 private:
 
     String m_family;
+    Type m_type = Type::Undefined;
     double m_pointSizeF = -1.0;
     int m_pixelSize = -1;
     Weight m_weight = Weight::Normal;

@@ -298,7 +298,7 @@ void FSymbol::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "font") {
-            _font.setFamily(e.readText());
+            _font.setFamily(e.readText(), draw::Font::Type::Unknown);
         } else if (tag == "fontsize") {
             _font.setPointSizeF(e.readDouble());
         } else if (tag == "code") {

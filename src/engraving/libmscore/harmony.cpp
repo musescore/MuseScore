@@ -1809,7 +1809,7 @@ void Harmony::render()
         mu::draw::Font ff(font());
         ff.setPointSizeF(ff.pointSizeF() * cf.mag);
         if (!(cf.family.isEmpty() || cf.family == "default")) {
-            ff.setFamily(cf.family);
+            ff.setFamily(cf.family, draw::Font::Type::Harmony);
         }
         fontList.push_back(ff);
     }

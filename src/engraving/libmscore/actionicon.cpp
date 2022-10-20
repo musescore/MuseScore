@@ -36,7 +36,7 @@ namespace mu::engraving {
 ActionIcon::ActionIcon(EngravingItem* score)
     : EngravingItem(ElementType::ACTION_ICON, score)
 {
-    m_iconFont = Font(engravingConfiguration()->iconsFontFamily());
+    m_iconFont = Font(engravingConfiguration()->iconsFontFamily(), Font::Type::Icon);
     m_iconFont.setPointSizeF(DEFAULT_FONT_SIZE);
 }
 
