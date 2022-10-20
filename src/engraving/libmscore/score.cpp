@@ -903,6 +903,9 @@ bool Score::isOpen() const
 void Score::setIsOpen(bool open)
 {
     _isOpen = open;
+    if (open) {
+        doLayout();
+    }
 }
 
 //---------------------------------------------------------
@@ -5447,35 +5450,6 @@ void Score::connectTies(bool silent)
                     }
                 }
             }
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   relayoutForStyles
-///   some styles can't properly apply if score hasn't been laid out yet,
-///   so temporarily disable them and then reenable after layout
-///   (called during score load)
-//---------------------------------------------------------
-
-void Score::relayoutForStyles()
-{
-    std::vector<Sid> stylesToTemporarilyDisable;
-
-    for (Sid sid : { Sid::createMultiMeasureRests, Sid::mrNumberSeries }) {
-        // only necessary if boolean style is true
-        if (styleB(sid)) {
-            stylesToTemporarilyDisable.push_back(sid);
-        }
-    }
-
-    if (!stylesToTemporarilyDisable.empty()) {
-        for (Sid sid : stylesToTemporarilyDisable) {
-            style().set(sid, false); // temporarily disable
-        }
-        doLayout();
-        for (Sid sid : stylesToTemporarilyDisable) {
-            style().set(sid, true); // and immediately reenable
         }
     }
 }

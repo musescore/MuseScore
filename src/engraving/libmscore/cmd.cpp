@@ -337,7 +337,7 @@ void Score::undoRedo(bool undo, EditData* ed)
 ///   and (always) updating the redraw area.
 //---------------------------------------------------------
 
-void Score::endCmd(bool rollback)
+void Score::endCmd(bool rollback, bool layoutAllParts)
 {
     if (undoStack()->locked()) {
         return;
@@ -357,7 +357,7 @@ void Score::endCmd(bool rollback)
         undoStack()->current()->unwind();
     }
 
-    update(false);
+    update(false, layoutAllParts);
 
     ScoreChangesRange range = changesRange();
 
@@ -408,7 +408,7 @@ void CmdState::dump()
 //    layout & update
 //---------------------------------------------------------
 
-void Score::update(bool resetCmdState)
+void Score::update(bool resetCmdState, bool layoutAllParts)
 {
     TRACEFUNC;
 
@@ -419,6 +419,9 @@ void Score::update(bool resetCmdState)
         ms->deletePostponed();
         if (cs.layoutRange()) {
             for (Score* s : ms->scoreList()) {
+                if (!s->isOpen() && ms->scoreList().size() > 1 && !layoutAllParts) {
+                    continue;
+                }
                 s->doLayoutRange(cs.startTick(), cs.endTick());
             }
             updateAll = true;
