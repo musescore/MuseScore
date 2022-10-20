@@ -126,8 +126,8 @@ StyledDialogView {
 
             navigationPanel.section: dialog.navigationSection
 
-            onIsAskAgainChangeRequested: {
-                dialog.isAskAgain = !dialog.isAskAgain
+            onIsAskAgainChangeRequested: function(askAgain) {
+                dialog.isAskAgain = askAgain
             }
 
             onWatchVideoRequested: {
@@ -159,8 +159,20 @@ StyledDialogView {
 
             navigationSection: dialog.navigationSection
 
-            onIsAskAgainChangeRequested: {
-                dialog.isAskAgain = !dialog.isAskAgain
+            onIsApplyEdwinChangeRequested: function(applyEdwin) {
+                dialog.isApplyEdwin = applyEdwin
+            }
+
+            onIsApplyLelandChangeRequested: function(applyLeland) {
+                dialog.isApplyLeland = applyLeland
+            }
+
+            onIsApplyAutoSpacingChangeRequested: function(applyAutoSpacing) {
+                dialog.isApplyAutoSpacing = applyAutoSpacing
+            }
+
+            onIsAskAgainChangeRequested: function(askAgain) {
+                dialog.isAskAgain = askAgain
             }
 
             onWatchVideoRequested: {
