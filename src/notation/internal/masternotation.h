@@ -83,6 +83,7 @@ private:
     void addExcerptsToMasterScore(const std::vector<mu::engraving::Excerpt*>& excerpts);
     void doSetExcerpts(ExcerptNotationList excerpts);
     void updateExcerpts();
+    void unloadExcerpts(ExcerptNotationList& excerpts);
 
     bool containsExcerpt(const mu::engraving::Excerpt* excerpt) const;
     bool containsExcerptForPart(const Part* part) const;
