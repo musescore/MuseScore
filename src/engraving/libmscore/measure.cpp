@@ -3277,6 +3277,7 @@ void Measure::layoutMeasureElements()
                     e->setPosX(measureWidth - .5 * e->width());
                 } else {
                     // full measure rest or one-measure repeat, center within this measure
+                    e->layout();
                     e->setPosX((x2 - x1 - e->width()) * .5 + x1 - s.x() - e->bbox().x());
                 }
                 s.createShape(staffIdx);            // DEBUG
@@ -4220,7 +4221,7 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
             }
 
             int n = 1;
-            for (Segment* ps = s; ps && !ps->isMMRestSegment(); ps=ps->prevActive()) {
+            for (Segment* ps = s; ps; ps=ps->prevActive()) {
                 double ww;
 
                 assert(ps);         // ps should never be nullptr but better be safe.
@@ -4307,7 +4308,7 @@ void Measure::computeWidth(Fraction minTicks, Fraction maxTicks, double stretchC
     //
     Shape ls(first ? RectF(0.0, -1000000.0, 0.0, 2000000.0) : RectF(0.0, 0.0, 0.0, spatium() * 4));
 
-    x = s->isMMRestSegment() ? 0 : s->minLeft(ls);
+    x = s->minLeft(ls);
 
     if (s->isStartRepeatBarLineType()) {
         System* sys = system();
@@ -4629,8 +4630,11 @@ Fraction Measure::maxTicks() const
 {
     Segment* s = first();
     Fraction maxticks = Fraction(0, 1);
+    if (isMMRest()) {
+        return timesig();
+    }
     while (s) {
-        if (s->enabled() && s->isChordRestType() && !s->isMMRestSegment()) {
+        if (s->enabled() && s->isChordRestType()) {
             maxticks = std::max(maxticks, s->ticks());
         }
         s = s->next();

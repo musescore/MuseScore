@@ -212,7 +212,7 @@ TEST_F(Engraving_ChordSymbolTests, testTransposePart)
     score->startCmd();
     score->cmdSelectAll();
     score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
-    score->endCmd();
+    score->endCmd(false, /*layoutAllParts = */ true);
     test_post(score, u"transpose-part");
 }
 

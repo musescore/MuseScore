@@ -2182,8 +2182,8 @@ void Chord::layoutPitched()
     addLedgerLines();
 
     if (_arpeggio) {
-        _arpeggio->layout();        // only for width() !
-        _arpeggio->setHeight(0.0);
+        _arpeggio->computeHeight();
+        _arpeggio->layout();
 
         double arpeggioNoteDistance = score()->styleMM(Sid::ArpeggioNoteDistance) * mag_;
 
@@ -2695,19 +2695,10 @@ void Chord::crossMeasureSetup(bool on)
 
 void Chord::layoutArpeggio2()
 {
-    if (!_arpeggio) {
+    if (!_arpeggio || _arpeggio->span() < 2) {
         return;
     }
-    double y           = upNote()->pagePos().y() - upNote()->headHeight() * .5;
-    int span          = _arpeggio->span();
-    track_idx_t btrack = track() + (span - 1) * VOICES;
-
-    EngravingItem* element = segment()->element(btrack);
-    ChordRest* bchord = element ? toChordRest(element) : nullptr;
-    Note* dnote       = (bchord && bchord->type() == ElementType::CHORD) ? toChord(bchord)->downNote() : downNote();
-
-    double h = dnote->pagePos().y() + dnote->headHeight() * .5 - y;
-    _arpeggio->setHeight(h);
+    _arpeggio->computeHeight(/*includeCrossStaffHeight = */ true);
     _arpeggio->layout();
 }
 
@@ -3704,14 +3695,6 @@ Shape Chord::shape() const
 //            shape.add(_tremolo->shape().translated(_tremolo->pos()));
     for (Note* note : _notes) {
         shape.add(note->shape().translated(note->pos()));
-        for (EngravingItem* e : note->el()) {
-            if (!e->addToSkyline()) {
-                continue;
-            }
-            if (e->isFingering() && toFingering(e)->layoutType() == ElementType::CHORD && e->bbox().isValid()) {
-                shape.add(e->bbox().translated(e->pos() + note->pos()), e);
-            }
-        }
     }
     for (EngravingItem* e : el()) {
         if (e->addToSkyline()) {
