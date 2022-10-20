@@ -107,7 +107,7 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     query.addParam("migrationType", Val(migrationType));
     query.addParam("isApplyLeland", Val(out.isApplyLeland));
     query.addParam("isApplyEdwin", Val(out.isApplyEdwin));
-    query.addParam("isApplyAutoSpacing", Val(out.isApplyAutoSpacing));
+    query.addParam("isApplyAutomaticPlacement", Val(out.isApplyAutomaticPlacement));
     RetVal<Val> rv = interactive()->open(query);
     if (!rv.ret) {
         return rv.ret;
@@ -119,7 +119,7 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     out.isAskAgain = vals.value("isAskAgain").toBool();
     out.isApplyLeland = vals.value("isApplyLeland").toBool();
     out.isApplyEdwin = vals.value("isApplyEdwin").toBool();
-    out.isApplyAutoSpacing = vals.value("isApplyAutoSpacing").toBool();
+    out.isApplyAutomaticPlacement = vals.value("isApplyAutomaticPlacement").toBool();
 
     return true;
 }
@@ -167,7 +167,7 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
         m_resetStyleSettings = false;
     }
 
-    if (ok && opt.isApplyAutoSpacing) {
+    if (ok && opt.isApplyAutomaticPlacement) {
         ok = resetAllElementsPositions(score);
     }
 
