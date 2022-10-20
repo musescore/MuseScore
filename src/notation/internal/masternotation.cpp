@@ -97,6 +97,8 @@ MasterNotation::MasterNotation()
 MasterNotation::~MasterNotation()
 {
     m_parts = nullptr;
+
+    unloadExcerpts(m_potentialExcerpts);
 }
 
 INotationPtr MasterNotation::notation()
@@ -427,6 +429,23 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
         mu::engraving::ScoreLoad sl;
         score->doLayout();
     }
+}
+
+void MasterNotation::unloadExcerpts(ExcerptNotationList& excerpts)
+{
+    for (IExcerptNotationPtr ptr : excerpts) {
+        Excerpt* excerpt = get_impl(ptr)->excerpt();
+        if (!excerpt) {
+            continue;
+        }
+
+        if (Score* score = excerpt->excerptScore()) {
+            delete score;
+            excerpt->setExcerptScore(nullptr);
+        }
+    }
+
+    excerpts.clear();
 }
 
 mu::ValNt<bool> MasterNotation::needSave() const
