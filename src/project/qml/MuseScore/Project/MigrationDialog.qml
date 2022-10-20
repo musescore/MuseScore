@@ -39,7 +39,7 @@ StyledDialogView {
 
     property bool isApplyLeland: true
     property bool isApplyEdwin: true
-    property bool isApplyAutoSpacing: true
+    property bool isApplyAutomaticPlacement: true
     property bool isAskAgain: true
 
     contentHeight: {
@@ -71,13 +71,13 @@ StyledDialogView {
             loader.sourceComponent = migrComp
             break;
         case MigrationType.Post300AndPre362:
-            isApplyAutoSpacing = false
+            isApplyAutomaticPlacement = false
             loader.sourceComponent = migrComp
             break;
         case MigrationType.Ver362:
             isApplyLeland = false
             isApplyEdwin = false
-            isApplyAutoSpacing = false
+            isApplyAutomaticPlacement = false
             loader.sourceComponent = noteComp
             break;
         default:
@@ -93,7 +93,7 @@ StyledDialogView {
                 isAskAgain: dialog.isAskAgain,
                 isApplyLeland: dialog.isApplyLeland,
                 isApplyEdwin: dialog.isApplyEdwin,
-                isApplyAutoSpacing: dialog.isApplyAutoSpacing
+                isApplyAutomaticPlacement: dialog.isApplyAutomaticPlacement
             }
         }
 
@@ -153,7 +153,7 @@ StyledDialogView {
 
             isApplyLeland: dialog.isApplyLeland
             isApplyEdwin: dialog.isApplyEdwin
-            isApplyAutoSpacing: dialog.isApplyAutoSpacing
+            isApplyAutomaticPlacement: dialog.isApplyAutomaticPlacement
 
             isPre300: dialog.migrationType === MigrationType.Pre300
 
@@ -167,8 +167,8 @@ StyledDialogView {
                 dialog.isApplyLeland = applyLeland
             }
 
-            onIsApplyAutoSpacingChangeRequested: function(applyAutoSpacing) {
-                dialog.isApplyAutoSpacing = applyAutoSpacing
+            onIsApplyAutomaticPlacementChangeRequested: function(applyAutomaticPlacement) {
+                dialog.isApplyAutomaticPlacement = applyAutomaticPlacement
             }
 
             onIsAskAgainChangeRequested: function(askAgain) {

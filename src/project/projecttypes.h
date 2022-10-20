@@ -55,7 +55,7 @@ struct MigrationOptions
 
     bool isApplyLeland = true;
     bool isApplyEdwin = true;
-    bool isApplyAutoSpacing = true;
+    bool isApplyAutomaticPlacement = true;
 
     bool isValid() const { return appVersion != 0; }
 };
