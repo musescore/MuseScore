@@ -86,31 +86,9 @@ struct RenderingContext {
     }
 };
 
-inline bool isNotePlayable(const Note* note)
-{
-    if (!note->play()) {
-        return false;
-    }
-
-    const Tie* tie = note->tieBack();
-
-    if (tie) {
-        if (!tie->startNote() || !tie->endNote()) {
-            return false;
-        }
-
-        const Chord* firstChord = tie->startNote()->chord();
-        const Chord* lastChord = tie->endNote()->chord();
-
-        return !firstChord->containsEqualTremolo(lastChord);
-    }
-
-    return true;
-}
-
 inline mpe::duration_t noteNominalDuration(const Note* note, const RenderingContext& ctx)
 {
-    return durationFromTicks(ctx.beatsPerSecond.val, note->playTicks());
+    return durationFromTicks(ctx.beatsPerSecond.val, note->chord()->durationTypeTicks().ticks());
 }
 
 struct NominalNoteCtx {
@@ -132,6 +110,38 @@ struct NominalNoteCtx {
         chordCtx(ctx)
     {}
 };
+
+inline bool isNotePlayable(const Note* note, const mpe::ArticulationMap& articualtionMap)
+{
+    if (!note->play()) {
+        return false;
+    }
+
+    const Tie* tie = note->tieBack();
+
+    if (tie) {
+        if (!tie->startNote() || !tie->endNote()) {
+            return false;
+        }
+
+        //!Note Checking whether the last tied note has any multi-note articulation attached
+        //!     If so, we can't ignore such note
+        if (!note->tieFor()) {
+            for (const auto& pair : articualtionMap) {
+                if (mpe::isMultiNoteArticulation(pair.first)) {
+                    return true;
+                }
+            }
+        }
+
+        const Chord* firstChord = tie->startNote()->chord();
+        const Chord* lastChord = tie->endNote()->chord();
+
+        return !firstChord->containsEqualTremolo(lastChord);
+    }
+
+    return true;
+}
 
 inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx)
 {

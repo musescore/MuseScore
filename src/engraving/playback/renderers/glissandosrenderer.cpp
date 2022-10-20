@@ -77,7 +77,7 @@ void GlissandosRenderer::renderDiscreteGlissando(const Note* note, const Renderi
     float durationStep = context.nominalDuration / static_cast<float>(stepsCount);
 
     for (size_t i = 0; i < stepsCount; ++i) {
-        if (!isNotePlayable(note)) {
+        if (!isNotePlayable(note, context.commonArticulations)) {
             continue;
         }
 
@@ -97,7 +97,7 @@ void GlissandosRenderer::renderDiscreteGlissando(const Note* note, const Renderi
 
 void GlissandosRenderer::renderContinuousGlissando(const Note* note, const RenderingContext& context, mpe::PlaybackEventList& result)
 {
-    if (!isNotePlayable(note)) {
+    if (!isNotePlayable(note, context.commonArticulations)) {
         return;
     }
 

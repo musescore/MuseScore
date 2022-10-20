@@ -338,13 +338,13 @@ void PlaybackEventsRenderer::renderNoteArticulations(const Chord* chord, const R
     }
 
     for (const Note* note : chord->notes()) {
-        if (!isNotePlayable(note)) {
-            continue;
-        }
-
         NominalNoteCtx noteCtx(note, ctx);
 
         NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.chordCtx.commonArticulations);
+
+        if (!isNotePlayable(note, noteCtx.chordCtx.commonArticulations)) {
+            continue;
+        }
 
         if (!swingDurationAdjustment.isNull()) {
             //! NOTE: Swing must be applied to the "raw" note duration, but not to the additional duration (e.g, from a tied note)

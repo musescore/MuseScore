@@ -106,7 +106,7 @@ void TremoloRenderer::buildAndAppendEvents(const Chord* chord, const Articulatio
     for (size_t noteIdx = 0; noteIdx < chord->notes().size(); ++noteIdx) {
         const Note* note = chord->notes().at(noteIdx);
 
-        if (!isNotePlayable(note)) {
+        if (!isNotePlayable(note, context.commonArticulations)) {
             continue;
         }
 
