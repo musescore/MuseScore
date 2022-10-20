@@ -912,7 +912,9 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
             tick += ncr->actualTicks();
 
             if (!articulationIds.empty()) {
-                toChord(ncr)->updateArticulations(articulationIds);
+                if (ncr->isChord()) {
+                    toChord(ncr)->updateArticulations(articulationIds);
+                }
             }
         }
 
