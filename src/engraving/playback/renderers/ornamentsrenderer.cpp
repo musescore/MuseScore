@@ -262,7 +262,7 @@ void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationTy
     const DisclosurePattern& nominalPattern = search->second;
 
     for (const Note* note : chord->notes()) {
-        if (!isNotePlayable(note)) {
+        if (!isNotePlayable(note, context.commonArticulations)) {
             continue;
         }
 

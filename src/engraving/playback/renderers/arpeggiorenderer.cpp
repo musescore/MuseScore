@@ -110,7 +110,7 @@ std::map<pitch_level_t, NominalNoteCtx> ArpeggioRenderer::arpeggioNotes(const Ch
     std::map<pitch_level_t, NominalNoteCtx> result;
 
     for (const Note* note : chord->notes()) {
-        if (!isNotePlayable(note)) {
+        if (!isNotePlayable(note, ctx.commonArticulations)) {
             continue;
         }
 
