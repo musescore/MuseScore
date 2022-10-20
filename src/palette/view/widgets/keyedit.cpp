@@ -303,6 +303,8 @@ KeyEditor::KeyEditor(QWidget* parent)
     setupUi(this);
     setWindowTitle(mu::qtrc("palette", "Key signatures"));
 
+    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     QSizePolicy policy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     // create key signature palette
