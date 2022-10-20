@@ -22,8 +22,11 @@
 
 #include "themeconverter.h"
 
+#include "translation.h"
+
 #include "log.h"
 
+using namespace mu;
 using namespace mu::ui;
 
 static const QString CODEKEY_KEY("codeKey");
@@ -57,6 +60,25 @@ static const std::vector<std::pair<ThemeStyleKey, QString > > s_keys = {
 
     { ITEM_OPACITY_DISABLED, "itemOpacityDisabled" },
 };
+
+static QString titleForTheme(const ThemeInfo& theme)
+{
+    if (theme.codeKey == LIGHT_THEME_CODE) {
+        //: The name of the light ui theme
+        return qtrc("ui", "Light");
+    } else if (theme.codeKey == DARK_THEME_CODE) {
+        //: The name of the dark ui theme
+        return qtrc("ui", "Dark");
+    } else if (theme.codeKey == HIGH_CONTRAST_WHITE_THEME_CODE) {
+        //: The name of the high contrast light ui theme
+        return qtrc("ui", "White");
+    } else if (theme.codeKey == HIGH_CONTRAST_BLACK_THEME_CODE) {
+        //: The name of the high contrast dark ui theme
+        return qtrc("ui", "Black");
+    }
+
+    return QString::fromStdString(theme.title);
+}
 
 static const QString& themeStyleKeyToString(ThemeStyleKey key)
 {
@@ -92,7 +114,7 @@ QVariantMap ThemeConverter::toMap(const ThemeInfo& theme)
     QVariantMap obj;
 
     obj[CODEKEY_KEY] = QString::fromStdString(theme.codeKey);
-    obj[TITLE_KEY] = QString::fromStdString(theme.title);
+    obj[TITLE_KEY] = titleForTheme(theme);
 
     for (ThemeStyleKey key : theme.values.keys()) {
         obj[themeStyleKeyToString(key)] = theme.values[key];
