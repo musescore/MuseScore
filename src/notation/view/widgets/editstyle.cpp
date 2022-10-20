@@ -646,6 +646,7 @@ EditStyle::EditStyle(QWidget* parent)
     verticalPlacementComboBoxes = {
         lyricsPlacement,
         textLinePlacement,
+        systemTextLinePlacement,
         hairpinPlacement,
         pedalLinePlacement,
         trillLinePlacement,
