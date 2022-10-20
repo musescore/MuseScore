@@ -473,22 +473,22 @@ MigrationOptions ProjectConfiguration::migrationOptions(MigrationType type) cons
 
     MigrationOptions result;
 
-    for (const QVariant& obj : array.toVariantList()) {
-        QVariantMap map = obj.toMap();
+    for (const auto val : array) {
+        QJsonObject obj = val.toObject();
 
-        auto migrationType = migrationTypeFromString(map["migrationType"].toString());
+        auto migrationType = migrationTypeFromString(obj["migrationType"].toString());
         if (migrationType == MigrationType::Unknown) {
             continue;
         }
 
-        QVariantMap optionsObj = map["options"].toMap();
+        QJsonObject optionsObj = obj["options"].toObject();
 
         MigrationOptions opt;
-        opt.appVersion = optionsObj.value("appVersion", 0).toInt();
-        opt.isApplyMigration = optionsObj.value("isApplyMigration", false).toBool();
-        opt.isAskAgain = optionsObj.value("isAskAgain", false).toBool();
-        opt.isApplyLeland = optionsObj.value("isApplyLeland", false).toBool();
-        opt.isApplyEdwin = optionsObj.value("isApplyEdwin", false).toBool();
+        opt.appVersion = optionsObj["appVersion"].toInt(0);
+        opt.isApplyMigration = optionsObj["isApplyMigration"].toBool();
+        opt.isAskAgain = optionsObj["isAskAgain"].toBool();
+        opt.isApplyLeland = optionsObj["isApplyLeland"].toBool();
+        opt.isApplyEdwin = optionsObj["isApplyEdwin"].toBool();
 
         m_migrationOptions[migrationType] = opt;
 
@@ -521,26 +521,25 @@ void ProjectConfiguration::setMigrationOptions(MigrationType type, const Migrati
         return;
     }
 
-    QVariantList objList;
+    QJsonArray array;
 
     for (auto it = m_migrationOptions.cbegin(); it != m_migrationOptions.cend(); ++it) {
         const MigrationOptions& o = it->second;
 
-        QVariantMap options;
+        QJsonObject options;
         options["appVersion"] = o.appVersion;
         options["isApplyMigration"] = o.isApplyMigration;
         options["isAskAgain"] = o.isAskAgain;
         options["isApplyLeland"] = o.isApplyLeland;
         options["isApplyEdwin"] = o.isApplyEdwin;
 
-        QVariantMap map;
-        map["migrationType"] = migrationTypeToString(it->first);
-        map["options"] = options;
+        QJsonObject obj;
+        obj["migrationType"] = migrationTypeToString(it->first);
+        obj["options"] = options;
 
-        objList << map;
+        array << obj;
     }
 
-    QJsonArray array = QJsonArray::fromVariantList(objList);
     QString json = QJsonDocument(array).toJson(QJsonDocument::Compact);
     settings()->setSharedValue(MIGRATION_OPTIONS, Val(json));
 }
