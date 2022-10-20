@@ -102,9 +102,9 @@ ExpandableBlank {
             navigationRowStart: velocityChangeSection.navigationRowEnd + 1
 
             model: [
-                { text: "Slow", value: Dynamic.VELOCITY_CHANGE_SPEED_SLOW },
-                { text: "Normal", value: Dynamic.VELOCITY_CHANGE_SPEED_NORMAL },
-                { text: "Fast", value: Dynamic.VELOCITY_CHANGE_SPEED_FAST }
+                { text: qsTrc("inspector", "Slow", "velocity change speed"), value: Dynamic.VELOCITY_CHANGE_SPEED_SLOW },
+                { text: qsTrc("inspector", "Normal", "velocity change speed"), value: Dynamic.VELOCITY_CHANGE_SPEED_NORMAL },
+                { text: qsTrc("inspector", "Fast", "velocity change speed"), value: Dynamic.VELOCITY_CHANGE_SPEED_FAST }
             ]
         }
     }
