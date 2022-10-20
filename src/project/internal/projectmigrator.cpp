@@ -41,17 +41,13 @@ static const Uri MIGRATION_DIALOG_URI("musescore://project/migration");
 static const QString LELAND_STYLE_PATH(":/engraving/styles/migration-306-style-Leland.mss");
 static const QString EDWIN_STYLE_PATH(":/engraving/styles/migration-306-style-Edwin.mss");
 
-static MigrationType migrationTypeFromAppVersion(const QString& appVersion)
+static MigrationType migrationTypeFromMscVersion(int mscVersion)
 {
-    QVersionNumber version = QVersionNumber::fromString(appVersion);
-    int major = version.majorVersion();
-    int minor = version.minorVersion();
-
-    if (major < 3 || (major == 3 && minor < 6)) {
+    if (mscVersion < 302) {
         return MigrationType::Pre_3_6;
     }
 
-    if (major < 4) {
+    if (mscVersion < 400) {
         return MigrationType::Ver_3_6;
     }
 
@@ -67,7 +63,7 @@ Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPt
     //! NOTE If the migration is not done, then the default style for the score is determined by the version.
     //! When migrating, the version becomes the current one, so remember the version of the default style before migrating
     project->masterScore()->style().setDefaultStyleVersion(ReadStyleHook::styleDefaultByMscVersion(project->mscVersion()));
-    MigrationType migrationType = migrationTypeFromAppVersion(project->appVersion());
+    MigrationType migrationType = migrationTypeFromMscVersion(project->mscVersion());
     m_resetStyleSettings = true;
 
     MigrationOptions migrationOptions = configuration()->migrationOptions(migrationType);
