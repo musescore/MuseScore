@@ -72,6 +72,7 @@ static JsonObject toObj(const Font& font)
 {
     JsonObject obj;
     obj["family"] = font.family();
+    obj["type"] = static_cast<int>(font.type());
     obj["pointSize"] = font.pointSizeF();
     obj["weight"] = font.weight();
     obj["italic"] = font.italic();
@@ -80,7 +81,7 @@ static JsonObject toObj(const Font& font)
 
 static void fromObj(const JsonObject& obj, Font& font)
 {
-    font.setFamily(obj["family"].toString());
+    font.setFamily(obj["family"].toString(), static_cast<Font::Type>(obj["type"].toInt()));
     font.setPointSizeF(obj["pointSize"].toDouble());
     font.setWeight(static_cast<Font::Weight>(obj["weight"].toInt()));
     font.setItalic(obj["italic"].toBool());

@@ -153,7 +153,7 @@ RectF QFontProvider::symBBox(const Font& f, char32_t ucs4, double dpi_f) const
     if (!rect.isValid()) {
         for (const auto& fontName : QFont::substitutes(f.family())) {
             Font subFont(f);
-            subFont.setFamily(fontName);
+            subFont.setFamily(fontName, f.type());
             engine = symEngine(subFont);
             if (!engine) {
                 continue;
@@ -180,7 +180,7 @@ double QFontProvider::symAdvance(const Font& f, char32_t ucs4, double dpi_f) con
     if (RealIsNull(symAdvance)) {
         for (const auto& fontName : QFont::substitutes(f.family())) {
             Font subFont(f);
-            subFont.setFamily(fontName);
+            subFont.setFamily(fontName, f.type());
             engine = symEngine(subFont);
             if (!engine) {
                 continue;

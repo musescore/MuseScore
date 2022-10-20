@@ -507,7 +507,7 @@ void FiguredBassItem::layout()
 
     // construct font metrics
     int fontIdx = 0;
-    mu::draw::Font f(g_FBFonts.at(fontIdx).family);
+    mu::draw::Font f(g_FBFonts.at(fontIdx).family, draw::Font::Type::Figuredbass);
 
     // font size in pixels, scaled according to spatium()
     // (use the same font selection as used in draw() below)
@@ -628,7 +628,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
     int font = 0;
     double _spatium = spatium();
     // set font from general style
-    mu::draw::Font f(g_FBFonts.at(font).family);
+    mu::draw::Font f(g_FBFonts.at(font).family, draw::Font::Type::Figuredbass);
 
     // (use the same font selection as used in layout() above)
     double m = score()->styleD(Sid::figuredBassFontSize) * spatium() / SPATIUM20;

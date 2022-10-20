@@ -74,7 +74,7 @@ static const ElementStyle fretStyle {
 FretDiagram::FretDiagram(Segment* parent)
     : EngravingItem(ElementType::FRET_DIAGRAM, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
-    font.setFamily(u"FreeSans");
+    font.setFamily(u"FreeSans", draw::Font::Type::Tablature);
     font.setPointSizeF(4.0 * mag());
     initElementStyle(&fretStyle);
 }

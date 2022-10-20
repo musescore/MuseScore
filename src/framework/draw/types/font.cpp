@@ -25,13 +25,18 @@
 using namespace mu;
 using namespace mu::draw;
 
-Font::Font(const String& family)
+Font::Font(const String& family, Type type)
     : m_family(family)
 {
 }
 
 bool Font::operator ==(const Font& other) const
 {
+    //! NOTE At the moment, the type is entered for information,
+    //! its correct installation is not guaranteed,
+    //! so we do not take it when comparing it yet
+    // && m_type == other.m_type
+
     return m_family == other.m_family
            && RealIsEqual(m_pointSizeF, other.m_pointSizeF)
            && m_weight == other.m_weight
@@ -40,14 +45,20 @@ bool Font::operator ==(const Font& other) const
            && m_hinting == other.m_hinting;
 }
 
-void Font::setFamily(const String& family)
+void Font::setFamily(const String& family, Type type)
 {
     m_family = family;
+    m_type = type;
 }
 
 String Font::family() const
 {
     return m_family;
+}
+
+Font::Type Font::type() const
+{
+    return m_type;
 }
 
 double Font::pointSizeF() const
@@ -165,9 +176,9 @@ QFont Font::toQFont() const
     return qf;
 }
 
-Font Font::fromQFont(const QFont& qf)
+Font Font::fromQFont(const QFont& qf, Font::Type type)
 {
-    mu::draw::Font f(qf.family());
+    mu::draw::Font f(qf.family(), type);
     if (qf.pointSizeF() > 0) {
         f.setPointSizeF(qf.pointSizeF());
     } else if (qf.pixelSize() > 0) {
