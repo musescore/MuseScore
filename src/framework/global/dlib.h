@@ -53,6 +53,7 @@ inline void* getLibFunc(void* libHandle, const char* funcName)
 inline void closeLib(void* libHandle)
 {
 #ifdef Q_OS_WIN
+    UNUSED(libHandle);
     return;
 #else
     dlclose(libHandle);
