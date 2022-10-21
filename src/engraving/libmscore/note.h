@@ -203,7 +203,7 @@ private:
     NoteHeadGroup _headGroup = NoteHeadGroup::HEAD_NORMAL;
     NoteHeadType _headType = NoteHeadType::HEAD_AUTO;
 
-    VeloType _veloType = VeloType::OFFSET_VAL;
+    VeloType _veloType = VeloType::USER_VAL;
 
     int _offTimeType = 0;     ///< compatibility only 1 - user(absolute), 2 - offset (%)
     int _onTimeType = 0;      ///< compatibility only 1 - user, 2 - offset
@@ -217,7 +217,7 @@ private:
     mutable int _tpc[2] = { Tpc::TPC_INVALID, Tpc::TPC_INVALID };   ///< tonal pitch class  (concert/transposing)
     mutable int _pitch = 0;      ///< Note pitch as midi value (0 - 127).
 
-    int _veloOffset = 0;    ///< velocity user offset in percent, or absolute velocity for this note
+    int _userVelocity = 0;    ///< velocity user offset in percent, or absolute velocity for this note
     int _fixedLine = 0;     ///< fixed line number if _fixed == true
     double _tuning = 0.0;    ///< pitch offset in cent, playable only by internal synthesizer
 
@@ -445,10 +445,8 @@ public:
 
     void reset() override;
 
-    VeloType veloType() const { return _veloType; }
-    void setVeloType(VeloType v) { _veloType = v; }
-    int veloOffset() const { return _veloOffset; }
-    void setVeloOffset(int v) { _veloOffset = v; }
+    int userVelocity() const { return _userVelocity; }
+    void setUserVelocity(int v) { _userVelocity = v; }
 
     void setOnTimeOffset(int v);
     void setOffTimeOffset(int v);

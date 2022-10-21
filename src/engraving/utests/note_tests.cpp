@@ -133,10 +133,10 @@ TEST_F(Engraving_NoteTests, note)
         delete n;
     }
 
-    // velo offset
-    note->setVeloOffset(71);
+    // user velocity
+    note->setUserVelocity(71);
     n = toNote(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(n->veloOffset(), 71);
+    EXPECT_EQ(n->userVelocity(), 71);
     delete n;
 
     // tuning
@@ -161,17 +161,6 @@ TEST_F(Engraving_NoteTests, note)
     note->setGhost(true);
     n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_TRUE(n->ghost());
-    delete n;
-
-    // velo type
-    note->setVeloType(VeloType::USER_VAL);
-    n = toNote(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(n->veloType(), VeloType::USER_VAL);
-    delete n;
-
-    note->setVeloType(VeloType::OFFSET_VAL);
-    n = toNote(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(n->veloType(), VeloType::OFFSET_VAL);
     delete n;
 
     //================================================
@@ -255,10 +244,10 @@ TEST_F(Engraving_NoteTests, note)
         delete n;
     }
 
-    // velo offset
-    note->setProperty(Pid::VELO_OFFSET, 38);
+    // user velocity
+    note->setProperty(Pid::USER_VELOCITY, 38);
     n = toNote(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(n->veloOffset(), 38);
+    EXPECT_EQ(n->userVelocity(), 38);
     delete n;
 
     // tuning
@@ -288,17 +277,6 @@ TEST_F(Engraving_NoteTests, note)
     note->setProperty(Pid::GHOST, true);
     n = toNote(ScoreRW::writeReadElement(note));
     EXPECT_TRUE(n->ghost());
-    delete n;
-
-    // velo type
-    note->setProperty(Pid::VELO_TYPE, int(VeloType::USER_VAL));
-    n = toNote(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(n->veloType(), VeloType::USER_VAL);
-    delete n;
-
-    note->setProperty(Pid::VELO_TYPE, int(VeloType::OFFSET_VAL));
-    n = toNote(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(n->veloType(), VeloType::OFFSET_VAL);
     delete n;
 
     delete chord;

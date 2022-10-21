@@ -3674,11 +3674,11 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
 
         noteTag += elementPosition(this, note);
 
-        //TODO support for OFFSET_VAL
-        if (note->veloType() == VeloType::USER_VAL) {
-            int velo = note->veloOffset();
+        int velo = note->userVelocity();
+        if (velo != 0) {
             noteTag += QString(" dynamics=\"%1\"").arg(QString::number(velo * 100.0 / 90.0, 'f', 2));
         }
+
         _xml.startElementRaw(noteTag);
 
         if (grace) {

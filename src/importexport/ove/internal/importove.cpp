@@ -1610,9 +1610,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                 Note* note = Factory::createNote(mu::engraving::toChord(cr));
                 int pitch = oveNote->getNote();
 
-                // note->setTrack(noteTrack);
-                note->setVeloType(VeloType::USER_VAL);
-                note->setVeloOffset(oveNote->getOnVelocity());
+                note->setUserVelocity(oveNote->getOnVelocity());
                 note->setPitch(pitch);
 
                 // tpc
