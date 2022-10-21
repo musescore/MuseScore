@@ -979,7 +979,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
 
         Measure* nfm = 0;
         Measure* nlm = 0;
-        Fraction tick     = { 0, 1 };
+        Fraction tick     = fm->tick();
         for (int i = 0; i < nm; ++i) {
             Measure* m = Factory::createMeasure(s->dummy()->system());
             m->setPrev(nlm);
