@@ -105,7 +105,7 @@ ColumnLayout {
         navigation.row: 3
 
         onClicked: {
-            root.isAskAgainChangeRequested(!checked)
+            root.isAskAgainChangeRequested(checked) // not `!checked` because the negation is in `checked: !root.isAskAgain`
         }
     }
 
