@@ -254,6 +254,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::hairpinCrescContText,    "hairpinCrescContText",    String(u"(cresc.)") },
     { Sid::hairpinDecrescContText,  "hairpinDecrescContText",  String(u"(dim.)") },
     { Sid::hairpinLineStyle,        "hairpinLineStyle",        PropertyValue(LineType::SOLID) },
+    { Sid::hairpinDashLineLen,      "hairpinDashLineLen",      3.0 },
+    { Sid::hairpinDashGapLen,       "hairpinDashGapLen",       3.0 },
     { Sid::hairpinLineLineStyle,    "hairpinLineLineStyle",    PropertyValue(LineType::DASHED) },
     { Sid::hairpinLineDashLineLen,  "hairpinLineDashLineLen",  6.0 },
     { Sid::hairpinLineDashGapLen,   "hairpinLineDashGapLen",   9.0 },
