@@ -585,9 +585,9 @@ Sid HairpinSegment::getPropertyStyle(Pid pid) const
     case Pid::LINE_STYLE:
         return hairpin()->isLineType() ? Sid::hairpinLineLineStyle : Sid::hairpinLineStyle;
     case Pid::DASH_LINE_LEN:
-        return hairpin()->isLineType() ? Sid::hairpinLineDashLineLen : Sid::NOSTYLE;
+        return hairpin()->isLineType() ? Sid::hairpinLineDashLineLen : Sid::hairpinDashLineLen;
     case Pid::DASH_GAP_LEN:
-        return hairpin()->isLineType() ? Sid::hairpinLineDashGapLen : Sid::NOSTYLE;
+        return hairpin()->isLineType() ? Sid::hairpinLineDashGapLen : Sid::hairpinDashGapLen;
     default:
         break;
     }
@@ -625,9 +625,9 @@ Sid Hairpin::getPropertyStyle(Pid pid) const
     case Pid::LINE_STYLE:
         return isLineType() ? Sid::hairpinLineLineStyle : Sid::hairpinLineStyle;
     case Pid::DASH_LINE_LEN:
-        return isLineType() ? Sid::hairpinLineDashLineLen : Sid::NOSTYLE;
+        return isLineType() ? Sid::hairpinLineDashLineLen : Sid::hairpinDashLineLen;
     case Pid::DASH_GAP_LEN:
-        return isLineType() ? Sid::hairpinLineDashGapLen : Sid::NOSTYLE;
+        return isLineType() ? Sid::hairpinLineDashGapLen : Sid::hairpinDashGapLen;
     default:
         break;
     }
