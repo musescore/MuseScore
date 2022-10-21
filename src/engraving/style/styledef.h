@@ -271,6 +271,8 @@ enum class Sid {
     hairpinCrescContText,
     hairpinDecrescContText,
     hairpinLineStyle,
+    hairpinDashLineLen,
+    hairpinDashGapLen,
     hairpinLineLineStyle,
     hairpinLineDashLineLen,
     hairpinLineDashGapLen,
