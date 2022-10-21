@@ -94,7 +94,7 @@ private:
 
     QMap<QTcpSocket*, HttpRequest> m_clients;
 
-    OAuthHttpServerReplyHandler* m_public;
+    OAuthHttpServerReplyHandler* m_public = nullptr;
 };
 
 OAuthHttpServerReplyHandler::Impl::Impl(OAuthHttpServerReplyHandler* p)

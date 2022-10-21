@@ -32,7 +32,7 @@
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
 #include "multiinstances/imultiinstancesprovider.h"
-#include "cloud/iuploadingservice.h"
+#include "cloud/icloudprojectsservice.h"
 #include "cloud/iauthorizationservice.h"
 #include "playback/iplaybackcontroller.h"
 #include "print/iprintprovider.h"
@@ -64,7 +64,7 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
     INJECT(project, context::IGlobalContext, globalContext)
     INJECT(project, mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(project, cloud::IAuthorizationService, authorizationService)
-    INJECT(project, cloud::IUploadingService, uploadingService)
+    INJECT(project, cloud::ICloudProjectsService, cloudProjectsService)
     INJECT(project, playback::IPlaybackController, playbackController)
     INJECT(project, print::IPrintProvider, printProvider)
     INJECT(project, io::IFileSystem, fileSystem)
@@ -106,7 +106,7 @@ private:
 
     bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save);
     bool saveProjectLocally(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save);
-    bool saveProjectToCloud(const CloudProjectInfo& info, SaveMode saveMode = SaveMode::Save);
+    bool saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode = SaveMode::Save);
 
     struct AudioFile {
         QString format;

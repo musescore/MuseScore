@@ -30,6 +30,7 @@
 #include "io/path.h"
 #include "log.h"
 
+#include "cloud/cloudtypes.h"
 #include "notation/notationtypes.h"
 
 namespace mu::project {
@@ -76,17 +77,11 @@ enum class SaveLocationType
     Cloud
 };
 
-enum class CloudProjectVisibility {
-    Undefined,
-    Private,
-    Public
-};
-
 struct CloudProjectInfo {
     QUrl sourceUrl;
     QString name;
 
-    CloudProjectVisibility visibility = CloudProjectVisibility::Undefined;
+    cloud::Visibility visibility = cloud::Visibility::Private;
 
     bool isValid() const
     {

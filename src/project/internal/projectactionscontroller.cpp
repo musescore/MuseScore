@@ -534,7 +534,7 @@ bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, Sa
     return true;
 }
 
-bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, SaveMode saveMode)
+bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode)
 {
     bool isCloudAvailable = authorizationService()->checkCloudIsAvailable();
     if (!isCloudAvailable) {
@@ -546,8 +546,27 @@ bool ProjectActionsController::saveProjectToCloud(const CloudProjectInfo& info, 
         return false;
     }
 
+    bool isPublic = info.visibility == cloud::Visibility::Public;
     bool generateAudio = false;
-    bool isPublic = info.visibility == CloudProjectVisibility::Public;
+
+    if (saveMode == SaveMode::Save && isCloudAvailable) {
+        // Get up-to-date visibility information
+        RetVal<cloud::ScoreInfo> scoreInfo = cloudProjectsService()->downloadScoreInfo(info.sourceUrl);
+        if (scoreInfo.ret) {
+            info.visibility = scoreInfo.val.visibility;
+            isPublic = info.visibility == cloud::Visibility::Public;
+        } else {
+            LOGE() << "Failed to download up-to-date score info for " << info.sourceUrl
+                   << "; falling back to last known visibility setting, namely " << static_cast<int>(info.visibility);
+        }
+
+        if (isPublic) {
+            if (!saveProjectScenario()->warnBeforeSavingToExistingPubliclyVisibleCloudProject()) {
+                return false;
+            }
+        }
+    }
+
     if (isCloudAvailable) {
         RetVal<bool> need = needGenerateAudio(isPublic);
         if (!need.ret) {
@@ -690,8 +709,7 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
     projectData->close();
     projectData->open(QIODevice::ReadOnly);
 
-    bool isPrivate = info.visibility == CloudProjectVisibility::Private;
-    m_uploadingProjectProgress = uploadingService()->uploadScore(*projectData, info.name, isPrivate, info.sourceUrl);
+    m_uploadingProjectProgress = cloudProjectsService()->uploadScore(*projectData, info.name, info.visibility, info.sourceUrl);
 
     m_uploadingProjectProgress->started.onNotify(this, [this]() {
         m_isUploadingProject = true;
@@ -747,7 +765,7 @@ void ProjectActionsController::uploadAudio(const AudioFile& audio, const QUrl& s
         return;
     }
 
-    m_uploadingAudioProgress = uploadingService()->uploadAudio(*audio.device, audio.format, sourceUrl);
+    m_uploadingAudioProgress = cloudProjectsService()->uploadAudio(*audio.device, audio.format, sourceUrl);
 
     m_uploadingAudioProgress->started.onNotify(this, [this]() {
         m_isUploadingAudio = true;
