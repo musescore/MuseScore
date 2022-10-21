@@ -317,6 +317,11 @@ mu::Ret CloudService::downloadAccountInfo()
     return make_ok();
 }
 
+mu::RetVal<ScoreInfo> CloudService::downloadScoreInfo(const QUrl& sourceUrl)
+{
+    return downloadScoreInfo(scoreIdFromSourceUrl(sourceUrl));
+}
+
 mu::RetVal<ScoreInfo> CloudService::downloadScoreInfo(int scoreId)
 {
     TRACEFUNC;
@@ -350,7 +355,7 @@ mu::RetVal<ScoreInfo> CloudService::downloadScoreInfo(int scoreId)
     result.val.description = scoreInfo.value("description").toString();
     result.val.license = scoreInfo.value("license").toString();
     result.val.tags = scoreInfo.value("tags").toString().split(',');
-    result.val.isPrivate = scoreInfo.value("sharing").toString() == "private";
+    result.val.visibility = static_cast<Visibility>(scoreInfo.value("privacy").toInt());
     result.val.url = scoreInfo.value("custom_url").toString();
 
     QJsonObject owner = scoreInfo.value("user").toObject();
@@ -451,11 +456,11 @@ void CloudService::setAccountInfo(const AccountInfo& info)
     m_userAuthorized.set(info.isValid());
 }
 
-ProgressPtr CloudService::uploadScore(QIODevice& scoreData, const QString& title, bool isPrivate, const QUrl& sourceUrl)
+ProgressPtr CloudService::uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility, const QUrl& sourceUrl)
 {
     ProgressPtr progress = std::make_shared<Progress>();
 
-    auto uploadCallback = [this, progress, &scoreData, title, isPrivate, sourceUrl]() {
+    auto uploadCallback = [this, progress, &scoreData, title, visibility, sourceUrl]() {
         progress->started.notify();
 
         INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
@@ -463,7 +468,7 @@ ProgressPtr CloudService::uploadScore(QIODevice& scoreData, const QString& title
             progress->progressChanged.send(current, total, message);
         });
 
-        RetVal<ValMap> urlMap = doUploadScore(manager, scoreData, title, isPrivate, sourceUrl);
+        RetVal<ValMap> urlMap = doUploadScore(manager, scoreData, title, visibility, sourceUrl);
 
         ProgressResult result;
         result.ret = urlMap.ret;
@@ -541,7 +546,7 @@ static Ret uploadingRetFromRawUploadingRet(const Ret& rawRet, bool isScoreAlread
 }
 
 mu::RetVal<mu::ValMap> CloudService::doUploadScore(INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
-                                                   bool isPrivate, const QUrl& sourceUrl)
+                                                   Visibility visibility, const QUrl& sourceUrl)
 {
     TRACEFUNC;
 
@@ -597,7 +602,7 @@ mu::RetVal<mu::ValMap> CloudService::doUploadScore(INetworkManagerPtr uploadMana
 
     QHttpPart privacyPart;
     privacyPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"privacy\""));
-    privacyPart.setBody(QByteArray::number(isPrivate ? 2 : 0));
+    privacyPart.setBody(QByteArray::number(int(visibility)));
     multiPart.append(privacyPart);
 
     QHttpPart licensePart;

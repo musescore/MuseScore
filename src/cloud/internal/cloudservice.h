@@ -27,7 +27,7 @@
 class QOAuth2AuthorizationCodeFlow;
 
 #include "iauthorizationservice.h"
-#include "iuploadingservice.h"
+#include "icloudprojectsservice.h"
 
 #include "async/asyncable.h"
 
@@ -41,7 +41,7 @@ class QOAuth2AuthorizationCodeFlow;
 namespace mu::cloud {
 class OAuthHttpServerReplyHandler;
 
-class CloudService : public QObject, public IAuthorizationService, public IUploadingService, public async::Asyncable
+class CloudService : public QObject, public IAuthorizationService, public ICloudProjectsService, public async::Asyncable
 {
     Q_OBJECT
 
@@ -67,9 +67,11 @@ public:
 
     Ret checkCloudIsAvailable() const override;
 
-    framework::ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, bool isPrivate = false,
+    framework::ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility = Visibility::Private,
                                        const QUrl& sourceUrl = QUrl()) override;
     framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) override;
+
+    RetVal<ScoreInfo> downloadScoreInfo(const QUrl& sourceUrl) override;
 
 private slots:
     void onUserAuthorized();
@@ -94,7 +96,7 @@ private:
     RetVal<ScoreInfo> downloadScoreInfo(int scoreId);
 
     mu::RetVal<mu::ValMap> doUploadScore(network::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
-                                         bool isPrivate = false, const QUrl& sourceUrl = QUrl());
+                                         Visibility visibility, const QUrl& sourceUrl = QUrl());
     Ret doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl);
 
     using RequestCallback = std::function<Ret()>;

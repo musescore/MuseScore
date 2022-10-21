@@ -68,11 +68,17 @@ struct ScoreOwnerInfo {
     }
 };
 
+enum class Visibility {
+    Public = 0,
+    Unlisted = 1,
+    Private = 2
+};
+
 struct ScoreInfo {
     int id = 0;
     QString title;
     QString description;
-    bool isPrivate = false;
+    Visibility visibility = Visibility::Private;
     QString license;
     QStringList tags;
     QString url;
@@ -84,7 +90,7 @@ struct ScoreInfo {
 
         equals &= (id == another.id);
         equals &= (description == another.description);
-        equals &= (isPrivate == another.isPrivate);
+        equals &= (visibility == another.visibility);
         equals &= (license == another.license);
         equals &= (tags == another.tags);
         equals &= (url == another.url);
