@@ -449,6 +449,18 @@ void ProjectConfiguration::setPreferredScoreCreationMode(PreferredScoreCreationM
     settings()->setSharedValue(PREFERRED_SCORE_CREATION_MODE_KEY, Val(mode));
 }
 
+static MigrationType migrationTypeFromString(const QString& str)
+{
+    if (str == "Pre_3_6") {
+        return MigrationType::Pre_3_6;
+    }
+    if (str == "Ver_3_6") {
+        return MigrationType::Ver_3_6;
+    }
+    LOGE() << "Unknown migration type string: " << str;
+    return MigrationType::Unknown;
+}
+
 MigrationOptions ProjectConfiguration::migrationOptions(MigrationType type) const
 {
     auto it = m_migrationOptions.find(type);
@@ -461,18 +473,22 @@ MigrationOptions ProjectConfiguration::migrationOptions(MigrationType type) cons
 
     MigrationOptions result;
 
-    for (const QVariant& obj : array.toVariantList()) {
-        QVariantMap map = obj.toMap();
-        auto migrationType = static_cast<MigrationType>(map["migrationType"].toInt());
-        QVariantMap optionsObj = map["options"].toMap();
+    for (const auto val : array) {
+        QJsonObject obj = val.toObject();
+
+        auto migrationType = migrationTypeFromString(obj["migrationType"].toString());
+        if (migrationType == MigrationType::Unknown) {
+            continue;
+        }
+
+        QJsonObject optionsObj = obj["options"].toObject();
 
         MigrationOptions opt;
-        opt.appVersion = optionsObj.value("appVersion", 0).toInt();
-        opt.isApplyMigration = optionsObj.value("isApplyMigration", false).toBool();
-        opt.isAskAgain = optionsObj.value("isAskAgain", false).toBool();
-        opt.isApplyLeland = optionsObj.value("isApplyLeland", false).toBool();
-        opt.isApplyEdwin = optionsObj.value("isApplyEdwin", false).toBool();
-        opt.isApplyAutoSpacing = optionsObj.value("isApplyAutoSpacing", false).toBool();
+        opt.appVersion = optionsObj["appVersion"].toInt(0);
+        opt.isApplyMigration = optionsObj["isApplyMigration"].toBool();
+        opt.isAskAgain = optionsObj["isAskAgain"].toBool();
+        opt.isApplyLeland = optionsObj["isApplyLeland"].toBool();
+        opt.isApplyEdwin = optionsObj["isApplyEdwin"].toBool();
 
         m_migrationOptions[migrationType] = opt;
 
@@ -484,6 +500,19 @@ MigrationOptions ProjectConfiguration::migrationOptions(MigrationType type) cons
     return result;
 }
 
+static QString migrationTypeToString(MigrationType type)
+{
+    switch (type) {
+    case MigrationType::Pre_3_6:
+        return QStringLiteral("Pre_3_6");
+    case MigrationType::Ver_3_6:
+        return QStringLiteral("Ver_3_6");
+    case MigrationType::Unknown:
+        break;
+    }
+    return QString();
+}
+
 void ProjectConfiguration::setMigrationOptions(MigrationType type, const MigrationOptions& opt, bool persistent)
 {
     m_migrationOptions[type] = opt;
@@ -492,26 +521,25 @@ void ProjectConfiguration::setMigrationOptions(MigrationType type, const Migrati
         return;
     }
 
-    QVariantList objList;
+    QJsonArray array;
 
     for (auto it = m_migrationOptions.cbegin(); it != m_migrationOptions.cend(); ++it) {
         const MigrationOptions& o = it->second;
 
-        QVariantMap options;
+        QJsonObject options;
         options["appVersion"] = o.appVersion;
         options["isApplyMigration"] = o.isApplyMigration;
         options["isAskAgain"] = o.isAskAgain;
         options["isApplyLeland"] = o.isApplyLeland;
         options["isApplyEdwin"] = o.isApplyEdwin;
 
-        QVariantMap map;
-        map["migrationType"] = static_cast<int>(it->first);
-        map["options"] = options;
+        QJsonObject obj;
+        obj["migrationType"] = migrationTypeToString(it->first);
+        obj["options"] = options;
 
-        objList << map;
+        array << obj;
     }
 
-    QJsonArray array = QJsonArray::fromVariantList(objList);
     QString json = QJsonDocument(array).toJson(QJsonDocument::Compact);
     settings()->setSharedValue(MIGRATION_OPTIONS, Val(json));
 }

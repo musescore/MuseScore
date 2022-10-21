@@ -56,7 +56,6 @@ struct MigrationOptions
 
     bool isApplyLeland = true;
     bool isApplyEdwin = true;
-    bool isApplyAutoSpacing = true;
 
     bool isValid() const { return appVersion != 0; }
 };
@@ -230,9 +229,8 @@ public:
     enum class Type
     {
         Unknown,
-        Pre300,
-        Post300AndPre362,
-        Ver362
+        Pre_3_6,
+        Ver_3_6
     };
     Q_ENUM(Type)
 };
@@ -242,9 +240,8 @@ using MigrationType = Migration::Type;
 inline std::vector<MigrationType> allMigrationTypes()
 {
     static const std::vector<MigrationType> types {
-        MigrationType::Pre300,
-        MigrationType::Post300AndPre362,
-        MigrationType::Ver362
+        MigrationType::Pre_3_6,
+        MigrationType::Ver_3_6
     };
 
     return types;
