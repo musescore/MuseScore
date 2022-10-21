@@ -155,7 +155,9 @@ void OAuthHttpServerReplyHandler::Impl::readData(QTcpSocket* socket)
         socket->disconnectFromHost();
         m_clients.remove(socket);
     } else if (!request->url.isEmpty()) {
+        LOGI() << "successfully read data";
         Q_ASSERT(request->state != HttpRequest::State::ReadingUrl);
+        LOGI() << "going to answer; url was " << request->url;
         answerClient(socket, request->url);
         m_clients.remove(socket);
     }
@@ -175,6 +177,8 @@ void OAuthHttpServerReplyHandler::Impl::answerClient(QTcpSocket* socket, const Q
     for (auto it = items.begin(), end = items.end(); it != end; ++it) {
         receivedData.insert(it->first, it->second);
     }
+
+    LOGI() << "going to emit callbackReceived with data " << receivedData;
 
     Q_EMIT m_public->callbackReceived(receivedData);
 
@@ -197,6 +201,8 @@ void OAuthHttpServerReplyHandler::Impl::answerClient(QTcpSocket* socket, const Q
                                                         "Content-Length: ") + htmlSize
                                     + QByteArrayLiteral("\r\n\r\n")
                                     + html;
+
+    LOGI() << "going to write replyMessage to socket: " << replyMessage;
 
     socket->write(replyMessage);
 }

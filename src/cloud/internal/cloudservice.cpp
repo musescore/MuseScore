@@ -122,6 +122,30 @@ void CloudService::init()
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, this, &CloudService::openUrl);
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::granted, this, &CloudService::onUserAuthorized);
 
+    connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::replyDataReceived, this, [](const QByteArray& data) {
+        LOGI() << "QOAuth2AuthorizationCodeFlow::replyDataReceived emitted with data " << data;
+    });
+
+    connect(m_replyHandler, &OAuthHttpServerReplyHandler::callbackReceived, this, [](const QVariantMap& values) {
+        LOGI() << "OAuthHttpServerReplyHandler::callbackReceived emitted with values " << values;
+    });
+
+    connect(m_replyHandler, &OAuthHttpServerReplyHandler::tokensReceived, this, [](const QVariantMap& tokens) {
+        LOGI() << "OAuthHttpServerReplyHandler::tokensReceived emitted with tokens " << tokens;
+    });
+
+    connect(m_replyHandler, &OAuthHttpServerReplyHandler::replyDataReceived, this, [](const QByteArray& data) {
+        LOGI() << "OAuthHttpServerReplyHandler::replyDataReceived emitted with data " << data;
+    });
+
+    connect(m_replyHandler, &OAuthHttpServerReplyHandler::callbackDataReceived, this, [](const QByteArray& data) {
+        LOGI() << "OAuthHttpServerReplyHandler::callbackDataReceived emitted with data " << data;
+    });
+
+    connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizationCallbackReceived, this, [](const QVariantMap& data) {
+        LOGI() << "QOAuth2AuthorizationCodeFlow::authorizationCallbackReceived emitted with data " << data;
+    });
+
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::error, [](const QString& error, const QString& errorDescription, const QUrl& uri) {
         LOGE() << "Error during authorization: " << error << "\n Description: " << errorDescription << "\n URI: " << uri.toString();
     });
@@ -167,6 +191,8 @@ bool CloudService::readTokens()
 bool CloudService::saveTokens()
 {
     TRACEFUNC;
+
+    LOGI() << "saving tokens: " << m_accessToken << " and " << m_refreshToken;
 
     mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
 
@@ -228,6 +254,8 @@ void CloudService::onUserAuthorized()
 {
     TRACEFUNC;
 
+    LOGI() << "user authorized";
+
     m_accessToken = m_oauth2->token();
     m_refreshToken = m_oauth2->refreshToken();
 
@@ -283,8 +311,11 @@ mu::Ret CloudService::downloadAccountInfo()
 {
     TRACEFUNC;
 
+    LOGI() << "downloading account info";
+
     RetVal<QUrl> userInfoUrl = prepareUrlForRequest(configuration()->userInfoApiUrl());
     if (!userInfoUrl.ret) {
+        LOGE() << userInfoUrl.ret.toString();
         return userInfoUrl.ret;
     }
 
