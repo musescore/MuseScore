@@ -44,7 +44,7 @@ class Fermata final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Fermata)
 
     SymId _symId;
-    double _timeStretch;
+    double _timeStretch = -1.0;
     bool _play;
 
     friend class Factory;
@@ -63,7 +63,7 @@ public:
     double mag() const override;
 
     SymId symId() const { return _symId; }
-    void setSymId(SymId id) { _symId  = id; }
+    void setSymId(SymId id);
     FermataType fermataType() const;
     int subtype() const override;
     TranslatableString typeUserName() const override;

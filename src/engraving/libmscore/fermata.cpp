@@ -60,7 +60,6 @@ Fermata::Fermata(EngravingItem* parent)
 {
     setPlacement(PlacementV::ABOVE);
     _symId         = SymId::noSym;
-    _timeStretch   = 1.0;
     setPlay(true);
     initElementStyle(&fermataStyle);
 }
@@ -337,7 +336,21 @@ PropertyValue Fermata::propertyDefault(Pid propertyId) const
     case Pid::PLACEMENT:
         return track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE;
     case Pid::TIME_STRETCH:
-        return 1.0;           // articulationList[int(articulationType())].timeStretch;
+        switch (fermataType()) {
+        case FermataType::VeryShort:
+            return 1.25;
+        case FermataType::Short:
+        case FermataType::ShortHenze:
+            return 1.5;
+        case FermataType::Normal:
+        case FermataType::Undefined:
+            return 2.0;
+        case FermataType::Long:
+        case FermataType::LongHenze:
+            return 3.0;
+        case FermataType::VeryLong:
+            return 4.0;
+        }
     case Pid::PLAY:
         return true;
     default:
@@ -382,6 +395,12 @@ Sid Fermata::getPropertyStyle(Pid pid) const
 double Fermata::mag() const
 {
     return staff() ? staff()->staffMag(tick()) * score()->styleD(Sid::articulationMag) : 1.0;
+}
+
+void Fermata::setSymId(SymId id)
+{
+    _symId  = id;
+    _timeStretch = _timeStretch == -1 ? propertyDefault(Pid::TIME_STRETCH).value<double>() : -1;
 }
 
 FermataType Fermata::fermataType() const
