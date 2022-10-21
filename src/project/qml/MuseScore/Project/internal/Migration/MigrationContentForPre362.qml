@@ -34,9 +34,6 @@ Item {
 
     property bool isApplyLeland: true
     property bool isApplyEdwin: true
-    property bool isApplyAutoSpacing: true
-
-    property bool isPre300: false
 
     property NavigationSection navigationSection: null
 
@@ -48,7 +45,6 @@ Item {
     signal isAskAgainChangeRequested(bool askAgain)
     signal isApplyLelandChangeRequested(bool applyLeland)
     signal isApplyEdwinChangeRequested(bool applyEdwin)
-    signal isApplyAutoSpacingChangeRequested(bool applyAutoSpacing)
 
     signal watchVideoRequested()
     signal access()
@@ -156,22 +152,6 @@ Item {
 
             onClicked: {
                 root.isApplyEdwinChangeRequested(!checked)
-            }
-        }
-
-        CheckBox {
-            id: spacingOption
-            anchors.left: parent.left
-            height: 32
-            text: qsTrc("project/migration", "Automatic spacing (introduced in MuseScore 3.0)")
-            visible: root.isPre300
-            checked: root.isApplyAutoSpacing
-
-            navigation.panel: mainContent.navigationPanel
-            navigation.row: 3
-
-            onClicked: {
-                root.isApplyAutoSpacingChangeRequested(!checked)
             }
         }
 

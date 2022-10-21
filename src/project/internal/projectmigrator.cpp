@@ -25,7 +25,6 @@
 
 #include "engraving/libmscore/score.h"
 #include "engraving/libmscore/excerpt.h"
-#include "engraving/libmscore/part.h"
 #include "engraving/libmscore/undo.h"
 
 #include "rw/compat/readstyle.h"
@@ -42,22 +41,14 @@ static const Uri MIGRATION_DIALOG_URI("musescore://project/migration");
 static const QString LELAND_STYLE_PATH(":/engraving/styles/migration-306-style-Leland.mss");
 static const QString EDWIN_STYLE_PATH(":/engraving/styles/migration-306-style-Edwin.mss");
 
-static MigrationType migrationTypeFromAppVersion(const QString& appVersion)
+static MigrationType migrationTypeFromMscVersion(int mscVersion)
 {
-    QVersionNumber version = QVersionNumber::fromString(appVersion);
-    int major = version.majorVersion();
-    int minor = version.minorVersion();
-
-    if (major < 3) {
-        return MigrationType::Pre300;
+    if (mscVersion < 302) {
+        return MigrationType::Pre_3_6;
     }
 
-    if (major >= 3 && minor < 6) {
-        return MigrationType::Post300AndPre362;
-    }
-
-    if (major < 4) {
-        return MigrationType::Ver362;
+    if (mscVersion < 400) {
+        return MigrationType::Ver_3_6;
     }
 
     UNREACHABLE;
@@ -72,7 +63,7 @@ Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPt
     //! NOTE If the migration is not done, then the default style for the score is determined by the version.
     //! When migrating, the version becomes the current one, so remember the version of the default style before migrating
     project->masterScore()->style().setDefaultStyleVersion(ReadStyleHook::styleDefaultByMscVersion(project->mscVersion()));
-    MigrationType migrationType = migrationTypeFromAppVersion(project->appVersion());
+    MigrationType migrationType = migrationTypeFromMscVersion(project->mscVersion());
     m_resetStyleSettings = true;
 
     MigrationOptions migrationOptions = configuration()->migrationOptions(migrationType);
@@ -107,7 +98,6 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     query.addParam("migrationType", Val(migrationType));
     query.addParam("isApplyLeland", Val(out.isApplyLeland));
     query.addParam("isApplyEdwin", Val(out.isApplyEdwin));
-    query.addParam("isApplyAutoSpacing", Val(out.isApplyAutoSpacing));
     RetVal<Val> rv = interactive()->open(query);
     if (!rv.ret) {
         return rv.ret;
@@ -119,7 +109,6 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     out.isAskAgain = vals.value("isAskAgain").toBool();
     out.isApplyLeland = vals.value("isApplyLeland").toBool();
     out.isApplyEdwin = vals.value("isApplyEdwin").toBool();
-    out.isApplyAutoSpacing = vals.value("isApplyAutoSpacing").toBool();
 
     return true;
 }
@@ -167,7 +156,7 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
         m_resetStyleSettings = false;
     }
 
-    if (ok && opt.isApplyAutoSpacing) {
+    if (ok && score->mscVersion() < 300) {
         ok = resetAllElementsPositions(score);
     }
 
