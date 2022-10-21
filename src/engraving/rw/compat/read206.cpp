@@ -987,7 +987,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
     } else if (tag == "head") {
         note->readProperty(e, Pid::HEAD_GROUP);
     } else if (tag == "velocity") {
-        note->setVeloOffset(e.readInt());
+        note->setUserVelocity(e.readInt());
     } else if (tag == "play") {
         note->setPlay(e.readInt());
     } else if (tag == "tuning") {

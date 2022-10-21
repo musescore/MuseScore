@@ -629,7 +629,7 @@ Note::Note(const Note& n, bool link)
     _play              = n._play;
     _tuning            = n._tuning;
     _veloType          = n._veloType;
-    _veloOffset        = n._veloOffset;
+    _userVelocity      = n._userVelocity;
     _headScheme        = n._headScheme;
     _headGroup         = n._headGroup;
     _headType          = n._headType;
@@ -1486,8 +1486,8 @@ void Note::write(XmlWriter& xml) const
         xml.endElement();
     }
     for (Pid id : { Pid::PITCH, Pid::TPC1, Pid::TPC2, Pid::SMALL, Pid::MIRROR_HEAD, Pid::DOT_POSITION,
-                    Pid::HEAD_SCHEME, Pid::HEAD_GROUP, Pid::VELO_OFFSET, Pid::PLAY, Pid::TUNING, Pid::FRET, Pid::STRING,
-                    Pid::GHOST, Pid::DEAD, Pid::HEAD_TYPE, Pid::VELO_TYPE, Pid::FIXED, Pid::FIXED_LINE }) {
+                    Pid::HEAD_SCHEME, Pid::HEAD_GROUP, Pid::USER_VELOCITY, Pid::PLAY, Pid::TUNING, Pid::FRET, Pid::STRING,
+                    Pid::GHOST, Pid::DEAD, Pid::HEAD_TYPE, Pid::FIXED, Pid::FIXED_LINE }) {
         writeProperty(xml, id);
     }
 
@@ -1646,7 +1646,7 @@ bool Note::readProperties(XmlReader& e)
     } else if (tag == "head") {
         readProperty(e, Pid::HEAD_GROUP);
     } else if (tag == "velocity") {
-        setVeloOffset(e.readInt());
+        setUserVelocity(e.readInt());
     } else if (tag == "play") {
         setPlay(e.readInt());
     } else if (tag == "tuning") {
@@ -2788,10 +2788,10 @@ int Note::playingOctave() const
 
 int Note::customizeVelocity(int velo) const
 {
-    if (veloType() == VeloType::OFFSET_VAL) {
-        velo = velo + (velo * veloOffset()) / 100;
-    } else if (veloType() == VeloType::USER_VAL) {
-        velo = veloOffset();
+    if (_veloType == VeloType::OFFSET_VAL) {
+        velo = velo + (velo * userVelocity()) / 100;
+    } else if (_veloType == VeloType::USER_VAL) {
+        velo = userVelocity();
     }
     return std::clamp(velo, 1, 127);
 }
@@ -3135,8 +3135,8 @@ PropertyValue Note::getProperty(Pid propertyId) const
         return int(headScheme());
     case Pid::HEAD_GROUP:
         return int(headGroup());
-    case Pid::VELO_OFFSET:
-        return veloOffset();
+    case Pid::USER_VELOCITY:
+        return userVelocity();
     case Pid::TUNING:
         return tuning();
     case Pid::FRET:
@@ -3150,7 +3150,7 @@ PropertyValue Note::getProperty(Pid propertyId) const
     case Pid::HEAD_TYPE:
         return headType();
     case Pid::VELO_TYPE:
-        return veloType();
+        return _veloType;
     case Pid::PLAY:
         return play();
     case Pid::LINE:
@@ -3215,8 +3215,8 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
             setHeadGroup(_headGroup);
         }
         break;
-    case Pid::VELO_OFFSET:
-        setVeloOffset(v.toInt());
+    case Pid::USER_VELOCITY:
+        setUserVelocity(v.toInt());
         score()->setPlaylistDirty();
         break;
     case Pid::TUNING:
@@ -3239,7 +3239,7 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         setHeadType(v.value<NoteHeadType>());
         break;
     case Pid::VELO_TYPE:
-        setVeloType(v.value<VeloType>());
+        _veloType = v.value<VeloType>();
         score()->setPlaylistDirty();
         break;
     case Pid::VISIBLE: {
@@ -3290,7 +3290,7 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
         return NoteHeadScheme::HEAD_AUTO;
     case Pid::HEAD_GROUP:
         return NoteHeadGroup::HEAD_NORMAL;
-    case Pid::VELO_OFFSET:
+    case Pid::USER_VELOCITY:
         return 0;
     case Pid::TUNING:
         return 0.0;
@@ -3300,7 +3300,7 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
     case Pid::HEAD_TYPE:
         return NoteHeadType::HEAD_AUTO;
     case Pid::VELO_TYPE:
-        return VeloType::OFFSET_VAL;
+        return VeloType::USER_VAL;
     case Pid::PLAY:
         return true;
     case Pid::FIXED:

@@ -38,7 +38,7 @@ NotePlaybackModel::NotePlaybackModel(QObject* parent, IElementRepositoryService*
 void NotePlaybackModel::createProperties()
 {
     m_tuning = buildPropertyItem(mu::engraving::Pid::TUNING);
-    m_velocity = buildPropertyItem(mu::engraving::Pid::VELO_OFFSET);
+    m_velocity = buildPropertyItem(mu::engraving::Pid::USER_VELOCITY);
 }
 
 void NotePlaybackModel::requestElements()
@@ -49,7 +49,10 @@ void NotePlaybackModel::requestElements()
 void NotePlaybackModel::loadProperties()
 {
     loadPropertyItem(m_tuning, formatDoubleFunc);
-    loadPropertyItem(m_velocity);
+    loadPropertyItem(m_velocity, [](const QVariant& value) {
+        //! NOTE: display 64 instead of 0 in the Velocity field to avoid confusing the user
+        return value.toInt() == 0 ? 64 : value;
+    });
 }
 
 void NotePlaybackModel::resetProperties()

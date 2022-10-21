@@ -92,7 +92,7 @@ enum class Pid {
     HEAD_TYPE,
     HEAD_GROUP,
     VELO_TYPE,
-    VELO_OFFSET,
+    USER_VELOCITY,
     ARTICULATION_ANCHOR,
 
     DIRECTION,
