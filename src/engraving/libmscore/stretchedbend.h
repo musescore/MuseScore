@@ -42,12 +42,14 @@ public:
     void draw(mu::draw::Painter*) const override;
 
     static void prepareBends(std::vector<StretchedBend*>& bends);
+    static void layoutBends(const std::vector<Segment*>& sl);
 
 private:
     friend class mu::engraving::Factory;
 
     StretchedBend(Note* parent);
 
+    void fillDrawPoints(); // filling the points which specify how bend will be drawn
     void fillSegments(); // converting points from file to bend segments
     void stretchSegments(); // stretching until end of chord duration
     void glueNeighbor(); // fixing the double appearance of some bends
@@ -78,6 +80,8 @@ private:
         int tone = -1;
     };
 
+    std::vector<int> m_drawPoints;
+    Note* m_endNote = nullptr;
     std::vector<BendSegment> m_bendSegments;
 
     PolygonF m_arrowUp;
@@ -86,6 +90,7 @@ private:
     double m_bendArrowWidth = 0;
     mutable RectF m_boundingRect;
     bool m_releasedToInitial = false;
+    bool m_skipFirstPoint = false;
 };
 }     // namespace mu::engraving
 #endif

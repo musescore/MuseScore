@@ -26,6 +26,7 @@
 #include "note.h"
 #include "score.h"
 #include "segment.h"
+#include "tie.h"
 
 #include "draw/fontmetrics.h"
 
@@ -78,56 +79,74 @@ StretchedBend::StretchedBend(Note* parent)
 }
 
 //---------------------------------------------------------
-//   fillSegments
+//   fillDrawPoints
 //---------------------------------------------------------
 
-void StretchedBend::fillSegments()
+void StretchedBend::fillDrawPoints()
 {
     if (m_points.size() < 2) {
         return;
     }
 
-    m_bendSegments.clear();
-
+    m_drawPoints.clear();
     auto isExtraPointHelper = [this](int i, std::function<bool(int, int)> compare) {
         return compare(m_points[i - 1].pitch, m_points[i].pitch) && compare(m_points[i].pitch, m_points[i + 1].pitch);
     };
 
-    auto isExtraPoint = [this, isExtraPointHelper](int i) {
+    auto isExtraPoint = [isExtraPointHelper](int i) {
         return isExtraPointHelper(i, std::less<int>())
                || isExtraPointHelper(i, std::greater<int>())
                || isExtraPointHelper(i, std::equal_to<int>());
     };
 
-    std::vector<int> drawPoints;
-
-    drawPoints.push_back(m_points[0].pitch);
-    for (size_t i = 1; i < m_points.size() - 1; i++) {
-        if (!isExtraPoint(i)) {
-            drawPoints.push_back(m_points[i].pitch);
+    if (Tie* tie = toNote(parent())->tieBack()) {
+        Note* backTied = tie->startNote();
+        if (StretchedBend* lastBend = (backTied ? backTied->bend() : nullptr)) {
+            auto lastBendPoints = lastBend->m_drawPoints;
+            if (!lastBendPoints.empty() && lastBendPoints.back() == m_points[0].pitch) {
+                m_skipFirstPoint = true;
+            }
         }
     }
-    drawPoints.push_back(m_points[m_points.size() - 1].pitch);
 
-    size_t n = drawPoints.size();
+    m_drawPoints.push_back(m_points[0].pitch);
+
+    for (int i = 1; i < m_points.size() - 1; i++) {
+        if (!isExtraPoint(i)) {
+            m_drawPoints.push_back(m_points[i].pitch);
+        }
+    }
+
+    m_drawPoints.push_back(m_points[m_points.size() - 1].pitch);
+}
+
+//---------------------------------------------------------
+//   fillSegments
+//---------------------------------------------------------
+
+void StretchedBend::fillSegments()
+{
+    m_bendSegments.clear();
+
+    size_t n = m_drawPoints.size();
     if (n < 2) {
         return;
     }
 
-    PointF src = (drawPoints[0] == 0)
+    PointF src = (m_drawPoints[0] == 0)
                  ? PointF(m_noteWidth + m_spatium * .8, 0)
                  : PointF(m_noteWidth * .5, -m_noteHeight * .5 - m_spatium * .2);
 
     PointF dest(0, 0);
 
-    int lastPointPitch = drawPoints.back();
+    int lastPointPitch = m_drawPoints.back();
     m_releasedToInitial = (0 == lastPointPitch);
 
     double baseBendHeight = m_spatium * 1.5;
 
     for (size_t pt = 0; pt < n - 1; pt++) {
-        int pitch = drawPoints[pt];
-        int nextPitch = drawPoints[pt + 1];
+        int pitch = m_drawPoints[pt];
+        int nextPitch = m_drawPoints[pt + 1];
 
         BendSegmentType type = BendSegmentType::NO_TYPE;
         int tone = bendTone(nextPitch);
@@ -137,7 +156,10 @@ void StretchedBend::fillSegments()
             int prebendTone = bendTone(pitch);
             double minY = std::min(-m_notePos.y(), src.y());
             dest = PointF(src.x(), minY - bendHeight(prebendTone) - baseBendHeight);
-            m_bendSegments.push_back({ src, dest, BendSegmentType::LINE_UP, prebendTone });
+            if (!m_skipFirstPoint) {
+                m_bendSegments.push_back({ src, dest, BendSegmentType::LINE_UP, prebendTone });
+            }
+
             src.ry() = dest.y();
         }
 
@@ -183,7 +205,7 @@ void StretchedBend::stretchSegments()
     }
 
     /// find end of the whole bend
-    double bendEnd = nextSegmentX();
+    double bendEnd = pos().x() + m_spatium * 6;
 
     for (BendSegment& seg : m_bendSegments) {
         if (seg.type != BendSegmentType::LINE_UP) {
@@ -253,6 +275,9 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
 
                 mu::draw::FontMetrics fm(font(m_spatium));
                 m_boundingRect.unite(textBoundingRect(fm, dest, text));
+                /// TODO: remove after fixing bRect
+                m_boundingRect.setHeight(m_boundingRect.height() + m_spatium);
+                m_boundingRect.setY(m_boundingRect.y() - m_spatium);
             } else {
                 painter->drawLine(LineF(src, dest));
                 painter->setBrush(curColor());
@@ -286,6 +311,9 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
                 if (layoutMode) {
                     mu::draw::FontMetrics fm(font(m_spatium));
                     m_boundingRect.unite(textBoundingRect(fm, dest - PointF(m_spatium, 0), text));
+                    /// TODO: remove after fixing bRect
+                    m_boundingRect.setHeight(m_boundingRect.height() + m_spatium);
+                    m_boundingRect.setY(m_boundingRect.y() - m_spatium);
                 } else {
                     double textLabelOffset = (!bendUp && !m_releasedToInitial ? m_spatium : 0);
                     PointF textPoint = dest + PointF(textLabelOffset, -textLabelOffset);
@@ -368,6 +396,7 @@ void StretchedBend::setupPainter(mu::draw::Painter* painter) const
 
 void StretchedBend::prepareBends(std::vector<StretchedBend*>& bends)
 {
+#if 0
     /// glueing extra bends together
     for (StretchedBend* bend : bends) {
         bend->glueNeighbor();
@@ -385,6 +414,10 @@ void StretchedBend::prepareBends(std::vector<StretchedBend*>& bends)
 
         delete bendToRemove;
         bendToRemove = nullptr;
+    }
+#endif
+    for (StretchedBend* bend : bends) {
+        bend->fillDrawPoints();
     }
 }
 
