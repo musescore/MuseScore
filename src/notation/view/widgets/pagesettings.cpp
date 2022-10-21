@@ -293,12 +293,14 @@ void PageSettings::buttonBoxClicked(QAbstractButton* button)
 void PageSettings::accept()
 {
     globalContext()->currentNotation()->undoStack()->commitChanges();
+    globalContext()->currentNotation()->style()->styleChanged().notify();
     QDialog::accept();
 }
 
 void PageSettings::reject()
 {
     globalContext()->currentNotation()->undoStack()->rollbackChanges();
+    globalContext()->currentNotation()->style()->styleChanged().notify();
     QDialog::reject();
 }
 
