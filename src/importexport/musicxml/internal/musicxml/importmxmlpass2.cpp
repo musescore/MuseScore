@@ -4766,8 +4766,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
         }
 
         if (velocity > 0) {
-            note->setVeloType(VeloType::USER_VAL);
-            note->setVeloOffset(velocity);
+            note->setUserVelocity(velocity);
         }
 
         if (mnp.unpitched()) {

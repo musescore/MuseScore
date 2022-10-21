@@ -81,7 +81,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::HEAD_TYPE,               false, "headType",              P_TYPE::NOTEHEAD_TYPE,      DUMMY_QT_TR_NOOP("propertyName", "head type") },
     { Pid::HEAD_GROUP,              false, "head",                  P_TYPE::NOTEHEAD_GROUP,     DUMMY_QT_TR_NOOP("propertyName", "head") },
     { Pid::VELO_TYPE,               false, "veloType",              P_TYPE::VELO_TYPE,      DUMMY_QT_TR_NOOP("propertyName", "velocity type") },
-    { Pid::VELO_OFFSET,             false, "velocity",              P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "velocity") },
+    { Pid::USER_VELOCITY,           false, "velocity",              P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "velocity") },
     { Pid::ARTICULATION_ANCHOR,     false, "anchor",                P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "anchor") },
 
     { Pid::DIRECTION,               false, "direction",             P_TYPE::DIRECTION_V,    DUMMY_QT_TR_NOOP("propertyName", "direction") },

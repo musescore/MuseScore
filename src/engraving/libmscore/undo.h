@@ -838,13 +838,12 @@ class ChangeVelocity : public UndoCommand
     OBJECT_ALLOCATOR(engraving, ChangeVelocity)
 
     Note* note = nullptr;
-    VeloType veloType;
-    int veloOffset = 0;
+    int userVelocity = 0;
 
     void flip(EditData*) override;
 
 public:
-    ChangeVelocity(Note*, VeloType, int);
+    ChangeVelocity(Note*, int);
 
     UNDO_TYPE(CommandType::ChangeVelocity)
     UNDO_NAME("ChangeVelocity")

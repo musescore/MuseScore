@@ -243,9 +243,6 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::LAYOUTBREAK_TYPE: {
         element(name, TConv::toXml(data.value<LayoutBreakType>()));
     } break;
-    case P_TYPE::VELO_TYPE: {
-        element(name, TConv::toXml(data.value<VeloType>()));
-    } break;
     case P_TYPE::BARLINE_TYPE: {
         element(name, TConv::toXml(data.value<BarLineType>()));
     } break;

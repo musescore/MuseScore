@@ -505,7 +505,7 @@ class Note : public EngravingItem
 //       Q_PROPERTY(mu::engraving::DirectionH         userMirror        READ userMirror         WRITE undoSetUserMirror)
     /** See PluginAPI::PluginAPI::NoteValueType */
     API_PROPERTY(veloType,                VELO_TYPE)
-    API_PROPERTY_T(int, veloOffset,       VELO_OFFSET)
+    API_PROPERTY_T(int, userVelocity,       USER_VELOCITY)
 
 public:
     /// \cond MS_INTERNAL
