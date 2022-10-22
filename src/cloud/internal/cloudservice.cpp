@@ -32,6 +32,10 @@
 #include <QRandomGenerator>
 #include <QSslSocket>
 
+#ifdef Q_OS_WIN
+#include "qsystemlibrary.cpp"
+#endif
+
 #include "async/async.h"
 #include "containers.h"
 #include "types/translatablestring.h"
@@ -111,6 +115,12 @@ void CloudService::init()
     LOGI() << "ssl library version string: " << QSslSocket::sslLibraryVersionString();
     LOGI() << "ssl library build version number: " << QSslSocket::sslLibraryBuildVersionNumber();
     LOGI() << "ssl library build version string: " << QSslSocket::sslLibraryBuildVersionString();
+#ifdef Q_OS_WIN
+    QSystemLibrary libssl("libssl-1_1-x64");
+    LOGI() << "load ssl system library: " << libssl.load(false);
+    QSystemLibrary libcrypto("libcrypto-1_1-x64");
+    LOGI() << "load crypto system library: " << libcrypto.load(false);
+#endif
     LOGI() << "ssl debug end";
 
     m_oauth2 = new QOAuth2AuthorizationCodeFlow(this);
