@@ -150,7 +150,7 @@ mu::Ret NotationProject::load(const io::path_t& path, const io::path_t& stylePat
 
     std::string suffix = !format.empty() ? format : io::suffix(path);
     if (!isMuseScoreFile(suffix)) {
-        return doImport(path, stylePath, forceMode);
+        return doImport(path, stylePath.empty() ? notationConfiguration()->styleFileImportPath() : stylePath, forceMode);
     }
 
     MscReader::Params params;
