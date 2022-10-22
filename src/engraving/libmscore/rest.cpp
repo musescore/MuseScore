@@ -903,7 +903,7 @@ void Rest::add(EngravingItem* e)
         break;
     case ElementType::DEAD_SLAPPED:
         _deadSlapped = toDeadSlapped(e);
-    /// fallthrough
+    // fallthrough
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
         el().push_back(e);
@@ -928,7 +928,7 @@ void Rest::remove(EngravingItem* e)
         break;
     case ElementType::DEAD_SLAPPED:
         _deadSlapped = nullptr;
-    /// fallthrough
+    // fallthrough
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
         if (!el().remove(e)) {
