@@ -35,6 +35,7 @@
 #include "engraving/engravingproject.h"
 
 #include "notation/internal/masternotation.h"
+#include "notation/inotationconfiguration.h"
 #include "projectaudiosettings.h"
 #include "projectviewsettings.h"
 #include "iprojectmigrator.h"
@@ -49,6 +50,7 @@ class NotationProject : public INotationProject, public async::Asyncable
 {
     INJECT(project, io::IFileSystem, fileSystem)
     INJECT(project, IProjectConfiguration, configuration)
+    INJECT(project, mu::notation::INotationConfiguration, notationConfiguration)
     INJECT(project, INotationReadersRegister, readers)
     INJECT(project, INotationWritersRegister, writers)
     INJECT(project, IProjectMigrator, migrator)

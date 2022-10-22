@@ -188,6 +188,9 @@ public:
     ValCh<int> pianoKeyboardNumberOfKeys() const override;
     void setPianoKeyboardNumberOfKeys(int number) override;
 
+    io::path_t styleFileImportPath() const override;
+    void setStyleFileImportPath(const io::path_t& path) override;
+
 private:
     io::path_t firstInstrumentListPath() const;
     void setFirstInstrumentListPath(const io::path_t& path);

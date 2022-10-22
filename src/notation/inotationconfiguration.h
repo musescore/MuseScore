@@ -183,6 +183,9 @@ public:
 
     virtual ValCh<int> pianoKeyboardNumberOfKeys() const = 0;
     virtual void setPianoKeyboardNumberOfKeys(int number) = 0;
+
+    virtual io::path_t styleFileImportPath() const = 0;
+    virtual void setStyleFileImportPath(const io::path_t& path) = 0;
 };
 }
 
