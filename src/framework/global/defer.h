@@ -45,6 +45,6 @@ struct Defer
 #define CONCAT_IMPL(x, y) x##y
 #define MACRO_CONCAT(x, y) CONCAT_IMPL(x, y)
 
-#define DEFER const Defer MACRO_CONCAT(defer_, __LINE__) = [&]()
+#define DEFER const ::mu::Defer MACRO_CONCAT(defer_, __LINE__) = [&]()
 
 #endif // MU_GLOBAL_DEFER_H
