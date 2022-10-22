@@ -351,6 +351,7 @@ PropertyValue Fermata::propertyDefault(Pid propertyId) const
         case FermataType::VeryLong:
             return 4.0;
         }
+        break;
     case Pid::PLAY:
         return true;
     default:

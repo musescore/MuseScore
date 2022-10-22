@@ -472,6 +472,7 @@ bool ChordLine::setProperty(Pid propertyId, const PropertyValue& val)
         break;
     case Pid::CHORD_LINE_STRAIGHT:
         setStraight(val.toBool());
+        break;
     case Pid::CHORD_LINE_WAVY:
         setWavy(val.toBool());
         break;
