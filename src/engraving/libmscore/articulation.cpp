@@ -640,6 +640,7 @@ Sid Articulation::getPropertyStyle(Pid id) const
         }
     }
         assert(false);           // should never be reached
+    // fallthrough
     default:
         return Sid::NOSTYLE;
     }
