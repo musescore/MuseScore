@@ -30,6 +30,7 @@
 #include <QBuffer>
 #include <QHttpMultiPart>
 #include <QRandomGenerator>
+#include <QSslSocket>
 
 #include "async/async.h"
 #include "containers.h"
@@ -103,6 +104,14 @@ CloudService::CloudService(QObject* parent)
 void CloudService::init()
 {
     TRACEFUNC;
+
+    LOGI() << "ssl debug start";
+    LOGI() << "ssl supported: " << QSslSocket::supportsSsl();
+    LOGI() << "ssl library version number: " << QSslSocket::sslLibraryVersionNumber();
+    LOGI() << "ssl library version string: " << QSslSocket::sslLibraryVersionString();
+    LOGI() << "ssl library build version number: " << QSslSocket::sslLibraryBuildVersionNumber();
+    LOGI() << "ssl library build version string: " << QSslSocket::sslLibraryBuildVersionString();
+    LOGI() << "ssl debug end";
 
     m_oauth2 = new QOAuth2AuthorizationCodeFlow(this);
     m_replyHandler = new OAuthHttpServerReplyHandler(this);
