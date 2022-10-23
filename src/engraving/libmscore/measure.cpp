@@ -1180,12 +1180,19 @@ void Measure::spatiumChanged(double /*oldValue*/, double /*newValue*/)
 
 void Measure::moveTicks(const Fraction& diff)
 {
-    std::set<Tuplet*> tuplets;
-    setTick(tick() + diff);
+    // This part must be run also for diff = 0
     for (Segment* segment = last(); segment; segment = segment->prev()) {
         if (segment->segmentType() & (SegmentType::EndBarLine | SegmentType::TimeSigAnnounce)) {
             segment->setRtick(ticks());
-        } else if (segment->isChordRestType()) {
+        }
+    }
+    if (diff.numerator() == 0) {
+        return;
+    }
+    std::set<Tuplet*> tuplets;
+    setTick(tick() + diff);
+    for (Segment* segment = last(); segment; segment = segment->prev()) {
+        if (segment->isChordRestType()) {
             // Tuplet ticks are stored as absolute ticks, so they must be adjusted.
             // But each tuplet must only be adjusted once.
             for (EngravingItem* e : segment->elist()) {
