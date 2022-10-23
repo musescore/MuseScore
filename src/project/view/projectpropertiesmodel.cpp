@@ -52,15 +52,15 @@ void ProjectPropertiesModel::load()
     beginResetModel();
 
     m_properties = {
-        { WORK_TITLE_TAG,          qtrc("project", "Worktitle"),         m_projectMetaInfo.title,                      true },
-        { ARRANGER_TAG,            qtrc("project", "Arranger"),          m_projectMetaInfo.arranger,                   true },
-        { COMPOSER_TAG,            qtrc("project", "Composer"),          m_projectMetaInfo.composer,                   true },
-        { COPYRIGHT_TAG,           qtrc("project", "Copyright"),         m_projectMetaInfo.copyright,                  true },
-        { CREATION_DATE_TAG,       qtrc("project", "Creation date"),     m_projectMetaInfo.creationDate.toString(),    true },
-        { LYRICIST_TAG,            qtrc("project", "Lyricist"),          m_projectMetaInfo.lyricist,                   true },
-        { TRANSLATOR_TAG,          qtrc("project", "Translator"),        m_projectMetaInfo.translator,                 true },
-        { PLATFORM_TAG,            qtrc("project", "Platform"),          m_projectMetaInfo.platform,                   true },
-        { SOURCE_TAG,              qtrc("project", "Source"),            m_projectMetaInfo.source,                     true }
+        { WORK_TITLE_TAG,          qtrc("project", "Work title"),         m_projectMetaInfo.title,                      true },
+        { ARRANGER_TAG,            qtrc("project", "Arranger"),           m_projectMetaInfo.arranger,                   true },
+        { COMPOSER_TAG,            qtrc("project", "Composer"),           m_projectMetaInfo.composer,                   true },
+        { COPYRIGHT_TAG,           qtrc("project", "Copyright"),          m_projectMetaInfo.copyright,                  true },
+        { CREATION_DATE_TAG,       qtrc("project", "Creation date"),      m_projectMetaInfo.creationDate.toString(),    true },
+        { LYRICIST_TAG,            qtrc("project", "Lyricist"),           m_projectMetaInfo.lyricist,                   true },
+        { TRANSLATOR_TAG,          qtrc("project", "Translator"),         m_projectMetaInfo.translator,                 true },
+        { PLATFORM_TAG,            qtrc("project", "Platform"),           m_projectMetaInfo.platform,                   true },
+        { SOURCE_TAG,              qtrc("project", "Source"),             m_projectMetaInfo.source,                     true }
     };
 
     QVariantMap additionalProperties = m_projectMetaInfo.additionalTags;
