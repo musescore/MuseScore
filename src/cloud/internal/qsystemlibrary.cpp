@@ -127,14 +127,28 @@ HINSTANCE QSystemLibrary::load(const wchar_t *libraryName, bool onlySystemDirect
         if (!fullPathAttempt.endsWith(QLatin1Char('\\'))) {
             fullPathAttempt.append(QLatin1Char('\\'));
         }
-        fullPathAttempt.append(fileName);
-        LOGI() << "looking at " << fullPathAttempt;
-        HINSTANCE inst = ::LoadLibrary(reinterpret_cast<const wchar_t *>(fullPathAttempt.utf16()));
-        LOGI() << "GetLastError: " << GetLastError();
-        if (inst != 0) {
-            LOGI() << "found";
-            return inst;
+        {
+            fullPathAttempt.append(fileName);
+            LOGI() << "looking at " << fullPathAttempt;
+            HINSTANCE inst = ::LoadLibrary(reinterpret_cast<const wchar_t *>(fullPathAttempt.utf16()));
+            LOGI() << "GetLastError: " << GetLastError();
+            if (inst != 0) {
+                LOGI() << "found";
+                return inst;
+            }
         }
+
+        {
+            fullPathAttempt.replace("/", "\\");
+            LOGI() << "looking at " << fullPathAttempt;
+            HINSTANCE inst = ::LoadLibrary(reinterpret_cast<const wchar_t *>(fullPathAttempt.utf16()));
+            LOGI() << "GetLastError: " << GetLastError();
+            if (inst != 0) {
+                LOGI() << "found";
+                return inst;
+            }
+        }
+
     }
     return 0;
 
