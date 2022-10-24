@@ -104,7 +104,7 @@ struct NominalNoteCtx {
     explicit NominalNoteCtx(const Note* note, const RenderingContext& ctx)
         : voiceIdx(note->voice()),
         timestamp(ctx.nominalTimestamp),
-        duration(noteNominalDuration(note, ctx)),
+        duration(ctx.nominalDuration),
         tempo(ctx.beatsPerSecond),
         pitchLevel(notePitchLevel(note->playingTpc(), note->playingOctave())),
         chordCtx(ctx)

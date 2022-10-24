@@ -29,18 +29,13 @@
 #include "libmscore/note.h"
 #include "libmscore/rest.h"
 #include "libmscore/sig.h"
-#include "libmscore/staff.h"
-#include "libmscore/swing.h"
 #include "libmscore/tempo.h"
 
 #include "utils/arrangementutils.h"
 #include "metaparsers/chordarticulationsparser.h"
-#include "metaparsers/notearticulationsparser.h"
-#include "renderers/ornamentsrenderer.h"
-#include "renderers/tremolorenderer.h"
-#include "renderers/arpeggiorenderer.h"
-#include "renderers/gracenotesrenderer.h"
-#include "renderers/glissandosrenderer.h"
+
+#include "renderers/gracechordsrenderer.h"
+#include "renderers/chordarticulationsrenderer.h"
 #include "filters/chordfilter.h"
 
 using namespace mu::engraving;
@@ -289,105 +284,12 @@ void PlaybackEventsRenderer::renderRestEvents(const Rest* rest, const int tickPo
 
 void PlaybackEventsRenderer::renderArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const
 {
-    if (renderChordArticulations(chord, ctx, result)) {
-        return;
-    }
-
-    renderNoteArticulations(chord, ctx, result);
-}
-
-bool PlaybackEventsRenderer::renderChordArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const
-{
-    for (const auto& pair : ctx.commonArticulations) {
-        const ArticulationType type = pair.first;
-
-        if (OrnamentsRenderer::isAbleToRender(type)) {
-            OrnamentsRenderer::render(chord, type, ctx, result);
-            return true;
-        }
-
-        if (TremoloRenderer::isAbleToRender(type)) {
-            TremoloRenderer::render(chord, type, ctx, result);
-            return true;
-        }
-
-        if (ArpeggioRenderer::isAbleToRender(type)) {
-            ArpeggioRenderer::render(chord, type, ctx, result);
-            return true;
-        }
-
-        if (GraceNotesRenderer::isAbleToRender(type)) {
-            GraceNotesRenderer::render(chord, type, ctx, result);
-            return true;
+    for (const auto& type : ctx.commonArticulations) {
+        if (GraceChordsRenderer::isAbleToRender(type.first)) {
+            GraceChordsRenderer::render(chord, type.first, ctx, result);
+            return;
         }
     }
 
-    return false;
-}
-
-void PlaybackEventsRenderer::renderNoteArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const
-{
-    Swing::ChordDurationAdjustment swingDurationAdjustment;
-
-    if (!chord->tuplet()) {
-        SwingParameters swing = chord->staff()->swing(chord->tick());
-
-        if (swing.isOn()) {
-            swingDurationAdjustment = Swing::applySwing(chord, swing);
-        }
-    }
-
-    for (const Note* note : chord->notes()) {
-        NominalNoteCtx noteCtx(note, ctx);
-
-        NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.chordCtx.commonArticulations);
-
-        if (!isNotePlayable(note, noteCtx.chordCtx.commonArticulations)) {
-            continue;
-        }
-
-        if (!swingDurationAdjustment.isNull()) {
-            //! NOTE: Swing must be applied to the "raw" note duration, but not to the additional duration (e.g, from a tied note)
-            duration_t additionalDuration = noteCtx.duration - ctx.nominalDuration;
-            noteCtx.timestamp = noteCtx.timestamp + ctx.nominalDuration * swingDurationAdjustment.remainingDurationMultiplier;
-            noteCtx.duration = ctx.nominalDuration * swingDurationAdjustment.durationMultiplier + additionalDuration;
-        }
-
-        if (note->tieFor()) {
-            noteCtx.duration = tiedNotesTotalDuration(note);
-            result.emplace_back(buildNoteEvent(std::move(noteCtx)));
-            continue;
-        }
-
-        if (noteCtx.chordCtx.commonArticulations.contains(ArticulationType::DiscreteGlissando)) {
-            GlissandosRenderer::render(note, ArticulationType::DiscreteGlissando, noteCtx.chordCtx, result);
-            continue;
-        }
-
-        if (noteCtx.chordCtx.commonArticulations.contains(ArticulationType::ContinuousGlissando)) {
-            GlissandosRenderer::render(note, ArticulationType::ContinuousGlissando, noteCtx.chordCtx, result);
-            continue;
-        }
-
-        result.emplace_back(buildNoteEvent(std::move(noteCtx)));
-    }
-}
-
-duration_t PlaybackEventsRenderer::tiedNotesTotalDuration(const Note* firstNote) const
-{
-    mpe::duration_t result = 0;
-
-    const Score* score = firstNote->score();
-    const std::vector<Note*> tiedNotes = firstNote->tiedNotes();
-
-    for (const Note* tiedNote : tiedNotes) {
-        if (!tiedNote || !tiedNote->chord()) {
-            continue;
-        }
-
-        BeatsPerSecond bps = score->tempomap()->tempo(tiedNote->tick().ticks());
-        result += durationFromTicks(bps.val, tiedNote->chord()->durationTypeTicks().ticks());
-    }
-
-    return result;
+    ChordArticulationsRenderer::render(chord, ArticulationType::Last, ctx, result);
 }

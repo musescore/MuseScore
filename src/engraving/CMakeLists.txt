@@ -174,10 +174,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/glissandosrenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/arpeggiorenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/arpeggiorenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/gracenotesrenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/gracenotesrenderer.h
+    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/gracechordsrenderer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/gracechordsrenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/tremolorenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/tremolorenderer.h
+    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/chordarticulationsrenderer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/chordarticulationsrenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/symbolsmetaparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/symbolsmetaparser.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/annotationsmetaparser.cpp

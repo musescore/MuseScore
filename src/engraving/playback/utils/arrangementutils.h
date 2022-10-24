@@ -36,6 +36,11 @@ inline mpe::timestamp_t timestampFromTicks(const Score* score, const int tick)
     return score->repeatList().utick2utime(tick) * 1000000;
 }
 
+inline int timestampToTick(const Score* score, const mpe::timestamp_t timestamp)
+{
+    return score->repeatList().utime2utick(timestamp / 1000000.f);
+}
+
 inline mpe::duration_t durationFromTicks(const double beatsPerSecond, const int durationTicks, const int ticksPerBeat = Constants::division)
 {
     float beatsNumber = static_cast<float>(durationTicks) / static_cast<float>(ticksPerBeat);

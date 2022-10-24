@@ -20,14 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "gracenotesrenderer.h"
+#include "gracechordsrenderer.h"
 
 #include "libmscore/chord.h"
+
+#include "chordarticulationsrenderer.h"
 
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-const ArticulationTypeSet& GraceNotesRenderer::supportedTypes()
+const ArticulationTypeSet& GraceChordsRenderer::supportedTypes()
 {
     static const mpe::ArticulationTypeSet types = {
         mpe::ArticulationType::Acciaccatura, mpe::ArticulationType::PostAppoggiatura,
@@ -37,9 +39,9 @@ const ArticulationTypeSet& GraceNotesRenderer::supportedTypes()
     return types;
 }
 
-void GraceNotesRenderer::doRender(const EngravingItem* item, const mpe::ArticulationType type,
-                                  const RenderingContext& context,
-                                  mpe::PlaybackEventList& result)
+void GraceChordsRenderer::doRender(const EngravingItem* item, const mpe::ArticulationType type,
+                                   const RenderingContext& context,
+                                   mpe::PlaybackEventList& result)
 {
     const Chord* chord = toChord(item);
 
@@ -54,7 +56,7 @@ void GraceNotesRenderer::doRender(const EngravingItem* item, const mpe::Articula
     }
 }
 
-bool GraceNotesRenderer::isPlacedBeforePrincipalNote(const mpe::ArticulationType type)
+bool GraceChordsRenderer::isPlacedBeforePrincipalNote(const mpe::ArticulationType type)
 {
     if (type == ArticulationType::Acciaccatura || type == ArticulationType::PreAppoggiatura) {
         return true;
@@ -63,9 +65,9 @@ bool GraceNotesRenderer::isPlacedBeforePrincipalNote(const mpe::ArticulationType
     return false;
 }
 
-void GraceNotesRenderer::renderPrependedGraceNotes(const Chord* chord, const RenderingContext& context,
-                                                   const mpe::ArticulationType type,
-                                                   mpe::PlaybackEventList& result)
+void GraceChordsRenderer::renderPrependedGraceNotes(const Chord* chord, const RenderingContext& context,
+                                                    const mpe::ArticulationType type,
+                                                    mpe::PlaybackEventList& result)
 {
     std::vector<NominalNoteCtx> graceCtxList = graceNotesCtxList(chord->graceNotesBefore(), context);
 
@@ -81,9 +83,9 @@ void GraceNotesRenderer::renderPrependedGraceNotes(const Chord* chord, const Ren
     buildPrincipalNoteEvents(chord, context, type, totalPrincipalNotesDuration, principalNotesTimestampFrom, result);
 }
 
-void GraceNotesRenderer::renderAppendedGraceNotes(const Chord* chord, const RenderingContext& context,
-                                                  const mpe::ArticulationType type,
-                                                  mpe::PlaybackEventList& result)
+void GraceChordsRenderer::renderAppendedGraceNotes(const Chord* chord, const RenderingContext& context,
+                                                   const mpe::ArticulationType type,
+                                                   mpe::PlaybackEventList& result)
 {
     std::vector<NominalNoteCtx> graceCtxList = graceNotesCtxList(chord->graceNotesAfter(), context);
 
@@ -100,7 +102,7 @@ void GraceNotesRenderer::renderAppendedGraceNotes(const Chord* chord, const Rend
                          actualGraceNotesDuration, result);
 }
 
-duration_t GraceNotesRenderer::graceNotesTotalDuration(const std::vector<NominalNoteCtx>& noteCtxList)
+duration_t GraceChordsRenderer::graceNotesTotalDuration(const std::vector<NominalNoteCtx>& noteCtxList)
 {
     duration_t result = 0;
 
@@ -111,7 +113,7 @@ duration_t GraceNotesRenderer::graceNotesTotalDuration(const std::vector<Nominal
     return result;
 }
 
-float GraceNotesRenderer::graceNotesDurationRatio(const mpe::duration_t totalDuration, const duration_t maxAvailableDuration)
+float GraceChordsRenderer::graceNotesDurationRatio(const mpe::duration_t totalDuration, const duration_t maxAvailableDuration)
 {
     float result = 1.f;
 
@@ -122,7 +124,7 @@ float GraceNotesRenderer::graceNotesDurationRatio(const mpe::duration_t totalDur
     return result;
 }
 
-std::vector<NominalNoteCtx> GraceNotesRenderer::graceNotesCtxList(const std::vector<Chord*>& graceChords, const RenderingContext& context)
+std::vector<NominalNoteCtx> GraceChordsRenderer::graceNotesCtxList(const std::vector<Chord*>& graceChords, const RenderingContext& context)
 {
     std::vector<NominalNoteCtx> result;
 
@@ -141,9 +143,9 @@ std::vector<NominalNoteCtx> GraceNotesRenderer::graceNotesCtxList(const std::vec
     return result;
 }
 
-void GraceNotesRenderer::buildGraceNoteEvents(std::vector<NominalNoteCtx>&& noteCtxList, const timestamp_t timestampFrom,
-                                              const ArticulationType type, const duration_t availableDuration,
-                                              mpe::PlaybackEventList& result)
+void GraceChordsRenderer::buildGraceNoteEvents(std::vector<NominalNoteCtx>&& noteCtxList, const timestamp_t timestampFrom,
+                                               const ArticulationType type, const duration_t availableDuration,
+                                               mpe::PlaybackEventList& result)
 {
     for (size_t i = 0; i < noteCtxList.size(); ++i) {
         NominalNoteCtx& noteCtx = noteCtxList.at(i);
@@ -156,29 +158,27 @@ void GraceNotesRenderer::buildGraceNoteEvents(std::vector<NominalNoteCtx>&& note
     }
 }
 
-void GraceNotesRenderer::buildPrincipalNoteEvents(const Chord* chord, const RenderingContext& context,
-                                                  const ArticulationType type,
-                                                  const mpe::duration_t duration,
-                                                  const mpe::timestamp_t timestamp,
-                                                  mpe::PlaybackEventList& result)
+void GraceChordsRenderer::buildPrincipalNoteEvents(const Chord* chord, const RenderingContext& ctx,
+                                                   const ArticulationType type,
+                                                   const mpe::duration_t duration,
+                                                   const mpe::timestamp_t timestamp,
+                                                   mpe::PlaybackEventList& result)
 {
-    for (const Note* note : chord->notes()) {
-        if (!isNotePlayable(note, context.commonArticulations)) {
-            continue;
-        }
+    RenderingContext principalCtx = ctx;
 
-        NominalNoteCtx noteCtx(note, context);
-        noteCtx.duration = duration;
-        noteCtx.timestamp = timestamp;
+    principalCtx.nominalDuration = duration;
+    principalCtx.nominalTimestamp = timestamp;
+    principalCtx.nominalPositionStartTick = timestampToTick(chord->score(), timestamp) - ctx.positionTickOffset;
+    principalCtx.nominalPositionEndTick = timestampToTick(chord->score(), timestamp + duration) - ctx.positionTickOffset;
+    principalCtx.nominalDurationTicks = principalCtx.nominalPositionEndTick - principalCtx.nominalPositionStartTick;
 
-        updateArticulationBoundaries(type, noteCtx.timestamp, noteCtx.duration, noteCtx.chordCtx.commonArticulations);
+    updateArticulationBoundaries(type, timestamp, duration, principalCtx.commonArticulations);
 
-        result.emplace_back(buildNoteEvent(std::move(noteCtx)));
-    }
+    ChordArticulationsRenderer::render(chord, ArticulationType::Last, principalCtx, result);
 }
 
-duration_t GraceNotesRenderer::graceNotesMaxAvailableDuration(const ArticulationType type, const RenderingContext& ctx,
-                                                              const size_t graceNotesCount)
+duration_t GraceChordsRenderer::graceNotesMaxAvailableDuration(const ArticulationType type, const RenderingContext& ctx,
+                                                               const size_t graceNotesCount)
 {
     duration_t halvedDuration = 0.5 * ctx.nominalDuration;
     duration_t twoThirdsDuration = (2 * ctx.nominalDuration) / 3;
@@ -197,8 +197,8 @@ duration_t GraceNotesRenderer::graceNotesMaxAvailableDuration(const Articulation
     return std::min(minAcciacaturaDuration * static_cast<duration_t>(graceNotesCount), halvedDuration);
 }
 
-timestamp_t GraceNotesRenderer::graceNotesStartTimestamp(const mpe::ArticulationType type, const mpe::duration_t availableDuration,
-                                                         const mpe::timestamp_t& nominalTimestamp)
+timestamp_t GraceChordsRenderer::graceNotesStartTimestamp(const mpe::ArticulationType type, const mpe::duration_t availableDuration,
+                                                          const mpe::timestamp_t& nominalTimestamp)
 {
     if (type == ArticulationType::PostAppoggiatura) {
         return nominalTimestamp - availableDuration;
@@ -207,8 +207,8 @@ timestamp_t GraceNotesRenderer::graceNotesStartTimestamp(const mpe::Articulation
     return nominalTimestamp;
 }
 
-timestamp_t GraceNotesRenderer::principalNotesStartTimestamp(const mpe::ArticulationType type, const mpe::duration_t graceNotesDuration,
-                                                             const mpe::timestamp_t& nominalTimestamp)
+timestamp_t GraceChordsRenderer::principalNotesStartTimestamp(const mpe::ArticulationType type, const mpe::duration_t graceNotesDuration,
+                                                              const mpe::timestamp_t& nominalTimestamp)
 {
     if (type == ArticulationType::PreAppoggiatura
         || type == ArticulationType::Acciaccatura) {
@@ -218,8 +218,8 @@ timestamp_t GraceNotesRenderer::principalNotesStartTimestamp(const mpe::Articula
     return nominalTimestamp;
 }
 
-timestamp_t GraceNotesRenderer::principalNotesDuration(const mpe::duration_t graceNotesDuration,
-                                                       const mpe::duration_t& nominalDuration)
+timestamp_t GraceChordsRenderer::principalNotesDuration(const mpe::duration_t graceNotesDuration,
+                                                        const mpe::duration_t& nominalDuration)
 {
     return nominalDuration - graceNotesDuration;
 }

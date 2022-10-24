@@ -30,7 +30,7 @@
 namespace mu::engraving {
 class Chord;
 
-class GraceNotesRenderer : public RenderBase<GraceNotesRenderer>
+class GraceChordsRenderer : public RenderBase<GraceChordsRenderer>
 {
 public:
     static const mpe::ArticulationTypeSet& supportedTypes();
@@ -53,7 +53,7 @@ private:
                                      const mpe::ArticulationType type, const mpe::duration_t availableDuration,
                                      mpe::PlaybackEventList& result);
 
-    static void buildPrincipalNoteEvents(const Chord* chord, const RenderingContext& context, const mpe::ArticulationType type,
+    static void buildPrincipalNoteEvents(const Chord* chord, const RenderingContext& ctx, const mpe::ArticulationType type,
                                          const mpe::duration_t duration, const mpe::timestamp_t timestamp, mpe::PlaybackEventList& result);
 
     static mpe::duration_t graceNotesMaxAvailableDuration(const mpe::ArticulationType type, const RenderingContext& ctx,
