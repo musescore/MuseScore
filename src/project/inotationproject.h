@@ -30,7 +30,6 @@
 #include "projecttypes.h"
 #include "notation/imasternotation.h"
 #include "iprojectaudiosettings.h"
-#include "iprojectviewsettings.h"
 
 namespace mu::project {
 class INotationProject
@@ -68,7 +67,6 @@ public:
 
     virtual notation::IMasterNotationPtr masterNotation() const = 0;
     virtual IProjectAudioSettingsPtr audioSettings() const = 0;
-    virtual IProjectViewSettingsPtr viewSettings() const = 0;
 };
 
 using INotationProjectPtr = std::shared_ptr<INotationProject>;
