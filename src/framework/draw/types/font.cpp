@@ -26,7 +26,7 @@ using namespace mu;
 using namespace mu::draw;
 
 Font::Font(const String& family, Type type)
-    : m_family(family)
+    : m_family(family), m_type(type)
 {
 }
 
