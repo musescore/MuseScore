@@ -127,7 +127,7 @@ void PianorollAutomationNote::buildNoteData()
     m_selectedStaves.clear();
     std::vector<EngravingItem*> selectedElements = notation->interaction()->selection()->elements();
     for (EngravingItem* e: selectedElements) {
-        int idx = e->staffIdx();
+        int idx = (int)e->staffIdx();
         m_activeStaff = idx;
         if (std::find(m_selectedStaves.begin(), m_selectedStaves.end(), idx) == m_selectedStaves.end()) {
             m_selectedStaves.push_back(idx);

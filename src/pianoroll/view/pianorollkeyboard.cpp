@@ -184,7 +184,7 @@ Staff* PianorollKeyboard::getActiveStaff()
     std::vector<int> selectedStaves;
     int activeStaff = -1;
     for (EngravingItem* e : selectedElements) {
-        int idx = e->staffIdx();
+        int idx = (int)e->staffIdx();
         qDebug() << "ele idx " << idx;
         activeStaff = idx;
         if (std::find(selectedStaves.begin(), selectedStaves.end(), idx) == selectedStaves.end()) {
