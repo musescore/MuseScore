@@ -41,7 +41,6 @@ public:
         MusicSymbolText,
         MusicSymbol,
         Tablature,
-        Figuredbass,
         Harmony
     };
 
