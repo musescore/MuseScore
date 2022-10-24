@@ -360,8 +360,6 @@ Ret Score::putNote(const PointF& pos, bool replace, bool insert)
             return score->putNote(p, replace);
         }
     }
-
-    return make_ok();
 }
 
 Ret Score::putNote(const Position& p, bool replace)
