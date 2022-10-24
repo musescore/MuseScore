@@ -128,13 +128,11 @@ void PianorollScrollbar::mousePressEvent(QMouseEvent* event)
         if (p0 < bound0) {
             setCenter(m_center - m_viewportSpan / m_displayObjectSpan);
             return;
-        }
-        else if (p0 > bound1) {
+        } else if (p0 > bound1) {
             setCenter(m_center + m_viewportSpan / m_displayObjectSpan);
             return;
         }
-    }
-    else {
+    } else {
         double span = height() * m_viewportSpan / m_displayObjectSpan;
         double bound0 = m_center * height() - span / 2;
         double bound1 = bound0 + span;
@@ -143,8 +141,7 @@ void PianorollScrollbar::mousePressEvent(QMouseEvent* event)
         if (p0 < bound0) {
             setCenter(m_center - m_viewportSpan / m_displayObjectSpan);
             return;
-        }
-        else if (p0 > bound1) {
+        } else if (p0 > bound1) {
             setCenter(m_center + m_viewportSpan / m_displayObjectSpan);
             return;
         }
