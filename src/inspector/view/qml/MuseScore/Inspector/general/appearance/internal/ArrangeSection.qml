@@ -29,7 +29,7 @@ Column {
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
-    property int navigationRowEnd: forwardsButton.navigation.row
+    property int navigationRowEnd: toBackButton.navigation.row
 
     signal pushBackwardsRequested()
     signal pushForwardsRequested()
@@ -57,57 +57,19 @@ Column {
             width: parent.width
 
             FlatButton {
+                id: forwardsButton
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 4
 
-                navigation.name: "Backwards"
-                navigation.panel: root.navigationPanel
-                navigation.row: root.navigationRowStart + 1
-
-                text: qsTrc("inspector", "Backwards")
-
-                onClicked: {
-                    root.pushBackwardsRequested()
-                }
-            }
-
-            FlatButton {
-                id: forwardsButton
-                anchors.left: parent.horizontalCenter
-                anchors.leftMargin: 4
-                anchors.right: parent.right
-
                 navigation.name: "Forwards"
                 navigation.panel: root.navigationPanel
-                navigation.row: root.navigationRowStart + 2
+                navigation.row: root.navigationRowStart + 1
 
                 text: qsTrc("inspector", "Forwards")
 
                 onClicked: {
                     root.pushForwardsRequested()
-                }
-            }
-        }
-
-        Item {
-            height: childrenRect.height
-            width: parent.width
-
-            FlatButton {
-                id: toBackButton
-                anchors.left: parent.left
-                anchors.right: parent.horizontalCenter
-                anchors.rightMargin: 4
-
-                navigation.name: "To Back"
-                navigation.panel: root.navigationPanel
-                navigation.row: root.navigationRowStart + 1
-
-                text: qsTrc("inspector", "To back")
-
-                onClicked: {
-                    root.pushToBackRequested()
                 }
             }
 
@@ -117,14 +79,53 @@ Column {
                 anchors.leftMargin: 4
                 anchors.right: parent.right
 
-                navigation.name: "To Front"
+                navigation.name: "To front"
                 navigation.panel: root.navigationPanel
-                navigation.row: root.navigationRowStart + 2
+                navigation.row: forwardsButton.navigation.row + 1
 
                 text: qsTrc("inspector", "To front")
 
                 onClicked: {
                     root.pushToFrontRequested()
+                }
+            }
+        }
+
+        Item {
+            height: childrenRect.height
+            width: parent.width
+
+            FlatButton {
+                id: backwardsButton
+                anchors.left: parent.left
+                anchors.right: parent.horizontalCenter
+                anchors.rightMargin: 4
+
+                navigation.name: "Backwards"
+                navigation.panel: root.navigationPanel
+                navigation.row: toFrontButton.navigation.row + 1
+
+                text: qsTrc("inspector", "Backwards")
+
+                onClicked: {
+                    root.pushBackwardsRequested()
+                }
+            }
+
+            FlatButton {
+                id: toBackButton
+                anchors.left: parent.horizontalCenter
+                anchors.leftMargin: 4
+                anchors.right: parent.right
+
+                navigation.name: "To back"
+                navigation.panel: root.navigationPanel
+                navigation.row: backwardsButton.navigation.row + 1
+
+                text: qsTrc("inspector", "To back")
+
+                onClicked: {
+                    root.pushToBackRequested()
                 }
             }
         }
