@@ -112,7 +112,7 @@ set(VST3_SDK_VERSION "3.7")
 option(BUILD_VST "Build VST MODULE" OFF)
 set(VST3_SDK_PATH "" CACHE PATH "Path to VST3_SDK. SDK version >= ${VST3_SDK_VERSION} required")
 
-option(BUILD_MUSESAMPLER_MODULE "Build MuseSampler MODULE" OFF)
+option(BUILD_MUSESAMPLER_MODULE "Build MuseSampler MODULE" ON)
 set(MUSESAMPLER_SRC_PATH "" CACHE PATH "Path to MuseSampler sources")
 
 option(ENABLE_AUDIO_EXPORT "Enable audio export" ON)
