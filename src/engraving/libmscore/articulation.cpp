@@ -59,11 +59,13 @@ struct ArticulationTextTypeMapping {
 
 // Note about "engraving/sym": they need to be in this context because PaletteCell::translationContext expects them there
 static const std::map<Articulation::TextType, ArticulationTextTypeMapping> artTypeToInfo {
+    { Articulation::TextType::TAP, { "Tap", String(u"T"), TranslatableString("engraving/sym", "Tap") } },
     { Articulation::TextType::SLAP, { "Slap", String(u"S"), TranslatableString("engraving/sym", "Slap") } },
     { Articulation::TextType::POP, { "Pop", String(u"P"), TranslatableString("engraving/sym", "Pop") } },
 };
 
 static const std::map<AsciiStringView, Articulation::TextType> artTextToType {
+    { "Tap", Articulation::TextType::TAP },
     { "Slap", Articulation::TextType::SLAP },
     { "Pop", Articulation::TextType::POP },
 };
@@ -83,7 +85,6 @@ Articulation::Articulation(ChordRest* parent)
 
     m_font.setFamily(u"FreeSans", draw::Font::Type::Tablature);
     m_font.setPointSizeF(7.0);
-    m_font.setBold(true);
 
     setPlayArticulation(true);
     initElementStyle(&articulationStyle);

@@ -62,11 +62,11 @@
             <subtype>mf</subtype>
             <velocity>80</velocity>
             </Dynamic>
-          <StaffText>
-            <text>T</text>
-            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>Tap</subtype>
+              </Articulation>
             <Note>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -74,11 +74,11 @@
               <string>2</string>
               </Note>
             </Chord>
-          <StaffText>
-            <text>S</text>
-            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>Slap</subtype>
+              </Articulation>
             <Note>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -86,11 +86,11 @@
               <string>2</string>
               </Note>
             </Chord>
-          <StaffText>
-            <text>P</text>
-            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>Pop</subtype>
+              </Articulation>
             <Note>
               <pitch>60</pitch>
               <tpc>14</tpc>

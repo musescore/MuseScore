@@ -524,7 +524,7 @@ void GuitarPro::addVibrato(Note* note, VibratoType type)
 
 void GuitarPro::addTap(Note* note)
 {
-    addTextToNote(u"T", note);
+    addTextArticulation(note, Articulation::TextType::TAP);
 }
 
 //---------------------------------------------------------
@@ -533,7 +533,7 @@ void GuitarPro::addTap(Note* note)
 
 void GuitarPro::addSlap(Note* note)
 {
-    addTextToNote(u"S", note);
+    addTextArticulation(note, Articulation::TextType::SLAP);
 }
 
 //---------------------------------------------------------
@@ -542,7 +542,20 @@ void GuitarPro::addSlap(Note* note)
 
 void GuitarPro::addPop(Note* note)
 {
-    addTextToNote(u"P", note);
+    addTextArticulation(note, Articulation::TextType::POP);
+}
+
+void GuitarPro::addTextArticulation(Note* note, Articulation::TextType type)
+{
+    if (type == Articulation::TextType::NO_TEXT) {
+        return;
+    }
+
+    if (Chord* ch = toChord(note->parent())) {
+        Articulation* art = mu::engraving::Factory::createArticulation(score->dummy()->chord());
+        art->setTextType(type);
+        ch->add(art);
+    }
 }
 
 //---------------------------------------------------------
