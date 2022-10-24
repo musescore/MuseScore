@@ -27,6 +27,7 @@
 #include "draw/ifontprovider.h"
 #include "infrastructure/smufl.h"
 #include "infrastructure/symbolfonts.h"
+#include "infrastructure/localfileinfoprovider.h"
 
 #ifndef ENGRAVING_NO_INTERNAL
 #include "internal/engravingconfiguration.h"
@@ -168,6 +169,8 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
         AccessibleItem::enabled = false;
 #endif
         gpaletteScore = compat::ScoreAccess::createMasterScore();
+        gpaletteScore->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(""));
+
 #ifndef ENGRAVING_NO_ACCESSIBILITY
         AccessibleItem::enabled = true;
 #endif
