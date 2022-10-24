@@ -174,13 +174,13 @@ std::vector<String> MscReader::excerptNames() const
 ByteArray MscReader::readExcerptStyleFile(const String& name) const
 {
     String fileName = name + u".mss";
-    return fileData(u"Excerpts/" + fileName);
+    return fileData(u"Excerpts/" + name + u"/" + fileName);
 }
 
 ByteArray MscReader::readExcerptFile(const String& name) const
 {
     String fileName = name + u".mscx";
-    return fileData(u"Excerpts/" + fileName);
+    return fileData(u"Excerpts/" + name + u"/" + fileName);
 }
 
 ByteArray MscReader::readChordListFile() const
@@ -225,9 +225,9 @@ ByteArray MscReader::readAudioSettingsJsonFile() const
     return fileData(u"audiosettings.json");
 }
 
-ByteArray MscReader::readViewSettingsJsonFile() const
+ByteArray MscReader::readViewSettingsJsonFile(const io::path_t& pathPrefix) const
 {
-    return fileData(u"viewsettings.json");
+    return fileData(pathPrefix.toString() + u"viewsettings.json");
 }
 
 // =======================================================================

@@ -331,14 +331,10 @@ int NotationViewInputController::zoomPercentageFromScaling(qreal scaling) const
 
 void NotationViewInputController::setViewMode(const ViewMode& viewMode)
 {
-    auto project = globalContext()->currentProject();
-    if (project) {
-        project->viewSettings()->setNotationViewMode(viewMode);
-    }
-
     auto notation = globalContext()->currentNotation();
     if (notation) {
-        notation->setViewMode(viewMode);
+        notation->viewState()->setViewMode(viewMode);
+        notation->painting()->setViewMode(viewMode);
     }
 }
 

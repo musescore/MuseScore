@@ -27,6 +27,9 @@
 #include "async/channel.h"
 #include "types/retval.h"
 
+#include "engraving/infrastructure/mscreader.h"
+#include "engraving/infrastructure/mscwriter.h"
+
 #include "draw/types/transform.h"
 
 #include "notationtypes.h"
@@ -37,6 +40,9 @@ class INotationViewState
 {
 public:
     virtual ~INotationViewState() = default;
+
+    virtual Ret read(const engraving::MscReader& reader, const io::path_t& pathPrefix = "") = 0;
+    virtual Ret write(engraving::MscWriter& writer, const io::path_t& pathPrefix = "") = 0;
 
     virtual bool isMatrixInited() const = 0;
     virtual void setMatrixInited(bool inited) = 0;
@@ -49,6 +55,14 @@ public:
 
     virtual ValCh<ZoomType> zoomType() const = 0;
     virtual void setZoomType(ZoomType type) = 0;
+
+    virtual ViewMode viewMode() const = 0;
+    virtual void setViewMode(const ViewMode& mode) = 0;
+
+    virtual bool needSave() const = 0;
+    virtual async::Notification needSaveChanged() const = 0;
+
+    virtual void makeDefault() = 0;
 };
 
 using INotationViewStatePtr = std::shared_ptr<INotationViewState>;
