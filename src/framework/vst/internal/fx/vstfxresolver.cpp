@@ -193,7 +193,7 @@ void VstFxResolver::fxChainToRemove(const AudioFxChain& currentFxChain,
             continue;
         }
 
-        if (it->second != newIt->second) {
+        if (it->second.resourceMeta != newIt->second.resourceMeta) {
             resultChain.insert({ it->first, it->second });
         }
     }

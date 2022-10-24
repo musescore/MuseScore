@@ -139,6 +139,11 @@ struct AudioResourceMeta {
                && attributes == other.attributes;
     }
 
+    bool operator!=(const AudioResourceMeta& other) const
+    {
+        return !(*this == other);
+    }
+
     bool operator<(const AudioResourceMeta& other) const
     {
         return id < other.id
