@@ -23,18 +23,20 @@ file(GLOB MUSESCORE_TS_FILES    ${CMAKE_CURRENT_LIST_DIR}/musescore_*.ts )
 file(GLOB QT_TS_FILES           ${CMAKE_CURRENT_LIST_DIR}/qt_*.ts )
 
 # Translations update and generate on CI
-#add_custom_command(
-#    OUTPUT ${CMAKE_CURRENT_LIST_DIR}/musescore_en_US.qm
-#    COMMAND Qt5::lrelease ${INSTRUMENTS_TS_FILES}
-#    COMMAND Qt5::lrelease ${MUSESCORE_TS_FILES}
-#    COMMAND Qt5::lrelease ${QT_TS_FILES}
-#    WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
-#)
+if (MUE_RUN_LRELEASE)
+    add_custom_command(
+        OUTPUT ${CMAKE_CURRENT_LIST_DIR}/musescore_en_US.qm
+        COMMAND Qt5::lrelease ${INSTRUMENTS_TS_FILES}
+        COMMAND Qt5::lrelease ${MUSESCORE_TS_FILES}
+        COMMAND Qt5::lrelease ${QT_TS_FILES}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+    )
 
-#add_custom_target(lrelease ALL
-#    DEPENDS ${CMAKE_CURRENT_LIST_DIR}/musescore_en_US.qm
-#    COMMENT "Generating .qm files" VERBATIM
-#)
+    add_custom_target(lrelease ALL
+        DEPENDS ${CMAKE_CURRENT_LIST_DIR}/musescore_en_US.qm
+        COMMENT "Generating .qm files" VERBATIM
+    )
+endif()
 
 install(FILES
       ${CMAKE_CURRENT_LIST_DIR}/languages.json
