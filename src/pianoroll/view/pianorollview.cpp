@@ -967,8 +967,7 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
                     m_dragStartTick = pi->note->tick();
                     m_dragEndTick = m_dragStartTick + pi->note->chord()->ticks();
                     m_dragNoteCache = serializeSelectedNotes();
-                }
-                else if (pi && m_tool == PianorollTool::EVENT_ADJUST) {
+                } else if (pi && m_tool == PianorollTool::EVENT_ADJUST) {
                     if (!pi->note->selected()) {
                         selectNotes(tick, tick, mouseDownPitch, mouseDownPitch, NoteSelectType::REPLACE);
                     }
