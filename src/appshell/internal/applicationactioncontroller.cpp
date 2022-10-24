@@ -28,6 +28,7 @@
 #include <QWindow>
 #include <QMimeData>
 
+#include "async/async.h"
 #include "audio/synthtypes.h"
 
 #include "translation.h"
@@ -96,15 +97,27 @@ void ApplicationActionController::onDropEvent(QDropEvent* event)
         io::path_t filePath = io::path_t(urls.first().toLocalFile());
         LOGD() << filePath;
 
-        Ret ret = make_ok();
+        bool shouldBeHandled = false;
 
         if (projectFilesController()->isFileSupported(filePath)) {
-            ret = projectFilesController()->openProject(filePath);
+            async::Async::call(this, [this, filePath]() {
+                Ret ret = projectFilesController()->openProject(filePath);
+                if (!ret) {
+                    LOGE() << ret.toString();
+                }
+            });
+            shouldBeHandled = true;
         } else if (audio::synth::isSoundFont(filePath)) {
-            ret = soundFontRepository()->addSoundFont(filePath);
+            async::Async::call(this, [this, filePath]() {
+                Ret ret = soundFontRepository()->addSoundFont(filePath);
+                if (!ret) {
+                    LOGE() << ret.toString();
+                }
+            });
+            shouldBeHandled = true;
         }
 
-        if (ret) {
+        if (shouldBeHandled) {
             event->accept();
         } else {
             event->ignore();
