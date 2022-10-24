@@ -984,24 +984,23 @@ void ProjectActionsController::printScore()
 
 io::path_t ProjectActionsController::selectScoreOpeningFile()
 {
-    QString allExt = "*.mscz *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx "
-                     "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscx *.mscs *.mscz~";
+    std::string allExt = "*.mscz *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx "
+                         "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscx *.mscs *.mscz~";
 
-    QStringList filter;
-    filter << qtrc("project", "All supported files") + " (" + allExt + ")"
-           << qtrc("project", "MuseScore files") + " (*.mscz)"
-           << qtrc("project", "MusicXML files") + " (*.mxl *.musicxml *.xml)"
-           << qtrc("project", "MIDI files") + " (*.mid *.midi *.kar)"
-           << qtrc("project", "MuseData files") + " (*.md)"
-           << qtrc("project", "Capella files") + " (*.cap *.capx)"
-           << qtrc("project", "BB files (experimental)") + " (*.mgu *.sgu)"
-           << qtrc("project", "Overture / Score Writer files (experimental)") + " (*.ove *.scw)"
-           << qtrc("project", "Bagpipe Music Writer files (experimental)") + " (*.bmw *.bww)"
-           << qtrc("project", "Guitar Pro files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)"
-           << qtrc("project", "Power Tab Editor files (experimental)") + " (*.ptb)"
-           << qtrc("project", "Uncompressed MuseScore folders (experimental)") + " (*.mscx)"
-           << qtrc("project", "MuseScore developer files") + " (*.mscs)"
-           << qtrc("project", "MuseScore backup files") + " (*.mscz~)";
+    std::vector<std::string> filter { trc("project", "All supported files") + " (" + allExt + ")",
+                                      trc("project", "MuseScore files") + " (*.mscz)",
+                                      trc("project", "MusicXML files") + " (*.mxl *.musicxml *.xml)",
+                                      trc("project", "MIDI files") + " (*.mid *.midi *.kar)",
+                                      trc("project", "MuseData files") + " (*.md)",
+                                      trc("project", "Capella files") + " (*.cap *.capx)",
+                                      trc("project", "BB files (experimental)") + " (*.mgu *.sgu)",
+                                      trc("project", "Overture / Score Writer files (experimental)") + " (*.ove *.scw)",
+                                      trc("project", "Bagpipe Music Writer files (experimental)") + " (*.bmw *.bww)",
+                                      trc("project", "Guitar Pro files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)",
+                                      trc("project", "Power Tab Editor files (experimental)") + " (*.ptb)",
+                                      trc("project", "Uncompressed MuseScore folders (experimental)") + " (*.mscx)",
+                                      trc("project", "MuseScore developer files") + " (*.mscs)",
+                                      trc("project", "MuseScore backup files") + " (*.mscz~)" };
 
     io::path_t defaultDir = configuration()->lastOpenedProjectsPath();
 
@@ -1009,7 +1008,7 @@ io::path_t ProjectActionsController::selectScoreOpeningFile()
         defaultDir = configuration()->defaultProjectsPath();
     }
 
-    io::path_t filePath = interactive()->selectOpeningFile(qtrc("project", "Open"), defaultDir, filter.join(";;"));
+    io::path_t filePath = interactive()->selectOpeningFile(qtrc("project", "Open"), defaultDir, filter);
 
     if (!filePath.empty()) {
         configuration()->setLastOpenedProjectsPath(io::dirpath(filePath));

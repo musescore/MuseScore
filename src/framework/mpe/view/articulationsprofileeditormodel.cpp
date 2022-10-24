@@ -25,7 +25,7 @@
 using namespace mu;
 using namespace mu::mpe;
 
-static const QString PROFILE_EXTENSION = "(*.json)";
+static const std::string PROFILE_EXTENSION = "(*.json)";
 
 ArticulationsProfileEditorModel::ArticulationsProfileEditorModel(QObject* parent)
     : QObject(parent)
@@ -38,7 +38,7 @@ ArticulationsProfileEditorModel::ArticulationsProfileEditorModel(QObject* parent
 void ArticulationsProfileEditorModel::requestToOpenProfile()
 {
     //! Make these strings translatable when we expose this tool to users
-    QString filter = /*qtrc*/ QString("MPE articulations profile") + " " + PROFILE_EXTENSION;
+    std::vector<std::string> filter = { /*qtrc*/ std::string("MPE articulations profile") + " " + PROFILE_EXTENSION };
     io::path_t path = interactive()->selectOpeningFile(/*qtrc*/ QString("Open MPE articulations profile"), "", filter);
 
     if (path.empty()) {
@@ -52,7 +52,7 @@ void ArticulationsProfileEditorModel::requestToOpenProfile()
 
 bool ArticulationsProfileEditorModel::requestToCreateProfile()
 {
-    QString filter = /*qtrc*/ QString("MPE articulations profile") + " " + PROFILE_EXTENSION;
+    std::vector<std::string> filter = { /*qtrc*/ std::string("MPE articulations profile") + " " + PROFILE_EXTENSION };
     io::path_t path = interactive()->selectSavingFile(/*qtrc*/ QString("Save MPE articulations profile"), "", filter);
 
     if (path.empty()) {

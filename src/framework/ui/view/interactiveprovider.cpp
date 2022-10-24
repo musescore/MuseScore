@@ -128,12 +128,14 @@ RetVal<Val> InteractiveProvider::error(const std::string& title, const framework
     return openStandardDialog("ERROR", QString::fromStdString(title), text, buttons, defBtn, options);
 }
 
-RetVal<io::path_t> InteractiveProvider::selectOpeningFile(const std::string& title, const io::path_t& dir, const std::string& filter)
+RetVal<io::path_t> InteractiveProvider::selectOpeningFile(const std::string& title, const io::path_t& dir,
+                                                          const std::vector<std::string>& filter)
 {
     return openFileDialog(FileDialogType::SelectOpenningFile, title, dir, filter);
 }
 
-RetVal<io::path_t> InteractiveProvider::selectSavingFile(const std::string& title, const io::path_t& dir, const std::string& filter,
+RetVal<io::path_t> InteractiveProvider::selectSavingFile(const std::string& title, const io::path_t& dir,
+                                                         const std::vector<std::string>& filter,
                                                          bool confirmOverwrite)
 {
     return openFileDialog(FileDialogType::SelectSavingFile, title, dir, filter, confirmOverwrite);
@@ -347,7 +349,7 @@ void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QStr
 }
 
 void InteractiveProvider::fillFileDialogData(QmlLaunchData* data, FileDialogType type, const std::string& title, const io::path_t& dir,
-                                             const std::string& filter, bool confirmOverwrite) const
+                                             const std::vector<std::string>& filter, bool confirmOverwrite) const
 {
     QVariantMap params;
     params["title"] = QString::fromStdString(title);
@@ -579,7 +581,7 @@ RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const Q
 }
 
 RetVal<io::path_t> InteractiveProvider::openFileDialog(FileDialogType type, const std::string& title, const io::path_t& dir,
-                                                       const std::string& filter, bool confirmOverwrite)
+                                                       const std::vector<std::string>& filter, bool confirmOverwrite)
 {
     RetVal<io::path_t> result;
 

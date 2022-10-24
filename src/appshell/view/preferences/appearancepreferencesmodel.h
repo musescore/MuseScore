@@ -105,7 +105,7 @@ public:
     Q_INVOKABLE void resetAppearancePreferencesToDefault();
     Q_INVOKABLE void setNewColor(const QColor& newColor, ColorType colorType);
     Q_INVOKABLE QStringList allFonts() const;
-    Q_INVOKABLE QString wallpaperPathFilter() const;
+    Q_INVOKABLE QStringList wallpaperPathFilter() const;
     Q_INVOKABLE QString wallpapersDir() const;
 
 public slots:

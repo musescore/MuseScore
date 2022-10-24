@@ -884,7 +884,7 @@ bool PaletteProvider::resetPalette(const QModelIndex& index)
 QString PaletteProvider::getPaletteFilename(bool open, const QString& name) const
 {
     QString title;
-    QString filter;
+    std::vector<std::string> filter;
 #if defined(WIN_PORTABLE)
     QString wd = QDir::cleanPath(QString("%1/../../../Data/settings").arg(QCoreApplication::applicationDirPath()));
 #else
@@ -893,10 +893,10 @@ QString PaletteProvider::getPaletteFilename(bool open, const QString& name) cons
 #endif
     if (open) {
         title  = mu::qtrc("palette", "Load Palette");
-        filter = mu::qtrc("palette", "MuseScore Palette") + " (*.mpal)";
+        filter = { mu::trc("palette", "MuseScore Palette") + " (*.mpal)" };
     } else {
         title  = mu::qtrc("palette", "Save Palette");
-        filter = mu::qtrc("palette", "MuseScore Palette") + " (*.mpal)";
+        filter = { mu::trc("palette", "MuseScore Palette") + " (*.mpal)" };
     }
 
     QFileInfo myPalettes(wd);

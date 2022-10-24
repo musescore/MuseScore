@@ -1187,10 +1187,10 @@ void NotationActionController::addImage()
         return;
     }
 
-    QString filter = qtrc("notation", "All Supported Files") + " (*.svg *.jpg *.jpeg *.png);;"
-                     + qtrc("notation", "Scalable Vector Graphics") + " (*.svg);;"
-                     + qtrc("notation", "JPEG") + " (*.jpg *.jpeg);;"
-                     + qtrc("notation", "PNG Bitmap Graphic") + " (*.png)";
+    std::vector<std::string> filter = { trc("notation", "All Supported Files") + " (*.svg *.jpg *.jpeg *.png)",
+                                        trc("notation", "Scalable Vector Graphics") + " (*.svg)",
+                                        trc("notation", "JPEG") + " (*.jpg *.jpeg)",
+                                        trc("notation", "PNG Bitmap Graphic") + " (*.png)" };
 
     io::path_t path = interactive()->selectOpeningFile(qtrc("notation", "Insert Image"), "", filter);
     interaction->addImageToItem(path, item);
@@ -1508,10 +1508,10 @@ void NotationActionController::openPartsDialog()
 mu::io::path_t NotationActionController::selectStyleFile(bool forLoad)
 {
     mu::io::path_t dir = configuration()->userStylesPath();
-    QString filterName = forLoad
-                         ? qtrc("notation", "MuseScore style files")
-                         : qtrc("notation", "MuseScore style file");
-    QString filter = filterName + " (*.mss)";
+    std::string filterName = forLoad
+                             ? trc("notation", "MuseScore style files")
+                             : trc("notation", "MuseScore style file");
+    std::vector<std::string> filter = { filterName + " (*.mss)" };
     return forLoad
            ? interactive()->selectOpeningFile(qtrc("notation", "Load style"), dir, filter)
            : interactive()->selectSavingFile(qtrc("notation", "Save style"), dir, filter);

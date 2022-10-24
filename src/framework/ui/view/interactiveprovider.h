@@ -136,7 +136,7 @@ private:
                                 const framework::IInteractive::ButtonDatas& buttons, int defBtn,
                                 const framework::IInteractive::Options& options) const;
     void fillFileDialogData(QmlLaunchData* data, FileDialogType type, const std::string& title, const io::path_t& dir,
-                            const std::string& filter = std::string(), bool confirmOverwrite = true) const;
+                            const std::vector<std::string>& filter = {}, bool confirmOverwrite = true) const;
 
     Ret toRet(const QVariant& jsr) const;
     RetVal<Val> toRetVal(const QVariant& jsrv) const;
@@ -149,7 +149,7 @@ private:
                                    const framework::IInteractive::Options& options = {});
 
     RetVal<io::path_t> openFileDialog(FileDialogType type, const std::string& title, const io::path_t& dir,
-                                      const std::string& filter = std::string(), bool confirmOverwrite = true);
+                                      const std::vector<std::string>& filter = {}, bool confirmOverwrite = true);
 
     void closeObject(const ObjectInfo& obj);
 
