@@ -638,6 +638,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Timbales,  {} }, { midi::Program(128, 0) } },
 
         { { mpe::SoundId::Anvil,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 48) } },
+        { { mpe::SoundId::BellTree,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Gong,  { mpe::SoundSubCategory::Metal,
                                    mpe::SoundSubCategory::Bowl } }, { midi::Program(0, 11) } },
         { { mpe::SoundId::Chain,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 0) } },
@@ -667,6 +668,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::HiHat,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Pipe,  { mpe::SoundSubCategory::Metal,
                                    mpe::SoundSubCategory::Iron } }, { midi::Program(128, 0) } },
+        { { mpe::SoundId::MarkTree,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Castanet,  { mpe::SoundSubCategory::Wooden } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Castanet,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 48) } },
 
