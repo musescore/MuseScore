@@ -62,7 +62,6 @@ class PianorollController : public QObject, public IPianorollController, public 
     INJECT(pianoroll, actions::IActionsDispatcher, dispatcher)
     INJECT(pianoroll, context::IGlobalContext, globalContext)
     INJECT(pianoroll, IPianorollConfiguration, configuration)
-//    INJECT(pianoroll, notation::INotationConfiguration, notationConfiguration)
     INJECT(pianoroll, audio::IPlayback, playback)
 
     Q_PROPERTY(double xZoom READ xZoom WRITE setXZoom NOTIFY xZoomChanged)
@@ -102,7 +101,6 @@ private:
     void onSelectionChanged();
 
     void buildNoteBlocks();
-    void addChord(engraving::Chord* chrd, int voice);
 
     engraving::Measure* lastMeasure();
     engraving::Score* score();

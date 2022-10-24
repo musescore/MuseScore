@@ -67,9 +67,9 @@ void PianorollView::load()
     });
 
     playback()->player()->playbackPositionMsecs().onReceive(this,
-                                                            [this](audio::TrackSequenceId currentTrackSequence,
+                                                            [this](audio::TrackSequenceId,
                                                                    const audio::msecs_t newPosMsecs) {
-        int tick = score()->utime2utick(newPosMsecs / 1000.);
+        int tick = score()->utime2utick(newPosMsecs / 1000.0);
         setPlaybackPosition(Fraction::fromTicks(tick));
     });
 }
@@ -134,7 +134,7 @@ void PianorollView::buildNoteData()
     Score* score = notation->elements()->msScore();
     std::vector<EngravingItem*> selectedElements = notation->interaction()->selection()->elements();
     for (EngravingItem* e: selectedElements) {
-        int idx = e->staffIdx();
+        int idx = (int)e->staffIdx();
         m_activeStaff = idx;
         if (std::find(m_selectedStaves.begin(), m_selectedStaves.end(), idx) == m_selectedStaves.end()) {
             m_selectedStaves.push_back(idx);
@@ -358,8 +358,6 @@ void PianorollView::paint(QPainter* p)
     Measure* lm = score->lastMeasure();
     Fraction end = lm->tick() + lm->ticks();
 
-    qreal y1 = pitchToPixelY(0);
-    qreal y2 = pitchToPixelY(128);
     qreal x1 = wholeNoteToPixelX(0);
     qreal x2 = wholeNoteToPixelX(end);
 
@@ -502,7 +500,7 @@ void PianorollView::drawDraggedNotes(QPainter* painter)
 
         if (endTickFrac != startTickFrac) {
             double pitch = pixelYToPitch(m_mouseDownPos.y());
-            int track = staff->idx() * VOICES + m_editNoteVoice;
+            int track = (int)staff->idx() * VOICES + m_editNoteVoice;
 
             drawDraggedNote(painter, startTickFrac, endTickFrac - startTickFrac, pitch, track, m_colorNoteDrag);
         }
@@ -551,7 +549,7 @@ void PianorollView::drawDraggedNotes(QPainter* painter)
 
                     int pitch = pi->note->pitch();
                     int voice = pi->note->voice();
-                    int track = staff->idx() * VOICES + voice;
+                    int track = (int)staff->idx() * VOICES + voice;
 
                     drawDraggedNote(painter, startNew, lenNew, pitch, track, m_colorNoteDrag);
                 }
@@ -609,9 +607,9 @@ void PianorollView::drawDraggedNotes(QPainter* painter)
         QXmlStreamReader::TokenType tt = xml.readNext();
         if (tt == QXmlStreamReader::StartElement) {
             if (xml.name().toString() == "notes") {
-                int n = xml.attributes().value("firstN").toString().toInt();
-                int d = xml.attributes().value("firstD").toString().toInt();
-                firstTick = Fraction(n, d);
+                int num = xml.attributes().value("firstN").toString().toInt();
+                int den = xml.attributes().value("firstD").toString().toInt();
+                firstTick = Fraction(num, den);
             }
             if (xml.name().toString() == "note") {
                 int sn = xml.attributes().value("startN").toString().toInt();
@@ -629,7 +627,7 @@ void PianorollView::drawDraggedNotes(QPainter* painter)
                 int pitch = xml.attributes().value("pitch").toString().toInt();
                 int voice = xml.attributes().value("voice").toString().toInt();
 
-                int track = staff->idx() * VOICES + voice;
+                int track = (int)staff->idx() * VOICES + voice;
 
                 drawDraggedNote(painter, startTick + pasteTickOffset, tickLen, pitch + pitchOffset, track, m_colorNoteDrag);
             }
@@ -849,7 +847,7 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
                 Staff* staff = activeStaff();
 
                 int voice = m_editNoteVoice;
-                int track = staff->idx() * VOICES + voice;
+                int track = (int)staff->idx() * VOICES + voice;
 
                 Fraction duration = endTickFrac - startTickFrac;
 
@@ -1051,6 +1049,7 @@ Fraction PianorollView::roundToSubdivision(double wholeNote, bool down)
 
 void PianorollView::insertNote(int modifiers)
 {
+    (void)modifiers;
     double pickTick = pixelXToWholeNote(m_mouseDownPos.x());
     double pickPitch = pixelYToPitch(m_mouseDownPos.y());
 
@@ -1066,7 +1065,7 @@ void PianorollView::insertNote(int modifiers)
 
     int voice = m_editNoteVoice;
 
-    int track = staff->idx() * VOICES + voice;
+    int track = (int)staff->idx() * VOICES + voice;
     Fraction noteLen = m_editNoteLength;
 
     Segment* seg = curScore->tick2segment(insertPosition);
@@ -1097,7 +1096,7 @@ void PianorollView::cutChord(const QPointF& pos)
     int voice = pn ? pn->note->voice() : m_editNoteVoice;
 
     //Find best chord to add to
-    int track = staff->idx() * VOICES + voice;
+    int track = (int)staff->idx() * VOICES + voice;
 
     Fraction insertPosition = roundToSubdivision(pickTick);
 
@@ -1261,7 +1260,7 @@ void PianorollView::handleSelectionClick()
     NoteSelectType selType = bnShift ? (bnCtrl ? NoteSelectType::SUBTRACT : NoteSelectType::XOR)
                              : (bnCtrl ? NoteSelectType::ADD : NoteSelectType::REPLACE);
 
-    Score* curScore = score();
+//    Score* curScore = score();
 
     double pickTick = pixelXToWholeNote((int)m_mouseDownPos.x());
     double pickPitch = pixelYToPitch(m_mouseDownPos.y());
@@ -1322,7 +1321,7 @@ QString PianorollView::serializeSelectedNotes()
             Fraction startTick = note->chord()->tick();
             int pitch = note->pitch();
 
-            int voice = note->voice();
+            int voice = (int)note->voice();
 
             int veloOff = note->veloOffset();
             VeloType veloType = note->veloType();
@@ -1489,9 +1488,9 @@ void PianorollView::pasteNotes(const QString& copiedNotes, Fraction pasteStartTi
         QXmlStreamReader::TokenType tt = xml.readNext();
         if (tt == QXmlStreamReader::StartElement) {
             if (xml.name().toString() == "notes") {
-                int n = xml.attributes().value("firstN").toString().toInt();
-                int d = xml.attributes().value("firstD").toString().toInt();
-                firstTick = Fraction(n, d);
+                int num = xml.attributes().value("firstN").toString().toInt();
+                int den = xml.attributes().value("firstD").toString().toInt();
+                firstTick = Fraction(num, den);
             }
             if (xml.name().toString() == "note") {
                 int sn = xml.attributes().value("startN").toString().toInt();
@@ -1513,7 +1512,7 @@ void PianorollView::pasteNotes(const QString& copiedNotes, Fraction pasteStartTi
                 QString veloTypeStrn = xml.attributes().value("veloType").toString();
                 VeloType veloType = veloTypeStrn == "o" ? VeloType::OFFSET_VAL : VeloType::USER_VAL;
 
-                int track = staff->idx() * VOICES + voice;
+                int track = (int)staff->idx() * VOICES + voice;
 
                 Fraction pos = xIsOffset ? startTick + pasteStartTick : startTick - firstTick + pasteStartTick;
 
@@ -1534,7 +1533,7 @@ void PianorollView::pasteNotes(const QString& copiedNotes, Fraction pasteStartTi
                 for (Note* note: qAsConst(addedNotes)) {
                     NoteEventList& evtList = note->playEvents();
                     if (!evtList.empty()) {
-                        NoteEvent* evt = note->noteEvent(evtList.size() - 1);
+                        NoteEvent* evt = note->noteEvent((int)evtList.size() - 1);
                         staff->score()->undo(new ChangeNoteEvent(note, evt, ne));
                     }
                 }

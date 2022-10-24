@@ -129,13 +129,11 @@ void PianorollController::onNotationChanged()
 
 void PianorollController::onUndoStackChanged()
 {
-    int j = 9;
     qDebug() << "onUndoStackChanged";
 }
 
 void PianorollController::onCurrentNotationChanged()
 {
-    int j = 9;
     qDebug() << "notationChanged";
 }
 
@@ -155,18 +153,6 @@ void PianorollController::setNoteHeight(int value)
     }
     m_noteHeight = value;
     emit noteHeightChanged();
-}
-
-void PianorollController::addChord(Chord* chrd, int voice)
-{
-    //for (Chord* c : chrd->graceNotes())
-    //    addChord(c, voice);
-
-    //for (Note* note : chrd->notes()) {
-    //    if (note->tieBack())
-    //          continue;
-    //    m_notes.push_back(NoteBlock(note));
-    //}
 }
 
 Fraction PianorollController::widthInBeats()
