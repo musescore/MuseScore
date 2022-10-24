@@ -312,6 +312,7 @@ Rectangle {
                     viewportSpan: pianoView.height
                     Layout.minimumWidth: 12
                     Layout.fillHeight: true
+                    center: pianoView.centerY
                 }
 
                 //-------
@@ -329,6 +330,7 @@ Rectangle {
                     viewportSpan: pianoView.width
                     Layout.fillWidth: true
                     Layout.minimumHeight: 12
+                    center: pianoView.centerX
                 }
 
                 Text {

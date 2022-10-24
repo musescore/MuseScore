@@ -54,7 +54,8 @@ enum class DragStyle
     DRAW_NOTE,
     EVENT_ONTIME,
     EVENT_MOVE,
-    EVENT_LENGTH
+    EVENT_LENGTH,
+    MOVE_VIEWPORT
 };
 
 struct BarPattern
@@ -135,6 +136,7 @@ public:
     void mouseReleaseEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
     void hoverMoveEvent(QHoverEvent* event) override;
+    void wheelEvent(QWheelEvent* event);
 
     int wholeNoteToPixelX(engraving::Fraction tick) const { return wholeNoteToPixelX(tick.numerator() / (double)tick.denominator()); }
     int wholeNoteToPixelX(double tick) const;
@@ -207,8 +209,9 @@ private:
     std::vector<int> m_selectedStaves;
     int m_activeStaff;
 
-    double m_centerX = 0;  //fraction of note grid camera is focused on
-    double m_centerY = 0;  //fraction of note grid camera is focused on
+    double m_centerX = 0;  //viewport center of focus
+    double m_centerY = 0;  //viewport center of focus
+    QPointF m_dragViewportStart;
 
     double m_displayObjectWidth = 0;  //Set to note grid in pixels
     double m_displayObjectHeight = 0;  //Set to note grid in pixels
