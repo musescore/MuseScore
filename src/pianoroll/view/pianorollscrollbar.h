@@ -26,6 +26,7 @@
 #include <QQuickPaintedItem>
 #include <QIcon>
 #include <QColor>
+#include <QWheelEvent>
 
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
@@ -52,6 +53,7 @@ public:
 
     Q_INVOKABLE void load();
 
+    void wheelEvent(QWheelEvent* event);
     void mousePressEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
@@ -81,8 +83,8 @@ private:
     bool m_dragging = false;
     double m_centerDragStart;
 
-    double m_displayObjectSpan = 0;
-    double m_viewportSpan = 0;
+    double m_displayObjectSpan = 0;  //Logical size of object inside the viewport in pixels
+    double m_viewportSpan = 0;  //Viewport size (number of pixels displayed onscreen)
     double m_center = 0;
 
     Direction m_direction = Direction::HORIZONTAL;

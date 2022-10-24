@@ -109,8 +109,47 @@ void PianorollScrollbar::setDisplayObjectSpan(double value)
     update();
 }
 
+void PianorollScrollbar::wheelEvent(QWheelEvent* event)
+{
+    QPoint scroll = event->angleDelta();
+    double amount = -(double)scroll.y() / 400;
+
+    setCenter(m_center + amount * m_viewportSpan / m_displayObjectSpan);
+}
+
 void PianorollScrollbar::mousePressEvent(QMouseEvent* event)
 {
+    if (m_direction == Direction::HORIZONTAL) {
+        double span = width() * m_viewportSpan / m_displayObjectSpan;
+        double bound0 = m_center * width() - span / 2;
+        double bound1 = bound0 + span;
+
+        double p0 = event->pos().x();
+        if (p0 < bound0) {
+            setCenter(m_center - m_viewportSpan / m_displayObjectSpan);
+            return;
+        }
+        else if (p0 > bound1) {
+            setCenter(m_center + m_viewportSpan / m_displayObjectSpan);
+            return;
+        }
+    }
+    else {
+        double span = height() * m_viewportSpan / m_displayObjectSpan;
+        double bound0 = m_center * height() - span / 2;
+        double bound1 = bound0 + span;
+
+        double p0 = event->pos().y();
+        if (p0 < bound0) {
+            setCenter(m_center - m_viewportSpan / m_displayObjectSpan);
+            return;
+        }
+        else if (p0 > bound1) {
+            setCenter(m_center + m_viewportSpan / m_displayObjectSpan);
+            return;
+        }
+    }
+
     m_dragging = true;
     m_mouseDownPos = event->pos();
     m_centerDragStart = m_center;
