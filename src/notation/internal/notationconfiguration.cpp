@@ -73,8 +73,6 @@ static const Settings::Key COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE(module_name
 static const Settings::Key REALTIME_DELAY(module_name, "io/midi/realtimeDelay");
 static const Settings::Key NOTE_DEFAULT_PLAY_DURATION(module_name, "score/note/defaultPlayDuration");
 
-static const Settings::Key FIRST_INSTRUMENT_LIST_KEY(module_name, "application/paths/instrumentList1");
-static const Settings::Key SECOND_INSTRUMENT_LIST_KEY(module_name, "application/paths/instrumentList2");
 static const Settings::Key FIRST_SCORE_ORDER_LIST_KEY(module_name, "application/paths/scoreOrderList1");
 static const Settings::Key SECOND_SCORE_ORDER_LIST_KEY(module_name, "application/paths/scoreOrderList2");
 
@@ -181,17 +179,6 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(true));
     settings()->setDefaultValue(REALTIME_DELAY, Val(750));
     settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(500));
-
-    settings()->setDefaultValue(FIRST_INSTRUMENT_LIST_KEY,
-                                Val(globalConfiguration()->appDataPath().toStdString() + "instruments/instruments.xml"));
-    settings()->valueChanged(FIRST_INSTRUMENT_LIST_KEY).onReceive(nullptr, [this](const Val&) {
-        m_instrumentListPathsChanged.notify();
-    });
-
-    settings()->setDefaultValue(SECOND_INSTRUMENT_LIST_KEY, Val(""));
-    settings()->valueChanged(SECOND_INSTRUMENT_LIST_KEY).onReceive(nullptr, [this](const Val&) {
-        m_instrumentListPathsChanged.notify();
-    });
 
     settings()->setDefaultValue(FIRST_SCORE_ORDER_LIST_KEY,
                                 Val(globalConfiguration()->appDataPath().toStdString() + "instruments/orders.xml"));
@@ -689,74 +676,9 @@ void NotationConfiguration::setTestModeEnabled(bool enabled)
     mu::engraving::MScore::testMode = enabled;
 }
 
-io::paths_t NotationConfiguration::instrumentListPaths() const
+io::path_t NotationConfiguration::instrumentListPath() const
 {
-    io::paths_t paths;
-
-    io::path_t firstInstrumentListPath = this->firstInstrumentListPath();
-    paths.push_back(firstInstrumentListPath);
-
-    io::path_t secondInstrumentListPath = this->secondInstrumentListPath();
-    if (!secondInstrumentListPath.empty()) {
-        paths.push_back(secondInstrumentListPath);
-    }
-
-    io::path_t firstScoreOrderListPath = this->firstScoreOrderListPath();
-    paths.push_back(firstScoreOrderListPath);
-
-    io::path_t secondScoreOrderListPath = this->secondScoreOrderListPath();
-    if (!secondScoreOrderListPath.empty()) {
-        paths.push_back(secondScoreOrderListPath);
-    }
-
-    return paths;
-}
-
-async::Notification NotationConfiguration::instrumentListPathsChanged() const
-{
-    return m_instrumentListPathsChanged;
-}
-
-io::paths_t NotationConfiguration::userInstrumentListPaths() const
-{
-    io::paths_t paths = {
-        firstInstrumentListPath(),
-        secondInstrumentListPath()
-    };
-
-    return paths;
-}
-
-void NotationConfiguration::setUserInstrumentListPaths(const io::paths_t& paths)
-{
-    if (paths.empty()) {
-        return;
-    }
-
-    setFirstInstrumentListPath(paths[0]);
-    if (paths.size() > 1) {
-        setSecondInstrumentListPath(paths[1]);
-    }
-}
-
-io::path_t NotationConfiguration::firstInstrumentListPath() const
-{
-    return settings()->value(FIRST_INSTRUMENT_LIST_KEY).toString();
-}
-
-void NotationConfiguration::setFirstInstrumentListPath(const io::path_t& path)
-{
-    settings()->setSharedValue(FIRST_INSTRUMENT_LIST_KEY, Val(path.toStdString()));
-}
-
-io::path_t NotationConfiguration::secondInstrumentListPath() const
-{
-    return settings()->value(SECOND_INSTRUMENT_LIST_KEY).toString();
-}
-
-void NotationConfiguration::setSecondInstrumentListPath(const io::path_t& path)
-{
-    settings()->setSharedValue(SECOND_INSTRUMENT_LIST_KEY, Val(path.toStdString()));
+    return globalConfiguration()->appDataPath() + "instruments/instruments.xml";
 }
 
 io::paths_t NotationConfiguration::scoreOrderListPaths() const
