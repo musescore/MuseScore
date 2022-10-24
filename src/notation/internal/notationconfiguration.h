@@ -158,11 +158,7 @@ public:
     void setTemplateModeEnabled(bool enabled) override;
     void setTestModeEnabled(bool enabled) override;
 
-    io::paths_t instrumentListPaths() const override;
-    async::Notification instrumentListPathsChanged() const override;
-
-    io::paths_t userInstrumentListPaths() const override;
-    void setUserInstrumentListPaths(const io::paths_t& paths) override;
+    io::path_t instrumentListPath() const override;
 
     io::paths_t scoreOrderListPaths() const override;
     async::Notification scoreOrderListPathsChanged() const override;
@@ -192,12 +188,6 @@ public:
     void setStyleFileImportPath(const io::path_t& path) override;
 
 private:
-    io::path_t firstInstrumentListPath() const;
-    void setFirstInstrumentListPath(const io::path_t& path);
-
-    io::path_t secondInstrumentListPath() const;
-    void setSecondInstrumentListPath(const io::path_t& path);
-
     io::path_t firstScoreOrderListPath() const;
     void setFirstScoreOrderListPath(const io::path_t& path);
 
@@ -208,7 +198,6 @@ private:
     async::Notification m_foregroundChanged;
     async::Channel<framework::Orientation> m_canvasOrientationChanged;
     async::Channel<io::path_t> m_userStylesPathChanged;
-    async::Notification m_instrumentListPathsChanged;
     async::Notification m_scoreOrderListPathsChanged;
     async::Notification m_isLimitCanvasScrollAreaChanged;
     async::Notification m_isPlayRepeatsChanged;

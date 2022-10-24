@@ -223,15 +223,7 @@ void NotationModule::onInit(const framework::IApplication::RunMode& mode)
 
     auto pr = modularity::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        io::paths_t instrPaths = s_configuration->instrumentListPaths();
-        for (const io::path_t& p : instrPaths) {
-            pr->reg("instruments", p);
-        }
-
-        io::paths_t uinstrPaths = s_configuration->userInstrumentListPaths();
-        for (const io::path_t& p : uinstrPaths) {
-            pr->reg("user instruments", p);
-        }
+        pr->reg("instruments", s_configuration->instrumentListPath());
 
         io::paths_t scoreOrderPaths = s_configuration->scoreOrderListPaths();
         for (const io::path_t& p : scoreOrderPaths) {
