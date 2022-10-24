@@ -624,7 +624,7 @@ void Selection::updateSelectedElements()
             }
         }
     }
-    Fraction stick = startSegment()->tick();
+    Fraction stick = tickStart();
     Fraction etick = tickEnd();
 
     for (auto i = _score->spanner().begin(); i != _score->spanner().end(); ++i) {

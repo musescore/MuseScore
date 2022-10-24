@@ -91,9 +91,11 @@ Notation::Notation(mu::engraving::Score* score)
     });
 
     configuration()->canvasOrientation().ch.onReceive(this, [this](framework::Orientation) {
-        m_score->doLayout();
-        for (mu::engraving::Score* score : m_score->scoreList()) {
-            score->doLayout();
+        if (m_score) {
+            m_score->doLayout();
+            for (mu::engraving::Score* score : m_score->scoreList()) {
+                score->doLayout();
+            }
         }
     });
 
