@@ -4231,6 +4231,7 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
             }
 
             // Adjust spacing for cross-beam situations
+            s->computeCrossBeamType(ns);
             CrossBeamType crossBeamType = s->crossBeamType();
             double displacement = score()->noteHeadWidth() - score()->styleMM(Sid::stemWidth);
             if (crossBeamType.upDown) {
