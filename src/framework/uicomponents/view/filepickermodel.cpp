@@ -39,14 +39,19 @@ QString FilePickerModel::dir() const
     return m_dir;
 }
 
-QString FilePickerModel::filter() const
+QStringList FilePickerModel::filter() const
 {
     return m_filter;
 }
 
 QString FilePickerModel::selectFile()
 {
-    io::path_t file = interactive()->selectOpeningFile(m_title, m_dir, m_filter);
+    std::vector<std::string> filter;
+    for (const QString& nameFilter : m_filter) {
+        filter.push_back(nameFilter.toStdString());
+    }
+
+    io::path_t file = interactive()->selectOpeningFile(m_title, m_dir, filter);
 
     if (!file.empty()) {
         m_dir = io::dirpath(file).toQString();
@@ -99,7 +104,7 @@ void FilePickerModel::setDir(const QString& dir)
     emit dirChanged(dir);
 }
 
-void FilePickerModel::setFilter(const QString& filter)
+void FilePickerModel::setFilter(const QStringList& filter)
 {
     if (filter == m_filter) {
         return;

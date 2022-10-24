@@ -145,14 +145,15 @@ IInteractive::Result Interactive::error(const std::string& title, const Text& te
     return standardDialogResult(provider()->error(title, text, buttons, defBtn, options));
 }
 
-mu::io::path_t Interactive::selectOpeningFile(const QString& title, const io::path_t& dir, const QString& filter)
+mu::io::path_t Interactive::selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter)
 {
-    return provider()->selectOpeningFile(title.toStdString(), dir, filter.toStdString()).val;
+    return provider()->selectOpeningFile(title.toStdString(), dir, filter).val;
 }
 
-io::path_t Interactive::selectSavingFile(const QString& title, const io::path_t& dir, const QString& filter, bool confirmOverwrite)
+io::path_t Interactive::selectSavingFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter,
+                                         bool confirmOverwrite)
 {
-    return provider()->selectSavingFile(title.toStdString(), dir, filter.toStdString(), confirmOverwrite).val;
+    return provider()->selectSavingFile(title.toStdString(), dir, filter, confirmOverwrite).val;
 }
 
 io::path_t Interactive::selectDirectory(const QString& title, const io::path_t& dir)

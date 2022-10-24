@@ -70,9 +70,9 @@ QVariantList ImportPreferencesModel::shortestNotes() const
     return result;
 }
 
-QString ImportPreferencesModel::stylePathFilter() const
+QStringList ImportPreferencesModel::stylePathFilter() const
 {
-    return qtrc("appshell/preferences", "MuseScore style file") + " (*.mss)";
+    return { qtrc("appshell/preferences", "MuseScore style file") + " (*.mss)" };
 }
 
 QString ImportPreferencesModel::styleChooseTitle() const

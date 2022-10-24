@@ -73,14 +73,14 @@ QVariantMap ExportType::toMap() const
     };
 }
 
-QString ExportType::filter() const
+std::vector<std::string> ExportType::filter() const
 {
     QStringList filterSuffixes;
     for (const QString& suffix : suffixes) {
         filterSuffixes << QString("*.%1").arg(suffix);
     }
 
-    return QString("%1 (%2)").arg(filterName, filterSuffixes.join(" "));
+    return { QString("%1 (%2)").arg(filterName, filterSuffixes.join(" ")).toStdString() };
 }
 
 bool ExportType::hasSubtypes() const
