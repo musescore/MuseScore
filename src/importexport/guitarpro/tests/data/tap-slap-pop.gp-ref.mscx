@@ -70,7 +70,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>guitarRightHandTapping</subtype>
+              <subtype>Tap</subtype>
               </Articulation>
             <Note>
               <pitch>60</pitch>

@@ -87,6 +87,7 @@ public:
 
     enum TextType {
         NO_TEXT,
+        TAP,
         SLAP,
         POP
     };
