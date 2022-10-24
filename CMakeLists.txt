@@ -90,6 +90,7 @@ option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the 
 option(BUILD_UNIT_TESTS "Build gtest unit test" ON)
 option(PACKAGE_FILE_ASSOCIATION "File types association" OFF)
 
+option(MUE_RUN_LRELEASE "Generate .qm files" ON)
 option(TRY_USE_CCACHE "Try use ccache" ON)
 option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_UNITY "Build using unity build." ON)
