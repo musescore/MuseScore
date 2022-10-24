@@ -1054,7 +1054,7 @@ void Chord::computeUp()
             }
             PointF base = _beam->pagePos();
             Note* baseNote = _up ? downNote() : upNote();
-            double noteY = baseNote->canvasPos().y();
+            double noteY = baseNote->pagePos().y();
             double noteX = stemPosX() + pagePos().x() - base.x();
             PointF startAnchor = PointF();
             PointF endAnchor = PointF();
