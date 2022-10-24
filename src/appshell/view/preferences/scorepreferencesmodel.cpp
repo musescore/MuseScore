@@ -88,10 +88,6 @@ void ScorePreferencesModel::load()
     beginResetModel();
 
     m_defaultFiles = {
-        { DefaultFileType::FirstInstrumentList, qtrc("appshell/preferences", "Instrument list 1"), firstInstrumentListPath(),
-          instrumentPathFilter(), instrumentChooseTitle() },
-        { DefaultFileType::SecondInstrumentList, qtrc("appshell/preferences", "Instrument list 2"), secondInstrumentListPath(),
-          instrumentPathFilter(), instrumentChooseTitle() },
         { DefaultFileType::FirstScoreOrderList, qtrc("appshell/preferences", "Score order list 1"), firstScoreOrderListPath(),
           scoreOrderPathFilter(), scoreOrderChooseTitle() },
         { DefaultFileType::SecondScoreOrderList, qtrc("appshell/preferences", "Score order list 2"), secondScoreOrderListPath(),
@@ -108,12 +104,6 @@ void ScorePreferencesModel::load()
 void ScorePreferencesModel::savePath(ScorePreferencesModel::DefaultFileType fileType, const QString& path)
 {
     switch (fileType) {
-    case DefaultFileType::FirstInstrumentList:
-        setFirstInstrumentListPath(path);
-        break;
-    case DefaultFileType::SecondInstrumentList:
-        setSecondInstrumentListPath(path);
-        break;
     case DefaultFileType::FirstScoreOrderList:
         setFirstScoreOrderListPath(path);
         break;
@@ -131,48 +121,6 @@ void ScorePreferencesModel::savePath(ScorePreferencesModel::DefaultFileType file
     }
 
     setPath(fileType, path);
-}
-
-QString ScorePreferencesModel::firstInstrumentListPath() const
-{
-    io::paths_t instrumentListPaths = notationConfiguration()->userInstrumentListPaths();
-    if (instrumentListPaths.empty()) {
-        return QString();
-    }
-
-    return instrumentListPaths[0].toQString();
-}
-
-void ScorePreferencesModel::setFirstInstrumentListPath(const QString& path)
-{
-    io::paths_t instrumentListPaths = notationConfiguration()->userInstrumentListPaths();
-    if (instrumentListPaths.empty()) {
-        return;
-    }
-
-    instrumentListPaths[0] = path.toStdString();
-    notationConfiguration()->setUserInstrumentListPaths(instrumentListPaths);
-}
-
-QString ScorePreferencesModel::secondInstrumentListPath() const
-{
-    io::paths_t instrumentListPaths = notationConfiguration()->userInstrumentListPaths();
-    if (instrumentListPaths.size() < 1) {
-        return QString();
-    }
-
-    return instrumentListPaths[1].toQString();
-}
-
-void ScorePreferencesModel::setSecondInstrumentListPath(const QString& path)
-{
-    io::paths_t instrumentListPaths = notationConfiguration()->userInstrumentListPaths();
-    if (instrumentListPaths.size() < 1) {
-        return;
-    }
-
-    instrumentListPaths[1] = path.toStdString();
-    notationConfiguration()->setUserInstrumentListPaths(instrumentListPaths);
 }
 
 QString ScorePreferencesModel::firstScoreOrderListPath() const
@@ -227,11 +175,6 @@ QString ScorePreferencesModel::partStylePath() const
     return notationConfiguration()->partStyleFilePath().toQString();
 }
 
-QString ScorePreferencesModel::instrumentPathFilter() const
-{
-    return qtrc("appshell/preferences", "Instrument list") + " (*.xml)";
-}
-
 QString ScorePreferencesModel::scoreOrderPathFilter() const
 {
     return qtrc("appshell/preferences", "Score order list") + " (*.xml)";
@@ -240,11 +183,6 @@ QString ScorePreferencesModel::scoreOrderPathFilter() const
 QString ScorePreferencesModel::stylePathFilter() const
 {
     return qtrc("appshell/preferences", "MuseScore style file") + " (*.mss)";
-}
-
-QString ScorePreferencesModel::instrumentChooseTitle() const
-{
-    return qtrc("appshell/preferences", "Choose instrument list");
 }
 
 QString ScorePreferencesModel::scoreOrderChooseTitle() const

@@ -154,11 +154,7 @@ public:
     virtual void setTemplateModeEnabled(bool enabled) = 0;
     virtual void setTestModeEnabled(bool enabled) = 0;
 
-    virtual io::paths_t instrumentListPaths() const = 0;
-    virtual async::Notification instrumentListPathsChanged() const = 0;
-
-    virtual io::paths_t userInstrumentListPaths() const = 0;
-    virtual void setUserInstrumentListPaths(const io::paths_t& paths) = 0;
+    virtual io::path_t instrumentListPath() const = 0;
 
     virtual io::paths_t scoreOrderListPaths() const = 0;
     virtual async::Notification scoreOrderListPathsChanged() const = 0;
