@@ -2793,12 +2793,43 @@ KeyList Score::keyList() const
     // find the keylist of the first pitched staff
     KeyList tmpKeymap;
     Staff* firstStaff = nullptr;
+    bool isFirstStaff = true;
     for (Staff* s : masterScore()->staves()) {
         if (!s->isDrumStaff(Fraction(0, 1))) {
             KeyList* km = s->keyList();
-            tmpKeymap.insert(km->begin(), km->end());
-            firstStaff = s;
-            break;
+            if (isFirstStaff) {
+                isFirstStaff = false;
+                tmpKeymap.insert(km->begin(), km->end());
+                firstStaff = s;
+                continue;
+            }
+
+            // in terms of ticks, tmpKeymap = intersection(tmpKeymap, km)
+            // note that if every single staff has a custom local keysig on this tick,
+            // we will just copy the one from the top staff.
+            auto currKey = km->begin();
+            KeyList kl;
+            for (auto key : tmpKeymap) {
+                if (key.first < (*currKey).first) {
+                    continue;
+                }
+                while ((*currKey).first < key.first && currKey != km->end()) {
+                    currKey++;
+                }
+                if (currKey == km->end()) {
+                    break;
+                }
+                if (key.first == (*currKey).first) {
+                    // there is a matching time sig on this staff
+                    ++currKey;
+                    kl.insert(key);
+                    if (currKey == km->end()) {
+                        break;
+                    }
+                }
+            }
+            tmpKeymap.clear();
+            tmpKeymap.insert(kl.begin(), kl.end());
         }
     }
 
