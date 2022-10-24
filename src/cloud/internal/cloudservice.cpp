@@ -116,6 +116,55 @@ void CloudService::init()
     LOGI() << "ssl library build version number: " << QSslSocket::sslLibraryBuildVersionNumber();
     LOGI() << "ssl library build version string: " << QSslSocket::sslLibraryBuildVersionString();
 #ifdef Q_OS_WIN
+    LOGI() << "QCoreApplication::arguments().first() " << QCoreApplication::arguments().first();
+    LOGI() << "QFileInfo(QCoreApplication::arguments().first()).filePath() " << QFileInfo(QCoreApplication::arguments().first()).filePath();
+
+    auto _qAppFileName = []()                // get application file name
+    {
+        // We do MAX_PATH + 2 here, and request with MAX_PATH + 1, so we can handle all paths
+        // up to, and including MAX_PATH size perfectly fine with string termination, as well
+        // as easily detect if the file path is indeed larger than MAX_PATH, in which case we
+        // need to use the heap instead. This is a work-around, since contrary to what the
+        // MSDN documentation states, GetModuleFileName sometimes doesn't set the
+        // ERROR_INSUFFICIENT_BUFFER error number, and we thus cannot rely on this value if
+        // GetModuleFileName(0, buffer, MAX_PATH) == MAX_PATH.
+        // GetModuleFileName(0, buffer, MAX_PATH + 1) == MAX_PATH just means we hit the normal
+        // file path limit, and we handle it normally, if the result is MAX_PATH + 1, we use
+        // heap (even if the result _might_ be exactly MAX_PATH + 1, but that's ok).
+        wchar_t buffer[MAX_PATH + 2];
+        DWORD v = GetModuleFileName(0, buffer, MAX_PATH + 1);
+        buffer[MAX_PATH + 1] = 0;
+
+        if (v == 0) {
+            return QString();
+        } else if (v <= MAX_PATH) {
+            return QString::fromWCharArray(buffer);
+        }
+
+        // MAX_PATH sized buffer wasn't large enough to contain the full path, use heap
+        wchar_t* b = 0;
+        int i = 1;
+        size_t size;
+        do {
+            ++i;
+            size = MAX_PATH * i;
+            b = reinterpret_cast<wchar_t*>(realloc(b, (size + 1) * sizeof(wchar_t)));
+            if (b) {
+                v = GetModuleFileName(NULL, b, DWORD(size));
+            }
+        } while (b && v == size);
+
+        if (b) {
+            *(b + size) = 0;
+        }
+        QString res = QString::fromWCharArray(b);
+        free(b);
+
+        return res;
+    };
+
+    LOGI() << "_qAppFileName " << _qAppFileName();
+
     QSystemLibrary libssl("libssl-1_1-x64");
     LOGI() << "load ssl system library: " << libssl.load(false);
     QSystemLibrary libcrypto("libcrypto-1_1-x64");

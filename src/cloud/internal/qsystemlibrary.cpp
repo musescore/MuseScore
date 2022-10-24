@@ -130,6 +130,7 @@ HINSTANCE QSystemLibrary::load(const wchar_t *libraryName, bool onlySystemDirect
         fullPathAttempt.append(fileName);
         LOGI() << "looking at " << fullPathAttempt;
         HINSTANCE inst = ::LoadLibrary(reinterpret_cast<const wchar_t *>(fullPathAttempt.utf16()));
+        LOGI() << "GetLastError: " << GetLastError();
         if (inst != 0) {
             LOGI() << "found";
             return inst;
