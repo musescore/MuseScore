@@ -939,68 +939,105 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
             //Start dragging
             m_dragStarted = true;
 
-            //Check for move note
-            double tick = pixelXToWholeNote(m_mouseDownPos.x());
-            double mouseDownPitch = pixelYToPitch(m_mouseDownPos.y());
+            if (event->buttons() & Qt::MiddleButton) {
+                m_dragStyle = DragStyle::MOVE_VIEWPORT;
+                m_dragViewportStart.setX(m_centerX);
+                m_dragViewportStart.setY(m_centerY);
+            }
+            else {
+                //Check for move note
+                double tick = pixelXToWholeNote(m_mouseDownPos.x());
+                double mouseDownPitch = pixelYToPitch(m_mouseDownPos.y());
 
-            NoteBlock* pi = pickNote(m_mouseDownPos.x(), m_mouseDownPos.y());
-            if (pi && (m_tool == PianorollTool::SELECT || m_tool == PianorollTool::ADD)) {
-                if (!pi->note->selected()) {
-                    selectNotes(tick, tick, mouseDownPitch, mouseDownPitch, NoteSelectType::REPLACE);
-                }
+                NoteBlock* pi = pickNote(m_mouseDownPos.x(), m_mouseDownPos.y());
+                if (pi && (m_tool == PianorollTool::SELECT || m_tool == PianorollTool::ADD)) {
+                    if (!pi->note->selected()) {
+                        selectNotes(tick, tick, mouseDownPitch, mouseDownPitch, NoteSelectType::REPLACE);
+                    }
 
-                QRect bounds = boundingRect(pi->note, false);
-                if (m_mouseDownPos.x() <= bounds.x() + m_dragNoteLengthMargin) {
-                    m_dragStyle = DragStyle::NOTE_LENGTH_START;
-                } else if (m_mouseDownPos.x() >= bounds.x() + bounds.width() - m_dragNoteLengthMargin) {
-                    m_dragStyle = DragStyle::NOTE_LENGTH_END;
-                } else {
-                    m_dragStyle = DragStyle::NOTE_POSITION;
-                }
+                    QRect bounds = boundingRect(pi->note, false);
+                    if (m_mouseDownPos.x() <= bounds.x() + m_dragNoteLengthMargin) {
+                        m_dragStyle = DragStyle::NOTE_LENGTH_START;
+                    }
+                    else if (m_mouseDownPos.x() >= bounds.x() + bounds.width() - m_dragNoteLengthMargin) {
+                        m_dragStyle = DragStyle::NOTE_LENGTH_END;
+                    }
+                    else {
+                        m_dragStyle = DragStyle::NOTE_POSITION;
+                    }
 
-                m_dragStartPitch = mouseDownPitch;
-                m_dragStartTick = pi->note->tick();
-                m_dragEndTick = m_dragStartTick + pi->note->chord()->ticks();
-                m_dragNoteCache = serializeSelectedNotes();
-            } else if (pi && m_tool == PianorollTool::EVENT_ADJUST) {
-                if (!pi->note->selected()) {
-                    selectNotes(tick, tick, mouseDownPitch, mouseDownPitch, NoteSelectType::REPLACE);
+                    m_dragStartPitch = mouseDownPitch;
+                    m_dragStartTick = pi->note->tick();
+                    m_dragEndTick = m_dragStartTick + pi->note->chord()->ticks();
+                    m_dragNoteCache = serializeSelectedNotes();
                 }
+                else if (pi && m_tool == PianorollTool::EVENT_ADJUST) {
+                    if (!pi->note->selected()) {
+                        selectNotes(tick, tick, mouseDownPitch, mouseDownPitch, NoteSelectType::REPLACE);
+                    }
 
-                QRect bounds = boundingRect(pi->note, true);
-                if (m_mouseDownPos.x() <= bounds.x() + m_dragNoteLengthMargin) {
-                    m_dragStyle = DragStyle::EVENT_ONTIME;
-                } else if (m_mouseDownPos.x() >= bounds.x() + bounds.width() - m_dragNoteLengthMargin) {
-                    m_dragStyle = DragStyle::EVENT_LENGTH;
-                } else {
-                    m_dragStyle = DragStyle::EVENT_MOVE;
+                    QRect bounds = boundingRect(pi->note, true);
+                    if (m_mouseDownPos.x() <= bounds.x() + m_dragNoteLengthMargin) {
+                        m_dragStyle = DragStyle::EVENT_ONTIME;
+                    }
+                    else if (m_mouseDownPos.x() >= bounds.x() + bounds.width() - m_dragNoteLengthMargin) {
+                        m_dragStyle = DragStyle::EVENT_LENGTH;
+                    }
+                    else {
+                        m_dragStyle = DragStyle::EVENT_MOVE;
+                    }
                 }
-            } else if (!pi && m_tool == PianorollTool::SELECT) {
-                m_dragStyle = DragStyle::SELECTION_RECT;
-            } else if (!pi && m_tool == PianorollTool::ADD) {
-                m_dragStyle = DragStyle::DRAW_NOTE;
-            } else {
-                m_dragStyle = DragStyle::NONE;
+                else if (!pi && m_tool == PianorollTool::SELECT) {
+                    m_dragStyle = DragStyle::SELECTION_RECT;
+                }
+                else if (!pi && m_tool == PianorollTool::ADD) {
+                    m_dragStyle = DragStyle::DRAW_NOTE;
+                }
+                else {
+                    m_dragStyle = DragStyle::NONE;
+                }
             }
         }
     }
 
     if (m_dragStarted) {
-        switch (m_tool) {
-        case PianorollTool::SELECT:
-        case PianorollTool::ADD:
-        case PianorollTool::CUT:
-        case PianorollTool::EVENT_ADJUST:
-//                scene()->update();
-            update();
-            break;
-        case PianorollTool::ERASE:
-            eraseNote(m_lastMousePos);
-            update();
-            break;
-        default:
-            break;
+        if (m_dragStyle == DragStyle::MOVE_VIEWPORT) {
+            qreal dx = m_lastMousePos.x() - m_mouseDownPos.x();
+            qreal dy = m_lastMousePos.y() - m_mouseDownPos.y();
+
+            dx /= width();
+            dy /= height();
+            setCenterX(m_dragViewportStart.x() + dx);
+            setCenterY(m_dragViewportStart.y() + dy);
         }
+        else {
+            switch (m_tool) {
+            case PianorollTool::SELECT:
+            case PianorollTool::ADD:
+            case PianorollTool::CUT:
+            case PianorollTool::EVENT_ADJUST:
+                //                scene()->update();
+                update();
+                break;
+            case PianorollTool::ERASE:
+                eraseNote(m_lastMousePos);
+                update();
+                break;
+            default:
+                break;
+            }
+        }
+    }
+}
+
+void PianorollView::wheelEvent(QWheelEvent* event)
+{
+    double amount = -(double)event->angleDelta().y() / 400;
+    if (event->modifiers() & Qt::ShiftModifier) {
+        setCenterX(m_centerX + amount * width() / m_displayObjectWidth);
+    }
+    else {
+        setCenterY(m_centerY + amount * height() / m_displayObjectHeight);
     }
 }
 
