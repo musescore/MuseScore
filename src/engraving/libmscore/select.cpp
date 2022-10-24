@@ -769,13 +769,13 @@ void Selection::setState(SelState s)
 String Selection::mimeType() const
 {
     switch (_state) {
-    default:
-    case SelState::NONE:
-        return String();
     case SelState::LIST:
         return isSingle() ? String::fromAscii(mimeSymbolFormat) : String::fromAscii(mimeSymbolListFormat);
     case SelState::RANGE:
         return String::fromAscii(mimeStaffListFormat);
+    case SelState::NONE:
+    default:
+        break;
     }
 
     return String();
