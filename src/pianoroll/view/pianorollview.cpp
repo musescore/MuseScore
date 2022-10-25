@@ -1483,7 +1483,7 @@ void PianorollView::finishNoteEventAdjustDrag()
 }
 
 std::vector<Note*> PianorollView::pasteNotes(const QString& copiedNotes, Fraction pasteStartTick, Fraction lengthOffset, int pitchOffset,
-                               bool xIsOffset)
+                                             bool xIsOffset)
 {
     QXmlStreamReader xml(copiedNotes);
     Fraction firstTick;

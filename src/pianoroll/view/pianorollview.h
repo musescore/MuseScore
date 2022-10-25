@@ -188,8 +188,9 @@ private:
     void eraseNote(const QPointF& pos);
     engraving::Fraction roundToSubdivision(double wholeNote, bool down = true);
 
-    std::vector<engraving::Note*> pasteNotes(const QString& copiedNotes, engraving::Fraction pasteStartTick, engraving::Fraction lengthOffset, int pitchOffset,
-                    bool xIsOffset);
+    std::vector<engraving::Note*> pasteNotes(const QString& copiedNotes, engraving::Fraction pasteStartTick,
+                                             engraving::Fraction lengthOffset, int pitchOffset,
+                                             bool xIsOffset);
     std::vector<engraving::Note*> addNote(engraving::Fraction startTick, engraving::Fraction duration, int pitch, int track);
     bool cutChordRest(engraving::ChordRest* targetCr, int track, engraving::Fraction cutTick, engraving::ChordRest*& cr0,
                       engraving::ChordRest*& cr1);
@@ -216,8 +217,8 @@ private:
     double m_displayObjectWidth = 0;  //Set to note grid in pixels
     double m_displayObjectHeight = 0;  //Set to note grid in pixels
 
-    double m_wholeNoteWidth;
-    double m_noteHeight;
+    double m_wholeNoteWidth = 60;
+    double m_noteHeight = 14;
     int m_tuplet = 1;
     int m_subdivision = 0;
     int m_stripePattern = 0b101010110101;  //bitflag indicating which rows are indicated as white keys
