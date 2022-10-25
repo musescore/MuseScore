@@ -203,7 +203,7 @@ private:
     NoteHeadGroup _headGroup = NoteHeadGroup::HEAD_NORMAL;
     NoteHeadType _headType = NoteHeadType::HEAD_AUTO;
 
-    VeloType _veloType = VeloType::OFFSET_VAL;
+    VeloType _veloType = VeloType::USER_VAL;
 
     int _offTimeType = 0;     ///< compatibility only 1 - user(absolute), 2 - offset (%)
     int _onTimeType = 0;      ///< compatibility only 1 - user, 2 - offset
