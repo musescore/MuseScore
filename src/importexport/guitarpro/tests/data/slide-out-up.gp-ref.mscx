@@ -71,8 +71,7 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>52</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <fret>7</fret>
               <string>4</string>
               <ChordLine>
@@ -85,8 +84,7 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>59</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               <fret>9</fret>
               <string>3</string>
               <ChordLine>
@@ -99,8 +97,7 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>62</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               <fret>17</fret>
               <string>4</string>
               <ChordLine>
@@ -113,8 +110,7 @@
             <durationType>quarter</durationType>
             <Note>
               <pitch>65</pitch>
-              <tpc>-9</tpc>
-              <tpc2>13</tpc2>
+              <tpc>13</tpc>
               <fret>10</fret>
               <string>2</string>
               <ChordLine>

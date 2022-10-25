@@ -2041,7 +2041,9 @@ void GPConverter::setTpc(Note* note, int accidental)
         note->setTpcFromPitch();
     } else {
         int tone = (note->pitch() - accidental + 12) % 12;
-        note->setTpc(toneToTpc[tone] + accidental * 7);
+        int tpc = toneToTpc[tone] + accidental * 7;
+        note->setTpc1(tpc);
+        note->setTpc2(tpc);
     }
 }
 
