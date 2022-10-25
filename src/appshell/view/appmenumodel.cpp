@@ -23,8 +23,9 @@
 
 #include "types/translatablestring.h"
 
-#include "log.h"
 #include "config.h"
+#include "version.h"
+#include "log.h"
 
 using namespace mu::appshell;
 using namespace mu::ui;
@@ -59,9 +60,7 @@ void AppMenuModel::load()
         makeToolsMenu(),
         makePluginsMenu(),
         makeHelpMenu(),
-#ifdef BUILD_DIAGNOSTICS
         makeDiagnosticMenu()
-#endif
     };
 
     setItems(items);
@@ -372,12 +371,15 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
     };
 
     MenuItemList items {
-        makeMenu(TranslatableString("appshell/menu/diagnostic", "&System"), systemItems, "menu-system"),
-        makeMenu(TranslatableString("appshell/menu/diagnostic", "&Accessibility"), accessibilityItems, "menu-accessibility"),
-        makeMenu(TranslatableString("appshell/menu/diagnostic", "&Engraving"), engravingItems, "menu-engraving"),
-        makeMenu(TranslatableString("appshell/menu/diagnostic", "Auto&bot"), autobotItems, "menu-autobot"),
-        makeMenuItem("multiinstances-dev-show-info")
+        makeMenu(TranslatableString("appshell/menu/diagnostic", "&System"), systemItems, "menu-system")
     };
+
+    if (framework::Version::unstable()) {
+        items << makeMenu(TranslatableString("appshell/menu/diagnostic", "&Accessibility"), accessibilityItems, "menu-accessibility")
+              << makeMenu(TranslatableString("appshell/menu/diagnostic", "&Engraving"), engravingItems, "menu-engraving")
+              << makeMenu(TranslatableString("appshell/menu/diagnostic", "Auto&bot"), autobotItems, "menu-autobot")
+              << makeMenuItem("multiinstances-dev-show-info");
+    }
 
     return makeMenu(TranslatableString("appshell/menu/diagnostic", "&Diagnostic"), items, "menu-diagnostic");
 }
