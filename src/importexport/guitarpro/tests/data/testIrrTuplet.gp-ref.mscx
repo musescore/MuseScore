@@ -103,8 +103,7 @@
                   </next>
                 </Spanner>
               <pitch>67</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               <fret>8</fret>
               <string>1</string>
               </Note>
@@ -120,8 +119,7 @@
                   </prev>
                 </Spanner>
               <pitch>67</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               <fret>8</fret>
               <string>1</string>
               </Note>
@@ -133,8 +131,7 @@
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>75</pitch>
-              <tpc>-9</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               <fret>16</fret>
               <string>1</string>
               </Note>
