@@ -78,6 +78,8 @@ public:
     std::vector<InstanceMeta> instances() const override;
     async::Notification instancesChanged() const override;
 
+    void notifyAboutInstanceWasQuited();
+
     // Quit for all
     void quitForAll() override;
     void quitAllAndRestartLast() override;

@@ -170,6 +170,10 @@ void ApplicationActionController::quit(bool isAllInstances, const io::path_t& in
             interactive()->openUrl(QUrl::fromLocalFile(installerPath.toQString()));
         }
 
+        if (multiInstancesProvider()->instances().size() > 1) {
+            multiInstancesProvider()->notifyAboutInstanceWasQuited();
+        }
+
         QCoreApplication::quit();
     }
 }
