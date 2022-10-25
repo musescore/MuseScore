@@ -189,8 +189,7 @@ private:
     engraving::Fraction roundToSubdivision(double wholeNote, bool down = true);
 
     std::vector<engraving::Note*> pasteNotes(const QString& copiedNotes, engraving::Fraction pasteStartTick,
-                                             engraving::Fraction lengthOffset, int pitchOffset,
-                                             bool xIsOffset);
+                                             engraving::Fraction lengthOffset, int pitchOffset, bool xIsOffset);
     std::vector<engraving::Note*> addNote(engraving::Fraction startTick, engraving::Fraction duration, int pitch, int track);
     bool cutChordRest(engraving::ChordRest* targetCr, int track, engraving::Fraction cutTick, engraving::ChordRest*& cr0,
                       engraving::ChordRest*& cr1);
