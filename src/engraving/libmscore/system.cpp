@@ -817,14 +817,7 @@ size_t System::getBracketsColumnsCount()
 void System::setBracketsXPosition(const double xPosition)
 {
     for (Bracket* b1 : _brackets) {
-        // Obtain correct distance
-        double bracketDistance = 0.0;
         BracketType bracketType = b1->bracketType();
-        if (bracketType == BracketType::NORMAL || bracketType == BracketType::LINE) {
-            bracketDistance = score()->styleMM(Sid::bracketDistance);
-        } else if (bracketType == BracketType::BRACE) {
-            bracketDistance = score()->styleMM(Sid::akkoladeBarDistance);
-        }
         // For brackets that are drawn, we must correct for half line width
         double lineWidthCorrection = 0.0;
         if (bracketType == BracketType::NORMAL || bracketType == BracketType::LINE) {
