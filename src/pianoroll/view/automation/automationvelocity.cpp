@@ -26,45 +26,46 @@ double AutomationVelocity::minValue()
 
 double AutomationVelocity::value(Staff* staff, NoteEventBlock& block)
 {
-    Note* note = block.note;
+    //Note* note = block.note;
 
-    //Change velocity to equivalent in new metric
-    switch (note->veloType()) {
-    case VeloType::USER_VAL:
-    {
-        int dynamicsVel = staff->velocities().val(note->tick());
-        return static_cast<int>((note->userVelocity() / (qreal)dynamicsVel - 1) * 100);
-    }
-    default:
-    case VeloType::OFFSET_VAL:
-        return note->userVelocity();
-    }
+    ////Change velocity to equivalent in new metric
+    //switch (note->veloType()) {
+    //case VeloType::USER_VAL:
+    //{
+    //    int dynamicsVel = staff->velocities().val(note->tick());
+    //    return static_cast<int>((note->userVelocity() / (qreal)dynamicsVel - 1) * 100);
+    //}
+    //default:
+    //case VeloType::OFFSET_VAL:
+    //    return note->userVelocity();
+    //}
+    return 0;
 }
 
 void AutomationVelocity::setValue(Staff* staff, NoteEventBlock& block, double value)
 {
-    Score* score = staff->score();
-    Note* note = block.note;
+    //Score* score = staff->score();
+    //Note* note = block.note;
 
-    score->startCmd();
+    //score->startCmd();
 
-    switch (note->veloType()) {
-    case VeloType::USER_VAL:
-    {
-        int dynamicsVel = staff->velocities().val(note->tick());
-        int newVelocity = static_cast<int>(dynamicsVel * (1 + value / 100.0));
+    //switch (note->veloType()) {
+    //case VeloType::USER_VAL:
+    //{
+    //    int dynamicsVel = staff->velocities().val(note->tick());
+    //    int newVelocity = static_cast<int>(dynamicsVel * (1 + value / 100.0));
 
-        score->undo(new ChangeVelocity(note, newVelocity));
+    //    score->undo(new ChangeVelocity(note, newVelocity));
 
-        break;
-    }
-    default:
-    case VeloType::OFFSET_VAL:
-    {
-        score->undo(new ChangeVelocity(note, value));
-        break;
-    }
-    }
+    //    break;
+    //}
+    //default:
+    //case VeloType::OFFSET_VAL:
+    //{
+    //    score->undo(new ChangeVelocity(note, value));
+    //    break;
+    //}
+    //}
 
-    score->endCmd();
+    //score->endCmd();
 }

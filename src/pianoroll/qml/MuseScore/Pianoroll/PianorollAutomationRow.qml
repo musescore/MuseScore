@@ -88,7 +88,6 @@ ColumnLayout {
                 valueRole: "value"
 
                 model: [
-                    { text: qsTr("Velocity Relative"), value: PianorollAutomationRow.Shape.Velocity },
                     { text: qsTr("Velocity Absolute"), value: PianorollAutomationRow.Shape.VelocityAbs },
                     { text: qsTr("On Time"), value: PianorollAutomationRow.Shape.Position },
                     { text: qsTr("Duration Offset"), value: PianorollAutomationRow.Shape.Duration },
@@ -101,12 +100,6 @@ ColumnLayout {
                     var noteTweak = false;
 
                     switch (currentValue) {
-                    case PianorollAutomationRow.Shape.Velocity:
-                    {
-                        noteTweak = true;
-                        automationNotes.automationType = PianorollAutomationNote.VELOCITY;
-                        break;
-                    }
                     case PianorollAutomationRow.Shape.VelocityAbs:
                     {
                         noteTweak = true;
