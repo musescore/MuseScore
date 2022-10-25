@@ -30,6 +30,7 @@
 #include "libmscore/tempo.h"
 
 #include "playback/utils/pitchutils.h"
+#include "playback/filters/spannerfilter.h"
 
 using namespace mu::engraving;
 
@@ -59,34 +60,15 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
 
     mpe::pitch_level_t overallPitchRange = 0;
     mpe::dynamic_level_t overallDynamicRange = 0;
-    int overallDurationTicks = spannerCtx.nominalDurationTicks;
+    int overallDurationTicks = SpannerFilter::spannerActualDurationTicks(spanner, spannerCtx.nominalDurationTicks);
 
     switch (spanner->type()) {
     case ElementType::SLUR: {
         type = mpe::ArticulationType::Legato;
-
-        EngravingItem* startItem = spanner->startElement();
-        EngravingItem* endItem = spanner->endElement();
-
-        if (!startItem || !endItem) {
-            break;
-        }
-
-        if (startItem->isChordRest() && endItem->isChordRest()) {
-            ChordRest* startChord = toChordRest(startItem);
-            ChordRest* endChord = toChordRest(endItem);
-            overallDurationTicks = endChord->tick().ticks() + endChord->ticks().ticks() - startChord->tick().ticks();
-        }
-
         break;
     }
     case ElementType::PEDAL: {
         type = mpe::ArticulationType::Pedal;
-        const Pedal* pedal = toPedal(spanner);
-        if (pedal->endHookType() == HookType::HOOK_45) {
-            overallDurationTicks -= Constants::division / 4;
-        }
-
         break;
     }
     case ElementType::LET_RING:
@@ -112,7 +94,6 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
         } else if (trill->trillType() == TrillType::PRALLPRALL_LINE) {
             type = mpe::ArticulationType::LinePrall;
         }
-        overallDurationTicks = spannerCtx.nominalDurationTicks;
         break;
     }
     case ElementType::GLISSANDO: {
