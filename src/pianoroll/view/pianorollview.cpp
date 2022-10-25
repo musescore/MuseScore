@@ -1323,7 +1323,7 @@ QString PianorollView::serializeSelectedNotes()
 
             int voice = (int)note->voice();
 
-            int veloOff = note->veloOffset();
+            int veloOff = note->userVelocity();
             VeloType veloType = note->veloType();
 
             xml.writeStartElement("note");
@@ -1333,7 +1333,7 @@ QString PianorollView::serializeSelectedNotes()
             xml.writeAttribute("lenD", QString::number(flen.denominator()));
             xml.writeAttribute("pitch", QString::number(pitch));
             xml.writeAttribute("voice", QString::number(voice));
-            xml.writeAttribute("veloOff", QString::number(veloOff));
+            xml.writeAttribute("userVelocity", QString::number(veloOff));
             xml.writeAttribute("veloType", veloType == VeloType::OFFSET_VAL ? "o" : "u");
 
             for (NoteEvent& evt : note->playEvents()) {
@@ -1508,7 +1508,7 @@ void PianorollView::pasteNotes(const QString& copiedNotes, Fraction pasteStartTi
                 int pitch = xml.attributes().value("pitch").toString().toInt();
                 int voice = xml.attributes().value("voice").toString().toInt();
 
-                int veloOff = xml.attributes().value("veloOff").toString().toInt();
+                int veloOff = xml.attributes().value("userVelocity").toString().toInt();
                 QString veloTypeStrn = xml.attributes().value("veloType").toString();
                 VeloType veloType = veloTypeStrn == "o" ? VeloType::OFFSET_VAL : VeloType::USER_VAL;
 
@@ -1518,7 +1518,7 @@ void PianorollView::pasteNotes(const QString& copiedNotes, Fraction pasteStartTi
 
                 addedNotes = addNote(pos, tickLen, pitch + pitchOffset, track);
                 for (Note* note: qAsConst(addedNotes)) {
-                    note->setVeloOffset(veloOff);
+                    note->setUserVelocity(veloOff);
                     note->setVeloType(veloType);
                 }
             }

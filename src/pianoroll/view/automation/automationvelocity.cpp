@@ -33,11 +33,11 @@ double AutomationVelocity::value(Staff* staff, NoteEventBlock& block)
     case VeloType::USER_VAL:
     {
         int dynamicsVel = staff->velocities().val(note->tick());
-        return static_cast<int>((note->veloOffset() / (qreal)dynamicsVel - 1) * 100);
+        return static_cast<int>((note->userVelocity() / (qreal)dynamicsVel - 1) * 100);
     }
     default:
     case VeloType::OFFSET_VAL:
-        return note->veloOffset();
+        return note->userVelocity();
     }
 }
 
@@ -54,14 +54,14 @@ void AutomationVelocity::setValue(Staff* staff, NoteEventBlock& block, double va
         int dynamicsVel = staff->velocities().val(note->tick());
         int newVelocity = static_cast<int>(dynamicsVel * (1 + value / 100.0));
 
-        score->undo(new ChangeVelocity(note, VeloType::USER_VAL, newVelocity));
+        score->undo(new ChangeVelocity(note, newVelocity));
 
         break;
     }
     default:
     case VeloType::OFFSET_VAL:
     {
-        score->undo(new ChangeVelocity(note, VeloType::OFFSET_VAL, value));
+        score->undo(new ChangeVelocity(note, value));
         break;
     }
     }
