@@ -108,8 +108,7 @@
             <durationType>whole</durationType>
             <Note>
               <pitch>59</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               <fret>0</fret>
               <string>1</string>
               </Note>
@@ -125,8 +124,7 @@
             <durationType>whole</durationType>
             <Note>
               <pitch>64</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <fret>0</fret>
               <string>0</string>
               </Note>
@@ -142,8 +140,7 @@
             <durationType>whole</durationType>
             <Note>
               <pitch>55</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               <fret>0</fret>
               <string>2</string>
               </Note>
@@ -172,8 +169,7 @@
             <durationType>whole</durationType>
             <Note>
               <pitch>55</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               <fret>0</fret>
               <string>2</string>
               </Note>
@@ -186,8 +182,7 @@
             <durationType>whole</durationType>
             <Note>
               <pitch>60</pitch>
-              <tpc>-9</tpc>
-              <tpc2>14</tpc2>
+              <tpc>14</tpc>
               <fret>1</fret>
               <string>1</string>
               </Note>
@@ -200,8 +195,7 @@
             <durationType>whole</durationType>
             <Note>
               <pitch>52</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <fret>2</fret>
               <string>3</string>
               </Note>
