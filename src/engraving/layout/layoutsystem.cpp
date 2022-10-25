@@ -1101,12 +1101,36 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     }
 
     //-------------------------------------------------------------
-    // StaffText, InstrumentChange
+    // StaffText
     //-------------------------------------------------------------
 
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
-            if (e->isPlayTechAnnotation() || e->isStaffText() || e->isSystemText() || e->isTripletFeel() || e->isInstrumentChange()) {
+            if (e->isStaffText()) {
+                e->layout();
+            }
+        }
+    }
+
+    //-------------------------------------------------------------
+    // InstrumentChange
+    //-------------------------------------------------------------
+
+    for (const Segment* s : sl) {
+        for (EngravingItem* e : s->annotations()) {
+            if (e->isInstrumentChange()) {
+                e->layout();
+            }
+        }
+    }
+
+    //-------------------------------------------------------------
+    // SystemText
+    //-------------------------------------------------------------
+
+    for (const Segment* s : sl) {
+        for (EngravingItem* e : s->annotations()) {
+            if (e->isPlayTechAnnotation() || e->isSystemText() || e->isTripletFeel()) {
                 e->layout();
             }
         }
