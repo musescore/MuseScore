@@ -68,6 +68,8 @@ private:
 
     bool m_dirty = false;
 };
+
+static const int KEYEDIT_ACC_ZERO_POINT = 3;
 }
 
 #endif
