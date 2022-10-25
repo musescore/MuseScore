@@ -50,6 +50,7 @@ static const QString METHOD_SETTINGS_SET_VALUE("SETTINGS_SET_VALUE");
 static const QString METHOD_QUIT("METHOD_QUIT");
 static const QString METHOD_QUIT_WITH_RESTART_LAST_INSTANCE("METHOD_QUIT_WITH_RESTART_LAST_INSTANCE");
 static const QString METHOD_QUIT_WITH_RUNING_INSTALLATION("METHOD_QUIT_WITH_RUNING_INSTALLATION");
+static const QString METHOD_QUITED("METHOD_QUITED");
 static const QString METHOD_RESOURCE_CHANGED("RESOURCE_CHANGED");
 
 MultiInstancesProvider::~MultiInstancesProvider()
@@ -135,6 +136,8 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
     } else if (msg.method == METHOD_QUIT_WITH_RUNING_INSTALLATION) {
         CHECK_ARGS_COUNT(1);
         dispatcher()->dispatch("quit", actions::ActionData::make_arg2<bool, std::string>(false, msg.args.at(0).toStdString()));
+    } else if (msg.method == METHOD_QUITED) {
+        m_ipcChannel->response(METHOD_QUITED, { }, msg.srcID);
     } else if (msg.method == METHOD_RESOURCE_CHANGED) {
         resourceChanged().send(msg.args.at(0).toStdString());
     }
@@ -383,6 +386,15 @@ std::vector<InstanceMeta> MultiInstancesProvider::instances() const
 mu::async::Notification MultiInstancesProvider::instancesChanged() const
 {
     return m_instancesChanged;
+}
+
+void MultiInstancesProvider::notifyAboutInstanceWasQuited()
+{
+    if (!isInited()) {
+        return;
+    }
+
+    m_ipcChannel->broadcast(METHOD_QUITED);
 }
 
 void MultiInstancesProvider::quitForAll()
