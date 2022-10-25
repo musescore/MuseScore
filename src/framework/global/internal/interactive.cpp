@@ -61,6 +61,16 @@ static IInteractive::Result standardDialogResult(const RetVal<Val>& retVal)
     return IInteractive::Result(btn, showAgain);
 }
 
+static QString filterToString(const std::vector<std::string>& filter)
+{
+    QStringList result;
+    for (const std::string& nameFilter : filter) {
+        result << QString::fromStdString(nameFilter);
+    }
+
+    return result.join(";;");
+}
+
 IInteractive::Result Interactive::question(const std::string& title, const std::string& text,
                                            const Buttons& buttons,
                                            const Button& def,
@@ -147,18 +157,35 @@ IInteractive::Result Interactive::error(const std::string& title, const Text& te
 
 mu::io::path_t Interactive::selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter)
 {
+#ifndef Q_OS_LINUX
+    QString path = QFileDialog::getOpenFileName(nullptr, title, dir.toQString(), filterToString(filter));
+    return path;
+#else
     return provider()->selectOpeningFile(title.toStdString(), dir, filter).val;
+#endif
 }
 
 io::path_t Interactive::selectSavingFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter,
                                          bool confirmOverwrite)
 {
+#ifndef Q_OS_LINUX
+    QFileDialog::Options options;
+    options.setFlag(QFileDialog::DontConfirmOverwrite, !confirmOverwrite);
+    QString path = QFileDialog::getSaveFileName(nullptr, title, dir.toQString(), filterToString(filter), nullptr, options);
+    return path;
+#else
     return provider()->selectSavingFile(title.toStdString(), dir, filter, confirmOverwrite).val;
+#endif
 }
 
 io::path_t Interactive::selectDirectory(const QString& title, const io::path_t& dir)
 {
+#ifndef Q_OS_LINUX
+    QString path = QFileDialog::getExistingDirectory(nullptr, title, dir.toQString());
+    return path;
+#else
     return provider()->selectDirectory(title.toStdString(), dir).val;
+#endif
 }
 
 io::paths_t Interactive::selectMultipleDirectories(const QString& title, const io::path_t& dir, const io::paths_t& selectedDirectories)
