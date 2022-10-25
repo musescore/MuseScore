@@ -350,9 +350,6 @@ public:
     int userVelocity() const { return _userVelocity; }
     void setUserVelocity(int v) { _userVelocity = v; }
 
-    VeloType veloType() const { return _veloType; }
-    void setVeloType(VeloType v) { _veloType = v; }
-
     void setOnTimeOffset(int v);
     void setOffTimeOffset(int v);
 
