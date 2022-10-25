@@ -25,8 +25,8 @@
 #include "libmscore/measure.h"
 #include "types/fraction.h"
 #include "libmscore/pos.h"
-#include "libmscore/noteevent.h"
 #include "libmscore/note.h"
+#include "libmscore/noteevent.h"
 #include "libmscore/pitchspelling.h"
 #include "libmscore/undo.h"
 #include "libmscore/tuplet.h"
@@ -820,7 +820,7 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
         } else if (m_dragStyle == DragStyle::NOTE_POSITION || m_dragStyle == DragStyle::NOTE_LENGTH_START
                    || m_dragStyle == DragStyle::NOTE_LENGTH_END) {
             if (m_tool == PianorollTool::SELECT || m_tool == PianorollTool::ADD) {
-                finishNoteGroupDrag();
+                finishNoteGroupDrag(event);
 
                 //Keep last note drag event, if any
                 if (m_inProgressUndoEvent) {
@@ -1354,7 +1354,7 @@ QString PianorollView::serializeSelectedNotes()
     return xmlStrn;
 }
 
-void PianorollView::finishNoteGroupDrag()
+void PianorollView::finishNoteGroupDrag(QMouseEvent* event)
 {
     Score* curScore = score();
 
@@ -1400,8 +1400,18 @@ void PianorollView::finishNoteGroupDrag()
     //Do command
     curScore->startCmd();
 
-    curScore->cmdDeleteSelection();
-    pasteNotes(m_dragNoteCache, pasteTickOffset, pasteLengthOffset, pitchOffset, true);
+    if (!(event->modifiers() & Qt::ShiftModifier)) {
+        curScore->cmdDeleteSelection();
+    }
+    std::vector<Note*> notes = pasteNotes(m_dragNoteCache, pasteTickOffset, pasteLengthOffset, pitchOffset, true);
+
+    //Select just pasted notes
+    Selection& selection = curScore->selection();
+    selection.deselectAll();
+    for (Note* note : notes) {
+        selection.add(note);
+        note->setSelected(true);
+    }
 
     curScore->endCmd();
 
@@ -1472,7 +1482,7 @@ void PianorollView::finishNoteEventAdjustDrag()
     update();
 }
 
-void PianorollView::pasteNotes(const QString& copiedNotes, Fraction pasteStartTick, Fraction lengthOffset, int pitchOffset,
+std::vector<Note*> PianorollView::pasteNotes(const QString& copiedNotes, Fraction pasteStartTick, Fraction lengthOffset, int pitchOffset,
                                bool xIsOffset)
 {
     QXmlStreamReader xml(copiedNotes);
@@ -1535,6 +1545,8 @@ void PianorollView::pasteNotes(const QString& copiedNotes, Fraction pasteStartTi
             }
         }
     }
+
+    return addedNotes;
 }
 
 std::vector<Note*> PianorollView::addNote(Fraction startTick, Fraction duration, int pitch, int track)

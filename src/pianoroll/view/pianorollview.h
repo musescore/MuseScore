@@ -144,7 +144,7 @@ public:
     int pitchToPixelY(double pitch) const;
     double pixelYToPitch(int tick) const;
 
-    void finishNoteGroupDrag();
+    void finishNoteGroupDrag(QMouseEvent* event);
     void finishNoteEventAdjustDrag();
     void selectNotes(double startTick, double endTick, double lowPitch, double highPitch, NoteSelectType selType);
     void handleSelectionClick();
@@ -188,7 +188,7 @@ private:
     void eraseNote(const QPointF& pos);
     engraving::Fraction roundToSubdivision(double wholeNote, bool down = true);
 
-    void pasteNotes(const QString& copiedNotes, engraving::Fraction pasteStartTick, engraving::Fraction lengthOffset, int pitchOffset,
+    std::vector<engraving::Note*> pasteNotes(const QString& copiedNotes, engraving::Fraction pasteStartTick, engraving::Fraction lengthOffset, int pitchOffset,
                     bool xIsOffset);
     std::vector<engraving::Note*> addNote(engraving::Fraction startTick, engraving::Fraction duration, int pitch, int track);
     bool cutChordRest(engraving::ChordRest* targetCr, int track, engraving::Fraction cutTick, engraving::ChordRest*& cr0,
