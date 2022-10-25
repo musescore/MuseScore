@@ -1756,10 +1756,10 @@ void GPConverter::addTapping(const GPNote* gpnote, Note* note)
         return;
     }
 
-    Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
-    art->setSymId(SymId::guitarRightHandTapping);
-    if (!note->score()->toggleArticulation(note, art)) {
-        delete art;
+    if (Chord* ch = toChord(note->parent())) {
+        Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
+        art->setTextType(Articulation::TextType::TAP);
+        ch->add(art);
     }
 }
 

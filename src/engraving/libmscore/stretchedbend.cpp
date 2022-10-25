@@ -282,7 +282,8 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
                 painter->drawLine(LineF(src, dest));
                 painter->setBrush(curColor());
                 painter->drawPolygon(m_arrowUp.translated(dest));
-                drawText(painter, dest, text);
+                /// TODO: remove substraction after fixing bRect
+                drawText(painter, dest - PointF(0, m_spatium * 0.5), text);
             }
 
             break;
@@ -317,7 +318,8 @@ void StretchedBend::layoutDraw(const bool layoutMode, mu::draw::Painter* painter
                 } else {
                     double textLabelOffset = (!bendUp && !m_releasedToInitial ? m_spatium : 0);
                     PointF textPoint = dest + PointF(textLabelOffset, -textLabelOffset);
-                    drawText(painter, textPoint, text);
+                    /// TODO: remove substraction after fixing bRect
+                    drawText(painter, textPoint - PointF(0, m_spatium * 0.5), text);
                 }
             }
 
