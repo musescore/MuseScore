@@ -281,7 +281,11 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
     if (!note->play()) {
         return;
     }
-    velo = note->customizeVelocity(velo);
+
+    if (note->userVelocity() != 0) {
+        velo = note->customizeVelocity(velo);
+    }
+
     NPlayEvent ev(ME_NOTEON, channel, pitch, velo);
     ev.setOriginatingStaff(staffIdx);
     ev.setTuning(note->tuning());
