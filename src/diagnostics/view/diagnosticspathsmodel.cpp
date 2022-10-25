@@ -54,7 +54,7 @@ void DiagnosticsPathsModel::load()
 
 void DiagnosticsPathsModel::openPath(const QString& path)
 {
-    interactive()->openUrl(QUrl(path));
+    interactive()->openUrl(QUrl::fromUserInput(path));
 }
 
 QVariant DiagnosticsPathsModel::data(const QModelIndex& index, int role) const
