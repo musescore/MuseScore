@@ -71,8 +71,7 @@
             <durationType>whole</durationType>
             <Note>
               <pitch>67</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               <fret>8</fret>
               <string>1</string>
               </Note>
@@ -89,8 +88,7 @@
             <durationType>whole</durationType>
             <Note>
               <pitch>55</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               <fret>10</fret>
               <string>4</string>
               </Note>
@@ -107,8 +105,7 @@
             <durationType>whole</durationType>
             <Note>
               <pitch>79</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               <fret>15</fret>
               <string>0</string>
               </Note>
@@ -125,8 +122,7 @@
             <durationType>whole</durationType>
             <Note>
               <pitch>91</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               <fret>27</fret>
               <string>0</string>
               </Note>
@@ -143,8 +139,7 @@
             <durationType>whole</durationType>
             <Note>
               <pitch>47</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               <fret>2</fret>
               <string>4</string>
               </Note>
@@ -161,8 +156,7 @@
             <durationType>whole</durationType>
             <Note>
               <pitch>57</pitch>
-              <tpc>-9</tpc>
-              <tpc2>17</tpc2>
+              <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
@@ -179,8 +173,7 @@
             <durationType>whole</durationType>
             <Note>
               <pitch>53</pitch>
-              <tpc>-9</tpc>
-              <tpc2>13</tpc2>
+              <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
               </Note>

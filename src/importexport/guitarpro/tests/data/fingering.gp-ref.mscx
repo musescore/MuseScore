@@ -74,8 +74,7 @@
                 <text>0</text>
                 </Fingering>
               <pitch>62</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               <fret>7</fret>
               <string>2</string>
               </Note>
@@ -87,8 +86,7 @@
                 <text>t</text>
                 </Fingering>
               <pitch>53</pitch>
-              <tpc>-9</tpc>
-              <tpc2>13</tpc2>
+              <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
               </Note>
@@ -100,8 +98,7 @@
                 <text>1</text>
                 </Fingering>
               <pitch>47</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               <fret>2</fret>
               <string>4</string>
               </Note>
@@ -113,8 +110,7 @@
                 <text>2</text>
                 </Fingering>
               <pitch>55</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               <fret>5</fret>
               <string>3</string>
               </Note>
@@ -130,8 +126,7 @@
                 <text>3</text>
                 </Fingering>
               <pitch>59</pitch>
-              <tpc>-9</tpc>
-              <tpc2>19</tpc2>
+              <tpc>19</tpc>
               <fret>4</fret>
               <string>2</string>
               </Note>
@@ -146,8 +141,7 @@
                 <text>4</text>
                 </Fingering>
               <pitch>51</pitch>
-              <tpc>-9</tpc>
-              <tpc2>23</tpc2>
+              <tpc>23</tpc>
               <fret>1</fret>
               <string>3</string>
               </Note>
@@ -162,8 +156,7 @@
                 <text>p</text>
                 </Fingering>
               <pitch>61</pitch>
-              <tpc>-9</tpc>
-              <tpc2>21</tpc2>
+              <tpc>21</tpc>
               <fret>6</fret>
               <string>2</string>
               </Note>
@@ -175,8 +168,7 @@
                 <text>i</text>
                 </Fingering>
               <pitch>52</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <fret>2</fret>
               <string>3</string>
               </Note>
@@ -192,8 +184,7 @@
                 <text>m</text>
                 </Fingering>
               <pitch>55</pitch>
-              <tpc>-9</tpc>
-              <tpc2>15</tpc2>
+              <tpc>15</tpc>
               <fret>5</fret>
               <string>3</string>
               </Note>
@@ -208,8 +199,7 @@
                 <text>a</text>
                 </Fingering>
               <pitch>56</pitch>
-              <tpc>-9</tpc>
-              <tpc2>22</tpc2>
+              <tpc>22</tpc>
               <fret>1</fret>
               <string>2</string>
               </Note>
@@ -221,8 +211,7 @@
                 <text>c</text>
                 </Fingering>
               <pitch>52</pitch>
-              <tpc>-9</tpc>
-              <tpc2>18</tpc2>
+              <tpc>18</tpc>
               <fret>2</fret>
               <string>3</string>
               </Note>
