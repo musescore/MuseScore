@@ -104,6 +104,12 @@ void InstrumentsRepository::load()
         LOGE() << "Could not load instruments from " << instrumentsPath << "!";
     }
 
+    for (const io::path_t& ordersPath : configuration()->scoreOrderListPaths()) {
+        if (!mu::engraving::loadInstrumentTemplates(ordersPath)) {
+            LOGE() << "Could not load orders from " << ordersPath << "!";
+        }
+    }
+
     for (const InstrumentGenre* genre : mu::engraving::instrumentGenres) {
         m_genres << genre;
     }
