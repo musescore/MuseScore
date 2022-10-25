@@ -3603,17 +3603,17 @@ void NotationInteraction::putRestToSelection()
     if (!is.duration().isValid() || is.duration().isZero() || is.duration().isMeasure()) {
         is.setDuration(DurationType::V_QUARTER);
     }
-    putRest(is.duration().type());
+    putRest(is.duration());
 }
 
-void NotationInteraction::putRest(DurationType duration)
+void NotationInteraction::putRest(Duration duration)
 {
     if (selection()->isNone()) {
         return;
     }
 
     startEdit();
-    score()->cmdEnterRest(Duration(duration));
+    score()->cmdEnterRest(duration);
     apply();
 }
 
