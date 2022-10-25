@@ -755,7 +755,7 @@ Bracket* System::createBracket(const LayoutContext& ctx, BracketItem* bi, size_t
     //
     if (span > 1
         || (bi->bracketSpan() == span)
-        || (span == 1 && score()->styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden)) && bi->bracketType() != BracketType::SQUARE
+        || (span == 1 && score()->styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden) && bi->bracketType() != BracketType::SQUARE)
         || (span == 1 && score()->styleB(Sid::alwaysShowSquareBracketsWhenEmptyStavesAreHidden)
             && bi->bracketType() == BracketType::SQUARE)) {
         //
