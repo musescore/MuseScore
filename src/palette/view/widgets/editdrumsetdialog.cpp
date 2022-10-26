@@ -142,13 +142,12 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
 
     const INotationInteractionPtr interaction = m_notation->interaction();
     INotationInteraction::HitElementContext context = interaction->hitElementContext();
-    const Measure* measure = toMeasure(context.element);
 
-    if (measure && context.staff) {
-        mu::engraving::Instrument* instrument = context.staff->part()->instrument(measure->tick());
+    if (context.element && context.staff) {
+        mu::engraving::Instrument* instrument = context.staff->part()->instrument(context.element->tick());
         m_instrumentKey.instrumentId = instrument->id();
         m_instrumentKey.partId = context.staff->part()->id();
-        m_instrumentKey.tick = measure->tick();
+        m_instrumentKey.tick = context.element->tick();
         m_originDrumset = *instrument->drumset();
     } else {
         NoteInputState state = m_notation->interaction()->noteInput()->state();
