@@ -432,6 +432,11 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
         }
     }
 
+    if (_needSetUpTempoMap) {
+        setUpTempoMap();
+        _needSetUpTempoMap = false;
+    }
+
     {
         MasterScore* ms = masterScore();
         CmdState& cs = ms->cmdState();

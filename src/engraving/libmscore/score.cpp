@@ -487,6 +487,11 @@ void Score::addMeasure(MeasureBase* m, MeasureBase* pos)
     _measures.add(m);
 }
 
+void Score::setUpTempoMapLater()
+{
+    _needSetUpTempoMap = true;
+}
+
 //---------------------------------------------------------
 //    setUpTempoMap
 //    update:
@@ -575,6 +580,9 @@ void Score::setUpTempoMap()
     if (tempomap()->empty()) {
         tempomap()->setTempo(0, Constants::defaultTempo);
     }
+
+    masterScore()->updateRepeatListTempo();
+    _needSetUpTempoMap = false;
 }
 
 //---------------------------------------------------------
@@ -4248,7 +4256,7 @@ void Score::appendPart(const InstrumentTemplate* t)
     }
     part->staves().front()->setBarLineSpan(static_cast<int>(part->nstaves()));
     undoInsertPart(part, static_cast<int>(n));
-    setUpTempoMap();
+    setUpTempoMapLater();
     masterScore()->rebuildMidiMapping();
 }
 
@@ -5510,10 +5518,12 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
 
     m_layoutOptions.updateFromStyle(style());
     m_layout.doLayoutRange(m_layoutOptions, st, et);
+
     if (_resetAutoplace) {
         _resetAutoplace = false;
         resetAutoplace();
     }
+
     if (_resetDefaults) {
         _resetDefaults = false;
         resetDefaults();
