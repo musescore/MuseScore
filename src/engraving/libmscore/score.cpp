@@ -5650,6 +5650,10 @@ void Score::createPaddingTable()
     // Temporary hack, because some padding is already constructed inside the lyrics themselves.
     _paddingTable[ElementType::BAR_LINE][ElementType::LYRICS] = 0.0 * spatium();
 
+    // Harmony
+    _paddingTable[ElementType::BAR_LINE][ElementType::HARMONY] = 0.5 * styleMM(Sid::minHarmonyDistance);
+    _paddingTable[ElementType::HARMONY][ElementType::HARMONY] = styleMM(Sid::minHarmonyDistance);
+
     // Chordlines
     _paddingTable[ElementType::CHORDLINE].fill(0.35 * spatium());
     for (auto& elem: _paddingTable) {
