@@ -151,7 +151,7 @@ public:
 
     // files
     virtual io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) = 0;
-    virtual io::path_t selectSavingFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter,
+    virtual io::path_t selectSavingFile(const QString& title, const io::path_t& path, const std::vector<std::string>& filter,
                                         bool confirmOverwrite = true) = 0;
 
     // dirs

@@ -61,6 +61,7 @@ static IInteractive::Result standardDialogResult(const RetVal<Val>& retVal)
     return IInteractive::Result(btn, showAgain);
 }
 
+#ifndef Q_OS_LINUX
 static QString filterToString(const std::vector<std::string>& filter)
 {
     QStringList result;
@@ -70,6 +71,8 @@ static QString filterToString(const std::vector<std::string>& filter)
 
     return result.join(";;");
 }
+
+#endif
 
 IInteractive::Result Interactive::question(const std::string& title, const std::string& text,
                                            const Buttons& buttons,
@@ -158,31 +161,31 @@ IInteractive::Result Interactive::error(const std::string& title, const Text& te
 mu::io::path_t Interactive::selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter)
 {
 #ifndef Q_OS_LINUX
-    QString path = QFileDialog::getOpenFileName(nullptr, title, dir.toQString(), filterToString(filter));
-    return path;
+    QString result = QFileDialog::getOpenFileName(nullptr, title, dir.toQString(), filterToString(filter));
+    return result;
 #else
     return provider()->selectOpeningFile(title.toStdString(), dir, filter).val;
 #endif
 }
 
-io::path_t Interactive::selectSavingFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter,
+io::path_t Interactive::selectSavingFile(const QString& title, const io::path_t& path, const std::vector<std::string>& filter,
                                          bool confirmOverwrite)
 {
 #ifndef Q_OS_LINUX
     QFileDialog::Options options;
     options.setFlag(QFileDialog::DontConfirmOverwrite, !confirmOverwrite);
-    QString path = QFileDialog::getSaveFileName(nullptr, title, dir.toQString(), filterToString(filter), nullptr, options);
-    return path;
+    QString result = QFileDialog::getSaveFileName(nullptr, title, path.toQString(), filterToString(filter), nullptr, options);
+    return result;
 #else
-    return provider()->selectSavingFile(title.toStdString(), dir, filter, confirmOverwrite).val;
+    return provider()->selectSavingFile(title.toStdString(), path, filter, confirmOverwrite).val;
 #endif
 }
 
 io::path_t Interactive::selectDirectory(const QString& title, const io::path_t& dir)
 {
 #ifndef Q_OS_LINUX
-    QString path = QFileDialog::getExistingDirectory(nullptr, title, dir.toQString());
-    return path;
+    QString result = QFileDialog::getExistingDirectory(nullptr, title, dir.toQString());
+    return result;
 #else
     return provider()->selectDirectory(title.toStdString(), dir).val;
 #endif
@@ -197,12 +200,12 @@ io::paths_t Interactive::selectMultipleDirectories(const QString& title, const i
         "startDir=" + dir.toQString()
     };
 
-    RetVal<Val> paths = open("musescore://interactive/selectMultipleDirectories?" + params.join("&").toStdString());
-    if (!paths.ret) {
+    RetVal<Val> result = open("musescore://interactive/selectMultipleDirectories?" + params.join("&").toStdString());
+    if (!result.ret) {
         return selectedDirectories;
     }
 
-    return io::pathsFromString(paths.val.toQString().toStdString());
+    return io::pathsFromString(result.val.toQString().toStdString());
 }
 
 QColor Interactive::selectColor(const QColor& color, const QString& title)
