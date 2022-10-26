@@ -75,7 +75,7 @@ public:
                       const framework::IInteractive::Options& options = {}) override;
 
     RetVal<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
-    RetVal<io::path_t> selectSavingFile(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter,
+    RetVal<io::path_t> selectSavingFile(const std::string& title, const io::path_t& path, const std::vector<std::string>& filter,
                                         bool confirmOverwrite) override;
     RetVal<io::path_t> selectDirectory(const std::string& title, const io::path_t& dir) override;
 
@@ -135,7 +135,7 @@ private:
     void fillStandardDialogData(QmlLaunchData* data, const QString& type, const QString& title, const framework::IInteractive::Text& text,
                                 const framework::IInteractive::ButtonDatas& buttons, int defBtn,
                                 const framework::IInteractive::Options& options) const;
-    void fillFileDialogData(QmlLaunchData* data, FileDialogType type, const std::string& title, const io::path_t& dir,
+    void fillFileDialogData(QmlLaunchData* data, FileDialogType type, const std::string& title, const io::path_t& path,
                             const std::vector<std::string>& filter = {}, bool confirmOverwrite = true) const;
 
     Ret toRet(const QVariant& jsr) const;
@@ -148,7 +148,7 @@ private:
                                    int defBtn = int(framework::IInteractive::Button::NoButton),
                                    const framework::IInteractive::Options& options = {});
 
-    RetVal<io::path_t> openFileDialog(FileDialogType type, const std::string& title, const io::path_t& dir,
+    RetVal<io::path_t> openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
                                       const std::vector<std::string>& filter = {}, bool confirmOverwrite = true);
 
     void closeObject(const ObjectInfo& obj);

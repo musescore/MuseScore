@@ -134,11 +134,11 @@ RetVal<io::path_t> InteractiveProvider::selectOpeningFile(const std::string& tit
     return openFileDialog(FileDialogType::SelectOpenningFile, title, dir, filter);
 }
 
-RetVal<io::path_t> InteractiveProvider::selectSavingFile(const std::string& title, const io::path_t& dir,
+RetVal<io::path_t> InteractiveProvider::selectSavingFile(const std::string& title, const io::path_t& path,
                                                          const std::vector<std::string>& filter,
                                                          bool confirmOverwrite)
 {
-    return openFileDialog(FileDialogType::SelectSavingFile, title, dir, filter, confirmOverwrite);
+    return openFileDialog(FileDialogType::SelectSavingFile, title, path, filter, confirmOverwrite);
 }
 
 RetVal<io::path_t> InteractiveProvider::selectDirectory(const std::string& title, const io::path_t& dir)
@@ -348,12 +348,11 @@ void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QStr
     data->setValue("params", params);
 }
 
-void InteractiveProvider::fillFileDialogData(QmlLaunchData* data, FileDialogType type, const std::string& title, const io::path_t& dir,
+void InteractiveProvider::fillFileDialogData(QmlLaunchData* data, FileDialogType type, const std::string& title, const io::path_t& path,
                                              const std::vector<std::string>& filter, bool confirmOverwrite) const
 {
     QVariantMap params;
     params["title"] = QString::fromStdString(title);
-    params["folder"] = QUrl::fromLocalFile(dir.toQString());
 
     if (type == FileDialogType::SelectOpenningFile || type == FileDialogType::SelectSavingFile) {
         QStringList filterList;
@@ -364,11 +363,16 @@ void InteractiveProvider::fillFileDialogData(QmlLaunchData* data, FileDialogType
         params["nameFilters"] = filterList;
         params["selectExisting"] = type == FileDialogType::SelectOpenningFile;
 
-        if (type == FileDialogType::SelectSavingFile) {
+        if (type == FileDialogType::SelectOpenningFile) {
+            // see QQuickPlatformFileDialog::FileMode::OpenFile
+            params["fileMode"] = 0;
+            params["folder"] = QUrl::fromLocalFile(path.toQString());
+        } else {
             // see QQuickPlatformFileDialog::FileMode::SaveFile
             params["fileMode"] = 2;
+            params["currentFile"] = QUrl::fromLocalFile(path.toQString());
 
-            if (confirmOverwrite) {
+            if (!confirmOverwrite) {
                 params["options"] = QFileDialog::DontConfirmOverwrite;
             }
         }
@@ -580,13 +584,13 @@ RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const Q
     return result;
 }
 
-RetVal<io::path_t> InteractiveProvider::openFileDialog(FileDialogType type, const std::string& title, const io::path_t& dir,
+RetVal<io::path_t> InteractiveProvider::openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
                                                        const std::vector<std::string>& filter, bool confirmOverwrite)
 {
     RetVal<io::path_t> result;
 
     QmlLaunchData* data = new QmlLaunchData();
-    fillFileDialogData(data, type, title, dir, filter, confirmOverwrite);
+    fillFileDialogData(data, type, title, path, filter, confirmOverwrite);
 
     emit fireOpenFileDialog(data);
 
