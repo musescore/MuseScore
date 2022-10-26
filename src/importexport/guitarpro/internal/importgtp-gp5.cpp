@@ -1236,16 +1236,16 @@ bool GuitarPro5::readNoteEffects(Note* note)
 
             switch (type) {
             case HARMONIC_MARK_ARTIFICIAL:
-                harmonicText = u"A.H.";
+                harmonicText = u"AH";
                 break;
             case HARMONIC_MARK_TAP:
-                harmonicText = u"T.H.";
+                harmonicText = u"TH";
                 break;
             case HARMONIC_MARK_PINCH:
-                harmonicText = u"P.H.";
+                harmonicText = u"PH";
                 break;
             case HARMONIC_MARK_SEMI:
-                harmonicText = u"S.H.";
+                harmonicText = u"SH";
                 break;
             }
 

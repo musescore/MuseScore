@@ -456,13 +456,13 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
         if (type == 1) {   //Natural
             note->setHarmonic(false);
         } else if (type == 3) { // Tapped
-            addTextToNote(u"T.H.", note);
+            addTextToNote(u"TH", note);
         } else if (type == 4) { //Pinch
-            addTextToNote(u"P.H.", note);
+            addTextToNote(u"PH", note);
         } else if (type == 5) { //semi
-            addTextToNote(u"S.H.", note);
+            addTextToNote(u"SH", note);
         } else {   //Artificial
-            addTextToNote(u"A.H.", note);
+            addTextToNote(u"AH", note);
             int harmonicFret = note->fret();
             harmonicFret += type - 10;
             Note* harmonicNote = Factory::createNote(note->chord());
