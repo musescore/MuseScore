@@ -765,6 +765,8 @@ void RepeatList::performJump(std::vector<RepeatListElementList>::const_iterator 
 ///
 void RepeatList::unwind()
 {
+    TRACEFUNC;
+
     DeleteAll(*this);
     clear();
     _jumpsTaken.clear();
