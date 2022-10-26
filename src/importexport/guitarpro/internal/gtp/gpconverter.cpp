@@ -110,11 +110,11 @@ static MarkerType markerType(const String& typeString)
 static String harmonicText(const GPBeat::HarmonicMarkType& type)
 {
     static std::map<GPBeat::HarmonicMarkType, String> names {
-        { GPBeat::HarmonicMarkType::Artificial, u"A.H." },
-        { GPBeat::HarmonicMarkType::Pinch, u"P.H." },
-        { GPBeat::HarmonicMarkType::Tap, u"T.H." },
-        { GPBeat::HarmonicMarkType::Semi, u"S.H." },
-        { GPBeat::HarmonicMarkType::FeedBack, u"Fdbk." },
+        { GPBeat::HarmonicMarkType::Artificial, u"AH" },
+        { GPBeat::HarmonicMarkType::Pinch, u"PH" },
+        { GPBeat::HarmonicMarkType::Tap, u"TH" },
+        { GPBeat::HarmonicMarkType::Semi, u"SH" },
+        { GPBeat::HarmonicMarkType::FeedBack, u"Fdbk" },
     };
 
     if (names.find(type) != names.end()) {

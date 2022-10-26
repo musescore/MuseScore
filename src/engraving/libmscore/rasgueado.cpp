@@ -139,7 +139,7 @@ PropertyValue Rasgueado::propertyDefault(Pid propertyId) const
         return score()->styleV(Sid::letRingFontStyle);
 
     case Pid::BEGIN_TEXT:
-        return PropertyValue::fromValue("rasg."); // TODO: fix the style
+        return PropertyValue::fromValue("rasg"); // TODO: fix the style
     case Pid::CONTINUE_TEXT:
     case Pid::END_TEXT:
         return "";
