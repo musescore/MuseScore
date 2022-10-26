@@ -176,7 +176,7 @@ public:
     virtual void addHairpinsToSelection(HairpinType type) = 0;
     virtual void addAccidentalToSelection(AccidentalType type) = 0;
     virtual void putRestToSelection() = 0;
-    virtual void putRest(DurationType duration) = 0;
+    virtual void putRest(Duration duration) = 0;
     virtual void addBracketsToSelection(BracketsType type) = 0;
     virtual void changeSelectedNotesArticulation(SymbolId articulationSymbolId) = 0;
     virtual void addGraceNotesToSelectedNotes(GraceNoteType type) = 0;
