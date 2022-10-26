@@ -75,6 +75,8 @@ public:
     bool isNewlyCreated() const override;
     void markAsNewlyCreated() override;
 
+    bool isImported() const override;
+
     void markAsUnsaved() override;
 
     ValNt<bool> needSave() const override;
@@ -116,8 +118,8 @@ private:
 
     async::Notification m_needSaveNotification;
 
-    /// true if the file has never been saved yet
-    bool m_isNewlyCreated = false;
+    bool m_isNewlyCreated = false; /// true if the file has never been saved yet
+    bool m_isImported = false;
 };
 }
 

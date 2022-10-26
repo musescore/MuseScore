@@ -156,6 +156,7 @@ Err EngravingProject::loadMscz(const MscReader& msc, bool ignoreVersionError)
 
 bool EngravingProject::writeMscz(MscWriter& writer, bool onlySelection, bool createThumbnail)
 {
+    TRACEFUNC;
     bool ok = m_masterScore->writeMscz(writer, onlySelection, createThumbnail);
     if (ok && !onlySelection) {
         m_masterScore->update();

@@ -55,6 +55,8 @@ public:
     virtual bool isNewlyCreated() const = 0;
     virtual void markAsNewlyCreated() = 0;
 
+    virtual bool isImported() const = 0;
+
     virtual void markAsUnsaved() = 0;
 
     virtual ValNt<bool> needSave() const = 0;
