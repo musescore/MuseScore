@@ -124,15 +124,18 @@ void ChordLine::layout()
         double vertOffset = 0.25 * spatium(); // one quarter of a space from the center line
         // Get chord shape
         Shape chordShape = chord()->shape();
-        // ...but remove chordLines, otherwise we are spacing chordLines against themselves
-        auto iter = chordShape.begin();
-        while (iter != chordShape.end()) {
-            if (iter->toItem && iter->toItem->isChordLine()) {
-                iter = chordShape.erase(iter);
-            } else {
-                ++iter;
+        // ...but remove from the shape items that the chordline shouldn't try to avoid
+        // (especially the chordline itself)
+        mu::remove_if(chordShape, [](ShapeElement& shapeEl){
+            if (!shapeEl.toItem) {
+                return true;
             }
-        }
+            const EngravingItem* item = shapeEl.toItem;
+            if (item->isChordLine() || item->isHarmony() || item->isLyrics()) {
+                return true;
+            }
+            return false;
+        });
         x += isToTheLeft() ? -chordShape.left() - horOffset : chordShape.right() + horOffset;
         y += isBelow() ? vertOffset : -vertOffset;
         setPos(x, y);
