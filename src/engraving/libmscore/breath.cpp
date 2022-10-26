@@ -267,7 +267,7 @@ void Breath::added()
         return;
     }
 
-    score()->setUpTempoMap();
+    score()->setUpTempoMapLater();
 }
 
 void Breath::removed()
@@ -276,6 +276,6 @@ void Breath::removed()
         return;
     }
 
-    score()->setUpTempoMap();
+    score()->setUpTempoMapLater();
 }
 }

@@ -422,6 +422,7 @@ private:
     int _mscVersion { MSCVERSION };     ///< version of current loading *.msc file
 
     bool _isOpen { false };
+    bool _needSetUpTempoMap { true };
 
     std::map<String, String> _metaTags;
 
@@ -831,7 +832,10 @@ public:
     Segment* tick2leftSegment(const Fraction& tick, bool useMMrest = false) const;
     Segment* tick2rightSegment(const Fraction& tick, bool useMMrest = false) const;
     Segment* tick2leftSegmentMM(const Fraction& tick) { return tick2leftSegment(tick, /* useMMRest */ true); }
+
+    void setUpTempoMapLater();
     void setUpTempoMap();
+
     EngravingItem* nextElement();
     EngravingItem* prevElement();
     ChordRest* cmdNextPrevSystem(ChordRest*, bool);

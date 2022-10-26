@@ -299,7 +299,7 @@ bool LayoutBreak::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::PAUSE:
         setPause(v.toDouble());
-        score()->setUpTempoMap();
+        score()->setUpTempoMapLater();
         break;
     case Pid::START_WITH_LONG_NAMES:
         setStartWithLongNames(v.toBool());
@@ -349,7 +349,7 @@ void LayoutBreak::added()
         return;
     }
 
-    score()->setUpTempoMap();
+    score()->setUpTempoMapLater();
 }
 
 void LayoutBreak::removed()
@@ -358,6 +358,6 @@ void LayoutBreak::removed()
         return;
     }
 
-    score()->setUpTempoMap();
+    score()->setUpTempoMapLater();
 }
 }
