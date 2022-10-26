@@ -269,6 +269,8 @@ void Score::linkMeasures(Score* score)
 
 std::shared_ptr<mu::draw::Pixmap> Score::createThumbnail()
 {
+    TRACEFUNC;
+
     LayoutMode mode = layoutMode();
     setLayoutMode(LayoutMode::PAGE);
     doLayout();
