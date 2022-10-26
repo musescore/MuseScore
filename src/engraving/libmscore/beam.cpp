@@ -1376,7 +1376,8 @@ void Beam::setValidBeamPositions(int& dictator, int& pointer, int beamCountD, in
                     continue;
                 }
                 // we can use dictator beam position because all of the notes have the same beam position
-                if (currOffset = findValidBeamOffset(dictator, cr->beams(), staffLines, isStartDictator, isAscending, isFlat)) {
+                currOffset = findValidBeamOffset(dictator, cr->beams(), staffLines, isStartDictator, isAscending, isFlat);
+                if (currOffset) {
                     break;
                 }
             }
