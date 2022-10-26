@@ -70,17 +70,12 @@ bool AccessibilityConfiguration::enabled() const
         return false;
     }
 
-#ifdef BUILD_DIAGNOSTICS
-    return true;
-#else
-
     if (!active()) {
         return false;
     }
 
     //! NOTE Accessibility available if navigation is used
     return navigationController()->activeSection() != nullptr;
-#endif
 }
 
 bool AccessibilityConfiguration::active() const

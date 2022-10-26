@@ -38,9 +38,6 @@ using namespace mu::framework;
 
 void UpdateScenario::delayedInit()
 {
-    //! NOTE: temporary disabled auto checking
-    return;
-
     if (configuration()->needCheckForUpdate()) {
         QTimer::singleShot(AUTO_CHECK_UPDATE_INTERVAL, [this]() {
             doCheckForUpdate(false);
