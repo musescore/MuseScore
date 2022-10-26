@@ -291,9 +291,9 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
 void MeasureBaseList::fixupSystems()
 {
     MeasureBase* m = _first;
-    while (m != _last) {
+    while (m && m != _last) {
         m = m->next();
-        if (m->prev()->system() && !m->system()) {
+        if (m && m->prev()->system() && !m->system()) {
             m->setParent(m->prev()->system());
             if (m->isMeasure() && !toMeasure(m)->hasMMRest()) {
                 m->system()->appendMeasure(m);
