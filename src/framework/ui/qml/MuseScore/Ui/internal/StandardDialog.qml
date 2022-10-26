@@ -46,8 +46,8 @@ StyledDialogView {
 
     margins: 16
 
-    onOpened: {
-        content.onOpened()
+    onNavigationActivateRequested: {
+        content.focusOnFirst()
     }
 
     StandardDialogPanel {

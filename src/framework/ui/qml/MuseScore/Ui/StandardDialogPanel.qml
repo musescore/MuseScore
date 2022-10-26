@@ -46,12 +46,11 @@ RowLayout {
 
     signal clicked(int buttonId, bool showAgain)
 
-    function onOpened() {
+    function focusOnFirst() {
         var btn = root.firstFocusBtn()
         btn.navigation.requestActive()
 
-        accessibleInfo.ignored = false
-        accessibleInfo.focused = true
+        accessibleInfo.readInfo()
     }
 
     function firstFocusBtn() {
@@ -106,6 +105,16 @@ RowLayout {
         visualItem: root
         role: MUAccessible.Button
         name: root.title + " " + root.text + " " + root.firstFocusBtn().text
+
+        function readInfo() {
+            accessibleInfo.ignored = false
+            accessibleInfo.focused = true
+        }
+
+        function resetFocus() {
+            accessibleInfo.ignored = true
+            accessibleInfo.focused = false
+        }
     }
 
     spacing: 27
@@ -202,11 +211,12 @@ RowLayout {
                 navigation.column: model.index
 
                 //! NOTE See description about AccessibleItem { id: accessibleInfo }
-                accessible.ignored: true
+                accessible.ignored: this === root.firstFocusBtn()
                 navigation.onActiveChanged: {
                     if (!navigation.active) {
                         accessible.ignored = false
-                        accessibleInfo.ignored = true
+                        accessible.focused = true
+                        accessibleInfo.resetFocus()
                     }
                 }
 

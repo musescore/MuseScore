@@ -58,7 +58,7 @@ StyledDialogView {
         }
     }
 
-    onOpened: {
+    onNavigationActivateRequested: {
         chooseInstrumentsAndTemplatePage.focusOnSelected()
     }
 

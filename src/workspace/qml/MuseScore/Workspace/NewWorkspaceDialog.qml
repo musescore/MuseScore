@@ -46,7 +46,7 @@ StyledDialogView {
         workspaceModel.load(root.workspaceNames)
     }
 
-    onOpened: {
+    onNavigationActivateRequested: {
         workspaceNameField.navigation.requestActive()
     }
 
