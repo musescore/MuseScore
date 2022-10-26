@@ -183,7 +183,7 @@ std::string AppShellConfiguration::musicXMLLicenseDeedUrl() const
 
 std::string AppShellConfiguration::museScoreVersion() const
 {
-    return VERSION;
+    return VERSION + std::string(".") + BUILD_NUMBER;
 }
 
 std::string AppShellConfiguration::museScoreRevision() const
