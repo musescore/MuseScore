@@ -2319,9 +2319,8 @@ void Segment::createShape(staff_idx_t staffIdx)
         if (e->isHarmony()) {
             // use same spacing calculation as for chordrest
             toHarmony(e)->layout1();
-            const double margin = styleP(Sid::minHarmonyDistance) * 0.5;
-            double x1 = e->bbox().x() - margin + e->pos().x();
-            double x2 = e->bbox().x() + e->bbox().width() + margin + e->pos().x();
+            double x1 = e->bbox().x() + e->pos().x();
+            double x2 = e->bbox().x() + e->bbox().width() + e->pos().x();
             s.addHorizontalSpacing(e, x1, x2);
         } else if (!e->isRehearsalMark()
                    && !e->isFretDiagram()
