@@ -202,7 +202,7 @@ bool Score::checkKeys()
 
 void Measure::fillGap(const Fraction& pos, const Fraction& len, track_idx_t track, const Fraction& stretch, bool useGapRests)
 {
-    LOGD("measure %6d pos %d, len %d/%d, stretch %d/%d track %zu",
+    LOGN("measure %6d pos %d, len %d/%d, stretch %d/%d track %zu",
          tick().ticks(),
          pos.ticks(),
          len.numerator(), len.denominator(),
@@ -252,11 +252,11 @@ void Measure::checkMeasure(staff_idx_t staffIdx, bool useGapRests)
             currentPos    = seg->rtick() * stretch;
 
             if (currentPos < expectedPos) {
-                LOGD("in measure overrun %6d at %d-%d track %zu", tick().ticks(),
+                LOGN("in measure overrun %6d at %d-%d track %zu", tick().ticks(),
                      (currentPos / stretch).ticks(), (expectedPos / stretch).ticks(), track);
                 break;
             } else if (currentPos > expectedPos) {
-                LOGD("in measure underrun %6d at %d-%d track %zu", tick().ticks(),
+                LOGN("in measure underrun %6d at %d-%d track %zu", tick().ticks(),
                      (currentPos / stretch).ticks(), (expectedPos / stretch).ticks(), track);
                 fillGap(expectedPos, currentPos - expectedPos, track, stretch, useGapRests);
             }
