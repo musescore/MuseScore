@@ -171,6 +171,9 @@ void RepeatList::update(bool expand)
 void RepeatList::updateTempo()
 {
     const TempoMap* tl = _score->tempomap();
+    if (tl->empty()) {
+        return;
+    }
 
     int utick = 0;
     double t  = 0;
