@@ -46,7 +46,7 @@ StyledDialogView {
         exportModel.load()
     }
 
-    onOpened: {
+    onNavigationActivateRequested: {
         exportScoresListView.focusOnFirst()
     }
 

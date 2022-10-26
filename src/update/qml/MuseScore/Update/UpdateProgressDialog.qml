@@ -52,7 +52,7 @@ StyledDialogView {
         updateModel.load(root.mode)
     }
 
-    onOpened: {
+    onNavigationActivateRequested: {
         progressBar.navigation.requestActive()
     }
 
