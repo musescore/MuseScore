@@ -4128,32 +4128,6 @@ void Measure::checkTrailer()
 }
 
 //---------------------------------------------------------
-//   hasAccidental
-//---------------------------------------------------------
-
-static bool hasAccidental(Segment* s)
-{
-    Score* score = s->score();
-    for (track_idx_t track = 0; track < s->score()->ntracks(); ++track) {
-        Staff* staff = score->staff(track2staff(track));
-        if (!staff->show()) {
-            continue;
-        }
-        EngravingItem* e = s->element(track);
-        if (!e || !e->isChord()) {
-            continue;
-        }
-        Chord* c = toChord(e);
-        for (Note* n : c->notes()) {
-            if (n->accidental() && n->accidental()->addToSkyline()) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-//---------------------------------------------------------
 //   computeWidth
 //   Computes the width of a measure depending on note durations
 //   (and given the shortest note of the system minTicks) and
@@ -4434,7 +4408,7 @@ double Measure::computeFirstSegmentXPosition(Segment* segment)
     if (x <= 0) { // If that doesn't succeed (e.g. first bar) then just use left-margins
         x = segment->minLeft(ls);
         if (segment->isChordRestType()) {
-            x += score()->styleMM(hasAccidental(segment) ? Sid::barAccidentalDistance : Sid::barNoteDistance);
+            x += score()->styleMM(segment->hasAccidentals() ? Sid::barAccidentalDistance : Sid::barNoteDistance);
         } else if (segment->isClefType() || segment->isHeaderClefType()) {
             x += score()->styleMM(Sid::clefLeftMargin);
         } else if (segment->isKeySigType()) {

@@ -26,6 +26,7 @@
 #include "rw/xml.h"
 #include "types/typesconv.h"
 
+#include "accidental.h"
 #include "barline.h"
 #include "beam.h"
 #include "chord.h"
@@ -2703,11 +2704,11 @@ bool Segment::hasAccidentals() const
         return false;
     }
     for (EngravingItem* e : elist()) {
-        if (!e || !e->isChord()) {
+        if (!e || !e->isChord() || (e->staff() && !e->staff()->show())) {
             continue;
         }
         for (Note* note : toChord(e)->notes()) {
-            if (note->accidental()) {
+            if (note->accidental() && note->accidental()->addToSkyline()) {
                 return true;
             }
         }
