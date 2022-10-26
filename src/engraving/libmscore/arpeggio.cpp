@@ -233,7 +233,7 @@ double Arpeggio::calcBottom() const
         return bottom;
     }
     default: {
-        return bottom + spatium() / 2;
+        return bottom - top + spatium() / 2;
     }
     }
 }
@@ -386,8 +386,8 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
 std::vector<PointF> Arpeggio::gripsPositions(const EditData&) const
 {
     const PointF pp(pagePos());
-    PointF p1(0.0, -_userLen1);
-    PointF p2(0.0, _height + _userLen2);
+    PointF p1(_bbox.width() / 2, _bbox.top());
+    PointF p2(_bbox.width() / 2, _bbox.bottom());
     return { p1 + pp, p2 + pp };
 }
 
