@@ -690,6 +690,11 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
                     if (!cr) {
                         continue;
                     }
+                    // Check if requested cross-staff is possible
+                    if (cr->staffMove() || cr->storedStaffMove()) {
+                        cr->checkStaffMoveValidity();
+                    }
+
                     double m = staff->staffMag(&segment);
                     if (cr->isSmall()) {
                         m *= score->styleD(Sid::smallNoteMag);
