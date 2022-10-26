@@ -2809,6 +2809,12 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
         }
     }
 
+    if (!preserveTies) {
+        // we're not preserving slurs and ties where they are, so the endpoints need to be either
+        // moved or the slur has to be deleted
+        reconnectSlurs(mbStart, mbEnd);
+    }
+
     // get the last deleted timesig & keysig in order to restore after deletion
     KeySigEvent lastDeletedKeySigEvent;
     TimeSig* lastDeletedSig   = 0;
@@ -2907,6 +2913,128 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
 
     undoInsertTime(mbStart->tick(), -(mbEnd->endTick() - mbStart->tick()));
     _is.setSegment(0);          // invalidate position
+}
+
+void Score::reconnectSlurs(MeasureBase* mbStart, MeasureBase* mbEnd)
+{
+    // Reconnect or remove slurs that intersect with these deleted measures
+    Fraction sTick = mbStart->tick();
+    Fraction eTick = mbEnd->tick();
+    for (auto overlappingSlur : spannerMap().findOverlapping(sTick.ticks(), eTick.ticks())) {
+        Spanner* sp = overlappingSlur.value;
+        if (!sp->isSlur()) {
+            continue;
+        }
+        ChordRest* cr1 = sp->startCR();
+        ChordRest* cr2 = sp->endCR();
+        if (!cr1 || !cr2) {
+            // this is an invalid slur
+            continue;
+        }
+        MeasureBase* m = mbStart;
+        bool adjust1 = false;
+        bool adjust2 = false;
+        Measure* measure1 = cr1->measure();
+        Measure* measure2 = cr2->measure();
+        do {
+            adjust1 = adjust1 ? true : measure1 == m;
+            adjust2 = adjust2 ? true : measure2 == m;
+            if (m == mbEnd) {
+                break;
+            } else {
+                m = m->next();
+            }
+        } while (m && !(adjust1 && adjust2));
+        if (adjust1 && adjust2) {
+            // if both endpoints of this slur are inside this deleted range, remove the slur.
+            undoRemoveElement(sp);
+            continue;
+        } else if (adjust1) {
+            // endpoint 1 is in deleted range. move endpoint forward to first non-deleted CR after range
+            Measure* mNext = mbEnd->next() && mbEnd->next()->isMeasure() ? toMeasure(mbEnd->next()) : nullptr;
+            if (!mNext) {
+                undoRemoveElement(sp);
+                continue;
+            }
+            ChordRest* firstAvailableCr = nullptr;
+            // search for last cr in this voice
+            Segment* seg = mNext->first(SegmentType::ChordRest);
+            int spTrack = sp->track();
+            ChordRest* spEndCr = sp->endCR();
+            Fraction spEndCrTick = spEndCr->tick();
+            while (seg) {
+                firstAvailableCr = seg->cr(spTrack);
+                if (!firstAvailableCr || !firstAvailableCr->isChord()) {
+                    seg = seg->next(SegmentType::ChordRest);
+                    continue;
+                }
+                auto gracesBefore = toChord(firstAvailableCr)->graceNotesBefore();
+                if (firstAvailableCr->tick() > spEndCrTick) {
+                    // we would create a negative-length slur. remove it entirely.
+                    undoRemoveElement(sp);
+                    break;
+                } else if (spEndCr == firstAvailableCr) {
+                    // this would be a zero-length slur, but a possibility exists that this cr has grace after
+                    if (gracesBefore.empty()) {
+                        undoRemoveElement(sp);
+                        break;
+                    }
+                }
+                if (!gracesBefore.empty()) {
+                    firstAvailableCr = gracesBefore.front();
+                }
+                Spanner* newSp = toSpanner(sp->clone());
+                newSp->setStartElement(firstAvailableCr);
+                newSp->setTick(firstAvailableCr->tick());
+                undoChangeElement(sp, newSp);
+                break;
+            }
+        } else if (adjust2) {
+            // endpoint 2 is in deleted range. move endpoint backward to last non-deleted CR before range
+            Measure* mPrev = mbStart->prev() && mbStart->prev()->isMeasure() ? toMeasure(mbStart->prev()) : nullptr;
+            if (!mPrev) {
+                undoRemoveElement(sp);
+                continue;
+            }
+            ChordRest* firstAvailableCr = nullptr;
+            // search for last cr in this voice
+            Segment* seg = mPrev->last();
+            if (seg->segmentType() != SegmentType::ChordRest) {
+                seg = seg->prev(SegmentType::ChordRest);
+            }
+            ChordRest* spStartCr = sp->startCR();
+            Fraction spStartCrTick = spStartCr->tick();
+            while (seg) {
+                firstAvailableCr = seg->cr(sp->track2());
+                if (!firstAvailableCr || !firstAvailableCr->isChord()) {
+                    seg = seg->prev(SegmentType::ChordRest);
+                    continue;
+                }
+                auto gracesAfter = toChord(firstAvailableCr)->graceNotesAfter();
+                if (firstAvailableCr->tick() < spStartCrTick) {
+                    // we would create a negative-length slur. remove it entirely.
+                    undoRemoveElement(sp);
+                    break;
+                } else if (spStartCr == toChordRest(firstAvailableCr)) {
+                    // this would be a zero-length slur, but a possibility exists that this cr has grace after
+                    if (gracesAfter.empty()) {
+                        undoRemoveElement(sp);
+                        break;
+                    }
+                }
+                if (!gracesAfter.empty()) {
+                    firstAvailableCr = gracesAfter.back();
+                }
+                Spanner* newSp = toSpanner(sp->clone());
+                newSp->setEndElement(firstAvailableCr);
+                newSp->setTick2(firstAvailableCr->tick());
+                undoChangeElement(sp, newSp);
+                break;
+            }
+        } else {
+            // both of the endpoints are outside of the deleted range. there is no reason to change or delete anything
+        }
+    }
 }
 
 //---------------------------------------------------------
