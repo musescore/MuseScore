@@ -816,12 +816,12 @@ void Articulation::doAutoplace()
 void Articulation::setupShowOnTabStyles()
 {
     /// staccato
-    if (isStaccato()) {
+    if (_symId == SymId::articStaccatoAbove) {
         m_showOnTabStyles = { Sid::staccatoShowTabCommon, Sid::staccatoShowTabSimple };
     }
 
     /// accent
-    if (isAccent() || isMarcato()) {
+    if (_symId == SymId::articAccentAbove || _symId == SymId::articMarcatoAbove) {
         m_showOnTabStyles = { Sid::accentShowTabCommon, Sid::accentShowTabSimple };
     }
 
