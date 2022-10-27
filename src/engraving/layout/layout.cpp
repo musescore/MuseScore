@@ -516,13 +516,15 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
         }
         m->layout2();
     }
+
+    const double lm = ctx.page->lm();
+    const double tm = ctx.page->tm() + ctx.score()->styleMM(Sid::staffUpperBorder);
+    const double rm = ctx.page->rm();
+    const double bm = ctx.page->bm() + ctx.score()->styleMM(Sid::staffLowerBorder);
+
     ctx.page->setPos(0, 0);
-    system->setPos(ctx.page->lm(), ctx.page->tm() + ctx.score()->styleMM(Sid::staffUpperBorder));
-    ctx.page->setWidth(system->width() + system->pos().x());
-    // Set buffer space after the last system to avoid problems with mouse input.
-    // Mouse input divides space between systems equally (see Score::searchSystem),
-    // hence the choice of the value.
-    const double buffer = 0.5 * ctx.score()->styleS(Sid::maxSystemDistance).val() * ctx.score()->spatium();
-    ctx.page->setHeight(system->height() + system->pos().y() + buffer);
+    system->setPos(lm, tm);
+    ctx.page->setWidth(lm + system->width() + rm);
+    ctx.page->setHeight(tm + system->height() + bm);
     ctx.page->invalidateBspTree();
 }
