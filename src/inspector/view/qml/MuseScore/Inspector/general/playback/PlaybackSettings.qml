@@ -37,67 +37,18 @@ Column {
     width: parent.width
     spacing: 12
 
-    Connections {
-        target: proxyModel
-
-        function onIsEmptyChanged() {
-            var hasGeneralSettings = proxyModel.hasGeneralSettings
-            var hasDynamicsSettings = proxyModel.hasDynamicsSettings
-
-            if (hasGeneralSettings && !hasDynamicsSettings) {
-                tabBar.currentIndex = 0
-            } else if (!hasGeneralSettings && hasDynamicsSettings) {
-                tabBar.currentIndex = 1
-            }
-        }
-    }
 
     function forceFocusIn() {
-        tabBar.focusOnCurrentTab()
+        generalSettings.focusOnCurrentTab()
     }
 
-    InspectorTabBar {
-        id: tabBar
+    PlaybackGeneralSettings {
+        id: generalSettings
+        height: implicitHeight
 
-        InspectorTabButton {
-            text: qsTrc("inspector", "General")
+        proxyModel: root.proxyModel
 
-            navigation.name: "GeneralSettingsTab"
-            navigation.panel: root.navigationPanel
-            navigation.row: 1
-        }
-
-        InspectorTabButton {
-            text: qsTrc("inspector", "Dynamics")
-
-            navigation.name: "DynamicsSettingsTab"
-            navigation.panel: root.navigationPanel
-            navigation.row: 2
-        }
-    }
-
-    StackLayout {
-        width: parent.width
-        currentIndex: tabBar.currentIndex
-
-        height: itemAt(currentIndex).implicitHeight
-
-        PlaybackGeneralSettings {
-            height: implicitHeight
-
-            proxyModel: root.proxyModel
-
-            navigationPanel: root.navigationPanel
-            navigationRowStart: 1000
-        }
-
-        PlaybackDynamicsSettings {
-            height: implicitHeight
-
-            proxyModel: root.proxyModel
-
-            navigationPanel: root.navigationPanel
-            navigationRowStart: 2000
-        }
+        navigationPanel: root.navigationPanel
+        navigationRowStart: 1000
     }
 }
