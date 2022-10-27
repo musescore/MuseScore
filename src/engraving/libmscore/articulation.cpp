@@ -98,10 +98,10 @@ Articulation::Articulation(ChordRest* parent)
 void Articulation::setSymId(SymId id)
 {
     _symId  = id;
+    computeCategories();
     setupShowOnTabStyles();
     _anchor = ArticulationAnchor(propertyDefault(Pid::ARTICULATION_ANCHOR).toInt());
     m_textType = TextType::NO_TEXT;
-    computeCategories();
 }
 
 //---------------------------------------------------------
@@ -816,12 +816,12 @@ void Articulation::doAutoplace()
 void Articulation::setupShowOnTabStyles()
 {
     /// staccato
-    if (_symId == SymId::articStaccatoAbove) {
+    if (isStaccato()) {
         m_showOnTabStyles = { Sid::staccatoShowTabCommon, Sid::staccatoShowTabSimple };
     }
 
     /// accent
-    if (_symId == SymId::articAccentAbove || _symId == SymId::articMarcatoAbove) {
+    if (isAccent() || isMarcato()) {
         m_showOnTabStyles = { Sid::accentShowTabCommon, Sid::accentShowTabSimple };
     }
 
