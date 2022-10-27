@@ -51,11 +51,10 @@ FretCircle::~FretCircle()
 void FretCircle::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
-    constexpr double circleWidth = 0.15;
     painter->save();
     painter->setPen(mu::draw::Pen(curColor(), spatium() * circleWidth));
     painter->setBrush(mu::draw::BrushStyle::NoBrush);
-    painter->drawEllipse(ellipseRect());
+    painter->drawEllipse(m_rect);
     painter->restore();
 }
 
@@ -68,10 +67,13 @@ void FretCircle::layout()
     _skipDraw = false;
     if (!tabEllipseEnabled()) {
         _skipDraw = true;
+        setbbox(RectF());
         return;
     }
 
-    setbbox(ellipseRect());
+    double lw = spatium() * circleWidth / 2;
+    m_rect = ellipseRect();
+    setbbox(m_rect.adjusted(-lw, -lw, lw, lw));
 }
 
 //---------------------------------------------------------
@@ -127,7 +129,6 @@ RectF FretCircle::ellipseRect() const
     }
 
     elRect.translate(-offsetX * 0.5, up->pos().y());
-
     return elRect;
 }
 }
