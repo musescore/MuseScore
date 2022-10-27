@@ -378,7 +378,7 @@ struct ZipContainer::Impl {
     uint start_of_directory = 0;
     ZipContainer::Status status = ZipContainer::NoError;
 
-    ZipContainer::CompressionPolicy compressionPolicy;
+    ZipContainer::CompressionPolicy compressionPolicy = ZipContainer::AlwaysCompress;
 
     enum EntryType {
         Directory, File, Symlink
