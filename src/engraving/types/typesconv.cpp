@@ -249,14 +249,14 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::VBOX,                 "VBox",                 TranslatableString("engraving", "Vertical frame") },
     { ElementType::TBOX,                 "TBox",                 TranslatableString("engraving", "Text frame") },
     { ElementType::FBOX,                 "FBox",                 TranslatableString("engraving", "Fretboard diagram frame") },
-    { ElementType::ACTION_ICON,          "ActionIcon",           TranslatableString("engraving", "Action icon") },
+    { ElementType::ACTION_ICON,          "ActionIcon",           TranslatableString::untranslatable("Action icon") },
     { ElementType::OSSIA,                "Ossia",                TranslatableString("engraving", "Ossia") },
     { ElementType::BAGPIPE_EMBELLISHMENT, "BagpipeEmbellishment", TranslatableString("engraving", "Bagpipe embellishment") },
     { ElementType::STICKING,             "Sticking",             TranslatableString("engraving", "Sticking") },
-    { ElementType::GRACE_NOTES_GROUP,    "GraceNotesGroup",      TranslatableString("engraving", "Grace notes group") },
-    { ElementType::FRET_CIRCLE,          "FretCircle",           TranslatableString("engraving", "Fret circle") },
-    { ElementType::ROOT_ITEM,            "RootItem",             TranslatableString("engraving", "Root item") },
-    { ElementType::DUMMY,                "Dummy",                TranslatableString("engraving", "Dummy") },
+    { ElementType::GRACE_NOTES_GROUP,    "GraceNotesGroup",      TranslatableString::untranslatable("Grace notes group") },
+    { ElementType::FRET_CIRCLE,          "FretCircle",           TranslatableString::untranslatable("Fret circle") },
+    { ElementType::ROOT_ITEM,            "RootItem",             TranslatableString::untranslatable("Root item") },
+    { ElementType::DUMMY,                "Dummy",                TranslatableString::untranslatable("Dummy") },
 };
 
 const TranslatableString& TConv::userName(ElementType v)
