@@ -36,7 +36,7 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 FretCircle::FretCircle(Chord* ch)
-    : EngravingItem(ElementType::FRET_CIRCLE, ch), m_chord(ch)
+    : EngravingItem(ElementType::FRET_CIRCLE, ch, ElementFlag::NOT_SELECTABLE), m_chord(ch)
 {
 }
 
