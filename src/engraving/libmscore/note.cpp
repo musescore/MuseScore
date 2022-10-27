@@ -2298,7 +2298,7 @@ void Note::layout()
         bbox().setRect(0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
 
         if (_ghost && score()->styleB(Sid::parenthesisHeadGhostNote)) {
-            bbox().setWidth(w + symWidth(SymId::noteheadParenthesisLeft) + symWidth(SymId::noteheadParenthesisRight) * 1.25);
+            bbox().setWidth(w + symWidth(SymId::noteheadParenthesisLeft) + symWidth(SymId::noteheadParenthesisRight));
         } else {
             bbox().setWidth(w);
         }
@@ -2396,7 +2396,7 @@ void Note::layout2()
                 }
 
                 if (score()->styleB(Sid::parenthesisHeadGhostNote) && staff()->isTabStaff(e->tick())) {
-                    e->movePosX(w + symWidth(SymId::noteheadParenthesisRight) * 1.5);
+                    e->movePosX(w + symWidth(SymId::noteheadParenthesisRight));
                 } else {
                     e->movePosX(w);
                 }
