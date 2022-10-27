@@ -540,6 +540,10 @@
         </Measure>
       <Measure>
         <voice>
+          <TimeSig>
+            <sigN>3</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           <Spanner type="HairPin">
             <prev>
               <location>
@@ -572,8 +576,8 @@
             <accidental>1</accidental>
             </KeySig>
           <Beam>
-            <l1>30</l1>
-            <l2>32</l2>
+            <l1>24</l1>
+            <l2>26</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -601,6 +605,10 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
+          <Beam>
+            <l1>30</l1>
+            <l2>32</l2>
+            </Beam>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
@@ -615,10 +623,6 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <l1>32</l1>
-            <l2>32</l2>
-            </Beam>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
@@ -635,6 +639,10 @@
               <tpc>16</tpc>
               </Note>
             </Chord>
+          <Beam>
+            <l1>32</l1>
+            <l2>32</l2>
+            </Beam>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
@@ -706,10 +714,6 @@
           <KeySig>
             <accidental>-1</accidental>
             </KeySig>
-          <TimeSig>
-            <sigN>3</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
           <Chord>
             <dots>1</dots>
             <durationType>quarter</durationType>
@@ -1100,6 +1104,11 @@
         </Measure>
       <Measure>
         <voice>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>3</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           <Chord>
             <linkedMain/>
             <durationType>half</durationType>
@@ -1229,11 +1238,6 @@
             <linkedMain/>
             <accidental>-1</accidental>
             </KeySig>
-          <TimeSig>
-            <linkedMain/>
-            <sigN>3</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
           <Chord>
             <linkedMain/>
             <dots>1</dots>
@@ -1641,6 +1645,12 @@
           </Measure>
         <Measure>
           <voice>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>3</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
             <Chord>
               <linked>
                 </linked>
@@ -1791,12 +1801,6 @@
                 </linked>
               <accidental>-1</accidental>
               </KeySig>
-            <TimeSig>
-              <linked>
-                </linked>
-              <sigN>3</sigN>
-              <sigD>4</sigD>
-              </TimeSig>
             <Chord>
               <linked>
                 </linked>
