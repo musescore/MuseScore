@@ -36,6 +36,8 @@ public:
 private:
 
     Chord* m_chord = nullptr;
+    static constexpr double circleWidth = 0.15;
+    mu::RectF m_rect;
     friend class Factory;
     FretCircle(Chord* ch = 0);
     FretCircle* clone() const override { return new FretCircle(*this); }
