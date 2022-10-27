@@ -53,15 +53,6 @@ Item {
 
             model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_DYNAMIC) : null
         }
-
-        SeparatorLine { anchors.margins: -12 }
-
-        HairpinsExpandableBlank {
-            navigation.panel: root.navigationPanel
-            navigation.row: dynamicSection.navigationRowEnd + 1
-
-            model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_HAIRPIN) : null
-        }
     }
 }
 
