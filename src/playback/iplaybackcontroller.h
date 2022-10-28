@@ -85,6 +85,8 @@ public:
     virtual framework::Progress loadingProgress() const = 0;
 
     virtual void applyProfile(const SoundProfileName& profileName) = 0;
+
+    virtual void setExportingAudio(bool isExporting) = 0;
 };
 }
 

@@ -1050,7 +1050,7 @@ void PlaybackController::updateMuteStates()
 
     INotationPartsPtr notationParts = m_notation->parts();
     InstrumentTrackIdSet allowedInstrumentTrackIdSet = instrumentTrackIdSetForRangePlayback();
-    bool isRangePlaybackMode = selection()->isRange() && !allowedInstrumentTrackIdSet.empty();
+    bool isRangePlaybackMode = !m_isExportingAudio && selection()->isRange() && !allowedInstrumentTrackIdSet.empty();
 
     for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
         if (!mu::contains(m_trackIdMap, instrumentTrackId)) {
@@ -1195,6 +1195,12 @@ void PlaybackController::applyProfile(const SoundProfileName& profileName)
     }
 
     audioSettingsPtr->setActiveSoundProfile(profileName);
+}
+
+void PlaybackController::setExportingAudio(bool isExporting)
+{
+    m_isExportingAudio = isExporting;
+    updateMuteStates();
 }
 
 bool PlaybackController::canReceiveAction(const actions::ActionCode&) const

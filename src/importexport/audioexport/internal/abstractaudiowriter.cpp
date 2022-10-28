@@ -21,7 +21,12 @@
  */
 #include "abstractaudiowriter.h"
 
+#include <QApplication>
+#include <QFile>
+#include <QFileInfo>
 #include <QThread>
+
+#include "audio/iaudiooutput.h"
 
 #include "log.h"
 
@@ -97,6 +102,12 @@ void AbstractAudioWriter::doWriteAndWait(QIODevice& destinationDevice, const aud
     QString path = info.absoluteFilePath();
 
     m_isCompleted = false;
+
+    playbackController()->setExportingAudio(true);
+
+    m_progress.finished.onReceive(this, [this](const auto&) {
+        playbackController()->setExportingAudio(false);
+    });
 
     playback()->sequenceIdList()
     .onResolve(this, [this, path, &format](const audio::TrackSequenceIdList& sequenceIdList) {
