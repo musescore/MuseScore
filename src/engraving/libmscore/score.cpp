@@ -137,7 +137,6 @@ void MeasureBaseList::push_back(MeasureBase* e)
         e->setNext(0);
     }
     _last = e;
-    fixupSystems();
 }
 
 //---------------------------------------------------------
@@ -157,7 +156,6 @@ void MeasureBaseList::push_front(MeasureBase* e)
         e->setNext(0);
     }
     _first = e;
-    fixupSystems();
 }
 
 //---------------------------------------------------------
@@ -180,7 +178,6 @@ void MeasureBaseList::add(MeasureBase* e)
     e->setPrev(el->prev());
     el->prev()->setNext(e);
     el->setPrev(e);
-    fixupSystems();
 }
 
 //---------------------------------------------------------
@@ -224,7 +221,6 @@ void MeasureBaseList::insert(MeasureBase* fm, MeasureBase* lm)
     } else {
         _last = lm;
     }
-    fixupSystems();
 }
 
 //---------------------------------------------------------
@@ -277,28 +273,6 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
     }
     for (EngravingItem* e : nb->el()) {
         e->setParent(nb);
-    }
-    fixupSystems();
-}
-
-//---------------------------------------------------------
-//   fixupSystems
-///   After modifying measures, make sure each measure
-///   belongs to some system. This is to make sure the
-///   score tree contains all the measures in some system.
-//---------------------------------------------------------
-
-void MeasureBaseList::fixupSystems()
-{
-    MeasureBase* m = _first;
-    while (m != _last) {
-        m = m->next();
-        if (m->prev()->system() && !m->system()) {
-            m->setParent(m->prev()->system());
-            if (m->isMeasure() && !toMeasure(m)->hasMMRest()) {
-                m->system()->appendMeasure(m);
-            }
-        }
     }
 }
 
