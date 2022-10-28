@@ -3690,30 +3690,27 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
     }
 
     for (Score* score : scores) {
-        MeasureBase* im = 0;
+        MeasureBase* im = nullptr;
+
         if (beforeMeasure) {
-            if (beforeMeasure->isMeasure()) {
+            if (beforeMeasure->score() == score) {
+                im = beforeMeasure;
+            } else if (beforeMeasure->isMeasure()) {
                 im = score->tick2measure(tick);
-            } else {
-                if (!beforeMeasure->links()) {
-                    if (beforeMeasure->score() == score) {
-                        im = beforeMeasure;
-                    } else {
-                        LOGD("no links");
-                    }
-                } else {
-                    for (EngravingObject* m : *beforeMeasure->links()) {
-                        if (beforeMeasure->score() == score) {
-                            im = toMeasureBase(m);
-                            break;
-                        }
+            } else if (beforeMeasure->links()) {
+                for (EngravingObject* m : *beforeMeasure->links()) {
+                    if (m && m->isMeasureBase() && m->score() == score) {
+                        im = toMeasureBase(m);
+                        break;
                     }
                 }
             }
+
             if (!im) {
                 LOGD("measure not found");
             }
         }
+
         MeasureBase* mb = toMeasureBase(Factory::createItem(type, score->dummy()));
         mb->setTick(tick);
 
