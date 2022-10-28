@@ -1826,6 +1826,10 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
         return;
     }
 
+    auto gpTimeToMuTime = [] (float time) {
+        return time * 60 / 100;
+    };
+
 #ifdef ENGRAVING_USE_STRETCHED_BENDS
     StretchedBend* bend = mu::engraving::Factory::createStretchedBend(note);
 #else
@@ -1839,16 +1843,16 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
         bendHasMiddleValue = false;
     }
 
-    bend->points().push_back(PitchValue(0, gpBend->originValue));
+    bend->points().push_back(PitchValue(gpTimeToMuTime(0), gpBend->originValue));
 
     PitchValue lastPoint = bend->points().back();
 
     if (bendHasMiddleValue) {
-        if (PitchValue value(gpBend->middleOffset1, gpBend->middleValue);
+        if (PitchValue value(gpTimeToMuTime(gpBend->middleOffset1), gpBend->middleValue);
             gpBend->middleOffset1 >= 0 && gpBend->middleOffset1 < gpBend->destinationOffset && value != lastPoint) {
             bend->points().push_back(std::move(value));
         }
-        if (PitchValue value(gpBend->middleOffset2, gpBend->middleValue);
+        if (PitchValue value(gpTimeToMuTime(gpBend->middleOffset2), gpBend->middleValue);
             gpBend->middleOffset2 >= 0 && gpBend->middleOffset2 != gpBend->middleOffset1
             && gpBend->middleOffset2 < gpBend->destinationOffset
             && value != lastPoint) {
@@ -1859,19 +1863,19 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
             //!@NOTE It seems when middle point is places exactly in the middle
             //!of bend  GP6 stores this value equal -1
             if (gpBend->destinationOffset > 50 || gpBend->destinationOffset == -1) {
-                bend->points().push_back(PitchValue(50, gpBend->middleValue));
+                bend->points().push_back(PitchValue(gpTimeToMuTime(50), gpBend->middleValue));
             }
         }
     }
 
     if (gpBend->destinationOffset <= 0) {
-        PitchValue fixGpxValue = PitchValue(50, gpBend->middleValue);
+        PitchValue fixGpxValue = PitchValue(gpTimeToMuTime(50), gpBend->middleValue);
         if (gpBend->middleValue > gpBend->destinationValue && bend->points().back() != fixGpxValue) {
             bend->points().push_back(fixGpxValue);
         }
-        bend->points().push_back(PitchValue(100, gpBend->destinationValue)); //! In .gpx this value might be exist
+        bend->points().push_back(PitchValue(gpTimeToMuTime(100), gpBend->destinationValue)); //! In .gpx this value might be exist
     } else {
-        if (PitchValue value(gpBend->destinationOffset, gpBend->destinationValue); value != lastPoint) {
+        if (PitchValue value(gpTimeToMuTime(gpBend->destinationOffset), gpBend->destinationValue); value != lastPoint) {
             bend->points().push_back(std::move(value));
         }
     }
