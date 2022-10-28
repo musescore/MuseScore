@@ -30,7 +30,7 @@ import "../../../common"
 
 FlatRadioButtonGroupPropertyView {
     id: root
-    titleText: qsTrc("inspector", "Notehead type")
+    titleText: qsTrc("inspector", "Notehead duration")
 
     radioButtonGroup.height: 40
     model: [
