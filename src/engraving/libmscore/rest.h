@@ -127,6 +127,7 @@ private:
     int m_dotline   { -1 };          // depends on rest symbol
     bool m_gap      { false };       // invisible and not selectable for user
     std::vector<NoteDot*> m_dots;
+    DeadSlapped* _deadSlapped = nullptr;
 
     mu::RectF drag(EditData&) override;
     double upPos() const override;

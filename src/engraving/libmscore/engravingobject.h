@@ -64,6 +64,7 @@ class ChordLine;
 class ChordRest;
 class Clef;
 class ConnectorInfoReader;
+class DeadSlapped;
 class DurationElement;
 class Dynamic;
 class EngravingItem;
@@ -313,6 +314,7 @@ public:
     CONVERT(Note,          NOTE)
     CONVERT(Rest,          REST)
     CONVERT(MMRest,        MMREST)
+    CONVERT(DeadSlapped,   DEAD_SLAPPED)
     CONVERT(Chord,         CHORD)
     CONVERT(BarLine,       BAR_LINE)
     CONVERT(Articulation,  ARTICULATION)
@@ -757,6 +759,7 @@ CONVERT(BagpipeEmbellishment)
 CONVERT(Sticking)
 CONVERT(GraceNotesGroup)
 CONVERT(FretCircle)
+CONVERT(DeadSlapped)
 #undef CONVERT
 }
 

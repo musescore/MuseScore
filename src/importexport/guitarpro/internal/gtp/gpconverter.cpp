@@ -13,6 +13,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/chordline.h"
 #include "libmscore/clef.h"
+#include "libmscore/deadslapped.h"
 #include "libmscore/drumset.h"
 #include "libmscore/dynamic.h"
 #include "libmscore/factory.h"
@@ -523,76 +524,84 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
         return ctx.curTick;
     }
 
-    ChordRest* cr = addChordRest(beat, ctx);
     auto curSegment = lastMeasure->getSegment(SegmentType::ChordRest, ctx.curTick);
 
-    if (beat->graceNotes() != GPBeat::GraceNotes::None) {
-        if (cr->type() == ElementType::REST) {
-            delete cr;
+    ChordRest* cr = addChordRest(beat, ctx);
+    if (_score->styleB(Sid::deadSlappedSupported) && beat->deadSlapped() && cr->isRest()) {
+        Rest* rest = toRest(cr);
+        curSegment->add(rest);
+        DeadSlapped* dc = Factory::createDeadSlapped(rest);
+        dc->setTrack(rest->track());
+        rest->add(dc);
+    } else {
+        if (beat->graceNotes() != GPBeat::GraceNotes::None) {
+            if (cr->type() == ElementType::REST) {
+                delete cr;
+                return ctx.curTick;
+            }
+
+            curSegment->add(cr);
+
+            configureGraceChord(beat, cr);
+            graceChords.push_back({ cr, beat });
+
             return ctx.curTick;
         }
 
         curSegment->add(cr);
 
-        configureGraceChord(beat, cr);
-        graceChords.push_back({ cr, beat });
-
-        return ctx.curTick;
-    }
-
-    curSegment->add(cr);
-
-    if (cr->isChord()) {
-        m_chordsInMeasureByVoice[lastMeasure][cr->voice()]++;
-        m_chordsInMeasure[lastMeasure]++;
-    }
-
-    convertNotes(beat->notes(), cr);
-
-    if (!graceChords.empty()) {
-        int grIndex = 0;
-        for (auto [pGrChord, pBeat] : graceChords) {
-            if (pGrChord->type() == ElementType::CHORD) {
-                static_cast<Chord*>(pGrChord)->setGraceIndex(grIndex++);
-            }
-
-            Fraction fr(1, (graceChords.size() == 1 ? 1 : 2) * 8);
-            pGrChord->setDurationType(TDuration(fr));
-
-            cr->add(pGrChord);
-            addLegato(pBeat, pGrChord);
+        if (cr->isChord()) {
+            m_chordsInMeasureByVoice[lastMeasure][cr->voice()]++;
+            m_chordsInMeasure[lastMeasure]++;
         }
+
+        convertNotes(beat->notes(), cr);
+
+        if (!graceChords.empty()) {
+            int grIndex = 0;
+            for (auto [pGrChord, pBeat] : graceChords) {
+                if (pGrChord->type() == ElementType::CHORD) {
+                    static_cast<Chord*>(pGrChord)->setGraceIndex(grIndex++);
+                }
+
+                Fraction fr(1, (graceChords.size() == 1 ? 1 : 2) * 8);
+                pGrChord->setDurationType(TDuration(fr));
+
+                cr->add(pGrChord);
+                addLegato(pBeat, pGrChord);
+            }
+        }
+        graceChords.clear();
+
+        addTuplet(beat, cr);
+        addTimer(beat, cr);
+        addFreeText(beat, cr);
+        addVibratoWTremBar(beat, cr);
+        addFadding(beat, cr);
+        addHairPin(beat, cr);
+        addTremolo(beat, cr);
+        addPickStroke(beat, cr);
+        addDynamic(beat, cr);
+        addWah(beat, cr);
+        addGolpe(beat, cr);
+        addFretDiagram(beat, cr, ctx);
+        addBarre(beat, cr);
+        addSlapped(beat, cr);
+        addPopped(beat, cr);
+        addBrush(beat, cr);
+        addArpeggio(beat, cr);
+        addLyrics(beat, cr, ctx);
+        addLegato(beat, cr);
+
+        // line segment elements
+        addOttava(beat, cr);
+        addLetRing(beat, cr);
+        addPalmMute(beat, cr);
+        addTrill(beat, cr);
+        addRasgueado(beat, cr);
+        addDive(beat, cr);
+        addHarmonicMark(beat, cr);
     }
-    graceChords.clear();
-
-    addTuplet(beat, cr);
-    addTimer(beat, cr);
-    addFreeText(beat, cr);
-    addVibratoWTremBar(beat, cr);
-    addFadding(beat, cr);
-    addHairPin(beat, cr);
-    addTremolo(beat, cr);
-    addPickStroke(beat, cr);
-    addDynamic(beat, cr);
-    addWah(beat, cr);
-    addGolpe(beat, cr);
-    addFretDiagram(beat, cr, ctx);
-    addBarre(beat, cr);
-    addSlapped(beat, cr);
-    addPopped(beat, cr);
-    addBrush(beat, cr);
-    addArpeggio(beat, cr);
-    addLyrics(beat, cr, ctx);
-    addLegato(beat, cr);
-
-    // line segment elements
-    addOttava(beat, cr);
-    addLetRing(beat, cr);
-    addPalmMute(beat, cr);
-    addTrill(beat, cr);
-    addRasgueado(beat, cr);
-    addDive(beat, cr);
-    addHarmonicMark(beat, cr);
 
     ctx.curTick += cr->actualTicks();
 
@@ -1566,8 +1575,8 @@ ChordRest* GPConverter::addChordRest(const GPBeat* beat, const Context& ctx)
         fr += Fraction(1, rhythm(beat->lenth().second) * 2 * dot);
     }
 
-    cr->setDurationType(TDuration(fr));
     cr->setTicks(fr);
+    cr->setDurationType(TDuration(fr));
 
     return cr;
 }

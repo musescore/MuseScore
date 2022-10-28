@@ -160,6 +160,7 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::TIMESIG,              "TimeSig",              TranslatableString("engraving", "Time signature") },
     { ElementType::REST,                 "Rest",                 TranslatableString("engraving", "Rest") },
     { ElementType::MMREST,               "MMRest",               TranslatableString("engraving", "Multimeasure rest") },
+    { ElementType::DEAD_SLAPPED,         "DeadSlapped",          TranslatableString("engraving", "Dead slapped") },
     { ElementType::BREATH,               "Breath",               TranslatableString("engraving", "Breath") },
     { ElementType::MEASURE_REPEAT,       "MeasureRepeat",        TranslatableString("engraving", "Measure repeat") },
     { ElementType::TIE,                  "Tie",                  TranslatableString("engraving", "Tie") },
