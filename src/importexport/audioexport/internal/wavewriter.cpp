@@ -29,7 +29,7 @@ using namespace mu::framework;
 
 mu::Ret WaveWriter::write(notation::INotationPtr, QIODevice& destinationDevice, const Options&)
 {
-    static const audio::SoundTrackFormat format {
+    const audio::SoundTrackFormat format {
         audio::SoundTrackType::WAV,
         static_cast<audio::sample_rate_t>(configuration()->exportSampleRate()),
         2 /* audioChannelsNumber */,
