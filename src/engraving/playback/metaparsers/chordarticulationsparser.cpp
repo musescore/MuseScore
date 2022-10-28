@@ -32,7 +32,6 @@
 
 #include "playback/utils/arrangementutils.h"
 #include "playback/filters/chordfilter.h"
-#include "playback/filters/spannerfilter.h"
 #include "internal/spannersmetaparser.h"
 #include "internal/symbolsmetaparser.h"
 #include "internal/annotationsmetaparser.h"
@@ -112,15 +111,18 @@ void ChordArticulationsParser::parseSpanners(const Chord* chord, const Rendering
             continue;
         }
 
-        if (!SpannerFilter::isItemPlayable(spanner, ctx)) {
+        int spannerFrom = interval.start;
+        int spannerTo = interval.stop;
+        int spannerDurationTicks = spannerTo - spannerFrom;
+
+        if (spannerDurationTicks == 0 || spannerTo < ctx.nominalPositionStartTick) {
             continue;
         }
 
         RenderingContext spannerContext = ctx;
-        spannerContext.nominalTimestamp = timestampFromTicks(score, interval.start + ctx.positionTickOffset);
-        spannerContext.nominalPositionStartTick = interval.start;
-        spannerContext.nominalDurationTicks = SpannerFilter::spannerActualDurationTicks(spanner, interval.stop - interval.start);
-        spannerContext.nominalPositionEndTick = spannerContext.nominalPositionStartTick + spannerContext.nominalDurationTicks;
+        spannerContext.nominalTimestamp = timestampFromTicks(score, spannerFrom + ctx.positionTickOffset);
+        spannerContext.nominalPositionStartTick = spannerFrom;
+        spannerContext.nominalDurationTicks = spannerDurationTicks;
 
         SpannersMetaParser::parse(spanner, std::move(spannerContext), result);
     }
