@@ -1508,6 +1508,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::circledNotesOnCommonTab, "circledNotesOnCommonTab", false },
     { Sid::fretConflictResolveSupported, "fretConflictResolveSupported", true },
     { Sid::considerInvisibleChordDirection, "considerInvisibleChordDirection", false },
+    { Sid::deadSlappedSupported, "deadSlappedSupported", false },
 
     { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
     { Sid::defaultsVersion,               "defaultsVersion",               MSCVERSION }

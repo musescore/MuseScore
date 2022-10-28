@@ -34,6 +34,7 @@
 #include "actionicon.h"
 #include "articulation.h"
 #include "chord.h"
+#include "deadslapped.h"
 #include "factory.h"
 #include "image.h"
 #include "measure.h"
@@ -95,6 +96,14 @@ Rest::Rest(const Rest& r, bool link)
     m_dotline  = r.m_dotline;
     for (NoteDot* dot : r.m_dots) {
         add(Factory::copyNoteDot(*dot));
+    }
+
+    if (r._deadSlapped) {
+        DeadSlapped* ndc = Factory::copyDeadSlapped(*r._deadSlapped);
+        add(ndc);
+        if (link) {
+            score()->undo(new Link(ndc, r._deadSlapped));
+        }
     }
 }
 
@@ -334,6 +343,13 @@ void Rest::layout()
     for (EngravingItem* e : el()) {
         e->layout();
     }
+
+    _skipDraw = false;
+    if (_deadSlapped) {
+        _skipDraw = true;
+        return;
+    }
+
     double _spatium = spatium();
 
     setPosX(0.0);
@@ -885,6 +901,9 @@ void Rest::add(EngravingItem* e)
         m_dots.push_back(toNoteDot(e));
         e->added();
         break;
+    case ElementType::DEAD_SLAPPED:
+        _deadSlapped = toDeadSlapped(e);
+    /// fallthrough
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
         el().push_back(e);
@@ -907,6 +926,9 @@ void Rest::remove(EngravingItem* e)
         m_dots.pop_back();
         e->removed();
         break;
+    case ElementType::DEAD_SLAPPED:
+        _deadSlapped = nullptr;
+    /// fallthrough
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
         if (!el().remove(e)) {

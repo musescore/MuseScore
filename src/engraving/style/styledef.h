@@ -1522,6 +1522,7 @@ enum class Sid {
     circledNotesOnCommonTab,
     fretConflictResolveSupported,
     considerInvisibleChordDirection,
+    deadSlappedSupported,
 
     autoplaceEnabled,
     defaultsVersion,
