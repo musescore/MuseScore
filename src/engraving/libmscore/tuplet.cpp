@@ -574,16 +574,17 @@ void Tuplet::layout()
 
         if (_isUp) {
             if (_number) {
-                bracketL[0] = PointF(p1.x(), p1.y());
-                bracketL[1] = PointF(p1.x(), p1.y() - l1);
                 //set width of bracket hole
                 double x     = x3 - numberWidth * .5 - _spatium * .5;
-
+                p1.rx() = std::min(p1.rx(), x - 0.5 * l1); // ensure enough space for the number
                 double y     = p1.y() + (x - p1.x()) * slope;
+                bracketL[0] = PointF(p1.x(), p1.y());
+                bracketL[1] = PointF(p1.x(), p1.y() - l1);
                 bracketL[2] = PointF(x,   y - l1);
 
                 //set width of bracket hole
                 x           = x3 + numberWidth * .5 + _spatium * .5;
+                p2.rx() = std::max(p2.rx(), x + 0.5 * l1); // ensure enough space for the number
                 y           = p1.y() + (x - p1.x()) * slope;
                 bracketR[0] = PointF(x,   y - l1);
                 bracketR[1] = PointF(p2.x(), p2.y() - l1);
@@ -596,15 +597,17 @@ void Tuplet::layout()
             }
         } else {
             if (_number) {
-                bracketL[0] = PointF(p1.x(), p1.y());
-                bracketL[1] = PointF(p1.x(), p1.y() + l1);
                 //set width of bracket hole
                 double x     = x3 - numberWidth * .5 - _spatium * .5;
+                p1.rx() = std::min(p1.rx(), x - 0.5 * l1); // ensure enough space for the number
                 double y     = p1.y() + (x - p1.x()) * slope;
+                bracketL[0] = PointF(p1.x(), p1.y());
+                bracketL[1] = PointF(p1.x(), p1.y() + l1);
                 bracketL[2] = PointF(x,   y + l1);
 
                 //set width of bracket hole
                 x           = x3 + numberWidth * .5 + _spatium * .5;
+                p2.rx() = std::max(p2.rx(), x + 0.5 * l1);
                 y           = p1.y() + (x - p1.x()) * slope;
                 bracketR[0] = PointF(x,   y + l1);
                 bracketR[1] = PointF(p2.x(), p2.y() + l1);
@@ -647,6 +650,9 @@ bool Tuplet::calcHasBracket(const DurationElement* cr1, const DurationElement* c
 {
     if (_bracketType != TupletBracketType::AUTO_BRACKET) {
         return _bracketType != TupletBracketType::SHOW_NO_BRACKET;
+    }
+    if (cr1 == cr2) { // Degenerate tuplet
+        return false;
     }
     if (!cr1->isChord() || !cr2->isChord()) {
         return true;
