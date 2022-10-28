@@ -5375,6 +5375,17 @@ Part* Score::partById(const ID& partId) const
     return nullptr;
 }
 
+int Score::visiblePartCount() const
+{
+    int count = 0;
+    for (const Part* part : _parts) {
+        if (part->show()) {
+            ++count;
+        }
+    }
+    return count;
+}
+
 ShadowNote& Score::shadowNote() const
 {
     return *m_shadowNote;

@@ -778,6 +778,7 @@ public:
     void changeSelectedNotesVoice(voice_idx_t);
 
     const std::vector<Part*>& parts() const { return _parts; }
+    int visiblePartCount() const;
     std::set<ID> partIdsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo) const;
 
     void appendPart(const InstrumentTemplate*);
