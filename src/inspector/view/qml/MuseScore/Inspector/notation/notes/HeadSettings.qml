@@ -141,7 +141,7 @@ FocusableItem {
 
                 NoteheadTypeSelector {
                     id: noteHeadTypeSection
-                    titleText: qsTrc("inspector", "Notehead type (visual only)")
+                    titleText: qsTrc("inspector", "Override visual duration")
                     propertyItem: root.model ? root.model.headType : null
 
                     navigationName: "NoteHeadTypeSection"
