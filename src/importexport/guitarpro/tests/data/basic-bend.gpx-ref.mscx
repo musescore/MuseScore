@@ -75,7 +75,7 @@
                 </Accidental>
               <Bend>
                 <point time="0" pitch="0" vibrato="0"/>
-                <point time="100" pitch="100" vibrato="0"/>
+                <point time="60" pitch="100" vibrato="0"/>
                 </Bend>
               <pitch>66</pitch>
               <tpc>20</tpc>
