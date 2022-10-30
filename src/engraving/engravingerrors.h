@@ -83,7 +83,7 @@ inline Ret make_ret(Err err, const io::path_t& filePath = "")
                .arg(u"https://musescore.org");
         break;
     case Err::FileOld300Format:
-        text = mtrc("engraving", "This file was last saved with a development version of 3.0.");
+        text = mtrc("engraving", "This file was last saved in a development version of 3.0.");
         break;
     case Err::FileCorrupted:
         text = mtrc("engraving", "File \"%1\" is corrupted.").arg(filePath.toString());
