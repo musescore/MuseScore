@@ -34,19 +34,26 @@ using namespace mu::appshell;
 
 static const QString imagePath(":/resources/LoadingScreen.svg");
 
-static const QSize splashScreenSize(810, 405);
+static constexpr QSize splashScreenSize(810, 405);
 
 static const QColor messageColor("#99FFFFFF");
-static const QRectF messageRect(splashScreenSize.width() / 2, 269, 0, 0);
+static constexpr QRectF messageRect(splashScreenSize.width() / 2, 269, 0, 0);
 
 static const QString website("www.musescore.org");
-static const QRectF websiteRect(splashScreenSize.width() - 48, splashScreenSize.height() - 48, 0, 0);
+static constexpr QRectF websiteRect(splashScreenSize.width() - 48, splashScreenSize.height() - 48, 0, 0);
 
 static const QColor versionNumberColor("#22A0F4");
 static constexpr qreal versionNumberSpacing = 5.0;
 
+#ifdef Q_OS_MAC
+// Necessary to remove undesired background, so that we really get our rounded corners
+static constexpr Qt::WindowFlags splashScreenWindowFlags = (Qt::SplashScreen | Qt::FramelessWindowHint) & ~Qt::Sheet | Qt::Window;
+#else
+static constexpr Qt::WindowFlags splashScreenWindowFlags = Qt::SplashScreen | Qt::FramelessWindowHint;
+#endif
+
 SplashScreen::SplashScreen()
-    : QWidget(nullptr, Qt::SplashScreen | Qt::FramelessWindowHint),
+    : QWidget(nullptr, splashScreenWindowFlags),
     m_backgroundRenderer(new QSvgRenderer(imagePath, this))
 {
     setAttribute(Qt::WA_TranslucentBackground);
