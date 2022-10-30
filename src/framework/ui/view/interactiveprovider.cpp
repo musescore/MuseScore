@@ -291,6 +291,7 @@ void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QStr
 {
     auto format = [](IInteractive::TextFormat f) {
         switch (f) {
+        case IInteractive::TextFormat::Auto:      return Qt::AutoText;
         case IInteractive::TextFormat::PlainText: return Qt::PlainText;
         case IInteractive::TextFormat::RichText:  return Qt::RichText;
         }
