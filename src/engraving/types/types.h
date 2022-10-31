@@ -88,6 +88,7 @@ enum class ElementType {
     TIMESIG,
     REST,
     MMREST,
+    DEAD_SLAPPED,
     BREATH,
     MEASURE_REPEAT,
     TIE,

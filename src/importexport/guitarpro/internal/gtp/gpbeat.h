@@ -153,6 +153,9 @@ public:
     void setDive(bool dive) { m_dive = dive; }
     bool dive() const { return m_dive; }
 
+    void setDeadSlapped(bool deadSlapped) { m_deadSlapped = deadSlapped; }
+    bool deadSlapped() const { return m_deadSlapped; }
+
     const std::vector<std::shared_ptr<GPNote> >& notes() const { return _notes; }
 
     //! NOTE В текущей версии GP 6.2.0 (и позднее) в биты записывается уже расставленная лирика,
@@ -243,6 +246,7 @@ private:
     Barre _barre;
     double _arpeggioStretch = 0.0;
     bool m_dive = false; // TODO-gp: implement dives
+    bool m_deadSlapped = false;
 };
 }
 

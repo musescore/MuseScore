@@ -38,6 +38,7 @@
 #include "breath.h"
 #include "chord.h"
 #include "chordline.h"
+#include "deadslapped.h"
 #include "dynamic.h"
 #include "fermata.h"
 #include "figuredbass.h"
@@ -181,6 +182,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::CHORD:             return new Chord(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::REST:              return new Rest(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::MMREST:            return new MMRest(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::DEAD_SLAPPED:      return new DeadSlapped(toRest(parent));
     case ElementType::SPACER:            return new Spacer(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
     case ElementType::STAFF_STATE:       return new StaffState(parent);
     case ElementType::TEMPO_TEXT:        return new TempoText(parent->isSegment() ? toSegment(parent) : dummy->segment());
@@ -368,6 +370,9 @@ MAKE_ITEM_IMPL(ChordLine, Chord)
 CREATE_ITEM_IMPL(Clef, ElementType::CLEF, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(Clef)
 MAKE_ITEM_IMPL(Clef, Segment)
+
+CREATE_ITEM_IMPL(DeadSlapped, ElementType::DEAD_SLAPPED, Rest, isAccessibleEnabled)
+COPY_ITEM_IMPL(DeadSlapped)
 
 CREATE_ITEM_IMPL(Fermata, ElementType::FERMATA, EngravingItem, isAccessibleEnabled)
 MAKE_ITEM_IMPL(Fermata, EngravingItem)
@@ -599,6 +604,7 @@ TripletFeel* Factory::createTripletFeel(Segment * parent, TripletFeelType type, 
 }
 
 CREATE_ITEM_IMPL(FretCircle, ElementType::FRET_CIRCLE, Chord, isAccessibleEnabled)
+COPY_ITEM_IMPL(FretCircle)
 
 CREATE_ITEM_IMPL(Vibrato, ElementType::VIBRATO, EngravingItem, isAccessibleEnabled)
 

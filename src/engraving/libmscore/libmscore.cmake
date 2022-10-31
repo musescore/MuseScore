@@ -71,6 +71,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/cmd.cpp
     ${CMAKE_CURRENT_LIST_DIR}/connector.cpp
     ${CMAKE_CURRENT_LIST_DIR}/connector.h
+    ${CMAKE_CURRENT_LIST_DIR}/deadslapped.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/deadslapped.h
     ${CMAKE_CURRENT_LIST_DIR}/drumset.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drumset.h
     ${CMAKE_CURRENT_LIST_DIR}/durationelement.cpp

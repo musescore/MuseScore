@@ -674,6 +674,8 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(XmlDomNode
         } else if (nodeName == u"Whammy" || nodeName == u"WhammyExtend") {
             // TODO-gp: implement dives
             beat->setDive(true);
+        } else if (nodeName == u"DeadSlapped") {
+            beat->setDeadSlapped(true);
         } else if (nodeName == u"XProperties") {
             readBeatXProperties(innerNode, beat.get());
         } else if (sUnused.find(nodeName) != sUnused.end()) {
