@@ -143,10 +143,20 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
 
     startGlobalEdit();
 
+    const Part* part = partModifiable(instrumentKey.partId);
+    bool isMainInstrument = part && isMainInstrumentForPart(instrumentKey.instrumentId, part);
+
     NotationParts::replaceInstrument(instrumentKey, newInstrument);
 
     for (INotationPartsPtr parts : excerptsParts()) {
         parts->replaceInstrument(instrumentKey, newInstrument);
+    }
+
+    if (isMainInstrument) {
+        if (mu::engraving::Excerpt* excerpt = findExcerpt(part->id())) {
+            String newName = mu::engraving::Excerpt::formatName(part->partName(), score()->masterScore()->excerpts());
+            excerpt->excerptScore()->undo(new mu::engraving::ChangeExcerptTitle(excerpt, newName));
+        }
     }
 
     endGlobalEdit();
@@ -197,4 +207,16 @@ std::vector<INotationPartsPtr> MasterNotationParts::excerptsParts() const
     }
 
     return result;
+}
+
+mu::engraving::Excerpt* MasterNotationParts::findExcerpt(const ID& initialPartId) const
+{
+    const std::vector<mu::engraving::Excerpt*>& excerpts = score()->masterScore()->excerpts();
+    for (mu::engraving::Excerpt* excerpt : excerpts) {
+        if (excerpt->initialPartId() == initialPartId) {
+            return excerpt;
+        }
+    }
+
+    return nullptr;
 }

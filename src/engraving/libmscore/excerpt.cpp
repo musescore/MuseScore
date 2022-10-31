@@ -107,7 +107,39 @@ void Excerpt::setExcerptScore(Score* s)
 
     if (s) {
         s->setExcerpt(this);
+        writeNameToMetaTags();
     }
+}
+
+const String& Excerpt::name() const
+{
+    return m_name;
+}
+
+void Excerpt::setName(const String& name)
+{
+    if (m_name == name) {
+        return;
+    }
+
+    m_name = name;
+    writeNameToMetaTags();
+    m_nameChanged.notify();
+}
+
+void Excerpt::writeNameToMetaTags()
+{
+    if (Score* score = excerptScore()) {
+        if (Text* nameItem = score->getText(mu::engraving::TextStyleType::INSTRUMENT_EXCERPT)) {
+            nameItem->setPlainText(m_name);
+            score->setMetaTag(u"partName", m_name);
+        }
+    }
+}
+
+async::Notification Excerpt::nameChanged() const
+{
+    return m_nameChanged;
 }
 
 bool Excerpt::containsPart(const Part* part) const
@@ -1543,12 +1575,12 @@ Excerpt* Excerpt::createExcerptFromPart(Part* part)
     return excerpt;
 }
 
-String Excerpt::formatName(const String& partName, const std::vector<Excerpt*>& excerptList)
+String Excerpt::formatName(const String& partName, const std::vector<Excerpt*>& allExcerpts)
 {
     String name = partName.simplified();
     int count = 0;      // no of occurrences of partName
 
-    for (Excerpt* e : excerptList) {
+    for (Excerpt* e : allExcerpts) {
         // if <partName> already exists, change <partName> to <partName 1>
         String excName = e->name();
         if (excName == name) {

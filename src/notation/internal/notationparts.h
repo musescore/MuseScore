@@ -80,6 +80,8 @@ protected:
     mu::engraving::Score* score() const;
     INotationUndoStackPtr undoStack() const;
 
+    Part* partModifiable(const ID& partId) const;
+
     void startEdit();
     void apply();
     void rollback();
@@ -95,7 +97,6 @@ private:
     void doSetStaffConfig(Staff* staff, const StaffConfig& config);
     void doInsertPart(Part* part, size_t index);
 
-    Part* partModifiable(const ID& partId) const;
     Staff* staffModifiable(const ID& staffId) const;
 
     std::vector<Staff*> staves(const IDList& stavesIds) const;
