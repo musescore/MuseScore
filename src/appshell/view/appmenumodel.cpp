@@ -374,6 +374,14 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
         makeMenu(TranslatableString("appshell/menu/diagnostic", "&System"), systemItems, "menu-system")
     };
 
+#ifdef BUILD_MUSESAMPLER_MODULE
+    MenuItemList museSamplerItems {
+        makeMenuItem("musesampler-check"),
+    };
+
+    items << makeMenu(TranslatableString("appshell/menu/diagnostic", "&Muse Sampler"), museSamplerItems, "menu-musesampler");
+#endif
+
     if (framework::Version::unstable()) {
         items << makeMenu(TranslatableString("appshell/menu/diagnostic", "&Accessibility"), accessibilityItems, "menu-accessibility")
               << makeMenu(TranslatableString("appshell/menu/diagnostic", "&Engraving"), engravingItems, "menu-engraving")
