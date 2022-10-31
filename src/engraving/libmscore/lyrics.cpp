@@ -57,11 +57,11 @@ Lyrics::Lyrics(ChordRest* parent)
     : TextBase(ElementType::LYRICS, parent, TextStyleType::LYRICS_ODD)
 {
     _even       = false;
+    _separator  = 0;
     initElementStyle(&lyricsElementStyle);
     _no         = 0;
     _ticks      = Fraction(0, 1);
     _syllabic   = Syllabic::SINGLE;
-    _separator  = 0;
 }
 
 Lyrics::Lyrics(const Lyrics& l)
@@ -696,6 +696,17 @@ PropertyValue Lyrics::propertyDefault(Pid id) const
     // fall through
     default:
         return TextBase::propertyDefault(id);
+    }
+}
+
+void Lyrics::triggerLayout() const
+{
+    if (_separator) {
+        // The separator may extend to next system(s), so we must use Spanner::triggerLayout()
+        _separator->triggerLayout();
+    } else {
+        // In this case is ok to use EngravingItem::triggerLayout()
+        EngravingItem::triggerLayout();
     }
 }
 
