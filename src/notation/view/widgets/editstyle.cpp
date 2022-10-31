@@ -864,10 +864,12 @@ EditStyle::EditStyle(QWidget* parent)
     connect(setSignalMapper, &QSignalMapper::mappedInt, this, &EditStyle::valueChanged);
     connect(resetSignalMapper, &QSignalMapper::mappedInt, this, &EditStyle::resetStyleValue);
 
+    Score* score = globalContext()->currentNotation()->elements()->msScore();
+
     textStyles->clear();
-    for (auto ss : allTextStyles()) {
-        QListWidgetItem* item = new QListWidgetItem(TConv::translatedUserName(ss));
-        item->setData(Qt::UserRole, int(ss));
+    for (TextStyleType textStyleType : allTextStyles()) {
+        QListWidgetItem* item = new QListWidgetItem(score->getTextStyleUserName(textStyleType).qTranslated());
+        item->setData(Qt::UserRole, int(textStyleType));
         textStyles->addItem(item);
     }
 
@@ -1117,10 +1119,11 @@ void EditStyle::retranslate()
 
     setHeaderFooterToolTip();
 
+    Score* score = globalContext()->currentNotation()->elements()->msScore();
+
     int idx = 0;
-    for (auto ss : allTextStyles()) {
-        QString name = TConv::translatedUserName(ss);
-        textStyles->item(idx)->setText(name);
+    for (TextStyleType textStyleType : allTextStyles()) {
+        textStyles->item(idx)->setText(score->getTextStyleUserName(textStyleType).qTranslated());
         ++idx;
     }
 
@@ -2160,7 +2163,9 @@ void EditStyle::textStyleChanged(int row)
         }
     }
 
-    styleName->setText(TConv::translatedUserName(tid));
+    Score* score = globalContext()->currentNotation()->elements()->msScore();
+
+    styleName->setText(score->getTextStyleUserName(tid).qTranslated());
     styleName->setEnabled(int(tid) >= int(TextStyleType::USER1));
     resetTextStyleName->setEnabled(false);
 }
