@@ -996,7 +996,7 @@ void Tie::write(XmlWriter& xml) const
 
 static int compareNotesPos(const Note* n1, const Note* n2)
 {
-    if (n1->line() != n2->line()) {
+    if (n1->line() != n2->line() && !(n1->staffType()->isTabStaff())) {
         return n2->line() - n1->line();
     } else if (n1->string() != n2->string()) {
         return n2->string() - n1->string();
