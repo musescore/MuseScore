@@ -126,6 +126,9 @@ public:
     static Rest* copyRest(const Rest& src, bool link = false);
     static MMRest* createMMRest(EngravingItem* parent, bool isAccessibleEnabled = true);
 
+    static DeadSlapped* createDeadSlapped(Rest* parent, bool isAccessibleEnabled = true);
+    static DeadSlapped* copyDeadSlapped(const DeadSlapped& src);
+
     static Segment* createSegment(Measure* parent, bool isAccessibleEnabled = true);
     static Segment* createSegment(Measure* parent, SegmentType type, const Fraction& t, bool isAccessibleEnabled = true);
 
@@ -191,6 +194,7 @@ public:
     static TripletFeel* createTripletFeel(Segment* parent, TripletFeelType type = TripletFeelType::NONE, bool isAccessibleEnabled = true);
 
     static FretCircle* createFretCircle(Chord* parent, bool isAccessibleEnabled = true);
+    static FretCircle* copyFretCircle(const FretCircle& src);
 
     static Tuplet* createTuplet(Measure* parent, bool isAccessibleEnabled = true);
     static Tuplet* copyTuplet(const Tuplet& src);
