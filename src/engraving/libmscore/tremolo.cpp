@@ -332,7 +332,7 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
         _direction = beam->beamDirection();
         // stem stuff is already taken care of by the beams
     } else {
-        bool hasVoices = _chord1->measure()->hasVoices(_chord1->staffIdx(), _chord1->tick(), _chord2->rtick() - _chord1->tick());
+        bool hasVoices = _chord1->measure()->hasVoices(_chord1->staffIdx(), _chord1->tick(), _chord2->tick() - _chord1->tick());
         if (_chord1->stemDirection() == DirectionV::AUTO && _chord2->stemDirection() == DirectionV::AUTO
             && _chord1->staffMove() == _chord2->staffMove() && !hasVoices) {
             std::vector<int> noteDistances;
