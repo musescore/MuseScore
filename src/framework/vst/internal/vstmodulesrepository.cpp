@@ -215,5 +215,13 @@ io::paths_t VstModulesRepository::pluginPathsFromCustomLocations(const io::paths
  **/
 PluginModule::PathList VstModulesRepository::pluginPathsFromDefaultLocation() const
 {
-    return PluginModule::getModulePaths();
+    PluginModule::PathList result;
+
+    try {
+        result = PluginModule::getModulePaths();
+    } catch (...) {
+        LOGE() << "Unable to get module paths";
+    }
+
+    return result;
 }
