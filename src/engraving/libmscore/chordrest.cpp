@@ -1030,6 +1030,9 @@ void ChordRest::processSiblings(std::function<void(EngravingItem*)> func)
     if (tuplet()) {
         func(tuplet());
     }
+    for (EngravingItem* e : _el) {
+        func(e);
+    }
 }
 
 //---------------------------------------------------------
