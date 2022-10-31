@@ -600,9 +600,7 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
 
     startEdit();
 
-    bool isMainInstrument = part->instrumentId() == instrumentKey.instrumentId;
-
-    if (isMainInstrument) {
+    if (isMainInstrumentForPart(instrumentKey.instrumentId, part)) {
         mu::engraving::Interval oldTranspose = part->instrument()->transpose();
 
         QString newInstrumentPartName = formatInstrumentTitle(newInstrument.trackName(), newInstrument.trait());
