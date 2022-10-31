@@ -24,6 +24,7 @@
 
 #include "libmscore/masterscore.h"
 #include "libmscore/scoreorder.h"
+#include "libmscore/excerpt.h"
 #include "libmscore/undo.h"
 
 #include "log.h"
@@ -164,6 +165,27 @@ void MasterNotationParts::replaceDrumset(const InstrumentKey& instrumentKey, con
     }
 
     endGlobalEdit();
+}
+
+void MasterNotationParts::onPartsRemoved(const std::vector<Part*>& parts)
+{
+    mu::engraving::MasterScore* master = score()->masterScore();
+    std::vector<mu::engraving::Excerpt*> excerpts = master->excerpts();
+
+    for (mu::engraving::Excerpt* excerpt : excerpts) {
+        const ID& initialPartId = excerpt->initialPartId();
+        if (!initialPartId.isValid()) {
+            continue;
+        }
+
+        bool deleteExcerpt = std::find_if(parts.cbegin(), parts.cend(), [initialPartId](const Part* part) {
+            return part->id() == initialPartId;
+        }) != parts.cend();
+
+        if (deleteExcerpt) {
+            master->deleteExcerpt(excerpt);
+        }
+    }
 }
 
 std::vector<INotationPartsPtr> MasterNotationParts::excerptsParts() const

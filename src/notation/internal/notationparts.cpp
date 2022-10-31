@@ -738,6 +738,12 @@ void NotationParts::doRemoveParts(const std::vector<Part*>& parts)
     for (Part* part : parts) {
         score()->cmdRemovePart(part);
     }
+
+    onPartsRemoved(parts);
+}
+
+void NotationParts::onPartsRemoved(const std::vector<Part*>&)
+{
 }
 
 void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart)

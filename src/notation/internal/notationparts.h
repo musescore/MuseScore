@@ -84,6 +84,8 @@ protected:
     void apply();
     void rollback();
 
+    virtual void onPartsRemoved(const std::vector<Part*>& parts);
+
 private:
     void updatePartTitles();
 
