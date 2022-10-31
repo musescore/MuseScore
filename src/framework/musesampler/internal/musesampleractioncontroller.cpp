@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,21 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "musesampleractioncontroller.h"
 
-#ifndef MU_MUSESAMPLERMODULE_H
-#define MU_MUSESAMPLERMODULE_H
+#include "translation.h"
 
-#include "modularity/imodulesetup.h"
+using namespace mu::musesampler;
 
-namespace mu::musesampler {
-class MuseSamplerModule : public modularity::IModuleSetup
+void MuseSamplerActionController::init()
 {
-public:
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-};
+    dispatcher()->reg(this, "musesampler-check", this, &MuseSamplerActionController::checkLibraryIsDetected);
 }
 
-#endif // MU_MUSESAMPLERMODULE_H
+void MuseSamplerActionController::checkLibraryIsDetected()
+{
+    io::path_t libraryPath = configuration()->libraryPath();
+    bool detected = fileSystem()->exists(libraryPath);
+
+    interactive()->info("", trc("musesampler", "MuseSampler lib is") + " "
+                        + (detected ? trc("musesampler", "detected") : trc("musesampler", "not found")));
+}

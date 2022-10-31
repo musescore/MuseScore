@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,21 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_MUSESAMPLER_MUSESAMLERUIACTIONS_H
+#define MU_MUSESAMPLER_MUSESAMLERUIACTIONS_H
 
-#ifndef MU_MUSESAMPLERMODULE_H
-#define MU_MUSESAMPLERMODULE_H
-
-#include "modularity/imodulesetup.h"
+#include "ui/iuiactionsmodule.h"
 
 namespace mu::musesampler {
-class MuseSamplerModule : public modularity::IModuleSetup
+class MuseSamplerUiActions : public ui::IUiActionsModule
 {
 public:
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
+    MuseSamplerUiActions() = default;
+
+    const ui::UiActionList& actionsList() const override;
+    bool actionEnabled(const ui::UiAction& act) const override;
+    async::Channel<actions::ActionCodeList> actionEnabledChanged() const override;
+
+    bool actionChecked(const ui::UiAction& act) const override;
+    async::Channel<actions::ActionCodeList> actionCheckedChanged() const override;
+
+private:
+    static const ui::UiActionList m_actions;
 };
 }
 
-#endif // MU_MUSESAMPLERMODULE_H
+#endif // MU_MUSESAMPLER_MUSESAMLERUIACTIONS_H
