@@ -42,8 +42,8 @@ DeadSlapped::DeadSlapped(Rest* rest)
 void DeadSlapped::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
-    painter->setPen(draw::Pen(curColor()));
-    painter->setBrush(draw::BrushStyle::SolidPattern);
+    painter->setPen(draw::PenStyle::NoPen);
+    painter->setBrush(curColor());
     painter->drawPath(m_path1);
     painter->drawPath(m_path2);
 }

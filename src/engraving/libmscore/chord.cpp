@@ -1393,9 +1393,6 @@ void Chord::processSiblings(std::function<void(EngravingItem*)> func) const
     for (Note* note : _notes) {
         func(note);
     }
-    for (EngravingItem* e : el()) {
-        func(e);
-    }
     for (Chord* chord : _graceNotes) {    // process grace notes last, needed for correct shape calculation
         func(chord);
     }
