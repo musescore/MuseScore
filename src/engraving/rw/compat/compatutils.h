@@ -22,8 +22,11 @@
 #ifndef MU_ENGRAVING_COMPATUTILS_H
 #define MU_ENGRAVING_COMPATUTILS_H
 
+#include <vector>
+
 namespace mu::engraving {
 class Score;
+class Excerpt;
 }
 
 namespace mu::engraving::compat {
@@ -31,6 +34,7 @@ class CompatUtils
 {
 public:
     static void replaceStaffTextWithPlayTechniqueAnnotation(Score* score);
+    static void assignInitialPartToExcerpts(const std::vector<Excerpt*>& excerpts);
 };
 }
 #endif // MU_ENGRAVING_COMPATUTILS_H
