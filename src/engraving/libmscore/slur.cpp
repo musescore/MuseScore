@@ -31,6 +31,7 @@
 #include "articulation.h"
 #include "beam.h"
 #include "chord.h"
+#include "fretcircle.h"
 #include "hook.h"
 #include "measure.h"
 #include "mscoreview.h"
@@ -1370,6 +1371,24 @@ void Slur::slurPos(SlurPos* sp)
             // TODO: offset start position if there is another slur ending on this cr
             sp->p2 += po;
         }
+    }
+
+    /// adding extra space above slurs for notes in circles
+    if (score()->styleB(Sid::circledNotesOnCommonTab) && staff()->staffType()->isCommonTabStaff()) {
+        auto adjustSlur = [](Chord* ch, PointF& coord) {
+            const Fraction halfFraction = Fraction(1, 2);
+            if (ch && ch->ticks() >= halfFraction) {
+                for (EngravingItem* item : ch->el()) {
+                    if (item && item->isFretCircle()) {
+                        coord -= PointF(0, toFretCircle(item)->offsetFromUpNote());
+                        break;
+                    }
+                }
+            }
+        };
+
+        adjustSlur(sc, sp->p1);
+        adjustSlur(ec, sp->p2);
     }
 }
 
