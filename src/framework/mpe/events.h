@@ -105,7 +105,8 @@ struct NoteEvent
                        const pitch_level_t nominalPitchLevel,
                        const dynamic_level_t nominalDynamicLevel,
                        const ArticulationMap& articulationsApplied,
-                       const double bps)
+                       const double bps,
+                       const float requiredVelocityFraction = 0.f)
     {
         m_arrangementCtx.nominalDuration = nominalDuration;
         m_arrangementCtx.nominalTimestamp = nominalTimestamp;
@@ -117,7 +118,7 @@ struct NoteEvent
         m_expressionCtx.articulations = articulationsApplied;
         m_expressionCtx.nominalDynamicLevel = nominalDynamicLevel;
 
-        setUp();
+        setUp(requiredVelocityFraction);
     }
 
     const ArrangementContext& arrangementCtx() const
@@ -150,14 +151,14 @@ private:
         return static_cast<T>(static_cast<float>(v) * f);
     }
 
-    void setUp()
+    void setUp(const float requiredVelocityFraction)
     {
         calculateActualDuration(m_expressionCtx.articulations);
         calculateActualTimestamp(m_expressionCtx.articulations);
 
         calculatePitchCurve(m_expressionCtx.articulations);
 
-        calculateExpressionCurve(m_expressionCtx.articulations);
+        calculateExpressionCurve(m_expressionCtx.articulations, requiredVelocityFraction);
     }
 
     void calculateActualTimestamp(const ArticulationMap& articulationsApplied)
@@ -204,7 +205,7 @@ private:
         }
     }
 
-    void calculateExpressionCurve(const ArticulationMap& articulationsApplied)
+    void calculateExpressionCurve(const ArticulationMap& articulationsApplied, const float requiredVelocityFraction)
     {
         const ExpressionPattern::DynamicOffsetMap& appliedOffsetMap = articulationsApplied.averageDynamicOffsetMap();
 
@@ -229,7 +230,11 @@ private:
         float ratio = static_cast<float>(actualDynamicLevel) / static_cast<float>(articulationDynamicLevel);
 
         for (auto& pair : m_expressionCtx.expressionCurve) {
-            pair.second = static_cast<pitch_level_t>(RealRound(static_cast<float>(pair.second) * ratio, 0));
+            pair.second = static_cast<dynamic_level_t>(RealRound(pair.second * ratio, 0));
+        }
+
+        if (!RealIsNull(requiredVelocityFraction)) {
+            m_expressionCtx.expressionCurve.amplifyVelocity(requiredVelocityFraction);
         }
     }
 

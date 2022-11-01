@@ -2641,6 +2641,11 @@ void Note::reset()
     chord()->undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(DirectionV::AUTO));
 }
 
+float Note::userVelocityFraction() const
+{
+    return _userVelocity / 127.f;
+}
+
 //---------------------------------------------------------
 //   mag
 //---------------------------------------------------------

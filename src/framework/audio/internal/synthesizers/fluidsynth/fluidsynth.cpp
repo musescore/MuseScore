@@ -165,9 +165,11 @@ bool FluidSynth::handleEvent(const midi::Event& event)
     switch (event.opcode()) {
     case Event::Opcode::NoteOn: {
         ret = fluid_synth_noteon(m_fluid->synth, event.channel(), event.note(), event.velocity());
+        m_tuning.add(event.note(), event.pitchTuningCents());
     } break;
     case Event::Opcode::NoteOff: {
         ret = fluid_synth_noteoff(m_fluid->synth, event.channel(), event.note());
+        m_tuning.add(event.note(), event.pitchTuningCents());
     } break;
     case Event::Opcode::ControlChange: {
         if (event.index() == midi::EXPRESSION_CONTROLLER) {
@@ -249,6 +251,8 @@ void FluidSynth::setupSound(const PlaybackSetupData& setupData)
     IF_ASSERT_FAILED(m_fluid->synth) {
         return;
     }
+
+    fluid_synth_activate_key_tuning(m_fluid->synth, 0, 0, "standard", NULL, true);
 
     m_channels.clear();
     m_articulationMapping.clear();
@@ -344,9 +348,15 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
 
     const FluidSequencer::EventSequence& sequence = m_sequencer.eventsToBePlayed(nextMsecs);
 
+    if (!sequence.empty()) {
+        m_tuning.reset();
+    }
+
     for (const FluidSequencer::EventType& event : sequence) {
         handleEvent(std::get<midi::Event>(event));
     }
+
+    fluid_synth_tune_notes(m_fluid->synth, 0, 0, m_tuning.size(), m_tuning.keys.data(), m_tuning.pitches.data(), true);
 
     unsigned int channelCount = audioChannelsCount();
 

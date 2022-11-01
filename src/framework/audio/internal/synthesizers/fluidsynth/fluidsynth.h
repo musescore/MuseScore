@@ -70,6 +70,33 @@ public:
     bool isValid() const override;
 
 private:
+    struct KeyTuning {
+        std::vector<int> keys;
+        std::vector<double> pitches;
+
+        void add(int key, double tuning)
+        {
+            keys.push_back(key);
+            pitches.push_back((key * 100.0) + tuning);
+        }
+
+        int size() const
+        {
+            return static_cast<int>(keys.size());
+        }
+
+        void reset()
+        {
+            keys.clear();
+            pitches.clear();
+        }
+
+        bool isEmpty() const
+        {
+            return keys.empty() && pitches.empty();
+        }
+    };
+
     Ret init();
     void createFluidInstance();
 
@@ -89,6 +116,8 @@ private:
 
     FluidSequencer m_sequencer;
     std::set<io::path_t> m_sfontPaths;
+
+    KeyTuning m_tuning;
 };
 
 using FluidSynthPtr = std::shared_ptr<FluidSynth>;
