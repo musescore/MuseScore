@@ -35,6 +35,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/musesamplerconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/apitypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/libhandler.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musesampleruiactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musesampleruiactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musesampleractioncontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musesampleractioncontroller.h
     )
 
 if (MUSESAMPLER_SRC_PATH)
