@@ -100,9 +100,9 @@ echo "DMGFILE: $DMGFILE"
 
 if [ "$BUILD_MODE" == "nightly_build" ]; then
 
-  BUILD_DATETIME=$(cat $ARTIFACTS_DIR/env/build_datetime.env)
+  BUILD_NUMBER=$(cat $ARTIFACTS_DIR/env/build_number.env)
   BUILD_BRANCH=$(cat $ARTIFACTS_DIR/env/build_branch.env)
-  ARTIFACT_NAME=MuseScoreNightly-${BUILD_DATETIME}-${BUILD_BRANCH}-${BUILD_REVISION}.dmg
+  ARTIFACT_NAME=MuseScoreNightly-${BUILD_NUMBER}-${BUILD_BRANCH}-${BUILD_REVISION}.dmg
 
 else
 
