@@ -722,6 +722,7 @@ EngravingItem* Score::nextElement()
         case ElementType::WHAMMY_BAR_SEGMENT:
         case ElementType::RASGUEADO_SEGMENT:
         case ElementType::HARMONIC_MARK_SEGMENT:
+        case ElementType::PICK_SCRAPE_SEGMENT:
         case ElementType::PEDAL_SEGMENT: {
             SpannerSegment* s = toSpannerSegment(e);
             Spanner* sp = s->spanner();

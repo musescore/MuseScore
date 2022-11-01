@@ -600,6 +600,7 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
         addTrill(beat, cr);
         addRasgueado(beat, cr);
         addDive(beat, cr);
+        addPickScrape(beat, cr);
         addHarmonicMark(beat, cr);
     }
 
@@ -649,6 +650,7 @@ void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
     note->setDeadNote(gpnote->muted());
     addAccent(gpnote, note);
     addSlide(gpnote, note);
+    addPickScrape(gpnote, note);
     collectHammerOn(gpnote, note);
     addTapping(gpnote, note);
     addLeftHandTapping(gpnote, note);
@@ -1791,9 +1793,12 @@ void GPConverter::addSingleSlide(const GPNote* gpnote, Note* note)
             return { ChordLineType::DOIT, Note::SlideType::Doit };
         } else if (flagIdx == 4) {
             return { ChordLineType::SCOOP, Note::SlideType::Lift };
-        } else {
+        } else if (flagIdx == 5) {
             return { ChordLineType::PLOP, Note::SlideType::Plop };
         }
+
+        LOGE() << "wrong slide type";
+        return { ChordLineType::NOTYPE, Note::SlideType::Undefined };
     };
 
     for (size_t flagIdx = 2; flagIdx < gpnote->slides().size(); flagIdx++) {
@@ -1819,6 +1824,14 @@ void GPConverter::collectContinuousSlide(const GPNote* gpnote, Note* note)
     }
     if (gpnote->slides()[1]) {
         _slideHammerOnMap.push_back(std::pair(note, SlideHammerOn::LegatoSlide));
+    }
+}
+
+void GPConverter::addPickScrape(const GPNote* gpnote, Note* /*note*/)
+{
+    if (gpnote->pickScrape() != GPNote::PickScrape::None && m_currentGPBeat) {
+        /// TODO: add pick scrape to note here
+        m_currentGPBeat->setPickScrape(true);
     }
 }
 
@@ -2311,6 +2324,11 @@ void GPConverter::addPalmMute(const GPBeat* gpbeat, ChordRest* cr)
 void GPConverter::addDive(const GPBeat* beat, ChordRest* cr)
 {
     addLineElement(cr, m_dives, ElementType::WHAMMY_BAR, LineImportType::WHAMMY_BAR, beat->dive());
+}
+
+void GPConverter::addPickScrape(const GPBeat* beat, ChordRest* cr)
+{
+    addLineElement(cr, m_pickScrapes, ElementType::PICK_SCRAPE, LineImportType::PICK_SCRAPE, beat->pickScrape(), true);
 }
 
 void GPConverter::addRasgueado(const GPBeat* beat, ChordRest* cr)
