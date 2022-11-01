@@ -38,6 +38,7 @@ using namespace mu::musesampler;
 
 static std::shared_ptr<MuseSamplerConfiguration> s_configuration = std::make_shared<MuseSamplerConfiguration>();
 static std::shared_ptr<MuseSamplerActionController> s_actionController = std::make_shared<MuseSamplerActionController>();
+static std::shared_ptr<MuseSamplerResolver> s_resolver = std::make_shared<MuseSamplerResolver>();
 
 std::string MuseSamplerModule::moduleName() const
 {
@@ -47,6 +48,7 @@ std::string MuseSamplerModule::moduleName() const
 void MuseSamplerModule::registerExports()
 {
     ioc()->registerExport(moduleName(), s_configuration);
+    ioc()->registerExport(moduleName(), s_resolver);
 }
 
 void MuseSamplerModule::resolveImports()
@@ -54,7 +56,7 @@ void MuseSamplerModule::resolveImports()
     auto synthResolver = ioc()->resolve<audio::synth::ISynthResolver>(moduleName());
 
     if (synthResolver) {
-        synthResolver->registerResolver(audio::AudioSourceType::MuseSampler, std::make_shared<MuseSamplerResolver>());
+        synthResolver->registerResolver(audio::AudioSourceType::MuseSampler, s_resolver);
     }
 
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
@@ -70,4 +72,5 @@ void MuseSamplerModule::onInit(const framework::IApplication::RunMode& mode)
     }
 
     s_actionController->init();
+    s_resolver->init();
 }
