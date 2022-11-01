@@ -112,7 +112,6 @@ static QString scoreDefaultTitle()
 
 NotationProject::~NotationProject()
 {
-    m_viewSettings = nullptr;
     m_projectAudioSettings = nullptr;
     m_masterNotation = nullptr;
     m_engravingProject = nullptr;
@@ -130,11 +129,6 @@ void NotationProject::setupProject()
 
     m_projectAudioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
     m_projectAudioSettings->needSave().notification.onNotify(this, [this]() {
-        m_needSaveNotification.notify();
-    });
-
-    m_viewSettings = std::shared_ptr<ProjectViewSettings>(new ProjectViewSettings());
-    m_viewSettings->needSave().notification.onNotify(this, [this]() {
         m_needSaveNotification.notify();
     });
 }
@@ -218,13 +212,13 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
         return ret;
     }
 
-    ret = m_viewSettings->read(reader);
-    if (!ret) {
-        return ret;
-    }
-
     // Set current if all success
     m_masterNotation->setMasterScore(m_engravingProject->masterScore());
+
+    m_masterNotation->viewState()->read(reader);
+    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
+        excerpt->notation()->viewState()->read(reader, u"Excerpts/" + excerpt->name() + u"/");
+    }
 
     return make_ret(Ret::Code::Ok);
 }
@@ -268,7 +262,11 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
 
     // Setup other stuff
     m_projectAudioSettings->makeDefault();
-    m_viewSettings->makeDefault();
+
+    m_masterNotation->viewState()->makeDefault();
+    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
+        excerpt->notation()->viewState()->makeDefault();
+    }
 
     // Set current if all success
     m_masterNotation->setMasterScore(score);
@@ -307,7 +305,11 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
 
     // Setup other stuff
     m_projectAudioSettings->makeDefault();
-    m_viewSettings->makeDefault();
+
+    m_masterNotation->viewState()->makeDefault();
+    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
+        excerpt->notation()->viewState()->makeDefault();
+    }
 
     masterScore->setSaved(true);
 
@@ -650,10 +652,9 @@ mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection)
         return ret;
     }
 
-    ret = m_viewSettings->write(msczWriter);
-    if (!ret) {
-        LOGE() << "failed write project view settings, err: " << ret.toString();
-        return ret;
+    m_masterNotation->viewState()->write(msczWriter);
+    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
+        excerpt->notation()->viewState()->write(msczWriter, u"Excerpts/" + excerpt->name() + u"/");
     }
 
     return make_ret(Ret::Code::Ok);
@@ -745,8 +746,7 @@ mu::ValNt<bool> NotationProject::needSave() const
 {
     ValNt<bool> needSave;
     needSave.val = m_masterNotation->needSave().val
-                   || m_projectAudioSettings->needSave().val
-                   || m_viewSettings->needSave().val;
+                   || m_projectAudioSettings->needSave().val;
     needSave.notification = m_needSaveNotification;
 
     return needSave;
@@ -833,9 +833,4 @@ void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
 IProjectAudioSettingsPtr NotationProject::audioSettings() const
 {
     return m_projectAudioSettings;
-}
-
-IProjectViewSettingsPtr NotationProject::viewSettings() const
-{
-    return m_viewSettings;
 }

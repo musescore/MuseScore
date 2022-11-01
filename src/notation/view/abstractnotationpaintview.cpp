@@ -223,9 +223,9 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     }
 
     if (publishMode()) {
-        m_notation->setViewMode(ViewMode::PAGE);
+        m_notation->painting()->setViewMode(ViewMode::PAGE);
     } else {
-        m_notation->setViewMode(globalContext()->currentProject()->viewSettings()->notationViewMode());
+        m_notation->painting()->setViewMode(m_notation->viewState()->viewMode());
     }
 
     INotationInteractionPtr interaction = notationInteraction();

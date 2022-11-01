@@ -21,11 +21,51 @@
  */
 #include "notationviewstate.h"
 
+#include <QJsonDocument>
+#include <QJsonObject>
+
 #include "notation.h"
 
 using namespace mu;
 using namespace mu::draw;
 using namespace mu::notation;
+
+static ViewMode viewModeFromString(const QString& str)
+{
+    if ("page" == str) {
+        return ViewMode::PAGE;
+    }
+
+    if ("float" == str) {
+        return ViewMode::FLOAT;
+    }
+
+    if ("continuous_v" == str) {
+        return ViewMode::LINE;
+    }
+
+    if ("continuous_h" == str) {
+        return ViewMode::SYSTEM;
+    }
+
+    if ("continuous_h_fixed" == str) {
+        return ViewMode::HORIZONTAL_FIXED;
+    }
+
+    return ViewMode::PAGE;
+}
+
+static QString viewModeToString(ViewMode m)
+{
+    switch (m) {
+    case ViewMode::PAGE: return "page";
+    case ViewMode::FLOAT: return "float";
+    case ViewMode::LINE: return "continuous_v";
+    case ViewMode::SYSTEM: return "continuous_h";
+    case ViewMode::HORIZONTAL_FIXED: return "continuous_h_fixed";
+    }
+    return "";
+}
 
 NotationViewState::NotationViewState(Notation* notation)
 {
@@ -35,6 +75,33 @@ NotationViewState::NotationViewState(Notation* notation)
             setMatrix(Transform(), nullptr);
         }
     });
+}
+
+Ret NotationViewState::read(const engraving::MscReader& reader, const io::path_t& pathPrefix)
+{
+    ByteArray json = reader.readViewSettingsJsonFile(pathPrefix);
+    QJsonObject rootObj = QJsonDocument::fromJson(json.toQByteArrayNoCopy()).object();
+    QJsonObject notationObj = rootObj.value("notation").toObject();
+
+    m_viewMode = viewModeFromString(notationObj.value("viewMode").toString());
+
+    return make_ret(Ret::Code::Ok);
+}
+
+Ret NotationViewState::write(engraving::MscWriter& writer, const io::path_t& pathPrefix)
+{
+    QJsonObject notationObj;
+    notationObj["viewMode"] = viewModeToString(m_viewMode);
+
+    QJsonObject rootObj;
+    rootObj["notation"] = notationObj;
+
+    QByteArray json = QJsonDocument(rootObj).toJson();
+    writer.writeViewSettingsJsonFile(ByteArray::fromQByteArrayNoCopy(json), pathPrefix);
+
+    setNeedSave(false);
+
+    return make_ret(Ret::Code::Ok);
 }
 
 bool NotationViewState::isMatrixInited() const
@@ -84,4 +151,44 @@ void NotationViewState::setZoomType(ZoomType type)
     if (m_zoomType.val != type) {
         m_zoomType.set(type);
     }
+}
+
+ViewMode NotationViewState::viewMode() const
+{
+    return m_viewMode;
+}
+
+void NotationViewState::setViewMode(const ViewMode& mode)
+{
+    if (m_viewMode == mode) {
+        return;
+    }
+
+    m_viewMode = mode;
+    setNeedSave(true);
+}
+
+bool NotationViewState::needSave() const
+{
+    return m_needSave;
+}
+
+async::Notification NotationViewState::needSaveChanged() const
+{
+    return m_needSaveNotification;
+}
+
+void NotationViewState::makeDefault()
+{
+    m_viewMode = ViewMode::PAGE;
+}
+
+void NotationViewState::setNeedSave(bool needSave)
+{
+    if (m_needSave == needSave) {
+        return;
+    }
+
+    m_needSave = needSave;
+    m_needSaveNotification.notify();
 }

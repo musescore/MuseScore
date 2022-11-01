@@ -155,13 +155,13 @@ void MscWriter::writeScoreFile(const ByteArray& data)
 void MscWriter::addExcerptStyleFile(const String& name, const ByteArray& data)
 {
     String fileName = name + u".mss";
-    addFileData(u"Excerpts/" + fileName, data);
+    addFileData(u"Excerpts/" + name + u"/" + fileName, data);
 }
 
 void MscWriter::addExcerptFile(const String& name, const ByteArray& data)
 {
     String fileName = name + u".mscx";
-    addFileData(u"Excerpts/" + fileName, data);
+    addFileData(u"Excerpts/" + name + u"/" + fileName, data);
 }
 
 void MscWriter::writeChordListFile(const ByteArray& data)
@@ -189,9 +189,9 @@ void MscWriter::writeAudioSettingsJsonFile(const ByteArray& data)
     addFileData(u"audiosettings.json", data);
 }
 
-void MscWriter::writeViewSettingsJsonFile(const ByteArray& data)
+void MscWriter::writeViewSettingsJsonFile(const ByteArray& data, const io::path_t& pathPrefix)
 {
-    addFileData(u"viewsettings.json", data);
+    addFileData(pathPrefix.toString() + u"viewsettings.json", data);
 }
 
 void MscWriter::writeMeta()

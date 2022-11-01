@@ -424,6 +424,11 @@ mu::ValNt<bool> MasterNotation::needSave() const
 {
     ValNt<bool> needSave;
     needSave.val = masterScore() ? !masterScore()->saved() : false;
+
+    for (IExcerptNotationPtr excerpt : excerpts().val) {
+        needSave.val |= excerpt->notation()->viewState()->needSave();
+    }
+
     needSave.notification = m_needSaveNotification;
 
     return needSave;
@@ -515,6 +520,10 @@ void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
     for (auto excerpt : excerpts) {
         excerpt->notation()->undoStack()->stackChanged().onNotify(this, [this]() {
             updateExcerpts();
+            notifyAboutNeedSaveChanged();
+        });
+
+        excerpt->notation()->viewState()->needSaveChanged().onNotify(this, [this]() {
             notifyAboutNeedSaveChanged();
         });
     }
