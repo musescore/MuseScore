@@ -44,9 +44,12 @@ public:
     void refresh() override;
     void clearSources() override;
 
-    std::string version() const;
+    std::string version() const override;
 
 private:
+    bool checkLibrary() const;
+    bool isVersionSupported() const;
+
     String buildMuseInstrumentId(const String& category, const String& name, int uniqueId) const;
 
     MuseSamplerLibHandlerPtr m_libHandler = nullptr;

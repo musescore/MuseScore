@@ -22,9 +22,9 @@
 
 #include "musesamplerresolver.h"
 
-#include "log.h"
-
 #include "musesamplerwrapper.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::async;
@@ -32,14 +32,38 @@ using namespace mu::audio;
 using namespace mu::audio::synth;
 using namespace mu::musesampler;
 
+static std::array<int, 3> parseVersion(const std::string& versionString, bool& ok)
+{
+    std::array<int, 3> result { 0, 0, 0 };
+
+    size_t componentIdx = 0;
+    int curNum = 0;
+
+    for (const char ch : versionString) {
+        if (ch == '.' || ch == '\0') {
+            result.at(componentIdx++) = curNum;
+            curNum = 0;
+        } else if ('0' <= ch && ch <= '9') {
+            curNum = curNum * 10 + (ch - '0');
+        } else {
+            ok = false;
+            return result;
+        }
+    }
+
+    result.at(componentIdx) = curNum;
+
+    ok = true;
+    return result;
+}
+
 void MuseSamplerResolver::init()
 {
     io::path_t path = configuration()->libraryPath();
 
     m_libHandler = std::make_shared<MuseSamplerLibHandler>(path);
 
-    if (!m_libHandler->isValid()) {
-        LOGE() << "Incompatible MuseSampler library; ignoring\n";
+    if (!checkLibrary()) {
         m_libHandler.reset();
     }
 }
@@ -70,9 +94,12 @@ ISynthesizerPtr MuseSamplerResolver::resolveSynth(const audio::TrackId /*trackId
 
 bool MuseSamplerResolver::hasCompatibleResources(const audio::PlaybackSetupData& setup) const
 {
+    UNUSED(setup);
+
     if (!m_libHandler) {
         return false;
     }
+
     return true;
 }
 
@@ -131,6 +158,51 @@ std::string MuseSamplerResolver::version() const
     }
 
     return String::fromUtf8(m_libHandler->getVersionString()).toStdString();
+}
+
+bool MuseSamplerResolver::checkLibrary() const
+{
+    if (!m_libHandler->isValid()) {
+        LOGE() << "Incompatible MuseSampler library; ignoring";
+        return false;
+    }
+
+    if (!isVersionSupported()) {
+        LOGE() << "MuseSampler " << version() << " is not supported; ignoring";
+        return false;
+    }
+
+    return true;
+}
+
+bool MuseSamplerResolver::isVersionSupported() const
+{
+    bool ok = true;
+    std::array<int, 3> minimumSupported = parseVersion(configuration()->minimumSupportedVersion(), ok);
+    if (!ok) {
+        return false;
+    }
+
+    std::array<int, 3> current = parseVersion(version(), ok);
+    if (!ok) {
+        return false;
+    }
+
+    if (current.at(0) > minimumSupported.at(0)) {
+        return true;
+    } else if (current.at(0) == minimumSupported.at(0)) {
+        if (current.at(1) > minimumSupported.at(1)) {
+            return true;
+        } else if (current.at(1) == minimumSupported.at(1)) {
+            if (current.at(2) > minimumSupported.at(2)) {
+                return true;
+            } else if (current.at(2) == minimumSupported.at(2)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 String MuseSamplerResolver::buildMuseInstrumentId(const String& category, const String& name, int uniqueId) const
