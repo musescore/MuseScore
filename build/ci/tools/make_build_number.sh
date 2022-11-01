@@ -20,16 +20,17 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ARTIFACTS_DIR="build.artifacts"
 
-DATETIME=$1
-if [ -z "$DATETIME" ]; then 
-    DATETIME=$(date -u +%Y%m%d%H%M)
+NUMBER=$1
+if [ -z "$NUMBER" ]; then
+    NUMBER=$(date -u +%y%j%H%M) # less than 2147483647 to fit in Int32 for WiX packaging tool
 fi
 
-if [ -z "$DATETIME" ]; then echo "error: not set DATETIME"; exit 1; fi
+if [ -z "$NUMBER" ]; then echo "error: not set BUILD_NUMBER"; exit 1; fi
 
 if [ -z "$2" ]; then OUT_DIR=$ARTIFACTS_DIR/env; fi
 
-echo $DATETIME > $ARTIFACTS_DIR/env/build_datetime.env
-cat $ARTIFACTS_DIR/env/build_datetime.env
+mkdir -p $ARTIFACTS_DIR
+mkdir -p $ARTIFACTS_DIR/env
 
-
+echo $NUMBER > $ARTIFACTS_DIR/env/build_number.env
+echo "BUILD_NUMBER: $(cat $ARTIFACTS_DIR/env/build_number.env)"

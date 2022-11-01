@@ -19,6 +19,13 @@ jobs:
         access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v2
+    - name: "Configure workflow"
+      run: |
+        sudo bash ./build/ci/tools/make_build_number.sh
+        BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
+
+        echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+        echo "BUILD_NUMBER: $BUILD_NUMBER"
     - name: Ccache cache files
       uses: actions/cache@v2
       with:
@@ -34,7 +41,7 @@ jobs:
     - name: Build
       run: |
         mkdir -p build.artifacts/env
-        sudo bash ./build/ci/linux/build_utest.sh -n ${{ github.run_id }}
+        sudo bash ./build/ci/linux/build_utest.sh -n ${{ env.BUILD_NUMBER }}
     - name: Run tests 
       run: |
         # At moment build and run tests consume 13.4 Gb of the disk.

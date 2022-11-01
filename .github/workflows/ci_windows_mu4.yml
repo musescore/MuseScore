@@ -44,6 +44,9 @@ jobs:
         bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
 
+        bash ./build/ci/tools/make_build_number.sh
+        BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
+
         DO_PUBLISH='false'
         if [[ "${{ github.event.inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly_build" ]]; then 
           DO_PUBLISH='true'
@@ -95,11 +98,13 @@ jobs:
         fi
 
         if [ "${{ github.event_name }}" == "pull_request" ]; then PR_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${{ github.run_id }}_Win${PR_INFO}")"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${BUILD_NUMBER}_Win${PR_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
         echo "BUILD_MODE: $BUILD_MODE"
+        echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+        echo "BUILD_NUMBER: $BUILD_NUMBER"
         echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
         echo "DO_BUILD: $DO_BUILD"
         echo "DO_UPDATE_TS=$DO_UPDATE_TS" >> $GITHUB_ENV
@@ -153,7 +158,7 @@ jobs:
       run: |
         IF ${{ env.SENTRY_URL != 0 }} == true ( SET C_URL="${{ env.SENTRY_URL }}" ) ELSE ( SET C_URL="" )
         IF ${{ secrets.YOUTUBE_API_KEY != 0 }} == true ( SET YT_API_KEY=${{ secrets.YOUTUBE_API_KEY }} ) ELSE ( SET YT_API_KEY="" )
-        build\ci\windows\build.bat -n ${{ github.run_id }} --youtube_api_key %YT_API_KEY% --crash_log_url %C_URL%
+        build\ci\windows\build.bat -n ${{ env.BUILD_NUMBER }} --youtube_api_key %YT_API_KEY% --crash_log_url %C_URL%
     - name: Generate dump symbols
       if: env.DO_BUILD == 'true'
       shell: bash
@@ -216,6 +221,9 @@ jobs:
         bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
 
+        bash ./build/ci/tools/make_build_number.sh
+        BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
+
         DO_BUILD='false'
         if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
           DO_BUILD='true'  
@@ -224,11 +232,13 @@ jobs:
         DO_PUBLISH='false'
 
         if [ "${{ github.event_name }}" == "pull_request" ]; then PR_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${{ github.run_id }}_Win${PR_INFO}_portable")"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${BUILD_NUMBER}_Win${PR_INFO}_portable")"
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
         echo "BUILD_MODE: $BUILD_MODE"
+        echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+        echo "BUILD_NUMBER: $BUILD_NUMBER"
         echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
         echo "DO_BUILD: $DO_BUILD"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
@@ -251,7 +261,7 @@ jobs:
       run: |
         IF ${{ env.SENTRY_URL != 0 }} == true ( SET C_URL="${{ env.SENTRY_URL }}" ) ELSE ( SET C_URL="" )
         IF ${{ secrets.YOUTUBE_API_KEY != 0 }} == true ( SET YT_API_KEY=${{ secrets.YOUTUBE_API_KEY }} ) ELSE ( SET YT_API_KEY="" )
-        build\ci\windows\build.bat --portable ON -n ${{ github.run_id }} --youtube_api_key %YT_API_KEY% --crash_log_url %C_URL%
+        build\ci\windows\build.bat --portable ON -n ${{ env.BUILD_NUMBER }} --youtube_api_key %YT_API_KEY% --crash_log_url %C_URL%
     - name: Package
       if: env.DO_BUILD == 'true'
       shell: cmd

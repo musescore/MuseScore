@@ -61,10 +61,10 @@ echo "PACKTYPE: $PACKTYPE"
 echo "INSTALL_DIR: $INSTALL_DIR"
 
 if [ "$BUILD_MODE" == "nightly_build" ]; then
-  BUILD_DATETIME=$(cat $ARTIFACTS_DIR/env/build_datetime.env)
+  BUILD_NUMBER=$(cat $ARTIFACTS_DIR/env/build_number.env)
   BUILD_BRANCH=$(cat $ARTIFACTS_DIR/env/build_branch.env)
   BUILD_REVISION=$(cat $ARTIFACTS_DIR/env/build_revision.env)
-  ARTIFACT_NAME=MuseScoreNightly-${BUILD_DATETIME}-${BUILD_BRANCH}-${BUILD_REVISION}-x86_64
+  ARTIFACT_NAME=MuseScoreNightly-${BUILD_NUMBER}-${BUILD_BRANCH}-${BUILD_REVISION}-x86_64
 else
   BUILD_VERSION=$(cat $ARTIFACTS_DIR/env/build_version.env)
   ARTIFACT_NAME=MuseScore-${BUILD_VERSION}-x86_64
