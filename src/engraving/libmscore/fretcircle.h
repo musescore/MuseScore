@@ -33,6 +33,8 @@ class FretCircle final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, FretCircle)
 public:
 
+    double offsetFromUpNote() const { return _offsetFromUpNote; }
+
 private:
 
     Chord* m_chord = nullptr;
@@ -53,6 +55,8 @@ public:
     void layout() override;
 
     void draw(mu::draw::Painter*) const override;
+
+    double _offsetFromUpNote = 0;
 };
 } // namespace mu::engraving
 #endif

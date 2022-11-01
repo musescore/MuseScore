@@ -73,6 +73,14 @@ void FretCircle::layout()
 
     double lw = spatium() * circleWidth / 2;
     m_rect = ellipseRect();
+
+    RectF chordRect;
+    for (const Note* note : m_chord->notes()) {
+        chordRect |= note->bbox();
+    }
+
+    _offsetFromUpNote = (m_rect.height() - chordRect.height() - (m_chord->downNote()->pos().y() - m_chord->upNote()->pos().y())) / 2;
+
     setbbox(m_rect.adjusted(-lw, -lw, lw, lw));
 }
 
