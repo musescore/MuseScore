@@ -25,14 +25,19 @@
 #include "modularity/ioc.h"
 #include "audio/isynthresolver.h"
 
+#include "ui/iuiactionsregister.h"
+
 #include "internal/musesamplerconfiguration.h"
 #include "internal/musesamplerresolver.h"
+#include "internal/musesampleruiactions.h"
+#include "internal/musesampleractioncontroller.h"
 
 using namespace mu;
 using namespace mu::modularity;
 using namespace mu::musesampler;
 
 static std::shared_ptr<MuseSamplerConfiguration> s_configuration = std::make_shared<MuseSamplerConfiguration>();
+static std::shared_ptr<MuseSamplerActionController> s_actionController = std::make_shared<MuseSamplerActionController>();
 
 std::string MuseSamplerModule::moduleName() const
 {
@@ -51,4 +56,18 @@ void MuseSamplerModule::resolveImports()
     if (synthResolver) {
         synthResolver->registerResolver(audio::AudioSourceType::MuseSampler, std::make_shared<MuseSamplerResolver>());
     }
+
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(std::make_shared<MuseSamplerUiActions>());
+    }
+}
+
+void MuseSamplerModule::onInit(const framework::IApplication::RunMode& mode)
+{
+    if (framework::IApplication::RunMode::Editor != mode) {
+        return;
+    }
+
+    s_actionController->init();
 }
