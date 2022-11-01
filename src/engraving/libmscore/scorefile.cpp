@@ -272,8 +272,7 @@ std::shared_ptr<mu::draw::Pixmap> Score::createThumbnail()
     TRACEFUNC;
 
     LayoutMode mode = layoutMode();
-    setLayoutMode(LayoutMode::PAGE);
-    doLayout();
+    switchToPageMode();
 
     Page* page = pages().at(0);
     RectF fr = page->abbox();
