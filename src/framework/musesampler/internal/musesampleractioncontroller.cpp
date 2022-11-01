@@ -32,9 +32,14 @@ void MuseSamplerActionController::init()
 
 void MuseSamplerActionController::checkLibraryIsDetected()
 {
-    io::path_t libraryPath = configuration()->libraryPath();
-    bool detected = fileSystem()->exists(libraryPath);
+    std::string libVersion = museSamplerInfo()->version();
+    std::string status = trc("musesampler", "MuseSampler lib is");
 
-    interactive()->info("", trc("musesampler", "MuseSampler lib is") + " "
-                        + (detected ? trc("musesampler", "detected") : trc("musesampler", "not found")));
+    if (libVersion.empty()) {
+        status += " " + trc("musesampler", "not found");
+    } else {
+        status += " " + trc("musesampler", "detected, version") + " " + libVersion;
+    }
+
+    interactive()->info("", status);
 }

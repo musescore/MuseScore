@@ -32,7 +32,7 @@ using namespace mu::audio;
 using namespace mu::audio::synth;
 using namespace mu::musesampler;
 
-MuseSamplerResolver::MuseSamplerResolver()
+void MuseSamplerResolver::init()
 {
     io::path_t path = configuration()->libraryPath();
 
@@ -122,6 +122,15 @@ void MuseSamplerResolver::refresh()
 void MuseSamplerResolver::clearSources()
 {
     NOT_SUPPORTED;
+}
+
+std::string MuseSamplerResolver::version() const
+{
+    if (!m_libHandler) {
+        return std::string();
+    }
+
+    return String::fromUtf8(m_libHandler->getVersionString()).toStdString();
 }
 
 String MuseSamplerResolver::buildMuseInstrumentId(const String& category, const String& name, int uniqueId) const
