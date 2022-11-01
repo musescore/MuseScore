@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2022 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,30 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MUSESAMPLER_MUSESAMPLERACTIONCONTROLLER_H
-#define MU_MUSESAMPLER_MUSESAMPLERACTIONCONTROLLER_H
 
-#include "actions/actionable.h"
-#include "async/asyncable.h"
+#ifndef MU_MUSESAMPLER_IMUSESAMPLERINFO_H
+#define MU_MUSESAMPLER_IMUSESAMPLERINFO_H
 
-#include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
-#include "iinteractive.h"
-#include "imusesamplerinfo.h"
+#include "modularity/imoduleexport.h"
 
 namespace mu::musesampler {
-class MuseSamplerActionController : public actions::Actionable, public async::Asyncable
+class IMuseSamplerInfo : MODULE_EXPORT_INTERFACE
 {
-    INJECT(musesampler, actions::IActionsDispatcher, dispatcher)
-    INJECT(musesampler, framework::IInteractive, interactive)
-    INJECT(musesampler, IMuseSamplerInfo, museSamplerInfo)
+    INTERFACE_ID(IMuseSamplerInfo)
 
 public:
-    void init();
+    virtual ~IMuseSamplerInfo() = default;
 
-private:
-    void checkLibraryIsDetected();
+    virtual std::string version() const = 0;
 };
 }
 
-#endif // MU_MUSESAMPLER_MUSESAMPLERACTIONCONTROLLER_H
+#endif // MU_MUSESAMPLER_IMUSESAMPLERINFO_H
