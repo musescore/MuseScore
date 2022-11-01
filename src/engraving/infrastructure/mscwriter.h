@@ -65,7 +65,7 @@ public:
     void addImageFile(const String& fileName, const ByteArray& data);
     void writeAudioFile(const ByteArray& data);
     void writeAudioSettingsJsonFile(const ByteArray& data);
-    void writeViewSettingsJsonFile(const ByteArray& data);
+    void writeViewSettingsJsonFile(const ByteArray& data, const io::path_t& pathPrefix = "");
 
 private:
 

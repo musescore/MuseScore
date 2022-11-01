@@ -37,6 +37,9 @@ class NotationViewState : public INotationViewState, public async::Asyncable
 public:
     explicit NotationViewState(Notation* notation);
 
+    Ret read(const engraving::MscReader& reader, const io::path_t& pathPrefix = "") override;
+    Ret write(engraving::MscWriter& writer, const io::path_t& pathPrefix = "") override;
+
     bool isMatrixInited() const override;
     void setMatrixInited(bool inited) override;
 
@@ -49,12 +52,27 @@ public:
     ValCh<ZoomType> zoomType() const override;
     void setZoomType(ZoomType type) override;
 
+    ViewMode viewMode() const override;
+    void setViewMode(const ViewMode& mode) override;
+
+    bool needSave() const override;
+    async::Notification needSaveChanged() const override;
+
+    void makeDefault() override;
+
 private:
+    void setNeedSave(bool needSave);
+
     bool m_isMatrixInited = false;
     draw::Transform m_matrix;
     async::Channel<draw::Transform, NotationPaintView*> m_matrixChanged;
     ValCh<int> m_zoomPercentage;
     ValCh<ZoomType> m_zoomType;
+
+    notation::ViewMode m_viewMode = notation::ViewMode::PAGE;
+
+    bool m_needSave = false;
+    async::Notification m_needSaveNotification;
 };
 }
 

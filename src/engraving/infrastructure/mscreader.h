@@ -70,7 +70,7 @@ public:
 
     ByteArray readAudioFile() const;
     ByteArray readAudioSettingsJsonFile() const;
-    ByteArray readViewSettingsJsonFile() const;
+    ByteArray readViewSettingsJsonFile(const io::path_t& pathPrefix) const;
 
 private:
 
