@@ -70,6 +70,7 @@
 #include "page.h"
 #include "palmmute.h"
 #include "pedal.h"
+#include "pickscrape.h"
 #include "playtechannotation.h"
 #include "rasgueado.h"
 #include "rehearsalmark.h"
@@ -134,6 +135,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::WHAMMY_BAR:        return new WhammyBar(parent);
     case ElementType::RASGUEADO:         return new Rasgueado(parent);
     case ElementType::HARMONIC_MARK:     return new HarmonicMark(parent);
+    case ElementType::PICK_SCRAPE:       return new PickScrape(parent);
     case ElementType::PEDAL:             return new Pedal(parent);
     case ElementType::HAIRPIN:           return new Hairpin(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::CLEF:              return new Clef(parent->isSegment() ? toSegment(parent) : dummy->segment());
@@ -231,6 +233,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::WHAMMY_BAR_SEGMENT:
     case ElementType::RASGUEADO_SEGMENT:
     case ElementType::HARMONIC_MARK_SEGMENT:
+    case ElementType::PICK_SCRAPE_SEGMENT:
     case ElementType::VOLTA_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
@@ -633,6 +636,8 @@ CREATE_ITEM_IMPL(WhammyBar, ElementType::WHAMMY_BAR, EngravingItem, isAccessible
 CREATE_ITEM_IMPL(Rasgueado, ElementType::RASGUEADO, EngravingItem, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(HarmonicMark, ElementType::HARMONIC_MARK, EngravingItem, isAccessibleEnabled)
+
+CREATE_ITEM_IMPL(PickScrape, ElementType::PICK_SCRAPE, EngravingItem, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(Volta, ElementType::VOLTA, EngravingItem, isAccessibleEnabled)
 

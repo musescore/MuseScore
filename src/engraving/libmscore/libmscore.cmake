@@ -214,6 +214,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/paste.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pedal.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pedal.h
+    ${CMAKE_CURRENT_LIST_DIR}/pickscrape.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/pickscrape.h
     ${CMAKE_CURRENT_LIST_DIR}/pitch.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pitch.h
     ${CMAKE_CURRENT_LIST_DIR}/pitchspelling.cpp

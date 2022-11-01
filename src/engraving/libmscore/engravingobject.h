@@ -122,6 +122,8 @@ class PalmMuteSegment;
 class Part;
 class Pedal;
 class PedalSegment;
+class PickScrape;
+class PickScrapeSegment;
 class PlayTechAnnotation;
 class Rasgueado;
 class RasgueadoSegment;
@@ -393,6 +395,8 @@ public:
     CONVERT(RasgueadoSegment, RASGUEADO_SEGMENT)
     CONVERT(HarmonicMark,      HARMONIC_MARK)
     CONVERT(HarmonicMarkSegment, HARMONIC_MARK_SEGMENT)
+    CONVERT(PickScrape,      PICK_SCRAPE)
+    CONVERT(PickScrapeSegment, PICK_SCRAPE_SEGMENT)
     CONVERT(VibratoSegment,  VIBRATO_SEGMENT)
     CONVERT(Symbol,        SYMBOL)
     CONVERT(FSymbol,       FSYMBOL)
@@ -737,6 +741,8 @@ CONVERT(Rasgueado)
 CONVERT(RasgueadoSegment)
 CONVERT(HarmonicMark)
 CONVERT(HarmonicMarkSegment)
+CONVERT(PickScrape)
+CONVERT(PickScrapeSegment)
 CONVERT(Symbol)
 CONVERT(FSymbol)
 CONVERT(Fingering)
