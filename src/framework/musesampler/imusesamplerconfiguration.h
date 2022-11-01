@@ -36,6 +36,8 @@ public:
     virtual ~IMuseSamplerConfiguration() = default;
 
     virtual mu::io::path_t libraryPath() const = 0;
+
+    virtual std::string minimumSupportedVersion() const = 0;
 };
 }
 

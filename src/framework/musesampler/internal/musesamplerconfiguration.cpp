@@ -35,6 +35,8 @@ static const io::path_t DEFAULT_PATH("/usr/local/lib/libMuseSamplerCoreLib.dylib
 static const io::path_t DEFAULT_PATH("MuseSamplerCoreLib.dll");
 #endif
 
+static const std::string MINIMUM_SUPPORTED_VERSION = "0.2.2";
+
 io::path_t MuseSamplerConfiguration::libraryPath() const
 {
     if (const char* path = std::getenv("MUSESAMPLER_PATH")) {
@@ -42,4 +44,9 @@ io::path_t MuseSamplerConfiguration::libraryPath() const
     }
 
     return DEFAULT_PATH;
+}
+
+std::string MuseSamplerConfiguration::minimumSupportedVersion() const
+{
+    return MINIMUM_SUPPORTED_VERSION;
 }
