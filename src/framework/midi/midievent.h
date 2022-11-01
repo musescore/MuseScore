@@ -32,6 +32,7 @@
 
 namespace mu::midi {
 using channel_t = uint8_t;
+using tuning_t = float;
 
 /*!
  * MIDI Event stored in Universal MIDI Packet Format Message
@@ -290,23 +291,23 @@ struct Event {
     }
 
     //! return tuning in semitones from Pitch attribute (for NoteOn & NoteOff) events) if exists else return 0.f
-    float pitchTuning() const
+    tuning_t pitchTuning() const
     {
         assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
         if (attributeType() == AttributeType::Pitch) {
-            return static_cast<float>((attribute() & 0x1FF) / static_cast<float>(0x200));
+            return static_cast<tuning_t>((attribute() & 0x1FF) / static_cast<tuning_t>(0x200));
         }
         return 0.f;
     }
 
     //! return tuning in cents
-    float pitchTuningCents() const
+    tuning_t pitchTuningCents() const
     {
         return pitchTuning() * 100;
     }
 
     //! 4.2.14.3 @see pitchNote(), pitchTuning()
-    void setPitchNote(uint8_t note, float tuning)
+    void setPitchNote(uint8_t note, tuning_t tuning)
     {
         assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
         assertMessageType({ MessageType::ChannelVoice20 });
