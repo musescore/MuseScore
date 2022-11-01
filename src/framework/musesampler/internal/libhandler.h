@@ -44,6 +44,11 @@ struct MuseSamplerLibHandler
         return ms_contains_instrument(mpe_id, musicxml) == 1;
     }
 
+    int getVersionMajor() { return ms_get_version_major(); }
+    int getVersionMinor() { return ms_get_version_minor(); }
+    int getVersionRevision() { return ms_get_version_revision(); }
+    const char* getVersionString() { return ms_get_version_string(); }
+
     int getMatchingInstrumentId(const char* pack, const char* name) { reutrn ms_get_matching_instrument_id(pack, name); }
     ms_InstrumentList getInstrumentList() { return ms_get_instrument_list(); }
     ms_InstrumentList getMatchingInstrumentList(const char* mpe_id, const char* musicxml)
@@ -145,6 +150,11 @@ struct MuseSamplerLibHandler
 struct MuseSamplerLibHandler
 {
     ms_init initLib = nullptr;
+    ms_get_version_major getVersionMajor = nullptr;
+    ms_get_version_minor getVersionMinor = nullptr;
+    ms_get_version_revision getVersionRevision = nullptr;
+    ms_get_version_string getVersionString = nullptr;
+
     ms_contains_instrument containsInstrument = nullptr;
 
     ms_get_matching_instrument_id getMatchingInstrumentId = nullptr;
@@ -203,6 +213,11 @@ struct MuseSamplerLibHandler
         }
 
         initLib = (ms_init)getLibFunc(m_lib, "ms_init");
+        getVersionMajor = (ms_get_version_major)getLibFunc(m_lib, "ms_get_version_major");
+        getVersionMinor = (ms_get_version_minor)getLibFunc(m_lib, "ms_get_version_minor");
+        getVersionRevision = (ms_get_version_revision)getLibFunc(m_lib, "ms_get_version_revision");
+        getVersionString = (ms_get_version_string)getLibFunc(m_lib, "ms_get_version_string");
+
         containsInstrument = (ms_contains_instrument)getLibFunc(m_lib, "ms_contains_instrument");
         getMatchingInstrumentId = (ms_get_matching_instrument_id)getLibFunc(m_lib, "ms_get_matching_instrument_id");
         getInstrumentList = (ms_get_instrument_list)getLibFunc(m_lib, "ms_get_instrument_list");
@@ -270,6 +285,10 @@ struct MuseSamplerLibHandler
     {
         return m_lib
                && initLib
+               && getVersionMajor
+               && getVersionMinor
+               && getVersionRevision
+               && getVersionString
                && containsInstrument
                && getMatchingInstrumentId
                && getInstrumentList
@@ -314,6 +333,10 @@ private:
     void printApiStatus() const
     {
         LOGI() << "MuseSampler API status:"
+               << "\n ms_get_version_major -" << reinterpret_cast<uint64_t>(getVersionMajor)
+               << "\n ms_get_version_minor -" << reinterpret_cast<uint64_t>(getVersionMinor)
+               << "\n ms_get_version_revision -" << reinterpret_cast<uint64_t>(getVersionRevision)
+               << "\n ms_get_version_string -" << reinterpret_cast<uint64_t>(getVersionString)
                << "\n ms_contains_instrument -" << reinterpret_cast<uint64_t>(containsInstrument)
                << "\n ms_get_matching_instrument_id -" << reinterpret_cast<uint64_t>(getMatchingInstrumentId)
                << "\n ms_get_instrument_list -" << reinterpret_cast<uint64_t>(getInstrumentList)
