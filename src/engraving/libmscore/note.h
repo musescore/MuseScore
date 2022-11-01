@@ -445,6 +445,7 @@ public:
 
     void reset() override;
 
+    float userVelocityFraction() const;
     int userVelocity() const { return _userVelocity; }
     void setUserVelocity(int v) { _userVelocity = v; }
 

@@ -130,11 +130,16 @@ inline mpe::octave_t actualOctave(const int nominalOctave, const mpe::PitchClass
     return static_cast<mpe::octave_t>(nominalOctave);
 }
 
-inline mpe::pitch_level_t notePitchLevel(const int noteTpc, const int noteOctave)
+inline mpe::pitch_level_t notePitchLevel(const int noteTpc, const int noteOctave, const double tuningCents = 0.0)
 {
     mpe::PitchClass pitchClass = pitchClassFromTpc(noteTpc);
 
-    return mpe::pitchLevel(pitchClass, actualOctave(noteOctave, pitchClass, tpc2alter(noteTpc)));
+    double tuningFactor = tuningCents / 100.0;
+
+    mpe::pitch_level_t result = mpe::pitchLevel(pitchClass, actualOctave(noteOctave, pitchClass, tpc2alter(noteTpc)));
+    result += tuningFactor * mpe::PITCH_LEVEL_STEP;
+
+    return result;
 }
 }
 

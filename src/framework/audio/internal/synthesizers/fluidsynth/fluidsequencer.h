@@ -48,11 +48,12 @@ private:
                              const int midiControlIdx);
 
     void appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationTypeSet& appliableTypes,
-                         const midi::channel_t channelIdx);
+                         const midi::channel_t channelIdx, const int noteIdx);
 
     midi::channel_t channel(const mpe::NoteEvent& noteEvent) const;
     midi::channel_t findChannelByProgram(const midi::Program& program) const;
     midi::note_idx_t noteIndex(const mpe::pitch_level_t pitchLevel) const;
+    midi::tuning_t noteTuning(const mpe::NoteEvent& noteEvent, const int noteIdx) const;
     midi::velocity_t noteVelocity(const mpe::NoteEvent& noteEvent) const;
     int expressionLevel(const mpe::dynamic_level_t dynamicLevel) const;
     int pitchBendLevel(const mpe::pitch_level_t pitchLevel) const;
