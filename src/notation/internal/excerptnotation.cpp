@@ -98,8 +98,6 @@ void ExcerptNotation::fillWithDefaultInfo()
     setText(TextStyleType::COMPOSER, qtrc("notation", "Composer / arranger"));
     setText(TextStyleType::SUBTITLE, "");
     setText(TextStyleType::POET, "");
-
-    score->doLayout();
 }
 
 mu::engraving::Excerpt* ExcerptNotation::excerpt() const
