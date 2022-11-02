@@ -153,6 +153,9 @@ public:
     void setDive(bool dive) { m_dive = dive; }
     bool dive() const { return m_dive; }
 
+    void setPickScrape(bool pickScrape) { m_pickScrape = pickScrape; }
+    bool pickScrape() const { return m_pickScrape; }
+
     void setDeadSlapped(bool deadSlapped) { m_deadSlapped = deadSlapped; }
     bool deadSlapped() const { return m_deadSlapped; }
 
@@ -246,6 +249,7 @@ private:
     Barre _barre;
     double _arpeggioStretch = 0.0;
     bool m_dive = false; // TODO-gp: implement dives
+    bool m_pickScrape = false;
     bool m_deadSlapped = false;
 };
 }

@@ -95,6 +95,7 @@
 #include "libmscore/palmmute.h"
 #include "libmscore/part.h"
 #include "libmscore/pedal.h"
+#include "libmscore/pickscrape.h"
 #include "libmscore/pitchspelling.h"
 #include "libmscore/rasgueado.h"
 #include "libmscore/rehearsalmark.h"
@@ -3988,7 +3989,8 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
             || el->type() == ElementType::PEDAL || el->type() == ElementType::TEXTLINE
             || el->type() == ElementType::LET_RING || el->type() == ElementType::PALM_MUTE
             || el->type() == ElementType::WHAMMY_BAR || el->type() == ElementType::RASGUEADO
-            || el->type() == ElementType::HARMONIC_MARK || el->type() == ElementType::GRADUAL_TEMPO_CHANGE) {
+            || el->type() == ElementType::HARMONIC_MARK || el->type() == ElementType::PICK_SCRAPE
+            || el->type() == ElementType::GRADUAL_TEMPO_CHANGE) {
             // handle elements derived from SLine
             // find the system containing the first linesegment
             const SLine* sl = static_cast<const SLine*>(el);
@@ -5762,6 +5764,9 @@ static void spannerStart(ExportMusicXml* exp, track_idx_t strack, track_idx_t et
                 case ElementType::HARMONIC_MARK:
                     exp->textLine(toHarmonicMark(e), sstaff, seg->tick());
                     break;
+                case ElementType::PICK_SCRAPE:
+                    exp->textLine(toPickScrape(e), sstaff, seg->tick());
+                    break;
                 case ElementType::TRILL:
                     // ignore (written as <note><notations><ornaments><wavy-line>)
                     break;
@@ -5830,6 +5835,9 @@ static void spannerStop(ExportMusicXml* exp, track_idx_t strack, track_idx_t etr
                 break;
             case ElementType::HARMONIC_MARK:
                 exp->textLine(toHarmonicMark(e), sstaff, Fraction(-1, 1));
+                break;
+            case ElementType::PICK_SCRAPE:
+                exp->textLine(toPickScrape(e), sstaff, Fraction(-1, 1));
                 break;
             case ElementType::TRILL:
                 // ignore (written as <note><notations><ornaments><wavy-line>

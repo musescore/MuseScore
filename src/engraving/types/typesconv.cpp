@@ -201,6 +201,7 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::WHAMMY_BAR_SEGMENT,   "WhammyBarSegment",     TranslatableString("engraving", "Whammy bar segment") },
     { ElementType::RASGUEADO_SEGMENT,    "RasgueadoSegment",     TranslatableString("engraving", "Rasgueado segment") },
     { ElementType::HARMONIC_MARK_SEGMENT,    "HarmonicMarkSegment",    TranslatableString("engraving", "Harmonic mark segment") },
+    { ElementType::PICK_SCRAPE_SEGMENT,    "PickScrapeSegment",    TranslatableString("engraving", "Pick scrape segment") },
     { ElementType::TEXTLINE_SEGMENT,     "TextLineSegment",      TranslatableString("engraving", "Text line segment") },
     { ElementType::VOLTA_SEGMENT,        "VoltaSegment",         TranslatableString("engraving", "Volta segment") },
     { ElementType::PEDAL_SEGMENT,        "PedalSegment",         TranslatableString("engraving", "Pedal segment") },
@@ -231,6 +232,7 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::WHAMMY_BAR,           "WhammyBar",            TranslatableString("engraving", "Whammy bar") },
     { ElementType::RASGUEADO,            "Rasgueado",            TranslatableString("engraving", "Rasgueado") },
     { ElementType::HARMONIC_MARK,        "HarmonicMark",         TranslatableString("engraving", "Harmonic mark") },
+    { ElementType::PICK_SCRAPE,          "PickScrape",           TranslatableString("engraving", "Pick scrape out") },
     { ElementType::TEXTLINE,             "TextLine",             TranslatableString("engraving", "Text line") },
     { ElementType::TEXTLINE_BASE,        "TextLineBase",         TranslatableString("engraving", "Text line base") },    // remove
     { ElementType::NOTELINE,             "NoteLine",             TranslatableString("engraving", "Note line") },

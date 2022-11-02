@@ -51,6 +51,7 @@ public:
         PALM_MUTE,
         WHAMMY_BAR,
         RASGUEADO,
+        PICK_SCRAPE,
 
         /// harmonics
         HARMONIC_ARTIFICIAL,
@@ -131,6 +132,7 @@ private:
     void addTapping(const GPNote* gpnote, Note* note);
     void addSlide(const GPNote* gpnote, Note* note);
     void addSingleSlide(const GPNote* gpnote, Note* note);
+    void addPickScrape(const GPNote* gpnote, Note* note);
     void addLetRing(const GPNote* gpnote, Note* note);
     void addPalmMute(const GPNote* gpnote, Note* note);
     void collectContinuousSlide(const GPNote* gpnote, Note* note);
@@ -155,6 +157,7 @@ private:
     void addPalmMute(const GPBeat* gpbeat, ChordRest* cr);
     void addTrill(const GPBeat* gpbeat, ChordRest* cr);
     void addDive(const GPBeat* beat, ChordRest* cr);
+    void addPickScrape(const GPBeat* beat, ChordRest* cr);
     void addHarmonicMark(const GPBeat* gpbeat, ChordRest* cr);
     void setupTupletStyle(Tuplet* tuplet);
     void addVibratoWTremBar(const GPBeat* beat, ChordRest* cr);
@@ -209,6 +212,7 @@ private:
     std::vector<SLine*> m_palmMutes;
     std::vector<SLine*> m_letRings;
     std::vector<SLine*> m_dives;
+    std::vector<SLine*> m_pickScrapes;
     std::vector<SLine*> m_rasgueados;
     std::vector<Vibrato*> _vibratos;
     std::map<GPBeat::HarmonicMarkType, std::vector<SLine*> > m_harmonicMarks;

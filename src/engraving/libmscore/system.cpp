@@ -1253,6 +1253,7 @@ void System::add(EngravingItem* el)
     case ElementType::WHAMMY_BAR_SEGMENT:
     case ElementType::RASGUEADO_SEGMENT:
     case ElementType::HARMONIC_MARK_SEGMENT:
+    case ElementType::PICK_SCRAPE_SEGMENT:
     {
         SpannerSegment* ss = toSpannerSegment(el);
 #ifndef NDEBUG
