@@ -81,17 +81,19 @@ public:
     using ButtonDatas = std::vector<ButtonData>;
 
     enum class TextFormat {
-        PlainText = 0,
+        Auto = 0,
+        PlainText,
         RichText
     };
 
     struct Text {
         std::string text;
-        TextFormat format = TextFormat::PlainText;
+        TextFormat format = TextFormat::Auto;
+
         Text() = default;
         Text(const char* t)
-            : text(t), format(TextFormat::PlainText) {}
-        Text(const std::string& t, const TextFormat& f = TextFormat::PlainText)
+            : text(t), format(TextFormat::Auto) {}
+        Text(const std::string& t, const TextFormat& f = TextFormat::Auto)
             : text(t), format(f) {}
     };
 
