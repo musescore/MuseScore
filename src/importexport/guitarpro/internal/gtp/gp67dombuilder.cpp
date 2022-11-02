@@ -971,7 +971,18 @@ void GP67DomBuilder::readNoteProperties(XmlDomNode* propertiesNode, GPNote* note
                 note->setMute(true);
             }
         } else if (propertyName == u"Slide") {
-            note->setSlides(propertyNode.firstChild().toElement().text().toUInt());
+            int slideInfo = propertyNode.firstChild().toElement().text().toUInt();
+            switch (slideInfo) {
+            case 64:
+                note->setPickScrape(GPNote::PickScrape::Down);
+                break;
+            case 128:
+                note->setPickScrape(GPNote::PickScrape::Up);
+                break;
+            default:
+                note->setSlides(slideInfo);
+                break;
+            }
         } else if (propertyName == u"HopoOrigin") {
             note->setHammerOn(GPNote::HammerOn::Start);
         } else if (propertyName == u"Tapped") {

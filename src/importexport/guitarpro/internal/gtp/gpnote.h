@@ -26,6 +26,10 @@ public:
         None, Start, End
     };
 
+    enum class PickScrape {
+        None, Down, Up
+    };
+
     struct Harmonic {
         enum class Type {
             None, Natural, Artificial, Pinch, Tap, Semi, FeedBack, Types
@@ -136,6 +140,9 @@ public:
     void setHammerOn(HammerOn h) { _hammer = h; }
     HammerOn hammerOn() const { return _hammer; }
 
+    void setPickScrape(PickScrape p) { _pickScrape = p; }
+    PickScrape pickScrape() const { return _pickScrape; }
+
     void setId(int id) { _id = id; }
     int id() const { return _id; }
 
@@ -158,7 +165,7 @@ private:
     bool _tapping{ false };
     //[0] - staccato, [1] - unknown, [2] - heavily accidental, [3] - accidental
     std::bitset<4> _accent{ 0 };
-    //[0] shifSlide, [1] - legatoSlide, [2] - slideDownWard, [3] - slidewUpWard, [4] - slideInFormBelow, [5] - slideInFormAbove
+    //[0] shifSlide, [1] - legatoSlide, [2] - slideDownWard, [3] - slidewUpWard, [4] - slideInFormBelow, [5] - slideInFormAbove,
     std::bitset<6> _slides{ 0 };
     String _leftFingering;
     String _rightFingering;
@@ -167,6 +174,7 @@ private:
     Ornament _ornament{ Ornament::None };
     bool _leftHandTapped{ false };
     HammerOn _hammer{ HammerOn::None };
+    PickScrape _pickScrape{ PickScrape::None };
 };
 }
 

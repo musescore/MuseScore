@@ -576,6 +576,7 @@ void Score::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
     case ElementType::WHAMMY_BAR:
     case ElementType::RASGUEADO:
     case ElementType::HARMONIC_MARK:
+    case ElementType::PICK_SCRAPE:
     case ElementType::LET_RING:
     case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::VIBRATO:

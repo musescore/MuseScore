@@ -231,6 +231,8 @@ public:
 
     static HarmonicMark* createHarmonicMark(EngravingItem* parent, bool isAccessibleEnabled = true);
 
+    static PickScrape* createPickScrape(EngravingItem* parent, bool isAccessibleEnabled = true);
+
     static Volta* createVolta(EngravingItem* parent, bool isAccessibleEnabled = true);
 
     static Pedal* createPedal(EngravingItem* parent, bool isAccessibleEnabled = true);

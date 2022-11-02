@@ -1552,6 +1552,7 @@ void Score::addElement(EngravingItem* element)
     case ElementType::WHAMMY_BAR:
     case ElementType::RASGUEADO:
     case ElementType::HARMONIC_MARK:
+    case ElementType::PICK_SCRAPE:
     {
         Spanner* spanner = toSpanner(element);
         if (et == ElementType::TEXTLINE && spanner->anchor() == Spanner::Anchor::NOTE) {
@@ -1710,6 +1711,7 @@ void Score::removeElement(EngravingItem* element)
     case ElementType::WHAMMY_BAR:
     case ElementType::RASGUEADO:
     case ElementType::HARMONIC_MARK:
+    case ElementType::PICK_SCRAPE:
     case ElementType::TEXTLINE:
     case ElementType::HAIRPIN:
     {
