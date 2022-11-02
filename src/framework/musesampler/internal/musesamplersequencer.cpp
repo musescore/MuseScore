@@ -236,32 +236,32 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
 
 int MuseSamplerSequencer::pitchIndex(const mpe::pitch_level_t pitchLevel) const
 {
-    static constexpr mpe::pitch_level_t MIN_SUPPORTED_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 0);
+    static constexpr mpe::pitch_level_t MIN_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 0);
     static constexpr int MIN_SUPPORTED_NOTE = 12; // equivalent for C0
-    static constexpr mpe::pitch_level_t MAX_SUPPORTED_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 8);
+    static constexpr mpe::pitch_level_t MAX_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 8);
     static constexpr int MAX_SUPPORTED_NOTE = 108; // equivalent for C8
 
-    if (pitchLevel <= MIN_SUPPORTED_LEVEL) {
+    if (pitchLevel <= MIN_SUPPORTED_PITCH_LEVEL) {
         return MIN_SUPPORTED_NOTE;
     }
 
-    if (pitchLevel >= MAX_SUPPORTED_LEVEL) {
+    if (pitchLevel >= MAX_SUPPORTED_PITCH_LEVEL) {
         return MAX_SUPPORTED_NOTE;
     }
 
-    float stepCount = MIN_SUPPORTED_NOTE + ((pitchLevel - MIN_SUPPORTED_LEVEL) / static_cast<float>(mpe::PITCH_LEVEL_STEP));
+    float stepCount = MIN_SUPPORTED_NOTE + ((pitchLevel - MIN_SUPPORTED_PITCH_LEVEL) / static_cast<float>(mpe::PITCH_LEVEL_STEP));
 
     return RealRound(stepCount, 0);
 }
 
 double MuseSamplerSequencer::dynamicLevelRatio(const mpe::dynamic_level_t level) const
 {
-    static constexpr mpe::dynamic_level_t MIN_SUPPORTED_LEVEL = mpe::dynamicLevelFromType(mpe::DynamicType::ppppppppp);
-    static constexpr mpe::dynamic_level_t MAX_SUPPORTED_LEVEL = mpe::dynamicLevelFromType(mpe::DynamicType::fffffffff);
+    static constexpr mpe::dynamic_level_t MIN_SUPPORTED_DYNAMIC_LEVEL = mpe::dynamicLevelFromType(mpe::DynamicType::ppppppppp);
+    static constexpr mpe::dynamic_level_t MAX_SUPPORTED_DYNAMIC_LEVEL = mpe::dynamicLevelFromType(mpe::DynamicType::fffffffff);
 
     // Piecewise linear simple scaling to expected MuseSampler values:
     static const std::list<std::pair<mpe::dynamic_level_t, double> > conversionMap = {
-        { MIN_SUPPORTED_LEVEL, 0.0 },
+        { MIN_SUPPORTED_DYNAMIC_LEVEL, 0.0 },
         { mpe::dynamicLevelFromType(mpe::DynamicType::ppppp), 1.0 / 127.0 },
         { mpe::dynamicLevelFromType(mpe::DynamicType::pppp), 2.0 / 127.0 },
         { mpe::dynamicLevelFromType(mpe::DynamicType::ppp), 4.0 / 127.0 },
@@ -272,7 +272,7 @@ double MuseSamplerSequencer::dynamicLevelRatio(const mpe::dynamic_level_t level)
         { mpe::dynamicLevelFromType(mpe::DynamicType::f), 96.0 / 127.0 },
         { mpe::dynamicLevelFromType(mpe::DynamicType::ff), 120.0 / 127.0 },
         { mpe::dynamicLevelFromType(mpe::DynamicType::fff), 127.0 / 127.0 },
-        { MAX_SUPPORTED_LEVEL, 127.0 / 127.0 }
+        { MAX_SUPPORTED_DYNAMIC_LEVEL, 127.0 / 127.0 }
     };
 
     auto prev_level = conversionMap.begin();
