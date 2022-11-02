@@ -89,6 +89,7 @@ void CommandLineController::parse(const QStringList& args)
     m_parser.addOption(QCommandLineOption("fps", "Frame per second [60, 30, 24]", "24"));
 
     m_parser.addOption(QCommandLineOption("gp-linked", "create tabulature linked staves for guitar pro"));
+    m_parser.addOption(QCommandLineOption("gp-experimental", "experimental features for guitar pro import"));
 
     //! NOTE Currently only implemented `full` mode
     m_parser.addOption(QCommandLineOption("migration", "Whether to do migration with given mode, `full` - full migration", "mode"));
@@ -361,6 +362,10 @@ void CommandLineController::apply()
 
     if (m_parser.isSet("gp-linked")) {
         guitarProConfiguration()->setLinkedTabStaffCreated(true);
+    }
+
+    if (m_parser.isSet("gp-experimental")) {
+        guitarProConfiguration()->setExperimental(true);
     }
 }
 

@@ -558,7 +558,6 @@ Note::Note(Chord* ch)
     _playEvents.push_back(NoteEvent());      // add default play event
     _cachedNoteheadSym = SymId::noSym;
     _cachedSymNull = SymId::noSym;
-    _fretConflictResolveSupported = score()->styleB(Sid::fretConflictResolveSupported);
 }
 
 Note::~Note()
@@ -641,7 +640,6 @@ Note::Note(const Note& n, bool link)
     _fixedLine         = n._fixedLine;
     _accidental        = 0;
     _harmonic          = n._harmonic;
-    _fretConflictResolveSupported = n._fretConflictResolveSupported;
     _cachedNoteheadSym = n._cachedNoteheadSym;
     _cachedSymNull     = n._cachedSymNull;
 
@@ -1365,7 +1363,7 @@ void Note::draw(mu::draw::Painter* painter) const
         return;
     }
 
-    bool negativeFret = !_fretConflictResolveSupported && _fret < 0 && staff()->isTabStaff(tick());
+    bool negativeFret = engravingConfiguration()->negativeFretsAllowed() && _fret < 0 && staff()->isTabStaff(tick());
 
     Color c(negativeFret ? engravingConfiguration()->criticalColor() : curColor());
     painter->setPen(c);
@@ -1411,7 +1409,7 @@ void Note::draw(mu::draw::Painter* painter) const
         painter->setFont(f);
         painter->setPen(c);
         double startPosX = bbox().x();
-        if (_ghost && score()->styleB(Sid::parenthesisHeadGhostNote)) {
+        if (_ghost && engravingConfiguration()->tablatureParenthesesZIndexWorkaround()) {
             startPosX += symWidth(SymId::noteheadParenthesisLeft);
         }
 
@@ -2272,7 +2270,7 @@ void Note::layout()
         if (_fixed) {
             _fretString = u"/";
         } else {
-            const bool negativeFret = (_fret < 0) && !_fretConflictResolveSupported;
+            const bool negativeFret = (_fret < 0) && engravingConfiguration()->negativeFretsAllowed();
 
             _fretString = tab->fretString(fabs(_fret), _string, _deadNote);
 
@@ -2290,14 +2288,14 @@ void Note::layout()
             backTiedParenthesis = true;
         }
 
-        if ((_ghost && !score()->styleB(Sid::parenthesisHeadGhostNote)) || backTiedParenthesis) {
+        if ((_ghost && !engravingConfiguration()->tablatureParenthesesZIndexWorkaround()) || backTiedParenthesis) {
             _fretString = String(u"(%1)").arg(_fretString);
         }
 
         double w = tabHeadWidth(tab);     // !! use _fretString
         bbox().setRect(0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
 
-        if (_ghost && score()->styleB(Sid::parenthesisHeadGhostNote)) {
+        if (_ghost && engravingConfiguration()->tablatureParenthesesZIndexWorkaround()) {
             bbox().setWidth(w + symWidth(SymId::noteheadParenthesisLeft) + symWidth(SymId::noteheadParenthesisRight));
         } else {
             bbox().setWidth(w);
@@ -2309,7 +2307,7 @@ void Note::layout()
             setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
         }
         SymId nh = noteHead();
-        if (score()->styleB(Sid::crossHeadBlackOnly) && ((nh == SymId::noteheadXHalf) || (nh == SymId::noteheadXWhole))) {
+        if (engravingConfiguration()->crossNoteHeadAlwaysBlack() && ((nh == SymId::noteheadXHalf) || (nh == SymId::noteheadXWhole))) {
             nh = SymId::noteheadXBlack;
         }
 
@@ -2395,13 +2393,13 @@ void Note::layout2()
                     w = tabHeadWidth(tab);
                 }
 
-                if (score()->styleB(Sid::parenthesisHeadGhostNote) && staff()->isTabStaff(e->tick())) {
+                if (engravingConfiguration()->tablatureParenthesesZIndexWorkaround() && staff()->isTabStaff(e->tick())) {
                     e->movePosX(w + symWidth(SymId::noteheadParenthesisRight));
                 } else {
                     e->movePosX(w);
                 }
             } else if (sym->sym() == SymId::noteheadParenthesisLeft) {
-                if (!score()->styleB(Sid::parenthesisHeadGhostNote) || !staff()->isTabStaff(e->tick())) {
+                if (!engravingConfiguration()->tablatureParenthesesZIndexWorkaround() || !staff()->isTabStaff(e->tick())) {
                     e->movePosX(-symWidth(SymId::noteheadParenthesisLeft));
                 }
             }
@@ -4047,5 +4045,10 @@ void Note::addLineAttachPoint(PointF point, EngravingItem* line)
     // We transform into note coordinates by subtracting the note position in staff coordinates
     point -= posInStaffCoordinates();
     _lineAttachPoints.push_back(LineAttachPoint(line, point.x(), point.y()));
+}
+
+bool Note::fretConflictResolveSupported() const
+{
+    return !engravingConfiguration()->negativeFretsAllowed();
 }
 }

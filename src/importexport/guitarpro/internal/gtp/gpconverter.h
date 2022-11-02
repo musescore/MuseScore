@@ -12,6 +12,8 @@
 
 #include "libmscore/vibrato.h"
 
+#include "iguitarproconfiguration.h"
+
 namespace mu::engraving {
 class GPNote;
 class GPVoice;
@@ -38,6 +40,8 @@ class Bend;
 
 class GPConverter
 {
+    INJECT(importexport, iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration);
+
 public:
     GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom);
 
