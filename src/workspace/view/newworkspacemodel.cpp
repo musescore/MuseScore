@@ -106,6 +106,11 @@ void NewWorkspaceModel::validateWorkspaceName()
                          .arg(m_workspaceName);
         return;
     }
+
+    if (m_workspaceName.size() > 24) {
+        m_errorMessage = qtrc("workspace", "Workspace name should not have more than 24 characters. Please choose a different name.");
+        return;
+    }
 }
 
 void NewWorkspaceModel::setUseUiPreferences(bool needUse)
