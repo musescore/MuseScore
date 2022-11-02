@@ -146,7 +146,8 @@ StyledDialogView {
                                 StyledTextLabel {
                                     Layout.preferredWidth: titleColumn.width
 
-                                    color: ui.theme.fontSecondaryColor
+                                    color: ui.theme.fontPrimaryColor
+                                    opacity: enabled? 0.7 : 0.7 * ui.theme.itemOpacityDisabled
 
                                     text: profileButton.activeTitle
                                 }
