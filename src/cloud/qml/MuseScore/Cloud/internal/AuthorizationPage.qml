@@ -116,7 +116,7 @@ FocusScope {
                 navigation.column: 2
 
                 onClicked: {
-                    // TODO: implement me
+                    Qt.openUrlExternally("https://youtu.be/6LP4U_BF23w")
                 }
             }
 
