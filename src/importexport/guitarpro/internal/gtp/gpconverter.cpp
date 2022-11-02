@@ -542,7 +542,6 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
 
             curSegment->add(cr);
 
-            configureGraceChord(beat, cr);
             graceChords.push_back({ cr, beat });
 
             return ctx.curTick;
@@ -560,6 +559,7 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
         if (!graceChords.empty()) {
             int grIndex = 0;
             for (auto [pGrChord, pBeat] : graceChords) {
+                configureGraceChord(pBeat, pGrChord);
                 if (pGrChord->type() == ElementType::CHORD) {
                     static_cast<Chord*>(pGrChord)->setGraceIndex(grIndex++);
                 }
