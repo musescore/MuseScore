@@ -21,13 +21,12 @@
  */
 #include "playbackproxymodel.h"
 
+#include "inspector/models/abstractinspectormodel.h"
 #include "internal_models/noteplaybackmodel.h"
 #include "internal_models/arpeggioplaybackmodel.h"
 #include "internal_models/fermataplaybackmodel.h"
 #include "internal_models/breathplaybackmodel.h"
 #include "internal_models/glissandoplaybackmodel.h"
-#include "internal_models/dynamicplaybackmodel.h"
-#include "internal_models/hairpinplaybackmodel.h"
 #include "internal_models/gradualtempochangeplaybackmodel.h"
 
 using namespace mu::inspector;
@@ -41,45 +40,8 @@ PlaybackProxyModel::PlaybackProxyModel(QObject* parent, IElementRepositoryServic
         new FermataPlaybackModel(this, repository),
         new BreathPlaybackModel(this, repository),
         new GlissandoPlaybackModel(this, repository),
-        new DynamicPlaybackModel(this, repository),
-        new HairpinPlaybackModel(this, repository),
         new GradualTempoChangePlaybackModel(this, repository)
     };
 
     setModels(models);
-}
-
-bool PlaybackProxyModel::hasGeneralSettings() const
-{
-    static const InspectorModelTypeSet generalGroup {
-        InspectorModelType::TYPE_NOTE,
-        InspectorModelType::TYPE_ARPEGGIO,
-        InspectorModelType::TYPE_FERMATA,
-        InspectorModelType::TYPE_BREATH,
-        InspectorModelType::TYPE_GLISSANDO,
-        InspectorModelType::TYPE_GRADUAL_TEMPO_CHANGE
-    };
-
-    return !isGropEmpty(generalGroup);
-}
-
-bool PlaybackProxyModel::hasDynamicsSettings() const
-{
-    static const InspectorModelTypeSet dynamicsGroup {
-        InspectorModelType::TYPE_DYNAMIC,
-        InspectorModelType::TYPE_HAIRPIN
-    };
-
-    return !isGropEmpty(dynamicsGroup);
-}
-
-bool PlaybackProxyModel::isGropEmpty(const InspectorModelTypeSet& group) const
-{
-    for (const AbstractInspectorModel* model : modelList()) {
-        if (group.contains(model->modelType()) && !model->isEmpty()) {
-            return false;
-        }
-    }
-
-    return true;
 }
