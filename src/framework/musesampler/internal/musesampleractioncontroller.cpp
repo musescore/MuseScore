@@ -33,13 +33,14 @@ void MuseSamplerActionController::init()
 void MuseSamplerActionController::checkLibraryIsDetected()
 {
     std::string libVersion = museSamplerInfo()->version();
-    std::string status = trc("musesampler", "MuseSampler lib is");
+    std::string status;
 
     if (libVersion.empty()) {
-        status += " " + trc("musesampler", "not found");
+        status = trc("musesampler", "MuseSampler library is not found");
     } else {
-        status += " " + trc("musesampler", "detected, version") + " " + libVersion;
+        status = qtrc("musesampler", "MuseSampler library is detected, version %1")
+                 .arg(QString::fromStdString(libVersion)).toStdString();
     }
 
-    interactive()->info("", status);
+    interactive()->info(status, std::string());
 }
