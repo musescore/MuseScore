@@ -27,9 +27,9 @@ using namespace mu::audio;
 using namespace mu::midi;
 using namespace mu::mpe;
 
-static constexpr mpe::pitch_level_t MIN_SUPPORTED_LEVEL = mpe::pitchLevel(PitchClass::C, 0);
+static constexpr mpe::pitch_level_t MIN_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(PitchClass::C, 0);
 static constexpr note_idx_t MIN_SUPPORTED_NOTE = 12; // MIDI equivalent for C0
-static constexpr mpe::pitch_level_t MAX_SUPPORTED_LEVEL = mpe::pitchLevel(PitchClass::C, 8);
+static constexpr mpe::pitch_level_t MAX_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(PitchClass::C, 8);
 static constexpr note_idx_t MAX_SUPPORTED_NOTE = 108; // MIDI equivalent for C8
 
 void FluidSequencer::init(const PlaybackSetupData& setupData)
@@ -228,15 +228,15 @@ channel_t FluidSequencer::channel(const mpe::NoteEvent& noteEvent) const
 
 note_idx_t FluidSequencer::noteIndex(const mpe::pitch_level_t pitchLevel) const
 {
-    if (pitchLevel <= MIN_SUPPORTED_LEVEL) {
+    if (pitchLevel <= MIN_SUPPORTED_PITCH_LEVEL) {
         return MIN_SUPPORTED_NOTE;
     }
 
-    if (pitchLevel >= MAX_SUPPORTED_LEVEL) {
+    if (pitchLevel >= MAX_SUPPORTED_PITCH_LEVEL) {
         return MAX_SUPPORTED_NOTE;
     }
 
-    float stepCount = MIN_SUPPORTED_NOTE + ((pitchLevel - MIN_SUPPORTED_LEVEL) / static_cast<float>(mpe::PITCH_LEVEL_STEP));
+    float stepCount = MIN_SUPPORTED_NOTE + ((pitchLevel - MIN_SUPPORTED_PITCH_LEVEL) / static_cast<float>(mpe::PITCH_LEVEL_STEP));
 
     return stepCount;
 }
@@ -261,21 +261,21 @@ velocity_t FluidSequencer::noteVelocity(const mpe::NoteEvent& noteEvent) const
 
 int FluidSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) const
 {
-    static constexpr mpe::dynamic_level_t MIN_SUPPORTED_LEVEL = mpe::dynamicLevelFromType(DynamicType::ppp);
-    static constexpr mpe::dynamic_level_t MAX_SUPPORTED_LEVEL = mpe::dynamicLevelFromType(DynamicType::fff);
+    static constexpr mpe::dynamic_level_t MIN_SUPPORTED_DYNAMICS_LEVEL = mpe::dynamicLevelFromType(DynamicType::ppp);
+    static constexpr mpe::dynamic_level_t MAX_SUPPORTED_DYNAMICS_LEVEL = mpe::dynamicLevelFromType(DynamicType::fff);
     static constexpr int MIN_SUPPORTED_VOLUME = 16; // MIDI equivalent for PPP
     static constexpr int MAX_SUPPORTED_VOLUME = 127; // MIDI equivalent for FFF
     static constexpr int VOLUME_STEP = 16;
 
-    if (dynamicLevel <= MIN_SUPPORTED_LEVEL) {
+    if (dynamicLevel <= MIN_SUPPORTED_DYNAMICS_LEVEL) {
         return MIN_SUPPORTED_VOLUME;
     }
 
-    if (dynamicLevel >= MAX_SUPPORTED_LEVEL) {
+    if (dynamicLevel >= MAX_SUPPORTED_DYNAMICS_LEVEL) {
         return MAX_SUPPORTED_VOLUME;
     }
 
-    float stepCount = ((dynamicLevel - MIN_SUPPORTED_LEVEL) / static_cast<float>(mpe::DYNAMIC_LEVEL_STEP));
+    float stepCount = ((dynamicLevel - MIN_SUPPORTED_DYNAMICS_LEVEL) / static_cast<float>(mpe::DYNAMIC_LEVEL_STEP));
 
     if (dynamicLevel == mpe::dynamicLevelFromType(DynamicType::Natural)) {
         stepCount -= 0.5;
@@ -287,7 +287,7 @@ int FluidSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) con
 
     dynamic_level_t result = RealRound(MIN_SUPPORTED_VOLUME + (stepCount * VOLUME_STEP), 0);
 
-    return std::min(result, MAX_SUPPORTED_LEVEL);
+    return std::min(result, MAX_SUPPORTED_DYNAMICS_LEVEL);
 }
 
 int FluidSequencer::pitchBendLevel(const mpe::pitch_level_t pitchLevel) const
