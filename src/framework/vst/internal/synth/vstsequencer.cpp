@@ -28,9 +28,9 @@ using namespace mu::vst;
 static constexpr ControllIdx SUSTAIN_IDX = static_cast<ControllIdx>(Steinberg::Vst::kCtrlSustainOnOff);
 static const mpe::ArticulationTypeSet PEDAL_CC_SUPPORTED_TYPES { mpe::ArticulationType::Pedal };
 
-static constexpr mpe::pitch_level_t MIN_SUPPORTED_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 0);
+static constexpr mpe::pitch_level_t MIN_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 0);
 static constexpr int MIN_SUPPORTED_NOTE = 12; // VST equivalent for C0
-static constexpr mpe::pitch_level_t MAX_SUPPORTED_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 8);
+static constexpr mpe::pitch_level_t MAX_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 8);
 static constexpr int MAX_SUPPORTED_NOTE = 108; // VST equivalent for C8
 
 void VstSequencer::init(ParamsMapping&& mapping)
@@ -166,15 +166,15 @@ PluginParamInfo VstSequencer::buildParamInfo(const PluginParamId id, const Plugi
 
 int32_t VstSequencer::noteIndex(const mpe::pitch_level_t pitchLevel) const
 {
-    if (pitchLevel <= MIN_SUPPORTED_LEVEL) {
+    if (pitchLevel <= MIN_SUPPORTED_PITCH_LEVEL) {
         return MIN_SUPPORTED_NOTE;
     }
 
-    if (pitchLevel >= MAX_SUPPORTED_LEVEL) {
+    if (pitchLevel >= MAX_SUPPORTED_PITCH_LEVEL) {
         return MAX_SUPPORTED_NOTE;
     }
 
-    float stepCount = MIN_SUPPORTED_NOTE + ((pitchLevel - MIN_SUPPORTED_LEVEL) / static_cast<float>(mpe::PITCH_LEVEL_STEP));
+    float stepCount = MIN_SUPPORTED_NOTE + ((pitchLevel - MIN_SUPPORTED_PITCH_LEVEL) / static_cast<float>(mpe::PITCH_LEVEL_STEP));
 
     return stepCount;
 }
@@ -195,17 +195,17 @@ float VstSequencer::noteVelocityFraction(const mpe::NoteEvent& noteEvent) const
 
 float VstSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) const
 {
-    static constexpr mpe::dynamic_level_t MIN_SUPPORTED_LEVEL = mpe::dynamicLevelFromType(mpe::DynamicType::ppp);
-    static constexpr mpe::dynamic_level_t MAX_SUPPORTED_LEVEL = mpe::dynamicLevelFromType(mpe::DynamicType::fff);
-    static constexpr mpe::dynamic_level_t AVAILABLE_RANGE = MAX_SUPPORTED_LEVEL - MIN_SUPPORTED_LEVEL;
+    static constexpr mpe::dynamic_level_t MIN_SUPPORTED_DYNAMIC_LEVEL = mpe::dynamicLevelFromType(mpe::DynamicType::ppp);
+    static constexpr mpe::dynamic_level_t MAX_SUPPORTED_DYNAMIC_LEVEL = mpe::dynamicLevelFromType(mpe::DynamicType::fff);
+    static constexpr mpe::dynamic_level_t AVAILABLE_RANGE = MAX_SUPPORTED_DYNAMIC_LEVEL - MIN_SUPPORTED_DYNAMIC_LEVEL;
 
-    if (dynamicLevel <= MIN_SUPPORTED_LEVEL) {
+    if (dynamicLevel <= MIN_SUPPORTED_DYNAMIC_LEVEL) {
         return (0.5f * mpe::ONE_PERCENT) / AVAILABLE_RANGE;
     }
 
-    if (dynamicLevel >= MAX_SUPPORTED_LEVEL) {
+    if (dynamicLevel >= MAX_SUPPORTED_DYNAMIC_LEVEL) {
         return 1.f;
     }
 
-    return RealRound((dynamicLevel - MIN_SUPPORTED_LEVEL) / static_cast<float>(AVAILABLE_RANGE), 2);
+    return RealRound((dynamicLevel - MIN_SUPPORTED_DYNAMIC_LEVEL) / static_cast<float>(AVAILABLE_RANGE), 2);
 }
