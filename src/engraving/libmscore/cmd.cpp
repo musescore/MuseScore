@@ -410,6 +410,10 @@ void CmdState::dump()
 
 void Score::update(bool resetCmdState, bool layoutAllParts)
 {
+    if (_updatesLocked) {
+        return;
+    }
+
     TRACEFUNC;
 
     bool updateAll = false;
@@ -461,6 +465,11 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
     if (_selection.isRange() && !_selection.isLocked()) {
         _selection.updateSelectedElements();
     }
+}
+
+void Score::lockUpdates(bool locked)
+{
+    _updatesLocked = locked;
 }
 
 //---------------------------------------------------------

@@ -489,6 +489,7 @@ private:
 
     PaddingTable _paddingTable;
     double _minimumPaddingUnit = 0.1 * spatium(); // Maybe style setting in future
+    bool _updatesLocked = false;
 
 protected:
     int _fileDivision;   ///< division of current loading *.msc file
@@ -746,6 +747,7 @@ public:
     void startCmd();                    // start undoable command
     void endCmd(bool rollback = false, bool layoutAllParts = false); // end undoable command
     void update() { update(true); }
+    void lockUpdates(bool locked);
     void undoRedo(bool undo, EditData*);
 
     virtual mu::async::Channel<ScoreChangesRange> changesChannel() const;
