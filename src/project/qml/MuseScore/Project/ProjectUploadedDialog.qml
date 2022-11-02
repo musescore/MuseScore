@@ -204,6 +204,7 @@ StyledDialogView {
                         }
 
                         onClicked: {
+                            Qt.openUrlExternally("https://youtu.be/6LP4U_BF23w")
                             root.hide()
                         }
                     }
