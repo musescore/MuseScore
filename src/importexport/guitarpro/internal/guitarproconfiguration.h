@@ -31,8 +31,12 @@ public:
     bool linkedTabStaffCreated() const override;
     void setLinkedTabStaffCreated(bool created) override;
 
+    bool experimental() const override;
+    void setExperimental(bool experimental) override;
+
 private:
     bool m_linkedTabStaffCreated = false;
+    bool m_experimental = false;
 };
 }
 

@@ -69,6 +69,13 @@ public:
     MOCK_METHOD(async::Notification, debuggingOptionsChanged, (), (const, override));
 
     MOCK_METHOD(bool, isAccessibleEnabled, (), (const, override));
+
+    MOCK_METHOD(bool, guitarProImportExperimental, (), (const, override));
+    MOCK_METHOD(bool, negativeFretsAllowed, (), (const, override));
+    MOCK_METHOD(bool, tablatureParenthesesZIndexWorkaround, (), (const, override));
+    MOCK_METHOD(bool, crossNoteHeadAlwaysBlack, (), (const, override));
+    MOCK_METHOD(bool, enableExperimentalFretCircle, (), (const, override));
+    MOCK_METHOD(bool, chordAlwaysHasVoices, (), (const, override));
 };
 }
 

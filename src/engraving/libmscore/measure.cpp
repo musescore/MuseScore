@@ -2367,7 +2367,7 @@ bool Measure::hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len) cons
                 bool v = false;
                 if (cr->isChord()) {
                     Chord* c = toChord(cr);
-                    if (score()->styleB(Sid::considerInvisibleChordDirection)) {
+                    if (engravingConfiguration()->chordAlwaysHasVoices()) {
                         return true;
                     }
 
