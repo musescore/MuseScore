@@ -245,18 +245,17 @@ void TieSegment::editDrag(EditData& ed)
 
 void TieSegment::computeBezier(PointF shoulderOffset)
 {
-    double _spatium = spatium();
-    double shoulderW; // height as fraction of slur-length
-    double shoulderH;
-
     PointF tieStart = ups(Grip::START).p + ups(Grip::START).off;
     PointF tieEnd = ups(Grip::END).p + ups(Grip::END).off;
 
     PointF tieEndNormalized = tieEnd - tieStart;  // normalize to zero
-    if (tieEndNormalized.x() == 0.0) {
-        LOGD("zero tie");
+    if (RealIsNull(tieEndNormalized.x())) {
         return;
     }
+
+    double _spatium = spatium();
+    double shoulderW = 0.0; // height as fraction of slur-length
+    double shoulderH = 0.0;
 
     double tieAngle = atan(tieEndNormalized.y() / tieEndNormalized.x()); // angle required from tie start to tie end--zero if horizontal
     Transform t;

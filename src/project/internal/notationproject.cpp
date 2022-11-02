@@ -171,6 +171,7 @@ mu::Ret NotationProject::load(const io::path_t& path, const io::path_t& stylePat
     m_masterNotation->masterScore()->setSaved(!treatAsImported);
 
     m_isNewlyCreated = treatAsImported;
+    m_isImported = treatAsImported;
 
     return ret;
 }
@@ -275,6 +276,7 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
     score->setMetaTag(u"originalFormat", QString::fromStdString(suffix));
 
     m_isNewlyCreated = true;
+    m_isImported = true;
 
     return make_ret(Ret::Code::Ok);
 }
@@ -735,6 +737,11 @@ void NotationProject::markAsNewlyCreated()
 
     masterScore->setSaved(false);
     m_masterNotation->undoStack()->stackChanged().notify();
+}
+
+bool NotationProject::isImported() const
+{
+    return m_isImported;
 }
 
 void NotationProject::markAsUnsaved()
