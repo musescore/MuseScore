@@ -361,7 +361,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
 void LayoutPage::layoutPage(const LayoutContext& ctx, Page* page, double restHeight, double footerPadding)
 {
     if (restHeight < 0.0) {
-        LOGD("restHeight < 0.0: %f\n", restHeight);
+        LOGN("restHeight < 0.0: %f\n", restHeight);
         restHeight = 0;
     }
 

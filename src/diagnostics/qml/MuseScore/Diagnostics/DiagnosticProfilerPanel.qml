@@ -54,6 +54,7 @@ Rectangle {
             anchors.right: btnRow.left
             anchors.verticalCenter: parent.verticalCenter
             anchors.margins: 16
+            clearTextButtonVisible: true
             onCurrentTextEdited: function(newTextValue) {
                 profModel.find(newTextValue)
             }
@@ -64,6 +65,7 @@ Rectangle {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.right: parent.right
+            anchors.rightMargin: 16
             width: childrenRect.width
             spacing: 8
 
