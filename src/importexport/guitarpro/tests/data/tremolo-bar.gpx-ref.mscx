@@ -67,6 +67,17 @@
             <tempo>2</tempo>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
+          <Spanner type="WhammyBar">
+            <WhammyBar>
+              <beginTextOffset x="0" y="0"/>
+              </WhammyBar>
+            <next>
+              <location>
+                <measures>3</measures>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -157,6 +168,14 @@
               <string>1</string>
               </Note>
             </Chord>
+          <Spanner type="WhammyBar">
+            <prev>
+              <location>
+                <measures>-3</measures>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
