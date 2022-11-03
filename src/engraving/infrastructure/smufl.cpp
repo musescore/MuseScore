@@ -126,7 +126,7 @@ const std::map<String, StringList>& Smufl::smuflRanges()
             LOGE() << "failed parse, err: " << error << ", file: " << fi.filePath();
         }
 
-        for (auto s : o.keys()) {
+        for (const std::string& s : o.keys()) {
             JsonObject range = o.value(s).toObject();
             String desc      = range.value("description").toString();
             JsonArray glyphs = range.value("glyphs").toArray();

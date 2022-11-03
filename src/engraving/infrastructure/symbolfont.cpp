@@ -526,15 +526,18 @@ const SymbolFont::Sym& SymbolFont::sym(SymId id) const
     return m_symbols.at(static_cast<size_t>(id));
 }
 
-char32_t SymbolFont::symCode(SymId id) const
+char32_t SymbolFont::symCode(SymId id, bool useFallBack) const
 {
     const Sym& s = sym(id);
     if (s.isValid()) {
         return s.code;
     }
 
-    // fallback: search in the common SMuFL table
-    return Smufl::smuflCode(id);
+    if (useFallBack) {
+        // fallback: search in the common SMuFL table
+        return Smufl::smuflCode(id);
+    }
+    return 0;
 }
 
 SymId SymbolFont::fromCode(char32_t code) const
