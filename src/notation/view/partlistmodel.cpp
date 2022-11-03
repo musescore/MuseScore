@@ -44,6 +44,8 @@ PartListModel::PartListModel(QObject* parent)
 
 void PartListModel::load()
 {
+    TRACEFUNC;
+
     beginResetModel();
 
     IMasterNotationPtr masterNotation = this->masterNotation();
@@ -52,12 +54,14 @@ void PartListModel::load()
         return;
     }
 
-    for (IExcerptNotationPtr excerpt : masterNotation->excerpts().val) {
-        m_excerpts << excerpt;
-    }
+    ExcerptNotationList excerpts = masterNotation->excerpts().val;
+    ExcerptNotationList potentialExcerpts = masterNotation->potentialExcerpts();
+    excerpts.insert(excerpts.end(), potentialExcerpts.begin(), potentialExcerpts.end());
 
-    for (IExcerptNotationPtr excerpt : masterNotation->potentialExcerpts()) {
-        m_excerpts << excerpt;
+    masterNotation->sortExcerpts(excerpts);
+
+    for (IExcerptNotationPtr excerpt : excerpts) {
+        m_excerpts.push_back(excerpt);
     }
 
     endResetModel();
