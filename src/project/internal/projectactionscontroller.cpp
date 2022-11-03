@@ -333,6 +333,7 @@ bool ProjectActionsController::closeOpenedProject(bool quitApp)
     }
 
     if (result) {
+        interactive()->closeAllDialogs();
         globalContext()->setCurrentProject(nullptr);
 
         if (quitApp) {
