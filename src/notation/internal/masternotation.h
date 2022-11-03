@@ -53,7 +53,7 @@ public:
 
     mu::ValNt<bool> needSave() const override;
 
-    IExcerptNotationPtr createEmptyExcerpt() const override;
+    IExcerptNotationPtr createEmptyExcerpt(const QString& name = QString()) const override;
 
     ValCh<ExcerptNotationList> excerpts() const override;
     const ExcerptNotationList& potentialExcerpts() const override;

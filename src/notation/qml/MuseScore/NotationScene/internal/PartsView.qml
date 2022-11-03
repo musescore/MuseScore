@@ -127,16 +127,16 @@ Item {
                 view.currentIndex = model.index
             }
 
-            onTitleEdited: function(newTitle) {
-                root.model.setPartTitle(model.index, newTitle)
-            }
-
-            onTitleEditingFinished: {
-                root.model.validatePartTitle(model.index)
-            }
-
             onRemovePartRequested: {
                 root.model.removePart(model.index)
+            }
+
+            onTitleEdited: function(newTitle) {
+                incorrectTitleWarning = root.model.validatePartTitle(model.index, newTitle)
+            }
+
+            onTitleEditingFinished: function(newTitle) {
+                root.model.setPartTitle(model.index, newTitle)
             }
 
             onCopyPartRequested: {
