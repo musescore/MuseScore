@@ -247,6 +247,11 @@ void Interactive::close(const UriQuery& uri)
     provider()->close(uri);
 }
 
+void Interactive::closeAllDialogs()
+{
+    provider()->closeAllDialogs();
+}
+
 ValCh<Uri> Interactive::currentUri() const
 {
     return provider()->currentUri();

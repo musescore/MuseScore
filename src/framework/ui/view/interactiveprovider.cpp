@@ -232,6 +232,17 @@ void InteractiveProvider::close(const UriQuery& uri)
     }
 }
 
+void InteractiveProvider::closeAllDialogs()
+{
+    for (const ObjectInfo& objectInfo: allOpenObjects()) {
+        UriQuery uriQuery = objectInfo.uriQuery;
+        ContainerMeta openMeta = uriRegister()->meta(uriQuery.uri());
+        if (openMeta.type == ContainerType::QWidgetDialog || openMeta.type == ContainerType::QmlDialog) {
+            closeObject(objectInfo);
+        }
+    }
+}
+
 void InteractiveProvider::closeObject(const ObjectInfo& obj)
 {
     ContainerMeta openMeta = uriRegister()->meta(obj.uriQuery.uri());
