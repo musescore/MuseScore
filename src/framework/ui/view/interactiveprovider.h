@@ -83,6 +83,7 @@ public:
 
     void close(const Uri& uri) override;
     void close(const UriQuery& uri) override;
+    void closeAllDialogs() override;
 
     ValCh<Uri> currentUri() const override;
     std::vector<Uri> stack() const override;

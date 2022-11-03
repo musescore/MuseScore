@@ -176,6 +176,11 @@ void AutobotInteractive::close(const UriQuery& uri)
     m_real->close(uri);
 }
 
+void AutobotInteractive::closeAllDialogs()
+{
+    m_real->closeAllDialogs();
+}
+
 ValCh<Uri> AutobotInteractive::currentUri() const
 {
     return m_real->currentUri();
