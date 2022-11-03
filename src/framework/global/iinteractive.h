@@ -177,6 +177,7 @@ public:
     virtual void close(const std::string& uri) = 0;
     virtual void close(const Uri& uri) = 0;
     virtual void close(const UriQuery& uri) = 0;
+    virtual void closeAllDialogs() = 0;
 
     virtual ValCh<Uri> currentUri() const = 0;
     virtual std::vector<Uri> stack() const = 0;
