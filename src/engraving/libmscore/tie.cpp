@@ -1043,11 +1043,13 @@ void Tie::calculateDirection()
     if (_slurDirection == DirectionV::AUTO) {
         std::vector<Note*> notes = c1->notes();
         size_t n = notes.size();
+        StaffType* st = staff()->staffType(startNote() ? startNote()->tick() : Fraction(0, 1));
+        bool simpleException = st && st->isSimpleTabStaff();
         // if there are multiple voices, the tie direction goes on stem side
         if (m1->hasVoices(c1->staffIdx(), c1->tick(), c1->actualTicks())) {
-            _up = c1->up();
+            _up = simpleException ? !(c1->voice() & 1) : c1->up();
         } else if (m2->hasVoices(c2->staffIdx(), c2->tick(), c2->actualTicks())) {
-            _up = c2->up();
+            _up = simpleException ? !(c2->voice() & 1) : c2->up();
         } else if (n == 1) {
             //
             // single note
@@ -1170,11 +1172,16 @@ TieSegment* Tie::layoutFor(System* system)
         Chord* c1 = startNote()->chord();
         setTick(c1->tick());
         if (_slurDirection == DirectionV::AUTO) {
-            if (c1->measure()->hasVoices(c1->staffIdx(), c1->tick(), c1->actualTicks())) {
-                // in polyphonic passage, ties go on the stem side
-                _up = c1->up();
+            bool simpleException = st && st->isSimpleTabStaff();
+            if (st && st->isSimpleTabStaff()) {
+                _up = !(c1->voice() & 1);
             } else {
-                _up = !c1->up();
+                if (c1->measure()->hasVoices(c1->staffIdx(), c1->tick(), c1->actualTicks())) {
+                    // in polyphonic passage, ties go on the stem side
+                    _up = simpleException ? !(c1->voice() & 1) : c1->up();
+                } else {
+                    _up = !c1->up();
+                }
             }
         } else {
             _up = _slurDirection == DirectionV::UP ? true : false;
