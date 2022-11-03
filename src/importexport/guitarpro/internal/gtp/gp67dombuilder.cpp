@@ -1166,7 +1166,18 @@ void GP67DomBuilder::readBeatProperties(const XmlDomNode& propertiesNode, GPBeat
             beat->setBarreFret(propertyNode.firstChild().toElement().text().toInt());
         } else if (propertyName == u"BarreString") {
             beat->setBarreString(propertyNode.firstChild().toElement().text().toInt());
-        } else {
+        } else if (propertyName == u"WhammyBar") {
+            beat->setDive(true);
+        }
+        /// TODO: implement dive
+//        else if (propertyName == u"WhammyBarDestinationOffset") {
+//        } else if (propertyName == u"WhammyBarDestinationValue") {
+//        } else if (propertyName == u"WhammyBarMiddleOffset1") {
+//        } else if (propertyName == u"WhammyBarMiddleOffset2") {
+//        } else if (propertyName == u"WhammyBarMiddleValue") {
+//        } else if (propertyName == u"WhammyBarOriginValue") {
+//        }
+        else {
             //LOGD() << "unknown GP Beat property info tag: " << propertyName << "\n";
         }
 
