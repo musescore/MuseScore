@@ -635,10 +635,10 @@ void MasterNotation::markScoreAsNeedToSave()
     m_needSaveNotification.notify();
 }
 
-IExcerptNotationPtr MasterNotation::createEmptyExcerpt() const
+IExcerptNotationPtr MasterNotation::createEmptyExcerpt(const QString& name) const
 {
     auto excerptNotation = std::make_shared<ExcerptNotation>(new mu::engraving::Excerpt(masterScore()));
-    excerptNotation->setName(qtrc("notation", "Part"));
+    excerptNotation->setName(name);
 
     return excerptNotation;
 }

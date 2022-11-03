@@ -57,18 +57,19 @@ public:
 
     Q_INVOKABLE void selectPart(int partIndex);
     Q_INVOKABLE void removePart(int partIndex);
-    Q_INVOKABLE void setPartTitle(int partIndex, const QString& title);
-    Q_INVOKABLE void validatePartTitle(int partIndex);
     Q_INVOKABLE void copyPart(int partIndex);
+
+    Q_INVOKABLE QString validatePartTitle(int partIndex, const QString& title) const;
+    Q_INVOKABLE void setPartTitle(int partIndex, const QString& title);
 
 signals:
     void selectionChanged();
     void partAdded(int index);
 
 private:
-    void setTitle(INotationPtr notation, const QString& title);
-
     void openNotations(const QList<int>& rows) const;
+
+    Ret doValidatePartTitle(int partIndex, const QString& title) const;
 
     bool isExcerptIndexValid(int index) const;
 

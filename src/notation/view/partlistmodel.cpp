@@ -31,9 +31,27 @@ using namespace mu::notation;
 using namespace mu::uicomponents;
 using namespace mu::framework;
 
-static QString defaultPartTitle()
+static bool nameExists(const QString& name, const QList<IExcerptNotationPtr>& allExcerpts)
 {
-    return mu::qtrc("notation", "Part");
+    for (const IExcerptNotationPtr& excerpt : allExcerpts) {
+        if (excerpt->name() == name) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+static QString formatUniqueExcerptName(const QString& baseName, const QList<IExcerptNotationPtr>& allExcerpts)
+{
+    QString name = baseName;
+    int num = 0;
+
+    while (nameExists(name, allExcerpts)) {
+        name = baseName + QString(" (%1)").arg(++num);
+    }
+
+    return name;
 }
 
 PartListModel::PartListModel(QObject* parent)
@@ -110,10 +128,13 @@ bool PartListModel::hasSelection() const
 
 void PartListModel::createNewPart()
 {
-    IExcerptNotationPtr excerpt = masterNotation()->createEmptyExcerpt();
+    TRACEFUNC;
+
+    QString name = formatUniqueExcerptName(qtrc("notation", "Part"), m_excerpts);
+    IExcerptNotationPtr newExcerpt = masterNotation()->createEmptyExcerpt(name);
 
     int index = m_excerpts.size();
-    insertExcerpt(index, excerpt);
+    insertExcerpt(index, newExcerpt);
 }
 
 void PartListModel::selectPart(int partIndex)
@@ -169,35 +190,48 @@ void PartListModel::doRemovePart(int partIndex)
     }
 }
 
+QString PartListModel::validatePartTitle(int partIndex, const QString& title) const
+{
+    return QString::fromStdString(doValidatePartTitle(partIndex, title.simplified()).text());
+}
+
+mu::Ret PartListModel::doValidatePartTitle(int partIndex, const QString& title) const
+{
+    if (title.isEmpty()) {
+        return false;
+    }
+
+    for (int i = 0; i < m_excerpts.size(); ++i) {
+        if (i == partIndex) {
+            continue;
+        }
+
+        if (m_excerpts[i]->name() == title) {
+            return make_ret(Ret::Code::UnknownError, trc("notation", "Name already exists"));
+        }
+    }
+
+    return true;
+}
+
 void PartListModel::setPartTitle(int partIndex, const QString& title)
 {
     if (!isExcerptIndexValid(partIndex)) {
         return;
     }
 
-    IExcerptNotationPtr excerpt = m_excerpts[partIndex];
-    if (excerpt->name() == title) {
-        return;
-    }
-
-    excerpt->setName(title);
-
-    notifyAboutNotationChanged(partIndex);
-}
-
-void PartListModel::validatePartTitle(int partIndex)
-{
-    if (!isExcerptIndexValid(partIndex)) {
-        return;
-    }
+    QString simplifiedTitle = title.simplified();
 
     IExcerptNotationPtr excerpt = m_excerpts[partIndex];
-    if (!excerpt->name().isEmpty()) {
+    if (excerpt->name() == simplifiedTitle) {
         return;
     }
 
-    excerpt->setName(defaultPartTitle());
+    if (!doValidatePartTitle(partIndex, simplifiedTitle)) {
+        return;
+    }
 
+    excerpt->setName(simplifiedTitle);
     notifyAboutNotationChanged(partIndex);
 }
 
@@ -209,15 +243,14 @@ void PartListModel::notifyAboutNotationChanged(int index)
 
 void PartListModel::copyPart(int partIndex)
 {
+    TRACEFUNC;
+
     if (!isExcerptIndexValid(partIndex)) {
         return;
     }
 
     IExcerptNotationPtr copy = m_excerpts[partIndex]->clone();
-    QString title = copy->name();
-    title += " " + qtrc("notation", "(copy)");
-
-    copy->setName(title);
+    copy->setName(formatUniqueExcerptName(copy->name() + " " + qtrc("notation", "(copy)"), m_excerpts));
 
     insertExcerpt(partIndex + 1, copy);
 }
