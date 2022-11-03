@@ -188,6 +188,13 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
         return engraving::make_ret(err, reader.params().filePath);
     }
 
+    MasterScore* masterScore = m_engravingProject->masterScore();
+    IF_ASSERT_FAILED(masterScore) {
+        return engraving::make_ret(engraving::Err::UnknownError, reader.params().filePath);
+    }
+
+    masterScore->lockUpdates(true);
+
     // Setup master score
     err = m_engravingProject->setupMasterScore(forceMode);
     if (err != engraving::Err::NoError) {
@@ -207,6 +214,9 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
         m_engravingProject->masterScore()->loadStyle(stylePath.toQString());
     }
 
+    masterScore->lockUpdates(false);
+    masterScore->update();
+
     // Load other stuff from the project file
     Ret ret = m_projectAudioSettings->read(reader);
     if (!ret) {
@@ -214,7 +224,7 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
     }
 
     // Set current if all success
-    m_masterNotation->setMasterScore(m_engravingProject->masterScore());
+    m_masterNotation->setMasterScore(masterScore);
 
     m_masterNotation->viewState()->read(reader);
     for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
