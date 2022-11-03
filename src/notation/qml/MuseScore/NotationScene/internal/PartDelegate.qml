@@ -71,9 +71,7 @@ ListItemBlank {
     }
 
     onDoubleClicked: {
-        if (root.isCustom) {
-            root.startEditTitle()
-        }
+        root.startEditTitle()
     }
 
     onIsSelectedChanged: {
@@ -141,10 +139,10 @@ ListItemBlank {
 
         MenuButton {
             Component.onCompleted: {
-                var operations = [ { "id": "duplicate", "title": qsTrc("notation", "Duplicate") }]
+                var operations = [ { "id": "duplicate", "title": qsTrc("notation", "Duplicate") },
+                                   { "id": "rename", "title": qsTrc("notation", "Rename") }]
 
                 if (root.isCustom) {
-                    operations.push({ "id": "rename", "title": qsTrc("notation", "Rename") })
                     operations.push({ "id": "delete", "title": qsTrc("notation", "Delete") })
                 }
 
