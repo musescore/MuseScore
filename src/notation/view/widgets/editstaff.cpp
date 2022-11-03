@@ -173,7 +173,6 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     invisible->setChecked(m_staff->isLinesInvisible(Fraction(0, 1)));
     isSmallCheckbox->setChecked(stt->isSmall());
     color->setColor(stt->color().toQColor());
-    partName->setText(part->partName());
     cutaway->setChecked(m_staff->cutaway());
 
     hideMode->setCurrentIndex(int(m_staff->hideWhenEmpty()));
@@ -211,12 +210,6 @@ void EditStaff::updateInstrument()
 
     longName->setPlainText(m_instrument.nameAsPlainText());
     shortName->setPlainText(m_instrument.abbreviatureAsPlainText());
-
-    if (partName->text() == instrumentName->text()) {
-        // Updates part name if no custom name has been set before
-        partName->setText(m_instrument.nameAsPlainText());
-    }
-
     instrumentName->setText(m_instrument.nameAsPlainText());
 
     m_minPitchA = m_instrument.minPitchA();
@@ -542,14 +535,8 @@ void EditStaff::applyPartProperties()
         m_instrument.longNames().push_back(mu::engraving::StaffName(ln, 0));
     }
 
-    QString newPartName = partName->text().simplified();
-
     if (m_instrument != m_orgInstrument) {
         notationParts()->replaceInstrument(m_instrumentKey, m_instrument);
-    }
-
-    if (part->partName() != newPartName) {
-        notationParts()->setPartName(m_instrumentKey.partId, newPartName);
     }
 
     SharpFlat newSharpFlat = SharpFlat(preferSharpFlat->currentIndex());

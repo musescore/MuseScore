@@ -51,7 +51,6 @@ public:
     void setPartVisible(const ID& partId, bool visible) override;
     bool setVoiceVisible(const ID& staffId, int voiceIndex, bool visible) override;
     void setStaffVisible(const ID& staffId, bool visible) override;
-    void setPartName(const ID& partId, const QString& name) override;
     void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) override;
     void setInstrumentName(const InstrumentKey& instrumentKey, const QString& name) override;
     void setInstrumentAbbreviature(const InstrumentKey& instrumentKey, const QString& abbreviature) override;
@@ -89,8 +88,6 @@ protected:
     virtual void onPartsRemoved(const std::vector<Part*>& parts);
 
 private:
-    void updatePartTitles();
-
     void doSetScoreOrder(const ScoreOrder& order);
     void doRemoveParts(const std::vector<Part*>& parts);
     void doAppendStaff(Staff* staff, Part* destinationPart);
