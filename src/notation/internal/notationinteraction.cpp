@@ -3384,7 +3384,7 @@ mu::Ret NotationInteraction::repeatSelection()
                 mu::engraving::NoteVal nval = note->noteVal();
                 score()->addPitch(nval, note != c->notes()[0]);
             }
-            setPlayChord(true);
+            score()->setPlayChord(true);
             apply();
         }
         return make_ok();
