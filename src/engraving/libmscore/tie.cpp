@@ -739,9 +739,14 @@ void TieSegment::adjustX()
             std::vector<Chord*> chords;
             track_idx_t strack = ec->staffIdx() * VOICES;
             track_idx_t etrack = ec->staffIdx() * VOICES + VOICES;
-            for (track_idx_t track = strack; track < etrack; ++track) {
-                if (Chord* ch = ec->measure()->findChord(ec->tick(), track)) {
-                    chords.push_back(ch);
+            chords.push_back(ec);
+            if (!ec->isGraceAfter()) {
+                for (track_idx_t track = strack; track < etrack; ++track) {
+                    if (Chord* ch = ec->measure()->findChord(ec->tick(), track)) {
+                        if (ch != ec) {
+                            chords.push_back(ch);
+                        }
+                    }
                 }
             }
 
