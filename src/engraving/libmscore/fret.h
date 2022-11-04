@@ -197,6 +197,8 @@ public:
     void readNew(XmlReader&);
     std::vector<mu::LineF> dragAnchorLines() const override;
     mu::PointF pagePos() const override;
+    double centerX() const;
+    double rightX() const;
 
     // read / write MusicXML
     void readMusicXML(XmlReader& de);
@@ -225,7 +227,6 @@ public:
     void setShowNut(bool val) { _showNut = val; }
 
     String harmonyText() const { return _harmony ? _harmony->plainText() : String(); }
-    double centerX() const;
     void setHarmony(String harmonyText);
 
     std::vector<FretItem::Dot> dot(int s, int f = 0) const;
