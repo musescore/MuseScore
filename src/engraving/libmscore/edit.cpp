@@ -1820,6 +1820,7 @@ void Score::cmdAddTie(bool addToChord)
             NoteVal nval(note->noteVal());
             if (!n) {
                 n = addPitch(nval, addFlag);
+                setPlayNote(true);
             } else {
                 select(n);
             }
