@@ -1543,10 +1543,9 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             mu::engraving::Segment* endSegment = cr2->segment();
             if (element->type() == mu::engraving::ElementType::PEDAL && cr2 != cr1) {
                 endSegment = endSegment->nextCR(cr2->track());
-            } else if (endSegment->next() && endSegment->next()->enabled()) {
-                // Must behave the same as range selection, where endSegment
-                // is assumed to be one past the last selected
-                endSegment = endSegment->next();
+            } else {
+                // Ensure that list-selection results in the same endSegment as range selection
+                endSegment = cr2->nextSegmentAfterCR(SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef);
             }
             // TODO - handle cross-voice selections
             staff_idx_t idx = cr1->staffIdx();
