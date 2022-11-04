@@ -680,15 +680,19 @@ void Spanner::computeStartElement()
 {
     switch (_anchor) {
     case Anchor::SEGMENT: {
-        Segment* seg = score()->tick2segmentMM(tick(), false, SegmentType::ChordRest);
-        track_idx_t strack = (track() / VOICES) * VOICES;
-        track_idx_t etrack = strack + VOICES;
-        _startElement = 0;
-        if (seg) {
-            for (track_idx_t t = strack; t < etrack; ++t) {
-                if (seg->element(t)) {
-                    _startElement = seg->element(t);
-                    break;
+        if (systemFlag()) {
+            _startElement = startSegment();
+        } else {
+            Segment* seg = score()->tick2segmentMM(tick(), false, SegmentType::ChordRest);
+            track_idx_t strack = (track() / VOICES) * VOICES;
+            track_idx_t etrack = strack + VOICES;
+            _startElement = 0;
+            if (seg) {
+                for (track_idx_t t = strack; t < etrack; ++t) {
+                    if (seg->element(t)) {
+                        _startElement = seg->element(t);
+                        break;
+                    }
                 }
             }
         }
@@ -726,8 +730,9 @@ void Spanner::computeEndElement()
         if (ticks().isZero() && isTextLine() && explicitParent()) {           // special case palette
             setTicks(score()->lastSegment()->tick() - _tick);
         }
-
-        if (isLyricsLine() && toLyricsLine(this)->isEndMelisma()) {
+        if (systemFlag()) {
+            _endElement = endSegment();
+        } else if (isLyricsLine() && toLyricsLine(this)->isEndMelisma()) {
             // lyrics endTick should already indicate the segment we want
             // except for TEMP_MELISMA_TICKS case
             Lyrics* l = toLyricsLine(this)->lyrics();
@@ -755,7 +760,7 @@ void Spanner::computeEndElement()
             return;
         }
 
-        if (!endCR()->measure()->isMMRest()) {
+        if (endCR() && !endCR()->measure()->isMMRest() && !systemFlag()) {
             ChordRest* cr = endCR();
             Fraction nticks = cr->tick() + cr->actualTicks() - _tick;
             if ((_ticks - nticks).isNotZero()) {
@@ -930,7 +935,7 @@ ChordRest* Spanner::startCR()
     if (!_startElement || _startElement->score() != score()) {
         _startElement = findStartCR();
     }
-    return toChordRest(_startElement);
+    return (_startElement && _startElement->isChordRest()) ? toChordRest(_startElement) : nullptr;
 }
 
 //---------------------------------------------------------
@@ -943,7 +948,7 @@ ChordRest* Spanner::endCR()
     if ((!_endElement || _endElement->score() != score())) {
         _endElement = findEndCR();
     }
-    return toChordRest(_endElement);
+    return (_endElement && _endElement->isChordRest()) ? toChordRest(_endElement) : nullptr;
 }
 
 //---------------------------------------------------------
