@@ -5254,7 +5254,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 staff_idx_t staffIdx1 = sp->track() / VOICES;
                 staff_idx_t staffIdx2 = sp->track2() / VOICES;
                 int diff = static_cast<int>(staffIdx2 - staffIdx1);
-                nsp->setTrack2((staffIdx + diff) * VOICES + (sp->track2() % VOICES));
+                nsp->setTrack2((staffIdx1 + diff) * VOICES + (sp->track2() % VOICES));
                 undo(new AddElement(nsp));
             } else if (et == ElementType::MARKER || et == ElementType::JUMP) {
                 Measure* om = toMeasure(element->explicitParent());
