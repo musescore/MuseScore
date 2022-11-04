@@ -846,7 +846,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
     {
         ChordRest* cr;
         if (grip == Grip::START) {
-            cr = toChordRest(startElement());
+            cr = (startElement() && startElement()->isChordRest()) ? toChordRest(startElement()) : nullptr;
             if (cr && type() == ElementType::OTTAVA) {
                 // some sources say to center the text over the notehead
                 // others say to start the text just to left of notehead
@@ -859,7 +859,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
 //                                    x = -cr->spaceLw;  // account for accidentals, etc
             }
         } else {
-            cr = toChordRest(endElement());
+            cr = (endElement() && endElement()->isChordRest()) ? toChordRest(endElement()) : nullptr;
             if (isOttava()) {
                 if (cr && cr->durationType() == DurationType::V_MEASURE) {
                     x = cr->x() + cr->width() + sp;
