@@ -46,6 +46,8 @@ signals:
     void hideToolTip();
 
 private:
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
     QQuickItem* m_item = nullptr;
     QString m_title;
     QString m_description;
