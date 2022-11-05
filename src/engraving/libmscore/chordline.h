@@ -43,16 +43,19 @@ class Note;
 class ChordLine final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, ChordLine)
-protected:
+private:
 
-    ChordLineType _chordLineType;
-    bool _straight;
+    bool _straight = false;
+    bool _wavy = false;
+
+    ChordLineType _chordLineType = ChordLineType::NOTYPE;
     mu::draw::PainterPath path;
-    bool modified;
-    double _lengthX;
-    double _lengthY;
+    bool modified = false;
+    double _lengthX = 0.0;
+    double _lengthY = 0.0;
     Note* _note = nullptr;
     static constexpr double _baseLength = 1.0;
+    static constexpr double _waveAngle = 20;
 
     friend class Factory;
 
@@ -71,6 +74,8 @@ public:
     ChordLineType chordLineType() const { return _chordLineType; }
     bool isStraight() const { return _straight; }
     void setStraight(bool straight) { _straight =  straight; }
+    bool isWavy() const { return _wavy; }
+    void setWavy(bool wavy) { _wavy =  wavy; }
     void setLengthX(double length) { _lengthX = length; }
     void setLengthY(double length) { _lengthY = length; }
 

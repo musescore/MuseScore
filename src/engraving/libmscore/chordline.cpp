@@ -25,16 +25,20 @@
 #include "rw/xml.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
+#include "log.h"
 
 #include "chord.h"
 #include "note.h"
 #include "score.h"
+#include "symbolfont.h"
 
 using namespace mu;
 using namespace mu::draw;
 using namespace mu::engraving;
 
 namespace mu::engraving {
+static const SymIdList s_waveSymbols = { SymId::wiggleVIbratoMediumSlower, SymId::wiggleVIbratoMediumSlower };
+
 //---------------------------------------------------------
 //   ChordLine
 //---------------------------------------------------------
@@ -42,12 +46,6 @@ namespace mu::engraving {
 ChordLine::ChordLine(Chord* parent)
     : EngravingItem(ElementType::CHORDLINE, parent, ElementFlag::MOVABLE)
 {
-    modified = false;
-    _chordLineType = ChordLineType::NOTYPE;
-    _straight = false;
-    _lengthX = 0.0;
-    _lengthY = 0.0;
-    _note = nullptr;
 }
 
 ChordLine::ChordLine(const ChordLine& cl)
@@ -57,6 +55,7 @@ ChordLine::ChordLine(const ChordLine& cl)
     modified = cl.modified;
     _chordLineType = cl._chordLineType;
     _straight = cl._straight;
+    _wavy = cl._wavy;
     _lengthX = cl._lengthX;
     _lengthY = cl._lengthY;
     _note = cl._note;
@@ -88,7 +87,7 @@ void ChordLine::layout()
         double horBaseLength = 1.2 * _baseLength; // let the symbols extend a bit more horizontally
         x2 += isToTheLeft() ? -horBaseLength : horBaseLength;
         y2 += isBelow() ? _baseLength : -_baseLength;
-        if (_chordLineType != ChordLineType::NOTYPE) {
+        if (_chordLineType != ChordLineType::NOTYPE && !_wavy) {
             path = PainterPath();
             if (!isToTheLeft()) {
                 if (_straight) {
@@ -135,18 +134,41 @@ void ChordLine::layout()
         }
         x += isToTheLeft() ? -chordShape.left() - horOffset : chordShape.right() + horOffset;
         y += isBelow() ? vertOffset : -vertOffset;
+
+        /// TODO: calculate properly the position for wavy type
+        if (_wavy) {
+            bool upDir = _chordLineType == ChordLineType::DOIT;
+            y += note->height() * (upDir ? 0.8 : -0.3);
+        }
+
         setPos(x, y);
     } else {
         setPos(0.0, 0.0);
     }
-    RectF r = path.boundingRect();
-    int x1, y1, width, height = 0;
 
-    x1 = r.x() * _spatium;
-    y1 = r.y() * _spatium;
-    width = r.width() * _spatium;
-    height = r.height() * _spatium;
-    bbox().setRect(x1, y1, width, height);
+    if (!_wavy) {
+        RectF r = path.boundingRect();
+        int x1 = 0, y1 = 0, width = 0, height = 0;
+
+        x1 = r.x() * _spatium;
+        y1 = r.y() * _spatium;
+        width = r.width() * _spatium;
+        height = r.height() * _spatium;
+        bbox().setRect(x1, y1, width, height);
+    } else {
+        SymbolFont* f = score()->symbolFont();
+        RectF r(f->bbox(s_waveSymbols, magS()));
+        double angle = _waveAngle * M_PI / 180;
+
+        r.setHeight(r.height() + r.width() * sin(angle));
+
+        /// TODO: calculate properly the rect for wavy type
+        if (_chordLineType == ChordLineType::DOIT) {
+            r.setY(y() - r.height() * (onTabStaff() ? 1.25 : 1));
+        }
+
+        setbbox(r);
+    }
 }
 
 //---------------------------------------------------------
@@ -202,6 +224,8 @@ void ChordLine::read(XmlReader& e)
             setChordLineType(TConv::fromXml(e.readAsciiText(), ChordLineType::NOTYPE));
         } else if (tag == "straight") {
             setStraight(e.readInt());
+        } else if (tag == "wavy") {
+            setWavy(e.readInt());
         } else if (tag == "lengthX") {
             setLengthX(e.readInt());
         } else if (tag == "lengthY") {
@@ -223,6 +247,7 @@ void ChordLine::write(XmlWriter& xml) const
     xml.startElement(this);
     writeProperty(xml, Pid::CHORD_LINE_TYPE);
     writeProperty(xml, Pid::CHORD_LINE_STRAIGHT);
+    writeProperty(xml, Pid::CHORD_LINE_WAVY);
     xml.tag("lengthX", _lengthX, 0.0);
     xml.tag("lengthY", _lengthY, 0.0);
     EngravingItem::writeProperties(xml);
@@ -245,12 +270,19 @@ void ChordLine::write(XmlWriter& xml) const
 void ChordLine::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
-    double _spatium = spatium();
-    painter->scale(_spatium, _spatium);
-    painter->setPen(Pen(curColor(), score()->styleMM(Sid::chordlineThickness), PenStyle::SolidLine));
-    painter->setBrush(BrushStyle::NoBrush);
-    painter->drawPath(path);
-    painter->scale(1.0 / _spatium, 1.0 / _spatium);
+    if (!_wavy) {
+        double _spatium = spatium();
+        painter->scale(_spatium, _spatium);
+        painter->setPen(Pen(curColor(), score()->styleMM(Sid::chordlineThickness), PenStyle::SolidLine));
+        painter->setBrush(BrushStyle::NoBrush);
+        painter->drawPath(path);
+        painter->scale(1.0 / _spatium, 1.0 / _spatium);
+    } else {
+        painter->save();
+        painter->rotate((_chordLineType == ChordLineType::FALL ? 1 : -1) * _waveAngle);
+        drawSymbols(s_waveSymbols, painter);
+        painter->restore();
+    }
 }
 
 //---------------------------------------------------------
@@ -291,9 +323,11 @@ void ChordLine::editDrag(EditData& ed)
 
     double dx = ed.delta.x() / sp;
     double dy = ed.delta.y() / sp;
+
+    bool curvative = !_wavy && !_straight;
     for (size_t i = 0; i < n; ++i) {
-        const PainterPath::Element& e = (_straight ? path.elementAt(1) : path.elementAt(i));
-        if (_straight) {
+        const PainterPath::Element& e = curvative ? path.elementAt(i) : path.elementAt(1);
+        if (!curvative) {
             if (i > 0) {
                 break;
             }
@@ -351,6 +385,11 @@ void ChordLine::editDrag(EditData& ed)
 
 std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
 {
+    if (_wavy) {
+        NOT_IMPLEMENTED;
+        return {};
+    }
+
     double sp = spatium();
     auto n   = path.elementCount();
     PointF cp(pagePos());
@@ -407,6 +446,8 @@ PropertyValue ChordLine::getProperty(Pid propertyId) const
         return int(_chordLineType);
     case Pid::CHORD_LINE_STRAIGHT:
         return _straight;
+    case Pid::CHORD_LINE_WAVY:
+        return _wavy;
     default:
         break;
     }
@@ -428,6 +469,8 @@ bool ChordLine::setProperty(Pid propertyId, const PropertyValue& val)
         break;
     case Pid::CHORD_LINE_STRAIGHT:
         setStraight(val.toBool());
+    case Pid::CHORD_LINE_WAVY:
+        setWavy(val.toBool());
         break;
     default:
         return EngravingItem::setProperty(propertyId, val);
@@ -444,6 +487,8 @@ PropertyValue ChordLine::propertyDefault(Pid pid) const
 {
     switch (pid) {
     case Pid::CHORD_LINE_STRAIGHT:
+        return false;
+    case Pid::CHORD_LINE_WAVY:
         return false;
     default:
         break;
