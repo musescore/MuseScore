@@ -56,6 +56,8 @@ StyledListView {
     preferredHighlightEnd: Math.ceil(height - preferredHighlightBegin)
     highlightRangeMode: itemDragged ? ListView.ApplyRange : ListView.NoHighlightRange
 
+    cacheBuffer: 3000
+
     NavigationPanel {
         id: keynavTree
         name: "PalettesTree"
