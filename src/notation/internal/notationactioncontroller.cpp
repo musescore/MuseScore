@@ -1036,6 +1036,10 @@ void NotationActionController::repeatSelection()
     if (!ret && !ret.text().empty()) {
         interactive()->error("", ret.text());
     }
+
+    if (noteInput->isNoteInputMode()) {
+        playSelectedElement(true);
+    }
 }
 
 void NotationActionController::pasteSelection(PastingType type)
@@ -1090,6 +1094,7 @@ void NotationActionController::addTie()
 
     if (noteInput->isNoteInputMode()) {
         noteInput->addTie();
+        playSelectedElement(true);
     } else {
         interaction->addTieToSelection();
     }
@@ -1110,6 +1115,7 @@ void NotationActionController::chordTie()
 
     if (noteInput->isNoteInputMode()) {
         noteInput->addTie();
+        playSelectedElement(true);
     } else {
         interaction->addTiedNoteToChord();
     }
