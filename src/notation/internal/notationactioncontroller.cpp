@@ -1090,6 +1090,7 @@ void NotationActionController::addTie()
 
     if (noteInput->isNoteInputMode()) {
         noteInput->addTie();
+        playSelectedElement(true);
     } else {
         interaction->addTieToSelection();
     }
@@ -1110,6 +1111,7 @@ void NotationActionController::chordTie()
 
     if (noteInput->isNoteInputMode()) {
         noteInput->addTie();
+        playSelectedElement(true);
     } else {
         interaction->addTiedNoteToChord();
     }
