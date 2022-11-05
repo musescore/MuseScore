@@ -1036,10 +1036,6 @@ void NotationActionController::repeatSelection()
     if (!ret && !ret.text().empty()) {
         interactive()->error("", ret.text());
     }
-
-    if (noteInput->isNoteInputMode()) {
-        playSelectedElement(true);
-    }
 }
 
 void NotationActionController::pasteSelection(PastingType type)
