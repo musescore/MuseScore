@@ -1032,18 +1032,10 @@ void NotationActionController::repeatSelection()
     }
 
     Ret ret = interaction->repeatSelection();
+    playSelectedElement(true);
 
     if (!ret && !ret.text().empty()) {
         interactive()->error("", ret.text());
-    }
-
-    auto noteInput = interaction->noteInput();
-    if (!noteInput) {
-        return;
-    }
-
-    if (noteInput->isNoteInputMode()) {
-        playSelectedElement(true);
     }
 }
 
