@@ -34,6 +34,8 @@ QmlToolTip::QmlToolTip(QObject* parent)
 
     m_closeTimer.setSingleShot(true);
     connect(&m_closeTimer, &QTimer::timeout, this, &QmlToolTip::doHide);
+
+    qApp->installEventFilter(this);
 }
 
 void QmlToolTip::show(QQuickItem* item, const QString& title, const QString& description, const QString& shortcut)
@@ -102,7 +104,9 @@ void QmlToolTip::doHide()
         return;
     }
 
-    disconnect(m_item, &QObject::destroyed, this, &QmlToolTip::doHide);
+    if (m_item) {
+        disconnect(m_item, &QObject::destroyed, this, &QmlToolTip::doHide);
+    }
 
     m_openTimer.stop();
     m_closeTimer.stop();
@@ -113,4 +117,14 @@ void QmlToolTip::doHide()
     m_shortcut = QString();
 
     emit hideToolTip();
+}
+
+bool QmlToolTip::eventFilter(QObject*, QEvent* event)
+{
+    if (event->type() == QEvent::Wheel) {
+        m_shouldBeClosed = true;
+        doHide();
+    }
+
+    return false;
 }
