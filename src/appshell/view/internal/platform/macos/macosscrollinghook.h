@@ -19,44 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_QMLTOOLTIP_H
-#define MU_UI_QMLTOOLTIP_H
+#ifndef MU_APPSHELL_MACOSSCROLLINGHOOK_H
+#define MU_APPSHELL_MACOSSCROLLINGHOOK_H
 
 #include <QObject>
-#include <QQuickItem>
-#include <QTimer>
 
-namespace mu::ui {
-class QmlToolTip : public QObject
+namespace mu::appshell {
+class MacOSScrollingHook : public QObject
 {
-    Q_OBJECT
-
 public:
-    explicit QmlToolTip(QObject* parent = nullptr);
-
-    Q_INVOKABLE void show(QQuickItem* item, const QString& title, const QString& description = "", const QString& shortcut = "");
-    Q_INVOKABLE void hide(QQuickItem* item, bool force = false);
-
-private slots:
-    void doShow();
-    void doHide();
-
-signals:
-    void showToolTip(QQuickItem* item, const QString& title, const QString& description, const QString& shortcut);
-    void hideToolTip();
+    void init();
 
 private:
     bool eventFilter(QObject* watched, QEvent* event) override;
-
-    QQuickItem* m_item = nullptr;
-    QString m_title;
-    QString m_description;
-    QString m_shortcut;
-
-    QTimer m_openTimer;
-    QTimer m_closeTimer;
-    bool m_shouldBeClosed = false;
 };
 }
 
-#endif // MU_UI_QMLTOOLTIP_H
+#endif // MU_APPSHELL_MACOSSCROLLINGHOOK_H
