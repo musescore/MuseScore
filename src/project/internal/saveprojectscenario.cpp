@@ -22,6 +22,8 @@
 
 #include "saveprojectscenario.h"
 
+#include "translation.h"
+
 #include "engraving/infrastructure/mscio.h"
 
 using namespace mu;
@@ -86,6 +88,38 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
     }
 }
 
+static io::path_t mscFilePath(const io::path_t& selectedPath)
+{
+    if (io::suffix(selectedPath) == engraving::MSCX) {
+        // User entered .mscx, but we should create a folder instead and put the mscx file in that folder
+        return io::dirpath(selectedPath) // parent folder
+               .appendingComponent(io::filename(selectedPath, false)) // the created folder
+               .appendingComponent(io::filename(selectedPath, true)); // the mscx file inside
+    }
+
+    if (!engraving::isMuseScoreFile(io::suffix(selectedPath))) {
+        // Then it must be that the user is trying to save a mscx file.
+        // At the selected path, a folder will be created,
+        // and inside the folder, a mscx file will be created.
+        // We should return the path to the mscx file.
+        return selectedPath // the created folder
+               .appendingComponent(io::filename(selectedPath)).appendingSuffix(engraving::MSCX); // the mscx file inside
+    }
+
+    return selectedPath;
+}
+
+static io::path_t containerPath(const io::path_t& selectedPath)
+{
+    if (io::suffix(selectedPath) == engraving::MSCX) {
+        // User entered .mscx, but we should create a folder instead and put the mscx file in that folder
+        return io::dirpath(selectedPath) // parent folder
+               .appendingComponent(io::filename(selectedPath, false)); // the created folder
+    }
+
+    return selectedPath;
+}
+
 RetVal<io::path_t> SaveProjectScenario::askLocalPath(INotationProjectPtr project, SaveMode saveMode) const
 {
     QString dialogTitle = qtrc("project/save", "Save score");
@@ -104,30 +138,59 @@ RetVal<io::path_t> SaveProjectScenario::askLocalPath(INotationProjectPtr project
     std::vector<std::string> filter {
         trc("project", "MuseScore file") + " (*.mscz)",
         trc("project", "Uncompressed MuseScore folder (experimental)")
-#ifdef Q_OS_MAC
-        + " (*)"
+#ifdef Q_OS_WIN
+        + " (*.)" // Windows interprets this as "no extension"
 #else
-        + " (*.)"
+        // On macOS and Linux, we have no way to specify "no extension"
+        // (because " (*)" means "any extension" and there is not something special like " (*.)" on Windows).
+        // So we will have to specify _some_ extension.
+        + " (*.mscx)"
 #endif
     };
 
-    io::path_t selectedPath = interactive()->selectSavingFile(dialogTitle, defaultPath, filter);
+    bool ok = false;
+    io::path_t selectedPath = defaultPath;
 
-    if (selectedPath.empty()) {
-        return make_ret(Ret::Code::Cancel);
+    while (!ok) {
+        // passing selectedPath as default path, so that the user doesn't need to look up the correct
+        // folder again after choosing "Cancel" in our custom "do you want to replace" dialog
+        selectedPath = interactive()->selectSavingFile(dialogTitle, selectedPath, filter);
+
+        if (selectedPath.empty()) {
+            return make_ret(Ret::Code::Cancel);
+        }
+
+        io::path_t containerPath = ::containerPath(selectedPath);
+
+        configuration()->setLastSavedProjectsPath(io::dirpath(containerPath));
+
+        ok = true;
+        if (containerPath != selectedPath) {
+            // We will be writing to a different location than the file dialog thinks,
+            // so we need to check ourselves if the container path does not already exist
+            // and ask the user about overriding if it does.
+            if (fileSystem()->exists(containerPath)) {
+                ok = askAboutReplacingExistingFile(containerPath);
+            }
+        }
     }
 
-    if (!engraving::isMuseScoreFile(io::suffix(selectedPath))) {
-        // Then it must be that the user is trying to save a mscx file.
-        // At the selected path, a folder will be created,
-        // and inside the folder, a mscx file will be created.
-        // We should return the path to the mscx file.
-        selectedPath = selectedPath.appendingComponent(io::filename(selectedPath)).appendingSuffix(engraving::MSCX);
-    }
+    return RetVal<io::path_t>::make_ok(mscFilePath(selectedPath));
+}
 
-    configuration()->setLastSavedProjectsPath(io::dirpath(selectedPath));
+bool SaveProjectScenario::askAboutReplacingExistingFile(const io::path_t& filePath) const
+{
+    static constexpr int Replace = static_cast<int>(IInteractive::Button::CustomButton) + 1;
 
-    return RetVal<io::path_t>::make_ok(selectedPath);
+    IInteractive::Result result = interactive()->question(
+        trc("project/export", "File already exists"),
+        qtrc("project/export", "A file already exists with the filename %1. Do you want to replace it?")
+        .arg(io::filename(filePath).toQString()).toStdString(), {
+        interactive()->buttonData(IInteractive::Button::Cancel),
+        IInteractive::ButtonData(Replace, trc("project/save", "Replace"))
+    });
+
+    return result.button() == Replace;
 }
 
 RetVal<SaveLocationType> SaveProjectScenario::saveLocationType() const
@@ -270,7 +333,7 @@ bool SaveProjectScenario::warnBeforePublishing(bool isPublish, cloud::Visibility
 bool SaveProjectScenario::warnBeforeSavingToExistingPubliclyVisibleCloudProject() const
 {
     IInteractive::ButtonDatas buttons = {
-        IInteractive::ButtonData(IInteractive::Button::Cancel, trc("global", "Cancel")),
+        interactive()->buttonData(IInteractive::Button::Cancel),
         IInteractive::ButtonData(IInteractive::Button::Ok, trc("project/save", "Publish"), true)
     };
 

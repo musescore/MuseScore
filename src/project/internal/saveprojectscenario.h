@@ -28,6 +28,7 @@
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
 #include "global/iinteractive.h"
+#include "io/ifilesystem.h"
 #include "cloud/iauthorizationservice.h"
 
 namespace mu::project {
@@ -35,6 +36,7 @@ class SaveProjectScenario : public ISaveProjectScenario
 {
     INJECT(project, IProjectConfiguration, configuration)
     INJECT(project, framework::IInteractive, interactive)
+    INJECT(project, io::IFileSystem, fileSystem)
     INJECT(project, cloud::IAuthorizationService, authorizationService)
 
 public:
@@ -59,6 +61,8 @@ private:
     RetVal<CloudProjectInfo> doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublish) const;
 
     bool warnBeforePublishing(bool isPublish, cloud::Visibility visibility) const;
+
+    bool askAboutReplacingExistingFile(const io::path_t& filePath) const;
 };
 
 class QMLSaveLocationType
