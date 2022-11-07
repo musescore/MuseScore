@@ -1082,7 +1082,7 @@
     </SC>
   <SC>
     <key>add-parentheses</key>
-    <seq>(</seq>
+    <seq>Shift+9</seq>
     </SC>
   <SC>
     <key>toggle-mmrest</key>
