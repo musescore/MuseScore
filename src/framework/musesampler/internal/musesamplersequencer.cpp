@@ -34,7 +34,6 @@ static const std::unordered_map<mpe::ArticulationType, ms_NoteArticulation> ARTI
     { mpe::ArticulationType::Marcato, ms_NoteArticulation_Marcato },
     { mpe::ArticulationType::Harmonic, ms_NoteArticulation_Harmonics },
     { mpe::ArticulationType::Mute, ms_NoteArticulation_Mute },
-    { mpe::ArticulationType::Pedal, ms_NoteArticulation_Pedal },
     { mpe::ArticulationType::Legato, ms_NoteArticulation_Slur },
     { mpe::ArticulationType::Trill, ms_NoteArticulation_Trill },
     { mpe::ArticulationType::TrillBaroque, ms_NoteArticulation_Trill },
@@ -189,6 +188,15 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
 
     for (auto& art : noteEvent.expressionCtx().articulations) {
         auto ms_art = convertArticulationType(art.first);
+
+        if (art.first == mpe::ArticulationType::Pedal) {
+            ms_PedalEvent pedalOnEvent { art.second.meta.timestamp, 1.0 };
+            m_samplerLib->addPedalEvent(m_sampler, m_track, std::move(pedalOnEvent));
+
+            ms_PedalEvent pedalOffEvent { art.second.meta.timestamp + art.second.meta.overallDuration, 0.0 };
+            m_samplerLib->addPedalEvent(m_sampler, m_track, std::move(pedalOffEvent));
+        }
+
         if (m_samplerLib->isRangedArticulation(ms_art)) {
             // If this starts an articulation range, indicate the start
             if (art.second.occupiedFrom == 0 && art.second.occupiedTo != mpe::HUNDRED_PERCENT) {
