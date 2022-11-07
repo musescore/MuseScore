@@ -2993,6 +2993,17 @@ int Measure::measureRepeatCount(staff_idx_t staffIdx) const
     return m_mstaves[staffIdx]->measureRepeatCount();
 }
 
+bool Measure::containsMeasureRepeat(const staff_idx_t staffIdxFrom, const staff_idx_t staffIdxTo) const
+{
+    for (staff_idx_t idx = staffIdxFrom; idx <= staffIdxTo; ++idx) {
+        if (measureRepeatCount(idx) > 0) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void Measure::setMeasureRepeatCount(int n, staff_idx_t staffIdx)
 {
     if (staffIdx >= m_mstaves.size()) {

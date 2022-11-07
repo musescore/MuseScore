@@ -111,7 +111,7 @@ private:
     void processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& changedStaffIdSet,
                         ChangedTrackIdSet* trackChanges);
 
-    bool hasToReloadTracks(const std::unordered_set<ElementType>& changedTypes) const;
+    bool hasToReloadTracks(const ScoreChangesRange& changesRange) const;
     bool hasToReloadScore(const std::unordered_set<ElementType>& changedTypes) const;
 
     bool containsTrack(const InstrumentTrackId& trackId) const;
