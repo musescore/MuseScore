@@ -86,6 +86,8 @@ StyledDialogView {
             navigation.row: 1
             navigation.accessible.name: workspaceNameTitle.text + " " + currentText
 
+            maximumLength: 40
+
             onCurrentTextEdited: function(newTextValue) {
                 workspaceModel.workspaceName = newTextValue
             }
