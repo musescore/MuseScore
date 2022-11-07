@@ -315,6 +315,7 @@ public:
     Measure* mmRestLast() const;
 
     int measureRepeatCount(staff_idx_t staffIdx) const;
+    bool containsMeasureRepeat(const staff_idx_t staffIdxFrom, const staff_idx_t staffIdxTo) const;
     void setMeasureRepeatCount(int n, staff_idx_t staffIdx);
     bool isMeasureRepeatGroup(staff_idx_t staffIdx) const;
     bool isMeasureRepeatGroupWithNextM(staff_idx_t staffIdx) const;
