@@ -434,6 +434,8 @@ staff_idx_t EngravingItem::staffIdxOrNextVisible() const
         m = s ? s->measure() : nullptr;
     } else if (parent() && parent()->isMeasure()) {
         m = parent() ? toMeasure(parent()) : nullptr;
+    } else if (isSpanner() || isSpannerSegment()) {
+        m = score()->tick2measure(tick());
     }
     if (!m || !m->system() || !m->system()->staff(si)) {
         return si;
@@ -480,6 +482,9 @@ bool EngravingItem::isTopSystemObject() const
 {
     if (!systemFlag()) {
         return false; // non system object
+    }
+    if (isSpannerSegment() && systemFlag() && track() != 0) {
+        return false;
     }
     if (!_links) {
         return true; // a system object, but not one with any linked clones
