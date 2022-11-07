@@ -35,7 +35,7 @@
 #include "engraving/engravingerrors.h"
 
 #include "modularity/ioc.h"
-#include "iguitarproconfiguration.h"
+#include "iengravingconfiguration.h"
 
 namespace mu::engraving {
 class Chord;
@@ -123,7 +123,7 @@ inline Drumset* gpDrumset = nullptr;
 
 class GuitarPro
 {
-    INJECT(iex_guitarpro, mu::iex::guitarpro::IGuitarProConfiguration, configuration)
+    INJECT(importexport, mu::engraving::IEngravingConfiguration, engravingConfiguration);
 
 protected:
 

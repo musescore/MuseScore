@@ -527,7 +527,7 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
     auto curSegment = lastMeasure->getSegment(SegmentType::ChordRest, ctx.curTick);
 
     ChordRest* cr = addChordRest(beat, ctx);
-    if (guitarProConfiguration()->experimental() && beat->deadSlapped() && cr->isRest()) {
+    if (engravingConfiguration()->guitarProImportExperimental() && beat->deadSlapped() && cr->isRest()) {
         Rest* rest = toRest(cr);
         curSegment->add(rest);
         DeadSlapped* dc = Factory::createDeadSlapped(rest);
@@ -619,7 +619,7 @@ void GPConverter::convertNotes(const std::vector<std::shared_ptr<GPNote> >& note
     if (cr->isChord()) {
         Chord* ch = static_cast<Chord*>(cr);
         ch->sortNotes();
-        if (guitarProConfiguration()->experimental()) {
+        if (engravingConfiguration()->guitarProImportExperimental()) {
             FretCircle* c = Factory::createFretCircle(ch);
             ch->add(c);
         }
@@ -643,7 +643,7 @@ void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
     addLetRing(gpnote, note);
     addPalmMute(gpnote, note);
     note->setGhost(gpnote->ghostNote());
-    if (guitarProConfiguration()->experimental()) {
+    if (engravingConfiguration()->guitarProImportExperimental()) {
         note->setHeadHasParentheses(gpnote->ghostNote());
     }
 
@@ -711,7 +711,7 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
                 Fraction fr = { 0, 1 };
                 int capo = staff->capo(fr);
 
-                if (capo != 0 && !guitarProConfiguration()->experimental()) {
+                if (capo != 0 && !engravingConfiguration()->guitarProImportExperimental()) {
                     StaffText* st = Factory::createStaffText(s);
                     st->setTrack(curTrack);
                     String capoText = String(u"Capo fret %1").arg(capo);
