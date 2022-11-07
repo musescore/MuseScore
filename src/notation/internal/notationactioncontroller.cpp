@@ -1032,6 +1032,7 @@ void NotationActionController::repeatSelection()
     }
 
     Ret ret = interaction->repeatSelection();
+    playSelectedElement(true);
 
     if (!ret && !ret.text().empty()) {
         interactive()->error("", ret.text());
@@ -1090,6 +1091,7 @@ void NotationActionController::addTie()
 
     if (noteInput->isNoteInputMode()) {
         noteInput->addTie();
+        playSelectedElement(true);
     } else {
         interaction->addTieToSelection();
     }
@@ -1110,6 +1112,7 @@ void NotationActionController::chordTie()
 
     if (noteInput->isNoteInputMode()) {
         noteInput->addTie();
+        playSelectedElement(true);
     } else {
         interaction->addTiedNoteToChord();
     }
