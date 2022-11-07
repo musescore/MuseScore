@@ -235,7 +235,6 @@ private:
 
     bool _isHammerOn = false;
     bool _harmonic = false;
-    bool _fretConflictResolveSupported = false;
 
     ElementList _el;          ///< fingering, other text, symbols or images
     std::vector<NoteDot*> _dots;
@@ -378,7 +377,7 @@ public:
     void setHarmonicFret(float val) { m_harmonicFret = val; }
     DisplayFretOption displayFret() const { return m_displayFret; }
     void setDisplayFret(DisplayFretOption val) { m_displayFret = val; }
-    bool fretConflictResolveSupported() const { return _fretConflictResolveSupported; }
+    bool fretConflictResolveSupported() const;
     int string() const { return _string; }
     void setString(int val);
     bool ghost() const { return _ghost; }

@@ -35,6 +35,9 @@ public:
 
     virtual bool linkedTabStaffCreated() const = 0;
     virtual void setLinkedTabStaffCreated(bool created) = 0;
+
+    virtual bool experimental() const = 0;
+    virtual void setExperimental(bool experimental) = 0;
 };
 }
 

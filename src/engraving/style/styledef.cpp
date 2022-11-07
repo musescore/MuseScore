@@ -1501,14 +1501,6 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::golpeShowTabCommon, "golpeShowTabCommon", true },
 
     { Sid::chordlineThickness, "chordlineThickness", Spatium(0.006) },
-    { Sid::showCapoOnStaff, "showCapoOnStaff", true },
-    { Sid::fretDiagramsAboveChords, "fretDiagramsAboveChords", false },
-    { Sid::crossHeadBlackOnly, "crossHeadBlackOnly", false },
-    { Sid::parenthesisHeadGhostNote, "parenthesisHeadGhostNote", false },
-    { Sid::circledNotesOnCommonTab, "circledNotesOnCommonTab", false },
-    { Sid::fretConflictResolveSupported, "fretConflictResolveSupported", true },
-    { Sid::considerInvisibleChordDirection, "considerInvisibleChordDirection", false },
-    { Sid::deadSlappedSupported, "deadSlappedSupported", false },
 
     { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
     { Sid::defaultsVersion,               "defaultsVersion",               MSCVERSION }

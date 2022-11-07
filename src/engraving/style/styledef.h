@@ -1515,14 +1515,6 @@ enum class Sid {
     golpeShowTabCommon,
 
     chordlineThickness,
-    showCapoOnStaff,
-    fretDiagramsAboveChords,
-    crossHeadBlackOnly,
-    parenthesisHeadGhostNote,
-    circledNotesOnCommonTab,
-    fretConflictResolveSupported,
-    considerInvisibleChordDirection,
-    deadSlappedSupported,
 
     autoplaceEnabled,
     defaultsVersion,

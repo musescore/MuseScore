@@ -527,7 +527,7 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
     auto curSegment = lastMeasure->getSegment(SegmentType::ChordRest, ctx.curTick);
 
     ChordRest* cr = addChordRest(beat, ctx);
-    if (_score->styleB(Sid::deadSlappedSupported) && beat->deadSlapped() && cr->isRest()) {
+    if (guitarProConfiguration()->experimental() && beat->deadSlapped() && cr->isRest()) {
         Rest* rest = toRest(cr);
         curSegment->add(rest);
         DeadSlapped* dc = Factory::createDeadSlapped(rest);
@@ -619,7 +619,7 @@ void GPConverter::convertNotes(const std::vector<std::shared_ptr<GPNote> >& note
     if (cr->isChord()) {
         Chord* ch = static_cast<Chord*>(cr);
         ch->sortNotes();
-        if (_score->styleB(Sid::circledNotesOnCommonTab)) {
+        if (guitarProConfiguration()->experimental()) {
             FretCircle* c = Factory::createFretCircle(ch);
             ch->add(c);
         }
@@ -643,7 +643,7 @@ void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
     addLetRing(gpnote, note);
     addPalmMute(gpnote, note);
     note->setGhost(gpnote->ghostNote());
-    if (_score->styleB(Sid::parenthesisHeadGhostNote)) {
+    if (guitarProConfiguration()->experimental()) {
         note->setHeadHasParentheses(gpnote->ghostNote());
     }
 
@@ -711,7 +711,7 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
                 Fraction fr = { 0, 1 };
                 int capo = staff->capo(fr);
 
-                if (capo != 0 && _score->styleB(Sid::showCapoOnStaff)) {
+                if (capo != 0 && !guitarProConfiguration()->experimental()) {
                     StaffText* st = Factory::createStaffText(s);
                     st->setTrack(curTrack);
                     String capoText = String(u"Capo fret %1").arg(capo);
@@ -2376,7 +2376,8 @@ void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Cont
 
     GPTrack::Diagram diagram = trackIt->second->diagram().at(diaId);
 
-    if (!_score->styleB(Sid::fretDiagramsAboveChords)) {
+    /// currently importing fret diagrams as chord names
+    if (true) {
         StaffText* staffText = Factory::createStaffText(cr->segment());
         staffText->setTrack(cr->track());
         staffText->setPlainText(diagram.name);
