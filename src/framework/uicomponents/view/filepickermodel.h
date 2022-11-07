@@ -36,14 +36,14 @@ class FilePickerModel : public QObject
 
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QString dir READ dir WRITE setDir NOTIFY dirChanged)
-    Q_PROPERTY(QString filter READ filter WRITE setFilter NOTIFY filterChanged)
+    Q_PROPERTY(QStringList filter READ filter WRITE setFilter NOTIFY filterChanged)
 
 public:
     explicit FilePickerModel(QObject* parent = nullptr);
 
     QString title() const;
     QString dir() const;
-    QString filter() const;
+    QStringList filter() const;
 
     Q_INVOKABLE QString selectFile();
     Q_INVOKABLE QString selectDirectory();
@@ -52,17 +52,17 @@ public:
 public slots:
     void setTitle(const QString& title);
     void setDir(const QString& dir);
-    void setFilter(const QString& filter);
+    void setFilter(const QStringList& filter);
 
 signals:
     void titleChanged(const QString& title);
     void dirChanged(const QString& dir);
-    void filterChanged(const QString& filter);
+    void filterChanged(const QStringList& filter);
 
 private:
     QString m_title;
     QString m_dir;
-    QString m_filter;
+    QStringList m_filter;
 };
 }
 

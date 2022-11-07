@@ -65,7 +65,7 @@ public:
 
     Q_INVOKABLE QVariantList charsets() const;
     Q_INVOKABLE QVariantList shortestNotes() const;
-    Q_INVOKABLE QString stylePathFilter() const;
+    Q_INVOKABLE QStringList stylePathFilter() const;
     Q_INVOKABLE QString styleChooseTitle() const;
     Q_INVOKABLE QString fileDirectory(const QString& filePath) const;
 

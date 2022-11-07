@@ -65,8 +65,9 @@ public:
                  const Options& options = {}) const override;
 
     // files
-    io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const QString& filter) override;
-    io::path_t selectSavingFile(const QString& title, const io::path_t& dir, const QString& filter, bool confirmOverwrite = true) override;
+    io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
+    io::path_t selectSavingFile(const QString& title, const io::path_t& path, const std::vector<std::string>& filter,
+                                bool confirmOverwrite = true) override;
 
     // dirs
     io::path_t selectDirectory(const QString& title, const io::path_t& dir) override;

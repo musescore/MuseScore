@@ -111,6 +111,25 @@ Item {
                 obj.raise()
             }
         }
+
+        function onFireOpenFileDialog(data) {
+            var dialog = data.data()
+            var dialogObj = null
+            if (dialog.selectFolder) {
+                dialogObj = createDialog("internal/FolderDialog.qml", dialog.params)
+            } else {
+                dialogObj = createDialog("internal/FileDialog.qml", dialog.params)
+            }
+
+            data.setValue("ret", dialogObj.ret)
+            data.setValue("objectId", dialogObj.object.objectId)
+
+            if (dialogObj.ret.errcode > 0) {
+                return
+            }
+
+            dialogObj.object.open()
+        }
     }
 
     function createDialog(path, params) {
@@ -120,7 +139,7 @@ Item {
             return { "ret": { "errcode": 102 } } // CreateFailed
         }
 
-        var obj = comp.createObject(root.topParent, params)
+        var obj = comp.createObject(root.provider.topWindow(), params)
         obj.objectId = root.provider.objectId(obj)
         root.objects[obj.objectId] = obj
 
@@ -131,7 +150,8 @@ Item {
         }
 
         obj.opened.connect(function() {
-            root.provider.onOpen(ContainerType.QmlDialog, obj.objectId, obj.contentItem.Window.window)
+            var window = Boolean(obj.contentItem) ? obj.contentItem.Window.window : obj.Window.window
+            root.provider.onOpen(ContainerType.QmlDialog, obj.objectId, window)
         })
 
         obj.closed.connect(function() {

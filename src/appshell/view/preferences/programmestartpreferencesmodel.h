@@ -44,7 +44,7 @@ public:
     QVariantList startupModes() const;
     QVariantList panels() const;
 
-    Q_INVOKABLE QString scorePathFilter() const;
+    Q_INVOKABLE QStringList scorePathFilter() const;
 
     Q_INVOKABLE void setCurrentStartupMode(int modeIndex);
     Q_INVOKABLE void setStartupScorePath(const QString& scorePath);
