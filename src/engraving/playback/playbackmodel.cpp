@@ -30,6 +30,7 @@
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
 #include "libmscore/tempo.h"
+#include "libmscore/measurerepeat.h"
 
 #include "log.h"
 
@@ -317,10 +318,91 @@ void PlaybackModel::updateContext(const InstrumentTrackId& trackId)
     trackData.dynamicLevelMap = ctx.dynamicLevelMap(m_score);
 }
 
+void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& changedStaffIdSet,
+                                   ChangedTrackIdSet* trackChanges)
+{
+    int segmentStartTick = segment->tick().ticks();
+
+    for (const EngravingItem* item : segment->annotations()) {
+        if (!item || !item->part()) {
+            continue;
+        }
+
+        const Harmony* chordSymbol = findChordSymbol(item);
+        if (!chordSymbol) {
+            continue;
+        }
+
+        staff_idx_t staffIdx = item->staffIdx();
+        if (changedStaffIdSet.find(staffIdx) == changedStaffIdSet.cend()) {
+            continue;
+        }
+
+        InstrumentTrackId trackId = chordSymbolsTrackId(item->part()->id());
+
+        if (chordSymbol->play()) {
+            m_renderer.renderChordSymbol(chordSymbol, tickPositionOffset,
+                                         m_playbackDataMap[trackId].originEvents);
+        }
+
+        collectChangesTracks(trackId, trackChanges);
+    }
+
+    for (const EngravingItem* item : segment->elist()) {
+        if (!item || !item->isChordRest() || !item->part()) {
+            continue;
+        }
+
+        staff_idx_t staffIdx = item->staffIdx();
+
+        if (changedStaffIdSet.find(staffIdx) == changedStaffIdSet.cend()) {
+            continue;
+        }
+
+        InstrumentTrackId trackId = idKey(item);
+
+        if (!trackId.isValid()) {
+            continue;
+        }
+
+        if (item->type() == ElementType::MEASURE_REPEAT) {
+            const MeasureRepeat* measureRepeat = toMeasureRepeat(item);
+            const Measure* currentMeasure = measureRepeat->measure();
+            const Measure* referringMeasure = measureRepeat->referringMeasure();
+
+            if (!referringMeasure || !currentMeasure) {
+                continue;
+            }
+
+            int currentMeasureTick = measureRepeat->measure()->tick().ticks();
+            int referringMeasureTick = referringMeasure->tick().ticks();
+            int repeatPositionTickOffset = currentMeasureTick - referringMeasureTick;
+
+            for (Segment* segment = referringMeasure->first(); segment; segment = segment->next()) {
+                processSegment(tickPositionOffset + repeatPositionTickOffset, segment, { staffIdx }, trackChanges);
+            }
+        }
+
+        const PlaybackContext& ctx = m_playbackCtxMap[trackId];
+
+        ArticulationsProfilePtr profile = profilesRepository()->defaultProfile(m_playbackDataMap[trackId].setupData.category);
+        if (!profile) {
+            LOGE() << "unsupported instrument family: " << item->part()->id();
+            continue;
+        }
+
+        m_renderer.render(item, tickPositionOffset, ctx.appliableDynamicLevel(segmentStartTick + tickPositionOffset),
+                          ctx.persistentArticulationType(segmentStartTick + tickPositionOffset), std::move(profile),
+                          m_playbackDataMap[trackId].originEvents);
+
+        collectChangesTracks(trackId, trackChanges);
+    }
+}
+
 void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                                  ChangedTrackIdSet* trackChanges)
 {
-    std::set<ID> changedPartIdSet = m_score->partIdsFromRange(trackFrom, trackTo);
+    std::set<staff_idx_t> changedStaffIdSet = m_score->staffIdsFromRange(trackFrom, trackTo);
 
     for (const RepeatSegment* repeatSegment : repeatList()) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
@@ -351,62 +433,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                     continue;
                 }
 
-                for (const EngravingItem* item : segment->annotations()) {
-                    if (!item || !item->part()) {
-                        continue;
-                    }
-
-                    const Harmony* chordSymbol = findChordSymbol(item);
-                    if (!chordSymbol) {
-                        continue;
-                    }
-
-                    ID partId = item->part()->id();
-                    if (changedPartIdSet.find(partId) == changedPartIdSet.cend()) {
-                        continue;
-                    }
-
-                    InstrumentTrackId trackId = chordSymbolsTrackId(partId);
-
-                    if (chordSymbol->play()) {
-                        m_renderer.renderChordSymbol(chordSymbol, tickPositionOffset,
-                                                     m_playbackDataMap[trackId].originEvents);
-                    }
-
-                    collectChangesTracks(trackId, trackChanges);
-                }
-
-                for (const EngravingItem* item : segment->elist()) {
-                    if (!item || !item->isChordRest() || !item->part()) {
-                        continue;
-                    }
-
-                    ID partId = item->part()->id();
-
-                    if (changedPartIdSet.find(partId) == changedPartIdSet.cend()) {
-                        continue;
-                    }
-
-                    InstrumentTrackId trackId = idKey(item);
-
-                    if (!trackId.isValid()) {
-                        continue;
-                    }
-
-                    const PlaybackContext& ctx = m_playbackCtxMap[trackId];
-
-                    ArticulationsProfilePtr profile = profilesRepository()->defaultProfile(m_playbackDataMap[trackId].setupData.category);
-                    if (!profile) {
-                        LOGE() << "unsupported instrument family: " << partId;
-                        continue;
-                    }
-
-                    m_renderer.render(item, tickPositionOffset, ctx.appliableDynamicLevel(segmentStartTick + tickPositionOffset),
-                                      ctx.persistentArticulationType(segmentStartTick + tickPositionOffset), std::move(profile),
-                                      m_playbackDataMap[trackId].originEvents);
-
-                    collectChangesTracks(trackId, trackChanges);
-                }
+                processSegment(tickPositionOffset, segment, changedStaffIdSet, trackChanges);
             }
 
             m_renderer.renderMetronome(m_score, measureStartTick, measureEndTick, tickPositionOffset,

@@ -61,6 +61,17 @@ Measure* MeasureRepeat::firstMeasureOfGroup() const
     return measure()->firstOfMeasureRepeatGroup(staffIdx());
 }
 
+const Measure* MeasureRepeat::referringMeasure() const
+{
+    Measure* firstMeasureRepeat = firstMeasureOfGroup();
+
+    if (!firstMeasureRepeat) {
+        return nullptr;
+    }
+
+    return firstMeasureRepeat->prevMeasure();
+}
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------

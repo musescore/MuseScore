@@ -101,6 +101,7 @@ public:
 
     size_t nstaves() const;
     const std::vector<Staff*>& staves() const;
+    std::set<staff_idx_t> staveIdxList() const;
     void appendStaff(Staff* staff);
     void clearStaves();
 
