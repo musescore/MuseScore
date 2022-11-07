@@ -369,7 +369,7 @@ void SpannerSegment::triggerLayout() const
 
 void SpannerSegment::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    if (all || spanner()->eitherEndVisible()) {
+    if (all || spanner()->eitherEndVisible() || systemFlag()) {
         func(data, this);
     }
 }
@@ -1667,13 +1667,14 @@ void SpannerSegment::autoplaceSpannerSegment()
         Shape sh = shape();
         sl.add(sh.translated(pos()));
         double yd = 0.0;
+        staff_idx_t stfIdx = systemFlag() ? staffIdxOrNextVisible() : staffIdx();
         if (above) {
-            double d  = system()->topDistance(staffIdx(), sl);
+            double d  = system()->topDistance(stfIdx, sl);
             if (d > -md) {
                 yd = -(d + md);
             }
         } else {
-            double d  = system()->bottomDistance(staffIdx(), sl);
+            double d  = system()->bottomDistance(stfIdx, sl);
             if (d > -md) {
                 yd = d + md;
             }
