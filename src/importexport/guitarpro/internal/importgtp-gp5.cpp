@@ -385,7 +385,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
     if (cr && cr->isChord()) {
         Chord* chord = toChord(cr);
 
-        if (configuration()->experimental()) {
+        if (engravingConfiguration()->guitarProImportExperimental()) {
             FretCircle* c = Factory::createFretCircle(chord);
             chord->add(c);
         }
@@ -589,7 +589,7 @@ bool GuitarPro5::readTracks()
             staff->setDefaultClefType(ClefTypeList(clefId, clefId));
         }
 
-        if (capo > 0 && !configuration()->experimental()) {
+        if (capo > 0 && !engravingConfiguration()->guitarProImportExperimental()) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
             StaffText* st = new StaffText(s);
             st->setPlainText(u"Capo. fret " + String::number(capo));
@@ -1304,7 +1304,7 @@ bool GuitarPro5::readNote(int string, Note* note)
 
     if (noteBits & NOTE_GHOST) {
         note->setGhost(true);
-        if (configuration()->experimental()) {
+        if (engravingConfiguration()->guitarProImportExperimental()) {
             note->setHeadHasParentheses(true);
         }
     }

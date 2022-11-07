@@ -1712,7 +1712,7 @@ bool GuitarPro2::read(IODevice* io)
         clef->setTrack(i * VOICES);
         segment->add(clef);
 
-        if (capo > 0 && !configuration()->experimental()) {
+        if (capo > 0 && !engravingConfiguration()->guitarProImportExperimental()) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
             StaffText* st = new StaffText(s);
             //                  st->setTextStyleType(TextStyleType::STAFF);
