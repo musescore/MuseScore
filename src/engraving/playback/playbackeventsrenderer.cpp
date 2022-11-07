@@ -54,8 +54,6 @@ void PlaybackEventsRenderer::render(const EngravingItem* item, const int tickPos
                                     const ArticulationType persistentArticulationApplied, const ArticulationsProfilePtr profile,
                                     PlaybackEventsMap& result) const
 {
-    TRACEFUNC;
-
     IF_ASSERT_FAILED(item->isChordRest()) {
         return;
     }
@@ -72,8 +70,6 @@ void PlaybackEventsRenderer::render(const EngravingItem* item, const mpe::timest
                                     const ArticulationType persistentArticulationApplied, const ArticulationsProfilePtr profile,
                                     PlaybackEventsMap& result) const
 {
-    TRACEFUNC;
-
     IF_ASSERT_FAILED(item->isChordRest() || item->isNote()) {
         return;
     }
