@@ -300,6 +300,13 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
             nvb->setRightMargin(tvb->rightMargin());
             nvb->setAutoSizeEnabled(tvb->isAutoSizeEnabled());
         }
+    
+        // for templates using built-in base page style, set score page style to default (may be user-defined)
+        if (score->style()->value(Sid::pageHeight) == DefaultStyle::baseStyle().value(Sid::pageHeight)) {
+            for (auto st : pageStyles()) {
+                score->resetStyleValue(st);
+            }
+        }
     }
 
     score->setSaved(true);
