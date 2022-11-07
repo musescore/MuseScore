@@ -79,16 +79,53 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Tuplet>
+            <normalNotes>2</normalNotes>
+            <actualNotes>3</actualNotes>
+            <baseNote>quarter</baseNote>
+            <Number>
+              <style>tuplet</style>
+              <text>3</text>
+              </Number>
+            </Tuplet>
           <Chord>
-            <durationType>whole</durationType>
+            <dots>1</dots>
+            <durationType>half</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/2</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <endTuplet/>
+          <Chord>
+            <durationType>quarter</durationType>
             <Note>
               <autoplace>0</autoplace>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/2</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <headScheme>name-pitch-german</headScheme>
               <tuning>30</tuning>
               </Note>
             </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
           </voice>
         </Measure>
       <Measure>
