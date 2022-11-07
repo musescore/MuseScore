@@ -46,7 +46,7 @@ struct Shortcut
 
     bool isValid() const
     {
-        return !action.empty() && (!sequences.empty() || standardKey != QKeySequence::UnknownKey);
+        return !action.empty();
     }
 
     bool operator ==(const Shortcut& sc) const
