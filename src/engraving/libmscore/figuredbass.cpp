@@ -1228,12 +1228,12 @@ void FiguredBass::layoutLines()
     system_idx_t sysIdx1 = mu::indexOf(systems, s1);
     system_idx_t sysIdx2 = mu::indexOf(systems, s2);
 
-    if (sysIdx2 < sysIdx1) {
+    if (sysIdx2 == mu::nidx || sysIdx2 < sysIdx1) {
         sysIdx2 = sysIdx1;
         nextSegm = segment()->next1();
         // TODO
         // During layout of figured bass next systems' numbers may be still
-        // undefined (then sysIdx2 == -1) or change in the future.
+        // undefined (then sysIdx2 == mu::nidx) or change in the future.
         // A layoutSystem() approach similar to that for spanners should
         // probably be implemented.
     }
