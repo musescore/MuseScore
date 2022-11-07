@@ -4335,7 +4335,7 @@ void Measure::computeWidth(Fraction minTicks, Fraction maxTicks, double stretchC
     if (s->isStartRepeatBarLineType()) {
         System* sys = system();
         MeasureBase* pmb = prev();
-        if (pmb->isMeasure() && pmb->system() == sys && pmb->repeatEnd()) {
+        if (pmb && pmb->isMeasure() && pmb->system() == sys && pmb->repeatEnd()) {
             Segment* seg = toMeasure(pmb)->last();
             // overlap end repeat barline with start repeat barline
             if (seg->isEndBarLineType()) {
