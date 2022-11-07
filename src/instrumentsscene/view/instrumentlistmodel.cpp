@@ -310,20 +310,8 @@ void InstrumentListModel::sortInstruments(Instruments& instruments) const
 {
     TRACEFUNC;
 
-    std::sort(instruments.begin(), instruments.end(), [this](const CombinedInstrument& instrument1, const CombinedInstrument& instrument2) {
-        QString instrumentName1 = instrument1.name.toLower();
-        QString instrumentName2 = instrument2.name.toLower();
-        QString searchText = m_searchText.toLower();
-
-        int searchTextPosition1 = instrumentName1.indexOf(searchText);
-        int searchTextPosition2 = instrumentName2.indexOf(searchText);
-
-        if (searchTextPosition1 == searchTextPosition2) {
-            return instrumentName1 < instrumentName2;
-        }
-
-        return searchTextPosition1 < searchTextPosition2;
-    });
+    // NOP for now - use ordering as is
+    // placeholder for additional sorting criteria in the future
 }
 
 void InstrumentListModel::setCurrentGenreIndex(int index)
