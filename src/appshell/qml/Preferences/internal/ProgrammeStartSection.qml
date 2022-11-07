@@ -32,7 +32,7 @@ BaseSection {
     navigation.direction: NavigationPanel.Both
 
     property alias startupModes: startupModesBox.model
-    property string scorePathFilter: ""
+    property var scorePathFilter: null
 
     property alias panels: panelsView.model
 

@@ -50,7 +50,7 @@ struct ExportType
     QString settingsPagePath;
 
     QVariantMap toMap() const;
-    QString filter() const;
+    std::vector<std::string> filter() const;
     bool hasSubtypes() const;
 
     static ExportType makeWithSuffixes(const QStringList& suffixes, const QString& name, const QString& filterName,

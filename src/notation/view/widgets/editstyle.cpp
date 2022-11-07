@@ -1784,7 +1784,7 @@ void EditStyle::setValues()
 void EditStyle::selectChordDescriptionFile()
 {
     io::path_t dir = configuration()->userStylesPath();
-    QString filter = qtrc("notation", "MuseScore style files") + " (*.mss)";
+    std::vector<std::string> filter = { trc("notation", "MuseScore style files") + " (*.mss)" };
 
     mu::io::path_t path = interactive()->selectOpeningFile(qtrc("notation", "Load style"), dir, filter);
     if (path.empty()) {

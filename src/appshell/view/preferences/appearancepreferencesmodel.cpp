@@ -160,10 +160,10 @@ QStringList AppearancePreferencesModel::allFonts() const
     return uiConfiguration()->possibleFontFamilies();
 }
 
-QString AppearancePreferencesModel::wallpaperPathFilter() const
+QStringList AppearancePreferencesModel::wallpaperPathFilter() const
 {
-    return qtrc("appshell/preferences", "Images") + " (*.jpg *.jpeg *.png);;"
-           + qtrc("appshell/preferences", "All") + " (*)";
+    return { qtrc("appshell/preferences", "Images") + " (*.jpg *.jpeg *.png)",
+             qtrc("appshell/preferences", "All") + " (*)" };
 }
 
 QString AppearancePreferencesModel::wallpapersDir() const

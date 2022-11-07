@@ -621,7 +621,7 @@ void EditDrumsetDialog::updateExample()
 
 void EditDrumsetDialog::load()
 {
-    QString filter = mu::qtrc("palette", "MuseScore drumset file") + " (*.drm)";
+    std::vector<std::string> filter = { mu::trc("palette", "MuseScore drumset file") + " (*.drm)" };
     mu::io::path_t dir = notationConfiguration()->userStylesPath();
     mu::io::path_t fname = interactive()->selectOpeningFile(mu::qtrc("palette", "Load drumset"), dir, filter);
 
@@ -670,7 +670,7 @@ void EditDrumsetDialog::load()
 
 void EditDrumsetDialog::save()
 {
-    QString filter = mu::qtrc("palette", "MuseScore drumset file") + " (*.drm)";
+    std::vector<std::string> filter = { mu::trc("palette", "MuseScore drumset file") + " (*.drm)" };
     mu::io::path_t dir = notationConfiguration()->userStylesPath();
     mu::io::path_t fname = interactive()->selectSavingFile(mu::qtrc("palette", "Save drumset"), dir, filter);
 

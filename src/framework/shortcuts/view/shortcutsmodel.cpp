@@ -32,9 +32,9 @@
 using namespace mu::shortcuts;
 using namespace mu::ui;
 
-static QString shortcutsFileFilter()
+static std::vector<std::string> shortcutsFileFilter()
 {
-    return mu::qtrc("shortcuts", "MuseScore shortcuts file") + " (*.xml)";
+    return { mu::trc("shortcuts", "MuseScore shortcuts file") + " (*.xml)" };
 }
 
 ShortcutsModel::ShortcutsModel(QObject* parent)

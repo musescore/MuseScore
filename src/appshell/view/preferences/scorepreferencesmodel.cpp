@@ -175,14 +175,14 @@ QString ScorePreferencesModel::partStylePath() const
     return notationConfiguration()->partStyleFilePath().toQString();
 }
 
-QString ScorePreferencesModel::scoreOrderPathFilter() const
+QStringList ScorePreferencesModel::scoreOrderPathFilter() const
 {
-    return qtrc("appshell/preferences", "Score order list") + " (*.xml)";
+    return { qtrc("appshell/preferences", "Score order list") + " (*.xml)" };
 }
 
-QString ScorePreferencesModel::stylePathFilter() const
+QStringList ScorePreferencesModel::stylePathFilter() const
 {
-    return qtrc("appshell/preferences", "MuseScore style file") + " (*.mss)";
+    return { qtrc("appshell/preferences", "MuseScore style file") + " (*.mss)" };
 }
 
 QString ScorePreferencesModel::scoreOrderChooseTitle() const

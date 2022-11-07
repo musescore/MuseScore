@@ -104,10 +104,10 @@ ProgrammeStartPreferencesModel::PanelList ProgrammeStartPreferencesModel::allPan
     return panels;
 }
 
-QString ProgrammeStartPreferencesModel::scorePathFilter() const
+QStringList ProgrammeStartPreferencesModel::scorePathFilter() const
 {
-    return qtrc("appshell/preferences", "MuseScore file") + " (*.mscz);;"
-           + qtrc("appshell/preferences", "All") + " (*)";
+    return { qtrc("appshell/preferences", "MuseScore file") + " (*.mscz)",
+             qtrc("appshell/preferences", "All") + " (*)" };
 }
 
 void ProgrammeStartPreferencesModel::setCurrentStartupMode(int modeIndex)

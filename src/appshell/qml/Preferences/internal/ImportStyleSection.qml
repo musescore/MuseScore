@@ -33,7 +33,7 @@ BaseSection {
 
     property string styleFileImportPath: ""
     property string fileChooseTitle: ""
-    property string filePathFilter: ""
+    property var filePathFilter: null
     property string fileDirectory: ""
 
     signal styleFileImportPathChangeRequested(string path)
