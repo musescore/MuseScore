@@ -305,13 +305,12 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
         }
 
         // for templates using built-in base page style, set score page style to default (may be user-defined)
-        //if (score->style().value(Sid::pageHeight) == DefaultStyle::baseStyle().value(Sid::pageHeight)) {
-            LOGE() << "base page height found: " << DefaultStyle::baseStyle().value(Sid::pageHeight);
+        if (score->style().styleD(Sid::pageHeight) == DefaultStyle::baseStyle().value(Sid::pageHeight)) {
+            LOGE() << "base page height found: " << DefaultStyle::baseStyle().styleD(Sid::pageHeight);
             for (auto st : pageStyles()) {
-                LOGE() << "resetting style value to " << DefaultStyle::defaultStyle().value(st);
                 score->setStyleValue(st, DefaultStyle::defaultStyle().value(st));
             }
-        //}
+        }
     }
 
     score->setSaved(true);
