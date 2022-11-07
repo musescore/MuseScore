@@ -141,7 +141,7 @@ inline bool isNotePlayable(const Note* note, const mpe::ArticulationMap& articua
         //!     If so, we can't ignore such note
         if (!note->tieFor()) {
             for (const auto& pair : articualtionMap) {
-                if (mpe::isMultiNoteArticulation(pair.first)) {
+                if (mpe::isMultiNoteArticulation(pair.first) && !mpe::isRangedArticulation(pair.first)) {
                     return true;
                 }
             }

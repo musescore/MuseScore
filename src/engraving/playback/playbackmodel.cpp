@@ -443,7 +443,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
     }
 }
 
-bool PlaybackModel::hasToReloadTracks(const std::unordered_set<ElementType>& changedTypes) const
+bool PlaybackModel::hasToReloadTracks(const ScoreChangesRange& changesRange) const
 {
     static const std::unordered_set<ElementType> REQUIRED_TYPES = {
         ElementType::PLAYTECH_ANNOTATION,
@@ -452,17 +452,30 @@ bool PlaybackModel::hasToReloadTracks(const std::unordered_set<ElementType>& cha
         ElementType::HAIRPIN_SEGMENT,
         ElementType::HARMONY,
         ElementType::STAFF_TEXT,
+        ElementType::MEASURE_REPEAT,
     };
 
     for (const ElementType type : REQUIRED_TYPES) {
-        if (changedTypes.find(type) == changedTypes.cend()) {
+        if (changesRange.changedTypes.find(type) == changesRange.changedTypes.cend()) {
             continue;
         }
 
         return true;
     }
 
-    return false;
+    const Measure* measureTo = m_score->tick2measure(Fraction::fromTicks(changesRange.tickTo));
+
+    if (!measureTo) {
+        return false;
+    }
+
+    const Measure* nextToLastMeasure = measureTo->nextMeasure();
+
+    if (!nextToLastMeasure) {
+        return false;
+    }
+
+    return nextToLastMeasure->containsMeasureRepeat(changesRange.staffIdxFrom, changesRange.staffIdxTo);
 }
 
 bool PlaybackModel::hasToReloadScore(const std::unordered_set<ElementType>& changedTypes) const
@@ -474,7 +487,6 @@ bool PlaybackModel::hasToReloadScore(const std::unordered_set<ElementType>& chan
         ElementType::TEMPO_TEXT,
         ElementType::LAYOUT_BREAK,
         ElementType::FERMATA,
-        ElementType::MEASURE_REPEAT,
         ElementType::VOLTA,
         ElementType::VOLTA_SEGMENT,
         ElementType::SYSTEM_TEXT,
@@ -658,7 +670,7 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const ScoreChangesRa
     result.tickFrom = changesRange.tickFrom;
     result.tickTo = changesRange.tickTo;
 
-    if (hasToReloadTracks(changesRange.changedTypes)
+    if (hasToReloadTracks(changesRange)
         || hasToReloadScore(changesRange.changedTypes)
         || !changesRange.isValidBoundary()) {
         const Measure* lastMeasure = m_score->lastMeasure();
