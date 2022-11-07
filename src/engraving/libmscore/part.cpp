@@ -244,6 +244,21 @@ const std::vector<Staff*>& Part::staves() const
     return _staves;
 }
 
+std::set<staff_idx_t> Part::staveIdxList() const
+{
+    std::set<staff_idx_t> result;
+
+    for (const Staff* stave : _staves) {
+        if (!stave) {
+            continue;
+        }
+
+        result.insert(stave->idx());
+    }
+
+    return result;
+}
+
 void Part::appendStaff(Staff* staff)
 {
     _staves.push_back(staff);

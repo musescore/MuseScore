@@ -108,6 +108,9 @@ private:
     void updateEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                       ChangedTrackIdSet* trackChanges = nullptr);
 
+    void processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& changedStaffIdSet,
+                        ChangedTrackIdSet* trackChanges);
+
     bool hasToReloadTracks(const std::unordered_set<ElementType>& changedTypes) const;
     bool hasToReloadScore(const std::unordered_set<ElementType>& changedTypes) const;
 

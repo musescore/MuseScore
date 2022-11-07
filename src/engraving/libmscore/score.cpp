@@ -5202,6 +5202,23 @@ std::set<ID> Score::partIdsFromRange(const track_idx_t trackFrom, const track_id
     return result;
 }
 
+std::set<staff_idx_t> Score::staffIdsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo) const
+{
+    std::set<staff_idx_t> result;
+
+    for (const Part* part : m_score->parts()) {
+        if (trackTo < part->startTrack() || trackFrom >= part->endTrack()) {
+            continue;
+        }
+
+        std::set<staff_idx_t> staffIdxList = part->staveIdxList();
+
+        result.insert(staffIdxList.cbegin(), staffIdxList.cend());
+    }
+
+    return result;
+}
+
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------

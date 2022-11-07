@@ -51,6 +51,7 @@ public:
     double numberPos() const { return m_numberPos; }
 
     Measure* firstMeasureOfGroup() const;
+    const Measure* referringMeasure() const;
 
     void draw(mu::draw::Painter*) const override;
     void layout() override;

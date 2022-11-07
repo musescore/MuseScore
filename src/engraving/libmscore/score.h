@@ -781,6 +781,7 @@ public:
     const std::vector<Part*>& parts() const { return _parts; }
     int visiblePartCount() const;
     std::set<ID> partIdsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo) const;
+    std::set<staff_idx_t> staffIdsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo) const;
 
     void appendPart(const InstrumentTemplate*);
     void updateStaffIndex();
