@@ -838,7 +838,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
     EngravingItem* nr   = nullptr;
     Tie* tie      = nullptr;
     ChordRest* cr = toChordRest(segment->element(track));
-    Tuplet* tuplet = cr && cr->tuplet() && sd <= cr->tuplet()->ticks() ? cr->tuplet() : nullptr;
+    Tuplet* tuplet = cr && cr->tuplet() ? cr->tuplet() : nullptr;
     Measure* measure = nullptr;
     bool targetIsRest = cr && cr->isRest();
     for (;;) {
@@ -911,7 +911,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
                     note->setTieFor(tie);
                 }
             }
-            if (tuplet && sd <= tuplet->ticks()) {
+            if (tuplet) {
                 ncr->setTuplet(tuplet);
             }
             tuplet = 0;
@@ -943,7 +943,8 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
         segment = nseg;
 
         cr = toChordRest(segment->element(track));
-
+        // if the cr was too big for the tuplet, get the next tuplet so we can spill into that one
+        tuplet = cr && cr->tuplet() ? cr->tuplet() : nullptr;
         if (!cr) {
             if (track % VOICES) {
                 cr = addRest(segment, track, TDuration(DurationType::V_MEASURE), 0);
