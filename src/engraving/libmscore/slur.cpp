@@ -1374,7 +1374,7 @@ void Slur::slurPos(SlurPos* sp)
     }
 
     /// adding extra space above slurs for notes in circles
-    if (score()->styleB(Sid::circledNotesOnCommonTab) && staff()->staffType()->isCommonTabStaff()) {
+    if (engravingConfiguration()->enableExperimentalFretCircle() && staff()->staffType()->isCommonTabStaff()) {
         auto adjustSlur = [](Chord* ch, PointF& coord) {
             const Fraction halfFraction = Fraction(1, 2);
             if (ch && ch->ticks() >= halfFraction) {

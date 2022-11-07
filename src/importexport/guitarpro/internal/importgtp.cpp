@@ -1404,7 +1404,8 @@ void GuitarPro::readChord(Segment* seg, int track, int numStrings, String name, 
 {
     int firstFret = readInt();
     if (firstFret || gpHeader) {
-        if (!score->styleB(Sid::fretDiagramsAboveChords)) {
+        /// showing chord instead of fret diagrams
+        if (true) {
             StaffText* staffText = Factory::createStaffText(seg);
             staffText->setTrack(track);
             staffText->setPlainText(name);
@@ -1711,7 +1712,7 @@ bool GuitarPro2::read(IODevice* io)
         clef->setTrack(i * VOICES);
         segment->add(clef);
 
-        if (capo > 0 && score->styleB(Sid::showCapoOnStaff)) {
+        if (capo > 0 && !configuration()->experimental()) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
             StaffText* st = new StaffText(s);
             //                  st->setTextStyleType(TextStyleType::STAFF);

@@ -31,4 +31,14 @@ void GuitarProConfiguration::setLinkedTabStaffCreated(bool created)
 {
     m_linkedTabStaffCreated = created;
 }
+
+bool GuitarProConfiguration::experimental() const
+{
+    return m_experimental;
+}
+
+void GuitarProConfiguration::setExperimental(bool experimental)
+{
+    m_experimental = experimental;
+}
 }

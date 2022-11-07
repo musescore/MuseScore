@@ -230,3 +230,33 @@ bool EngravingConfiguration::isAccessibleEnabled() const
 {
     return accessibilityConfiguration() ? accessibilityConfiguration()->enabled() : false;
 }
+
+bool EngravingConfiguration::guitarProImportExperimental() const
+{
+    return guitarProConfiguration() ? guitarProConfiguration()->experimental() : false;
+}
+
+bool EngravingConfiguration::negativeFretsAllowed() const
+{
+    return guitarProImportExperimental();
+}
+
+bool EngravingConfiguration::tablatureParenthesesZIndexWorkaround() const
+{
+    return guitarProImportExperimental();
+}
+
+bool EngravingConfiguration::crossNoteHeadAlwaysBlack() const
+{
+    return guitarProImportExperimental();
+}
+
+bool EngravingConfiguration::enableExperimentalFretCircle() const
+{
+    return guitarProImportExperimental();
+}
+
+bool EngravingConfiguration::chordAlwaysHasVoices() const
+{
+    return guitarProImportExperimental();
+}
