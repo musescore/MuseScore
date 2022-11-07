@@ -884,7 +884,7 @@ void ProjectActionsController::warnCloudIsNotAvailable()
 void ProjectActionsController::warnPublishIsNotAvailable()
 {
     std::string title = trc("project/save", "Unable to connect to MuseScore.com");
-    std::string msg = trc("project/save", "Please check your internet connection, or try again later.");
+    std::string msg = trc("project/save", "Please check your internet connection or try again later.");
 
     IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
     okBtn.accent = true;
