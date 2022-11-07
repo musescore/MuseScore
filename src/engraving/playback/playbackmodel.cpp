@@ -402,6 +402,8 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
 void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                                  ChangedTrackIdSet* trackChanges)
 {
+    TRACEFUNC;
+
     std::set<staff_idx_t> changedStaffIdSet = m_score->staffIdsFromRange(trackFrom, trackTo);
 
     for (const RepeatSegment* repeatSegment : repeatList()) {
