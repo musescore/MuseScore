@@ -345,7 +345,7 @@ TEST_F(Engraving_PlaybackModelTests, Pizz_To_Arco_Technique)
  *      take into account MeasureRepeat elements which leads to issues with playback model. Whenever the root issue will be finished, this test
  *      will be enabled
  */
-TEST_F(Engraving_PlaybackModelTests, DISABLED_Repeat_Last_Measure)
+TEST_F(Engraving_PlaybackModelTests, Repeat_Last_Measure)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_last_measure/repeat_last_measure.mscx");
