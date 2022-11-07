@@ -309,7 +309,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
             LOGE() << "base page height found: " << DefaultStyle::baseStyle().value(Sid::pageHeight);
             for (auto st : pageStyles()) {
                 LOGE() << "resetting style value " << st << " to " << DefaultStyle::defaultStyle().value(st);
-                score->setStyleValue(DefaultStyle::defaultStyle().value(st));
+                score->setStyleValue(st, DefaultStyle::defaultStyle().value(st));
             }
         //}
     }
