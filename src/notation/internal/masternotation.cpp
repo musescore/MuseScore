@@ -306,7 +306,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
         }
 
         // for templates using built-in base page style, set score page style to default (may be user-defined)
-        if (RealIsEqual(score->style().styleD(Sid::pageHeight), DefaultStyle::baseStyle().styleD(Sid::pageHeight)) {
+        if (RealIsEqual(score->style().styleD(Sid::pageHeight), DefaultStyle::baseStyle().styleD(Sid::pageHeight))) {
             LOGE() << "base page height found: " << DefaultStyle::baseStyle().styleD(Sid::pageHeight);
             for (auto st : pageStyles()) {
                 score->setStyleValue(st, DefaultStyle::defaultStyle().value(st));
