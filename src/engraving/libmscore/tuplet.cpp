@@ -689,7 +689,7 @@ bool Tuplet::calcHasBracket(const DurationElement* cr1, const DurationElement* c
     bool startChordBreaks64 = false;
     Chord* prevStartChord = c1->prev();
     if (prevStartChord) {
-        beamStart->calcBeamBreaks(c1, prevStartChord, beamCount, startChordBreaks32, startChordBreaks64);
+        beamStart->calcBeamBreaks(c1, prevStartChord, beamCount - 1, startChordBreaks32, startChordBreaks64);
     }
     bool startChordDefinesTuplet = startChordBreaks32 || startChordBreaks64 || tupletStartsBeam;
     if (prevStartChord) {
@@ -700,7 +700,7 @@ bool Tuplet::calcHasBracket(const DurationElement* cr1, const DurationElement* c
     bool endChordBreaks64 = false;
     Chord* nextEndChord = c2->next();
     if (nextEndChord) {
-        beamEnd->calcBeamBreaks(nextEndChord, c2, beamCount, endChordBreaks32, endChordBreaks64);
+        beamEnd->calcBeamBreaks(nextEndChord, c2, beamCount - 1, endChordBreaks32, endChordBreaks64);
     }
     bool endChordDefinesTuplet = endChordBreaks32 || endChordBreaks64 || tupletEndsBeam;
     if (nextEndChord) {
