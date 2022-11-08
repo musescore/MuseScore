@@ -2914,7 +2914,7 @@ void Score::deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, trac
     auto spanners = _spanner.findOverlapping(t1.ticks(), t2.ticks() - 1);
     for (auto i : spanners) {
         Spanner* sp = i.value;
-        if (sp->isVolta() && sp->systemFlag()) {
+        if (sp->isVolta() || sp->systemFlag()) {
             continue;
         }
         if (!filter.canSelectVoice(sp->track())) {
