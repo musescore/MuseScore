@@ -183,7 +183,13 @@ Channel<uint32_t> PlaybackController::midiTickPlayed() const
 
 float PlaybackController::playbackPositionInSeconds() const
 {
-    return notationPlayback() ? notationPlayback()->playedTickToSec(m_currentTick) : 0.0;
+    INotationPlaybackPtr playback = notationPlayback();
+    if (!playback) {
+        return 0.f;
+    }
+
+    midi::tick_t uniqueTick = playback->playPositionTickByRawTick(m_currentTick).val;
+    return playback->playedTickToSec(uniqueTick);
 }
 
 TrackSequenceId PlaybackController::currentTrackSequenceId() const
