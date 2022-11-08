@@ -314,8 +314,8 @@ void InstrumentListModel::sortInstruments(Instruments& instruments) const
         QString instrumentName1 = instrument1.name.toLower();
         QString instrumentName2 = instrument2.name.toLower();
         QString searchText = m_searchText.toLower();
-        int instrumentIndex1 = instrument1.templates[instrument1.currentTemplateIndex].sequenceOrder;
-        int instrumentIndex2 = instrument2.templates[instrument2.currentTemplateIndex].sequenceOrder;
+        int instrumentIndex1 = instrument1.templates[instrument1.currentTemplateIndex]->sequenceOrder;
+        int instrumentIndex2 = instrument2.templates[instrument2.currentTemplateIndex]->sequenceOrder;
 
         int searchTextPosition1 = instrumentName1.indexOf(searchText);
         int searchTextPosition2 = instrumentName2.indexOf(searchText);
