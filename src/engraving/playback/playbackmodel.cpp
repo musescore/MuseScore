@@ -527,8 +527,12 @@ void PlaybackModel::clearExpiredContexts(const track_idx_t trackFrom, const trac
 
 void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo)
 {
-    timestamp_t timestampFrom = timestampFromTicks(m_score, tickFrom);
-    timestamp_t timestampTo = timestampFromTicks(m_score, tickTo);
+    const RepeatList& repeatList = m_score->repeatList();
+    int uniqueTickFrom = repeatList.tick2utick(tickFrom);
+    int uniqueTickTo = repeatList.tick2utick(tickTo);
+
+    timestamp_t timestampFrom = timestampFromTicks(m_score, uniqueTickFrom);
+    timestamp_t timestampTo = timestampFromTicks(m_score, uniqueTickTo);
 
     for (const Part* part : m_score->parts()) {
         if (part->startTrack() > trackTo || part->endTrack() <= trackFrom) {
