@@ -21,6 +21,7 @@
  */
 #include "masternotation.h"
 
+#include <cmath>
 #include <QFileInfo>
 
 #include "log.h"
@@ -306,7 +307,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
         }
 
         // for templates using built-in base page style, set score page style to default (may be user-defined)
-        if (RealIsEqual(score->style().styleD(Sid::pageHeight), DefaultStyle::baseStyle().styleD(Sid::pageHeight))) {
+        if (std::abs(score->style().styleD(Sid::pageHeight) - DefaultStyle::baseStyle().styleD(Sid::pageHeight)) < 0.1) {
             LOGE() << "base page height found: " << DefaultStyle::baseStyle().styleD(Sid::pageHeight);
             for (auto st : pageStyles()) {
                 score->setStyleValue(st, DefaultStyle::defaultStyle().value(st));
