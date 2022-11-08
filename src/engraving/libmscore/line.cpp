@@ -969,11 +969,22 @@ PointF SLine::linePos(Grip grip, System** sys) const
             }
         }
 
-        Fraction t = grip == Grip::START ? tick() : tick2();
-        Measure* m = cr ? cr->measure() : score()->tick2measure(t);
+        Measure* m = nullptr;
+        if (cr) {
+            m = cr->measure();
+            x += cr->segment()->pos().x() + m->pos().x();
+        } else {
+            Segment* segment = (grip == Grip::START) ? startSegment() : endSegment();
+            if (segment) {
+                m = segment->measure();
+                if (m->mmRest()) {
+                    m = m->mmRest();
+                }
+                x += m->pos().x() + segment->pos().x() - (grip == Grip::START ? 0 : sp);
+            }
+        }
 
         if (m) {
-            x += cr ? cr->segment()->pos().x() + m->pos().x() : m->tick2pos(t);
             *sys = m->system();
         } else {
             *sys = 0;
