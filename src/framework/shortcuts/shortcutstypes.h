@@ -103,7 +103,7 @@ struct RemoteEvent {
             return mtrc("shortcuts", "Note %1").arg(String::fromStdString(pitchToString(this->value)));
         } else if (this->type == RemoteEventType::Controller) {
             //: A MIDI remote event, namely a MIDI controller event
-            return mtrc("shortcuts", "Controller %1").arg(String::number(this->value));
+            return mtrc("shortcuts", "CC %1").arg(String::number(this->value));
         }
 
         //: No MIDI remote event
