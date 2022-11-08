@@ -319,7 +319,15 @@ void InstrumentListModel::sortInstruments(Instruments& instruments) const
         int searchTextPosition2 = instrumentName2.indexOf(searchText);
 
         if (searchTextPosition1 == searchTextPosition2) {
-            return instrumentName1 < instrumentName2;
+            int ti1 = instrument1.currentTemplateIndex;
+            int ti2 = instrument2.currentTemplateIndex;
+            if (ti1 >= 0 && ti1 < instrument1.templates.size() && ti2 >= 0 && ti2 < instrument2.templates.size()) {
+                int instrumentIndex1 = instrument1.templates[ti1]->sequenceOrder;
+                int instrumentIndex2 = instrument2.templates[ti2]->sequenceOrder;
+                return instrumentIndex1 < instrumentIndex2;
+            } else {
+                return instrumentName1 < instrumentName2;
+            }
         }
 
         return searchTextPosition1 < searchTextPosition2;
