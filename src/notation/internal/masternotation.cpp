@@ -310,6 +310,8 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
             for (auto st : pageStyles()) {
                 score->setStyleValue(st, DefaultStyle::defaultStyle().value(st));
             }
+        } else {
+            LOGE() << "custom page style: height " << score->style().styleD(Sid::pageHeight) << ", expected " << DefaultStyle::baseStyle().styleD(Sid::pageHeight);
         }
     }
 
