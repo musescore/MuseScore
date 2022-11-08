@@ -72,7 +72,7 @@ static constexpr double GLISS_PALETTE_HEIGHT = 4.0;
 //=========================================================
 
 GlissandoSegment::GlissandoSegment(Glissando* sp, System* parent)
-    : LineSegment(ElementType::GLISSANDO_SEGMENT, sp, parent)
+    : LineSegment(ElementType::GLISSANDO_SEGMENT, sp, parent, ElementFlag::MOVABLE)
 {
 }
 
