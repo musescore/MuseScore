@@ -55,8 +55,13 @@ add_subdirectory(${MU_ROOT}/thirdparty/freetype freetype)
 
 add_executable(fontcheck
     main.cpp
+    types.h
     fontface.cpp
     fontface.h
+    symbolsinfontstat.cpp
+    symbolsinfontstat.h
+    drawsymbols.cpp
+    drawsymbols.h
 )
 
 set_target_properties(engraving PROPERTIES COMPILE_FLAGS "-fPIC")
