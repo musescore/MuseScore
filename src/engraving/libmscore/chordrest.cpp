@@ -1322,25 +1322,6 @@ Shape ChordRest::shape() const
         }
     }
 
-    {
-        double x1 = 1000000.0;
-        double x2 = -1000000.0;
-        for (EngravingItem* e : segment()->annotations()) {
-            if (!e || !e->addToSkyline()) {
-                continue;
-            }
-            if (e->isHarmony() && e->staffIdx() == staffIdx()) {
-                Harmony* h = toHarmony(e);
-                // calculate bbox only (do not reset position)
-                h->layout1();
-                const double margin = styleP(Sid::minHarmonyDistance) * 0.5;
-                x1 = std::min(x1, e->bbox().x() - margin + e->pos().x());
-                x2 = std::max(x2, e->bbox().x() + e->bbox().width() + margin + e->pos().x());
-                shape.addHorizontalSpacing(e, x1, x2);
-            }
-        }
-    }
-
     if (isMelismaEnd()) {
         double right = rightEdge();
         shape.addHorizontalSpacing(nullptr, right, right);

@@ -724,7 +724,7 @@ PointF EngravingItem::canvasPos() const
         } else if (explicitParent()->isChord()) {       // grace chord
             measure = toSegment(explicitParent()->explicitParent())->measure();
         } else if (explicitParent()->isFretDiagram()) {
-            return p + parentItem()->canvasPos() + PointF(toFretDiagram(explicitParent())->centerX(), 0.0);
+            return p + parentItem()->canvasPos();
         } else {
             ASSERT_X(String(u"this %1 parent %2\n").arg(String::fromAscii(typeName()), String::fromAscii(explicitParent()->typeName())));
         }

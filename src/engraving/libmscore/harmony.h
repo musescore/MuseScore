@@ -115,6 +115,7 @@ class Harmony final : public TextBase
     NoteCaseType _rootRenderCase, _baseRenderCase;    // case to render
 
     void determineRootBaseSpelling();
+    PointF calculateBoundingRect();
     void draw(mu::draw::Painter*) const override;
     void drawEditMode(mu::draw::Painter* p, EditData& ed, double currentViewScaling) override;
     void render(const String&, double&, double&);
@@ -220,8 +221,6 @@ public:
     void spatiumChanged(double oldValue, double newValue) override;
     void localSpatiumChanged(double oldValue, double newValue) override;
     void setHarmony(const String& s);
-    mu::PointF calculateBoundingRect();
-    double xShapeOffset() const;
 
     TranslatableString typeUserName() const override;
     String accessibleInfo() const override;
