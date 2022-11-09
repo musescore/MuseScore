@@ -1827,10 +1827,17 @@ void GPConverter::collectContinuousSlide(const GPNote* gpnote, Note* note)
     }
 }
 
-void GPConverter::addPickScrape(const GPNote* gpnote, Note* /*note*/)
+void GPConverter::addPickScrape(const GPNote* gpnote, Note* note)
 {
     if (gpnote->pickScrape() != GPNote::PickScrape::None && m_currentGPBeat) {
-        /// TODO: add pick scrape to note here
+        if (engravingConfiguration()->guitarProImportExperimental()) {
+            ChordLine* cl = mu::engraving::Factory::createChordLine(_score->dummy()->chord());
+            cl->setChordLineType(gpnote->pickScrape() == GPNote::PickScrape::Down ? ChordLineType::FALL : ChordLineType::DOIT);
+            cl->setWavy(true);
+            note->chord()->add(cl);
+            cl->setNote(note);
+        }
+
         m_currentGPBeat->setPickScrape(true);
     }
 }
