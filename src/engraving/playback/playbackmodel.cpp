@@ -463,19 +463,23 @@ bool PlaybackModel::hasToReloadTracks(const ScoreChangesRange& changesRange) con
         return true;
     }
 
-    const Measure* measureTo = m_score->tick2measure(Fraction::fromTicks(changesRange.tickTo));
+    if (changesRange.isValidBoundary()) {
+        const Measure* measureTo = m_score->tick2measure(Fraction::fromTicks(changesRange.tickTo));
 
-    if (!measureTo) {
-        return false;
+        if (!measureTo) {
+            return false;
+        }
+
+        const Measure* nextToLastMeasure = measureTo->nextMeasure();
+
+        if (!nextToLastMeasure) {
+            return false;
+        }
+
+        return nextToLastMeasure->containsMeasureRepeat(changesRange.staffIdxFrom, changesRange.staffIdxTo);
     }
 
-    const Measure* nextToLastMeasure = measureTo->nextMeasure();
-
-    if (!nextToLastMeasure) {
-        return false;
-    }
-
-    return nextToLastMeasure->containsMeasureRepeat(changesRange.staffIdxFrom, changesRange.staffIdxTo);
+    return false;
 }
 
 bool PlaybackModel::hasToReloadScore(const std::unordered_set<ElementType>& changedTypes) const
