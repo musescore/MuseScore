@@ -1440,7 +1440,7 @@ void Harmony::layout1()
     if (textBlockList().empty()) {
         textBlockList().push_back(TextBlock());
     }
-    calculateBoundingRect();      // for normal symbols this is called in layout: computeMinWidth()
+    calculateBoundingRect();
     if (hasFrame()) {
         layoutFrame();
     }
@@ -1454,39 +1454,37 @@ void Harmony::layout1()
 PointF Harmony::calculateBoundingRect()
 {
     const double ypos = (placeBelow() && staff()) ? staff()->height() : 0.0;
-    const FretDiagram* fd   = (explicitParent() && explicitParent()->isFretDiagram()) ? toFretDiagram(explicitParent()) : nullptr;
-    const double cw   = symWidth(SymId::noteheadBlack);
-    double newx = 0.0;
-    double newy = 0.0;
+    const FretDiagram* fd = (explicitParent() && explicitParent()->isFretDiagram()) ? toFretDiagram(explicitParent()) : nullptr;
+    const double cw = symWidth(SymId::noteheadBlack);
+
+    double newPosX = 0.0;
+    double newPosY = 0.0;
 
     if (textList.empty()) {
         TextBase::layout1();
 
-        // When in EDIT mode, the bbox is different as in NORMAL mode.
-        // Adjust the position so the both bbox have the same alignment.
-
-        double xx = 0.0;
-        double yy = 0.0;
         if (fd) {
-            if (align() == AlignH::RIGHT) {
-                xx = fd->width() / 2.0;
-            }
-            yy = this->ypos();
+            newPosY = this->ypos();
         } else {
-            if (align() == AlignH::RIGHT) {
-                xx = cw;
-            } else if (align() == AlignH::HCENTER) {
-                xx = cw / 2.0;
-            }
-            yy = ypos - ((align() == AlignV::BOTTOM) ? _harmonyHeight - bbox().height() : 0.0);
+            newPosY = ypos - ((align() == AlignV::BOTTOM) ? _harmonyHeight - bbox().height() : 0.0);
         }
-
-        newx = xx;
-        newy = yy;
     } else {
         RectF bb;
         for (TextSegment* ts : textList) {
             bb.unite(ts->tightBoundingRect().translated(ts->x, ts->y));
+        }
+
+        double xx = 0.0;
+        switch (align().horizontal) {
+        case AlignH::LEFT:
+            xx = -bb.left();
+            break;
+        case AlignH::HCENTER:
+            xx = -(bb.center().x());
+            break;
+        case AlignH::RIGHT:
+            xx = -bb.right();
+            break;
         }
 
         double yy = -bb.y();      // Align::TOP
@@ -1498,25 +1496,10 @@ PointF Harmony::calculateBoundingRect()
             yy = -bb.height() - bb.y();
         }
 
-        double xx = -bb.x();     // AlignH::LEFT
         if (fd) {
-            if (align() == AlignH::RIGHT) {
-                xx = fd->bbox().width() - bb.width();
-            } else if (align() == AlignH::HCENTER) {
-                xx = fd->centerX() - bb.width() / 2.0;
-            }
-
-            newx = 0.0;
-            newy = ypos - yy - score()->styleMM(Sid::harmonyFretDist);
+            newPosY = ypos - yy - score()->styleMM(Sid::harmonyFretDist);
         } else {
-            if (align() == AlignH::RIGHT) {
-                xx = -bb.x() - bb.width() + cw;
-            } else if (align() == AlignH::HCENTER) {
-                xx = -bb.x() - bb.width() / 2.0 + cw / 2.0;
-            }
-
-            newx = 0.0;
-            newy = ypos;
+            newPosY = ypos;
         }
 
         for (TextSegment* ts : textList) {
@@ -1525,32 +1508,35 @@ PointF Harmony::calculateBoundingRect()
 
         setbbox(bb.translated(xx, yy));
         _harmonyHeight = bbox().height();
+    }
 
-        for (size_t i = 0; i < rows(); ++i) {
-            TextBlock& t = textBlockList()[i];
-
-            // when MS switch to editing Harmony MS draws text defined by textBlockList().
-            // When MS switches back to normal state it draws text from textList
-            // To correct placement of text in editing we need to layout textBlockList() elements
-            t.layout(this);
-            for (auto& s : t.fragments()) {
-                s.pos = PointF();
-            }
+    if (fd) {
+        switch (align().horizontal) {
+        case AlignH::LEFT:
+            newPosX = 0.0;
+            break;
+        case AlignH::HCENTER:
+            newPosX = fd->centerX();
+            break;
+        case AlignH::RIGHT:
+            newPosX = fd->rightX();
+            break;
+        }
+    } else {
+        switch (align().horizontal) {
+        case AlignH::LEFT:
+            newPosX = 0.0;
+            break;
+        case AlignH::HCENTER:
+            newPosX = cw * 0.5;
+            break;
+        case AlignH::RIGHT:
+            newPosX = cw;
+            break;
         }
     }
 
-    return PointF(newx, newy);
-}
-
-//---------------------------------------------------------
-//   xShapeOffset
-//    Returns the offset for the shapes.
-//---------------------------------------------------------
-
-double Harmony::xShapeOffset() const
-{
-    const FretDiagram* fd = (explicitParent() && explicitParent()->isFretDiagram()) ? toFretDiagram(explicitParent()) : nullptr;
-    return (fd && textList.empty()) ? fd->centerX() : 0.0;
+    return PointF(newPosX, newPosY);
 }
 
 //---------------------------------------------------------

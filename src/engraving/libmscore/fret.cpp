@@ -498,6 +498,7 @@ void FretDiagram::layout()
         y = tempX;
     }
 
+    // When changing how bbox is calculated, don't forget to update the centerX and rightX methods too.
     bbox().setRect(x, y, w, h);
 
     if (!explicitParent() || !explicitParent()->isSegment()) {
@@ -547,7 +548,7 @@ void FretDiagram::layout()
         staff_idx_t si = staffIdx();
 
         SysStaff* ss = m->system()->staff(si);
-        RectF r = _harmony->bbox().translated(m->pos() + s->pos() + pos() + _harmony->pos() + PointF(_harmony->xShapeOffset(), 0.0));
+        RectF r = _harmony->bbox().translated(m->pos() + s->pos() + pos() + _harmony->pos());
 
         double minDistance = _harmony->minDistance().val() * spatium();
         SkylineLine sk(false);
@@ -565,17 +566,16 @@ void FretDiagram::layout()
     }
 }
 
-//---------------------------------------------------------
-//   centerX
-///   used by harmony for layout. Keep in sync with layout, same dotd and x as above
-//    also used in EngravingItem::canvasPos().
-//---------------------------------------------------------
-
 double FretDiagram::centerX() const
 {
-    double dotd = spatium() * _userMag * .49 * score()->styleD(Sid::fretDotSize);
-    double x    = -((dotd + stringLw) * .5);
-    return bbox().right() * .5 + x;
+    // Keep in sync with how bbox is calculated in layout().
+    return (bbox().right() - markerSize * .5) * .5;
+}
+
+double FretDiagram::rightX() const
+{
+    // Keep in sync with how bbox is calculated in layout().
+    return bbox().right() - markerSize * .5;
 }
 
 //---------------------------------------------------------
