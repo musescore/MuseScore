@@ -51,12 +51,14 @@ void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partSt
 {
     m_baseStyle.precomputeValues();
 
-    auto useLetter = (getenv("PAGESIZE") == "Letter");
+    std::string pagesize = getenv("PAGESIZE");
+    std::string letter = "Letter";
+    auto useLetter = (pagesize == letter);
     if (useLetter) {
         m_defaultStyle = new MStyle();
         m_defaultStyle->set(Sid::pageWidth, 8.5);
         m_defaultStyle->set(Sid::pageHeight, 11);
-        m_defaultStyleForParts = newMStyle();
+        m_defaultStyleForParts = new MStyle();
         m_defaultStyleForParts->set(Sid::pageWidth, 8.5);
         m_defaultStyleForParts->set(Sid::pageHeight, 11);
     }
