@@ -552,12 +552,21 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
 }
 
 //---------------------------------------------------------
-//   defaultStemLengths()
+//   defaultStemLengthStart
 //---------------------------------------------------------
 
-std::pair<double, double> Tremolo::defaultStemLengths()
+double Tremolo::defaultStemLengthStart()
 {
-    return LayoutTremolo::extendedStemLenWithTwoNoteTremolo(this, _chord1->defaultStemLength(), _chord2->defaultStemLength());
+    return LayoutTremolo::extendedStemLenWithTwoNoteTremolo(this, _chord1->defaultStemLength(), _chord2->defaultStemLength()).first;
+}
+
+//---------------------------------------------------------
+//   defaultStemLengthEnd
+//---------------------------------------------------------
+
+double Tremolo::defaultStemLengthEnd()
+{
+    return LayoutTremolo::extendedStemLenWithTwoNoteTremolo(this, _chord1->defaultStemLength(), _chord2->defaultStemLength()).second;
 }
 
 //---------------------------------------------------------

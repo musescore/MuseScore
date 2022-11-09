@@ -123,7 +123,8 @@ public:
     void setStyle(TremoloStyle v) { _style = v; }
     void setBeamDirection(DirectionV v);
 
-    std::pair<double, double> defaultStemLengths();
+    double defaultStemLengthStart();
+    double defaultStemLengthEnd();
     bool customStyleApplicable() const;
 
     PropertyValue getProperty(Pid propertyId) const override;
