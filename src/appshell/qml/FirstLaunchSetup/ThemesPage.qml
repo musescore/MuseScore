@@ -29,6 +29,8 @@ import MuseScore.AppShell 1.0
 import "../shared"
 
 Page {
+    id: root
+
     title: qsTrc("appshell/gettingstarted", "Welcome to MuseScore 4")
     explanation: qsTrc("appshell/gettingstarted", "Let's get started by choosing a theme.")
 
@@ -61,7 +63,7 @@ Page {
                 name: "FollowSystemThemeBox"
                 enabled: parent.enabled && parent.visible
                 section: root.navigationSection
-                order: 1
+                order: root.navigationStartRow + 1
                 direction: NavigationPanel.Horizontal
             }
 
@@ -80,7 +82,7 @@ Page {
             spacing: 48
 
             navigationPanel.section: root.navigationSection
-            navigationPanel.order: 2
+            navigationPanel.order: root.navigationStartRow + 2
 
             onThemeChangeRequested: function(newThemeCode) {
                 model.currentThemeCode = newThemeCode
@@ -100,7 +102,7 @@ Page {
             spacing: 4
 
             navigationPanel.section: root.navigationSection
-            navigationPanel.order: 3
+            navigationPanel.order: root.navigationStartRow + 3
 
             onAccentColorChangeRequested: function(newColorIndex) {
                 model.currentAccentColorIndex = newColorIndex
@@ -127,7 +129,7 @@ Page {
                 name: "EnableHighContrast"
                 enabled: parent.enabled && parent.visible
                 section: root.navigationSection
-                order: 4
+                order: root.navigationStartRow + 4
                 direction: NavigationPanel.Horizontal
             }
             navigation.accessible.description: highContrastPreferencesHintLabel.text

@@ -51,7 +51,7 @@ StyledDialogView {
         directoriesModel.load(root.startDir, root.selectedDirectories)
     }
 
-    onOpened: {
+    onNavigationActivateRequested: {
         view.focusOnFirst()
     }
 

@@ -33,6 +33,8 @@ Item {
     property alias explanation: explanationLabel.text
 
     property NavigationSection navigationSection: null
+    property int navigationStartRow: 2
+    property string activeButtonTitle: ""
 
     default property alias content: contentItem.data
 
@@ -42,6 +44,41 @@ Item {
     signal extraButtonClicked()
 
     anchors.fill: parent
+
+    function readInfo() {
+        accessibleInfo.readInfo()
+    }
+
+    function resetFocus() {
+        accessibleInfo.resetFocus()
+    }
+
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "ContentPanel"
+        enabled: root.enabled && root.visible
+        section: root.navigationSection
+        order: root.navigationStartRow
+        direction: NavigationPanel.Vertical
+    }
+
+    AccessibleItem {
+        id: accessibleInfo
+
+        accessibleParent: root.navigationPanel.accessible
+        visualItem: root
+        role: MUAccessible.Button
+        name: root.title + ". " + root.explanation + " " + root.activeButtonTitle
+
+        function readInfo() {
+            accessibleInfo.ignored = false
+            accessibleInfo.focused = true
+        }
+
+        function resetFocus() {
+            accessibleInfo.ignored = true
+            accessibleInfo.focused = false
+        }
+    }
 
     Column {
         id: header

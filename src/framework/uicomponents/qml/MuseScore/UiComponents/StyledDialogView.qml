@@ -47,6 +47,18 @@ DialogView {
 
     onOpened: {
         navSec.requestActive()
+        navigationActiveTimer.start()
+    }
+
+    signal navigationActivateRequested()
+
+    property Timer navigationActiveTimer: Timer {
+        interval: 500
+        repeat: false
+
+        onTriggered: {
+            root.navigationActivateRequested()
+        }
     }
 
     contentItem: FocusScope {
