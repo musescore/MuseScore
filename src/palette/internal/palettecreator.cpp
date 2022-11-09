@@ -1617,7 +1617,7 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
         auto colLegno = makeElement<PlayTechAnnotation>(gpaletteScore);
         colLegno->setXmlText(QT_TRANSLATE_NOOP("palette", "col legno"));
         colLegno->setTechniqueType(PlayingTechniqueType::ColLegno);
-        sp->appendElement(colLegno, QT_TRANSLATE_NOOP("palette", "Martele"))->setElementTranslated(true);
+        sp->appendElement(colLegno, QT_TRANSLATE_NOOP("palette", "Col legno"))->setElementTranslated(true);
 
         auto sulPont = makeElement<PlayTechAnnotation>(gpaletteScore);
         sulPont->setXmlText(QT_TRANSLATE_NOOP("palette", "sul pont."));
