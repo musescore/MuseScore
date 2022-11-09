@@ -1605,14 +1605,14 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
         sp->appendElement(meaNum, QT_TRANSLATE_NOOP("palette", "Measure number"))->setElementTranslated(true);
 
         auto detache = makeElement<PlayTechAnnotation>(gpaletteScore);
-        detache->setXmlText(QT_TRANSLATE_NOOP("palette", "detache"));
+        detache->setXmlText(QT_TRANSLATE_NOOP("palette", "détaché"));
         detache->setTechniqueType(PlayingTechniqueType::Detache);
-        sp->appendElement(detache, QT_TRANSLATE_NOOP("palette", "Detache"))->setElementTranslated(true);
+        sp->appendElement(detache, QT_TRANSLATE_NOOP("palette", "Détaché"))->setElementTranslated(true);
 
         auto martele = makeElement<PlayTechAnnotation>(gpaletteScore);
-        martele->setXmlText(QT_TRANSLATE_NOOP("palette", "martele"));
+        martele->setXmlText(QT_TRANSLATE_NOOP("palette", "martelé"));
         martele->setTechniqueType(PlayingTechniqueType::Martele);
-        sp->appendElement(martele, QT_TRANSLATE_NOOP("palette", "Martele"))->setElementTranslated(true);
+        sp->appendElement(martele, QT_TRANSLATE_NOOP("palette", "Martelé"))->setElementTranslated(true);
 
         auto colLegno = makeElement<PlayTechAnnotation>(gpaletteScore);
         colLegno->setXmlText(QT_TRANSLATE_NOOP("palette", "col legno"));
@@ -1622,12 +1622,12 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
         auto sulPont = makeElement<PlayTechAnnotation>(gpaletteScore);
         sulPont->setXmlText(QT_TRANSLATE_NOOP("palette", "sul pont."));
         sulPont->setTechniqueType(PlayingTechniqueType::SulPonticello);
-        sp->appendElement(sulPont, QT_TRANSLATE_NOOP("palette", "Sul Ponticello"))->setElementTranslated(true);
+        sp->appendElement(sulPont, QT_TRANSLATE_NOOP("palette", "Sul ponticello"))->setElementTranslated(true);
 
         auto sulTasto = makeElement<PlayTechAnnotation>(gpaletteScore);
         sulTasto->setXmlText(QT_TRANSLATE_NOOP("palette", "sul tasto"));
         sulTasto->setTechniqueType(PlayingTechniqueType::SulTasto);
-        sp->appendElement(sulTasto, QT_TRANSLATE_NOOP("palette", "Sul Tasto"))->setElementTranslated(true);
+        sp->appendElement(sulTasto, QT_TRANSLATE_NOOP("palette", "Sul tasto"))->setElementTranslated(true);
 
         auto vibrato = makeElement<PlayTechAnnotation>(gpaletteScore);
         vibrato->setXmlText(QT_TRANSLATE_NOOP("palette", "vibrato"));
