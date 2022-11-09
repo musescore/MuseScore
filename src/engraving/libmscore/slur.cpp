@@ -1204,7 +1204,7 @@ void Slur::slurPos(SlurPos* sp)
             } else if (trem && trem->twoNotes() && trem->chord2() != sc && sc->up() == _up) {
                 trem->layout();
                 Note* note = _up ? sc->upNote() : sc->downNote();
-                double stemHeight = stem1 ? stem1->length() : trem->defaultStemLengths().first;
+                double stemHeight = stem1 ? stem1->length() : trem->defaultStemLengthStart();
                 double offset = std::max(beamClearance * sc->mag(), minOffset) * _spatium;
                 double sh = stemHeight + offset;
 
@@ -1330,7 +1330,7 @@ void Slur::slurPos(SlurPos* sp)
                     // in these cases, layout end of slur to stem
                     double beamWidthSp = beam2 ? score()->styleS(Sid::beamWidth).val() : 0;
                     Note* note = _up ? sc->upNote() : sc->downNote();
-                    double stemHeight = stem2 ? stem2->length() + (beamWidthSp / 2) : trem->defaultStemLengths().second;
+                    double stemHeight = stem2 ? stem2->length() + (beamWidthSp / 2) : trem->defaultStemLengthEnd();
                     double offset = std::max(beamClearance * ec->mag(), minOffset) * _spatium;
                     double sh = stemHeight + offset;
 
