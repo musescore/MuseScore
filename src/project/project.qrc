@@ -57,5 +57,6 @@
         <file>qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml</file>
         <file>qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml</file>
         <file>qml/MuseScore/Project/internal/Migration/migration.png</file>
+        <file>qml/MuseScore/Project/UploadProgressDialog.qml</file>
     </qresource>
 </RCC>

@@ -45,6 +45,7 @@ static mu::Uri NOTATION_PAGE_URI("musescore://notation");
 static mu::Uri HOME_PAGE_URI("musescore://home");
 static mu::Uri NEW_SCORE_URI("musescore://project/newscore");
 static mu::Uri PROJECT_PROPERTIES_URI("musescore://project/properties");
+static mu::Uri UPLOAD_PROGRESS_URI("musescore://project/upload/progress");
 
 void ProjectActionsController::init()
 {
@@ -102,7 +103,7 @@ INotationSelectionPtr ProjectActionsController::currentNotationSelection() const
 
 bool ProjectActionsController::canReceiveAction(const actions::ActionCode& code) const
 {
-    if (m_isUploadingProject || m_isUploadingAudio) {
+    if (m_isProjectUploading) {
         if (code == "file-save-to-cloud" || code == "file-publish") {
             return false;
         }
@@ -537,6 +538,20 @@ bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, Sa
 
 bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode)
 {
+    if (m_isProjectUploading) {
+        return true;
+    }
+
+    m_isProjectUploading = true;
+
+    bool isUploadingFinished = true;
+
+    DEFER {
+        if (isUploadingFinished) {
+            m_isProjectUploading = false;
+        }
+    };
+
     bool isCloudAvailable = authorizationService()->checkCloudIsAvailable();
     if (!isCloudAvailable) {
         warnCloudIsNotAvailable();
@@ -609,6 +624,8 @@ bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMod
     }
 
     uploadProject(info, audio, /*openEditUrl=*/ isPublic, /*publishMode=*/ false);
+    isUploadingFinished = false;
+
     m_numberOfSavesToCloud++;
 
     return true;
@@ -685,13 +702,26 @@ ProjectActionsController::AudioFile ProjectActionsController::exportMp3(const IN
     return audio;
 }
 
-void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode)
+void ProjectActionsController::showUploadProgressDialog()
 {
-    // We can only be uploading one project at a time
-    if (m_isUploadingProject) {
+    if (interactive()->isOpened(UPLOAD_PROGRESS_URI).val) {
         return;
     }
 
+    UriQuery uriQuery(UPLOAD_PROGRESS_URI);
+    uriQuery.addParam("sync", Val(false));
+    interactive()->open(uriQuery);
+}
+
+void ProjectActionsController::closeUploadProgressDialog()
+{
+    if (interactive()->isOpened(UPLOAD_PROGRESS_URI).val) {
+        interactive()->close(UPLOAD_PROGRESS_URI);
+    }
+}
+
+void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode)
+{
     INotationProjectPtr project = globalContext()->currentProject();
     if (!project) {
         return;
@@ -710,10 +740,12 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
     projectData->close();
     projectData->open(QIODevice::ReadOnly);
 
+    bool isFirstSave = info.sourceUrl.isEmpty();
+
     m_uploadingProjectProgress = cloudProjectsService()->uploadScore(*projectData, info.name, info.visibility, info.sourceUrl);
 
     m_uploadingProjectProgress->started.onNotify(this, [this]() {
-        m_isUploadingProject = true;
+        showUploadProgressDialog();
         LOGD() << "Uploading project started";
     });
 
@@ -723,9 +755,8 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
         }
     });
 
-    m_uploadingProjectProgress->finished.onReceive(
-        this, [this, project, projectData, audio, openEditUrl, publishMode](const ProgressResult& res) {
-        m_isUploadingProject = false;
+    m_uploadingProjectProgress->finished.onReceive(this, [this, project, projectData, audio, openEditUrl, publishMode,
+                                                          isFirstSave](const ProgressResult& res) {
         projectData->deleteLater();
 
         if (!res.ret) {
@@ -740,10 +771,10 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
 
         LOGD() << "Source url received: " << newSourceUrl;
 
-        onProjectSuccessfullyUploaded(editUrl);
-
         if (audio.isValid()) {
-            uploadAudio(audio, newSourceUrl);
+            uploadAudio(audio, newSourceUrl, editUrl, isFirstSave);
+        } else {
+            onProjectSuccessfullyUploaded(editUrl, isFirstSave);
         }
 
         CloudProjectInfo info = project->cloudInfo();
@@ -760,16 +791,11 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
     });
 }
 
-void ProjectActionsController::uploadAudio(const AudioFile& audio, const QUrl& sourceUrl)
+void ProjectActionsController::uploadAudio(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen, bool isFirstSave)
 {
-    if (m_isUploadingAudio) {
-        return;
-    }
-
     m_uploadingAudioProgress = cloudProjectsService()->uploadAudio(*audio.device, audio.format, sourceUrl);
 
-    m_uploadingAudioProgress->started.onNotify(this, [this]() {
-        m_isUploadingAudio = true;
+    m_uploadingAudioProgress->started.onNotify(this, []() {
         LOGD() << "Uploading audio started";
     });
 
@@ -779,8 +805,7 @@ void ProjectActionsController::uploadAudio(const AudioFile& audio, const QUrl& s
         }
     });
 
-    m_uploadingAudioProgress->finished.onReceive(this, [this, audio](const ProgressResult& res) {
-        m_isUploadingAudio = false;
+    m_uploadingAudioProgress->finished.onReceive(this, [this, audio, urlToOpen, isFirstSave](const ProgressResult& res) {
         LOGD() << "Uploading audio finished";
 
         audio.device->deleteLater();
@@ -788,11 +813,17 @@ void ProjectActionsController::uploadAudio(const AudioFile& audio, const QUrl& s
         if (!res.ret) {
             LOGE() << res.ret.toString();
         }
+
+        onProjectSuccessfullyUploaded(urlToOpen, isFirstSave);
     });
 }
 
-void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOpen)
+void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOpen, bool isFirstSave)
 {
+    m_isProjectUploading = false;
+
+    closeUploadProgressDialog();
+
     if (!urlToOpen.isEmpty()) {
         interactive()->openUrl(urlToOpen);
         return;
@@ -801,10 +832,14 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
     QUrl scoreManagerUrl = configuration()->scoreManagerUrl();
 
     if (configuration()->openDetailedProjectUploadedDialog()) {
-        UriQuery query("musescore://project/uploaded");
+        UriQuery query("musescore://project/upload/success");
         query.addParam("scoreManagerUrl", Val(scoreManagerUrl.toString()));
         interactive()->open(query);
         configuration()->setOpenDetailedProjectUploadedDialog(false);
+        return;
+    }
+
+    if (!isFirstSave) {
         return;
     }
 
@@ -825,6 +860,10 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
 
 void ProjectActionsController::onProjectUploadFailed(const Ret& ret, bool publishMode)
 {
+    m_isProjectUploading = false;
+
+    closeUploadProgressDialog();
+
     std::string title = publishMode
                         ? trc("project/save", "Your score could not be published")
                         : trc("project/save", "Your score could not be saved to the cloud");
@@ -864,6 +903,8 @@ void ProjectActionsController::onProjectUploadFailed(const Ret& ret, bool publis
 
 void ProjectActionsController::warnCloudIsNotAvailable()
 {
+    closeUploadProgressDialog();
+
     if (!configuration()->showCloudIsNotAvailableWarning()) {
         return;
     }
