@@ -35,7 +35,7 @@ StyledDialogView {
 
     property string scoreManagerUrl: ""
 
-    onOpened: {
+    onNavigationActivateRequested: {
         watchVideoButton.navigation.requestActive()
         accessibleInfo.readInfo()
     }

@@ -39,11 +39,7 @@ StyledDialogView {
 
     margins: 24
 
-    onOpened: {
-        activateNavigation()
-    }
-
-    function activateNavigation() {
+    onNavigationActivateRequested: {
         buttons.focusOnFirst()
         accessibleInfo.readInfo()
     }

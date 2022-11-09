@@ -39,7 +39,7 @@ StyledDialogView {
     title: canSelectMultipleInstruments ? qsTrc("instruments", "Add or remove instruments") :
                                           qsTrc("instruments", "Select instrument")
 
-    onOpened: {
+    onNavigationActivateRequested: {
         instrumentsPage.focusOnFirst()
     }
 

@@ -35,7 +35,7 @@ StyledDialogView {
 
     objectName: "AudioGenerationSettingsDialog"
 
-    onOpened: {
+    onNavigationActivateRequested: {
         settingsOptions.focusOnDefaultSettingControl()
         accessibleInfo.readInfo()
     }

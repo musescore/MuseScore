@@ -39,7 +39,7 @@ StyledDialogView {
         id: profilesListModel
     }
 
-    onOpened: {
+    onNavigationActivateRequested: {
         profilesListView.itemAtIndex(0).navigation.requestActive()
     }
 
