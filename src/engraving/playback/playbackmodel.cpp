@@ -384,8 +384,8 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
             int referringMeasureTick = referringMeasure->tick().ticks();
             int repeatPositionTickOffset = currentMeasureTick - referringMeasureTick;
 
-            for (Segment* segment = referringMeasure->first(); segment; segment = segment->next()) {
-                processSegment(tickPositionOffset + repeatPositionTickOffset, segment, { staffIdx }, trackChanges);
+            for (Segment* seg = referringMeasure->first(); seg; seg = seg->next()) {
+                processSegment(tickPositionOffset + repeatPositionTickOffset, seg, { staffIdx }, trackChanges);
             }
         }
 
