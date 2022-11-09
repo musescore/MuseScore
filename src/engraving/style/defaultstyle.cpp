@@ -21,6 +21,8 @@
  */
 #include "defaultstyle.h"
 
+#include <cstdlib>
+
 #include "io/file.h"
 
 #include "log.h"
@@ -49,8 +51,20 @@ void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partSt
 {
     m_baseStyle.precomputeValues();
 
-    if (!defaultStyleFilePath.empty()) {
+    auto useLetter = (getenv("PAGESIZE") == "Letter");
+    if (useLetter) {
         m_defaultStyle = new MStyle();
+        m_defaultStyle->set(Sid::pageWidth, 8.5);
+        m_defaultStyle->set(Sid::pageHeight, 11);
+        m_defaultStyleForParts = newMStyle();
+        m_defaultStyleForParts->set(Sid::pageWidth, 8.5);
+        m_defaultStyleForParts->set(Sid::pageHeight, 11);
+    }
+
+    if (!defaultStyleFilePath.empty()) {
+        if (!m_defaultStyle) {
+            m_defaultStyle = new MStyle();
+        }
         bool ok = doLoadStyle(m_defaultStyle, defaultStyleFilePath);
         if (!ok) {
             delete m_defaultStyle;
@@ -61,8 +75,10 @@ void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partSt
     }
 
     if (!partStyleFilePath.empty()) {
-        m_defaultStyleForParts = new MStyle();
-        bool ok = doLoadStyle(m_defaultStyleForParts, defaultStyleFilePath);
+        if (!m_defaultStyleForParts) {
+            m_defaultStyleForParts = new MStyle();
+        }
+        bool ok = doLoadStyle(m_defaultStyleForParts, partStyleFilePath);
         if (!ok) {
             delete m_defaultStyleForParts;
             m_defaultStyleForParts = nullptr;
