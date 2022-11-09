@@ -554,8 +554,6 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
             m_chordsInMeasure[lastMeasure]++;
         }
 
-        convertNotes(beat->notes(), cr);
-
         if (!graceChords.empty()) {
             int grIndex = 0;
             for (auto [pGrChord, pBeat] : graceChords) {
@@ -572,6 +570,8 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
             }
         }
         graceChords.clear();
+
+        convertNotes(beat->notes(), cr);
 
         addTuplet(beat, cr);
         addTimer(beat, cr);
