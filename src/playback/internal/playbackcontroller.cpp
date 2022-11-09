@@ -97,7 +97,7 @@ void PlaybackController::updateCurrentTempo()
         return;
     }
 
-    const Tempo& newTempo = notationPlayback()->tempo(currentTick());
+    const Tempo& newTempo = notationPlayback()->tempo(m_currentTick);
 
     if (newTempo == m_currentTempo) {
         return;
@@ -105,11 +105,6 @@ void PlaybackController::updateCurrentTempo()
 
     m_currentTempo = newTempo;
     m_currentTempoChanged.notify();
-}
-
-int PlaybackController::currentTick() const
-{
-    return m_currentTick;
 }
 
 bool PlaybackController::isPlayAllowed() const
@@ -183,13 +178,7 @@ Channel<uint32_t> PlaybackController::midiTickPlayed() const
 
 float PlaybackController::playbackPositionInSeconds() const
 {
-    INotationPlaybackPtr playback = notationPlayback();
-    if (!playback) {
-        return 0.f;
-    }
-
-    midi::tick_t uniqueTick = playback->playPositionTickByRawTick(m_currentTick).val;
-    return playback->playedTickToSec(uniqueTick);
+    return secondsFromMilliseconds(m_currentPlaybackTimeMsecs);
 }
 
 TrackSequenceId PlaybackController::currentTrackSequenceId() const
@@ -403,9 +392,8 @@ void PlaybackController::togglePlay()
         pause();
     } else if (isPaused()) {
         msecs_t endMsecs = playbackEndMsecs();
-        msecs_t currentTimeMsecs = tickToMsecs(m_currentTick);
 
-        if (currentTimeMsecs == endMsecs) {
+        if (m_currentPlaybackTimeMsecs == endMsecs) {
             msecs_t startMsecs = playbackStartMsecs();
             seek(startMsecs);
         }
@@ -617,7 +605,7 @@ void PlaybackController::openPlaybackSetupDialog()
 void PlaybackController::addLoopBoundary(LoopBoundaryType type)
 {
     if (isPlaying()) {
-        addLoopBoundaryToTick(type, currentTick());
+        addLoopBoundaryToTick(type, m_currentTick);
     } else {
         addLoopBoundaryToTick(type, INotationPlayback::SelectedNoteTick);
     }
@@ -698,7 +686,7 @@ void PlaybackController::resetCurrentSequence()
     playback()->audioOutput()->outputParamsChanged().resetOnReceive(this);
     playback()->audioOutput()->masterOutputParamsChanged().resetOnReceive(this);
 
-    setCurrentTick(0);
+    setCurrentPlaybackTime(0);
     setCurrentPlaybackStatus(PlaybackStatus::Stopped);
 
     playback()->removeSequence(m_currentSequenceId);
@@ -709,13 +697,15 @@ void PlaybackController::resetCurrentSequence()
     m_currentSequenceIdChanged.notify();
 }
 
-void PlaybackController::setCurrentTick(const tick_t tick)
+void PlaybackController::setCurrentPlaybackTime(msecs_t msecs)
 {
-    if (m_currentTick == tick) {
+    if (m_currentPlaybackTimeMsecs == msecs) {
         return;
     }
 
-    m_currentTick = tick;
+    m_currentPlaybackTimeMsecs = msecs;
+    m_currentTick = notationPlayback()->secToTick(secondsFromMilliseconds(msecs));
+
     m_playbackPositionChanged.notify();
 }
 
@@ -1024,9 +1014,8 @@ void PlaybackController::setupSequencePlayer()
             return;
         }
 
-        tick_t tick = notationPlayback()->secToTick(msecs / 1000.);
-        setCurrentTick(tick);
-        m_tickPlayed.send(std::move(tick));
+        setCurrentPlaybackTime(msecs);
+        m_tickPlayed.send(m_currentTick);
     });
 
     playback()->player()->setDuration(m_currentSequenceId, notationPlayback()->totalPlayTime());
@@ -1137,7 +1126,7 @@ Notification PlaybackController::currentTempoChanged() const
 
 MeasureBeat PlaybackController::currentBeat() const
 {
-    return notationPlayback() ? notationPlayback()->beat(currentTick()) : MeasureBeat();
+    return notationPlayback() ? notationPlayback()->beat(m_currentTick) : MeasureBeat();
 }
 
 msecs_t PlaybackController::beatToMilliseconds(int measureIndex, int beatIndex) const
