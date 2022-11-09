@@ -1375,20 +1375,20 @@ void Slur::slurPos(SlurPos* sp)
 
     /// adding extra space above slurs for notes in circles
     if (engravingConfiguration()->enableExperimentalFretCircle() && staff()->staffType()->isCommonTabStaff()) {
-        auto adjustSlur = [](Chord* ch, PointF& coord) {
+        auto adjustSlur = [](Chord* ch, PointF& coord, bool up) {
             const Fraction halfFraction = Fraction(1, 2);
             if (ch && ch->ticks() >= halfFraction) {
                 for (EngravingItem* item : ch->el()) {
                     if (item && item->isFretCircle()) {
-                        coord -= PointF(0, toFretCircle(item)->offsetFromUpNote());
+                        coord += PointF(0, toFretCircle(item)->offsetFromUpNote() * (up ? -1 : 1));
                         break;
                     }
                 }
             }
         };
 
-        adjustSlur(sc, sp->p1);
-        adjustSlur(ec, sp->p2);
+        adjustSlur(sc, sp->p1, _up);
+        adjustSlur(ec, sp->p2, _up);
     }
 }
 
