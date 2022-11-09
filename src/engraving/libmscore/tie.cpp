@@ -30,6 +30,7 @@
 
 #include "accidental.h"
 #include "chord.h"
+#include "fretcircle.h"
 #include "hook.h"
 #include "ledgerline.h"
 #include "measure.h"
@@ -965,6 +966,29 @@ void Tie::slurPos(SlurPos* sp)
     if (ec->vStaffIdx() != staffIdx() && sp->system2) {
         double diff = sp->system2->staff(ec->vStaffIdx())->y() - sp->system2->staff(staffIdx())->y();
         sp->p2.ry() += diff;
+    }
+
+    /// adjusting ties for notes in circles
+    if (engravingConfiguration()->enableExperimentalFretCircle() && staff()->staffType()->isCommonTabStaff()) {
+        auto adjustTie = [this](Chord* ch, PointF& coord, bool tieStart) {
+            const Fraction halfFraction = Fraction(1, 2);
+            if (ch && ch->ticks() >= halfFraction) {
+                for (EngravingItem* item : ch->el()) {
+                    if (item && item->isFretCircle()) {
+                        FretCircle* fretCircle = toFretCircle(item);
+                        coord += PointF(0, fretCircle->offsetFromUpNote() * (up() ? -1 : 1));
+                        if (isInside()) {
+                            coord += PointF(fretCircle->sideOffset() * (tieStart ? 1 : -1), 0);
+                        }
+
+                        break;
+                    }
+                }
+            }
+        };
+
+        adjustTie(sc, sp->p1, true);
+        adjustTie(ec, sp->p2, false);
     }
 }
 

@@ -34,6 +34,7 @@ class FretCircle final : public EngravingItem
 public:
 
     double offsetFromUpNote() const { return _offsetFromUpNote; }
+    double sideOffset() const { return _sideOffset; }
 
 private:
 
@@ -57,6 +58,7 @@ public:
     void draw(mu::draw::Painter*) const override;
 
     double _offsetFromUpNote = 0;
+    double _sideOffset = 0;
 };
 } // namespace mu::engraving
 #endif
