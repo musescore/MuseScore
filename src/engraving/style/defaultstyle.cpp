@@ -21,6 +21,8 @@
  */
 #include "defaultstyle.h"
 
+#include <cstdlib>
+
 #include "io/file.h"
 
 #include "log.h"
@@ -49,8 +51,25 @@ void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partSt
 {
     m_baseStyle.precomputeValues();
 
-    if (!defaultStyleFilePath.empty()) {
+    char* ps = getenv("PAPERSIZE");
+    std::string defaultPageSize = ps ? ps : "a4";
+    std::string letter = "letter";
+    bool useLetter = (defaultPageSize == letter);
+    if (useLetter) {
         m_defaultStyle = new MStyle();
+        m_defaultStyle->set(Sid::pageWidth, 8.5);
+        m_defaultStyle->set(Sid::pageHeight, 11.0);
+        m_defaultStyle->precomputeValues();
+        m_defaultStyleForParts = new MStyle();
+        m_defaultStyleForParts->set(Sid::pageWidth, 8.5);
+        m_defaultStyleForParts->set(Sid::pageHeight, 11.0);
+        m_defaultStyleForParts->precomputeValues();
+    }
+
+    if (!defaultStyleFilePath.empty()) {
+        if (!m_defaultStyle) {
+            m_defaultStyle = new MStyle();
+        }
         bool ok = doLoadStyle(m_defaultStyle, defaultStyleFilePath);
         if (!ok) {
             delete m_defaultStyle;
@@ -61,8 +80,10 @@ void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partSt
     }
 
     if (!partStyleFilePath.empty()) {
-        m_defaultStyleForParts = new MStyle();
-        bool ok = doLoadStyle(m_defaultStyleForParts, defaultStyleFilePath);
+        if (!m_defaultStyleForParts) {
+            m_defaultStyleForParts = new MStyle();
+        }
+        bool ok = doLoadStyle(m_defaultStyleForParts, partStyleFilePath);
         if (!ok) {
             delete m_defaultStyleForParts;
             m_defaultStyleForParts = nullptr;
