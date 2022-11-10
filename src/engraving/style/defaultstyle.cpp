@@ -59,10 +59,12 @@ void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partSt
         m_defaultStyle = new MStyle();
         m_defaultStyle->set(Sid::pageWidth, 8.5);
         m_defaultStyle->set(Sid::pageHeight, 11.0);
+        m_defaultStyle->set(Sid::pagePrintableWidth, 7.3189);
         m_defaultStyle->precomputeValues();
         m_defaultStyleForParts = new MStyle();
         m_defaultStyleForParts->set(Sid::pageWidth, 8.5);
         m_defaultStyleForParts->set(Sid::pageHeight, 11.0);
+        m_defaultStyleForParts->set(Sid::pagePrintableWidth, 7.3189);
         m_defaultStyleForParts->precomputeValues();
     }
 
