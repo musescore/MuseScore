@@ -3990,7 +3990,26 @@ void ExportMusicXml::rest(Rest* rest, staff_idx_t staff)
     if (b && ExportMusicXml::canWrite(b)) {
         notations.tag(_xml, b);
         articulations.tag(_xml);
-        _xml.tag(b->isCaesura() ? "caesura" : "breath-mark");
+        if (b->isCaesura()) {
+            _xml.tag("caesura");
+        } else {
+            QString breathMarkType;
+            switch (b->symId()) {
+            case SymId::breathMarkTick:
+                breathMarkType = "tick";
+                break;
+            case SymId::breathMarkUpbow:
+                breathMarkType = "upbow";
+                break;
+            case SymId::breathMarkSalzedo:
+                breathMarkType = "salzedo";
+                break;
+            default:
+                breathMarkType = "comma";
+            }
+
+            _xml.tag("breath-mark", breathMarkType);
+        }
     }
     articulations.etag(_xml);
 
