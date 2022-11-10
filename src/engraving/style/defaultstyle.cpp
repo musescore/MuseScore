@@ -51,9 +51,10 @@ void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partSt
 {
     m_baseStyle.precomputeValues();
 
-    std::string pagesize = getenv("PAGESIZE");
+    char* ps = getenv("PAGESIZE");
+    std::string defaultPageSize = ps ? ps : "A4";
     std::string letter = "Letter";
-    bool useLetter = (pagesize == letter);
+    bool useLetter = (defaultPageSize == letter);
     if (useLetter) {
         m_defaultStyle = new MStyle();
         m_defaultStyle->set(Sid::pageWidth, 8.5);
