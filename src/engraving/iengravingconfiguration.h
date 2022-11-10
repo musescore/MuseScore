@@ -96,7 +96,6 @@ public:
     virtual bool tablatureParenthesesZIndexWorkaround() const = 0;
     virtual bool crossNoteHeadAlwaysBlack() const = 0;
     virtual bool enableExperimentalFretCircle() const = 0;
-    virtual bool chordAlwaysHasVoices() const = 0;
 };
 }
 
