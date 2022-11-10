@@ -427,9 +427,19 @@ INotationPtr EditStaff::notation() const
     return globalContext()->currentNotation();
 }
 
+IMasterNotationPtr EditStaff::masterNotation() const
+{
+    return globalContext()->currentMasterNotation();
+}
+
 INotationPartsPtr EditStaff::notationParts() const
 {
     return notation() ? notation()->parts() : nullptr;
+}
+
+INotationPartsPtr EditStaff::masterNotationParts() const
+{
+    return masterNotation() ? masterNotation()->parts() : nullptr;
 }
 
 void EditStaff::initStaff()
@@ -535,7 +545,9 @@ void EditStaff::applyPartProperties()
         m_instrument.longNames().push_back(mu::engraving::StaffName(ln, 0));
     }
 
-    if (m_instrument != m_orgInstrument) {
+    if (m_instrument.id() != m_orgInstrument.id()) {
+        masterNotationParts()->replaceInstrument(m_instrumentKey, m_instrument);
+    } else {
         notationParts()->replaceInstrument(m_instrumentKey, m_instrument);
     }
 
