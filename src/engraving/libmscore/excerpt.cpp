@@ -1462,7 +1462,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                             nt = toTuplet(ot->linkedClone());
                             nt->clear();
                             nt->setTrack(dstTrack);
-                            nt->setParent(m);
+                            nt->setParent(nm);
                             tupletMap.add(ot, nt);
                         }
                         ncr->setTuplet(nt);
