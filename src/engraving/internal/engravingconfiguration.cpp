@@ -255,8 +255,3 @@ bool EngravingConfiguration::enableExperimentalFretCircle() const
 {
     return guitarProImportExperimental();
 }
-
-bool EngravingConfiguration::chordAlwaysHasVoices() const
-{
-    return guitarProImportExperimental();
-}
