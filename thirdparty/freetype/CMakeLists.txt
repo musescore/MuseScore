@@ -47,6 +47,11 @@ set(MODULE_SRC
 
 set(MODULE_DEF
     -DFT2_BUILD_LIBRARY
+    -DFT_CONFIG_OPTION_USE_HARFBUZZ
+    )
+
+set(MODULE_LINK
+    harfbuzz
     )
 
 set(MODULE_USE_PCH_NONE ON)

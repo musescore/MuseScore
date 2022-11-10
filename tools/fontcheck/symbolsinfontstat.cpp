@@ -46,7 +46,7 @@ void SymbolsInFontStat::printStat()
         fs.path = paths[f];
         fs.face = new FontFace();
         fs.face->load(fs.path);
-        fs.glyphs = fs.face->glyphs(true);
+        fs.glyphs = fs.face->allGlyphs(true);
 
         stats[f] = fs;
     }

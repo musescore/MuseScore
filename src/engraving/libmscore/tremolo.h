@@ -53,7 +53,7 @@ class Tremolo final : public EngravingItem
     DirectionV _direction;
     mu::draw::PainterPath path;
 
-    int _lines;         // derived from _subtype
+    int _lines = 0;         // derived from _subtype
     TremoloStyle _style { TremoloStyle::DEFAULT };
 
     friend class Factory;

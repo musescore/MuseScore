@@ -99,7 +99,7 @@ static T findTypeByXmlTag(const C& cont, const AsciiStringView& tag, T def, bool
     if (it == cont.cend()) {
         if (!silent) {
             LOGE() << "not found type for tag: " << tag;
-            assert(it != cont.cend());
+            //assert(it != cont.cend());
         }
         return def;
     }
@@ -1073,7 +1073,7 @@ TextStyleType TConv::fromXml(const AsciiStringView& tag, TextStyleType def)
     }
 
     LOGE() << "not found type for tag: " << tag;
-    UNREACHABLE;
+    //UNREACHABLE;
     return def;
 }
 

@@ -1,0 +1,11 @@
+[wrap-file]
+directory = benchmark-1.6.0
+source_url = https://github.com/google/benchmark/archive/refs/tags/v1.6.0.tar.gz
+source_filename = benchmark-1.6.0.tar.gz
+source_hash = 1f71c72ce08d2c1310011ea6436b31e39ccab8c2db94186d26657d41747c85d6
+patch_filename = google-benchmark_1.6.0-1_patch.zip
+patch_url = https://wrapdb.mesonbuild.com/v2/google-benchmark_1.6.0-1/get_patch
+patch_hash = f2feff0641a5ebf6b893a4f49ea0bff566ba866ee993c5c3aef62ff40cdc6b14
+
+[provide]
+benchmark = google_benchmark_dep

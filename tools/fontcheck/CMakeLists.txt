@@ -41,17 +41,25 @@ include_directories(
     ${Qt5Widgets_INCLUDE_DIRS}
     ${MU_ROOT}/thirdparty/dtl
     ${MU_ROOT}/thirdparty/freetype/include
+    ${MU_ROOT}/thirdparty/harfbuzz/harfbuzz/src
+    ${MU_ROOT}/src/importexport/guitarpro
 )
 
 set(THIRDPARTY_DIR ${MU_ROOT}/thirdparty)
+set(THIRD_PARTY ${MU_ROOT}/thirdparty)
 
-add_definitions(-DDRAW_NO_QSVGRENDER)
+add_definitions(
+    -DDRAW_NO_QSVGRENDER
+
+)
 
 add_subdirectory(${MU_ROOT}/src/framework/global global)
 add_subdirectory(${MU_ROOT}/src/framework/draw draw)
 add_subdirectory(${MU_ROOT}/src/framework/fonts fonts)
 add_subdirectory(${MU_ROOT}/src/engraving engraving)
+add_subdirectory(${MU_ROOT}/src/importexport/guitarpro guitarpro)
 add_subdirectory(${MU_ROOT}/thirdparty/freetype freetype)
+add_subdirectory(${MU_ROOT}/thirdparty/harfbuzz harfbuzz)
 
 add_executable(fontcheck
     main.cpp
@@ -62,6 +70,8 @@ add_executable(fontcheck
     symbolsinfontstat.h
     drawsymbols.cpp
     drawsymbols.h
+    symbolsinscoresstat.cpp
+    symbolsinscoresstat.h
 )
 
 set_target_properties(engraving PROPERTIES COMPILE_FLAGS "-fPIC")
@@ -77,8 +87,11 @@ target_include_directories(fontcheck PUBLIC
 
 target_link_libraries(fontcheck
     ${QT_LIBRARIES}
+    harfbuzz
+    mscore_freetype
     global
     draw
     fonts
     engraving
+    iex_guitarpro
 )

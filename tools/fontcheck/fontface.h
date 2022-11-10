@@ -26,7 +26,8 @@ public:
     glyph_idx_t glyphIndex(char32_t ucs4) const;
     bool inFont(char32_t ucs4) const;
 
-    std::vector<Glyph> glyphs(bool withBBox) const;
+    std::vector<Glyph> allGlyphs(bool withBBox) const;
+    std::vector<glyph_idx_t> glyphs(const char32_t* text, int text_length, bool withLigatures) const;
 
 private:
     struct FData;

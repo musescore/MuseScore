@@ -1,0 +1,8 @@
+[wrap-git]
+directory=cairo
+url=https://gitlab.freedesktop.org/cairo/cairo.git
+depth=1
+revision=c90faeb7492b1b778d18a796afe5c2e4b32a6356
+
+[provide]
+dependency_names = cairo, cairo-ft

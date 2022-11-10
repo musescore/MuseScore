@@ -15,11 +15,15 @@
 #include "framework/fonts/fontsmodule.h"
 #include "framework/draw/drawmodule.h"
 
+#include "engraving/engravingmodule.h"
 #include "engraving/infrastructure/smufl.h"
 #include "engraving/infrastructure/symbolfonts.h"
 
+#include "importexport/guitarpro/guitarpromodule.h"
+
 #include "symbolsinfontstat.h"
 #include "drawsymbols.h"
+#include "symbolsinscoresstat.h"
 
 #include "log.h"
 
@@ -36,6 +40,8 @@ int main(int argc, char* argv[])
     std::vector<IModuleSetup*> modules;
     modules.push_back(new mu::fonts::FontsModule());
     modules.push_back(new mu::draw::DrawModule());
+    modules.push_back(new mu::engraving::EngravingModule());
+    modules.push_back(new mu::iex::guitarpro::GuitarProModule());
 
     // ====================================================
     // Setup modules: Resources, Exports, Imports, UiTypes
@@ -58,19 +64,24 @@ int main(int argc, char* argv[])
         m->resolveImports();
     }
 
-    Smufl::init();
+    IApplication::RunMode runMode = IApplication::RunMode::Editor;
+    globalModule.onPreInit(runMode);
+    for (mu::modularity::IModuleSetup* m : modules) {
+        m->onPreInit(runMode);
+    }
 
-    SymbolFonts::addFont(u"Bravura",    u"Bravura",     ":/fonts/bravura/Bravura.otf");
-    SymbolFonts::addFont(u"Leland",     u"Leland",      ":/fonts/leland/Leland.otf");
+    globalModule.onInit(runMode);
+    for (mu::modularity::IModuleSetup* m : modules) {
+        m->onInit(runMode);
+    }
+
     SymbolFonts::fontByName(u"Bravura"); // load
     SymbolFonts::fontByName(u"Leland");  // load
-
-    QFontDatabase::addApplicationFont(":/fonts/bravura/BravuraText.otf");
-    QFontDatabase::addApplicationFont(":/fonts/leland/LelandText.otf");
 
     QCommandLineParser parser;
     parser.addOption(QCommandLineOption("syms-in-fonts", "Symbols in fonts"));
     parser.addOption(QCommandLineOption("draw-syms", "Draw symbols"));
+    parser.addOption(QCommandLineOption("syms-in-scores", "Symbols in fonts", "dir"));
     parser.process(QCoreApplication::arguments());
 
     if (parser.isSet("syms-in-fonts")) {
@@ -79,6 +90,11 @@ int main(int argc, char* argv[])
 
     if (parser.isSet("draw-syms")) {
         DrawSymbols::drawSymbols();
+    }
+
+    if (parser.isSet("syms-in-scores")) {
+        SymbolsInScoresStat s;
+        s.processDir(parser.value("syms-in-scores"));
     }
 
     return 0;

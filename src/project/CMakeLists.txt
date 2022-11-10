@@ -140,4 +140,4 @@ set(MODULE_LINK
     notation
 )
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)
