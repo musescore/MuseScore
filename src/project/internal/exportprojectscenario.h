@@ -46,9 +46,8 @@ class ExportProjectScenario : public IExportProjectScenario, public async::Async
 public:
     std::vector<INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const override;
 
-    bool exportScores(const notation::INotationPtrList& notations, const ExportType& exportType,
-                      INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
-                      bool openDestinationFolderOnExport = false) const override;
+    RetVal<io::path_t> askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
+                                     INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART) const override;
 
     bool exportScores(const notation::INotationPtrList& notations, const io::path_t& destinationPath,
                       INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
@@ -69,8 +68,6 @@ private:
 
     bool isMainNotation(notation::INotationPtr notation) const;
 
-    io::path_t askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
-                             INotationWriter::UnitType unitType) const;
     io::path_t completeExportPath(const io::path_t& basePath, notation::INotationPtr notation, bool isMain, int pageIndex = -1) const;
 
     bool shouldReplaceFile(const QString& filename) const;

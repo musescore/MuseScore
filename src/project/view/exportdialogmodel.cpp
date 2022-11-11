@@ -23,6 +23,7 @@
 
 #include <QItemSelectionModel>
 
+#include "async/async.h"
 #include "translation.h"
 #include "log.h"
 
@@ -335,8 +336,17 @@ bool ExportDialogModel::exportScores()
 
     masterNotation()->initExcerpts(excerptsToInit);
 
-    return exportProjectScenario()->exportScores(notations, m_selectedExportType, m_selectedUnitType,
-                                                 shouldDestinationFolderBeOpenedOnExport());
+    RetVal<io::path_t> exportPath = exportProjectScenario()->askExportPath(notations, m_selectedExportType, m_selectedUnitType);
+    if (!exportPath.ret) {
+        return false;
+    }
+
+    async::Async::call(this, [this, notations, exportPath]() {
+        exportProjectScenario()->exportScores(notations, exportPath.val, m_selectedUnitType,
+                                              shouldDestinationFolderBeOpenedOnExport());
+    });
+
+    return true;
 }
 
 int ExportDialogModel::pdfResolution() const

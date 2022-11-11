@@ -44,27 +44,51 @@ std::vector<INotationWriter::UnitType> ExportProjectScenario::supportedUnitTypes
     return writer->supportedUnitTypes();
 }
 
-bool ExportProjectScenario::exportScores(const INotationPtrList& notations, const ExportType& exportType,
-                                         INotationWriter::UnitType unitType, bool openDestinationFolderOnExport) const
+mu::RetVal<mu::io::path_t> ExportProjectScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
+                                                                INotationWriter::UnitType unitType) const
 {
-    IF_ASSERT_FAILED(!exportType.suffixes.isEmpty()) {
-        return false;
-    }
+    INotationProjectPtr project = context()->currentProject();
 
-    io::path_t chosenPath = askExportPath(notations, exportType, unitType);
-    if (chosenPath.empty()) {
-        return false;
-    }
+    std::string filenameAddition;
 
-    // Scores that are closed may have never been laid out, so we lay them out now
-    for (INotationPtr notation : notations) {
-        mu::engraving::Score* score = notation->elements()->msScore();
-        if (!score->isOpen()) {
-            score->doLayout();
+    // If only one file will be created, the filename will be exactly what the user
+    // types in the save dialog and therefore we can put the file dialog in charge of
+    // asking the user whether an existing file should be overridden. Otherwise, we
+    // will take care of that ourselves.
+    bool isCreatingOnlyOneFile = this->isCreatingOnlyOneFile(notations, unitType);
+    bool isExportingOnlyOneScore = notations.size() == 1;
+
+    if (unitType == INotationWriter::UnitType::MULTI_PART && !isExportingOnlyOneScore) {
+        bool containsMaster = std::find_if(notations.cbegin(), notations.cend(), [this](INotationPtr notation) {
+            return isMainNotation(notation);
+        }) != notations.cend();
+
+        if (containsMaster) {
+            //: Used in export filename suggestion. Please use only characters that are valid for filenames.
+            filenameAddition = "-" + trc("project/export", "Score_and_Parts");
+        } else {
+            //: Used in export filename suggestion. Please use only characters that are valid for filenames.
+            filenameAddition = "-" + trc("project/export", "Parts");
+        }
+    } else if (isExportingOnlyOneScore) {
+        if (!isMainNotation(notations.front())) {
+            filenameAddition = "-" + io::escapeFileName(notations.front()->name()).toStdString();
+        }
+
+        if (unitType == INotationWriter::UnitType::PER_PAGE && isCreatingOnlyOneFile) {
+            // So there is only one page
+            filenameAddition += "-1";
         }
     }
 
-    return exportScores(notations, chosenPath, unitType, openDestinationFolderOnExport);
+    io::path_t defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition, exportType.suffixes.front().toStdString());
+
+    RetVal<io::path_t> exportPath;
+    exportPath.val = interactive()->selectSavingFile(qtrc("project/export", "Export"), defaultPath,
+                                                     exportType.filter(), isCreatingOnlyOneFile);
+    exportPath.ret = !exportPath.val.empty();
+
+    return exportPath;
 }
 
 bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notations, const io::path_t& destinationPath,
@@ -79,6 +103,14 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
 
     IF_ASSERT_FAILED(m_currentWriter->supportsUnitType(unitType)) {
         return false;
+    }
+
+    // Scores that are closed may have never been laid out, so we lay them out now
+    for (INotationPtr notation : notations) {
+        mu::engraving::Score* score = notation->elements()->msScore();
+        if (!score->isOpen()) {
+            score->doLayout();
+        }
     }
 
     bool isCreatingOnlyOneFile = this->isCreatingOnlyOneFile(notations, unitType);
@@ -184,49 +216,6 @@ bool ExportProjectScenario::isCreatingOnlyOneFile(const INotationPtrList& notati
 bool ExportProjectScenario::isMainNotation(INotationPtr notation) const
 {
     return context()->currentMasterNotation()->notation() == notation;
-}
-
-mu::io::path_t ExportProjectScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
-                                                    INotationWriter::UnitType unitType) const
-{
-    INotationProjectPtr project = context()->currentProject();
-
-    std::string filenameAddition;
-
-    // If only one file will be created, the filename will be exactly what the user
-    // types in the save dialog and therefore we can put the file dialog in charge of
-    // asking the user whether an existing file should be overridden. Otherwise, we
-    // will take care of that ourselves.
-    bool isCreatingOnlyOneFile = this->isCreatingOnlyOneFile(notations, unitType);
-    bool isExportingOnlyOneScore = notations.size() == 1;
-
-    if (unitType == INotationWriter::UnitType::MULTI_PART && !isExportingOnlyOneScore) {
-        bool containsMaster = std::find_if(notations.cbegin(), notations.cend(), [this](INotationPtr notation) {
-            return isMainNotation(notation);
-        }) != notations.cend();
-
-        if (containsMaster) {
-            //: Used in export filename suggestion. Please use only characters that are valid for filenames.
-            filenameAddition = "-" + trc("project/export", "Score_and_Parts");
-        } else {
-            //: Used in export filename suggestion. Please use only characters that are valid for filenames.
-            filenameAddition = "-" + trc("project/export", "Parts");
-        }
-    } else if (isExportingOnlyOneScore) {
-        if (!isMainNotation(notations.front())) {
-            filenameAddition = "-" + io::escapeFileName(notations.front()->name()).toStdString();
-        }
-
-        if (unitType == INotationWriter::UnitType::PER_PAGE && isCreatingOnlyOneFile) {
-            // So there is only one page
-            filenameAddition += "-1";
-        }
-    }
-
-    io::path_t defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition, exportType.suffixes.front().toStdString());
-
-    return interactive()->selectSavingFile(qtrc("project/export", "Export"), defaultPath,
-                                           exportType.filter(), isCreatingOnlyOneFile);
 }
 
 mu::io::path_t ExportProjectScenario::completeExportPath(const io::path_t& basePath, INotationPtr notation, bool isMain,
