@@ -35,9 +35,8 @@ class IExportProjectScenario : MODULE_EXPORT_INTERFACE
 public:
     virtual std::vector<INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const = 0;
 
-    virtual bool exportScores(const notation::INotationPtrList& notations, const ExportType& exportType,
-                              INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
-                              bool openDestinationFolderOnExport = false) const = 0;
+    virtual RetVal<io::path_t> askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
+                                             INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART) const = 0;
 
     virtual bool exportScores(const notation::INotationPtrList& notations, const io::path_t& destinationPath,
                               INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
