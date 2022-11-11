@@ -30,20 +30,20 @@ namespace mu::notation {
 class ExcerptNotation : public IExcerptNotation, public Notation, public std::enable_shared_from_this<ExcerptNotation>
 {
 public:
-    explicit ExcerptNotation() = default;
     explicit ExcerptNotation(mu::engraving::Excerpt* excerpt);
 
     ~ExcerptNotation() override;
 
     void init();
 
+    mu::engraving::Excerpt* excerpt() const;
+
     bool isCustom() const override;
     bool isEmpty() const override;
 
-    mu::engraving::Excerpt* excerpt() const;
-
     QString name() const override;
     void setName(const QString& name) override;
+    async::Notification nameChanged() const override;
 
     INotationPtr notation() override;
     IExcerptNotationPtr clone() const override;
@@ -52,7 +52,6 @@ private:
     void fillWithDefaultInfo();
 
     mu::engraving::Excerpt* m_excerpt = nullptr;
-    QString m_name;
     bool m_inited = false;
 };
 }

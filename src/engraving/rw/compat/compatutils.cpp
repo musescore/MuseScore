@@ -23,6 +23,8 @@
 #include "compatutils.h"
 
 #include "libmscore/score.h"
+#include "libmscore/excerpt.h"
+#include "libmscore/part.h"
 #include "libmscore/measure.h"
 #include "libmscore/factory.h"
 #include "libmscore/stafftextbase.h"
@@ -90,6 +92,44 @@ void CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(Score* score)
                 segment->add(playTechAnnotation);
 
                 delete annotation;
+            }
+        }
+    }
+}
+
+void CompatUtils::assignInitialPartToExcerpts(const std::vector<Excerpt*>& excerpts)
+{
+    TRACEFUNC;
+
+    std::set<ID> assignedPartIdSet;
+
+    auto assignInitialPartId = [&assignedPartIdSet](Excerpt* excerpt, const ID& initialPartId) {
+        excerpt->setInitialPartId(initialPartId);
+        assignedPartIdSet.insert(initialPartId);
+    };
+
+    for (Excerpt* excerpt : excerpts) {
+        for (const Part* part : excerpt->excerptScore()->parts()) {
+            if (excerpt->name() == part->partName()) {
+                assignInitialPartId(excerpt, part->id());
+                break;
+            }
+        }
+    }
+
+    for (Excerpt* excerpt : excerpts) {
+        if (excerpt->initialPartId().isValid()) {
+            continue;
+        }
+
+        for (Part* part : excerpt->excerptScore()->parts()) {
+            if (mu::contains(assignedPartIdSet, part->id())) {
+                continue;
+            }
+
+            if (excerpt->name().contains(part->partName())) {
+                assignInitialPartId(excerpt, part->id());
+                break;
             }
         }
     }

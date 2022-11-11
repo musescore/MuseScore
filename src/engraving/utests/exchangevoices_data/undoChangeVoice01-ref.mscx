@@ -556,6 +556,7 @@
         </Measure>
       </Staff>
     <Score>
+      <initialPartId>1</initialPartId>
       <LayerTag id="0" tag="default"></LayerTag>
       <currentLayer>0</currentLayer>
       <Division>480</Division>

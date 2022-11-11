@@ -51,7 +51,6 @@ public:
     void setPartVisible(const ID& partId, bool visible) override;
     bool setVoiceVisible(const ID& staffId, int voiceIndex, bool visible) override;
     void setStaffVisible(const ID& staffId, bool visible) override;
-    void setPartName(const ID& partId, const QString& name) override;
     void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) override;
     void setInstrumentName(const InstrumentKey& instrumentKey, const QString& name) override;
     void setInstrumentAbbreviature(const InstrumentKey& instrumentKey, const QString& abbreviature) override;
@@ -80,20 +79,21 @@ protected:
     mu::engraving::Score* score() const;
     INotationUndoStackPtr undoStack() const;
 
+    Part* partModifiable(const ID& partId) const;
+
     void startEdit();
     void apply();
     void rollback();
 
-private:
-    void updatePartTitles();
+    virtual void onPartsRemoved(const std::vector<Part*>& parts);
 
+private:
     void doSetScoreOrder(const ScoreOrder& order);
     void doRemoveParts(const std::vector<Part*>& parts);
     void doAppendStaff(Staff* staff, Part* destinationPart);
     void doSetStaffConfig(Staff* staff, const StaffConfig& config);
     void doInsertPart(Part* part, size_t index);
 
-    Part* partModifiable(const ID& partId) const;
     Staff* staffModifiable(const ID& staffId) const;
 
     std::vector<Staff*> staves(const IDList& stavesIds) const;

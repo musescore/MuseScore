@@ -32,7 +32,6 @@ using namespace mu::notation;
 ExcerptNotation::ExcerptNotation(mu::engraving::Excerpt* excerpt)
     : Notation(), m_excerpt(excerpt)
 {
-    m_name = excerpt ? excerpt->name().toQString() : QString();
 }
 
 ExcerptNotation::~ExcerptNotation()
@@ -47,7 +46,6 @@ void ExcerptNotation::init()
     }
 
     setScore(m_excerpt->excerptScore());
-    setName(m_name);
 
     if (isEmpty()) {
         fillWithDefaultInfo();
@@ -58,12 +56,12 @@ void ExcerptNotation::init()
 
 bool ExcerptNotation::isCustom() const
 {
-    return m_excerpt && !m_excerpt->initialPartId().isValid();
+    return !m_excerpt->initialPartId().isValid();
 }
 
 bool ExcerptNotation::isEmpty() const
 {
-    return m_excerpt ? m_excerpt->parts().empty() : true;
+    return m_excerpt->parts().empty();
 }
 
 void ExcerptNotation::fillWithDefaultInfo()
@@ -98,8 +96,6 @@ void ExcerptNotation::fillWithDefaultInfo()
     setText(TextStyleType::COMPOSER, qtrc("notation", "Composer / arranger"));
     setText(TextStyleType::SUBTITLE, "");
     setText(TextStyleType::POET, "");
-
-    score->doLayout();
 }
 
 mu::engraving::Excerpt* ExcerptNotation::excerpt() const
@@ -109,32 +105,22 @@ mu::engraving::Excerpt* ExcerptNotation::excerpt() const
 
 QString ExcerptNotation::name() const
 {
-    return m_excerpt ? m_excerpt->name().toQString() : m_name;
+    return m_excerpt->name().toQString();
 }
 
 void ExcerptNotation::setName(const QString& name)
 {
-    m_name = name;
-
-    if (!m_excerpt) {
-        return;
-    }
-
+    bool changed = name != this->name();
     m_excerpt->setName(name);
 
-    if (!score()) {
-        return;
+    if (changed) {
+        notifyAboutNotationChanged();
     }
+}
 
-    mu::engraving::Text* excerptTitle = score()->getText(mu::engraving::TextStyleType::INSTRUMENT_EXCERPT);
-    if (!excerptTitle) {
-        return;
-    }
-
-    excerptTitle->setPlainText(name);
-    score()->setMetaTag(u"partName", name);
-
-    notifyAboutNotationChanged();
+mu::async::Notification ExcerptNotation::nameChanged() const
+{
+    return m_excerpt->nameChanged();
 }
 
 INotationPtr ExcerptNotation::notation()
@@ -144,10 +130,6 @@ INotationPtr ExcerptNotation::notation()
 
 IExcerptNotationPtr ExcerptNotation::clone() const
 {
-    if (!m_excerpt) {
-        return nullptr;
-    }
-
     mu::engraving::Excerpt* copy = new mu::engraving::Excerpt(*m_excerpt);
     return std::make_shared<ExcerptNotation>(copy);
 }
