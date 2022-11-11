@@ -5343,6 +5343,7 @@ void NotationInteraction::getLocation()
             score()->setPlayNote(true);
         }
         select({ e }, SelectType::SINGLE);
+        showItem(e);
     }
 }
 
@@ -5356,7 +5357,6 @@ void NotationInteraction::execute(void (mu::engraving::Score::* function)())
 //! NOTE: Copied from ScoreView::adjustCanvasPosition
 void NotationInteraction::showItem(const mu::engraving::EngravingItem* el, int staffIndex)
 {
-    LOGD("showItem called");
     if (!el) {
         return;
     }
@@ -5391,6 +5391,10 @@ void NotationInteraction::showItem(const mu::engraving::EngravingItem* el, int s
     } else if (el->isSpanner()) {
         EngravingItem* se = static_cast<const mu::engraving::Spanner*>(el)->startElement();
         m = static_cast<Measure*>(se->findMeasure());
+    } else if (el->isPage()) {
+        const mu::engraving::Page* p = static_cast<const mu::engraving::Page*>(el);
+        mu::engraving::System* s = p->systems().empty() ? nullptr : p->systems().front();
+        m = s ? nullptr : s->measures().front();
     } else {
         // attempt to find measure
         mu::engraving::EngravingObject* e = el->parent();
@@ -5419,10 +5423,6 @@ void NotationInteraction::showItem(const mu::engraving::EngravingItem* el, int s
     const qreal border = _spatium * 3;
     RectF showRect;
     if (staffIndex == -1) {
-        // HACK - use top staff
-        staffIndex = 0;
-    }
-    if (staffIndex == -1) {
         showRect = RectF(mRect.x(), sysRect.y(), mRect.width(), sysRect.height())
                    .adjusted(-border, -border, border, border);
     } else {
@@ -5438,7 +5438,6 @@ void NotationInteraction::showItem(const mu::engraving::EngravingItem* el, int s
     request.item = el;
     request.showRect = showRect;
 
-    LOGD("sendItem - about to send request");
     m_showItemRequested.send(request);
 }
 
