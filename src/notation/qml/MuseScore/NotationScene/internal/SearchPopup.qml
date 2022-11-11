@@ -86,6 +86,10 @@ Rectangle {
             onCurrentTextEdited: function(newTextValue) {
                 model.search(newTextValue)
             }
+
+            onTextEditingFinished: function(newTextValue) {
+                privateProperties.hide();
+            }
         }
     }
 }
