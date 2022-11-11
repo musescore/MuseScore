@@ -384,7 +384,7 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
     shoulderHeightMax = 1.3;
     double tieAdjustSp = 0;
 
-    const double staffLineOffset = 0.125 + (styleP(Sid::staffLineWidth) / 2 / ld); // sp
+    const double staffLineOffset = 0.110 + (styleP(Sid::staffLineWidth) / 2 / ld); // sp
     const double noteHeadOffset = 0.185; // sp
     bool isUp = t->up();
 
