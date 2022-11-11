@@ -5356,6 +5356,7 @@ void NotationInteraction::execute(void (mu::engraving::Score::* function)())
 //! NOTE: Copied from ScoreView::adjustCanvasPosition
 void NotationInteraction::showItem(const mu::engraving::EngravingItem* el, int staffIndex)
 {
+    LOGD("showItem called");
     if (!el) {
         return;
     }
@@ -5418,6 +5419,10 @@ void NotationInteraction::showItem(const mu::engraving::EngravingItem* el, int s
     const qreal border = _spatium * 3;
     RectF showRect;
     if (staffIndex == -1) {
+        // HACK - use top staff
+        staffIndex = 0;
+    }
+    if (staffIndex == -1) {
         showRect = RectF(mRect.x(), sysRect.y(), mRect.width(), sysRect.height())
                    .adjusted(-border, -border, border, border);
     } else {
@@ -5433,6 +5438,7 @@ void NotationInteraction::showItem(const mu::engraving::EngravingItem* el, int s
     request.item = el;
     request.showRect = showRect;
 
+    LOGD("sendItem - about to send request");
     m_showItemRequested.send(request);
 }
 
