@@ -284,9 +284,19 @@ void InstrumentListModel::loadInstruments()
     QList<CombinedInstrument> instruments;
 
     for (const InstrumentName& instrumentName : templatesByInstrumentName.keys()) {
+        const InstrumentTemplateList& templates = templatesByInstrumentName[instrumentName];
         CombinedInstrument instrument;
-        instrument.name = instrumentName;
-        instrument.templates = templatesByInstrumentName[instrumentName];
+
+        if (templates.length() == 1) {
+            // Only one trait option so let's display it in the instrument name.
+            const InstrumentTemplate* templ = templates.at(0);
+            instrument.name = formatInstrumentTitle(instrumentName, templ->trait);
+        } else {
+            // Multiple traits to choose from so don't add any to instrument name yet.
+            instrument.name = instrumentName;
+        }
+
+        instrument.templates = templates;
         instrument.currentTemplateIndex = 0;
 
         instruments << instrument;
