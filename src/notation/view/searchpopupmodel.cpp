@@ -37,7 +37,7 @@ void SearchPopupModel::search(const QString& text)
     mu::engraving::EngravingItem* element = notation()->elements()->search(text.toStdString());
     if (element) {
         notation()->interaction()->select({ element }, SelectType::SINGLE);
-        notation()->interaction()->showItem(element, 0);
+        notation()->interaction()->showItem(element);
     } else {
         notation()->interaction()->clearSelection();
     }
