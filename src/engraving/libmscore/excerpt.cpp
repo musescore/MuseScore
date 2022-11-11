@@ -1429,6 +1429,10 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             TupletMap tupletMap;          // tuplets cannot cross measure boundaries
             track_idx_t dstTrack = map.at(srcTrack);
             for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
+                if (oseg->header()) {
+                    // Generated at layout time, should not be cloned
+                    continue;
+                }
                 Segment* ns = nm->getSegment(oseg->segmentType(), oseg->tick());
                 EngravingItem* oef = oseg->element(trackZeroVoice(srcTrack));
                 if (oef && !oef->generated() && (oef->isTimeSig() || oef->isKeySig())) {
@@ -1470,10 +1474,9 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     }
 
                     for (EngravingItem* e : oseg->annotations()) {
-                        if (e->generated()) {
-                            continue;
-                        }
-                        if (e->track() != srcTrack) {
+                        if (e->generated()
+                            || (e->track() != srcTrack && !e->systemFlag()) // system items must be cloned even if they are on different tracks
+                            || (e->systemFlag() && score->nstaves() > 1)) { // ...but only once!
                             continue;
                         }
 
