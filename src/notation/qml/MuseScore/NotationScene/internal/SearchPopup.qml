@@ -72,7 +72,7 @@ Rectangle {
                 privateProperties.hide()
             }
         }
-        
+
         StyledTextLabel {
             anchors.verticalCenter: parent.verticalCenter 
             text: qsTrc("notation", "Find / Go to:")
@@ -91,5 +91,9 @@ Rectangle {
                 privateProperties.hide();
             }
         }
+    }
+
+    Keys.onShortcutOverride: function(event) {
+        event.accepted = true
     }
 }
