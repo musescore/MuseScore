@@ -670,6 +670,7 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
     }
 
     score->undo(new AddElement(ns));
+    ns->styleChanged();
 }
 
 static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& tupletMap, Measure* m, track_idx_t track)
@@ -1437,6 +1438,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         ne->setTrack(trackZeroVoice(dstTrack));
                         ne->setParent(ns);
                         ne->setScore(score);
+                        ne->styleChanged();
                         addElement(ne);
                     }
                 }
@@ -1450,6 +1452,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 ne->setTrack(dstTrack);
                 ne->setParent(ns);
                 ne->setScore(score);
+                ne->styleChanged();
                 addElement(ne);
                 if (oe->isChordRest()) {
                     ChordRest* ocr = toChordRest(oe);
@@ -1463,6 +1466,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                             nt->clear();
                             nt->setTrack(dstTrack);
                             nt->setParent(nm);
+                            nt->styleChanged();
                             tupletMap.add(ot, nt);
                         }
                         ncr->setTuplet(nt);
@@ -1481,6 +1485,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         ne1->setTrack(dstTrack);
                         ne1->setParent(ns);
                         ne1->setScore(score);
+                        ne1->styleChanged();
                         addElement(ne1);
                     }
                     if (oe->isChord()) {

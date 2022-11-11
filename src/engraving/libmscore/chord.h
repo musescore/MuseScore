@@ -336,6 +336,8 @@ public:
     void undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps) override;
 
     bool isSlurStartEnd() const;
+
+    void styleChanged() override;
 };
 } // namespace mu::engraving
 #endif

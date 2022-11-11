@@ -4118,6 +4118,17 @@ void Chord::setNoteEventLists(std::vector<NoteEventList>& ell)
     }
 }
 
+//---------------------------------------------------------
+//   styleChanged
+//---------------------------------------------------------
+void Chord::styleChanged()
+{
+    auto updateElementsStyle = [] (void*, EngravingItem* e) {
+        e->styleChanged();
+    };
+    scanElements(0, updateElementsStyle);
+}
+
 //---------------------------------
 // GRACE NOTES
 //---------------------------------
