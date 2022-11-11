@@ -209,7 +209,7 @@ bool MidiRemote::needIgnoreEvent(const Event& event) const
         return true;
     }
 
-    if (event.opcode() != Event::Opcode::NoteOn && event.opcode() != Event::Opcode::NoteOn
+    if (event.opcode() != Event::Opcode::NoteOn && event.opcode() != Event::Opcode::NoteOff
         && event.opcode() != Event::Opcode::ControlChange) {
         return true;
     }
