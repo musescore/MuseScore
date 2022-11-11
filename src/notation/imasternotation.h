@@ -40,7 +40,7 @@ public:
 
     virtual ValNt<bool> needSave() const = 0;
 
-    virtual IExcerptNotationPtr createEmptyExcerpt() const = 0;
+    virtual IExcerptNotationPtr createEmptyExcerpt(const QString& name = QString()) const = 0;
 
     virtual ValCh<ExcerptNotationList> excerpts() const = 0;
     virtual const ExcerptNotationList& potentialExcerpts() const = 0;
@@ -48,6 +48,7 @@ public:
     virtual void initExcerpts(const ExcerptNotationList& excerpts) = 0;
     virtual void addExcerpts(const ExcerptNotationList& excerpts) = 0;
     virtual void removeExcerpts(const ExcerptNotationList& excerpts) = 0;
+    virtual void sortExcerpts(ExcerptNotationList& excerpts) = 0;
 
     virtual void setExcerptIsOpen(const INotationPtr excerptNotation, bool opened) = 0;
 

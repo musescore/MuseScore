@@ -29,6 +29,8 @@
 #include "types/types.h"
 #include "types/string.h"
 
+#include "async/notification.h"
+
 namespace mu::engraving {
 class MasterScore;
 class Part;
@@ -54,8 +56,9 @@ public:
     Score* excerptScore() const { return m_excerptScore; }
     void setExcerptScore(Score* s);
 
-    String name() const { return m_name; }
-    void setName(const String& title) { m_name = title; }
+    const String& name() const;
+    void setName(const String& name);
+    async::Notification nameChanged() const;
 
     std::vector<Part*>& parts() { return m_parts; }
     const std::vector<Part*>& parts() const { return m_parts; }
@@ -86,18 +89,20 @@ public:
     static void cloneStaff2(Staff* ostaff, Staff* nstaff, const Fraction& startTick, const Fraction& endTick);
     static void cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track_idx_t dstTrack2);
 
+    static String formatName(const String& partName, const std::vector<Excerpt*>& allExcerpts);
+
 private:
     friend class MasterScore;
 
-    static String formatName(const String& partName, const std::vector<Excerpt*>&);
-
     void setInited(bool inited);
+    void writeNameToMetaTags();
 
     void updateTracksMapping(bool voicesVisibilityChanged = false);
 
     MasterScore* m_masterScore = nullptr;
     Score* m_excerptScore = nullptr;
     String m_name;
+    async::Notification m_nameChanged;
     std::vector<Part*> m_parts;
     TracksMap m_tracksMapping;
     bool m_inited = false;

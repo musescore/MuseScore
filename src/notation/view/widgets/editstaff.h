@@ -86,7 +86,9 @@ signals:
 
 private:
     INotationPtr notation() const;
+    IMasterNotationPtr masterNotation() const;
     INotationPartsPtr notationParts() const;
+    INotationPartsPtr masterNotationParts() const;
 
     void initStaff();
 

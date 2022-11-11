@@ -791,8 +791,6 @@ void Segment::remove(EngravingItem* el)
         break;
 
     case ElementType::KEYSIG:
-        assert(_elist[track] == el);
-
         _elist[track] = 0;
         if (!el->generated()) {
             el->staff()->removeKey(tick());

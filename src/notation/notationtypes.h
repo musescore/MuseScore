@@ -348,6 +348,11 @@ struct InstrumentKey
     Fraction tick = mu::engraving::Fraction(0, 1);
 };
 
+inline bool isMainInstrumentForPart(const QString& instrumentId, const Part* part)
+{
+    return instrumentId == part->instrumentId();
+}
+
 inline QString formatInstrumentTitle(const QString& instrumentName, const InstrumentTrait& trait)
 {
     // Comments for translators start with //:

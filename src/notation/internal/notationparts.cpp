@@ -284,28 +284,6 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
     notifyAboutPartChanged(part);
 }
 
-void NotationParts::setPartName(const ID& partId, const QString& name)
-{
-    TRACEFUNC;
-
-    Part* part = partModifiable(partId);
-    if (!part) {
-        return;
-    }
-
-    if (part->partName() == name) {
-        return;
-    }
-
-    startEdit();
-
-    score()->undo(new mu::engraving::ChangePart(part, new mu::engraving::Instrument(*part->instrument()), name));
-
-    apply();
-
-    notifyAboutPartChanged(part);
-}
-
 void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat)
 {
     TRACEFUNC;
@@ -330,14 +308,6 @@ void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFla
     apply();
 
     notifyAboutPartChanged(part);
-}
-
-void NotationParts::updatePartTitles()
-{
-    TRACEFUNC;
-    for (const Part* part: score()->parts()) {
-        setPartName(part->id(), formatPartTitle(part));
-    }
 }
 
 void NotationParts::doSetScoreOrder(const ScoreOrder& order)
@@ -600,9 +570,7 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
 
     startEdit();
 
-    bool isMainInstrument = part->instrumentId() == instrumentKey.instrumentId;
-
-    if (isMainInstrument) {
+    if (isMainInstrumentForPart(instrumentKey.instrumentId, part)) {
         mu::engraving::Interval oldTranspose = part->instrument()->transpose();
 
         QString newInstrumentPartName = formatInstrumentTitle(newInstrument.trackName(), newInstrument.trait());
@@ -738,6 +706,12 @@ void NotationParts::doRemoveParts(const std::vector<Part*>& parts)
     for (Part* part : parts) {
         score()->cmdRemovePart(part);
     }
+
+    onPartsRemoved(parts);
+}
+
+void NotationParts::onPartsRemoved(const std::vector<Part*>&)
+{
 }
 
 void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart)
