@@ -5394,7 +5394,7 @@ void NotationInteraction::showItem(const mu::engraving::EngravingItem* el, int s
     } else if (el->isPage()) {
         const mu::engraving::Page* p = static_cast<const mu::engraving::Page*>(el);
         mu::engraving::System* s = p->systems().empty() ? nullptr : p->systems().front();
-        m = s ? nullptr : s->measures().front();
+        m = s ? s->measures().front() : nullptr;
     } else {
         // attempt to find measure
         mu::engraving::EngravingObject* e = el->parent();
