@@ -22,6 +22,7 @@
 #include "defaultstyle.h"
 
 #include <cstdlib>
+#include <QLocale>
 
 #include "io/file.h"
 
@@ -47,15 +48,37 @@ DefaultStyle* DefaultStyle::instance()
     return &s;
 }
 
+static bool defaultPageSizeIsLetter()
+{
+    // try PAPERSIZE environment variable
+    char* papersize = getenv("PAPERSIZE");
+    if (papersize) {
+        std::string letter = "letter";
+        return papersize == letter;
+    }
+    // try locale
+    switch (QLocale::system().country()) {
+    case QLocale::UnitedStates:
+    case QLocale::Canada:
+    case QLocale::Mexico:
+    case QLocale::Chile:
+    case QLocale::Colombia:
+    case QLocale::CostaRica:
+    case QLocale::Panama:
+    case QLocale::Guatemala:
+    case QLocale::DominicanRepublic:
+    case QLocale::Philippines:
+        return true;
+    default:
+        return false;
+    }
+}
+
 void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partStyleFilePath)
 {
     m_baseStyle.precomputeValues();
 
-    char* ps = getenv("PAPERSIZE");
-    std::string defaultPageSize = ps ? ps : "a4";
-    std::string letter = "letter";
-    bool useLetter = (defaultPageSize == letter);
-    if (useLetter) {
+    if (defaultPageSizeIsLetter()) {
         m_defaultStyle = new MStyle();
         m_defaultStyle->set(Sid::pageWidth, 8.5);
         m_defaultStyle->set(Sid::pageHeight, 11.0);
