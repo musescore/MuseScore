@@ -48,12 +48,13 @@ DefaultStyle* DefaultStyle::instance()
     return &s;
 }
 
-static bool defaultPageSizeIsLetter() {
+static bool defaultPageSizeIsLetter()
+{
     // first try PAPERSIZE environment variable
     char* papersize = getenv("PAPERSIZE");
     if (papersize) {
         std::string letter = "letter";
-        return (ps == letter);
+        return papersize == letter;
     }
     // try locale
     QLocale::Country country = QLocale::system().country();
