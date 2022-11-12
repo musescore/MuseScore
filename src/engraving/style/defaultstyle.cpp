@@ -62,7 +62,7 @@ void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partSt
 
     if (!partStyleFilePath.empty()) {
         m_defaultStyleForParts = new MStyle();
-        bool ok = doLoadStyle(m_defaultStyleForParts, defaultStyleFilePath);
+        bool ok = doLoadStyle(m_defaultStyleForParts, partStyleFilePath);
         if (!ok) {
             delete m_defaultStyleForParts;
             m_defaultStyleForParts = nullptr;
