@@ -2081,85 +2081,93 @@ void EditStyle::textStyleChanged(int row)
     const TextStyle* ts = textStyle(tid);
 
     for (const StyledProperty& a : *ts) {
-        switch (a.pid) {
-        case Pid::FONT_FACE: {
-            PropertyValue val = styleValue(a.sid);
-            textStyleFontFace->setCurrentFont(QFont(val.value<String>()));
-            resetTextStyleFontFace->setEnabled(val != defaultStyleValue(a.sid));
-        }
-        break;
-
-        case Pid::FONT_SIZE:
-            textStyleFontSize->setValue(styleValue(a.sid).toDouble());
-            resetTextStyleFontSize->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
+        auto func = [this](Sid sid, Pid pid) {
+            switch (pid) {
+            case Pid::FONT_FACE: {
+                PropertyValue val = styleValue(sid);
+                textStyleFontFace->setCurrentFont(QFont(val.value<String>()));
+                resetTextStyleFontFace->setEnabled(val != defaultStyleValue(sid));
+            }
             break;
 
-        case Pid::TEXT_LINE_SPACING:
-            textStyleLineSpacing->setValue(styleValue(a.sid).toDouble());
-            resetTextStyleLineSpacing->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
+            case Pid::FONT_SIZE:
+                textStyleFontSize->setValue(styleValue(sid).toDouble());
+                resetTextStyleFontSize->setEnabled(styleValue(sid) != defaultStyleValue(sid));
+                break;
+
+            case Pid::TEXT_LINE_SPACING:
+                textStyleLineSpacing->setValue(styleValue(sid).toDouble());
+                resetTextStyleLineSpacing->setEnabled(styleValue(sid) != defaultStyleValue(sid));
+                break;
+
+            case Pid::FONT_STYLE:
+                textStyleFontStyle->setFontStyle(FontStyle(styleValue(sid).toInt()));
+                resetTextStyleFontStyle->setEnabled(styleValue(sid) != defaultStyleValue(sid));
+                break;
+
+            case Pid::ALIGN:
+                textStyleAlign->setAlign(styleValue(sid).value<Align>());
+                resetTextStyleAlign->setEnabled(styleValue(sid) != defaultStyleValue(sid));
+                break;
+
+            case Pid::OFFSET:
+                textStyleOffset->setOffset(styleValue(sid).value<PointF>().toQPointF());
+                resetTextStyleOffset->setEnabled(styleValue(sid) != defaultStyleValue(sid));
+                break;
+
+            case Pid::SIZE_SPATIUM_DEPENDENT: {
+                PropertyValue val = styleValue(sid);
+                textStyleSpatiumDependent->setChecked(val.toBool());
+                resetTextStyleSpatiumDependent->setEnabled(val != defaultStyleValue(sid));
+                textStyleOffset->setSuffix(val.toBool() ? qtrc("global", "sp") : qtrc("global", "mm"));
+            }
             break;
 
-        case Pid::FONT_STYLE:
-            textStyleFontStyle->setFontStyle(FontStyle(styleValue(a.sid).toInt()));
-            resetTextStyleFontStyle->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
-            break;
+            case Pid::FRAME_TYPE:
+                textStyleFrameType->setCurrentIndex(styleValue(sid).toInt());
+                resetTextStyleFrameType->setEnabled(styleValue(sid) != defaultStyleValue(sid));
+                frameWidget->setEnabled(styleValue(sid).toInt() != 0);             // disable if no frame
+                break;
 
-        case Pid::ALIGN:
-            textStyleAlign->setAlign(styleValue(a.sid).value<Align>());
-            resetTextStyleAlign->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
-            break;
+            case Pid::FRAME_PADDING:
+                textStyleFramePadding->setValue(styleValue(sid).toDouble());
+                resetTextStyleFramePadding->setEnabled(styleValue(sid) != defaultStyleValue(sid));
+                break;
 
-        case Pid::OFFSET:
-            textStyleOffset->setOffset(styleValue(a.sid).value<PointF>().toQPointF());
-            resetTextStyleOffset->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
-            break;
+            case Pid::FRAME_WIDTH:
+                textStyleFrameBorder->setValue(styleValue(sid).toDouble());
+                resetTextStyleFrameBorder->setEnabled(styleValue(sid) != defaultStyleValue(sid));
+                break;
 
-        case Pid::SIZE_SPATIUM_DEPENDENT: {
-            PropertyValue val = styleValue(a.sid);
-            textStyleSpatiumDependent->setChecked(val.toBool());
-            resetTextStyleSpatiumDependent->setEnabled(val != defaultStyleValue(a.sid));
-            textStyleOffset->setSuffix(val.toBool() ? qtrc("global", "sp") : qtrc("global", "mm"));
-        }
-        break;
+            case Pid::FRAME_ROUND:
+                textStyleFrameBorderRadius->setValue(double(styleValue(sid).toInt()));
+                resetTextStyleFrameBorderRadius->setEnabled(styleValue(sid) != defaultStyleValue(sid));
+                break;
 
-        case Pid::FRAME_TYPE:
-            textStyleFrameType->setCurrentIndex(styleValue(a.sid).toInt());
-            resetTextStyleFrameType->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
-            frameWidget->setEnabled(styleValue(a.sid).toInt() != 0);             // disable if no frame
-            break;
+            case Pid::FRAME_FG_COLOR:
+                textStyleFrameForeground->setColor(styleValue(sid).value<Color>().toQColor());
+                resetTextStyleFrameForeground->setEnabled(styleValue(sid) != defaultStyleValue(sid));
+                break;
 
-        case Pid::FRAME_PADDING:
-            textStyleFramePadding->setValue(styleValue(a.sid).toDouble());
-            resetTextStyleFramePadding->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
-            break;
+            case Pid::FRAME_BG_COLOR:
+                textStyleFrameBackground->setColor(styleValue(sid).value<Color>().toQColor());
+                resetTextStyleFrameBackground->setEnabled(styleValue(sid) != defaultStyleValue(sid));
+                break;
 
-        case Pid::FRAME_WIDTH:
-            textStyleFrameBorder->setValue(styleValue(a.sid).toDouble());
-            resetTextStyleFrameBorder->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
-            break;
+            case Pid::COLOR:
+                textStyleColor->setColor(styleValue(sid).value<Color>().toQColor());
+                resetTextStyleColor->setEnabled(styleValue(sid) != defaultStyleValue(sid));
+                break;
 
-        case Pid::FRAME_ROUND:
-            textStyleFrameBorderRadius->setValue(double(styleValue(a.sid).toInt()));
-            resetTextStyleFrameBorderRadius->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
-            break;
-
-        case Pid::FRAME_FG_COLOR:
-            textStyleFrameForeground->setColor(styleValue(a.sid).value<Color>().toQColor());
-            resetTextStyleFrameForeground->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
-            break;
-
-        case Pid::FRAME_BG_COLOR:
-            textStyleFrameBackground->setColor(styleValue(a.sid).value<Color>().toQColor());
-            resetTextStyleFrameBackground->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
-            break;
-
-        case Pid::COLOR:
-            textStyleColor->setColor(styleValue(a.sid).value<Color>().toQColor());
-            resetTextStyleColor->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
-            break;
-
-        default:
-            break;
+            default:
+                return false;
+            }
+            return true;
+        };
+        if (!func(a.sid, a.pid)) {
+            TextStyleType tid = TextStyleType(textStyles->currentItem()->data(Qt::UserRole).toInt());
+            Pid synonymousPid = getSynonymousPid(tid, a.pid);
+            func(a.sid, synonymousPid);
         }
     }
 
@@ -2179,13 +2187,79 @@ void EditStyle::textStyleValueChanged(Pid pid, QVariant value)
     TextStyleType tid = TextStyleType(textStyles->currentItem()->data(Qt::UserRole).toInt());
     const TextStyle* ts = textStyle(tid);
 
+    Pid synonymousPid = getSynonymousPid(tid, pid);
+
     for (const StyledProperty& a : *ts) {
-        if (a.pid == pid) {
+        if (a.pid == pid || a.pid == synonymousPid) {
             setStyleQVariantValue(a.sid, value);
             break;
         }
     }
     textStyleChanged(textStyles->currentRow()); // update GUI (reset buttons)
+}
+
+//---------------------------------------------------------
+//   getSynonymousPid
+//---------------------------------------------------------
+
+Pid EditStyle::getSynonymousPid(TextStyleType tid, Pid pid)
+{
+    static const std::unordered_map<TextStyleType, std::vector<std::pair<Pid, Pid> > > synonymousPids = {
+        { TextStyleType::TEXTLINE, {
+              { Pid::FONT_FACE, Pid::BEGIN_FONT_FACE },
+              { Pid::FONT_SIZE, Pid::BEGIN_FONT_SIZE },
+              { Pid::FONT_STYLE, Pid::BEGIN_FONT_STYLE } } },
+        { TextStyleType::OTTAVA, {
+              { Pid::FONT_FACE, Pid::BEGIN_FONT_FACE },
+              { Pid::FONT_SIZE, Pid::BEGIN_FONT_SIZE },
+              { Pid::FONT_STYLE, Pid::BEGIN_FONT_STYLE },
+              { Pid::ALIGN, Pid::BEGIN_TEXT_ALIGN } } },
+        { TextStyleType::VOLTA, {
+              { Pid::FONT_FACE, Pid::BEGIN_FONT_FACE },
+              { Pid::FONT_SIZE, Pid::BEGIN_FONT_SIZE },
+              { Pid::FONT_STYLE, Pid::BEGIN_FONT_STYLE },
+              { Pid::ALIGN, Pid::BEGIN_TEXT_ALIGN },
+              { Pid::OFFSET, Pid::BEGIN_TEXT_OFFSET } } },
+        { TextStyleType::PEDAL, {
+              { Pid::FONT_FACE, Pid::BEGIN_FONT_FACE },
+              { Pid::FONT_SIZE, Pid::BEGIN_FONT_SIZE },
+              { Pid::FONT_STYLE, Pid::BEGIN_FONT_STYLE },
+              { Pid::ALIGN, Pid::BEGIN_TEXT_ALIGN },
+              { Pid::OFFSET, Pid::BEGIN_TEXT_OFFSET } } },
+        { TextStyleType::LET_RING, {
+              { Pid::FONT_FACE, Pid::BEGIN_FONT_FACE },
+              { Pid::FONT_SIZE, Pid::BEGIN_FONT_SIZE },
+              { Pid::FONT_STYLE, Pid::BEGIN_FONT_STYLE },
+              { Pid::ALIGN, Pid::BEGIN_TEXT_ALIGN },
+              { Pid::OFFSET, Pid::BEGIN_TEXT_OFFSET } } },
+        { TextStyleType::PALM_MUTE, {
+              { Pid::FONT_FACE, Pid::BEGIN_FONT_FACE },
+              { Pid::FONT_SIZE, Pid::BEGIN_FONT_SIZE },
+              { Pid::FONT_STYLE, Pid::BEGIN_FONT_STYLE },
+              { Pid::ALIGN, Pid::BEGIN_TEXT_ALIGN },
+              { Pid::OFFSET, Pid::BEGIN_TEXT_OFFSET } } },
+        { TextStyleType::HAIRPIN, {
+              { Pid::FONT_FACE, Pid::BEGIN_FONT_FACE },
+              { Pid::FONT_SIZE, Pid::BEGIN_FONT_SIZE },
+              { Pid::FONT_STYLE, Pid::BEGIN_FONT_STYLE },
+              { Pid::ALIGN, Pid::BEGIN_TEXT_ALIGN },
+              { Pid::OFFSET, Pid::BEGIN_TEXT_OFFSET } } },
+        { TextStyleType::BEND, {
+              { Pid::ALIGN, Pid::BEGIN_TEXT_ALIGN },
+              { Pid::OFFSET, Pid::BEGIN_TEXT_OFFSET } } }
+    };
+
+    if (synonymousPids.find(tid) != synonymousPids.end()) {
+        for (std::pair<Pid, Pid> pair : synonymousPids.at(tid)) {
+            if (pair.first == pid) {
+                return pair.second;
+            } else if (pair.second == pid) {
+                return pair.first;
+            }
+        }
+    }
+
+    return Pid::END;
 }
 
 //---------------------------------------------------------

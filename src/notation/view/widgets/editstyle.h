@@ -104,6 +104,8 @@ private:
     void setStyleQVariantValue(StyleId id, const QVariant& value);
     void setStyleValue(StyleId id, const PropertyValue& value);
 
+    mu::engraving::Pid getSynonymousPid(TextStyleType tid, mu::engraving::Pid pid);
+
 private slots:
     void selectChordDescriptionFile();
     void setChordStyle(bool);
