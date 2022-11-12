@@ -190,10 +190,10 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
         auto ms_art = convertArticulationType(art.first);
 
         if (art.first == mpe::ArticulationType::Pedal) {
-            ms_PedalEvent pedalOnEvent { art.second.meta.timestamp, 1.0 };
+            ms_PedalEvent pedalOnEvent { static_cast<long>(art.second.meta.timestamp), 1.0 };
             m_samplerLib->addPedalEvent(m_sampler, m_track, std::move(pedalOnEvent));
 
-            ms_PedalEvent pedalOffEvent { art.second.meta.timestamp + art.second.meta.overallDuration, 0.0 };
+            ms_PedalEvent pedalOffEvent { static_cast<long>(art.second.meta.timestamp + art.second.meta.overallDuration), 0.0 };
             m_samplerLib->addPedalEvent(m_sampler, m_track, std::move(pedalOffEvent));
         }
 
