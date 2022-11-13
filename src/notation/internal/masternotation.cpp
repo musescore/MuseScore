@@ -516,6 +516,36 @@ void MasterNotation::removeExcerpts(const ExcerptNotationList& excerpts)
     doSetExcerpts(m_excerpts.val);
 }
 
+void MasterNotation::sortExcerpts(ExcerptNotationList& excerpts)
+{
+    TRACEFUNC;
+
+    std::vector<ID> partIdList;
+    for (const Part* part : masterScore()->parts()) {
+        partIdList.push_back(part->id());
+    }
+
+    std::sort(excerpts.begin(), excerpts.end(), [&partIdList](const IExcerptNotationPtr& f, const IExcerptNotationPtr& s) {
+        //! NOTE: excertps created by users are always at the end of the list in alphabetical order
+        if (f->isCustom() && !s->isCustom()) {
+            return false;
+        } else if (!f->isCustom() && s->isCustom()) {
+            return true;
+        } else if (f->isCustom() && s->isCustom()) {
+            return f->name() < s->name();
+        }
+
+        //! NOTE: sort standard excerpts in the order of their initial parts in the main score
+        const ID& initialPart1 = get_impl(f)->excerpt()->initialPartId();
+        const ID& initialPart2 = get_impl(s)->excerpt()->initialPartId();
+
+        int index1 = mu::indexOf(partIdList, initialPart1);
+        int index2 = mu::indexOf(partIdList, initialPart2);
+
+        return index1 < index2;
+    });
+}
+
 void MasterNotation::setExcerptIsOpen(const INotationPtr excerptNotation, bool open)
 {
     excerptNotation->setIsOpen(open);
@@ -618,10 +648,10 @@ void MasterNotation::markScoreAsNeedToSave()
     m_needSaveNotification.notify();
 }
 
-IExcerptNotationPtr MasterNotation::createEmptyExcerpt() const
+IExcerptNotationPtr MasterNotation::createEmptyExcerpt(const QString& name) const
 {
     auto excerptNotation = std::make_shared<ExcerptNotation>(new mu::engraving::Excerpt(masterScore()));
-    excerptNotation->setName(qtrc("notation", "Part"));
+    excerptNotation->setName(name);
 
     return excerptNotation;
 }

@@ -91,7 +91,6 @@ public:
     bool tablatureParenthesesZIndexWorkaround() const override;
     bool crossNoteHeadAlwaysBlack() const override;
     bool enableExperimentalFretCircle() const override;
-    bool chordAlwaysHasVoices() const override;
 
 private:
     async::Channel<voice_idx_t, draw::Color> m_voiceColorChanged;

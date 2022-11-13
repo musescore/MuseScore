@@ -47,7 +47,10 @@ private:
     void startGlobalEdit();
     void endGlobalEdit();
 
+    void onPartsRemoved(const std::vector<Part*>& parts) override;
+
     std::vector<INotationPartsPtr> excerptsParts() const;
+    mu::engraving::Excerpt* findExcerpt(const ID& initialPartId) const;
 
     ExcerptNotationList m_excerpts;
 };

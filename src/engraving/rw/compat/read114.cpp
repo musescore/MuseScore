@@ -29,6 +29,7 @@
 #include "infrastructure/htmlparser.h"
 
 #include "rw/xml.h"
+#include "rw/compat/compatutils.h"
 
 #include "style/defaultstyle.h"
 #include "style/style.h"
@@ -3155,6 +3156,12 @@ Err Read114::read114(MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
 
     masterScore->rebuildMidiMapping();
     masterScore->updateChannel();
+
+    for (Score* score : masterScore->scoreList()) {
+        CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(score);
+    }
+
+    CompatUtils::assignInitialPartToExcerpts(masterScore->excerpts());
 
     return Err::NoError;
 }

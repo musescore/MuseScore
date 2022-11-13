@@ -64,6 +64,12 @@ typedef struct ms_DynamicsEvent
     double _value; // 0.0 - 1.0
 } ms_DynamicsEvent;
 
+typedef struct ms_PedalEvent
+{
+    long _location_us;
+    double _value; // 0.0 - 1.0
+} ms_PedalEvent;
+
 enum ms_NoteArticulation : uint64_t
 {
     ms_NoteArticulation_None = 0,
@@ -177,6 +183,7 @@ typedef ms_Result (* ms_MuseSampler_clear_track)(ms_MuseSampler ms, ms_Track tra
 
 typedef ms_Result (* ms_MuseSampler_add_track_note_event)(ms_MuseSampler ms, ms_Track track, ms_NoteEvent evt);
 typedef ms_Result (* ms_MuseSampler_add_track_dynamics_event)(ms_MuseSampler ms, ms_Track track, ms_DynamicsEvent evt);
+typedef ms_Result (* ms_MuseSampler_add_track_pedal_event)(ms_MuseSampler ms, ms_Track track, ms_PedalEvent evt);
 
 typedef int (* ms_MuseSampler_is_ranged_articulation)(ms_NoteArticulation);
 typedef ms_Result (* ms_MuseSampler_add_track_event_range_start)(ms_MuseSampler, ms_Track, int voice, ms_NoteArticulation);

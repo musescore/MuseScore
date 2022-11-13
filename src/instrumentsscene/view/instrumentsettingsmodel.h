@@ -43,7 +43,6 @@ class InstrumentSettingsModel : public QObject, public async::Asyncable
     INJECT(instruments, framework::IInteractive, interactive)
 
     Q_PROPERTY(QString instrumentName READ instrumentName WRITE setInstrumentName NOTIFY dataChanged)
-    Q_PROPERTY(QString partName READ partName WRITE setPartName NOTIFY dataChanged)
     Q_PROPERTY(QString abbreviature READ abbreviature WRITE setAbbreviature NOTIFY dataChanged)
 
     Q_PROPERTY(bool isMainScore READ isMainScore NOTIFY isMainScoreChanged)
@@ -56,14 +55,12 @@ public:
     Q_INVOKABLE void resetAllFormatting();
 
     QString instrumentName() const;
-    QString partName() const;
     QString abbreviature() const;
 
     bool isMainScore() const;
 
 public slots:
     void setInstrumentName(const QString& name);
-    void setPartName(const QString& name);
     void setAbbreviature(const QString& abbreviature);
 
 signals:
@@ -77,7 +74,6 @@ private:
     notation::INotationPartsPtr masterNotationParts() const;
 
     notation::InstrumentKey m_instrumentKey;
-    QString m_partName;
     QString m_instrumentName;
     QString m_instrumentAbbreviature;
 };

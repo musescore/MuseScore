@@ -106,6 +106,8 @@ ExportDialogModel::~ExportDialogModel()
 
 void ExportDialogModel::load()
 {
+    TRACEFUNC;
+
     beginResetModel();
 
     IMasterNotationPtr masterNotation = this->masterNotation();
@@ -115,11 +117,14 @@ void ExportDialogModel::load()
     }
 
     m_notations << masterNotation->notation();
-    for (IExcerptNotationPtr excerpt : masterNotation->excerpts().val) {
-        m_notations << excerpt->notation();
-    }
 
-    for (IExcerptNotationPtr excerpt : masterNotation->potentialExcerpts()) {
+    ExcerptNotationList excerpts = masterNotation->excerpts().val;
+    ExcerptNotationList potentialExcerpts = masterNotation->potentialExcerpts();
+    excerpts.insert(excerpts.end(), potentialExcerpts.begin(), potentialExcerpts.end());
+
+    masterNotation->sortExcerpts(excerpts);
+
+    for (IExcerptNotationPtr excerpt : excerpts) {
         m_notations << excerpt->notation();
     }
 

@@ -84,6 +84,11 @@ struct MuseSamplerLibHandler
         return ms_MuseSampler_add_track_dynamics_event(ms, track, evt);
     }
 
+    ms_Result addPedalEvent(ms_MuseSampler ms, ms_Track track, ms_PedalEvent evt)
+    {
+        return ms_MuseSampler_add_track_pedal_event(ms, track, evt);
+    }
+
     ms_Result addNoteEvent(ms_MuseSampler ms, ms_Track track, ms_Event evt) { return ms_MuseSampler_add_track_note_event(ms, track, evt); }
 
     bool isRangedArticulation(ms_NoteArticulation art) { return ms_MuseSampler_is_ranged_articulation(art) == 1; }
@@ -181,6 +186,7 @@ struct MuseSamplerLibHandler
     ms_MuseSampler_clear_track clearTrack = nullptr;
 
     ms_MuseSampler_add_track_dynamics_event addDynamicsEvent = nullptr;
+    ms_MuseSampler_add_track_pedal_event addPedalEvent = nullptr;
     ms_MuseSampler_add_track_note_event addNoteEvent = nullptr;
     ms_MuseSampler_is_ranged_articulation isRangedArticulation = nullptr;
     ms_MuseSampler_add_track_event_range_start addTrackEventRangeStart = nullptr;
@@ -243,6 +249,7 @@ struct MuseSamplerLibHandler
         clearTrack = (ms_MuseSampler_clear_track)getLibFunc(m_lib, "ms_MuseSampler_clear_track");
 
         addDynamicsEvent = (ms_MuseSampler_add_track_dynamics_event)getLibFunc(m_lib, "ms_MuseSampler_add_track_dynamics_event");
+        addPedalEvent = (ms_MuseSampler_add_track_pedal_event)getLibFunc(m_lib, "ms_MuseSampler_add_track_pedal_event");
         addNoteEvent = (ms_MuseSampler_add_track_note_event)getLibFunc(m_lib, "ms_MuseSampler_add_track_note_event");
 
         isRangedArticulation = (ms_MuseSampler_is_ranged_articulation)getLibFunc(m_lib, "ms_MuseSampler_is_ranged_articulation");
@@ -310,6 +317,7 @@ struct MuseSamplerLibHandler
                && finalizeTrack
                && clearTrack
                && addDynamicsEvent
+               && addPedalEvent
                && addNoteEvent
                && setPosition
                && setPlaying

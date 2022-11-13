@@ -33,6 +33,7 @@ FocusScope {
     readonly property string indeterminateText: "--"
     property var currentText: ""
     property alias validator: valueInput.validator
+    property alias maximumLength: valueInput.maximumLength
     property alias measureUnitsSymbol: measureUnitsLabel.text
 
     property alias hint: valueInput.placeholderText
@@ -59,7 +60,7 @@ FocusScope {
 
     signal currentTextEdited(var newTextValue)
     signal textCleared()
-    signal textEditingFinished()
+    signal textEditingFinished(var newTextValue)
 
     function selectAll() {
         valueInput.selectAll()
@@ -180,7 +181,7 @@ FocusScope {
                     event.accepted = false
 
                     root.focus = false
-                    root.textEditingFinished()
+                    root.textEditingFinished(valueInput.text)
                 }
             }
 
@@ -188,7 +189,7 @@ FocusScope {
                 if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return
                         || event.key === Qt.Key_Escape) {
                     root.focus = false
-                    root.textEditingFinished()
+                    root.textEditingFinished(valueInput.text)
                 }
             }
 
@@ -198,7 +199,7 @@ FocusScope {
                     selectAll()
                 } else {
                     deselect()
-                    root.textEditingFinished()
+                    root.textEditingFinished(valueInput.text)
                 }
             }
 

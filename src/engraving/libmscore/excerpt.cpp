@@ -107,7 +107,39 @@ void Excerpt::setExcerptScore(Score* s)
 
     if (s) {
         s->setExcerpt(this);
+        writeNameToMetaTags();
     }
+}
+
+const String& Excerpt::name() const
+{
+    return m_name;
+}
+
+void Excerpt::setName(const String& name)
+{
+    if (m_name == name) {
+        return;
+    }
+
+    m_name = name;
+    writeNameToMetaTags();
+    m_nameChanged.notify();
+}
+
+void Excerpt::writeNameToMetaTags()
+{
+    if (Score* score = excerptScore()) {
+        if (Text* nameItem = score->getText(mu::engraving::TextStyleType::INSTRUMENT_EXCERPT)) {
+            nameItem->setPlainText(m_name);
+            score->setMetaTag(u"partName", m_name);
+        }
+    }
+}
+
+async::Notification Excerpt::nameChanged() const
+{
+    return m_nameChanged;
 }
 
 bool Excerpt::containsPart(const Part* part) const
@@ -638,6 +670,7 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
     }
 
     score->undo(new AddElement(ns));
+    ns->styleChanged();
 }
 
 static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& tupletMap, Measure* m, track_idx_t track)
@@ -1397,6 +1430,10 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             TupletMap tupletMap;          // tuplets cannot cross measure boundaries
             track_idx_t dstTrack = map.at(srcTrack);
             for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
+                if (oseg->header()) {
+                    // Generated at layout time, should not be cloned
+                    continue;
+                }
                 Segment* ns = nm->getSegment(oseg->segmentType(), oseg->tick());
                 EngravingItem* oef = oseg->element(trackZeroVoice(srcTrack));
                 if (oef && !oef->generated() && (oef->isTimeSig() || oef->isKeySig())) {
@@ -1405,6 +1442,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         ne->setTrack(trackZeroVoice(dstTrack));
                         ne->setParent(ns);
                         ne->setScore(score);
+                        ne->styleChanged();
                         addElement(ne);
                     }
                 }
@@ -1418,6 +1456,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 ne->setTrack(dstTrack);
                 ne->setParent(ns);
                 ne->setScore(score);
+                ne->styleChanged();
                 addElement(ne);
                 if (oe->isChordRest()) {
                     ChordRest* ocr = toChordRest(oe);
@@ -1430,7 +1469,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                             nt = toTuplet(ot->linkedClone());
                             nt->clear();
                             nt->setTrack(dstTrack);
-                            nt->setParent(m);
+                            nt->setParent(nm);
+                            nt->styleChanged();
                             tupletMap.add(ot, nt);
                         }
                         ncr->setTuplet(nt);
@@ -1438,10 +1478,9 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     }
 
                     for (EngravingItem* e : oseg->annotations()) {
-                        if (e->generated()) {
-                            continue;
-                        }
-                        if (e->track() != srcTrack) {
+                        if (e->generated()
+                            || (e->track() != srcTrack && !e->systemFlag()) // system items must be cloned even if they are on different tracks
+                            || (e->systemFlag() && score->nstaves() > 1)) { // ...but only once!
                             continue;
                         }
 
@@ -1449,6 +1488,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         ne1->setTrack(dstTrack);
                         ne1->setParent(ns);
                         ne1->setScore(score);
+                        ne1->styleChanged();
                         addElement(ne1);
                     }
                     if (oe->isChord()) {
@@ -1543,12 +1583,12 @@ Excerpt* Excerpt::createExcerptFromPart(Part* part)
     return excerpt;
 }
 
-String Excerpt::formatName(const String& partName, const std::vector<Excerpt*>& excerptList)
+String Excerpt::formatName(const String& partName, const std::vector<Excerpt*>& allExcerpts)
 {
     String name = partName.simplified();
     int count = 0;      // no of occurrences of partName
 
-    for (Excerpt* e : excerptList) {
+    for (Excerpt* e : allExcerpts) {
         // if <partName> already exists, change <partName> to <partName 1>
         String excName = e->name();
         if (excName == name) {
