@@ -22,7 +22,10 @@
 #include "defaultstyle.h"
 
 #include <cstdlib>
+
+#ifndef NO_QT_SUPPORT
 #include <QLocale>
+#endif
 
 #include "io/file.h"
 
@@ -56,6 +59,7 @@ static bool defaultPageSizeIsLetter()
         std::string letter = "letter";
         return papersize == letter;
     }
+#ifndef NO_QT_SUPPORT
     // try locale
     switch (QLocale::system().country()) {
     case QLocale::UnitedStates:
@@ -72,6 +76,9 @@ static bool defaultPageSizeIsLetter()
     default:
         return false;
     }
+#else
+    return false;
+#endif
 }
 
 void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partStyleFilePath)
