@@ -2828,9 +2828,12 @@ void GPConverter::addLyrics(const GPBeat* beat, ChordRest* cr, const Context& ct
     }
 
     Lyrics* lyr = Factory::createLyrics(_score->dummy()->chord());
-    lyr->setPlainText(String::fromUtf8(lyrStr.c_str()));
+
     if (lyrStr.back() == '-') {
         lyr->setSyllabic(Lyrics::Syllabic::MIDDLE);
+        lyr->setPlainText(String::fromUtf8(lyrStr.substr(0, lyrStr.size() - 1).c_str()));
+    } else {
+        lyr->setPlainText(String::fromUtf8(lyrStr.c_str()));
     }
     cr->add(lyr);
 }
