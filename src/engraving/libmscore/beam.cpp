@@ -1009,6 +1009,27 @@ void Beam::calcBeamBreaks(const ChordRest* chord, const ChordRest* prevChord, in
 
     isBroken32 = isManuallyBroken32 || isDefaultBroken32;
     isBroken64 = isManuallyBroken64 || isDefaultBroken64;
+
+    // deal with beam-embedded triplets by breaking beams as if they are their underlying durations
+    // note that we use max(hooks, 1) here because otherwise we'd end up breaking the main (level 0) beam for
+    // tuplets that take up non-beamed amounts of space (eg. 16th note quintuplets)
+    if (level > 0 && prevChord && chord->beamMode() == BeamMode::AUTO) {
+        if (chord->tuplet() && chord->tuplet() != prevChord->tuplet()) {
+            // this cr starts a tuplet
+            int beams = std::max(TDuration(chord->tuplet()->ticks()).hooks(), 1);
+            if (beams <= level) {
+                isBroken32 = level >= 1;
+                isBroken64 = level >= 2;
+            }
+        } else if (prevChord->tuplet() && prevChord->tuplet() != chord->tuplet()) {
+            // this is a non-tuplet cr that is first after a tuplet
+            int beams = std::max(TDuration(prevChord->tuplet()->ticks()).hooks(), 1);
+            if (beams <= level) {
+                isBroken32 = level >= 1;
+                isBroken64 = level >= 2;
+            }
+        }
+    }
 }
 
 void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
@@ -1044,6 +1065,7 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
             // updates isBroken32 and isBroken64
             calcBeamBreaks(chordRest, prevChordRest, level, isBroken32, isBroken64);
             breakBeam = isBroken32 || isBroken64;
+
             if (level < chordRest->beams() && !breakBeam) {
                 endCr = chordRest;
                 if (!startCr) {
