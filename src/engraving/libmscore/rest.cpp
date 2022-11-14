@@ -1131,7 +1131,7 @@ Shape Rest::shape() const
         shape.add(ChordRest::shape());
         shape.add(bbox(), this);
         for (NoteDot* dot : m_dots) {
-            shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
+            shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
         }
     }
     for (EngravingItem* e : el()) {
