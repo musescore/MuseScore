@@ -22,13 +22,19 @@
 import QtQuick 2.15
 
 import MuseScore.Project 1.0
+import MuseScore.Ui 1.0
 
 BaseSection {
     id: root
 
     title: qsTrc("appshell/preferences", "Generate MP3 audio for private cloud scores")
 
+    navigation.name: "AudioGenerationSettingsContent"
+    navigation.direction: NavigationPanel.Both
+
     AudioGenerationSettings {
         width: parent.width
+
+        navigationPanel: root.navigation
     }
 }
