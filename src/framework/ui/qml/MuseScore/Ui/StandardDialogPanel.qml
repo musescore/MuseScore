@@ -159,7 +159,6 @@ RowLayout {
 
                 font: ui.theme.largeBodyBoldFont
                 horizontalAlignment: Text.AlignLeft
-                maximumLineCount: 2
                 wrapMode: Text.Wrap
 
                 visible: !isEmpty
@@ -170,7 +169,6 @@ RowLayout {
                 width: parent.width
 
                 horizontalAlignment: Text.AlignLeft
-                maximumLineCount: 5
                 wrapMode: Text.Wrap
 
                 visible: !isEmpty
