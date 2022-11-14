@@ -24,6 +24,8 @@
 
 #include "modularity/ioc.h"
 
+#include "async/asyncable.h"
+
 #include "iinteractive.h"
 #include "context/iglobalcontext.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
@@ -36,10 +38,12 @@
 #include "inotationwritersregister.h"
 #include "internal/iexportprojectscenario.h"
 
+#include <QAbstractListModel>
+
 class QItemSelectionModel;
 
 namespace mu::project {
-class ExportDialogModel : public QAbstractListModel
+class ExportDialogModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
