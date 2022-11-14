@@ -33,12 +33,20 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "SearchPopup"
+        enabled: root.visible
+        direction: NavigationPanel.Horizontal
+        order: 3
+        accessible.name: titleLabel.text
+    }
+
     QtObject {
         id: privateProperties
 
         function show() {
             visible = true
-            Qt.callLater(textInputField.forceActiveFocus)
+            Qt.callLater(textInputField.navigation.requestActive)
         }
 
         function hide() {
@@ -60,6 +68,10 @@ Rectangle {
 
     Row {
         anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: 8
+        anchors.right: parent.right
+        anchors.rightMargin: 8
 
         spacing: 8
 
@@ -68,12 +80,18 @@ Rectangle {
 
             icon: IconCode.CLOSE_X_ROUNDED
 
+            navigation.panel: root.navigationPanel
+            navigation.order: 2
+            navigation.accessible.name: qsTrc("notation", "Close Search")
+            navigation.enabled: root.visible
+
             onClicked: {
                 privateProperties.hide()
             }
         }
         
         StyledTextLabel {
+            id: titleLabel
             anchors.verticalCenter: parent.verticalCenter 
             text: qsTrc("notation", "Find / Go to:")
         }
@@ -82,6 +100,9 @@ Rectangle {
             id: textInputField
 
             width: 500
+
+            navigation.panel: root.navigationPanel
+            navigation.order: 1
 
             onCurrentTextEdited: function(newTextValue) {
                 model.search(newTextValue)
