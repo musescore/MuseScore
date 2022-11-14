@@ -334,7 +334,7 @@
           </time-modification>
         <stem>up</stem>
         <notations>
-          <tuplet type="start" bracket="yes"/>
+          <tuplet type="start" bracket="no"/>
           <tuplet type="stop"/>
           </notations>
         </note>
@@ -354,7 +354,7 @@
           </time-modification>
         <stem>up</stem>
         <notations>
-          <tuplet type="start" bracket="yes"/>
+          <tuplet type="start" bracket="no"/>
           <tuplet type="stop"/>
           </notations>
         </note>
@@ -396,7 +396,7 @@
           </time-modification>
         <stem>up</stem>
         <notations>
-          <tuplet type="start" bracket="yes"/>
+          <tuplet type="start" bracket="no"/>
           <tuplet type="stop"/>
           </notations>
         </note>
@@ -448,7 +448,7 @@
           </time-modification>
         <stem>up</stem>
         <notations>
-          <tuplet type="start" bracket="yes"/>
+          <tuplet type="start" bracket="no"/>
           <tuplet type="stop"/>
           </notations>
         </note>
@@ -468,7 +468,7 @@
           </time-modification>
         <stem>up</stem>
         <notations>
-          <tuplet type="start" bracket="yes"/>
+          <tuplet type="start" bracket="no"/>
           <tuplet type="stop"/>
           </notations>
         </note>
