@@ -85,9 +85,9 @@
               <string>2</string>
               </Note>
             </Chord>
-          <Text>
+          <StaffText>
             <text>0:01</text>
-            </Text>
+            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -143,9 +143,9 @@
               <string>4</string>
               </Note>
             </Chord>
-          <Text>
+          <StaffText>
             <text>0:09</text>
-            </Text>
+            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -1044,9 +1044,9 @@
               <string>4</string>
               </Note>
             </Chord>
-          <Text>
-            <text>1:42</text>
-            </Text>
+          <StaffText>
+            <text>1:41</text>
+            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
