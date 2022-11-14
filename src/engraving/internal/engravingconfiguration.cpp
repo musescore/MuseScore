@@ -255,3 +255,13 @@ bool EngravingConfiguration::enableExperimentalFretCircle() const
 {
     return guitarProImportExperimental();
 }
+
+void EngravingConfiguration::setGuitarProMultivoiceEnabled(bool multiVoice)
+{
+    m_multiVoice = multiVoice;
+}
+
+bool EngravingConfiguration::guitarProMultivoiceEnabled() const
+{
+    return m_multiVoice;
+}

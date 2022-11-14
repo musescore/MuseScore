@@ -250,7 +250,6 @@ private:
 
     Measure* _lastMeasure = nullptr;
     bool m_showCapo = true; // TODO-gp : settings
-    bool m_multiVoice = false;
     std::unordered_map<Measure*, std::array<int, VOICES> > m_chordsInMeasureByVoice; /// if measure has any chord for specific voice, rests are hidden
     std::unordered_map<Measure*, size_t> m_chordsInMeasure;
 };
