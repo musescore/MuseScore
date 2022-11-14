@@ -284,20 +284,6 @@ void EngravingObject::scanElements(void* data, void (* func)(void*, EngravingIte
 //   propertyDefault
 //---------------------------------------------------------
 
-PropertyValue EngravingObject::propertyDefault(Pid pid, TextStyleType tid) const
-{
-    for (const StyledProperty& spp : *textStyle(tid)) {
-        if (spp.pid == pid) {
-            return styleValue(pid, spp.sid);
-        }
-    }
-    return PropertyValue();
-}
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
 PropertyValue EngravingObject::propertyDefault(Pid pid) const
 {
     Sid sid = getPropertyStyle(pid);
@@ -434,7 +420,7 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
         //
         auto l = textStyle(v.value<TextStyleType>());
         // Change to ElementStyle defaults
-        for (const StyledProperty& p : *l) {
+        for (const auto& p : *l) {
             if (p.sid == Sid::NOSTYLE) {
                 break;
             }
