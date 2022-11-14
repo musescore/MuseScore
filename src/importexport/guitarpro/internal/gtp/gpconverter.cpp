@@ -682,6 +682,7 @@ void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
     collectHammerOn(gpnote, note);
     addTapping(gpnote, note);
     addLeftHandTapping(gpnote, note);
+    addStringNumber(gpnote, note);
     addOrnament(gpnote, note);
     addVibratoLeftHand(gpnote, note);
     addTrill(gpnote, note);
@@ -1634,6 +1635,20 @@ void GPConverter::addFingering(const GPNote* gpnote, Note* note)
         f->setPlainText(gpnote->rightFingering());
         note->add(f);
     }
+}
+
+void GPConverter::addStringNumber(const GPNote* gpnote, Note* note)
+{
+    if (!gpnote->showStringNumber()) {
+        return;
+    }
+
+    Fingering* f = Factory::createFingering(note);
+
+    f->setPlainText(String::number(note->string() + 1));
+    f->setTextStyleType(TextStyleType::STRING_NUMBER);
+    f->setFrameType(FrameType::CIRCLE);
+    note->add(f);
 }
 
 void GPConverter::addTrill(const GPNote* gpnote, Note* note)
