@@ -92,10 +92,18 @@ void ExcerptNotation::fillWithDefaultInfo()
         }
     };
 
-    setText(TextStyleType::TITLE, qtrc("notation", "Title"));
-    setText(TextStyleType::COMPOSER, qtrc("notation", "Composer / arranger"));
-    setText(TextStyleType::SUBTITLE, "");
-    setText(TextStyleType::POET, "");
+    auto getText = [&score](TextStyleType textType, const QString& defaultText) {
+        if (Text* t = score->getText(textType)) {
+            return t->plainText().toQString();
+        } else {
+            return defaultText;
+        }
+    };
+
+    setText(TextStyleType::TITLE, getText(TextStyleType::TITLE, ""));
+    setText(TextStyleType::COMPOSER, getText(TextStyleType::COMPOSER, ""));
+    setText(TextStyleType::SUBTITLE, getText(TextStyleType::SUBTITLE, ""));
+    setText(TextStyleType::POET, getText(TextStyleType::POET, ""));
 }
 
 mu::engraving::Excerpt* ExcerptNotation::excerpt() const
