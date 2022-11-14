@@ -1000,6 +1000,8 @@ void GP67DomBuilder::readNoteProperties(XmlDomNode* propertiesNode, GPNote* note
             if (propertyNode.firstChild().nodeName() == "Enable") {
                 note->setLeftHandTapped(true);
             }
+        } else if (propertyName == "ShowStringNumber") {
+            note->setShowStringNumber(true);
         } else {
             //LOGD() << "unknown GP Note Property tag" << propertyName << "\n";
         }
