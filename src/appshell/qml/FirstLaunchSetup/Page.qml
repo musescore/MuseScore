@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -92,14 +91,21 @@ Item {
 
         StyledTextLabel {
             id: titleLabel
+
             anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width
+
             font: ui.theme.largeBodyBoldFont
+            wrapMode: Text.Wrap
         }
 
         StyledTextLabel {
             id: explanationLabel
+
             anchors.horizontalCenter: parent.horizontalCenter
-            wrapMode: Text.WordWrap
+            width: parent.width
+
+            wrapMode: Text.Wrap
         }
     }
 
