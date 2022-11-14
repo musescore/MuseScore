@@ -30,6 +30,8 @@
 #include "iinteractive.h"
 #include "ui/iuiengine.h"
 
+#include "engraving/style/textstyle.h"
+
 namespace mu::notation {
 class EditStyle : public QDialog, private Ui::EditStyleBase
 {
@@ -122,8 +124,8 @@ private slots:
     void resetStyleValue(int);
     void valueChanged(int);
     void textStyleChanged(int);
-    void resetTextStyle(mu::engraving::Pid);
-    void textStyleValueChanged(mu::engraving::Pid, QVariant);
+    void resetTextStyle(engraving::TextStylePropertyType type);
+    void textStyleValueChanged(engraving::TextStylePropertyType type, QVariant);
     void on_comboFBFont_currentIndexChanged(int index);
     void on_buttonTogglePagelist_clicked();
     void on_resetStylesButton_clicked();
