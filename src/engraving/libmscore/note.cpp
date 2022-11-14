@@ -1363,7 +1363,7 @@ void Note::draw(mu::draw::Painter* painter) const
         return;
     }
 
-    bool negativeFret = engravingConfiguration()->negativeFretsAllowed() && _fret < 0 && staff()->isTabStaff(tick());
+    bool negativeFret = negativeFretUsed() && staff()->isTabStaff(tick());
 
     Color c(negativeFret ? engravingConfiguration()->criticalColor() : curColor());
     painter->setPen(c);
@@ -2270,11 +2270,9 @@ void Note::layout()
         if (_fixed) {
             _fretString = u"/";
         } else {
-            const bool negativeFret = (_fret < 0) && engravingConfiguration()->negativeFretsAllowed();
-
             _fretString = tab->fretString(fabs(_fret), _string, _deadNote);
 
-            if (negativeFret) {
+            if (negativeFretUsed()) {
                 _fretString = u"-" + _fretString;
             }
 
@@ -4051,8 +4049,8 @@ void Note::addLineAttachPoint(PointF point, EngravingItem* line)
     _lineAttachPoints.push_back(LineAttachPoint(line, point.x(), point.y()));
 }
 
-bool Note::fretConflictResolveSupported() const
+bool Note::negativeFretUsed() const
 {
-    return !engravingConfiguration()->negativeFretsAllowed();
+    return engravingConfiguration()->negativeFretsAllowed() && _fret < 0;
 }
 }
