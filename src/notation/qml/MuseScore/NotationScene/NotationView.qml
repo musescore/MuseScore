@@ -226,6 +226,9 @@ FocusScope {
             id: searchPopup
 
             Layout.fillWidth: true
+
+            navigationPanel.section: navSec
+            navigationPanel.order: 3
         }
     }
 }
