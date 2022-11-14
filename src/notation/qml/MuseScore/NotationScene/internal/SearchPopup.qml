@@ -33,6 +33,8 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
+    signal closed()
+
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "SearchPopup"
         enabled: root.visible
@@ -51,6 +53,7 @@ Rectangle {
 
         function hide() {
             visible = false
+            root.closed()
         }
     }
 
@@ -108,8 +111,12 @@ Rectangle {
                 model.search(newTextValue)
             }
 
-            onTextEditingFinished: function(newTextValue) {
-                privateProperties.hide();
+            onAccepted: {
+                Qt.callLater(privateProperties.hide)
+            }
+
+            onEscapted: {
+                Qt.callLater(privateProperties.hide)
             }
         }
     }
