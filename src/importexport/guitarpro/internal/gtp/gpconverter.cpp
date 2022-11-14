@@ -2481,10 +2481,10 @@ void GPConverter::addTimer(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    int time = beat->time();
+    int time = beat->time() / 1000;
     int minutes = time / 60;
     int seconds = time % 60;
-    Text* st = Factory::createText(cr->segment());
+    StaffText* st = Factory::createStaffText(cr->segment());
     st->setPlainText(String::number(minutes)
                      + u':'
                      + (seconds < 10 ? u'0' + String::number(seconds) : String::number(seconds)));
