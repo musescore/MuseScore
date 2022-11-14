@@ -74,7 +74,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
     const track_idx_t partStartTrack = part ? part->startTrack() : startTrack;
     const track_idx_t partEndTrack = part ? part->endTrack() : endTrack;
 
-    if (staff->isTabStaff(tick)) {
+    if (staff && staff->isTabStaff(tick) && (!staff->staffType() || !staff->staffType()->stemThrough())) {
         layoutSegmentElements(segment, startTrack, endTrack, staffIdx);
         return;
     }
