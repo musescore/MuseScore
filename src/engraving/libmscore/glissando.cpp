@@ -348,8 +348,16 @@ void Glissando::layout()
     // Remove offset already applied
     offs1 *= -1.0;
     offs2 *= -1.0;
-    // Look at chord shapes
-    offs1.rx() += cr1->shape().right() - anchor1->pos().x();
+    // Look at chord shapes (but don't consider lyrics)
+    Shape cr1shape = cr1->shape();
+    mu::remove_if(cr1shape, [](ShapeElement& s) {
+        if (!s.toItem || s.toItem->isLyrics()) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+    offs1.rx() += cr1shape.right() - anchor1->pos().x();
     if (!cr2->staff()->isTabStaff(cr2->tick())) {
         offs2.rx() -= cr2->shape().left() + anchor2->pos().x();
     }
