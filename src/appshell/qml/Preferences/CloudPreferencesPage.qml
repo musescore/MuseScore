@@ -27,6 +27,7 @@ PreferencesPage {
     id: root
 
     AudioGenerationSection {
-        width: parent.width
+        navigation.section: root.navigationSection
+        navigation.order: root.navigationOrderStart + 1
     }
 }
