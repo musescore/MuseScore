@@ -570,26 +570,34 @@ void PlaybackModel::clearExpiredContexts(const track_idx_t trackFrom, const trac
 
 void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo)
 {
-    const RepeatList& repeatList = m_score->repeatList();
-    int uniqueTickFrom = repeatList.tick2utick(tickFrom);
-    int uniqueTickTo = repeatList.tick2utick(tickTo);
+    TRACEFUNC;
 
-    timestamp_t timestampFrom = timestampFromTicks(m_score, uniqueTickFrom);
-    timestamp_t timestampTo = timestampFromTicks(m_score, uniqueTickTo);
+    for (const RepeatSegment* repeatSegment : m_score->repeatList()) {
+        int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
+        int repeatStartTick = repeatSegment->tick;
+        int repeatEndTick = repeatStartTick + repeatSegment->len();
 
-    for (const Part* part : m_score->parts()) {
-        if (part->startTrack() > trackTo || part->endTrack() <= trackFrom) {
+        if (repeatStartTick > tickTo || repeatEndTick <= tickFrom) {
             continue;
         }
 
-        for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
-            removeEvents(trackId, timestampFrom, timestampTo);
+        timestamp_t timestampFrom = timestampFromTicks(m_score, tickFrom + tickPositionOffset);
+        timestamp_t timestampTo = timestampFromTicks(m_score, tickTo + tickPositionOffset);
+
+        for (const Part* part : m_score->parts()) {
+            if (part->startTrack() > trackTo || part->endTrack() <= trackFrom) {
+                continue;
+            }
+
+            for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
+                removeEvents(trackId, timestampFrom, timestampTo);
+            }
+
+            removeEvents(chordSymbolsTrackId(part->id()), timestampFrom, timestampTo);
         }
 
-        removeEvents(chordSymbolsTrackId(part->id()), timestampFrom, timestampTo);
+        removeEvents(METRONOME_TRACK_ID, timestampFrom, timestampTo);
     }
-
-    removeEvents(METRONOME_TRACK_ID, timestampFrom, timestampTo);
 }
 
 void PlaybackModel::collectChangesTracks(const InstrumentTrackId& trackId, ChangedTrackIdSet* result)

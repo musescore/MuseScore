@@ -116,9 +116,7 @@ private:
 
     void updateCurrentTempo();
 
-    int currentTick() const;
     bool isPaused() const;
-
     bool isLoaded() const;
 
     bool isLoopVisible() const;
@@ -173,7 +171,7 @@ private:
 
     void updateMuteStates();
 
-    void setCurrentTick(const midi::tick_t tick);
+    void setCurrentPlaybackTime(audio::msecs_t msecs);
 
     using TrackAddFinished = std::function<void (const engraving::InstrumentTrackId&)>;
 
@@ -202,6 +200,7 @@ private:
     audio::TrackSequenceId m_currentSequenceId = -1;
     async::Notification m_currentSequenceIdChanged;
     audio::PlaybackStatus m_currentPlaybackStatus = audio::PlaybackStatus::Stopped;
+    audio::msecs_t m_currentPlaybackTimeMsecs = 0;
     midi::tick_t m_currentTick = 0;
     notation::Tempo m_currentTempo;
 
