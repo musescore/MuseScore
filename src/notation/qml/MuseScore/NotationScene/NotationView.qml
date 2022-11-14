@@ -229,6 +229,10 @@ FocusScope {
 
             navigationPanel.section: navSec
             navigationPanel.order: 3
+
+            onClosed: {
+                fakeNavCtrl.requestActive()
+            }
         }
     }
 }
