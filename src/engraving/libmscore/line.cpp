@@ -1515,7 +1515,11 @@ bool SLine::setProperty(Pid id, const PropertyValue& v)
         _lineColor = v.value<mu::draw::Color>();
         break;
     case Pid::LINE_WIDTH:
-        _lineWidth = v.value<Millimetre>();
+        if (v.type() == P_TYPE::MILLIMETRE) {
+            _lineWidth = v.value<Millimetre>();
+        } else if (v.type() == P_TYPE::SPATIUM) {
+            _lineWidth = v.value<Spatium>().toMM(spatium());
+        }
         break;
     case Pid::LINE_STYLE:
         _lineStyle = v.value<LineType>();
