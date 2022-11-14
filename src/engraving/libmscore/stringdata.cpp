@@ -238,7 +238,7 @@ void StringData::fretChords(Chord* chord) const
         if (nString == INVALID_STRING_INDEX /*|| nFret == INVALID_FRET_INDEX || getPitch(nString, nFret) != note->pitch()*/) {
             // get a new fretting
             if (!convertPitch(note->pitch(), pitchOffset, &nNewString, &nNewFret) && note->displayFret()
-                == Note::DisplayFretOption::NoHarmonic && note->fretConflictResolveSupported()) {
+                == Note::DisplayFretOption::NoHarmonic && !note->negativeFretUsed()) {
                 // no way to fit this note in this tab:
                 // mark as fretting conflict
                 note->setFretConflict(true);
@@ -286,7 +286,7 @@ void StringData::fretChords(Chord* chord) const
     // check for any remaining fret conflict
     for (auto& p : sortedNotes) {
         Note* note = p.second;
-        if (note->fretConflictResolveSupported() && (note->string() == -1 || bUsed[note->string()] > 1)) {
+        if (!note->negativeFretUsed() && (note->string() == -1 || bUsed[note->string()] > 1)) {
             note->setFretConflict(true);
         }
     }
@@ -477,8 +477,8 @@ void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* 
         // if note not fretted yet or current fretting no longer valid,
         // use most convenient string as key
         int pitch = getPitch(string, fret + capoFret, pitchOffset);
-        if (note->fretConflictResolveSupported() && (string <= INVALID_STRING_INDEX || fret <= INVALID_FRET_INDEX
-                                                     || (pitchIsValid(pitch) && pitch != note->pitch()))) {
+        if (!note->negativeFretUsed() && (string <= INVALID_STRING_INDEX || fret <= INVALID_FRET_INDEX
+                                          || (pitchIsValid(pitch) && pitch != note->pitch()))) {
             note->setString(INVALID_STRING_INDEX);
             note->setFret(INVALID_FRET_INDEX);
             convertPitch(note->pitch(), pitchOffset, &string, &fret);
