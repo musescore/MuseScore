@@ -21,11 +21,7 @@
  */
 #include "updateactioncontroller.h"
 
-#include "translation.h"
-#include "log.h"
-
 using namespace mu::update;
-using namespace mu::framework;
 
 void UpdateActionController::init()
 {
