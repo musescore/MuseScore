@@ -61,6 +61,8 @@ FocusScope {
     signal currentTextEdited(var newTextValue)
     signal textCleared()
     signal textEditingFinished(var newTextValue)
+    signal accepted()
+    signal escapted()
 
     function selectAll() {
         valueInput.selectAll()
@@ -175,6 +177,12 @@ FocusScope {
             }
 
             Keys.onShortcutOverride: function(event) {
+                if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return
+                        || event.key === Qt.Key_Escape) {
+                    event.accepted = true
+                    return
+                }
+
                 if (textInputFieldModel.isShortcutAllowedOverride(event.key, event.modifiers)) {
                     event.accepted = true
                 } else {
@@ -186,10 +194,19 @@ FocusScope {
             }
 
             Keys.onPressed: function(event) {
-                if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return
-                        || event.key === Qt.Key_Escape) {
+                var isAcceptKey = event.key === Qt.Key_Enter || event.key === Qt.Key_Return
+                var isEscapeKey = event.key === Qt.Key_Escape
+                if (isAcceptKey || isEscapeKey) {
                     root.focus = false
                     root.textEditingFinished(valueInput.text)
+                }
+
+                if (isAcceptKey) {
+                    root.accepted()
+                }
+
+                if (isEscapeKey) {
+                    root.escapted()
                 }
             }
 
