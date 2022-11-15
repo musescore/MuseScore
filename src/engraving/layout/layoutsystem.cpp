@@ -1479,11 +1479,6 @@ void LayoutSystem::updateCrossBeams(System* system, const LayoutContext& ctx)
                 }
             }
         }
-        for (Segment& seg : toMeasure(mb)->segments()) {
-            if (seg.next()) {
-                seg.computeCrossBeamType(seg.next());
-            }
-        }
     }
 }
 

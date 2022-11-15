@@ -3020,18 +3020,6 @@ void Note::updateRelLine(int relLine, bool undoable)
     const Staff* staff  = score()->staff(idx);
     const StaffType* st = staff->staffTypeForElement(this);
 
-    if (chord()->staffMove()) {
-        // check that destination staff makes sense (might have been deleted)
-        staff_idx_t minStaff = part()->startTrack() / VOICES;
-        staff_idx_t maxStaff = part()->endTrack() / VOICES;
-        const Staff* stf = this->staff();
-        if (idx < minStaff || idx >= maxStaff || st->group() != stf->staffTypeForElement(this)->group()) {
-            LOGD("staffMove out of scope %zu + %d min %zu max %zu",
-                 staffIdx(), chord()->staffMove(), minStaff, maxStaff);
-            chord()->undoChangeProperty(Pid::STAFF_MOVE, 0);
-        }
-    }
-
     ClefType clef = staff->clef(chord()->tick());
     int line      = relStep(relLine, clef);
 
