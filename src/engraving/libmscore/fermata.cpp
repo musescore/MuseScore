@@ -317,7 +317,7 @@ bool Fermata::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::TIME_STRETCH:
         setTimeStretch(v.toDouble());
-        score()->setUpTempoMap();
+        score()->setUpTempoMapLater();
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);
@@ -446,7 +446,7 @@ void Fermata::added()
         return;
     }
 
-    score()->setUpTempoMap();
+    score()->setUpTempoMapLater();
 }
 
 void Fermata::removed()
@@ -455,6 +455,6 @@ void Fermata::removed()
         return;
     }
 
-    score()->setUpTempoMap();
+    score()->setUpTempoMapLater();
 }
 }
