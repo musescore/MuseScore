@@ -35,6 +35,7 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/infrastructure/mscwriter.h"
 #include "engraving/libmscore/excerpt.h"
+#include "engraving/engravingerrors.h"
 
 #include "backendjsonwriter.h"
 #include "notationmeta.h"
@@ -213,8 +214,15 @@ RetVal<project::INotationProjectPtr> BackendApi::openProject(const io::path_t& p
 
     Ret ret = notationProject->load(path, stylePath, forceMode);
     if (!ret) {
-        LOGE() << "failed load: " << path << ", ret: " << ret.toString();
-        return make_ret(Ret::Code::InternalError);
+        if (!forceMode && (static_cast<engraving::Err>(ret.code()) == engraving::Err::FileCorrupted)) {
+            LOGW() << "failed load: " << path << ", ret: " << ret.toString() << ", trying to use force mode";
+            ret = notationProject->load(path, stylePath, true);
+        }
+
+        if (!ret) {
+            LOGE() << "failed load: " << path << ", ret: " << ret.toString();
+            return make_ret(Ret::Code::InternalError);
+        }
     }
 
     INotationPtr notation = notationProject->masterNotation()->notation();
