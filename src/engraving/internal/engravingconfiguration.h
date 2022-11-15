@@ -91,12 +91,16 @@ public:
     bool tablatureParenthesesZIndexWorkaround() const override;
     bool crossNoteHeadAlwaysBlack() const override;
     bool enableExperimentalFretCircle() const override;
+    void setGuitarProMultivoiceEnabled(bool multiVoice) override;
+    bool guitarProMultivoiceEnabled() const override;
 
 private:
     async::Channel<voice_idx_t, draw::Color> m_voiceColorChanged;
     async::Notification m_scoreInversionChanged;
 
     ValNt<DebuggingOptions> m_debuggingOptions;
+
+    bool m_multiVoice = false;
 };
 }
 
