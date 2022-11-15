@@ -219,6 +219,7 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
     }
 
     masterScore->lockUpdates(false);
+    masterScore->setLayoutAll();
     masterScore->update();
 
     // Load other stuff from the project file

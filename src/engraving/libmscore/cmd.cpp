@@ -421,9 +421,10 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
         MasterScore* ms = masterScore();
         CmdState& cs = ms->cmdState();
         ms->deletePostponed();
+
         if (cs.layoutRange()) {
             for (Score* s : ms->scoreList()) {
-                if (!s->isOpen() && ms->scoreList().size() > 1 && !layoutAllParts) {
+                if (s != this && !s->isOpen() && ms->scoreList().size() > 1 && !layoutAllParts) {
                     continue;
                 }
                 s->doLayoutRange(cs.startTick(), cs.endTick());
