@@ -22,6 +22,8 @@
 #include "notationviewinputcontroller.h"
 
 #include <QMimeData>
+#include <QQuickItem>
+#include <QTimer>
 #include <QtMath>
 
 #include "log.h"
