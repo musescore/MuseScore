@@ -88,6 +88,10 @@ MasterNotation::MasterNotation()
         updateExcerpts();
         notifyAboutNeedSaveChanged();
     });
+
+    viewState()->needSaveChanged().onNotify(this, [this]() {
+        notifyAboutNeedSaveChanged();
+    });
 }
 
 MasterNotation::~MasterNotation()
@@ -425,6 +429,7 @@ mu::ValNt<bool> MasterNotation::needSave() const
     ValNt<bool> needSave;
     needSave.val = masterScore() ? !masterScore()->saved() : false;
 
+    needSave.val |= viewState()->needSave();
     for (IExcerptNotationPtr excerpt : excerpts().val) {
         needSave.val |= excerpt->notation()->viewState()->needSave();
     }
