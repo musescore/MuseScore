@@ -1403,7 +1403,7 @@ void Note::draw(mu::draw::Painter* painter) const
         const Staff* st = staff();
         const StaffType* tab = st->staffTypeForElement(this);
         if (tieBack() && !tab->showBackTied()) {
-            if (chord()->measure() == tieBack()->startNote()->chord()->measure() && el().empty()) {
+            if (chord()->measure()->system() == tieBack()->startNote()->chord()->measure()->system() && el().empty()) {
                 // fret should be hidden, so return without drawing it
                 return;
             }
@@ -2390,7 +2390,6 @@ void Note::layout()
         const Staff* st = staff();
         const StaffType* tab = st->staffTypeForElement(this);
         double mags = magS();
-        bool backTiedParenthesis = false;
         // not complete but we need systems to be laid out to add parenthesis
         if (_fixed) {
             _fretString = u"/";
@@ -2407,11 +2406,8 @@ void Note::layout()
                 _fretString = String(u"<%1>").arg(String::number(m_harmonicFret));
             }
         }
-        if (tieBack() && (chord()->measure() != tieBack()->startNote()->chord()->measure() || !el().empty())) {
-            backTiedParenthesis = true;
-        }
 
-        if ((_ghost && !engravingConfiguration()->tablatureParenthesesZIndexWorkaround()) || backTiedParenthesis) {
+        if ((_ghost && !engravingConfiguration()->tablatureParenthesesZIndexWorkaround())) {
             _fretString = String(u"(%1)").arg(_fretString);
         }
 
@@ -2458,9 +2454,18 @@ void Note::layout()
 
 void Note::layout2()
 {
+    const StaffType* staffType = staff()->staffTypeForElement(this);
     // for standard staves this is done in Score::layoutChords3()
     // so that the results are available there
-
+    bool isTabStaff = staffType && staffType->isTabStaff();
+    // First, for tab staves that have show back-tied fret marks option, we add parentheses to the tied note if
+    // the tie spans a system boundary. This can't be done in layout() as the system of each note is not decided yet
+    bool useParens = isTabStaff && !staffType->showBackTied() && !_fixed;
+    if (useParens && tieBack() && (chord()->measure()->system() != tieBack()->startNote()->chord()->measure()->system() || !el().empty())) {
+        _fretString = String(u"(%1)").arg(_fretString);
+        double w = tabHeadWidth(staffType);     // !! use _fretString
+        bbox().setRect(0, staffType->fretBoxY() * magS(), w, staffType->fretBoxH() * magS());
+    }
     int dots = chord()->dots();
     if (dots && !_dots.empty()) {
         // if chords have notes with different mag, dots must still  align
@@ -2485,19 +2490,15 @@ void Note::layout2()
             }
         }
         // if TAB and stems through staff
-        if (staff()->isTabStaff(chord()->tick())) {
-            const Staff* st = staff();
-            const StaffType* tab = st->staffTypeForElement(this);
-            if (tab->stemThrough()) {
-                // with TAB's, dot Y is not calculated during layoutChords3(),
-                // as layoutChords3() is not even called for TAB's;
-                // setDotY() actually also manages creation/deletion of NoteDot's
-                setDotY(DirectionV::AUTO);
+        if (isTabStaff && staffType->stemThrough()) {
+            // with TAB's, dot Y is not calculated during layoutChords3(),
+            // as layoutChords3() is not even called for TAB's;
+            // setDotY() actually also manages creation/deletion of NoteDot's
+            setDotY(DirectionV::AUTO);
 
-                // use TAB default note-to-dot spacing
-                dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * spatium();
-                d = dd * 0.5;
-            }
+            // use TAB default note-to-dot spacing
+            dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * spatium();
+            d = dd * 0.5;
         }
         // apply to dots
         double xx = x + d;
@@ -2518,7 +2519,7 @@ void Note::layout2()
             Symbol* sym = toSymbol(e);
             e->layout();
             if (sym->sym() == SymId::noteheadParenthesisRight) {
-                if (staff()->isTabStaff(chord()->tick())) {
+                if (isTabStaff) {
                     const Staff* st = staff();
                     const StaffType* tab = st->staffTypeForElement(this);
                     w = tabHeadWidth(tab);
