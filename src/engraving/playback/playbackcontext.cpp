@@ -41,24 +41,22 @@ using namespace mu::mpe;
 
 dynamic_level_t PlaybackContext::appliableDynamicLevel(const int nominalPositionTick) const
 {
-    for (auto it = m_dynamicsMap.rbegin(); it != m_dynamicsMap.rend(); ++it) {
-        if (it->first <= nominalPositionTick) {
-            return it->second;
-        }
+    auto it = m_dynamicsMap.upper_bound(nominalPositionTick);
+    if (it == m_dynamicsMap.cbegin() || it == m_dynamicsMap.cend()) {
+        return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
     }
 
-    return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+    return std::prev(it)->second;
 }
 
 ArticulationType PlaybackContext::persistentArticulationType(const int nominalPositionTick) const
 {
-    for (auto it = m_playTechniquesMap.rbegin(); it != m_playTechniquesMap.rend(); ++it) {
-        if (it->first <= nominalPositionTick) {
-            return it->second;
-        }
+    auto it = m_playTechniquesMap.upper_bound(nominalPositionTick);
+    if (it == m_playTechniquesMap.cbegin() || it == m_playTechniquesMap.cend()) {
+        return mpe::ArticulationType::Standard;
     }
 
-    return mpe::ArticulationType::Standard;
+    return std::prev(it)->second;
 }
 
 void PlaybackContext::update(const ID partId, const Score* score)

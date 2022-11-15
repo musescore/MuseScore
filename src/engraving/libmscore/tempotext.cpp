@@ -250,7 +250,7 @@ String TempoText::duration2tempoTextString(const TDuration dur)
 
 void TempoText::updateScore()
 {
-    score()->setUpTempoMap();
+    score()->setUpTempoMapLater();
     score()->setPlaylistDirty();
 }
 
@@ -395,7 +395,7 @@ bool TempoText::setProperty(Pid propertyId, const PropertyValue& v)
     switch (propertyId) {
     case Pid::TEMPO:
         setTempo(v.value<BeatsPerSecond>());
-        score()->setUpTempoMap();
+        score()->setUpTempoMapLater();
         break;
     case Pid::TEMPO_FOLLOW_TEXT:
         _followText = v.toBool();
