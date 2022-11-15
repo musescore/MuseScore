@@ -56,7 +56,8 @@ class ChordRest : public DurationElement
 
     ElementList _el;
     TDuration _durationType;
-    int _staffMove;           // -1, 0, +1, used for crossbeaming
+    int _staffMove; // -1, 0, +1, used for crossbeaming
+    int _storedStaffMove = 0; // used to remember and re-apply staff move if needed
 
     void processSiblings(std::function<void(EngravingItem*)> func);
 
@@ -123,8 +124,10 @@ public:
     void undoSetSmall(bool val);
 
     int staffMove() const { return _staffMove; }
+    int storedStaffMove() const { return _storedStaffMove; }
     void setStaffMove(int val) { _staffMove = val; }
     staff_idx_t vStaffIdx() const override { return staffIdx() + _staffMove; }
+    void checkStaffMoveValidity();
 
     const TDuration durationType() const
     {

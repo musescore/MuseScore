@@ -1426,4 +1426,34 @@ void ChordRest::undoAddAnnotation(EngravingItem* a)
     a->setParent(seg);
     score()->undoAddElement(a);
 }
+
+void ChordRest::checkStaffMoveValidity()
+{
+    if (!staff()) {
+        return;
+    }
+    staff_idx_t idx = _staffMove ? vStaffIdx() : staffIdx() + _storedStaffMove;
+    const Staff* baseStaff = staff();
+    const StaffType* baseStaffType = baseStaff->staffTypeForElement(this);
+    const Staff* targetStaff  = score()->staff(idx);
+    const StaffType* targetStaffType = targetStaff ? targetStaff->staffTypeForElement(this) : nullptr;
+    // check that destination staff makes sense
+    staff_idx_t minStaff = part()->startTrack() / VOICES;
+    staff_idx_t maxStaff = part()->endTrack() / VOICES;
+    bool isDestinationValid = targetStaff && targetStaff->visible() && idx >= minStaff && idx < maxStaff
+                              && targetStaffType->group() == baseStaffType->group();
+    if (!isDestinationValid) {
+        LOGD("staffMove out of scope %zu + %d min %zu max %zu",
+             staffIdx(), _staffMove, minStaff, maxStaff);
+        // If destination staff is invalid, reset to base staff
+        if (_staffMove) {
+            // Remember the intended staff move, so it can be re-applied if
+            // destination staff becomes valid (e.g. unihidden)
+            _storedStaffMove = _staffMove;
+        }
+        undoChangeProperty(Pid::STAFF_MOVE, 0);
+    } else if (!_staffMove && _storedStaffMove) {
+        undoChangeProperty(Pid::STAFF_MOVE, _storedStaffMove);
+    }
+}
 }
