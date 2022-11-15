@@ -41,6 +41,7 @@
 
 #include "libmscore/undo.h"
 
+#include "defer.h"
 #include "log.h"
 
 using namespace mu;
@@ -194,6 +195,9 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
     }
 
     masterScore->lockUpdates(true);
+    DEFER {
+        masterScore->lockUpdates(false);
+    };
 
     // Setup master score
     err = m_engravingProject->setupMasterScore(forceMode);
