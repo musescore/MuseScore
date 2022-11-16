@@ -72,16 +72,6 @@ static QString formatInstrumentTitleOnScore(const QString& instrumentName, const
            .arg(instrumentName, number);
 }
 
-static QString formatPartTitle(const Part* part)
-{
-    QStringList instrumentsNames;
-    for (const auto& pair : part->instruments()) {
-        instrumentsNames << pair.second->trackName();
-    }
-
-    return instrumentsNames.join(" & ");
-}
-
 NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
     : m_getScore(getScore), m_undoStack(undoStack), m_interaction(interaction)
 {
