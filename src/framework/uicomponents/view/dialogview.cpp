@@ -22,8 +22,9 @@
 
 #include "dialogview.h"
 
-#include <QScreen>
+#include <QStyle>
 #include <QWindow>
+#include <QScreen>
 
 #include "log.h"
 
@@ -43,30 +44,6 @@ bool DialogView::isDialog() const
     return true;
 }
 
-void DialogView::beforeShow()
-{
-    QWindow* qMainWindow = mainWindow()->qWindow();
-    IF_ASSERT_FAILED(qMainWindow) {
-        return;
-    }
-
-    QRect referenceRect = qMainWindow->geometry();
-    if (referenceRect.isEmpty() && qMainWindow->screen()) {
-        referenceRect = qMainWindow->screen()->availableGeometry();
-    }
-
-    const QRect& dlgRect = geometry();
-
-    m_globalPos.setX(referenceRect.x() + (referenceRect.width() - dlgRect.width()) / 2);
-    m_globalPos.setY(referenceRect.y() + (referenceRect.height() - dlgRect.height()) / 2 - DIALOG_WINDOW_FRAME_HEIGHT);
-
-    m_globalPos.setX(m_globalPos.x() + m_localPos.x());
-    m_globalPos.setY(m_globalPos.y() + m_localPos.y());
-
-    //! NOTE ok will be if they call accept
-    setErrCode(Ret::Code::Cancel);
-}
-
 void DialogView::onHidden()
 {
     PopupView::onHidden();
@@ -74,6 +51,55 @@ void DialogView::onHidden()
     if (m_loop.isRunning()) {
         m_loop.exit();
     }
+}
+
+void DialogView::updatePosition()
+{
+    QWindow* qMainWindow = mainWindow()->qWindow();
+    IF_ASSERT_FAILED(qMainWindow) {
+        return;
+    }
+
+    QScreen* mainWindowScreen = qMainWindow->screen();
+    if (!mainWindowScreen) {
+        mainWindowScreen = QGuiApplication::primaryScreen();
+    }
+
+    QRect anchorRect = mainWindowScreen->availableGeometry();
+
+    QRect referenceRect = qMainWindow->geometry();
+    if (referenceRect.isEmpty()) {
+        referenceRect = anchorRect;
+    }
+
+    const QRect& dlgRect = geometry();
+
+    m_globalPos.setX(referenceRect.x() + (referenceRect.width() - dlgRect.width()) / 2);
+    m_globalPos.setY(referenceRect.y() + (referenceRect.height() - dlgRect.height()) / 2 + DIALOG_WINDOW_FRAME_HEIGHT);
+
+    m_globalPos.setX(m_globalPos.x() + m_localPos.x());
+    m_globalPos.setY(m_globalPos.y() + m_localPos.y());
+
+    int titleBarHeight = QApplication::style()->pixelMetric(QStyle::PM_TitleBarHeight);
+
+    if (m_globalPos.x() < anchorRect.x()) {
+        m_globalPos.setX(anchorRect.x() + DIALOG_WINDOW_FRAME_HEIGHT);
+    }
+
+    if (m_globalPos.y() - titleBarHeight < anchorRect.y()) {
+        m_globalPos.setY(anchorRect.y() + titleBarHeight + DIALOG_WINDOW_FRAME_HEIGHT);
+    }
+
+    if (m_globalPos.x() + dlgRect.width() > anchorRect.right()) {
+        m_globalPos.setX(anchorRect.right() - dlgRect.width() - DIALOG_WINDOW_FRAME_HEIGHT);
+    }
+
+    if (m_globalPos.y() + dlgRect.height() > anchorRect.bottom()) {
+        m_globalPos.setY(anchorRect.bottom() - dlgRect.height() - DIALOG_WINDOW_FRAME_HEIGHT);
+    }
+
+    //! NOTE ok will be if they call accept
+    setErrCode(Ret::Code::Cancel);
 }
 
 void DialogView::exec()
