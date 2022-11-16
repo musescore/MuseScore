@@ -789,25 +789,23 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
     static ArticulationMapping ELECTRIC_BASS_GUITAR = {
         { mpe::ArticulationType::Slap, midi::Program(0, 36) },
         { mpe::ArticulationType::Pop, midi::Program(0, 37) },
-        { mpe::ArticulationType::Mute, midi::Program(0, 28) },
-        { mpe::ArticulationType::Tremolo8th, midi::Program(0, 44) },
-        { mpe::ArticulationType::Tremolo16th, midi::Program(0, 44) },
-        { mpe::ArticulationType::Tremolo32nd, midi::Program(0, 44) },
-        { mpe::ArticulationType::Tremolo64th, midi::Program(0, 44) },
+        { mpe::ArticulationType::Mute, midi::Program(0, 28) }
     };
 
     static ArticulationMapping ACOUSTIC_BASS_GUITAR = {
         { mpe::ArticulationType::Slap, midi::Program(0, 36) },
         { mpe::ArticulationType::Pop, midi::Program(0, 37) },
         { mpe::ArticulationType::Pizzicato, midi::Program(0, 32) },
-        { mpe::ArticulationType::Mute, midi::Program(0, 32) },
-        { mpe::ArticulationType::Tremolo8th, midi::Program(0, 44) },
-        { mpe::ArticulationType::Tremolo16th, midi::Program(0, 44) },
-        { mpe::ArticulationType::Tremolo32nd, midi::Program(0, 44) },
-        { mpe::ArticulationType::Tremolo64th, midi::Program(0, 44) },
+        { mpe::ArticulationType::Mute, midi::Program(0, 32) }
     };
 
     static ArticulationMapping BASIC_STRING_SECTION = {
+        { mpe::ArticulationType::SnapPizzicato, midi::Program(0, 45) },
+        { mpe::ArticulationType::Pizzicato, midi::Program(0, 45) },
+        { mpe::ArticulationType::Mute, midi::Program(0, 45) }
+    };
+
+    static ArticulationMapping BASIC_VIOL_SECTION = {
         { mpe::ArticulationType::SnapPizzicato, midi::Program(0, 45) },
         { mpe::ArticulationType::Pizzicato, midi::Program(0, 45) },
         { mpe::ArticulationType::Mute, midi::Program(0, 45) },
@@ -938,6 +936,14 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
     }
 
     if (setupData.category == mpe::SoundCategory::Strings) {
+        static const std::unordered_set<mpe::SoundId> VIOL_SECTION {
+            mpe::SoundId::Viol, mpe::SoundId::PardessusViol, mpe::SoundId::ViolaDaGamba, mpe::SoundId::Violone
+        };
+
+        if (mu::contains(VIOL_SECTION, setupData.id)) {
+            return BASIC_VIOL_SECTION;
+        }
+
         return BASIC_STRING_SECTION;
     }
 
