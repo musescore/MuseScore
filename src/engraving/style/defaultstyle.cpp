@@ -21,12 +21,6 @@
  */
 #include "defaultstyle.h"
 
-#include <cstdlib>
-
-#ifndef NO_QT_SUPPORT
-#include <QLocale>
-#endif
-
 #include "io/file.h"
 
 #include "log.h"
@@ -51,72 +45,43 @@ DefaultStyle* DefaultStyle::instance()
     return &s;
 }
 
-static bool defaultPageSizeIsLetter()
+static void applyPageSizeToStyle(MStyle* style, const SizeF& pageSize)
 {
-    // try PAPERSIZE environment variable
-    char* papersize = getenv("PAPERSIZE");
-    if (papersize) {
-        std::string letter = "letter";
-        return papersize == letter;
-    }
-#ifndef NO_QT_SUPPORT
-    // try locale
-    switch (QLocale::system().country()) {
-    case QLocale::UnitedStates:
-    case QLocale::Canada:
-    case QLocale::Mexico:
-    case QLocale::Chile:
-    case QLocale::Colombia:
-    case QLocale::CostaRica:
-    case QLocale::Panama:
-    case QLocale::Guatemala:
-    case QLocale::DominicanRepublic:
-    case QLocale::Philippines:
-        return true;
-    default:
-        return false;
-    }
-#else
-    return false;
-#endif
+    double oldWidth = style->styleD(Sid::pageWidth);
+    double newPrintableWidth = style->styleD(Sid::pagePrintableWidth) + (pageSize.width() - oldWidth);
+
+    style->set(Sid::pageWidth, pageSize.width());
+    style->set(Sid::pageHeight, pageSize.height());
+    style->set(Sid::pagePrintableWidth, newPrintableWidth);
 }
 
 void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partStyleFilePath)
 {
     m_baseStyle.precomputeValues();
 
-    if (defaultPageSizeIsLetter()) {
-        m_defaultStyle = new MStyle();
-        m_defaultStyle->set(Sid::pageWidth, 8.5);
-        m_defaultStyle->set(Sid::pageHeight, 11.0);
-        m_defaultStyle->set(Sid::pagePrintableWidth, 7.3189);
-        m_defaultStyle->precomputeValues();
-        m_defaultStyleForParts = new MStyle();
-        m_defaultStyleForParts->set(Sid::pageWidth, 8.5);
-        m_defaultStyleForParts->set(Sid::pageHeight, 11.0);
-        m_defaultStyleForParts->set(Sid::pagePrintableWidth, 7.3189);
-        m_defaultStyleForParts->precomputeValues();
-    }
+    SizeF pageSize = engravingConfiguration()->defaultPageSize();
 
-    if (!defaultStyleFilePath.empty()) {
-        if (!m_defaultStyle) {
-            m_defaultStyle = new MStyle();
+    {
+        applyPageSizeToStyle(&m_defaultStyle, pageSize);
+
+        if (!defaultStyleFilePath.empty()) {
+            bool ok = doLoadStyle(&m_defaultStyle, defaultStyleFilePath);
+            if (!ok) {
+                LOGW() << "Failed to load default style file from " << defaultStyleFilePath;
+            }
         }
-        bool ok = doLoadStyle(m_defaultStyle, defaultStyleFilePath);
-        if (!ok) {
-            delete m_defaultStyle;
-            m_defaultStyle = nullptr;
-        } else {
-            m_defaultStyle->precomputeValues();
-        }
+
+        m_defaultStyle.precomputeValues();
     }
 
     if (!partStyleFilePath.empty()) {
-        if (!m_defaultStyleForParts) {
-            m_defaultStyleForParts = new MStyle();
-        }
+        m_defaultStyleForParts = new MStyle();
+
+        applyPageSizeToStyle(m_defaultStyleForParts, pageSize);
+
         bool ok = doLoadStyle(m_defaultStyleForParts, partStyleFilePath);
         if (!ok) {
+            LOGW() << "Failed to load default part style file from " << partStyleFilePath;
             delete m_defaultStyleForParts;
             m_defaultStyleForParts = nullptr;
         } else {
@@ -143,20 +108,9 @@ const MStyle& DefaultStyle::baseStyle()
     return instance()->m_baseStyle;
 }
 
-bool DefaultStyle::isHasDefaultStyle()
-{
-    if (instance()->m_defaultStyle) {
-        return true;
-    }
-    return false;
-}
-
 const MStyle& DefaultStyle::defaultStyle()
 {
-    if (instance()->m_defaultStyle) {
-        return *instance()->m_defaultStyle;
-    }
-    return instance()->m_baseStyle;
+    return instance()->m_defaultStyle;
 }
 
 const MStyle* DefaultStyle::defaultStyleForParts()
