@@ -789,11 +789,6 @@ void GuitarPro::readLyrics()
     lyrics.replace(u'\r', u' ');
     auto sl = lyrics.split(u' ', KeepEmptyParts);
     for (auto& str : sl) {
-        /*while (str[0] == '-')
-    {
-       gpLyrics.lyrics.push_back("aa");
-       str = str.substr(1);
-    }*/
         gpLyrics.lyrics.push_back(str);
     }
 
