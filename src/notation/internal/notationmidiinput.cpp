@@ -227,6 +227,10 @@ Note* NotationMidiInput::makeNote(const midi::Event& e)
     }
 
     const mu::engraving::InputState& inputState = score->inputState();
+    if (!inputState.cr()) {
+        return nullptr;
+    }
+
     Chord* chord = engraving::Factory::createChord(inputState.lastSegment());
     chord->setParent(inputState.lastSegment());
 
