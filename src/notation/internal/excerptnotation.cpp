@@ -93,7 +93,7 @@ void ExcerptNotation::fillWithDefaultInfo()
     };
 
     auto getText = [&score](TextStyleType textType, const QString& defaultText) {
-        if (Text* t = score->getText(textType)) {
+        if (mu::engraving::Text* t = score->getText(textType)) {
             return t->plainText().toQString();
         } else {
             return defaultText;
