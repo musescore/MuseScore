@@ -382,7 +382,7 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
         segShape.add(secondStaffShape);
     }
     // Remove items that the slur shouldn't try to avoid
-    mu::remove_if(segShape, [&](ShapeElement& shapeEl){
+    mu::remove_if(segShape, [&](ShapeElement& shapeEl) {
         if (!shapeEl.toItem || !shapeEl.toItem->parentItem()) {
             return true;
         }
@@ -1303,7 +1303,7 @@ void Slur::slurPos(SlurPos* sp)
 
             // adjustments for stem and/or beam
             Tremolo* trem = ec ? ec->tremolo() : nullptr;
-            if (stem2 || trem && trem->twoNotes()) {       //ec can't be null
+            if (stem2 || (trem && trem->twoNotes())) {       //ec can't be null
                 Beam* beam2 = ec->beam();
                 if ((stemPos && (scr->up() == ec->up()))
                     || (beam2
