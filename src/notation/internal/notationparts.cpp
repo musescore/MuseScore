@@ -766,6 +766,11 @@ void NotationParts::doInsertPart(Part* part, size_t index)
         part->setInstrument(new Instrument(*it->second), it->first);
     }
 
+    const MeasureBase* firstMeasure = score()->firstMeasure();
+    mu::engraving::Fraction startTick = firstMeasure->tick();
+    const MeasureBase* lastMeasure = score()->lastMeasure();
+    mu::engraving::Fraction endTick = lastMeasure->tick() + lastMeasure->ticks();
+
     for (size_t staffIndex = 0; staffIndex < stavesCopy.size(); ++staffIndex) {
         Staff* staff = stavesCopy[staffIndex];
 
@@ -778,8 +783,6 @@ void NotationParts::doInsertPart(Part* part, size_t index)
         insertStaff(staffCopy, static_cast<int>(staffIndex));
         score()->undo(new mu::engraving::Link(staffCopy, staff));
 
-        mu::engraving::Fraction startTick = staff->score()->firstMeasure()->tick();
-        mu::engraving::Fraction endTick = staff->score()->lastMeasure()->tick();
         mu::engraving::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
     }
 
