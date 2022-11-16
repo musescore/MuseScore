@@ -48,7 +48,7 @@ private:
                              const int midiControlIdx);
 
     void appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationTypeSet& appliableTypes,
-                         const midi::channel_t channelIdx, const int noteIdx);
+                         const midi::channel_t channelIdx);
 
     midi::channel_t channel(const mpe::NoteEvent& noteEvent) const;
     midi::channel_t findChannelByProgram(const midi::Program& program) const;

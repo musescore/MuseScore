@@ -108,7 +108,7 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
             destination[timestampTo].emplace(std::move(noteOff));
 
             appendControlSwitch(destination, noteEvent, PEDAL_CC_SUPPORTED_TYPES, 64);
-            appendPitchBend(destination, noteEvent, BEND_SUPPORTED_TYPES, channelIdx, noteIdx);
+            appendPitchBend(destination, noteEvent, BEND_SUPPORTED_TYPES, channelIdx);
         }
     }
 }
@@ -150,7 +150,7 @@ void FluidSequencer::appendControlSwitch(EventSequenceMap& destination, const mp
 }
 
 void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
-                                     const mpe::ArticulationTypeSet& appliableTypes, const channel_t channelIdx, const int noteIdx)
+                                     const mpe::ArticulationTypeSet& appliableTypes, const channel_t channelIdx)
 {
     mpe::ArticulationType currentType = mpe::ArticulationType::Undefined;
 
