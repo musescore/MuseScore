@@ -45,8 +45,9 @@ public:
 
 private:
     bool isDialog() const override;
-    void beforeShow() override;
     void onHidden() override;
+
+    void updatePosition() override;
 
     QEventLoop m_loop;
 };

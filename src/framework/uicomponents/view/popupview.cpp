@@ -155,10 +155,6 @@ QWindow* PopupView::qWindow() const
     return m_window ? m_window->qWindow() : nullptr;
 }
 
-void PopupView::beforeShow()
-{
-}
-
 void PopupView::open()
 {
     if (isOpened()) {
@@ -170,10 +166,9 @@ void PopupView::open()
         return;
     }
 
-    beforeShow();
+    updatePosition();
 
     if (!isDialog()) {
-        updatePosition();
         updateContentPosition();
     }
 
