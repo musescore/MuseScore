@@ -1040,7 +1040,6 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
     size_t n = sourceStavesIndexes.size();
     for (staff_idx_t dstStaffIdx = 0; dstStaffIdx < n; ++dstStaffIdx) {
         Staff* srcStaff = sourceScore->staff(sourceStavesIndexes[dstStaffIdx]);
-        Staff* dstStaff = dstScore->staff(dstStaffIdx);
 
         Measure* m = sourceScore->firstMeasure();
         Measure* nm = dstScore->firstMeasure();
@@ -1049,39 +1048,6 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
             nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaff->idx()), dstStaffIdx);
             m = m->nextMeasure();
             nm = nm->nextMeasure();
-        }
-
-        if (srcStaff->isPrimaryStaff()) {
-            int span = srcStaff->barLineSpan();
-            staff_idx_t sIdx = srcStaff->idx();
-            if (dstStaffIdx == 0 && span == 0) {
-                // this is first staff of new score,
-                // but it was somewhere within a barline span in the old score
-                // so, find beginning of span
-                for (staff_idx_t i = 0; i <= sIdx; ++i) {
-                    span = sourceScore->staff(i)->barLineSpan();
-                    if (i + span > sIdx) {
-                        sIdx = i;
-                        break;
-                    }
-                }
-            }
-            staff_idx_t eIdx = sIdx + span;
-            for (staff_idx_t staffIdx = sIdx; staffIdx < eIdx; ++staffIdx) {
-                if (!mu::contains(sourceStavesIndexes, staffIdx)) {
-                    --span;
-                }
-            }
-            if (dstStaffIdx + span > n) {
-                span = static_cast<int>(n - dstStaffIdx - 1);
-            }
-            dstStaff->setBarLineSpan(span);
-            int idx = 0;
-            for (BracketItem* bi : srcStaff->brackets()) {
-                dstStaff->setBracketType(idx, bi->bracketType());
-                dstStaff->setBracketSpan(idx, bi->bracketSpan());
-                ++idx;
-            }
         }
     }
 
