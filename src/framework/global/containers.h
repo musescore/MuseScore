@@ -319,6 +319,21 @@ inline auto values(const std::multimap<K, V>& mm, const K& key) -> std::vector<t
     return result;
 }
 
+template<typename C>
+inline typename C::const_iterator findLessOrEqual(const C& c, const typename C::key_type& k)
+{
+    if (c.empty()) {
+        return c.cend();
+    }
+
+    auto it = c.upper_bound(k);
+    if (it == c.cbegin()) {
+        return c.cend();
+    }
+
+    return std::prev(it);
+}
+
 template<typename ForwardIterator>
 inline void DeleteAll(ForwardIterator begin, ForwardIterator end)
 {
