@@ -5755,6 +5755,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             } else {
                 LOGW("undoAddElement: unhandled: <%s>", element->typeName());
             }
+            ne->styleChanged();
         }
     }
 }
