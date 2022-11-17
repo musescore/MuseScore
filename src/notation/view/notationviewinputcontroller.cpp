@@ -594,11 +594,11 @@ bool NotationViewInputController::needSelect(const ClickContext& ctx) const
 
     INotationSelectionPtr selection = viewInteraction()->selection();
 
-    if (selection->isRange()) {
+    if (ctx.event->button() == Qt::LeftButton && ctx.event->modifiers() & Qt::ControlModifier) {
+        return true;
+    } else if (ctx.event->button() == Qt::RightButton && selection->isRange()) {
         return !selection->range()->containsPoint(ctx.logicClickPos);
     } else if (!ctx.hitElement->selected()) {
-        return true;
-    } else if (ctx.event->button() == Qt::LeftButton && ctx.event->modifiers() & Qt::ControlModifier) {
         return true;
     }
 
