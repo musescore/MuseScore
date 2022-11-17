@@ -540,7 +540,15 @@ void MasterNotation::sortExcerpts(ExcerptNotationList& excerpts)
 
 void MasterNotation::setExcerptIsOpen(const INotationPtr excerptNotation, bool open)
 {
+    if (excerptNotation->isOpen() == open) {
+        return;
+    }
+
     excerptNotation->setIsOpen(open);
+
+    if (open) {
+        excerptNotation->elements()->msScore()->doLayout();
+    }
 
     markScoreAsNeedToSave();
 }
@@ -598,6 +606,7 @@ void MasterNotation::updateExcerpts()
 
         IExcerptNotationPtr excerptNotation = createAndInitExcerptNotation(excerpt);
         excerptNotation->notation()->setIsOpen(true);
+        excerptNotation->notation()->elements()->msScore()->doLayout();
 
         updatedExcerpts.push_back(excerptNotation);
     }
