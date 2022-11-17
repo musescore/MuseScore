@@ -531,7 +531,7 @@
                   <trackName>Soprano Flute</trackName>
                   <longName>Soprano Flute</longName>
                   <shortName>Sop. Fl.</shortName>
-                  <description>Flute in E♭, sound a minor third above the standard flute.</description>
+                  <description>Flute in E♭, sounding a minor third above the standard flute.</description>
                   <musicXMLid>wind.flutes.flute</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
