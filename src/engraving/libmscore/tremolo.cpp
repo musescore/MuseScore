@@ -290,8 +290,20 @@ void Tremolo::layoutOneNoteTremolo(double x, double y, double h, double spatium)
 
     int beams = chord()->beams();
     if (chord()->hook()) {
-        yOffset -= up ? 1.75 * spatium : 1.25 * spatium;
-        yOffset -= beams >= 2 ? 0.5 * spatium : 0.0;
+        // allow for space at the hook side of the stem (yOffset)
+        // straight flags and traditional flags have different requirements because of their slopes
+        // away from the stem. Straight flags have a shallower slope and a lot more space in general
+        // so we can place the trem higher in that case
+        bool straightFlags = score()->styleB(Sid::useStraightNoteFlags);
+        if (straightFlags) {
+            yOffset -= 0.75 * spatium;
+        } else {
+            // up-hooks and down-hooks are shaped differently
+            yOffset -= up ? 1.5 * spatium : 1.0 * spatium;
+        }
+        // we need an additional offset for beams > 2 since those beams extend outwards and we don't want to adjust for that
+        double beamOffset = straightFlags ? 0.75 : 0.5;
+        yOffset -= beams >= 2 ? beamOffset * spatium : 0.0;
     } else if (beams) {
         yOffset -= (beams * (score()->styleB(Sid::useWideBeams) ? 1.0 : 0.75) - 0.25) * spatium;
     }
@@ -303,7 +315,7 @@ void Tremolo::layoutOneNoteTremolo(double x, double y, double h, double spatium)
 
     if (up) {
         double height = isBuzzRoll() ? 0 : minHeight();
-        y = std::min(y, ((staff()->lines(tick()) - 1) - height) * spatium);
+        y = std::min(y, ((staff()->lines(tick()) - 1) - height) * spatium / mag);
     } else {
         y = std::max(y, 0.0);
     }
