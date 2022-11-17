@@ -217,49 +217,15 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
     Lyrics* lyrics = 0;
     String free_text;
     if (beatBits & BEAT_LYRICS) {
-        //free_text = readDelphiString();
-        String qs = readDelphiString();
-        std::string txt = qs.toStdString();
-        txt.erase(std::remove_if(txt.begin(), txt.end(), [](char c) { return c == '_'; }), txt.end());
-//		auto pos = txt.find('-');
-        auto buffer = txt;
-        txt.resize(0);
-        const char* c = buffer.c_str();
-        while (*c) {
-            if (*c == ' ') {
-                while (*c == ' ') {
-                    ++c;
-                }
-                if (*c == '-') {
-                    txt += '-';
-                    ++c;
-                    while (*c == ' ') {
-                        ++c;
-                    }
-                } else if (*c) {
-                    txt += '-';
-                }
-            } else {
-                txt += *(c++);
-            }
-        }
-        if (gpLyrics.lyrics.size() == 0 || (gpLyrics.lyrics.size() == 1 && gpLyrics.lyrics[0].isEmpty())) {
-//			gpLyrics.lyrics.resize(0);
-            gpLyrics.lyrics.clear();
-            gpLyrics.fromBeat = _beat_counter;
-            gpLyrics.lyricTrack = track;
-        }
-        while (txt.size() && txt[txt.size() - 1] == '-') {
-            txt.resize(txt.size() - 1);
-        }
-//		  gpLyrics.lyrics.append(txt);
-        gpLyrics.lyrics.append(String::fromStdString(txt));
-        gpLyrics.segments.push_back(segment);
+        /// it is not beat lirics, it is free text
+        free_text = readDelphiString();
     }
+
     int beatEffects = 0;
     if (beatBits & BEAT_EFFECTS) {
         beatEffects = readBeatEffects(track, segment);
     }
+
     last_segment = segment;
     if (beatBits & BEAT_MIX_CHANGE) {
         readMixChange(measure);
