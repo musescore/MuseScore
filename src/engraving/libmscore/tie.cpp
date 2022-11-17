@@ -560,9 +560,9 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
         // Each line position in the staff has a set endpoint Y location
         double newAnchor;
         if (isUp) {
-            newAnchor = floor(line / 2.0) + ((line & 1) ? staffLineOffset : -staffLineOffset);
+            newAnchor = floor(line / 2.0) + (line & 1 ? staffLineOffset : -staffLineOffset);
         } else {
-            newAnchor = floor((line + 1) / 2.0) + ((line & 1) ? -staffLineOffset : staffLineOffset);
+            newAnchor = floor((line + 1) / 2.0) + (line & 1 ? -staffLineOffset : staffLineOffset);
         }
 
         // are the endpoints within the staff?
@@ -1047,9 +1047,9 @@ void Tie::calculateDirection()
         bool simpleException = st && st->isSimpleTabStaff();
         // if there are multiple voices, the tie direction goes on stem side
         if (m1->hasVoices(c1->staffIdx(), c1->tick(), c1->actualTicks())) {
-            _up = simpleException ? !(c1->voice() & 1) : c1->up();
+            _up = simpleException ? isUpVoice(c1->voice()) : c1->up();
         } else if (m2->hasVoices(c2->staffIdx(), c2->tick(), c2->actualTicks())) {
-            _up = simpleException ? !(c2->voice() & 1) : c2->up();
+            _up = simpleException ? isUpVoice(c2->voice()) : c2->up();
         } else if (n == 1) {
             //
             // single note
@@ -1174,11 +1174,11 @@ TieSegment* Tie::layoutFor(System* system)
         if (_slurDirection == DirectionV::AUTO) {
             bool simpleException = st && st->isSimpleTabStaff();
             if (st && st->isSimpleTabStaff()) {
-                _up = !(c1->voice() & 1);
+                _up = isUpVoice(c1->voice());
             } else {
                 if (c1->measure()->hasVoices(c1->staffIdx(), c1->tick(), c1->actualTicks())) {
                     // in polyphonic passage, ties go on the stem side
-                    _up = simpleException ? !(c1->voice() & 1) : c1->up();
+                    _up = simpleException ? isUpVoice(c1->voice()) : c1->up();
                 } else {
                     _up = !c1->up();
                 }

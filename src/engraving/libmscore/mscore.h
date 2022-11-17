@@ -100,6 +100,16 @@ inline constexpr track_idx_t trackZeroVoice(track_idx_t track)
     return track != mu::nidx ? (track / VOICES) * VOICES : mu::nidx;
 }
 
+inline constexpr bool isUpVoice(voice_idx_t voiceIdx)
+{
+    return !(voiceIdx & 1);
+}
+
+inline constexpr bool isDownVoice(voice_idx_t voiceIdx)
+{
+    return voiceIdx & 1;
+}
+
 static constexpr int MAX_TAGS = 32;
 
 static constexpr int MAX_HEADERS = 3;
