@@ -37,6 +37,9 @@ StyledDialogView {
 
     onNavigationActivateRequested: {
         settingsOptions.focusOnDefaultSettingControl()
+    }
+
+    onAccessibilityActivateRequested: {
         accessibleInfo.readInfo()
     }
 

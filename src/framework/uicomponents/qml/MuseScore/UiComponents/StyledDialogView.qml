@@ -47,17 +47,19 @@ DialogView {
 
     onOpened: {
         navSec.requestActive()
-        navigationActiveTimer.start()
+        root.navigationActivateRequested()
+        accessibilityActiveTimer.start()
     }
 
     signal navigationActivateRequested()
+    signal accessibilityActivateRequested()
 
-    property Timer navigationActiveTimer: Timer {
+    property Timer accessibilityActiveTimer: Timer {
         interval: 500
         repeat: false
 
         onTriggered: {
-            root.navigationActivateRequested()
+            root.accessibilityActivateRequested()
         }
     }
 
