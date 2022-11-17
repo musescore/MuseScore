@@ -49,7 +49,9 @@ RowLayout {
     function focusOnFirst() {
         var btn = root.firstFocusBtn()
         btn.navigation.requestActive()
+    }
 
+    function readInfo() {
         accessibleInfo.readInfo()
     }
 

@@ -45,6 +45,9 @@ StyledDialogView {
 
     onNavigationActivateRequested: {
         view.focusOnSelected()
+    }
+
+    onAccessibilityActivateRequested: {
         topPanel.readInfo()
     }
 
