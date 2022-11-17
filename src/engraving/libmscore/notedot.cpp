@@ -58,6 +58,8 @@ void NoteDot::draw(mu::draw::Painter* painter) const
     TRACE_OBJ_DRAW;
     if (note() && note()->dotsHidden()) {     // don't draw dot if note is hidden
         return;
+    } else if (rest() && rest()->isGap()) {  // don't draw dot for gap rests
+        return;
     }
     Note* n = note();
     Fraction tick = n ? n->chord()->tick() : rest()->tick();
