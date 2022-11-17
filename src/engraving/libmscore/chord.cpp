@@ -46,6 +46,7 @@
 #include "mscore.h"
 #include "navigate.h"
 #include "note.h"
+#include "notedot.h"
 #include "noteevent.h"
 #include "part.h"
 #include "score.h"
@@ -1392,6 +1393,9 @@ void Chord::processSiblings(std::function<void(EngravingItem*)> func) const
     }
     for (Note* note : _notes) {
         func(note);
+        for (NoteDot* noteDot : note->dots()) {
+            func(noteDot);
+        }
     }
     for (Chord* chord : _graceNotes) {    // process grace notes last, needed for correct shape calculation
         func(chord);

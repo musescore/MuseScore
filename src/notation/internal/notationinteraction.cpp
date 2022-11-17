@@ -42,6 +42,7 @@
 #include "engraving/internal/qmimedataadapter.h"
 
 #include "libmscore/actionicon.h"
+#include "libmscore/beam.h"
 #include "libmscore/bracket.h"
 #include "libmscore/chord.h"
 #include "libmscore/drumset.h"
@@ -500,13 +501,66 @@ void NotationInteraction::hideShadowNote()
 void NotationInteraction::toggleVisible()
 {
     startEdit();
-
+    bool isRange = selection()->isRange();
+    std::vector<Chord*> toggledChords;
     // TODO: Update `score()->cmdToggleVisible()` and call that here?
-    for (EngravingItem* el : selection()->elements()) {
-        if (el->isBracket()) {
-            continue;
+    if (selection()->isRange()) {
+        for (EngravingItem* el : selection()->elements()) {
+            if (el->isBracket() || el->isNoteDot()) {
+                // brackets are not hidden and notedots are taken care of by note
+                continue;
+            }
+            if (el->isStem() || el->isNote() || el->isHook()) {
+                if (Chord* parentChord = toChord(el->explicitParent())) {
+                    if (std::find(toggledChords.begin(), toggledChords.end(), parentChord) == toggledChords.end()) {
+                        parentChord->undoChangeProperty(mu::engraving::Pid::VISIBLE, !parentChord->visible());
+                        toggledChords.push_back(parentChord);
+                    }
+                }
+                continue;
+            }
+            el->undoChangeProperty(mu::engraving::Pid::VISIBLE, !el->visible());
         }
-        el->undoChangeProperty(mu::engraving::Pid::VISIBLE, !el->visible());
+    } else {
+        // single selection
+        for (EngravingItem* el : selection()->elements()) {
+            if (el->isBracket()) {
+                continue;
+            } else if (el->isStem() || el->isNote() || el->isHook()) {
+                if (Chord* parentChord = toChord(el->explicitParent())) {
+                    if (std::find(toggledChords.begin(), toggledChords.end(), parentChord) == toggledChords.end()) {
+                        parentChord->undoChangeProperty(mu::engraving::Pid::VISIBLE, !parentChord->visible());
+                        toggledChords.push_back(parentChord);
+                    }
+                    //el->undoChangeProperty(mu::engraving::Pid::VISIBLE, parentChord->visible());
+                    continue;
+                }
+            } else if (el->isNoteDot()) {
+                EngravingItem* parent = el->elementBase();
+                bool newVisibility = !el->visible();
+                if (parent && parent->isNote()) {
+                    mu::engraving::Note* note = mu::engraving::toNote(parent);
+                    for (mu::engraving::NoteDot* dot : note->dots()) {
+                        dot->undoChangeProperty(Pid::VISIBLE, newVisibility);
+                    }
+                    continue;
+                } else if (parent && parent->isRest()) {
+                    mu::engraving::Rest* rest = mu::engraving::toRest(parent);
+                    for (int n = 0; n < rest->dots(); ++n) {
+                        if (mu::engraving::NoteDot* dot = rest->dot(n)) {
+                            dot->undoChangeProperty(Pid::VISIBLE, newVisibility);
+                        }
+                    }
+                    continue;
+                }
+            } else if (el->isBeam()) {
+                for (ChordRest* cr : toBeam(el)->elements()) {
+                    cr->undoChangeProperty(mu::engraving::Pid::VISIBLE, !el->visible());
+                }
+                // fallthrough
+            }
+            el->undoChangeProperty(mu::engraving::Pid::VISIBLE, !el->visible());
+        }
     }
 
     apply();

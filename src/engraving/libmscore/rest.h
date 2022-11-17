@@ -98,6 +98,8 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue getProperty(Pid propertyId) const override;
     void undoChangeDotsVisible(bool v);
+    void undoChangeProperty(Pid id, const PropertyValue& newValue);
+    void undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps) override;
 
     EngravingItem* nextElement() override;
     EngravingItem* prevElement() override;

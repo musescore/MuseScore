@@ -1091,6 +1091,21 @@ bool Rest::setProperty(Pid propertyId, const PropertyValue& v)
     return true;
 }
 
+void Rest::undoChangeProperty(Pid id, const PropertyValue& newValue)
+{
+    undoChangeProperty(id, newValue, propertyFlags(id));
+}
+
+void Rest::undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps)
+{
+    if (id == Pid::VISIBLE) {
+        for (NoteDot* nd : m_dots) {
+            nd->undoChangeProperty(id, newValue, ps);
+        }
+    }
+    EngravingItem::undoChangeProperty(id, newValue, ps);
+}
+
 //---------------------------------------------------------
 //   undoChangeDotsVisible
 //---------------------------------------------------------
