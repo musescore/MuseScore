@@ -262,7 +262,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Danso", "danso longName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "Da.", "danso shortName"),
 
 //: description for Soprano Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Flute in E♭, sound a minor third above the standard flute.", "soprano-flute description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Flute in E♭, sounding a minor third above the standard flute.", "soprano-flute description"),
 //: trackName for Soprano Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Soprano Flute", "soprano-flute trackName"),
 //: longName for Soprano Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
