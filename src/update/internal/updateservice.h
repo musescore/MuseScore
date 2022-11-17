@@ -41,9 +41,7 @@ class UpdateService : public IUpdateService, public async::Asyncable
     INJECT(update, io::IFileSystem, fileSystem)
 
 public:
-    void init();
-
-    async::Promise<RetVal<ReleaseInfo> > checkForUpdate() override;
+    RetVal<ReleaseInfo> checkForUpdate() override;
 
     RetVal<io::path_t> downloadRelease() override;
     void cancelUpdate() override;

@@ -23,6 +23,7 @@
 #define MU_UPDATE_UPDATESCENARIO_H
 
 #include "async/asyncable.h"
+#include "progress.h"
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
@@ -51,6 +52,7 @@ private:
     bool isCheckStarted() const;
 
     void doCheckForUpdate(bool manual);
+    void th_heckForUpdate();
 
     void processUpdateResult(int errorCode);
 
@@ -63,6 +65,7 @@ private:
     void closeAppAndStartInstallation(const io::path_t& installerPath);
 
     bool m_progress = false;
+    framework::ProgressPtr m_progressChannel = nullptr;
 };
 }
 
