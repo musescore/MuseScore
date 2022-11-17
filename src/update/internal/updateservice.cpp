@@ -49,51 +49,47 @@ static std::string platformFileSuffix()
 #endif
 }
 
-void UpdateService::init()
+mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
 {
+    RetVal<ReleaseInfo> result;
+
+    clear();
+
+    QBuffer buff;
     m_networkManager = networkManagerCreator()->makeNetworkManager();
-}
+    Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(configuration()->checkForUpdateUrl()), &buff,
+                                              configuration()->checkForUpdateHeaders());
 
-mu::async::Promise<mu::RetVal<ReleaseInfo> > UpdateService::checkForUpdate()
-{
-    return async::Promise<RetVal<ReleaseInfo> >([this](auto resolve, auto reject) {
-        RetVal<ReleaseInfo> result;
+    if (!getUpdateInfo) {
+        result.ret = getUpdateInfo;
+        return result;
+    }
 
-        clear();
+    QByteArray json = buff.data();
 
-        QBuffer buff;
-        Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(configuration()->checkForUpdateUrl()), &buff,
-                                                  configuration()->checkForUpdateHeaders());
+    RetVal<ReleaseInfo> releaseInfo = parseRelease(json);
+    if (!releaseInfo.ret) {
+        result.ret = releaseInfo.ret;
+        return result;
+    }
 
-        if (!getUpdateInfo) {
-            return reject(getUpdateInfo.code(), getUpdateInfo.text());
-        }
+    if (!releaseInfo.val.isValid()) {
+        result.ret = make_ret(Err::NoUpdate);
+        return result;
+    }
 
-        QByteArray json = buff.data();
+    QVersionNumber current = QVersionNumber::fromString(QString::fromStdString(VERSION));
+    QVersionNumber update = QVersionNumber::fromString(QString::fromStdString(releaseInfo.val.version));
+    if (current.normalized() >= update.normalized()) {
+        result.ret = make_ret(Err::NoUpdate);
+        return result;
+    }
 
-        RetVal<ReleaseInfo> releaseInfo = parseRelease(json);
-        if (!releaseInfo.ret) {
-            return reject(releaseInfo.ret.code(), releaseInfo.ret.text());
-        }
+    result.ret = make_ok();
+    result.val = releaseInfo.val;
 
-        if (!releaseInfo.val.isValid()) {
-            result.ret = make_ret(Err::NoUpdate);
-            return reject(result.ret.code(), result.ret.text());
-        }
-
-        QVersionNumber current = QVersionNumber::fromString(QString::fromStdString(VERSION));
-        QVersionNumber update = QVersionNumber::fromString(QString::fromStdString(releaseInfo.val.version));
-        if (current.normalized() >= update.normalized()) {
-            result.ret = make_ret(Err::NoUpdate);
-            return resolve(result);
-        }
-
-        result.ret = make_ok();
-        result.val = releaseInfo.val;
-
-        m_lastCheckResult = result.val;
-        return resolve(result);
-    });
+    m_lastCheckResult = result.val;
+    return result;
 }
 
 mu::RetVal<mu::io::path_t> UpdateService::downloadRelease()
@@ -105,6 +101,7 @@ mu::RetVal<mu::io::path_t> UpdateService::downloadRelease()
 
     m_updateProgress.started.notify();
 
+    m_networkManager = networkManagerCreator()->makeNetworkManager();
     m_networkManager->progress().progressChanged.onReceive(this, [this](int64_t current, int64_t total, const std::string&) {
         m_updateProgress.progressChanged.send(current, total, trc("update", "Downloading MuseScore") + " " + m_lastCheckResult.version);
     });
@@ -129,7 +126,9 @@ mu::RetVal<mu::io::path_t> UpdateService::downloadRelease()
 
 void UpdateService::cancelUpdate()
 {
-    m_networkManager->abort();
+    if (m_networkManager) {
+        m_networkManager->abort();
+    }
 }
 
 mu::framework::Progress UpdateService::updateProgress()
