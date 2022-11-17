@@ -978,7 +978,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
 
     if (isGripEditStarted()) {
         m_dragData.ed.curGrip = m_editData.curGrip;
-        m_dragData.ed.delta = m_dragData.ed.pos - m_dragData.ed.lastPos;
+        m_dragData.ed.delta = evtDelta;
         m_dragData.ed.moveDelta = m_dragData.ed.delta - m_dragData.elementOffset;
         m_dragData.ed.addData(m_editData.getData(m_editData.element));
         m_editData.element->editDrag(m_dragData.ed);
