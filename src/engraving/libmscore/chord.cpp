@@ -1428,9 +1428,9 @@ int Chord::calcMinStemLength()
         // buzz roll's height is actually half of the visual height,
         // so we need to multiply it by 2 to get the actual height
         int buzzRollMultiplier = _tremolo->isBuzzRoll() ? 2 : 1;
-        minStemLength += ceil(_tremolo->minHeight() * 4.0 * buzzRollMultiplier);
-        int outSidePadding = score()->styleMM(Sid::tremoloOutSidePadding).val() / _spatium * 4.0 * _relativeMag;
-        int noteSidePadding = score()->styleMM(Sid::tremoloNoteSidePadding).val() / _spatium * 4.0 * _relativeMag;
+        minStemLength += ceil(_tremolo->minHeight() / _relativeMag * 4.0 * buzzRollMultiplier);
+        int outSidePadding = score()->styleMM(Sid::tremoloOutSidePadding).val() / _spatium * 4.0;
+        int noteSidePadding = score()->styleMM(Sid::tremoloNoteSidePadding).val() / _spatium * 4.0;
 
         Note* lineNote = _up ? upNote() : downNote();
         if (lineNote->line() == INVALID_LINE) {
@@ -1443,33 +1443,34 @@ int Chord::calcMinStemLength()
         if (!_up && line < -2) {
             outsideStaffOffset = -line;
         } else if (_up && line > staff()->lines(tick()) * 4) {
-            outsideStaffOffset = line - staff()->lines(tick()) * 4 + 4;
+            outsideStaffOffset = line - (staff()->lines(tick()) * 4) + 4;
         }
 
         minStemLength += (outSidePadding + std::max(noteSidePadding, outsideStaffOffset));
 
         if (_hook) {
+            bool straightFlags = score()->styleB(Sid::useStraightNoteFlags);
             double smuflAnchor = _hook->smuflAnchor().y() * (_up ? 1 : -1);
-            int hookOffset = (_hook->height() + smuflAnchor) / _spatium * 4 - 2;
+            int hookOffset = floor((_hook->height() / _relativeMag + smuflAnchor) / _spatium * 4) - (straightFlags ? 0 : 2);
+            // some fonts have hooks that extend very far down (making the height of the hook very large)
+            // so we constrain to a reasonable maximum for hook length
+            hookOffset = std::min(hookOffset, 11);
             // TODO: when the SMuFL metadata includes a cutout for flags, replace this with that metadata
             // https://github.com/w3c/smufl/issues/203
-            int cutout = floor(up() ? 4 * _relativeMag : 6 * _relativeMag);
-            if (beams() >= 2) {
+            int cutout = up() ? 5 : 7;
+            if (straightFlags) {
+                // don't need cutout for straight flags (they are similar to beams)
+                cutout = 0;
+            } else if (beams() >= 2) {
+                // beams greater than two extend outwards and thus don't factor into the cutout
                 cutout -= 2;
             }
-            if (score()->styleB(Sid::useStraightNoteFlags)) {
-                cutout = 0;
-            }
-            if (minStemLength < cutout) {
-                minStemLength = hookOffset;
-            } else {
-                minStemLength += hookOffset - cutout;
-            }
-            if (isGrace()) {
-                minStemLength += 2;
-            }
-            // ceils to the nearest half-space (returned as pixels)
-            minStemLength = ceil(minStemLength / 2.0) * 2;
+
+            minStemLength += hookOffset - cutout;
+
+            // hooks with trems inside them no longer ceil (snap) to nearest 0.5sp.
+            // if we want to add that back in, here is the place to do it:
+            // minStemLength = ceil(minStemLength / 2.0) * 2;
         }
     }
     if (_beam) {
@@ -4123,7 +4124,7 @@ void Chord::setNoteEventLists(std::vector<NoteEventList>& ell)
 //---------------------------------------------------------
 void Chord::styleChanged()
 {
-    auto updateElementsStyle = [] (void*, EngravingItem* e) {
+    auto updateElementsStyle = [](void*, EngravingItem* e) {
         e->styleChanged();
     };
     scanElements(0, updateElementsStyle);
