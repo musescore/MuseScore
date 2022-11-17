@@ -457,6 +457,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     score->setPlaylistDirty();
     masterScore->rebuildMidiMapping();
     masterScore->updateChannel();
+    score->remapBracketsAndBarlines();
 
     score->setLayoutAll();
     score->doLayout();
