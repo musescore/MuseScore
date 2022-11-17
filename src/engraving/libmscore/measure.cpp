@@ -4372,6 +4372,9 @@ double Measure::computeMinMeasureWidth() const
         maxWidth = minWidth;
     }
     minWidth = std::min(minWidth, maxWidth); // Accounts for a case where the user may set the minMeasureWidth to a value larger than the available system width
+    if (ticks() < timesig()) { // Accounts for shortened measure (e.g. anacrusis)
+        minWidth *= (ticks() / timesig()).toDouble();
+    }
     Segment* firstCRSegment = findFirstR(SegmentType::ChordRest, Fraction(0, 1));
     if (!firstCRSegment) {
         return minWidth;
