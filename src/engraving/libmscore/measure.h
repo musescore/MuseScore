@@ -165,7 +165,7 @@ public:
     void spatiumChanged(double oldValue, double newValue) override;
 
     System* system() const { return toSystem(explicitParent()); }
-    bool hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len) const;
+    bool hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len, bool considerInvisible = false) const;
     bool hasVoices(staff_idx_t staffIdx) const;
     void setHasVoices(staff_idx_t staffIdx, bool v);
 

@@ -2336,7 +2336,7 @@ void Measure::checkMultiVoices(staff_idx_t staffIdx)
 //   hasVoices
 //---------------------------------------------------------
 
-bool Measure::hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len) const
+bool Measure::hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len, bool considerInvisible) const
 {
     Staff* st = score()->staff(staffIdx);
     if (st->isTabStaff(stick)) {
@@ -2363,6 +2363,9 @@ bool Measure::hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len) cons
             if (cr) {
                 if (cr->tick() + cr->actualTicks() <= stick) {
                     continue;
+                }
+                if (considerInvisible) {
+                    return true;
                 }
                 bool v = false;
                 if (cr->isChord()) {
@@ -4420,6 +4423,16 @@ double Measure::computeFirstSegmentXPosition(Segment* segment)
     if (prevMeas && prevMeas->repeatEnd() && segment->isStartRepeatBarLineType() && (prevMeas->system() == system())) {
         // The start-repeat should overlap the end-repeat of the previous measure
         x -= score()->styleMM(Sid::endBarWidth);
+    }
+    // Do a final check of chord distances (invisible items may in some cases elude the 2 previous steps)
+    if (segment->isChordRestType()) {
+        double barNoteDist = score()->styleMM(Sid::barNoteDistance).val();
+        for (EngravingItem* e : segment->elist()) {
+            if (!e || !e->isChordRest() || (e->staff() && e->staff()->isTabStaff(e->tick()))) {
+                continue;
+            }
+            x = std::max(x, barNoteDist * e->mag() - e->pos().x());
+        }
     }
     x += segment->extraLeadingSpace().val() * spatium();
     return x;
