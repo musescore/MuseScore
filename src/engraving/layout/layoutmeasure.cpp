@@ -851,3 +851,39 @@ int LayoutMeasure::adjustMeasureNo(LayoutContext& lc, MeasureBase* m)
 
     return lc.measureNo;
 }
+
+/****************************************************************
+ * computePreSpacingItems
+ * Computes information that is needed before horizontal spacing.
+ * Caution: assumes that the system is known! (which is why we
+ * cannot compute this stuff in LayoutMeasure::getNextMeasure().)
+ * **************************************************************/
+void LayoutMeasure::computePreSpacingItems(Measure* m)
+{
+    // Compute chord properties
+    bool isFirstChordInMeasure = true;
+    LayoutChords::clearLineAttachPoints(m);
+    for (Segment& seg : m->segments()) {
+        if (!seg.isChordRestType()) {
+            continue;
+        }
+        for (EngravingItem* e : seg.elist()) {
+            if (!e || !e->isChord()) {
+                continue;
+            }
+            Chord* chord = toChord(e);
+
+            LayoutChords::updateLineAttachPoints(chord, isFirstChordInMeasure);
+            for (Chord* gn : chord->graceNotes()) {
+                LayoutChords::updateLineAttachPoints(gn, false);
+            }
+            isFirstChordInMeasure = false;
+
+            chord->layoutArticulations();
+            chord->layoutArticulations2();
+            chord->checkStartEndSlurs();
+            chord->computeKerningExceptions();
+        }
+        seg.createShapes();
+    }
+}

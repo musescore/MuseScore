@@ -4279,6 +4279,12 @@ void Score::addSpanner(Spanner* s)
 {
     _spanner.addSpanner(s);
     s->added();
+    if (s->startElement()) {
+        s->startElement()->startingSpanners().push_back(s);
+    }
+    if (s->endElement()) {
+        s->endElement()->endingSpanners().push_back(s);
+    }
 }
 
 //---------------------------------------------------------
@@ -4289,6 +4295,12 @@ void Score::removeSpanner(Spanner* s)
 {
     _spanner.removeSpanner(s);
     s->removed();
+    if (s->startElement()) {
+        mu::remove_if(s->startElement()->startingSpanners(), [s](Spanner* sp) { return sp == s; });
+    }
+    if (s->endElement()) {
+        mu::remove_if(s->endElement()->endingSpanners(), [s](Spanner* sp) { return sp == s; });
+    }
 }
 
 //---------------------------------------------------------

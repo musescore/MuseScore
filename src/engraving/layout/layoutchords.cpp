@@ -1320,7 +1320,7 @@ void LayoutChords::repositionGraceNotesAfter(Segment* segment)
     }
 }
 
-void LayoutChords::updateLineAttachPoints(Measure* measure)
+void LayoutChords::clearLineAttachPoints(Measure* measure)
 {
     for (Segment& s : measure->segments()) {
         if (!s.isChordRestType()) {
@@ -1341,32 +1341,12 @@ void LayoutChords::updateLineAttachPoints(Measure* measure)
             }
         }
     }
-    bool isFirstChordRestInMeasure = true;
-    for (Segment& s : measure->segments()) {
-        if (!s.isChordRestType()) {
-            continue;
-        }
-        for (EngravingItem* e : s.elist()) {
-            if (!e || !e->isChord()) {
-                continue;
-            }
-            Chord* c = toChord(e);
-            doUpdateLineAttachPoints(c, isFirstChordRestInMeasure);
-            for (Chord* gn : c->graceNotes()) {
-                doUpdateLineAttachPoints(gn, false);
-            }
-        }
-        isFirstChordRestInMeasure = false;
-    }
-    for (Segment& s : measure->segments()) {
-        s.createShapes();
-    }
 }
 
 /* We perform a pre-layout of ties and glissandi to obtain the attach points and attach them to
  * the notes of the chord. Will be needed for spacing calculation, particularly to
  * enforce minTieLength. The true layout of ties and glissandi is done much later. */
-void LayoutChords::doUpdateLineAttachPoints(Chord* chord, bool isFirstInMeasure)
+void LayoutChords::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure)
 {
     if (chord->endsGlissando()) {
         for (Note* note : chord->notes()) {

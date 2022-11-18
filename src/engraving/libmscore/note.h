@@ -281,6 +281,7 @@ public:
     std::vector<const Note*> compoundNotes() const;
 
     double computePadding(const EngravingItem* nextItem) const override;
+    KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
 
     Note& operator=(const Note&) = delete;
     virtual Note* clone() const override { return new Note(*this, false); }
