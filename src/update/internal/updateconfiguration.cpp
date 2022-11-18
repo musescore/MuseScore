@@ -30,10 +30,10 @@ using namespace mu::framework;
 static const std::string module_name("update");
 
 static const Settings::Key CHECK_FOR_UPDATE_KEY(module_name, "application/checkForUpdate");
+static const Settings::Key CHECK_FOR_UPDATE_TESTING_MODE_KEY(module_name, "application/checkForUpdateTestingMode");
 static const Settings::Key SKIPPED_VERSION_KEY(module_name, "application/skippedVersion");
 
 static const std::string PRIVACY_POLICY_URL_PATH("/about/desktop-privacy-policy");
-static const std::string CHECK_FOR_UPDATE_URL("https://updates.musescore.org/feed/latest.xml");
 
 static QString userAgent()
 {
@@ -56,6 +56,8 @@ static QString userAgent()
 void UpdateConfiguration::init()
 {
     settings()->setDefaultValue(CHECK_FOR_UPDATE_KEY, Val(isAppUpdatable()));
+
+    settings()->setDefaultValue(CHECK_FOR_UPDATE_TESTING_MODE_KEY, Val(false));
 }
 
 bool UpdateConfiguration::isAppUpdatable() const
@@ -65,6 +67,16 @@ bool UpdateConfiguration::isAppUpdatable() const
 #else
     return false;
 #endif
+}
+
+bool UpdateConfiguration::isTestingMode() const
+{
+    return settings()->value(CHECK_FOR_UPDATE_TESTING_MODE_KEY).toBool();
+}
+
+void UpdateConfiguration::setIsTestingMode(bool isTesting)
+{
+    settings()->setSharedValue(CHECK_FOR_UPDATE_TESTING_MODE_KEY, Val(isTesting));
 }
 
 bool UpdateConfiguration::needCheckForUpdate() const
@@ -89,7 +101,7 @@ void UpdateConfiguration::setSkippedReleaseVersion(const std::string& version) c
 
 std::string UpdateConfiguration::checkForUpdateUrl() const
 {
-    return CHECK_FOR_UPDATE_URL;
+    return !isTestingMode() ? "https://updates.musescore.org/feed/latest.xml" : "https://updates.musescore.org/feed/latest.test.xml";
 }
 
 mu::network::RequestHeaders UpdateConfiguration::checkForUpdateHeaders() const

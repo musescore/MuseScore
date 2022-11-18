@@ -39,6 +39,9 @@ public:
 
     bool isAppUpdatable() const override;
 
+    bool isTestingMode() const override;
+    void setIsTestingMode(bool isTesting) override;
+
     bool needCheckForUpdate() const override;
     void setNeedCheckForUpdate(bool needCheck) override;
 
