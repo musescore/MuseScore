@@ -82,7 +82,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontrepository.h
 
     # Common internal
-    ${CMAKE_CURRENT_LIST_DIR}/internal/iaudiobuffer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothreadsecurer.cpp
