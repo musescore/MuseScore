@@ -322,6 +322,8 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Gemshorn,  { mpe::SoundSubCategory::Tenor } }, { midi::Program(0, 79) } },
         { { mpe::SoundId::Gemshorn,  { mpe::SoundSubCategory::Bass } }, { midi::Program(0, 79) } },
 
+        { { mpe::SoundId::Theremin,  { mpe::SoundSubCategory::Electric } }, { midi::Program(0, 79) } },
+
         { { mpe::SoundId::PanFlute,  {} }, { midi::Program(0, 75) } },
 
         { { mpe::SoundId::Quena,  {} }, { midi::Program(0, 67) } },
