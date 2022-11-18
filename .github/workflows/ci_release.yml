@@ -31,8 +31,8 @@ jobs:
             --repo ${{ github.repository }} \
 
           sudo bash ./build/ci/release/push_file_to_s3.sh \
-            --s3_key ${{ secrets.S3_KEY }} \
-            --s3_secret ${{ secrets.S3_SECRET }} \
+            --s3_key ${{ secrets.S3_KEY_UPDATE }} \
+            --s3_secret ${{ secrets.S3_SECRET_UPDATE }} \
             --s3_url ${S3_URL} \
-            --s3_bucket "s3.ultimate-guitar" \
+            --s3_bucket ${{ secrets.S3_BUCKET_UPDATE }} \
             --file_name "release_info.json"
