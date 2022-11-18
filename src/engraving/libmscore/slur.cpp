@@ -327,12 +327,13 @@ void SlurSegment::editDrag(EditData& ed)
 //---------------------------------------------------------
 void SlurSegment::adjustEndpoints()
 {
-    const double staffLineMargin = 0.175 + (0.5 * score()->styleS(Sid::staffLineWidth).val());
+    double lw = (staffType() ? staffType()->lineDistance().val() : 1.0) * spatium();
+    const double staffLineMargin = 0.175 + (0.5 * score()->styleS(Sid::staffLineWidth).val() * (spatium() / lw));
     PointF p1 = ups(Grip::START).p;
     PointF p2 = ups(Grip::END).p;
 
-    double y1sp = p1.y() / spatium();
-    double y2sp = p2.y() / spatium();
+    double y1sp = p1.y() / lw;
+    double y2sp = p2.y() / lw;
 
     // point 1
     int lines = staff()->lines(tick());
@@ -360,10 +361,10 @@ void SlurSegment::adjustEndpoints()
         return adjust;
     };
     if (y1sp > -staffLineMargin && y1sp < (lines - 1) + staffLineMargin) {
-        ups(Grip::START).p.ry() += adjustPoint(slur()->up(), y1sp) * spatium();
+        ups(Grip::START).p.ry() += adjustPoint(slur()->up(), y1sp) * lw;
     }
     if (y2sp > -staffLineMargin && y2sp < (lines - 1) + staffLineMargin) {
-        ups(Grip::END).p.ry() += adjustPoint(slur()->up(), y2sp) * spatium();
+        ups(Grip::END).p.ry() += adjustPoint(slur()->up(), y2sp) * lw;
     }
 }
 
@@ -962,7 +963,7 @@ void Slur::slurPosChord(SlurPos* sp)
 void Slur::slurPos(SlurPos* sp)
 {
     _stemFloated.reset();
-    double _spatium = spatium();
+    double _spatium = (staffType() ? staffType()->lineDistance().val() : 1.0) * spatium();
     const double stemSideInset = 0.5;
     const double stemOffsetX = 0.35;
     const double beamClearance = 0.35;
@@ -1172,7 +1173,8 @@ void Slur::slurPos(SlurPos* sp)
         } else {
             po.ry() = scr->bbox().top() + scr->height();
         }
-        po.ry() += scr->mag() * _spatium * .9 * __up;
+        double offset = useTablature ? 0.75 : 0.9;
+        po.ry() += scr->mag() * _spatium * offset * __up;
 
         // adjustments for stem and/or beam
         Tremolo* trem = sc ? sc->tremolo() : nullptr;
@@ -1299,7 +1301,8 @@ void Slur::slurPos(SlurPos* sp)
             } else {
                 po.ry() = endCR()->bbox().top() + endCR()->height();
             }
-            po.ry() += ecr->mag() * _spatium * .9 * __up;
+            double offset = useTablature ? 0.75 : 0.9;
+            po.ry() += ecr->mag() * _spatium * offset * __up;
 
             // adjustments for stem and/or beam
             Tremolo* trem = ec ? ec->tremolo() : nullptr;
