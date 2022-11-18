@@ -853,7 +853,7 @@ bool Harmony::isEditAllowed(EditData& ed) const
     }
 
     if (ed.key == Key_Return || ed.key == Key_Enter) {
-        return true;
+        return false;
     }
 
     return TextBase::isEditAllowed(ed);
@@ -867,11 +867,6 @@ bool Harmony::edit(EditData& ed)
 {
     if (!isEditAllowed(ed)) {
         return false;
-    }
-
-    if (ed.key == Key_Return || ed.key == Key_Enter) {
-        endEdit(ed);
-        return true;
     }
 
     bool rv = TextBase::edit(ed);
