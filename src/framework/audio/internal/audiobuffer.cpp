@@ -21,18 +21,18 @@
  */
 #include "audiobuffer.h"
 
-#include <cstring>
-
 #include "log.h"
+#include "audiosanitizer.h"
 
 using namespace mu::audio;
 
 static constexpr size_t DEFAULT_SIZE_PER_CHANNEL = 1024 * 16;
+static constexpr size_t DEFAULT_SIZE = DEFAULT_SIZE_PER_CHANNEL * 2;
+
+static const std::vector<float> SILENT_FRAMES(DEFAULT_SIZE, 0.f);
 
 void AudioBuffer::init(const audioch_t audioChannelsCount, const samples_t renderStep)
 {
-    std::lock_guard<std::mutex> lock(m_mutex);
-
     m_samplesPerChannel = DEFAULT_SIZE_PER_CHANNEL;
     m_audioChannelsCount = audioChannelsCount;
     m_renderStep = renderStep;
@@ -42,96 +42,115 @@ void AudioBuffer::init(const audioch_t audioChannelsCount, const samples_t rende
 
 void AudioBuffer::setSource(std::shared_ptr<IAudioSource> source)
 {
-    std::lock_guard<std::mutex> lock(m_mutex);
+    if (m_source == source) {
+        return;
+    }
+
+    if (m_source) {
+        reset();
+    }
+
     m_source = source;
 }
 
 void AudioBuffer::forward()
 {
-    std::lock_guard<std::mutex> lock(m_mutex);
-    fillup();
-}
-
-void AudioBuffer::pop(float* dest, size_t sampleCount)
-{
-    std::lock_guard<std::mutex> lock(m_mutex);
-
-    size_t from = m_readIndex;
-    auto memStep = sizeof(float);
-    size_t to = m_readIndex + sampleCount * m_audioChannelsCount;
-    if (to > m_data.size()) {
-        to = m_data.size();
-    }
-    auto count = to - from;
-    std::memcpy(dest, m_data.data() + from, count * memStep);
-    m_readIndex += count;
-
-    size_t left = sampleCount * m_audioChannelsCount - count;
-    if (left > 0) {
-        std::memcpy(dest + count, m_data.data(), left * memStep);
-        m_readIndex = left;
-    }
-
-    if (m_readIndex >= m_data.size()) {
-        m_readIndex -= m_data.size();
-    }
-}
-
-void AudioBuffer::setMinSampleLag(size_t lag)
-{
-    std::lock_guard<std::mutex> lock(m_mutex);
-
-    IF_ASSERT_FAILED(lag < m_data.size()) {
-        lag = m_data.size();
-    }
-    m_minSampleLag = lag;
-}
-
-void AudioBuffer::fillup()
-{
     if (!m_source) {
         return;
     }
 
-    static bool hasAnyDataWritten = false;
-    if (!hasAnyDataWritten) {
-        hasAnyDataWritten = true;
-        m_readIndex = 0;
-        m_writeIndex = 0;
+    const auto currentWriteIdx = m_writeIndex.load(std::memory_order_relaxed);
+    const auto currentReadIdx = m_readIndex.load(std::memory_order_acquire);
+    size_t nextWriteIdx = currentWriteIdx;
+
+    samples_t sampleToReserve = m_minSamplesToReserve * 4;
+
+    while (reservedSamples(nextWriteIdx, currentReadIdx) < sampleToReserve) {
+        m_source->process(m_data.data() + nextWriteIdx, m_renderStep);
+
+        nextWriteIdx = incrementWriteIndex(nextWriteIdx, m_renderStep);
     }
 
-    samples_t sampleToReserve = m_minSampleLag * 2;
-
-    while (sampleLag() < sampleToReserve) {
-        m_source->process(m_data.data() + m_writeIndex, m_renderStep);
-        updateWriteIndex(m_renderStep);
-    }
+    m_writeIndex.store(nextWriteIdx, std::memory_order_release);
 }
 
-void AudioBuffer::updateWriteIndex(const unsigned int samplesPerChannel)
+void AudioBuffer::pop(float* dest, size_t sampleCount)
 {
-    size_t from = m_writeIndex;
+    const auto currentReadIdx = m_readIndex.load(std::memory_order_relaxed);
+    const auto currentWriteIdx = m_writeIndex.load(std::memory_order_acquire);
+    if (currentReadIdx == currentWriteIdx) { // empty queue
+        std::memcpy(dest, SILENT_FRAMES.data(), sampleCount * sizeof(float) * m_audioChannelsCount);
+        return;
+    }
 
-    auto to = m_writeIndex + samplesPerChannel * m_audioChannelsCount;
-    if (to > m_data.size()) {
-        to = m_data.size() - 1;
+    size_t newReadIdx = currentReadIdx;
+
+    size_t from = newReadIdx;
+    auto memStep = sizeof(float);
+    size_t to = from + sampleCount * m_audioChannelsCount;
+    if (to > DEFAULT_SIZE) {
+        to = DEFAULT_SIZE;
     }
     auto count = to - from;
-    m_writeIndex += count;
+    std::memcpy(dest, m_data.data() + from, count * memStep);
+    newReadIdx += count;
 
-    if (m_writeIndex >= m_data.size()) {
-        m_writeIndex -= m_data.size();
+    size_t left = sampleCount * m_audioChannelsCount - count;
+    if (left > 0) {
+        std::memcpy(dest + count, m_data.data(), left * memStep);
+        newReadIdx = left;
     }
+
+    if (newReadIdx >= DEFAULT_SIZE) {
+        newReadIdx -= DEFAULT_SIZE;
+    }
+
+    m_readIndex.store(newReadIdx, std::memory_order_release);
 }
 
-unsigned int AudioBuffer::sampleLag() const
+void AudioBuffer::setMinSamplesToReserve(size_t lag)
 {
-    size_t lag = 0;
-    if (m_readIndex <= m_writeIndex) {
-        lag = m_writeIndex - m_readIndex;
-    } else {
-        lag = m_writeIndex + m_data.size() - m_readIndex;
+    IF_ASSERT_FAILED(lag < DEFAULT_SIZE) {
+        lag = DEFAULT_SIZE;
+    }
+    m_minSamplesToReserve = lag;
+}
+
+void AudioBuffer::reset()
+{
+    m_readIndex.store(0, std::memory_order_release);
+    m_writeIndex.store(0, std::memory_order_release);
+
+    m_data = SILENT_FRAMES;
+}
+
+size_t AudioBuffer::incrementWriteIndex(const size_t writeIdx, const samples_t samplesPerChannel)
+{
+    size_t result = writeIdx;
+    size_t from = writeIdx;
+
+    auto to = writeIdx + samplesPerChannel * m_audioChannelsCount;
+    if (to > DEFAULT_SIZE) {
+        to = DEFAULT_SIZE - 1;
+    }
+    auto count = to - from;
+    result += count;
+
+    if (result >= DEFAULT_SIZE) {
+        result -= DEFAULT_SIZE;
     }
 
-    return static_cast<unsigned int>(lag / m_audioChannelsCount);
+    return result;
+}
+
+size_t AudioBuffer::reservedSamples(const size_t writeIdx, const size_t readIdx) const
+{
+    size_t result = 0;
+    if (readIdx <= writeIdx) {
+        result = writeIdx - readIdx;
+    } else {
+        result = writeIdx + DEFAULT_SIZE - readIdx;
+    }
+
+    return result;
 }
