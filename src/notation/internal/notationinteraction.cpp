@@ -780,7 +780,6 @@ void NotationInteraction::selectFirstElement(bool frame)
 {
     if (EngravingItem* element = score()->firstElement(frame)) {
         select({ element }, SelectType::SINGLE, element->staffIdx());
-        showItem(element);
     }
 }
 
@@ -788,7 +787,6 @@ void NotationInteraction::selectLastElement()
 {
     if (EngravingItem* element = score()->lastElement()) {
         select({ element }, SelectType::SINGLE, element->staffIdx());
-        showItem(element);
     }
 }
 
@@ -3337,9 +3335,7 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
     apply();
 
     int indexOfFirstAddedMeasure = beforeBoxIndex >= 0 ? beforeBoxIndex : score()->measures()->size() - count;
-    MeasureBase* firstAddedMeasure = score()->measure(indexOfFirstAddedMeasure);
-    doSelect({ firstAddedMeasure }, SelectType::REPLACE);
-    showItem(firstAddedMeasure);
+    doSelect({ score()->measure(indexOfFirstAddedMeasure) }, SelectType::REPLACE);
 
     // For other box types, it makes little sense to select them all
     if (boxType == BoxType::Measure) {
@@ -3954,7 +3950,6 @@ void NotationInteraction::addText(TextStyleType type, EngravingItem* item)
     }
 
     apply();
-    showItem(textBox);
     startEditText(textBox);
 }
 
