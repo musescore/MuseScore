@@ -77,8 +77,10 @@ static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDrive
 #ifdef Q_OS_WIN
 //#include "internal/platform/win/winmmdriver.h"
 //static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDriver>(new WinmmDriver());
-#include "internal/platform/win/wincoreaudiodriver.h"
-static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDriver>(new CoreAudioDriver());
+//#include "internal/platform/win/wincoreaudiodriver.h"
+//static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDriver>(new CoreAudioDriver());
+#include "internal/platform/win/wasapiaudiodriver.h"
+static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver());
 #endif
 
 #ifdef Q_OS_MACOS
@@ -174,55 +176,7 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
     s_audioOutputController->init();
 
     // Setup audio driver
-    IAudioDriver::Spec requiredSpec;
-    requiredSpec.sampleRate = s_audioConfiguration->sampleRate();
-    requiredSpec.format = IAudioDriver::Format::AudioF32;
-    requiredSpec.channels = s_audioConfiguration->audioChannelsCount();
-    requiredSpec.samples = s_audioConfiguration->driverBufferSize();
-    requiredSpec.callback = [](void* /*userdata*/, uint8_t* stream, int byteCount) {
-        auto samplesPerChannel = byteCount / (2 * sizeof(float));
-        s_audioBuffer->pop(reinterpret_cast<float*>(stream), samplesPerChannel);
-    };
-
-    IAudioDriver::Spec activeSpec;
-
-    if (mode == framework::IApplication::RunMode::Editor) {
-        s_audioDriver->init();
-
-        bool driverOpened = s_audioDriver->open(requiredSpec, &activeSpec);
-        if (!driverOpened) {
-            LOGE() << "audio output open failed";
-            activeSpec = requiredSpec;
-        }
-    } else {
-        activeSpec = requiredSpec;
-    }
-
-    // Setup worker
-    auto workerSetup = [activeSpec]() {
-        AudioSanitizer::setupWorkerThread();
-        ONLY_AUDIO_WORKER_THREAD;
-
-        // Setup audio engine
-        AudioEngine::instance()->init(s_audioBuffer);
-        AudioEngine::instance()->setAudioChannelsCount(activeSpec.channels);
-        AudioEngine::instance()->setSampleRate(activeSpec.sampleRate);
-        AudioEngine::instance()->setReadBufferSize(activeSpec.samples);
-
-        auto fluidResolver = std::make_shared<FluidResolver>();
-        s_synthResolver->registerResolver(AudioSourceType::Fluid, fluidResolver);
-        s_synthResolver->init(s_audioConfiguration->defaultAudioInputParams());
-
-        // Initialize IPlayback facade and make sure that it's initialized after the audio-engine
-        s_playbackFacade->init();
-    };
-
-    auto workerLoopBody = []() {
-        ONLY_AUDIO_WORKER_THREAD;
-        s_audioBuffer->forward();
-    };
-
-    s_audioWorker->run(workerSetup, workerLoopBody);
+    setupAudioDriver(mode);
 
     //! --- Diagnostics ---
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
@@ -247,4 +201,59 @@ void AudioModule::onDeinit()
             AudioEngine::instance()->deinit();
         });
     }
+}
+
+void AudioModule::setupAudioDriver(const framework::IApplication::RunMode& mode)
+{
+    IAudioDriver::Spec requiredSpec;
+    requiredSpec.sampleRate = s_audioConfiguration->sampleRate();
+    requiredSpec.format = IAudioDriver::Format::AudioF32;
+    requiredSpec.channels = s_audioConfiguration->audioChannelsCount();
+    requiredSpec.samples = s_audioConfiguration->driverBufferSize();
+    requiredSpec.callback = [](void* /*userdata*/, uint8_t* stream, int byteCount) {
+        auto samplesPerChannel = byteCount / (2 * sizeof(float));
+        s_audioBuffer->pop(reinterpret_cast<float*>(stream), samplesPerChannel);
+    };
+
+    if (mode == framework::IApplication::RunMode::Editor) {
+        s_audioDriver->init();
+
+        IAudioDriver::Spec activeSpec;
+        if (s_audioDriver->open(requiredSpec, &activeSpec)) {
+            setupAudioWorker(activeSpec);
+            return;
+        }
+
+        LOGE() << "audio output open failed";
+    }
+
+    setupAudioWorker(requiredSpec);
+}
+
+void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
+{
+    auto workerSetup = [activeSpec]() {
+        AudioSanitizer::setupWorkerThread();
+        ONLY_AUDIO_WORKER_THREAD;
+
+        // Setup audio engine
+        AudioEngine::instance()->init(s_audioBuffer);
+        AudioEngine::instance()->setAudioChannelsCount(activeSpec.channels);
+        AudioEngine::instance()->setSampleRate(activeSpec.sampleRate);
+        AudioEngine::instance()->setReadBufferSize(activeSpec.samples);
+
+        auto fluidResolver = std::make_shared<FluidResolver>();
+        s_synthResolver->registerResolver(AudioSourceType::Fluid, fluidResolver);
+        s_synthResolver->init(s_audioConfiguration->defaultAudioInputParams());
+
+        // Initialize IPlayback facade and make sure that it's initialized after the audio-engine
+        s_playbackFacade->init();
+    };
+
+    auto workerLoopBody = []() {
+        ONLY_AUDIO_WORKER_THREAD;
+        s_audioBuffer->forward();
+    };
+
+    s_audioWorker->run(workerSetup, workerLoopBody);
 }
