@@ -23,6 +23,8 @@
 #include <map>
 #include <set>
 
+#include "infrastructure/messagebox.h"
+
 #include "accidental.h"
 #include "articulation.h"
 #include "barline.h"
@@ -243,7 +245,9 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
 
     Fraction fr = f * Fraction(1, _ratio.denominator());
     if (!TDuration::isValid(fr)) {
-        // todo: there needs to be some kind of user feedback for failure to add tuplet
+        MessageBox::warning(mtrc("engraving", "Cannot create tuplet with ratio %1 for duration %2")
+                            .arg(_ratio.toString(), f.toString()).toStdString(),
+                            std::string(), { MessageBox::Ok });
         return nullptr;
     }
 
