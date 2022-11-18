@@ -115,8 +115,8 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         double ww  = 0.0; // width of current measure
         if (ctx.curMeasure->isMeasure()) {
             Measure* m = toMeasure(ctx.curMeasure);
-            LayoutChords::updateLineAttachPoints(m);
-
+            // Construct information that is needed before horizontal spacing
+            LayoutMeasure::computePreSpacingItems(m);
             // After appending a new measure, the shortest note in the system may change, in which case
             // we need to recompute the layout of the previous measures. When updating the width of these
             // measures, curSysWidth must be updated accordingly.

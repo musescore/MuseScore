@@ -3977,55 +3977,64 @@ void Chord::layoutArticulations2()
         }
     }
 
-    if (!isSlurStartEnd()) {
-        // If this chord is the start or end of a slur, we add the accent
-        // shape later, after the slur layout
-        for (Articulation* a : _articulations) {
-            if (a->addToSkyline()) {
-                // the segment shape has already been calculated
-                // so measure width and spacing is already determined
-                // in line mode, we cannot add to segment shape without throwing this off
-                // but adding to skyline is always good
-                Segment* s = segment();
-                Measure* m = s->measure();
-                RectF r = a->bbox().translated(a->pos() + pos());
-                // TODO: limit to width of chord
-                // this avoids "staircase" effect due to space not having been allocated already
-                // ANOTHER alternative is to allocate the space in layoutPitched() / layoutTablature()
-                //double w = std::min(r.width(), width());
-                //r.translate((r.width() - w) * 0.5, 0.0);
-                //r.setWidth(w);
-                if (!score()->lineMode()) {
-                    s->staffShape(staffIdx()).add(r, a);
-                }
-                r.translate(s->pos() + m->pos());
-                m->system()->staff(vStaffIdx())->skyline().add(r);
+    for (Articulation* a : _articulations) {
+        if (a->addToSkyline()) {
+            // the segment shape has already been calculated
+            // so measure width and spacing is already determined
+            // in line mode, we cannot add to segment shape without throwing this off
+            // but adding to skyline is always good
+            Segment* s = segment();
+            Measure* m = s->measure();
+            RectF r = a->bbox().translated(a->pos() + pos());
+            // TODO: limit to width of chord
+            // this avoids "staircase" effect due to space not having been allocated already
+            // ANOTHER alternative is to allocate the space in layoutPitched() / layoutTablature()
+            //double w = std::min(r.width(), width());
+            //r.translate((r.width() - w) * 0.5, 0.0);
+            //r.setWidth(w);
+            if (!score()->lineMode()) {
+                s->staffShape(staffIdx()).add(r, a);
             }
+            r.translate(s->pos() + m->pos());
+            m->system()->staff(vStaffIdx())->skyline().add(r);
         }
     }
 }
 
-bool Chord::isSlurStartEnd() const
+void Chord::checkStartEndSlurs()
 {
-    int ticks = tick().ticks();
-    auto spanners = score()->spannerMap().findOverlapping(ticks, ticks);
-    if (spanners.empty()) {
-        return false;
-    }
-    for (auto sp : spanners) {
-        Spanner* spanner = sp.value;
-        if (!spanner->isSlur() || spanner->staffIdx() != staffIdx()) {
+    _startEndSlurs.reset();
+    for (Spanner* spanner : _startingSpanners) {
+        if (!spanner->isSlur()) {
             continue;
         }
         Slur* slur = toSlur(spanner);
-        if (slur->startElement() && slur->startElement()->isChord() && toChord(slur->startElement()) == this) {
-            return true;
+        slur->computeUp();
+        if (slur->up()) {
+            _startEndSlurs.startUp = true;
+        } else {
+            _startEndSlurs.startDown = true;
         }
-        if (slur->endElement() && slur->endElement()->isChord() && toChord(slur->endElement()) == this) {
-            return true;
+        // Check if end chord has been connected to this slur. If not, connect it.
+        if (!slur->endChord()) {
+            continue;
+        }
+        std::vector<Spanner*>& endingSp = slur->endChord()->endingSpanners();
+        if (std::find(endingSp.begin(), endingSp.end(), slur) == endingSp.end()) {
+            // Slur not added. Add it now.
+            endingSp.push_back(slur);
         }
     }
-    return false;
+    for (Spanner* spanner : _endingSpanners) {
+        if (!spanner->isSlur()) {
+            continue;
+        }
+        if (toSlur(spanner)->up()) {
+            _startEndSlurs.endUp = true;
+        } else {
+            _startEndSlurs.endDown = true;
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -4128,6 +4137,25 @@ void Chord::styleChanged()
         e->styleChanged();
     };
     scanElements(0, updateElementsStyle);
+}
+
+void Chord::computeKerningExceptions()
+{
+    _allowKerningAbove = true;
+    _allowKerningBelow = true;
+    for (Articulation* art : _articulations) {
+        if (art->up()) {
+            _allowKerningAbove = false;
+        } else {
+            _allowKerningBelow = false;
+        }
+    }
+    if (_startEndSlurs.startUp || _startEndSlurs.endUp) {
+        _allowKerningAbove = false;
+    }
+    if (_startEndSlurs.startDown || _startEndSlurs.endDown) {
+        _allowKerningBelow = false;
+    }
 }
 
 //---------------------------------

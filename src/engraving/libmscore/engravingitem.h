@@ -155,6 +155,9 @@ class EngravingItem : public EngravingObject
     virtual bool alwaysKernable() const { return false; }
     KerningType _userSetKerning = KerningType::NOT_SET;
 
+    std::vector<Spanner*> _startingSpanners; ///< spanners starting on this item
+    std::vector<Spanner*> _endingSpanners; ///< spanners ending on this item
+
 protected:
     mutable int _z;
     mu::draw::Color _color;                ///< element color attribute
@@ -555,6 +558,9 @@ public:
     void setColorsInverionEnabled(bool enabled);
 
     std::pair<int, float> barbeat() const;
+
+    std::vector<Spanner*>& startingSpanners() { return _startingSpanners; }
+    std::vector<Spanner*>& endingSpanners() { return _endingSpanners; }
 
 private:
     void initAccessibleIfNeed();

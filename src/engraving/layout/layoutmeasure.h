@@ -36,6 +36,7 @@ public:
     LayoutMeasure() = default;
 
     static void getNextMeasure(const LayoutOptions& options, LayoutContext& lc);
+    static void computePreSpacingItems(Measure* m);
 
 private:
 

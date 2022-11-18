@@ -4021,6 +4021,22 @@ double Note::computePadding(const EngravingItem* nextItem) const
     return padding;
 }
 
+KerningType Note::doComputeKerningType(const EngravingItem* nextItem) const
+{
+    Chord* c = chord();
+    if (!c || (c->allowKerningAbove() && c->allowKerningBelow())) {
+        return KerningType::KERNING;
+    }
+    bool kerningAbove = nextItem->canvasPos().y() < canvasPos().y();
+    if (kerningAbove && !c->allowKerningAbove()) {
+        return KerningType::NON_KERNING;
+    }
+    if (!kerningAbove && !c->allowKerningBelow()) {
+        return KerningType::NON_KERNING;
+    }
+    return KerningType::KERNING;
+}
+
 mu::PointF Note::posInStaffCoordinates()
 {
     double X = x() + chord()->x() + chord()->segment()->x() + chord()->measure()->x() + headWidth() / 2;
