@@ -27,7 +27,8 @@
 #include <atomic>
 #include <new>
 
-#include "iaudiobuffer.h"
+#include "iaudiosource.h"
+#include "audiotypes.h"
 
 namespace mu::audio {
 class AudioBuffer
