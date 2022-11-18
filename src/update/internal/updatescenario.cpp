@@ -99,7 +99,10 @@ void UpdateScenario::doCheckForUpdate(bool manual)
         if (!res.ret) {
             LOGE() << "Unable to check for update, error: " << res.ret.toString();
 
-            processUpdateResult(res.ret.code());
+            if (manual) {
+                processUpdateResult(res.ret.code());
+            }
+
             return;
         }
 

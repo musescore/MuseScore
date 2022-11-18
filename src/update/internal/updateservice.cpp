@@ -52,6 +52,7 @@ static std::string platformFileSuffix()
 mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
 {
     RetVal<ReleaseInfo> result;
+    result.ret = make_ret(Err::NoUpdate);
 
     clear();
 
@@ -61,7 +62,7 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
                                               configuration()->checkForUpdateHeaders());
 
     if (!getUpdateInfo) {
-        result.ret = getUpdateInfo;
+        result.ret = make_ret(Err::NetworkError);
         return result;
     }
 
@@ -69,19 +70,16 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
 
     RetVal<ReleaseInfo> releaseInfo = parseRelease(json);
     if (!releaseInfo.ret) {
-        result.ret = releaseInfo.ret;
         return result;
     }
 
     if (!releaseInfo.val.isValid()) {
-        result.ret = make_ret(Err::NoUpdate);
         return result;
     }
 
     QVersionNumber current = QVersionNumber::fromString(QString::fromStdString(VERSION));
     QVersionNumber update = QVersionNumber::fromString(QString::fromStdString(releaseInfo.val.version));
     if (current.normalized() >= update.normalized()) {
-        result.ret = make_ret(Err::NoUpdate);
         return result;
     }
 
