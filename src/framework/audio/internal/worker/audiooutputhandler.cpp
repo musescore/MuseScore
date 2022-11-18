@@ -184,12 +184,13 @@ Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceI
         }
 
 #ifdef ENABLE_AUDIO_EXPORT
+        s->player()->stop();
         s->player()->seek(0);
         msecs_t totalDuration = s->player()->duration();
         SoundTrackWriter writer(destination, format, totalDuration, mixer());
 
         framework::Progress progress = saveSoundTrackProgress(sequenceId);
-        writer.progress().progressChanged.onReceive(this, [&progress](int64_t current, int64_t total, std::string title){
+        writer.progress().progressChanged.onReceive(this, [&progress](int64_t current, int64_t total, std::string title) {
             progress.progressChanged.send(current, total, title);
         });
 
