@@ -174,8 +174,8 @@ public:
     virtual bool needToShowAddFiguredBassErrorMessage() const = 0;
     virtual void setNeedToShowAddFiguredBassErrorMessage(bool show) = 0;
 
-    virtual bool needToShowAddBoxesErrorMessage() const = 0;
-    virtual void setNeedToShowAddBoxesErrorMessage(bool show) = 0;
+    virtual bool needToShowMScoreError(const std::string& errorKey) const = 0;
+    virtual void setNeedToShowMScoreError(const std::string& errorKey, bool show) = 0;
 
     virtual ValCh<int> pianoKeyboardNumberOfKeys() const = 0;
     virtual void setPianoKeyboardNumberOfKeys(int number) = 0;
