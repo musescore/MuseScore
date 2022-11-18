@@ -218,6 +218,38 @@ void NotationInteraction::rollback()
     m_undoStack->rollbackChanges();
 }
 
+static std::string MScoreErrorToString(MsError err)
+{
+    switch (err) {
+    case MsError::MS_NO_ERROR: return "MS_NO_ERROR";
+    case MsError::NO_LYRICS_SELECTED: return "NO_LYRICS_SELECTED";
+    case MsError::NO_NOTE_REST_SELECTED: return "NO_NOTE_REST_SELECTED";
+    case MsError::NO_FLIPPABLE_SELECTED: return "NO_FLIPPABLE_SELECTED";
+    case MsError::NO_STAFF_SELECTED: return "NO_STAFF_SELECTED";
+    case MsError::NO_NOTE_FIGUREDBASS_SELECTED: return "NO_NOTE_FIGUREDBASS_SELECTED";
+    case MsError::CANNOT_INSERT_TUPLET: return "CANNOT_INSERT_TUPLET";
+    case MsError::CANNOT_SPLIT_TUPLET: return "CANNOT_SPLIT_TUPLET";
+    case MsError::CANNOT_SPLIT_MEASURE_FIRST_BEAT: return "CANNOT_SPLIT_MEASURE_FIRST_BEAT";
+    case MsError::CANNOT_SPLIT_MEASURE_TUPLET: return "CANNOT_SPLIT_MEASURE_TUPLET";
+    case MsError::INSUFFICIENT_MEASURES: return "INSUFFICIENT_MEASURES";
+    case MsError::CANNOT_SPLIT_MEASURE_REPEAT: return "CANNOT_SPLIT_MEASURE_REPEAT";
+    case MsError::CANNOT_SPLIT_MEASURE_TOO_SHORT: return "CANNOT_SPLIT_MEASURE_TOO_SHORT";
+    case MsError::CANNOT_REMOVE_TIME_TUPLET: return "CANNOT_REMOVE_TIME_TUPLET";
+    case MsError::CANNOT_REMOVE_TIME_MEASURE_REPEAT: return "CANNOT_REMOVE_TIME_MEASURE_REPEAT";
+    case MsError::NO_DEST: return "NO_DEST";
+    case MsError::DEST_TUPLET: return "DEST_TUPLET";
+    case MsError::TUPLET_CROSSES_BAR: return "TUPLET_CROSSES_BAR";
+    case MsError::DEST_LOCAL_TIME_SIGNATURE: return "DEST_LOCAL_TIME_SIGNATURE";
+    case MsError::DEST_TREMOLO: return "DEST_TREMOLO";
+    case MsError::NO_MIME: return "NO_MIME";
+    case MsError::DEST_NO_CR: return "DEST_NO_CR";
+    case MsError::CANNOT_CHANGE_LOCAL_TIMESIG: return "CANNOT_CHANGE_LOCAL_TIMESIG";
+    case MsError::CORRUPTED_MEASURE: return "CORRUPTED_MEASURE";
+    }
+
+    return {};
+}
+
 void NotationInteraction::checkAndShowMScoreError() const
 {
     TRACEFUNC;
@@ -228,6 +260,10 @@ void NotationInteraction::checkAndShowMScoreError() const
     }
 
     MScore::setError(MsError::MS_NO_ERROR); // reset
+
+    if (!configuration()->needToShowMScoreError(MScoreErrorToString(err))) {
+        return;
+    }
 
     std::string title;
     std::string message;
@@ -318,7 +354,11 @@ void NotationInteraction::checkAndShowMScoreError() const
         break;
     }
 
-    interactive()->error(title, message);
+    IInteractive::Result result
+        = interactive()->info(title, message, {}, 0, IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
+    if (!result.showAgain()) {
+        configuration()->setNeedToShowMScoreError(MScoreErrorToString(err), false);
+    }
 }
 
 void NotationInteraction::notifyAboutDragChanged()
