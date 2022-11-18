@@ -30,7 +30,7 @@ SineSource::SineSource()
 
 unsigned int SineSource::audioChannelsCount() const
 {
-    return 1;
+    return 2;
 }
 
 samples_t SineSource::process(float* buffer, samples_t samplesPerChannel)
