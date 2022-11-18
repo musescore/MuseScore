@@ -2,11 +2,11 @@ name: Collect release info
 
 on:
   workflow_dispatch:
-  inputs:
-    mode:
-      description: 'Mode: stable, testing'
-      required: true
-      default: 'stable'
+    inputs:
+      mode:
+        description: 'Mode: stable, testing'
+        required: true
+        default: 'stable'
 
 defaults:
   run:
