@@ -3098,6 +3098,11 @@ void NotationInteraction::editElement(QKeyEvent* event)
         if (system) {
             bracketIndex = mu::indexOf(system->brackets(), bracket);
         }
+    } else if (m_editData.element->isHarmony()) {
+        if (isTextEditingStarted() && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
+            endEditText();
+            return;
+        }
     }
 
     startEdit();
