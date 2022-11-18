@@ -124,6 +124,23 @@ class Chord final : public ChordRest
 
     double _dotPosX = 0.0;
 
+    struct StartEndSlurs {
+        bool startUp = false;
+        bool startDown = false;
+        bool endUp = false;
+        bool endDown = false;
+        void reset()
+        {
+            startUp = false;
+            startDown = false;
+            endUp = false;
+            endDown = false;
+        }
+    } _startEndSlurs;
+
+    bool _allowKerningAbove = true;
+    bool _allowKerningBelow = true;
+
     std::vector<Articulation*> _articulations;
 
     friend class Factory;
@@ -335,9 +352,12 @@ public:
     void undoChangeProperty(Pid id, const PropertyValue& newValue);
     void undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps) override;
 
-    bool isSlurStartEnd() const;
-
     void styleChanged() override;
+    StartEndSlurs& startEndSlurs() { return _startEndSlurs; }
+    void checkStartEndSlurs();
+    bool allowKerningAbove() const { return _allowKerningAbove; }
+    bool allowKerningBelow() const { return _allowKerningBelow; }
+    void computeKerningExceptions();
 };
 } // namespace mu::engraving
 #endif
