@@ -2,18 +2,18 @@ name: Clear release info
 
 on:
   workflow_dispatch:
-  inputs:
-    mode:
-      description: 'Mode: stable, testing'
-      required: true
-      default: 'stable'
+    inputs:
+      mode:
+        description: 'Mode: stable, testing'
+        required: true
+        default: 'stable'
 
 defaults:
   run:
     shell: bash
 
 jobs:
-  update-release-info:
+  update-release-clear:
     runs-on: ubuntu-20.04
     steps:
       - name: Clone repository
