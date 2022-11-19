@@ -30,10 +30,6 @@
 #include "iaudiodriver.h"
 #include "internal/audiodeviceslistener.h"
 
-namespace winrt {
-class WasapiAudioClient;
-}
-
 namespace mu::audio {
 class WasapiAudioDriver : public IAudioDriver, public async::Asyncable
 {
