@@ -32,6 +32,7 @@ using namespace mu::inspector;
 
 static const QMap<mu::engraving::ElementType, InspectorModelType> NOTE_PART_TYPES {
     { mu::engraving::ElementType::NOTEHEAD, InspectorModelType::TYPE_NOTEHEAD },
+    { mu::engraving::ElementType::CHORD, InspectorModelType::TYPE_CHORD },
     { mu::engraving::ElementType::STEM, InspectorModelType::TYPE_STEM },
     { mu::engraving::ElementType::BEAM, InspectorModelType::TYPE_BEAM },
     { mu::engraving::ElementType::HOOK, InspectorModelType::TYPE_HOOK },
