@@ -180,6 +180,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/beams/beamsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/beams/internal/beammodesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/beams/internal/beammodesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/chords/chordsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/chords/chordsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/hooks/hooksettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/hooks/hooksettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/noteheads/noteheadsettingsmodel.cpp
