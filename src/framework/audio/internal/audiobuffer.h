@@ -25,10 +25,17 @@
 #include <vector>
 #include <memory>
 #include <atomic>
-#include <new>
 
 #include "iaudiosource.h"
 #include "audiotypes.h"
+
+//!Note Somehow clang has this define, but doesn't have symbols for std::hardware_destructive_interference_size
+#if defined(__cpp_lib_hardware_interference_size) && !defined(Q_OS_MACOS)
+#include <new>
+constexpr size_t cache_line_size = std::hardware_destructive_interference_size;
+#else
+constexpr size_t cache_line_size = 64;
+#endif
 
 namespace mu::audio {
 class AudioBuffer
@@ -52,9 +59,9 @@ private:
 
     size_t m_minSamplesToReserve = 0;
 
-    alignas(std::hardware_destructive_interference_size) std::atomic<size_t> m_writeIndex = 0;
-    alignas(std::hardware_destructive_interference_size) std::atomic<size_t> m_readIndex = 0;
-    alignas(std::hardware_destructive_interference_size) std::vector<float> m_data;
+    alignas(cache_line_size) std::atomic<size_t> m_writeIndex = 0;
+    alignas(cache_line_size) std::atomic<size_t> m_readIndex = 0;
+    alignas(cache_line_size) std::vector<float> m_data;
 
     samples_t m_samplesPerChannel = 0;
     audioch_t m_audioChannelsCount = 0;
