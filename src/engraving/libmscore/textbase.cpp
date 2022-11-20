@@ -252,7 +252,9 @@ RectF TextCursor::cursorRect() const
     mu::draw::Font _font  = fragment ? fragment->font(_text) : _text->font();
     if (_font.family() == _text->score()->styleSt(Sid::MusicalSymbolFont)) {
         _font.setFamily(_text->score()->styleSt(Sid::MusicalTextFont), draw::Font::Type::MusicSymbolText);
-        _font.setPointSizeF(fragment->format.fontSize());
+        if (fragment) {
+            _font.setPointSizeF(fragment->format.fontSize());
+        }
     }
     double ascent = mu::draw::FontMetrics::ascent(_font);
     double h = ascent;
