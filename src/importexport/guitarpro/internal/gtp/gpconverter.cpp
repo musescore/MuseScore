@@ -2198,7 +2198,7 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note)
         auto range = ties.equal_range(curTrack);
         for (auto it = range.first; it != range.second; it++) {
             Tie* tie = it->second;
-            if (tie->startNote()->pitch() == note->pitch()) {
+            if (tie->startNote()->pitch() == note->pitch() && tie->startNote()->string() == note->string()) {
                 tie->setEndNote(note);
                 note->setTieBack(tie);
                 ties.erase(it);
