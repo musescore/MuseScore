@@ -24,6 +24,7 @@
 #include "importxmlfirstpass.h"
 #include "musicxml.h" // for the creditwords and MusicXmlPartGroupList definitions
 #include "musicxmlsupport.h"
+#include "qsize.h"
 
 namespace Ms {
 
@@ -32,15 +33,15 @@ namespace Ms {
 //---------------------------------------------------------
 
 struct MxmlPageFormat {
-      QSizeF size;
-      qreal printableWidth;        // _width - left margin - right margin
-      qreal evenLeftMargin;        // values in inch
-      qreal oddLeftMargin;
-      qreal evenTopMargin;
-      qreal evenBottomMargin;
-      qreal oddTopMargin;
-      qreal oddBottomMargin;
-      bool twosided;
+      QSizeF size;                       // automatically initialized (to invalid)
+      qreal printableWidth { 5 };        // _width - left margin - right margin
+      qreal evenLeftMargin { 0.2 };      // values in inch
+      qreal oddLeftMargin { 0.2 };
+      qreal evenTopMargin { 0.2 };
+      qreal evenBottomMargin { 0.2 };
+      qreal oddTopMargin { 0.2 };
+      qreal oddBottomMargin { 0.2 };
+      bool twosided { false };
       };
 
 typedef QMap<QString, Part*> PartMap;
