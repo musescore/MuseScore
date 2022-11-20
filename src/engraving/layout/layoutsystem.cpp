@@ -217,7 +217,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
 
                 ctx.nextMeasure = ctx.curMeasure;
                 ctx.curMeasure  = ctx.prevMeasure;
-                ctx.prevMeasure = ctx.curMeasure->prevMeasure();
+                ctx.prevMeasure = ctx.curMeasure->prev();
 
                 curSysWidth -= system->lastMeasure()->width();
                 system->removeLastMeasure();
@@ -333,6 +333,8 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             break;
         }
     }
+
+    assert(ctx.prevMeasure);
 
     if (ctx.endTick < ctx.prevMeasure->tick()) {
         // we've processed the entire range
