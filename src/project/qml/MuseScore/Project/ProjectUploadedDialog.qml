@@ -37,6 +37,9 @@ StyledDialogView {
 
     onNavigationActivateRequested: {
         watchVideoButton.navigation.requestActive()
+    }
+
+    onAccessibilityActivateRequested: {
         accessibleInfo.readInfo()
     }
 

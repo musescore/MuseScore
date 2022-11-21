@@ -50,6 +50,10 @@ StyledDialogView {
         content.focusOnFirst()
     }
 
+    onAccessibilityActivateRequested: {
+        content.readInfo()
+    }
+
     StandardDialogPanel {
         id: content
         anchors.fill: parent
