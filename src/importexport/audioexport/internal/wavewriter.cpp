@@ -27,7 +27,7 @@
 using namespace mu::iex::audioexport;
 using namespace mu::framework;
 
-mu::Ret WaveWriter::write(notation::INotationPtr, QIODevice& destinationDevice, const Options&)
+mu::Ret WaveWriter::write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options&)
 {
     const audio::SoundTrackFormat format {
         audio::SoundTrackType::WAV,
@@ -36,7 +36,7 @@ mu::Ret WaveWriter::write(notation::INotationPtr, QIODevice& destinationDevice, 
         0 /* bitRate */
     };
 
-    doWriteAndWait(destinationDevice, format);
+    doWriteAndWait(notation, destinationDevice, format);
 
     return make_ret(Ret::Code::Ok);
 }

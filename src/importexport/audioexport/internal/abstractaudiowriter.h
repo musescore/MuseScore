@@ -49,7 +49,7 @@ public:
     void abort() override;
 
 protected:
-    void doWriteAndWait(QIODevice& destinationDevice, const audio::SoundTrackFormat& format);
+    void doWriteAndWait(notation::INotationPtr notation, QIODevice& destinationDevice, const audio::SoundTrackFormat& format);
 
     UnitType unitTypeFromOptions(const Options& options) const;
     framework::Progress m_progress;
