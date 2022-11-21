@@ -2293,8 +2293,7 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
         }
     }
     for (const auto& spp : *textStyle(textStyleType())) {
-        if (!isStyled(spp.pid) && spp.pid != Pid::FONT_FACE && spp.pid != Pid::FONT_SIZE && spp.pid != Pid::FONT_STYLE
-            && spp.pid != Pid::TEXT_SCRIPT_ALIGN) {
+        if (!isStyled(spp.pid)) {
             writeProperty(xml, spp.pid);
         }
     }
