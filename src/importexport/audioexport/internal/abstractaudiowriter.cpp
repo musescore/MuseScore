@@ -91,7 +91,7 @@ mu::framework::Progress AbstractAudioWriter::progress() const
     return m_progress;
 }
 
-void AbstractAudioWriter::doWriteAndWait(QIODevice& destinationDevice, const audio::SoundTrackFormat& format)
+void AbstractAudioWriter::doWriteAndWait(INotationPtr notation, QIODevice& destinationDevice, const audio::SoundTrackFormat& format)
 {
     //!Note Temporary workaround, since QIODevice is the alias for QIODevice, which falls with SIGSEGV
     //!     on any call from background thread. Once we have our own implementation of QIODevice
@@ -103,10 +103,10 @@ void AbstractAudioWriter::doWriteAndWait(QIODevice& destinationDevice, const aud
 
     m_isCompleted = false;
 
-    playbackController()->setExportingAudio(true);
+    playbackController()->setExportedNotation(notation);
 
     m_progress.finished.onReceive(this, [this](const auto&) {
-        playbackController()->setExportingAudio(false);
+        playbackController()->setExportedNotation(nullptr);
     });
 
     playback()->sequenceIdList()

@@ -26,6 +26,7 @@
 #include "async/notification.h"
 #include "async/channel.h"
 #include "global/progress.h"
+#include "notation/inotation.h"
 #include "notation/notationtypes.h"
 #include "audio/audiotypes.h"
 #include "actions/actiontypes.h"
@@ -86,7 +87,7 @@ public:
 
     virtual void applyProfile(const SoundProfileName& profileName) = 0;
 
-    virtual void setExportingAudio(bool isExporting) = 0;
+    virtual void setExportedNotation(notation::INotationPtr notation) = 0;
 };
 }
 
