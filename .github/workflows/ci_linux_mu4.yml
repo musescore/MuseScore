@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
     - master
+    - 4.0_rc
     
   schedule: 
     - cron: '0 4 */1 */1 *' # At 04:00 on every day-of-month
