@@ -161,6 +161,7 @@ public:
     void setExpandRepeats(bool expandRepeats);
     bool expandRepeats() const { return _expandRepeats; }
     void updateRepeatListTempo();
+    void updateRepeatList();
     const RepeatList& repeatList() const override;
     const RepeatList& repeatList2() const override;
 
