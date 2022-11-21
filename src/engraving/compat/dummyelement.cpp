@@ -29,6 +29,7 @@
 #include "libmscore/segment.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
+#include "libmscore/bracketItem.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -44,6 +45,7 @@ DummyElement::DummyElement(EngravingObject* parent)
 
 DummyElement::~DummyElement()
 {
+    delete m_bracketItem;
     delete m_note;
     delete m_chord;
     delete m_segment;
@@ -83,6 +85,9 @@ void DummyElement::init()
 
     m_note = Factory::createNote(m_chord);
     m_note->setParent(m_chord);
+
+    m_bracketItem = Factory::createBracketItem(m_system);
+    m_bracketItem->setParent(m_system);
 }
 
 RootItem* DummyElement::rootItem()
@@ -118,6 +123,11 @@ Chord* DummyElement::chord()
 Note* DummyElement::note()
 {
     return m_note;
+}
+
+BracketItem* DummyElement::bracketItem()
+{
+    return m_bracketItem;
 }
 
 EngravingItem* DummyElement::clone() const

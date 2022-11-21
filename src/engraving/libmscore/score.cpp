@@ -457,6 +457,19 @@ bool Score::isPaletteScore() const
     return this == gpaletteScore;
 }
 
+static void onBracketItemDestruction(const Score* score, const BracketItem* item)
+{
+    BracketItem* dummy = score->dummy()->bracketItem();
+
+    for (const System* system : score->systems()) {
+        for (Bracket* bracket : system->brackets()) {
+            if (bracket && bracket->bracketItem() == item) {
+                bracket->setBracketItem(dummy);
+            }
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   Score::onElementDestruction
 //    Ensure correct state of the score after destruction
@@ -470,6 +483,10 @@ void Score::onElementDestruction(EngravingItem* e)
     if (!score || Score::validScores.find(score) == Score::validScores.end()) {
         // No score or the score is already deleted
         return;
+    }
+
+    if (e->isBracketItem()) {
+        onBracketItemDestruction(score, toBracketItem(e));
     }
 
     score->selection().remove(e);
