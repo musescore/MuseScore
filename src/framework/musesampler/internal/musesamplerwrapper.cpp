@@ -294,13 +294,11 @@ void MuseSamplerWrapper::handleAuditionEvents(const MuseSamplerSequencer::EventT
 
     if (std::holds_alternative<ms_AuditionStartNoteEvent>(event)) {
         m_samplerLib->startAuditionNote(m_sampler, m_track, std::get<ms_AuditionStartNoteEvent>(event));
-        LOGI() << "START AUDITION NOTE";
         return;
     }
 
     if (std::holds_alternative<ms_AuditionStopNoteEvent>(event)) {
         m_samplerLib->stopAuditionNote(m_sampler, m_track, std::get<ms_AuditionStopNoteEvent>(event));
-        LOGI() << "STOP AUDITION NOTE";
         return;
     }
 }

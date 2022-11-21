@@ -26,10 +26,75 @@
 
 using namespace mu::audio;
 
-static constexpr size_t DEFAULT_SIZE_PER_CHANNEL = 1024 * 16;
+static constexpr size_t DEFAULT_SIZE_PER_CHANNEL = 1024 * 32;
 static constexpr size_t DEFAULT_SIZE = DEFAULT_SIZE_PER_CHANNEL * 2;
 
 static const std::vector<float> SILENT_FRAMES(DEFAULT_SIZE, 0.f);
+
+struct BaseBufferProfiler {
+    size_t reservedFramesMax = 0;
+    size_t reservedFramesMin = 0;
+    double elapsedMax = 0.0;
+    double elapsedSum = 0.0;
+    double elapsedMin = 0.0;
+    uint64_t callCount = 0;
+    uint64_t maxCallCount = 0;
+    std::string tag;
+
+    BaseBufferProfiler(std::string&& profileTag, uint64_t profilerMaxCalls)
+        : maxCallCount(profilerMaxCalls), tag(std::move(profileTag)) {}
+
+    ~BaseBufferProfiler()
+    {
+        std::cout << "\n BUFFER PROFILE:    " << tag;
+        std::cout << "\n reservedFramesMax: " << reservedFramesMax;
+        std::cout << "\n reservedFramesMin: " << reservedFramesMin;
+        std::cout << "\n elapsedMax:        " << elapsedMax;
+        std::cout << "\n elapsedMin:        " << elapsedMin;
+        std::cout << "\n elapsedAvg:        " << elapsedSum / callCount;
+        std::cout << "\n total call count:  " << callCount;
+        std::cout << "\n ===================\n";
+    }
+
+    void add(size_t reservedFrames, double elapsed)
+    {
+        if (maxCallCount != 0 && callCount > maxCallCount) {
+            return;
+        }
+
+        callCount++;
+
+        if (callCount == 1) {
+            reservedFramesMin = reservedFrames;
+            elapsedMin = elapsed;
+        } else {
+            reservedFramesMin = std::min(reservedFrames, reservedFramesMin);
+            elapsedMin = std::min(elapsed, elapsedMin);
+        }
+
+        reservedFramesMax = std::max(reservedFrames, reservedFramesMax);
+        elapsedMax = std::max(elapsed, elapsedMax);
+        elapsedSum += elapsed;
+    }
+
+    bool stopped() const
+    {
+        return callCount >= maxCallCount && maxCallCount != 0;
+    }
+
+    void stop()
+    {
+        if (stopped()) {
+            return;
+        }
+
+        maxCallCount = callCount - 1;
+        LOGD() << "\n PROFILE STOP";
+    }
+};
+
+static BaseBufferProfiler READ_PROFILE("READ_PROFILE", 3000);
+static BaseBufferProfiler WRITE_PROFILE("WRITE_PROFILE", 0);
 
 void AudioBuffer::init(const audioch_t audioChannelsCount, const samples_t renderStep)
 {
@@ -63,9 +128,9 @@ void AudioBuffer::forward()
     const auto currentReadIdx = m_readIndex.load(std::memory_order_acquire);
     size_t nextWriteIdx = currentWriteIdx;
 
-    samples_t sampleToReserve = m_minSamplesToReserve * 4;
+    samples_t framesToReserve = DEFAULT_SIZE / 2;
 
-    while (reservedSamples(nextWriteIdx, currentReadIdx) < sampleToReserve) {
+    while (reservedFrames(nextWriteIdx, currentReadIdx) < framesToReserve) {
         m_source->process(m_data.data() + nextWriteIdx, m_renderStep);
 
         nextWriteIdx = incrementWriteIndex(nextWriteIdx, m_renderStep);
@@ -81,6 +146,13 @@ void AudioBuffer::pop(float* dest, size_t sampleCount)
     if (currentReadIdx == currentWriteIdx) { // empty queue
         std::memcpy(dest, SILENT_FRAMES.data(), sampleCount * sizeof(float) * m_audioChannelsCount);
         return;
+    }
+
+    if (reservedFrames(currentWriteIdx, currentReadIdx) < (sampleCount * 2)) {
+        static size_t missingFramesTotal = 0;
+        missingFramesTotal += (sampleCount * 2);
+        LOGD() << "\n FRAMES MISSED " << sampleCount * 2 << ", reserve: " <<
+            reservedFrames(currentWriteIdx, currentReadIdx) << ", total: " << missingFramesTotal;
     }
 
     size_t newReadIdx = currentReadIdx;
@@ -143,7 +215,7 @@ size_t AudioBuffer::incrementWriteIndex(const size_t writeIdx, const samples_t s
     return result;
 }
 
-size_t AudioBuffer::reservedSamples(const size_t writeIdx, const size_t readIdx) const
+size_t AudioBuffer::reservedFrames(const size_t writeIdx, const size_t readIdx) const
 {
     size_t result = 0;
     if (readIdx <= writeIdx) {

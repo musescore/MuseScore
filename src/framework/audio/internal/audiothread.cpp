@@ -89,7 +89,7 @@ void AudioThread::main()
             m_mainLoopBody();
         }
 
-        std::this_thread::yield();
+        std::this_thread::sleep_for(std::chrono::milliseconds(2));
     }
 
     if (m_onFinished) {
