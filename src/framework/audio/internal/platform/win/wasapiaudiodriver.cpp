@@ -83,7 +83,7 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
     m_desiredSpec = spec;
 
     s_data.wasapiClient->setBufferDuration(samplesToRefTime(spec.samples, spec.sampleRate));
-    s_data.wasapiClient->setLowLatency(true);
+    s_data.wasapiClient->setLowLatency(false);
     s_data.wasapiClient->setSampleRequestCallback(spec.callback);
 
     hstring deviceId;

@@ -54,7 +54,7 @@ public:
     void reset();
 
 private:
-    size_t reservedSamples(const size_t writeIdx, const size_t readIdx) const;
+    size_t reservedFrames(const size_t writeIdx, const size_t readIdx) const;
     size_t incrementWriteIndex(const size_t writeIdx, const samples_t samplesPerChannel);
 
     size_t m_minSamplesToReserve = 0;
