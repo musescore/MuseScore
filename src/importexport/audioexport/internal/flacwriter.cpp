@@ -27,7 +27,7 @@
 using namespace mu::iex::audioexport;
 using namespace mu::io;
 
-mu::Ret FlacWriter::write(notation::INotationPtr, QIODevice& destinationDevice, const Options&)
+mu::Ret FlacWriter::write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options&)
 {
     const audio::SoundTrackFormat format {
         audio::SoundTrackType::FLAC,
@@ -36,7 +36,7 @@ mu::Ret FlacWriter::write(notation::INotationPtr, QIODevice& destinationDevice, 
         128 /* bitRate */
     };
 
-    doWriteAndWait(destinationDevice, format);
+    doWriteAndWait(notation, destinationDevice, format);
 
     return make_ret(Ret::Code::Ok);
 }

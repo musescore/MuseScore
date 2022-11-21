@@ -105,7 +105,7 @@ public:
 
     void applyProfile(const SoundProfileName& profileName) override;
 
-    void setExportingAudio(bool isExporting) override;
+    void setExportedNotation(notation::INotationPtr notation) override;
 
     bool canReceiveAction(const actions::ActionCode& code) const override;
 
@@ -214,7 +214,8 @@ private:
     framework::Progress m_loadingProgress;
     std::list<engraving::InstrumentTrackId> m_loadingTracks;
 
-    bool m_isExportingAudio = false;
+    /// The notation for which we're currently exporting audio
+    notation::INotationWeakPtr m_exportedNotation;
 };
 }
 
