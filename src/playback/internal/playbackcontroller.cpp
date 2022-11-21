@@ -1048,9 +1048,10 @@ void PlaybackController::updateMuteStates()
         }
     }
 
-    INotationPartsPtr notationParts = m_notation->parts();
+    INotationPtr exportedNotation = m_exportedNotation.lock();
+    INotationPartsPtr notationParts = (exportedNotation ? exportedNotation : m_notation)->parts();
     InstrumentTrackIdSet allowedInstrumentTrackIdSet = instrumentTrackIdSetForRangePlayback();
-    bool isRangePlaybackMode = !m_isExportingAudio && selection()->isRange() && !allowedInstrumentTrackIdSet.empty();
+    bool isRangePlaybackMode = !exportedNotation && selection()->isRange() && !allowedInstrumentTrackIdSet.empty();
 
     for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
         if (!mu::contains(m_trackIdMap, instrumentTrackId)) {
@@ -1197,9 +1198,9 @@ void PlaybackController::applyProfile(const SoundProfileName& profileName)
     audioSettingsPtr->setActiveSoundProfile(profileName);
 }
 
-void PlaybackController::setExportingAudio(bool isExporting)
+void PlaybackController::setExportedNotation(INotationPtr notation)
 {
-    m_isExportingAudio = isExporting;
+    m_exportedNotation = notation;
     updateMuteStates();
 }
 
