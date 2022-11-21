@@ -41,6 +41,9 @@ StyledDialogView {
 
     onNavigationActivateRequested: {
         buttons.focusOnFirst()
+    }
+
+    onAccessibilityActivateRequested: {
         accessibleInfo.readInfo()
     }
 

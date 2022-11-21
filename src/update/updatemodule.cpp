@@ -98,7 +98,6 @@ void UpdateModule::onInit(const framework::IApplication::RunMode& mode)
     }
 
     s_configuration->init();
-    s_service->init();
     s_actionController->init();
 }
 

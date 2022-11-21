@@ -38,7 +38,7 @@ class IUpdateService : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IUpdateService() = default;
 
-    virtual async::Promise<mu::RetVal<ReleaseInfo> > checkForUpdate() = 0;
+    virtual mu::RetVal<ReleaseInfo> checkForUpdate() = 0;
 
     virtual RetVal<io::path_t> downloadRelease() = 0;
     virtual void cancelUpdate() = 0;
