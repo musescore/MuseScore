@@ -1677,7 +1677,7 @@ double System::topDistance(staff_idx_t staffIdx, const SkylineLine& s) const
     // this means we cannot expect the minDistance calculation to produce meaningful results
     // so just give up on autoplace for spanners in continuous view
     // (or any other calculations that rely on this value)
-    if (score()->lineMode()) {
+    if (score()->lineMode() && !engravingConfiguration()->minDistanceForPartialSkylineCalculated()) {
         return 0.0;
     }
     return s.minDistance(staff(staffIdx)->skyline().north());
@@ -1692,7 +1692,7 @@ double System::bottomDistance(staff_idx_t staffIdx, const SkylineLine& s) const
     assert(!vbox());
     assert(s.isNorth());
     // see note on topDistance() above
-    if (score()->lineMode()) {
+    if (score()->lineMode() && !engravingConfiguration()->minDistanceForPartialSkylineCalculated()) {
         return 0.0;
     }
     return staff(staffIdx)->skyline().south().minDistance(s);

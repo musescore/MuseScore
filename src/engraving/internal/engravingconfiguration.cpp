@@ -265,3 +265,8 @@ bool EngravingConfiguration::guitarProMultivoiceEnabled() const
 {
     return m_multiVoice;
 }
+
+bool EngravingConfiguration::minDistanceForPartialSkylineCalculated() const
+{
+    return guitarProImportExperimental();
+}
