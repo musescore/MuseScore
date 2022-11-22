@@ -2293,9 +2293,12 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
         }
     }
     for (const auto& spp : *textStyle(textStyleType())) {
-        if (!isStyled(spp.pid)) {
-            writeProperty(xml, spp.pid);
+        if (isStyled(spp.pid)
+            || (spp.pid == Pid::FONT_SIZE && getProperty(spp.pid).toDouble() == TextBase::UNDEFINED_FONT_SIZE)
+            || (spp.pid == Pid::FONT_FACE && getProperty(spp.pid).value<String>() == TextBase::UNDEFINED_FONT_FAMILY)) {
+            continue;
         }
+        writeProperty(xml, spp.pid);
     }
     if (writeText) {
         xml.writeXml(u"text", xmlText());
