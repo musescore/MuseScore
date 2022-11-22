@@ -2639,43 +2639,11 @@ bool EngravingItem::selected() const
 void EngravingItem::setSelected(bool f)
 {
     setFlag(ElementFlag::SELECTED, f);
-
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-    if (f) {
-        initAccessibleIfNeed();
-
-        if (m_accessible) {
-            AccessibleRoot* currAccRoot = m_accessible->accessibleRoot();
-            AccessibleRoot* accRoot = score()->rootItem()->accessible()->accessibleRoot();
-            AccessibleRoot* dummyAccRoot = score()->dummy()->rootItem()->accessible()->accessibleRoot();
-
-            if (accRoot && currAccRoot == accRoot && accRoot->registered()) {
-                accRoot->setFocusedElement(m_accessible);
-
-                if (AccessibleItemPtr focusedElement = dummyAccRoot->focusedElement().lock()) {
-                    accRoot->updateStaffInfo(m_accessible, focusedElement);
-                }
-
-                dummyAccRoot->setFocusedElement(nullptr);
-            }
-
-            if (dummyAccRoot && currAccRoot == dummyAccRoot && dummyAccRoot->registered()) {
-                dummyAccRoot->setFocusedElement(m_accessible);
-
-                if (AccessibleItemPtr focusedElement = accRoot->focusedElement().lock()) {
-                    dummyAccRoot->updateStaffInfo(m_accessible, focusedElement);
-                }
-
-                accRoot->setFocusedElement(nullptr);
-            }
-        }
-    }
-#endif
 }
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
 void EngravingItem::initAccessibleIfNeed()
 {
-#ifndef ENGRAVING_NO_ACCESSIBILITY
     if (!engravingConfiguration()->isAccessibleEnabled()) {
         return;
     }
@@ -2685,12 +2653,10 @@ void EngravingItem::initAccessibleIfNeed()
     }
 
     doInitAccessible();
-#endif
 }
 
 void EngravingItem::doInitAccessible()
 {
-#ifndef ENGRAVING_NO_ACCESSIBILITY
     EngravingItemList parents;
     auto parent = parentItem(false /*not explicit*/);
     while (parent) {
@@ -2703,8 +2669,8 @@ void EngravingItem::doInitAccessible()
     }
 
     setupAccessible();
-#endif
 }
+#endif // ENGRAVING_NO_ACCESSIBILITY
 
 KerningType EngravingItem::computeKerningType(const EngravingItem* nextItem) const
 {
