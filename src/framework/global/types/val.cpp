@@ -130,6 +130,10 @@ int64_t Val::toInt64() const
     case Type::Int: return toInt();
     case Type::Int64: return std::get<int64_t>(m_val);
     case Type::Double: return static_cast<int>(toDouble());
+    case Type::String: {
+        std::string str = std::get<std::string>(m_val);
+        return std::stod(str);
+    }
     default:
         break;
     }
@@ -143,6 +147,10 @@ double Val::toDouble() const
     case Type::Int: return static_cast<double>(toInt());
     case Type::Int64: return static_cast<double>(toInt64());
     case Type::Double: return std::get<double>(m_val);
+    case Type::String: {
+        std::string str = std::get<std::string>(m_val);
+        return std::stod(str);
+    }
     default:
         break;
     }
