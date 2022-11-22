@@ -123,10 +123,12 @@ mu::engraving::MasterScore* MasterNotation::masterScore() const
     return dynamic_cast<mu::engraving::MasterScore*>(score());
 }
 
-static void clearMeasures(mu::engraving::Score* score)
+static void clearMeasures(mu::engraving::MasterScore* masterScore)
 {
-    for (mu::engraving::Score* _score : score->scoreList()) {
-        mu::engraving::MeasureBaseList* measures = _score->measures();
+    TRACEFUNC;
+
+    for (mu::engraving::Score* score : masterScore->scoreList()) {
+        mu::engraving::MeasureBaseList* measures = score->measures();
 
         for (mu::engraving::MeasureBase* measure = measures->first(); measure; measure = measure->next()) {
             measure->deleteLater();
@@ -134,6 +136,9 @@ static void clearMeasures(mu::engraving::Score* score)
 
         measures->clear();
     }
+
+    masterScore->setPlaylistDirty();
+    masterScore->updateRepeatList();
 }
 
 static void createMeasures(mu::engraving::Score* score, const ScoreCreateOptions& scoreOptions)
