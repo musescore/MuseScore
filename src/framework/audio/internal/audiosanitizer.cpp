@@ -23,6 +23,8 @@
 
 #include <thread>
 
+#include "concurrency/taskscheduler.h"
+
 using namespace mu::audio;
 
 static std::thread::id s_as_mainThreadID;
@@ -55,5 +57,7 @@ std::thread::id AudioSanitizer::workerThread()
 
 bool AudioSanitizer::isWorkerThread()
 {
-    return std::this_thread::get_id() == s_as_workerThreadID;
+    std::thread::id id = std::this_thread::get_id();
+
+    return TaskScheduler::instance()->containsThread(id) || id == s_as_workerThreadID;
 }

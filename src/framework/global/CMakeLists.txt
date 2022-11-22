@@ -118,6 +118,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/serialization/json.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmldom.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmldom.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/concurrency/taskscheduler.h
 )
 
 if (GLOBAL_NO_INTERNAL)

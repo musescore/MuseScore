@@ -26,6 +26,8 @@
 
 #include <limits>
 
+#include "concurrency/taskscheduler.h"
+
 #include "internal/audiosanitizer.h"
 #include "internal/audiothread.h"
 #include "internal/dsp/audiomathutils.h"
@@ -128,12 +130,31 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
 
     samples_t masterChannelSampleCount = 0;
 
-    for (auto& channel : m_mixerChannels) {
-        samples_t processedSamplesCount = channel.second->process(m_writeCacheBuff.data(), samplesPerChannel);
-        mixOutputFromChannel(outBuffer, m_writeCacheBuff.data(), processedSamplesCount);
-        std::fill(m_writeCacheBuff.begin(), m_writeCacheBuff.end(), 0.f);
+    std::vector<std::future<std::vector<float> > > futureList;
 
-        masterChannelSampleCount = std::max(processedSamplesCount, masterChannelSampleCount);
+    for (const auto& pair : m_mixerChannels) {
+        MixerChannelPtr channel = pair.second;
+        std::future<std::vector<float> > future = TaskScheduler::instance()->submit([this, samplesPerChannel,
+                                                                                     channel]() -> std::vector<float> {
+            thread_local std::vector<float> buffer(samplesPerChannel * audioChannelsCount(), 0.f);
+            thread_local std::vector<float> silent_buffer(samplesPerChannel * audioChannelsCount(), 0.f);
+
+            buffer = silent_buffer;
+
+            if (channel) {
+                channel->process(buffer.data(), samplesPerChannel);
+            }
+
+            return buffer;
+        });
+
+        futureList.emplace_back(std::move(future));
+    }
+
+    for (size_t i = 0; i < futureList.size(); ++i) {
+        mixOutputFromChannel(outBuffer, futureList[i].get().data(), samplesPerChannel);
+
+        masterChannelSampleCount = std::max(samplesPerChannel, masterChannelSampleCount);
     }
 
     if (m_masterParams.muted || masterChannelSampleCount == 0) {

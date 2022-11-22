@@ -46,6 +46,10 @@ struct BaseBufferProfiler {
 
     ~BaseBufferProfiler()
     {
+        if (!stopped()) {
+            return;
+        }
+
         std::cout << "\n BUFFER PROFILE:    " << tag;
         std::cout << "\n reservedFramesMax: " << reservedFramesMax;
         std::cout << "\n reservedFramesMin: " << reservedFramesMin;
