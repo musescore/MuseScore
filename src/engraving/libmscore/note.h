@@ -378,7 +378,7 @@ public:
     void setHarmonicFret(float val) { m_harmonicFret = val; }
     DisplayFretOption displayFret() const { return m_displayFret; }
     void setDisplayFret(DisplayFretOption val) { m_displayFret = val; }
-    bool fretConflictResolveSupported() const;
+    bool negativeFretUsed() const;
     int string() const { return _string; }
     void setString(int val);
     bool ghost() const { return _ghost; }

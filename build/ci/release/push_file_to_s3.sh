@@ -54,9 +54,9 @@ cat >~/.s3cfg <<EOL
 [default]
 access_key = ${S3_KEY}
 secret_key = ${S3_SECRET}
-host_base = ${S3_BUCKET}.com:443
-host_bucket = ${S3_BUCKET}.com:443
-website_endpoint = https://${S3_BUCKET}.com:443
+host_base = ${S3_BUCKET}
+host_bucket = ${S3_BUCKET}
+website_endpoint = https://${S3_BUCKET}
 EOL
 
 echo "=== Publish to S3 ==="

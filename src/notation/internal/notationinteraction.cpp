@@ -944,18 +944,21 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     PointF delta = toPos - normalizedBegin;
     PointF evtDelta = toPos - m_dragData.ed.pos;
 
-    switch (mode) {
-    case DragMode::BothXY:
-    case DragMode::LassoList:
-        break;
-    case DragMode::OnlyX:
-        delta.setY(m_dragData.ed.delta.y());
-        evtDelta.setY(0.0);
-        break;
-    case DragMode::OnlyY:
-        delta.setX(m_dragData.ed.delta.x());
-        evtDelta.setX(0.0);
-        break;
+    bool constrainDirection = !(isGripEditStarted() && m_editData.element && m_editData.element->isBarLine());
+    if (constrainDirection) {
+        switch (mode) {
+        case DragMode::BothXY:
+        case DragMode::LassoList:
+            break;
+        case DragMode::OnlyX:
+            delta.setY(m_dragData.ed.delta.y());
+            evtDelta.setY(0.0);
+            break;
+        case DragMode::OnlyY:
+            delta.setX(m_dragData.ed.delta.x());
+            evtDelta.setX(0.0);
+            break;
+        }
     }
 
     m_dragData.ed.lastPos = m_dragData.ed.pos;
@@ -978,7 +981,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
 
     if (isGripEditStarted()) {
         m_dragData.ed.curGrip = m_editData.curGrip;
-        m_dragData.ed.delta = m_dragData.ed.pos - m_dragData.ed.lastPos;
+        m_dragData.ed.delta = evtDelta;
         m_dragData.ed.moveDelta = m_dragData.ed.delta - m_dragData.elementOffset;
         m_dragData.ed.addData(m_editData.getData(m_editData.element));
         m_editData.element->editDrag(m_dragData.ed);

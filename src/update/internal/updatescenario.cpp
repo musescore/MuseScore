@@ -23,6 +23,7 @@
 #include "updatescenario.h"
 
 #include <QTimer>
+#include <QtConcurrent>
 
 #include "updateerrors.h"
 
@@ -33,8 +34,32 @@
 
 static constexpr int AUTO_CHECK_UPDATE_INTERVAL = 1000;
 
+using namespace mu;
 using namespace mu::update;
 using namespace mu::framework;
+
+static ValMap releaseInfoToValMap(const ReleaseInfo& info)
+{
+    return {
+        { "title", Val(info.title) },
+        { "notes", Val(info.notes) },
+        { "fileName", Val(info.fileName) },
+        { "fileUrl", Val(info.fileUrl) },
+        { "version", Val(info.version) }
+    };
+}
+
+static ReleaseInfo releaseInfoFromValMap(const ValMap& map)
+{
+    ReleaseInfo info;
+    info.title = map.at("title").toString();
+    info.notes = map.at("notes").toString();
+    info.fileName = map.at("fileName").toString();
+    info.fileUrl = map.at("fileUrl").toString();
+    info.version = map.at("version").toString();
+
+    return info;
+}
 
 void UpdateScenario::delayedInit()
 {
@@ -47,6 +72,10 @@ void UpdateScenario::delayedInit()
 
 void UpdateScenario::checkForUpdate()
 {
+    if (isCheckStarted()) {
+        return;
+    }
+
     doCheckForUpdate(true);
 }
 
@@ -57,20 +86,30 @@ bool UpdateScenario::isCheckStarted() const
 
 void UpdateScenario::doCheckForUpdate(bool manual)
 {
-    if (isCheckStarted()) {
-        return;
-    }
+    m_progressChannel = std::make_shared<framework::Progress>();
+    m_progressChannel->started.onNotify(this, [this]() {
+        m_progress = true;
+    });
 
-    m_progress = true;
-
-    updateService()->checkForUpdate().onResolve(this, [this, manual](const mu::RetVal<ReleaseInfo>& releaseInfo) {
+    m_progressChannel->finished.onReceive(this, [this, manual](const ProgressResult& res) {
         DEFER {
             m_progress = false;
         };
 
-        bool noUpdate = releaseInfo.ret.code() == static_cast<int>(Err::NoUpdate);
+        if (!res.ret) {
+            LOGE() << "Unable to check for update, error: " << res.ret.toString();
+
+            if (manual) {
+                processUpdateResult(res.ret.code());
+            }
+
+            return;
+        }
+
+        ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
+        bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
         if (!manual) {
-            bool shouldIgnoreUpdate = releaseInfo.val.version == configuration()->skippedReleaseVersion();
+            bool shouldIgnoreUpdate = info.version == configuration()->skippedReleaseVersion();
             if (noUpdate || shouldIgnoreUpdate) {
                 return;
             }
@@ -79,18 +118,22 @@ void UpdateScenario::doCheckForUpdate(bool manual)
             return;
         }
 
-        showReleaseInfo(releaseInfo.val);
-    })
-    .onReject(this, [this](int errCode, std::string text) {
-        DEFER {
-            m_progress = false;
-        };
-
-        LOGE() << "unable to check for update, error code: " << errCode
-               << ", " << text;
-
-        processUpdateResult(errCode);
+        showReleaseInfo(info);
     });
+
+    QtConcurrent::run(this, &UpdateScenario::th_heckForUpdate);
+}
+
+void UpdateScenario::th_heckForUpdate()
+{
+    m_progressChannel->started.notify();
+
+    RetVal<ReleaseInfo> retVal = updateService()->checkForUpdate();
+
+    RetVal<Val> result;
+    result.ret = retVal.ret;
+    result.val = Val(releaseInfoToValMap(retVal.val));
+    m_progressChannel->finished.send(result);
 }
 
 void UpdateScenario::processUpdateResult(int errorCode)

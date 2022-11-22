@@ -193,6 +193,12 @@ void MasterScore::updateRepeatListTempo()
     _repeatList2->updateTempo();
 }
 
+void MasterScore::updateRepeatList()
+{
+    _repeatList->update(MScore::playRepeats);
+    _repeatList2->update(false);
+}
+
 //---------------------------------------------------------
 //   repeatList
 //---------------------------------------------------------
