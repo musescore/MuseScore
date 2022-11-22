@@ -532,7 +532,9 @@ public:
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr accessible() const;
+    void initAccessibleIfNeed();
 #endif
+
     virtual String accessibleInfo() const;
     virtual String screenReaderInfo() const { return accessibleInfo(); }
     //  if the screen-reader needs a special string (see note for example)
@@ -563,10 +565,8 @@ public:
     std::vector<Spanner*>& endingSpanners() { return _endingSpanners; }
 
 private:
-    void initAccessibleIfNeed();
-    void doInitAccessible();
-
 #ifndef ENGRAVING_NO_ACCESSIBILITY
+    void doInitAccessible();
     AccessibleItemPtr m_accessible;
 #endif
 
