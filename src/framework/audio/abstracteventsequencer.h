@@ -139,11 +139,11 @@ public:
         return std::prev(upper)->second;
     }
 
-    const EventSequence& eventsToBePlayed(const msecs_t nextMsecs)
+    EventSequence eventsToBePlayed(const msecs_t nextMsecs)
     {
         ONLY_AUDIO_WORKER_THREAD;
 
-        static EventSequence result;
+        EventSequence result;
 
         result.clear();
 
