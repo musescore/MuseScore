@@ -217,7 +217,9 @@ const
     std::vector<RangeSection> sections;
 
     const mu::engraving::Segment* startSegment = rangeStartSegment;
-    for (const mu::engraving::Segment* segment = rangeStartSegment; segment && (segment != rangeEndSegment);) {
+    Fraction rangeEndTick = rangeEndSegment->tick();
+    for (const mu::engraving::Segment* segment = rangeStartSegment;
+         segment && segment != rangeEndSegment && segment->tick() <= rangeEndTick;) {
         mu::engraving::System* currentSegmentSystem = segment->measure()->system();
 
         mu::engraving::Segment* nextSegment = segment->next1MMenabled();
