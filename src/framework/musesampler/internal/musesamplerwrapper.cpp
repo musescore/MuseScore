@@ -71,19 +71,15 @@ void MuseSamplerWrapper::setSampleRate(unsigned int sampleRate)
             LOGD() << "Successfully initialized sampler";
         }
 
-        static std::vector<float> left;
-        static std::vector<float> right;
-
-        left.resize(renderStep);
-        right.resize(renderStep);
+        m_leftChannel.resize(renderStep);
+        m_rightChannel.resize(renderStep);
 
         m_bus._num_channels = AUDIO_CHANNELS_COUNT;
         m_bus._num_data_pts = renderStep;
 
-        static std::array<float*, AUDIO_CHANNELS_COUNT> channels;
-        channels[0] = left.data();
-        channels[1] = right.data();
-        m_bus._channels = channels.data();
+        m_internalBuffer[0] = m_leftChannel.data();
+        m_internalBuffer[1] = m_rightChannel.data();
+        m_bus._channels = m_internalBuffer.data();
     }
 
     if (currentRenderMode() == audio::RenderMode::OfflineMode) {
