@@ -365,6 +365,7 @@ public:
     void setPlainText(const String& t) { setXmlText(plainToXmlText(t)); }
     virtual void setXmlText(const String&);
     void setXmlText(const char* str) { setXmlText(String::fromUtf8(str)); }
+    void checkCustomFormatting(const String&);
     String xmlText() const;
     String plainText() const;
     void resetFormatting();
