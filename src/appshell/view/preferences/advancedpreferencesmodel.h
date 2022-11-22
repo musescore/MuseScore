@@ -47,7 +47,9 @@ private:
     enum Roles {
         KeyRole = Qt::UserRole + 1,
         TypeRole,
-        ValRole
+        ValueRole,
+        MinValueRole,
+        MaxValueRole
     };
 
     void changeVal(int index, QVariant newVal);

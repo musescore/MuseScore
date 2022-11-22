@@ -43,7 +43,9 @@ QVariant SettingListModel::data(const QModelIndex& index, int role) const
     case SectionRole: return QString::fromStdString(item.key.moduleName);
     case KeyRole: return QString::fromStdString(item.key.key);
     case TypeRole: return typeToString(item.value.type());
-    case ValRole: return item.value.toQVariant();
+    case ValueRole: return item.value.toQVariant();
+    case MinValueRole: return !item.minValue.isNull() ? item.minValue.toQVariant() : -1000;
+    case MaxValueRole: return !item.maxValue.isNull() ? item.maxValue.toQVariant() : 1000;
     }
     return QVariant();
 }
@@ -59,7 +61,9 @@ QHash<int, QByteArray> SettingListModel::roleNames() const
         { SectionRole, "sectionRole" },
         { KeyRole, "keyRole" },
         { TypeRole, "typeRole" },
-        { ValRole, "valRole" }
+        { ValueRole, "valueRole" },
+        { MinValueRole, "minValueRole" },
+        { MaxValueRole, "maxValueRole" }
     };
     return roles;
 }
@@ -81,8 +85,13 @@ void SettingListModel::load()
 
 void SettingListModel::changeVal(int idx, QVariant newVal)
 {
-    LOGD() << "changeVal index: " << idx << ", newVal: " << newVal;
     Settings::Item& item = m_items[idx];
+    if (item.value.toQVariant() == newVal) {
+        return;
+    }
+
+    LOGD() << "changeVal index: " << idx << ", newVal: " << newVal;
+
     Val::Type type = item.value.type();
     item.value = Val::fromQVariant(newVal);
     item.value.setType(type);
