@@ -73,6 +73,11 @@ protected:
 
     audio::samples_t m_currentPosition = 0;
 
+    std::vector<float> m_leftChannel;
+    std::vector<float> m_rightChannel;
+
+    std::array<float*, 2> m_internalBuffer;
+
     MuseSamplerSequencer m_sequencer;
 };
 
