@@ -38,7 +38,7 @@ static const Settings::Key IS_SINGLE_CLICK_TO_OPEN_PALETTE(MODULE_NAME, "applica
 void PaletteConfiguration::init()
 {
     settings()->setDefaultValue(PALETTE_SCALE, Val(1.0));
-    settings()->setCanBeManuallyEdited(PALETTE_SCALE, true);
+    settings()->setCanBeManuallyEdited(PALETTE_SCALE, true, Val(0.5), Val(5.0));
 
     settings()->setDefaultValue(PALETTE_USE_SINGLE, Val(false));
     settings()->setCanBeManuallyEdited(PALETTE_USE_SINGLE, true);

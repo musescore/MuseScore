@@ -43,6 +43,8 @@ Item {
     property string valueTitle: qsTrc("ui", "Value")
     property string valueTypeRole: "valueType"
     property string valueEnabledRoleName: "enabled"
+    property string minValueRoleName: "min"
+    property string maxValueRoleName: "max"
     property string iconRoleName: "icon"
 
     property alias hasSelection: selectionModel.hasSelection
@@ -215,6 +217,8 @@ Item {
             valueRoleName: root.valueRoleName
             valueTypeRole: root.valueTypeRole
             valueEnabledRoleName: root.valueEnabledRoleName
+            minValueRoleName: root.minValueRoleName
+            maxValueRoleName: root.maxValueRoleName
             iconRoleName: root.iconRoleName
 
             isSelected: selectionModel.hasSelection && selectionModel.isSelected(modelIndex)
