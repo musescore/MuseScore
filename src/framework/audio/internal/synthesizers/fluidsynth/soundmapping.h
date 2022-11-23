@@ -123,96 +123,129 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
     };
 
     static const std::map<SoundMappingKey, midi::Programs> STRINGS_MAPPINGS = {
-        { { mpe::SoundId::Harp,  {} }, { midi::Program(0, 46) } },
+        { { mpe::SoundId::Harp,  { mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 46) } },
 
         { { mpe::SoundId::Guitar,  { mpe::SoundSubCategory::Acoustic,
                                      mpe::SoundSubCategory::Nylon,
-                                     mpe::SoundSubCategory::Soprano } }, { midi::Program(0, 24) } },
+                                     mpe::SoundSubCategory::Soprano,
+                                     mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 24) } },
         { { mpe::SoundId::Guitar,  { mpe::SoundSubCategory::Acoustic,
                                      mpe::SoundSubCategory::Nylon,
-                                     mpe::SoundSubCategory::Alto } }, { midi::Program(0, 24) } },
+                                     mpe::SoundSubCategory::Alto,
+                                     mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 24) } },
         { { mpe::SoundId::Guitar,  { mpe::SoundSubCategory::Acoustic,
                                      mpe::SoundSubCategory::Nylon,
-                                     mpe::SoundSubCategory::Baritone } }, { midi::Program(0, 24) } },
+                                     mpe::SoundSubCategory::Baritone,
+                                     mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 24) } },
         { { mpe::SoundId::Guitar,  { mpe::SoundSubCategory::Acoustic,
                                      mpe::SoundSubCategory::Nylon,
-                                     mpe::SoundSubCategory::Contra } }, { midi::Program(0, 24) } },
+                                     mpe::SoundSubCategory::Contra,
+                                     mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 24) } },
 
-        { { mpe::SoundId::Guitar,  { mpe::SoundSubCategory::Electric } }, { midi::Program(0, 27) } },
-
-        { { mpe::SoundId::Guitar,  { mpe::SoundSubCategory::Acoustic,
-                                     mpe::SoundSubCategory::Steel } }, { midi::Program(0, 25) } },
+        { { mpe::SoundId::Guitar,  { mpe::SoundSubCategory::Electric,
+                                     mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 27) } },
 
         { { mpe::SoundId::Guitar,  { mpe::SoundSubCategory::Acoustic,
                                      mpe::SoundSubCategory::Steel,
-                                     mpe::SoundSubCategory::TwelveString } }, { midi::Program(8, 25) } },
+                                     mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 25) } },
+
+        { { mpe::SoundId::Guitar,  { mpe::SoundSubCategory::Acoustic,
+                                     mpe::SoundSubCategory::Steel,
+                                     mpe::SoundSubCategory::TwelveString,
+                                     mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 25) } },
 
         { { mpe::SoundId::Guitar,  { mpe::SoundSubCategory::Acoustic,
                                      mpe::SoundSubCategory::Pedal,
-                                     mpe::SoundSubCategory::Steel } }, { midi::Program(0, 25) } },
-
-        { { mpe::SoundId::Guitar,  { mpe::SoundSubCategory::Acoustic } }, { midi::Program(0, 24) } },
+                                     mpe::SoundSubCategory::Steel,
+                                     mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 25) } },
 
         { { mpe::SoundId::Guitar,  { mpe::SoundSubCategory::Acoustic,
-                                     mpe::SoundSubCategory::Nylon } }, { midi::Program(0, 24) } },
+                                     mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 24) } },
+
+        { { mpe::SoundId::Guitar,  { mpe::SoundSubCategory::Acoustic,
+                                     mpe::SoundSubCategory::Nylon,
+                                     mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 24) } },
 
         { { mpe::SoundId::BassGuitar,  { mpe::SoundSubCategory::Electric,
-                                         mpe::SoundSubCategory::Tenor } }, { midi::Program(0, 33) } },
-        { { mpe::SoundId::BassGuitar,  { mpe::SoundSubCategory::Electric } }, { midi::Program(0, 33) } },
+                                         mpe::SoundSubCategory::Tenor,
+                                         mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 33) } },
         { { mpe::SoundId::BassGuitar,  { mpe::SoundSubCategory::Electric,
-                                         mpe::SoundSubCategory::Fretless } }, { midi::Program(0, 35) } },
-        { { mpe::SoundId::BassGuitar,  { mpe::SoundSubCategory::Acoustic } }, { midi::Program(0, 32) } },
+                                         mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 33) } },
+        { { mpe::SoundId::BassGuitar,  { mpe::SoundSubCategory::Electric,
+                                         mpe::SoundSubCategory::Fretless,
+                                         mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 35) } },
+        { { mpe::SoundId::BassGuitar,  { mpe::SoundSubCategory::Acoustic,
+                                         mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 32) } },
 
-        { { mpe::SoundId::Banjo,  {} }, { midi::Program(0, 105) } },
-        { { mpe::SoundId::Banjo,  { mpe::SoundSubCategory::Tenor } }, { midi::Program(0, 105) } },
+        { { mpe::SoundId::Banjo,  { mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 105) } },
+        { { mpe::SoundId::Banjo,  { mpe::SoundSubCategory::Tenor,
+                                    mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 105) } },
         { { mpe::SoundId::Banjo,  { mpe::SoundSubCategory::Irish,
-                                    mpe::SoundSubCategory::Tenor } }, { midi::Program(0, 105) } },
+                                    mpe::SoundSubCategory::Tenor,
+                                    mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 105) } },
 
-        { { mpe::SoundId::Ukulele,  {} }, { midi::Program(8, 24) } },
-        { { mpe::SoundId::Ukulele,  { mpe::SoundSubCategory::Tenor } }, { midi::Program(8, 24) } },
-        { { mpe::SoundId::Ukulele,  { mpe::SoundSubCategory::Baritone } }, { midi::Program(8, 24) } },
+        { { mpe::SoundId::Ukulele,  { mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 24) } },
+        { { mpe::SoundId::Ukulele,  { mpe::SoundSubCategory::Tenor,
+                                      mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 24) } },
+        { { mpe::SoundId::Ukulele,  { mpe::SoundSubCategory::Baritone,
+                                      mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 24) } },
 
-        { { mpe::SoundId::Mandolin,  {} }, { midi::Program(16, 25) } },
-        { { mpe::SoundId::Mandolin,  { mpe::SoundSubCategory::Alto } }, { midi::Program(16, 25) } },
-        { { mpe::SoundId::Mandolin,  { mpe::SoundSubCategory::Tenor } }, { midi::Program(16, 25) } },
-        { { mpe::SoundId::Mandolin,  { mpe::SoundSubCategory::Octave } }, { midi::Program(16, 25) } },
+        { { mpe::SoundId::Mandolin,  { mpe::SoundSubCategory::Plucked } }, { midi::Program(16, 25) } },
+        { { mpe::SoundId::Mandolin,  { mpe::SoundSubCategory::Alto,
+                                       mpe::SoundSubCategory::Plucked, } }, { midi::Program(16, 25) } },
+        { { mpe::SoundId::Mandolin,  { mpe::SoundSubCategory::Tenor,
+                                       mpe::SoundSubCategory::Plucked } }, { midi::Program(16, 25) } },
+        { { mpe::SoundId::Mandolin,  { mpe::SoundSubCategory::Octave,
+                                       mpe::SoundSubCategory::Plucked } }, { midi::Program(16, 25) } },
 
-        { { mpe::SoundId::MtnDulcimer,  {} }, { midi::Program(0, 25) } },
-        { { mpe::SoundId::MtnDulcimer,  { mpe::SoundSubCategory::Baritone } }, { midi::Program(16, 25) } },
-        { { mpe::SoundId::MtnDulcimer,  { mpe::SoundSubCategory::Bass } }, { midi::Program(16, 25) } },
+        { { mpe::SoundId::MtnDulcimer,  { mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 25) } },
+        { { mpe::SoundId::MtnDulcimer,  { mpe::SoundSubCategory::Baritone,
+                                          mpe::SoundSubCategory::Plucked } }, { midi::Program(16, 25) } },
+        { { mpe::SoundId::MtnDulcimer,  { mpe::SoundSubCategory::Bass,
+                                          mpe::SoundSubCategory::Plucked } }, { midi::Program(16, 25) } },
 
         { { mpe::SoundId::Cavaquinho,  { mpe::SoundSubCategory::Acoustic,
-                                         mpe::SoundSubCategory::Steel } }, { midi::Program(0, 25) } },
+                                         mpe::SoundSubCategory::Steel,
+                                         mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 25) } },
 
-        { { mpe::SoundId::Lute,  {} }, { midi::Program(8, 25) } },
-        { { mpe::SoundId::Lute,  { mpe::SoundSubCategory::Tenor } }, { midi::Program(8, 25) } },
-        { { mpe::SoundId::Lute,  { mpe::SoundSubCategory::Baroque } }, { midi::Program(8, 25) } },
-        { { mpe::SoundId::Lute,  { } }, { midi::Program(8, 25) } },
-        { { mpe::SoundId::Lute,  { mpe::SoundSubCategory::Greek } }, { midi::Program(8, 25) } },
+        { { mpe::SoundId::Lute,  { mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 25) } },
+        { { mpe::SoundId::Lute,  { mpe::SoundSubCategory::Tenor,
+                                   mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 25) } },
+        { { mpe::SoundId::Lute,  { mpe::SoundSubCategory::Baroque,
+                                   mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 25) } },
+        { { mpe::SoundId::Lute,  { mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 25) } },
+        { { mpe::SoundId::Lute,  { mpe::SoundSubCategory::Greek,
+                                   mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 25) } },
 
-        { { mpe::SoundId::Theorbo,  {} }, { midi::Program(0, 24) } },
+        { { mpe::SoundId::Theorbo,  { mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 24) } },
 
-        { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Prima } }, { midi::Program(8, 107) } },
-        { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Piccolo } }, { midi::Program(8, 107) } },
         { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Prima,
-                                        mpe::SoundSubCategory::Alto } }, { midi::Program(8, 107) } },
+                                        mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 107) } },
+        { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Piccolo,
+                                        mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 107) } },
         { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Prima,
-                                        mpe::SoundSubCategory::Bass } }, { midi::Program(8, 107) } },
+                                        mpe::SoundSubCategory::Alto,
+                                        mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 107) } },
         { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Prima,
-                                        mpe::SoundSubCategory::Contra_Bass } }, { midi::Program(8, 107) } },
-        { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Secunda } }, { midi::Program(8, 107) } },
+                                        mpe::SoundSubCategory::Bass,
+                                        mpe::SoundSubCategory::Plucked, } }, { midi::Program(8, 107) } },
+        { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Prima,
+                                        mpe::SoundSubCategory::Contra_Bass,
+                                        mpe::SoundSubCategory::Plucked, } }, { midi::Program(8, 107) } },
+        { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Secunda,
+                                        mpe::SoundSubCategory::Plucked, } }, { midi::Program(8, 107) } },
 
-        { { mpe::SoundId::Koto,  { mpe::SoundSubCategory::Japanese } }, { midi::Program(8, 107) } },
-        { { mpe::SoundId::Shamisen,  { mpe::SoundSubCategory::Japanese } }, { midi::Program(0, 106) } },
-        { { mpe::SoundId::Sitar,  { mpe::SoundSubCategory::Indian } }, { midi::Program(0, 104) } },
-        { { mpe::SoundId::Oud,  { mpe::SoundSubCategory::African } }, { midi::Program(8, 25) } },
-        { { mpe::SoundId::Prim,  { } }, { midi::Program(0, 24) } },
-        { { mpe::SoundId::Brac,  { } }, { midi::Program(0, 24) } },
-        { { mpe::SoundId::Bugarija,  { } }, { midi::Program(0, 24) } },
-        { { mpe::SoundId::Berda,  { } }, { midi::Program(0, 32) } },
-        { { mpe::SoundId::Celo,  { } }, { midi::Program(0, 24) } },
-        { { mpe::SoundId::Bandurria,  { mpe::SoundSubCategory::Spanish } }, { midi::Program(0, 24) } },
-        { { mpe::SoundId::Laud,  { mpe::SoundSubCategory::Spanish } }, { midi::Program(0, 24) } },
+        { { mpe::SoundId::Koto,  { mpe::SoundSubCategory::Japanese, mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 107) } },
+        { { mpe::SoundId::Shamisen,  { mpe::SoundSubCategory::Japanese, mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 106) } },
+        { { mpe::SoundId::Sitar,  { mpe::SoundSubCategory::Indian, mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 104) } },
+        { { mpe::SoundId::Oud,  { mpe::SoundSubCategory::African, mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 25) } },
+        { { mpe::SoundId::Prim,  { mpe::SoundSubCategory::Plucked, } }, { midi::Program(0, 24) } },
+        { { mpe::SoundId::Brac,  { mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 24) } },
+        { { mpe::SoundId::Bugarija,  { mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 24) } },
+        { { mpe::SoundId::Berda,  { mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 32) } },
+        { { mpe::SoundId::Celo,  { mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 24) } },
+        { { mpe::SoundId::Bandurria,  { mpe::SoundSubCategory::Spanish, mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 24) } },
+        { { mpe::SoundId::Laud,  { mpe::SoundSubCategory::Spanish, mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 24) } },
 
         { { mpe::SoundId::StringsGroup,  { } }, { midi::Program(0, 48) } },
         { { mpe::SoundId::Contrabass,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(0, 43) } },
@@ -237,7 +270,8 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Nyckelharpa,  { mpe::SoundSubCategory::Swedish } }, { midi::Program(0, 41) } },
 
         { { mpe::SoundId::Synthesizer,  { mpe::SoundSubCategory::Electric,
-                                          mpe::SoundSubCategory::Bass } }, { midi::Program(0, 38) } },
+                                          mpe::SoundSubCategory::Bass,
+                                          mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 38) } },
         { { mpe::SoundId::Synthesizer,  { mpe::SoundSubCategory::Electric,
                                           mpe::SoundSubCategory::Bowed } }, { midi::Program(0, 92) } },
     };
@@ -287,6 +321,8 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Gemshorn,  { mpe::SoundSubCategory::Alto } }, { midi::Program(0, 79) } },
         { { mpe::SoundId::Gemshorn,  { mpe::SoundSubCategory::Tenor } }, { midi::Program(0, 79) } },
         { { mpe::SoundId::Gemshorn,  { mpe::SoundSubCategory::Bass } }, { midi::Program(0, 79) } },
+
+        { { mpe::SoundId::Theremin,  { mpe::SoundSubCategory::Electric } }, { midi::Program(0, 79) } },
 
         { { mpe::SoundId::PanFlute,  {} }, { midi::Program(0, 75) } },
 
@@ -755,25 +791,23 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
     static ArticulationMapping ELECTRIC_BASS_GUITAR = {
         { mpe::ArticulationType::Slap, midi::Program(0, 36) },
         { mpe::ArticulationType::Pop, midi::Program(0, 37) },
-        { mpe::ArticulationType::Mute, midi::Program(0, 28) },
-        { mpe::ArticulationType::Tremolo8th, midi::Program(0, 44) },
-        { mpe::ArticulationType::Tremolo16th, midi::Program(0, 44) },
-        { mpe::ArticulationType::Tremolo32nd, midi::Program(0, 44) },
-        { mpe::ArticulationType::Tremolo64th, midi::Program(0, 44) },
+        { mpe::ArticulationType::Mute, midi::Program(0, 28) }
     };
 
     static ArticulationMapping ACOUSTIC_BASS_GUITAR = {
         { mpe::ArticulationType::Slap, midi::Program(0, 36) },
         { mpe::ArticulationType::Pop, midi::Program(0, 37) },
         { mpe::ArticulationType::Pizzicato, midi::Program(0, 32) },
-        { mpe::ArticulationType::Mute, midi::Program(0, 32) },
-        { mpe::ArticulationType::Tremolo8th, midi::Program(0, 44) },
-        { mpe::ArticulationType::Tremolo16th, midi::Program(0, 44) },
-        { mpe::ArticulationType::Tremolo32nd, midi::Program(0, 44) },
-        { mpe::ArticulationType::Tremolo64th, midi::Program(0, 44) },
+        { mpe::ArticulationType::Mute, midi::Program(0, 32) }
     };
 
     static ArticulationMapping BASIC_STRING_SECTION = {
+        { mpe::ArticulationType::SnapPizzicato, midi::Program(0, 45) },
+        { mpe::ArticulationType::Pizzicato, midi::Program(0, 45) },
+        { mpe::ArticulationType::Mute, midi::Program(0, 45) }
+    };
+
+    static ArticulationMapping BASIC_VIOL_SECTION = {
         { mpe::ArticulationType::SnapPizzicato, midi::Program(0, 45) },
         { mpe::ArticulationType::Pizzicato, midi::Program(0, 45) },
         { mpe::ArticulationType::Mute, midi::Program(0, 45) },
@@ -904,6 +938,14 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
     }
 
     if (setupData.category == mpe::SoundCategory::Strings) {
+        static const std::unordered_set<mpe::SoundId> VIOL_SECTION {
+            mpe::SoundId::Viol, mpe::SoundId::PardessusViol, mpe::SoundId::ViolaDaGamba, mpe::SoundId::Violone
+        };
+
+        if (mu::contains(VIOL_SECTION, setupData.id)) {
+            return BASIC_VIOL_SECTION;
+        }
+
         return BASIC_STRING_SECTION;
     }
 
