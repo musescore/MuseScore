@@ -25,9 +25,9 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-const PlaybackSetupData& VoicesSetupDataResolver::doResolve(const Instrument* instrument)
+PlaybackSetupData VoicesSetupDataResolver::doResolve(const Instrument* instrument)
 {
-    static std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
+    static const std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
         { "boy-soprano", { SoundId::Choir, SoundCategory::Voices, { SoundSubCategory::Soprano,
                                                                     SoundSubCategory::Boy }, {} } },
         { "soprano", { SoundId::Choir, SoundCategory::Voices, { SoundSubCategory::Soprano }, {} } },

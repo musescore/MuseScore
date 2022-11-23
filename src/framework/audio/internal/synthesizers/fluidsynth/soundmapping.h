@@ -764,7 +764,11 @@ inline const midi::Programs& findPrograms(const mpe::PlaybackSetupData& setupDat
 {
     const std::map<SoundMappingKey, midi::Programs>& mapping = mappingByCategory(setupData.category);
 
-    auto search = mapping.find({ setupData.id, setupData.subCategorySet });
+    mpe::SoundSubCategories subCategorySet = setupData.subCategorySet;
+    mu::remove(subCategorySet, mpe::SoundSubCategory::Primary);
+    mu::remove(subCategorySet, mpe::SoundSubCategory::Secondary);
+
+    auto search = mapping.find({ setupData.id, subCategorySet });
 
     if (search != mapping.cend()) {
         return search->second;
