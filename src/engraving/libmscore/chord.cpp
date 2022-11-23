@@ -4168,8 +4168,15 @@ void GraceNotesGroup::layout()
     for (size_t i = this->size() - 1; i != mu::nidx; --i) {
         Chord* grace = this->at(i);
         Shape graceShape = grace->shape();
+        Shape groupShape = _shape;
+        mu::remove_if(groupShape, [grace](ShapeElement& s){
+            if (!s.toItem || (s.toItem->isStem() && s.toItem->vStaffIdx() != grace->vStaffIdx())) {
+                return true;
+            }
+            return false;
+        });
         double offset;
-        offset = -std::max(graceShape.minHorizontalDistance(_shape, score()), 0.0);
+        offset = -std::max(graceShape.minHorizontalDistance(groupShape, score()), 0.0);
         // Adjust spacing for cross-beam situations
         if (i < this->size() - 1) {
             Chord* prevGrace = this->at(i + 1);
