@@ -25,9 +25,9 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-const PlaybackSetupData& WindsSetupDataResolver::doResolve(const Instrument* instrument)
+PlaybackSetupData WindsSetupDataResolver::doResolve(const Instrument* instrument)
 {
-    static std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
+    static const std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
         { "winds", { SoundId::WindsGroup, SoundCategory::Winds, {}, {} } },
         { "eb-piccolo", { SoundId::Piccolo, SoundCategory::Winds, {}, {} } },
         { "db-piccolo", { SoundId::Piccolo, SoundCategory::Winds, {}, {} } },
@@ -402,6 +402,17 @@ const PlaybackSetupData& WindsSetupDataResolver::doResolve(const Instrument* ins
     if (search == SETUP_DATA_MAP.cend()) {
         static PlaybackSetupData empty;
         return empty;
+    }
+
+    static const std::unordered_set<SoundId> supportPrimaryAndSecondaryCategories {
+        SoundId::Flute,
+    };
+
+    if (mu::contains(supportPrimaryAndSecondaryCategories, search->second.id)) {
+        SoundSubCategory category = instrument->isPrimary() ? SoundSubCategory::Primary : SoundSubCategory::Secondary;
+        PlaybackSetupData setupData = search->second;
+        setupData.subCategorySet.insert(category);
+        return setupData;
     }
 
     return search->second;
