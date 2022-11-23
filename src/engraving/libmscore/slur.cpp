@@ -2094,7 +2094,8 @@ bool Slur::isOverBeams()
         ChordRest* cr = toChordRest(seg->elist().at(track));
         bool hasBeam = cr->beam() && cr->up() == up();
         bool hasTrem = false;
-        if (Chord* c = toChord(cr)) {
+        if (cr->isChord()) {
+            Chord* c = toChord(cr);
             hasTrem = c->tremolo() && c->tremolo()->twoNotes() && c->up() == up();
         }
         if (!(hasBeam || hasTrem)) {

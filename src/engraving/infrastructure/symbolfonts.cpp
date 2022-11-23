@@ -52,17 +52,7 @@ SymbolFont* SymbolFonts::fontByName(const String& name)
     }
 
     if (!font) {
-        LOGE() << "ScoreFont not found in list: " << name;
-        LOGE() << "ScoreFonts in list:";
-
-        for (const SymbolFont& f : s_symbolFonts) {
-            LOGE() << "    " << f.name();
-        }
-
-        font = fallbackFont();
-
-        LOGE() << "Using fallback font " << font->name() << " instead.";
-        return font;
+        return fallbackFont();
     }
 
     if (!font->m_loaded) {
@@ -92,11 +82,11 @@ void SymbolFonts::setFallbackFont(const String& name)
     }
 }
 
-SymbolFont* SymbolFonts::fallbackFont()
+SymbolFont* SymbolFonts::fallbackFont(bool load)
 {
     SymbolFont* font = &s_symbolFonts[s_fallback.index];
 
-    if (!font->m_loaded) {
+    if (load && !font->m_loaded) {
         font->load();
     }
 

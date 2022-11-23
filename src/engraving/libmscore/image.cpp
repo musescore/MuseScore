@@ -413,6 +413,10 @@ void Image::read(XmlReader& e)
 
 bool Image::load(const io::path_t& ss)
 {
+    if (ss.empty()) {
+        return false;
+    }
+
     io::path_t path(ss);
     // if file path is relative, prepend score path
     FileInfo fi(path);

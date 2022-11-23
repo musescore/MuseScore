@@ -39,7 +39,7 @@ public:
     static SymbolFont* fontByName(const String& name);
 
     static void setFallbackFont(const String& name);
-    static SymbolFont* fallbackFont();
+    static SymbolFont* fallbackFont(bool load = true);
     static const char* fallbackTextFont();
 
 private:

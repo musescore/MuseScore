@@ -560,7 +560,7 @@ bool SymbolFont::isValid(SymId id) const
 
 bool SymbolFont::useFallbackFont(SymId id) const
 {
-    return MScore::useFallbackFont && !sym(id).isValid() && this != SymbolFonts::fallbackFont();
+    return MScore::useFallbackFont && !sym(id).isValid() && this != SymbolFonts::fallbackFont(false);
 }
 
 // =============================================

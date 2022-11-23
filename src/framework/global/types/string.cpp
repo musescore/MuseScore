@@ -188,22 +188,38 @@ char16_t Char::toUpper(char16_t ch)
 // ============================
 void UtfCodec::utf8to16(std::string_view src, std::u16string& dst)
 {
-    utf8::utf8to16(src.begin(), src.end(), std::back_inserter(dst));
+    try {
+        utf8::utf8to16(src.begin(), src.end(), std::back_inserter(dst));
+    } catch (const std::exception& e) {
+        LOGE() << e.what();
+    }
 }
 
 void UtfCodec::utf16to8(std::u16string_view src, std::string& dst)
 {
-    utf8::utf16to8(src.begin(), src.end(), std::back_inserter(dst));
+    try {
+        utf8::utf16to8(src.begin(), src.end(), std::back_inserter(dst));
+    } catch (const std::exception& e) {
+        LOGE() << e.what();
+    }
 }
 
 void UtfCodec::utf8to32(std::string_view src, std::u32string& dst)
 {
-    utf8::utf8to32(src.begin(), src.end(), std::back_inserter(dst));
+    try {
+        utf8::utf8to32(src.begin(), src.end(), std::back_inserter(dst));
+    } catch (const std::exception& e) {
+        LOGE() << e.what();
+    }
 }
 
 void UtfCodec::utf32to8(std::u32string_view src, std::string& dst)
 {
-    utf8::utf32to8(src.begin(), src.end(), std::back_inserter(dst));
+    try {
+        utf8::utf32to8(src.begin(), src.end(), std::back_inserter(dst));
+    } catch (const std::exception& e) {
+        LOGE() << e.what();
+    }
 }
 
 // ============================
@@ -390,12 +406,20 @@ ByteArray String::toUtf8() const
 {
     ByteArray ba;
     std::u16string_view v(constStr());
-    utf8::utf16to8(v.begin(), v.end(), std::back_inserter(ba));
+    try {
+        utf8::utf16to8(v.begin(), v.end(), std::back_inserter(ba));
+    } catch (const std::exception& e) {
+        LOGE() << e.what();
+    }
     return ba;
 }
 
 String String::fromAscii(const char* str, size_t size)
 {
+    if (!str) {
+        return String();
+    }
+
     size = (size == mu::nidx) ? std::strlen(str) : size;
     String s;
     std::u16string& data = s.mutStr();
