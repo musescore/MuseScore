@@ -383,6 +383,26 @@
     <render>striangle</render>
     </token>
 
+  <token class="modifier">
+    <name>add</name>
+    <render>add</render>
+    </token>
+
+  <token class="modifier">
+    <name>sus</name>
+    <render>sus</render>
+    </token>
+
+  <token class="modifier">
+    <name>no</name>
+    <render>no</render>
+    </token>
+
+  <token class="modifier">
+    <name>omit</name>
+    <render>omit</render>
+    </token>
+
   <renderRoot>:n :a m:0.5:0</renderRoot>
   <renderFunction>:a m:0.5:0 :n</renderFunction>
   <renderBase>m:-0.2:1 / m:0.2:1 :n :a m:0:-2</renderBase>
