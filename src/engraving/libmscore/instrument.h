@@ -335,6 +335,7 @@ class Instrument
     bool _singleNoteDynamics = false;
 
     Trait _trait;
+    bool _isPrimary = false;
 
 public:
     Instrument(String id = String());
@@ -428,6 +429,9 @@ public:
 
     Trait trait() const;
     void setTrait(const Trait& trait);
+
+    bool isPrimary() const;
+    void setIsPrimary(bool isPrimary);
 
     void updateInstrumentId();
 
