@@ -25,9 +25,9 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const Instrument* instrument)
+PlaybackSetupData PercussionsSetupDataResolver::doResolve(const Instrument* instrument)
 {
-    static std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
+    static const std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
         { "timpani", { SoundId::Timpani, SoundCategory::Percussions, {}, {} } },
         { "roto-toms", { SoundId::RotoToms, SoundCategory::Percussions, {}, {} } },
         { "tubaphone", { SoundId::Tubaphone, SoundCategory::Percussions, { SoundSubCategory::Metal }, {} } },
