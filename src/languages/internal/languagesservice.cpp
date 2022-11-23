@@ -215,6 +215,18 @@ QString LanguagesService::effectiveLanguageCode(const QString& languageCode) con
                 return code;
             }
 
+            static const std::map<QString, QString> SHORT_TO_LONG_FALLBACK_CODES {
+                { "en", "en_US" },
+                { "hi", "hi_IN" },
+                { "mn", "mn_MN" },
+                { "zh", "zh_CN" }
+            };
+
+            auto it = SHORT_TO_LONG_FALLBACK_CODES.find(code);
+            if (it != SHORT_TO_LONG_FALLBACK_CODES.cend()) {
+                return it->second;
+            }
+
             int rightmost = code.lastIndexOf('_');
             if (rightmost <= 0) {
                 break;
