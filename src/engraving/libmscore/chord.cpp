@@ -3678,10 +3678,7 @@ Shape Chord::shape() const
         shape.add(_hook->shape().translated(_hook->pos()));
     }
     if (_stem && _stem->addToSkyline()) {
-        // stem direction is not known soon enough for cross staff beamed notes
-        if (!(beam() && (staffMove() || beam()->cross()))) {
-            shape.add(_stem->shape().translated(_stem->pos()));
-        }
+        shape.add(_stem->shape().translated(_stem->pos()));
     }
     if (_stemSlash && _stemSlash->addToSkyline()) {
         shape.add(_stemSlash->shape().translated(_stemSlash->pos()));
