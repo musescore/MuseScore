@@ -92,6 +92,8 @@ const PlaybackSetupData& WindsSetupDataResolver::doResolve(const Instrument* ins
         { "tenor-gemshorn", { SoundId::Gemshorn, SoundCategory::Winds, { SoundSubCategory::Tenor }, {} } },
         { "bass-gemshorn", { SoundId::Gemshorn, SoundCategory::Winds, { SoundSubCategory::Bass }, {} } },
 
+        { "theremin", { SoundId::Theremin, SoundCategory::Winds, { SoundSubCategory::Electric }, {} } },
+
         { "pan-flute", { SoundId::PanFlute, SoundCategory::Winds, {}, {} } },
 
         { "quena", { SoundId::Quena, SoundCategory::Winds, {}, {} } },
