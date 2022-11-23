@@ -3415,9 +3415,16 @@ void Score::deselect(EngravingItem* el)
 //    staffIdx is valid, if element is of type MEASURE
 //---------------------------------------------------------
 
-void Score::select(EngravingItem* e, SelectType type, staff_idx_t staffIdx)
+void Score::select(EngravingItem* item, SelectType type, staff_idx_t staffIdx)
 {
-    doSelect(e, type, staffIdx);
+    select(std::vector<EngravingItem*> { item }, type, staffIdx);
+}
+
+void Score::select(const std::vector<EngravingItem*>& items, SelectType type, staff_idx_t staffIdx)
+{
+    for (EngravingItem* item : items) {
+        doSelect(item, type, staffIdx);
+    }
 
     if (!_selection.elements().empty()) {
         onFocusedItemChanged(_selection.elements().back());
@@ -3844,9 +3851,7 @@ void Score::selectSimilar(EngravingItem* e, bool sameStaff)
     score->scanElements(&pattern, collectMatch);
 
     score->select(0, SelectType::SINGLE, 0);
-    for (EngravingItem* ee : pattern.el) {
-        score->select(ee, SelectType::ADD, 0);
-    }
+    score->select(pattern.el, SelectType::ADD, 0);
 }
 
 //---------------------------------------------------------
@@ -3879,9 +3884,7 @@ void Score::selectSimilarInRange(EngravingItem* e)
     score->scanElementsInRange(&pattern, collectMatch);
 
     score->select(0, SelectType::SINGLE, 0);
-    for (EngravingItem* ee : pattern.el) {
-        score->select(ee, SelectType::ADD, 0);
-    }
+    score->select(pattern.el, SelectType::ADD, 0);
 }
 
 //---------------------------------------------------------
@@ -4008,14 +4011,18 @@ void Score::lassoSelect(const RectF& bbox)
             break;
         }
 
-        std::vector<EngravingItem*> el = page->items(frr);
-        for (EngravingItem* e : el) {
-            if (frr.contains(e->abbox())) {
-                if (e->type() != ElementType::MEASURE && e->selectable()) {
-                    select(e, SelectType::ADD, 0);
+        std::vector<EngravingItem*> items = page->items(frr);
+        std::vector<EngravingItem*> itemsToSelect;
+
+        for (EngravingItem* item : items) {
+            if (frr.contains(item->abbox())) {
+                if (item->type() != ElementType::MEASURE && item->selectable()) {
+                    itemsToSelect.push_back(item);
                 }
             }
         }
+
+        select(itemsToSelect, SelectType::ADD, 0);
     }
 }
 
@@ -5281,9 +5288,8 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
     if (!el.empty()) {
         selection().clear();
     }
-    for (EngravingItem* e : el) {
-        select(e, SelectType::ADD, mu::nidx);
-    }
+
+    select(el, SelectType::ADD, mu::nidx);
     setLayoutAll();
 }
 
