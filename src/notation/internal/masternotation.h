@@ -78,15 +78,14 @@ private:
 
     mu::engraving::MasterScore* masterScore() const;
 
-    void updatePotentialExcerpts() const;
     void initExcerptNotations(const std::vector<mu::engraving::Excerpt*>& excerpts);
     void addExcerptsToMasterScore(const std::vector<mu::engraving::Excerpt*>& excerpts);
     void doSetExcerpts(ExcerptNotationList excerpts);
     void updateExcerpts();
+    void updatePotentialExcerpts() const;
     void unloadExcerpts(ExcerptNotationList& excerpts);
 
     bool containsExcerpt(const mu::engraving::Excerpt* excerpt) const;
-    bool containsExcerptForPart(const Part* part) const;
 
     void notifyAboutNeedSaveChanged();
 
@@ -97,7 +96,6 @@ private:
     async::Notification m_needSaveNotification;
     async::Notification m_hasPartsChanged;
 
-    mutable bool m_needUpdatePotentialExcerpts = false;
     mutable ExcerptNotationList m_potentialExcerpts;
 };
 
