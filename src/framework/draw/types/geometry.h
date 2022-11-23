@@ -38,8 +38,15 @@
 #endif
 
 namespace mu {
-inline bool isEqual(double a1, double a2) { return RealIsEqual(a1, a2); }
-inline bool isEqual(int a1, int a2) { return a1 == a2; }
+template<typename T>
+inline bool isEqual(T a1, T a2)
+{
+    if constexpr (std::is_same<T, double>::value) {
+        return RealIsEqual(a1, a2);
+    } else {
+        return a1 == a2;
+    }
+}
 
 // ====================================
 // Point

@@ -513,7 +513,22 @@ AsciiStringView TConv::toXml(NoteHeadGroup v)
 
 NoteHeadGroup TConv::fromXml(const AsciiStringView& tag, NoteHeadGroup def)
 {
-    return findTypeByXmlTag<NoteHeadGroup>(NOTEHEAD_GROUPS, tag, def);
+    auto it = std::find_if(NOTEHEAD_GROUPS.cbegin(), NOTEHEAD_GROUPS.cend(), [tag](const Item<NoteHeadGroup>& i) {
+        return i.xml == tag;
+    });
+
+    if (it != NOTEHEAD_GROUPS.cend()) {
+        return it->type;
+    }
+
+    // compatibility
+    bool ok = false;
+    int v = tag.toInt(&ok);
+    if (ok) {
+        return static_cast<NoteHeadGroup>(v);
+    }
+
+    return def;
 }
 
 static const std::vector<Item<ClefType> > CLEF_TYPES = {
@@ -1063,15 +1078,16 @@ TextStyleType TConv::fromXml(const AsciiStringView& tag, TextStyleType def)
         { "User-10", TextStyleType::USER10 },
         { "User-11", TextStyleType::USER11 },
         { "User-12", TextStyleType::USER12 },
+
+        { "Technique", TextStyleType::EXPRESSION },
+
+        { "12", TextStyleType::DYNAMICS },
+        { "26", TextStyleType::STAFF }
     };
 
     auto old = OLD_TST_TAGS.find(tag);
     if (old != OLD_TST_TAGS.cend()) {
         return old->second;
-    }
-
-    if (tag == "Technique") {
-        return TextStyleType::EXPRESSION;
     }
 
     LOGE() << "not found type for tag: " << tag;
@@ -2240,7 +2256,21 @@ AsciiStringView TConv::toXml(MarkerType v)
 
 MarkerType TConv::fromXml(const AsciiStringView& tag, MarkerType def)
 {
-    return findTypeByXmlTag<MarkerType>(MARKER_TYPES, tag, def);
+    auto it = std::find_if(MARKER_TYPES.cbegin(), MARKER_TYPES.cend(), [tag](const Item<MarkerType>& i) {
+        return i.xml == tag;
+    });
+
+    if (it != MARKER_TYPES.cend()) {
+        return it->type;
+    }
+
+    // compatibility
+
+    if (tag == "Repeat") {
+        return MarkerType::TOCODA;
+    }
+
+    return def;
 }
 
 static const std::array<Item<StaffGroup>, 3> STAFFGROUP_TYPES = { {
