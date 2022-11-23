@@ -809,7 +809,8 @@ public:
     std::set<ChordRest*> getSelectedChordRests() const;
     void getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const;
 
-    void select(EngravingItem* obj, SelectType = SelectType::SINGLE, staff_idx_t staff = 0);
+    void select(EngravingItem* item, SelectType = SelectType::SINGLE, staff_idx_t staff = 0);
+    void select(const std::vector<EngravingItem*>& items, SelectType = SelectType::SINGLE, staff_idx_t staff = 0);
     void selectSimilar(EngravingItem* e, bool sameStaff);
     void selectSimilarInRange(EngravingItem* e);
     static void collectMatch(void* data, EngravingItem* e);
