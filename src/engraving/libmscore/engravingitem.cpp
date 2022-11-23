@@ -2670,6 +2670,7 @@ void EngravingItem::doInitAccessible()
 
     setupAccessible();
 }
+
 #endif // ENGRAVING_NO_ACCESSIBILITY
 
 KerningType EngravingItem::computeKerningType(const EngravingItem* nextItem) const
