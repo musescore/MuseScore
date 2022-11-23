@@ -44,7 +44,7 @@ class Chord;
 //---------------------------------------------------------
 
 struct ElementPattern {
-    std::list<EngravingItem*> el;
+    std::vector<EngravingItem*> el;
     int type = 0;
     int subtype = 0;
     staff_idx_t staffStart = 0;

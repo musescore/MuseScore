@@ -734,9 +734,7 @@ void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, 
         }
     }
 
-    for (EngravingItem* element: elements) {
-        score()->select(element, type, staffIndex);
-    }
+    score()->select(elements, type, staffIndex);
 }
 
 void NotationInteraction::selectElementsWithSameTypeOnSegment(mu::engraving::ElementType elementType, mu::engraving::Segment* segment)
@@ -749,12 +747,16 @@ void NotationInteraction::selectElementsWithSameTypeOnSegment(mu::engraving::Ele
 
     score()->deselectAll();
 
+    std::vector<EngravingItem*> elementsToSelect;
+
     for (size_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
         EngravingItem* element = segment->element(staffIdx * mu::engraving::VOICES);
         if (element && element->type() == elementType) {
-            score()->select(element, SelectType::ADD);
+            elementsToSelect.push_back(element);
         }
     }
+
+    score()->select(elementsToSelect);
 }
 
 void NotationInteraction::selectAll()
