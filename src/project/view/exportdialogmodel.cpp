@@ -341,10 +341,10 @@ bool ExportDialogModel::exportScores()
         return false;
     }
 
-    async::Async::call(this, [this, notations, exportPath]() {
+    QMetaObject::invokeMethod(qApp, [this, notations, exportPath]() {
         exportProjectScenario()->exportScores(notations, exportPath.val, m_selectedUnitType,
                                               shouldDestinationFolderBeOpenedOnExport());
-    });
+    }, Qt::QueuedConnection);
 
     return true;
 }
