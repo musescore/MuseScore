@@ -1397,6 +1397,9 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
     for (SpannerSegment* ss : segments) {
         if (ss->addToSkyline()) {
             staff_idx_t stfIdx = ss->systemFlag() ? ss->staffIdxOrNextVisible() : ss->staffIdx();
+            if (stfIdx == mu::nidx) {
+                continue;
+            }
             system->staff(stfIdx)->skyline().add(ss->shape().translated(ss->pos()));
         }
     }
