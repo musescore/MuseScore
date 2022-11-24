@@ -73,6 +73,12 @@ public:
         bool userDefined = false;
     };
 
+    enum class BeamMode {
+        AUTO,
+        JOINED,
+        BROKEN
+    };
+
     void addGPNote(const std::shared_ptr<GPNote>& n) { _notes.push_back(n); }
     void addGPRhythm(const std::shared_ptr<GPRhythm>& n) { _rhythm = n; }
     void setDynamic(GPBeat::DynamicType t) { _dynamic = t; }
@@ -169,6 +175,9 @@ public:
     bool stemOrientationUp() const { return m_stemOrientation.up; }
     bool stemOrientationUserDefined() const { return m_stemOrientation.userDefined; }
 
+    void setBeamMode(BeamMode mode) { m_beamMode = mode; }
+    BeamMode beamMode() const { return m_beamMode; }
+
     const std::vector<std::shared_ptr<GPNote> >& notes() const { return _notes; }
 
     //! NOTE В текущей версии GP 6.2.0 (и позднее) в биты записывается уже расставленная лирика,
@@ -262,6 +271,7 @@ private:
     bool m_pickScrape = false;
     bool m_deadSlapped = false;
     StemOrientation m_stemOrientation;
+    BeamMode m_beamMode = BeamMode::AUTO;
 };
 }
 
