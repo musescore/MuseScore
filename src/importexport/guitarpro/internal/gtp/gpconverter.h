@@ -205,7 +205,7 @@ private:
     std::unordered_map<track_idx_t, GPBar::Clef> _clefs;
     std::unordered_map<track_idx_t, GPBeat::DynamicType> _dynamics;
     std::unordered_map<track_idx_t, bool> m_hasCapo;
-    std::unordered_multimap<track_idx_t, Tie*> _ties; // map(track, tie)
+    std::unordered_map<track_idx_t, std::vector<Tie*> > _ties; // map(track, tie)
     std::unordered_map<track_idx_t, Slur*> _slurs; // map(track, slur)
 
     mutable GPBeat* m_currentGPBeat = nullptr; // used for passing info from notes

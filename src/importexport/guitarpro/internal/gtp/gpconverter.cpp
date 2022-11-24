@@ -2190,22 +2190,22 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note)
         return;
     }
 
-    using tieMap = std::unordered_multimap<track_idx_t, Tie*>;
+    using tieMap = std::unordered_map<track_idx_t, std::vector<Tie*> >;
 
     auto startTie = [](Note* note, Score* sc, tieMap& ties, track_idx_t curTrack) {
         Tie* tie = Factory::createTie(sc->dummy());
         note->add(tie);
-        ties.insert(std::make_pair(curTrack, tie));
+        ties[curTrack].push_back(tie);
     };
 
     auto endTie = [](Note* note, tieMap& ties, track_idx_t curTrack) {
-        auto range = ties.equal_range(curTrack);
-        for (auto it = range.first; it != range.second; it++) {
-            Tie* tie = it->second;
+        auto& tiesOnTrack = ties[curTrack];
+        for (auto it = tiesOnTrack.rbegin(); it != tiesOnTrack.rend(); it++) {
+            Tie* tie = *it;
             if (tie->startNote()->pitch() == note->pitch() && tie->startNote()->string() == note->string()) {
                 tie->setEndNote(note);
                 note->setTieBack(tie);
-                ties.erase(it);
+                mu::remove(tiesOnTrack, tie);
                 break;
             }
         }
@@ -2898,15 +2898,18 @@ void GPConverter::addTextToNote(String string, Note* note)
 
 void GPConverter::clearDefectedSpanner()
 {
-    for (const auto& element : _ties) {
-        Tie* tie = element.second;
-        if (tie->startNote()) {
-            tie->startNote()->setTieFor(nullptr);
+    for (const auto& [track, elems] : _ties) {
+        for (Tie* tie : elems) {
+            if (tie->startNote()) {
+                tie->startNote()->setTieFor(nullptr);
+            }
+
+            if (tie->endNote()) {
+                tie->endNote()->setTieBack(nullptr);
+            }
+
+            delete tie;
         }
-        if (tie->endNote()) {
-            tie->endNote()->setTieBack(nullptr);
-        }
-        delete tie;
     }
 }
 
