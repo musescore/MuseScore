@@ -2325,6 +2325,7 @@ void NotationInteraction::addToSelection(MoveDirection d, MoveSelectionType type
 
     if (el) {
         select({ el }, SelectType::RANGE, el->staffIdx());
+        showItem(el);
         resetHitElementContext();
     }
 }
