@@ -173,12 +173,10 @@ RetVal<CloudProjectInfo> SaveProjectScenario::askPublishLocation(INotationProjec
 
 RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublish) const
 {
-    if (!authorizationService()->userAuthorized().val) {
-        Ret ret = authorizationService()->requireAuthorization(
-            trc("project/save", "Login or create a free account on musescore.com to save this score to the cloud."));
-        if (!ret) {
-            return ret;
-        }
+    Ret ret = authorizationService()->ensureAuthorization(
+        trc("project/save", "Login or create a free account on musescore.com to save this score to the cloud."));
+    if (!ret) {
+        return ret;
     }
 
     // TODO(save-to-cloud): better name?

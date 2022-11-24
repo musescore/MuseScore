@@ -555,6 +555,12 @@ bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMod
     bool isCloudAvailable = authorizationService()->checkCloudIsAvailable();
     if (!isCloudAvailable) {
         warnCloudIsNotAvailable();
+    } else {
+        Ret ret = authorizationService()->ensureAuthorization(
+            trc("project/save", "Login or create a free account on musescore.com to save this score to the cloud."));
+        if (!ret) {
+            return false;
+        }
     }
 
     INotationProjectPtr project = currentNotationProject();
