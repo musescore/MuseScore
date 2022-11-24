@@ -21,14 +21,20 @@
  */
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
-import QtQuick.Dialogs 1.3
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Shortcuts 1.0
 
-Dialog {
+StyledDialogView {
     id: root
+
+    title: qsTrc("shortcuts", "Enter shortcut sequence")
+
+    contentWidth: 538
+    contentHeight: 200
+
+    margins: 20
 
     signal applySequenceRequested(string newSequence, int conflictShortcutIndex)
 
@@ -36,21 +42,6 @@ Dialog {
         model.load(shortcut, allShortcuts)
         open()
         content.forceActiveFocus()
-    }
-
-    height: 240
-    width: 538
-
-    title: qsTrc("shortcuts", "Enter shortcut sequence")
-
-    standardButtons: Dialog.NoButton
-
-    EditShortcutModel {
-        id: model
-
-        onApplyNewSequenceRequested: function(newSequence, conflictShortcutIndex) {
-            root.applySequenceRequested(newSequence, conflictShortcutIndex)
-        }
     }
 
     Rectangle {
@@ -62,9 +53,16 @@ Dialog {
 
         focus: true
 
+        EditShortcutModel {
+            id: model
+
+            onApplyNewSequenceRequested: function(newSequence, conflictShortcutIndex) {
+                root.applySequenceRequested(newSequence, conflictShortcutIndex)
+            }
+        }
+
         Column {
             anchors.fill: parent
-            anchors.margins: 8
 
             spacing: 20
 
