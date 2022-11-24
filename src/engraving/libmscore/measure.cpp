@@ -4308,13 +4308,15 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
     }
     setLayoutStretch(stretchCoeff);
     setWidth(x);
-    // Check against minimum width and increase if needed
-    double minWidth = computeMinMeasureWidth();
-    if (width() < minWidth) {
-        stretchToTargetWidth(minWidth);
-        setWidthLocked(true);
-    } else {
-        setWidthLocked(false);
+    // Check against minimum width and increase if needed (MMRest minWidth is guaranteed elsewhere)
+    if (!(isMMRest() && mmRestCount() > 1)) {
+        double minWidth = computeMinMeasureWidth();
+        if (width() < minWidth) {
+            stretchToTargetWidth(minWidth);
+            setWidthLocked(true);
+        } else {
+            setWidthLocked(false);
+        }
     }
 }
 
@@ -4364,7 +4366,7 @@ void Measure::computeWidth(Fraction minTicks, Fraction maxTicks, double stretchC
 
 double Measure::computeMinMeasureWidth() const
 {
-    double minWidth = isMMRest() ? score()->styleMM(Sid::minMMRestWidth) : score()->styleMM(Sid::minMeasureWidth);
+    double minWidth = score()->styleMM(Sid::minMeasureWidth);
     double maxWidth = system()->width() - system()->leftMargin(); // maximum available system width (left margin accounts for possible indentation)
     if (maxWidth <= 0) {
         // System width may not yet be available for the linear mode (e.g. continuous view)
