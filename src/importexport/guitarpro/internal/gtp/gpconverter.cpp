@@ -552,6 +552,10 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
         if (cr->isChord()) {
             m_chordsInMeasureByVoice[lastMeasure][cr->voice()]++;
             m_chordsInMeasure[lastMeasure]++;
+
+            if (beat->stemOrientationUserDefined()) {
+                static_cast<Chord*>(cr)->setStemDirection(beat->stemOrientationUp() ? DirectionV::UP : DirectionV::DOWN);
+            }
         }
 
         if (!graceChords.empty()) {
