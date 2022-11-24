@@ -60,7 +60,7 @@ public:
     void signIn() override;
     void signOut() override;
 
-    Ret requireAuthorization(const std::string& text = {}) override;
+    Ret ensureAuthorization(const std::string& text = {}) override;
 
     ValCh<bool> userAuthorized() const override;
     ValCh<AccountInfo> accountInfo() const override;
