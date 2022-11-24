@@ -505,7 +505,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(XmlDomNode
 {
     static const std::set<String> sUnused = {
         u"Bank",
-        u"StemOrientation", u"ConcertPitchStemOrientation", u"TransposedPitchStemOrientation",
+        u"StemOrientation", u"ConcertPitchStemOrientation",
         u"Ottavia"
     };
 
@@ -676,6 +676,10 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(XmlDomNode
             beat->setDive(true);
         } else if (nodeName == u"DeadSlapped") {
             beat->setDeadSlapped(true);
+        } else if (nodeName == u"TransposedPitchStemOrientation") {
+            beat->setStemOrientationUp(innerNode.toElement().text() == u"Upward");
+        } else if (nodeName == u"TransposedPitchStemOrientationUserDefined") {
+            beat->setStemOrientationUserDefined(true);
         } else if (nodeName == u"XProperties") {
             readBeatXProperties(innerNode, beat.get());
         } else if (sUnused.find(nodeName) != sUnused.end()) {
