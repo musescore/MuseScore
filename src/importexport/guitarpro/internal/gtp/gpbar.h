@@ -38,12 +38,16 @@ public:
 
     const std::vector<std::unique_ptr<GPVoice> >& voices() const { return _voices; }
 
+    void setNoBeams(bool noBeams) { m_noBeams = noBeams; }
+    bool noBeams() const { return m_noBeams; }
+
 private:
 
     int _id{ -1 };
     std::vector<std::unique_ptr<GPVoice> > _voices;
     Clef _clef;
     SimileMark _simileMark;
+    bool m_noBeams = false;
 };
 }
 
