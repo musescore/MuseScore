@@ -93,6 +93,11 @@
 #include "undo.h"
 #include "utils.h"
 
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+#include "accessibility/accessibleitem.h"
+#include "accessibility/accessibleroot.h"
+#endif
+
 #include "config.h"
 
 #include "log.h"
@@ -3341,6 +3346,58 @@ void Score::padToggle(Pad p, const EditData& ed)
     }
 }
 
+static void onFocusedItemChanged(EngravingItem* item)
+{
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    if (!item || !item->selected()) {
+        return;
+    }
+
+    if (item->isSpannerSegment()) {
+        item = toSpannerSegment(item)->spanner();
+        if (!item) {
+            return;
+        }
+    }
+
+    item->initAccessibleIfNeed();
+
+    AccessibleItemPtr accessible = item->accessible();
+    if (!accessible) {
+        return;
+    }
+
+    const Score* score = item->score();
+    if (!score) {
+        return;
+    }
+
+    AccessibleRoot* currAccRoot = accessible->accessibleRoot();
+    AccessibleRoot* accRoot = score->rootItem()->accessible()->accessibleRoot();
+    AccessibleRoot* dummyAccRoot = score->dummy()->rootItem()->accessible()->accessibleRoot();
+
+    if (accRoot && currAccRoot == accRoot && accRoot->registered()) {
+        accRoot->setFocusedElement(accessible);
+
+        if (AccessibleItemPtr focusedElement = dummyAccRoot->focusedElement().lock()) {
+            accRoot->updateStaffInfo(accessible, focusedElement);
+        }
+
+        dummyAccRoot->setFocusedElement(nullptr);
+    }
+
+    if (dummyAccRoot && currAccRoot == dummyAccRoot && dummyAccRoot->registered()) {
+        dummyAccRoot->setFocusedElement(accessible);
+
+        if (AccessibleItemPtr focusedElement = accRoot->focusedElement().lock()) {
+            dummyAccRoot->updateStaffInfo(accessible, focusedElement);
+        }
+
+        accRoot->setFocusedElement(nullptr);
+    }
+#endif
+}
+
 //---------------------------------------------------------
 //   deselect
 //---------------------------------------------------------
@@ -3358,7 +3415,23 @@ void Score::deselect(EngravingItem* el)
 //    staffIdx is valid, if element is of type MEASURE
 //---------------------------------------------------------
 
-void Score::select(EngravingItem* e, SelectType type, staff_idx_t staffIdx)
+void Score::select(EngravingItem* item, SelectType type, staff_idx_t staffIdx)
+{
+    select(std::vector<EngravingItem*> { item }, type, staffIdx);
+}
+
+void Score::select(const std::vector<EngravingItem*>& items, SelectType type, staff_idx_t staffIdx)
+{
+    for (EngravingItem* item : items) {
+        doSelect(item, type, staffIdx);
+    }
+
+    if (!_selection.elements().empty()) {
+        onFocusedItemChanged(_selection.elements().back());
+    }
+}
+
+void Score::doSelect(EngravingItem* e, SelectType type, staff_idx_t staffIdx)
 {
     // Move the playhead to the selected element's preferred play position.
     if (e) {
@@ -3403,7 +3476,7 @@ void Score::selectSingle(EngravingItem* e, staff_idx_t staffIdx)
         setUpdateAll();
     } else {
         if (e->isMeasure()) {
-            select(e, SelectType::RANGE, staffIdx);
+            doSelect(e, SelectType::RANGE, staffIdx);
             return;
         }
         addRefresh(e->abbox());
@@ -3445,7 +3518,7 @@ void Score::selectAdd(EngravingItem* e)
     SelState selState = _selection.state();
 
     if (_selection.isRange()) {
-        select(e, SelectType::SINGLE, 0);
+        doSelect(e, SelectType::SINGLE, 0);
         return;
     }
 
@@ -3559,7 +3632,7 @@ void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
                 _selection.setRange(ocr->segment(), endSeg, oe->staffIdx(), oe->staffIdx() + 1);
                 _selection.extendRangeSelection(cr);
             } else {
-                select(e, SelectType::SINGLE, 0);
+                doSelect(e, SelectType::SINGLE, 0);
                 return;
             }
         } else if (_selection.isRange()) {
@@ -3617,7 +3690,7 @@ void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
                 }
             }
         }
-        select(e, SelectType::SINGLE, staffIdx);
+        doSelect(e, SelectType::SINGLE, staffIdx);
         return;
     }
 
@@ -3778,9 +3851,7 @@ void Score::selectSimilar(EngravingItem* e, bool sameStaff)
     score->scanElements(&pattern, collectMatch);
 
     score->select(0, SelectType::SINGLE, 0);
-    for (EngravingItem* ee : pattern.el) {
-        score->select(ee, SelectType::ADD, 0);
-    }
+    score->select(pattern.el, SelectType::ADD, 0);
 }
 
 //---------------------------------------------------------
@@ -3813,9 +3884,7 @@ void Score::selectSimilarInRange(EngravingItem* e)
     score->scanElementsInRange(&pattern, collectMatch);
 
     score->select(0, SelectType::SINGLE, 0);
-    for (EngravingItem* ee : pattern.el) {
-        score->select(ee, SelectType::ADD, 0);
-    }
+    score->select(pattern.el, SelectType::ADD, 0);
 }
 
 //---------------------------------------------------------
@@ -3942,14 +4011,18 @@ void Score::lassoSelect(const RectF& bbox)
             break;
         }
 
-        std::vector<EngravingItem*> el = page->items(frr);
-        for (EngravingItem* e : el) {
-            if (frr.contains(e->abbox())) {
-                if (e->type() != ElementType::MEASURE && e->selectable()) {
-                    select(e, SelectType::ADD, 0);
+        std::vector<EngravingItem*> items = page->items(frr);
+        std::vector<EngravingItem*> itemsToSelect;
+
+        for (EngravingItem* item : items) {
+            if (frr.contains(item->abbox())) {
+                if (item->type() != ElementType::MEASURE && item->selectable()) {
+                    itemsToSelect.push_back(item);
                 }
             }
         }
+
+        select(itemsToSelect, SelectType::ADD, 0);
     }
 }
 
@@ -5215,9 +5288,8 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
     if (!el.empty()) {
         selection().clear();
     }
-    for (EngravingItem* e : el) {
-        select(e, SelectType::ADD, mu::nidx);
-    }
+
+    select(el, SelectType::ADD, mu::nidx);
     setLayoutAll();
 }
 
