@@ -49,20 +49,6 @@ os.makedirs('tsv', exist_ok=True)
 # InstrumentsXML
 root = ET.parse('instruments.xml').getroot()
 
-# Roman's InstrumentsXML
-roman = {}
-if os.path.exists('tsv/instruments_roman.xml'):
-    for instrument in ET.parse('tsv/instruments_roman.xml').getroot().findall('InstrumentGroup/Instrument'):
-        instrument_id = instrument.attrib['id']
-        roman[instrument_id] = {
-            'id':           instrument_id,
-            'trackName':    find_text(instrument, 'trackName'),
-            'longName':     find_text(instrument, 'longName'),
-            'shortName':    find_text(instrument, 'shortName'),
-    'transpositionName':    find_text(instrument, 'transpositionName'),
-            'description':  find_text(instrument, 'description'),
-        }
-
 # Translations
 italian = load_translations('../locale/instruments_it.ts')
 german = load_translations('../locale/instruments_de.ts')
@@ -74,7 +60,8 @@ for genre in root.findall('Genre'):
         'id': id,
         'name': genre.find('name').text,
     }
-create_tsv('tsv/genres.tsv', genres)
+if genres:
+    create_tsv('tsv/genres.tsv', genres)
 
 families = {}
 for family in root.findall('Family'):
@@ -83,23 +70,26 @@ for family in root.findall('Family'):
         'id': id,
         'name': family.find('name').text,
     }
-create_tsv('tsv/families.tsv', families)
+if families:
+    create_tsv('tsv/families.tsv', families)
 
 articulation_names = {}
 for articulation in root.findall('Articulation'):
     name = articulation.get('name', default='[null]')
     articulation_names[name] = {
         'name':     name,
-        'velocity': articulation.find('velocity').text,
-        'gateTime': articulation.find('gateTime').text,
+        'velocity': find_text(articulation, 'velocity'),
+        'gateTime': find_text(articulation, 'gateTime'),
     }
-create_tsv('tsv/articulation_names.tsv', articulation_names)
+if articulation_names:
+    create_tsv('tsv/articulation_names.tsv', articulation_names)
 
 groups = {}
 instruments = {}
 channels = {}
 articulations = {}
 drumsets = {}
+variants = {}
 for group in root.findall('InstrumentGroup'):
     group_id = group.attrib['id']
     groups[group_id] = {
@@ -108,23 +98,12 @@ for group in root.findall('InstrumentGroup'):
     }
     for instrument in group.findall('Instrument'):
         instrument_id = instrument.attrib['id']
+        family_id = find_text(instrument, 'family')
 
         trackName = find_text(instrument, 'trackName')
         longName = find_text(instrument, 'longName')
         shortName = find_text(instrument, 'shortName')
-
-        if instrument_id in roman:
-            instrument_roman = roman.pop(instrument_id)
-            trackName_roman = instrument_roman['trackName']
-            longName_roman = instrument_roman['longName']
-            shortName_roman = instrument_roman['shortName']
-            transpositionName_roman = instrument_roman['transpositionName']
-            description_roman = instrument_roman['description']
-        else:
-            longName_roman = null
-            shortName_roman = null
-            transpositionName_roman = null
-            description_roman = null
+        description = find_text(instrument, 'description')
 
         stringdata = instrument.find('StringData')
         strings_open = []
@@ -164,8 +143,8 @@ for group in root.findall('InstrumentGroup'):
             chans[channel_name] = {
                 'instrument':   instrument_id,
                 'group':        group_id,
-                'family':       find_text(instrument, 'family'),
-                'description':  find_text(instrument, 'description'),
+                'family':       family_id,
+                'description':  description,
                 'channel':      channel_name,
                 'Bank':         (128 * bank_msb) + bank_lsb,
                 'Prog':         channel.find('program').get('value'),
@@ -176,23 +155,18 @@ for group in root.findall('InstrumentGroup'):
         instruments[instrument_id] = {
             'id':           instrument_id,
             'group':        group_id,
-            'family':       find_text(instrument, 'family'),
-        'longName_roman':   longName_roman,
+            'family':       family_id,
             'longName':     longName,
             'longName_it':  italian[longName] if longName in italian else null,
             'longName_de':  german[longName] if longName in german else null,
-        'shortName_roman':  shortName_roman,
             'shortName':    shortName,
             'shortName_it': italian[shortName] if shortName in italian else null,
             'shortName_de': german[shortName] if shortName in german else null,
-        'trackName_roman':  trackName_roman,
             'trackName':    trackName,
             'trackName_it': italian[trackName] if trackName in italian else null,
             'trackName_de': german[trackName] if trackName in german else null,
-    'transpositionName':    transpositionName_roman,
             'init':         find_text(instrument, 'init'),
-    'description_roman':    description_roman,
-            'description':  find_text(instrument, 'description'),
+            'description':  description,
             'musicXMLid':   find_text(instrument, 'musicXMLid'),
             'frets':        frets,
         'stringsOpen':      ';'.join(strings_open),
@@ -226,8 +200,8 @@ for group in root.findall('InstrumentGroup'):
             artics[name] = {
                 'instrument':   instrument_id,
                 'group':        group_id,
-                'family':       find_text(instrument, 'family'),
-                'description':  find_text(instrument, 'description'),
+                'family':       family_id,
+                'description':  description,
                 'articulation': name,
                 'velocity':     find_text(articulation, 'velocity'),
                 'gateTime':     find_text(articulation, 'gateTime'),
@@ -236,29 +210,60 @@ for group in root.findall('InstrumentGroup'):
             articulations[instrument_id] = artics
 
         drums = {}
+        drum_variants = {}
         for drum in instrument.findall('Drum'):
-            pitch = drum.get('pitch', default=null)
-            drums[pitch] = {
+            drum_pitch = drum.get('pitch', default=null)
+            drum_name = find_text(drum, 'name')
+
+            # pitch is unique for each drum so it is safe to index by it
+            drums[drum_pitch] = {
                 'instrument':   instrument_id,
                 'group':        group_id,
-                'family':       find_text(instrument, 'family'),
-                'description':  find_text(instrument, 'description'),
-                'pitch':        pitch,
-                'drum':         find_text(drum, 'name'),
+                'family':       family_id,
+                'description':  description,
+                'pitch':        drum_pitch,
+                'drum':         drum_name,
                 'head':         find_text(drum, 'head'),
                 'line':         find_text(drum, 'line'),
                 'voice':        find_text(drum, 'voice'),
                 'stem':         find_text(drum, 'stem'),
                 'shortcut':     find_text(drum, 'shortcut'),
+                'quarter':      find_text(drum, 'noteheads/quarter'),
+                'half':         find_text(drum, 'noteheads/half'),
+                'whole':        find_text(drum, 'noteheads/whole'),
+                'breve':        find_text(drum, 'noteheads/breve'),
             }
+
+            vrnts = {}
+            for variant in drum.findall('variants/variant'):
+                variant_pitch   = variant.get('pitch', default=null)
+                articulation    = find_text(variant, 'articulation')
+                tremolo         = find_text(variant, 'tremolo')
+
+                # pitch is not unique for each variant so we cannot index by it alone
+                variant_idx = (variant_pitch, articulation, tremolo)
+                vrnts[variant_idx] = {
+                    'instrument':   instrument_id,
+                    'group':        group_id,
+                    'family':       family_id,
+                    'description':  description,
+                    'drum':         drum_pitch,
+                    'drum name':    drum_name,
+                    'pitch':        variant_pitch,
+                    'articulation': find_text(variant, 'articulation'),
+                    'tremolo':      find_text(variant, 'tremolo'),
+                }
+            if vrnts:
+                drum_variants[drum_pitch] = vrnts
+
         if drums:
             drumsets[instrument_id] = drums
+            if drum_variants:
+                variants[instrument_id] = drum_variants
 
 create_tsv('tsv/groups.tsv', groups)
 create_tsv('tsv/instruments.tsv', instruments)
 create_tsv('tsv/articulations.tsv', articulations)
 create_tsv('tsv/channels.tsv', channels)
 create_tsv('tsv/drumsets.tsv', drumsets)
-
-for inst in roman.values():
-    print(inst) # these had IDs changed
+create_tsv('tsv/variants.tsv', variants)

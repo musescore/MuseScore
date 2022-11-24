@@ -8921,6 +8921,467 @@
                   </Articulation>
                   <genre>marching</genre>
             </Instrument>
+            <Instrument id="marching-snareline">
+                  <family>batterie</family>
+                  <trackName>Snare Line (MDL)</trackName>
+                  <longName>Snare Line</longName>
+                  <shortName>S. L.</shortName>
+                  <description>Marching snare line.</description>
+                  <musicXMLid>drum.snare-drum</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="60"> <!--High Bongo-->
+                        <head>normal</head>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Hit</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <variants>
+                              <variant pitch="59">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="59">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="59">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="59">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="59">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="59">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="59">
+                                    <articulation>portato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="57">
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="57">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="57">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="57">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="57">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="57">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="57">
+                                    <articulation>portato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="58">
+                                    <articulation>mordent</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="61"> <!--Low Bongo-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadXOrnate</quarter>
+                              <half>noteheadXOrnate</half>
+                              <whole>noteheadXOrnate</whole>
+                              <breve>noteheadXOrnate</breve>
+                        </noteheads>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Rim Shot</name>
+                        <stem>1</stem>
+                        <shortcut>B</shortcut>
+                  </Drum>
+                  <Drum pitch="64"> <!--Low Conga-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadRoundWhiteWithDot</quarter>
+                              <half>noteheadRoundWhiteWithDot</half>
+                              <whole>noteheadRoundWhiteWithDot</whole>
+                              <breve>noteheadRoundWhiteWithDot</breve>
+                        </noteheads>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Ping Shot</name>
+                        <stem>1</stem>
+                        <shortcut>C</shortcut>
+                  </Drum>
+                  <Drum pitch="65"> <!--High Timbale-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadSlashedBlack2</quarter>
+                              <half>noteheadSlashedHalf2</half>
+                              <whole>noteheadSlashedWhole2</whole>
+                              <breve>noteheadSlashedDoubleWhole2</breve>
+                        </noteheads>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Stick Shot</name>
+                        <stem>1</stem>
+                        <shortcut>D</shortcut>
+                  </Drum>
+                  <Drum pitch="62"> <!--Mute High Conga-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadSlashedBlack1</quarter>
+                              <half>noteheadSlashedHalf1</half>
+                              <whole>noteheadSlashedWhole1</whole>
+                              <breve>noteheadSlashedDoubleWhole1</breve>
+                        </noteheads>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Rim Knock</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="63"> <!--Open High Conga-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadXBlack</quarter>
+                              <half>noteheadXHalf</half>
+                              <whole>noteheadXWhole</whole>
+                              <breve>noteheadXDoubleWhole</breve>
+                        </noteheads>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Rim</name>
+                        <stem>1</stem>
+                        <shortcut>E</shortcut>
+                  </Drum>
+                  <Drum pitch="67"> <!--High Agogô-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadTriangleRoundDownBlack</quarter>
+                              <half>noteShapeTriangleRoundWhite</half>
+                              <whole>noteShapeTriangleRoundWhite</whole>
+                              <breve>noteShapeTriangleRoundWhite</breve>
+                        </noteheads>
+                        <line>2</line>
+                        <voice>0</voice>
+                        <name>Backstick/Visual</name>
+                        <stem>1</stem>
+                        <shortcut>F</shortcut>
+                  </Drum>
+                  <Drum pitch="72"> <!--Long Whistle-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadDiamondBlack</quarter>
+                              <half>noteheadDiamondHalf</half>
+                              <whole>noteheadDiamondWhole</whole>
+                              <breve>noteheadDiamondDoubleWhole</breve>
+                        </noteheads>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Rods</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="73"> <!--Short Guiro-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadTriangleUpBlack</quarter>
+                              <half>noteheadTriangleUpHalf</half>
+                              <whole>noteheadTriangleUpWhole</whole>
+                              <breve>noteheadTriangleUpDoubleWhole</breve>
+                        </noteheads>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Brushes</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="68"> <!--Low Agogô-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadPlusBlack</quarter>
+                              <half>noteheadPlusHalf</half>
+                              <whole>noteheadPlusWhole</whole>
+                              <breve>noteheadPlusDoubleWhole</breve>
+                        </noteheads>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Hand Hit</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="76"> <!--High Woodblock-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadXBlack</quarter>
+                              <half>noteheadXHalf</half>
+                              <whole>noteheadXWhole</whole>
+                              <breve>noteheadMoonBlack</breve>
+                        </noteheads>
+                        <line>2</line>
+                        <voice>0</voice>
+                        <name>Stick Click</name>
+                        <stem>1</stem>
+                        <shortcut>G</shortcut>
+                  </Drum>
+                  <Drum pitch="77"> <!--Low Woodblock-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadSquareBlack</quarter>
+                              <half>noteShapeTriangleLeftWhite</half>
+                              <whole>noteShapeTriangleLeftWhite</whole>
+                              <breve>noteShapeTriangleLeftWhite</breve>
+                        </noteheads>
+                        <line>6</line>
+                        <voice>0</voice>
+                        <name>Sticks In</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="74"> <!--Long Guiro-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadMoonBlack</quarter>
+                              <half>noteheadMoonWhite</half>
+                              <whole>noteheadMoonWhite</whole>
+                              <breve>noteheadMoonWhite</breve>
+                        </noteheads>
+                        <line>6</line>
+                        <voice>0</voice>
+                        <name>Shells</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="75"> <!--Claves-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadCircleSlash</quarter>
+                              <half>noteheadCircleSlash</half>
+                              <whole>noteheadCircleSlash</whole>
+                              <breve>noteheadCircleSlash</breve>
+                        </noteheads>
+                        <line>6</line>
+                        <voice>0</voice>
+                        <name>Harness Hit</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="40"> <!--Electric Snare-->
+                        <head>cross</head>
+                        <line>-2</line>
+                        <voice>0</voice>
+                        <name>Crash Cymbal</name>
+                        <stem>2</stem>
+                  </Drum>
+                  <Drum pitch="38"> <!--Acoustic Snare-->
+                        <head>cross</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Ride Cymbal</name>
+                        <stem>2</stem>
+                        <variants>
+                              <variant pitch="38">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="38">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="38">
+                                    <tremolo>r32</tremolo>
+                              </variant>
+                              <variant pitch="38">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r32</tremolo>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="39"> <!--Hand Clap-->
+                        <head>diamond</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Ride Cymbal Bell</name>
+                        <stem>2</stem>
+                  </Drum>
+                  <Drum pitch="36"> <!--Electric Bass Drum-->
+                        <head>cross</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Hi-Hat (closed)</name>
+                        <stem>2</stem>
+                        <variants>
+                              <variant pitch="36">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="36">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="36">
+                                    <tremolo>r32</tremolo>
+                              </variant>
+                              <variant pitch="36">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r32</tremolo>
+                              </variant>
+                              <variant pitch="37">
+                                    <articulation>ouvert</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="32"> <!--Square Click-->
+                        <head>do</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Cowbell</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="33"> <!--Metronome Click-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteShapeTriangleRightBlack</quarter>
+                              <half>noteShapeTriangleRightWhite</half>
+                              <whole>noteShapeTriangleRightWhite</whole>
+                              <breve>noteheadTriangleLeftWhite</breve>
+                        </noteheads>
+                        <line>5</line>
+                        <voice>0</voice>
+                        <name>Ribbon Crasher</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="31"> <!--Sticks-->
+                        <head>do</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Jam Block</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="29"> <!--Scratch Push-->
+                        <head>fa</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Agogo Low</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="30"> <!--Scratch Pull-->
+                        <head>fa</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Agogo Hi</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="27"> <!--High Q-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadTriangleDownBlack</quarter>
+                              <half>noteheadTriangleDownHalf</half>
+                              <whole>noteheadTriangleDownWhole</whole>
+                              <breve>noteheadTriangleDownDoubleWhole</breve>
+                        </noteheads>
+                        <line>6</line>
+                        <voice>0</voice>
+                        <name>Dut</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="28"> <!--Slap-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadTriangleDownBlack</quarter>
+                              <half>noteheadTriangleDownHalf</half>
+                              <whole>noteheadTriangleDownWhole</whole>
+                              <breve>noteheadTriangleDownDoubleWhole</breve>
+                        </noteheads>
+                        <line>6</line>
+                        <voice>0</voice>
+                        <name>Dut Unison</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="23">
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadPlusBlack</quarter>
+                              <half>noteheadPlusHalf</half>
+                              <whole>noteheadPlusWhole</whole>
+                              <breve>noteheadPlusDoubleWhole</breve>
+                        </noteheads>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Hand Clap</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="21">
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteShapeTriangleLeftBlack</quarter>
+                              <half>noteShapeTriangleLeftWhite</half>
+                              <whole>noteShapeTriangleLeftWhite</whole>
+                              <breve>noteShapeTriangleLeftWhite</breve>
+                        </noteheads>
+                        <line>7</line>
+                        <voice>0</voice>
+                        <name>Metronome</name>
+                        <stem>1</stem>
+                        <variants>
+                              <variant pitch="22">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 56; MS General: Marching Snare-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="56"/> <!--SFX Kit-->
+                  </Channel>
+                  <Articulation>
+                        <velocity>100</velocity>
+                        <gateTime>100</gateTime>
+                  </Articulation>
+                  <Articulation name="staccato">
+                        <velocity>100</velocity>
+                        <gateTime>50</gateTime>
+                  </Articulation>
+                  <Articulation name="portato">
+                        <velocity>100</velocity>
+                        <gateTime>75</gateTime>
+                  </Articulation>
+                  <Articulation name="tenuto">
+                        <velocity>115</velocity>
+                        <gateTime>100</gateTime>
+                  </Articulation>
+                  <Articulation name="marcato">
+                        <velocity>137</velocity>
+                        <gateTime>100</gateTime>
+                  </Articulation>
+                  <Articulation name="sforzato">
+                        <velocity>127</velocity>
+                        <gateTime>100</gateTime>
+                  </Articulation>
+                  <Articulation name="sforzatoStaccato">
+                        <velocity>127</velocity>
+                        <gateTime>50</gateTime>
+                  </Articulation>
+                  <Articulation name="marcatoStaccato">
+                        <velocity>137</velocity>
+                        <gateTime>50</gateTime>
+                  </Articulation>
+                  <Articulation name="tenutoStaccato">
+                        <velocity>115</velocity>
+                        <gateTime>50</gateTime>
+                  </Articulation>
+                  <Articulation name="plusstop">
+                        <velocity>80</velocity>
+                        <gateTime>80</gateTime>
+                  </Articulation>
+                  <genre>marching</genre>
+            </Instrument>
             <Instrument id="marching-tenor-drums">
                   <family>batterie</family>
                   <trackName>Tenor Drums</trackName>
@@ -9131,6 +9592,804 @@
                   </Articulation>
                   <genre>marching</genre>
             </Instrument>
+            <Instrument id="marching-tenorline">
+                  <family>batterie</family>
+                  <trackName>Tenor Line (MDL)</trackName>
+                  <longName>Tenor Line</longName>
+                  <shortName>T. L.</shortName>
+                  <description>Marching tenor line.</description>
+                  <musicXMLid>drum.tenor-drum</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="60"> <!--High Bongo-->
+                        <head>normal</head>
+                        <line>7</line>
+                        <voice>0</voice>
+                        <name>Hit Drum 4</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <variants>
+                              <variant pitch="107">
+                                    <articulation>plusstop</articulation>
+                              </variant>
+                              <variant pitch="101">
+                                    <articulation>staccatissimo</articulation>
+                              </variant>
+                              <variant pitch="66">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="66">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="66">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="66">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="66">
+                                    <articulation>portato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="66">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="66">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="54">
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="54">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="54">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="54">
+                                    <articulation>portato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="54">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="54">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="54">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="54">
+                                    <articulation>mordent</articulation>
+                              </variant>
+                              <variant pitch="54">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="61"> <!--Low Bongo-->
+                        <head>normal</head>
+                        <line>5</line>
+                        <voice>0</voice>
+                        <name>Hit Drum 3</name>
+                        <stem>1</stem>
+                        <shortcut>B</shortcut>
+                        <variants>
+                              <variant pitch="67">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="67">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="67">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="67">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="67">
+                                    <articulation>portato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="67">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="67">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="49">
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="49">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="49">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="49">
+                                    <articulation>portato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="49">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="49">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="49">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="49">
+                                    <articulation>mordent</articulation>
+                              </variant>
+                              <variant pitch="49">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="62"> <!--Mute High Conga-->
+                        <head>normal</head>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Hit Drum 2</name>
+                        <stem>1</stem>
+                        <shortcut>C</shortcut>
+                        <variants>
+                              <variant pitch="68">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="68">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="68">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="68">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="68">
+                                    <articulation>portato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="68">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="68">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="50">
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="50">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="50">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="50">
+                                    <articulation>portato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="50">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="50">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="50">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="56">
+                                    <articulation>mordent</articulation>
+                              </variant>
+                              <variant pitch="56">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="63"> <!--Open High Conga-->
+                        <head>normal</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Hit Drum 1</name>
+                        <stem>1</stem>
+                        <shortcut>D</shortcut>
+                        <variants>
+                              <variant pitch="69">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="69">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="69">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="69">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="69">
+                                    <articulation>portato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="69">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="69">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="51">
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="50">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="51">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="51">
+                                    <articulation>portato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="51">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="51">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="51">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="57">
+                                    <articulation>mordent</articulation>
+                              </variant>
+                              <variant pitch="57">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="64"> <!--Low Conga-->
+                        <head>normal</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Hit Spock 2</name>
+                        <stem>1</stem>
+                        <shortcut>E</shortcut>
+                        <variants>
+                              <variant pitch="70">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="70">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="70">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="70">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="70">
+                                    <articulation>portato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="70">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="70">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="52">
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="52">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="52">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="52">
+                                    <articulation>portato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="52">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="52">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="52">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="58">
+                                    <articulation>mordent</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="65"> <!--High Timbale-->
+                        <head>normal</head>
+                        <line>-2</line>
+                        <voice>0</voice>
+                        <name>Hit Spock 1</name>
+                        <stem>1</stem>
+                        <shortcut>F</shortcut>
+                        <variants>
+                              <variant pitch="71">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="71">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="71">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="71">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="71">
+                                    <articulation>portato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="71">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="71">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="53">
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="53">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="53">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="53">
+                                    <articulation>portato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="53">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="53">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="53">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="59">
+                                    <articulation>mordent</articulation>
+                              </variant>
+                              <variant pitch="59">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="72"> <!--Long Whistle-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadXOrnate</quarter>
+                              <half>noteheadXOrnate</half>
+                              <whole>noteheadXOrnate</whole>
+                              <breve>noteheadXOrnate</breve>
+                        </noteheads>
+                        <line>7</line>
+                        <voice>0</voice>
+                        <name>Rim Shot Drum 4</name>
+                        <stem>1</stem>
+                        <variants>
+                              <variant pitch="101">
+                                    <articulation>staccatissimo</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="73"> <!--Short Guiro-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadXOrnate</quarter>
+                              <half>noteheadXOrnate</half>
+                              <whole>noteheadXOrnate</whole>
+                              <breve>noteheadXOrnate</breve>
+                        </noteheads>
+                        <line>5</line>
+                        <voice>0</voice>
+                        <name>Rim Shot Drum 3</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="74"> <!--Long Guiro-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadXOrnate</quarter>
+                              <half>noteheadXOrnate</half>
+                              <whole>noteheadXOrnate</whole>
+                              <breve>noteheadXOrnate</breve>
+                        </noteheads>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Rim Shot Drum 2</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="75"> <!--Claves-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadXOrnate</quarter>
+                              <half>noteheadXOrnate</half>
+                              <whole>noteheadXOrnate</whole>
+                              <breve>noteheadXOrnate</breve>
+                        </noteheads>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Rim Shot Drum 1</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="76"> <!--High Woodblock-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadXOrnate</quarter>
+                              <half>noteheadXOrnate</half>
+                              <whole>noteheadXOrnate</whole>
+                              <breve>noteheadXOrnate</breve>
+                        </noteheads>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Rim Shot Spock 2</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="77"> <!--Low Woodblock-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadXOrnate</quarter>
+                              <half>noteheadXOrnate</half>
+                              <whole>noteheadXOrnate</whole>
+                              <breve>noteheadXOrnate</breve>
+                        </noteheads>
+                        <line>-2</line>
+                        <voice>0</voice>
+                        <name>Rim Shot Spock 1</name>
+                        <stem>1</stem>
+                        <shortcut>G</shortcut>
+                  </Drum>
+                  <Drum pitch="96">
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadSlashedBlack2</quarter>
+                              <half>noteheadSlashedHalf2</half>
+                              <whole>noteheadSlashedWhole2</whole>
+                              <breve>noteheadSlashedDoubleWhole2</breve>
+                        </noteheads>
+                        <line>7</line>
+                        <voice>0</voice>
+                        <name>Stick Shot Drum 4</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="97">
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadSlashedBlack2</quarter>
+                              <half>noteheadSlashedHalf2</half>
+                              <whole>noteheadSlashedWhole2</whole>
+                              <breve>noteheadSlashedDoubleWhole2</breve>
+                        </noteheads>
+                        <line>5</line>
+                        <voice>0</voice>
+                        <name>Stick Shot Drum 3</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="98">
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadSlashedBlack2</quarter>
+                              <half>noteheadSlashedHalf2</half>
+                              <whole>noteheadSlashedWhole2</whole>
+                              <breve>noteheadSlashedDoubleWhole2</breve>
+                        </noteheads>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Stick Shot Drum 2</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="99">
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadSlashedBlack2</quarter>
+                              <half>noteheadSlashedHalf2</half>
+                              <whole>noteheadSlashedWhole2</whole>
+                              <breve>noteheadSlashedDoubleWhole2</breve>
+                        </noteheads>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Stick Shot Drum 1</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="100">
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadSlashedBlack2</quarter>
+                              <half>noteheadSlashedHalf2</half>
+                              <whole>noteheadSlashedWhole2</whole>
+                              <breve>noteheadSlashedDoubleWhole2</breve>
+                        </noteheads>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Stick Shot Spock 2</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="78"> <!--Mute Cuica-->
+                        <head>cross</head>
+                        <line>7</line>
+                        <voice>0</voice>
+                        <name>Rim Drum 4</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="79"> <!--Open Cuica-->
+                        <head>cross</head>
+                        <line>5</line>
+                        <voice>0</voice>
+                        <name>Rim Drum 3</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="80"> <!--Mute Triangle-->
+                        <head>cross</head>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Rim Drum 2</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="81"> <!--Open Triangle-->
+                        <head>cross</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Rim Drum 1</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="82"> <!--Shaker-->
+                        <head>cross</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Rim Spock 2</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="83"> <!--Jingle Bell-->
+                        <head>cross</head>
+                        <line>-2</line>
+                        <voice>0</voice>
+                        <name>Rim Spock 1</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="45"> <!--Low Tom-->
+                        <head>mi</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Mallet Click</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="46"> <!--Open Hi-hat-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadSquareBlack</quarter>
+                              <half>noteShapeTriangleLeftWhite</half>
+                              <whole>noteShapeTriangleLeftWhite</whole>
+                              <breve>noteShapeTriangleLeftWhite</breve>
+                        </noteheads>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Sticks In</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="47"> <!--Low-Mid Tom-->
+                        <head>re</head>
+                        <line>6</line>
+                        <voice>0</voice>
+                        <name>Shells</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="44"> <!--Pedal Hi-hat-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadCircleSlash</quarter>
+                              <half>noteheadCircleSlash</half>
+                              <whole>noteheadCircleSlash</whole>
+                              <breve>noteheadCircleSlash</breve>
+                        </noteheads>
+                        <line>8</line>
+                        <voice>0</voice>
+                        <name>Stand Hit</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="32"> <!--Square Click-->
+                        <head>do</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Cowbell</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="33"> <!--Metronome Click-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteShapeTriangleRightBlack</quarter>
+                              <half>noteShapeTriangleRightWhite</half>
+                              <whole>noteShapeTriangleRightWhite</whole>
+                              <breve>noteheadTriangleLeftWhite</breve>
+                        </noteheads>
+                        <line>5</line>
+                        <voice>0</voice>
+                        <name>Ribbon Crasher</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="31"> <!--Sticks-->
+                        <head>do</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Jam Block</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="29"> <!--Scratch Push-->
+                        <head>fa</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Agogo Low</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="30"> <!--Scratch Pull-->
+                        <head>fa</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Agogo Hi</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="27"> <!--High Q-->
+                        <head>triangle-down</head>
+                        <line>6</line>
+                        <voice>0</voice>
+                        <name>Dut</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="28"> <!--Slap-->
+                        <head>triangle-down</head>
+                        <line>6</line>
+                        <voice>0</voice>
+                        <name>Dut (unison)</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="23">
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadPlusBlack</quarter>
+                              <half>noteheadPlusHalf</half>
+                              <whole>noteheadPlusWhole</whole>
+                              <breve>noteheadPlusDoubleWhole</breve>
+                        </noteheads>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Hand Clap</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="21">
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteShapeTriangleLeftBlack</quarter>
+                              <half>noteShapeTriangleLeftWhite</half>
+                              <whole>noteShapeTriangleLeftWhite</whole>
+                              <breve>noteShapeTriangleLeftWhite</breve>
+                        </noteheads>
+                        <line>7</line>
+                        <voice>0</voice>
+                        <name>Metronome</name>
+                        <stem>1</stem>
+                        <variants>
+                              <variant pitch="22">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 96; MS General: Marching Tenor-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="96"/> <!--Non-GS drum kit-->
+                  </Channel>
+                  <Articulation>
+                        <velocity>100</velocity>
+                        <gateTime>100</gateTime>
+                  </Articulation>
+                  <Articulation name="staccato">
+                        <velocity>100</velocity>
+                        <gateTime>50</gateTime>
+                  </Articulation>
+                  <Articulation name="portato">
+                        <velocity>100</velocity>
+                        <gateTime>75</gateTime>
+                  </Articulation>
+                  <Articulation name="tenuto">
+                        <velocity>115</velocity>
+                        <gateTime>100</gateTime>
+                  </Articulation>
+                  <Articulation name="marcato">
+                        <velocity>137</velocity>
+                        <gateTime>100</gateTime>
+                  </Articulation>
+                  <Articulation name="sforzato">
+                        <velocity>127</velocity>
+                        <gateTime>100</gateTime>
+                  </Articulation>
+                  <Articulation name="sforzatoStaccato">
+                        <velocity>127</velocity>
+                        <gateTime>50</gateTime>
+                  </Articulation>
+                  <Articulation name="marcatoStaccato">
+                        <velocity>137</velocity>
+                        <gateTime>50</gateTime>
+                  </Articulation>
+                  <Articulation name="tenutoStaccato">
+                        <velocity>115</velocity>
+                        <gateTime>50</gateTime>
+                  </Articulation>
+                  <Articulation name="plusstop">
+                        <velocity>80</velocity>
+                        <gateTime>80</gateTime>
+                  </Articulation>
+                  <genre>marching</genre>
+            </Instrument>
             <Instrument id="marching-bass-drums">
                   <family>batterie</family>
                   <trackName>Bass Drums</trackName>
@@ -9240,6 +10499,999 @@
                   </Articulation>
                   <Articulation name="sforzato">
                         <velocity>130</velocity>
+                  </Articulation>
+                  <genre>marching</genre>
+            </Instrument>
+            <Instrument id="marching-bassline">
+                  <family>batterie</family>
+                  <trackName>Bass Line (10) (MDL)</trackName>
+                  <longName>Bass Line</longName>
+                  <shortName>B. L.</shortName>
+                  <description>Marching bass line.</description>
+                  <musicXMLid>drum.bass-drum</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="61"> <!--Low Bongo-->
+                        <head>normal</head>
+                        <line>9</line>
+                        <voice>0</voice>
+                        <name>Hit Drum 10</name>
+                        <stem>1</stem>
+                        <variants>
+                              <variant pitch="97">
+                                    <articulation>plusstop</articulation>
+                              </variant>
+                              <variant pitch="37">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="37">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="37">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="37">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="37">
+                                    <articulation>portato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="37">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="37">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="49">
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="49">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="49">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="49">
+                                    <articulation>portato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="49">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="49">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="49">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="49">
+                                    <articulation>mordent</articulation>
+                              </variant>
+                              <variant pitch="49">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="62"> <!--Mute High Conga-->
+                        <head>normal</head>
+                        <line>8</line>
+                        <voice>0</voice>
+                        <name>Hit Drum 9</name>
+                        <stem>1</stem>
+                        <variants>
+                              <variant pitch="98">
+                                    <articulation>plusstop</articulation>
+                              </variant>
+                              <variant pitch="38">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="38">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="38">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="38">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="38">
+                                    <articulation>portato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="38">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="38">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="50">
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="50">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="50">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="50">
+                                    <articulation>portato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="50">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="50">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="50">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="50">
+                                    <articulation>mordent</articulation>
+                              </variant>
+                              <variant pitch="50">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="63"> <!--Open High Conga-->
+                        <head>normal</head>
+                        <line>7</line>
+                        <voice>0</voice>
+                        <name>Hit Drum 8</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <variants>
+                              <variant pitch="99">
+                                    <articulation>plusstop</articulation>
+                              </variant>
+                              <variant pitch="39">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="39">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="39">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="39">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="39">
+                                    <articulation>portato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="39">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="39">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="51">
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="51">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="51">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="51">
+                                    <articulation>portato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="51">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="51">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="51">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="51">
+                                    <articulation>mordent</articulation>
+                              </variant>
+                              <variant pitch="51">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="64"> <!--Low Conga-->
+                        <head>normal</head>
+                        <line>6</line>
+                        <voice>0</voice>
+                        <name>Hit Drum 7</name>
+                        <stem>1</stem>
+                        <variants>
+                              <variant pitch="100">
+                                    <articulation>plusstop</articulation>
+                              </variant>
+                              <variant pitch="40">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="40">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="40">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="40">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="40">
+                                    <articulation>portato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="40">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="40">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="52">
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="52">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="52">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="52">
+                                    <articulation>portato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="52">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="52">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="52">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="52">
+                                    <articulation>mordent</articulation>
+                              </variant>
+                              <variant pitch="52">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="65"> <!--High Timbale-->
+                        <head>normal</head>
+                        <line>5</line>
+                        <voice>0</voice>
+                        <name>Hit Drum 6</name>
+                        <stem>1</stem>
+                        <shortcut>B</shortcut>
+                        <variants>
+                              <variant pitch="101">
+                                    <articulation>plusstop</articulation>
+                              </variant>
+                              <variant pitch="41">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="41">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="41">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="41">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="41">
+                                    <articulation>portato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="41">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="41">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="53">
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="53">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="53">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="53">
+                                    <articulation>portato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="53">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="53">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="53">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="53">
+                                    <articulation>mordent</articulation>
+                              </variant>
+                              <variant pitch="53">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="66"> <!--Low Timbale-->
+                        <head>normal</head>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Hit Drum 5</name>
+                        <stem>1</stem>
+                        <shortcut>C</shortcut>
+                        <variants>
+                              <variant pitch="102">
+                                    <articulation>plusstop</articulation>
+                              </variant>
+                              <variant pitch="42">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="42">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="42">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="42">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="42">
+                                    <articulation>portato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="42">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="42">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="54">
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="54">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="54">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="54">
+                                    <articulation>portato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="54">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="54">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="54">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="54">
+                                    <articulation>mordent</articulation>
+                              </variant>
+                              <variant pitch="54">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="67"> <!--High Agogô-->
+                        <head>normal</head>
+                        <line>2</line>
+                        <voice>0</voice>
+                        <name>Hit Drum 4</name>
+                        <stem>1</stem>
+                        <variants>
+                              <variant pitch="103">
+                                    <articulation>plusstop</articulation>
+                              </variant>
+                              <variant pitch="43">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="43">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="43">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="43">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="43">
+                                    <articulation>portato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="43">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="43">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="55">
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="55">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="55">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="55">
+                                    <articulation>portato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="55">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="55">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="55">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="55">
+                                    <articulation>mordent</articulation>
+                              </variant>
+                              <variant pitch="55">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="68"> <!--Low Agogô-->
+                        <head>normal</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Hit Drum 3</name>
+                        <stem>1</stem>
+                        <shortcut>D</shortcut>
+                        <variants>
+                              <variant pitch="104">
+                                    <articulation>plusstop</articulation>
+                              </variant>
+                              <variant pitch="44">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="44">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="44">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="44">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="44">
+                                    <articulation>portato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="44">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="44">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="56">
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="56">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="56">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="56">
+                                    <articulation>portato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="56">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="56">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="56">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="56">
+                                    <articulation>mordent</articulation>
+                              </variant>
+                              <variant pitch="56">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="69"> <!--Cabasa-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Hit Drum 2</name>
+                        <stem>1</stem>
+                        <variants>
+                              <variant pitch="105">
+                                    <articulation>plusstop</articulation>
+                              </variant>
+                              <variant pitch="45">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="45">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="45">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="45">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="45">
+                                    <articulation>portato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="45">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="45">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="57">
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="57">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="57">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="57">
+                                    <articulation>portato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="57">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="57">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="57">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="57">
+                                    <articulation>mordent</articulation>
+                              </variant>
+                              <variant pitch="57">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="70"> <!--Maracas-->
+                        <head>normal</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Hit Drum 1</name>
+                        <stem>1</stem>
+                        <shortcut>E</shortcut>
+                        <variants>
+                              <variant pitch="106">
+                                    <articulation>plusstop</articulation>
+                              </variant>
+                              <variant pitch="46">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="46">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="46">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="46">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="46">
+                                    <articulation>portato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="46">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="46">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="58">
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="58">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="58">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="58">
+                                    <articulation>portato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="58">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="58">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="58">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="58">
+                                    <articulation>mordent</articulation>
+                              </variant>
+                              <variant pitch="58">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="60"> <!--High Bongo-->
+                        <head>slash</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Hit Unison</name>
+                        <stem>1</stem>
+                        <shortcut>F</shortcut>
+                        <variants>
+                              <variant pitch="96">
+                                    <articulation>plusstop</articulation>
+                              </variant>
+                              <variant pitch="36">
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="36">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="36">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="36">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="46">
+                                    <articulation>portato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="36">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="36">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>r16</tremolo>
+                              </variant>
+                              <variant pitch="48">
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="48">
+                                    <articulation>sforzato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="48">
+                                    <articulation>tenuto</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="48">
+                                    <articulation>portato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="48">
+                                    <articulation>marcato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="48">
+                                    <articulation>staccato</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="48">
+                                    <articulation>staccatissimo</articulation>
+                                    <tremolo>buzzroll</tremolo>
+                              </variant>
+                              <variant pitch="48">
+                                    <articulation>mordent</articulation>
+                              </variant>
+                              <variant pitch="48">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="73"> <!--Short Guiro-->
+                        <head>cross</head>
+                        <line>9</line>
+                        <voice>0</voice>
+                        <name>Rim Drum 10</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="74"> <!--Long Guiro-->
+                        <head>cross</head>
+                        <line>8</line>
+                        <voice>0</voice>
+                        <name>Rim Drum 9</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="75"> <!--Claves-->
+                        <head>cross</head>
+                        <line>7</line>
+                        <voice>0</voice>
+                        <name>Rim Drum 8</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="76"> <!--High Woodblock-->
+                        <head>cross</head>
+                        <line>6</line>
+                        <voice>0</voice>
+                        <name>Rim Drum 7</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="77"> <!--Low Woodblock-->
+                        <head>cross</head>
+                        <line>5</line>
+                        <voice>0</voice>
+                        <name>Rim Drum 6</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="78"> <!--Mute Cuica-->
+                        <head>cross</head>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Rim Drum 5</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="79"> <!--Open Cuica-->
+                        <head>cross</head>
+                        <line>2</line>
+                        <voice>0</voice>
+                        <name>Rim Drum 4</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="80"> <!--Mute Triangle-->
+                        <head>cross</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Rim Drum 3</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="81"> <!--Open Triangle-->
+                        <head>cross</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Rim Drum 2</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="82"> <!--Shaker-->
+                        <head>cross</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Rim Drum 1</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="72"> <!--Long Whistle-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadSlashX</quarter>
+                              <half>noteheadSlashX</half>
+                              <whole>noteheadSlashX</whole>
+                              <breve>noteheadSlashX</breve>
+                        </noteheads>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Rim Unison</name>
+                        <stem>1</stem>
+                        <shortcut>G</shortcut>
+                  </Drum>
+                  <Drum pitch="95">
+                        <head>mi</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Mallet Click Unison</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="84"> <!--Belltree-->
+                        <head>la</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Sticks In</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="35"> <!--Acoustic Bass Drum-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadPlusBlack</quarter>
+                              <half>noteheadPlusHalf</half>
+                              <whole>noteheadPlusWhole</whole>
+                              <breve>noteheadPlusDoubleWhole</breve>
+                        </noteheads>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Hand Clap</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="27"> <!--High Q-->
+                        <head>triangle-down</head>
+                        <line>6</line>
+                        <voice>0</voice>
+                        <name>Dut</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="28"> <!--Slap-->
+                        <head>triangle-down</head>
+                        <line>6</line>
+                        <voice>0</voice>
+                        <name>Dut (Unison)</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="33"> <!--Metronome Click-->
+                        <head>fa</head>
+                        <line>7</line>
+                        <voice>0</voice>
+                        <name>Metronome</name>
+                        <stem>1</stem>
+                        <variants>
+                              <variant pitch="34">
+                                    <articulation>sforzato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 59; MS General: Marching Bass-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="59"/> <!--Non-GS drum kit-->
+                  </Channel>
+                  <Articulation>
+                        <velocity>100</velocity>
+                        <gateTime>100</gateTime>
+                  </Articulation>
+                  <Articulation name="staccato">
+                        <velocity>100</velocity>
+                        <gateTime>50</gateTime>
+                  </Articulation>
+                  <Articulation name="portato">
+                        <velocity>100</velocity>
+                        <gateTime>75</gateTime>
+                  </Articulation>
+                  <Articulation name="tenuto">
+                        <velocity>115</velocity>
+                        <gateTime>100</gateTime>
+                  </Articulation>
+                  <Articulation name="marcato">
+                        <velocity>137</velocity>
+                        <gateTime>100</gateTime>
+                  </Articulation>
+                  <Articulation name="sforzato">
+                        <velocity>127</velocity>
+                        <gateTime>100</gateTime>
+                  </Articulation>
+                  <Articulation name="sforzatoStaccato">
+                        <velocity>127</velocity>
+                        <gateTime>50</gateTime>
+                  </Articulation>
+                  <Articulation name="marcatoStaccato">
+                        <velocity>137</velocity>
+                        <gateTime>50</gateTime>
+                  </Articulation>
+                  <Articulation name="tenutoStaccato">
+                        <velocity>115</velocity>
+                        <gateTime>50</gateTime>
+                  </Articulation>
+                  <Articulation name="plusstop">
+                        <velocity>80</velocity>
+                        <gateTime>80</gateTime>
                   </Articulation>
                   <genre>marching</genre>
             </Instrument>
@@ -9353,6 +11605,277 @@
                   </Articulation>
                   <Articulation name="sforzato">
                         <velocity>130</velocity>
+                  </Articulation>
+                  <genre>marching</genre>
+            </Instrument>
+            <Instrument id="marching-cymballine">
+                  <family>batterie</family>
+                  <trackName>Cymbal Line (MDL)</trackName>
+                  <longName>Cymbal Line</longName>
+                  <shortName>C. L.</shortName>
+                  <description>Marching cymbal line.</description>
+                  <musicXMLid>metal.cymbal.crash</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="38"> <!--Acoustic Snare-->
+                        <head>normal</head>
+                        <line>8</line>
+                        <voice>0</voice>
+                        <name>Orchestra Crash 3</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <variants>
+                              <variant pitch="40">
+                                    <articulation>staccatissimo</articulation>
+                              </variant>
+                              <variant pitch="37">
+                                    <articulation>tenuto</articulation>
+                              </variant>
+                              <variant pitch="36">
+                                    <articulation>portato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="62"> <!--Mute High Conga-->
+                        <head>normal</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Orchestra Crash 2</name>
+                        <stem>1</stem>
+                        <shortcut>B</shortcut>
+                        <variants>
+                              <variant pitch="64">
+                                    <articulation>staccatissimo</articulation>
+                              </variant>
+                              <variant pitch="61">
+                                    <articulation>tenuto</articulation>
+                              </variant>
+                              <variant pitch="60">
+                                    <articulation>portato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="86"> <!--Mute Surdo-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Orchestra Crash 1</name>
+                        <stem>1</stem>
+                        <shortcut>C</shortcut>
+                        <variants>
+                              <variant pitch="88">
+                                    <articulation>staccatissimo</articulation>
+                              </variant>
+                              <variant pitch="85">
+                                    <articulation>tenuto</articulation>
+                              </variant>
+                              <variant pitch="84">
+                                    <articulation>portato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="45"> <!--Low Tom-->
+                        <head>cross</head>
+                        <line>8</line>
+                        <voice>0</voice>
+                        <name>Crunch Cymbal 3</name>
+                        <stem>1</stem>
+                        <shortcut>D</shortcut>
+                  </Drum>
+                  <Drum pitch="69"> <!--Cabasa-->
+                        <head>cross</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Crunch Cymbal 2</name>
+                        <stem>1</stem>
+                        <shortcut>E</shortcut>
+                  </Drum>
+                  <Drum pitch="93">
+                        <head>cross</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Crunch Cymbal 1</name>
+                        <stem>1</stem>
+                        <shortcut>F</shortcut>
+                  </Drum>
+                  <Drum pitch="43"> <!--High Floor Tom-->
+                        <head>do</head>
+                        <line>8</line>
+                        <voice>0</voice>
+                        <name>Tap Cymbal 3</name>
+                        <stem>1</stem>
+                        <variants>
+                              <variant pitch="44">
+                                    <articulation>staccato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="67"> <!--High Agogô-->
+                        <head>do</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Tap Cymbal 2</name>
+                        <stem>1</stem>
+                        <variants>
+                              <variant pitch="68">
+                                    <articulation>staccato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="91">
+                        <head>do</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Tap Cymbal 1</name>
+                        <stem>1</stem>
+                        <variants>
+                              <variant pitch="92">
+                                    <articulation>staccato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="50"> <!--High Tom-->
+                        <head>re</head>
+                        <line>8</line>
+                        <voice>0</voice>
+                        <name>Ding Cymbal 3</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="74"> <!--Long Guiro-->
+                        <head>re</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Ding Cymbal 2</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="98">
+                        <head>re</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Ding Cymbal 1</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="51"> <!--Ride Cymbal 1-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadSlashedBlack1</quarter>
+                              <half>noteheadSlashedHalf1</half>
+                              <whole>noteheadSlashedWhole1</whole>
+                              <breve>noteheadXDoubleWhole</breve>
+                        </noteheads>
+                        <line>8</line>
+                        <voice>0</voice>
+                        <name>Zing Cymbal 3</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="75"> <!--Claves-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadSlashedBlack1</quarter>
+                              <half>noteheadSlashedHalf1</half>
+                              <whole>noteheadSlashedWhole1</whole>
+                              <breve>noteheadXDoubleWhole</breve>
+                        </noteheads>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Zing Cymbal 2</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="99">
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadSlashedBlack1</quarter>
+                              <half>noteheadSlashedHalf1</half>
+                              <whole>noteheadSlashedWhole1</whole>
+                              <breve>noteheadXDoubleWhole</breve>
+                        </noteheads>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Zing Cymbal 1</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="47"> <!--Low-Mid Tom-->
+                        <head>diamond</head>
+                        <line>8</line>
+                        <voice>0</voice>
+                        <name>Sizzle Cymbal 3</name>
+                        <stem>1</stem>
+                        <variants>
+                              <variant pitch="48">
+                                    <articulation>staccato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="71"> <!--Short Whistle-->
+                        <head>diamond</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Sizzle Cymbal 2</name>
+                        <stem>1</stem>
+                        <variants>
+                              <variant pitch="72">
+                                    <articulation>staccato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Drum pitch="95">
+                        <head>diamond</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Sizzle Cymbal 1</name>
+                        <stem>1</stem>
+                        <variants>
+                              <variant pitch="96">
+                                    <articulation>staccato</articulation>
+                              </variant>
+                        </variants>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 58; MS General: Marching Cymbals-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="58"/> <!--Non-GS drum kit-->
+                  </Channel>
+                  <Articulation>
+                        <velocity>100</velocity>
+                        <gateTime>100</gateTime>
+                  </Articulation>
+                  <Articulation name="staccato">
+                        <velocity>100</velocity>
+                        <gateTime>50</gateTime>
+                  </Articulation>
+                  <Articulation name="portato">
+                        <velocity>100</velocity>
+                        <gateTime>75</gateTime>
+                  </Articulation>
+                  <Articulation name="tenuto">
+                        <velocity>115</velocity>
+                        <gateTime>100</gateTime>
+                  </Articulation>
+                  <Articulation name="marcato">
+                        <velocity>137</velocity>
+                        <gateTime>100</gateTime>
+                  </Articulation>
+                  <Articulation name="sforzato">
+                        <velocity>127</velocity>
+                        <gateTime>100</gateTime>
+                  </Articulation>
+                  <Articulation name="sforzatoStaccato">
+                        <velocity>127</velocity>
+                        <gateTime>50</gateTime>
+                  </Articulation>
+                  <Articulation name="marcatoStaccato">
+                        <velocity>137</velocity>
+                        <gateTime>50</gateTime>
+                  </Articulation>
+                  <Articulation name="tenutoStaccato">
+                        <velocity>115</velocity>
+                        <gateTime>50</gateTime>
+                  </Articulation>
+                  <Articulation name="plusstop">
+                        <velocity>80</velocity>
+                        <gateTime>80</gateTime>
                   </Articulation>
                   <genre>marching</genre>
             </Instrument>

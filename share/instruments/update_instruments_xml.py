@@ -13,6 +13,7 @@ spreadsheet_id = '1SwqZb8lq5rfv5regPSA10drWjUAoi65EuMoYtG-4k5s'
 sheet_ids = {
     'Instruments':              '516529997',
     'Drumsets':                 '272323799',
+    'Variants':                 '1290706265',
     'Channels':                 '504647632',
     'Genres':                   '1006945000',
     'Groups':                   '1568449825',
@@ -65,35 +66,48 @@ def data_by_heading(table, headings_row=0):
         rows.append(data)
     return rows
 
-def index_by_column(rows, primary_index_col, secondary_index_col=None):
-    data = {}
-    if secondary_index_col is None:
-        for row in rows:
-            primary = row[primary_index_col]
-            assert primary not in data
-            data[primary] = row
+def index_for_column(row, cols):
+    if isinstance(cols, tuple):
+        # index by multiple columns at once
+        return tuple(row[col] for col in cols)
     else:
-        for row in rows:
-            primary = row[primary_index_col]
-            secondary = row[secondary_index_col]
-            if primary not in data:
-                data[primary] = {}
-            else:
-                assert secondary not in data[primary]
-            data[primary][secondary] = row
-    return data
+        # index by single column
+        return row[cols]
 
-def google_spreadsheet_to_indexed_dict(sheet, headers_row, primary_index_col, secondary_index_col=None):
+def index_by_columns(rows, *index_cols):
+    # Returns a nested dictionary of rows indexed by items in the specified columns:
+    #     dict[col1][col2][col3]...
+    # You can also specify a tuple of columns to index by multiple columns at once:
+    #     dict[col1][(col2,col3)][col4]...
+    # Rows must be uniquely identifiable by the index columns. If not, add more columns.
+    final_idx_col = index_cols[-1]
+    data_root = {}
+    for row in rows:
+        data = data_root
+        # Prepare nested dict structure for all columns except the final one.
+        for col in index_cols[:-1]:
+            idx = index_for_column(row, col)
+            if idx not in data:
+                data[idx] = {}
+            data = data[idx]
+        # Innermost dict is indexed by the final column. It contains the actual data row.
+        final_idx = index_for_column(row, final_idx_col)
+        assert final_idx not in data # Rows must be uniquely identifiable...
+        data[final_idx] = row # ...otherwise data will be overwritten here.
+    return data_root
+
+def google_spreadsheet_to_indexed_dict(sheet, headers_row, *index_cols):
     tsv = download_google_spreadsheet(sheet)
     table = table_from_tsv(tsv)
     rows = data_by_heading(table, headers_row - 1)
-    return index_by_column(rows, primary_index_col, secondary_index_col)
+    return index_by_columns(rows, *index_cols)
 
 os.chdir(sys.path[0]) # make all paths relative to this script's directory
 os.makedirs('tsv/download', exist_ok=True)
 
 instruments     = google_spreadsheet_to_indexed_dict('Instruments', 3, 'group', 'id')
 drumsets        = google_spreadsheet_to_indexed_dict('Drumsets', 3, 'instrument', 'pitch')
+variants        = google_spreadsheet_to_indexed_dict('Variants', 3, 'instrument', 'drum', ('pitch', 'articulation', 'tremolo'))
 channels        = google_spreadsheet_to_indexed_dict('Channels', 3, 'instrument', 'channel')
 genres          = google_spreadsheet_to_indexed_dict('Genres', 3, 'id')
 groups          = google_spreadsheet_to_indexed_dict('Groups', 3, 'id')
@@ -153,19 +167,21 @@ for family in families.values():
 
 # Add articulations to XML tree
 for articulation in articulation_defaults.values():
-    el = ET.SubElement(root, 'Articulation')
+    el = ET.Element('Articulation')
     to_attribute(el, articulation, 'name')
     to_subelement(el, articulation, 'velocity')
     to_subelement(el, articulation, 'gateTime')
+    if el.find('*') is not None:
+        root.append(el)
 
 # Add groups and instruments to XML tree
-for group in groups.values():
+for group_id, group in groups.items():
     g_el = ET.SubElement(root, 'InstrumentGroup')
-    to_attribute(g_el, group, 'id')
+    g_el.set('id', group_id)
     to_subelement(g_el, group, 'name')
-    for instrument in instruments[group['id']].values():
+    for instrument_id, instrument in instruments[group_id].items():
         el = ET.SubElement(g_el, 'Instrument')
-        to_attribute(el, instrument, 'id')
+        el.set('id', instrument_id)
         to_subelement(el, instrument, 'init') # must be first subelement
         to_subelement(el, instrument, 'family')
         to_comment(el, instrument, 'comment')
@@ -262,22 +278,40 @@ for group in groups.values():
         to_subelement(el, instrument, 'transpDia', 'transposeDiatonic')
         to_subelement(el, instrument, 'transpChr', 'transposeChromatic')
 
-        if instrument['id'] in drumsets:
-            for drum in drumsets[instrument['id']].values():
-                pitch = drum['pitch']
+        if instrument_id in drumsets:
+            for drum in drumsets[instrument_id].values():
+                drum_pitch = drum['pitch']
                 d_el = ET.SubElement(el, 'Drum')
-                d_el.set('pitch', pitch)
-                if pitch in gmgs_percussion:
-                    to_comment(d_el, gmgs_percussion[pitch], 'name')
+                d_el.set('pitch', drum_pitch)
+                if drum_pitch in gmgs_percussion:
+                    to_comment(d_el, gmgs_percussion[drum_pitch], 'name')
                 to_subelement(d_el, drum, 'head')
+
+                nh_el = ET.Element('noteheads')
+                to_subelement(nh_el, drum, 'quarter')
+                to_subelement(nh_el, drum, 'half')
+                to_subelement(nh_el, drum, 'whole')
+                to_subelement(nh_el, drum, 'breve')
+                if nh_el.find('*') is not None:
+                    d_el.append(nh_el)
+
                 to_subelement(d_el, drum, 'line')
                 to_subelement(d_el, drum, 'voice')
                 to_subelement(d_el, drum, 'drum', 'name')
                 to_subelement(d_el, drum, 'stem')
                 to_subelement(d_el, drum, 'shortcut')
 
-        if instrument['id'] in channels:
-            for channel in channels[instrument['id']].values():
+                if instrument_id in variants and drum_pitch in variants[instrument_id]:
+                    vs_el = ET.SubElement(d_el, 'variants')
+                    for variant in variants[instrument_id][drum_pitch].values():
+                        variant_pitch = variant['pitch']
+                        v_el = ET.SubElement(vs_el, 'variant')
+                        v_el.set('pitch', variant_pitch)
+                        to_subelement(v_el, variant, 'articulation')
+                        to_subelement(v_el, variant, 'tremolo')
+
+        if instrument_id in channels:
+            for channel in channels[instrument_id].values():
                 ch_el = ET.SubElement(el, 'Channel')
                 to_attribute(ch_el, channel, 'channel', 'name')
                 bank = channel['Bank']
@@ -304,8 +338,8 @@ for group in groups.values():
                 else:
                     to_comment(ch_el, gm_programs[channel['Prog']], 'name')
 
-        if instrument['id'] in articulations:
-            for articulation in articulations[instrument['id']].values():
+        if instrument_id in articulations:
+            for articulation in articulations[instrument_id].values():
                 ar_el = ET.SubElement(el, 'Articulation')
                 to_attribute(ar_el, articulation, 'articulation', 'name')
                 to_subelement(ar_el, articulation, 'velocity')
@@ -404,7 +438,7 @@ with open('instrumentsxml.h', 'w', newline='\n', encoding='utf-8') as f:
     f.write("// Templates\n")
     d = "../templates"
     # sort to get same ordering on all platforms
-    for o in sorted(os.listdir(d)):  
+    for o in sorted(os.listdir(d)):
         ofullPath = os.path.join(d, o)
         if os.path.isdir(ofullPath):
             templateCategory = o.split("-")[1].replace("_", " ")
@@ -428,13 +462,12 @@ with open('instrumentsxml.h', 'w', newline='\n', encoding='utf-8') as f:
 
     f.write("\n")
     f.write("// Groups & Instruments\n")
-    for group in groups.values():
+    for group_id, group in groups.items():
         f.write("\n// " + group['name'] + "\n")
         add_translatable_string(f, 'engraving/instruments/group', group['name'])
 
-        for instrument in instruments[group['id']].values():
+        for instrumentId, instrument in instruments[group_id].items():
             f.write('\n')
-            instrumentId = instrument['id']
             hasTrait = instrument['traitName'] and instrument['traitName'] != '[hide]'
 
             add_translatable_string_if_not_null(f, 'engraving/instruments', instrument['description'],
@@ -445,10 +478,10 @@ with open('instrumentsxml.h', 'w', newline='\n', encoding='utf-8') as f:
                 add_translatable_string_if_not_null(f, 'engraving/instruments', instrument[nameType],
                                                     disambiguation(instrumentId, nameType),
                                                     get_comment(instrument, nameType, hasTrait))
-                
+
             if hasTrait:
                 add_translatable_string_if_not_null(f, 'engraving/instruments', instrument['traitName'],
-                                                    disambiguation(instrumentId, 'traitName'), 
+                                                    disambiguation(instrumentId, 'traitName'),
                                                     get_comment(instrument, 'traitName', hasTrait))
 
             if instrumentId in channels:

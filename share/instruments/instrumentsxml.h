@@ -4314,6 +4314,15 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Snare Drum", "marching-snare longNa
 //: shortName for Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "S.D.", "marching-snare shortName"),
 
+//: description for Snare Line (MDL); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Marching snare line.", "marching-snareline description"),
+//: trackName for Snare Line (MDL); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Snare Line (MDL)", "marching-snareline trackName"),
+//: longName for Snare Line (MDL); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Snare Line", "marching-snareline longName"),
+//: shortName for Snare Line (MDL); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "S. L.", "marching-snareline shortName"),
+
 //: description for Tenor Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Marching tenor drums.", "marching-tenor-drums description"),
 //: trackName for Tenor Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -4322,6 +4331,15 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Tenor Drums", "marching-tenor-drums
 QT_TRANSLATE_NOOP3("engraving/instruments", "Tenor Drums", "marching-tenor-drums longName"),
 //: shortName for Tenor Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "T.D.", "marching-tenor-drums shortName"),
+
+//: description for Tenor Line (MDL); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Marching tenor line.", "marching-tenorline description"),
+//: trackName for Tenor Line (MDL); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tenor Line (MDL)", "marching-tenorline trackName"),
+//: longName for Tenor Line (MDL); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tenor Line", "marching-tenorline longName"),
+//: shortName for Tenor Line (MDL); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "T. L.", "marching-tenorline shortName"),
 
 //: description for Bass Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Marching bass drums.", "marching-bass-drums description"),
@@ -4332,6 +4350,15 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Bass Drums", "marching-bass-drums l
 //: shortName for Bass Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "B.D.", "marching-bass-drums shortName"),
 
+//: description for Bass Line (10) (MDL); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Marching bass line.", "marching-bassline description"),
+//: trackName for Bass Line (10) (MDL); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Bass Line (10) (MDL)", "marching-bassline trackName"),
+//: longName for Bass Line (10) (MDL); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Bass Line", "marching-bassline longName"),
+//: shortName for Bass Line (10) (MDL); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "B. L.", "marching-bassline shortName"),
+
 //: description for Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Marching cymbals.", "marching-cymbals description"),
 //: trackName for Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -4340,6 +4367,15 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Cymbals", "marching-cymbals trackNa
 QT_TRANSLATE_NOOP3("engraving/instruments", "Cymbals", "marching-cymbals longName"),
 //: shortName for Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Cym.", "marching-cymbals shortName"),
+
+//: description for Cymbal Line (MDL); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Marching cymbal line.", "marching-cymballine description"),
+//: trackName for Cymbal Line (MDL); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Cymbal Line (MDL)", "marching-cymballine trackName"),
+//: longName for Cymbal Line (MDL); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Cymbal Line", "marching-cymballine longName"),
+//: shortName for Cymbal Line (MDL); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "C. L.", "marching-cymballine shortName"),
 
 // Percussion - Body
 QT_TRANSLATE_NOOP("engraving/instruments/group", "Percussion - Body"),
