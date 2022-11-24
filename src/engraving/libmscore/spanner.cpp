@@ -1668,6 +1668,10 @@ void SpannerSegment::autoplaceSpannerSegment()
         sl.add(sh.translated(pos()));
         double yd = 0.0;
         staff_idx_t stfIdx = systemFlag() ? staffIdxOrNextVisible() : staffIdx();
+        if (stfIdx == mu::nidx) {
+            _skipDraw = true;
+            return;
+        }
         if (above) {
             double d  = system()->topDistance(stfIdx, sl);
             if (d > -md) {
