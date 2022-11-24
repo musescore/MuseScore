@@ -22,6 +22,8 @@
 #include "elementrepositoryservice.h"
 
 #include "chord.h"
+#include "rest.h"
+#include "notedot.h"
 #include "stem.h"
 #include "hook.h"
 #include "beam.h"
@@ -154,6 +156,25 @@ const
         if (elementType == mu::engraving::ElementType::BRACKET) {
             resultList << mu::engraving::toBracket(element)->bracketItem();
             continue;
+        }
+
+        if (elementType == mu::engraving::ElementType::NOTEDOT) {
+            mu::engraving::EngravingItem* parent = element->elementBase();
+            if (parent && parent->isNote()) {
+                mu::engraving::Note* note = mu::engraving::toNote(parent);
+                for (mu::engraving::NoteDot* dot : note->dots()) {
+                    resultList << dot;
+                }
+                continue;
+            } else if (parent && parent->isRest()) {
+                mu::engraving::Rest* rest = mu::engraving::toRest(parent);
+                for (int n = 0; n < rest->dots(); ++n) {
+                    if (mu::engraving::NoteDot* dot = rest->dot(n)) {
+                        resultList << dot;
+                    }
+                }
+                continue;
+            }
         }
 
         if (!resultList.contains(element->elementBase())) {
