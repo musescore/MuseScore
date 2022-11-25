@@ -1153,7 +1153,7 @@
             </Instrument>
             <Instrument id="g-soprano-ocarina">
                   <family>ocarinas</family>
-                  <trackName>G Soprano Ocarina</trackName>
+                  <trackName>Soprano Ocarina</trackName>
                   <longName>G Soprano Ocarina</longName>
                   <shortName>G S. Oc.</shortName>
                   <traitName type="tuning">G</traitName>
@@ -1171,7 +1171,7 @@
             </Instrument>
             <Instrument id="f-soprano-ocarina">
                   <family>ocarinas</family>
-                  <trackName>F Soprano Ocarina</trackName>
+                  <trackName>Soprano Ocarina</trackName>
                   <longName>F Soprano Ocarina</longName>
                   <shortName>F S. Oc.</shortName>
                   <traitName type="tuning">F</traitName>
