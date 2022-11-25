@@ -28,7 +28,7 @@
 #include "internal/encoders/flacencoder.h"
 #include "internal/encoders/wavencoder.h"
 
-#include "translation.h"
+#include "defer.h"
 
 using namespace mu;
 using namespace mu::audio;
@@ -75,6 +75,15 @@ bool SoundTrackWriter::write()
     m_source->setSampleRate(m_encoderPtr->format().sampleRate);
     m_source->setIsActive(true);
 
+    DEFER {
+        m_encoderPtr->flush();
+
+        AudioEngine::instance()->setMode(RenderMode::RealTimeMode);
+
+        m_source->setSampleRate(AudioEngine::instance()->sampleRate());
+        m_source->setIsActive(false);
+    };
+
     if (!prepareInputBuffer()) {
         return false;
     }
@@ -82,13 +91,6 @@ bool SoundTrackWriter::write()
     if (m_encoderPtr->encode(m_inputBuffer.size() / sizeof(float), m_inputBuffer.data()) == 0) {
         return false;
     }
-
-    m_encoderPtr->flush();
-
-    AudioEngine::instance()->setMode(RenderMode::RealTimeMode);
-
-    m_source->setSampleRate(AudioEngine::instance()->sampleRate());
-    m_source->setIsActive(false);
 
     return true;
 }
