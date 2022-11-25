@@ -32,10 +32,10 @@ using namespace mu::audio::encode;
 size_t OggEncoder::encode(samples_t samplesPerChannel, const float* input)
 {
     m_progress.progressChanged.send(0, 100, "");
-    size_t result = ope_encoder_write_float(m_opusEncoder, input, samplesPerChannel + m_format.sampleRate * 2);
+    int code = ope_encoder_write_float(m_opusEncoder, input, samplesPerChannel + m_format.sampleRate * 2);
     m_progress.progressChanged.send(100, 100, "");
 
-    return result;
+    return code == OPE_OK ? samplesPerChannel : 0;
 }
 
 size_t OggEncoder::flush()
