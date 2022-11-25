@@ -1779,6 +1779,16 @@ void Instrument::setTrait(const Trait& trait)
     _trait = trait;
 }
 
+bool Instrument::isPrimary() const
+{
+    return _isPrimary;
+}
+
+void Instrument::setIsPrimary(bool isPrimary)
+{
+    _isPrimary = isPrimary;
+}
+
 void Instrument::updateInstrumentId()
 {
     if (_instrumentId.isEmpty()) {

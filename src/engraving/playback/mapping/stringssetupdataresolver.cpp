@@ -25,9 +25,9 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-const PlaybackSetupData& StringsSetupDataResolver::doResolve(const Instrument* instrument)
+PlaybackSetupData StringsSetupDataResolver::doResolve(const Instrument* instrument)
 {
-    static std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
+    static const std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
         { "harp", { SoundId::Harp, SoundCategory::Strings, { mpe::SoundSubCategory::Plucked }, {} } },
         { "cavaquinho", { SoundId::Cavaquinho, SoundCategory::Strings, { SoundSubCategory::Acoustic,
                                                                          SoundSubCategory::Steel,
@@ -268,6 +268,18 @@ const PlaybackSetupData& StringsSetupDataResolver::doResolve(const Instrument* i
     if (search == SETUP_DATA_MAP.cend()) {
         static PlaybackSetupData empty;
         return empty;
+    }
+
+    static const std::unordered_set<SoundId> supportPrimaryAndSecondaryCategories {
+        SoundId::Violin,
+        SoundId::ViolinSection,
+    };
+
+    if (mu::contains(supportPrimaryAndSecondaryCategories, search->second.id)) {
+        SoundSubCategory category = instrument->isPrimary() ? SoundSubCategory::Primary : SoundSubCategory::Secondary;
+        PlaybackSetupData setupData = search->second;
+        setupData.subCategorySet.insert(category);
+        return setupData;
     }
 
     return search->second;
