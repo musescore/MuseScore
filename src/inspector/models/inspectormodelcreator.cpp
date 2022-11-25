@@ -23,6 +23,7 @@
 
 #include "notation/notes/notesettingsproxymodel.h"
 #include "notation/notes/noteheads/noteheadsettingsmodel.h"
+#include "notation/notes/chords/chordsettingsmodel.h"
 #include "notation/notes/beams/beamsettingsmodel.h"
 #include "notation/notes/hooks/hooksettingsmodel.h"
 #include "notation/notes/stems/stemsettingsmodel.h"
@@ -79,6 +80,8 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
         return new NoteSettingsProxyModel(parent, repository);
     case InspectorModelType::TYPE_NOTEHEAD:
         return new NoteheadSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_CHORD:
+        return new ChordSettingsModel(parent, repository);
     case InspectorModelType::TYPE_STEM:
         return new StemSettingsModel(parent, repository);
     case InspectorModelType::TYPE_HOOK:

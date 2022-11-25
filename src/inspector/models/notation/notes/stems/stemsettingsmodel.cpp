@@ -40,10 +40,6 @@ StemSettingsModel::StemSettingsModel(QObject* parent, IElementRepositoryService*
 
 void StemSettingsModel::createProperties()
 {
-    m_isStemHidden = buildPropertyItem(Pid::VISIBLE, [this](const Pid pid, const QVariant& isStemHidden) {
-        onPropertyValueChanged(pid, !isStemHidden.toBool());
-    });
-
     m_thickness = buildPropertyItem(Pid::LINE_WIDTH);
     m_length = buildPropertyItem(Pid::USER_LEN);
 
@@ -75,16 +71,10 @@ void StemSettingsModel::loadProperties()
 
 void StemSettingsModel::resetProperties()
 {
-    m_isStemHidden->resetToDefault();
     m_thickness->resetToDefault();
     m_length->resetToDefault();
     m_stemDirection->resetToDefault();
     m_offset->resetToDefault();
-}
-
-PropertyItem* StemSettingsModel::isStemHidden() const
-{
-    return m_isStemHidden;
 }
 
 PropertyItem* StemSettingsModel::thickness() const
@@ -152,12 +142,6 @@ void StemSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyId
 
 void StemSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
-    if (mu::contains(propertyIdSet, Pid::VISIBLE)) {
-        loadPropertyItem(m_isStemHidden, [](const QVariant& isVisible) -> QVariant {
-            return !isVisible.toBool();
-        });
-    }
-
     if (mu::contains(propertyIdSet, Pid::LINE_WIDTH)) {
         loadPropertyItem(m_thickness, formatDoubleFunc);
     }
