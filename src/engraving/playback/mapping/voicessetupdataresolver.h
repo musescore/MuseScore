@@ -29,7 +29,7 @@ namespace mu::engraving {
 class VoicesSetupDataResolver : public SetupDataResolverBase<VoicesSetupDataResolver>
 {
 public:
-    static const mpe::PlaybackSetupData& doResolve(const Instrument* instrument);
+    static mpe::PlaybackSetupData doResolve(const Instrument* instrument);
 };
 }
 

@@ -114,6 +114,30 @@ bool noMidi          = false;
 bool midiInputTrace  = false;
 bool midiOutputTrace = false;
 
+static void markInstrumentsAsPrimary(std::vector<Part*>& parts)
+{
+    TRACEFUNC;
+
+    std::unordered_map<String /*instrumentId*/, int /*count*/> instrumentCount;
+
+    for (Part* part : parts) {
+        Instrument* instrument = part->instrument();
+        if (!instrument) {
+            continue;
+        }
+
+        auto it = instrumentCount.find(instrument->id());
+        if (it == instrumentCount.cend()) {
+            it = instrumentCount.insert(instrumentCount.begin(), { instrument->id(), 0 });
+        }
+
+        it->second++;
+
+        bool isPrimary = (it->second % 2 != 0);
+        instrument->setIsPrimary(isPrimary);
+    }
+}
+
 //---------------------------------------------------------
 //   MeasureBaseList
 //---------------------------------------------------------
@@ -2538,6 +2562,7 @@ void Score::insertPart(Part* part, staff_idx_t idx)
     }
     masterScore()->rebuildMidiMapping();
     setInstrumentsChanged(true);
+    markInstrumentsAsPrimary(_parts);
 }
 
 void Score::appendPart(Part* part)
@@ -2548,6 +2573,7 @@ void Score::appendPart(Part* part)
 
     assignIdIfNeed(*part);
     _parts.push_back(part);
+    markInstrumentsAsPrimary(_parts);
 }
 
 //---------------------------------------------------------
@@ -2568,6 +2594,7 @@ void Score::removePart(Part* part)
     }
 
     _parts.erase(_parts.begin() + index);
+    markInstrumentsAsPrimary(_parts);
 
     if (_excerpt) {
         for (Part* excerptPart : _excerpt->parts()) {
@@ -2576,6 +2603,7 @@ void Score::removePart(Part* part)
             }
 
             mu::remove(_excerpt->parts(), excerptPart);
+            markInstrumentsAsPrimary(_excerpt->parts());
             break;
         }
     }
@@ -3014,6 +3042,7 @@ void Score::sortStaves(std::vector<staff_idx_t>& dst)
         }
     }
     setLayoutAll();
+    markInstrumentsAsPrimary(_parts);
 }
 
 //---------------------------------------------------------

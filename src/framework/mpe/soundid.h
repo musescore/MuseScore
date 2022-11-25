@@ -379,6 +379,9 @@ enum class SoundSubCategory
     Square_Wave,
     Sawtooth_Wave,
 
+    Primary,
+    Secondary,
+
     Last
 };
 
@@ -758,6 +761,8 @@ static const std::unordered_map<SoundSubCategory, String> SUBCATEGORY_STRINGS
     { SoundSubCategory::FX_Rain, String(u"FX_Rain") },
     { SoundSubCategory::FX_SciFi, String(u"FX_SciFi") },
     { SoundSubCategory::FX_SoundTrack, String(u"FX_SoundTrack") },
+    { SoundSubCategory::Primary, String(u"Primary") },
+    { SoundSubCategory::Secondary, String(u"Secondary") },
     { SoundSubCategory::Last, String(u"Last") }
 };
 
