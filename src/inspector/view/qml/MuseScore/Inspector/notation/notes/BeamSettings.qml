@@ -49,7 +49,7 @@ FocusableItem {
 
         BeamTypeSelector {
             id: beamTypeSection
-            titleText: qsTrc("inspector", "Beam types")
+            titleText: qsTrc("inspector", "Beam type")
             propertyItem: root.beamModesModel ? root.beamModesModel.mode : null
             enabled: root.beamModesModel && !root.beamModesModel.isEmpty
 
