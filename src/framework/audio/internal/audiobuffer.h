@@ -37,6 +37,11 @@ constexpr size_t cache_line_size = std::hardware_destructive_interference_size;
 constexpr size_t cache_line_size = 64;
 #endif
 
+#if (defined (_MSCVER) || defined (_MSC_VER))
+// structure was padded due to alignment specifier
+#pragma warning(disable: 4324)
+#endif
+
 namespace mu::audio {
 class AudioBuffer
 {
