@@ -80,9 +80,7 @@ static const TranslatableString X_TAB = TranslatableString("action", "%1 (TAB)")
 const UiActionList NotationUiActions::m_actions = {
     UiAction("notation-escape",
              mu::context::UiCtxNotationOpened,
-             mu::context::CTX_NOTATION_FOCUSED,
-             TranslatableString("action", "Esc"),
-             TranslatableString("action", "Escape (Esc)")
+             mu::context::CTX_NOTATION_FOCUSED
              ),
     UiAction("put-note", // args: PointF pos, bool replace, bool insert
              mu::context::UiCtxNotationOpened,
