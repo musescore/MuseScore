@@ -252,6 +252,7 @@ private:
     bool m_showCapo = true; // TODO-gp : settings
     std::unordered_map<Measure*, std::array<int, VOICES> > m_chordsInMeasureByVoice; /// if measure has any chord for specific voice, rests are hidden
     std::unordered_map<Measure*, size_t> m_chordsInMeasure;
+    std::unordered_map<size_t, bool> m_noBeamsInBar;
 };
 } //end Ms namespace
 #endif // SCOREDOMBUILDER_H

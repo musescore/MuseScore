@@ -229,6 +229,21 @@ static GPConverter::LineImportType hairpinToImportType(GPBeat::Hairpin t)
     return GPConverter::LineImportType::NONE;
 }
 
+static BeamMode beamModeBeatToCr(GPBeat::BeamMode mode)
+{
+    static std::unordered_map<GPBeat::BeamMode, BeamMode> types {
+        { GPBeat::BeamMode::AUTO, BeamMode::AUTO },
+        { GPBeat::BeamMode::JOINED, BeamMode::MID },
+        { GPBeat::BeamMode::BROKEN, BeamMode::NONE }
+    };
+
+    if (types.find(mode) != types.end()) {
+        return types[mode];
+    }
+
+    return BeamMode::AUTO;
+}
+
 GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
     : _score(score), _gpDom(std::move(gpDom))
 {
@@ -428,6 +443,8 @@ void GPConverter::convertBar(const GPBar* bar, Context ctx)
     if (addSimileMark(bar, static_cast<int>(ctx.curTrack))) {
         return;
     }
+
+    m_noBeamsInBar[ctx.masterBarIndex] = bar->noBeams();
     convertVoices(bar->voices(), ctx);
 
     for (track_idx_t i = ctx.curTrack; i < ctx.curTrack + VOICES; i++) {
@@ -555,6 +572,13 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
 
             if (beat->stemOrientationUserDefined()) {
                 static_cast<Chord*>(cr)->setStemDirection(beat->stemOrientationUp() ? DirectionV::UP : DirectionV::DOWN);
+            }
+
+            /// TODO: for now skipping "break secondary beams"
+            if (m_noBeamsInBar[ctx.masterBarIndex] && beat->beamMode() == GPBeat::BeamMode::BROKEN) {
+                cr->setBeamMode(BeamMode::NONE);
+            } else if (beat->beamMode() == GPBeat::BeamMode::JOINED) {
+                cr->setBeamMode(BeamMode::MID);
             }
         }
 
