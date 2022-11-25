@@ -78,7 +78,7 @@ void PlaybackConfiguration::init()
         settings()->setDefaultValue(mixerSectionVisibleKey(sectionType), Val(sectionEnabledByDefault));
     }
 
-    settings()->setDefaultValue(DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS, Val(BASIC_PROFILE_NAME.toStdString()));
+    settings()->setDefaultValue(DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS, Val(fallbackSoundProfileStr().toStdString()));
 }
 
 bool PlaybackConfiguration::playNotesWhenEditing() const
@@ -144,4 +144,15 @@ SoundProfileName PlaybackConfiguration::defaultProfileForNewProjects() const
 void PlaybackConfiguration::setDefaultProfileForNewProjects(const SoundProfileName& name)
 {
     settings()->setSharedValue(DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS, Val(name.toStdString()));
+}
+
+const SoundProfileName& PlaybackConfiguration::fallbackSoundProfileStr() const
+{
+#ifdef BUILD_MUSESAMPLER_MODULE
+    if (musesamplerInfo()->isInstalled()) {
+        return MUSE_PROFILE_NAME;
+    }
+#endif
+
+    return BASIC_PROFILE_NAME;
 }

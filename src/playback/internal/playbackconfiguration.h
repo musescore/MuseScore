@@ -22,11 +22,22 @@
 #ifndef MU_PLAYBACK_PLAYBACKCONFIGURATION_H
 #define MU_PLAYBACK_PLAYBACKCONFIGURATION_H
 
+#include "config.h"
+
+#ifdef BUILD_MUSESAMPLER_MODULE
+#include "modularity/ioc.h"
+#include "musesampler/imusesamplerinfo.h"
+#endif
+
 #include "../iplaybackconfiguration.h"
 
 namespace mu::playback {
 class PlaybackConfiguration : public IPlaybackConfiguration
 {
+#ifdef BUILD_MUSESAMPLER_MODULE
+    INJECT(playback, musesampler::IMuseSamplerInfo, musesamplerInfo)
+#endif
+
 public:
     void init();
 
@@ -48,6 +59,8 @@ public:
     const SoundProfileName& museSoundProfileName() const override;
     SoundProfileName defaultProfileForNewProjects() const override;
     void setDefaultProfileForNewProjects(const SoundProfileName& name) override;
+private:
+    const SoundProfileName& fallbackSoundProfileStr() const;
 };
 }
 
