@@ -45,6 +45,7 @@ public:
     void clearSources() override;
 
     std::string version() const override;
+    bool isInstalled() const override;
 
 private:
     bool checkLibrary() const;

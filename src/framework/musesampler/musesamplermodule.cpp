@@ -27,6 +27,7 @@
 
 #include "ui/iuiactionsregister.h"
 
+#include "imusesamplerinfo.h"
 #include "internal/musesamplerconfiguration.h"
 #include "internal/musesamplerresolver.h"
 #include "internal/musesampleruiactions.h"
@@ -47,8 +48,8 @@ std::string MuseSamplerModule::moduleName() const
 
 void MuseSamplerModule::registerExports()
 {
-    ioc()->registerExport(moduleName(), s_configuration);
-    ioc()->registerExport(moduleName(), s_resolver);
+    ioc()->registerExport<IMuseSamplerConfiguration>(moduleName(), s_configuration);
+    ioc()->registerExport<IMuseSamplerInfo>(moduleName(), s_resolver);
 }
 
 void MuseSamplerModule::resolveImports()
