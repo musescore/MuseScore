@@ -160,6 +160,15 @@ std::string MuseSamplerResolver::version() const
     return String::fromUtf8(m_libHandler->getVersionString()).toStdString();
 }
 
+bool MuseSamplerResolver::isInstalled() const
+{
+    if (m_libHandler) {
+        return true;
+    }
+
+    return false;
+}
+
 bool MuseSamplerResolver::checkLibrary() const
 {
     if (!m_libHandler->isValid()) {

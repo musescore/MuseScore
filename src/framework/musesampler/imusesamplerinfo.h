@@ -34,6 +34,7 @@ public:
     virtual ~IMuseSamplerInfo() = default;
 
     virtual std::string version() const = 0;
+    virtual bool isInstalled() const = 0;
 };
 }
 
