@@ -392,10 +392,6 @@ std::unique_ptr<GPMasterBar> GP67DomBuilder::createGPMasterBar(XmlDomNode* maste
 
 std::pair<int, std::unique_ptr<GPBar> > GP67DomBuilder::createGPBar(XmlDomNode* barNode)
 {
-    static const std::set<String> sUnused = {
-        u"XProperties"
-    };
-
     auto clefType = [](const String& clef) {
         if (clef == u"C4") {
             return GPBar::ClefType::C4;
@@ -463,8 +459,15 @@ std::pair<int, std::unique_ptr<GPBar> > GP67DomBuilder::createGPBar(XmlDomNode* 
                 _voices.erase(idx);
                 bar->addGPVoice(std::move(voice));
             }
-        } else if (sUnused.find(nodeName) != sUnused.end()) {
-            // Ignored
+        } else if (nodeName == u"XProperties") {
+            auto propertyNode = innerNode.firstChild();
+            int propertyId = propertyNode.attribute("id").toInt();
+            if (propertyId == 1124139521) {
+                // broken beams
+                if (propertyNode.firstChild().toElement().text().toInt() == 1) {
+                    bar->setNoBeams(true);
+                }
+            }
         } else {
             LOGW() << "unknown GP Bar tag: " << nodeName << "\n";
         }
@@ -1017,6 +1020,17 @@ void GP67DomBuilder::readBeatXProperties(const XmlDomNode& propertiesNode, GPBea
         if (propertyId == 687931393 || propertyId == 687935489) {
             // arpeggio/brush ticks
             beat->setArpeggioStretch(propertyNode.firstChild().toElement().text().toDouble() / mu::engraving::Constants::division);
+        } else if (propertyId == 1124204546) {
+            // joined beams
+            int beamData = propertyNode.firstChild().toElement().text().toInt();
+
+            if (beamData == 1) {
+                beat->setBeamMode(GPBeat::BeamMode::JOINED);
+            } else if (beamData == 2) {
+                /// TODO: then if it's broken beams, then it's "break beams" and not "break secondary beams" guitar-pro beam type
+                /// if "1124139521" xproperty of bar isn't 1, this information should be ignored
+                beat->setBeamMode(GPBeat::BeamMode::BROKEN);
+            }
         }
 
         propertyNode = propertyNode.nextSibling();
