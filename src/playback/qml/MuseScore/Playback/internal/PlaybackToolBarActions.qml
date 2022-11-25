@@ -110,13 +110,14 @@ Item {
         id: timeField
 
         anchors.left: buttonsSeparator.right
-        anchors.leftMargin: 12
+        anchors.leftMargin: 26
         anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: 1 // for nicer visual alignment
 
         //! NOTE: explicit width prevents the content from jumping around
         // when a score is being played
         // See: https://github.com/musescore/MuseScore/issues/9633
-        width: 58
+        width: 64
 
         maxTime: root.playbackModel.maxPlayTime
         maxMillisecondsNumber: 9
@@ -131,7 +132,9 @@ Item {
         id: measureAndBeatFields
 
         anchors.left: timeField.right
+        anchors.leftMargin: 6
         anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: 1 // for nicer visual alignment
 
         measureNumber: root.playbackModel.measureNumber
         maxMeasureNumber: root.playbackModel.maxMeasureNumber
@@ -153,12 +156,13 @@ Item {
         id: tempoView
 
         anchors.left: measureAndBeatFields.right
+        anchors.leftMargin: 6
         anchors.verticalCenter: parent.verticalCenter
 
         //! NOTE: explicit width prevents the content from jumping around
         // when a score is being played
         // See: https://github.com/musescore/MuseScore/issues/9633
-        width: 56
+        width: 48
 
         noteSymbol: root.playbackModel.tempo.noteSymbol
         tempoValue: root.playbackModel.tempo.value
@@ -169,6 +173,7 @@ Item {
 
     SeparatorLine {
         anchors.left: tempoView.right
+        anchors.leftMargin: 24
         anchors.topMargin: 2
         anchors.bottomMargin: 2
 
