@@ -756,7 +756,7 @@ void NotationInteraction::selectElementsWithSameTypeOnSegment(mu::engraving::Ele
         }
     }
 
-    score()->select(elementsToSelect);
+    score()->select(elementsToSelect, SelectType::ADD);
 }
 
 void NotationInteraction::selectAll()
