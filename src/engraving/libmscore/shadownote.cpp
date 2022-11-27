@@ -181,18 +181,19 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
         double extraLen = score()->styleS(Sid::ledgerLineLength).val() * sp * mag();
         double x1 = -extraLen;
         double x2 = noteheadWidth + extraLen;
+        double step = sp2 * staffType()->lineDistance().val();
 
         lw = score()->styleMM(Sid::ledgerLineWidth) * mag();
         pen.setWidthF(lw);
         painter->setPen(pen);
 
         for (int i = -2; i >= m_lineIndex; i -= 2) {
-            double y = sp2 * (i - m_lineIndex);
+            double y = step * (i - m_lineIndex);
             painter->drawLine(LineF(x1, y, x2, y));
         }
         int l = staffType()->lines() * 2; // first ledger line below staff
         for (int i = l; i <= m_lineIndex; i += 2) {
-            double y = sp2 * (i - m_lineIndex);
+            double y = step * (i - m_lineIndex);
             painter->drawLine(LineF(x1, y, x2, y));
         }
     }
@@ -323,6 +324,7 @@ void ShadowNote::layout()
     // Layout ledger lines if needed
     if (!m_isRest && m_lineIndex < 100 && m_lineIndex > -100) {
         double extraLen = score()->styleMM(Sid::ledgerLineLength) * mag();
+        double step = 0.5 * _spatium * staffType()->lineDistance().val();
         double x = noteheadBbox.x() - extraLen;
         double w = noteheadBbox.width() + 2 * extraLen;
 
@@ -331,11 +333,11 @@ void ShadowNote::layout()
         InputState ps = score()->inputState();
         RectF r(x, -lw * .5, w, lw);
         for (int i = -2; i >= m_lineIndex; i -= 2) {
-            newBbox |= r.translated(PointF(0, _spatium * .5 * (i - m_lineIndex)));
+            newBbox |= r.translated(PointF(0, step * (i - m_lineIndex)));
         }
         int l = staffType()->lines() * 2; // first ledger line below staff
         for (int i = l; i <= m_lineIndex; i += 2) {
-            newBbox |= r.translated(PointF(0, _spatium * .5 * (i - m_lineIndex)));
+            newBbox |= r.translated(PointF(0, step * (i - m_lineIndex)));
         }
     }
     setbbox(newBbox);
