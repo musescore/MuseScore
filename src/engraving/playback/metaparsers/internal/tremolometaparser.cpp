@@ -79,7 +79,7 @@ void TremoloMetaParser::doParse(const EngravingItem* item, const RenderingContex
 
     int overallDurationTicks = ctx.nominalDurationTicks;
     if (tremolo->twoNotes() && tremolo->chord1() && tremolo->chord2()) {
-        overallDurationTicks = tremolo->chord1()->ticks().ticks() + tremolo->chord2()->ticks().ticks();
+        overallDurationTicks = tremolo->chord1()->actualTicks().ticks() + tremolo->chord2()->actualTicks().ticks();
     }
 
     mpe::ArticulationMeta articulationMeta;

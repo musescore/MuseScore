@@ -23,6 +23,7 @@
 #include "durationelement.h"
 
 #include "rw/xml.h"
+#include "realfn.h"
 
 #include "property.h"
 #include "score.h"
@@ -94,6 +95,14 @@ Fraction DurationElement::globalTicks() const
         f /= t->ratio();
     }
     return f;
+}
+
+float DurationElement::timeStretchFactor() const
+{
+    int nominalDuration = _duration.ticks();
+    int actualDuration = actualTicks().ticks();
+
+    return actualDuration / static_cast<float>(nominalDuration);
 }
 
 //---------------------------------------------------------
