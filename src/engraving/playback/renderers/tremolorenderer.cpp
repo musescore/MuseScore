@@ -95,7 +95,7 @@ int TremoloRenderer::stepDurationTicks(const Chord* chord, const Tremolo* tremol
     if (ticks <= 0) {
         return 1;
     }
-    return ticks;
+    return ticks * chord->timeStretchFactor();
 }
 
 void TremoloRenderer::buildAndAppendEvents(const Chord* chord, const ArticulationType type,
