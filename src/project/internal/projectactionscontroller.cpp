@@ -575,11 +575,13 @@ bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMod
         // Get up-to-date visibility information
         RetVal<cloud::ScoreInfo> scoreInfo = cloudProjectsService()->downloadScoreInfo(info.sourceUrl);
         if (scoreInfo.ret) {
+            info.name = scoreInfo.val.title;
             info.visibility = scoreInfo.val.visibility;
             isPublic = info.visibility == cloud::Visibility::Public;
         } else {
             LOGE() << "Failed to download up-to-date score info for " << info.sourceUrl
-                   << "; falling back to last known visibility setting, namely " << static_cast<int>(info.visibility);
+                   << "; falling back to last known name and visibility setting, namely "
+                   << info.name << " and " << static_cast<int>(info.visibility);
         }
 
         if (isPublic) {
