@@ -126,13 +126,13 @@ void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* se
             return;
         }
 
-        applyDynamicToNextSegment(segment, prevDynamicLevel);
+        applyDynamicToNextSegment(segment, segmentPositionTick, prevDynamicLevel);
         return;
     }
 
     const DynamicTransition& transition = dynamicTransitionFromType(type);
     m_dynamicsMap[segmentPositionTick] = dynamicLevelFromType(transition.from);
-    applyDynamicToNextSegment(segment, dynamicLevelFromType(transition.to));
+    applyDynamicToNextSegment(segment, segmentPositionTick, dynamicLevelFromType(transition.to));
 }
 
 void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick)
@@ -146,13 +146,16 @@ void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, co
     m_playTechniquesMap[segmentPositionTick] = articulationFromPlayTechType(type);
 }
 
-void PlaybackContext::applyDynamicToNextSegment(const Segment* currentSegment, const mpe::dynamic_level_t dynamicLevel)
+void PlaybackContext::applyDynamicToNextSegment(const Segment* currentSegment, const int segmentPositionTick,
+                                                const mpe::dynamic_level_t dynamicLevel)
 {
     if (!currentSegment->next()) {
         return;
     }
 
-    int nextSegmentPositionTick = currentSegment->next()->tick().ticks();
+    const int tickPositionOffset = segmentPositionTick - currentSegment->tick().ticks();
+
+    int nextSegmentPositionTick = currentSegment->next()->tick().ticks() + tickPositionOffset;
     m_dynamicsMap[nextSegmentPositionTick] = dynamicLevel;
 }
 
