@@ -212,7 +212,7 @@ void PlaybackEventsRenderer::renderNoteEvents(const Chord* chord, const int tick
     }
 
     int chordPosTick = chord->tick().ticks();
-    int chordDurationTicks = chord->durationTypeTicks().ticks();
+    int chordDurationTicks = chord->actualTicks().ticks();
 
     const Score* score = chord->score();
 
