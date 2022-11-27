@@ -131,8 +131,9 @@ void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* se
     }
 
     const DynamicTransition& transition = dynamicTransitionFromType(type);
+    const int transitionDuration = dynamic->velocityChangeLength().ticks();
     m_dynamicsMap[segmentPositionTick] = dynamicLevelFromType(transition.from);
-    applyDynamicToNextSegment(segment, segmentPositionTick, dynamicLevelFromType(transition.to));
+    m_dynamicsMap[segmentPositionTick + transitionDuration] = dynamicLevelFromType(transition.to);
 }
 
 void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick)
