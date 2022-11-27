@@ -408,9 +408,8 @@ bool NotationProject::isCloudProject() const
 const CloudProjectInfo& NotationProject::cloudInfo() const
 {
     if (!m_cloudInfo.isValid()) {
-        auto tags = m_masterNotation->masterScore()->metaTags();
-        m_cloudInfo.name = tags[WORK_TITLE_TAG].toQString();
-        m_cloudInfo.sourceUrl = tags[SOURCE_TAG].toQString();
+        m_cloudInfo.name = io::filename(m_path, false).toQString();
+        m_cloudInfo.sourceUrl = m_masterNotation->masterScore()->metaTags()[SOURCE_TAG].toQString();
     }
 
     return m_cloudInfo;
