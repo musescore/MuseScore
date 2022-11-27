@@ -3248,12 +3248,18 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
 
         if (selection()->isRange()) {
             INotationSelectionRange::MeasureRange range = selection()->range()->measureRange();
-            int startMeasureIndex = range.startMeasure ? range.startMeasure->index() : 0;
-            int endMeasureIndex = range.endMeasure ? range.endMeasure->index() + 1 : 0;
+            if (range.startMeasure->isMMRest() && target == AddBoxesTarget::BeforeSelection) {
+                beforeBoxIndex = range.startMeasure->prev()->index() + 1;
+            } else if (range.endMeasure->isMMRest() && target == AddBoxesTarget::AfterSelection) {
+                beforeBoxIndex = range.endMeasure->next()->index();
+            } else {
+                int startMeasureIndex = range.startMeasure ? range.startMeasure->index() : 0;
+                int endMeasureIndex = range.endMeasure ? range.endMeasure->index() + 1 : 0;
 
-            beforeBoxIndex = target == AddBoxesTarget::BeforeSelection
-                             ? startMeasureIndex
-                             : endMeasureIndex;
+                beforeBoxIndex = target == AddBoxesTarget::BeforeSelection
+                                 ? startMeasureIndex
+                                 : endMeasureIndex;
+            }
             break;
         }
 
@@ -3269,7 +3275,19 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
                 continue;
             }
 
-            int itemMeasureIndex = itemMeasure->index();
+            int itemMeasureIndex = -1;
+            if (item->isMMRest()) {
+                MeasureBase* adjacentItemMeasure = nullptr;
+                if (target == AddBoxesTarget::BeforeSelection) {
+                    adjacentItemMeasure = itemMeasure->next();
+                } else if (target == AddBoxesTarget::AfterSelection) {
+                    adjacentItemMeasure = itemMeasure->prev();
+                }
+
+                itemMeasureIndex = adjacentItemMeasure ? adjacentItemMeasure->index() : -1;
+            } else {
+                itemMeasureIndex = itemMeasure->index();
+            }
             if (itemMeasureIndex < 0) {
                 continue;
             }
