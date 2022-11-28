@@ -570,9 +570,36 @@ void PlaybackModel::clearExpiredContexts(const track_idx_t trackFrom, const trac
     }
 }
 
+void mu::engraving::PlaybackModel::removeEventsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo,
+                                                         const timestamp_t timestampFrom, const timestamp_t timestampTo)
+{
+    for (const Part* part : m_score->parts()) {
+        if (part->startTrack() > trackTo || part->endTrack() <= trackFrom) {
+            continue;
+        }
+
+        for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
+            removeTrackEvents(trackId, timestampFrom, timestampTo);
+        }
+
+        removeTrackEvents(chordSymbolsTrackId(part->id()), timestampFrom, timestampTo);
+    }
+
+    removeTrackEvents(METRONOME_TRACK_ID, timestampFrom, timestampTo);
+}
+
 void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo)
 {
     TRACEFUNC;
+
+    if (!m_score || !m_score->lastMeasure()) {
+        return;
+    }
+
+    if (tickFrom == 0 && m_score->lastMeasure()->endTick().ticks() == tickTo) {
+        removeEventsFromRange(trackFrom, trackTo);
+        return;
+    }
 
     for (const RepeatSegment* repeatSegment : m_score->repeatList()) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
@@ -586,19 +613,7 @@ void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, con
         timestamp_t timestampFrom = timestampFromTicks(m_score, tickFrom + tickPositionOffset);
         timestamp_t timestampTo = timestampFromTicks(m_score, tickTo + tickPositionOffset);
 
-        for (const Part* part : m_score->parts()) {
-            if (part->startTrack() > trackTo || part->endTrack() <= trackFrom) {
-                continue;
-            }
-
-            for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
-                removeEvents(trackId, timestampFrom, timestampTo);
-            }
-
-            removeEvents(chordSymbolsTrackId(part->id()), timestampFrom, timestampTo);
-        }
-
-        removeEvents(METRONOME_TRACK_ID, timestampFrom, timestampTo);
+        removeEventsFromRange(trackFrom, trackTo, timestampFrom, timestampTo);
     }
 }
 
@@ -635,7 +650,8 @@ void PlaybackModel::notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, co
     }
 }
 
-void PlaybackModel::removeEvents(const InstrumentTrackId& trackId, const mpe::timestamp_t timestampFrom, const mpe::timestamp_t timestampTo)
+void PlaybackModel::removeTrackEvents(const InstrumentTrackId& trackId, const mpe::timestamp_t timestampFrom,
+                                      const mpe::timestamp_t timestampTo)
 {
     auto search = m_playbackDataMap.find(trackId);
 
@@ -644,6 +660,11 @@ void PlaybackModel::removeEvents(const InstrumentTrackId& trackId, const mpe::ti
     }
 
     PlaybackData& trackPlaybackData = search->second;
+
+    if (timestampFrom == -1 && timestampTo == -1) {
+        search->second.originEvents.clear();
+        return;
+    }
 
     PlaybackEventsMap::const_iterator lowerBound;
 
