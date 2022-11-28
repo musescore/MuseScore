@@ -169,7 +169,7 @@ StyledDialogView {
         }
 
         Keys.onShortcutOverride: function(event) {
-            event.accepted = true
+            event.accepted = event.key !== Qt.Key_Escape && event.key !== Qt.Key_Tab
         }
 
         Keys.onPressed: function(event) {
