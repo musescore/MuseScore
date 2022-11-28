@@ -25,12 +25,12 @@
 #include "rw/xml.h"
 #include "style/style.h"
 #include "translation.h"
+#include "isymbolfont.h"
 
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
 #include "stafftype.h"
-#include "symbolfont.h"
 #include "utils.h"
 
 #include "log.h"
@@ -331,7 +331,7 @@ void TimeSig::layout()
             ds = timeSigSymIdsFromString(_denominatorString);
         }
 
-        SymbolFont* font = score()->symbolFont();
+        ISymbolFontPtr font = score()->symbolFont();
         SizeF mag(magS() * _scale);
 
         RectF numRect = font->bbox(ns, mag);

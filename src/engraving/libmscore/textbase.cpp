@@ -27,7 +27,7 @@
 #include "draw/types/pen.h"
 #include "draw/types/brush.h"
 
-#include "infrastructure/symbolfonts.h"
+#include "isymbolfont.h"
 
 #include "rw/xml.h"
 
@@ -61,6 +61,8 @@ namespace mu::engraving {
 static constexpr double subScriptSize     = 0.6;
 static constexpr double subScriptOffset   = 0.5; // of x-height
 static constexpr double superScriptOffset = -.9; // of x-height
+
+static const char* FALLBACK_SYMBOLTEXT_FONT = "Bravura Text";
 
 //---------------------------------------------------------
 //   isSorted
@@ -793,7 +795,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
     draw::Font::Type fontType = draw::Font::Type::Unknown;
     if (format.fontFamily() == "ScoreText") {
         if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA) {
-            family = SymbolFonts::fontByName(t->score()->styleSt(Sid::MusicalSymbolFont))->family();
+            family = String::fromStdString(symbolFonts()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont).toStdString())->family());
             fontType = draw::Font::Type::MusicSymbol;
             // to keep desired size ratio (based on 20pt symbol size to 10pt text size)
             m *= 2;
@@ -832,7 +834,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
             }
         }
         if (fail) {
-            family = String::fromUtf8(SymbolFonts::fallbackTextFont());
+            family = String::fromUtf8(FALLBACK_SYMBOLTEXT_FONT);
             fontType = draw::Font::Type::MusicSymbolText;
         }
     } else {
@@ -1485,7 +1487,9 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
 
 static String toSymbolXml(Char c)
 {
-    SymId symId = SymbolFonts::fallbackFont()->fromCode(c.unicode());
+    static std::shared_ptr<ISymbolFontsProvider> provider = modularity::ioc()->resolve<ISymbolFontsProvider>("engraving");
+
+    SymId symId = provider->fallbackFont()->fromCode(c.unicode());
     return u"<sym>" + String::fromAscii(SymNames::nameForSymId(symId).ascii()) + u"</sym>";
 }
 
@@ -1747,7 +1751,7 @@ void TextBase::createLayout()
                         CharFormat fmt = *cursor.format(); // save format
 
                         //char32_t code = score()->scoreFont()->symCode(id);
-                        char32_t code = id == SymId::space ? static_cast<char32_t>(' ') : SymbolFonts::fallbackFont()->symCode(id);
+                        char32_t code = id == SymId::space ? static_cast<char32_t>(' ') : symbolFonts()->fallbackFont()->symCode(id);
                         cursor.format()->setFontFamily(u"ScoreText");
                         insert(&cursor, code);
                         cursor.setFormat(fmt); // restore format

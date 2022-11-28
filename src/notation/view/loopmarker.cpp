@@ -22,7 +22,7 @@
 
 #include "loopmarker.h"
 #include "draw/types/pen.h"
-#include "infrastructure/symbolfont.h"
+#include "engraving/isymbolfont.h"
 
 using namespace mu::notation;
 using namespace mu;

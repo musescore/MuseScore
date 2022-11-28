@@ -36,7 +36,6 @@
 #include "offsetSelect.h"
 
 #include "engraving/libmscore/figuredbass.h"
-#include "engraving/infrastructure/symbolfonts.h"
 #include "engraving/libmscore/realizedharmony.h"
 #include "engraving/libmscore/text.h"
 #include "engraving/style/textstyle.h"
@@ -698,10 +697,9 @@ EditStyle::EditStyle(QWidget* parent)
     tupletBracketType->addItem(qtrc("notation/editstyle", "None", "no tuplet bracket type"), int(TupletBracketType::SHOW_NO_BRACKET));
 
     musicalSymbolFont->clear();
-    int idx = 0;
-    for (auto i : SymbolFonts::scoreFonts()) {
-        musicalSymbolFont->addItem(i.name().toQString(), i.name().toQString());
-        ++idx;
+
+    for (auto i : symbolFonts()->fonts()) {
+        musicalSymbolFont->addItem(QString::fromStdString(i->name()), QString::fromStdString(i->name()));
     }
 
     static const SymId ids[] = {
@@ -1744,8 +1742,8 @@ void EditStyle::setValues()
 
     QString mfont(styleValue(StyleId::MusicalSymbolFont).value<String>());
     int idx = 0;
-    for (const auto& i : SymbolFonts::scoreFonts()) {
-        if (i.name().toLower() == mfont.toLower()) {
+    for (const auto& i : symbolFonts()->fonts()) {
+        if (QString::fromStdString(i->name()).toLower() == mfont.toLower()) {
             musicalSymbolFont->setCurrentIndex(idx);
             break;
         }
@@ -2039,7 +2037,7 @@ void EditStyle::valueChanged(int i)
     PropertyValue val  = getValue(idx);
     bool setValue = false;
     if (idx == StyleId::MusicalSymbolFont && optimizeStyleCheckbox->isChecked()) {
-        SymbolFont* scoreFont = SymbolFonts::fontByName(val.value<String>());
+        ISymbolFontPtr scoreFont = symbolFonts()->fontByName(val.value<String>().toStdString());
         if (scoreFont) {
             for (auto j : scoreFont->engravingDefaults()) {
                 setStyleValue(j.first, j.second);

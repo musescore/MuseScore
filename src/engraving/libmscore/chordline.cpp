@@ -25,12 +25,13 @@
 #include "rw/xml.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
-#include "log.h"
+#include "isymbolfont.h"
 
 #include "chord.h"
 #include "note.h"
 #include "score.h"
-#include "symbolfont.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -159,8 +160,7 @@ void ChordLine::layout()
         height = r.height() * _spatium;
         bbox().setRect(x1, y1, width, height);
     } else {
-        SymbolFont* f = score()->symbolFont();
-        RectF r(f->bbox(s_waveSymbols, magS()));
+        RectF r(score()->symbolFont()->bbox(s_waveSymbols, magS()));
         double angle = _waveAngle * M_PI / 180;
 
         r.setHeight(r.height() + r.width() * sin(angle));

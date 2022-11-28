@@ -25,9 +25,9 @@
 #include "draw/types/pen.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
+#include "isymbolfont.h"
 
 #include "score.h"
-#include "symbolfont.h"
 
 using namespace mu;
 

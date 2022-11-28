@@ -21,7 +21,7 @@
  */
 #include "read302.h"
 
-#include "infrastructure/symbolfonts.h"
+#include "isymbolfont.h"
 #include "rw/xml.h"
 #include "rw/compat/compatutils.h"
 #include "style/style.h"
@@ -108,7 +108,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
                 // float mode
                 score->style().set(Sid::spatium, sp);
             }
-            score->m_symbolFont = SymbolFonts::fontByName(score->style().styleSt(Sid::MusicalSymbolFont));
+            score->m_symbolFont = symbolFonts()->fontByName(score->style().styleSt(Sid::MusicalSymbolFont).toStdString());
         } else if (tag == "copyright" || tag == "rights") {
             score->setMetaTag(u"copyright", Text::readXmlText(e, score));
         } else if (tag == "movement-number") {

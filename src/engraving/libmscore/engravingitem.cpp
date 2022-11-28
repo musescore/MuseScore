@@ -35,7 +35,7 @@
 #include "types/translatablestring.h"
 
 #include "draw/types/pen.h"
-#include "infrastructure/symbolfont.h"
+#include "isymbolfont.h"
 #include "style/style.h"
 #include "rw/xml.h"
 #include "rw/writecontext.h"
@@ -1685,11 +1685,6 @@ void EngravingItem::drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF&
     score()->symbolFont()->draw(id, p, magS() * scale, o);
 }
 
-void EngravingItem::drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF& o, int n) const
-{
-    score()->symbolFont()->draw(id, p, magS(), o, n);
-}
-
 void EngravingItem::drawSymbols(const SymIdList& symbols, mu::draw::Painter* p, const PointF& o, double scale) const
 {
     score()->symbolFont()->draw(symbols, p, magS() * scale, o);
@@ -1697,7 +1692,7 @@ void EngravingItem::drawSymbols(const SymIdList& symbols, mu::draw::Painter* p, 
 
 void EngravingItem::drawSymbols(const SymIdList& symbols, mu::draw::Painter* p, const PointF& o, const SizeF& scale) const
 {
-    score()->symbolFont()->draw(symbols, p, SizeF(magS() * scale), PointF(o));
+    score()->symbolFont()->draw(symbols, p, SizeF(magS() * scale), o);
 }
 
 //---------------------------------------------------------
