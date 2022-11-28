@@ -103,10 +103,12 @@ void AbstractAudioWriter::doWriteAndWait(INotationPtr notation, QIODevice& desti
 
     m_isCompleted = false;
 
-    playbackController()->setExportedNotation(notation);
+    playbackController()->setNotation(notation);
+    playbackController()->setIsExportingAudio(true);
 
     m_progress.finished.onReceive(this, [this](const auto&) {
-        playbackController()->setExportedNotation(nullptr);
+        playbackController()->setIsExportingAudio(false);
+        playbackController()->setNotation(globalContext()->currentNotation());
     });
 
     playback()->sequenceIdList()
