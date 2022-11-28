@@ -76,7 +76,6 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>guitarFadeIn</subtype>
-              <anchor>0</anchor>
               </Articulation>
             <Note>
               <pitch>59</pitch>
