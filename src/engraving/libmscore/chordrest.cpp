@@ -528,11 +528,8 @@ EngravingItem* ChordRest::drop(EditData& data)
             InstrumentChange* ic = toInstrumentChange(e);
             ic->setParent(segment());
             ic->setTrack(trackZeroVoice(track()));
-            Instrument* instr = ic->instrument();
-            Instrument* prevInstr = part()->instrument(tick());
-            if (instr && instr->isDifferentInstrument(*prevInstr)) {
-                ic->setupInstrument(instr);
-            }
+            Instrument* instr = part()->instrument(tick());
+            ic->setInstrument(instr);
             score()->undoAddElement(ic);
             return e;
         }
