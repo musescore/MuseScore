@@ -83,7 +83,10 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
     m_desiredSpec = spec;
 
     s_data.wasapiClient->setBufferDuration(samplesToRefTime(spec.samples, spec.sampleRate));
-    s_data.wasapiClient->setLowLatency(false);
+
+    bool lowLatencyModeRequired = spec.samples <= s_data.wasapiClient->lowLatencyUpperBound();
+
+    s_data.wasapiClient->setLowLatency(lowLatencyModeRequired);
     s_data.wasapiClient->setSampleRequestCallback(spec.callback);
 
     hstring deviceId;
@@ -196,14 +199,20 @@ unsigned int WasapiAudioDriver::outputDeviceBufferSize() const
 
 bool WasapiAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
 {
-    //!Note WASAPI client is set to LowLatency mode, which means that:
-    //!     - requested number of frames may varry from one call to another
-    //!     - internal buffer size of a device is set automatically by WASAPI audio client
+    bool result = true;
 
-    m_activeSpec.samples = bufferSize;
+    if (isOpened()) {
+        close();
+
+        m_activeSpec.samples = bufferSize;
+        result = open(m_activeSpec, &m_activeSpec);
+    } else {
+        m_desiredSpec.samples = bufferSize;
+    }
+
     m_outputDeviceBufferSizeChanged.notify();
 
-    return true;
+    return result;
 }
 
 mu::async::Notification WasapiAudioDriver::outputDeviceBufferSizeChanged() const
