@@ -1215,7 +1215,10 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                     DeleteAll(ncr->lyrics());
                     ncr->lyrics().clear();
 
-                    for (EngravingItem* e : seg->annotations()) {
+                    // creating copy for iteration, cause seg->annotations() may change during loop
+                    const std::vector<EngravingItem*> iterableAnnotations = seg->annotations();
+
+                    for (EngravingItem* e : iterableAnnotations) {
                         if (!e) {
                             LOGD("cloneStaff: corrupted annotation found.");
                             continue;
