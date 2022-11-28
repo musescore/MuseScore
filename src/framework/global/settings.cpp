@@ -220,27 +220,29 @@ void Settings::setDefaultValue(const Key& key, const Val& value)
     Item& item = findItem(key);
 
     if (item.isNull()) {
-        m_items[key] = Item{ key, value, value };
+        m_items[key] = Item{ key, value, value, false, Val(), Val() };
     } else {
         item.defaultValue = value;
         item.value.setType(value.type());
     }
 }
 
-void Settings::setCanBeManuallyEdited(const Settings::Key& key, bool canBeManuallyEdited)
+void Settings::setCanBeManuallyEdited(const Settings::Key& key, bool canBeManuallyEdited, const Val& minValue, const Val& maxValue)
 {
     Item& item = findItem(key);
 
     if (item.isNull()) {
-        m_items[key] = Item{ key, Val(), Val(), canBeManuallyEdited };
+        m_items[key] = Item{ key, Val(), Val(), canBeManuallyEdited, minValue, maxValue };
     } else {
         item.canBeManuallyEdited = canBeManuallyEdited;
+        item.minValue = minValue;
+        item.maxValue = maxValue;
     }
 }
 
 void Settings::insertNewItem(const Settings::Key& key, const Val& value)
 {
-    Item item = Item{ key, value, value };
+    Item item = Item{ key, value, value, false, Val(), Val() };
     if (m_isTransactionStarted) {
         m_localSettings[key] = item;
     } else {

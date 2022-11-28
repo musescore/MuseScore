@@ -68,6 +68,8 @@ PreferencesPage {
             valueRoleName: "valueRole"
             valueTitle: qsTrc("appshell/preferences", "Value")
             valueTypeRole: "typeRole"
+            minValueRoleName: "minValueRole"
+            maxValueRoleName: "maxValueRole"
 
             navigationSection: root.navigationSection
             navigationOrderStart: root.navigationOrderStart + 2
