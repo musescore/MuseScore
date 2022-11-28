@@ -146,7 +146,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
         posDot.rx() += (noteheadWidth + d);
 
         if (m_isRest) {
-            posDot.ry() += Rest::getDotline(m_duration.type()) * sp2 * mag();
+            posDot.ry() += Rest::getDotline(m_duration.type()) * sp2;
         } else {
             posDot.ry() -= (m_lineIndex % 2 == 0 ? sp2 : 0);
         }
@@ -178,7 +178,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
 
     // Draw ledger lines if needed
     if (!m_isRest && m_lineIndex < 100 && m_lineIndex > -100) {
-        double extraLen = score()->styleS(Sid::ledgerLineLength).val() * sp * mag();
+        double extraLen = score()->styleS(Sid::ledgerLineLength).val() * sp;
         double x1 = -extraLen;
         double x2 = noteheadWidth + extraLen;
         double step = sp2 * staffType()->lineDistance().val();
