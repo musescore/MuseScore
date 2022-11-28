@@ -87,7 +87,8 @@ public:
 
     virtual void applyProfile(const SoundProfileName& profileName) = 0;
 
-    virtual void setExportedNotation(notation::INotationPtr notation) = 0;
+    virtual void setNotation(notation::INotationPtr notation) = 0;
+    virtual void setIsExportingAudio(bool exporting) = 0;
 };
 }
 
