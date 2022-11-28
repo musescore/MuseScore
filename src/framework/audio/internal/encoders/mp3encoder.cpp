@@ -30,47 +30,19 @@ using namespace mu::audio::encode;
 
 struct LameHandler
 {
-    static LameHandler* instance()
+    LameHandler() = default;
+
+    ~LameHandler()
     {
-        static LameHandler handler;
-        return &handler;
+        lame_close(flags);
     }
 
-    bool updateSpec(const SoundTrackFormat& format)
-    {
-        if (!isValid()) {
-            return false;
-        }
-
-        if (m_format == format) {
-            return true;
-        }
-
-        m_format = format;
-
-        lame_set_num_channels(flags, m_format.audioChannelsNumber);
-        lame_set_in_samplerate(flags, m_format.sampleRate);
-        lame_set_brate(flags, m_format.bitRate);
-
-        return lame_init_params(flags) != 0;
-    }
-
-    const SoundTrackFormat& format() const
-    {
-        return m_format;
-    }
-
-    bool isValid() const
-    {
-        return flags;
-    }
-
-    lame_global_flags* flags = nullptr;
-
-private:
-    LameHandler()
+    bool init(const SoundTrackFormat& format)
     {
         flags = lame_init();
+        if (!flags) {
+            return false;
+        }
 
         lame_set_errorf(flags, [](const char* msg, va_list /*ap*/) {
             LOGE() << msg;
@@ -81,15 +53,31 @@ private:
         lame_set_msgf(flags, [](const char* msg, va_list /*ap*/) {
             LOGI() << msg;
         });
+
+        lame_set_num_channels(flags, format.audioChannelsNumber);
+        lame_set_in_samplerate(flags, format.sampleRate);
+        lame_set_brate(flags, format.bitRate);
+
+        return lame_init_params(flags) >= 0;
     }
 
-    ~LameHandler()
-    {
-        lame_close(flags);
-    }
-
-    SoundTrackFormat m_format;
+    lame_global_flags* flags = nullptr;
 };
+
+bool Mp3Encoder::init(const io::path_t& path, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
+{
+    m_handler = new LameHandler();
+
+    if (!AbstractAudioEncoder::init(path, format, totalSamplesNumber)) {
+        return false;
+    }
+
+    if (!m_handler->init(format)) {
+        return false;
+    }
+
+    return true;
+}
 
 size_t Mp3Encoder::requiredOutputBufferSize(samples_t totalSamplesNumber) const
 {
@@ -100,11 +88,9 @@ size_t Mp3Encoder::requiredOutputBufferSize(samples_t totalSamplesNumber) const
 
 size_t Mp3Encoder::encode(samples_t samplesPerChannel, const float* input)
 {
-    LameHandler::instance()->updateSpec(m_format);
-
     m_progress.progressChanged.send(0, 100, "");
 
-    int encodedBytes = lame_encode_buffer_interleaved_ieee_float(LameHandler::instance()->flags, input, samplesPerChannel,
+    int encodedBytes = lame_encode_buffer_interleaved_ieee_float(m_handler->flags, input, samplesPerChannel,
                                                                  m_outputBuffer.data(),
                                                                  static_cast<int>(m_outputBuffer.size()));
 
@@ -117,9 +103,17 @@ size_t Mp3Encoder::encode(samples_t samplesPerChannel, const float* input)
 
 size_t Mp3Encoder::flush()
 {
-    int encodedBytes = lame_encode_flush(LameHandler::instance()->flags,
+    int encodedBytes = lame_encode_flush(m_handler->flags,
                                          m_outputBuffer.data(),
                                          static_cast<int>(m_outputBuffer.size()));
 
     return std::fwrite(m_outputBuffer.data(), sizeof(unsigned char), encodedBytes, m_fileStream);
+}
+
+void Mp3Encoder::closeDestination()
+{
+    AbstractAudioEncoder::closeDestination();
+
+    delete m_handler;
+    m_handler = nullptr;
 }
