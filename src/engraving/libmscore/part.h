@@ -87,6 +87,8 @@ class Part final : public EngravingObject
     friend class compat::Read206;
 
 public:
+    static const Fraction MAIN_INSTRUMENT_TICK;
+
     Part(Score* score = nullptr);
     void initFromInstrTemplate(const InstrumentTemplate*);
 
