@@ -109,10 +109,23 @@ ColumnLayout {
 
                 Loader {
                     id: loader
-                    property var val: valRole
+                    property var val: valueRole
+                    property var minValue: minValueRole
+                    property var maxValue: maxValueRole
                     anchors.fill: parent
                     sourceComponent: root.componentByType(typeRole)
-                    onLoaded: loader.item.val = loader.val
+                    onLoaded: {
+                        loader.item.val = loader.val
+
+                        if (loader.item.minValue !== undefined) {
+                            loader.item.minValue = loader.minValue
+                        }
+
+                        if (loader.item.maxValue !== undefined) {
+                            loader.item.maxValue = loader.maxValue
+                        }
+                    }
+
                     onValChanged: {
                         if (loader.item) {
                             loader.item.val = loader.val
@@ -189,40 +202,44 @@ ColumnLayout {
 
     Component {
         id: intComp
-        SpinBox {
-            id: spinbox
-            property var val
+
+        IncrementalPropertyControl {
+            id: control
+
+            property int val
+
             signal changed(var newVal)
-            anchors.fill: parent
-            value: val
-            stepSize: 1
-            textFromValue: function(value, locale) { return String(value) }
-            valueFromText: function(text, locale) { return Number(text) }
-            onValueModified: spinbox.changed(Number(spinbox.value))
+            anchors.centerIn: parent
+
+            currentValue: val
+
+            step: 1
+            decimals: 0
+
+            onValueEdited: function(newValue) {
+                control.changed(newValue)
+            }
         }
     }
 
     Component {
         id: doubleComp
-        SpinBox {
-            id: spinbox
-            property var val
+
+        IncrementalPropertyControl {
+            id: control
+
+            property real val
+
             signal changed(var newVal)
             anchors.centerIn: parent
-            value: val * 10
-            stepSize: 10
-            from: -1000
-            to: 1000
 
-            property int decimals: 1
-            property real realValue: value / 10
+            currentValue: val
 
-            textFromValue: function(value, locale) {
-                return Number(value / 10).toLocaleString(locale, 'f', spinbox.decimals)
-            }
+            step: 1
+            decimals: 2
 
-            valueFromText: function(text, locale) {
-                return Number.fromLocaleString(locale, text) * 10
+            onValueEdited: function(newValue) {
+                control.changed(newValue)
             }
         }
     }
