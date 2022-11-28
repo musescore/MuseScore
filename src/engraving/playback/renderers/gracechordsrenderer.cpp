@@ -183,8 +183,8 @@ duration_t GraceChordsRenderer::graceNotesMaxAvailableDuration(const Articulatio
     duration_t halvedDuration = 0.5 * ctx.nominalDuration;
     duration_t twoThirdsDuration = (2 * ctx.nominalDuration) / 3;
 
-    if (type == ArticulationType::PostAppoggiatura
-        || type == ArticulationType::PreAppoggiatura) {
+    if ((type == ArticulationType::PostAppoggiatura
+         || (type == ArticulationType::PreAppoggiatura && graceNotesCount == 1))) {
         if (ctx.timeSignatureFraction.isCompound() && ctx.nominalDurationTicks > QUAVER_TICKS) {
             return twoThirdsDuration;
         } else {
