@@ -826,7 +826,6 @@ void Chord::addLedgerLines()
     // the line pos corresponding to the bottom line of the staff
     int lineBelow      = 8;                     // assuming 5-lined "staff"
     double lineDistance = 1;
-    double mag         = 1;
     bool staffVisible  = true;
     int stepOffset = 0;                         // for staff type changes with a step offset
 
@@ -837,7 +836,6 @@ void Chord::addLedgerLines()
         Staff* st     = score()->staff(idx);
         lineBelow     = (st->lines(tick) - 1) * 2;
         lineDistance  = st->lineDistance(tick);
-        mag           = staff()->staffMag(tick);
         staffVisible  = !staff()->isLinesInvisible(tick);
         stepOffset = st->staffType(tick)->stepOffset();
     }
@@ -848,7 +846,7 @@ void Chord::addLedgerLines()
     }
 
     // the extra length of a ledger line to be added on each side of the notehead
-    double extraLen = score()->styleMM(Sid::ledgerLineLength) * mag;
+    double extraLen = score()->styleMM(Sid::ledgerLineLength);
     double hw;
     double minX, maxX;                           // note extrema in raster units
     int minLine, maxLine;
