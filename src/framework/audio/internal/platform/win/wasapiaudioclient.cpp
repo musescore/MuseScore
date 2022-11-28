@@ -40,9 +40,43 @@ WasapiAudioClient::~WasapiAudioClient()
     MFShutdown();
 }
 
+void WasapiAudioClient::setHardWareOffload(bool value)
+{
+    m_isHWOffload = value;
+}
+
+void WasapiAudioClient::setBackgroundAudio(bool value)
+{
+    m_isBackground = value;
+}
+
+void WasapiAudioClient::setRawAudio(bool value)
+{
+    m_isRawAudio = value;
+}
+
+void WasapiAudioClient::setLowLatency(bool value)
+{
+    m_isLowLatency = value;
+}
+
+void WasapiAudioClient::setBufferDuration(REFERENCE_TIME value)
+{
+    m_hnsBufferDuration = value;
+}
+
 void WasapiAudioClient::setSampleRequestCallback(SampleRequestCallback callback)
 {
     m_sampleRequestCallback = callback;
+}
+
+unsigned int WasapiAudioClient::lowLatencyUpperBound() const
+{
+    //!Note See https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/low-latency-audio
+
+    static constexpr unsigned int LOWER_BOUND_SAMPLES_PER_CHANNEL = 1024;
+
+    return LOWER_BOUND_SAMPLES_PER_CHANNEL;
 }
 
 unsigned int WasapiAudioClient::sampleRate() const
@@ -131,7 +165,7 @@ HRESULT WasapiAudioClient::ActivateCompleted(IActivateAudioInterfaceAsyncOperati
         check_hresult(configureDeviceInternal());
 
         // Initialize the AudioClient in Shared Mode with the user specified buffer
-        if (!m_isLowLatency || m_isHWOffload) {
+        if (!m_isLowLatency) {
             check_hresult(m_audioClient->Initialize(AUDCLNT_SHAREMODE_SHARED,
                                                     AUDCLNT_STREAMFLAGS_EVENTCALLBACK,
                                                     m_hnsBufferDuration,
@@ -251,9 +285,6 @@ HRESULT WasapiAudioClient::configureDeviceInternal() noexcept
                                                                    &m_fundamentalPeriodInFrames,
                                                                    &m_minPeriodInFrames, &m_maxPeriodInFrames));
         }
-
-        // Verify the user defined value for hardware buffer
-        validateBufferValue();
 
         return S_OK;
     } catch (...) {

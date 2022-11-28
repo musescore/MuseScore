@@ -32,12 +32,14 @@ public:
     WasapiAudioClient(HANDLE clientStartedEvent, HANDLE clientStoppedEvent);
     ~WasapiAudioClient();
 
-    void setHardWareOffload(bool value) { m_isHWOffload = value; }
-    void setBackgroundAudio(bool value) { m_isBackground = value; }
-    void setRawAudio(bool value) { m_isRawAudio = value; }
-    void setLowLatency(bool value) { m_isLowLatency = value; }
-    void setBufferDuration(REFERENCE_TIME value) { m_hnsBufferDuration = value; }
+    void setHardWareOffload(bool value);
+    void setBackgroundAudio(bool value);
+    void setRawAudio(bool value);
+    void setLowLatency(bool value);
+    void setBufferDuration(REFERENCE_TIME value);
     void setSampleRequestCallback(SampleRequestCallback callback);
+
+    unsigned int lowLatencyUpperBound() const;
 
     unsigned int sampleRate() const;
     unsigned int channelCount() const;
