@@ -524,9 +524,6 @@ Articulation::AnchorGroup Articulation::anchorGroup(SymId symId)
     case SymId::articSoftAccentTenutoStaccatoAbove:
     case SymId::articSoftAccentTenutoStaccatoBelow:
 
-    case SymId::guitarFadeIn:
-    case SymId::guitarFadeOut:
-    case SymId::guitarVolumeSwell:
     case SymId::wiggleSawtooth:
     case SymId::wiggleSawtoothWide:
     case SymId::wiggleVibratoLargeFaster:
