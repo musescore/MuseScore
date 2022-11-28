@@ -121,7 +121,10 @@ private:
     void collectChangesTracks(const InstrumentTrackId& trackId, ChangedTrackIdSet* result);
     void notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, const InstrumentTrackIdSet& changedTracks);
 
-    void removeEvents(const InstrumentTrackId& trackId, const mpe::timestamp_t timestampFrom, const mpe::timestamp_t timestampTo);
+    void removeEventsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo, const mpe::timestamp_t timestampFrom = -1,
+                               const mpe::timestamp_t timestampTo = -1);
+    void removeTrackEvents(const InstrumentTrackId& trackId, const mpe::timestamp_t timestampFrom = -1,
+                           const mpe::timestamp_t timestampTo = -1);
 
     TrackBoundaries trackBoundaries(const ScoreChangesRange& changesRange) const;
     TickBoundaries tickBoundaries(const ScoreChangesRange& changesRange) const;
