@@ -24,10 +24,8 @@
 
 #include "mscoreview.h"
 #include "score.h"
-#include "symbolfont.h"
+#include "isymbolfont.h"
 #include "types/symnames.h"
-
-//#include "accessibility/accessibleitem.h"
 
 #include "log.h"
 

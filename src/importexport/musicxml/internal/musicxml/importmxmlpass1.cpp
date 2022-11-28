@@ -22,8 +22,6 @@
 
 #include <QRegularExpression>
 
-#include "engraving/infrastructure/symbolfonts.h"
-
 #include "engraving/libmscore/box.h"
 #include "engraving/libmscore/factory.h"
 #include "engraving/libmscore/layoutbreak.h"
@@ -56,6 +54,11 @@ using namespace mu::engraving;
 static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
 {
     return mu::modularity::ioc()->resolve<mu::iex::musicxml::IMusicXmlConfiguration>("iex_musicxml");
+}
+
+static std::shared_ptr<mu::engraving::ISymbolFontsProvider> symbolFonts()
+{
+    return mu::modularity::ioc()->resolve<mu::engraving::ISymbolFontsProvider>("iex_musicxml");
 }
 
 static bool musicxmlImportBreaks()
@@ -1177,7 +1180,7 @@ static QString text2syms(const QString& t)
     // note that this takes about 1 msec on a Core i5,
     // caching does not gain much
 
-    SymbolFont* sf = SymbolFonts::fallbackFont();
+    ISymbolFontPtr sf = symbolFonts()->fallbackFont();
     QMap<QString, SymId> map;
     int maxStringSize = 0;          // maximum string size found
 

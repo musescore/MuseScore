@@ -39,12 +39,12 @@ NICE-TO-HAVE TODO:
 #include "style/style.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
+#include "isymbolfont.h"
 
 #include "chord.h"
 #include "measure.h"
 #include "note.h"
 #include "score.h"
-#include "symbolfont.h"
 #include "segment.h"
 #include "staff.h"
 #include "system.h"

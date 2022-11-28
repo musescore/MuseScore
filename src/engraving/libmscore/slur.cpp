@@ -27,6 +27,7 @@
 #include "draw/types/pen.h"
 #include "draw/types/brush.h"
 #include "rw/xml.h"
+#include "isymbolfont.h"
 
 #include "articulation.h"
 #include "beam.h"
@@ -42,9 +43,6 @@
 #include "system.h"
 #include "tie.h"
 #include "undo.h"
-
-// included for gonville/musejazz hook hack in SlurPos
-#include "symbolfont.h"
 
 #include "log.h"
 

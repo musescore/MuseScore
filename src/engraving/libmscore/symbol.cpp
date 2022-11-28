@@ -23,7 +23,7 @@
 #include "symbol.h"
 
 #include "draw/fontmetrics.h"
-#include "infrastructure/symbolfonts.h"
+#include "isymbolfont.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
 
@@ -161,7 +161,7 @@ void Symbol::read(XmlReader& e)
             }
             setSym(symId);
         } else if (tag == "font") {
-            _scoreFont = SymbolFonts::fontByName(e.readText());
+            _scoreFont = symbolFonts()->fontByName(e.readText().toStdString());
         } else if (tag == "Symbol") {
             Symbol* s = new Symbol(this);
             s->read(e);

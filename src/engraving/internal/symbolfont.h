@@ -24,9 +24,12 @@
 
 #include <unordered_map>
 
+#include "isymbolfont.h"
+
 #include "modularity/ioc.h"
 #include "draw/ifontprovider.h"
 #include "draw/types/geometry.h"
+#include "isymbolfontsprovider.h"
 
 #include "io/path.h"
 
@@ -44,45 +47,46 @@ class Painter;
 }
 
 namespace mu::engraving {
-class SymbolFont
+class SymbolFont : public ISymbolFont
 {
     INJECT_STATIC(score, mu::draw::IFontProvider, fontProvider)
-
+    INJECT_STATIC(score, ISymbolFontsProvider, symbolFonts)
 public:
-    SymbolFont(const String& name, const String& family, const io::path_t& filePath);
+    SymbolFont(const std::string& name, const std::string& family, const io::path_t& filePath);
     SymbolFont(const SymbolFont& other);
 
-    const String& name() const;
-    const String& family() const;
-    const io::path_t& fontPath() const;
+    const std::string& name() const override;
+    const std::string& family() const override;
 
-    std::unordered_map<Sid, PropertyValue> engravingDefaults();
+    std::unordered_map<Sid, PropertyValue> engravingDefaults() const override;
     double textEnclosureThickness();
 
-    char32_t symCode(SymId id) const;
-    SymId fromCode(char32_t code) const;
-    String toString(SymId id) const;
+    char32_t symCode(SymId id) const override;
+    SymId fromCode(char32_t code) const override;
+    String toString(SymId id) const override;
 
-    bool isValid(SymId id) const;
-    bool useFallbackFont(SymId id) const;
+    bool isValid(SymId id) const override;
 
-    const mu::RectF bbox(SymId id, double mag) const;
-    const mu::RectF bbox(SymId id, const mu::SizeF&) const;
-    const mu::RectF bbox(const SymIdList& s, double mag) const;
-    const mu::RectF bbox(const SymIdList& s, const mu::SizeF& mag) const;
+    RectF bbox(SymId id, double mag) const override;
+    RectF bbox(SymId id, const mu::SizeF&) const override;
+    RectF bbox(const SymIdList& s, double mag) const override;
+    RectF bbox(const SymIdList& s, const mu::SizeF& mag) const override;
 
-    double width(SymId id, double mag) const;
-    double height(SymId id, double mag) const;
-    double advance(SymId id, double mag) const;
-    double width(const SymIdList&, double mag) const;
+    double width(SymId id, double mag) const override;
+    double width(const SymIdList&, double mag) const override;
+    double height(SymId id, double mag) const override;
+    double advance(SymId id, double mag) const override;
 
-    mu::PointF smuflAnchor(SymId symId, SmuflAnchorId anchorId, double mag) const;
+    PointF smuflAnchor(SymId symId, SmuflAnchorId anchorId, double mag) const override;
 
-    void draw(SymId id,         mu::draw::Painter*, double mag,            const mu::PointF& pos) const;
-    void draw(SymId id,         mu::draw::Painter*, const mu::SizeF& mag, const mu::PointF& pos) const;
-    void draw(SymId id,         mu::draw::Painter*, double mag,            const mu::PointF& pos, int n) const;
-    void draw(const SymIdList&, mu::draw::Painter*, double mag,            const mu::PointF& pos) const;
-    void draw(const SymIdList&, mu::draw::Painter*, const mu::SizeF& mag, const mu::PointF& pos) const;
+    // Draw
+    void draw(SymId id, draw::Painter* p, double mag, const PointF& pos) const override;
+    void draw(SymId id, draw::Painter* p, const SizeF& mag, const PointF& pos) const override;
+
+    void draw(const SymIdList& ids, draw::Painter* p, double mag, const PointF& pos) const override;
+    void draw(const SymIdList& ids, draw::Painter* p, const SizeF& mag, const PointF& pos) const override;
+
+    void ensureLoad();
 
 private:
 
@@ -90,7 +94,7 @@ private:
 
     struct Sym {
         char32_t code;
-        mu::RectF bbox;
+        RectF bbox;
         double advance = 0.0;
 
         std::map<SmuflAnchorId, mu::PointF> smuflAnchors;
@@ -107,7 +111,6 @@ private:
         }
     };
 
-    void load();
     void loadGlyphsWithAnchors(const JsonObject& glyphsWithAnchors);
     void loadComposedGlyphs();
     void loadStylisticAlternates(const JsonObject& glyphsWithAlternatesObject);
@@ -117,12 +120,14 @@ private:
     Sym& sym(SymId id);
     const Sym& sym(SymId id) const;
 
+    bool useFallbackFont(SymId id) const;
+
     bool m_loaded = false;
     std::vector<Sym> m_symbols;
     mutable draw::Font m_font;
 
-    String m_name;
-    String m_family;
+    std::string m_name;
+    std::string m_family;
     io::path_t m_fontPath;
 
     std::unordered_map<Sid, PropertyValue> m_engravingDefaults;

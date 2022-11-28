@@ -38,7 +38,7 @@
 #include "rw/xml.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
-#include "infrastructure/symbolfonts.h"
+#include "isymbolfont.h"
 
 #include "articulation.h"
 #include "audio.h"
@@ -323,7 +323,7 @@ Score::Score()
     _layer.push_back(l);
     _layerTags[0]   = u"default";
 
-    m_symbolFont = SymbolFonts::fontByName(u"Leland");
+    m_symbolFont = symbolFonts()->fontByName("Leland");
 
     _fileDivision           = Constants::division;
     _style  = DefaultStyle::defaultStyle();
@@ -5640,7 +5640,7 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
 {
     TRACEFUNC;
 
-    m_symbolFont = SymbolFonts::fontByName(style().value(Sid::MusicalSymbolFont).value<String>());
+    m_symbolFont = symbolFonts()->fontByName(style().value(Sid::MusicalSymbolFont).value<String>().toStdString());
     _noteHeadWidth = m_symbolFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
 
     m_layoutOptions.updateFromStyle(style());

@@ -25,14 +25,16 @@
 
 #include <variant>
 
-#include "engravingitem.h"
-#include "property.h"
-#include "types.h"
+#include "modularity/ioc.h"
 
 #include "draw/fontmetrics.h"
 #include "draw/types/color.h"
-
 #include "style/style.h"
+#include "isymbolfontsprovider.h"
+
+#include "engravingitem.h"
+#include "property.h"
+#include "types.h"
 
 namespace mu::engraving {
 class TextBase;
@@ -209,6 +211,7 @@ private:
 
 class TextFragment
 {
+    INJECT_STATIC(engraving, ISymbolFontsProvider, symbolFonts)
 public:
     mutable CharFormat format;
     mu::PointF pos;                    // y is relative to TextBlock->y()
@@ -280,6 +283,8 @@ public:
 class TextBase : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, TextBase)
+
+    INJECT(engraving, ISymbolFontsProvider, symbolFonts)
 
     // sorted by size to allow for most compact memory layout
     M_PROPERTY(FrameType,  frameType,              setFrameType)

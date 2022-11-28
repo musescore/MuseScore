@@ -25,11 +25,14 @@
 #include <QObject>
 #include <QAbstractListModel>
 
+#include "modularity/ioc.h"
+#include "engraving/isymbolfontsprovider.h"
+
 namespace mu::inspector {
 class NoteheadGroupsModel : public QAbstractListModel
 {
     Q_OBJECT
-
+    INJECT(inspector, engraving::ISymbolFontsProvider, symbolFonts)
 public:
     explicit NoteheadGroupsModel(QObject* parent = nullptr);
 

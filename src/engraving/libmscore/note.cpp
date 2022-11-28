@@ -34,6 +34,7 @@
 #include "translation.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
+#include "isymbolfont.h"
 
 #include "accidental.h"
 #include "actionicon.h"
@@ -61,7 +62,6 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "stringdata.h"
-#include "symbolfont.h"
 #include "tie.h"
 #include "tremolo.h"
 #include "undo.h"

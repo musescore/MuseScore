@@ -22,6 +22,9 @@
 #ifndef MU_ENGRAVING_READ302_H
 #define MU_ENGRAVING_READ302_H
 
+#include "modularity/ioc.h"
+#include "isymbolfontsprovider.h"
+
 #include "engravingerrors.h"
 
 namespace mu::engraving {
@@ -36,6 +39,7 @@ class XmlReader;
 namespace mu::engraving::compat {
 class Read302
 {
+    INJECT_STATIC(engraving, ISymbolFontsProvider, symbolFonts)
 public:
 
     static Err read302(MasterScore* masterScore, XmlReader& e, ReadContext& ctx);
