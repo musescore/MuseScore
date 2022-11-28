@@ -26,11 +26,11 @@
 
 #include "draw/ifontprovider.h"
 #include "infrastructure/smufl.h"
-#include "infrastructure/symbolfonts.h"
 #include "infrastructure/localfileinfoprovider.h"
 
 #ifndef ENGRAVING_NO_INTERNAL
 #include "internal/engravingconfiguration.h"
+#include "internal/symbolfontsprovider.h"
 #endif
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -52,6 +52,7 @@ using namespace mu::draw;
 
 #ifndef ENGRAVING_NO_INTERNAL
 static std::shared_ptr<EngravingConfiguration> s_configuration = std::make_shared<EngravingConfiguration>();
+static std::shared_ptr<SymbolFontsProvider> s_symbolfonts = std::make_shared<SymbolFontsProvider>();
 #endif
 
 static void engraving_init_qrc()
@@ -70,6 +71,7 @@ void EngravingModule::registerExports()
 {
 #ifndef ENGRAVING_NO_INTERNAL
     ioc()->registerExport<IEngravingConfiguration>(moduleName(), s_configuration);
+    ioc()->registerExport<ISymbolFontsProvider>(moduleName(), s_symbolfonts);
 #endif
 }
 
@@ -89,21 +91,22 @@ void EngravingModule::registerUiTypes()
 
 void EngravingModule::onInit(const framework::IApplication::RunMode&)
 {
+#ifndef ENGRAVING_NO_INTERNAL
     // Init fonts
     {
         // Symbols
         Smufl::init();
 
-        SymbolFonts::addFont(u"Leland",     u"Leland",      ":/fonts/leland/Leland.otf");
-        SymbolFonts::addFont(u"Bravura",    u"Bravura",     ":/fonts/bravura/Bravura.otf");
-        SymbolFonts::addFont(u"Emmentaler", u"MScore",      ":/fonts/mscore/mscore.ttf");
-        SymbolFonts::addFont(u"Gonville",   u"Gootville",   ":/fonts/gootville/Gootville.otf");
-        SymbolFonts::addFont(u"MuseJazz",   u"MuseJazz",    ":/fonts/musejazz/MuseJazz.otf");
-        SymbolFonts::addFont(u"Petaluma",   u"Petaluma",    ":/fonts/petaluma/Petaluma.otf");
-        SymbolFonts::addFont(u"Finale Maestro", u"Finale Maestro", ":/fonts/finalemaestro/FinaleMaestro.otf");
-        SymbolFonts::addFont(u"Finale Broadway", u"Finale Broadway", ":/fonts/finalebroadway/FinaleBroadway.otf");
+        s_symbolfonts->addFont("Leland",     "Leland",      ":/fonts/leland/Leland.otf");
+        s_symbolfonts->addFont("Bravura",    "Bravura",     ":/fonts/bravura/Bravura.otf");
+        s_symbolfonts->addFont("Emmentaler", "MScore",      ":/fonts/mscore/mscore.ttf");
+        s_symbolfonts->addFont("Gonville",   "Gootville",   ":/fonts/gootville/Gootville.otf");
+        s_symbolfonts->addFont("MuseJazz",   "MuseJazz",    ":/fonts/musejazz/MuseJazz.otf");
+        s_symbolfonts->addFont("Petaluma",   "Petaluma",    ":/fonts/petaluma/Petaluma.otf");
+        s_symbolfonts->addFont("Finale Maestro", "Finale Maestro", ":/fonts/finalemaestro/FinaleMaestro.otf");
+        s_symbolfonts->addFont("Finale Broadway", "Finale Broadway", ":/fonts/finalebroadway/FinaleBroadway.otf");
 
-        SymbolFonts::setFallbackFont(u"Bravura");
+        s_symbolfonts->setFallbackFont("Bravura");
 
         // Text
         const std::vector<io::path_t> textFonts = {
@@ -150,7 +153,6 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
         fontProvider->insertSubstitution(u"ScoreFont",      u"Leland Text");// alias for current Musical Text Font
     }
 
-#ifndef ENGRAVING_NO_INTERNAL
     s_configuration->init();
 
     DefaultStyle::instance()->init(s_configuration->defaultStyleFilePath(),
@@ -159,9 +161,9 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
 
     MScore::init();     // initialize libmscore
 
-    MScore::setNudgeStep(0.1); // cursor key (default 0.1)
-    MScore::setNudgeStep10(1.0); // Ctrl + cursor key (default 1.0)
-    MScore::setNudgeStep50(0.01); // Alt  + cursor key (default 0.01)
+    MScore::setNudgeStep(0.1);     // cursor key (default 0.1)
+    MScore::setNudgeStep10(1.0);     // Ctrl + cursor key (default 1.0)
+    MScore::setNudgeStep50(0.01);     // Alt  + cursor key (default 0.01)
 
     // Palette
     {
@@ -179,12 +181,14 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
             EngravingObject::elementsProvider()->unreg(gpaletteScore);
         }
 
+#ifndef ENGRAVING_NO_INTERNAL
         gpaletteScore->setStyle(DefaultStyle::baseStyle());
 
         gpaletteScore->style().set(Sid::MusicalTextFont, String(u"Leland Text"));
-        SymbolFont* scoreFont = SymbolFonts::fontByName(u"Leland");
+        ISymbolFontPtr scoreFont = s_symbolfonts->fontByName("Leland");
         gpaletteScore->setSymbolFont(scoreFont);
         gpaletteScore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gpaletteScore->spatium()) / SPATIUM20);
+#endif
     }
 
     //! NOTE And some initialization in the `Notation::init()`

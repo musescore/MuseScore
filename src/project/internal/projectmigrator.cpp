@@ -21,8 +21,6 @@
  */
 #include "projectmigrator.h"
 
-#include "engraving/infrastructure/symbolfont.h"
-
 #include "engraving/libmscore/score.h"
 #include "engraving/libmscore/excerpt.h"
 #include "engraving/libmscore/undo.h"

@@ -26,7 +26,7 @@
 
 #include "containers.h"
 
-#include "infrastructure/symbolfont.h"
+#include "isymbolfont.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
 
@@ -136,7 +136,7 @@ void Arpeggio::symbolLine(SymId end, SymId fill)
     double bottom = calcBottom();
     double w   = bottom - top;
     double mag = magS();
-    SymbolFont* f = score()->symbolFont();
+    ISymbolFontPtr f = score()->symbolFont();
 
     symbols.clear();
     double w1 = f->advance(end, mag);

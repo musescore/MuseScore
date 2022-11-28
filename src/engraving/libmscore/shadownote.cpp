@@ -157,7 +157,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
 
         for (int i = 0; i < m_duration.dots(); i++) {
             posDot.rx() += dd * i;
-            drawSymbol(SymId::augmentationDot, painter, posDot, 1);
+            drawSymbol(SymId::augmentationDot, painter, posDot);
             posDot.rx() -= dd * i;
         }
     }
@@ -170,7 +170,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
 
         if (hasFlag()) {
             SymId flag = flagSym();
-            drawSymbol(flag, painter, PointF(x - (lw / 2), y2), 1);
+            drawSymbol(flag, painter, PointF(x - (lw / 2), y2));
             y2 += symSmuflAnchor(flag, up ? SmuflAnchorId::stemUpNW : SmuflAnchorId::stemDownSW).y();
         }
         painter->drawLine(LineF(x, y1, x, y2));

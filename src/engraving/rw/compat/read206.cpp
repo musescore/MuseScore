@@ -26,7 +26,7 @@
 
 #include "compat/pageformat.h"
 
-#include "infrastructure/symbolfonts.h"
+#include "isymbolfont.h"
 
 #include "rw/xml.h"
 #include "rw/compat/compatutils.h"
@@ -3237,7 +3237,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
                 // float mode
                 score->style().set(Sid::spatium, sp);
             }
-            score->setSymbolFont(SymbolFonts::fontByName(score->style().styleSt(Sid::MusicalSymbolFont)));
+            score->setSymbolFont(symbolFonts()->fontByName(score->style().styleSt(Sid::MusicalSymbolFont).toStdString()));
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = Factory::createText(score->dummy(), TextStyleType::DEFAULT, false);
             readText206(e, ctx, text, text);

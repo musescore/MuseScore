@@ -29,7 +29,6 @@
 
 #include "libmscore/mscore.h"
 
-#include "symbolfonts.h"
 #include "smufl.h"
 
 #include "log.h"
@@ -43,7 +42,7 @@ using namespace mu::engraving;
 // ScoreFont
 // =============================================
 
-SymbolFont::SymbolFont(const String& name, const String& family, const path_t& filePath)
+SymbolFont::SymbolFont(const std::string& name, const std::string& family, const path_t& filePath)
     : m_symbols(static_cast<size_t>(SymId::lastSym) + 1),
     m_name(name),
     m_family(family),
@@ -64,22 +63,17 @@ SymbolFont::SymbolFont(const SymbolFont& other)
 // Properties
 // =============================================
 
-const String& SymbolFont::name() const
+const std::string& SymbolFont::name() const
 {
     return m_name;
 }
 
-const String& SymbolFont::family() const
+const std::string& SymbolFont::family() const
 {
     return m_family;
 }
 
-const path_t& SymbolFont::fontPath() const
-{
-    return m_fontPath;
-}
-
-std::unordered_map<Sid, PropertyValue> SymbolFont::engravingDefaults()
+std::unordered_map<Sid, PropertyValue> SymbolFont::engravingDefaults() const
 {
     return m_engravingDefaults;
 }
@@ -93,16 +87,20 @@ double SymbolFont::textEnclosureThickness()
 // Load
 // =============================================
 
-void SymbolFont::load()
+void SymbolFont::ensureLoad()
 {
-    if (-1 == fontProvider()->addSymbolFont(m_family, m_fontPath)) {
+    if (m_loaded) {
+        return;
+    }
+
+    if (-1 == fontProvider()->addSymbolFont(String::fromStdString(m_family), m_fontPath)) {
         LOGE() << "fatal error: cannot load internal font: " << m_fontPath;
         return;
     }
 
     m_font.setWeight(mu::draw::Font::Normal);
     m_font.setItalic(false);
-    m_font.setFamily(m_family, Font::Type::MusicSymbol);
+    m_font.setFamily(String::fromStdString(m_family), Font::Type::MusicSymbol);
     m_font.setNoFontMerging(true);
     m_font.setHinting(mu::draw::Font::Hinting::PreferVerticalHinting);
 
@@ -495,7 +493,7 @@ void SymbolFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObject
         applyEngravingDefault(key, engravingDefaultsObject.value(key).toDouble());
     }
 
-    m_engravingDefaults.insert({ Sid::MusicalTextFont, String(u"%1 Text").arg(m_family) });
+    m_engravingDefaults.insert({ Sid::MusicalTextFont, String(u"%1 Text").arg(String::fromStdString(m_family)) });
 }
 
 void SymbolFont::computeMetrics(SymbolFont::Sym& sym, const Smufl::Code& code)
@@ -560,22 +558,22 @@ bool SymbolFont::isValid(SymId id) const
 
 bool SymbolFont::useFallbackFont(SymId id) const
 {
-    return MScore::useFallbackFont && !sym(id).isValid() && this != SymbolFonts::fallbackFont(false);
+    return MScore::useFallbackFont && !sym(id).isValid() && !symbolFonts()->isFallbackFont(this);
 }
 
 // =============================================
 // Symbol bounding box
 // =============================================
 
-const RectF SymbolFont::bbox(SymId id, double mag) const
+RectF SymbolFont::bbox(SymId id, double mag) const
 {
     return bbox(id, SizeF(mag, mag));
 }
 
-const RectF SymbolFont::bbox(SymId id, const SizeF& mag) const
+RectF SymbolFont::bbox(SymId id, const SizeF& mag) const
 {
     if (useFallbackFont(id)) {
-        return SymbolFonts::fallbackFont()->bbox(id, mag);
+        return symbolFonts()->fallbackFont()->bbox(id, mag);
     }
 
     RectF r = sym(id).bbox;
@@ -583,12 +581,12 @@ const RectF SymbolFont::bbox(SymId id, const SizeF& mag) const
                  r.width() * mag.width(), r.height() * mag.height());
 }
 
-const RectF SymbolFont::bbox(const SymIdList& s, double mag) const
+RectF SymbolFont::bbox(const SymIdList& s, double mag) const
 {
     return bbox(s, SizeF(mag, mag));
 }
 
-const RectF SymbolFont::bbox(const SymIdList& s, const SizeF& mag) const
+RectF SymbolFont::bbox(const SymIdList& s, const SizeF& mag) const
 {
     RectF r;
     PointF pos;
@@ -616,7 +614,7 @@ double SymbolFont::height(SymId id, double mag) const
 double SymbolFont::advance(SymId id, double mag) const
 {
     if (useFallbackFont(id)) {
-        return SymbolFonts::fallbackFont()->advance(id, mag);
+        return symbolFonts()->fallbackFont()->advance(id, mag);
     }
 
     return sym(id).advance * mag;
@@ -630,7 +628,7 @@ double SymbolFont::width(const SymIdList& s, double mag) const
 PointF SymbolFont::smuflAnchor(SymId symId, SmuflAnchorId anchorId, double mag) const
 {
     if (useFallbackFont(symId)) {
-        return SymbolFonts::fallbackFont()->smuflAnchor(symId, anchorId, mag);
+        return symbolFonts()->fallbackFont()->smuflAnchor(symId, anchorId, mag);
     }
 
     return const_cast<Sym&>(sym(symId)).smuflAnchors[anchorId] * mag;
@@ -649,8 +647,8 @@ void SymbolFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF
     }
 
     if (!sym.isValid()) {
-        if (MScore::useFallbackFont && this != SymbolFonts::fallbackFont()) {
-            SymbolFonts::fallbackFont()->draw(id, painter, mag, pos);
+        if (MScore::useFallbackFont && !symbolFonts()->isFallbackFont(this)) {
+            symbolFonts()->fallbackFont()->draw(id, painter, mag, pos);
         } else {
             LOGE() << "invalid sym: " << static_cast<size_t>(id);
         }
@@ -670,12 +668,6 @@ void SymbolFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF
 void SymbolFont::draw(SymId id, Painter* painter, double mag, const PointF& pos) const
 {
     draw(id, painter, SizeF(mag, mag), pos);
-}
-
-void SymbolFont::draw(SymId id, mu::draw::Painter* painter, double mag, const PointF& pos, int n) const
-{
-    SymIdList list(n, id);
-    draw(list, painter, mag, pos);
 }
 
 void SymbolFont::draw(const SymIdList& ids, Painter* painter, double mag, const PointF& startPos) const

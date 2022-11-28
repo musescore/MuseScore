@@ -28,6 +28,7 @@
 #include "translation.h"
 #include "types/symnames.h"
 #include "types/typesconv.h"
+#include "isymbolfont.h"
 
 #include "articulation.h"
 #include "factory.h"
@@ -44,7 +45,6 @@
 #include "stafflines.h"
 #include "stafftype.h"
 #include "symbol.h"
-#include "symbolfont.h"
 #include "system.h"
 #include "undo.h"
 
