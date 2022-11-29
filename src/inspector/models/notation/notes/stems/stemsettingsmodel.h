@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_NOTATIONINSPECTORMODEL_H
-#define MU_INSPECTOR_NOTATIONINSPECTORMODEL_H
+#ifndef MU_INSPECTOR_STEMSETTINGSMODEL_H
+#define MU_INSPECTOR_STEMSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 
@@ -29,7 +29,6 @@ class StemSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem * isStemHidden READ isStemHidden CONSTANT)
     Q_PROPERTY(PropertyItem * thickness READ thickness CONSTANT)
     Q_PROPERTY(PropertyItem * length READ length CONSTANT)
     Q_PROPERTY(PropertyItem * offset READ offset CONSTANT)
@@ -40,7 +39,6 @@ class StemSettingsModel : public AbstractInspectorModel
 public:
     explicit StemSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
-    PropertyItem* isStemHidden() const;
     PropertyItem* thickness() const;
     PropertyItem* length() const;
 
@@ -65,7 +63,6 @@ private:
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
-    PropertyItem* m_isStemHidden = nullptr;
     PropertyItem* m_thickness = nullptr;
     PropertyItem* m_length = nullptr;
     PointFPropertyItem* m_offset = nullptr;
@@ -73,4 +70,4 @@ private:
 };
 }
 
-#endif // MU_INSPECTOR_NOTATIONINSPECTORMODEL_H
+#endif // MU_INSPECTOR_STEMSETTINGSMODEL_H

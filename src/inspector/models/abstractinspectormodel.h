@@ -69,6 +69,7 @@ public:
     enum class InspectorModelType {
         TYPE_UNDEFINED = -1,
         TYPE_NOTE,
+        TYPE_CHORD,
         TYPE_BEAM,
         TYPE_NOTEHEAD,
         TYPE_STEM,
