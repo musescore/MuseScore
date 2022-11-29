@@ -132,8 +132,20 @@ void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* se
 
     const DynamicTransition& transition = dynamicTransitionFromType(type);
     const int transitionDuration = dynamic->velocityChangeLength().ticks();
-    m_dynamicsMap[segmentPositionTick] = dynamicLevelFromType(transition.from);
-    m_dynamicsMap[segmentPositionTick + transitionDuration] = dynamicLevelFromType(transition.to);
+
+    dynamic_level_t levelFrom = dynamicLevelFromType(transition.from);
+    dynamic_level_t levelTo = dynamicLevelFromType(transition.to);
+
+    dynamic_level_t range = levelTo - levelFrom;
+
+    std::map<int, int> dynamicsCurve = TConv::easingValueCurve(transitionDuration,
+                                                               6 /*stepsCount*/,
+                                                               static_cast<int>(range),
+                                                               ChangeMethod::NORMAL);
+
+    for (const auto& pair : dynamicsCurve) {
+        m_dynamicsMap[segmentPositionTick + pair.first] = levelFrom + pair.second;
+    }
 }
 
 void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick)
