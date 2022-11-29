@@ -197,11 +197,31 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
 
         int spannerDurationTicks = spannerTo - spannerFrom;
 
-        if (spannerDurationTicks == 0) {
+        if (spannerDurationTicks <= 0) {
             continue;
         }
 
         const Hairpin* hairpin = toHairpin(spanner);
+
+        {
+            Dynamic* startDynamic
+                = toDynamic(hairpin->startSegment()->findAnnotation(ElementType::DYNAMIC, hairpin->track(), hairpin->track()));
+            if (startDynamic) {
+                if (startDynamic->dynamicType() != DynamicType::OTHER
+                    && !isOrdinaryDynamicType(startDynamic->dynamicType())
+                    && !isSingleNoteDynamicType(startDynamic->dynamicType())) {
+                    // The hairpin starts with a transition dynamic; we should start the hairpin after the transition is complete
+                    // This solution should be replaced once we have better infrastructure to see relations between Dynamics and Hairpins.
+                    spannerFrom += startDynamic->velocityChangeLength().ticks();
+
+                    spannerDurationTicks = spannerTo - spannerFrom;
+
+                    if (spannerDurationTicks <= 0) {
+                        continue;
+                    }
+                }
+            }
+        }
 
         DynamicType dynamicTypeFrom = hairpin->dynamicTypeFrom();
         DynamicType dynamicTypeTo = hairpin->dynamicTypeTo();
