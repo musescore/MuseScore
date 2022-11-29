@@ -64,6 +64,7 @@ static const ElementStyle voltaStyle {
     { Sid::voltaHook,                          Pid::BEGIN_HOOK_HEIGHT },
     { Sid::voltaHook,                          Pid::END_HOOK_HEIGHT },
     { Sid::voltaPosAbove,                      Pid::OFFSET },
+    { Sid::voltaFontSpatiumDependent,          Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
 };
 
 //---------------------------------------------------------
