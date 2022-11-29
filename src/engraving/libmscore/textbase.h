@@ -505,12 +505,16 @@ public:
 inline bool isTextNavigationKey(int key, KeyboardModifiers modifiers)
 {
     if (modifiers & TextEditingControlModifier) {
-        static const std::set<int> standardTextOperationsKeys {
-            Key_Space, // Ctrl + Space inserts the space symbol
-            Key_A // select all
+        static const std::set<int> controlNavigationKeys {
+            Key_Left,
+            Key_Right,
+            Key_Up,
+            Key_Down,
+            Key_Home,
+            Key_End
         };
 
-        return standardTextOperationsKeys.find(key) == standardTextOperationsKeys.end();
+        return controlNavigationKeys.find(key) != controlNavigationKeys.end();
     }
 
     static const std::set<int> navigationKeys {
