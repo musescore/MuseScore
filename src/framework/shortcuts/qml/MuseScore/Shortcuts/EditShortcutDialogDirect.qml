@@ -27,30 +27,32 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Shortcuts 1.0
 
-Dialog {
+StyledDialogView {
     id: root
 
-    signal applySequenceRequested(var newSequence, var toChangeShortcut)
-
     title: qsTrc("shortcuts", "Enter shortcut sequence")
-    height: 240
-    width: 600
+    contentHeight: 228
+    contentWidth: 538
+    margins: 12
 
-    standardButtons: Dialog.NoButton
+    property string actionCode
+
+    Component.onCompleted: {
+        console.log("Action code in direct qml: " + actionCode)
+
+        model.setDirectReplace()
+        model.clearConflicts()
+        model.loadByAction(actionCode)
+
+        view.forceFocus()
+    }
 
     EditShortcutModel {
         id: model
 
-        onApplyNewSequenceRequested: function(newSequence, conflictShortcutIndex) {
-            root.applySequenceRequested(newSequence, conflictShortcutIndex)
+        onApplyNewSequenceRequested: function(newSequence) {
             root.accept()
         }
-    }
-
-    function startEdit(shortcut, allShortcuts) {
-        open()
-        model.load(shortcut, allShortcuts)
-        view.forceFocus()
     }
 
     EditShortcutView {
@@ -63,6 +65,6 @@ Dialog {
         onReject: {
             root.reject()
         }
-
     }
 }
+

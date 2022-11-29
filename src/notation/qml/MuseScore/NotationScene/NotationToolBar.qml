@@ -69,6 +69,8 @@ Item {
         model: toolbarModel
 
         delegate: FlatButton {
+            id: btn
+
             height: 30
 
             property var item: Boolean(model) ? model.itemRole : null
@@ -82,6 +84,7 @@ Item {
             toolTipShortcut: Boolean(item) ? item.shortcuts : ""
 
             enabled: Boolean(item) ? item.enabled : false
+            mouseArea.acceptedButtons: Qt.LeftButton | Qt.RightButton
 
             textFont: ui.theme.largeBodyFont
 
@@ -92,8 +95,21 @@ Item {
             transparent: true
             orientation: Qt.Horizontal
 
-            onClicked: {
-                toolbarModel.handleMenuItem(item.id)
+            ToolbarShortcutsContextMenu {
+                id: contextMenu
+                actionCode: btn.item ? btn.item.action : ""
+
+                onItemHandled: {
+                    console.log(btn.item.action + " handled!")
+                }
+            }
+
+            onClicked: function(mouse) {
+                if (mouse.button === Qt.LeftButton) {
+                    toolbarModel.handleMenuItem(item.id)
+                } else if (mouse.button === Qt.RightButton) {
+                    contextMenu.show(Qt.point(mouseArea.mouseX, mouseArea.mouseY))
+                }
             }
         }
     }

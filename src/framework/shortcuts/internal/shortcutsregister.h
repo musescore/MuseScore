@@ -51,7 +51,9 @@ public:
     void reload(bool onlyDef = false) override;
 
     const ShortcutList& shortcuts() const override;
+    Ret setShortcut(const Shortcut& shortcut) override;
     Ret setShortcuts(const ShortcutList& shortcuts) override;
+    Ret removeShortcutForAction(const QString& action) override;
     void resetShortcuts() override;
     async::Notification shortcutsChanged() const override;
 

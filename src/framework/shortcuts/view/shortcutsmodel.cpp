@@ -165,6 +165,18 @@ QVariant ShortcutsModel::currentShortcut() const
     return shortcutToObject(sc);
 }
 
+QVariant ShortcutsModel::getShortcut(QString action) const
+{
+    for (const Shortcut& shortcut : m_shortcuts) {
+        if (action == QString::fromStdString(shortcut.action)) {
+            return shortcutToObject(shortcut);
+        }
+    }
+
+    LOGE() << "No shortcut container found in getShortcut in shortcutsmodel.cpp for action: " << action;
+    return QVariant();
+}
+
 QModelIndex ShortcutsModel::currentShortcutIndex() const
 {
     if (m_selection.size() == 1) {
@@ -229,6 +241,39 @@ void ShortcutsModel::applySequenceToCurrentShortcut(const QString& newSequence, 
     }
 
     notifyAboutShortcutChanged(currIndex);
+}
+
+void ShortcutsModel::applySequenceToShortcut(QString action, const QString& newSequence, int conflictShortcutIndex)
+{
+    int i = 0;
+    for (Shortcut& shortcut : m_shortcuts) {
+        if (action == QString::fromStdString(shortcut.action)) {
+            shortcut.sequences = Shortcut::sequencesFromString(newSequence.toStdString());
+
+            if (conflictShortcutIndex >= 0 && conflictShortcutIndex < m_shortcuts.size()) {
+                m_shortcuts[conflictShortcutIndex].clear();
+                notifyAboutShortcutChanged(index(conflictShortcutIndex));
+            }
+
+            notifyAboutShortcutChanged(index(i));
+            return;
+        }
+        i += 1;
+    }
+}
+
+void ShortcutsModel::clearSequenceOfShortcut(QString action)
+{
+    int i = 0;
+    for (Shortcut& shortcut : m_shortcuts) {
+        if (action == QString::fromStdString(shortcut.action)) {
+            shortcut.sequences.clear();
+            shortcut.standardKey = QKeySequence::StandardKey::UnknownKey;
+            notifyAboutShortcutChanged(index(i));
+            return;
+        }
+        i += 1;
+    }
 }
 
 void ShortcutsModel::clearSelectedShortcuts()
@@ -298,6 +343,7 @@ QVariant ShortcutsModel::shortcutToObject(const Shortcut& shortcut) const
 {
     QVariantMap obj;
     obj["title"] = actionText(shortcut.action);
+    obj["action"] = QString::fromStdString(shortcut.action);
     obj["sequence"] = QString::fromStdString(shortcut.sequencesAsString());
     obj["context"] = QString::fromStdString(shortcut.context);
 

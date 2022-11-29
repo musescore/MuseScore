@@ -25,6 +25,7 @@ import QtQuick.Layouts 1.15
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 import MuseScore.CommonScene 1.0
+import MuseScore.Shortcuts 1.0
 
 Item {
     id: root
@@ -35,6 +36,8 @@ Item {
 
     width: childrenRect.width
     height: 30
+
+    signal shortcutChanged()
 
     ListView {
         id: buttonsListView
@@ -58,6 +61,8 @@ Item {
             width: 30
             height: width
 
+            mouseArea.acceptedButtons: Qt.LeftButton | Qt.RightButton
+
             property var item: Boolean(model) ? model.itemRole : null
 
             icon: Boolean(item) ? item.icon : IconCode.NONE
@@ -75,13 +80,28 @@ Item {
             navigation.name: toolTipTitle
             navigation.order: model.index
 
-            onClicked: {
+            onClicked: function(mouse) {
                 if (menuLoader.isMenuOpened || item.subitems.length) {
                     menuLoader.toggleOpened(item.subitems)
                     return
                 }
 
+                if (mouse.button === Qt.RightButton) {
+                    contextMenu.show(Qt.point(mouseArea.mouseX, mouseArea.mouseY))
+                    return;
+                }
+
                 Qt.callLater(root.playbackModel.handleMenuItem, item.id)
+            }
+
+            ToolbarShortcutsContextMenu {
+                id: contextMenu
+                actionCode: btn.item ? btn.item.action : ""
+
+                onItemHandled: {
+                    console.log(btn.item.action + " handled!")
+                    root.shortcutChanged()
+                }
             }
 
             StyledMenuLoader {

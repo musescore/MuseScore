@@ -70,6 +70,10 @@ Item {
             floating: root.floating
 
             navPanel: root.navigation
+
+            onShortcutChanged: {
+                playbackModel.load()
+            }
         }
 
         StyledSlider {

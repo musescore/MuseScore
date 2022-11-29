@@ -68,11 +68,14 @@ public:
     Q_INVOKABLE void exportShortcutsToFile();
 
     Q_INVOKABLE void applySequenceToCurrentShortcut(const QString& newSequence, int conflictShortcutIndex = -1);
+    Q_INVOKABLE void applySequenceToShortcut(QString action, const QString& newSequence, int conflictShortcutIndex = -1);
 
+    Q_INVOKABLE void clearSequenceOfShortcut(QString action);
     Q_INVOKABLE void clearSelectedShortcuts();
     Q_INVOKABLE void resetToDefaultSelectedShortcuts();
 
     Q_INVOKABLE QVariantList shortcuts() const;
+    Q_INVOKABLE QVariant getShortcut(QString action) const;
 
 public slots:
     void setSelection(const QItemSelection& selection);
