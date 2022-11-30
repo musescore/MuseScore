@@ -133,6 +133,8 @@ private:
 
     std::vector<const EngravingItem*> filterPlaybleItems(const std::vector<const EngravingItem*>& items) const;
 
+    mpe::ArticulationsProfilePtr defaultActiculationProfile(const InstrumentTrackId& trackId) const;
+
     Score* m_score = nullptr;
     bool m_expandRepeats = true;
     bool m_playChordSymbols = true;

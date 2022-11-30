@@ -41,6 +41,23 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
+static ArticulationMap makeArticulations(ArticulationType persistentArticulationApplied, ArticulationsProfilePtr profile,
+                                         timestamp_t timestamp, duration_t duration)
+{
+    ArticulationMeta meta(persistentArticulationApplied,
+                          profile->pattern(persistentArticulationApplied),
+                          timestamp,
+                          duration,
+                          0,
+                          0);
+
+    ArticulationMap articulations;
+    articulations.emplace(persistentArticulationApplied, mu::mpe::ArticulationAppliedData(std::move(meta), 0, mu::mpe::HUNDRED_PERCENT));
+    articulations.preCalculateAverageData();
+
+    return articulations;
+}
+
 void PlaybackEventsRenderer::render(const EngravingItem* item, const dynamic_level_t nominalDynamicLevel,
                                     const ArticulationType persistentArticulationApplied,
                                     const ArticulationsProfilePtr profile,
@@ -90,7 +107,9 @@ void PlaybackEventsRenderer::render(const EngravingItem* item, const mpe::timest
 }
 
 void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
-                                               const int ticksPositionOffset, mpe::PlaybackEventsMap& result) const
+                                               const int ticksPositionOffset,
+                                               const mpe::ArticulationsProfilePtr profile,
+                                               mpe::PlaybackEventsMap& result) const
 {
     if (!chordSymbol->isRealizable()) {
         return;
@@ -110,7 +129,8 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
     duration_t duration = durationFromTicks(bps.val, durationTicks);
 
     voice_layer_idx_t voiceIdx = static_cast<voice_layer_idx_t>(chordSymbol->voice());
-    static ArticulationMap emptyArticulations;
+
+    ArticulationMap articulations = makeArticulations(mpe::ArticulationType::Standard, profile, eventTimestamp, duration);
 
     for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
         int octave = playingOctave(it->first, it->second);
@@ -121,13 +141,14 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
                                            voiceIdx,
                                            pitchLevel,
                                            dynamicLevelFromType(mpe::DynamicType::Natural),
-                                           emptyArticulations,
+                                           articulations,
                                            bps.val));
     }
 }
 
 void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const mpe::timestamp_t actualTimestamp,
-                                               const mpe::duration_t actualDuration, mpe::PlaybackEventsMap& result) const
+                                               const mpe::duration_t actualDuration, const ArticulationsProfilePtr profile,
+                                               mpe::PlaybackEventsMap& result) const
 {
     if (!chordSymbol->isRealizable()) {
         return;
@@ -139,7 +160,8 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const
     PlaybackEventList& events = result[actualTimestamp];
 
     voice_layer_idx_t voiceIdx = static_cast<voice_layer_idx_t>(chordSymbol->voice());
-    static ArticulationMap emptyArticulations;
+
+    ArticulationMap articulations = makeArticulations(mpe::ArticulationType::Standard, profile, actualTimestamp, actualDuration);
 
     for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
         int octave = playingOctave(it->first, it->second);
@@ -150,7 +172,7 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const
                                            voiceIdx,
                                            pitchLevel,
                                            dynamicLevelFromType(mpe::DynamicType::Natural),
-                                           emptyArticulations,
+                                           articulations,
                                            2.0));
     }
 }
@@ -248,16 +270,7 @@ void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::t
                                                   const mpe::ArticulationType persistentArticulationApplied,
                                                   const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventList& result) const
 {
-    ArticulationMeta meta(persistentArticulationApplied,
-                          profile->pattern(persistentArticulationApplied),
-                          actualTimestamp,
-                          actualDuration,
-                          0,
-                          0);
-
-    ArticulationMap articulations;
-    articulations.emplace(persistentArticulationApplied, mpe::ArticulationAppliedData(std::move(meta), 0, mpe::HUNDRED_PERCENT));
-    articulations.preCalculateAverageData();
+    ArticulationMap articulations = makeArticulations(persistentArticulationApplied, profile, actualDuration, actualTimestamp);
 
     result.emplace_back(buildFixedNoteEvent(note, actualTimestamp, actualDuration, actualDynamicLevel, articulations));
 }
