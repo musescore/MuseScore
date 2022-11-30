@@ -180,7 +180,7 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
             }
 
             percentage_t positionDistance = nextToCurrent->first - it->first;
-            int stepsCount = positionDistance / (mpe::ONE_PERCENT * 2);
+            int stepsCount = positionDistance / (mpe::ONE_PERCENT * 5);
             float posStep = positionDistance / static_cast<float>(stepsCount);
             float pitchStep = (nextToCurrent->second - it->second) / static_cast<float>(stepsCount);
 
