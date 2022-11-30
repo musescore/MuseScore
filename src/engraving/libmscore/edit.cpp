@@ -4856,7 +4856,7 @@ static EngravingItem* findLinkedVoiceElement(EngravingItem* e, Staff* nstaff)
     Measure* measure = segment->measure();
     Measure* m       = score->tick2measure(measure->tick());
     Segment* s       = m->findSegment(segment->segmentType(), segment->tick());
-    return s->element(dtrack);
+    return s ? s->element(dtrack) : nullptr;
 }
 
 //---------------------------------------------------------
