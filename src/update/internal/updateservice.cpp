@@ -177,5 +177,7 @@ void UpdateService::clear()
 {
     m_lastCheckResult = ReleaseInfo();
 
+#if !defined(Q_OS_LINUX)
     fileSystem()->remove(configuration()->updateDataPath());
+#endif
 }
