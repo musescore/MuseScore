@@ -144,7 +144,7 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
     startGlobalEdit();
 
     const Part* part = partModifiable(instrumentKey.partId);
-    bool isMainInstrument = part && isMainInstrumentForPart(instrumentKey.instrumentId, part);
+    bool isMainInstrument = part && isMainInstrumentForPart(instrumentKey, part);
 
     NotationParts::replaceInstrument(instrumentKey, newInstrument);
 
