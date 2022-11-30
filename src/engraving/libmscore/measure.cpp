@@ -3826,8 +3826,9 @@ void Measure::addSystemHeader(bool isFirstSystem)
         }
 
         needKeysig = needKeysig && (keyIdx.key() != Key::C || keyIdx.custom() || keyIdx.isAtonal());
+        bool isPitchedStaff = staff->isPitchedStaff(tick());
 
-        if (needKeysig) {
+        if (needKeysig && isPitchedStaff) {
             KeySig* keysig;
             if (!kSegment) {
                 kSegment = Factory::createSegment(this, SegmentType::KeySig, Fraction(0, 1));
@@ -3851,33 +3852,36 @@ void Measure::addSystemHeader(bool isFirstSystem)
             keysig->layout();
             //kSegment->createShape(staffIdx);
             kSegment->setEnabled(true);
-        } else {
-            if (kSegment && staff->isPitchedStaff(tick())) {
-                // do not disable user modified keysigs
-                bool disable = true;
-                for (size_t i = 0; i < score()->nstaves(); ++i) {
-                    EngravingItem* e = kSegment->element(i * VOICES);
-                    Key key = score()->staff(i)->key(tick());
-                    if ((e && !e->generated()) || (key != keyIdx.key())) {
-                        disable = false;
-                    } else if (e && e->generated() && key == keyIdx.key() && keyIdx.key() == Key::C) {
-                        // If a key sig segment is disabled, it may be re-enabled if there is
-                        // a transposing instrument using a different key sig.
-                        // To prevent this from making the wrong key sig display, remove any key
-                        // sigs on staves where the key in this measure is C.
-                        kSegment->remove(e);
-                    }
+        } else if (kSegment && isPitchedStaff) {
+            // do not disable user modified keysigs
+            bool disable = true;
+            for (size_t i = 0; i < score()->nstaves(); ++i) {
+                EngravingItem* e = kSegment->element(i * VOICES);
+                Key key = score()->staff(i)->key(tick());
+                if ((e && !e->generated()) || (key != keyIdx.key())) {
+                    disable = false;
+                } else if (e && e->generated() && key == keyIdx.key() && keyIdx.key() == Key::C) {
+                    // If a key sig segment is disabled, it may be re-enabled if there is
+                    // a transposing instrument using a different key sig.
+                    // To prevent this from making the wrong key sig display, remove any key
+                    // sigs on staves where the key in this measure is C.
+                    kSegment->remove(e);
                 }
+            }
 
-                if (disable) {
-                    kSegment->setEnabled(false);
-                } else {
-                    EngravingItem* e = kSegment->element(track);
-                    if (e && e->isKeySig()) {
-                        KeySig* keysig = toKeySig(e);
-                        keysig->layout();
-                    }
+            if (disable) {
+                kSegment->setEnabled(false);
+            } else {
+                EngravingItem* e = kSegment->element(track);
+                if (e && e->isKeySig()) {
+                    KeySig* keysig = toKeySig(e);
+                    keysig->layout();
                 }
+            }
+        } else if (kSegment && !isPitchedStaff) {
+            EngravingItem* e = kSegment->element(track);
+            if (e && e->isKeySig()) {
+                kSegment->remove(e);
             }
         }
 
@@ -4010,8 +4014,9 @@ void Measure::addSystemTrailer(Measure* nm)
     for (staff_idx_t staffIdx = 0; staffIdx < n; ++staffIdx) {
         track_idx_t track = staffIdx * VOICES;
         Staff* staff = score()->staff(staffIdx);
+        bool staffIsPitchedAtNextMeas = nextMeasure() && staff->isPitchedStaff(nextMeasure()->tick());
 
-        if (show) {
+        if (show && staffIsPitchedAtNextMeas) {
             if (!s) {
                 s = Factory::createSegment(this, SegmentType::KeySigAnnounce, _rtick);
                 s->setTrailer(true);
@@ -4036,7 +4041,12 @@ void Measure::addSystemTrailer(Measure* nm)
             ks->layout();
             //s->createShape(track / VOICES);
             s->setEnabled(true);
-        } else {
+        } else if (show && !staffIsPitchedAtNextMeas) {
+            KeySig* keySig = toKeySig(s->element(track));
+            if (keySig) {
+                s->remove(keySig);
+            }
+        } else if (!show) {
             // remove any existent courtesy key signature
             if (s) {
                 s->setEnabled(false);
