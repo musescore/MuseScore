@@ -6,8 +6,9 @@ on:
     - master
     - 4.0_rc
     
-  schedule: 
-    - cron: '0 4 */1 */1 *' # At 04:00 on every day-of-month
+  schedule:
+    - cron: '0 3 */1 */1 *' # At 03:00 on every day-of-month for master
+    - cron: '0 5 */1 */1 *' # At 05:00 on every day-of-month for 4.0_rc
   workflow_dispatch:
     inputs:
       build_mode:
@@ -31,8 +32,14 @@ jobs:
       uses: styfle/cancel-workflow-action@0.9.1
       with:
         access_token: ${{ github.token }}
-    - name: Clone repository
+    - name: Clone repository (default)
       uses: actions/checkout@v2
+      if: ${{ github.event_name != 'schedule' || github.event.schedule == '0 3 */1 */1 *' }}
+    - name: Clone repository (4.0_rc)
+      uses: actions/checkout@v2
+      if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' }}
+      with:
+        ref: 4.0_rc
     - name: Ccache cache files
       uses: actions/cache@v2
       with:
@@ -102,8 +109,9 @@ jobs:
           DO_PUBLISH='false'
         fi
 
-        if [ "${{ github.event_name }}" == "pull_request" ]; then PR_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${BUILD_NUMBER}_Lin${PR_INFO}")"
+        ADD_INFO="_${GITHUB_REF#refs/heads/}"
+        if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="${ADD_INFO}_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${BUILD_NUMBER}_Lin${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
