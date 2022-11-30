@@ -2730,6 +2730,38 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
       }
 
 //---------------------------------------------------------
+//   writeBreathMark
+//---------------------------------------------------------
+
+static void writeBreathMark(const Breath* const breath, XmlWriter& xml, Notations& notations, Articulations& articulations)
+      {
+      if (breath) {
+            notations.tag(xml);
+            articulations.tag(xml);
+            if (breath->isCaesura())
+                  xml.tagE("caesura");
+            else {
+                  QString breathMarkType;
+                  switch (breath->symId()) {
+                        case SymId::breathMarkTick:
+                              breathMarkType = "tick";
+                              break;
+                        case SymId::breathMarkUpbow:
+                              breathMarkType = "upbow";
+                              break;
+                        case SymId::breathMarkSalzedo:
+                              breathMarkType = "salzedo";
+                              break;
+                        default:
+                              breathMarkType = "comma";
+                        }
+
+                  xml.tag("breath-mark", breathMarkType);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   chordAttributes
 //---------------------------------------------------------
 
@@ -2766,12 +2798,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                   }
             }
 
-      if (Breath* b = chord->hasBreathMark()) {
-            notations.tag(_xml);
-            articulations.tag(_xml);
-            _xml.tagE(b->isCaesura() ? "caesura" : "breath-mark");
-            }
-
+      writeBreathMark(chord->hasBreathMark(), _xml, notations, articulations);
       writeChordLines(chord, _xml, notations, articulations);
 
       articulations.etag(_xml);
@@ -3651,11 +3678,7 @@ void ExportMusicXml::rest(Rest* rest, int staff, const std::vector<Lyrics*>* ll)
       fermatas(fl, _xml, notations);
 
       Articulations articulations;
-      if (Breath* b = rest->hasBreathMark()) {
-            notations.tag(_xml);
-            articulations.tag(_xml);
-            _xml.tagE(b->isCaesura() ? "caesura" : "breath-mark");
-            }
+      writeBreathMark(rest->hasBreathMark(), _xml, notations, articulations);
       articulations.etag(_xml);
 
       Ornaments ornaments;
