@@ -208,15 +208,15 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
     duration_t actualDuration = MScore::defaultPlayDuration * 1000;
 
     for (const EngravingItem* item : playableItems) {
-        if (item->isHarmony()) {
-            m_renderer.renderChordSymbol(toHarmony(item), actualTimestamp, actualDuration, result);
-            continue;
-        }
-
-        ArticulationsProfilePtr profile = profilesRepository()->defaultProfile(m_playbackDataMap[trackId].setupData.category);
+        ArticulationsProfilePtr profile = defaultActiculationProfile(trackId);
         if (!profile) {
             LOGE() << "unsupported instrument family: " << trackId.partId.toUint64();
             return;
+        }
+
+        if (item->isHarmony()) {
+            m_renderer.renderChordSymbol(toHarmony(item), actualTimestamp, actualDuration, profile, result);
+            continue;
         }
 
         int utick = repeatList().tick2utick(item->tick().ticks());
@@ -340,8 +340,14 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
 
         InstrumentTrackId trackId = chordSymbolsTrackId(item->part()->id());
 
+        ArticulationsProfilePtr profile = defaultActiculationProfile(trackId);
+        if (!profile) {
+            LOGE() << "unsupported instrument family: " << item->part()->id();
+            continue;
+        }
+
         if (chordSymbol->play()) {
-            m_renderer.renderChordSymbol(chordSymbol, tickPositionOffset,
+            m_renderer.renderChordSymbol(chordSymbol, tickPositionOffset, profile,
                                          m_playbackDataMap[trackId].originEvents);
         }
 
@@ -385,7 +391,7 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
 
         const PlaybackContext& ctx = m_playbackCtxMap[trackId];
 
-        ArticulationsProfilePtr profile = profilesRepository()->defaultProfile(m_playbackDataMap[trackId].setupData.category);
+        ArticulationsProfilePtr profile = defaultActiculationProfile(trackId);
         if (!profile) {
             LOGE() << "unsupported instrument family: " << item->part()->id();
             continue;
@@ -770,4 +776,9 @@ InstrumentTrackId PlaybackModel::idKey(const std::vector<const EngravingItem*>& 
 InstrumentTrackId PlaybackModel::idKey(const ID& partId, const std::string& instrumentId) const
 {
     return { partId, instrumentId };
+}
+
+mpe::ArticulationsProfilePtr PlaybackModel::defaultActiculationProfile(const InstrumentTrackId& trackId) const
+{
+    return profilesRepository()->defaultProfile(m_playbackDataMap.at(trackId).setupData.category);
 }
