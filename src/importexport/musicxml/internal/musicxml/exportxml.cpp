@@ -2982,6 +2982,38 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
 }
 
 //---------------------------------------------------------
+//   writeBreathMark
+//---------------------------------------------------------
+
+static void writeBreathMark(const Breath* const breath, XmlWriter& xml, Notations& notations, Articulations& articulations)
+{
+    if (breath && ExportMusicXml::canWrite(breath)) {
+        notations.tag(xml, breath);
+        articulations.tag(xml);
+        if (breath->isCaesura()) {
+            xml.tag("caesura");
+        } else {
+            QString breathMarkType;
+            switch (breath->symId()) {
+            case SymId::breathMarkTick:
+                breathMarkType = "tick";
+                break;
+            case SymId::breathMarkUpbow:
+                breathMarkType = "upbow";
+                break;
+            case SymId::breathMarkSalzedo:
+                breathMarkType = "salzedo";
+                break;
+            default:
+                breathMarkType = "comma";
+            }
+
+            xml.tag("breath-mark", breathMarkType);
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   chordAttributes
 //---------------------------------------------------------
 
@@ -3031,14 +3063,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         }
     }
 
-    Breath* b = chord->hasBreathMark();
-
-    if (b && ExportMusicXml::canWrite(b)) {
-        notations.tag(_xml, b);
-        articulations.tag(_xml);
-        _xml.tag(b->isCaesura() ? "caesura" : "breath-mark");
-    }
-
+    writeBreathMark(chord->hasBreathMark(), _xml, notations, articulations);
     writeChordLines(chord, _xml, notations, articulations);
 
     articulations.etag(_xml);
@@ -3986,31 +4011,7 @@ void ExportMusicXml::rest(Rest* rest, staff_idx_t staff)
     fermatas(fl, _xml, notations);
 
     Articulations articulations;
-    Breath* b = rest->hasBreathMark();
-    if (b && ExportMusicXml::canWrite(b)) {
-        notations.tag(_xml, b);
-        articulations.tag(_xml);
-        if (b->isCaesura()) {
-            _xml.tag("caesura");
-        } else {
-            QString breathMarkType;
-            switch (b->symId()) {
-            case SymId::breathMarkTick:
-                breathMarkType = "tick";
-                break;
-            case SymId::breathMarkUpbow:
-                breathMarkType = "upbow";
-                break;
-            case SymId::breathMarkSalzedo:
-                breathMarkType = "salzedo";
-                break;
-            default:
-                breathMarkType = "comma";
-            }
-
-            _xml.tag("breath-mark", breathMarkType);
-        }
-    }
+    writeBreathMark(rest->hasBreathMark(), _xml, notations, articulations);
     articulations.etag(_xml);
 
     Ornaments ornaments;
