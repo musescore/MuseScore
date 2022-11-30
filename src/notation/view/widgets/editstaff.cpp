@@ -134,12 +134,17 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     Part* part = m_orgStaff->part();
     mu::engraving::Score* score = part->score();
 
-    m_instrument = *part->instrument(tick);
+    auto it = mu::findLessOrEqual(part->instruments(), tick.ticks());
+    if (it == part->instruments().cend()) {
+        return;
+    }
+
+    m_instrument = *it->second;
     m_orgInstrument = m_instrument;
 
     m_instrumentKey.instrumentId = m_instrument.id();
     m_instrumentKey.partId = part->id();
-    m_instrumentKey.tick = tick;
+    m_instrumentKey.tick = Fraction::fromTicks(it->first);
 
     m_staff = engraving::Factory::createStaff(part);
     mu::engraving::StaffType* stt = m_staff->setStaffType(Fraction(0, 1), *m_orgStaff->staffType(Fraction(0, 1)));
