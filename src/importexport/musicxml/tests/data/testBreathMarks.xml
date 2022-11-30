@@ -48,6 +48,11 @@
           <line>2</line>
           </clef>
         </attributes>
+      <direction placement="above">
+        <direction-type>
+          <words>Rests and notes are handled separately, so test both</words>
+          </direction-type>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -88,6 +93,70 @@
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
+        <notations>
+          <articulations>
+            <breath-mark>salzedo</breath-mark>
+            </articulations>
+          </notations>
+        </note>
+      </measure>
+    <measure number="5">
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <articulations>
+            <breath-mark>comma</breath-mark>
+            </articulations>
+          </notations>
+        </note>
+      </measure>
+    <measure number="6">
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <articulations>
+            <breath-mark>tick</breath-mark>
+            </articulations>
+          </notations>
+        </note>
+      </measure>
+    <measure number="7">
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <articulations>
+            <breath-mark>upbow</breath-mark>
+            </articulations>
+          </notations>
+        </note>
+      </measure>
+    <measure number="8">
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
         <notations>
           <articulations>
             <breath-mark>salzedo</breath-mark>
