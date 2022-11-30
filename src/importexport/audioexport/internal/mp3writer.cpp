@@ -27,7 +27,7 @@
 using namespace mu::iex::audioexport;
 using namespace mu::framework;
 
-mu::Ret Mp3Writer::write(notation::INotationPtr, QIODevice& destinationDevice, const Options&)
+mu::Ret Mp3Writer::write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options&)
 {
     const audio::SoundTrackFormat format {
         audio::SoundTrackType::MP3,
@@ -36,7 +36,7 @@ mu::Ret Mp3Writer::write(notation::INotationPtr, QIODevice& destinationDevice, c
         configuration()->exportMp3Bitrate()
     };
 
-    doWriteAndWait(destinationDevice, format);
+    doWriteAndWait(notation, destinationDevice, format);
 
     return make_ret(Ret::Code::Ok);
 }

@@ -315,40 +315,19 @@ INotationInteractionPtr PlaybackController::interaction() const
 void PlaybackController::onNotationChanged()
 {
     m_masterNotation = globalContext()->currentMasterNotation();
-    m_notation = globalContext()->currentNotation();
+    setNotation(globalContext()->currentNotation());
 
     DEFER {
         m_isPlayAllowedChanged.notify();
         m_totalPlayTimeChanged.notify();
     };
 
-    if (!m_notation || !m_masterNotation) {
+    if (!m_masterNotation) {
         return;
     }
 
-    updateMuteStates();
-
-    INotationPartsPtr notationParts = m_notation->parts();
-    NotifyList<const Part*> partList = notationParts->partList();
-
-    partList.onItemAdded(this, [this](const Part*) {
-        updateMuteStates();
-    });
-
-    partList.onItemChanged(this, [this](const Part*) {
-        updateMuteStates();
-    });
-
     m_masterNotation->hasPartsChanged().onNotify(this, [this]() {
         m_isPlayAllowedChanged.notify();
-    });
-
-    notationPlayback()->loopBoundariesChanged().onNotify(this, [this]() {
-        updateLoop();
-    });
-
-    m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
-        onSelectionChanged();
     });
 }
 
@@ -1050,7 +1029,7 @@ void PlaybackController::updateMuteStates()
 
     INotationPartsPtr notationParts = m_notation->parts();
     InstrumentTrackIdSet allowedInstrumentTrackIdSet = instrumentTrackIdSetForRangePlayback();
-    bool isRangePlaybackMode = selection()->isRange() && !allowedInstrumentTrackIdSet.empty();
+    bool isRangePlaybackMode = !m_isExportingAudio && selection()->isRange() && !allowedInstrumentTrackIdSet.empty();
 
     for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
         if (!mu::contains(m_trackIdMap, instrumentTrackId)) {
@@ -1195,6 +1174,46 @@ void PlaybackController::applyProfile(const SoundProfileName& profileName)
     }
 
     audioSettingsPtr->setActiveSoundProfile(profileName);
+}
+
+void PlaybackController::setNotation(notation::INotationPtr notation)
+{
+    if (m_notation == notation) {
+        return;
+    }
+
+    m_notation = notation;
+
+    if (!m_notation) {
+        return;
+    }
+
+    updateMuteStates();
+
+    INotationPartsPtr notationParts = m_notation->parts();
+    NotifyList<const Part*> partList = notationParts->partList();
+
+    partList.onItemAdded(this, [this](const Part*) {
+        updateMuteStates();
+    });
+
+    partList.onItemChanged(this, [this](const Part*) {
+        updateMuteStates();
+    });
+
+    notationPlayback()->loopBoundariesChanged().onNotify(this, [this]() {
+        updateLoop();
+    });
+
+    m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
+        onSelectionChanged();
+    });
+}
+
+void PlaybackController::setIsExportingAudio(bool exporting)
+{
+    m_isExportingAudio = exporting;
+    updateMuteStates();
 }
 
 bool PlaybackController::canReceiveAction(const actions::ActionCode&) const

@@ -26,6 +26,7 @@
 #include "async/notification.h"
 #include "async/channel.h"
 #include "global/progress.h"
+#include "notation/inotation.h"
 #include "notation/notationtypes.h"
 #include "audio/audiotypes.h"
 #include "actions/actiontypes.h"
@@ -85,6 +86,9 @@ public:
     virtual framework::Progress loadingProgress() const = 0;
 
     virtual void applyProfile(const SoundProfileName& profileName) = 0;
+
+    virtual void setNotation(notation::INotationPtr notation) = 0;
+    virtual void setIsExportingAudio(bool exporting) = 0;
 };
 }
 

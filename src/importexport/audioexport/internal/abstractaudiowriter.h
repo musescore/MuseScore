@@ -22,11 +22,12 @@
 #ifndef MU_IMPORTEXPORT_ABSTRACTAUDIOWRITER_H
 #define MU_IMPORTEXPORT_ABSTRACTAUDIOWRITER_H
 
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "audio/iplayback.h"
-#include "audio/iaudiooutput.h"
-#include "async/asyncable.h"
 #include "iaudioexportconfiguration.h"
+#include "context/iglobalcontext.h"
+#include "playback/iplaybackcontroller.h"
 
 #include "project/inotationwriter.h"
 
@@ -35,6 +36,8 @@ class AbstractAudioWriter : public project::INotationWriter, public async::Async
 {
     INJECT(audioexport, audio::IPlayback, playback)
     INJECT(audioexport, IAudioExportConfiguration, configuration)
+    INJECT(audioexport, context::IGlobalContext, globalContext)
+    INJECT(audioexport, playback::IPlaybackController, playbackController)
 
 public:
     std::vector<UnitType> supportedUnitTypes() const override;
@@ -48,7 +51,7 @@ public:
     void abort() override;
 
 protected:
-    void doWriteAndWait(QIODevice& destinationDevice, const audio::SoundTrackFormat& format);
+    void doWriteAndWait(notation::INotationPtr notation, QIODevice& destinationDevice, const audio::SoundTrackFormat& format);
 
     UnitType unitTypeFromOptions(const Options& options) const;
     framework::Progress m_progress;
