@@ -111,8 +111,8 @@ void LayoutBeams::restoreBeams(Measure* m)
         for (EngravingItem* e : s->elist()) {
             if (e && e->isChordRest()) {
                 ChordRest* cr = toChordRest(e);
-                if (isTopBeam(cr)) {
-                    Beam* b = cr->beam();
+                Beam* b = cr->beam();
+                if (b && !b->elements().empty() && b->elements().front() == cr) {
                     b->layout();
                     b->addSkyline(m->system()->staff(b->staffIdx())->skyline());
                 }
