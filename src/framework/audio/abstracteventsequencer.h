@@ -64,6 +64,8 @@ public:
         m_playbackEventsMap = data.originEvents;
         m_dynamicLevelMap = data.dynamicLevelMap;
 
+        m_setupData = data.setupData;
+
         m_offStreamChanges.onReceive(this, [this](const mpe::PlaybackEventsMap& changes) {
             updateOffStreamEvents(changes);
         });
@@ -228,6 +230,26 @@ protected:
         }
     }
 
+    bool isGradualVolumeChangeAllowed() const
+    {
+        if (m_setupData.category == mpe::SoundCategory::Percussions) {
+            return false;
+        }
+
+        if (m_setupData.contains(mpe::SoundSubCategory::Plucked)) {
+            return false;
+        }
+
+        static const std::set<mpe::SoundId> NON_SUPPORTED_SOUND_ID_SET = {
+            mpe::SoundId::Piano,
+            mpe::SoundId::Celesta,
+            mpe::SoundId::Harpsichord,
+            mpe::SoundId::Harp
+        };
+
+        return NON_SUPPORTED_SOUND_ID_SET.find(m_setupData.id) != NON_SUPPORTED_SOUND_ID_SET.cend();
+    }
+
     mutable msecs_t m_playbackPosition = 0;
 
     SequenceIterator m_currentMainSequenceIt;
@@ -249,6 +271,8 @@ protected:
     mpe::PlaybackEventsChanges m_mainStreamChanges;
     mpe::PlaybackEventsChanges m_offStreamChanges;
     mpe::DynamicLevelChanges m_dynamicLevelChanges;
+
+    mpe::PlaybackSetupData m_setupData;
 };
 }
 

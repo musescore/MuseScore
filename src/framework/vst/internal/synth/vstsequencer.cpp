@@ -61,6 +61,10 @@ void VstSequencer::updateDynamicChanges(const mpe::DynamicLevelMap& changes)
 {
     m_dynamicEvents.clear();
 
+    if (!isGradualVolumeChangeAllowed()) {
+        return;
+    }
+
     for (const auto& pair : changes) {
         m_dynamicEvents[pair.first].emplace(expressionLevel(pair.second));
     }

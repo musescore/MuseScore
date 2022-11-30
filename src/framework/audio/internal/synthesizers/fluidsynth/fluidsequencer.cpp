@@ -63,6 +63,10 @@ void FluidSequencer::updateDynamicChanges(const mpe::DynamicLevelMap& changes)
 {
     m_dynamicEvents.clear();
 
+    if (!isGradualVolumeChangeAllowed()) {
+        return;
+    }
+
     for (const auto& pair : changes) {
         midi::Event event(midi::Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
         event.setIndex(midi::EXPRESSION_CONTROLLER);
