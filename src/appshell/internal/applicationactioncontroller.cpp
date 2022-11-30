@@ -167,7 +167,11 @@ void ApplicationActionController::quit(bool isAllInstances, const io::path_t& in
         }
 
         if (multiInstancesProvider()->instances().size() == 1 && !installerPath.empty()) {
+#if defined(Q_OS_LINUX)
+            interactive()->revealInFileBrowser(installerPath);
+#else
             interactive()->openUrl(QUrl::fromLocalFile(installerPath.toQString()));
+#endif
         }
 
         if (multiInstancesProvider()->instances().size() > 1) {
