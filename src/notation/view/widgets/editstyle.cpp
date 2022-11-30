@@ -344,6 +344,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::mmRestOldStyleSpacing,   false, mmRestOldStyleSpacing,   resetMMRestOldStyleSpacing },
         { StyleId::hideEmptyStaves,         false, hideEmptyStaves,         0 },
         { StyleId::dontHideStavesInFirstSystem, false, dontHideStavesInFirstSystem, 0 },
+        { StyleId::dontHideStavesWithInvisibleItems, false, dontHideIfInvisibleItems, 0 },
         { StyleId::enableIndentationOnFirstSystem, false, enableIndentationOnFirstSystem, 0 },
         { StyleId::firstSystemIndentationValue, false, indentationValue, resetFirstSystemIndentation },
         { StyleId::alwaysShowBracketsWhenEmptyStavesAreHidden, false, alwaysShowBrackets, 0 },

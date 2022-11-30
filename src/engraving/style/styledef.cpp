@@ -445,6 +445,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::hideEmptyStaves,         "hideEmptyStaves",         false },
     { Sid::dontHideStavesInFirstSystem,
       "dontHideStavesInFirstSystem",    true },
+    { Sid::dontHideStavesWithInvisibleItems,
+      "dontHideStavesWithInvisibleItems",    false },
     { Sid::enableIndentationOnFirstSystem,
       "enableIndentationOnFirstSystem", true },
     { Sid::firstSystemIndentationValue, "firstSystemIndentationValue", Spatium(5.0) },

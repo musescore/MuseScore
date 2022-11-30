@@ -2441,10 +2441,11 @@ bool Measure::isEmpty(staff_idx_t staffIdx) const
         strack = staffIdx * VOICES;
         etrack = strack + VOICES;
     }
+    bool dontHideIfInvisible = score()->styleB(Sid::dontHideStavesWithInvisibleItems);
     for (Segment* s = first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
         for (track_idx_t track = strack; track < etrack; ++track) {
             EngravingItem* e = s->element(track);
-            if (e && !e->isRest()) {
+            if (e && !e->isRest() && (e->visible() || dontHideIfInvisible)) {
                 return false;
             }
             // Check for cross-staff chords
