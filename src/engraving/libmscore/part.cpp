@@ -42,6 +42,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
+const Fraction Part::MAIN_INSTRUMENT_TICK = Fraction(-1, 1);
 //---------------------------------------------------------
 //   Part
 //---------------------------------------------------------
