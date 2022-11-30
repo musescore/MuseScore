@@ -860,4 +860,17 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
         }
     }
 }
+
+void Score::transpositionChanged(Part* part, const Fraction& instrumentTick, Interval oldTransposition)
+{
+    Fraction tickStart = instrumentTick;
+    Fraction tickEnd = { -1, 1 };
+
+    auto mainInstrumentEndIt = part->instruments().upper_bound(tickStart.ticks());
+    if (mainInstrumentEndIt != part->instruments().cend()) {
+        tickEnd = Fraction::fromTicks(mainInstrumentEndIt->first);
+    }
+
+    transpositionChanged(part, oldTransposition, tickStart, tickEnd);
+}
 }
