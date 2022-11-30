@@ -45,7 +45,7 @@ static std::string platformFileSuffix()
 #elif defined(Q_OS_MACOS)
     return "dmg";
 #elif defined(Q_OS_LINUX)
-    return "AppImage";
+    return "appimage";
 #endif
 }
 
