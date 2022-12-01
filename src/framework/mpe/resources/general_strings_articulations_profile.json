@@ -6091,7 +6091,7 @@
         "Staccatissimo": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 1500,
+                    "durationFactor": 2500,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -6196,7 +6196,7 @@
         "Staccato": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 2500,
+                    "durationFactor": 5000,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
