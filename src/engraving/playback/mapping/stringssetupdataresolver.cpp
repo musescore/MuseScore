@@ -56,8 +56,8 @@ PlaybackSetupData StringsSetupDataResolver::doResolve(const Instrument* instrume
                                                                           SoundSubCategory::Plucked }, {} } },
         { "electric-guitar-treble-clef", { SoundId::Guitar, SoundCategory::Strings, { SoundSubCategory::Electric,
                                                                                       SoundSubCategory::Plucked }, {} } },
-        { "electric-guitar-treble-clef", { SoundId::Guitar, SoundCategory::Strings, { SoundSubCategory::Electric,
-                                                                                      SoundSubCategory::Plucked }, {} } },
+        { "electric-guitar-tablature", { SoundId::Guitar, SoundCategory::Strings, { SoundSubCategory::Electric,
+                                                                                    SoundSubCategory::Plucked }, {} } },
 
         { "guitar-steel", { SoundId::Guitar, SoundCategory::Strings, { SoundSubCategory::Acoustic,
                                                                        SoundSubCategory::Steel,
