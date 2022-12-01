@@ -2298,10 +2298,12 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
         }
     }
     for (const auto& spp : *textStyle(textStyleType())) {
-        if (!isStyled(spp.pid) && spp.pid != Pid::FONT_FACE && spp.pid != Pid::FONT_SIZE && spp.pid != Pid::FONT_STYLE
-            && spp.pid != Pid::TEXT_SCRIPT_ALIGN) {
-            writeProperty(xml, spp.pid);
+        if (isStyled(spp.pid)
+            || (spp.pid == Pid::FONT_SIZE && getProperty(spp.pid).toDouble() == TextBase::UNDEFINED_FONT_SIZE)
+            || (spp.pid == Pid::FONT_FACE && getProperty(spp.pid).value<String>() == TextBase::UNDEFINED_FONT_FAMILY)) {
+            continue;
         }
+        writeProperty(xml, spp.pid);
     }
     if (writeText) {
         xml.writeXml(u"text", xmlText());
@@ -2337,7 +2339,9 @@ bool TextBase::readProperties(XmlReader& e)
         }
     }
     if (tag == "text") {
-        setXmlText(e.readXml());
+        String str = e.readXml();
+        setXmlText(str);
+        checkCustomFormatting(str);
     } else if (tag == "bold") {
         bool val = e.readInt();
         if (val) {
@@ -2504,6 +2508,19 @@ void TextBase::setXmlText(const String& s)
     _text = s;
     textInvalid = false;
     layoutInvalid = true;
+}
+
+void TextBase::checkCustomFormatting(const String& s)
+{
+    if (s.contains(u"<font face")) {
+        setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
+    }
+    if (s.contains(u"<font size")) {
+        setPropertyFlags(Pid::FONT_SIZE, PropertyFlags::UNSTYLED);
+    }
+    if (s.contains(u"<b>") || s.contains(u"<i>") || s.contains(u"<u>") || s.contains(u"<s>")) {
+        setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+    }
 }
 
 void TextBase::resetFormatting()
