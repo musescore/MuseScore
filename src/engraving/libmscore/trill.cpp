@@ -26,7 +26,7 @@
 
 #include "types/typesconv.h"
 #include "rw/xml.h"
-#include "isymbolfont.h"
+#include "iengravingfont.h"
 
 #include "accidental.h"
 #include "factory.h"
@@ -107,7 +107,7 @@ void TrillSegment::symbolLine(SymId start, SymId fill)
     double x2 = pos2().x();
     double w   = x2 - x1;
     double mag = magS();
-    ISymbolFontPtr f = score()->symbolFont();
+    IEngravingFontPtr f = score()->engravingFont();
 
     _symbols.clear();
     _symbols.push_back(start);
@@ -127,7 +127,7 @@ void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
     double x2 = pos2().x();
     double w   = x2 - x1;
     double mag = magS();
-    ISymbolFontPtr f = score()->symbolFont();
+    IEngravingFontPtr f = score()->engravingFont();
 
     _symbols.clear();
     _symbols.push_back(start);

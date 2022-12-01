@@ -677,7 +677,7 @@ void SpecialCharactersDialog::populateCommon()
 
     for (auto id : commonScoreSymbols) {
         std::shared_ptr<Symbol> s = std::make_shared<Symbol>(gpaletteScore->dummy());
-        s->setSym(id, gpaletteScore->symbolFont());
+        s->setSym(id, gpaletteScore->engravingFont());
         m_pCommon->appendElement(s, SymNames::translatedUserNameForSymId(id));
     }
 
@@ -704,7 +704,7 @@ void SpecialCharactersDialog::populateSmufl()
     for (const QString& name : smuflNames) {
         auto symId = SymNames::symIdByName(name);
         std::shared_ptr<Symbol> s = std::make_shared<Symbol>(gpaletteScore->dummy());
-        s->setSym(symId, gpaletteScore->symbolFont());
+        s->setSym(symId, gpaletteScore->engravingFont());
         m_pSmufl->appendElement(s, SymNames::translatedUserNameForSymId(symId));
     }
 }

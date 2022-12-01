@@ -30,7 +30,7 @@
 #include "draw/fontmetrics.h"
 #include "draw/types/color.h"
 #include "style/style.h"
-#include "isymbolfontsprovider.h"
+#include "iengravingfontsprovider.h"
 
 #include "engravingitem.h"
 #include "property.h"
@@ -211,7 +211,7 @@ private:
 
 class TextFragment
 {
-    INJECT_STATIC(engraving, ISymbolFontsProvider, symbolFonts)
+    INJECT_STATIC(engraving, IEngravingFontsProvider, engravingFonts)
 public:
     mutable CharFormat format;
     mu::PointF pos;                    // y is relative to TextBlock->y()
@@ -284,7 +284,7 @@ class TextBase : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, TextBase)
 
-    INJECT(engraving, ISymbolFontsProvider, symbolFonts)
+    INJECT(engraving, IEngravingFontsProvider, engravingFonts)
 
     // sorted by size to allow for most compact memory layout
     M_PROPERTY(FrameType,  frameType,              setFrameType)

@@ -28,7 +28,7 @@
 #include "global/iinteractive.h"
 #include "context/iglobalcontext.h"
 #include "notation/inotationconfiguration.h"
-#include "engraving/isymbolfontsprovider.h"
+#include "engraving/iengravingfontsprovider.h"
 
 #include "libmscore/drumset.h"
 
@@ -44,7 +44,7 @@ class EditDrumsetDialog : public QDialog, private Ui::EditDrumsetDialog
     INJECT(palette, framework::IInteractive, interactive)
     INJECT(palette, context::IGlobalContext, globalContext)
     INJECT(palette, notation::INotationConfiguration, notationConfiguration)
-    INJECT_STATIC(palette, engraving::ISymbolFontsProvider, symbolFonts)
+    INJECT_STATIC(palette, engraving::IEngravingFontsProvider, engravingFonts)
 
 public:
     EditDrumsetDialog(QWidget* parent = nullptr);

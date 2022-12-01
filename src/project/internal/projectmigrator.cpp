@@ -126,7 +126,7 @@ void ProjectMigrator::resetStyleSettings(mu::engraving::MasterScore* score)
     endBarDistance -= (style->styleMM(mu::engraving::Sid::barWidth) + style->styleMM(mu::engraving::Sid::endBarWidth)) / 2;
     style->set(mu::engraving::Sid::endBarDistance, endBarDistance / sp);
     qreal repeatBarlineDotSeparation = style->styleMM(mu::engraving::Sid::repeatBarlineDotSeparation);
-    qreal dotWidth = score->symbolFont()->width(mu::engraving::SymId::repeatDot, 1.0);
+    qreal dotWidth = score->engravingFont()->width(mu::engraving::SymId::repeatDot, 1.0);
     repeatBarlineDotSeparation -= (style->styleMM(mu::engraving::Sid::barWidth) + dotWidth) / 2;
     style->set(mu::engraving::Sid::repeatBarlineDotSeparation, repeatBarlineDotSeparation / sp);
     score->resetStyleValue(mu::engraving::Sid::measureSpacing);

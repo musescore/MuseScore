@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "symbolfont.h"
+#include "engravingfont.h"
 
 #include "serialization/json.h"
 #include "io/file.h"
@@ -42,7 +42,7 @@ using namespace mu::engraving;
 // ScoreFont
 // =============================================
 
-SymbolFont::SymbolFont(const std::string& name, const std::string& family, const path_t& filePath)
+EngravingFont::EngravingFont(const std::string& name, const std::string& family, const path_t& filePath)
     : m_symbols(static_cast<size_t>(SymId::lastSym) + 1),
     m_name(name),
     m_family(family),
@@ -50,7 +50,7 @@ SymbolFont::SymbolFont(const std::string& name, const std::string& family, const
 {
 }
 
-SymbolFont::SymbolFont(const SymbolFont& other)
+EngravingFont::EngravingFont(const EngravingFont& other)
 {
     m_loaded = false;
     m_symbols  = other.m_symbols;
@@ -63,22 +63,22 @@ SymbolFont::SymbolFont(const SymbolFont& other)
 // Properties
 // =============================================
 
-const std::string& SymbolFont::name() const
+const std::string& EngravingFont::name() const
 {
     return m_name;
 }
 
-const std::string& SymbolFont::family() const
+const std::string& EngravingFont::family() const
 {
     return m_family;
 }
 
-std::unordered_map<Sid, PropertyValue> SymbolFont::engravingDefaults() const
+std::unordered_map<Sid, PropertyValue> EngravingFont::engravingDefaults() const
 {
     return m_engravingDefaults;
 }
 
-double SymbolFont::textEnclosureThickness()
+double EngravingFont::textEnclosureThickness()
 {
     return m_textEnclosureThickness;
 }
@@ -87,7 +87,7 @@ double SymbolFont::textEnclosureThickness()
 // Load
 // =============================================
 
-void SymbolFont::ensureLoad()
+void EngravingFont::ensureLoad()
 {
     if (m_loaded) {
         return;
@@ -134,7 +134,7 @@ void SymbolFont::ensureLoad()
     m_loaded = true;
 }
 
-void SymbolFont::loadGlyphsWithAnchors(const JsonObject& glyphsWithAnchors)
+void EngravingFont::loadGlyphsWithAnchors(const JsonObject& glyphsWithAnchors)
 {
     for (const std::string& symName : glyphsWithAnchors.keys()) {
         SymId symId = SymNames::symIdByName(symName);
@@ -175,7 +175,7 @@ void SymbolFont::loadGlyphsWithAnchors(const JsonObject& glyphsWithAnchors)
     }
 }
 
-void SymbolFont::loadComposedGlyphs()
+void EngravingFont::loadComposedGlyphs()
 {
     static const struct ComposedGlyph {
         const SymId id;
@@ -236,7 +236,7 @@ void SymbolFont::loadComposedGlyphs()
     }
 }
 
-void SymbolFont::loadStylisticAlternates(const JsonObject& glyphsWithAlternatesObject)
+void EngravingFont::loadStylisticAlternates(const JsonObject& glyphsWithAlternatesObject)
 {
     if (!glyphsWithAlternatesObject.isValid()) {
         return;
@@ -410,7 +410,7 @@ void SymbolFont::loadStylisticAlternates(const JsonObject& glyphsWithAlternatesO
     }
 }
 
-void SymbolFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObject)
+void EngravingFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObject)
 {
     struct EngravingDefault {
         std::vector<Sid> sids;
@@ -496,7 +496,7 @@ void SymbolFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObject
     m_engravingDefaults.insert({ Sid::MusicalTextFont, String(u"%1 Text").arg(String::fromStdString(m_family)) });
 }
 
-void SymbolFont::computeMetrics(SymbolFont::Sym& sym, const Smufl::Code& code)
+void EngravingFont::computeMetrics(EngravingFont::Sym& sym, const Smufl::Code& code)
 {
     if (fontProvider()->inFontUcs4(m_font, code.smuflCode)) {
         sym.code = code.smuflCode;
@@ -514,17 +514,17 @@ void SymbolFont::computeMetrics(SymbolFont::Sym& sym, const Smufl::Code& code)
 // Symbol properties
 // =============================================
 
-SymbolFont::Sym& SymbolFont::sym(SymId id)
+EngravingFont::Sym& EngravingFont::sym(SymId id)
 {
     return m_symbols[static_cast<size_t>(id)];
 }
 
-const SymbolFont::Sym& SymbolFont::sym(SymId id) const
+const EngravingFont::Sym& EngravingFont::sym(SymId id) const
 {
     return m_symbols.at(static_cast<size_t>(id));
 }
 
-char32_t SymbolFont::symCode(SymId id) const
+char32_t EngravingFont::symCode(SymId id) const
 {
     const Sym& s = sym(id);
     if (s.isValid()) {
@@ -535,7 +535,7 @@ char32_t SymbolFont::symCode(SymId id) const
     return Smufl::smuflCode(id);
 }
 
-SymId SymbolFont::fromCode(char32_t code) const
+SymId EngravingFont::fromCode(char32_t code) const
 {
     auto it = std::find_if(m_symbols.begin(), m_symbols.end(), [code](const Sym& s) { return s.code == code; });
     return static_cast<SymId>(it == m_symbols.end() ? 0 : it - m_symbols.begin());
@@ -546,34 +546,34 @@ static String codeToString(char32_t code)
     return String::fromUcs4(&code, 1);
 }
 
-String SymbolFont::toString(SymId id) const
+String EngravingFont::toString(SymId id) const
 {
     return codeToString(symCode(id));
 }
 
-bool SymbolFont::isValid(SymId id) const
+bool EngravingFont::isValid(SymId id) const
 {
     return sym(id).isValid();
 }
 
-bool SymbolFont::useFallbackFont(SymId id) const
+bool EngravingFont::useFallbackFont(SymId id) const
 {
-    return MScore::useFallbackFont && !sym(id).isValid() && !symbolFonts()->isFallbackFont(this);
+    return MScore::useFallbackFont && !sym(id).isValid() && !engravingFonts()->isFallbackFont(this);
 }
 
 // =============================================
 // Symbol bounding box
 // =============================================
 
-RectF SymbolFont::bbox(SymId id, double mag) const
+RectF EngravingFont::bbox(SymId id, double mag) const
 {
     return bbox(id, SizeF(mag, mag));
 }
 
-RectF SymbolFont::bbox(SymId id, const SizeF& mag) const
+RectF EngravingFont::bbox(SymId id, const SizeF& mag) const
 {
     if (useFallbackFont(id)) {
-        return symbolFonts()->fallbackFont()->bbox(id, mag);
+        return engravingFonts()->fallbackFont()->bbox(id, mag);
     }
 
     RectF r = sym(id).bbox;
@@ -581,12 +581,12 @@ RectF SymbolFont::bbox(SymId id, const SizeF& mag) const
                  r.width() * mag.width(), r.height() * mag.height());
 }
 
-RectF SymbolFont::bbox(const SymIdList& s, double mag) const
+RectF EngravingFont::bbox(const SymIdList& s, double mag) const
 {
     return bbox(s, SizeF(mag, mag));
 }
 
-RectF SymbolFont::bbox(const SymIdList& s, const SizeF& mag) const
+RectF EngravingFont::bbox(const SymIdList& s, const SizeF& mag) const
 {
     RectF r;
     PointF pos;
@@ -601,44 +601,51 @@ RectF SymbolFont::bbox(const SymIdList& s, const SizeF& mag) const
 // Symbol metrics
 // =============================================
 
-double SymbolFont::width(SymId id, double mag) const
+double EngravingFont::width(SymId id, double mag) const
 {
     return bbox(id, mag).width();
 }
 
-double SymbolFont::height(SymId id, double mag) const
+double EngravingFont::height(SymId id, double mag) const
 {
     return bbox(id, mag).height();
 }
 
-double SymbolFont::advance(SymId id, double mag) const
+double EngravingFont::advance(SymId id, double mag) const
 {
     if (useFallbackFont(id)) {
-        return symbolFonts()->fallbackFont()->advance(id, mag);
+        return engravingFonts()->fallbackFont()->advance(id, mag);
     }
 
     return sym(id).advance * mag;
 }
 
-double SymbolFont::width(const SymIdList& s, double mag) const
+double EngravingFont::width(const SymIdList& s, double mag) const
 {
     return bbox(s, mag).width();
 }
 
-PointF SymbolFont::smuflAnchor(SymId symId, SmuflAnchorId anchorId, double mag) const
+PointF EngravingFont::smuflAnchor(SymId symId, SmuflAnchorId anchorId, double mag) const
 {
     if (useFallbackFont(symId)) {
-        return symbolFonts()->fallbackFont()->smuflAnchor(symId, anchorId, mag);
+        return engravingFonts()->fallbackFont()->smuflAnchor(symId, anchorId, mag);
     }
 
-    return const_cast<Sym&>(sym(symId)).smuflAnchors[anchorId] * mag;
+    const std::map<SmuflAnchorId, mu::PointF>& smuflAnchors = sym(symId).smuflAnchors;
+
+    auto it = smuflAnchors.find(anchorId);
+    if (it == smuflAnchors.cend()) {
+        return PointF();
+    }
+
+    return it->second * mag;
 }
 
 // =============================================
 // Draw
 // =============================================
 
-void SymbolFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF& pos) const
+void EngravingFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF& pos) const
 {
     const Sym& sym = this->sym(id);
     if (sym.isCompound()) { // is this a compound symbol?
@@ -647,8 +654,8 @@ void SymbolFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF
     }
 
     if (!sym.isValid()) {
-        if (MScore::useFallbackFont && !symbolFonts()->isFallbackFont(this)) {
-            symbolFonts()->fallbackFont()->draw(id, painter, mag, pos);
+        if (MScore::useFallbackFont && !engravingFonts()->isFallbackFont(this)) {
+            engravingFonts()->fallbackFont()->draw(id, painter, mag, pos);
         } else {
             LOGE() << "invalid sym: " << static_cast<size_t>(id);
         }
@@ -665,12 +672,12 @@ void SymbolFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF
     painter->restore();
 }
 
-void SymbolFont::draw(SymId id, Painter* painter, double mag, const PointF& pos) const
+void EngravingFont::draw(SymId id, Painter* painter, double mag, const PointF& pos) const
 {
     draw(id, painter, SizeF(mag, mag), pos);
 }
 
-void SymbolFont::draw(const SymIdList& ids, Painter* painter, double mag, const PointF& startPos) const
+void EngravingFont::draw(const SymIdList& ids, Painter* painter, double mag, const PointF& startPos) const
 {
     PointF pos(startPos);
     for (SymId id : ids) {
@@ -679,7 +686,7 @@ void SymbolFont::draw(const SymIdList& ids, Painter* painter, double mag, const 
     }
 }
 
-void SymbolFont::draw(const SymIdList& ids, Painter* painter, const SizeF& mag, const PointF& startPos) const
+void EngravingFont::draw(const SymIdList& ids, Painter* painter, const SizeF& mag, const PointF& startPos) const
 {
     PointF pos(startPos);
     for (SymId id : ids) {

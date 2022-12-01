@@ -27,7 +27,7 @@
 #include "draw/types/pen.h"
 #include "draw/types/brush.h"
 #include "rw/xml.h"
-#include "isymbolfont.h"
+#include "iengravingfont.h"
 
 #include "articulation.h"
 #include "beam.h"
@@ -975,7 +975,7 @@ void Slur::slurPos(SlurPos* sp)
     // Gonville and MuseJazz have really weirdly-shaped hooks compared to Leland and Bravura and Emmentaler,
     // so we need to adjust the slope of our hook-avoidance line. this will be unnecessary when hooks have
     // SMuFL anchors
-    bool bulkyHook = score()->symbolFont()->family() == "Gonville" || score()->symbolFont()->family() == "MuseJazz";
+    bool bulkyHook = score()->engravingFont()->family() == "Gonville" || score()->engravingFont()->family() == "MuseJazz";
     const double fakeCutoutSlope = bulkyHook ? 1.5 : 1.0;
 
     if (endCR() == 0) {
