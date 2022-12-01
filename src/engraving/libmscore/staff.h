@@ -128,9 +128,7 @@ private:
     void updateVisibilityVoices(Staff* masterStaff, const TracksMap& tracks);
 
 public:
-
     Staff* clone() const override;
-    ~Staff();
 
     void init(const InstrumentTemplate*, const StaffType* staffType, int);
     void initFromStaffType(const StaffType* staffType);

@@ -97,6 +97,8 @@ MasterNotation::MasterNotation()
 MasterNotation::~MasterNotation()
 {
     m_parts = nullptr;
+
+    unloadExcerpts(m_potentialExcerpts);
 }
 
 INotationPtr MasterNotation::notation()
@@ -429,6 +431,23 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
     }
 }
 
+void MasterNotation::unloadExcerpts(ExcerptNotationList& excerpts)
+{
+    for (IExcerptNotationPtr ptr : excerpts) {
+        Excerpt* excerpt = get_impl(ptr)->excerpt();
+        if (!excerpt) {
+            continue;
+        }
+
+        if (Score* score = excerpt->excerptScore()) {
+            delete score;
+            excerpt->setExcerptScore(nullptr);
+        }
+    }
+
+    excerpts.clear();
+}
+
 mu::ValNt<bool> MasterNotation::needSave() const
 {
     ValNt<bool> needSave;
@@ -576,7 +595,7 @@ void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
         });
     }
 
-    m_needUpdatePotentialExcerpts = true;
+    updatePotentialExcerpts();
 }
 
 void MasterNotation::updateExcerpts()
@@ -621,21 +640,46 @@ void MasterNotation::updateExcerpts()
     masterScore()->setExcerptsChanged(false);
 }
 
+void MasterNotation::updatePotentialExcerpts() const
+{
+    TRACEFUNC;
+
+    auto findExcerptByPart = [](const ExcerptNotationList& excerpts, const Part* part) {
+        return std::find_if(excerpts.cbegin(), excerpts.cend(), [part](const IExcerptNotationPtr& notation) {
+            return get_impl(notation)->excerpt()->initialPartId() == part->id();
+        });
+    };
+
+    ExcerptNotationList potentialExcerpts;
+    std::vector<Part*> partsWithoutExcerpt;
+
+    for (Part* part : score()->parts()) {
+        if (findExcerptByPart(m_excerpts.val, part) != m_excerpts.val.end()) {
+            continue;
+        }
+
+        auto it = findExcerptByPart(m_potentialExcerpts, part);
+        if (it == m_potentialExcerpts.cend()) {
+            partsWithoutExcerpt.push_back(part);
+        } else {
+            potentialExcerpts.push_back(*it);
+        }
+    }
+
+    std::vector<mu::engraving::Excerpt*> excerpts = mu::engraving::Excerpt::createExcerptsFromParts(partsWithoutExcerpt);
+
+    for (mu::engraving::Excerpt* excerpt : excerpts) {
+        auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
+        potentialExcerpts.push_back(excerptNotation);
+    }
+
+    m_potentialExcerpts = std::move(potentialExcerpts);
+}
+
 bool MasterNotation::containsExcerpt(const mu::engraving::Excerpt* excerpt) const
 {
     for (IExcerptNotationPtr excerptNotation : m_excerpts.val) {
         if (get_impl(excerptNotation)->excerpt() == excerpt) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool MasterNotation::containsExcerptForPart(const Part* part) const
-{
-    for (const mu::engraving::Excerpt* excerpt : masterScore()->excerpts()) {
-        if (excerpt->initialPartId() == part->id()) {
             return true;
         }
     }
@@ -692,40 +736,6 @@ const ExcerptNotationList& MasterNotation::potentialExcerpts() const
     updatePotentialExcerpts();
 
     return m_potentialExcerpts;
-}
-
-void MasterNotation::updatePotentialExcerpts() const
-{
-    TRACEFUNC;
-
-    static std::vector<Part*> prevParts;
-
-    if (prevParts != score()->parts()) {
-        prevParts = score()->parts();
-        m_needUpdatePotentialExcerpts = true;
-    }
-
-    if (!m_needUpdatePotentialExcerpts) {
-        return;
-    }
-
-    m_potentialExcerpts.clear();
-
-    std::vector<Part*> parts;
-    for (Part* part : score()->parts()) {
-        if (!containsExcerptForPart(part)) {
-            parts.push_back(part);
-        }
-    }
-
-    std::vector<mu::engraving::Excerpt*> excerpts = mu::engraving::Excerpt::createExcerptsFromParts(parts);
-
-    for (mu::engraving::Excerpt* excerpt : excerpts) {
-        auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
-        m_potentialExcerpts.push_back(excerptNotation);
-    }
-
-    m_needUpdatePotentialExcerpts = false;
 }
 
 void MasterNotation::initExcerptNotations(const std::vector<mu::engraving::Excerpt*>& excerpts)

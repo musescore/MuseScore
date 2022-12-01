@@ -2547,6 +2547,7 @@ void Score::insertPart(Part* part, staff_idx_t idx)
     bool inserted = false;
     staff_idx_t staff = 0;
 
+    part->setScore(this);
     assignIdIfNeed(*part);
 
     for (auto i = _parts.begin(); i != _parts.end(); ++i) {
@@ -2571,6 +2572,7 @@ void Score::appendPart(Part* part)
         return;
     }
 
+    part->setScore(this);
     assignIdIfNeed(*part);
     _parts.push_back(part);
     markInstrumentsAsPrimary(_parts);

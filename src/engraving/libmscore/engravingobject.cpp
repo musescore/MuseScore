@@ -186,6 +186,20 @@ void EngravingObject::moveToDummy()
 void EngravingObject::setScore(Score* s)
 {
     doSetScore(s);
+
+    if (!m_parent) {
+        return;
+    }
+
+    if (m_parent->score() == s) {
+        return;
+    }
+
+    if (m_parent->isType(ElementType::DUMMY)) {
+        moveToDummy();
+    } else if (m_parent->isType(ElementType::SCORE)) {
+        setParent(s);
+    }
 }
 
 void EngravingObject::addChild(EngravingObject* o)
