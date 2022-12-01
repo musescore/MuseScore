@@ -50,7 +50,7 @@ ExpandableBlank {
         navigationPanel: root.navigation.panel
         navigationRowStart: root.navigation.row + 1
 
-        maxValue: 100
+        maxValue: 2
         minValue: 0
     }
 }
