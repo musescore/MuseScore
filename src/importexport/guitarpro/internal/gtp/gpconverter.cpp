@@ -235,7 +235,8 @@ static BeamMode beamModeBeatToCr(GPBeat::BeamMode mode)
     static std::unordered_map<GPBeat::BeamMode, BeamMode> types {
         { GPBeat::BeamMode::AUTO, BeamMode::AUTO },
         { GPBeat::BeamMode::JOINED, BeamMode::MID },
-        { GPBeat::BeamMode::BROKEN, BeamMode::NONE }
+        { GPBeat::BeamMode::BROKEN, BeamMode::NONE },
+        { GPBeat::BeamMode::BROKEN2, BeamMode::BEGIN32 }
     };
 
     if (types.find(mode) != types.end()) {
@@ -445,7 +446,6 @@ void GPConverter::convertBar(const GPBar* bar, Context ctx)
         return;
     }
 
-    m_noBeamsInBar[ctx.masterBarIndex] = bar->noBeams();
     convertVoices(bar->voices(), ctx);
 
     for (track_idx_t i = ctx.curTrack; i < ctx.curTrack + VOICES; i++) {
@@ -575,12 +575,7 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
                 static_cast<Chord*>(cr)->setStemDirection(beat->stemOrientationUp() ? DirectionV::UP : DirectionV::DOWN);
             }
 
-            /// TODO: for now skipping "break secondary beams"
-            if (m_noBeamsInBar[ctx.masterBarIndex] && beat->beamMode() == GPBeat::BeamMode::BROKEN) {
-                cr->setBeamMode(BeamMode::NONE);
-            } else if (beat->beamMode() == GPBeat::BeamMode::JOINED) {
-                cr->setBeamMode(BeamMode::MID);
-            }
+            setBeamMode(beat, cr, lastMeasure, ctx.curTick);
         }
 
         if (!graceChords.empty()) {
@@ -2993,5 +2988,38 @@ int GPConverter::getStringNumberFor(mu::engraving::Note* pNote, int pitch) const
     }
 
     return -1;
+}
+
+void GPConverter::setBeamMode(const GPBeat* beat, ChordRest* cr, Measure* measure, Fraction tick)
+{
+    BeamMode beamMode = BeamMode::AUTO;
+
+    if (beat->beamMode() == GPBeat::BeamMode::BROKEN) {
+        beamMode = BeamMode::NONE;
+    } else if (beat->beamMode() == GPBeat::BeamMode::JOINED) {
+        beamMode = BeamMode::MID;
+    } else if (beat->beamMode() == GPBeat::BeamMode::BROKEN2 || beat->beamMode() == GPBeat::BeamMode::BROKEN2_JOINED) {
+        int measureDenom = measure->ticks().denominator();
+        double fract = (double)tick.numerator() / tick.denominator() * measureDenom;
+
+        if ((int)fract == fract && beat->beamMode() != GPBeat::BeamMode::BROKEN2_JOINED) {
+            /// keep auto direction for some beams, so BEGIN32/BEGIN64 modes work properly
+            /// (forcing divide of beam groups, TODO-gp: make possible to show broken2 type from guitar pro
+            beamMode = BeamMode::AUTO;
+        } else if (cr->ticks() > Fraction(1, 32)) {
+            beamMode = BeamMode::BEGIN32;
+        } else {
+            beamMode = BeamMode::BEGIN64;
+        }
+    }
+
+    cr->setBeamMode(beamMode);
+
+    /// last chord of the measure has always type BeamMode::AUTO, which makes layout incorrect
+    if (measure != _lastMeasure) {
+        cr->setBeamMode(m_previousBeamMode);
+    }
+
+    m_previousBeamMode = beamMode;
 }
 } //end Ms namespace
