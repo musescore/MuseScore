@@ -40,6 +40,7 @@ public:
     io::path_t userDataPath() const override;
 
     io::path_t homePath() const override;
+    io::path_t downloadsPath() const override;
 
     bool useFactorySettings() const override;
     bool enableExperimental() const override;

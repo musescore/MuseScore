@@ -110,7 +110,8 @@ jobs:
         fi
 
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
-        if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="${ADD_INFO}_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
+        if [ "${{ github.event_name }}" == "schedule" && "${{ github.event.schedule }}" == "0 5 */1 */1 *" }} ]; then ADD_INFO="_4.0_rc"; fi
+        if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${BUILD_NUMBER}_Lin${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
