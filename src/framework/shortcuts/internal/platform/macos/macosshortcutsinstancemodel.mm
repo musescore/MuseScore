@@ -212,9 +212,15 @@ quint32 nativeModifiers(Qt::KeyboardModifiers modifiers)
 QSet<int> possibleKeys(const QKeySequence& sequence)
 {
     const int key = sequence[0];
+
+    Qt::Key qKey = Qt::Key(key & ~Qt::KeyboardModifierMask);
+    if (qKey == Qt::Key_Insert) {
+        return { key };
+    }
+
     const Qt::KeyboardModifiers modifiers = Qt::KeyboardModifiers(key & Qt::KeyboardModifierMask);
 
-    quint32 keyNativeCode = nativeKeycode(Qt::Key(key & ~Qt::KeyboardModifierMask));
+    quint32 keyNativeCode = nativeKeycode(qKey);
     quint32 keyNativeModifiers = nativeModifiers(modifiers);
 
     QKeyEvent fakeKey(QKeyEvent::None, key, modifiers, keyNativeCode, keyNativeCode, keyNativeModifiers);
