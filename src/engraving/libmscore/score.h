@@ -1162,7 +1162,9 @@ public:
     void setNoteHeadWidth(double n) { _noteHeadWidth = n; }
 
     std::list<staff_idx_t> uniqueStaves() const;
+
     void transpositionChanged(Part* part, Interval oldTransposition, Fraction tickStart = { 0, 1 }, Fraction tickEnd = { -1, 1 });
+    void transpositionChanged(Part* part, const Fraction& instrumentTick, Interval oldTransposition);
 
     void moveUp(ChordRest*);
     void moveDown(ChordRest*);

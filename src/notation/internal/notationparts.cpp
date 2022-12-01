@@ -565,7 +565,7 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
 
         QString newInstrumentPartName = formatInstrumentTitle(newInstrument.trackName(), newInstrument.trait());
         score()->undo(new mu::engraving::ChangePart(part, new mu::engraving::Instrument(newInstrument), newInstrumentPartName));
-        score()->transpositionChanged(part, oldTranspose);
+        score()->transpositionChanged(part, Part::MAIN_INSTRUMENT_TICK, oldTranspose);
 
         // Update clefs
         for (staff_idx_t staffIdx = 0; staffIdx < part->nstaves(); ++staffIdx) {
