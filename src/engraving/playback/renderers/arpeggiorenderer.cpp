@@ -23,6 +23,7 @@
 #include "arpeggiorenderer.h"
 
 #include "libmscore/chord.h"
+#include "libmscore/arpeggio.h"
 
 using namespace mu::engraving;
 using namespace mu::mpe;
@@ -48,13 +49,18 @@ void ArpeggioRenderer::doRender(const EngravingItem* item, const mpe::Articulati
         return;
     }
 
+    const Arpeggio* arpeggio = chord->arpeggio();
+    IF_ASSERT_FAILED(arpeggio) {
+        return;
+    }
+
     int stepsCount = static_cast<int>(chord->notes().size());
     mpe::percentage_t percentageStep = mpe::HUNDRED_PERCENT / stepsCount;
 
     auto buildEvent = [&](NominalNoteCtx& noteCtx, const int stepNumber) {
         noteCtx.chordCtx.commonArticulations.updateOccupiedRange(preferredType, stepNumber * percentageStep,
                                                                  (stepNumber + 1) * percentageStep);
-        noteCtx.timestamp += timestampOffsetStep(context) * stepNumber;
+        noteCtx.timestamp += timestampOffsetStep(context) * stepNumber * arpeggio->Stretch();
         result.emplace_back(buildNoteEvent(std::move(noteCtx)));
     };
 
