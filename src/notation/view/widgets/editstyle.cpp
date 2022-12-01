@@ -698,7 +698,7 @@ EditStyle::EditStyle(QWidget* parent)
 
     musicalSymbolFont->clear();
 
-    for (auto i : symbolFonts()->fonts()) {
+    for (auto i : engravingFonts()->fonts()) {
         musicalSymbolFont->addItem(QString::fromStdString(i->name()), QString::fromStdString(i->name()));
     }
 
@@ -1742,7 +1742,7 @@ void EditStyle::setValues()
 
     QString mfont(styleValue(StyleId::MusicalSymbolFont).value<String>());
     int idx = 0;
-    for (const auto& i : symbolFonts()->fonts()) {
+    for (const auto& i : engravingFonts()->fonts()) {
         if (QString::fromStdString(i->name()).toLower() == mfont.toLower()) {
             musicalSymbolFont->setCurrentIndex(idx);
             break;
@@ -2037,7 +2037,7 @@ void EditStyle::valueChanged(int i)
     PropertyValue val  = getValue(idx);
     bool setValue = false;
     if (idx == StyleId::MusicalSymbolFont && optimizeStyleCheckbox->isChecked()) {
-        ISymbolFontPtr scoreFont = symbolFonts()->fontByName(val.value<String>().toStdString());
+        IEngravingFontPtr scoreFont = engravingFonts()->fontByName(val.value<String>().toStdString());
         if (scoreFont) {
             for (auto j : scoreFont->engravingDefaults()) {
                 setStyleValue(j.first, j.second);

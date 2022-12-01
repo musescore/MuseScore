@@ -25,7 +25,7 @@
 #include "rw/xml.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
-#include "isymbolfont.h"
+#include "iengravingfont.h"
 
 #include "chord.h"
 #include "note.h"
@@ -160,7 +160,7 @@ void ChordLine::layout()
         height = r.height() * _spatium;
         bbox().setRect(x1, y1, width, height);
     } else {
-        RectF r(score()->symbolFont()->bbox(s_waveSymbols, magS()));
+        RectF r(score()->engravingFont()->bbox(s_waveSymbols, magS()));
         double angle = _waveAngle * M_PI / 180;
 
         r.setHeight(r.height() + r.width() * sin(angle));

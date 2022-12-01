@@ -28,7 +28,7 @@
 #include "translation.h"
 #include "types/symnames.h"
 #include "types/typesconv.h"
-#include "isymbolfont.h"
+#include "iengravingfont.h"
 
 #include "articulation.h"
 #include "factory.h"
@@ -503,9 +503,9 @@ void BarLine::drawDots(Painter* painter, double x) const
         y2l = st->doty2() * _spatium;
 
         //workaround to make Bravura, Petaluma and Leland font work correctly with repeatDots
-        if (!(score()->symbolFont()->name() == "Leland"
-              || score()->symbolFont()->name() == "Bravura"
-              || score()->symbolFont()->name() == "Petaluma")) {
+        if (!(score()->engravingFont()->name() == "Leland"
+              || score()->engravingFont()->name() == "Bravura"
+              || score()->engravingFont()->name() == "Petaluma")) {
             double offset = 0.5 * score()->spatium() * mag();
             y1l += offset;
             y2l += offset;

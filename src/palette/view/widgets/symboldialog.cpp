@@ -56,9 +56,9 @@ void SymbolDialog::createSymbolPalette()
 void SymbolDialog::createSymbols()
 {
     int currentIndex = fontList->currentIndex();
-    const ISymbolFontPtr f = symbolFonts()->fonts()[currentIndex];
+    const IEngravingFontPtr f = engravingFonts()->fonts()[currentIndex];
     // init the font if not done yet
-    symbolFonts()->fontByName(f->name());
+    engravingFonts()->fontByName(f->name());
     m_symbolsWidget->clear();
     for (auto name : Smufl::smuflRanges().at(range)) {
         SymId id = SymNames::symIdByName(name);
@@ -82,7 +82,7 @@ SymbolDialog::SymbolDialog(const QString& s, QWidget* parent)
     range = s;          // smufl symbol range
     int idx = 0;
     int currentIndex = 0;
-    for (const ISymbolFontPtr& f : symbolFonts()->fonts()) {
+    for (const IEngravingFontPtr& f : engravingFonts()->fonts()) {
         fontList->addItem(QString::fromStdString(f->name()));
         if (f->name() == "Leland" || f->name() == "Bravura") {
             currentIndex = idx;

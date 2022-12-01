@@ -25,7 +25,7 @@
 #include "draw/types/pen.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
-#include "isymbolfont.h"
+#include "iengravingfont.h"
 
 #include "score.h"
 
@@ -122,7 +122,7 @@ struct BEDrawingDataX {
         lw(0.1 * s),
         xcorr(0.1 * s)
     {
-        double w = Score::paletteScore()->symbolFont()->width(hs, mags);
+        double w = Score::paletteScore()->engravingFont()->width(hs, mags);
         headw = 1.2 * w;     // using 1.0 the stem xpos is off
         headp = 1.6 * w;
         xl    = (1 - 1.6 * (nn - 1)) * w / 2;
@@ -226,7 +226,7 @@ void BagpipeEmbellishment::layout()
         BEDrawingDataY dy(line, score()->spatium());
 
         // head
-        addbbox(score()->symbolFont()->bbox(headsym, dx.mags).translated(PointF(x - dx.lw * .5 - dx.headw, dy.y2)));
+        addbbox(score()->engravingFont()->bbox(headsym, dx.mags).translated(PointF(x - dx.lw * .5 - dx.headw, dy.y2)));
         /*
         if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
               printBBox(" notehead", bbox());
@@ -244,7 +244,7 @@ void BagpipeEmbellishment::layout()
 
         // flag
         if (drawFlag) {
-            addbbox(score()->symbolFont()->bbox(flagsym, dx.mags).translated(PointF(x - dx.lw * .5 + dx.xcorr, dy.y1f + dy.ycorr)));
+            addbbox(score()->engravingFont()->bbox(flagsym, dx.mags).translated(PointF(x - dx.lw * .5 + dx.xcorr, dy.y1f + dy.ycorr)));
             // printBBox(" notehead + stem + flag", bbox());
         }
 

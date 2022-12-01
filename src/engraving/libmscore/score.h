@@ -36,7 +36,7 @@
 
 #include "modularity/ioc.h"
 #include "draw/iimageprovider.h"
-#include "isymbolfontsprovider.h"
+#include "iengravingfontsprovider.h"
 
 #include "layout/layout.h"
 #include "layout/layoutoptions.h"
@@ -97,7 +97,7 @@ class RepeatList;
 class Rest;
 class Score;
 class ScoreElement;
-class ISymbolFont;
+class IEngravingFont;
 class Segment;
 class Slur;
 class Spanner;
@@ -361,7 +361,7 @@ class Score : public EngravingObject
 
     INJECT(engraving, draw::IImageProvider, imageProvider)
     INJECT(engraving, IEngravingConfiguration, configuration)
-    INJECT(engraving, ISymbolFontsProvider, symbolFonts)
+    INJECT(engraving, IEngravingFontsProvider, engravingFonts)
 
 private:
 
@@ -386,7 +386,7 @@ private:
     std::vector<Layer> _layer;
     int _currentLayer { 0 };
 
-    std::shared_ptr<ISymbolFont> m_symbolFont = nullptr;
+    std::shared_ptr<IEngravingFont> m_engravingFont = nullptr;
     int _pageNumberOffset { 0 };          ///< Offset for page numbers.
 
     UpdateState _updateState;
@@ -1158,8 +1158,8 @@ public:
     ChordRest* findCRinStaff(const Fraction& tick, staff_idx_t staffIdx) const;
     void insertTime(const Fraction& tickPos, const Fraction& tickLen);
 
-    std::shared_ptr<ISymbolFont> symbolFont() const { return m_symbolFont; }
-    void setSymbolFont(std::shared_ptr<ISymbolFont> f) { m_symbolFont = f; }
+    std::shared_ptr<IEngravingFont> engravingFont() const { return m_engravingFont; }
+    void setEngravingFont(std::shared_ptr<IEngravingFont> f) { m_engravingFont = f; }
 
     double noteHeadWidth() const { return _noteHeadWidth; }
     void setNoteHeadWidth(double n) { _noteHeadWidth = n; }

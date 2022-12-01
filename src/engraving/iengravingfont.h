@@ -1,5 +1,5 @@
-#ifndef MU_ENGRAVING_ISYMBOLFONT_H
-#define MU_ENGRAVING_ISYMBOLFONT_H
+#ifndef MU_ENGRAVING_IENGRAVINGFONT_H
+#define MU_ENGRAVING_IENGRAVINGFONT_H
 
 #include <memory>
 
@@ -14,11 +14,11 @@ class Painter;
 }
 
 namespace mu::engraving {
-class ISymbolFont
+class IEngravingFont
 {
 public:
 
-    virtual ~ISymbolFont() = default;
+    virtual ~IEngravingFont() = default;
 
     virtual const std::string& name() const = 0;
     virtual const std::string& family() const = 0;
@@ -51,7 +51,7 @@ public:
     virtual void draw(const SymIdList& ids, draw::Painter* p, const SizeF& mag, const PointF& pos) const = 0;
 };
 
-using ISymbolFontPtr = std::shared_ptr<ISymbolFont>;
+using IEngravingFontPtr = std::shared_ptr<IEngravingFont>;
 }
 
-#endif // MU_ENGRAVING_ISYMBOLFONT_H
+#endif // MU_ENGRAVING_IENGRAVINGFONT_H
