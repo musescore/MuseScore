@@ -23,6 +23,7 @@
 #ifndef MU_AUDIO_SOUNDMAPPING_H
 #define MU_AUDIO_SOUNDMAPPING_H
 
+#include "async/channel.h"
 #include "mpe/events.h"
 #include "midi/miditypes.h"
 
@@ -985,6 +986,84 @@ static const mpe::ArticulationTypeSet BEND_SUPPORTED_TYPES = {
 static const mpe::ArticulationTypeSet AFTERTOUCH_SUPPORTED_TYPES = {
     mpe::ArticulationType::Vibrato, mpe::ArticulationType::MoltoVibrato,
     mpe::ArticulationType::SenzaVibrato, mpe::ArticulationType::WideVibrato
+};
+
+struct ChannelMap {
+    using ChannelMapping = std::pair<midi::channel_t, midi::Program>;
+    using VoiceMappings = std::map<mpe::ArticulationType, ChannelMapping>;
+
+    void init(const mpe::PlaybackSetupData& setupData)
+    {
+        m_standardPrograms = findPrograms(setupData);
+        m_articulationMapping = articulationSounds(setupData);
+    }
+
+    midi::channel_t resolveChannelForEvent(const mpe::NoteEvent& event)
+    {
+        if (event.expressionCtx().articulations.contains(mpe::ArticulationType::Standard)) {
+            if (m_standardPrograms.empty()) {
+                return 0;
+            }
+
+            const midi::Program& standardProgram = m_standardPrograms.at(0);
+
+            return resolveChannel(event.arrangementCtx().voiceLayerIndex, mpe::ArticulationType::Standard, standardProgram);
+        }
+
+        if (m_articulationMapping.empty()) {
+            return 0;
+        }
+
+        for (const auto& pair : event.expressionCtx().articulations) {
+            auto search = m_articulationMapping.find(pair.first);
+            if (search == m_articulationMapping.cend()) {
+                continue;
+            }
+
+            return resolveChannel(event.arrangementCtx().voiceLayerIndex, search->first, search->second);
+        }
+
+        return 0;
+    }
+
+    midi::channel_t lastIndex() const
+    {
+        size_t result = 0;
+
+        for (const auto& pair : m_data) {
+            result += pair.second.size();
+        }
+
+        return static_cast<midi::channel_t>(result);
+    }
+
+    bool contains(const mpe::voice_layer_idx_t voiceIdx, const mpe::ArticulationType key) const
+    {
+        VoiceMappings& mapping = m_data[voiceIdx];
+        return mapping.find(key) != mapping.cend();
+    }
+
+    async::Channel<midi::channel_t, midi::Program> channelAdded;
+
+private:
+    midi::channel_t resolveChannel(const mpe::voice_layer_idx_t voiceIdx, const mpe::ArticulationType type, const midi::Program& program)
+    {
+        if (!contains(voiceIdx, type)) {
+            midi::channel_t newChannelIdx = lastIndex();
+
+            m_data[voiceIdx].insert({ type, { newChannelIdx, program } });
+            channelAdded.send(newChannelIdx, program);
+
+            return newChannelIdx;
+        } else {
+            return m_data[voiceIdx].at(type).first;
+        }
+    }
+
+    mutable std::map<mpe::voice_layer_idx_t, VoiceMappings> m_data;
+
+    midi::Programs m_standardPrograms;
+    ArticulationMapping m_articulationMapping;
 };
 }
 

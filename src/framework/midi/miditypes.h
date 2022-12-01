@@ -49,7 +49,7 @@ using Events = std::map<tick_t, std::vector<Event> >;
 static constexpr int EXPRESSION_CONTROLLER = 11;
 
 struct Program {
-    Program(bank_t b, program_t p)
+    Program(bank_t b = 0, program_t p = 0)
         : bank(b), program(p) {}
 
     bank_t bank = 0;
