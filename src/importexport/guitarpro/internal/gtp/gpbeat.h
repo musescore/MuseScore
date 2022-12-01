@@ -76,7 +76,9 @@ public:
     enum class BeamMode {
         AUTO,
         JOINED,
-        BROKEN
+        BROKEN,
+        BROKEN2,
+        BROKEN2_JOINED
     };
 
     void addGPNote(const std::shared_ptr<GPNote>& n) { _notes.push_back(n); }
