@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "symbolfontsprovider.h"
+#include "engravingfontsprovider.h"
 
 #include "global/stringutils.h"
 
@@ -29,16 +29,16 @@
 using namespace mu;
 using namespace mu::engraving;
 
-void SymbolFontsProvider::addFont(const std::string& name, const std::string& family, const io::path_t& filePath)
+void EngravingFontsProvider::addFont(const std::string& name, const std::string& family, const io::path_t& filePath)
 {
-    m_symbolFonts.push_back(std::make_shared<SymbolFont>(name, family, filePath));
+    m_symbolFonts.push_back(std::make_shared<EngravingFont>(name, family, filePath));
     m_fallback.font = nullptr;
 }
 
-std::shared_ptr<SymbolFont> SymbolFontsProvider::doFontByName(const std::string& name) const
+std::shared_ptr<EngravingFont> EngravingFontsProvider::doFontByName(const std::string& name) const
 {
     std::string name_lo = mu::strings::toLower(name);
-    for (const std::shared_ptr<SymbolFont>& f : m_symbolFonts) {
+    for (const std::shared_ptr<EngravingFont>& f : m_symbolFonts) {
         if (mu::strings::toLower(f->name()) == name_lo) {
             return f;
         }
@@ -46,9 +46,9 @@ std::shared_ptr<SymbolFont> SymbolFontsProvider::doFontByName(const std::string&
     return nullptr;
 }
 
-ISymbolFontPtr SymbolFontsProvider::fontByName(const std::string& name) const
+IEngravingFontPtr EngravingFontsProvider::fontByName(const std::string& name) const
 {
-    std::shared_ptr<SymbolFont> font = doFontByName(name);
+    std::shared_ptr<EngravingFont> font = doFontByName(name);
     if (!font) {
         font = doFallbackFont();
     }
@@ -57,22 +57,22 @@ ISymbolFontPtr SymbolFontsProvider::fontByName(const std::string& name) const
     return font;
 }
 
-std::vector<ISymbolFontPtr> SymbolFontsProvider::fonts() const
+std::vector<IEngravingFontPtr> EngravingFontsProvider::fonts() const
 {
-    std::vector<ISymbolFontPtr> fs;
-    for (const std::shared_ptr<SymbolFont>& f : m_symbolFonts) {
+    std::vector<IEngravingFontPtr> fs;
+    for (const std::shared_ptr<EngravingFont>& f : m_symbolFonts) {
         fs.push_back(f);
     }
     return fs;
 }
 
-void SymbolFontsProvider::setFallbackFont(const std::string& name)
+void EngravingFontsProvider::setFallbackFont(const std::string& name)
 {
     m_fallback.name = name;
     m_fallback.font = nullptr;
 }
 
-std::shared_ptr<SymbolFont> SymbolFontsProvider::doFallbackFont() const
+std::shared_ptr<EngravingFont> EngravingFontsProvider::doFallbackFont() const
 {
     if (!m_fallback.font) {
         m_fallback.font = doFontByName(m_fallback.name);
@@ -84,14 +84,14 @@ std::shared_ptr<SymbolFont> SymbolFontsProvider::doFallbackFont() const
     return m_fallback.font;
 }
 
-ISymbolFontPtr SymbolFontsProvider::fallbackFont() const
+IEngravingFontPtr EngravingFontsProvider::fallbackFont() const
 {
-    std::shared_ptr<SymbolFont> font = doFallbackFont();
+    std::shared_ptr<EngravingFont> font = doFallbackFont();
     font->ensureLoad();
     return font;
 }
 
-bool SymbolFontsProvider::isFallbackFont(const ISymbolFont* f) const
+bool EngravingFontsProvider::isFallbackFont(const IEngravingFont* f) const
 {
     return doFallbackFont().get() == f;
 }

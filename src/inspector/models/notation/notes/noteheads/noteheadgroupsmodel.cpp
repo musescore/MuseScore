@@ -62,7 +62,7 @@ QVariant NoteheadGroupsModel::data(const QModelIndex& index, int role) const
         return TConv::translatedUserName(group).toQString();
     case IconCodeRole: {
         auto type = (group == NoteHeadGroup::HEAD_BREVIS_ALT) ? NoteHeadType::HEAD_BREVIS : NoteHeadType::HEAD_QUARTER;
-        return symbolFonts()->fallbackFont()->symCode(Note::noteHead(0, group, type));
+        return engravingFonts()->fallbackFont()->symCode(Note::noteHead(0, group, type));
     }
     default: break;
     }

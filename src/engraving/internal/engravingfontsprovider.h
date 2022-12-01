@@ -20,42 +20,42 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SYMBOLFONTSPROVIDER_H
-#define MU_ENGRAVING_SYMBOLFONTSPROVIDER_H
+#ifndef MU_ENGRAVING_ENGRAVINGFONTSPROVIDER_H
+#define MU_ENGRAVING_ENGRAVINGFONTSPROVIDER_H
 
 #include <vector>
 
-#include "isymbolfontsprovider.h"
+#include "iengravingfontsprovider.h"
 
-#include "symbolfont.h"
+#include "engravingfont.h"
 
 namespace mu::engraving {
-class SymbolFont;
-class SymbolFontsProvider : public ISymbolFontsProvider
+class EngravingFont;
+class EngravingFontsProvider : public IEngravingFontsProvider
 {
 public:
 
     void addFont(const std::string& name, const std::string& family, const io::path_t& filePath) override;
-    ISymbolFontPtr fontByName(const std::string& name) const override;
-    std::vector<ISymbolFontPtr> fonts() const override;
+    IEngravingFontPtr fontByName(const std::string& name) const override;
+    std::vector<IEngravingFontPtr> fonts() const override;
 
     void setFallbackFont(const std::string& name) override;
-    ISymbolFontPtr fallbackFont() const override;
-    bool isFallbackFont(const ISymbolFont* f) const override;
+    IEngravingFontPtr fallbackFont() const override;
+    bool isFallbackFont(const IEngravingFont* f) const override;
 
 private:
 
-    std::shared_ptr<SymbolFont> doFontByName(const std::string& name) const;
-    std::shared_ptr<SymbolFont> doFallbackFont() const;
+    std::shared_ptr<EngravingFont> doFontByName(const std::string& name) const;
+    std::shared_ptr<EngravingFont> doFallbackFont() const;
 
     struct Fallback {
         std::string name;
-        std::shared_ptr<SymbolFont> font;
+        std::shared_ptr<EngravingFont> font;
     };
 
     mutable Fallback m_fallback;
-    std::vector<std::shared_ptr<SymbolFont> > m_symbolFonts;
+    std::vector<std::shared_ptr<EngravingFont> > m_symbolFonts;
 };
 }
 
-#endif // MU_ENGRAVING_SYMBOLFONTSPROVIDER_H
+#endif // MU_ENGRAVING_ENGRAVINGFONTSPROVIDER_H

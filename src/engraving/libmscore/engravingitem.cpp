@@ -35,7 +35,7 @@
 #include "types/translatablestring.h"
 
 #include "draw/types/pen.h"
-#include "isymbolfont.h"
+#include "iengravingfont.h"
 #include "style/style.h"
 #include "rw/xml.h"
 #include "rw/writecontext.h"
@@ -1682,17 +1682,17 @@ void EngravingItem::undoAddElement(EngravingItem* element)
 
 void EngravingItem::drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF& o, double scale) const
 {
-    score()->symbolFont()->draw(id, p, magS() * scale, o);
+    score()->engravingFont()->draw(id, p, magS() * scale, o);
 }
 
 void EngravingItem::drawSymbols(const SymIdList& symbols, mu::draw::Painter* p, const PointF& o, double scale) const
 {
-    score()->symbolFont()->draw(symbols, p, magS() * scale, o);
+    score()->engravingFont()->draw(symbols, p, magS() * scale, o);
 }
 
 void EngravingItem::drawSymbols(const SymIdList& symbols, mu::draw::Painter* p, const PointF& o, const SizeF& scale) const
 {
-    score()->symbolFont()->draw(symbols, p, SizeF(magS() * scale), o);
+    score()->engravingFont()->draw(symbols, p, SizeF(magS() * scale), o);
 }
 
 //---------------------------------------------------------
@@ -1701,7 +1701,7 @@ void EngravingItem::drawSymbols(const SymIdList& symbols, mu::draw::Painter* p, 
 
 double EngravingItem::symHeight(SymId id) const
 {
-    return score()->symbolFont()->height(id, magS());
+    return score()->engravingFont()->height(id, magS());
 }
 
 //---------------------------------------------------------
@@ -1710,12 +1710,12 @@ double EngravingItem::symHeight(SymId id) const
 
 double EngravingItem::symWidth(SymId id) const
 {
-    return score()->symbolFont()->width(id, magS());
+    return score()->engravingFont()->width(id, magS());
 }
 
 double EngravingItem::symWidth(const SymIdList& symbols) const
 {
-    return score()->symbolFont()->width(symbols, magS());
+    return score()->engravingFont()->width(symbols, magS());
 }
 
 //---------------------------------------------------------
@@ -1724,7 +1724,7 @@ double EngravingItem::symWidth(const SymIdList& symbols) const
 
 double EngravingItem::symAdvance(SymId id) const
 {
-    return score()->symbolFont()->advance(id, magS());
+    return score()->engravingFont()->advance(id, magS());
 }
 
 //---------------------------------------------------------
@@ -1733,12 +1733,12 @@ double EngravingItem::symAdvance(SymId id) const
 
 RectF EngravingItem::symBbox(SymId id) const
 {
-    return score()->symbolFont()->bbox(id, magS());
+    return score()->engravingFont()->bbox(id, magS());
 }
 
 RectF EngravingItem::symBbox(const SymIdList& symbols) const
 {
-    return score()->symbolFont()->bbox(symbols, magS());
+    return score()->engravingFont()->bbox(symbols, magS());
 }
 
 //---------------------------------------------------------
@@ -1747,7 +1747,7 @@ RectF EngravingItem::symBbox(const SymIdList& symbols) const
 
 PointF EngravingItem::symSmuflAnchor(SymId symId, SmuflAnchorId anchorId) const
 {
-    return score()->symbolFont()->smuflAnchor(symId, anchorId, magS());
+    return score()->engravingFont()->smuflAnchor(symId, anchorId, magS());
 }
 
 //---------------------------------------------------------
@@ -1756,7 +1756,7 @@ PointF EngravingItem::symSmuflAnchor(SymId symId, SmuflAnchorId anchorId) const
 
 bool EngravingItem::symIsValid(SymId id) const
 {
-    return score()->symbolFont()->isValid(id);
+    return score()->engravingFont()->isValid(id);
 }
 
 //---------------------------------------------------------

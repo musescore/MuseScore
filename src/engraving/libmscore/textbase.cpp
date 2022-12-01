@@ -27,7 +27,7 @@
 #include "draw/types/pen.h"
 #include "draw/types/brush.h"
 
-#include "isymbolfont.h"
+#include "iengravingfont.h"
 
 #include "rw/xml.h"
 
@@ -795,7 +795,8 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
     draw::Font::Type fontType = draw::Font::Type::Unknown;
     if (format.fontFamily() == "ScoreText") {
         if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA) {
-            family = String::fromStdString(symbolFonts()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont).toStdString())->family());
+            family
+                = String::fromStdString(engravingFonts()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont).toStdString())->family());
             fontType = draw::Font::Type::MusicSymbol;
             // to keep desired size ratio (based on 20pt symbol size to 10pt text size)
             m *= 2;
@@ -1487,7 +1488,7 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
 
 static String toSymbolXml(Char c)
 {
-    static std::shared_ptr<ISymbolFontsProvider> provider = modularity::ioc()->resolve<ISymbolFontsProvider>("engraving");
+    static std::shared_ptr<IEngravingFontsProvider> provider = modularity::ioc()->resolve<IEngravingFontsProvider>("engraving");
 
     SymId symId = provider->fallbackFont()->fromCode(c.unicode());
     return u"<sym>" + String::fromAscii(SymNames::nameForSymId(symId).ascii()) + u"</sym>";
@@ -1751,7 +1752,7 @@ void TextBase::createLayout()
                         CharFormat fmt = *cursor.format(); // save format
 
                         //char32_t code = score()->scoreFont()->symCode(id);
-                        char32_t code = id == SymId::space ? static_cast<char32_t>(' ') : symbolFonts()->fallbackFont()->symCode(id);
+                        char32_t code = id == SymId::space ? static_cast<char32_t>(' ') : engravingFonts()->fallbackFont()->symCode(id);
                         cursor.format()->setFontFamily(u"ScoreText");
                         insert(&cursor, code);
                         cursor.setFormat(fmt); // restore format

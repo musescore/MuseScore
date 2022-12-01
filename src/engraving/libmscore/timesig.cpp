@@ -25,7 +25,7 @@
 #include "rw/xml.h"
 #include "style/style.h"
 #include "translation.h"
-#include "isymbolfont.h"
+#include "iengravingfont.h"
 
 #include "score.h"
 #include "segment.h"
@@ -331,7 +331,7 @@ void TimeSig::layout()
             ds = timeSigSymIdsFromString(_denominatorString);
         }
 
-        ISymbolFontPtr font = score()->symbolFont();
+        IEngravingFontPtr font = score()->engravingFont();
         SizeF mag(magS() * _scale);
 
         RectF numRect = font->bbox(ns, mag);

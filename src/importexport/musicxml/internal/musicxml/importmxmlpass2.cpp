@@ -28,7 +28,7 @@
 
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
-#include "isymbolfont.h"
+#include "iengravingfont.h"
 
 #include "libmscore/accidental.h"
 #include "libmscore/arpeggio.h"
@@ -89,7 +89,7 @@
 
 #include "modularity/ioc.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
-#include "engraving/isymbolfontsprovider.h"
+#include "engraving/iengravingfontsprovider.h"
 
 #include "log.h"
 
@@ -102,9 +102,9 @@ static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration(
     return mu::modularity::ioc()->resolve<mu::iex::musicxml::IMusicXmlConfiguration>("iex_musicxml");
 }
 
-static std::shared_ptr<mu::engraving::ISymbolFontsProvider> symbolFonts()
+static std::shared_ptr<mu::engraving::IEngravingFontsProvider> engravingFonts()
 {
-    return mu::modularity::ioc()->resolve<mu::engraving::ISymbolFontsProvider>("iex_musicxml");
+    return mu::modularity::ioc()->resolve<mu::engraving::IEngravingFontsProvider>("iex_musicxml");
 }
 
 //---------------------------------------------------------
@@ -680,7 +680,7 @@ static QString text2syms(const QString& t)
     // note that this takes about 1 msec on a Core i5,
     // caching does not gain much
 
-    ISymbolFontPtr sf = symbolFonts()->fallbackFont();
+    IEngravingFontPtr sf = engravingFonts()->fallbackFont();
     QMap<QString, SymId> map;
     int maxStringSize = 0;          // maximum string size found
 

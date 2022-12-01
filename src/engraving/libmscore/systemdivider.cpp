@@ -66,7 +66,7 @@ void SystemDivider::layout()
     } else {
         sid = SymNames::symIdByName(score()->styleSt(Sid::dividerRightSym));
     }
-    setSym(sid, score()->symbolFont());
+    setSym(sid, score()->engravingFont());
     Symbol::layout();
 }
 
@@ -114,12 +114,12 @@ void SystemDivider::read(XmlReader& e)
     if (e.attribute("type") == "left") {
         _dividerType = SystemDivider::Type::LEFT;
         SymId sym = SymNames::symIdByName(score()->styleSt(Sid::dividerLeftSym));
-        setSym(sym, score()->symbolFont());
+        setSym(sym, score()->engravingFont());
         setOffset(PointF(score()->styleD(Sid::dividerLeftX), score()->styleD(Sid::dividerLeftY)));
     } else {
         _dividerType = SystemDivider::Type::RIGHT;
         SymId sym = SymNames::symIdByName(score()->styleSt(Sid::dividerRightSym));
-        setSym(sym, score()->symbolFont());
+        setSym(sym, score()->engravingFont());
         setOffset(PointF(score()->styleD(Sid::dividerRightX), score()->styleD(Sid::dividerRightY)));
     }
     Symbol::read(e);

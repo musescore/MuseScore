@@ -19,17 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SYMBOLFONT_H
-#define MU_ENGRAVING_SYMBOLFONT_H
+#ifndef MU_ENGRAVING_ENGRAVINGFONT_H
+#define MU_ENGRAVING_ENGRAVINGFONT_H
 
 #include <unordered_map>
 
-#include "isymbolfont.h"
+#include "iengravingfont.h"
 
 #include "modularity/ioc.h"
 #include "draw/ifontprovider.h"
 #include "draw/types/geometry.h"
-#include "isymbolfontsprovider.h"
+#include "iengravingfontsprovider.h"
 
 #include "io/path.h"
 
@@ -47,13 +47,13 @@ class Painter;
 }
 
 namespace mu::engraving {
-class SymbolFont : public ISymbolFont
+class EngravingFont : public IEngravingFont
 {
     INJECT_STATIC(score, mu::draw::IFontProvider, fontProvider)
-    INJECT_STATIC(score, ISymbolFontsProvider, symbolFonts)
+    INJECT_STATIC(score, IEngravingFontsProvider, engravingFonts)
 public:
-    SymbolFont(const std::string& name, const std::string& family, const io::path_t& filePath);
-    SymbolFont(const SymbolFont& other);
+    EngravingFont(const std::string& name, const std::string& family, const io::path_t& filePath);
+    EngravingFont(const EngravingFont& other);
 
     const std::string& name() const override;
     const std::string& family() const override;
@@ -135,4 +135,4 @@ private:
 };
 }
 
-#endif // MU_ENGRAVING_SYMBOLFONT_H
+#endif // MU_ENGRAVING_ENGRAVINGFONT_H

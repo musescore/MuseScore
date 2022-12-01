@@ -24,7 +24,7 @@
 #define MU_ENGRAVING_READ206_H
 
 #include "modularity/ioc.h"
-#include "isymbolfontsprovider.h"
+#include "iengravingfontsprovider.h"
 
 #include "engravingerrors.h"
 #include "style/styledef.h"
@@ -54,7 +54,7 @@ class Score;
 namespace mu::engraving::compat {
 class Read206
 {
-    INJECT_STATIC(engraving, ISymbolFontsProvider, symbolFonts)
+    INJECT_STATIC(engraving, IEngravingFontsProvider, engravingFonts)
 public:
 
     //---------------------------------------------------------

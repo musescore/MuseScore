@@ -34,7 +34,7 @@
 
 #include "undo.h"
 
-#include "isymbolfont.h"
+#include "iengravingfont.h"
 
 #include "bend.h"
 #include "bracket.h"
@@ -1847,7 +1847,7 @@ void ChangeStyle::flip(EditData*)
         score->cmdConcertPitchChanged(style.value(Sid::concertPitch).toBool());
     }
     if (score->styleV(Sid::MusicalSymbolFont) != style.value(Sid::MusicalSymbolFont)) {
-        score->setSymbolFont(symbolFonts()->fontByName(style.styleSt(Sid::MusicalSymbolFont).toStdString()));
+        score->setEngravingFont(engravingFonts()->fontByName(style.styleSt(Sid::MusicalSymbolFont).toStdString()));
     }
 
     score->setStyle(style, overlap);
