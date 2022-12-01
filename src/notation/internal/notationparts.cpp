@@ -775,8 +775,6 @@ void NotationParts::doInsertPart(Part* part, size_t index)
 
         mu::engraving::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
     }
-
-    part->setScore(score());
 }
 
 void NotationParts::removeStaves(const IDList& stavesIds)
