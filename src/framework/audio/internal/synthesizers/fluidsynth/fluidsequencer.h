@@ -23,6 +23,7 @@
 #ifndef MU_AUDIO_FLUIDSEQUENCER_H
 #define MU_AUDIO_FLUIDSEQUENCER_H
 
+#include "async/channel.h"
 #include "midi/midievent.h"
 #include "mpe/events.h"
 
@@ -33,13 +34,17 @@ namespace mu::audio {
 class FluidSequencer : public AbstractEventSequencer<midi::Event>
 {
 public:
-    void init(const ArticulationMapping& mapping, const std::unordered_map<midi::channel_t, midi::Program>& channels);
+    void init(const mpe::PlaybackSetupData& setupData);
 
     int currentExpressionLevel() const;
 
     void updateOffStreamEvents(const mpe::PlaybackEventsMap& changes) override;
     void updateMainStreamEvents(const mpe::PlaybackEventsMap& changes) override;
     void updateDynamicChanges(const mpe::DynamicLevelMap& changes) override;
+
+    async::Channel<midi::channel_t, midi::Program> channelAdded() const;
+
+    const ChannelMap& channels() const;
 
 private:
     void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes);
@@ -51,15 +56,13 @@ private:
                          const midi::channel_t channelIdx);
 
     midi::channel_t channel(const mpe::NoteEvent& noteEvent) const;
-    midi::channel_t findChannelByProgram(const midi::Program& program) const;
     midi::note_idx_t noteIndex(const mpe::pitch_level_t pitchLevel) const;
     midi::tuning_t noteTuning(const mpe::NoteEvent& noteEvent, const int noteIdx) const;
     midi::velocity_t noteVelocity(const mpe::NoteEvent& noteEvent) const;
     int expressionLevel(const mpe::dynamic_level_t dynamicLevel) const;
     int pitchBendLevel(const mpe::pitch_level_t pitchLevel) const;
 
-    ArticulationMapping m_articulationMapping;
-    std::unordered_map<midi::channel_t, midi::Program> m_channels;
+    mutable ChannelMap m_channels;
 };
 }
 
