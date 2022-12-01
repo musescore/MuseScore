@@ -112,6 +112,12 @@ io::path_t GlobalConfiguration::homePath() const
     return p;
 }
 
+io::path_t GlobalConfiguration::downloadsPath() const
+{
+    static io::path_t p = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
+    return p;
+}
+
 bool GlobalConfiguration::useFactorySettings() const
 {
     return false;
