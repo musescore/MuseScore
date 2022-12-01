@@ -109,9 +109,6 @@ private:
 
     std::shared_ptr<Fluid> m_fluid = nullptr;
 
-    std::unordered_map<midi::channel_t, midi::Program> m_channels;
-    ArticulationMapping m_articulationMapping;
-
     async::Channel<unsigned int> m_streamsCountChanged;
 
     FluidSequencer m_sequencer;

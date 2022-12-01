@@ -254,32 +254,19 @@ void FluidSynth::setupSound(const PlaybackSetupData& setupData)
 
     fluid_synth_activate_key_tuning(m_fluid->synth, 0, 0, "standard", NULL, true);
 
-    m_channels.clear();
-    m_articulationMapping.clear();
+    m_sequencer.channelAdded().onReceive(this, [this](const midi::channel_t channelIdx, const midi::Program& program) {
+        fluid_synth_set_interp_method(m_fluid->synth, channelIdx, FLUID_INTERP_DEFAULT);
+        fluid_synth_pitch_wheel_sens(m_fluid->synth, channelIdx, 24);
+        fluid_synth_bank_select(m_fluid->synth, channelIdx, program.bank);
+        fluid_synth_program_change(m_fluid->synth, channelIdx, program.program);
+        fluid_synth_cc(m_fluid->synth, channelIdx, 7, DEFAULT_MIDI_VOLUME);
+        fluid_synth_cc(m_fluid->synth, channelIdx, 74, 0);
+        fluid_synth_set_portamento_mode(m_fluid->synth, channelIdx, FLUID_CHANNEL_PORTAMENTO_MODE_EACH_NOTE);
+        fluid_synth_set_legato_mode(m_fluid->synth, channelIdx, FLUID_CHANNEL_LEGATO_MODE_RETRIGGER);
+        fluid_synth_activate_tuning(m_fluid->synth, channelIdx, 0, 0, 0);
+    });
 
-    const Programs& programs = findPrograms(setupData);
-    for (const Program& program : programs) {
-        m_channels.emplace(static_cast<int>(m_channels.size()), program);
-    }
-
-    m_articulationMapping = articulationSounds(setupData);
-    for (const auto& pair : m_articulationMapping) {
-        m_channels.emplace(static_cast<int>(m_channels.size()), pair.second);
-    }
-
-    for (const auto& pair : m_channels) {
-        fluid_synth_set_interp_method(m_fluid->synth, pair.first, FLUID_INTERP_DEFAULT);
-        fluid_synth_pitch_wheel_sens(m_fluid->synth, pair.first, 24);
-        fluid_synth_bank_select(m_fluid->synth, pair.first, pair.second.bank);
-        fluid_synth_program_change(m_fluid->synth, pair.first, pair.second.program);
-        fluid_synth_cc(m_fluid->synth, pair.first, 7, DEFAULT_MIDI_VOLUME);
-        fluid_synth_cc(m_fluid->synth, pair.first, 74, 0);
-        fluid_synth_set_portamento_mode(m_fluid->synth, pair.first, FLUID_CHANNEL_PORTAMENTO_MODE_EACH_NOTE);
-        fluid_synth_set_legato_mode(m_fluid->synth, pair.first, FLUID_CHANNEL_LEGATO_MODE_RETRIGGER);
-        fluid_synth_activate_tuning(m_fluid->synth, pair.first, 0, 0, 0);
-    }
-
-    m_sequencer.init(m_articulationMapping, m_channels);
+    m_sequencer.init(setupData);
 }
 
 void FluidSynth::setupEvents(const mpe::PlaybackData& playbackData)
@@ -389,8 +376,10 @@ void FluidSynth::toggleExpressionController()
 
 int FluidSynth::setExpressionLevel(int level)
 {
-    for (const auto& pair : m_channels) {
-        fluid_synth_cc(m_fluid->synth, pair.first, midi::EXPRESSION_CONTROLLER, level);
+    midi::channel_t lastChannelIdx = m_sequencer.channels().lastIndex();
+
+    for (midi::channel_t i = 0; i < lastChannelIdx; ++i) {
+        fluid_synth_cc(m_fluid->synth, i, midi::EXPRESSION_CONTROLLER, level);
     }
 
     return FLUID_OK;
