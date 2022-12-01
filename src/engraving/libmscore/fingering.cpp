@@ -109,7 +109,7 @@ void Fingering::layout()
         Fraction tick = parentItem()->tick();
         const Staff* st = staff();
         _skipDraw = false;
-        if (st && st->isTabStaff(tick) && !st->staffType(tick)->showTabFingering()) {
+        if (st && st->isTabStaff(tick) && (!st->staffType(tick)->showTabFingering() || textStyleType() == TextStyleType::STRING_NUMBER)) {
             _skipDraw = true;
             return;
         }
