@@ -914,7 +914,6 @@ void System::layout2(const LayoutContext& ctx)
     }
 
     if (visibleStaves.empty()) {
-        LOGD() << "====no visible staves, staves: " << _staves.size() << ", score staves: " << score()->nstaves();
         return;
     }
 
@@ -1710,7 +1709,6 @@ staff_idx_t System::firstVisibleSysStaff() const
             return i;
         }
     }
-    LOGD("no sys staff");
     return mu::nidx;
 }
 
@@ -1726,7 +1724,6 @@ staff_idx_t System::lastVisibleSysStaff() const
             return static_cast<staff_idx_t>(i);
         }
     }
-    LOGD("no sys staff");
     return mu::nidx;
 }
 
