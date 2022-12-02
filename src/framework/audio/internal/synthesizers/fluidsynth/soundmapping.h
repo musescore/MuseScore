@@ -1070,6 +1070,11 @@ struct ChannelMap {
         return mapping.find(key) != mapping.cend();
     }
 
+    const std::map<mpe::voice_layer_idx_t, VoiceMappings>& data() const
+    {
+        return m_data;
+    }
+
     async::Channel<midi::channel_t, midi::Program> channelAdded;
 
 private:

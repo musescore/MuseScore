@@ -254,7 +254,7 @@ void FluidSynth::setupSound(const PlaybackSetupData& setupData)
 
     fluid_synth_activate_key_tuning(m_fluid->synth, 0, 0, "standard", NULL, true);
 
-    m_sequencer.channelAdded().onReceive(this, [this](const midi::channel_t channelIdx, const midi::Program& program) {
+    auto setupChannel = [this](const midi::channel_t channelIdx, const midi::Program& program) {
         fluid_synth_set_interp_method(m_fluid->synth, channelIdx, FLUID_INTERP_DEFAULT);
         fluid_synth_pitch_wheel_sens(m_fluid->synth, channelIdx, 24);
         fluid_synth_bank_select(m_fluid->synth, channelIdx, program.bank);
@@ -264,9 +264,17 @@ void FluidSynth::setupSound(const PlaybackSetupData& setupData)
         fluid_synth_set_portamento_mode(m_fluid->synth, channelIdx, FLUID_CHANNEL_PORTAMENTO_MODE_EACH_NOTE);
         fluid_synth_set_legato_mode(m_fluid->synth, channelIdx, FLUID_CHANNEL_LEGATO_MODE_RETRIGGER);
         fluid_synth_activate_tuning(m_fluid->synth, channelIdx, 0, 0, 0);
-    });
+    };
 
+    m_sequencer.channelAdded().onReceive(this, setupChannel);
     m_sequencer.init(setupData);
+
+    for (const auto& voice : m_sequencer.channels().data()) {
+        for (const auto& pair : voice.second) {
+            const ChannelMap::ChannelMapping& channelMapping = pair.second;
+            setupChannel(channelMapping.first, channelMapping.second);
+        }
+    }
 }
 
 void FluidSynth::setupEvents(const mpe::PlaybackData& playbackData)
