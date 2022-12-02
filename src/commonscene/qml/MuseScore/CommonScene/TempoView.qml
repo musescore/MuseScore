@@ -25,43 +25,34 @@ import QtQuick.Layouts 1.15
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
-Item {
+RowLayout {
     id: root
 
     property alias noteSymbol: noteSymbolLabel.text
-    property int tempoValue: 0
+    property var tempoValue: 0
 
     property alias noteSymbolFont: noteSymbolLabel.font
     property alias tempoValueFont: tempoValueLabel.font
 
     property alias noteSymbolTopPadding: noteSymbolLabel.topPadding
 
-    implicitWidth: contentRow.implicitWidth
-    implicitHeight: contentRow.implicitHeight
+    spacing: 0
 
-    RowLayout {
-        id: contentRow
+    StyledTextLabel {
+        id: noteSymbolLabel
 
-        anchors.centerIn: parent
+        topPadding: 10
+        lineHeightMode: Text.FixedHeight
+        lineHeight: 10
 
-        spacing: 0
+        font.family: ui.theme.musicalFont.family
+        font.pixelSize: ui.theme.musicalFont.pixelSize
+        font.letterSpacing: 1
+    }
 
-        StyledTextLabel {
-            id: noteSymbolLabel
+    StyledTextLabel {
+        id: tempoValueLabel
 
-            topPadding: 10
-            lineHeightMode: Text.FixedHeight
-            lineHeight: 10
-
-            font.family: ui.theme.musicalFont.family
-            font.pixelSize: ui.theme.musicalFont.pixelSize
-            font.letterSpacing: 1
-        }
-
-        StyledTextLabel {
-            id: tempoValueLabel
-
-            text: " = " + root.tempoValue
-        }
+        text: " = " + root.tempoValue
     }
 }

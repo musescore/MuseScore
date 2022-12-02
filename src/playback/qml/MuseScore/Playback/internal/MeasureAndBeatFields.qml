@@ -81,7 +81,7 @@ Item {
             //! NOTE: explicit width prevents the content from jumping around
             // when a score is being played
             // See: https://github.com/musescore/MuseScore/issues/9633
-            Layout.preferredWidth: 24
+            Layout.preferredWidth: 20
 
             NumberInputField {
                 id: beatNumberField
