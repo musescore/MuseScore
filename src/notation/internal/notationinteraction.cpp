@@ -220,6 +220,8 @@ static std::string MScoreErrorToString(MsError err)
 {
     switch (err) {
     case MsError::MS_NO_ERROR: return "MS_NO_ERROR";
+    case MsError::NO_NOTE_SELECTED: return "NO_NOTE_SELECTED";
+    case MsError::NO_CHORD_REST_SELECTED: return "NO_CHORD_REST_SELECTED";
     case MsError::NO_LYRICS_SELECTED: return "NO_LYRICS_SELECTED";
     case MsError::NO_NOTE_REST_SELECTED: return "NO_NOTE_REST_SELECTED";
     case MsError::NO_FLIPPABLE_SELECTED: return "NO_FLIPPABLE_SELECTED";
@@ -269,6 +271,14 @@ void NotationInteraction::checkAndShowMScoreError() const
     switch (err) {
     case MsError::MS_NO_ERROR:
         return;
+    case MsError::NO_NOTE_SELECTED:
+        title = trc("notation", "No note selected");
+        message = trc("notation", "Please select a note and retry");
+        break;
+    case MsError::NO_CHORD_REST_SELECTED:
+        title = trc("notation", "No chord/rest selected");
+        message = trc("notation", "Please select a chord or rest and retry");
+        break;
     case MsError::NO_LYRICS_SELECTED:
         title = trc("notation", "No note or lyrics selected");
         message = trc("notation", "Please select a note or lyrics and retry");
