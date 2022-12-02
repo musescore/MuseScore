@@ -133,8 +133,9 @@ FocusScope {
         function pageIndex(pageName) {
             switch (pageName) {
             case "get-started": return 0
-            case "advanced": return 1
-            case "classes": return 2
+            //! NOTE: see https://github.com/musescore/MuseScore/issues/14886
+            //case "advanced": return 1
+            case "classes": return 1
             }
 
             return 0
@@ -168,6 +169,8 @@ FocusScope {
             navigation.column: 1
         }
 
+        //! NOTE: see https://github.com/musescore/MuseScore/issues/14886
+        /*
         StyledTabButton {
             text: qsTrc("learn", "Advanced")
 
@@ -175,6 +178,7 @@ FocusScope {
             navigation.panel: navTabPanel
             navigation.column: 2
         }
+        */
 
         StyledTabButton {
             text: qsTrc("learn", "Classes")
@@ -212,6 +216,9 @@ FocusScope {
             }
         }
 
+
+        //! NOTE: see https://github.com/musescore/MuseScore/issues/14886
+        /*
         Playlist {
             id: advancedComp
 
@@ -229,6 +236,7 @@ FocusScope {
                 pageModel.openVideo(videoId)
             }
         }
+        */
 
         ClassesPage {
             id: classesComp
