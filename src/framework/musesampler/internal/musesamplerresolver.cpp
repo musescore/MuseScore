@@ -186,26 +186,29 @@ bool MuseSamplerResolver::checkLibrary() const
 
 bool MuseSamplerResolver::isVersionSupported() const
 {
+    IF_ASSERT_FAILED(m_libHandler) {
+        return false;
+    }
+
     bool ok = true;
     std::array<int, 3> minimumSupported = parseVersion(configuration()->minimumSupportedVersion(), ok);
     if (!ok) {
         return false;
     }
 
-    std::array<int, 3> current = parseVersion(version(), ok);
-    if (!ok) {
-        return false;
-    }
+    int currentMajorNum = m_libHandler->getVersionMajor();
+    int currentMinorNum = m_libHandler->getVersionMinor();
+    int currentRevisionNum = m_libHandler->getVersionRevision();
 
-    if (current.at(0) > minimumSupported.at(0)) {
+    if (currentMajorNum > minimumSupported.at(0)) {
         return true;
-    } else if (current.at(0) == minimumSupported.at(0)) {
-        if (current.at(1) > minimumSupported.at(1)) {
+    } else if (currentMajorNum == minimumSupported.at(0)) {
+        if (currentMinorNum > minimumSupported.at(1)) {
             return true;
-        } else if (current.at(1) == minimumSupported.at(1)) {
-            if (current.at(2) > minimumSupported.at(2)) {
+        } else if (currentMinorNum == minimumSupported.at(1)) {
+            if (currentRevisionNum > minimumSupported.at(2)) {
                 return true;
-            } else if (current.at(2) == minimumSupported.at(2)) {
+            } else if (currentRevisionNum == minimumSupported.at(2)) {
                 return true;
             }
         }
