@@ -240,7 +240,7 @@ public:
     void setScoreConfig(const ScoreConfig& config) override;
     async::Channel<ScoreConfigType> scoreConfigChanged() const override;
 
-    void navigateToLyrics(MoveDirection direction) override;
+    void navigateToLyrics(MoveDirection direction, bool moveOnly = true) override;
     void navigateToLyricsVerse(MoveDirection direction) override;
 
     void navigateToNextSyllable() override;
