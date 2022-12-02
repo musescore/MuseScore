@@ -312,21 +312,29 @@ bool Box::readProperties(XmlReader& e)
         //! but when we add it to Box, the parent will be rewritten.
         add(f);
     } else if (tag == "HBox") {
-        HBox* hb = new HBox(this->system());
-        hb->read(e);
-        //! TODO Looks like a bug.
-        //! The HBox parent must be System
-        //! there is a method: `System* system() const { return (System*)parent(); }`,
-        //! but when we add it to Box, the parent will be rewritten.
-        add(hb);
+        // m_parent is used here (rather than system()) because explicit parent isn't set for this object
+        // until it is fully read. m_parent is nonetheless valid and using it here matches MU3 behavior.
+        // If we do not set the parent of this new box correctly, it will cause a crash on read()
+        // because it needs access to the system it is being added to. (c.r. issue #14643)
+        if (m_parent && m_parent->isSystem()) {
+            HBox* hb = new HBox(toSystem(m_parent));
+            hb->read(e);
+            //! TODO Looks like a bug.
+            //! The HBox parent must be System
+            //! there is a method: `System* system() const { return (System*)parent(); }`,
+            //! but when we add it to Box, the parent will be rewritten.
+            add(hb);
+        }
     } else if (tag == "VBox") {
-        VBox* vb = new VBox(this->system());
-        vb->read(e);
-        //! TODO Looks like a bug.
-        //! The VBox parent must be System
-        //! there is a method: `System* system() const { return (System*)parent(); }`,
-        //! but when we add it to Box, the parent will be rewritten.
-        add(vb);
+        if (m_parent && m_parent->isSystem()) {
+            VBox* vb = new VBox(toSystem(m_parent));
+            vb->read(e);
+            //! TODO Looks like a bug.
+            //! The VBox parent must be System
+            //! there is a method: `System* system() const { return (System*)parent(); }`,
+            //! but when we add it to Box, the parent will be rewritten.
+            add(vb);
+        }
     } else if (MeasureBase::readProperties(e)) {
     } else {
         return false;
