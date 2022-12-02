@@ -235,13 +235,17 @@ PlaybackSetupData StringsSetupDataResolver::doResolve(const Instrument* instrume
         { "strings", { SoundId::StringsGroup, SoundCategory::Strings, {}, {} } },
         { "double-bass", { SoundId::Contrabass, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
         { "contrabass", { SoundId::Contrabass, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
-        { "contrabasses", { SoundId::ContrabassSection, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
+        { "contrabasses", { SoundId::Contrabass, SoundCategory::Strings, { SoundSubCategory::Orchestral,
+                                                                           SoundSubCategory::Section }, {} } },
         { "violin", { SoundId::Violin, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
-        { "violins", { SoundId::ViolinSection, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
+        { "violins", { SoundId::Violin, SoundCategory::Strings, { SoundSubCategory::Orchestral,
+                                                                  SoundSubCategory::Section }, {} } },
         { "viola", { SoundId::Viola, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
-        { "violas", { SoundId::ViolaSection, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
+        { "violas", { SoundId::Viola, SoundCategory::Strings, { SoundSubCategory::Orchestral,
+                                                                SoundSubCategory::Section }, {} } },
         { "violoncello", { SoundId::Violoncello, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
-        { "violoncellos", { SoundId::VioloncelloSection, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
+        { "violoncellos", { SoundId::Violoncello, SoundCategory::Strings, { SoundSubCategory::Orchestral,
+                                                                            SoundSubCategory::Section }, {} } },
 
         { "treble-viol", { SoundId::Viol, SoundCategory::Strings, {}, {} } },
         { "alto-viol", { SoundId::Viol, SoundCategory::Strings, { SoundSubCategory::Alto }, {} } },
@@ -271,8 +275,7 @@ PlaybackSetupData StringsSetupDataResolver::doResolve(const Instrument* instrume
     }
 
     static const std::unordered_set<SoundId> supportPrimaryAndSecondaryCategories {
-        SoundId::Violin,
-        SoundId::ViolinSection,
+        SoundId::Violin
     };
 
     if (mu::contains(supportPrimaryAndSecondaryCategories, search->second.id)) {

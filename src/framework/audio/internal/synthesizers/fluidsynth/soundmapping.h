@@ -250,13 +250,17 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
 
         { { mpe::SoundId::StringsGroup,  { } }, { midi::Program(0, 48) } },
         { { mpe::SoundId::Contrabass,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(0, 43) } },
-        { { mpe::SoundId::ContrabassSection,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(50, 48) } },
+        { { mpe::SoundId::Contrabass,  { mpe::SoundSubCategory::Orchestral,
+                                         mpe::SoundSubCategory::Section } }, { midi::Program(50, 48) } },
         { { mpe::SoundId::Violin,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(0, 40) } },
-        { { mpe::SoundId::ViolinSection,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(20, 48) } },
+        { { mpe::SoundId::Violin,  { mpe::SoundSubCategory::Orchestral,
+                                     mpe::SoundSubCategory::Section } }, { midi::Program(20, 48) } },
         { { mpe::SoundId::Viola,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(0, 41) } },
-        { { mpe::SoundId::ViolaSection,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(30, 48) } },
+        { { mpe::SoundId::Viola,  { mpe::SoundSubCategory::Orchestral,
+                                    mpe::SoundSubCategory::Section } }, { midi::Program(30, 48) } },
         { { mpe::SoundId::Violoncello,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(0, 42) } },
-        { { mpe::SoundId::VioloncelloSection,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(40, 48) } },
+        { { mpe::SoundId::Violoncello,  { mpe::SoundSubCategory::Orchestral,
+                                          mpe::SoundSubCategory::Section } }, { midi::Program(40, 48) } },
 
         { { mpe::SoundId::Viol,  { } }, { midi::Program(0, 40) } },
         { { mpe::SoundId::Viol,  { mpe::SoundSubCategory::Alto } }, { midi::Program(0, 41) } },
@@ -377,9 +381,15 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
 
         { { mpe::SoundId::Clarinet,  {} }, { midi::Program(0, 71) } },
         { { mpe::SoundId::Clarinet,  { mpe::SoundSubCategory::Sopranino } }, { midi::Program(0, 71) } },
+        { { mpe::SoundId::Clarinet,  { mpe::SoundSubCategory::Sopranino,
+                                       mpe::SoundSubCategory::In_E_flat } }, { midi::Program(0, 71) } },
         { { mpe::SoundId::Clarinet,  { mpe::SoundSubCategory::Soprano } }, { midi::Program(0, 71) } },
+        { { mpe::SoundId::Clarinet,  { mpe::SoundSubCategory::Soprano,
+                                       mpe::SoundSubCategory::In_B_flat } }, { midi::Program(0, 71) } },
         { { mpe::SoundId::Clarinet,  { mpe::SoundSubCategory::Alto } }, { midi::Program(0, 71) } },
         { { mpe::SoundId::Clarinet,  { mpe::SoundSubCategory::Bass } }, { midi::Program(0, 71) } },
+        { { mpe::SoundId::Clarinet,  { mpe::SoundSubCategory::Bass,
+                                       mpe::SoundSubCategory::In_B_flat } }, { midi::Program(0, 71) } },
         { { mpe::SoundId::Clarinet,  { mpe::SoundSubCategory::Contra_Alto } }, { midi::Program(0, 71) } },
         { { mpe::SoundId::Clarinet,  { mpe::SoundSubCategory::Contra_Bass } }, { midi::Program(0, 71) } },
 
@@ -449,9 +459,25 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::BrassGroup,  {} }, { midi::Program(0, 61) } },
 
         { { mpe::SoundId::Horn,  {} }, { midi::Program(0, 60), midi::Program(0, 59) } },
-        { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::French } }, { midi::Program(0, 60), midi::Program(0, 59) } },
+        { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::In_A } }, { midi::Program(0, 60), midi::Program(0, 59) } },
+        { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::In_A_flat } }, { midi::Program(0, 60), midi::Program(0, 59) } },
+        { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::In_G } }, { midi::Program(0, 60), midi::Program(0, 59) } },
+        { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::In_E } }, { midi::Program(0, 60), midi::Program(0, 59) } },
+        { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::In_E_flat } }, { midi::Program(0, 60), midi::Program(0, 59) } },
+        { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::In_D } }, { midi::Program(0, 60), midi::Program(0, 59) } },
+        { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::In_C } }, { midi::Program(0, 60), midi::Program(0, 59) } },
+        { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::French,
+                                   mpe::SoundSubCategory::In_F } }, { midi::Program(0, 60), midi::Program(0, 59) } },
         { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::Alto } }, { midi::Program(0, 60), midi::Program(0, 59) } },
+        { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::Alto,
+                                   mpe::SoundSubCategory::In_C } }, { midi::Program(0, 60), midi::Program(0, 59) } },
+        { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::Alto,
+                                   mpe::SoundSubCategory::In_B_flat } }, { midi::Program(0, 60), midi::Program(0, 59) } },
         { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::Bass } }, { midi::Program(0, 60), midi::Program(0, 59) } },
+        { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::Bass,
+                                   mpe::SoundSubCategory::In_B_flat } }, { midi::Program(0, 60), midi::Program(0, 59) } },
+        { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::Bass,
+                                   mpe::SoundSubCategory::In_C } }, { midi::Program(0, 60), midi::Program(0, 59) } },
         { { mpe::SoundId::Horn,  { mpe::SoundSubCategory::Vienna } }, { midi::Program(0, 60), midi::Program(0, 59) } },
 
         { { mpe::SoundId::Tuba,  { mpe::SoundSubCategory::Wagner } }, { midi::Program(0, 56) } },
@@ -912,7 +938,7 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
         }
     }
 
-    if (setupData.id == mpe::SoundId::ViolinSection) {
+    if (setupData.id == mpe::SoundId::Violin && setupData.contains(mpe::SoundSubCategory::Section)) {
         return VIOLIN_SECTION;
     }
 
@@ -920,7 +946,7 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
         return VIOLIN;
     }
 
-    if (setupData.id == mpe::SoundId::ViolaSection) {
+    if (setupData.id == mpe::SoundId::Viola && setupData.contains(mpe::SoundSubCategory::Section)) {
         return VIOLA_SECTION;
     }
 
@@ -928,7 +954,7 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
         return VIOLA;
     }
 
-    if (setupData.id == mpe::SoundId::VioloncelloSection) {
+    if (setupData.id == mpe::SoundId::Violoncello && setupData.contains(mpe::SoundSubCategory::Section)) {
         return VIOLONCELLO_SECTION;
     }
 
@@ -936,7 +962,7 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
         return VIOLONCELLO;
     }
 
-    if (setupData.id == mpe::SoundId::ContrabassSection) {
+    if (setupData.id == mpe::SoundId::Contrabass && setupData.contains(mpe::SoundSubCategory::Section)) {
         return CONTRABASS_SECTION;
     }
 
@@ -1000,7 +1026,8 @@ struct ChannelMap {
 
     midi::channel_t resolveChannelForEvent(const mpe::NoteEvent& event)
     {
-        if (event.expressionCtx().articulations.contains(mpe::ArticulationType::Standard)) {
+        if (event.expressionCtx().articulations.contains(mpe::ArticulationType::Standard)
+            || event.expressionCtx().articulations.empty()) {
             if (m_standardPrograms.empty()) {
                 return 0;
             }
