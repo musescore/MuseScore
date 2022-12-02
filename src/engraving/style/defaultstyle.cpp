@@ -45,25 +45,43 @@ DefaultStyle* DefaultStyle::instance()
     return &s;
 }
 
+static void applyPageSizeToStyle(MStyle* style, const SizeF& pageSize)
+{
+    double oldWidth = style->styleD(Sid::pageWidth);
+    double newPrintableWidth = style->styleD(Sid::pagePrintableWidth) + (pageSize.width() - oldWidth);
+
+    style->set(Sid::pageWidth, pageSize.width());
+    style->set(Sid::pageHeight, pageSize.height());
+    style->set(Sid::pagePrintableWidth, newPrintableWidth);
+}
+
 void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partStyleFilePath)
 {
     m_baseStyle.precomputeValues();
 
-    if (!defaultStyleFilePath.empty()) {
-        m_defaultStyle = new MStyle();
-        bool ok = doLoadStyle(m_defaultStyle, defaultStyleFilePath);
-        if (!ok) {
-            delete m_defaultStyle;
-            m_defaultStyle = nullptr;
-        } else {
-            m_defaultStyle->precomputeValues();
+    SizeF pageSize = engravingConfiguration()->defaultPageSize();
+
+    {
+        applyPageSizeToStyle(&m_defaultStyle, pageSize);
+
+        if (!defaultStyleFilePath.empty()) {
+            bool ok = doLoadStyle(&m_defaultStyle, defaultStyleFilePath);
+            if (!ok) {
+                LOGW() << "Failed to load default style file from " << defaultStyleFilePath;
+            }
         }
+
+        m_defaultStyle.precomputeValues();
     }
 
     if (!partStyleFilePath.empty()) {
         m_defaultStyleForParts = new MStyle();
+
+        applyPageSizeToStyle(m_defaultStyleForParts, pageSize);
+
         bool ok = doLoadStyle(m_defaultStyleForParts, partStyleFilePath);
         if (!ok) {
+            LOGW() << "Failed to load default part style file from " << partStyleFilePath;
             delete m_defaultStyleForParts;
             m_defaultStyleForParts = nullptr;
         } else {
@@ -90,20 +108,9 @@ const MStyle& DefaultStyle::baseStyle()
     return instance()->m_baseStyle;
 }
 
-bool DefaultStyle::isHasDefaultStyle()
-{
-    if (instance()->m_defaultStyle) {
-        return true;
-    }
-    return false;
-}
-
 const MStyle& DefaultStyle::defaultStyle()
 {
-    if (instance()->m_defaultStyle) {
-        return *instance()->m_defaultStyle;
-    }
-    return instance()->m_baseStyle;
+    return instance()->m_defaultStyle;
 }
 
 const MStyle* DefaultStyle::defaultStyleForParts()

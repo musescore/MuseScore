@@ -23,22 +23,25 @@
 #define MU_ENGRAVING_DEFAULTSTYLE_H
 
 #include "io/path.h"
+
+#include "modularity/ioc.h"
+#include "iengravingconfiguration.h"
+
 #include "style.h"
 
 namespace mu::engraving {
 class DefaultStyle
 {
-public:
+    INJECT(engraving, IEngravingConfiguration, engravingConfiguration)
 
+public:
     static DefaultStyle* instance();
 
     void init(const io::path_t& defaultStyleFilePath, const io::path_t& partStyleFilePath);
 
     static const MStyle& baseStyle();
 
-    static bool isHasDefaultStyle();
     static const MStyle& defaultStyle();
-
     static const MStyle* defaultStyleForParts();
 
     static const MStyle& resolveStyleDefaults(const int defaultsVersion);
@@ -49,7 +52,7 @@ private:
     static bool doLoadStyle(MStyle* style, const io::path_t& filePath);
 
     MStyle m_baseStyle; // builtin initial style
-    MStyle* m_defaultStyle; // builtin modified by preferences
+    MStyle m_defaultStyle; // builtin modified by preferences
     MStyle* m_defaultStyleForParts = nullptr;
 };
 }
