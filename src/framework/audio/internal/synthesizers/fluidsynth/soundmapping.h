@@ -1026,7 +1026,8 @@ struct ChannelMap {
 
     midi::channel_t resolveChannelForEvent(const mpe::NoteEvent& event)
     {
-        if (event.expressionCtx().articulations.contains(mpe::ArticulationType::Standard)) {
+        if (event.expressionCtx().articulations.contains(mpe::ArticulationType::Standard)
+            || event.expressionCtx().articulations.empty()) {
             if (m_standardPrograms.empty()) {
                 return 0;
             }
