@@ -48,6 +48,8 @@ public:
     virtual io::path_t partStyleFilePath() const = 0;
     virtual void setPartStyleFilePath(const io::path_t& path) = 0;
 
+    virtual SizeF defaultPageSize() const = 0;
+
     virtual String iconsFontFamily() const = 0;
 
     virtual draw::Color defaultColor() const = 0;

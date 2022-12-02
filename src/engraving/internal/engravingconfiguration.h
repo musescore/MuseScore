@@ -53,6 +53,8 @@ public:
     io::path_t partStyleFilePath() const override;
     void setPartStyleFilePath(const io::path_t& path) override;
 
+    SizeF defaultPageSize() const override;
+
     String iconsFontFamily() const override;
 
     draw::Color defaultColor() const override;

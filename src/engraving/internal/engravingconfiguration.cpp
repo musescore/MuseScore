@@ -21,6 +21,13 @@
  */
 #include "engravingconfiguration.h"
 
+#include <cstdlib>
+
+#ifndef NO_QT_SUPPORT
+#include <QLocale>
+#include <QPageSize>
+#endif
+
 #include "global/settings.h"
 #include "draw/types/color.h"
 #include "libmscore/mscore.h"
@@ -96,6 +103,44 @@ mu::io::path_t EngravingConfiguration::partStyleFilePath() const
 void EngravingConfiguration::setPartStyleFilePath(const io::path_t& path)
 {
     settings()->setSharedValue(PART_STYLE_FILE_PATH, Val(path.toStdString()));
+}
+
+static bool defaultPageSizeIsLetter()
+{
+    // try PAPERSIZE environment variable
+    const char* papersize = getenv("PAPERSIZE");
+    if (papersize) {
+        return strcmp(papersize, "letter") == 0;
+    }
+#ifndef NO_QT_SUPPORT
+    // try locale
+    switch (QLocale::system().country()) {
+    case QLocale::UnitedStates:
+    case QLocale::Canada:
+    case QLocale::Mexico:
+    case QLocale::Chile:
+    case QLocale::Colombia:
+    case QLocale::CostaRica:
+    case QLocale::Panama:
+    case QLocale::Guatemala:
+    case QLocale::DominicanRepublic:
+    case QLocale::Philippines:
+        return true;
+    default:
+        return false;
+    }
+#else
+    return false;
+#endif
+}
+
+SizeF EngravingConfiguration::defaultPageSize() const
+{
+    // Needs to be determined only once, therefore static
+    static SizeF size = SizeF::fromQSizeF(
+        QPageSize::size(defaultPageSizeIsLetter() ? QPageSize::Letter : QPageSize::A4, QPageSize::Inch));
+
+    return size;
 }
 
 mu::String EngravingConfiguration::iconsFontFamily() const
