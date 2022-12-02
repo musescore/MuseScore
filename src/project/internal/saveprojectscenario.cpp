@@ -138,14 +138,13 @@ RetVal<io::path_t> SaveProjectScenario::askLocalPath(INotationProjectPtr project
     std::vector<std::string> filter {
         trc("project", "MuseScore file") + " (*.mscz)",
         trc("project", "Uncompressed MuseScore folder (experimental)")
-#ifdef Q_OS_WIN
-        + " (*.)" // Windows interprets this as "no extension"
-#else
-        // On macOS and Linux, we have no way to specify "no extension"
-        // (because " (*)" means "any extension" and there is not something special like " (*.)" on Windows).
-        // So we will have to specify _some_ extension.
+        // Actually we want to specify "no extension", which we could do by specifying a
+        // pattern like "(*)" on macOS and Linux or the dedicated code "(*.)" on Windows.
+        // But that doesn't work, because "filename.mscz" also matches those patterns,
+        // so when switching from mscz to mscx, the file dialog won't remove the extension.
+        // So we specify this dummy extension, which causes the dialog to update the
+        // extension properly on most platforms.
         + " (*.mscx)"
-#endif
     };
 
     bool ok = false;
