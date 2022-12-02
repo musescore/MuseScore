@@ -617,19 +617,20 @@ inline SoundId soundIdFromString(const String& str)
 
 static const std::unordered_map<SoundCategory, String> CATEGORY_STRINGS
 {
-    { SoundCategory::Keyboards, String(u"Keyboards") },
-    { SoundCategory::Strings, String(u"Strings") },
-    { SoundCategory::Winds, String(u"Winds") },
-    { SoundCategory::Percussions, String(u"Percussions") },
-    { SoundCategory::Voices, String(u"Voices") },
-    { SoundCategory::Last, String(u"Last") }
+    { SoundCategory::Keyboards, String(u"keyboards") },
+    { SoundCategory::Strings, String(u"strings") },
+    { SoundCategory::Winds, String(u"winds") },
+    { SoundCategory::Percussions, String(u"percussions") },
+    { SoundCategory::Voices, String(u"voices") },
+    { SoundCategory::Last, String(u"last") }
 };
 
 inline const String& soundCategoryToString(const SoundCategory category)
 {
     auto search = CATEGORY_STRINGS.find(category);
     if (search == CATEGORY_STRINGS.cend()) {
-        return UNDEFINED_STR;
+        static const String UNDEFINED_SUBCATEGORY_STR(u"undefined");
+        return UNDEFINED_SUBCATEGORY_STR;
     }
 
     return search->second;
@@ -650,137 +651,153 @@ inline SoundCategory soundCategoryFromString(const String& str)
 
 static const std::unordered_map<SoundSubCategory, String> SUBCATEGORY_STRINGS
 {
-    { SoundSubCategory::English, String(u"English") },
-    { SoundSubCategory::Armenian, String(u"Armenian") },
-    { SoundSubCategory::Alpine, String(u"Alpine") },
-    { SoundSubCategory::Australian, String(u"Australian") },
-    { SoundSubCategory::Irish, String(u"Irish") },
-    { SoundSubCategory::French, String(u"French") },
-    { SoundSubCategory::Chinese, String(u"Chinese") },
-    { SoundSubCategory::Vienna, String(u"Vienna") },
-    { SoundSubCategory::Greek, String(u"Greek") },
-    { SoundSubCategory::Japanese, String(u"Japanese") },
-    { SoundSubCategory::Tibetan, String(u"Tibetan") },
-    { SoundSubCategory::African, String(u"African") },
-    { SoundSubCategory::Indian, String(u"Indian") },
-    { SoundSubCategory::Spanish, String(u"Spanish") },
-    { SoundSubCategory::Swedish, String(u"Swedish") },
-    { SoundSubCategory::Hungarian, String(u"Hungarian") },
-    { SoundSubCategory::Romanian, String(u"Romanian") },
-    { SoundSubCategory::CentralEuropean, String(u"CentralEuropean") },
+    { SoundSubCategory::English, String(u"english") },
+    { SoundSubCategory::Armenian, String(u"armenian") },
+    { SoundSubCategory::Alpine, String(u"alpine") },
+    { SoundSubCategory::Australian, String(u"australian") },
+    { SoundSubCategory::Irish, String(u"irish") },
+    { SoundSubCategory::French, String(u"french") },
+    { SoundSubCategory::Chinese, String(u"chinese") },
+    { SoundSubCategory::Vienna, String(u"vienna") },
+    { SoundSubCategory::Greek, String(u"greek") },
+    { SoundSubCategory::Japanese, String(u"japanese") },
+    { SoundSubCategory::Tibetan, String(u"tibetan") },
+    { SoundSubCategory::African, String(u"african") },
+    { SoundSubCategory::Indian, String(u"indian") },
+    { SoundSubCategory::Spanish, String(u"spanish") },
+    { SoundSubCategory::Swedish, String(u"swedish") },
+    { SoundSubCategory::Hungarian, String(u"hungarian") },
+    { SoundSubCategory::Romanian, String(u"romanian") },
+    { SoundSubCategory::CentralEuropean, String(u"central_european") },
 
-    { SoundSubCategory::Baroque, String(u"Baroque") },
-    { SoundSubCategory::Classical, String(u"Classical") },
-    { SoundSubCategory::Modern, String(u"Modern") },
-    { SoundSubCategory::Orchestral, String(u"Orchestral") },
+    { SoundSubCategory::Baroque, String(u"baroque") },
+    { SoundSubCategory::Classical, String(u"classical") },
+    { SoundSubCategory::Modern, String(u"modern") },
+    { SoundSubCategory::Orchestral, String(u"orchestral") },
 
-    { SoundSubCategory::Hammond, String(u"Hammond") },
-    { SoundSubCategory::Wagner, String(u"Wagner") },
-    { SoundSubCategory::Orff, String(u"Orff") },
-    { SoundSubCategory::Huang, String(u"Huang") },
-    { SoundSubCategory::Hohner, String(u"Hohner") },
+    { SoundSubCategory::Hammond, String(u"hammond") },
+    { SoundSubCategory::Wagner, String(u"wagner") },
+    { SoundSubCategory::Orff, String(u"orff") },
+    { SoundSubCategory::Huang, String(u"huang") },
+    { SoundSubCategory::Hohner, String(u"hohner") },
 
-    { SoundSubCategory::Percussive, String(u"Percussive") },
-    { SoundSubCategory::Piped, String(u"Piped") },
-    { SoundSubCategory::Rotary, String(u"Rotary") },
-    { SoundSubCategory::Reed, String(u"Reed") },
-    { SoundSubCategory::Foot, String(u"Foot") },
-    { SoundSubCategory::Hand, String(u"Hand") },
-    { SoundSubCategory::Finger, String(u"Finger") },
-    { SoundSubCategory::Boy, String(u"Boy") },
-    { SoundSubCategory::Girl, String(u"Girl") },
-    { SoundSubCategory::Male, String(u"Male") },
-    { SoundSubCategory::Female, String(u"Female") },
-    { SoundSubCategory::Pad, String(u"Pad") },
-    { SoundSubCategory::Plucked, String(u"Plucked") },
+    { SoundSubCategory::Percussive, String(u"percussive") },
+    { SoundSubCategory::Piped, String(u"piped") },
+    { SoundSubCategory::Rotary, String(u"rotary") },
+    { SoundSubCategory::Reed, String(u"reed") },
+    { SoundSubCategory::Foot, String(u"foot") },
+    { SoundSubCategory::Hand, String(u"hand") },
+    { SoundSubCategory::Finger, String(u"finger") },
+    { SoundSubCategory::Boy, String(u"boy") },
+    { SoundSubCategory::Girl, String(u"girl") },
+    { SoundSubCategory::Male, String(u"male") },
+    { SoundSubCategory::Female, String(u"female") },
+    { SoundSubCategory::Pad, String(u"pad") },
+    { SoundSubCategory::Plucked, String(u"plucked") },
 
-    { SoundSubCategory::Temple, String(u"Temple") },
-    { SoundSubCategory::Military, String(u"Military") },
-    { SoundSubCategory::Ride, String(u"Ride") },
-    { SoundSubCategory::Sleigh, String(u"Sleigh") },
-    { SoundSubCategory::Cow, String(u"Cow") },
-    { SoundSubCategory::Marching, String(u"Marching") },
+    { SoundSubCategory::Temple, String(u"temple") },
+    { SoundSubCategory::Military, String(u"military") },
+    { SoundSubCategory::Ride, String(u"ride") },
+    { SoundSubCategory::Sleigh, String(u"sleigh") },
+    { SoundSubCategory::Cow, String(u"cow") },
+    { SoundSubCategory::Marching, String(u"marching") },
 
-    { SoundSubCategory::Splash, String(u"Splash") },
-    { SoundSubCategory::Crash, String(u"Crash") },
-    { SoundSubCategory::Plate, String(u"Plate") },
-    { SoundSubCategory::Bowl, String(u"Bowl") },
-    { SoundSubCategory::Frame, String(u"Frame") },
-    { SoundSubCategory::Slit, String(u"Slit") },
-    { SoundSubCategory::Field, String(u"Field") },
-    { SoundSubCategory::Snare, String(u"Snare") },
-    { SoundSubCategory::Brake, String(u"Brake") },
-    { SoundSubCategory::Slide, String(u"Slide") },
-    { SoundSubCategory::Pocket, String(u"Pocket") },
-    { SoundSubCategory::Garklein, String(u"Garklein") },
-    { SoundSubCategory::Toy, String(u"Toy") },
-    { SoundSubCategory::TwelveString, String(u"TwelveString") },
+    { SoundSubCategory::Splash, String(u"splash") },
+    { SoundSubCategory::Crash, String(u"crash") },
+    { SoundSubCategory::Plate, String(u"plate") },
+    { SoundSubCategory::Bowl, String(u"bowl") },
+    { SoundSubCategory::Frame, String(u"frame") },
+    { SoundSubCategory::Slit, String(u"slit") },
+    { SoundSubCategory::Field, String(u"field") },
+    { SoundSubCategory::Snare, String(u"snare") },
+    { SoundSubCategory::Brake, String(u"brake") },
+    { SoundSubCategory::Slide, String(u"slide") },
+    { SoundSubCategory::Pocket, String(u"pocket") },
+    { SoundSubCategory::Garklein, String(u"garklein") },
+    { SoundSubCategory::Toy, String(u"toy") },
+    { SoundSubCategory::TwelveString, String(u"twelve_string") },
 
-    { SoundSubCategory::Grand, String(u"Grand") },
-    { SoundSubCategory::HonkyTonk, String(u"HonkyTonk") },
-    { SoundSubCategory::Upright, String(u"Upright") },
-    { SoundSubCategory::Prima, String(u"Prima") },
-    { SoundSubCategory::Secunda, String(u"Secunda") },
+    { SoundSubCategory::Grand, String(u"grand") },
+    { SoundSubCategory::HonkyTonk, String(u"honky_tonk") },
+    { SoundSubCategory::Upright, String(u"upright") },
+    { SoundSubCategory::Prima, String(u"prima") },
+    { SoundSubCategory::Secunda, String(u"secunda") },
 
-    { SoundSubCategory::Electric, String(u"Electric") },
-    { SoundSubCategory::Acoustic, String(u"Acoustic") },
-    { SoundSubCategory::Fretless, String(u"Fretless") },
-    { SoundSubCategory::Pedal, String(u"Pedal") },
-    { SoundSubCategory::Steel, String(u"Steel") },
-    { SoundSubCategory::Metal, String(u"Metal") },
-    { SoundSubCategory::Iron, String(u"Iron") },
-    { SoundSubCategory::Brass, String(u"Brass") },
-    { SoundSubCategory::Tin, String(u"Tin") },
-    { SoundSubCategory::Nylon, String(u"Nylon") },
-    { SoundSubCategory::Wooden, String(u"Wooden") },
-    { SoundSubCategory::Sandpaper, String(u"Sandpaper") },
-    { SoundSubCategory::Glass, String(u"Glass") },
-    { SoundSubCategory::Shell, String(u"Shell") },
-    { SoundSubCategory::Wind, String(u"Wind") },
+    { SoundSubCategory::Electric, String(u"electric") },
+    { SoundSubCategory::Acoustic, String(u"acoustic") },
+    { SoundSubCategory::Fretless, String(u"fretless") },
+    { SoundSubCategory::Pedal, String(u"pedal") },
+    { SoundSubCategory::Steel, String(u"steel") },
+    { SoundSubCategory::Metal, String(u"metal") },
+    { SoundSubCategory::Iron, String(u"iron") },
+    { SoundSubCategory::Brass, String(u"brass") },
+    { SoundSubCategory::Tin, String(u"tin") },
+    { SoundSubCategory::Nylon, String(u"nylon") },
+    { SoundSubCategory::Wooden, String(u"wooden") },
+    { SoundSubCategory::Sandpaper, String(u"sandpaper") },
+    { SoundSubCategory::Glass, String(u"glass") },
+    { SoundSubCategory::Shell, String(u"shell") },
+    { SoundSubCategory::Wind, String(u"wind") },
+    { SoundSubCategory::Soft, String(u"soft") },
 
-    { SoundSubCategory::Treble, String(u"Treble") },
-    { SoundSubCategory::Diatonic, String(u"Diatonic") },
-    { SoundSubCategory::Chromatic, String(u"Chromatic") },
-    { SoundSubCategory::Octave, String(u"Octave") },
+    { SoundSubCategory::Treble, String(u"treble") },
+    { SoundSubCategory::Diatonic, String(u"diatonic") },
+    { SoundSubCategory::Chromatic, String(u"chromatic") },
+    { SoundSubCategory::Octave, String(u"octave") },
 
-    { SoundSubCategory::Piccolo, String(u"Piccolo") },
-    { SoundSubCategory::Alto, String(u"Alto") },
-    { SoundSubCategory::Tenor, String(u"Tenor") },
-    { SoundSubCategory::Baritone, String(u"Baritone") },
-    { SoundSubCategory::Soprano, String(u"Soprano") },
-    { SoundSubCategory::Mezzo_Soprano, String(u"Mezzo_Soprano") },
-    { SoundSubCategory::Sopranino, String(u"Sopranino") },
-    { SoundSubCategory::Sopranissimo, String(u"Sopranissimo") },
-    { SoundSubCategory::Counter_Tenor, String(u"Counter_Tenor") },
-    { SoundSubCategory::Contra, String(u"Contra") },
-    { SoundSubCategory::Contra_Alto, String(u"Contra_Alto") },
-    { SoundSubCategory::Sub_Contra_Alto, String(u"Sub_Contra_Alto") },
-    { SoundSubCategory::Contra_Bass, String(u"Contra_Bass") },
-    { SoundSubCategory::Sub_Contra_Bass, String(u"Sub_Contra_Bass") },
-    { SoundSubCategory::Double_Contra_Bass, String(u"Double_Contra_Bass") },
-    { SoundSubCategory::Bass, String(u"Bass") },
-    { SoundSubCategory::Great_Bass, String(u"Great_Bass") },
-    { SoundSubCategory::Hyper_Bass, String(u"Hyper_Bass") },
-    { SoundSubCategory::Melody, String(u"Melody") },
+    { SoundSubCategory::Piccolo, String(u"piccolo") },
+    { SoundSubCategory::Alto, String(u"alto") },
+    { SoundSubCategory::Tenor, String(u"tenor") },
+    { SoundSubCategory::Baritone, String(u"baritone") },
+    { SoundSubCategory::Soprano, String(u"soprano") },
+    { SoundSubCategory::Mezzo_Soprano, String(u"mezzo_soprano") },
+    { SoundSubCategory::Sopranino, String(u"sopranino") },
+    { SoundSubCategory::Sopranissimo, String(u"sopranissimo") },
+    { SoundSubCategory::Counter_Tenor, String(u"counter_tenor") },
+    { SoundSubCategory::Contra, String(u"contra") },
+    { SoundSubCategory::Contra_Alto, String(u"contra_alto") },
+    { SoundSubCategory::Sub_Contra_Alto, String(u"sub_contra_alto") },
+    { SoundSubCategory::Contra_Bass, String(u"contra_bass") },
+    { SoundSubCategory::Sub_Contra_Bass, String(u"sub_contra_bass") },
+    { SoundSubCategory::Double_Contra_Bass, String(u"double_contra_bass") },
+    { SoundSubCategory::Bass, String(u"bass") },
+    { SoundSubCategory::Great_Bass, String(u"great_bass") },
+    { SoundSubCategory::Hyper_Bass, String(u"hyper_bass") },
+    { SoundSubCategory::Melody, String(u"melody") },
 
-    { SoundSubCategory::FX_Goblins, String(u"FX_Goblins") },
-    { SoundSubCategory::FX_Atmosphere, String(u"FX_Atmosphere") },
-    { SoundSubCategory::FX_Brightness, String(u"FX_Brightness") },
-    { SoundSubCategory::FX_Crystal, String(u"FX_Crystal") },
-    { SoundSubCategory::FX_Echoes, String(u"FX_Echoes") },
-    { SoundSubCategory::FX_Rain, String(u"FX_Rain") },
-    { SoundSubCategory::FX_SciFi, String(u"FX_SciFi") },
-    { SoundSubCategory::FX_SoundTrack, String(u"FX_SoundTrack") },
-    { SoundSubCategory::Primary, String(u"Primary") },
-    { SoundSubCategory::Secondary, String(u"Secondary") },
-    { SoundSubCategory::Last, String(u"Last") }
+    { SoundSubCategory::In_C, String(u"in_c") },
+    { SoundSubCategory::In_D, String(u"in_d") },
+    { SoundSubCategory::In_D_flat, String(u"in_d_flat") },
+    { SoundSubCategory::In_E, String(u"in_e") },
+    { SoundSubCategory::In_E_flat, String(u"in_e_flat") },
+    { SoundSubCategory::In_F, String(u"in_f") },
+    { SoundSubCategory::In_G, String(u"in_g") },
+    { SoundSubCategory::In_G_flat, String(u"in_g_flat") },
+    { SoundSubCategory::In_A, String(u"in_a") },
+    { SoundSubCategory::In_A_flat, String(u"in_a_flat") },
+    { SoundSubCategory::In_B, String(u"in_b") },
+    { SoundSubCategory::In_B_flat, String(u"in_b_flat") },
+
+    { SoundSubCategory::FX_Goblins, String(u"fx_goblins") },
+    { SoundSubCategory::FX_Atmosphere, String(u"fx_atmosphere") },
+    { SoundSubCategory::FX_Brightness, String(u"fx_brightness") },
+    { SoundSubCategory::FX_Crystal, String(u"fx_crystal") },
+    { SoundSubCategory::FX_Echoes, String(u"fx_echoes") },
+    { SoundSubCategory::FX_Rain, String(u"fx_rain") },
+    { SoundSubCategory::FX_SciFi, String(u"fx_scifi") },
+    { SoundSubCategory::FX_SoundTrack, String(u"fx_soundtrack") },
+    { SoundSubCategory::Primary, String(u"primary") },
+    { SoundSubCategory::Secondary, String(u"secondary") },
+    { SoundSubCategory::Section, String(u"section") },
+    { SoundSubCategory::Last, String(u"last") }
 };
 
 inline const String& soundSubCategoryToString(const SoundSubCategory& subCategory)
 {
     auto search = SUBCATEGORY_STRINGS.find(subCategory);
     if (search == SUBCATEGORY_STRINGS.cend()) {
-        return UNDEFINED_STR;
+        static const String UNDEFINED_SUBCATEGORY_STR(u"undefined");
+        return UNDEFINED_SUBCATEGORY_STR;
     }
 
     return search->second;
@@ -815,14 +832,14 @@ struct SoundSubCategories : public std::set<SoundSubCategory>
             subCategoryStrList.push_back(soundSubCategoryToString(subCategory));
         }
 
-        return subCategoryStrList.join(u",");
+        return subCategoryStrList.join(u":");
     }
 
     static SoundSubCategories fromString(const String& str)
     {
         SoundSubCategories result;
 
-        StringList subCategoryStrList = str.split(u",");
+        StringList subCategoryStrList = str.split(u":");
         for (const String& subStr : subCategoryStrList) {
             result.insert(soundSubCategoryFromString(subStr));
         }
