@@ -108,7 +108,7 @@ FocusScope {
             FlatButton {
                 Layout.alignment: Qt.AlignLeft
 
-                width: privateProperties.buttonWidth
+                minWidth: privateProperties.buttonWidth
                 text: qsTrc("cloud", "Learn more")
 
                 navigation.name: "LearnMore"
@@ -126,7 +126,7 @@ FocusScope {
                 spacing: 22
 
                 FlatButton {
-                    width: privateProperties.buttonWidth
+                    minWidth: privateProperties.buttonWidth
                     text: qsTrc("cloud", "Sign in")
 
                     navigation.name: "SignIn"
@@ -140,7 +140,7 @@ FocusScope {
 
                 FlatButton {
                     id: createNewAccount
-                    width: privateProperties.buttonWidth
+                    minWidth: privateProperties.buttonWidth
                     text: qsTrc("cloud", "Create new account")
 
                     accentButton: true

@@ -168,6 +168,7 @@ RadioDelegate {
 
             StyledTextLabel {
                 text: root.text
+                maximumLineCount: 1
             }
         }
     }
