@@ -198,6 +198,7 @@ FocusScope {
                 text: root.text
                 font: root.textFont
                 textFormat: root.textFormat
+                maximumLineCount: 1
                 visible: !isEmpty
             }
         }
@@ -221,6 +222,7 @@ FocusScope {
                 text: root.text
                 font: root.textFont
                 textFormat: root.textFormat
+                maximumLineCount: 1
                 visible: !isEmpty
             }
         }

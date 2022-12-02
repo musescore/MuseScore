@@ -214,7 +214,7 @@ FocusScope {
             navigation.panel: navBottomPanel
             navigation.column: 1
 
-            width: 216
+            minWidth: 216
             text: qsTrc("project", "Score manager (online)")
 
             onClicked: {
@@ -235,7 +235,7 @@ FocusScope {
                 navigation.panel: navBottomPanel
                 navigation.column: 2
 
-                width: prv.buttonWidth
+                minWidth: prv.buttonWidth
                 text: qsTrc("project", "New")
 
                 onClicked: {
@@ -248,7 +248,7 @@ FocusScope {
                 navigation.panel: navBottomPanel
                 navigation.column: 3
 
-                width: prv.buttonWidth
+                minWidth: prv.buttonWidth
                 text: qsTrc("project", "Open other…")
 
                 onClicked: {

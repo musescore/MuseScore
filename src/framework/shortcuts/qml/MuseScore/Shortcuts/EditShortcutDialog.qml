@@ -148,7 +148,7 @@ Dialog {
                 Item { Layout.fillWidth: true }
 
                 FlatButton {
-                    width: parent.buttonWidth
+                    minWidth: parent.buttonWidth
 
                     text: qsTrc("global", "Cancel")
 
@@ -158,7 +158,7 @@ Dialog {
                 }
 
                 FlatButton {
-                    width: parent.buttonWidth
+                    minWidth: parent.buttonWidth
 
                     text: qsTrc("global", "Save")
 
