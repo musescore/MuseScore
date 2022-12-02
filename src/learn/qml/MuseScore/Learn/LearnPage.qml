@@ -168,6 +168,7 @@ FocusScope {
             navigation.column: 1
         }
 
+        /* Temporarily hidden https://github.com/musescore/MuseScore/issues/14886
         StyledTabButton {
             text: qsTrc("learn", "Advanced")
 
@@ -175,6 +176,7 @@ FocusScope {
             navigation.panel: navTabPanel
             navigation.column: 2
         }
+        */
 
         StyledTabButton {
             text: qsTrc("learn", "Classes")
@@ -212,6 +214,7 @@ FocusScope {
             }
         }
 
+        /* Temporarily hidden https://github.com/musescore/MuseScore/issues/14886
         Playlist {
             id: advancedComp
 
@@ -229,6 +232,7 @@ FocusScope {
                 pageModel.openVideo(videoId)
             }
         }
+        */
 
         ClassesPage {
             id: classesComp
