@@ -56,7 +56,7 @@ void UiContextResolver::init()
                 notifyAboutContextChanged();
             });
 
-            notation->interaction()->textEditingEnded().onNotify(this, [this]() {
+            notation->interaction()->textEditingEnded().onReceive(this, [this](engraving::TextBase*) {
                 notifyAboutContextChanged();
             });
 

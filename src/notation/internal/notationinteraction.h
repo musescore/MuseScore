@@ -142,7 +142,7 @@ public:
     const TextBase* editedText() const override;
     async::Notification textEditingStarted() const override;
     async::Notification textEditingChanged() const override;
-    async::Notification textEditingEnded() const override;
+    async::Channel<TextBase*> textEditingEnded() const override;
 
     // Grip edit
     bool isGripEditStarted() const override;
@@ -303,7 +303,7 @@ private:
     void notifyAboutNotationChanged();
     void notifyAboutTextEditingStarted();
     void notifyAboutTextEditingChanged();
-    void notifyAboutTextEditingEnded();
+    void notifyAboutTextEditingEnded(TextBase* text);
     void notifyAboutNoteInputStateChanged();
     void doDragLasso(const PointF& p);
     void endLasso();
@@ -414,7 +414,7 @@ private:
 
     async::Notification m_textEditingStarted;
     async::Notification m_textEditingChanged;
-    async::Notification m_textEditingEnded;
+    async::Channel<TextBase*> m_textEditingEnded;
 
     DropData m_dropData;
     async::Notification m_dropChanged;
