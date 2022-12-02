@@ -314,10 +314,18 @@ struct PlaybackSetupData
 
     String toString() const
     {
-        String result = String(u"%1.%2.%3")
-                        .arg(soundIdToString(id))
-                        .arg(soundCategoryToString(category))
-                        .arg(subCategorySet.toString());
+        String result;
+
+        if (!subCategorySet.empty()) {
+            result = String(u"%1.%2.%3")
+                     .arg(soundCategoryToString(category))
+                     .arg(soundIdToString(id))
+                     .arg(subCategorySet.toString());
+        } else {
+            result = String(u"%1.%2")
+                     .arg(soundCategoryToString(category))
+                     .arg(soundIdToString(id));
+        }
 
         return result;
     }
@@ -330,10 +338,19 @@ struct PlaybackSetupData
 
         StringList subStrList = str.split(u".");
 
+        if (subStrList < 2) {
+            return PlaybackSetupData();
+        }
+
+        SoundSubCategories subCategories;
+        if (subStrList.size() == 3) {
+            subCategories = SoundSubCategories::fromString(subStrList.at(2));
+        }
+
         PlaybackSetupData result = {
-            soundIdFromString(subStrList.at(0)),
-            soundCategoryFromString(subStrList.at(1)),
-            SoundSubCategories::fromString(subStrList.at(2)),
+            soundIdFromString(subStrList.at(1)),
+            soundCategoryFromString(subStrList.at(0)),
+            std::move(subCategories),
             std::nullopt
         };
 
