@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "iinteractive.h"
 
 #include "inotationinteraction.h"
 #include "inotationconfiguration.h"
@@ -50,6 +51,7 @@ class NotationInteraction : public INotationInteraction, public async::Asyncable
 {
     INJECT(notation, INotationConfiguration, configuration)
     INJECT(notation, ISelectInstrumentsScenario, selectInstrumentScenario)
+    INJECT(notation, framework::IInteractive, interactive)
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);
@@ -285,6 +287,8 @@ private:
     void startEdit();
     void apply();
     void rollback();
+
+    void checkAndShowMScoreError() const;
 
     bool needStartEditGrip(QKeyEvent* event) const;
     bool handleKeyPress(QKeyEvent* event);
