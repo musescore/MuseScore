@@ -1208,6 +1208,12 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
     m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
         onSelectionChanged();
     });
+
+    m_notation->interaction()->textEditingEnded().onReceive(this, [this](engraving::TextBase* text) {
+        if (text->isHarmony()) {
+            playElements({ text });
+        }
+    });
 }
 
 void PlaybackController::setIsExportingAudio(bool exporting)
