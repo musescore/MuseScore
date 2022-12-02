@@ -163,8 +163,6 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
 
     m_undoStack->stackChanged().onNotify(this, [this]() {
         notifyAboutSelectionChangedIfNeed();
-
-        checkAndShowMScoreError();
     });
 
     m_dragData.ed = mu::engraving::EditData(&m_scoreCallbacks);
@@ -1189,6 +1187,8 @@ void NotationInteraction::endDrag()
     apply();
     notifyAboutDragChanged();
 
+    checkAndShowMScoreError();
+
     //    updateGrips();
     //    if (editData.element->normalModeEditBehavior() == EngravingItem::EditBehavior::Edit
     //        && score()->selection().element() == editData.element) {
@@ -1570,6 +1570,8 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
         notifyAboutDropChanged();
     }
 
+    checkAndShowMScoreError();
+
     return accepted;
 }
 
@@ -1908,6 +1910,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
     apply();
 
     setDropTarget(nullptr);
+
+    checkAndShowMScoreError();
 
     return true;
 }
@@ -3348,6 +3352,8 @@ void NotationInteraction::splitSelectedMeasure()
     startEdit();
     score()->cmdSplitMeasure(chordRest);
     apply();
+
+    checkAndShowMScoreError();
 }
 
 void NotationInteraction::joinSelectedMeasures()
@@ -3361,6 +3367,8 @@ void NotationInteraction::joinSelectedMeasures()
     startEdit();
     score()->cmdJoinMeasure(measureRange.startMeasure, measureRange.endMeasure);
     apply();
+
+    checkAndShowMScoreError();
 }
 
 mu::Ret NotationInteraction::canAddBoxes() const
@@ -3602,6 +3610,8 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
         score()->cmdPaste(&ma, nullptr, scale);
     }
     apply();
+
+    checkAndShowMScoreError();
 }
 
 void NotationInteraction::swapSelection()
