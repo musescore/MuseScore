@@ -50,8 +50,8 @@ Column {
         CheckBoxPropertyView {
             id: matchStaffSize
             anchors.left: parent.left
-            anchors.right: parent.horizontalCenter
-            anchors.rightMargin: 2
+            anchors.right: subscriptOptionsButtonList.left
+            anchors.rightMargin: 8
             anchors.verticalCenter: subscriptOptionsButtonList.verticalCenter
 
             navigation.name: "Match staff size"
