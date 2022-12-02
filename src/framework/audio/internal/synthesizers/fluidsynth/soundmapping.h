@@ -254,7 +254,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
                                          mpe::SoundSubCategory::Section } }, { midi::Program(50, 48) } },
         { { mpe::SoundId::Violin,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(0, 40) } },
         { { mpe::SoundId::Violin,  { mpe::SoundSubCategory::Orchestral,
-                                            mpe::SoundSubCategory::Section } }, { midi::Program(20, 48) } },
+                                     mpe::SoundSubCategory::Section } }, { midi::Program(20, 48) } },
         { { mpe::SoundId::Viola,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(0, 41) } },
         { { mpe::SoundId::Viola,  { mpe::SoundSubCategory::Orchestral,
                                     mpe::SoundSubCategory::Section } }, { midi::Program(30, 48) } },

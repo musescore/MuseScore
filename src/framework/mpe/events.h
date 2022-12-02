@@ -295,15 +295,17 @@ struct PlaybackSetupData
 
     bool operator<(const PlaybackSetupData& other) const
     {
-        if (id < other.id) {
+        if (other.id > id) {
             return true;
+        } else if (other.id == id) {
+            if (other.category > category) {
+                return true;
+            } else if (other.category == category) {
+                return other.subCategorySet > subCategorySet;
+            }
         }
 
-        if (category < other.category) {
-            return true;
-        }
-
-        return subCategorySet < other.subCategorySet;
+        return false;
     }
 
     bool isValid() const
@@ -338,7 +340,7 @@ struct PlaybackSetupData
 
         StringList subStrList = str.split(u".");
 
-        if (subStrList < 2) {
+        if (subStrList.size() < 2) {
             return PlaybackSetupData();
         }
 
