@@ -178,8 +178,8 @@ public:
     bool needToShowAddFiguredBassErrorMessage() const override;
     void setNeedToShowAddFiguredBassErrorMessage(bool show) override;
 
-    bool needToShowAddBoxesErrorMessage() const override;
-    void setNeedToShowAddBoxesErrorMessage(bool show) override;
+    bool needToShowMScoreError(const std::string& errorKey) const override;
+    void setNeedToShowMScoreError(const std::string& errorKey, bool show) override;
 
     ValCh<int> pianoKeyboardNumberOfKeys() const override;
     void setPianoKeyboardNumberOfKeys(int number) override;

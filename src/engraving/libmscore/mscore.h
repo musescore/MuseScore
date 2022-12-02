@@ -280,6 +280,8 @@ public:
     static double horizontalPageGapOdd;
 
     static void setError(MsError e) { _error = e; }
+
+    static std::string errorToString(MsError err);
 };
 } // namespace mu::engraving
 
