@@ -243,9 +243,9 @@ void NotationInteraction::notifyAboutTextEditingChanged()
     m_textEditingChanged.notify();
 }
 
-void NotationInteraction::notifyAboutTextEditingEnded()
+void NotationInteraction::notifyAboutTextEditingEnded(TextBase* text)
 {
-    m_textEditingEnded.notify();
+    m_textEditingEnded.send(text);
 }
 
 void NotationInteraction::notifyAboutSelectionChangedIfNeed()
@@ -2825,7 +2825,8 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
 
 void NotationInteraction::endEditText()
 {
-    IF_ASSERT_FAILED(m_editData.element) {
+    EngravingItem* element = m_editData.element;
+    IF_ASSERT_FAILED(element) {
         return;
     }
 
@@ -2835,7 +2836,7 @@ void NotationInteraction::endEditText()
 
     doEndEditElement();
 
-    notifyAboutTextEditingEnded();
+    notifyAboutTextEditingEnded(toTextBase(element));
     notifyAboutTextEditingChanged();
     notifyAboutSelectionChangedIfNeed();
 }
@@ -2903,7 +2904,7 @@ mu::async::Notification NotationInteraction::textEditingChanged() const
     return m_textEditingChanged;
 }
 
-mu::async::Notification NotationInteraction::textEditingEnded() const
+mu::async::Channel<TextBase*> NotationInteraction::textEditingEnded() const
 {
     return m_textEditingEnded;
 }
@@ -3097,6 +3098,11 @@ void NotationInteraction::editElement(QKeyEvent* event)
 
         if (system) {
             bracketIndex = mu::indexOf(system->brackets(), bracket);
+        }
+    } else if (m_editData.element->isHarmony()) {
+        if (isTextEditingStarted() && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
+            endEditText();
+            return;
         }
     }
 

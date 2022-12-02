@@ -853,6 +853,7 @@ bool Harmony::isEditAllowed(EditData& ed) const
     }
 
     if (ed.key == Key_Return || ed.key == Key_Enter) {
+        // This "edit" is actually handled in NotationInteraction::editElement
         return true;
     }
 
@@ -867,11 +868,6 @@ bool Harmony::edit(EditData& ed)
 {
     if (!isEditAllowed(ed)) {
         return false;
-    }
-
-    if (ed.key == Key_Return || ed.key == Key_Enter) {
-        endEdit(ed);
-        return true;
     }
 
     bool rv = TextBase::edit(ed);
