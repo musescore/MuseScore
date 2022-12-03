@@ -192,7 +192,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
     for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         track_idx_t track = staffIdx * VOICES;
         if (s->element(track) == 0) {
-            MMRest* mmr = new MMRest(s);
+            MMRest* mmr = Factory::createMMRest(s);
             mmr->setDurationType(DurationType::V_MEASURE);
             mmr->setTicks(mmrMeasure->ticks());
             mmr->setTrack(track);
