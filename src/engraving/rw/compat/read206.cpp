@@ -2515,7 +2515,8 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
         } else if (tag == "Rest") {
             if (m->isMMRest()) {
                 segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
-                MMRest* mmr = new MMRest(segment);
+                MMRest* mmr = Factory::createMMRest(segment);
+                mmr->setParent(segment);
                 mmr->setTrack(ctx.track());
                 mmr->read(e);
                 segment->add(mmr);
