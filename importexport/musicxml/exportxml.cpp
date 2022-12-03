@@ -6072,11 +6072,15 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
                                           // filter out implicit brackets
                                           if (!(st->bracketSpan(j) == part->nstaves()
                                                 && st->bracketType(j) == BracketType::BRACE)) {
-                                                // add others
-                                                int number = findPartGroupNumber(partGroupEnd);
-                                                if (number < MAX_PART_GROUPS) {
-                                                      partGroupStart(xml, number + 1, st->bracketType(j));
-                                                      partGroupEnd[number] = staffCount + st->bracketSpan(j);
+                                                // filter out brackets starting in the last part
+                                                // as they cannot span multiple parts
+                                                if (idx < parts.size() - 1) {
+                                                      // add others
+                                                      int number = findPartGroupNumber(partGroupEnd);
+                                                      if (number < MAX_PART_GROUPS) {
+                                                            partGroupStart(xml, number + 1, st->bracketType(j));
+                                                            partGroupEnd[number] = static_cast<int>(staffCount + st->bracketSpan(j));
+                                                            }
                                                       }
                                                 }
                                           }
