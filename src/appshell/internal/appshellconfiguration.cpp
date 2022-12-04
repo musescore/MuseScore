@@ -116,7 +116,7 @@ std::string AppShellConfiguration::handbookUrl() const
         QString::fromStdString(utm)
     };
 
-    return MUSESCORE_ONLINE_HANDBOOK_URL_PATH + "?" + params.join("&").toStdString();
+    return museScoreUrl() + MUSESCORE_ONLINE_HANDBOOK_URL_PATH + "?" + params.join("&").toStdString();
 }
 
 std::string AppShellConfiguration::askForHelpUrl() const
@@ -127,7 +127,7 @@ std::string AppShellConfiguration::askForHelpUrl() const
         "locale=" + QString::fromStdString(languageCode)
     };
 
-    return MUSESCORE_ASK_FOR_HELP_URL_PATH + "?" + params.join("&").toStdString();
+    return museScoreUrl() + MUSESCORE_ASK_FOR_HELP_URL_PATH + "?" + params.join("&").toStdString();
 }
 
 std::string AppShellConfiguration::bugReportUrl() const
@@ -142,7 +142,7 @@ std::string AppShellConfiguration::bugReportUrl() const
         QString::fromStdString(_sha)
     };
 
-    return MUSESCORE_BUG_REPORT_URL_PATH + "?" + params.join("&").toStdString();
+    return museScoreUrl() + MUSESCORE_BUG_REPORT_URL_PATH + "?" + params.join("&").toStdString();
 }
 
 std::string AppShellConfiguration::leaveFeedbackUrl() const
@@ -163,12 +163,12 @@ std::string AppShellConfiguration::museScoreUrl() const
 
 std::string AppShellConfiguration::museScoreForumUrl() const
 {
-    return globalConfiguration()->museScoreUrl() + MUSESCORE_FORUM_URL_PATH;
+    return museScoreUrl() + MUSESCORE_FORUM_URL_PATH;
 }
 
 std::string AppShellConfiguration::museScoreContributionUrl() const
 {
-    return globalConfiguration()->museScoreUrl() + MUSESCORE_CONTRIBUTE_URL_PATH;
+    return museScoreUrl() + MUSESCORE_CONTRIBUTE_URL_PATH;
 }
 
 std::string AppShellConfiguration::musicXMLLicenseUrl() const
