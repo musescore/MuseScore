@@ -68,6 +68,7 @@ static const ElementStyle textLineStyle {
     { Sid::textLineTextAlign,                  Pid::END_TEXT_ALIGN },
     { Sid::textLinePlacement,                  Pid::PLACEMENT },
     { Sid::textLinePosAbove,                   Pid::OFFSET },
+    { Sid::textLineFontSpatiumDependent,       Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
 };
 
 //---------------------------------------------------------
