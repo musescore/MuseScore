@@ -41,7 +41,7 @@ public:
     virtual void toggleNoteInputMethod(NoteInputMethod method) = 0;
     virtual void addNote(NoteName noteName, NoteAddingMode addingMode) = 0;
     virtual void padNote(const Pad& pad)  = 0;
-    virtual void putNote(const PointF& pos, bool replace, bool insert) = 0;
+    virtual Ret putNote(const PointF& pos, bool replace, bool insert) = 0;
     virtual void removeNote(const PointF& pos) = 0;
     virtual async::Notification noteInputStarted() const = 0;
     virtual async::Notification noteInputEnded() const = 0;

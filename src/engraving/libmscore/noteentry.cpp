@@ -332,13 +332,14 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
 //    mouse click in state NoteType::ENTRY
 //---------------------------------------------------------
 
-void Score::putNote(const PointF& pos, bool replace, bool insert)
+Ret Score::putNote(const PointF& pos, bool replace, bool insert)
 {
     Position p;
     if (!getPosition(&p, pos, _is.voice())) {
         LOGD("cannot put note here, get position failed");
-        return;
+        return make_ret(Ret::Code::UnknownError);
     }
+
     Score* score = p.segment->score();
     // it is not safe to call Score::repitchNote() if p is on a TAB staff
     bool isTablature = staff(p.staffIdx)->isTabStaff(p.segment->tick());
@@ -351,17 +352,19 @@ void Score::putNote(const PointF& pos, bool replace, bool insert)
     p.line -= stepOffset + 2 * stYOffset / lineDist;
 
     if (score->inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH) && !isTablature) {
-        score->repitchNote(p, replace);
+        return score->repitchNote(p, replace);
     } else {
         if (insert || score->inputState().usingNoteEntryMethod(NoteEntryMethod::TIMEWISE)) {
-            score->insertChord(p);
+            return score->insertChord(p);
         } else {
-            score->putNote(p, replace);
+            return score->putNote(p, replace);
         }
     }
+
+    return make_ok();
 }
 
-void Score::putNote(const Position& p, bool replace)
+Ret Score::putNote(const Position& p, bool replace)
 {
     Staff* st   = staff(p.staffIdx);
     Segment* s  = p.segment;
@@ -373,15 +376,15 @@ void Score::putNote(const Position& p, bool replace)
         const TracksMap& tracks = excerpt->tracksMapping();
 
         if (!tracks.empty() && mu::key(tracks, _is.track(), mu::nidx) == mu::nidx) {
-            return;
+            return make_ret(Ret::Code::UnknownError);
         }
     }
 
     DirectionV stemDirection = DirectionV::AUTO;
-    bool error;
+    bool error = false;
     NoteVal nval = noteValForPosition(p, _is.accidentalType(), error);
     if (error) {
-        return;
+        return make_ret(Ret::Code::UnknownError);
     }
 
     // warn and delete MeasureRepeat if necessary
@@ -393,8 +396,9 @@ void Score::putNote(const Position& p, bool replace)
                                                       " If you enter notes here, it will be deleted."
                                                       " Do you want to continue?"));
         if (b == MessageBox::Cancel) {
-            return;
+            return make_ret(Ret::Code::Cancel);
         }
+
         Score::deleteItem(m->measureRepeatElement(staffIdx));
     }
 
@@ -454,7 +458,7 @@ void Score::putNote(const Position& p, bool replace)
                         int tpc2 = note->tpc2default(nval.pitch);
                         undoChangeFretting(note, nval.pitch, nval.string, nval.fret, tpc1, tpc2);
                         setPlayNote(true);
-                        return;
+                        return make_ok();
                     }
                 }
             } else {                            // not TAB
@@ -465,7 +469,7 @@ void Score::putNote(const Position& p, bool replace)
                     if (chord->notes().size() > 1) {
                         undoRemoveElement(note);
                     }
-                    return;
+                    return make_ok();
                 }
             }
             addToChord = true;                  // if no special case, add note to chord
@@ -476,31 +480,45 @@ void Score::putNote(const Position& p, bool replace)
         NoteVal nval2 = noteValForPosition(p, AccidentalType::NONE, error);
         forceAccidental = (nval.pitch == nval2.pitch);
     }
+
+    Ret ret = make_ok();
+
     if (addToChord && cr->isChord()) {
         // if adding, add!
-        addNote(toChord(cr), nval, forceAccidental, _is.articulationIds());
+        Note* note = addNote(toChord(cr), nval, forceAccidental, _is.articulationIds());
+        if (!note) {
+            ret = make_ret(Ret::Code::UnknownError);
+        }
+
         _is.setAccidentalType(AccidentalType::NONE);
-        return;
+        return ret;
     } else {
         // if not adding, replace current chord (or create a new one)
-
         if (_is.rest()) {
             nval.pitch = -1;
         }
-        setNoteRest(_is.segment(), _is.track(), nval, _is.duration().fraction(), stemDirection, forceAccidental, _is.articulationIds());
+
+        Segment* seg = setNoteRest(_is.segment(), _is.track(), nval,
+                                   _is.duration().fraction(), stemDirection, forceAccidental, _is.articulationIds());
+        if (!seg) {
+            ret = make_ret(Ret::Code::UnknownError);
+        }
+
         _is.setAccidentalType(AccidentalType::NONE);
     }
 
     if (cr && !st->isTabStaff(cr->tick())) {
         _is.moveToNextInputPos();
     }
+
+    return ret;
 }
 
 //---------------------------------------------------------
 //   repitchNote
 //---------------------------------------------------------
 
-void Score::repitchNote(const Position& p, bool replace)
+Ret Score::repitchNote(const Position& p, bool replace)
 {
     Segment* s      = p.segment;
     Fraction tick   = s->tick();
@@ -516,7 +534,7 @@ void Score::repitchNote(const Position& p, bool replace)
         AccidentalVal acci
             = (at == AccidentalType::NONE ? s->measure()->findAccidental(s, p.staffIdx, p.line, error) : Accidental::subtype2value(at));
         if (error) {
-            return;
+            return make_ret(Ret::Code::UnknownError);
         }
 
         int step   = absStep(p.line, clef);
@@ -532,7 +550,7 @@ void Score::repitchNote(const Position& p, bool replace)
     }
 
     if (!_is.segment()) {
-        return;
+        return make_ret(Ret::Code::UnknownError);
     }
 
     Chord* chord;
@@ -540,7 +558,7 @@ void Score::repitchNote(const Position& p, bool replace)
     if (!cr) {
         cr = _is.segment()->nextChordRest(_is.track());
         if (!cr) {
-            return;
+            return make_ret(Ret::Code::UnknownError);
         }
     }
     if (cr->isRest()) {   //skip rests
@@ -551,7 +569,7 @@ void Score::repitchNote(const Position& p, bool replace)
         if (next) {
             _is.moveInputPos(next->segment());
         }
-        return;
+        return make_ok();
     } else {
         chord = toChord(cr);
     }
@@ -641,13 +659,15 @@ void Score::repitchNote(const Position& p, bool replace)
     if (next) {
         _is.moveInputPos(next->segment());
     }
+
+    return make_ok();
 }
 
 //---------------------------------------------------------
 //   insertChord
 //---------------------------------------------------------
 
-void Score::insertChord(const Position& pos)
+Ret Score::insertChord(const Position& pos)
 {
     // insert
     // TODO:
@@ -656,18 +676,20 @@ void Score::insertChord(const Position& pos)
 
     EngravingItem* el = selection().element();
     if (!el || !(el->isNote() || el->isRest())) {
-        return;
+        return make_ret(Ret::Code::UnknownError);
     }
     Segment* seg = pos.segment;
     if (seg->splitsTuplet()) {
         MScore::setError(MsError::CANNOT_INSERT_TUPLET);
-        return;
+        return make_ret(Ret::Code::UnknownError);
     }
     if (_is.insertMode()) {
         globalInsertChord(pos);
     } else {
         localInsertChord(pos);
     }
+
+    return make_ok();
 }
 
 //---------------------------------------------------------
