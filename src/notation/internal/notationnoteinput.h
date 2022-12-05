@@ -55,7 +55,7 @@ public:
     void toggleNoteInputMethod(NoteInputMethod method) override;
     void addNote(NoteName noteName, NoteAddingMode addingMode) override;
     void padNote(const Pad& pad) override;
-    void putNote(const PointF& pos, bool replace, bool insert) override;
+    Ret putNote(const PointF& pos, bool replace, bool insert) override;
     void removeNote(const PointF& pos) override;
     async::Notification noteInputStarted() const override;
     async::Notification noteInputEnded() const override;
