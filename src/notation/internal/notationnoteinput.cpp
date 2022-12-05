@@ -351,16 +351,18 @@ void NotationNoteInput::padNote(const Pad& pad)
     notifyAboutStateChanged();
 }
 
-void NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
+mu::Ret NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
 {
     TRACEFUNC;
 
     startEdit();
-    score()->putNote(pos, replace, insert);
+    Ret ret = score()->putNote(pos, replace, insert);
     apply();
 
     notifyNoteAddedChanged();
     notifyAboutStateChanged();
+
+    return ret;
 }
 
 void NotationNoteInput::removeNote(const PointF& pos)

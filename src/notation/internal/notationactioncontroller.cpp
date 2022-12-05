@@ -733,9 +733,10 @@ void NotationActionController::putNote(const actions::ActionData& args)
     bool replace = args.arg<bool>(1);
     bool insert = args.arg<bool>(2);
 
-    noteInput->putNote(pos, replace, insert);
-
-    playSelectedElement();
+    Ret ret = noteInput->putNote(pos, replace, insert);
+    if (ret) {
+        playSelectedElement();
+    }
 }
 
 void NotationActionController::removeNote(const actions::ActionData& args)
