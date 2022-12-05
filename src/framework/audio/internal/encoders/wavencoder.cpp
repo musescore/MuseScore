@@ -135,6 +135,7 @@ size_t WavEncoder::requiredOutputBufferSize(samples_t totalSamplesNumber) const
 
 bool WavEncoder::openDestination(const io::path_t& path)
 {
+    prepareWriting();
     m_fileStream.open(path.toStdString(), std::ios_base::binary);
 
     return m_fileStream.is_open();
@@ -143,4 +144,6 @@ bool WavEncoder::openDestination(const io::path_t& path)
 void WavEncoder::closeDestination()
 {
     m_fileStream.close();
+
+    completeWriting();
 }
