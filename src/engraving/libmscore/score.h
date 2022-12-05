@@ -32,6 +32,7 @@
 
 #include "async/channel.h"
 #include "io/iodevice.h"
+#include "types/ret.h"
 
 #include "modularity/ioc.h"
 #include "draw/iimageprovider.h"
@@ -466,7 +467,7 @@ private:
 
     void cmdToggleVisible();
 
-    void putNote(const Position&, bool replace);
+    Ret putNote(const Position&, bool replace);
 
     void resetTempo();
     void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
@@ -733,14 +734,14 @@ public:
     void cmdDeleteSelection();
     void cmdFullMeasureRest();
 
-    void putNote(const mu::PointF&, bool replace, bool insert);
-    void insertChord(const Position&);
+    Ret putNote(const mu::PointF&, bool replace, bool insert);
+    Ret insertChord(const Position&);
     void localInsertChord(const Position&);
     void globalInsertChord(const Position&);
 
     void cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, const Fraction& lTick, bool link = true, bool spanner = true);
 
-    void repitchNote(const Position& pos, bool replace);
+    Ret repitchNote(const Position& pos, bool replace);
     void regroupNotesAndRests(const Fraction& startTick, const Fraction& endTick, track_idx_t track);
     bool checkTimeDelete(Segment*, Segment*);
     void timeDelete(Measure*, Segment*, const Fraction&);
