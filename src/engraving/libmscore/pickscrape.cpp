@@ -129,8 +129,9 @@ PropertyValue PickScrape::propertyDefault(Pid propertyId) const
         return score()->styleV(Sid::palmMuteFontStyle);
 
     case Pid::BEGIN_TEXT:
-        return PropertyValue::fromValue("P.S."); // TODO: fix the style
     case Pid::CONTINUE_TEXT:
+        return PropertyValue::fromValue("P.S."); // TODO: fix the style
+
     case Pid::END_TEXT:
         return "";
 

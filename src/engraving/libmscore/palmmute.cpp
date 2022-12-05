@@ -207,8 +207,8 @@ PropertyValue PalmMute::propertyDefault(Pid propertyId) const
 //                  return score()->styleV(Sid::palmMuteFontItalic);
 
     case Pid::BEGIN_TEXT:
-        return score()->styleV(Sid::palmMuteText);
     case Pid::CONTINUE_TEXT:
+        return score()->styleV(Sid::palmMuteText);
     case Pid::END_TEXT:
         return "";
 
