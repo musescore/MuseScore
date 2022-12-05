@@ -1026,14 +1026,14 @@ struct ChannelMap {
 
     midi::channel_t resolveChannelForEvent(const mpe::NoteEvent& event)
     {
+        if (m_standardPrograms.empty()) {
+            return 0;
+        }
+
+        const midi::Program& standardProgram = m_standardPrograms.at(0);
+
         if (event.expressionCtx().articulations.contains(mpe::ArticulationType::Standard)
             || event.expressionCtx().articulations.empty()) {
-            if (m_standardPrograms.empty()) {
-                return 0;
-            }
-
-            const midi::Program& standardProgram = m_standardPrograms.at(0);
-
             return resolveChannel(event.arrangementCtx().voiceLayerIndex, mpe::ArticulationType::Standard, standardProgram);
         }
 
@@ -1050,7 +1050,7 @@ struct ChannelMap {
             return resolveChannel(event.arrangementCtx().voiceLayerIndex, search->first, search->second);
         }
 
-        return 0;
+        return resolveChannel(event.arrangementCtx().voiceLayerIndex, mpe::ArticulationType::Standard, standardProgram);
     }
 
     midi::channel_t lastIndex() const
@@ -1068,6 +1068,11 @@ struct ChannelMap {
     {
         VoiceMappings& mapping = m_data[voiceIdx];
         return mapping.find(key) != mapping.cend();
+    }
+
+    const std::map<mpe::voice_layer_idx_t, VoiceMappings>& data() const
+    {
+        return m_data;
     }
 
     async::Channel<midi::channel_t, midi::Program> channelAdded;
