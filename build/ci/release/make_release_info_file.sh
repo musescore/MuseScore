@@ -24,10 +24,13 @@ ARTIFACTS_DIR=build.artifacts
 GITHUB_TOKEN=""
 GITHUB_REPOSITORY=""
 
+RELEASE_TAG=""
+
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --token) GITHUB_TOKEN="$2"; shift ;;
         --repo) GITHUB_REPOSITORY="$2"; shift ;;
+        --release_tag) RELEASE_TAG="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -35,10 +38,13 @@ done
 
 echo "=== Get release info ==="
 
+RELEASE_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest"
+if [ -z "$RELEASE_TAG" ]; then RELEASE_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}"; fi
+
 RELEASE_INFO=$(curl \
   -H "Accept: application/vnd.github+json" \
   -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-  https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest)
+  $RELEASE_URL)
 
 mkdir -p $ARTIFACTS_DIR
 echo $RELEASE_INFO > $ARTIFACTS_DIR/release_info.json

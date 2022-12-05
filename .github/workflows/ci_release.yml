@@ -7,6 +7,9 @@ on:
         description: 'Mode: stable, testing'
         required: true
         default: 'stable'
+      tag:
+        description: 'Release tag (latest stable by default)'
+        required: false
 
 defaults:
   run:
@@ -19,7 +22,7 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v3
 
-      - name: Update info about the latest release in musescore-updates
+      - name: Update info about the release in musescore-updates
         run: |
           S3_URL="s3://musescore-updates/feed/latest.xml"
           if [ ${{ github.event.inputs.mode }} == "testing" ]; then
@@ -29,6 +32,7 @@ jobs:
           sudo bash ./build/ci/release/make_release_info_file.sh \
             --token ${{ secrets.GITHUB_TOKEN }} \
             --repo ${{ github.repository }} \
+            --release_tag ${{ github.event.inputs.tag }}
 
           sudo bash ./build/ci/release/push_file_to_s3.sh \
             --s3_key ${{ secrets.S3_KEY_UPDATE }} \
