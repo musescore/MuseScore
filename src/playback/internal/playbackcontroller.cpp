@@ -1045,6 +1045,10 @@ void PlaybackController::updateMuteStates()
                              || (hasSolo && !soloMuteState.solo)
                              || (!isPartVisible);
 
+        if (notationPlayback()->isChordSymbolsTrack(instrumentTrackId) && !shouldBeMuted) {
+            shouldBeMuted = !notationConfiguration()->isPlayChordSymbolsEnabled();
+        }
+
         if (isRangePlaybackMode && !shouldBeMuted) {
             shouldBeMuted = !mu::contains(allowedInstrumentTrackIdSet, instrumentTrackId);
         }
