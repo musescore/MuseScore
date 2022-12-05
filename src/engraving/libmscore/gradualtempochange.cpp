@@ -61,7 +61,8 @@ static const ElementStyle tempoStyle {
     { Sid::tempoChangeLineWidth, Pid::LINE_WIDTH },
     { Sid::tempoChangeLineStyle, Pid::LINE_STYLE },
     { Sid::tempoChangeDashLineLen, Pid::DASH_LINE_LEN },
-    { Sid::tempoChangeDashGapLen, Pid::DASH_GAP_LEN }
+    { Sid::tempoChangeDashGapLen, Pid::DASH_GAP_LEN },
+    { Sid::tempoFontSpatiumDependent, Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
 };
 
 static const ElementStyle tempoSegmentStyle {
