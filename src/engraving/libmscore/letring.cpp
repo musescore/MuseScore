@@ -186,8 +186,8 @@ PropertyValue LetRing::propertyDefault(Pid propertyId) const
         return score()->styleV(Sid::letRingFontStyle);
 
     case Pid::BEGIN_TEXT:
-        return score()->styleV(Sid::letRingText);
     case Pid::CONTINUE_TEXT:
+        return score()->styleV(Sid::letRingText);
     case Pid::END_TEXT:
         return "";
 
