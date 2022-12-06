@@ -155,6 +155,8 @@ void MixerChannelItem::loadOutputParams(AudioOutputParams&& newParams)
         emit mutedChanged();
     }
 
+    m_outParams.fxChain = newParams.fxChain;
+
     QMap<AudioFxChainOrder, OutputResourceItem*> newItems = m_outputResourceItems;
 
     for (AudioFxChainOrder chainOrder : m_outputResourceItems.keys()) {
