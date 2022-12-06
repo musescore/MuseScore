@@ -1022,18 +1022,26 @@ struct ChannelMap {
     {
         m_standardPrograms = findPrograms(setupData);
         m_articulationMapping = articulationSounds(setupData);
+
+        if (m_standardPrograms.empty()) {
+            return;
+        }
+
+        //!Note ensuring that the default channel being pre-initialized
+        const midi::Program& standardProgram = m_standardPrograms.at(0);
+        resolveChannel(0, mpe::ArticulationType::Standard, standardProgram);
     }
 
     midi::channel_t resolveChannelForEvent(const mpe::NoteEvent& event)
     {
+        if (m_standardPrograms.empty()) {
+            return 0;
+        }
+
+        const midi::Program& standardProgram = m_standardPrograms.at(0);
+
         if (event.expressionCtx().articulations.contains(mpe::ArticulationType::Standard)
             || event.expressionCtx().articulations.empty()) {
-            if (m_standardPrograms.empty()) {
-                return 0;
-            }
-
-            const midi::Program& standardProgram = m_standardPrograms.at(0);
-
             return resolveChannel(event.arrangementCtx().voiceLayerIndex, mpe::ArticulationType::Standard, standardProgram);
         }
 
@@ -1050,7 +1058,7 @@ struct ChannelMap {
             return resolveChannel(event.arrangementCtx().voiceLayerIndex, search->first, search->second);
         }
 
-        return 0;
+        return resolveChannel(event.arrangementCtx().voiceLayerIndex, mpe::ArticulationType::Standard, standardProgram);
     }
 
     midi::channel_t lastIndex() const
