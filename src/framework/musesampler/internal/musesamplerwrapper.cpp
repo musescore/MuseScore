@@ -305,10 +305,6 @@ void MuseSamplerWrapper::setCurrentPosition(const audio::samples_t samples)
         return;
     }
 
-    if (m_currentPosition == samples) {
-        return;
-    }
-
     m_currentPosition = samples;
     m_samplerLib->setPosition(m_sampler, m_currentPosition);
 
