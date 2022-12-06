@@ -1386,13 +1386,13 @@ void GuitarPro::setTempo(int newTempo, Measure* measure)
     if (last_tempo != newTempo) {
         Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
         TempoText* tt = Factory::createTempoText(segment);
-        tt->setTempo(double(newTempo) / 60.0);
+        tt->setTempo(BeatsPerSecond::fromBPM(newTempo));
         tt->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(newTempo));
         tt->setTrack(0);
         segment->add(tt);
         tempo = newTempo;
         last_tempo = newTempo;
-        score->setTempo(measure->tick(), newTempo);
+        score->setTempo(measure->tick(), BeatsPerSecond::fromBPM(newTempo));
     }
 }
 
