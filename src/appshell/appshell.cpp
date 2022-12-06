@@ -69,7 +69,9 @@ int AppShell::run(int argc, char** argv)
     qputenv("QML_DISABLE_DISK_CACHE", "true");
 
 #ifdef Q_OS_LINUX
-    qputenv("QT_QPA_PLATFORMTHEME", "gtk3");
+    if (qEnvironmentVariable("QT_QPA_PLATFORM") != "offscreen") {
+        qputenv("QT_QPA_PLATFORMTHEME", "gtk3");
+    }
 #endif
 
     const char* appName;
@@ -150,9 +152,10 @@ int AppShell::run(int argc, char** argv)
         m->onPreInit(runMode);
     }
 
-    SplashScreen splashScreen;
+    SplashScreen* splashScreen = nullptr;
     if (runMode == framework::IApplication::RunMode::Editor) {
-        splashScreen.show();
+        splashScreen = new SplashScreen();
+        splashScreen->show();
     }
 
     // ====================================================
@@ -257,7 +260,10 @@ int AppShell::run(int argc, char** argv)
 
         engine->load(url);
 
-        splashScreen.close();
+        if (splashScreen) {
+            splashScreen->close();
+            delete splashScreen;
+        }
     }
     }
 
