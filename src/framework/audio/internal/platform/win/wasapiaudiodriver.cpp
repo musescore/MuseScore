@@ -89,6 +89,9 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
     s_data.wasapiClient->setLowLatency(lowLatencyModeRequired);
     s_data.wasapiClient->setSampleRequestCallback(spec.callback);
 
+    LOGI() << "WASAPI: trying to open the audio end-point with the following sample rate - " << spec.sampleRate;
+    LOGI() << "WASAPI: trying to open the audio end-point with the following samples per channel number - " << spec.samples;
+
     hstring deviceId;
 
     if (m_deviceId.empty() || m_deviceId == DEFAULT_DEVICE_ID) {

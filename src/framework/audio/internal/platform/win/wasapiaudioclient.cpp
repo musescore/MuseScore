@@ -167,9 +167,9 @@ HRESULT WasapiAudioClient::ActivateCompleted(IActivateAudioInterfaceAsyncOperati
         // Initialize the AudioClient in Shared Mode with the user specified buffer
         if (!m_isLowLatency) {
             check_hresult(m_audioClient->Initialize(AUDCLNT_SHAREMODE_SHARED,
-                                                    AUDCLNT_STREAMFLAGS_EVENTCALLBACK,
+                                                    AUDCLNT_STREAMFLAGS_EVENTCALLBACK | AUDCLNT_STREAMFLAGS_NOPERSIST,
                                                     m_hnsBufferDuration,
-                                                    m_hnsBufferDuration,
+                                                    0,
                                                     m_mixFormat.get(),
                                                     nullptr));
         } else {
@@ -178,6 +178,20 @@ HRESULT WasapiAudioClient::ActivateCompleted(IActivateAudioInterfaceAsyncOperati
                                                                      m_mixFormat.get(),
                                                                      nullptr));
         }
+
+        LOGI() << "Initialized WASAPI audio endpoint with: ";
+        LOGI() << "Sample rate: " << m_mixFormat->nSamplesPerSec;
+        LOGI() << "Channels: " << m_mixFormat->nChannels;
+        LOGI() << "Average bytes per second: " << m_mixFormat->nAvgBytesPerSec;
+        LOGI() << "Block align: " << m_mixFormat->nBlockAlign;
+        LOGI() << "Bits per sample: " << m_mixFormat->wBitsPerSample;
+        LOGI() << "cbSize: " << m_mixFormat->cbSize;
+        LOGI() << "HnsBufferDuration: " << m_hnsBufferDuration;
+        LOGI() << "Minimal period in frames: " << m_minPeriodInFrames;
+        LOGI() << "Default period in frames: " << m_defaultPeriodInFrames;
+        LOGI() << "Fundamental period in frames: " << m_fundamentalPeriodInFrames;
+        LOGI() << "Max period in frames: " << m_maxPeriodInFrames;
+        LOGI() << "Min period in frames: " << m_minPeriodInFrames;
 
         // Get the maximum size of the AudioClient Buffer
         check_hresult(m_audioClient->GetBufferSize(&m_bufferFrames));
@@ -259,6 +273,7 @@ HRESULT WasapiAudioClient::configureDeviceInternal() noexcept
             audioProps.Options = AUDCLNT_STREAMOPTIONS_RAW;
         }
 
+        LOGI() << "WASAPI: Settings device client properties";
         check_hresult(m_audioClient->SetClientProperties(&audioProps));
 
         // If application already has a preferred source format available,
@@ -276,15 +291,26 @@ HRESULT WasapiAudioClient::configureDeviceInternal() noexcept
         // }
 
         // This sample opens the device is shared mode so we need to find the supported WAVEFORMATEX mix format
+        LOGI() << "WASAPI: Getting device mix format";
         check_hresult(m_audioClient->GetMixFormat(m_mixFormat.put()));
 
         if (!audioProps.bIsOffload) {
+            LOGI() << "WASAPI: Getting shared mode engine period";
             // The wfx parameter below is optional (Its needed only for MATCH_FORMAT clients). Otherwise, wfx will be assumed
             // to be the current engine format based on the processing mode for this stream
             check_hresult(m_audioClient->GetSharedModeEnginePeriod(m_mixFormat.get(), &m_defaultPeriodInFrames,
                                                                    &m_fundamentalPeriodInFrames,
                                                                    &m_minPeriodInFrames, &m_maxPeriodInFrames));
         }
+
+        m_mixFormat->wFormatTag = WAVE_FORMAT_IEEE_FLOAT;
+        m_mixFormat->nChannels = 2;
+        m_mixFormat->wBitsPerSample = 32;
+        m_mixFormat->nAvgBytesPerSec = m_mixFormat->nSamplesPerSec * m_mixFormat->nChannels * sizeof(float);
+        m_mixFormat->nBlockAlign = (m_mixFormat->nChannels * m_mixFormat->wBitsPerSample) / 8;
+        m_mixFormat->cbSize = 0;
+
+        LOGI() << "WASAPI: Device successfully configured";
 
         return S_OK;
     } catch (...) {
@@ -494,6 +520,8 @@ void WasapiAudioClient::onAudioSampleRequested(bool IsSilence)
         }
 
         // Attempt auto-recovery from loss of resources.
+        LOGI() << "Attempting to auto-recovery audio endpoint";
+
         setState(DeviceState::Uninitialized);
         m_audioClient = nullptr;
         m_audioRenderClient = nullptr;
