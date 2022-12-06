@@ -80,3 +80,13 @@ int SpannerFilter::spannerActualDurationTicks(const Spanner* spanner, const int 
 
     return nominalDurationTicks;
 }
+
+bool SpannerFilter::isMultiStaffSpanner(const Spanner* spanner)
+{
+    static const ElementTypeSet MULTI_STAFF_SPANNERS = {
+        ElementType::PEDAL,
+        ElementType::PEDAL_SEGMENT
+    };
+
+    return MULTI_STAFF_SPANNERS.find(spanner->type()) != MULTI_STAFF_SPANNERS.cend();
+}
