@@ -211,15 +211,13 @@ static void createMeasures(mu::engraving::Score* score, const ScoreCreateOptions
                             nKey.setKey(mu::engraving::transposeKey(nKey.key(), diff, part->preferSharpFlat()));
                         }
                         // do not create empty keysig unless custom or atonal
-                        if (nKey.custom() || nKey.isAtonal() || nKey.key() != Key::C) {
-                            staff->setKey(mu::engraving::Fraction(0, 1), nKey);
-                            mu::engraving::Segment* ss
-                                = measure->getSegment(mu::engraving::SegmentType::KeySig, mu::engraving::Fraction(0, 1));
-                            mu::engraving::KeySig* keysig = mu::engraving::Factory::createKeySig(ss);
-                            keysig->setTrack(staffIdx * mu::engraving::VOICES);
-                            keysig->setKeySigEvent(nKey);
-                            ss->add(keysig);
-                        }
+                        staff->setKey(mu::engraving::Fraction(0, 1), nKey);
+                        mu::engraving::Segment* ss
+                            = measure->getSegment(mu::engraving::SegmentType::KeySig, mu::engraving::Fraction(0, 1));
+                        mu::engraving::KeySig* keysig = mu::engraving::Factory::createKeySig(ss);
+                        keysig->setTrack(staffIdx * mu::engraving::VOICES);
+                        keysig->setKeySigEvent(nKey);
+                        ss->add(keysig);
                     }
                 }
 
