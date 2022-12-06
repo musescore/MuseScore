@@ -448,7 +448,7 @@ bool GuitarPro5::readMixChange(Measure* measure)
     }
     if (temp >= 0) {
         if (last_segment) {
-            score->setTempo(last_segment->tick(), double(temp) / 60.0);
+            score->setTempo(last_segment->tick(), BeatsPerSecond::fromBPM(temp));
             last_segment = nullptr;
         }
         if (temp != previousTempo) {
