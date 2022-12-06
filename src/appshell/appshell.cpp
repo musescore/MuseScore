@@ -69,7 +69,9 @@ int AppShell::run(int argc, char** argv)
     qputenv("QML_DISABLE_DISK_CACHE", "true");
 
 #ifdef Q_OS_LINUX
-    qputenv("QT_QPA_PLATFORMTHEME", "gtk3");
+    if (qEnvironmentVariable("QT_QPA_PLATFORM") != "offscreen") {
+        qputenv("QT_QPA_PLATFORMTHEME", "gtk3");
+    }
 #endif
 
     const char* appName;
