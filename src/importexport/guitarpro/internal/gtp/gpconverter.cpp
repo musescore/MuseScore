@@ -67,6 +67,7 @@ static JumpType jumpType(const String& typeString)
 {
     static std::map<String, JumpType> types {
         { u"DaCapo", JumpType::DC },
+        { u"DaSegno", JumpType::DS },
         { u"DaCapoAlFine", JumpType::DC_AL_FINE },
         { u"DaCapoAlCoda", JumpType::DC_AL_CODA },
         { u"DaCapoAlDoubleCoda", JumpType::DC_AL_DBLCODA },
