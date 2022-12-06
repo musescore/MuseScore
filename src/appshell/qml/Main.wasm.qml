@@ -61,9 +61,6 @@ ApplicationWindow {
             id: notationView
             Layout.fillWidth: true
             Layout.fillHeight: true
-
-            Component.onCompleted: {
-            }
         }
 
     }
