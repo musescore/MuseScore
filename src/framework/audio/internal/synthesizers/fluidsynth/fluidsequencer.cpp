@@ -174,6 +174,9 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
     midi::Event event(Event::Opcode::PitchBend, Event::MessageType::ChannelVoice10);
     event.setChannel(channelIdx);
 
+    duration_t minInterval = 10000;
+    duration_t actualInterval = noteEvent.arrangementCtx().actualDuration * percentageToFactor(mpe::ONE_PERCENT * 10);
+
     if (currentType != mpe::ArticulationType::Undefined) {
         auto it = noteEvent.pitchCtx().pitchCurve.cbegin();
         auto last = noteEvent.pitchCtx().pitchCurve.cend();
@@ -189,7 +192,13 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
             }
 
             percentage_t positionDistance = nextToCurrent->first - it->first;
-            int stepsCount = positionDistance / (mpe::ONE_PERCENT * 5);
+            int stepsCount = 0;
+            if (actualInterval < minInterval) {
+                stepsCount = 1;
+            } else {
+                stepsCount = actualInterval / minInterval;
+            }
+
             float posStep = positionDistance / static_cast<float>(stepsCount);
             float pitchStep = (nextToCurrent->second - it->second) / static_cast<float>(stepsCount);
 
