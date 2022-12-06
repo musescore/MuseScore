@@ -780,5 +780,10 @@ InstrumentTrackId PlaybackModel::idKey(const ID& partId, const std::string& inst
 
 mpe::ArticulationsProfilePtr PlaybackModel::defaultActiculationProfile(const InstrumentTrackId& trackId) const
 {
-    return profilesRepository()->defaultProfile(m_playbackDataMap.at(trackId).setupData.category);
+    auto it = m_playbackDataMap.find(trackId);
+    if (it == m_playbackDataMap.cend()) {
+        return nullptr;
+    }
+
+    return profilesRepository()->defaultProfile(it->second.setupData.category);
 }
