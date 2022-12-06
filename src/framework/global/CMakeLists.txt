@@ -82,6 +82,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/translatablestring.h
     ${CMAKE_CURRENT_LIST_DIR}/types/mnemonicstring.cpp
     ${CMAKE_CURRENT_LIST_DIR}/types/mnemonicstring.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/version.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/types/version.h
 
     ${CMAKE_CURRENT_LIST_DIR}/io/ioenums.h
     ${CMAKE_CURRENT_LIST_DIR}/io/path.cpp
