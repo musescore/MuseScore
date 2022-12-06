@@ -1189,7 +1189,7 @@ void Beam::offsetBeamWithAnchorShortening(std::vector<ChordRest*> chordRests, in
         return;
     }
     // min stem lengths according to how many beams there are (starting with 1)
-    static const int minStemLengths[] = { 11, 13, 15, 18, 21 };
+    static const int minStemLengths[] = { 11, 13, 15, 18, 21, 24, 27, 30 };
     const int middleLine = getMiddleStaffLine(startChord, endChord, staffLines);
     int maxDictatorReduce = stemLengthDictator - minStemLengths[(isStartDictator ? startChord : endChord)->beams() - 1];
     maxDictatorReduce = std::min(abs(dictator - middleLine), maxDictatorReduce);
