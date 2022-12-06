@@ -1036,6 +1036,10 @@ void PlaybackController::updateMuteStates()
             continue;
         }
 
+        if (instrumentTrackId == notationPlayback()->metronomeTrackId()) {
+            continue;
+        }
+
         const Part* part = notationParts->part(instrumentTrackId.partId);
         bool isPartVisible = part && part->show();
 
