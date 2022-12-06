@@ -389,6 +389,8 @@ class StringList : public std::vector<String>
 {
 public:
     StringList() = default;
+    StringList(std::initializer_list<String> l)
+        : std::vector<String>(l) {}
 
     StringList& operator <<(const String& s) { return append(s); }
     StringList& append(const String& s) { push_back(s); return *this; }
