@@ -108,8 +108,14 @@ void ChordArticulationsParser::parseSpanners(const Chord* chord, const Rendering
             continue;
         }
 
-        if (spanner->part() != chord->part()) {
-            continue;
+        if (SpannerFilter::isMultiStaffSpanner(spanner)) {
+            if (spanner->part() != chord->part()) {
+                continue;
+            }
+        } else {
+            if (spanner->staffIdx() != chord->staffIdx()) {
+                continue;
+            }
         }
 
         if (!SpannerFilter::isItemPlayable(spanner, ctx)) {
