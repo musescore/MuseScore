@@ -152,9 +152,10 @@ int AppShell::run(int argc, char** argv)
         m->onPreInit(runMode);
     }
 
-    SplashScreen splashScreen;
+    SplashScreen* splashScreen = nullptr;
     if (runMode == framework::IApplication::RunMode::Editor) {
-        splashScreen.show();
+        splashScreen = new SplashScreen();
+        splashScreen->show();
     }
 
     // ====================================================
@@ -259,7 +260,10 @@ int AppShell::run(int argc, char** argv)
 
         engine->load(url);
 
-        splashScreen.close();
+        if (splashScreen) {
+            splashScreen->close();
+            delete splashScreen;
+        }
     }
     }
 
