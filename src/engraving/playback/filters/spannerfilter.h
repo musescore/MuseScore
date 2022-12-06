@@ -36,6 +36,7 @@ public:
     //!HACK Unfortunately, the behavior of different types of "spanners" is not consistent in terms of
     //!     calculation of their durations. This hack would not be actual once we'll get rid of "anchors" system
     static int spannerActualDurationTicks(const Spanner* spanner, const int nominalDurationTicks);
+    static bool isMultiStaffSpanner(const Spanner* spanner);
 
 protected:
     friend class FilterBase<SpannerFilter>;
