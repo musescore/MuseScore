@@ -459,7 +459,8 @@ void Beam::layout()
 
     size_t n = 0;
     for (ChordRest* cr : _elements) {
-        if (cr->measure()->system() != system) {
+        auto newSystem = cr->measure()->system();
+        if (newSystem && newSystem != system) {
             SpannerSegmentType st;
             if (n == 0) {
                 st = SpannerSegmentType::BEGIN;
