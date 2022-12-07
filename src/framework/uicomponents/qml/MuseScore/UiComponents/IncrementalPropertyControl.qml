@@ -188,7 +188,7 @@ Item {
             scrolled = 0
         }
 
-        onCurrentTextEdited: function(newTextValue) {
+        onTextChanged: function(newTextValue) {
             var newVal = parseFloat(newTextValue)
 
             if (isNaN(newVal)) {

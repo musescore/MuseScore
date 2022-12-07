@@ -57,7 +57,7 @@ StyledDialogView {
         TextInputField {
             currentText: propertiesModel.name
 
-            onCurrentTextEdited: function(newTextValue) {
+            onTextChanged: function(newTextValue) {
                 propertiesModel.name = newTextValue
             }
         }

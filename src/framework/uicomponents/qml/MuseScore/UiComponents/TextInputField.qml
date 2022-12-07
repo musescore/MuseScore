@@ -58,8 +58,8 @@ FocusScope {
 
     readonly property alias clearTextButton: clearTextButtonItem
 
-    signal currentTextEdited(var newTextValue)
-    signal userEditedText(var newTextValue)
+    signal textChanged(var newTextValue)
+    signal textEdited(var newTextValue)
     signal textCleared()
     signal textEditingFinished(var newTextValue)
     signal accepted()
@@ -226,7 +226,7 @@ FocusScope {
                     return
                 }
 
-                root.currentTextEdited(text)
+                root.textChanged(text)
             }
 
             onTextEdited: {
@@ -234,7 +234,7 @@ FocusScope {
                     return
                 }
 
-                root.userEditedText(text)
+                root.textEdited(text)
             }
         }
 

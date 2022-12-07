@@ -107,7 +107,7 @@ Rectangle {
             navigation.panel: root.navigationPanel
             navigation.order: 1
 
-            onCurrentTextEdited: function(newTextValue) {
+            onTextChanged: function(newTextValue) {
                 model.search(newTextValue)
             }
 

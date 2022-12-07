@@ -67,7 +67,7 @@ StyledPopupView {
 
             property string name: ""
 
-            onCurrentTextEdited: function(newTextValue) {
+            onTextChanged: function(newTextValue) {
                 name = newTextValue
             }
         }
