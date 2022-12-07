@@ -76,7 +76,7 @@ RowLayout {
             }
         }
 
-        onCurrentTextEdited: function(newValue) {
+        onTextChanged: function(newValue) {
             root.propertyName = newValue
         }
     }
@@ -98,7 +98,7 @@ RowLayout {
             }
         }
 
-        onCurrentTextEdited: function(newValue) {
+        onTextChanged: function(newValue) {
             root.propertyValue = newValue
         }
     }
