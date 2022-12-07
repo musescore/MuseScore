@@ -138,7 +138,7 @@ ListItemBlank {
 
                         currentText: root.title
 
-                        onCurrentTextEdited: function(newTextValue) {
+                        onTextChanged: function(newTextValue) {
                             root.titleEdited(newTextValue)
                         }
 

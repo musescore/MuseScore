@@ -55,7 +55,7 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             anchors.margins: 16
             clearTextButtonVisible: true
-            onCurrentTextEdited: function(newTextValue) {
+            onTextChanged: function(newTextValue) {
                 profModel.find(newTextValue)
             }
         }

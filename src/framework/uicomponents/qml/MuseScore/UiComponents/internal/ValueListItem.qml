@@ -154,7 +154,7 @@ ListItemBlank {
 
             currentText: val
 
-            onCurrentTextEdited: function(newTextValue) {
+            onTextChanged: function(newTextValue) {
                 textControl.changed(newTextValue)
             }
         }
