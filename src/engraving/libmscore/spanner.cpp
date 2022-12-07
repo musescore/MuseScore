@@ -1016,24 +1016,7 @@ Segment* Spanner::startSegment() const
 
 Segment* Spanner::endSegment() const
 {
-    Segment* endSeg = score()->tick2leftSegment(tick2());
-    if (!systemFlag()) {
-        return endSeg;
-    }
-    if (endSeg->rtick().ticks() == 0) {
-        // If this is the first segment of the measure, it may not be the left-most segment at this tick.
-        // There could be segments at the end of the previous measure. We nees those for correct layout of system lines.
-        Measure* prevMeas = endSeg->measure()->prevMeasure();
-        if (prevMeas) {
-            for (Segment& s : prevMeas->segments()) {
-                if (s.tick() == tick2()) {
-                    endSeg = &s;
-                    break;
-                }
-            }
-        }
-    }
-    return endSeg;
+    return score()->tick2leftSegment(tick2());
 }
 
 //---------------------------------------------------------
