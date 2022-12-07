@@ -63,7 +63,7 @@ Part::Part(Score* s)
 
 void Part::initFromInstrTemplate(const InstrumentTemplate* t)
 {
-    _partName = t->trackName;
+    _partName = !t->longNames.empty() ? t->longNames.front().name() : t->trackName;
     setInstrument(Instrument::fromTemplate(t));
 }
 
