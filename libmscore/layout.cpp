@@ -2687,7 +2687,7 @@ void Score::createBeams(LayoutContext& lc, Measure* measure)
                         firstCR = false;
                         // Handle cross-measure beams
                         Beam::Mode mode = cr->beamMode();
-                        if (mode == Beam::Mode::MID || mode == Beam::Mode::END) {
+                        if (mode == Beam::Mode::MID || mode == Beam::Mode::END || mode == Beam::Mode::BEGIN32 || mode == Beam::Mode::BEGIN64) {
                               ChordRest* prevCR = findCR(measure->tick() - Fraction::fromTicks(1), track);
                               if (prevCR) {
                                     const Measure* pm = prevCR->measure();
@@ -4761,7 +4761,7 @@ void LayoutContext::collectPage()
             y = page->system(0)->y() + page->system(0)->height();
             }
       else {
-             y = page->tm();
+            y = page->tm();
             }
       for (int i = 1; i < pSystems; ++i) {
             System* cs = page->system(i);
@@ -4773,7 +4773,7 @@ void LayoutContext::collectPage()
             y += cs->height();
             }
 
-      for (int k = 0;;++k) {
+      for (;;) {
             //
             // calculate distance to previous system
             //
@@ -4892,7 +4892,7 @@ void LayoutContext::collectPage()
                   if (vbox) {
                         dist += vbox->bottomGap();
                         if (footerExtension > 0)
-                            dist += footerExtension;
+                              dist += footerExtension;
                         }
                   else if (!prevSystem->hasFixedDownDistance()) {
                         qreal margin = qMax(curSystem->minBottom(), curSystem->spacerDistance(false));
@@ -4908,9 +4908,9 @@ void LayoutContext::collectPage()
                   qreal footerPadding = 0.0;
                   // ensure it doesn't collide with footer
                   if (footerExtension > 0) {
-                      footerPadding = footerExtension + headerFooterPadding;
-                      dist += footerPadding;
-                  }
+                        footerPadding = footerExtension + headerFooterPadding;
+                        dist += footerPadding;
+                        }
                   dist = qMax(dist, slb);
                   layoutPage(page, endY - (y + dist), footerPadding);
                   // if we collected a system we cannot fit onto this page,
