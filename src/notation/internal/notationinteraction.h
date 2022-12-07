@@ -388,7 +388,6 @@ private:
         mu::engraving::EditData ed;
         std::vector<EngravingItem*> elements;
         std::vector<std::unique_ptr<mu::engraving::ElementGroup> > dragGroups;
-        DragMode mode { DragMode::BothXY };
         void reset();
     };
 

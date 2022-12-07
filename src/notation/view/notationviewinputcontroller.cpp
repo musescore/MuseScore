@@ -708,11 +708,11 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
             viewInteraction()->drag(m_beginPoint, logicPos, mode);
 
             return;
-        } else if (hitElement == nullptr && (keyState & (Qt::ShiftModifier | Qt::ControlModifier))) {
+        } else if (hitElement == nullptr && (keyState & Qt::ShiftModifier)) {
             if (!viewInteraction()->isDragStarted()) {
                 viewInteraction()->startDrag(std::vector<EngravingItem*>(), PointF(), [](const EngravingItem*) { return false; });
             }
-            viewInteraction()->drag(m_beginPoint, logicPos, keyState & Qt::ControlModifier ? DragMode::LassoList : DragMode::BothXY);
+            viewInteraction()->drag(m_beginPoint, logicPos, DragMode::BothXY);
 
             return;
         }
