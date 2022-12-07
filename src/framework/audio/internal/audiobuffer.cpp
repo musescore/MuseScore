@@ -26,7 +26,7 @@
 
 using namespace mu::audio;
 
-static constexpr size_t DEFAULT_SIZE_PER_CHANNEL = 1024 * 16;
+static constexpr size_t DEFAULT_SIZE_PER_CHANNEL = 1024 * 8;
 static constexpr size_t DEFAULT_SIZE = DEFAULT_SIZE_PER_CHANNEL * 2;
 
 static const std::vector<float> SILENT_FRAMES(DEFAULT_SIZE, 0.f);
