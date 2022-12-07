@@ -294,13 +294,11 @@ struct AudioSignalsNotifier {
 
         volume_dbfs_t validatedPressure = std::max(newPressure, MINIMUM_OPERABLE_DBFS_LEVEL);
 
-        if (RealIsEqual(signalVal.amplitude, newAmplitude)
-            && RealIsEqual(signalVal.pressure, validatedPressure)) {
+        if (RealIsEqual(signalVal.pressure, validatedPressure)) {
             return;
         }
 
-        if (std::abs(signalVal.amplitude - newAmplitude) < AMPLITUDE_MINIMAL_VALUABLE_DIFF
-            && std::abs(signalVal.pressure - newPressure) < PRESSURE_MINIMAL_VALUABLE_DIFF) {
+        if (std::abs(signalVal.pressure - validatedPressure) < PRESSURE_MINIMAL_VALUABLE_DIFF) {
             return;
         }
 
@@ -313,7 +311,6 @@ struct AudioSignalsNotifier {
     AudioSignalChanges audioSignalChanges;
 
 private:
-    static constexpr float AMPLITUDE_MINIMAL_VALUABLE_DIFF = 0.1f;
     static constexpr volume_dbfs_t PRESSURE_MINIMAL_VALUABLE_DIFF = 2.5f;
     static constexpr volume_dbfs_t MINIMUM_OPERABLE_DBFS_LEVEL = -100.f;
 
