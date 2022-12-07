@@ -412,9 +412,6 @@ Score::~Score()
         m = nm;
     }
 
-    for (auto it = _spanner.cbegin(); it != _spanner.cend(); ++it) {
-        delete it->second;
-    }
     _spanner.clear();
 
     DeleteAll(_parts);
