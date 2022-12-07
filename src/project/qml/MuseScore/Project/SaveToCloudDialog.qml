@@ -117,7 +117,7 @@ StyledDialogView {
                         navigation.row: 1
                         accessible.name: titleLabel.text + ". " + qsTrc("project/save", "Name") + ": " + currentText
 
-                        onCurrentTextEdited: function(newTextValue) {
+                        onTextChanged: function(newTextValue) {
                             root.name = newTextValue
                         }
                     }

@@ -79,7 +79,7 @@ Item {
             navigation.column: root.navigationColumnOrderStart
             navigation.accessible.name: root.pathFieldTitle + " " + pathField.currentText
 
-            onCurrentTextEdited: function(newTextValue) {
+            onTextChanged: function(newTextValue) {
                 root.pathEdited(newTextValue)
             }
         }
