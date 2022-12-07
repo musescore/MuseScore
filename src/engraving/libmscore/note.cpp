@@ -1708,7 +1708,7 @@ bool Note::readProperties(XmlReader& e)
         }
     } else if (tag == "offset") {
         EngravingItem::readProperties(e);
-    } else if (tag == "ChordLine") {
+    } else if (tag == "ChordLine" && chord()) {
         ChordLine* cl = Factory::createChordLine(chord());
         cl->setNote(this);
         cl->read(e);
