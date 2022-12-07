@@ -50,7 +50,7 @@ StyledDialogView {
 
                 property string value: ""
                 width: 150
-                onCurrentTextEdited: input.value = newTextValue
+                onTextChanged: input.value = newTextValue
             }
 
             StyledTextLabel {

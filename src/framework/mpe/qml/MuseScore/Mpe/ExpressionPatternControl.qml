@@ -119,7 +119,7 @@ Column {
                 bottom: 0
             }
 
-            onCurrentTextEdited: function(newTextValue) {
+            onTextChanged: function(newTextValue) {
                 if (root.patternModel) {
                     root.patternModel.updateDynamicOffsetValue(offsetPointIndexSlider.value,
                                                                newTextValue * 100)

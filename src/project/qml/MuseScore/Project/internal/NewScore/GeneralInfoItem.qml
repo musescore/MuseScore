@@ -48,7 +48,7 @@ Column {
 
         navigation.accessible.name: root.title + " " + currentText
 
-        onCurrentTextEdited: function(newTextValue) {
+        onTextChanged: function(newTextValue) {
             root.info = newTextValue
         }
     }

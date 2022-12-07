@@ -28,7 +28,7 @@ TextInputField {
 
     property string searchText: currentText
 
-    onCurrentTextEdited: function(newTextValue) {
+    onTextChanged: function(newTextValue) {
         searchText = newTextValue.trim()
     }
 
