@@ -941,10 +941,6 @@ void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ, co
         }
         initStaff(staff, templ, staffType, staffIndex);
 
-        if (lastStaffIndex > 0) {
-            staff->setBarLineSpan(score()->staff(lastStaffIndex - 1)->barLineSpan());
-        }
-
         insertStaff(staff, staffIndex);
     }
 
