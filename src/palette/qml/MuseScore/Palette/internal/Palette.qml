@@ -24,6 +24,7 @@ import QtQuick 2.8
 import QtQuick.Controls 2.15
 import QtQml.Models 2.2
 
+import MuseScore.Shortcuts 1.0
 import MuseScore.Palette 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
@@ -50,6 +51,7 @@ StyledGridView {
     property bool enableAnimations: true
 
     property bool isInVisibleArea: true
+    property var currentCellIdx
 
     property NavigationPanel navigationPanel: null
     property int navigationRow: 0
@@ -209,6 +211,23 @@ StyledGridView {
         id: dragDropReorderTimer
         interval: 400
     }
+
+    EditShortcutDialog {
+        id: editShortcutDialog
+
+        onApplySequenceRequested: function(newSequence, conflictShortcutIndex, shortcutAction) {
+            console.log("Applying to " + shortcutAction + " with " + newSequence)
+            shortcutsModel.applySequenceToAction(shortcutAction, newSequence, conflictShortcutIndex)
+        }
+
+        property bool canEditCurrentShortcut: Boolean(shortcutsModel.currentShortcut)
+
+        function startEditShortcut(shortcut2change) {
+            editShortcutDialog.clearConflicts()
+            editShortcutDialog.startEdit(shortcut2change, shortcutsModel.shortcuts())
+        }
+    }
+
 
     PaletteGrid {
         id: grid
@@ -515,7 +534,7 @@ StyledGridView {
                 visible: !parent.paletteDrag || parent.dragCopy
             }
 
-            hint: model.toolTip
+            hint: model.cellID
 
             navigation.accessible.name: model.accessibleText
 
@@ -611,13 +630,26 @@ StyledGridView {
                 property bool canEdit: true
 
                 property var items: [
+                    { id: "assign", title: qsTrc("palette", "Assign"), enabled: true },
+                    { id: "delshortcut", title: qsTrc("palette", "Clear Current Shortcut"), enabled: true },
                     { id: "delete", title: qsTrc("palette", "Delete"), icon: IconCode.DELETE_TANK, enabled: contextMenu.canEdit },
                     { id: "properties", title: qsTrc("palette", "Properties…"), enabled: contextMenu.canEdit }
                 ]
 
                 onHandleMenuItem: {
                     switch(itemId) {
+                    case "assign":
+                        paletteView.currentCellIdx = contextMenu.modelIndex
+                        console.log("Adding shortcut for: " + model.cellAction + " with ID:" + model.cellID)
+                        editShortcutDialog.startEditShortcut(shortcutsModel.getShortcut(model.cellAction))
+                        break
+                    case "delshortcut":
+                        shortcutsModel.clearSequenceOfShortcut(model.cellAction)
+                        shortcutsModel.apply()
+                        break
                     case "delete":
+                        shortcutsModel.clearSequenceOfShortcut(model.cellAction)
+                        shortcutsModel.apply()
                         paletteView.paletteController.remove(contextMenu.modelIndex)
                         break
                     case "properties":

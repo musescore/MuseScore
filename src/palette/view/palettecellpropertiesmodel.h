@@ -50,6 +50,7 @@ public:
     bool drawStaff() const;
 
     Q_INVOKABLE void load(const QVariant& properties);
+    Q_INVOKABLE void accept();
     Q_INVOKABLE void reject();
 
 public slots:

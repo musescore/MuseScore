@@ -47,6 +47,7 @@ void EditShortcutModel::load(const QVariant& originShortcut, const QVariantList&
 
     QVariantMap originShortcutMap = originShortcut.toMap();
     std::string originCtx = originShortcutMap.value("context").toString().toStdString();
+    m_originAction = originShortcutMap.value("action").toString();
 
     for (const QVariant& shortcut : allShortcuts) {
         if (shortcut == originShortcut) {
@@ -132,6 +133,11 @@ void EditShortcutModel::checkNewSequenceForConflicts()
     }
 }
 
+void EditShortcutModel::clearConflicts()
+{
+    m_potentialConflictShortcuts.clear();
+}
+
 QString EditShortcutModel::originSequenceInNativeFormat() const
 {
     std::vector<std::string> sequences = Shortcut::sequencesFromString(m_originSequence.toStdString());
@@ -194,4 +200,10 @@ void EditShortcutModel::applyNewSequence()
 QString EditShortcutModel::newSequence() const
 {
     return m_newSequence.toString();
+}
+
+QString EditShortcutModel::originAction() const
+{
+    LOGE() << "Action in cpp: " << m_originAction;
+    return m_originAction;
 }

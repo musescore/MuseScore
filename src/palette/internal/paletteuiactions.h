@@ -45,8 +45,10 @@ public:
     bool actionChecked(const ui::UiAction& act) const override;
     async::Channel<actions::ActionCodeList> actionCheckedChanged() const override;
 
+    void addAction(const ui::UiAction& action);
+
 private:
-    const static ui::UiActionList m_actions;
+    static ui::UiActionList m_actions;
     std::shared_ptr<PaletteActionsController> m_controller;
     async::Channel<actions::ActionCodeList> m_actionEnabledChanged;
     async::Channel<actions::ActionCodeList> m_actionCheckedChanged;

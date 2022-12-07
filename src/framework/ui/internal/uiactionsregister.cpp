@@ -44,7 +44,7 @@ void UiActionsRegister::init()
     });
 }
 
-void UiActionsRegister::reg(const IUiActionsModulePtr& module)
+void UiActionsRegister::reg(const IUiActionsModulePtr& module, bool reload)
 {
     const UiActionList& alist = module->actionsList();
     ActionCodeList newActionCodeList;
@@ -59,6 +59,11 @@ void UiActionsRegister::reg(const IUiActionsModulePtr& module)
 
     updateEnabled(newActionCodeList);
     updateChecked(newActionCodeList);
+
+    if (reload) {
+        shortcutsRegister()->reload();
+    }
+
     updateShortcuts(newActionCodeList);
 
     module->actionEnabledChanged().onReceive(this, [this](const ActionCodeList& codes) {

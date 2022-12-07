@@ -28,11 +28,15 @@
 
 #include "ipaletteprovider.h"
 #include "async/asyncable.h"
+#include "shortcuts/ishortcutsregister.h"
+#include "actions/iactionsdispatcher.h"
+#include "actions/actionable.h"
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 #include "ipaletteconfiguration.h"
 #include "context/iglobalcontext.h"
+#include "workspace/iworkspacesdataprovider.h"
 
 namespace mu::palette {
 class AbstractPaletteController;
@@ -139,6 +143,8 @@ class UserPaletteController : public AbstractPaletteController, public async::As
     INJECT(palette, context::IGlobalContext, globalContext)
     INJECT(palette, framework::IInteractive, interactive)
     INJECT(palette, IPaletteConfiguration, configuration)
+    INJECT(palette, workspace::IWorkspacesDataProvider, workspacesDataProvider)
+    INJECT(palette, IPaletteProvider, paletteProvider)
 
     QAbstractItemModel* _model;
     PaletteTreeModel* _userPalette;
@@ -185,6 +191,7 @@ public:
     void removeSelection(const QModelIndexList&, const QModelIndex& parent = QModelIndex()) override;
 
     void editPaletteProperties(const QModelIndex& index) override;
+
     void editCellProperties(const QModelIndex& index) override;
 
     bool userEditable() const { return _userEditable; }
@@ -199,13 +206,16 @@ public:
 //   PaletteProvider
 // ========================================================
 
-class PaletteProvider : public QObject, public IPaletteProvider, public async::Asyncable
+class PaletteProvider : public QObject, public IPaletteProvider, public async::Asyncable, public mu::actions::Actionable
 {
     Q_OBJECT
 
+    INJECT(palette, mu::shortcuts::IShortcutsRegister, shortcutsRegister)
     INJECT(palette, IPaletteConfiguration, configuration)
     INJECT(palette, framework::IInteractive, interactive)
-
+    INJECT(palette, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(palette, workspace::IWorkspacesDataProvider, workspacesDataProvider)
     Q_PROPERTY(QAbstractItemModel * mainPaletteModel READ mainPaletteModel NOTIFY mainPaletteChanged)
     Q_PROPERTY(mu::palette::AbstractPaletteController * mainPaletteController READ mainPaletteController NOTIFY mainPaletteChanged)
 
@@ -225,9 +235,12 @@ public:
 
     void setDefaultPaletteTree(PaletteTreePtr tree) override;
 
+    void connectOnReceiveCells();
+
     async::Channel<engraving::ElementPtr> addCustomItemRequested() const override;
 
     Q_INVOKABLE QModelIndex poolPaletteIndex(const QModelIndex& index, mu::palette::FilterPaletteTreeModel* poolPalette) const;
+
     Q_INVOKABLE QModelIndex customElementsPaletteIndex(const QModelIndex& index);
 
     Q_INVOKABLE mu::palette::FilterPaletteTreeModel* poolPaletteModel(const QModelIndex& index) const;
@@ -260,6 +273,8 @@ public:
 
     bool isSinglePalette() const;
     bool isSingleClickToOpenPalette() const;
+
+    void savePalette() const;
 
 signals:
     void userPaletteChanged();
@@ -309,6 +324,8 @@ private:
     UserPaletteController* m_customElementsPaletteController = nullptr;
 
     async::Channel<engraving::ElementPtr> m_addCustomItemRequested;
+
+    std::unordered_map<QString, mu::engraving::EngravingItem*> actionToItem;
 };
 }
 

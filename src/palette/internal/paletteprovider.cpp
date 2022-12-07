@@ -21,7 +21,7 @@
  */
 
 #include "paletteprovider.h"
-
+#include "io/buffer.h"
 #include <QFileDialog>
 #include <QStandardItemModel>
 #include <QJsonDocument>
@@ -31,7 +31,7 @@
 
 #include "libmscore/keysig.h"
 #include "libmscore/timesig.h"
-
+#include "engraving/rw/xml.h"
 #include "palettecreator.h"
 #include "view/widgets/keyedit.h"
 #include "view/widgets/timedialog.h"
@@ -45,7 +45,7 @@
 using namespace mu::palette;
 using namespace mu::framework;
 using namespace mu::engraving;
-
+using namespace mu::io;
 // ========================================================
 // PaletteElementEditor
 // ========================================================
@@ -441,6 +441,7 @@ void UserPaletteController::remove(const QModelIndexList& unsortedRemoveIndices,
         case RemoveAction::NoAction:
             break;
         case RemoveAction::Hide:
+            LOGE() << "Setting invisible";
             model()->setData(index, false, PaletteTreeModel::VisibleRole);
             break;
         case RemoveAction::DeletePermanently:
@@ -459,6 +460,8 @@ void UserPaletteController::remove(const QModelIndex& index)
     if (!canEdit(index.parent())) {
         return;
     }
+
+    LOGE() << "In userpc remove";
 
     const bool customItem = index.data(PaletteTreeModel::CustomRole).toBool();
     queryRemove({ index }, customItem ? 1 : 0);
@@ -538,13 +541,22 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
     }
 
     configuration()->paletteCellConfig(cell->id).ch.onReceive(this,
-                                                              [this, srcIndex, cell](
+                                                              [this, cell, srcIndex](
                                                                   const IPaletteConfiguration::PaletteCellConfig& config) {
+        bool writeRequired = cell->name != config.name || cell->mag != config.scale || cell->drawStaff != config.drawStaff
+                             || cell->xoffset != config.xOffset || cell->yoffset != config.yOffset || cell->shortcut != config.shortcut;
+
+        if (!writeRequired) {
+            _userPalette->itemDataChanged(srcIndex);
+            return;
+        }
+
         cell->name = config.name;
         cell->mag = config.scale;
         cell->drawStaff = config.drawStaff;
         cell->xoffset = config.xOffset;
         cell->yoffset = config.yOffset;
+        cell->shortcut = config.shortcut;
         _userPalette->itemDataChanged(srcIndex);
     });
 
@@ -555,6 +567,9 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
     properties["yOffset"] = cell->yoffset;
     properties["scale"] = cell->mag;
     properties["drawStaff"] = cell->drawStaff;
+    properties["shortcutSeq"] = QString::fromStdString(cell->shortcut.sequencesAsString());
+    properties["shortcutCode"] = QString::fromStdString(cell->shortcut.action);
+    properties["shortcutCtx"] = QString::fromStdString(cell->shortcut.context);
 
     QJsonDocument document = QJsonDocument::fromVariant(properties);
     QString uri = QString("musescore://palette/cellproperties?sync=true&properties=%1")
@@ -640,6 +655,20 @@ bool PaletteProvider::isSingleClickToOpenPalette() const
     return configuration()->isSingleClickToOpenPalette().val;
 }
 
+void PaletteProvider::savePalette() const
+{
+    PaletteTreePtr tree = userPaletteTree();
+
+    Buffer buf;
+    buf.open(IODevice::WriteOnly);
+
+    mu::engraving::XmlWriter writer(&buf);
+    tree->write(writer);
+
+    QByteArray newData = buf.data().toQByteArray();
+    workspacesDataProvider()->setRawData(mu::workspace::DataKey::Palettes, newData);
+}
+
 QAbstractItemModel* PaletteProvider::mainPaletteModel()
 {
     if (m_isSearching) {
@@ -648,7 +677,50 @@ QAbstractItemModel* PaletteProvider::mainPaletteModel()
         m_mainPalette = m_visibilityFilterModel;
     }
 
+    connectOnReceiveCells();
+
     return m_mainPalette;
+}
+
+void PaletteProvider::connectOnReceiveCells()
+{
+    actionToItem.clear();
+    LOGE() << "Cells in model: " << PaletteCell::cells.size();
+    for (PaletteCell* cell : PaletteCell::cells) {
+        if (!cell || !cell->element) {
+            continue;
+        }
+
+        configuration()->paletteCellConfig(cell->id).ch.onReceive(this,
+                                                                  [this, cell](
+                                                                      const IPaletteConfiguration::PaletteCellConfig& config) {
+            bool writeRequired = cell->name != config.name || cell->mag != config.scale || cell->drawStaff != config.drawStaff
+                                 || cell->xoffset != config.xOffset || cell->yoffset != config.yOffset || cell->shortcut != config.shortcut || config.writeToFile;
+
+            if (!writeRequired) {
+                return;
+            }
+
+            cell->name = config.name;
+            cell->mag = config.scale;
+            cell->drawStaff = config.drawStaff;
+            cell->xoffset = config.xOffset;
+            cell->yoffset = config.yOffset;
+            cell->shortcut = config.shortcut;
+
+            LOGE() << "Initial OnReceive for ID: " + cell->id + " with writeToFile: " << config.writeToFile;
+            if (config.writeToFile) {
+                savePalette();
+            }
+        });
+
+        QString ac_name = cell->action;
+        actionToItem[ac_name] = cell->element.get();
+        dispatcher()->reg(this, ac_name.toStdString(), [this, ac_name]() {
+            LOGE() << "You are trying to call: " << ac_name;
+            globalContext()->currentNotation()->interaction()->applyPaletteElement(actionToItem[ac_name]);
+        });
+    }
 }
 
 AbstractPaletteController* PaletteProvider::mainPaletteController()
@@ -772,13 +844,17 @@ QAbstractItemModel* PaletteProvider::availableExtraPalettesModel() const
 
 bool PaletteProvider::addPalette(const QPersistentModelIndex& index)
 {
+    // Adding logs to find out if someday later I get an error here again causing wrong IDs of the cells
     if (!index.isValid()) {
+        LOGE() << "addPaletteError: Invalid index";
         return false;
     }
 
     if (index.model() == m_userPaletteModel) {
+        LOGE() << "I am User Palette Model";
         const bool ok = m_userPaletteModel->setData(index, true, PaletteTreeModel::VisibleRole);
         if (!ok) {
+            LOGE() << "addPaletteError: Could not set data in the userPaletteModel";
             return false;
         }
         const QModelIndex parent = index.parent();
@@ -787,12 +863,19 @@ bool PaletteProvider::addPalette(const QPersistentModelIndex& index)
     }
 
     if (index.model() == m_masterPaletteModel) {
+        LOGE() << "I am Master Palette Model";
         QMimeData* data = m_masterPaletteModel->mimeData({ QModelIndex(index) });
         const bool success = m_userPaletteModel->dropMimeData(data, Qt::CopyAction, 0, 0, QModelIndex());
         data->deleteLater();
+
+        if (!success) {
+            LOGE() << "addPaletteError: Success variable in masterPaletteModel: " << success;
+        }
+
         return success;
     }
 
+    LOGE() << "addPaletteError: Running the end false";
     return false;
 }
 
@@ -926,7 +1009,7 @@ bool PaletteProvider::savePalette(const QModelIndex& index)
     if (!pp) {
         return false;
     }
-
+    LOGE() << "Saving palette:" << srcIndex.row();
     const QString path = getPaletteFilename(/* load? */ false, pp->translatedName());
 
     if (path.isEmpty()) {
@@ -966,6 +1049,17 @@ void PaletteProvider::setUserPaletteTree(PaletteTreePtr tree)
         m_userPaletteModel = new PaletteTreeModel(tree, /* parent */ this);
         connect(m_userPaletteModel, &PaletteTreeModel::treeChanged, this, &PaletteProvider::notifyAboutUserPaletteChanged);
     }
+
+    mu::shortcuts::ShortcutList toBeAdded;
+    shortcutsRegister()->mergeShortcuts(toBeAdded, shortcutsRegister()->shortcuts());
+    for (auto x : PaletteCell::allActions) {
+        if (x.isValid()) {
+            toBeAdded.push_back(x);
+        }
+    }
+
+    shortcutsRegister()->setShortcuts(toBeAdded);
+    LOGE() << "In the end total palette cells: " << PaletteCell::allActions.size() << " and with valid shortcuts: " << toBeAdded.size();
 }
 
 void PaletteProvider::setDefaultPaletteTree(PaletteTreePtr tree)
@@ -988,6 +1082,7 @@ void PaletteProvider::write(XmlWriter& xml) const
         return;
     }
     if (const PaletteTree* tree = m_userPaletteModel->paletteTree()) {
+        LOGE() << "Here21";
         tree->write(xml);
     }
 }

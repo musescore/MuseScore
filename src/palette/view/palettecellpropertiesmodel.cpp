@@ -21,7 +21,7 @@
  */
 
 #include "palettecellpropertiesmodel.h"
-
+#include "log.h"
 #include <QJsonDocument>
 
 using namespace mu::palette;
@@ -37,7 +37,11 @@ void PaletteCellPropertiesModel::load(const QVariant& properties)
     m_originConfig.yOffset = map["yOffset"].toDouble();
     m_originConfig.scale = map["scale"].toDouble();
     m_originConfig.drawStaff = map["drawStaff"].toBool();
+    m_originConfig.shortcut.action = map["shortcutCode"].toString().toStdString();
+    m_originConfig.shortcut.context = map["shortcutCtx"].toString().toStdString();
+    m_originConfig.shortcut.sequences = mu::shortcuts::Shortcut::sequencesFromString(map["shortcutSeq"].toString().toStdString());
     m_currentConfig = m_originConfig;
+    m_currentConfig.writeToFile = false;
 
     emit propertiesChanged();
 }
@@ -45,6 +49,13 @@ void PaletteCellPropertiesModel::load(const QVariant& properties)
 void PaletteCellPropertiesModel::reject()
 {
     setConfig(m_originConfig);
+}
+
+void PaletteCellPropertiesModel::accept()
+{
+    m_currentConfig.writeToFile = true;
+    LOGE() << "Setting config?";
+    setConfig(m_currentConfig);
 }
 
 void PaletteCellPropertiesModel::setConfig(const IPaletteConfiguration::PaletteCellConfig& config)

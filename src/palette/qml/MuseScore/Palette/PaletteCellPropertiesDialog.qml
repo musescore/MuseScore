@@ -153,6 +153,7 @@ StyledDialogView {
                 width: (parent.width - parent.spacing) / 2
 
                 onClicked: {
+                    propertiesModel.accept()
                     root.hide()
                 }
             }

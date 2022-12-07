@@ -327,6 +327,7 @@ QByteArray Palette::toMimeData() const
 
 void Palette::write(XmlWriter& xml) const
 {
+    LOGE() << "Writing palette";
     xml.startElement("Palette", { { "name", m_name } });
     xml.tag("type", QMetaEnum::fromType<Type>().valueToKey(int(m_type)));
     xml.tag("gridWidth", m_gridSize.width());
@@ -495,6 +496,7 @@ bool Palette::writeToFile(const QString& p) const
         XmlWriter xml1(&cbuf1);
         xml1.startDocument();
         xml1.startElement("museScore", { { "version", MSC_VERSION } });
+        LOGE() << "Here1";
         write(xml1);
         xml1.endElement();
         cbuf1.close();

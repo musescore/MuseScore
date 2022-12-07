@@ -62,6 +62,7 @@ static void writePalette(const PaletteTreePtr& tree, QByteArray& data)
     Buffer buf;
     buf.open(IODevice::WriteOnly);
     mu::engraving::XmlWriter writer(&buf);
+    LOGE() << "Here22";
     tree->write(writer);
     data = buf.data().toQByteArray();
 }
@@ -78,20 +79,23 @@ void PaletteWorkspaceSetup::setup()
         PaletteTreePtr tree = paletteProvider()->userPaletteTree();
 
         QByteArray newData;
+        LOGE() << "Here221";
         writePalette(tree, newData);
 
         workspacesDataProvider()->setRawData(DataKey::Palettes, newData);
     });
 
     auto loadData = [this]() {
+        //workspacesDataProvider()->setRawData(DataKey::Palettes, "");
         RetVal<QByteArray> data = workspacesDataProvider()->rawData(DataKey::Palettes);
+
         PaletteTreePtr tree;
         if (data.ret && !data.val.isEmpty()) {
             LOGD() << "there is palette data in the workspace, we will use it";
             ByteArray ba = ByteArray::fromQByteArrayNoCopy(data.val);
             tree = readPalette(ba);
         } else {
-            LOGD() << "no palette data in workspace, will use default";
+            LOGD() << "no palette data in workspace, will use default"; // TODO: Do the shortcuts work when no data in workspace?
             tree = PaletteCreator::newDefaultPaletteTree();
         }
         paletteProvider()->setUserPaletteTree(tree);

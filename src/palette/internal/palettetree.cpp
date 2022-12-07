@@ -25,6 +25,7 @@
 #include <QBuffer>
 
 #include "engraving/rw/xml.h"
+#include "log.h"
 
 using namespace mu::palette;
 
@@ -59,6 +60,7 @@ void PaletteTree::write(mu::engraving::XmlWriter& xml) const
     xml.startElement("PaletteBox"); // for compatibility with old palettes file format
 
     for (PalettePtr palette : palettes) {
+        LOGE() << "Here2"; // FINAL!
         palette->write(xml);
     }
 

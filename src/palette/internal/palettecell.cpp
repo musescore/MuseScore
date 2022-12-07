@@ -64,6 +64,7 @@ PaletteCell::PaletteCell(QObject* parent)
     : QObject(parent)
 {
     id = makeId();
+    cells.insert(this);
 }
 
 PaletteCell::PaletteCell(ElementPtr e, const QString& _name, qreal _mag, const QPointF& _offset, const QString& _tag, QObject* parent)
@@ -71,6 +72,7 @@ PaletteCell::PaletteCell(ElementPtr e, const QString& _name, qreal _mag, const Q
 {
     id = makeId();
     drawStaff = needsStaff(element);
+    cells.insert(this);
 }
 
 QAccessibleInterface* PaletteCell::accessibleInterface(QObject* object)
@@ -175,6 +177,7 @@ bool PaletteCell::read(XmlReader& e)
     // pre-3.3 version compatibility
     custom = e.hasAttribute("custom") ? e.intAttribute("custom") : false; // TODO: actually check master palette?
     visible = e.hasAttribute("visible") ? e.intAttribute("visible") : true;
+    shortcut.sequences.clear();
 
     const bool translateElement = e.hasAttribute("trElement") ? e.intAttribute("trElement") : false;
 
@@ -190,6 +193,13 @@ bool PaletteCell::read(XmlReader& e)
             mag = e.readDouble();
         } else if (s == "tag") {
             tag = e.readText();
+        } else if (s == "sctx") {
+            shortcut.context = e.readText().toStdString();
+        } else if (s == "sseq") {
+            shortcut.sequences.push_back(e.readText().toStdString());
+            if (!shortcut.sequencesAsString().empty()) {
+                LOGE() << "Sequence found for: " << name << " as:" << shortcut.sequencesAsString();
+            }
         }
         // added on palettes rework
         // TODO: remove or leave to switch from using attributes later?
@@ -218,7 +228,20 @@ bool PaletteCell::read(XmlReader& e)
         }
     }
 
+    if (shortcut.context.empty()) {
+        shortcut.context = mu::context::CTX_NOTATION_FOCUSED;
+    }
+
     setElementTranslated(translateElement);
+
+    std::stringstream pointerAddr;
+    pointerAddr << element.get();
+    shortcut.action = "palette-item-" + id.toStdString() + "_" + pointerAddr.str();
+
+    action = QString::fromStdString(shortcut.action);
+    PaletteCell::allActions.push_back(shortcut);
+
+    //LOGE() << PaletteCell::allActions.size() << " is the size and the addr is " << pointerAddr.str();
 
     return add && element;
 }
@@ -263,6 +286,19 @@ void PaletteCell::write(XmlWriter& xml) const
     }
     if (mag != 1.0) {
         xml.tag("mag", mag);
+    }
+
+    if (!shortcut.action.empty()) {
+        LOGE() << "Sequence written for: " << name << " as:" << shortcut.sequencesAsString();
+        for (std::string seq : shortcut.sequences) {
+            xml.tag("sseq", QString::fromStdString(seq));
+        }
+
+        if (shortcut.sequences.empty()) {
+            xml.tag("sseq", "");
+        }
+
+        xml.tag("sctx", QString::fromStdString(shortcut.context));
     }
 
     if (untranslatedElement) {

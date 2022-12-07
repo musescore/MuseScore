@@ -83,6 +83,7 @@ void PaletteModule::resolveImports()
 {
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
+        LOGE() << "Registering palette ui actions";
         ar->reg(s_paletteUiActions);
     }
 
@@ -169,6 +170,47 @@ void PaletteModule::onAllInited(const framework::IApplication::RunMode& mode)
     //! NOTE We need to be sure that the workspaces are initialized.
     //! So, we loads these settings on onAllInited
     s_paletteWorkspaceSetup->setup();
+
+    registerCellActions();
+}
+
+void PaletteModule::registerCellActions()
+{
+    LOGE() << "Actions in cell prepped here" << PaletteCell::cells.size() << " where cells in userPaletteModel are: " <<
+        s_paletteProvider->userPaletteModel()->rowCount();
+
+    for (int paletteIt = 0; paletteIt < s_paletteProvider->userPaletteModel()->rowCount(); paletteIt++) {
+        for (int cellIt = 0;
+             cellIt < s_paletteProvider->userPaletteModel()->rowCount(s_paletteProvider->userPaletteModel()->index(paletteIt, 0));
+             cellIt++) {
+            auto it = s_paletteProvider->userPaletteModel()->index(cellIt, 0, s_paletteProvider->userPaletteModel()->index(paletteIt, 0));
+            const PaletteCell* cell = s_paletteProvider->userPaletteModel()->data(it,
+                                                                                  PaletteTreeModel::PaletteCellRole).value<const PaletteCell*>();
+
+            if (cell->action.isEmpty()) {
+                std::stringstream pointerAddr;
+                pointerAddr << cell->element.get();
+                std::string cellAction = "palette-item-" + cell->id.toStdString() + "_" + pointerAddr.str();
+                s_paletteProvider->userPaletteModel()->setData(it, QString::fromStdString(cellAction), PaletteTreeModel::CellActionRole);
+            }
+
+            auto a = UiAction(cell->shortcut.action,
+                              mu::context::UiCtxNotationOpened,
+                              mu::context::CTX_NOTATION_FOCUSED,
+                              TranslatableString("action",
+                                                 ("ID: " + cell->id.toStdString() + " | " + cell->translatedName().toStdString()).c_str()),
+                              TranslatableString("action",
+                                                 ("ID: " + cell->id.toStdString() + " | " + cell->translatedName().toStdString()).c_str())
+                              );
+
+            s_paletteUiActions->addAction(a);
+        }
+    }
+
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(s_paletteUiActions, true);
+    }
 }
 
 void PaletteModule::onDeinit()

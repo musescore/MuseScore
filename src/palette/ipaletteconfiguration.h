@@ -26,7 +26,7 @@
 #include <QSize>
 
 #include "modularity/imoduleexport.h"
-
+#include "shortcuts/shortcutstypes.h"
 #include "types/retval.h"
 #include "io/path.h"
 
@@ -75,6 +75,9 @@ public:
         double yOffset = 0;
         double scale = 0;
         bool drawStaff = false;
+        mu::shortcuts::Shortcut shortcut = mu::shortcuts::Shortcut();
+
+        bool writeToFile = true;
     };
 
     virtual ValCh<PaletteConfig> paletteConfig(const QString& paletteId) const = 0;

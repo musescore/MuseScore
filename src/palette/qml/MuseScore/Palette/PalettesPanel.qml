@@ -24,6 +24,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
+import MuseScore.Shortcuts 1.0
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Palette 1.0
@@ -57,6 +58,8 @@ Item {
 
     Component.onCompleted: {
         contextMenuModel.load()
+        console.log("Loading model from panel")
+        shortcutsModel.load()
     }
 
     PaletteRootModel {
@@ -125,6 +128,10 @@ Item {
             wrapMode: Text.WordWrap
 
             visible: !paletteTree.isResultFound
+        }
+
+        ShortcutsModel {
+            id: shortcutsModel
         }
 
         PaletteTree {
