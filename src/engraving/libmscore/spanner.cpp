@@ -399,21 +399,6 @@ Spanner::Spanner(const Spanner& s)
     }
 }
 
-Spanner::~Spanner()
-{
-    for (SpannerSegment* s : segments) {
-        if (s->parent() == this) {
-            delete s;
-        }
-    }
-
-    for (SpannerSegment* s : unusedSegments) {
-        if (s->parent() == this) {
-            delete s;
-        }
-    }
-}
-
 //---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
