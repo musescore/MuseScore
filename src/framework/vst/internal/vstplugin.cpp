@@ -150,6 +150,9 @@ void VstPlugin::rescanParams()
     m_componentStateBuffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
     m_controllerStateBuffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
 
+    m_componentStateBuffer.setSize(0);
+    m_controllerStateBuffer.setSize(0);
+
     audio::AudioUnitConfig updatedConfig;
 
     component->getState(&m_componentStateBuffer);
