@@ -2941,32 +2941,37 @@ static void createLinkedTabs(MasterScore* score)
             continue;
         }
 
-        part->setStaves(static_cast<int>(stavesInPart));
+        bool needsTabStaff = !part->staff(0)->isDrumStaff(fr);
 
-        Staff* srcStaff = part->staff(0);
-        Staff* dstStaff = part->staff(1);
-        Excerpt::cloneStaff(srcStaff, dstStaff, false);
+        if (needsTabStaff) {
+            part->setStaves(static_cast<int>(stavesInPart));
 
-        static const std::vector<StaffTypes> types {
-            StaffTypes::TAB_4SIMPLE,
-            StaffTypes::TAB_5SIMPLE,
-            StaffTypes::TAB_6SIMPLE,
-            StaffTypes::TAB_7SIMPLE,
-            StaffTypes::TAB_8SIMPLE
-        };
+            Staff* srcStaff = part->staff(0);
+            Staff* dstStaff = part->staff(1);
+            Excerpt::cloneStaff(srcStaff, dstStaff, false);
 
-        int index = (lines >= 4 && lines <= 8) ? lines - 4 : 2;
+            static const std::vector<StaffTypes> types {
+                StaffTypes::TAB_4SIMPLE,
+                StaffTypes::TAB_5SIMPLE,
+                StaffTypes::TAB_6SIMPLE,
+                StaffTypes::TAB_7SIMPLE,
+                StaffTypes::TAB_8SIMPLE
+            };
 
-        dstStaff->setStaffType(fr, *StaffType::preset(types.at(index)));
-        dstStaff->setLines(fr, static_cast<int>(lines));
+            int index = (lines >= 4 && lines <= 8) ? lines - 4 : 2;
+
+            dstStaff->setStaffType(fr, *StaffType::preset(types.at(index)));
+            dstStaff->setLines(fr, static_cast<int>(lines));
+
+            staffIndexesToCopy.insert(curStaffIdx);
+        }
 
         // each spanner moves down to the staff with index,
         // equal to number of spanners operated before it
         indexMapping[curStaffIdx] = stavesOperated;
-        staffIndexesToCopy.insert(curStaffIdx);
         curStaffIdx++;
 
-        stavesOperated += stavesInPart;
+        stavesOperated += needsTabStaff ? stavesInPart : 1;
     }
 
     // moving and copying spanner segments
