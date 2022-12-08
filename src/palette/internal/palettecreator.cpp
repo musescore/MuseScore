@@ -1462,7 +1462,9 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
     for (const auto& pair : defaultPalette ? DEFAULT_TEMPO_CHANGE : MASTER_TEMPO_CHANGE) {
         auto item = makeElement<GradualTempoChange>(gpaletteScore);
         item->setTempoChangeType(pair.first);
-        item->setBeginText(String::fromUtf8(pair.second));
+        const String& text = String::fromUtf8(pair.second);
+        item->setBeginText(text);
+        item->setContinueText(String(u"(%1)").arg(text));
         sp->appendElement(item, pair.second, 1.3)->yoffset = 0.4;
     }
 

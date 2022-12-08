@@ -1379,14 +1379,20 @@ void GPConverter::addTempoMap()
                 }
 
                 _lastGradualTempoChange->setTick2(tick);
+                GradualTempoChangeType tempoChangeType = GradualTempoChangeType::Undefined;
+                String tempoChangeText;
+
                 if (realTemp > previousTempo) {
-                    _lastGradualTempoChange->setTempoChangeType(GradualTempoChangeType::Accelerando);
-                    _lastGradualTempoChange->setBeginText(u"accel");
+                    tempoChangeType =  GradualTempoChangeType::Accelerando;
+                    tempoChangeText = u"accel.";
                 } else {
-                    _lastGradualTempoChange->setTempoChangeType(GradualTempoChangeType::Rallentando);
-                    _lastGradualTempoChange->setBeginText(u"rall");
+                    tempoChangeType = GradualTempoChangeType::Rallentando;
+                    tempoChangeText = u"rall.";
                 }
 
+                _lastGradualTempoChange->setTempoChangeType(tempoChangeType);
+                _lastGradualTempoChange->setBeginText(tempoChangeText);
+                _lastGradualTempoChange->setContinueText(String(u"(%1)").arg(tempoChangeText));
                 _score->addElement(_lastGradualTempoChange);
                 _lastGradualTempoChange = nullptr;
             }
@@ -2396,7 +2402,9 @@ void GPConverter::addHarmonicMark(const GPBeat* gpbeat, ChordRest* cr)
     if (!textLineElems.empty()) {
         auto& elem = textLineElems.back();
         if (elem && elem->isTextLineBase()) {
-            toTextLineBase(elem)->setBeginText(harmonicText(harmonicMarkType));
+            const String& text = harmonicText(harmonicMarkType);
+            toTextLineBase(elem)->setBeginText(text);
+            toTextLineBase(elem)->setContinueText(text);
         }
     }
 }

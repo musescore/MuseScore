@@ -71,6 +71,7 @@
             <HarmonicMark>
               <beginText>Fdbk</beginText>
               <beginTextOffset x="0" y="0"/>
+              <continueText>Fdbk</continueText>
               </HarmonicMark>
             <next>
               <location>
@@ -106,6 +107,7 @@
             <HarmonicMark>
               <beginText>SH</beginText>
               <beginTextOffset x="0" y="0"/>
+              <continueText>SH</continueText>
               </HarmonicMark>
             <next>
               <location>
@@ -141,6 +143,7 @@
             <HarmonicMark>
               <beginText>PH</beginText>
               <beginTextOffset x="0" y="0"/>
+              <continueText>PH</continueText>
               </HarmonicMark>
             <next>
               <location>
@@ -176,6 +179,7 @@
             <HarmonicMark>
               <beginText>TH</beginText>
               <beginTextOffset x="0" y="0"/>
+              <continueText>TH</continueText>
               </HarmonicMark>
             <next>
               <location>
@@ -220,6 +224,7 @@
             <HarmonicMark>
               <beginText>AH</beginText>
               <beginTextOffset x="0" y="0"/>
+              <continueText>AH</continueText>
               </HarmonicMark>
             <next>
               <location>
@@ -255,6 +260,7 @@
             <HarmonicMark>
               <beginText>Fdbk</beginText>
               <beginTextOffset x="0" y="0"/>
+              <continueText>Fdbk</continueText>
               </HarmonicMark>
             <next>
               <location>

@@ -129,8 +129,9 @@ PropertyValue WhammyBar::propertyDefault(Pid propertyId) const
         return score()->styleV(Sid::letRingFontStyle);
 
     case Pid::BEGIN_TEXT:
-        return PropertyValue::fromValue("w/bar"); // TODO: fix the style
     case Pid::CONTINUE_TEXT:
+        return PropertyValue::fromValue("w/bar"); // TODO: fix the style
+
     case Pid::END_TEXT:
         return "";
 
