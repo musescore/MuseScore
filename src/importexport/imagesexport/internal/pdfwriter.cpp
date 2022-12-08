@@ -104,6 +104,8 @@ mu::Ret PdfWriter::writeList(const INotationPtrList& notations, QIODevice& desti
         }
 
         if (notation != firstNotation) {
+            QSizeF size = notation->painting()->pageSizeInch().toQSizeF();
+            pdfWriter.setPageSize(QPageSize(size, QPageSize::Inch));
             pdfWriter.newPage();
         }
 
