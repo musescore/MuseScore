@@ -48,6 +48,7 @@ static const ElementStyle whammyBarStyle {
     { Sid::letRingLineStyle,                     Pid::LINE_STYLE },
     { Sid::letRingDashLineLen,                   Pid::DASH_LINE_LEN },
     { Sid::letRingDashGapLen,                    Pid::DASH_GAP_LEN },
+    { Sid::letRingFontSpatiumDependent,          Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
     { Sid::letRingEndHookType,                   Pid::END_HOOK_TYPE },
     { Sid::letRingLineWidth,                     Pid::LINE_WIDTH },
     { Sid::ottava8VAPlacement,                   Pid::PLACEMENT }
