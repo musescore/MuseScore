@@ -88,6 +88,12 @@ void PlaybackController::init()
 
     m_playbackPositionChanged.onNotify(this, [this]() {
         updateCurrentTempo();
+
+        msecs_t endMsecs = playbackEndMsecs();
+        const LoopBoundaries& loop = notationPlayback()->loopBoundaries();
+        if (m_currentPlaybackTimeMsecs == endMsecs && m_currentPlaybackTimeMsecs != loop.loopOutTick) {
+            stop();
+        }
     });
 }
 
