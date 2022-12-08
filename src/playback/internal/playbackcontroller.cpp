@@ -664,6 +664,7 @@ void PlaybackController::resetCurrentSequence()
     playback()->audioOutput()->clearAllFx();
     playback()->audioOutput()->outputParamsChanged().resetOnReceive(this);
     playback()->audioOutput()->masterOutputParamsChanged().resetOnReceive(this);
+    playback()->audioOutput()->clearMasterOutputParams();
 
     setCurrentPlaybackTime(0);
     setCurrentPlaybackStatus(PlaybackStatus::Stopped);
