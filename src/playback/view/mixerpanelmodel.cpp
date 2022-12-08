@@ -152,7 +152,8 @@ void MixerPanelModel::loadItems()
         }
     }
 
-    m_mixerChannelList.append(buildMasterChannelItem());
+    m_masterChannelItem = buildMasterChannelItem();
+    m_mixerChannelList.append(m_masterChannelItem);
 
     updateItemsPanelsOrder();
     setupConnections();
@@ -213,6 +214,7 @@ void MixerPanelModel::clear()
 {
     TRACEFUNC;
 
+    m_masterChannelItem = nullptr;
     qDeleteAll(m_mixerChannelList);
     m_mixerChannelList.clear();
 }
@@ -248,6 +250,13 @@ void MixerPanelModel::setupConnections()
             item->loadOutputParams(std::move(params));
         }
     });
+
+    playback()->audioOutput()->masterOutputParamsChanged().onReceive(this,
+                                                                     [this](AudioOutputParams params) {
+        if (m_masterChannelItem) {
+            m_masterChannelItem->loadOutputParams(std::move(params));
+        }
+    }, AsyncMode::AsyncSetRepeat);
 }
 
 int MixerPanelModel::resolveInsertIndex(const engraving::InstrumentTrackId& newInstrumentTrackId) const
@@ -397,11 +406,6 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
         LOGE() << "unable to get master output parameters, error code: " << errCode
                << ", " << text;
     });
-
-    playback()->audioOutput()->masterOutputParamsChanged().onReceive(this,
-                                                                     [item](AudioOutputParams params) {
-        item->loadOutputParams(std::move(params));
-    }, AsyncMode::AsyncSetRepeat);
 
     playback()->audioOutput()->masterSignalChanges()
     .onResolve(this, [item](AudioSignalChanges signalChanges) {

@@ -88,6 +88,7 @@ private:
     notation::INotationPartsPtr masterNotationParts() const;
 
     QList<MixerChannelItem*> m_mixerChannelList;
+    MixerChannelItem* m_masterChannelItem = nullptr;
     audio::TrackSequenceId m_currentTrackSequenceId = -1;
 
     ui::NavigationSection* m_itemsNavigationSection = nullptr;
