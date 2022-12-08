@@ -1049,7 +1049,7 @@ void NotationInteraction::endLasso()
 
     score()->addRefresh(m_lasso->canvasBoundingRect());
     m_lasso->setbbox(RectF());
-    score()->lassoSelectEnd(m_dragData.mode != DragMode::LassoList);
+    score()->lassoSelectEnd();
     score()->update();
 }
 
@@ -1059,7 +1059,6 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
         m_dragData.beginMove = fromPos;
         m_dragData.ed.pos = fromPos;
     }
-    m_dragData.mode = mode;
 
     PointF normalizedBegin = m_dragData.beginMove - m_dragData.elementOffset;
     PointF delta = toPos - normalizedBegin;
@@ -1069,7 +1068,6 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     if (constrainDirection) {
         switch (mode) {
         case DragMode::BothXY:
-        case DragMode::LassoList:
             break;
         case DragMode::OnlyX:
             delta.setY(m_dragData.ed.delta.y());
