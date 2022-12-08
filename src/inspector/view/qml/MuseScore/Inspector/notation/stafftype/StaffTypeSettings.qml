@@ -68,7 +68,7 @@ Column {
 
             measureUnitsSymbol: qsTrc("global", "sp")
             step: 0.25
-            decimals: 1
+            decimals: 2
             maxValue: 20
             minValue: -20
 
@@ -130,6 +130,7 @@ Column {
             propertyItem: root.model ? root.model.lineDistance : null
 
             step: 0.25
+            decimals: 2
             maxValue: 3
             minValue: 0
 
