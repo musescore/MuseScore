@@ -1033,13 +1033,12 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
 
         int instrumentNumber = resolveNewInstrumentNumber(pi.instrumentTemplate, parts);
 
-        QString formattedPartName = formatInstrumentTitle(instrument.trackName(), instrument.trait(), instrumentNumber);
         QString longName = !longNames.empty() ? longNames.front().name().toQString() : QString();
         QString formattedLongName = formatInstrumentTitleOnScore(longName, instrument.trait(), instrumentNumber);
         QString shortName = !shortNames.empty() ? shortNames.front().name().toQString() : QString();
         QString formattedShortName = formatInstrumentTitleOnScore(shortName, instrument.trait(), instrumentNumber);
 
-        part->setPartName(formattedPartName);
+        part->setPartName(formattedLongName);
         part->setLongName(formattedLongName);
         part->setShortName(formattedShortName);
 
