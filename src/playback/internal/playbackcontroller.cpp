@@ -736,8 +736,15 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
     }
 
     if (!inParams.isValid()) {
-        const SoundProfile& profile = profilesRepo()->profile(audioSettings()->activeSoundProfile());
-        inParams = { profile.findResource(playbackData.setupData), {} };
+        bool isMetronome = notationPlayback()->metronomeTrackId() == instrumentTrackId;
+
+        if (isMetronome) {
+            const SoundProfile& profile = profilesRepo()->profile(configuration()->basicSoundProfileName());
+            inParams = { profile.findResource(playbackData.setupData), {} };
+        } else {
+            const SoundProfile& profile = profilesRepo()->profile(audioSettings()->activeSoundProfile());
+            inParams = { profile.findResource(playbackData.setupData), {} };
+        }
     }
 
     uint64_t notationPlaybackKey = reinterpret_cast<uint64_t>(notationPlayback().get());
@@ -1173,7 +1180,13 @@ void PlaybackController::applyProfile(const SoundProfileName& profileName)
         return;
     }
 
+    const InstrumentTrackId& metronomeTrackId = notationPlayback()->metronomeTrackId();
+
     for (const auto& pair : m_trackIdMap) {
+        if (pair.first == metronomeTrackId) {
+            continue;
+        }
+
         const mpe::PlaybackData& playbackData = notationPlayback()->trackPlaybackData(pair.first);
 
         AudioInputParams newInputParams { profile.findResource(playbackData.setupData), {} };
