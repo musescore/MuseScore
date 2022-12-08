@@ -1205,6 +1205,10 @@ void NotationInteraction::startDragCopy(const EngravingItem* element, QObject* d
     m_drag = new QDrag(dragSource);
     m_drag->setMimeData(mimeData);
 
+    QObject::connect(m_drag, &QDrag::destroyed, [this]() {
+        m_drag = nullptr;
+    });
+
     static QPixmap pixmap(2, 2); // null or 1x1 crashes on Linux under ChromeOS?!
     pixmap.fill(Qt::white);
 
@@ -1214,8 +1218,10 @@ void NotationInteraction::startDragCopy(const EngravingItem* element, QObject* d
 
 void NotationInteraction::endDragCopy()
 {
-    delete m_drag;
-    m_drag = nullptr;
+    if (m_drag) {
+        delete m_drag;
+        m_drag = nullptr;
+    }
 }
 
 //! NOTE Copied from ScoreView::dragEnterEvent
