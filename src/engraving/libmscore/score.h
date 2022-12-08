@@ -973,7 +973,7 @@ public:
     void setBracketsAndBarlines();
 
     void lassoSelect(const mu::RectF&);
-    void lassoSelectEnd(bool);
+    void lassoSelectEnd();
 
     Page* searchPage(const mu::PointF&) const;
     std::vector<System*> searchSystem(const mu::PointF& p, const System* preferredSystem = nullptr, double spacingFactor = 0.5,

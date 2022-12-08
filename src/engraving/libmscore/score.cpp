@@ -4061,7 +4061,7 @@ void Score::lassoSelect(const RectF& bbox)
 //   lassoSelectEnd
 //---------------------------------------------------------
 
-void Score::lassoSelectEnd(bool convertToRange)
+void Score::lassoSelectEnd()
 {
     int noteRestCount     = 0;
     Segment* startSegment = 0;
@@ -4076,11 +4076,6 @@ void Score::lassoSelectEnd(bool convertToRange)
         return;
     }
     _selection.setState(SelState::LIST);
-
-    if (!convertToRange) {
-        setUpdateAll();
-        return;
-    }
 
     for (const EngravingItem* e : _selection.elements()) {
         if (e->type() != ElementType::NOTE && e->type() != ElementType::REST) {
