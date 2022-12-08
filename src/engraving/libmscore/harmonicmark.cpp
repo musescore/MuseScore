@@ -100,7 +100,7 @@ HarmonicMark::HarmonicMark(EngravingItem* parent)
 
 bool HarmonicMark::setProperty(Pid propertyId, const PropertyValue& value)
 {
-    if (propertyId == Pid::BEGIN_TEXT) {
+    if (propertyId == Pid::BEGIN_TEXT || propertyId == Pid::CONTINUE_TEXT) {
         m_text = value.value<String>();
     }
 
@@ -150,8 +150,8 @@ PropertyValue HarmonicMark::propertyDefault(Pid propertyId) const
         return score()->styleV(Sid::letRingFontStyle);
 
     case Pid::BEGIN_TEXT:
-        return PropertyValue::fromValue(m_text); // TODO: fix the style
     case Pid::CONTINUE_TEXT:
+        return PropertyValue::fromValue(m_text); // TODO: fix the style
     case Pid::END_TEXT:
         return "";
 
