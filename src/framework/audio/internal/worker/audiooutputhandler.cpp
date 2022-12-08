@@ -120,6 +120,19 @@ void AudioOutputHandler::setMasterOutputParams(const AudioOutputParams& params)
     }, AudioThread::ID);
 }
 
+void AudioOutputHandler::clearMasterOutputParams()
+{
+    Async::call(this, [this]() {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        IF_ASSERT_FAILED(mixer()) {
+            return;
+        }
+
+        mixer()->clearMasterOutputParams();
+    }, AudioThread::ID);
+}
+
 Channel<AudioOutputParams> AudioOutputHandler::masterOutputParamsChanged() const
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
