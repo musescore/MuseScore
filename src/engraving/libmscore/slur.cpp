@@ -1053,24 +1053,25 @@ void Slur::slurPos(SlurPos* sp)
     };
     SlurAnchor sa1 = SlurAnchor::NONE;
     SlurAnchor sa2 = SlurAnchor::NONE;
-
-    if (sc && sc->hook() && sc->up() == _up) {
-        sa1 = SlurAnchor::STEM;
-    }
-    if (scr->up() == ecr->up() && scr->up() == _up) {
-        if (stem1 && !stemSideStartForBeam()) {
+    if (staffHasStems) {
+        if (sc && sc->hook() && sc->up() == _up) {
             sa1 = SlurAnchor::STEM;
         }
-        if (stem2 && !stemSideEndForBeam()) {
-            sa2 = SlurAnchor::STEM;
-        }
-    } else if (ecr->segment()->system() != scr->segment()->system()) {
-        // in the case of continued slurs, we anchor to stem when necessary
-        if (scr->up() == _up && stem1 && !scr->beam()) {
-            sa1 = SlurAnchor::STEM;
-        }
-        if (ecr->up() == _up && stem2 && !ecr->beam()) {
-            sa2 = SlurAnchor::STEM;
+        if (scr->up() == ecr->up() && scr->up() == _up) {
+            if (stem1 && !stemSideStartForBeam()) {
+                sa1 = SlurAnchor::STEM;
+            }
+            if (stem2 && !stemSideEndForBeam()) {
+                sa2 = SlurAnchor::STEM;
+            }
+        } else if (ecr->segment()->system() != scr->segment()->system()) {
+            // in the case of continued slurs, we anchor to stem when necessary
+            if (scr->up() == _up && stem1 && !scr->beam()) {
+                sa1 = SlurAnchor::STEM;
+            }
+            if (ecr->up() == _up && stem2 && !ecr->beam()) {
+                sa2 = SlurAnchor::STEM;
+            }
         }
     }
 
