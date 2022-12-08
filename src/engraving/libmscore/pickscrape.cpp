@@ -48,6 +48,7 @@ static const ElementStyle pickScrapeStyle {
     { Sid::palmMuteLineStyle,                     Pid::LINE_STYLE },
     { Sid::palmMuteDashLineLen,                   Pid::DASH_LINE_LEN },
     { Sid::palmMuteDashGapLen,                    Pid::DASH_GAP_LEN },
+    { Sid::palmMuteFontSpatiumDependent,          Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
     { Sid::palmMuteEndHookType,                   Pid::END_HOOK_TYPE },
     { Sid::palmMuteLineWidth,                     Pid::LINE_WIDTH },
     { Sid::palmMutePlacement,                     Pid::PLACEMENT }
