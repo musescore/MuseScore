@@ -65,6 +65,7 @@ Column {
         //! NOTE: Slur/tie uses the direction property,
         // but for convenience we will display it in the placement section
         model: [
+            { text: qsTrc("inspector", "Auto"), value: DirectionTypes.VERTICAL_AUTO },
             { text: qsTrc("inspector", "Above"), value: DirectionTypes.VERTICAL_UP },
             { text: qsTrc("inspector", "Below"), value: DirectionTypes.VERTICAL_DOWN }
         ]
