@@ -159,7 +159,7 @@ void LyricsLine::layout()
                 if (!e || e->type() != ElementType::CHORD) {
                     // nothing to do but set ticks to 0
                     // this will result in melisma being deleted later
-                    lyrics()->undoChangeProperty(Pid::LYRIC_TICKS, 0);
+                    lyrics()->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::fromTicks(0));
                     setTicks(Fraction(0, 1));
                     return;
                 }
