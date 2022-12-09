@@ -4020,7 +4020,7 @@ double Note::computePadding(const EngravingItem* nextItem) const
         padding = std::max(padding, static_cast<double>(score()->styleMM(Sid::graceToMainNoteDist)));
     }
 
-    if (nextItem->isNote()) {
+    if (nextItem->isNote() && !(_lineAttachPoints.empty() || toNote(nextItem)->lineAttachPoints().empty())) {
         // This is where space for minTieLength and minGlissandoLength is allocated by making sure
         // there is enough distance between the attach points
         double minEndPointsDistance = 0.0;
