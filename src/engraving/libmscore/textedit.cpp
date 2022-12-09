@@ -344,10 +344,10 @@ bool TextBase::isEditAllowed(EditData& ed) const
         case Key_Z:
             return true;
         }
-        if (ctrlPressed && altPressed) {
-            if (ed.key == Key_Minus) {
-                return true;
-            }
+    }
+    if (ctrlPressed && altPressed) {
+        if (ed.key == Key_Minus) {
+            return true;
         }
     }
 
@@ -662,11 +662,11 @@ bool TextBase::edit(EditData& ed)
                 insertSym(ed, SymId::dynamicZ);
                 return true;
             }
-            if (ctrlPressed && altPressed) {
-                if (ed.key == Key_Minus) {
-                    insertSym(ed, SymId::lyricsElision);
-                    return true;
-                }
+        }
+        if (ctrlPressed && altPressed) {
+            if (ed.key == Key_Minus) {
+                insertSym(ed, SymId::lyricsElision);
+                return true;
             }
         }
     }
