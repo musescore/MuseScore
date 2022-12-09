@@ -54,6 +54,7 @@ public:
 
     AudioOutputParams masterOutputParams() const;
     void setMasterOutputParams(const AudioOutputParams& params);
+    void clearMasterOutputParams();
     async::Channel<AudioOutputParams> masterOutputParamsChanged() const;
 
     async::Channel<audioch_t, AudioSignalVal> masterAudioSignalChanges() const;
