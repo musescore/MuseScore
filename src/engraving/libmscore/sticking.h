@@ -50,7 +50,6 @@ public:
     void read(XmlReader&) override;
 
     bool isEditAllowed(EditData&) const override;
-    bool edit(EditData&) override;
 };
 } // namespace mu::engraving
 #endif

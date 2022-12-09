@@ -51,7 +51,6 @@ public:
     void layout() override;
 
     bool isEditAllowed(EditData&) const override;
-    bool edit(EditData&) override;
 
     PropertyValue propertyDefault(Pid id) const override;
 
