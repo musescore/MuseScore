@@ -443,6 +443,8 @@ void Lyrics::paste(EditData& ed, const String& txt)
     bool underscore = false;
     score()->startCmd();
 
+    deleteSelectedText(ed);
+
     if (hyph.size() > 1) {
         score()->undo(new InsertText(cursorFromEditData(ed), hyph[0]), &ed);
         hyph.removeAt(0);
