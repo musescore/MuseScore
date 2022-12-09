@@ -261,15 +261,6 @@ bool Fingering::isEditAllowed(EditData& ed) const
     return TextBase::isEditAllowed(ed);
 }
 
-bool Fingering::edit(EditData& ed)
-{
-    if (!isEditAllowed(ed)) {
-        return false;
-    }
-
-    return TextBase::edit(ed);
-}
-
 //---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------

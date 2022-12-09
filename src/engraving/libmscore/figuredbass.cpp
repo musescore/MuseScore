@@ -1323,20 +1323,7 @@ bool FiguredBass::isEditAllowed(EditData& ed) const
         return false;
     }
 
-    if (ed.key == Key_Semicolon || ed.key == Key_Colon) {
-        return true;
-    }
-
     return TextBase::isEditAllowed(ed);
-}
-
-bool FiguredBass::edit(EditData& ed)
-{
-    if (!isEditAllowed(ed)) {
-        return false;
-    }
-
-    return TextBase::edit(ed);
 }
 
 void FiguredBass::endEdit(EditData& ed)

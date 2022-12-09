@@ -282,16 +282,15 @@ public:
 
     FiguredBassItem* createItem(int line) { return new FiguredBassItem(this, line); }
 
-    void      draw(mu::draw::Painter* painter) const override;
-    void      layout() override;
-    void      read(XmlReader&) override;
-    void      setSelected(bool f) override;
-    void      setVisible(bool f) override;
-    void      startEdit(EditData&) override;
-    bool      isEditAllowed(EditData&) const override;
-    bool      edit(EditData&) override;
-    void      endEdit(EditData&) override;
-    void      write(XmlWriter& xml) const override;
+    void draw(mu::draw::Painter* painter) const override;
+    void layout() override;
+    void read(XmlReader&) override;
+    void setSelected(bool f) override;
+    void setVisible(bool f) override;
+    void startEdit(EditData&) override;
+    bool isEditAllowed(EditData&) const override;
+    void endEdit(EditData&) override;
+    void write(XmlWriter& xml) const override;
 
     // read / write MusicXML
     void writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const;
