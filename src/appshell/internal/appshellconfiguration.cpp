@@ -42,7 +42,7 @@ static const Settings::Key HAS_COMPLETED_FIRST_LAUNCH_SETUP(module_name, "applic
 static const Settings::Key STARTUP_MODE_TYPE(module_name, "application/startup/modeStart");
 static const Settings::Key STARTUP_SCORE_PATH(module_name, "application/startup/startScore");
 
-static const std::string MUSESCORE_ONLINE_HANDBOOK_URL_PATH("/redirect/help");
+static const std::string MUSESCORE_ONLINE_HANDBOOK_URL_PATH("/handbook/4");
 static const std::string MUSESCORE_ASK_FOR_HELP_URL_PATH("/redirect/post/question");
 static const std::string MUSESCORE_BUG_REPORT_URL_PATH("/redirect/post/bug-report?locale=");
 static const std::string MUSESCORE_FORUM_URL_PATH("/forum");
