@@ -251,6 +251,11 @@ void Mixer::setMasterOutputParams(const AudioOutputParams& params)
     m_masterOutputParamsChanged.send(params);
 }
 
+void Mixer::clearMasterOutputParams()
+{
+    setMasterOutputParams(AudioOutputParams());
+}
+
 Channel<AudioOutputParams> Mixer::masterOutputParamsChanged() const
 {
     return m_masterOutputParamsChanged;
