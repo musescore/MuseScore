@@ -30,6 +30,7 @@
 #include "libmscore/rest.h"
 #include "libmscore/sig.h"
 #include "libmscore/tempo.h"
+#include "libmscore/staff.h"
 
 #include "utils/arrangementutils.h"
 #include "metaparsers/chordarticulationsparser.h"
@@ -129,12 +130,15 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
     duration_t duration = durationFromTicks(bps.val, durationTicks);
 
     voice_layer_idx_t voiceIdx = static_cast<voice_layer_idx_t>(chordSymbol->voice());
+    Key key = chordSymbol->staff()->key(chordSymbol->tick());
 
     ArticulationMap articulations = makeArticulations(mpe::ArticulationType::Standard, profile, eventTimestamp, duration);
 
     for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
-        int octave = playingOctave(it->first, it->second);
-        pitch_level_t pitchLevel = notePitchLevel(it->second, octave);
+        int pitch = it->first;
+        int tpc = pitch2tpc(pitch, key, Prefer::NEAREST);
+        int octave = playingOctave(pitch, tpc);
+        pitch_level_t pitchLevel = notePitchLevel(tpc, octave);
 
         events.emplace_back(mpe::NoteEvent(eventTimestamp,
                                            duration,
@@ -160,12 +164,15 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const
     PlaybackEventList& events = result[actualTimestamp];
 
     voice_layer_idx_t voiceIdx = static_cast<voice_layer_idx_t>(chordSymbol->voice());
+    Key key = chordSymbol->staff()->key(chordSymbol->tick());
 
     ArticulationMap articulations = makeArticulations(mpe::ArticulationType::Standard, profile, actualTimestamp, actualDuration);
 
     for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
-        int octave = playingOctave(it->first, it->second);
-        pitch_level_t pitchLevel = notePitchLevel(it->second, octave);
+        int pitch = it->first;
+        int tpc = pitch2tpc(pitch, key, Prefer::NEAREST);
+        int octave = playingOctave(pitch, tpc);
+        pitch_level_t pitchLevel = notePitchLevel(tpc, octave);
 
         events.emplace_back(mpe::NoteEvent(actualTimestamp,
                                            actualDuration,
