@@ -2588,7 +2588,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Trumpet", "c-trumpet longName"),
 //: shortName for Trumpet; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Tpt.", "c-trumpet shortName"),
 //: traitName for Trumpet; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "*C", "c-trumpet traitName"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "C", "c-trumpet traitName"),
 //: channel for Trumpet; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "open", "c-trumpet channel"),
 //: channel for Trumpet; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -2608,7 +2608,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "open", "trumpet channel"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "mute", "trumpet channel"),
 
 //: description for Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Trumpet in B♭.", "bb-trumpet description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Trumpet in B♭. Still the most common trumpet in non-orchestral contexts.", "bb-trumpet description"),
 //: trackName for Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Trumpet", "bb-trumpet trackName"),
 //: longName for Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -2616,7 +2616,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Trumpet", "bb-trumpet longName"),
 //: shortName for Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Tpt.", "bb-trumpet shortName"),
 //: traitName for Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "B♭", "bb-trumpet traitName"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "*B♭", "bb-trumpet traitName"),
 //: channel for Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "open", "bb-trumpet channel"),
 //: channel for Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
