@@ -153,10 +153,12 @@ for family in families.values():
 
 # Add articulations to XML tree
 for articulation in articulation_defaults.values():
-    el = ET.SubElement(root, 'Articulation')
+    el = ET.Element('Articulation')
     to_attribute(el, articulation, 'name')
     to_subelement(el, articulation, 'velocity')
     to_subelement(el, articulation, 'gateTime')
+    if el.find('*') is not None:
+        root.append(el)
 
 # Add groups and instruments to XML tree
 for group in groups.values():
@@ -164,6 +166,8 @@ for group in groups.values():
     to_attribute(g_el, group, 'id')
     to_subelement(g_el, group, 'name')
     for instrument in instruments[group['id']].values():
+        if instrument['traitName'] == '[skip]':
+            continue
         el = ET.SubElement(g_el, 'Instrument')
         to_attribute(el, instrument, 'id')
         to_subelement(el, instrument, 'init') # must be first subelement
@@ -404,7 +408,7 @@ with open('instrumentsxml.h', 'w', newline='\n', encoding='utf-8') as f:
     f.write("// Templates\n")
     d = "../templates"
     # sort to get same ordering on all platforms
-    for o in sorted(os.listdir(d)):  
+    for o in sorted(os.listdir(d)):
         ofullPath = os.path.join(d, o)
         if os.path.isdir(ofullPath):
             templateCategory = o.split("-")[1].replace("_", " ")
@@ -433,6 +437,8 @@ with open('instrumentsxml.h', 'w', newline='\n', encoding='utf-8') as f:
         add_translatable_string(f, 'engraving/instruments/group', group['name'])
 
         for instrument in instruments[group['id']].values():
+            if instrument['traitName'] == '[skip]':
+                continue
             f.write('\n')
             instrumentId = instrument['id']
             hasTrait = instrument['traitName'] and instrument['traitName'] != '[hide]'
@@ -445,10 +451,10 @@ with open('instrumentsxml.h', 'w', newline='\n', encoding='utf-8') as f:
                 add_translatable_string_if_not_null(f, 'engraving/instruments', instrument[nameType],
                                                     disambiguation(instrumentId, nameType),
                                                     get_comment(instrument, nameType, hasTrait))
-                
+
             if hasTrait:
                 add_translatable_string_if_not_null(f, 'engraving/instruments', instrument['traitName'],
-                                                    disambiguation(instrumentId, 'traitName'), 
+                                                    disambiguation(instrumentId, 'traitName'),
                                                     get_comment(instrument, 'traitName', hasTrait))
 
             if instrumentId in channels:
