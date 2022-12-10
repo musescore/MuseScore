@@ -4693,7 +4693,7 @@
                   <trackName>Trumpet</trackName>
                   <longName>Trumpet</longName>
                   <shortName>Tpt.</shortName>
-                  <traitName type="transposition">*C</traitName>
+                  <traitName type="transposition">C</traitName>
                   <description>Trumpet in C. Nowadays the most common orchestral trumpet.</description>
                   <musicXMLid>brass.trumpet.c</musicXMLid>
                   <clef>G</clef>
@@ -4734,8 +4734,8 @@
                   <trackName>Trumpet</trackName>
                   <longName>Trumpet</longName>
                   <shortName>Tpt.</shortName>
-                  <traitName type="transposition">B♭</traitName>
-                  <description>Trumpet in B♭.</description>
+                  <traitName type="transposition">*B♭</traitName>
+                  <description>Trumpet in B♭. Still the most common trumpet in non-orchestral contexts.</description>
                   <musicXMLid>brass.trumpet.bflat</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
