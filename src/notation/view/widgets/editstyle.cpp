@@ -829,9 +829,9 @@ EditStyle::EditStyle(QWidget* parent)
         }
 
         if (auto spinBox = qobject_cast<QSpinBox*>(sw.widget)) {
-            connect(spinBox, QOverload<int>::of(&QSpinBox::valueChanged), setSignalMapper, mapFunction);
+            connect(spinBox, QOverload<>::of(&QSpinBox::editingFinished), setSignalMapper, mapFunction);
         } else if (auto doubleSpinBox = qobject_cast<QDoubleSpinBox*>(sw.widget)) {
-            connect(doubleSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), setSignalMapper, mapFunction);
+            connect(doubleSpinBox, QOverload<>::of(&QDoubleSpinBox::editingFinished), setSignalMapper, mapFunction);
         } else if (auto fontComboBox = qobject_cast<QFontComboBox*>(sw.widget)) {
             connect(fontComboBox, &QFontComboBox::currentFontChanged, setSignalMapper, mapFunction);
         } else if (auto comboBox = qobject_cast<QComboBox*>(sw.widget)) {
@@ -895,7 +895,7 @@ EditStyle::EditStyle(QWidget* parent)
     connect(resetTextStyleFontSize, &QToolButton::clicked, [=]() {
         resetTextStyle(TextStylePropertyType::FontSize);
     });
-    connect(textStyleFontSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
+    connect(textStyleFontSize, QOverload<>::of(&QDoubleSpinBox::editingFinished), [=]() {
         textStyleValueChanged(TextStylePropertyType::FontSize, QVariant(textStyleFontSize->value()));
     });
 
@@ -904,7 +904,7 @@ EditStyle::EditStyle(QWidget* parent)
     connect(resetTextStyleLineSpacing, &QToolButton::clicked, [=]() {
         resetTextStyle(TextStylePropertyType::LineSpacing);
     });
-    connect(textStyleLineSpacing, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
+    connect(textStyleLineSpacing, QOverload<>::of(&QDoubleSpinBox::editingFinished), [=]() {
         textStyleValueChanged(TextStylePropertyType::LineSpacing, QVariant(textStyleLineSpacing->value()));
     });
 
@@ -956,7 +956,7 @@ EditStyle::EditStyle(QWidget* parent)
     connect(resetTextStyleFramePadding, &QToolButton::clicked, [=]() {
         resetTextStyle(TextStylePropertyType::FramePadding);
     });
-    connect(textStyleFramePadding, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
+    connect(textStyleFramePadding, QOverload<>::of(&QDoubleSpinBox::editingFinished), [=]() {
         textStyleValueChanged(TextStylePropertyType::FramePadding, textStyleFramePadding->value());
     });
 
@@ -964,7 +964,7 @@ EditStyle::EditStyle(QWidget* parent)
     connect(resetTextStyleFrameBorder, &QToolButton::clicked, [=]() {
         resetTextStyle(TextStylePropertyType::FrameWidth);
     });
-    connect(textStyleFrameBorder, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
+    connect(textStyleFrameBorder, QOverload<>::of(&QDoubleSpinBox::editingFinished), [=]() {
         textStyleValueChanged(TextStylePropertyType::FrameWidth, textStyleFrameBorder->value());
     });
 
@@ -972,7 +972,7 @@ EditStyle::EditStyle(QWidget* parent)
     connect(resetTextStyleFrameBorderRadius, &QToolButton::clicked, [=]() {
         resetTextStyle(TextStylePropertyType::FrameRound);
     });
-    connect(textStyleFrameBorderRadius, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
+    connect(textStyleFrameBorderRadius, QOverload<>::of(&QDoubleSpinBox::editingFinished), [=]() {
         textStyleValueChanged(TextStylePropertyType::FrameRound, textStyleFrameBorderRadius->value());
     });
 
