@@ -431,9 +431,12 @@ void Lyrics::layout2(int nAbove)
 
 void Lyrics::paste(EditData& ed, const String& txt)
 {
-    MuseScoreView* scoreview = ed.view();
+    String correctedText = txt;
+    //! NOTE: Remove formating info. For example, for "<info><info>text" will be "text"
+    correctedText = correctedText.remove(std::regex("\\<(.*?)\\>"));
+
     String regex = String(u"[^\\S") + Char(0xa0) + Char(0x202F) + u"]+";
-    StringList sl = txt.split(std::regex(regex.toStdString()), mu::SkipEmptyParts);
+    StringList sl = correctedText.split(std::regex(regex.toStdString()), mu::SkipEmptyParts);
     if (sl.empty()) {
         return;
     }
@@ -481,6 +484,7 @@ void Lyrics::paste(EditData& ed, const String& txt)
 
     score()->endCmd();
 
+    MuseScoreView* scoreview = ed.view();
     if (minus) {
         scoreview->lyricsMinus();
     } else if (underscore) {
