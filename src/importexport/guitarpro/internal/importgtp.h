@@ -91,6 +91,7 @@ struct GPFermata {
 struct GPLyrics {
     StringList lyrics;
     std::vector<Segment*> segments;
+    std::vector<size_t> lyricPos;
     int fromBeat;
     int beatCounter;
     int lyricTrack;
