@@ -1739,8 +1739,8 @@ void GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
         hnote->setPlay(true);
         note->setPlay(false);
 
-        addTie(gpnote, note);
         note->setHarmonicFret(note->fret() + gpnote->harmonic().fret);
+        m_harmonicNotes[note] = hnote;
     } else {
         note->setHarmonicFret(gpnote->harmonic().fret);
         note->setDisplayFret(Note::DisplayFretOption::NaturalHarmonic);
@@ -2233,20 +2233,42 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note)
 
     using tieMap = std::unordered_map<track_idx_t, std::vector<Tie*> >;
 
-    auto startTie = [](Note* note, Score* sc, tieMap& ties, track_idx_t curTrack) {
+    auto startTie = [](Note* startNote, Score* sc, tieMap& ties, track_idx_t curTrack) {
         Tie* tie = Factory::createTie(sc->dummy());
-        note->add(tie);
+        startNote->add(tie);
         ties[curTrack].push_back(tie);
     };
 
-    auto endTie = [](Note* note, tieMap& ties, track_idx_t curTrack) {
+    auto endTie = [](Note* endNote, tieMap& ties, std::unordered_map<Note*, Note*>& harmonicNotes, track_idx_t curTrack) {
         auto& tiesOnTrack = ties[curTrack];
         for (auto it = tiesOnTrack.rbegin(); it != tiesOnTrack.rend(); it++) {
             Tie* tie = *it;
-            if (tie->startNote()->pitch() == note->pitch() && tie->startNote()->string() == note->string()) {
-                tie->setEndNote(note);
-                note->setTieBack(tie);
+            Note* startNote = tie->startNote();
+            if (startNote->pitch() == endNote->pitch() && startNote->string() == endNote->string()) {
+                tie->setEndNote(endNote);
+                endNote->setTieBack(tie);
                 mu::remove(tiesOnTrack, tie);
+
+                /// handling ties of harmonic notes
+                auto endHarmonicNoteIt = harmonicNotes.find(endNote);
+                if (endHarmonicNoteIt != harmonicNotes.end()) {
+                    auto startHarmonicNoteIt = harmonicNotes.find(startNote);
+                    if (startHarmonicNoteIt != harmonicNotes.end()) {
+                        Note* startHarmonicNote = startHarmonicNoteIt->second;
+                        Note* endHarmonicNote = endHarmonicNoteIt->second;
+                        if (startHarmonicNote && endHarmonicNote) {
+                            Tie* haromnicTie = Factory::createTie(startHarmonicNote);
+                            startHarmonicNote->add(haromnicTie);
+                            haromnicTie->setEndNote(endHarmonicNote);
+                            endHarmonicNote->setTieBack(haromnicTie);
+                        }
+
+                        harmonicNotes.erase(startHarmonicNoteIt);
+                    }
+
+                    harmonicNotes.erase(endHarmonicNoteIt);
+                }
+
                 break;
             }
         }
@@ -2255,10 +2277,10 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note)
     if (gpnote->tieType() == GPNote::TieType::Start) {
         startTie(note, _score, _ties, note->track());
     } else if (gpnote->tieType() == GPNote::TieType::Mediate) {
-        endTie(note, _ties, note->track());
+        endTie(note, _ties, m_harmonicNotes, note->track());
         startTie(note, _score, _ties, note->track());
     } else if (gpnote->tieType() == GPNote::TieType::End) {
-        endTie(note, _ties, note->track());
+        endTie(note, _ties, m_harmonicNotes, note->track());
     }
 }
 
