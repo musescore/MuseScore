@@ -3429,9 +3429,10 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
             return;
         }
     } break;
-    case AddBoxesTarget::AtStartOfScore:
-        beforeBoxIndex = score()->firstMeasure()->index();
-        break;
+    case AddBoxesTarget::AtStartOfScore: {
+        Measure* firstMeasure = score()->firstMeasure();
+        beforeBoxIndex = firstMeasure ? firstMeasure->index() : -1;
+    } break;
     case AddBoxesTarget::AtEndOfScore:
         beforeBoxIndex = -1;
         break;
