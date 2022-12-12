@@ -1094,7 +1094,7 @@ void Chord::computeUp()
                 _up = noteY > desiredY;
             }
         }
-        _beam->layout();
+        _beam->layout1(); // compute beam direction (a full layout is not necessary at this point)
         if (!cross && !_beam->userModified()) {
             _up = _beam->up();
         }
