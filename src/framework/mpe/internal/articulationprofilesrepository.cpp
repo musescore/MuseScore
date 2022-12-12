@@ -249,7 +249,7 @@ PitchPattern ArticulationProfilesRepository::pitchPatternFromJson(const QJsonObj
 
     QJsonArray offsets = obj.value(PITCH_OFFSETS_KEY).toArray();
 
-    for (const QJsonValue& pitchOffset : offsets) {
+    for (const QJsonValue pitchOffset : offsets) {
         QJsonObject offsetObj = pitchOffset.toObject();
 
         result.pitchOffsetMap.emplace(offsetObj.value(OFFSET_POS_KEY).toInt(),
@@ -284,7 +284,7 @@ ExpressionPattern ArticulationProfilesRepository::expressionPatternFromJson(cons
 
     QJsonArray offsets = obj.value(DYNAMIC_OFFSETS_KEY).toArray();
 
-    for (const QJsonValue& offset : offsets) {
+    for (const QJsonValue offset : offsets) {
         QJsonObject offsetObj = offset.toObject();
         result.dynamicOffsetMap.emplace(offsetObj.value(OFFSET_POS_KEY).toInt(),
                                         offsetObj.value(OFFSET_VAL_KEY).toInt());
