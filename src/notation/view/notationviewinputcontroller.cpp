@@ -681,7 +681,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     }
 
     bool isNoteEnterMode = m_view->isNoteEnterMode();
-    bool isDragObjectsAllowed = !(isNoteEnterMode || playbackController()->isPlaying());
+    bool isDragObjectsAllowed = !(isNoteEnterMode || playbackController()->isPlaying() || (event->buttons() & Qt::MiddleButton));
     if (isDragObjectsAllowed) {
         const EngravingItem* hitElement = hitElementContext().element;
 
