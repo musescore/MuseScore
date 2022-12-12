@@ -159,7 +159,7 @@ void MasterScore::rebuildExcerptsMidiMapping()
                 continue;
             }
             assert(p->instruments().size() == masterPart->instruments().size());
-            for (const auto [tick, iMaster] : masterPart->instruments()) {
+            for (const auto&[tick, iMaster] : masterPart->instruments()) {
                 Instrument* iLocal = p->instrument(Fraction::fromTicks(tick));
                 const size_t nchannels = iMaster->channel().size();
                 if (iLocal->channel().size() != nchannels) {

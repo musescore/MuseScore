@@ -185,7 +185,7 @@ io::paths_t ProjectConfiguration::parseRecentProjectsPaths(const Val& value) con
         return result;
     }
 
-    for (const QJsonValue& val : jsonDoc.array()) {
+    for (const QJsonValue val : jsonDoc.array()) {
         result.push_back(val.toString());
     }
 

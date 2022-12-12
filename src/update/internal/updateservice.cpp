@@ -158,7 +158,7 @@ mu::RetVal<ReleaseInfo> UpdateService::parseRelease(const QByteArray& json) cons
     std::string fileSuffix = platformFileSuffix();
 
     QJsonArray assets = release.value("assets").toArray();
-    for (const QJsonValue& asset : assets) {
+    for (const QJsonValue asset : assets) {
         QJsonObject assetObj = asset.toObject();
 
         QString name = assetObj.value("name").toString();
