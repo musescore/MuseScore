@@ -399,7 +399,9 @@ double System::totalBracketOffset(LayoutContext& ctx)
                 dummyBr->setBracketItem(bi);
                 dummyBr->setStaffSpan(firstStaff, lastStaff);
                 dummyBr->layout();
-                bracketWidth[staffIdx] += dummyBr->width();
+                for (staff_idx_t stfIdx = firstStaff; stfIdx <= lastStaff; ++stfIdx) {
+                    bracketWidth[stfIdx] += dummyBr->width();
+                }
                 delete dummyBr;
             }
         }
