@@ -175,7 +175,7 @@ QStringList LearnService::parsePlaylistItemsIds(const QJsonDocument& playlistDoc
     QJsonObject obj = playlistDoc.object();
     QJsonArray items = obj.value("items").toArray();
 
-    for (const QJsonValue& itemVal : items) {
+    for (const QJsonValue itemVal : items) {
         QJsonObject itemObj = itemVal.toObject();
         QJsonObject snippetObj = itemObj.value("snippet").toObject();
         QJsonObject resourceIdObj = snippetObj.value("resourceId").toObject();
@@ -194,7 +194,7 @@ Playlist LearnService::parsePlaylist(const QJsonDocument& playlistDoc) const
     QJsonObject obj = playlistDoc.object();
     QJsonArray items = obj.value("items").toArray();
 
-    for (const QJsonValue& itemVal : items) {
+    for (const QJsonValue itemVal : items) {
         QJsonObject itemObj = itemVal.toObject();
         QJsonObject snippetObj = itemObj.value("snippet").toObject();
 

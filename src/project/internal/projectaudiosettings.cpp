@@ -193,7 +193,7 @@ mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
 
     QJsonArray tracksArray = rootObj.value("tracks").toArray();
 
-    for (const QJsonValue& value : tracksArray) {
+    for (const QJsonValue value : tracksArray) {
         QJsonObject trackObject = value.toObject();
 
         ID partId = trackObject.value("partId").toString();
