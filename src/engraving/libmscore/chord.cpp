@@ -1094,7 +1094,7 @@ void Chord::computeUp()
                 _up = noteY > desiredY;
             }
         }
-        _beam->layout1(); // compute beam direction (a full layout is not necessary at this point)
+        _beam->layout();
         if (!cross && !_beam->userModified()) {
             _up = _beam->up();
         }
@@ -1831,6 +1831,7 @@ void Chord::layoutHook()
 {
     if (!_hook) {
         createHook();
+        computeUp();
     }
     _hook->setHookType(up() ? durationType().hooks() : -durationType().hooks());
     _hook->layout();
