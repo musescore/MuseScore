@@ -158,5 +158,5 @@ mu::io::path_t CloudConfiguration::tokensFilePath() const
 
 QString CloudConfiguration::apiRootUrl() const
 {
-    return "https://api.musescore.com/editor/v1";
+    return "https://desktop.musescore.com/editor/v1";
 }
