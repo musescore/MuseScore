@@ -34,6 +34,37 @@
 using namespace mu::learn;
 using namespace mu::network;
 
+static const Playlist s_startedPlaylist = {
+    { "Nc08RhOQDR4", "Announcing MuseScore 4 - a gigantic overhaul!", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/announcing.jpg", 241 },
+    { "qM1CcIRzJHE", "Important Differences Between MuseScore 3 & MuseScore 4", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/differences_v3.jpg", 341 },
+    { "n7UgN69e2Y8", "MuseScore 4 - Installing Our FREE Orchestral Plugin: Muse Sounds", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/installing.jpg", 63 },
+    { "U7dagae87eM", "Engraving Improvements in MuseScore 4: How They Affect Your Older Scores", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/engraving.jpg", 144 },
+    { "jZtlJ57AheA", "MuseScore in Minutes: Setting up your Score", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/setting_up.jpg", 92 },
+    { "0X8G59wJcXc", "MuseScore in Minutes: The Basics of Score Writing", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/basics_writing.jpg", 262 },
+    { "ailUD3wBBrM", "MuseScore in Minutes: Dynamics, Articulations, Tempo & Text", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/dynamics.jpg", 200 },
+    { "3s3o-01p_5o", "MuseScore in Minutes: Guitar & Percussion", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/guitar.jpg", 167 },
+    { "owDxvIQK4mE", "MuseScore in Minutes: Layouts & Parts", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/layouts.jpg", 297 },
+    { "z4Ecaaqwg8U", "MuseScore in Minutes: Text, Lyrics & Chords", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/text.jpg", 165 },
+    { "a5_GsbdTpKo", "MuseScore in Minutes: Repeats & Jumps", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/repeats.jpg", 161 },
+    { "MAqF3Ok8_Rs", "MuseScore in Minutes: Using MIDI Keyboards", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/midi.jpg", 148 },
+    { "6LP4U_BF23w", "MuseScore in Minutes: Publishing and Saving to the Cloud", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/publishing.jpg", 131 },
+    { "XGo4PJd1lng", "How I Designed a Free Music Font for 5 Million Musicians (MuseScore 3.6)", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/designing.jpg", 1180 }
+};
+
 static int videoDurationSecs(const QString& durationInIsoFormat)
 {
     // NOTE Available ISO8601 duration format: P#Y#M#DT#H#M#S
@@ -64,41 +95,42 @@ static int videoDurationSecs(const QString& durationInIsoFormat)
 
 void LearnService::refreshPlaylists()
 {
-    auto startedPlaylistCallBack = [this](const RetVal<Playlist>& result) {
-        if (!result.ret) {
-            LOGW() << result.ret.toString();
-            return;
-        }
+    //! TODO: Temporary disabled
+//    auto startedPlaylistCallBack = [this](const RetVal<Playlist>& result) {
+//        if (!result.ret) {
+//            LOGW() << result.ret.toString();
+//            return;
+//        }
 
-        if (m_startedPlaylist == result.val) {
-            return;
-        }
+//        if (m_startedPlaylist == result.val) {
+//            return;
+//        }
 
-        m_startedPlaylist = result.val;
-        m_startedPlaylistChannel.send(m_startedPlaylist);
-    };
+//        m_startedPlaylist = result.val;
+//        m_startedPlaylistChannel.send(m_startedPlaylist);
+//    };
 
-    auto advancedPlaylistCallBack = [this](const RetVal<Playlist>& result) {
-        if (!result.ret) {
-            LOGW() << result.ret.toString();
-            return;
-        }
+//    auto advancedPlaylistCallBack = [this](const RetVal<Playlist>& result) {
+//        if (!result.ret) {
+//            LOGW() << result.ret.toString();
+//            return;
+//        }
 
-        if (m_advancedPlaylist == result.val) {
-            return;
-        }
+//        if (m_advancedPlaylist == result.val) {
+//            return;
+//        }
 
-        m_advancedPlaylist = result.val;
-        m_advancedPlaylistChannel.send(m_advancedPlaylist);
-    };
+//        m_advancedPlaylist = result.val;
+//        m_advancedPlaylistChannel.send(m_advancedPlaylist);
+//    };
 
-    QtConcurrent::run(this, &LearnService::th_requestPlaylist, configuration()->startedPlaylistUrl(), startedPlaylistCallBack);
-    QtConcurrent::run(this, &LearnService::th_requestPlaylist, configuration()->advancedPlaylistUrl(), advancedPlaylistCallBack);
+//    QtConcurrent::run(this, &LearnService::th_requestPlaylist, configuration()->startedPlaylistUrl(), startedPlaylistCallBack);
+//    QtConcurrent::run(this, &LearnService::th_requestPlaylist, configuration()->advancedPlaylistUrl(), advancedPlaylistCallBack);
 }
 
 Playlist LearnService::startedPlaylist() const
 {
-    return m_startedPlaylist;
+    return s_startedPlaylist;
 }
 
 mu::async::Channel<Playlist> LearnService::startedPlaylistChanged() const
