@@ -36,6 +36,7 @@ public:
     io::path_t libraryPath() const override;
 
     std::string minimumSupportedVersion() const override;
+    std::string maximumSupportedVersion() const override;
 };
 }
 

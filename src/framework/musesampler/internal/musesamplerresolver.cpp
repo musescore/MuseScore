@@ -190,6 +190,11 @@ bool MuseSamplerResolver::isVersionSupported() const
         return false;
     }
 
+    return isVersionAboveMinSupported() && isVersionBelowMaxSupported();
+}
+
+bool MuseSamplerResolver::isVersionAboveMinSupported() const
+{
     bool ok = true;
     std::array<int, 3> minimumSupported = parseVersion(configuration()->minimumSupportedVersion(), ok);
     if (!ok) {
@@ -209,6 +214,35 @@ bool MuseSamplerResolver::isVersionSupported() const
             if (currentRevisionNum > minimumSupported.at(2)) {
                 return true;
             } else if (currentRevisionNum == minimumSupported.at(2)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool MuseSamplerResolver::isVersionBelowMaxSupported() const
+{
+    bool ok = true;
+    std::array<int, 3> maxSupported = parseVersion(configuration()->maximumSupportedVersion(), ok);
+    if (!ok) {
+        return false;
+    }
+
+    int currentMajorNum = m_libHandler->getVersionMajor();
+    int currentMinorNum = m_libHandler->getVersionMinor();
+    int currentRevisionNum = m_libHandler->getVersionRevision();
+
+    if (currentMajorNum < maxSupported.at(0)) {
+        return true;
+    } else if (currentMajorNum == maxSupported.at(0)) {
+        if (currentMinorNum < maxSupported.at(1)) {
+            return true;
+        } else if (currentMinorNum == maxSupported.at(1)) {
+            if (currentRevisionNum < maxSupported.at(2)) {
+                return true;
+            } else if (currentRevisionNum == maxSupported.at(2)) {
                 return true;
             }
         }

@@ -36,6 +36,7 @@ static const io::path_t DEFAULT_PATH("MuseSamplerCoreLib.dll");
 #endif
 
 static const std::string MINIMUM_SUPPORTED_VERSION = "0.2.2";
+static const std::string MAXIMUM_SUPPORTED_VERSION = "0.4.0";
 
 io::path_t MuseSamplerConfiguration::libraryPath() const
 {
@@ -49,4 +50,9 @@ io::path_t MuseSamplerConfiguration::libraryPath() const
 std::string MuseSamplerConfiguration::minimumSupportedVersion() const
 {
     return MINIMUM_SUPPORTED_VERSION;
+}
+
+std::string MuseSamplerConfiguration::maximumSupportedVersion() const
+{
+    return MAXIMUM_SUPPORTED_VERSION;
 }

@@ -38,6 +38,7 @@ public:
     virtual mu::io::path_t libraryPath() const = 0;
 
     virtual std::string minimumSupportedVersion() const = 0;
+    virtual std::string maximumSupportedVersion() const = 0;
 };
 }
 
