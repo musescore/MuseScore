@@ -894,11 +894,15 @@ bool Beam::calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Bre
     // next note has a beam break
     ChordRest* nextChordRest = _elements[i + 1];
     ChordRest* currChordRest = _elements[i];
+    ChordRest* prevChordRest = _elements[i - 1];
     if (nextChordRest->isChord()) {
         bool nextBreak32 = false;
         bool nextBreak64 = false;
+        bool currBreak32 = false;
+        bool currBreak64 = false;
+        calcBeamBreaks(currChordRest, prevChordRest, prevChordRest->beams(), currBreak32, currBreak64);
         calcBeamBreaks(nextChordRest, currChordRest, level, nextBreak32, nextBreak64);
-        if ((nextBreak32 && level >= 1) || (nextBreak64 && level >= 2)) {
+        if ((nextBreak32 && level >= 1) || (!currBreak32 && nextBreak64 && level >= 2)) {
             return true;
         }
     }
@@ -1034,14 +1038,14 @@ void Beam::calcBeamBreaks(const ChordRest* chord, const ChordRest* prevChord, in
             // this cr starts a tuplet
             int beams = std::max(TDuration(chord->tuplet()->ticks()).hooks(), 1);
             if (beams <= level) {
-                isBroken32 = level >= 1;
+                isBroken32 = level == 1;
                 isBroken64 = level >= 2;
             }
         } else if (prevChord->tuplet() && prevChord->tuplet() != chord->tuplet()) {
             // this is a non-tuplet cr that is first after a tuplet
             int beams = std::max(TDuration(prevChord->tuplet()->ticks()).hooks(), 1);
             if (beams <= level) {
-                isBroken32 = level >= 1;
+                isBroken32 = level == 1;
                 isBroken64 = level >= 2;
             }
         }
@@ -1109,8 +1113,9 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
         // if the beam ends on the last chord
         if (startCr && (endCr || breakBeam)) {
             if ((startCr == endCr || !endCr) && startCr->isChord()) {
-                // since it's the last chord, beamlet always goes before
-                createBeamletSegment(toChord(startCr), true, level);
+                // this chord is either the last chord, or the first (followed by a rest)
+                bool isBefore = !(startCr == chordRests.front());
+                createBeamletSegment(toChord(startCr), isBefore, level);
             } else {
                 createBeamSegment(startCr, endCr, level);
             }
