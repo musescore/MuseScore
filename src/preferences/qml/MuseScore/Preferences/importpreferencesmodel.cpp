@@ -64,6 +64,10 @@ void ImportPreferencesModel::load()
         emit currentShortestNoteChanged(val);
     });
 
+    midiImportExportConfiguration()->roundTempoChanged().onReceive(this, [this](bool val) {
+        emit roundTempoChanged(val);
+    });
+
     meiConfiguration()->meiImportLayoutChanged().onReceive(this, [this](bool val) {
         emit meiImportLayoutChanged(val);
     });
@@ -155,6 +159,11 @@ int ImportPreferencesModel::currentShortestNote() const
     return midiImportExportConfiguration()->midiShortestNote();
 }
 
+bool ImportPreferencesModel::roundTempo() const
+{
+    return midiImportExportConfiguration()->roundTempo();
+}
+
 bool ImportPreferencesModel::needAskAboutApplyingNewStyle() const
 {
     return musicXmlConfiguration()->needAskAboutApplyingNewStyle();
@@ -172,7 +181,6 @@ void ImportPreferencesModel::setStyleFileImportPath(QString path)
     }
 
     notationConfiguration()->setStyleFileImportPath(path.toStdString());
-    emit styleFileImportPathChanged(path);
 }
 
 void ImportPreferencesModel::setCurrentOvertureCharset(QString charset)
@@ -182,7 +190,6 @@ void ImportPreferencesModel::setCurrentOvertureCharset(QString charset)
     }
 
     oveConfiguration()->setImportOvertureCharset(charset.toStdString());
-    emit currentOvertureCharsetChanged(charset);
 }
 
 void ImportPreferencesModel::setImportLayout(bool import)
@@ -192,7 +199,6 @@ void ImportPreferencesModel::setImportLayout(bool import)
     }
 
     musicXmlConfiguration()->setImportLayout(import);
-    emit importLayoutChanged(import);
 }
 
 void ImportPreferencesModel::setImportBreaks(bool import)
@@ -202,7 +208,6 @@ void ImportPreferencesModel::setImportBreaks(bool import)
     }
 
     musicXmlConfiguration()->setImportBreaks(import);
-    emit importBreaksChanged(import);
 }
 
 void ImportPreferencesModel::setNeedUseDefaultFont(bool value)
@@ -212,7 +217,6 @@ void ImportPreferencesModel::setNeedUseDefaultFont(bool value)
     }
 
     musicXmlConfiguration()->setNeedUseDefaultFont(value);
-    emit needUseDefaultFontChanged(value);
 }
 
 void ImportPreferencesModel::setInferTextType(bool value)
@@ -222,7 +226,6 @@ void ImportPreferencesModel::setInferTextType(bool value)
     }
 
     musicXmlConfiguration()->setInferTextType(value);
-    emit inferTextTypeChanged(value);
 }
 
 void ImportPreferencesModel::setCurrentShortestNote(int note)
@@ -232,7 +235,15 @@ void ImportPreferencesModel::setCurrentShortestNote(int note)
     }
 
     midiImportExportConfiguration()->setMidiShortestNote(note);
-    emit currentShortestNoteChanged(note);
+}
+
+void ImportPreferencesModel::setRoundTempo(bool value)
+{
+    if (value == roundTempo()) {
+        return;
+    }
+
+    midiImportExportConfiguration()->setRoundTempo(value);
 }
 
 void ImportPreferencesModel::setNeedAskAboutApplyingNewStyle(bool value)
@@ -242,7 +253,6 @@ void ImportPreferencesModel::setNeedAskAboutApplyingNewStyle(bool value)
     }
 
     musicXmlConfiguration()->setNeedAskAboutApplyingNewStyle(value);
-    emit needAskAboutApplyingNewStyleChanged(value);
 }
 
 void ImportPreferencesModel::setMeiImportLayout(bool import)
@@ -252,5 +262,4 @@ void ImportPreferencesModel::setMeiImportLayout(bool import)
     }
 
     meiConfiguration()->setMeiImportLayout(import);
-    emit meiImportLayoutChanged(import);
 }

@@ -31,7 +31,10 @@ BaseSection {
     property alias shortestNotes: shortestNotesBox.model
     property int currentShortestNote: 0
 
+    property alias roundTempo: roundTempoBox.checked
+
     signal currentShortestNoteChangeRequested(int note)
+    signal roundTempoChangeRequested(bool round)
 
     ComboBoxWithTitle {
         id: shortestNotesBox
@@ -50,6 +53,21 @@ BaseSection {
 
         onValueEdited: function(newIndex, newValue) {
             root.currentShortestNoteChangeRequested(newValue)
+        }
+    }
+
+    CheckBox {
+        id: roundTempoBox
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Round tempos to nearest whole number")
+
+        navigation.name: "RoundTempoBox"
+        navigation.panel: root.navigation
+        navigation.row: 1
+
+        onClicked: {
+            root.roundTempoChangeRequested(!checked)
         }
     }
 }

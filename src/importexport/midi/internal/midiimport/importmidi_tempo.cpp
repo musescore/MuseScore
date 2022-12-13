@@ -30,6 +30,9 @@
 #include "engraving/dom/factory.h"
 #include "importmidi_operations.h"
 
+#include "modularity/ioc.h"
+#include "imidiconfiguration.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
@@ -64,7 +67,7 @@ double findBasicTempo(const std::multimap<int, MTrack>& tracks, bool isHumanPerf
     return 2;     // default beats per second = 120 beats per minute
 }
 
-void setTempoToScore(Score* score, int tick, double beatsPerSecond)
+static void setTempoToScore(Score* score, int tick, double beatsPerSecond, const bool roundTempo)
 {
     if (score->tempomap()->find(tick) != score->tempomap()->end()) {
         return;
@@ -78,7 +81,7 @@ void setTempoToScore(Score* score, int tick, double beatsPerSecond)
 
     auto* data = midiImportOperations.data();
     if (data->trackOpers.showTempoText.value()) {
-        const int tempoInBpm = qRound(beatsPerSecond * 60.0);
+        const double tempoInBpm = roundTempo ? qRound(beatsPerSecond * 60.0) : (beatsPerSecond * 60.0);
 
         Measure* measure = score->tick2measure(Fraction::fromTicks(tick));
         if (!measure) {
@@ -93,25 +96,27 @@ void setTempoToScore(Score* score, int tick, double beatsPerSecond)
 
         TempoText* tempoText = mu::engraving::Factory::createTempoText(segment);
         tempoText->setTempo(beatsPerSecond);
-        tempoText->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(tempoInBpm));
+        tempoText->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(tempoInBpm));
         tempoText->setTrack(0);
         segment->add(tempoText);
         data->hasTempoText = true;          // to show tempo text column in the MIDI import panel
     }
 }
 
-double roundToBpm(double beatsPerSecond)
+static inline double roundToBpm(double beatsPerSecond)
 {
     return qRound(beatsPerSecond * 60.0) / 60.0;
 }
 
-void applyAllTempoEvents(const std::multimap<int, MTrack>& tracks, Score* score)
+static void applyAllTempoEvents(const std::multimap<int, MTrack>& tracks, Score* score, const bool roundTempo)
 {
     for (const auto& track: tracks) {
         if (track.second.isDivisionInTps) {         // ticks per second
             const double ticksPerBeat = Constants::DIVISION;
-            const double beatsPerSecond = roundToBpm(track.second.division / ticksPerBeat);
-            setTempoToScore(score, 0, beatsPerSecond);
+            const double beatsPerSecond = roundTempo
+                                          ? roundToBpm(track.second.division / ticksPerBeat)
+                                          : (track.second.division / ticksPerBeat);
+            setTempoToScore(score, 0, beatsPerSecond, roundTempo);
         } else {        // beats per second
             for (const auto& ie : track.second.mtrack->events()) {
                 const MidiEvent& e = ie.second;
@@ -120,8 +125,10 @@ void applyAllTempoEvents(const std::multimap<int, MTrack>& tracks, Score* score)
                         ie.first, track.second.division, false);
                     const uchar* data = (uchar*)e.edata();
                     const unsigned tempo = data[2] + (data[1] << 8) + (data[0] << 16);
-                    const double beatsPerSecond = roundToBpm(1000000.0 / tempo);
-                    setTempoToScore(score, tick.ticks(), beatsPerSecond);
+                    const double beatsPerSecond =  roundTempo
+                                                  ? roundToBpm(1000000.0 / tempo)
+                                                  : (1000000.0 / tempo);
+                    setTempoToScore(score, tick.ticks(), beatsPerSecond, roundTempo);
                 }
             }
         }
@@ -130,6 +137,9 @@ void applyAllTempoEvents(const std::multimap<int, MTrack>& tracks, Score* score)
 
 void setTempo(const std::multimap<int, MTrack>& tracks, Score* score)
 {
+    muse::Inject<mu::iex::midi::IMidiImportExportConfiguration> configuration;
+    const bool roundTempo = configuration() ? configuration()->roundTempo() : true;
+
     score->tempomap()->clear();
     auto* midiData = midiImportOperations.data();
     std::set<ReducedFraction> beats = midiData->humanBeatData.beatSet;      // copy
@@ -137,7 +147,7 @@ void setTempo(const std::multimap<int, MTrack>& tracks, Score* score)
     if (beats.empty()) {
         // it's most likely not a human performance;
         // we find all tempo events and set tempo changes to score
-        applyAllTempoEvents(tracks, score);
+        applyAllTempoEvents(tracks, score, roundTempo);
     } else {            // calculate and set tempo from adjusted beat locations
         if (midiData->trackOpers.measureCount2xLess.value()) {
             MidiBeat::removeEvery2ndBeat(beats);
@@ -164,10 +174,11 @@ void setTempo(const std::multimap<int, MTrack>& tracks, Score* score)
         averageTempoFactor /= counter;
 
         const double basicTempo = MidiTempo::findBasicTempo(tracks, true);
-        const double tempo = roundToBpm(basicTempo * averageTempoFactor);
+        const double tempo = roundTempo ? roundToBpm(basicTempo * averageTempoFactor)
+                             : (basicTempo * averageTempoFactor);
 
         score->tempomap()->clear();             // use only one tempo marking for all score
-        setTempoToScore(score, 0, tempo);
+        setTempoToScore(score, 0, tempo, roundTempo);
     }
 
     if (score->tempomap()->empty()) {
