@@ -46,6 +46,9 @@ static void updateWindowPosition()
 WinFramelessWindowController::WinFramelessWindowController()
     : FramelessWindowController()
 {
+    memset(&m_monitorInfo, 0, sizeof(MONITORINFO));
+    m_monitorInfo.cbSize = sizeof(MONITORINFO);
+
     qApp->installEventFilter(this);
     qApp->installNativeEventFilter(this);
 }
@@ -129,7 +132,7 @@ bool WinFramelessWindowController::nativeEventFilter(const QByteArray& eventType
     return false;
 }
 
-bool WinFramelessWindowController::removeWindowFrame(MSG* message, long* result) const
+bool WinFramelessWindowController::removeWindowFrame(MSG* message, long* result)
 {
     NCCALCSIZE_PARAMS& params = *reinterpret_cast<NCCALCSIZE_PARAMS*>(message->lParam);
 
@@ -138,11 +141,15 @@ bool WinFramelessWindowController::removeWindowFrame(MSG* message, long* result)
     GetWindowPlacement(s_hwnd, &placement);
 
     if (placement.showCmd == SW_SHOWMAXIMIZED) {
-        qreal borderWidth = this->borderWidth();
-        params.rgrc[0].left += borderWidth;
-        params.rgrc[0].top += borderWidth;
-        params.rgrc[0].right -= borderWidth;
-        params.rgrc[0].bottom -= borderWidth;
+        HMONITOR hMonitor = MonitorFromWindow(message->hwnd, MONITOR_DEFAULTTONULL);
+        if (hMonitor != NULL) {
+            GetMonitorInfoW(hMonitor, &m_monitorInfo);
+        }
+
+        params.rgrc[0].left = m_monitorInfo.rcWork.left;
+        params.rgrc[0].top = m_monitorInfo.rcWork.top;
+        params.rgrc[0].right = m_monitorInfo.rcWork.right;
+        params.rgrc[0].bottom = m_monitorInfo.rcWork.bottom;
     }
 
     /// NOTE: remove window frame
@@ -150,35 +157,34 @@ bool WinFramelessWindowController::removeWindowFrame(MSG* message, long* result)
     return true;
 }
 
-bool WinFramelessWindowController::calculateWindowSize(MSG* message, long* result) const
+bool WinFramelessWindowController::calculateWindowSize(MSG* message, long* result)
 {
-    QWindow* window = mainWindow()->qWindow();
-    if (!window) {
+    if (!isWindowMaximized(message->hwnd)) {
         return false;
     }
 
-    QScreen* windowScreen = window->screen();
-    if (!windowScreen) {
+    RECT windowRect;
+    if (!GetWindowRect(message->hwnd, &windowRect)) {
         return false;
     }
 
-    const QRect availableGeometry = windowScreen->availableGeometry();
-    double scaleFactor = uiConfiguration()->guiScaling();
+    HMONITOR hMonitor = MonitorFromRect(&windowRect, MONITOR_DEFAULTTONULL);
+    if (!hMonitor) {
+        return false;
+    }
+
+    GetMonitorInfoW(hMonitor, &m_monitorInfo);
+    RECT monitorRect = m_monitorInfo.rcMonitor;
+    RECT monitorWorkAreaRect = m_monitorInfo.rcWork;
 
     auto minMaxInfo = reinterpret_cast<MINMAXINFO*>(message->lParam);
 
-    minMaxInfo->ptMaxSize.x = availableGeometry.width() * scaleFactor;
-    minMaxInfo->ptMaxSize.y = availableGeometry.height() * scaleFactor;
-
-    if (windowScreen == QGuiApplication::primaryScreen()) {
-        minMaxInfo->ptMaxPosition.x = availableGeometry.x();
-        minMaxInfo->ptMaxPosition.y = availableGeometry.y();
-    }
-
-    minMaxInfo->ptMinTrackSize.x = window->minimumWidth() * scaleFactor;
-    minMaxInfo->ptMinTrackSize.y = window->minimumHeight() * scaleFactor;
-
-    minMaxInfo->ptMaxTrackSize = minMaxInfo->ptMaxSize;
+    minMaxInfo->ptMaxSize.x = monitorWorkAreaRect.right - monitorWorkAreaRect.left;
+    minMaxInfo->ptMaxSize.y =  monitorWorkAreaRect.bottom - monitorWorkAreaRect.top;
+    minMaxInfo->ptMaxPosition.x = abs(windowRect.left - monitorRect.left);
+    minMaxInfo->ptMaxPosition.y = abs(windowRect.top - monitorRect.top);
+    minMaxInfo->ptMinTrackSize.x =  minMaxInfo->ptMaxSize.x;
+    minMaxInfo->ptMinTrackSize.y =  minMaxInfo->ptMaxSize.y;
 
     *result = 0;
     return true;
@@ -187,8 +193,10 @@ bool WinFramelessWindowController::calculateWindowSize(MSG* message, long* resul
 bool WinFramelessWindowController::processMouseMove(MSG* message, long* result) const
 {
     const LONG borderWidth = this->borderWidth();
-    RECT winrect;
-    GetWindowRect(message->hwnd, &winrect);
+    RECT windowRect;
+    if (!GetWindowRect(message->hwnd, &windowRect)) {
+        return false;
+    }
 
     long x = GET_X_LPARAM(message->lParam);
     long y = GET_Y_LPARAM(message->lParam);
@@ -197,8 +205,8 @@ bool WinFramelessWindowController::processMouseMove(MSG* message, long* result) 
     QRect moveAreaRect = windowTitleBarMoveArea();
     int moveAreaHeight = static_cast<int>(moveAreaRect.height() * scaleFactor);
     int moveAreaWidth = static_cast<int>(moveAreaRect.width() * scaleFactor);
-    int moveAreaX = winrect.left + static_cast<int>(moveAreaRect.x() * scaleFactor);
-    int moveAreaY = winrect.top + borderWidth + static_cast<int>(moveAreaRect.y() * scaleFactor);
+    int moveAreaX = windowRect.left + static_cast<int>(moveAreaRect.x() * scaleFactor);
+    int moveAreaY = windowRect.top + borderWidth + static_cast<int>(moveAreaRect.y() * scaleFactor);
 
     /// NOTE: titlebar`s move area
     if (x >= moveAreaX && x < moveAreaX + moveAreaWidth
@@ -208,53 +216,53 @@ bool WinFramelessWindowController::processMouseMove(MSG* message, long* result) 
     }
 
     /// NOTE: bottom left corner
-    if (x >= winrect.left && x < winrect.left + borderWidth
-        && y < winrect.bottom && y >= winrect.bottom - borderWidth) {
+    if (x >= windowRect.left && x < windowRect.left + borderWidth
+        && y < windowRect.bottom && y >= windowRect.bottom - borderWidth) {
         *result = HTBOTTOMLEFT;
         return true;
     }
 
     /// NOTE: bottom right corner
-    if (x < winrect.right && x >= winrect.right - borderWidth
-        && y < winrect.bottom && y >= winrect.bottom - borderWidth) {
+    if (x < windowRect.right && x >= windowRect.right - borderWidth
+        && y < windowRect.bottom && y >= windowRect.bottom - borderWidth) {
         *result = HTBOTTOMRIGHT;
         return true;
     }
 
     /// NOTE: top left corner
-    if (x >= winrect.left && x < winrect.left + borderWidth
-        && y >= winrect.top && y < winrect.top + borderWidth) {
+    if (x >= windowRect.left && x < windowRect.left + borderWidth
+        && y >= windowRect.top && y < windowRect.top + borderWidth) {
         *result = HTTOPLEFT;
         return true;
     }
 
     /// NOTE: top right corner
-    if (x < winrect.right && x >= winrect.right - borderWidth
-        && y >= winrect.top && y < winrect.top + borderWidth) {
+    if (x < windowRect.right && x >= windowRect.right - borderWidth
+        && y >= windowRect.top && y < windowRect.top + borderWidth) {
         *result = HTTOPRIGHT;
         return true;
     }
 
     /// NOTE: left border
-    if (x >= winrect.left && x < winrect.left + borderWidth) {
+    if (x >= windowRect.left && x < windowRect.left + borderWidth) {
         *result = HTLEFT;
         return true;
     }
 
     /// NOTE: right border
-    if (x < winrect.right && x >= winrect.right - borderWidth) {
+    if (x < windowRect.right && x >= windowRect.right - borderWidth) {
         *result = HTRIGHT;
         return true;
     }
 
     /// NOTE: bottom border
-    if (y < winrect.bottom && y >= winrect.bottom - borderWidth) {
+    if (y < windowRect.bottom && y >= windowRect.bottom - borderWidth) {
         *result = HTBOTTOM;
         return true;
     }
 
     /// NOTE: top border
-    if (y >= winrect.top && y < winrect.top + borderWidth) {
+    if (y >= windowRect.top && y < windowRect.top + borderWidth) {
         *result = HTTOP;
         return true;
     }
@@ -323,6 +331,17 @@ bool WinFramelessWindowController::showSystemMenuIfNeed(MSG* message) const
 
     PostMessage(message->hwnd, WM_SYSCOMMAND, command, 0);
     return true;
+}
+
+bool WinFramelessWindowController::isWindowMaximized(HWND hWnd) const
+{
+    WINDOWPLACEMENT wp;
+    wp.length = sizeof(WINDOWPLACEMENT);
+    if (!GetWindowPlacement(hWnd, &wp)) {
+        return false;
+    }
+
+    return wp.showCmd == SW_MAXIMIZE;
 }
 
 int WinFramelessWindowController::borderWidth() const
