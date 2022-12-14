@@ -935,8 +935,6 @@ void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ, co
     }
 
     for (staff_idx_t staffIndex = 0; staffIndex < templ.staffCount; ++staffIndex) {
-        staff_idx_t lastStaffIndex = !score()->staves().empty() ? score()->staves().back()->idx() : 0;
-
         Staff* staff = engraving::Factory::createStaff(part);
         const mu::engraving::StaffType* staffType = templ.staffTypePreset;
         if (!staffType) {
