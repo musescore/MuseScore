@@ -53,21 +53,23 @@ void DialogView::onHidden()
     }
 }
 
-void DialogView::updatePosition()
+QScreen* DialogView::resolveScreen() const
 {
     QWindow* qMainWindow = mainWindow()->qWindow();
-    IF_ASSERT_FAILED(qMainWindow) {
-        return;
-    }
-
     QScreen* mainWindowScreen = qMainWindow->screen();
     if (!mainWindowScreen) {
         mainWindowScreen = QGuiApplication::primaryScreen();
     }
 
-    QRect anchorRect = mainWindowScreen->availableGeometry();
+    return mainWindowScreen;
+}
 
-    QRect referenceRect = qMainWindow->geometry();
+void DialogView::updatePosition()
+{
+    QScreen* screen = resolveScreen();
+    QRect anchorRect = screen->availableGeometry();
+
+    QRect referenceRect = mainWindow()->qWindow()->geometry();
     if (referenceRect.isEmpty()) {
         referenceRect = anchorRect;
     }
