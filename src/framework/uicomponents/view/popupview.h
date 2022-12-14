@@ -208,7 +208,7 @@ protected:
 
     void setErrCode(Ret::Code code);
 
-    QScreen* resolveScreen() const;
+    virtual QScreen* resolveScreen() const;
     QRect currentScreenGeometry() const;
     virtual void updatePosition();
     void updateContentPosition();
