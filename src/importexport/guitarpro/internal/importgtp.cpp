@@ -3104,6 +3104,8 @@ static Err importScore(MasterScore* score, mu::io::IODevice* io)
         }
     }
 
+    score->setUpTempoMap();
+
     delete gp;
 
     return Err::NoError;
