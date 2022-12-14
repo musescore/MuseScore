@@ -59,14 +59,21 @@ AbstractVstEditorView::AbstractVstEditorView(QWidget* parent)
 
 AbstractVstEditorView::~AbstractVstEditorView()
 {
+    deinit();
+}
+
+void AbstractVstEditorView::deinit()
+{
     if (m_view) {
         m_view->setFrame(nullptr);
         m_view->removed();
+        m_view = nullptr;
     }
 
     if (m_pluginPtr) {
         m_pluginPtr->loadingCompleted().resetOnNotify(this);
         m_pluginPtr->refreshConfig();
+        m_pluginPtr = nullptr;
     }
 }
 
@@ -163,6 +170,13 @@ void AbstractVstEditorView::showEvent(QShowEvent* ev)
     moveViewToMainWindowCenter();
 
     TopLevelDialog::showEvent(ev);
+}
+
+void AbstractVstEditorView::closeEvent(QCloseEvent* ev)
+{
+    deinit();
+
+    TopLevelDialog::closeEvent(ev);
 }
 
 bool AbstractVstEditorView::event(QEvent* ev)
