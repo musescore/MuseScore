@@ -3098,10 +3098,22 @@ static Err importScore(MasterScore* score, mu::io::IODevice* io)
         score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
     }
 
-    for (const Part* part : score->parts()) {
+    for (Part* part : score->parts()) {
         for (const auto& pair : part->instruments()) {
             pair.second->updateInstrumentId();
         }
+
+        std::vector<MidiArticulation> articulations =
+        {
+            MidiArticulation(u"staccatissimo", u"", 100, 30),
+            MidiArticulation(u"staccato", u"", 100, 50),
+            MidiArticulation(u"portato", u"", 100, 67),
+            MidiArticulation(u"tenuto", u"", 100, 100),
+            MidiArticulation(u"marcato", u"", 120, 67),
+            MidiArticulation(u"sforzato", u"", 120, 100),
+        };
+
+        part->instrument()->setArticulation(articulations);
     }
 
     score->setUpTempoMap();
