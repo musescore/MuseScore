@@ -21,7 +21,12 @@
  */
 
 #include "skyline.h"
+
 #include "arpeggio.h"
+#include "beam.h"
+#include "chord.h"
+#include "stem.h"
+
 #include "draw/painter.h"
 
 #include "shape.h"
@@ -43,12 +48,26 @@ static const double MINIMUM_Y = -1000000.0;
 #define DP(...)
 #endif
 
+//--------------------------------------------------------
+// findSpan
+// used for correct handling of cross-staff skyline items
+//--------------------------------------------------------
+
 int findSpan(const ShapeElement& r)
 {
+    if (!r.toItem) {
+        return 0;
+    }
     int span = 0;
-    // add more conditions for other cross-staff skyline items
-    if (r.toItem && r.toItem->isArpeggio()) {
+    if (r.toItem->isArpeggio()) {
+        // cross-staff arpeggios
         span = toArpeggio(r.toItem)->span() - 1; // for some reason, Arpeggio::_span is 1-indexed
+    } else if (r.toItem->isStem()) {
+        // cross-staff stems
+        Chord* chord = toStem(r.toItem)->chord();
+        if (chord && chord->beam() && chord->beam()->cross()) {
+            span = chord->up() ? -1 : 1;
+        }
     }
     return span;
 }
