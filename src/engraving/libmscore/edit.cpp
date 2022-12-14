@@ -2846,7 +2846,6 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
     Fraction startTick = mbStart->tick();
     Fraction endTick   = mbEnd->tick();
 
-    undoInsertTime(mbStart->tick(), -(mbEnd->endTick() - mbStart->tick()));
     for (Score* score : scoreList()) {
         Measure* startMeasure = score->tick2measure(startTick);
         Measure* endMeasure = score->tick2measure(endTick);
@@ -2903,6 +2902,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
         }
     }
 
+    undoInsertTime(mbStart->tick(), -(mbEnd->endTick() - mbStart->tick()));
     _is.setSegment(0);          // invalidate position
 }
 
