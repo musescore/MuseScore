@@ -89,20 +89,24 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         Fraction tickStart = segment()->tick();
         Part* part = staff()->part();
         Interval oldV = part->instrument(tickStart)->transpose();
+        bool concPitch = score()->styleB(Sid::concertPitch);
 
         // change the clef for each staff
         for (size_t i = 0; i < part->nstaves(); i++) {
-            if (part->instrument(tickStart)->clefType(i) != instrument->clefType(i)) {
-                ClefType clefType
-                    = score()->styleB(Sid::concertPitch) ? instrument->clefType(i)._concertClef : instrument->clefType(i)._transposingClef;
+            ClefType oldClefType = concPitch ? part->instrument(tickStart)->clefType(i)._concertClef
+                                   : part->instrument(tickStart)->clefType(i)._transposingClef;
+            ClefType newClefType = concPitch ? instrument->clefType(i)._concertClef
+                                   : instrument->clefType(i)._transposingClef;
+            // Introduce cleff change only if the new clef *symbol* is different from the old one
+            if (ClefInfo::symId(oldClefType) != ClefInfo::symId(newClefType)) {
                 // If instrument change is at the start of a measure, use the measure as the element, as this will place the instrument change before the barline.
                 EngravingItem* element = rtick().isZero() ? toEngravingItem(findMeasure()) : toEngravingItem(this);
-                score()->undoChangeClef(part->staff(i), element, clefType, true);
+                score()->undoChangeClef(part->staff(i), element, newClefType, true);
             }
         }
 
-        // Change key signature if necessary
-        if (instrument->transpose() != oldV) {
+        // Change key signature if necessary. CAUTION: not necessary in case of octave-transposing!
+        if ((instrument->transpose().chromatic - oldV.chromatic) % 12) {
             for (size_t i = 0; i < part->nstaves(); i++) {
                 if (!part->staff(i)->keySigEvent(tickStart).isAtonal()) {
                     KeySigEvent ks;
