@@ -1902,6 +1902,30 @@ static bool shouldRenderNote(Note* n)
     return true;
 }
 
+static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int& onTime, int& trailtime)
+{
+    if (!note->isSlideOutNote()) {
+        return;
+    }
+
+    const int slideNotes = 3;
+    int on = onTime;
+
+    const int slideDuration = 65;
+
+    int pitch = 0;
+    int pitchOffset = note->slide().is(Note::SlideType::Doit) ? 1 : -1;
+    for (int i = 0; i < slideNotes; ++i) {
+        el->push_back(NoteEvent(pitch, on, slideDuration));
+        pitch += pitchOffset;
+
+        on += slideDuration;
+    }
+    el->push_back(NoteEvent(pitch, on, 1000 - trailtime - on));
+
+    trailtime = slideDuration;
+}
+
 //---------------------------------------------------------
 //   renderChord
 //    ontime and trailtime in 1/1000 of duration
@@ -1941,6 +1965,7 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
             el->clear();
             continue;
         }
+        createSlideOutNotePlayEvents(chord->notes()[i], el, ontime, trailtime);
         if (arpeggio) {
             continue;       // don't add extra events and apply gateTime to arpeggio
         }
