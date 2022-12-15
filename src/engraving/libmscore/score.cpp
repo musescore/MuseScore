@@ -4022,6 +4022,76 @@ void Score::setBracketsAndBarlines()
 }
 
 //---------------------------------------------------------
+//   remapBracketsAndBarlines
+///  Reconstructs brackets and barlines based on how they
+///  are in the masterScore. Must be called after creating
+///  an excerpt or adding new parts to it.
+//---------------------------------------------------------
+
+void Score::remapBracketsAndBarlines()
+{
+    if (isMaster()) {
+        return;
+    }
+
+    // Remove all brackets
+    for (Staff* staff : staves()) {
+        for (BracketItem* bracket : staff->brackets()) {
+            bracket->setBracketType(BracketType::NO_BRACKET);
+        }
+    }
+    // Remap all brackets from masterScore
+    Score* master = masterScore();
+    for (staff_idx_t masterStaffIdx = 0; masterStaffIdx < master->nstaves(); ++masterStaffIdx) {
+        Staff* masterStaff = master->staff(masterStaffIdx);
+        auto brackets = masterStaff->brackets();
+        for (int bracketIdx = 0; bracketIdx < brackets.size(); ++bracketIdx) {
+            BracketItem* bracket = brackets.at(bracketIdx);
+            Staff* firstBracketed = nullptr;
+            int span = 0;
+            for (staff_idx_t bracketSpanIdx = 0; bracketSpanIdx < bracket->bracketSpan(); ++bracketSpanIdx) {
+                masterStaff = master->staff(masterStaffIdx + bracketSpanIdx);
+                Staff* linkedStaff = toStaff(masterStaff->findLinkedInScore(this));
+                if (!linkedStaff) {
+                    continue;
+                }
+                if (!firstBracketed) {
+                    firstBracketed = linkedStaff;
+                }
+                ++span;
+            }
+            if (firstBracketed && span > 1) {
+                firstBracketed->setBracketType(bracketIdx, bracket->bracketType());
+                firstBracketed->setBracketSpan(bracketIdx, span);
+            }
+        }
+    }
+
+    // Remap all barline spans from masterScore
+    for (Staff* staff : staves()) {
+        Staff* masterStaff = toStaff(staff->findLinkedInScore(masterScore()));
+        if (!masterStaff || !masterStaff->barLineSpan()) {
+            continue;
+        }
+        // Look in the masterScore for all the staves spanned by a common barline.
+        // If at least one of them is also in this score, then connect it through.
+        bool extendBarline = false;
+        int span = masterStaff->barLineSpan();
+        while (!extendBarline && span > 0) {
+            masterStaff = masterScore()->staff(masterStaff->idx() + 1);
+            span = masterStaff->barLineSpan();
+            if (masterStaff->findLinkedInScore(this)) {
+                extendBarline = true;
+                break;
+            }
+        }
+        if (extendBarline) {
+            staff->setBarLineSpan(1);
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   lassoSelect
 //---------------------------------------------------------
 
