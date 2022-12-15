@@ -675,8 +675,8 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
             }
         }
     } else if (gpLyrics.lyricTrack != 0) {
-        int counter = 0;
-        int index = 0;
+        size_t counter = 0;
+        size_t index = 0;
         gpLyrics.lyricTrack -= 1;
         Measure* mes = score->firstMeasure();
         if (!mes) {

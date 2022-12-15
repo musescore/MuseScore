@@ -230,22 +230,6 @@ static GPConverter::LineImportType hairpinToImportType(GPBeat::Hairpin t)
     return GPConverter::LineImportType::NONE;
 }
 
-static BeamMode beamModeBeatToCr(GPBeat::BeamMode mode)
-{
-    static std::unordered_map<GPBeat::BeamMode, BeamMode> types {
-        { GPBeat::BeamMode::AUTO, BeamMode::AUTO },
-        { GPBeat::BeamMode::JOINED, BeamMode::MID },
-        { GPBeat::BeamMode::BROKEN, BeamMode::NONE },
-        { GPBeat::BeamMode::BROKEN2, BeamMode::BEGIN32 }
-    };
-
-    if (types.find(mode) != types.end()) {
-        return types[mode];
-    }
-
-    return BeamMode::AUTO;
-}
-
 GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
     : _score(score), _gpDom(std::move(gpDom))
 {
