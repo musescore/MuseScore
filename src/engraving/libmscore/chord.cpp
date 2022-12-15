@@ -1256,7 +1256,9 @@ void Chord::read(XmlReader& e)
 bool Chord::readProperties(XmlReader& e)
 {
     const AsciiStringView tag(e.name());
-
+    // issue #15166: MU3 saves wildly incorrect stem directions for drum staves, so we need to ignore them
+    // on import
+    bool readStemDirection = !staff()->staffType()->isDrumStaff() || score()->mscVersion() >= 400;
     if (tag == "Note") {
         Note* note = Factory::createNote(this);
         // the note needs to know the properties of the track it belongs to
@@ -1301,7 +1303,7 @@ bool Chord::readProperties(XmlReader& e)
         StemSlash* ss = Factory::createStemSlash(this);
         ss->read(e);
         add(ss);
-    } else if (readProperty(tag, e, Pid::STEM_DIRECTION)) {
+    } else if (readStemDirection && readProperty(tag, e, Pid::STEM_DIRECTION)) {
     } else if (tag == "noStem") {
         _noStem = e.readInt();
     } else if (tag == "Arpeggio") {
@@ -4169,7 +4171,7 @@ void GraceNotesGroup::layout()
         Chord* grace = this->at(i);
         Shape graceShape = grace->shape();
         Shape groupShape = _shape;
-        mu::remove_if(groupShape, [grace](ShapeElement& s){
+        mu::remove_if(groupShape, [grace](ShapeElement& s) {
             if (!s.toItem || (s.toItem->isStem() && s.toItem->vStaffIdx() != grace->vStaffIdx())) {
                 return true;
             }
