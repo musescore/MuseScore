@@ -330,7 +330,7 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                 firstCR = false;
                 // Handle cross-measure beams
                 BeamMode mode = cr->beamMode();
-                if (mode == BeamMode::MID || mode == BeamMode::END) {
+                if (mode == BeamMode::MID || mode == BeamMode::END || mode == BeamMode::BEGIN32 || mode == BeamMode::BEGIN64) {
                     ChordRest* prevCR = score->findCR(measure->tick() - Fraction::fromTicks(1), track);
                     if (prevCR) {
                         const Measure* pm = prevCR->measure();
