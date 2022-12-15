@@ -4294,7 +4294,7 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
                         ns1->setPosX(xx);
                         ss = ns1;
                     }
-                    if (s->isChordRestType()) {
+                    if (s->isChordRestType() || ps == s) {
                         w += d;
                     }
                     x = xx;
