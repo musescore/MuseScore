@@ -2336,7 +2336,7 @@ void Measure::checkMultiVoices(staff_idx_t staffIdx)
 //   hasVoices
 //---------------------------------------------------------
 
-bool Measure::hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len) const
+bool Measure::hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len, bool considerInvisible) const
 {
     Staff* st = score()->staff(staffIdx);
     if (st->isTabStaff(stick)) {
@@ -2363,6 +2363,9 @@ bool Measure::hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len) cons
             if (cr) {
                 if (cr->tick() + cr->actualTicks() <= stick) {
                     continue;
+                }
+                if (considerInvisible) {
+                    return true;
                 }
                 bool v = false;
                 if (cr->isChord()) {
@@ -4138,32 +4141,6 @@ void Measure::checkTrailer()
 }
 
 //---------------------------------------------------------
-//   hasAccidental
-//---------------------------------------------------------
-
-static bool hasAccidental(Segment* s)
-{
-    Score* score = s->score();
-    for (track_idx_t track = 0; track < s->score()->ntracks(); ++track) {
-        Staff* staff = score->staff(track2staff(track));
-        if (!staff->show()) {
-            continue;
-        }
-        EngravingItem* e = s->element(track);
-        if (!e || !e->isChord()) {
-            continue;
-        }
-        Chord* c = toChord(e);
-        for (Note* n : c->notes()) {
-            if (n->accidental() && n->accidental()->addToSkyline()) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-//---------------------------------------------------------
 //   computeWidth
 //   Computes the width of a measure depending on note durations
 //   (and given the shortest note of the system minTicks) and
@@ -4446,7 +4423,7 @@ double Measure::computeFirstSegmentXPosition(Segment* segment)
     if (x <= 0) { // If that doesn't succeed (e.g. first bar) then just use left-margins
         x = segment->minLeft(ls);
         if (segment->isChordRestType()) {
-            x += score()->styleMM(hasAccidental(segment) ? Sid::barAccidentalDistance : Sid::barNoteDistance);
+            x += score()->styleMM(segment->hasAccidentals() ? Sid::barAccidentalDistance : Sid::barNoteDistance);
         } else if (segment->isClefType() || segment->isHeaderClefType()) {
             x += score()->styleMM(Sid::clefLeftMargin);
         } else if (segment->isKeySigType()) {
@@ -4458,6 +4435,16 @@ double Measure::computeFirstSegmentXPosition(Segment* segment)
     if (prevMeas && prevMeas->repeatEnd() && segment->isStartRepeatBarLineType() && (prevMeas->system() == system())) {
         // The start-repeat should overlap the end-repeat of the previous measure
         x -= score()->styleMM(Sid::endBarWidth);
+    }
+    // Do a final check of chord distances (invisible items may in some cases elude the 2 previous steps)
+    if (segment->isChordRestType()) {
+        double barNoteDist = score()->styleMM(Sid::barNoteDistance).val();
+        for (EngravingItem* e : segment->elist()) {
+            if (!e || !e->isChordRest() || (e->staff() && e->staff()->isTabStaff(e->tick()))) {
+                continue;
+            }
+            x = std::max(x, barNoteDist * e->mag() - e->pos().x());
+        }
     }
     x += segment->extraLeadingSpace().val() * spatium();
     return x;
