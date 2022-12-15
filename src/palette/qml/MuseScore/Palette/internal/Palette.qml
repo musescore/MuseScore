@@ -563,6 +563,8 @@ StyledGridView {
             property var dropData: null
 
             Drag.onDragStarted: {
+                contextMenu.close()
+
                 paletteView.state = "drag";
                 DelegateModel.inPersistedItems = true;
             }
