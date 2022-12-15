@@ -2608,6 +2608,17 @@ double Segment::elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const
 
 double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
 {
+    // Handle mmRest segment case separately
+    if (measure() && measure()->isMMRest() && measure()->mmRestCount() > 1 && isChordRestType()) {
+        double minWidth = score()->styleMM(Sid::minMMRestWidth).val();
+        if (!score()->styleB(Sid::oldStyleMultiMeasureRests)) {
+            minWidth += 2 * score()->styleMM(Sid::multiMeasureRestMargin).val();
+        }
+        if (prevActive()) {
+            minWidth += prevActive()->minRight();
+        }
+        return minWidth;
+    }
     double ww = -1000000.0;          // can remain negative
     double d = 0.0;
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
