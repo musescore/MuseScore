@@ -971,6 +971,7 @@ public:
     void setScoreOrder(ScoreOrder order);
     void updateBracesAndBarlines(Part* part, size_t index);
     void setBracketsAndBarlines();
+    void remapBracketsAndBarlines();
 
     void lassoSelect(const mu::RectF&);
     void lassoSelectEnd();
