@@ -2742,6 +2742,9 @@ void Segment::computeCrossBeamType(Segment* nextSeg)
     }
     bool upDown = false;
     bool downUp = false;
+    bool canBeAdjusted = true;
+    // Spacing can be adjusted for cross-beam cases only if there aren't
+    // chords in other voices in this or next segment.
     for (EngravingItem* e : elist()) {
         if (!e || !e->isChordRest() || !e->staff()->visible()) {
             continue;
@@ -2751,7 +2754,8 @@ void Segment::computeCrossBeamType(Segment* nextSeg)
             continue;
         }
         if (!thisCR->beam()) {
-            return;
+            canBeAdjusted = false;
+            continue;
         }
         Beam* beam = thisCR->beam();
         for (EngravingItem* ee : nextSeg->elist()) {
@@ -2763,7 +2767,8 @@ void Segment::computeCrossBeamType(Segment* nextSeg)
                 continue;
             }
             if (!nextCR->beam()) {
-                return;
+                canBeAdjusted = false;
+                continue;
             }
             if (nextCR->beam() != beam) {
                 continue;
@@ -2784,6 +2789,7 @@ void Segment::computeCrossBeamType(Segment* nextSeg)
     }
     _crossBeamType.upDown = upDown;
     _crossBeamType.downUp = downUp;
+    _crossBeamType.canBeAdjusted = canBeAdjusted;
 }
 
 /***********************************************
