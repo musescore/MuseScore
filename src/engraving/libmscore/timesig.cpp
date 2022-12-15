@@ -298,27 +298,34 @@ void TimeSig::layout()
     double yoff = _spatium * (numOfLines - 1) * .5 * lineDist;
 
     // C and Ccut are placed at the middle of the staff: use yoff directly
+    IEngravingFontPtr font = score()->engravingFont();
+    SizeF mag(magS() * _scale);
+
     if (sigType == TimeSigType::FOUR_FOUR) {
         pz = PointF(0.0, yoff);
-        setbbox(symBbox(SymId::timeSigCommon).translated(pz));
+        RectF bbox = font->bbox(SymId::timeSigCommon, mag);
+        setbbox(bbox.translated(pz));
         ns.clear();
         ns.push_back(SymId::timeSigCommon);
         ds.clear();
     } else if (sigType == TimeSigType::ALLA_BREVE) {
         pz = PointF(0.0, yoff);
-        setbbox(symBbox(SymId::timeSigCutCommon).translated(pz));
+        RectF bbox = font->bbox(SymId::timeSigCutCommon, mag);
+        setbbox(bbox.translated(pz));
         ns.clear();
         ns.push_back(SymId::timeSigCutCommon);
         ds.clear();
     } else if (sigType == TimeSigType::CUT_BACH) {
         pz = PointF(0.0, yoff);
-        setbbox(symBbox(SymId::timeSigCut2).translated(pz));
+        RectF bbox = font->bbox(SymId::timeSigCut2, mag);
+        setbbox(bbox.translated(pz));
         ns.clear();
         ns.push_back(SymId::timeSigCut2);
         ds.clear();
     } else if (sigType == TimeSigType::CUT_TRIPLE) {
         pz = PointF(0.0, yoff);
-        setbbox(symBbox(SymId::timeSigCut3).translated(pz));
+        RectF bbox = font->bbox(SymId::timeSigCut3, mag);
+        setbbox(bbox.translated(pz));
         ns.clear();
         ns.push_back(SymId::timeSigCut3);
         ds.clear();
@@ -330,9 +337,6 @@ void TimeSig::layout()
             ns = timeSigSymIdsFromString(_numeratorString);
             ds = timeSigSymIdsFromString(_denominatorString);
         }
-
-        IEngravingFontPtr font = score()->engravingFont();
-        SizeF mag(magS() * _scale);
 
         RectF numRect = font->bbox(ns, mag);
         RectF denRect = font->bbox(ds, mag);
