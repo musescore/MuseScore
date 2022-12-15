@@ -26,6 +26,7 @@
 #include "rw/xml.h"
 #include "types/typesconv.h"
 
+#include "accidental.h"
 #include "barline.h"
 #include "beam.h"
 #include "chord.h"
@@ -2695,10 +2696,10 @@ Fraction Segment::shortestChordRest() const
     Fraction shortest = measure()->ticks(); // Initializing at the highest possible value ( = time signature of the measure)
     Fraction cur = measure()->ticks();
     for (auto elem : elist()) {
-        if (!elem || !elem->staff()->show() || !elem->isChordRest() || !elem->visible()) {
-            if (!(elem && elem->isRest() && toRest(elem)->isFullMeasureRest())) {
-                continue;
-            }
+        if (!elem || !elem->staff()->show() || !elem->isChordRest()
+            || (!elem->visible()
+                && measure()->hasVoices(elem->staffIdx(), measure()->tick(), measure()->ticks(), /*considerInvisible*/ true))) {
+            continue;
         }
         cur = toChordRest(elem)->actualTicks();
         if (cur < shortest) {
@@ -2714,11 +2715,11 @@ bool Segment::hasAccidentals() const
         return false;
     }
     for (EngravingItem* e : elist()) {
-        if (!e || !e->isChord()) {
+        if (!e || !e->isChord() || (e->staff() && !e->staff()->show())) {
             continue;
         }
         for (Note* note : toChord(e)->notes()) {
-            if (note->accidental()) {
+            if (note->accidental() && note->accidental()->addToSkyline()) {
                 return true;
             }
         }
