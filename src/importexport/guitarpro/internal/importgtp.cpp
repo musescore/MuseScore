@@ -780,8 +780,8 @@ void GuitarPro::readBend(Note* note)
 
 void GuitarPro::readLyrics()
 {
-    gpLyrics.lyricTrack = readInt();          // lyric track
-    gpLyrics.fromBeat = readInt();
+    gpLyrics.lyricTrack = static_cast<size_t>(readInt());          // lyric track
+    gpLyrics.fromBeat = static_cast<size_t>(readInt());
     gpLyrics.beatCounter = 0;
 
     String lyrics = readWordPascalString();
@@ -2927,7 +2927,7 @@ static void createLinkedTabs(MasterScore* score)
         size_t stavesNum = part->nstaves();
 
         if (stavesNum != 1) {
-            for (int i = 0; i < stavesNum; i++) {
+            for (size_t i = 0; i < stavesNum; i++) {
                 indexMapping[curStaffIdx] = stavesOperated + i;
                 curStaffIdx++;
             }
