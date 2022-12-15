@@ -5354,6 +5354,20 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
                 if (notes > 1) {
                     undoRemoveElement(note);
                 } else if (notes == 1) {
+                    // take care of slurs
+                    int currentTick = chord->tick().ticks();
+                    for (auto it : score()->spannerMap().findOverlapping(currentTick, currentTick + 1)) {
+                        Spanner* spanner = it.value;
+                        if (!spanner->isSlur()) {
+                            continue;
+                        }
+                        Slur* slur = toSlur(spanner);
+                        if (slur->startElement() == chord) {
+                            undoChangeSpannerElements(slur, dstChord, slur->endElement());
+                        } else if (slur->endElement() == chord) {
+                            undoChangeSpannerElements(slur, slur->startElement(), dstChord);
+                        }
+                    }
                     // create rest to leave behind
                     Rest* r = Factory::createRest(s);
                     r->setTrack(chord->track());
