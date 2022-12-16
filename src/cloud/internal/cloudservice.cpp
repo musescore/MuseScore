@@ -104,6 +104,26 @@ void CloudService::init()
 {
     TRACEFUNC;
 
+    multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName) {
+        if (resourceName == CLOUD_ACCESS_TOKEN_RESOURCE_NAME) {
+            readTokens();
+        }
+    });
+
+    if (readTokens()) {
+        executeRequest([this]() { return downloadAccountInfo(); });
+    }
+}
+
+void CloudService::initOAuthIfNecessary()
+{
+    if (m_oauth2) {
+        return;
+    }
+
+    // We initialize the OAuth etc lazily, to save resources, but also so that firewall warnings
+    // will only appear at the moment that the user tries to log in, not on every launch.
+
     m_oauth2 = new QOAuth2AuthorizationCodeFlow(this);
     m_replyHandler = new OAuthHttpServerReplyHandler(this);
 
@@ -125,16 +145,6 @@ void CloudService::init()
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::error, [](const QString& error, const QString& errorDescription, const QUrl& uri) {
         LOGE() << "Error during authorization: " << error << "\n Description: " << errorDescription << "\n URI: " << uri.toString();
     });
-
-    multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName) {
-        if (resourceName == CLOUD_ACCESS_TOKEN_RESOURCE_NAME) {
-            readTokens();
-        }
-    });
-
-    if (readTokens()) {
-        executeRequest([this]() { return downloadAccountInfo(); });
-    }
 }
 
 bool CloudService::readTokens()
@@ -228,6 +238,8 @@ void CloudService::onUserAuthorized()
 {
     TRACEFUNC;
 
+    initOAuthIfNecessary();
+
     m_accessToken = m_oauth2->token();
     m_refreshToken = m_oauth2->refreshToken();
 
@@ -250,6 +262,8 @@ void CloudService::authorize(const OnUserAuthorizedCallback& onUserAuthorizedCal
     if (m_userAuthorized.val) {
         return;
     }
+
+    initOAuthIfNecessary();
 
     m_onUserAuthorizedCallback = onUserAuthorizedCallback;
     m_oauth2->setAuthorizationUrl(configuration()->authorizationUrl());
@@ -377,6 +391,9 @@ void CloudService::signUp()
     if (m_userAuthorized.val) {
         return;
     }
+
+    initOAuthIfNecessary();
+
     m_oauth2->setAuthorizationUrl(configuration()->signUpUrl());
     m_oauth2->grant();
 }
