@@ -4045,21 +4045,35 @@ void Score::remapBracketsAndBarlines()
     for (staff_idx_t masterStaffIdx = 0; masterStaffIdx < master->nstaves(); ++masterStaffIdx) {
         Staff* masterStaff = master->staff(masterStaffIdx);
         auto brackets = masterStaff->brackets();
-        for (int bracketIdx = 0; bracketIdx < brackets.size(); ++bracketIdx) {
+
+        for (size_t bracketIdx = 0; bracketIdx < brackets.size(); ++bracketIdx) {
             BracketItem* bracket = brackets.at(bracketIdx);
             Staff* firstBracketed = nullptr;
             int span = 0;
-            for (staff_idx_t bracketSpanIdx = 0; bracketSpanIdx < bracket->bracketSpan(); ++bracketSpanIdx) {
-                masterStaff = master->staff(masterStaffIdx + bracketSpanIdx);
+
+            // There is no guarantee that bracket->bracketSpan() is correctly bounded,
+            // so masterStaffIdx + bracket->bracketSpan() might be > master->nstaves(),
+            // in which case masterStaff below will become null.
+            size_t endSpannedMasterStaffIdx = std::min(masterStaffIdx + bracket->bracketSpan(), master->nstaves());
+
+            for (staff_idx_t spannedMasterStIdx = masterStaffIdx; spannedMasterStIdx < endSpannedMasterStaffIdx; ++spannedMasterStIdx) {
+                masterStaff = master->staff(spannedMasterStIdx);
+                IF_ASSERT_FAILED(masterStaff) {
+                    continue;
+                }
+
                 Staff* linkedStaff = toStaff(masterStaff->findLinkedInScore(this));
                 if (!linkedStaff) {
                     continue;
                 }
+
                 if (!firstBracketed) {
                     firstBracketed = linkedStaff;
                 }
+
                 ++span;
             }
+
             if (firstBracketed && span > 1) {
                 firstBracketed->setBracketType(bracketIdx, bracket->bracketType());
                 firstBracketed->setBracketSpan(bracketIdx, span);
@@ -4077,7 +4091,7 @@ void Score::remapBracketsAndBarlines()
         // If at least one of them is also in this score, then connect it through.
         bool extendBarline = false;
         int span = masterStaff->barLineSpan();
-        while (!extendBarline && span > 0) {
+        while (!extendBarline && span > 0 && masterStaff->idx() + 1 < master->nstaves()) {
             masterStaff = masterScore()->staff(masterStaff->idx() + 1);
             span = masterStaff->barLineSpan();
             if (masterStaff->findLinkedInScore(this)) {
