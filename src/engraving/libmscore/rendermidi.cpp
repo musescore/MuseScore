@@ -1909,7 +1909,10 @@ static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int& onT
     }
 
     const int slideNotes = 3;
-    int on = onTime;
+    trailtime += (1000 - onTime) / 2;
+    el->push_back(NoteEvent(0, onTime, trailtime));
+
+    int on = onTime + trailtime;
 
     const int slideDuration = 30;
 
@@ -1921,9 +1924,7 @@ static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int& onT
 
         on += slideDuration;
     }
-    el->push_back(NoteEvent(pitch, on, 1000 - trailtime - on));
-
-    trailtime = slideDuration;
+    el->push_back(NoteEvent(pitch, on, 1000 - on));
 }
 
 //---------------------------------------------------------
