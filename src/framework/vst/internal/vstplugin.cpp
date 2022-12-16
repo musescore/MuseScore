@@ -125,7 +125,6 @@ void VstPlugin::unload()
         m_module = nullptr;
         m_pluginProvider = nullptr;
         m_classInfo = ClassInfo();
-        m_pluginView = nullptr;
         m_isLoaded = false;
         m_unloadingCompleted.notify();
     }, threadSecurer()->mainThreadId());
@@ -176,25 +175,18 @@ void VstPlugin::stateBufferFromString(VstMemoryStream& buffer, char* strData, co
     buffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
 }
 
-PluginViewPtr VstPlugin::view() const
+PluginViewPtr VstPlugin::createView() const
 {
     ONLY_MAIN_THREAD(threadSecurer);
 
     std::lock_guard lock(m_mutex);
 
-    if (m_pluginView) {
-        return m_pluginView;
-    }
-
     auto controller = m_pluginProvider->getController();
-
     if (!controller) {
         return nullptr;
     }
 
-    m_pluginView = owned(controller->createView(PluginEditorViewType::kEditor));
-
-    return m_pluginView;
+    return owned(controller->createView(PluginEditorViewType::kEditor));
 }
 
 PluginProviderPtr VstPlugin::provider() const

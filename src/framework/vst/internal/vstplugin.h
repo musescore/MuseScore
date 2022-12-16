@@ -51,7 +51,7 @@ public:
     const audio::AudioResourceId& resourceId() const;
     const std::string& name() const;
 
-    PluginViewPtr view() const;
+    PluginViewPtr createView() const;
     PluginProviderPtr provider() const;
     bool isAbleForInput() const;
 
@@ -77,7 +77,6 @@ private:
 
     PluginModulePtr m_module = nullptr;
     PluginProviderPtr m_pluginProvider = nullptr;
-    mutable PluginViewPtr m_pluginView = nullptr;
     ClassInfo m_classInfo;
 
     Steinberg::FUnknownPtr<VstComponentHandler> m_componentHandlerPtr = nullptr;

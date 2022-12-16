@@ -115,11 +115,14 @@ void AbstractVstEditorView::wrapPluginView()
 
 void AbstractVstEditorView::attachView(VstPluginPtr pluginPtr)
 {
-    if (!pluginPtr || !pluginPtr->view()) {
+    if (!pluginPtr) {
         return;
     }
 
-    m_view = pluginPtr->view();
+    m_view = pluginPtr->createView();
+    if (!m_view) {
+        return;
+    }
 
     if (m_view->isPlatformTypeSupported(currentPlatformUiType()) != Steinberg::kResultTrue) {
         return;
