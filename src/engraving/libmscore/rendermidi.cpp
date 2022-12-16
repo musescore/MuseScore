@@ -1911,7 +1911,7 @@ static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int& onT
     const int slideNotes = 3;
     int on = onTime;
 
-    const int slideDuration = 65;
+    const int slideDuration = 30;
 
     int pitch = 0;
     int pitchOffset = note->slide().is(Note::SlideType::Doit) ? 1 : -1;
