@@ -148,12 +148,10 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
 
     m_staff = engraving::Factory::createStaff(part);
     mu::engraving::StaffType* stt = m_staff->setStaffType(Fraction(0, 1), *m_orgStaff->staffType(Fraction(0, 1)));
-    stt->setInvisible(m_orgStaff->staffType(Fraction(0, 1))->invisible());
-    stt->setColor(m_orgStaff->staffType(Fraction(0, 1))->color());
-    stt->setUserMag(m_orgStaff->staffType(Fraction(0, 1))->userMag());
 
     m_staff->setUserDist(m_orgStaff->userDist());
     m_staff->setPart(part);
+    m_staff->setCutaway(m_orgStaff->cutaway());
     m_staff->setHideWhenEmpty(m_orgStaff->hideWhenEmpty());
     m_staff->setShowIfEmpty(m_orgStaff->showIfEmpty());
     m_staff->setHideSystemBarLine(m_orgStaff->hideSystemBarLine());
@@ -175,18 +173,18 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
 
     // set dlg controls
     spinExtraDistance->setValue(s->userDist() / score->spatium());
-    invisible->setChecked(m_staff->isLinesInvisible(Fraction(0, 1)));
+    invisible->setChecked(stt->invisible());
     isSmallCheckbox->setChecked(stt->isSmall());
     color->setColor(stt->color().toQColor());
-    cutaway->setChecked(m_staff->cutaway());
+    mag->setValue(stt->userMag() * 100.0);
 
+    cutaway->setChecked(m_staff->cutaway());
     hideMode->setCurrentIndex(int(m_staff->hideWhenEmpty()));
     showIfEmpty->setChecked(m_staff->showIfEmpty());
     hideSystemBarLine->setChecked(m_staff->hideSystemBarLine());
     mergeMatchingRests->setChecked(m_staff->mergeMatchingRests());
-    mag->setValue(stt->userMag() * 100.0);
 
-    updateStaffType(*m_staff->staffType(mu::engraving::Fraction(0, 1)));
+    updateStaffType(*stt);
     updateInstrument();
     updateNextPreviousButtons();
 }
