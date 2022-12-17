@@ -552,10 +552,6 @@ void Score::setUpTempoMapLater()
 
 void Score::setUpTempoMap()
 {
-    if (!isMaster()) {
-        return;
-    }
-
     TRACEFUNC;
 
     Fraction tick = Fraction(0, 1);
@@ -568,9 +564,11 @@ void Score::setUpTempoMap()
         staff->clearTimeSig();
     }
 
-    tempomap()->clear();
-    sigmap()->clear();
-    sigmap()->add(0, SigEvent(fm->ticks(),  fm->timesig(), 0));
+    if (isMaster()) {
+        tempomap()->clear();
+        sigmap()->clear();
+        sigmap()->add(0, SigEvent(fm->ticks(),  fm->timesig(), 0));
+    }
 
     for (MeasureBase* mb = first(); mb; mb = mb->next()) {
         if (mb->type() != ElementType::MEASURE) {
@@ -591,37 +589,39 @@ void Score::setUpTempoMap()
         tick += measureTicks;
     }
 
-    for (const auto& pair : spanner()) {
-        const Spanner* spannerItem = pair.second;
-        if (!spannerItem || !spannerItem->isGradualTempoChange()) {
-            continue;
-        }
+    if (isMaster()) {
+        for (const auto& pair : spanner()) {
+            const Spanner* spannerItem = pair.second;
+            if (!spannerItem || !spannerItem->isGradualTempoChange()) {
+                continue;
+            }
 
-        const GradualTempoChange* tempoChange = toGradualTempoChange(spannerItem);
-        if (!tempoChange) {
-            continue;
-        }
+            const GradualTempoChange* tempoChange = toGradualTempoChange(spannerItem);
+            if (!tempoChange) {
+                continue;
+            }
 
-        int tickPositionFrom = tempoChange->tick().ticks();
-        BeatsPerSecond currentBps = tempomap()->tempo(tickPositionFrom);
-        BeatsPerSecond newBps = currentBps * tempoChange->tempoChangeFactor();
+            int tickPositionFrom = tempoChange->tick().ticks();
+            BeatsPerSecond currentBps = tempomap()->tempo(tickPositionFrom);
+            BeatsPerSecond newBps = currentBps * tempoChange->tempoChangeFactor();
 
-        std::map<int, double> tempoCurve = TConv::easingValueCurve(tempoChange->ticks().ticks(),
-                                                                   4 /*stepsCount*/,
-                                                                   newBps.val - currentBps.val,
-                                                                   tempoChange->easingMethod());
+            std::map<int, double> tempoCurve = TConv::easingValueCurve(tempoChange->ticks().ticks(),
+                                                                       4 /*stepsCount*/,
+                                                                       newBps.val - currentBps.val,
+                                                                       tempoChange->easingMethod());
 
-        for (const auto& pair : tempoCurve) {
-            int tick = tickPositionFrom + pair.first;
+            for (const auto& pair : tempoCurve) {
+                int tick = tickPositionFrom + pair.first;
 
-            if (tempomap()->find(tick) == tempomap()->end()) {
-                tempomap()->setTempo(tick, BeatsPerSecond(currentBps.val + pair.second));
+                if (tempomap()->find(tick) == tempomap()->end()) {
+                    tempomap()->setTempo(tick, BeatsPerSecond(currentBps.val + pair.second));
+                }
             }
         }
-    }
 
-    if (tempomap()->empty()) {
-        tempomap()->setTempo(0, Constants::defaultTempo);
+        if (tempomap()->empty()) {
+            tempomap()->setTempo(0, Constants::defaultTempo);
+        }
     }
 
     masterScore()->updateRepeatListTempo();
