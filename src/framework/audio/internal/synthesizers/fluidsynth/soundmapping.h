@@ -96,7 +96,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
                                                                                     0, 101),
                                                                                 midi::Program(0, 96) } },
         { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
-                                         mpe::SoundSubCategory::Sine_Wave } }, { midi::Program(0, 79) } },
+                                         mpe::SoundSubCategory::Sine_Wave } }, { midi::Program(8, 80) } },
         { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
                                          mpe::SoundSubCategory::Square_Wave } }, { midi::Program(0, 80) } },
         { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
