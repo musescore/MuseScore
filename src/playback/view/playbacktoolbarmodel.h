@@ -95,6 +95,8 @@ private:
     QTime totalPlayTime() const;
     notation::MeasureBeat measureBeat() const;
 
+    ui::UiAction playAction() const;
+
     void updatePlayPosition();
     void doSetPlayTime(const QTime& time);
 
