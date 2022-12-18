@@ -34,7 +34,7 @@ public:
     QUrl advancedPlaylistUrl() const override;
 
     QUrl videosInfoUrl(const QStringList& videosIds) const override;
-    QUrl videoOpenUrl(const QString& videoId) const override;
+    QUrl videoOpenUrl(const QString& videoId, bool isBilibili = false) const override;
 
 private:
     QString apiRootUrl() const;

@@ -39,7 +39,7 @@ public:
     virtual QUrl advancedPlaylistUrl() const = 0;
 
     virtual QUrl videosInfoUrl(const QStringList& videosIds) const = 0;
-    virtual QUrl videoOpenUrl(const QString& videoId) const = 0;
+    virtual QUrl videoOpenUrl(const QString& videoId, bool isBilibili = false) const = 0;
 };
 }
 

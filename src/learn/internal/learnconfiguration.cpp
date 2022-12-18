@@ -55,9 +55,9 @@ QUrl LearnConfiguration::videosInfoUrl(const QStringList& videosIds) const
     return QUrl(apiRootUrl() + "/videos?" + videosParams(videosIds));
 }
 
-QUrl LearnConfiguration::videoOpenUrl(const QString& videoId) const
+QUrl LearnConfiguration::videoOpenUrl(const QString& videoId, bool isBilibili) const
 {
-    return QUrl("https://www.youtube.com/watch?v=" + videoId);
+    return isBilibili ? QUrl("https://www.bilibili.com/video/" + videoId) : QUrl("https://www.youtube.com/watch?v=" + videoId);
 }
 
 QString LearnConfiguration::apiRootUrl() const
