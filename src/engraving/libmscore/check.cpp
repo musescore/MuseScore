@@ -31,6 +31,8 @@
 #include "tuplet.h"
 #include "utils.h"
 
+#include "engravingerrors.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -104,11 +106,11 @@ void Score::checkScore()
 ///    Check that voices > 1 contains less than measure duration
 //---------------------------------------------------------
 
-bool Score::sanityCheck()
+Ret Score::sanityCheck()
 {
-    bool result = true;
+    StringList errors;
     int mNumber = 1;
-    String error;
+
     for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
         Fraction mLen = m->ticks();
         size_t endStaff  = staves().size();
@@ -133,39 +135,40 @@ bool Score::sanityCheck()
                     }
                 }
             }
-            if (voices[0] != mLen) {
-                LOGE() << String(u"Measure %1, staff %2 incomplete. Expected: %3; Found: %4")
-                    .arg(mNumber).arg(staffIdx + 1).arg(mLen.toString(), voices[0].toString());
 
+            if (voices[0] != mLen) {
+                errors << String(u"Measure %1, staff %2 incomplete. Expected: %3; Found: %4")
+                    .arg(mNumber).arg(staffIdx + 1).arg(mLen.toString(), voices[0].toString());
 #ifndef NDEBUG
                 m->setCorrupted(staffIdx, true);
 #endif
-                result = false;
                 // try to fix a bad full measure rest
                 if (fmrest0) {
                     // fmrest0->setDuration(mLen * fmrest0->staff()->timeStretch(fmrest0->tick()));
                     fmrest0->setTicks(mLen);
-                    if (fmrest0->actualTicks() != mLen) {
-                        fprintf(stderr, "whoo???\n");
-                    }
                 }
             }
             for (voice_idx_t v = 1; v < VOICES; ++v) {
                 if (voices[v] > mLen) {
-                    LOGE() << String(u"Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5")
+                    errors << String(u"Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5")
                         .arg(mNumber).arg(staffIdx + 1).arg(v + 1).arg(mLen.toString(), voices[v].toString());
-
 #ifndef NDEBUG
                     m->setCorrupted(staffIdx, true);
 #endif
-                    result = false;
                 }
             }
         }
         mNumber++;
     }
 
-    return result;
+    bool scoreCorrupted = !errors.empty();
+    Ret ret = make_ret(scoreCorrupted ? Err::FileCorrupted : Err::NoError);
+
+    if (scoreCorrupted) {
+        ret.setData("details", errors);
+    }
+
+    return ret;
 }
 
 //---------------------------------------------------------

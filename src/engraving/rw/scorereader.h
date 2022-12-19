@@ -36,13 +36,13 @@ class ScoreReader
 public:
     ScoreReader() = default;
 
-    Err loadMscz(MasterScore* score, const MscReader& mscReader, bool ignoreVersionError);
+    Ret loadMscz(MasterScore* score, const MscReader& mscReader, bool ignoreVersionError);
 
 private:
 
     friend class MasterScore;
 
-    Err read(MasterScore* score, XmlReader&, ReadContext& ctx, compat::ReadStyleHook* styleHook = nullptr);
+    Ret read(MasterScore* score, XmlReader&, ReadContext& ctx, compat::ReadStyleHook* styleHook = nullptr);
     Err doRead(MasterScore* score, XmlReader& e, ReadContext& ctx);
 };
 }
