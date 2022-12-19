@@ -772,7 +772,7 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
 
 void NotationViewInputController::handleLeftClickRelease(const QPointF& releasePoint)
 {
-    if (m_view->isNoteEnterMode()) {
+    if (m_view->isNoteEnterMode() || playbackController()->isPlaying()) {
         return;
     }
 
