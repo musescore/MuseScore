@@ -2353,11 +2353,11 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
     }
 }
 
-void GPConverter::addLetRing(const GPNote* gpnote, Note* /*note*/)
+void GPConverter::addLetRing(const GPNote* gpnote, Note* note)
 {
     if (gpnote->letRing() && m_currentGPBeat) {
         m_currentGPBeat->setLetRing(true);
-        //note->setLetRing(true); TODO-gp: let ring playback
+        note->setLetRing(true);
     }
 }
 
