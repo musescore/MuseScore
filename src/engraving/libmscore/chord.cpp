@@ -1000,8 +1000,7 @@ void Chord::computeUp()
         }
     }
 
-    bool hasCustomStemDirection = _stemDirection != DirectionV::AUTO;
-    if (hasCustomStemDirection && !(_beam && _beam->cross())) {
+    if (_stemDirection != DirectionV::AUTO && !_beam) {
         _up = _stemDirection == DirectionV::UP;
         return;
     }
@@ -1012,10 +1011,21 @@ void Chord::computeUp()
     }
 
     if (_beam) {
+        bool mixedDirection = false;
         bool cross = false;
         ChordRest* firstCr = _beam->elements().front();
         ChordRest* lastCr = _beam->elements().back();
+        DirectionV stemDirections = DirectionV::AUTO;
         for (ChordRest* cr : _beam->elements()) {
+            if (!_beam->userModified() && !mixedDirection && cr->isChord() && toChord(cr)->stemDirection() != DirectionV::AUTO) {
+                // on an unmodified beam, if all of the elements on that beam are explicitly set in one direction
+                // (or AUTO), use that as the direction. This is necessary because the beam has not been laid out yet.
+                if (stemDirections == DirectionV::AUTO) {
+                    stemDirections = toChord(cr)->stemDirection();
+                } else if (stemDirections != toChord(cr)->stemDirection()) {
+                    mixedDirection = true;
+                }
+            }
             if (cr->isChord() && toChord(cr)->staffMove() != 0) {
                 cross = true;
                 if (!_beam->userModified()) { // if the beam is user-modified _up must be decided later down
@@ -1036,8 +1046,12 @@ void Chord::computeUp()
             }
         }
         Measure* measure = findMeasure();
-        if (!cross && !_beam->userModified()) {
-            _up = _beam->up();
+        if (!cross) {
+            if (!mixedDirection && stemDirections != DirectionV::AUTO) {
+                _up = stemDirections == DirectionV::UP;
+            } else if (!_beam->userModified()) {
+                _up = _beam->up();
+            }
         }
         if (!measure->explicitParent()) {
             // this method will be called later (from Measure::layoutCrossStaff) after the
@@ -4171,7 +4185,7 @@ void GraceNotesGroup::layout()
         Chord* grace = this->at(i);
         Shape graceShape = grace->shape();
         Shape groupShape = _shape;
-        mu::remove_if(groupShape, [grace](ShapeElement& s){
+        mu::remove_if(groupShape, [grace](ShapeElement& s) {
             if (!s.toItem || (s.toItem->isStem() && s.toItem->vStaffIdx() != grace->vStaffIdx())) {
                 return true;
             }
