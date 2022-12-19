@@ -364,6 +364,9 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
             for (SLine* elem : typeMaps.second) {
                 if (elem) {
                     _score->addElement(elem);
+                    if (engravingConfiguration()->guitarProImportExperimental()) {
+                        addSoundEffects(elem);
+                    }
                 }
             }
         }
@@ -1432,6 +1435,67 @@ void GPConverter::addInstrumentChanges()
     }
 }
 
+void GPConverter::addSoundEffects(const SLine* const elem)
+{
+    track_idx_t track = elem->track();
+    EngravingItem* startEl = elem->startElement();
+    EngravingItem* endEl = elem->endElement();
+
+    if (!startEl->isChordRest() || !endEl->isChordRest()) {
+        return;
+    }
+
+    ChordRest* startCR = toChordRest(startEl);
+    ChordRest* endCR = toChordRest(endEl);
+
+    if (elem->isPalmMute()) {
+        constexpr int PALM_MUTE_CHAN = 0;
+        constexpr int PALM_MUTE_PROG = 27;
+
+        Fraction begTick = elem->tick();
+
+        Instrument* currentInstrument = elem->part()->instrument(begTick);
+        if (!currentInstrument->hasStrings()) {
+            return;
+        }
+
+        Segment* begSegment = startCR->segment();
+        Segment* endSegment = endCR->segment();
+        Segment* nextSeg = endSegment->nextCR(track, true);
+        bool foundChord = false;
+        while (nextSeg && nextSeg->isChordRestType()) {
+            const auto& elemList = nextSeg->elist();
+            for (const auto el : elemList) {
+                if (el && el->isChord()) {
+                    foundChord = true;
+                    break;
+                }
+            }
+
+            if (foundChord) {
+                break;
+            }
+
+            nextSeg = nextSeg->nextCR(track, true);
+        }
+
+        endSegment = (nextSeg && nextSeg != endSegment ? nextSeg : nullptr);
+
+        Instrument palmMuteInstr(*currentInstrument);
+
+        palmMuteInstr.channel(PALM_MUTE_CHAN)->setProgram(PALM_MUTE_PROG);
+        InstrumentChange* instrChPalmMute =  Factory::createInstrumentChange(begSegment, palmMuteInstr);
+        instrChPalmMute->setTrack(track * VOICES);
+        begSegment->add(instrChPalmMute);
+
+        if (endSegment) {
+            InstrumentChange* instrChangeBack =  Factory::createInstrumentChange(endSegment, *currentInstrument);
+            instrChangeBack->setTrack(track * VOICES);
+            endSegment->add(instrChangeBack);
+        }
+    }
+}
+
 bool GPConverter::addSimileMark(const GPBar* bar, int curTrack)
 {
     if (bar->simileMark() == GPBar::SimileMark::None) {
@@ -1946,6 +2010,16 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
 void GPConverter::addLineElement(ChordRest* cr, std::vector<SLine*>& elements, ElementType muType, LineImportType importType,
                                  bool elemExists, bool splitByRests)
 {
+    auto setStartCR = [](SLine* elem, ChordRest* cr) {
+        elem->setTick(cr->tick());
+        elem->setStartElement(cr);
+    };
+
+    auto setEndCR = [](SLine* elem, ChordRest* cr) {
+        elem->setTick2(cr->tick() + cr->actualTicks());
+        elem->setEndElement(cr);
+    };
+
     track_idx_t track = cr->track();
 
     auto& lastTypeForTrack = m_lastImportTypes[track][muType];
@@ -1984,15 +2058,13 @@ void GPConverter::addLineElement(ChordRest* cr, std::vector<SLine*>& elements, E
         elem = nullptr;
     }
 
-    Fraction tick = cr->tick();
-
     if (elem) {
         ChordRest* lastCR = elem->endCR();
         if (lastCR == cr) {
             return;
         }
 
-        if (elem->tick2() < tick) {
+        if (elem->tick2() < cr->tick()) {
             if (lastTypeForTrack != LineImportType::NONE) {
                 auto& lastTypeElementsToAdd = m_elementsToAddToScore[track][lastTypeForTrack];
 
@@ -2006,12 +2078,11 @@ void GPConverter::addLineElement(ChordRest* cr, std::vector<SLine*>& elements, E
                     }
 
                     elem = prevElem;
-                    elem->setTick2(tick + cr->actualTicks());
+                    setEndCR(elem, cr);
                 }
             }
         } else {
-            elem->setTick2(cr->tick() + cr->actualTicks());
-            elem->setEndElement(cr);
+            setEndCR(elem, cr);
         }
     }
 
@@ -2025,12 +2096,11 @@ void GPConverter::addLineElement(ChordRest* cr, std::vector<SLine*>& elements, E
 
         elem = newElem;
 
-        newElem->setTick(tick);
-        newElem->setTick2(tick + cr->actualTicks());
+        setStartCR(newElem, cr);
+        setEndCR(newElem, cr);
+
         newElem->setTrack(track);
         newElem->setTrack2(track);
-        newElem->setStartElement(cr);
-        newElem->setEndElement(cr);
 
         auto& elementsToAdd = m_elementsToAddToScore[track][importType];
         elementsToAdd.push_back(newElem);
