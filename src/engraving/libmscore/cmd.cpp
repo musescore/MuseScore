@@ -1995,8 +1995,8 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
         return;
     }
     ClefType clef = estaff->clef(tick);
-    if (clef == ClefType::TAB 
-        || clef == ClefType::TAB4 
+    if (clef == ClefType::TAB
+        || clef == ClefType::TAB4
         || clef == ClefType::TAB_SERIF
         || clef == ClefType::TAB4_SERIF) {
         return;
