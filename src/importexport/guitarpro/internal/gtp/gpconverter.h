@@ -181,6 +181,7 @@ private:
     void addFermatas();
     void addTempoMap();
     void addInstrumentChanges();
+    void addSoundEffects(const SLine* const elem);
     void fillUncompletedMeasure(const Context& ctx);
     void hideRestsInEmptyMeasures(track_idx_t track);
     int getStringNumberFor(Note* pNote, int pitch) const;
