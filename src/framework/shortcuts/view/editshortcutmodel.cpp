@@ -181,7 +181,7 @@ void EditShortcutModel::applyNewSequence()
     IInteractive::Button btn = interactive()->warning(mu::trc("shortcuts", "Reassign shortcut"), text, {
         interactive()->buttonData(IInteractive::Button::Cancel),
         okBtn,
-    }, (int)IInteractive::Button::Ok, IInteractive::Option::WithIcon).standardButton();
+    }, (int)IInteractive::Button::Ok).standardButton();
 
     if (btn != IInteractive::Button::Ok) {
         return;
