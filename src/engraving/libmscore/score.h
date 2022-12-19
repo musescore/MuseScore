@@ -1209,7 +1209,7 @@ public:
     String createRehearsalMarkText(RehearsalMark* current) const;
     String nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
 
-    bool sanityCheck();
+    Ret sanityCheck();
 
     bool checkKeys();
 

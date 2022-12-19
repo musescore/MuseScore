@@ -38,14 +38,14 @@
 using namespace mu::io;
 using namespace mu::engraving;
 
-Err ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, bool ignoreVersionError)
+mu::Ret ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, bool ignoreVersionError)
 {
     TRACEFUNC;
 
     using namespace mu::engraving;
 
     IF_ASSERT_FAILED(mscReader.isOpened()) {
-        return Err::FileOpenError;
+        return make_ret(Err::FileOpenError, mscReader.params().filePath);
     }
 
     ScoreLoad sl;
@@ -83,7 +83,7 @@ Err ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, 
     ReadContext masterScoreCtx(masterScore);
     masterScoreCtx.setIgnoreVersionError(ignoreVersionError);
 
-    Err retval = Err::NoError;
+    Ret ret = make_ok();
 
     // Read score
     {
@@ -96,7 +96,7 @@ Err ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, 
         xml.setDocName(docName);
         xml.setContext(&masterScoreCtx);
 
-        retval = read(masterScore, xml, masterScoreCtx, &styleHook);
+        ret = read(masterScore, xml, masterScoreCtx, &styleHook);
     }
 
     // Read excerpts
@@ -143,10 +143,10 @@ Err ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, 
         }
     }
 
-    return retval;
+    return ret;
 }
 
-Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat::ReadStyleHook* styleHook)
+mu::Ret ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat::ReadStyleHook* styleHook)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
@@ -156,13 +156,13 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
 
             if (!ctx.ignoreVersionError()) {
                 if (score->mscVersion() > MSCVERSION) {
-                    return Err::FileTooNew;
+                    return make_ret(Err::FileTooNew);
                 }
                 if (score->mscVersion() < 114) {
-                    return Err::FileTooOld;
+                    return make_ret(Err::FileTooOld);
                 }
                 if (score->mscVersion() == 300) {
-                    return Err::FileOld300Format;
+                    return make_ret(Err::FileOld300Format);
                 }
             }
 
@@ -195,13 +195,13 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
             // don't autosave (as long as there's no change to the score)
             score->setAutosaveDirty(false);
 
-            return err;
+            return make_ret(err);
         } else {
             e.unknown();
         }
     }
 
-    return Err::FileCorrupted;
+    return Ret(static_cast<int>(Err::FileCorrupted), e.errorString().toStdString());
 }
 
 Err ScoreReader::doRead(MasterScore* score, XmlReader& e, ReadContext& ctx)
