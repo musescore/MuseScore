@@ -3196,11 +3196,11 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         if (links()) {
             for (EngravingObject* scoreElement : *links()) {
                 Note* note = toNote(scoreElement);
-                note->setDeadNote(_headGroup == NoteHeadGroup::HEAD_CROSS);
+                note->setDeadNote(staff() && !staff()->isDrumStaff(tick()) && _headGroup == NoteHeadGroup::HEAD_CROSS);
                 note->setHeadGroup(_headGroup);
             }
         } else {
-            setDeadNote(_headGroup == NoteHeadGroup::HEAD_CROSS);
+            setDeadNote(staff() && !staff()->isDrumStaff(tick()) && _headGroup == NoteHeadGroup::HEAD_CROSS);
             setHeadGroup(_headGroup);
         }
         break;
