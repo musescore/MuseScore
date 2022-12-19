@@ -32,6 +32,7 @@ StyledDialogView {
     property alias title: content.title
     property alias text: content.text
     property alias textFormat: content.textFormat
+    property var details: []
 
     property alias withIcon: content.withIcon
     property alias iconCode: content.iconCode
@@ -45,6 +46,12 @@ StyledDialogView {
     contentHeight: content.implicitHeight
 
     margins: 16
+
+    Component.onCompleted: {
+        for (var i = 0; i < root.details.length; ++i) {
+            console.debug(root.details[i])
+        }
+    }
 
     onNavigationActivateRequested: {
         content.focusOnFirst()

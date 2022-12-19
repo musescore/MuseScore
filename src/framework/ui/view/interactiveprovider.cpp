@@ -103,29 +103,32 @@ RetVal<Val> InteractiveProvider::question(const std::string& title, const IInter
                                           const IInteractive::ButtonDatas& buttons, int defBtn,
                                           const IInteractive::Options& options)
 {
-    return openStandardDialog("QUESTION", QString::fromStdString(title), text, buttons, defBtn, options);
+    return openStandardDialog("QUESTION", title, text, {}, buttons, defBtn, options);
 }
 
 RetVal<Val> InteractiveProvider::info(const std::string& title, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
                                       int defBtn,
                                       const IInteractive::Options& options)
 {
-    return openStandardDialog("INFO", QString::fromStdString(title), text, buttons, defBtn, options);
+    return openStandardDialog("INFO", title, text, {}, buttons, defBtn, options);
 }
 
-RetVal<Val> InteractiveProvider::warning(const std::string& title, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
+RetVal<Val> InteractiveProvider::warning(const std::string& title, const IInteractive::Text& text,
+                                         const std::string& detailedText,
+                                         const IInteractive::ButtonDatas& buttons,
                                          int defBtn,
                                          const IInteractive::Options& options)
 {
-    return openStandardDialog("WARNING", QString::fromStdString(title), text, buttons, defBtn, options);
+    return openStandardDialog("WARNING", title, text, detailedText, buttons, defBtn, options);
 }
 
 RetVal<Val> InteractiveProvider::error(const std::string& title, const framework::IInteractive::Text& text,
+                                       const std::string& detailedText,
                                        const IInteractive::ButtonDatas& buttons,
                                        int defBtn,
                                        const IInteractive::Options& options)
 {
-    return openStandardDialog("ERROR", QString::fromStdString(title), text, buttons, defBtn, options);
+    return openStandardDialog("ERROR", title, text, detailedText, buttons, defBtn, options);
 }
 
 RetVal<io::path_t> InteractiveProvider::selectOpeningFile(const std::string& title, const io::path_t& dir,
@@ -315,8 +318,9 @@ void InteractiveProvider::fillData(QObject* object, const UriQuery& q) const
     }
 }
 
-void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QString& type, const QString& title,
-                                                 const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons, int defBtn,
+void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QString& type, const std::string& title,
+                                                 const IInteractive::Text& text, const std::string& detailedText,
+                                                 const IInteractive::ButtonDatas& buttons, int defBtn,
                                                  const IInteractive::Options& options) const
 {
     auto format = [](IInteractive::TextFormat f) {
@@ -330,8 +334,9 @@ void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QStr
 
     QVariantMap params;
     params["type"] = type;
-    params["title"] = title;
+    params["title"] = QString::fromStdString(title);
     params["text"] = QString::fromStdString(text.text);
+    params["detailedText"] = QString::fromStdString(detailedText);
     params["textFormat"] = format(text.format);
     params["defaultButtonId"] = defBtn;
 
@@ -566,12 +571,13 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openQml(const UriQuer
     return result;
 }
 
-RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const QString& title, const IInteractive::Text& text,
+RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const std::string& title, const IInteractive::Text& text,
+                                                    const std::string& detailedText,
                                                     const IInteractive::ButtonDatas& buttons, int defBtn,
                                                     const IInteractive::Options& options)
 {
     QmlLaunchData* data = new QmlLaunchData();
-    fillStandardDialogData(data, type, title, text, buttons, defBtn, options);
+    fillStandardDialogData(data, type, title, text, detailedText, buttons, defBtn, options);
 
     emit fireOpenStandardDialog(data);
 

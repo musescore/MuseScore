@@ -78,6 +78,13 @@ IInteractive::Result AutobotInteractive::warning(const std::string& title, const
     return m_real->warning(title, text, buttons, defBtn, options);
 }
 
+IInteractive::Result AutobotInteractive::warning(const std::string& title, const Text& text, const std::string& detailedText,
+                                                 const ButtonDatas& buttons, int defBtn,
+                                                 const Options& options) const
+{
+    return m_real->warning(title, text, detailedText, buttons, defBtn, options);
+}
+
 IInteractive::Result AutobotInteractive::error(const std::string& title, const std::string& text, const Buttons& buttons,
                                                const Button& def, const Options& options) const
 {
@@ -88,6 +95,12 @@ IInteractive::Result AutobotInteractive::error(const std::string& title, const T
                                                int defBtn, const Options& options) const
 {
     return m_real->error(title, text, buttons, defBtn, options);
+}
+
+IInteractive::Result AutobotInteractive::error(const std::string& title, const Text& text, const std::string& detailedText,
+                                               const ButtonDatas& buttons, int defBtn, const Options& options) const
+{
+    return m_real->error(title, text, detailedText, buttons, defBtn, options);
 }
 
 io::path_t AutobotInteractive::selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter)
