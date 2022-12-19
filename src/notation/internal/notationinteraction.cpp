@@ -2715,6 +2715,18 @@ void NotationInteraction::moveStringSelection(MoveDirection d)
     int strg = is.string() + delta;
     if (strg >= 0 && strg < instrStrgs && strg != is.string()) {
         is.setString(strg);
+
+        const ChordRest* chordRest = is.cr();
+        if (chordRest && chordRest->isChord()) {
+            const Chord* chord = toChord(chordRest);
+
+            for (Note* note : chord->notes()) {
+                if (note->string() == strg) {
+                    select({ note }, SelectType::SINGLE);
+                }
+            }
+        }
+
         notifyAboutNoteInputStateChanged();
     }
 }
