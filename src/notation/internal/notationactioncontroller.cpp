@@ -490,12 +490,12 @@ void NotationActionController::init()
 
     navigationController()->navigationChanged().onNotify(this, [this]() {
         if (!currentNotationNoteInput()) {
-            return
-        };
+            return;
+        }
         
         if (!currentNotationNoteInput()->isNoteInputMode()) {
-            return
-        };
+            return;
+        }
         
         currentNotationNoteInput()->endNoteInput();
     });
