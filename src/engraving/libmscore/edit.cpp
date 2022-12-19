@@ -1245,6 +1245,7 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
         //  ignore if there is already a timesig
         //  with same values
         //
+        select(ots, SelectType::SINGLE, staffIdx); // keep selected
         delete ts;
         return;
     }
@@ -1300,6 +1301,8 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
                 nsig->undoChangeProperty(Pid::GROUP_NODES, ts->groups().nodes());
                 nsig->setSelected(false);
                 nsig->setDropTarget(false);
+
+                select(nsig, SelectType::SINGLE, staffIdx);
             }
         }
     } else {
@@ -1382,6 +1385,8 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
                 if (score->isMaster()) {
                     masterTimeSigs[nsig->track()] = nsig;
                 }
+
+                select(nsig, SelectType::SINGLE, staffIdx);
             }
         }
     }
