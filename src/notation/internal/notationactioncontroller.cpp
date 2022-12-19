@@ -492,11 +492,11 @@ void NotationActionController::init()
         if (!currentNotationNoteInput()) {
             return;
         }
-        
+
         if (!currentNotationNoteInput()->isNoteInputMode()) {
             return;
         }
-        
+
         currentNotationNoteInput()->endNoteInput();
     });
 
