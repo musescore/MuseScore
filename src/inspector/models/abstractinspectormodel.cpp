@@ -472,11 +472,13 @@ void AbstractInspectorModel::setElementType(mu::engraving::ElementType type)
 
 PropertyItem* AbstractInspectorModel::buildPropertyItem(const mu::engraving::Pid& propertyId,
                                                         std::function<void(const mu::engraving::Pid propertyId,
-                                                                           const QVariant& newValue)> onPropertyChangedCallBack)
+                                                                           const QVariant& newValue)> onPropertyChangedCallBack,
+                                                        std::function<void(const mu::engraving::Sid styleId,
+                                                                           const QVariant& newValue)> onStyleChangedCallBack)
 {
     PropertyItem* newPropertyItem = new PropertyItem(propertyId, this);
 
-    initPropertyItem(newPropertyItem, onPropertyChangedCallBack);
+    initPropertyItem(newPropertyItem, onPropertyChangedCallBack, onStyleChangedCallBack);
 
     return newPropertyItem;
 }
@@ -494,22 +496,28 @@ PointFPropertyItem* AbstractInspectorModel::buildPointFPropertyItem(const mu::en
 
 void AbstractInspectorModel::initPropertyItem(PropertyItem* propertyItem,
                                               std::function<void(const mu::engraving::Pid propertyId,
-                                                                 const QVariant& newValue)> onPropertyChangedCallBack)
+                                                                 const QVariant& newValue)> onPropertyChangedCallBack,
+                                              std::function<void(const mu::engraving::Sid styleId,
+                                                                 const QVariant& newValue)> onStyleChangedCallBack)
 {
-    auto callback = onPropertyChangedCallBack;
-
-    if (!callback) {
-        callback = [this](const mu::engraving::Pid propertyId, const QVariant& newValue) {
+    auto propertyCallback = onPropertyChangedCallBack;
+    if (!propertyCallback) {
+        propertyCallback = [this](const mu::engraving::Pid propertyId, const QVariant& newValue) {
             onPropertyValueChanged(propertyId, newValue);
         };
     }
 
-    connect(propertyItem, &PropertyItem::propertyModified, this, callback);
-    connect(propertyItem, &PropertyItem::applyToStyleRequested, this, [this](const mu::engraving::Sid sid, const QVariant& newStyleValue) {
-        updateStyleValue(sid, newStyleValue);
+    auto styleCallback = onStyleChangedCallBack;
+    if (!styleCallback) {
+        styleCallback = [this](const mu::engraving::Sid styleId, const QVariant& newValue) {
+            updateStyleValue(styleId, newValue);
 
-        emit requestReloadPropertyItems();
-    });
+            emit requestReloadPropertyItems();
+        };
+    }
+
+    connect(propertyItem, &PropertyItem::propertyModified, this, propertyCallback);
+    connect(propertyItem, &PropertyItem::applyToStyleRequested, this, styleCallback);
 }
 
 void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem,
