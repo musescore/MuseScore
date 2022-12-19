@@ -200,6 +200,7 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
             e.unknown();
         }
     }
+
     return Err::FileCorrupted;
 }
 

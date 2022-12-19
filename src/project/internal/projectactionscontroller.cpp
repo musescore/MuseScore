@@ -204,7 +204,7 @@ Ret ProjectActionsController::doOpenProject(const io::path_t& filePath)
             return ret;
         }
 
-        if (checkCanIgnoreError(ret, filePath)) {
+        if (checkCanIgnoreError(ret, io::filename(loadPath).toString())) {
             ret = project->load(loadPath, "" /*stylePath*/, true /*forceMode*/, format);
         }
 
@@ -956,42 +956,67 @@ void ProjectActionsController::warnSaveIsNotAvailable()
     interactive()->warning(title, msg, { okBtn }, okBtn.btn, IInteractive::Option::WithIcon);
 }
 
-bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path_t& filePath)
+bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const String& projectName)
 {
-    static const QList<engraving::Err> ignorableErrors {
-        engraving::Err::FileTooOld,
-        engraving::Err::FileTooNew,
-        engraving::Err::FileCorrupted,
-        engraving::Err::FileOld300Format
-    };
-
-    //: an error that occurred while opening a file
-    std::string title = trc("project", "Open error");
-    std::string body = ret.text();
-
-    if (body.empty()) {
-        body = qtrc("project", "Cannot open file %1").arg(filePath.toQString()).toStdString();
+    if (ret) {
+        return true;
     }
 
-    IInteractive::Options options;
-    options.setFlag(IInteractive::Option::WithIcon);
-
-    bool canIgnore = ignorableErrors.contains(static_cast<engraving::Err>(ret.code()));
-
-    if (!canIgnore) {
-        interactive()->error(title, body, {
-            IInteractive::Button::Ok
-        }, IInteractive::Button::Ok, options);
-
+    switch (static_cast<engraving::Err>(ret.code())) {
+    case engraving::Err::FileTooOld:
+    case engraving::Err::FileTooNew:
+    case engraving::Err::FileOld300Format:
+        return askIfUserAgreesToOpenProjectWithIncompatibleVersion(ret.text());
+    case engraving::Err::FileCorrupted:
+        return askIfUserAgreesToOpenCorruptedProject(projectName, ret.text());
+    default:
+        warnProjectCannotBeOpened(projectName, ret.text());
         return false;
     }
+}
 
-    IInteractive::Result result = interactive()->warning(title, body, {
-        IInteractive::Button::Cancel,
-        IInteractive::Button::Ignore
-    }, IInteractive::Button::Ignore, options);
+bool ProjectActionsController::askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText)
+{
+    IInteractive::ButtonData openAnywayBtn(IInteractive::Button::CustomButton, trc("project", "Open anyway"), true /*accent*/);
 
-    return result.standardButton() == IInteractive::Button::Ignore;
+    int btn = interactive()->warning(errorText, "", {
+        interactive()->buttonData(IInteractive::Button::Cancel),
+        openAnywayBtn
+    }, openAnywayBtn.btn).button();
+
+    return btn == openAnywayBtn.btn;
+}
+
+bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const String& projectName, const std::string& errorText)
+{
+    std::string title = mtrc("project", "File “%1” is corrupted").arg(projectName).toStdString();
+    std::string body = trc("project", "This file contains errors that could cause MuseScore to malfunction.");
+
+    IInteractive::ButtonData openAnywayBtn(IInteractive::Button::CustomButton, trc("project", "Open anyway"), true /*accent*/);
+
+    int btn = interactive()->warning(title, body, {
+        interactive()->buttonData(IInteractive::Button::Cancel),
+        openAnywayBtn
+    }, openAnywayBtn.btn, options).button();
+
+    return btn == openAnywayBtn.btn;
+}
+
+void ProjectActionsController::warnProjectCannotBeOpened(const String& projectName, const std::string& errorText)
+{
+    std::string title = mtrc("project", "File “%1” is corrupted and cannot be opened").arg(projectName).toStdString();
+    std::string body = trc("project", "Get help for this issue on musescore.org.");
+
+    IInteractive::ButtonData getHelpBtn(IInteractive::Button::CustomButton, trc("project", "Get help"), true /*accent*/);
+
+    int btn = interactive()->error(title, body, {
+        interactive()->buttonData(IInteractive::Button::Cancel),
+        getHelpBtn
+    }, getHelpBtn.btn).button();
+
+    if (btn == getHelpBtn.btn) {
+        interactive()->openUrl(configuration()->supportForumUrl());
+    }
 }
 
 void ProjectActionsController::importPdf()
