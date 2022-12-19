@@ -488,6 +488,12 @@ void NotationActionController::init()
         m_currentNotationNoteInputChanged.notify();
     });
 
+    navigationController()->navigationChanged().onNotify(this, [this]() {
+        if (!currentNotationNoteInput()) return;
+        if (!currentNotationNoteInput()->isNoteInputMode()) return;
+        currentNotationNoteInput()->endNoteInput();
+    });
+
     // Register engraving debugging options actions
     for (auto [code, member] : engravingDebuggingActions) {
         dispatcher()->reg(this, code, [this, member = member]() {

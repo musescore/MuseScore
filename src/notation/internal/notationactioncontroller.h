@@ -35,6 +35,7 @@
 #include "playback/iplaybackcontroller.h"
 #include "engraving/iengravingconfiguration.h"
 #include "inotationconfiguration.h"
+#include "ui/inavigationcontroller.h"
 
 #include "inotation.h"
 
@@ -43,6 +44,7 @@ class NotationActionController : public actions::Actionable, public async::Async
 {
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, ui::IUiActionsRegister, actionRegister)
+    INJECT(notation, ui::INavigationController, navigationController)
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, context::IUiContextResolver, uiContextResolver)
     INJECT(notation, framework::IInteractive, interactive)
