@@ -771,7 +771,8 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                     if (e->generated()) {
                         continue;
                     }
-                    if ((e->track() == srcTrack && strack != mu::nidx) || (e->systemFlag() && srcTrack == 0)) {
+                    if ((e->track() == srcTrack && strack != mu::nidx && !e->systemFlag())
+                        || (e->systemFlag() && srcTrack == 0 && e->track() == srcTrack)) {
                         EngravingItem* ne = e->linkedClone();
                         processLinkedClone(ne, score, strack);
                         if (!ns) {
@@ -1479,8 +1480,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
 
                     for (EngravingItem* e : oseg->annotations()) {
                         if (e->generated()
-                            || (e->track() != srcTrack && !e->systemFlag()) // system items must be cloned even if they are on different tracks
-                            || (e->systemFlag() && score->nstaves() > 1)) { // ...but only once!
+                            || (e->track() != srcTrack && !(e->systemFlag() && e->track() == 0)) // system items must be cloned even if they are on different tracks
+                            || (e->track() != srcTrack && e->systemFlag() && e->findLinkedInScore(score))) { // ...but only once!
                             continue;
                         }
 
