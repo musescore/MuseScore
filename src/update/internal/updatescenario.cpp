@@ -198,8 +198,7 @@ void UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
 void UpdateScenario::showServerErrorMsg()
 {
     interactive()->error(trc("update", "Cannot connect to server"),
-                         trc("update", "Sorry - please try again later"),  {}, 0,
-                         IInteractive::Option::WithIcon);
+                         trc("update", "Sorry - please try again later"));
 }
 
 void UpdateScenario::downloadRelease()

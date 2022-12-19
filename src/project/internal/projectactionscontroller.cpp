@@ -357,15 +357,11 @@ IInteractive::Button ProjectActionsController::askAboutSavingScore(INotationProj
 
     std::string body = trc("project", "Your changes will be lost if you don’t save them.");
 
-    IInteractive::Options options {
-        IInteractive::Option::WithIcon
-    };
-
     IInteractive::Result result = interactive()->warning(title, body, {
         IInteractive::Button::DontSave,
         IInteractive::Button::Cancel,
         IInteractive::Button::Save
-    }, IInteractive::Button::Save, options);
+    }, IInteractive::Button::Save);
 
     return result.standardButton();
 }
@@ -903,7 +899,7 @@ void ProjectActionsController::onProjectUploadFailed(const Ret& ret, bool publis
         break;
     }
 
-    IInteractive::Result result = interactive()->warning(title, msg, buttons, okBtn.btn, IInteractive::Option::WithIcon);
+    IInteractive::Result result = interactive()->warning(title, msg, buttons, okBtn.btn);
     if (result.button() == helpBtn.btn) {
         interactive()->openUrl(configuration()->supportForumUrl());
     }
@@ -938,7 +934,7 @@ void ProjectActionsController::warnPublishIsNotAvailable()
     IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
     okBtn.accent = true;
 
-    interactive()->warning(title, msg, { okBtn }, okBtn.btn, IInteractive::Option::WithIcon);
+    interactive()->warning(title, msg, { okBtn }, okBtn.btn);
 }
 
 void ProjectActionsController::warnSaveIsNotAvailable()
@@ -953,7 +949,7 @@ void ProjectActionsController::warnSaveIsNotAvailable()
     IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
     okBtn.accent = true;
 
-    interactive()->warning(title, msg, { okBtn }, okBtn.btn, IInteractive::Option::WithIcon);
+    interactive()->warning(title, msg, { okBtn }, okBtn.btn);
 }
 
 bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const String& projectName)
@@ -997,7 +993,7 @@ bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const Strin
     int btn = interactive()->warning(title, body, {
         interactive()->buttonData(IInteractive::Button::Cancel),
         openAnywayBtn
-    }, openAnywayBtn.btn, options).button();
+    }, openAnywayBtn.btn).button();
 
     return btn == openAnywayBtn.btn;
 }
