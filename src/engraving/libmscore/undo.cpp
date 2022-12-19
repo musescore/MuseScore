@@ -1547,7 +1547,7 @@ void ChangeMeasureLen::flip(EditData*)
         measure->remove(s);
     }
     measure->setTicks(len);
-    measure->score()->setUpTempoMapLater();
+    measure->score()->setUpTempoMap();
     len = oLen;
 }
 
