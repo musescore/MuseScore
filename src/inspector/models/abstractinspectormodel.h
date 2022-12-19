@@ -165,7 +165,8 @@ protected:
     void setElementType(mu::engraving::ElementType type);
 
     PropertyItem* buildPropertyItem(const mu::engraving::Pid& pid, std::function<void(const mu::engraving::Pid propertyId,
-                                                                                      const QVariant& newValue)> onPropertyChangedCallBack = nullptr);
+                                                                                      const QVariant& newValue)> onPropertyChangedCallBack = nullptr, std::function<void(const mu::engraving::Sid styleId,
+                                                                                                                                                                         const QVariant& newValue)> onStyleChangedCallBack = nullptr);
     PointFPropertyItem* buildPointFPropertyItem(const mu::engraving::Pid& pid, std::function<void(const mu::engraving::Pid propertyId,
                                                                                                   const QVariant& newValue)> onPropertyChangedCallBack = nullptr);
 
@@ -209,7 +210,9 @@ private:
     void setupCurrentNotationChangedConnection();
 
     void initPropertyItem(PropertyItem* propertyItem, std::function<void(const mu::engraving::Pid propertyId,
-                                                                         const QVariant& newValue)> onPropertyChangedCallBack = nullptr);
+                                                                         const QVariant& newValue)> onPropertyChangedCallBack = nullptr,
+                          std::function<void(const mu::engraving::Sid styleId,
+                                             const QVariant& newValue)> onStyleChangedCallBack = nullptr);
 
     mu::engraving::Sid styleIdByPropertyId(const mu::engraving::Pid pid) const;
     mu::engraving::PropertyIdSet propertyIdSetFromStyleIdSet(const mu::engraving::StyleIdSet& styleIdSet) const;
