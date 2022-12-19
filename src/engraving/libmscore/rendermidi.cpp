@@ -1169,7 +1169,7 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
         int idx = s->staff()->channel(s->tick(), 0);
         int channel = s->part()->instrument(s->tick())->channel(idx)->channel();
 
-        if (s->isPedal() || s->isLetRing()) {
+        if (s->isPedal()) {
             channelPedalEvents.insert({ channel, std::vector<std::pair<int, std::pair<bool, int> > >() });
             std::vector<std::pair<int, std::pair<bool, int> > > pedalEventList = channelPedalEvents.at(channel);
             std::pair<int, std::pair<bool, int> > lastEvent;
@@ -1977,7 +1977,11 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
         }
         if (trailtime == 0) {   // if trailtime is non-zero that means we have graceNotesAfter, so we don't need additional gate time.
             for (NoteEvent& e : ell[i]) {
-                e.setLen(chord->notes()[i]->deadNote() ? deadNoteDurationInTicks : e.len() * gateTime / 100);
+                Note* note = chord->notes()[i];
+                e.setLen(note->deadNote() ? deadNoteDurationInTicks : e.len() * gateTime / 100);
+                if (note->letRing()) {
+                    e.setLen(e.len() * 2);
+                }
             }
         }
     }
