@@ -975,7 +975,7 @@ bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const Strin
 
     IInteractive::ButtonData openAnywayBtn(IInteractive::Button::CustomButton, trc("project", "Open anyway"), true /*accent*/);
 
-    int btn = interactive()->warning(title, body, {
+    int btn = interactive()->warning(title, body, errorText, {
         interactive()->buttonData(IInteractive::Button::Cancel),
         openAnywayBtn
     }, openAnywayBtn.btn).button();
@@ -990,7 +990,7 @@ void ProjectActionsController::warnProjectCannotBeOpened(const String& projectNa
 
     IInteractive::ButtonData getHelpBtn(IInteractive::Button::CustomButton, trc("project", "Get help"), true /*accent*/);
 
-    int btn = interactive()->error(title, body, {
+    int btn = interactive()->error(title, body, errorText, {
         interactive()->buttonData(IInteractive::Button::Cancel),
         getHelpBtn
     }, getHelpBtn.btn).button();
