@@ -49,15 +49,15 @@ MasterScore* MTest::readScore(const QString& name)
     std::string suffix = io::suffix(path);
 
     ScoreLoad sl;
-    Err rv;
+    Ret ret;
     if (suffix == "mscz" || suffix == "mscx") {
-        rv = compat::loadMsczOrMscx(score, path.toQString(), false);
+        ret = compat::loadMsczOrMscx(score, path.toQString(), false);
     } else {
-        rv = Err::FileUnknownType;
+        ret = make_ret(Err::FileUnknownType, path);
     }
 
-    if (rv != Err::NoError) {
-        LOGE() << "cannot load file at " << path;
+    if (!ret) {
+        LOGE() << ret.text();
         delete score;
         score = nullptr;
     } else {
