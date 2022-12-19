@@ -38,7 +38,7 @@ StyledDialogView {
 
     property alias withDontShowAgainCheckBox: content.withDontShowAgainCheckBox
 
-    property var buttons: [ { "buttonId": 1, "title": qsTrc("global", "OK") } ]
+    property var buttons: [ { "buttonId": 1, "title": qsTrc("global", "OK"), "accent": true } ]
     property alias defaultButtonId: content.defaultButtonId
 
     contentWidth: content.implicitWidth

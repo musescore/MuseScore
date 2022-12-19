@@ -849,7 +849,6 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
 
     IInteractive::ButtonData viewOnlineBtn(IInteractive::Button::CustomButton, trc("project/save", "View online"));
     IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
-    okBtn.accent = true;
 
     std::string msg = trc("project/save", "All saved changes will now update to the cloud. "
                                           "You can manage this file in the score manager on musescore.com.");
@@ -875,8 +874,6 @@ void ProjectActionsController::onProjectUploadFailed(const Ret& ret, bool publis
     std::string msg;
 
     IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
-    okBtn.accent = true;
-
     IInteractive::ButtonData helpBtn { IInteractive::Button::CustomButton, trc("project/save", "Get help") };
 
     IInteractive::ButtonDatas buttons { helpBtn, okBtn };
@@ -916,11 +913,8 @@ void ProjectActionsController::warnCloudIsNotAvailable()
     std::string title = trc("project/save", "Unable to connect to the cloud");
     std::string msg = trc("project/save", "Your changes will be saved to a local file until the connection resumes.");
 
-    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
-    okBtn.accent = true;
-
     IInteractive::Result result = interactive()->warning(title, msg,
-                                                         { okBtn }, okBtn.btn,
+                                                         { IInteractive::Button::Ok }, IInteractive::Button::Ok,
                                                          IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
 
     configuration()->setShowCloudIsNotAvailableWarning(result.showAgain());
@@ -928,28 +922,19 @@ void ProjectActionsController::warnCloudIsNotAvailable()
 
 void ProjectActionsController::warnPublishIsNotAvailable()
 {
-    std::string title = trc("project/save", "Unable to connect to MuseScore.com");
-    std::string msg = trc("project/save", "Please check your internet connection or try again later.");
-
-    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
-    okBtn.accent = true;
-
-    interactive()->warning(title, msg, { okBtn }, okBtn.btn);
+    interactive()->warning(trc("project/save", "Unable to connect to MuseScore.com"),
+                           trc("project/save", "Please check your internet connection or try again later."));
 }
 
 void ProjectActionsController::warnSaveIsNotAvailable()
 {
-    std::string title = trc("project/save", "Your score could not be saved");
     std::string msg;
 
     if (!currentMasterNotation()->hasParts()) {
         msg = trc("project/save", "Please add at least one instrument to enable saving.");
     }
 
-    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
-    okBtn.accent = true;
-
-    interactive()->warning(title, msg, { okBtn }, okBtn.btn);
+    interactive()->warning(trc("project/save", "Your score could not be saved"), msg);
 }
 
 bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const String& projectName)
