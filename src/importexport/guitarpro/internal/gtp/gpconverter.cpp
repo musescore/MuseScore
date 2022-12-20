@@ -6,6 +6,7 @@
 
 #include "../importgtp.h"
 #include "gpdommodel.h"
+#include "gpdrumsetresolver.h"
 
 #include "libmscore/arpeggio.h"
 #include "libmscore/box.h"
@@ -271,6 +272,9 @@ GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
         { 126, 59 },//Ride (middle)
         { 127, 59 }//Ride (bell)
     };
+
+    _drumResolver = std::make_unique<GPDrumSetResolver>();
+    _drumResolver->initGPDrum();
 }
 
 const std::unique_ptr<GPDomModel>& GPConverter::gpDom() const
@@ -2179,64 +2183,9 @@ void GPConverter::setTpc(Note* note, int accidental)
     }
 }
 
-int GPConverter::calculateDrumPitch(int element, int variation, const String& /*instrumentName*/)
+int GPConverter::calculateDrumPitch(int element, int variation, const String& instrumentName)
 {
-    //!@NOTE copied from importgtp-gp6.cpp.
-
-    int pitch = 44;
-    /* These numbers below were determined by creating all drum
-     * notes in a GPX format file and then analyzing the score.gpif
-     * file which specifies the score and then matching as much
-     * as possible with the gpDrumset...   */
-    if (element == 11 && variation == 0) {  // pedal hihat
-        pitch = 44;
-    } else if (element == 0 && variation == 0) { // Kick (hit)
-        pitch = 36;     // or 36
-    } else if (element == 5 && variation == 0) { // Tom very low (hit)
-        pitch = 41;
-    } else if (element == 6 && variation == 0) { // Tom low (hit)
-        pitch = 43;
-    } else if (element == 7 && variation == 0) { // Tom medium (hit)
-        pitch = 45;
-    } else if (element == 1 && variation == 0) { // Snare (hit)
-        pitch = 40;     //or 40
-    } else if (element == 1 && variation == 1) { // Snare (rim shot)
-        pitch = 91;
-    } else if (element == 1 && variation == 2) { // Snare (side stick)
-        pitch = 37;
-    } else if (element == 8 && variation == 0) { // Tom high (hit)
-        pitch = 48;
-    } else if (element == 9 && variation == 0) { // Tom very high (hit)
-        pitch = 50;
-    } else if (element == 15 && variation == 0) { // Ride (middle)
-        pitch = 51;
-    } else if (element == 15 && variation == 1) { // Ride (edge)
-        pitch = 59;
-    } else if (element == 15 && variation == 2) { // Ride (bell)
-        pitch = 59;
-    } else if (element == 10 && variation == 0) { // Hihat (closed)
-        pitch = 42;
-    } else if (element == 10 && variation == 1) { // Hihat (half)
-        pitch = 46;
-    } else if (element == 10 && variation == 2) { // Hihat (open)
-        pitch = 46;
-    } else if (element == 12 && variation == 0) { // Crash medium (hit)
-        pitch = 49;
-    } else if (element == 14 && variation == 0) { // Splash (hit)
-        pitch = 55;
-    } else if (element == 13 && variation == 0) { // Crash high (hit)
-        pitch = 57;
-    } else if (element == 16 && variation == 0) { // China (hit)
-        pitch = 52;
-    } else if (element == 4 && variation == 0) { // Cowbell high (hit)
-        pitch = 102;
-    } else if (element == 3 && variation == 0) { // Cowbell medium (hit)
-        pitch = 56;
-    } else if (element == 2 && variation == 0) { // Cowbell low (hit)
-        pitch = 99;
-    }
-
-    return pitch;
+    return _drumResolver->pitch(element, variation, instrumentName);
 }
 
 void GPConverter::addDynamic(const GPBeat* gpb, ChordRest* cr)
