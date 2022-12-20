@@ -182,6 +182,11 @@ MenuItemList NotationContextMenuModel::makeSelectItems()
 MenuItemList NotationContextMenuModel::makeElementItems()
 {
     MenuItemList items = makeDefaultCopyPasteItems();
+
+    if (interaction()->isTextEditingStarted()) {
+        return items;
+    }
+
     MenuItemList selectItems = makeSelectItems();
 
     if (!selectItems.isEmpty()) {
