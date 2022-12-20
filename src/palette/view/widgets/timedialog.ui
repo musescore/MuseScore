@@ -290,7 +290,7 @@
             <string>Place time signature in score without adding to master pallete</string>
            </property>
            <property name="text">
-            <string>Place without adding</string>
+            <string>Place in score</string>
            </property>
           </widget>
          </item>
@@ -306,7 +306,7 @@
             <string>Add time signature to master palette</string>
            </property>
            <property name="text">
-            <string>Add</string>
+            <string>Add to palette</string>
            </property>
           </widget>
          </item>
