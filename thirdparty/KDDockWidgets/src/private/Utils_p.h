@@ -107,8 +107,16 @@ inline bool usesNativeDraggingAndResizing()
 {
     // a native title bar implies native resizing and dragging
     // Windows Aero-Snap also implies native dragging, and implies no native-title bar
-    Q_ASSERT(!(usesNativeTitleBar() && usesAeroSnapWithCustomDecos()));
-    return usesNativeTitleBar() || usesAeroSnapWithCustomDecos();
+
+    //! NOTE: INTERNAL PATCH FOR MU4 ONLY
+    //!
+    //! Causes problems when dragging panels/toolbars between monitors with different scalings
+    //!
+    //! See: https://github.com/musescore/MuseScore/issues/12939
+    return true;
+
+//    Q_ASSERT(!(usesNativeTitleBar() && usesAeroSnapWithCustomDecos()));
+//    return usesNativeTitleBar() || usesAeroSnapWithCustomDecos();
 }
 
 inline bool usesUtilityWindows()
