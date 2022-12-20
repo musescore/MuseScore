@@ -38,6 +38,7 @@
 #include "translation.h"
 
 using namespace mu::palette;
+using namespace mu::notation;
 using namespace mu::engraving;
 
 TimeDialog::TimeDialog(QWidget* parent)
@@ -62,6 +63,7 @@ TimeDialog::TimeDialog(QWidget* parent)
     connect(sp, &PaletteWidget::boxClicked, this, &TimeDialog::paletteChanged);
     connect(sp, &PaletteWidget::changed, this, &TimeDialog::setDirty);
     connect(addButton, &QPushButton::clicked, this, &TimeDialog::addClicked);
+    connect(placeButton, &QPushButton::clicked, this, &TimeDialog::placeClicked);
     connect(zText, &QLineEdit::textChanged, this, &TimeDialog::textChanged);
     connect(nText, &QLineEdit::textChanged, this, &TimeDialog::textChanged);
 
@@ -127,6 +129,32 @@ void TimeDialog::addClicked()
     _dirty = true;
 
     paletteProvider()->addCustomItemRequested().send(ts);
+}
+
+//---------------------------------------------------------
+//   placeClicked
+//---------------------------------------------------------
+
+void TimeDialog::placeClicked()
+{
+    auto ts = mu::engraving::Factory::makeTimeSig(gpaletteScore->dummy()->segment());
+    ts->setSig(Fraction(zNominal->value(), denominator()));
+    ts->setGroups(groups->groups());
+
+    // check for special text
+    if ((QString("%1").arg(zNominal->value()) != zText->text())
+        || (QString("%1").arg(denominator()) != nText->text())) {
+        ts->setNumeratorString(zText->text());
+        ts->setDenominatorString(nText->text());
+    }
+
+    auto notation = globalContext()->currentNotation();
+
+    notation->interaction()->addTimeSignature(
+        notation->interaction()->selection()->range()->measureRange().startMeasure,
+        notation->interaction()->selection()->range()->startStaffIndex(),
+        ts.get()->clone()
+    );
 }
 
 //---------------------------------------------------------
@@ -243,6 +271,7 @@ void TimeDialog::paletteChanged(int idx)
         nText->setEnabled(false);
         groups->setEnabled(false);
         addButton->setEnabled(false);
+        placeButton->setEnabled(false);
         return;
     }
 
@@ -252,6 +281,7 @@ void TimeDialog::paletteChanged(int idx)
     nText->setEnabled(true);
     groups->setEnabled(true);
     addButton->setEnabled(true);
+    placeButton->setEnabled(true);
 
     Fraction sig(timeSig->sig());
     Groups g = timeSig->groups();

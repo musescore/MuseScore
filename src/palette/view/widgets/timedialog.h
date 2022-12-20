@@ -41,6 +41,7 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase
 
     INJECT(palette, IPaletteConfiguration, configuration)
     INJECT(palette, IPaletteProvider, paletteProvider)
+    INJECT(palette, mu::context::IGlobalContext, globalContext)
 
 public:
     TimeDialog(QWidget* parent = 0);
@@ -52,6 +53,7 @@ public:
 
 private slots:
     void addClicked();
+    void placeClicked();
     void zChanged(int);
     void nChanged(int);
     void paletteChanged(int idx);

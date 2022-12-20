@@ -279,6 +279,22 @@
           </spacer>
          </item>
          <item>
+          <widget class="QPushButton" name="placeButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="toolTip">
+            <string>Place time signature in score without adding to master pallete</string>
+           </property>
+           <property name="text">
+            <string>Place without adding</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="addButton">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
