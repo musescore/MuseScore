@@ -154,7 +154,7 @@ void TimeDialog::placeClicked()
         notation->interaction()->selection()->range()->startStaffIndex(),
         ts.get()->clone(),
         false
-    );
+        );
 }
 
 //---------------------------------------------------------
