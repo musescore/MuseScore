@@ -1635,42 +1635,6 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
         vibrato->setXmlText(QT_TRANSLATE_NOOP("palette", "vibrato"));
         vibrato->setTechniqueType(PlayingTechniqueType::Vibrato);
         sp->appendElement(vibrato, QT_TRANSLATE_NOOP("palette", "Vibrato"))->setElementTranslated(true);
-
-        auto sa = makeElement<StaffText>(gpaletteScore);
-        sa->setXmlText(QT_TRANSLATE_NOOP("palette", "S/A"));
-        sa->setChannelName(0, u"Soprano");
-        sa->setChannelName(1, u"Alto");
-        sa->setChannelName(2, u"Soprano");
-        sa->setChannelName(3, u"Alto");
-        sa->setVisible(false);
-        sp->appendElement(sa, QT_TRANSLATE_NOOP("palette", "Soprano/Alto"))->setElementTranslated(true);
-
-        auto tb = makeElement<StaffText>(gpaletteScore);
-        tb->setXmlText(QT_TRANSLATE_NOOP("palette", "T/B"));
-        tb->setChannelName(0, u"Tenor");
-        tb->setChannelName(1, u"Bass");
-        tb->setChannelName(2, u"Tenor");
-        tb->setChannelName(3, u"Bass");
-        tb->setVisible(false);
-        sp->appendElement(tb, QT_TRANSLATE_NOOP("palette", "Tenor/Bass"))->setElementTranslated(true);
-
-        auto tl = makeElement<StaffText>(gpaletteScore);
-        tl->setXmlText(QT_TRANSLATE_NOOP("palette", "T/L"));
-        tl->setChannelName(0, u"TENOR");
-        tl->setChannelName(1, u"LEAD");
-        tl->setChannelName(2, u"TENOR");
-        tl->setChannelName(3, u"LEAD");
-        tl->setVisible(false);
-        sp->appendElement(tl, QT_TRANSLATE_NOOP("palette", "Tenor/Lead"))->setElementTranslated(true);
-
-        auto bb = makeElement<StaffText>(gpaletteScore);
-        bb->setXmlText(QT_TRANSLATE_NOOP("palette", "B/B"));
-        bb->setChannelName(0, u"BARI");
-        bb->setChannelName(1, u"BASS");
-        bb->setChannelName(2, u"BARI");
-        bb->setChannelName(3, u"BASS");
-        bb->setVisible(false);
-        sp->appendElement(bb, QT_TRANSLATE_NOOP("palette", "Bari/Bass"))->setElementTranslated(true);
     }
 
     return sp;
