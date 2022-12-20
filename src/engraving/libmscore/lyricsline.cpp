@@ -199,7 +199,8 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
     SpannerSegmentType sst;
     if (tick() >= stick) {
         layout();
-        if (ticks().isZero()) {                   // only do layout if some time span
+        if (ticks().isZero() && isEndMelisma()) { // only do layout if some time span
+            // dash lines still need to be laid out, though
             return nullptr;
         }
         SLine::layout();
