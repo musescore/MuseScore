@@ -4001,7 +4001,7 @@ double Note::computePadding(const EngravingItem* nextItem) const
     double padding = score()->paddingTable().at(type()).at(nextItem->type());
 
     if ((nextItem->isNote() || nextItem->isStem()) && track() == nextItem->track()
-        && (shape().translated(pos())).intersects(nextItem->shape().translated(nextItem->pos()))) {
+        && (shape().translate(pos())).intersects(nextItem->shape().translate(nextItem->pos()))) {
         padding = std::max(padding, static_cast<double>(score()->styleMM(Sid::minNoteDistance)));
     }
 

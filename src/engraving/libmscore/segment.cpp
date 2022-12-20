@@ -2300,7 +2300,7 @@ void Segment::createShape(staff_idx_t staffIdx)
                 continue;
             }
             if (e->addToSkyline()) {
-                s.add(e->shape().translated(e->pos()));
+                s.add(e->shape().translate(e->pos()));
             }
         }
     }
@@ -2337,7 +2337,7 @@ void Segment::createShape(staff_idx_t staffIdx)
                    && !e->isPlayTechAnnotation()) {
             // annotations added here are candidates for collision detection
             // lyrics, ...
-            s.add(e->shape().translated(e->pos()));
+            s.add(e->shape().translate(e->pos()));
         }
     }
 }

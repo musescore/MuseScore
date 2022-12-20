@@ -79,7 +79,7 @@ public:
 
     void addHorizontalSpacing(EngravingItem* item, double left, double right);
 
-    void translate(const mu::PointF&);
+    Shape& translate(const mu::PointF&);
     void translateX(double);
     void translateY(double);
     Shape translated(const mu::PointF&) const;

@@ -1141,7 +1141,7 @@ Shape Rest::shape() const
     }
     for (EngravingItem* e : el()) {
         if (e->addToSkyline()) {
-            shape.add(e->shape().translated(e->pos()));
+            shape.add(e->shape().translate(e->pos()));
         }
     }
     return shape;

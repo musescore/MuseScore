@@ -54,11 +54,12 @@ void Shape::addHorizontalSpacing(EngravingItem* item, double leftEdge, double ri
 //   translate
 //---------------------------------------------------------
 
-void Shape::translate(const PointF& pt)
+Shape& Shape::translate(const PointF& pt)
 {
     for (RectF& r : *this) {
         r.translate(pt);
     }
+    return *this;
 }
 
 void Shape::translateX(double xo)
