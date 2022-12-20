@@ -4200,7 +4200,7 @@ void GraceNotesGroup::layout()
             return false;
         });
         double offset;
-        offset = -std::max(graceShape.minHorizontalDistance(groupShape, score()), 0.0);
+        offset = -std::max(graceShape.minHorizontalDistance(groupShape), 0.0);
         // Adjust spacing for cross-beam situations
         if (i < this->size() - 1) {
             Chord* prevGrace = this->at(i + 1);
@@ -4217,16 +4217,16 @@ void GraceNotesGroup::layout()
         double xpos = offset - parent()->rxoffset() - parent()->xpos();
         grace->setPos(xpos, 0.0);
     }
-    double xPos = -_shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->staffIdx()), score());
+    double xPos = -_shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->staffIdx()));
     // If the parent chord is cross-staff, also check against shape in the other staff and take the minimum
     if (_parent->staffMove() != 0) {
-        double xPosCross = -_shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->vStaffIdx()), score());
+        double xPosCross = -_shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->vStaffIdx()));
         xPos = std::min(xPos, xPosCross);
     }
     // Same if the grace note itself is cross-staff
     Chord* firstGN = this->back();
     if (firstGN->staffMove() != 0) {
-        double xPosCross = -_shape.minHorizontalDistance(_appendedSegment->staffShape(firstGN->vStaffIdx()), score());
+        double xPosCross = -_shape.minHorizontalDistance(_appendedSegment->staffShape(firstGN->vStaffIdx()));
         xPos = std::min(xPos, xPosCross);
     }
     // Safety net in case the shape checks don't succeed
