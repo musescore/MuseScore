@@ -76,7 +76,7 @@ StyledPopupView {
 
             currentText: settingsModel.instrumentName
 
-            onTextChanged: function(newTextValue) {
+            onTextEditingFinished: function(newTextValue) {
                 settingsModel.instrumentName = newTextValue
             }
         }
