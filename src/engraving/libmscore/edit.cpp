@@ -23,6 +23,8 @@
 #include <map>
 #include <set>
 
+#include "infrastructure/messagebox.h"
+
 #include "accidental.h"
 #include "articulation.h"
 #include "barline.h"
@@ -243,7 +245,9 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
 
     Fraction fr = f * Fraction(1, _ratio.denominator());
     if (!TDuration::isValid(fr)) {
-        // todo: there needs to be some kind of user feedback for failure to add tuplet
+        MessageBox::warning(mtrc("engraving", "Cannot create tuplet with ratio %1 for duration %2")
+                            .arg(_ratio.toString(), f.toString()).toStdString(),
+                            std::string(), { MessageBox::Ok });
         return nullptr;
     }
 
@@ -2842,7 +2846,6 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
     Fraction startTick = mbStart->tick();
     Fraction endTick   = mbEnd->tick();
 
-    undoInsertTime(mbStart->tick(), -(mbEnd->endTick() - mbStart->tick()));
     for (Score* score : scoreList()) {
         Measure* startMeasure = score->tick2measure(startTick);
         Measure* endMeasure = score->tick2measure(endTick);
@@ -2899,6 +2902,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
         }
     }
 
+    undoInsertTime(mbStart->tick(), -(mbEnd->endTick() - mbStart->tick()));
     _is.setSegment(0);          // invalidate position
 }
 
@@ -4856,7 +4860,7 @@ static EngravingItem* findLinkedVoiceElement(EngravingItem* e, Staff* nstaff)
     Measure* measure = segment->measure();
     Measure* m       = score->tick2measure(measure->tick());
     Segment* s       = m->findSegment(segment->segmentType(), segment->tick());
-    return s->element(dtrack);
+    return s ? s->element(dtrack) : nullptr;
 }
 
 //---------------------------------------------------------

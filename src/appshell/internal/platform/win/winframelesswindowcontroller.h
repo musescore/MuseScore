@@ -31,6 +31,8 @@
 #include "ui/iuiconfiguration.h"
 #include "ui/imainwindow.h"
 
+#include "windows.h"
+
 namespace mu::appshell {
 class WinFramelessWindowController : public QObject, public FramelessWindowController
 {
@@ -46,17 +48,21 @@ private:
     bool eventFilter(QObject* watched, QEvent* event) override;
     bool nativeEventFilter(const QByteArray& eventType, void* message, long* result) override;
 
-    bool removeWindowFrame(MSG* message, long* result) const;
-    bool calculateWindowSize(MSG* message, long* result) const;
+    bool removeWindowFrame(MSG* message, long* result);
+    bool calculateWindowSize(MSG* message, long* result);
     bool processMouseMove(MSG* message, long* result) const;
     bool processMouseRightClick(MSG* message) const;
 
     void updateContextMenuState(MSG* message) const;
     bool showSystemMenuIfNeed(MSG* message) const;
 
+    bool isWindowMaximized(HWND hWnd) const;
+
     int borderWidth() const;
 
     QScreen* m_screen = nullptr;
+
+    MONITORINFO m_monitorInfo;
 };
 }
 

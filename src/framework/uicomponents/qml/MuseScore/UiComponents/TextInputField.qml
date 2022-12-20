@@ -58,7 +58,8 @@ FocusScope {
 
     readonly property alias clearTextButton: clearTextButtonItem
 
-    signal currentTextEdited(var newTextValue)
+    signal textChanged(var newTextValue)
+    signal textEdited(var newTextValue)
     signal textCleared()
     signal textEditingFinished(var newTextValue)
     signal accepted()
@@ -177,6 +178,10 @@ FocusScope {
             }
 
             Keys.onShortcutOverride: function(event) {
+                if (readOnly) {
+                    return
+                }
+
                 if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return
                         || event.key === Qt.Key_Escape) {
                     event.accepted = true
@@ -225,7 +230,15 @@ FocusScope {
                     return
                 }
 
-                root.currentTextEdited(text)
+                root.textChanged(text)
+            }
+
+            onTextEdited: {
+                if (!acceptableInput) {
+                    return
+                }
+
+                root.textEdited(text)
             }
         }
 

@@ -83,7 +83,6 @@ static const Settings::Key VERTICAL_GRID_SIZE_KEY(module_name,  "ui/application/
 
 static const Settings::Key NEED_TO_SHOW_ADD_TEXT_ERROR_MESSAGE_KEY(module_name,  "ui/dialogs/needToShowAddTextErrorMessage");
 static const Settings::Key NEED_TO_SHOW_ADD_FIGURED_BASS_ERROR_MESSAGE_KEY(module_name,  "ui/dialogs/needToShowAddFiguredBassErrorMessage");
-static const Settings::Key NEED_TO_SHOW_ADD_BOXES_ERROR_MESSAGE_KEY(module_name,  "ui/dialogs/needToShowAddBoxesErrorMessage");
 
 static const Settings::Key PIANO_KEYBOARD_NUMBER_OF_KEYS(module_name,  "pianoKeyboard/numberOfKeys");
 
@@ -196,7 +195,6 @@ void NotationConfiguration::init()
 
     settings()->setDefaultValue(NEED_TO_SHOW_ADD_TEXT_ERROR_MESSAGE_KEY, Val(true));
     settings()->setDefaultValue(NEED_TO_SHOW_ADD_FIGURED_BASS_ERROR_MESSAGE_KEY, Val(true));
-    settings()->setDefaultValue(NEED_TO_SHOW_ADD_BOXES_ERROR_MESSAGE_KEY, Val(true));
 
     settings()->setDefaultValue(PIANO_KEYBOARD_NUMBER_OF_KEYS, Val(88));
     m_pianoKeyboardNumberOfKeys.val = settings()->value(PIANO_KEYBOARD_NUMBER_OF_KEYS).toInt();
@@ -789,14 +787,19 @@ void NotationConfiguration::setNeedToShowAddFiguredBassErrorMessage(bool show)
     settings()->setSharedValue(NEED_TO_SHOW_ADD_FIGURED_BASS_ERROR_MESSAGE_KEY, Val(show));
 }
 
-bool NotationConfiguration::needToShowAddBoxesErrorMessage() const
+bool NotationConfiguration::needToShowMScoreError(const std::string& errorKey) const
 {
-    return settings()->value(NEED_TO_SHOW_ADD_BOXES_ERROR_MESSAGE_KEY).toBool();
+    Settings::Key key(module_name, "ui/dialogs/needToShowMScoreError/" + errorKey);
+
+    settings()->setDefaultValue(key, Val(true));
+
+    return settings()->value(key).toBool();
 }
 
-void NotationConfiguration::setNeedToShowAddBoxesErrorMessage(bool show)
+void NotationConfiguration::setNeedToShowMScoreError(const std::string& errorKey, bool show)
 {
-    settings()->setSharedValue(NEED_TO_SHOW_ADD_BOXES_ERROR_MESSAGE_KEY, Val(show));
+    Settings::Key key(module_name, "ui/dialogs/needToShowMScoreError/" + errorKey);
+    settings()->setSharedValue(key, Val(show));
 }
 
 ValCh<int> NotationConfiguration::pianoKeyboardNumberOfKeys() const

@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "iinteractive.h"
 
 #include "inotationinteraction.h"
 #include "inotationconfiguration.h"
@@ -50,6 +51,7 @@ class NotationInteraction : public INotationInteraction, public async::Asyncable
 {
     INJECT(notation, INotationConfiguration, configuration)
     INJECT(notation, ISelectInstrumentsScenario, selectInstrumentScenario)
+    INJECT(notation, framework::IInteractive, interactive)
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);
@@ -142,7 +144,7 @@ public:
     const TextBase* editedText() const override;
     async::Notification textEditingStarted() const override;
     async::Notification textEditingChanged() const override;
-    async::Notification textEditingEnded() const override;
+    async::Channel<TextBase*> textEditingEnded() const override;
 
     // Grip edit
     bool isGripEditStarted() const override;
@@ -240,7 +242,7 @@ public:
     void setScoreConfig(const ScoreConfig& config) override;
     async::Channel<ScoreConfigType> scoreConfigChanged() const override;
 
-    void navigateToLyrics(MoveDirection direction) override;
+    void navigateToLyrics(MoveDirection direction, bool moveOnly = true) override;
     void navigateToLyricsVerse(MoveDirection direction) override;
 
     void navigateToNextSyllable() override;
@@ -286,6 +288,8 @@ private:
     void apply();
     void rollback();
 
+    void checkAndShowMScoreError() const;
+
     bool needStartEditGrip(QKeyEvent* event) const;
     bool handleKeyPress(QKeyEvent* event);
 
@@ -303,7 +307,7 @@ private:
     void notifyAboutNotationChanged();
     void notifyAboutTextEditingStarted();
     void notifyAboutTextEditingChanged();
-    void notifyAboutTextEditingEnded();
+    void notifyAboutTextEditingEnded(TextBase* text);
     void notifyAboutNoteInputStateChanged();
     void doDragLasso(const PointF& p);
     void endLasso();
@@ -384,7 +388,6 @@ private:
         mu::engraving::EditData ed;
         std::vector<EngravingItem*> elements;
         std::vector<std::unique_ptr<mu::engraving::ElementGroup> > dragGroups;
-        DragMode mode { DragMode::BothXY };
         void reset();
     };
 
@@ -414,7 +417,7 @@ private:
 
     async::Notification m_textEditingStarted;
     async::Notification m_textEditingChanged;
-    async::Notification m_textEditingEnded;
+    async::Channel<TextBase*> m_textEditingEnded;
 
     DropData m_dropData;
     async::Notification m_dropChanged;

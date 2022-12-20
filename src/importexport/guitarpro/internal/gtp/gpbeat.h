@@ -68,6 +68,19 @@ public:
         int string{ -1 };
     };
 
+    struct StemOrientation {
+        bool up = false; /// taken in consideration only if userDefined == true
+        bool userDefined = false;
+    };
+
+    enum class BeamMode {
+        AUTO,
+        JOINED,
+        BROKEN,
+        BROKEN2,
+        BROKEN2_JOINED
+    };
+
     void addGPNote(const std::shared_ptr<GPNote>& n) { _notes.push_back(n); }
     void addGPRhythm(const std::shared_ptr<GPRhythm>& n) { _rhythm = n; }
     void setDynamic(GPBeat::DynamicType t) { _dynamic = t; }
@@ -158,6 +171,14 @@ public:
 
     void setDeadSlapped(bool deadSlapped) { m_deadSlapped = deadSlapped; }
     bool deadSlapped() const { return m_deadSlapped; }
+
+    void setStemOrientationUp(bool up) { m_stemOrientation.up = up; }
+    void setStemOrientationUserDefined(bool userDefined) { m_stemOrientation.userDefined = userDefined; }
+    bool stemOrientationUp() const { return m_stemOrientation.up; }
+    bool stemOrientationUserDefined() const { return m_stemOrientation.userDefined; }
+
+    void setBeamMode(BeamMode mode) { m_beamMode = mode; }
+    BeamMode beamMode() const { return m_beamMode; }
 
     const std::vector<std::shared_ptr<GPNote> >& notes() const { return _notes; }
 
@@ -251,6 +272,8 @@ private:
     bool m_dive = false; // TODO-gp: implement dives
     bool m_pickScrape = false;
     bool m_deadSlapped = false;
+    StemOrientation m_stemOrientation;
+    BeamMode m_beamMode = BeamMode::AUTO;
 };
 }
 

@@ -124,6 +124,9 @@ public:
     void setRightFingering(const String& ch) { _rightFingering = ch; }
     const String& rightFingering() const { return _rightFingering; }
 
+    void setShowStringNumber(bool show) { m_showStringNumber = show; }
+    bool showStringNumber() const { return m_showStringNumber; }
+
     void setVibratoType(VibratoType v) { _vibrato = v; }
     VibratoType vibratoType() const { return _vibrato; }
 
@@ -175,6 +178,7 @@ private:
     bool _leftHandTapped{ false };
     HammerOn _hammer{ HammerOn::None };
     PickScrape _pickScrape{ PickScrape::None };
+    bool m_showStringNumber = false;
 };
 }
 

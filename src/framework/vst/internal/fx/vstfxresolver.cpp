@@ -177,7 +177,9 @@ void VstFxResolver::updateMasterFxMap(const AudioFxChain& newFxChain)
     fxChainToCreate(currentFxChain, newFxChain, fxToCreate);
 
     for (const auto& pair : fxToCreate) {
-        m_masterFxMap.emplace(pair.first, createMasterFx(pair.second));
+        if (VstFxPtr fx = createMasterFx(pair.second)) {
+            m_masterFxMap.emplace(pair.first, fx);
+        }
     }
 }
 

@@ -25,14 +25,16 @@
 
 #include <variant>
 
-#include "engravingitem.h"
-#include "property.h"
-#include "types.h"
+#include "modularity/ioc.h"
 
 #include "draw/fontmetrics.h"
 #include "draw/types/color.h"
-
 #include "style/style.h"
+#include "iengravingfontsprovider.h"
+
+#include "engravingitem.h"
+#include "property.h"
+#include "types.h"
 
 namespace mu::engraving {
 class TextBase;
@@ -209,6 +211,7 @@ private:
 
 class TextFragment
 {
+    INJECT_STATIC(engraving, IEngravingFontsProvider, engravingFonts)
 public:
     mutable CharFormat format;
     mu::PointF pos;                    // y is relative to TextBlock->y()
@@ -280,6 +283,8 @@ public:
 class TextBase : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, TextBase)
+
+    INJECT(engraving, IEngravingFontsProvider, engravingFonts)
 
     // sorted by size to allow for most compact memory layout
     M_PROPERTY(FrameType,  frameType,              setFrameType)
@@ -365,6 +370,7 @@ public:
     void setPlainText(const String& t) { setXmlText(plainToXmlText(t)); }
     virtual void setXmlText(const String&);
     void setXmlText(const char* str) { setXmlText(String::fromUtf8(str)); }
+    void checkCustomFormatting(const String&);
     String xmlText() const;
     String plainText() const;
     void resetFormatting();
@@ -505,12 +511,16 @@ public:
 inline bool isTextNavigationKey(int key, KeyboardModifiers modifiers)
 {
     if (modifiers & TextEditingControlModifier) {
-        static const std::set<int> standardTextOperationsKeys {
-            Key_Space, // Ctrl + Space inserts the space symbol
-            Key_A // select all
+        static const std::set<int> controlNavigationKeys {
+            Key_Left,
+            Key_Right,
+            Key_Up,
+            Key_Down,
+            Key_Home,
+            Key_End
         };
 
-        return standardTextOperationsKeys.find(key) == standardTextOperationsKeys.end();
+        return controlNavigationKeys.find(key) != controlNavigationKeys.end();
     }
 
     static const std::set<int> navigationKeys {

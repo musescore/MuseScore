@@ -499,6 +499,30 @@
           <string>0</string>
           <string>0</string>
           </StringData>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>30</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
           <program value="0"/>
           <controller ctrl="7" value="61"/>
@@ -508,9 +532,6 @@
     <Staff id="1">
       <Measure>
         <voice>
-          <KeySig>
-            <accidental>0</accidental>
-            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -578,7 +599,6 @@
               <head>cross</head>
               <fret>31</fret>
               <string>0</string>
-              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
@@ -602,7 +622,6 @@
               <head>cross</head>
               <fret>33</fret>
               <string>0</string>
-              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
@@ -648,7 +667,6 @@
               <head>cross</head>
               <fret>37</fret>
               <string>0</string>
-              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
@@ -703,7 +721,6 @@
               <head>cross</head>
               <fret>42</fret>
               <string>0</string>
-              <dead>1</dead>
               </Note>
             </Chord>
           </voice>
@@ -727,7 +744,6 @@
               <head>cross</head>
               <fret>44</fret>
               <string>0</string>
-              <dead>1</dead>
               </Note>
             </Chord>
           </voice>
@@ -787,7 +803,6 @@
               <head>cross</head>
               <fret>49</fret>
               <string>0</string>
-              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
@@ -811,7 +826,6 @@
               <head>cross</head>
               <fret>51</fret>
               <string>0</string>
-              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
@@ -846,7 +860,6 @@
               <head>cross</head>
               <fret>54</fret>
               <string>0</string>
-              <dead>1</dead>
               </Note>
             </Chord>
           </voice>
@@ -861,7 +874,6 @@
               <head>cross</head>
               <fret>55</fret>
               <string>0</string>
-              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
@@ -885,7 +897,6 @@
               <head>cross</head>
               <fret>57</fret>
               <string>0</string>
-              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
@@ -909,7 +920,6 @@
               <head>cross</head>
               <fret>59</fret>
               <string>0</string>
-              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
@@ -942,7 +952,6 @@
               <head>cross</head>
               <fret>62</fret>
               <string>0</string>
-              <dead>1</dead>
               </Note>
             </Chord>
           </voice>
@@ -957,7 +966,6 @@
               <head>cross</head>
               <fret>63</fret>
               <string>0</string>
-              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
@@ -968,7 +976,6 @@
               <head>cross</head>
               <fret>64</fret>
               <string>0</string>
-              <dead>1</dead>
               </Note>
             </Chord>
           </voice>
@@ -983,7 +990,6 @@
               <head>cross</head>
               <fret>65</fret>
               <string>0</string>
-              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
@@ -994,7 +1000,6 @@
               <head>cross</head>
               <fret>66</fret>
               <string>0</string>
-              <dead>1</dead>
               </Note>
             </Chord>
           </voice>

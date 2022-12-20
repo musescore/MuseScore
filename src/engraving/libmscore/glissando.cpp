@@ -39,12 +39,12 @@ NICE-TO-HAVE TODO:
 #include "style/style.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
+#include "iengravingfont.h"
 
 #include "chord.h"
 #include "measure.h"
 #include "note.h"
 #include "score.h"
-#include "symbolfont.h"
 #include "segment.h"
 #include "staff.h"
 #include "system.h"
@@ -125,7 +125,7 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
             ids.push_back(SymId::wiggleTrill);
         }
 
-        score()->symbolFont()->draw(ids, painter, magS(), PointF(x, -(b.y() + b.height() * 0.5)));
+        score()->engravingFont()->draw(ids, painter, magS(), PointF(x, -(b.y() + b.height() * 0.5)));
     }
 
     if (glissando()->showText()) {

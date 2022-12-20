@@ -186,6 +186,20 @@ void EngravingObject::moveToDummy()
 void EngravingObject::setScore(Score* s)
 {
     doSetScore(s);
+
+    if (!m_parent) {
+        return;
+    }
+
+    if (m_parent->score() == s) {
+        return;
+    }
+
+    if (m_parent->isType(ElementType::DUMMY)) {
+        moveToDummy();
+    } else if (m_parent->isType(ElementType::SCORE)) {
+        setParent(s);
+    }
 }
 
 void EngravingObject::addChild(EngravingObject* o)
@@ -660,6 +674,22 @@ bool EngravingObject::isLinked(EngravingObject* se) const
     }
 
     return _links->contains(se);
+}
+
+//---------------------------------------------------------
+//   findLinkedInScore
+///  if exists, returns the linked object in the required
+///  score, else returns null
+//---------------------------------------------------------
+
+EngravingObject* EngravingObject::findLinkedInScore(Score* score) const
+{
+    if (score == this || !_links || _links->empty()) {
+        return nullptr;
+    }
+    auto findElem = std::find_if(_links->begin(), _links->end(),
+                                 [score](EngravingObject* engObj) { return engObj && engObj->score() == score; });
+    return findElem != _links->end() ? *findElem : nullptr;
 }
 
 //---------------------------------------------------------

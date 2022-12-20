@@ -43,6 +43,30 @@
           <string>71</string>
           <string>76</string>
           </StringData>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>30</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
           <program value="27"/>
           <controller ctrl="7" value="101"/>
@@ -71,6 +95,7 @@
             <HarmonicMark>
               <beginText>Fdbk</beginText>
               <beginTextOffset x="0" y="0"/>
+              <continueText>Fdbk</continueText>
               </HarmonicMark>
             <next>
               <location>
@@ -106,6 +131,7 @@
             <HarmonicMark>
               <beginText>SH</beginText>
               <beginTextOffset x="0" y="0"/>
+              <continueText>SH</continueText>
               </HarmonicMark>
             <next>
               <location>
@@ -141,6 +167,7 @@
             <HarmonicMark>
               <beginText>PH</beginText>
               <beginTextOffset x="0" y="0"/>
+              <continueText>PH</continueText>
               </HarmonicMark>
             <next>
               <location>
@@ -176,6 +203,7 @@
             <HarmonicMark>
               <beginText>TH</beginText>
               <beginTextOffset x="0" y="0"/>
+              <continueText>TH</continueText>
               </HarmonicMark>
             <next>
               <location>
@@ -220,6 +248,7 @@
             <HarmonicMark>
               <beginText>AH</beginText>
               <beginTextOffset x="0" y="0"/>
+              <continueText>AH</continueText>
               </HarmonicMark>
             <next>
               <location>
@@ -255,6 +284,7 @@
             <HarmonicMark>
               <beginText>Fdbk</beginText>
               <beginTextOffset x="0" y="0"/>
+              <continueText>Fdbk</continueText>
               </HarmonicMark>
             <next>
               <location>

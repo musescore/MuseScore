@@ -25,15 +25,15 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-const PlaybackSetupData& VoicesSetupDataResolver::doResolve(const Instrument* instrument)
+PlaybackSetupData VoicesSetupDataResolver::doResolve(const Instrument* instrument)
 {
-    static std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
+    static const std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
         { "boy-soprano", { SoundId::Choir, SoundCategory::Voices, { SoundSubCategory::Soprano,
                                                                     SoundSubCategory::Boy }, {} } },
         { "soprano", { SoundId::Choir, SoundCategory::Voices, { SoundSubCategory::Soprano }, {} } },
         { "soprano-c-clef", { SoundId::Choir, SoundCategory::Voices, { SoundSubCategory::Soprano }, {} } },
-        { "mezzo-soprano", { SoundId::Choir, SoundCategory::Voices, { SoundSubCategory::Mezzo_Soprano }, {} } },
-        { "mezzo-soprano-c-clef", { SoundId::Choir, SoundCategory::Voices, { SoundSubCategory::Mezzo_Soprano }, {} } },
+        { "mezzo-soprano", { SoundId::Choir, SoundCategory::Voices, { SoundSubCategory::Soprano }, {} } },
+        { "mezzo-soprano-c-clef", { SoundId::Choir, SoundCategory::Voices, { SoundSubCategory::Soprano }, {} } },
         { "countertenor", { SoundId::Choir, SoundCategory::Voices, { SoundSubCategory::Counter_Tenor }, {} } },
         { "alto", { SoundId::Choir, SoundCategory::Voices, { SoundSubCategory::Alto }, {} } },
         { "alto-c-clef", { SoundId::Choir, SoundCategory::Voices, { SoundSubCategory::Alto }, {} } },

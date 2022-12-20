@@ -25,8 +25,13 @@ if (OS_IS_WIN)
     set(DRIVER_SRC
         #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.cpp
         #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wincoreaudiodriver.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wincoreaudiodriver.h
+        #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wincoreaudiodriver.cpp
+        #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wincoreaudiodriver.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wasapiaudioclient.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wasapiaudioclient.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wasapitypes.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wasapiaudiodriver.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wasapiaudiodriver.h
     )
 elseif(OS_IS_LIN)
     set(DRIVER_SRC
@@ -77,7 +82,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontrepository.h
 
     # Common internal
-    ${CMAKE_CURRENT_LIST_DIR}/internal/iaudiobuffer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothreadsecurer.cpp
@@ -227,7 +231,7 @@ if (OS_IS_MAC)
     find_library(AudioToolbox NAMES AudioToolbox)
     set(MODULE_LINK ${MODULE_LINK} ${AudioToolbox})
 elseif (OS_IS_WIN)
-    set(MODULE_LINK ${MODULE_LINK} winmm )
+    set(MODULE_LINK ${MODULE_LINK} winmm mmdevapi mfplat)
 elseif (OS_IS_LIN)
     find_package(ALSA REQUIRED)
     set(MODULE_INCLUDE ${MODULE_INCLUDE} ${ALSA_INCLUDE_DIRS} )

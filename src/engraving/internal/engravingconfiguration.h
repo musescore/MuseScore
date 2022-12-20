@@ -53,6 +53,8 @@ public:
     io::path_t partStyleFilePath() const override;
     void setPartStyleFilePath(const io::path_t& path) override;
 
+    SizeF defaultPageSize() const override;
+
     String iconsFontFamily() const override;
 
     draw::Color defaultColor() const override;
@@ -93,6 +95,7 @@ public:
     bool enableExperimentalFretCircle() const override;
     void setGuitarProMultivoiceEnabled(bool multiVoice) override;
     bool guitarProMultivoiceEnabled() const override;
+    bool minDistanceForPartialSkylineCalculated() const override;
 
 private:
     async::Channel<voice_idx_t, draw::Color> m_voiceColorChanged;

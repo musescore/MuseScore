@@ -27,6 +27,7 @@
 #include "draw/types/pen.h"
 #include "draw/types/brush.h"
 #include "rw/xml.h"
+#include "iengravingfont.h"
 
 #include "articulation.h"
 #include "beam.h"
@@ -42,9 +43,6 @@
 #include "system.h"
 #include "tie.h"
 #include "undo.h"
-
-// included for gonville/musejazz hook hack in SlurPos
-#include "symbolfont.h"
 
 #include "log.h"
 
@@ -397,6 +395,12 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
         // Items that are on the start segment but in a different voice
         if ((item->tick() == startCR->tick() && item->track() != startCR->track())
             || (item->tick() == endCR->tick() && item->track() != endCR->track())) {
+            return true;
+        }
+        // Edge-case: multiple voices and slur is on the inside
+        if (item->vStaffIdx() == startCR->staffIdx()
+            && (!slur()->up() && item->track() > startCR->track() // slur-down: ignore lower voices
+                || slur()->up() && item->track() < startCR->track())) { // slur-up: ignore higher voices
             return true;
         }
         return false;
@@ -977,7 +981,7 @@ void Slur::slurPos(SlurPos* sp)
     // Gonville and MuseJazz have really weirdly-shaped hooks compared to Leland and Bravura and Emmentaler,
     // so we need to adjust the slope of our hook-avoidance line. this will be unnecessary when hooks have
     // SMuFL anchors
-    bool bulkyHook = score()->symbolFont()->family() == "Gonville" || score()->symbolFont()->family() == "MuseJazz";
+    bool bulkyHook = score()->engravingFont()->family() == "Gonville" || score()->engravingFont()->family() == "MuseJazz";
     const double fakeCutoutSlope = bulkyHook ? 1.5 : 1.0;
 
     if (endCR() == 0) {
@@ -1053,24 +1057,25 @@ void Slur::slurPos(SlurPos* sp)
     };
     SlurAnchor sa1 = SlurAnchor::NONE;
     SlurAnchor sa2 = SlurAnchor::NONE;
-
-    if (sc && sc->hook() && sc->up() == _up) {
-        sa1 = SlurAnchor::STEM;
-    }
-    if (scr->up() == ecr->up() && scr->up() == _up) {
-        if (stem1 && !stemSideStartForBeam()) {
+    if (staffHasStems) {
+        if (sc && sc->hook() && sc->up() == _up) {
             sa1 = SlurAnchor::STEM;
         }
-        if (stem2 && !stemSideEndForBeam()) {
-            sa2 = SlurAnchor::STEM;
-        }
-    } else if (ecr->segment()->system() != scr->segment()->system()) {
-        // in the case of continued slurs, we anchor to stem when necessary
-        if (scr->up() == _up && stem1 && !scr->beam()) {
-            sa1 = SlurAnchor::STEM;
-        }
-        if (ecr->up() == _up && stem2 && !ecr->beam()) {
-            sa2 = SlurAnchor::STEM;
+        if (scr->up() == ecr->up() && scr->up() == _up) {
+            if (stem1 && !stemSideStartForBeam()) {
+                sa1 = SlurAnchor::STEM;
+            }
+            if (stem2 && !stemSideEndForBeam()) {
+                sa2 = SlurAnchor::STEM;
+            }
+        } else if (ecr->segment()->system() != scr->segment()->system()) {
+            // in the case of continued slurs, we anchor to stem when necessary
+            if (scr->up() == _up && stem1 && !scr->beam()) {
+                sa1 = SlurAnchor::STEM;
+            }
+            if (ecr->up() == _up && stem2 && !ecr->beam()) {
+                sa2 = SlurAnchor::STEM;
+            }
         }
     }
 
@@ -2094,7 +2099,8 @@ bool Slur::isOverBeams()
         ChordRest* cr = toChordRest(seg->elist().at(track));
         bool hasBeam = cr->beam() && cr->up() == up();
         bool hasTrem = false;
-        if (Chord* c = toChord(cr)) {
+        if (cr->isChord()) {
+            Chord* c = toChord(cr);
             hasTrem = c->tremolo() && c->tremolo()->twoNotes() && c->up() == up();
         }
         if (!(hasBeam || hasTrem)) {

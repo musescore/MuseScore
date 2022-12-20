@@ -186,9 +186,6 @@ protected:
     const std::vector<SpannerSegment*> spannerSegments() const { return segments; }
 
 public:
-
-    ~Spanner();
-
     // Score Tree functions
     virtual EngravingObject* scanParent() const override;
     virtual EngravingObjectList scanChildren() const override;

@@ -52,6 +52,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpconverter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpdommodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpdommodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpdrumsetresolver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpdrumsetresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpmasterbar.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpmasterbar.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpmastertracks.cpp

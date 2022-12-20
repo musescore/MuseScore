@@ -780,8 +780,8 @@ void GuitarPro::readBend(Note* note)
 
 void GuitarPro::readLyrics()
 {
-    gpLyrics.lyricTrack = readInt();          // lyric track
-    gpLyrics.fromBeat = readInt();
+    gpLyrics.lyricTrack = static_cast<size_t>(readInt());          // lyric track
+    gpLyrics.fromBeat = static_cast<size_t>(readInt());
     gpLyrics.beatCounter = 0;
 
     String lyrics = readWordPascalString();
@@ -789,11 +789,6 @@ void GuitarPro::readLyrics()
     lyrics.replace(u'\r', u' ');
     auto sl = lyrics.split(u' ', KeepEmptyParts);
     for (auto& str : sl) {
-        /*while (str[0] == '-')
-    {
-       gpLyrics.lyrics.push_back("aa");
-       str = str.substr(1);
-    }*/
         gpLyrics.lyrics.push_back(str);
     }
 
@@ -1386,13 +1381,13 @@ void GuitarPro::setTempo(int newTempo, Measure* measure)
     if (last_tempo != newTempo) {
         Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
         TempoText* tt = Factory::createTempoText(segment);
-        tt->setTempo(double(newTempo) / 60.0);
+        tt->setTempo(BeatsPerSecond::fromBPM(newTempo));
         tt->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(newTempo));
         tt->setTrack(0);
         segment->add(tt);
         tempo = newTempo;
         last_tempo = newTempo;
-        score->setTempo(measure->tick(), newTempo);
+        score->setTempo(measure->tick(), BeatsPerSecond::fromBPM(newTempo));
     }
 }
 
@@ -2932,7 +2927,7 @@ static void createLinkedTabs(MasterScore* score)
         size_t stavesNum = part->nstaves();
 
         if (stavesNum != 1) {
-            for (int i = 0; i < stavesNum; i++) {
+            for (size_t i = 0; i < stavesNum; i++) {
                 indexMapping[curStaffIdx] = stavesOperated + i;
                 curStaffIdx++;
             }
@@ -2941,32 +2936,37 @@ static void createLinkedTabs(MasterScore* score)
             continue;
         }
 
-        part->setStaves(static_cast<int>(stavesInPart));
+        bool needsTabStaff = !part->staff(0)->isDrumStaff(fr);
 
-        Staff* srcStaff = part->staff(0);
-        Staff* dstStaff = part->staff(1);
-        Excerpt::cloneStaff(srcStaff, dstStaff, false);
+        if (needsTabStaff) {
+            part->setStaves(static_cast<int>(stavesInPart));
 
-        static const std::vector<StaffTypes> types {
-            StaffTypes::TAB_4SIMPLE,
-            StaffTypes::TAB_5SIMPLE,
-            StaffTypes::TAB_6SIMPLE,
-            StaffTypes::TAB_7SIMPLE,
-            StaffTypes::TAB_8SIMPLE
-        };
+            Staff* srcStaff = part->staff(0);
+            Staff* dstStaff = part->staff(1);
+            Excerpt::cloneStaff(srcStaff, dstStaff, false);
 
-        int index = (lines >= 4 && lines <= 8) ? lines - 4 : 2;
+            static const std::vector<StaffTypes> types {
+                StaffTypes::TAB_4SIMPLE,
+                StaffTypes::TAB_5SIMPLE,
+                StaffTypes::TAB_6SIMPLE,
+                StaffTypes::TAB_7SIMPLE,
+                StaffTypes::TAB_8SIMPLE
+            };
 
-        dstStaff->setStaffType(fr, *StaffType::preset(types.at(index)));
-        dstStaff->setLines(fr, static_cast<int>(lines));
+            int index = (lines >= 4 && lines <= 8) ? lines - 4 : 2;
+
+            dstStaff->setStaffType(fr, *StaffType::preset(types.at(index)));
+            dstStaff->setLines(fr, static_cast<int>(lines));
+
+            staffIndexesToCopy.insert(curStaffIdx);
+        }
 
         // each spanner moves down to the staff with index,
         // equal to number of spanners operated before it
         indexMapping[curStaffIdx] = stavesOperated;
-        staffIndexesToCopy.insert(curStaffIdx);
         curStaffIdx++;
 
-        stavesOperated += stavesInPart;
+        stavesOperated += needsTabStaff ? stavesInPart : 1;
     }
 
     // moving and copying spanner segments
@@ -3098,11 +3098,25 @@ static Err importScore(MasterScore* score, mu::io::IODevice* io)
         score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
     }
 
-    for (const Part* part : score->parts()) {
+    for (Part* part : score->parts()) {
         for (const auto& pair : part->instruments()) {
             pair.second->updateInstrumentId();
         }
+
+        std::vector<MidiArticulation> articulations =
+        {
+            MidiArticulation(u"staccatissimo", u"", 100, 30),
+            MidiArticulation(u"staccato", u"", 100, 50),
+            MidiArticulation(u"portato", u"", 100, 67),
+            MidiArticulation(u"tenuto", u"", 100, 100),
+            MidiArticulation(u"marcato", u"", 120, 67),
+            MidiArticulation(u"sforzato", u"", 120, 100),
+        };
+
+        part->instrument()->setArticulation(articulations);
     }
+
+    score->setUpTempoMap();
 
     delete gp;
 

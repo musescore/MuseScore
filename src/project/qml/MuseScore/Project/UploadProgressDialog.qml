@@ -19,25 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_IAUDIOBUFFER_H
-#define MU_AUDIO_IAUDIOBUFFER_H
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
-#include <memory>
-#include "../iaudiosource.h"
+import MuseScore.UiComponents 1.0
+import MuseScore.Project 1.0
 
-namespace mu::audio {
-class IAudioBuffer
-{
-public:
-    virtual ~IAudioBuffer() = default;
+StyledDialogView {
+    id: root
 
-    virtual void setSource(std::shared_ptr<IAudioSource> source) = 0;
-    virtual void forward() = 0;
+    contentWidth: 314
+    contentHeight: 52
+    margins: 12
 
-    virtual void pop(float* dest, size_t sampleCount) = 0;
-    virtual void setMinSampleLag(size_t lag) = 0;
-};
+    modal: true
+    frameless: true
+    closeOnEscape: false
 
-using IAudioBufferPtr = std::shared_ptr<IAudioBuffer>;
+    ColumnLayout {
+        anchors.fill: parent
+
+        spacing: 8
+
+        StyledTextLabel {
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter
+
+            text: qsTrc("project", "Saving online…")
+            font: ui.theme.largeBodyBoldFont
+        }
+    }
 }
-#endif // MU_AUDIO_IAUDIOBUFFER_H

@@ -569,8 +569,6 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
             selectType = SelectType::ADD;
         }
         viewInteraction()->select({ hitElement }, selectType, hitStaffIndex);
-    } else if (hitElement && button == Qt::LeftButton && keyState == Qt::ControlModifier) {
-        viewInteraction()->select({ hitElement }, SelectType::ADD, hitStaffIndex);
     }
 
     if (hitElement && !viewInteraction()->selection()->isRange()) {
@@ -596,7 +594,9 @@ bool NotationViewInputController::needSelect(const ClickContext& ctx) const
 
     INotationSelectionPtr selection = viewInteraction()->selection();
 
-    if (selection->isRange()) {
+    if (ctx.event->button() == Qt::LeftButton && ctx.event->modifiers() & Qt::ControlModifier) {
+        return true;
+    } else if (ctx.event->button() == Qt::RightButton && selection->isRange()) {
         return !selection->range()->containsPoint(ctx.logicClickPos);
     } else if (!ctx.hitElement->selected()) {
         return true;
@@ -681,7 +681,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     }
 
     bool isNoteEnterMode = m_view->isNoteEnterMode();
-    bool isDragObjectsAllowed = !(isNoteEnterMode || playbackController()->isPlaying());
+    bool isDragObjectsAllowed = !(isNoteEnterMode || playbackController()->isPlaying() || (event->buttons() & Qt::MiddleButton));
     if (isDragObjectsAllowed) {
         const EngravingItem* hitElement = hitElementContext().element;
 
@@ -708,11 +708,11 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
             viewInteraction()->drag(m_beginPoint, logicPos, mode);
 
             return;
-        } else if (hitElement == nullptr && (keyState & (Qt::ShiftModifier | Qt::ControlModifier))) {
+        } else if (hitElement == nullptr && (keyState & Qt::ShiftModifier)) {
             if (!viewInteraction()->isDragStarted()) {
                 viewInteraction()->startDrag(std::vector<EngravingItem*>(), PointF(), [](const EngravingItem*) { return false; });
             }
-            viewInteraction()->drag(m_beginPoint, logicPos, keyState & Qt::ControlModifier ? DragMode::LassoList : DragMode::BothXY);
+            viewInteraction()->drag(m_beginPoint, logicPos, DragMode::BothXY);
 
             return;
         }
@@ -772,7 +772,7 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
 
 void NotationViewInputController::handleLeftClickRelease(const QPointF& releasePoint)
 {
-    if (m_view->isNoteEnterMode()) {
+    if (m_view->isNoteEnterMode() || playbackController()->isPlaying()) {
         return;
     }
 

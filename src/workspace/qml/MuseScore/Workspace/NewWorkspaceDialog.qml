@@ -88,7 +88,7 @@ StyledDialogView {
 
             maximumLength: 40
 
-            onCurrentTextEdited: function(newTextValue) {
+            onTextChanged: function(newTextValue) {
                 workspaceModel.workspaceName = newTextValue
             }
 

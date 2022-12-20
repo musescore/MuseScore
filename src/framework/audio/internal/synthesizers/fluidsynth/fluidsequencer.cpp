@@ -32,10 +32,9 @@ static constexpr note_idx_t MIN_SUPPORTED_NOTE = 12; // MIDI equivalent for C0
 static constexpr mpe::pitch_level_t MAX_SUPPORTED_LEVEL = mpe::pitchLevel(PitchClass::C, 8);
 static constexpr note_idx_t MAX_SUPPORTED_NOTE = 108; // MIDI equivalent for C8
 
-void FluidSequencer::init(const ArticulationMapping& mapping, const std::unordered_map<midi::channel_t, midi::Program>& channels)
+void FluidSequencer::init(const PlaybackSetupData& setupData)
 {
-    m_articulationMapping = mapping;
-    m_channels = channels;
+    m_channels.init(setupData);
 }
 
 int FluidSequencer::currentExpressionLevel() const
@@ -72,6 +71,16 @@ void FluidSequencer::updateDynamicChanges(const mpe::DynamicLevelMap& changes)
     }
 
     updateDynamicChangesIterator();
+}
+
+async::Channel<channel_t, Program> FluidSequencer::channelAdded() const
+{
+    return m_channels.channelAdded;
+}
+
+const ChannelMap& FluidSequencer::channels() const
+{
+    return m_channels;
 }
 
 void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes)
@@ -165,6 +174,9 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
     midi::Event event(Event::Opcode::PitchBend, Event::MessageType::ChannelVoice10);
     event.setChannel(channelIdx);
 
+    duration_t minInterval = 10000;
+    duration_t actualInterval = noteEvent.arrangementCtx().actualDuration * percentageToFactor(mpe::ONE_PERCENT * 10);
+
     if (currentType != mpe::ArticulationType::Undefined) {
         auto it = noteEvent.pitchCtx().pitchCurve.cbegin();
         auto last = noteEvent.pitchCtx().pitchCurve.cend();
@@ -180,7 +192,13 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
             }
 
             percentage_t positionDistance = nextToCurrent->first - it->first;
-            int stepsCount = positionDistance / (mpe::ONE_PERCENT * 2);
+            int stepsCount = 0;
+            if (actualInterval < minInterval) {
+                stepsCount = 1;
+            } else {
+                stepsCount = actualInterval / minInterval;
+            }
+
             float posStep = positionDistance / static_cast<float>(stepsCount);
             float pitchStep = (nextToCurrent->second - it->second) / static_cast<float>(stepsCount);
 
@@ -205,24 +223,7 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
 
 channel_t FluidSequencer::channel(const mpe::NoteEvent& noteEvent) const
 {
-    for (const auto& pair : m_articulationMapping) {
-        if (noteEvent.expressionCtx().articulations.contains(pair.first)) {
-            return findChannelByProgram(pair.second);
-        }
-    }
-
-    return 0;
-}
-
-channel_t FluidSequencer::findChannelByProgram(const midi::Program& program) const
-{
-    for (const auto& pair : m_channels) {
-        if (pair.second == program) {
-            return pair.first;
-        }
-    }
-
-    return 0;
+    return m_channels.resolveChannelForEvent(noteEvent);
 }
 
 note_idx_t FluidSequencer::noteIndex(const mpe::pitch_level_t pitchLevel) const

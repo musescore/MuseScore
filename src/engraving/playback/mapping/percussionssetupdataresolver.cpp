@@ -25,9 +25,9 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const Instrument* instrument)
+PlaybackSetupData PercussionsSetupDataResolver::doResolve(const Instrument* instrument)
 {
-    static std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
+    static const std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
         { "timpani", { SoundId::Timpani, SoundCategory::Percussions, {}, {} } },
         { "roto-toms", { SoundId::RotoToms, SoundCategory::Percussions, {}, {} } },
         { "tubaphone", { SoundId::Tubaphone, SoundCategory::Percussions, { SoundSubCategory::Metal }, {} } },
@@ -117,6 +117,7 @@ const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const Instrumen
         { "anvil", { SoundId::Anvil, SoundCategory::Percussions, { SoundSubCategory::Metal }, {} } },
         { "bell-plate", { SoundId::Bell, SoundCategory::Percussions, { SoundSubCategory::Plate,
                                                                        SoundSubCategory::Metal }, {} } },
+        { "bell-tree", { SoundId::BellTree, SoundCategory::Percussions, { SoundSubCategory::Metal }, {} } },
         { "bells", { SoundId::Bell, SoundCategory::Percussions, { SoundSubCategory::Metal }, {} } },
         { "bowl-gongs", { SoundId::Gong, SoundCategory::Percussions, { SoundSubCategory::Metal,
                                                                        SoundSubCategory::Bowl }, {} } },
@@ -133,6 +134,7 @@ const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const Instrumen
         { "hi-hat", { SoundId::HiHat, SoundCategory::Percussions, { SoundSubCategory::Metal }, {} } },
         { "iron-pipes", { SoundId::Pipe, SoundCategory::Percussions, { SoundSubCategory::Metal,
                                                                        SoundSubCategory::Iron }, {} } },
+        { "mark-tree", { SoundId::MarkTree, SoundCategory::Percussions, { SoundSubCategory::Metal }, {} } },
         { "metal-castanets", { SoundId::Castanet, SoundCategory::Percussions, { SoundSubCategory::Metal }, {} } },
         { "metal-wind-chimes", { SoundId::Chimes, SoundCategory::Percussions, { SoundSubCategory::Metal,
                                                                                 SoundSubCategory::Wind }, {} } },

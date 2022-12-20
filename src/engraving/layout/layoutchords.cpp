@@ -238,7 +238,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
 
         // handle conflict between upstem and downstem chords
 
-        if (upVoices && downVoices) {
+        if (upVoices && downVoices && !staff->isTabStaff(segment->tick())) {
             Note* bottomUpNote = upStemNotes.front();
             Note* topDownNote  = downStemNotes.back();
             int separation;

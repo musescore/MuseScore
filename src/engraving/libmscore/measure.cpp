@@ -1283,7 +1283,9 @@ void Measure::cmdRemoveStaves(staff_idx_t sStaff, staff_idx_t eStaff)
             }
         }
 
-        for (EngravingItem* e : s->annotations()) {
+        // Create copy, because s->annotations() will be modified during the loop
+        std::vector<EngravingItem*> annotations = s->annotations();
+        for (EngravingItem* e : annotations) {
             if (removingAllowed(e)) {
                 e->undoUnlink();
                 score()->undo(new RemoveElement(e));
@@ -2336,7 +2338,7 @@ void Measure::checkMultiVoices(staff_idx_t staffIdx)
 //   hasVoices
 //---------------------------------------------------------
 
-bool Measure::hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len) const
+bool Measure::hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len, bool considerInvisible) const
 {
     Staff* st = score()->staff(staffIdx);
     if (st->isTabStaff(stick)) {
@@ -2363,6 +2365,9 @@ bool Measure::hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len) cons
             if (cr) {
                 if (cr->tick() + cr->actualTicks() <= stick) {
                     continue;
+                }
+                if (considerInvisible) {
+                    return true;
                 }
                 bool v = false;
                 if (cr->isChord()) {
@@ -3826,8 +3831,9 @@ void Measure::addSystemHeader(bool isFirstSystem)
         }
 
         needKeysig = needKeysig && (keyIdx.key() != Key::C || keyIdx.custom() || keyIdx.isAtonal());
+        bool isPitchedStaff = staff->isPitchedStaff(tick());
 
-        if (needKeysig) {
+        if (needKeysig && isPitchedStaff) {
             KeySig* keysig;
             if (!kSegment) {
                 kSegment = Factory::createSegment(this, SegmentType::KeySig, Fraction(0, 1));
@@ -3851,33 +3857,36 @@ void Measure::addSystemHeader(bool isFirstSystem)
             keysig->layout();
             //kSegment->createShape(staffIdx);
             kSegment->setEnabled(true);
-        } else {
-            if (kSegment && staff->isPitchedStaff(tick())) {
-                // do not disable user modified keysigs
-                bool disable = true;
-                for (size_t i = 0; i < score()->nstaves(); ++i) {
-                    EngravingItem* e = kSegment->element(i * VOICES);
-                    Key key = score()->staff(i)->key(tick());
-                    if ((e && !e->generated()) || (key != keyIdx.key())) {
-                        disable = false;
-                    } else if (e && e->generated() && key == keyIdx.key() && keyIdx.key() == Key::C) {
-                        // If a key sig segment is disabled, it may be re-enabled if there is
-                        // a transposing instrument using a different key sig.
-                        // To prevent this from making the wrong key sig display, remove any key
-                        // sigs on staves where the key in this measure is C.
-                        kSegment->remove(e);
-                    }
+        } else if (kSegment && isPitchedStaff) {
+            // do not disable user modified keysigs
+            bool disable = true;
+            for (size_t i = 0; i < score()->nstaves(); ++i) {
+                EngravingItem* e = kSegment->element(i * VOICES);
+                Key key = score()->staff(i)->key(tick());
+                if ((e && !e->generated()) || (key != keyIdx.key())) {
+                    disable = false;
+                } else if (e && e->generated() && key == keyIdx.key() && keyIdx.key() == Key::C) {
+                    // If a key sig segment is disabled, it may be re-enabled if there is
+                    // a transposing instrument using a different key sig.
+                    // To prevent this from making the wrong key sig display, remove any key
+                    // sigs on staves where the key in this measure is C.
+                    kSegment->remove(e);
                 }
+            }
 
-                if (disable) {
-                    kSegment->setEnabled(false);
-                } else {
-                    EngravingItem* e = kSegment->element(track);
-                    if (e && e->isKeySig()) {
-                        KeySig* keysig = toKeySig(e);
-                        keysig->layout();
-                    }
+            if (disable) {
+                kSegment->setEnabled(false);
+            } else {
+                EngravingItem* e = kSegment->element(track);
+                if (e && e->isKeySig()) {
+                    KeySig* keysig = toKeySig(e);
+                    keysig->layout();
                 }
+            }
+        } else if (kSegment && !isPitchedStaff) {
+            EngravingItem* e = kSegment->element(track);
+            if (e && e->isKeySig()) {
+                kSegment->remove(e);
             }
         }
 
@@ -4010,8 +4019,9 @@ void Measure::addSystemTrailer(Measure* nm)
     for (staff_idx_t staffIdx = 0; staffIdx < n; ++staffIdx) {
         track_idx_t track = staffIdx * VOICES;
         Staff* staff = score()->staff(staffIdx);
+        bool staffIsPitchedAtNextMeas = nextMeasure() && staff->isPitchedStaff(nextMeasure()->tick());
 
-        if (show) {
+        if (show && staffIsPitchedAtNextMeas) {
             if (!s) {
                 s = Factory::createSegment(this, SegmentType::KeySigAnnounce, _rtick);
                 s->setTrailer(true);
@@ -4036,7 +4046,12 @@ void Measure::addSystemTrailer(Measure* nm)
             ks->layout();
             //s->createShape(track / VOICES);
             s->setEnabled(true);
-        } else {
+        } else if (show && !staffIsPitchedAtNextMeas) {
+            KeySig* keySig = toKeySig(s->element(track));
+            if (keySig) {
+                s->remove(keySig);
+            }
+        } else if (!show) {
             // remove any existent courtesy key signature
             if (s) {
                 s->setEnabled(false);
@@ -4125,32 +4140,6 @@ void Measure::checkTrailer()
             break;
         }
     }
-}
-
-//---------------------------------------------------------
-//   hasAccidental
-//---------------------------------------------------------
-
-static bool hasAccidental(Segment* s)
-{
-    Score* score = s->score();
-    for (track_idx_t track = 0; track < s->score()->ntracks(); ++track) {
-        Staff* staff = score->staff(track2staff(track));
-        if (!staff->show()) {
-            continue;
-        }
-        EngravingItem* e = s->element(track);
-        if (!e || !e->isChord()) {
-            continue;
-        }
-        Chord* c = toChord(e);
-        for (Note* n : c->notes()) {
-            if (n->accidental() && n->accidental()->addToSkyline()) {
-                return true;
-            }
-        }
-    }
-    return false;
 }
 
 //---------------------------------------------------------
@@ -4284,7 +4273,7 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
                         ns1->setPosX(xx);
                         ss = ns1;
                     }
-                    if (s->isChordRestType()) {
+                    if (s->isChordRestType() || ps == s) {
                         w += d;
                     }
                     x = xx;
@@ -4308,13 +4297,15 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
     }
     setLayoutStretch(stretchCoeff);
     setWidth(x);
-    // Check against minimum width and increase if needed
-    double minWidth = computeMinMeasureWidth();
-    if (width() < minWidth) {
-        stretchToTargetWidth(minWidth);
-        setWidthLocked(true);
-    } else {
-        setWidthLocked(false);
+    // Check against minimum width and increase if needed (MMRest minWidth is guaranteed elsewhere)
+    if (!(isMMRest() && mmRestCount() > 1)) {
+        double minWidth = computeMinMeasureWidth();
+        if (width() < minWidth) {
+            stretchToTargetWidth(minWidth);
+            setWidthLocked(true);
+        } else {
+            setWidthLocked(false);
+        }
     }
 }
 
@@ -4364,7 +4355,7 @@ void Measure::computeWidth(Fraction minTicks, Fraction maxTicks, double stretchC
 
 double Measure::computeMinMeasureWidth() const
 {
-    double minWidth = isMMRest() ? score()->styleMM(Sid::minMMRestWidth) : score()->styleMM(Sid::minMeasureWidth);
+    double minWidth = score()->styleMM(Sid::minMeasureWidth);
     double maxWidth = system()->width() - system()->leftMargin(); // maximum available system width (left margin accounts for possible indentation)
     if (maxWidth <= 0) {
         // System width may not yet be available for the linear mode (e.g. continuous view)
@@ -4434,7 +4425,7 @@ double Measure::computeFirstSegmentXPosition(Segment* segment)
     if (x <= 0) { // If that doesn't succeed (e.g. first bar) then just use left-margins
         x = segment->minLeft(ls);
         if (segment->isChordRestType()) {
-            x += score()->styleMM(hasAccidental(segment) ? Sid::barAccidentalDistance : Sid::barNoteDistance);
+            x += score()->styleMM(segment->hasAccidentals() ? Sid::barAccidentalDistance : Sid::barNoteDistance);
         } else if (segment->isClefType() || segment->isHeaderClefType()) {
             x += score()->styleMM(Sid::clefLeftMargin);
         } else if (segment->isKeySigType()) {
@@ -4446,6 +4437,16 @@ double Measure::computeFirstSegmentXPosition(Segment* segment)
     if (prevMeas && prevMeas->repeatEnd() && segment->isStartRepeatBarLineType() && (prevMeas->system() == system())) {
         // The start-repeat should overlap the end-repeat of the previous measure
         x -= score()->styleMM(Sid::endBarWidth);
+    }
+    // Do a final check of chord distances (invisible items may in some cases elude the 2 previous steps)
+    if (segment->isChordRestType()) {
+        double barNoteDist = score()->styleMM(Sid::barNoteDistance).val();
+        for (EngravingItem* e : segment->elist()) {
+            if (!e || !e->isChordRest() || (e->staff() && e->staff()->isTabStaff(e->tick()))) {
+                continue;
+            }
+            x = std::max(x, barNoteDist * e->mag() - e->pos().x());
+        }
     }
     x += segment->extraLeadingSpace().val() * spatium();
     return x;

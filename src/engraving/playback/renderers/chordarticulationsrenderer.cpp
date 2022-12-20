@@ -155,7 +155,7 @@ duration_t ChordArticulationsRenderer::tiedNotesTotalDuration(const Note* firstN
         }
 
         BeatsPerSecond bps = score->tempomap()->tempo(tiedNote->tick().ticks());
-        result += durationFromTicks(bps.val, tiedNote->chord()->durationTypeTicks().ticks());
+        result += durationFromTicks(bps.val, tiedNote->chord()->actualTicks().ticks());
     }
 
     return result;

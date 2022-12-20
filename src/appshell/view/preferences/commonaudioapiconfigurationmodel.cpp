@@ -91,6 +91,8 @@ QList<unsigned int> CommonAudioApiConfigurationModel::bufferSizeList() const
         result << bufferSize;
     }
 
+    std::sort(result.begin(), result.end());
+
     return result;
 }
 

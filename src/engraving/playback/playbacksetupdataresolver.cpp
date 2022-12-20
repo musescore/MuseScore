@@ -63,7 +63,9 @@ void PlaybackSetupDataResolver::resolveChordSymbolsSetupData(const Instrument* i
 {
     if (instrument->hasStrings()) {
         static const mpe::PlaybackSetupData CHORD_SYMBOLS_SETUP_DATA = {
-            SoundId::Guitar, SoundCategory::Strings, { SoundSubCategory::Acoustic, SoundSubCategory::Nylon }, {}
+            SoundId::Guitar, SoundCategory::Strings, { SoundSubCategory::Acoustic,
+                                                       SoundSubCategory::Nylon,
+                                                       SoundSubCategory::Plucked }, {}
         };
 
         result = CHORD_SYMBOLS_SETUP_DATA;

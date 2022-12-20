@@ -43,6 +43,7 @@ public:
 
     virtual async::Promise<AudioOutputParams> masterOutputParams() const = 0;
     virtual void setMasterOutputParams(const AudioOutputParams& params) = 0;
+    virtual void clearMasterOutputParams() = 0;
     virtual async::Channel<AudioOutputParams> masterOutputParamsChanged() const = 0;
 
     virtual async::Promise<AudioResourceMetaList> availableOutputResources() const = 0;

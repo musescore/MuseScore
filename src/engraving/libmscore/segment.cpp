@@ -26,6 +26,7 @@
 #include "rw/xml.h"
 #include "types/typesconv.h"
 
+#include "accidental.h"
 #include "barline.h"
 #include "beam.h"
 #include "chord.h"
@@ -2608,6 +2609,17 @@ double Segment::elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const
 
 double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
 {
+    // Handle mmRest segment case separately
+    if (measure() && measure()->isMMRest() && measure()->mmRestCount() > 1 && isChordRestType()) {
+        double minWidth = score()->styleMM(Sid::minMMRestWidth).val();
+        if (!score()->styleB(Sid::oldStyleMultiMeasureRests)) {
+            minWidth += 2 * score()->styleMM(Sid::multiMeasureRestMargin).val();
+        }
+        if (prevActive()) {
+            minWidth += prevActive()->minRight();
+        }
+        return minWidth;
+    }
     double ww = -1000000.0;          // can remain negative
     double d = 0.0;
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
@@ -2684,10 +2696,10 @@ Fraction Segment::shortestChordRest() const
     Fraction shortest = measure()->ticks(); // Initializing at the highest possible value ( = time signature of the measure)
     Fraction cur = measure()->ticks();
     for (auto elem : elist()) {
-        if (!elem || !elem->staff()->show() || !elem->isChordRest() || !elem->visible()) {
-            if (!(elem && elem->isRest() && toRest(elem)->isFullMeasureRest())) {
-                continue;
-            }
+        if (!elem || !elem->staff()->show() || !elem->isChordRest()
+            || (!elem->visible()
+                && measure()->hasVoices(elem->staffIdx(), measure()->tick(), measure()->ticks(), /*considerInvisible*/ true))) {
+            continue;
         }
         cur = toChordRest(elem)->actualTicks();
         if (cur < shortest) {
@@ -2703,11 +2715,11 @@ bool Segment::hasAccidentals() const
         return false;
     }
     for (EngravingItem* e : elist()) {
-        if (!e || !e->isChord()) {
+        if (!e || !e->isChord() || (e->staff() && !e->staff()->show())) {
             continue;
         }
         for (Note* note : toChord(e)->notes()) {
-            if (note->accidental()) {
+            if (note->accidental() && note->accidental()->addToSkyline()) {
                 return true;
             }
         }

@@ -26,7 +26,7 @@
 
 #include "compat/pageformat.h"
 
-#include "infrastructure/symbolfonts.h"
+#include "iengravingfont.h"
 
 #include "rw/xml.h"
 #include "rw/compat/compatutils.h"
@@ -2515,7 +2515,8 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
         } else if (tag == "Rest") {
             if (m->isMMRest()) {
                 segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
-                MMRest* mmr = new MMRest(segment);
+                MMRest* mmr = Factory::createMMRest(segment);
+                mmr->setParent(segment);
                 mmr->setTrack(ctx.track());
                 mmr->read(e);
                 segment->add(mmr);
@@ -3237,7 +3238,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
                 // float mode
                 score->style().set(Sid::spatium, sp);
             }
-            score->setSymbolFont(SymbolFonts::fontByName(score->style().styleSt(Sid::MusicalSymbolFont)));
+            score->setEngravingFont(engravingFonts()->fontByName(score->style().styleSt(Sid::MusicalSymbolFont).toStdString()));
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = Factory::createText(score->dummy(), TextStyleType::DEFAULT, false);
             readText206(e, ctx, text, text);

@@ -80,9 +80,7 @@ static const TranslatableString X_TAB = TranslatableString("action", "%1 (TAB)")
 const UiActionList NotationUiActions::m_actions = {
     UiAction("notation-escape",
              mu::context::UiCtxNotationOpened,
-             mu::context::CTX_NOTATION_FOCUSED,
-             TranslatableString("action", "Esc"),
-             TranslatableString("action", "Escape (Esc)")
+             mu::context::CTX_NOTATION_FOCUSED
              ),
     UiAction("put-note", // args: PointF pos, bool replace, bool insert
              mu::context::UiCtxNotationOpened,
@@ -1589,17 +1587,23 @@ const UiActionList NotationUiActions::m_actions = {
              IconCode::Code::TUNING_FORK,
              Checkable::Yes
              ),
+    UiAction("next-word",
+             mu::context::UiCtxNotationFocused,
+             mu::context::CTX_NOTATION_TEXT_EDITING,
+             TranslatableString("action", "Next word"),
+             TranslatableString("action", "Go to next word")
+             ),
     UiAction("next-text-element",
              mu::context::UiCtxNotationFocused,
              mu::context::CTX_NOTATION_TEXT_EDITING,
              TranslatableString("action", "Next text element"),
-             TranslatableString("action", "Go to next syllable")
+             TranslatableString("action", "Go to next text element")
              ),
     UiAction("prev-text-element",
              mu::context::UiCtxNotationFocused,
              mu::context::CTX_NOTATION_TEXT_EDITING,
              TranslatableString("action", "Previous text element"),
-             TranslatableString("action", "Go to previous syllable")
+             TranslatableString("action", "Go to previous text element")
              ),
     UiAction("next-beat-TEXT",
              mu::context::UiCtxNotationFocused,

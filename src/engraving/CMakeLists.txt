@@ -32,6 +32,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/engravingproject.cpp
     ${CMAKE_CURRENT_LIST_DIR}/engravingproject.h
     ${CMAKE_CURRENT_LIST_DIR}/iengravingconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/iengravingfont.h
+    ${CMAKE_CURRENT_LIST_DIR}/iengravingfontsprovider.h
 
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/messagebox.cpp
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/messagebox.h
@@ -52,10 +54,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/debugpaint.h
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/paintdebugger.cpp
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/paintdebugger.h
-    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/symbolfonts.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/symbolfonts.h
-    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/symbolfont.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/symbolfont.h
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/smufl.cpp
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/smufl.h
 
@@ -244,6 +242,10 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/internal/engravingconfiguration.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/qmimedataadapter.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/qmimedataadapter.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/engravingfontsprovider.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/engravingfontsprovider.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/engravingfont.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/engravingfont.h
         )
 endif()
 

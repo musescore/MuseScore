@@ -27,9 +27,9 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-const PlaybackSetupData& KeyboardsSetupDataResolver::doResolve(const Instrument* instrument)
+PlaybackSetupData KeyboardsSetupDataResolver::doResolve(const Instrument* instrument)
 {
-    static std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
+    static const std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
         { "celesta", { SoundId::Celesta, SoundCategory::Keyboards, {}, {} } },
         { "clavichord", { SoundId::Clavichord, SoundCategory::Keyboards, { SoundSubCategory::Baroque }, {} } },
         { "clavinet", { SoundId::Clavichord, SoundCategory::Keyboards, { SoundSubCategory::Electric }, {} } },

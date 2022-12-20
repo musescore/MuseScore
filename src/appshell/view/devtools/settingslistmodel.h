@@ -47,7 +47,9 @@ private:
         SectionRole = Qt::UserRole + 1,
         KeyRole,
         TypeRole,
-        ValRole
+        ValueRole,
+        MinValueRole,
+        MaxValueRole
     };
 
     QString typeToString(Val::Type t) const;

@@ -537,7 +537,7 @@ TEST_F(GuitarPro_Tests, gpxRasg) {
 TEST_F(GuitarPro_Tests, gpPercussion) {
     gpReadTest("all-percussion", "gp");
 }
-TEST_F(GuitarPro_Tests, gpxPercussion) {
+TEST_F(GuitarPro_Tests, DISABLED_gpxPercussion) {
     gpReadTest("all-percussion", "gpx");
 }
 TEST_F(GuitarPro_Tests, gp5Percussion) {

@@ -111,7 +111,7 @@ void StretchedBend::fillDrawPoints()
 
     m_drawPoints.push_back(m_points[0].pitch);
 
-    for (int i = 1; i < m_points.size() - 1; i++) {
+    for (size_t i = 1; i < m_points.size() - 1; i++) {
         if (!isExtraPoint(i)) {
             m_drawPoints.push_back(m_points[i].pitch);
         }

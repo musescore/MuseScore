@@ -33,9 +33,9 @@ FocusableItem {
 
     //@note Current design assumes that stems and hooks should be represented at the same tab,
     //      but semantically it's different things, so they should have different models
+    property QtObject chordModel: null
     property QtObject stemModel: null
     property QtObject hookModel: null
-    property QtObject beamModel: null
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -51,21 +51,13 @@ FocusableItem {
 
         spacing: 12
 
-        CheckBox {
-            width: parent.width
-            isIndeterminate: root.stemModel && root.beamModel ? root.stemModel.isStemHidden.isUndefined || root.beamModel.isBeamHidden.isUndefined : false
-            checked: root.stemModel && !isIndeterminate && root.beamModel ? root.stemModel.isStemHidden.value && root.beamModel.isBeamHidden.value : false
-            text: qsTrc("inspector", "Hide stem (also hides beam)")
+        CheckBoxPropertyView {
+            text: qsTrc("inspector", "Stemless")
+            propertyItem: root.chordModel ? root.chordModel.isStemless : null
 
-            navigation.name: "HideStem"
+            navigation.name: "Stemless"
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart + 1
-
-            onClicked: {
-                var isHidden = !checked
-                root.stemModel.isStemHidden.value = isHidden
-                root.beamModel.isBeamHidden.value = isHidden
-            }
         }
 
         DirectionSection {

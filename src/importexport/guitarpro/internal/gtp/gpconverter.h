@@ -7,6 +7,7 @@
 #include "gpmasterbar.h"
 #include "gpbar.h"
 #include "gpbeat.h"
+#include "gpdrumsetresolver.h"
 #include "gpmastertracks.h"
 #include "types/fraction.h"
 
@@ -133,6 +134,7 @@ private:
     void addFingering(const GPNote* gpnote, Note* note);
     void addAccent(const GPNote* gpnote, Note* note);
     void addLeftHandTapping(const GPNote* gpnote, Note* note);
+    void addStringNumber(const GPNote* gpnote, Note* note);
     void addTapping(const GPNote* gpnote, Note* note);
     void addSlide(const GPNote* gpnote, Note* note);
     void addSingleSlide(const GPNote* gpnote, Note* note);
@@ -180,6 +182,7 @@ private:
     void addFermatas();
     void addTempoMap();
     void addInstrumentChanges();
+    void addSoundEffects(const SLine* const elem);
     void fillUncompletedMeasure(const Context& ctx);
     void hideRestsInEmptyMeasures(track_idx_t track);
     int getStringNumberFor(Note* pNote, int pitch) const;
@@ -188,6 +191,8 @@ private:
 
     void addLineElement(ChordRest* cr, std::vector<SLine*>& elements, ElementType muType, LineImportType importType, bool elemExists,
                         bool splitByRests = false);
+
+    void setBeamMode(const GPBeat* beat, ChordRest* cr, Measure* measure, Fraction tick);
 
     Score* _score;
     std::unique_ptr<GPDomModel> _gpDom;
@@ -205,7 +210,7 @@ private:
     std::unordered_map<track_idx_t, GPBar::Clef> _clefs;
     std::unordered_map<track_idx_t, GPBeat::DynamicType> _dynamics;
     std::unordered_map<track_idx_t, bool> m_hasCapo;
-    std::unordered_multimap<track_idx_t, Tie*> _ties; // map(track, tie)
+    std::unordered_map<track_idx_t, std::vector<Tie*> > _ties; // map(track, tie)
     std::unordered_map<track_idx_t, Slur*> _slurs; // map(track, slur)
 
     mutable GPBeat* m_currentGPBeat = nullptr; // used for passing info from notes
@@ -252,6 +257,10 @@ private:
     bool m_showCapo = true; // TODO-gp : settings
     std::unordered_map<Measure*, std::array<int, VOICES> > m_chordsInMeasureByVoice; /// if measure has any chord for specific voice, rests are hidden
     std::unordered_map<Measure*, size_t> m_chordsInMeasure;
+    BeamMode m_previousBeamMode = BeamMode::AUTO;
+
+    std::unordered_map<Note*, Note*> m_harmonicNotes;
+    std::unique_ptr<GPDrumSetResolver> _drumResolver;
 };
 } //end Ms namespace
 #endif // SCOREDOMBUILDER_H

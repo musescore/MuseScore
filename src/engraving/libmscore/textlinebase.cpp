@@ -368,6 +368,11 @@ void TextLineBaseSegment::layout()
         _endText->setXmlText(u"");
     }
 
+    if (!textLineBase()->textSizeSpatiumDependent()) {
+        _text->setSize(_text->size() * SPATIUM20 / spatium());
+        _endText->setSize(_endText->size() * SPATIUM20 / spatium());
+    }
+
     PointF pp1;
     PointF pp2(pos2());
 
@@ -715,6 +720,8 @@ PropertyValue TextLineBase::getProperty(Pid id) const
         return _endTextOffset;
     case Pid::LINE_VISIBLE:
         return lineVisible();
+    case Pid::TEXT_SIZE_SPATIUM_DEPENDENT:
+        return textSizeSpatiumDependent();
     default:
         return SLine::getProperty(id);
     }
@@ -807,6 +814,9 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::END_FONT_STYLE:
         setEndFontStyle(FontStyle(v.toInt()));
+        break;
+    case Pid::TEXT_SIZE_SPATIUM_DEPENDENT:
+        setTextSizeSpatiumDependent(v.toBool());
         break;
     default:
         return SLine::setProperty(id, v);

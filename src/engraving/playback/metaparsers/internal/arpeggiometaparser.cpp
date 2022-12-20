@@ -68,7 +68,7 @@ void ArpeggioMetaParser::doParse(const EngravingItem* item, const RenderingConte
     articulationMeta.type = type;
     articulationMeta.pattern = ctx.profile->pattern(type);
     articulationMeta.timestamp = ctx.nominalTimestamp;
-    articulationMeta.overallDuration = ctx.nominalDuration;
+    articulationMeta.overallDuration = ctx.nominalDuration * arpeggio->Stretch();
 
     appendArticulationData(std::move(articulationMeta), result);
 }

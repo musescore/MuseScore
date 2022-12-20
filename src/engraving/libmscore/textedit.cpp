@@ -24,10 +24,8 @@
 
 #include "mscoreview.h"
 #include "score.h"
-#include "symbolfont.h"
+#include "iengravingfont.h"
 #include "types/symnames.h"
-
-//#include "accessibility/accessibleitem.h"
 
 #include "log.h"
 
@@ -225,7 +223,7 @@ void TextBase::insertSym(EditData& ed, SymId id)
     TextCursor* cursor = ted->cursor();
 
     deleteSelectedText(ed);
-    String s = score()->symbolFont()->toString(id);
+    String s = score()->engravingFont()->toString(id);
     CharFormat fmt = *cursor->format();    // save format
     cursor->format()->setFontFamily(u"ScoreText");
     score()->undo(new InsertText(_cursor, s), &ed);

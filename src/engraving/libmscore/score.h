@@ -29,12 +29,15 @@
 */
 
 #include <set>
+#include <memory>
 
 #include "async/channel.h"
 #include "io/iodevice.h"
+#include "types/ret.h"
 
 #include "modularity/ioc.h"
 #include "draw/iimageprovider.h"
+#include "iengravingfontsprovider.h"
 
 #include "layout/layout.h"
 #include "layout/layoutoptions.h"
@@ -95,7 +98,7 @@ class RepeatList;
 class Rest;
 class Score;
 class ScoreElement;
-class SymbolFont;
+class IEngravingFont;
 class Segment;
 class Slur;
 class Spanner;
@@ -357,8 +360,9 @@ class Score : public EngravingObject
 {
     OBJECT_ALLOCATOR(engraving, Score)
 
-    INJECT(engraving, mu::draw::IImageProvider, imageProvider)
-    INJECT(engraving, mu::engraving::IEngravingConfiguration, configuration)
+    INJECT(engraving, draw::IImageProvider, imageProvider)
+    INJECT(engraving, IEngravingConfiguration, configuration)
+    INJECT(engraving, IEngravingFontsProvider, engravingFonts)
 
 private:
 
@@ -383,7 +387,7 @@ private:
     std::vector<Layer> _layer;
     int _currentLayer { 0 };
 
-    SymbolFont* m_symbolFont = nullptr;
+    std::shared_ptr<IEngravingFont> m_engravingFont = nullptr;
     int _pageNumberOffset { 0 };          ///< Offset for page numbers.
 
     UpdateState _updateState;
@@ -459,13 +463,14 @@ private:
     std::list<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
     void pasteChordRest(ChordRest* cr, const Fraction& tick, const Interval&);
 
+    void doSelect(EngravingItem* e, SelectType type, staff_idx_t staffIdx);
     void selectSingle(EngravingItem* e, staff_idx_t staffIdx);
     void selectAdd(EngravingItem* e);
     void selectRange(EngravingItem* e, staff_idx_t staffIdx);
 
     void cmdToggleVisible();
 
-    void putNote(const Position&, bool replace);
+    Ret putNote(const Position&, bool replace);
 
     void resetTempo();
     void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
@@ -732,14 +737,14 @@ public:
     void cmdDeleteSelection();
     void cmdFullMeasureRest();
 
-    void putNote(const mu::PointF&, bool replace, bool insert);
-    void insertChord(const Position&);
+    Ret putNote(const mu::PointF&, bool replace, bool insert);
+    Ret insertChord(const Position&);
     void localInsertChord(const Position&);
     void globalInsertChord(const Position&);
 
     void cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, const Fraction& lTick, bool link = true, bool spanner = true);
 
-    void repitchNote(const Position& pos, bool replace);
+    Ret repitchNote(const Position& pos, bool replace);
     void regroupNotesAndRests(const Fraction& startTick, const Fraction& endTick, track_idx_t track);
     bool checkTimeDelete(Segment*, Segment*);
     void timeDelete(Measure*, Segment*, const Fraction&);
@@ -808,7 +813,8 @@ public:
     std::set<ChordRest*> getSelectedChordRests() const;
     void getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const;
 
-    void select(EngravingItem* obj, SelectType = SelectType::SINGLE, staff_idx_t staff = 0);
+    void select(EngravingItem* item, SelectType = SelectType::SINGLE, staff_idx_t staff = 0);
+    void select(const std::vector<EngravingItem*>& items, SelectType = SelectType::SINGLE, staff_idx_t staff = 0);
     void selectSimilar(EngravingItem* e, bool sameStaff);
     void selectSimilarInRange(EngravingItem* e);
     static void collectMatch(void* data, EngravingItem* e);
@@ -965,9 +971,10 @@ public:
     void setScoreOrder(ScoreOrder order);
     void updateBracesAndBarlines(Part* part, size_t index);
     void setBracketsAndBarlines();
+    void remapBracketsAndBarlines();
 
     void lassoSelect(const mu::RectF&);
-    void lassoSelectEnd(bool);
+    void lassoSelectEnd();
 
     Page* searchPage(const mu::PointF&) const;
     std::vector<System*> searchSystem(const mu::PointF& p, const System* preferredSystem = nullptr, double spacingFactor = 0.5,
@@ -1153,14 +1160,16 @@ public:
     ChordRest* findCRinStaff(const Fraction& tick, staff_idx_t staffIdx) const;
     void insertTime(const Fraction& tickPos, const Fraction& tickLen);
 
-    SymbolFont* symbolFont() const { return m_symbolFont; }
-    void setSymbolFont(SymbolFont* f) { m_symbolFont = f; }
+    std::shared_ptr<IEngravingFont> engravingFont() const { return m_engravingFont; }
+    void setEngravingFont(std::shared_ptr<IEngravingFont> f) { m_engravingFont = f; }
 
     double noteHeadWidth() const { return _noteHeadWidth; }
     void setNoteHeadWidth(double n) { _noteHeadWidth = n; }
 
     std::list<staff_idx_t> uniqueStaves() const;
+
     void transpositionChanged(Part* part, Interval oldTransposition, Fraction tickStart = { 0, 1 }, Fraction tickEnd = { -1, 1 });
+    void transpositionChanged(Part* part, const Fraction& instrumentTick, Interval oldTransposition);
 
     void moveUp(ChordRest*);
     void moveDown(ChordRest*);

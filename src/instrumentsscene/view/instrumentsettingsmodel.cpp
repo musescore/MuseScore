@@ -42,6 +42,7 @@ void InstrumentSettingsModel::load(const QVariant& instrument)
     QVariantMap map = instrument.toMap();
     m_instrumentKey.partId = ID(map["partId"]);
     m_instrumentKey.instrumentId = map["instrumentId"].toString();
+    m_instrumentKey.tick = Part::MAIN_INSTRUMENT_TICK;
 
     const Part* part = notationParts()->part(m_instrumentKey.partId);
     if (!part) {

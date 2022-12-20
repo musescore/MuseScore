@@ -21,7 +21,12 @@
  */
 #include "abstractaudiowriter.h"
 
+#include <QApplication>
+#include <QFile>
+#include <QFileInfo>
 #include <QThread>
+
+#include "audio/iaudiooutput.h"
 
 #include "log.h"
 
@@ -86,7 +91,7 @@ mu::framework::Progress AbstractAudioWriter::progress() const
     return m_progress;
 }
 
-void AbstractAudioWriter::doWriteAndWait(QIODevice& destinationDevice, const audio::SoundTrackFormat& format)
+void AbstractAudioWriter::doWriteAndWait(INotationPtr notation, QIODevice& destinationDevice, const audio::SoundTrackFormat& format)
 {
     //!Note Temporary workaround, since QIODevice is the alias for QIODevice, which falls with SIGSEGV
     //!     on any call from background thread. Once we have our own implementation of QIODevice
@@ -97,6 +102,14 @@ void AbstractAudioWriter::doWriteAndWait(QIODevice& destinationDevice, const aud
     QString path = info.absoluteFilePath();
 
     m_isCompleted = false;
+
+    playbackController()->setNotation(notation);
+    playbackController()->setIsExportingAudio(true);
+
+    m_progress.finished.onReceive(this, [this](const auto&) {
+        playbackController()->setIsExportingAudio(false);
+        playbackController()->setNotation(globalContext()->currentNotation());
+    });
 
     playback()->sequenceIdList()
     .onResolve(this, [this, path, &format](const audio::TrackSequenceIdList& sequenceIdList) {

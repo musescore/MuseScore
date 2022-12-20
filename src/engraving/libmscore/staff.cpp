@@ -81,15 +81,6 @@ Staff::Staff(const Staff& staff)
 }
 
 //---------------------------------------------------------
-//   ~Staff
-//---------------------------------------------------------
-
-Staff::~Staff()
-{
-    DeleteAll(brackets());
-}
-
-//---------------------------------------------------------
 //   clone
 //---------------------------------------------------------
 
@@ -1288,13 +1279,6 @@ void Staff::init(const Staff* s)
     _id                = s->_id;
     _staffTypeList     = s->_staffTypeList;
     setDefaultClefType(s->defaultClefType());
-    for (BracketItem* i : s->_brackets) {
-        BracketItem* ni = new BracketItem(*i);
-        ni->setScore(score());
-        ni->setStaff(this);
-        _brackets.push_back(ni);
-    }
-    _barLineSpan       = s->_barLineSpan;
     _barLineFrom       = s->_barLineFrom;
     _barLineTo         = s->_barLineTo;
     _hideWhenEmpty     = s->_hideWhenEmpty;

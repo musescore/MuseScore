@@ -217,7 +217,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
 
                 ctx.nextMeasure = ctx.curMeasure;
                 ctx.curMeasure  = ctx.prevMeasure;
-                ctx.prevMeasure = ctx.curMeasure->prevMeasure();
+                ctx.prevMeasure = ctx.curMeasure->prev();
 
                 curSysWidth -= system->lastMeasure()->width();
                 system->removeLastMeasure();
@@ -333,6 +333,8 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             break;
         }
     }
+
+    assert(ctx.prevMeasure);
 
     if (ctx.endTick < ctx.prevMeasure->tick()) {
         // we've processed the entire range
@@ -1395,6 +1397,9 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
     for (SpannerSegment* ss : segments) {
         if (ss->addToSkyline()) {
             staff_idx_t stfIdx = ss->systemFlag() ? ss->staffIdxOrNextVisible() : ss->staffIdx();
+            if (stfIdx == mu::nidx) {
+                continue;
+            }
             system->staff(stfIdx)->skyline().add(ss->shape().translated(ss->pos()));
         }
     }

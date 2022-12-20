@@ -50,9 +50,10 @@ public:
                 const mpe::dynamic_level_t actualDynamicLevel, const mpe::ArticulationType persistentArticulationApplied,
                 const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventsMap& result) const;
 
-    void renderChordSymbol(const Harmony* chordSymbol, const int ticksPositionOffset, mpe::PlaybackEventsMap& result) const;
-    void renderChordSymbol(const Harmony* chordSymbol, const mpe::timestamp_t actualTimestamp, const mpe::duration_t actualDuration,
+    void renderChordSymbol(const Harmony* chordSymbol, const int ticksPositionOffset, const mpe::ArticulationsProfilePtr profile,
                            mpe::PlaybackEventsMap& result) const;
+    void renderChordSymbol(const Harmony* chordSymbol, const mpe::timestamp_t actualTimestamp, const mpe::duration_t actualDuration,
+                           const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventsMap& result) const;
 
     void renderMetronome(const Score* score, const int measureStartTick, const int measureEndTick, const int ticksPositionOffset,
                          mpe::PlaybackEventsMap& result) const;

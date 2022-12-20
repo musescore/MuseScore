@@ -834,10 +834,10 @@ void RepeatList::unwind()
                     activeVolta = nullptr;
                     // Start next rs on the following measure
                     Measure const* const possibleNextMeasure = (*repeatListElementIt)->measure->nextMeasure();
+                    rs = new RepeatSegment(playbackCount);
                     if (possibleNextMeasure == nullptr) {
-                        rs = nullptr;                   // end of score, but will still encounter section break, notify it
+                        // end of score, but will still encounter section break, notify it
                     } else {
-                        rs = new RepeatSegment(playbackCount);
                         rs->addMeasure(possibleNextMeasure);
                     }
                 }

@@ -120,6 +120,19 @@ void AudioOutputHandler::setMasterOutputParams(const AudioOutputParams& params)
     }, AudioThread::ID);
 }
 
+void AudioOutputHandler::clearMasterOutputParams()
+{
+    Async::call(this, [this]() {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        IF_ASSERT_FAILED(mixer()) {
+            return;
+        }
+
+        mixer()->clearMasterOutputParams();
+    }, AudioThread::ID);
+}
+
 Channel<AudioOutputParams> AudioOutputHandler::masterOutputParamsChanged() const
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
@@ -184,12 +197,13 @@ Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceI
         }
 
 #ifdef ENABLE_AUDIO_EXPORT
+        s->player()->stop();
         s->player()->seek(0);
         msecs_t totalDuration = s->player()->duration();
         SoundTrackWriter writer(destination, format, totalDuration, mixer());
 
         framework::Progress progress = saveSoundTrackProgress(sequenceId);
-        writer.progress().progressChanged.onReceive(this, [&progress](int64_t current, int64_t total, std::string title){
+        writer.progress().progressChanged.onReceive(this, [&progress](int64_t current, int64_t total, std::string title) {
             progress.progressChanged.send(current, total, title);
         });
 

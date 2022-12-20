@@ -46,6 +46,7 @@ Column {
     }
 
     readonly property QtObject headModel: model ? model.modelByType(Inspector.TYPE_NOTEHEAD) : null
+    readonly property QtObject chordModel: model ? model.modelByType(Inspector.TYPE_CHORD) : null
     readonly property QtObject stemModel: model ? model.modelByType(Inspector.TYPE_STEM) : null
     readonly property QtObject hookModel: model ? model.modelByType(Inspector.TYPE_HOOK) : null
     readonly property QtObject beamModel: model ? model.modelByType(Inspector.TYPE_BEAM) : null
@@ -110,9 +111,9 @@ Column {
         StemSettings {
             height: implicitHeight
 
+            chordModel: root.chordModel
             stemModel: root.stemModel
             hookModel: root.hookModel
-            beamModel: root.beamModel
 
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 2000

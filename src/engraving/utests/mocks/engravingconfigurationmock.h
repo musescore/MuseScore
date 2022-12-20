@@ -38,6 +38,8 @@ public:
     MOCK_METHOD(io::path_t, partStyleFilePath, (), (const, override));
     MOCK_METHOD(void, setPartStyleFilePath, (const io::path_t&), (override));
 
+    MOCK_METHOD(SizeF, defaultPageSize, (), (const, override));
+
     MOCK_METHOD(String, iconsFontFamily, (), (const, override));
 
     MOCK_METHOD(draw::Color, defaultColor, (), (const, override));
@@ -77,6 +79,7 @@ public:
     MOCK_METHOD(bool, enableExperimentalFretCircle, (), (const, override));
     MOCK_METHOD(void, setGuitarProMultivoiceEnabled, (bool), (override));
     MOCK_METHOD(bool, guitarProMultivoiceEnabled, (), (const, override));
+    MOCK_METHOD(bool, minDistanceForPartialSkylineCalculated, (), (const, override));
 };
 }
 

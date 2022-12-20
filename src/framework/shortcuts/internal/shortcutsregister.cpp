@@ -180,7 +180,6 @@ void ShortcutsRegister::expandStandardKeys(ShortcutList& shortcuts) const
 
         QList<QKeySequence> kslist = QKeySequence::keyBindings(shortcut.standardKey);
         if (kslist.isEmpty()) {
-            LOGW() << "not bind key sequence for standard key: " << shortcut.standardKey;
             notbonded.push_back(shortcut);
             continue;
         }

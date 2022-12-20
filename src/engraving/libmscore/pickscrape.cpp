@@ -48,6 +48,7 @@ static const ElementStyle pickScrapeStyle {
     { Sid::palmMuteLineStyle,                     Pid::LINE_STYLE },
     { Sid::palmMuteDashLineLen,                   Pid::DASH_LINE_LEN },
     { Sid::palmMuteDashGapLen,                    Pid::DASH_GAP_LEN },
+    { Sid::palmMuteFontSpatiumDependent,          Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
     { Sid::palmMuteEndHookType,                   Pid::END_HOOK_TYPE },
     { Sid::palmMuteLineWidth,                     Pid::LINE_WIDTH },
     { Sid::palmMutePlacement,                     Pid::PLACEMENT }
@@ -129,8 +130,9 @@ PropertyValue PickScrape::propertyDefault(Pid propertyId) const
         return score()->styleV(Sid::palmMuteFontStyle);
 
     case Pid::BEGIN_TEXT:
-        return PropertyValue::fromValue("P.S."); // TODO: fix the style
     case Pid::CONTINUE_TEXT:
+        return PropertyValue::fromValue("P.S."); // TODO: fix the style
+
     case Pid::END_TEXT:
         return "";
 

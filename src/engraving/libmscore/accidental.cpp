@@ -22,7 +22,7 @@
 
 #include "accidental.h"
 
-#include "infrastructure/symbolfont.h"
+#include "iengravingfont.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
 #include "types/translatablestring.h"
@@ -427,7 +427,7 @@ void Accidental::layoutSingleGlyphAccidental()
         default:
             break;
         }
-        if (!score()->symbolFont()->isValid(s)) {
+        if (!score()->engravingFont()->isValid(s)) {
             layoutMultiGlyphAccidental();
             return;
         }
@@ -530,7 +530,7 @@ void Accidental::draw(mu::draw::Painter* painter) const
 
     painter->setPen(curColor());
     for (const SymElement& e : el) {
-        score()->symbolFont()->draw(e.sym, painter, magS(), PointF(e.x, e.y));
+        score()->engravingFont()->draw(e.sym, painter, magS(), PointF(e.x, e.y));
     }
 }
 

@@ -1169,7 +1169,7 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
         int idx = s->staff()->channel(s->tick(), 0);
         int channel = s->part()->instrument(s->tick())->channel(idx)->channel();
 
-        if (s->isPedal() || s->isLetRing()) {
+        if (s->isPedal()) {
             channelPedalEvents.insert({ channel, std::vector<std::pair<int, std::pair<bool, int> > >() });
             std::vector<std::pair<int, std::pair<bool, int> > > pedalEventList = channelPedalEvents.at(channel);
             std::pair<int, std::pair<bool, int> > lastEvent;
@@ -1902,6 +1902,31 @@ static bool shouldRenderNote(Note* n)
     return true;
 }
 
+static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int& onTime, int& trailtime)
+{
+    if (!note->isSlideOutNote()) {
+        return;
+    }
+
+    const int slideNotes = 3;
+    trailtime += (1000 - onTime) / 2;
+    el->push_back(NoteEvent(0, onTime, trailtime));
+
+    int on = onTime + trailtime;
+
+    const int slideDuration = 30;
+
+    int pitch = 0;
+    int pitchOffset = note->slide().is(Note::SlideType::Doit) ? 1 : -1;
+    for (int i = 0; i < slideNotes; ++i) {
+        el->push_back(NoteEvent(pitch, on, slideDuration));
+        pitch += pitchOffset;
+
+        on += slideDuration;
+    }
+    el->push_back(NoteEvent(pitch, on, 1000 - on));
+}
+
 //---------------------------------------------------------
 //   renderChord
 //    ontime and trailtime in 1/1000 of duration
@@ -1941,6 +1966,7 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
             el->clear();
             continue;
         }
+        createSlideOutNotePlayEvents(chord->notes()[i], el, ontime, trailtime);
         if (arpeggio) {
             continue;       // don't add extra events and apply gateTime to arpeggio
         }
@@ -1951,7 +1977,11 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
         }
         if (trailtime == 0) {   // if trailtime is non-zero that means we have graceNotesAfter, so we don't need additional gate time.
             for (NoteEvent& e : ell[i]) {
-                e.setLen(chord->notes()[i]->deadNote() ? deadNoteDurationInTicks : e.len() * gateTime / 100);
+                Note* note = chord->notes()[i];
+                e.setLen(note->deadNote() ? deadNoteDurationInTicks : e.len() * gateTime / 100);
+                if (note->letRing()) {
+                    e.setLen(e.len() * 2);
+                }
             }
         }
     }

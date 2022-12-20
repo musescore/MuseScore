@@ -523,16 +523,19 @@ EngravingItem* ChordRest::drop(EditData& data)
         if (part()->instruments().find(tick().ticks()) != part()->instruments().end()) {
             LOGD() << "InstrumentChange already exists at tick = " << tick().ticks();
             delete e;
-            return 0;
+            return nullptr;
         } else {
             InstrumentChange* ic = toInstrumentChange(e);
             ic->setParent(segment());
             ic->setTrack(trackZeroVoice(track()));
-            Instrument* instr = ic->instrument();
-            Instrument* prevInstr = part()->instrument(tick());
-            if (instr && instr->isDifferentInstrument(*prevInstr)) {
-                ic->setupInstrument(instr);
+
+            const Instrument* instr = part()->instrument(tick());
+            IF_ASSERT_FAILED(instr) {
+                delete e;
+                return nullptr;
             }
+
+            ic->setInstrument(*instr);
             score()->undoAddElement(ic);
             return e;
         }

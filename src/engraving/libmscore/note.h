@@ -181,6 +181,7 @@ public:
 private:
     bool _ghost = false;        ///< ghost note
     bool _deadNote = false;     ///< dead note
+    bool _letRing = false;      ///< let ring
     bool _hidden = false;                 ///< marks this note as the hidden one if there are
                                           ///< overlapping notes; hidden notes are not played
                                           ///< and heads + accidentals are not shown
@@ -378,13 +379,15 @@ public:
     void setHarmonicFret(float val) { m_harmonicFret = val; }
     DisplayFretOption displayFret() const { return m_displayFret; }
     void setDisplayFret(DisplayFretOption val) { m_displayFret = val; }
-    bool fretConflictResolveSupported() const;
+    bool negativeFretUsed() const;
     int string() const { return _string; }
     void setString(int val);
     bool ghost() const { return _ghost; }
     void setGhost(bool val) { _ghost = val; }
     bool deadNote() const { return _deadNote; }
     void setDeadNote(bool deadNote) { _deadNote = deadNote; }
+    bool letRing() const { return _letRing; }
+    void setLetRing(bool letRing) { _letRing = letRing; }
 
     bool fretConflict() const { return _fretConflict; }
     void setFretConflict(bool val) { _fretConflict = val; }

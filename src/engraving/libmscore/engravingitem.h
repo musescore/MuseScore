@@ -510,9 +510,8 @@ public:
     virtual bool isUserModified() const;
 
     void drawSymbol(SymId id, mu::draw::Painter* p, const PointF& o = PointF(), double scale = 1.0) const;
-    void drawSymbol(SymId id, mu::draw::Painter* p, const PointF& o, int n) const;
     void drawSymbols(const SymIdList&, mu::draw::Painter* p, const PointF& o = PointF(), double scale = 1.0) const;
-    void drawSymbols(const SymIdList&, mu::draw::Painter* p, const PointF& o, const mu::SizeF& scale) const;
+    void drawSymbols(const SymIdList&, mu::draw::Painter* p, const PointF& o, const SizeF& scale) const;
     double symHeight(SymId id) const;
     double symWidth(SymId id) const;
     double symWidth(const SymIdList&) const;
@@ -532,7 +531,9 @@ public:
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr accessible() const;
+    void initAccessibleIfNeed();
 #endif
+
     virtual String accessibleInfo() const;
     virtual String screenReaderInfo() const { return accessibleInfo(); }
     //  if the screen-reader needs a special string (see note for example)
@@ -563,10 +564,8 @@ public:
     std::vector<Spanner*>& endingSpanners() { return _endingSpanners; }
 
 private:
-    void initAccessibleIfNeed();
-    void doInitAccessible();
-
 #ifndef ENGRAVING_NO_ACCESSIBILITY
+    void doInitAccessible();
     AccessibleItemPtr m_accessible;
 #endif
 

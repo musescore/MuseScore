@@ -35,8 +35,15 @@ void TremoloMetaParser::doParse(const EngravingItem* item, const RenderingContex
 
     const Tremolo* tremolo = toTremolo(item);
 
-    if (tremolo->twoNotes() && tremolo->chord2()->tick().ticks() == ctx.nominalPositionStartTick) {
-        return;
+    if (tremolo->twoNotes()) {
+        const Chord* chord2 = tremolo->chord2();
+        IF_ASSERT_FAILED(chord2) {
+            return;
+        }
+
+        if (chord2->tick().ticks() == ctx.nominalPositionStartTick) {
+            return;
+        }
     }
 
     mpe::ArticulationType type = mpe::ArticulationType::Undefined;
@@ -72,7 +79,7 @@ void TremoloMetaParser::doParse(const EngravingItem* item, const RenderingContex
 
     int overallDurationTicks = ctx.nominalDurationTicks;
     if (tremolo->twoNotes() && tremolo->chord1() && tremolo->chord2()) {
-        overallDurationTicks = tremolo->chord1()->ticks().ticks() + tremolo->chord2()->ticks().ticks();
+        overallDurationTicks = tremolo->chord1()->actualTicks().ticks() + tremolo->chord2()->actualTicks().ticks();
     }
 
     mpe::ArticulationMeta articulationMeta;

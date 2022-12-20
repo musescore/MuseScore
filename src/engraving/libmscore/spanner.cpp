@@ -399,21 +399,6 @@ Spanner::Spanner(const Spanner& s)
     }
 }
 
-Spanner::~Spanner()
-{
-    for (SpannerSegment* s : segments) {
-        if (s->parent() == this) {
-            delete s;
-        }
-    }
-
-    for (SpannerSegment* s : unusedSegments) {
-        if (s->parent() == this) {
-            delete s;
-        }
-    }
-}
-
 //---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
@@ -1016,24 +1001,7 @@ Segment* Spanner::startSegment() const
 
 Segment* Spanner::endSegment() const
 {
-    Segment* endSeg = score()->tick2leftSegment(tick2());
-    if (!systemFlag()) {
-        return endSeg;
-    }
-    if (endSeg->rtick().ticks() == 0) {
-        // If this is the first segment of the measure, it may not be the left-most segment at this tick.
-        // There could be segments at the end of the previous measure. We nees those for correct layout of system lines.
-        Measure* prevMeas = endSeg->measure()->prevMeasure();
-        if (prevMeas) {
-            for (Segment& s : prevMeas->segments()) {
-                if (s.tick() == tick2()) {
-                    endSeg = &s;
-                    break;
-                }
-            }
-        }
-    }
-    return endSeg;
+    return score()->tick2leftSegment(tick2());
 }
 
 //---------------------------------------------------------
@@ -1668,6 +1636,10 @@ void SpannerSegment::autoplaceSpannerSegment()
         sl.add(sh.translated(pos()));
         double yd = 0.0;
         staff_idx_t stfIdx = systemFlag() ? staffIdxOrNextVisible() : staffIdx();
+        if (stfIdx == mu::nidx) {
+            _skipDraw = true;
+            return;
+        }
         if (above) {
             double d  = system()->topDistance(stfIdx, sl);
             if (d > -md) {

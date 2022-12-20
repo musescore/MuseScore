@@ -321,6 +321,11 @@ bool ExportDialogModel::exportScores()
         return false;
     }
 
+    RetVal<io::path_t> exportPath = exportProjectScenario()->askExportPath(notations, m_selectedExportType, m_selectedUnitType);
+    if (!exportPath.ret) {
+        return false;
+    }
+
     ExcerptNotationList excerptsToInit;
     ExcerptNotationList potentialExcerpts = masterNotation()->potentialExcerpts();
 
@@ -336,15 +341,10 @@ bool ExportDialogModel::exportScores()
 
     masterNotation()->initExcerpts(excerptsToInit);
 
-    RetVal<io::path_t> exportPath = exportProjectScenario()->askExportPath(notations, m_selectedExportType, m_selectedUnitType);
-    if (!exportPath.ret) {
-        return false;
-    }
-
-    async::Async::call(this, [this, notations, exportPath]() {
+    QMetaObject::invokeMethod(qApp, [this, notations, exportPath]() {
         exportProjectScenario()->exportScores(notations, exportPath.val, m_selectedUnitType,
                                               shouldDestinationFolderBeOpenedOnExport());
-    });
+    }, Qt::QueuedConnection);
 
     return true;
 }

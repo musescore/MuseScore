@@ -112,11 +112,12 @@ Item {
         anchors.left: buttonsSeparator.right
         anchors.leftMargin: 12
         anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: 1 // for nicer visual alignment
 
         //! NOTE: explicit width prevents the content from jumping around
         // when a score is being played
         // See: https://github.com/musescore/MuseScore/issues/9633
-        width: 58
+        width: 64
 
         maxTime: root.playbackModel.maxPlayTime
         maxMillisecondsNumber: 9
@@ -131,7 +132,9 @@ Item {
         id: measureAndBeatFields
 
         anchors.left: timeField.right
+        anchors.leftMargin: 6
         anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: 1 // for nicer visual alignment
 
         measureNumber: root.playbackModel.measureNumber
         maxMeasureNumber: root.playbackModel.maxMeasureNumber
@@ -149,26 +152,35 @@ Item {
         }
     }
 
-    TempoView {
-        id: tempoView
+    Item {
+        id: tempoViewContainer
 
         anchors.left: measureAndBeatFields.right
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.leftMargin: 6
 
         //! NOTE: explicit width prevents the content from jumping around
         // when a score is being played
         // See: https://github.com/musescore/MuseScore/issues/9633
-        width: 56
+        width: 48
+        height: parent.height
 
-        noteSymbol: root.playbackModel.tempo.noteSymbol
-        tempoValue: root.playbackModel.tempo.value
+        TempoView {
+            id: tempoView
 
-        noteSymbolFont.pixelSize: ui.theme.iconsFont.pixelSize
-        tempoValueFont: timeField.font
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+
+            noteSymbol: root.playbackModel.tempo.noteSymbol
+            tempoValue: root.playbackModel.tempo.value
+
+            noteSymbolFont.pixelSize: ui.theme.iconsFont.pixelSize
+            tempoValueFont: timeField.font
+        }
     }
 
     SeparatorLine {
-        anchors.left: tempoView.right
+        anchors.left: tempoViewContainer.right
+        anchors.leftMargin: 12
         anchors.topMargin: 2
         anchors.bottomMargin: 2
 

@@ -30,6 +30,9 @@
 
 #include <map>
 
+#include "modularity/ioc.h"
+#include "iengravingfontsprovider.h"
+
 #include "style/style.h"
 #include "compat/midi/midipatch.h"
 
@@ -761,6 +764,8 @@ public:
 class ChangeStyle : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeStyle)
+
+    INJECT_STATIC(engraving, IEngravingFontsProvider, engravingFonts)
 
     Score* score = nullptr;
     MStyle style;

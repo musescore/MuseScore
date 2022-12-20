@@ -560,12 +560,15 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
 
     startEdit();
 
-    if (isMainInstrumentForPart(instrumentKey.instrumentId, part)) {
+    if (isMainInstrumentForPart(instrumentKey, part)) {
         mu::engraving::Interval oldTranspose = part->instrument()->transpose();
 
         QString newInstrumentPartName = formatInstrumentTitle(newInstrument.trackName(), newInstrument.trait());
         score()->undo(new mu::engraving::ChangePart(part, new mu::engraving::Instrument(newInstrument), newInstrumentPartName));
-        score()->transpositionChanged(part, oldTranspose);
+        if (score()->isMaster()) {
+            // this also transposes all linked parts
+            score()->transpositionChanged(part, Part::MAIN_INSTRUMENT_TICK, oldTranspose);
+        }
 
         // Update clefs
         for (staff_idx_t staffIdx = 0; staffIdx < part->nstaves(); ++staffIdx) {
@@ -777,6 +780,7 @@ void NotationParts::doInsertPart(Part* part, size_t index)
     }
 
     part->setScore(score());
+    score()->remapBracketsAndBarlines();
 }
 
 void NotationParts::removeStaves(const IDList& stavesIds)
@@ -940,10 +944,6 @@ void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ, co
         }
         initStaff(staff, templ, staffType, staffIndex);
 
-        if (lastStaffIndex > 0) {
-            staff->setBarLineSpan(score()->staff(lastStaffIndex - 1)->barLineSpan());
-        }
-
         insertStaff(staff, staffIndex);
     }
 
@@ -1032,13 +1032,12 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
 
         int instrumentNumber = resolveNewInstrumentNumber(pi.instrumentTemplate, parts);
 
-        QString formattedPartName = formatInstrumentTitle(instrument.trackName(), instrument.trait(), instrumentNumber);
         QString longName = !longNames.empty() ? longNames.front().name().toQString() : QString();
         QString formattedLongName = formatInstrumentTitleOnScore(longName, instrument.trait(), instrumentNumber);
         QString shortName = !shortNames.empty() ? shortNames.front().name().toQString() : QString();
         QString formattedShortName = formatInstrumentTitleOnScore(shortName, instrument.trait(), instrumentNumber);
 
-        part->setPartName(formattedPartName);
+        part->setPartName(formattedLongName);
         part->setLongName(formattedLongName);
         part->setShortName(formattedShortName);
 

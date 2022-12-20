@@ -118,7 +118,7 @@ Column {
                 decimal: 1
             }
 
-            onCurrentTextEdited: function(newTextValue) {
+            onTextChanged: function(newTextValue) {
                 if (root.patternModel) {
                     root.patternModel.updatePitchOffsetValue(offsetPointIndexSlider.value,
                                                              newTextValue * 100)

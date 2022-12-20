@@ -216,6 +216,125 @@ void NotationInteraction::rollback()
     m_undoStack->rollbackChanges();
 }
 
+void NotationInteraction::checkAndShowMScoreError() const
+{
+    TRACEFUNC;
+
+    MsError err = MScore::_error;
+    if (err == MsError::MS_NO_ERROR) {
+        return;
+    }
+
+    MScore::setError(MsError::MS_NO_ERROR); // reset
+
+    if (!configuration()->needToShowMScoreError(MScore::errorToString(err))) {
+        return;
+    }
+
+    std::string title;
+    std::string message;
+
+    switch (err) {
+    case MsError::MS_NO_ERROR:
+        return;
+    case MsError::NO_NOTE_SELECTED:
+        title = trc("notation", "No note selected");
+        message = trc("notation", "Please select a note and retry");
+        break;
+    case MsError::NO_CHORD_REST_SELECTED:
+        title = trc("notation", "No chord/rest selected");
+        message = trc("notation", "Please select a chord or rest and retry");
+        break;
+    case MsError::NO_LYRICS_SELECTED:
+        title = trc("notation", "No note or lyrics selected");
+        message = trc("notation", "Please select a note or lyrics and retry");
+        break;
+    case MsError::NO_NOTE_REST_SELECTED:
+        title = trc("notation", "No note or rest selected");
+        message = trc("notation", "Please select a note or rest and retry");
+        break;
+    case MsError::NO_FLIPPABLE_SELECTED:
+        title = trc("notation", "No flippable element selected");
+        message = trc("notation", "Please select an element that can be flipped and retry");
+        break;
+    case MsError::NO_STAFF_SELECTED:
+        title = trc("notation", "No staff selected");
+        message = trc("notation", "Please select one or more staves and retry");
+        break;
+    case MsError::NO_NOTE_FIGUREDBASS_SELECTED:
+        title = trc("notation", "No note or figured bass selected");
+        message = trc("notation", "Please select a note or figured bass and retry");
+        break;
+    case MsError::CANNOT_INSERT_TUPLET:
+        title = trc("notation", "Cannot insert chord/rest in tuplet");
+        break;
+    case MsError::CANNOT_SPLIT_TUPLET:
+        title = trc("notation", "Cannot split tuplet");
+        break;
+    case MsError::CANNOT_SPLIT_MEASURE_FIRST_BEAT:
+        title = trc("notation", "Cannot split measure at the first beat");
+        break;
+    case MsError::CANNOT_SPLIT_MEASURE_TUPLET:
+        title = trc("notation", "Cannot split measure here");
+        message = trc("notation", "Cannot split tuplet");
+        break;
+    case MsError::INSUFFICIENT_MEASURES:
+        title = trc("notation", "Cannot create measure repeat here");
+        message = trc("notation", "Insufficient or unequal measures");
+        break;
+    case MsError::CANNOT_SPLIT_MEASURE_REPEAT:
+        title = trc("notation", "Cannot split measure repeat");
+        message = trc("notation", "Please select a note or rest and retry");
+        break;
+    case MsError::CANNOT_SPLIT_MEASURE_TOO_SHORT:
+        title = trc("notation", "No note or rest selected");
+        message = trc("notation", "Please select a note or rest and retry");
+        break;
+    case MsError::CANNOT_REMOVE_TIME_TUPLET:
+        title = trc("notation", "Cannot remove time from tuplet");
+        message = trc("notation", "Please select the complete tuplet and retry");
+        break;
+    case MsError::CANNOT_REMOVE_TIME_MEASURE_REPEAT:
+        title = trc("notation", "Cannot remove time from measure repeat");
+        message = trc("notation", "Please select the complete measure repeat and retry");
+        break;
+    case MsError::NO_DEST:
+        title = trc("notation", "No destination to paste");
+        break;
+    case MsError::DEST_TUPLET:
+        title = trc("notation", "Cannot paste into tuplet");
+        break;
+    case MsError::TUPLET_CROSSES_BAR:
+        title = trc("notation", "Tuplet cannot cross barlines");
+        break;
+    case MsError::DEST_LOCAL_TIME_SIGNATURE:
+        title = trc("notation", "Cannot paste in local time signature");
+        break;
+    case MsError::DEST_TREMOLO:
+        title = trc("notation", "Cannot paste in tremolo");
+        break;
+    case MsError::NO_MIME:
+        title = trc("notation", "Nothing to paste");
+        break;
+    case MsError::DEST_NO_CR:
+        title = trc("notation", "Destination is not a chord or rest");
+        break;
+    case MsError::CANNOT_CHANGE_LOCAL_TIMESIG:
+        title = trc("notation", "Cannot change local time signature");
+        message = trc("notation", "Measure is not empty");
+        break;
+    case MsError::CORRUPTED_MEASURE:
+        title = trc("notation", "Cannot change time signature in front of a corrupted measure");
+        break;
+    }
+
+    IInteractive::Result result
+        = interactive()->info(title, message, {}, 0, IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
+    if (!result.showAgain()) {
+        configuration()->setNeedToShowMScoreError(MScore::errorToString(err), false);
+    }
+}
+
 void NotationInteraction::notifyAboutDragChanged()
 {
     m_dragChanged.notify();
@@ -243,9 +362,9 @@ void NotationInteraction::notifyAboutTextEditingChanged()
     m_textEditingChanged.notify();
 }
 
-void NotationInteraction::notifyAboutTextEditingEnded()
+void NotationInteraction::notifyAboutTextEditingEnded(TextBase* text)
 {
-    m_textEditingEnded.notify();
+    m_textEditingEnded.send(text);
 }
 
 void NotationInteraction::notifyAboutSelectionChangedIfNeed()
@@ -568,6 +687,12 @@ bool NotationInteraction::elementIsLess(const EngravingItem* e1, const Engraving
     if (e1->isBox() && e2->isText()) {
         return true;
     }
+    if (e1->isImage() && e2->isBox()) {
+        return false;
+    }
+    if (e1->isBox() && e2->isImage()) {
+        return true;
+    }
     if (e1->z() == e2->z()) {
         // same stacking order, prefer non-hidden elements
         if (e1->type() == e2->type()) {
@@ -734,9 +859,7 @@ void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, 
         }
     }
 
-    for (EngravingItem* element: elements) {
-        score()->select(element, type, staffIndex);
-    }
+    score()->select(elements, type, staffIndex);
 }
 
 void NotationInteraction::selectElementsWithSameTypeOnSegment(mu::engraving::ElementType elementType, mu::engraving::Segment* segment)
@@ -749,12 +872,16 @@ void NotationInteraction::selectElementsWithSameTypeOnSegment(mu::engraving::Ele
 
     score()->deselectAll();
 
+    std::vector<EngravingItem*> elementsToSelect;
+
     for (size_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
         EngravingItem* element = segment->element(staffIdx * mu::engraving::VOICES);
         if (element && element->type() == elementType) {
-            score()->select(element, SelectType::ADD);
+            elementsToSelect.push_back(element);
         }
     }
+
+    score()->select(elementsToSelect, SelectType::ADD);
 }
 
 void NotationInteraction::selectAll()
@@ -930,7 +1057,7 @@ void NotationInteraction::endLasso()
 
     score()->addRefresh(m_lasso->canvasBoundingRect());
     m_lasso->setbbox(RectF());
-    score()->lassoSelectEnd(m_dragData.mode != DragMode::LassoList);
+    score()->lassoSelectEnd();
     score()->update();
 }
 
@@ -940,24 +1067,25 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
         m_dragData.beginMove = fromPos;
         m_dragData.ed.pos = fromPos;
     }
-    m_dragData.mode = mode;
 
     PointF normalizedBegin = m_dragData.beginMove - m_dragData.elementOffset;
     PointF delta = toPos - normalizedBegin;
     PointF evtDelta = toPos - m_dragData.ed.pos;
 
-    switch (mode) {
-    case DragMode::BothXY:
-    case DragMode::LassoList:
-        break;
-    case DragMode::OnlyX:
-        delta.setY(m_dragData.ed.delta.y());
-        evtDelta.setY(0.0);
-        break;
-    case DragMode::OnlyY:
-        delta.setX(m_dragData.ed.delta.x());
-        evtDelta.setX(0.0);
-        break;
+    bool constrainDirection = !(isGripEditStarted() && m_editData.element && m_editData.element->isBarLine());
+    if (constrainDirection) {
+        switch (mode) {
+        case DragMode::BothXY:
+            break;
+        case DragMode::OnlyX:
+            delta.setY(m_dragData.ed.delta.y());
+            evtDelta.setY(0.0);
+            break;
+        case DragMode::OnlyY:
+            delta.setX(m_dragData.ed.delta.x());
+            evtDelta.setX(0.0);
+            break;
+        }
     }
 
     m_dragData.ed.lastPos = m_dragData.ed.pos;
@@ -980,7 +1108,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
 
     if (isGripEditStarted()) {
         m_dragData.ed.curGrip = m_editData.curGrip;
-        m_dragData.ed.delta = m_dragData.ed.pos - m_dragData.ed.lastPos;
+        m_dragData.ed.delta = evtDelta;
         m_dragData.ed.moveDelta = m_dragData.ed.delta - m_dragData.elementOffset;
         m_dragData.ed.addData(m_editData.getData(m_editData.element));
         m_editData.element->editDrag(m_dragData.ed);
@@ -1041,6 +1169,8 @@ void NotationInteraction::endDrag()
     apply();
     notifyAboutDragChanged();
 
+    checkAndShowMScoreError();
+
     //    updateGrips();
     //    if (editData.element->normalModeEditBehavior() == EngravingItem::EditBehavior::Edit
     //        && score()->selection().element() == editData.element) {
@@ -1083,6 +1213,10 @@ void NotationInteraction::startDragCopy(const EngravingItem* element, QObject* d
     m_drag = new QDrag(dragSource);
     m_drag->setMimeData(mimeData);
 
+    QObject::connect(m_drag, &QDrag::destroyed, [this]() {
+        m_drag = nullptr;
+    });
+
     static QPixmap pixmap(2, 2); // null or 1x1 crashes on Linux under ChromeOS?!
     pixmap.fill(Qt::white);
 
@@ -1092,8 +1226,10 @@ void NotationInteraction::startDragCopy(const EngravingItem* element, QObject* d
 
 void NotationInteraction::endDragCopy()
 {
-    delete m_drag;
-    m_drag = nullptr;
+    if (m_drag) {
+        delete m_drag;
+        m_drag = nullptr;
+    }
 }
 
 //! NOTE Copied from ScoreView::dragEnterEvent
@@ -1421,6 +1557,8 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     if (accepted) {
         notifyAboutDropChanged();
     }
+
+    checkAndShowMScoreError();
 
     return accepted;
 }
@@ -1760,6 +1898,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
     apply();
 
     setDropTarget(nullptr);
+
+    checkAndShowMScoreError();
 
     return true;
 }
@@ -2578,6 +2718,18 @@ void NotationInteraction::moveStringSelection(MoveDirection d)
     int strg = is.string() + delta;
     if (strg >= 0 && strg < instrStrgs && strg != is.string()) {
         is.setString(strg);
+
+        const ChordRest* chordRest = is.cr();
+        if (chordRest && chordRest->isChord()) {
+            const Chord* chord = toChord(chordRest);
+
+            for (Note* note : chord->notes()) {
+                if (note->string() == strg) {
+                    select({ note }, SelectType::SINGLE);
+                }
+            }
+        }
+
         notifyAboutNoteInputStateChanged();
     }
 }
@@ -2823,7 +2975,8 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
 
 void NotationInteraction::endEditText()
 {
-    IF_ASSERT_FAILED(m_editData.element) {
+    EngravingItem* element = m_editData.element;
+    IF_ASSERT_FAILED(element) {
         return;
     }
 
@@ -2833,7 +2986,7 @@ void NotationInteraction::endEditText()
 
     doEndEditElement();
 
-    notifyAboutTextEditingEnded();
+    notifyAboutTextEditingEnded(toTextBase(element));
     notifyAboutTextEditingChanged();
     notifyAboutSelectionChangedIfNeed();
 }
@@ -2901,7 +3054,7 @@ mu::async::Notification NotationInteraction::textEditingChanged() const
     return m_textEditingChanged;
 }
 
-mu::async::Notification NotationInteraction::textEditingEnded() const
+mu::async::Channel<TextBase*> NotationInteraction::textEditingEnded() const
 {
     return m_textEditingEnded;
 }
@@ -3096,6 +3249,11 @@ void NotationInteraction::editElement(QKeyEvent* event)
         if (system) {
             bracketIndex = mu::indexOf(system->brackets(), bracket);
         }
+    } else if (m_editData.element->isHarmony()) {
+        if (isTextEditingStarted() && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
+            endEditText();
+            return;
+        }
     }
 
     startEdit();
@@ -3195,6 +3353,8 @@ void NotationInteraction::splitSelectedMeasure()
     startEdit();
     score()->cmdSplitMeasure(chordRest);
     apply();
+
+    checkAndShowMScoreError();
 }
 
 void NotationInteraction::joinSelectedMeasures()
@@ -3208,6 +3368,8 @@ void NotationInteraction::joinSelectedMeasures()
     startEdit();
     score()->cmdJoinMeasure(measureRange.startMeasure, measureRange.endMeasure);
     apply();
+
+    checkAndShowMScoreError();
 }
 
 mu::Ret NotationInteraction::canAddBoxes() const
@@ -3288,9 +3450,10 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
             return;
         }
     } break;
-    case AddBoxesTarget::AtStartOfScore:
-        beforeBoxIndex = score()->firstMeasure()->index();
-        break;
+    case AddBoxesTarget::AtStartOfScore: {
+        Measure* firstMeasure = score()->firstMeasure();
+        beforeBoxIndex = firstMeasure ? firstMeasure->index() : -1;
+    } break;
     case AddBoxesTarget::AtEndOfScore:
         beforeBoxIndex = -1;
         break;
@@ -3451,6 +3614,8 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
         score()->cmdPaste(&ma, nullptr, scale);
     }
     apply();
+
+    checkAndShowMScoreError();
 }
 
 void NotationInteraction::swapSelection()
@@ -4413,7 +4578,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
             break;
         }
         // for the same reason, it cannot have a melisma
-        fromLyrics->undoChangeProperty(mu::engraving::Pid::LYRIC_TICKS, 0);
+        fromLyrics->undoChangeProperty(mu::engraving::Pid::LYRIC_TICKS, Fraction::fromTicks(0));
     }
 
     if (newLyrics) {
@@ -4436,9 +4601,9 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
     showItem(nextLyrics);
 }
 
-void NotationInteraction::navigateToLyrics(MoveDirection direction)
+void NotationInteraction::navigateToLyrics(MoveDirection direction, bool moveOnly)
 {
-    navigateToLyrics(direction == MoveDirection::Left, true, false);
+    navigateToLyrics(direction == MoveDirection::Left, moveOnly, false);
 }
 
 //! NOTE: Copied from ScoreView::lyricsTab

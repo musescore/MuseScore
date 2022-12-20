@@ -25,7 +25,6 @@
 #include "io/file.h"
 
 #include "engraving/infrastructure/smufl.h"
-#include "engraving/infrastructure/symbolfonts.h"
 #include "engraving/rw/xml.h"
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
@@ -118,13 +117,13 @@ struct SymbolIcon {
         QPixmap image(w, h);
         image.fill(Qt::transparent);
         mu::draw::Painter painter(&image, "generateicon");
-        const mu::RectF& bbox = SymbolFonts::fallbackFont()->bbox(id, 1);
+        const mu::RectF& bbox = EditDrumsetDialog::engravingFonts()->fallbackFont()->bbox(id, 1);
         const qreal actualSymbolScale = std::min(w / bbox.width(), h / bbox.height());
         qreal mag = std::min(defaultScale, actualSymbolScale);
         const qreal& xStShift = (w - mag * bbox.width()) / 2 - mag * bbox.left();
         const qreal& yStShift = (h - mag * bbox.height()) / 2 - mag * bbox.top();
         const mu::PointF& stPtPos = mu::PointF(xStShift, yStShift);
-        SymbolFonts::fallbackFont()->draw(id, &painter, mag, stPtPos);
+        EditDrumsetDialog::engravingFonts()->fallbackFont()->draw(id, &painter, mag, stPtPos);
         icon.addPixmap(image);
         return SymbolIcon(id, icon);
     }

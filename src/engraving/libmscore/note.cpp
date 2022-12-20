@@ -34,6 +34,7 @@
 #include "translation.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
+#include "iengravingfont.h"
 
 #include "accidental.h"
 #include "actionicon.h"
@@ -61,7 +62,6 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "stringdata.h"
-#include "symbolfont.h"
 #include "tie.h"
 #include "tremolo.h"
 #include "undo.h"
@@ -980,7 +980,7 @@ SymId Note::noteHead() const
 //---------------------------------------------------------
 double Note::bboxRightPos() const
 {
-    const auto& bbox = score()->symbolFont()->bbox(noteHead(), magS());
+    const auto& bbox = score()->engravingFont()->bbox(noteHead(), magS());
     return bbox.right();
 }
 
@@ -1095,7 +1095,7 @@ double Note::headWidth() const
 //---------------------------------------------------------
 double Note::bboxXShift() const
 {
-    const auto& bbox = score()->symbolFont()->bbox(noteHead(), magS());
+    const auto& bbox = score()->engravingFont()->bbox(noteHead(), magS());
     return bbox.bottomLeft().x();
 }
 
@@ -1106,7 +1106,7 @@ double Note::bboxXShift() const
 //---------------------------------------------------------
 double Note::noteheadCenterX() const
 {
-    return score()->symbolFont()->width(noteHead(), magS()) / 2 + bboxXShift();
+    return score()->engravingFont()->width(noteHead(), magS()) / 2 + bboxXShift();
 }
 
 //---------------------------------------------------------
@@ -1363,7 +1363,7 @@ void Note::draw(mu::draw::Painter* painter) const
         return;
     }
 
-    bool negativeFret = engravingConfiguration()->negativeFretsAllowed() && _fret < 0 && staff()->isTabStaff(tick());
+    bool negativeFret = negativeFretUsed() && staff()->isTabStaff(tick());
 
     Color c(negativeFret ? engravingConfiguration()->criticalColor() : curColor());
     painter->setPen(c);
@@ -1708,7 +1708,7 @@ bool Note::readProperties(XmlReader& e)
         }
     } else if (tag == "offset") {
         EngravingItem::readProperties(e);
-    } else if (tag == "ChordLine") {
+    } else if (tag == "ChordLine" && chord()) {
         ChordLine* cl = Factory::createChordLine(chord());
         cl->setNote(this);
         cl->read(e);
@@ -2270,11 +2270,9 @@ void Note::layout()
         if (_fixed) {
             _fretString = u"/";
         } else {
-            const bool negativeFret = (_fret < 0) && engravingConfiguration()->negativeFretsAllowed();
-
             _fretString = tab->fretString(fabs(_fret), _string, _deadNote);
 
-            if (negativeFret) {
+            if (negativeFretUsed()) {
                 _fretString = u"-" + _fretString;
             }
 
@@ -3198,11 +3196,11 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         if (links()) {
             for (EngravingObject* scoreElement : *links()) {
                 Note* note = toNote(scoreElement);
-                note->setDeadNote(_headGroup == NoteHeadGroup::HEAD_CROSS);
+                note->setDeadNote(staff() && !staff()->isDrumStaff(tick()) && _headGroup == NoteHeadGroup::HEAD_CROSS);
                 note->setHeadGroup(_headGroup);
             }
         } else {
-            setDeadNote(_headGroup == NoteHeadGroup::HEAD_CROSS);
+            setDeadNote(staff() && !staff()->isDrumStaff(tick()) && _headGroup == NoteHeadGroup::HEAD_CROSS);
             setHeadGroup(_headGroup);
         }
         break;
@@ -4051,8 +4049,8 @@ void Note::addLineAttachPoint(PointF point, EngravingItem* line)
     _lineAttachPoints.push_back(LineAttachPoint(line, point.x(), point.y()));
 }
 
-bool Note::fretConflictResolveSupported() const
+bool Note::negativeFretUsed() const
 {
-    return !engravingConfiguration()->negativeFretsAllowed();
+    return engravingConfiguration()->negativeFretsAllowed() && _fret < 0;
 }
 }

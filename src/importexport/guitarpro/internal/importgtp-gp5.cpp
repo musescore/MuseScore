@@ -448,7 +448,7 @@ bool GuitarPro5::readMixChange(Measure* measure)
     }
     if (temp >= 0) {
         if (last_segment) {
-            score->setTempo(last_segment->tick(), double(temp) / 60.0);
+            score->setTempo(last_segment->tick(), BeatsPerSecond::fromBPM(temp));
             last_segment = nullptr;
         }
         if (temp != previousTempo) {
@@ -674,33 +674,86 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
                 }
             }
         }
-    } else {
-        int counter = 0;
-//            int index = 0;
-//TODO-ws ???		gpLyrics.lyricTrack -= 1;
-        auto mes = score->firstMeasure();
-        auto beg = mes->first();
+    } else if (gpLyrics.lyricTrack != 0) {
+        size_t counter = 0;
+        size_t index = 0;
+        gpLyrics.lyricTrack -= 1;
+        Measure* mes = score->firstMeasure();
+        if (!mes) {
+            return;
+        }
+
+        Segment* beg = mes->first();
 
         do {
-            if (beg->isChordRestType() && beg->cr(gpLyrics.lyricTrack)) {
+            if (beg->segmentType() == SegmentType::ChordRest && beg->cr(gpLyrics.lyricTrack)) {
                 ChordRest* cr = beg->cr(gpLyrics.lyricTrack);
+                assert(cr);
                 ++counter;
-                if (!cr->isChord()) {
+                if (cr->type() != ElementType::CHORD) {
                     continue;
                 }
-                bool is_tied = false;
+
+                bool isTied = false;
                 Chord* chord = toChord(cr);
-                for (auto n : chord->notes()) {
-                    if (n->tiedNotes().size() > 1 && n->tiedNotes()[0] != n) {
-                        is_tied = true;
+                for (Note* n : chord->notes()) {
+                    const auto& tiedNotes = n->tiedNotes();
+
+                    if (tiedNotes.size() > 1 && tiedNotes.front() != n) {
+                        isTied = true;
                         break;
                     }
                 }
-                if (is_tied) {
+
+                if (isTied) {
                     continue;
                 }
+
+                if (counter >= gpLyrics.fromBeat) {
+                    if (gpLyrics.lyricPos.size() == index) {
+                        gpLyrics.lyricPos.push_back(0);
+                    }
+
+                    String& lyricsInIndex = gpLyrics.lyrics[index];
+                    if (lyricsInIndex[0] != u'-') {
+                        Lyrics* lyr = mu::engraving::Factory::createLyrics(cr);
+
+                        String text;
+                        size_t pos = lyricsInIndex.indexOf(u'-', gpLyrics.lyricPos[index]);
+                        size_t pos2 = lyricsInIndex.indexOf(u'\n', gpLyrics.lyricPos[index]);
+                        if (pos2 < pos) {
+                            pos = pos2;
+                        }
+
+                        if (pos != std::string::npos && (pos + 1 < lyricsInIndex.size())) {
+                            const char16_t* c = &lyricsInIndex[pos + 1];
+                            if (*c == 0) {
+                                pos = std::string::npos;
+                                text = lyricsInIndex;
+                            } else {
+                                text = lyricsInIndex.mid(gpLyrics.lyricPos[index], pos + 1 - gpLyrics.lyricPos[index]);
+                                gpLyrics.lyricPos[index] = pos + 1;
+                            }
+                        } else {
+                            text = lyricsInIndex.mid(gpLyrics.lyricPos[index]);
+                        }
+
+                        if (pos == std::string::npos) {
+                            ++index;
+                        }
+
+                        lyr->setPlainText(text);
+                        cr->add(lyr);
+                        if (index >= gpLyrics.lyrics.size()) {
+                            break;
+                        }
+                    } else if (lyricsInIndex.size() >= 2) {
+                        lyricsInIndex = lyricsInIndex.mid(1);
+                    }
+                }
             }
-        } while ((beg = beg->next()) || ((mes = toMeasure(mes->next())) && (beg = mes->first())));
+        } while ((beg = beg->next())
+                 || (mes->next() && mes->next()->type() == ElementType::MEASURE && (mes = toMeasure(mes->next())) && (beg = mes->first())));
     }
 }
 

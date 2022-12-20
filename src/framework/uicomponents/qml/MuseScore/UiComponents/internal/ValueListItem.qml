@@ -34,6 +34,8 @@ ListItemBlank {
     property string valueRoleName: "value"
     property string valueTypeRole: "valueType"
     property string valueEnabledRoleName: "enabled"
+    property string minValueRoleName: "min"
+    property string maxValueRoleName: "max"
     property string iconRoleName: "icon"
 
     property bool readOnly: false
@@ -112,12 +114,12 @@ ListItemBlank {
                 loader.item.val = loader.val
 
                 if (privateProperties.isNumberComponent() && !root.readOnly) {
-                    if (Boolean(root.item.min)) {
-                        loader.item.minValue = root.item.min
+                    if (Boolean(root.item[minValueRoleName])) {
+                        loader.item.minValue = root.item[minValueRoleName]
                     }
 
-                    if (Boolean(root.item.max)) {
-                        loader.item.maxValue = root.item.max
+                    if (Boolean(root.item[maxValueRoleName])) {
+                        loader.item.maxValue = root.item[maxValueRoleName]
                     }
                 }
             }
@@ -154,7 +156,7 @@ ListItemBlank {
 
             currentText: val
 
-            onCurrentTextEdited: function(newTextValue) {
+            onTextChanged: function(newTextValue) {
                 textControl.changed(newTextValue)
             }
         }

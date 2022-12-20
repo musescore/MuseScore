@@ -399,7 +399,9 @@ double System::totalBracketOffset(LayoutContext& ctx)
                 dummyBr->setBracketItem(bi);
                 dummyBr->setStaffSpan(firstStaff, lastStaff);
                 dummyBr->layout();
-                bracketWidth[staffIdx] += dummyBr->width();
+                for (staff_idx_t stfIdx = firstStaff; stfIdx <= lastStaff; ++stfIdx) {
+                    bracketWidth[stfIdx] += dummyBr->width();
+                }
                 delete dummyBr;
             }
         }
@@ -914,7 +916,6 @@ void System::layout2(const LayoutContext& ctx)
     }
 
     if (visibleStaves.empty()) {
-        LOGD() << "====no visible staves, staves: " << _staves.size() << ", score staves: " << score()->nstaves();
         return;
     }
 
@@ -1677,7 +1678,7 @@ double System::topDistance(staff_idx_t staffIdx, const SkylineLine& s) const
     // this means we cannot expect the minDistance calculation to produce meaningful results
     // so just give up on autoplace for spanners in continuous view
     // (or any other calculations that rely on this value)
-    if (score()->lineMode()) {
+    if (score()->lineMode() && !engravingConfiguration()->minDistanceForPartialSkylineCalculated()) {
         return 0.0;
     }
     return s.minDistance(staff(staffIdx)->skyline().north());
@@ -1692,7 +1693,7 @@ double System::bottomDistance(staff_idx_t staffIdx, const SkylineLine& s) const
     assert(!vbox());
     assert(s.isNorth());
     // see note on topDistance() above
-    if (score()->lineMode()) {
+    if (score()->lineMode() && !engravingConfiguration()->minDistanceForPartialSkylineCalculated()) {
         return 0.0;
     }
     return staff(staffIdx)->skyline().south().minDistance(s);
@@ -1710,7 +1711,6 @@ staff_idx_t System::firstVisibleSysStaff() const
             return i;
         }
     }
-    LOGD("no sys staff");
     return mu::nidx;
 }
 
@@ -1726,7 +1726,6 @@ staff_idx_t System::lastVisibleSysStaff() const
             return static_cast<staff_idx_t>(i);
         }
     }
-    LOGD("no sys staff");
     return mu::nidx;
 }
 

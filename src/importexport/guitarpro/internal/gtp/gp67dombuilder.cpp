@@ -392,10 +392,6 @@ std::unique_ptr<GPMasterBar> GP67DomBuilder::createGPMasterBar(XmlDomNode* maste
 
 std::pair<int, std::unique_ptr<GPBar> > GP67DomBuilder::createGPBar(XmlDomNode* barNode)
 {
-    static const std::set<String> sUnused = {
-        u"XProperties"
-    };
-
     auto clefType = [](const String& clef) {
         if (clef == u"C4") {
             return GPBar::ClefType::C4;
@@ -463,8 +459,6 @@ std::pair<int, std::unique_ptr<GPBar> > GP67DomBuilder::createGPBar(XmlDomNode* 
                 _voices.erase(idx);
                 bar->addGPVoice(std::move(voice));
             }
-        } else if (sUnused.find(nodeName) != sUnused.end()) {
-            // Ignored
         } else {
             LOGW() << "unknown GP Bar tag: " << nodeName << "\n";
         }
@@ -505,7 +499,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(XmlDomNode
 {
     static const std::set<String> sUnused = {
         u"Bank",
-        u"StemOrientation", u"ConcertPitchStemOrientation", u"TransposedPitchStemOrientation",
+        u"StemOrientation", u"ConcertPitchStemOrientation",
         u"Ottavia"
     };
 
@@ -676,6 +670,10 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(XmlDomNode
             beat->setDive(true);
         } else if (nodeName == u"DeadSlapped") {
             beat->setDeadSlapped(true);
+        } else if (nodeName == u"TransposedPitchStemOrientation") {
+            beat->setStemOrientationUp(innerNode.toElement().text() == u"Upward");
+        } else if (nodeName == u"TransposedPitchStemOrientationUserDefined") {
+            beat->setStemOrientationUserDefined(true);
         } else if (nodeName == u"XProperties") {
             readBeatXProperties(innerNode, beat.get());
         } else if (sUnused.find(nodeName) != sUnused.end()) {
@@ -993,6 +991,8 @@ void GP67DomBuilder::readNoteProperties(XmlDomNode* propertiesNode, GPNote* note
             if (propertyNode.firstChild().nodeName() == "Enable") {
                 note->setLeftHandTapped(true);
             }
+        } else if (propertyName == "ShowStringNumber") {
+            note->setShowStringNumber(true);
         } else {
             //LOGD() << "unknown GP Note Property tag" << propertyName << "\n";
         }
@@ -1007,15 +1007,40 @@ void GP67DomBuilder::readBeatXProperties(const XmlDomNode& propertiesNode, GPBea
 {
     auto propertyNode = propertiesNode.firstChild();
 
+    bool brokenBeams = false;
+    bool brokenSecondaryBeams = false;
+    bool joinedBeams = false;
+
     while (!propertyNode.isNull()) {
         int propertyId = propertyNode.attribute("id").toInt();
 
         if (propertyId == 687931393 || propertyId == 687935489) {
             // arpeggio/brush ticks
             beat->setArpeggioStretch(propertyNode.firstChild().toElement().text().toDouble() / mu::engraving::Constants::division);
+        } else if (propertyId == 1124204546) {
+            int beamData = propertyNode.firstChild().toElement().text().toInt();
+
+            if (beamData == 1) {
+                joinedBeams = true;
+            } else if (beamData == 2) {
+                brokenBeams = true;
+            }
+        } else if (propertyId == 1124204552) {
+            int beamData = propertyNode.firstChild().toElement().text().toInt();
+            if (beamData == 1) {
+                brokenSecondaryBeams = true;
+            }
         }
 
         propertyNode = propertyNode.nextSibling();
+    }
+
+    if (brokenBeams) {
+        beat->setBeamMode(GPBeat::BeamMode::BROKEN);
+    } else if (brokenSecondaryBeams) {
+        beat->setBeamMode(joinedBeams ? GPBeat::BeamMode::BROKEN2_JOINED : GPBeat::BeamMode::BROKEN2);
+    } else if (joinedBeams) {
+        beat->setBeamMode(GPBeat::BeamMode::JOINED);
     }
 }
 

@@ -48,6 +48,8 @@ public:
     virtual io::path_t partStyleFilePath() const = 0;
     virtual void setPartStyleFilePath(const io::path_t& path) = 0;
 
+    virtual SizeF defaultPageSize() const = 0;
+
     virtual String iconsFontFamily() const = 0;
 
     virtual draw::Color defaultColor() const = 0;
@@ -98,6 +100,7 @@ public:
     virtual bool enableExperimentalFretCircle() const = 0;
     virtual void setGuitarProMultivoiceEnabled(bool multiVoice) = 0;
     virtual bool guitarProMultivoiceEnabled() const = 0;
+    virtual bool minDistanceForPartialSkylineCalculated() const = 0;
 };
 }
 

@@ -31,9 +31,9 @@
 
 #include "../../iaudiodriver.h"
 #include "internal/worker/mixer.h"
-#include "internal/iaudiobuffer.h"
 
 namespace mu::audio {
+class AudioBuffer;
 class AudioEngine : public async::Asyncable
 {
 public:
@@ -41,7 +41,7 @@ public:
 
     static AudioEngine* instance();
 
-    Ret init(IAudioBufferPtr bufferPtr);
+    Ret init(std::shared_ptr<AudioBuffer> bufferPtr);
     void deinit();
 
     sample_rate_t sampleRate() const;
@@ -64,7 +64,7 @@ private:
     sample_rate_t m_sampleRate = 0;
 
     MixerPtr m_mixer = nullptr;
-    IAudioBufferPtr m_buffer = nullptr;
+    std::shared_ptr<AudioBuffer> m_buffer = nullptr;
 
     RenderMode m_currentMode = RenderMode::Undefined;
     async::Notification m_modeChanges;

@@ -124,10 +124,13 @@ private:
     RetVal<bool> needGenerateAudio(bool isPublic) const;
     AudioFile exportMp3(const notation::INotationPtr notation) const;
 
-    void uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode);
-    void uploadAudio(const AudioFile& audio, const QUrl& sourceUrl);
+    void showUploadProgressDialog();
+    void closeUploadProgressDialog();
 
-    void onProjectSuccessfullyUploaded(const QUrl& urlToOpen = QUrl());
+    void uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode);
+    void uploadAudio(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen, bool isFirstSave);
+
+    void onProjectSuccessfullyUploaded(const QUrl& urlToOpen = QUrl(), bool isFirstSave = true);
     void onProjectUploadFailed(const Ret& ret, bool publishMode);
 
     void warnCloudIsNotAvailable();
@@ -158,12 +161,10 @@ private:
     bool hasSelection() const;
 
     bool m_isProjectProcessing = false;
+    bool m_isProjectUploading = false;
 
-    bool m_isUploadingProject = false;
-    bool m_isUploadingAudio = false;
-
-    framework::ProgressPtr m_uploadingProjectProgress;
-    framework::ProgressPtr m_uploadingAudioProgress;
+    framework::ProgressPtr m_uploadingProjectProgress = nullptr;
+    framework::ProgressPtr m_uploadingAudioProgress = nullptr;
 
     int m_numberOfSavesToCloud = 0;
 };

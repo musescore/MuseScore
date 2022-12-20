@@ -134,6 +134,7 @@ void NotationActionController::init()
 
     registerAction("next-text-element", &Controller::nextTextElement, &Controller::textNavigationAvailable);
     registerAction("prev-text-element", &Controller::prevTextElement, &Controller::textNavigationAvailable);
+    registerAction("next-word", &Controller::nextWord, &Controller::textNavigationAvailable);
     registerAction("next-beat-TEXT", &Controller::nextBeatTextElement, &Controller::textNavigationByBeatsAvailable);
     registerAction("prev-beat-TEXT", &Controller::prevBeatTextElement, &Controller::textNavigationByBeatsAvailable);
 
@@ -473,7 +474,7 @@ void NotationActionController::init()
     registerTabPadNoteAction("pad-note-1024-TAB", Pad::NOTE1024);
 
     for (int i = 0; i < MAX_FRET; ++i) {
-        registerAction("fret-" + std::to_string(i), &Interaction::addFret, i, &Controller::isTablatureStaff);
+        registerAction("fret-" + std::to_string(i), [i, this]() { addFret(i); }, &Controller::isTablatureStaff);
     }
 
     // listen on state changes
@@ -732,9 +733,10 @@ void NotationActionController::putNote(const actions::ActionData& args)
     bool replace = args.arg<bool>(1);
     bool insert = args.arg<bool>(2);
 
-    noteInput->putNote(pos, replace, insert);
-
-    playSelectedElement();
+    Ret ret = noteInput->putNote(pos, replace, insert);
+    if (ret) {
+        playSelectedElement();
+    }
 }
 
 void NotationActionController::removeNote(const actions::ActionData& args)
@@ -1136,6 +1138,17 @@ void NotationActionController::addSlur()
     } else {
         interaction->addSlurToSelection();
     }
+}
+
+void NotationActionController::addFret(int num)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->addFret(num);
+    playSelectedElement(currentNotationElements()->msScore()->playChord());
 }
 
 IInteractive::Result NotationActionController::showErrorMessage(const std::string& message) const
@@ -1648,6 +1661,11 @@ void NotationActionController::prevTextElement()
     navigateToTextElement(MoveDirection::Left, NEAR_NOTE_OR_REST);
 }
 
+void NotationActionController::nextWord()
+{
+    navigateToTextElement(MoveDirection::Right, NEAR_NOTE_OR_REST, false);
+}
+
 void NotationActionController::nextBeatTextElement()
 {
     navigateToTextElement(MoveDirection::Right);
@@ -1658,7 +1676,7 @@ void NotationActionController::prevBeatTextElement()
     navigateToTextElement(MoveDirection::Left);
 }
 
-void NotationActionController::navigateToTextElement(MoveDirection direction, bool nearNoteOrRest)
+void NotationActionController::navigateToTextElement(MoveDirection direction, bool nearNoteOrRest, bool moveOnly)
 {
     const mu::engraving::EngravingItem* element = selectedElement();
     if (!element) {
@@ -1666,7 +1684,7 @@ void NotationActionController::navigateToTextElement(MoveDirection direction, bo
     }
 
     if (element->isLyrics()) {
-        currentNotationInteraction()->navigateToLyrics(direction);
+        currentNotationInteraction()->navigateToLyrics(direction, moveOnly);
     } else if (element->isHarmony()) {
         const Harmony* chordSymbol = editedChordSymbol();
         currentNotationInteraction()->navigateToNearHarmony(direction, nearNoteOrRest);
@@ -1836,6 +1854,10 @@ void NotationActionController::playSelectedElement(bool playChord)
     }
 
     playbackController()->playElements({ element });
+
+    mu::engraving::Score* score = currentNotationElements()->msScore();
+    score->setPlayChord(false);
+    score->setPlayNote(false);
 }
 
 void NotationActionController::startNoteInputIfNeed()

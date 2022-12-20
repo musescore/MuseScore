@@ -112,17 +112,6 @@ struct SoundProfile {
             return search->second;
         }
 
-        auto nearestMatch = std::find_if(data.cbegin(),
-                                         data.cend(),
-                                         [key](const auto& pair) {
-            return pair.first.id == key.id
-                   && pair.first.category == key.category;
-        });
-
-        if (nearestMatch != data.cend()) {
-            return nearestMatch->second;
-        }
-
         static audio::AudioResourceMeta empty;
         return empty;
     }

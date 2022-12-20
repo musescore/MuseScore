@@ -23,13 +23,18 @@
 #ifndef __SYMBOL_H__
 #define __SYMBOL_H__
 
-#include "bsymbol.h"
+#include <memory>
 
+#include "modularity/ioc.h"
 #include "draw/types/font.h"
+
+#include "iengravingfontsprovider.h"
+
+#include "bsymbol.h"
 
 namespace mu::engraving {
 class Segment;
-class SymbolFont;
+class IEngravingFont;
 
 //---------------------------------------------------------
 //   @@ Symbol
@@ -41,9 +46,11 @@ class SymbolFont;
 class Symbol : public BSymbol
 {
     OBJECT_ALLOCATOR(engraving, Symbol)
+
+    INJECT(engraving, IEngravingFontsProvider, engravingFonts)
 protected:
     SymId _sym;
-    const SymbolFont* _scoreFont = nullptr;
+    std::shared_ptr<IEngravingFont> _scoreFont = nullptr;
 
 public:
     Symbol(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::MOVABLE);
@@ -54,7 +61,7 @@ public:
 
     Symbol* clone() const override { return new Symbol(*this); }
 
-    void setSym(SymId s, const SymbolFont* sf = nullptr) { _sym  = s; _scoreFont = sf; }
+    void setSym(SymId s, const std::shared_ptr<IEngravingFont>& sf = nullptr) { _sym  = s; _scoreFont = sf; }
     SymId sym() const { return _sym; }
     mu::AsciiStringView symName() const;
 

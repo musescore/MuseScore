@@ -315,40 +315,19 @@ INotationInteractionPtr PlaybackController::interaction() const
 void PlaybackController::onNotationChanged()
 {
     m_masterNotation = globalContext()->currentMasterNotation();
-    m_notation = globalContext()->currentNotation();
+    setNotation(globalContext()->currentNotation());
 
     DEFER {
         m_isPlayAllowedChanged.notify();
         m_totalPlayTimeChanged.notify();
     };
 
-    if (!m_notation || !m_masterNotation) {
+    if (!m_masterNotation) {
         return;
     }
 
-    updateMuteStates();
-
-    INotationPartsPtr notationParts = m_notation->parts();
-    NotifyList<const Part*> partList = notationParts->partList();
-
-    partList.onItemAdded(this, [this](const Part*) {
-        updateMuteStates();
-    });
-
-    partList.onItemChanged(this, [this](const Part*) {
-        updateMuteStates();
-    });
-
     m_masterNotation->hasPartsChanged().onNotify(this, [this]() {
         m_isPlayAllowedChanged.notify();
-    });
-
-    notationPlayback()->loopBoundariesChanged().onNotify(this, [this]() {
-        updateLoop();
-    });
-
-    m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
-        onSelectionChanged();
     });
 }
 
@@ -685,6 +664,7 @@ void PlaybackController::resetCurrentSequence()
     playback()->audioOutput()->clearAllFx();
     playback()->audioOutput()->outputParamsChanged().resetOnReceive(this);
     playback()->audioOutput()->masterOutputParamsChanged().resetOnReceive(this);
+    playback()->audioOutput()->clearMasterOutputParams();
 
     setCurrentPlaybackTime(0);
     setCurrentPlaybackStatus(PlaybackStatus::Stopped);
@@ -757,8 +737,15 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
     }
 
     if (!inParams.isValid()) {
-        const SoundProfile& profile = profilesRepo()->profile(audioSettings()->activeSoundProfile());
-        inParams = { profile.findResource(playbackData.setupData), {} };
+        bool isMetronome = notationPlayback()->metronomeTrackId() == instrumentTrackId;
+
+        if (isMetronome) {
+            const SoundProfile& profile = profilesRepo()->profile(configuration()->basicSoundProfileName());
+            inParams = { profile.findResource(playbackData.setupData), {} };
+        } else {
+            const SoundProfile& profile = profilesRepo()->profile(audioSettings()->activeSoundProfile());
+            inParams = { profile.findResource(playbackData.setupData), {} };
+        }
     }
 
     uint64_t notationPlaybackKey = reinterpret_cast<uint64_t>(notationPlayback().get());
@@ -1050,10 +1037,14 @@ void PlaybackController::updateMuteStates()
 
     INotationPartsPtr notationParts = m_notation->parts();
     InstrumentTrackIdSet allowedInstrumentTrackIdSet = instrumentTrackIdSetForRangePlayback();
-    bool isRangePlaybackMode = selection()->isRange() && !allowedInstrumentTrackIdSet.empty();
+    bool isRangePlaybackMode = !m_isExportingAudio && selection()->isRange() && !allowedInstrumentTrackIdSet.empty();
 
     for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
         if (!mu::contains(m_trackIdMap, instrumentTrackId)) {
+            continue;
+        }
+
+        if (instrumentTrackId == notationPlayback()->metronomeTrackId()) {
             continue;
         }
 
@@ -1065,6 +1056,10 @@ void PlaybackController::updateMuteStates()
         bool shouldBeMuted = soloMuteState.mute
                              || (hasSolo && !soloMuteState.solo)
                              || (!isPartVisible);
+
+        if (notationPlayback()->isChordSymbolsTrack(instrumentTrackId) && !shouldBeMuted) {
+            shouldBeMuted = !notationConfiguration()->isPlayChordSymbolsEnabled();
+        }
 
         if (isRangePlaybackMode && !shouldBeMuted) {
             shouldBeMuted = !mu::contains(allowedInstrumentTrackIdSet, instrumentTrackId);
@@ -1186,7 +1181,13 @@ void PlaybackController::applyProfile(const SoundProfileName& profileName)
         return;
     }
 
+    const InstrumentTrackId& metronomeTrackId = notationPlayback()->metronomeTrackId();
+
     for (const auto& pair : m_trackIdMap) {
+        if (pair.first == metronomeTrackId) {
+            continue;
+        }
+
         const mpe::PlaybackData& playbackData = notationPlayback()->trackPlaybackData(pair.first);
 
         AudioInputParams newInputParams { profile.findResource(playbackData.setupData), {} };
@@ -1195,6 +1196,52 @@ void PlaybackController::applyProfile(const SoundProfileName& profileName)
     }
 
     audioSettingsPtr->setActiveSoundProfile(profileName);
+}
+
+void PlaybackController::setNotation(notation::INotationPtr notation)
+{
+    if (m_notation == notation) {
+        return;
+    }
+
+    m_notation = notation;
+
+    if (!m_notation) {
+        return;
+    }
+
+    updateMuteStates();
+
+    INotationPartsPtr notationParts = m_notation->parts();
+    NotifyList<const Part*> partList = notationParts->partList();
+
+    partList.onItemAdded(this, [this](const Part*) {
+        updateMuteStates();
+    });
+
+    partList.onItemChanged(this, [this](const Part*) {
+        updateMuteStates();
+    });
+
+    notationPlayback()->loopBoundariesChanged().onNotify(this, [this]() {
+        updateLoop();
+    });
+
+    m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
+        onSelectionChanged();
+    });
+
+    m_notation->interaction()->textEditingEnded().onReceive(this, [this](engraving::TextBase* text) {
+        if (text->isHarmony()) {
+            playElements({ text });
+        }
+    });
+}
+
+void PlaybackController::setIsExportingAudio(bool exporting)
+{
+    m_isExportingAudio = exporting;
+    updateMuteStates();
 }
 
 bool PlaybackController::canReceiveAction(const actions::ActionCode&) const

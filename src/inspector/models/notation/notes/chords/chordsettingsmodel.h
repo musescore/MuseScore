@@ -19,39 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_INSPECTOR_CHORDSETTINGSMODEL_H
+#define MU_INSPECTOR_CHORDSETTINGSMODEL_H
 
-#ifndef MU_ENGRAVING_SYMBOLFONTS_H
-#define MU_ENGRAVING_SYMBOLFONTS_H
+#include "models/abstractinspectormodel.h"
 
-#include <vector>
-
-#include "types/string.h"
-
-#include "symbolfont.h"
-
-namespace mu::engraving {
-class SymbolFonts
+namespace mu::inspector {
+class ChordSettingsModel : public AbstractInspectorModel
 {
+    Q_OBJECT
+
+    Q_PROPERTY(PropertyItem * isStemless READ isStemless CONSTANT)
+
 public:
+    explicit ChordSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
-    static void addFont(const String& name, const String& family, const io::path_t& filePath);
-    static const std::vector<SymbolFont>& scoreFonts();
-    static SymbolFont* fontByName(const String& name);
-
-    static void setFallbackFont(const String& name);
-    static SymbolFont* fallbackFont();
-    static const char* fallbackTextFont();
+    PropertyItem* isStemless() const;
 
 private:
+    void createProperties() override;
+    void requestElements() override;
+    void loadProperties() override;
+    void resetProperties() override;
 
-    struct Fallback {
-        String name;
-        size_t index = 0;
-    };
-
-    static Fallback s_fallback;
-    static std::vector<SymbolFont> s_symbolFonts;
+    PropertyItem* m_isStemless = nullptr;
 };
 }
 
-#endif // MU_ENGRAVING_SYMBOLFONTS_H
+#endif // MU_INSPECTOR_CHORDSETTINGSMODEL_H

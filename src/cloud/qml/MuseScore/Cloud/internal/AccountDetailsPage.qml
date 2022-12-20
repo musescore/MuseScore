@@ -109,7 +109,7 @@ FocusScope {
 
             FlatButton {
                 id: accountInfoButton
-                width: prv.buttonWidth
+                minWidth: prv.buttonWidth
                 text: qsTrc("cloud", "Account info")
 
                 accentButton: true
@@ -131,7 +131,7 @@ FocusScope {
             }
 
             FlatButton {
-                width: prv.buttonWidth
+                minWidth: prv.buttonWidth
                 text: qsTrc("cloud", "Sign out")
 
                 navigation.name: "SignOut"

@@ -131,12 +131,21 @@ QVariantList LearnPageModel::playlistToVariantList(const Playlist& playlist) con
 {
     QVariantList result;
 
+    // h:mm:ss for anything over an hour
+    //    m:ss for anything under an hour
+    //    0:ss for anything under a minute
     auto formatDuration = [](int durationSecs) {
         int seconds = durationSecs;
         int minutes = seconds / 60;
+        seconds -= minutes * 60;
         int hours = minutes / 60;
+        minutes -= hours * 60;
 
-        return (hours > 0 ? QString::number(hours) + ":" : "") + QString::number(minutes % 60) + ":" + QString::number(seconds % 60);
+        return ((hours > 0)
+                ? (QString::number(hours) + ":" + QString::number(minutes).rightJustified(2, '0'))
+                : QString::number(minutes)
+                ) + ":"
+               + QString::number(seconds).rightJustified(2, '0');
     };
 
     for (const PlaylistItem& item : playlist) {
