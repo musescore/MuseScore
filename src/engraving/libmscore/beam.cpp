@@ -325,8 +325,9 @@ void Beam::layout1()
             DirectionV explicitDirection = DirectionV::AUTO;
             for (ChordRest* cr :_elements) {
                 if (cr->isChord()) {
-                    if (toChord(cr)->stemDirection() != DirectionV::AUTO) {
-                        _up = toChord(cr)->stemDirection() == DirectionV::UP;
+                    DirectionV crDirection = toChord(cr)->stemDirection();
+                    if (crDirection != DirectionV::AUTO) {
+                        _up = crDirection == DirectionV::UP;
                         break;
                     } else if (firstChord) {
                         firstUp = cr->up();

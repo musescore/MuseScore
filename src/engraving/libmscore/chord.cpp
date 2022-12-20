@@ -1015,6 +1015,17 @@ void Chord::computeUp()
         bool cross = false;
         ChordRest* firstCr = _beam->elements().front();
         ChordRest* lastCr = _beam->elements().back();
+        Chord* firstChord = nullptr;
+        Chord* lastChord = nullptr;
+        for (ChordRest* currCr : _beam->elements()) {
+            if (!currCr->isChord()) {
+                continue;
+            }
+            if (!firstChord) {
+                firstChord = toChord(currCr);
+            }
+            lastChord = toChord(currCr);
+        }
         DirectionV stemDirections = DirectionV::AUTO;
         for (ChordRest* cr : _beam->elements()) {
             if (!_beam->userModified() && !mixedDirection && cr->isChord() && toChord(cr)->stemDirection() != DirectionV::AUTO) {
@@ -1072,12 +1083,8 @@ void Chord::computeUp()
             double noteX = stemPosX() + pagePos().x() - base.x();
             PointF startAnchor = PointF();
             PointF endAnchor = PointF();
-            if (firstCr->isChord()) {
-                startAnchor = _beam->chordBeamAnchor(toChord(firstCr), Beam::ChordBeamAnchorType::Start);
-            }
-            if (lastCr->isChord()) {
-                endAnchor = _beam->chordBeamAnchor(toChord(lastCr), Beam::ChordBeamAnchorType::End);
-            }
+            startAnchor = _beam->chordBeamAnchor(firstChord, Beam::ChordBeamAnchorType::Start);
+            endAnchor = _beam->chordBeamAnchor(lastChord, Beam::ChordBeamAnchorType::End);
 
             if (this == _beam->elements().front()) {
                 _up = noteY > startAnchor.y();
