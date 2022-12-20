@@ -55,6 +55,8 @@
 #include "view/qmlaccessible.h"
 #include "view/focuslistener.h"
 
+#include "view/internal/errordetailsmodel.h"
+
 #include "dev/interactivetestsmodel.h"
 #include "dev/testdialog.h"
 
@@ -140,6 +142,8 @@ void UiModule::registerUiTypes()
 #else
     qmlRegisterType<MainWindowProvider>("MuseScore.Ui", 1, 0, "MainWindowProvider");
 #endif
+
+    qmlRegisterType<ErrorDetailsModel>("MuseScore.Ui", 1, 0, "ErrorDetailsModel");
 
     qmlRegisterType<InteractiveTestsModel>("MuseScore.Ui", 1, 0, "InteractiveTestsModel");
     qRegisterMetaType<TestDialog>("TestDialog");
