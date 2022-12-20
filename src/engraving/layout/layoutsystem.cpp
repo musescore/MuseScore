@@ -606,10 +606,11 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
                         for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
                             for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
                                 ChordRest* cr = s->cr(st * VOICES + voice);
-                                if (cr == 0 || cr->isRest()) {
+                                int staffMove = cr ? cr->staffMove() : 0;
+                                if (!cr || cr->isRest() || cr->staffMove() == 0) {
+                                    // The case staffMove == 0 has already been checked by measure->isEmpty()
                                     continue;
                                 }
-                                int staffMove = cr->staffMove();
                                 if (staffIdx == st + staffMove) {
                                     hideStaff = false;
                                     break;
