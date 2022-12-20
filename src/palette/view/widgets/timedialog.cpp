@@ -150,12 +150,22 @@ void TimeDialog::placeClicked()
 
     auto notation = globalContext()->currentNotation();
 
+    if (notation->interaction()->selection()->isNone()) {
+        //TODO: Add error here
+        return;
+    }
+
     Measure* measure;
 
     if (notation->interaction()->selection()->isRange()) {
         measure = notation->interaction()->selection()->range()->measureRange().startMeasure;
     } else {
         measure = notation->interaction()->selection()->elements().at(0)->findMeasure();
+    }
+
+    if (!measure) {
+        //TODO: Add error here (no measure selected or something)
+        return;
     }
 
     notation->interaction()->addTimeSignature(
