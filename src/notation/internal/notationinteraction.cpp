@@ -4177,10 +4177,10 @@ void NotationInteraction::addStretch(qreal value)
     apply();
 }
 
-void NotationInteraction::addTimeSignature(Measure* measure, staff_idx_t staffIndex, TimeSignature* timeSignature)
+void NotationInteraction::addTimeSignature(Measure* measure, staff_idx_t staffIndex, TimeSignature* timeSignature, bool local = true)
 {
     startEdit();
-    score()->cmdAddTimeSig(measure, staffIndex, timeSignature, true);
+    score()->cmdAddTimeSig(measure, staffIndex, timeSignature, local);
     apply();
 }
 

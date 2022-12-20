@@ -149,11 +149,11 @@ void TimeDialog::placeClicked()
     }
 
     auto notation = globalContext()->currentNotation();
-
     notation->interaction()->addTimeSignature(
         notation->interaction()->selection()->range()->measureRange().startMeasure,
         notation->interaction()->selection()->range()->startStaffIndex(),
-        ts.get()->clone()
+        ts.get()->clone(),
+        false
     );
 }
 
