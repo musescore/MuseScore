@@ -7,6 +7,7 @@
 #include "gpmasterbar.h"
 #include "gpbar.h"
 #include "gpbeat.h"
+#include "gpdrumsetresolver.h"
 #include "gpmastertracks.h"
 #include "types/fraction.h"
 
@@ -259,6 +260,7 @@ private:
     BeamMode m_previousBeamMode = BeamMode::AUTO;
 
     std::unordered_map<Note*, Note*> m_harmonicNotes;
+    std::unique_ptr<GPDrumSetResolver> _drumResolver;
 };
 } //end Ms namespace
 #endif // SCOREDOMBUILDER_H
