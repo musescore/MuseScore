@@ -149,8 +149,17 @@ void TimeDialog::placeClicked()
     }
 
     auto notation = globalContext()->currentNotation();
+
+    Measure* measure;
+
+    if (notation->interaction()->selection()->isRange()) {
+        measure = notation->interaction()->selection()->range()->measureRange().startMeasure;
+    } else {
+        measure = notation->interaction()->selection()->elements().at(0)->findMeasure();
+    }
+
     notation->interaction()->addTimeSignature(
-        notation->interaction()->selection()->range()->measureRange().startMeasure,
+        measure,
         notation->interaction()->selection()->range()->startStaffIndex(),
         ts.get()->clone(),
         false
