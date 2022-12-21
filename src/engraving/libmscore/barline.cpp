@@ -502,10 +502,10 @@ void BarLine::drawDots(Painter* painter, double x) const
         y1l = st->doty1() * _spatium;
         y2l = st->doty2() * _spatium;
 
-        //workaround to make Bravura, Petaluma and Leland font work correctly with repeatDots
-        if (!(score()->engravingFont()->name() == "Leland"
-              || score()->engravingFont()->name() == "Bravura"
-              || score()->engravingFont()->name() == "Petaluma")) {
+        //workaround to make Emmentaler, Gonville and MuseJazz font work correctly with repeatDots
+        if (score()->engravingFont()->name() == "Emmentaler"
+            || score()->engravingFont()->name() == "Gonville"
+            || score()->engravingFont()->name() == "MuseJazz") {
             double offset = 0.5 * score()->spatium() * mag();
             y1l += offset;
             y2l += offset;
