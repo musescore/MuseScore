@@ -115,8 +115,11 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         double ww  = 0.0; // width of current measure
         if (ctx.curMeasure->isMeasure()) {
             Measure* m = toMeasure(ctx.curMeasure);
-            // Construct information that is needed before horizontal spacing
-            LayoutMeasure::computePreSpacingItems(m);
+            if (!(oldSystem && oldSystem->page() && oldSystem->page() != ctx.page)) {
+                // Construct information that is needed before horizontal spacing
+                // (unless the curMeasure we've just collected comes from the next page)
+                LayoutMeasure::computePreSpacingItems(m);
+            }
             // After appending a new measure, the shortest note in the system may change, in which case
             // we need to recompute the layout of the previous measures. When updating the width of these
             // measures, curSysWidth must be updated accordingly.
@@ -484,7 +487,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         ctx.startWithLongNames = ctx.firstSystem && layoutBreak->startWithLongNames();
     }
 
-    if (oldSystem) {
+    if (oldSystem && !(oldSystem->page() && oldSystem->page() != ctx.page)) {
         // We may have previously processed the ties of the next system (in LayoutChords::updateLineAttachPoints()).
         // We need to restore them to the correct state.
         LayoutSystem::restoreTies(oldSystem);
