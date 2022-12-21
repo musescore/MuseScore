@@ -1976,8 +1976,20 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
             for (NoteEvent& e : ell[i]) {
                 Note* note = chord->notes()[i];
                 e.setLen(note->deadNote() ? deadNoteDurationInTicks : e.len() * gateTime / 100);
-                if (note->letRing()) {
-                    e.setLen(e.len() * 2);
+
+                if (note->letRingType() != mu::engraving::Note::LetRingType::None) {
+                    constexpr double letRingMaxStretch = 4.;
+                    constexpr double letRingMinStretch = 1.;
+                    double newLetRingStretch = 0;
+
+                    if (note->letRingType() == mu::engraving::Note::LetRingType::IgnoreEnd) {
+                        newLetRingStretch = letRingMaxStretch;
+                    } else {
+                        newLetRingStretch = std::clamp(
+                            (note->letRingEndDistance() / chord->ticks()).toDouble(), letRingMinStretch, letRingMaxStretch);
+                    }
+
+                    e.setLen(e.len() * newLetRingStretch);
                 }
             }
         }
