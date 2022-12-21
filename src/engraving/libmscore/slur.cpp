@@ -453,18 +453,11 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
 
     // Collect all the segments shapes spanned by this slur segment in a single vector
     std::vector<Shape> segShapes;
-    Segment* seg = startSeg;
-    while (seg && seg->tick() <= endSeg->tick()) {
-        if (seg->enabled()) {
-            segShapes.push_back(getSegmentShape(seg, startCR, endCR));
+    for (Segment* seg = startSeg; seg && seg->tick() <= endSeg->tick(); seg = seg->next1enabled()) {
+        if (seg->isType(SegmentType::BarLineType)) {
+            continue;
         }
-        if (seg->next() && !seg->next()->isType(SegmentType::BarLineType)) {
-            seg = seg->next();
-        } else if (seg->measure()->next() && seg->measure()->next()->isMeasure()) {
-            seg = toMeasure(seg->measure()->next())->first();
-        } else {
-            break;
-        }
+        segShapes.push_back(getSegmentShape(seg, startCR, endCR));
     }
     if (segShapes.empty()) {
         return;
