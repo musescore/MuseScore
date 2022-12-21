@@ -466,6 +466,8 @@ void GuitarPro::addLetRing(Note* note)
         lr->setEndElement(chord);
         score->addElement(lr);
     }
+
+    note->setLetRingType(Note::LetRingType::IgnoreEnd);
 }
 
 //---------------------------------------------------------
