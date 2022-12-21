@@ -27,11 +27,11 @@ public:
 
     void initGPDrum();
 
-    void addDrum(const GPDrum& drum) { _drum[drum._name].push_back(drum); }
-
     int32_t pitch(int32_t element, int32_t variation, const String& name) const;
 
 private:
+
+    void addDrum(const GPDrum& drum);
 
     std::map<String, std::list<GPDrum> > _drum;
 };
