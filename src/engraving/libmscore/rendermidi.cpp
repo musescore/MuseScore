@@ -1909,22 +1909,19 @@ static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int& onT
     }
 
     const int slideNotes = 3;
-    trailtime += (1000 - onTime) / 2;
-    el->push_back(NoteEvent(0, onTime, trailtime));
-
-    int on = onTime + trailtime;
-
-    const int slideDuration = 30;
+    const int slideDuration = 45;
+    trailtime += slideNotes * slideDuration;
+    int slideOn = 1000 - trailtime;
+    el->push_back(NoteEvent(0, onTime, slideOn));
 
     int pitch = 0;
     int pitchOffset = note->slide().is(Note::SlideType::Doit) ? 1 : -1;
     for (int i = 0; i < slideNotes; ++i) {
-        el->push_back(NoteEvent(pitch, on, slideDuration));
         pitch += pitchOffset;
+        el->push_back(NoteEvent(pitch, slideOn, slideDuration));
 
-        on += slideDuration;
+        slideOn += slideDuration;
     }
-    el->push_back(NoteEvent(pitch, on, 1000 - on));
 }
 
 //---------------------------------------------------------
