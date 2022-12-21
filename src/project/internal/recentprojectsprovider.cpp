@@ -40,8 +40,17 @@ void RecentProjectsProvider::init()
 ProjectMetaList RecentProjectsProvider::recentProjectList() const
 {
     if (m_dirty) {
+        TRACEFUNC;
+
         io::paths_t paths = configuration()->recentProjectPaths();
         m_recentList.clear();
+
+        static constexpr size_t MAX_RECENT_FILES = 100;
+
+        if (paths.size() > MAX_RECENT_FILES) {
+            paths.resize(MAX_RECENT_FILES);
+        }
+
         for (const io::path_t& path : paths) {
             ProjectMeta meta;
             if (engraving::isMuseScoreFile(io::suffix(path))) {
