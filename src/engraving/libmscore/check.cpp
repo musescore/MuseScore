@@ -137,8 +137,8 @@ Ret Score::sanityCheck()
             }
 
             if (voices[0] != mLen) {
-                errors << String(u"Measure %1, staff %2 incomplete. Expected: %3; Found: %4")
-                    .arg(mNumber).arg(staffIdx + 1).arg(mLen.toString(), voices[0].toString());
+                errors << mtrc("engraving", u"<b>Incomplete measure</b>: Measure %1, Staff %2. Found: %3. Expected: %4.")
+                    .arg(mNumber).arg(staffIdx + 1).arg(voices[0].toString(), mLen.toString());
 #ifndef NDEBUG
                 m->setCorrupted(staffIdx, true);
 #endif
@@ -150,8 +150,8 @@ Ret Score::sanityCheck()
             }
             for (voice_idx_t v = 1; v < VOICES; ++v) {
                 if (voices[v] > mLen) {
-                    errors << String(u"Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5")
-                        .arg(mNumber).arg(staffIdx + 1).arg(v + 1).arg(mLen.toString(), voices[v].toString());
+                    errors << mtrc("engraving", u"<b>Voice too long</b>: Measure %1, Staff %2, Voice %3. Found: %4. Expected: %5.")
+                        .arg(mNumber).arg(staffIdx + 1).arg(v + 1).arg(voices[v].toString(), mLen.toString());
 #ifndef NDEBUG
                     m->setCorrupted(staffIdx, true);
 #endif
@@ -161,14 +161,11 @@ Ret Score::sanityCheck()
         mNumber++;
     }
 
-    bool scoreCorrupted = !errors.empty();
-    Ret ret = make_ret(scoreCorrupted ? Err::FileCorrupted : Err::NoError);
-
-    if (scoreCorrupted) {
-        ret.setData("details", errors);
+    if (errors.empty()) {
+        return make_ok();
     }
 
-    return ret;
+    return Ret(static_cast<int>(Err::FileCorrupted), errors.join(u"\n").toStdString());
 }
 
 //---------------------------------------------------------
