@@ -1252,12 +1252,23 @@ void Note::add(EngravingItem* e)
         m_bend = toStretchedBend(e);
     // fallthrough
     case ElementType::FINGERING:
-    case ElementType::SYMBOL:
     case ElementType::IMAGE:
     case ElementType::TEXT:
     case ElementType::BEND:
         _el.push_back(e);
         break;
+    case ElementType::SYMBOL: {
+        Symbol* s = toSymbol(e);
+        SymId symbolId = toSymbol(e)->sym();
+
+        if (symbolId == SymId::noteheadParenthesisLeft) {
+            _leftParenthesis = s;
+        } else if (symbolId == SymId::noteheadParenthesisRight) {
+            _rightParenthesis = s;
+        }
+        _hasHeadParentheses = _leftParenthesis && _rightParenthesis;
+        _el.push_back(e);
+    } break;
     case ElementType::TIE: {
         Tie* tie = toTie(e);
         tie->setStartNote(this);
@@ -1300,7 +1311,6 @@ void Note::remove(EngravingItem* e)
         m_bend = nullptr;
     // fallthrough
     case ElementType::TEXT:
-    case ElementType::SYMBOL:
     case ElementType::IMAGE:
     case ElementType::FINGERING:
     case ElementType::BEND:
@@ -1308,6 +1318,20 @@ void Note::remove(EngravingItem* e)
             LOGD("Note::remove(): cannot find %s", e->typeName());
         }
         break;
+    case ElementType::SYMBOL:
+        if (e == _leftParenthesis) {
+            _leftParenthesis = nullptr;
+        }
+        if (e == _rightParenthesis) {
+            _rightParenthesis = nullptr;
+        }
+        _hasHeadParentheses = _leftParenthesis && _rightParenthesis;
+
+        if (!_el.remove(e)) {
+            LOGD("Note::remove(): cannot find %s", e->typeName());
+        }
+        break;
+
     case ElementType::TIE: {
         Tie* tie = toTie(e);
         setTieFor(0);
@@ -2160,19 +2184,20 @@ void Note::setHeadHasParentheses(bool hasParentheses)
             _leftParenthesis = new Symbol(this);
             _leftParenthesis->setSym(SymId::noteheadParenthesisLeft);
             _leftParenthesis->setParent(this);
+            score()->undoAddElement(_leftParenthesis);
         }
 
         if (!_rightParenthesis) {
             _rightParenthesis = new Symbol(this);
             _rightParenthesis->setSym(SymId::noteheadParenthesisRight);
             _rightParenthesis->setParent(this);
+            score()->undoAddElement(_rightParenthesis);
         }
-
-        score()->undoAddElement(_leftParenthesis);
-        score()->undoAddElement(_rightParenthesis);
     } else {
         score()->undoRemoveElement(_leftParenthesis);
         score()->undoRemoveElement(_rightParenthesis);
+        assert(_leftParenthesis == nullptr);
+        assert(_rightParenthesis == nullptr);
     }
 }
 
