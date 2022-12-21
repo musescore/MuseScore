@@ -2173,7 +2173,7 @@ void GPConverter::setTpc(Note* note, int accidental)
         { 11, 19 },
     };
 
-    if (accidental == GPNote::invalidAccidental) {
+    if (note->staff()->capo({ 0, 1 }) != 0 || accidental == GPNote::invalidAccidental) {
         note->setTpcFromPitch();
     } else {
         int tone = (note->pitch() - accidental + 12) % 12;
