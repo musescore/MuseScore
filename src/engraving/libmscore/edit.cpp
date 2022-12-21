@@ -4657,18 +4657,15 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
             ks->undoChangeProperty(Pid::GENERATED, false);
             undo(new ChangeKeySig(ks, nkey, ks->showCourtesy()));
         } else {
-            // do not create empty keysig unless custom or atonal
-            if (tick.isNotZero() || nkey.key() != Key::C || nkey.custom() || nkey.isAtonal()) {
-                KeySig* nks = Factory::createKeySig(s);
-                nks->setParent(s);
-                nks->setTrack(track);
-                nks->setKeySigEvent(nkey);
-                undo(new AddElement(nks));
-                if (lks) {
-                    undo(new Link(lks, nks));
-                } else {
-                    lks = nks;
-                }
+            KeySig* nks = Factory::createKeySig(s);
+            nks->setParent(s);
+            nks->setTrack(track);
+            nks->setKeySigEvent(nkey);
+            undo(new AddElement(nks));
+            if (lks) {
+                undo(new Link(lks, nks));
+            } else {
+                lks = nks;
             }
         }
     }
