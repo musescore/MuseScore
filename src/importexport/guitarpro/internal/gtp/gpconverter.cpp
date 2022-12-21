@@ -1454,7 +1454,7 @@ void GPConverter::addSoundEffects(const SLine* const elem)
 
     if (elem->isPalmMute()) {
         constexpr int PALM_MUTE_CHAN = 0;
-        constexpr int PALM_MUTE_PROG = 27;
+        constexpr int PALM_MUTE_PROG = 28;
 
         Fraction begTick = elem->tick();
 
@@ -1489,12 +1489,12 @@ void GPConverter::addSoundEffects(const SLine* const elem)
 
         palmMuteInstr.channel(PALM_MUTE_CHAN)->setProgram(PALM_MUTE_PROG);
         InstrumentChange* instrChPalmMute =  Factory::createInstrumentChange(begSegment, palmMuteInstr);
-        instrChPalmMute->setTrack(track * VOICES);
+        instrChPalmMute->setTrack(track);
         begSegment->add(instrChPalmMute);
 
         if (endSegment) {
             InstrumentChange* instrChangeBack =  Factory::createInstrumentChange(endSegment, *currentInstrument);
-            instrChangeBack->setTrack(track * VOICES);
+            instrChangeBack->setTrack(track);
             endSegment->add(instrChangeBack);
         }
     }
