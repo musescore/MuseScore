@@ -1497,6 +1497,25 @@ void GPConverter::addSoundEffects(const SLine* const elem)
             instrChangeBack->setTrack(track);
             endSegment->add(instrChangeBack);
         }
+    } else if (elem->isLetRing()) {
+        Segment* begSegment = startCR->segment();
+        Segment* endSegment = endCR->segment();
+        for (Segment* nextSeg = begSegment; nextSeg; nextSeg = nextSeg->nextCR(track, true)) {
+            const auto& elemList = nextSeg->elist();
+            for (const auto el : elemList) {
+                if (el && el->isChord()) {
+                    /// put the duration until end of let ring
+                    const auto& notes = toChord(el)->notes();
+                    for (Note* note : notes) {
+                        note->setLetRingType(Note::LetRingType::TreatEnd);
+                        note->setLetRingEndDistance(endCR->tick() + endCR->ticks() - toChord(el)->tick());
+                    }
+                }
+            }
+            if (nextSeg == endSegment) {
+                break;
+            }
+        }
     }
 }
 
@@ -2372,11 +2391,10 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
     }
 }
 
-void GPConverter::addLetRing(const GPNote* gpnote, Note* note)
+void GPConverter::addLetRing(const GPNote* gpnote, Note* /*note*/)
 {
     if (gpnote->letRing() && m_currentGPBeat) {
         m_currentGPBeat->setLetRing(true);
-        note->setLetRing(true);
     }
 }
 
