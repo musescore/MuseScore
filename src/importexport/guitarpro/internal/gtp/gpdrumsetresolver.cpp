@@ -120,18 +120,31 @@ void GPDrumSetResolver::initGPDrum()
     addDrum(GPDrum(66, 6, 0,  u"sambaKit"));
     addDrum(GPDrum(65, 7, 0,  u"sambaKit"));
 
-    addDrum(GPDrum(61, 0, 0,   u"conbon|bngKit"));
-    addDrum(GPDrum(106, 0, 2,  u"conbon|bngKit"));
-    addDrum(GPDrum(107, 0, 1,  u"conbon|bngKit"));
-    addDrum(GPDrum(60, 1, 0,   u"conbon|bngKit"));
-    addDrum(GPDrum(104, 1, 2,  u"conbon|bngKit"));
-    addDrum(GPDrum(105, 1, 1,  u"conbon|bngKit"));
-    addDrum(GPDrum(108, 2, 1,  u"conbon|bngKit"));
-    addDrum(GPDrum(64, 2, 0,   u"conbon|bngKit"));
-    addDrum(GPDrum(109, 2, 2,  u"conbon|bngKit"));
-    addDrum(GPDrum(63, 3, 0,   u"conbon|bngKit"));
-    addDrum(GPDrum(110, 3, 1,  u"conbon|bngKit"));
-    addDrum(GPDrum(62, 3, 2,   u"conbon|bngKit"));
+    addDrum(GPDrum(61, 0, 0,   u"bngKit"));
+    addDrum(GPDrum(106, 0, 2,  u"bngKit"));
+    addDrum(GPDrum(107, 0, 1,  u"bngKit"));
+    addDrum(GPDrum(60, 1, 0,   u"bngKit"));
+    addDrum(GPDrum(104, 1, 2,  u"bngKit"));
+    addDrum(GPDrum(105, 1, 1,  u"bngKit"));
+    addDrum(GPDrum(108, 2, 1,  u"bngKit"));
+    addDrum(GPDrum(64, 2, 0,   u"bngKit"));
+    addDrum(GPDrum(109, 2, 2,  u"bngKit"));
+    addDrum(GPDrum(63, 3, 0,   u"bngKit"));
+    addDrum(GPDrum(110, 3, 1,  u"bngKit"));
+    addDrum(GPDrum(62, 3, 2,   u"bngKit"));
+
+    addDrum(GPDrum(61, 0, 0,   u"conbon"));
+    addDrum(GPDrum(106, 0, 2,  u"conbon"));
+    addDrum(GPDrum(107, 0, 1,  u"conbon"));
+    addDrum(GPDrum(60, 1, 0,   u"conbon"));
+    addDrum(GPDrum(104, 1, 2,  u"conbon"));
+    addDrum(GPDrum(105, 1, 1,  u"conbon"));
+    addDrum(GPDrum(108, 2, 1,  u"conbon"));
+    addDrum(GPDrum(64, 2, 0,   u"conbon"));
+    addDrum(GPDrum(109, 2, 2,  u"conbon"));
+    addDrum(GPDrum(63, 3, 0,   u"conbon"));
+    addDrum(GPDrum(110, 3, 1,  u"conbon"));
+    addDrum(GPDrum(62, 3, 2,   u"conbon"));
 
     addDrum(GPDrum(108, 0, 1,  u"cngKit"));
     addDrum(GPDrum(109, 0, 2,  u"cngKit"));
@@ -168,4 +181,9 @@ int32_t GPDrumSetResolver::pitch(int32_t element,
     LOGD() << "Absent drum " << "element: " << element << " variation: " << variation << " name: " << name << " key: " << 0;
 
     return 0;
+}
+
+void GPDrumSetResolver::addDrum(const GPDrum& drum)
+{
+    _drum[drum._name].push_back(drum);
 }
