@@ -210,7 +210,8 @@ io::paths_t Interactive::selectMultipleDirectories(const QString& title, const i
 
 QColor Interactive::selectColor(const QColor& color, const QString& title)
 {
-    return QColorDialog::getColor(color, nullptr, title);
+    QColor selectedColor = QColorDialog::getColor(color, nullptr, title);
+    return selectedColor.isValid() ? selectedColor : color;
 }
 
 RetVal<Val> Interactive::open(const std::string& uri) const
