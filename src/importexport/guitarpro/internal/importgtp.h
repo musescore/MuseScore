@@ -285,6 +285,14 @@ protected:
     void createTuningString(int strings, int tuning[]);
     virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const { return nullptr; }
 
+    /// midi effects
+    void addSoundEffects();
+    void addPalmMuteEffect(const PalmMute* const elem);
+    void addLetRingEffect(const LetRing* const elem);
+
+    std::vector<PalmMute*> _addedPalmMutes;
+    std::vector<LetRing*> _addedLetRings;
+
     std::vector<PalmMute*> _palmMutes;
     std::vector<LetRing*> _letRings;
     std::vector<Vibrato*> _vibratos;
