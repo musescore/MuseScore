@@ -4021,37 +4021,43 @@ void Measure::addSystemTrailer(Measure* nm)
         Staff* staff = score()->staff(staffIdx);
         bool staffIsPitchedAtNextMeas = nextMeasure() && staff->isPitchedStaff(nextMeasure()->tick());
 
-        if (show && staffIsPitchedAtNextMeas) {
+        if (show) {
             if (!s) {
                 s = Factory::createSegment(this, SegmentType::KeySigAnnounce, _rtick);
                 s->setTrailer(true);
                 add(s);
             }
 
-            KeySig* ks = toKeySig(s->element(track));
-            KeySigEvent key2 = staff->keySigEvent(endTick());
+            if (staffIsPitchedAtNextMeas) {
+                KeySig* ks = toKeySig(s->element(track));
+                KeySigEvent key2 = staff->keySigEvent(endTick());
 
-            if (!ks) {
-                ks = Factory::createKeySig(s);
-                ks->setTrack(track);
-                ks->setGenerated(true);
-                ks->setParent(s);
-                s->add(ks);
-                s->setTrailer(true);
+                if (!ks) {
+                    ks = Factory::createKeySig(s);
+                    ks->setTrack(track);
+                    ks->setGenerated(true);
+                    ks->setParent(s);
+                    s->add(ks);
+                    s->setTrailer(true);
+                }
+                //else if (!(ks->keySigEvent() == key2)) {
+                //      score()->undo(new ChangeKeySig(ks, key2, ks->showCourtesy()));
+                //      }
+                ks->setKeySigEvent(key2);
+                ks->layout();
+                //s->createShape(track / VOICES);
+                s->setEnabled(true);
+            } else { /// !staffIsPitchedAtNextMeas
+                KeySig* keySig = nullptr;
+                EngravingItem* keySigElem = s->element(track);
+                if (keySigElem && keySigElem->isKeySig()) {
+                    keySig = toKeySig(keySigElem);
+                }
+                if (keySig) {
+                    s->remove(keySig);
+                }
             }
-            //else if (!(ks->keySigEvent() == key2)) {
-            //      score()->undo(new ChangeKeySig(ks, key2, ks->showCourtesy()));
-            //      }
-            ks->setKeySigEvent(key2);
-            ks->layout();
-            //s->createShape(track / VOICES);
-            s->setEnabled(true);
-        } else if (show && !staffIsPitchedAtNextMeas) {
-            KeySig* keySig = toKeySig(s->element(track));
-            if (keySig) {
-                s->remove(keySig);
-            }
-        } else if (!show) {
+        } else { /// !show
             // remove any existent courtesy key signature
             if (s) {
                 s->setEnabled(false);
