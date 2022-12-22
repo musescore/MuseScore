@@ -880,7 +880,6 @@ void LayoutMeasure::computePreSpacingItems(Measure* m)
             isFirstChordInMeasure = false;
 
             chord->layoutArticulations();
-            chord->layoutArticulations2();
             chord->checkStartEndSlurs();
             chord->computeKerningExceptions();
         }
