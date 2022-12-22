@@ -77,6 +77,8 @@ private slots:
     void onUserAuthorized();
 
 private:
+    void initOAuthIfNecessary();
+
     bool readTokens();
     bool saveTokens();
     bool updateTokens();
