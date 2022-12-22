@@ -3189,6 +3189,17 @@ void Score::cmdDeleteSelection()
                 //else tick < 0
                 track = e->track();
             }
+            // find element to select
+            if (!cr && tick >= Fraction(0, 1) && track != mu::nidx) {
+                cr = findCR(tick, track);
+            }
+
+            // We should not allow deleting the very first keySig of the piece, because it is
+            // logically incorrect and leads to a state of undefined key/transposition. The correct
+            // action is for the user to set an atonal/custom keySig as needed.
+            if (e->isKeySig() && e->tick() == Fraction(0, 1)) {
+                continue;
+            }
 
             // delete element if we have not done so already
             if (deletedElements.find(e) == deletedElements.end()) {
@@ -3211,12 +3222,6 @@ void Score::cmdDeleteSelection()
                 }
                 deleteItem(e);
             }
-
-            // find element to select
-            if (!cr && tick >= Fraction(0, 1) && track != mu::nidx) {
-                cr = findCR(tick, track);
-            }
-
             // add these linked elements to list of already-deleted elements
             for (EngravingObject* se : links) {
                 deletedElements.insert(se);
