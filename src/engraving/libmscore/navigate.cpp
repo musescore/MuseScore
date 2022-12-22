@@ -24,6 +24,7 @@
 
 #include "chord.h"
 #include "engravingitem.h"
+#include "lyrics.h"
 #include "measure.h"
 #include "measurerepeat.h"
 #include "note.h"
@@ -964,5 +965,30 @@ EngravingItem* Score::prevElement()
         e = e->parentItem();
     }
     return score()->firstElement();
+}
+
+//---------------------------------------------------------
+//   prevLyrics
+//    - find the lyric (if any) before this one (not including lines)
+//    - currently used to determine the first lyric of a melisma
+//---------------------------------------------------------
+
+Lyrics* Lyrics::prevLyrics() const
+{
+    track_idx_t currTrack = track();
+    Segment* seg = segment();
+    if (!seg) {
+        return nullptr;
+    }
+    PropertyFlags pFlags = propertyFlags(mu::engraving::Pid::PLACEMENT);
+    Segment* prevSegment = seg;
+    while ((prevSegment = prevSegment->prev1(mu::engraving::SegmentType::ChordRest))) {
+        EngravingItem* el = prevSegment->element(currTrack);
+        Lyrics* prevLyrics = el && el->isChord() ? toChordRest(el)->lyrics(no(), placement()) : nullptr;
+        if (prevLyrics) {
+            return prevLyrics;
+        }
+    }
+    return nullptr;
 }
 }

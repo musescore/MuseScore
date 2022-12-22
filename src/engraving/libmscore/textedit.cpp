@@ -26,6 +26,7 @@
 #include "score.h"
 #include "iengravingfont.h"
 #include "types/symnames.h"
+#include "lyrics.h"
 
 #include "log.h"
 
@@ -187,6 +188,13 @@ void TextBase::endEdit(EditData& ed)
         }
 
         commitText();
+        if (isLyrics()) {
+            Lyrics* prevLyrics = toLyrics(this)->prevLyrics();
+            if (prevLyrics) {
+                prevLyrics->setRemoveInvalidSegments();
+                prevLyrics->layout();
+            }
+        }
         return;
     }
 
