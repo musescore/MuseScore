@@ -26,6 +26,7 @@
 
 #include "rw/xml.h"
 
+#include "beam.h"
 #include "chord.h"
 #include "measure.h"
 #include "note.h"
@@ -272,6 +273,17 @@ String Fingering::accessibleInfo() const
         rez += u' ' + mtrc("engraving", "String number");
     }
     return String(u"%1: %2").arg(rez, plainText());
+}
+
+bool Fingering::isOnCrossBeamSide()
+{
+    Chord* chord = note() ? note()->chord() : nullptr;
+    if (!chord) {
+        return false;
+    }
+    return this->layoutType() == ElementType::CHORD
+           && chord->beam() && (chord->beam()->cross() || chord->staffMove() != 0)
+           && placeAbove() == chord->up();
 }
 
 //---------------------------------------------------------

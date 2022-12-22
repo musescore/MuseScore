@@ -863,7 +863,8 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                     for (EngravingItem* el : note->el()) {
                         if (el->isFingering()) {
                             Fingering* f = toFingering(el);
-                            if (f->layoutType() == ElementType::CHORD) {
+                            if (f->layoutType() == ElementType::CHORD && !f->isOnCrossBeamSide()) {
+                                // Fingering on top of cross-staff beams must be laid out later
                                 if (f->placeAbove()) {
                                     fingerings.push_back(f);
                                 } else {
