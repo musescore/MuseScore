@@ -2962,7 +2962,8 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
                 }
                 for (Segment* s = m->first(); s; s = s->next()) {
                     if (s->isChordRest() || !s->annotations().empty()) {
-                        for (EngravingItem* e : s->annotations()) {
+                        const auto annotations = s->annotations(); // make a copy since we alter the list
+                        for (EngravingItem* e : annotations) {
                             if (e->isRehearsalMark()
                                 || e->isSystemText()
                                 || e->isTripletFeel()
