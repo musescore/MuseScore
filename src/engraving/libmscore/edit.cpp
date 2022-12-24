@@ -2663,7 +2663,8 @@ void Score::deleteItem(EngravingItem* el)
             // propagate to original measure/element
             m = m->mmRestFirst();
             Segment* ns = m->findSegment(SegmentType::ChordRest, s->tick());
-            for (EngravingItem* e : ns->annotations()) {
+            const auto annotations = ns->annotations(); // make a copy since we alter the list
+            for (EngravingItem* e : annotations) {
                 if (e->type() == el->type() && e->track() == el->track()) {
                     el = e;
                     undoRemoveElement(el);
@@ -2956,7 +2957,7 @@ void Score::deleteAnnotationsFromRange(Segment* s1, Segment* s2, track_idx_t tra
             continue;
         }
         for (Segment* s = s1; s && s != s2; s = s->next1()) {
-            const auto annotations = s->annotations();       // make a copy since we alter the list
+            const auto annotations = s->annotations(); // make a copy since we alter the list
             for (EngravingItem* annotation : annotations) {
                 // skip if not included in selection (eg, filter)
                 if (!filter.canSelect(annotation)) {
@@ -4223,7 +4224,8 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
             // Move annotations from the empty segment.
             // TODO: do we need to preserve annotations at all?
             // Maybe only some types (Tempo etc.)?
-            for (EngravingItem* a : s->annotations()) {
+            const auto annotations = s->annotations(); // make a copy since we alter the list
+            for (EngravingItem* a : annotations) {
                 EngravingItem* a1 = a->clone();
                 a1->setParent(ns);
                 undoRemoveElement(a);
