@@ -175,7 +175,7 @@ Column {
             propertyItem: root.model ? root.model.frameThickness : null
 
             step: 0.1
-            minValue: 0.1
+            minValue: 0
             maxValue: 5
         }
 
