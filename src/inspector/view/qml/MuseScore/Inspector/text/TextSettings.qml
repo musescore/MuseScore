@@ -219,7 +219,7 @@ Column {
 
         step: 0.1
         minValue: 0
-        maxValue: 5
+        maxValue: 100
     }
 
     SeparatorLine { anchors.margins: -12 }
