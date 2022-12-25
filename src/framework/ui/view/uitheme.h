@@ -147,6 +147,7 @@ public:
     int pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget) const override;
     QSize sizeFromContents(ContentsType type, const QStyleOption* option, const QSize& contentsSize,
                            const QWidget* widget = nullptr) const override;
+	QIcon standardIcon(QStyle::StandardPixmap standardIcon, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const override;
     int styleHint(StyleHint hint, const QStyleOption* option = nullptr, const QWidget* widget = nullptr,
                   QStyleHintReturn* returnData = nullptr) const override;
 
