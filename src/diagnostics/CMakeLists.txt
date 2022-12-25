@@ -99,11 +99,23 @@ if (BUILD_CRASHPAD_CLIENT)
     # Install crashpad handler
     set(CPAD_ROOT_PATH ${CMAKE_CURRENT_LIST_DIR}/crashpad_handler)
     if (OS_IS_LIN)
-        install(PROGRAMS ${CPAD_ROOT_PATH}/linux/x86-64/crashpad_handler DESTINATION bin)
+        if (NOT CRASHPAD_HANDLER_PATH)
+            set(CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/linux/x86-64/crashpad_handler)
+        endif()
+
+        install(PROGRAMS ${CRASHPAD_HANDLER_PATH} DESTINATION bin)
     elseif(OS_IS_WIN)
-        install(PROGRAMS ${CPAD_ROOT_PATH}/windows/x86-64/crashpad_handler.exe DESTINATION bin)
+        if (NOT CRASHPAD_HANDLER_PATH)
+            set(CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/windows/x86-64/crashpad_handler.exe)
+        endif()
+
+        install(PROGRAMS ${CRASHPAD_HANDLER_PATH} DESTINATION bin)
     elseif(OS_IS_MAC)
-        install(PROGRAMS ${CPAD_ROOT_PATH}/macos/x86-64/crashpad_handler DESTINATION ${Mscore_SHARE_NAME}Contents/MacOS)
+        if (NOT CRASHPAD_HANDLER_PATH)
+            set(CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/macos/x86-64/crashpad_handler)
+        endif()
+
+        install(PROGRAMS ${CRASHPAD_HANDLER_PATH} DESTINATION ${Mscore_SHARE_NAME}Contents/MacOS)
     endif()
 endif(BUILD_CRASHPAD_CLIENT)
 # ----------------
