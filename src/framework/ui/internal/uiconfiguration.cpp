@@ -604,20 +604,6 @@ std::string UiConfiguration::defaultFontFamily() const
 {
     std::string family = QFontDatabase::systemFont(QFontDatabase::GeneralFont).family().toStdString();
 
-#ifdef Q_OS_MACOS
-    // The macOS default font *is* SF Pro, but under the name ".AppleSystemUIFont".
-    // In Qt, the version under this name has an issue with the width of the comma
-    // character (see https://github.com/musescore/MuseScore/issues/10736). This does
-    // not occur in user-installed versions of the font. So if the user has one, we
-    // use it, otherwise, it will be just the system version.
-    // TODO(qt-6): This can be removed when switching to Qt 6.
-    static const QString defaultMacFamily = "SF Pro";
-    QFontDatabase fontDatabase;
-    if (fontDatabase.hasFamily(defaultMacFamily)) {
-        family = defaultMacFamily.toStdString();
-    }
-#endif
-
 #ifdef Q_OS_WIN
     static const QString defaultWinFamily = "Segoe UI";
     QFontDatabase fontDatabase;
