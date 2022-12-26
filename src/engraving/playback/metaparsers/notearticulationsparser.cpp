@@ -160,9 +160,11 @@ void NoteArticulationsParser::parseSpanners(const Note* note, const RenderingCon
             continue;
         }
 
+        auto spannerTnD = timestampAndDurationFromStartAndDurationTicks(note->score(), spannerFrom, spannerDurationTicks);
+
         RenderingContext spannerContext = ctx;
-        spannerContext.nominalTimestamp = timestampFromTicks(note->score(), spannerFrom);
-        spannerContext.nominalDuration = durationFromTicks(ctx.beatsPerSecond.val, spannerDurationTicks);
+        spannerContext.nominalTimestamp = spannerTnD.timestamp;
+        spannerContext.nominalDuration = spannerTnD.duration;
         spannerContext.nominalPositionStartTick = spannerFrom;
         spannerContext.nominalDurationTicks = spannerDurationTicks;
 
