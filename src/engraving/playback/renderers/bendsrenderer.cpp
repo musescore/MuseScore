@@ -181,6 +181,7 @@ void BendsRenderer::appendBendTimeFactors(const Score* score, const GuitarBend* 
 
     IF_ASSERT_FAILED(RealIsEqualOrLess(startFactor, endFactor)) {
         timeFactorMap.insert_or_assign(endNoteTime, BendTimeFactors { 0.f, 1.f });
+        return;
     }
 
     timeFactorMap.insert_or_assign(endNoteTime, BendTimeFactors { startFactor, endFactor });
@@ -201,10 +202,12 @@ RenderingContext BendsRenderer::buildRenderingContext(const Score* score, const 
     int chordPosTicks = chord->tick().ticks();
     int chordDurationTicks = chord->actualTicks().ticks();
 
+    auto tnd = timestampAndDurationFromStartAndDurationTicks(score, chordPosTicks + initialCtx.positionTickOffset, chordDurationTicks);
+
     BeatsPerSecond bps = score->tempomap()->tempo(chordPosTicks);
 
-    RenderingContext ctx(timestampFromTicks(score, chordPosTicks + initialCtx.positionTickOffset),
-                         durationFromTicks(bps.val, chordDurationTicks),
+    RenderingContext ctx(tnd.timestamp,
+                         tnd.duration,
                          initialCtx.nominalDynamicLevel,
                          chordPosTicks,
                          initialCtx.positionTickOffset,

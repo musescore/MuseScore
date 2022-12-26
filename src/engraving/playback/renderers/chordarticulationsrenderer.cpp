@@ -149,19 +149,13 @@ void ChordArticulationsRenderer::renderNote(const Chord* chord, const Note* note
 
 duration_t ChordArticulationsRenderer::tiedNotesTotalDuration(const Note* firstNote)
 {
-    mpe::duration_t result = 0;
+    int startTick = firstNote->tick().ticks();
 
-    const Score* score = firstNote->score();
-    const std::vector<Note*> tiedNotes = firstNote->tiedNotes();
+    const Note* lastNote = firstNote->lastTiedNote();
 
-    for (const Note* tiedNote : tiedNotes) {
-        if (!tiedNote || !tiedNote->chord()) {
-            continue;
-        }
+    int endTick = lastNote
+                  ? lastNote->tick().ticks() + lastNote->chord()->actualTicks().ticks()
+                  : startTick + firstNote->chord()->actualTicks().ticks();
 
-        BeatsPerSecond bps = score->tempomap()->tempo(tiedNote->tick().ticks());
-        result += durationFromTicks(bps.val, tiedNote->chord()->actualTicks().ticks());
-    }
-
-    return result;
+    return durationFromStartAndEndTick(firstNote->score(), startTick, endTick);
 }

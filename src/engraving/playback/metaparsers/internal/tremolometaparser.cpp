@@ -91,7 +91,8 @@ void TremoloMetaParser::doParse(const EngravingItem* item, const RenderingContex
     articulationMeta.type = type;
     articulationMeta.pattern = pattern;
     articulationMeta.timestamp = ctx.nominalTimestamp;
-    articulationMeta.overallDuration = durationFromTicks(ctx.beatsPerSecond.val, overallDurationTicks);
+    articulationMeta.overallDuration
+        = timestampFromTicks(tremolo->score(), ctx.nominalPositionStartTick + overallDurationTicks) - ctx.nominalTimestamp;
 
     appendArticulationData(std::move(articulationMeta), result);
 }
