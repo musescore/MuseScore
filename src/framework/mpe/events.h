@@ -38,7 +38,7 @@ struct NoteEvent;
 struct RestEvent;
 using PlaybackEvent = std::variant<NoteEvent, RestEvent>;
 using PlaybackEventList = std::vector<PlaybackEvent>;
-using PlaybackEventsMap = std::map<msecs_t, PlaybackEventList>;
+using PlaybackEventsMap = std::map<timestamp_t, PlaybackEventList>;
 using PlaybackEventsChanges = async::Channel<PlaybackEventsMap>;
 using DynamicLevelChanges = async::Channel<DynamicLevelMap>;
 
