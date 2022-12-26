@@ -324,7 +324,7 @@ void CommandLineController::apply()
     }
 
     if (m_parser.isSet("f")) {
-        m_converterTask.params[CommandLineController::ParamKey::ForceMode] = m_parser.value("f");
+        m_converterTask.params[CommandLineController::ParamKey::ForceMode] = true;
     }
 
     if (m_parser.isSet("S")) {
