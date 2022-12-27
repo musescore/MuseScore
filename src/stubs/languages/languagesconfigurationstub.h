@@ -34,13 +34,12 @@ public:
     QUrl languagesUpdateUrl() const override;
     QUrl languageFileServerUrl(const QString& languageCode) const override;
 
-    ValCh<LanguagesHash> languages() const override;
-    Ret setLanguages(const LanguagesHash& languages) override;
-
+    io::path_t languagesAppDataPath() const override;
     io::path_t languagesUserAppDataPath() const override;
 
-    io::paths_t languageFilePaths(const QString& languageCode) const override;
-    io::path_t languageArchivePath(const QString& languageCode) const override;
+    io::path_t builtinLanguagesJsonPath() const override;
+    io::path_t builtinLanguageFilePath(const QString& resourceName, const QString& languageCode) const override;
+    io::path_t userLanguageFilePath(const QString& resourceName, const QString& languageCode) const override;
 };
 }
 

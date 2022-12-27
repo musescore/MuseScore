@@ -26,7 +26,6 @@
 
 #include "languagesconfigurationstub.h"
 #include "languagesservicestub.h"
-#include "languageunpackerstub.h"
 
 using namespace mu::languages;
 using namespace mu::modularity;
@@ -45,7 +44,6 @@ void LanguagesStubModule::registerExports()
 {
     ioc()->registerExport<ILanguagesConfiguration>(moduleName(), new LanguagesConfigurationStub());
     ioc()->registerExport<ILanguagesService>(moduleName(), new LanguagesServiceStub());
-    ioc()->registerExport<ILanguageUnpacker>(moduleName(), new LanguageUnpackerStub());
 }
 
 void LanguagesStubModule::registerResources()
