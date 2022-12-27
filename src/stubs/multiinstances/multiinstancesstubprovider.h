@@ -30,9 +30,11 @@ class MultiInstancesStubProvider : public IMultiInstancesProvider
 public:
     MultiInstancesStubProvider() = default;
 
-    // Score opening
-    bool isProjectAlreadyOpened(const io::path_t& scorePath) const override;
-    void activateWindowWithProject(const io::path_t& scorePath) override;
+    // Project opening
+    bool isProjectAlreadyOpened(const io::path_t& projectPath) const override;
+    void activateWindowWithProject(const io::path_t& projectPath) override;
+    bool isHasAppInstanceWithoutProject() const override;
+    void activateWindowWithoutProject() override;
     bool openNewAppInstance(const QStringList& args) override;
 
     // Settings
@@ -46,14 +48,21 @@ public:
     // Resources (files)
     bool lockResource(const std::string& name) override;
     bool unlockResource(const std::string& name) override;
+    void notifyAboutResourceChanged(const std::string& name) override;
+    async::Channel<std::string> resourceChanged() override;
 
     // Instances info
     const std::string& selfID() const override;
+    bool isMainInstance() const override;
     std::vector<InstanceMeta> instances() const override;
     async::Notification instancesChanged() const override;
 
+    void notifyAboutInstanceWasQuited() override;
+
     // Quit for all
     void quitForAll() override;
+    void quitAllAndRestartLast() override;
+    void quitAllAndRunInstallation(const io::path_t& installerPath) override;
 };
 }
 
