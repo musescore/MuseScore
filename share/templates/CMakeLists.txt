@@ -26,7 +26,6 @@ install(FILES
       drumset_fr.drm
       orchestral.drm
       My_First_Score.mscx
-      Create_New_Score.mscz
       categories.json
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates
       )
@@ -102,4 +101,3 @@ install(DIRECTORY
       08-Orchestral/03-String_Orchestra
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/08-Orchestral
       )
-
