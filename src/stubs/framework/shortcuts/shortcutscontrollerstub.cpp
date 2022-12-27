@@ -26,3 +26,8 @@ using namespace mu::shortcuts;
 void ShortcutsControllerStub::activate(const std::string&)
 {
 }
+
+bool ShortcutsControllerStub::isRegistered(const std::string&) const
+{
+    return false;
+}

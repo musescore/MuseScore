@@ -28,6 +28,8 @@ namespace mu::shortcuts {
 class ShortcutsConfigurationStub : public IShortcutsConfiguration
 {
 public:
+    QString currentKeyboardLayout() const override;
+    void setCurrentKeyboardLayout(const QString& layout) override;
 
     io::path_t shortcutsUserAppDataPath() const override;
     io::path_t shortcutsAppDataPath() const override;
