@@ -28,9 +28,9 @@ namespace mu::instrumentsscene {
 class SelectInstrumentsScenarioStub : public notation::ISelectInstrumentsScenario
 {
 public:
-    RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(SelectInstrumentsMode mode = SelectInstrumentsMode::None) const
+    RetVal<notation::PartInstrumentListScoreOrder> selectInstruments() const override;
+    RetVal<notation::Instrument> selectInstrument(const notation::InstrumentKey& currentInstrumentKey = notation::InstrumentKey()) const
     override;
-    RetVal<notation::Instrument> selectInstrument(const std::string& currentInstrumentId = "") const override;
 };
 }
 
