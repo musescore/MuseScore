@@ -22,24 +22,24 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.5.0
+      uses: styfle/cancel-workflow-action@0.11.0
       with:
         access_token: ${{ github.token }}
     - name: Clone repository (default)
       if: ${{ github.event_name != 'schedule' }}
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Clone repository (3.x for build nightly )
       if: ${{ github.event_name == 'schedule' }}
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: 3.x
     - name: Prepare ccache timestamp
       id: ccache_cache_timestamp
       run: |
         NOW=$(date -u +"%F-%T")
-        echo "::set-output name=timestamp::${NOW}"
+        echo "timestamp=${NOW}" >> $GITHUB_OUTPUT
     - name: Ccache cache files
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ~/.ccache
         key: ${{github.workflow}}-ccache-${{steps.ccache_cache_timestamp.outputs.timestamp}}
@@ -109,7 +109,7 @@ jobs:
         sudo bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os linux -v $VER
     - name: Upload artifacts on GitHub
       if: env.DO_BUILD == 'true'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: MuseScore_${{ github.run_id }}
         path: ./build.artifacts/
@@ -122,7 +122,7 @@ jobs:
         CXXFLAGS: "-fsanitize=address -fno-omit-frame-pointer"
     steps:
     - name: Clone repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup environment
       run: |
         sudo bash ./build/ci/linux/setup.sh

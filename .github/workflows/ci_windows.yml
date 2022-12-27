@@ -23,17 +23,17 @@ jobs:
     runs-on: windows-2019
     steps:
     - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.5.0
+      uses: styfle/cancel-workflow-action@0.11.0
       with:
         access_token: ${{ github.token }}
     - name: Clone repository (default)
       if: ${{ github.event_name != 'schedule' }}
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         submodules: 'true'
     - name: Clone repository (3.x for build nightly )
       if: ${{ github.event_name == 'schedule' }}
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         submodules: 'true'
         ref: 3.x
@@ -116,7 +116,7 @@ jobs:
         bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: MuseScore_x64_${{ github.run_id }}
         path: build.artifacts\ 
