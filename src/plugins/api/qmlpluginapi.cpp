@@ -31,6 +31,7 @@
 
 #include "cursor.h"
 #include "elements.h"
+#include "enums.h"
 #include "fraction.h"
 #include "instrument.h"
 #include "part.h"
@@ -41,8 +42,7 @@
 
 using namespace mu::engraving;
 
-namespace mu::engraving {
-namespace PluginAPI {
+namespace mu::plugins::api {
 Enum* PluginAPI::elementTypeEnum = nullptr;
 Enum* PluginAPI::accidentalTypeEnum = nullptr;
 Enum* PluginAPI::beamModeEnum = nullptr;
@@ -72,7 +72,7 @@ Enum* PluginAPI::harmonyTypeEnum = nullptr;
 //---------------------------------------------------------
 
 PluginAPI::PluginAPI(QQuickItem* parent)
-    : mu::engraving::QmlPlugin(parent)
+    : QmlPlugin(parent)
 {
     setRequiresScore(true);                // by default plugins require a score to work
 }
@@ -151,7 +151,7 @@ Score* PluginAPI::readScore(const QString& name, bool noninteractive)
 //   closeScore
 //---------------------------------------------------------
 
-void PluginAPI::closeScore(mu::engraving::PluginAPI::Score* score)
+void PluginAPI::closeScore(mu::plugins::api::Score* score)
 {
     UNUSED(score);
 
@@ -191,7 +191,7 @@ EngravingItem* PluginAPI::newElement(int elementType)
 ///   \since MuseScore 3.3
 //---------------------------------------------------------
 
-void PluginAPI::removeElement(mu::engraving::PluginAPI::EngravingItem* wrapped)
+void PluginAPI::removeElement(mu::plugins::api::EngravingItem* wrapped)
 {
     mu::engraving::Score* score = wrapped->element()->score();
     score->deleteItem(wrapped->element());
@@ -388,5 +388,4 @@ void PluginAPI::registerQmlTypes()
 
     qmlTypesRegistered = true;
 }
-}
-}
+} // namespace mu::plugins::api

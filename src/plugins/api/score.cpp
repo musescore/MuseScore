@@ -27,12 +27,13 @@
 #include "libmscore/factory.h"
 #include "libmscore/instrtemplate.h"
 #include "libmscore/measure.h"
-#include "libmscore/masterscore.h"
+#include "libmscore/score.h"
 #include "libmscore/segment.h"
 #include "libmscore/text.h"
 
-namespace mu::engraving {
-namespace PluginAPI {
+using namespace mu::engraving;
+
+namespace mu::plugins::api {
 //---------------------------------------------------------
 //   Score::newCursor
 //---------------------------------------------------------
@@ -245,5 +246,4 @@ void Score::endCmd(bool rollback)
 
     notation()->notationChanged().notify();
 }
-}
-}
+} // namespace mu::plugins::api

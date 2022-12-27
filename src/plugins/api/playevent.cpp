@@ -20,16 +20,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "libmscore/masterscore.h"
-#include "libmscore/note.h"
-#include "libmscore/undo.h"
-#include "elements.h"
 #include "playevent.h"
+
+#include "libmscore/note.h"
+#include "libmscore/score.h"
+#include "libmscore/undo.h"
+
+#include "elements.h"
 
 #include "log.h"
 
-namespace mu::engraving {
-namespace PluginAPI {
+using namespace mu::engraving;
+
+namespace mu::plugins::api {
 //---------------------------------------------------------
 //   PlayEvent::setPitch
 //---------------------------------------------------------
@@ -165,5 +168,4 @@ void QmlPlayEventsListAccess::append(QQmlListProperty<PlayEvent>* l, PlayEvent* 
     mu::engraving::Score* score = papinote->note()->score();
     score->undo(new ChangeNoteEventList(papinote->note(), nel));
 }
-}
-}
+} // namespace mu::plugins::api

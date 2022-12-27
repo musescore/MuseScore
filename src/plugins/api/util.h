@@ -29,15 +29,13 @@
 
 #include "uicomponents/view/quickpaintedview.h"
 
-#include "config.h"
-
-#include "libmscore/engravingitem.h"
 #include "libmscore/mscoreview.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/utils.h"
 
 namespace mu::engraving {
-namespace PluginAPI {
+class Score;
+}
+
+namespace mu::plugins::api {
 class Score;
 
 //---------------------------------------------------------
@@ -151,7 +149,7 @@ public slots:
 ///    This is an GUI element to show a score. \since MuseScore 3.2
 //---------------------------------------------------------
 
-class ScoreView : public uicomponents::QuickPaintedView, public MuseScoreView
+class ScoreView : public uicomponents::QuickPaintedView, public engraving::MuseScoreView
 {
     Q_OBJECT
     /** Background color */
@@ -180,7 +178,7 @@ class ScoreView : public uicomponents::QuickPaintedView, public MuseScoreView
 
 public slots:
     //@ --
-    Q_INVOKABLE void setScore(mu::engraving::PluginAPI::Score*);
+    Q_INVOKABLE void setScore(mu::plugins::api::Score*);
     //@ --
     Q_INVOKABLE void setCurrentPage(int n);
     //@ --
@@ -199,6 +197,6 @@ public:
     virtual const mu::Rect geometry() const override { return mu::Rect(x(), y(), width(), height()); }
     /// \endcond
 };
-} // namespace PluginAPI
-} // namespace Ms
+} // namespace mu::plugins::api
+
 #endif

@@ -27,8 +27,7 @@
 
 #include "libmscore/excerpt.h"
 
-namespace mu::engraving {
-namespace PluginAPI {
+namespace mu::plugins::api {
 class Score;
 
 //---------------------------------------------------------
@@ -46,7 +45,7 @@ class Excerpt : public QObject
 {
     Q_OBJECT
     /** The score object for this part */
-    Q_PROPERTY(mu::engraving::PluginAPI::Score * partScore READ partScore)
+    Q_PROPERTY(mu::plugins::api::Score * partScore READ partScore)
     /** The title of this part */
     Q_PROPERTY(QString title READ title)
 
@@ -68,7 +67,7 @@ public:
     /// \endcond
 
     /// Checks whether two variables represent the same object. \since MuseScore 3.3
-    Q_INVOKABLE bool is(mu::engraving::PluginAPI::Excerpt* other) { return other && e == other->e; }
+    Q_INVOKABLE bool is(mu::plugins::api::Excerpt* other) { return other && e == other->e; }
 };
 
 //---------------------------------------------------------
@@ -115,6 +114,6 @@ QmlExcerptsListAccess<T, Container> wrapExcerptsContainerProperty(QObject* obj, 
 {
     return QmlExcerptsListAccess<T, Container>(obj, c);
 }
-} // namespace PluginAPI
-} // namespace Ms
+} // namespace mu::plugins::api
+
 #endif

@@ -26,8 +26,7 @@
 #include <QQmlPropertyMap>
 #include <QMetaEnum>
 
-namespace mu::engraving {
-namespace PluginAPI {
+namespace mu::plugins::api {
 //---------------------------------------------------------
 ///   \class Enum
 ///   Wrapper for enumerations
@@ -54,6 +53,6 @@ Enum* wrapEnum(QObject* parent = nullptr)
 {
     return new Enum(QMetaEnum::fromType<T>(), parent);
 }
-} // namespace PluginAPI
-} // namespace Ms
+} // namespace mu::plugins::api
+
 #endif

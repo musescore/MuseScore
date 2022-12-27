@@ -22,8 +22,9 @@
 
 #include "tie.h"
 
-namespace mu::engraving {
-namespace PluginAPI {
+using namespace mu::engraving;
+
+namespace mu::plugins::api {
 //---------------------------------------------------------
 //   Tie::startNote
 //---------------------------------------------------------
@@ -41,5 +42,4 @@ Note* Tie::endNote() { return wrap<Note>(toTie(e)->endNote()); }
 //---------------------------------------------------------
 
 Tie* tieWrap(mu::engraving::Tie* tie) { return wrap<Tie>(tie); }
-}
-}
+} // namespace mu::plugins::api
