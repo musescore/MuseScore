@@ -51,3 +51,8 @@ mu::Ret WorkspaceStub::setRawData(const DataKey&, const QByteArray&)
 {
     return make_ret(Ret::Code::NotImplemented);
 }
+
+mu::async::Notification WorkspaceStub::reloadNotification()
+{
+    return async::Notification();
+}
