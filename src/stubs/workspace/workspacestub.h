@@ -36,6 +36,8 @@ public:
 
     RetVal<QByteArray> rawData(const DataKey& key) const override;
     Ret setRawData(const DataKey& key, const QByteArray& data) override;
+
+    async::Notification reloadNotification() override;
 };
 }
 

@@ -37,6 +37,11 @@ IWorkspacePtr WorkspaceManagerStub::currentWorkspace() const
     return p;
 }
 
+async::Notification WorkspaceManagerStub::currentWorkspaceAboutToBeChanged() const
+{
+    return async::Notification();
+}
+
 async::Notification WorkspaceManagerStub::currentWorkspaceChanged() const
 {
     return async::Notification();
