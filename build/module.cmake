@@ -135,5 +135,6 @@ if (NOT ${MODULE} MATCHES global)
 endif()
 
 set(MODULE_LINK ${QT_LIBRARIES} ${MODULE_LINK})
+set(MODULE_LINK ${CMAKE_DL_LIBS} ${MODULE_LINK})
 
 target_link_libraries(${MODULE} PRIVATE ${MODULE_LINK} )
