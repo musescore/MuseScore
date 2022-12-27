@@ -28,11 +28,14 @@ namespace mu::plugins {
 class PluginsServiceStub : public IPluginsService
 {
 public:
-    RetVal<PluginInfoList> plugins(PluginsStatus status = All) const override;
+    void reloadPlugins() override;
 
-    RetValCh<framework::Progress> install(const CodeKey& codeKey) override;
-    RetValCh<framework::Progress> update(const CodeKey& codeKey) override;
-    Ret uninstall(const CodeKey& codeKey) override;
+    RetVal<PluginInfoMap> plugins(PluginsStatus status = All) const override;
+    async::Notification pluginsChanged() const override;
+
+    CategoryInfoMap categories() const override;
+
+    Ret setEnable(const CodeKey& codeKey, bool enable) override;
 
     Ret run(const CodeKey& codeKey) override;
 

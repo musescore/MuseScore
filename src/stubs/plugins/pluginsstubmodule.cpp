@@ -27,8 +27,6 @@
 #include "pluginsservicestub.h"
 #include "pluginsconfigurationstub.h"
 
-#include "ui/iinteractiveuriregister.h"
-
 using namespace mu::plugins;
 using namespace mu::modularity;
 using namespace mu::ui;
