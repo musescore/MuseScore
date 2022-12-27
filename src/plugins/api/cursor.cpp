@@ -37,8 +37,9 @@
 #include "libmscore/timesig.h"
 #include "libmscore/tuplet.h"
 
-namespace mu::engraving {
-namespace PluginAPI {
+using namespace mu::engraving;
+
+namespace mu::plugins::api {
 //---------------------------------------------------------
 //   Cursor
 //---------------------------------------------------------
@@ -166,7 +167,7 @@ void Cursor::rewind(RewindMode mode)
 ///   Rewind cursor to a position defined by tick.
 ///   \param tick Determines the position where to move
 ///   this cursor.
-///   \see \ref mu::engraving::PluginAPI::Segment::tick "Segment.tick"
+///   \see \ref mu::plugins::api::Segment::tick "Segment.tick"
 ///   \since MuseScore 3.5
 //---------------------------------------------------------
 
@@ -765,5 +766,4 @@ void Cursor::setInputStateString(int string)
     const int visString = _score->staff(staffIdx())->staffType(istate.tick())->visualStringToPhys(string);
     istate.setString(visString);
 }
-}
-}
+} // namespace mu::plugins::api

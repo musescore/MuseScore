@@ -922,6 +922,7 @@ struct std::hash<mu::engraving::InstrumentTrackId>
 };
 
 #ifndef NO_QT_SUPPORT
+Q_DECLARE_METATYPE(mu::engraving::BeamMode)
 Q_DECLARE_METATYPE(mu::engraving::JumpType)
 Q_DECLARE_METATYPE(mu::engraving::MarkerType)
 Q_DECLARE_METATYPE(mu::engraving::TrillType)

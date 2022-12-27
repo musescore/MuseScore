@@ -25,8 +25,9 @@
 
 #include "libmscore/undo.h"
 
-namespace mu::engraving {
-namespace PluginAPI {
+using namespace mu::engraving;
+
+namespace mu::plugins::api {
 //---------------------------------------------------------
 //   QmlPlayEventsListAccess::append
 //---------------------------------------------------------
@@ -184,5 +185,4 @@ bool Selection::clear()
     _select->deselectAll();
     return true;
 }
-}
-}
+} // namespace mu::plugins::api

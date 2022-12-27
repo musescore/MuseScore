@@ -25,14 +25,13 @@
 #include <QQmlEngine>
 #include <QMetaEnum>
 
-#include "libmscore/masterscore.h"
+#include "libmscore/score.h"
 
 #include "log.h"
 
 using namespace mu::engraving;
 
-namespace mu::engraving {
-namespace PluginAPI {
+namespace mu::plugins::api {
 //---------------------------------------------------------
 //   wrap
 //---------------------------------------------------------
@@ -107,5 +106,4 @@ void MStyle::setValue(const QString& key, QVariant value)
         _style->set(sid, PropertyValue::fromQVariant(value, mu::engraving::MStyle::valueType(sid)));
     }
 }
-} // namespace PluginAPI
-} // namespace Ms
+} // namespace mu::plugins::api

@@ -24,8 +24,8 @@
 
 #include "log.h"
 
-namespace mu::engraving {
-namespace PluginAPI {
+using namespace mu::plugins::api;
+
 //---------------------------------------------------------
 //   Enum::Enum
 //---------------------------------------------------------
@@ -42,5 +42,3 @@ Enum::Enum(const QMetaEnum& _enum, QObject* parent)
         insert(_enum.key(i), _enum.value(i));
     }
 }
-} // namespace PluginAPI
-} // namespace Ms

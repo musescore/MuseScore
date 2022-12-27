@@ -22,10 +22,9 @@
 
 #include "excerpt.h"
 #include "score.h"
-#include "libmscore/masterscore.h"
+#include "libmscore/score.h"
 
-namespace mu::engraving {
-namespace PluginAPI {
+namespace mu::plugins::api {
 //---------------------------------------------------------
 //   Excerpt::partScore
 //---------------------------------------------------------
@@ -44,5 +43,4 @@ Excerpt* excerptWrap(mu::engraving::Excerpt* e)
 {
     return excerptWrap<Excerpt>(e);
 }
-}
-}
+} // namespace mu::plugins::api
