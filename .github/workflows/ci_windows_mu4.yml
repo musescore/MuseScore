@@ -27,16 +27,16 @@ jobs:
     runs-on: windows-2022
     steps:
     - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.9.1
+      uses: styfle/cancel-workflow-action@0.11.0
       with:
         access_token: ${{ github.token }}
     - name: Clone repository (default)
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       if: ${{ github.event_name != 'schedule' || github.event.schedule == '0 3 */1 */1 *' }}
       with:
         fetch-depth: 3
     # - name: Clone repository (<rc branch name>)
-    #   uses: actions/checkout@v2
+    #   uses: actions/checkout@v3
     #   if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' }}
     #   with:
     #     fetch-depth: 3
@@ -203,7 +203,7 @@ jobs:
         bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows 
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\ 
@@ -213,11 +213,11 @@ jobs:
     runs-on: windows-2022
     steps:
     - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.9.1
+      uses: styfle/cancel-workflow-action@0.11.0
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 3
     - name: Fetch submodules
@@ -288,7 +288,7 @@ jobs:
       shell: cmd
     - name: Upload artifacts on GitHub
       if: env.DO_BUILD == 'true'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\
