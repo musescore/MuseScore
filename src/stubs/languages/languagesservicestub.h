@@ -28,14 +28,18 @@ namespace mu::languages {
 class LanguagesServiceStub : public ILanguagesService
 {
 public:
-    ValCh<LanguagesHash> languages() const override;
-    RetCh<LanguageProgress> install(const QString& languageCode) override;
-    RetCh<LanguageProgress> update(const QString& languageCode) override;
-    Ret uninstall(const QString& languageCode) override;
+    const LanguagesHash& languages() const override;
+    Language language(const QString& languageCode) const override;
+    const Language& currentLanguage() const override;
+    async::Notification currentLanguageChanged() const override;
 
-    ValCh<Language> currentLanguage() const override;
+    bool hasPlaceholderLanguage() const override;
+    const Language& placeholderLanguage() const override;
 
-    RetCh<Language> languageChanged() override;
+    framework::Progress update(const QString& languageCode) override;
+
+    bool needRestartToApplyLanguageChange() const override;
+    async::Channel<bool> needRestartToApplyLanguageChangeChanged() const override;
 };
 }
 

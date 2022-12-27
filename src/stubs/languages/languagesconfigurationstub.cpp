@@ -43,14 +43,9 @@ QUrl LanguagesConfigurationStub::languageFileServerUrl(const QString&) const
     return QUrl();
 }
 
-ValCh<LanguagesHash> LanguagesConfigurationStub::languages() const
+io::path_t LanguagesConfigurationStub::languagesAppDataPath() const
 {
-    return ValCh<LanguagesHash>();
-}
-
-Ret LanguagesConfigurationStub::setLanguages(const LanguagesHash&)
-{
-    return make_ret(Ret::Code::NotSupported);
+    return io::path_t();
 }
 
 io::path_t LanguagesConfigurationStub::languagesUserAppDataPath() const
@@ -58,12 +53,17 @@ io::path_t LanguagesConfigurationStub::languagesUserAppDataPath() const
     return io::path_t();
 }
 
-io::paths_t LanguagesConfigurationStub::languageFilePaths(const QString&) const
+io::path_t LanguagesConfigurationStub::builtinLanguagesJsonPath() const
 {
-    return {};
+    return io::path_t();
 }
 
-io::path_t LanguagesConfigurationStub::languageArchivePath(const QString&) const
+io::path_t LanguagesConfigurationStub::builtinLanguageFilePath(const QString&, const QString&) const
+{
+    return io::path_t();
+}
+
+io::path_t LanguagesConfigurationStub::userLanguageFilePath(const QString&, const QString&) const
 {
     return io::path_t();
 }
