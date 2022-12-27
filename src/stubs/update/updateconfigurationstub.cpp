@@ -28,6 +28,15 @@ bool UpdateConfigurationStub::isAppUpdatable() const
     return false;
 }
 
+bool UpdateConfigurationStub::isTestingMode() const
+{
+    return false;
+}
+
+void UpdateConfigurationStub::setIsTestingMode(bool)
+{
+}
+
 bool UpdateConfigurationStub::needCheckForUpdate() const
 {
     return false;
@@ -66,7 +75,7 @@ std::string UpdateConfigurationStub::museScorePrivacyPolicyUrl() const
     return "";
 }
 
-mu::io::path_t UpdateConfigurationStub::userAppDataPath() const
+mu::io::path_t UpdateConfigurationStub::updateDataPath() const
 {
     return "";
 }

@@ -23,15 +23,14 @@
 
 using namespace mu::update;
 
-mu::async::Promise<mu::RetVal<ReleaseInfo> > UpdateServiceStub::checkForUpdate()
+mu::RetVal<ReleaseInfo> UpdateServiceStub::checkForUpdate()
 {
-    return async::Promise<RetVal<ReleaseInfo> >([](auto, auto reject){
-        return reject(0, "");
-    });
+    return make_ret(Ret::Code::NotSupported);
 }
 
-void UpdateServiceStub::update()
+mu::RetVal<mu::io::path_t> UpdateServiceStub::downloadRelease()
 {
+    return make_ret(Ret::Code::NotSupported);
 }
 
 void UpdateServiceStub::cancelUpdate()

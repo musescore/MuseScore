@@ -28,9 +28,9 @@ namespace mu::update {
 class UpdateServiceStub : public IUpdateService
 {
 public:
-    async::Promise<mu::RetVal<ReleaseInfo> > checkForUpdate() override;
+    mu::RetVal<ReleaseInfo> checkForUpdate() override;
 
-    void update() override;
+    RetVal<io::path_t> downloadRelease() override;
     void cancelUpdate() override;
     framework::Progress updateProgress() override;
 };
