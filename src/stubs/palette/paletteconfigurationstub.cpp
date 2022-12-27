@@ -23,21 +23,35 @@
 
 using namespace mu::palette;
 
-double PaletteConfigurationStub::paletteScaling() const
+double PaletteConfigurationStub::paletteSpatium() const
 {
     return 0.f;
+}
+
+double PaletteConfigurationStub::paletteScaling() const
+{
+    return 1.f;
 }
 
 void PaletteConfigurationStub::setPaletteScaling(double)
 {
 }
 
-bool PaletteConfigurationStub::isSinglePalette() const
+mu::ValCh<bool> PaletteConfigurationStub::isSinglePalette() const
 {
-    return false;
+    return mu::ValCh<bool>();
 }
 
 void PaletteConfigurationStub::setIsSinglePalette(bool)
+{
+}
+
+mu::ValCh<bool> PaletteConfigurationStub::isSingleClickToOpenPalette() const
+{
+    return mu::ValCh<bool>();
+}
+
+void PaletteConfigurationStub::setIsSingleClickToOpenPalette(bool)
 {
 }
 
