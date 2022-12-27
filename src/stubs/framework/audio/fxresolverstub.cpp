@@ -19,37 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "synthesizersregisterstub.h"
-
-#include "synthesizerstub.h"
+#include "fxresolverstub.h"
 
 using namespace mu::audio;
-using namespace mu::audio::synth;
+using namespace mu::audio::fx;
 
-void SynthesizersRegisterStub::registerSynthesizer(const SynthName&, ISynthesizerPtr)
-{
-}
-
-ISynthesizerPtr SynthesizersRegisterStub::synthesizer(const SynthName&) const
-{
-    return std::make_shared<SynthesizerStub>();
-}
-
-std::vector<ISynthesizerPtr> SynthesizersRegisterStub::synthesizers() const
+std::vector<IFxProcessorPtr> FxResolverStub::resolveMasterFxList(const AudioFxChain&)
 {
     return {};
 }
 
-mu::async::Channel<ISynthesizerPtr> SynthesizersRegisterStub::synthesizerAdded() const
+std::vector<IFxProcessorPtr> FxResolverStub::resolveFxList(const TrackId, const AudioFxChain&)
 {
-    return mu::async::Channel<ISynthesizerPtr>();
+    return {};
 }
 
-void SynthesizersRegisterStub::setDefaultSynthesizer(const SynthName&)
+AudioResourceMetaList FxResolverStub::resolveAvailableResources() const
+{
+    return {};
+}
+
+void FxResolverStub::registerResolver(const AudioFxType, IResolverPtr)
 {
 }
 
-ISynthesizerPtr SynthesizersRegisterStub::defaultSynthesizer() const
+void FxResolverStub::clearAllFx()
 {
-    return std::make_shared<SynthesizerStub>();
 }

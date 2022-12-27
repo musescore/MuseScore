@@ -19,23 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_SYNTHESIZERSREGISTERSTUB_H
-#define MU_AUDIO_SYNTHESIZERSREGISTERSTUB_H
+#include "soundfontrepositorystub.h"
 
-#include "audio/isynthesizersregister.h"
+using namespace mu::audio;
 
-namespace mu::audio::synth {
-class SynthesizersRegisterStub : public ISynthesizersRegister
+synth::SoundFontPaths SoundFontRepositoryStub::soundFontPaths() const
 {
-public:
-    void registerSynthesizer(const SynthName& name, ISynthesizerPtr synthesizer) override;
-    ISynthesizerPtr synthesizer(const SynthName& name) const override;
-    std::vector<ISynthesizerPtr> synthesizers() const override;
-    async::Channel<ISynthesizerPtr> synthesizerAdded() const override;
-
-    void setDefaultSynthesizer(const SynthName& name) override;
-    ISynthesizerPtr defaultSynthesizer() const override;
-};
+    return {};
 }
 
-#endif // MU_AUDIO_SYNTHESIZERSREGISTERSTUB_H
+mu::async::Notification SoundFontRepositoryStub::soundFontPathsChanged() const
+{
+    return async::Notification();
+}
+
+mu::Ret SoundFontRepositoryStub::addSoundFont(const synth::SoundFontPath&)
+{
+    return make_ret(Ret::Code::NotSupported);
+}

@@ -19,21 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "soundfontsproviderstub.h"
+#ifndef MU_AUDIO_FXRESOLVERSTUB_H
+#define MU_AUDIO_FXRESOLVERSTUB_H
 
-using namespace mu::audio;
+#include "audio/ifxresolver.h"
 
-std::vector<mu::io::path_t> synth::SoundFontsProviderStub::soundFontPathsForSynth(const synth::SynthName&) const
+namespace mu::audio::fx {
+class FxResolverStub : public IFxResolver
 {
-    return {};
+public:
+    std::vector<IFxProcessorPtr> resolveMasterFxList(const AudioFxChain& fxChain) override;
+    std::vector<IFxProcessorPtr> resolveFxList(const TrackId trackId, const AudioFxChain& fxChain) override;
+    AudioResourceMetaList resolveAvailableResources() const override;
+    void registerResolver(const AudioFxType type, IResolverPtr resolver) override;
+    void clearAllFx() override;
+};
 }
 
-mu::async::Notification synth::SoundFontsProviderStub::soundFontPathsForSynthChanged(const synth::SynthName&) const
-{
-    return mu::async::Notification();
-}
-
-std::vector<mu::io::path_t> synth::SoundFontsProviderStub::soundFontPaths(synth::SoundFontFormats) const
-{
-    return {};
-}
+#endif // MU_AUDIO_FXRESOLVERSTUB_H

@@ -23,6 +23,10 @@
 
 using namespace mu::audio;
 
+void AudioDriverStub::init()
+{
+}
+
 std::string AudioDriverStub::name() const
 {
     return std::string();
@@ -52,7 +56,17 @@ bool AudioDriverStub::selectOutputDevice(const std::string&)
     return false;
 }
 
-std::vector<std::string> AudioDriverStub::availableOutputDevices() const
+bool AudioDriverStub::resetToDefaultOutputDevice()
+{
+    return false;
+}
+
+mu::async::Notification AudioDriverStub::outputDeviceChanged() const
+{
+    return async::Notification();
+}
+
+AudioDeviceList AudioDriverStub::availableOutputDevices() const
 {
     return {};
 }
@@ -60,6 +74,26 @@ std::vector<std::string> AudioDriverStub::availableOutputDevices() const
 mu::async::Notification AudioDriverStub::availableOutputDevicesChanged() const
 {
     return async::Notification();
+}
+
+unsigned int AudioDriverStub::outputDeviceBufferSize() const
+{
+    return 0;
+}
+
+bool AudioDriverStub::setOutputDeviceBufferSize(unsigned int)
+{
+    return false;
+}
+
+mu::async::Notification AudioDriverStub::outputDeviceBufferSizeChanged() const
+{
+    return async::Notification();
+}
+
+std::vector<unsigned int> AudioDriverStub::availableOutputDeviceBufferSizes() const
+{
+    return {};
 }
 
 void AudioDriverStub::resume()
