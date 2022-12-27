@@ -26,8 +26,9 @@
 
 #include "audioconfigurationstub.h"
 #include "audiodriverstub.h"
-#include "synthesizersregisterstub.h"
-#include "soundfontsproviderstub.h"
+#include "synthresolverstub.h"
+#include "fxresolverstub.h"
+#include "soundfontrepositorystub.h"
 
 using namespace mu::modularity;
 using namespace mu::audio;
@@ -47,8 +48,10 @@ void AudioStubModule::registerExports()
     ioc()->registerExport<IAudioConfiguration>(moduleName(), new AudioConfigurationStub());
     ioc()->registerExport<IAudioDriver>(moduleName(), new AudioDriverStub());
 
-    ioc()->registerExport<synth::ISynthesizersRegister>(moduleName(), new synth::SynthesizersRegisterStub());
-    ioc()->registerExport<synth::ISoundFontsProvider>(moduleName(), new synth::SoundFontsProviderStub());
+    ioc()->registerExport<synth::ISynthResolver>(moduleName(), new synth::SynthResolverStub());
+    ioc()->registerExport<fx::IFxResolver>(moduleName(), new fx::FxResolverStub());
+
+    ioc()->registerExport<ISoundFontRepository>(moduleName(), new SoundFontRepositoryStub());
 }
 
 void AudioStubModule::registerResources()

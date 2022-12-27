@@ -23,39 +23,29 @@
 
 using namespace mu::audio;
 using namespace mu::audio::synth;
-using namespace mu;
-using namespace mu::audio;
+
+SynthesizerStub::SynthesizerStub(const AudioSourceParams& params)
+    : AbstractSynthesizer(params)
+{
+}
 
 void SynthesizerStub::setSampleRate(unsigned int)
 {
 }
 
-unsigned int SynthesizerStub::streamCount() const
+unsigned int SynthesizerStub::audioChannelsCount() const
+{
+    return 2;
+}
+
+mu::async::Channel<unsigned int> SynthesizerStub::audioChannelsCountChanged() const
+{
+    return async::Channel<unsigned int>();
+}
+
+samples_t SynthesizerStub::process(float* buffer, samples_t samplesPerChannel)
 {
     return 0;
-}
-
-mu::async::Channel<unsigned int> SynthesizerStub::streamsCountChanged() const
-{
-    return mu::async::Channel<unsigned int>();
-}
-
-void SynthesizerStub::forward(unsigned int)
-{
-}
-
-const float* SynthesizerStub::data() const
-{
-    return new float();
-}
-
-void SynthesizerStub::setBufferSize(unsigned int)
-{
-}
-
-bool SynthesizerStub::isValid() const
-{
-    return false;
 }
 
 std::string SynthesizerStub::name() const
@@ -63,24 +53,27 @@ std::string SynthesizerStub::name() const
     return std::string();
 }
 
-SoundFontFormats SynthesizerStub::soundFontFormats() const
+AudioSourceType SynthesizerStub::type() const
 {
-    return {};
+    return AudioSourceType::Undefined;
 }
 
-Ret SynthesizerStub::init(float)
+msecs_t SynthesizerStub::playbackPosition() const
 {
-    return make_ret(Ret::Code::NotSupported);
+    return 0;
 }
 
-Ret SynthesizerStub::addSoundFonts(const std::vector<io::path_t>&)
+void SynthesizerStub::setPlaybackPosition(const msecs_t)
 {
-    return make_ret(Ret::Code::NotSupported);
 }
 
-Ret SynthesizerStub::removeSoundFonts()
+void SynthesizerStub::flushSound()
 {
-    return make_ret(Ret::Code::NotSupported);
+}
+
+bool SynthesizerStub::isValid() const
+{
+    return false;
 }
 
 bool SynthesizerStub::isActive() const
@@ -92,43 +85,10 @@ void SynthesizerStub::setIsActive(bool)
 {
 }
 
-Ret SynthesizerStub::setupChannels(const std::vector<midi::Event>&)
-{
-    return make_ret(Ret::Code::NotSupported);
-}
-
-bool SynthesizerStub::handleEvent(const midi::Event&)
-{
-    return false;
-}
-
-void SynthesizerStub::writeBuf(float*, unsigned int)
+void SynthesizerStub::setupSound(const mpe::PlaybackSetupData&)
 {
 }
 
-void SynthesizerStub::allSoundsOff()
+void SynthesizerStub::setupEvents(const mpe::PlaybackData&)
 {
-}
-
-void SynthesizerStub::flushSound()
-{
-}
-
-void SynthesizerStub::channelSoundsOff(midi::channel_t)
-{
-}
-
-bool SynthesizerStub::channelVolume(midi::channel_t, float)
-{
-    return false;
-}
-
-bool SynthesizerStub::channelBalance(midi::channel_t, float)
-{
-    return false;
-}
-
-bool SynthesizerStub::channelPitch(midi::channel_t, int16_t)
-{
-    return false;
 }
