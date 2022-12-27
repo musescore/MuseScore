@@ -24,7 +24,7 @@ on:
 
 jobs:
   build_mu4_x64:
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.9.1
@@ -210,7 +210,7 @@ jobs:
   
 
   build_portable:
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.9.1
