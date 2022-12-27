@@ -34,10 +34,47 @@ public:
     bool isPlaying() const override;
     async::Notification isPlayingChanged() const override;
 
-    float playbackPosition() const override;
-    async::Channel<uint32_t> midiTickPlayed() const override;
+    void seek(const midi::tick_t tick) override;
+    void seek(const audio::msecs_t msecs) override;
+    void reset() override;
 
-    void playElement(const notation::EngravingItem* e) override;
+    async::Notification playbackPositionChanged() const override;
+    async::Channel<uint32_t> midiTickPlayed() const override;
+    float playbackPositionInSeconds() const override;
+
+    audio::TrackSequenceId currentTrackSequenceId() const override;
+    async::Notification currentTrackSequenceIdChanged() const override;
+
+    const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
+
+    async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackAdded() const override;
+    async::Channel<audio::TrackId, engraving::InstrumentTrackId> trackRemoved() const override;
+
+    void playElements(const std::vector<const notation::EngravingItem*>& elements) override;
+    void playMetronome(int tick) override;
+    void seekElement(const notation::EngravingItem* element) override;
+
+    bool actionChecked(const actions::ActionCode& actionCode) const override;
+    async::Channel<actions::ActionCode> actionCheckedChanged() const override;
+
+    QTime totalPlayTime() const override;
+    async::Notification totalPlayTimeChanged() const override;
+
+    notation::Tempo currentTempo() const override;
+    async::Notification currentTempoChanged() const override;
+
+    notation::MeasureBeat currentBeat() const override;
+    audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const override;
+
+    double tempoMultiplier() const override;
+    void setTempoMultiplier(double multiplier) override;
+
+    framework::Progress loadingProgress() const override;
+
+    void applyProfile(const SoundProfileName& profileName) override;
+
+    void setNotation(notation::INotationPtr notation) override;
+    void setIsExportingAudio(bool exporting) override;
 };
 }
 
