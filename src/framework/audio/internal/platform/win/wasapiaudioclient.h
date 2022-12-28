@@ -29,7 +29,7 @@ namespace winrt {
 struct WasapiAudioClient : implements<WasapiAudioClient, IActivateAudioInterfaceCompletionHandler>
 {
 public:
-    WasapiAudioClient(HANDLE clientStartedEvent, HANDLE clientStoppedEvent);
+    WasapiAudioClient(HANDLE clientStartedEvent, HANDLE clientFailedToStartEvent, HANDLE clientStoppedEvent);
     ~WasapiAudioClient();
 
     void setHardWareOffload(bool value);
@@ -99,6 +99,7 @@ private:
     DeviceState m_deviceState = DeviceState::Uninitialized;
     SampleRequestCallback m_sampleRequestCallback;
     HANDLE m_clientStartedEvent;
+    HANDLE m_clientFailedToStartEvent;
     HANDLE m_clientStoppedEvent;
 };
 }
