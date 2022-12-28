@@ -29,8 +29,9 @@ using namespace winrt::Windows::Foundation;
 using namespace winrt::Windows::Media::Devices;
 using namespace winrt::Windows::Devices::Enumeration;
 
-WasapiAudioClient::WasapiAudioClient(HANDLE clientStartedEvent, HANDLE clientStoppedEvent)
-    : m_clientStartedEvent(clientStartedEvent), m_clientStoppedEvent(clientStoppedEvent)
+WasapiAudioClient::WasapiAudioClient(HANDLE clientStartedEvent, HANDLE clientFailedToStartEvent, HANDLE clientStoppedEvent)
+    : m_clientStartedEvent(clientStartedEvent), m_clientFailedToStartEvent(clientFailedToStartEvent), m_clientStoppedEvent(
+        clientStoppedEvent)
 {
     check_hresult(MFStartup(MF_VERSION, MFSTARTUP_LITE));
 }
@@ -218,6 +219,8 @@ HRESULT WasapiAudioClient::ActivateCompleted(IActivateAudioInterfaceAsyncOperati
         m_audioRenderClient = nullptr;
         m_sampleReadyAsyncResult = nullptr;
 
+        SetEvent(m_clientFailedToStartEvent);
+
         // Must return S_OK even on failure.
         return S_OK;
     }
@@ -370,6 +373,8 @@ void WasapiAudioClient::startPlayback() noexcept
     } catch (...) {
         hresult error = to_hresult();
         setStateAndNotify(DeviceState::Error, error);
+
+        SetEvent(m_clientFailedToStartEvent);
     }
 }
 
@@ -398,6 +403,9 @@ HRESULT WasapiAudioClient::onStartPlayback(IMFAsyncResult*) noexcept
         return S_OK;
     } catch (...) {
         setStateAndNotify(DeviceState::Error, to_hresult());
+
+        SetEvent(m_clientFailedToStartEvent);
+
         // Must return S_OK.
         return S_OK;
     }
