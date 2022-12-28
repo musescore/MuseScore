@@ -84,9 +84,6 @@ getCrossPlatformDependencies() {
   copyLib libQt5Sql.so.5
   copyLib libQt5Svg.so.5
   copyLib libQt5WebChannel.so.5
-  copyLib libQt5WebEngine.so.5
-  copyLib libQt5WebEngineCore.so.5
-  copyLib libQt5WebEngineWidgets.so.5
   copyLib libQt5Widgets.so.5
   copyLib libQt5XmlPatterns.so.5
   copyLib libQt5Xml.so.5
