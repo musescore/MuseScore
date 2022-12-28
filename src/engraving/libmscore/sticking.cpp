@@ -80,15 +80,6 @@ bool Sticking::isEditAllowed(EditData& ed) const
     return TextBase::isEditAllowed(ed);
 }
 
-bool Sticking::edit(EditData& ed)
-{
-    if (!isEditAllowed(ed)) {
-        return false;
-    }
-
-    return TextBase::edit(ed);
-}
-
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
