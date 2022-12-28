@@ -7,4 +7,4 @@ When changes have been made to this spreadsheet, please run `update_instruments_
 to update the following files: 
 - `instruments.xml` (used by MuseScore, to load the instruments);
 - `instrumentsxml.h` (a fake header file used to generate translatable strings from; 
-  see also `/build/gen-instruments-projectfile` and `/build/ci/run_lupdate.sh`).
+  see also `/tools/translations/run_lupdate.sh`).
