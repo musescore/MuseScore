@@ -351,7 +351,8 @@ bool TextBase::isEditAllowed(EditData& ed) const
         }
     }
 
-    return !ed.s.empty();
+    // At least on non-macOS, sometimes ed.s is not empty even if Ctrl is pressed
+    return !ctrlPressed && !ed.s.empty();
 }
 
 //---------------------------------------------------------
