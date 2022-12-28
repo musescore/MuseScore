@@ -507,28 +507,10 @@ public:
     using EngravingObject::undoChangeProperty;
 };
 
-// allow shortcut key controller to handle
 inline bool isTextNavigationKey(int key, KeyboardModifiers modifiers)
 {
-    if (modifiers & TextEditingControlModifier) {
-        static const std::set<int> controlNavigationKeys {
-            Key_Left,
-            Key_Right,
-            Key_Up,
-            Key_Down,
-            Key_Home,
-            Key_End
-        };
-
-        return controlNavigationKeys.find(key) != controlNavigationKeys.end();
-    }
-
-    static const std::set<int> navigationKeys {
-        Key_Space,
-        Key_Tab
-    };
-
-    return navigationKeys.find(key) != navigationKeys.end();
+    // space + TextEditingControlModifier = insert nonbreaking space, so that's *not* a navigation key
+    return (key == Key_Space && modifiers != TextEditingControlModifier) || key == Key_Tab;
 }
 } // namespace mu::engraving
 
