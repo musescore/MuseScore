@@ -44,6 +44,7 @@ inline REFERENCE_TIME samplesToRefTime(int numSamples, double sampleRate) noexce
 
 struct WasapiData {
     HANDLE clientStartedEvent;
+    HANDLE clientFailedToStartEvent;
     HANDLE clientStoppedEvent;
 
     winrt::com_ptr<winrt::WasapiAudioClient> wasapiClient;
@@ -54,6 +55,7 @@ static WasapiData s_data;
 WasapiAudioDriver::WasapiAudioDriver()
 {
     s_data.clientStartedEvent = CreateEvent(NULL, FALSE, FALSE, L"WASAPI_Client_Started");
+    s_data.clientFailedToStartEvent = CreateEvent(NULL, FALSE, FALSE, L"WASAPI_Client_Failed_To_Start");
     s_data.clientStoppedEvent = CreateEvent(NULL, FALSE, FALSE, L"WASAPI_Client_Stopped");
 
     m_devicesListener.startWithCallback([this]() {
@@ -77,7 +79,8 @@ std::string WasapiAudioDriver::name() const
 bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
     if (!s_data.wasapiClient.get()) {
-        s_data.wasapiClient = make_self<WasapiAudioClient>(s_data.clientStartedEvent, s_data.clientStoppedEvent);
+        s_data.wasapiClient
+            = make_self<WasapiAudioClient>(s_data.clientStartedEvent, s_data.clientFailedToStartEvent, s_data.clientStoppedEvent);
     }
 
     m_desiredSpec = spec;
@@ -102,7 +105,15 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
 
     s_data.wasapiClient->asyncInitializeAudioDevice(deviceId);
 
-    WaitForSingleObject(s_data.clientStartedEvent, INFINITE);
+    static constexpr DWORD handleCount = 2;
+    const HANDLE handles[handleCount] = { s_data.clientStartedEvent, s_data.clientFailedToStartEvent };
+
+    DWORD waitResult = WaitForMultipleObjects(handleCount, handles, false, INFINITE);
+    if (waitResult != WAIT_OBJECT_0) {
+        // Either the event was the second event (namely s_data.clientFailedToStartEvent)
+        // Or some wait error occurred
+        return false;
+    }
 
     m_activeSpec = m_desiredSpec;
     m_activeSpec.sampleRate = s_data.wasapiClient->sampleRate();
