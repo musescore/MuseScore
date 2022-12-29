@@ -141,7 +141,6 @@ void ByteArray::reserve(size_t nsize)
 
     detach();
     m_data->reserve(nsize + 1);
-    m_data->operator [](nsize) = 0;
 }
 
 void ByteArray::resize(size_t nsize)
