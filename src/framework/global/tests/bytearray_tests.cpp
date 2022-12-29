@@ -189,4 +189,11 @@ TEST_F(Global_Types_ByteArrayTests, Modification)
     //! CHECK (data beyond the first 4 positions is garbage)
     const uint8_t* d12 = ba10.constData();
     EXPECT_EQ(std::memcmp(d12, &ref11[0], 4), 0);
+
+    //! DO clear
+    ba10.clear();
+
+    //! CHECK (should be empty now)
+    EXPECT_EQ(ba10.size(), 0);
+    EXPECT_TRUE(ba10.empty());
 }
