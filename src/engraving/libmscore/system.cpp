@@ -274,7 +274,7 @@ double System::instrumentNamesWidth()
 
     for (staff_idx_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
         const SysStaff* staff = this->staff(staffIdx);
-        if (!staff) {
+        if (!staff || !staff->show()) { // Fix for #15638: ignore hidden staves when calculating instrument names width.
             continue;
         }
 
