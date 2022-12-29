@@ -176,7 +176,24 @@ TEST_F(Global_Types_ByteArrayTests, Modification)
 
     //! CHECK
     EXPECT_EQ(ba10.size(), 8);
-    //! CHECK (data more pos 4 is trash)
+    //! CHECK (data beyond the first 4 positions is garbage)
     const uint8_t* d11 = ba10.constData();
     EXPECT_EQ(std::memcmp(d11, &ref11[0], 4), 0);
+
+    //! DO reserve
+    size_t sizeBeforeReserving = ba10.size();
+    ba10.reserve(10);
+
+    //! CHECK (reserving should only affect capacity, not size)
+    EXPECT_EQ(ba10.size(), sizeBeforeReserving);
+    //! CHECK (data beyond the first 4 positions is garbage)
+    const uint8_t* d12 = ba10.constData();
+    EXPECT_EQ(std::memcmp(d12, &ref11[0], 4), 0);
+
+    //! DO clear
+    ba10.clear();
+
+    //! CHECK (should be empty now)
+    EXPECT_EQ(ba10.size(), 0);
+    EXPECT_TRUE(ba10.empty());
 }
