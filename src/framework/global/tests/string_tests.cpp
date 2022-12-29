@@ -510,6 +510,45 @@ TEST_F(Global_Types_StringTests, String_Args)
         //! CHECK
         EXPECT_EQ(newStr, u"100%100% 100%%100%%");
     }
+
+    {
+        //! GIVEN Some Strings containing a %1 and starting with a number
+        String str = u"1-%1";
+        String str2 = u"2-%1";
+        //! DO
+        String newStr = str.arg(6);
+        String newStr2 = str2.arg(6);
+        //! CHECK
+        EXPECT_EQ(newStr, u"1-6");
+        EXPECT_EQ(newStr2, u"2-6");
+    }
+
+    {
+        //! GIVEN Some String containing a %1 and %2 with chained calls to .arg
+        String str = u"%1-%2";
+        //! DO
+        String newStr = str.arg(2).arg(6);
+        //! CHECK
+        EXPECT_EQ(newStr, u"2-6");
+    }
+
+    {
+        //! GIVEN Some String containing a %1, %2, ..., %9 except %8, given not enough args
+        String str = u"%1%3%2%4%9%7%6%5";
+        //! DO
+        String newStr = str.arg(u"a", u"b", u"c", u"d", u"e");
+        //! CHECK
+        EXPECT_EQ(newStr, u"acbd%4%2%1e");
+    }
+
+    {
+        //! GIVEN Some String containing a %1, %2, ..., %9 except %8, given not enough args in chained calls to .arg
+        String str = u"%1%3%2%4%9%7%6%5";
+        //! DO
+        String newStr = str.arg(u"a").arg(u"b", u"c").arg(u"d").arg(u"e");
+        //! CHECK
+        EXPECT_EQ(newStr, u"acbd%4%2%1e");
+    }
 }
 
 TEST_F(Global_Types_StringTests, String_Number)
