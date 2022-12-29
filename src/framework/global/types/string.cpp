@@ -842,46 +842,46 @@ static constexpr bool is1To9(char16_t chr)
 
 void String::doArgs(std::u16string& out, const std::vector<std::u16string_view>& args) const
 {
+    struct Part {
+        std::u16string_view substr;
+        size_t argIdxToInsertAfter = mu::nidx;
+    };
+
     const std::u16string& str = constStr();
     const std::u16string_view view(str);
-    std::vector<std::u16string_view> parts;
+    std::vector<Part> parts;
 
     {
-        std::size_t current = view.find(u'%'), previousCut = 0, previousPercent = 0;
+        std::size_t currentPercentIdx = view.find(u'%'), partStartIdx = 0;
 
-        while (current != std::string::npos) {
-            std::u16string_view sub = view.substr(previousCut, current - previousCut);
-            std::size_t next = current + 1;
-            if (next < view.size() && is1To9(view.at(next))) {
-                parts.push_back(std::move(sub));
-                previousCut = next;
+        while (currentPercentIdx != std::string::npos) {
+            std::u16string_view sub = view.substr(partStartIdx, currentPercentIdx - partStartIdx);
+            std::size_t nextCharIdx = currentPercentIdx + 1;
+            if (nextCharIdx < view.size() && is1To9(view.at(nextCharIdx))) {
+                size_t argIdx = view.at(nextCharIdx) - u'1';
+                parts.push_back({ std::move(sub), argIdx });
+                partStartIdx = nextCharIdx + 1;
             }
-            previousPercent = next;
-            current = view.find(u'%', previousPercent);
+            currentPercentIdx = view.find(u'%', nextCharIdx);
         }
 
-        std::u16string_view sub = view.substr(previousCut);
-        parts.push_back(std::move(sub));
+        std::u16string_view sub = view.substr(partStartIdx);
+        parts.push_back({ std::move(sub) });
     }
 
     {
-        for (const std::u16string_view& p : parts) {
-            if (p.empty()) {
-                continue;
+        for (const auto& [substr, argIdxToInsertAfter] : parts) {
+            if (!substr.empty()) {
+                out += substr;
             }
 
-            char16_t first = p.at(0);
-            if (!is1To9(first)) {
-                out += p;
-            } else {
-                size_t idx = first - u'1';
-                if (idx < args.size()) {
-                    out += args.at(idx);
-                    out.append(p.cbegin() + 1, p.cend());
+            if (argIdxToInsertAfter != mu::nidx) {
+                if (argIdxToInsertAfter < args.size()) {
+                    out += args.at(argIdxToInsertAfter);
                 } else {
+                    // When there are 5 args, %6 becomes %1
                     out.push_back(u'%');
-                    out.push_back(first - 1);
-                    out.append(p.cbegin() + 1, p.cend());
+                    out.push_back(u'1' + argIdxToInsertAfter - args.size());
                 }
             }
         }
