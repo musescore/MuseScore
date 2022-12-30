@@ -571,19 +571,94 @@ void WasapiAudioClient::setStateAndNotify(const DeviceState newState, hresult re
     std::string errMsg;
 
     switch (resultCode) {
-    case AUDCLNT_E_ENDPOINT_OFFLOAD_NOT_CAPABLE:
-        errMsg = "ERROR: Endpoint Does Not Support HW Offload";
+    case AUDCLNT_E_NOT_INITIALIZED: errMsg = "AUDCLNT_E_NOT_INITIALIZED";
         break;
-
-    case AUDCLNT_E_RESOURCES_INVALIDATED:
-        errMsg = "ERROR: Endpoint Lost Access To Resources";
+    case AUDCLNT_E_ALREADY_INITIALIZED: errMsg = "AUDCLNT_E_ALREADY_INITIALIZED";
+        break;
+    case AUDCLNT_E_WRONG_ENDPOINT_TYPE: errMsg = "AUDCLNT_E_WRONG_ENDPOINT_TYPE";
+        break;
+    case AUDCLNT_E_DEVICE_INVALIDATED: errMsg = "AUDCLNT_E_DEVICE_INVALIDATED";
+        break;
+    case AUDCLNT_E_NOT_STOPPED: errMsg = "AUDCLNT_E_NOT_STOPPED";
+        break;
+    case AUDCLNT_E_BUFFER_TOO_LARGE: errMsg = "AUDCLNT_E_BUFFER_TOO_LARGE";
+        break;
+    case AUDCLNT_E_OUT_OF_ORDER: errMsg = "AUDCLNT_E_OUT_OF_ORDER";
+        break;
+    case AUDCLNT_E_UNSUPPORTED_FORMAT: errMsg = "AUDCLNT_E_UNSUPPORTED_FORMAT";
+        break;
+    case AUDCLNT_E_INVALID_SIZE: errMsg = "AUDCLNT_E_INVALID_SIZE";
+        break;
+    case AUDCLNT_E_DEVICE_IN_USE: errMsg = "AUDCLNT_E_DEVICE_IN_USE";
+        break;
+    case AUDCLNT_E_BUFFER_OPERATION_PENDING: errMsg = "AUDCLNT_E_BUFFER_OPERATION_PENDING";
+        break;
+    case AUDCLNT_E_THREAD_NOT_REGISTERED: errMsg = "AUDCLNT_E_THREAD_NOT_REGISTERED";
+        break;
+    case AUDCLNT_E_EXCLUSIVE_MODE_NOT_ALLOWED: errMsg = "AUDCLNT_E_EXCLUSIVE_MODE_NOT_ALLOWED";
+        break;
+    case AUDCLNT_E_ENDPOINT_CREATE_FAILED: errMsg = "AUDCLNT_E_ENDPOINT_CREATE_FAILED";
+        break;
+    case AUDCLNT_E_SERVICE_NOT_RUNNING: errMsg = "AUDCLNT_E_SERVICE_NOT_RUNNING";
+        break;
+    case AUDCLNT_E_EVENTHANDLE_NOT_EXPECTED: errMsg = "AUDCLNT_E_EVENTHANDLE_NOT_EXPECTED";
+        break;
+    case AUDCLNT_E_EXCLUSIVE_MODE_ONLY: errMsg = "AUDCLNT_E_EXCLUSIVE_MODE_ONLY";
+        break;
+    case AUDCLNT_E_BUFDURATION_PERIOD_NOT_EQUAL: errMsg = "AUDCLNT_E_BUFDURATION_PERIOD_NOT_EQUAL";
+        break;
+    case AUDCLNT_E_EVENTHANDLE_NOT_SET: errMsg = "AUDCLNT_E_EVENTHANDLE_NOT_SET";
+        break;
+    case AUDCLNT_E_INCORRECT_BUFFER_SIZE: errMsg = "AUDCLNT_E_INCORRECT_BUFFER_SIZE";
+        break;
+    case AUDCLNT_E_BUFFER_SIZE_ERROR: errMsg = "AUDCLNT_E_BUFFER_SIZE_ERROR";
+        break;
+    case AUDCLNT_E_CPUUSAGE_EXCEEDED: errMsg = "AUDCLNT_E_CPUUSAGE_EXCEEDED";
+        break;
+    case AUDCLNT_E_BUFFER_ERROR: errMsg = "AUDCLNT_E_BUFFER_ERROR";
+        break;
+    case AUDCLNT_E_BUFFER_SIZE_NOT_ALIGNED: errMsg = "AUDCLNT_E_BUFFER_SIZE_NOT_ALIGNED";
+        break;
+    case AUDCLNT_E_INVALID_DEVICE_PERIOD: errMsg = "AUDCLNT_E_INVALID_DEVICE_PERIOD";
+        break;
+    case AUDCLNT_E_INVALID_STREAM_FLAG: errMsg = "AUDCLNT_E_INVALID_STREAM_FLAG";
+        break;
+    case AUDCLNT_E_ENDPOINT_OFFLOAD_NOT_CAPABLE: errMsg = "AUDCLNT_E_ENDPOINT_OFFLOAD_NOT_CAPABLE";
+        break;
+    case AUDCLNT_E_OUT_OF_OFFLOAD_RESOURCES: errMsg = "AUDCLNT_E_OUT_OF_OFFLOAD_RESOURCES";
+        break;
+    case AUDCLNT_E_OFFLOAD_MODE_ONLY: errMsg = "AUDCLNT_E_OFFLOAD_MODE_ONLY";
+        break;
+    case AUDCLNT_E_NONOFFLOAD_MODE_ONLY: errMsg = "AUDCLNT_E_NONOFFLOAD_MODE_ONLY";
+        break;
+    case AUDCLNT_E_RESOURCES_INVALIDATED: errMsg = "AUDCLNT_E_RESOURCES_INVALIDATED";
+        break;
+    case AUDCLNT_E_RAW_MODE_UNSUPPORTED: errMsg = "AUDCLNT_E_RAW_MODE_UNSUPPORTED";
+        break;
+    case AUDCLNT_E_ENGINE_PERIODICITY_LOCKED: errMsg = "AUDCLNT_E_ENGINE_PERIODICITY_LOCKED";
+        break;
+    case AUDCLNT_E_ENGINE_FORMAT_LOCKED: errMsg = "AUDCLNT_E_ENGINE_FORMAT_LOCKED";
+        break;
+    case AUDCLNT_E_HEADTRACKING_ENABLED: errMsg = "AUDCLNT_E_HEADTRACKING_ENABLED";
+        break;
+    case AUDCLNT_E_HEADTRACKING_UNSUPPORTED: errMsg = "AUDCLNT_E_HEADTRACKING_UNSUPPORTED";
+        break;
+    case AUDCLNT_E_EFFECT_NOT_AVAILABLE: errMsg = "AUDCLNT_E_EFFECT_NOT_AVAILABLE";
+        break;
+    case AUDCLNT_E_EFFECT_STATE_READ_ONLY: errMsg = "AUDCLNT_E_EFFECT_STATE_READ_ONLY";
+        break;
+    case AUDCLNT_S_BUFFER_EMPTY: errMsg = "AUDCLNT_S_BUFFER_EMPTY";
+        break;
+    case AUDCLNT_S_THREAD_ALREADY_REGISTERED: errMsg = "AUDCLNT_S_THREAD_ALREADY_REGISTERED";
+        break;
+    case AUDCLNT_S_POSITION_STALLED: errMsg = "AUDCLNT_S_POSITION_STALLED";
         break;
 
     case S_OK:
         break;
 
     default:
-        errMsg = "ERROR: " + to_string(hresult_error(resultCode).message());
+        errMsg = "ERROR: " + std::to_string(resultCode) + " " + to_string(hresult_error(resultCode).message());
         break;
     }
 
