@@ -34,7 +34,7 @@ ListItemBlank {
 
     property int currentPartIndex: -1
 
-    property bool isCustom: false
+    property bool isInited: false
 
     property int sideMargin: 0
 
@@ -163,7 +163,7 @@ ListItemBlank {
                 var operations = [ { "id": "duplicate", "title": qsTrc("notation", "Duplicate") },
                                    { "id": "rename", "title": qsTrc("notation", "Rename") }]
 
-                if (root.isCustom) {
+                if (root.isInited) {
                     operations.push({ "id": "delete", "title": qsTrc("notation", "Delete") })
                 }
 
