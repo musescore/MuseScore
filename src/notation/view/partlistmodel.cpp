@@ -98,8 +98,8 @@ QVariant PartListModel::data(const QModelIndex& index, int role) const
         return excerpt->name();
     case RoleIsSelected:
         return m_selectionModel->isSelected(index);
-    case RoleIsCustom:
-        return excerpt->isCustom();
+    case RoleIsInited:
+        return excerpt->isInited();
     }
 
     return QVariant();
@@ -115,7 +115,7 @@ QHash<int, QByteArray> PartListModel::roleNames() const
     static const QHash<int, QByteArray> roles {
         { RoleTitle, "title" },
         { RoleIsSelected, "isSelected" },
-        { RoleIsCustom, "isCustom" }
+        { RoleIsInited, "isInited" }
     };
 
     return roles;

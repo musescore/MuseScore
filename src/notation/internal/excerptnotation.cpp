@@ -56,6 +56,11 @@ void ExcerptNotation::init()
     m_inited = true;
 }
 
+bool ExcerptNotation::isInited() const
+{
+    return m_inited;
+}
+
 bool ExcerptNotation::isCustom() const
 {
     return !m_excerpt->initialPartId().isValid();

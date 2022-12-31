@@ -38,6 +38,7 @@ public:
 
     mu::engraving::Excerpt* excerpt() const;
 
+    bool isInited() const override;
     bool isCustom() const override;
     bool isEmpty() const override;
 

@@ -34,6 +34,7 @@ class IExcerptNotation
 public:
     virtual ~IExcerptNotation() = default;
 
+    virtual bool isInited() const = 0;
     virtual bool isCustom() const = 0;
     virtual bool isEmpty() const = 0;
 
