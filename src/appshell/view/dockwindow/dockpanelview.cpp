@@ -282,8 +282,7 @@ int DockPanelView::getTabIndexOfPanel(DockPanelView* tab)
     }
 
     KDDockWidgets::Frame* frame = dockWidget()->frame();
-    if (!frame)
-    {
+    if (!frame) {
         return -1;
     }
 
