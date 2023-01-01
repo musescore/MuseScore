@@ -54,6 +54,8 @@ public:
 
     bool isTabAllowed(const DockPanelView* tab) const;
     void addPanelAsTab(DockPanelView* tab);
+    int getTabIndexOfPanel(DockPanelView* tab);
+    int getCurrentTabIndex();
     void setCurrentTabIndex(int index);
 
 public slots:

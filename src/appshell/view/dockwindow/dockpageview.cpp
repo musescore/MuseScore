@@ -178,6 +178,23 @@ bool DockPageView::isDockOpen(const QString& dockName) const
 
 void DockPageView::toggleDock(const QString& dockName)
 {
+    DockBase* dock = dockByName(dockName);
+    DockPanelView* panel = dynamic_cast<DockPanelView*>(dock);
+    if (panel) {
+        DockPanelView* destinationPanel = findPanelForTab(panel);
+        if (destinationPanel) {
+            const int currentTabIndex = destinationPanel->getCurrentTabIndex();
+            const int tabIndex = destinationPanel->getTabIndexOfPanel(panel);
+            
+            const bool tabNotFound = tabIndex < 0;
+            const bool tabNotCurrent = tabIndex != currentTabIndex;
+            const bool openTab = tabNotFound || tabNotCurrent;
+            setDockOpen(dockName, openTab);
+            
+            return;
+        }
+    }
+
     setDockOpen(dockName, !isDockOpen(dockName));
 }
 
@@ -201,7 +218,16 @@ void DockPageView::setDockOpen(const QString& dockName, bool open)
 
     DockPanelView* destinationPanel = findPanelForTab(panel);
     if (destinationPanel) {
-        destinationPanel->addPanelAsTab(panel);
+        const int currentTabIndex = destinationPanel->getCurrentTabIndex();
+        const int tabIndex = destinationPanel->getTabIndexOfPanel(panel);
+
+        const bool tabNotFound = tabIndex < 0;
+        const bool tabNotCurrent = tabIndex != currentTabIndex;
+        if (tabNotFound) {
+            destinationPanel->addPanelAsTab(panel);
+        } else if (tabNotCurrent) {
+            destinationPanel->setCurrentTabIndex(tabIndex);
+        }
     } else {
         panel->open();
     }
