@@ -271,7 +271,7 @@ void DockPanelView::addPanelAsTab(DockPanelView* tab)
     tab->setVisible(true);
 }
 
-int DockPanelView::tabIndexOfPanel(const DockPanelView* tab) const
+int DockPanelView::getTabIndexOfPanel(DockPanelView* tab)
 {
     IF_ASSERT_FAILED(dockWidget()) {
         return -1;
@@ -282,14 +282,15 @@ int DockPanelView::tabIndexOfPanel(const DockPanelView* tab) const
     }
 
     KDDockWidgets::Frame* frame = dockWidget()->frame();
-    if (!frame) {
+    if (!frame)
+    {
         return -1;
     }
 
     return frame->indexOfDockWidget(tab->dockWidget());
 }
 
-int DockPanelView::currentTabIndex() const
+int DockPanelView::getCurrentTabIndex()
 {
     IF_ASSERT_FAILED(dockWidget()) {
         return -1;

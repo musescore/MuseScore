@@ -179,36 +179,23 @@ bool DockPageView::isDockOpen(const QString& dockName) const
 void DockPageView::toggleDock(const QString& dockName)
 {
     DockBase* dock = dockByName(dockName);
-    if (dock == nullptr) {
-        return;
-    }
-
-    bool shouldOpen = true;
-
     DockPanelView* panel = dynamic_cast<DockPanelView*>(dock);
     if (panel) {
-        if (panel->isOpen()) {
-            if (panel->floating()) {
-                shouldOpen = !panel->hasFocus();
-            } else {
-                DockPanelView* panelParent = findCurrentPanelForTab(panel);
-                if (panelParent) {
-                    const int currentTabIndex = panelParent->currentTabIndex();
-                    const int tabIndexOfPanel = panelParent->tabIndexOfPanel(panel);
-                    Q_ASSERT(tabIndexOfPanel >= 0);
-                    shouldOpen = !panel->hasFocus() || currentTabIndex != tabIndexOfPanel;
-                } else {
-                    shouldOpen = !panel->hasFocus();
-                }
-            }
-        } else {
-            shouldOpen = true;
+        DockPanelView* destinationPanel = findPanelForTab(panel);
+        if (destinationPanel) {
+            const int currentTabIndex = destinationPanel->getCurrentTabIndex();
+            const int tabIndex = destinationPanel->getTabIndexOfPanel(panel);
+            
+            const bool tabNotFound = tabIndex < 0;
+            const bool tabNotCurrent = tabIndex != currentTabIndex;
+            const bool openTab = tabNotFound || tabNotCurrent;
+            setDockOpen(dockName, openTab);
+            
+            return;
         }
-    } else {
-        shouldOpen = !panel->hasFocus() || !panel->isOpen();
     }
 
-    setDockOpen(dockName, shouldOpen);
+    setDockOpen(dockName, !isDockOpen(dockName));
 }
 
 void DockPageView::setDockOpen(const QString& dockName, bool open)
@@ -221,46 +208,35 @@ void DockPageView::setDockOpen(const QString& dockName, bool open)
     if (!open) {
         dock->close();
         return;
+    }
+
+    DockPanelView* panel = dynamic_cast<DockPanelView*>(dock);
+    if (!panel) {
+        dock->open();
+        return;
+    }
+
+    DockPanelView* destinationPanel = findPanelForTab(panel);
+    if (destinationPanel) {
+        const int currentTabIndex = destinationPanel->getCurrentTabIndex();
+        const int tabIndex = destinationPanel->getTabIndexOfPanel(panel);
+
+        const bool tabNotFound = tabIndex < 0;
+        const bool tabNotCurrent = tabIndex != currentTabIndex;
+        if (tabNotFound) {
+            destinationPanel->addPanelAsTab(panel);
+        } else if (tabNotCurrent) {
+            destinationPanel->setCurrentTabIndex(tabIndex);
+        }
     } else {
-        dock->setFocus(true);
-
-        DockPanelView* panel = dynamic_cast<DockPanelView*>(dock);
-        if (!panel) {
-            dock->open();
-            return;
-        }
-
-        if (!panel->isOpen()) {
-            panel->open();
-            return;
-        }
-
-        if (DockPanelView* panelParent = findCurrentPanelForTab(panel)) {
-            const int currentTabIndex = panelParent->currentTabIndex();
-            const int tabIndexOfPanel = panelParent->tabIndexOfPanel(panel);
-            Q_ASSERT(tabIndexOfPanel >= 0);
-            if (tabIndexOfPanel != currentTabIndex) {
-                panelParent->setCurrentTabIndex(tabIndexOfPanel);
-            }
-        }
+        panel->open();
     }
 }
 
-DockPanelView* DockPageView::findFirstPanelForTab(const DockPanelView* tab) const
+DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab) const
 {
     QList<DockPanelView*> panels = possiblePanelsForTab(tab);
     return !panels.isEmpty() ? panels.first() : nullptr;
-}
-
-DockPanelView* DockPageView::findCurrentPanelForTab(const DockPanelView* tab) const
-{
-    QList<DockPanelView*> panels = possiblePanelsForTab(tab);
-    for (DockPanelView* panelView : panels) {
-        if (panelView->tabIndexOfPanel(tab) != -1) {
-            return panelView;
-        }
-    }
-    return nullptr;
 }
 
 bool DockPageView::isDockFloating(const QString& dockName) const
