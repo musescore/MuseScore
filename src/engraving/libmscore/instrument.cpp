@@ -173,7 +173,7 @@ Instrument::Instrument(const Instrument& i)
     _minPitchP    = i._minPitchP;
     _maxPitchP    = i._maxPitchP;
     _transpose    = i._transpose;
-    _instrumentId = i._instrumentId;
+    _musicXmlId   = i._musicXmlId;
     _stringData   = i._stringData;
     _drumset      = 0;
     setDrumset(i._drumset);
@@ -204,7 +204,7 @@ void Instrument::operator=(const Instrument& i)
     _minPitchP    = i._minPitchP;
     _maxPitchP    = i._maxPitchP;
     _transpose    = i._transpose;
-    _instrumentId = i._instrumentId;
+    _musicXmlId   = i._musicXmlId;
     _stringData   = i._stringData;
     _drumset      = 0;
     setDrumset(i._drumset);
@@ -303,8 +303,8 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
     if (_transpose.chromatic) {
         xml.tag("transposeChromatic", _transpose.chromatic);
     }
-    if (!_instrumentId.isEmpty()) {
-        xml.tag("instrumentId", _instrumentId);
+    if (!_musicXmlId.isEmpty()) {
+        xml.tag("instrumentId", _musicXmlId);
     }
     if (_useDrumset) {
         xml.tag("useDrumset", _useDrumset);
@@ -350,9 +350,9 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
     xml.endElement();
 }
 
-String Instrument::recognizeInstrumentId() const
+String Instrument::recognizeMusicXmlId() const
 {
-    static const String defaultInstrumentId(u"keyboard.piano");
+    static const String defaultMusicXmlId(u"keyboard.piano");
 
     std::list<String> nameList;
 
@@ -369,7 +369,7 @@ String Instrument::recognizeInstrumentId() const
     const InstrChannel* channel = this->channel(0);
 
     if (!channel) {
-        return defaultInstrumentId;
+        return defaultMusicXmlId;
     }
 
     const InstrumentTemplate* tmplMidiProgram = mu::engraving::searchTemplateForMidiProgram(channel->bank(), channel->program(),
@@ -384,7 +384,7 @@ String Instrument::recognizeInstrumentId() const
         return drumsetId;
     }
 
-    return defaultInstrumentId;
+    return defaultMusicXmlId;
 }
 
 String Instrument::recognizeId() const
@@ -399,7 +399,7 @@ String Instrument::recognizeId() const
     // There are some duplicate MusicXML IDs among other instruments too. In
     // that case we check the pitch range and use the shortest ID that matches.
     const String arco = String(u"arco");
-    const bool groupHack = instrumentId() == String(u"strings.group");
+    const bool groupHack = musicXmlId() == String(u"strings.group");
     const int idxref = channelIdx(arco);
     const int val32ref = (idxref < 0) ? -1 : channel(idxref)->bank();
     String fallback;
@@ -407,7 +407,7 @@ String Instrument::recognizeId() const
 
     for (InstrumentGroup* g : instrumentGroups) {
         for (InstrumentTemplate* it : g->instrumentTemplates) {
-            if (it->musicXMLid != instrumentId()) {
+            if (it->musicXMLid != musicXmlId()) {
                 continue;
             }
             if (groupHack) {
@@ -452,7 +452,7 @@ String Instrument::recognizeId() const
 
 int Instrument::recognizeMidiProgram() const
 {
-    InstrumentTemplate* tmplInstrumentId = mu::engraving::searchTemplateForMusicXmlId(_instrumentId);
+    InstrumentTemplate* tmplInstrumentId = mu::engraving::searchTemplateForMusicXmlId(_musicXmlId);
 
     if (tmplInstrumentId && !tmplInstrumentId->channel.empty() && tmplInstrumentId->channel[0].program() >= 0) {
         return tmplInstrumentId->channel[0].program();
@@ -494,8 +494,8 @@ void Instrument::read(XmlReader& e, Part* part)
         }
     }
 
-    if (_instrumentId.isEmpty()) {
-        _instrumentId = recognizeInstrumentId();
+    if (_musicXmlId.isEmpty()) {
+        _musicXmlId = recognizeMusicXmlId();
     }
 
     if (_id.isEmpty()) {
@@ -548,7 +548,7 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
     } else if (tag == "transposeDiatonic") {
         _transpose.diatonic = e.readInt();
     } else if (tag == "instrumentId") {
-        _instrumentId = e.readText();
+        _musicXmlId = e.readText();
     } else if (tag == "useDrumset") {
         _useDrumset = e.readInt();
         if (_useDrumset) {
@@ -1589,12 +1589,12 @@ int Instrument::maxPitchA() const
 }
 
 //---------------------------------------------------------
-//   instrumentId
+//   musicXmlId
 //---------------------------------------------------------
 
-String Instrument::instrumentId() const
+String Instrument::musicXmlId() const
 {
-    return _instrumentId;
+    return _musicXmlId;
 }
 
 //---------------------------------------------------------
@@ -1743,7 +1743,7 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* templ)
 
     instrument.setTrackName(templ->trackName);
     instrument.setTranspose(templ->transpose);
-    instrument.setInstrumentId(templ->musicXMLid);
+    instrument.setMusicXmlId(templ->musicXMLid);
     instrument._useDrumset = templ->useDrumset;
 
     if (templ->useDrumset) {
@@ -1791,8 +1791,8 @@ void Instrument::setIsPrimary(bool isPrimary)
 
 void Instrument::updateInstrumentId()
 {
-    if (_instrumentId.isEmpty()) {
-        _instrumentId = recognizeInstrumentId();
+    if (_musicXmlId.isEmpty()) {
+        _musicXmlId = recognizeMusicXmlId();
     }
 
     if (_id.isEmpty()) {
