@@ -9710,9 +9710,9 @@ By verstek sal hulle so geplaas word dat hulle regtereinde op dieselfde vlak is.
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="236"/>
-        <source>This action will reset all your app preferences and delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
+        <source>This action will reset all your app preferences and Delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
 
-This action will not delete any of your scores.</source>
+This action will not Delete any of your scores.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -20452,7 +20452,7 @@ Whether you are just getting started with music notation software, or are a powe
     </message>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="134"/>
-        <source>Are you sure you want to delete this part?</source>
+        <source>Are you sure you want to Delete this part?</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -21420,7 +21420,7 @@ Whether you are just getting started with music notation software, or are a powe
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="150"/>
-        <source>Hide/delete palette</source>
+        <source>Hide/Delete palette</source>
         <translation>Versteek/skrap palet</translation>
     </message>
     <message>
@@ -22376,37 +22376,37 @@ Whether you are just getting started with music notation software, or are a powe
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="375"/>
-        <source>Do you want to hide this custom palette cell or permanently delete it?</source>
+        <source>Do you want to hide this custom palette cell or permanently Delete it?</source>
         <translation>Wil jy hierdie pasgemaakte palet-sel versteek of permanent skrap?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="376"/>
-        <source>Do you want to hide these custom palette cells or permanently delete them?</source>
+        <source>Do you want to hide these custom palette cells or permanently Delete them?</source>
         <translation>Wil jy hierdie pasgemaakte paletselle versteek of permanent skrap?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="382"/>
-        <source>Do you want to permanently delete this custom palette cell?</source>
+        <source>Do you want to permanently Delete this custom palette cell?</source>
         <translation>Wil jy hierdie pasgemaakte paletsel permanent skrap?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="383"/>
-        <source>Do you want to permanently delete these custom palette cells?</source>
+        <source>Do you want to permanently Delete these custom palette cells?</source>
         <translation>Wil jy hierdie pasgemaakte paletselle permanent skrap?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="399"/>
-        <source>Do you want to hide this custom palette or permanently delete it?</source>
+        <source>Do you want to hide this custom palette or permanently Delete it?</source>
         <translation>Wil jy hierdie pasgemaakte palet versteek of permanent skrap?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="400"/>
-        <source>Do you want to hide these custom palettes or permanently delete them?</source>
+        <source>Do you want to hide these custom palettes or permanently Delete them?</source>
         <translation>Wil jy hierdie pasgemaakte palette versteek of permanent skrap?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="812"/>
-        <source>Do you want to permanently delete this custom palette?</source>
+        <source>Do you want to permanently Delete this custom palette?</source>
         <translation>Wil jy hierdie pasgemaakte palet permanent skrap?</translation>
     </message>
     <message>
@@ -22523,7 +22523,7 @@ oop te maak, het misluk: %2</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1149"/>
-        <source>Are you sure you want to delete palette cell &quot;%1&quot;?</source>
+        <source>Are you sure you want to Delete palette cell &quot;%1&quot;?</source>
         <translation>Is jy seker jy wil paletsel &quot;%1&quot; uitvee?</translation>
     </message>
     <message>
@@ -25065,7 +25065,7 @@ het misluk: </translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="187"/>
-        <source>Hint: You can also add &amp; delete measures after you have created your score</source>
+        <source>Hint: You can also add &amp; Delete measures after you have created your score</source>
         <translation>Wenk: jy kan ook mate byvoeg en verwyder na die skepping van jou partituur</translation>
     </message>
     <message>

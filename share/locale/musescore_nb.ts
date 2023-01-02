@@ -21425,7 +21425,7 @@ Om du akkkurat har startet med programvare for musikknotasjon, eller er en erfar
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="150"/>
-        <source>Hide/delete palette</source>
+        <source>Hide/Delete palette</source>
         <translation>Skjul/slett palett</translation>
     </message>
     <message>

@@ -21425,7 +21425,7 @@ Niezależnie od tego, czy dopiero zaczynasz korzystać z oprogramowania do notac
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="150"/>
-        <source>Hide/delete palette</source>
+        <source>Hide/Delete palette</source>
         <translation>Ukryj/usuń zakładkę palety</translation>
     </message>
     <message>

@@ -21436,7 +21436,7 @@ Ať už s notačním softwarem teprve začínáte, nebo jste zkušený uživatel
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="150"/>
-        <source>Hide/delete palette</source>
+        <source>Hide/Delete palette</source>
         <translation>Skrýt/Smazat paletu</translation>
     </message>
     <message>

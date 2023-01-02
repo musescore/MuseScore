@@ -21424,7 +21424,7 @@ Oavsett om du bara ligger i startgroparna med notskriftprogram, eller är en erf
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="150"/>
-        <source>Hide/delete palette</source>
+        <source>Hide/Delete palette</source>
         <translation>Dölj/radera palett</translation>
     </message>
     <message>

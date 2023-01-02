@@ -21431,7 +21431,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="150"/>
-        <source>Hide/delete palette</source>
+        <source>Hide/Delete palette</source>
         <translation>Ascunde/șterge paletă</translation>
     </message>
     <message>
