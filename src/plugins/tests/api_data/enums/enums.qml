@@ -107,10 +107,9 @@ MuseScore {
         console.log("Align:", Align)
         check(countEnumCases(Align))
         check(Align.CENTER)
-        check(Align.CENTER === Align.HCENTER | Align.VCENTER)
-        // TODO: failing!
-        //check((Align.BOTTOM | Align.RIGHT) & Align.HMASK === Align.RIGHT)
-        //check((Align.BOTTOM | Align.RIGHT) & Align.VMASK === Align.BOTTOM)
+        check(Align.CENTER === (Align.HCENTER | Align.VCENTER))
+        check(((Align.BOTTOM | Align.RIGHT) & Align.HMASK) === Align.RIGHT)
+        check(((Align.BOTTOM | Align.RIGHT) & Align.VMASK) === Align.BOTTOM)
 
         console.log("NoteType:", NoteType)
         check(countEnumCases(NoteType))
@@ -140,7 +139,7 @@ MuseScore {
         check(countEnumCases(Segment))
         check(Segment.Clef)
         check(Segment.BarLineType
-                       === Segment.BeginBarLine | Segment.StartRepeatBarLine | Segment.BarLine | Segment.EndBarLine)
+                       === (Segment.BeginBarLine | Segment.StartRepeatBarLine | Segment.BarLine | Segment.EndBarLine))
 
         console.log("Spanner:", Spanner)
         check(countEnumCases(Spanner))

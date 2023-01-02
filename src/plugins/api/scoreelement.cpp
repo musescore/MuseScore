@@ -21,11 +21,14 @@
  */
 
 #include "scoreelement.h"
+
+#include "apitypes.h"
 #include "elements.h"
-#include "score.h"
 #include "fraction.h"
-#include "libmscore/score.h"
+#include "score.h"
+
 #include "libmscore/engravingobject.h"
+#include "libmscore/score.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -100,33 +103,69 @@ QVariant ScoreElement::get(mu::engraving::Pid pid) const
     return val.toQVariant();
 }
 
+static AlignH alignHFromApiValue(api::enums::Align apiValue)
+{
+    switch (apiValue & enums::Align::HMASK) {
+    case api::enums::Align::LEFT: return engraving::AlignH::LEFT;
+    case api::enums::Align::RIGHT: return engraving::AlignH::RIGHT;
+    case api::enums::Align::HCENTER: return engraving::AlignH::HCENTER;
+    default:
+        break;
+    }
+
+    return engraving::AlignH::LEFT;
+}
+
+static AlignV alignVFromApiValue(api::enums::Align apiValue)
+{
+    switch (apiValue & enums::Align::VMASK) {
+    case api::enums::Align::TOP: return engraving::AlignV::TOP;
+    case api::enums::Align::BOTTOM: return engraving::AlignV::BOTTOM;
+    case api::enums::Align::VCENTER: return engraving::AlignV::VCENTER;
+    case api::enums::Align::BASELINE: return engraving::AlignV::BASELINE;
+    default:
+        break;
+    }
+
+    return engraving::AlignV::TOP;
+}
+
 //---------------------------------------------------------
 //   ScoreElement::set
 //---------------------------------------------------------
 
-void ScoreElement::set(mu::engraving::Pid pid, QVariant val)
+void ScoreElement::set(mu::engraving::Pid pid, const QVariant& val)
 {
     if (!e) {
         return;
     }
 
+    PropertyValue newValue;
+
     switch (propertyType(pid)) {
     case P_TYPE::FRACTION: {
         FractionWrapper* f = val.value<FractionWrapper*>();
         if (!f) {
-            LOGW("ScoreElement::set: trying to assign value of wrong type to fractional property");
+            LOGW() << "trying to assign value of wrong type to fractional property";
             return;
         }
-        val = f->fraction().toString().toQString();
+        newValue = f->fraction();
     }
     break;
     case P_TYPE::POINT:
-        val = val.toPointF() * spatium();
+        newValue = PointF::fromQPointF(val.toPointF() * spatium());
         break;
     case P_TYPE::MILLIMETRE:
-        val = val.toReal() * spatium();
+        newValue = Millimetre(val.toReal() * spatium());
         break;
+    case P_TYPE::ALIGN: {
+        api::enums::Align apiValue = api::enums::Align(val.toInt());
+
+        newValue = Align { alignHFromApiValue(apiValue), alignVFromApiValue(apiValue) };
+    } break;
+
     default:
+        newValue = PropertyValue::fromQVariant(val, propertyType(pid));
         break;
     }
 
@@ -134,9 +173,9 @@ void ScoreElement::set(mu::engraving::Pid pid, QVariant val)
     const PropertyFlags newFlags = (f == PropertyFlags::NOSTYLE) ? f : PropertyFlags::UNSTYLED;
 
     if (_ownership == Ownership::SCORE) {
-        e->undoChangeProperty(pid, PropertyValue::fromQVariant(val, propertyType(pid)), newFlags);
+        e->undoChangeProperty(pid, newValue, newFlags);
     } else { // not added to a score so no need (and dangerous) to deal with undo stack
-        e->setProperty(pid, PropertyValue::fromQVariant(val, propertyType(pid)));
+        e->setProperty(pid, newValue);
         e->setPropertyFlags(pid, newFlags);
     }
 }
