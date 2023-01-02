@@ -94,7 +94,7 @@ public:
     int type() const;
 
     QVariant get(mu::engraving::Pid pid) const;
-    void set(mu::engraving::Pid pid, QVariant val);
+    void set(mu::engraving::Pid pid, const QVariant& val);
     /// \endcond
 
     Q_INVOKABLE QString userName() const;
