@@ -19,20 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_SOUNDFONTSPROVIDERSTUB_H
-#define MU_AUDIO_SOUNDFONTSPROVIDERSTUB_H
+#ifndef MU_AUDIO_SOUNDFONTREPOSITORYSTUB_H
+#define MU_AUDIO_SOUNDFONTREPOSITORYSTUB_H
 
-#include "audio/isoundfontsprovider.h"
+#include "audio/isoundfontrepository.h"
 
-namespace mu::audio::synth {
-class SoundFontsProviderStub : public ISoundFontsProvider
+namespace mu::audio {
+class SoundFontRepositoryStub : public ISoundFontRepository
 {
 public:
-    std::vector<io::path_t> soundFontPathsForSynth(const SynthName& synth) const override;
-    async::Notification soundFontPathsForSynthChanged(const SynthName& synth) const override;
+    synth::SoundFontPaths soundFontPaths() const override;
+    async::Notification soundFontPathsChanged() const override;
 
-    std::vector<io::path_t> soundFontPaths(SoundFontFormats formats) const override;
+    mu::Ret addSoundFont(const synth::SoundFontPath& path) override;
 };
 }
 
-#endif // MU_AUDIO_SOUNDFONTSPROVIDERSTUB_H
+#endif // MU_AUDIO_SOUNDFONTREPOSITORYSTUB_H

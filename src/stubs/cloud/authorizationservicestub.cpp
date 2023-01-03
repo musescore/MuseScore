@@ -24,12 +24,21 @@
 
 using namespace mu::cloud;
 
+void AuthorizationServiceStub::signUp()
+{
+}
+
 void AuthorizationServiceStub::signIn()
 {
 }
 
 void AuthorizationServiceStub::signOut()
 {
+}
+
+mu::Ret AuthorizationServiceStub::ensureAuthorization(const std::string&)
+{
+    return make_ret(Ret::Code::NotSupported);
 }
 
 mu::ValCh<bool> AuthorizationServiceStub::userAuthorized() const
@@ -40,4 +49,9 @@ mu::ValCh<bool> AuthorizationServiceStub::userAuthorized() const
 mu::ValCh<AccountInfo> AuthorizationServiceStub::accountInfo() const
 {
     return mu::ValCh<AccountInfo>();
+}
+
+mu::Ret AuthorizationServiceStub::checkCloudIsAvailable() const
+{
+    return make_ret(Ret::Code::NotSupported);
 }

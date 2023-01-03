@@ -24,28 +24,26 @@
 using namespace mu::plugins;
 using namespace mu;
 
-RetVal<PluginInfoList> PluginsServiceStub::plugins(IPluginsService::PluginsStatus) const
+void PluginsServiceStub::reloadPlugins()
 {
-    RetVal<PluginInfoList> result;
-    result.ret = make_ret(Ret::Code::NotSupported);
-    return result;
 }
 
-RetValCh<framework::Progress> PluginsServiceStub::install(const CodeKey&)
+RetVal<PluginInfoMap> PluginsServiceStub::plugins(PluginsStatus) const
 {
-    RetValCh<framework::Progress> result;
-    result.ret = make_ret(Ret::Code::NotSupported);
-    return result;
+    return make_ret(Ret::Code::NotSupported);
 }
 
-RetValCh<framework::Progress> PluginsServiceStub::update(const CodeKey&)
+async::Notification PluginsServiceStub::pluginsChanged() const
 {
-    RetValCh<framework::Progress> result;
-    result.ret = make_ret(Ret::Code::NotSupported);
-    return result;
+    return async::Notification();
 }
 
-Ret PluginsServiceStub::uninstall(const CodeKey&)
+IPluginsService::CategoryInfoMap PluginsServiceStub::categories() const
+{
+    return {};
+}
+
+Ret PluginsServiceStub::setEnable(const CodeKey&, bool)
 {
     return make_ret(Ret::Code::NotSupported);
 }

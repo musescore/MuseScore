@@ -34,6 +34,15 @@ mu::Ret MidiRemoteStub::setMidiMappings(const MidiMappingList&)
     return make_ret(Ret::Code::NotImplemented);
 }
 
+void MidiRemoteStub::resetMidiMappings()
+{
+}
+
+mu::async::Notification MidiRemoteStub::midiMappingsChanged() const
+{
+    return async::Notification();
+}
+
 void MidiRemoteStub::setIsSettingMode(bool)
 {
 }

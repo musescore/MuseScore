@@ -24,38 +24,50 @@
 using namespace mu::languages;
 using namespace mu;
 
-ValCh<LanguagesHash> LanguagesServiceStub::languages() const
+const LanguagesHash& LanguagesServiceStub::languages() const
 {
-    return ValCh<LanguagesHash>();
+    static const LanguagesHash lh;
+    return lh;
 }
 
-RetCh<LanguageProgress> LanguagesServiceStub::install(const QString&)
+Language LanguagesServiceStub::language(const QString&) const
 {
-    RetCh<LanguageProgress> result;
-    result.ret = make_ret(Ret::Code::NotSupported);
-    return result;
+    return {};
 }
 
-RetCh<LanguageProgress> LanguagesServiceStub::update(const QString&)
+const Language& LanguagesServiceStub::currentLanguage() const
 {
-    RetCh<LanguageProgress> result;
-    result.ret = make_ret(Ret::Code::NotSupported);
-    return result;
+    static const Language cl;
+    return cl;
 }
 
-Ret LanguagesServiceStub::uninstall(const QString&)
+async::Notification LanguagesServiceStub::currentLanguageChanged() const
 {
-    return make_ret(Ret::Code::NotSupported);
+    return async::Notification();
 }
 
-ValCh<Language> LanguagesServiceStub::currentLanguage() const
+bool LanguagesServiceStub::hasPlaceholderLanguage() const
 {
-    return ValCh<Language>();
+    return false;
 }
 
-RetCh<Language> LanguagesServiceStub::languageChanged()
+const Language& LanguagesServiceStub::placeholderLanguage() const
 {
-    RetCh<Language> result;
-    result.ret = make_ret(Ret::Code::NotSupported);
-    return result;
+    static const Language pl;
+    return pl;
+}
+
+framework::Progress LanguagesServiceStub::update(const QString&)
+{
+    return framework::Progress();
+}
+
+bool LanguagesServiceStub::needRestartToApplyLanguageChange() const
+{
+    return false;
+}
+
+async::Channel<bool> LanguagesServiceStub::needRestartToApplyLanguageChangeChanged() const
+{
+    return async::Channel<bool>();
 }

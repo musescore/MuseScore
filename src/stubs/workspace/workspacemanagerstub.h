@@ -28,10 +28,10 @@ namespace mu::workspace {
 class WorkspaceManagerStub : public IWorkspaceManager
 {
 public:
-
     IWorkspacePtr defaultWorkspace() const override;
 
     IWorkspacePtr currentWorkspace() const override;
+    async::Notification currentWorkspaceAboutToBeChanged() const override;
     async::Notification currentWorkspaceChanged() const override;
 
     IWorkspacePtrList workspaces() const override;
