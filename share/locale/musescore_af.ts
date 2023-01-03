@@ -1707,7 +1707,7 @@
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="80"/>
-        <source>Delete string</source>
+        <source>delete string</source>
         <translation>Skrap string</translation>
     </message>
     <message>
@@ -7102,7 +7102,7 @@ By verstek sal hulle so geplaas word dat hulle regtereinde op dieselfde vlak is.
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="386"/>
-        <source>Delete</source>
+        <source>delete</source>
         <translation>Skrap</translation>
     </message>
     <message>
@@ -7147,7 +7147,7 @@ By verstek sal hulle so geplaas word dat hulle regtereinde op dieselfde vlak is.
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="441"/>
-        <source>Delete selected measures</source>
+        <source>delete selected measures</source>
         <translation>Skrap geselekteerde mate</translation>
     </message>
     <message>
@@ -9712,7 +9712,7 @@ By verstek sal hulle so geplaas word dat hulle regtereinde op dieselfde vlak is.
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="236"/>
         <source>This action will reset all your app preferences and Delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
 
-This action will not Delete any of your scores.</source>
+This action will not delete any of your scores.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -16716,7 +16716,7 @@ Gepubliseer onder die &lt;a href=&quot;%1&quot;&gt;GNU General Public License ve
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/DirectoriesTopPanel.qml" line="89"/>
-        <source>Delete</source>
+        <source>delete</source>
         <translation>Skrap</translation>
     </message>
     <message>
@@ -17696,7 +17696,7 @@ opslagmaat</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="81"/>
-        <source>Delete selected measures</source>
+        <source>delete selected measures</source>
         <translation>Skrap geselekteerde mate</translation>
     </message>
     <message>
@@ -20131,7 +20131,7 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml" line="84"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="148"/>
-        <source>Delete</source>
+        <source>delete</source>
         <translation>Skrap</translation>
     </message>
     <message>
@@ -20365,7 +20365,7 @@ Whether you are just getting started with music notation software, or are a powe
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="106"/>
-        <source>Delete measures</source>
+        <source>delete measures</source>
         <translation>Skrap mate</translation>
     </message>
     <message>
@@ -20452,7 +20452,7 @@ Whether you are just getting started with music notation software, or are a powe
     </message>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="134"/>
-        <source>Are you sure you want to Delete this part?</source>
+        <source>Are you sure you want to delete this part?</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -21382,7 +21382,7 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/Palette.qml" line="614"/>
         <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1129"/>
-        <source>Delete</source>
+        <source>delete</source>
         <translation>Skrap</translation>
     </message>
     <message>
@@ -22371,42 +22371,42 @@ Whether you are just getting started with music notation software, or are a powe
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="338"/>
-        <source>Delete permanently</source>
+        <source>delete permanently</source>
         <translation>Skrap permanent</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="375"/>
-        <source>Do you want to hide this custom palette cell or permanently Delete it?</source>
+        <source>Do you want to hide this custom palette cell or permanently delete it?</source>
         <translation>Wil jy hierdie pasgemaakte palet-sel versteek of permanent skrap?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="376"/>
-        <source>Do you want to hide these custom palette cells or permanently Delete them?</source>
+        <source>Do you want to hide these custom palette cells or permanently delete them?</source>
         <translation>Wil jy hierdie pasgemaakte paletselle versteek of permanent skrap?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="382"/>
-        <source>Do you want to permanently Delete this custom palette cell?</source>
+        <source>Do you want to permanently delete this custom palette cell?</source>
         <translation>Wil jy hierdie pasgemaakte paletsel permanent skrap?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="383"/>
-        <source>Do you want to permanently Delete these custom palette cells?</source>
+        <source>Do you want to permanently delete these custom palette cells?</source>
         <translation>Wil jy hierdie pasgemaakte paletselle permanent skrap?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="399"/>
-        <source>Do you want to hide this custom palette or permanently Delete it?</source>
+        <source>Do you want to hide this custom palette or permanently delete it?</source>
         <translation>Wil jy hierdie pasgemaakte palet versteek of permanent skrap?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="400"/>
-        <source>Do you want to hide these custom palettes or permanently Delete them?</source>
+        <source>Do you want to hide these custom palettes or permanently delete them?</source>
         <translation>Wil jy hierdie pasgemaakte palette versteek of permanent skrap?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="812"/>
-        <source>Do you want to permanently Delete this custom palette?</source>
+        <source>Do you want to permanently delete this custom palette?</source>
         <translation>Wil jy hierdie pasgemaakte palet permanent skrap?</translation>
     </message>
     <message>
@@ -22518,12 +22518,12 @@ oop te maak, het misluk: %2</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1147"/>
-        <source>Delete palette cell</source>
+        <source>delete palette cell</source>
         <translation>Skrap paletsel</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1149"/>
-        <source>Are you sure you want to Delete palette cell &quot;%1&quot;?</source>
+        <source>Are you sure you want to delete palette cell &quot;%1&quot;?</source>
         <translation>Is jy seker jy wil paletsel &quot;%1&quot; uitvee?</translation>
     </message>
     <message>
@@ -25065,7 +25065,7 @@ het misluk: </translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="187"/>
-        <source>Hint: You can also add &amp; Delete measures after you have created your score</source>
+        <source>Hint: You can also add &amp; delete measures after you have created your score</source>
         <translation>Wenk: jy kan ook mate byvoeg en verwyder na die skepping van jou partituur</translation>
     </message>
     <message>
