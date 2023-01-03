@@ -115,7 +115,9 @@ if (BUILD_UNIT_TESTS)
     #add_subdirectory(notation/tests) no tests at moment
     add_subdirectory(project/tests)
 
-    add_subdirectory(plugins/tests)
+    if (BUILD_PLUGINS_MODULE)
+        add_subdirectory(plugins/tests)
+    endif()
 endif(BUILD_UNIT_TESTS)
 
 if (OS_IS_WASM)

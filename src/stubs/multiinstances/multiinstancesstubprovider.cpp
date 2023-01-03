@@ -23,13 +23,23 @@
 
 using namespace mu::mi;
 
-// Score opening
+// Project opening
+
 bool MultiInstancesStubProvider::isProjectAlreadyOpened(const io::path_t&) const
 {
     return false;
 }
 
 void MultiInstancesStubProvider::activateWindowWithProject(const io::path_t&)
+{
+}
+
+bool MultiInstancesStubProvider::isHasAppInstanceWithoutProject() const
+{
+    return false;
+}
+
+void MultiInstancesStubProvider::activateWindowWithoutProject()
 {
 }
 
@@ -75,11 +85,25 @@ bool MultiInstancesStubProvider::unlockResource(const std::string&)
     return true;
 }
 
+void MultiInstancesStubProvider::notifyAboutResourceChanged(const std::string&)
+{
+}
+
+mu::async::Channel<std::string> MultiInstancesStubProvider::resourceChanged()
+{
+    return async::Channel<std::string>();
+}
+
 // Instances info
 const std::string& MultiInstancesStubProvider::selfID() const
 {
     static std::string id("stub");
     return id;
+}
+
+bool MultiInstancesStubProvider::isMainInstance() const
+{
+    return true;
 }
 
 std::vector<InstanceMeta> MultiInstancesStubProvider::instances() const
@@ -94,6 +118,20 @@ mu::async::Notification MultiInstancesStubProvider::instancesChanged() const
     return n;
 }
 
+void MultiInstancesStubProvider::notifyAboutInstanceWasQuited()
+{
+}
+
+// Quit for all
+
 void MultiInstancesStubProvider::quitForAll()
+{
+}
+
+void MultiInstancesStubProvider::quitAllAndRestartLast()
+{
+}
+
+void MultiInstancesStubProvider::quitAllAndRunInstallation(const io::path_t&)
 {
 }

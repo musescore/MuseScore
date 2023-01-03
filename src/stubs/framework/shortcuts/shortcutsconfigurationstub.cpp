@@ -23,6 +23,15 @@
 
 using namespace mu::shortcuts;
 
+QString ShortcutsConfigurationStub::currentKeyboardLayout() const
+{
+    return QString();
+}
+
+void ShortcutsConfigurationStub::setCurrentKeyboardLayout(const QString&)
+{
+}
+
 mu::io::path_t ShortcutsConfigurationStub::shortcutsUserAppDataPath() const
 {
     return mu::io::path_t();

@@ -30,6 +30,9 @@ class UpdateConfigurationStub : public IUpdateConfiguration
 public:
     bool isAppUpdatable() const override;
 
+    bool isTestingMode() const override;
+    void setIsTestingMode(bool isTesting) override;
+
     bool needCheckForUpdate() const override;
     void setNeedCheckForUpdate(bool needCheck) override;
 
@@ -42,7 +45,7 @@ public:
     std::string museScoreUrl() const override;
     std::string museScorePrivacyPolicyUrl() const override;
 
-    io::path_t userAppDataPath() const override;
+    io::path_t updateDataPath() const override;
 };
 }
 

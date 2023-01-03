@@ -28,8 +28,25 @@ namespace mu::playback {
 class PlaybackConfigurationStub : public IPlaybackConfiguration
 {
 public:
-    bool isPlayElementOnClick() const override;
-    bool isPlayHarmonyOnClick() const override;
+    bool playNotesWhenEditing() const override;
+    void setPlayNotesWhenEditing(bool value) override;
+
+    bool playChordWhenEditing() const override;
+    void setPlayChordWhenEditing(bool value) override;
+
+    bool playHarmonyWhenEditing() const override;
+    void setPlayHarmonyWhenEditing(bool value) override;
+
+    PlaybackCursorType cursorType() const override;
+
+    bool isMixerSectionVisible(MixerSectionType sectionType) const override;
+    void setMixerSectionVisible(MixerSectionType sectionType, bool visible) override;
+
+    const SoundProfileName& basicSoundProfileName() const override;
+    const SoundProfileName& museSoundProfileName() const override;
+
+    SoundProfileName defaultProfileForNewProjects() const override;
+    void setDefaultProfileForNewProjects(const SoundProfileName& name) override;
 };
 }
 

@@ -24,6 +24,11 @@
 using namespace mu::audio;
 using namespace mu;
 
+std::vector<std::string> AudioConfigurationStub::availableAudioApiList() const
+{
+    return {};
+}
+
 std::string AudioConfigurationStub::currentAudioApi() const
 {
     return std::string();
@@ -33,7 +38,21 @@ void AudioConfigurationStub::setCurrentAudioApi(const std::string&)
 {
 }
 
-int AudioConfigurationStub::audioChannelsCount() const
+std::string AudioConfigurationStub::audioOutputDeviceId() const
+{
+    return "";
+}
+
+void AudioConfigurationStub::setAudioOutputDeviceId(const std::string&)
+{
+}
+
+async::Notification AudioConfigurationStub::audioOutputDeviceIdChanged() const
+{
+    return async::Notification();
+}
+
+audioch_t AudioConfigurationStub::audioChannelsCount() const
 {
     return 2;
 }
@@ -43,21 +62,59 @@ unsigned int AudioConfigurationStub::driverBufferSize() const
     return 0;
 }
 
-bool AudioConfigurationStub::isShowControlsInMixer() const
+void AudioConfigurationStub::setDriverBufferSize(unsigned int)
 {
-    return false;
 }
 
-void AudioConfigurationStub::setIsShowControlsInMixer(bool)
+async::Notification AudioConfigurationStub::driverBufferSizeChanged() const
 {
+    return async::Notification();
+}
+
+samples_t AudioConfigurationStub::renderStep() const
+{
+    return 0;
+}
+
+unsigned int AudioConfigurationStub::sampleRate() const
+{
+    return 0;
+}
+
+void AudioConfigurationStub::setSampleRate(unsigned int)
+{
+}
+
+async::Notification AudioConfigurationStub::sampleRateChanged() const
+{
+    return async::Notification();
+}
+
+AudioInputParams AudioConfigurationStub::defaultAudioInputParams() const
+{
+    return {};
+}
+
+io::paths_t AudioConfigurationStub::soundFontDirectories() const
+{
+    return {};
+}
+
+io::paths_t AudioConfigurationStub::userSoundFontDirectories() const
+{
+    return {};
+}
+
+void AudioConfigurationStub::setUserSoundFontDirectories(const io::paths_t&)
+{
+}
+
+async::Channel<io::paths_t> AudioConfigurationStub::soundFontDirectoriesChanged() const
+{
+    return async::Channel<io::paths_t>();
 }
 
 // synthesizers
-std::vector<io::path_t> AudioConfigurationStub::soundFontPaths() const
-{
-    return std::vector<io::path_t>();
-}
-
 const synth::SynthesizerState& AudioConfigurationStub::synthesizerState() const
 {
     static synth::SynthesizerState s;

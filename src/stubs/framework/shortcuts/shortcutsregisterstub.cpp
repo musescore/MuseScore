@@ -34,9 +34,18 @@ mu::Ret ShortcutsRegisterStub::setShortcuts(const ShortcutList&)
     return make_ret(Ret::Code::NotImplemented);
 }
 
+void ShortcutsRegisterStub::resetShortcuts()
+{
+}
+
 mu::async::Notification ShortcutsRegisterStub::shortcutsChanged() const
 {
     return async::Notification();
+}
+
+mu::Ret ShortcutsRegisterStub::setAdditionalShortcuts(const std::string&, const ShortcutList&)
+{
+    return make_ret(Ret::Code::NotImplemented);
 }
 
 const Shortcut& ShortcutsRegisterStub::shortcut(const std::string&) const
@@ -49,6 +58,11 @@ const Shortcut& ShortcutsRegisterStub::defaultShortcut(const std::string&) const
 {
     static Shortcut s;
     return s;
+}
+
+bool ShortcutsRegisterStub::isRegistered(const std::string&) const
+{
+    return false;
 }
 
 ShortcutList ShortcutsRegisterStub::shortcutsForSequence(const std::string&) const
@@ -64,4 +78,22 @@ mu::Ret ShortcutsRegisterStub::importFromFile(const io::path_t&)
 mu::Ret ShortcutsRegisterStub::exportToFile(const io::path_t&) const
 {
     return make_ret(Ret::Code::NotImplemented);
+}
+
+bool ShortcutsRegisterStub::active()
+{
+    return false;
+}
+
+void ShortcutsRegisterStub::setActive(bool)
+{
+}
+
+mu::async::Notification ShortcutsRegisterStub::activeChanged() const
+{
+    return async::Notification();
+}
+
+void ShortcutsRegisterStub::reload(bool)
+{
 }
