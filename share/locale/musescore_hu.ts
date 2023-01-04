@@ -21428,7 +21428,7 @@ Ha még csak most teszi meg az első lépéseket a kottagrafikai szoftverek vil�
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="150"/>
-        <source>Hide/Delete palette</source>
+        <source>Hide/delete palette</source>
         <translation>Paletta elrejtése/törlése</translation>
     </message>
     <message>

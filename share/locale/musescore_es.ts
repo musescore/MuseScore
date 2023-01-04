@@ -21427,7 +21427,7 @@ e intente de nuevo</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="150"/>
-        <source>Hide/Delete palette</source>
+        <source>Hide/delete palette</source>
         <translation>Ocultar/eliminar paleta</translation>
     </message>
     <message>

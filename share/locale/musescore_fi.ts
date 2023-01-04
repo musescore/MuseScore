@@ -21422,7 +21422,7 @@ Olitpa vasta aloittamassa musiikin nuotinnosohjelmiston käyttöä tai olet teho
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="150"/>
-        <source>Hide/Delete palette</source>
+        <source>Hide/delete palette</source>
         <translation>Piilota/poista paletti</translation>
     </message>
     <message>

@@ -9710,7 +9710,7 @@ By verstek sal hulle so geplaas word dat hulle regtereinde op dieselfde vlak is.
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="236"/>
-        <source>This action will reset all your app preferences and Delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
+        <source>This action will reset all your app preferences and delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
 
 This action will not delete any of your scores.</source>
         <translation type="unfinished"/>
@@ -21420,7 +21420,7 @@ Whether you are just getting started with music notation software, or are a powe
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="150"/>
-        <source>Hide/Delete palette</source>
+        <source>Hide/delete palette</source>
         <translation>Versteek/skrap palet</translation>
     </message>
     <message>

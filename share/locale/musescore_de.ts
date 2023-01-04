@@ -21430,7 +21430,7 @@ Egal ob Sie gerade erst starten oder ein Power-User sind, der erpicht darauf ist
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="150"/>
-        <source>Hide/Delete palette</source>
+        <source>Hide/delete palette</source>
         <translation>Palette verstecken/löschen</translation>
     </message>
     <message>

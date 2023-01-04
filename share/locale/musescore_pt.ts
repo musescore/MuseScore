@@ -21423,7 +21423,7 @@ Se está a começar a utilizar o software de notação musical ou é um utilizad
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="150"/>
-        <source>Hide/Delete palette</source>
+        <source>Hide/delete palette</source>
         <translation>Mostrar/ocultar janela flutuante</translation>
     </message>
     <message>
