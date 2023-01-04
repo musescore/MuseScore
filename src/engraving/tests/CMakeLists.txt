@@ -37,6 +37,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/chordsymbol_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/clef_courtesy_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/clef_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/compat206_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/copypaste_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/copypastesymbollist_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/durationtype_tests.cpp
@@ -78,7 +79,7 @@ set(MODULE_TEST_SRC
 set(MODULE_TEST_LINK
     engraving
     fonts
-    )
+)
 
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
