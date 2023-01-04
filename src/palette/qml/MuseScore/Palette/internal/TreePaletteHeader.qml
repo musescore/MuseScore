@@ -147,7 +147,7 @@ Item {
         navigation.column: 3
 
         menuModel: [
-            {id: "hide", title: root.custom ? qsTrc("palette", "Hide/delete palette") : qsTrc("palette", "Hide palette") },
+            {id: "hide", title: root.custom ? qsTrc("palette", "Hide/Delete palette") : qsTrc("palette", "Hide palette") },
             {id: "new", title: qsTrc("palette", "Insert new palette") },
             {id: "", title: "" }, // separator
             {id: "edit", title: qsTrc("palette", "Enable editing"), checkable: true, checked: root.editingEnabled },
