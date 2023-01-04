@@ -1707,7 +1707,7 @@
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="80"/>
-        <source>delete string</source>
+        <source>Delete string</source>
         <translation>Skrap string</translation>
     </message>
     <message>
@@ -7102,7 +7102,7 @@ By verstek sal hulle so geplaas word dat hulle regtereinde op dieselfde vlak is.
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="386"/>
-        <source>delete</source>
+        <source>Delete</source>
         <translation>Skrap</translation>
     </message>
     <message>
@@ -7147,7 +7147,7 @@ By verstek sal hulle so geplaas word dat hulle regtereinde op dieselfde vlak is.
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="441"/>
-        <source>delete selected measures</source>
+        <source>Delete selected measures</source>
         <translation>Skrap geselekteerde mate</translation>
     </message>
     <message>
@@ -16716,7 +16716,7 @@ Gepubliseer onder die &lt;a href=&quot;%1&quot;&gt;GNU General Public License ve
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/DirectoriesTopPanel.qml" line="89"/>
-        <source>delete</source>
+        <source>Delete</source>
         <translation>Skrap</translation>
     </message>
     <message>
@@ -17696,7 +17696,7 @@ opslagmaat</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="81"/>
-        <source>delete selected measures</source>
+        <source>Delete selected measures</source>
         <translation>Skrap geselekteerde mate</translation>
     </message>
     <message>
@@ -20131,7 +20131,7 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml" line="84"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="148"/>
-        <source>delete</source>
+        <source>Delete</source>
         <translation>Skrap</translation>
     </message>
     <message>
@@ -20365,7 +20365,7 @@ Whether you are just getting started with music notation software, or are a powe
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="106"/>
-        <source>delete measures</source>
+        <source>Delete measures</source>
         <translation>Skrap mate</translation>
     </message>
     <message>
@@ -21382,7 +21382,7 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/Palette.qml" line="614"/>
         <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1129"/>
-        <source>delete</source>
+        <source>Delete</source>
         <translation>Skrap</translation>
     </message>
     <message>
@@ -22371,7 +22371,7 @@ Whether you are just getting started with music notation software, or are a powe
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="338"/>
-        <source>delete permanently</source>
+        <source>Delete permanently</source>
         <translation>Skrap permanent</translation>
     </message>
     <message>
@@ -22518,7 +22518,7 @@ oop te maak, het misluk: %2</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1147"/>
-        <source>delete palette cell</source>
+        <source>Delete palette cell</source>
         <translation>Skrap paletsel</translation>
     </message>
     <message>
