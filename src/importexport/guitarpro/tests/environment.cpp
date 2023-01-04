@@ -25,7 +25,7 @@
 #include "fonts/fontsmodule.h"
 #include "draw/drawmodule.h"
 #include "engraving/engravingmodule.h"
-#include "engraving/utests/utils/scorerw.h"
+#include "engraving/tests/utils/scorerw.h"
 
 #include "importexport/guitarpro/guitarpromodule.h"
 
