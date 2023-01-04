@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE_TEST engraving_utests)
+set(MODULE_TEST engraving_tests)
 
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
@@ -83,4 +83,3 @@ set(MODULE_TEST_LINK
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
 include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
-

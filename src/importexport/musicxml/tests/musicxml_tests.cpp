@@ -29,8 +29,8 @@
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 #include "importexport/musicxml/internal/musicxml/exportxml.h"
 
-#include "engraving/utests/utils/scorerw.h"
-#include "engraving/utests/utils/scorecomp.h"
+#include "engraving/tests/utils/scorerw.h"
+#include "engraving/tests/utils/scorecomp.h"
 
 #include "io/fileinfo.h"
 
