@@ -211,7 +211,7 @@ void CompatUtils::assignInitialPartToExcerpts(const std::vector<Excerpt*>& excer
                 continue;
             }
 
-            if (excerpt->name().contains(part->partName())) {
+            if (excerpt->name().contains(part->partName()) || excerpt->excerptScore()->parts().size() == 1) {
                 assignInitialPartId(excerpt, part->id());
                 break;
             }
