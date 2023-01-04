@@ -223,7 +223,7 @@ bool MTest::saveCompareMimeData(QByteArray mimeData, const QString& saveName, co
 
 QString MTest::rootPath()
 {
-    return QString(engraving_tests_DATA_ROOT);
+    return QString(engraving_tests_legacy_DATA_ROOT);
 }
 
 //---------------------------------------------------------
