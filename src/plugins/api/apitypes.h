@@ -343,24 +343,29 @@ enum class ElementType {
 Q_ENUM_NS(ElementType);
 
 enum class OrnamentStyle : char {
-    DEFAULT = int(mu::engraving::OrnamentStyle::DEFAULT),
-    BAROQUE = int(mu::engraving::OrnamentStyle::BAROQUE)
+    DEFAULT = char(mu::engraving::OrnamentStyle::DEFAULT),
+    BAROQUE = char(mu::engraving::OrnamentStyle::BAROQUE)
 };
 Q_ENUM_NS(OrnamentStyle);
 
 enum class Align : char {
-    LEFT     = char(mu::engraving::AlignH::LEFT),
-    RIGHT    = char(mu::engraving::AlignH::RIGHT),
-    HCENTER  = char(mu::engraving::AlignH::HCENTER),
-    TOP      = char(mu::engraving::AlignV::TOP),
-    BOTTOM   = char(mu::engraving::AlignV::BOTTOM),
-    VCENTER  = char(mu::engraving::AlignV::VCENTER),
-    BASELINE = char(mu::engraving::AlignV::BASELINE),
+    LEFT     = 0,
+    RIGHT    = 1,
+    HCENTER  = 2,
+    TOP      = 0,
+    BOTTOM   = 4,
+    VCENTER  = 8,
+    BASELINE = 16,
     CENTER = Align::HCENTER | Align::VCENTER,
     HMASK  = Align::LEFT | Align::RIGHT | Align::HCENTER,
     VMASK  = Align::TOP | Align::BOTTOM | Align::VCENTER | Align::BASELINE
 };
 Q_ENUM_NS(Align);
+
+constexpr Align operator &(Align a1, Align a2)
+{
+    return static_cast<Align>(static_cast<char>(a1) & static_cast<char>(a2));
+}
 
 //! NOTE just Placement for compatibility
 enum class Placement {
