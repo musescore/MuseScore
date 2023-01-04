@@ -217,7 +217,8 @@ Column {
         titleText: qsTrc("inspector", "Corner radius")
         propertyItem: root.model ? root.model.frameCornerRadius : null
 
-        step: 0.1
+        step: 1
+        decimals: 2
         minValue: 0
         maxValue: 100
     }
