@@ -321,7 +321,7 @@ class Instrument
     int _minPitchP = 0;
     int _maxPitchP = 0;
     Interval _transpose;
-    String _instrumentId;
+    String _musicXmlId;
 
     bool _useDrumset = false;
     Drumset* _drumset = nullptr;
@@ -351,7 +351,7 @@ public:
     double getVelocityMultiplier(const String& name);
     void updateGateTime(int* gateTime, int channelIdx, const String& name);
 
-    String recognizeInstrumentId() const;
+    String recognizeMusicXmlId() const;
     String recognizeId() const;
     int recognizeMidiProgram() const;
 
@@ -370,8 +370,7 @@ public:
     void setMaxPitchA(int v) { _maxPitchA = v; }
     Interval transpose() const { return _transpose; }
     void setTranspose(const Interval& v) { _transpose = v; }
-    String instrumentId() { return _instrumentId; }
-    void setInstrumentId(const String& instrumentId) { _instrumentId = instrumentId; }
+    void setMusicXmlId(const String& musicXmlId) { _musicXmlId = musicXmlId; }
 
     void setDrumset(const Drumset* ds);
     const Drumset* drumset() const { return _drumset; }
@@ -412,7 +411,7 @@ public:
     int maxPitchP() const;
     int minPitchA() const;
     int maxPitchA() const;
-    String instrumentId() const;
+    String musicXmlId() const;
 
     const std::list<StaffName>& longNames() const;
     const std::list<StaffName>& shortNames() const;
