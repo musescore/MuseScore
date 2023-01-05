@@ -5,12 +5,10 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <clefLeftMargin>0.64</clefLeftMargin>
-      <clefKeyRightMargin>1.75</clefKeyRightMargin>
-      <barNoteDistance>1.2</barNoteDistance>
       <pedalPosBelow x="0" y="0"/>
       <trillPosAbove x="0" y="0"/>
       <dynamicsFontStyle>0</dynamicsFontStyle>
+      <defaultsVersion>206</defaultsVersion>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -28,7 +26,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
@@ -36,7 +34,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Lead</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -76,7 +74,7 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="2">
       <Staff id="2">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -85,7 +83,7 @@
         </Staff>
       <show>0</show>
       <trackName>Bass</trackName>
-      <Instrument>
+      <Instrument id="contrabass">
         <trackName>Contrabass</trackName>
         <minPitchP>28</minPitchP>
         <maxPitchP>67</maxPitchP>
@@ -157,8 +155,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>23</l1>
-            <l2>17</l2>
+            <l1>44</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -236,12 +234,10 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <clefLeftMargin>0.64</clefLeftMargin>
-        <clefKeyRightMargin>1.75</clefKeyRightMargin>
-        <barNoteDistance>1.2</barNoteDistance>
         <pedalPosBelow x="0" y="0"/>
         <trillPosAbove x="0" y="0"/>
         <dynamicsFontStyle>0</dynamicsFontStyle>
+        <defaultsVersion>206</defaultsVersion>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -249,7 +245,7 @@
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
       <metaTag name="partName">Bass</metaTag>
-      <Part>
+      <Part id="2">
         <Staff id="1">
           <linkedTo>2</linkedTo>
           <StaffType group="pitched">
@@ -258,7 +254,7 @@
           <defaultClef>F8vb</defaultClef>
           </Staff>
         <trackName>Contrabass</trackName>
-        <Instrument>
+        <Instrument id="contrabass">
           <trackName>Contrabass</trackName>
           <minPitchP>28</minPitchP>
           <maxPitchP>67</maxPitchP>

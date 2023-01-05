@@ -5,8 +5,6 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <pageWidth>8.27</pageWidth>
-      <pageHeight>11.69</pageHeight>
       <pagePrintableWidth>7.4826</pagePrintableWidth>
       <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
       <pageOddLeftMargin>0.393701</pageOddLeftMargin>
@@ -14,6 +12,7 @@
       <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
       <pageOddTopMargin>0.393701</pageOddTopMargin>
       <pageOddBottomMargin>0.787403</pageOddBottomMargin>
+      <defaultsVersion>206</defaultsVersion>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -31,7 +30,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">ideas</metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -39,7 +38,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Violoncello</trackName>
-      <Instrument>
+      <Instrument id="violoncello">
         <longName>Violoncello</longName>
         <shortName>Vc.</shortName>
         <trackName>Violoncello</trackName>
@@ -113,8 +112,8 @@
             <placement>below</placement>
             </Fermata>
           <Beam>
-            <l1>21</l1>
-            <l2>21</l2>
+            <l1>42</l1>
+            <l2>42</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -158,7 +157,7 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-5</l1>
+            <l1>-6</l1>
             <l2>0</l2>
             </Beam>
           <Chord>
@@ -219,8 +218,8 @@
         <stretch>0.9</stretch>
         <voice>
           <Beam>
-            <l1>21</l1>
-            <l2>21</l2>
+            <l1>42</l1>
+            <l2>42</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -261,7 +260,7 @@
             <play>0</play>
             </Fermata>
           <Beam>
-            <l1>-5</l1>
+            <l1>-6</l1>
             <l2>0</l2>
             </Beam>
           <Chord>

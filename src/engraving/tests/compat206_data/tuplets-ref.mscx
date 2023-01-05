@@ -5,6 +5,7 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <defaultsVersion>206</defaultsVersion>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -22,14 +23,14 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Title</metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
@@ -97,8 +98,8 @@
             <numberType>1</numberType>
             </Tuplet>
           <Beam>
-            <l1>24</l1>
-            <l2>23</l2>
+            <l1>46</l1>
+            <l2>44</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -163,8 +164,8 @@
             <numberType>1</numberType>
             </Tuplet>
           <Beam>
-            <l1>20</l1>
-            <l2>19</l2>
+            <l1>40</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -195,8 +196,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>19</l1>
-            <l2>21</l2>
+            <l1>38</l1>
+            <l2>42</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -262,8 +263,8 @@
             </Chord>
           <endTuplet/>
           <Beam>
-            <l1>17</l1>
-            <l2>17</l2>
+            <l1>34</l1>
+            <l2>34</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -288,8 +289,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>20</l1>
-            <l2>19</l2>
+            <l1>40</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -329,8 +330,8 @@
             <direction>up</direction>
             </Tuplet>
           <Beam>
-            <l1>31</l1>
-            <l2>27</l2>
+            <l1>56</l1>
+            <l2>56</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -457,8 +458,8 @@
             <direction>up</direction>
             </Tuplet>
           <Beam>
-            <l1>25</l1>
-            <l2>26</l2>
+            <l1>50</l1>
+            <l2>50</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>

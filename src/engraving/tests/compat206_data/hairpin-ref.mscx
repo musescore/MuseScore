@@ -14,6 +14,7 @@
       <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
       <pageOddTopMargin>0.393701</pageOddTopMargin>
       <pageOddBottomMargin>0.787403</pageOddBottomMargin>
+      <defaultsVersion>206</defaultsVersion>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -31,14 +32,14 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">crescendo-2</metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
@@ -595,6 +596,7 @@
         </Measure>
       </Staff>
     <Score>
+      <initialPartId>1</initialPartId>
       <LayerTag id="0" tag="default"></LayerTag>
       <currentLayer>0</currentLayer>
       <Division>480</Division>
@@ -609,6 +611,7 @@
         <pageOddTopMargin>0.393701</pageOddTopMargin>
         <pageOddBottomMargin>0.787403</pageOddBottomMargin>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <defaultsVersion>206</defaultsVersion>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -616,7 +619,7 @@
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
       <metaTag name="partName">Piano</metaTag>
-      <Part>
+      <Part id="1">
         <Staff id="1">
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
@@ -624,7 +627,7 @@
             </StaffType>
           </Staff>
         <trackName>Piano</trackName>
-        <Instrument>
+        <Instrument id="piano">
           <longName>Piano</longName>
           <shortName>Pno.</shortName>
           <trackName>Piano</trackName>

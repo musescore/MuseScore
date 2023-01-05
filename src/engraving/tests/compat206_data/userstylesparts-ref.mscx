@@ -5,8 +5,6 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <pageWidth>8.27</pageWidth>
-      <pageHeight>11.69</pageHeight>
       <pagePrintableWidth>7.4826</pagePrintableWidth>
       <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
       <pageOddLeftMargin>0.393701</pageOddLeftMargin>
@@ -37,21 +35,18 @@
       <user3FramePadding>0</user3FramePadding>
       <user3FrameWidth>0</user3FrameWidth>
       <user4Name>Style4</user4Name>
-      <user4FontFace>FreeSerif</user4FontFace>
       <user4FontSize>12</user4FontSize>
       <user4FontSpatiumDependent>0</user4FontSpatiumDependent>
       <user4Align>center,center</user4Align>
       <user4FramePadding>0</user4FramePadding>
       <user4FrameWidth>0</user4FrameWidth>
       <user5Name>Style5</user5Name>
-      <user5FontFace>FreeSerif</user5FontFace>
       <user5FontSize>15</user5FontSize>
       <user5FontSpatiumDependent>0</user5FontSpatiumDependent>
       <user5Align>left,bottom</user5Align>
       <user5FramePadding>0</user5FramePadding>
       <user5FrameWidth>0</user5FrameWidth>
       <user6Name>Style6</user6Name>
-      <user6FontFace>FreeSerif</user6FontFace>
       <user6FontSize>12</user6FontSize>
       <user6FontSpatiumDependent>0</user6FontSpatiumDependent>
       <user6FontStyle>1</user6FontStyle>
@@ -59,13 +54,13 @@
       <user6FramePadding>0</user6FramePadding>
       <user6FrameWidth>0</user6FrameWidth>
       <user7Name>Style7</user7Name>
-      <user7FontFace>FreeSerif</user7FontFace>
       <user7FontSize>12</user7FontSize>
       <user7FontSpatiumDependent>0</user7FontSpatiumDependent>
       <user7FontStyle>2</user7FontStyle>
       <user7Align>right,bottom</user7Align>
       <user7FramePadding>0</user7FramePadding>
       <user7FrameWidth>0</user7FrameWidth>
+      <defaultsVersion>206</defaultsVersion>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -83,14 +78,14 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Title</metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
@@ -133,14 +128,14 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="2">
       <Staff id="2">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -182,14 +177,14 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="3">
       <Staff id="3">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -238,37 +233,37 @@
         <linkedMain/>
         <Text>
           <linkedMain/>
-          <style>User-1</style>
+          <style>user_1</style>
           <text>Title</text>
           </Text>
         <Text>
           <linkedMain/>
-          <style>User-7</style>
+          <style>user_7</style>
           <text>Text7</text>
           </Text>
         <Text>
           <linkedMain/>
-          <style>User-2</style>
+          <style>user_2</style>
           <text>Text 2</text>
           </Text>
         <Text>
           <linkedMain/>
-          <style>User-3</style>
+          <style>user_3</style>
           <text>Text3</text>
           </Text>
         <Text>
           <linkedMain/>
-          <style>User-4</style>
+          <style>user_4</style>
           <text>Text4</text>
           </Text>
         <Text>
           <linkedMain/>
-          <style>User-5</style>
+          <style>user_5</style>
           <text>Text5</text>
           </Text>
         <Text>
           <linkedMain/>
-          <style>User-6</style>
+          <style>user_6</style>
           <text>Text6</text>
           </Text>
         </VBox>
@@ -386,12 +381,11 @@
         </Measure>
       </Staff>
     <Score>
+      <initialPartId>1</initialPartId>
       <LayerTag id="0" tag="default"></LayerTag>
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <pageWidth>8.27</pageWidth>
-        <pageHeight>11.69</pageHeight>
         <pagePrintableWidth>7.4826</pagePrintableWidth>
         <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
         <pageOddLeftMargin>0.393701</pageOddLeftMargin>
@@ -423,21 +417,18 @@
         <user3FramePadding>0</user3FramePadding>
         <user3FrameWidth>0</user3FrameWidth>
         <user4Name>Style4</user4Name>
-        <user4FontFace>FreeSerif</user4FontFace>
         <user4FontSize>12</user4FontSize>
         <user4FontSpatiumDependent>0</user4FontSpatiumDependent>
         <user4Align>center,center</user4Align>
         <user4FramePadding>0</user4FramePadding>
         <user4FrameWidth>0</user4FrameWidth>
         <user5Name>Style5</user5Name>
-        <user5FontFace>FreeSerif</user5FontFace>
         <user5FontSize>15</user5FontSize>
         <user5FontSpatiumDependent>0</user5FontSpatiumDependent>
         <user5Align>left,bottom</user5Align>
         <user5FramePadding>0</user5FramePadding>
         <user5FrameWidth>0</user5FrameWidth>
         <user6Name>Style6</user6Name>
-        <user6FontFace>FreeSerif</user6FontFace>
         <user6FontSize>12</user6FontSize>
         <user6FontSpatiumDependent>0</user6FontSpatiumDependent>
         <user6FontStyle>1</user6FontStyle>
@@ -445,13 +436,13 @@
         <user6FramePadding>0</user6FramePadding>
         <user6FrameWidth>0</user6FrameWidth>
         <user7Name>Style7</user7Name>
-        <user7FontFace>FreeSerif</user7FontFace>
         <user7FontSize>12</user7FontSize>
         <user7FontSpatiumDependent>0</user7FontSpatiumDependent>
         <user7FontStyle>2</user7FontStyle>
         <user7Align>right,bottom</user7Align>
         <user7FramePadding>0</user7FramePadding>
         <user7FrameWidth>0</user7FrameWidth>
+        <defaultsVersion>206</defaultsVersion>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -459,7 +450,7 @@
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
       <metaTag name="partName">Piano</metaTag>
-      <Part>
+      <Part id="1">
         <Staff id="1">
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
@@ -467,7 +458,7 @@
             </StaffType>
           </Staff>
         <trackName>Piano</trackName>
-        <Instrument>
+        <Instrument id="piano">
           <longName>Piano</longName>
           <shortName>Pno.</shortName>
           <trackName>Piano</trackName>
@@ -519,43 +510,43 @@
           <Text>
             <linked>
               </linked>
-            <style>User-1</style>
+            <style>user_1</style>
             <text>Title</text>
             </Text>
           <Text>
             <linked>
               </linked>
-            <style>User-7</style>
+            <style>user_7</style>
             <text>Text7</text>
             </Text>
           <Text>
             <linked>
               </linked>
-            <style>User-2</style>
+            <style>user_2</style>
             <text>Text 2</text>
             </Text>
           <Text>
             <linked>
               </linked>
-            <style>User-3</style>
+            <style>user_3</style>
             <text>Text3</text>
             </Text>
           <Text>
             <linked>
               </linked>
-            <style>User-4</style>
+            <style>user_4</style>
             <text>Text4</text>
             </Text>
           <Text>
             <linked>
               </linked>
-            <style>User-5</style>
+            <style>user_5</style>
             <text>Text5</text>
             </Text>
           <Text>
             <linked>
               </linked>
-            <style>User-6</style>
+            <style>user_6</style>
             <text>Text6</text>
             </Text>
           <Text>
@@ -626,12 +617,11 @@
       <name>Piano</name>
       </Score>
     <Score>
+      <initialPartId>2</initialPartId>
       <LayerTag id="0" tag="default"></LayerTag>
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <pageWidth>8.27</pageWidth>
-        <pageHeight>11.69</pageHeight>
         <pagePrintableWidth>7.4826</pagePrintableWidth>
         <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
         <pageOddLeftMargin>0.393701</pageOddLeftMargin>
@@ -663,21 +653,18 @@
         <user3FramePadding>0</user3FramePadding>
         <user3FrameWidth>0</user3FrameWidth>
         <user4Name>Style4</user4Name>
-        <user4FontFace>FreeSerif</user4FontFace>
         <user4FontSize>12</user4FontSize>
         <user4FontSpatiumDependent>0</user4FontSpatiumDependent>
         <user4Align>center,center</user4Align>
         <user4FramePadding>0</user4FramePadding>
         <user4FrameWidth>0</user4FrameWidth>
         <user5Name>Style5</user5Name>
-        <user5FontFace>FreeSerif</user5FontFace>
         <user5FontSize>15</user5FontSize>
         <user5FontSpatiumDependent>0</user5FontSpatiumDependent>
         <user5Align>left,bottom</user5Align>
         <user5FramePadding>0</user5FramePadding>
         <user5FrameWidth>0</user5FrameWidth>
         <user6Name>Style6</user6Name>
-        <user6FontFace>FreeSerif</user6FontFace>
         <user6FontSize>12</user6FontSize>
         <user6FontSpatiumDependent>0</user6FontSpatiumDependent>
         <user6FontStyle>1</user6FontStyle>
@@ -685,13 +672,13 @@
         <user6FramePadding>0</user6FramePadding>
         <user6FrameWidth>0</user6FrameWidth>
         <user7Name>Style7</user7Name>
-        <user7FontFace>FreeSerif</user7FontFace>
         <user7FontSize>12</user7FontSize>
         <user7FontSpatiumDependent>0</user7FontSpatiumDependent>
         <user7FontStyle>2</user7FontStyle>
         <user7Align>right,bottom</user7Align>
         <user7FramePadding>0</user7FramePadding>
         <user7FrameWidth>0</user7FrameWidth>
+        <defaultsVersion>206</defaultsVersion>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -699,7 +686,7 @@
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
       <metaTag name="partName">Flute 1</metaTag>
-      <Part>
+      <Part id="2">
         <Staff id="1">
           <linkedTo>2</linkedTo>
           <StaffType group="pitched">
@@ -707,7 +694,7 @@
             </StaffType>
           </Staff>
         <trackName>Flute</trackName>
-        <Instrument>
+        <Instrument id="flute">
           <longName>Flute</longName>
           <shortName>Fl.</shortName>
           <trackName>Flute</trackName>
@@ -764,7 +751,7 @@
                 <staves>-1</staves>
                 </location>
               </linked>
-            <style>User-1</style>
+            <style>user_1</style>
             <text>Title</text>
             </Text>
           <Text>
@@ -773,7 +760,7 @@
                 <staves>-1</staves>
                 </location>
               </linked>
-            <style>User-7</style>
+            <style>user_7</style>
             <text>Text7</text>
             </Text>
           <Text>
@@ -782,7 +769,7 @@
                 <staves>-1</staves>
                 </location>
               </linked>
-            <style>User-2</style>
+            <style>user_2</style>
             <text>Text 2</text>
             </Text>
           <Text>
@@ -791,7 +778,7 @@
                 <staves>-1</staves>
                 </location>
               </linked>
-            <style>User-3</style>
+            <style>user_3</style>
             <text>Text3</text>
             </Text>
           <Text>
@@ -800,7 +787,7 @@
                 <staves>-1</staves>
                 </location>
               </linked>
-            <style>User-4</style>
+            <style>user_4</style>
             <text>Text4</text>
             </Text>
           <Text>
@@ -809,7 +796,7 @@
                 <staves>-1</staves>
                 </location>
               </linked>
-            <style>User-5</style>
+            <style>user_5</style>
             <text>Text5</text>
             </Text>
           <Text>
@@ -818,7 +805,7 @@
                 <staves>-1</staves>
                 </location>
               </linked>
-            <style>User-6</style>
+            <style>user_6</style>
             <text>Text6</text>
             </Text>
           <Text>
@@ -889,12 +876,11 @@
       <name>Flute 1</name>
       </Score>
     <Score>
+      <initialPartId>3</initialPartId>
       <LayerTag id="0" tag="default"></LayerTag>
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <pageWidth>8.27</pageWidth>
-        <pageHeight>11.69</pageHeight>
         <pagePrintableWidth>7.4826</pagePrintableWidth>
         <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
         <pageOddLeftMargin>0.393701</pageOddLeftMargin>
@@ -926,21 +912,18 @@
         <user3FramePadding>0</user3FramePadding>
         <user3FrameWidth>0</user3FrameWidth>
         <user4Name>Style4</user4Name>
-        <user4FontFace>FreeSerif</user4FontFace>
         <user4FontSize>12</user4FontSize>
         <user4FontSpatiumDependent>0</user4FontSpatiumDependent>
         <user4Align>center,center</user4Align>
         <user4FramePadding>0</user4FramePadding>
         <user4FrameWidth>0</user4FrameWidth>
         <user5Name>Style5</user5Name>
-        <user5FontFace>FreeSerif</user5FontFace>
         <user5FontSize>15</user5FontSize>
         <user5FontSpatiumDependent>0</user5FontSpatiumDependent>
         <user5Align>left,bottom</user5Align>
         <user5FramePadding>0</user5FramePadding>
         <user5FrameWidth>0</user5FrameWidth>
         <user6Name>Style6</user6Name>
-        <user6FontFace>FreeSerif</user6FontFace>
         <user6FontSize>12</user6FontSize>
         <user6FontSpatiumDependent>0</user6FontSpatiumDependent>
         <user6FontStyle>1</user6FontStyle>
@@ -948,13 +931,13 @@
         <user6FramePadding>0</user6FramePadding>
         <user6FrameWidth>0</user6FrameWidth>
         <user7Name>Style7</user7Name>
-        <user7FontFace>FreeSerif</user7FontFace>
         <user7FontSize>12</user7FontSize>
         <user7FontSpatiumDependent>0</user7FontSpatiumDependent>
         <user7FontStyle>2</user7FontStyle>
         <user7Align>right,bottom</user7Align>
         <user7FramePadding>0</user7FramePadding>
         <user7FrameWidth>0</user7FrameWidth>
+        <defaultsVersion>206</defaultsVersion>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -962,7 +945,7 @@
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
       <metaTag name="partName">Flute 2</metaTag>
-      <Part>
+      <Part id="3">
         <Staff id="1">
           <linkedTo>3</linkedTo>
           <StaffType group="pitched">
@@ -970,7 +953,7 @@
             </StaffType>
           </Staff>
         <trackName>Flute</trackName>
-        <Instrument>
+        <Instrument id="flute">
           <longName>Flute</longName>
           <shortName>Fl.</shortName>
           <trackName>Flute</trackName>
@@ -1027,7 +1010,7 @@
                 <staves>-2</staves>
                 </location>
               </linked>
-            <style>User-1</style>
+            <style>user_1</style>
             <text>Title</text>
             </Text>
           <Text>
@@ -1036,7 +1019,7 @@
                 <staves>-2</staves>
                 </location>
               </linked>
-            <style>User-7</style>
+            <style>user_7</style>
             <text>Text7</text>
             </Text>
           <Text>
@@ -1045,7 +1028,7 @@
                 <staves>-2</staves>
                 </location>
               </linked>
-            <style>User-2</style>
+            <style>user_2</style>
             <text>Text 2</text>
             </Text>
           <Text>
@@ -1054,7 +1037,7 @@
                 <staves>-2</staves>
                 </location>
               </linked>
-            <style>User-3</style>
+            <style>user_3</style>
             <text>Text3</text>
             </Text>
           <Text>
@@ -1063,7 +1046,7 @@
                 <staves>-2</staves>
                 </location>
               </linked>
-            <style>User-4</style>
+            <style>user_4</style>
             <text>Text4</text>
             </Text>
           <Text>
@@ -1072,7 +1055,7 @@
                 <staves>-2</staves>
                 </location>
               </linked>
-            <style>User-5</style>
+            <style>user_5</style>
             <text>Text5</text>
             </Text>
           <Text>
@@ -1081,7 +1064,7 @@
                 <staves>-2</staves>
                 </location>
               </linked>
-            <style>User-6</style>
+            <style>user_6</style>
             <text>Text6</text>
             </Text>
           <Text>
