@@ -105,6 +105,11 @@
           <style>title</style>
           <text>testpart1</text>
           </Text>
+        <Image>
+          <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
+          <linkPath>schnee.png</linkPath>
+          <size w="38.52" h="38.64"/>
+          </Image>
         </VBox>
       <Measure>
         <voice>
@@ -118,11 +123,6 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Tempo>
-            <tempo>1.66667</tempo>
-            <linkedMain/>
-            <text>𝅘𝅥 = 100</text>
-            </Tempo>
           <Chord>
             <linkedMain/>
             <durationType>quarter</durationType>
@@ -768,6 +768,7 @@
         </Measure>
       </Staff>
     <Score>
+      <initialPartId>1</initialPartId>
       <LayerTag id="0" tag="default"></LayerTag>
       <currentLayer>0</currentLayer>
       <Division>480</Division>
@@ -828,6 +829,11 @@
             <style>title</style>
             <text>testpart1</text>
             </Text>
+          <Image>
+            <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
+            <linkPath>schnee.png</linkPath>
+            <size w="38.52" h="38.64"/>
+            </Image>
           <Text>
             <style>instrument_excerpt</style>
             <text>Alto</text>
@@ -847,12 +853,6 @@
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
-            <Tempo>
-              <tempo>1.66667</tempo>
-              <linked>
-                </linked>
-              <text>𝅘𝅥 = 100</text>
-              </Tempo>
             <Chord>
               <linked>
                 </linked>
@@ -1207,6 +1207,7 @@
       <name>Alto</name>
       </Score>
     <Score>
+      <initialPartId>2</initialPartId>
       <LayerTag id="0" tag="default"></LayerTag>
       <currentLayer>0</currentLayer>
       <Division>480</Division>
@@ -1292,24 +1293,12 @@
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
-            <Tempo>
-              <tempo>1.66667</tempo>
-              <linked>
-                <location>
-                  <staves>-1</staves>
-                  </location>
-                <indexDiff>4</indexDiff>
-                </linked>
-              <text>𝅘𝅥 = 100</text>
-              </Tempo>
             <Chord>
               <linked>
-                <indexDiff>2</indexDiff>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <indexDiff>2</indexDiff>
                   </linked>
                 <pitch>55</pitch>
                 <tpc>15</tpc>
