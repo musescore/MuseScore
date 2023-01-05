@@ -39,6 +39,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/clef_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat114_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat206_tests.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/concertpitch_tests.cpp doesn't compile and needs actualization
     ${CMAKE_CURRENT_LIST_DIR}/copypaste_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/copypastesymbollist_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/durationtype_tests.cpp
@@ -54,6 +55,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/layoutelements_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/links_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/measure_tests.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/midimapping_tests.cpp doesn't compile and needs actualization
     ${CMAKE_CURRENT_LIST_DIR}/note_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/parts_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playbackeventsrendering_tests.cpp
@@ -70,6 +72,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/splitstaff_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tempomap_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/textbase_tests.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/textedit_tests.cpp doesn't compile and needs actualization
     ${CMAKE_CURRENT_LIST_DIR}/timesig_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tools_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/transpose_tests.cpp
