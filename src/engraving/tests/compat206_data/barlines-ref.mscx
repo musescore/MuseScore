@@ -5,8 +5,6 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <pageWidth>8.27</pageWidth>
-      <pageHeight>11.69</pageHeight>
       <pagePrintableWidth>7.4826</pagePrintableWidth>
       <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
       <pageOddLeftMargin>0.393701</pageOddLeftMargin>
@@ -15,6 +13,7 @@
       <pageOddTopMargin>0.393701</pageOddTopMargin>
       <pageOddBottomMargin>0.787403</pageOddBottomMargin>
       <lastSystemFillLimit>0</lastSystemFillLimit>
+      <defaultsVersion>206</defaultsVersion>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -32,14 +31,14 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">barlines</metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
@@ -82,14 +81,14 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="2">
       <Staff id="2">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -131,14 +130,14 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="3">
       <Staff id="3">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -180,14 +179,14 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="4">
       <Staff id="4">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -229,14 +228,14 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="5">
       <Staff id="5">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -278,14 +277,14 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="6">
       <Staff id="6">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -327,14 +326,14 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="7">
       <Staff id="7">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -376,14 +375,14 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="8">
       <Staff id="8">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>

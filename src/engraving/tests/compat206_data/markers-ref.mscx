@@ -5,6 +5,7 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <defaultsVersion>206</defaultsVersion>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -22,14 +23,14 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -74,7 +75,7 @@
     <Staff id="1">
       <Measure>
         <Marker>
-          <style>Repeat Text Left</style>
+          <style>repeat_left</style>
           <text><sym>segno</sym></text>
           <label>segno</label>
           </Marker>
@@ -91,7 +92,7 @@
         </Measure>
       <Measure>
         <Marker>
-          <style>Repeat Text Left</style>
+          <style>repeat_left</style>
           <text><sym>segnoSerpent1</sym></text>
           <label>varsegno</label>
           </Marker>
@@ -104,7 +105,7 @@
         </Measure>
       <Measure>
         <Marker>
-          <style>Repeat Text Left</style>
+          <style>repeat_left</style>
           <text><sym>coda</sym></text>
           <label>codab</label>
           </Marker>
@@ -120,7 +121,7 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <Marker>
-          <style>Repeat Text Left</style>
+          <style>repeat_left</style>
           <text><sym>codaSquare</sym></text>
           <label>varcoda</label>
           </Marker>
@@ -133,7 +134,7 @@
         </Measure>
       <Measure>
         <Marker>
-          <style>Repeat Text Right</style>
+          <style>repeat_right</style>
           <text>Fine</text>
           <label>fine</label>
           </Marker>
@@ -146,7 +147,7 @@
         </Measure>
       <Measure>
         <Marker>
-          <style>Repeat Text Right</style>
+          <style>repeat_right</style>
           <text>To Coda</text>
           <label>coda</label>
           </Marker>
@@ -159,7 +160,7 @@
         </Measure>
       <Measure>
         <Jump>
-          <style>Repeat Text Right</style>
+          <style>repeat_right</style>
           <text>D.C.</text>
           <jumpTo>start</jumpTo>
           <playUntil>end</playUntil>
@@ -177,7 +178,7 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <Jump>
-          <style>Repeat Text Right</style>
+          <style>repeat_right</style>
           <text>D.C. al Fine</text>
           <jumpTo>start</jumpTo>
           <playUntil>fine</playUntil>
@@ -192,7 +193,7 @@
         </Measure>
       <Measure>
         <Jump>
-          <style>Repeat Text Right</style>
+          <style>repeat_right</style>
           <text>D.C. al Coda</text>
           <jumpTo>start</jumpTo>
           <playUntil>coda</playUntil>
@@ -207,7 +208,7 @@
         </Measure>
       <Measure>
         <Jump>
-          <style>Repeat Text Right</style>
+          <style>repeat_right</style>
           <text>D.S. al Coda</text>
           <jumpTo>segno</jumpTo>
           <playUntil>coda</playUntil>
@@ -222,7 +223,7 @@
         </Measure>
       <Measure>
         <Jump>
-          <style>Repeat Text Right</style>
+          <style>repeat_right</style>
           <text>D.S. al Fine</text>
           <jumpTo>segno</jumpTo>
           <playUntil>fine</playUntil>
@@ -240,7 +241,7 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <Jump>
-          <style>Repeat Text Right</style>
+          <style>repeat_right</style>
           <text>D.S.</text>
           <jumpTo>segno</jumpTo>
           <playUntil>end</playUntil>
@@ -254,11 +255,13 @@
           </voice>
         </Measure>
       <Measure>
+        <measureRepeatCount>1</measureRepeatCount>
         <voice>
-          <RepeatMeasure>
+          <MeasureRepeat>
+            <subtype>1</subtype>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </RepeatMeasure>
+            </MeasureRepeat>
           <BarLine>
             <subtype>end</subtype>
             </BarLine>

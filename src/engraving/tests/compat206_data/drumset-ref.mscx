@@ -5,6 +5,7 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <defaultsVersion>206</defaultsVersion>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -22,7 +23,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="percussion">
           <name>perc5Line</name>
@@ -31,7 +32,7 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Drumset</trackName>
-      <Instrument>
+      <Instrument id="drumset">
         <longName>Drumset</longName>
         <shortName>Drs.</shortName>
         <trackName>Drumset</trackName>
@@ -255,7 +256,7 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="2">
       <Staff id="2">
         <StaffType group="percussion">
           <name>perc1Line</name>
@@ -265,7 +266,7 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Snare Drum</trackName>
-      <Instrument>
+      <Instrument id="snare-drum">
         <longName>Snare Drum</longName>
         <shortName>SD</shortName>
         <trackName>Snare Drum</trackName>
@@ -388,7 +389,7 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="3">
       <Staff id="3">
         <StaffType group="percussion">
           <name>perc5Line</name>
@@ -397,7 +398,7 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Tenor Drums</trackName>
-      <Instrument>
+      <Instrument id="marching-tenor-drums">
         <longName>Tenor Drums</longName>
         <shortName>TD</shortName>
         <trackName>Tenor Drums</trackName>
@@ -597,7 +598,7 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="4">
       <Staff id="4">
         <StaffType group="percussion">
           <name>perc5Line</name>
@@ -606,7 +607,7 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Bass Drums</trackName>
-      <Instrument>
+      <Instrument id="bass-drum">
         <longName>Bass Drums</longName>
         <shortName>BD</shortName>
         <trackName>Bass Drums</trackName>

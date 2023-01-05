@@ -14,11 +14,10 @@
       <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
       <pageOddTopMargin>0.393701</pageOddTopMargin>
       <pageOddBottomMargin>0.787403</pageOddBottomMargin>
-      <longInstrumentFontFace>FreeSerif</longInstrumentFontFace>
-      <longInstrumentFontSize>12</longInstrumentFontSize>
       <longInstrumentAlign>center,center</longInstrumentAlign>
       <longInstrumentFramePadding>0</longInstrumentFramePadding>
       <longInstrumentFrameWidth>0</longInstrumentFrameWidth>
+      <defaultsVersion>206</defaultsVersion>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -36,7 +35,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">align</metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -44,7 +43,7 @@
         <bracket type="0" span="4" col="0"/>
         </Staff>
       <trackName>Soprano</trackName>
-      <Instrument>
+      <Instrument id="soprano">
         <longName>Soprano</longName>
         <shortName>S.</shortName>
         <trackName>Soprano</trackName>
@@ -86,14 +85,14 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="2">
       <Staff id="2">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Alto</trackName>
-      <Instrument>
+      <Instrument id="alto">
         <longName>Alto</longName>
         <shortName>A.</shortName>
         <trackName>Alto</trackName>
@@ -135,7 +134,7 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="3">
       <Staff id="3">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -143,7 +142,7 @@
         <defaultClef>G8vb</defaultClef>
         </Staff>
       <trackName>Tenor</trackName>
-      <Instrument>
+      <Instrument id="tenor">
         <longName>Tenor</longName>
         <shortName>T.</shortName>
         <trackName>Tenor</trackName>
@@ -186,7 +185,7 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="4">
       <Staff id="4">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -194,7 +193,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Bass</trackName>
-      <Instrument>
+      <Instrument id="bass">
         <longName>Bass</longName>
         <shortName>B.</shortName>
         <trackName>Bass</trackName>
