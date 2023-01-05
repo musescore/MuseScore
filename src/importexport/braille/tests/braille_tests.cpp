@@ -24,8 +24,8 @@
 
 #include <QFile>
 
-#include "engraving/utests/utils/scorerw.h"
-#include "engraving/utests/utils/scorecomp.h"
+#include "engraving/tests/utils/scorerw.h"
+#include "engraving/tests/utils/scorecomp.h"
 
 #include "libmscore/masterscore.h"
 #include "importexport/braille/internal/exportbraille.h"

@@ -27,7 +27,7 @@
 #include "engraving/engravingmodule.h"
 #include "importexport/musicxml/musicxmlmodule.h"
 
-#include "engraving/utests/utils/scorerw.h"
+#include "engraving/tests/utils/scorerw.h"
 
 #include "engraving/libmscore/instrtemplate.h"
 #include "engraving/libmscore/mscore.h"

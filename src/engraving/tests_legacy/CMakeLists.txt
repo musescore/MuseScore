@@ -18,24 +18,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE_TEST iex_musicxml_tests)
+set(MODULE_TEST engraving_tests_legacy)
 
 set(MODULE_TEST_SRC
-    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.cpp
-    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.h
-    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorecomp.cpp
-    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorecomp.h
-
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/musicxml_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/testbase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/testbase.h
+    # ${CMAKE_CURRENT_LIST_DIR}/tst_compat114.cpp # fail
+    # ${CMAKE_CURRENT_LIST_DIR}/tst_compat206.cpp # fail
+    # ${CMAKE_CURRENT_LIST_DIR}/tst_links.cpp # fail
+    # ${CMAKE_CURRENT_LIST_DIR}/tst_midi.cpp not ported
+    # ${CMAKE_CURRENT_LIST_DIR}/tst_midimapping.cpp not ported
+    #${CMAKE_CURRENT_LIST_DIR}/tst_parts.cpp # won't compile
+    # ${CMAKE_CURRENT_LIST_DIR}/tst_text.cpp not actual, not compile
 )
 
 set(MODULE_TEST_LINK
     engraving
     fonts
-    iex_musicxml
-)
+    )
 
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
-include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
+include(${PROJECT_SOURCE_DIR}/src/framework/testing/qtest.cmake)

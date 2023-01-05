@@ -18,7 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 # Main
 add_subdirectory(main)
 
@@ -102,7 +101,7 @@ endif (BUILD_UPDATE_MODULE)
 add_subdirectory(stubs)
 
 if (BUILD_UNIT_TESTS)
-    add_subdirectory(engraving/utests)
+    add_subdirectory(engraving/tests)
 
     add_subdirectory(importexport/bb/tests)
     add_subdirectory(importexport/braille/tests)
