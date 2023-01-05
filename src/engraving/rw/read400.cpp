@@ -156,7 +156,9 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
                     // TODO: read the other attributes from this element when we begin treating different classes
                     // of system objects differently. ex:
                     // bool showBarNumbers = !(e.hasAttribute("barNumbers") && e.attribute("barNumbers") == "false");
-                    sysStaves.push_back(staffIdx);
+                    if (staffIdx > 0) {
+                        sysStaves.push_back(staffIdx);
+                    }
                     e.skipCurrentElement();
                 } else {
                     e.skipCurrentElement();
