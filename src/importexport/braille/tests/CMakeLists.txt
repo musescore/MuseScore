@@ -21,10 +21,10 @@
 set(MODULE_TEST iex_braille_tests)
 
 set(MODULE_TEST_SRC
-    ${PROJECT_SOURCE_DIR}/src/engraving/utests/utils/scorerw.cpp
-    ${PROJECT_SOURCE_DIR}/src/engraving/utests/utils/scorerw.h
-    ${PROJECT_SOURCE_DIR}/src/engraving/utests/utils/scorecomp.cpp
-    ${PROJECT_SOURCE_DIR}/src/engraving/utests/utils/scorecomp.h
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.cpp
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.h
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorecomp.cpp
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorecomp.h
 
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/braille_tests.cpp

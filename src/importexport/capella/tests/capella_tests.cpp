@@ -25,8 +25,8 @@
 #include "engraving/engravingerrors.h"
 #include "engraving/libmscore/masterscore.h"
 
-#include "engraving/utests/utils/scorecomp.h"
-#include "engraving/utests/utils/scorerw.h"
+#include "engraving/tests/utils/scorecomp.h"
+#include "engraving/tests/utils/scorerw.h"
 
 using namespace mu;
 using namespace mu::engraving;
