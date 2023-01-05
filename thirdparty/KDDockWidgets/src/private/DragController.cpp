@@ -329,12 +329,6 @@ void StateDragging::onEntry()
 void StateDragging::onExit()
 {
     m_maybeCancelDrag.stop();
-
-    if (DockWidgetBase *dw = q->m_draggable->singleDockWidget()) {
-        // When we stop dragging a floating window which has a single dock widget, we save the position
-        if (dw->isFloating())
-            dw->d->saveLastFloatingGeometry();
-    }
 }
 
 bool StateDragging::handleMouseButtonRelease(QPoint globalPos)
