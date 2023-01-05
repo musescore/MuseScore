@@ -5,9 +5,9 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <frameSystemDistance>13</frameSystemDistance>
-      <measureSpacing>1.14</measureSpacing>
+      <frameSystemDistance>7</frameSystemDistance>
       <voltaPosAbove x="0" y="-2"/>
+      <defaultsVersion>114</defaultsVersion>
       <Spatium>1.764</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -25,16 +25,16 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
         <bracket type="-1" span="1" col="0"/>
         </Staff>
       <trackName>Voice</trackName>
-      <Instrument>
-        <longName><font size="12"/><font face="Times New Roman"/>Voice</longName>
-        <shortName><font size="12"/><font face="Times New Roman"/>Vo.</shortName>
+      <Instrument id="voice">
+        <longName>Voice</longName>
+        <shortName>Vo.</shortName>
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>94</maxPitchP>
@@ -74,7 +74,7 @@
         <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>title</style>
-          <text><font size="24"/><font face="Times New Roman"/>keysig</text>
+          <text>keysig</text>
           </Text>
         </VBox>
       <Measure>

@@ -5,9 +5,9 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <frameSystemDistance>13</frameSystemDistance>
-      <measureSpacing>1.14</measureSpacing>
+      <frameSystemDistance>7</frameSystemDistance>
       <voltaPosAbove x="0" y="-2"/>
+      <defaultsVersion>114</defaultsVersion>
       <Spatium>1.764</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -25,7 +25,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
@@ -37,7 +37,7 @@
           </StaffType>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

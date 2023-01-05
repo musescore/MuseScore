@@ -5,9 +5,9 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <frameSystemDistance>13</frameSystemDistance>
-      <measureSpacing>1.14</measureSpacing>
+      <frameSystemDistance>7</frameSystemDistance>
       <voltaPosAbove x="0" y="-2"/>
+      <defaultsVersion>114</defaultsVersion>
       <Spatium>1.764</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -25,7 +25,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="percussion">
           <name>perc5Line</name>
@@ -34,9 +34,9 @@
         <bracket type="-1" span="1" col="0"/>
         </Staff>
       <trackName>Drumset 5 lines</trackName>
-      <Instrument>
-        <longName><font size="12"/><font face="Times New Roman"/>Drumset</longName>
-        <shortName><font size="12"/><font face="Times New Roman"/>Drs.</shortName>
+      <Instrument id="drumset">
+        <longName>Drumset</longName>
+        <shortName>Drs.</shortName>
         <trackName>Drumset 5 lines</trackName>
         <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>

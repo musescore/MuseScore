@@ -5,9 +5,9 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <frameSystemDistance>13</frameSystemDistance>
-      <measureSpacing>1.14</measureSpacing>
+      <frameSystemDistance>7</frameSystemDistance>
       <voltaPosAbove x="0" y="-2"/>
+      <defaultsVersion>114</defaultsVersion>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -25,22 +25,22 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
         <bracket type="-1" span="1" col="0"/>
         </Staff>
       <trackName>Guitar</trackName>
-      <Instrument>
-        <longName><font size="12"/><font face="Times New Roman"/>Guitar</longName>
-        <shortName><font size="12"/><font face="Times New Roman"/>Guit.</shortName>
+      <Instrument id="guitar-steel">
+        <longName><font size="12"/>Guitar</longName>
+        <shortName><font size="12"/>Guit.</shortName>
         <trackName>Guitar</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>83</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>83</maxPitchA>
-        <instrumentId>pluck.guitar.nylon-string</instrumentId>
+        <instrumentId>pluck.guitar.acoustic</instrumentId>
         <StringData>
           <frets>19</frets>
           <string>40</string>
@@ -83,7 +83,7 @@
         <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>title</style>
-          <text><font size="24"/><font face="Times New Roman"/>fing</text>
+          <text>fing</text>
           </Text>
         </VBox>
       <Measure>
@@ -110,7 +110,7 @@
             <durationType>quarter</durationType>
             <Note>
               <Fingering>
-                <style>String Number</style>
+                <style>string_number</style>
                 <text>2</text>
                 </Fingering>
               <pitch>55</pitch>
