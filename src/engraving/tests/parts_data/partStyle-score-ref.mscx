@@ -5,17 +5,13 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <pageWidth>11.6929</pageWidth>
-      <pageHeight>8.26771</pageHeight>
-      <pagePrintableWidth>10.9055</pagePrintableWidth>
-      <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
-      <pageOddLeftMargin>0.393701</pageOddLeftMargin>
-      <pageEvenTopMargin>0.393701</pageEvenTopMargin>
-      <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
-      <pageOddTopMargin>0.393701</pageOddTopMargin>
-      <pageOddBottomMargin>0.787403</pageOddBottomMargin>
       <frameSystemDistance>21</frameSystemDistance>
       <clefLeftMargin>4</clefLeftMargin>
+      <defaultFramePadding>0</defaultFramePadding>
+      <defaultFrameWidth>0</defaultFrameWidth>
+      <titleFontFace>Arial</titleFontFace>
+      <titleFontSize>48</titleFontSize>
+      <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
       <Spatium>1.364</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -33,19 +29,20 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Style Score</metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
         <minPitchA>60</minPitchA>
         <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -67,20 +64,21 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="2">
       <Staff id="2">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Oboe</trackName>
-      <Instrument>
+      <Instrument id="oboe">
         <shortName>Ob.</shortName>
         <trackName>Oboe</trackName>
         <minPitchP>58</minPitchP>
         <maxPitchP>93</maxPitchP>
         <minPitchA>58</minPitchA>
         <maxPitchA>87</maxPitchA>
+        <instrumentId>wind.reed.oboe</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -316,26 +314,14 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <pageWidth>8.26771</pageWidth>
-        <pageHeight>11.6929</pageHeight>
-        <pagePrintableWidth>7.48031</pagePrintableWidth>
-        <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
-        <pageOddLeftMargin>0.393701</pageOddLeftMargin>
-        <pageEvenTopMargin>0.393701</pageEvenTopMargin>
-        <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
-        <pageOddTopMargin>0.393701</pageOddTopMargin>
-        <pageOddBottomMargin>0.787403</pageOddBottomMargin>
-        <frameSystemDistance>21</frameSystemDistance>
-        <clefLeftMargin>4</clefLeftMargin>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
       <metaTag name="partName">Flute</metaTag>
-      <Part>
+      <Part id="1">
         <Staff id="1">
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
@@ -343,12 +329,13 @@
             </StaffType>
           </Staff>
         <trackName>Flute</trackName>
-        <Instrument>
+        <Instrument id="flute">
           <trackName>Flute</trackName>
           <minPitchP>59</minPitchP>
           <maxPitchP>98</maxPitchP>
           <minPitchA>60</minPitchA>
           <maxPitchA>93</maxPitchA>
+          <instrumentId>wind.flutes.flute</instrumentId>
           <Articulation>
             <velocity>100</velocity>
             <gateTime>100</gateTime>
@@ -526,26 +513,14 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <pageWidth>8.26771</pageWidth>
-        <pageHeight>11.6929</pageHeight>
-        <pagePrintableWidth>7.48031</pagePrintableWidth>
-        <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
-        <pageOddLeftMargin>0.393701</pageOddLeftMargin>
-        <pageEvenTopMargin>0.393701</pageEvenTopMargin>
-        <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
-        <pageOddTopMargin>0.393701</pageOddTopMargin>
-        <pageOddBottomMargin>0.787403</pageOddBottomMargin>
-        <frameSystemDistance>21</frameSystemDistance>
-        <clefLeftMargin>4</clefLeftMargin>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
       <metaTag name="partName">Oboe</metaTag>
-      <Part>
+      <Part id="2">
         <Staff id="1">
           <linkedTo>2</linkedTo>
           <StaffType group="pitched">
@@ -553,13 +528,14 @@
             </StaffType>
           </Staff>
         <trackName>Oboe</trackName>
-        <Instrument>
+        <Instrument id="oboe">
           <shortName>Ob.</shortName>
           <trackName>Oboe</trackName>
           <minPitchP>58</minPitchP>
           <maxPitchP>93</maxPitchP>
           <minPitchA>58</minPitchA>
           <maxPitchA>87</maxPitchA>
+          <instrumentId>wind.reed.oboe</instrumentId>
           <Articulation>
             <velocity>100</velocity>
             <gateTime>100</gateTime>
@@ -622,19 +598,6 @@
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
-              </Rest>
-            </voice>
-          </Measure>
-        <Measure len="32/4">
-          <multiMeasureRest>8</multiMeasureRest>
-          <voice>
-            <TimeSig>
-              <sigN>4</sigN>
-              <sigD>4</sigD>
-              </TimeSig>
-            <Rest>
-              <durationType>measure</durationType>
-              <duration>32/4</duration>
               </Rest>
             </voice>
           </Measure>

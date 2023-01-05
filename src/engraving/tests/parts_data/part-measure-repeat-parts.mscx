@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="4.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <pageWidth>8.27</pageWidth>
-      <pageHeight>11.69</pageHeight>
+      <defaultsVersion>301</defaultsVersion>
       <Spatium>1.764</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -24,14 +23,14 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">testpart1</metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
         </Staff>
       <trackName>Alto</trackName>
-      <Instrument>
+      <Instrument id="alto">
         <longName>Alto</longName>
         <shortName>A.</shortName>
         <trackName>Alto</trackName>
@@ -39,6 +38,7 @@
         <maxPitchP>77</maxPitchP>
         <minPitchA>55</minPitchA>
         <maxPitchA>74</maxPitchA>
+        <instrumentId>voice.alto</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -56,17 +56,18 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <program value="52"/>
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="2">
       <Staff id="2">
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
         </Staff>
       <trackName>Tenor</trackName>
-      <Instrument>
+      <Instrument id="tenor">
         <longName>Tenor</longName>
         <shortName>T.</shortName>
         <trackName>Tenor</trackName>
@@ -74,6 +75,7 @@
         <maxPitchP>72</maxPitchP>
         <minPitchA>48</minPitchA>
         <maxPitchA>69</maxPitchA>
+        <instrumentId>voice.tenor</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -91,12 +93,14 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <program value="52"/>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <boxAutoSize>0</boxAutoSize>
         <linkedMain/>
         <Text>
           <linkedMain/>
@@ -816,15 +820,14 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
       <metaTag name="partName">Alto</metaTag>
-      <Part>
+      <Part id="1">
         <Staff id="1">
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
@@ -832,7 +835,7 @@
             </StaffType>
           </Staff>
         <trackName>Alto</trackName>
-        <Instrument>
+        <Instrument id="alto">
           <longName>Alto</longName>
           <shortName>A.</shortName>
           <trackName>Alto</trackName>
@@ -840,6 +843,7 @@
           <maxPitchP>77</maxPitchP>
           <minPitchA>55</minPitchA>
           <maxPitchA>74</maxPitchA>
+          <instrumentId>voice.alto</instrumentId>
           <Articulation>
             <velocity>100</velocity>
             <gateTime>100</gateTime>
@@ -857,6 +861,7 @@
             <gateTime>100</gateTime>
             </Articulation>
           <Channel>
+            <program value="52"/>
             </Channel>
           </Instrument>
         </Part>
@@ -952,6 +957,9 @@
           <measureRepeatCount>1</measureRepeatCount>
           <LayoutBreak>
             <linked>
+              <location>
+                <staves>-1</staves>
+                </location>
               </linked>
             <subtype>nobreak</subtype>
             </LayoutBreak>
@@ -969,6 +977,9 @@
           <measureRepeatCount>2</measureRepeatCount>
           <LayoutBreak>
             <linked>
+              <location>
+                <staves>-1</staves>
+                </location>
               </linked>
             <subtype>nobreak</subtype>
             </LayoutBreak>
@@ -985,6 +996,9 @@
           <measureRepeatCount>1</measureRepeatCount>
           <LayoutBreak>
             <linked>
+              <location>
+                <staves>-1</staves>
+                </location>
               </linked>
             <subtype>nobreak</subtype>
             </LayoutBreak>
@@ -1001,6 +1015,9 @@
           <measureRepeatCount>2</measureRepeatCount>
           <LayoutBreak>
             <linked>
+              <location>
+                <staves>-1</staves>
+                </location>
               </linked>
             <subtype>nobreak</subtype>
             </LayoutBreak>
@@ -1018,6 +1035,9 @@
           <measureRepeatCount>3</measureRepeatCount>
           <LayoutBreak>
             <linked>
+              <location>
+                <staves>-1</staves>
+                </location>
               </linked>
             <subtype>nobreak</subtype>
             </LayoutBreak>
@@ -1034,6 +1054,9 @@
           <measureRepeatCount>4</measureRepeatCount>
           <LayoutBreak>
             <linked>
+              <location>
+                <staves>-1</staves>
+                </location>
               </linked>
             <subtype>nobreak</subtype>
             </LayoutBreak>
@@ -1053,15 +1076,6 @@
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
-              </Rest>
-            </voice>
-          </Measure>
-        <Measure len="96/4">
-          <multiMeasureRest>24</multiMeasureRest>
-          <voice>
-            <Rest>
-              <durationType>measure</durationType>
-              <duration>96/4</duration>
               </Rest>
             </voice>
           </Measure>
@@ -1303,15 +1317,14 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
       <metaTag name="partName">Tenor</metaTag>
-      <Part>
+      <Part id="2">
         <Staff id="1">
           <linkedTo>2</linkedTo>
           <StaffType group="pitched">
@@ -1319,7 +1332,7 @@
             </StaffType>
           </Staff>
         <trackName>Tenor</trackName>
-        <Instrument>
+        <Instrument id="tenor">
           <longName>Tenor</longName>
           <shortName>T.</shortName>
           <trackName>Tenor</trackName>
@@ -1327,6 +1340,7 @@
           <maxPitchP>72</maxPitchP>
           <minPitchA>48</minPitchA>
           <maxPitchA>69</maxPitchA>
+          <instrumentId>voice.tenor</instrumentId>
           <Articulation>
             <velocity>100</velocity>
             <gateTime>100</gateTime>
@@ -1344,6 +1358,7 @@
             <gateTime>100</gateTime>
             </Articulation>
           <Channel>
+            <program value="52"/>
             </Channel>
           </Instrument>
         </Part>
@@ -1458,7 +1473,7 @@
           <LayoutBreak>
             <linked>
               <location>
-                <staves>-1</staves>
+                <staves>-2</staves>
                 </location>
               </linked>
             <subtype>nobreak</subtype>
@@ -1478,7 +1493,7 @@
           <LayoutBreak>
             <linked>
               <location>
-                <staves>-1</staves>
+                <staves>-2</staves>
                 </location>
               </linked>
             <subtype>nobreak</subtype>
@@ -1498,7 +1513,7 @@
           <LayoutBreak>
             <linked>
               <location>
-                <staves>-1</staves>
+                <staves>-2</staves>
                 </location>
               </linked>
             <subtype>nobreak</subtype>
@@ -1517,7 +1532,7 @@
           <LayoutBreak>
             <linked>
               <location>
-                <staves>-1</staves>
+                <staves>-2</staves>
                 </location>
               </linked>
             <subtype>nobreak</subtype>
@@ -1536,7 +1551,7 @@
           <LayoutBreak>
             <linked>
               <location>
-                <staves>-1</staves>
+                <staves>-2</staves>
                 </location>
               </linked>
             <subtype>nobreak</subtype>
@@ -1556,7 +1571,7 @@
           <LayoutBreak>
             <linked>
               <location>
-                <staves>-1</staves>
+                <staves>-2</staves>
                 </location>
               </linked>
             <subtype>nobreak</subtype>
@@ -1588,15 +1603,6 @@
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
-              </Rest>
-            </voice>
-          </Measure>
-        <Measure len="92/4">
-          <multiMeasureRest>23</multiMeasureRest>
-          <voice>
-            <Rest>
-              <durationType>measure</durationType>
-              <duration>92/4</duration>
               </Rest>
             </voice>
           </Measure>

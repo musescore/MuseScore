@@ -22,7 +22,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">testpart1</metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>Standard</name>
@@ -59,7 +59,7 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="2">
       <Staff id="2">
         <StaffType group="pitched">
           <name>Standard</name>
@@ -771,7 +771,6 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
         <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -779,7 +778,7 @@
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
       <metaTag name="partName">Alto</metaTag>
-      <Part>
+      <Part id="1">
         <Staff id="1">
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
@@ -899,15 +898,6 @@
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
-              </Rest>
-            </voice>
-          </Measure>
-        <Measure len="124/4">
-          <multiMeasureRest>31</multiMeasureRest>
-          <voice>
-            <Rest>
-              <durationType>measure</durationType>
-              <duration>124/4</duration>
               </Rest>
             </voice>
           </Measure>
@@ -1219,7 +1209,6 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
         <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -1227,7 +1216,7 @@
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
       <metaTag name="partName">Tenor</metaTag>
-      <Part>
+      <Part id="2">
         <Staff id="1">
           <linkedTo>2</linkedTo>
           <StaffType group="pitched">
@@ -1354,15 +1343,6 @@
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
-              </Rest>
-            </voice>
-          </Measure>
-        <Measure len="124/4">
-          <multiMeasureRest>31</multiMeasureRest>
-          <voice>
-            <Rest>
-              <durationType>measure</durationType>
-              <duration>124/4</duration>
               </Rest>
             </voice>
           </Measure>

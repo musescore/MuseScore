@@ -137,6 +137,11 @@
             <durationType>quarter</durationType>
             <Note>
               <linkedMain/>
+              <Image>
+                <linkedMain/>
+                <path></path>
+                <linkPath></linkPath>
+                </Image>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -768,6 +773,7 @@
         </Measure>
       </Staff>
     <Score>
+      <initialPartId>1</initialPartId>
       <LayerTag id="0" tag="default"></LayerTag>
       <currentLayer>0</currentLayer>
       <Division>480</Division>
@@ -871,6 +877,12 @@
               <Note>
                 <linked>
                   </linked>
+                <Image>
+                  <linked>
+                    </linked>
+                  <path></path>
+                  <linkPath></linkPath>
+                  </Image>
                 <pitch>74</pitch>
                 <tpc>16</tpc>
                 </Note>
@@ -1207,6 +1219,7 @@
       <name>Alto</name>
       </Score>
     <Score>
+      <initialPartId>2</initialPartId>
       <LayerTag id="0" tag="default"></LayerTag>
       <currentLayer>0</currentLayer>
       <Division>480</Division>

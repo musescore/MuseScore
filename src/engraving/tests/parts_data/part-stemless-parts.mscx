@@ -25,7 +25,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Stemless</metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -88,7 +88,7 @@
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="2">
       <Staff id="2">
         <StaffType group="pitched">
           <name>stdNormal</name>
@@ -233,8 +233,8 @@
       <Measure>
         <voice>
           <Beam>
-            <l1>-4</l1>
-            <l2>-3</l2>
+            <l1>-8</l1>
+            <l2>-6</l2>
             </Beam>
           <Chord>
             <linkedMain/>
@@ -273,8 +273,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>20</l1>
-            <l2>15</l2>
+            <l1>38</l1>
+            <l2>32</l2>
             </Beam>
           <Chord>
             <linkedMain/>
@@ -485,7 +485,6 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
         <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -493,7 +492,7 @@
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
       <metaTag name="partName">Flute</metaTag>
-      <Part>
+      <Part id="1">
         <Staff id="1">
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
@@ -658,8 +657,8 @@
         <Measure>
           <voice>
             <Beam>
-              <l1>-4</l1>
-              <l2>-3</l2>
+              <l1>-8</l1>
+              <l2>-6</l2>
               </Beam>
             <Chord>
               <linked>
@@ -706,8 +705,8 @@
                 </Note>
               </Chord>
             <Beam>
-              <l1>20</l1>
-              <l2>15</l2>
+              <l1>38</l1>
+              <l2>32</l2>
               </Beam>
             <Chord>
               <linked>
@@ -773,7 +772,6 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
         <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -781,7 +779,7 @@
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
       <metaTag name="partName">Oboe</metaTag>
-      <Part>
+      <Part id="2">
         <Staff id="1">
           <linkedTo>2</linkedTo>
           <StaffType group="pitched">

@@ -22,14 +22,14 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">testpart1</metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
         </Staff>
       <trackName>Alto</trackName>
-      <Instrument>
+      <Instrument id="alto">
         <longName>Alto</longName>
         <shortName>A.</shortName>
         <trackName>Alto</trackName>
@@ -37,6 +37,7 @@
         <maxPitchP>77</maxPitchP>
         <minPitchA>55</minPitchA>
         <maxPitchA>74</maxPitchA>
+        <instrumentId>voice.alto</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -54,17 +55,18 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <program value="52"/>
           </Channel>
         </Instrument>
       </Part>
-    <Part>
+    <Part id="2">
       <Staff id="2">
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
         </Staff>
       <trackName>Tenor</trackName>
-      <Instrument>
+      <Instrument id="tenor">
         <longName>Tenor</longName>
         <shortName>T.</shortName>
         <trackName>Tenor</trackName>
@@ -72,6 +74,7 @@
         <maxPitchP>72</maxPitchP>
         <minPitchA>48</minPitchA>
         <maxPitchA>69</maxPitchA>
+        <instrumentId>voice.tenor</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -89,6 +92,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <program value="52"/>
           </Channel>
         </Instrument>
       </Part>
@@ -120,10 +124,9 @@
             <Note>
               <Image>
                 <Image>
-                  <z>6699</z>
+                  <z>7899</z>
                   <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
                   <linkPath>schnee.png</linkPath>
-                  <size w="0" h="0"/>
                   </Image>
                 <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
                 <linkPath>schnee.png</linkPath>
