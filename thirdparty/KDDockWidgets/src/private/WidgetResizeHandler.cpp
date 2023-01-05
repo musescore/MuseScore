@@ -12,6 +12,7 @@
 #include "WidgetResizeHandler_p.h"
 #include "FloatingWindow_p.h"
 #include "TitleBar_p.h"
+#include "DockWidgetBase_p.h"
 #include "DragController_p.h"
 #include "Config.h"
 #include "Qt5Qt6Compat_p.h"
@@ -127,6 +128,14 @@ bool WidgetResizeHandler::eventFilter(QObject *o, QEvent *e)
         }
         updateCursor(CursorPosition_Undefined);
         auto mouseEvent = static_cast<QMouseEvent *>(e);
+
+        // When we stop dragging a floating window which has a single dock widget, we save the position
+        if (Draggable *draggable = dynamic_cast<Draggable *>(mTarget)) {
+            if (DockWidgetBase *dw = draggable->singleDockWidget()) {
+                if (dw->isFloating())
+                    dw->d->saveLastFloatingGeometry();
+            }            
+        }
 
         if (mTarget->isMaximized() || !m_resizingInProgress || mouseEvent->button() != Qt::LeftButton)
             break;
