@@ -5,9 +5,9 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <frameSystemDistance>13</frameSystemDistance>
-      <measureSpacing>1.14</measureSpacing>
+      <frameSystemDistance>7</frameSystemDistance>
       <voltaPosAbove x="0" y="-2"/>
+      <defaultsVersion>114</defaultsVersion>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -25,14 +25,14 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
         <bracket type="-1" span="1" col="0"/>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -72,7 +72,7 @@
         <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>title</style>
-          <text><font size="24"/><font face="Times New Roman"/>Tuplet 1.3 file</text>
+          <text>Tuplet 1.3 file</text>
           </Text>
         </VBox>
       <Measure>
@@ -132,7 +132,7 @@
             </Chord>
           <endTuplet/>
           <location>
-            <fractions>-43/2160</fractions>
+            <fractions>1/108</fractions>
             </location>
           <Rest>
             <dots>1</dots>
@@ -140,21 +140,20 @@
             </Rest>
           <endTuplet/>
           <location>
-            <fractions>-1/960</fractions>
+            <fractions>-29/960</fractions>
             </location>
           <Tuplet>
             <normalNotes>4</normalNotes>
             <actualNotes>6</actualNotes>
             <baseNote>32nd</baseNote>
             <Number>
-              <text>6:4</text>
               </Number>
             <numberType>1</numberType>
             <bracketType>1</bracketType>
             </Tuplet>
           <Beam>
-            <l1>15</l1>
-            <l2>15</l2>
+            <l1>26</l1>
+            <l2>26</l2>
             </Beam>
           <Chord>
             <durationType>32nd</durationType>
@@ -205,6 +204,15 @@
           <Rest>
             <durationType>half</durationType>
             </Rest>
+          <location>
+            <fractions>-469/960</fractions>
+            </location>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          <location>
+            <fractions>-11/960</fractions>
+            </location>
           <BarLine>
             <subtype>end</subtype>
             </BarLine>

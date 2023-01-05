@@ -5,9 +5,9 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <frameSystemDistance>13</frameSystemDistance>
-      <measureSpacing>1.14</measureSpacing>
+      <frameSystemDistance>7</frameSystemDistance>
       <voltaPosAbove x="0" y="-2"/>
+      <defaultsVersion>114</defaultsVersion>
       <Spatium>0.764</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -25,16 +25,16 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
+    <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
         <bracket type="-1" span="1" col="0"/>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
-        <longName><font size="11.5438"/><font face="Times New Roman"/>Flute</longName>
-        <shortName><font size="11.5438"/><font face="Times New Roman"/>Fl.</shortName>
+      <Instrument id="flute">
+        <longName><font size="5"/>Flute</longName>
+        <shortName><font size="5"/>Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -79,7 +79,7 @@
         <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>title</style>
-          <text><font size="24"/><font face="Times New Roman"/>Title</text>
+          <text>Title</text>
           </Text>
         </VBox>
       <Measure>
@@ -93,13 +93,13 @@
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <text><font face="Times New Roman"/>staff text</text>
+            <text>staff text</text>
             </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
               <syllabic>begin</syllabic>
-              <text><font size="11"/><font face="Times New Roman"/>ly</text>
+              <text>ly</text>
               </Lyrics>
             <Note>
               <pitch>72</pitch>
@@ -110,7 +110,7 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
-              <text><font size="11"/><font face="Times New Roman"/>rics</text>
+              <text>rics</text>
               </Lyrics>
             <Note>
               <pitch>72</pitch>
