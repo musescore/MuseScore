@@ -135,8 +135,6 @@ public:
 
     void init();
 
-    Q_INVOKABLE virtual void requestResetToDefaults();
-
     QString title() const;
     int icon() const;
     InspectorSectionType sectionType() const;

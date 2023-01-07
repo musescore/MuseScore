@@ -58,7 +58,6 @@ public:
     void resetProperties() override {}
 
     void requestElements() override;
-    void requestResetToDefaults() override;
     bool isEmpty() const override;
 
     void updateModels(const ElementKeySet& newElementKeySet);

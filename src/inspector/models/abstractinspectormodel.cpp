@@ -162,11 +162,6 @@ void AbstractInspectorModel::onNotationChanged(const PropertyIdSet&, const Style
 {
 }
 
-void AbstractInspectorModel::requestResetToDefaults()
-{
-    resetProperties();
-}
-
 QString AbstractInspectorModel::title() const
 {
     return m_title;
