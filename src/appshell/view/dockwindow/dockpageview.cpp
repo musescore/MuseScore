@@ -221,28 +221,6 @@ void DockPageView::setDockOpen(const QString& dockName, bool open)
     if (!open) {
         dock->close();
         return;
-<<<<<<< HEAD
-=======
-    }
-
-    DockPanelView* panel = dynamic_cast<DockPanelView*>(dock);
-    if (!panel) {
-        dock->open();
-        return;
-    }
-
-    DockPanelView* destinationPanel = findPanelForTab(panel);
-    if (destinationPanel) {
-        const int currentTabIndex = destinationPanel->getCurrentTabIndex();
-        const int tabIndex = destinationPanel->getTabIndexOfPanel(panel);
-        const bool tabNotFound = tabIndex < 0;
-        const bool tabNotCurrent = tabIndex != currentTabIndex;
-        if (tabNotFound) {
-            destinationPanel->addPanelAsTab(panel);
-        } else if (tabNotCurrent) {
-            destinationPanel->setCurrentTabIndex(tabIndex);
-        }
->>>>>>> 2914134596 (Fixed whitespace and braces issue.)
     } else {
         dock->setFocus(true);
 
