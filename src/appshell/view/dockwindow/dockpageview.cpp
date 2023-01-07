@@ -186,7 +186,9 @@ void DockPageView::toggleDock(const QString& dockName)
     bool shouldOpen = true;
 
     DockPanelView* panel = dynamic_cast<DockPanelView*>(dock);
-    if (panel) {
+    if (!panel) {
+        shouldOpen = !dock->hasFocus() || !dock->isOpen();
+    } else {
         if (panel->isOpen()) {
             if (panel->floating()) {
                 shouldOpen = !panel->hasFocus();
@@ -204,8 +206,6 @@ void DockPageView::toggleDock(const QString& dockName)
         } else {
             shouldOpen = true;
         }
-    } else {
-        shouldOpen = !panel->hasFocus() || !panel->isOpen();
     }
 
     setDockOpen(dockName, shouldOpen);
