@@ -1,0 +1,26 @@
+#!/bin/sh
+
+if [ -z "$test_dir" ]
+then
+    echo "Error: please set \$test_dir to the folder that contains the test files"
+    exit 1
+fi
+
+cp $test_dir/accidentals-test.mscx     accidentals-ref.mscx
+cp $test_dir/ambitus-test.mscx         ambitus-ref.mscx
+cp $test_dir/articulations-test.mscx   articulations-ref.mscx
+cp $test_dir/articulations-double-test.mscx   articulations-double-ref.mscx
+cp $test_dir/barlines-test.mscx        barlines-ref.mscx
+cp $test_dir/breath-test.mscx          breath-ref.mscx
+cp $test_dir/clefs-test.mscx           clefs-ref.mscx
+cp $test_dir/drumset-test.mscx         drumset-ref.mscx
+cp $test_dir/fermata-test.mscx         fermata-ref.mscx
+cp $test_dir/frame_text2-test.mscx     frame_text2-ref.mscx
+cp $test_dir/hairpin-test.mscx         hairpin-ref.mscx
+cp $test_dir/instrumentNameAlign-test.mscx instrumentNameAlign-ref.mscx
+cp $test_dir/lidemptytext-test.mscx    lidemptytext-ref.mscx
+cp $test_dir/markers-test.mscx         markers-ref.mscx
+cp $test_dir/noteheads-test.mscx       noteheads-ref.mscx
+cp $test_dir/textstyles-test.mscx      textstyles-ref.mscx
+cp $test_dir/tuplets-test.mscx         tuplets-ref.mscx
+cp $test_dir/userstylesparts-test.mscx userstylesparts-ref.mscx
