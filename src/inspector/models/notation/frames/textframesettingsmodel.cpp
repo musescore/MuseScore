@@ -82,11 +82,11 @@ void TextFrameSettingsModel::onNotationChanged(const PropertyIdSet& changedPrope
 void TextFrameSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)
 {
     if (mu::contains(propertyIdSet, Pid::TOP_GAP)) {
-        loadPropertyItem(m_gapAbove, formatDoubleFunc);
+        loadPropertyItem(m_gapAbove, roundedDoubleElementInternalToUiConverter(Pid::TOP_GAP));
     }
 
     if (mu::contains(propertyIdSet, Pid::BOTTOM_GAP)) {
-        loadPropertyItem(m_gapBelow, formatDoubleFunc);
+        loadPropertyItem(m_gapBelow, roundedDoubleElementInternalToUiConverter(Pid::BOTTOM_GAP));
     }
 
     if (mu::contains(propertyIdSet, Pid::LEFT_MARGIN)) {

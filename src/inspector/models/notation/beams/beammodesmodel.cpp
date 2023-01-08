@@ -33,7 +33,8 @@ void BeamModesModel::createProperties()
 {
     m_mode = buildPropertyItem(mu::engraving::Pid::BEAM_MODE);
     m_isFeatheringAvailable = buildPropertyItem(mu::engraving::Pid::DURATION_TYPE_WITH_DOTS, [](const mu::engraving::Pid, const QVariant&) {
-    });                                                                                                                                         //@note readonly property, there is no need to modify it
+        //@note readonly property, there is no need to modify it
+    });
 }
 
 void BeamModesModel::requestElements()
@@ -46,13 +47,8 @@ void BeamModesModel::loadProperties()
 {
     loadPropertyItem(m_mode);
 
-    loadPropertyItem(m_isFeatheringAvailable, [](const QVariant& elementPropertyValue) -> QVariant {
-        QVariantMap map = elementPropertyValue.toMap();
-        if (map.isEmpty()) {
-            return false;
-        }
-
-        mu::engraving::DurationType durationType = static_cast<mu::engraving::DurationType>(map["type"].toInt());
+    loadPropertyItem(m_isFeatheringAvailable, [](const engraving::PropertyValue& propertyValue) -> QVariant {
+        mu::engraving::DurationType durationType = propertyValue.value<engraving::DurationTypeWithDots>().type;
 
         switch (durationType) {
         case mu::engraving::DurationType::V_INVALID:

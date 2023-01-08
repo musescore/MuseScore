@@ -40,7 +40,7 @@ NoteheadSettingsModel::NoteheadSettingsModel(QObject* parent, IElementRepository
 void NoteheadSettingsModel::createProperties()
 {
     m_isHeadHidden = buildPropertyItem(mu::engraving::Pid::VISIBLE, [this](const mu::engraving::Pid pid, const QVariant& isHeadHidden) {
-        onPropertyValueChanged(pid, !isHeadHidden.toBool());
+        defaultSetPropertyCallback(mu::engraving::Pid::VISIBLE)(pid, !isHeadHidden.toBool());
     });
 
     m_isHeadSmall = buildPropertyItem(mu::engraving::Pid::SMALL);
@@ -50,7 +50,7 @@ void NoteheadSettingsModel::createProperties()
     m_headType = buildPropertyItem(mu::engraving::Pid::HEAD_TYPE);
     m_headSystem = buildPropertyItem(mu::engraving::Pid::HEAD_SCHEME);
     m_dotPosition = buildPropertyItem(mu::engraving::Pid::DOT_POSITION);
-    m_offset = buildPointFPropertyItem(mu::engraving::Pid::OFFSET);
+//    m_offset = buildPointFPropertyItem(mu::engraving::Pid::OFFSET);
 }
 
 void NoteheadSettingsModel::requestElements()
@@ -60,7 +60,7 @@ void NoteheadSettingsModel::requestElements()
 
 void NoteheadSettingsModel::loadProperties()
 {
-    static PropertyIdSet propertyIdSet {
+    static const PropertyIdSet propertyIdSet {
         Pid::VISIBLE,
         Pid::SMALL,
         Pid::HEAD_HAS_PARENTHESES,
@@ -97,7 +97,7 @@ void NoteheadSettingsModel::onNotationChanged(const mu::engraving::PropertyIdSet
 void NoteheadSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)
 {
     if (mu::contains(propertyIdSet, Pid::VISIBLE)) {
-        loadPropertyItem(m_isHeadHidden, [](const QVariant& isVisible) -> QVariant {
+        loadPropertyItem(m_isHeadHidden, [](const engraving::PropertyValue& isVisible) -> QVariant {
             return !isVisible.toBool();
         });
     }

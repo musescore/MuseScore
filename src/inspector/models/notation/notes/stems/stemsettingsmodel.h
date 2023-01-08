@@ -65,7 +65,7 @@ private:
 
     PropertyItem* m_thickness = nullptr;
     PropertyItem* m_length = nullptr;
-    PointFPropertyItem* m_offset = nullptr;
+    PropertyItem* m_offset = nullptr;
     PropertyItem* m_stemDirection = nullptr;
 };
 }

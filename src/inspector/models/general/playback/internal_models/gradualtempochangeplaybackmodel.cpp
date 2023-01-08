@@ -22,6 +22,8 @@
 
 #include "gradualtempochangeplaybackmodel.h"
 
+#include "dataformatter.h"
+
 #include "engraving/types/types.h"
 
 using namespace mu::inspector;
@@ -59,8 +61,8 @@ QVariantList GradualTempoChangePlaybackModel::possibleEasingMethods() const
 
 void GradualTempoChangePlaybackModel::createProperties()
 {
-    m_tempoChangeFactor = buildPropertyItem(Pid::TEMPO_CHANGE_FACTOR, [this](const Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue.toDouble() / 100);
+    m_tempoChangeFactor = buildPropertyItem(Pid::TEMPO_CHANGE_FACTOR, [](const QVariant& newValue) {
+        return newValue.toDouble() / 100;
     });
 
     m_tempoEasingMethod = buildPropertyItem(Pid::TEMPO_EASING_METHOD);
@@ -68,8 +70,8 @@ void GradualTempoChangePlaybackModel::createProperties()
 
 void GradualTempoChangePlaybackModel::loadProperties()
 {
-    loadPropertyItem(m_tempoChangeFactor, [](const QVariant& elementPropertyValue) -> QVariant {
-        return static_cast<int>(DataFormatter::roundDouble(elementPropertyValue.toDouble() * 100.0));
+    loadPropertyItem(m_tempoChangeFactor, [](const PropertyValue& propertyValue) -> QVariant {
+        return static_cast<int>(DataFormatter::roundDouble(propertyValue.toDouble() * 100.0));
     });
 
     loadPropertyItem(m_tempoEasingMethod);

@@ -43,7 +43,7 @@ protected:
     void resetProperties() override;
 
 private:
-    PointFPropertyItem* m_offset = nullptr;
+    PropertyItem* m_offset = nullptr;
 };
 }
 

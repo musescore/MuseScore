@@ -81,7 +81,7 @@ private:
     PropertyItem* m_headType = nullptr;
     PropertyItem* m_headSystem = nullptr;
     PropertyItem* m_dotPosition = nullptr;
-    PointFPropertyItem* m_offset = nullptr;
+    PropertyItem* m_offset = nullptr;
     bool m_isTrillCueNote = false;
 };
 }

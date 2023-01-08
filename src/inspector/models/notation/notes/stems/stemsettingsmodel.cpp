@@ -47,7 +47,7 @@ void StemSettingsModel::createProperties()
         onStemDirectionChanged(static_cast<mu::engraving::DirectionV>(newValue.toInt()));
     });
 
-    m_offset = buildPointFPropertyItem(Pid::OFFSET);
+//    m_offset = buildPointFPropertyItem(Pid::OFFSET);
 }
 
 void StemSettingsModel::requestElements()
@@ -104,7 +104,7 @@ bool StemSettingsModel::useStraightNoteFlags() const
 
 void StemSettingsModel::setUseStraightNoteFlags(bool use)
 {
-    if (updateStyleValue(Sid::useStraightNoteFlags, use)) {
+    if (setStyleValue(Sid::useStraightNoteFlags, use)) {
         emit useStraightNoteFlagsChanged();
     }
 }
@@ -143,11 +143,11 @@ void StemSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyId
 void StemSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
     if (mu::contains(propertyIdSet, Pid::LINE_WIDTH)) {
-        loadPropertyItem(m_thickness, formatDoubleFunc);
+        loadPropertyItem(m_thickness, roundedDoubleElementInternalToUiConverter(Pid::LINE_WIDTH));
     }
 
     if (mu::contains(propertyIdSet, Pid::USER_LEN)) {
-        loadPropertyItem(m_length, formatDoubleFunc);
+        loadPropertyItem(m_length, roundedDoubleElementInternalToUiConverter(Pid::USER_LEN));
     }
 
     if (mu::contains(propertyIdSet, Pid::STEM_DIRECTION)) {

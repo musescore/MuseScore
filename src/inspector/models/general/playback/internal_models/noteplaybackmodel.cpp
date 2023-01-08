@@ -21,8 +21,9 @@
  */
 #include "noteplaybackmodel.h"
 
+#include "types/commontypes.h"
+
 #include "translation.h"
-#include "dataformatter.h"
 
 using namespace mu::inspector;
 
@@ -48,10 +49,10 @@ void NotePlaybackModel::requestElements()
 
 void NotePlaybackModel::loadProperties()
 {
-    loadPropertyItem(m_tuning, formatDoubleFunc);
-    loadPropertyItem(m_velocity, [](const QVariant& value) {
+    loadPropertyItem(m_tuning, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::TUNING));
+    loadPropertyItem(m_velocity, [](const engraving::PropertyValue& propertyValue) {
         //! NOTE: display 64 instead of 0 in the Velocity field to avoid confusing the user
-        return value.toInt() == 0 ? 64 : value;
+        return propertyValue.toInt() == 0 ? 64 : propertyValue.toInt();
     });
 }
 

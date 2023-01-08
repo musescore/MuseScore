@@ -40,9 +40,7 @@ void StaffTypeSettingsModel::createProperties()
 {
     m_isSmall = buildPropertyItem(mu::engraving::Pid::SMALL);
     m_verticalOffset = buildPropertyItem(mu::engraving::Pid::STAFF_YOFFSET);
-    m_scale = buildPropertyItem(mu::engraving::Pid::MAG, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue.toDouble() / 100);
-    });
+    m_scale = buildPropertyItem(mu::engraving::Pid::MAG, [](const QVariant& newValue) { return newValue.toDouble() / 100.0; });
 
     m_lineCount = buildPropertyItem(mu::engraving::Pid::STAFF_LINES); // int
     m_lineDistance = buildPropertyItem(mu::engraving::Pid::LINE_DISTANCE);
@@ -67,13 +65,13 @@ void StaffTypeSettingsModel::requestElements()
 void StaffTypeSettingsModel::loadProperties()
 {
     loadPropertyItem(m_isSmall);
-    loadPropertyItem(m_verticalOffset, formatDoubleFunc);
-    loadPropertyItem(m_scale, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
+    loadPropertyItem(m_verticalOffset, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::STAFF_YOFFSET));
+    loadPropertyItem(m_scale, [](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem* element) -> QVariant {
+        return roundedDoubleElementInternalToUiConverter(engraving::Pid::MAG)(propertyValue, element).toDouble() * 100;
     });
 
     loadPropertyItem(m_lineCount);
-    loadPropertyItem(m_lineDistance, formatDoubleFunc);
+    loadPropertyItem(m_lineDistance, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::LINE_DISTANCE));
     loadPropertyItem(m_stepOffset);
     loadPropertyItem(m_isInvisible);
     loadPropertyItem(m_color);

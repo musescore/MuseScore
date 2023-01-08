@@ -92,7 +92,7 @@ private:
     PropertyItem* m_minimumDistance = nullptr;
     PropertyItem* m_color = nullptr;
     PropertyItem* m_arrangeOrder = nullptr;
-    PointFPropertyItem* m_offset = nullptr;
+    PropertyItem* m_offset = nullptr;
 
     bool m_isVerticalOffsetAvailable = true;
 

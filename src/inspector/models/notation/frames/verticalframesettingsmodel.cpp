@@ -87,15 +87,15 @@ void VerticalFrameSettingsModel::onNotationChanged(const PropertyIdSet& changedP
 void VerticalFrameSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)
 {
     if (mu::contains(propertyIdSet, Pid::BOX_HEIGHT)) {
-        loadPropertyItem(m_frameHeight, formatDoubleFunc);
+        loadPropertyItem(m_frameHeight, roundedDoubleElementInternalToUiConverter(Pid::BOX_HEIGHT));
     }
 
     if (mu::contains(propertyIdSet, Pid::TOP_GAP)) {
-        loadPropertyItem(m_gapAbove, formatDoubleFunc);
+        loadPropertyItem(m_gapAbove, roundedDoubleElementInternalToUiConverter(Pid::TOP_GAP));
     }
 
     if (mu::contains(propertyIdSet, Pid::BOTTOM_GAP)) {
-        loadPropertyItem(m_gapBelow, formatDoubleFunc);
+        loadPropertyItem(m_gapBelow, roundedDoubleElementInternalToUiConverter(Pid::BOTTOM_GAP));
     }
 
     if (mu::contains(propertyIdSet, Pid::LEFT_MARGIN)) {

@@ -36,7 +36,7 @@ HookSettingsModel::HookSettingsModel(QObject* parent, IElementRepositoryService*
 
 void HookSettingsModel::createProperties()
 {
-    m_offset = buildPointFPropertyItem(mu::engraving::Pid::OFFSET);
+//    m_offset = buildPointFPropertyItem(mu::engraving::Pid::OFFSET);
 }
 
 void HookSettingsModel::requestElements()

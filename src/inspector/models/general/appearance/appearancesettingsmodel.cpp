@@ -48,9 +48,9 @@ void AppearanceSettingsModel::createProperties()
     m_minimumDistance = buildPropertyItem(Pid::MIN_DISTANCE);
     m_color = buildPropertyItem(Pid::COLOR);
     m_arrangeOrder = buildPropertyItem(Pid::Z);
-    m_offset = buildPointFPropertyItem(Pid::OFFSET, [this](const mu::engraving::Pid, const QVariant& newValue) {
-        setPropertyValue(m_elementsForOffsetProperty, Pid::OFFSET, newValue);
-    });
+//    m_offset = buildPointFPropertyItem(Pid::OFFSET, [this](const mu::engraving::Pid, const QVariant& newValue) {
+//        setPropertyValue(m_elementsForOffsetProperty, Pid::OFFSET, newValue);
+//    });
 }
 
 void AppearanceSettingsModel::requestElements()
@@ -114,15 +114,15 @@ void AppearanceSettingsModel::onNotationChanged(const PropertyIdSet& changedProp
 void AppearanceSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
     if (mu::contains(propertyIdSet, Pid::LEADING_SPACE)) {
-        loadPropertyItem(m_leadingSpace, formatDoubleFunc);
+        loadPropertyItem(m_leadingSpace, roundedDoubleElementInternalToUiConverter(Pid::LEADING_SPACE));
     }
 
     if (mu::contains(propertyIdSet, Pid::USER_STRETCH)) {
-        loadPropertyItem(m_measureWidth, formatDoubleFunc);
+        loadPropertyItem(m_measureWidth, roundedDoubleElementInternalToUiConverter(engraving::Pid::USER_STRETCH));
     }
 
     if (mu::contains(propertyIdSet, Pid::MIN_DISTANCE)) {
-        loadPropertyItem(m_minimumDistance, formatDoubleFunc);
+        loadPropertyItem(m_minimumDistance, roundedDoubleElementInternalToUiConverter(Pid::MIN_DISTANCE));
     }
 
     if (mu::contains(propertyIdSet, Pid::COLOR)) {

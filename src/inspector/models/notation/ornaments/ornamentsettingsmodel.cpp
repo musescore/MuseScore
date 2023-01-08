@@ -48,7 +48,7 @@ OrnamentSettingsModel::OrnamentSettingsModel(QObject* parent, IElementRepository
 
 void OrnamentSettingsModel::createProperties()
 {
-    auto onIntervalChanged = [this](const Pid pid, const QVariant& newValue) {
+    auto intervalUiToInternalConverter = [](const QVariant& newValue) {
         OrnamentTypes::BasicInterval basicInterval = OrnamentTypes::BasicInterval(newValue.toInt());
         OrnamentInterval newInterval;
 
@@ -69,13 +69,13 @@ void OrnamentSettingsModel::createProperties()
             break;
         }
 
-        onPropertyValueChanged(pid, PropertyValue(newInterval).toQVariant());
+        return PropertyValue(newInterval);
     };
 
     m_placement = buildPropertyItem(Pid::ARTICULATION_ANCHOR);
 
-    m_intervalAbove = buildPropertyItem(Pid::INTERVAL_ABOVE, onIntervalChanged);
-    m_intervalBelow = buildPropertyItem(Pid::INTERVAL_BELOW, onIntervalChanged);
+    m_intervalAbove = buildPropertyItem(Pid::INTERVAL_ABOVE, intervalUiToInternalConverter);
+    m_intervalBelow = buildPropertyItem(Pid::INTERVAL_BELOW, intervalUiToInternalConverter);
 
     m_intervalStep = buildPropertyItem(Pid::INTERVAL_ABOVE, [this](Pid id, const QVariant& newValue) {
         IntervalStep step = IntervalStep(newValue.toInt());
@@ -98,8 +98,7 @@ void OrnamentSettingsModel::requestElements()
 
 void OrnamentSettingsModel::loadProperties()
 {
-    auto convertIntevalValue = [](const QVariant& elementPropertyValue) -> QVariant {
-        PropertyValue propertyValue = PropertyValue::fromQVariant(elementPropertyValue, P_TYPE::ORNAMENT_INTERVAL);
+    auto convertIntervalValue = [](const PropertyValue& propertyValue) -> QVariant {
         OrnamentInterval interval = propertyValue.value<OrnamentInterval>();
         OrnamentTypes::BasicInterval basicInterval = OrnamentTypes::BasicInterval::TYPE_INVALID;
 
@@ -116,17 +115,15 @@ void OrnamentSettingsModel::loadProperties()
 
     loadPropertyItem(m_placement);
 
-    loadPropertyItem(m_intervalAbove, convertIntevalValue);
-    loadPropertyItem(m_intervalBelow, convertIntevalValue);
+    loadPropertyItem(m_intervalAbove, convertIntervalValue);
+    loadPropertyItem(m_intervalBelow, convertIntervalValue);
 
-    loadPropertyItem(m_intervalStep, [](const QVariant& elementPropertyValue) -> QVariant {
-        PropertyValue propertyValue = PropertyValue::fromQVariant(elementPropertyValue, P_TYPE::ORNAMENT_INTERVAL);
+    loadPropertyItem(m_intervalStep, [](const PropertyValue& propertyValue) -> QVariant {
         OrnamentInterval interval = propertyValue.value<OrnamentInterval>();
         return static_cast<int>(interval.step);
     });
 
-    loadPropertyItem(m_intervalType, [](const QVariant& elementPropertyValue) -> QVariant {
-        PropertyValue propertyValue = PropertyValue::fromQVariant(elementPropertyValue, P_TYPE::ORNAMENT_INTERVAL);
+    loadPropertyItem(m_intervalType, [](const PropertyValue& propertyValue) -> QVariant {
         OrnamentInterval interval = propertyValue.value<OrnamentInterval>();
         return static_cast<int>(interval.type);
     });

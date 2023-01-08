@@ -146,13 +146,13 @@ private:
     PropertyItem* m_gapBetweenTextAndLine = nullptr;
 
     PropertyItem* m_beginningText = nullptr;
-    PointFPropertyItem* m_beginningTextOffset = nullptr;
+    PropertyItem* m_beginningTextOffset = nullptr;
 
     PropertyItem* m_continuousText = nullptr;
-    PointFPropertyItem* m_continuousTextOffset = nullptr;
+    PropertyItem* m_continuousTextOffset = nullptr;
 
     PropertyItem* m_endText = nullptr;
-    PointFPropertyItem* m_endTextOffset = nullptr;
+    PropertyItem* m_endTextOffset = nullptr;
 
     QVariantList m_possibleStartHookTypes;
     QVariantList m_possibleEndHookTypes;

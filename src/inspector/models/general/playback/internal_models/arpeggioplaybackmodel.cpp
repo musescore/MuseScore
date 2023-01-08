@@ -48,7 +48,7 @@ void ArpeggioPlaybackModel::requestElements()
 
 void ArpeggioPlaybackModel::loadProperties()
 {
-    loadPropertyItem(m_stretch, formatDoubleFunc);
+    loadPropertyItem(m_stretch, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::TIME_STRETCH));
 }
 
 void ArpeggioPlaybackModel::resetProperties()

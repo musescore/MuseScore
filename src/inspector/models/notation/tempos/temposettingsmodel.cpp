@@ -21,7 +21,7 @@
  */
 #include "temposettingsmodel.h"
 
-#include "dataformatter.h"
+#include "types/commontypes.h"
 
 #include "translation.h"
 
@@ -40,10 +40,10 @@ void TempoSettingsModel::createProperties()
 {
     m_isDefaultTempoForced
         = buildPropertyItem(mu::engraving::Pid::TEMPO_FOLLOW_TEXT, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
+        defaultSetPropertyCallback(mu::engraving::Pid::TEMPO_FOLLOW_TEXT)(pid, newValue);
 
         emit requestReloadPropertyItems();
-    });
+    }, defaultSetStyleValueCallback(mu::engraving::Pid::TEMPO_FOLLOW_TEXT));
 
     m_tempo = buildPropertyItem(mu::engraving::Pid::TEMPO);
 }
@@ -56,7 +56,7 @@ void TempoSettingsModel::requestElements()
 void TempoSettingsModel::loadProperties()
 {
     loadPropertyItem(m_isDefaultTempoForced);
-    loadPropertyItem(m_tempo, formatDoubleFunc);
+    loadPropertyItem(m_tempo, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::TEMPO));
 }
 
 void TempoSettingsModel::resetProperties()

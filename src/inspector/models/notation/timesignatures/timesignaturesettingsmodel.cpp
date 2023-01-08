@@ -22,10 +22,12 @@
 #include "timesignaturesettingsmodel.h"
 
 #include "dataformatter.h"
-#include "log.h"
 #include "translation.h"
 
+#include "log.h"
+
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 TimeSignatureSettingsModel::TimeSignatureSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -38,22 +40,30 @@ TimeSignatureSettingsModel::TimeSignatureSettingsModel(QObject* parent, IElement
 
 void TimeSignatureSettingsModel::createProperties()
 {
-    m_horizontalScale = buildPropertyItem(mu::engraving::Pid::SCALE,
-                                          [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QSizeF(newValue.toDouble() / 100, m_verticalScale->value().toDouble() / 100));
+    m_horizontalScale = buildPropertyItem(
+        Pid::SCALE,
+        [](const QVariant& value, const EngravingItem* element) {
+        double hor = value.toDouble() / 100;
+        double ver = element->getProperty(Pid::SCALE).value<ScaleF>().height();
+        return ScaleF(hor, ver);
     },
-                                          [this](const mu::engraving::Sid sid, const QVariant& newValue) {
-        updateStyleValue(sid, QSizeF(newValue.toDouble() / 100, m_verticalScale->value().toDouble() / 100));
-        emit requestReloadPropertyItems();
+        [this](const QVariant& value) {
+        double hor = value.toDouble() / 100;
+        double ver = m_verticalScale->value().toDouble() / 100; // TODO: What if m_verticalScale->value() is invalid?
+        return ScaleF(hor, ver);
     });
 
-    m_verticalScale = buildPropertyItem(mu::engraving::Pid::SCALE,
-                                        [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QSizeF(m_horizontalScale->value().toDouble() / 100, newValue.toDouble() / 100));
+    m_verticalScale = buildPropertyItem(
+        Pid::SCALE,
+        [](const QVariant& value, const EngravingItem* element) {
+        double hor = element->getProperty(Pid::SCALE).value<ScaleF>().width();
+        double ver = value.toDouble() / 100;
+        return ScaleF(hor, ver);
     },
-                                        [this](const mu::engraving::Sid sid, const QVariant& newValue) {
-        updateStyleValue(sid, QSizeF(m_horizontalScale->value().toDouble() / 100, newValue.toDouble() / 100));
-        emit requestReloadPropertyItems();
+        [this](const QVariant& value) {
+        double hor = m_horizontalScale->value().toDouble() / 100; // TODO: What if m_horizontalScale->value() is invalid?
+        double ver = value.toDouble() / 100;
+        return ScaleF(hor, ver);
     });
 
     m_shouldShowCourtesy = buildPropertyItem(mu::engraving::Pid::SHOW_COURTESY);
@@ -66,12 +76,12 @@ void TimeSignatureSettingsModel::requestElements()
 
 void TimeSignatureSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_horizontalScale, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QSizeF>().width()) * 100;
+    loadPropertyItem(m_horizontalScale, [](const engraving::PropertyValue& propertyValue) -> QVariant {
+        return DataFormatter::roundDouble(propertyValue.value<ScaleF>().width()) * 100;
     });
 
-    loadPropertyItem(m_verticalScale, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QSizeF>().height()) * 100;
+    loadPropertyItem(m_verticalScale, [](const engraving::PropertyValue& propertyValue) -> QVariant {
+        return DataFormatter::roundDouble(propertyValue.value<ScaleF>().height()) * 100;
     });
 
     loadPropertyItem(m_shouldShowCourtesy);

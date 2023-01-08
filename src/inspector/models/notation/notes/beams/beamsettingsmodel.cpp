@@ -53,7 +53,7 @@ void BeamSettingsModel::createProperties()
     m_featheringHeightRight = buildPropertyItem(mu::engraving::Pid::GROW_RIGHT);
 
     m_isBeamHidden = buildPropertyItem(mu::engraving::Pid::VISIBLE, [this](const mu::engraving::Pid pid, const QVariant& isBeamHidden) {
-        onPropertyValueChanged(pid, !isBeamHidden.toBool());
+        defaultSetPropertyCallback(Pid::VISIBLE)(pid, !isBeamHidden.toBool());
     });
 
     m_beamHeightLeft = buildPropertyItem(mu::engraving::Pid::BEAM_POS, [this](const mu::engraving::Pid, const QVariant& newValue) {
@@ -66,13 +66,13 @@ void BeamSettingsModel::createProperties()
 
     m_forceHorizontal = buildPropertyItem(mu::engraving::Pid::BEAM_NO_SLOPE,
                                           [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
+        defaultSetPropertyCallback(Pid::BEAM_NO_SLOPE)(pid, newValue);
         loadBeamHeightProperties();
     });
 
     m_customPositioned = buildPropertyItem(mu::engraving::Pid::USER_MODIFIED,
                                            [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
+        defaultSetPropertyCallback(Pid::USER_MODIFIED)(pid, newValue);
         loadBeamHeightProperties();
     });
 }
@@ -104,17 +104,17 @@ void BeamSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyId
 void BeamSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)
 {
     if (mu::contains(propertyIdSet, Pid::VISIBLE)) {
-        loadPropertyItem(m_isBeamHidden, [](const QVariant& isVisible) -> QVariant {
+        loadPropertyItem(m_isBeamHidden, [](const PropertyValue& isVisible) -> QVariant {
             return !isVisible.toBool();
         });
     }
 
     if (mu::contains(propertyIdSet, Pid::GROW_LEFT)) {
-        loadPropertyItem(m_featheringHeightLeft, formatDoubleFunc);
+        loadPropertyItem(m_featheringHeightLeft, roundedDoubleElementInternalToUiConverter(Pid::GROW_LEFT));
     }
 
     if (mu::contains(propertyIdSet, Pid::GROW_RIGHT)) {
-        loadPropertyItem(m_featheringHeightRight, formatDoubleFunc);
+        loadPropertyItem(m_featheringHeightRight, roundedDoubleElementInternalToUiConverter(Pid::GROW_RIGHT));
     }
 
     loadBeamHeightProperties();
@@ -126,12 +126,12 @@ void BeamSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& prope
 
 void BeamSettingsModel::loadBeamHeightProperties()
 {
-    loadPropertyItem(m_beamHeightLeft, [](const QVariant& elementPropertyValue) -> QVariant {
-        return round((elementPropertyValue.value<QPair<double, double> >().first) * 100) / 100;
+    loadPropertyItem(m_beamHeightLeft, [](const PropertyValue& propertyValue) -> QVariant {
+        return round(propertyValue.value<PairF>().first * 100) / 100;
     });
 
-    loadPropertyItem(m_beamHeightRight, [](const QVariant& elementPropertyValue) -> QVariant {
-        return round((elementPropertyValue.value<QPair<double, double> >().second) * 100) / 100;
+    loadPropertyItem(m_beamHeightRight, [](const PropertyValue& propertyValue) -> QVariant {
+        return round(propertyValue.value<PairF>().second * 100) / 100;
     });
 
     loadPropertyItem(m_forceHorizontal);
@@ -168,6 +168,7 @@ PropertyItem* BeamSettingsModel::customPositioned()
 
 void BeamSettingsModel::setBeamHeightLeft(const qreal left)
 {
+    // TODO: what if m_beamHeightRight->value() is invalid?
     qreal right = m_beamHeightRight->value().toDouble();
     if (m_forceHorizontal->value().toBool()) {
         right = left;
@@ -181,6 +182,7 @@ void BeamSettingsModel::setBeamHeightLeft(const qreal left)
 
 void BeamSettingsModel::setBeamHeightRight(const qreal right)
 {
+    // TODO: what if m_beamHeightLeft->value() is invalid?
     qreal left = m_beamHeightLeft->value().toDouble();
     if (m_forceHorizontal->value().toBool()) {
         left = right;
@@ -196,7 +198,7 @@ void BeamSettingsModel::setBeamHeight(const qreal left, const qreal right)
 {
     m_customPositioned->setValue(true);
 
-    onPropertyValueChanged(engraving::Pid::BEAM_POS, QVariant::fromValue(QPair<qreal, qreal>(left, right)));
+    setProperty(engraving::Pid::BEAM_POS, PairF(left, right));
 
     loadBeamHeightProperties();
 }

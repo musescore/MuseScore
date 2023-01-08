@@ -21,6 +21,7 @@
  */
 #include "dynamicsettingsmodel.h"
 
+#include "dataformatter.h"
 #include "translation.h"
 
 #include "types/texttypes.h"
@@ -39,19 +40,14 @@ DynamicsSettingsModel::DynamicsSettingsModel(QObject* parent, IElementRepository
 void DynamicsSettingsModel::createProperties()
 {
     m_avoidBarLines = buildPropertyItem(mu::engraving::Pid::AVOID_BARLINES);
-    m_dynamicSize = buildPropertyItem(mu::engraving::Pid::DYNAMICS_SIZE,
-                                      [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue.toDouble() / 100);
-    },
-                                      [this](const mu::engraving::Sid sid, const QVariant& newValue) {
-        updateStyleValue(sid, newValue.toDouble() / 100);
-        emit requestReloadPropertyItems();
+    m_dynamicSize = buildPropertyItem(mu::engraving::Pid::DYNAMICS_SIZE, [](const QVariant& newValue) {
+        return newValue.toDouble() / 100;
     });
     m_centerOnNotehead = buildPropertyItem(mu::engraving::Pid::CENTER_ON_NOTEHEAD);
     m_placement = buildPropertyItem(mu::engraving::Pid::PLACEMENT);
 
     m_frameType = buildPropertyItem(mu::engraving::Pid::FRAME_TYPE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
+        defaultSetPropertyCallback(mu::engraving::Pid::FRAME_TYPE)(pid, newValue);
         updateFramePropertiesAvailability();
     });
     m_frameBorderColor = buildPropertyItem(mu::engraving::Pid::FRAME_FG_COLOR);
@@ -69,8 +65,8 @@ void DynamicsSettingsModel::requestElements()
 void DynamicsSettingsModel::loadProperties()
 {
     loadPropertyItem(m_avoidBarLines);
-    loadPropertyItem(m_dynamicSize, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
+    loadPropertyItem(m_dynamicSize, [](const engraving::PropertyValue& propertyValue) -> QVariant {
+        return DataFormatter::roundDouble(propertyValue.toDouble()) * 100;
     });
     loadPropertyItem(m_centerOnNotehead);
     loadPropertyItem(m_placement);
@@ -78,9 +74,9 @@ void DynamicsSettingsModel::loadProperties()
     loadPropertyItem(m_frameType);
     loadPropertyItem(m_frameBorderColor);
     loadPropertyItem(m_frameFillColor);
-    loadPropertyItem(m_frameThickness, formatDoubleFunc);
-    loadPropertyItem(m_frameMargin, formatDoubleFunc);
-    loadPropertyItem(m_frameCornerRadius, formatDoubleFunc);
+    loadPropertyItem(m_frameThickness, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::FRAME_WIDTH));
+    loadPropertyItem(m_frameMargin, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::FRAME_PADDING));
+    loadPropertyItem(m_frameCornerRadius, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::FRAME_ROUND));
 
     updateFramePropertiesAvailability();
 }

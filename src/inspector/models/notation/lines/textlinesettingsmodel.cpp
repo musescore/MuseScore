@@ -64,7 +64,7 @@ TextLineSettingsModel::TextLineSettingsModel(QObject* parent, IElementRepository
 void TextLineSettingsModel::createProperties()
 {
     auto applyPropertyValueAndUpdateAvailability = [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
+        defaultSetPropertyCallback(pid)(pid, newValue);
         onUpdateLinePropertiesAvailability();
     };
 
@@ -92,13 +92,13 @@ void TextLineSettingsModel::createProperties()
     m_placement->setIsVisible(false);
 
     m_beginningText = buildPropertyItem(Pid::BEGIN_TEXT);
-    m_beginningTextOffset = buildPointFPropertyItem(Pid::BEGIN_TEXT_OFFSET);
+//    m_beginningTextOffset = buildPointFPropertyItem(Pid::BEGIN_TEXT_OFFSET);
 
     m_continuousText = buildPropertyItem(Pid::CONTINUE_TEXT);
-    m_continuousTextOffset = buildPointFPropertyItem(Pid::CONTINUE_TEXT_OFFSET);
+//    m_continuousTextOffset = buildPointFPropertyItem(Pid::CONTINUE_TEXT_OFFSET);
 
     m_endText = buildPropertyItem(Pid::END_TEXT);
-    m_endTextOffset = buildPointFPropertyItem(Pid::END_TEXT_OFFSET);
+//    m_endTextOffset = buildPointFPropertyItem(Pid::END_TEXT_OFFSET);
 }
 
 void TextLineSettingsModel::loadProperties()
@@ -329,15 +329,15 @@ void TextLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     }
 
     if (mu::contains(propertyIdSet, Pid::LINE_WIDTH)) {
-        loadPropertyItem(m_thickness, formatDoubleFunc);
+        loadPropertyItem(m_thickness, roundedDoubleElementInternalToUiConverter(Pid::LINE_WIDTH));
     }
 
     if (mu::contains(propertyIdSet, Pid::DASH_LINE_LEN)) {
-        loadPropertyItem(m_dashLineLength, formatDoubleFunc);
+        loadPropertyItem(m_dashLineLength, roundedDoubleElementInternalToUiConverter(Pid::DASH_LINE_LEN));
     }
 
     if (mu::contains(propertyIdSet, Pid::DASH_GAP_LEN)) {
-        loadPropertyItem(m_dashGapLength, formatDoubleFunc);
+        loadPropertyItem(m_dashGapLength, roundedDoubleElementInternalToUiConverter(Pid::DASH_GAP_LEN));
     }
 
     if (mu::contains(propertyIdSet, Pid::BEGIN_HOOK_TYPE)) {

@@ -38,9 +38,7 @@ FermataPlaybackModel::FermataPlaybackModel(QObject* parent, IElementRepositorySe
 
 void FermataPlaybackModel::createProperties()
 {
-    m_timeStretch = buildPropertyItem(mu::engraving::Pid::TIME_STRETCH, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue.toDouble() / 100);
-    });
+    m_timeStretch = buildPropertyItem(mu::engraving::Pid::TIME_STRETCH, [](const QVariant& newValue) { return newValue.toDouble() / 100; });
 }
 
 void FermataPlaybackModel::requestElements()
@@ -50,8 +48,8 @@ void FermataPlaybackModel::requestElements()
 
 void FermataPlaybackModel::loadProperties()
 {
-    loadPropertyItem(m_timeStretch, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
+    loadPropertyItem(m_timeStretch, [](const engraving::PropertyValue& propertyValue) -> QVariant {
+        return DataFormatter::roundDouble(propertyValue.toDouble()) * 100;
     });
 }
 

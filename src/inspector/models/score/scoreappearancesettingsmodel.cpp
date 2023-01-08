@@ -40,7 +40,7 @@ bool ScoreAppearanceSettingsModel::hideEmptyStaves() const
 
 void ScoreAppearanceSettingsModel::setHideEmptyStaves(bool hide)
 {
-    if (updateStyleValue(StyleId::hideEmptyStaves, hide)) {
+    if (setStyleValue(StyleId::hideEmptyStaves, hide)) {
         emit hideEmptyStavesChanged();
     }
 }
@@ -52,7 +52,7 @@ bool ScoreAppearanceSettingsModel::dontHideEmptyStavesInFirstSystem() const
 
 void ScoreAppearanceSettingsModel::setDontHideEmptyStavesInFirstSystem(bool dont)
 {
-    if (updateStyleValue(StyleId::dontHideStavesInFirstSystem, dont)) {
+    if (setStyleValue(StyleId::dontHideStavesInFirstSystem, dont)) {
         emit dontHideEmptyStavesInFirstSystemChanged();
     }
 }
@@ -64,7 +64,7 @@ bool ScoreAppearanceSettingsModel::showBracketsWhenSpanningSingleStaff() const
 
 void ScoreAppearanceSettingsModel::setShowBracketsWhenSpanningSingleStaff(bool show)
 {
-    if (updateStyleValue(StyleId::alwaysShowBracketsWhenEmptyStavesAreHidden, show)) {
+    if (setStyleValue(StyleId::alwaysShowBracketsWhenEmptyStavesAreHidden, show)) {
         emit showBracketsWhenSpanningSingleStaffChanged();
     }
 }

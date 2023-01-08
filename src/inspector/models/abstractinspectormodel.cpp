@@ -22,6 +22,8 @@
 #include "abstractinspectormodel.h"
 #include "engraving/dom/dynamic.h"
 
+#include "dataformatter.h"
+
 #include "types/texttypes.h"
 
 #include "log.h"
@@ -298,37 +300,9 @@ void AbstractInspectorModel::setModelType(InspectorModelType modelType)
     m_modelType = modelType;
 }
 
-void AbstractInspectorModel::onPropertyValueChanged(const mu::engraving::Pid pid, const QVariant& newValue)
+void AbstractInspectorModel::setElementType(mu::engraving::ElementType type)
 {
-    setPropertyValue(m_elementList, pid, newValue);
-}
-
-void AbstractInspectorModel::setPropertyValue(const QList<engraving::EngravingItem*>& items, const mu::engraving::Pid pid,
-                                              const QVariant& newValue)
-{
-    if (items.empty()) {
-        return;
-    }
-
-    beginCommand();
-
-    for (mu::engraving::EngravingItem* item : items) {
-        IF_ASSERT_FAILED(item) {
-            continue;
-        }
-
-        mu::engraving::PropertyFlags ps = item->propertyFlags(pid);
-
-        if (ps == mu::engraving::PropertyFlags::STYLED) {
-            ps = mu::engraving::PropertyFlags::UNSTYLED;
-        }
-
-        PropertyValue propValue = valueToElementUnits(pid, newValue, item);
-        item->undoChangeProperty(pid, propValue, ps);
-    }
-
-    updateNotation();
-    endCommand();
+    m_elementType = type;
 }
 
 void AbstractInspectorModel::updateProperties()
@@ -388,26 +362,13 @@ mu::engraving::PropertyIdSet AbstractInspectorModel::propertyIdSetFromStyleIdSet
     return result;
 }
 
-bool AbstractInspectorModel::updateStyleValue(const mu::engraving::Sid& sid, const QVariant& newValue)
-{
-    PropertyValue newVal = PropertyValue::fromQVariant(newValue, mu::engraving::MStyle::valueType(sid));
-    if (style() && style()->styleValue(sid) != newVal) {
-        beginCommand();
-        style()->setStyleValue(sid, newVal);
-        endCommand();
-        return true;
-    }
-
-    return false;
-}
-
 QVariant AbstractInspectorModel::styleValue(const mu::engraving::Sid& sid) const
 {
     return style() ? style()->styleValue(sid).toQVariant() : QVariant();
 }
 
 PropertyValue AbstractInspectorModel::valueToElementUnits(const mu::engraving::Pid& pid, const QVariant& value,
-                                                          const mu::engraving::EngravingItem* element) const
+                                                          const mu::engraving::EngravingItem* element)
 {
     if (mu::engraving::Pid::VERSE == pid) {
         return value.toInt() - 1;
@@ -420,14 +381,24 @@ PropertyValue AbstractInspectorModel::valueToElementUnits(const mu::engraving::P
     P_TYPE type = mu::engraving::propertyType(pid);
     switch (type) {
     case P_TYPE::POINT: {
-        if (pid == Pid::OFFSET ? element->offsetIsSpatiumDependent() : element->sizeIsSpatiumDependent()) {
-            return toPoint(value) * element->spatium();
-        } else {
-            return toPoint(value) * mu::engraving::DPMM;
+        if (element) {
+            if (pid == Pid::OFFSET ? element->offsetIsSpatiumDependent() : element->sizeIsSpatiumDependent()) {
+                return toPoint(value) * element->spatium();
+            } else {
+                return toPoint(value) * mu::engraving::DPMM;
+            }
         }
+        // If !element, then it's for style; no need to multiply with spatium in that case,
+        // so go to the bottom of this method
+        break;
     }
 
     case P_TYPE::MILLIMETRE:
+        if (!element) {
+            // then it's for style
+            return value.toReal();
+        }
+
         return Spatium(value.toReal()).toMM(element->spatium());
 
     case P_TYPE::SPATIUM:
@@ -453,12 +424,14 @@ PropertyValue AbstractInspectorModel::valueToElementUnits(const mu::engraving::P
         return Color::fromQColor(value.value<QColor>());
 
     default:
-        return PropertyValue::fromQVariant(value, type);
+        break;
     }
+
+    return PropertyValue::fromQVariant(value, type);
 }
 
 QVariant AbstractInspectorModel::valueFromElementUnits(const mu::engraving::Pid& pid, const PropertyValue& value,
-                                                       const mu::engraving::EngravingItem* element) const
+                                                       const mu::engraving::EngravingItem* element)
 {
     if (mu::engraving::Pid::VERSE == pid) {
         return value.toInt() + 1;
@@ -501,74 +474,231 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const mu::engraving::Pid&
     }
 }
 
-void AbstractInspectorModel::setElementType(mu::engraving::ElementType type)
+AbstractInspectorModel::ElementInternalToUiConverter AbstractInspectorModel::defaultElementInternalToUiConverter(engraving::Pid pid)
 {
-    m_elementType = type;
+    return [pid](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem* element) {
+        return valueFromElementUnits(pid, propertyValue, element);
+    };
+}
+
+AbstractInspectorModel::ElementInternalToUiConverter AbstractInspectorModel::roundedDoubleElementInternalToUiConverter(engraving::Pid pid)
+{
+    return [pid](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem* element) {
+        return DataFormatter::roundDouble(valueFromElementUnits(pid, propertyValue, element).toDouble());
+    };
+}
+
+AbstractInspectorModel::ElementUiToInternalConvertor AbstractInspectorModel::defaultElementUiToInternalConvertor(engraving::Pid pid)
+{
+    return [pid](const QVariant& value, const engraving::EngravingItem* element) {
+        return valueToElementUnits(pid, value, element);
+    };
+}
+
+AbstractInspectorModel::StyleUiToInternalConvertor AbstractInspectorModel::defaultStyleUiToInternalConvertor(engraving::Pid pid)
+{
+    return [pid](const QVariant& value) {
+        return valueToElementUnits(pid, value, nullptr);
+    };
+}
+
+AbstractInspectorModel::SetPropertyCallback AbstractInspectorModel::defaultSetPropertyCallback(engraving::Pid pid)
+{
+    return [this, pid](engraving::Pid pid_, const QVariant& newValue) {
+        setProperty(pid_, newValue, defaultElementUiToInternalConvertor(pid));
+    };
+}
+
+AbstractInspectorModel::SetStyleValueCallback AbstractInspectorModel::defaultSetStyleValueCallback(engraving::Pid pid)
+{
+    return [this, pid](engraving::Sid sid, const QVariant& newValue) {
+        setStyleValue(sid, newValue, defaultStyleUiToInternalConvertor(pid));
+
+        emit requestReloadPropertyItems();
+    };
+}
+
+void AbstractInspectorModel::setProperty(engraving::Pid pid, const QVariant& newValue, ElementUiToInternalConvertor convertor)
+{
+    setProperty(m_elementList, pid, newValue, convertor);
+}
+
+void AbstractInspectorModel::setProperty(const QList<engraving::EngravingItem*>& items, engraving::Pid pid, const QVariant& newValue,
+                                         ElementUiToInternalConvertor convertor)
+{
+    if (isEmpty()) {
+        return;
+    }
+
+    beginCommand();
+
+    for (mu::engraving::EngravingItem* item : items) {
+        IF_ASSERT_FAILED(item) {
+            continue;
+        }
+
+        mu::engraving::PropertyFlags ps = item->propertyFlags(pid);
+
+        if (ps == mu::engraving::PropertyFlags::STYLED) {
+            ps = mu::engraving::PropertyFlags::UNSTYLED;
+        }
+
+        PropertyValue propValue = convertor(newValue, item);
+        item->undoChangeProperty(pid, propValue, ps);
+    }
+
+    updateNotation();
+    endCommand();
+}
+
+void AbstractInspectorModel::setProperty(engraving::Pid pid, const engraving::PropertyValue& newValue)
+{
+    setProperty(m_elementList, pid, newValue);
+}
+
+void AbstractInspectorModel::setProperty(const QList<engraving::EngravingItem*>& items, engraving::Pid pid,
+                                         const engraving::PropertyValue& newValue)
+{
+    if (isEmpty()) {
+        return;
+    }
+
+    beginCommand();
+
+    for (mu::engraving::EngravingItem* item : items) {
+        IF_ASSERT_FAILED(item) {
+            continue;
+        }
+
+        mu::engraving::PropertyFlags ps = item->propertyFlags(pid);
+
+        if (ps == mu::engraving::PropertyFlags::STYLED) {
+            ps = mu::engraving::PropertyFlags::UNSTYLED;
+        }
+
+        item->undoChangeProperty(pid, newValue, ps);
+    }
+
+    updateNotation();
+    endCommand();
+}
+
+void AbstractInspectorModel::setStyleValue(engraving::Sid sid, const QVariant& newValue, StyleUiToInternalConvertor convertor)
+{
+    PropertyValue newVal = convertor(newValue);
+
+    if (style() && style()->styleValue(sid) != newVal) {
+        beginCommand();
+        style()->setStyleValue(sid, newVal);
+        endCommand();
+    }
+}
+
+bool AbstractInspectorModel::setStyleValue(engraving::Sid sid, const PropertyValue& newValue)
+{
+    if (style() && style()->styleValue(sid) != newValue) {
+        beginCommand();
+        style()->setStyleValue(sid, newValue);
+        endCommand();
+        return true;
+    }
+
+    return false;
+}
+
+PropertyItem* AbstractInspectorModel::buildPropertyItem(const mu::engraving::Pid& pid)
+{
+    return buildPropertyItem(pid, defaultElementUiToInternalConvertor(pid), defaultStyleUiToInternalConvertor(pid));
+}
+
+PropertyItem* AbstractInspectorModel::buildPropertyItem(const mu::engraving::Pid& pid, GeneralUiToInternalConvertor convertor)
+{
+    ElementUiToInternalConvertor elementConvertor = [convertor](const QVariant& value, const engraving::EngravingItem*) {
+        return convertor(value);
+    };
+
+    StyleUiToInternalConvertor styleConvertor = [convertor](const QVariant& value) {
+        return convertor(value);
+    };
+
+    return buildPropertyItem(pid, elementConvertor, styleConvertor);
+}
+
+PropertyItem* AbstractInspectorModel::buildPropertyItem(const mu::engraving::Pid& pid,
+                                                        ElementUiToInternalConvertor elementConvertor,
+                                                        StyleUiToInternalConvertor styleConvertor)
+{
+    SetPropertyCallback propertySetter = [this, elementConvertor](engraving::Pid pid, const QVariant& newValue) {
+        setProperty(pid, newValue, elementConvertor);
+    };
+
+    SetStyleValueCallback styleSetter = [this, styleConvertor](engraving::Sid sid, const QVariant& newValue) {
+        setStyleValue(sid, newValue, styleConvertor);
+
+        emit requestReloadPropertyItems();
+    };
+
+    return buildPropertyItem(pid, propertySetter, styleSetter);
 }
 
 PropertyItem* AbstractInspectorModel::buildPropertyItem(const mu::engraving::Pid& propertyId,
-                                                        std::function<void(const mu::engraving::Pid propertyId,
-                                                                           const QVariant& newValue)> onPropertyChangedCallBack,
-                                                        std::function<void(const mu::engraving::Sid styleId,
-                                                                           const QVariant& newValue)> onStyleChangedCallBack)
+                                                        SetPropertyCallback propertySetter,
+                                                        SetStyleValueCallback styleSetter)
 {
-    PropertyItem* newPropertyItem = new PropertyItem(propertyId, this);
+    PropertyItem* propertyItem = new PropertyItem(propertyId, this);
 
-    initPropertyItem(newPropertyItem, onPropertyChangedCallBack, onStyleChangedCallBack);
-
-    return newPropertyItem;
-}
-
-PointFPropertyItem* AbstractInspectorModel::buildPointFPropertyItem(const mu::engraving::Pid& propertyId,
-                                                                    std::function<void(const mu::engraving::Pid propertyId,
-                                                                                       const QVariant& newValue)> onPropertyChangedCallBack)
-{
-    PointFPropertyItem* newPropertyItem = new PointFPropertyItem(propertyId, this);
-
-    initPropertyItem(newPropertyItem, onPropertyChangedCallBack);
-
-    return newPropertyItem;
-}
-
-void AbstractInspectorModel::initPropertyItem(PropertyItem* propertyItem,
-                                              std::function<void(const mu::engraving::Pid propertyId,
-                                                                 const QVariant& newValue)> onPropertyChangedCallBack,
-                                              std::function<void(const mu::engraving::Sid styleId,
-                                                                 const QVariant& newValue)> onStyleChangedCallBack)
-{
-    auto propertyCallback = onPropertyChangedCallBack;
-    if (!propertyCallback) {
-        propertyCallback = [this](const mu::engraving::Pid propertyId, const QVariant& newValue) {
-            onPropertyValueChanged(propertyId, newValue);
-        };
+    if (!propertySetter) {
+        propertySetter = defaultSetPropertyCallback(propertyId);
     }
 
-    auto styleCallback = onStyleChangedCallBack;
-    if (!styleCallback) {
-        styleCallback = [this](const mu::engraving::Sid styleId, const QVariant& newValue) {
-            updateStyleValue(styleId, newValue);
-
-            emit requestReloadPropertyItems();
-        };
+    if (!styleSetter) {
+        styleSetter = defaultSetStyleValueCallback(propertyId);
     }
 
-    connect(propertyItem, &PropertyItem::propertyModified, this, propertyCallback);
-    connect(propertyItem, &PropertyItem::applyToStyleRequested, this, styleCallback);
+    connect(propertyItem, &PropertyItem::propertyModified, this, propertySetter);
+    connect(propertyItem, &PropertyItem::applyToStyleRequested, this, styleSetter);
+
+    return propertyItem;
 }
 
-void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, ConvertPropertyValueFunc convertElementPropertyValueFunc)
+void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, const QList<engraving::EngravingItem*>& items)
 {
-    loadPropertyItem(propertyItem, m_elementList, convertElementPropertyValueFunc);
+    loadPropertyItem(propertyItem, ElementInternalToUiConverter(), items);
 }
 
-void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, const QList<EngravingItem*>& elements,
-                                              ConvertPropertyValueFunc convertElementPropertyValueFunc)
+void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, GeneralInternalToUiConverter convertor)
+{
+    loadPropertyItem(propertyItem, convertor, m_elementList);
+}
+
+void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, GeneralInternalToUiConverter convertor,
+                                              const QList<engraving::EngravingItem*>& items)
+{
+    ElementInternalToUiConverter elementConvertor
+        = [convertor](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem*) {
+        return convertor(propertyValue);
+    };
+
+    loadPropertyItem(propertyItem, elementConvertor, items);
+}
+
+void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, ElementInternalToUiConverter convertor)
+{
+    loadPropertyItem(propertyItem, convertor, m_elementList);
+}
+
+void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, ElementInternalToUiConverter convertor,
+                                              const QList<EngravingItem*>& elements)
 {
     if (!propertyItem || elements.isEmpty()) {
         return;
     }
 
     mu::engraving::Pid pid = propertyItem->propertyId();
+
+    if (!convertor) {
+        convertor = defaultElementInternalToUiConverter(pid);
+    }
 
     mu::engraving::Sid styleId = styleIdByPropertyId(pid);
     propertyItem->setStyleId(styleId);
@@ -583,18 +713,13 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, const 
             continue;
         }
 
-        QVariant elementCurrentValue = valueFromElementUnits(pid, element->getProperty(pid), element);
-        QVariant elementDefaultValue = valueFromElementUnits(pid, element->propertyDefault(pid), element);
+        QVariant elementCurrentValue = convertor(element->getProperty(pid), element);
+        QVariant elementDefaultValue = convertor(element->propertyDefault(pid), element);
 
         bool isPropertySupportedByElement = elementCurrentValue.isValid();
 
         if (!isPropertySupportedByElement) {
             continue;
-        }
-
-        if (convertElementPropertyValueFunc) {
-            elementCurrentValue = convertElementPropertyValueFunc(elementCurrentValue);
-            elementDefaultValue = convertElementPropertyValueFunc(elementDefaultValue);
         }
 
         if (!(propertyValue.isValid() && defaultPropertyValue.isValid())) {

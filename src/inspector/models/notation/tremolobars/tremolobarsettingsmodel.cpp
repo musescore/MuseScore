@@ -22,7 +22,6 @@
 #include "tremolobarsettingsmodel.h"
 
 #include "types/tremolobartypes.h"
-#include "dataformatter.h"
 
 #include "translation.h"
 
@@ -40,7 +39,7 @@ TremoloBarSettingsModel::TremoloBarSettingsModel(QObject* parent, IElementReposi
 void TremoloBarSettingsModel::createProperties()
 {
     m_type = buildPropertyItem(mu::engraving::Pid::TREMOLOBAR_TYPE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
+        defaultSetPropertyCallback(mu::engraving::Pid::TREMOLOBAR_TYPE)(pid, newValue);
 
         if (newValue.toInt() != static_cast<int>(TremoloBarTypes::TremoloBarType::TYPE_CUSTOM)) {
             emit requestReloadPropertyItems();
@@ -48,7 +47,7 @@ void TremoloBarSettingsModel::createProperties()
     });
 
     m_curve = buildPropertyItem(mu::engraving::Pid::TREMOLOBAR_CURVE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
+        defaultSetPropertyCallback(mu::engraving::Pid::TREMOLOBAR_CURVE)(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
@@ -68,8 +67,8 @@ void TremoloBarSettingsModel::loadProperties()
 {
     loadPropertyItem(m_type);
     loadPropertyItem(m_curve);
-    loadPropertyItem(m_lineThickness, formatDoubleFunc);
-    loadPropertyItem(m_scale, formatDoubleFunc);
+    loadPropertyItem(m_lineThickness, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::LINE_WIDTH));
+    loadPropertyItem(m_scale, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::MAG));
 }
 
 void TremoloBarSettingsModel::resetProperties()
