@@ -59,8 +59,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/inspectorlistmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/propertyitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/propertyitem.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/pointfpropertyitem.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/pointfpropertyitem.h
     ${CMAKE_CURRENT_LIST_DIR}/models/general/generalsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/general/generalsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/general/appearance/appearancesettingsmodel.cpp

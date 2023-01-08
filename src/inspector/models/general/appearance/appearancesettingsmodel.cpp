@@ -21,7 +21,6 @@
  */
 #include "appearancesettingsmodel.h"
 
-#include "types/commontypes.h"
 #include "translation.h"
 
 #include "log.h"
@@ -48,9 +47,32 @@ void AppearanceSettingsModel::createProperties()
     m_minimumDistance = buildPropertyItem(Pid::MIN_DISTANCE);
     m_color = buildPropertyItem(Pid::COLOR);
     m_arrangeOrder = buildPropertyItem(Pid::Z);
-//    m_offset = buildPointFPropertyItem(Pid::OFFSET, [this](const mu::engraving::Pid, const QVariant& newValue) {
-//        setPropertyValue(m_elementsForOffsetProperty, Pid::OFFSET, newValue);
-//    });
+
+    m_horizontalOffset = buildPropertyItem(Pid::OFFSET,
+                                           [this](engraving::Pid, const QVariant& newValue) {
+        setProperty(m_elementsForOffsetProperty, Pid::OFFSET, newValue,
+                    [](const QVariant& value, const engraving::EngravingItem* element) {
+            double newX = value.toDouble();
+            newX *= element->offsetIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+            return PointF(newX, element->getProperty(Pid::OFFSET).value<PointF>().y());
+        });
+    }, [this](engraving::Sid sid, const QVariant& value) {
+        // TODO: What if m_verticalOffset->value() is invalid?
+        setStyleValue(sid, PointF(value.toDouble(), m_verticalOffset->value().toDouble()));
+    });
+
+    m_verticalOffset = buildPropertyItem(Pid::OFFSET,
+                                         [this](engraving::Pid, const QVariant& newValue) {
+        setProperty(m_elementsForOffsetProperty, Pid::OFFSET, newValue,
+                    [](const QVariant& value, const engraving::EngravingItem* element) {
+            double newY = value.toDouble();
+            newY *= element->offsetIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+            return PointF(element->getProperty(Pid::OFFSET).value<PointF>().x(), newY);
+        });
+    }, [this](engraving::Sid sid, const QVariant& value) {
+        // TODO: What if m_horizontalOffset->value() is invalid?)
+        setStyleValue(sid, PointF(m_horizontalOffset->value().toDouble(), value.toDouble()));
+    });
 }
 
 void AppearanceSettingsModel::requestElements()
@@ -103,7 +125,8 @@ void AppearanceSettingsModel::resetProperties()
     m_measureWidth->resetToDefault();
     m_color->resetToDefault();
     m_arrangeOrder->resetToDefault();
-    m_offset->resetToDefault();
+    m_horizontalOffset->resetToDefault();
+    m_verticalOffset->resetToDefault();
 }
 
 void AppearanceSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
@@ -134,7 +157,17 @@ void AppearanceSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     }
 
     if (mu::contains(propertyIdSet, Pid::OFFSET)) {
-        loadPropertyItem(m_offset, m_elementsForOffsetProperty);
+        loadPropertyItem(m_horizontalOffset, [](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem* element) {
+            double x = propertyValue.value<PointF>().x();
+            x /= element->offsetIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+            return x;
+        }, m_elementsForOffsetProperty);
+
+        loadPropertyItem(m_verticalOffset, [](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem* element) {
+            double y = propertyValue.value<PointF>().y();
+            y /= element->offsetIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+            return y;
+        }, m_elementsForOffsetProperty);
     }
 
     emit isSnappedToGridChanged(isSnappedToGrid());
@@ -252,9 +285,14 @@ PropertyItem* AppearanceSettingsModel::arrangeOrder() const
     return m_arrangeOrder;
 }
 
-PropertyItem* AppearanceSettingsModel::offset() const
+PropertyItem* AppearanceSettingsModel::horizontalOffset() const
 {
-    return m_offset;
+    return m_horizontalOffset;
+}
+
+PropertyItem* AppearanceSettingsModel::verticalOffset() const
+{
+    return m_verticalOffset;
 }
 
 bool AppearanceSettingsModel::isVerticalOffsetAvailable() const

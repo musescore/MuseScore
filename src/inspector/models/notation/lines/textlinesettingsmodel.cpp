@@ -21,7 +21,6 @@
  */
 #include "textlinesettingsmodel.h"
 
-#include "types/commontypes.h"
 #include "types/linetypes.h"
 
 #include "ui/view/iconcodes.h"
@@ -92,13 +91,70 @@ void TextLineSettingsModel::createProperties()
     m_placement->setIsVisible(false);
 
     m_beginningText = buildPropertyItem(Pid::BEGIN_TEXT);
-//    m_beginningTextOffset = buildPointFPropertyItem(Pid::BEGIN_TEXT_OFFSET);
 
-    m_continuousText = buildPropertyItem(Pid::CONTINUE_TEXT);
-//    m_continuousTextOffset = buildPointFPropertyItem(Pid::CONTINUE_TEXT_OFFSET);
+    m_beginningTextHorizontalOffset
+        = buildPropertyItem(Pid::BEGIN_TEXT_OFFSET, [](const QVariant& value, const engraving::EngravingItem* element) {
+        double newX = value.toDouble();
+        newX *= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+        return PointF(newX, element->getProperty(Pid::BEGIN_TEXT_OFFSET).value<PointF>().y());
+    }, [this](const QVariant& value) {
+        // TODO: What if m_beginningTextVerticalOffset->value() is invalid?
+        return PointF(value.toDouble(), m_beginningTextVerticalOffset->value().toDouble());
+    });
+
+    m_beginningTextVerticalOffset
+        = buildPropertyItem(Pid::BEGIN_TEXT_OFFSET, [](const QVariant& value, const engraving::EngravingItem* element) {
+        double newY = value.toDouble();
+        newY *= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+        return PointF(element->getProperty(Pid::BEGIN_TEXT_OFFSET).value<PointF>().x(), newY);
+    }, [this](const QVariant& value) {
+        // TODO: What if m_beginningTextHorizontalOffset->value() is invalid?
+        return PointF(m_beginningTextHorizontalOffset->value().toDouble(), value.toDouble());
+    });
+
+    m_continueText = buildPropertyItem(Pid::CONTINUE_TEXT);
+
+    m_continueTextHorizontalOffset
+        = buildPropertyItem(Pid::CONTINUE_TEXT_OFFSET, [](const QVariant& value, const engraving::EngravingItem* element) {
+        double newX = value.toDouble();
+        newX *= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+        return PointF(newX, element->getProperty(Pid::CONTINUE_TEXT_OFFSET).value<PointF>().y());
+    }, [this](const QVariant& value) {
+        // TODO: What if m_continueTextVerticalOffset->value() is invalid?
+        return PointF(value.toDouble(), m_continueTextVerticalOffset->value().toDouble());
+    });
+
+    m_continueTextVerticalOffset
+        = buildPropertyItem(Pid::CONTINUE_TEXT_OFFSET, [](const QVariant& value, const engraving::EngravingItem* element) {
+        double newY = value.toDouble();
+        newY *= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+        return PointF(element->getProperty(Pid::CONTINUE_TEXT_OFFSET).value<PointF>().x(), newY);
+    }, [this](const QVariant& value) {
+        // TODO: What if m_continueTextHorizontalOffset->value() is invalid?
+        return PointF(m_continueTextHorizontalOffset->value().toDouble(), value.toDouble());
+    });
 
     m_endText = buildPropertyItem(Pid::END_TEXT);
-//    m_endTextOffset = buildPointFPropertyItem(Pid::END_TEXT_OFFSET);
+
+    m_endTextHorizontalOffset
+        = buildPropertyItem(Pid::END_TEXT_OFFSET, [](const QVariant& value, const engraving::EngravingItem* element) {
+        double newX = value.toDouble();
+        newX *= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+        return PointF(newX, element->getProperty(Pid::END_TEXT_OFFSET).value<PointF>().y());
+    }, [this](const QVariant& value) {
+        // TODO: What if m_endTextVerticalOffset->value() is invalid?
+        return PointF(value.toDouble(), m_endTextVerticalOffset->value().toDouble());
+    });
+
+    m_endTextVerticalOffset
+        = buildPropertyItem(Pid::END_TEXT_OFFSET, [](const QVariant& value, const engraving::EngravingItem* element) {
+        double newY = value.toDouble();
+        newY *= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+        return PointF(element->getProperty(Pid::END_TEXT_OFFSET).value<PointF>().x(), newY);
+    }, [this](const QVariant& value) {
+        // TODO: What if m_endTextHorizontalOffset->value() is invalid?
+        return PointF(m_endTextHorizontalOffset->value().toDouble(), value.toDouble());
+    });
 }
 
 void TextLineSettingsModel::loadProperties()
@@ -143,11 +199,14 @@ void TextLineSettingsModel::resetProperties()
         m_gapBetweenTextAndLine,
         m_placement,
         m_beginningText,
-        m_beginningTextOffset,
-        m_continuousText,
-        m_continuousTextOffset,
+        m_beginningTextHorizontalOffset,
+        m_beginningTextVerticalOffset,
+        m_continueText,
+        m_continueTextHorizontalOffset,
+        m_continueTextVerticalOffset,
         m_endText,
-        m_endTextOffset
+        m_endTextHorizontalOffset,
+        m_endTextVerticalOffset
     };
 
     for (PropertyItem* property : allProperties) {
@@ -222,19 +281,29 @@ PropertyItem* TextLineSettingsModel::beginningText() const
     return m_beginningText;
 }
 
-PropertyItem* TextLineSettingsModel::beginningTextOffset() const
+PropertyItem* TextLineSettingsModel::beginningTextHorizontalOffset() const
 {
-    return m_beginningTextOffset;
+    return m_beginningTextHorizontalOffset;
 }
 
-PropertyItem* TextLineSettingsModel::continuousText() const
+PropertyItem* TextLineSettingsModel::beginningTextVerticalOffset() const
 {
-    return m_continuousText;
+    return m_beginningTextVerticalOffset;
 }
 
-PropertyItem* TextLineSettingsModel::continuousTextOffset() const
+PropertyItem* TextLineSettingsModel::continueText() const
 {
-    return m_continuousTextOffset;
+    return m_continueText;
+}
+
+PropertyItem* TextLineSettingsModel::continueTextHorizontalOffset() const
+{
+    return m_continueTextHorizontalOffset;
+}
+
+PropertyItem* TextLineSettingsModel::continueTextVerticalOffset() const
+{
+    return m_continueTextVerticalOffset;
 }
 
 PropertyItem* TextLineSettingsModel::endText() const
@@ -242,9 +311,14 @@ PropertyItem* TextLineSettingsModel::endText() const
     return m_endText;
 }
 
-PropertyItem* TextLineSettingsModel::endTextOffset() const
+PropertyItem* TextLineSettingsModel::endTextHorizontalOffset() const
 {
-    return m_endTextOffset;
+    return m_endTextHorizontalOffset;
+}
+
+PropertyItem* TextLineSettingsModel::endTextVerticalOffset() const
+{
+    return m_endTextVerticalOffset;
 }
 
 QVariantList TextLineSettingsModel::possibleStartHookTypes() const
@@ -369,15 +443,39 @@ void TextLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     }
 
     if (mu::contains(propertyIdSet, Pid::BEGIN_TEXT_OFFSET)) {
-        loadPropertyItem(m_beginningTextOffset);
+        loadPropertyItem(m_beginningTextHorizontalOffset,
+                         [](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem* element) {
+            double x = propertyValue.value<PointF>().x();
+            x /= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+            return x;
+        });
+
+        loadPropertyItem(m_beginningTextVerticalOffset,
+                         [](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem* element) {
+            double y = propertyValue.value<PointF>().y();
+            y /= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+            return y;
+        });
     }
 
     if (mu::contains(propertyIdSet, Pid::CONTINUE_TEXT)) {
-        loadPropertyItem(m_continuousText);
+        loadPropertyItem(m_continueText);
     }
 
     if (mu::contains(propertyIdSet, Pid::CONTINUE_TEXT_OFFSET)) {
-        loadPropertyItem(m_continuousTextOffset);
+        loadPropertyItem(m_continueTextHorizontalOffset,
+                         [](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem* element) {
+            double x = propertyValue.value<PointF>().x();
+            x /= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+            return x;
+        });
+
+        loadPropertyItem(m_continueTextVerticalOffset,
+                         [](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem* element) {
+            double y = propertyValue.value<PointF>().y();
+            y /= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+            return y;
+        });
     }
 
     if (mu::contains(propertyIdSet, Pid::END_TEXT)) {
@@ -385,7 +483,18 @@ void TextLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     }
 
     if (mu::contains(propertyIdSet, Pid::END_TEXT_OFFSET)) {
-        loadPropertyItem(m_endTextOffset);
+        loadPropertyItem(m_endTextHorizontalOffset,
+                         [](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem* element) {
+            double x = propertyValue.value<PointF>().x();
+            x /= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+            return x;
+        });
+
+        loadPropertyItem(m_endTextVerticalOffset, [](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem* element) {
+            double y = propertyValue.value<PointF>().y();
+            y /= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+            return y;
+        });
     }
 
     onUpdateLinePropertiesAvailability();

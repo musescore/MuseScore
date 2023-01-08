@@ -45,7 +45,7 @@ Column {
     property alias showTitle: titleLabelLoader.visible
     property alias showButton: buttonLoader.visible
 
-    readonly property bool isStyled: propertyItem ? propertyItem.isStyled : false
+    property bool isStyled: propertyItem ? propertyItem.isStyled : false
     property bool isModified: propertyItem ? propertyItem.isModified : false
 
     signal requestResetToDefault()

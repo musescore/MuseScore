@@ -39,8 +39,8 @@ NoteheadSettingsModel::NoteheadSettingsModel(QObject* parent, IElementRepository
 
 void NoteheadSettingsModel::createProperties()
 {
-    m_isHeadHidden = buildPropertyItem(mu::engraving::Pid::VISIBLE, [this](const mu::engraving::Pid pid, const QVariant& isHeadHidden) {
-        defaultSetPropertyCallback(mu::engraving::Pid::VISIBLE)(pid, !isHeadHidden.toBool());
+    m_isHeadHidden = buildPropertyItem(mu::engraving::Pid::VISIBLE, [](const QVariant& isHeadHidden) {
+        return !isHeadHidden.toBool();
     });
 
     m_isHeadSmall = buildPropertyItem(mu::engraving::Pid::SMALL);
@@ -50,7 +50,24 @@ void NoteheadSettingsModel::createProperties()
     m_headType = buildPropertyItem(mu::engraving::Pid::HEAD_TYPE);
     m_headSystem = buildPropertyItem(mu::engraving::Pid::HEAD_SCHEME);
     m_dotPosition = buildPropertyItem(mu::engraving::Pid::DOT_POSITION);
-//    m_offset = buildPointFPropertyItem(mu::engraving::Pid::OFFSET);
+
+    m_horizontalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [](const QVariant& value, const engraving::EngravingItem* element) {
+        double newX = value.toDouble();
+        newX *= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+        return PointF(newX, element->getProperty(mu::engraving::Pid::OFFSET).value<PointF>().y());
+    }, [this](const QVariant& value) {
+        // TODO: What if m_verticalOffset->value() is invalid?
+        return PointF(value.toDouble(), m_verticalOffset->value().toDouble());
+    });
+
+    m_verticalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [](const QVariant& value, const engraving::EngravingItem* element) {
+        double newY = value.toDouble();
+        newY *= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+        return PointF(element->getProperty(mu::engraving::Pid::OFFSET).value<PointF>().x(), newY);
+    }, [this](const QVariant& value) {
+        // TODO: What if m_horizontalOffset->value() is invalid?
+        return PointF(m_horizontalOffset->value().toDouble(), value.toDouble());
+    });
 }
 
 void NoteheadSettingsModel::requestElements()
@@ -86,7 +103,8 @@ void NoteheadSettingsModel::resetProperties()
     m_headType->resetToDefault();
     m_headSystem->resetToDefault();
     m_dotPosition->resetToDefault();
-    m_offset->resetToDefault();
+    m_horizontalOffset->resetToDefault();
+    m_verticalOffset->resetToDefault();
 }
 
 void NoteheadSettingsModel::onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet, const mu::engraving::StyleIdSet&)
@@ -131,7 +149,17 @@ void NoteheadSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& p
     }
 
     if (mu::contains(propertyIdSet, Pid::OFFSET)) {
-        loadPropertyItem(m_offset);
+        loadPropertyItem(m_horizontalOffset, [](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem* element) {
+            double x = propertyValue.value<PointF>().x();
+            x /= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+            return x;
+        });
+
+        loadPropertyItem(m_verticalOffset, [](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem* element) {
+            double y = propertyValue.value<PointF>().y();
+            y /= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+            return y;
+        });
     }
 }
 
@@ -175,9 +203,14 @@ PropertyItem* NoteheadSettingsModel::dotPosition() const
     return m_dotPosition;
 }
 
-PropertyItem* NoteheadSettingsModel::offset() const
+PropertyItem* NoteheadSettingsModel::horizontalOffset() const
 {
-    return m_offset;
+    return m_horizontalOffset;
+}
+
+PropertyItem* NoteheadSettingsModel::verticalOffset() const
+{
+    return m_verticalOffset;
 }
 
 bool NoteheadSettingsModel::isTrillCueNote() const

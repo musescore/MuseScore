@@ -28,6 +28,9 @@ import MuseScore.Inspector 1.0
 InspectorPropertyView {
     id: root
 
+    property PropertyItem horizontalOffset: null
+    property PropertyItem verticalOffset: null
+
     property alias horizontalOffsetControl: horizontalOffsetControl
     property alias verticalOffsetControl: verticalOffsetControl
     property bool isVerticalOffsetAvailable: true
@@ -36,6 +39,34 @@ InspectorPropertyView {
 
     navigationName: "OffsetSection"
     navigationRowEnd: verticalOffsetControl.navigation.row
+
+    enabled: horizontalOffset || verticalOffset
+    visible: horizontalOffset || verticalOffset
+
+    isStyled: (horizontalOffset && horizontalOffset.isStyled)
+              || (verticalOffset && verticalOffset.isStyled)
+    isModified: (horizontalOffset && horizontalOffset.isModified)
+                || (verticalOffset && verticalOffset.isModified)
+
+    onRequestApplyToStyle: {
+        if (horizontalOffset && horizontalOffset.isStyled) {
+            horizontalOffset.applyToStyle()
+        }
+
+        if (verticalOffset && verticalOffset.isStyled) {
+            verticalOffset.applyToStyle()
+        }
+    }
+
+    onRequestResetToDefault: {
+        if (horizontalOffset) {
+            horizontalOffset.resetToDefault()
+        }
+
+        if (verticalOffset) {
+            verticalOffset.resetToDefault()
+        }
+    }
 
     Row {
         id: row
@@ -57,18 +88,19 @@ InspectorPropertyView {
 
             icon: IconCode.HORIZONTAL
 
-            isIndeterminate: root.propertyItem && enabled ? root.propertyItem.isUndefined : false
-            currentValue: root.propertyItem ? root.propertyItem.x : 0
+            enabled: root.horizontalOffset && root.horizontalOffset.isEnabled
+            isIndeterminate: !root.horizontalOffset || root.horizontalOffset.isUndefined
+            currentValue: root.horizontalOffset ? root.horizontalOffset.value : 0
 
             onValueEditingFinished: function(newValue) {
-                root.propertyItem.x = newValue
+                if (root.horizontalOffset) {
+                    root.horizontalOffset.value = newValue
+                }
             }
         }
 
         IncrementalPropertyControl {
             id: verticalOffsetControl
-
-            enabled: root.isVerticalOffsetAvailable
 
             width: parent.width / 2 - row.spacing / 2
 
@@ -79,11 +111,14 @@ InspectorPropertyView {
 
             icon: IconCode.VERTICAL
 
-            isIndeterminate: root.propertyItem && enabled ? root.propertyItem.isUndefined : false
-            currentValue: root.propertyItem ? root.propertyItem.y : 0
+            enabled: root.isVerticalOffsetAvailable && root.verticalOffset && root.verticalOffset.isEnabled
+            isIndeterminate: !root.verticalOffset || root.verticalOffset.isUndefined
+            currentValue: root.verticalOffset ? root.verticalOffset.value : 0
 
             onValueEditingFinished: function(newValue) {
-                root.propertyItem.y = newValue
+                if (root.verticalOffset) {
+                    root.verticalOffset.value = newValue
+                }
             }
         }
     }

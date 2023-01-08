@@ -31,7 +31,8 @@ class StemSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(PropertyItem * thickness READ thickness CONSTANT)
     Q_PROPERTY(PropertyItem * length READ length CONSTANT)
-    Q_PROPERTY(PropertyItem * offset READ offset CONSTANT)
+    Q_PROPERTY(PropertyItem * horizontalOffset READ horizontalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * verticalOffset READ verticalOffset CONSTANT)
     Q_PROPERTY(PropertyItem * stemDirection READ stemDirection CONSTANT)
 
     Q_PROPERTY(bool useStraightNoteFlags READ useStraightNoteFlags WRITE setUseStraightNoteFlags NOTIFY useStraightNoteFlagsChanged)
@@ -42,7 +43,8 @@ public:
     PropertyItem* thickness() const;
     PropertyItem* length() const;
 
-    PropertyItem* offset() const;
+    PropertyItem* horizontalOffset() const;
+    PropertyItem* verticalOffset() const;
     PropertyItem* stemDirection() const;
 
     bool useStraightNoteFlags() const;
@@ -65,7 +67,8 @@ private:
 
     PropertyItem* m_thickness = nullptr;
     PropertyItem* m_length = nullptr;
-    PropertyItem* m_offset = nullptr;
+    PropertyItem* m_horizontalOffset = nullptr;
+    PropertyItem* m_verticalOffset = nullptr;
     PropertyItem* m_stemDirection = nullptr;
 };
 }
