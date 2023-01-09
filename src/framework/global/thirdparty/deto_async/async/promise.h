@@ -3,6 +3,9 @@
 
 #include <memory>
 #include <string>
+
+#include <QtCore/qcompilerdetection.h>
+
 #include "internal/abstractinvoker.h"
 #include "async.h"
 

@@ -21,6 +21,8 @@
  */
 #include "ipc.h"
 
+#include <QDataStream>
+
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>

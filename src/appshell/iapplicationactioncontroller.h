@@ -22,6 +22,9 @@
 #ifndef MU_APPSHELL_IAPPLICATIONACTIONCONTROLLER_H
 #define MU_APPSHELL_IAPPLICATIONACTIONCONTROLLER_H
 
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QDragMoveEvent>
 #include <QEvent>
 
 #include "modularity/imoduleexport.h"

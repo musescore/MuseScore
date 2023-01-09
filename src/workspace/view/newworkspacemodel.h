@@ -24,6 +24,7 @@
 #define MU_WORKSPACE_NEWWORKSPACEMODEL_H
 
 #include <QObject>
+#include <QVariant>
 
 namespace mu::workspace {
 class NewWorkspaceModel : public QObject

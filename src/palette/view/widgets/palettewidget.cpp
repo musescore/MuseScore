@@ -27,8 +27,10 @@
 #include <QAccessible>
 #include <QAccessibleEvent>
 #include <QAction>
+#include <QApplication>
 #include <QContextMenuEvent>
 #include <QDrag>
+#include <QFileInfo>
 #include <QMenu>
 #include <QMimeData>
 #include <QResizeEvent>
