@@ -4697,7 +4697,11 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
                     nkey = transposeKey(nkey, previousTranspose);
                     e.setKey(nkey);
                 }
-                KeySig* keySig = toKeySig(s->element(track));
+                KeySig* keySig = nullptr;
+                EngravingItem* keySigElem = s->element(track);
+                if (keySigElem && keySigElem->isKeySig()) {
+                    keySig = toKeySig(keySigElem);
+                }
                 if (keySig) {
                     undo(new ChangeKeySig(keySig, e, keySig->showCourtesy()));
                 }
