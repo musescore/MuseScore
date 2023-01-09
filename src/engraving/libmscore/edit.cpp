@@ -5229,8 +5229,10 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         std::vector<Staff* > staffList;
 
         if (!addToLinkedStaves || (ctrlModifier && isSystemLine)) {
-            element->setSystemFlag(false);
             staffList.push_back(element->staff());
+            if (ctrlModifier && isSystemLine) {
+                element->setSystemFlag(false);
+            }
         } else {
             for (Score* s : scoreList()) {
                 staffList.push_back(s->staff(0)); // system objects always appear on the top staff
