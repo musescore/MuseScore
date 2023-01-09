@@ -287,8 +287,7 @@ void NotationInteraction::checkAndShowMScoreError() const
         message = trc("notation", "Please select a note or rest and retry");
         break;
     case MsError::CANNOT_SPLIT_MEASURE_TOO_SHORT:
-        title = trc("notation", "No note or rest selected");
-        message = trc("notation", "Please select a note or rest and retry");
+        title = trc("notation", "This measure is too short to be split");
         break;
     case MsError::CANNOT_REMOVE_TIME_TUPLET:
         title = trc("notation", "Cannot remove time from tuplet");
