@@ -87,11 +87,15 @@ StyledDialogView {
                     text: model.conflictWarning
                 }
 
-                RowLayout {
+                GridLayout {
                     width: parent.width
                     height: childrenRect.height
 
-                    spacing: 12
+                    columnSpacing: 12
+                    rowSpacing: 12
+
+                    columns: 2
+                    rows: 2
 
                     StyledTextLabel {
                         Layout.alignment: Qt.AlignVCenter
@@ -105,13 +109,6 @@ StyledDialogView {
                         enabled: false
                         currentText: model.originSequence
                     }
-                }
-
-                RowLayout {
-                    width: parent.width
-                    height: childrenRect.height
-
-                    spacing: 12
 
                     StyledTextLabel {
                         Layout.alignment: Qt.AlignVCenter
