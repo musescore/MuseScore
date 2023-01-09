@@ -407,7 +407,7 @@ int StringData::fret(int pitch, int string, int pitchOffset) const
              fret += strg.startFret;  // banjo 5th string adjustment
 
       // fret number is invalid or string cannot be fretted
-      if (fret < 0 || fret >= _frets || (fret > 0 && strg.open))
+      if (fret < 0 || fret > _frets || (fret > 0 && strg.open))
             return INVALID_FRET_INDEX ;
       return fret;
       }
