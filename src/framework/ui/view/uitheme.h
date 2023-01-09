@@ -24,6 +24,7 @@
 #define MU_UI_UITHEME_H
 
 #include <QFont>
+#include <QPainter>
 #include <QProxyStyle>
 
 #include "modularity/ioc.h"

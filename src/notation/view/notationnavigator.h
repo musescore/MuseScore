@@ -23,6 +23,8 @@
 #define MU_NOTATION_NOTATIONNAVIGATOR_H
 
 #include <QObject>
+#include <QMouseEvent>
+#include <QPainter>
 #include <QQuickPaintedItem>
 
 #include "modularity/ioc.h"

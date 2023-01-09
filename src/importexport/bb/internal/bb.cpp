@@ -20,6 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <QFile>
+#include <QFileInfo>
+
 #include "bb.h"
 
 #include "engravingerrors.h"
