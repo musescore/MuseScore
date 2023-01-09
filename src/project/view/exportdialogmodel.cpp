@@ -21,6 +21,7 @@
  */
 #include "exportdialogmodel.h"
 
+#include <QApplication>
 #include <QItemSelectionModel>
 
 #include "async/async.h"

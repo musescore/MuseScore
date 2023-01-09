@@ -22,6 +22,7 @@
 
 #include <QTextStream>
 #include <QBuffer>
+#include <QFile>
 #include <QTextCodec>
 #include <QPainterPath>
 #include <QMimeType>

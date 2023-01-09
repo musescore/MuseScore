@@ -26,6 +26,8 @@
 
 #include <memory>
 
+#include <QAbstractTableModel>
+
 namespace mu::iex::midi {
 class TracksModel : public QAbstractTableModel
 {
