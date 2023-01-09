@@ -99,11 +99,12 @@ void MMRest::draw(mu::draw::Painter* painter) const
             x += symBbox(sym).width() + spacing;
         }
     } else {
+        double mag = staff()->staffMag(tick());
         mu::draw::Pen pen(painter->pen());
         pen.setCapStyle(mu::draw::PenCapStyle::FlatCap);
 
         // draw horizontal line
-        double hBarThickness = score()->styleMM(Sid::mmRestHBarThickness);
+        double hBarThickness = score()->styleMM(Sid::mmRestHBarThickness) * mag;
         if (hBarThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
             pen.setWidthF(hBarThickness);
             painter->setPen(pen);
@@ -122,11 +123,11 @@ void MMRest::draw(mu::draw::Painter* painter) const
         }
 
         // draw vertical lines
-        double vStrokeThickness = score()->styleMM(Sid::mmRestHBarVStrokeThickness);
+        double vStrokeThickness = score()->styleMM(Sid::mmRestHBarVStrokeThickness) * mag;
         if (vStrokeThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
             pen.setWidthF(vStrokeThickness);
             painter->setPen(pen);
-            double halfVStrokeHeight = score()->styleMM(Sid::mmRestHBarVStrokeHeight) * .5;
+            double halfVStrokeHeight = score()->styleMM(Sid::mmRestHBarVStrokeHeight) * .5 * mag;
             painter->drawLine(LineF(0.0, -halfVStrokeHeight, 0.0, halfVStrokeHeight));
             painter->drawLine(LineF(m_width, -halfVStrokeHeight, m_width, halfVStrokeHeight));
         }
