@@ -388,7 +388,7 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
         const EngravingItem* item = shapeEl.toItem;
         const EngravingItem* parent = item->parentItem();
         // Its own startCR or items belonging to it, lyrics, fingering, ledger lines, articulation on endCR
-        if (item == startCR || parent == startCR || item->isLyrics() || item->isFingering() || item->isLedgerLine()
+        if (item == startCR || parent == startCR || item->isTextBase() || item->isLedgerLine()
             || (item->isArticulation() && parent == endCR)) {
             return true;
         }
