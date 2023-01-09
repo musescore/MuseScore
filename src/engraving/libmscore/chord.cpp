@@ -295,7 +295,7 @@ Chord::Chord(const Chord& c, bool link)
     for (Articulation* a : c._articulations) {      // make deep copy
         Articulation* na = new Articulation(*a);
         if (link) {
-            na->linkTo(a);
+            score()->undo(new Link(na, a));
         }
         na->setParent(this);
         na->setTrack(track());

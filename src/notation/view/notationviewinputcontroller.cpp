@@ -647,8 +647,6 @@ void NotationViewInputController::handleRightClick(const ClickContext& ctx)
         viewInteraction()->endEditElement();
         return;
     }
-
-    updateTextCursorPosition();
 }
 
 bool NotationViewInputController::startTextEditingAllowed() const

@@ -1283,7 +1283,9 @@ void Measure::cmdRemoveStaves(staff_idx_t sStaff, staff_idx_t eStaff)
             }
         }
 
-        for (EngravingItem* e : s->annotations()) {
+        // Create copy, because s->annotations() will be modified during the loop
+        std::vector<EngravingItem*> annotations = s->annotations();
+        for (EngravingItem* e : annotations) {
             if (removingAllowed(e)) {
                 e->undoUnlink();
                 score()->undo(new RemoveElement(e));
@@ -1961,7 +1963,8 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                 for (Segment* segment = m->last(); segment;) {
                     Segment* pseg = segment->prev();
                     if (segment->segmentType() == SegmentType::ChordRest) {
-                        for (EngravingItem* a : segment->annotations()) {
+                        const auto annotations = segment->annotations(); // make a copy since we alter the list
+                        for (EngravingItem* a : annotations) {
                             if (a->track() == trk) {
                                 s->undoRemoveElement(a);
                             }
