@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
     - master
-    - 4.0_rc
+    - 4.0.1
 
 jobs:
   setup:
