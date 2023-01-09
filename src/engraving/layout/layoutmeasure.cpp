@@ -361,8 +361,8 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
 
         // remove stray elements (possibly leftover from a previous layout of this mmr)
         // this should not happen since the elements are linked?
-        for (EngravingItem* e : s->annotations()) {
-            // look at elements in mmr
+        const auto annotations = s->annotations(); // make a copy since we alter the list
+        for (EngravingItem* e : annotations) { // look at elements in mmr
             if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isTripletFeel()
                   || e->isPlayTechAnnotation() || e->isInstrumentChange())) {
                 continue;
