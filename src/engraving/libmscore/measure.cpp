@@ -1963,7 +1963,8 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                 for (Segment* segment = m->last(); segment;) {
                     Segment* pseg = segment->prev();
                     if (segment->segmentType() == SegmentType::ChordRest) {
-                        for (EngravingItem* a : segment->annotations()) {
+                        const auto annotations = segment->annotations(); // make a copy since we alter the list
+                        for (EngravingItem* a : annotations) {
                             if (a->track() == trk) {
                                 s->undoRemoveElement(a);
                             }
