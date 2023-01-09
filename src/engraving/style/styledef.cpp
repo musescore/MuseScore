@@ -432,7 +432,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     { Sid::createMultiMeasureRests, "createMultiMeasureRests", false },
     { Sid::minEmptyMeasures,        "minEmptyMeasures",        PropertyValue(2) },
-    { Sid::minMMRestWidth,          "minMMRestWidth",          Spatium(4) },
+    { Sid::minMMRestWidth,          "minMMRestWidth",          Spatium(6) },
     { Sid::mmRestNumberPos,         "mmRestNumberPos",         Spatium(-0.5) },
     { Sid::mmRestNumberMaskHBar,    "mmRestNumberMaskHBar",    true },
     { Sid::multiMeasureRestMargin,  "multiMeasureRestMargin",  Spatium(1.2) },
