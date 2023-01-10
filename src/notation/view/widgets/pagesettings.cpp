@@ -339,14 +339,16 @@ void PageSettings::applyToAllParts()
 void PageSettings::pageFormatSelected(int size)
 {
     if (size >= 0) {
+        bool landscape = landscapeButton->isChecked();
         int id = pageGroup->currentData().toInt();
         QSizeF sz = QPageSize::size(QPageSize::PageSizeId(id), QPageSize::Inch);
 
-        setStyleValue(Sid::pageWidth, sz.width());
-        setStyleValue(Sid::pageHeight, sz.height());
+        setStyleValue(Sid::pageWidth, landscape ? sz.height() : sz.width());
+        setStyleValue(Sid::pageHeight, landscape ? sz.width() : sz.height());
 
         double f  = mmUnit ? 1.0 / INCH : 1.0;
-        setStyleValue(Sid::pagePrintableWidth, sz.width() - (oddPageLeftMargin->value() + oddPageRightMargin->value()) * f);
+        setStyleValue(Sid::pagePrintableWidth,
+                      (landscape ? sz.height() : sz.width()) - (oddPageLeftMargin->value() + oddPageRightMargin->value()) * f);
         updateValues();
     }
 }
