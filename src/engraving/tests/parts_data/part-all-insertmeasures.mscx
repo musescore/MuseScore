@@ -1164,9 +1164,6 @@
             <Tempo>
               <tempo>1.66667</tempo>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <text>𝅘𝅥 = 100</text>
               </Tempo>
@@ -1174,23 +1171,14 @@
               <subtype>pp</subtype>
               <velocity>33</velocity>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               </Dynamic>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
@@ -1198,16 +1186,10 @@
               </Chord>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>74</pitch>
                 <tpc>16</tpc>
@@ -1215,16 +1197,10 @@
               </Chord>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>76</pitch>
                 <tpc>18</tpc>
@@ -1232,9 +1208,6 @@
               </Chord>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               </Rest>
@@ -1242,106 +1215,6 @@
           </Measure>
         <Measure>
           <voice>
-            <Chord>
-              <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
-                <indexDiff>1</indexDiff>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
-                  <indexDiff>1</indexDiff>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
-                </linked>
-              <durationType>quarter</durationType>
-              <Note>
-                <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
-                  </linked>
-                <Fingering>
-                  <linked>
-                    <location>
-                      <fractions>1/1</fractions>
-                      </location>
-                    </linked>
-                  <offset x="1.06662" y="-4.71271"/>
-                  <text>2</text>
-                  </Fingering>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                </Note>
-              </Chord>
-            <Chord>
-              <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
-                </linked>
-              <durationType>quarter</durationType>
-              <Articulation>
-                <subtype>articAccentBelow</subtype>
-                <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
-                  </linked>
-                </Articulation>
-              <Note>
-                <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
-                  </linked>
-                <pitch>67</pitch>
-                <tpc>15</tpc>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Harmony>
-              <root>15</root>
-              <name>7</name>
-              <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
-                </linked>
-              </Harmony>
             <Spanner type="HairPin">
               <HairPin>
                 <subtype>0</subtype>
@@ -1359,18 +1232,10 @@
               </Spanner>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
-                <indexDiff>1</indexDiff>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
-                  <indexDiff>1</indexDiff>
                   </linked>
                 <pitch>67</pitch>
                 <tpc>15</tpc>
@@ -1385,16 +1250,75 @@
               </Spanner>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
+                  </linked>
+                <pitch>67</pitch>
+                <tpc>15</tpc>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <Fingering>
+                  <linked>
+                    </linked>
+                  <offset x="1.06662" y="-4.71271"/>
+                  <text>2</text>
+                  </Fingering>
+                <pitch>67</pitch>
+                <tpc>15</tpc>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Articulation>
+                <subtype>articAccentBelow</subtype>
+                <linked>
+                  </linked>
+                </Articulation>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>67</pitch>
+                <tpc>15</tpc>
+                </Note>
+              </Chord>
+            </voice>
+          </Measure>
+        <Measure>
+          <voice>
+            <Harmony>
+              <root>15</root>
+              <name>7</name>
+              <linked>
+                </linked>
+              </Harmony>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>67</pitch>
+                <tpc>15</tpc>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
                   </linked>
                 <pitch>67</pitch>
                 <tpc>15</tpc>
@@ -1402,24 +1326,15 @@
               </Chord>
             <StaffText>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <text>system-text</text>
               </StaffText>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>67</pitch>
                 <tpc>15</tpc>
@@ -1427,16 +1342,10 @@
               </Chord>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>67</pitch>
                 <tpc>15</tpc>
@@ -1448,17 +1357,21 @@
           <voice>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
+              <Spanner type="Slur">
+                <Slur>
+                  <linked>
+                    </linked>
+                  </Slur>
+                <next>
+                  <location>
+                    <fractions>3/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
-                  <indexDiff>1</indexDiff>
                   </linked>
                 <pitch>67</pitch>
                 <tpc>15</tpc>
@@ -1466,16 +1379,10 @@
               </Chord>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>67</pitch>
                 <tpc>15</tpc>
@@ -1483,16 +1390,10 @@
               </Chord>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>67</pitch>
                 <tpc>15</tpc>
@@ -1500,16 +1401,17 @@
               </Chord>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
+              <Spanner type="Slur">
+                <prev>
+                  <location>
+                    <fractions>-3/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>67</pitch>
                 <tpc>15</tpc>
@@ -1521,16 +1423,10 @@
           <voice>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <Spanner type="Tie">
                   <Tie>
@@ -1552,16 +1448,10 @@
               </Chord>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <Spanner type="Tie">
                   <prev>
@@ -1576,16 +1466,10 @@
               </Chord>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>67</pitch>
                 <tpc>15</tpc>
@@ -1593,9 +1477,6 @@
               </Chord>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               </Rest>
@@ -1605,9 +1486,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1618,9 +1496,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1631,9 +1506,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1644,9 +1516,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1657,9 +1526,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1670,9 +1536,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1683,9 +1546,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1696,9 +1556,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1709,9 +1566,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1722,9 +1576,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1735,9 +1586,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1748,9 +1596,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1761,9 +1606,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1774,9 +1616,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1787,9 +1626,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1800,9 +1636,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1813,9 +1646,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1826,9 +1656,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1839,9 +1666,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1852,9 +1676,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1865,9 +1686,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1878,9 +1696,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1891,9 +1706,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1904,9 +1716,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1917,9 +1726,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1930,9 +1736,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -1943,16 +1746,10 @@
           <voice>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>67</pitch>
                 <tpc>15</tpc>
@@ -1960,16 +1757,10 @@
               </Chord>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>69</pitch>
                 <tpc>17</tpc>
@@ -1977,16 +1768,10 @@
               </Chord>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
@@ -1994,9 +1779,6 @@
               </Chord>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               </Rest>
@@ -2102,23 +1884,16 @@
               <linked>
                 <location>
                   <staves>-1</staves>
-                  <fractions>1/1</fractions>
                   </location>
                 </linked>
               <text>𝅘𝅥 = 100</text>
               </Tempo>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>55</pitch>
                 <tpc>15</tpc>
@@ -2126,16 +1901,10 @@
               </Chord>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>57</pitch>
                 <tpc>17</tpc>
@@ -2143,16 +1912,10 @@
               </Chord>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>59</pitch>
                 <tpc>19</tpc>
@@ -2160,16 +1923,10 @@
               </Chord>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>60</pitch>
                 <tpc>14</tpc>
@@ -2181,9 +1938,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2194,16 +1948,10 @@
           <voice>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>55</pitch>
                 <tpc>15</tpc>
@@ -2211,16 +1959,10 @@
               </Chord>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>55</pitch>
                 <tpc>15</tpc>
@@ -2228,16 +1970,10 @@
               </Chord>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>55</pitch>
                 <tpc>15</tpc>
@@ -2245,16 +1981,10 @@
               </Chord>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>55</pitch>
                 <tpc>15</tpc>
@@ -2266,9 +1996,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2279,9 +2006,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2292,9 +2016,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2305,9 +2026,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2318,9 +2036,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2331,9 +2046,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2344,9 +2056,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2357,9 +2066,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2370,9 +2076,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2383,9 +2086,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2396,9 +2096,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2409,9 +2106,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2422,9 +2116,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2435,9 +2126,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2448,9 +2136,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2461,9 +2146,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2474,9 +2156,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2487,9 +2166,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2500,9 +2176,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2513,9 +2186,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2526,9 +2196,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2539,9 +2206,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2552,9 +2216,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2565,9 +2226,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2578,9 +2236,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2591,9 +2246,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2604,9 +2256,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2617,9 +2266,6 @@
           <voice>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -2630,16 +2276,10 @@
           <voice>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>53</pitch>
                 <tpc>13</tpc>
@@ -2647,16 +2287,10 @@
               </Chord>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>52</pitch>
                 <tpc>18</tpc>
@@ -2664,16 +2298,10 @@
               </Chord>
             <Chord>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <location>
-                    <fractions>1/1</fractions>
-                    </location>
                   </linked>
                 <pitch>53</pitch>
                 <tpc>13</tpc>
@@ -2681,9 +2309,6 @@
               </Chord>
             <Rest>
               <linked>
-                <location>
-                  <fractions>1/1</fractions>
-                  </location>
                 </linked>
               <durationType>quarter</durationType>
               </Rest>
