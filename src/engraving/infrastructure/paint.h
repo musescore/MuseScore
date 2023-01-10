@@ -27,12 +27,36 @@
 
 namespace mu::engraving {
 class EngravingItem;
+class Score;
 
 class Paint
 {
 public:
-    static void paintElement(mu::draw::Painter& painter, const EngravingItem* element);
-    static void paintElements(mu::draw::Painter& painter, const std::vector<EngravingItem*>& elements, bool isPrinting);
+
+    struct Options
+    {
+        bool isSetViewport = true;
+        bool isPrinting = false;
+        bool isMultiPage = false;
+        bool printPageBackground = true;
+        RectF frameRect;
+        int fromPage = -1; // 0 is first
+        int toPage = -1;
+        int copyCount = 1;
+        int trimMarginPixelSize = -1;
+        int deviceDpi = -1;
+
+        std::function<void(draw::Painter* painter, const RectF& pageRect, const RectF& pageContentRect, bool isOdd)> onPaintPageSheet;
+        std::function<void()> onNewPage;
+    };
+
+    static void paintScore(draw::Painter* painter, Score* score, const Options& opt);
+    static void paintElement(draw::Painter& painter, const EngravingItem* element);
+    static void paintElements(draw::Painter& painter, const std::vector<EngravingItem*>& elements, bool isPrinting);
+
+    static SizeF pageSizeInch(Score* score);
+
+private:
 };
 }
 

@@ -88,16 +88,29 @@ public:
         QMap<ParamKey, QVariant> params;
     };
 
+    enum class DiagnosticType {
+        Undefined = 0,
+        GenDrawData
+    };
+
+    struct Diagnostic {
+        DiagnosticType type = DiagnosticType::Undefined;
+        QString input;
+        QString output;
+    };
+
     void parse(const QStringList& args);
     void apply();
 
     ConverterTask converterTask() const;
+    Diagnostic diagnostic() const;
 
 private:
     void printLongVersion() const;
 
     QCommandLineParser m_parser;
     ConverterTask m_converterTask;
+    Diagnostic m_diagnostic;
 };
 }
 

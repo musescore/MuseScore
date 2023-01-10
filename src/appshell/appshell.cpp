@@ -191,13 +191,24 @@ int AppShell::run(int argc, char** argv)
     switch (runMode) {
     case framework::IApplication::RunMode::Converter: {
         // ====================================================
-        // Process Converter
+        // Process Diagnostic
         // ====================================================
-        auto task = commandLine.converterTask();
-        QMetaObject::invokeMethod(qApp, [this, task]() {
-                int code = processConverter(task);
-                qApp->exit(code);
-            }, Qt::QueuedConnection);
+        CommandLineController::Diagnostic diagnostic = commandLine.diagnostic();
+        if (diagnostic.type != CommandLineController::DiagnosticType::Undefined) {
+            QMetaObject::invokeMethod(qApp, [this, diagnostic]() {
+                    int code = processDiagnostic(diagnostic);
+                    qApp->exit(code);
+                }, Qt::QueuedConnection);
+        } else {
+            // ====================================================
+            // Process Converter
+            // ====================================================
+            CommandLineController::ConverterTask task = commandLine.converterTask();
+            QMetaObject::invokeMethod(qApp, [this, task]() {
+                    int code = processConverter(task);
+                    qApp->exit(code);
+                }, Qt::QueuedConnection);
+        }
     } break;
     case framework::IApplication::RunMode::Editor: {
         // ====================================================
@@ -351,6 +362,36 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
         std::string scoreSource = task.params[CommandLineController::ParamKey::ScoreSource].toString().toStdString();
         ret = converter()->updateSource(task.inputFile, scoreSource, forceMode);
     } break;
+    }
+
+    if (!ret) {
+        LOGE() << "failed convert, error: " << ret.toString();
+    }
+
+    return ret.code();
+}
+
+int AppShell::processDiagnostic(const CommandLineController::Diagnostic& task)
+{
+    if (!engravingDrawProvider()) {
+        return make_ret(Ret::Code::NotSupported);
+    }
+
+    Ret ret = make_ret(Ret::Code::Ok);
+
+    io::path_t input = task.input;
+    io::path_t output = task.output;
+
+    if (output.empty()) {
+        output = "./";
+    }
+
+    switch (task.type) {
+    case CommandLineController::DiagnosticType::GenDrawData:
+        ret = engravingDrawProvider()->genDrawData(input, output);
+        break;
+    default:
+        break;
     }
 
     if (!ret) {

@@ -72,7 +72,7 @@ void BufferedPaintProvider::beginObject(const std::string& name, const PointF& p
     m_currentObjects.push(DrawData::Object(name, pagePos));
 
 #ifdef TRACE_DRAW_OBJ_ENABLED
-    m_drawObjectsLogger.beginObject(name, pagePos);
+    m_drawObjectsLogger->beginObject(name, pagePos);
 #endif
 }
 
@@ -93,12 +93,16 @@ void BufferedPaintProvider::endObject()
     m_currentObjects.pop();
 
 #ifdef TRACE_DRAW_OBJ_ENABLED
-    m_drawObjectsLogger.endObject();
+    m_drawObjectsLogger->endObject();
 #endif
 }
 
 const DrawData::Data& BufferedPaintProvider::currentData() const
 {
+    if (m_currentObjects.empty()) {
+        static const DrawData::Data null;
+        return null;
+    }
     return m_currentObjects.top().datas.back();
 }
 

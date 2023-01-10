@@ -119,115 +119,17 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
         return;
     }
 
-    const std::vector<mu::engraving::Page*>& pages = score()->pages();
-    if (pages.empty()) {
-        return;
-    }
+    Options myopt = opt;
+    bool printPageBackground = myopt.printPageBackground;
+    myopt.onPaintPageSheet
+        = [this, printPageBackground](draw::Painter* painter, const RectF& pageRect, const RectF& pageContentRect, bool isOdd) {
+        paintPageSheet(painter, pageRect, pageContentRect, isOdd, printPageBackground);
+    };
 
-    //! NOTE This is DPI of paint device,  ex screen, image, printer and etc.
-    //! Should be set, but if not set, we will use our default DPI.
-    const int DEVICE_DPI = opt.deviceDpi > 0 ? opt.deviceDpi : mu::engraving::DPI;
+    engraving::Paint::paintScore(painter, score(), myopt);
 
-    //! NOTE Depending on the view mode,
-    //! if the view mode is PAGE, then this is one page size (ex A4),
-    //! if someone a continuous mode, then this is the size of the entire score.
-    SizeF pageSize = pageSizeInch();
-
-    // Setup Painter
-    painter->setAntialiasing(true);
-
-    //! NOTE To draw on the screen, no need to adjust the viewport,
-    //! to draw on others (pdf, png, printer), we need to set the viewport
-    if (opt.isSetViewport) {
-        painter->setViewport(RectF(0.0, 0.0, pageSize.width() * DEVICE_DPI, pageSize.height() * DEVICE_DPI));
-        painter->setWindow(RectF(0.0, 0.0, pageSize.width() * mu::engraving::DPI, pageSize.height() * mu::engraving::DPI));
-    }
-
-    // Setup score draw system
-    mu::engraving::MScore::pixelRatio = mu::engraving::DPI / DEVICE_DPI;
-    score()->setPrinting(opt.isPrinting);
-    mu::engraving::MScore::pdfPrinting = opt.isPrinting;
-
-    // Setup page counts
-    int fromPage = opt.fromPage >= 0 ? opt.fromPage : 0;
-    int toPage = (opt.toPage >= 0 && opt.toPage < int(pages.size())) ? opt.toPage : (int(pages.size()) - 1);
-
-    for (int copy = 0; copy < opt.copyCount; ++copy) {
-        bool firstPage = true;
-        for (int pi = fromPage; pi <= toPage; ++pi) {
-            mu::engraving::Page* page = pages.at(pi);
-
-            PointF pagePos = page->pos();
-            RectF pageRect = page->bbox();
-            RectF pageContentRect = pageRect.adjusted(page->lm(), page->tm(), -page->rm(), -page->bm());
-
-            //! NOTE Trim page margins, if need
-            if (opt.trimMarginPixelSize >= 0) {
-                qreal trimSize = static_cast<qreal>(opt.trimMarginPixelSize);
-                pageRect = pageContentRect.adjusted(-trimSize, -trimSize, trimSize, trimSize);
-            }
-
-            //! NOTE Check draw rect, usually for optimisation drawing on screen (draw only what we see)
-            RectF drawRect;
-            RectF pageAbsRect = pageRect.translated(pagePos);
-            if (opt.frameRect.isValid()) {
-                if (pageAbsRect.right() < opt.frameRect.left()) {
-                    continue;
-                }
-
-                if (pageAbsRect.left() > opt.frameRect.right()) {
-                    break;
-                }
-
-                drawRect = opt.frameRect;
-            } else {
-                drawRect = pageAbsRect;
-            }
-
-            //! NOTE Notify about new page (usually for paged paint device, ex pdf, printer)
-            if (!firstPage) {
-                if (opt.onNewPage) {
-                    opt.onNewPage();
-                }
-            }
-            firstPage = false;
-
-            if (opt.isMultiPage) {
-                painter->translate(pagePos);
-            }
-
-            // Draw page sheet
-            paintPageSheet(painter, pageRect, pageContentRect, page->isOdd(), opt.printPageBackground);
-
-            // Draw page elements
-            painter->setClipping(true);
-            painter->setClipRect(pageRect);
-            std::vector<EngravingItem*> elements = page->items(drawRect.translated(-pagePos));
-            engraving::Paint::paintElements(*painter, elements, opt.isPrinting);
-            painter->setClipping(false);
-
-#ifdef ENGRAVING_PAINT_DEBUGGER_ENABLED
-            if (!opt.isPrinting) {
-                engraving::DebugPaint::paintPageDebug(*painter, page);
-            }
-#endif
-
-            if (opt.isMultiPage) {
-                painter->translate(-pagePos);
-            }
-
-            if ((copy + 1) < opt.copyCount) {
-                //! NOTE Notify about new page (usually for paged paint device, ex pdf, printer)
-                //! for next copy
-                if (opt.onNewPage) {
-                    opt.onNewPage();
-                }
-            }
-        }
-
-        if (!opt.isPrinting) {
-            static_cast<NotationInteraction*>(m_notation->interaction().get())->paint(painter);
-        }
+    if (!myopt.isPrinting) {
+        static_cast<NotationInteraction*>(m_notation->interaction().get())->paint(painter);
     }
 }
 
