@@ -102,6 +102,9 @@ mu::Ret VideoWriter::write(INotationProjectPtr project, const io::path_t& filePa
     }
     cfg.bitrate = int(br * 1000000);
 
+    cfg.leadingSec = configuration()->leadingSec();
+    cfg.trailingSec = configuration()->trailingSec();
+
     Ret ret = generatePagedOriginalVideo(project, filePath, cfg);
     return ret;
 }

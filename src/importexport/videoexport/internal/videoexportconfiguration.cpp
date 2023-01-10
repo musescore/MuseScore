@@ -26,6 +26,8 @@ static bool DEFAULT_SHOW_PIANO = false;
 static PianoPosition DEFAULT_PIANO_POSITION = PianoPosition::Bottom;
 static std::string DEFAULT_RESOLUTION = "1080p";
 static int DEFAULT_FPS = 24;
+static double DEFAULT_LEADING_SEC = 3.0;
+static double DEFAULT_TRAILING_SECONDS = 3.0;
 
 using namespace mu::iex::videoexport;
 
@@ -77,4 +79,24 @@ int VideoExportConfiguration::fps() const
 void VideoExportConfiguration::setFps(std::optional<int> fps)
 {
     m_fps = fps;
+}
+
+double VideoExportConfiguration::leadingSec() const
+{
+    return m_leadingSec ? m_leadingSec.value() : DEFAULT_LEADING_SEC;
+}
+
+void VideoExportConfiguration::setLeadingSec(std::optional<double> leadingSec)
+{
+    m_leadingSec = leadingSec;
+}
+
+double VideoExportConfiguration::trailingSec() const
+{
+    return m_trailingSec ? m_trailingSec.value() : DEFAULT_TRAILING_SECONDS;
+}
+
+void VideoExportConfiguration::setTrailingSec(std::optional<double> trailingSec)
+{
+    m_trailingSec = trailingSec;
 }
