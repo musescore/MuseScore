@@ -40,8 +40,15 @@ public:
 
     std::string resolution() const override;
     void setResolution(std::optional<std::string> resolution) override;
+
     int fps() const override;
     void setFps(std::optional<int> fps) override;
+
+    double leadingSec() const override;
+    void setLeadingSec(std::optional<double> leadingSec) override;
+
+    double trailingSec() const override;
+    void setTrailingSec(std::optional<double> trailingSec) override;
 
 private:
     std::optional<ViewMode> m_viewMode = std::nullopt;
@@ -49,6 +56,8 @@ private:
     std::optional<PianoPosition> m_pianoPosition = std::nullopt;
     std::optional<std::string> m_resolution = std::nullopt;
     std::optional<int> m_fps = std::nullopt;
+    std::optional<double> m_leadingSec = std::nullopt;
+    std::optional<double> m_trailingSec = std::nullopt;
 };
 }
 
