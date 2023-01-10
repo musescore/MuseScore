@@ -165,11 +165,32 @@ void WorkspaceListModel::createNewWorkspace()
         return;
     }
 
+    IWorkspacePtr currentWorkspace = workspacesManager()->currentWorkspace();
     IWorkspacePtr newWorkspace = workspacesManager()->newWorkspace(name.toStdString());
-    newWorkspace->setIsManaged(DataKey::UiSettings, meta.value("ui_settings").toBool());
-    newWorkspace->setIsManaged(DataKey::UiStates, meta.value("ui_states").toBool());
-    newWorkspace->setIsManaged(DataKey::UiToolConfigs, meta.value("ui_toolconfigs").toBool());
-    newWorkspace->setIsManaged(DataKey::Palettes, meta.value("palettes").toBool());
+
+    bool uiSettings = meta.value("ui_settings").toBool();
+    newWorkspace->setIsManaged(DataKey::UiSettings, uiSettings);
+    if (uiSettings) {
+        newWorkspace->setRawData(DataKey::UiSettings, currentWorkspace->rawData(DataKey::UiSettings).val);
+    }
+
+    bool uiStates = meta.value("ui_states").toBool();
+    newWorkspace->setIsManaged(DataKey::UiStates, uiStates);
+    if (uiStates) {
+        newWorkspace->setRawData(DataKey::UiStates, currentWorkspace->rawData(DataKey::UiStates).val);
+    }
+
+    bool uiToolConfigs = meta.value("ui_toolconfigs").toBool();
+    newWorkspace->setIsManaged(DataKey::UiToolConfigs, uiToolConfigs);
+    if (uiToolConfigs) {
+        newWorkspace->setRawData(DataKey::UiToolConfigs, currentWorkspace->rawData(DataKey::UiToolConfigs).val);
+    }
+
+    bool uiPalettes = meta.value("palettes").toBool();
+    newWorkspace->setIsManaged(DataKey::Palettes, uiPalettes);
+    if (uiPalettes) {
+        newWorkspace->setRawData(DataKey::Palettes, currentWorkspace->rawData(DataKey::Palettes).val);
+    }
 
     int newWorkspaceIndex = m_workspaces.size();
 
