@@ -44,6 +44,9 @@ public:
         : m_color(Color::fromQColor(color)) {}
 #endif
 
+    inline bool operator==(const Brush& o) const { return m_color == o.m_color && m_style == o.m_style; }
+    inline bool operator!=(const Brush& o) const { return !this->operator==(o); }
+
     inline BrushStyle style() const { return m_style; }
     void setStyle(BrushStyle style) { m_style = style; }
     inline const Color& color() const { return m_color; }
