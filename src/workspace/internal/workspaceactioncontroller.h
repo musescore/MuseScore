@@ -22,18 +22,21 @@
 #ifndef MU_WORKSPACE_WORKSPACEACTIONCONTROLLER_H
 #define MU_WORKSPACE_WORKSPACEACTIONCONTROLLER_H
 
-#include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
-#include "iworkspaceconfiguration.h"
+
+#include "modularity/ioc.h"
 #include "iinteractive.h"
+#include "actions/iactionsdispatcher.h"
+#include "iworkspaceconfiguration.h"
+#include "iworkspacemanager.h"
 
 namespace mu::workspace {
 class WorkspaceActionController : public actions::Actionable
 {
     INJECT(workspace, actions::IActionsDispatcher, dispatcher)
-    INJECT(workspace, IWorkspaceConfiguration, configuration)
     INJECT(workspace, framework::IInteractive, interactive)
+    INJECT(workspace, IWorkspaceConfiguration, configuration)
+    INJECT(workspace, IWorkspaceManager, workspacesManager)
 
 public:
     void init();
@@ -43,6 +46,8 @@ private:
     void openConfigureWorkspacesDialog();
 
     void setCurrentWorkspaceName(const std::string& workspaceName);
+
+    void notifyCurrentWorkspaceAboutToBeChanged();
 };
 }
 

@@ -34,12 +34,16 @@ void WorkspaceActionController::init()
 
 void WorkspaceActionController::selectWorkspace(const ActionData& args)
 {
+    notifyCurrentWorkspaceAboutToBeChanged();
+
     std::string selectedWorkspace = !args.empty() ? args.arg<std::string>(0) : "";
     setCurrentWorkspaceName(selectedWorkspace);
 }
 
 void WorkspaceActionController::openConfigureWorkspacesDialog()
 {
+    notifyCurrentWorkspaceAboutToBeChanged();
+
     RetVal<Val> result = interactive()->open("musescore://workspace/select?sync=true");
     if (!result.ret) {
         return;
@@ -56,4 +60,9 @@ void WorkspaceActionController::setCurrentWorkspaceName(const std::string& works
     }
 
     configuration()->setCurrentWorkspaceName(workspaceName);
+}
+
+void WorkspaceActionController::notifyCurrentWorkspaceAboutToBeChanged()
+{
+    workspacesManager()->currentWorkspaceAboutToBeChanged().notify();
 }

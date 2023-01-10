@@ -279,8 +279,6 @@ void WorkspaceManager::setupCurrentWorkspace()
             return;
         }
 
-        m_currentWorkspaceAboutToBeChanged.notify();
-
         saveCurrentWorkspace();
 
         //! NOTE Perhaps we need to unload the current workspace (clear memory)
