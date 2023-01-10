@@ -99,7 +99,7 @@ option(TRY_BUILD_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in debug" O
 option(BUILD_ASAN "Enable Address Sanitizer" OFF) # if ON, then disabled custom allocator
 option(BUILD_ALLOCATOR "Enable Custom allocator (used for engraving)" OFF)
 option(QML_LOAD_FROM_SOURCE "Load qml files from source (not resource)" OFF)
-option(TRACE_DRAW_OBJ_ENABLED "Trace draw objects" ON)
+option(TRACE_DRAW_OBJ_ENABLED "Trace draw objects" OFF)
 
 if (BUILD_ASAN)
     set(BUILD_ALLOCATOR OFF)

@@ -95,6 +95,14 @@ struct DrawData
         Transform transform;
         bool isAntialiasing = false;
         CompositionMode compositionMode = CompositionMode::SourceOver;
+
+        bool operator==(const State& o) const
+        {
+            return pen == o.pen && brush == o.brush && font == o.font && transform == o.transform
+                   && isAntialiasing == o.isAntialiasing && compositionMode == o.compositionMode;
+        }
+
+        bool operator!=(const State& o) const { return !this->operator==(o); }
     };
 
     struct Data {

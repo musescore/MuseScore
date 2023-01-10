@@ -21,8 +21,8 @@
  */
 #include "drawjson.h"
 
-#include "serialization/json.h"
-#include "realfn.h"
+#include "global/serialization/json.h"
+#include "global/containers.h"
 #include "log.h"
 
 using namespace mu;
@@ -373,6 +373,19 @@ ByteArray DrawDataJson::toJson(const DrawData& buf)
     JsonObject root;
     root["a_name"] = buf.name;
 
+    std::vector<DrawData::State> states;
+    // collect states
+    {
+        for (const DrawData::Object& obj : buf.objects) {
+            for (const DrawData::Data& data : obj.datas) {
+                if (mu::contains(states, data.state)) {
+                    continue;
+                }
+                states.push_back(data.state);
+            }
+        }
+    }
+
     JsonArray objsArr;
     for (const DrawData::Object& obj : buf.objects) {
         JsonObject objObj;
@@ -385,7 +398,7 @@ ByteArray DrawDataJson::toJson(const DrawData& buf)
             }
 
             JsonObject dataObj;
-            dataObj["state"] = toObj(data.state);
+            dataObj["state"] = static_cast<int>(mu::indexOf(states, data.state));
             if (!data.paths.empty()) {
                 dataObj["paths"] = toArr(data.paths);
             }
@@ -417,6 +430,13 @@ ByteArray DrawDataJson::toJson(const DrawData& buf)
 
     root["objects"] = objsArr;
 
+    // states
+    JsonObject stateObj;
+    for (size_t i = 0; i < states.size(); ++i) {
+        stateObj[std::to_string(i)] = toObj(states.at(i));
+    }
+    root["states"] = stateObj;
+
     return JsonDocument(root).toJson(JsonDocument::Format::Indented);
 }
 
@@ -432,6 +452,18 @@ mu::RetVal<DrawDataPtr> DrawDataJson::fromJson(const ByteArray& json)
 
     const JsonObject root = doc.rootObject();
 
+    std::map<int, DrawData::State> states;
+    // read states
+    {
+        const JsonObject obj = root["states"].toObject();
+        std::vector<std::string> keys = obj.keys();
+        for (const std::string& k : keys) {
+            DrawData::State state;
+            fromObj(obj[k].toObject(), state);
+            states[std::stoi(k)] = state;
+        }
+    }
+
     DrawDataPtr buf = std::make_shared<DrawData>();
     buf->name = root["a_name"].toStdString();
     JsonArray objsArr = root["objects"].toArray();
@@ -444,7 +476,7 @@ mu::RetVal<DrawDataPtr> DrawDataJson::fromJson(const ByteArray& json)
         for (size_t j = 0; j < datasArr.size(); ++j) {
             const JsonObject dataObj = datasArr.at(j).toObject();
             DrawData::Data data;
-            fromObj(dataObj["state"].toObject(), data.state);
+            data.state = states.at(dataObj["state"].toInt());
             fromArr(dataObj["paths"].toArray(), data.paths);
             fromArr(dataObj["polygons"].toArray(), data.polygons);
             fromArr(dataObj["texts"].toArray(), data.texts);
