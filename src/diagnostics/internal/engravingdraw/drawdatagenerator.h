@@ -19,19 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_DRAWDATAJSON_H
-#define MU_DRAW_DRAWDATAJSON_H
+#ifndef MU_DIAGNOSTICS_DRAWDATAGENERATOR_H
+#define MU_DIAGNOSTICS_DRAWDATAGENERATOR_H
 
-#include "../buffereddrawtypes.h"
-#include "types/retval.h"
+#include "global/types/ret.h"
+#include "global/io/path.h"
 
-namespace mu::draw {
-class DrawDataJson
+namespace mu::engraving {
+class MasterScore;
+}
+
+namespace mu::diagnostics {
+class DrawDataGenerator
 {
 public:
+    DrawDataGenerator() = default;
 
-    static ByteArray toJson(const DrawData& buf);
-    static RetVal<DrawDataPtr> fromJson(const ByteArray& json);
+    Ret processDir(const io::path_t& scoreDir, const io::path_t& outDir, const io::path_t& ignoreFile);
+
+private:
+    void processFile(const io::path_t& scorePath, const io::path_t& outDir);
+
+    std::vector<std::string> loadIgnore(const mu::io::path_t& ignoreFile) const;
+    bool loadScore(engraving::MasterScore* score, const io::path_t& path);
 };
 }
-#endif // MU_DRAW_DRAWDATAJSON_H
+
+#endif // MU_DIAGNOSTICS_DRAWDATAGENERATOR_H

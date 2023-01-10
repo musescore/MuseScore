@@ -30,6 +30,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/diagnosticutils.h
     ${CMAKE_CURRENT_LIST_DIR}/idiagnosticspathsregister.h
     ${CMAKE_CURRENT_LIST_DIR}/iengravingelementsprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/iengravingdrawprovider.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticsconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticsconfiguration.h
@@ -41,6 +42,11 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticspathsregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/engravingelementsprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/engravingelementsprovider.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingdraw/engravingdrawprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingdraw/engravingdrawprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingdraw/drawdatagenerator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingdraw/drawdatagenerator.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/diagnosticspathsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/diagnosticspathsmodel.h
@@ -120,4 +126,8 @@ if (BUILD_CRASHPAD_CLIENT)
 endif(BUILD_CRASHPAD_CLIENT)
 # ----------------
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+set(MODULE_INCLUDE ${MODULE_INCLUDE}
+    ${PROJECT_SOURCE_DIR}/src/importexport/guitarpro
+)
+
+include(SetupModule)

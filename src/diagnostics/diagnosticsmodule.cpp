@@ -34,6 +34,8 @@
 #include "internal/diagnosticspathsregister.h"
 #include "internal/engravingelementsprovider.h"
 
+#include "internal/engravingdraw/engravingdrawprovider.h"
+
 #include "internal/crashhandler/crashhandler.h"
 
 #include "view/diagnosticspathsmodel.h"
@@ -68,7 +70,8 @@ std::string DiagnosticsModule::moduleName() const
 void DiagnosticsModule::registerExports()
 {
     ioc()->registerExport<IDiagnosticsPathsRegister>(moduleName(), new DiagnosticsPathsRegister());
-    ioc()->registerExport<EngravingElementsProvider>(moduleName(), new EngravingElementsProvider());
+    ioc()->registerExport<IEngravingElementsProvider>(moduleName(), new EngravingElementsProvider());
+    ioc()->registerExport<IEngravingDrawProvider>(moduleName(), new EngravingDrawProvider());
 }
 
 void DiagnosticsModule::resolveImports()

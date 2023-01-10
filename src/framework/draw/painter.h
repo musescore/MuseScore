@@ -287,7 +287,7 @@ private:
 
 #ifdef TRACE_DRAW_OBJ_ENABLED
     #define TRACE_OBJ_DRAW \
-    mu::draw::PainterObjMarker __drawObjMarker(painter, name(), pagePos())
+    mu::draw::PainterObjMarker __drawObjMarker(painter, typeName(), pagePos())
 
     #define TRACE_OBJ_DRAW_C(painter, objName, objPagePos) \
     mu::draw::PainterObjMarker __drawObjMarker(painter, objName, objPagePos)
