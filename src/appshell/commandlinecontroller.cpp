@@ -87,6 +87,8 @@ void CommandLineController::parse(const QStringList& args)
 //    m_parser.addOption(QCommandLineOption("piano-position", "Show Piano top or bottom. Default bottom", "bottom"));
     m_parser.addOption(QCommandLineOption("resolution", "Resolution [2160p, 1440p, 1080p, 720p, 480p, 360p]", "1080p"));
     m_parser.addOption(QCommandLineOption("fps", "Frame per second [60, 30, 24]", "24"));
+    m_parser.addOption(QCommandLineOption("ls", "Pause before playback in seconds (3.0)", "3.0"));
+    m_parser.addOption(QCommandLineOption("ts", "Pause before end of video in seconds (3.0)", "3.0"));
 
     m_parser.addOption(QCommandLineOption("gp-linked", "create tabulature linked staves for guitar pro"));
     m_parser.addOption(QCommandLineOption("gp-experimental", "experimental features for guitar pro import"));
@@ -315,6 +317,14 @@ void CommandLineController::apply()
 
         if (m_parser.isSet("fps")) {
             videoExportConfiguration()->setFps(intValue("fps"));
+        }
+
+        if (m_parser.isSet("ls")) {
+            videoExportConfiguration()->setLeadingSec(doubleValue("ls"));
+        }
+
+        if (m_parser.isSet("ts")) {
+            videoExportConfiguration()->setTrailingSec(doubleValue("ts"));
         }
     }
 #endif
