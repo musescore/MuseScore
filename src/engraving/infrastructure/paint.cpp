@@ -76,7 +76,7 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const Options& opt)
     for (int copy = 0; copy < opt.copyCount; ++copy) {
         bool firstPage = true;
         for (int pi = fromPage; pi <= toPage; ++pi) {
-            mu::engraving::Page* page = pages.at(pi);
+            Page* page = pages.at(pi);
 
             PointF pagePos = page->pos();
             RectF pageRect = page->bbox();
@@ -84,7 +84,7 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const Options& opt)
 
             //! NOTE Trim page margins, if need
             if (opt.trimMarginPixelSize >= 0) {
-                qreal trimSize = static_cast<qreal>(opt.trimMarginPixelSize);
+                double trimSize = static_cast<double>(opt.trimMarginPixelSize);
                 pageRect = pageContentRect.adjusted(-trimSize, -trimSize, trimSize, trimSize);
             }
 

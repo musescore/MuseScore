@@ -28,6 +28,7 @@
 
 #include "color.h"
 #include "drawtypes.h"
+#include "realfn.h"
 
 namespace mu::draw {
 class Pen
@@ -44,6 +45,15 @@ public:
         : m_color(color), m_width(width), m_style(s), m_capStyle(c), m_joinStyle(j)
     {
     }
+
+    inline bool operator==(const Pen& o) const
+    {
+        return m_color == o.m_color && RealIsEqual(m_width, o.m_width)
+               && m_style == o.m_style && m_capStyle == o.m_capStyle && m_joinStyle == o.m_joinStyle
+               && m_dashPattern == o.m_dashPattern;
+    }
+
+    inline bool operator!=(const Pen& o) const { return !this->operator==(o); }
 
     PenStyle style() const
     {
@@ -154,7 +164,9 @@ public:
         Pen p(pen.color(), pen.widthF(), static_cast<PenStyle>(pen.style()),
               static_cast<PenCapStyle>(pen.capStyle()),
               static_cast<PenJoinStyle>(pen.joinStyle()));
-        p.m_dashPattern = std::vector<double>(pen.dashPattern().cbegin(), pen.dashPattern().cend());
+
+        QVector<qreal> dp = pen.dashPattern();
+        p.m_dashPattern = std::vector<double>(dp.cbegin(), dp.cend());
         return p;
     }
 
