@@ -19,19 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_DRAWDATAJSON_H
-#define MU_DRAW_DRAWDATAJSON_H
+#ifndef MU_DIAGNOSTICS_ENGRAVINGDRAWPROVIDER_H
+#define MU_DIAGNOSTICS_ENGRAVINGDRAWPROVIDER_H
 
-#include "../buffereddrawtypes.h"
-#include "types/retval.h"
+#include "../../iengravingdrawprovider.h"
 
-namespace mu::draw {
-class DrawDataJson
+namespace mu::diagnostics {
+class EngravingDrawProvider : public IEngravingDrawProvider
 {
 public:
+    EngravingDrawProvider() = default;
 
-    static ByteArray toJson(const DrawData& buf);
-    static RetVal<DrawDataPtr> fromJson(const ByteArray& json);
+    Ret genDrawData(const io::path_t& scoresDir, const io::path_t& outDir) override;
 };
 }
-#endif // MU_DRAW_DRAWDATAJSON_H
+
+#endif // MU_DIAGNOSTICS_ENGRAVINGDRAWPROVIDER_H

@@ -96,6 +96,10 @@ void CommandLineController::parse(const QStringList& args)
     //! NOTE Currently only implemented `full` mode
     m_parser.addOption(QCommandLineOption("migration", "Whether to do migration with given mode, `full` - full migration", "mode"));
 
+    // Diagnostic
+    m_parser.addOption(QCommandLineOption("diagnostic-output", "Diagnostic output", "output"));
+    m_parser.addOption(QCommandLineOption("diagnostic-gendrawdata", "Generate engraving draw data", "scores-dir"));
+
     m_parser.process(args);
 }
 
@@ -341,6 +345,14 @@ void CommandLineController::apply()
         m_converterTask.params[CommandLineController::ParamKey::StylePath] = m_parser.value("S");
     }
 
+    if (m_parser.isSet("gp-linked")) {
+        guitarProConfiguration()->setLinkedTabStaffCreated(true);
+    }
+
+    if (m_parser.isSet("gp-experimental")) {
+        guitarProConfiguration()->setExperimental(true);
+    }
+
     if (application()->runMode() == IApplication::RunMode::Converter) {
         project::MigrationOptions migration;
         migration.appVersion = mu::engraving::MSCVERSION;
@@ -362,6 +374,18 @@ void CommandLineController::apply()
         }
     }
 
+    // Diagnostic
+    if (m_parser.isSet("diagnostic-output")) {
+        m_diagnostic.output = m_parser.value("diagnostic-output");
+    }
+
+    if (m_parser.isSet("diagnostic-gendrawdata")) {
+        application()->setRunMode(IApplication::RunMode::Converter);
+        m_diagnostic.type = DiagnosticType::GenDrawData;
+        m_diagnostic.input = m_parser.value("diagnostic-gendrawdata");
+    }
+
+    // Startup
     if (application()->runMode() == IApplication::RunMode::Editor) {
         startupScenario()->setModeType(modeType);
 
@@ -369,19 +393,16 @@ void CommandLineController::apply()
             startupScenario()->setStartupScorePath(scorefiles[0]);
         }
     }
-
-    if (m_parser.isSet("gp-linked")) {
-        guitarProConfiguration()->setLinkedTabStaffCreated(true);
-    }
-
-    if (m_parser.isSet("gp-experimental")) {
-        guitarProConfiguration()->setExperimental(true);
-    }
 }
 
 CommandLineController::ConverterTask CommandLineController::converterTask() const
 {
     return m_converterTask;
+}
+
+CommandLineController::Diagnostic CommandLineController::diagnostic() const
+{
+    return m_diagnostic;
 }
 
 void CommandLineController::printLongVersion() const

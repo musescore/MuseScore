@@ -24,6 +24,8 @@
 
 #include "painterpath.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::draw;
 
@@ -587,7 +589,7 @@ Transform& Transform::translate(double dx, double dy)
         return *this;
     }
 #ifdef TRACE_DRAW_OBJ_ENABLED
-    if (std::isnan(dx) | td::isnan(dy)) {
+    if (std::isnan(dx) | std::isnan(dy)) {
         nanWarning("translate");
         return *this;
     }
@@ -626,7 +628,7 @@ Transform& Transform::scale(double sx, double sy)
         return *this;
     }
 #ifdef TRACE_DRAW_OBJ_ENABLED
-    if (std::isnan(sx) | td::isnan(sy)) {
+    if (std::isnan(sx) | std::isnan(sy)) {
         nanWarning("scale");
         return *this;
     }

@@ -57,6 +57,11 @@ bool File::remove(const path_t& filePath)
     return fileSystem()->remove(filePath);
 }
 
+mu::Ret File::writeFile(const io::path_t& filePath, const ByteArray& data)
+{
+    return fileSystem()->writeFile(filePath, data);
+}
+
 bool File::setPermissionsAllowedForAll(const path_t& filePath)
 {
     return fileSystem()->setPermissionsAllowedForAll(filePath);

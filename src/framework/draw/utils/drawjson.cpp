@@ -366,7 +366,7 @@ static void fromArr(const JsonArray& arr, std::vector<T>& vals)
     }
 }
 
-ByteArray DrawBufferJson::toJson(const DrawData& buf)
+ByteArray DrawDataJson::toJson(const DrawData& buf)
 {
     //! NOTE 'a' added to the beginning of some field names for convenient sorting
 
@@ -386,13 +386,27 @@ ByteArray DrawBufferJson::toJson(const DrawData& buf)
 
             JsonObject dataObj;
             dataObj["state"] = toObj(data.state);
-            dataObj["paths"] = toArr(data.paths);
-            dataObj["polygons"] = toArr(data.polygons);
-            dataObj["texts"] = toArr(data.texts);
-            dataObj["rectTexts"] = toArr(data.rectTexts);
+            if (!data.paths.empty()) {
+                dataObj["paths"] = toArr(data.paths);
+            }
+            if (!data.polygons.empty()) {
+                dataObj["polygons"] = toArr(data.polygons);
+            }
+            if (!data.texts.empty()) {
+                dataObj["texts"] = toArr(data.texts);
+            }
+            if (!data.rectTexts.empty()) {
+                dataObj["rectTexts"] = toArr(data.rectTexts);
+            }
+
             // dataObj["glyphs"] = toArr(data.glyphs);  not implemented
-            dataObj["pixmaps"] = toArr(data.pixmaps);
-            dataObj["tiledPixmap"] = toArr(data.tiledPixmap);
+
+            if (!data.pixmaps.empty()) {
+                dataObj["pixmaps"] = toArr(data.pixmaps);
+            }
+            if (!data.tiledPixmap.empty()) {
+                dataObj["tiledPixmap"] = toArr(data.tiledPixmap);
+            }
 
             datasArr.append(dataObj);
         }
@@ -406,7 +420,7 @@ ByteArray DrawBufferJson::toJson(const DrawData& buf)
     return JsonDocument(root).toJson(JsonDocument::Format::Indented);
 }
 
-mu::RetVal<DrawDataPtr> DrawBufferJson::fromJson(const ByteArray& json)
+mu::RetVal<DrawDataPtr> DrawDataJson::fromJson(const ByteArray& json)
 {
     std::string err;
     JsonDocument doc = JsonDocument::fromJson(json, &err);
