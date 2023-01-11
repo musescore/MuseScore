@@ -291,6 +291,7 @@
   <SC>
     <key>rest</key>
     <seq>0</seq>
+    <seq>Num+0</seq>
     </SC>
   <SC>
     <key>realtime-advance</key>
@@ -315,6 +316,7 @@
   <SC>
     <key>sharp</key>
     <seq>+</seq>
+    <seq>Num++</seq>
     </SC>
   <SC>
     <key>nat</key>
@@ -323,6 +325,7 @@
   <SC>
     <key>flat</key>
     <seq>-</seq>
+    <seq>Num+-</seq>
     </SC>
   <SC>
     <key>stretch+</key>
@@ -598,42 +601,53 @@
   <SC>
     <key>note-longa</key>
     <seq>9</seq>
+    <seq>Num+9</seq>
     </SC>
   <SC>
     <key>note-breve</key>
     <seq>8</seq>
+    <seq>Num+8</seq>
     </SC>
   <SC>
     <key>pad-note-1</key>
     <seq>7</seq>
+    <seq>Num+7</seq>
     </SC>
   <SC>
     <key>pad-note-2</key>
     <seq>6</seq>
+    <seq>Num+6</seq>
     </SC>
   <SC>
     <key>pad-note-4</key>
     <seq>5</seq>
+    <seq>Num+5</seq>
     </SC>
   <SC>
     <key>pad-note-8</key>
     <seq>4</seq>
+    <seq>Num+4</seq>
     </SC>
   <SC>
     <key>pad-note-16</key>
     <seq>3</seq>
+    <seq>Num+3</seq>
     </SC>
   <SC>
     <key>pad-note-32</key>
     <seq>2</seq>
+    <seq>Num+2</seq>
     </SC>
   <SC>
     <key>pad-note-64</key>
     <seq>1</seq>
+    <seq>Num+1</seq>
     </SC>
   <SC>
     <key>pad-dot</key>
     <seq>.</seq>
+    <seq>Num+.</seq>
+    <seq>Num+,</seq>
     </SC>
   <SC>
     <key>tie</key>
@@ -642,6 +656,7 @@
   <SC>
     <key>acciaccatura</key>
     <seq>/</seq>
+    <seq>Num+/</seq>
     </SC>
   <SC>
     <key>voice-1</key>
