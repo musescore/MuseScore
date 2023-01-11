@@ -122,7 +122,7 @@ StyledDialogView {
 
             StyledTextLabel {
                 Layout.fillWidth: true
-                text: qsTrc("appshell/about", "Copyright © 1999-2022 MuseScore BVBA and others.\nPublished under the <a href=\"%1\">GNU General Public License version 3</a>.")
+                text: qsTrc("appshell/about", "Copyright © 1999-2023 MuseScore BVBA and others.\nPublished under the <a href=\"%1\">GNU General Public License version 3</a>.")
                       .arg("https://www.gnu.org/licenses/gpl-3.0.html")
                       .replace("\n", "<br>")
 
