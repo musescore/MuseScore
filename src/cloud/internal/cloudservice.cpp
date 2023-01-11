@@ -251,26 +251,7 @@ void CloudService::onUserAuthorized()
     Ret ret = downloadAccountInfo();
     if (!ret) {
         LOGE() << ret.toString();
-        return;
     }
-
-    if (m_onUserAuthorizedCallback) {
-        m_onUserAuthorizedCallback();
-        m_onUserAuthorizedCallback = OnUserAuthorizedCallback();
-    }
-}
-
-void CloudService::authorize(const OnUserAuthorizedCallback& onUserAuthorizedCallback)
-{
-    if (m_userAuthorized.val) {
-        return;
-    }
-
-    initOAuthIfNecessary();
-
-    m_onUserAuthorizedCallback = onUserAuthorizedCallback;
-    m_oauth2->setAuthorizationUrl(configuration()->authorizationUrl());
-    m_oauth2->grant();
 }
 
 mu::RetVal<QUrl> CloudService::prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params) const
@@ -386,7 +367,14 @@ mu::RetVal<ScoreInfo> CloudService::downloadScoreInfo(int scoreId)
 
 void CloudService::signIn()
 {
-    authorize();
+    if (m_userAuthorized.val) {
+        return;
+    }
+
+    initOAuthIfNecessary();
+
+    m_oauth2->setAuthorizationUrl(configuration()->authorizationUrl());
+    m_oauth2->grant();
 }
 
 void CloudService::signUp()
@@ -503,11 +491,6 @@ ProgressPtr CloudService::uploadScore(QIODevice& scoreData, const QString& title
     };
 
     async::Async::call(this, [this, uploadCallback]() {
-        if (!m_userAuthorized.val) {
-            authorize(uploadCallback);
-            return;
-        }
-
         executeRequest(uploadCallback);
     });
 
@@ -533,11 +516,6 @@ ProgressPtr CloudService::uploadAudio(QIODevice& audioData, const QString& audio
     };
 
     async::Async::call(this, [this, uploadCallback]() {
-        if (!m_userAuthorized.val) {
-            authorize(uploadCallback);
-            return;
-        }
-
         executeRequest(uploadCallback);
     });
 

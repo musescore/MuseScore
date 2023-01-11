@@ -84,9 +84,6 @@ private:
     bool updateTokens();
     void clearTokens();
 
-    using OnUserAuthorizedCallback = std::function<void ()>;
-    void authorize(const OnUserAuthorizedCallback& onUserAuthorizedCallback = OnUserAuthorizedCallback());
-
     void setAccountInfo(const AccountInfo& info);
 
     void openUrl(const QUrl& url);
@@ -112,8 +109,6 @@ private:
 
     QString m_accessToken;
     QString m_refreshToken;
-
-    OnUserAuthorizedCallback m_onUserAuthorizedCallback;
 };
 }
 
