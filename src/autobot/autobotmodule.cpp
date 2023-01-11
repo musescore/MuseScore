@@ -54,9 +54,9 @@
 using namespace mu::autobot;
 using namespace mu::api;
 
-static std::shared_ptr<AutobotConfiguration> s_configuration = std::make_shared<AutobotConfiguration>();
-static std::shared_ptr<Autobot> s_autobot = std::make_shared<Autobot>();
-static std::shared_ptr<AutobotActionsController> s_actionsController = std::make_shared<AutobotActionsController>();
+static std::shared_ptr<AutobotConfiguration> s_configuration = {};
+static std::shared_ptr<Autobot> s_autobot = {};
+static std::shared_ptr<AutobotActionsController> s_actionsController = {};
 
 std::string AutobotModule::moduleName() const
 {
@@ -65,6 +65,10 @@ std::string AutobotModule::moduleName() const
 
 void AutobotModule::registerExports()
 {
+    s_configuration = std::make_shared<AutobotConfiguration>();
+    s_autobot = std::make_shared<Autobot>();
+    s_actionsController = std::make_shared<AutobotActionsController>();
+
     modularity::ioc()->registerExport<IAutobot>(moduleName(), s_autobot);
     modularity::ioc()->registerExport<IAutobotConfiguration>(moduleName(), s_configuration);
     modularity::ioc()->registerExport<IAutobotScriptsRepository>(moduleName(), new AutobotScriptsRepository());
