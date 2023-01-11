@@ -57,6 +57,8 @@ static const QString PLATFORM_KEY("platform");
 
 static const std::string CLOUD_ACCESS_TOKEN_RESOURCE_NAME("CLOUD_ACCESS_TOKEN");
 
+static const std::string STATUS_KEY("status");
+
 static constexpr int USER_UNAUTHORIZED_STATUS_CODE = 401;
 static constexpr int FORBIDDEN_CODE = 403;
 static constexpr int NOT_FOUND_STATUS_CODE = 404;
@@ -65,7 +67,7 @@ static constexpr int INVALID_SCORE_ID = 0;
 
 static int statusCode(const mu::Ret& ret)
 {
-    std::any status = ret.data("status");
+    std::any status = ret.data(STATUS_KEY);
     return status.has_value() ? std::any_cast<int>(status) : 0;
 }
 
@@ -531,6 +533,7 @@ static Ret uploadingRetFromRawUploadingRet(const Ret& rawRet, bool isScoreAlread
 
     static const std::map<int, mu::TranslatableString> codes {
         { 400, mu::TranslatableString("cloud", "Invalid request") },
+        { 401, mu::TranslatableString("cloud", "Authorization required") },
         { 403, mu::TranslatableString("cloud", "Forbidden. User is not owner of the score.") },
         { 422, mu::TranslatableString("cloud", "Validation is failed") },
         { 500, mu::TranslatableString("cloud", "Internal server error") },
@@ -543,6 +546,8 @@ static Ret uploadingRetFromRawUploadingRet(const Ret& rawRet, bool isScoreAlread
 
     Ret ret = make_ret(cloud::Err::NetworkError);
     ret.setData(CLOUD_NETWORK_ERROR_USER_DESCRIPTION_KEY, userDescription);
+    ret.setData(STATUS_KEY, code);
+
     return ret;
 }
 
@@ -578,6 +583,8 @@ mu::RetVal<mu::ValMap> CloudService::doUploadScore(INetworkManagerPtr uploadMana
             isScoreAlreadyUploaded = false;
         }
     }
+
+    scoreData.seek(0);
 
     QHttpMultiPart multiPart(QHttpMultiPart::FormDataType);
 
@@ -653,6 +660,8 @@ mu::Ret CloudService::doUploadAudio(network::INetworkManagerPtr uploadManager, Q
     if (!uploadUrl.ret) {
         return uploadUrl.ret;
     }
+
+    audioData.seek(0);
 
     QHttpMultiPart multiPart(QHttpMultiPart::FormDataType);
 
