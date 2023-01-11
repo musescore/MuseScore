@@ -472,26 +472,28 @@ ProgressPtr CloudService::uploadScore(QIODevice& scoreData, const QString& title
 {
     ProgressPtr progress = std::make_shared<Progress>();
 
-    auto uploadCallback = [this, progress, &scoreData, title, visibility, sourceUrl]() {
-        progress->started.notify();
+    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
+        progress->progressChanged.send(current, total, message);
+    });
 
-        INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-        manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
-            progress->progressChanged.send(current, total, message);
-        });
+    std::shared_ptr<ValMap> scoreUrlMap = std::make_shared<ValMap>();
 
+    auto uploadCallback = [this, manager, &scoreData, title, visibility, sourceUrl, scoreUrlMap]() {
         RetVal<ValMap> urlMap = doUploadScore(manager, scoreData, title, visibility, sourceUrl);
+        *scoreUrlMap = urlMap.val;
 
-        ProgressResult result;
-        result.ret = urlMap.ret;
-        result.val = Val(urlMap.val);
-        progress->finished.send(result);
-
-        return result.ret;
+        return urlMap.ret;
     };
 
-    async::Async::call(this, [this, uploadCallback]() {
-        executeRequest(uploadCallback);
+    async::Async::call(this, [this, progress, uploadCallback, scoreUrlMap]() {
+        progress->started.notify();
+
+        ProgressResult result;
+        result.ret = executeRequest(uploadCallback);
+        result.val = Val(*scoreUrlMap);
+
+        progress->finished.send(result);
     });
 
     return progress;
@@ -501,22 +503,19 @@ ProgressPtr CloudService::uploadAudio(QIODevice& audioData, const QString& audio
 {
     ProgressPtr progress = std::make_shared<Progress>();
 
-    auto uploadCallback = [this, progress, &audioData, audioFormat, sourceUrl]() {
-        progress->started.notify();
+    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
+        progress->progressChanged.send(current, total, message);
+    });
 
-        INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-        manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
-            progress->progressChanged.send(current, total, message);
-        });
-
-        Ret ret = doUploadAudio(manager, audioData, audioFormat, sourceUrl);
-        progress->finished.send(ret);
-
-        return ret;
+    auto uploadCallback = [this, manager, &audioData, audioFormat, sourceUrl]() {
+        return doUploadAudio(manager, audioData, audioFormat, sourceUrl);
     };
 
-    async::Async::call(this, [this, uploadCallback]() {
-        executeRequest(uploadCallback);
+    async::Async::call(this, [this, progress, uploadCallback]() {
+        progress->started.notify();
+        Ret ret = executeRequest(uploadCallback);
+        progress->finished.send(ret);
     });
 
     return progress;
@@ -683,11 +682,11 @@ mu::Ret CloudService::doUploadAudio(network::INetworkManagerPtr uploadManager, Q
     return ret;
 }
 
-void CloudService::executeRequest(const RequestCallback& requestCallback)
+Ret CloudService::executeRequest(const RequestCallback& requestCallback)
 {
     Ret ret = requestCallback();
     if (ret) {
-        return;
+        return make_ok();
     }
 
     if (statusCode(ret) == USER_UNAUTHORIZED_STATUS_CODE) {
@@ -699,6 +698,8 @@ void CloudService::executeRequest(const RequestCallback& requestCallback)
     if (!ret) {
         LOGE() << ret.toString();
     }
+
+    return ret;
 }
 
 void CloudService::openUrl(const QUrl& url)
