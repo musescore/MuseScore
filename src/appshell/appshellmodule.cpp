@@ -200,6 +200,14 @@ void AppShellModule::onInit(const IApplication::RunMode&)
 #endif
 }
 
+void AppShellModule::onAllInited(const framework::IApplication::RunMode&)
+{
+    //! NOTE: process QEvent::FileOpen as early as possible if it was postponed
+#ifdef Q_OS_MACOS
+    qApp->processEvents();
+#endif
+}
+
 void AppShellModule::onDeinit()
 {
     s_sessionsManager->deinit();
