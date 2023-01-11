@@ -376,6 +376,23 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
         }
     }
 
+    if (engravingConfiguration()->guitarProImportExperimental()) {
+        // recalculate let ring endings
+        for (auto& [track, trackMap] : m_letRingNotes) {
+            for (auto& [pitch, pitchMap] : trackMap) {
+                for (auto& [tick, noteVector] : pitchMap) {
+                    auto upperBound = pitchMap.upper_bound(tick);
+                    if (upperBound != pitchMap.end()) {
+                        Fraction distanceToNext = upperBound->first - tick;
+                        for (Note* note : noteVector) {
+                            note->setLetRingEndDistance(std::min(note->letRingEndDistance(), distanceToNext));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     // fixing last measure barline
     if (_lastMeasure) {
         for (size_t staffIdx = 0; staffIdx < _score->staves().size(); staffIdx++) {
@@ -1470,7 +1487,7 @@ void GPConverter::addSoundEffects(const SLine* const elem)
         while (nextSeg && nextSeg->isChordRestType()) {
             const auto& elemList = nextSeg->elist();
             for (const auto el : elemList) {
-                if (el && el->isChord()) {
+                if (el && el->isChord() && el->track() == track) {
                     foundChord = true;
                     break;
                 }
@@ -1503,8 +1520,7 @@ void GPConverter::addSoundEffects(const SLine* const elem)
         for (Segment* nextSeg = begSegment; nextSeg; nextSeg = nextSeg->nextCR(track, true)) {
             const auto& elemList = nextSeg->elist();
             for (const auto el : elemList) {
-                if (el && el->isChord()) {
-                    /// put the duration until end of let ring
+                if (el && el->isChord() && el->track() == track) {
                     const auto& notes = toChord(el)->notes();
                     for (Note* note : notes) {
                         note->setLetRingType(Note::LetRingType::TreatEnd);
@@ -2391,10 +2407,13 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
     }
 }
 
-void GPConverter::addLetRing(const GPNote* gpnote, Note* /*note*/)
+void GPConverter::addLetRing(const GPNote* gpnote, Note* note)
 {
     if (gpnote->letRing() && m_currentGPBeat) {
         m_currentGPBeat->setLetRing(true);
+        if (engravingConfiguration()->guitarProImportExperimental()) {
+            m_letRingNotes[note->track()][note->pitch()][note->tick()].push_back(note);
+        }
     }
 }
 
