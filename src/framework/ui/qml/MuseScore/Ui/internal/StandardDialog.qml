@@ -89,6 +89,8 @@ StyledDialogView {
             id: mainPanel
 
             navigation.section: root.navigationSection
+            navigation.order: 1
+
             buttons: root.buttons
 
             onClicked: function(buttonId, showAgain) {
@@ -113,6 +115,9 @@ StyledDialogView {
 
             sourceComponent: ErrorDetailsView {
                 detailedText: root.detailedText
+
+                navigationSection: root.navigationSection
+                navigationOrder: 2
             }
         }
     }
