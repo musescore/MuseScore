@@ -113,6 +113,10 @@ void CloudService::init()
     if (readTokens()) {
         executeRequest([this]() { return downloadAccountInfo(); });
     }
+
+    configuration()->customAccessTokenChanged().onReceive(this, [this](const QString& token) {
+        m_accessToken = token;
+    });
 }
 
 void CloudService::initOAuthIfNecessary()
