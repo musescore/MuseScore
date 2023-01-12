@@ -608,7 +608,7 @@ mu::draw::Color EngravingItem::curColor(bool isVisible, Color normalColor) const
 {
     // the default element color is always interpreted as black in printing
     if (score() && score()->printing()) {
-        return (normalColor == engravingConfiguration()->defaultColor()) ? Color::black : normalColor;
+        return (normalColor == engravingConfiguration()->defaultColor()) ? Color::BLACK : normalColor;
     }
 
     if (flag(ElementFlag::DROP_TARGET)) {

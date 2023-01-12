@@ -50,6 +50,8 @@ public:
 
     virtual void setAntialiasing(bool arg) = 0;
     virtual void setCompositionMode(CompositionMode mode) = 0;
+    virtual void setWindow(const RectF& window) = 0;
+    virtual void setViewport(const RectF& viewport) = 0;
 
     virtual void setFont(const Font& font) = 0;
     virtual const Font& font() const = 0;

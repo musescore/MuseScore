@@ -44,6 +44,8 @@ public:
 
     void setAntialiasing(bool arg) override;
     void setCompositionMode(draw::CompositionMode mode) override;
+    void setWindow(const RectF& window) override;
+    void setViewport(const RectF& viewport) override;
 
     void setFont(const draw::Font& font) override;
     const draw::Font& font() const override;

@@ -19,27 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_DRAWLOGGER_H
-#define MU_DRAW_DRAWLOGGER_H
+#ifndef MU_DIAGNOSTICS_DRAWDATACONVERTER_H
+#define MU_DIAGNOSTICS_DRAWDATACONVERTER_H
 
-#include <stack>
-#include <string>
+#include "global/types/ret.h"
+#include "global/io/path.h"
+#include "draw/types/drawdata.h"
+#include "draw/types/pixmap.h"
 
-#include "../types/geometry.h"
-
-namespace mu::draw {
-class DrawObjectsLogger
+namespace mu::diagnostics {
+class DrawDataConverter
 {
 public:
-    DrawObjectsLogger() = default;
+    DrawDataConverter() = default;
 
-    void beginObject(const std::string& name, const PointF& pagePos);
-    void endObject();
-
-private:
-
-    std::stack<std::string> m_objects;
+    Ret drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile) const;
+    draw::Pixmap drawDataToPixmap(const draw::DrawDataPtr& data) const;
 };
 }
 
-#endif // MU_DRAW_DRAWLOGGER_H
+#endif // MU_DIAGNOSTICS_DRAWDATACONVERTER_H

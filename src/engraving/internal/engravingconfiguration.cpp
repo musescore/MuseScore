@@ -150,7 +150,7 @@ mu::String EngravingConfiguration::iconsFontFamily() const
 
 Color EngravingConfiguration::defaultColor() const
 {
-    return Color::black;
+    return Color::BLACK;
 }
 
 Color EngravingConfiguration::scoreInversionColor() const
@@ -181,7 +181,7 @@ Color EngravingConfiguration::warningSelectedColor() const
 
 Color EngravingConfiguration::criticalColor() const
 {
-    return Color::redColor;
+    return Color::RED;
 }
 
 Color EngravingConfiguration::criticalSelectedColor() const
@@ -196,12 +196,12 @@ Color EngravingConfiguration::formattingMarksColor() const
 
 Color EngravingConfiguration::thumbnailBackgroundColor() const
 {
-    return Color::white;
+    return Color::WHITE;
 }
 
 Color EngravingConfiguration::noteBackgroundColor() const
 {
-    return Color::white;
+    return Color::WHITE;
 }
 
 double EngravingConfiguration::guiScaling() const

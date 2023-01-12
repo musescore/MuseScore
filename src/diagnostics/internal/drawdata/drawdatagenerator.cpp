@@ -27,7 +27,7 @@
 #include "global/stringutils.h"
 
 #include "draw/bufferedpaintprovider.h"
-#include "draw/utils/drawjson.h"
+#include "draw/utils/drawdatarw.h"
 
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
@@ -46,6 +46,7 @@ using namespace mu::draw;
 using namespace mu::engraving;
 using namespace mu::iex::guitarpro;
 
+static const int CANVAS_DPI = 300;
 static const std::vector<std::string> FILES_FILTER = { "*.mscz", "*.gp", "*.gpx", "*.gp4", "*.gp5" };
 
 Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& outDir, const io::path_t& ignoreFile)
@@ -92,51 +93,17 @@ Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& 
     return make_ok();
 }
 
-void DrawDataGenerator::processFile(const io::path_t& path, const io::path_t& outDir)
+Ret DrawDataGenerator::processFile(const io::path_t& path, const io::path_t& outDir)
 {
     MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
     if (!loadScore(score, path)) {
         LOGE() << "failed load score: " << path;
-        return;
+        return make_ret(Ret::Code::UnknownError);
     }
 
     {
         TRACEFUNC_C("Layout");
         score->doLayout();
-    }
-
-    static const int CANVAS_DPI = 300;
-
-    // draw image for test
-    if (0) {
-        const SizeF pageSizeInch = Paint::pageSizeInch(score);
-
-        int width = std::lrint(pageSizeInch.width() * CANVAS_DPI);
-        int height = std::lrint(pageSizeInch.height() * CANVAS_DPI);
-
-        QImage image(width, height, QImage::Format_ARGB32_Premultiplied);
-        image.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / mu::engraving::INCH));
-        image.setDotsPerMeterY(std::lrint((CANVAS_DPI * 1000) / mu::engraving::INCH));
-
-        image.fill(Qt::white);
-
-        Painter painter(&image, "DrawDataGenerator");
-
-        Paint::Options opt;
-        opt.fromPage = 0;
-        opt.toPage = 0;
-        opt.deviceDpi = CANVAS_DPI;
-        opt.printPageBackground = false;
-        opt.isSetViewport = true;
-        opt.isMultiPage = false;
-        opt.isPrinting = true;
-
-        Paint::paintScore(&painter, score, opt);
-
-        QString filePath = outDir.toQString() + "/" + io::FileInfo(path).baseName() + ".png";
-        image.save(filePath, "png");
-
-        return;
     }
 
     std::shared_ptr<BufferedPaintProvider> pd = std::make_shared<BufferedPaintProvider>();
@@ -151,15 +118,86 @@ void DrawDataGenerator::processFile(const io::path_t& path, const io::path_t& ou
         Paint::paintScore(&painter, score, opt);
     }
 
-    const DrawData& drawData = pd->drawData();
-
-    {
-        ByteArray json = DrawDataJson::toJson(drawData);
-        io::path_t filePath = outDir + "/" + io::FileInfo(path).baseName() + ".json";
-        io::File::writeFile(filePath, json);
-    }
+    DrawDataPtr drawData = genDrawData(path);
+    io::path_t filePath = outDir + "/" + io::FileInfo(path).baseName() + ".json";
+    DrawDataRW::writeData(filePath, drawData);
 
     delete score;
+
+    return make_ok();
+}
+
+DrawDataPtr DrawDataGenerator::genDrawData(const io::path_t& scorePath) const
+{
+    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
+    if (!loadScore(score, scorePath)) {
+        LOGE() << "failed load score: " << scorePath;
+        return nullptr;
+    }
+
+    {
+        TRACEFUNC_C("Layout");
+        score->doLayout();
+    }
+
+    std::shared_ptr<BufferedPaintProvider> pd = std::make_shared<BufferedPaintProvider>();
+    {
+        TRACEFUNC_C("Paint");
+        Painter painter(pd, "DrawData");
+        Paint::Options opt;
+        opt.fromPage = 0;
+        opt.toPage = 0;
+        opt.deviceDpi = CANVAS_DPI;
+        opt.printPageBackground = true;
+        opt.isSetViewport = true;
+        opt.isMultiPage = false;
+        opt.isPrinting = true;
+
+        Paint::paintScore(&painter, score, opt);
+    }
+
+    DrawDataPtr drawData = pd->drawData();
+    return drawData;
+}
+
+Pixmap DrawDataGenerator::genImage(const io::path_t& scorePath) const
+{
+    LOGD() << "try: " << scorePath;
+    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
+    if (!loadScore(score, scorePath)) {
+        LOGE() << "failed load score: " << scorePath;
+        return Pixmap();
+    }
+
+    {
+        TRACEFUNC_C("Layout");
+        score->doLayout();
+    }
+
+    LOGD() << "success loaded: " << scorePath;
+
+    const SizeF pageSizeInch = Paint::pageSizeInch(score);
+
+    int width = std::lrint(pageSizeInch.width() * CANVAS_DPI);
+    int height = std::lrint(pageSizeInch.height() * CANVAS_DPI);
+
+    QPixmap qpx(width, height);
+    {
+        Painter painter(&qpx, "DrawData");
+
+        Paint::Options opt;
+        opt.fromPage = 0;
+        opt.toPage = 0;
+        opt.deviceDpi = CANVAS_DPI;
+        opt.printPageBackground = true;
+        opt.isSetViewport = true;
+        opt.isMultiPage = false;
+        opt.isPrinting = true;
+
+        Paint::paintScore(&painter, score, opt);
+    }
+
+    return Pixmap::fromQPixmap(qpx);
 }
 
 std::vector<std::string> DrawDataGenerator::loadIgnore(const io::path_t& ignoreFile) const
@@ -201,7 +239,7 @@ std::vector<std::string> DrawDataGenerator::loadIgnore(const io::path_t& ignoreF
     return ignore;
 }
 
-bool DrawDataGenerator::loadScore(mu::engraving::MasterScore* score, const mu::io::path_t& path)
+bool DrawDataGenerator::loadScore(mu::engraving::MasterScore* score, const mu::io::path_t& path) const
 {
     TRACEFUNC;
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
@@ -214,7 +252,7 @@ bool DrawDataGenerator::loadScore(mu::engraving::MasterScore* score, const mu::i
 
         MscReader::Params params;
         params.filePath = path;
-        params.mode = MscIoMode::Zip;
+        params.mode = mscIoModeBySuffix(suffix);
 
         MscReader reader(params);
         if (!reader.open()) {

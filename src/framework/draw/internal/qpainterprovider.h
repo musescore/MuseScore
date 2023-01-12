@@ -50,6 +50,8 @@ public:
 
     void setAntialiasing(bool arg) override;
     void setCompositionMode(CompositionMode mode) override;
+    void setWindow(const RectF& window) override;
+    void setViewport(const RectF& viewport) override;
 
     void setFont(const Font& font) override;
     const Font& font() const override;

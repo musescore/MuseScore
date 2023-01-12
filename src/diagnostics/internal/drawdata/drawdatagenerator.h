@@ -19,23 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_IENGRAVINGDRAWPROVIDER_H
-#define MU_DIAGNOSTICS_IENGRAVINGDRAWPROVIDER_H
+#ifndef MU_DIAGNOSTICS_DRAWDATAGENERATOR_H
+#define MU_DIAGNOSTICS_DRAWDATAGENERATOR_H
 
-#include "modularity/imoduleexport.h"
 #include "global/types/ret.h"
 #include "global/io/path.h"
+#include "draw/types/drawdata.h"
+
+namespace mu::engraving {
+class MasterScore;
+}
 
 namespace mu::diagnostics {
-class IEngravingDrawProvider : MODULE_EXPORT_INTERFACE
+class DrawDataGenerator
 {
-    INTERFACE_ID(IEngravingDrawProvider)
 public:
-    virtual ~IEngravingDrawProvider() = default;
+    DrawDataGenerator() = default;
 
-    virtual Ret genDrawData(const io::path_t& scoresDir, const io::path_t& outDir) = 0;
-    virtual Ret drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile) = 0;
+    Ret processDir(const io::path_t& scoreDir, const io::path_t& outDir, const io::path_t& ignoreFile);
+    Ret processFile(const io::path_t& scorePath, const io::path_t& outDir);
+
+    draw::DrawDataPtr genDrawData(const io::path_t& scorePath) const;
+    draw::Pixmap genImage(const io::path_t& scorePath) const;
+
+private:
+
+    std::vector<std::string> loadIgnore(const mu::io::path_t& ignoreFile) const;
+    bool loadScore(engraving::MasterScore* score, const io::path_t& path) const;
 };
 }
 
-#endif // MU_DIAGNOSTICS_IENGRAVINGDRAWPROVIDER_H
+#endif // MU_DIAGNOSTICS_DRAWDATAGENERATOR_H

@@ -117,6 +117,10 @@ if (BUILD_UNIT_TESTS)
     if (BUILD_PLUGINS_MODULE)
         add_subdirectory(plugins/tests)
     endif()
+
+    if (BUILD_DIAGNOSTICS)
+        add_subdirectory(diagnostics/tests)
+    endif()
 endif(BUILD_UNIT_TESTS)
 
 if (OS_IS_WASM)

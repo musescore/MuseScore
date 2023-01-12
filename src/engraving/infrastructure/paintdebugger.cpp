@@ -93,6 +93,16 @@ void PaintDebugger::setCompositionMode(CompositionMode mode)
     m_real->setCompositionMode(mode);
 }
 
+void PaintDebugger::setWindow(const RectF& window)
+{
+    m_real->setWindow(window);
+}
+
+void PaintDebugger::setViewport(const RectF& viewport)
+{
+    m_real->setViewport(viewport);
+}
+
 void PaintDebugger::setFont(const Font& f)
 {
     m_real->setFont(f);

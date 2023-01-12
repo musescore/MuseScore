@@ -390,6 +390,9 @@ int AppShell::processDiagnostic(const CommandLineController::Diagnostic& task)
     case CommandLineController::DiagnosticType::GenDrawData:
         ret = engravingDrawProvider()->genDrawData(input, output);
         break;
+    case CommandLineController::DiagnosticType::DrawDataToPng:
+        ret = engravingDrawProvider()->drawDataToPng(input, output);
+        break;
     default:
         break;
     }

@@ -19,30 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DRAWDATAGENERATOR_H
-#define MU_DIAGNOSTICS_DRAWDATAGENERATOR_H
+#ifndef MU_DRAW_DRAWDATAPAINT_H
+#define MU_DRAW_DRAWDATAPAINT_H
 
-#include "global/types/ret.h"
-#include "global/io/path.h"
+#include "../painter.h"
+#include "../types/drawdata.h"
 
-namespace mu::engraving {
-class MasterScore;
-}
-
-namespace mu::diagnostics {
-class DrawDataGenerator
+namespace mu::draw {
+class DrawDataPaint
 {
 public:
-    DrawDataGenerator() = default;
+    DrawDataPaint() = default;
 
-    Ret processDir(const io::path_t& scoreDir, const io::path_t& outDir, const io::path_t& ignoreFile);
-
-private:
-    void processFile(const io::path_t& scorePath, const io::path_t& outDir);
-
-    std::vector<std::string> loadIgnore(const mu::io::path_t& ignoreFile) const;
-    bool loadScore(engraving::MasterScore* score, const io::path_t& path);
+    static void paint(Painter* painter, const DrawDataPtr& data);
 };
 }
 
-#endif // MU_DIAGNOSTICS_DRAWDATAGENERATOR_H
+#endif // MU_DRAW_DRAWDATAPAINT_H

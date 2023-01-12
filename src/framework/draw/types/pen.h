@@ -40,7 +40,7 @@ public:
     {
     }
 
-    Pen(const Color& color = Color::black, double width = 1, PenStyle s = PenStyle::SolidLine,
+    Pen(const Color& color = Color::BLACK, double width = 1, PenStyle s = PenStyle::SolidLine,
         PenCapStyle c = PenCapStyle::SquareCap, PenJoinStyle j = PenJoinStyle::BevelJoin)
         : m_color(color), m_width(width), m_style(s), m_capStyle(c), m_joinStyle(j)
     {
@@ -174,7 +174,7 @@ public:
 
 private:
 
-    Color m_color = Color::black;
+    Color m_color = Color::BLACK;
     double m_width = 1.0;
     PenStyle m_style = PenStyle::SolidLine;
     PenCapStyle m_capStyle = PenCapStyle::SquareCap;

@@ -122,6 +122,18 @@ void QPainterProvider::setCompositionMode(CompositionMode mode)
     m_painter->setCompositionMode(toQPainter(mode));
 }
 
+void QPainterProvider::setWindow(const RectF& window)
+{
+    // no need set
+    UNUSED(window);
+}
+
+void QPainterProvider::setViewport(const RectF& viewport)
+{
+    // no need set
+    UNUSED(viewport);
+}
+
 void QPainterProvider::setFont(const Font& font)
 {
     if (m_font != font) {

@@ -26,7 +26,7 @@
 #include <stack>
 
 #include "ipaintprovider.h"
-#include "buffereddrawtypes.h"
+#include "types/drawdata.h"
 #include "types/pen.h"
 #include "types/brush.h"
 
@@ -48,6 +48,8 @@ public:
 
     void setAntialiasing(bool arg) override;
     void setCompositionMode(CompositionMode mode) override;
+    void setWindow(const RectF& window) override;
+    void setViewport(const RectF& viewport) override;
 
     void setFont(const Font& font) override;
     const Font& font() const override;
@@ -88,7 +90,7 @@ public:
 
     // ---
 
-    const DrawData& drawData() const;
+    DrawDataPtr drawData() const;
     void clear();
 
 private:
@@ -99,7 +101,7 @@ private:
     const DrawData::State& currentState() const;
     DrawData::State& editableState();
 
-    DrawData m_buf;
+    DrawDataPtr m_buf = nullptr;
     std::stack<DrawData::Object> m_currentObjects;
     bool m_isActive = false;
     DrawObjectsLogger* m_drawObjectsLogger = nullptr;

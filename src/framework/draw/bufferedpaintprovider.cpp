@@ -42,7 +42,7 @@ BufferedPaintProvider::~BufferedPaintProvider()
 void BufferedPaintProvider::beginTarget(const std::string& name)
 {
     clear();
-    m_buf.name = name;
+    m_buf->name = name;
     beginObject(name + "_default", PointF());
     m_isActive = true;
 }
@@ -87,7 +87,7 @@ void BufferedPaintProvider::endObject()
     }
 
     // move object to buffer
-    m_buf.objects.push_back(obj);
+    m_buf->objects.push_back(obj);
 
     // remove obj
     m_currentObjects.pop();
@@ -139,6 +139,16 @@ void BufferedPaintProvider::setAntialiasing(bool arg)
 void BufferedPaintProvider::setCompositionMode(CompositionMode mode)
 {
     editableState().compositionMode = mode;
+}
+
+void BufferedPaintProvider::setWindow(const RectF& window)
+{
+    m_buf->window = window;
+}
+
+void BufferedPaintProvider::setViewport(const RectF& viewport)
+{
+    m_buf->viewport = viewport;
 }
 
 void BufferedPaintProvider::setFont(const Font& f)
@@ -272,14 +282,14 @@ void BufferedPaintProvider::setClipping(bool enable)
     UNUSED(enable);
 }
 
-const DrawData& BufferedPaintProvider::drawData() const
+DrawDataPtr BufferedPaintProvider::drawData() const
 {
     return m_buf;
 }
 
 void BufferedPaintProvider::clear()
 {
-    m_buf = DrawData();
+    m_buf = std::make_shared<DrawData>();
     std::stack<DrawData::Object> empty;
     m_currentObjects.swap(empty);
 }

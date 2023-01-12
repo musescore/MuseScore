@@ -34,7 +34,7 @@
 #include "internal/diagnosticspathsregister.h"
 #include "internal/engravingelementsprovider.h"
 
-#include "internal/engravingdraw/engravingdrawprovider.h"
+#include "internal/drawdata/engravingdrawprovider.h"
 
 #include "internal/crashhandler/crashhandler.h"
 
