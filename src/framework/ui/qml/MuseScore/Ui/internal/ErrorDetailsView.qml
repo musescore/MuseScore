@@ -29,6 +29,8 @@ Column {
     id: root
 
     property string detailedText: ""
+    property NavigationSection navigationSection: null
+    property int navigationOrder: 0
 
     spacing: 16
 
@@ -63,11 +65,29 @@ Column {
 
             model: detailsModel.details
 
-            delegate: Rectangle {
-                height: 30
-                width: parent.width
+            NavigationPanel {
+               id: detailsViewNavPanel
 
-                color: model.index % 2 === 0 ? ui.theme.backgroundSecondaryColor : "transparent"
+               name: "DetailsViewNavPanel"
+               order: root.navigationOrder
+               enabled: root.enabled && root.visible
+               direction: NavigationPanel.Horizontal
+               section: root.navigationSection
+           }
+
+            delegate: ListItemBlank {
+                navigation.name: "Error " + model.index
+                navigation.panel: detailsViewNavPanel
+                navigation.row: model.index
+                navigation.accessible.name: modelData
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
+                        detailsView.positionViewAtIndex(index, ListView.Contain)
+                    }
+                }
+
+                background.color: model.index % 2 === 0 ? ui.theme.backgroundSecondaryColor : "transparent"
+                mouseArea.enabled: false
 
                 StyledTextLabel {
                     anchors.fill: parent
@@ -88,8 +108,21 @@ Column {
     RowLayout {
         spacing: 0
 
+        NavigationPanel {
+           id: buttonsNavPanel
+
+           name: "ButtonsNavPanel"
+           order: root.navigationOrder + 1
+           enabled: root.enabled && root.visible
+           direction: NavigationPanel.Horizontal
+           section: root.navigationSection
+       }
+
         FlatButton {
             text: qsTrc("global", "Copy")
+
+            navigation.name: "CopyButton"
+            navigation.panel: buttonsNavPanel
 
             onClicked: {
                 detailsCopiedMessage.visible = detailsModel.copyDetailsToClipboard()
