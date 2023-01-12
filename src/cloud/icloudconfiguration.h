@@ -26,6 +26,8 @@
 #include "io/path.h"
 #include "network/networktypes.h"
 
+#include "async/channel.h"
+
 namespace mu::cloud {
 class ICloudConfiguration : MODULE_EXPORT_INTERFACE
 {
@@ -52,6 +54,8 @@ public:
     virtual QUrl uploadAudioApiUrl() const = 0;
 
     virtual io::path_t tokensFilePath() const = 0;
+
+    virtual mu::async::Channel<QString> customAccessTokenChanged() const = 0;
 };
 }
 
