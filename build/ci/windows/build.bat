@@ -58,7 +58,7 @@ ECHO "BUILD_UI_MU4: %BUILD_UI_MU4%"
 XCOPY "C:\musescore_dependencies" %CD% /E /I /Y
 ECHO "Finished copy dependencies"
 
-SET GENERATOR_NAME=Visual Studio 16 2019
+SET GENERATOR_NAME=Visual Studio 17 2022
 SET MSCORE_STABLE_BUILD="TRUE"
 
 :: TODO We need define paths during image creation

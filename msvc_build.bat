@@ -40,7 +40,7 @@ IF "%GENERATOR_NAME%"=="" (
 )
 
 IF "%GENERATOR_NAME%"=="" (
-   ECHO "No supported version of Microsoft Visual Studio (2017 or 2019) found."
+   ECHO "No supported version of Microsoft Visual Studio (2017, 2019 or 2022) found."
    GOTO :END
 )
 
@@ -148,8 +148,11 @@ IF /I "%1"=="clean" (
    SET VSWHERE="%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
    IF NOT EXIST %VSWHERE% EXIT /B !ERRORLEVEL!
 
-   REM Try Visual Studio 2019 first.
-   CALL :FIND_GENERATOR_VERSION %VSWHERE% 16 2019
+   REM Try Visual Studio 2022 first.
+   CALL :FIND_GENERATOR_VERSION %VSWHERE% 17 2022
+
+   REM Fall back to Visual Studio 2019.
+   IF "%GENERATOR_NAME%"=="" CALL :FIND_GENERATOR_VERSION %VSWHERE% 16 2019
 
    REM Fall back to Visual Studio 2017.
    IF "%GENERATOR_NAME%"=="" CALL :FIND_GENERATOR_VERSION %VSWHERE% 15 2017

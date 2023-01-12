@@ -19,7 +19,7 @@ on:
 
 jobs:
   build_x64:
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.5.0
@@ -104,7 +104,7 @@ jobs:
         path: build.artifacts\ 
 
   build_x32:
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.5.0
@@ -183,7 +183,7 @@ jobs:
         name: MuseScore_x86_${{ github.run_id }}
         path: build.artifacts\     
   build_portable:
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.5.0
