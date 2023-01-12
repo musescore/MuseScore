@@ -5145,8 +5145,6 @@ void Score::undoRemoveStaff(Staff* staff)
 
     staff->undoUnlink();
 
-    mu::remove_if(systemObjectStaves, [staff](Staff* s){ return s == staff; });
-
     undo(new RemoveStaff(staff));
 }
 
