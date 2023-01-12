@@ -41,6 +41,13 @@ if (WIN32)
       )
 endif(WIN32)
 
+if (OS_IS_LIN)
+    set(_components
+      ${_components}
+      DBus
+      )
+endif()
+
 find_package(Qt5Core ${QT_MIN_VERSION} REQUIRED)
 
 foreach(_component ${_components})
