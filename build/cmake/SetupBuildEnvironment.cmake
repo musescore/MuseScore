@@ -132,8 +132,19 @@ endif()
 
 # APPLE specific
 if (OS_IS_MAC)
-      set(CMAKE_OSX_ARCHITECTURES x86_64)
-      set(MACOSX_DEPLOYMENT_TARGET 10.14)
-      set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14)
+    if (BUILD_MACOS_APPLE_SILICON)
+        set(CMAKE_OSX_ARCHITECTURES ) # leave empty, use default
+    else()
+        set(CMAKE_OSX_ARCHITECTURES x86_64)
+    endif()
+
+    if (CMAKE_OSX_ARCHITECTURES)
+        message(STATUS "Building for architecture(s) ${CMAKE_OSX_ARCHITECTURES}")
+    else()
+        message(STATUS "Building for default architecture(s)")
+    endif()
+
+    set(MACOSX_DEPLOYMENT_TARGET 10.14)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14)
 endif(OS_IS_MAC)
 

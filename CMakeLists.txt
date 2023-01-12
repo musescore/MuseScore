@@ -46,6 +46,7 @@ set(MUSESCORE_BUILD_CONFIG "dev" CACHE STRING "Build config")
 # - testing - for testing versions (alpha, beta, RC)
 # - release - for stable release builds
 
+option(BUILD_MACOS_APPLE_SILICON "Build for Apple Silicon architecture. Only applicable on Macs with Apple Silicon, and requires suitable Qt version." OFF)
 option(BUILD_64 "Build 64 bit version of editor" ON)
 option(BUILD_PORTABLEAPPS "Windows build for PortableApps.com" OFF)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
