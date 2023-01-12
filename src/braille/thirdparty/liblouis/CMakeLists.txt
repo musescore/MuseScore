@@ -1,0 +1,38 @@
+set(MODULE liblouis)
+
+add_subdirectory(tables)
+
+configure_file(
+    ${CMAKE_CURRENT_LIST_DIR}/configMS.h
+    ${CMAKE_CURRENT_LIST_DIR}/liblouis/config.h
+    @ONLY
+)
+
+configure_file(
+    ${CMAKE_CURRENT_LIST_DIR}/liblouis/liblouis.h.in
+    ${CMAKE_CURRENT_LIST_DIR}/liblouis/liblouis.h
+    @ONLY
+)
+
+set(MODULE_SRC
+    # Alphabetical order please!
+    ${CMAKE_CURRENT_LIST_DIR}/liblouis/commonTranslationFunctions.c
+    ${CMAKE_CURRENT_LIST_DIR}/liblouis/compileTranslationTable.c
+    ${CMAKE_CURRENT_LIST_DIR}/liblouis/config.h
+    ${CMAKE_CURRENT_LIST_DIR}/liblouis/internal.h
+    ${CMAKE_CURRENT_LIST_DIR}/liblouis/liblouis.h
+    ${CMAKE_CURRENT_LIST_DIR}/liblouis/logging.c
+    ${CMAKE_CURRENT_LIST_DIR}/liblouis/lou_backTranslateString.c
+    ${CMAKE_CURRENT_LIST_DIR}/liblouis/lou_translateString.c
+    ${CMAKE_CURRENT_LIST_DIR}/liblouis/maketable.c
+    ${CMAKE_CURRENT_LIST_DIR}/liblouis/pattern.c
+    ${CMAKE_CURRENT_LIST_DIR}/liblouis/utils.c
+)
+
+set(MODULE_USE_PCH_NONE ON)
+set(MODULE_USE_UNITY_NONE ON)
+
+include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+
+target_no_warning(${MODULE} -Wno-conversion)
+target_no_warning(${MODULE} -w)
