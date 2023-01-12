@@ -19,10 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "drawjson.h"
+#include "drawdatajson.h"
 
 #include "global/serialization/json.h"
-#include "global/containers.h"
 #include "log.h"
 
 using namespace mu;
@@ -366,17 +365,21 @@ static void fromArr(const JsonArray& arr, std::vector<T>& vals)
     }
 }
 
-ByteArray DrawDataJson::toJson(const DrawData& buf)
+ByteArray DrawDataJson::toJson(const DrawDataPtr& buf)
 {
+    IF_ASSERT_FAILED(buf) {
+        return ByteArray();
+    }
+
     //! NOTE 'a' added to the beginning of some field names for convenient sorting
 
     JsonObject root;
-    root["a_name"] = buf.name;
+    root["a_name"] = buf->name;
 
     std::vector<DrawData::State> states;
     // collect states
     {
-        for (const DrawData::Object& obj : buf.objects) {
+        for (const DrawData::Object& obj : buf->objects) {
             for (const DrawData::Data& data : obj.datas) {
                 if (mu::contains(states, data.state)) {
                     continue;
@@ -387,7 +390,7 @@ ByteArray DrawDataJson::toJson(const DrawData& buf)
     }
 
     JsonArray objsArr;
-    for (const DrawData::Object& obj : buf.objects) {
+    for (const DrawData::Object& obj : buf->objects) {
         JsonObject objObj;
         objObj["a_name"] = obj.name;
         objObj["a_pagePos"] = toArr(obj.pagePos);
@@ -477,12 +480,24 @@ mu::RetVal<DrawDataPtr> DrawDataJson::fromJson(const ByteArray& json)
             const JsonObject dataObj = datasArr.at(j).toObject();
             DrawData::Data data;
             data.state = states.at(dataObj["state"].toInt());
-            fromArr(dataObj["paths"].toArray(), data.paths);
-            fromArr(dataObj["polygons"].toArray(), data.polygons);
-            fromArr(dataObj["texts"].toArray(), data.texts);
-            fromArr(dataObj["rectTexts"].toArray(), data.rectTexts);
-            fromArr(dataObj["pixmaps"].toArray(), data.pixmaps);
-            fromArr(dataObj["tiledPixmap"].toArray(), data.tiledPixmap);
+            if (dataObj.contains("paths")) {
+                fromArr(dataObj.value("paths").toArray(), data.paths);
+            }
+            if (dataObj.contains("polygons")) {
+                fromArr(dataObj.value("polygons").toArray(), data.polygons);
+            }
+            if (dataObj.contains("texts")) {
+                fromArr(dataObj.value("texts").toArray(), data.texts);
+            }
+            if (dataObj.contains("rectTexts")) {
+                fromArr(dataObj.value("rectTexts").toArray(), data.rectTexts);
+            }
+            if (dataObj.contains("pixmaps")) {
+                fromArr(dataObj.value("pixmaps").toArray(), data.pixmaps);
+            }
+            if (dataObj.contains("tiledPixmap")) {
+                fromArr(dataObj.value("tiledPixmap").toArray(), data.tiledPixmap);
+            }
 
             obj.datas.push_back(std::move(data));
         }

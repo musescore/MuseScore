@@ -79,12 +79,12 @@ public:
 
     static constexpr int DEFAULT_ALPHA = 255;
 
-    static const Color black;
-    static const Color white;
     static const Color transparent;
-    static const Color redColor;
-    static const Color greenColor;
-    static const Color blueColor;
+    static const Color BLACK;
+    static const Color WHITE;
+    static const Color RED;
+    static const Color GREEN;
+    static const Color BLUE;
 
 private:
 
@@ -95,12 +95,12 @@ private:
     bool m_isValid = false;
 };
 
-inline const Color Color::black { 0, 0, 0 };
-inline const Color Color::white { 255, 255, 255 };
 inline const Color Color::transparent { 255, 255, 255, 0 };
-inline const Color Color::redColor { 255, 0, 0 };
-inline const Color Color::greenColor { 0, 255, 0 };
-inline const Color Color::blueColor { 0, 0, 255 };
+inline const Color Color::BLACK { 0, 0, 0 };
+inline const Color Color::WHITE { 255, 255, 255 };
+inline const Color Color::RED { 255, 0, 0 };
+inline const Color Color::GREEN { 0, 255, 0 };
+inline const Color Color::BLUE { 0, 0, 255 };
 }
 
 #endif // MU_DRAW_COLOR_H

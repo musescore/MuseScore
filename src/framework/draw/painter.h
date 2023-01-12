@@ -202,7 +202,7 @@ private:
 
 inline void Painter::setPen(const Color& color)
 {
-    setPen(Pen(color.isValid() ? color : Color::black));
+    setPen(Pen(color.isValid() ? color : Color::BLACK));
 }
 
 inline void Painter::translate(const PointF& offset)

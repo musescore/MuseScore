@@ -91,6 +91,21 @@ std::string mu::strings::toLower(const std::string& source)
     return str;
 }
 
+bool mu::strings::startsWith(const std::string& str, const std::string& start)
+{
+    if (str.size() < start.size()) {
+        return false;
+    }
+
+    for (size_t i = 0; i < start.size(); ++i) {
+        if (str.at(i) != start.at(i)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 bool mu::strings::endsWith(const std::string& str, const std::string& ending)
 {
     if (ending.size() > str.size()) {

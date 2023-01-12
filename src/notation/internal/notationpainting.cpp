@@ -142,7 +142,7 @@ void NotationPainting::paintPageSheet(Painter* painter, const RectF& pageRect, c
             return;
         }
 
-        painter->fillRect(pageRect, Color::white);
+        painter->fillRect(pageRect, Color::WHITE);
         return;
     }
 
@@ -155,7 +155,7 @@ void NotationPainting::paintPageSheet(Painter* painter, const RectF& pageRect, c
         } else {
             //! NOTE We can use the color from the configuration,
             //! but in this case I believe it is better to use the "unassigned" color
-            painter->fillRect(pageRect, Color::white);
+            painter->fillRect(pageRect, Color::WHITE);
         }
     }
 

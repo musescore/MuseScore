@@ -19,19 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_ENGRAVINGDRAWPROVIDER_H
-#define MU_DIAGNOSTICS_ENGRAVINGDRAWPROVIDER_H
+#ifndef MU_DRAW_DRAWDATACOMP_H
+#define MU_DRAW_DRAWDATACOMP_H
 
-#include "../../iengravingdrawprovider.h"
+#include "../types/drawdata.h"
 
-namespace mu::diagnostics {
-class EngravingDrawProvider : public IEngravingDrawProvider
+namespace mu::draw {
+class DrawDataComp
 {
 public:
-    EngravingDrawProvider() = default;
 
-    Ret genDrawData(const io::path_t& scoresDir, const io::path_t& outDir) override;
+    struct Tolerance {
+        double base = -1.0;
+        Tolerance() {}
+    };
+
+    static Diff compare(const DrawDataPtr& data, const DrawDataPtr& origin, Tolerance tolerance = Tolerance());
 };
 }
 
-#endif // MU_DIAGNOSTICS_ENGRAVINGDRAWPROVIDER_H
+#endif // MU_DRAW_DRAWDATACOMP_H

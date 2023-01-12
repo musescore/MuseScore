@@ -19,64 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "abpaintprovider.h"
+#include "drawdatapaint.h"
 
-#include "log.h"
-#include "draw/painter.h"
+using namespace mu;
+using namespace mu::draw;
 
-static const QColor REMOVED_COLOR("#cc0000");
-static const QColor ADDED_COLOR("#009900");
-
-static const std::string NOTATION_DEFAULT_OBJ("notationview_default");
-
-using namespace mu::autobot;
-
-const std::shared_ptr<AbPaintProvider>& AbPaintProvider::instance()
+void DrawDataPaint::paint(Painter* painter, const DrawDataPtr& data)
 {
-    static std::shared_ptr<AbPaintProvider> p = std::shared_ptr<AbPaintProvider>(new AbPaintProvider());
-    return p;
-}
-
-void AbPaintProvider::beginTarget(const std::string& name)
-{
-    BufferedPaintProvider::beginTarget(name);
-}
-
-void AbPaintProvider::beforeEndTargetHook(draw::Painter* painter)
-{
-    IF_ASSERT_FAILED(painter) {
-        return;
-    }
-
-    if (!m_isDiffDrawEnabled) {
-        return;
-    }
-
-    draw::IPaintProviderPtr provider = painter->provider();
-
-    if (m_diff.dataRemoved && !m_diff.dataRemoved->objects.empty()) {
-        paintData(provider, m_diff.dataRemoved, REMOVED_COLOR);
-    }
-
-    if (m_diff.dataAdded && !m_diff.dataAdded->objects.empty()) {
-        paintData(provider, m_diff.dataAdded, ADDED_COLOR);
-    }
-}
-
-void AbPaintProvider::paintData(draw::IPaintProviderPtr provider, const draw::DrawDataPtr& data, const QColor& overcolor)
-{
-    using namespace mu::draw;
-
+    Color overcolor(255, 0, 0);
+    IPaintProviderPtr provider = painter->provider();
     for (const DrawData::Object& obj : data->objects) {
-        if (obj.name == NOTATION_DEFAULT_OBJ) {
-            continue;
-        }
-
         for (const DrawData::Data& d : obj.datas) {
             DrawData::State st = d.state;
-            st.pen.setColor(overcolor);
-            st.pen.setWidthF(10.);
-            st.brush.setColor(overcolor);
+            //st.pen.setColor(overcolor);
+            //st.pen.setWidthF(10.);
+            //st.brush.setColor(overcolor);
 
             provider->setPen(st.pen);
             provider->setBrush(st.brush);
@@ -115,28 +72,4 @@ void AbPaintProvider::paintData(draw::IPaintProviderPtr provider, const draw::Dr
             }
         }
     }
-}
-
-bool AbPaintProvider::endTarget(bool endDraw)
-{
-    bool ok = BufferedPaintProvider::endTarget(endDraw);
-    if (ok && drawData()->name == "notationview") {
-        m_notationViewDrawData = drawData();
-    }
-    return ok;
-}
-
-const mu::draw::DrawDataPtr& AbPaintProvider::notationViewDrawData() const
-{
-    return m_notationViewDrawData;
-}
-
-void AbPaintProvider::setDiff(const draw::Diff& diff)
-{
-    m_diff = diff;
-}
-
-void AbPaintProvider::setIsDiffDrawEnabled(bool arg)
-{
-    m_isDiffDrawEnabled = arg;
 }
