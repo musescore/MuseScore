@@ -36,6 +36,7 @@ void rtrim(std::string& s);
 void trim(std::string& s);
 
 std::string toLower(const std::string& source);
+bool startsWith(const std::string& str, const std::string& start);
 bool endsWith(const std::string& str, const std::string& end);
 std::string leftJustified(const std::string& val, size_t width);
 

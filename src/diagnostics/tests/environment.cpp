@@ -19,19 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_DRAWDATAJSON_H
-#define MU_DRAW_DRAWDATAJSON_H
 
-#include "../buffereddrawtypes.h"
-#include "types/retval.h"
+#include "testing/environment.h"
 
-namespace mu::draw {
-class DrawDataJson
+#include "engraving/engravingmodule.h"
+#include "fonts/fontsmodule.h"
+#include "draw/drawmodule.h"
+
+#include "libmscore/instrtemplate.h"
+#include "libmscore/mscore.h"
+
+#include "log.h"
+
+static mu::testing::SuiteEnvironment diagnostics_se(
 {
-public:
+    new mu::draw::DrawModule(),
+    new mu::fonts::FontsModule(),
+    new mu::engraving::EngravingModule()
+},
+    nullptr,
+    []() {
+    LOGI() << "engraving tests suite post init";
 
-    static ByteArray toJson(const DrawData& buf);
-    static RetVal<DrawDataPtr> fromJson(const ByteArray& json);
-};
+    mu::engraving::MScore::testMode = true;
+    mu::engraving::MScore::noGui = true;
+
+    mu::engraving::loadInstrumentTemplates(":/data/instruments.xml");
 }
-#endif // MU_DRAW_DRAWDATAJSON_H
+    );

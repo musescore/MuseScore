@@ -60,8 +60,8 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const Options& opt)
     //! NOTE To draw on the screen, no need to adjust the viewport,
     //! to draw on others (pdf, png, printer), we need to set the viewport
     if (opt.isSetViewport) {
-        painter->setViewport(RectF(0.0, 0.0, pageSize.width() * DEVICE_DPI, pageSize.height() * DEVICE_DPI));
-        painter->setWindow(RectF(0.0, 0.0, pageSize.width() * mu::engraving::DPI, pageSize.height() * mu::engraving::DPI));
+        painter->setViewport(RectF(0.0, 0.0, std::lrint(pageSize.width() * DEVICE_DPI), std::lrint(pageSize.height() * DEVICE_DPI)));
+        painter->setWindow(RectF(0.0, 0.0, std::lrint(pageSize.width() * engraving::DPI), std::lrint(pageSize.height() * engraving::DPI)));
     }
 
     // Setup score draw system
@@ -121,7 +121,7 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const Options& opt)
             if (opt.onPaintPageSheet) {
                 opt.onPaintPageSheet(painter, pageRect, pageContentRect, page->isOdd());
             } else if (opt.printPageBackground) {
-                painter->fillRect(pageRect, Color::white);
+                painter->fillRect(pageRect, Color::WHITE);
             }
 
             // Draw page elements

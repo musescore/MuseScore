@@ -19,27 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_DRAWLOGGER_H
-#define MU_DRAW_DRAWLOGGER_H
+#ifndef MU_DRAW_DRAWDATAJSON_H
+#define MU_DRAW_DRAWDATAJSON_H
 
-#include <stack>
-#include <string>
-
-#include "../types/geometry.h"
+#include "../types/drawdata.h"
+#include "global/types/retval.h"
 
 namespace mu::draw {
-class DrawObjectsLogger
+class DrawDataJson
 {
 public:
-    DrawObjectsLogger() = default;
 
-    void beginObject(const std::string& name, const PointF& pagePos);
-    void endObject();
-
-private:
-
-    std::stack<std::string> m_objects;
+    static ByteArray toJson(const DrawDataPtr& buf);
+    static RetVal<DrawDataPtr> fromJson(const ByteArray& json);
 };
 }
-
-#endif // MU_DRAW_DRAWLOGGER_H
+#endif // MU_DRAW_DRAWDATAJSON_H

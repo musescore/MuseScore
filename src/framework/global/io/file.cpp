@@ -57,6 +57,12 @@ bool File::remove(const path_t& filePath)
     return fileSystem()->remove(filePath);
 }
 
+mu::Ret File::readFile(const io::path_t& filePath, ByteArray& out)
+{
+    bool ok = fileSystem()->readFile(filePath, out);
+    return make_ret(ok ? Err::NoError : Err::FSReadError);
+}
+
 mu::Ret File::writeFile(const io::path_t& filePath, const ByteArray& data)
 {
     return fileSystem()->writeFile(filePath, data);

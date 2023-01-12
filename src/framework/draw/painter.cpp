@@ -267,6 +267,12 @@ void Painter::setWindow(const RectF& window)
     st.window = window;
     st.isVxF = true;
     updateViewTransform();
+
+    // for debug purpose
+    m_provider->setWindow(window);
+    if (extended) {
+        extended->setWindow(window);
+    }
 }
 
 RectF Painter::viewport() const
@@ -280,6 +286,12 @@ void Painter::setViewport(const RectF& viewport)
     st.viewport = viewport;
     st.isVxF = true;
     updateViewTransform();
+
+    // for debug purpose
+    m_provider->setViewport(viewport);
+    if (extended) {
+        extended->setViewport(viewport);
+    }
 }
 
 // drawing functions

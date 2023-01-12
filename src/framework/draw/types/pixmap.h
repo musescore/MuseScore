@@ -48,6 +48,9 @@ public:
 
     unsigned int key() const { return m_key; }
 
+    bool operator==(const Pixmap& o) const { return m_size == o.m_size && m_key == o.m_key && m_data == o.m_data; }
+    bool operator!=(const Pixmap& o) const { return !this->operator==(o); }
+
 #ifndef NO_QT_SUPPORT
     static Pixmap fromQPixmap(const QPixmap& qtPixmap)
     {

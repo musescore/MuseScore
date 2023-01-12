@@ -19,23 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_DRAWCOMP_H
-#define MU_DRAW_DRAWCOMP_H
+#ifndef MU_DRAW_DRAWDATARW_H
+#define MU_DRAW_DRAWDATARW_H
 
-#include "../buffereddrawtypes.h"
+#include "../types/drawdata.h"
+#include "global/io/path.h"
+#include "global/types/retval.h"
 
 namespace mu::draw {
-class DrawComp
+class DrawDataRW
 {
 public:
+    DrawDataRW() = default;
 
-    struct Tolerance {
-        double base = -1.0;
-        Tolerance() {}
-    };
-
-    static Diff compare(const DrawDataPtr& data, const DrawDataPtr& origin, Tolerance tolerance = Tolerance());
+    static RetVal<DrawDataPtr> readData(const io::path_t& filePath);
+    static Ret writeData(const io::path_t& filePath, const DrawDataPtr& data);
 };
 }
 
-#endif // MU_DRAW_DRAWCOMP_H
+#endif // MU_DRAW_DRAWDATARW_H

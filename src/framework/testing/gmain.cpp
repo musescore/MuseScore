@@ -23,7 +23,8 @@
 #include <QGuiApplication>
 #include <gmock/gmock.h>
 
-#include "framework/global/runtime.h"
+#include "global/stringutils.h"
+#include "global/runtime.h"
 #include "environment.h"
 
 GTEST_API_ int main(int argc, char** argv)
@@ -31,6 +32,36 @@ GTEST_API_ int main(int argc, char** argv)
     QGuiApplication app(argc, argv);
 
     qputenv("QML_DISABLE_DISK_CACHE", "true");
+
+    //! NOTE Fixed filter value
+    //! When the test is run in QtCreator with debuger,
+    //! the filter is passed as --gtest_filter="SuiteName.TestName"
+    //! but expected --gtest_filter=SuiteName.TestName (without quotes)
+    //! (maybe QtCreator bug)
+    std::vector<std::string> args;
+    for (int i = 0; i < argc; ++i) {
+        std::string arg = argv[i];
+        if (mu::strings::startsWith(arg, "--gtest_filter=")) {
+            std::vector<std::string> filter;
+            mu::strings::split(arg, filter, "=");
+            if (filter.size() > 1) {
+                std::string val = filter.at(1);
+                if (val.at(0) == '"') {
+                    val = val.substr(1, val.size() - 2);
+                }
+                arg = filter.at(0) + "=" + val;
+            }
+        }
+        args.push_back(arg);
+    }
+
+    std::vector<char*> argsc;
+    for (size_t i = 0; i < args.size(); ++i) {
+        argsc.push_back(const_cast<char*>(args.at(i).c_str()));
+    }
+
+    argc = static_cast<int>(argsc.size());
+    argv = argsc.data();
 
     mu::runtime::mainThreadId(); //! NOTE Needs only call
     mu::runtime::setThreadName("main");

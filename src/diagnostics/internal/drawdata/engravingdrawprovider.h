@@ -19,18 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "engravingdrawprovider.h"
+#ifndef MU_DIAGNOSTICS_ENGRAVINGDRAWPROVIDER_H
+#define MU_DIAGNOSTICS_ENGRAVINGDRAWPROVIDER_H
 
-#include "drawdatagenerator.h"
+#include "../../iengravingdrawprovider.h"
 
-#include "log.h"
-
-using namespace mu;
-using namespace mu::diagnostics;
-
-Ret EngravingDrawProvider::genDrawData(const io::path_t& scoresDir, const io::path_t& outDir)
+namespace mu::diagnostics {
+class EngravingDrawProvider : public IEngravingDrawProvider
 {
-    LOGI() << "scoresDir: " << scoresDir << ", outDir: " << outDir;
-    DrawDataGenerator g;
-    return g.processDir(scoresDir, outDir, io::path_t());
+public:
+    EngravingDrawProvider() = default;
+
+    Ret genDrawData(const io::path_t& scoresDir, const io::path_t& outDir) override;
+    Ret drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile) override;
+};
 }
+
+#endif // MU_DIAGNOSTICS_ENGRAVINGDRAWPROVIDER_H

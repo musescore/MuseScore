@@ -99,7 +99,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
     mu::engraving::MScore::pixelRatio = mu::engraving::DPI / printer.logicalDpiX();
 
     if (!options[OptionKey::TRANSPARENT_BACKGROUND].toBool()) {
-        painter.fillRect(pageRect, mu::draw::Color::white);
+        painter.fillRect(pageRect, mu::draw::Color::WHITE);
     }
 
     // 1st pass: StaffLines

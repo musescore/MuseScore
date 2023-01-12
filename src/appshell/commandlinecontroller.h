@@ -90,7 +90,8 @@ public:
 
     enum class DiagnosticType {
         Undefined = 0,
-        GenDrawData
+        GenDrawData,
+        DrawDataToPng
     };
 
     struct Diagnostic {

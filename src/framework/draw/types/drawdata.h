@@ -24,14 +24,14 @@
 
 #include <memory>
 
-#include "types/brush.h"
-#include "types/drawtypes.h"
-#include "types/geometry.h"
-#include "types/font.h"
-#include "types/pen.h"
-#include "types/pixmap.h"
-#include "types/transform.h"
-#include "types/painterpath.h"
+#include "brush.h"
+#include "drawtypes.h"
+#include "geometry.h"
+#include "font.h"
+#include "pen.h"
+#include "pixmap.h"
+#include "transform.h"
+#include "painterpath.h"
 
 namespace mu::draw {
 enum class DrawMode {
@@ -141,6 +141,8 @@ struct DrawData
     };
 
     std::string name;
+    RectF window;
+    RectF viewport;
     std::vector<Object> objects;
 };
 

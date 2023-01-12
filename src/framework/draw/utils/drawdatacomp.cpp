@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "drawcomp.h"
+#include "drawdatacomp.h"
 
 #include "global/realfn.h"
 #include "log.h"
@@ -31,7 +31,7 @@ namespace mu::draw::comp {
 static const int DEFAULT_PREC(3);
 
 template<class T>
-static bool isEqual(const std::vector<T>& v1, const std::vector<T>& v2, DrawComp::Tolerance tolerance);
+static bool isEqual(const std::vector<T>& v1, const std::vector<T>& v2, DrawDataComp::Tolerance tolerance);
 
 static bool isEqual(const double& v1, const double& v2, double tolerance)
 {
@@ -181,7 +181,7 @@ static bool isEqual(const Transform& t1, const Transform& t2, double tolerance)
     return true;
 }
 
-static bool isEqual(const DrawData::State& s1, const DrawData::State& s2, DrawComp::Tolerance tolerance)
+static bool isEqual(const DrawData::State& s1, const DrawData::State& s2, DrawDataComp::Tolerance tolerance)
 {
     if (s1.isAntialiasing != s2.isAntialiasing) {
         return false;
@@ -236,7 +236,7 @@ static bool isEqual(const PainterPath& v1, const PainterPath& v2, double toleran
     return true;
 }
 
-static bool isEqual(const DrawPath& v1, const DrawPath& v2, DrawComp::Tolerance tolerance)
+static bool isEqual(const DrawPath& v1, const DrawPath& v2, DrawDataComp::Tolerance tolerance)
 {
     if (v1.mode != v2.mode) {
         return false;
@@ -275,7 +275,7 @@ static bool isEqual(const PolygonF& v1, const PolygonF& v2, double tolerance)
     return true;
 }
 
-static bool isEqual(const DrawPolygon& v1, const DrawPolygon& v2, DrawComp::Tolerance tolerance)
+static bool isEqual(const DrawPolygon& v1, const DrawPolygon& v2, DrawDataComp::Tolerance tolerance)
 {
     if (v1.mode != v2.mode) {
         return false;
@@ -288,7 +288,7 @@ static bool isEqual(const DrawPolygon& v1, const DrawPolygon& v2, DrawComp::Tole
     return true;
 }
 
-static bool isEqual(const DrawText& v1, const DrawText& v2, DrawComp::Tolerance tolerance)
+static bool isEqual(const DrawText& v1, const DrawText& v2, DrawDataComp::Tolerance tolerance)
 {
     if (!isEqual(v1.pos, v2.pos, tolerance.base)) {
         return false;
@@ -301,7 +301,7 @@ static bool isEqual(const DrawText& v1, const DrawText& v2, DrawComp::Tolerance 
     return true;
 }
 
-static bool isEqual(const DrawRectText& v1, const DrawRectText& v2, DrawComp::Tolerance tolerance)
+static bool isEqual(const DrawRectText& v1, const DrawRectText& v2, DrawDataComp::Tolerance tolerance)
 {
     if (v1.flags != v2.flags) {
         return false;
@@ -318,7 +318,7 @@ static bool isEqual(const DrawRectText& v1, const DrawRectText& v2, DrawComp::To
     return true;
 }
 
-static bool isEqual(const DrawPixmap& v1, const DrawPixmap& v2, DrawComp::Tolerance tolerance)
+static bool isEqual(const DrawPixmap& v1, const DrawPixmap& v2, DrawDataComp::Tolerance tolerance)
 {
     if (!isEqual(v1.pos, v2.pos, tolerance.base)) {
         return false;
@@ -331,7 +331,7 @@ static bool isEqual(const DrawPixmap& v1, const DrawPixmap& v2, DrawComp::Tolera
     return true;
 }
 
-static bool isEqual(const DrawTiledPixmap& v1, const DrawTiledPixmap& v2, DrawComp::Tolerance tolerance)
+static bool isEqual(const DrawTiledPixmap& v1, const DrawTiledPixmap& v2, DrawDataComp::Tolerance tolerance)
 {
     if (!isEqual(v1.rect, v2.rect, tolerance.base)) {
         return false;
@@ -348,7 +348,7 @@ static bool isEqual(const DrawTiledPixmap& v1, const DrawTiledPixmap& v2, DrawCo
     return true;
 }
 
-static bool isEqual(const DrawData::Data& d1, const DrawData::Data& d2, DrawComp::Tolerance tolerance)
+static bool isEqual(const DrawData::Data& d1, const DrawData::Data& d2, DrawDataComp::Tolerance tolerance)
 {
     if (!isEqual(d1.state, d2.state, tolerance)) {
         return false;
@@ -382,7 +382,7 @@ static bool isEqual(const DrawData::Data& d1, const DrawData::Data& d2, DrawComp
 }
 
 template<class T>
-static bool isEqual(const std::vector<T>& v1, const std::vector<T>& v2, DrawComp::Tolerance tolerance)
+static bool isEqual(const std::vector<T>& v1, const std::vector<T>& v2, DrawDataComp::Tolerance tolerance)
 {
     if (v1.size() != v2.size()) {
         return false;
@@ -413,7 +413,7 @@ static bool isEqual(const std::vector<T>& v1, const std::vector<T>& v2, DrawComp
     return true;
 }
 
-static bool isEqual(const DrawData::Object& o1, const DrawData::Object& o2, DrawComp::Tolerance tolerance)
+static bool isEqual(const DrawData::Object& o1, const DrawData::Object& o2, DrawDataComp::Tolerance tolerance)
 {
     if (o1.name != o2.name) {
         return false;
@@ -431,7 +431,7 @@ static bool isEqual(const DrawData::Object& o1, const DrawData::Object& o2, Draw
 }
 
 template<class T>
-static bool contains(const std::vector<T>& v1, const T& val, DrawComp::Tolerance tolerance)
+static bool contains(const std::vector<T>& v1, const T& val, DrawDataComp::Tolerance tolerance)
 {
     for (size_t i = 0; i < v1.size(); ++i) {
         const T& t = v1.at(i);
@@ -443,7 +443,7 @@ static bool contains(const std::vector<T>& v1, const T& val, DrawComp::Tolerance
 }
 
 template<class T>
-static void difference(std::vector<T>& diff, const std::vector<T>& v1, const std::vector<T>& v2, DrawComp::Tolerance tolerance)
+static void difference(std::vector<T>& diff, const std::vector<T>& v1, const std::vector<T>& v2, DrawDataComp::Tolerance tolerance)
 {
     for (size_t i = 0; i < v1.size(); ++i) {
         const T& t = v1.at(i);
@@ -454,7 +454,7 @@ static void difference(std::vector<T>& diff, const std::vector<T>& v1, const std
 }
 } // mu::draw::comp
 
-Diff DrawComp::compare(const DrawDataPtr& data, const DrawDataPtr& origin, Tolerance tolerance)
+Diff DrawDataComp::compare(const DrawDataPtr& data, const DrawDataPtr& origin, Tolerance tolerance)
 {
     Diff diff;
     IF_ASSERT_FAILED(data) {

@@ -128,7 +128,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     QRectF r = imatrix.mapRect(QRectF(x, y, w, wh));
 
     RectF background = RectF::fromQRectF(imatrix.mapRect(QRectF(0, 0, ww, wh)));
-    painter.fillRect(background, mu::draw::Color::white);
+    painter.fillRect(background, mu::draw::Color::WHITE);
 
     draw::Pen pen(engravingConfiguration()->defaultColor());
     pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(Sid::staffLineWidth).val() * gpaletteScore->spatium());

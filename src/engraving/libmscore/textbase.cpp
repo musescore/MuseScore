@@ -1543,7 +1543,7 @@ TextBase::TextBase(const ElementType& type, EngravingItem* parent, TextStyleType
     _textLineSpacing        = 1.0;
     _textStyleType          = tid;
     _bgColor                = mu::draw::Color::transparent;
-    _frameColor             = mu::draw::Color::black;
+    _frameColor             = mu::draw::Color::BLACK;
     _align                  = { AlignH::LEFT, AlignV::TOP };
     _frameType              = FrameType::NO_FRAME;
     _frameWidth             = Spatium(0.1);

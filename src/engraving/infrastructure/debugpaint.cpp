@@ -143,7 +143,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
 
     if (options.showSystemBoundingRects) {
         painter.setBrush(BrushStyle::NoBrush);
-        painter.setPen(Pen(Color::black, 3.0 / scaling));
+        painter.setPen(Pen(Color::BLACK, 3.0 / scaling));
 
         for (const System* system : page->systems()) {
             PointF pt(system->ipos());
@@ -238,7 +238,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
 
 #ifndef NDEBUG
     if (options.showCorruptedMeasures) {
-        painter.setPen(Pen(Color::redColor, 4.0));
+        painter.setPen(Pen(Color::RED, 4.0));
         painter.setBrush(BrushStyle::NoBrush);
 
         double _spatium = score->spatium();

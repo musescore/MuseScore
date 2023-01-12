@@ -24,7 +24,6 @@
 
 #include <memory>
 #include "draw/bufferedpaintprovider.h"
-#include "draw/types/drawtypes.h"
 
 namespace mu::autobot {
 class AbPaintProvider : public draw::BufferedPaintProvider
@@ -37,7 +36,7 @@ public:
     void beforeEndTargetHook(draw::Painter* painter) override;
     bool endTarget(bool endDraw = false) override;
 
-    const draw::DrawData& notationViewDrawData() const;
+    const draw::DrawDataPtr& notationViewDrawData() const;
 
     void setDiff(const draw::Diff& diff);
     void setIsDiffDrawEnabled(bool arg);
@@ -47,7 +46,7 @@ private:
 
     void paintData(draw::IPaintProviderPtr provider, const draw::DrawDataPtr& data, const QColor& overcolor);
 
-    draw::DrawData m_notationViewDrawData;
+    draw::DrawDataPtr m_notationViewDrawData;
 
     draw::Diff m_diff;
     bool m_isDiffDrawEnabled = false;
