@@ -1,0 +1,63 @@
+#French letters used to translate music text in SMB software
+
+lowercase \x00e7  12346 # c cédille (ç)
+noback lowercase \x00E6 345 # a e-dans-l’a (æ)
+lowercase \x0153    246 # oe liés (Œœ)
+lowercase \x00E3 5-26-1		a tilde
+noback lowercase \x00f1 12456 # n tilde (ñ)
+
+lowercase \x00e0  12356 # a accent grave (à)
+lowercase \x00e8   2346 # e accent grave (è)
+lowercase \x00f9  23456 # u accent grave (ù)
+noback lowercase \x00ec  34 # i accent grave (ì)
+noback lowercase \x00f2 346 # o accent grave (ò)
+
+lowercase \x00e2     16 # a accent circonflexe (â)
+lowercase \x00ea    126 # e accent circonflexe (ê)
+lowercase \x00ee    146 # i accent circonflexe (î)
+lowercase \x00f4   1456 # o accent circonflexe (ô)
+lowercase \x00fb    156 # u accent circonflexe (û)
+
+lowercase \x00e1  12356 # a accent aigu (á)
+lowercase \x00e9 123456 # e accent aigu (é)
+lowercase \x00f3    346 # o accent aigu (ó)
+lowercase \x00fa  23456 # u accent aigu (ú)
+noback lowercase \x00ed 34 # i accent aigu (í)
+
+noback lowercase \x00e4   345 # a tréma (ä)
+lowercase \x00eb   1246 # e tréma (ë)
+lowercase \x00ef  12456 # i tréma (ï)
+lowercase \x00f6    246 # o tréma (ö)
+lowercase \x00fc   1256 # u tréma (ü)
+lowercase \x00e5 5-1       #*latin capital letter a with ring above (unofficial)
+lowercase \x00f8 56-246 # o barré (non officiel)
+
+# Uppercase letters
+base uppercase \x00C3 \x00E3 # a tilde
+base uppercase \x00C5 \x00e5 # latin capital letter a with ring above (unofficial)
+base uppercase \x00c0 \x00e0 # a accent grave (Àà)
+base uppercase \x00c1 \x00e1 # a accent aigu (Áá)
+base uppercase \x00c2 \x00e2 # a accent circonflexe (Ââ)
+base uppercase \x00c4 \x00e4 # a tréma (Ää)
+base uppercase \x00c6 \x00E6 # a e-dans-l’a (Ææ)
+base uppercase \x00c7 \x00e7 # c cédille (Çç)
+base uppercase \x00c8 \x00e8 # e accent grave (Èè)
+base uppercase \x00c9 \x00e9 # e accent aigu (Éé)
+base uppercase \x00ca \x00ea # e accent circonflexe (Êê)
+base uppercase \x00cb \x00eb # e tréma (Ëë)
+base uppercase \x00cc \x00ec # i accent grave (Ìì)
+base uppercase \x00cd \x00ed # i accent aigu (Íí)
+base uppercase \x00ce \x00ee # i accent circonflexe (Îî)
+base uppercase \x00cf \x00ef # i tréma (Ïï)
+base uppercase \x00d1 \x00f1 # n tilde (Ññ)
+base uppercase \x00d2 \x00f2 # o accent grave (Òò)
+base uppercase \x00d3 \x00f3 # o accent aigu (Óó)
+base uppercase \x00d4 \x00f4 # o accent circonflexe (Ôô)
+base uppercase \x00d6 \x00f6 # o tréma (Öö)
+base uppercase \x00d8 \x00f8 # o barré (non officiel)
+base uppercase \x00d9 \x00f9 # u accent grave (Ùù)
+base uppercase \x00da \x00fa # u accent aigu (Úú)
+base uppercase \x00db \x00fb # u accent circonflexe (Ûû)
+base uppercase \x00dc \x00fc # u tréma (Üü)
+base uppercase \x0152 \x0153 # oe liés (Œœ)
+
