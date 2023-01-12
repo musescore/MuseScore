@@ -550,10 +550,8 @@ void Tuplet::layout()
         numberWidth = _number->bbox().width();
 
         double y3 = p1.y() + (p2.y() - p1.y()) * .5 - l1 * (_isUp ? 1.0 : -1.0);
-        //
-        // for beamed tuplets, center number on beam
-        //
-        if (cr1->beam() && cr2->beam() && cr1->beam() == cr2->beam()) {
+        // for beamed tuplets, center number on beam - if they don't have a bracket
+        if (cr1->beam() && cr2->beam() && cr1->beam() == cr2->beam() && !_hasBracket) {
             const ChordRest* crr = toChordRest(cr1);
             if (_isUp == crr->up()) {
                 double deltax = cr2->pagePos().x() - cr1->pagePos().x();
@@ -563,6 +561,7 @@ void Tuplet::layout()
                 x3 = p1.x() + deltax * .5;
             }
         } else {
+            // otherwise center on the bracket (TODO: make centering rules customizable?)
             double deltax = p2.x() - p1.x();
             x3 = p1.x() + deltax * .5;
         }
