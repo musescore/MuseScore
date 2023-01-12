@@ -1615,7 +1615,14 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
                 Glissando* glissando = toGlissando(spanner);
                 EaseInOut easeInOut(static_cast<double>(glissando->easeIn()) / 100.0,
                                     static_cast<double>(glissando->easeOut()) / 100.0);
-                easeInOut.timeList(b, millespernote * b, &onTimes);
+
+                // shifting glissando sounds to the second half of glissando duration
+                int duration = millespernote * b / 2;
+                easeInOut.timeList(b, duration, &onTimes);
+                for (size_t i = 1; i < onTimes.size(); i++) {
+                    onTimes[i] += duration;
+                }
+
                 isGlissando = true;
                 break;
             }
