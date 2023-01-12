@@ -103,7 +103,6 @@
               <string>3</string>
               <Spanner type="Glissando">
                 <Glissando>
-                  <glissandoStyle>portamento</glissandoStyle>
                   <diagonal>1</diagonal>
                   <anchor>3</anchor>
                   </Glissando>
