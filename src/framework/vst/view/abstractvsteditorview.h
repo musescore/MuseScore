@@ -74,7 +74,10 @@ private:
     void moveViewToMainWindowCenter();
 
     void showEvent(QShowEvent* ev) override;
+    void closeEvent(QCloseEvent* ev) override;
     bool event(QEvent* ev) override;
+
+    void deinit();
 
     FIDString currentPlatformUiType() const;
 

@@ -110,7 +110,7 @@ void VstModulesRepository::removePluginModule(const audio::AudioResourceId& reso
     std::lock_guard lock(m_mutex);
 
     auto search = m_modules.find(resourceId);
-    if (search != m_modules.end()) {
+    if (search == m_modules.end()) {
         return;
     }
 
