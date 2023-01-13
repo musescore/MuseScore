@@ -44,6 +44,11 @@ elseif(OS_IS_WIN)
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/windowsplatformtheme.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/windowsplatformtheme.h
     )
+elseif(OS_IS_LIN)
+    set(PLATFORM_THEME_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/linux/linuxplatformtheme.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/linux/linuxplatformtheme.h
+    )
 else()
     set(PLATFORM_THEME_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/stub/stubplatformtheme.cpp

@@ -39,6 +39,9 @@
 #elif defined(Q_OS_WIN)
 #include "internal/platform/windows/windowsplatformtheme.h"
 #include "view/mainwindowprovider.h"
+#elif defined(Q_OS_LINUX)
+#include "internal/platform/linux/linuxplatformtheme.h"
+#include "view/mainwindowprovider.h"
 #else
 #include "internal/platform/stub/stubplatformtheme.h"
 #include "view/mainwindowprovider.h"
@@ -70,6 +73,8 @@ static std::shared_ptr<NavigationUiActions> s_keyNavigationUiActions = std::make
 static std::shared_ptr<MacOSPlatformTheme> s_platformTheme = std::make_shared<MacOSPlatformTheme>();
 #elif defined(Q_OS_WIN)
 static std::shared_ptr<WindowsPlatformTheme> s_platformTheme = std::make_shared<WindowsPlatformTheme>();
+#elif defined(Q_OS_LINUX)
+static std::shared_ptr<LinuxPlatformTheme> s_platformTheme = std::make_shared<LinuxPlatformTheme>();
 #else
 static std::shared_ptr<StubPlatformTheme> s_platformTheme = std::make_shared<StubPlatformTheme>();
 #endif
