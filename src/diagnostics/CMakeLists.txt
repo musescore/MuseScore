@@ -29,6 +29,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/diagnosticsmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/diagnosticutils.h
     ${CMAKE_CURRENT_LIST_DIR}/idiagnosticspathsregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/idiagnosticsconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iengravingelementsprovider.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticsconfiguration.cpp
@@ -41,6 +42,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticspathsregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/engravingelementsprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/engravingelementsprovider.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/isavediagnosticfilesscenario.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/savediagnosticfilesscenario.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/savediagnosticfilesscenario.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticfileswriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticfileswriter.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/diagnosticspathsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/diagnosticspathsmodel.h
