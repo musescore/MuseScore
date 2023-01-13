@@ -701,6 +701,11 @@ Notification UiConfiguration::windowGeometryChanged() const
     return m_windowGeometryChanged;
 }
 
+bool UiConfiguration::isGlobalMenuAvailable() const
+{
+    return platformTheme()->isGlobalMenuAvailable();
+}
+
 void UiConfiguration::applyPlatformStyle(QWindow* window)
 {
     platformTheme()->applyPlatformStyleOnWindowForTheme(window, currentThemeCodeKey());
