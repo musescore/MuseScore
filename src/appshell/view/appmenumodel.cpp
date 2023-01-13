@@ -347,29 +347,8 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
         makeMenuItem("diagnostic-show-profiler"),
     };
 
-    MenuItemList accessibilityItems {
-        makeMenuItem("diagnostic-show-navigation-tree"),
-        makeMenuItem("diagnostic-show-accessible-tree"),
-        makeMenuItem("diagnostic-accessible-tree-dump"),
-    };
-
-    MenuItemList engravingItems {
-        makeMenuItem("diagnostic-show-engraving-elements"),
-        makeSeparator(),
-        makeMenuItem("show-element-bounding-rects"),
-        makeMenuItem("color-element-shapes"),
-        makeMenuItem("show-segment-shapes"),
-        makeMenuItem("color-segment-shapes"),
-        makeMenuItem("show-skylines"),
-        makeMenuItem("show-system-bounding-rects"),
-        makeMenuItem("show-corrupted-measures")
-    };
-
-    MenuItemList autobotItems {
-        makeMenuItem("autobot-show-scripts"),
-    };
-
     MenuItemList items {
+        makeMenuItem("diagnostic-save-diagnostic-files"),
         makeMenu(TranslatableString("appshell/menu/diagnostic", "&System"), systemItems, "menu-system")
     };
 
@@ -382,6 +361,28 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
 #endif
 
     if (framework::Version::unstable()) {
+        MenuItemList engravingItems {
+            makeMenuItem("diagnostic-show-engraving-elements"),
+            makeSeparator(),
+            makeMenuItem("show-element-bounding-rects"),
+            makeMenuItem("color-element-shapes"),
+            makeMenuItem("show-segment-shapes"),
+            makeMenuItem("color-segment-shapes"),
+            makeMenuItem("show-skylines"),
+            makeMenuItem("show-system-bounding-rects"),
+            makeMenuItem("show-corrupted-measures")
+        };
+
+        MenuItemList autobotItems {
+            makeMenuItem("autobot-show-scripts"),
+        };
+
+        MenuItemList accessibilityItems {
+            makeMenuItem("diagnostic-show-navigation-tree"),
+            makeMenuItem("diagnostic-show-accessible-tree"),
+            makeMenuItem("diagnostic-accessible-tree-dump"),
+        };
+
         items << makeMenu(TranslatableString("appshell/menu/diagnostic", "&Accessibility"), accessibilityItems, "menu-accessibility")
               << makeMenu(TranslatableString("appshell/menu/diagnostic", "&Engraving"), engravingItems, "menu-engraving")
               << makeMenu(TranslatableString("appshell/menu/diagnostic", "Auto&bot"), autobotItems, "menu-autobot")

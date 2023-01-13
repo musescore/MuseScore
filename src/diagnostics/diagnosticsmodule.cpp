@@ -33,6 +33,7 @@
 #include "internal/diagnosticsactionscontroller.h"
 #include "internal/diagnosticspathsregister.h"
 #include "internal/engravingelementsprovider.h"
+#include "internal/savediagnosticfilesscenario.h"
 
 #include "internal/drawdata/engravingdrawprovider.h"
 
@@ -59,8 +60,8 @@
 using namespace mu::diagnostics;
 using namespace mu::modularity;
 
-static std::shared_ptr<DiagnosticsConfiguration> s_configuration = std::make_shared<DiagnosticsConfiguration>();
-static std::shared_ptr<DiagnosticsActionsController> s_actionsController = std::make_shared<DiagnosticsActionsController>();
+static std::shared_ptr<DiagnosticsConfiguration> s_configuration = {};
+static std::shared_ptr<DiagnosticsActionsController> s_actionsController = {};
 
 std::string DiagnosticsModule::moduleName() const
 {
@@ -69,9 +70,14 @@ std::string DiagnosticsModule::moduleName() const
 
 void DiagnosticsModule::registerExports()
 {
+    s_configuration = std::make_shared<DiagnosticsConfiguration>();
+    s_actionsController = std::make_shared<DiagnosticsActionsController>();
+
     ioc()->registerExport<IDiagnosticsPathsRegister>(moduleName(), new DiagnosticsPathsRegister());
     ioc()->registerExport<IEngravingElementsProvider>(moduleName(), new EngravingElementsProvider());
     ioc()->registerExport<IEngravingDrawProvider>(moduleName(), new EngravingDrawProvider());
+    ioc()->registerExport<IDiagnosticsConfiguration>(moduleName(), s_configuration);
+    ioc()->registerExport<ISaveDiagnosticFilesScenario>(moduleName(), new SaveDiagnosticFilesScenario());
 }
 
 void DiagnosticsModule::resolveImports()

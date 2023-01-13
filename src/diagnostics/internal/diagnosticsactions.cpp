@@ -29,6 +29,11 @@ using namespace mu::actions;
 using namespace mu::diagnostics;
 
 const UiActionList DiagnosticsActions::m_actions = {
+    UiAction("diagnostic-save-diagnostic-files",
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Save diagnostic files")
+             ),
     UiAction("diagnostic-show-paths",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,

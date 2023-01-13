@@ -19,32 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
-#define MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
-
-#include "idiagnosticsconfiguration.h"
+#ifndef MU_DIAGNOSTICS_DIAGNOSTICFILESWRITER_H
+#define MU_DIAGNOSTICS_DIAGNOSTICFILESWRITER_H
 
 #include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
+#include "io/ifilesystem.h"
+#include "global/iglobalconfiguration.h"
+
+#include "types/ret.h"
+#include "io/path.h"
+
+namespace mu {
+class ZipWriter;
+}
 
 namespace mu::diagnostics {
-class DiagnosticsConfiguration : public IDiagnosticsConfiguration
+class DiagnosticFilesWriter
 {
-    INJECT(diagnostics, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT_STATIC(diagnostics, io::IFileSystem, fileSystem)
+    INJECT_STATIC(diagnostics, framework::IGlobalConfiguration, globalConfiguration)
 
 public:
-    DiagnosticsConfiguration() = default;
+    static Ret writeDiagnosticFiles(const io::path_t& destinationZipPath);
 
-    void init();
-
-    bool isDumpUploadAllowed() const override;
-    void setIsDumpUploadAllowed(bool val) override;
-
-    bool shouldWarnBeforeSavingDiagnosticFiles() const override;
-    void setShouldWarnBeforeSavingDiagnosticFiles(bool val) override;
-
-    io::path_t diagnosticFilesDefaultSavingPath() const override;
+private:
+    static RetVal<io::paths_t> scanDir(const std::string& dirName);
+    static mu::Ret addFileToZip(const io::path_t& filePath, ZipWriter& zip, const std::string& destinationDirName = std::string());
 };
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
+#endif // MU_DIAGNOSTICS_DIAGNOSTICFILESWRITER_H
