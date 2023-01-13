@@ -22,28 +22,30 @@
 #ifndef MU_UI_ERRORDETAILSMODEL_H
 #define MU_UI_ERRORDETAILSMODEL_H
 
-#include <QObject>
+#include <QAbstractListModel>
 
 namespace mu::ui {
-class ErrorDetailsModel : public QObject
+class ErrorDetailsModel : public QAbstractListModel
 {
     Q_OBJECT
-
-    Q_PROPERTY(QStringList details READ details NOTIFY detailsChanged)
 
 public:
     explicit ErrorDetailsModel(QObject* parent = nullptr);
 
-    QStringList details() const;
+    QVariant data(const QModelIndex& index, int role) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load(const QString& detailedText);
     Q_INVOKABLE bool copyDetailsToClipboard();
 
-signals:
-    void detailsChanged();
-
 private:
-    QStringList m_details;
+    enum Roles {
+        ErrorText = Qt::UserRole + 1,
+        ErrorPlainText
+    };
+
+    QList<QVariantMap> m_items;
 };
 }
 

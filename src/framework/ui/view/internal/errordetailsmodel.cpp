@@ -26,7 +26,12 @@
 #include <QClipboard>
 #include <QTextDocument>
 
+#include "log.h"
+
 using namespace mu::ui;
+
+static const QString ERROR_TEXT_KEY("errorText");
+static const QString ERROR_PLAIN_TEXT_KEY("errorPlainText");
 
 static QString toPlainText(const QString& html)
 {
@@ -37,34 +42,71 @@ static QString toPlainText(const QString& html)
 }
 
 ErrorDetailsModel::ErrorDetailsModel(QObject* parent)
-    : QObject(parent)
+    : QAbstractListModel(parent)
 {
 }
 
-QStringList ErrorDetailsModel::details() const
+QVariant ErrorDetailsModel::data(const QModelIndex& index, int role) const
 {
-    return m_details;
+    if (!index.isValid() || index.row() >= rowCount()) {
+        return QVariant();
+    }
+
+    const QVariantMap& item = m_items.at(index.row());
+    switch (role) {
+    case ErrorText: return item[ERROR_TEXT_KEY];
+    case ErrorPlainText: return item[ERROR_PLAIN_TEXT_KEY];
+    }
+
+    return QVariant();
+}
+
+int ErrorDetailsModel::rowCount(const QModelIndex&) const
+{
+    return m_items.size();
+}
+
+QHash<int, QByteArray> ErrorDetailsModel::roleNames() const
+{
+    static const QHash<int, QByteArray> roles = {
+        { ErrorText, ERROR_TEXT_KEY.toUtf8() },
+        { ErrorPlainText, ERROR_PLAIN_TEXT_KEY.toUtf8() },
+    };
+
+    return roles;
 }
 
 void ErrorDetailsModel::load(const QString& detailedText)
 {
-    m_details = detailedText.split('\n');
+    TRACEFUNC;
 
-    emit detailsChanged();
+    beginResetModel();
+
+    QStringList errors = detailedText.split('\n');
+
+    for (const QString& error : errors) {
+        QVariantMap item;
+        item[ERROR_TEXT_KEY] = error;
+        item[ERROR_PLAIN_TEXT_KEY] = toPlainText(error);
+
+        m_items << item;
+    }
+
+    endResetModel();
 }
 
 bool ErrorDetailsModel::copyDetailsToClipboard()
 {
     QClipboard* clipboard = QGuiApplication::clipboard();
-    if (!clipboard || m_details.empty()) {
+    if (!clipboard || m_items.empty()) {
         return false;
     }
 
     QString text;
-    int lastIdx = m_details.size() - 1;
+    int lastIdx = m_items.size() - 1;
 
-    for (int i = 0; i < m_details.size(); ++i) {
-        text += toPlainText(m_details[i]);
+    for (int i = 0; i < m_items.size(); ++i) {
+        text += m_items[i][ERROR_PLAIN_TEXT_KEY].toString();
 
         if (i != lastIdx) {
             text += "\n";
