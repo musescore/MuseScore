@@ -41,6 +41,8 @@ public:
     bool isSystemThemeDark() const override;
     async::Notification platformThemeChanged() const override;
 
+    bool isGlobalMenuAvailable() const override;
+
     void applyPlatformStyleOnAppForTheme(const ThemeCode& themeCode) override;
     void applyPlatformStyleOnWindowForTheme(QWindow* window, const ThemeCode& themeCode) override;
 

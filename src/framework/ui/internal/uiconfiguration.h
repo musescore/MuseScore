@@ -97,6 +97,8 @@ public:
     void setWindowGeometry(const QByteArray& geometry) override;
     async::Notification windowGeometryChanged() const override;
 
+    bool isGlobalMenuAvailable() const override;
+
     void applyPlatformStyle(QWindow* window) override;
 
     bool isVisible(const QString& key, bool def = true) const override;

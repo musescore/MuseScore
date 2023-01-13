@@ -66,6 +66,11 @@ bool MacOSPlatformTheme::isSystemThemeDark() const
     return [systemMode isEqualToString:@"Dark"];
 }
 
+bool MacOSPlatformTheme::isGlobalMenuAvailable() const
+{
+    return true;
+}
+
 Notification MacOSPlatformTheme::platformThemeChanged() const
 {
     return m_platformThemeChanged;

@@ -43,6 +43,11 @@ bool StubPlatformTheme::isSystemThemeDark() const
     return false;
 }
 
+bool StubPlatformTheme::isGlobalMenuAvailable() const
+{
+    return false;
+}
+
 Notification StubPlatformTheme::platformThemeChanged() const
 {
     return m_platformThemeChanged;
