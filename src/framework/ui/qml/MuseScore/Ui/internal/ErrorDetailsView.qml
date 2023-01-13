@@ -29,6 +29,7 @@ Column {
     id: root
 
     property string detailedText: ""
+
     property NavigationSection navigationSection: null
     property int navigationOrder: 0
 
@@ -51,8 +52,6 @@ Column {
         border.width: 1
         border.color: ui.theme.strokeColor
 
-        visible: detailsView.count > 0
-
         color: "transparent"
 
         StyledListView {
@@ -63,7 +62,7 @@ Column {
 
             spacing: 0
 
-            model: detailsModel.details
+            model: detailsModel
 
             NavigationPanel {
                id: detailsViewNavPanel
@@ -79,7 +78,7 @@ Column {
                 navigation.name: "Error " + model.index
                 navigation.panel: detailsViewNavPanel
                 navigation.row: model.index
-                navigation.accessible.name: modelData
+                navigation.accessible.name: model.errorPlainText
                 navigation.onActiveChanged: {
                     if (navigation.active) {
                         detailsView.positionViewAtIndex(index, ListView.Contain)
@@ -99,7 +98,7 @@ Column {
                     width: parent.width
 
                     textFormat: Qt.RichText
-                    text: modelData
+                    text: model.errorText
                 }
             }
         }
@@ -109,9 +108,9 @@ Column {
         spacing: 0
 
         NavigationPanel {
-           id: buttonsNavPanel
+           id: copyDetailsNavPanel
 
-           name: "ButtonsNavPanel"
+           name: "CopyDetailsNavPanel"
            order: root.navigationOrder + 1
            enabled: root.enabled && root.visible
            direction: NavigationPanel.Horizontal
@@ -122,10 +121,19 @@ Column {
             text: qsTrc("global", "Copy")
 
             navigation.name: "CopyButton"
-            navigation.panel: buttonsNavPanel
+            navigation.panel: copyDetailsNavPanel
+            navigation.onActiveChanged: {
+                if (!navigation.active) {
+                    detailsCopiedMessage.resetFocus()
+                }
+            }
 
             onClicked: {
                 detailsCopiedMessage.visible = detailsModel.copyDetailsToClipboard()
+
+                if (detailsCopiedMessage.visible) {
+                    detailsCopiedMessage.readInfo()
+                }
             }
         }
 
@@ -155,6 +163,25 @@ Column {
             visible: false
 
             text: qsTrc("global", "Error details have been copied to the clipboard.")
+
+            AccessibleItem {
+                id: accessibleInfo
+
+                accessibleParent: copyDetailsNavPanel.navigationPanel.accessible
+                visualItem: detailsCopiedMessage
+                role: MUAccessible.StaticText
+                name: detailsCopiedMessage.text
+            }
+
+            function readInfo() {
+                accessibleInfo.ignored = false
+                accessibleInfo.focused = true
+            }
+
+            function resetFocus() {
+                accessibleInfo.ignored = true
+                accessibleInfo.focused = false
+            }
         }
     }
 }
