@@ -72,6 +72,11 @@ void AppMenuModel::load()
     appMenuModelHook()->onAppMenuInited();
 }
 
+bool AppMenuModel::isGlobalMenuAvailable()
+{
+    return uiConfiguration()->isGlobalMenuAvailable();
+}
+
 void AppMenuModel::setupConnections()
 {
     recentProjectsProvider()->recentProjectListChanged().onNotify(this, [this]() {
