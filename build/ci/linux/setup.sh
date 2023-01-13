@@ -110,7 +110,8 @@ apt_packages_ffmpeg=(
   libswscale-dev
   )
 
-sudo apt-get update # no package lists in Docker image
+sudo sed -i 's/azure\.//' /etc/apt/sources.list
+sudo apt-get update 
 sudo apt-get install -y --no-install-recommends \
   "${apt_packages_basic[@]}" \
   "${apt_packages_standard[@]}" \
