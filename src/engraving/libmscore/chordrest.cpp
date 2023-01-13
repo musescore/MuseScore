@@ -602,8 +602,12 @@ EngravingItem* ChordRest::drop(EditData& data)
         if (e->isSpanner()) {
             Spanner* spanner = toSpanner(e);
             spanner->setTick(tick());
-            spanner->setTrack(track());
-            spanner->setTrack2(track());
+            if (spanner->systemFlag()) {
+                spanner->setTrack(0);
+            } else {
+                spanner->setTrack(track());
+                spanner->setTrack2(track());
+            }
             score()->undoAddElement(spanner);
             return e;
         }
