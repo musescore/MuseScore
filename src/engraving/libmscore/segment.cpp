@@ -885,9 +885,6 @@ void Segment::sortStaves(std::vector<staff_idx_t>& dst)
             ElementType::JUMP,
             ElementType::MARKER,
             ElementType::TEMPO_TEXT,
-            ElementType::VOLTA,
-            ElementType::GRADUAL_TEMPO_CHANGE,
-            ElementType::TEXTLINE
         };
         if (!e->systemFlag() || (e->isLinked() && (allowedTypes.find(et) != allowedTypes.end()))) {
             e->setTrack(map[e->staffIdx()] * VOICES + e->voice());

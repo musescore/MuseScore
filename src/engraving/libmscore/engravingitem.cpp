@@ -423,6 +423,9 @@ staff_idx_t EngravingItem::staffIdxOrNextVisible() const
     if (!staff()) {
         return mu::nidx;
     }
+    if (isSpannerSegment()) {
+        return toSpannerSegment(this)->spanner()->staffIdxOrNextVisible();
+    }
 
     staff_idx_t si = staff()->idx();
     if (!systemFlag()) {
@@ -483,14 +486,12 @@ bool EngravingItem::isTopSystemObject() const
     if (!systemFlag()) {
         return false; // non system object
     }
-    if (isSpannerSegment() && systemFlag() && track() != 0) {
-        return false;
-    }
-    if (!_links) {
+    LinkedObjects* links = isSpannerSegment() ? toSpannerSegment(this)->spanner()->links() : _links;
+    if (!links) {
         return true; // a system object, but not one with any linked clones
     }
     // this is part of a link ecosystem, see if we're the main one
-    EngravingObject* mainElement = _links->mainElement();
+    EngravingObject* mainElement = links->mainElement();
     return track() == 0
            && (mainElement->score() != score() || !toEngravingItem(mainElement)->enabled());
 }
