@@ -36,6 +36,15 @@ StyledDialogView {
 
     property int measuresCount: 1
 
+    function okClick() {
+        root.ret = { errcode: 0, value: root.measuresCount }
+        root.hide()
+    }
+
+    function cancelClick() {
+        root.reject()
+    }
+
     ColumnLayout {
         id: content
         anchors.fill: parent
@@ -82,6 +91,14 @@ StyledDialogView {
                 onValueEdited: function(newValue) {
                     root.measuresCount = newValue
                 }
+
+                Keys.onPressed: function(event) {
+                    if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
+                        okClick()
+                    } else if (event.key === Qt.Key_Escape) {
+                        cancelClick()
+                    }
+                }
             }
         }
 
@@ -108,7 +125,7 @@ StyledDialogView {
                 navigation.order: 2
 
                 onClicked: {
-                    root.reject()
+                    cancelClick()
                 }
             }
 
@@ -122,8 +139,7 @@ StyledDialogView {
                 navigation.order: 1
 
                 onClicked: {
-                    root.ret = { errcode: 0, value: root.measuresCount }
-                    root.hide()
+                    okClick()
                 }
             }
         }
