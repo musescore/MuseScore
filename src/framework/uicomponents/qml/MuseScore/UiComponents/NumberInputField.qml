@@ -51,8 +51,7 @@ FocusScope {
     function ensureActiveFocus() {
         if (!root.activeFocus) {
             root.forceActiveFocus()
-        } else if (!textField.activeFocus)
-        {
+        } else if (!textField.activeFocus) {
             // In the case when the FocusScope is still in focus
             // and therefore doesn't trigger the onActiveFocusChanged
             textField.forceActiveFocus()
