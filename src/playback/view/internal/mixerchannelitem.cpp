@@ -247,6 +247,10 @@ void MixerChannelItem::loadOutputParams(AudioOutputParams&& newParams)
         emit mutedChanged();
     }
 
+    if (newParams.muted) {
+        setSolo(false);
+    }
+
     loadOutputResourceItems(newParams.fxChain);
     loadAuxSendItems(newParams.auxSends);
 }
