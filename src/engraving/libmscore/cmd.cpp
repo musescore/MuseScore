@@ -65,6 +65,7 @@
 #include "slur.h"
 #include "staff.h"
 #include "stafftype.h"
+#include "stafftypechange.h"
 #include "stem.h"
 #include "stringdata.h"
 #include "system.h"
@@ -4242,6 +4243,21 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
             }
         }
     }
+}
+
+void Score::cmdAddStaffTypeChange(Measure* measure, staff_idx_t staffIdx, StaffTypeChange* stc)
+{
+    if (!measure) {
+        return;
+    }
+
+    if (measure->isMMRest()) {
+        measure = measure->mmRestFirst();
+    }
+
+    stc->setParent(measure);
+    stc->setTrack(staffIdx * VOICES);
+    score()->undoAddElement(stc);
 }
 
 //---------------------------------------------------------
