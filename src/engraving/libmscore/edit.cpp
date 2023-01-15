@@ -400,9 +400,13 @@ Chord* Score::addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie
 ChordRest* Score::addClone(ChordRest* cr, const Fraction& tick, const TDuration& d)
 {
     ChordRest* newcr;
-    // change a MeasureRepeat() into an Rest()
+    // change a MeasureRepeat into an Rest
+    // To do: *properly* remove the measure repeat, like in Score::deleteItem
+    // https://github.com/musescore/MuseScore/issues/15844
+    // https://github.com/musescore/MuseScore/issues/15874
     if (cr->isMeasureRepeat()) {
         newcr = Factory::copyRest(*toRest(cr));
+        toRest(newcr)->hack_toRestType();
     } else {
         newcr = toChordRest(cr->clone());
     }
