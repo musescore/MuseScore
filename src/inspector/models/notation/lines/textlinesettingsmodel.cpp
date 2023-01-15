@@ -74,9 +74,15 @@ void TextLineSettingsModel::createProperties()
     m_dashLineLength = buildPropertyItem(Pid::DASH_LINE_LEN);
     m_dashGapLength = buildPropertyItem(Pid::DASH_GAP_LEN);
 
-    m_hookHeight = buildPropertyItem(Pid::END_HOOK_HEIGHT, [this](const Pid pid, const QVariant& newValue) {
+    // m_hookHeight = buildPropertyItem(Pid::END_HOOK_HEIGHT, [this](const Pid pid, const QVariant& newValue) {
+    //     onPropertyValueChanged(pid, newValue);
+    //     onPropertyValueChanged(Pid::BEGIN_HOOK_HEIGHT, newValue);
+    // });
+    m_startHookHeight = buildPropertyItem(Pid::BEGIN_HOOK_HEIGHT, [this](const Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
-        onPropertyValueChanged(Pid::BEGIN_HOOK_HEIGHT, newValue);
+    });
+    m_endHookHeight = buildPropertyItem(Pid::END_HOOK_HEIGHT, [this](const Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
     });
 
     m_placement = buildPropertyItem(Pid::PLACEMENT);
@@ -134,7 +140,9 @@ void TextLineSettingsModel::resetProperties()
         m_dashGapLength,
         m_startHookType,
         m_endHookType,
-        m_hookHeight,
+        // m_hookHeight,
+        m_startHookHeight,
+        m_endHookHeight,
         m_placement,
         m_beginningText,
         m_beginningTextOffset,
@@ -191,9 +199,19 @@ PropertyItem* TextLineSettingsModel::endHookType() const
     return m_endHookType;
 }
 
-PropertyItem* TextLineSettingsModel::hookHeight() const
+// PropertyItem* TextLineSettingsModel::hookHeight() const
+// {
+//     return m_hookHeight;
+// }
+
+PropertyItem* TextLineSettingsModel::startHookHeight() const
 {
-    return m_hookHeight;
+    return m_startHookHeight;
+}
+
+PropertyItem* TextLineSettingsModel::endHookHeight() const
+{
+    return m_endHookHeight;
 }
 
 PropertyItem* TextLineSettingsModel::placement() const
@@ -270,7 +288,9 @@ void TextLineSettingsModel::onUpdateLinePropertiesAvailability()
     m_startHookType->setIsEnabled(isLineAvailable);
     m_endHookType->setIsEnabled(isLineAvailable);
     m_thickness->setIsEnabled(isLineAvailable);
-    m_hookHeight->setIsEnabled(isLineAvailable && (hasStartHook || hasEndHook));
+    // m_hookHeight->setIsEnabled(isLineAvailable && (hasStartHook || hasEndHook));
+    m_startHookHeight->setIsEnabled(isLineAvailable && (hasStartHook));
+    m_endHookHeight->setIsEnabled(isLineAvailable && (hasEndHook));
     m_lineStyle->setIsEnabled(isLineAvailable);
 
     auto currentStyle = static_cast<LineTypes::LineStyle>(m_lineStyle->value().toInt());
@@ -335,8 +355,16 @@ void TextLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
         loadPropertyItem(m_endHookType);
     }
 
+    // if (mu::contains(propertyIdSet, Pid::END_HOOK_HEIGHT)) {
+    //     loadPropertyItem(m_hookHeight);
+    // }
+
+    if (mu::contains(propertyIdSet, Pid::BEGIN_HOOK_HEIGHT)) {
+        loadPropertyItem(m_startHookHeight);
+    }
+
     if (mu::contains(propertyIdSet, Pid::END_HOOK_HEIGHT)) {
-        loadPropertyItem(m_hookHeight);
+        loadPropertyItem(m_endHookHeight);
     }
 
     if (mu::contains(propertyIdSet, Pid::PLACEMENT)) {
