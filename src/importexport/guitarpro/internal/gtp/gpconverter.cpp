@@ -2276,12 +2276,18 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note)
         ties[curTrack].push_back(tie);
     };
 
-    auto endTie = [](Note* endNote, tieMap& ties, std::unordered_map<Note*, Note*>& harmonicNotes, track_idx_t curTrack) {
+    auto endTie = [this](Note* endNote, tieMap& ties, std::unordered_map<Note*, Note*>& harmonicNotes, track_idx_t curTrack) {
         auto& tiesOnTrack = ties[curTrack];
         for (auto it = tiesOnTrack.rbegin(); it != tiesOnTrack.rend(); it++) {
             Tie* tie = *it;
             Note* startNote = tie->startNote();
-            if (startNote->pitch() == endNote->pitch() && startNote->string() == endNote->string()) {
+            int startPitch = startNote->pitch();
+            if (m_originalPitches.find(startNote) != m_originalPitches.end()) {
+                startPitch = m_originalPitches[startNote];
+                m_originalPitches.erase(startNote);
+            }
+
+            if (startPitch == endNote->pitch() && startNote->string() == endNote->string()) {
                 tie->setEndNote(endNote);
                 endNote->setTieBack(tie);
                 mu::remove(tiesOnTrack, tie);
@@ -2394,6 +2400,7 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
 
     for (mu::engraving::Note* note : chord->notes()) {
         int pitch = note->pitch();
+
         if (type == mu::engraving::OttavaType::OTTAVA_8VA) {
             note->setPitch((pitch - 12 > 0) ? pitch - 12 : pitch);
         } else if (type == mu::engraving::OttavaType::OTTAVA_8VB) {
@@ -2402,6 +2409,11 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
             note->setPitch((pitch - 24 > 0) ? pitch - 24 : (pitch - 12 > 0 ? pitch - 12 : pitch));
         } else if (type == mu::engraving::OttavaType::OTTAVA_15MB) {
             note->setPitch((pitch + 24 < 127) ? pitch + 24 : ((pitch + 12 < 127) ? pitch + 12 : pitch));
+        }
+
+        // pitch changed because of octave
+        if (pitch != note->pitch()) {
+            m_originalPitches[note] = pitch;
         }
     }
 }
