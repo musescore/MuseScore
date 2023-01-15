@@ -127,9 +127,10 @@ void ApplicationActionController::onDropEvent(QDropEvent* event)
 
 bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
 {
-    if (event->type() == QEvent::Close && watched == mainWindow()->qWindow()) {
-        quit(false);
-        event->ignore();
+    if ((event->type() == QEvent::Close && watched == mainWindow()->qWindow())
+        || event->type() == QEvent::Quit) {
+        bool accepted = quit(false);
+        event->setAccepted(accepted);
 
         return true;
     }
@@ -159,27 +160,30 @@ mu::ValCh<bool> ApplicationActionController::isFullScreen() const
     return result;
 }
 
-void ApplicationActionController::quit(bool isAllInstances, const io::path_t& installerPath)
+bool ApplicationActionController::quit(bool isAllInstances, const io::path_t& installerPath)
 {
-    if (projectFilesController()->closeOpenedProject()) {
-        if (isAllInstances) {
-            multiInstancesProvider()->quitForAll();
-        }
-
-        if (multiInstancesProvider()->instances().size() == 1 && !installerPath.empty()) {
-#if defined(Q_OS_LINUX)
-            interactive()->revealInFileBrowser(installerPath);
-#else
-            interactive()->openUrl(QUrl::fromLocalFile(installerPath.toQString()));
-#endif
-        }
-
-        if (multiInstancesProvider()->instances().size() > 1) {
-            multiInstancesProvider()->notifyAboutInstanceWasQuited();
-        }
-
-        QCoreApplication::quit();
+    if (!projectFilesController()->closeOpenedProject()) {
+        return false;
     }
+
+    if (isAllInstances) {
+        multiInstancesProvider()->quitForAll();
+    }
+
+    if (multiInstancesProvider()->instances().size() == 1 && !installerPath.empty()) {
+#if defined(Q_OS_LINUX)
+        interactive()->revealInFileBrowser(installerPath);
+#else
+        interactive()->openUrl(QUrl::fromLocalFile(installerPath.toQString()));
+#endif
+    }
+
+    if (multiInstancesProvider()->instances().size() > 1) {
+        multiInstancesProvider()->notifyAboutInstanceWasQuited();
+    }
+
+    QCoreApplication::quit();
+    return true;
 }
 
 void ApplicationActionController::restart()
