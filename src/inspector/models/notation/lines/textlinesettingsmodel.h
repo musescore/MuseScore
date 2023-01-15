@@ -42,7 +42,9 @@ class TextLineSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(PropertyItem * startHookType READ startHookType CONSTANT)
     Q_PROPERTY(PropertyItem * endHookType READ endHookType CONSTANT)
-    Q_PROPERTY(PropertyItem * hookHeight READ hookHeight CONSTANT)
+    // Q_PROPERTY(PropertyItem * hookHeight READ hookHeight CONSTANT)
+    Q_PROPERTY(PropertyItem * startHookHeight READ startHookHeight CONSTANT)
+    Q_PROPERTY(PropertyItem * endHookHeight READ endHookHeight CONSTANT)
 
     Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
 
@@ -70,7 +72,9 @@ public:
 
     PropertyItem* startHookType() const;
     PropertyItem* endHookType() const;
-    PropertyItem* hookHeight() const;
+    // PropertyItem* hookHeight() const;
+    PropertyItem* startHookHeight() const;
+    PropertyItem* endHookHeight() const;
 
     PropertyItem* placement() const;
 
@@ -138,7 +142,9 @@ private:
 
     PropertyItem* m_startHookType = nullptr;
     PropertyItem* m_endHookType = nullptr;
-    PropertyItem* m_hookHeight = nullptr;
+    // PropertyItem* m_hookHeight = nullptr;
+    PropertyItem* m_startHookHeight = nullptr;
+    PropertyItem* m_endHookHeight = nullptr;
 
     PropertyItem* m_beginningText = nullptr;
     PointFPropertyItem* m_beginningTextOffset = nullptr;
