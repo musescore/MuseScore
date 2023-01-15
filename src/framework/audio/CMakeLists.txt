@@ -40,13 +40,16 @@ elseif(OS_IS_LIN)
     )
 elseif(OS_IS_MAC)
     set(DRIVER_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.mm
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.h
     )
 
-    # Conflicted with AudioBuffer
-    set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.cpp
-                                PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
+    set_source_files_properties(
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.mm
+        PROPERTIES
+        SKIP_UNITY_BUILD_INCLUSION ON
+        SKIP_PRECOMPILE_HEADERS ON
+    )
 elseif(OS_IS_WASM)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/web/webaudiodriver.cpp

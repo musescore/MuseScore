@@ -216,6 +216,7 @@ void OSXAudioDriver::updateDeviceMap()
     OSStatus result;
     std::vector<AudioObjectID> audioObjects = {};
     m_outputDevices.clear();
+    m_inputDevices.clear();
 
     AudioObjectPropertyAddress devicesPropertyAddress = {
         .mSelector = kAudioHardwarePropertyDevices,
@@ -267,7 +268,6 @@ void OSXAudioDriver::updateDeviceMap()
     }
 
     for (auto&& deviceId : audioObjects) {
-        std::string deviceName;
         CFStringRef nameRef;
 
         result = AudioObjectGetPropertyData(deviceId, &namePropertyAddress, 0, NULL, &propertySize, &nameRef);
@@ -275,9 +275,9 @@ void OSXAudioDriver::updateDeviceMap()
             logError("Failed to get device's name, err: ", result);
             continue;
         }
-        propertySize = CFStringGetLength(nameRef);
-        deviceName.resize(propertySize);
-        CFStringGetCString(nameRef, deviceName.data(), sizeof(deviceName), kCFStringEncodingUTF8);
+
+        NSString* nsString = (NSString*)nameRef;
+        std::string deviceName = [nsString UTF8String];
 
         if (getStreamsCount(deviceId, kAudioObjectPropertyScopeOutput, deviceName) > 0) {
             m_outputDevices[deviceId] = deviceName;
