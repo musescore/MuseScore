@@ -72,7 +72,7 @@ private:
 
     void setupConnections();
 
-    void quit(bool isAllInstances, const io::path_t& installerPath = io::path_t());
+    bool quit(bool isAllInstances, const io::path_t& installerPath = io::path_t());
     void restart();
 
     void toggleFullScreen();
