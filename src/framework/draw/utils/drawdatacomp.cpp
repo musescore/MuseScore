@@ -32,14 +32,35 @@ using namespace mu::draw;
 namespace mu::draw::comp {
 static const int DEFAULT_PREC(3);
 
+struct Path {
+    const DrawData::Object* obj = nullptr;
+    const DrawData::Data* data = nullptr;
+    const DrawPath* path = nullptr;
+};
+
 struct Polygon {
     const DrawData::Object* obj = nullptr;
     const DrawData::Data* data = nullptr;
     const DrawPolygon* polygon = nullptr;
 };
 
+struct Text {
+    const DrawData::Object* obj = nullptr;
+    const DrawData::Data* data = nullptr;
+    const DrawText* text = nullptr;
+};
+
+struct Pixmap {
+    const DrawData::Object* obj = nullptr;
+    const DrawData::Data* data = nullptr;
+    const DrawPixmap* pixmap = nullptr;
+};
+
 struct Data {
+    std::vector<Path> paths;
     std::vector<Polygon> polygons;
+    std::vector<Text> texts;
+    std::vector<Pixmap> pixmaps;
 };
 
 template<class T>
@@ -416,6 +437,19 @@ static bool isEqual(const DrawData::Object& o1, const DrawData::Object& o2, Draw
     return true;
 }
 
+static bool isEqual(const Path& p1, const Path& p2, DrawDataComp::Tolerance tolerance)
+{
+    if (p1.obj->name != p2.obj->name) {
+        return false;
+    }
+
+    if (p1.data->state != p2.data->state) {
+        return false;
+    }
+
+    return isEqual(*p1.path, *p2.path, tolerance);
+}
+
 static bool isEqual(const Polygon& p1, const Polygon& p2, DrawDataComp::Tolerance tolerance)
 {
     if (p1.obj->name != p2.obj->name) {
@@ -427,6 +461,32 @@ static bool isEqual(const Polygon& p1, const Polygon& p2, DrawDataComp::Toleranc
     }
 
     return isEqual(*p1.polygon, *p2.polygon, tolerance);
+}
+
+static bool isEqual(const Text& p1, const Text& p2, DrawDataComp::Tolerance tolerance)
+{
+    if (p1.obj->name != p2.obj->name) {
+        return false;
+    }
+
+    if (p1.data->state != p2.data->state) {
+        return false;
+    }
+
+    return isEqual(*p1.text, *p2.text, tolerance);
+}
+
+static bool isEqual(const comp::Pixmap& p1, const comp::Pixmap& p2, DrawDataComp::Tolerance tolerance)
+{
+    if (p1.obj->name != p2.obj->name) {
+        return false;
+    }
+
+    if (p1.data->state != p2.data->state) {
+        return false;
+    }
+
+    return isEqual(*p1.pixmap, *p2.pixmap, tolerance);
 }
 
 template<class T>
@@ -454,7 +514,10 @@ static void difference(std::vector<T>& diff, const std::vector<T>& v1, const std
 
 static void difference(Data& diff, const Data& d1, const Data& d2, DrawDataComp::Tolerance tolerance)
 {
+    difference(diff.paths, d1.paths, d2.paths, tolerance);
     difference(diff.polygons, d1.polygons, d2.polygons, tolerance);
+    difference(diff.texts, d1.texts, d2.texts, tolerance);
+    difference(diff.pixmaps, d1.pixmaps, d2.pixmaps, tolerance);
 }
 
 static Data toCompData(const DrawDataPtr& dd)
@@ -462,8 +525,17 @@ static Data toCompData(const DrawDataPtr& dd)
     Data cd;
     for (const DrawData::Object& o : dd->objects) {
         for (const DrawData::Data& d : o.datas) {
+            for (const DrawPath& p : d.paths) {
+                cd.paths.push_back(comp::Path { &o, &d, &p });
+            }
             for (const DrawPolygon& p : d.polygons) {
                 cd.polygons.push_back(comp::Polygon { &o, &d, &p });
+            }
+            for (const DrawText& p : d.texts) {
+                cd.texts.push_back(comp::Text { &o, &d, &p });
+            }
+            for (const DrawPixmap& p : d.pixmaps) {
+                cd.pixmaps.push_back(comp::Pixmap { &o, &d, &p });
             }
         }
     }
@@ -477,23 +549,39 @@ static void fillDrawData(DrawDataPtr& dd, const comp::Data& cd)
 
     // collect objects (save order)
     std::vector<const DrawData::Object*> objs;
+    for (const comp::Path& p : cd.paths) {
+        if (!mu::contains(objs, p.obj)) {
+            objs.push_back(p.obj);
+        }
+    }
     for (const comp::Polygon& p : cd.polygons) {
         if (!mu::contains(objs, p.obj)) {
             objs.push_back(p.obj);
         }
     }
+    for (const comp::Text& p : cd.texts) {
+        if (!mu::contains(objs, p.obj)) {
+            objs.push_back(p.obj);
+        }
+    }
+    for (const comp::Pixmap& p : cd.pixmaps) {
+        if (!mu::contains(objs, p.obj)) {
+            objs.push_back(p.obj);
+        }
+    }
 
+    // collect data
     for (const DrawData::Object* o : objs) {
         DrawData::Object dobj;
         dobj.name = o->name;
         dobj.pagePos = o->pagePos;
 
-        for (const comp::Polygon& p : cd.polygons) {
+        auto findOrCreateDData = [](DrawData::Object& dobj, const DrawData::State& state) {
             DrawData::Data* ddata = nullptr;
 
-            // find for state
+            // find by state
             for (DrawData::Data& od : dobj.datas) {
-                if (od.state == p.data->state) {
+                if (od.state == state) {
                     ddata = &od;
                 }
             }
@@ -502,10 +590,30 @@ static void fillDrawData(DrawDataPtr& dd, const comp::Data& cd)
             if (!ddata) {
                 dobj.datas.push_back(DrawData::Data());
                 ddata = &dobj.datas.back();
-                ddata->state = p.data->state;
+                ddata->state = state;
             }
 
+            return ddata;
+        };
+
+        for (const comp::Path& p : cd.paths) {
+            DrawData::Data* ddata = findOrCreateDData(dobj, p.data->state);
+            ddata->paths.push_back(*p.path);
+        }
+
+        for (const comp::Polygon& p : cd.polygons) {
+            DrawData::Data* ddata = findOrCreateDData(dobj, p.data->state);
             ddata->polygons.push_back(*p.polygon);
+        }
+
+        for (const comp::Text& p : cd.texts) {
+            DrawData::Data* ddata = findOrCreateDData(dobj, p.data->state);
+            ddata->texts.push_back(*p.text);
+        }
+
+        for (const comp::Pixmap& p : cd.pixmaps) {
+            DrawData::Data* ddata = findOrCreateDData(dobj, p.data->state);
+            ddata->pixmaps.push_back(*p.pixmap);
         }
 
         dd->objects.push_back(dobj);
