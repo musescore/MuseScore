@@ -59,6 +59,20 @@ StyledDialogView {
 
                 source: "qrc:/qml/resources/mu_logo.svg"
                 sourceSize: Qt.size(100, 100)
+
+                MouseArea {
+                    anchors.fill: parent
+
+                    property int clickCount: 0
+
+                    onClicked: {
+                        clickCount++
+
+                        if (clickCount % 3 == 0) {
+                            aboutModel.toggleDevMode()
+                        }
+                    }
+                }
             }
 
             Column {
