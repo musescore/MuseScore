@@ -33,6 +33,7 @@ while [[ "$#" -gt 0 ]]; do
     case $1 in
         --build_mode) BUILD_MODE="$2"; shift ;;
         -v|--version) BUILD_VERSION="$2"; shift ;;
+        --arch) PACKARCH="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
