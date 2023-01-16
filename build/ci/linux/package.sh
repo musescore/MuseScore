@@ -54,20 +54,23 @@ if [ "$BUILD_MODE" == "stable_build" ]; then PACKTYPE=appimage; fi
 
 MAJOR_VERSION="${BUILD_VERSION%%.*}"
 
+if [ -z "$PACKARCH" ]; then PACKARCH="x86_64"; fi
+
 echo "BUILD_MODE: $BUILD_MODE"
 echo "BUILD_VERSION: $BUILD_VERSION"
 echo "MAJOR_VERSION: $MAJOR_VERSION"
 echo "PACKTYPE: $PACKTYPE"
+echo "PACKARCH: $PACKARCH"
 echo "INSTALL_DIR: $INSTALL_DIR"
 
 if [ "$BUILD_MODE" == "nightly_build" ]; then
   BUILD_NUMBER=$(cat $ARTIFACTS_DIR/env/build_number.env)
   BUILD_BRANCH=$(cat $ARTIFACTS_DIR/env/build_branch.env)
   BUILD_REVISION=$(cat $ARTIFACTS_DIR/env/build_revision.env)
-  ARTIFACT_NAME=MuseScoreNightly-${BUILD_NUMBER}-${BUILD_BRANCH}-${BUILD_REVISION}-x86_64
+  ARTIFACT_NAME=MuseScoreNightly-${BUILD_NUMBER}-${BUILD_BRANCH}-${BUILD_REVISION}-${PACKARCH}
 else
   BUILD_VERSION=$(cat $ARTIFACTS_DIR/env/build_version.env)
-  ARTIFACT_NAME=MuseScore-${BUILD_VERSION}-x86_64
+  ARTIFACT_NAME=MuseScore-${BUILD_VERSION}-${PACKARCH}
 fi
 
 if [ "$PACKTYPE" == "7z" ]; then
@@ -81,8 +84,8 @@ if [ "$PACKTYPE" == "appimage" ]; then
     # To enable automatic updates for AppImages, set UPDATE_INFORMATION according to
     # https://github.com/AppImage/AppImageSpec/blob/master/draft.md#update-information
     case "${BUILD_MODE}" in
-    "stable_build")  export UPDATE_INFORMATION="gh-releases-zsync|musescore|MuseScore|latest|MuseScore-*x86_64.AppImage.zsync";;
-    "nightly_build") export UPDATE_INFORMATION="zsync|https://ftp.osuosl.org/pub/musescore-nightlies/linux/${MAJOR_VERSION}x/nightly/MuseScoreNightly-latest-x86_64.AppImage.zsync";;
+    "stable_build")  export UPDATE_INFORMATION="gh-releases-zsync|musescore|MuseScore|latest|MuseScore-*${PACKARCH}.AppImage.zsync";;
+    "nightly_build") export UPDATE_INFORMATION="zsync|https://ftp.osuosl.org/pub/musescore-nightlies/linux/${MAJOR_VERSION}x/nightly/MuseScoreNightly-latest-${PACKARCH}.AppImage.zsync";;
     *) unset UPDATE_INFORMATION;; # disable updates for other build modes
     esac
 
