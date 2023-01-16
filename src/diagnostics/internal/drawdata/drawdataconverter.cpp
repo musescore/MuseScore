@@ -53,10 +53,22 @@ Pixmap DrawDataConverter::drawDataToPixmap(const DrawDataPtr& data) const
 
     Painter painter(&px, "DrawData");
 
+    painter.fillRect(RectF(0, 0, px.width(), px.height()), Color::WHITE);
+
     DrawDataPaint::paint(&painter, data);
 
     painter.endDraw();
 
     Pixmap png = Pixmap::fromQPixmap(px);
     return png;
+}
+
+void DrawDataConverter::drawOnPixmap(Pixmap& px, const draw::DrawDataPtr& data, const Color& overlay)  const
+{
+    QPixmap qpx = Pixmap::toQPixmap(px);
+    Painter painter(&qpx, "DrawData");
+    DrawDataPaint::paint(&painter, data, overlay);
+    painter.endDraw();
+
+    px = Pixmap::fromQPixmap(qpx);
 }
