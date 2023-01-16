@@ -24,8 +24,6 @@
 
 #include "translation.h"
 
-#include "version.h"
-
 using namespace mu::appshell;
 
 static const QString HOME_PAGE("musescore://home");
@@ -93,7 +91,7 @@ void MainToolBarModel::load()
     m_items << buildItem(mu::qtrc("appshell", "Score"), NOTATION_PAGE);
     m_items << buildItem(mu::qtrc("appshell", "Publish"), PUBLISH_PAGE);
 
-    if (framework::Version::unstable()) {
+    if (globalConfiguration()->devModeEnabled()) {
         m_items << buildItem(mu::qtrc("appshell", "DevTools"), DEVTOOLS_PAGE);
     }
 

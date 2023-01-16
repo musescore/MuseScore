@@ -28,7 +28,6 @@
 #include "iinteractive.h"
 #include "accessibility/iaccessibilitycontroller.h"
 #include "isavediagnosticfilesscenario.h"
-#include "iglobalconfiguration.h"
 
 namespace mu::diagnostics {
 class DiagnosticsActionsController : public actions::Actionable
@@ -36,7 +35,6 @@ class DiagnosticsActionsController : public actions::Actionable
     INJECT(diagnostics, actions::IActionsDispatcher, dispatcher)
     INJECT(diagnostics, framework::IInteractive, interactive)
     INJECT(diagnostics, diagnostics::ISaveDiagnosticFilesScenario, saveDiagnosticsScenario)
-    INJECT(diagnostics, framework::IGlobalConfiguration, globalConfiguration)
 
 public:
     DiagnosticsActionsController() = default;

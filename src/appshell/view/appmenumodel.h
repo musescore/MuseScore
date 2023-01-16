@@ -38,6 +38,7 @@
 #include "internal/iappmenumodelhook.h"
 #include "plugins/ipluginsservice.h"
 #include "update/iupdateconfiguration.h"
+#include "global/iglobalconfiguration.h"
 
 namespace mu::appshell {
 class AppMenuModel : public uicomponents::AbstractMenuModel
@@ -54,6 +55,7 @@ class AppMenuModel : public uicomponents::AbstractMenuModel
     INJECT(appshell, IAppMenuModelHook, appMenuModelHook)
     INJECT(appshell, plugins::IPluginsService, pluginsService)
     INJECT(appshell, update::IUpdateConfiguration, updateConfiguration)
+    INJECT(appshell, framework::IGlobalConfiguration, globalConfiguration)
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);
