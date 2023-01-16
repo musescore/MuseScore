@@ -35,8 +35,6 @@ void MainWindowTitleProvider::load()
     update();
 
     context()->currentProjectChanged().onNotify(this, [this]() {
-        update();
-
         if (auto currentProject = context()->currentProject()) {
             currentProject->pathChanged().onNotify(this, [this]() {
                 update();
@@ -46,6 +44,10 @@ void MainWindowTitleProvider::load()
                 update();
             });
         }
+    });
+
+    context()->currentNotationChanged().onNotify(this, [this]() {
+        update();
     });
 }
 
