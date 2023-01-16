@@ -22,6 +22,8 @@
 #include "drawdatacomp.h"
 
 #include "global/realfn.h"
+#include "global/containers.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -29,6 +31,16 @@ using namespace mu::draw;
 
 namespace mu::draw::comp {
 static const int DEFAULT_PREC(3);
+
+struct Polygon {
+    const DrawData::Object* obj = nullptr;
+    const DrawData::Data* data = nullptr;
+    const DrawPolygon* polygon = nullptr;
+};
+
+struct Data {
+    std::vector<Polygon> polygons;
+};
 
 template<class T>
 static bool isEqual(const std::vector<T>& v1, const std::vector<T>& v2, DrawDataComp::Tolerance tolerance);
@@ -430,6 +442,19 @@ static bool isEqual(const DrawData::Object& o1, const DrawData::Object& o2, Draw
     return true;
 }
 
+static bool isEqual(const Polygon& p1, const Polygon& p2, DrawDataComp::Tolerance tolerance)
+{
+    if (p1.obj->name != p2.obj->name) {
+        return false;
+    }
+
+    if (p1.data->state != p2.data->state) {
+        return false;
+    }
+
+    return isEqual(*p1.polygon, *p2.polygon, tolerance);
+}
+
 template<class T>
 static bool contains(const std::vector<T>& v1, const T& val, DrawDataComp::Tolerance tolerance)
 {
@@ -452,6 +477,66 @@ static void difference(std::vector<T>& diff, const std::vector<T>& v1, const std
         }
     }
 }
+
+static void difference(Data& diff, const Data& d1, const Data& d2, DrawDataComp::Tolerance tolerance)
+{
+    difference(diff.polygons, d1.polygons, d2.polygons, tolerance);
+}
+
+static Data toCompData(const DrawDataPtr& dd)
+{
+    Data cd;
+    for (const DrawData::Object& o : dd->objects) {
+        for (const DrawData::Data& d : o.datas) {
+            for (const DrawPolygon& p : d.polygons) {
+                cd.polygons.push_back(comp::Polygon { &o, &d, &p });
+            }
+        }
+    }
+
+    return cd;
+}
+
+static void fillDrawData(DrawDataPtr& dd, const comp::Data& cd)
+{
+    //! NOTE Not effective, but efficiency is not required yet
+
+    // collect objects (save order)
+    std::vector<const DrawData::Object*> objs;
+    for (const comp::Polygon& p : cd.polygons) {
+        if (!mu::contains(objs, p.obj)) {
+            objs.push_back(p.obj);
+        }
+    }
+
+    for (const DrawData::Object* o : objs) {
+        DrawData::Object dobj;
+        dobj.name = o->name;
+        dobj.pagePos = o->pagePos;
+
+        for (const comp::Polygon& p : cd.polygons) {
+            DrawData::Data* ddata = nullptr;
+
+            // find for state
+            for (DrawData::Data& od : dobj.datas) {
+                if (od.state == p.data->state) {
+                    ddata = &od;
+                }
+            }
+
+            // add new, if not find
+            if (!ddata) {
+                dobj.datas.push_back(DrawData::Data());
+                ddata = &dobj.datas.back();
+                ddata->state = p.data->state;
+            }
+
+            ddata->polygons.push_back(*p.polygon);
+        }
+
+        dd->objects.push_back(dobj);
+    }
+}
 } // mu::draw::comp
 
 Diff DrawDataComp::compare(const DrawDataPtr& data, const DrawDataPtr& origin, Tolerance tolerance)
@@ -465,14 +550,24 @@ Diff DrawDataComp::compare(const DrawDataPtr& data, const DrawDataPtr& origin, T
         return diff;
     }
 
+    comp::Data cdata = comp::toCompData(data);
+    comp::Data corigin = comp::toCompData(origin);
+
+    comp::Data added;
+    comp::difference(added, corigin, cdata, tolerance);
+
+    comp::Data removed;
+    comp::difference(removed, cdata, corigin, tolerance);
+
     diff.dataAdded = std::make_shared<DrawData>();
-    diff.dataAdded->name = data->name;
+    diff.dataAdded->name = origin->name;
+    diff.dataAdded->viewport = origin->viewport;
+    fillDrawData(diff.dataAdded, added);
 
     diff.dataRemoved = std::make_shared<DrawData>();
-    diff.dataRemoved->name = data->name;
-
-    comp::difference(diff.dataRemoved->objects, data->objects, origin->objects, tolerance);
-    comp::difference(diff.dataAdded->objects, origin->objects, data->objects, tolerance);
+    diff.dataRemoved->name = origin->name;
+    diff.dataRemoved->viewport = origin->viewport;
+    fillDrawData(diff.dataRemoved, removed);
 
     return diff;
 }

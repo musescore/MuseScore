@@ -24,16 +24,16 @@
 using namespace mu;
 using namespace mu::draw;
 
-void DrawDataPaint::paint(Painter* painter, const DrawDataPtr& data)
+void DrawDataPaint::paint(Painter* painter, const DrawDataPtr& data, const Color& overlay)
 {
-    Color overcolor(255, 0, 0);
     IPaintProviderPtr provider = painter->provider();
     for (const DrawData::Object& obj : data->objects) {
         for (const DrawData::Data& d : obj.datas) {
             DrawData::State st = d.state;
-            //st.pen.setColor(overcolor);
-            //st.pen.setWidthF(10.);
-            //st.brush.setColor(overcolor);
+            if (overlay.isValid()) {
+                st.pen.setColor(overlay);
+                st.brush.setColor(overlay);
+            }
 
             provider->setPen(st.pen);
             provider->setBrush(st.brush);

@@ -31,7 +31,7 @@ class DrawDataPaint
 public:
     DrawDataPaint() = default;
 
-    static void paint(Painter* painter, const DrawDataPtr& data);
+    static void paint(Painter* painter, const DrawDataPtr& data, const Color& overlay = Color());
 };
 }
 
