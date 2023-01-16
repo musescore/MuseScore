@@ -3,7 +3,7 @@
 # After editing, run this command to check for errors: $ desktop-file-validate [filename]
 Type=Application
 # Version of Desktop Entry Spec, not MuseScore version. Don't upgrade prematurely.
-Version=1.2
+Version=1.0
 Name=@DESKTOP_LAUNCHER_NAME@
 GenericName=Music notation
 GenericName[de]=Notensatz
