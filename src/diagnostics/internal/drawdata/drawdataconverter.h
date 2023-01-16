@@ -35,6 +35,7 @@ public:
 
     Ret drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile) const;
     draw::Pixmap drawDataToPixmap(const draw::DrawDataPtr& data) const;
+    void drawOnPixmap(draw::Pixmap& px, const draw::DrawDataPtr& data, const draw::Color& overlay = draw::Color()) const;
 };
 }
 
