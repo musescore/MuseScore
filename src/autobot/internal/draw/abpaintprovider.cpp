@@ -99,19 +99,19 @@ void AbPaintProvider::paintData(draw::IPaintProviderPtr provider, const draw::Dr
             }
 
             for (const DrawText& t : d.texts) {
-                provider->drawText(t.pos, t.text);
-            }
-
-            for (const DrawRectText& t : d.rectTexts) {
-                provider->drawText(t.rect, t.flags, t.text);
+                if (t.mode == DrawText::Point) {
+                    provider->drawText(t.rect.topLeft(), t.text);
+                } else {
+                    provider->drawText(t.rect, t.flags, t.text);
+                }
             }
 
             for (const DrawPixmap& px : d.pixmaps) {
-                provider->drawPixmap(px.pos, px.pm);
-            }
-
-            for (const DrawTiledPixmap& px : d.tiledPixmap) {
-                provider->drawTiledPixmap(px.rect, px.pm, px.offset);
+                if (px.mode == DrawPixmap::Single) {
+                    provider->drawPixmap(px.rect.topLeft(), px.pm);
+                } else {
+                    provider->drawTiledPixmap(px.rect, px.pm, px.offset);
+                }
             }
         }
     }

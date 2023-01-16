@@ -302,24 +302,15 @@ static bool isEqual(const DrawPolygon& v1, const DrawPolygon& v2, DrawDataComp::
 
 static bool isEqual(const DrawText& v1, const DrawText& v2, DrawDataComp::Tolerance tolerance)
 {
-    if (!isEqual(v1.pos, v2.pos, tolerance.base)) {
-        return false;
-    }
-
-    if (v1.text != v2.text) {
-        return false;
-    }
-
-    return true;
-}
-
-static bool isEqual(const DrawRectText& v1, const DrawRectText& v2, DrawDataComp::Tolerance tolerance)
-{
-    if (v1.flags != v2.flags) {
+    if (v1.mode != v2.mode) {
         return false;
     }
 
     if (!isEqual(v1.rect, v2.rect, tolerance.base)) {
+        return false;
+    }
+
+    if (v1.flags != v2.flags) {
         return false;
     }
 
@@ -332,19 +323,10 @@ static bool isEqual(const DrawRectText& v1, const DrawRectText& v2, DrawDataComp
 
 static bool isEqual(const DrawPixmap& v1, const DrawPixmap& v2, DrawDataComp::Tolerance tolerance)
 {
-    if (!isEqual(v1.pos, v2.pos, tolerance.base)) {
+    if (v1.mode != v2.mode) {
         return false;
     }
 
-    if (!isEqual(v1.pm.size(), v2.pm.size())) {
-        return false;
-    }
-
-    return true;
-}
-
-static bool isEqual(const DrawTiledPixmap& v1, const DrawTiledPixmap& v2, DrawDataComp::Tolerance tolerance)
-{
     if (!isEqual(v1.rect, v2.rect, tolerance.base)) {
         return false;
     }
@@ -378,15 +360,7 @@ static bool isEqual(const DrawData::Data& d1, const DrawData::Data& d2, DrawData
         return false;
     }
 
-    if (!isEqual(d1.rectTexts, d2.rectTexts, tolerance)) {
-        return false;
-    }
-
     if (!isEqual(d1.pixmaps, d2.pixmaps, tolerance)) {
-        return false;
-    }
-
-    if (!isEqual(d1.tiledPixmap, d2.tiledPixmap, tolerance)) {
         return false;
     }
 

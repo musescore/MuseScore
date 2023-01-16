@@ -230,12 +230,12 @@ void BufferedPaintProvider::drawPolygon(const PointF* points, size_t pointCount,
 
 void BufferedPaintProvider::drawText(const PointF& point, const String& text)
 {
-    editableData().texts.push_back(DrawText { point, text });
+    editableData().texts.push_back(DrawText { DrawText::Point, RectF(point, SizeF()), 0, text });
 }
 
 void BufferedPaintProvider::drawText(const RectF& rect, int flags, const String& text)
 {
-    editableData().rectTexts.push_back(DrawRectText { rect, flags, text });
+    editableData().texts.push_back(DrawText { DrawText::Rect, rect, flags, text });
 }
 
 void BufferedPaintProvider::drawTextWorkaround(const Font& f, const PointF& pos, const String& text)
@@ -251,23 +251,23 @@ void BufferedPaintProvider::drawSymbol(const PointF& point, char32_t ucs4Code)
 
 void BufferedPaintProvider::drawPixmap(const PointF& p, const Pixmap& pm)
 {
-    editableData().pixmaps.push_back(DrawPixmap { p, pm });
+    editableData().pixmaps.push_back(DrawPixmap { DrawPixmap::Single, RectF(p, SizeF()), pm, PointF() });
 }
 
 void BufferedPaintProvider::drawTiledPixmap(const RectF& rect, const Pixmap& pm, const PointF& offset)
 {
-    editableData().tiledPixmap.push_back(DrawTiledPixmap { rect, pm, offset });
+    editableData().pixmaps.push_back(DrawPixmap { DrawPixmap::Tiled, rect, pm, offset });
 }
 
 #ifndef NO_QT_SUPPORT
 void BufferedPaintProvider::drawPixmap(const PointF& p, const QPixmap& pm)
 {
-    editableData().pixmaps.push_back(DrawPixmap { p, Pixmap::fromQPixmap(pm) });
+    editableData().pixmaps.push_back(DrawPixmap { DrawPixmap::Single, RectF(p, SizeF()), Pixmap::fromQPixmap(pm), PointF() });
 }
 
 void BufferedPaintProvider::drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset)
 {
-    editableData().tiledPixmap.push_back(DrawTiledPixmap { rect, Pixmap::fromQPixmap(pm), offset });
+    editableData().pixmaps.push_back(DrawPixmap { DrawPixmap::Tiled, rect, Pixmap::fromQPixmap(pm), offset });
 }
 
 #endif

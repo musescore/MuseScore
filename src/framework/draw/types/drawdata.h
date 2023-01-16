@@ -65,25 +65,29 @@ struct DrawPolygon {
 };
 
 struct DrawText {
-    PointF pos;
-    String text;
-};
+    enum Mode {
+        Undefined = 0,
+        Point,
+        Rect
+    };
 
-struct DrawRectText {
-    RectF rect;
+    Mode mode = Mode::Undefined;
+    RectF rect;     // If mode is Point when use topLeft point
     int flags = 0;
     String text;
 };
 
 struct DrawPixmap {
-    PointF pos;
-    Pixmap pm;
-};
+    enum Mode {
+        Undefined = 0,
+        Single,
+        Tiled
+    };
 
-struct DrawTiledPixmap {
-    RectF rect;
+    Mode mode = Mode::Undefined;
+    RectF rect;     // If mode is Single when use topLeft point
     Pixmap pm;
-    PointF offset;
+    PointF offset;  // used only for Tiled mode
 };
 
 struct DrawData
@@ -111,18 +115,11 @@ struct DrawData
         std::vector<DrawPath> paths;
         std::vector<DrawPolygon> polygons;
         std::vector<DrawText> texts;
-        std::vector<DrawRectText> rectTexts;
         std::vector<DrawPixmap> pixmaps;
-        std::vector<DrawTiledPixmap> tiledPixmap;
 
         bool empty() const
         {
-            return paths.empty()
-                   && polygons.empty()
-                   && texts.empty()
-                   && rectTexts.empty()
-                   && pixmaps.empty()
-                   && tiledPixmap.empty();
+            return paths.empty() && polygons.empty() && texts.empty() && pixmaps.empty();
         }
     };
 
