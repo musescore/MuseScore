@@ -38,6 +38,7 @@ while [[ "$#" -gt 0 ]]; do
         --crash_log_url) CRASH_REPORT_URL="$2"; shift ;;
         --build_mode) BUILD_MODE="$2"; shift ;;
         --youtube_api_key) YOUTUBE_API_KEY="$2"; shift ;;
+        --arch) PACKARCH="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -68,6 +69,12 @@ echo "=== ENVIRONMENT === "
 cat $BUILD_TOOLS/environment.sh
 source $BUILD_TOOLS/environment.sh
 
+# disable crashpad client and update module on aarch64 and armv7l due to no prebuilts being available
+if [ "$PACKARCH" == "aarch64" ] || [ "$PACKARCH" == "armv7l" ]; then
+  MUSESCORE_BUILD_CRASHPAD_CLIENT="OFF"
+  MUSESCORE_BUILD_UPDATE_MODULE="OFF"
+fi
+
 # TODO: https://github.com/musescore/MuseScore/issues/11689
 #echo "VST3_SDK_PATH: $VST3_SDK_PATH"
 #if [ -z "$VST3_SDK_PATH" ]; then
@@ -91,6 +98,8 @@ MUSESCORE_CRASHREPORT_URL=$CRASH_REPORT_URL \
 MUSESCORE_BUILD_VST=$BUILD_VST \
 MUSESCORE_VST3_SDK_PATH=$VST3_SDK_PATH \
 MUSESCORE_YOUTUBE_API_KEY=$YOUTUBE_API_KEY \
+MUSESCORE_BUILD_CRASHPAD_CLIENT=${MUSESCORE_BUILD_CRASHPAD_CLIENT:-"ON"} \
+MUSESCORE_BUILD_UPDATE_MODULE=${MUSESCORE_BUILD_UPDATE_MODULE:-"ON"} \
 bash ./ninja_build.sh -t appimage
 
 
