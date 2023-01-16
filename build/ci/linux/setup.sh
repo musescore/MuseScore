@@ -137,6 +137,7 @@ echo export LD_LIBRARY_PATH="${qt_dir}/lib:\${LD_LIBRARY_PATH}" >> ${ENV_FILE}
 echo export QT_PATH="${qt_dir}" >> ${ENV_FILE}
 echo export QT_PLUGIN_PATH="${qt_dir}/plugins" >> ${ENV_FILE}
 echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
+echo export PACKARCH=x86_64 >> ${ENV_FILE}
 
 
 ##########################################################################
