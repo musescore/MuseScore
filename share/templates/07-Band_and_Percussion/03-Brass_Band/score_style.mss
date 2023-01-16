@@ -1256,8 +1256,8 @@
     <palmMuteTextAlign>left,center</palmMuteTextAlign>
     <palmMuteHookHeight>0.6</palmMuteHookHeight>
     <palmMutePlacement>1</palmMutePlacement>
-    <palmMutePosAbove x="0" y="-4"/>
-    <palmMutePosBelow x="0" y="4"/>
+    <palmMutePosAbove x="0" y="0"/>
+    <palmMutePosBelow x="0" y="0"/>
     <palmMuteLineWidth>0.11</palmMuteLineWidth>
     <palmMuteLineStyle>2</palmMuteLineStyle>
     <palmMuteBeginTextOffset x="0" y="0.15"/>
