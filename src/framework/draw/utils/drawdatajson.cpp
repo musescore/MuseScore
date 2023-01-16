@@ -283,29 +283,27 @@ static void fromObj(const JsonObject& obj, DrawPolygon& pol)
 static JsonObject toObj(const DrawText& text)
 {
     JsonObject o;
-    o["pos"] = toArr(text.pos);
+    if (text.mode == DrawText::Point) {
+        o["point"] = toArr(text.rect.topLeft());
+    } else {
+        o["rect"] = toArr(text.rect);
+    }
+    o["flags"] = text.flags;
     o["text"] = text.text;
     return o;
 }
 
 static void fromObj(const JsonObject& obj, DrawText& text)
 {
-    fromArr(obj["pos"].toArray(), text.pos);
-    text.text = obj["text"].toString();
-}
-
-static JsonObject toObj(const DrawRectText& text)
-{
-    JsonObject o;
-    o["rect"] = toArr(text.rect);
-    o["flags"] = text.flags;
-    o["text"] = text.text;
-    return o;
-}
-
-static void fromObj(const JsonObject& obj, DrawRectText& text)
-{
-    fromArr(obj["rect"].toArray(), text.rect);
+    if (obj.contains("point")) {
+        PointF point;
+        fromArr(obj["point"].toArray(), point);
+        text.mode = DrawText::Point;
+        text.rect = RectF(point, SizeF());
+    } else {
+        fromArr(obj["rect"].toArray(), text.rect);
+        text.mode = DrawText::Rect;
+    }
     text.flags = obj["flags"].toInt();
     text.text = obj["text"].toString();
 }
@@ -313,35 +311,32 @@ static void fromObj(const JsonObject& obj, DrawRectText& text)
 static JsonObject toObj(const DrawPixmap& pm)
 {
     JsonObject o;
-    o["pos"] = toArr(pm.pos);
+    if (pm.mode == DrawPixmap::Single) {
+        o["point"] = toArr(pm.rect.topLeft());
+    } else {
+        o["rect"] = toArr(pm.rect);
+        o["offset"] = toArr(pm.offset);
+    }
     o["pmSize"] = toArr(pm.pm.size());
     return o;
 }
 
 static void fromObj(const JsonObject& obj, DrawPixmap& pm)
 {
-    fromArr(obj["pos"].toArray(), pm.pos);
+    if (obj.contains("point")) {
+        pm.mode = DrawPixmap::Single;
+        PointF point;
+        fromArr(obj["point"].toArray(), point);
+        pm.rect = RectF(point, SizeF());
+    } else {
+        pm.mode = DrawPixmap::Tiled;
+        fromArr(obj["rect"].toArray(), pm.rect);
+        fromArr(obj["offset"].toArray(), pm.offset);
+    }
+
     Size size;
     fromArr(obj["pmSize"].toArray(), size);
     pm.pm = Pixmap(size);
-}
-
-static JsonObject toObj(const DrawTiledPixmap& pm)
-{
-    JsonObject o;
-    o["rect"] = toArr(pm.rect);
-    o["pmSize"] = toArr(pm.pm.size());
-    o["offset"] = toArr(pm.offset);
-    return o;
-}
-
-static void fromObj(const JsonObject& obj, DrawTiledPixmap& pm)
-{
-    fromArr(obj["rect"].toArray(), pm.rect);
-    Size size;
-    fromArr(obj["pmSize"].toArray(), size);
-    pm.pm = Pixmap(size);
-    fromArr(obj["offset"].toArray(), pm.offset);
 }
 
 template<class T>
@@ -411,17 +406,8 @@ ByteArray DrawDataJson::toJson(const DrawDataPtr& buf)
             if (!data.texts.empty()) {
                 dataObj["texts"] = toArr(data.texts);
             }
-            if (!data.rectTexts.empty()) {
-                dataObj["rectTexts"] = toArr(data.rectTexts);
-            }
-
-            // dataObj["glyphs"] = toArr(data.glyphs);  not implemented
-
             if (!data.pixmaps.empty()) {
                 dataObj["pixmaps"] = toArr(data.pixmaps);
-            }
-            if (!data.tiledPixmap.empty()) {
-                dataObj["tiledPixmap"] = toArr(data.tiledPixmap);
             }
 
             datasArr.append(dataObj);
@@ -489,14 +475,8 @@ mu::RetVal<DrawDataPtr> DrawDataJson::fromJson(const ByteArray& json)
             if (dataObj.contains("texts")) {
                 fromArr(dataObj.value("texts").toArray(), data.texts);
             }
-            if (dataObj.contains("rectTexts")) {
-                fromArr(dataObj.value("rectTexts").toArray(), data.rectTexts);
-            }
             if (dataObj.contains("pixmaps")) {
                 fromArr(dataObj.value("pixmaps").toArray(), data.pixmaps);
-            }
-            if (dataObj.contains("tiledPixmap")) {
-                fromArr(dataObj.value("tiledPixmap").toArray(), data.tiledPixmap);
             }
 
             obj.datas.push_back(std::move(data));
