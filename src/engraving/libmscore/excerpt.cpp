@@ -1420,6 +1420,21 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     }
                 }
 
+                for (EngravingItem* e : oseg->annotations()) {
+                    if (e->generated()
+                        || (e->track() != srcTrack && !(e->systemFlag() && e->track() == 0)) // system items must be cloned even if they are on different tracks
+                        || (e->track() != srcTrack && e->systemFlag() && e->findLinkedInScore(score))) { // ...but only once!
+                        continue;
+                    }
+
+                    EngravingItem* ne1 = e->linkedClone();
+                    ne1->setTrack(dstTrack);
+                    ne1->setParent(ns);
+                    ne1->setScore(score);
+                    ne1->styleChanged();
+                    addElement(ne1);
+                }
+
                 EngravingItem* oe = oseg->element(srcTrack);
                 if (oe == 0 || oe->generated()) {
                     continue;
@@ -1448,21 +1463,6 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         }
                         ncr->setTuplet(nt);
                         nt->add(ncr);
-                    }
-
-                    for (EngravingItem* e : oseg->annotations()) {
-                        if (e->generated()
-                            || (e->track() != srcTrack && !(e->systemFlag() && e->track() == 0)) // system items must be cloned even if they are on different tracks
-                            || (e->systemFlag() && e->findLinkedInScore(score))) { // ...but only once!
-                            continue;
-                        }
-
-                        EngravingItem* ne1 = e->linkedClone();
-                        ne1->setTrack(dstTrack);
-                        ne1->setParent(ns);
-                        ne1->setScore(score);
-                        ne1->styleChanged();
-                        addElement(ne1);
                     }
                     if (oe->isChord()) {
                         Chord* och = toChord(ocr);
