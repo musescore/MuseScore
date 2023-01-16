@@ -9,7 +9,6 @@
         <file>qml/DevTools/Preferences/SettingsPage.qml</file>
         <file>qml/NotationPage/NotationStatusBar.qml</file>
         <file>qml/HomePage/PluginsPage.qml</file>
-        <file>qml/DevTools/VST/VSTTests.qml</file>
         <file>qml/DevTools/Gallery/GeneralComponentsGallery.qml</file>
         <file>qml/DevTools/CrashHandler/CrashHandlerDevTools.qml</file>
         <file>qml/AboutDialog.qml</file>
@@ -60,7 +59,6 @@
         <file>qml/Preferences/internal/IncrementalPropertyControlWithTitle.qml</file>
         <file>qml/Preferences/internal/KeyboardLayoutsSection.qml</file>
         <file>qml/Preferences/internal/AudioGenerationSection.qml</file>
-        <file>qml/DevTools/Autobot/AutobotControl.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavExample.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSection.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSubSection.qml</file>
