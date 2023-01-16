@@ -47,7 +47,6 @@ static const std::string MUSESCORE_ASK_FOR_HELP_URL_PATH("/redirect/post/questio
 static const std::string MUSESCORE_BUG_REPORT_URL_PATH("/redirect/post/bug-report?locale=");
 static const std::string MUSESCORE_FORUM_URL_PATH("/forum");
 static const std::string MUSESCORE_CONTRIBUTE_URL_PATH("/contribute");
-static const std::string LEAVE_FEEDBACK_URL("https://musescore.com/content/editor-feedback");
 static const std::string MUSICXML_URL("https://w3.org");
 static const std::string MUSICXML_LICENSE_URL(MUSICXML_URL + "/community/about/process/final/");
 static const std::string MUSICXML_LICENSE_DEED_URL(MUSICXML_URL + "/community/about/process/fsa-deed/");
@@ -143,17 +142,6 @@ std::string AppShellConfiguration::bugReportUrl() const
     };
 
     return museScoreUrl() + MUSESCORE_BUG_REPORT_URL_PATH + "?" + params.join("&").toStdString();
-}
-
-std::string AppShellConfiguration::leaveFeedbackUrl() const
-{
-    std::string utm = utmParameters(UTM_MEDIUM_MENU);
-
-    QStringList params = {
-        QString::fromStdString(utm)
-    };
-
-    return LEAVE_FEEDBACK_URL + "?" + params.join("&").toStdString();
 }
 
 std::string AppShellConfiguration::museScoreUrl() const
