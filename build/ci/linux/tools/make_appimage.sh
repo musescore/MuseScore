@@ -62,8 +62,10 @@ if [[ ! -d $BUILD_TOOLS/appimageupdatetool ]]; then
   download_appimage_release AppImage/AppImageUpdate appimageupdatetool continuous
   cd $ORIGIN_DIR
 fi
-export PATH="$BUILD_TOOLS/appimageupdatetool:$PATH"
-appimageupdatetool --version
+if [[ "${UPDATE_INFORMATION}" ]]; then
+  export PATH="$BUILD_TOOLS/appimageupdatetool:$PATH"
+  appimageupdatetool --version
+fi
 
 function download_linuxdeploy_component()
 {
@@ -112,15 +114,15 @@ linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
 # (at that time the linux deploy was updated). 
 # This is a hack, for the deployment of QtQuick/Controls.2 
 if [ ! -f ${appdir}/usr/lib/libQt5QuickControls2.so.5 ]; then
-    cp -r $BUILD_TOOLS/Qt/5152/qml/QtQuick/Controls.2 ${appdir}/usr/qml/QtQuick/Controls.2
-    cp -r $BUILD_TOOLS/Qt/5152/qml/QtQuick/Templates.2 ${appdir}/usr/qml/QtQuick/Templates.2
-    cp $BUILD_TOOLS/Qt/5152/lib/libQt5QuickControls2.so.5 ${appdir}/usr/lib/libQt5QuickControls2.so.5 
-    cp $BUILD_TOOLS/Qt/5152/lib/libQt5QuickTemplates2.so.5 ${appdir}/usr/lib/libQt5QuickTemplates2.so.5 
+    cp -r ${QT_PATH}/qml/QtQuick/Controls.2 ${appdir}/usr/qml/QtQuick/Controls.2
+    cp -r ${QT_PATH}/qml/QtQuick/Templates.2 ${appdir}/usr/qml/QtQuick/Templates.2
+    cp ${QT_PATH}/lib/libQt5QuickControls2.so.5 ${appdir}/usr/lib/libQt5QuickControls2.so.5 
+    cp ${QT_PATH}/lib/libQt5QuickTemplates2.so.5 ${appdir}/usr/lib/libQt5QuickTemplates2.so.5 
 fi
 
 # At an unknown point in time, the libqgtk3 plugin stopped being deployed
 if [ ! -f ${appdir}/plugins/platformthemes/libqgtk3.so ]; then
-  cp $BUILD_TOOLS/Qt/5152/plugins/platformthemes/libqgtk3.so ${appdir}/plugins/platformthemes/libqgtk3.so 
+  cp ${QT_PATH}/plugins/platformthemes/libqgtk3.so ${appdir}/plugins/platformthemes/libqgtk3.so 
 fi
 
 # The system must be used
@@ -200,9 +202,15 @@ fallback_libraries=(
 # PREVIOUSLY EXTRACTED APPIMAGES
 # These include their own dependencies. We bundle them uncompressed to avoid
 # creating a double layer of compression (AppImage inside AppImage).
+if [[ "${UPDATE_INFORMATION}" ]]; then
 extracted_appimages=(
   appimageupdatetool
 )
+else
+extracted_appimages=(
+  # none
+)
+fi
 
 for file in "${unwanted_files[@]}"; do
   rm -rf "${appdir}/${file}"
@@ -280,7 +288,7 @@ done
 appimage="${APPIMAGE_NAME}" # name to use for AppImage file
 
 appimagetool_args=( # array
-  # none
+  --no-appstream # do not check upstream metadata
   )
 
 created_files=(
