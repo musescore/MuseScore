@@ -439,30 +439,30 @@ String Page::replaceTextMacros(const String& s) const
                 d += masterScore()->fileInfo()->path().toString().toXmlEscaped();
                 break;
             case 'd':
-                d += Date::currentDate().toString(DateFormat::LocaleShortFormat);
+                d += Date::currentDate().toString(DateFormat::ISODate);
                 break;
             case 'D':
             {
                 String creationDate = score()->metaTag(u"creationDate");
                 if (creationDate.isEmpty()) {
-                    d += masterScore()->fileInfo()->birthTime().date().toString(DateFormat::LocaleShortFormat);
+                    d += masterScore()->fileInfo()->birthTime().date().toString(DateFormat::ISODate);
                 } else {
-                    d += Date::fromStringISOFormat(creationDate).toString(DateFormat::LocaleShortFormat);
+                    d += Date::fromStringISOFormat(creationDate).toString(DateFormat::ISODate);
                 }
             }
             break;
             case 'm':
                 if (score()->dirty()) {
-                    d += Time::currentTime().toString(DateFormat::LocaleShortFormat);
+                    d += Time::currentTime().toString(DateFormat::ISODate);
                 } else {
-                    d += masterScore()->fileInfo()->lastModified().time().toString(DateFormat::LocaleShortFormat);
+                    d += masterScore()->fileInfo()->lastModified().time().toString(DateFormat::ISODate);
                 }
                 break;
             case 'M':
                 if (score()->dirty()) {
-                    d += Date::currentDate().toString(DateFormat::LocaleShortFormat);
+                    d += Date::currentDate().toString(DateFormat::ISODate);
                 } else {
-                    d += masterScore()->fileInfo()->lastModified().date().toString(DateFormat::LocaleShortFormat);
+                    d += masterScore()->fileInfo()->lastModified().date().toString(DateFormat::ISODate);
                 }
                 break;
             case 'C': // only on first page
