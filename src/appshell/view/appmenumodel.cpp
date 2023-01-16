@@ -24,7 +24,6 @@
 #include "types/translatablestring.h"
 
 #include "config.h"
-#include "version.h"
 #include "log.h"
 
 using namespace mu::appshell;
@@ -361,7 +360,7 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
     items << makeMenu(TranslatableString("appshell/menu/diagnostic", "&Muse Sampler"), museSamplerItems, "menu-musesampler");
 #endif
 
-    if (framework::Version::unstable()) {
+    if (globalConfiguration()->devModeEnabled()) {
         MenuItemList engravingItems {
             makeMenuItem("diagnostic-show-engraving-elements"),
             makeSeparator(),
