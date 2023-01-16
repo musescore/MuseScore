@@ -39,6 +39,7 @@ GTEST_API_ int main(int argc, char** argv)
     //! but expected --gtest_filter=SuiteName.TestName (without quotes)
     //! (maybe QtCreator bug)
     std::vector<std::string> args;
+    args.reserve(argc);
     for (int i = 0; i < argc; ++i) {
         std::string arg = argv[i];
         if (mu::strings::startsWith(arg, "--gtest_filter=")) {
@@ -56,11 +57,11 @@ GTEST_API_ int main(int argc, char** argv)
     }
 
     std::vector<char*> argsc;
+    argsc.reserve(argc + 1);
     for (size_t i = 0; i < args.size(); ++i) {
         argsc.push_back(const_cast<char*>(args.at(i).c_str()));
     }
-
-    argc = static_cast<int>(argsc.size());
+    argsc.push_back(NULL);
     argv = argsc.data();
 
     mu::runtime::mainThreadId(); //! NOTE Needs only call
