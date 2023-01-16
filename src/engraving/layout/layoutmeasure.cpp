@@ -501,7 +501,29 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
         }
     }
 
+    // Break for annotations found mid-way into the previous measure
+    Measure* prevMeas = m->prevMeasure();
+    if (prevMeas) {
+        for (Segment* s = prevMeas->first(); s; s = s->next()) {
+            for (EngravingItem* e : s->annotations()) {
+                if (!e->visible()) {
+                    continue;
+                }
+                if ((e->isRehearsalMark()
+                     || e->isTempoText()
+                     || ((e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isTripletFeel() || e->isPlayTechAnnotation()
+                          || e->isInstrumentChange())
+                         && (e->systemFlag() || ctx.score()->staff(e->staffIdx())->show())
+                         ))
+                    && e->rtick() > Fraction(0, 1)) {
+                    return true;
+                }
+            }
+        }
+    }
+
     for (Segment* s = m->first(); s; s = s->next()) {
+        // Break for annotations in this measure
         for (EngravingItem* e : s->annotations()) {
             if (!e->visible()) {
                 continue;
