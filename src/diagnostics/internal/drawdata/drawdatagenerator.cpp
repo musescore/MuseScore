@@ -185,11 +185,13 @@ Pixmap DrawDataGenerator::genImage(const io::path_t& scorePath) const
     {
         Painter painter(&qpx, "DrawData");
 
+        painter.fillRect(RectF(0, 0, width, height), Color::WHITE);
+
         Paint::Options opt;
         opt.fromPage = 0;
         opt.toPage = 0;
         opt.deviceDpi = CANVAS_DPI;
-        opt.printPageBackground = true;
+        opt.printPageBackground = false;
         opt.isSetViewport = true;
         opt.isMultiPage = false;
         opt.isPrinting = true;
