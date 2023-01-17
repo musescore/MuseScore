@@ -1139,8 +1139,12 @@ void MusicXMLParserPass1::scorePartwise()
                   staff->setBracketType(pg->column, pg->type);
                   staff->setBracketSpan(pg->column, stavesSpan);
                   }
-            if (pg->barlineSpan)
-                  staff->setBarLineSpan(pg->span);
+            if (pg->barlineSpan) {
+                  // set setBarLineSpan to 1 for all staves in the part except the last staff
+                  auto idx = staff->idx();
+                  for (auto i = idx; i < idx + stavesSpan - 1; ++i)
+                        _score->staff(i)->setBarLineSpan(1);
+                  }
             }
 
       // handle the implicit brackets:

@@ -228,6 +228,8 @@ private slots:
       void systemBrackets1() { mxmlIoTest("testSystemBrackets1"); }
       void systemBrackets2() { mxmlIoTest("testSystemBrackets2"); }
       void systemBrackets3() { mxmlImportTestRef("testSystemBrackets3"); }
+      void systemBrackets4() { mxmlIoTest("testSystemBrackets4"); }
+      void systemBrackets5() { mxmlIoTest("testSystemBrackets5"); }
       void tablature1() { mxmlIoTest("testTablature1"); }
       void tablature2() { mxmlIoTest("testTablature2"); }
       void tablature3() { mxmlIoTest("testTablature3"); }

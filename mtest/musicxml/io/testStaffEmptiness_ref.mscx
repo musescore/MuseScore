@@ -1489,6 +1489,9 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>

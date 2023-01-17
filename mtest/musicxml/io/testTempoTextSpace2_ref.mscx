@@ -686,6 +686,9 @@
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>

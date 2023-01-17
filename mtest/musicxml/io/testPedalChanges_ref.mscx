@@ -623,6 +623,9 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
           <Spanner type="Pedal">
             <prev>
               <location>
