@@ -4005,6 +4005,8 @@ void NotationInteraction::addIntervalToSelectedNotes(int interval)
     }
 
     if (notes.empty()) {
+        MScore::setError(MsError::NO_NOTE_SELECTED);
+        checkAndShowMScoreError();
         return;
     }
 
