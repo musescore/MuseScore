@@ -1576,13 +1576,17 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const EngravingItem* current, const
         // elements and will try to obtain this info from the spanner itself.
         if (!start) {
             _prevLoc.setTrack(static_cast<int>(sp->track()));
-            Measure* m = sp->score()->tick2measure(sp->tick());
-            fillSpannerPosition(_prevLoc, m, sp->tick(), clipboardmode);
+            // For system-object spanners it is more reliable to use the tick of the segment
+            Fraction startTick = (current->isSegment() && sp->systemFlag()) ? current->tick() : sp->tick();
+            Measure* m = sp->score()->tick2measure(startTick);
+            fillSpannerPosition(_prevLoc, m, startTick, clipboardmode);
         } else {
             const track_idx_t track2 = (sp->track2() != mu::nidx) ? sp->track2() : sp->track();
             _nextLoc.setTrack(static_cast<int>(track2));
-            Measure* m = sp->score()->tick2measure(sp->tick2());
-            fillSpannerPosition(_nextLoc, m, sp->tick2(), clipboardmode);
+            // For system-object spanners it is more reliable to use the tick of the segment
+            Fraction endTick = (current->isSegment() && sp->systemFlag()) ? current->tick() : sp->tick2();
+            Measure* m = sp->score()->tick2measure(endTick);
+            fillSpannerPosition(_nextLoc, m, endTick, clipboardmode);
         }
     } else {
         // We can obtain the spanner position info from its start/end

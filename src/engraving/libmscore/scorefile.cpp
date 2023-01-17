@@ -585,7 +585,8 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
                         } else {
                             end = s->tick2() <= endTick;
                         }
-                        if (s->tick() == segment->tick() && (!clip || end) && !s->isSlur()) {
+                        if ((s->tick() == segment->tick() || s->startElement()->tick() == segment->tick()) && (!clip || end)
+                            && !s->isSlur()) {
                             if (needMove) {
                                 voiceTagWritten |= writeVoiceMove(xml, segment, startTick, track, &lastTrackWritten);
                                 needMove = false;
@@ -593,7 +594,7 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
                             s->writeSpannerStart(xml, segment, track);
                         }
                     }
-                    if ((s->tick2() == segment->tick())
+                    if ((s->tick2() == segment->tick() || s->endElement()->tick() == segment->tick())
                         && !s->isSlur()
                         && (s->effectiveTrack2() == track)
                         && (!clip || s->tick() >= sseg->tick())
