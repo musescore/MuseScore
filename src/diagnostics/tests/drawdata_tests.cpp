@@ -95,27 +95,27 @@ TEST_F(Diagnostics_DrawDataTests, SimpleDraw)
     }
 }
 
-TEST_F(Diagnostics_DrawDataTests, DISABLED_ScoreDraw)
+TEST_F(Diagnostics_DrawDataTests, ScoreDraw)
 {
     Pixmap originImage;
     {
         DrawDataGenerator g;
         originImage = g.genImage(VTEST_SCORES + "/accidental-1.mscx");
-        io::File::writeFile("accidental-1.origin.png", originImage.data());
+        io::File::writeFile("2_accidental-1.origin.png", originImage.data());
     }
 
     DrawDataPtr drawData;
     {
         DrawDataGenerator g;
         drawData = g.genDrawData(VTEST_SCORES + "/accidental-1.mscx");
-        DrawDataRW::writeData("accidental-1.json", drawData);
+        DrawDataRW::writeData("2_accidental-1.json", drawData);
     }
 
     Pixmap dataImage;
     {
         DrawDataConverter c;
         dataImage = c.drawDataToPixmap(drawData);
-        io::File::writeFile("accidental-1.data.png", dataImage.data());
+        io::File::writeFile("2_accidental-1.data.png", dataImage.data());
     }
 
     EXPECT_EQ(originImage, dataImage);
@@ -195,4 +195,31 @@ TEST_F(Diagnostics_DrawDataTests, DrawDiff)
     EXPECT_EQ(ddo.datas.size(), 1);
     const DrawData::Data& ddd = ddo.datas.at(0);
     EXPECT_EQ(ddd.polygons.size(), 1);
+}
+
+TEST_F(Diagnostics_DrawDataTests, ScoreDrawDiff)
+{
+    DrawDataPtr data1;
+    {
+        DrawDataGenerator g;
+        data1 = g.genDrawData(VTEST_SCORES + "/accidental-1.mscx");
+    }
+
+    DrawDataPtr data2;
+    {
+        DrawDataGenerator g;
+        data2 = g.genDrawData(VTEST_SCORES + "/accidental-2.mscx");
+    }
+
+    Diff diff = DrawDataComp::compare(data1, data2);
+
+    DrawDataRW::writeData("4_data1.json", data1);
+    saveAsPng("4_data1.png", data1);
+
+    DrawDataRW::writeData("4_data2.json", data2);
+    saveAsPng("4_data2.png", data2);
+
+    saveAsPng("4_added.png", diff.dataAdded);
+
+    saveDiff("4_diff.png", data1, diff.dataAdded);
 }
