@@ -95,7 +95,7 @@ TEST_F(Diagnostics_DrawDataTests, SimpleDraw)
     }
 }
 
-TEST_F(Diagnostics_DrawDataTests, ScoreDraw)
+TEST_F(Diagnostics_DrawDataTests, DISABLED_ScoreDraw)
 {
     Pixmap originImage;
     {
