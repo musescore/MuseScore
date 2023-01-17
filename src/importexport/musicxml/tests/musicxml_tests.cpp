@@ -790,6 +790,12 @@ TEST_F(Musicxml_Tests, systemBrackets2) {
 TEST_F(Musicxml_Tests, systemBrackets3) {
     mxmlImportTestRef("testSystemBrackets3");
 }
+TEST_F(Musicxml_Tests, systemBrackets4) {
+    mxmlIoTest("testSystemBrackets1");
+}
+TEST_F(Musicxml_Tests, systemBrackets5) {
+    mxmlIoTest("testSystemBrackets1");
+}
 TEST_F(Musicxml_Tests, tablature1) {
     mxmlIoTest("testTablature1");
 }
