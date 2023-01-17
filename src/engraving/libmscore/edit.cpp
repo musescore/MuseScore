@@ -5172,14 +5172,125 @@ void Score::undoInsertStaff(Staff* staff, staff_idx_t ridx, bool createRests)
     //adjustBracketsIns(idx, idx+1);
 }
 
-//---------------------------------------------------------
-//   undoChangeInvisible
-//---------------------------------------------------------
-
-void Score::undoChangeInvisible(EngravingItem* e, bool v)
+static bool chordHasVisibleNote(const Chord* chord)
 {
-    e->undoChangeProperty(Pid::VISIBLE, v);
-    e->setGenerated(false);
+    for (const Note* note : chord->notes()) {
+        if (note->visible()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+static bool beamHasVisibleNote(const Beam* beam)
+{
+    for (const EngravingItem* item : beam->elements()) {
+        if (!item->isChord()) {
+            continue;
+        }
+
+        if (chordHasVisibleNote(toChord(item))) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+static void undoSetChordChildrenVisible(Chord* chord, bool visible, std::function<bool(const EngravingItem*)> childAccepted)
+{
+    static const std::unordered_set<ElementType> ignoredTypes {
+        ElementType::LEDGER_LINE,
+    };
+
+    for (EngravingObject* child : chord->scanChildren()) {
+        if (!child->isEngravingItem()) {
+            continue;
+        }
+
+        if (mu::contains(ignoredTypes, child->type())) {
+            continue;
+        }
+
+        EngravingItem* item = toEngravingItem(child);
+        if (childAccepted(item)) {
+            item->undoChangeProperty(Pid::VISIBLE, visible);
+        }
+    }
+}
+
+static void undoChangeNoteVisibility(Note* note, bool visible)
+{
+    note->undoChangeProperty(Pid::VISIBLE, visible);
+
+    for (NoteDot* dot : note->dots()) {
+        dot->undoChangeProperty(Pid::VISIBLE, visible);
+    }
+
+    if (note->accidental()) {
+        note->accidental()->undoChangeProperty(Pid::VISIBLE, visible);
+    }
+
+    Chord* chord = note->chord();
+    Beam* beam = chord->beam();
+
+    bool chordHasVisibleNote_ = visible || chordHasVisibleNote(chord);
+
+    if (beam) {
+        undoSetChordChildrenVisible(chord, chordHasVisibleNote_, [](const EngravingItem* item) {
+            static const std::unordered_set<ElementType> ignoredTypes {
+                ElementType::STEM,
+                ElementType::BEAM,
+                ElementType::NOTE,
+            };
+
+            return !mu::contains(ignoredTypes, item->type());
+        });
+    } else {
+        undoSetChordChildrenVisible(chord, chordHasVisibleNote_, [](const EngravingItem* item) {
+            return item->type() != ElementType::NOTE;
+        });
+
+        return;
+    }
+
+    bool beamHasVisibleNote_ = chordHasVisibleNote_ || beamHasVisibleNote(beam);
+
+    for (EngravingItem* item : beam->elements()) {
+        if (!item->isChord()) {
+            continue;
+        }
+
+        undoSetChordChildrenVisible(toChord(item), beamHasVisibleNote_, [](const EngravingItem* item) {
+            static const std::unordered_set<ElementType> acceptedTypes {
+                ElementType::STEM,
+                ElementType::BEAM,
+            };
+
+            return mu::contains(acceptedTypes, item->type());
+        });
+    }
+}
+
+static void undoChangeRestVisibility(Rest* rest, bool visible)
+{
+    rest->undoChangeProperty(Pid::VISIBLE, visible);
+
+    for (NoteDot* dot : rest->dotList()) {
+        dot->undoChangeProperty(Pid::VISIBLE, visible);
+    }
+}
+
+void Score::undoChangeVisible(EngravingItem* item, bool visible)
+{
+    if (item->isNote()) {
+        undoChangeNoteVisibility(toNote(item), visible);
+    } else if (item->isRest()) {
+        undoChangeRestVisibility(toRest(item), visible);
+    } else {
+        item->undoChangeProperty(Pid::VISIBLE, visible);
+    }
 }
 
 //---------------------------------------------------------

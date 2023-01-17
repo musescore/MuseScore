@@ -659,7 +659,7 @@ public:
     void undoInsertPart(Part* part, int idx);
     void undoRemoveStaff(Staff* staff);
     void undoInsertStaff(Staff* staff, staff_idx_t idx, bool createRests=true);
-    void undoChangeInvisible(EngravingItem*, bool);
+    void undoChangeVisible(EngravingItem* item, bool visible);
     void undoChangeTuning(Note*, double);
     void undoChangeUserMirror(Note*, DirectionH);
     void undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent);
