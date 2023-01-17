@@ -459,12 +459,26 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
         return true;
     }
 
+    // Break for spanners/textLines in this measure
     auto sl = ctx.score()->spannerMap().findOverlapping(m->tick().ticks(), m->endTick().ticks());
     for (auto i : sl) {
         Spanner* s = i.value;
-        // break for first measure of volta or textline and first measure *after* volta
-        if ((s->isVolta() || s->isGradualTempoChange() || s->isTextLine()) && (s->tick() == m->tick() || s->tick2() == m->tick())) {
+        if ((s->isVolta() || s->isGradualTempoChange() || s->isTextLine())
+            && ((s->tick() >= m->tick() && s->tick() < m->endTick()) || (s->tick2() >= m->tick() && s->tick2() < m->endTick()))) {
             return true;
+        }
+    }
+    // Break for spanners/textLines starting or ending mid-way inside the previous measure
+    Measure* prevMeas = m->prevMeasure();
+    if (prevMeas) {
+        auto prevMeasSpanners = ctx.score()->spannerMap().findOverlapping(prevMeas->tick().ticks(), prevMeas->endTick().ticks());
+        for (auto i : prevMeasSpanners) {
+            Spanner* s = i.value;
+            if ((s->isVolta() || s->isGradualTempoChange() || s->isTextLine())
+                && ((s->tick2() > prevMeas->tick() && s->tick2() < prevMeas->endTick())
+                    || (s->tick() > prevMeas->tick() && s->tick() < prevMeas->endTick()))) {
+                return true;
+            }
         }
     }
 
@@ -502,7 +516,6 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
     }
 
     // Break for annotations found mid-way into the previous measure
-    Measure* prevMeas = m->prevMeasure();
     if (prevMeas) {
         for (Segment* s = prevMeas->first(); s; s = s->next()) {
             for (EngravingItem* e : s->annotations()) {
