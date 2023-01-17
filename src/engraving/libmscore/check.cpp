@@ -114,15 +114,23 @@ Ret Score::sanityCheck()
     for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
         Fraction mLen = m->ticks();
         size_t endStaff  = staves().size();
+
         for (size_t staffIdx = 0; staffIdx < endStaff; ++staffIdx) {
             Rest* fmrest0 = 0;            // full measure rest in voice 0
             Fraction voices[VOICES];
+
 #ifndef NDEBUG
             m->setCorrupted(staffIdx, false);
 #endif
+
             for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
                 for (size_t v = 0; v < VOICES; ++v) {
-                    ChordRest* cr = toChordRest(s->element(static_cast<int>(staffIdx) * VOICES + static_cast<int>(v)));
+                    EngravingItem* element = s->element(static_cast<int>(staffIdx) * VOICES + static_cast<int>(v));
+                    if (!element) {
+                        continue;
+                    }
+
+                    ChordRest* cr = toChordRest(element);
                     if (cr == 0) {
                         continue;
                     }
@@ -134,6 +142,21 @@ Ret Score::sanityCheck()
                         }
                     }
                 }
+            }
+
+            bool checkRepeats = m->isMeasureRepeatGroup(staffIdx);
+            bool repeatsIsValid = true;
+
+            if (checkRepeats) {
+                repeatsIsValid = m->measureRepeatElement(staffIdx) != nullptr;
+            }
+
+            if (!repeatsIsValid) {
+                errors << mtrc("engraving", u"<b>Corrupted measure</b>: Measure %1, Staff %2.")
+                    .arg(mNumber).arg(staffIdx + 1);
+#ifndef NDEBUG
+                m->setCorrupted(staffIdx, true);
+#endif
             }
 
             if (voices[0] != mLen) {
@@ -158,6 +181,7 @@ Ret Score::sanityCheck()
                 }
             }
         }
+
         mNumber++;
     }
 
