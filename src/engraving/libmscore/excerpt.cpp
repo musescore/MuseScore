@@ -620,7 +620,7 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
 
     Spanner* ns = toSpanner(s->linkedClone());
     ns->setScore(score);
-    ns->resetExplicitParent();
+    ns->moveToDummy();
     ns->setTrack(dstTrack);
     ns->setTrack2(dstTrack2);
 
