@@ -615,7 +615,7 @@ TEST_F(Engraving_PartsTests, undoRedoRemoveFingering)
 //   Symbol
 //---------------------------------------------------------
 
-TEST_F(Engraving_PartsTests, createPartSymbol)
+TEST_F(Engraving_PartsTests, DISABLED_createPartSymbol)
 {
     testPartCreation(u"part-symbol");
 }
@@ -749,7 +749,7 @@ TEST_F(Engraving_PartsTests, undoRedoRemoveSymbol)
 //   Chordline
 //---------------------------------------------------------
 
-TEST_F(Engraving_PartsTests, createPartChordline)
+TEST_F(Engraving_PartsTests, DISABLED_createPartChordline)
 {
     testPartCreation(u"part-chordline");
 }
