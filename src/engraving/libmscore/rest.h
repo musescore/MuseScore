@@ -78,6 +78,7 @@ public:
     void checkDots();
     void layoutDots();
     NoteDot* dot(int n);
+    const std::vector<NoteDot*>& dotList() const;
     int getDotline() const { return m_dotline; }
     static int getDotline(DurationType durationType);
     SymId sym() const { return m_sym; }
