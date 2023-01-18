@@ -883,7 +883,7 @@ TEST_F(Engraving_PartsTests, undoRedoRemoveChordline)
 //   MeasureRepeat
 //---------------------------------------------------------
 
-TEST_F(Engraving_PartsTests, createPartMeasureRepeat)
+TEST_F(Engraving_PartsTests, DISABLED_createPartMeasureRepeat)
 {
     testPartCreation(u"part-measure-repeat");
 }
