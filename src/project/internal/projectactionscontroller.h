@@ -93,7 +93,11 @@ private:
     void openProject(const actions::ActionData& args);
     void newProject();
 
-    bool checkCanIgnoreError(const Ret& ret, const io::path_t& filePath);
+    bool checkCanIgnoreError(const Ret& ret, const String& projectName);
+    bool askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText);
+    bool askIfUserAgreesToOpenCorruptedProject(const String& projectName, const std::string& errorText);
+    void warnProjectCannotBeOpened(const String& projectName, const std::string& errorText);
+
     framework::IInteractive::Button askAboutSavingScore(INotationProjectPtr project);
 
     bool canSaveProject() const;

@@ -107,8 +107,7 @@ bool FirstLaunchSetupModel::askAboutClosingEarly()
                                  trc("appshell/gettingstarted", "If you choose to cancel, then be sure to check out "
                                                                 "our free Muse Sounds playback library on musescore.org."),
                                  buttons,
-                                 int(IInteractive::Button::Cancel),
-                                 IInteractive::Option::WithIcon);
+                                 int(IInteractive::Button::Cancel));
 
     return result.standardButton() == IInteractive::Button::Cancel;
 }

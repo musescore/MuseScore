@@ -52,17 +52,23 @@ public:
 
     // warning
     Result warning(const std::string& title, const std::string& text, const Buttons& buttons, const Button& def = Button::NoButton,
-                   const Options& options = {}) const override;
+                   const Options& options = { WithIcon }) const override;
 
     Result warning(const std::string& title, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
-                   const Options& options = {}) const override;
+                   const Options& options = { WithIcon }) const override;
+
+    Result warning(const std::string& title, const Text& text, const std::string& detailedText, const ButtonDatas& buttons,
+                   int defBtn = int(Button::NoButton), const Options& options = { WithIcon }) const override;
 
     // error
     Result error(const std::string& title, const std::string& text, const Buttons& buttons, const Button& def = Button::NoButton,
-                 const Options& options = {}) const override;
+                 const Options& options = { WithIcon }) const override;
 
     Result error(const std::string& title, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
-                 const Options& options = {}) const override;
+                 const Options& options = { WithIcon }) const override;
+
+    Result error(const std::string& title, const Text& text, const std::string& detailedText, const ButtonDatas& buttons,
+                 int defBtn = int(Button::NoButton), const Options& options = { WithIcon }) const override;
 
     // files
     io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) override;

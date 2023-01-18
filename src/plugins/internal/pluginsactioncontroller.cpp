@@ -81,8 +81,7 @@ void PluginsActionController::onPluginTriggered(const CodeKey& codeKey)
         qtrc("plugins", "The plugin \"%1\" is currently disabled. Do you want to enable it now?").arg(pluginName).toStdString(),
         trc("plugins", "Alternatively, you can enable it at any time from Home > Plugins."),
         { interactive()->buttonData(IInteractive::Button::No),
-          interactive()->buttonData(IInteractive::Button::Yes) }, 0,
-        IInteractive::Option::WithIcon);
+          interactive()->buttonData(IInteractive::Button::Yes) }, 0);
 
     if (result.standardButton() == IInteractive::Button::Yes) {
         service()->setEnable(codeKey, true);
