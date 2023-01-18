@@ -318,7 +318,7 @@ void PlaybackModel::updateContext(const InstrumentTrackId& trackId)
 }
 
 void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& staffIdxSet,
-                                   ChangedTrackIdSet* trackChanges)
+                                   ChangedTrackIdSet* trackChanges, bool isFirstSegmentOfMeasure)
 {
     int segmentStartTick = segment->tick().ticks();
 
@@ -369,21 +369,51 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
             continue;
         }
 
-        if (item->type() == ElementType::MEASURE_REPEAT) {
-            const MeasureRepeat* measureRepeat = toMeasureRepeat(item);
-            const Measure* currentMeasure = measureRepeat->measure();
-            const Measure* referringMeasure = measureRepeat->referringMeasure();
+        if (isFirstSegmentOfMeasure) {
+            auto processMeasureRepeat
+                = [this, staffIdx, tickPositionOffset, trackChanges](const MeasureRepeat* measureRepeat, const Measure* currentMeasure) {
+                if (!measureRepeat || !currentMeasure) {
+                    return;
+                }
 
-            if (!referringMeasure || !currentMeasure) {
+                const Measure* referringMeasure = measureRepeat->referringMeasure(currentMeasure);
+                if (!referringMeasure) {
+                    return;
+                }
+
+                int currentMeasureTick = currentMeasure->tick().ticks();
+                int referringMeasureTick = referringMeasure->tick().ticks();
+                int repeatPositionTickOffset = currentMeasureTick - referringMeasureTick;
+
+                bool isFirstSegmentOfRepeatedMeasure = true;
+
+                for (Segment* seg = referringMeasure->first(); seg; seg = seg->next()) {
+                    if (!seg->isChordRestType()) {
+                        continue;
+                    }
+
+                    processSegment(tickPositionOffset + repeatPositionTickOffset, seg, { staffIdx }, trackChanges,
+                                   isFirstSegmentOfRepeatedMeasure);
+                    isFirstSegmentOfRepeatedMeasure = false;
+                }
+            };
+
+            if (item->isMeasureRepeat()) {
+                const MeasureRepeat* measureRepeat = toMeasureRepeat(item);
+                const Measure* currentMeasure = measureRepeat->measure();
+
+                processMeasureRepeat(measureRepeat, currentMeasure);
+
                 continue;
-            }
+            } else {
+                const Measure* currentMeasure = segment->measure();
 
-            int currentMeasureTick = measureRepeat->measure()->tick().ticks();
-            int referringMeasureTick = referringMeasure->tick().ticks();
-            int repeatPositionTickOffset = currentMeasureTick - referringMeasureTick;
+                if (currentMeasure->measureRepeatCount(staffIdx) > 0) {
+                    const MeasureRepeat* measureRepeat = currentMeasure->measureRepeatElement(staffIdx);
 
-            for (Segment* seg = referringMeasure->first(); seg; seg = seg->next()) {
-                processSegment(tickPositionOffset + repeatPositionTickOffset, seg, { staffIdx }, trackChanges);
+                    processMeasureRepeat(measureRepeat, currentMeasure);
+                    continue;
+                }
             }
         }
 
@@ -429,6 +459,8 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                 continue;
             }
 
+            bool isFirstSegmentOfMeasure = true;
+
             for (Segment* segment = measure->first(); segment; segment = segment->next()) {
                 if (!segment->isChordRestType()) {
                     continue;
@@ -441,7 +473,8 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                     continue;
                 }
 
-                processSegment(tickPositionOffset, segment, staffToProcessIdxSet, trackChanges);
+                processSegment(tickPositionOffset, segment, staffToProcessIdxSet, trackChanges, isFirstSegmentOfMeasure);
+                isFirstSegmentOfMeasure = false;
             }
 
             m_renderer.renderMetronome(m_score, measureStartTick, measureEndTick, tickPositionOffset,
@@ -479,13 +512,15 @@ bool PlaybackModel::hasToReloadTracks(const ScoreChangesRange& changesRange) con
             return false;
         }
 
-        const Measure* nextToLastMeasure = measureTo->nextMeasure();
+        const Measure* nextMeasure = measureTo->nextMeasure();
 
-        if (!nextToLastMeasure) {
-            return false;
+        for (int i = 0; i < MeasureRepeat::MAX_NUM_MEASURES && nextMeasure; ++i) {
+            if (nextMeasure->containsMeasureRepeat(changesRange.staffIdxFrom, changesRange.staffIdxTo)) {
+                return true;
+            }
+
+            nextMeasure = nextMeasure->nextMeasure();
         }
-
-        return nextToLastMeasure->containsMeasureRepeat(changesRange.staffIdxFrom, changesRange.staffIdxTo);
     }
 
     return false;
