@@ -4448,28 +4448,25 @@ void Score::cmdAddPitch(int step, bool addFlag, bool insert)
     _is.setAccidentalType(AccidentalType::NONE);
 }
 
-//---------------------------------------------------------
-//   cmdToggleVisible
-//---------------------------------------------------------
-
 void Score::cmdToggleVisible()
 {
-    std::set<EngravingItem*> spanners;
-    for (EngravingItem* e : selection().elements()) {
-        if (e->isBracket()) {       // ignore
+    bool allVisible = true;
+
+    for (EngravingItem* item : selection().elements()) {
+        if (!item->visible()) {
+            allVisible = false;
+            break;
+        }
+    }
+
+    bool newVisible = !allVisible;
+
+    for (EngravingItem* item : selection().elements()) {
+        if (item->isBracket()) {
             continue;
         }
-        if (e->isNoteDot() && mu::contains(selection().elements(), e->parentItem())) {
-            // already handled in ScoreElement::undoChangeProperty(); don't toggle twice
-            continue;
-        }
-        bool spannerSegment = e->isSpannerSegment();
-        if (!spannerSegment || !mu::contains(spanners, static_cast<EngravingItem*>(toSpannerSegment(e)->spanner()))) {
-            e->undoChangeProperty(Pid::VISIBLE, !e->getProperty(Pid::VISIBLE).toBool());
-        }
-        if (spannerSegment) {
-            spanners.insert(toSpannerSegment(e)->spanner());
-        }
+
+        undoChangeVisible(item, newVisible);
     }
 }
 

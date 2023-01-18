@@ -465,8 +465,6 @@ private:
     void selectAdd(EngravingItem* e);
     void selectRange(EngravingItem* e, staff_idx_t staffIdx);
 
-    void cmdToggleVisible();
-
     Ret putNote(const Position&, bool replace);
 
     void resetTempo();
@@ -1232,6 +1230,7 @@ public:
     void setFooterText(Text* t, int index) { _footersText.at(index) = t; }
 
     void cmdAddPitch(int note, bool addFlag, bool insert);
+    void cmdToggleVisible();
     void forAllLyrics(std::function<void(Lyrics*)> f);
 
     void createPaddingTable();
