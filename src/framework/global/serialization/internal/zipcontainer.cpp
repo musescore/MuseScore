@@ -625,7 +625,11 @@ void ZipContainer::Impl::addEntry(EntryType type, const std::string& fileName, c
     writeUShort(header.h.version_made, HostUnix << 8);
     //uint8_t internal_file_attributes[2];
     //uint8_t external_file_attributes[4];
-    uint32_t mode = 0;
+    uint32_t mode = UnixFileAttributes::ReadUser
+                    | UnixFileAttributes::WriteUser
+                    | UnixFileAttributes::ExeUser
+                    | UnixFileAttributes::ReadGroup
+                    | UnixFileAttributes::ReadOther;
     switch (type) {
     case Symlink:
         mode |= UnixFileAttributes::SymLink;

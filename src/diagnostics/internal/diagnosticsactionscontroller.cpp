@@ -25,8 +25,11 @@
 
 #include "view/diagnosticaccessiblemodel.h"
 
+#include "log.h"
+
 using namespace mu::diagnostics;
 using namespace mu::accessibility;
+using namespace mu::framework;
 
 static const mu::UriQuery SYSTEM_PATHS_URI("musescore://diagnostics/system/paths?sync=false&modal=false&floating=true");
 static const mu::UriQuery PROFILER_URI("musescore://diagnostics/system/profiler?sync=false&modal=false&floating=true");
@@ -42,6 +45,7 @@ void DiagnosticsActionsController::init()
     dispatcher()->reg(this, "diagnostic-show-accessible-tree", [this]() { openUri(ACCESSIBLE_TREE_URI); });
     dispatcher()->reg(this, "diagnostic-accessible-tree-dump", []() { DiagnosticAccessibleModel::dumpTree(); });
     dispatcher()->reg(this, "diagnostic-show-engraving-elements", [this]() { openUri(ENGRAVING_ELEMENTS_URI, false); });
+    dispatcher()->reg(this, "diagnostic-save-diagnostic-files", this, &DiagnosticsActionsController::saveDiagnosticFiles);
 }
 
 void DiagnosticsActionsController::openUri(const mu::UriQuery& uri, bool isSingle)
@@ -51,4 +55,12 @@ void DiagnosticsActionsController::openUri(const mu::UriQuery& uri, bool isSingl
     }
 
     interactive()->open(uri);
+}
+
+void DiagnosticsActionsController::saveDiagnosticFiles()
+{
+    Ret ret = saveDiagnosticsScenario()->saveDiagnosticFiles();
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
 }

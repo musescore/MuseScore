@@ -38,7 +38,6 @@
 #include "internal/synth/vstiresolver.h"
 #include "internal/fx/vstfxresolver.h"
 
-#include "devtools/vstpluginlistmodelexample.h"
 #include "view/vstieditorview.h"
 #include "view/vstfxeditorview.h"
 
@@ -99,8 +98,6 @@ void VSTModule::registerResources()
 
 void VSTModule::registerUiTypes()
 {
-    qmlRegisterType<VstPluginListModelExample>("MuseScore.Vst", 1, 0, "VstPluginListModelExample");
-
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(vst_QML_IMPORT);
 }
 
