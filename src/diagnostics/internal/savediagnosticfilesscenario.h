@@ -19,32 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
-#define MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
+#ifndef MU_DIAGNOSTICS_SAVEDIAGNOSTICFILESSCENARIO_H
+#define MU_DIAGNOSTICS_SAVEDIAGNOSTICFILESSCENARIO_H
 
-#include "idiagnosticsconfiguration.h"
+#include "isavediagnosticfilesscenario.h"
 
 #include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
+#include "idiagnosticsconfiguration.h"
+#include "iinteractive.h"
 
 namespace mu::diagnostics {
-class DiagnosticsConfiguration : public IDiagnosticsConfiguration
+class SaveDiagnosticFilesScenario : public ISaveDiagnosticFilesScenario
 {
-    INJECT(diagnostics, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(diagnostics, diagnostics::IDiagnosticsConfiguration, configuration)
+    INJECT(diagnostics, framework::IInteractive, interactive)
 
 public:
-    DiagnosticsConfiguration() = default;
-
-    void init();
-
-    bool isDumpUploadAllowed() const override;
-    void setIsDumpUploadAllowed(bool val) override;
-
-    bool shouldWarnBeforeSavingDiagnosticFiles() const override;
-    void setShouldWarnBeforeSavingDiagnosticFiles(bool val) override;
-
-    io::path_t diagnosticFilesDefaultSavingPath() const override;
+    Ret saveDiagnosticFiles() override;
 };
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
+#endif // MU_DIAGNOSTICS_SAVEDIAGNOSTICFILESSCENARIO_H

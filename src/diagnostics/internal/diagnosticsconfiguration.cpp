@@ -27,10 +27,12 @@ using namespace mu::diagnostics;
 using namespace mu::framework;
 
 static const Settings::Key IS_DUMP_UPLOAD_ALLOWED("diagnostics", "diagnostics/is_dump_upload_allowed");
+static const Settings::Key SHOULD_WARN_BEFORE_SAVING_DIAGNOSTIC_FILES("diagnostics", "diagnostics/shouldWarnBeforeSavingDiagnosticFiles");
 
 void DiagnosticsConfiguration::init()
 {
     settings()->setDefaultValue(IS_DUMP_UPLOAD_ALLOWED, Val(true));
+    settings()->setDefaultValue(SHOULD_WARN_BEFORE_SAVING_DIAGNOSTIC_FILES, Val(true));
 }
 
 bool DiagnosticsConfiguration::isDumpUploadAllowed() const
@@ -41,4 +43,19 @@ bool DiagnosticsConfiguration::isDumpUploadAllowed() const
 void DiagnosticsConfiguration::setIsDumpUploadAllowed(bool val)
 {
     settings()->setSharedValue(IS_DUMP_UPLOAD_ALLOWED, Val(val));
+}
+
+bool DiagnosticsConfiguration::shouldWarnBeforeSavingDiagnosticFiles() const
+{
+    return settings()->value(SHOULD_WARN_BEFORE_SAVING_DIAGNOSTIC_FILES).toBool();
+}
+
+void DiagnosticsConfiguration::setShouldWarnBeforeSavingDiagnosticFiles(bool val)
+{
+    settings()->setSharedValue(SHOULD_WARN_BEFORE_SAVING_DIAGNOSTIC_FILES, Val(val));
+}
+
+mu::io::path_t DiagnosticsConfiguration::diagnosticFilesDefaultSavingPath() const
+{
+    return globalConfiguration()->homePath();
 }

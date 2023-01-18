@@ -27,12 +27,14 @@
 #include "actions/actionable.h"
 #include "iinteractive.h"
 #include "accessibility/iaccessibilitycontroller.h"
+#include "isavediagnosticfilesscenario.h"
 
 namespace mu::diagnostics {
 class DiagnosticsActionsController : public actions::Actionable
 {
     INJECT(diagnostics, actions::IActionsDispatcher, dispatcher)
     INJECT(diagnostics, framework::IInteractive, interactive)
+    INJECT(diagnostics, diagnostics::ISaveDiagnosticFilesScenario, saveDiagnosticsScenario)
 
 public:
     DiagnosticsActionsController() = default;
@@ -41,6 +43,7 @@ public:
 
 private:
     void openUri(const mu::UriQuery& uri, bool isSingle = true);
+    void saveDiagnosticFiles();
 };
 }
 

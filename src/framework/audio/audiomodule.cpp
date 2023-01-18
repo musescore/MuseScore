@@ -45,9 +45,6 @@
 
 #include "internal/fx/fxresolver.h"
 
-#include "view/synthssettingsmodel.h"
-#include "devtools/waveformmodel.h"
-
 #include "diagnostics/idiagnosticspathsregister.h"
 
 #include "log.h"
@@ -128,9 +125,6 @@ void AudioModule::registerResources()
 
 void AudioModule::registerUiTypes()
 {
-    qmlRegisterType<WaveFormModel>("MuseScore.Audio", 1, 0, "WaveFormModel");
-    qmlRegisterType<synth::SynthsSettingsModel>("MuseScore.Audio", 1, 0, "SynthsSettingsModel");
-
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(audio_QML_IMPORT);
 }
 

@@ -151,3 +151,8 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
         pr->reg("settings file", settings()->filePath());
     }
 }
+
+void GlobalModule::onInit(const IApplication::RunMode&)
+{
+    s_globalConf->init();
+}
