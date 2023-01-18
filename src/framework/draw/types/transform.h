@@ -52,6 +52,16 @@ public:
     Transform& operator*=(double num);
     Transform& operator/=(double div);
 
+    bool operator ==(const Transform& other) const
+    {
+        return m_affine == other.m_affine
+               && RealIsEqual(m_13, other.m_13)
+               && RealIsEqual(m_23, other.m_23)
+               && RealIsEqual(m_33, other.m_33);
+    }
+
+    bool operator !=(const Transform& other) const { return !this->operator==(other); }
+
     double m11() const { return m_affine.m_11; }
     double m12() const { return m_affine.m_12; }
     double m13() const { return m_13; }
@@ -81,14 +91,6 @@ public:
     Transform& scale(double sx, double sy);
     Transform& shear(double sh, double sv);
     Transform inverted() const;
-
-    bool operator ==(const Transform& other) const
-    {
-        return m_affine == other.m_affine
-               && m_13 == other.m_13
-               && m_23 == other.m_23
-               && m_33 == other.m_33;
-    }
 
 #ifndef NO_QT_SUPPORT
     static QTransform toQTransform(const Transform& transform);

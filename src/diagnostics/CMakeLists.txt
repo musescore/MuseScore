@@ -50,6 +50,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/drawdata/drawdatagenerator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/drawdata/drawdataconverter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/drawdata/drawdataconverter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/drawdata/drawdatacomparator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/drawdata/drawdatacomparator.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/isavediagnosticfilesscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/savediagnosticfilesscenario.cpp

@@ -108,6 +108,12 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
 
         s_engravingfonts->setFallbackFont("Bravura");
 
+        //! NOTE It may be necessary to draw something with these fonts without requesting the fonts themselves
+        //! (for example, simply specifying the family name for painter).
+        //! But if they are not loaded, then they are not added to the font database and,
+        //! accordingly, they are drawn incorrectly
+        //s_engravingfonts->loadAllFonts();
+
         // Text
         const std::vector<io::path_t> textFonts = {
             ":/fonts/musejazz/MuseJazzText.otf",

@@ -99,7 +99,9 @@ void CommandLineController::parse(const QStringList& args)
     // Diagnostic
     m_parser.addOption(QCommandLineOption("diagnostic-output", "Diagnostic output", "output"));
     m_parser.addOption(QCommandLineOption("diagnostic-gen-drawdata", "Generate engraving draw data", "scores-dir"));
+    m_parser.addOption(QCommandLineOption("diagnostic-com-drawdata", "Compare engraving draw data"));
     m_parser.addOption(QCommandLineOption("diagnostic-drawdata-to-png", "Convert draw data to png", "file"));
+    m_parser.addOption(QCommandLineOption("diagnostic-drawdiff-to-png", "Convert draw diff to png"));
 
     m_parser.process(args);
 }
@@ -383,13 +385,25 @@ void CommandLineController::apply()
     if (m_parser.isSet("diagnostic-gen-drawdata")) {
         application()->setRunMode(IApplication::RunMode::Converter);
         m_diagnostic.type = DiagnosticType::GenDrawData;
-        m_diagnostic.input = m_parser.value("diagnostic-gen-drawdata");
+        m_diagnostic.input << m_parser.value("diagnostic-gen-drawdata");
+    }
+
+    if (m_parser.isSet("diagnostic-com-drawdata")) {
+        application()->setRunMode(IApplication::RunMode::Converter);
+        m_diagnostic.type = DiagnosticType::ComDrawData;
+        m_diagnostic.input = scorefiles;
     }
 
     if (m_parser.isSet("diagnostic-drawdata-to-png")) {
         application()->setRunMode(IApplication::RunMode::Converter);
         m_diagnostic.type = DiagnosticType::DrawDataToPng;
-        m_diagnostic.input = m_parser.value("diagnostic-drawdata-to-png");
+        m_diagnostic.input << m_parser.value("diagnostic-drawdata-to-png");
+    }
+
+    if (m_parser.isSet("diagnostic-drawdiff-to-png")) {
+        application()->setRunMode(IApplication::RunMode::Converter);
+        m_diagnostic.type = DiagnosticType::DrawDiffToPng;
+        m_diagnostic.input = scorefiles;
     }
 
     // Startup

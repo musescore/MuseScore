@@ -45,6 +45,8 @@ public:
 
     virtual Ret makePath(const io::path_t& path) const = 0;
 
+    virtual EntryType entryType(const io::path_t& path) const = 0;
+
     virtual RetVal<uint64_t> fileSize(const io::path_t& path) const = 0;
 
     virtual RetVal<io::paths_t> scanFiles(const io::path_t& rootDir, const std::vector<std::string>& filters,

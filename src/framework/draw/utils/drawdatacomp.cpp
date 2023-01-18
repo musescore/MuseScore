@@ -21,6 +21,8 @@
  */
 #include "drawdatacomp.h"
 
+#include <list>
+
 #include "global/realfn.h"
 #include "global/containers.h"
 
@@ -32,6 +34,9 @@ using namespace mu::draw;
 namespace mu::draw::comp {
 static const int DEFAULT_PREC(3);
 
+struct Polygon;
+static bool isEqual(const Polygon& p1, const Polygon& p2, DrawDataComp::Tolerance tolerance);
+
 struct Path {
     const DrawData::Object* obj = nullptr;
     const DrawData::Data* data = nullptr;
@@ -42,6 +47,7 @@ struct Polygon {
     const DrawData::Object* obj = nullptr;
     const DrawData::Data* data = nullptr;
     const DrawPolygon* polygon = nullptr;
+    bool operator==(const Polygon& o) const { return isEqual(*this, o, DrawDataComp::Tolerance()); }
 };
 
 struct Text {
@@ -57,10 +63,10 @@ struct Pixmap {
 };
 
 struct Data {
-    std::vector<Path> paths;
-    std::vector<Polygon> polygons;
-    std::vector<Text> texts;
-    std::vector<Pixmap> pixmaps;
+    std::list<Path> paths;
+    std::list<Polygon> polygons;
+    std::list<Text> texts;
+    std::list<Pixmap> pixmaps;
 };
 
 template<class T>
@@ -515,6 +521,27 @@ static void difference(std::vector<T>& diff, const std::vector<T>& v1, const std
 {
     for (size_t i = 0; i < v1.size(); ++i) {
         const T& t = v1.at(i);
+        if (!contains(v2, t, tolerance)) {
+            diff.push_back(t);
+        }
+    }
+}
+
+template<class T>
+static bool contains(const std::list<T>& v1, const T& val, DrawDataComp::Tolerance tolerance)
+{
+    for (const T& t : v1) {
+        if (isEqual(t, val, tolerance)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+template<class T>
+static void difference(std::list<T>& diff, const std::list<T>& v1, const std::list<T>& v2, DrawDataComp::Tolerance tolerance)
+{
+    for (const T& t : v1) {
         if (!contains(v2, t, tolerance)) {
             diff.push_back(t);
         }

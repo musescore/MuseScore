@@ -170,6 +170,7 @@ SizeF Paint::pageSizeInch(Score* score)
 
 void Paint::paintElement(mu::draw::Painter& painter, const EngravingItem* element)
 {
+    TRACEFUNC;
     if (element->skipDraw()) {
         return;
     }
@@ -183,6 +184,7 @@ void Paint::paintElement(mu::draw::Painter& painter, const EngravingItem* elemen
 
 void Paint::paintElements(mu::draw::Painter& painter, const std::vector<EngravingItem*>& elements, bool isPrinting)
 {
+    TRACEFUNC;
     std::vector<EngravingItem*> sortedElements(elements.begin(), elements.end());
 
     std::sort(sortedElements.begin(), sortedElements.end(), mu::engraving::elementLessThan);

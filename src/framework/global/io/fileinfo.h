@@ -47,6 +47,8 @@ public:
     String suffix() const;
     static String suffix(const path_t& filePath);
 
+    EntryType entryType() const;
+
     bool isRelative() const;
     bool isAbsolute() const;
 

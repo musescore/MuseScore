@@ -50,6 +50,12 @@ struct DrawPath {
     Pen pen;
     Brush brush;
     DrawMode mode = DrawMode::StrokeAndFill;
+    bool operator==(const DrawPath& o) const
+    {
+        return mode == o.mode && pen == o.pen && brush == o.brush && path == o.path;
+    }
+
+    bool operator!=(const DrawPath& o) const { return !this->operator==(o); }
 };
 
 struct DrawRect {
@@ -62,6 +68,8 @@ struct DrawRect {
 struct DrawPolygon {
     PolygonF polygon;
     PolygonMode mode = PolygonMode::OddEven;
+    bool operator==(const DrawPolygon& o) const { return mode == o.mode && polygon == o.polygon; }
+    bool operator!=(const DrawPolygon& o) const { return !this->operator==(o); }
 };
 
 struct DrawText {
@@ -75,6 +83,12 @@ struct DrawText {
     RectF rect;     // If mode is Point when use topLeft point
     int flags = 0;
     String text;
+    bool operator==(const DrawText& o) const
+    {
+        return mode == o.mode && flags == o.flags && rect == o.rect && text == o.text;
+    }
+
+    bool operator!=(const DrawText& o) const { return !this->operator==(o); }
 };
 
 struct DrawPixmap {
@@ -92,6 +106,8 @@ struct DrawPixmap {
 
 struct DrawData
 {
+    static const int CANVAS_DPI = 360;
+
     struct State {
         Pen pen;
         Brush brush;
@@ -138,7 +154,6 @@ struct DrawData
     };
 
     std::string name;
-    RectF window;
     RectF viewport;
     std::vector<Object> objects;
 };

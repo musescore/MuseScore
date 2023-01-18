@@ -148,6 +148,11 @@ DateTime FileInfo::lastModified() const
     return fileSystem()->lastModified(m_filePath);
 }
 
+EntryType FileInfo::entryType() const
+{
+    return fileSystem()->entryType(m_filePath);
+}
+
 bool FileInfo::isRelative() const
 {
     return !isAbsolute();

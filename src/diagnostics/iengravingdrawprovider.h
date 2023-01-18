@@ -33,8 +33,10 @@ class IEngravingDrawProvider : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IEngravingDrawProvider() = default;
 
-    virtual Ret genDrawData(const io::path_t& scoresDir, const io::path_t& outDir) = 0;
+    virtual Ret generateDrawData(const io::path_t& scoresDir, const io::path_t& outDir) = 0;
+    virtual Ret compareDrawData(const io::path_t& ref, const io::path_t& test, const io::path_t& outDiff) = 0;
     virtual Ret drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile) = 0;
+    virtual Ret drawDiffToPng(const io::path_t& diffFile, const io::path_t& refFile, const io::path_t& outFile) = 0;
 };
 }
 
