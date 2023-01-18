@@ -27,6 +27,7 @@
 
 #ifndef NO_QT_SUPPORT
 #include <QPixmap>
+#include <QImage>
 #include <QBuffer>
 #endif
 
@@ -54,6 +55,29 @@ public:
     bool operator!=(const Pixmap& o) const { return !this->operator==(o); }
 
 #ifndef NO_QT_SUPPORT
+    static Pixmap fromQImage(const QImage& qim)
+    {
+        QByteArray bytes;
+        QBuffer buffer(&bytes);
+        buffer.open(QIODevice::WriteOnly);
+        qim.save(&buffer, "PNG");
+
+        Pixmap px(qim.width(), qim.height());
+        px.setData(ByteArray::fromQByteArray(bytes));
+
+        return px;
+    }
+
+    static QImage toQImage(const Pixmap& px)
+    {
+        QImage qim(px.width(), px.height(), QImage::Format_ARGB32_Premultiplied);
+        ByteArray data = px.data();
+        if (!data.empty()) {
+            qim.loadFromData(data.toQByteArrayNoCopy());
+        }
+        return qim;
+    }
+
     static Pixmap fromQPixmap(const QPixmap& qpx)
     {
         QByteArray bytes;

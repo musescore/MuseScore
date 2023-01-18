@@ -23,6 +23,8 @@ public:
     virtual void setFallbackFont(const std::string& name) = 0;
     virtual IEngravingFontPtr fallbackFont() const = 0;
     virtual bool isFallbackFont(const IEngravingFont* f) const = 0;
+
+    virtual void loadAllFonts() = 0;
 };
 }
 

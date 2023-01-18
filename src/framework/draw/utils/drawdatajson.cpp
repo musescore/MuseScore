@@ -22,6 +22,7 @@
 #include "drawdatajson.h"
 
 #include "global/serialization/json.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -37,20 +38,45 @@ static double itor(int v)
     return static_cast<double>(v) / 1000.0;
 }
 
+static JsonArray toArr(const std::vector<double>& vv)
+{
+    JsonArray a;
+    for (double v : vv) {
+        a.append(rtoi(v));
+    }
+    return a;
+}
+
+static void fromArr(const JsonArray& arr, std::vector<double>& vv)
+{
+    for (size_t i = 0; i < arr.size(); ++i) {
+        vv.push_back(itor(arr.at(i).toDouble()));
+    }
+}
+
 static JsonObject toObj(const Pen& pen)
 {
     JsonObject obj;
     obj["style"] = static_cast<int>(pen.style());
+    obj["capStyle"] = static_cast<int>(pen.capStyle());
+    obj["joinStyle"] = static_cast<int>(pen.joinStyle());
     obj["color"] = pen.color().toString();
     obj["width"] = pen.widthF();
+    obj["dashPattern"] = toArr(pen.dashPattern());
     return obj;
 }
 
 static void fromObj(const JsonObject& obj, Pen& pen)
 {
-    pen.setStyle(static_cast<PenStyle>(obj["style"].toInt()));
-    pen.setColor(Color(obj["color"].toStdString().c_str()));
-    pen.setWidthF(obj["width"].toDouble());
+    pen.setStyle(static_cast<PenStyle>(obj.value("style").toInt()));
+    pen.setCapStyle(static_cast<PenCapStyle>(obj.value("capStyle").toInt()));
+    pen.setJoinStyle(static_cast<PenJoinStyle>(obj.value("joinStyle").toInt()));
+    pen.setColor(Color(obj.value("color").toStdString().c_str()));
+    pen.setWidthF(obj.value("width").toDouble());
+
+    std::vector<double> dp;
+    fromArr(obj.value("dashPattern").toArray(), dp);
+    pen.setDashPattern(dp);
 }
 
 static JsonObject toObj(const Brush& brush)
@@ -75,15 +101,19 @@ static JsonObject toObj(const Font& font)
     obj["pointSize"] = font.pointSizeF();
     obj["weight"] = font.weight();
     obj["italic"] = font.italic();
+    obj["hinting"] = static_cast<int>(font.hinting());
+    obj["no_merging"] = font.noFontMerging();
     return obj;
 }
 
 static void fromObj(const JsonObject& obj, Font& font)
 {
-    font.setFamily(obj["family"].toString(), static_cast<Font::Type>(obj["type"].toInt()));
-    font.setPointSizeF(obj["pointSize"].toDouble());
-    font.setWeight(static_cast<Font::Weight>(obj["weight"].toInt()));
-    font.setItalic(obj["italic"].toBool());
+    font.setFamily(obj.value("family").toString(), static_cast<Font::Type>(obj.value("type").toInt()));
+    font.setPointSizeF(obj.value("pointSize").toDouble());
+    font.setWeight(static_cast<Font::Weight>(obj.value("weight").toInt()));
+    font.setItalic(obj.value("italic").toBool());
+    font.setHinting(static_cast<Font::Hinting>(obj.value("hinting").toInt()));
+    font.setNoFontMerging(obj.value("no_merging").toBool());
 }
 
 static JsonArray toArr(const Transform& t)
@@ -360,21 +390,17 @@ static void fromArr(const JsonArray& arr, std::vector<T>& vals)
     }
 }
 
-ByteArray DrawDataJson::toJson(const DrawDataPtr& buf)
+void DrawDataJson::toJson(JsonObject& root, const DrawDataPtr& dd)
 {
-    IF_ASSERT_FAILED(buf) {
-        return ByteArray();
-    }
-
     //! NOTE 'a' added to the beginning of some field names for convenient sorting
 
-    JsonObject root;
-    root["a_name"] = buf->name;
+    root["a_name"] = dd->name;
+    root["a_viewport"] = toArr(dd->viewport);
 
     std::vector<DrawData::State> states;
     // collect states
     {
-        for (const DrawData::Object& obj : buf->objects) {
+        for (const DrawData::Object& obj : dd->objects) {
             for (const DrawData::Data& data : obj.datas) {
                 if (mu::contains(states, data.state)) {
                     continue;
@@ -385,7 +411,7 @@ ByteArray DrawDataJson::toJson(const DrawDataPtr& buf)
     }
 
     JsonArray objsArr;
-    for (const DrawData::Object& obj : buf->objects) {
+    for (const DrawData::Object& obj : dd->objects) {
         JsonObject objObj;
         objObj["a_name"] = obj.name;
         objObj["a_pagePos"] = toArr(obj.pagePos);
@@ -425,42 +451,31 @@ ByteArray DrawDataJson::toJson(const DrawDataPtr& buf)
         stateObj[std::to_string(i)] = toObj(states.at(i));
     }
     root["states"] = stateObj;
-
-    return JsonDocument(root).toJson(JsonDocument::Format::Indented);
 }
 
-mu::RetVal<DrawDataPtr> DrawDataJson::fromJson(const ByteArray& json)
+void DrawDataJson::fromJson(const JsonObject& root, DrawDataPtr& dd)
 {
-    std::string err;
-    JsonDocument doc = JsonDocument::fromJson(json, &err);
-    if (!err.empty()) {
-        RetVal<DrawDataPtr> rv;
-        rv.ret = make_ret(Ret::Code::UnknownError, err);
-        return rv;
-    }
-
-    const JsonObject root = doc.rootObject();
-
     std::map<int, DrawData::State> states;
     // read states
     {
-        const JsonObject obj = root["states"].toObject();
+        const JsonObject obj = root.value("states").toObject();
         std::vector<std::string> keys = obj.keys();
         for (const std::string& k : keys) {
             DrawData::State state;
-            fromObj(obj[k].toObject(), state);
+            fromObj(obj.value(k).toObject(), state);
             states[std::stoi(k)] = state;
         }
     }
 
-    DrawDataPtr buf = std::make_shared<DrawData>();
-    buf->name = root["a_name"].toStdString();
-    JsonArray objsArr = root["objects"].toArray();
+    dd->name = root.value("a_name").toStdString();
+    fromArr(root.value("a_viewport").toArray(), dd->viewport);
+
+    JsonArray objsArr = root.value("objects").toArray();
     for (size_t i = 0; i < objsArr.size(); ++i) {
         const JsonObject objObj = objsArr.at(i).toObject();
         DrawData::Object obj;
-        obj.name = objObj["a_name"].toString().toStdString();
-        fromArr(objObj["a_pagePos"].toArray(), obj.pagePos);
+        obj.name = objObj.value("a_name").toString().toStdString();
+        fromArr(objObj.value("a_pagePos").toArray(), obj.pagePos);
         JsonArray datasArr = objObj["datas"].toArray();
         for (size_t j = 0; j < datasArr.size(); ++j) {
             const JsonObject dataObj = datasArr.at(j).toObject();
@@ -482,8 +497,82 @@ mu::RetVal<DrawDataPtr> DrawDataJson::fromJson(const ByteArray& json)
             obj.datas.push_back(std::move(data));
         }
 
-        buf->objects.push_back(std::move(obj));
+        dd->objects.push_back(std::move(obj));
+    }
+}
+
+ByteArray DrawDataJson::toJson(const DrawDataPtr& data)
+{
+    IF_ASSERT_FAILED(data) {
+        return ByteArray();
     }
 
-    return RetVal<DrawDataPtr>::make_ok(buf);
+    JsonObject root;
+    toJson(root, data);
+    return JsonDocument(root).toJson(JsonDocument::Format::Indented);
+}
+
+mu::RetVal<DrawDataPtr> DrawDataJson::fromJson(const ByteArray& json)
+{
+    std::string err;
+    JsonDocument doc = JsonDocument::fromJson(json, &err);
+    if (!err.empty()) {
+        RetVal<DrawDataPtr> rv;
+        rv.ret = make_ret(Ret::Code::UnknownError, err);
+        return rv;
+    }
+
+    const JsonObject root = doc.rootObject();
+    DrawDataPtr dd = std::make_shared<DrawData>();
+    fromJson(root, dd);
+    return RetVal<DrawDataPtr>::make_ok(dd);
+}
+
+ByteArray DrawDataJson::diffToJson(const Diff& diff)
+{
+    IF_ASSERT_FAILED(diff.dataAdded && diff.dataRemoved) {
+        return ByteArray();
+    }
+
+    JsonObject added;
+    toJson(added, diff.dataAdded);
+
+    JsonObject removed;
+    toJson(removed, diff.dataRemoved);
+
+    JsonObject root;
+    root["type"] = "diff";
+    root["added"] = added;
+    root["removed"] = removed;
+    return JsonDocument(root).toJson(JsonDocument::Format::Indented);
+}
+
+RetVal<Diff> DrawDataJson::diffFromJson(const ByteArray& json)
+{
+    std::string err;
+    JsonDocument doc = JsonDocument::fromJson(json, &err);
+    if (!err.empty()) {
+        RetVal<Diff> rv;
+        rv.ret = make_ret(Ret::Code::UnknownError, err);
+        return rv;
+    }
+
+    const JsonObject root = doc.rootObject();
+    IF_ASSERT_FAILED(root.value("type").toStdString() == "diff") {
+        RetVal<Diff> rv;
+        rv.ret = make_ret(Ret::Code::UnknownError, err);
+        return rv;
+    }
+
+    Diff diff;
+    diff.dataAdded = std::make_shared<DrawData>();
+    diff.dataRemoved = std::make_shared<DrawData>();
+
+    JsonObject added = root.value("added").toObject();
+    fromJson(added, diff.dataAdded);
+
+    JsonObject removed = root.value("removed").toObject();
+    fromJson(removed, diff.dataRemoved);
+
+    return RetVal<Diff>::make_ok(diff);
 }

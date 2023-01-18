@@ -48,9 +48,12 @@ public:
 
     inline bool operator==(const Pen& o) const
     {
-        return m_color == o.m_color && RealIsEqual(m_width, o.m_width)
-               && m_style == o.m_style && m_capStyle == o.m_capStyle && m_joinStyle == o.m_joinStyle
-               && m_dashPattern == o.m_dashPattern;
+        return m_color == o.m_color
+               && RealIsEqual(m_width, o.m_width)
+               && m_style == o.m_style
+               && m_capStyle == o.m_capStyle
+               && m_joinStyle == o.m_joinStyle
+               && RealIsEqual(m_dashPattern, o.m_dashPattern);
     }
 
     inline bool operator!=(const Pen& o) const { return !this->operator==(o); }

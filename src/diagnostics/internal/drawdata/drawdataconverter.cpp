@@ -26,49 +26,92 @@
 #include "draw/utils/drawdatapaint.h"
 #include "draw/painter.h"
 
+#include "engraving/libmscore/mscore.h"
+
 #include "log.h"
 
 using namespace mu;
 using namespace mu::diagnostics;
 using namespace mu::draw;
 
-Ret DrawDataConverter::drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile) const
+static const Color REF_COLOR("#999999");
+static const Color ADDED_COLOR("#ff0000");
+
+Ret DrawDataConverter::drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile)
 {
     RetVal<DrawDataPtr> drawData = DrawDataRW::readData(dataFile);
     if (!drawData.ret) {
         return drawData.ret;
     }
 
-    Pixmap png = drawDataToPixmap(drawData.val);
-    return io::File::writeFile(outFile, png.data());
+    return saveAsPng(drawData.val, outFile);
 }
 
-Pixmap DrawDataConverter::drawDataToPixmap(const DrawDataPtr& data) const
+Ret DrawDataConverter::drawDiffToPng(const io::path_t& diffFile, const io::path_t& refFile, const io::path_t& outFile)
+{
+    RetVal<Diff> diff = DrawDataRW::readDiff(diffFile);
+    if (!diff.ret) {
+        return diff.ret;
+    }
+
+    RetVal<DrawDataPtr> refData;
+    if (!refFile.empty()) {
+        refData = DrawDataRW::readData(refFile);
+        if (!refData.ret) {
+            return refData.ret;
+        }
+    }
+
+    Pixmap px(std::lrint(diff.val.dataAdded->viewport.width()), std::lrint(diff.val.dataAdded->viewport.height()));
+    if (refData.val) {
+        drawOnPixmap(px, refData.val, REF_COLOR);
+    }
+
+    drawOnPixmap(px, diff.val.dataAdded, ADDED_COLOR);
+
+    return io::File::writeFile(outFile, px.data());
+}
+
+Ret DrawDataConverter::saveAsPng(const DrawDataPtr& data, const io::path_t& path)
+{
+    Pixmap px = drawDataToPixmap(data);
+    return io::File::writeFile(path, px.data());
+}
+
+Pixmap DrawDataConverter::drawDataToPixmap(const DrawDataPtr& data)
 {
     IF_ASSERT_FAILED(data) {
         return Pixmap();
     }
 
-    QPixmap px(std::lrint(data->viewport.width()), std::lrint(data->viewport.height()));
+    int width = std::lrint(data->viewport.width());
+    int height = std::lrint(data->viewport.height());
 
-    Painter painter(&px, "DrawData");
+    QImage image(width, height, QImage::Format_ARGB32_Premultiplied);
+    image.setDotsPerMeterX(std::lrint((DrawData::CANVAS_DPI * 1000) / mu::engraving::INCH));
+    image.setDotsPerMeterY(std::lrint((DrawData::CANVAS_DPI * 1000) / mu::engraving::INCH));
 
-    painter.fillRect(RectF(0, 0, px.width(), px.height()), Color::WHITE);
+    image.fill(Qt::white);
+
+    Painter painter(&image, "DrawData");
 
     DrawDataPaint::paint(&painter, data);
 
     painter.endDraw();
 
-    Pixmap png = Pixmap::fromQPixmap(px);
+    Pixmap png = Pixmap::fromQImage(image);
     return png;
 }
 
-void DrawDataConverter::drawOnPixmap(Pixmap& px, const draw::DrawDataPtr& data, const Color& overlay)  const
+void DrawDataConverter::drawOnPixmap(Pixmap& px, const draw::DrawDataPtr& data, const Color& overlay)
 {
-    QPixmap qpx = Pixmap::toQPixmap(px);
-    Painter painter(&qpx, "DrawData");
+    QImage qim = Pixmap::toQImage(px);
+    qim.setDotsPerMeterX(std::lrint((DrawData::CANVAS_DPI * 1000) / mu::engraving::INCH));
+    qim.setDotsPerMeterY(std::lrint((DrawData::CANVAS_DPI * 1000) / mu::engraving::INCH));
+
+    Painter painter(&qim, "DrawData");
     DrawDataPaint::paint(&painter, data, overlay);
     painter.endDraw();
 
-    px = Pixmap::fromQPixmap(qpx);
+    px = Pixmap::fromQImage(qim);
 }

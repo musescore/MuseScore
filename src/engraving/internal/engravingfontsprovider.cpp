@@ -31,7 +31,8 @@ using namespace mu::engraving;
 
 void EngravingFontsProvider::addFont(const std::string& name, const std::string& family, const io::path_t& filePath)
 {
-    m_symbolFonts.push_back(std::make_shared<EngravingFont>(name, family, filePath));
+    std::shared_ptr<EngravingFont> f = std::make_shared<EngravingFont>(name, family, filePath);
+    m_symbolFonts.push_back(f);
     m_fallback.font = nullptr;
 }
 
@@ -94,4 +95,11 @@ IEngravingFontPtr EngravingFontsProvider::fallbackFont() const
 bool EngravingFontsProvider::isFallbackFont(const IEngravingFont* f) const
 {
     return doFallbackFont().get() == f;
+}
+
+void EngravingFontsProvider::loadAllFonts()
+{
+    for (std::shared_ptr<EngravingFont>& f : m_symbolFonts) {
+        f->ensureLoad();
+    }
 }

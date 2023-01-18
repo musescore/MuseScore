@@ -34,6 +34,9 @@ public:
 
     static RetVal<DrawDataPtr> readData(const io::path_t& filePath);
     static Ret writeData(const io::path_t& filePath, const DrawDataPtr& data);
+
+    static RetVal<Diff> readDiff(const io::path_t& filePath);
+    static Ret writeDiff(const io::path_t& filePath, const Diff& diff);
 };
 }
 

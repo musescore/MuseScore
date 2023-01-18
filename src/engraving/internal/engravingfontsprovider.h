@@ -43,6 +43,8 @@ public:
     IEngravingFontPtr fallbackFont() const override;
     bool isFallbackFont(const IEngravingFont* f) const override;
 
+    void loadAllFonts() override;
+
 private:
 
     std::shared_ptr<EngravingFont> doFontByName(const std::string& name) const;

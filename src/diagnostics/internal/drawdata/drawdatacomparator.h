@@ -19,34 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DRAWDATAGENERATOR_H
-#define MU_DIAGNOSTICS_DRAWDATAGENERATOR_H
+#ifndef MU_DIAGNOSTICS_DRAWDATACOMPARATOR_H
+#define MU_DIAGNOSTICS_DRAWDATACOMPARATOR_H
 
 #include "global/types/ret.h"
 #include "global/io/path.h"
 #include "draw/types/drawdata.h"
 
-namespace mu::engraving {
-class MasterScore;
-}
-
 namespace mu::diagnostics {
-class DrawDataGenerator
+class DrawDataComparator
 {
 public:
-    DrawDataGenerator() = default;
+    DrawDataComparator() = default;
 
-    Ret processDir(const io::path_t& scoreDir, const io::path_t& outDir, const io::path_t& ignoreFile);
-    Ret processFile(const io::path_t& scoreFile, const io::path_t& outFile);
-
-    draw::DrawDataPtr genDrawData(const io::path_t& scorePath) const;
-    draw::Pixmap genImage(const io::path_t& scorePath) const;
-
-private:
-
-    std::vector<std::string> loadIgnore(const mu::io::path_t& ignoreFile) const;
-    bool loadScore(engraving::MasterScore* score, const io::path_t& path) const;
+    draw::Diff compare(const draw::DrawDataPtr& ref, const draw::DrawDataPtr& test);
+    Ret compare(const io::path_t& ref, const io::path_t& test, const io::path_t& outdiff);
 };
 }
 
-#endif // MU_DIAGNOSTICS_DRAWDATAGENERATOR_H
+#endif // MU_DIAGNOSTICS_DRAWDATACOMPARATOR_H

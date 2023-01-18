@@ -91,12 +91,14 @@ public:
     enum class DiagnosticType {
         Undefined = 0,
         GenDrawData,
-        DrawDataToPng
+        ComDrawData,
+        DrawDataToPng,
+        DrawDiffToPng
     };
 
     struct Diagnostic {
         DiagnosticType type = DiagnosticType::Undefined;
-        QString input;
+        QStringList input;
         QString output;
     };
 

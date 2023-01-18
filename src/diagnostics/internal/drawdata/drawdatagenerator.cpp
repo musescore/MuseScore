@@ -46,8 +46,7 @@ using namespace mu::draw;
 using namespace mu::engraving;
 using namespace mu::iex::guitarpro;
 
-static const int CANVAS_DPI = 300;
-static const std::vector<std::string> FILES_FILTER = { "*.mscz", "*.gp", "*.gpx", "*.gp4", "*.gp5" };
+static const std::vector<std::string> FILES_FILTER = { "*.mscz", "*.mscx", "*.gp", "*.gpx", "*.gp4", "*.gp5" };
 
 Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& outDir, const io::path_t& ignoreFile)
 {
@@ -61,7 +60,7 @@ Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& 
 //            continue;
 //        }
 
-//        if (i > 1005) {
+//        if (i > 4) {
 //            break;
 //        }
 
@@ -85,7 +84,9 @@ Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& 
             continue;
         }
 
-        processFile(scores.val.at(i), outDir);
+        io::path_t scoreFile = scores.val.at(i);
+        io::path_t outFile = outDir + "/" + io::FileInfo(scoreFile).baseName() + ".json";
+        processFile(scoreFile, outFile);
     }
 
     PROFILER_PRINT;
@@ -93,36 +94,10 @@ Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& 
     return make_ok();
 }
 
-Ret DrawDataGenerator::processFile(const io::path_t& path, const io::path_t& outDir)
+Ret DrawDataGenerator::processFile(const io::path_t& scoreFile, const io::path_t& outFile)
 {
-    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
-    if (!loadScore(score, path)) {
-        LOGE() << "failed load score: " << path;
-        return make_ret(Ret::Code::UnknownError);
-    }
-
-    {
-        TRACEFUNC_C("Layout");
-        score->doLayout();
-    }
-
-    std::shared_ptr<BufferedPaintProvider> pd = std::make_shared<BufferedPaintProvider>();
-    {
-        TRACEFUNC_C("Paint");
-        Painter painter(pd, "DrawData");
-        Paint::Options opt;
-        opt.isSetViewport = true;
-        opt.isMultiPage = false;
-        opt.isPrinting = true;
-
-        Paint::paintScore(&painter, score, opt);
-    }
-
-    DrawDataPtr drawData = genDrawData(path);
-    io::path_t filePath = outDir + "/" + io::FileInfo(path).baseName() + ".json";
-    DrawDataRW::writeData(filePath, drawData);
-
-    delete score;
+    DrawDataPtr drawData = genDrawData(scoreFile);
+    DrawDataRW::writeData(outFile, drawData);
 
     return make_ok();
 }
@@ -147,7 +122,7 @@ DrawDataPtr DrawDataGenerator::genDrawData(const io::path_t& scorePath) const
         Paint::Options opt;
         opt.fromPage = 0;
         opt.toPage = 0;
-        opt.deviceDpi = CANVAS_DPI;
+        opt.deviceDpi = DrawData::CANVAS_DPI;
         opt.printPageBackground = true;
         opt.isSetViewport = true;
         opt.isMultiPage = false;
@@ -155,6 +130,8 @@ DrawDataPtr DrawDataGenerator::genDrawData(const io::path_t& scorePath) const
 
         Paint::paintScore(&painter, score, opt);
     }
+
+    delete score;
 
     DrawDataPtr drawData = pd->drawData();
     return drawData;
@@ -178,19 +155,21 @@ Pixmap DrawDataGenerator::genImage(const io::path_t& scorePath) const
 
     const SizeF pageSizeInch = Paint::pageSizeInch(score);
 
-    int width = std::lrint(pageSizeInch.width() * CANVAS_DPI);
-    int height = std::lrint(pageSizeInch.height() * CANVAS_DPI);
+    int width = std::lrint(pageSizeInch.width() * DrawData::CANVAS_DPI);
+    int height = std::lrint(pageSizeInch.height() * DrawData::CANVAS_DPI);
 
-    QPixmap qpx(width, height);
+    QImage image(width, height, QImage::Format_ARGB32_Premultiplied);
+    image.setDotsPerMeterX(std::lrint((DrawData::CANVAS_DPI * 1000) / mu::engraving::INCH));
+    image.setDotsPerMeterY(std::lrint((DrawData::CANVAS_DPI * 1000) / mu::engraving::INCH));
+
+    image.fill(Qt::white);
     {
-        Painter painter(&qpx, "DrawData");
-
-        painter.fillRect(RectF(0, 0, width, height), Color::WHITE);
+        Painter painter(&image, "DrawData");
 
         Paint::Options opt;
         opt.fromPage = 0;
         opt.toPage = 0;
-        opt.deviceDpi = CANVAS_DPI;
+        opt.deviceDpi = DrawData::CANVAS_DPI;
         opt.printPageBackground = false;
         opt.isSetViewport = true;
         opt.isMultiPage = false;
@@ -199,7 +178,7 @@ Pixmap DrawDataGenerator::genImage(const io::path_t& scorePath) const
         Paint::paintScore(&painter, score, opt);
     }
 
-    return Pixmap::fromQPixmap(qpx);
+    return Pixmap::fromQImage(image);
 }
 
 std::vector<std::string> DrawDataGenerator::loadIgnore(const io::path_t& ignoreFile) const

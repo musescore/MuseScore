@@ -64,6 +64,51 @@ void saveDiff(const io::path_t& path, const DrawDataPtr& origin, const DrawDataP
     io::File::writeFile(path, px.data());
 }
 
+TEST_F(Diagnostics_DrawDataTests, Rw)
+{
+    DrawDataPtr origin;
+    {
+        DrawDataGenerator g;
+        origin = g.genDrawData(VTEST_SCORES + "/accidental-1.mscx");
+        DrawDataRW::writeData("rw_data.origin.json", origin);
+    }
+
+    DrawDataPtr readed;
+    {
+        readed = DrawDataRW::readData("rw_data.origin.json").val;
+    }
+
+    mu::SetCompareRealPrecision(3);
+
+    EXPECT_EQ(origin->objects.size(), readed->objects.size());
+
+    for (size_t i = 0; i < origin->objects.size(); ++i) {
+        const DrawData::Object& originObj = origin->objects.at(i);
+        const DrawData::Object& readedObj = readed->objects.at(i);
+        EXPECT_EQ(originObj.datas.size(), readedObj.datas.size());
+
+        for (size_t j = 0; j < originObj.datas.size(); ++j) {
+            const DrawData::Data& originData = originObj.datas.at(j);
+            const DrawData::Data& readedData = readedObj.datas.at(j);
+            // state
+            const DrawData::State& originState = originData.state;
+            const DrawData::State& readedState = readedData.state;
+
+            EXPECT_EQ(originState.pen, readedState.pen);
+            EXPECT_EQ(originState.brush, readedState.brush);
+            EXPECT_EQ(originState.font, readedState.font);
+            EXPECT_EQ(originState.transform, readedState.transform);
+            EXPECT_EQ(originState.isAntialiasing, readedState.isAntialiasing);
+            EXPECT_EQ(originState.compositionMode, readedState.compositionMode);
+
+            // data
+            EXPECT_EQ(originData.paths, readedData.paths);
+            EXPECT_EQ(originData.polygons, readedData.polygons);
+            EXPECT_EQ(originData.texts, readedData.texts);
+        }
+    }
+}
+
 TEST_F(Diagnostics_DrawDataTests, SimpleDraw)
 {
     DrawDataPtr data;
@@ -71,6 +116,8 @@ TEST_F(Diagnostics_DrawDataTests, SimpleDraw)
     {
         std::shared_ptr<BufferedPaintProvider> prv = std::make_shared<BufferedPaintProvider>();
         Painter p(prv, "test");
+
+        p.setViewport(RectF(0, 0, 450, 450));
 
         PointF pos(120, 240);
         p.translate(pos);
@@ -91,7 +138,7 @@ TEST_F(Diagnostics_DrawDataTests, SimpleDraw)
     {
         DrawDataConverter c;
         Pixmap px = c.drawDataToPixmap(data);
-        io::File::writeFile("paint.png", px.data());
+        io::File::writeFile("1_data.png", px.data());
     }
 }
 
@@ -183,11 +230,19 @@ TEST_F(Diagnostics_DrawDataTests, DrawDiff)
 
     Diff diff = DrawDataComp::compare(origin, test);
 
-    saveAsPng("dd_origin.png", origin);
-    saveAsPng("dd_test.png", test);
-    saveAsPng("dd_added.png", diff.dataAdded);
-    saveAsPng("dd_removed.png", diff.dataRemoved);
-    saveDiff("dd_diff.png", origin, diff.dataAdded);
+    DrawDataRW::writeData("3_origin.json", origin);
+    saveAsPng("3_origin.png", origin);
+
+    DrawDataRW::writeData("3_test.json", test);
+    saveAsPng("3_test.png", test);
+
+    DrawDataRW::writeData("3_added.json", diff.dataAdded);
+    saveAsPng("3_added.png", diff.dataAdded);
+
+    DrawDataRW::writeData("3_removed.json", diff.dataRemoved);
+    saveAsPng("3_removed.png", diff.dataRemoved);
+
+    saveDiff("3_diff.png", origin, diff.dataAdded);
 
     const DrawDataPtr& dd = diff.dataAdded;
     EXPECT_EQ(dd->objects.size(), 1);
@@ -219,6 +274,7 @@ TEST_F(Diagnostics_DrawDataTests, ScoreDrawDiff)
     DrawDataRW::writeData("4_data2.json", data2);
     saveAsPng("4_data2.png", data2);
 
+    DrawDataRW::writeData("4_diff.added.json", diff.dataAdded);
     saveAsPng("4_added.png", diff.dataAdded);
 
     saveDiff("4_diff.png", data1, diff.dataAdded);

@@ -23,6 +23,8 @@
 #ifndef MU_DRAW_MATRIX_H
 #define MU_DRAW_MATRIX_H
 
+#include "global/realfn.h"
+
 namespace mu::draw {
 class Matrix
 {
@@ -70,12 +72,12 @@ public:
 
     bool operator ==(const Matrix& other) const
     {
-        return m_11 == other.m_11
-               && m_12 == other.m_12
-               && m_21 == other.m_21
-               && m_22 == other.m_22
-               && m_dx == other.m_dx
-               && m_dy == other.m_dy;
+        return RealIsEqual(m_11, other.m_11)
+               && RealIsEqual(m_12, other.m_12)
+               && RealIsEqual(m_21, other.m_21)
+               && RealIsEqual(m_22, other.m_22)
+               && RealIsEqual(m_dx, other.m_dx)
+               && RealIsEqual(m_dy, other.m_dy);
     }
 
 private:
