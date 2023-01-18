@@ -27,6 +27,14 @@ trap 'echo Setup failed; exit 1' ERR
 
 df -h .
 
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --arch) PACKARCH="$2"; shift ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
 BUILD_TOOLS=$HOME/build_tools
 ENV_FILE=$BUILD_TOOLS/environment.sh
 
@@ -79,6 +87,11 @@ apt_packages=(
   make
   desktop-file-utils # installs `desktop-file-validate` for appimagetool
   zsync # installs `zsyncmake` for appimagetool
+  libglib2.0-dev
+  librsvg2-dev
+  argagg-dev
+  libgcrypt20-dev
+  libcurl4-openssl-dev
   )
 
 # MuseScore compiles without these but won't run without them
@@ -263,17 +276,52 @@ mkdir -p $BUILD_TOOLS/appimagetool
 cd /
 appimagetool --version
 
-cd ${CURRDIR}
+##########################################################################
+# Compile and install appimageupdatetool
+##########################################################################
 
-##########################################################################
-# appimageupdatetool empty (TODO)
-##########################################################################
+git clone https://github.com/AppImageCommunity/AppImageUpdate.git
+cd AppImageUpdate
+git checkout --recurse-submodules 2.0.0-alpha-1-20220512
+git submodule update --init --recursive
+mkdir -p build
+cd build
+# switch to using pkgconf
+# the following is a super ugly hack that exists upstream
+apt-get install -y --no-install-recommends pkgconf
+
+if [ "$PACKARCH" == "armv7l" ]; then
+  cp ../ci/libgcrypt.pc /usr/lib/arm-linux-gnueabihf/pkgconfig/libgcrypt.pc
+  sed -i 's|x86_64-linux-gnu|arm-linux-gnueabihf|g' /usr/lib/arm-linux-gnueabihf/pkgconfig/libgcrypt.pc
+  sed -i 's|x86_64-pc-linux-gnu|arm-pc-linux-gnueabihf|g' /usr/lib/arm-linux-gnueabihf/pkgconfig/libgcrypt.pc
+else
+  cp ../ci/libgcrypt.pc /usr/lib/aarch64-linux-gnu/pkgconfig/libgcrypt.pc
+  sed -i 's|x86_64|aarch64|g' /usr/lib/aarch64-linux-gnu/pkgconfig/libgcrypt.pc
+fi
+
+# the hack uses pkgconf to produce a partial makefile and then installs back pkg-config to finish producing the makefile
+cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo .. || true
+apt-get install -y --no-install-recommends pkg-config
+cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+make -j"$(nproc)"
+# create the extracted appimage directory
 mkdir -p $BUILD_TOOLS/appimageupdatetool
+make install DESTDIR=$BUILD_TOOLS/appimageupdatetool/appimageupdatetool-${PACKARCH}.AppDir
+mkdir -p $BUILD_TOOLS/appimageupdatetool/appimageupdatetool-${PACKARCH}.AppDir/resources
+cp -v ../resources/*.xpm $BUILD_TOOLS/appimageupdatetool/appimageupdatetool-${PACKARCH}.AppDir/resources/
+$BUILD_TOOLS/linuxdeploy/linuxdeploy -v0 --appdir $BUILD_TOOLS/appimageupdatetool/appimageupdatetool-${PACKARCH}.AppDir  --output appimage -d ../resources/appimageupdatetool.desktop -i ../resources/appimage.png
+cd $BUILD_TOOLS/appimageupdatetool
+ln -s "appimageupdatetool-${PACKARCH}.AppDir/AppRun" appimageupdatetool # symlink for convenience
+rm -rf /usr/lib/arm-linux-gnueabihf/pkgconfig/libgcrypt.pc /usr/lib/aarch64-linux-gnu/pkgconfig/libgcrypt.pc
+cd /
+$BUILD_TOOLS/appimageupdatetool/appimageupdatetool --version
 
+cd ${CURRDIR}
 
 # delete build folders
 rm -rf /linuxdeploy*
 rm -rf /AppImageKit
+rm -rf /AppImageUpdate
 
 echo export PATH="${qt_dir}/bin:\${PATH}" >> ${ENV_FILE}
 echo export LD_LIBRARY_PATH="${qt_dir}/lib:\${LD_LIBRARY_PATH}" >> ${ENV_FILE}
