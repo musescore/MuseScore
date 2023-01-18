@@ -25,13 +25,24 @@
 #include "../types/drawdata.h"
 #include "global/types/retval.h"
 
+namespace mu {
+class JsonObject;
+}
+
 namespace mu::draw {
 class DrawDataJson
 {
 public:
 
-    static ByteArray toJson(const DrawDataPtr& buf);
+    static ByteArray toJson(const DrawDataPtr& data);
     static RetVal<DrawDataPtr> fromJson(const ByteArray& json);
+
+    static ByteArray diffToJson(const Diff& diff);
+    static RetVal<Diff> diffFromJson(const ByteArray& json);
+
+private:
+    static void toJson(JsonObject& root, const DrawDataPtr& data);
+    static void fromJson(const JsonObject& root, DrawDataPtr& data);
 };
 }
 #endif // MU_DRAW_DRAWDATAJSON_H

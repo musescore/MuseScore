@@ -36,6 +36,8 @@ public:
     MOCK_METHOD(Ret, copy, (const io::path_t& src, const io::path_t& dst, bool replace), (const, override));
     MOCK_METHOD(Ret, move, (const io::path_t& src, const io::path_t& dst, bool replace), (const, override));
 
+    MOCK_METHOD(EntryType, entryType, (const io::path_t& path), (const, override));
+
     MOCK_METHOD(RetVal<uint64_t>, fileSize, (const io::path_t& path), (const, override));
 
     MOCK_METHOD(RetVal<ByteArray>, readFile, (const io::path_t&), (const, override));

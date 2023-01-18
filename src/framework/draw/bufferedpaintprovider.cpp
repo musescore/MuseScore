@@ -141,9 +141,8 @@ void BufferedPaintProvider::setCompositionMode(CompositionMode mode)
     editableState().compositionMode = mode;
 }
 
-void BufferedPaintProvider::setWindow(const RectF& window)
+void BufferedPaintProvider::setWindow(const RectF&)
 {
-    m_buf->window = window;
 }
 
 void BufferedPaintProvider::setViewport(const RectF& viewport)

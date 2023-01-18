@@ -379,7 +379,15 @@ int AppShell::processDiagnostic(const CommandLineController::Diagnostic& task)
 
     Ret ret = make_ret(Ret::Code::Ok);
 
-    io::path_t input = task.input;
+    if (task.input.isEmpty()) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    io::paths_t input;
+    for (const QString& p : task.input) {
+        input.push_back(p);
+    }
+
     io::path_t output = task.output;
 
     if (output.empty()) {
@@ -388,11 +396,25 @@ int AppShell::processDiagnostic(const CommandLineController::Diagnostic& task)
 
     switch (task.type) {
     case CommandLineController::DiagnosticType::GenDrawData:
-        ret = engravingDrawProvider()->genDrawData(input, output);
+        ret = engravingDrawProvider()->generateDrawData(input.front(), output);
+        break;
+    case CommandLineController::DiagnosticType::ComDrawData:
+        IF_ASSERT_FAILED(input.size() == 2) {
+            return make_ret(Ret::Code::UnknownError);
+        }
+        ret = engravingDrawProvider()->compareDrawData(input.at(0), input.at(1), output);
         break;
     case CommandLineController::DiagnosticType::DrawDataToPng:
-        ret = engravingDrawProvider()->drawDataToPng(input, output);
+        ret = engravingDrawProvider()->drawDataToPng(input.front(), output);
         break;
+    case CommandLineController::DiagnosticType::DrawDiffToPng: {
+        io::path_t diffPath = input.at(0);
+        io::path_t refPath;
+        if (input.size() > 1) {
+            refPath = input.at(1);
+        }
+        ret = engravingDrawProvider()->drawDiffToPng(diffPath, refPath, output);
+    } break;
     default:
         break;
     }

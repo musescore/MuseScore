@@ -307,7 +307,7 @@ void QPainterProvider::drawSymbol(const PointF& point, char32_t ucs4Code)
         cache[ucs4Code] = QString::fromUcs4(&ucs4Code, 1);
     }
 
-    m_painter->drawText(QPointF(point.x(), point.y()), cache[ucs4Code]);
+    drawText(point, cache.value(ucs4Code));
 }
 
 void QPainterProvider::drawPixmap(const PointF& point, const Pixmap& pm)

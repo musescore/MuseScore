@@ -179,6 +179,18 @@ Ret FileSystem::makePath(const io::path_t& path) const
     return make_ret(Err::NoError);
 }
 
+EntryType FileSystem::entryType(const io::path_t& path) const
+{
+    QFileInfo fi(path.toQString());
+    if (fi.isFile()) {
+        return EntryType::File;
+    } else if (fi.isDir()) {
+        return EntryType::Dir;
+    }
+
+    return EntryType::Undefined;
+}
+
 RetVal<uint64_t> FileSystem::fileSize(const io::path_t& path) const
 {
     RetVal<uint64_t> rv;

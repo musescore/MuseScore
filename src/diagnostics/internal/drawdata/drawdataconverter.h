@@ -33,9 +33,13 @@ class DrawDataConverter
 public:
     DrawDataConverter() = default;
 
-    Ret drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile) const;
-    draw::Pixmap drawDataToPixmap(const draw::DrawDataPtr& data) const;
-    void drawOnPixmap(draw::Pixmap& px, const draw::DrawDataPtr& data, const draw::Color& overlay = draw::Color()) const;
+    Ret drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile);
+    Ret drawDiffToPng(const io::path_t& diffFile, const io::path_t& refFile, const io::path_t& outFile);
+
+    Ret saveAsPng(const draw::DrawDataPtr& data, const io::path_t& path);
+
+    draw::Pixmap drawDataToPixmap(const draw::DrawDataPtr& data);
+    void drawOnPixmap(draw::Pixmap& px, const draw::DrawDataPtr& data, const draw::Color& overlay = draw::Color());
 };
 }
 

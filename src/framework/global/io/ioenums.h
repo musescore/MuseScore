@@ -28,6 +28,12 @@ enum class ScanMode {
     FilesAndFoldersInCurrentDir,
     FilesInCurrentDirAndSubdirs
 };
+
+enum class EntryType {
+    Undefined = 0,
+    File,
+    Dir
+};
 }
 
 #endif // MU_IO_IOENUMS_H

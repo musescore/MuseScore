@@ -31,7 +31,8 @@ public:
 
     struct Tolerance {
         double base = -1.0;
-        Tolerance() {}
+        Tolerance(double b = -1.0)
+            : base(b) {}
     };
 
     static Diff compare(const DrawDataPtr& data, const DrawDataPtr& origin, Tolerance tolerance = Tolerance());

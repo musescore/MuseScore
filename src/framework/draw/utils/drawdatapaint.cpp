@@ -21,6 +21,8 @@
  */
 #include "drawdatapaint.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::draw;
 

@@ -44,3 +44,21 @@ Ret DrawDataRW::writeData(const io::path_t& filePath, const DrawDataPtr& data)
     ByteArray json = DrawDataJson::toJson(data);
     return io::File::writeFile(filePath, json);
 }
+
+RetVal<Diff> DrawDataRW::readDiff(const io::path_t& filePath)
+{
+    ByteArray json;
+    Ret ret = io::File::readFile(filePath, json);
+    if (!ret) {
+        return RetVal<Diff>(ret);
+    }
+
+    RetVal<Diff> rv = DrawDataJson::diffFromJson(json);
+    return rv;
+}
+
+Ret DrawDataRW::writeDiff(const io::path_t& filePath, const Diff& diff)
+{
+    ByteArray json = DrawDataJson::diffToJson(diff);
+    return io::File::writeFile(filePath, json);
+}

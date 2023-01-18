@@ -175,6 +175,18 @@ inline T takeLast(std::list<T>& l)
     return v;
 }
 
+template<typename T>
+inline std::pair<bool, T> take(std::list<T>& l, const T& v)
+{
+    auto it = std::find(l.begin(), l.end(), v);
+    if (it == l.end()) {
+        return std::make_pair(false, T());
+    }
+    std::pair<bool, T> ret = std::make_pair(true, *it);
+    l.erase(it);
+    return ret;
+}
+
 // set
 template<typename T>
 inline bool contains(const std::set<T>& s, const T& v)
