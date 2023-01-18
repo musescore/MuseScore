@@ -63,15 +63,17 @@ Measure* MeasureRepeat::firstMeasureOfGroup() const
     return measure()->firstOfMeasureRepeatGroup(staffIdx());
 }
 
-const Measure* MeasureRepeat::referringMeasure() const
+const Measure* MeasureRepeat::referringMeasure(const Measure* measure) const
 {
-    Measure* firstMeasureRepeat = firstMeasureOfGroup();
+    Measure* referringMeasure = firstMeasureOfGroup()->prevMeasure();
 
-    if (!firstMeasureRepeat) {
-        return nullptr;
+    int measuresBack = m_numMeasures - measure->measureRepeatCount(staffIdx());
+
+    for (int i = 0; i < measuresBack && referringMeasure; ++i) {
+        referringMeasure = referringMeasure->prevMeasure();
     }
 
-    return firstMeasureRepeat->prevMeasure();
+    return referringMeasure;
 }
 
 //---------------------------------------------------------

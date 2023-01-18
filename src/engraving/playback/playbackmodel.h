@@ -109,7 +109,7 @@ private:
                       ChangedTrackIdSet* trackChanges = nullptr);
 
     void processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& staffIdxSet,
-                        ChangedTrackIdSet* trackChanges);
+                        ChangedTrackIdSet* trackChanges, bool isFirstSegmentOfMeasure);
 
     bool hasToReloadTracks(const ScoreChangesRange& changesRange) const;
     bool hasToReloadScore(const std::unordered_set<ElementType>& changedTypes) const;
