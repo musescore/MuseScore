@@ -74,6 +74,7 @@ signals:
 private:
     void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
                            const mu::engraving::StyleIdSet& changedStyleIdSet) override;
+    void onOffsetChanged(const QVariant& offset);
 
     void loadProperties(const mu::engraving::PropertyIdSet& allowedPropertyIdSet);
 
