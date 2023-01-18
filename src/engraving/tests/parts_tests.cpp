@@ -615,7 +615,7 @@ TEST_F(Engraving_PartsTests, undoRedoRemoveFingering)
 //   Symbol
 //---------------------------------------------------------
 
-TEST_F(Engraving_PartsTests, DISABLED_createPartSymbol)
+TEST_F(Engraving_PartsTests, createPartSymbol)
 {
     testPartCreation(u"part-symbol");
 }
@@ -749,7 +749,7 @@ TEST_F(Engraving_PartsTests, undoRedoRemoveSymbol)
 //   Chordline
 //---------------------------------------------------------
 
-TEST_F(Engraving_PartsTests, DISABLED_createPartChordline)
+TEST_F(Engraving_PartsTests, createPartChordline)
 {
     testPartCreation(u"part-chordline");
 }
@@ -883,7 +883,7 @@ TEST_F(Engraving_PartsTests, undoRedoRemoveChordline)
 //   MeasureRepeat
 //---------------------------------------------------------
 
-TEST_F(Engraving_PartsTests, DISABLED_createPartMeasureRepeat)
+TEST_F(Engraving_PartsTests, createPartMeasureRepeat)
 {
     testPartCreation(u"part-measure-repeat");
 }
