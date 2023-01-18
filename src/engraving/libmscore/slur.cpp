@@ -1087,9 +1087,9 @@ void Slur::slurPos(SlurPos* sp)
         // clear the stem (x)
         // allow slight overlap (y)
         // don't allow overlap with hook if not disabling the autoplace checks against start/end segments in SlurSegment::layoutSegment()
-        double yadj = -stemSideInset* sc->mag();
+        double yadj = -stemSideInset* sc->intrinsicMag();
         yadj *= _spatium * __up;
-        double offset = std::max(stemOffsetX * sc->mag(), minOffset);
+        double offset = std::max(stemOffsetX * sc->intrinsicMag(), minOffset);
         pt += PointF(offset * _spatium, yadj);
         // account for articulations
         fixArticulations(pt, sc, __up, true);
@@ -1142,7 +1142,7 @@ void Slur::slurPos(SlurPos* sp)
             yadj = -stemSideInset;
         }
         yadj *= _spatium * __up;
-        double offset = std::max(stemOffsetX * ec->mag(), minOffset);
+        double offset = std::max(stemOffsetX * ec->intrinsicMag(), minOffset);
         pt += PointF(-offset * _spatium, yadj);
         // account for articulations
         fixArticulations(pt, ec, __up, true);
@@ -1173,7 +1173,7 @@ void Slur::slurPos(SlurPos* sp)
             po.ry() = scr->bbox().top() + scr->height();
         }
         double offset = useTablature ? 0.75 : 0.9;
-        po.ry() += scr->mag() * _spatium * offset * __up;
+        po.ry() += scr->intrinsicMag() * _spatium * offset * __up;
 
         // adjustments for stem and/or beam
         Tremolo* trem = sc ? sc->tremolo() : nullptr;
@@ -1186,14 +1186,14 @@ void Slur::slurPos(SlurPos* sp)
 
                 // in these cases, layout start of slur to stem
                 double beamWidthSp = score()->styleS(Sid::beamWidth).val() * beam1->magS();
-                double offset = std::max(beamClearance * sc->mag(), minOffset) * _spatium;
+                double offset = std::max(beamClearance * sc->intrinsicMag(), minOffset) * _spatium;
                 double sh = stem1->length() + (beamWidthSp / 2) + offset;
                 if (_up) {
                     po.ry() = sc->stemPos().y() - sc->pagePos().y() - sh;
                 } else {
                     po.ry() = sc->stemPos().y() - sc->pagePos().y() + sh;
                 }
-                po.rx() = sc->stemPosX() + (beamAnchorInset * _spatium * sc->mag()) + (stem1->lineWidthMag() / 2 * __up);
+                po.rx() = sc->stemPosX() + (beamAnchorInset * _spatium * sc->intrinsicMag()) + (stem1->lineWidthMag() / 2 * __up);
 
                 // account for articulations
                 fixArticulations(po, sc, __up, true);
@@ -1205,7 +1205,7 @@ void Slur::slurPos(SlurPos* sp)
                 trem->layout();
                 Note* note = _up ? sc->upNote() : sc->downNote();
                 double stemHeight = stem1 ? stem1->length() : trem->defaultStemLengthStart();
-                double offset = std::max(beamClearance * sc->mag(), minOffset) * _spatium;
+                double offset = std::max(beamClearance * sc->intrinsicMag(), minOffset) * _spatium;
                 double sh = stemHeight + offset;
 
                 if (_up) {
@@ -1216,7 +1216,7 @@ void Slur::slurPos(SlurPos* sp)
                 if (!stem1) {
                     po.rx() = note->noteheadCenterX();
                 } else {
-                    po.rx() = sc->stemPosX() + (beamAnchorInset * _spatium * sc->mag()) + (stem1->lineWidthMag() / 2. * __up);
+                    po.rx() = sc->stemPosX() + (beamAnchorInset * _spatium * sc->intrinsicMag()) + (stem1->lineWidthMag() / 2. * __up);
                 }
                 fixArticulations(po, sc, __up, true);
 
@@ -1301,7 +1301,7 @@ void Slur::slurPos(SlurPos* sp)
                 po.ry() = endCR()->bbox().top() + endCR()->height();
             }
             double offset = useTablature ? 0.75 : 0.9;
-            po.ry() += ecr->mag() * _spatium * offset * __up;
+            po.ry() += ecr->intrinsicMag() * _spatium * offset * __up;
 
             // adjustments for stem and/or beam
             Tremolo* trem = ec ? ec->tremolo() : nullptr;
@@ -1332,7 +1332,7 @@ void Slur::slurPos(SlurPos* sp)
                     double beamWidthSp = beam2 ? score()->styleS(Sid::beamWidth).val() : 0;
                     Note* note = _up ? sc->upNote() : sc->downNote();
                     double stemHeight = stem2 ? stem2->length() + (beamWidthSp / 2) : trem->defaultStemLengthEnd();
-                    double offset = std::max(beamClearance * ec->mag(), minOffset) * _spatium;
+                    double offset = std::max(beamClearance * ec->intrinsicMag(), minOffset) * _spatium;
                     double sh = stemHeight + offset;
 
                     if (_up) {
@@ -1344,7 +1344,7 @@ void Slur::slurPos(SlurPos* sp)
                         // tremolo whole notes
                         po.setX(note->noteheadCenterX());
                     } else {
-                        po.setX(ec->stemPosX() + (stem2->lineWidthMag() / 2 * __up) - (beamAnchorInset * _spatium * ec->mag()));
+                        po.setX(ec->stemPosX() + (stem2->lineWidthMag() / 2 * __up) - (beamAnchorInset * _spatium * ec->intrinsicMag()));
                     }
 
                     // account for articulations
