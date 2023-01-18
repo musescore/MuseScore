@@ -181,6 +181,7 @@ apt_packages_qt=(
   qt515svg
   qt515tools
   qt515translations
+  qt515wayland
   qt515x11extras
   qt515xmlpatterns
   )
