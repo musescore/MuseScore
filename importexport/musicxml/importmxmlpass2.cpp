@@ -4789,6 +4789,8 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
             clef = ClefType::G15_MA;
       else if (c == "G" && i == -1 && line == 2)
             clef = ClefType::G8_VB;
+      else if (c == "G" && i == -2 && line == 2)
+            clef = ClefType::G15_MB;
       else if (c == "G" && i == 0 && line == 1)
             clef = ClefType::G_1;
       else if (c == "F" && i == 0 && line == 3)
