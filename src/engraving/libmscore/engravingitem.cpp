@@ -2603,6 +2603,7 @@ void EngravingItem::autoplaceMeasureElement(bool above, bool add)
             sk.add(sh);
             d = ss->skyline().south().minDistance(sk);
         }
+        minDistance *= staff()->staffMag(this);
         if (d > -minDistance) {
             double yd = d + minDistance;
             if (above) {
