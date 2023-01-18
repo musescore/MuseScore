@@ -204,7 +204,7 @@ Ret ProjectActionsController::doOpenProject(const io::path_t& filePath)
             return ret;
         }
 
-        if (checkCanIgnoreError(ret, filePath)) {
+        if (checkCanIgnoreError(ret, io::filename(loadPath).toString())) {
             ret = project->load(loadPath, "" /*stylePath*/, true /*forceMode*/, format);
         }
 
@@ -357,15 +357,11 @@ IInteractive::Button ProjectActionsController::askAboutSavingScore(INotationProj
 
     std::string body = trc("project", "Your changes will be lost if you don’t save them.");
 
-    IInteractive::Options options {
-        IInteractive::Option::WithIcon
-    };
-
     IInteractive::Result result = interactive()->warning(title, body, {
         IInteractive::Button::DontSave,
         IInteractive::Button::Cancel,
         IInteractive::Button::Save
-    }, IInteractive::Button::Save, options);
+    }, IInteractive::Button::Save);
 
     return result.standardButton();
 }
@@ -853,7 +849,6 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
 
     IInteractive::ButtonData viewOnlineBtn(IInteractive::Button::CustomButton, trc("project/save", "View online"));
     IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
-    okBtn.accent = true;
 
     std::string msg = trc("project/save", "All saved changes will now update to the cloud. "
                                           "You can manage this file in the score manager on musescore.com.");
@@ -879,8 +874,6 @@ void ProjectActionsController::onProjectUploadFailed(const Ret& ret, bool publis
     std::string msg;
 
     IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
-    okBtn.accent = true;
-
     IInteractive::ButtonData helpBtn { IInteractive::Button::CustomButton, trc("project/save", "Get help") };
 
     IInteractive::ButtonDatas buttons { helpBtn, okBtn };
@@ -903,7 +896,7 @@ void ProjectActionsController::onProjectUploadFailed(const Ret& ret, bool publis
         break;
     }
 
-    IInteractive::Result result = interactive()->warning(title, msg, buttons, okBtn.btn, IInteractive::Option::WithIcon);
+    IInteractive::Result result = interactive()->warning(title, msg, buttons, okBtn.btn);
     if (result.button() == helpBtn.btn) {
         interactive()->openUrl(configuration()->supportForumUrl());
     }
@@ -920,11 +913,8 @@ void ProjectActionsController::warnCloudIsNotAvailable()
     std::string title = trc("project/save", "Unable to connect to the cloud");
     std::string msg = trc("project/save", "Your changes will be saved to a local file until the connection resumes.");
 
-    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
-    okBtn.accent = true;
-
     IInteractive::Result result = interactive()->warning(title, msg,
-                                                         { okBtn }, okBtn.btn,
+                                                         { IInteractive::Button::Ok }, IInteractive::Button::Ok,
                                                          IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
 
     configuration()->setShowCloudIsNotAvailableWarning(result.showAgain());
@@ -932,66 +922,82 @@ void ProjectActionsController::warnCloudIsNotAvailable()
 
 void ProjectActionsController::warnPublishIsNotAvailable()
 {
-    std::string title = trc("project/save", "Unable to connect to MuseScore.com");
-    std::string msg = trc("project/save", "Please check your internet connection or try again later.");
-
-    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
-    okBtn.accent = true;
-
-    interactive()->warning(title, msg, { okBtn }, okBtn.btn, IInteractive::Option::WithIcon);
+    interactive()->warning(trc("project/save", "Unable to connect to MuseScore.com"),
+                           trc("project/save", "Please check your internet connection or try again later."));
 }
 
 void ProjectActionsController::warnSaveIsNotAvailable()
 {
-    std::string title = trc("project/save", "Your score could not be saved");
     std::string msg;
 
     if (!currentMasterNotation()->hasParts()) {
         msg = trc("project/save", "Please add at least one instrument to enable saving.");
     }
 
-    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
-    okBtn.accent = true;
-
-    interactive()->warning(title, msg, { okBtn }, okBtn.btn, IInteractive::Option::WithIcon);
+    interactive()->warning(trc("project/save", "Your score could not be saved"), msg);
 }
 
-bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path_t& filePath)
+bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const String& projectName)
 {
-    static const QList<engraving::Err> ignorableErrors {
-        engraving::Err::FileTooOld,
-        engraving::Err::FileTooNew,
-        engraving::Err::FileCorrupted,
-        engraving::Err::FileOld300Format
-    };
-
-    //: an error that occurred while opening a file
-    std::string title = trc("project", "Open error");
-    std::string body = ret.text();
-
-    if (body.empty()) {
-        body = qtrc("project", "Cannot open file %1").arg(filePath.toQString()).toStdString();
+    if (ret) {
+        return true;
     }
 
-    IInteractive::Options options;
-    options.setFlag(IInteractive::Option::WithIcon);
-
-    bool canIgnore = ignorableErrors.contains(static_cast<engraving::Err>(ret.code()));
-
-    if (!canIgnore) {
-        interactive()->error(title, body, {
-            IInteractive::Button::Ok
-        }, IInteractive::Button::Ok, options);
-
+    switch (static_cast<engraving::Err>(ret.code())) {
+    case engraving::Err::FileTooOld:
+    case engraving::Err::FileTooNew:
+    case engraving::Err::FileOld300Format:
+        return askIfUserAgreesToOpenProjectWithIncompatibleVersion(ret.text());
+    case engraving::Err::FileCorrupted:
+        return askIfUserAgreesToOpenCorruptedProject(projectName, ret.text());
+    default:
+        warnProjectCannotBeOpened(projectName, ret.text());
         return false;
     }
+}
 
-    IInteractive::Result result = interactive()->warning(title, body, {
-        IInteractive::Button::Cancel,
-        IInteractive::Button::Ignore
-    }, IInteractive::Button::Ignore, options);
+bool ProjectActionsController::askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText)
+{
+    IInteractive::ButtonData openAnywayBtn(IInteractive::Button::CustomButton, trc("project", "Open anyway"), true /*accent*/);
 
-    return result.standardButton() == IInteractive::Button::Ignore;
+    int btn = interactive()->warning(errorText, "", {
+        interactive()->buttonData(IInteractive::Button::Cancel),
+        openAnywayBtn
+    }, openAnywayBtn.btn).button();
+
+    return btn == openAnywayBtn.btn;
+}
+
+bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const String& projectName, const std::string& errorText)
+{
+    std::string title = mtrc("project", "File “%1” is corrupted").arg(projectName).toStdString();
+    std::string body = trc("project", "This file contains errors that could cause MuseScore to malfunction.");
+
+    IInteractive::ButtonData openAnywayBtn(IInteractive::Button::CustomButton, trc("project", "Open anyway"), true /*accent*/);
+
+    int btn = interactive()->warning(title, body, errorText, {
+        interactive()->buttonData(IInteractive::Button::Cancel),
+        openAnywayBtn
+    }, openAnywayBtn.btn).button();
+
+    return btn == openAnywayBtn.btn;
+}
+
+void ProjectActionsController::warnProjectCannotBeOpened(const String& projectName, const std::string& errorText)
+{
+    std::string title = mtrc("project", "File “%1” is corrupted and cannot be opened").arg(projectName).toStdString();
+    std::string body = trc("project", "Get help for this issue on musescore.org.");
+
+    IInteractive::ButtonData getHelpBtn(IInteractive::Button::CustomButton, trc("project", "Get help"), true /*accent*/);
+
+    int btn = interactive()->error(title, body, errorText, {
+        interactive()->buttonData(IInteractive::Button::Cancel),
+        getHelpBtn
+    }, getHelpBtn.btn).button();
+
+    if (btn == getHelpBtn.btn) {
+        interactive()->openUrl(configuration()->supportForumUrl());
+    }
 }
 
 void ProjectActionsController::importPdf()

@@ -101,14 +101,12 @@ bool EngravingProject::readOnly() const
     return m_masterScore->readOnly();
 }
 
-Err EngravingProject::setupMasterScore(bool forceMode)
+Ret EngravingProject::setupMasterScore(bool forceMode)
 {
-    TRACEFUNC;
-    Err err = doSetupMasterScore(m_masterScore, forceMode);
-    return err;
+    return doSetupMasterScore(m_masterScore, forceMode);
 }
 
-Err EngravingProject::doSetupMasterScore(MasterScore* score, bool forceMode)
+Ret EngravingProject::doSetupMasterScore(MasterScore* score, bool forceMode)
 {
     TRACEFUNC;
 
@@ -132,12 +130,10 @@ Err EngravingProject::doSetupMasterScore(MasterScore* score, bool forceMode)
     score->update();
 
     if (!forceMode) {
-        if (!score->sanityCheck()) {
-            return Err::FileCorrupted;
-        }
+        return score->sanityCheck();
     }
 
-    return Err::NoError;
+    return make_ok();
 }
 
 MasterScore* EngravingProject::masterScore() const
@@ -145,13 +141,12 @@ MasterScore* EngravingProject::masterScore() const
     return m_masterScore;
 }
 
-Err EngravingProject::loadMscz(const MscReader& msc, bool ignoreVersionError)
+Ret EngravingProject::loadMscz(const MscReader& msc, bool ignoreVersionError)
 {
     TRACEFUNC;
     MScore::setError(MsError::MS_NO_ERROR);
     ScoreReader scoreReader;
-    Err err = scoreReader.loadMscz(m_masterScore, msc, ignoreVersionError);
-    return err;
+    return scoreReader.loadMscz(m_masterScore, msc, ignoreVersionError);
 }
 
 bool EngravingProject::writeMscz(MscWriter& writer, bool onlySelection, bool createThumbnail)

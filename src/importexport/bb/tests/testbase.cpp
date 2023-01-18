@@ -55,7 +55,7 @@ MasterScore* MTest::readScore(const QString& name)
     ScoreLoad sl;
     Err rv;
     if (suffix == "mscz" || suffix == "mscx") {
-        rv = compat::loadMsczOrMscx(score, path, false);
+        rv = static_cast<Err>(compat::loadMsczOrMscx(score, path, false).code());
     } else if (suffix == "sgu") {
         rv = iex::bb::importBB(score, path);
     } else {

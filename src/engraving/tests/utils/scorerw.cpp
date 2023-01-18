@@ -60,7 +60,7 @@ MasterScore* ScoreRW::readScore(const String& name, bool isAbsolutePath, ImportF
     ScoreLoad sl;
     Err rv;
     if (suffix == "mscz" || suffix == "mscx") {
-        rv = compat::loadMsczOrMscx(score, path.toString(), false);
+        rv = static_cast<Err>(compat::loadMsczOrMscx(score, path.toString(), false).code());
     } else if (importFunc) {
         rv = importFunc(score, path);
     } else {

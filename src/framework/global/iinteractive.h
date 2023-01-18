@@ -139,17 +139,23 @@ public:
 
     // warning
     virtual Result warning(const std::string& title, const std::string& text, const Buttons& buttons = {},
-                           const Button& def = Button::NoButton, const Options& options = {}) const = 0;
+                           const Button& def = Button::NoButton, const Options& options = { WithIcon }) const = 0;
 
     virtual Result warning(const std::string& title, const Text& text, const ButtonDatas& buttons = {}, int defBtn = int(Button::NoButton),
-                           const Options& options = {}) const = 0;
+                           const Options& options = { WithIcon }) const = 0;
+
+    virtual Result warning(const std::string& title, const Text& text, const std::string& detailedText, const ButtonDatas& buttons = {},
+                           int defBtn = int(Button::NoButton), const Options& options = { WithIcon }) const = 0;
 
     // error
     virtual Result error(const std::string& title, const std::string& text, const Buttons& buttons = {},
-                         const Button& def = Button::NoButton, const Options& options = {}) const = 0;
+                         const Button& def = Button::NoButton, const Options& options = { WithIcon }) const = 0;
 
     virtual Result error(const std::string& title, const Text& text, const ButtonDatas& buttons = {}, int defBtn = int(Button::NoButton),
-                         const Options& options = {}) const = 0;
+                         const Options& options = { WithIcon }) const = 0;
+
+    virtual Result error(const std::string& title, const Text& text, const std::string& detailedText, const ButtonDatas& buttons = {},
+                         int defBtn = int(Button::NoButton), const Options& options = { WithIcon }) const = 0;
 
     // files
     virtual io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) = 0;

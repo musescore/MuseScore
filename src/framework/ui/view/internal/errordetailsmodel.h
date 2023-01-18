@@ -19,32 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SCOREREADER_H
-#define MU_ENGRAVING_SCOREREADER_H
+#ifndef MU_UI_ERRORDETAILSMODEL_H
+#define MU_UI_ERRORDETAILSMODEL_H
 
-#include "../engravingerrors.h"
+#include <QAbstractListModel>
 
-#include "infrastructure/mscreader.h"
-#include "readcontext.h"
-#include "xml.h"
-
-#include "../libmscore/masterscore.h"
-
-namespace mu::engraving {
-class ScoreReader
+namespace mu::ui {
+class ErrorDetailsModel : public QAbstractListModel
 {
-public:
-    ScoreReader() = default;
+    Q_OBJECT
 
-    Ret loadMscz(MasterScore* score, const MscReader& mscReader, bool ignoreVersionError);
+public:
+    explicit ErrorDetailsModel(QObject* parent = nullptr);
+
+    QVariant data(const QModelIndex& index, int role) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QHash<int, QByteArray> roleNames() const override;
+
+    Q_INVOKABLE void load(const QString& detailedText);
+    Q_INVOKABLE bool copyDetailsToClipboard();
 
 private:
+    enum Roles {
+        ErrorText = Qt::UserRole + 1,
+        ErrorPlainText
+    };
 
-    friend class MasterScore;
-
-    Ret read(MasterScore* score, XmlReader&, ReadContext& ctx, compat::ReadStyleHook* styleHook = nullptr);
-    Err doRead(MasterScore* score, XmlReader& e, ReadContext& ctx);
+    QList<QVariantMap> m_items;
 };
 }
 
-#endif // MU_ENGRAVING_SCOREREADER_H
+#endif //MU_UI_ERRORDETAILSMODEL_H

@@ -184,9 +184,9 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
     // Load engraving project
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
 
-    engraving::Err err = m_engravingProject->loadMscz(reader, forceMode);
-    if (err != engraving::Err::NoError) {
-        return engraving::make_ret(err, reader.params().filePath);
+    Ret ret = m_engravingProject->loadMscz(reader, forceMode);
+    if (!ret) {
+        return ret;
     }
 
     MasterScore* masterScore = m_engravingProject->masterScore();
@@ -200,14 +200,14 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
     };
 
     // Setup master score
-    err = m_engravingProject->setupMasterScore(forceMode);
-    if (err != engraving::Err::NoError) {
-        return engraving::make_ret(err, reader.params().filePath);
+    ret = m_engravingProject->setupMasterScore(forceMode);
+    if (!ret) {
+        return ret;
     }
 
     // Migration
     if (migrator()) {
-        Ret ret = migrator()->migrateEngravingProjectIfNeed(m_engravingProject);
+        ret = migrator()->migrateEngravingProjectIfNeed(m_engravingProject);
         if (!ret) {
             return ret;
         }
@@ -223,7 +223,7 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
     masterScore->update();
 
     // Load other stuff from the project file
-    Ret ret = m_projectAudioSettings->read(reader);
+    ret = m_projectAudioSettings->read(reader);
     if (!ret) {
         return ret;
     }
@@ -266,9 +266,9 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
     }
 
     // Setup master score
-    engraving::Err err = m_engravingProject->setupMasterScore(forceMode);
-    if (err != engraving::Err::NoError) {
-        return make_ret(err);
+    ret = m_engravingProject->setupMasterScore(forceMode);
+    if (!ret) {
+        return ret;
     }
 
     // Load style if present
