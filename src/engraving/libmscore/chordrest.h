@@ -210,6 +210,8 @@ public:
     bool isBefore(const ChordRest*) const;
 
     void undoAddAnnotation(EngravingItem*);
+
+    virtual double intrinsicMag() const = 0;
 };
 } // namespace mu::engraving
 #endif

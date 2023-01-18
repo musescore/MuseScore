@@ -760,6 +760,18 @@ void Rest::setTrack(track_idx_t val)
 double Rest::mag() const
 {
     double m = staff() ? staff()->staffMag(this) : 1.0;
+    return m * intrinsicMag();
+}
+
+//---------------------------------------------------------
+//   intrinsicMag
+//   returns the INTRINSIC mag of the rest (i.e. NOT scaled
+//   by staff size)
+//---------------------------------------------------------
+
+double Rest::intrinsicMag() const
+{
+    double m = 1.0;
     if (isSmall()) {
         m *= score()->styleD(Sid::smallNoteMag);
     }

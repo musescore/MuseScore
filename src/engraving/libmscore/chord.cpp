@@ -1449,7 +1449,7 @@ int Chord::calcMinStemLength()
         // buzz roll's height is actually half of the visual height,
         // so we need to multiply it by 2 to get the actual height
         int buzzRollMultiplier = _tremolo->isBuzzRoll() ? 2 : 1;
-        minStemLength += ceil(_tremolo->minHeight() / _relativeMag * 4.0 * buzzRollMultiplier);
+        minStemLength += ceil(_tremolo->minHeight() / intrinsicMag() * 4.0 * buzzRollMultiplier);
         int outSidePadding = score()->styleMM(Sid::tremoloOutSidePadding).val() / _spatium * 4.0;
         int noteSidePadding = score()->styleMM(Sid::tremoloNoteSidePadding).val() / _spatium * 4.0;
 
@@ -1472,7 +1472,7 @@ int Chord::calcMinStemLength()
         if (_hook) {
             bool straightFlags = score()->styleB(Sid::useStraightNoteFlags);
             double smuflAnchor = _hook->smuflAnchor().y() * (_up ? 1 : -1);
-            int hookOffset = floor((_hook->height() / _relativeMag + smuflAnchor) / _spatium * 4) - (straightFlags ? 0 : 2);
+            int hookOffset = floor((_hook->height() / intrinsicMag() + smuflAnchor) / _spatium * 4) - (straightFlags ? 0 : 2);
             // some fonts have hooks that extend very far down (making the height of the hook very large)
             // so we constrain to a reasonable maximum for hook length
             hookOffset = std::min(hookOffset, 11);
@@ -1566,7 +1566,7 @@ int Chord::maxReduction(int extensionOutsideStaff) const
     int extensionHalfSpaces = floor(extensionOutsideStaff / 2.0);
     extensionHalfSpaces = std::min(extensionHalfSpaces, 4);
     int reduction = maxReductions[beamCount][extensionHalfSpaces];
-    if (_relativeMag < 1) {
+    if (intrinsicMag() < 1) {
         // there is an exception for grace-sized stems with hooks.
         // reducing by the full amount puts the hooks too low. Limit reduction to 0.5sp
         if (hasTradHook) {
@@ -1659,7 +1659,7 @@ double Chord::calcDefaultStemLength()
     }
     // extraHeight represents the extra vertical distance between notehead and stem start
     // eg. slashed noteheads etc
-    double extraHeight = (_up ? upNote()->stemUpSE().y() : downNote()->stemDownNW().y()) / _relativeMag / _spatium;
+    double extraHeight = (_up ? upNote()->stemUpSE().y() : downNote()->stemDownNW().y()) / intrinsicMag() / _spatium;
     int shortestStem = score()->styleB(Sid::useWideBeams) ? 12 : (score()->styleD(Sid::shortestStem) + abs(extraHeight)) * 4;
     int quarterSpacesPerLine = std::floor(lineDistance * 2);
     int chordHeight = (downLine() - upLine()) * quarterSpacesPerLine; // convert to quarter spaces
@@ -1712,7 +1712,7 @@ double Chord::calcDefaultStemLength()
         stemLength = calc4BeamsException(stemLength);
     }
 
-    double finalStemLength = (chordHeight / 4.0 * _spatium) + ((stemLength / 4.0 * _spatium) * _relativeMag);
+    double finalStemLength = (chordHeight / 4.0 * _spatium) + ((stemLength / 4.0 * _spatium) * intrinsicMag());
 
     // when the chord's magnitude is < 1, the stem length with mag can find itself below the middle line.
     // in those cases, we have to add the extra amount to it to bring it to a minimum.
@@ -1837,17 +1837,6 @@ void Chord::layoutHook()
     _hook->layout();
 }
 
-void Chord::calcRelativeMag()
-{
-    _relativeMag = 1;
-    if (isSmall()) {
-        _relativeMag *= score()->styleD(Sid::smallNoteMag);
-    }
-    if (isGrace()) {
-        _relativeMag *= score()->styleD(Sid::graceNoteMag);
-    }
-}
-
 //! May be called again when the chord is added to or removed from a beam.
 void Chord::layoutStem()
 {
@@ -1867,7 +1856,7 @@ void Chord::layoutStem()
         removeStem();
         return;
     }
-    calcRelativeMag();
+
     if (!_stem) {
         createStem();
     }
@@ -2050,7 +2039,6 @@ void Chord::layout()
     if (_notes.empty()) {
         return;
     }
-    calcRelativeMag();
     if (onTabStaff()) {
         layoutTablature();
     } else {
@@ -3227,10 +3215,12 @@ void Chord::removeMarkings(bool keepTremolo)
 }
 
 //---------------------------------------------------------
-//   chordMag
+//   intrinsicMag
+//   returns the INTRINSIC mag of the chord (i.e. NOT scaled
+//   by staff size)
 //---------------------------------------------------------
 
-double Chord::chordMag() const
+double Chord::intrinsicMag() const
 {
     double m = 1.0;
     if (isSmall()) {
@@ -3249,7 +3239,7 @@ double Chord::chordMag() const
 double Chord::mag() const
 {
     const Staff* st = staff();
-    return (st ? st->staffMag(this) : 1.0) * chordMag();
+    return (st ? st->staffMag(this) : 1.0) * intrinsicMag();
 }
 
 //---------------------------------------------------------

@@ -119,7 +119,6 @@ class Chord final : public ChordRest
 
     double _defaultStemLength;
     double _minStemLength;
-    double _relativeMag = 1; // mag() but relative to the staff size
 
     bool _isUiItem = false;
 
@@ -173,7 +172,6 @@ class Chord final : public ChordRest
     int calcMinStemLength();
     int calc4BeamsException(int stemLength) const;
     double calcDefaultStemLength();
-    void calcRelativeMag();
 
 public:
 
@@ -194,9 +192,8 @@ public:
     void undoUnlink() override;
 
     void setScore(Score* s) override;
-    double chordMag() const;
+    double intrinsicMag() const override;
     double mag() const override;
-    double relativeMag() const { return _relativeMag; }
     double noteHeadWidth() const;
 
     void write(XmlWriter& xml) const override;
