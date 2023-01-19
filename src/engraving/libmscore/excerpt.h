@@ -104,6 +104,7 @@ private:
     String m_name;
     async::Notification m_nameChanged;
     std::vector<Part*> m_parts;
+    std::vector<Staff*> m_cachedStaves;
     TracksMap m_tracksMapping;
     bool m_inited = false;
     ID m_initialPartId;
