@@ -259,8 +259,7 @@ void ApplicationActionController::revertToFactorySettings()
     IInteractive::Result result = interactive()->warning(title, question,
                                                          { interactive()->buttonData(IInteractive::Button::Cancel),
                                                            IInteractive::ButtonData(revertBtn, trc("appshell", "Revert"), true) },
-                                                         revertBtn, IInteractive::WithIcon
-                                                         );
+                                                         revertBtn);
 
     if (result.standardButton() == IInteractive::Button::Cancel) {
         return;

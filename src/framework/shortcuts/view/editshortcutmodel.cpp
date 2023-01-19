@@ -175,13 +175,11 @@ void EditShortcutModel::applyNewSequence()
                   .arg(m_originShortcutTitle);
 
     IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);
-    IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
-    okBtn.accent = true;
 
     IInteractive::Button btn = interactive()->warning(mu::trc("shortcuts", "Reassign shortcut"), text, {
         interactive()->buttonData(IInteractive::Button::Cancel),
-        okBtn,
-    }, (int)IInteractive::Button::Ok, IInteractive::Option::WithIcon).standardButton();
+        interactive()->buttonData(IInteractive::Button::Ok)
+    }, (int)IInteractive::Button::Ok).standardButton();
 
     if (btn != IInteractive::Button::Ok) {
         return;

@@ -65,9 +65,9 @@ public:
     bool readOnly() const;
 
     MasterScore* masterScore() const;
-    Err setupMasterScore(bool forceMode);
+    Ret setupMasterScore(bool forceMode);
 
-    Err loadMscz(const MscReader& msc, bool ignoreVersionError);
+    Ret loadMscz(const MscReader& msc, bool ignoreVersionError);
     bool writeMscz(MscWriter& writer, bool onlySelection, bool createThumbnail);
 
 private:
@@ -77,7 +77,7 @@ private:
 
     void init(const MStyle& style);
 
-    Err doSetupMasterScore(MasterScore* score, bool forceMode);
+    Ret doSetupMasterScore(MasterScore* score, bool forceMode);
 
     MasterScore* m_masterScore = nullptr;
 };

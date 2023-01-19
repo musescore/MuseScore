@@ -192,8 +192,9 @@ mu::Ret EditStaffType::loadScore(mu::engraving::MasterScore* score, const mu::io
 {
     mu::engraving::ScoreLoad sl;
 
-    if (compat::loadMsczOrMscx(score, path.toQString()) != engraving::Err::NoError) {
-        return make_ret(Ret::Code::UnknownError);
+    Ret ret = compat::loadMsczOrMscx(score, path.toQString());
+    if (!ret) {
+        return ret;
     }
 
     score->connectTies();
@@ -209,15 +210,10 @@ mu::Ret EditStaffType::loadScore(mu::engraving::MasterScore* score, const mu::io
         s->setLayoutAll();
     }
     score->updateChannel();
-    //score->updateExpressive(MuseScore::synthesizer("Fluid"));
     score->setSaved(true);
     score->update();
 
-    if (!score->sanityCheck()) {
-        return make_ret(engraving::Err::FileCorrupted, path);
-    }
-
-    return make_ret(Ret::Code::Ok);
+    return score->sanityCheck();
 }
 
 //---------------------------------------------------------

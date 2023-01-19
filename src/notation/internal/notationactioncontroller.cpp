@@ -826,8 +826,7 @@ void NotationActionController::putTuplet(const TupletOptions& options)
     }
 
     if (!interaction->canAddTupletToSelectedChordRests()) {
-        interactive()->error(trc("notation", "Cannot create tuplet"), trc("notation", "Note value is too short"),
-                             { IInteractive::Button::Ok });
+        interactive()->error(trc("notation", "Cannot create tuplet"), trc("notation", "Note value is too short"));
         return;
     }
 
@@ -1541,15 +1540,14 @@ void NotationActionController::loadStyle()
         File f(path.toQString());
         if (!f.open(IODevice::ReadOnly) || !mu::engraving::MStyle::isValid(&f)) {
             interactive()->error(trc("notation", "The style file could not be loaded."),
-                                 f.errorString(), { IInteractive::Button::Ok },
-                                 IInteractive::Button::Ok, IInteractive::Option::WithIcon);
+                                 f.errorString());
             return;
         }
         if (!currentNotationStyle()->loadStyle(path.toQString(), false) && interactive()->warning(
                 trc("notation",
                     "Since this style file is from a different version of MuseScore, your score is not guaranteed to display correctly."),
                 trc("notation", "Click OK to load anyway."), { IInteractive::Button::Ok, IInteractive::Button::Cancel },
-                IInteractive::Button::Ok, IInteractive::Option::WithIcon).standardButton()
+                IInteractive::Button::Ok).standardButton()
             == IInteractive::Button::Ok) {
             currentNotationStyle()->loadStyle(path.toQString(), true);
         }
@@ -1563,8 +1561,7 @@ void NotationActionController::saveStyle()
     if (!path.empty()) {
         if (!currentNotationStyle()->saveStyle(path)) {
             interactive()->error(trc("notation", "The style file could not be saved."),
-                                 trc("notation", "An error occurred."), { IInteractive::Button::Ok },
-                                 IInteractive::Button::Ok, IInteractive::Option::WithIcon);
+                                 trc("notation", "An error occurred."));
         }
     }
 }

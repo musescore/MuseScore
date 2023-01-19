@@ -48,13 +48,13 @@ public:
                              int defBtn = int(framework::IInteractive::Button::NoButton),
                              const framework::IInteractive::Options& options = {}) = 0;
 
-    virtual RetVal<Val> warning(const std::string& title, const framework::IInteractive::Text& text,
-                                const framework::IInteractive::ButtonDatas& buttons,
+    virtual RetVal<Val> warning(const std::string& title, const framework::IInteractive::Text& text, const std::string& detailedText = {},
+                                const framework::IInteractive::ButtonDatas& buttons = {},
                                 int defBtn = int(framework::IInteractive::Button::NoButton),
                                 const framework::IInteractive::Options& options = {}) = 0;
 
-    virtual RetVal<Val> error(const std::string& title, const framework::IInteractive::Text& text,
-                              const framework::IInteractive::ButtonDatas& buttons,
+    virtual RetVal<Val> error(const std::string& title, const framework::IInteractive::Text& text, const std::string& detailedText = {},
+                              const framework::IInteractive::ButtonDatas& buttons = {},
                               int defBtn = int(framework::IInteractive::Button::NoButton),
                               const framework::IInteractive::Options& options = {}) = 0;
 
