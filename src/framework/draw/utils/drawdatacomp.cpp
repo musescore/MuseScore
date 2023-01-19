@@ -152,6 +152,7 @@ static bool isEqual(const Brush& b1, const Brush& b2)
     return true;
 }
 
+#if 0 // currently unused, disabled due to an MSVC compiler warning C4505
 static bool isEqual(const Font& f1, const Font& f2)
 {
     if (f1.family() != f2.family()) {
@@ -242,6 +243,8 @@ static bool isEqual(const DrawData::State& s1, const DrawData::State& s2, DrawDa
 
     return true;
 }
+
+#endif
 
 static bool isEqual(const PainterPath& v1, const PainterPath& v2, double tolerance)
 {
@@ -363,6 +366,7 @@ static bool isEqual(const DrawPixmap& v1, const DrawPixmap& v2, DrawDataComp::To
     return true;
 }
 
+#if 0 // currently unused, disabled due to an MSVC compiler warning C4505
 static bool isEqual(const DrawData::Data& d1, const DrawData::Data& d2, DrawDataComp::Tolerance tolerance)
 {
     if (!isEqual(d1.state, d2.state, tolerance)) {
@@ -387,6 +391,8 @@ static bool isEqual(const DrawData::Data& d1, const DrawData::Data& d2, DrawData
 
     return true;
 }
+
+#endif
 
 template<class T>
 static bool isEqual(const std::vector<T>& v1, const std::vector<T>& v2, DrawDataComp::Tolerance tolerance)
@@ -420,6 +426,7 @@ static bool isEqual(const std::vector<T>& v1, const std::vector<T>& v2, DrawData
     return true;
 }
 
+#if 0 // currently unused, disabled due to an MSVC compiler warning C4505
 static bool isEqual(const DrawData::Object& o1, const DrawData::Object& o2, DrawDataComp::Tolerance tolerance)
 {
     if (o1.name != o2.name) {
@@ -436,6 +443,8 @@ static bool isEqual(const DrawData::Object& o1, const DrawData::Object& o2, Draw
 
     return true;
 }
+
+#endif
 
 static bool isEqual(const Path& p1, const Path& p2, DrawDataComp::Tolerance tolerance)
 {
