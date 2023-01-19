@@ -103,7 +103,7 @@ void MasterScore::checkMidiMapping()
 //   getNextFreeMidiMapping
 //---------------------------------------------------------
 
-int MasterScore::getNextFreeMidiMapping(int p, int ch)
+int MasterScore::getNextFreeMidiMapping(std::set<int>& occupiedMidiChannels, unsigned int& searchMidiMappingFrom, int p, int ch)
 {
     if (ch != -1 && p != -1) {
         return p * 16 + ch;
@@ -135,7 +135,7 @@ int MasterScore::getNextFreeMidiMapping(int p, int ch)
 //   getNextFreeDrumMidiMapping
 //---------------------------------------------------------
 
-int MasterScore::getNextFreeDrumMidiMapping()
+int MasterScore::getNextFreeDrumMidiMapping(std::set<int>& occupiedMidiChannels)
 {
     for (int i = 0;; i++) {
         if (!mu::contains(occupiedMidiChannels, i * 16 + 9)) {
@@ -256,8 +256,8 @@ void MasterScore::removeDeletedMidiMapping()
 int MasterScore::updateMidiMapping()
 {
     int maxport = 0;
-    occupiedMidiChannels.clear();
-    searchMidiMappingFrom = 0;
+    std::set<int> occupiedMidiChannels;// each entry is port*16+channel, port range: 0-inf, channel: 0-15
+    unsigned int searchMidiMappingFrom = 0;           // makes getting next free MIDI mapping faster
 
     for (const MidiMapping& mm :_midiMapping) {
         if (mm.port() == -1 || mm.channel() == -1) {
@@ -284,15 +284,18 @@ int MasterScore::updateMidiMapping()
                 // Channel could already exist, but have unassigned port or channel. Repair and continue
                 if (channelExists) {
                     if (_midiMapping[channel->channel()].port() == -1) {
-                        const int nm = getNextFreeMidiMapping(-1, _midiMapping[channel->channel()].channel());
+                        const int nm
+                            = getNextFreeMidiMapping(occupiedMidiChannels, searchMidiMappingFrom, -1,
+                                                     _midiMapping[channel->channel()].channel());
                         _midiMapping[channel->channel()]._port = nm / 16;
                     } else if (_midiMapping[channel->channel()].channel() == -1) {
                         if (drum) {
-                            _midiMapping[channel->channel()]._port = getNextFreeDrumMidiMapping() / 16;
+                            _midiMapping[channel->channel()]._port = getNextFreeDrumMidiMapping(occupiedMidiChannels) / 16;
                             _midiMapping[channel->channel()]._channel = 9;
                             continue;
                         }
-                        int nm = getNextFreeMidiMapping(_midiMapping[channel->channel()].port());
+                        int nm = getNextFreeMidiMapping(occupiedMidiChannels, searchMidiMappingFrom,
+                                                        _midiMapping[channel->channel()].port());
                         _midiMapping[channel->channel()]._port    = nm / 16;
                         _midiMapping[channel->channel()]._channel = nm % 16;
                     }
@@ -302,10 +305,10 @@ int MasterScore::updateMidiMapping()
                 int midiPort;
                 int midiChannel;
                 if (drum) {
-                    midiPort = getNextFreeDrumMidiMapping() / 16;
+                    midiPort = getNextFreeDrumMidiMapping(occupiedMidiChannels) / 16;
                     midiChannel = 9;
                 } else {
-                    int nm = getNextFreeMidiMapping();
+                    int nm = getNextFreeMidiMapping(occupiedMidiChannels, searchMidiMappingFrom);
                     midiPort    = nm / 16;
                     midiChannel = nm % 16;
                 }
