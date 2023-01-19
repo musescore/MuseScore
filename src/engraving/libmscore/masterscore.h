@@ -102,9 +102,6 @@ class MasterScore : public Score
     std::vector<MidiMapping> _midiMapping;
     bool isSimpleMidiMapping = false;                 // midi mapping is simple if all ports and channels
                                                       // don't decrease and don't have gaps
-    std::set<int> occupiedMidiChannels;               // each entry is port*16+channel, port range: 0-inf, channel: 0-15
-    unsigned int searchMidiMappingFrom = 0;           // makes getting next free MIDI mapping faster
-
     double m_widthOfSegmentCell = 3;
 
     std::weak_ptr<EngravingProject> m_project;
@@ -198,8 +195,8 @@ public:
     void rebuildMidiMapping();
     void checkMidiMapping();
     bool exportMidiMapping() { return !isSimpleMidiMapping; }
-    int getNextFreeMidiMapping(int p = -1, int ch = -1);
-    int getNextFreeDrumMidiMapping();
+    int getNextFreeMidiMapping(std::set<int>& occupiedMidiChannels, unsigned int& searchMidiMappingFrom, int p = -1, int ch = -1);
+    int getNextFreeDrumMidiMapping(std::set<int>& occupiedMidiChannels);
 //    void enqueueMidiEvent(MidiInputEvent ev) { _midiInputQueue.enqueue(ev); }
     void rebuildAndUpdateExpressive(Synthesizer* synth);
     void updateExpressive(Synthesizer* synth);
