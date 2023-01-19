@@ -1139,9 +1139,14 @@ void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, const 
         if (m->isMeasureRepeatGroup(staffIdx)) {
             MeasureRepeat* mr = m->measureRepeatElement(staffIdx);
             Measure const* playMeasure = lastMeasure;
+            if (!playMeasure || !mr) {
+                continue;
+            }
+
             for (int i = m->measureRepeatCount(staffIdx); i < mr->numMeasures() && playMeasure->prevMeasure(); ++i) {
                 playMeasure = playMeasure->prevMeasure();
             }
+
             int offset = (m->tick() - playMeasure->tick()).ticks();
             collectMeasureEvents(events, playMeasure, sctx, tickOffset + offset);
         } else {
