@@ -59,6 +59,10 @@ private:
     void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
+    void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                           const mu::engraving::StyleIdSet& changedStyleIdSet) override;
+
+    void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
     PropertyItem* m_isHeadHidden = nullptr;
     PropertyItem* m_isHeadSmall = nullptr;
