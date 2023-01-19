@@ -108,6 +108,7 @@ private:
     void addTie();
     void chordTie();
     void addSlur();
+    void addFret(int num);
 
     framework::IInteractive::Result showErrorMessage(const std::string& message) const;
 

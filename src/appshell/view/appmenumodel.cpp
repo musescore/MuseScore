@@ -322,7 +322,6 @@ MenuItem* AppMenuModel::makeHelpMenu()
         makeSeparator(),
         makeMenuItem("ask-help"),
         makeMenuItem("report-bug"),
-        makeMenuItem("leave-feedback"),
         makeSeparator(),
         makeMenuItem("about", MenuItemRole::AboutRole),
         makeMenuItem("about-qt", MenuItemRole::AboutQtRole),

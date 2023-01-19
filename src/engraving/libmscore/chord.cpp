@@ -1367,7 +1367,7 @@ double Chord::centerX() const
 //   processSiblings
 //---------------------------------------------------------
 
-void Chord::processSiblings(std::function<void(EngravingItem*)> func) const
+void Chord::processSiblings(std::function<void(EngravingItem*)> func, bool includeTemporarySiblings) const
 {
     if (_hook) {
         func(_hook);
@@ -1384,8 +1384,10 @@ void Chord::processSiblings(std::function<void(EngravingItem*)> func) const
     if (_tremolo) {
         func(_tremolo);
     }
-    for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next()) {
-        func(ll);
+    if (includeTemporarySiblings) {
+        for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next()) {
+            func(ll);
+        }
     }
     for (Articulation* a : _articulations) {
         func(a);
@@ -1405,7 +1407,7 @@ void Chord::processSiblings(std::function<void(EngravingItem*)> func) const
 void Chord::setTrack(track_idx_t val)
 {
     ChordRest::setTrack(val);
-    processSiblings([val](EngravingItem* e) { e->setTrack(val); });
+    processSiblings([val](EngravingItem* e) { e->setTrack(val); }, true);
 }
 
 //---------------------------------------------------------
@@ -1415,7 +1417,7 @@ void Chord::setTrack(track_idx_t val)
 void Chord::setScore(Score* s)
 {
     ChordRest::setScore(s);
-    processSiblings([s](EngravingItem* e) { e->setScore(s); });
+    processSiblings([s](EngravingItem* e) { e->setScore(s); }, true);
 }
 
 // all values are in quarter spaces
@@ -2640,7 +2642,7 @@ void Chord::layoutTablature()
         _notes.at(i)->layout2();
     }
     RectF bb;
-    processSiblings([&bb](EngravingItem* e) { bb.unite(e->bbox().translated(e->pos())); });
+    processSiblings([&bb](EngravingItem* e) { bb.unite(e->bbox().translated(e->pos())); }, true);
     if (_tabDur) {
         bb.unite(_tabDur->bbox().translated(_tabDur->pos()));
     }
@@ -3721,7 +3723,7 @@ void Chord::undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFl
     if (id == Pid::VISIBLE) {
         processSiblings([=](EngravingItem* element) {
             element->undoChangeProperty(id, newValue, ps);
-        });
+        }, false);
     }
 
     EngravingItem::undoChangeProperty(id, newValue, ps);

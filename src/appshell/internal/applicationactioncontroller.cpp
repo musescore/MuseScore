@@ -63,7 +63,6 @@ void ApplicationActionController::init()
     dispatcher()->reg(this, "online-handbook", this, &ApplicationActionController::openOnlineHandbookPage);
     dispatcher()->reg(this, "ask-help", this, &ApplicationActionController::openAskForHelpPage);
     dispatcher()->reg(this, "report-bug", this, &ApplicationActionController::openBugReportPage);
-    dispatcher()->reg(this, "leave-feedback", this, &ApplicationActionController::openLeaveFeedbackPage);
     dispatcher()->reg(this, "preference-dialog", this, &ApplicationActionController::openPreferencesDialog);
 
     dispatcher()->reg(this, "revert-factory", this, &ApplicationActionController::revertToFactorySettings);
@@ -127,9 +126,10 @@ void ApplicationActionController::onDropEvent(QDropEvent* event)
 
 bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
 {
-    if (event->type() == QEvent::Close && watched == mainWindow()->qWindow()) {
-        quit(false);
-        event->ignore();
+    if ((event->type() == QEvent::Close && watched == mainWindow()->qWindow())
+        || event->type() == QEvent::Quit) {
+        bool accepted = quit(false);
+        event->setAccepted(accepted);
 
         return true;
     }
@@ -159,27 +159,30 @@ mu::ValCh<bool> ApplicationActionController::isFullScreen() const
     return result;
 }
 
-void ApplicationActionController::quit(bool isAllInstances, const io::path_t& installerPath)
+bool ApplicationActionController::quit(bool isAllInstances, const io::path_t& installerPath)
 {
-    if (projectFilesController()->closeOpenedProject()) {
-        if (isAllInstances) {
-            multiInstancesProvider()->quitForAll();
-        }
-
-        if (multiInstancesProvider()->instances().size() == 1 && !installerPath.empty()) {
-#if defined(Q_OS_LINUX)
-            interactive()->revealInFileBrowser(installerPath);
-#else
-            interactive()->openUrl(QUrl::fromLocalFile(installerPath.toQString()));
-#endif
-        }
-
-        if (multiInstancesProvider()->instances().size() > 1) {
-            multiInstancesProvider()->notifyAboutInstanceWasQuited();
-        }
-
-        QCoreApplication::quit();
+    if (!projectFilesController()->closeOpenedProject()) {
+        return false;
     }
+
+    if (isAllInstances) {
+        multiInstancesProvider()->quitForAll();
+    }
+
+    if (multiInstancesProvider()->instances().size() == 1 && !installerPath.empty()) {
+#if defined(Q_OS_LINUX)
+        interactive()->revealInFileBrowser(installerPath);
+#else
+        interactive()->openUrl(QUrl::fromLocalFile(installerPath.toQString()));
+#endif
+    }
+
+    if (multiInstancesProvider()->instances().size() > 1) {
+        multiInstancesProvider()->notifyAboutInstanceWasQuited();
+    }
+
+    QCoreApplication::quit();
+    return true;
 }
 
 void ApplicationActionController::restart()
@@ -233,12 +236,6 @@ void ApplicationActionController::openBugReportPage()
 {
     std::string bugReportUrl = configuration()->bugReportUrl();
     interactive()->openUrl(bugReportUrl);
-}
-
-void ApplicationActionController::openLeaveFeedbackPage()
-{
-    std::string leaveFeedbackUrl = configuration()->leaveFeedbackUrl();
-    interactive()->openUrl(leaveFeedbackUrl);
 }
 
 void ApplicationActionController::openPreferencesDialog()

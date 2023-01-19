@@ -107,7 +107,13 @@ void PlaybackToolBarModel::updateActions()
             //! NOTE In this case, we want to see the actions' description instead of the title
             settingsItems << makeMenuItem(item.action);
         } else {
-            result << makeMenuItem(item.action);
+            MenuItem* menuItem = makeMenuItem(item.action);
+
+            if (item.action == PLAY_ACTION_CODE) {
+                menuItem->setAction(playAction());
+            }
+
+            result << menuItem;
         }
     }
 
@@ -127,12 +133,8 @@ void PlaybackToolBarModel::onActionsStateChanges(const actions::ActionCodeList& 
     AbstractMenuModel::onActionsStateChanges(codes);
 
     if (isPlayAllowed() && containsAction(codes, PLAY_ACTION_CODE)) {
-        bool isPlaying = playbackController()->isPlaying();
-
         MenuItem& item = findItem(PLAY_ACTION_CODE);
-        UiAction action = item.action();
-        action.iconCode = isPlaying ? IconCode::Code::PAUSE : IconCode::Code::PLAY;
-        item.setAction(action);
+        item.setAction(playAction());
     }
 }
 
@@ -216,6 +218,16 @@ QTime PlaybackToolBarModel::totalPlayTime() const
 MeasureBeat PlaybackToolBarModel::measureBeat() const
 {
     return playbackController()->currentBeat();
+}
+
+UiAction PlaybackToolBarModel::playAction() const
+{
+    UiAction action = uiActionsRegister()->action(PLAY_ACTION_CODE);
+
+    bool isPlaying = playbackController()->isPlaying();
+    action.iconCode =  isPlaying ? IconCode::Code::PAUSE : IconCode::Code::PLAY;
+
+    return action;
 }
 
 void PlaybackToolBarModel::updatePlayPosition()

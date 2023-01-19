@@ -151,7 +151,9 @@ class Chord final : public ChordRest
     double downPos() const override;
     double centerX() const;
     void addLedgerLines();
-    void processSiblings(std::function<void(EngravingItem*)> func) const;
+
+    // `includeTemporarySiblings`: whether items that are deleted & recreated during every layout should also be processed
+    void processSiblings(std::function<void(EngravingItem*)> func, bool includeTemporarySiblings) const;
 
     void layoutPitched();
     void layoutTablature();
