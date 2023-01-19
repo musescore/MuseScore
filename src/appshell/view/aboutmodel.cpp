@@ -97,6 +97,11 @@ void AboutModel::copyRevisionToClipboard() const
         .arg(MUSESCORE_REVISION));
 }
 
+void AboutModel::toggleDevMode()
+{
+    globalConfiguration()->setDevModeEnabled(!globalConfiguration()->devModeEnabled());
+}
+
 QVariantMap AboutModel::makeUrl(const QUrl& url, bool showPath) const
 {
     QVariantMap urlMap;

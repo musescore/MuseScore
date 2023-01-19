@@ -19,22 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import MuseScore.Ui 1.0
-import MuseScore.UiComponents 1.0
+#ifndef MU_DIAGNOSTICS_ISAVEDIAGNOSTICFILESSCENARIO_H
+#define MU_DIAGNOSTICS_ISAVEDIAGNOSTICFILESSCENARIO_H
 
-Rectangle {
+#include "modularity/imoduleexport.h"
 
-    color: ui.theme.backgroundPrimaryColor
+#include "types/ret.h"
 
-    FlatButton {
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.topMargin: 24
-        anchors.leftMargin: 24
-        text: "Open Autobot"
-        onClicked: api.launcher.open("musescore://autobot/main")
-    }
+namespace mu::diagnostics {
+class ISaveDiagnosticFilesScenario : MODULE_EXPORT_INTERFACE
+{
+    INTERFACE_ID(ISaveDiagnosticFilesScenario)
 
-    //! NOTE Will be some settings here
+public:
+    virtual ~ISaveDiagnosticFilesScenario() = default;
+
+    virtual mu::Ret saveDiagnosticFiles() = 0;
+};
 }
+
+#endif // MU_DIAGNOSTICS_ISAVEDIAGNOSTICFILESSCENARIO_H

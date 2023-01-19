@@ -29,6 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
+#include "iglobalconfiguration.h"
 
 namespace mu::appshell {
 class MainToolBarModel : public QAbstractListModel, public async::Asyncable
@@ -36,6 +37,7 @@ class MainToolBarModel : public QAbstractListModel, public async::Asyncable
     Q_OBJECT
 
     INJECT(appshell, context::IGlobalContext, context)
+    INJECT(appshell, framework::IGlobalConfiguration, globalConfiguration)
 
 public:
     explicit MainToolBarModel(QObject* parent = nullptr);

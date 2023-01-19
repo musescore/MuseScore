@@ -28,14 +28,21 @@
 
 #include "config.h"
 #include "settings.h"
+#include "version.h"
 #include "log.h"
 
 using namespace mu;
 using namespace mu::framework;
 
 static const Settings::Key BACKUP_KEY("global", "application/backup/subfolder");
+static const Settings::Key DEV_MODE_ENABLED_KEY("global", "application/devModeEnabled");
 
 static const std::string MUSESCORE_URL("https://www.musescore.org/");
+
+void GlobalConfiguration::init()
+{
+    settings()->setDefaultValue(DEV_MODE_ENABLED_KEY, Val(Version::unstable()));
+}
 
 io::path_t GlobalConfiguration::appBinPath() const
 {
@@ -126,6 +133,16 @@ bool GlobalConfiguration::useFactorySettings() const
 bool GlobalConfiguration::enableExperimental() const
 {
     return false;
+}
+
+bool GlobalConfiguration::devModeEnabled() const
+{
+    return settings()->value(DEV_MODE_ENABLED_KEY).toBool();
+}
+
+void GlobalConfiguration::setDevModeEnabled(bool enabled)
+{
+    settings()->setSharedValue(DEV_MODE_ENABLED_KEY, Val(enabled));
 }
 
 std::string GlobalConfiguration::museScoreUrl() const
