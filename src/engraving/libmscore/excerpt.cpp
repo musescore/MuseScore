@@ -216,16 +216,15 @@ void Excerpt::updateTracksMapping(bool voicesVisibilityChanged)
 
     TracksMap tracks;
 
-    static std::vector<Staff*> staves;
-    if (staves == score->staves() && !voicesVisibilityChanged) {
+    if (m_cachedStaves == score->staves() && !voicesVisibilityChanged) {
         return;
     }
 
     TRACEFUNC;
 
-    staves = score->staves();
+    m_cachedStaves = score->staves();
 
-    for (Staff* staff : staves) {
+    for (Staff* staff : m_cachedStaves) {
         Staff* masterStaff = masterScore()->staffById(staff->id());
         if (!masterStaff) {
             continue;
