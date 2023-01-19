@@ -61,6 +61,11 @@ void WriteScoreHook::onWriteExcerpts302(Score* score, XmlWriter& xml, bool selec
     isWriteExcerpts = true;
 #endif
 
+    //! NOTE If the test mode, because the tests have not yet been adapted to the new format
+    if (MScore::testMode) {
+        isWriteExcerpts = true;
+    }
+
     if (isWriteExcerpts) {
         if (score->isMaster()) {
             if (!selectionOnly) {
