@@ -324,6 +324,25 @@ rm -rf /linuxdeploy*
 rm -rf /AppImageKit
 rm -rf /AppImageUpdate
 
+# Dump syms
+if [ "$PACKARCH" == "armv7l" ]; then
+  echo "Get Breakpad"
+  breakpad_dir=$BUILD_TOOLS/breakpad
+  if [[ ! -d "$breakpad_dir" ]]; then
+    wget -q --show-progress -O $BUILD_TOOLS/dump_syms.7z "https://s3.amazonaws.com/utils.musescore.org/breakpad/linux/armv7l/dump_syms.zip"
+    7z x -y $BUILD_TOOLS/dump_syms.7z -o"$breakpad_dir"
+  fi
+  echo export DUMPSYMS_BIN="$breakpad_dir/dump_syms" >> $ENV_FILE
+else
+  echo "Get Breakpad"
+  breakpad_dir=$BUILD_TOOLS/breakpad
+  if [[ ! -d "$breakpad_dir" ]]; then
+    wget -q --show-progress -O $BUILD_TOOLS/dump_syms.7z "https://s3.amazonaws.com/utils.musescore.org/breakpad/linux/aarch64/dump_syms.zip"
+    7z x -y $BUILD_TOOLS/dump_syms.7z -o"$breakpad_dir"
+  fi
+  echo export DUMPSYMS_BIN="$breakpad_dir/dump_syms" >> $ENV_FILE
+fi
+
 echo export PATH="${qt_dir}/bin:\${PATH}" >> ${ENV_FILE}
 echo export LD_LIBRARY_PATH="${qt_dir}/lib:\${LD_LIBRARY_PATH}" >> ${ENV_FILE}
 echo export QT_PATH="${qt_dir}" >> ${ENV_FILE}

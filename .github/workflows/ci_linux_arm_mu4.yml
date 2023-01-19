@@ -119,8 +119,13 @@ jobs:
         bash /MuseScore/build/ci/linux/setup-arm.sh --arch armv7l && \
         bash /MuseScore/build/ci/translation/run_lrelease.sh && \
         bash /MuseScore/build/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --youtube_api_key $YT_API_KEY --crash_log_url $C_URL --arch armv7l && \
+        bash ./build/ci/linux/dumpsyms.sh && \
         bash /MuseScore/build/ci/linux/package.sh --arch armv7l && \
         bash /MuseScore/build/ci/tools/checksum.sh"
+    - name: Upload dump symbols
+      if: env.DO_UPLOAD_SYMBOLS == 'true'
+      run: |
+        sudo bash ./build/ci/tools/sentry_syms_upload.sh -t ${{ secrets.SENTRY_AUTH_TOKEN }} -p ${SENTRY_PROJECT}
     - name: Publish package
       if: env.DO_PUBLISH == 'true'
       run: |
@@ -234,8 +239,13 @@ jobs:
         bash /MuseScore/build/ci/linux/setup-arm.sh --arch aarch64 && \
         bash /MuseScore/build/ci/translation/run_lrelease.sh && \
         bash /MuseScore/build/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --youtube_api_key $YT_API_KEY --crash_log_url $C_URL --arch aarch64 && \
+        bash ./build/ci/linux/dumpsyms.sh && \
         bash /MuseScore/build/ci/linux/package.sh --arch aarch64 && \
         bash /MuseScore/build/ci/tools/checksum.sh"
+    - name: Upload dump symbols
+      if: env.DO_UPLOAD_SYMBOLS == 'true'
+      run: |
+        sudo bash ./build/ci/tools/sentry_syms_upload.sh -t ${{ secrets.SENTRY_AUTH_TOKEN }} -p ${SENTRY_PROJECT}
     - name: Publish package
       if: env.DO_PUBLISH == 'true'
       run: |

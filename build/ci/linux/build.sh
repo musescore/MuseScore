@@ -69,9 +69,8 @@ echo "=== ENVIRONMENT === "
 cat $BUILD_TOOLS/environment.sh
 source $BUILD_TOOLS/environment.sh
 
-# disable crashpad client and update module on aarch64 and armv7l due to no prebuilts being available
+# disable update module due to current broken functionality
 if [ "$PACKARCH" == "aarch64" ] || [ "$PACKARCH" == "armv7l" ]; then
-  MUSESCORE_BUILD_CRASHPAD_CLIENT="OFF"
   MUSESCORE_BUILD_UPDATE_MODULE="OFF"
 fi
 
