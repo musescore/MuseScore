@@ -43,7 +43,7 @@ public:
     explicit PopupWindow_QQuickView(QObject* parent = nullptr);
     ~PopupWindow_QQuickView();
 
-    void init(QQmlEngine* engine, std::shared_ptr<ui::IUiConfiguration> uiConfiguration, bool isDialogMode) override;
+    void init(QQmlEngine* engine, bool isDialogMode) override;
 
     void setContent(QQuickItem* item) override;
 
