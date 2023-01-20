@@ -80,6 +80,11 @@ public:
 
     void setParent(Measure* parent);
 
+    mu::PointF startPoint() const { return p1; }
+    mu::PointF endPoint() const { return p2; }
+    void movePosX(double x) override;
+    void movePosY(double y) override;
+
     // Score Tree functions
     EngravingObject* scanParent() const override;
     EngravingObjectList scanChildren() const override;

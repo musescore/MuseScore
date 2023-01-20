@@ -274,8 +274,8 @@ public:
     void setPosX(double x) { doSetPos(x, _pos.y()); }
     void setPosY(double y) { doSetPos(_pos.x(), y); }
     void movePos(const PointF& p) { doSetPos(_pos.x() + p.x(), _pos.y() + p.y()); }
-    void movePosX(double x) { doSetPos(_pos.x() + x, _pos.y()); }
-    void movePosY(double y) { doSetPos(_pos.x(), _pos.y() + y); }
+    virtual void movePosX(double x) { doSetPos(_pos.x() + x, _pos.y()); }
+    virtual void movePosY(double y) { doSetPos(_pos.x(), _pos.y() + y); }
     double xpos() { return _pos.x(); }
     double ypos() { return _pos.y(); }
     virtual void move(const PointF& s) { _pos += s; }

@@ -122,6 +122,20 @@ void Tuplet::setParent(Measure* parent)
     EngravingItem::setParent(parent);
 }
 
+void Tuplet::movePosX(double x)
+{
+    EngravingItem::movePosX(x);
+    p1 += PointF(x, 0.0);
+    p2 += PointF(x, 0.0);
+}
+
+void Tuplet::movePosY(double y)
+{
+    EngravingItem::movePosY(y);
+    p1 += PointF(0.0, y);
+    p2 += PointF(0.0, y);
+}
+
 //---------------------------------------------------------
 //   setSelected
 //---------------------------------------------------------

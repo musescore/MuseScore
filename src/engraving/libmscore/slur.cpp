@@ -42,6 +42,7 @@
 #include "stem.h"
 #include "system.h"
 #include "tie.h"
+#include "tuplet.h"
 #include "undo.h"
 
 #include "log.h"
@@ -369,10 +370,11 @@ void SlurSegment::adjustEndpoints()
 Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* endCR)
 {
     staff_idx_t startStaffIdx = startCR->staffIdx();
+    staff_idx_t endStaffIdx = endCR->staffIdx();
     Shape segShape = seg->staffShape(startStaffIdx).translated(seg->pos() + seg->measure()->pos());
     // If cross-staff, also add the shape of second staff
     if (slur()->isCrossStaff() && seg != startCR->segment()) {
-        staff_idx_t endStaffIdx = (endCR->staffIdx() != startStaffIdx) ? endCR->staffIdx() : endCR->vStaffIdx();
+        endStaffIdx = (endCR->staffIdx() != startStaffIdx) ? endCR->staffIdx() : endCR->vStaffIdx();
         SysStaff* startStaff = system()->staves().at(startStaffIdx);
         SysStaff* endStaff = system()->staves().at(endStaffIdx);
         double dist = endStaff->y() - startStaff->y();
@@ -405,6 +407,41 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
         }
         return false;
     });
+    for (track_idx_t track = staff2track(startStaffIdx); track < staff2track(endStaffIdx, VOICES); ++track) {
+        EngravingItem* e = seg->elementAt(track);
+        if (!e || !e->isChordRest()) {
+            continue;
+        }
+        // Gets ties shapes
+        if (e->isChord()) {
+            for (Note* note : toChord(e)->notes()) {
+                Tie* tieFor = note->tieFor();
+                Tie* tieBack = note->tieBack();
+                if (tieFor && tieFor->up() == slur()->up() && !tieFor->segmentsEmpty()) {
+                    TieSegment* tieSegment = tieFor->frontSegment();
+                    if (tieSegment->isSingleBeginType()) {
+                        segShape.add(tieSegment->shape());
+                    }
+                }
+                if (tieBack && tieBack->up() == slur()->up() && !tieBack->segmentsEmpty()) {
+                    TieSegment* tieSegment = tieBack->backSegment();
+                    if (tieSegment->isEndType()) {
+                        segShape.add(tieSegment->shape());
+                    }
+                }
+            }
+        }
+        // Get tuplets shapes
+        Tuplet* tuplet = toChordRest(e)->tuplet();
+        while (tuplet) {
+            if (tuplet->isUp() == slur()->up()
+                && tuplet->elements().front()->tick() >= slur()->tick()
+                && tuplet->elements().back()->tick() <= slur()->tick2()) {
+                segShape.add(tuplet->shape().translated(seg->measure()->pos()));
+            }
+            tuplet = tuplet->tuplet(); // tuplets can be nested, so climb up until the last
+        }
+    }
     return segShape;
 }
 
@@ -794,7 +831,7 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
     _shape.clear();
     PointF start = pp1;
     int nbShapes  = 32;
-    double minH    = abs(3 * w);
+    double minH    = abs(2 * w);
     const CubicBezier b(ups(Grip::START).pos(), ups(Grip::BEZIER1).pos(), ups(Grip::BEZIER2).pos(), ups(Grip::END).pos());
     for (int i = 1; i <= nbShapes; i++) {
         const PointF point = b.pointAtPercent(i / float(nbShapes));
@@ -1412,6 +1449,34 @@ void Slur::slurPos(SlurPos* sp)
             sp->p2 += po;
         }
     }
+
+    auto avoidTuplets = [sp, this](Tuplet* tuplet, bool start) {
+        while (tuplet) {
+            const double verticalDistance = 0.4 * spatium();
+            double tupletYMargin = score()->styleMM(Sid::tupletBracketHookHeight) + verticalDistance;
+            Fraction startTick = tuplet->tick();
+            DurationElement* lastElement = tuplet->elements().back();
+            while (lastElement && lastElement->isTuplet()) {
+                lastElement = toTuplet(lastElement)->elements().back();
+            }
+            Fraction endTick = lastElement->tick();
+            bool isInternal = (tick() >= startTick && tick2() <= endTick) && !(startTick == tick() && endTick == tick2());
+            if (tuplet->hasBracket() && tuplet->isUp() == _up && !isInternal) {
+                double slurY = start ? sp->p1.y() : sp->p2.y();
+                double tupletY = start ? tuplet->startPoint().y() : tuplet->endPoint().y();
+                tupletY += _up ? -tupletYMargin : tupletYMargin;
+                double y = _up ? std::min(slurY, tupletY) : std::max(slurY, tupletY);
+                if (start) {
+                    sp->p1.ry() = y;
+                } else {
+                    sp->p2.ry() = y;
+                }
+            }
+            tuplet = tuplet->tuplet();
+        }
+    };
+    avoidTuplets(startCR()->tuplet(), true);
+    avoidTuplets(endCR()->tuplet(), false);
 
     /// adding extra space above slurs for notes in circles
     if (engravingConfiguration()->enableExperimentalFretCircle() && staff()->staffType()->isCommonTabStaff()) {
