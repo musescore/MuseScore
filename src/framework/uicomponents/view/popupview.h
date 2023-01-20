@@ -202,14 +202,13 @@ protected:
     bool isMouseWithinBoundaries(const QPoint& mousePos) const;
 
     QWindow* qWindow() const;
-    virtual void beforeShow();
     virtual void onHidden();
 
     void repositionWindowIfNeed();
 
     void setErrCode(Ret::Code code);
 
-    QScreen* resolveScreen() const;
+    virtual QScreen* resolveScreen() const;
     QRect currentScreenGeometry() const;
     virtual void updatePosition();
     void updateContentPosition();
