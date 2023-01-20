@@ -170,7 +170,11 @@ void MultiInstancesProvider::activateWindowWithProject(const io::path_t& project
         return;
     }
 
+#ifndef Q_OS_MAC
+    // On macOS, this is not desirable, since raising the main window of the other instance works properly without this
     mainWindow()->requestShowOnBack();
+#endif
+
     m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITH_PROJECT, { projectPath.toQString() });
 }
 
@@ -200,7 +204,12 @@ void MultiInstancesProvider::activateWindowWithoutProject()
     if (!isInited()) {
         return;
     }
+
+#ifndef Q_OS_MAC
+    // On macOS, this is not desirable, since raising the main window of the other instance works properly without this
     mainWindow()->requestShowOnBack();
+#endif
+
     m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITHOUT_PROJECT, {});
 }
 
@@ -279,7 +288,11 @@ void MultiInstancesProvider::activateWindowWithOpenedPreferences() const
         return;
     }
 
+#ifndef Q_OS_MAC
+    // On macOS, this is not desirable, since raising the main window of the other instance works properly without this
     mainWindow()->requestShowOnBack();
+#endif
+
     m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITH_OPENED_PREFERENCES);
 }
 
