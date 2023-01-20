@@ -2054,7 +2054,7 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
         //  - the grace note duration as notated does not matter
         //
         Chord* graceChord = gnb[0];
-        if (graceChord->noteType() == NoteType::ACCIACCATURA || nb > 1) {      // treat multiple subsequent grace notes as acciaccaturas
+        if (configuration()->guitarProImportExperimental() || graceChord->noteType() == NoteType::ACCIACCATURA || nb > 1) {      // treat multiple subsequent grace notes as acciaccaturas
             int graceTimeMS = 65 * nb;           // value determined empirically (TODO: make instrument-specific, like articulations)
             // 1000 occurs below as a unit for ontime
             ontime = std::min(500, static_cast<int>((graceTimeMS / chordTimeMS) * 1000));
@@ -2069,6 +2069,7 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
         }
 
         graceDuration = ontime / nb;
+        trailtime += ontime;
     }
 
     for (int i = 0, on = 0; i < nb; ++i) {
