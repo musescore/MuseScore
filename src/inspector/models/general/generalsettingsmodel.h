@@ -65,6 +65,7 @@ private:
     void resetProperties() override;
     void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
                            const mu::engraving::StyleIdSet& changedStyleIdSet) override;
+    void onVisibleChanged(bool visible);
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
