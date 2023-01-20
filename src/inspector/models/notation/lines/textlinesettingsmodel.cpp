@@ -74,12 +74,8 @@ void TextLineSettingsModel::createProperties()
     m_dashLineLength = buildPropertyItem(Pid::DASH_LINE_LEN);
     m_dashGapLength = buildPropertyItem(Pid::DASH_GAP_LEN);
 
-    m_startHookHeight = buildPropertyItem(Pid::BEGIN_HOOK_HEIGHT, [this](const Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
-    });
-    m_endHookHeight = buildPropertyItem(Pid::END_HOOK_HEIGHT, [this](const Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
-    });
+    m_startHookHeight = buildPropertyItem(Pid::BEGIN_HOOK_HEIGHT);
+    m_endHookHeight = buildPropertyItem(Pid::END_HOOK_HEIGHT);
 
     m_placement = buildPropertyItem(Pid::PLACEMENT);
     m_placement->setIsVisible(false);
