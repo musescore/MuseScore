@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,18 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UI_WINDOWSPLATFORMTHEME_H
-#define MU_UI_WINDOWSPLATFORMTHEME_H
+#ifndef MU_UI_LINUXPLATFORMTHEME_H
+#define MU_UI_LINUXPLATFORMTHEME_H
 
 #include "internal/iplatformtheme.h"
 
-#include "types/retval.h"
-
 namespace mu::ui {
-class WindowsPlatformTheme : public IPlatformTheme
+class LinuxPlatformTheme : public IPlatformTheme
 {
 public:
-    WindowsPlatformTheme();
+    LinuxPlatformTheme();
 
     void startListening() override;
     void stopListening() override;
@@ -47,17 +45,8 @@ public:
     void applyPlatformStyleOnWindowForTheme(QWindow* window, const ThemeCode& themeCode) override;
 
 private:
-    bool isSystemThemeCurrentlyDark() const;
-
-    void th_listen();
-
-    int m_buildNumber = 0;
-
-    std::atomic<bool> m_isListening = false;
-    std::thread m_listenThread;
-
-    ValNt<bool> m_isSystemThemeDark;
+    async::Notification m_platformThemeChanged;
 };
 }
 
-#endif // MU_UI_WINDOWSPLATFORMTHEME_H
+#endif // MU_UI_LINUXPLATFORMTHEME_H

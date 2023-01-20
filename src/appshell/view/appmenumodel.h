@@ -31,6 +31,7 @@
 #include "ui/imainwindow.h"
 #include "ui/iuiactionsregister.h"
 #include "ui/inavigationcontroller.h"
+#include "ui/iuiconfiguration.h"
 #include "actions/iactionsdispatcher.h"
 #include "workspace/iworkspacemanager.h"
 #include "iappshellconfiguration.h"
@@ -48,6 +49,7 @@ class AppMenuModel : public uicomponents::AbstractMenuModel
     INJECT(appshell, ui::IMainWindow, mainWindow)
     INJECT(appshell, ui::IUiActionsRegister, uiActionsRegister)
     INJECT(appshell, ui::INavigationController, navigationController)
+    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell, actions::IActionsDispatcher, actionsDispatcher)
     INJECT(appshell, workspace::IWorkspaceManager, workspacesManager)
     INJECT(appshell, IAppShellConfiguration, configuration)
@@ -61,6 +63,7 @@ public:
     explicit AppMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load() override;
+    Q_INVOKABLE bool isGlobalMenuAvailable();
 
 private:
     void setupConnections();

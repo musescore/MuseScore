@@ -30,17 +30,28 @@ import "../../"
 AppWindow {
     id: root
 
-    AppMenuBar {
+    Loader {
         id: appMenuBar
 
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
+    }
 
-        appWindow: root
+    Loader {
+        id: platformMenuBar
     }
 
     Component.onCompleted: {
+        platformMenuBar.setSource("../PlatformMenuBar.qml", { "loadSubitems": false });
+        if (platformMenuBar.item.available) {
+            platformMenuBar.item.load();
+            appMenuBar.active = 0;
+        } else {
+            appMenuBar.setSource("../AppMenuBar.qml", { "appWindow": root });
+            platformMenuBar.active = 0;
+        }
+
         window.init()
     }
 
