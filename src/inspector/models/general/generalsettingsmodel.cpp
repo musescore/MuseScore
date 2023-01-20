@@ -39,7 +39,10 @@ GeneralSettingsModel::GeneralSettingsModel(QObject* parent, IElementRepositorySe
 
 void GeneralSettingsModel::createProperties()
 {
-    m_isVisible = buildPropertyItem(Pid::VISIBLE);
+    m_isVisible = buildPropertyItem(Pid::VISIBLE, [this](const mu::engraving::Pid, const QVariant& newValue) {
+        onVisibleChanged(newValue.toBool());
+    });
+
     m_isAutoPlaceAllowed = buildPropertyItem(Pid::AUTOPLACE);
     m_isPlayable = buildPropertyItem(Pid::PLAY);
     m_isSmall = buildPropertyItem(Pid::SMALL);
@@ -97,6 +100,20 @@ void GeneralSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& pr
     if (mu::contains(propertyIdSet, Pid::SMALL)) {
         loadPropertyItem(m_isSmall);
     }
+}
+
+void GeneralSettingsModel::onVisibleChanged(bool visible)
+{
+    beginCommand();
+
+    Score* score = currentNotation()->elements()->msScore();
+
+    for (EngravingItem* item : m_elementList) {
+        score->undoChangeVisible(item, visible);
+    }
+
+    updateNotation();
+    endCommand();
 }
 
 PropertyItem* GeneralSettingsModel::isVisible() const

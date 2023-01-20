@@ -48,7 +48,9 @@ void AppearanceSettingsModel::createProperties()
     m_minimumDistance = buildPropertyItem(Pid::MIN_DISTANCE);
     m_color = buildPropertyItem(Pid::COLOR);
     m_arrangeOrder = buildPropertyItem(Pid::Z);
-    m_offset = buildPointFPropertyItem(Pid::OFFSET);
+    m_offset = buildPointFPropertyItem(Pid::OFFSET, [this](const mu::engraving::Pid, const QVariant& newValue) {
+        onOffsetChanged(newValue);
+    });
 }
 
 void AppearanceSettingsModel::requestElements()
@@ -112,6 +114,24 @@ void AppearanceSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     }
 
     emit isSnappedToGridChanged(isSnappedToGrid());
+}
+
+void AppearanceSettingsModel::onOffsetChanged(const QVariant& offset)
+{
+    beginCommand();
+
+    for (EngravingItem* item : m_elementList) {
+        EngravingItem* chord = item->findAncestor(ElementType::CHORD);
+
+        if (chord) {
+            chord->undoChangeProperty(Pid::OFFSET, valueToElementUnits(Pid::OFFSET, offset, chord));
+        } else {
+            item->undoChangeProperty(Pid::OFFSET, valueToElementUnits(Pid::OFFSET, offset, item));
+        }
+    }
+
+    updateNotation();
+    endCommand();
 }
 
 Page* AppearanceSettingsModel::page() const

@@ -499,15 +499,7 @@ void NotationInteraction::hideShadowNote()
 void NotationInteraction::toggleVisible()
 {
     startEdit();
-
-    // TODO: Update `score()->cmdToggleVisible()` and call that here?
-    for (EngravingItem* el : selection()->elements()) {
-        if (el->isBracket()) {
-            continue;
-        }
-        el->undoChangeProperty(mu::engraving::Pid::VISIBLE, !el->visible());
-    }
-
+    score()->cmdToggleVisible();
     apply();
 }
 
