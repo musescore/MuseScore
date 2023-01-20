@@ -63,6 +63,10 @@
 
 using namespace mu::engraving;
 
+constexpr int PALM_MUTE_CHAN = 1;
+constexpr int HARMONIC_CHAN = 2;
+constexpr int PALM_MUTE_PROG = 28;
+
 namespace mu::engraving {
 static JumpType jumpType(const String& typeString)
 {
@@ -1469,49 +1473,18 @@ void GPConverter::addSoundEffects(const SLine* const elem)
     ChordRest* endCR = toChordRest(endEl);
 
     if (elem->isPalmMute()) {
-        constexpr int PALM_MUTE_CHAN = 0;
-        constexpr int PALM_MUTE_PROG = 28;
-
         Fraction begTick = elem->tick();
-
         Instrument* currentInstrument = elem->part()->instrument(begTick);
         if (!currentInstrument->hasStrings()) {
             return;
         }
 
-        Segment* begSegment = startCR->segment();
-        Segment* endSegment = endCR->segment();
-        Segment* nextSeg = endSegment->nextCR(track, true);
-        bool foundChord = false;
-        while (nextSeg && nextSeg->isChordRestType()) {
-            const auto& elemList = nextSeg->elist();
-            for (const auto el : elemList) {
-                if (el && el->isChord() && el->track() == track) {
-                    foundChord = true;
-                    break;
-                }
-            }
-
-            if (foundChord) {
-                break;
-            }
-
-            nextSeg = nextSeg->nextCR(track, true);
-        }
-
-        endSegment = (nextSeg && nextSeg != endSegment ? nextSeg : nullptr);
-
-        Instrument palmMuteInstr(*currentInstrument);
-
-        palmMuteInstr.channel(PALM_MUTE_CHAN)->setProgram(PALM_MUTE_PROG);
-        InstrumentChange* instrChPalmMute =  Factory::createInstrumentChange(begSegment, palmMuteInstr);
-        instrChPalmMute->setTrack(track);
-        begSegment->add(instrChPalmMute);
-
-        if (endSegment) {
-            InstrumentChange* instrChangeBack =  Factory::createInstrumentChange(endSegment, *currentInstrument);
-            instrChangeBack->setTrack(track);
-            endSegment->add(instrChangeBack);
+        if (int idx = currentInstrument->channelIdx(String::fromUtf8(InstrChannel::PALM_MUTE_NAME)); idx < 0) {
+            InstrChannel* palmMuteChannel = new InstrChannel(*currentInstrument->channel(0));
+            palmMuteChannel->setChannel(PALM_MUTE_CHAN);
+            palmMuteChannel->setProgram(PALM_MUTE_PROG);
+            palmMuteChannel->setName(String::fromUtf8(InstrChannel::PALM_MUTE_NAME));
+            currentInstrument->appendChannel(palmMuteChannel);
         }
     } else if (elem->isLetRing()) {
         Segment* begSegment = startCR->segment();
