@@ -99,6 +99,11 @@ bool WindowsPlatformTheme::isSystemThemeDark() const
     return isSystemThemeCurrentlyDark();
 }
 
+bool WindowsPlatformTheme::isGlobalMenuAvailable() const
+{
+    return false;
+}
+
 Notification WindowsPlatformTheme::platformThemeChanged() const
 {
     return m_isSystemThemeDark.notification;

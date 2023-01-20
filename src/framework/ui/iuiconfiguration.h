@@ -96,6 +96,8 @@ public:
     virtual void setWindowGeometry(const QByteArray& state) = 0;
     virtual async::Notification windowGeometryChanged() const = 0;
 
+    virtual bool isGlobalMenuAvailable() const = 0;
+
     virtual void applyPlatformStyle(QWindow* window) = 0;
 
     virtual bool isVisible(const QString& key, bool def = true) const = 0;
