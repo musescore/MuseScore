@@ -71,6 +71,8 @@ public:
     LineSegment* createLineSegment(System* parent) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
 
+    void setChannel();
+
     friend class PalmMuteLine;
 };
 } // namespace mu::engraving
