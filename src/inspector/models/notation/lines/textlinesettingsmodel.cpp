@@ -74,10 +74,6 @@ void TextLineSettingsModel::createProperties()
     m_dashLineLength = buildPropertyItem(Pid::DASH_LINE_LEN);
     m_dashGapLength = buildPropertyItem(Pid::DASH_GAP_LEN);
 
-    // m_hookHeight = buildPropertyItem(Pid::END_HOOK_HEIGHT, [this](const Pid pid, const QVariant& newValue) {
-    //     onPropertyValueChanged(pid, newValue);
-    //     onPropertyValueChanged(Pid::BEGIN_HOOK_HEIGHT, newValue);
-    // });
     m_startHookHeight = buildPropertyItem(Pid::BEGIN_HOOK_HEIGHT, [this](const Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
     });
@@ -354,10 +350,6 @@ void TextLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     if (mu::contains(propertyIdSet, Pid::END_HOOK_TYPE)) {
         loadPropertyItem(m_endHookType);
     }
-
-    // if (mu::contains(propertyIdSet, Pid::END_HOOK_HEIGHT)) {
-    //     loadPropertyItem(m_hookHeight);
-    // }
 
     if (mu::contains(propertyIdSet, Pid::BEGIN_HOOK_HEIGHT)) {
         loadPropertyItem(m_startHookHeight);

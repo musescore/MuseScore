@@ -35,7 +35,6 @@ Column {
     property PropertyItem startHookType: null
     property PropertyItem endHookType: null
     property PropertyItem thickness: null
-    // property PropertyItem hookHeight: null
     property PropertyItem startHookHeight: null
     property PropertyItem endHookHeight: null
 
@@ -44,7 +43,6 @@ Column {
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
-    // property int navigationRowEnd: hookHeightSection.navigationRowEnd
     property int navigationRowEnd: endHookHeightSection.navigationRowEnd
 
     width: parent.width
@@ -73,9 +71,6 @@ Column {
 
         SpinBoxPropertyView {
             id: thicknessSection
-            // anchors.left: parent.left
-            // anchors.right: parent.horizontalCenter
-            // anchors.rightMargin: 2
 
             titleText: qsTrc("inspector", "Thickness")
             propertyItem: root.thickness
@@ -100,7 +95,7 @@ Column {
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
-            titleText: qsTrc("inspector", "Start Hook height")
+            titleText: qsTrc("inspector", "Start hook height")
             propertyItem: root.startHookHeight
 
             step: 0.5
@@ -119,7 +114,7 @@ Column {
             anchors.leftMargin: 2
             anchors.right: parent.right
 
-            titleText: qsTrc("inspector", "End Hook height")
+            titleText: qsTrc("inspector", "End hook height")
             propertyItem: root.endHookHeight
 
             step: 0.5

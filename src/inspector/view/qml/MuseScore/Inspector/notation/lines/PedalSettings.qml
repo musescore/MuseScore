@@ -65,7 +65,8 @@ Column {
         endHookType: root.model ? root.model.lineType : null
 
         thickness: root.model ? root.model.thickness : null
-        hookHeight: root.model ? root.model.hookHeight : null
+        startHookHeight: root.model ? root.model.startHookHeight : null
+        endHookHeight: root.model ? root.model.endHookHeight : null
 
         possibleStartHookTypes: root.model ? root.model.possibleStartHookTypes() : null
         possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes() : null
