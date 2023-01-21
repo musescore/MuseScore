@@ -132,7 +132,6 @@ void TextLineSettingsModel::resetProperties()
         m_dashGapLength,
         m_startHookType,
         m_endHookType,
-        // m_hookHeight,
         m_startHookHeight,
         m_endHookHeight,
         m_placement,
@@ -190,11 +189,6 @@ PropertyItem* TextLineSettingsModel::endHookType() const
 {
     return m_endHookType;
 }
-
-// PropertyItem* TextLineSettingsModel::hookHeight() const
-// {
-//     return m_hookHeight;
-// }
 
 PropertyItem* TextLineSettingsModel::startHookHeight() const
 {
