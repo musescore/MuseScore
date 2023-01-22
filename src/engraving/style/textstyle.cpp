@@ -316,6 +316,23 @@ const TextStyle tempoTextStyle { {
     { TextStylePropertyType::FrameFillColor,       Sid::tempoFrameBgColor,                      Pid::FRAME_BG_COLOR },
 } };
 
+const TextStyle tempoChangeTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::tempoChangeFontFace,                          Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::tempoChangeFontSize,                          Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::tempoChangeLineSpacing,                       Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::tempoChangeFontSpatiumDependent,              Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::tempoChangeFontStyle,                         Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::tempoChangeColor,                             Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::tempoChangeAlign,                             Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::tempoChangePosAbove,                          Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::tempoChangeFrameType,                         Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::tempoChangeFramePadding,                      Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::tempoChangeFrameWidth,                        Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::tempoChangeFrameRound,                        Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::tempoChangeFrameFgColor,                      Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::tempoChangeFrameBgColor,                      Pid::FRAME_BG_COLOR },
+} };
+
 const TextStyle metronomeTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::metronomeFontFace,                      Pid::FONT_FACE },
     { TextStylePropertyType::FontSize,             Sid::metronomeFontSize,                      Pid::FONT_SIZE },
@@ -1017,6 +1034,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::MMREST_RANGE: return &mmRestRangeTextStyle;
 
     case TextStyleType::TEMPO: return &tempoTextStyle;
+    case TextStyleType::TEMPO_CHANGE: return &tempoChangeTextStyle;
     case TextStyleType::METRONOME: return &metronomeTextStyle;
     case TextStyleType::REPEAT_LEFT: return &repeatLeftTextStyle;
     case TextStyleType::REPEAT_RIGHT: return &repeatRightTextStyle;
