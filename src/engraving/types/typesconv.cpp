@@ -940,6 +940,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::MMREST_RANGE,      "mmrest_range",         TranslatableString("engraving", "Multimeasure rest range") },
 
     { TextStyleType::TEMPO,             "tempo",                TranslatableString("engraving", "Tempo") },
+    { TextStyleType::TEMPO_CHANGE,      "tempo change",         TranslatableString("engraving", "Gradual tempo change") },
     { TextStyleType::METRONOME,         "metronome",            TranslatableString("engraving", "Metronome") },
     { TextStyleType::REPEAT_LEFT,       "repeat_left",          TranslatableString("engraving", "Repeat text left") },
     { TextStyleType::REPEAT_RIGHT,      "repeat_right",         TranslatableString("engraving", "Repeat text right") },
