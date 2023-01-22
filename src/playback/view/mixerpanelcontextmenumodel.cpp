@@ -98,6 +98,8 @@ bool MixerPanelContextMenuModel::titleSectionVisible() const
 
 void MixerPanelContextMenuModel::load()
 {
+    AbstractMenuModel::load();
+
     dispatcher()->reg(this, TOGGLE_MIXER_SECTION_ACTION, this, &MixerPanelContextMenuModel::toggleMixerSection);
 
     MenuItemList viewMenuItems;
