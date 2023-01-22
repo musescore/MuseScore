@@ -56,6 +56,7 @@ private:
     static const ui::UiActionList m_mainActions;
     static const ui::UiActionList m_settingsActions;
     static const ui::UiActionList m_loopBoundaryActions;
+    static const ui::UiActionList m_otherActions;
 
     std::shared_ptr<PlaybackController> m_controller;
     async::Channel<actions::ActionCodeList> m_actionEnabledChanged;

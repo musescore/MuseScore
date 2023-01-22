@@ -47,6 +47,7 @@ static const ActionCode COUNT_IN_CODE("countin");
 static const ActionCode PAN_CODE("pan");
 static const ActionCode REPEAT_CODE("repeat");
 static const ActionCode PLAY_CHORD_SYMBOLS_CODE("play-chord-symbols");
+static const ActionCode TOGGLE_MUTE_INVISIBLE_PARTS_CODE("toggle-mute-invisible-parts");
 static const ActionCode PLAYBACK_SETUP("playback-setup");
 
 void PlaybackController::init()
@@ -63,6 +64,7 @@ void PlaybackController::init()
     dispatcher()->reg(this, METRONOME_CODE, this, &PlaybackController::toggleMetronome);
     dispatcher()->reg(this, MIDI_ON_CODE, this, &PlaybackController::toggleMidiInput);
     dispatcher()->reg(this, COUNT_IN_CODE, this, &PlaybackController::toggleCountIn);
+    dispatcher()->reg(this, TOGGLE_MUTE_INVISIBLE_PARTS_CODE, this, &PlaybackController::toggleMuteInvisibleParts);
     dispatcher()->reg(this, PLAYBACK_SETUP, this, &PlaybackController::openPlaybackSetupDialog);
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
@@ -70,6 +72,8 @@ void PlaybackController::init()
     });
 
     globalContext()->currentProjectChanged().onNotify(this, [this]() {
+        notifyActionCheckedChanged(TOGGLE_MUTE_INVISIBLE_PARTS_CODE);
+
         if (m_currentSequenceId != -1) {
             resetCurrentSequence();
             return;
@@ -582,6 +586,16 @@ void PlaybackController::toggleLoopPlayback()
     addLoopBoundaryToTick(LoopBoundaryType::LoopOut, loopOutTick);
 }
 
+void PlaybackController::toggleMuteInvisibleParts()
+{
+    auto audioSettings = this->audioSettings();
+    if (!audioSettings) {
+        return;
+    }
+
+    audioSettings->setMuteInvisibleParts(!audioSettings->muteInvisibleParts());
+}
+
 void PlaybackController::openPlaybackSetupDialog()
 {
     interactive()->open("musescore://playback/soundprofilesdialog");
@@ -652,7 +666,7 @@ void PlaybackController::notifyActionCheckedChanged(const ActionCode& actionCode
 
 mu::project::IProjectAudioSettingsPtr PlaybackController::audioSettings() const
 {
-    IF_ASSERT_FAILED(globalContext()->currentProject()) {
+    if (!globalContext()->currentProject()) {
         return nullptr;
     }
 
@@ -990,6 +1004,11 @@ void PlaybackController::setupSequenceTracks()
         updateMuteStates();
     });
 
+    audioSettings()->muteInvisiblePartsChanged().onNotify(this, [this] () {
+        notifyActionCheckedChanged(TOGGLE_MUTE_INVISIBLE_PARTS_CODE);
+        updateMuteStates();
+    });
+
     m_isPlayAllowedChanged.notify();
 }
 
@@ -1041,9 +1060,10 @@ void PlaybackController::updateMuteStates()
         }
     }
 
+    bool muteInvisibleParts = audioSettings()->muteInvisibleParts();
     INotationPartsPtr notationParts = m_notation->parts();
-    InstrumentTrackIdSet allowedInstrumentTrackIdSet = instrumentTrackIdSetForRangePlayback();
-    bool isRangePlaybackMode = !m_isExportingAudio && selection()->isRange() && !allowedInstrumentTrackIdSet.empty();
+    InstrumentTrackIdSet selectionInstrumentTrackIdSet = instrumentTrackIdSetForRangePlayback();
+    bool isRangePlaybackMode = !m_isExportingAudio && selection()->isRange() && !selectionInstrumentTrackIdSet.empty();
 
     for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
         if (!mu::contains(m_trackIdMap, instrumentTrackId)) {
@@ -1054,25 +1074,40 @@ void PlaybackController::updateMuteStates()
             continue;
         }
 
-        const Part* part = notationParts->part(instrumentTrackId.partId);
-        bool isPartVisible = part && part->show();
-
         auto soloMuteState = audioSettings()->soloMuteState(instrumentTrackId);
 
-        bool shouldBeMuted = soloMuteState.mute
-                             || (hasSolo && !soloMuteState.solo)
-                             || (!isPartVisible);
+        auto shouldBeMuted = [&]() {
+            if (soloMuteState.mute) {
+                return true;
+            }
 
-        if (notationPlayback()->isChordSymbolsTrack(instrumentTrackId) && !shouldBeMuted) {
-            shouldBeMuted = !notationConfiguration()->isPlayChordSymbolsEnabled();
-        }
+            if (hasSolo && !soloMuteState.solo) {
+                return true;
+            }
 
-        if (isRangePlaybackMode && !shouldBeMuted) {
-            shouldBeMuted = !mu::contains(allowedInstrumentTrackIdSet, instrumentTrackId);
-        }
+            if (muteInvisibleParts) {
+                const Part* part = notationParts->part(instrumentTrackId.partId);
+                bool isPartVisible = part && part->show();
+
+                if (!isPartVisible) {
+                    return true;
+                }
+            }
+
+            if (notationPlayback()->isChordSymbolsTrack(instrumentTrackId)
+                && !notationConfiguration()->isPlayChordSymbolsEnabled()) {
+                return true;
+            }
+
+            if (isRangePlaybackMode && !mu::contains(selectionInstrumentTrackIdSet, instrumentTrackId)) {
+                return true;
+            }
+
+            return false;
+        };
 
         AudioOutputParams params = trackOutputParams(instrumentTrackId);
-        params.muted = shouldBeMuted;
+        params.muted = shouldBeMuted();
 
         audio::TrackId trackId = m_trackIdMap.at(instrumentTrackId);
         playback()->audioOutput()->setOutputParams(m_currentSequenceId, trackId, std::move(params));
@@ -1088,7 +1123,8 @@ bool PlaybackController::actionChecked(const ActionCode& actionCode) const
         { PLAY_CHORD_SYMBOLS_CODE, notationConfiguration()->isPlayChordSymbolsEnabled() },
         { PAN_CODE, notationConfiguration()->isAutomaticallyPanEnabled() },
         { METRONOME_CODE, notationConfiguration()->isMetronomeEnabled() },
-        { COUNT_IN_CODE, notationConfiguration()->isCountInEnabled() }
+        { COUNT_IN_CODE, notationConfiguration()->isCountInEnabled() },
+        { TOGGLE_MUTE_INVISIBLE_PARTS_CODE, audioSettings() && audioSettings()->muteInvisibleParts() }
     };
 
     return isChecked[actionCode];

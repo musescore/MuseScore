@@ -59,6 +59,10 @@ public:
     virtual void setSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& soloMuteState) = 0;
     virtual async::Channel<engraving::InstrumentTrackId, SoloMuteState> soloMuteStateChanged() const = 0;
 
+    virtual bool muteInvisibleParts() const = 0;
+    virtual void setMuteInvisibleParts(bool mute) = 0;
+    virtual async::Notification muteInvisiblePartsChanged() const = 0;
+
     virtual void removeTrackParams(const engraving::InstrumentTrackId& trackId) = 0;
 
     virtual mu::ValNt<bool> needSave() const = 0;

@@ -107,6 +107,7 @@ void MixerPanelContextMenuModel::load()
 
     MenuItemList items {
         makeMenuItem("playback-setup"),
+        makeMenuItem("toggle-mute-invisible-parts"),
         makeMenu(TranslatableString("playback", "View"), viewMenuItems, VIEW_MENU_ID)
     };
 

@@ -135,6 +135,16 @@ const UiActionList PlaybackUiActions::m_loopBoundaryActions = {
              ),
 };
 
+const UiActionList PlaybackUiActions::m_otherActions = {
+    UiAction("toggle-mute-invisible-parts",
+             mu::context::UiCtxAny,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Mute invisible parts"),
+             TranslatableString("action", "Toggle 'Mute invisible parts'"),
+             Checkable::Yes
+             ),
+};
+
 PlaybackUiActions::PlaybackUiActions(std::shared_ptr<PlaybackController> controller)
     : m_controller(controller)
 {
@@ -164,6 +174,7 @@ const UiActionList& PlaybackUiActions::actionsList() const
         alist.insert(alist.end(), m_mainActions.cbegin(), m_mainActions.cend());
         alist.insert(alist.end(), m_settingsActions.cbegin(), m_settingsActions.cend());
         alist.insert(alist.end(), m_loopBoundaryActions.cbegin(), m_loopBoundaryActions.cend());
+        alist.insert(alist.end(), m_otherActions.cbegin(), m_otherActions.cend());
     }
     return alist;
 }

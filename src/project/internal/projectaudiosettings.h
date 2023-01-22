@@ -37,6 +37,7 @@ namespace mu::project {
 class ProjectAudioSettings : public IProjectAudioSettings
 {
     INJECT_STATIC(project, playback::IPlaybackConfiguration, playbackConfig)
+
 public:
     audio::AudioOutputParams masterAudioOutputParams() const override;
     void setMasterAudioOutputParams(const audio::AudioOutputParams& params) override;
@@ -50,6 +51,10 @@ public:
     SoloMuteState soloMuteState(const engraving::InstrumentTrackId& trackId) const override;
     void setSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& soloMuteState) override;
     async::Channel<engraving::InstrumentTrackId, SoloMuteState> soloMuteStateChanged() const override;
+
+    bool muteInvisibleParts() const override;
+    void setMuteInvisibleParts(bool mute) override;
+    async::Notification muteInvisiblePartsChanged() const override;
 
     void removeTrackParams(const engraving::InstrumentTrackId& partId) override;
 
@@ -100,9 +105,12 @@ private:
 
     std::unordered_map<engraving::InstrumentTrackId, audio::AudioInputParams> m_trackInputParamsMap;
     std::unordered_map<engraving::InstrumentTrackId, audio::AudioOutputParams> m_trackOutputParamsMap;
-    std::unordered_map<engraving::InstrumentTrackId, SoloMuteState> m_soloMuteStatesMap;
 
+    std::unordered_map<engraving::InstrumentTrackId, SoloMuteState> m_soloMuteStatesMap;
     async::Channel<engraving::InstrumentTrackId, SoloMuteState> m_soloMuteStateChanged;
+
+    bool m_muteInvisibleParts = true;
+    async::Notification m_muteInvisiblePartsChanged;
 
     bool m_needSave = false;
     async::Notification m_needSaveNotification;

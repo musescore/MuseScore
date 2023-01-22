@@ -152,6 +152,7 @@ private:
     void toggleMidiInput();
     void toggleCountIn();
     void toggleLoopPlayback();
+    void toggleMuteInvisibleParts();
 
     void openPlaybackSetupDialog();
 

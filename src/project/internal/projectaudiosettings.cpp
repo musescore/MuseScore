@@ -142,6 +142,26 @@ void ProjectAudioSettings::setSoloMuteState(const InstrumentTrackId& partId, con
     setNeedSave(true);
 }
 
+bool ProjectAudioSettings::muteInvisibleParts() const
+{
+    return m_muteInvisibleParts;
+}
+
+void ProjectAudioSettings::setMuteInvisibleParts(bool mute)
+{
+    if (mute == m_muteInvisibleParts) {
+        return;
+    }
+
+    m_muteInvisibleParts = mute;
+    m_muteInvisiblePartsChanged.notify();
+}
+
+mu::async::Notification ProjectAudioSettings::muteInvisiblePartsChanged() const
+{
+    return m_muteInvisiblePartsChanged;
+}
+
 void ProjectAudioSettings::removeTrackParams(const InstrumentTrackId& partId)
 {
     auto inSearch = m_trackInputParamsMap.find(partId);
@@ -210,6 +230,8 @@ mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
         m_soloMuteStatesMap.emplace(id, std::move(soloMuteState));
     }
 
+    m_muteInvisibleParts = rootObj.value("muteInvisibleParts").toBool(/*defaultValue=*/ m_muteInvisibleParts);
+
     m_activeSoundProfileName = rootObj.value("activeSoundProfile").toString();
     if (m_activeSoundProfileName.empty()) {
         m_activeSoundProfileName = playbackConfig()->defaultProfileForNewProjects();
@@ -229,6 +251,7 @@ mu::Ret ProjectAudioSettings::write(engraving::MscWriter& writer)
     }
 
     rootObj["tracks"] = tracksArray;
+    rootObj["muteInvisibleParts"] = m_muteInvisibleParts;
     rootObj["activeSoundProfile"] = m_activeSoundProfileName.toQString();
 
     QByteArray json = QJsonDocument(rootObj).toJson();
