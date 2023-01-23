@@ -1,0 +1,75 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+#include "muversion.h"
+
+#include "types/version.h"
+
+#include "config.h"
+#include "log.h"
+
+using namespace mu::framework;
+
+bool MUVersion::unstable()
+{
+#ifdef MSCORE_UNSTABLE
+    return true;
+#else
+    return false;
+#endif
+}
+
+mu::String MUVersion::version()
+{
+    return String::fromStdString(VERSION);
+}
+
+mu::String MUVersion::fullVersion()
+{
+    Version res(version());
+
+    String versionLabel = String::fromStdString(VERSION_LABEL);
+    if (!versionLabel.isEmpty()) {
+        res.setSuffix(versionLabel);
+    }
+
+    return res.toString();
+}
+
+mu::String MUVersion::revision()
+{
+    return String::fromStdString(MUSESCORE_REVISION);
+}
+
+int MUVersion::majorVersion()
+{
+    return Version(version()).major();
+}
+
+int MUVersion::minorVersion()
+{
+    return Version(version()).minor();
+}
+
+int MUVersion::patchVersion()
+{
+    return Version(version()).patch();
+}

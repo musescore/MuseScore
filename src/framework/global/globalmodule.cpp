@@ -27,7 +27,7 @@
 #include "log.h"
 #include "logremover.h"
 #include "thirdparty/haw_logger/logger/logdefdest.h"
-#include "version.h"
+#include "muversion.h"
 #include "config.h"
 
 #include "internal/application.h"
@@ -110,7 +110,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 #endif
 
     LOGI() << "log path: " << logFile->filePath();
-    LOGI() << "=== Started MuseScore " << framework::Version::fullVersion() << ", build number " << BUILD_NUMBER << " ===";
+    LOGI() << "=== Started MuseScore " << framework::MUVersion::fullVersion() << ", build number " << BUILD_NUMBER << " ===";
 
     //! --- Setup profiler ---
     using namespace haw::profiler;

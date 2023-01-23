@@ -28,7 +28,7 @@
 #include <QSvgRenderer>
 
 #include "translation.h"
-#include "version.h"
+#include "muversion.h"
 
 using namespace mu::appshell;
 
@@ -109,7 +109,7 @@ void SplashScreen::draw(QPainter* painter)
 
     painter->drawText(websiteRect.translated(0.0, -websiteBoundingRect.height() - versionNumberSpacing),
                       Qt::AlignBottom | Qt::AlignRight | Qt::TextDontClip,
-                      qtrc("appshell", "Version %1").arg(QString::fromStdString(framework::Version::fullVersion())));
+                      qtrc("appshell", "Version %1").arg(QString::fromStdString(framework::MUVersion::fullVersion().toStdString())));
 }
 
 void SplashScreen::setSize(const QSize& size)
