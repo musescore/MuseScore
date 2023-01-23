@@ -21,7 +21,7 @@
  */
 #include "workspace.h"
 
-#include "global/version.h"
+#include "global/muversion.h"
 #include "multiinstances/resourcelockguard.h"
 
 #include "workspacefile.h"
@@ -107,7 +107,7 @@ Ret Workspace::load()
 Ret Workspace::save()
 {
     mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), fileResourceName());
-    m_file.setMeta("app_version", Val(Version::version()));
+    m_file.setMeta("app_version", Val(MUVersion::version().toStdString()));
     return m_file.save();
 }
 

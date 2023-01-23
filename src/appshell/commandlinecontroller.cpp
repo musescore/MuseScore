@@ -22,7 +22,7 @@
 #include "commandlinecontroller.h"
 
 #include "log.h"
-#include "global/version.h"
+#include "global/muversion.h"
 #include "config.h"
 
 using namespace mu::appshell;
@@ -414,11 +414,11 @@ CommandLineController::Diagnostic CommandLineController::diagnostic() const
 
 void CommandLineController::printLongVersion() const
 {
-    if (Version::unstable()) {
+    if (MUVersion::unstable()) {
         printf("MuseScore: Music Score Editor\nUnstable Prerelease for Version %s; Build %s\n",
-               Version::version().c_str(), Version::revision().c_str());
+               MUVersion::version().toStdString().c_str(), MUVersion::revision().toStdString().c_str());
     } else {
         printf("MuseScore: Music Score Editor; Version %s; Build %s\n",
-               Version::version().c_str(), Version::revision().c_str());
+               MUVersion::version().toStdString().c_str(), MUVersion::revision().toStdString().c_str());
     }
 }

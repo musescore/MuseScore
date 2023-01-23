@@ -22,7 +22,7 @@
 
 #include "qmlplugin.h"
 
-#include "version.h"
+#include "muversion.h"
 
 #include "engraving/libmscore/mscore.h"
 
@@ -149,17 +149,17 @@ int QmlPlugin::mscoreVersion() const
 
 int QmlPlugin::mscoreMajorVersion() const
 {
-    return framework::Version::majorVersion();
+    return framework::MUVersion::majorVersion();
 }
 
 int QmlPlugin::mscoreMinorVersion() const
 {
-    return framework::Version::minorVersion();
+    return framework::MUVersion::minorVersion();
 }
 
 int QmlPlugin::mscoreUpdateVersion() const
 {
-    return framework::Version::patchVersion();
+    return framework::MUVersion::patchVersion();
 }
 
 qreal QmlPlugin::mscoreDPI() const
