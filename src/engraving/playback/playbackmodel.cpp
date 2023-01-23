@@ -24,13 +24,13 @@
 
 #include "libmscore/fret.h"
 #include "libmscore/instrument.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
+#include "libmscore/measurerepeat.h"
 #include "libmscore/part.h"
 #include "libmscore/repeatlist.h"
-#include "libmscore/score.h"
 #include "libmscore/segment.h"
 #include "libmscore/tempo.h"
-#include "libmscore/measurerepeat.h"
 
 #include "log.h"
 
@@ -605,7 +605,7 @@ void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, con
         return;
     }
 
-    for (const RepeatSegment* repeatSegment : m_score->repeatList()) {
+    for (const RepeatSegment* repeatSegment : repeatList()) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
         int repeatStartTick = repeatSegment->tick;
         int repeatEndTick = repeatStartTick + repeatSegment->len();
@@ -722,6 +722,8 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const ScoreChangesRa
 
 const RepeatList& PlaybackModel::repeatList() const
 {
+    m_score->masterScore()->setExpandRepeats(m_expandRepeats);
+
     return m_score->repeatList();
 }
 

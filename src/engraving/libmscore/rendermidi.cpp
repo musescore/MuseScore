@@ -1489,9 +1489,7 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
 
 void Score::renderMidi(EventMap* events, const MidiRenderer::Context& ctx, bool expandRepeats)
 {
-    bool expandRepeatsBackup = masterScore()->expandRepeats();
     masterScore()->setExpandRepeats(expandRepeats);
     MidiRenderer(this).renderScore(events, ctx);
-    masterScore()->setExpandRepeats(expandRepeatsBackup);
 }
 }

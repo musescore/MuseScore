@@ -84,9 +84,9 @@ class MasterScore : public Score
     UndoStack* _undoStack = nullptr;
     TimeSigMap* _sigmap;
     TempoMap* _tempomap;
-    RepeatList* _repeatList;
-    RepeatList* _repeatList2;
-    bool _expandRepeats = MScore::playRepeats;
+    RepeatList* _expandedRepeatList;
+    RepeatList* _nonExpandedRepeatList;
+    bool _expandRepeats = true;
     bool _playlistDirty = true;
     std::vector<Excerpt*> _excerpts;
     std::vector<PartChannelSettingsLink> _playbackSettingsLinks;
@@ -158,12 +158,15 @@ public:
     void setPlaylistDirty() override;
     void setPlaylistClean() { _playlistDirty = false; }
 
+    /// Always call this before calling `repeatList()`
+    /// No need to set it back after use, because everyone always calls it before using `repeatList()`
     void setExpandRepeats(bool expandRepeats);
     bool expandRepeats() const { return _expandRepeats; }
+
     void updateRepeatListTempo();
     void updateRepeatList();
     const RepeatList& repeatList() const override;
-    const RepeatList& repeatList2() const override;
+    const RepeatList& repeatList(bool expandRepeats) const override;
 
     std::vector<Excerpt*>& excerpts() { return _excerpts; }
     const std::vector<Excerpt*>& excerpts() const { return _excerpts; }

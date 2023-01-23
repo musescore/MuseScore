@@ -545,7 +545,6 @@ bool NotationConfiguration::isPlayRepeatsEnabled() const
 void NotationConfiguration::setIsPlayRepeatsEnabled(bool enabled)
 {
     settings()->setSharedValue(IS_PLAY_REPEATS_ENABLED, Val(enabled));
-    mu::engraving::MScore::playRepeats = enabled;
     m_isPlayRepeatsChanged.notify();
 }
 

@@ -999,8 +999,13 @@ public:
     void adjustKeySigs(track_idx_t sidx, track_idx_t eidx, KeyList km);
     KeyList keyList() const;
 
+    /// To be used together with setExpandRepeats.
+    /// For bigger operations, where suboperations might also use it,
+    /// where those need to have the same value for expandRepeats.
     virtual const RepeatList& repeatList() const;
-    virtual const RepeatList& repeatList2() const;
+    /// For small, one-step operations, where you need to get the relevant repeatList just once
+    virtual const RepeatList& repeatList(bool expandRepeats) const;
+
     double utick2utime(int tick) const;
     int utime2utick(double utime) const;
 
