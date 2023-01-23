@@ -93,7 +93,8 @@ FocusScope {
     }
 
     signal clicked(var mouse)
-    signal pressAndHold(var mouse)
+    // There are intentionally no "forwarded" signals here from the MouseArea, like `pressAndHold`
+    // See https://github.com/musescore/MuseScore/issues/16012#issuecomment-1399656043
 
     objectName: root.text
 
@@ -288,10 +289,6 @@ FocusScope {
 
         onPressed: {
             ui.tooltip.hide(root, true)
-        }
-
-        onPressAndHold: function(mouse) {
-            root.pressAndHold(mouse)
         }
 
         onContainsMouseChanged: {
