@@ -66,7 +66,8 @@ Ret PrintProvider::printNotation(INotationPtr notation)
     INotationPainting::Options opt;
     opt.fromPage = printerDev.fromPage() - 1;
     opt.toPage = printerDev.toPage() - 1;
-    opt.copyCount = printerDev.copyCount();
+    // See https://doc.qt.io/qt-5/qprinter.html#supportsMultipleCopies
+    opt.copyCount = printerDev.supportsMultipleCopies() ? 1 : printerDev.copyCount();
     opt.deviceDpi = printerDev.logicalDpiX();
     opt.onNewPage = [&printerDev]() { printerDev.newPage(); };
 
