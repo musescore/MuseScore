@@ -3081,7 +3081,7 @@ MeasureRepeat* Measure::measureRepeatElement(staff_idx_t staffIdx) const
         track_idx_t etrack = staff2track(staffIdx + 1);
         for (track_idx_t track = strack; track < etrack; ++track) {
             // should only be in first track, but just in case
-            for (Segment* s = m->first(SegmentType::ChordRest); s && s != m->last(); s = s->next(SegmentType::ChordRest)) {
+            for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
                 // should only be in first segment, but just in case
                 EngravingItem* e = s->element(track);
                 if (e && e->isMeasureRepeat()) {

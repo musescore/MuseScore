@@ -1174,12 +1174,19 @@ void Rest::editDrag(EditData& editData)
 bool Rest::shouldNotBeDrawn() const
 {
     const StaffType* st = staff() ? staff()->staffTypeForElement(this) : nullptr;
-    if (generated()
-        || (st && st->isTabStaff() && (!st->showRests() || st->genDurations())
-            && (!measure() || !measure()->isMMRest()))
-        || (measure() && measure()->measureRepeatCount(staffIdx()))) {
+    if (generated()) {
         return true;
     }
+
+    if (st && st->isTabStaff() && (!st->showRests() || st->genDurations())
+        && (!measure() || !measure()->isMMRest())) {
+        return true;
+    }
+
+    if (measure() && measure()->measureRepeatCount(staffIdx())) {
+        return true;
+    }
+
     return false;
 }
 
