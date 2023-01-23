@@ -2104,11 +2104,14 @@ String Harmony::generateScreenReaderInfo() const
             { u"i", u"1" },
         };
         static std::vector<std::pair<String, String> > symbolReplacements {
-            { u"b", u"♭" },
-            { u"h", u"♮" },
-            { u"#", u"♯" },
             { u"bb", u"𝄫" },
             { u"##", u"𝄪" },
+            { u"h", u"♮" },
+            { u"\\♮", u"h" }, // \h should be h, so need to correct replacing in the previous step
+            { u"#", u"♯" },
+            { u"\\♯", u"#" }, // \# should be #, so need to correct replacing in the previous step
+            { u"b", u"♭" },
+            { u"\\♭", u"b" }, // \b should be b, so need to correct replacing in the previous step
             // TODO: use SMuFL glyphs and translate
             //{ "o", ""},
             //{ "0", ""},
@@ -2119,10 +2122,7 @@ String Harmony::generateScreenReaderInfo() const
             aux.replace(r.first, r.second);
         }
         for (auto const& r : symbolReplacements) {
-            // only replace when not preceded by backslash
-            String s = u"(?<!\\\\)" + r.first;
-            std::regex re(s.toStdString());
-            aux.replace(re, r.second);
+            aux.replace(r.first, r.second);
         }
         // construct string one  character at a time
         for (size_t i = 0; i < aux.size(); ++i) {
