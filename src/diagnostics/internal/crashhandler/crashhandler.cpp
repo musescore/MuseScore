@@ -29,7 +29,7 @@
 #include <thirdparty/google_crashpad_client/client/settings.h>
 
 #include "log.h"
-#include "global/version.h"
+#include "global/muversion.h"
 
 using namespace mu::diagnostics;
 using namespace crashpad;
@@ -62,7 +62,7 @@ bool CrashHandler::start(const io::path_t& handlerFilePath, const io::path_t& du
 
     // Optional annotations passed via --annotations to the handler
     std::map<std::string, std::string> annotations = {
-        { "sentry[release]", framework::Version::fullVersion() }
+        { "sentry[release]", framework::MUVersion::fullVersion().toStdString() }
     };
     // Optional arguments to pass to the handler
     std::vector<std::string> arguments;

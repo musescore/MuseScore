@@ -22,7 +22,7 @@
 #include "aboutmodel.h"
 
 #include "translation.h"
-#include "version.h"
+#include "muversion.h"
 #include "config.h"
 
 #include <QApplication>
@@ -39,7 +39,7 @@ AboutModel::AboutModel(QObject* parent)
 QString AboutModel::museScoreVersion() const
 {
     QString version = QString::fromStdString(configuration()->museScoreVersion());
-    return mu::framework::Version::unstable()
+    return mu::framework::MUVersion::unstable()
            ? qtrc("appshell/about", "Unstable prerelease for %1").arg(version)
            : version;
 }

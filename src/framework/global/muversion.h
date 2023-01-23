@@ -19,19 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_VERSION_H
-#define MU_FRAMEWORK_VERSION_H
+#ifndef MU_FRAMEWORK_MUVERSION_H
+#define MU_FRAMEWORK_MUVERSION_H
 
-#include <string>
+#include "types/version.h"
 
 namespace mu::framework {
-class Version
+class MUVersion
 {
 public:
     static bool unstable();
-    static std::string version();
-    static std::string fullVersion();  // e.g. 3.4.0-Beta
-    static std::string revision();
+    static String version();
+    static String fullVersion();
+    static String revision();
 
     static int majorVersion();
     static int minorVersion();
@@ -39,4 +39,4 @@ public:
 };
 }
 
-#endif // MU_FRAMEWORK_VERSION_H
+#endif // MU_FRAMEWORK_MUVERSION_H
