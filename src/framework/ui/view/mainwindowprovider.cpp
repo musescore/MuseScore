@@ -94,6 +94,12 @@ void MainWindowProvider::requestShowOnBack()
 
 void MainWindowProvider::requestShowOnFront()
 {
+#ifdef Q_OS_MAC
+    // On macOS, this simple way of raising the window works just fine
+    // (and the other way causes problems, since calling `show()` resizes the window if it was sized to fill the screen)
+    m_window->setWindowStates(m_window->windowStates() & ~Qt::WindowMinimized);
+    m_window->raise();
+#else
     struct Holder {
         QMetaObject::Connection conn;
     };
@@ -109,6 +115,7 @@ void MainWindowProvider::requestShowOnFront()
     });
     m_window->show();
     m_window->requestActivate();
+#endif
 }
 
 bool MainWindowProvider::isFullScreen() const
