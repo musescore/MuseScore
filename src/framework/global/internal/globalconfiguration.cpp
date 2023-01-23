@@ -28,7 +28,7 @@
 
 #include "config.h"
 #include "settings.h"
-#include "version.h"
+#include "muversion.h"
 #include "log.h"
 
 using namespace mu;
@@ -41,7 +41,7 @@ static const std::string MUSESCORE_URL("https://www.musescore.org/");
 
 void GlobalConfiguration::init()
 {
-    settings()->setDefaultValue(DEV_MODE_ENABLED_KEY, Val(Version::unstable()));
+    settings()->setDefaultValue(DEV_MODE_ENABLED_KEY, Val(MUVersion::unstable()));
 }
 
 io::path_t GlobalConfiguration::appBinPath() const

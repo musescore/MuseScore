@@ -39,7 +39,7 @@
 #include "backendjsonwriter.h"
 #include "notationmeta.h"
 
-#include "version.h"
+#include "muversion.h"
 #include "log.h"
 
 using namespace mu;
@@ -454,7 +454,8 @@ Ret BackendApi::devInfo(const notation::INotationPtr notation, BackendJsonWriter
     TRACEFUNC
 
     QJsonObject infoObj;
-    infoObj["version"] = QString::fromStdString(framework::Version::fullVersion() + "(" + framework::Version::revision() + ")");
+    infoObj["version"] = QString::fromStdString(String("%1(%2)").arg(framework::MUVersion::fullVersion(),
+                                                                     framework::MUVersion::revision()).toStdString());
 
     jsonWriter.addKey(DEV_INFO_NAME.c_str());
     jsonWriter.addValue(QJsonDocument(infoObj).toJson(), addSeparator, true);
