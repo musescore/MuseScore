@@ -50,6 +50,7 @@
 #include "measurerepeat.h"
 #include "note.h"
 #include "noteevent.h"
+#include "palmmute.h"
 #include "part.h"
 #include "repeatlist.h"
 #include "score.h"
@@ -209,11 +210,12 @@ void Score::updateChannel()
 
     for (auto it = spanner().cbegin(); it != spanner().cend(); ++it) {
         Spanner* spanner = (*it).second;
-        if (!spanner->isVolta()) {
-            continue;
+        if (spanner->isPalmMute()) {
+            toPalmMute(spanner)->setChannel();
         }
-        Volta* volta = toVolta(spanner);
-        volta->setChannel();
+        if (spanner->isVolta()) {
+            toVolta(spanner)->setChannel();
+        }
     }
 
     for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {

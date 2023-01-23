@@ -24,7 +24,10 @@
 
 #include "rw/xml.h"
 
+#include "chordrest.h"
+#include "part.h"
 #include "score.h"
+#include "staff.h"
 #include "stafftype.h"
 #include "system.h"
 
@@ -223,6 +226,31 @@ PropertyValue PalmMute::propertyDefault(Pid propertyId) const
 
     default:
         return TextLineBase::propertyDefault(propertyId);
+    }
+}
+
+void PalmMute::setChannel()
+{
+    EngravingItem* startEl = startElement();
+    EngravingItem* endEl = endElement();
+
+    if (!startEl || !endEl) {
+        return;
+    }
+
+    if (!startEl->isChordRest() || !endEl->isChordRest()) {
+        return;
+    }
+
+    ChordRest* startCR = toChordRest(startEl);
+    ChordRest* endCR = toChordRest(endEl);
+
+    Instrument* instrument = part()->instrument(startCR->tick());
+    part()->instrument(startCR->tick())->channelIdx(String::fromUtf8(InstrChannel::PALM_MUTE_NAME));
+    int idx = instrument->channelIdx(String::fromUtf8(InstrChannel::PALM_MUTE_NAME));
+    if (idx > 0) {
+        staff()->insertIntoChannelList(voice(), startCR->tick(), idx);
+        staff()->insertIntoChannelList(voice(), endCR->tick() + endCR->ticks(), 0);
     }
 }
 }
