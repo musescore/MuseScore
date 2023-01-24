@@ -78,6 +78,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/transpose_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tuplet_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/unrollrepeats_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/changevisibility_tests.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/mocks/engravingconfigurationmock.h
 )
