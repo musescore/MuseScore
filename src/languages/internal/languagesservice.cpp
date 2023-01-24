@@ -215,15 +215,17 @@ QString LanguagesService::effectiveLanguageCode(const QString& languageCode) con
                 return code;
             }
 
-            static const std::map<QString, QString> SHORT_TO_LONG_FALLBACK_CODES {
+            static const std::map<QString, QString> SPECIAL_CASES {
+                { "ca_valencia", "ca@valencia" },
+                { "ca_ES_valencia", "ca@valencia" },
                 { "en", "en_US" },
                 { "hi", "hi_IN" },
                 { "mn", "mn_MN" },
                 { "zh", "zh_CN" }
             };
 
-            auto it = SHORT_TO_LONG_FALLBACK_CODES.find(code);
-            if (it != SHORT_TO_LONG_FALLBACK_CODES.cend()) {
+            auto it = SPECIAL_CASES.find(code);
+            if (it != SPECIAL_CASES.cend()) {
                 return it->second;
             }
 
