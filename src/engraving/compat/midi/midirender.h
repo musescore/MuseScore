@@ -23,8 +23,8 @@
 #ifndef __RENDERMIDI_H__
 #define __RENDERMIDI_H__
 
-#include "measure.h"
-#include "synthesizerstate.h"
+#include "libmscore/measure.h"
+#include "libmscore/synthesizerstate.h"
 
 namespace mu::engraving {
 class EventMap;
