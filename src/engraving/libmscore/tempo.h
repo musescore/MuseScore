@@ -75,7 +75,6 @@ class TempoMap : public std::map<int, TEvent>
     int _tempoSN = 0; // serial no to track tempo changes
     BeatsPerSecond _tempo; // tempo if not using tempo list (beats per second)
     BeatsPerSecond _tempoMultiplier;
-    async::Notification _tempoMultiplierChanged;
 
     void normalize();
     void del(int tick);
@@ -101,8 +100,7 @@ public:
     void delTempo(int tick);
 
     BeatsPerSecond tempoMultiplier() const;
-    async::Notification tempoMultiplierChanged() const;
-    void setTempoMultiplier(BeatsPerSecond val);
+    bool setTempoMultiplier(BeatsPerSecond val);
 };
 } // namespace mu::engraving
 #endif
