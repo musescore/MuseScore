@@ -341,7 +341,7 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
 //---------------------------------------------------------
 
 static void collectNote(EventMap* events, int channel, const Note* note, double velocityMultiplier, int tickOffset, Staff* staff,
-                        SndConfig config)
+                        SndConfig config, int graceOffsetOn = 0, int graceOffsetOff = 0)
 {
     if (!note->play() || note->hidden()) {      // do not play overlapping notes
         return;
@@ -430,7 +430,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, double 
         }
 
         velo *= velocityMultiplier;
-        playNote(events, note, channel, p, std::clamp(velo, 1, 127), on, off, staffIdx);
+        playNote(events, note, channel, p, std::clamp(velo, 1, 127), on - graceOffsetOn, off - graceOffsetOff, staffIdx);
     }
 
     // Single-note dynamics
@@ -714,6 +714,42 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
     }
 }
 
+static void collectGraceBeforeChordEvents(Chord* chord, EventMap* events, const SndConfig& config, int channel, double veloMultiplier,
+                                          Staff* st, int tickOffset)
+{
+    // calculate offset for grace notes here
+    const auto& grChords = chord->graceNotesBefore();
+    std::vector<Chord*> graceNotesBeforeBar;
+    std::copy_if(grChords.begin(), grChords.end(), std::back_inserter(graceNotesBeforeBar), [](Chord* ch) {
+        return ch->noteType() == NoteType::ACCIACCATURA;
+    });
+
+    int graceTickSum = 0;
+    int graceTickOffset = 0;
+
+    size_t acciacaturaGraceSize = graceNotesBeforeBar.size();
+    if (acciacaturaGraceSize > 0) {
+        graceTickSum = graceNotesBeforeBar[0]->ticks().ticks();
+        graceTickOffset = graceTickSum / acciacaturaGraceSize;
+    }
+
+    if (!graceNotesMerged(chord)) {
+        int currentBeaforeBeatNote = 0;
+        for (Chord* c : chord->graceNotesBefore()) {
+            for (const Note* note : c->notes()) {
+                if (note->noteType() == NoteType::ACCIACCATURA) {
+                    collectNote(events, channel, note, veloMultiplier, tickOffset, st, config,
+                                graceTickSum - graceTickOffset * currentBeaforeBeatNote,
+                                graceTickSum - graceTickOffset * (currentBeaforeBeatNote + 1) + 1);
+                    currentBeaforeBeatNote++;
+                } else {
+                    collectNote(events, channel, note, veloMultiplier, tickOffset, st, config);
+                }
+            }
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   collectMeasureEventsSimple
 //    the original, velocity-only method of collecting events.
@@ -776,13 +812,7 @@ void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure const* m
 
             SndConfig config;             // dummy
 
-            if (!graceNotesMerged(chord)) {
-                for (Chord* c : chord->graceNotesBefore()) {
-                    for (const Note* note : c->notes()) {
-                        collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config);
-                    }
-                }
-            }
+            collectGraceBeforeChordEvents(chord, events, config, channel, veloMultiplier, st1, tickOffset);
 
             for (const Note* note : chord->notes()) {
                 collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config);
@@ -885,14 +915,7 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* 
             //
             // Add normal note events
             //
-
-            if (!graceNotesMerged(chord)) {
-                for (Chord* c : chord->graceNotesBefore()) {
-                    for (const Note* note : c->notes()) {
-                        collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config);
-                    }
-                }
-            }
+            collectGraceBeforeChordEvents(chord, events, config, channel, veloMultiplier, st1, tickOffset);
 
             for (const Note* note : chord->notes()) {
                 collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config);
@@ -2061,21 +2084,22 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
         //  - the grace note duration as notated does not matter
         //
         Chord* graceChord = gnb[0];
-        if (graceChord->noteType() == NoteType::ACCIACCATURA || nb > 1) {      // treat multiple subsequent grace notes as acciaccaturas
-            int graceTimeMS = 65 * nb;           // value determined empirically (TODO: make instrument-specific, like articulations)
-            // 1000 occurs below as a unit for ontime
-            ontime = std::min(500, static_cast<int>((graceTimeMS / chordTimeMS) * 1000));
+
+        if (graceChord->noteType() == NoteType::ACCIACCATURA) {
+            ontime = 0;
+            graceDuration = 0;
             weightb = 0.0;
             weighta = 1.0;
-        } else if (chord->dots() == 1) {
-            ontime = floor(667 * weightb);
-        } else if (chord->dots() == 2) {
-            ontime = floor(571 * weightb);
         } else {
-            ontime = floor(500 * weightb);
-        }
+            const double graceTimeMS = (graceChord->actualTicks().ticks() / ticksPerSecond) * 1000;
 
-        graceDuration = ontime / nb;
+            // 1000 occurs below as a unit for ontime
+            ontime = std::min(500, static_cast<int>((graceTimeMS / chordTimeMS) * 1000));
+            graceDuration = ontime / nb;
+            weightb = 0.0;
+            weighta = 1.0;
+            trailtime += ontime;
+        }
     }
 
     for (int i = 0, on = 0; i < nb; ++i) {
@@ -2091,6 +2115,7 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
         if (gc->playEventType() == PlayEventType::Auto) {
             gc->setNoteEventLists(el);
         }
+
         on += graceDuration;
     }
     if (na) {
@@ -2167,6 +2192,44 @@ void Score::createPlayEvents(Chord* chord)
     // don't change event list if type is PlayEventType::User
 }
 
+static void adjustPreviousChordLength(Chord* currentChord, Chord* prevChord)
+{
+    const std::vector<Chord*>& graceBeforeChords = currentChord->graceNotesBefore();
+    std::vector<Chord*> graceNotesBeforeBar;
+    std::copy_if(graceBeforeChords.begin(), graceBeforeChords.end(), std::back_inserter(graceNotesBeforeBar), [](Chord* ch) {
+        return ch->noteType() == NoteType::ACCIACCATURA;
+    });
+
+    if (prevChord && !graceNotesBeforeBar.empty()) {
+        int reducedTicks = graceNotesBeforeBar[0]->ticks().ticks();
+        int prevTicks = prevChord->ticks().ticks();
+        if (reducedTicks < prevTicks) {
+            int newLength = static_cast<int>((float)(prevTicks - reducedTicks) / (float)prevTicks * 1000.0f);
+
+            for (size_t i = 0; i < prevChord->notes().size(); i++) {
+                Note* prevChordNote = prevChord->notes()[i];
+
+                NoteEventList evList;
+
+                for (auto it = prevChordNote->playEvents().begin(); it != prevChordNote->playEvents().end(); it++) {
+                    if (it->ontime() >= newLength) {
+                        continue;
+                    }
+
+                    NoteEvent event;
+                    event.setOntime(it->ontime());
+                    event.setPitch(it->pitch());
+                    event.setLen(std::min(newLength, it->offtime()) - it->ontime());
+
+                    evList.push_back(event);
+                }
+
+                prevChordNote->setPlayEvents(evList);
+            }
+        }
+    }
+}
+
 void Score::createPlayEvents(Measure const* start, Measure const* const end)
 {
     if (!start) {
@@ -2176,6 +2239,7 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
     track_idx_t etrack = nstaves() * VOICES;
     for (track_idx_t track = 0; track < etrack; ++track) {
         bool rangeEnded = false;
+        Chord* prevChord = nullptr;
         for (Measure const* m = start; m; m = m->nextMeasure()) {
             constexpr SegmentType st = SegmentType::ChordRest;
 
@@ -2208,9 +2272,14 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
             for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
                 EngravingItem* e = seg->element(track);
                 if (e == 0 || !e->isChord()) {
+                    prevChord = nullptr;
                     continue;
                 }
-                createPlayEvents(toChord(e));
+
+                Chord* chord = toChord(e);
+                createPlayEvents(chord);
+                adjustPreviousChordLength(chord, prevChord);
+                prevChord = chord;
             }
         }
     }
