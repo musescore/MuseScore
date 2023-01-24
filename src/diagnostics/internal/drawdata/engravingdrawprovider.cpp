@@ -37,7 +37,8 @@ using namespace mu::diagnostics;
 // --diagnostic-com-drawdata ./drawdata/accidental-1.json ./drawdata/accidental-2.json --diagnostic-output ./drawdata/accidental-1-2.diff.json
 // --diagnostic-drawdata-to-png ./drawdata/accidental-1.json --diagnostic-output ./drawdata/accidental-1.png
 // --diagnostic-drawdiff-to-png ./drawdata/accidental-1-2.diff.json ./drawdata/accidental-1.json --diagnostic-output ./drawdata/accidental-1-2.diff.png
-//  ./vtest/scores/accidental-1.mscx -o ./drawdata/1_accidental-1.exp.png
+//  ./vtest/scores/accidental-1.mscx -o ./work/1_accidental-1.exp.png
+// ./vtest/scores/emmentaler-text-3.mscx -o ./work/emmentaler-text-3.png
 
 Ret EngravingDrawProvider::generateDrawData(const io::path_t& dirOrFile, const io::path_t& outDirOrFile)
 {
