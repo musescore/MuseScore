@@ -96,8 +96,10 @@ void PlaybackModel::reload()
     int trackFrom = 0;
     size_t trackTo = m_score->ntracks();
 
+    const Measure* lastMeasure = m_score->lastMeasure();
+
     int tickFrom = 0;
-    int tickTo = m_score->lastMeasure()->endTick().ticks();
+    int tickTo = lastMeasure ? lastMeasure->endTick().ticks() : 0;
 
     clearExpiredTracks();
     clearExpiredContexts(trackFrom, trackTo);
