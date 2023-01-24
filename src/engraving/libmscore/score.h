@@ -465,8 +465,6 @@ private:
     void selectAdd(EngravingItem* e);
     void selectRange(EngravingItem* e, staff_idx_t staffIdx);
 
-    void cmdToggleVisible();
-
     Ret putNote(const Position&, bool replace);
 
     void resetTempo();
@@ -659,7 +657,7 @@ public:
     void undoInsertPart(Part* part, int idx);
     void undoRemoveStaff(Staff* staff);
     void undoInsertStaff(Staff* staff, staff_idx_t idx, bool createRests=true);
-    void undoChangeInvisible(EngravingItem*, bool);
+    void undoChangeVisible(EngravingItem* item, bool visible);
     void undoChangeTuning(Note*, double);
     void undoChangeUserMirror(Note*, DirectionH);
     void undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent);
@@ -1232,6 +1230,7 @@ public:
     void setFooterText(Text* t, int index) { _footersText.at(index) = t; }
 
     void cmdAddPitch(int note, bool addFlag, bool insert);
+    void cmdToggleVisible();
     void forAllLyrics(std::function<void(Lyrics*)> f);
 
     void createPaddingTable();

@@ -141,7 +141,7 @@ const
 {
     QList<mu::engraving::EngravingItem*> resultList;
 
-    for (const mu::engraving::EngravingItem* element : rawElementList) {
+    for (mu::engraving::EngravingItem* element : rawElementList) {
         mu::engraving::ElementType elementType = element->type();
 
         //! NOTE: instrument names can't survive the layout process,
@@ -156,9 +156,7 @@ const
             continue;
         }
 
-        if (!resultList.contains(element->elementBase())) {
-            resultList << element->elementBase();
-        }
+        resultList << element;
 
         if (elementType == mu::engraving::ElementType::BEAM) {
             const mu::engraving::Beam* beam = mu::engraving::toBeam(element);
@@ -174,15 +172,21 @@ const
 
 QList<mu::engraving::EngravingItem*> ElementRepositoryService::findChords() const
 {
-    QList<mu::engraving::EngravingItem*> resultList;
+    QSet<mu::engraving::EngravingItem*> elements;
 
     for (mu::engraving::EngravingItem* element : m_exposedElementList) {
         if (element->type() == mu::engraving::ElementType::CHORD) {
-            resultList << element;
+            elements << element;
+            continue;
+        }
+
+        mu::engraving::EngravingItem* chord = element->findAncestor(mu::engraving::ElementType::CHORD);
+        if (chord) {
+            elements << chord;
         }
     }
 
-    return resultList;
+    return QList<mu::engraving::EngravingItem*>(elements.begin(), elements.end());
 }
 
 QList<mu::engraving::EngravingItem*> ElementRepositoryService::findNotes() const
