@@ -4,9 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       publish:
-        description: 'Publish to Transifex: on - publish'
+        description: 'Publish to Transifex (on/off)'
         required: false
         default: 'off'
+      cleanup_obsolete:
+        description: 'Clean up obsolete strings (on/off)'
+        required: true
+
 jobs:
   lupdate:
     runs-on: ubuntu-20.04
@@ -27,17 +31,24 @@ jobs:
           fi   
         fi
 
+        LUPDATE_ARGS=''
+        if [ "${{ github.event.inputs.cleanup_obsolete }}" == "on" ]; then
+          LUPDATE_ARGS='-no-obsolete'
+        fi
+
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
         echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
         echo "BUILD_NUMBER: $BUILD_NUMBER"
-  
+        echo "LUPDATE_ARGS=$LUPDATE_ARGS" >> $GITHUB_ENV
+        echo "LUPDATE_ARGS: $LUPDATE_ARGS"
+
     - name: Setup environment
       run: |
         sudo bash ./build/ci/translation/qt_install.sh 
     - name: Run lupdate
       run: |
-        sudo bash ./build/ci/translation/run_lupdate.sh
+        sudo bash ./build/ci/translation/run_lupdate.sh ${{ env.LUPDATE_ARGS }}
     - name: Publish to Transifex
       if: env.DO_PUBLISH == 'true'
       run: |
