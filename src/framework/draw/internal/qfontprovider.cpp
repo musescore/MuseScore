@@ -21,6 +21,7 @@
  */
 #include "qfontprovider.h"
 
+#include <QFont>
 #include <QPaintDevice>
 #include <QFontDatabase>
 #include <QFontMetricsF>
