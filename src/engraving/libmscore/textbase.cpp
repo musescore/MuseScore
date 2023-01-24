@@ -62,6 +62,7 @@ static constexpr double subScriptSize     = 0.6;
 static constexpr double subScriptOffset   = 0.5; // of x-height
 static constexpr double superScriptOffset = -.9; // of x-height
 
+static const char* FALLBACK_SYMBOL_FONT = "Bravura";
 static const char* FALLBACK_SYMBOLTEXT_FONT = "Bravura Text";
 
 //---------------------------------------------------------
@@ -811,6 +812,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
         }
         // check if all symbols are available
         font.setFamily(family, fontType);
+        font.setNoFontMerging(true);
         mu::draw::FontMetrics fm(font);
 
         bool fail = false;
@@ -835,8 +837,11 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
             }
         }
         if (fail) {
-            family = String::fromUtf8(FALLBACK_SYMBOLTEXT_FONT);
-            fontType = draw::Font::Type::MusicSymbolText;
+            if (fontType == draw::Font::Type::MusicSymbol) {
+                family = String::fromUtf8(FALLBACK_SYMBOL_FONT);
+            } else {
+                family = String::fromUtf8(FALLBACK_SYMBOLTEXT_FONT);
+            }
         }
     } else {
         family = format.fontFamily();
