@@ -2365,9 +2365,17 @@ void Note::layout2()
 
     int dots = chord()->dots();
     if (dots && !_dots.empty()) {
-        double d  = score()->point(score()->styleS(Sid::dotNoteDistance)) * mag();
-        double dd = score()->point(score()->styleS(Sid::dotDotDistance)) * mag();
+        // if chords have notes with different mag, dots must still  align
+        double correctMag = chord()->notes().size() > 1 ? chord()->mag() : mag();
+        double d  = score()->point(score()->styleS(Sid::dotNoteDistance)) * correctMag;
+        double dd = score()->point(score()->styleS(Sid::dotDotDistance)) * correctMag;
         double x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
+        // in case of dots with different size, center-align them
+        if (mag() != chord()->mag() && chord()->notes().size() > 1) {
+            double relativeMag = mag() / chord()->mag();
+            double centerAlignOffset = dot(0)->width() * (1 / relativeMag - 1) / 2;
+            x += centerAlignOffset;
+        }
         // adjust dot distance for hooks
         if (chord()->hook() && chord()->up()) {
             double hookRight = chord()->hook()->width() + chord()->hook()->x() + chord()->pos().x();
