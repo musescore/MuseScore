@@ -37,6 +37,7 @@
 
 #include "engraving/libmscore/figuredbass.h"
 #include "engraving/infrastructure/symbolfonts.h"
+#include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/realizedharmony.h"
 #include "engraving/libmscore/text.h"
 #include "engraving/style/textstyle.h"
@@ -1186,7 +1187,19 @@ void EditStyle::setHeaderFooterToolTip()
           + qtrc("notation/editstyle", "(in File > Score properties…):")
           + QString("</p><table>");
 
-    // show all tags for current score/part, see also Score::init()
+    // show all tags for current score/part
+    Score* score = globalContext()->currentNotation()->elements()->msScore();
+    if (!score->isMaster()) {
+        for (const auto& tag : score->masterScore()->metaTags()) {
+            toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>")
+                                   .arg(tag.first.toQString()).arg(tag.second.toQString());
+        }
+    }
+    for (const auto& tag : score->masterScore()->metaTags()) {
+        toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>")
+                               .arg(tag.first.toQString()).arg(tag.second.toQString());
+    }
+
     QList<QMap<QString, QString> > tags; // FIXME
     for (const QMap<QString, QString>& tag: tags) {
         QMapIterator<QString, QString> i(tag);
