@@ -60,6 +60,9 @@ Column {
             anchors.fill: parent
             anchors.margins: 1
 
+            contentWidth: contentItem.childrenRect.width
+            flickableDirection: Flickable.AutoFlickDirection
+
             spacing: 0
 
             model: detailsModel
@@ -88,9 +91,14 @@ Column {
                 background.color: model.index % 2 === 0 ? ui.theme.backgroundSecondaryColor : "transparent"
                 mouseArea.enabled: false
 
+                implicitWidth: label.implicitWidth + 2 * 30
+                width: Math.max(ListView.view.width, implicitWidth)
+
                 StyledTextLabel {
+                    id: label
                     anchors.fill: parent
                     anchors.leftMargin: 30
+                    anchors.rightMargin: 30
 
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignLeft
