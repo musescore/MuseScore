@@ -219,6 +219,7 @@ QString LanguagesService::effectiveLanguageCode(const QString& languageCode) con
                 { "ca_valencia", "ca@valencia" },
                 { "ca_ES_valencia", "ca@valencia" },
                 { "en_AU", "en_GB" },
+                { "en_NZ", "en_GB" },
                 { "en", "en_US" },
                 { "hi", "hi_IN" },
                 { "mn", "mn_MN" },
