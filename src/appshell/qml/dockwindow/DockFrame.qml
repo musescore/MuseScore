@@ -70,7 +70,7 @@ Rectangle {
         order: 1
 
         onNavigationEvent: function(event) {
-            if (event.type === NavigationEvent.AboutActive) {
+            if (event.type === NavigationEvent.AboutActive && tabsPanel.visible) {
                 event.setData("controlName", tabs.currentItem.navigation.name)
             }
         }
@@ -86,6 +86,9 @@ Rectangle {
         contextMenuModel: frameModel.currentDockContextMenuModel
         visible: frameModel.titleBarVisible
         isHorizontalPanel: frameModel.isHorizontalPanel
+
+        navigation.panel: navPanel
+        navigation.order: 1
 
         onHandleContextMenuItemRequested: function(itemId) {
             frameModel.handleMenuItem(itemId)
