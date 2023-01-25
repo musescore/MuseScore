@@ -176,7 +176,9 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
     }
 
     ev.setVelo(0);
-    events->insert(std::pair<int, NPlayEvent>(offTime, ev));
+    if (!note->part()->instrument(note->tick())->useDrumset()) {
+        events->insert(std::pair<int, NPlayEvent>(offTime, ev));
+    }
 }
 
 //---------------------------------------------------------
