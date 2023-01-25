@@ -43,6 +43,8 @@ public:
     double width() const override { return m_width; }
 
     void write(XmlWriter&) const override;
+    void writeProperties(XmlWriter&) const override;
+    bool readProperties(XmlReader&) override;
 
     PropertyValue propertyDefault(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;

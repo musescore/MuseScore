@@ -1005,7 +1005,7 @@ void Rest::read(XmlReader& e)
             dot->read(e);
             add(dot);
         } else if (readStyledProperty(e, tag)) {
-        } else if (ChordRest::readProperties(e)) {
+        } else if (readProperties(e)) {
         } else {
             e.unknown();
         }
