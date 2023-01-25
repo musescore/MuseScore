@@ -25,6 +25,7 @@
 
 #include "libmscore/measure.h"
 #include "libmscore/synthesizerstate.h"
+#include "pitchwheelrenderer.h"
 
 namespace mu::engraving {
 class EventMap;
@@ -113,14 +114,19 @@ private:
     static bool canBreakChunk(const Measure* last);
     void updateState();
 
-    void renderStaffChunk(const Chunk&, EventMap* events, const StaffContext& sctx);
-    void renderSpanners(const Chunk&, EventMap* events);
+    void renderStaffChunk(const Chunk&, EventMap* events, const StaffContext& sctx, PitchWheelRenderer& pitchWheelRenderer);
+
+    void renderSpanners(const Chunk&, EventMap* events, PitchWheelRenderer& pitchWheelRenderer);
+
     void renderMetronome(const Chunk&, EventMap* events);
     void renderMetronome(EventMap* events, Measure const* m, const Fraction& tickOffset);
 
-    void collectMeasureEvents(EventMap* events, Measure const* m, const MidiRenderer::StaffContext& sctx, int tickOffset);
-    void collectMeasureEventsSimple(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset);
-    void collectMeasureEventsDefault(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset);
+    void collectMeasureEvents(EventMap* events, Measure const* m, const MidiRenderer::StaffContext& sctx, int tickOffset,
+                              PitchWheelRenderer& pitchWheelRenderer);
+    void collectMeasureEventsSimple(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset,
+                                    PitchWheelRenderer& pitchWheelRenderer);
+    void collectMeasureEventsDefault(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset,
+                                     PitchWheelRenderer& pitchWheelRenderer);
 
 public:
     explicit MidiRenderer(Score* s);
@@ -135,7 +141,7 @@ public:
     };
 
     void renderScore(EventMap* events, const Context& ctx);
-    void renderChunk(const Chunk&, EventMap* events, const Context& ctx);
+    void renderChunk(const Chunk&, EventMap* events, const Context& ctx, PitchWheelRenderer& pitchWheelRenderer);
 
     void setScoreChanged() { needUpdate = true; }
     void setMinChunkSize(int sizeMeasures) { minChunkSize = sizeMeasures; needUpdate = true; }
