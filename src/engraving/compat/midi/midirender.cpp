@@ -273,7 +273,9 @@ static void collectNote(EventMap* events, int channel, const Note* note, double 
         }
 
         velo *= velocityMultiplier;
-        playNote(events, note, channel, p, std::clamp(velo, 1, 127), on - graceOffsetOn, off - graceOffsetOff, staffIdx);
+        playNote(events, note, channel, p, std::clamp(velo, 1, 127), std::max(0, on - graceOffsetOn), std::max(0,
+                                                                                                               off - graceOffsetOff),
+                 staffIdx);
     }
 
     // Single-note dynamics
