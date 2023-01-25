@@ -950,10 +950,10 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
 
         if (selectedElement && selectedElement->isTextBase()) {
             interaction->nudge(direction, quickly);
-        } else if (interaction->selection()->isNone()) {
-            interaction->selectFirstElement(false);
-            playChord = true;
         } else {
+            if (interaction->selection()->isNone()) {
+                interaction->selectFirstElement(false);
+            }
             interaction->moveSelection(direction, quickly ? MoveSelectionType::Measure : MoveSelectionType::Chord);
             playChord = true;
         }
