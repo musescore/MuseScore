@@ -1,4 +1,4 @@
-﻿/*
+/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
@@ -78,6 +78,7 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 static constexpr int MIN_CHUNK_SIZE(10); // measure
+static PitchWheelSpecs wheelSpec;
 
 static bool graceNotesMerged(Chord* chord);
 
@@ -117,11 +118,31 @@ bool isGlissandoFor(const Note* note)
     return false;
 }
 
+static void collectGlissando(int channel,
+                             int onTime, int offTime,
+                             int pitchDelta,
+                             PitchWheelRenderer& pitchWheelRenderer)
+{
+    const float scale = (float)wheelSpec.mLimit / wheelSpec.mAmplitude;
+
+    PitchWheelRenderer::PitchWheelFunction func;
+    func.mStartTick = onTime;
+    func.mEndTick = offTime;
+
+    auto linearFunc = [startTick = onTime, endTick = offTime, pitchDelta, scale] (uint32_t tick) {
+        float x = (float)(tick - startTick) / (endTick - startTick);
+        return pitchDelta * x * scale;
+    };
+    func.func = linearFunc;
+
+    pitchWheelRenderer.addPitchWheelFunction(func, channel);
+}
+
 //---------------------------------------------------------
 //   playNote
 //---------------------------------------------------------
 static void playNote(EventMap* events, const Note* note, int channel, int pitch,
-                     int velo, int onTime, int offTime, int staffIdx)
+                     int velo, int onTime, int offTime, int staffIdx, PitchWheelRenderer& pitchWheelRenderer)
 {
     if (!note->play()) {
         return;
@@ -145,31 +166,10 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
             Glissando* glissando = toGlissando(spanner);
             if (glissando->glissandoStyle() == GlissandoStyle::PORTAMENTO) {
                 Note* nextNote = toNote(spanner->endElement());
-                double pitchDelta = (static_cast<double>(nextNote->ppitch()) - pitch) * 50.0;
-                double timeDelta = static_cast<double>(offTime - onTime);
-                if (pitchDelta != 0.0 && timeDelta != 0.0) {
-                    double timeStep = std::abs(timeDelta / pitchDelta * 20.0);
-                    double t = 0.0;
-                    std::vector<int> onTimes;
-                    EaseInOut easeInOut(static_cast<double>(glissando->easeIn()) / 100.0,
-                                        static_cast<double>(glissando->easeOut()) / 100.0);
-                    easeInOut.timeList(static_cast<int>((timeDelta + timeStep * 0.5) / timeStep), int(timeDelta), &onTimes);
-                    double nTimes = static_cast<double>(onTimes.size() - 1);
-                    for (double time : onTimes) {
-                        int p = static_cast<int>((t / nTimes) * pitchDelta);
-                        int timeStamp = std::min(onTime + int(time), offTime - 1);
-                        int midiPitch = (p * 16384) / 1200 + 8192;
-                        NPlayEvent evb(ME_PITCHBEND, channel, midiPitch % 128, midiPitch / 128);
-                        evb.setOriginatingStaff(staffIdx);
-                        events->insert(std::pair<int, NPlayEvent>(timeStamp, evb));
-                        t += 1.0;
-                    }
-                    ev.setVelo(0);
-                    events->insert(std::pair<int, NPlayEvent>(offTime, ev));
-                    NPlayEvent evb(ME_PITCHBEND, channel, 0, 64);           // 0:64 is 8192 - no pitch bend
-                    evb.setOriginatingStaff(staffIdx);
-                    events->insert(std::pair<int, NPlayEvent>(offTime, evb));
-                    return;
+                double pitchDelta = nextNote->ppitch() - pitch;
+                int timeDelta = offTime - onTime;
+                if (pitchDelta != 0 && timeDelta != 0) {
+                    collectGlissando(channel, onTime, offTime, pitchDelta, pitchWheelRenderer);
                 }
             }
         }
@@ -181,12 +181,98 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
     }
 }
 
+static void collectVibrato(int channel,
+                           int onTime, int offTime,
+                           int lowPitch, int highPitch,
+                           PitchWheelRenderer& pitchWheelRenderer)
+{
+    const uint16_t vibratoPeriod = Constants::division / 2;
+    const uint32_t duration = offTime - onTime;
+    const float scale = 2 * (float)wheelSpec.mLimit / wheelSpec.mAmplitude / 100;
+
+    if (duration < vibratoPeriod) {
+        return;
+    }
+
+    const int pillarAmplitude = (highPitch - lowPitch);
+
+    PitchWheelRenderer::PitchWheelFunction func;
+    func.mStartTick = onTime;
+    func.mEndTick = offTime - duration % vibratoPeriod;//removed last points to make more smooth of the end
+
+    auto vibratoFunc = [startTick = onTime, pillarAmplitude, vibratoPeriod, lowPitch, scale] (uint32_t tick) {
+        float x = (float)(tick - startTick) / vibratoPeriod;
+        return (pillarAmplitude * 2 / M_PI * asin(sin(2 * M_PI * x)) + lowPitch) * scale;
+    };
+    func.func = vibratoFunc;
+
+    pitchWheelRenderer.addPitchWheelFunction(func, channel);
+}
+
+static void collectBend(const Bend* bend,
+                        int channel,
+                        int onTime, int offTime,
+                        PitchWheelRenderer& pitchWheelRenderer)
+{
+    const PitchValues& points = bend->points();
+    size_t pitchSize = points.size();
+
+    const float scale = 2 * (float)wheelSpec.mLimit / wheelSpec.mAmplitude / 100;
+    uint32_t duration = offTime - onTime;
+
+    for (size_t i = 0; i < pitchSize - 1; i++) {
+        PitchValue curValue = points[i];
+        PitchValue nextValue = points[i + 1];
+
+        //! y = a x^2 + b - curve
+        float curTick = (float)curValue.time * duration / 100;
+        float nextTick = (float)nextValue.time * duration / 100;
+
+        float a = (float)(nextValue.pitch - curValue.pitch) / ((curTick - nextTick) * (curTick - nextTick));
+        float b = curValue.pitch;
+
+        uint32_t x0 = curValue.time * duration / 100;
+
+        PitchWheelRenderer::PitchWheelFunction func;
+        func.mStartTick = onTime + x0;
+        uint32_t startTimeNextPoint = nextValue.time * duration / 100;
+        func.mEndTick = onTime + startTimeNextPoint;
+
+        auto bendFunc = [ startTick = func.mStartTick, scale,
+                          a, b] (uint32_t tick) {
+            float x = (float)(tick - startTick);
+
+            float y = a * x * x + b;
+
+            return y * scale;
+        };
+        func.func = bendFunc;
+        pitchWheelRenderer.addPitchWheelFunction(func, channel);
+    }
+    PitchWheelRenderer::PitchWheelFunction func;
+    func.mStartTick = onTime + points[pitchSize - 1].time * duration / 100;
+    func.mEndTick = offTime;
+
+    if (func.mEndTick == func.mStartTick) {
+        return;
+    }
+
+    //! y = releaseValue linear curve
+    uint32_t releaseValue = points[pitchSize - 1].pitch * scale;
+    auto bendFunc = [releaseValue] (uint32_t tick) {
+        UNUSED(tick)
+        return releaseValue;
+    };
+    func.func = bendFunc;
+    pitchWheelRenderer.addPitchWheelFunction(func, channel);
+}
+
 //---------------------------------------------------------
 //   collectNote
 //---------------------------------------------------------
 
 static void collectNote(EventMap* events, int channel, const Note* note, double velocityMultiplier, int tickOffset, Staff* staff,
-                        SndConfig config, int graceOffsetOn = 0, int graceOffsetOff = 0)
+                        SndConfig config, PitchWheelRenderer& pitchWheelRenderer, int graceOffsetOn = 0, int graceOffsetOff = 0)
 {
     if (!note->play() || note->hidden()) {      // do not play overlapping notes
         return;
@@ -217,7 +303,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, double 
                 tieLen += (n->chord()->actualTicks().ticks() * (nel[0].len())) / 1000;
             } else {
                 // recurse
-                collectNote(events, channel, n, velocityMultiplier, tickOffset, staff, config);
+                collectNote(events, channel, n, velocityMultiplier, tickOffset, staff, config, pitchWheelRenderer);
                 break;
             }
             if (n->tieFor() && n != n->tieFor()->endNote()) {
@@ -277,7 +363,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, double 
         velo *= velocityMultiplier;
         playNote(events, note, channel, p, std::clamp(velo, 1, 127), std::max(0, on - graceOffsetOn), std::max(0,
                                                                                                                off - graceOffsetOff),
-                 staffIdx);
+                 staffIdx, pitchWheelRenderer);
     }
 
     // Single-note dynamics
@@ -351,58 +437,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, double 
         if (!bend->playBend()) {
             break;
         }
-        const PitchValues& points = bend->points();
-        size_t pitchSize = points.size();
-
-        double noteLen = note->playTicks();
-        int lastPointTick = tick1;
-        for (size_t pitchIndex = 0; pitchIndex < pitchSize - 1; pitchIndex++) {
-            PitchValue pitchValue = points[pitchIndex];
-            PitchValue nextPitch  = points[pitchIndex + 1];
-            int nextPointTick = tick1 + nextPitch.time / 60.0 * noteLen;
-            int pitch = pitchValue.pitch;
-
-            if (pitchIndex == 0 && (pitch == nextPitch.pitch)) {
-                int midiPitch = (pitch * 16384) / 1200 + 8192;
-                int msb = midiPitch / 128;
-                int lsb = midiPitch % 128;
-                NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
-                ev.setOriginatingStaff(staffIdx);
-                events->insert(std::pair<int, NPlayEvent>(lastPointTick, ev));
-                lastPointTick = nextPointTick;
-                continue;
-            }
-            if (pitch == nextPitch.pitch && !(pitchIndex == 0 && pitch != 0)) {
-                lastPointTick = nextPointTick;
-                continue;
-            }
-
-            double pitchDelta = nextPitch.pitch - pitch;
-            double tickDelta  = nextPitch.time - pitchValue.time;
-            /*         B
-                      /.                   pitch is 1/100 semitones
-              bend   / .  pitchDelta       time is in noteDuration/60
-                    /  .                   midi pitch is 12/16384 semitones
-                   A....
-                 tickDelta   */
-            for (int i = lastPointTick; i <= nextPointTick; i += 16) {
-                double dx = ((i - lastPointTick) * 60) / noteLen;
-                int p = pitch + dx * pitchDelta / tickDelta;
-
-                // We don't support negative pitch, but Midi does. Let's center by adding 8192.
-                int midiPitch = (p * 16384) / 1200 + 8192;
-                // Representing pitch as two bytes
-                int msb = midiPitch / 128;
-                int lsb = midiPitch % 128;
-                NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
-                ev.setOriginatingStaff(staffIdx);
-                events->insert(std::pair<int, NPlayEvent>(i, ev));
-            }
-            lastPointTick = nextPointTick;
-        }
-        NPlayEvent ev(ME_PITCHBEND, channel, 0, 64);     // 0:64 is 8192 - no pitch bend
-        ev.setOriginatingStaff(staffIdx);
-        events->insert(std::pair<int, NPlayEvent>(tick1 + int(noteLen), ev));
+        collectBend(bend, channel, tick1, tick1 + note->playTicks(), pitchWheelRenderer);
     }
 }
 
@@ -562,7 +597,7 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
 }
 
 static void collectGraceBeforeChordEvents(Chord* chord, EventMap* events, const SndConfig& config, int channel, double veloMultiplier,
-                                          Staff* st, int tickOffset)
+                                          Staff* st, int tickOffset, PitchWheelRenderer& pitchWheelRenderer)
 {
     // calculate offset for grace notes here
     const auto& grChords = chord->graceNotesBefore();
@@ -586,11 +621,12 @@ static void collectGraceBeforeChordEvents(Chord* chord, EventMap* events, const 
             for (const Note* note : c->notes()) {
                 if (note->noteType() == NoteType::ACCIACCATURA) {
                     collectNote(events, channel, note, veloMultiplier, tickOffset, st, config,
+                                pitchWheelRenderer,
                                 graceTickSum - graceTickOffset * currentBeaforeBeatNote,
                                 graceTickSum - graceTickOffset * (currentBeaforeBeatNote + 1) + 1);
                     currentBeaforeBeatNote++;
                 } else {
-                    collectNote(events, channel, note, veloMultiplier, tickOffset, st, config);
+                    collectNote(events, channel, note, veloMultiplier, tickOffset, st, config, pitchWheelRenderer);
                 }
             }
         }
@@ -602,7 +638,8 @@ static void collectGraceBeforeChordEvents(Chord* chord, EventMap* events, const 
 //    the original, velocity-only method of collecting events.
 //---------------------------------------------------------
 
-void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset)
+void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset,
+                                              PitchWheelRenderer& pitchWheelRenderer)
 {
     staff_idx_t firstStaffIdx = sctx.staff->idx();
     staff_idx_t nextStaffIdx  = firstStaffIdx + 1;
@@ -659,16 +696,16 @@ void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure const* m
 
             SndConfig config;             // dummy
 
-            collectGraceBeforeChordEvents(chord, events, config, channel, veloMultiplier, st1, tickOffset);
+            collectGraceBeforeChordEvents(chord, events, config, channel, veloMultiplier, st1, tickOffset, pitchWheelRenderer);
 
             for (const Note* note : chord->notes()) {
-                collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config);
+                collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config, pitchWheelRenderer);
             }
 
             if (!graceNotesMerged(chord)) {
                 for (Chord* c : chord->graceNotesAfter()) {
                     for (const Note* note : c->notes()) {
-                        collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config);
+                        collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config, pitchWheelRenderer);
                     }
                 }
             }
@@ -686,7 +723,8 @@ void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure const* m
 //          SEG_START - note-on velocity is the same as the start velocity of the seg
 //---------------------------------------------------------
 
-void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset)
+void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset,
+                                               PitchWheelRenderer& pitchWheelRenderer)
 {
     int controller = getControllerFromCC(sctx.cc);
 
@@ -762,16 +800,16 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* 
             //
             // Add normal note events
             //
-            collectGraceBeforeChordEvents(chord, events, config, channel, veloMultiplier, st1, tickOffset);
+            collectGraceBeforeChordEvents(chord, events, config, channel, veloMultiplier, st1, tickOffset, pitchWheelRenderer);
 
             for (const Note* note : chord->notes()) {
-                collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config);
+                collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config, pitchWheelRenderer);
             }
 
             if (!graceNotesMerged(chord)) {
                 for (Chord* c : chord->graceNotesAfter()) {
                     for (const Note* note : c->notes()) {
-                        collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config);
+                        collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config, pitchWheelRenderer);
                     }
                 }
             }
@@ -790,15 +828,16 @@ MidiRenderer::MidiRenderer(Score* s)
 //    redirects to the correct function based on the passed method
 //---------------------------------------------------------
 
-void MidiRenderer::collectMeasureEvents(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset)
+void MidiRenderer::collectMeasureEvents(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset,
+                                        PitchWheelRenderer& pitchWheelRenderer)
 {
     switch (sctx.method) {
     case DynamicsRenderMethod::SIMPLE:
-        collectMeasureEventsSimple(events, m, sctx, tickOffset);
+        collectMeasureEventsSimple(events, m, sctx, tickOffset, pitchWheelRenderer);
         break;
     case DynamicsRenderMethod::SEG_START:
     case DynamicsRenderMethod::FIXED_MAX:
-        collectMeasureEventsDefault(events, m, sctx, tickOffset);
+        collectMeasureEventsDefault(events, m, sctx, tickOffset, pitchWheelRenderer);
         break;
     default:
         LOGW("Unrecognized dynamics method: %d", int(sctx.method));
@@ -812,7 +851,7 @@ void MidiRenderer::collectMeasureEvents(EventMap* events, Measure const* m, cons
 //   renderStaffChunk
 //---------------------------------------------------------
 
-void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, const StaffContext& sctx)
+void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, const StaffContext& sctx, PitchWheelRenderer& pitchWheelRenderer)
 {
     Measure const* const start = chunk.startMeasure();
     Measure const* const end = chunk.endMeasure();
@@ -834,10 +873,10 @@ void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, const 
             }
 
             int offset = (m->tick() - playMeasure->tick()).ticks();
-            collectMeasureEvents(events, playMeasure, sctx, tickOffset + offset);
+            collectMeasureEvents(events, playMeasure, sctx, tickOffset + offset, pitchWheelRenderer);
         } else {
             lastMeasure = m;
-            collectMeasureEvents(events, lastMeasure, sctx, tickOffset);
+            collectMeasureEvents(events, lastMeasure, sctx, tickOffset, pitchWheelRenderer);
         }
     }
 }
@@ -846,7 +885,7 @@ void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, const 
 //   renderSpanners
 //---------------------------------------------------------
 
-void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
+void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events, PitchWheelRenderer& pitchWheelRenderer)
 {
     const int tickOffset = chunk.tickOffset();
     const int tick1 = chunk.tick1();
@@ -917,36 +956,14 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
             }
             // vibrato with whammy bar up and down
             else if (t->vibratoType() == VibratoType::VIBRATO_SAWTOOTH_WIDE) {
-                spitch = 25;         // 1/16
-                epitch = -25;
+                spitch = -25;         // 1/16
+                epitch = 25;
             } else if (t->vibratoType() == VibratoType::VIBRATO_SAWTOOTH) {
-                spitch = 12;
-                epitch = -12;
+                spitch = -12;
+                epitch = 12;
             }
 
-            int j = 0;
-            int delta = Constants::division / 8;       // 1/8 note
-            int lastPointTick = stick;
-            while (lastPointTick < etick) {
-                int pitch = (j % 4 < 2) ? spitch : epitch;
-                int nextPitch = ((j + 1) % 4 < 2) ? spitch : epitch;
-                int nextPointTick = lastPointTick + delta;
-                for (int i = lastPointTick; i <= nextPointTick; i += 16) {
-                    double dx = ((i - lastPointTick) * 60) / delta;
-                    int p = pitch + dx * (nextPitch - pitch) / delta;
-                    int midiPitch = (p * 16384) / 1200 + 8192;
-                    int msb = midiPitch / 128;
-                    int lsb = midiPitch % 128;
-                    NPlayEvent ev(ME_PITCHBEND, static_cast<uint8_t>(channel), lsb, msb);
-                    ev.setOriginatingStaff(staff);
-                    events->insert(std::pair<int, NPlayEvent>(i + tickOffset, ev));
-                }
-                lastPointTick = nextPointTick;
-                j++;
-            }
-            NPlayEvent ev(ME_PITCHBEND, static_cast<uint8_t>(channel), 0, 64);       // no pitch bend
-            ev.setOriginatingStaff(staff);
-            events->insert(std::pair<int, NPlayEvent>(etick + tickOffset, ev));
+            collectVibrato(channel, stick, etick, spitch, epitch, pitchWheelRenderer);
         } else {
             continue;
         }
@@ -1137,13 +1154,15 @@ void MidiRenderer::renderMetronome(EventMap* events, Measure const* m, const Fra
 
 void MidiRenderer::renderScore(EventMap* events, const Context& ctx)
 {
+    PitchWheelRenderer pitchWheelRender(wheelSpec);
+
     updateState();
     for (const Chunk& chunk : chunks) {
-        renderChunk(chunk, events, ctx);
+        renderChunk(chunk, events, ctx, pitchWheelRender);
     }
 }
 
-void MidiRenderer::renderChunk(const Chunk& chunk, EventMap* events, const Context& ctx)
+void MidiRenderer::renderChunk(const Chunk& chunk, EventMap* events, const Context& ctx, PitchWheelRenderer& pitchWheelRenderer)
 {
     // TODO: avoid doing it multiple times for the same measures
     score->createPlayEvents(chunk.startMeasure(), chunk.endMeasure());
@@ -1192,12 +1211,15 @@ void MidiRenderer::renderChunk(const Chunk& chunk, EventMap* events, const Conte
         sctx.method = renderMethod;
         sctx.cc = cc;
         sctx.renderHarmony = ctx.renderHarmony;
-        renderStaffChunk(chunk, events, sctx);
+        renderStaffChunk(chunk, events, sctx, pitchWheelRenderer);
     }
     events->fixupMIDI();
 
     // create sustain pedal events
-    renderSpanners(chunk, events);
+    renderSpanners(chunk, events, pitchWheelRenderer);
+
+    EventMap pitchWheelEvents = pitchWheelRenderer.renderPitchWheel();
+    events->merge(pitchWheelEvents);
 
     if (ctx.metronome) {
         renderMetronome(chunk, events);

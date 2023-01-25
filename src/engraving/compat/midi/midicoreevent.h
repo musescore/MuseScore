@@ -28,6 +28,17 @@
 #include "global/allocator.h"
 
 namespace mu::engraving {
+struct PitchWheelSpecs {
+    //! @note amplitude of the pitch wheel in semitones
+    uint16_t mAmplitude{ 12 };
+
+    //! @note absolute limit of the  wheel pitch value (thus,  pitch shift can be set using values from {-mLimit, mLimit} interval
+    uint16_t mLimit    { 8192 };
+
+    //! @note step of pith wheel in ticks
+    uint16_t mStep     { 10 };
+};
+
 //---------------------------------------------------------
 //   Event types
 //---------------------------------------------------------
