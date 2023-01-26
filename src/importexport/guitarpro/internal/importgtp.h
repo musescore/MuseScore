@@ -392,6 +392,8 @@ class GuitarPro5 : public GuitarPro
 {
     std::map<std::pair<int, int>, bool> dead_end;
     int _beat_counter{ 0 };
+    std::unordered_map<Chord*, TremoloType> m_tremolosInChords;
+
     void readInfo();
     void readPageSetup();
     int readBeatEffects(int track, Segment* segment) override;

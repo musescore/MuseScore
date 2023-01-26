@@ -212,6 +212,7 @@ private:
     std::unordered_map<track_idx_t, bool> m_hasCapo;
     std::unordered_map<track_idx_t, std::vector<Tie*> > _ties; // map(track, tie)
     std::unordered_map<Note*, int> m_originalPitches; // info of changed pitches for keeping track of ties
+    std::unordered_map<Chord*, TremoloType> m_tremolosInChords;
     std::unordered_map<track_idx_t, Slur*> _slurs; // map(track, slur)
 
     mutable GPBeat* m_currentGPBeat = nullptr; // used for passing info from notes
