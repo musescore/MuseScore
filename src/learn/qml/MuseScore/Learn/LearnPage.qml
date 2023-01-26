@@ -104,8 +104,23 @@ FocusScope {
             font: ui.theme.titleBoldFont
             horizontalAlignment: Text.AlignLeft
         }
+
+        SearchField {
+            id: searchField
+
+            Layout.preferredWidth: 220
+
+            navigation.name: "LearnSearch"
+            navigation.panel: navSearchPanel
+            navigation.order: 1
+
+            onSearchTextChanged: {
+                pageModel.setSearchText(searchText)
+            }
+        }
     }
 
+    
     StyledTabBar {
         id: tabBar
 
@@ -153,6 +168,7 @@ FocusScope {
             navigation.name: "Get started"
             navigation.panel: navTabPanel
             navigation.column: 1
+            onClicked: searchField.visible = true
         }
 
         //! NOTE: see https://github.com/musescore/MuseScore/issues/14886
@@ -172,6 +188,7 @@ FocusScope {
             navigation.name: "Classes"
             navigation.panel: navTabPanel
             navigation.column: 3
+            onClicked: searchField.visible = false
         }
     }
 
