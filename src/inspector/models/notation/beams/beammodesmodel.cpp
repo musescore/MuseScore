@@ -38,7 +38,8 @@ void BeamModesModel::createProperties()
 
 void BeamModesModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::CHORD);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::CHORD) << m_repository->findElementsByType(
+        mu::engraving::ElementType::REST);
 }
 
 void BeamModesModel::loadProperties()

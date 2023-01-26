@@ -122,6 +122,8 @@ public:
         TYPE_GRADUAL_TEMPO_CHANGE,
         TYPE_INSTRUMENT_NAME,
         TYPE_LYRICS,
+        TYPE_REST,
+        TYPE_REST_BEAM,
     };
     Q_ENUM(InspectorModelType)
 

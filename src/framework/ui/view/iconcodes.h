@@ -379,6 +379,8 @@ public:
         PLUGIN = 0xF440,
         LYRICS = 0xF441,
 
+        QUAVER_REST = 0xF44C,
+
         NONE = 0xFFFF
     };
 
