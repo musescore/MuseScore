@@ -361,6 +361,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, double 
         }
 
         velo *= velocityMultiplier;
+        velo *= e.velocityMultiplier();
         playNote(events, note, channel, p, std::clamp(velo, 1, 127), std::max(0, on - graceOffsetOn), std::max(0,
                                                                                                                off - graceOffsetOff),
                  staffIdx, pitchWheelRenderer);
