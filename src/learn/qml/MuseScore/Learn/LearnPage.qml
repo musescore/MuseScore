@@ -104,20 +104,6 @@ FocusScope {
             font: ui.theme.titleBoldFont
             horizontalAlignment: Text.AlignLeft
         }
-
-        SearchField {
-            id: searchField
-
-            Layout.preferredWidth: 220
-
-            navigation.name: "LearnSearch"
-            navigation.panel: navSearchPanel
-            navigation.order: 1
-
-            onSearchTextChanged: {
-                pageModel.setSearchText(searchText)
-            }
-        }
     }
 
     StyledTabBar {
