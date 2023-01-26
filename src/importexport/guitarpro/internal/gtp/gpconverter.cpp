@@ -655,7 +655,7 @@ void GPConverter::convertNotes(const std::vector<std::shared_ptr<GPNote> >& note
     if (cr->isChord()) {
         Chord* ch = static_cast<Chord*>(cr);
         ch->sortNotes();
-        if (engravingConfiguration()->guitarProImportExperimental()) {
+        if (engravingConfiguration()->enableExperimentalFretCircle()) {
             FretCircle* c = Factory::createFretCircle(ch);
             ch->add(c);
         }
