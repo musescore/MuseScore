@@ -67,7 +67,7 @@ Rectangle {
 
             text: Boolean(item) ? item.title : ""
             icon: Boolean(item) ? item.icon : IconCode.NONE
-            //enabled: Boolean(item) ? item.enabled : false
+            enabled: Boolean(item) ? item.enabled : false
             toolTipTitle: Boolean(item) ? item.title : ""
             toolTipDescription: Boolean(item) ? item.description : ""
             toolTipShortcut: Boolean(item) ? item.shortcuts : ""

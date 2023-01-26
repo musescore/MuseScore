@@ -101,8 +101,20 @@ INotationSelectionPtr ProjectActionsController::currentNotationSelection() const
     return currentNotation() ? currentInteraction()->selection() : nullptr;
 }
 
-bool ProjectActionsController::canReceiveAction(const actions::ActionCode& code) const
+bool ProjectActionsController::canReceiveAction(const ActionCode& code) const
 {
+    if (!currentNotationProject()) {
+        static const std::unordered_set<ActionCode> DONT_REQUIRE_OPEN_PROJECT {
+            "file-open",
+            "file-new",
+            "file-import-pdf",
+            "continue-last-session",
+            "clear-recent",
+        };
+
+        return mu::contains(DONT_REQUIRE_OPEN_PROJECT, code);
+    }
+
     if (m_isProjectUploading) {
         if (code == "file-save-to-cloud" || code == "file-publish") {
             return false;
