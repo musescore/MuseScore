@@ -42,13 +42,15 @@ class NoteEvent
     int _ontime;    // one unit is 1/1000 of nominal note len
     int _len;       // one unit is 1/1000 of nominal note len
 
+    double _velocityMultiplier = 1.0;
+
 public:
     constexpr static int NOTE_LENGTH = 1000;
 
     NoteEvent()
-        : _pitch(0), _ontime(0), _len(NOTE_LENGTH) {}
-    NoteEvent(int a, int b, int c)
-        : _pitch(a), _ontime(b), _len(c) {}
+        : _pitch(0), _ontime(0), _len(NOTE_LENGTH), _velocityMultiplier(1.0) {}
+    NoteEvent(int a, int b, int c, double d = 1.0)
+        : _pitch(a), _ontime(b), _len(c), _velocityMultiplier(d) {}
 
     void read(XmlReader&);
     void write(XmlWriter&) const;
@@ -57,9 +59,11 @@ public:
     int ontime() const { return _ontime; }
     int offtime() const { return _ontime + _len; }
     int len() const { return _len; }
+    double velocityMultiplier() const { return _velocityMultiplier; }
     void setPitch(int v) { _pitch = v; }
     void setOntime(int v) { _ontime = v; }
     void setLen(int v) { _len = v; }
+    void setVelocityMultiplier(double velocityMultiplier) { _velocityMultiplier = velocityMultiplier; }
     bool operator==(const NoteEvent&) const;
 };
 
