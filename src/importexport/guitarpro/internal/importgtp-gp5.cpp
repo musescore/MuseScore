@@ -351,7 +351,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
     if (cr && cr->isChord()) {
         Chord* chord = toChord(cr);
 
-        if (engravingConfiguration()->guitarProImportExperimental()) {
+        if (engravingConfiguration()->enableExperimentalFretCircle()) {
             FretCircle* c = Factory::createFretCircle(chord);
             chord->add(c);
         }
