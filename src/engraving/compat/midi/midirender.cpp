@@ -613,7 +613,7 @@ static void collectGraceBeforeChordEvents(Chord* chord, EventMap* events, const 
     size_t acciacaturaGraceSize = graceNotesBeforeBar.size();
     if (acciacaturaGraceSize > 0) {
         graceTickSum = graceNotesBeforeBar[0]->ticks().ticks();
-        graceTickOffset = graceTickSum / acciacaturaGraceSize;
+        graceTickOffset = graceTickSum / static_cast<int>(acciacaturaGraceSize);
     }
 
     if (!graceNotesMerged(chord)) {
