@@ -702,10 +702,10 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
     //   append a NoteEvent either by calculating an articulationExcursion or by
     //   the given chromatic relative pitch.
     //   RETURNS the new ontime value.  The caller is expected to assign this value.
-    auto makeEvent = [note, chord, chromatic, events](int pitch, int ontime, int duration) {
+    auto makeEvent = [note, chord, chromatic, events](int pitch, int ontime, int duration, double velocityMultiplier = 1.0) {
         events->push_back(NoteEvent(chromatic ? pitch : chromaticPitchSteps(note, note, pitch),
                                     ontime / chord->actualTicks().ticks(),
-                                    duration / chord->actualTicks().ticks()));
+                                    duration / chord->actualTicks().ticks(), velocityMultiplier));
         return ontime + duration;
     };
 
@@ -771,11 +771,15 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
             }
         }
         if (isGlissando) {
+            const double defaultVelocityMultiplier = 1.0;
+            const double glissandoVelocityMultiplier = 0.6;
+
             // render the body, i.e. the glissando
             for (int j = 0; j < b - 1; j++) {
-                makeEvent(body[j], onTimes[j], onTimes[j + 1] - onTimes[j]);
+                makeEvent(body[j], onTimes[j], onTimes[j + 1] - onTimes[j],
+                          j == 0 ? defaultVelocityMultiplier : glissandoVelocityMultiplier);
             }
-            makeEvent(body[b - 1], onTimes[b - 1], (millespernote * b - onTimes[b - 1]) + sustain);
+            makeEvent(body[b - 1], onTimes[b - 1], (millespernote * b - onTimes[b - 1]) + sustain, glissandoVelocityMultiplier);
         } else {
             // render the body, but not the final repetition
             for (int r = 0; r < numrepeat - 1; r++) {
