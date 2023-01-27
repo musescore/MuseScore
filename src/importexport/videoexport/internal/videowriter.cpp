@@ -215,7 +215,7 @@ mu::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, con
         opt.toPage = opt.fromPage;
         opt.deviceDpi = CANVAS_DPI;
 
-        painter.fillRect(frameRect, draw::Color::white);
+        painter.fillRect(frameRect, draw::Color::WHITE);
 
         painting->paintPrint(&painter, opt);
 
