@@ -231,24 +231,20 @@ BeatsPerSecond TempoMap::tempoMultiplier() const
     return _tempoMultiplier;
 }
 
-async::Notification TempoMap::tempoMultiplierChanged() const
-{
-    return _tempoMultiplierChanged;
-}
-
-void TempoMap::setTempoMultiplier(BeatsPerSecond val)
+bool TempoMap::setTempoMultiplier(BeatsPerSecond val)
 {
     IF_ASSERT_FAILED(val > BeatsPerSecond(0.0)) {
-        return;
+        return false;
     }
 
     if (_tempoMultiplier == val) {
-        return;
+        return false;
     }
 
     _tempoMultiplier = val;
     normalize();
-    _tempoMultiplierChanged.notify();
+
+    return true;
 }
 
 //---------------------------------------------------------
