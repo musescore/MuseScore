@@ -226,7 +226,7 @@ io::paths_t Interactive::selectMultipleDirectories(const QString& title, const i
 QColor Interactive::selectColor(const QColor& color, const QString& title)
 {
     QColor colorEditable = color;
-    if (colorEditable.alpha() == 0){
+    if (colorEditable.alpha() == 0) {
         colorEditable.setAlpha(255);
     }
     QColor selectedColor = QColorDialog::getColor(colorEditable, nullptr, title, QColorDialog::ShowAlphaChannel);
