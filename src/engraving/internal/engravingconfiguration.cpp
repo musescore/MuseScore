@@ -298,7 +298,7 @@ bool EngravingConfiguration::crossNoteHeadAlwaysBlack() const
 
 bool EngravingConfiguration::enableExperimentalFretCircle() const
 {
-    return guitarProImportExperimental();
+    return false;
 }
 
 void EngravingConfiguration::setGuitarProMultivoiceEnabled(bool multiVoice)
