@@ -32,6 +32,9 @@ extern "C" {
 #include "libavutil/avstring.h"
 #include "libavutil/opt.h"
 #include "libswscale/swscale.h"
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(54, 6, 100)
+#include "libavutil/imgutils.h"
+#endif
 }
 
 #endif // MU_IMPORTEXPORT_FFMPEG_H
