@@ -203,7 +203,7 @@ mu::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, con
             currentTimeSec = totalPlayTimeSec;
         }
 
-        midi::tick_t tick = playback->secToPlayedTick(currentTimeSec);
+        midi::tick_t tick = playback->secToTick(currentTimeSec);
 
         const Page* page = pageByTick(pages, tick);
         if (!page) {
