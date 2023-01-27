@@ -45,7 +45,10 @@
         "memory": "cpp",
         "qgroupbox": "cpp",
         "qbytearray": "cpp",
-        "qcombobox": "cpp"
+        "qcombobox": "cpp",
+        "xhash": "cpp",
+        "xstring": "cpp",
+        "xtree": "cpp"
     },
     "cmake.buildDirectory": "${workspaceRoot}/build.debug",
     "cmake.configureOnOpen": true
