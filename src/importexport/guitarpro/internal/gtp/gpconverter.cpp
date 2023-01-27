@@ -2155,10 +2155,12 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
         fret = note->part()->instrument()->stringData()->fret(pitch, musescoreString, nullptr);
     }
 
-    if (note->part()->hasDrumStaff()) {
-        auto it = _drumExtension.find(pitch);
-        if (it != _drumExtension.end()) {
-            pitch =  it->second;
+    if (!engravingConfiguration()->guitarProImportExperimental()) {
+        if (note->part()->hasDrumStaff()) {
+            auto it = _drumExtension.find(pitch);
+            if (it != _drumExtension.end()) {
+                pitch =  it->second;
+            }
         }
     }
 
