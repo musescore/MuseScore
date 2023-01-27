@@ -21,6 +21,7 @@
  */
 #include "version.h"
 
+#include <array>
 #include "log.h"
 
 static const mu::Char SUFFIX_DELIMITER = '-';
