@@ -2265,6 +2265,18 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note)
                 endNote->setTieBack(tie);
                 mu::remove(tiesOnTrack, tie);
 
+                /// adding tremolos to tied note
+                Chord* startChord = toChord(startNote->parent());
+                Chord* endChord = toChord(endNote->parent());
+                if (m_tremolosInChords.find(startChord) != m_tremolosInChords.end()) {
+                    Tremolo* t = Factory::createTremolo(_score->dummy()->chord());
+                    TremoloType type = m_tremolosInChords.at(startChord);
+                    t->setTremoloType(type);
+                    endChord->add(t);
+                    mu::remove(m_tremolosInChords, startChord);
+                    m_tremolosInChords[endChord] = type;
+                }
+
                 /// handling ties of harmonic notes
                 auto endHarmonicNoteIt = harmonicNotes.find(endNote);
                 if (endHarmonicNoteIt != harmonicNotes.end()) {
@@ -2822,7 +2834,9 @@ void GPConverter::addTremolo(const GPBeat* beat, ChordRest* cr)
 
     Tremolo* t = Factory::createTremolo(_score->dummy()->chord());
     t->setTremoloType(scoreTremolo(beat->tremolo()));
-    static_cast<Chord*>(cr)->add(t);
+    Chord* ch = toChord(cr);
+    ch->add(t);
+    m_tremolosInChords[ch] = t->tremoloType();
 }
 
 void GPConverter::addWah(const GPBeat* beat, ChordRest* cr)
