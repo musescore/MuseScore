@@ -73,6 +73,22 @@ using namespace mu::io;
 using namespace mu::engraving;
 
 namespace mu::engraving {
+static TremoloType tremoloType(int division)
+{
+    static std::map<int, TremoloType> types {
+        { 1, TremoloType::R8 },
+        { 2, TremoloType::R16 },
+        { 3, TremoloType::R32 }
+    };
+
+    if (types.find(division) != types.end()) {
+        return types[division];
+    }
+
+    LOGE() << "wrong tremolo type";
+    return TremoloType::INVALID_TREMOLO;
+}
+
 //---------------------------------------------------------
 //   readInfo
 //---------------------------------------------------------
@@ -351,7 +367,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
     if (cr && cr->isChord()) {
         Chord* chord = toChord(cr);
 
-        if (engravingConfiguration()->guitarProImportExperimental()) {
+        if (engravingConfiguration()->enableExperimentalFretCircle()) {
             FretCircle* c = Factory::createFretCircle(chord);
             chord->add(c);
         }
@@ -1074,21 +1090,16 @@ bool GuitarPro5::readNoteEffects(Note* note)
     if (modMask2 & EFFECT_PALM_MUTE) {
         addPalmMute(note);
     }
-    //note->setPalmMute(true);
 
     if (modMask2 & EFFECT_TREMOLO) {      // tremolo picking length
         int tremoloDivision = readUInt8();
         Chord* chord = note->chord();
         Tremolo* t = Factory::createTremolo(chord);
-        if (tremoloDivision == 1) {
-            t->setTremoloType(TremoloType::R8);
+        if (tremoloDivision >= 1 && tremoloDivision <= 3) {
+            TremoloType type = tremoloType(tremoloDivision);
+            t->setTremoloType(type);
             chord->add(t);
-        } else if (tremoloDivision == 2) {
-            t->setTremoloType(TremoloType::R16);
-            chord->add(t);
-        } else if (tremoloDivision == 3) {
-            t->setTremoloType(TremoloType::R32);
-            chord->add(t);
+            m_tremolosInChords[chord] = type;
         } else {
             LOGD("Unknown tremolo value");
         }
@@ -1471,6 +1482,15 @@ bool GuitarPro5::readNote(int string, Note* note)
                             note->setFret(note2->fret());
                             note->setPitch(note2->pitch());
                             true_note = note2;
+                            if (m_tremolosInChords.find(chord2) != m_tremolosInChords.end()) {
+                                Tremolo* t = Factory::createTremolo(score->dummy()->chord());
+                                TremoloType type = m_tremolosInChords.at(chord2);
+                                t->setTremoloType(type);
+                                chord->add(t);
+                                mu::remove(m_tremolosInChords, chord2);
+                                m_tremolosInChords[chord] = type;
+                            }
+
                             found = true;
                             break;
                         }

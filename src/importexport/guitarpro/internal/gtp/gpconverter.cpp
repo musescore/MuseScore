@@ -655,7 +655,7 @@ void GPConverter::convertNotes(const std::vector<std::shared_ptr<GPNote> >& note
     if (cr->isChord()) {
         Chord* ch = static_cast<Chord*>(cr);
         ch->sortNotes();
-        if (engravingConfiguration()->guitarProImportExperimental()) {
+        if (engravingConfiguration()->enableExperimentalFretCircle()) {
             FretCircle* c = Factory::createFretCircle(ch);
             ch->add(c);
         }
@@ -2155,10 +2155,12 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
         fret = note->part()->instrument()->stringData()->fret(pitch, musescoreString, nullptr);
     }
 
-    if (note->part()->hasDrumStaff()) {
-        auto it = _drumExtension.find(pitch);
-        if (it != _drumExtension.end()) {
-            pitch =  it->second;
+    if (!engravingConfiguration()->guitarProImportExperimental()) {
+        if (note->part()->hasDrumStaff()) {
+            auto it = _drumExtension.find(pitch);
+            if (it != _drumExtension.end()) {
+                pitch =  it->second;
+            }
         }
     }
 
@@ -2264,6 +2266,18 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note)
                 tie->setEndNote(endNote);
                 endNote->setTieBack(tie);
                 mu::remove(tiesOnTrack, tie);
+
+                /// adding tremolos to tied note
+                Chord* startChord = toChord(startNote->parent());
+                Chord* endChord = toChord(endNote->parent());
+                if (m_tremolosInChords.find(startChord) != m_tremolosInChords.end()) {
+                    Tremolo* t = Factory::createTremolo(_score->dummy()->chord());
+                    TremoloType type = m_tremolosInChords.at(startChord);
+                    t->setTremoloType(type);
+                    endChord->add(t);
+                    mu::remove(m_tremolosInChords, startChord);
+                    m_tremolosInChords[endChord] = type;
+                }
 
                 /// handling ties of harmonic notes
                 auto endHarmonicNoteIt = harmonicNotes.find(endNote);
@@ -2822,7 +2836,9 @@ void GPConverter::addTremolo(const GPBeat* beat, ChordRest* cr)
 
     Tremolo* t = Factory::createTremolo(_score->dummy()->chord());
     t->setTremoloType(scoreTremolo(beat->tremolo()));
-    static_cast<Chord*>(cr)->add(t);
+    Chord* ch = toChord(cr);
+    ch->add(t);
+    m_tremolosInChords[ch] = t->tremoloType();
 }
 
 void GPConverter::addWah(const GPBeat* beat, ChordRest* cr)

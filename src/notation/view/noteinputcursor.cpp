@@ -46,20 +46,20 @@ void NoteInputCursor::paint(mu::draw::Painter* painter)
 
 
             //will need these later. please dont delete. - somethingstarted
-    //double WidthMultiplierBefore = 1.0;  //change size of both (keep at 1 normally)
-    //double OneDigitFretMult = 1.2;  //if it's  0-9,  frets width 
-    //double TwoDigitFretMult = 1.2;  //if it's 10+,  frets width
+    //double widthMultiplierBefore = 1.0;  //change size of both (keep at 1 normally)
+    //double oneDigitFretMult = 1.2;  //if it's  0-9,  frets width 
+    //double twoDigitFretMult = 1.2;  //if it's 10+,  frets width
 
-    double WidthMultiplierFinal = 1.2; 
+    double widthMultiplierFinal = 1.2; 
     constexpr int leftLineWidth = 3;    
 
-    PointX OldCenter = cursorRect.center(); //store the old center
-    double OldWidth = cursorRect.width();//store old width
-    double NewWidth = cursorRect.width() * WidthMultiplierFinal;      //set new width
-    double PixToSlideLeft = (((OldWidth - NewWidth) / 2) - (leftLineWidth / 2)); //((find new left justification position) - (divide left line by 2 to find a middle ground between 2ch and 1ch frets.))
+    PointX oldCenter = cursorRect.center(); //store the old center
+    double oldWidth = cursorRect.width();//store old width
+    double newWidth = cursorRect.width() * widthMultiplierFinal;      //set new width
+    double pixToSlideLeft = (((oldWidth - newWidth) / 2) - (leftLineWidth / 2)); //((find new left justification position) - (divide left line by 2 to find a middle ground between 2ch and 1ch frets.))
 
-    cursorRect.setLeft(cursorRect.left() + PixToSlideLeft); 
-    cursorRect.setWidth(NewWidth); 
+    cursorRect.setLeft(cursorRect.left() + pixToSlideLeft); 
+    cursorRect.setWidth(newWidth); 
     
     
     

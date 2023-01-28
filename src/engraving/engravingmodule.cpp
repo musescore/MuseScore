@@ -112,7 +112,7 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
         //! (for example, simply specifying the family name for painter).
         //! But if they are not loaded, then they are not added to the font database and,
         //! accordingly, they are drawn incorrectly
-        //s_engravingfonts->loadAllFonts();
+        s_engravingfonts->loadAllFonts();
 
         // Text
         const std::vector<io::path_t> textFonts = {
