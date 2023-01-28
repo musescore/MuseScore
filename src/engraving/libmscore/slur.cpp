@@ -399,8 +399,8 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
         }
         // Edge-case: multiple voices and slur is on the inside
         if (item->vStaffIdx() == startCR->staffIdx()
-            && (!slur()->up() && item->track() > startCR->track() // slur-down: ignore lower voices
-                || slur()->up() && item->track() < startCR->track())) { // slur-up: ignore higher voices
+            && ((!slur()->up() && item->track() > startCR->track()) // slur-down: ignore lower voices
+                || (slur()->up() && item->track() < startCR->track()))) { // slur-up: ignore higher voices
             return true;
         }
         return false;
