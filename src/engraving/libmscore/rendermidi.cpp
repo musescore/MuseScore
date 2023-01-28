@@ -1181,7 +1181,6 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
     // assuring that all the grace notes get the same duration, and their total is 50%.
     // exception is if the note is dotted or double-dotted; see below.
     float weighta = float(na) / (nb + na);
-    float weightb = float(nb) / (nb + na);
 
     int graceDuration = 0;
     bool drumset = (getDrumset(chord) != nullptr);
@@ -1206,7 +1205,6 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
         if (graceChord->noteType() == NoteType::ACCIACCATURA) {
             ontime = 0;
             graceDuration = 0;
-            weightb = 0.0;
             weighta = 1.0;
         } else {
             const double graceTimeMS = (graceChord->actualTicks().ticks() / ticksPerSecond) * 1000;
@@ -1214,7 +1212,6 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
             // 1000 occurs below as a unit for ontime
             ontime = std::min(500, static_cast<int>((graceTimeMS / chordTimeMS) * 1000));
             graceDuration = ontime / nb;
-            weightb = 0.0;
             weighta = 1.0;
             trailtime += ontime;
         }
