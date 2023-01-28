@@ -220,9 +220,28 @@ RectF MMRest::numberRect() const
 void MMRest::write(XmlWriter& xml) const
 {
     xml.startElement("Rest"); // for compatibility, see also Measure::readVoice()
-    ChordRest::writeProperties(xml);
+    writeProperties(xml);
     el().write(xml);
     xml.endElement();
+}
+
+void MMRest::writeProperties(XmlWriter& xml) const
+{
+    ChordRest::writeProperties(xml);
+    writeProperty(xml, Pid::MMREST_NUMBER_POS);
+    writeProperty(xml, Pid::MMREST_NUMBER_VISIBLE);
+}
+
+bool MMRest::readProperties(XmlReader& xml)
+{
+    const AsciiStringView tag(xml.name());
+    if (tag == "mmRestNumberVisible") {
+        setProperty(Pid::MMREST_NUMBER_VISIBLE, xml.readBool());
+    } else if (ChordRest::readProperties(xml)) {
+    } else {
+        return false;
+    }
+    return true;
 }
 
 //---------------------------------------------------------

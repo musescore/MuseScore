@@ -375,7 +375,16 @@ double NotationPlayback::tempoMultiplier() const
 
 void NotationPlayback::setTempoMultiplier(double multiplier)
 {
-    if (score()) {
-        score()->tempomap()->setTempoMultiplier(multiplier);
+    Score* score = this->score();
+    if (!score) {
+        return;
     }
+
+    if (!score->tempomap()->setTempoMultiplier(multiplier)) {
+        return;
+    }
+
+    score->masterScore()->updateRepeatListTempo();
+
+    m_playbackModel.reload();
 }
