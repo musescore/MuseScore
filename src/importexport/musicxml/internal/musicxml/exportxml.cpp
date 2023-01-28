@@ -6184,7 +6184,7 @@ static void scoreInstrument(XmlWriter& xml, const int partNr, const int instrNr,
 {
     xml.startElementRaw(QString("score-instrument %1").arg(instrId(partNr, instrNr)));
     xml.tag("instrument-name", instrName);
-    if (instr && !instr->musicXmlId().isEmpty()) {
+    if (instr && !instr->musicXmlId().isEmpty() && !MScore::testMode) {
         xml.tag("instrument-sound", instr->musicXmlId());
     }
     xml.endElement();
