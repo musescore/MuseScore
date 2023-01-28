@@ -2837,7 +2837,8 @@ double Segment::computeDurationStretch(Segment* prevSeg, Fraction minTicks, Frac
         static constexpr double longNoteThreshold = Fraction(1, 16).toDouble();
 
         if (measure()->isMMRest() && isChordRestType()) { // This is an MM rest segment
-            int count = measure()->mmRestCount();
+            static constexpr int minMMRestCount  = 2; // MMRests with less bars than this don't receive additional spacing
+            int count =std::max(measure()->mmRestCount() - minMMRestCount, 0);
             Fraction timeSig = measure()->timesig();
             curTicks = timeSig + Fraction(count, timeSig.denominator());
         }
