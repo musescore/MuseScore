@@ -43,7 +43,7 @@ PageSettings::PageSettings(QWidget* parent)
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     setModal(true);
 
-    mmUnit = true;        // should be made a global configuration item
+    mmUnit = configuration()->metricUnit();
     _changeFlag = false;
 
     if (mmUnit) {
@@ -234,12 +234,14 @@ void PageSettings::updateValues()
 void PageSettings::inchClicked()
 {
     mmUnit = false;
+    configuration()->setMetricUnit(false);
     updateValues();
 }
 
 void PageSettings::mmClicked()
 {
     mmUnit = true;
+    configuration()->setMetricUnit(true);
     updateValues();
 }
 
