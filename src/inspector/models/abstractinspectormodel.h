@@ -204,6 +204,7 @@ protected:
 
 protected slots:
     void onPropertyValueChanged(const mu::engraving::Pid pid, const QVariant& newValue);
+    void setPropertyValue(const QList<mu::engraving::EngravingItem*>& items, const mu::engraving::Pid pid, const QVariant& newValue);
     void updateProperties();
 
 private:
