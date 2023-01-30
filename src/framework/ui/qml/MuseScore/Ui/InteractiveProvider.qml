@@ -139,6 +139,9 @@ Item {
             return { "ret": { "errcode": 102 } } // CreateFailed
         }
 
+        //! NOTE: set the top-level window as a parent,
+        // because we want to ensure correct interaction between nested dialogs
+        // (when opening one dialog from another)
         var obj = comp.createObject(root.provider.topWindow(), params)
         obj.objectId = root.provider.objectId(obj)
         root.objects[obj.objectId] = obj
