@@ -499,8 +499,7 @@ void LayoutSystem::justifySystem(System* system, double curSysWidth, double targ
     if (RealIsNull(rest)) {
         return;
     }
-    if (rest < 0) {
-        LOGE("*** System justification error ***");
+    if (targetSystemWidth < system->firstMeasure()->first(SegmentType::ChordRest)->x()) {
         return;
     }
 
