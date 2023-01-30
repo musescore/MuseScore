@@ -32,6 +32,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/idiagnosticsconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iengravingelementsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/iengravingdrawprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/diagnosticserrors.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticsconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticsconfiguration.h

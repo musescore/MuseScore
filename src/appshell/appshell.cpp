@@ -420,7 +420,7 @@ int AppShell::processDiagnostic(const CommandLineController::Diagnostic& task)
     }
 
     if (!ret) {
-        LOGE() << "failed convert, error: " << ret.toString();
+        LOGE() << "diagnostic ret: " << ret.toString();
     }
 
     return ret.code();
