@@ -59,7 +59,7 @@ public:
     QVariantList itemsProperty() const;
     const MenuItemList& items() const;
 
-    Q_INVOKABLE void handleMenuItem(const QString& itemId);
+    Q_INVOKABLE virtual void handleMenuItem(const QString& itemId);
     Q_INVOKABLE QVariantMap get(int index);
 
 signals:
