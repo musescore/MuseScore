@@ -50,6 +50,9 @@ public:
     bool devModeEnabled() const override;
     void setDevModeEnabled(bool enabled) override;
 
+    bool metricUnit() const override;
+    void setMetricUnit(bool metricUnit) override;
+
     std::string museScoreUrl() const override;
 
 private:
