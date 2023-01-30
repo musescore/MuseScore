@@ -96,6 +96,9 @@ public:
 
         EngravingFirst  = 2000,
         EngravingLast   = 2999,
+
+        DiagnosticsFirst = 3000,
+        DiagnosticsLast = 3999
     };
 
     Ret() = default;
