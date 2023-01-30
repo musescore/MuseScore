@@ -1290,13 +1290,41 @@ bool MidiRenderer::canBreakChunk(const Measure* last)
         }
     }
 
-    // Repeat measures rely on the previous measure
-    // being properly rendered, disallow breaking
-    // chunk at repeat measure.
     if (const Measure* next = last->nextMeasure()) {
+        // Repeat measures rely on the previous measure
+        // being properly rendered, disallow breaking
+        // chunk at repeat measure.
         for (const Staff* staff : score->staves()) {
             if (next->isMeasureRepeatGroup(staff->idx())) {
                 return false;
+            }
+        }
+
+        // Forbid breaking chunk if any track in next measure starts with grace note before beat
+        SegmentType st = SegmentType::ChordRest;
+        std::set<track_idx_t> tracksChecked; // store track numbers where measure starts not from grace note before beat
+        for (Segment* seg = next->first(st); seg; seg = seg->next(st)) {
+            for (const EngravingItem* el : seg->elist()) {
+                if (el == 0 || el->type() != ElementType::CHORD) {
+                    continue;
+                }
+
+                if (tracksChecked.find(el->track()) != tracksChecked.end()) {
+                    continue;
+                }
+
+                tracksChecked.insert(el->track());
+
+                const Chord* chord = toChord(el);
+
+                auto& grList = chord->graceNotesBefore();
+                if (grList.empty()) {
+                    continue;
+                }
+
+                if (std::any_of(grList.begin(), grList.end(), [](Chord* ch) { return ch->noteType() == NoteType::ACCIACCATURA; })) {
+                    return false;
+                }
             }
         }
     }
