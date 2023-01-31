@@ -46,6 +46,7 @@ RadioButtonGroup {
     }
 
     spacing: 0
+    clip: true
     orientation: Qt.Vertical
 
     interactive: height < contentHeight
@@ -76,7 +77,7 @@ RadioButtonGroup {
 
         function onSelectedWorkspaceChanged(selectedWorkspace) {
             if (Boolean(selectedWorkspace)) {
-                root.positionViewAtIndex(selectedWorkspace.index, ListView.Contain)
+                root.positionViewAtIndex(selectedWorkspace.index + 1, ListView.Contain)
             }
         }
     }
