@@ -138,6 +138,29 @@ static void collectGlissando(int channel,
     pitchWheelRenderer.addPitchWheelFunction(func, channel);
 }
 
+static Fraction getPlayTicksForBend(const Note* note)
+{
+    Tie* tie = note->tieFor();
+    if (!tie) {
+        return note->playTicksFraction();
+    }
+
+    Fraction stick = note->chord()->tick();
+    Note* nextNote = tie->endNote();
+    while (tie) {
+        nextNote = tie->endNote();
+        for (EngravingItem* e : nextNote->el()) {
+            if (e && (e->type() == ElementType::BEND || e->type() == ElementType::STRETCHED_BEND)) {
+                return nextNote->chord()->tick() - stick;
+            }
+        }
+
+        tie = nextNote->tieFor();
+    }
+
+    return nextNote->chord()->tick() + nextNote->chord()->actualTicks() - stick;
+}
+
 //---------------------------------------------------------
 //   playNote
 //---------------------------------------------------------
@@ -217,7 +240,7 @@ static void collectBend(const Bend* bend,
     const PitchValues& points = bend->points();
     size_t pitchSize = points.size();
 
-    const float scale = 2 * (float)wheelSpec.mLimit / wheelSpec.mAmplitude / 100;
+    const float scale = 2 * (float)wheelSpec.mLimit / wheelSpec.mAmplitude / PitchValue::PITCH_FOR_SEMITONE;
     uint32_t duration = offTime - onTime;
 
     for (size_t i = 0; i < pitchSize - 1; i++) {
@@ -225,17 +248,17 @@ static void collectBend(const Bend* bend,
         PitchValue nextValue = points[i + 1];
 
         //! y = a x^2 + b - curve
-        float curTick = (float)curValue.time * duration / 100;
-        float nextTick = (float)nextValue.time * duration / 100;
+        float curTick = (float)curValue.time * duration / PitchValue::MAX_TIME;
+        float nextTick = (float)nextValue.time * duration / PitchValue::MAX_TIME;
 
         float a = (float)(nextValue.pitch - curValue.pitch) / ((curTick - nextTick) * (curTick - nextTick));
         float b = curValue.pitch;
 
-        uint32_t x0 = curValue.time * duration / 100;
+        uint32_t x0 = curValue.time * duration / PitchValue::MAX_TIME;
 
         PitchWheelRenderer::PitchWheelFunction func;
         func.mStartTick = onTime + x0;
-        uint32_t startTimeNextPoint = nextValue.time * duration / 100;
+        uint32_t startTimeNextPoint = nextValue.time * duration / PitchValue::MAX_TIME;
         func.mEndTick = onTime + startTimeNextPoint;
 
         auto bendFunc = [ startTick = func.mStartTick, scale,
@@ -250,7 +273,7 @@ static void collectBend(const Bend* bend,
         pitchWheelRenderer.addPitchWheelFunction(func, channel);
     }
     PitchWheelRenderer::PitchWheelFunction func;
-    func.mStartTick = onTime + points[pitchSize - 1].time * duration / 100;
+    func.mStartTick = onTime + points[pitchSize - 1].time * duration / PitchValue::MAX_TIME;
     func.mEndTick = offTime;
 
     if (func.mEndTick == func.mStartTick) {
@@ -438,7 +461,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, double 
         if (!bend->playBend()) {
             break;
         }
-        collectBend(bend, channel, tick1, tick1 + note->playTicks(), pitchWheelRenderer);
+        collectBend(bend, channel, tick1, tick1 + getPlayTicksForBend(note).ticks(), pitchWheelRenderer);
     }
 }
 
