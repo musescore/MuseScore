@@ -44,6 +44,7 @@ public:
     explicit NavigableAppMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load() override;
+    Q_INVOKABLE void handleMenuItem(const QString& itemId) override;
     Q_INVOKABLE void openMenu(const QString& menuId, bool byHover);
 
     bool isNavigationStarted() const;

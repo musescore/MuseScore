@@ -24,6 +24,8 @@
 #include "draw/utils/drawdatacomp.h"
 #include "draw/utils/drawdatarw.h"
 
+#include "../../diagnosticserrors.h"
+
 using namespace mu;
 using namespace mu::draw;
 using namespace mu::diagnostics;
@@ -48,5 +50,10 @@ Ret DrawDataComparator::compare(const io::path_t& ref, const io::path_t& test, c
 
     Diff diff = DrawDataComp::compare(refData.val, testData.val);
 
-    return DrawDataRW::writeDiff(outdiff, diff);
+    if (diff.empty()) {
+        return make_ok();
+    }
+
+    DrawDataRW::writeDiff(outdiff, diff);
+    return make_ret(Err::DDiff);
 }

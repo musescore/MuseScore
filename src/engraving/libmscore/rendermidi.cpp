@@ -772,7 +772,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
         }
         if (isGlissando) {
             const double defaultVelocityMultiplier = 1.0;
-            const double glissandoVelocityMultiplier = 0.6;
+            const double glissandoVelocityMultiplier = NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
 
             // render the body, i.e. the glissando
             for (int j = 0; j < b - 1; j++) {
@@ -1073,7 +1073,7 @@ static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int& onT
     int pitchOffset = note->slide().is(Note::SlideType::Doit) ? 1 : -1;
     for (int i = 0; i < slideNotes; ++i) {
         pitch += pitchOffset;
-        el->push_back(NoteEvent(pitch, slideOn, slideDuration));
+        el->push_back(NoteEvent(pitch, slideOn, slideDuration, NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER));
 
         slideOn += slideDuration;
     }
@@ -1181,7 +1181,6 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
     // assuring that all the grace notes get the same duration, and their total is 50%.
     // exception is if the note is dotted or double-dotted; see below.
     float weighta = float(na) / (nb + na);
-    float weightb = float(nb) / (nb + na);
 
     int graceDuration = 0;
     bool drumset = (getDrumset(chord) != nullptr);
@@ -1206,7 +1205,6 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
         if (graceChord->noteType() == NoteType::ACCIACCATURA) {
             ontime = 0;
             graceDuration = 0;
-            weightb = 0.0;
             weighta = 1.0;
         } else {
             const double graceTimeMS = (graceChord->actualTicks().ticks() / ticksPerSecond) * 1000;
@@ -1214,7 +1212,6 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
             // 1000 occurs below as a unit for ontime
             ontime = std::min(500, static_cast<int>((graceTimeMS / chordTimeMS) * 1000));
             graceDuration = ontime / nb;
-            weightb = 0.0;
             weighta = 1.0;
             trailtime += ontime;
         }

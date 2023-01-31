@@ -31,6 +31,7 @@
 #include "libmscore/system.h"
 #include "libmscore/stafftype.h"
 #include "libmscore/mscore.h"
+#include "libmscore/tuplet.h"
 
 #include "scorecallbacks.h"
 
@@ -472,12 +473,8 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
     mu::engraving::ChordRest* chordRest = inputState.cr();
     if (chordRest) {
         Fraction ratio = options.ratio;
-        // prevent weird dotted tuplets when adding tuplets to dotted durations
         if (options.autoBaseLen) {
-            ratio.setDenominator(inputState.duration().dots() ? 3 : 2);
-            while (ratio.numerator() >= ratio.denominator() * 2) {
-                ratio.setDenominator(ratio.denominator() * 2);      // operator*= reduces, we don't want that here
-            }
+            ratio.setDenominator(mu::engraving::Tuplet::computeTupletDenominator(ratio.numerator(), inputState.ticks()));
         }
         score()->changeCRlen(chordRest, inputState.duration());
         score()->addTuplet(chordRest, ratio, options.numberType, options.bracketType);

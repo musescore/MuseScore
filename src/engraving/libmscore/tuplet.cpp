@@ -1431,4 +1431,19 @@ void Tuplet::addMissingElements()
              missingElementsDuration.numerator(), missingElementsDuration.denominator());
     }
 }
+
+int Tuplet::computeTupletDenominator(int numerator, Fraction totalDuration)
+{
+    if (numerator <= 0) {
+        return 0;
+    }
+    Fraction noteDuration = totalDuration / numerator;
+    Fraction baseLen(1, 1);
+    Fraction ratio = (totalDuration / baseLen).reduced();
+    while (ratio.denominator() != 1 || baseLen / 2 >= noteDuration) {
+        baseLen /= 2;
+        ratio = (totalDuration / baseLen).reduced();
+    }
+    return ratio.numerator();
+}
 } // namespace mu::engraving
