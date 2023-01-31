@@ -42,7 +42,7 @@ void NoteInputCursor::paint(mu::draw::Painter* painter)
     double oldWidth = cursorRect.width();//store old width
     double newWidth = cursorRect.width() * widthMultiplier;      //set new width
     double pixToSlideLeft = (((oldWidth - newWidth) / 2) - (leftLineWidth / 2)); //calculate new center pos
-    cursorRect.setLeft(cursorRect.left() + pixToSlideLeft); //use center pos to find left justification location
+    cursorRect.setLeft(cursorRect.left() + pixToSlideLeft); //use center pos to find left justification location 
     cursorRect.setWidth(newWidth); 
     
             //create the new box...
