@@ -27,7 +27,7 @@
 #include <QList>
 
 #include "modularity/ioc.h"
-#include "iautobotconfiguration.h"
+#include "../iautobotconfiguration.h"
 #include "io/ifilesystem.h"
 
 namespace mu::autobot {

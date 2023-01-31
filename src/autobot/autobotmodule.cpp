@@ -48,6 +48,9 @@
 #include "internal/api/interactiveapi.h"
 #include "internal/api/keyboardapi.h"
 #include "internal/api/accessibilityapi.h"
+#include "internal/api/diagnosticsapi.h"
+#include "internal/api/processapi.h"
+#include "internal/api/filesystemapi.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -95,14 +98,17 @@ void AutobotModule::resolveImports()
     auto api = modularity::ioc()->resolve<IApiRegister>(moduleName());
     if (api) {
         api->regApiCreator("global", "api.log", new ApiCreator<LogApi>());
+        api->regApiCreator("global", "api.interactive", new ApiCreator<InteractiveApi>());
+        api->regApiCreator("global", "api.process", new ApiCreator<ProcessApi>());
+        api->regApiCreator("global", "api.filesystem", new ApiCreator<FileSystemApi>());
         api->regApiCreator("autobot", "api.autobot", new ApiCreator<AutobotApi>());
         api->regApiCreator("autobot", "api.context", new ApiCreator<ContextApi>());
         api->regApiCreator("actions", "api.dispatcher", new ApiCreator<DispatcherApi>());
         api->regApiCreator("ui", "api.navigation", new ApiCreator<NavigationApi>());
-        api->regApiCreator("shortcuts", "api.shortcuts", new ApiCreator<ShortcutsApi>());
-        api->regApiCreator("global", "api.interactive", new ApiCreator<InteractiveApi>());
         api->regApiCreator("ui", "api.keyboard", new ApiCreator<KeyboardApi>());
+        api->regApiCreator("shortcuts", "api.shortcuts", new ApiCreator<ShortcutsApi>());
         api->regApiCreator("accessibility", "api.accessibility", new ApiCreator<AccessibilityApi>());
+        api->regApiCreator("diagnostics", "api.diagnostics", new ApiCreator<DiagnosticsApi>());
     }
 }
 

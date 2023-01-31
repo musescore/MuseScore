@@ -35,7 +35,7 @@
 #include "internal/engravingelementsprovider.h"
 #include "internal/savediagnosticfilesscenario.h"
 
-#include "internal/drawdata/engravingdrawprovider.h"
+#include "internal/drawdata/diagnosticdrawprovider.h"
 
 #include "internal/crashhandler/crashhandler.h"
 
@@ -75,7 +75,7 @@ void DiagnosticsModule::registerExports()
 
     ioc()->registerExport<IDiagnosticsPathsRegister>(moduleName(), new DiagnosticsPathsRegister());
     ioc()->registerExport<IEngravingElementsProvider>(moduleName(), new EngravingElementsProvider());
-    ioc()->registerExport<IEngravingDrawProvider>(moduleName(), new EngravingDrawProvider());
+    ioc()->registerExport<IDiagnosticDrawProvider>(moduleName(), new DiagnosticDrawProvider());
     ioc()->registerExport<IDiagnosticsConfiguration>(moduleName(), s_configuration);
     ioc()->registerExport<ISaveDiagnosticFilesScenario>(moduleName(), new SaveDiagnosticFilesScenario());
 }

@@ -19,32 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
-#define MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
+#ifndef MU_API_PROCESSAPI_H
+#define MU_API_PROCESSAPI_H
 
-#include "../idiagnosticsconfiguration.h"
+#include <QString>
+
+#include "apiobject.h"
 
 #include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
+#include "global/iprocess.h"
 
-namespace mu::diagnostics {
-class DiagnosticsConfiguration : public IDiagnosticsConfiguration
+namespace mu::api {
+class ProcessApi : public ApiObject
 {
-    INJECT(diagnostics, framework::IGlobalConfiguration, globalConfiguration)
+    Q_OBJECT
+
+    INJECT(api, IProcess, process)
 
 public:
-    DiagnosticsConfiguration() = default;
+    explicit ProcessApi(IApiEngine* e);
 
-    void init();
-
-    bool isDumpUploadAllowed() const override;
-    void setIsDumpUploadAllowed(bool val) override;
-
-    bool shouldWarnBeforeSavingDiagnosticFiles() const override;
-    void setShouldWarnBeforeSavingDiagnosticFiles(bool val) override;
-
-    io::path_t diagnosticFilesDefaultSavingPath() const override;
+    Q_INVOKABLE int execute(const QString& program, const QStringList& arguments = QStringList());
+    Q_INVOKABLE bool startDetached(const QString& program, const QStringList& arguments = QStringList());
 };
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
+#endif // MU_API_PROCESSAPI_H

@@ -59,7 +59,9 @@ Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& 
 {
     std::vector<std::string> ignore = loadIgnore(ignoreFile);
 
-    PROFILER_CLEAR;
+    io::Dir::mkpath(outDir);
+
+    //PROFILER_CLEAR;
 
     RetVal<io::paths_t> scores = io::Dir::scanFiles(scoreDir, FILES_FILTER);
     for (size_t i = 0; i < scores.val.size(); ++i) {
@@ -104,7 +106,7 @@ Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& 
         processFile(scoreFile, outFile);
     }
 
-    PROFILER_PRINT;
+    //PROFILER_PRINT;
 
     return make_ok();
 }

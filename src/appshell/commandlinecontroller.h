@@ -102,11 +102,19 @@ public:
         QString output;
     };
 
+    struct Autobot {
+        QString testCaseNameOrFile;
+        QString testCaseContextNameOrFile;
+        QString testCaseContextValue;
+        QString testCaseFunc;
+    };
+
     void parse(const QStringList& args);
     void apply();
 
     ConverterTask converterTask() const;
     Diagnostic diagnostic() const;
+    Autobot autobot() const;
 
 private:
     void printLongVersion() const;
@@ -114,6 +122,7 @@ private:
     QCommandLineParser m_parser;
     ConverterTask m_converterTask;
     Diagnostic m_diagnostic;
+    Autobot m_autobot;
 };
 }
 

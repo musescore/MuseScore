@@ -31,9 +31,8 @@
 #include "async/channel.h"
 #include "async/asyncable.h"
 #include "types/ret.h"
-#include "io/path.h"
 
-#include "autobottypes.h"
+#include "../autobottypes.h"
 
 namespace mu::autobot {
 class TestCaseRunner : public async::Asyncable
