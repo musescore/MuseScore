@@ -1039,22 +1039,47 @@ void renderChordArticulation(Chord* chord, std::vector<NoteEventList>& ell, int&
 //   shouldRenderNote
 //---------------------------------------------------------
 
-static bool shouldRenderNote(Note* n)
+static std::set<size_t> getNotesIndexesToRender(Chord* chord)
 {
-    while (n->tieBack() && n != n->tieBack()->startNote()) {
-        n = n->tieBack()->startNote();
-        if (findFirstTrill(n->chord())) {
-            // The previous tied note probably has events for this note too.
-            // That is, we don't need to render this note separately.
-            return false;
-        }
-        for (Articulation* a : n->chord()->articulations()) {
-            if (a->isOrnament()) {
+    std::set<size_t> notesIndexesToRender;
+
+    auto& notes = chord->notes();
+    /// not adding sounds for the same pitches in chord (for example, on different strings)
+    std::map<int, int> longestPlayTicksForPitch;
+
+    for (Note* note : notes) {
+        int pitch = note->pitch();
+        auto& pitchLength = longestPlayTicksForPitch[pitch];
+        pitchLength = std::max(pitchLength, note->playTicks());
+    }
+
+    auto noteShouldBeRendered = [](Note* n) {
+        while (n->tieBack() && n != n->tieBack()->startNote()) {
+            n = n->tieBack()->startNote();
+            if (findFirstTrill(n->chord())) {
+                // The previous tied note probably has events for this note too.
+                // That is, we don't need to render this note separately.
                 return false;
             }
+
+            for (Articulation* a : n->chord()->articulations()) {
+                if (a->isOrnament()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    };
+
+    size_t idx = 0;
+    for (Note* n : notes) {
+        if (noteShouldBeRendered(n) && longestPlayTicksForPitch[n->pitch()] == n->playTicks()) {
+            notesIndexesToRender.insert(idx++);
         }
     }
-    return true;
+
+    return notesIndexesToRender;
 }
 
 static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int& onTime, int& trailtime)
@@ -1088,15 +1113,11 @@ static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int& onT
 
 static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime, int trailtime)
 {
-    std::vector<NoteEventList> ell;
     if (chord->notes().empty()) {
-        return ell;
+        return std::vector<NoteEventList>();
     }
 
-    size_t notes = chord->notes().size();
-    for (size_t i = 0; i < notes; ++i) {
-        ell.push_back(NoteEventList());
-    }
+    std::vector<NoteEventList> ell(chord->notes().size(), NoteEventList());
 
     bool arpeggio = false;
     if (chord->tremolo()) {
@@ -1109,27 +1130,24 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
     }
 
     // Check each note and apply gateTime
-    for (unsigned i = 0; i < notes; ++i) {
+    for (size_t i : getNotesIndexesToRender(chord)) {
+        Note* note = chord->notes()[i];
         NoteEventList* el = &ell[i];
         const double ticksPerSecond = chord->score()->tempo(chord->tick()).val * Constants::division;
         constexpr double deadNoteDurationInSec = 0.05;
         const double deadNoteDurationInTicks = ticksPerSecond * deadNoteDurationInSec;
-        if (!shouldRenderNote(chord->notes()[i])) {
-            el->clear();
-            continue;
-        }
-        createSlideOutNotePlayEvents(chord->notes()[i], el, ontime, trailtime);
+
+        createSlideOutNotePlayEvents(note, el, ontime, trailtime);
         if (arpeggio) {
             continue;       // don't add extra events and apply gateTime to arpeggio
         }
         // If we are here then we still need to render the note.
         // Render its body if necessary and apply gateTime.
-        if (el->size() == 0 && chord->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
+        if (el->empty() && chord->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
             el->push_back(NoteEvent(0, ontime, 1000 - trailtime));
         }
         if (trailtime == 0) {   // if trailtime is non-zero that means we have graceNotesAfter, so we don't need additional gate time.
-            for (NoteEvent& e : ell[i]) {
-                Note* note = chord->notes()[i];
+            for (NoteEvent& e : *el) {
                 e.setLen(note->deadNote() ? deadNoteDurationInTicks : e.len() * gateTime / 100);
 
                 if (note->letRingType() != mu::engraving::Note::LetRingType::None) {
