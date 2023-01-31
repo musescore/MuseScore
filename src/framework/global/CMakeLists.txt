@@ -60,6 +60,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/allocator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/allocator.h
     ${CMAKE_CURRENT_LIST_DIR}/dlib.h
+    ${CMAKE_CURRENT_LIST_DIR}/iprocess.h
 
     ${CMAKE_CURRENT_LIST_DIR}/types/bytearray.cpp
     ${CMAKE_CURRENT_LIST_DIR}/types/bytearray.h
@@ -143,6 +144,8 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/internal/cryptographichash.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/invoker.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/invoker.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/process.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/process.h
 
         ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.cpp
         ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.h

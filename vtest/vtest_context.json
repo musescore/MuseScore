@@ -1,0 +1,7 @@
+{
+    "mscore_ref_bin": "./../MuseScore/build.debug/install/bin/mscore",
+    "score_dir": "./scores",
+    "current_data_dir": "./current_data",
+    "reference_data_dir": "./reference_data",
+    "comparison_dir": "./comparison"
+}

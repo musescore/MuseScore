@@ -29,7 +29,8 @@
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
 #include "converter/iconvertercontroller.h"
-#include "diagnostics/iengravingdrawprovider.h"
+#include "diagnostics/idiagnosticdrawprovider.h"
+#include "autobot/iautobot.h"
 
 #include "commandlinecontroller.h"
 
@@ -38,7 +39,8 @@ class AppShell
 {
     INJECT(appshell, framework::IApplication, muapplication)
     INJECT(appshell, converter::IConverterController, converter)
-    INJECT(appshell, diagnostics::IEngravingDrawProvider, engravingDrawProvider)
+    INJECT(appshell, diagnostics::IDiagnosticDrawProvider, diagnosticDrawProvider)
+    INJECT(appshell, autobot::IAutobot, autobot)
 
 public:
     AppShell();
@@ -51,6 +53,7 @@ private:
 
     int processConverter(const CommandLineController::ConverterTask& task);
     int processDiagnostic(const CommandLineController::Diagnostic& task);
+    void processAutobot(const CommandLineController::Autobot& task);
 
     QList<modularity::IModuleSetup*> m_modules;
 };

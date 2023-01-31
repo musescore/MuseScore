@@ -19,32 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
-#define MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
+#ifndef MU_DIAGNOSTICS_DIAGNOSTICDRAWPROVIDER_H
+#define MU_DIAGNOSTICS_DIAGNOSTICDRAWPROVIDER_H
 
-#include "../idiagnosticsconfiguration.h"
-
-#include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
+#include "../../idiagnosticdrawprovider.h"
 
 namespace mu::diagnostics {
-class DiagnosticsConfiguration : public IDiagnosticsConfiguration
+class DiagnosticDrawProvider : public IDiagnosticDrawProvider
 {
-    INJECT(diagnostics, framework::IGlobalConfiguration, globalConfiguration)
-
 public:
-    DiagnosticsConfiguration() = default;
+    DiagnosticDrawProvider() = default;
 
-    void init();
-
-    bool isDumpUploadAllowed() const override;
-    void setIsDumpUploadAllowed(bool val) override;
-
-    bool shouldWarnBeforeSavingDiagnosticFiles() const override;
-    void setShouldWarnBeforeSavingDiagnosticFiles(bool val) override;
-
-    io::path_t diagnosticFilesDefaultSavingPath() const override;
+    Ret generateDrawData(const io::path_t& dirOrFile, const io::path_t& outDirOrFile) override;
+    Ret compareDrawData(const io::path_t& ref, const io::path_t& test, const io::path_t& outDiff) override;
+    Ret drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile) override;
+    Ret drawDiffToPng(const io::path_t& diffFile, const io::path_t& refFile, const io::path_t& outFile) override;
 };
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
+#endif // MU_DIAGNOSTICS_DIAGNOSTICDRAWPROVIDER_H

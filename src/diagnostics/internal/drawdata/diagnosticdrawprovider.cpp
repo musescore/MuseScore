@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "engravingdrawprovider.h"
+#include "diagnosticdrawprovider.h"
 
 #include "global/io/fileinfo.h"
 
@@ -40,7 +40,7 @@ using namespace mu::diagnostics;
 // ./vtest/scores/accidental-1.mscx -o ./work/1_accidental-1.exp.png
 // ./vtest/scores/emmentaler-text-3.mscx -o ./work/emmentaler-text-3.png
 
-Ret EngravingDrawProvider::generateDrawData(const io::path_t& dirOrFile, const io::path_t& outDirOrFile)
+Ret DiagnosticDrawProvider::generateDrawData(const io::path_t& dirOrFile, const io::path_t& outDirOrFile)
 {
     LOGI() << "scoresDir: " << dirOrFile << ", outDir: " << outDirOrFile;
     DrawDataGenerator g;
@@ -52,21 +52,21 @@ Ret EngravingDrawProvider::generateDrawData(const io::path_t& dirOrFile, const i
     return g.processDir(dirOrFile, outDirOrFile, io::path_t());
 }
 
-Ret EngravingDrawProvider::compareDrawData(const io::path_t& ref, const io::path_t& test, const io::path_t& outDiff)
+Ret DiagnosticDrawProvider::compareDrawData(const io::path_t& ref, const io::path_t& test, const io::path_t& outDiff)
 {
     LOGI() << "ref: " << ref << ", test: " << test << ", outDiff: " << outDiff;
     DrawDataComparator c;
     return c.compare(ref, test, outDiff);
 }
 
-Ret EngravingDrawProvider::drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile)
+Ret DiagnosticDrawProvider::drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile)
 {
     LOGI() << "dataFile: " << dataFile << ", outFile: " << outFile;
     DrawDataConverter c;
     return c.drawDataToPng(dataFile, outFile);
 }
 
-Ret EngravingDrawProvider::drawDiffToPng(const io::path_t& diffFile, const io::path_t& refFile, const io::path_t& outFile)
+Ret DiagnosticDrawProvider::drawDiffToPng(const io::path_t& diffFile, const io::path_t& refFile, const io::path_t& outFile)
 {
     LOGI() << "diffFile: " << diffFile << ", refFile: " << refFile << ", outFile: " << outFile;
     DrawDataConverter c;

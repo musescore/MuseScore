@@ -191,23 +191,33 @@ int AppShell::run(int argc, char** argv)
     switch (runMode) {
     case framework::IApplication::RunMode::Converter: {
         // ====================================================
-        // Process Diagnostic
+        // Process Autobot
         // ====================================================
-        CommandLineController::Diagnostic diagnostic = commandLine.diagnostic();
-        if (diagnostic.type != CommandLineController::DiagnosticType::Undefined) {
-            QMetaObject::invokeMethod(qApp, [this, diagnostic]() {
-                    int code = processDiagnostic(diagnostic);
-                    qApp->exit(code);
+        CommandLineController::Autobot autobot = commandLine.autobot();
+        if (!autobot.testCaseNameOrFile.isEmpty()) {
+            QMetaObject::invokeMethod(qApp, [this, autobot]() {
+                    processAutobot(autobot);
                 }, Qt::QueuedConnection);
         } else {
             // ====================================================
-            // Process Converter
+            // Process Diagnostic
             // ====================================================
-            CommandLineController::ConverterTask task = commandLine.converterTask();
-            QMetaObject::invokeMethod(qApp, [this, task]() {
-                    int code = processConverter(task);
-                    qApp->exit(code);
-                }, Qt::QueuedConnection);
+            CommandLineController::Diagnostic diagnostic = commandLine.diagnostic();
+            if (diagnostic.type != CommandLineController::DiagnosticType::Undefined) {
+                QMetaObject::invokeMethod(qApp, [this, diagnostic]() {
+                        int code = processDiagnostic(diagnostic);
+                        qApp->exit(code);
+                    }, Qt::QueuedConnection);
+            } else {
+                // ====================================================
+                // Process Converter
+                // ====================================================
+                CommandLineController::ConverterTask task = commandLine.converterTask();
+                QMetaObject::invokeMethod(qApp, [this, task]() {
+                        int code = processConverter(task);
+                        qApp->exit(code);
+                    }, Qt::QueuedConnection);
+            }
         }
     } break;
     case framework::IApplication::RunMode::Editor: {
@@ -373,7 +383,7 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
 
 int AppShell::processDiagnostic(const CommandLineController::Diagnostic& task)
 {
-    if (!engravingDrawProvider()) {
+    if (!diagnosticDrawProvider()) {
         return make_ret(Ret::Code::NotSupported);
     }
 
@@ -396,16 +406,16 @@ int AppShell::processDiagnostic(const CommandLineController::Diagnostic& task)
 
     switch (task.type) {
     case CommandLineController::DiagnosticType::GenDrawData:
-        ret = engravingDrawProvider()->generateDrawData(input.front(), output);
+        ret = diagnosticDrawProvider()->generateDrawData(input.front(), output);
         break;
     case CommandLineController::DiagnosticType::ComDrawData:
         IF_ASSERT_FAILED(input.size() == 2) {
             return make_ret(Ret::Code::UnknownError);
         }
-        ret = engravingDrawProvider()->compareDrawData(input.at(0), input.at(1), output);
+        ret = diagnosticDrawProvider()->compareDrawData(input.at(0), input.at(1), output);
         break;
     case CommandLineController::DiagnosticType::DrawDataToPng:
-        ret = engravingDrawProvider()->drawDataToPng(input.front(), output);
+        ret = diagnosticDrawProvider()->drawDataToPng(input.front(), output);
         break;
     case CommandLineController::DiagnosticType::DrawDiffToPng: {
         io::path_t diffPath = input.at(0);
@@ -413,7 +423,7 @@ int AppShell::processDiagnostic(const CommandLineController::Diagnostic& task)
         if (input.size() > 1) {
             refPath = input.at(1);
         }
-        ret = engravingDrawProvider()->drawDiffToPng(diffPath, refPath, output);
+        ret = diagnosticDrawProvider()->drawDiffToPng(diffPath, refPath, output);
     } break;
     default:
         break;
@@ -424,4 +434,31 @@ int AppShell::processDiagnostic(const CommandLineController::Diagnostic& task)
     }
 
     return ret.code();
+}
+
+void AppShell::processAutobot(const CommandLineController::Autobot& task)
+{
+    using namespace mu::autobot;
+    async::Channel<StepInfo, Ret> stepCh = autobot()->stepStatusChanged();
+    stepCh.onReceive(nullptr, [](const StepInfo& step, const Ret& ret){
+        if (!ret) {
+            LOGE() << "failed step: " << step.name << ", ret: " << ret.toString();
+            qApp->exit(ret.code());
+        }
+    });
+
+    async::Channel<io::path_t, IAutobot::Status> statusCh = autobot()->statusChanged();
+    statusCh.onReceive(nullptr, [](const io::path_t& path, IAutobot::Status st){
+        if (st == IAutobot::Status::Finished) {
+            LOGI() << "success finished, path: " << path;
+            qApp->exit(0);
+        }
+    });
+
+    IAutobot::Options opt;
+    opt.context = task.testCaseContextNameOrFile;
+    opt.contextVal = task.testCaseContextValue.toStdString();
+    opt.func = task.testCaseFunc.toStdString();
+
+    autobot()->execScript(task.testCaseNameOrFile, opt);
 }

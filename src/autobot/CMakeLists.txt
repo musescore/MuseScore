@@ -65,6 +65,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/scriptapi.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/apiobject.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/apiobject.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/jsretval.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/apiutils.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/logapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/logapi.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/autobotapi.cpp
@@ -83,6 +85,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/keyboardapi.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/accessibilityapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/accessibilityapi.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/diagnosticsapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/diagnosticsapi.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/processapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/processapi.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/filesystemapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/filesystemapi.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.h

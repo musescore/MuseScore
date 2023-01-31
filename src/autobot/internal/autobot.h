@@ -34,9 +34,9 @@
 #include "shortcuts/ishortcutsregister.h"
 #include "iinteractive.h"
 #include "ui/imainwindow.h"
+#include "global/iapplication.h"
 
 #include "scriptengine.h"
-#include "testcasecontext.h"
 #include "testcaserunner.h"
 #include "testcasereport.h"
 #include "autobotinteractive.h"
@@ -44,6 +44,7 @@
 namespace mu::autobot {
 class Autobot : public IAutobot, public async::Asyncable
 {
+    INJECT(autobot, framework::IApplication, application)
     INJECT(autobot, IAutobotConfiguration, configuration)
     INJECT(autobot, io::IFileSystem, fileSystem)
     INJECT(autobot, ui::INavigationController, navigation)
@@ -67,7 +68,8 @@ public:
     int defaultIntervalMsec() const override;
     int intervalMsec() const override;
 
-    void execScript(const io::path_t& path) override;
+    void execScript(const io::path_t& path, const Options& opt = Options()) override;
+
     void runTestCase(const TestCase& testCase) override;
     void sleep(int msec) override;
     void pause() override;
@@ -79,6 +81,8 @@ public:
     AutobotInteractivePtr autobotInteractive() const override;
 
 private:
+
+    void loadContext(ITestCaseContextPtr ctx, const io::path_t& context, const std::string& contextVal);
 
     void affectOnServices();
     void restoreAffectOnServices();
