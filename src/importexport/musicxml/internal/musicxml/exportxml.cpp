@@ -7036,9 +7036,14 @@ void ExportMusicXml::writeMeasureStaves(const Measure* m,
 
         // in presence of a MeasureRepeat, adjust m to point to the actual content being repeated
         if (m->isMeasureRepeatGroup(staffIdx)) {
-            MeasureRepeat* mr;
+            MeasureRepeat* mr = nullptr;
             while (m->isMeasureRepeatGroup(staffIdx) && m->prevMeasure()) { // keep going back until out of measure repeat groups
                 mr = m->measureRepeatElement(staffIdx);
+                IF_ASSERT_FAILED(mr) {
+                    LOGE() << String("Could not find MeasureRepeat on measure %1, staff %2").arg(m->index()).arg(staffIdx);
+                    break;
+                }
+
                 for (int i = 0; i < mr->numMeasures() && m->prevMeasure(); ++i) {
                     m = m->prevMeasure();
                 }

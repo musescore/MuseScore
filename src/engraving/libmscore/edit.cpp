@@ -401,9 +401,6 @@ ChordRest* Score::addClone(ChordRest* cr, const Fraction& tick, const TDuration&
 {
     ChordRest* newcr;
     // change a MeasureRepeat into an Rest
-    // To do: *properly* remove the measure repeat, like in Score::deleteItem
-    // https://github.com/musescore/MuseScore/issues/15844
-    // https://github.com/musescore/MuseScore/issues/15874
     if (cr->isMeasureRepeat()) {
         newcr = Factory::copyRest(*toRest(cr));
         toRest(newcr)->hack_toRestType();
@@ -6043,6 +6040,7 @@ void Score::undoRemoveElement(EngravingItem* element)
     for (EngravingObject* ee : element->linkList()) {
         EngravingItem* e = static_cast<EngravingItem*>(ee);
         undo(new RemoveElement(e));
+
         if (e->explicitParent() && (e->explicitParent()->isSegment())) {
             Segment* s = toSegment(e->explicitParent());
             if (!mu::contains(segments, s)) {
@@ -6053,6 +6051,18 @@ void Score::undoRemoveElement(EngravingItem* element)
             e->setParent(0);       // systems will be regenerated upon redo, so detach
         }
     }
+
+    if (element->isMeasureRepeat()) {
+        const MeasureRepeat* repeat = toMeasureRepeat(element);
+        Measure* measure = repeat->firstMeasureOfGroup();
+        int staffIdx = repeat->staffIdx();
+
+        for (int i = 0; i < repeat->numMeasures(); ++i) {
+            undoChangeMeasureRepeatCount(measure, 0, staffIdx);
+            measure = measure->nextMeasure();
+        }
+    }
+
     for (Segment* s : segments) {
         if (s->empty()) {
             if (s->header() || s->trailer()) {        // probably more segment types (system header)
@@ -6376,13 +6386,17 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
 //   undoChangeMeasureRepeatCount
 //---------------------------------------------------------
 
-void Score::undoChangeMeasureRepeatCount(Measure* m, int i, staff_idx_t staffIdx)
+void Score::undoChangeMeasureRepeatCount(Measure* m, int newCount, staff_idx_t staffIdx)
 {
     for (Staff* st : staff(staffIdx)->staffList()) {
         Score* linkedScore = st->score();
         staff_idx_t linkedStaffIdx = st->idx();
         Measure* linkedMeasure = linkedScore->tick2measure(m->tick());
-        linkedScore->undo(new ChangeMeasureRepeatCount(linkedMeasure, i, linkedStaffIdx));
+
+        int currCount = linkedMeasure->measureRepeatCount(linkedStaffIdx);
+        if (currCount != newCount) {
+            linkedScore->undo(new ChangeMeasureRepeatCount(linkedMeasure, newCount, linkedStaffIdx));
+        }
     }
 }
 }
