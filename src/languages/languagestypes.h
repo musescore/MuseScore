@@ -38,6 +38,7 @@ struct Language
 {
     QString code;
     QString name;
+    Qt::LayoutDirection direction = Qt::LeftToRight;
 
     LanguageFilesMap files;
 

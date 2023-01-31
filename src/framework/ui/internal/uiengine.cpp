@@ -180,6 +180,11 @@ Qt::KeyboardModifiers UiEngine::keyboardModifiers() const
     return QGuiApplication::keyboardModifiers();
 }
 
+Qt::LayoutDirection UiEngine::currentLanguageLayoutDirection() const
+{
+    return languagesService()->currentLanguage().direction;
+}
+
 QQmlEngine* UiEngine::qmlEngine() const
 {
     return const_cast<UiEngine*>(this)->engine();

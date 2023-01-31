@@ -229,7 +229,11 @@ Slider {
                 ctx.translate(0, height)
                 ctx.rotate(3 * (Math.PI/2))
 
-                ctx.textAlign = "end"
+                if (ui.currentLanguageLayoutDirection() === Qt.RightToLeft) {
+                    ctx.textAlign = "start"
+                } else {
+                    ctx.textAlign = "end"
+                }
             }
 
             ctx.clearRect(0, 0, bgCanvas.height, bgCanvas.width)
