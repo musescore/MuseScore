@@ -82,6 +82,7 @@ public:
 private:
 
     using ChordRestContainer = std::vector<std::pair<ChordRest*, const GPBeat*> >;
+    using TieMap = std::unordered_map<track_idx_t, std::vector<Tie*> >;
 
     struct Context {
         int32_t masterBarIndex{ 0 };
@@ -123,14 +124,14 @@ private:
     bool addSimileMark(const GPBar* bar, int curTrack);
     void addBarline(const GPMasterBar* mB, Measure* measure);
 
-    void addTie(const GPNote* gpnote, Note* note);
+    void addTie(const GPNote* gpnote, Note* note, TieMap& ties);
     void addFretDiagram(const GPBeat* gpnote, ChordRest* note, const Context& ctx);
     ChordRest* addChordRest(const GPBeat* beats, const Context& ctx);
     void addOrnament(const GPNote* gpnote, Note* note);
     void addVibratoLeftHand(const GPNote* gpnote, Note* note);
     void addVibratoByType(const Note* note, VibratoType type);
     void addTrill(const GPNote* gpnote, Note* note);
-    void addHarmonic(const GPNote* gpnote, Note* note);
+    Note* addHarmonic(const GPNote* gpnote, Note* note);
     void addFingering(const GPNote* gpnote, Note* note);
     void addAccent(const GPNote* gpnote, Note* note);
     void addLeftHandTapping(const GPNote* gpnote, Note* note);
@@ -211,6 +212,7 @@ private:
     std::unordered_map<track_idx_t, GPBeat::DynamicType> _dynamics;
     std::unordered_map<track_idx_t, bool> m_hasCapo;
     std::unordered_map<track_idx_t, std::vector<Tie*> > _ties; // map(track, tie)
+    std::unordered_map<track_idx_t, std::vector<Tie*> > _harmonicTies; // map(track, tie between harmonic note)
     std::unordered_map<Note*, int> m_originalPitches; // info of changed pitches for keeping track of ties
     std::unordered_map<Chord*, TremoloType> m_tremolosInChords;
     std::unordered_map<track_idx_t, Slur*> _slurs; // map(track, slur)
