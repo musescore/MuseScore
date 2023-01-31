@@ -103,6 +103,12 @@ void CommandLineController::parse(const QStringList& args)
     m_parser.addOption(QCommandLineOption("diagnostic-drawdata-to-png", "Convert draw data to png", "file"));
     m_parser.addOption(QCommandLineOption("diagnostic-drawdiff-to-png", "Convert draw diff to png"));
 
+    // Autobot
+    m_parser.addOption(QCommandLineOption("test-case", "Run test case by name or file", "nameOrFile"));
+    m_parser.addOption(QCommandLineOption("test-case-context", "Set test case context by name or file", "nameOrFile"));
+    m_parser.addOption(QCommandLineOption("test-case-context-value", "Set test case context value", "value"));
+    m_parser.addOption(QCommandLineOption("test-case-func", "Call test case function", "name"));
+
     m_parser.process(args);
 }
 
@@ -406,6 +412,24 @@ void CommandLineController::apply()
         m_diagnostic.input = scorefiles;
     }
 
+    // Autobot
+    if (m_parser.isSet("test-case")) {
+        application()->setRunMode(IApplication::RunMode::Converter);
+        m_autobot.testCaseNameOrFile = m_parser.value("test-case");
+    }
+
+    if (m_parser.isSet("test-case-context")) {
+        m_autobot.testCaseContextNameOrFile = m_parser.value("test-case-context");
+    }
+
+    if (m_parser.isSet("test-case-context-value")) {
+        m_autobot.testCaseContextValue = m_parser.value("test-case-context-value");
+    }
+
+    if (m_parser.isSet("test-case-func")) {
+        m_autobot.testCaseFunc = m_parser.value("test-case-func");
+    }
+
     // Startup
     if (application()->runMode() == IApplication::RunMode::Editor) {
         startupScenario()->setModeType(modeType);
@@ -424,6 +448,11 @@ CommandLineController::ConverterTask CommandLineController::converterTask() cons
 CommandLineController::Diagnostic CommandLineController::diagnostic() const
 {
     return m_diagnostic;
+}
+
+CommandLineController::Autobot CommandLineController::autobot() const
+{
+    return m_autobot;
 }
 
 void CommandLineController::printLongVersion() const

@@ -28,8 +28,6 @@
 #include <QJSValue>
 #include <QString>
 
-#include "types/ret.h"
-
 namespace mu::autobot {
 class ITestCaseContext
 {

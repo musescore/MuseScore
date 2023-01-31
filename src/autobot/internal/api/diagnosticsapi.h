@@ -19,32 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
-#define MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
+#ifndef MU_API_DIAGNOSTICSAPI_H
+#define MU_API_DIAGNOSTICSAPI_H
 
-#include "../idiagnosticsconfiguration.h"
+#include <QString>
+
+#include "apiobject.h"
+#include "jsretval.h"
 
 #include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
+#include "diagnostics/idiagnosticdrawprovider.h"
 
-namespace mu::diagnostics {
-class DiagnosticsConfiguration : public IDiagnosticsConfiguration
+namespace mu::api {
+class DiagnosticsApi : public ApiObject
 {
-    INJECT(diagnostics, framework::IGlobalConfiguration, globalConfiguration)
+    Q_OBJECT
+
+    INJECT(api, diagnostics::IDiagnosticDrawProvider, diagnosticDrawProvider)
 
 public:
-    DiagnosticsConfiguration() = default;
+    DiagnosticsApi(IApiEngine* e);
 
-    void init();
-
-    bool isDumpUploadAllowed() const override;
-    void setIsDumpUploadAllowed(bool val) override;
-
-    bool shouldWarnBeforeSavingDiagnosticFiles() const override;
-    void setShouldWarnBeforeSavingDiagnosticFiles(bool val) override;
-
-    io::path_t diagnosticFilesDefaultSavingPath() const override;
+    Q_INVOKABLE JSRet generateDrawData(const QString& scoresDir, const QString& outDir);
+    Q_INVOKABLE JSRet compareDrawData(const QString& ref, const QString& test, const QString& outDiff);
+    Q_INVOKABLE JSRet drawDataToPng(const QString& dataFile, const QString& outFile);
+    Q_INVOKABLE JSRet drawDiffToPng(const QString& diffFile, const QString& refFile, const QString& outFile);
 };
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
+#endif // MU_API_DIAGNOSTICSAPI_H

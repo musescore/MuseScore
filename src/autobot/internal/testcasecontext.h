@@ -22,7 +22,7 @@
 #ifndef MU_AUTOBOT_TESTCASECONTEXT_H
 #define MU_AUTOBOT_TESTCASECONTEXT_H
 
-#include "itestcasecontext.h"
+#include "../itestcasecontext.h"
 
 namespace mu::autobot {
 struct TestCaseContext : public ITestCaseContext
