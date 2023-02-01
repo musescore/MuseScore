@@ -19,22 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_ENGRAVINGDRAWPROVIDER_H
-#define MU_DIAGNOSTICS_ENGRAVINGDRAWPROVIDER_H
+#include "processapi.h"
 
-#include "../../iengravingdrawprovider.h"
+using namespace mu::api;
 
-namespace mu::diagnostics {
-class EngravingDrawProvider : public IEngravingDrawProvider
+static std::vector<std::string> toArgs(const QStringList& list)
 {
-public:
-    EngravingDrawProvider() = default;
-
-    Ret generateDrawData(const io::path_t& dirOrFile, const io::path_t& outDirOrFile) override;
-    Ret compareDrawData(const io::path_t& ref, const io::path_t& test, const io::path_t& outDiff) override;
-    Ret drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile) override;
-    Ret drawDiffToPng(const io::path_t& diffFile, const io::path_t& refFile, const io::path_t& outFile) override;
-};
+    std::vector<std::string> args;
+    for (const QString& a : list) {
+        args.push_back(a.toStdString());
+    }
+    return args;
 }
 
-#endif // MU_DIAGNOSTICS_ENGRAVINGDRAWPROVIDER_H
+ProcessApi::ProcessApi(IApiEngine* e)
+    : ApiObject(e)
+{
+}
+
+int ProcessApi::execute(const QString& program, const QStringList& list)
+{
+    return process()->execute(program.toStdString(), toArgs(list));
+}
+
+bool ProcessApi::startDetached(const QString& program, const QStringList& list)
+{
+    return process()->startDetached(program.toStdString(), toArgs(list));
+}

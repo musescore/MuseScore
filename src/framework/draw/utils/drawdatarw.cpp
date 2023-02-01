@@ -24,6 +24,8 @@
 #include "global/io/file.h"
 #include "drawdatajson.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::draw;
 
@@ -60,5 +62,11 @@ RetVal<Diff> DrawDataRW::readDiff(const io::path_t& filePath)
 Ret DrawDataRW::writeDiff(const io::path_t& filePath, const Diff& diff)
 {
     ByteArray json = DrawDataJson::diffToJson(diff);
-    return io::File::writeFile(filePath, json);
+    Ret ret = io::File::writeFile(filePath, json);
+    if (ret) {
+        LOGI() << "success write diff, file: " << filePath;
+    } else {
+        LOGE() << "failed write diff, err: " << ret.toString() << ", file: " << filePath;
+    }
+    return ret;
 }

@@ -42,6 +42,9 @@ class ScriptApi : public QObject
     Q_PROPERTY(QJSValue interactive READ interactive CONSTANT)
     Q_PROPERTY(QJSValue keyboard READ keyboard CONSTANT)
     Q_PROPERTY(QJSValue accessibility READ accessibility CONSTANT)
+    Q_PROPERTY(QJSValue diagnostics READ diagnostics CONSTANT)
+    Q_PROPERTY(QJSValue process READ process CONSTANT)
+    Q_PROPERTY(QJSValue filesystem READ filesystem CONSTANT)
 
     INJECT(api, IApiRegister, apiRegister)
 
@@ -57,6 +60,9 @@ public:
     QJSValue interactive() const { return api("api.interactive"); }
     QJSValue keyboard() const { return api("api.keyboard"); }
     QJSValue accessibility() const { return api("api.accessibility"); }
+    QJSValue diagnostics() const { return api("api.diagnostics"); }
+    QJSValue process() const { return api("api.process"); }
+    QJSValue filesystem() const { return api("api.filesystem"); }
 
 private:
 

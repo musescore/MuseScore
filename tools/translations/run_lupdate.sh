@@ -21,8 +21,14 @@
 
 HERE="${BASH_SOURCE%/*}" # path to dir that contains this script
 
+if [[ "$@" = *"-no-obsolete"* ]]; then
+    echo "Note: cleaning up obsolete strings"
+else
+    echo "Note: preserving obsolete strings (use -no-obsolete to clean them up)"
+fi
+
 LUPDATE=lupdate
-SRC_DIR=$HERE/../../src 
+SRC_DIR=$HERE/../../src
 TS_FILE=$HERE/../../share/locale/musescore_en.ts
 ARGS="-recursive \
     -tr-function-alias translate+=trc \
@@ -31,7 +37,7 @@ ARGS="-recursive \
     -tr-function-alias translate+=TranslatableString \
     -tr-function-alias qsTranslate+=qsTrc \
     -extensions cpp,h,mm,ui,qml,js \
-    -no-obsolete"
+    $@"
 
 # We only need to update one ts file per "resource", that will be sent to Transifex.
 # We get .ts files for other languages from Transifex.
@@ -45,7 +51,7 @@ echo ""
 # instruments (and templates, and score orders, currently)
 FAKE_HEADER_FILE=$HERE/../../share/instruments/instrumentsxml.h
 TS_FILE=$HERE/../../share/locale/instruments_en.ts
-ARGS="-no-obsolete"
+ARGS="$0"
 
 echo "Instruments:"
 $LUPDATE $ARGS $FAKE_HEADER_FILE -ts $TS_FILE

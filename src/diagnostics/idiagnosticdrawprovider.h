@@ -19,19 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_IENGRAVINGDRAWPROVIDER_H
-#define MU_DIAGNOSTICS_IENGRAVINGDRAWPROVIDER_H
+#ifndef MU_DIAGNOSTICS_IDIAGNOSTICDRAWPROVIDER_H
+#define MU_DIAGNOSTICS_IDIAGNOSTICDRAWPROVIDER_H
 
 #include "modularity/imoduleexport.h"
 #include "global/types/ret.h"
 #include "global/io/path.h"
 
 namespace mu::diagnostics {
-class IEngravingDrawProvider : MODULE_EXPORT_INTERFACE
+class IDiagnosticDrawProvider : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IEngravingDrawProvider)
+    INTERFACE_ID(IDiagnosticDrawProvider)
 public:
-    virtual ~IEngravingDrawProvider() = default;
+    virtual ~IDiagnosticDrawProvider() = default;
 
     virtual Ret generateDrawData(const io::path_t& scoresDir, const io::path_t& outDir) = 0;
     virtual Ret compareDrawData(const io::path_t& ref, const io::path_t& test, const io::path_t& outDiff) = 0;
@@ -40,4 +40,4 @@ public:
 };
 }
 
-#endif // MU_DIAGNOSTICS_IENGRAVINGDRAWPROVIDER_H
+#endif // MU_DIAGNOSTICS_IDIAGNOSTICDRAWPROVIDER_H

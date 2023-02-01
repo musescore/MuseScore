@@ -34,6 +34,7 @@
 #include "internal/interactive.h"
 #include "internal/invoker.h"
 #include "internal/cryptographichash.h"
+#include "internal/process.h"
 
 #include "runtime.h"
 #include "async/processevents.h"
@@ -66,6 +67,7 @@ void GlobalModule::registerExports()
     ioc()->registerExport<IInteractive>(moduleName(), new Interactive());
     ioc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
     ioc()->registerExport<ICryptographicHash>(moduleName(), new CryptographicHash());
+    ioc()->registerExport<IProcess>(moduleName(), new Process());
 }
 
 void GlobalModule::onPreInit(const IApplication::RunMode& mode)

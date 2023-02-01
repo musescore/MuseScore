@@ -76,6 +76,13 @@ void NavigableAppMenuModel::load()
     qApp->installEventFilter(this);
 }
 
+void NavigableAppMenuModel::handleMenuItem(const QString& itemId)
+{
+    resetNavigation();
+
+    AppMenuModel::handleMenuItem(itemId);
+}
+
 void NavigableAppMenuModel::openMenu(const QString& menuId, bool byHover)
 {
     bool navigationStarted = isNavigationStarted();
