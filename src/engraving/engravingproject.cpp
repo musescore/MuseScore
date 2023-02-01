@@ -103,36 +103,35 @@ bool EngravingProject::readOnly() const
 
 Ret EngravingProject::setupMasterScore(bool forceMode)
 {
-    return doSetupMasterScore(m_masterScore, forceMode);
+    return doSetupMasterScore(forceMode);
 }
 
-Ret EngravingProject::doSetupMasterScore(MasterScore* score, bool forceMode)
+Ret EngravingProject::doSetupMasterScore(bool forceMode)
 {
     TRACEFUNC;
 
-    score->createPaddingTable();
-    score->connectTies();
+    m_masterScore->createPaddingTable();
+    m_masterScore->connectTies();
 
-    for (Part* p : score->parts()) {
+    for (Part* p : m_masterScore->parts()) {
         p->updateHarmonyChannels(false);
     }
 
-    score->rebuildMidiMapping();
+    m_masterScore->rebuildMidiMapping();
 
-    for (Score* s : score->scoreList()) {
+    for (Score* s : m_masterScore->scoreList()) {
         s->setPlaylistDirty();
         s->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
         s->setLayoutAll();
     }
 
-    score->updateChannel();
-    score->update();
+    m_masterScore->updateChannel();
+    m_masterScore->update();
 
-    if (!forceMode) {
-        return score->sanityCheck();
-    }
+    Ret ret = checkCorrupted();
+    m_isCorruptedUponLoading = !ret;
 
-    return make_ok();
+    return forceMode ? make_ok() : ret;
 }
 
 MasterScore* EngravingProject::masterScore() const
@@ -156,5 +155,19 @@ bool EngravingProject::writeMscz(MscWriter& writer, bool onlySelection, bool cre
         m_masterScore->update();
     }
 
+    m_isCorruptedUponLoading = false;
+
     return ok;
+}
+
+bool EngravingProject::isCorruptedUponLoading() const
+{
+    return m_isCorruptedUponLoading;
+}
+
+Ret EngravingProject::checkCorrupted() const
+{
+    TRACEFUNC;
+
+    return m_masterScore->sanityCheck();
 }
