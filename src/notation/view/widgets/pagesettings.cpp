@@ -468,9 +468,7 @@ void PageSettings::spatiumChanged()
 {
     double val = spatiumEntry->value();
     val *= mmUnit ? DPMM : DPI;
-    double oldVal = score()->spatium();
-    setStyleValue(Sid::spatium, val);
-    score()->spatiumChanged(oldVal, val);
+    setStyleValue(Sid::spatium, val); // this will also call Score::spatiumChanged()
 }
 
 void PageSettings::pageOffsetChanged()
