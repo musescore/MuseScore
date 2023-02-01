@@ -347,6 +347,8 @@ void LayoutSaver::Private::deserializeWindowGeometry(const T &saved, QWidgetOrQu
         geometry = saved.normalGeometry;
     }
 
+    ::FloatingWindow::ensureRectIsOnScreen(geometry);
+
     if (topLevel->isWindow()) {
         topLevel->setGeometry(geometry);
     } else {
