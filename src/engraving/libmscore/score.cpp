@@ -1681,16 +1681,14 @@ void Score::removeElement(EngravingItem* element)
     EngravingItem* parent = element->parentItem();
     element->triggerLayout();
 
-//      LOGD("Score(%p) EngravingItem(%p)(%s) parent %p(%s)",
-//         this, element, element->typeName(), parent, parent ? parent->typeName() : "");
-
     // special for MEASURE, HBOX, VBOX
     // their parent is not static
 
     ElementType et = element->type();
+    bool parentIsVBox = parent && parent->isVBox();
 
     if (et == ElementType::MEASURE
-        || (et == ElementType::HBOX && !parent->isVBox())
+        || (et == ElementType::HBOX && !parentIsVBox)
         || et == ElementType::VBOX
         || et == ElementType::TBOX
         || et == ElementType::FBOX
@@ -1699,8 +1697,10 @@ void Score::removeElement(EngravingItem* element)
         measures()->remove(mb);
         System* system = mb->system();
 
-        if (!system) {     // vertical boxes are not shown in continuous view so no system
-            assert(lineMode() && (element->isVBox() || element->isTBox()));
+        if (!system) {
+            // vertical boxes are not shown in continuous view so no system
+            bool noSystemMode = lineMode() && (element->isVBox() || element->isTBox());
+            assert(noSystemMode || !isOpen());
             return;
         }
 
