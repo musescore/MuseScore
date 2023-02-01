@@ -1072,10 +1072,10 @@ static std::set<size_t> getNotesIndexesToRender(Chord* chord)
         return true;
     };
 
-    size_t idx = 0;
-    for (Note* n : notes) {
+    for (size_t i = 0; i < notes.size(); i++) {
+        Note* n = notes[i];
         if (noteShouldBeRendered(n) && longestPlayTicksForPitch[n->pitch()] == n->playTicks()) {
-            notesIndexesToRender.insert(idx++);
+            notesIndexesToRender.insert(i);
         }
     }
 
