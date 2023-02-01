@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -44,6 +44,18 @@ QString FileSystemApi::fileName(const QString& path) const
 QString FileSystemApi::baseName(const QString& path) const
 {
     return FileInfo(path).baseName().toQString();
+}
+
+JSRet FileSystemApi::remove(const QString& path)
+{
+    Ret ret = fileSystem()->remove(path);
+    return retToJs(ret);
+}
+
+JSRet FileSystemApi::clear(const QString& path)
+{
+    Ret ret = fileSystem()->clear(path);
+    return retToJs(ret);
 }
 
 JSRet FileSystemApi::copy(const QString& src, const QString& dst, bool replace)

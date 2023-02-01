@@ -45,23 +45,56 @@ Ret FileSystem::exists(const io::path_t& path) const
     return make_ret(Err::NoError);
 }
 
-Ret FileSystem::remove(const io::path_t& path_) const
+Ret FileSystem::remove(const io::path_t& path_, bool onlyIfEmpty)
 {
     QString path = path_.toQString();
     QFileInfo fileInfo(path);
     if (fileInfo.exists()) {
-        return fileInfo.isDir() ? removeDir(path) : removeFile(path);
+        return fileInfo.isDir() ? removeDir(path, onlyIfEmpty) : removeFile(path);
     }
 
     return make_ret(Err::NoError);
 }
 
-Ret FileSystem::removeFolderIfEmpty(const io::path_t& path) const
+Ret FileSystem::clear(const io::path_t& path_)
 {
-    return removeDir(path, false);
+    QString path = path_.toQString();
+    if (!QFileInfo::exists(path)) {
+        return true;
+    }
+
+    Ret ret = make_ret(Err::NoError);
+    QDirIterator di(path, QDir::AllEntries | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot);
+    while (di.hasNext()) {
+        di.next();
+        const QFileInfo& fi = di.fileInfo();
+        const QString& filePath = di.filePath();
+        if (fi.isDir() && !fi.isSymLink()) {
+            ret = removeDir(filePath); // recursive
+        } else {
+            bool ok = QFile::remove(filePath);
+            if (!ok) { // Read-only files prevent directory deletion on Windows, retry with Write permission.
+                const QFile::Permissions permissions = QFile::permissions(filePath);
+                if (!(permissions & QFile::WriteUser)) {
+                    ok = QFile::setPermissions(filePath, permissions | QFile::WriteUser)
+                         && QFile::remove(filePath);
+                }
+            }
+
+            if (!ok) {
+                ret = make_ret(Err::FSRemoveError);
+            }
+        }
+
+        if (!ret) {
+            break;
+        }
+    }
+
+    return ret;
 }
 
-Ret FileSystem::copy(const io::path_t& src, const io::path_t& dst, bool replace) const
+Ret FileSystem::copy(const io::path_t& src, const io::path_t& dst, bool replace)
 {
     QFileInfo srcFileInfo(src.toQString());
     if (!srcFileInfo.exists()) {
@@ -84,7 +117,7 @@ Ret FileSystem::copy(const io::path_t& src, const io::path_t& dst, bool replace)
     return ret;
 }
 
-Ret FileSystem::move(const io::path_t& src, const io::path_t& dst, bool replace) const
+Ret FileSystem::move(const io::path_t& src, const io::path_t& dst, bool replace)
 {
     QFileInfo srcFileInfo(src.toQString());
     if (!srcFileInfo.exists()) {
@@ -254,11 +287,11 @@ Ret FileSystem::removeFile(const io::path_t& path) const
     return make_ret(Err::NoError);
 }
 
-Ret FileSystem::removeDir(const io::path_t& path, bool recursively) const
+Ret FileSystem::removeDir(const io::path_t& path, bool onlyIfEmpty) const
 {
     QDir dir(path.toQString());
 
-    if (!recursively && !dir.isEmpty()) {
+    if (onlyIfEmpty && !dir.isEmpty()) {
         return make_ret(Err::FSDirNotEmptyError);
     }
 

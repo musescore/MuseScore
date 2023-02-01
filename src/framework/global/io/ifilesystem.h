@@ -38,10 +38,10 @@ public:
     virtual ~IFileSystem() = default;
 
     virtual Ret exists(const io::path_t& path) const = 0;
-    virtual Ret remove(const io::path_t& path) const = 0;
-    virtual Ret removeFolderIfEmpty(const io::path_t& path) const = 0;
-    virtual Ret copy(const io::path_t& src, const io::path_t& dst, bool replace = false) const = 0;
-    virtual Ret move(const io::path_t& src, const io::path_t& dst, bool replace = false) const = 0;
+    virtual Ret remove(const io::path_t& path, bool onlyIfEmpty = false) = 0; // remove file or dir
+    virtual Ret clear(const io::path_t& path) = 0; // clear dir
+    virtual Ret copy(const io::path_t& src, const io::path_t& dst, bool replace = false) = 0;
+    virtual Ret move(const io::path_t& src, const io::path_t& dst, bool replace = false) = 0;
 
     virtual Ret makePath(const io::path_t& path) const = 0;
 
