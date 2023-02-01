@@ -96,6 +96,9 @@ public:
 
         EngravingFirst  = 2000,
         EngravingLast   = 2999,
+
+        ProjectFirst  = 3000,
+        ProjectLast   = 3999,
     };
 
     Ret() = default;
