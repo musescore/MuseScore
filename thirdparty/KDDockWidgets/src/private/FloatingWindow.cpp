@@ -261,6 +261,8 @@ void FloatingWindow::setSuggestedGeometry(QRect suggestedRect, SuggestedGeometry
             suggestedRect.moveCenter(originalCenter);
     }
 
+    ensureRectIsOnScreen(suggestedRect);
+
     setGeometry(suggestedRect);
 }
 
@@ -628,4 +630,47 @@ void FloatingWindow::updateSizeConstraints()
         // Doing it manually instead.
         setMaximumSize(maxSizeHint());
     });
+}
+
+void FloatingWindow::ensureRectIsOnScreen(QRect &geometry)
+{
+    const auto screens = qApp->screens();
+    if (screens.empty())
+        return;
+
+    int nearestDistSq = std::numeric_limits<int>::max();
+    int nearestIndex = -1;
+
+    const int screenCount = screens.count();
+    for (int i = 0; i < screenCount; i++) {
+        const QRect scrGeom = screens[i]->geometry();
+
+        // If the rectangle is visible at all, we need do nothing
+        if (scrGeom.intersects(geometry))
+            return;
+
+        // Find the nearest screen, so we can move the geometry onto it
+        const QPoint dist2D = geometry.center() - scrGeom.center();
+        const int distSq = (dist2D.x() * dist2D.x()) + (dist2D.y() * dist2D.y());
+        if (distSq < nearestDistSq) {
+            nearestDistSq = distSq;
+            nearestIndex = i;
+        }
+    }
+
+    // Move the rectangle to the nearest vertical and/or horizontal screen edge
+    auto scrGeom = screens[nearestIndex]->geometry();
+    scrGeom.moveTopLeft(scrGeom.topLeft() - screens[nearestIndex]->virtualGeometry().topLeft());
+
+    if (geometry.left() < scrGeom.left()) {
+        geometry.moveLeft(scrGeom.left());
+    } else if (geometry.left() > scrGeom.right()) {
+        geometry.moveRight(scrGeom.right());
+    }
+
+    if (geometry.top() < scrGeom.top()) {
+        geometry.moveTop(scrGeom.top());
+    } else if (geometry.top() > scrGeom.bottom()) {
+        geometry.moveBottom(scrGeom.bottom());
+    }
 }
