@@ -6312,9 +6312,18 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
     //  handle ties which start before m1 and end in (m1-m2)
     //
     for (Segment* s = m1->first(); s != m2->last(); s = s->next1()) {
+        IF_ASSERT_FAILED(s) {
+            // This score is corrupted; handle it without crashing,
+            // to help the user to fix corruptions by deleting the affected measures
+            LOGE() << "Missing segments detected while deleting measures " << m1->no() << " to " << m2->no()
+                   << ". This score (" << name() << ") is corrupted. Continuing without deleting measure contents.";
+            break;
+        }
+
         if (!s->isChordRestType()) {
             continue;
         }
+
         for (track_idx_t track = 0; track < ntracks(); ++track) {
             EngravingItem* e = s->element(track);
             if (!e || !e->isChord()) {
