@@ -73,7 +73,6 @@ StyledDialogView {
             progressStatus: Math.round(model.progress * 100 / model.totalProgress) + "%"
         }
 
-        /*
         FlatButton {
             Layout.alignment: Qt.AlignRight
 
@@ -83,6 +82,6 @@ StyledDialogView {
                 model.cancel()
                 root.close()
             }
-        }*/
+        }
     }
 }

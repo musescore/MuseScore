@@ -73,7 +73,7 @@ private:
     bool shouldReplaceFile(const QString& filename) const;
     bool askForRetry(const QString& filename) const;
 
-    bool doExportLoop(const io::path_t& path, std::function<bool(QIODevice&)> exportFunction) const;
+    Ret doExportLoop(const io::path_t& path, std::function<Ret (QIODevice &)> exportFunction) const;
 
     void showExportProgressIfNeed() const;
 
