@@ -583,7 +583,7 @@ mu::Ret NotationProject::doSave(const io::path_t& path, bool generateBackup, eng
             }
 
             // Try to remove the temp save folder (not problematic if fails)
-            ret = fileSystem()->removeFolderIfEmpty(savePath);
+            ret = fileSystem()->remove(savePath, true);
             if (!ret) {
                 LOGW() << ret.toString();
             }

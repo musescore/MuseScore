@@ -28,11 +28,12 @@ namespace mu::io {
 class FileSystem : public IFileSystem
 {
 public:
+
     Ret exists(const io::path_t& path) const override;
-    Ret remove(const io::path_t& path) const override;
-    Ret removeFolderIfEmpty(const io::path_t& path) const override;
-    Ret copy(const io::path_t& src, const io::path_t& dst, bool replace = false) const override;
-    Ret move(const io::path_t& src, const io::path_t& dst, bool replace = false) const override;
+    Ret remove(const io::path_t& path, bool onlyIfEmpty = false) override;
+    Ret clear(const io::path_t& path) override;
+    Ret copy(const io::path_t& src, const io::path_t& dst, bool replace = false) override;
+    Ret move(const io::path_t& src, const io::path_t& dst, bool replace = false) override;
 
     Ret makePath(const io::path_t& path) const override;
 
@@ -59,7 +60,7 @@ public:
 
 private:
     Ret removeFile(const io::path_t& path) const;
-    Ret removeDir(const io::path_t& path, bool recursively = true) const;
+    Ret removeDir(const io::path_t& path, bool onlyIfEmpty = false) const;
     Ret copyRecursively(const io::path_t& src, const io::path_t& dst) const;
 };
 }

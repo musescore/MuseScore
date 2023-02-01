@@ -35,6 +35,7 @@ enum class Err {
     FSAlreadyExists,
     FSRemoveError,
     FSDirNotEmptyError,
+    FSClearError,
     FSReadError,
     FSWriteError,
     FSMakingError,
@@ -54,6 +55,7 @@ inline Ret make_ret(Err e)
     case Err::FSAlreadyExists: return Ret(retCode, trc("system", "The file already exists"));
     case Err::FSRemoveError: return Ret(retCode, trc("system", "The file could not be removed"));
     case Err::FSDirNotEmptyError: return Ret(retCode, trc("system", "The directory is not empty"));
+    case Err::FSClearError: return Ret(retCode, trc("system", "The directory could not be cleared"));
     case Err::FSReadError: return Ret(retCode, trc("system", "An error occurred when reading from the file"));
     case Err::FSWriteError: return Ret(retCode, trc("system", "An error occurred when writing to the file"));
     case Err::FSMakingError: return Ret(retCode, trc("system", "An error occurred when making a path"));
