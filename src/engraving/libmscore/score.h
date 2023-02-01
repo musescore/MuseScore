@@ -43,6 +43,7 @@
 #include "layout/layoutoptions.h"
 
 #include "style/style.h"
+#include "style/pagestyle.h"
 
 #include "chordlist.h"
 #include "input.h"
@@ -407,7 +408,7 @@ private:
     std::vector<System*> _systems;        // measures are accumulated to systems
 
     InputState _is;
-    MStyle _style;
+    MStyle m_style;
     ChordList _chordList;
 
     bool _showInvisible         { true };
@@ -876,8 +877,11 @@ public:
     const ChordList* chordList() const { return &_chordList; }
     void checkChordList() { _chordList.checkChordList(style()); }
 
-    virtual MStyle& style() { return _style; }
-    virtual const MStyle& style() const { return _style; }
+    virtual MStyle& style() { return m_style; }
+    virtual const MStyle& style() const { return m_style; }
+
+    PageSizeGetAccessor pageSize() const { return PageSizeGetAccessor(m_style); }
+    PageSizeSetAccessor pageSize() { return PageSizeSetAccessor(m_style); }
 
     void resetStyleValue(Sid styleToReset);
 
