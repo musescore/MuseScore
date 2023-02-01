@@ -19,30 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "processapi.h"
+#ifndef MU_API_ENGRAVINGAPI_H
+#define MU_API_ENGRAVINGAPI_H
 
-using namespace mu::api;
+#include "apiobject.h"
 
-static std::vector<std::string> toArgs(const QStringList& list)
+namespace mu::api {
+class EngravingApi : public ApiObject
 {
-    std::vector<std::string> args;
-    for (const QString& a : list) {
-        args.push_back(a.toStdString());
-    }
-    return args;
+public:
+    EngravingApi(IApiEngine* e);
+};
 }
 
-ProcessApi::ProcessApi(IApiEngine* e)
-    : ApiObject(e)
-{
-}
-
-int ProcessApi::execute(const QString& program, const QStringList& list)
-{
-    return process()->execute(program.toStdString(), toArgs(list));
-}
-
-bool ProcessApi::startDetached(const QString& program, const QStringList& list)
-{
-    return process()->startDetached(program.toStdString(), toArgs(list));
-}
+#endif // MU_API_ENGRAVINGAPI_H

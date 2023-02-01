@@ -31,10 +31,10 @@ class FileSystemMock : public IFileSystem
 {
 public:
     MOCK_METHOD(Ret, exists, (const io::path_t&), (const, override));
-    MOCK_METHOD(Ret, remove, (const io::path_t&), (const, override));
-    MOCK_METHOD(Ret, removeFolderIfEmpty, (const io::path_t&), (const, override));
-    MOCK_METHOD(Ret, copy, (const io::path_t& src, const io::path_t& dst, bool replace), (const, override));
-    MOCK_METHOD(Ret, move, (const io::path_t& src, const io::path_t& dst, bool replace), (const, override));
+    MOCK_METHOD(Ret, remove, (const io::path_t&, bool onlyIfEmpty), (override));
+    MOCK_METHOD(Ret, clear, (const io::path_t&), (override));
+    MOCK_METHOD(Ret, copy, (const io::path_t& src, const io::path_t& dst, bool replace), (override));
+    MOCK_METHOD(Ret, move, (const io::path_t& src, const io::path_t& dst, bool replace), (override));
 
     MOCK_METHOD(EntryType, entryType, (const io::path_t& path), (const, override));
 

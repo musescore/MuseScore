@@ -91,6 +91,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/processapi.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/filesystemapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/filesystemapi.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/engravingapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/engravingapi.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.h

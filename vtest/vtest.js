@@ -1,4 +1,6 @@
 
+// --test-case ./../MuseScore/vtest/vtest.js --test-case-context ./../MuseScore/vtest/vtest_context.json
+
 const THIS_SCRIPT = api.context.globalVal("script_path")
 const CONTEXT_PATH = api.context.globalVal("context_path")
 const MSCORE_REF_BIN = api.context.globalVal("mscore_ref_bin")
@@ -17,12 +19,15 @@ var testCase = {
     name: "Compare draw data",
     steps: [
         {name: "Generate draw data", func: function() {
-            //generateDrawData()
+            generateDrawData()
         }},
         {name: "Generate ref draw data", func: function() {
-            //callRef(generateDrawData)
+            callRef(generateDrawData)
         }},
         {name: "Compare draw data", func: function() {
+
+            api.filesystem.clear(COMPARISON_DIR)
+
             let rv = api.filesystem.scanFiles(REFERENCE_DATA_DIR, [], "FilesInCurrentDir")
             fatalIfFailed(rv)
             //api.log.info("scanFiles: " + JSON.stringify(rv))
