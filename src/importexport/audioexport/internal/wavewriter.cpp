@@ -36,7 +36,5 @@ mu::Ret WaveWriter::write(notation::INotationPtr notation, QIODevice& destinatio
         0 /* bitRate */
     };
 
-    doWriteAndWait(notation, destinationDevice, format);
-
-    return make_ret(Ret::Code::Ok);
+    return doWriteAndWait(notation, destinationDevice, format);
 }

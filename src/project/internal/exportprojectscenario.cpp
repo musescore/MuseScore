@@ -143,7 +143,10 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
                         return m_currentWriter->write(notation, destinationDevice, options);
                     };
 
-                doExportLoop(definitivePath, exportFunction);
+                Ret ret = doExportLoop(definitivePath, exportFunction);
+                if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+                    return false;
+                }
             }
         }
     } break;
@@ -164,7 +167,10 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
                     return m_currentWriter->write(notation, destinationDevice, options);
                 };
 
-            doExportLoop(definitivePath, exportFunction);
+            Ret ret = doExportLoop(definitivePath, exportFunction);
+            if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+                return false;
+            }
         }
     } break;
     case INotationWriter::UnitType::MULTI_PART: {
@@ -178,7 +184,10 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
                 return m_currentWriter->writeList(notations, destinationDevice, options);
             };
 
-        doExportLoop(destinationPath, exportFunction);
+        Ret ret = doExportLoop(destinationPath, exportFunction);
+        if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+            return false;
+        }
     } break;
     }
 
@@ -288,15 +297,15 @@ bool ExportProjectScenario::askForRetry(const QString& filename) const
     return result.standardButton() == IInteractive::Button::Retry;
 }
 
-bool ExportProjectScenario::doExportLoop(const io::path_t& scorePath, std::function<bool(QIODevice&)> exportFunction) const
+mu::Ret ExportProjectScenario::doExportLoop(const io::path_t& scorePath, std::function<Ret(QIODevice&)> exportFunction) const
 {
     IF_ASSERT_FAILED(exportFunction) {
-        return false;
+        return make_ret(Ret::Code::InternalError);
     }
 
     QString filename = io::filename(scorePath).toQString();
     if (fileSystem()->exists(scorePath) && !shouldReplaceFile(filename)) {
-        return false;
+        return make_ret(Ret::Code::InternalError);
     }
 
     while (true) {
@@ -305,24 +314,30 @@ bool ExportProjectScenario::doExportLoop(const io::path_t& scorePath, std::funct
             if (askForRetry(filename)) {
                 continue;
             } else {
-                return false;
+                return make_ret(Ret::Code::Cancel);
             }
         }
 
-        if (!exportFunction(outputFile)) {
-            outputFile.close();
+        Ret ret = exportFunction(outputFile);
+        outputFile.close();
+
+        if (!ret) {
+            if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+                fileSystem()->remove(scorePath);
+                return ret;
+            }
+
             if (askForRetry(filename)) {
                 continue;
             } else {
-                return false;
+                return make_ret(Ret::Code::Cancel);
             }
         }
 
-        outputFile.close();
         break;
     }
 
-    return true;
+    return make_ok();
 }
 
 void ExportProjectScenario::showExportProgressIfNeed() const

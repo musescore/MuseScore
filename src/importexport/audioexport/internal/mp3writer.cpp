@@ -36,7 +36,5 @@ mu::Ret Mp3Writer::write(notation::INotationPtr notation, QIODevice& destination
         configuration()->exportMp3Bitrate()
     };
 
-    doWriteAndWait(notation, destinationDevice, format);
-
-    return make_ret(Ret::Code::Ok);
+    return doWriteAndWait(notation, destinationDevice, format);
 }

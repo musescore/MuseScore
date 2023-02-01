@@ -36,7 +36,5 @@ mu::Ret FlacWriter::write(notation::INotationPtr notation, QIODevice& destinatio
         128 /* bitRate */
     };
 
-    doWriteAndWait(notation, destinationDevice, format);
-
-    return make_ret(Ret::Code::Ok);
+    return doWriteAndWait(notation, destinationDevice, format);
 }
