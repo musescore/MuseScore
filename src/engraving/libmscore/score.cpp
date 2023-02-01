@@ -325,8 +325,8 @@ Score::Score()
 
     m_engravingFont = engravingFonts()->fontByName("Leland");
 
-    _fileDivision           = Constants::division;
-    _style  = DefaultStyle::defaultStyle();
+    _fileDivision = Constants::division;
+    m_style = DefaultStyle::defaultStyle();
 
     m_rootItem = new RootItem(this);
     m_rootItem->init();
@@ -342,10 +342,10 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
     Score::validScores.insert(this);
     _masterScore = parent;
     if (DefaultStyle::defaultStyleForParts()) {
-        _style = *DefaultStyle::defaultStyleForParts();
+        m_style = *DefaultStyle::defaultStyleForParts();
     } else {
         // inherit most style settings from parent
-        _style = parent->style();
+        m_style = parent->style();
 
         checkChordList();
 
@@ -364,7 +364,7 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
         };
         // but borrow defaultStyle page layout settings
         for (auto i : styles) {
-            _style.set(i, DefaultStyle::defaultStyle().value(i));
+            m_style.set(i, DefaultStyle::defaultStyle().value(i));
         }
         // and force some style settings that just make sense for parts
         if (forcePartStyle) {
@@ -375,7 +375,7 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
         }
     }
     // update style values
-    _style.precomputeValues();
+    m_style.precomputeValues();
     _synthesizerState = parent->_synthesizerState;
     _mscVersion = parent->_mscVersion;
     createPaddingTable();
@@ -385,7 +385,7 @@ Score::Score(MasterScore* parent, const MStyle& s)
     : Score{parent}
 {
     Score::validScores.insert(this);
-    _style  = s;
+    m_style  = s;
     createPaddingTable();
 }
 
