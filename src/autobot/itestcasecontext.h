@@ -46,6 +46,7 @@ public:
     virtual const std::vector<StepContext>& steps() const = 0;
     virtual const StepContext& step(const QString& name) const = 0;
 
+    // global
     virtual void setGlobalVal(const Key& key, const Val& val) = 0;
     virtual Val globalVal(const Key& key) const = 0;
 

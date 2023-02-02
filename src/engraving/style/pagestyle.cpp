@@ -108,6 +108,61 @@ PageSizeSetAccessor::PageSizeSetAccessor(MStyle& style)
 {
 }
 
+double PageSizeSetAccessor::width() const
+{
+    return m_style.styleD(Sid::pageWidth);
+}
+
+double PageSizeSetAccessor::height() const
+{
+    return m_style.styleD(Sid::pageHeight);
+}
+
+double PageSizeSetAccessor::printableWidth() const
+{
+    return m_style.styleD(Sid::pagePrintableWidth);
+}
+
+double PageSizeSetAccessor::evenTopMargin() const
+{
+    return m_style.styleD(Sid::pageEvenTopMargin);
+}
+
+double PageSizeSetAccessor::evenBottomMargin() const
+{
+    return m_style.styleD(Sid::pageEvenBottomMargin);
+}
+
+double PageSizeSetAccessor::evenLeftMargin() const
+{
+    return m_style.styleD(Sid::pageEvenLeftMargin);
+}
+
+double PageSizeSetAccessor::oddTopMargin() const
+{
+    return m_style.styleD(Sid::pageOddTopMargin);
+}
+
+double PageSizeSetAccessor::oddBottomMargin() const
+{
+    return m_style.styleD(Sid::pageOddBottomMargin);
+}
+
+double PageSizeSetAccessor::oddLeftMargin() const
+{
+    return m_style.styleD(Sid::pageOddLeftMargin);
+}
+
+double PageSizeSetAccessor::twosided() const
+{
+    return m_style.styleD(Sid::pageTwosided);
+}
+
+double PageSizeSetAccessor::spatium() const
+{
+    return m_style.styleD(Sid::spatium);
+}
+
 void PageSizeSetAccessor::setWidth(double v)
 {
     m_style.set(Sid::pageWidth, v);

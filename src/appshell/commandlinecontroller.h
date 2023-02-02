@@ -107,6 +107,7 @@ public:
         QString testCaseContextNameOrFile;
         QString testCaseContextValue;
         QString testCaseFunc;
+        QString testCaseFuncArgs;
     };
 
     void parse(const QStringList& args);

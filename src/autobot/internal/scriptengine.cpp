@@ -150,18 +150,17 @@ Ret ScriptEngine::evaluate()
 
 Ret ScriptEngine::call(const QString& funcName, QJSValue* retVal)
 {
-    CallData data;
-    Ret ret = doCall(funcName, data, retVal);
+    Ret ret = doCall(funcName, QJSValueList(), retVal);
     return ret;
 }
 
-Ret ScriptEngine::call(const QString& funcName, const CallData& data, QJSValue* retVal)
+Ret ScriptEngine::call(const QString& funcName, const QJSValueList& args, QJSValue* retVal)
 {
-    Ret ret = doCall(funcName, data, retVal);
+    Ret ret = doCall(funcName, args, retVal);
     return ret;
 }
 
-Ret ScriptEngine::doCall(const QString& funcName, const CallData& data, QJSValue* retVal)
+Ret ScriptEngine::doCall(const QString& funcName, const QJSValueList& args, QJSValue* retVal)
 {
     TRACEFUNC;
 
@@ -188,13 +187,7 @@ Ret ScriptEngine::doCall(const QString& funcName, const CallData& data, QJSValue
 
     QJSValue value;
     if (ret) {
-        QJSValueList args;
-        for (const QString& arg : data.args) {
-            args.append(arg);
-        }
-
         value = m_lastCallFunc.func.call(args);
-
         ret = jsValueToRet(value);
     }
 
@@ -262,4 +255,14 @@ QJSValue ScriptEngine::newQObject(QObject* o)
         o->setParent(m_engine);
     }
     return m_engine->newQObject(o);
+}
+
+QJSValue ScriptEngine::newObject()
+{
+    return m_engine->newObject();
+}
+
+QJSValue ScriptEngine::newArray(size_t length)
+{
+    return m_engine->newArray(uint(length));
 }

@@ -3,5 +3,12 @@
     "score_dir": "./scores",
     "current_data_dir": "./current_data",
     "reference_data_dir": "./reference_data",
-    "comparison_dir": "./comparison"
+    "comparison_dir": "./comparison",
+    "opt_default": {},
+    "opt_small": {
+        "pageSize": { "width": 60, "height": 130 }
+    },
+    "opt_medium": {
+        "pageSize": { "width": 120, "height": 250 }
+    }
 }

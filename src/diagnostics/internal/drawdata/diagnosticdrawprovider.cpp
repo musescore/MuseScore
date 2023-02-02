@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -40,16 +40,16 @@ using namespace mu::diagnostics;
 // ./vtest/scores/accidental-1.mscx -o ./work/1_accidental-1.exp.png
 // ./vtest/scores/emmentaler-text-3.mscx -o ./work/emmentaler-text-3.png
 
-Ret DiagnosticDrawProvider::generateDrawData(const io::path_t& dirOrFile, const io::path_t& outDirOrFile)
+Ret DiagnosticDrawProvider::generateDrawData(const io::path_t& dirOrFile, const io::path_t& outDirOrFile, const GenOpt& opt)
 {
     LOGI() << "scoresDir: " << dirOrFile << ", outDir: " << outDirOrFile;
     DrawDataGenerator g;
 
     if (io::FileInfo(dirOrFile).entryType() == io::EntryType::File) {
-        return g.processFile(dirOrFile, outDirOrFile);
+        return g.processFile(dirOrFile, outDirOrFile, opt);
     }
 
-    return g.processDir(dirOrFile, outDirOrFile, io::path_t());
+    return g.processDir(dirOrFile, outDirOrFile, opt);
 }
 
 Ret DiagnosticDrawProvider::compareDrawData(const io::path_t& ref, const io::path_t& test, const io::path_t& outDiff)

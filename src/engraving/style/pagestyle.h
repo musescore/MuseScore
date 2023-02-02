@@ -60,6 +60,18 @@ public:
 
     PageSizeSetAccessor(MStyle& style);
 
+    double width() const;
+    double height() const;
+    double printableWidth() const;
+    double evenTopMargin() const;
+    double evenBottomMargin() const;
+    double evenLeftMargin() const;
+    double oddTopMargin() const;
+    double oddBottomMargin() const;
+    double oddLeftMargin() const;
+    double twosided() const;
+    double spatium() const;
+
     void setWidth(double v);
     void setHeight(double v);
     void setPrintableWidth(double v);

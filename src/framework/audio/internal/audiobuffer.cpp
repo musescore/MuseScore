@@ -31,6 +31,13 @@ static constexpr size_t DEFAULT_SIZE = DEFAULT_SIZE_PER_CHANNEL * 2;
 
 static const std::vector<float> SILENT_FRAMES(DEFAULT_SIZE, 0.f);
 
+//#define DEBUG_AUDIO
+#ifdef DEBUG_AUDIO
+#define LOG_AUDIO LOGD
+#else
+#define LOG_AUDIO LOGN
+#endif
+
 struct BaseBufferProfiler {
     size_t reservedFramesMax = 0;
     size_t reservedFramesMin = 0;
@@ -155,7 +162,7 @@ void AudioBuffer::pop(float* dest, size_t sampleCount)
     if (reservedFrames(currentWriteIdx, currentReadIdx) < (sampleCount * 2)) {
         static size_t missingFramesTotal = 0;
         missingFramesTotal += (sampleCount * 2);
-        LOGD() << "\n FRAMES MISSED " << sampleCount * 2 << ", reserve: " <<
+        LOG_AUDIO() << "\n FRAMES MISSED " << sampleCount * 2 << ", reserve: " <<
             reservedFrames(currentWriteIdx, currentReadIdx) << ", total: " << missingFramesTotal;
     }
 
