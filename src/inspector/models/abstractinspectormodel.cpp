@@ -270,25 +270,31 @@ void AbstractInspectorModel::setModelType(InspectorModelType modelType)
 
 void AbstractInspectorModel::onPropertyValueChanged(const mu::engraving::Pid pid, const QVariant& newValue)
 {
-    if (isEmpty()) {
+    setPropertyValue(m_elementList, pid, newValue);
+}
+
+void AbstractInspectorModel::setPropertyValue(const QList<engraving::EngravingItem*>& items, const mu::engraving::Pid pid,
+                                              const QVariant& newValue)
+{
+    if (items.empty()) {
         return;
     }
 
     beginCommand();
 
-    for (mu::engraving::EngravingItem* element : m_elementList) {
-        IF_ASSERT_FAILED(element) {
+    for (mu::engraving::EngravingItem* item : items) {
+        IF_ASSERT_FAILED(item) {
             continue;
         }
 
-        mu::engraving::PropertyFlags ps = element->propertyFlags(pid);
+        mu::engraving::PropertyFlags ps = item->propertyFlags(pid);
 
         if (ps == mu::engraving::PropertyFlags::STYLED) {
             ps = mu::engraving::PropertyFlags::UNSTYLED;
         }
 
-        PropertyValue propValue = valueToElementUnits(pid, newValue, element);
-        element->undoChangeProperty(pid, propValue, ps);
+        PropertyValue propValue = valueToElementUnits(pid, newValue, item);
+        item->undoChangeProperty(pid, propValue, ps);
     }
 
     updateNotation();
