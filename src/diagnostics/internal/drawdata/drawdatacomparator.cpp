@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,6 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "drawdatacomparator.h"
+
+#include "global/io/fileinfo.h"
+#include "global/io/dir.h"
 
 #include "draw/utils/drawdatacomp.h"
 #include "draw/utils/drawdatarw.h"
@@ -53,6 +56,8 @@ Ret DrawDataComparator::compare(const io::path_t& ref, const io::path_t& test, c
     if (diff.empty()) {
         return make_ok();
     }
+
+    io::FileInfo(outdiff).dir().mkpath();
 
     DrawDataRW::writeDiff(outdiff, diff);
     return make_ret(Err::DDiff);

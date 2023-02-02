@@ -23,15 +23,23 @@
 
 using namespace mu;
 using namespace mu::api;
+using namespace mu::diagnostics;
 
 DiagnosticsApi::DiagnosticsApi(IApiEngine* e)
     : ApiObject(e)
 {
 }
 
-JSRet DiagnosticsApi::generateDrawData(const QString& scoresDir, const QString& outDir)
+JSRet DiagnosticsApi::generateDrawData(const QString& scoresDir, const QString& outDir, const QJSValue& obj)
 {
-    Ret ret = diagnosticDrawProvider()->generateDrawData(scoresDir, outDir);
+    GenOpt opt;
+    if (obj.hasProperty("pageSize")) {
+        QJSValue ps = obj.property("pageSize");
+        opt.pageSize.setWidth(ps.property("width").toNumber());
+        opt.pageSize.setHeight(ps.property("height").toNumber());
+    }
+
+    Ret ret = diagnosticDrawProvider()->generateDrawData(scoresDir, outDir, opt);
     return retToJs(ret);
 }
 

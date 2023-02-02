@@ -459,6 +459,7 @@ void AppShell::processAutobot(const CommandLineController::Autobot& task)
     opt.context = task.testCaseContextNameOrFile;
     opt.contextVal = task.testCaseContextValue.toStdString();
     opt.func = task.testCaseFunc.toStdString();
+    opt.funcArgs = task.testCaseFuncArgs.toStdString();
 
     autobot()->execScript(task.testCaseNameOrFile, opt);
 }

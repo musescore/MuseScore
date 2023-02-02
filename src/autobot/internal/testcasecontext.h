@@ -23,6 +23,7 @@
 #define MU_AUTOBOT_TESTCASECONTEXT_H
 
 #include "../itestcasecontext.h"
+#include "api/iapiengine.h"
 
 namespace mu::autobot {
 struct TestCaseContext : public ITestCaseContext
@@ -45,6 +46,7 @@ public:
 
 private:
 
+    api::IApiEngine* m_engine = nullptr;
     std::map<Key, Val > m_globalVals;
     std::vector<StepContext> m_steps;
 };
