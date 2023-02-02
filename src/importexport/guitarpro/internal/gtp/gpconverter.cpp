@@ -369,7 +369,7 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
     // glueing line segment elements separated with rests
     for (auto& trackMaps : m_elementsToAddToScore) {
         for (auto& typeMaps : trackMaps.second) {
-            for (SLine* elem : typeMaps.second) {
+            for (SLine* elem : typeMaps.second.elements) {
                 if (elem) {
                     _score->addElement(elem);
                     if (engravingConfiguration()->guitarProImportExperimental()) {
@@ -1141,10 +1141,7 @@ void GPConverter::fillUncompletedMeasure(const Context& ctx)
 
         for (auto& trackMaps : m_elementsToAddToScore) {
             for (auto& typeMaps : trackMaps.second) {
-                auto& elemsToAdd = typeMaps.second;
-                if (!elemsToAdd.empty() && elemsToAdd.back() != nullptr) {
-                    elemsToAdd.push_back(nullptr);
-                }
+                typeMaps.second.endedOnRest = true;
             }
         }
     }
@@ -1729,7 +1726,7 @@ void GPConverter::addTrill(const GPNote* gpnote, Note* note)
 
 void GPConverter::addTrill(const GPBeat* gpbeat, ChordRest* cr)
 {
-    addLineElement(cr, m_trillLines, ElementType::TRILL, LineImportType::TRILL, gpbeat->trill(), true);
+    buildContiniousElement(cr, m_trillElements, ElementType::TRILL, LineImportType::TRILL, gpbeat->trill(), true);
 }
 
 void GPConverter::addOrnament(const GPNote* gpnote, Note* note)
@@ -2025,9 +2022,29 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
     m_bends.push_back(bend);
 }
 
-void GPConverter::addLineElement(ChordRest* cr, std::vector<SLine*>& elements, ElementType muType, LineImportType importType,
-                                 bool elemExists, bool splitByRests)
+/**
+ * Making the current element of continious type (octave, let ring, trill etc.. inherited from SLine) longer or starting a new one
+ *
+ * @param cr ChordRest to which element will be added
+ * @param elements vector storing current continious elements for each existing track
+ * @param muType type from MU
+ * @param importType type of imported element
+ * @param elemExists indicates if element exists in imported file on current beat
+ * @param splitByRests indicates if continious elements of current type should be split by rests
+ */
+void GPConverter::buildContiniousElement(ChordRest* cr, std::vector<SLine*>& elements, ElementType muType, LineImportType importType,
+                                         bool elemExists, bool splitByRests)
 {
+    enum class ContiniousElementState {
+        UNDEFINED = -1,
+        CHORD_NO_ELEMENT,      // there is no imported type of element
+        CONTINUE_CURRENT_LINE, // element exists on current beat and was before, line will be continued
+        REST_BREAK,            // element should be broken in rests, new element starts later
+        REST_CONTINUE,         // element shouln't be broken in rests, end of element will be found later
+        CREATE_NEW_ITEM,       // new element should be created on this beat
+        ELEMENT_ON_REST,       // element was imported for Rest
+    } state = ContiniousElementState::UNDEFINED;
+
     auto setStartCR = [](SLine* elem, ChordRest* cr) {
         elem->setTick(cr->tick());
         elem->setStartElement(cr);
@@ -2040,43 +2057,58 @@ void GPConverter::addLineElement(ChordRest* cr, std::vector<SLine*>& elements, E
 
     track_idx_t track = cr->track();
 
-    auto& lastTypeForTrack = m_lastImportTypes[track][muType];
-
     while (elements.size() < track + 1) {
         elements.push_back(nullptr);
     }
 
     auto& elem = elements[track];
+    auto& lastTypeForTrack = m_lastImportTypes[track][muType];
 
-    if (cr->isRest() && splitByRests) {
+    bool isRest = cr->isRest();
+
+    /// indicating the type of behaviour for continious element
+    if (isRest && splitByRests) {
+        state = ContiniousElementState::REST_BREAK;
+    } else {
+        if (!elemExists) {
+            if (!isRest) {
+                state = ContiniousElementState::CHORD_NO_ELEMENT;
+            } else {
+                state = ContiniousElementState::REST_CONTINUE;
+            }
+        } else {
+            // element exists on current beat
+            if (isRest) {
+                state = ContiniousElementState::ELEMENT_ON_REST;
+            } else if (lastTypeForTrack != importType) {
+                state = ContiniousElementState::CREATE_NEW_ITEM;
+            } else {
+                state = ContiniousElementState::CONTINUE_CURRENT_LINE;
+            }
+        }
+    }
+
+    /// handling the continious element according to its state
+    switch (state) {
+    case ContiniousElementState::CHORD_NO_ELEMENT:
         lastTypeForTrack = LineImportType::NONE;
         elem = nullptr;
         return;
-    }
 
-    if (!elemExists) {
-        if (!cr->isRest()) {
-            elem = nullptr; // should start new element
-            return;
-        }
-
-        if (lastTypeForTrack != LineImportType::NONE) {
-            auto& lastTypeElementsToAdd = m_elementsToAddToScore[track][lastTypeForTrack];
-
-            /// adding nullptr to 'elements to be added' to track the REST
-            if (!lastTypeElementsToAdd.empty() && lastTypeElementsToAdd.back() != nullptr) {
-                lastTypeElementsToAdd.push_back(nullptr);
-            }
-        }
-
-        return;
-    }
-
-    if (lastTypeForTrack != importType) {
+    case ContiniousElementState::REST_BREAK:
+        lastTypeForTrack = LineImportType::NONE;
         elem = nullptr;
-    }
+        return;
 
-    if (elem) {
+    case ContiniousElementState::REST_CONTINUE:
+    case ContiniousElementState::ELEMENT_ON_REST: // currently it's mistake: we cannot indicate Rest with any of continious elements in guitar pro
+        if (lastTypeForTrack != LineImportType::NONE) {
+            m_elementsToAddToScore[track][lastTypeForTrack].endedOnRest = true;
+        }
+        return;
+
+    case ContiniousElementState::CONTINUE_CURRENT_LINE:
+    {
         ChordRest* lastCR = elem->endCR();
         if (lastCR == cr) {
             return;
@@ -2086,10 +2118,10 @@ void GPConverter::addLineElement(ChordRest* cr, std::vector<SLine*>& elements, E
             if (lastTypeForTrack != LineImportType::NONE) {
                 auto& lastTypeElementsToAdd = m_elementsToAddToScore[track][lastTypeForTrack];
 
-                /// removing info about the REST and updating last element's ticks
-                if (!lastTypeElementsToAdd.empty() && lastTypeElementsToAdd.back() == nullptr) {
-                    lastTypeElementsToAdd.pop_back();
-                    SLine* prevElem = lastTypeElementsToAdd.back();
+                /// removing info about the Rest and updating last element's ticks
+                if (lastTypeElementsToAdd.endedOnRest) {
+                    lastTypeElementsToAdd.endedOnRest = false;
+                    SLine* prevElem = lastTypeElementsToAdd.elements.back();
                     if (!prevElem) {
                         LOGE() << "error while importing";
                         return;
@@ -2102,9 +2134,12 @@ void GPConverter::addLineElement(ChordRest* cr, std::vector<SLine*>& elements, E
         } else {
             setEndCR(elem, cr);
         }
+
+        return;
     }
 
-    if (!elem && cr->isChord()) {
+    case ContiniousElementState::CREATE_NEW_ITEM:
+    {
         EngravingItem* engItem = Factory::createItem(muType, _score->dummy());
 
         SLine* newElem = dynamic_cast<SLine*>(engItem);
@@ -2120,9 +2155,13 @@ void GPConverter::addLineElement(ChordRest* cr, std::vector<SLine*>& elements, E
         newElem->setTrack(track);
         newElem->setTrack2(track);
 
-        auto& elementsToAdd = m_elementsToAddToScore[track][importType];
-        elementsToAdd.push_back(newElem);
+        m_elementsToAddToScore[track][importType].elements.push_back(newElem);
         lastTypeForTrack = importType;
+        return;
+    }
+
+    default:
+        return;
     }
 }
 
@@ -2352,19 +2391,20 @@ void GPConverter::addLegato(const GPBeat* beat, ChordRest* cr)
 
 void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
 {
-    if (!cr->isChord() || gpb->ottavaType() == GPBeat::OttavaType::None) {
+    buildContiniousElement(cr, m_ottavas[gpb->ottavaType()], ElementType::OTTAVA, ottavaToImportType(gpb->ottavaType()),
+                           gpb->ottavaType() != GPBeat::OttavaType::None);
+
+    if (!cr->isChord()) {
         return;
     }
 
-    addLineElement(cr, m_ottavas[gpb->ottavaType()], ElementType::OTTAVA, ottavaToImportType(gpb->ottavaType()),
-                   gpb->ottavaType() != GPBeat::OttavaType::None);
-
     const Chord* chord = toChord(cr);
     mu::engraving::OttavaType type = ottavaType(gpb->ottavaType());
-    SLine* lineElem = m_ottavas[gpb->ottavaType()].back();
+    SLine* lineElem = m_ottavas[gpb->ottavaType()][chord->track()];
     Ottava* ottava = dynamic_cast<Ottava*>(lineElem);
 
     if (!ottava) {
+        LOGE() << "ottava not found";
         return;
     }
 
@@ -2410,35 +2450,36 @@ void GPConverter::addPalmMute(const GPNote* gpnote, Note* /*note*/)
 
 void GPConverter::addLetRing(const GPBeat* gpbeat, ChordRest* cr)
 {
-    addLineElement(cr, m_letRings, ElementType::LET_RING, LineImportType::LET_RING, gpbeat->letRing());
+    buildContiniousElement(cr, m_letRings, ElementType::LET_RING, LineImportType::LET_RING, gpbeat->letRing());
 }
 
 void GPConverter::addPalmMute(const GPBeat* gpbeat, ChordRest* cr)
 {
-    addLineElement(cr, m_palmMutes, ElementType::PALM_MUTE, LineImportType::PALM_MUTE, gpbeat->palmMute());
+    buildContiniousElement(cr, m_palmMutes, ElementType::PALM_MUTE, LineImportType::PALM_MUTE, gpbeat->palmMute());
 }
 
 void GPConverter::addDive(const GPBeat* beat, ChordRest* cr)
 {
-    addLineElement(cr, m_dives, ElementType::WHAMMY_BAR, LineImportType::WHAMMY_BAR, beat->dive());
+    buildContiniousElement(cr, m_dives, ElementType::WHAMMY_BAR, LineImportType::WHAMMY_BAR, beat->dive());
 }
 
 void GPConverter::addPickScrape(const GPBeat* beat, ChordRest* cr)
 {
-    addLineElement(cr, m_pickScrapes, ElementType::PICK_SCRAPE, LineImportType::PICK_SCRAPE, beat->pickScrape(), true);
+    buildContiniousElement(cr, m_pickScrapes, ElementType::PICK_SCRAPE, LineImportType::PICK_SCRAPE, beat->pickScrape(), true);
 }
 
 void GPConverter::addRasgueado(const GPBeat* beat, ChordRest* cr)
 {
-    addLineElement(cr, m_rasgueados, ElementType::RASGUEADO, LineImportType::RASGUEADO, beat->rasgueado() != GPBeat::Rasgueado::None);
+    buildContiniousElement(cr, m_rasgueados, ElementType::RASGUEADO, LineImportType::RASGUEADO,
+                           beat->rasgueado() != GPBeat::Rasgueado::None);
 }
 
 void GPConverter::addHarmonicMark(const GPBeat* gpbeat, ChordRest* cr)
 {
     auto harmonicMarkType = gpbeat->harmonicMarkType();
     auto& textLineElems = m_harmonicMarks[harmonicMarkType];
-    addLineElement(cr, textLineElems, ElementType::HARMONIC_MARK, harmonicMarkToImportType(
-                       harmonicMarkType), harmonicMarkType != GPBeat::HarmonicMarkType::None, true);
+    buildContiniousElement(cr, textLineElems, ElementType::HARMONIC_MARK, harmonicMarkToImportType(
+                               harmonicMarkType), harmonicMarkType != GPBeat::HarmonicMarkType::None, true);
     if (!textLineElems.empty()) {
         auto& elem = textLineElems.back();
         if (elem && elem->isTextLineBase()) {
@@ -2766,8 +2807,8 @@ void GPConverter::addFadding(const GPBeat* beat, ChordRest* cr)
 void GPConverter::addHairPin(const GPBeat* beat, ChordRest* cr)
 {
     auto& hairpins = m_hairpins[beat->hairpin()];
-    addLineElement(cr, hairpins, ElementType::HAIRPIN, hairpinToImportType(
-                       beat->hairpin()), beat->hairpin() != GPBeat::Hairpin::None);
+    buildContiniousElement(cr, hairpins, ElementType::HAIRPIN, hairpinToImportType(
+                               beat->hairpin()), beat->hairpin() != GPBeat::Hairpin::None);
 
     if (!hairpins.empty()) {
         auto& elem = hairpins.back();

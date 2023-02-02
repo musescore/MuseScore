@@ -190,8 +190,8 @@ private:
     void fillTuplet();
     bool tupletParamsChanged(const GPBeat* beat, const ChordRest* cr);
 
-    void addLineElement(ChordRest* cr, std::vector<SLine*>& elements, ElementType muType, LineImportType importType, bool elemExists,
-                        bool splitByRests = false);
+    void buildContiniousElement(ChordRest* cr, std::vector<SLine*>& elements, ElementType muType, LineImportType importType,
+                                bool elemExists, bool splitByRests = false);
 
     void setBeamMode(const GPBeat* beat, ChordRest* cr, Measure* measure, Fraction tick);
 
@@ -220,7 +220,12 @@ private:
     mutable GPBeat* m_currentGPBeat = nullptr; // used for passing info from notes
     std::map<track_idx_t, std::map<ElementType, LineImportType> > m_lastImportTypes;
 
-    std::map<track_idx_t, std::map<LineImportType, std::vector<SLine*> > > m_elementsToAddToScore;
+    struct ContiniousElement {
+        std::vector<SLine*> elements;
+        bool endedOnRest = false;
+    };
+
+    std::map<track_idx_t, std::map<LineImportType, ContiniousElement> > m_elementsToAddToScore;
 
     std::vector<SLine*> m_palmMutes;
     std::vector<SLine*> m_letRings;
@@ -231,7 +236,7 @@ private:
     std::map<GPBeat::HarmonicMarkType, std::vector<SLine*> > m_harmonicMarks;
     std::map<GPBeat::OttavaType, std::vector<SLine*> > m_ottavas;
     std::map<GPBeat::Hairpin, std::vector<SLine*> > m_hairpins;
-    std::vector<SLine*> m_trillLines;
+    std::vector<SLine*> m_trillElements;
 
     std::map<uint16_t, uint16_t > _drumExtension;
 
