@@ -21,6 +21,7 @@
  */
 #include "notationviewinputcontroller.h"
 
+#include <QApplication>
 #include <QMimeData>
 #include <QQuickItem>
 #include <QTimer>
@@ -508,10 +509,6 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     if (m_view->isNoteEnterMode()) {
         if (button == Qt::RightButton) {
             dispatcher()->dispatch("remove-note", ActionData::make_arg1<PointF>(logicPos));
-        return;
-        }   
-        if (button == Qt::MiddleButton) {
-            m_beginPoint = logicPos;
             return;
         }
 
@@ -714,23 +711,19 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
             if (!viewInteraction()->isDragStarted()) {
                 viewInteraction()->startDrag(std::vector<EngravingItem*>(), PointF(), [](const EngravingItem*) { return false; });
             }
-
+            viewInteraction()->drag(m_beginPoint, logicPos, DragMode::BothXY);
 
             return;
         }
     }
 
     // move canvas
-    if (!isNoteEnterMode) {
+    if (!isNoteEnterMode){
         m_view->moveCanvas(dragDelta.x(), dragDelta.y());
         m_isCanvasDragged = true;
     }
-    if (m_view->isNoteEnterMode()) {
-        m_view->moveCanvas(dragDelta.x(), dragDelta.y());
-        m_isCanvasDragged = true;
-    }
-}
 
+}
 void NotationViewInputController::startDragElements(ElementType elementsType, const PointF& elementsOffset)
 {
     if (elementsType == ElementType::INVALID) {
