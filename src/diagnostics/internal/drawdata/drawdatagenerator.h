@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,7 @@
 #include "global/types/ret.h"
 #include "global/io/path.h"
 #include "draw/types/drawdata.h"
+#include "../../diagnosticstypes.h"
 
 namespace mu::engraving {
 class MasterScore;
@@ -36,16 +37,15 @@ class DrawDataGenerator
 public:
     DrawDataGenerator() = default;
 
-    Ret processDir(const io::path_t& scoreDir, const io::path_t& outDir, const io::path_t& ignoreFile);
-    Ret processFile(const io::path_t& scoreFile, const io::path_t& outFile);
+    Ret processDir(const io::path_t& scoreDir, const io::path_t& outDir, const GenOpt& opt = GenOpt());
+    Ret processFile(const io::path_t& scoreFile, const io::path_t& outFile, const GenOpt& opt = GenOpt());
 
-    draw::DrawDataPtr genDrawData(const io::path_t& scorePath) const;
+    draw::DrawDataPtr genDrawData(const io::path_t& scorePath, const GenOpt& opt = GenOpt()) const;
     draw::Pixmap genImage(const io::path_t& scorePath) const;
 
 private:
-
-    std::vector<std::string> loadIgnore(const mu::io::path_t& ignoreFile) const;
     bool loadScore(engraving::MasterScore* score, const io::path_t& path) const;
+    void applyOptions(engraving::MasterScore* score, const GenOpt& opt) const;
 };
 }
 

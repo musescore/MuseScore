@@ -19,17 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_ENGRAVINGAPI_H
-#define MU_API_ENGRAVINGAPI_H
+#ifndef MU_AUTOBOT_AUTOBOTUTILS_H
+#define MU_AUTOBOT_AUTOBOTUTILS_H
 
-#include "apiobject.h"
+#include <QJSValue>
 
-namespace mu::api {
-class EngravingApi : public ApiObject
-{
-public:
-    EngravingApi(IApiEngine* e);
-};
+#include "global/serialization/json.h"
+#include "api/iapiengine.h"
+
+namespace mu::autobot {
+QJSValue toQJSValue(const JsonValue& jv, api::IApiEngine* e = nullptr);
 }
 
-#endif // MU_API_ENGRAVINGAPI_H
+#endif // MU_AUTOBOT_AUTOBOTUTILS_H

@@ -19,11 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "engravingapi.h"
+#ifndef MU_DIAGNOSTICS_DIAGNOSTICSTYPES_H
+#define MU_DIAGNOSTICS_DIAGNOSTICSTYPES_H
 
-using namespace mu::api;
+#include "draw/types/geometry.h"
 
-EngravingApi::EngravingApi(IApiEngine* e)
-    : ApiObject(e)
-{
+namespace mu::diagnostics {
+struct GenOpt {
+    SizeF pageSize;
+};
 }
+
+#endif // MU_DIAGNOSTICS_DIAGNOSTICSTYPES_H

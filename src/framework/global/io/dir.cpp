@@ -51,6 +51,11 @@ Ret Dir::removeRecursively()
     return fileSystem()->remove(m_path);
 }
 
+Ret Dir::mkpath()
+{
+    return mkpath(m_path);
+}
+
 Ret Dir::mkpath(const path_t& path)
 {
     return fileSystem()->makePath(path);

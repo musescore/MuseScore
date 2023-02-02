@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -30,7 +30,7 @@ class DiagnosticDrawProvider : public IDiagnosticDrawProvider
 public:
     DiagnosticDrawProvider() = default;
 
-    Ret generateDrawData(const io::path_t& dirOrFile, const io::path_t& outDirOrFile) override;
+    Ret generateDrawData(const io::path_t& dirOrFile, const io::path_t& outDirOrFile, const GenOpt& opt = GenOpt()) override;
     Ret compareDrawData(const io::path_t& ref, const io::path_t& test, const io::path_t& outDiff) override;
     Ret drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile) override;
     Ret drawDiffToPng(const io::path_t& diffFile, const io::path_t& refFile, const io::path_t& outFile) override;
