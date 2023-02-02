@@ -718,7 +718,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     }
 
     // move canvas
-    if (!isNoteEnterMode){
+    if ((!isNoteEnterMode) || (event->buttons() & Qt::MiddleButton)){
         m_view->moveCanvas(dragDelta.x(), dragDelta.y());
         m_isCanvasDragged = true;
     }
