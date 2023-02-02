@@ -118,20 +118,27 @@ void AppearanceSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 
 void AppearanceSettingsModel::onOffsetChanged(const QVariant& offset)
 {
-    beginCommand();
+    QList<EngravingItem*> items;
+
+    static const std::unordered_set<ElementType> applyOffsetToChordTypes {
+        ElementType::NOTE,
+        ElementType::STEM,
+        ElementType::HOOK,
+    };
 
     for (EngravingItem* item : m_elementList) {
-        EngravingItem* chord = item->findAncestor(ElementType::CHORD);
+        if (!mu::contains(applyOffsetToChordTypes, item->type())) {
+            items.push_back(item);
+            continue;
+        }
 
-        if (chord) {
-            chord->undoChangeProperty(Pid::OFFSET, valueToElementUnits(Pid::OFFSET, offset, chord));
-        } else {
-            item->undoChangeProperty(Pid::OFFSET, valueToElementUnits(Pid::OFFSET, offset, item));
+        EngravingItem* parent = item->parentItem();
+        if (parent && parent->isChord()) {
+            items.push_back(parent);
         }
     }
 
-    updateNotation();
-    endCommand();
+    setPropertyValue(items, Pid::OFFSET, offset);
 }
 
 Page* AppearanceSettingsModel::page() const
