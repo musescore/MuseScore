@@ -629,7 +629,7 @@
 /* #undef WCHAR_T_SUFFIX */
 
 /* Define if widechars are ucs4 */
-/* #undef WIDECHARS_ARE_UCS4 */
+#cmakedefine WIDECHARS_ARE_UCS4
 
 /* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
    'wint_t'. */

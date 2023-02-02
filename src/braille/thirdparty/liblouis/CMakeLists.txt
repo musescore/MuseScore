@@ -2,6 +2,13 @@ set(MODULE liblouis)
 
 add_subdirectory(tables)
 
+set(MODULE_DEF
+    -DTABLESDIR=dataPathPtr         # compileTranslationTable.c
+)
+
+set(WIDECHARS_ARE_UCS4 TRUE)        # configMS.h
+set(WIDECHAR_TYPE "unsigned int")   # liblouis.h.in
+
 configure_file(
     ${CMAKE_CURRENT_LIST_DIR}/configMS.h
     ${CMAKE_CURRENT_LIST_DIR}/liblouis/config.h
