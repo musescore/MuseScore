@@ -400,9 +400,10 @@ Chord* Score::addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie
 ChordRest* Score::addClone(ChordRest* cr, const Fraction& tick, const TDuration& d)
 {
     ChordRest* newcr;
-    // change a MeasureRepeat() into an Rest()
+    // change a MeasureRepeat into an Rest
     if (cr->isMeasureRepeat()) {
         newcr = Factory::copyRest(*toRest(cr));
+        toRest(newcr)->hack_toRestType();
     } else {
         newcr = toChordRest(cr->clone());
     }
@@ -5333,8 +5334,10 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         std::vector<Staff* > staffList;
 
         if (!addToLinkedStaves || (ctrlModifier && isSystemLine)) {
-            element->setSystemFlag(false);
             staffList.push_back(element->staff());
+            if (ctrlModifier && isSystemLine) {
+                element->setSystemFlag(false);
+            }
         } else {
             for (Score* s : scoreList()) {
                 staffList.push_back(s->staff(0)); // system objects always appear on the top staff
@@ -6039,6 +6042,7 @@ void Score::undoRemoveElement(EngravingItem* element)
     for (EngravingObject* ee : element->linkList()) {
         EngravingItem* e = static_cast<EngravingItem*>(ee);
         undo(new RemoveElement(e));
+
         if (e->explicitParent() && (e->explicitParent()->isSegment())) {
             Segment* s = toSegment(e->explicitParent());
             if (!mu::contains(segments, s)) {
@@ -6049,6 +6053,18 @@ void Score::undoRemoveElement(EngravingItem* element)
             e->setParent(0);       // systems will be regenerated upon redo, so detach
         }
     }
+
+    if (element->isMeasureRepeat()) {
+        const MeasureRepeat* repeat = toMeasureRepeat(element);
+        Measure* measure = repeat->firstMeasureOfGroup();
+        int staffIdx = repeat->staffIdx();
+
+        for (int i = 0; i < repeat->numMeasures(); ++i) {
+            undoChangeMeasureRepeatCount(measure, 0, staffIdx);
+            measure = measure->nextMeasure();
+        }
+    }
+
     for (Segment* s : segments) {
         if (s->empty()) {
             if (s->header() || s->trailer()) {        // probably more segment types (system header)
@@ -6312,9 +6328,18 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
     //  handle ties which start before m1 and end in (m1-m2)
     //
     for (Segment* s = m1->first(); s != m2->last(); s = s->next1()) {
+        IF_ASSERT_FAILED(s) {
+            // This score is corrupted; handle it without crashing,
+            // to help the user to fix corruptions by deleting the affected measures
+            LOGE() << "Missing segments detected while deleting measures " << m1->no() << " to " << m2->no()
+                   << ". This score (" << name() << ") is corrupted. Continuing without deleting measure contents.";
+            break;
+        }
+
         if (!s->isChordRestType()) {
             continue;
         }
+
         for (track_idx_t track = 0; track < ntracks(); ++track) {
             EngravingItem* e = s->element(track);
             if (!e || !e->isChord()) {
@@ -6363,13 +6388,17 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
 //   undoChangeMeasureRepeatCount
 //---------------------------------------------------------
 
-void Score::undoChangeMeasureRepeatCount(Measure* m, int i, staff_idx_t staffIdx)
+void Score::undoChangeMeasureRepeatCount(Measure* m, int newCount, staff_idx_t staffIdx)
 {
     for (Staff* st : staff(staffIdx)->staffList()) {
         Score* linkedScore = st->score();
         staff_idx_t linkedStaffIdx = st->idx();
         Measure* linkedMeasure = linkedScore->tick2measure(m->tick());
-        linkedScore->undo(new ChangeMeasureRepeatCount(linkedMeasure, i, linkedStaffIdx));
+
+        int currCount = linkedMeasure->measureRepeatCount(linkedStaffIdx);
+        if (currCount != newCount) {
+            linkedScore->undo(new ChangeMeasureRepeatCount(linkedMeasure, newCount, linkedStaffIdx));
+        }
     }
 }
 }

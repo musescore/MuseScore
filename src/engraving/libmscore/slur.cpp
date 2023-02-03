@@ -399,6 +399,12 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
             || (item->tick() == endCR->tick() && item->track() != endCR->track())) {
             return true;
         }
+        // Edge-case: multiple voices and slur is on the inside
+        if (item->vStaffIdx() == startCR->staffIdx()
+            && (!slur()->up() && item->track() > startCR->track() // slur-down: ignore lower voices
+                || slur()->up() && item->track() < startCR->track())) { // slur-up: ignore higher voices
+            return true;
+        }
         return false;
     });
     return segShape;

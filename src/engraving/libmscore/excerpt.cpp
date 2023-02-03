@@ -664,7 +664,7 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
         }
     }
 
-    if (!ns->startElement() && !ns->endElement()) {
+    if (!ns->startElement() || !ns->endElement()) {
         delete ns;
         return;
     }
@@ -1541,8 +1541,12 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         } else {
             // export other spanner if staffidx matches
             if (srcStaffIdx == staffIdx) {
-                dstTrack  = dstStaffIdx * VOICES + s->voice();
-                dstTrack2 = dstStaffIdx * VOICES + (s->track2() % VOICES);
+                if (mu::contains(map, s->track())) {
+                    dstTrack  = map.at(s->track());
+                }
+                if (mu::contains(map, s->track2())) {
+                    dstTrack2 = map.at(s->track2());
+                }
             }
         }
 

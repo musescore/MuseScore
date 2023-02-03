@@ -166,6 +166,8 @@ public:
 
     void sanitizeTuplet();
     void addMissingElements();
+
+    static int computeTupletDenominator(int numerator, Fraction totalDuration);
 };
 } // namespace mu::engraving
 #endif
