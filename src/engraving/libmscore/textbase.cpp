@@ -3021,11 +3021,12 @@ void TextBase::editCut(EditData& ed)
 void TextBase::editCopy(EditData& ed)
 {
     //
-    // store selection as plain text
+    // store selection as rich and plain text
     //
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     TextCursor* cursor = ted->cursor();
     ted->selectedText = cursor->selectedText(true);
+    ted->selectedPlainText = cursor->selectedText(false);
 }
 
 //---------------------------------------------------------
