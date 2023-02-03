@@ -39,12 +39,15 @@ PopupWindow_QQuickView::~PopupWindow_QQuickView()
 
 void PopupWindow_QQuickView::init(QQmlEngine* engine, std::shared_ptr<ui::IUiConfiguration> uiConfiguration, bool isDialogMode)
 {
-    //! NOTE Without a parent on MacOS with FullScreen, the popup is shown on another virtual Desktop.
-    //! With parent on WinOS not work transparent background.
-
+    //! NOTE: do not set the window when constructing the view
+    //! This causes different bugs on different OS (e.g., no transparency for popups on windows)
     m_view = new QQuickView(engine, nullptr);
-    m_view->setObjectName("PopupWindow_QQuickView");
 
+    //! NOTE: We must set the parent
+    //! Otherwise, the garbage collector may take ownership of the view and destroy it when we don't expect it
+    m_view->QObject::setParent(this);
+
+    m_view->setObjectName("PopupWindow_QQuickView");
     m_view->setResizeMode(QQuickView::SizeRootObjectToView);
 
     // dialog
