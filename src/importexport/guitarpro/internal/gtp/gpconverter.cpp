@@ -2022,16 +2022,6 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
     m_bends.push_back(bend);
 }
 
-/**
- * Making the current element of continious type (octave, let ring, trill etc.. inherited from SLine) longer or starting a new one
- *
- * @param cr ChordRest to which element will be added
- * @param elements vector storing current continious elements for each existing track
- * @param muType type from MU
- * @param importType type of imported element
- * @param elemExists indicates if element exists in imported file on current beat
- * @param splitByRests indicates if continious elements of current type should be split by rests
- */
 void GPConverter::buildContiniousElement(ChordRest* cr, std::vector<SLine*>& elements, ElementType muType, LineImportType importType,
                                          bool elemExists, bool splitByRests)
 {
@@ -2480,13 +2470,17 @@ void GPConverter::addHarmonicMark(const GPBeat* gpbeat, ChordRest* cr)
     auto& textLineElems = m_harmonicMarks[harmonicMarkType];
     buildContiniousElement(cr, textLineElems, ElementType::HARMONIC_MARK, harmonicMarkToImportType(
                                harmonicMarkType), harmonicMarkType != GPBeat::HarmonicMarkType::None, true);
-    if (!textLineElems.empty()) {
-        auto& elem = textLineElems.back();
-        if (elem && elem->isTextLineBase()) {
-            const String& text = harmonicText(harmonicMarkType);
-            toTextLineBase(elem)->setBeginText(text);
-            toTextLineBase(elem)->setContinueText(text);
-        }
+
+    if (textLineElems.size() <= cr->track()) {
+        LOGE() << "error in importing harmonic mark";
+        return;
+    }
+
+    auto& elem = textLineElems[cr->track()];
+    if (elem && elem->isTextLineBase()) {
+        const String& text = harmonicText(harmonicMarkType);
+        toTextLineBase(elem)->setBeginText(text);
+        toTextLineBase(elem)->setContinueText(text);
     }
 }
 
@@ -2810,12 +2804,15 @@ void GPConverter::addHairPin(const GPBeat* beat, ChordRest* cr)
     buildContiniousElement(cr, hairpins, ElementType::HAIRPIN, hairpinToImportType(
                                beat->hairpin()), beat->hairpin() != GPBeat::Hairpin::None);
 
-    if (!hairpins.empty()) {
-        auto& elem = hairpins.back();
-        if (elem && elem->isHairpin()) {
-            toHairpin(elem)->setHairpinType(
-                beat->hairpin() == GPBeat::Hairpin::Crescendo ? HairpinType::CRESC_HAIRPIN : HairpinType::DECRESC_HAIRPIN);
-        }
+    if (hairpins.size() <= cr->track()) {
+        LOGE() << "error in importing hairpin";
+        return;
+    }
+
+    auto& elem = hairpins[cr->track()];
+    if (elem && elem->isHairpin()) {
+        toHairpin(elem)->setHairpinType(
+            beat->hairpin() == GPBeat::Hairpin::Crescendo ? HairpinType::CRESC_HAIRPIN : HairpinType::DECRESC_HAIRPIN);
     }
 }
 
