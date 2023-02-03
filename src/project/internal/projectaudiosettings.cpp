@@ -186,6 +186,10 @@ void ProjectAudioSettings::setActiveSoundProfile(const playback::SoundProfileNam
 mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
 {
     ByteArray json = reader.readAudioSettingsJsonFile();
+    if (json.empty()) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
     QJsonObject rootObj = QJsonDocument::fromJson(json.toQByteArrayNoCopy()).object();
 
     QJsonObject masterObj = rootObj.value("master").toObject();

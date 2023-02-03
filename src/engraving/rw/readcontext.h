@@ -58,6 +58,15 @@ struct TextStyleMap {
     TextStyleType ss;
 };
 
+struct PartAudioSettingsCompat {
+    InstrumentTrackId instrumentId;
+    bool mute{ false };
+    bool solo{ false };
+    int velocity{ 127 };
+};
+
+using AudioSettingsCompat = std::map<ID /*partid*/, PartAudioSettingsCompat>;
+
 class ReadContext
 {
 public:
@@ -158,6 +167,9 @@ public:
 
     std::list<std::pair<EngravingItem*, mu::PointF> >& fixOffsets() { return _fixOffsets; }
 
+    void addPartAudioSettingCompat(PartAudioSettingsCompat partAudioSetting);
+    const AudioSettingsCompat& audioSettingCompat() { return _audioSettingsCompat; }
+
 private:
 
     void addConnectorInfo(std::unique_ptr<ConnectorInfoReader>);
@@ -200,6 +212,7 @@ private:
     std::list<TextStyleMap> userTextStyles;
 
     std::list<std::pair<EngravingItem*, mu::PointF> > _fixOffsets;
+    AudioSettingsCompat _audioSettingsCompat;
 };
 }
 

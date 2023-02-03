@@ -203,7 +203,6 @@ mu::Ret EditStaffType::loadScore(mu::engraving::MasterScore* score, const mu::io
         p->updateHarmonyChannels(false);
     }
     score->rebuildMidiMapping();
-    score->setSoloMute();
     for (mu::engraving::Score* s : score->scoreList()) {
         s->setPlaylistDirty();
         s->addLayoutFlags(mu::engraving::LayoutFlag::FIX_PITCH_VELO);

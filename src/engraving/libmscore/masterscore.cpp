@@ -468,28 +468,6 @@ void MasterScore::setPos(POS pos, Fraction tick)
 }
 
 //---------------------------------------------------------
-//   setSoloMute
-//   called once at opening file, adds soloMute marks
-//---------------------------------------------------------
-
-void MasterScore::setSoloMute()
-{
-    for (unsigned i = 0; i < _midiMapping.size(); i++) {
-        InstrChannel* b = _midiMapping[i].articulation();
-        if (b->solo()) {
-            b->setSoloMute(false);
-            for (unsigned j = 0; j < _midiMapping.size(); j++) {
-                InstrChannel* a = _midiMapping[j].articulation();
-                bool sameMidiMapping = _midiMapping[i].port() == _midiMapping[j].port()
-                                       && _midiMapping[i].channel() == _midiMapping[j].channel();
-                a->setSoloMute((i != j && !a->solo() && !sameMidiMapping));
-                a->setSolo(i == j || a->solo() || sameMidiMapping);
-            }
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   setUpdateAll
 //---------------------------------------------------------
 
@@ -570,9 +548,6 @@ void MasterScore::setPlaybackScore(Score* score)
         return;
     }
 
-    for (MidiMapping& mm : _midiMapping) {
-        mm.articulation()->setSoloMute(true);
-    }
     for (Part* part : score->parts()) {
         for (const auto& pair : part->instruments()) {
             Instrument* instr = pair.second;

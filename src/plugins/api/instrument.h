@@ -23,6 +23,7 @@
 #ifndef __PLUGIN_API_INSTRUMENT_H__
 #define __PLUGIN_API_INSTRUMENT_H__
 
+#include "log.h"
 #include "scoreelement.h"
 #include "libmscore/instrument.h"
 
@@ -143,8 +144,18 @@ public:
     int reverb() const { return _channel->reverb(); }
     void setReverb(int val) { activeChannel()->setReverb(qBound(0, val, 127)); }
 
-    bool mute() const { return _channel->mute(); }
-    void setMute(bool val) { activeChannel()->setMute(val); }
+    bool mute() const
+    {
+        DEPRECATED;
+        //!@NOTE since MuseScore 4.0 mixer doen/t work via Channel
+        return false;
+    }
+
+    void setMute(bool val)
+    {
+        DEPRECATED;
+        //!@NOTE since MuseScore 4.0 mixer doen/t work via Channel
+    }
 
     int midiProgram() const { return _channel->program(); }
     void setMidiProgram(int prog);
