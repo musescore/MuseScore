@@ -24,22 +24,33 @@
 using namespace mu::notation;
 using namespace mu::engraving;
 
+
 void NoteInputCursor::paint(mu::draw::Painter* painter)
 {
     INotationNoteInputPtr noteInput = currentNoteInput();
     if (!noteInput || !noteInput->isNoteInputMode()) {
         return;
     }
-
     NoteInputState state = noteInput->state();
-    RectF cursorRect = noteInput->cursorRect();
+    RectF cursorRect  = noteInput->cursorRect();
 
+    constexpr double widthMultiplier = 1.2; 
+    constexpr int leftLineWidth = 3;
+
+            //calculate where the box is, and how to center it with new width
+    PointX oldCenter = cursorRect.center(); //store the old center
+    double oldWidth = cursorRect.width();//store old width
+    double newWidth = cursorRect.width() * widthMultiplier;      //set new width
+    double pixToSlideLeft = (((oldWidth - newWidth) / 2) - (leftLineWidth / 2)); //calculate new center pos
+    cursorRect.setLeft(cursorRect.left() + pixToSlideLeft); //use center pos to find left justification location 
+    cursorRect.setWidth(newWidth); 
+    
+            //create the new box...
     Color fillColor = configuration()->selectionColor(state.currentVoiceIndex);
     Color cursorRectColor = fillColor;
     cursorRectColor.setAlpha(configuration()->cursorOpacity());
     painter->fillRect(cursorRect, cursorRectColor);
 
-    constexpr int leftLineWidth = 3;
     RectF leftLine(cursorRect.topLeft().x(), cursorRect.topLeft().y(), leftLineWidth, cursorRect.height());
     Color lineColor = fillColor;
     painter->fillRect(leftLine, lineColor);

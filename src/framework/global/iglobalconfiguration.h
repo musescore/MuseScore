@@ -70,9 +70,6 @@ public:
     virtual bool devModeEnabled() const = 0;
     virtual void setDevModeEnabled(bool enabled) = 0;
 
-    virtual bool metricUnit() const = 0;
-    virtual void setMetricUnit(bool metricUnit) = 0;
-
     virtual std::string museScoreUrl() const = 0;
 };
 }

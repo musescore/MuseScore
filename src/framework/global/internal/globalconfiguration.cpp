@@ -36,7 +36,6 @@ using namespace mu::framework;
 
 static const Settings::Key BACKUP_KEY("global", "application/backup/subfolder");
 static const Settings::Key DEV_MODE_ENABLED_KEY("global", "application/devModeEnabled");
-static const Settings::Key METRIC_UNIT_KEY("global", "application/metricUnit");
 
 static const std::string MUSESCORE_URL("https://www.musescore.org/");
 
@@ -144,16 +143,6 @@ bool GlobalConfiguration::devModeEnabled() const
 void GlobalConfiguration::setDevModeEnabled(bool enabled)
 {
     settings()->setSharedValue(DEV_MODE_ENABLED_KEY, Val(enabled));
-}
-
-bool GlobalConfiguration::metricUnit() const
-{
-    return settings()->value(METRIC_UNIT_KEY).toBool();
-}
-
-void GlobalConfiguration::setMetricUnit(bool metricUnit)
-{
-    settings()->setSharedValue(METRIC_UNIT_KEY, Val(metricUnit));
 }
 
 std::string GlobalConfiguration::museScoreUrl() const
