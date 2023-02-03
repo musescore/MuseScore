@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUTOBOT_AUTOBOTINTERACTIVE_H
-#define MUSE_AUTOBOT_AUTOBOTINTERACTIVE_H
+
+#pragma once
 
 #include <memory>
 
@@ -36,37 +36,37 @@ public:
     std::shared_ptr<IInteractive> realInteractive() const;
 
     Result questionSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
-                        const Options& options = {}, const std::string& dialogTitle = "") override;
+                        const Options& options = {}, const std::string& dialogTitle = {}) override;
 
     async::Promise<Result> question(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
                                     int defBtn = int(Button::NoButton), const Options& options = {},
-                                    const std::string& dialogTitle = "") override;
+                                    const std::string& dialogTitle = {}) override;
 
     ButtonData buttonData(Button b) const override;
 
     // info
     Result infoSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
-                    const Options& options = {}, const std::string& dialogTitle = "") override;
+                    const Options& options = {}, const std::string& dialogTitle = {}) override;
 
     async::Promise<Result> info(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
                                 int defBtn = int(Button::NoButton), const Options& options = {},
-                                const std::string& dialogTitle = "") override;
+                                const std::string& dialogTitle = {}) override;
 
     // warning
     Result warningSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
-                       const Options& options = {}, const std::string& dialogTitle = "") override;
+                       const Options& options = {}, const std::string& dialogTitle = {}) override;
 
     async::Promise<Result> warning(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
                                    int defBtn = int(Button::NoButton), const Options& options = {},
-                                   const std::string& dialogTitle = "") override;
+                                   const std::string& dialogTitle = {}) override;
 
     // error
     Result errorSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
-                     const Options& options = {}, const std::string& dialogTitle = "") override;
+                     const Options& options = {}, const std::string& dialogTitle = {}) override;
 
     async::Promise<Result> error(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
                                  int defBtn = int(Button::NoButton), const Options& options = {},
-                                 const std::string& dialogTitle = "") override;
+                                 const std::string& dialogTitle = {}) override;
 
     // progress
     void showProgress(const std::string& title, Progress progress) override;
@@ -84,7 +84,7 @@ public:
     io::paths_t selectMultipleDirectories(const std::string& title, const io::path_t& dir, const io::paths_t& initialDirectories) override;
 
     // color
-    async::Promise<Color> selectColor(const Color& color = Color::WHITE, const std::string& title = "") override;
+    async::Promise<Color> selectColor(const Color& color = Color::WHITE, const std::string& title = {}, bool allowAlpha = false) override;
     bool isSelectColorOpened() const override;
 
     // custom
@@ -125,5 +125,3 @@ private:
 
 using AutobotInteractivePtr = std::shared_ptr<AutobotInteractive>;
 }
-
-#endif // MUSE_AUTOBOT_AUTOBOTINTERACTIVE_H

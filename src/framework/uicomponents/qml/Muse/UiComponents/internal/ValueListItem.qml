@@ -442,6 +442,7 @@ ListItemBlank {
             navigation.column: 1
 
             color: val
+            allowAlpha: true
 
             onNewColorSelected: function(newColor) {
                 colorControl.changed(newColor)

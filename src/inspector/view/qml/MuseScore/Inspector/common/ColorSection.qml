@@ -47,6 +47,7 @@ InspectorPropertyView {
         enabled: root.propertyItem ? root.propertyItem.isEnabled : false
         isIndeterminate: root.propertyItem && enabled ? root.propertyItem.isUndefined : false
         color: root.propertyItem && !root.propertyItem.isUndefined ? root.propertyItem.value : ui.theme.backgroundPrimaryColor
+        allowAlpha: true
 
         onNewColorSelected: function(newColor) {
             if (root.propertyItem) {
