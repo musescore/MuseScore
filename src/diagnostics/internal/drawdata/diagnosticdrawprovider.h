@@ -31,7 +31,7 @@ public:
     DiagnosticDrawProvider() = default;
 
     Ret generateDrawData(const io::path_t& dirOrFile, const io::path_t& outDirOrFile, const GenOpt& opt = GenOpt()) override;
-    Ret compareDrawData(const io::path_t& ref, const io::path_t& test, const io::path_t& outDiff) override;
+    Ret compareDrawData(const io::path_t& ref, const io::path_t& test, const io::path_t& outDiff, const ComOpt& opt = ComOpt()) override;
     Ret drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile) override;
     Ret drawDiffToPng(const io::path_t& diffFile, const io::path_t& refFile, const io::path_t& outFile) override;
 };

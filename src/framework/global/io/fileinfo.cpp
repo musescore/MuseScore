@@ -183,12 +183,16 @@ bool FileInfo::exists(const path_t& filePath)
     return fileSystem()->exists(filePath);
 }
 
-Dir FileInfo::dir() const
+path_t FileInfo::dirPath() const
 {
     size_t lastSep = m_filePath.lastIndexOf(u'/');
     if (lastSep == mu::nidx) {
-        return Dir(".");
+        return ".";
     }
-    String dirPath = m_filePath.mid(0, lastSep);
-    return Dir(io::path_t(dirPath));
+    return m_filePath.mid(0, lastSep);
+}
+
+Dir FileInfo::dir() const
+{
+    return Dir(dirPath());
 }

@@ -41,7 +41,7 @@ public:
     DiagnosticsApi(IApiEngine* e);
 
     Q_INVOKABLE JSRet generateDrawData(const QString& scoresDir, const QString& outDir, const QJSValue& opt = QJSValue());
-    Q_INVOKABLE JSRet compareDrawData(const QString& ref, const QString& test, const QString& outDiff);
+    Q_INVOKABLE JSRet compareDrawData(const QString& ref, const QString& test, const QString& outDiff, const QJSValue& opt = QJSValue());
     Q_INVOKABLE JSRet drawDataToPng(const QString& dataFile, const QString& outFile);
     Q_INVOKABLE JSRet drawDiffToPng(const QString& diffFile, const QString& refFile, const QString& outFile);
 };

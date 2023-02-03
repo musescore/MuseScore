@@ -54,6 +54,7 @@ public:
 
     static bool exists(const path_t& filePath);
     static bool remove(const path_t& filePath);
+    static bool copy(const path_t& src, const path_t& dst, bool replace = false);
     static Ret readFile(const io::path_t& filePath, ByteArray& out);
     static Ret writeFile(const io::path_t& filePath, const ByteArray& data);
     static bool setPermissionsAllowedForAll(const path_t& filePath);

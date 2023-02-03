@@ -43,9 +43,18 @@ JSRet DiagnosticsApi::generateDrawData(const QString& scoresDir, const QString& 
     return retToJs(ret);
 }
 
-JSRet DiagnosticsApi::compareDrawData(const QString& ref, const QString& test, const QString& outDiff)
+JSRet DiagnosticsApi::compareDrawData(const QString& ref, const QString& test, const QString& outDiff, const QJSValue& obj)
 {
-    Ret ret = diagnosticDrawProvider()->compareDrawData(ref, test, outDiff);
+    ComOpt opt;
+    if (obj.hasProperty("isCopySrc")) {
+        opt.isCopySrc = obj.property("isCopySrc").toBool();
+    }
+
+    if (obj.hasProperty("isMakePng")) {
+        opt.isMakePng = obj.property("isMakePng").toBool();
+    }
+
+    Ret ret = diagnosticDrawProvider()->compareDrawData(ref, test, outDiff, opt);
     return retToJs(ret);
 }
 
