@@ -6066,7 +6066,7 @@ void Score::undoRemoveElement(EngravingItem* element)
     if (element->isMeasureRepeat()) {
         const MeasureRepeat* repeat = toMeasureRepeat(element);
         Measure* measure = repeat->firstMeasureOfGroup();
-        int staffIdx = repeat->staffIdx();
+        size_t staffIdx = repeat->staffIdx();
 
         for (int i = 0; i < repeat->numMeasures(); ++i) {
             undoChangeMeasureRepeatCount(measure, 0, staffIdx);
