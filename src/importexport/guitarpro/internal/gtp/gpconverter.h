@@ -190,6 +190,16 @@ private:
     void fillTuplet();
     bool tupletParamsChanged(const GPBeat* beat, const ChordRest* cr);
 
+    /**
+     * Making the current element of continious type (octave, let ring, trill etc.. inherited from SLine) longer or starting a new one
+     *
+     * @param cr ChordRest to which element will be added
+     * @param elements vector storing current continious elements for each existing track
+     * @param muType type from MU
+     * @param importType type of imported element
+     * @param elemExists indicates if element exists in imported file on current beat
+     * @param splitByRests indicates if continious elements of current type should be split by rests
+     */
     void buildContiniousElement(ChordRest* cr, std::vector<SLine*>& elements, ElementType muType, LineImportType importType,
                                 bool elemExists, bool splitByRests = false);
 
