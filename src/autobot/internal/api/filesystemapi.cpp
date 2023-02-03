@@ -84,3 +84,19 @@ JSRetVal FileSystemApi::scanFiles(const QString& rootDir, const QStringList& fil
     RetVal<io::paths_t> rv = fileSystem()->scanFiles(rootDir, toStdVector(filters), toIoScanMode(mode));
     return retValToJs(rv);
 }
+
+JSRet FileSystemApi::writeTextFile(const QString& filePath, const QString& str) const
+{
+    QByteArray data = str.toUtf8();
+    Ret ret = fileSystem()->writeFile(filePath, ByteArray::fromQByteArrayNoCopy(data));
+    return retToJs(ret);
+}
+
+JSRetVal FileSystemApi::readTextFile(const QString& filePath) const
+{
+    RetVal<ByteArray> data = fileSystem()->readFile(filePath);
+    RetVal<QString> sr;
+    sr.ret = data.ret;
+    sr.val = QString::fromUtf8(data.val.toQByteArrayNoCopy());
+    return retValToJs(sr);
+}

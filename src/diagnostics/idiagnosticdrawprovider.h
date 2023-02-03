@@ -35,7 +35,7 @@ public:
     virtual ~IDiagnosticDrawProvider() = default;
 
     virtual Ret generateDrawData(const io::path_t& scoresDir, const io::path_t& outDir, const GenOpt& opt = GenOpt()) = 0;
-    virtual Ret compareDrawData(const io::path_t& ref, const io::path_t& test, const io::path_t& outDiff) = 0;
+    virtual Ret compareDrawData(const io::path_t& ref, const io::path_t& test, const io::path_t& outDiff, const ComOpt& opt = ComOpt()) = 0;
     virtual Ret drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile) = 0;
     virtual Ret drawDiffToPng(const io::path_t& diffFile, const io::path_t& refFile, const io::path_t& outFile) = 0;
 };

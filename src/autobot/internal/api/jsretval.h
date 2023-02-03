@@ -45,6 +45,11 @@ inline Ret retFromJs(const JSRet& r)
     return Ret(r.value("errcode", 0).toInt(), r.value("text").toString().toStdString());
 }
 
+inline QVariant toQVariant(const QString& v)
+{
+    return QVariant::fromValue(v);
+}
+
 inline QVariant toQVariant(const io::path_t& v)
 {
     return QVariant(v.toQString());

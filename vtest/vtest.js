@@ -18,11 +18,8 @@ const DEFAULT = "default"
 const SMALL = "small"
 const MEDIUM = "medium"
 
-var DIFF_NAME_LIST = {
-    "default": [],
-    "small": [],
-    "medium": []
-}
+// { fileName: { opt_name: true }}
+var DIFF_NAME_LIST = {}
 
 var testCase = {
     name: "Compare draw data",
@@ -39,9 +36,6 @@ var testCase = {
         {name: "Compare draw data (default)", func: function() {
             compareDrawData(DEFAULT)
         }},
-        {name: "Create diff pngs (default)", func: function() {
-            createDiffPngs(DEFAULT)
-        }},
         {name: "Generate draw data (small)", func: function() {
             generateDrawData(SMALL)
         }},
@@ -53,9 +47,6 @@ var testCase = {
         }},
         {name: "Compare draw data (small)", func: function() {
             compareDrawData(SMALL)
-        }},
-        {name: "Create diff pngs (small)", func: function() {
-            createDiffPngs(SMALL)
         }},
         {name: "Generate draw data (medium)", func: function() {
             generateDrawData(MEDIUM)
@@ -69,8 +60,8 @@ var testCase = {
         {name: "Compare draw data (medium)", func: function() {
             compareDrawData(MEDIUM)
         }},
-        {name: "Create diff pngs (medium)", func: function() {
-            createDiffPngs(MEDIUM)
+        {name: "Create report", func: function() {
+            createReport()
         }},
     ]
 };
@@ -102,7 +93,7 @@ function callRef(func, funcArgs)
                 "--test-case-context-value", JSON.stringify({"mode": "ref"}),
                 "--test-case-func", funcName,
                 "--test-case-func-args", JSON.stringify(funcArgsArr)
-                ]
+        ]
 
     api.process.execute(MSCORE_REF_BIN, args)
 }
@@ -126,6 +117,11 @@ function compareDrawData(optName)
 
     api.filesystem.clear(COMP_DIR)
 
+    let opt = {
+        isCopySrc: true,
+        isMakePng: true
+    }
+
     let files = api.filesystem.scanFiles(REF_DIR, [], "FilesInCurrentDir").value
     for (let  i = 0; i < files.length; ++i) {
         let refFile = files[i]
@@ -133,12 +129,15 @@ function compareDrawData(optName)
         let currFile = CURR_DIR + "/" + fileName + ".json"
         let diffFile = COMP_DIR + "/" + fileName + ".diff.json"
 
-        let ret = api.diagnostics.compareDrawData(refFile, currFile, diffFile)
+        let ret = api.diagnostics.compareDrawData(refFile, currFile, diffFile, opt)
         if (!ret.success) {
             api.log.info("DIFF DETECTED: " + fileName)
-            DIFF_NAME_LIST[optName].push(fileName)
-            api.filesystem.copy(currFile, COMP_DIR + "/" + fileName + ".json")
-            api.filesystem.copy(refFile, COMP_DIR + "/" + fileName + ".ref.json")
+            let fileInfo = DIFF_NAME_LIST[fileName]
+            if (fileInfo === undefined) {
+                fileInfo = {}
+            }
+            fileInfo[optName] = true
+            DIFF_NAME_LIST[fileName] = fileInfo
         }
     }
 }
@@ -152,21 +151,65 @@ function createDataPngs(optName)
     }
 }
 
-function createDiffPngs(optName)
+function isHasDiff()
 {
-    const COMP_DIR = COMPARISON_DIR + "/" + optName
-    const DIFF_LIST = DIFF_NAME_LIST[optName]
+    return Object.keys(DIFF_NAME_LIST).length !== 0
+}
 
-    for (let i = 0; i < DIFF_LIST.length; ++i) {
-        let fileName = DIFF_LIST[i]
-        let refFile  = COMP_DIR + "/" + fileName + ".ref.json"
-        let currFile = COMP_DIR + "/" + fileName + ".json"
-        let diffFile = COMP_DIR + "/" + fileName + ".diff.json"
-
-        api.diagnostics.compareDrawData(refFile, currFile, diffFile)
-
-        api.diagnostics.drawDataToPng(refFile, COMP_DIR + "/" + fileName + ".ref.png");
-        api.diagnostics.drawDataToPng(currFile, COMP_DIR + "/" + fileName + ".png");
-        api.diagnostics.drawDiffToPng(diffFile, refFile, COMP_DIR + "/" + fileName + ".diff.png");
+function createReport()
+{
+    if (!isHasDiff()) {
+        return
     }
+
+    if (!String.prototype.format) {
+        String.prototype.format = function() {
+            var args = arguments;
+            return this.replace(/{(\d+)}/g, function(match, number) {
+                return typeof args[number] != 'undefined'
+                        ? args[number]
+                        : match
+                ;
+            });
+        };
+    }
+
+    let html = '\
+<html>
+    <head>
+    </head>
+    <body style="background-color:#eee;">
+';
+    let makeBlock = function(opt, fn) {
+        let block = '\
+        <h2 id=\"{0}_{1}\">{0}: {1}<a href=\"#{0}_{1}\">#</a></h2>
+        <div>
+            <div>ref:</div><br/>
+            <img src=\"{0}/{1}.ref.png\"><br/>
+            <div>current:</div><br/>
+            <img src=\"{0}/{1}.png\"><br/>
+            <div>diff:</div>
+            <img src=\"{0}/{1}.diff.png\"><br/>
+        </div>
+        '.format(opt, fn)
+
+        return block
+    }
+
+    for (let fileName in DIFF_NAME_LIST) {
+        let fileInfo = DIFF_NAME_LIST[fileName]
+        for (let opt in fileInfo) {
+            if (fileInfo[opt]) {
+                html += "\n"
+                html += makeBlock(opt, fileName)
+            }
+        }
+    }
+
+    html += '\
+    </body>
+</html>
+';
+
+    api.filesystem.writeTextFile(COMPARISON_DIR+"/vtest_compare.html", html)
 }
