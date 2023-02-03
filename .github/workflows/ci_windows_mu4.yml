@@ -1,4 +1,4 @@
-name: CI_Windows MU4
+name: CI_Windows
 
 on:
   pull_request:
