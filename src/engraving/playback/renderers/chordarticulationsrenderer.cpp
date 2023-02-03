@@ -106,6 +106,17 @@ void ChordArticulationsRenderer::renderNoteArticulations(const Chord* chord, con
         }
     }
 
+    auto applySwingToNoteCtx = [&swingDurationAdjustment, &ctx](NominalNoteCtx& noteCtx) {
+        if (swingDurationAdjustment.isNull()) {
+            return;
+        }
+
+        //! NOTE: Swing must be applied to the "raw" note duration, but not to the additional duration (e.g, from a tied note)
+        duration_t additionalDuration = noteCtx.duration - ctx.nominalDuration;
+        noteCtx.timestamp = noteCtx.timestamp + ctx.nominalDuration * swingDurationAdjustment.remainingDurationMultiplier;
+        noteCtx.duration = ctx.nominalDuration * swingDurationAdjustment.durationMultiplier + additionalDuration;
+    };
+
     for (const Note* note : chord->notes()) {
         NominalNoteCtx noteCtx(note, ctx);
 
@@ -115,18 +126,14 @@ void ChordArticulationsRenderer::renderNoteArticulations(const Chord* chord, con
             continue;
         }
 
-        if (!swingDurationAdjustment.isNull()) {
-            //! NOTE: Swing must be applied to the "raw" note duration, but not to the additional duration (e.g, from a tied note)
-            duration_t additionalDuration = noteCtx.duration - ctx.nominalDuration;
-            noteCtx.timestamp = noteCtx.timestamp + ctx.nominalDuration * swingDurationAdjustment.remainingDurationMultiplier;
-            noteCtx.duration = ctx.nominalDuration * swingDurationAdjustment.durationMultiplier + additionalDuration;
-        }
-
         if (note->tieFor()) {
             noteCtx.duration = tiedNotesTotalDuration(note);
+            applySwingToNoteCtx(noteCtx);
             result.emplace_back(buildNoteEvent(std::move(noteCtx)));
             continue;
         }
+
+        applySwingToNoteCtx(noteCtx);
 
         if (noteCtx.chordCtx.commonArticulations.contains(ArticulationType::DiscreteGlissando)) {
             GlissandosRenderer::render(note, ArticulationType::DiscreteGlissando, noteCtx.chordCtx, result);

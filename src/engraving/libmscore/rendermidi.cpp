@@ -1072,10 +1072,10 @@ static std::set<size_t> getNotesIndexesToRender(Chord* chord)
         return true;
     };
 
-    size_t idx = 0;
-    for (Note* n : notes) {
+    for (size_t i = 0; i < notes.size(); i++) {
+        Note* n = notes[i];
         if (noteShouldBeRendered(n) && longestPlayTicksForPitch[n->pitch()] == n->playTicks()) {
-            notesIndexesToRender.insert(idx++);
+            notesIndexesToRender.insert(i);
         }
     }
 
@@ -1340,24 +1340,24 @@ static void adjustPreviousChordLength(Chord* currentChord, Chord* prevChord)
         int reducedTicks = graceNotesBeforeBar[0]->ticks().ticks();
         int prevTicks = prevChord->ticks().ticks();
         if (reducedTicks < prevTicks) {
-            int newLength = static_cast<int>((float)(prevTicks - reducedTicks) / (float)prevTicks * 1000.0f);
+            double lengthMultiply = std::min(1.f, (float)(prevTicks - reducedTicks) / (float)prevTicks);
 
             for (size_t i = 0; i < prevChord->notes().size(); i++) {
                 Note* prevChordNote = prevChord->notes()[i];
-
                 NoteEventList evList;
+                const auto& prevEvents = prevChordNote->playEvents();
 
-                for (auto it = prevChordNote->playEvents().begin(); it != prevChordNote->playEvents().end(); it++) {
-                    if (it->ontime() >= newLength) {
-                        continue;
-                    }
+                int curPos = prevEvents.front().ontime();
 
+                for (size_t i = 0; i < prevEvents.size(); i++) {
                     NoteEvent event;
-                    event.setOntime(it->ontime());
-                    event.setPitch(it->pitch());
-                    event.setLen(std::min(newLength, it->offtime()) - it->ontime());
-
+                    const NoteEvent& prevEvent = prevEvents[i];
+                    event.setOntime(curPos);
+                    event.setPitch(prevEvent.pitch());
+                    int newEventLength = prevEvent.len() * lengthMultiply;
+                    event.setLen(newEventLength);
                     evList.push_back(event);
+                    curPos += newEventLength;
                 }
 
                 prevChordNote->setPlayEvents(evList);

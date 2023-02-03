@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -34,7 +34,6 @@
 #include "engraving/infrastructure/paint.h"
 #include "engraving/rw/scorereader.h"
 #include "engraving/libmscore/masterscore.h"
-#include "engraving/libmscore/page.h"
 
 #include "importexport/guitarpro/internal/guitarproreader.h"
 
@@ -55,10 +54,8 @@ using namespace mu::iex::guitarpro;
 
 static const std::vector<std::string> FILES_FILTER = { "*.mscz", "*.mscx", "*.gp", "*.gpx", "*.gp4", "*.gp5" };
 
-Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& outDir, const io::path_t& ignoreFile)
+Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& outDir, const GenOpt& opt)
 {
-    std::vector<std::string> ignore = loadIgnore(ignoreFile);
-
     io::Dir::mkpath(outDir);
 
     //PROFILER_CLEAR;
@@ -83,27 +80,13 @@ Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& 
             skip = true;
         }
 
-        if (!skip) {
-            for (const std::string& path : ignore) {
-                if (scorePath == "." || scorePath == "..") {
-                    skip = true;
-                    break;
-                }
-                if (scorePath.find(path) != std::string::npos) {
-                    LOGW() << "ignore: " << scores.val.at(i);
-                    skip = true;
-                    break;
-                }
-            }
-        }
-
         if (skip) {
             continue;
         }
 
         io::path_t scoreFile = scores.val.at(i);
         io::path_t outFile = outDir + "/" + io::FileInfo(scoreFile).baseName() + ".json";
-        processFile(scoreFile, outFile);
+        processFile(scoreFile, outFile, opt);
     }
 
     //PROFILER_PRINT;
@@ -111,21 +94,23 @@ Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& 
     return make_ok();
 }
 
-Ret DrawDataGenerator::processFile(const io::path_t& scoreFile, const io::path_t& outFile)
+Ret DrawDataGenerator::processFile(const io::path_t& scoreFile, const io::path_t& outFile, const GenOpt& opt)
 {
-    DrawDataPtr drawData = genDrawData(scoreFile);
+    DrawDataPtr drawData = genDrawData(scoreFile, opt);
     DrawDataRW::writeData(outFile, drawData);
 
     return make_ok();
 }
 
-DrawDataPtr DrawDataGenerator::genDrawData(const io::path_t& scorePath) const
+DrawDataPtr DrawDataGenerator::genDrawData(const io::path_t& scorePath, const GenOpt& opt) const
 {
     MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
     if (!loadScore(score, scorePath)) {
         LOGE() << "failed load score: " << scorePath;
         return nullptr;
     }
+
+    applyOptions(score, opt);
 
     {
         TRACEFUNC_C("Layout");
@@ -136,16 +121,16 @@ DrawDataPtr DrawDataGenerator::genDrawData(const io::path_t& scorePath) const
     {
         TRACEFUNC_C("Paint");
         Painter painter(pd, "DrawData");
-        Paint::Options opt;
-        opt.fromPage = 0;
-        opt.toPage = 0;
-        opt.deviceDpi = DrawData::CANVAS_DPI;
-        opt.printPageBackground = true;
-        opt.isSetViewport = true;
-        opt.isMultiPage = false;
-        opt.isPrinting = true;
+        Paint::Options option;
+        option.fromPage = 0;
+        option.toPage = 0;
+        option.deviceDpi = DrawData::CANVAS_DPI;
+        option.printPageBackground = true;
+        option.isSetViewport = true;
+        option.isMultiPage = false;
+        option.isPrinting = true;
 
-        Paint::paintScore(&painter, score, opt);
+        Paint::paintScore(&painter, score, option);
     }
 
     delete score;
@@ -198,45 +183,6 @@ Pixmap DrawDataGenerator::genImage(const io::path_t& scorePath) const
     return Pixmap::fromQImage(image);
 }
 
-std::vector<std::string> DrawDataGenerator::loadIgnore(const io::path_t& ignoreFile) const
-{
-    io::File file(ignoreFile);
-    if (!file.exists()) {
-        return std::vector<std::string>();
-    }
-
-    if (!file.open(io::IODevice::ReadOnly)) {
-        LOGE() << "failed open file: " << ignoreFile;
-        return std::vector<std::string>();
-    }
-
-    ByteArray data = file.readAll();
-    std::string str = data.constChar();
-    std::vector<std::string> scores;
-    mu::strings::split(str, scores, "\n");
-
-    std::vector<std::string> ignore;
-    for (std::string& score : scores) {
-        if (score.empty()) {
-            continue;
-        }
-
-        if (score.size() < 3) {
-            continue;
-        }
-
-        mu::strings::trim(score);
-
-        if (score.at(0) == '/' && score.at(1) == '/') {
-            continue;
-        }
-
-        ignore.push_back(score);
-    }
-
-    return ignore;
-}
-
 bool DrawDataGenerator::loadScore(mu::engraving::MasterScore* score, const mu::io::path_t& path) const
 {
     TRACEFUNC;
@@ -277,4 +223,14 @@ bool DrawDataGenerator::loadScore(mu::engraving::MasterScore* score, const mu::i
     }
 
     return true;
+}
+
+void DrawDataGenerator::applyOptions(engraving::MasterScore* score, const GenOpt& opt) const
+{
+    if (!opt.pageSize.isNull()) {
+        PageSizeSetAccessor pageSize = score->pageSize();
+        pageSize.setHeight(opt.pageSize.height() / engraving::INCH);
+        pageSize.setWidth(opt.pageSize.width() / engraving::INCH);
+        pageSize.setPrintableWidth(pageSize.width() - pageSize.evenLeftMargin() - pageSize.oddLeftMargin());
+    }
 }

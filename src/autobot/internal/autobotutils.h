@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,22 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_IAPIENGINE_H
-#define MU_API_IAPIENGINE_H
+#ifndef MU_AUTOBOT_AUTOBOTUTILS_H
+#define MU_AUTOBOT_AUTOBOTUTILS_H
 
 #include <QJSValue>
-#include <QObject>
 
-namespace mu::api {
-class IApiEngine
-{
-public:
-    virtual ~IApiEngine() = default;
+#include "global/serialization/json.h"
+#include "api/iapiengine.h"
 
-    virtual QJSValue newQObject(QObject* o) = 0;
-    virtual QJSValue newObject() = 0;
-    virtual QJSValue newArray(size_t length = 0) = 0;
-};
+namespace mu::autobot {
+QJSValue toQJSValue(const JsonValue& jv, api::IApiEngine* e = nullptr);
 }
 
-#endif // MU_API_IAPIENGINE_H
+#endif // MU_AUTOBOT_AUTOBOTUTILS_H

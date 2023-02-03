@@ -19,28 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DRAWDATACONVERTER_H
-#define MU_DIAGNOSTICS_DRAWDATACONVERTER_H
+#ifndef MU_DIAGNOSTICS_DIAGNOSTICSTYPES_H
+#define MU_DIAGNOSTICS_DIAGNOSTICSTYPES_H
 
-#include "global/types/ret.h"
-#include "global/io/path.h"
-#include "draw/types/drawdata.h"
-#include "draw/types/pixmap.h"
+#include "draw/types/geometry.h"
 
 namespace mu::diagnostics {
-class DrawDataConverter
-{
-public:
-    DrawDataConverter() = default;
+struct GenOpt {
+    SizeF pageSize;
+};
 
-    Ret drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile);
-    Ret drawDiffToPng(const io::path_t& diffFile, const io::path_t& refFile, const io::path_t& outFile);
-
-    Ret saveAsPng(const draw::DrawDataPtr& data, const io::path_t& path);
-
-    draw::Pixmap drawDataToPixmap(const draw::DrawDataPtr& data);
-    void drawOnPixmap(draw::Pixmap& px, const draw::DrawDataPtr& data, const draw::Color& overlay = draw::Color());
+struct ComOpt {
+    bool isCopySrc = true;
+    bool isMakePng = true;
 };
 }
 
-#endif // MU_DIAGNOSTICS_DRAWDATACONVERTER_H
+#endif // MU_DIAGNOSTICS_DIAGNOSTICSTYPES_H

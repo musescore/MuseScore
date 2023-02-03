@@ -58,6 +58,7 @@ public:
     DateTime birthTime() const;
     DateTime lastModified() const;
 
+    path_t dirPath() const;
     Dir dir() const;
 
 private:

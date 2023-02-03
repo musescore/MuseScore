@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -44,6 +44,8 @@ public:
     Q_INVOKABLE QString baseName(const QString& path) const;
 
     // Action
+    Q_INVOKABLE JSRet remove(const QString& path);
+    Q_INVOKABLE JSRet clear(const QString& path);
     Q_INVOKABLE JSRet copy(const QString& src, const QString& dst, bool replace = false);
 
     // Scan
@@ -55,6 +57,10 @@ public:
 
     Q_INVOKABLE JSRetVal scanFiles(const QString& rootDir, const QStringList& filters,
                                    const QString& mode = "FilesInCurrentDirAndSubdirs") const;
+
+    // Read / Write
+    Q_INVOKABLE JSRet writeTextFile(const QString& filePath, const QString& str) const;
+    Q_INVOKABLE JSRetVal readTextFile(const QString& filePath) const;
 };
 }
 

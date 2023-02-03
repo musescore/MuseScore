@@ -76,6 +76,7 @@ public:
         io::path_t context;
         std::string contextVal;
         std::string func;
+        std::string funcArgs;
     };
 
     virtual void execScript(const io::path_t& path, const Options& opt = Options()) = 0;

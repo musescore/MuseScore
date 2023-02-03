@@ -57,6 +57,11 @@ bool File::remove(const path_t& filePath)
     return fileSystem()->remove(filePath);
 }
 
+bool File::copy(const path_t& src, const path_t& dst, bool replace)
+{
+    return fileSystem()->copy(src, dst, replace);
+}
+
 mu::Ret File::readFile(const io::path_t& filePath, ByteArray& out)
 {
     bool ok = fileSystem()->readFile(filePath, out);

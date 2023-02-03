@@ -420,14 +420,24 @@ std::vector<Uri> InteractiveProvider::stack() const
 
 QWindow* InteractiveProvider::topWindow() const
 {
+    QWindow* mainWin = mainWindow()->qWindow();
+
     if (m_stack.empty()) {
         LOGE() << "stack is empty";
-        return mainWindow()->qWindow();
+        return mainWin;
     }
 
     const ObjectInfo& last = m_stack.last();
     if (!last.window) {
-        return mainWindow()->qWindow();
+        return mainWin;
+    }
+
+    if (last.window == mainWin) {
+        return mainWin;
+    }
+
+    if (!last.window->parent()) {
+        ASSERT_X("Window must have a parent!");
     }
 
     return qobject_cast<QWindow*>(last.window);

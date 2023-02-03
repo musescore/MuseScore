@@ -56,6 +56,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/jsmoduleloader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobotinteractive.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobotinteractive.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotutils.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotutils.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/iapiengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/iapiregister.h

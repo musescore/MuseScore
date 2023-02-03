@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -46,6 +46,18 @@ QString FileSystemApi::baseName(const QString& path) const
     return FileInfo(path).baseName().toQString();
 }
 
+JSRet FileSystemApi::remove(const QString& path)
+{
+    Ret ret = fileSystem()->remove(path);
+    return retToJs(ret);
+}
+
+JSRet FileSystemApi::clear(const QString& path)
+{
+    Ret ret = fileSystem()->clear(path);
+    return retToJs(ret);
+}
+
 JSRet FileSystemApi::copy(const QString& src, const QString& dst, bool replace)
 {
     Ret ret = fileSystem()->copy(src, dst, replace);
@@ -71,4 +83,20 @@ JSRetVal FileSystemApi::scanFiles(const QString& rootDir, const QStringList& fil
 
     RetVal<io::paths_t> rv = fileSystem()->scanFiles(rootDir, toStdVector(filters), toIoScanMode(mode));
     return retValToJs(rv);
+}
+
+JSRet FileSystemApi::writeTextFile(const QString& filePath, const QString& str) const
+{
+    QByteArray data = str.toUtf8();
+    Ret ret = fileSystem()->writeFile(filePath, ByteArray::fromQByteArrayNoCopy(data));
+    return retToJs(ret);
+}
+
+JSRetVal FileSystemApi::readTextFile(const QString& filePath) const
+{
+    RetVal<ByteArray> data = fileSystem()->readFile(filePath);
+    RetVal<QString> sr;
+    sr.ret = data.ret;
+    sr.val = QString::fromUtf8(data.val.toQByteArrayNoCopy());
+    return retValToJs(sr);
 }
