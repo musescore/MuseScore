@@ -28,6 +28,7 @@
 #include "infrastructure/mscreader.h"
 #include "infrastructure/mscwriter.h"
 #include "infrastructure/ifileinfoprovider.h"
+#include "rw/readcontext.h"
 
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"
@@ -67,7 +68,7 @@ public:
     MasterScore* masterScore() const;
     Ret setupMasterScore(bool forceMode);
 
-    Ret loadMscz(const MscReader& msc, bool ignoreVersionError);
+    Ret loadMscz(const MscReader& msc, AudioSettingsCompat& audioSettingsCompat, bool ignoreVersionError);
     bool writeMscz(MscWriter& writer, bool onlySelection, bool createThumbnail);
 
 private:

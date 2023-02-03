@@ -52,11 +52,6 @@ const char* InstrChannel::HARMONY_NAME = QT_TRANSLATE_NOOP("engraving/instrument
 const char* InstrChannel::PALM_MUTE_NAME = QT_TRANSLATE_NOOP("engraving/instruments", "palmmute");
 
 Instrument InstrumentList::defaultInstrument;
-const std::initializer_list<InstrChannel::Prop> PartChannelSettingsLink::excerptProperties {
-    InstrChannel::Prop::SOLOMUTE,
-    InstrChannel::Prop::SOLO,
-    InstrChannel::Prop::MUTE,
-};
 
 static void midi_event_write(const MidiCoreEvent& e, XmlWriter& xml)
 {
@@ -518,6 +513,9 @@ void Instrument::read(XmlReader& e, Part* part)
 
 bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
 {
+    PartAudioSettingsCompat partAudioSetting;
+    InstrumentTrackId trackId = { part->score()->parts().size() + 1, id().toStdString() };//part is not assigned to score, _id field is not correct
+    partAudioSetting.instrumentId = trackId;
     const AsciiStringView tag(e.name());
     if (tag == "longName") {
         StaffName name;
@@ -581,7 +579,7 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
         _articulation.push_back(a);
     } else if (tag == "Channel" || tag == "channel") {
         InstrChannel* a = new InstrChannel;
-        a->read(e, part);
+        a->read(e, part, trackId);
         _channel.push_back(a);
     } else if (tag == "clef") {           // sets both transposing and concert clef
         int idx = e.intAttribute("staff", 1) - 1;
@@ -640,12 +638,6 @@ InstrChannel::InstrChannel()
     _chorus   = 0;
     _reverb   = 0;
     _color = DEFAULT_COLOR;
-
-    _mute     = false;
-    _solo     = false;
-    _soloMute = false;
-
-//      LOGD("construct Channel ");
 }
 
 //---------------------------------------------------------
@@ -788,42 +780,6 @@ void InstrChannel::setChannel(int value)
 }
 
 //---------------------------------------------------------
-//   setSoloMute
-//---------------------------------------------------------
-
-void InstrChannel::setSoloMute(bool value)
-{
-    if (_soloMute != value) {
-        _soloMute = value;
-        firePropertyChanged(Prop::SOLOMUTE);
-    }
-}
-
-//---------------------------------------------------------
-//   setMute
-//---------------------------------------------------------
-
-void InstrChannel::setMute(bool value)
-{
-    if (_mute != value) {
-        _mute = value;
-        firePropertyChanged(Prop::MUTE);
-    }
-}
-
-//---------------------------------------------------------
-//   setSolo
-//---------------------------------------------------------
-
-void InstrChannel::setSolo(bool value)
-{
-    if (_solo != value) {
-        _solo = value;
-        firePropertyChanged(Prop::SOLO);
-    }
-}
-
-//---------------------------------------------------------
 //   setUserBankController
 //---------------------------------------------------------
 
@@ -882,12 +838,6 @@ void InstrChannel::write(XmlWriter& xml, const Part* part) const
         // xml.tag("synti", ::synti->name(synti));
         xml.tag("synti", _synti);
     }
-    if (_mute) {
-        xml.tag("mute", _mute);
-    }
-    if (_solo) {
-        xml.tag("solo", _solo);
-    }
 
     if (part && part->masterScore()->exportMidiMapping() && part->score() == part->masterScore()) {
         xml.tag("midiPort",    part->masterScore()->midiMapping(_channel)->port());
@@ -906,7 +856,7 @@ void InstrChannel::write(XmlWriter& xml, const Part* part) const
 //   read
 //---------------------------------------------------------
 
-void InstrChannel::read(XmlReader& e, Part* part)
+void InstrChannel::read(XmlReader& e, Part* part, const InstrumentTrackId& instrId)
 {
     // synti = 0;
     _name = e.attribute("name");
@@ -916,6 +866,8 @@ void InstrChannel::read(XmlReader& e, Part* part)
 
     int midiPort = -1;
     int midiChannel = -1;
+    PartAudioSettingsCompat partAudioSetting;
+    partAudioSetting.instrumentId = instrId;
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -975,9 +927,9 @@ void InstrChannel::read(XmlReader& e, Part* part)
         } else if (tag == "color") {
             _color = e.readInt();
         } else if (tag == "mute") {
-            _mute = e.readInt();
+            partAudioSetting.mute = e.readInt();
         } else if (tag == "solo") {
-            _solo = e.readInt();
+            partAudioSetting.solo = e.readInt();
         } else if (tag == "midiPort") {
             midiPort = e.readInt();
         } else if (tag == "midiChannel") {
@@ -988,6 +940,9 @@ void InstrChannel::read(XmlReader& e, Part* part)
     }
 
     _mustUpdateInit = true;
+    if (e.context()) {
+        e.context()->addPartAudioSettingCompat(partAudioSetting);
+    }
 
     if ((midiPort != -1 || midiChannel != -1) && part && part->score()->isMaster()) {
         part->masterScore()->addMidiMapping(this, part, midiPort, midiChannel);
@@ -1127,11 +1082,6 @@ void InstrChannel::removeListener(ChannelListener* l)
 PartChannelSettingsLink::PartChannelSettingsLink(InstrChannel* main, InstrChannel* bound, bool excerpt)
     : _main(main), _bound(bound), _excerpt(excerpt)
 {
-    if (excerpt) {
-        for (InstrChannel::Prop p : excerptProperties) {
-            applyProperty(p, /* from */ bound, /* to */ main);
-        }
-    }
     // Maybe it would be good to assign common properties if the link
     // is constructed in non-excerpt mode. But it is not currently
     // necessary as playback channels are currently recreated on each
@@ -1207,15 +1157,6 @@ void PartChannelSettingsLink::applyProperty(InstrChannel::Prop p, const InstrCha
     case InstrChannel::Prop::COLOR:
         to->setColor(from->color());
         break;
-    case InstrChannel::Prop::SOLOMUTE:
-        to->setSoloMute(from->soloMute());
-        break;
-    case InstrChannel::Prop::SOLO:
-        to->setSolo(from->solo());
-        break;
-    case InstrChannel::Prop::MUTE:
-        to->setMute(from->mute());
-        break;
     case InstrChannel::Prop::SYNTI:
         to->setSynti(from->synti());
         break;
@@ -1234,9 +1175,7 @@ void PartChannelSettingsLink::applyProperty(InstrChannel::Prop p, const InstrCha
 
 void PartChannelSettingsLink::propertyChanged(InstrChannel::Prop p)
 {
-    if (isExcerptProperty(p) == _excerpt) {
-        applyProperty(p, _main, _bound);
-    }
+    applyProperty(p, _main, _bound);
 }
 
 //---------------------------------------------------------
