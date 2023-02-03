@@ -28,6 +28,11 @@ namespace mu::diagnostics {
 struct GenOpt {
     SizeF pageSize;
 };
+
+struct ComOpt {
+    bool isCopySrc = true;
+    bool isMakePng = true;
+};
 }
 
 #endif // MU_DIAGNOSTICS_DIAGNOSTICSTYPES_H

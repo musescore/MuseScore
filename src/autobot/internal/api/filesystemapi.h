@@ -57,6 +57,10 @@ public:
 
     Q_INVOKABLE JSRetVal scanFiles(const QString& rootDir, const QStringList& filters,
                                    const QString& mode = "FilesInCurrentDirAndSubdirs") const;
+
+    // Read / Write
+    Q_INVOKABLE JSRet writeTextFile(const QString& filePath, const QString& str) const;
+    Q_INVOKABLE JSRetVal readTextFile(const QString& filePath) const;
 };
 }
 

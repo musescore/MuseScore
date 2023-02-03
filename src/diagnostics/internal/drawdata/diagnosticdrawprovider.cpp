@@ -22,6 +22,7 @@
 #include "diagnosticdrawprovider.h"
 
 #include "global/io/fileinfo.h"
+#include "global/io/file.h"
 
 #include "drawdatagenerator.h"
 #include "drawdataconverter.h"
@@ -52,11 +53,31 @@ Ret DiagnosticDrawProvider::generateDrawData(const io::path_t& dirOrFile, const 
     return g.processDir(dirOrFile, outDirOrFile, opt);
 }
 
-Ret DiagnosticDrawProvider::compareDrawData(const io::path_t& ref, const io::path_t& test, const io::path_t& outDiff)
+Ret DiagnosticDrawProvider::compareDrawData(const io::path_t& ref, const io::path_t& test, const io::path_t& outDiff, const ComOpt& opt)
 {
     LOGI() << "ref: " << ref << ", test: " << test << ", outDiff: " << outDiff;
     DrawDataComparator c;
-    return c.compare(ref, test, outDiff);
+    Ret ret = c.compare(ref, test, outDiff);
+
+    // no diff
+    if (ret) {
+        return ret;
+    }
+
+    io::path_t outDir = io::FileInfo(outDiff).dirPath();
+    if (opt.isCopySrc) {
+        io::File::copy(ref, outDir + "/" + io::FileInfo(ref).baseName() + ".ref.json");
+        io::File::copy(test, outDir + "/" + io::FileInfo(test).baseName() + ".json");
+    }
+
+    if (opt.isMakePng) {
+        DrawDataConverter c;
+        c.drawDataToPng(ref, outDir + "/" + io::FileInfo(ref).baseName() + ".ref.png");
+        c.drawDataToPng(test, outDir + "/" + io::FileInfo(test).baseName() + ".png");
+        c.drawDiffToPng(outDiff, ref, outDir + "/" + io::FileInfo(outDiff).baseName() + ".diff.png");
+    }
+
+    return ret;
 }
 
 Ret DiagnosticDrawProvider::drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile)
