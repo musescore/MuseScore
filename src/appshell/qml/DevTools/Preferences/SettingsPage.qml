@@ -185,6 +185,7 @@ ColumnLayout {
 
             anchors.fill: parent
             color: val
+            allowAlpha: true
 
             onNewColorSelected: function(newColor) {
                 changed(newColor)

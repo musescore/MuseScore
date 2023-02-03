@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_IINTERACTIVEPROVIDER_H
-#define MUSE_UI_IINTERACTIVEPROVIDER_H
+
+#pragma once
 
 #include "global/modularity/imoduleinterface.h"
 
@@ -40,7 +40,8 @@ public:
     virtual ~IInteractiveProvider() = default;
 
     // color
-    virtual async::Promise<Color> selectColor(const Color& color = Color::WHITE, const std::string& title = "") = 0;
+    virtual async::Promise<Color> selectColor(const Color& color = Color::WHITE, const std::string& title = {},
+                                              bool allowAlpha = false) = 0;
     virtual bool isSelectColorOpened() const = 0;
 
     virtual RetVal<Val> openSync(const UriQuery& uri) = 0;
@@ -65,5 +66,3 @@ public:
     virtual bool topWindowIsWidget() const = 0;
 };
 }
-
-#endif // MUSE_UI_IINTERACTIVEPROVIDER_H

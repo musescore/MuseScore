@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_UICOMPONENTS_COLORPICKER_H
-#define MUSE_UICOMPONENTS_COLORPICKER_H
+#pragma once
 
 #include <QObject>
 
@@ -40,12 +39,10 @@ class ColorPickerModel : public QObject, public muse::Injectable, public async::
 public:
     explicit ColorPickerModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void selectColor(const QColor& currentColor);
+    Q_INVOKABLE void selectColor(const QColor& currentColor, bool allowAlpha = false);
 
 signals:
     void colorSelected(QColor color);
     void selectRejected();
 };
 }
-
-#endif // MUSE_UICOMPONENTS_COLORPICKER_H

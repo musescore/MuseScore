@@ -29,6 +29,7 @@ import "Utils.js" as Utils
 Rectangle {
     id: root
 
+    property bool allowAlpha: false
     property bool isIndeterminate: false
 
     property alias navigation: navCtrl
@@ -60,7 +61,7 @@ Rectangle {
         id: prv
 
         function selectColor() {
-            colorPickerModel.selectColor(root.color)
+            colorPickerModel.selectColor(root.color, root.allowAlpha)
         }
     }
 
