@@ -99,7 +99,7 @@ static void setCustomColors(const std::vector<QColor>& customColors)
     }
 }
 
-async::Promise<Color> InteractiveProvider::selectColor(const Color& color, const std::string& title)
+async::Promise<Color> InteractiveProvider::selectColor(const Color& color, const std::string& title, bool allowAlpha)
 {
     if (m_isSelectColorOpened) {
         LOGW() << "already opened";
@@ -113,7 +113,7 @@ async::Promise<Color> InteractiveProvider::selectColor(const Color& color, const
 
     setCustomColors(config()->colorDialogCustomColors());
 
-    return async::make_promise<Color>([this, color, title](auto resolve, auto reject) {
+    return async::make_promise<Color>([this, color, title, allowAlpha](auto resolve, auto reject) {
         //! FIX https://github.com/musescore/MuseScore/issues/23208
         shortcutsRegister()->setActive(false);
 
@@ -122,7 +122,15 @@ async::Promise<Color> InteractiveProvider::selectColor(const Color& color, const
             dlg->setWindowTitle(QString::fromStdString(title));
         }
 
-        dlg->setCurrentColor(color.toQColor());
+        QColor currentColor = color.toQColor();
+
+        // If the color is fully transparent, set alpha to opaque, to avoid "Hm, nothing happened" user confusion
+        if (currentColor.alpha() == 0) {
+            currentColor.setAlpha(255);
+        }
+
+        dlg->setCurrentColor(currentColor);
+        dlg->setOption(QColorDialog::ShowAlphaChannel, allowAlpha);
 
         QObject::connect(dlg, &QColorDialog::finished, [this, dlg, resolve, reject](int result) {
             dlg->deleteLater();

@@ -65,7 +65,7 @@ class InteractiveProvider : public QObject, public IInteractiveProvider, public 
 public:
     explicit InteractiveProvider(const modularity::ContextPtr& iocCtx);
 
-    async::Promise<Color> selectColor(const Color& color = Color::WHITE, const std::string& title = "") override;
+    async::Promise<Color> selectColor(const Color& color = Color::WHITE, const std::string& title = {}, bool allowAlpha = false) override;
     bool isSelectColorOpened() const override;
 
     RetVal<Val> openSync(const UriQuery& uri) override;
