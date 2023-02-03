@@ -1699,7 +1699,9 @@ void Score::removeElement(EngravingItem* element)
 
         if (!system) {
             // vertical boxes are not shown in continuous view so no system
+#ifndef NDEBUG
             bool noSystemMode = lineMode() && (element->isVBox() || element->isTBox());
+#endif
             assert(noSystemMode || !isOpen());
             return;
         }
