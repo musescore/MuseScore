@@ -19,17 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Layouts
 
-import Muse.UiComponents 1.0
-import Muse.Ui 1.0
-import MuseScore.CommonScene 1.0
+import Muse.UiComponents
+import Muse.Ui
+
+import MuseScore.CommonScene
+import MuseScore.Playback
 
 Item {
     id: root
 
-    property var playbackModel: null
+    property PlaybackToolBarModel playbackModel: null
+
     property NavigationPanel navPanel: null
     property bool floating: false
 
@@ -154,8 +157,8 @@ Item {
         }
     }
 
-    Item {
-        id: tempoViewContainer
+    FlatButton {
+        id: tempoButton
 
         anchors.left: measureAndBeatFields.right
         anchors.leftMargin: 6
@@ -166,11 +169,11 @@ Item {
         width: 48
         height: parent.height
 
-        TempoView {
-            id: tempoView
+        accentButton: tempoOverridePopup.isOpened
+        transparent: !accentButton
 
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
+        contentItem: TempoView {
+            anchors.centerIn: parent
 
             noteSymbol: root.playbackModel.tempo.noteSymbol
             tempoValue: root.playbackModel.tempo.value
@@ -178,10 +181,20 @@ Item {
             noteSymbolFont.pixelSize: ui.theme.iconsFont.pixelSize
             tempoValueFont: timeField.font
         }
+
+        onClicked: {
+            tempoOverridePopup.toggleOpened()
+        }
+
+        TempoOverridePopup {
+            id: tempoOverridePopup
+
+            playbackModel: root.playbackModel
+        }
     }
 
     SeparatorLine {
-        anchors.left: tempoViewContainer.right
+        anchors.left: tempoButton.right
         anchors.leftMargin: 12
         anchors.topMargin: 2
         anchors.bottomMargin: 2
