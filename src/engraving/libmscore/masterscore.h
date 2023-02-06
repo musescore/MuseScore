@@ -201,7 +201,6 @@ public:
     void rebuildAndUpdateExpressive(Synthesizer* synth);
     void updateExpressive(Synthesizer* synth);
     void updateExpressive(Synthesizer* synth, bool expressive, bool force = false);
-    void setSoloMute();
 
     using Score::pos;
     Fraction pos(POS pos) const { return _pos[int(pos)]; }

@@ -531,7 +531,8 @@ void InstrumentTemplate::read(XmlReader& e)
             midiActions.push_back(a);
         } else if (tag == "Channel" || tag == "channel") {
             InstrChannel a;
-            a.read(e, nullptr);
+            InstrumentTrackId id;
+            a.read(e, nullptr, id);
             channel.push_back(a);
         } else if (tag == "Articulation") {
             MidiArticulation a;
