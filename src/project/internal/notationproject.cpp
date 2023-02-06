@@ -184,8 +184,8 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
     // Load engraving project
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
 
-    AudioSettingsCompat audioSettingsCompat;
-    Ret ret = m_engravingProject->loadMscz(reader, audioSettingsCompat, forceMode);
+    SettingsCompat settingsCompat;
+    Ret ret = m_engravingProject->loadMscz(reader, settingsCompat, forceMode);
     if (!ret) {
         return ret;
     }
@@ -227,8 +227,8 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
     ret = m_projectAudioSettings->read(reader);
     if (!ret) {
         //applyed compat audio settings
-        if (!audioSettingsCompat.empty()) {
-            for (const auto& audioCompat : audioSettingsCompat) {
+        if (!settingsCompat.audioSettings.empty()) {
+            for (const auto& audioCompat : settingsCompat.audioSettings) {
                 IProjectAudioSettings::SoloMuteState state = { audioCompat.second.mute, audioCompat.second.solo };
                 m_projectAudioSettings->setSoloMuteState(audioCompat.second.instrumentId, state);
             }

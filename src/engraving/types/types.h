@@ -908,6 +908,17 @@ static inline bool operator==(const Key a, const Key b) { return int(a) == int(b
 static inline bool operator!=(const Key a, const Key b) { return static_cast<int>(a) != static_cast<int>(b); }
 static inline Key operator+=(Key& a, const Key& b) { return a = Key(static_cast<int>(a) + static_cast<int>(b)); }
 static inline Key operator-=(Key& a, const Key& b) { return a = Key(static_cast<int>(a) - static_cast<int>(b)); }
+
+struct PartAudioSettingsCompat {
+    InstrumentTrackId instrumentId;
+    bool mute = false;
+    bool solo = false;
+    int velocity = 127;
+};
+
+struct SettingsCompat {
+    std::map<ID /*partid*/, PartAudioSettingsCompat> audioSettings;
+};
 } // mu::engraving
 
 template<>

@@ -509,7 +509,7 @@ TextStyleType ReadContext::lookupUserTextStyle(const String& name) const
 
 void ReadContext::addPartAudioSettingCompat(PartAudioSettingsCompat partAudioSetting)
 {
-    if (_audioSettingsCompat.count(partAudioSetting.instrumentId.partId) == 0) {
-        _audioSettingsCompat.insert({ partAudioSetting.instrumentId.partId, partAudioSetting });
+    if (_settingsCompat.audioSettings.count(partAudioSetting.instrumentId.partId) == 0) {
+        _settingsCompat.audioSettings.insert({ partAudioSetting.instrumentId.partId, partAudioSetting });
     }
 }

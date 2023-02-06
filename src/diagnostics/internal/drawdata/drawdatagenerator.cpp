@@ -204,8 +204,8 @@ bool DrawDataGenerator::loadScore(mu::engraving::MasterScore* score, const mu::i
         }
 
         ScoreReader scoreReader;
-        AudioSettingsCompat audioSettingsCompat;
-        Ret ret = scoreReader.loadMscz(score, reader, audioSettingsCompat, true);
+        SettingsCompat settingsCompat;
+        Ret ret = scoreReader.loadMscz(score, reader, settingsCompat, true);
         if (!ret) {
             LOGE() << "failed read file: " << path;
             return false;
