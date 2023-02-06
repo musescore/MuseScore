@@ -30,6 +30,7 @@
 #include "async/async.h"
 #include "audio/synthtypes.h"
 
+#include "defer.h"
 #include "translation.h"
 #include "log.h"
 
@@ -160,6 +161,15 @@ mu::ValCh<bool> ApplicationActionController::isFullScreen() const
 
 bool ApplicationActionController::quit(bool isAllInstances, const io::path_t& installerPath)
 {
+    if (m_quiting) {
+        return false;
+    }
+
+    m_quiting = true;
+    DEFER {
+        m_quiting = false;
+    };
+
     if (!projectFilesController()->closeOpenedProject()) {
         return false;
     }

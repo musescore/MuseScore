@@ -323,6 +323,15 @@ void ProjectActionsController::newProject()
 
 bool ProjectActionsController::closeOpenedProject(bool quitApp)
 {
+    if (m_isProjectClosing) {
+        return false;
+    }
+
+    m_isProjectClosing = true;
+    DEFER {
+        m_isProjectClosing = false;
+    };
+
     INotationProjectPtr project = currentNotationProject();
     if (!project) {
         return true;
