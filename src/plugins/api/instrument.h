@@ -151,7 +151,7 @@ public:
         return false;
     }
 
-    void setMute(bool val)
+    void setMute(bool)
     {
         DEPRECATED;
         //!@NOTE since MuseScore 4.0 mixer doen/t work via Channel
