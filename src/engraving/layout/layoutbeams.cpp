@@ -26,6 +26,7 @@
 #include "containers.h"
 
 #include "libmscore/beam.h"
+#include "libmscore/tremolo.h"
 #include "libmscore/chord.h"
 #include "libmscore/factory.h"
 #include "libmscore/measure.h"
@@ -503,6 +504,18 @@ void LayoutBeams::layoutNonCrossBeams(Segment* s)
         // layout beam
         if (LayoutBeams::isTopBeam(cr)) {
             cr->beam()->layout();
+            if (!cr->beam()->tremAnchors().empty()) {
+                // there are inset tremolos in here
+                for (ChordRest* beamCr : cr->beam()->elements()) {
+                    if (!beamCr->isChord()) {
+                        continue;
+                    }
+                    Chord* c = toChord(beamCr);
+                    if (c->tremolo() && c->tremolo()->twoNotes()) {
+                        c->tremolo()->layout();
+                    }
+                }
+            }
         }
         if (!cr->isChord()) {
             continue;

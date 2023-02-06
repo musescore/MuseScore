@@ -1084,8 +1084,8 @@ void Chord::computeUp()
             double noteX = stemPosX() + pagePos().x() - base.x();
             PointF startAnchor = PointF();
             PointF endAnchor = PointF();
-            startAnchor = _beam->chordBeamAnchor(firstChord, Beam::ChordBeamAnchorType::Start);
-            endAnchor = _beam->chordBeamAnchor(lastChord, Beam::ChordBeamAnchorType::End);
+            startAnchor = _beam->chordBeamAnchor(firstChord, BeamLayout::ChordBeamAnchorType::Start);
+            endAnchor = _beam->chordBeamAnchor(lastChord, BeamLayout::ChordBeamAnchorType::End);
 
             if (this == _beam->elements().front()) {
                 _up = noteY > startAnchor.y();
@@ -1098,8 +1098,41 @@ void Chord::computeUp()
             }
         }
         _beam->layout();
+        if (cross && _tremolo && _tremolo->twoNotes() && _tremolo->chord1() == this
+            && _tremolo->chord1()->beam() == _tremolo->chord2()->beam()) {
+            _tremolo->layout(); // beam-infixed two-note trems have to be laid out here
+        }
         if (!cross && !_beam->userModified()) {
             _up = _beam->up();
+        }
+        return;
+    } else if (_tremolo && _tremolo->twoNotes()) {
+        Chord* c1 = _tremolo->chord1();
+        Chord* c2 = _tremolo->chord2();
+        bool cross = c1->staffMove() != c2->staffMove();
+        Measure* measure = findMeasure();
+        if (!cross && !_tremolo->userModified()) {
+            _up = _tremolo->up();
+        }
+        if (!measure->explicitParent()) {
+            // this method will be called later (from Measure::layoutCrossStaff) after the
+            // system is completely laid out.
+            // this is necessary because otherwise there's no way to deal with cross-staff beams
+            // because we don't know how far apart the staves actually are
+            return;
+        }
+        _tremolo->layout();
+        if (_tremolo->userModified()) {
+            Note* baseNote = _up ? downNote() : upNote();
+            PairF beamPos = _tremolo->beamPos();
+            double tremY = c1 == this ? beamPos.first : beamPos.second;
+            tremY *= spatium();
+            tremY += pagePos().y();
+            double noteY = baseNote->pagePos().y();
+            _up = noteY > tremY;
+        }
+        if (!cross && !_tremolo->userModified()) {
+            _up = _tremolo->up();
         }
         return;
     }
@@ -1497,12 +1530,20 @@ int Chord::calcMinStemLength()
             // minStemLength = ceil(minStemLength / 2.0) * 2;
         }
     }
-    if (_beam) {
+    if (_beam || (_tremolo && _tremolo->twoNotes())) {
+        int beamCount = (_beam ? beams() : 0) + (_tremolo ? _tremolo->lines() : 0);
         static const int minInnerStemLengths[4] = { 10, 9, 8, 7 };
-        int innerStemLength = minInnerStemLengths[std::min(beams(), 3)];
-        int beamsHeight = beams() * (score()->styleB(Sid::useWideBeams) ? 4 : 3) - 1;
+        int innerStemLength = minInnerStemLengths[std::min(beamCount, 3)];
+        int beamsHeight = beamCount * (score()->styleB(Sid::useWideBeams) ? 4 : 3) - 1;
         minStemLength = std::max(minStemLength, innerStemLength);
         minStemLength += beamsHeight;
+        // for 4+ beams, there are a few situations where we need to lengthen the stem by 1
+        int noteLine = line();
+        int staffLines = staff()->lines(tick());
+        bool noteInStaff = (_up && noteLine > 0) || (!_up && noteLine < (staffLines - 1) * 2);
+        if (beamCount >= 4 && noteInStaff) {
+            minStemLength++;
+        }
     }
     return minStemLength;
 }
@@ -1513,7 +1554,7 @@ int Chord::stemLengthBeamAddition() const
     if (_hook) {
         return 0;
     }
-    int beamCount = beams();
+    int beamCount = (_beam ? beams() : 0) + (_tremolo ? _tremolo->lines() : 0);
     switch (beamCount) {
     case 0:
     case 1:
@@ -1558,8 +1599,11 @@ int Chord::maxReduction(int extensionOutsideStaff) const
         { 0, 1, 1, 1, 1 }, // 2 beams
         { 0, 0, 0, 1, 1 }, // 3 beams
     };
+    int beamCount = 0;
+    if (!_hook) {
+        beamCount = _tremolo ? _tremolo->lines() + (_beam ? beams() : 0) : beams();
+    }
     bool hasTradHook = _hook && !score()->styleB(Sid::useStraightNoteFlags);
-    int beamCount = hasTradHook ? 0 : beams();
     if (_hook && !hasTradHook) {
         beamCount = std::min(beamCount, 2); // the straight glyphs extend outwards after 2 beams
     }
@@ -1601,7 +1645,7 @@ int Chord::stemOpticalAdjustment(int stemEndPosition) const
     if (_hook && !_beam) {
         return 0;
     }
-    int beamCount = beams();
+    int beamCount = (_tremolo ? _tremolo->lines() : 0) + (_beam ? beams() : 0);
     if (beamCount == 0 || beamCount > 2) {
         return 0;
     }
@@ -1674,8 +1718,9 @@ double Chord::calcDefaultStemLength()
     int staffLineCount = staffItem ? staffItem->lines(tick()) : 5;
     int shortStemStart = score()->styleI(Sid::shortStemStartLocation) * quarterSpacesPerLine + 1;
     bool useWideBeams = score()->styleB(Sid::useWideBeams);
-
-    int middleLine = minStaffOverlap(_up, staffLineCount, beams(), !!_hook, useWideBeams ? 4 : 3, useWideBeams, !(isGrace() || isSmall()));
+    int beamCount = (_tremolo ? _tremolo->lines() : 0) + (_beam ? beams() : 0);
+    int middleLine
+        = minStaffOverlap(_up, staffLineCount, beamCount, !!_hook, useWideBeams ? 4 : 3, useWideBeams, !(isGrace() || isSmall()));
     if (up()) {
         int stemEndPosition = upLine() * quarterSpacesPerLine - defaultStemLength;
         double stemEndPositionMag = (double)upLine() * quarterSpacesPerLine - (defaultStemLength * intrinsicMag());
@@ -1711,7 +1756,7 @@ double Chord::calcDefaultStemLength()
 
         stemLength = std::max(idealStemLength, minStemLengthQuarterSpaces);
     }
-    if (beams() == 4 && _beam) {
+    if (beamCount == 4 && !_hook) {
         stemLength = calc4BeamsException(stemLength);
     }
 
@@ -1797,7 +1842,8 @@ bool Chord::shouldHaveHook() const
 {
     return shouldHaveStem()
            && durationType().hooks() > 0
-           && !beam();
+           && !beam()
+           && !(tremolo() && tremolo()->twoNotes());
 }
 
 void Chord::createStem()

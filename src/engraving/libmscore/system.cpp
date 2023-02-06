@@ -56,6 +56,7 @@
 #include "system.h"
 #include "systemdivider.h"
 #include "textframe.h"
+#include "tremolo.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -2136,6 +2137,14 @@ bool System::hasCrossStaffOrModifiedBeams()
                 }
                 if (toChordRest(e)->beam() && (toChordRest(e)->beam()->cross() || toChordRest(e)->beam()->userModified())) {
                     return true;
+                }
+                Chord* c = e->isChord() ? toChord(e) : nullptr;
+                if (c && c->tremolo() && c->tremolo()->twoNotes()) {
+                    Chord* c1 = c->tremolo()->chord1();
+                    Chord* c2 = c->tremolo()->chord2();
+                    if (c->tremolo()->userModified() || c1->staffMove() != c2->staffMove()) {
+                        return true;
+                    }
                 }
                 if (e->isChord() && !toChord(e)->graceNotes().empty()) {
                     for (Chord* grace : toChord(e)->graceNotes()) {

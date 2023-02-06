@@ -1495,6 +1495,18 @@ void LayoutSystem::updateCrossBeams(System* system, const LayoutContext& ctx)
                         LayoutChords::layoutChords1(chord->score(), &seg, chord->vStaffIdx());
                         seg.createShape(chord->vStaffIdx());
                     }
+                } else if (chord->tremolo() && chord->tremolo()->twoNotes()) {
+                    Tremolo* t = chord->tremolo();
+                    Chord* c1 = t->chord1();
+                    Chord* c2 = t->chord2();
+                    if (t->userModified() || (c1->staffMove() != 0 || c2->staffMove() != 0)) {
+                        bool prevUp = chord->up();
+                        chord->computeUp();
+                        if (chord->up() != prevUp) {
+                            LayoutChords::layoutChords1(chord->score(), &seg, chord->vStaffIdx());
+                            seg.createShape(chord->vStaffIdx());
+                        }
+                    }
                 }
             }
         }
