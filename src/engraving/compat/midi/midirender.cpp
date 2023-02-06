@@ -77,7 +77,6 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static constexpr int MIN_CHUNK_SIZE(10); // measure
 static PitchWheelSpecs wheelSpec;
 
 static bool graceNotesMerged(Chord* chord);
@@ -634,7 +633,6 @@ void MidiRenderer::doCollectMeasureEvents(EventMap* events, Measure const* m, co
 MidiRenderer::MidiRenderer(Score* s)
     : score(s)
 {
-    setMinChunkSize(MIN_CHUNK_SIZE);
 }
 
 //---------------------------------------------------------
@@ -654,15 +652,13 @@ void MidiRenderer::collectMeasureEvents(EventMap* events, Measure const* m, cons
 //   renderStaffChunk
 //---------------------------------------------------------
 
-void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, const Staff* staff, PitchWheelRenderer& pitchWheelRenderer)
+void MidiRenderer::renderStaff(EventMap* events, const Staff* staff, PitchWheelRenderer& pitchWheelRenderer)
 {
-    Measure const* const start = chunk.startMeasure();
-    Measure const* const end = chunk.endMeasure();
-    const int tickOffset = chunk.tickOffset();
+    Measure const* const start = score->firstMeasure();
 
-    Measure const* lastMeasure = start->prevMeasure();
+    Measure const* lastMeasure = nullptr;
 
-    for (Measure const* m = start; m != end; m = m->nextMeasure()) {
+    for (Measure const* m = start; m; m = m->nextMeasure()) {
         staff_idx_t staffIdx = staff->idx();
         if (m->isMeasureRepeatGroup(staffIdx)) {
             MeasureRepeat* mr = m->measureRepeatElement(staffIdx);
@@ -676,10 +672,10 @@ void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, const 
             }
 
             int offset = (m->tick() - playMeasure->tick()).ticks();
-            collectMeasureEvents(events, playMeasure, staff, tickOffset + offset, pitchWheelRenderer);
+            collectMeasureEvents(events, playMeasure, staff, offset, pitchWheelRenderer);
         } else {
             lastMeasure = m;
-            collectMeasureEvents(events, lastMeasure, staff, tickOffset, pitchWheelRenderer);
+            collectMeasureEvents(events, lastMeasure, staff, 0, pitchWheelRenderer);
         }
     }
 }
@@ -688,12 +684,8 @@ void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, const 
 //   renderSpanners
 //---------------------------------------------------------
 
-void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events, PitchWheelRenderer& pitchWheelRenderer)
+void MidiRenderer::renderSpanners(EventMap* events, PitchWheelRenderer& pitchWheelRenderer)
 {
-    const int tickOffset = chunk.tickOffset();
-    const int tick1 = chunk.tick1();
-    const int tick2 = chunk.tick2();
-
     std::map<int, std::vector<std::pair<int, std::pair<bool, int> > > > channelPedalEvents;
     for (const auto& sp : score->spannerMap().map()) {
         Spanner* s = sp.second;
@@ -714,39 +706,26 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events, PitchWhe
             }
 
             int st = s->tick().ticks();
-            if (st >= tick1 && st < tick2) {
-                // Handle "overlapping" pedal segments (usual case for connected pedal line)
-                if (lastEvent.second.first == false && lastEvent.first >= (st + tickOffset + 2)) {
-                    channelPedalEvents.at(channel).pop_back();
-                    channelPedalEvents.at(channel).push_back(std::pair<int,
-                                                                       std::pair<bool,
-                                                                                 int> >(st + tickOffset + (2 - MScore::pedalEventsMinTicks),
-                                                                                        std::pair<bool, int>(false, staff)));
-                }
-                int a = st + tickOffset + 2;
-                channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int> >(a, std::pair<bool, int>(true, staff)));
+
+            if (lastEvent.second.first == false && lastEvent.first >= (st + 2)) {
+                channelPedalEvents.at(channel).pop_back();
+                channelPedalEvents.at(channel).push_back(std::pair<int,
+                                                                   std::pair<bool,
+                                                                             int> >(st + (2 - MScore::pedalEventsMinTicks),
+                                                                                    std::pair<bool, int>(false, staff)));
             }
-            if (s->tick2().ticks() >= tick1 && s->tick2().ticks() <= tick2) {
-                int t = s->tick2().ticks() + tickOffset + (2 - MScore::pedalEventsMinTicks);
-                const RepeatSegment& lastRepeat = *score->repeatList().back();
-                if (t > lastRepeat.utick + lastRepeat.len()) {
-                    t = lastRepeat.utick + lastRepeat.len();
-                }
-                channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int> >(t, std::pair<bool, int>(false, staff)));
+            int a = st + 2;
+            channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int> >(a, std::pair<bool, int>(true, staff)));
+
+            int t = s->tick2().ticks() + (2 - MScore::pedalEventsMinTicks);
+            const RepeatSegment& lastRepeat = *score->repeatList().back();
+            if (t > lastRepeat.utick + lastRepeat.len()) {
+                t = lastRepeat.utick + lastRepeat.len();
             }
+            channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int> >(t, std::pair<bool, int>(false, staff)));
         } else if (s->isVibrato()) {
             int stick = s->tick().ticks();
             int etick = s->tick2().ticks();
-            if (stick >= tick2 || etick < tick1) {
-                continue;
-            }
-
-            if (stick < tick1) {
-                stick = tick1;
-            }
-            if (etick > tick2) {
-                etick = tick2;
-            }
 
             // from start to end of trill, send bend events at regular interval
             Vibrato* t = toVibrato(s);
@@ -915,14 +894,13 @@ static bool graceNotesMerged(Chord* chord)
 ///   add metronome tick events
 //---------------------------------------------------------
 
-void MidiRenderer::renderMetronome(const Chunk& chunk, EventMap* events)
+void MidiRenderer::renderMetronome(EventMap* events)
 {
-    const int tickOffset = chunk.tickOffset();
-    Measure const* const start = chunk.startMeasure();
-    Measure const* const end = chunk.endMeasure();
+    Measure const* const start = score->firstMeasure();
+    Measure const* const end = score->lastMeasure();
 
     for (Measure const* m = start; m != end; m = m->nextMeasure()) {
-        renderMetronome(events, m, Fraction::fromTicks(tickOffset));
+        renderMetronome(events, m);
     }
 }
 
@@ -931,7 +909,7 @@ void MidiRenderer::renderMetronome(const Chunk& chunk, EventMap* events)
 ///   add metronome tick events
 //---------------------------------------------------------
 
-void MidiRenderer::renderMetronome(EventMap* events, Measure const* m, const Fraction& tickOffset)
+void MidiRenderer::renderMetronome(EventMap* events, Measure const* m)
 {
     int msrTick         = m->tick().ticks();
     BeatsPerSecond tempo = score->tempomap()->tempo(msrTick);
@@ -951,7 +929,7 @@ void MidiRenderer::renderMetronome(EventMap* events, Measure const* m, const Fra
     }
 
     for (int tick = msrTick; tick < endTick; tick += clickTicks, rtick += clickTicks) {
-        events->insert(std::pair<int, NPlayEvent>(tick + tickOffset.ticks(), NPlayEvent(timeSig.rtick2beatType(rtick))));
+        events->insert(std::pair<int, NPlayEvent>(tick, NPlayEvent(timeSig.rtick2beatType(rtick))));
     }
 }
 
@@ -959,34 +937,28 @@ void MidiRenderer::renderScore(EventMap* events, const Context& ctx)
 {
     PitchWheelRenderer pitchWheelRender(wheelSpec);
 
-    updateState();
-    for (const Chunk& chunk : chunks) {
-        renderChunk(chunk, events, ctx, pitchWheelRender);
-    }
-}
+    score->updateSwing();
+    score->updateCapo();
 
-void MidiRenderer::renderChunk(const Chunk& chunk, EventMap* events, const Context& ctx, PitchWheelRenderer& pitchWheelRenderer)
-{
-    // TODO: avoid doing it multiple times for the same measures
-    score->createPlayEvents(chunk.startMeasure(), chunk.endMeasure());
+    score->createPlayEvents(score->firstMeasure(), score->lastMeasure());
 
     score->updateChannel();
     score->updateVelo();
 
     // create note & other events
     for (const Staff* st : score->staves()) {
-        renderStaffChunk(chunk, events, st, pitchWheelRenderer);
+        renderStaff(events, st, pitchWheelRender);
     }
     events->fixupMIDI();
 
     // create sustain pedal events
-    renderSpanners(chunk, events, pitchWheelRenderer);
+    renderSpanners(events, pitchWheelRender);
 
-    EventMap pitchWheelEvents = pitchWheelRenderer.renderPitchWheel();
+    EventMap pitchWheelEvents = pitchWheelRender.renderPitchWheel();
     events->merge(pitchWheelEvents);
 
     if (ctx.metronome) {
-        renderMetronome(chunk, events);
+        renderMetronome(events);
     }
 
     // NOTE:JT this is a temporary fix for duplicate events until polyphonic aftertouch support
@@ -1011,157 +983,6 @@ void MidiRenderer::renderChunk(const Chunk& chunk, EventMap* events, const Conte
             i++;
         }
     }
-}
-
-//---------------------------------------------------------
-//   MidiRenderer::updateState
-//---------------------------------------------------------
-
-void MidiRenderer::updateState()
-{
-    if (needUpdate) {
-        // Update the related structures inside score
-        // to avoid doing it multiple times on chunks rendering
-        score->updateSwing();
-        score->updateCapo();
-
-        updateChunksPartition();
-
-        needUpdate = false;
-    }
-}
-
-//---------------------------------------------------------
-//   MidiRenderer::canBreakChunk
-///   Helper function for updateChunksPartition
-///   Determines whether it is allowed to break MIDI
-///   rendering chunk at given measure.
-//---------------------------------------------------------
-
-bool MidiRenderer::canBreakChunk(const Measure* last)
-{
-    Score* score = last->score();
-
-    // Check for hairpins that overlap measure end:
-    // hairpins should be inside one chunk, if possible
-    const int endTick = last->endTick().ticks();
-    const auto& spanners = score->spannerMap().findOverlapping(endTick - 1, endTick);
-    for (const auto& interval : spanners) {
-        const Spanner* sp = interval.value;
-        if (sp->isHairpin() && sp->tick2().ticks() > endTick) {
-            return false;
-        }
-    }
-
-    if (const Measure* next = last->nextMeasure()) {
-        // Repeat measures rely on the previous measure
-        // being properly rendered, disallow breaking
-        // chunk at repeat measure.
-        for (const Staff* staff : score->staves()) {
-            if (next->isMeasureRepeatGroup(staff->idx())) {
-                return false;
-            }
-        }
-
-        // Forbid breaking chunk if any track in next measure starts with grace note before beat
-        SegmentType st = SegmentType::ChordRest;
-        std::set<track_idx_t> tracksChecked; // store track numbers where measure starts not from grace note before beat
-        for (Segment* seg = next->first(st); seg; seg = seg->next(st)) {
-            for (const EngravingItem* el : seg->elist()) {
-                if (el == 0 || el->type() != ElementType::CHORD) {
-                    continue;
-                }
-
-                if (tracksChecked.find(el->track()) != tracksChecked.end()) {
-                    continue;
-                }
-
-                tracksChecked.insert(el->track());
-
-                const Chord* chord = toChord(el);
-
-                auto& grList = chord->graceNotesBefore();
-                if (grList.empty()) {
-                    continue;
-                }
-
-                if (std::any_of(grList.begin(), grList.end(), [](Chord* ch) { return ch->noteType() == NoteType::ACCIACCATURA; })) {
-                    return false;
-                }
-            }
-        }
-    }
-
-    return true;
-}
-
-//---------------------------------------------------------
-//   MidiRenderer::updateChunksPartition
-//---------------------------------------------------------
-
-void MidiRenderer::updateChunksPartition()
-{
-    chunks.clear();
-
-    const RepeatList& repeatList = score->repeatList();
-
-    for (const RepeatSegment* rs : repeatList) {
-        const int tickOffset = rs->utick - rs->tick;
-
-        if (!minChunkSize) {
-            // just make chunks corresponding to repeat segments
-            chunks.emplace_back(tickOffset, rs->firstMeasure(), rs->lastMeasure());
-            continue;
-        }
-
-        Measure const* const end = rs->lastMeasure()->nextMeasure();
-        int count = 0;
-        bool needBreak = false;
-        Measure const* chunkStart = nullptr;
-        for (Measure const* m = rs->firstMeasure(); m != end; m = m->nextMeasure()) {
-            if (!chunkStart) {
-                chunkStart = m;
-            }
-            if ((++count) >= minChunkSize) {
-                needBreak = true;
-            }
-            if (needBreak && canBreakChunk(m)) {
-                chunks.emplace_back(tickOffset, chunkStart, m);
-                chunkStart = nullptr;
-                needBreak = false;
-                count = 0;
-            }
-        }
-        if (chunkStart) {   // last measures did not get added to chunk list
-            chunks.emplace_back(tickOffset, chunkStart, rs->lastMeasure());
-        }
-    }
-
-    if (score != repeatList.score()) {
-        // Repeat list may belong to another linked score (e.g. MasterScore).
-        // Update chunks to make them contain measures from the currently
-        // rendered score.
-        for (Chunk& ch : chunks) {
-            Measure* first = score->tick2measure(ch.startMeasure()->tick());
-            Measure* last = score->tick2measure(ch.lastMeasure()->tick());
-            ch = Chunk(ch.tickOffset(), first, last);
-        }
-    }
-}
-
-std::vector<MidiRenderer::Chunk> MidiRenderer::chunksFromRange(const int fromTick, const int toTick)
-{
-    std::vector<Chunk> result;
-
-    updateState();
-
-    for (const Chunk& chunk : chunks) {
-        if (chunk.utick2() >= fromTick && chunk.utick1() <= toTick) {
-            result.push_back(chunk);
-        }
-    }
-
-    return result;
 }
 
 //---------------------------------------------------------
