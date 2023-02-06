@@ -62,76 +62,36 @@ public:
 
 class MidiRenderer
 {
-    Score* score{ nullptr };
-    bool needUpdate = true;
-    int minChunkSize = 0;
-
 public:
-    class Chunk
-    {
-        int _tickOffset;
-        Measure const* first;
-        Measure const* last;
-
-    public:
-        Chunk(int tickOffset, Measure const* fst, Measure const* lst)
-            : _tickOffset(tickOffset), first(fst), last(lst) {}
-
-        Chunk()     // "invalid chunk" constructor
-            : _tickOffset(0), first(nullptr), last(nullptr) {}
-
-        operator bool() const {
-            return bool(first);
-        }
-        int tickOffset() const { return _tickOffset; }
-        Measure const* startMeasure() const { return first; }
-        Measure const* endMeasure() const { return last ? last->nextMeasure() : nullptr; }
-        Measure const* lastMeasure() const { return last; }
-        int tick1() const { return first->tick().ticks(); }
-        int tick2() const { return last ? last->endTick().ticks() : tick1(); }
-        int utick1() const { return tick1() + tickOffset(); }
-        int utick2() const { return tick2() + tickOffset(); }
-    };
-
-private:
-    std::vector<Chunk> chunks;
-
-    void updateChunksPartition();
-    static bool canBreakChunk(const Measure* last);
-    void updateState();
-
-    void renderStaffChunk(const Chunk&, EventMap* events, const Staff* sctx, PitchWheelRenderer& pitchWheelRenderer);
-
-    void renderSpanners(const Chunk&, EventMap* events, PitchWheelRenderer& pitchWheelRenderer);
-
-    void renderMetronome(const Chunk&, EventMap* events);
-    void renderMetronome(EventMap* events, Measure const* m, const Fraction& tickOffset);
-
-    void collectMeasureEvents(EventMap* events, Measure const* m, const Staff* sctx, int tickOffset,
-                              PitchWheelRenderer& pitchWheelRenderer);
-
-public:
-    explicit MidiRenderer(Score* s);
-
     struct Context
     {
         SynthesizerState synthState;
-        bool metronome{ true };
+        bool metronome = true;
 
         Context() {}
     };
 
-    void doCollectMeasureEvents(EventMap* events, Measure const* m, const Staff* sctx, int tickOffset,
-                                PitchWheelRenderer& pitchWheelRenderer);
-    void renderScore(EventMap* events, const Context& ctx);
-    void renderChunk(const Chunk&, EventMap* events, const Context& ctx, PitchWheelRenderer& pitchWheelRenderer);
+    explicit MidiRenderer(Score* s);
 
-    void setScoreChanged() { needUpdate = true; }
-    void setMinChunkSize(int sizeMeasures) { minChunkSize = sizeMeasures; needUpdate = true; }
+    void renderScore(EventMap* events, const Context& ctx);
 
     static const int ARTICULATION_CONV_FACTOR { 100000 };
 
-    std::vector<Chunk> chunksFromRange(const int fromTick, const int toTick);
+private:
+
+    Score* score = nullptr;
+
+    void renderStaff(EventMap* events, const Staff* sctx, PitchWheelRenderer& pitchWheelRenderer);
+
+    void renderSpanners(EventMap* events, PitchWheelRenderer& pitchWheelRenderer);
+
+    void renderMetronome(EventMap* events);
+    void renderMetronome(EventMap* events, Measure const* m);
+
+    void collectMeasureEvents(EventMap* events, Measure const* m, const Staff* sctx, int tickOffset,
+                              PitchWheelRenderer& pitchWheelRenderer);
+    void doCollectMeasureEvents(EventMap* events, Measure const* m, const Staff* sctx, int tickOffset,
+                                PitchWheelRenderer& pitchWheelRenderer);
 };
 } // namespace mu::engraving
 
