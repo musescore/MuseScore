@@ -36,7 +36,7 @@ class ScoreReader
 public:
     ScoreReader() = default;
 
-    Ret loadMscz(MasterScore* score, const MscReader& mscReader, AudioSettingsCompat& audioSettings, bool ignoreVersionError);
+    Ret loadMscz(MasterScore* score, const MscReader& mscReader, SettingsCompat& settingsCompat, bool ignoreVersionError);
 
 private:
 

@@ -86,7 +86,7 @@ mu::Ret mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const String& 
     reader.open();
 
     ScoreReader scoreReader;
-    AudioSettingsCompat audioSettings;
+    SettingsCompat audioSettings;
     return scoreReader.loadMscz(score, reader, audioSettings, ignoreVersionError);
 }
 
@@ -123,6 +123,6 @@ mu::Ret mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const
     MscReader reader(params);
     reader.open();
 
-    AudioSettingsCompat audioSettingsCompat;
-    return project->loadMscz(reader, audioSettingsCompat, ignoreVersionError);
+    SettingsCompat settingsCompat;
+    return project->loadMscz(reader, settingsCompat, ignoreVersionError);
 }
