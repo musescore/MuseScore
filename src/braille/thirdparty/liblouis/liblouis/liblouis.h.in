@@ -41,7 +41,7 @@ typedef @WIDECHAR_TYPE@ widechar;
 // clang-format on
 typedef unsigned short formtype;
 
-#ifdef _MSC_VER
+#if 0 // #ifdef _MSC_VER // disable because MuseScore is not using liblouis as a DLL
 #ifdef _EXPORTING
 #define LIBLOUIS_API __declspec(dllexport)
 #else
