@@ -31,7 +31,7 @@ StyledPopupView {
     id: root
 
     contentWidth: 280
-    contentHeight: 600
+    contentHeight: (parent.parent.height < 80) ? 600 : 500
 
     NoteInputBarCustomiseModel {
         id: customiseModel
