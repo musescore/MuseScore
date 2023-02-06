@@ -172,6 +172,7 @@ private:
 
     bool hasSelection() const;
 
+    bool m_isProjectClosing = false;
     bool m_isProjectProcessing = false;
     bool m_isProjectUploading = false;
 
