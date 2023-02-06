@@ -146,7 +146,7 @@ TEST_F(Engraving_RepeatTests, repeat14)
            u"1;2;3;4;5;6;7;8;9;10; 2;3;4;5;6;7;8; 11;12; 2;3;4;5;6;7;8; 13;14;15;16;17;18; 16;17;18; 19;20;21;22;23; 5;6;7; 24;25;26");
 }
 
-TEST_F(Engraving_RepeatTests, DISABLED_repeat15) {
+TEST_F(Engraving_RepeatTests, repeat15) {
     // repeat barline ||: x8 :||
     repeat("repeat15.mscx", u"1;2; 2; 2; 2; 2; 2; 2; 2;3");
 }
@@ -181,7 +181,7 @@ TEST_F(Engraving_RepeatTests, repeat21) {
     repeat("repeat21.mscx", u"1;2;3; 1;2;3;4;5;6;7; 5; 8");
 }
 
-TEST_F(Engraving_RepeatTests, DISABLED_repeat22) {
+TEST_F(Engraving_RepeatTests, repeat22) {
     // DS and ||: 3x :||
     repeat("repeat22.mscx", u"1;2;3; 2;3;4;5; 5; 5;6");
 }
@@ -371,27 +371,27 @@ TEST_F(Engraving_RepeatTests, repeat59) {
     repeat("repeat59.mscx", u"1;2; 1; 3;4;5; 4; 6;7");
 }
 
-TEST_F(Engraving_RepeatTests, DISABLED_repeat60) {
+TEST_F(Engraving_RepeatTests, repeat60) {
     // overlapping voltas
     repeat("repeat60.mscx", u"1;2;6;7; 1;2;3;6;7; 1;2;3;4;5;6;7; 1;2;3;6;7; 1;2;6;7; 1;7");
 }
 
-TEST_F(Engraving_RepeatTests, DISABLED_repeat61) {
+TEST_F(Engraving_RepeatTests, repeat61) {
     // overlapping voltas - nested
     repeat("repeat61.mscx", u"1;2;3;6;7; 1;2;3;4;5;6;7; 1;2;3;6;7; 1;7");
 }
 
-TEST_F(Engraving_RepeatTests, DISABLED_repeat62) {
+TEST_F(Engraving_RepeatTests, repeat62) {
     // overlapping voltas - same start
     repeat("repeat62.mscx", u"1;5;6;7; 1;2;3;4;5;6;7; 1;5;6;7; 1;7");
 }
 
-TEST_F(Engraving_RepeatTests, DISABLED_repeat63) {
+TEST_F(Engraving_RepeatTests, repeat63) {
     // overlapping voltas - same end
     repeat("repeat63.mscx", u"1;2;3;7; 1;2;3;4;5;6;7; 1;2;3;7; 1;7");
 }
 
-TEST_F(Engraving_RepeatTests, DISABLED_repeat64) {
+TEST_F(Engraving_RepeatTests, repeat64) {
     // overlapping voltas
     repeat("repeat64.mscx", u"1;2;3;7; 1;2;3;4;5;6;7; 1;2;3;7; 1;7");
 }

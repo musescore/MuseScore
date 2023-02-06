@@ -1213,8 +1213,6 @@ void Spanner::setTick(const Fraction& v)
     if (score) {
         score->spannerMap().setDirty();
     }
-
-    _startUniqueTicks = score ? score->repeatList().tick2utick(tick().ticks()) : 0;
 }
 
 //---------------------------------------------------------
@@ -1243,8 +1241,6 @@ void Spanner::setTicks(const Fraction& f)
     if (score) {
         score->spannerMap().setDirty();
     }
-
-    _endUniqueTicks = score ? score->repeatList().tick2utick(tick2().ticks()) : 0;
 }
 
 int Spanner::startUniqueTicks() const
