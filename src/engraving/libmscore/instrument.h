@@ -139,10 +139,6 @@ class InstrChannel
     int _bank;          // initialized from "init"
     int _channel { 0 };        // mscore channel number, mapped to midi port/channel
 
-    bool _soloMute;
-    bool _mute;
-    bool _solo;
-
     // MuseScore General-specific SND flags:
     //! TODO Needs porting to MU4
     bool _userBankController = false;     // if the user has changed the bank controller as opposed to switchExpressive
@@ -164,7 +160,7 @@ public:
 
     enum class Prop : char {
         VOLUME, PAN, CHORUS, REVERB, NAME, PROGRAM, BANK, COLOR,
-        SOLOMUTE, SOLO, MUTE, SYNTI, CHANNEL, USER_BANK_CONTROL
+        SYNTI, CHANNEL, USER_BANK_CONTROL
     };
 
 private:
@@ -197,13 +193,6 @@ public:
     int channel() const { return _channel; }
     void setChannel(int value);
 
-    bool soloMute() const { return _soloMute; }
-    void setSoloMute(bool value);
-    bool mute() const { return _mute; }
-    void setMute(bool value);
-    bool solo() const { return _solo; }
-    void setSolo(bool value);
-
     // If the bank controller is set by the user or not
     bool userBankController() const { return _userBankController; }
     void setUserBankController(bool val);
@@ -215,7 +204,7 @@ public:
 
     InstrChannel();
     void write(XmlWriter&, const Part* part) const;
-    void read(XmlReader&, Part* part);
+    void read(XmlReader&, Part* part, const InstrumentTrackId& instrId);
     void updateInitList() const;
     bool operator==(const InstrChannel& c) const { return (_name == c._name) && (_channel == c._channel); }
     bool operator!=(const InstrChannel& c) const { return !(*this == c); }
@@ -253,18 +242,10 @@ private:
 
 class PartChannelSettingsLink final : private ChannelListener
 {
-    // A list of properties which may vary for different excerpts.
-    static const std::initializer_list<InstrChannel::Prop> excerptProperties;
-
 private:
     InstrChannel* _main;
     InstrChannel* _bound;
     bool _excerpt;
-
-    static bool isExcerptProperty(InstrChannel::Prop p)
-    {
-        return std::find(excerptProperties.begin(), excerptProperties.end(), p) != excerptProperties.end();
-    }
 
     static void applyProperty(InstrChannel::Prop p, const InstrChannel* from, InstrChannel* to);
     void propertyChanged(InstrChannel::Prop p) override;

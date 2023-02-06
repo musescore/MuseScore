@@ -506,3 +506,10 @@ TextStyleType ReadContext::lookupUserTextStyle(const String& name) const
     }
     return TextStyleType::TEXT_TYPES;         // not found
 }
+
+void ReadContext::addPartAudioSettingCompat(PartAudioSettingsCompat partAudioSetting)
+{
+    if (_settingsCompat.audioSettings.count(partAudioSetting.instrumentId.partId) == 0) {
+        _settingsCompat.audioSettings.insert({ partAudioSetting.instrumentId.partId, partAudioSetting });
+    }
+}

@@ -38,7 +38,8 @@
 using namespace mu::io;
 using namespace mu::engraving;
 
-mu::Ret ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, bool ignoreVersionError)
+mu::Ret ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, SettingsCompat& settingsCompat,
+                              bool ignoreVersionError)
 {
     TRACEFUNC;
 
@@ -142,6 +143,8 @@ mu::Ret ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscRead
             masterScore->audio()->setData(dbuf1);
         }
     }
+
+    settingsCompat = std::move(masterScoreCtx.settingCompat());
 
     return ret;
 }

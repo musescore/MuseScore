@@ -158,6 +158,9 @@ public:
 
     std::list<std::pair<EngravingItem*, mu::PointF> >& fixOffsets() { return _fixOffsets; }
 
+    void addPartAudioSettingCompat(PartAudioSettingsCompat partAudioSetting);
+    const SettingsCompat& settingCompat() { return _settingsCompat; }
+
 private:
 
     void addConnectorInfo(std::unique_ptr<ConnectorInfoReader>);
@@ -200,6 +203,7 @@ private:
     std::list<TextStyleMap> userTextStyles;
 
     std::list<std::pair<EngravingItem*, mu::PointF> > _fixOffsets;
+    SettingsCompat _settingsCompat;
 };
 }
 

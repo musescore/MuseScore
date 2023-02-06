@@ -118,7 +118,6 @@ Ret EngravingProject::doSetupMasterScore(MasterScore* score, bool forceMode)
     }
 
     score->rebuildMidiMapping();
-    score->setSoloMute();
 
     for (Score* s : score->scoreList()) {
         s->setPlaylistDirty();
@@ -141,12 +140,12 @@ MasterScore* EngravingProject::masterScore() const
     return m_masterScore;
 }
 
-Ret EngravingProject::loadMscz(const MscReader& msc, bool ignoreVersionError)
+Ret EngravingProject::loadMscz(const MscReader& msc, SettingsCompat& settingsCompat, bool ignoreVersionError)
 {
     TRACEFUNC;
     MScore::setError(MsError::MS_NO_ERROR);
     ScoreReader scoreReader;
-    return scoreReader.loadMscz(m_masterScore, msc, ignoreVersionError);
+    return scoreReader.loadMscz(m_masterScore, msc, settingsCompat, ignoreVersionError);
 }
 
 bool EngravingProject::writeMscz(MscWriter& writer, bool onlySelection, bool createThumbnail)
