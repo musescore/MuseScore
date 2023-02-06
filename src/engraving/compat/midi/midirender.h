@@ -33,12 +33,6 @@ class MasterScore;
 class Staff;
 class SynthesizerState;
 
-enum class DynamicsRenderMethod : signed char {
-    FIXED_MAX,
-    SEG_START,
-    SIMPLE
-};
-
 //---------------------------------------------------------
 //   RangeMap
 ///   Helper class to keep track of status of status of
@@ -102,31 +96,19 @@ public:
 private:
     std::vector<Chunk> chunks;
 
-    struct StaffContext
-    {
-        Staff* staff{ nullptr };
-        DynamicsRenderMethod method{ DynamicsRenderMethod::SIMPLE };
-        int cc{ 0 };
-        bool renderHarmony{ false };
-    };
-
     void updateChunksPartition();
     static bool canBreakChunk(const Measure* last);
     void updateState();
 
-    void renderStaffChunk(const Chunk&, EventMap* events, const StaffContext& sctx, PitchWheelRenderer& pitchWheelRenderer);
+    void renderStaffChunk(const Chunk&, EventMap* events, const Staff* sctx, PitchWheelRenderer& pitchWheelRenderer);
 
     void renderSpanners(const Chunk&, EventMap* events, PitchWheelRenderer& pitchWheelRenderer);
 
     void renderMetronome(const Chunk&, EventMap* events);
     void renderMetronome(EventMap* events, Measure const* m, const Fraction& tickOffset);
 
-    void collectMeasureEvents(EventMap* events, Measure const* m, const MidiRenderer::StaffContext& sctx, int tickOffset,
+    void collectMeasureEvents(EventMap* events, Measure const* m, const Staff* sctx, int tickOffset,
                               PitchWheelRenderer& pitchWheelRenderer);
-    void collectMeasureEventsSimple(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset,
-                                    PitchWheelRenderer& pitchWheelRenderer);
-    void collectMeasureEventsDefault(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset,
-                                     PitchWheelRenderer& pitchWheelRenderer);
 
 public:
     explicit MidiRenderer(Score* s);
@@ -135,11 +117,12 @@ public:
     {
         SynthesizerState synthState;
         bool metronome{ true };
-        bool renderHarmony{ false };
 
         Context() {}
     };
 
+    void doCollectMeasureEvents(EventMap* events, Measure const* m, const Staff* sctx, int tickOffset,
+                                PitchWheelRenderer& pitchWheelRenderer);
     void renderScore(EventMap* events, const Context& ctx);
     void renderChunk(const Chunk&, EventMap* events, const Context& ctx, PitchWheelRenderer& pitchWheelRenderer);
 

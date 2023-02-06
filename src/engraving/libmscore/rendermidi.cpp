@@ -1,4 +1,4 @@
-﻿/*
+/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
@@ -1435,7 +1435,6 @@ void Score::renderMidi(EventMap* events, bool metronome, bool expandRepeats, con
     MidiRenderer::Context ctx;
     ctx.synthState = synthState;
     ctx.metronome = metronome;
-    ctx.renderHarmony = true;
     MidiRenderer(this).renderScore(events, ctx);
     masterScore()->setExpandRepeats(expandRepeatsBackup);
 }

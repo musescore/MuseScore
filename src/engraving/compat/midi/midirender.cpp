@@ -82,16 +82,6 @@ static PitchWheelSpecs wheelSpec;
 
 static bool graceNotesMerged(Chord* chord);
 
-struct SndConfig {
-    bool useSND = false;
-    int controller = -1;
-    DynamicsRenderMethod method = DynamicsRenderMethod::SEG_START;
-
-    SndConfig() {}
-    SndConfig(bool use, int c, DynamicsRenderMethod me)
-        : useSND(use), controller(c), method(me) {}
-};
-
 //---------------------------------------------------------
 //   Converts midi time (noteoff - noteon) to milliseconds
 //---------------------------------------------------------
@@ -295,7 +285,7 @@ static void collectBend(const Bend* bend,
 //---------------------------------------------------------
 
 static void collectNote(EventMap* events, int channel, const Note* note, double velocityMultiplier, int tickOffset, Staff* staff,
-                        SndConfig config, PitchWheelRenderer& pitchWheelRenderer, int graceOffsetOn = 0, int graceOffsetOff = 0)
+                        PitchWheelRenderer& pitchWheelRenderer, int graceOffsetOn = 0, int graceOffsetOff = 0)
 {
     if (!note->play() || note->hidden()) {      // do not play overlapping notes
         return;
@@ -326,7 +316,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, double 
                 tieLen += (n->chord()->actualTicks().ticks() * (nel[0].len())) / 1000;
             } else {
                 // recurse
-                collectNote(events, channel, n, velocityMultiplier, tickOffset, staff, config, pitchWheelRenderer);
+                collectNote(events, channel, n, velocityMultiplier, tickOffset, staff, pitchWheelRenderer);
                 break;
             }
             if (n->tieFor() && n != n->tieFor()->endNote()) {
@@ -369,87 +359,13 @@ static void collectNote(EventMap* events, int channel, const Note* note, double 
         // This allows correct playback of tremolos even without SND enabled.
         int velo;
         Fraction nonUnwoundTick = Fraction::fromTicks(on - tickOffset);
-        if (config.useSND) {
-            switch (config.method) {
-            case DynamicsRenderMethod::FIXED_MAX:
-                velo = 127;
-                break;
-            case DynamicsRenderMethod::SEG_START:
-            default:
-                velo = staff->velocities().val(nonUnwoundTick);
-                break;
-            }
-        } else {
-            velo = staff->velocities().val(nonUnwoundTick);
-        }
+        velo = staff->velocities().val(nonUnwoundTick);
 
         velo *= velocityMultiplier;
         velo *= e.velocityMultiplier();
         playNote(events, note, channel, p, std::clamp(velo, 1, 127), std::max(0, on - graceOffsetOn), std::max(0,
                                                                                                                off - graceOffsetOff),
                  staffIdx, pitchWheelRenderer);
-    }
-
-    // Single-note dynamics
-    // Find any changes, and apply events
-    if (config.useSND) {
-        ChangeMap& veloEvents = staff->velocities();
-        ChangeMap& multEvents = staff->velocityMultiplications();
-        Fraction stick = chord->tick();
-        Fraction etick = stick + chord->ticks();
-        auto changes = veloEvents.changesInRange(stick, etick);
-        auto multChanges = multEvents.changesInRange(stick, etick);
-
-        std::map<int, int> velocityMap;
-        for (auto& change : changes) {
-            int lastVal = -1;
-            int endPoint = change.second.ticks();
-            for (int t = change.first.ticks(); t <= endPoint; t++) {
-                int velo = veloEvents.val(Fraction::fromTicks(t));
-                if (velo == lastVal) {
-                    continue;
-                }
-                lastVal = velo;
-
-                velocityMap[t] = velo;
-            }
-        }
-
-        double CONVERSION_FACTOR = MidiRenderer::ARTICULATION_CONV_FACTOR;
-        for (auto& change : multChanges) {
-            // Ignore fix events: they are available as cached ramp starts
-            // and considering them ends up with multiplying twice effectively
-            if (change.first == change.second) {
-                continue;
-            }
-
-            int lastVal = MidiRenderer::ARTICULATION_CONV_FACTOR;
-            int endPoint = change.second.ticks();
-            int lastVelocity = velocityMap.upper_bound(change.first.ticks())->second;
-            for (int t = change.first.ticks(); t <= endPoint; t++) {
-                int mult = multEvents.val(Fraction::fromTicks(t));
-                if (mult == lastVal || mult == CONVERSION_FACTOR) {
-                    continue;
-                }
-                lastVal = mult;
-
-                double realMult = mult / CONVERSION_FACTOR;
-                if (velocityMap.find(t) != velocityMap.end()) {
-                    lastVelocity = velocityMap[t];
-                    velocityMap[t] *= realMult;
-                } else {
-                    velocityMap[t] = lastVelocity * realMult;
-                }
-            }
-        }
-
-        for (auto point = velocityMap.cbegin(); point != velocityMap.cend(); ++point) {
-            // NOTE:JT if we ever want to use poly aftertouch instead of CC, this is where we want to
-            // be using it. Instead of ME_CONTROLLER, use ME_POLYAFTER (but duplicate for each note in chord)
-            NPlayEvent event = NPlayEvent(ME_CONTROLLER, channel, config.controller, std::clamp(point->second, 0, 127));
-            event.setOriginatingStaff(staffIdx);
-            events->insert(std::make_pair(point->first + tickOffset, event));
-        }
     }
 
     // Bends
@@ -493,7 +409,7 @@ static void aeolusSetStop(int tick, int channel, int i, int k, bool val, EventMa
 //   collectProgramChanges
 //---------------------------------------------------------
 
-static void collectProgramChanges(EventMap* events, Measure const* m, Staff* staff, int tickOffset)
+static void collectProgramChanges(EventMap* events, Measure const* m, const Staff* staff, int tickOffset)
 {
     int firstStaffIdx = static_cast<int>(staff->idx());
     int nextStaffIdx  = firstStaffIdx + 1;
@@ -547,34 +463,6 @@ static void collectProgramChanges(EventMap* events, Measure const* m, Staff* sta
 }
 
 //---------------------------------------------------------
-//   getControllerFromCC
-//---------------------------------------------------------
-
-static int getControllerFromCC(int cc)
-{
-    int controller = -1;
-
-    switch (cc) {
-    case 1:
-        controller = CTRL_MODULATION;
-        break;
-    case 2:
-        controller = CTRL_BREATH;
-        break;
-    case 4:
-        controller = CTRL_FOOT;
-        break;
-    case 11:
-        controller = CTRL_EXPRESSION;
-        break;
-    default:
-        break;
-    }
-
-    return controller;
-}
-
-//---------------------------------------------------------
 //    renderHarmony
 ///    renders chord symbols
 //---------------------------------------------------------
@@ -620,7 +508,7 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
     }
 }
 
-static void collectGraceBeforeChordEvents(Chord* chord, EventMap* events, const SndConfig& config, int channel, double veloMultiplier,
+static void collectGraceBeforeChordEvents(Chord* chord, EventMap* events, int channel, double veloMultiplier,
                                           Staff* st, int tickOffset, PitchWheelRenderer& pitchWheelRenderer)
 {
     // calculate offset for grace notes here
@@ -644,93 +532,13 @@ static void collectGraceBeforeChordEvents(Chord* chord, EventMap* events, const 
         for (Chord* c : chord->graceNotesBefore()) {
             for (const Note* note : c->notes()) {
                 if (note->noteType() == NoteType::ACCIACCATURA) {
-                    collectNote(events, channel, note, veloMultiplier, tickOffset, st, config,
+                    collectNote(events, channel, note, veloMultiplier, tickOffset, st,
                                 pitchWheelRenderer,
                                 graceTickSum - graceTickOffset * currentBeaforeBeatNote,
                                 graceTickSum - graceTickOffset * (currentBeaforeBeatNote + 1) + 1);
                     currentBeaforeBeatNote++;
                 } else {
-                    collectNote(events, channel, note, veloMultiplier, tickOffset, st, config, pitchWheelRenderer);
-                }
-            }
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   collectMeasureEventsSimple
-//    the original, velocity-only method of collecting events.
-//---------------------------------------------------------
-
-void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset,
-                                              PitchWheelRenderer& pitchWheelRenderer)
-{
-    staff_idx_t firstStaffIdx = sctx.staff->idx();
-    staff_idx_t nextStaffIdx  = firstStaffIdx + 1;
-
-    SegmentType st = SegmentType::ChordRest;
-    track_idx_t strack = firstStaffIdx * VOICES;
-    track_idx_t etrack = nextStaffIdx * VOICES;
-
-    for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-        int tick = seg->tick().ticks();
-
-        //render harmony
-        if (sctx.renderHarmony) {
-            for (EngravingItem* e : seg->annotations()) {
-                if (!e || (e->track() < strack) || (e->track() >= etrack)) {
-                    continue;
-                }
-                Harmony* h = nullptr;
-                if (e->isHarmony()) {
-                    h = toHarmony(e);
-                } else if (e->isFretDiagram()) {
-                    h = toFretDiagram(e)->harmony();
-                }
-                if (!h || !h->play()) {
-                    continue;
-                }
-                renderHarmony(events, m, h, tickOffset);
-            }
-        }
-
-        for (track_idx_t track = strack; track < etrack; ++track) {
-            // skip linked staves, except primary
-            if (!m->score()->staff(track / VOICES)->isPrimaryStaff()) {
-                track += VOICES - 1;
-                continue;
-            }
-            EngravingItem* cr = seg->element(track);
-            if (cr == 0 || cr->type() != ElementType::CHORD) {
-                continue;
-            }
-
-            Chord* chord = toChord(cr);
-            Staff* st1   = chord->staff();
-            Instrument* instr = chord->part()->instrument(Fraction::fromTicks(tick));
-            int channel = instr->channel(chord->upNote()->subchannel())->channel();
-            events->registerChannel(channel);
-
-            double veloMultiplier = 1;
-            for (Articulation* a : chord->articulations()) {
-                if (a->playArticulation()) {
-                    veloMultiplier *= instr->getVelocityMultiplier(a->articulationName());
-                }
-            }
-
-            SndConfig config;             // dummy
-
-            collectGraceBeforeChordEvents(chord, events, config, channel, veloMultiplier, st1, tickOffset, pitchWheelRenderer);
-
-            for (const Note* note : chord->notes()) {
-                collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config, pitchWheelRenderer);
-            }
-
-            if (!graceNotesMerged(chord)) {
-                for (Chord* c : chord->graceNotesAfter()) {
-                    for (const Note* note : c->notes()) {
-                        collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config, pitchWheelRenderer);
-                    }
+                    collectNote(events, channel, note, veloMultiplier, tickOffset, st, pitchWheelRenderer);
                 }
             }
         }
@@ -739,25 +547,12 @@ void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure const* m
 
 //---------------------------------------------------------
 //   collectMeasureEventsDefault
-//    this uses only CC events to control note velocity, and sets the
-//    note-on velocity to always be 127 (max). This is the method that allows
-//    single note dynamics, but only works if the soundfont supports it.
-//    Method is one of:
-//          FIXED_MAX - default: velocity is fixed at 127
-//          SEG_START - note-on velocity is the same as the start velocity of the seg
 //---------------------------------------------------------
 
-void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset,
-                                               PitchWheelRenderer& pitchWheelRenderer)
+void MidiRenderer::doCollectMeasureEvents(EventMap* events, Measure const* m, const Staff* staff, int tickOffset,
+                                          PitchWheelRenderer& pitchWheelRenderer)
 {
-    int controller = getControllerFromCC(sctx.cc);
-
-    if (controller == -1) {
-        LOGW("controller for CC %d not valid", sctx.cc);
-        return;
-    }
-
-    staff_idx_t firstStaffIdx = sctx.staff->idx();
+    staff_idx_t firstStaffIdx = staff->idx();
     staff_idx_t nextStaffIdx  = firstStaffIdx + 1;
 
     SegmentType st = SegmentType::ChordRest;
@@ -767,22 +562,20 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* 
         Fraction tick = seg->tick();
 
         //render harmony
-        if (sctx.renderHarmony) {
-            for (EngravingItem* e : seg->annotations()) {
-                if (!e || (e->track() < strack) || (e->track() >= etrack)) {
-                    continue;
-                }
-                Harmony* h = nullptr;
-                if (e->isHarmony()) {
-                    h = toHarmony(e);
-                } else if (e->isFretDiagram()) {
-                    h = toFretDiagram(e)->harmony();
-                }
-                if (!h || !h->play()) {
-                    continue;
-                }
-                renderHarmony(events, m, h, tickOffset);
+        for (EngravingItem* e : seg->annotations()) {
+            if (!e || (e->track() < strack) || (e->track() >= etrack)) {
+                continue;
             }
+            Harmony* h = nullptr;
+            if (e->isHarmony()) {
+                h = toHarmony(e);
+            } else if (e->isFretDiagram()) {
+                h = toFretDiagram(e)->harmony();
+            }
+            if (!h || !h->play()) {
+                continue;
+            }
+            renderHarmony(events, m, h, tickOffset);
         }
 
         for (track_idx_t track = strack; track < etrack; ++track) {
@@ -818,22 +611,19 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* 
                 }
             }
 
-            bool useSND = instr->singleNoteDynamics();
-            SndConfig config = SndConfig(useSND, controller, sctx.method);
-
             //
             // Add normal note events
             //
-            collectGraceBeforeChordEvents(chord, events, config, channel, veloMultiplier, st1, tickOffset, pitchWheelRenderer);
+            collectGraceBeforeChordEvents(chord, events, channel, veloMultiplier, st1, tickOffset, pitchWheelRenderer);
 
             for (const Note* note : chord->notes()) {
-                collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config, pitchWheelRenderer);
+                collectNote(events, channel, note, veloMultiplier, tickOffset, st1, pitchWheelRenderer);
             }
 
             if (!graceNotesMerged(chord)) {
                 for (Chord* c : chord->graceNotesAfter()) {
                     for (const Note* note : c->notes()) {
-                        collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config, pitchWheelRenderer);
+                        collectNote(events, channel, note, veloMultiplier, tickOffset, st1, pitchWheelRenderer);
                     }
                 }
             }
@@ -852,30 +642,19 @@ MidiRenderer::MidiRenderer(Score* s)
 //    redirects to the correct function based on the passed method
 //---------------------------------------------------------
 
-void MidiRenderer::collectMeasureEvents(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset,
+void MidiRenderer::collectMeasureEvents(EventMap* events, Measure const* m, const Staff* staff, int tickOffset,
                                         PitchWheelRenderer& pitchWheelRenderer)
 {
-    switch (sctx.method) {
-    case DynamicsRenderMethod::SIMPLE:
-        collectMeasureEventsSimple(events, m, sctx, tickOffset, pitchWheelRenderer);
-        break;
-    case DynamicsRenderMethod::SEG_START:
-    case DynamicsRenderMethod::FIXED_MAX:
-        collectMeasureEventsDefault(events, m, sctx, tickOffset, pitchWheelRenderer);
-        break;
-    default:
-        LOGW("Unrecognized dynamics method: %d", int(sctx.method));
-        break;
-    }
+    doCollectMeasureEvents(events, m, staff, tickOffset, pitchWheelRenderer);
 
-    collectProgramChanges(events, m, sctx.staff, tickOffset);
+    collectProgramChanges(events, m, staff, tickOffset);
 }
 
 //---------------------------------------------------------
 //   renderStaffChunk
 //---------------------------------------------------------
 
-void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, const StaffContext& sctx, PitchWheelRenderer& pitchWheelRenderer)
+void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, const Staff* staff, PitchWheelRenderer& pitchWheelRenderer)
 {
     Measure const* const start = chunk.startMeasure();
     Measure const* const end = chunk.endMeasure();
@@ -884,7 +663,7 @@ void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, const 
     Measure const* lastMeasure = start->prevMeasure();
 
     for (Measure const* m = start; m != end; m = m->nextMeasure()) {
-        staff_idx_t staffIdx = sctx.staff->idx();
+        staff_idx_t staffIdx = staff->idx();
         if (m->isMeasureRepeatGroup(staffIdx)) {
             MeasureRepeat* mr = m->measureRepeatElement(staffIdx);
             Measure const* playMeasure = lastMeasure;
@@ -897,10 +676,10 @@ void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, const 
             }
 
             int offset = (m->tick() - playMeasure->tick()).ticks();
-            collectMeasureEvents(events, playMeasure, sctx, tickOffset + offset, pitchWheelRenderer);
+            collectMeasureEvents(events, playMeasure, staff, tickOffset + offset, pitchWheelRenderer);
         } else {
             lastMeasure = m;
-            collectMeasureEvents(events, lastMeasure, sctx, tickOffset, pitchWheelRenderer);
+            collectMeasureEvents(events, lastMeasure, staff, tickOffset, pitchWheelRenderer);
         }
     }
 }
@@ -1194,48 +973,9 @@ void MidiRenderer::renderChunk(const Chunk& chunk, EventMap* events, const Conte
     score->updateChannel();
     score->updateVelo();
 
-    SynthesizerState s = score->synthesizerState();
-    int method = s.method();
-    int cc = s.ccToUse();
-
-    // check if the score synth settings are actually set
-    // if not, use the global synth state
-    if (method == -1) {
-        method = ctx.synthState.method();
-        cc = ctx.synthState.ccToUse();
-
-        if (method == -1) {
-            // fall back to defaults - this may be needed to pass tests,
-            // since sometimes the synth state is not init
-            method = 1;
-            cc = 2;
-        }
-    }
-
-    DynamicsRenderMethod renderMethod = DynamicsRenderMethod::SIMPLE;
-    switch (method) {
-    case 0:
-        renderMethod = DynamicsRenderMethod::SIMPLE;
-        break;
-    case 1:
-        renderMethod = DynamicsRenderMethod::SEG_START;
-        break;
-    case 2:
-        renderMethod = DynamicsRenderMethod::FIXED_MAX;
-        break;
-    default:
-        LOGW("Unrecognized dynamics method: %d", method);
-        break;
-    }
-
     // create note & other events
-    for (Staff* st : score->staves()) {
-        StaffContext sctx;
-        sctx.staff = st;
-        sctx.method = renderMethod;
-        sctx.cc = cc;
-        sctx.renderHarmony = ctx.renderHarmony;
-        renderStaffChunk(chunk, events, sctx, pitchWheelRenderer);
+    for (const Staff* st : score->staves()) {
+        renderStaffChunk(chunk, events, st, pitchWheelRenderer);
     }
     events->fixupMIDI();
 
