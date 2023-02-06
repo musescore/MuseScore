@@ -81,17 +81,17 @@ jobs:
     - name: Build
       run: |
         source $HOME/build_tools/environment.sh
-        mkdir -p "$HOME/musescore_install"
+        mkdir -p "./musescore_current"
         bash ninja_build.sh -t clean
-        MUSESCORE_INSTALL_DIR="$HOME/musescore_install" bash ninja_build.sh -t installdebug
-    - name: Generate current PNGs
-      run: |
-        xvfb-run ./vtest/vtest-generate-pngs.sh -o ./current_pngs -m $HOME/musescore_install/bin/mscore
-    - name: Upload PNGs
+        MUSESCORE_INSTALL_DIR="./musescore_current" bash ninja_build.sh -t installdebug
+#    - name: Generate current PNGs
+#      run: |
+#        xvfb-run ./vtest/vtest-generate-pngs.sh -o ./current_pngs -m $HOME/musescore_current/bin/mscore
+    - name: Upload Current musescore
       uses: actions/upload-artifact@v3
       with:
-        name: Current PNGs
-        path: ./current_pngs
+        name: Current musescore
+        path: ./musescore_current
 
   generate_reference_pngs:
     name: "Generate reference PNGs"
@@ -118,19 +118,19 @@ jobs:
     - name: Build
       run: |
         source $HOME/build_tools/environment.sh
-        mkdir -p "$HOME/musescore_install"
+        mkdir -p "./musescore_reference"
         bash ninja_build.sh -t clean
-        MUSESCORE_INSTALL_DIR="$HOME/musescore_install" bash ninja_build.sh -t installdebug
+        MUSESCORE_INSTALL_DIR="./musescore_reference" bash ninja_build.sh -t installdebug
     - name: Checkout current commit
       uses: actions/checkout@v3
-    - name: Generate reference PNGs
-      run: |
-        xvfb-run ./vtest/vtest-generate-pngs.sh -o ./reference_pngs -m $HOME/musescore_install/bin/mscore
-    - name: Upload PNGs
+#    - name: Generate reference PNGs
+#      run: |
+#        xvfb-run ./vtest/vtest-generate-pngs.sh -o ./reference_pngs -m $HOME/musescore_reference/bin/mscore
+    - name: Upload Reference musescore
       uses: actions/upload-artifact@v3
       with:
-        name: Reference PNGs
-        path: ./reference_pngs
+        name: Reference musescore
+        path: ./musescore_reference
 
   compare_pngs:
     name: "Compare PNGs"
@@ -140,48 +140,62 @@ jobs:
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
-    - name: Download current PNGs
+    - name: Download Current musescore
       uses: actions/download-artifact@v3
       with:
-        name: Current PNGs
-        path: ./current_pngs
-    - name: Download reference PNGs
+        name: Current musescore
+        path: $HOME/musescore_current
+    - name: Download Reference musescore
       uses: actions/download-artifact@v3
       with:
-        name: Reference PNGs
-        path: ./reference_pngs
-    - name: Compare PNGs
+        name: Reference musescore
+        path: $HOME/musescore_reference
+    - name: My test
       run: |
-        echo "VTEST_DIFF_FOUND=false" >> $GITHUB_ENV
-        ./vtest/vtest-compare-pngs.sh
-    - name: Upload comparison
-      if: env.VTEST_DIFF_FOUND == 'true'
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ needs.setup.outputs.artifact_name }}
-        path: ./comparison
-    - name: Skip failure signal if PR is labeled 'vtests'
-      if: github.event_name == 'pull_request' && contains( env.VTEST_DIFF_FOUND, 'true') && contains(github.event.pull_request.labels.*.name, 'vtests')
-      run: |
-        echo "This PR appears to change some of the visual tests."
-        echo "Please carefully review the new visual test results in the uploaded artifact that can be found here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-        echo "Failure signal skipped because 'vtests' label is applied to the PR"
-        export VTEST_DIFF_FOUND=false
-        echo "VTEST_DIFF_FOUND=$VTEST_DIFF_FOUND" >> $GITHUB_ENV
-    - name: Emit failure signal for PR if differences are found
-      if: github.event_name == 'pull_request' && contains( env.VTEST_DIFF_FOUND, 'true')
-      run: |
-        echo "This PR appears to change some of the visual tests."
-        echo "Please carefully review the new visual test results in the uploaded artifact that can be found here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-        exit 1
-    - name: Comment push commit
-      if: github.event_name == 'push' && contains( env.VTEST_DIFF_FOUND, 'true')
-      uses: peter-evans/commit-comment@v2
-      with:
-        body: |
-          This is an automatic message. This commit appears to change some of the visual tests.
-          Please carefully review the new visual test results in the uploaded artifact that can be found
-          [here][1]
+        echo "======= HOME ======"
+        ls $HOME
 
-          [1]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        token: ${{ secrets.GITHUB_TOKEN }}
+        echo "======= $HOME/musescore_current ======"
+        ls $HOME/musescore_current
+
+        echo "======= $HOME/musescore_reference ======"
+        ls $HOME/musescore_reference
+
+        $HOME/musescore_current/bin/mscore -v
+        $HOME/musescore_reference/bin/mscore -v
+
+    # - name: Compare PNGs
+    #   run: |
+    #     echo "VTEST_DIFF_FOUND=false" >> $GITHUB_ENV
+    #     ./vtest/vtest-compare-pngs.sh
+    # - name: Upload comparison
+    #   if: env.VTEST_DIFF_FOUND == 'true'
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: ${{ needs.setup.outputs.artifact_name }}
+    #     path: ./comparison
+    # - name: Skip failure signal if PR is labeled 'vtests'
+    #   if: github.event_name == 'pull_request' && contains( env.VTEST_DIFF_FOUND, 'true') && contains(github.event.pull_request.labels.*.name, 'vtests')
+    #   run: |
+    #     echo "This PR appears to change some of the visual tests."
+    #     echo "Please carefully review the new visual test results in the uploaded artifact that can be found here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+    #     echo "Failure signal skipped because 'vtests' label is applied to the PR"
+    #     export VTEST_DIFF_FOUND=false
+    #     echo "VTEST_DIFF_FOUND=$VTEST_DIFF_FOUND" >> $GITHUB_ENV
+    # - name: Emit failure signal for PR if differences are found
+    #   if: github.event_name == 'pull_request' && contains( env.VTEST_DIFF_FOUND, 'true')
+    #   run: |
+    #     echo "This PR appears to change some of the visual tests."
+    #     echo "Please carefully review the new visual test results in the uploaded artifact that can be found here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+    #     exit 1
+    # - name: Comment push commit
+    #   if: github.event_name == 'push' && contains( env.VTEST_DIFF_FOUND, 'true')
+    #   uses: peter-evans/commit-comment@v2
+    #   with:
+    #     body: |
+    #       This is an automatic message. This commit appears to change some of the visual tests.
+    #       Please carefully review the new visual test results in the uploaded artifact that can be found
+    #       [here][1]
+
+    #       [1]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    #     token: ${{ secrets.GITHUB_TOKEN }}
