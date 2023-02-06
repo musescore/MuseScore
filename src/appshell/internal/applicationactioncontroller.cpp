@@ -21,7 +21,6 @@
  */
 #include "applicationactioncontroller.h"
 
-#include <QCoreApplication>
 #include <QApplication>
 #include <QCloseEvent>
 #include <QFileOpenEvent>
@@ -283,11 +282,4 @@ void ApplicationActionController::revertToFactorySettings()
     }
 
     restart();
-}
-
-bool ApplicationActionController::canReceiveAction(const mu::actions::ActionCode& code) const
-{
-    Q_UNUSED(code);
-    auto focus = QGuiApplication::focusWindow();
-    return !focus || focus->modality() == Qt::WindowModality::NonModal;
 }
