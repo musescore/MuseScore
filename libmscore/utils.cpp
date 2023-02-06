@@ -1059,5 +1059,16 @@ Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStretch)
       return f;
       }
 
+
+double yStaffDifference(const System* system1, int staffIdx1, const System* system2, int staffIdx2)
+      {
+       if (!system1 || !system2)
+            return 0.0;
+      const SysStaff* staff1 = system1->staff(staffIdx1);
+      const SysStaff* staff2 = system2->staff(staffIdx2);
+      if (!staff1 || !staff2)
+            return 0.0;
+      return staff1->y() - staff2->y();
+      }
 }
 
