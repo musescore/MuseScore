@@ -73,6 +73,7 @@
 #include "project/projectmodule.h"
 #include "print/printmodule.h"
 
+#ifdef BUILD_IMPORTEXPORT_MODULE
 #include "importexport/musicxml/musicxmlmodule.h"
 #include "importexport/bb/bbmodule.h"
 #include "importexport/braille/braillemodule.h"
@@ -84,6 +85,7 @@
 #include "importexport/ove/ovemodule.h"
 #include "importexport/audioexport/audioexportmodule.h"
 #include "importexport/imagesexport/imagesexportmodule.h"
+#endif
 
 #ifdef BUILD_VIDEOEXPORT_MODULE
 #include "importexport/videoexport/videoexportmodule.h"
@@ -248,6 +250,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::converter::ConverterModule());
 
 #ifndef Q_OS_WASM
+#ifdef BUILD_IMPORTEXPORT_MODULE
     app.addModule(new mu::iex::bb::BBModule());
     app.addModule(new mu::iex::braille::BrailleModule());
     app.addModule(new mu::iex::bww::BwwModule());
@@ -259,6 +262,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::iex::ove::OveModule());
     app.addModule(new mu::iex::audioexport::AudioExportModule());
     app.addModule(new mu::iex::imagesexport::ImagesExportModule());
+#endif
 
 #ifdef BUILD_VIDEOEXPORT_MODULE
     app.addModule(new mu::iex::videoexport::VideoExportModule());
