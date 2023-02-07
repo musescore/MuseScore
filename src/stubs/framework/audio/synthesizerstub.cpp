@@ -25,7 +25,8 @@ using namespace mu;
 using namespace mu::audio;
 using namespace mu::audio::synth;
 
-SynthesizerStub::SynthesizerStub(const AudioSourceParams&)
+SynthesizerStub::SynthesizerStub(const AudioSourceParams& params)
+    : m_params(params)
 {
 }
 
@@ -43,7 +44,7 @@ mu::async::Channel<unsigned int> SynthesizerStub::audioChannelsCountChanged() co
     return async::Channel<unsigned int>();
 }
 
-samples_t SynthesizerStub::process(float* buffer, samples_t samplesPerChannel)
+samples_t SynthesizerStub::process(float*, samples_t)
 {
     return 0;
 }
@@ -60,12 +61,11 @@ AudioSourceType SynthesizerStub::type() const
 
 void SynthesizerStub::setup(const mpe::PlaybackData&)
 {
-
 }
 
 const audio::AudioInputParams& SynthesizerStub::params() const
 {
-
+    return m_params;
 }
 
 async::Channel<audio::AudioInputParams> SynthesizerStub::paramsChanged() const
@@ -85,7 +85,6 @@ void SynthesizerStub::setPlaybackPosition(const msecs_t)
 
 void SynthesizerStub::revokePlayingNotes()
 {
-
 }
 
 void SynthesizerStub::flushSound()
@@ -105,4 +104,3 @@ bool SynthesizerStub::isActive() const
 void SynthesizerStub::setIsActive(bool)
 {
 }
-

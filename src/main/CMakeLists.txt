@@ -161,19 +161,25 @@ if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB ${FREETYPE_LIB})
     list(APPEND LINK_LIB cloud)
     list(APPEND LINK_LIB languages)
-    list(APPEND LINK_LIB iex_musicxml)
-    list(APPEND LINK_LIB iex_bb)
-    list(APPEND LINK_LIB iex_braille)
-    list(APPEND LINK_LIB iex_bww)
-    list(APPEND LINK_LIB iex_capella)
-    list(APPEND LINK_LIB iex_guitarpro)
-    list(APPEND LINK_LIB iex_midi)
-    list(APPEND LINK_LIB iex_musedata)
-    list(APPEND LINK_LIB iex_ove)
-    list(APPEND LINK_LIB iex_audioexport)
-    list(APPEND LINK_LIB iex_imagesexport)
     list(APPEND LINK_LIB plugins)
     list(APPEND LINK_LIB multiinstances)
+
+    if (BUILD_IMPORTEXPORT_MODULE)
+        set(LINK_LIB ${LINK_LIB}
+            iex_musicxml
+            iex_bb
+            iex_braille
+            iex_bww
+            iex_capella
+            iex_guitarpro
+            iex_midi
+            iex_musedata
+            iex_ove
+            iex_audioexport
+            iex_imagesexport
+        )
+    endif()
+
 endif()
 
 if (BUILD_VIDEOEXPORT_MODULE)
