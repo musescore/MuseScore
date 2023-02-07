@@ -289,35 +289,26 @@ static void collectNote(EventMap* events, int channel, const Note* note, double 
     if (!note->play() || note->hidden()) {      // do not play overlapping notes
         return;
     }
+
     Chord* chord = note->chord();
 
-    int staffIdx = static_cast<int>(staff->idx());
-    int ticks;
     int tieLen = 0;
     if (chord->isGrace()) {
         assert(!graceNotesMerged(chord));      // this function should not be called on a grace note if grace notes are merged
         chord = toChord(chord->explicitParent());
     }
 
-    ticks = chord->actualTicks().ticks();   // ticks of the actual note
+    int ticks = chord->actualTicks().ticks();   // ticks of the actual note
     // calculate additional length due to ties forward
     // taking NoteEvent length adjustments into account
-    // but stopping at any note with multiple NoteEvents
-    // and processing those notes recursively
     if (note->tieFor()) {
-        Note* n = note->tieFor()->endNote();
+        const Note* n = note->tieFor()->endNote();
         while (n) {
             NoteEventList nel = n->playEvents();
-            if (nel.size() == 1 && !isGlissandoFor(n)) {
-                // add value of this note to main note
-                // if we wish to suppress first note of ornament,
-                // then do this regardless of number of NoteEvents
+            if (!nel.empty()) {
                 tieLen += (n->chord()->actualTicks().ticks() * (nel[0].len())) / 1000;
-            } else {
-                // recurse
-                collectNote(events, channel, n, velocityMultiplier, tickOffset, staff, pitchWheelRenderer);
-                break;
             }
+
             if (n->tieFor() && n != n->tieFor()->endNote()) {
                 n = n->tieFor()->endNote();
             } else {
@@ -342,12 +333,8 @@ static void collectNote(EventMap* events, int channel, const Note* note, double 
         if (tieBack && nels == 1 && !isGlissandoFor(note)) {
             break;
         }
-        int p = pitch + e.pitch();
-        if (p < 0) {
-            p = 0;
-        } else if (p > 127) {
-            p = 127;
-        }
+
+        int p = std::clamp(pitch + e.pitch(), 0, 127);
         int on  = tick1 + (ticks * e.ontime()) / 1000;
         int off = on + (ticks * e.len()) / 1000 - 1;
         if (tieFor && i == static_cast<int>(nels) - 1) {
@@ -356,15 +343,13 @@ static void collectNote(EventMap* events, int channel, const Note* note, double 
 
         // Get the velocity used for this note from the staff
         // This allows correct playback of tremolos even without SND enabled.
-        int velo;
         Fraction nonUnwoundTick = Fraction::fromTicks(on - tickOffset);
-        velo = staff->velocities().val(nonUnwoundTick);
-
-        velo *= velocityMultiplier;
-        velo *= e.velocityMultiplier();
-        playNote(events, note, channel, p, std::clamp(velo, 1, 127), std::max(0, on - graceOffsetOn), std::max(0,
-                                                                                                               off - graceOffsetOff),
-                 staffIdx, pitchWheelRenderer);
+        int velo = staff->velocities().val(nonUnwoundTick) * velocityMultiplier * e.velocityMultiplier();
+        if (e.play()) {
+            playNote(events, note, channel, p, std::clamp(velo, 1, 127), std::max(0, on - graceOffsetOn), std::max(0,
+                                                                                                                   off - graceOffsetOff),
+                     static_cast<int>(staff->idx()), pitchWheelRenderer);
+        }
     }
 
     // Bends

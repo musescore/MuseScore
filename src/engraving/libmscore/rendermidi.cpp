@@ -702,10 +702,12 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
     //   append a NoteEvent either by calculating an articulationExcursion or by
     //   the given chromatic relative pitch.
     //   RETURNS the new ontime value.  The caller is expected to assign this value.
-    auto makeEvent = [note, chord, chromatic, events](int pitch, int ontime, int duration, double velocityMultiplier = 1.0) {
+    auto makeEvent
+        = [note, chord, chromatic, events](int pitch, int ontime, int duration, double velocityMultiplier = 1.0, bool play = true) {
         events->push_back(NoteEvent(chromatic ? pitch : chromaticPitchSteps(note, note, pitch),
                                     ontime / chord->actualTicks().ticks(),
-                                    duration / chord->actualTicks().ticks(), velocityMultiplier));
+                                    duration / chord->actualTicks().ticks(), velocityMultiplier, play));
+
         return ontime + duration;
     };
 
@@ -775,9 +777,14 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
             const double glissandoVelocityMultiplier = NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
 
             // render the body, i.e. the glissando
-            for (int j = 0; j < b - 1; j++) {
+            if (onTimes.size() > 1) {
+                makeEvent(body[0], onTimes[0], onTimes[1] - onTimes[0],
+                          defaultVelocityMultiplier, !note->tieBack());
+            }
+
+            for (int j = 1; j < b - 1; j++) {
                 makeEvent(body[j], onTimes[j], onTimes[j + 1] - onTimes[j],
-                          j == 0 ? defaultVelocityMultiplier : glissandoVelocityMultiplier);
+                          glissandoVelocityMultiplier);
             }
             makeEvent(body[b - 1], onTimes[b - 1], (millespernote * b - onTimes[b - 1]) + sustain, glissandoVelocityMultiplier);
         } else {
@@ -1092,7 +1099,7 @@ static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int& onT
     const int slideDuration = 45;
     trailtime += slideNotes * slideDuration;
     int slideOn = 1000 - trailtime;
-    el->push_back(NoteEvent(0, onTime, slideOn));
+    el->push_back(NoteEvent(0, onTime, slideOn, NoteEvent::DEFAULT_VELOCITY_MULTIPLIER, !note->tieBack()));
 
     int pitch = 0;
     int pitchOffset = note->slide().is(Note::SlideType::Doit) ? 1 : -1;
