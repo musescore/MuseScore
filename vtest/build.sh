@@ -19,9 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-HERE="$(dirname ${BASH_SOURCE[0]})"
-
-INSTALL_DIR="$HERE/../musescore"
+INSTALL_DIR="../musescore"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -31,8 +29,8 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
-
 mkdir -p $INSTALL_DIR
+
 bash $HERE/../ninja_build.sh -t clean
 MUSESCORE_INSTALL_DIR=$INSTALL_DIR \
 MUSESCORE_BUILD_UPDATE_MODULE=OFF \
@@ -50,4 +48,5 @@ MUSESCORE_BUILD_INSTRUMENTSSCENE_MODULE=OFF \
 MUSESCORE_BUILD_INSPECTOR_MODULE=OFF \
 MUSESCORE_BUILD_MULTIINSTANCES_MODULE=OFF \
 MUSESCORE_BUILD_VIDEOEXPORT_MODULE=OFF \
+MUSESCORE_BUILD_IMPORTEXPORT_MODULE=OFF \
 bash ninja_build.sh -t installdebug
