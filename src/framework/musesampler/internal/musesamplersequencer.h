@@ -23,7 +23,7 @@
 #ifndef MU_MUSESAMPLER_MUSESAMPLERSEQUENCER_H
 #define MU_MUSESAMPLER_MUSESAMPLERSEQUENCER_H
 
-#include "audio/abstracteventsequencer.h"
+#include "audio/internal/abstracteventsequencer.h"
 
 #include "internal/apitypes.h"
 #include "internal/libhandler.h"

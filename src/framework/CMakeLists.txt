@@ -38,12 +38,16 @@ if (BUILD_AUDIO_MODULE)
     add_subdirectory(audio)
 endif (BUILD_AUDIO_MODULE)
 
-add_subdirectory(midi)
-add_subdirectory(mpe)
-
 if (BUILD_MUSESAMPLER_MODULE)
     add_subdirectory(musesampler)
 endif(BUILD_MUSESAMPLER_MODULE)
+
+if (BUILD_VST_MODULE)
+    add_subdirectory(vst)
+endif(BUILD_VST_MODULE)
+
+add_subdirectory(midi)
+add_subdirectory(mpe)
 
 if (BUILD_UNIT_TESTS)
     add_subdirectory(global/tests)
@@ -53,6 +57,3 @@ if (BUILD_UNIT_TESTS)
     add_subdirectory(accessibility/tests)
 endif(BUILD_UNIT_TESTS)
 
-if (BUILD_VST)
-    add_subdirectory(vst)
-endif(BUILD_VST)

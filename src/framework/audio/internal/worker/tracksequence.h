@@ -23,12 +23,10 @@
 #ifndef MU_AUDIO_TRACKSEQUENCE_H
 #define MU_AUDIO_TRACKSEQUENCE_H
 
-#include "modularity/ioc.h"
 #include "async/asyncable.h"
 
 #include "itracksequence.h"
 #include "igettracks.h"
-#include "iaudiosource.h"
 #include "iclock.h"
 #include "track.h"
 #include "audiotypes.h"

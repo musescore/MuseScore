@@ -57,7 +57,6 @@ option(LOGGER_DEBUGLEVEL_ENABLED "Enable logging debug level" ON)
 
 option(BUILD_SHORTCUTS_MODULE "Build shortcuts module" ON)
 option(BUILD_NETWORK_MODULE "Build network module" ON)
-option(BUILD_AUDIO_MODULE "Build audio module" ON)
 option(BUILD_LEARN_MODULE "Build learn module" ON)
 option(BUILD_WORKSPACE_MODULE "Build workspace module" ON)
 option(BUILD_CLOUD_MODULE "Build cloud module" ON)
@@ -75,6 +74,18 @@ option(BUILD_DIAGNOSTICS "Build diagnostic code" ON)
 option(BUILD_CRASHPAD_CLIENT "Build crashpad client" ON)
 option(CRASHPAD_HANDLER_PATH "Path to custom crashpad_handler executable (optional)" "")
 set(YOUTUBE_API_KEY "" CACHE STRING "YouTube API key")
+
+option(BUILD_AUDIO_MODULE "Build audio module" ON)
+option(BUILD_MUSESAMPLER_MODULE "Build MuseSampler MODULE" ON)
+set(MUSESAMPLER_SRC_PATH "" CACHE PATH "Path to MuseSampler sources")
+set(VST3_SDK_VERSION "3.7")
+option(BUILD_VST_MODULE "Build VST MODULE" OFF)
+set(VST3_SDK_PATH "" CACHE PATH "Path to VST3_SDK. SDK version >= ${VST3_SDK_VERSION} required")
+
+if (NOT BUILD_AUDIO_MODULE)
+    set(BUILD_MUSESAMPLER_MODULE OFF)
+    set(BUILD_VST_MODULE OFF)
+endif()
 
 option(ENGRAVING_PAINT_DEBUGGER_ENABLED "Enable diagnostic engraving paint debugger" OFF)
 # Temporary flags for MU3 compatibility to make testing easier.
@@ -110,13 +121,6 @@ set(QT_SUPPORT ON)
 
 option(USE_SYSTEM_FREETYPE "Use system FreeType" OFF) # requires freetype >= 2.5.2, does not work on win
 set(SCRIPT_INTERFACE  TRUE)
-
-set(VST3_SDK_VERSION "3.7")
-option(BUILD_VST "Build VST MODULE" OFF)
-set(VST3_SDK_PATH "" CACHE PATH "Path to VST3_SDK. SDK version >= ${VST3_SDK_VERSION} required")
-
-option(BUILD_MUSESAMPLER_MODULE "Build MuseSampler MODULE" ON)
-set(MUSESAMPLER_SRC_PATH "" CACHE PATH "Path to MuseSampler sources")
 
 option(ENABLE_AUDIO_EXPORT "Enable audio export" ON)
 

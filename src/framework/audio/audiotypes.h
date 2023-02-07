@@ -30,9 +30,7 @@
 
 #include "types/string.h"
 #include "realfn.h"
-#include "midi/miditypes.h"
 #include "mpe/events.h"
-#include "io/path.h"
 #include "io/iodevice.h"
 #include "async/channel.h"
 

@@ -33,7 +33,7 @@
 #include "modularity/ioc.h"
 #include "midi/imidioutport.h"
 
-#include "abstractsynthesizer.h"
+#include "../../abstractsynthesizer.h"
 #include "fluidsequencer.h"
 #include "soundmapping.h"
 
