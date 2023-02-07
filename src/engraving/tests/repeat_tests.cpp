@@ -410,3 +410,8 @@ TEST_F(Engraving_RepeatTests, repeat67) {
     // Jump at skipped open volta end with end repeat at end of score: #327681
     repeat("repeat67.mscx", u"1;2; 1");
 }
+
+TEST_F(Engraving_RepeatTests, repeat68) {
+    // Entire score skipped by volta: gh#14685
+    repeat("repeat68.mscx", u"");
+}
