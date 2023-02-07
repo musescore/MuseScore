@@ -235,6 +235,21 @@ static GPConverter::LineImportType hairpinToImportType(GPBeat::Hairpin t)
     return GPConverter::LineImportType::NONE;
 }
 
+static void setPitchByOttavaType(Note* note, OttavaType type)
+{
+    int pitch = note->pitch();
+
+    if (type == mu::engraving::OttavaType::OTTAVA_8VA) {
+        note->setPitch((pitch - 12 > 0) ? pitch - 12 : pitch);
+    } else if (type == mu::engraving::OttavaType::OTTAVA_8VB) {
+        note->setPitch((pitch + 12 < 127) ? pitch + 12 : pitch);
+    } else if (type == mu::engraving::OttavaType::OTTAVA_15MA) {
+        note->setPitch((pitch - 24 > 0) ? pitch - 24 : (pitch - 12 > 0 ? pitch - 12 : pitch));
+    } else if (type == mu::engraving::OttavaType::OTTAVA_15MB) {
+        note->setPitch((pitch + 24 < 127) ? pitch + 24 : ((pitch + 12 < 127) ? pitch + 12 : pitch));
+    }
+}
+
 GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
     : _score(score), _gpDom(std::move(gpDom))
 {
@@ -592,8 +607,9 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
 
         if (!graceChords.empty()) {
             int grIndex = 0;
+
             for (auto [pGrChord, pBeat] : graceChords) {
-                configureGraceChord(pBeat, pGrChord);
+                configureGraceChord(pBeat, pGrChord, beat->ottavaType());
                 if (pGrChord->type() == ElementType::CHORD) {
                     static_cast<Chord*>(pGrChord)->setGraceIndex(grIndex++);
                 }
@@ -704,17 +720,25 @@ void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
     }
 }
 
-void GPConverter::configureGraceChord(const GPBeat* beat, ChordRest* cr)
+void GPConverter::configureGraceChord(const GPBeat* beat, ChordRest* cr, GPBeat::OttavaType type)
 {
     convertNotes(beat->notes(), cr);
 
-    if (cr->type() == ElementType::CHORD) {
-        Chord* grChord = static_cast<Chord*>(cr);
+    if (!cr->isChord()) {
+        return;
+    }
 
-        if (GPBeat::GraceNotes::OnBeat == beat->graceNotes()) {
-            grChord->setNoteType(NoteType::APPOGGIATURA);
-        } else {
-            grChord->setNoteType(NoteType::ACCIACCATURA);
+    Chord* grChord = toChord(cr);
+
+    if (GPBeat::GraceNotes::OnBeat == beat->graceNotes()) {
+        grChord->setNoteType(NoteType::APPOGGIATURA);
+    } else {
+        grChord->setNoteType(NoteType::ACCIACCATURA);
+    }
+
+    if (type != GPBeat::OttavaType::None) {
+        for (Note* note : grChord->notes()) {
+            setPitchByOttavaType(note, ottavaType(type));
         }
     }
 }
@@ -2402,16 +2426,7 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
 
     for (mu::engraving::Note* note : chord->notes()) {
         int pitch = note->pitch();
-
-        if (type == mu::engraving::OttavaType::OTTAVA_8VA) {
-            note->setPitch((pitch - 12 > 0) ? pitch - 12 : pitch);
-        } else if (type == mu::engraving::OttavaType::OTTAVA_8VB) {
-            note->setPitch((pitch + 12 < 127) ? pitch + 12 : pitch);
-        } else if (type == mu::engraving::OttavaType::OTTAVA_15MA) {
-            note->setPitch((pitch - 24 > 0) ? pitch - 24 : (pitch - 12 > 0 ? pitch - 12 : pitch));
-        } else if (type == mu::engraving::OttavaType::OTTAVA_15MB) {
-            note->setPitch((pitch + 24 < 127) ? pitch + 24 : ((pitch + 12 < 127) ? pitch + 12 : pitch));
-        }
+        setPitchByOttavaType(note, type);
 
         // pitch changed because of octave
         if (pitch != note->pitch()) {
