@@ -22,10 +22,10 @@
 #ifndef MU_AUDIO_SYNTHESIZERSTUB_H
 #define MU_AUDIO_SYNTHESIZERSTUB_H
 
-#include "audio/abstractsynthesizer.h"
+#include "audio/isynthesizer.h"
 
 namespace mu::audio::synth {
-class SynthesizerStub : public AbstractSynthesizer
+class SynthesizerStub : public ISynthesizer
 {
 public:
     SynthesizerStub(const audio::AudioSourceParams& params);
@@ -41,18 +41,20 @@ public:
     std::string name() const override;
     AudioSourceType type() const override;
 
+    void setup(const mpe::PlaybackData& playbackData) override;
+
+    const audio::AudioInputParams& params() const override;
+    async::Channel<audio::AudioInputParams> paramsChanged() const override;
+
     msecs_t playbackPosition() const override;
     void setPlaybackPosition(const msecs_t newPosition) override;
 
+    void revokePlayingNotes() override;
     void flushSound() override;
 
     bool isValid() const override;
     bool isActive() const override;
     void setIsActive(bool arg) override;
-
-private:
-    void setupSound(const mpe::PlaybackSetupData& setupData) override;
-    void setupEvents(const mpe::PlaybackData& playbackData) override;
 };
 }
 

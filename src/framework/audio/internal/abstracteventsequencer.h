@@ -27,12 +27,11 @@
 #include <set>
 
 #include "async/asyncable.h"
-#include "async/channel.h"
 #include "async/notification.h"
 #include "mpe/events.h"
 
-#include "internal/audiosanitizer.h"
-#include "audiotypes.h"
+#include "audiosanitizer.h"
+#include "../audiotypes.h"
 
 namespace mu::audio {
 template<class ... Types>

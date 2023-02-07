@@ -31,6 +31,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/audioconfigurationstub.h
     ${CMAKE_CURRENT_LIST_DIR}/synthresolverstub.cpp
     ${CMAKE_CURRENT_LIST_DIR}/synthresolverstub.h
+    ${CMAKE_CURRENT_LIST_DIR}/synthesizerstub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/synthesizerstub.h
     ${CMAKE_CURRENT_LIST_DIR}/fxresolverstub.cpp
     ${CMAKE_CURRENT_LIST_DIR}/fxresolverstub.h
     ${CMAKE_CURRENT_LIST_DIR}/soundfontrepositorystub.cpp
