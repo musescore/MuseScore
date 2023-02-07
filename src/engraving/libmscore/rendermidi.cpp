@@ -1425,23 +1425,10 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
     }
 }
 
-//---------------------------------------------------------
-//   renderMidi
-//    export score to event list
-//---------------------------------------------------------
-
-void Score::renderMidi(EventMap* events, const SynthesizerState& synthState)
-{
-    renderMidi(events, true, MScore::playRepeats, synthState);
-}
-
-void Score::renderMidi(EventMap* events, bool metronome, bool expandRepeats, const SynthesizerState& synthState)
+void Score::renderMidi(EventMap* events, const MidiRenderer::Context& ctx, bool expandRepeats)
 {
     bool expandRepeatsBackup = masterScore()->expandRepeats();
     masterScore()->setExpandRepeats(expandRepeats);
-    MidiRenderer::Context ctx;
-    ctx.synthState = synthState;
-    ctx.metronome = metronome;
     MidiRenderer(this).renderScore(events, ctx);
     masterScore()->setExpandRepeats(expandRepeatsBackup);
 }
