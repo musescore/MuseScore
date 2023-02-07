@@ -36,11 +36,11 @@ void NoteEvent::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "pitch") {
-            _pitch = e.readInt();
+            m_pitch = e.readInt();
         } else if (tag == "ontime") {
-            _ontime = e.readInt();
+            m_ontime = e.readInt();
         } else if (tag == "len") {
-            _len = e.readInt();
+            m_len = e.readInt();
         } else {
             e.unknown();
         }
@@ -54,9 +54,9 @@ void NoteEvent::read(XmlReader& e)
 void NoteEvent::write(XmlWriter& xml) const
 {
     xml.startElement("Event");
-    xml.tag("pitch", _pitch, 0);
-    xml.tag("ontime", _ontime, 0);
-    xml.tag("len", _len, NOTE_LENGTH);
+    xml.tag("pitch", m_pitch, 0);
+    xml.tag("ontime", m_ontime, 0);
+    xml.tag("len", m_len, NOTE_LENGTH);
     xml.endElement();
 }
 
@@ -75,6 +75,6 @@ NoteEventList::NoteEventList()
 
 bool NoteEvent::operator==(const NoteEvent& e) const
 {
-    return (e._pitch == _pitch) && (e._ontime == _ontime) && (e._len == _len);
+    return (e.m_pitch == m_pitch) && (e.m_ontime == m_ontime) && (e.m_len == m_len);
 }
 }
