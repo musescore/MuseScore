@@ -55,6 +55,9 @@ public:
     bool isValid() const override;
     bool isActive() const override;
     void setIsActive(bool arg) override;
+
+private:
+    audio::AudioInputParams m_params;
 };
 }
 
