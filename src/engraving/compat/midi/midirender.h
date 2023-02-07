@@ -23,6 +23,9 @@
 #ifndef __RENDERMIDI_H__
 #define __RENDERMIDI_H__
 
+#include <memory>
+
+#include "libmscore/instrument.h"
 #include "libmscore/measure.h"
 #include "libmscore/synthesizerstate.h"
 #include "pitchwheelrenderer.h"
@@ -34,28 +37,6 @@ class Staff;
 class SynthesizerState;
 
 //---------------------------------------------------------
-//   RangeMap
-///   Helper class to keep track of status of status of
-///   certain parts of score or MIDI representation.
-//---------------------------------------------------------
-
-class RangeMap
-{
-    enum class Range {
-        BEGIN, END
-    };
-    std::map<int, Range> status;
-
-public:
-    void setOccupied(int tick1, int tick2);
-    void setOccupied(std::pair<int, int> range) { setOccupied(range.first, range.second); }
-
-    int occupiedRangeEnd(int tick) const;
-
-    void clear() { status.clear(); }
-};
-
-//---------------------------------------------------------
 //   MidiRenderer
 ///   MIDI renderer for a score
 //---------------------------------------------------------
@@ -63,10 +44,19 @@ public:
 class MidiRenderer
 {
 public:
+    //! @brief helper structure to find channel in a case eachStringHasChannel = true
+    struct ChannelLookup {
+        std::map<int, std::map<int, int> > channelsMap;
+        uint32_t maxChannel = 0;
+        uint32_t getChannel(uint32_t instrumentChannel, int32_t string);
+    };
+
     struct Context
     {
         SynthesizerState synthState;
         bool metronome = true;
+        bool eachStringHasChannel = false;//!to better display the guitar instrument, each string has its own channel
+        std::shared_ptr<ChannelLookup> channels = std::make_shared<ChannelLookup>();
 
         Context() {}
     };
@@ -79,11 +69,10 @@ public:
 
 private:
 
-    Score* score = nullptr;
-
     void renderStaff(EventMap* events, const Staff* sctx, PitchWheelRenderer& pitchWheelRenderer);
 
     void renderSpanners(EventMap* events, PitchWheelRenderer& pitchWheelRenderer);
+    void doRenderSpanners(EventMap* events, Spanner* s, uint32_t channel, PitchWheelRenderer& pitchWheelRenderer);
 
     void renderMetronome(EventMap* events);
     void renderMetronome(EventMap* events, Measure const* m);
@@ -92,6 +81,14 @@ private:
                               PitchWheelRenderer& pitchWheelRenderer);
     void doCollectMeasureEvents(EventMap* events, Measure const* m, const Staff* sctx, int tickOffset,
                                 PitchWheelRenderer& pitchWheelRenderer);
+    void collectGraceBeforeChordEvents(Chord* chord, EventMap* events, double veloMultiplier, Staff* st, int tickOffset,
+                                       PitchWheelRenderer& pitchWheelRenderer);
+
+    uint32_t getChannel(const Instrument* instr, const Note* note);
+
+    Score* score = nullptr;
+
+    Context _context;
 };
 } // namespace mu::engraving
 

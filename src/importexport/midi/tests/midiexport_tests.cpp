@@ -563,7 +563,11 @@ void TestMidi::events()
     EventMap events;
     // a temporary, uninitialized synth state so we can render the midi - should fall back correctly
     SynthesizerState ss;
-    score->renderMidi(&events, ss);
+    MidiRenderer::Context ctx;
+    ctx.eachStringHasChannel = false;
+    ctx.metronome = true;
+    ctx.synthState = ss;
+    score->renderMidi(&events, ctx, true);
     qDebug() << "Opened score " << readFile;
     QFile filehandler(writeFile);
     filehandler.open(QIODevice::WriteOnly | QIODevice::Text);

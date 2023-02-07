@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
@@ -507,8 +507,8 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
     }
 }
 
-static void collectGraceBeforeChordEvents(Chord* chord, EventMap* events, int channel, double veloMultiplier,
-                                          Staff* st, int tickOffset, PitchWheelRenderer& pitchWheelRenderer)
+void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, EventMap* events, double veloMultiplier,
+                                                 Staff* st, int tickOffset, PitchWheelRenderer& pitchWheelRenderer)
 {
     // calculate offset for grace notes here
     const auto& grChords = chord->graceNotesBefore();
@@ -530,6 +530,7 @@ static void collectGraceBeforeChordEvents(Chord* chord, EventMap* events, int ch
         int currentBeaforeBeatNote = 0;
         for (Chord* c : chord->graceNotesBefore()) {
             for (const Note* note : c->notes()) {
+                int channel = getChannel(chord->part()->instrument(chord->tick()), note);
                 if (note->noteType() == NoteType::ACCIACCATURA) {
                     collectNote(events, channel, note, veloMultiplier, tickOffset, st,
                                 pitchWheelRenderer,
@@ -597,10 +598,6 @@ void MidiRenderer::doCollectMeasureEvents(EventMap* events, Measure const* m, co
             Chord* chord = toChord(cr);
 
             Instrument* instr = st1->part()->instrument(tick);
-            int subchannel = chord->upNote()->subchannel();
-            int channel = instr->channel(subchannel)->channel();
-
-            events->registerChannel(channel);
 
             // Get a velocity multiplier
             double veloMultiplier = 1;
@@ -613,15 +610,17 @@ void MidiRenderer::doCollectMeasureEvents(EventMap* events, Measure const* m, co
             //
             // Add normal note events
             //
-            collectGraceBeforeChordEvents(chord, events, channel, veloMultiplier, st1, tickOffset, pitchWheelRenderer);
+            collectGraceBeforeChordEvents(chord, events, veloMultiplier, st1, tickOffset, pitchWheelRenderer);
 
             for (const Note* note : chord->notes()) {
+                int channel = getChannel(instr, note);
                 collectNote(events, channel, note, veloMultiplier, tickOffset, st1, pitchWheelRenderer);
             }
 
             if (!graceNotesMerged(chord)) {
                 for (Chord* c : chord->graceNotesAfter()) {
                     for (const Note* note : c->notes()) {
+                        int channel = getChannel(instr, note);
                         collectNote(events, channel, note, veloMultiplier, tickOffset, st1, pitchWheelRenderer);
                     }
                 }
@@ -654,28 +653,35 @@ void MidiRenderer::collectMeasureEvents(EventMap* events, Measure const* m, cons
 
 void MidiRenderer::renderStaff(EventMap* events, const Staff* staff, PitchWheelRenderer& pitchWheelRenderer)
 {
-    Measure const* const start = score->firstMeasure();
-
     Measure const* lastMeasure = nullptr;
 
-    for (Measure const* m = start; m; m = m->nextMeasure()) {
-        staff_idx_t staffIdx = staff->idx();
-        if (m->isMeasureRepeatGroup(staffIdx)) {
-            MeasureRepeat* mr = m->measureRepeatElement(staffIdx);
-            Measure const* playMeasure = lastMeasure;
-            if (!playMeasure || !mr) {
-                continue;
-            }
+    const RepeatList& repeatList = score->repeatList();
 
-            for (int i = m->measureRepeatCount(staffIdx); i < mr->numMeasures() && playMeasure->prevMeasure(); ++i) {
-                playMeasure = playMeasure->prevMeasure();
-            }
+    for (const RepeatSegment* rs : repeatList) {
+        const int tickOffset = rs->utick - rs->tick;
 
-            int offset = (m->tick() - playMeasure->tick()).ticks();
-            collectMeasureEvents(events, playMeasure, staff, offset, pitchWheelRenderer);
-        } else {
-            lastMeasure = m;
-            collectMeasureEvents(events, lastMeasure, staff, 0, pitchWheelRenderer);
+        Measure const* const start = rs->firstMeasure();
+        Measure const* const end = rs->lastMeasure()->nextMeasure();
+
+        for (Measure const* m = start; m; m = m->nextMeasure()) {
+            staff_idx_t staffIdx = staff->idx();
+            if (m->isMeasureRepeatGroup(staffIdx)) {
+                MeasureRepeat* mr = m->measureRepeatElement(staffIdx);
+                Measure const* playMeasure = lastMeasure;
+                if (!playMeasure || !mr) {
+                    continue;
+                }
+
+                for (int i = m->measureRepeatCount(staffIdx); i < mr->numMeasures() && playMeasure->prevMeasure(); ++i) {
+                    playMeasure = playMeasure->prevMeasure();
+                }
+
+                int offset = (m->tick() - playMeasure->tick()).ticks();
+                collectMeasureEvents(events, playMeasure, staff, tickOffset + offset, pitchWheelRenderer);
+            } else {
+                lastMeasure = m;
+                collectMeasureEvents(events, lastMeasure, staff, tickOffset, pitchWheelRenderer);
+            }
         }
     }
 }
@@ -686,83 +692,90 @@ void MidiRenderer::renderStaff(EventMap* events, const Staff* staff, PitchWheelR
 
 void MidiRenderer::renderSpanners(EventMap* events, PitchWheelRenderer& pitchWheelRenderer)
 {
-    std::map<int, std::vector<std::pair<int, std::pair<bool, int> > > > channelPedalEvents;
     for (const auto& sp : score->spannerMap().map()) {
         Spanner* s = sp.second;
 
         int staff = static_cast<int>(s->staffIdx());
         int idx = s->staff()->channel(s->tick(), 0);
         int channel = s->part()->instrument(s->tick())->channel(idx)->channel();
-
-        if (s->isPedal()) {
-            channelPedalEvents.insert({ channel, std::vector<std::pair<int, std::pair<bool, int> > >() });
-            std::vector<std::pair<int, std::pair<bool, int> > > pedalEventList = channelPedalEvents.at(channel);
-            std::pair<int, std::pair<bool, int> > lastEvent;
-
-            if (!pedalEventList.empty()) {
-                lastEvent = pedalEventList.back();
-            } else {
-                lastEvent = std::pair<int, std::pair<bool, int> >(0, std::pair<bool, int>(true, staff));
-            }
-
-            int st = s->tick().ticks();
-
-            if (lastEvent.second.first == false && lastEvent.first >= (st + 2)) {
-                channelPedalEvents.at(channel).pop_back();
-                channelPedalEvents.at(channel).push_back(std::pair<int,
-                                                                   std::pair<bool,
-                                                                             int> >(st + (2 - MScore::pedalEventsMinTicks),
-                                                                                    std::pair<bool, int>(false, staff)));
-            }
-            int a = st + 2;
-            channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int> >(a, std::pair<bool, int>(true, staff)));
-
-            int t = s->tick2().ticks() + (2 - MScore::pedalEventsMinTicks);
-            const RepeatSegment& lastRepeat = *score->repeatList().back();
-            if (t > lastRepeat.utick + lastRepeat.len()) {
-                t = lastRepeat.utick + lastRepeat.len();
-            }
-            channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int> >(t, std::pair<bool, int>(false, staff)));
-        } else if (s->isVibrato()) {
-            int stick = s->tick().ticks();
-            int etick = s->tick2().ticks();
-
-            // from start to end of trill, send bend events at regular interval
-            Vibrato* t = toVibrato(s);
-            // guitar vibrato, up only
-            int spitch = 0;       // 1/8 (100 is a semitone)
-            int epitch = 12;
-            if (t->vibratoType() == VibratoType::GUITAR_VIBRATO_WIDE) {
-                spitch = 0;         // 1/4
-                epitch = 25;
-            }
-            // vibrato with whammy bar up and down
-            else if (t->vibratoType() == VibratoType::VIBRATO_SAWTOOTH_WIDE) {
-                spitch = -25;         // 1/16
-                epitch = 25;
-            } else if (t->vibratoType() == VibratoType::VIBRATO_SAWTOOTH) {
-                spitch = -12;
-                epitch = 12;
-            }
-
-            collectVibrato(channel, stick, etick, spitch, epitch, pitchWheelRenderer);
+        const auto& channels = _context.channels->channelsMap[channel];
+        if (channels.empty()) {
+            doRenderSpanners(events, s, channel, pitchWheelRenderer);
         } else {
-            continue;
+            for (const auto& channel : channels) {
+                doRenderSpanners(events, s, channel.second, pitchWheelRenderer);
+            }
         }
     }
+}
 
-    for (const auto& pedalEvents : channelPedalEvents) {
-        int channel = pedalEvents.first;
-        for (const auto& pe : pedalEvents.second) {
-            NPlayEvent event;
-            if (pe.second.first == true) {
-                event = NPlayEvent(ME_CONTROLLER, static_cast<uint8_t>(channel), CTRL_SUSTAIN, 127);
-            } else {
-                event = NPlayEvent(ME_CONTROLLER, static_cast<uint8_t>(channel), CTRL_SUSTAIN, 0);
-            }
-            event.setOriginatingStaff(pe.second.second);
-            events->insert(std::pair<int, NPlayEvent>(pe.first, event));
+void MidiRenderer::doRenderSpanners(EventMap* events, Spanner* s, uint32_t channel, PitchWheelRenderer& pitchWheelRenderer)
+{
+    std::vector<std::pair<int, std::pair<bool, int> > > pedalEventList;
+
+    int staff = static_cast<int>(s->staffIdx());
+
+    if (s->isPedal()) {
+        std::pair<int, std::pair<bool, int> > lastEvent;
+
+        if (!pedalEventList.empty()) {
+            lastEvent = pedalEventList.back();
+        } else {
+            lastEvent = std::pair<int, std::pair<bool, int> >(0, std::pair<bool, int>(true, staff));
         }
+
+        int st = s->tick().ticks();
+
+        if (lastEvent.second.first == false && lastEvent.first >= (st + 2)) {
+            pedalEventList.pop_back();
+            pedalEventList.push_back(std::pair<int,
+                                               std::pair<bool,
+                                                         int> >(st + (2 - MScore::pedalEventsMinTicks),
+                                                                std::pair<bool, int>(false, staff)));
+        }
+        int a = st + 2;
+        pedalEventList.push_back(std::pair<int, std::pair<bool, int> >(a, std::pair<bool, int>(true, staff)));
+
+        int t = s->tick2().ticks() + (2 - MScore::pedalEventsMinTicks);
+        const RepeatSegment& lastRepeat = *score->repeatList().back();
+        if (t > lastRepeat.utick + lastRepeat.len()) {
+            t = lastRepeat.utick + lastRepeat.len();
+        }
+        pedalEventList.push_back(std::pair<int, std::pair<bool, int> >(t, std::pair<bool, int>(false, staff)));
+    } else if (s->isVibrato()) {
+        int stick = s->tick().ticks();
+        int etick = s->tick2().ticks();
+
+        // from start to end of trill, send bend events at regular interval
+        Vibrato* t = toVibrato(s);
+        // guitar vibrato, up only
+        int spitch = 0;       // 1/8 (100 is a semitone)
+        int epitch = 12;
+        if (t->vibratoType() == VibratoType::GUITAR_VIBRATO_WIDE) {
+            spitch = 0;         // 1/4
+            epitch = 25;
+        }
+        // vibrato with whammy bar up and down
+        else if (t->vibratoType() == VibratoType::VIBRATO_SAWTOOTH_WIDE) {
+            spitch = -25;         // 1/16
+            epitch = 25;
+        } else if (t->vibratoType() == VibratoType::VIBRATO_SAWTOOTH) {
+            spitch = -12;
+            epitch = 12;
+        }
+
+        collectVibrato(channel, stick, etick, spitch, epitch, pitchWheelRenderer);
+    }
+
+    for (const auto& pe : pedalEventList) {
+        NPlayEvent event;
+        if (pe.second.first == true) {
+            event = NPlayEvent(ME_CONTROLLER, static_cast<uint8_t>(channel), CTRL_SUSTAIN, 127);
+        } else {
+            event = NPlayEvent(ME_CONTROLLER, static_cast<uint8_t>(channel), CTRL_SUSTAIN, 0);
+        }
+        event.setOriginatingStaff(pe.second.second);
+        events->insert(std::pair<int, NPlayEvent>(pe.first, event));
     }
 }
 
@@ -935,6 +948,7 @@ void MidiRenderer::renderMetronome(EventMap* events, Measure const* m)
 
 void MidiRenderer::renderScore(EventMap* events, const Context& ctx)
 {
+    _context = ctx;
     PitchWheelRenderer pitchWheelRender(wheelSpec);
 
     score->updateSwing();
@@ -985,47 +999,38 @@ void MidiRenderer::renderScore(EventMap* events, const Context& ctx)
     }
 }
 
-//---------------------------------------------------------
-//   RangeMap::setOccupied
-//---------------------------------------------------------
-
-void RangeMap::setOccupied(int tick1, int tick2)
+uint32_t MidiRenderer::getChannel(const Instrument* instr, const Note* note)
 {
-    auto it1 = status.upper_bound(tick1);
-    const bool beforeBegin = (it1 == status.begin());
-    if (beforeBegin || (--it1)->second != Range::BEGIN) {
-        if (!beforeBegin && it1->first == tick1) {
-            status.erase(it1);
-        } else {
-            status.insert(std::make_pair(tick1, Range::BEGIN));
-        }
+    int subchannel = note->subchannel();
+    int channel = instr->channel(subchannel)->channel();
+
+    if (!_context.eachStringHasChannel || !instr->hasStrings()) {
+        return channel;
     }
 
-    const auto it2 = status.lower_bound(tick2);
-    const bool afterEnd = (it2 == status.end());
-    if (afterEnd || it2->second != Range::END) {
-        if (!afterEnd && it2->first == tick2) {
-            status.erase(it2);
-        } else {
-            status.insert(std::make_pair(tick2, Range::END));
-        }
-    }
+    return _context.channels->getChannel(channel, note->string());
 }
 
-//---------------------------------------------------------
-//   RangeMap::occupiedRangeEnd
-//---------------------------------------------------------
-
-int RangeMap::occupiedRangeEnd(int tick) const
+uint32_t MidiRenderer::ChannelLookup::getChannel(uint32_t instrumentChannel, int32_t string)
 {
-    const auto it = status.upper_bound(tick);
-    if (it == status.begin()) {
-        return tick;
+    auto& channelsForString = channelsMap[instrumentChannel];
+
+    if (string == -1) {
+        auto channelIt = channelsForString.find(string);
+        if (channelIt != channelsForString.end()) {
+            return channelIt->second;
+        } else {
+            channelsForString[string] = maxChannel;
+            return maxChannel++;
+        }
     }
-    const int rangeEnd = (it == status.end()) ? tick : it->first;
-    if (it->second == Range::END) {
-        return rangeEnd;
+
+    auto channelIt = channelsForString.find(string);
+    if (channelIt != channelsForString.end()) {
+        return channelIt->second;
     }
-    return tick;
+
+    channelsForString.insert({ string, maxChannel });
+    return maxChannel++;
 }
 }
