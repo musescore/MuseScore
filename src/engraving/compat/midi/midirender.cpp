@@ -646,7 +646,6 @@ void MidiRenderer::renderStaff(EventMap* events, const Staff* staff, PitchWheelR
         const int tickOffset = rs->utick - rs->tick;
 
         Measure const* const start = rs->firstMeasure();
-        Measure const* const end = rs->lastMeasure()->nextMeasure();
 
         for (Measure const* m = start; m; m = m->nextMeasure()) {
             staff_idx_t staffIdx = staff->idx();
@@ -680,7 +679,6 @@ void MidiRenderer::renderSpanners(EventMap* events, PitchWheelRenderer& pitchWhe
     for (const auto& sp : score->spannerMap().map()) {
         Spanner* s = sp.second;
 
-        int staff = static_cast<int>(s->staffIdx());
         int idx = s->staff()->channel(s->tick(), 0);
         int channel = s->part()->instrument(s->tick())->channel(idx)->channel();
         const auto& channels = _context.channels->channelsMap[channel];
