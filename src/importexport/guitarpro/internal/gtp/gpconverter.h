@@ -100,7 +100,7 @@ private:
     void convertVoice(const GPVoice*, Context ctx);
     void convertBeats(const std::vector<std::shared_ptr<GPBeat> >& beats, Context ctx);
     Fraction convertBeat(const GPBeat* beat, ChordRestContainer& graceChords, Context ctx);
-    void configureGraceChord(const GPBeat* beat, ChordRest* cr);
+    void configureGraceChord(const GPBeat* beat, ChordRest* cr, GPBeat::OttavaType type);
     void convertNotes(const std::vector<std::shared_ptr<GPNote> >& notes, ChordRest* cr);
     void convertNote(const GPNote* note, ChordRest* cr);
 
