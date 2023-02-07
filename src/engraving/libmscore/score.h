@@ -34,6 +34,7 @@
 #include "async/channel.h"
 #include "io/iodevice.h"
 #include "types/ret.h"
+#include "compat/midi/midirender.h"
 
 #include "modularity/ioc.h"
 #include "draw/iimageprovider.h"
@@ -935,8 +936,7 @@ public:
     bool pasteStaff(XmlReader&, Segment* dst, staff_idx_t staffIdx, Fraction scale = Fraction(1, 1));
     void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
     void pasteSymbols(XmlReader& e, ChordRest* dst);
-    void renderMidi(EventMap* events, const SynthesizerState& synthState);
-    void renderMidi(EventMap* events, bool metronome, bool expandRepeats, const SynthesizerState& synthState);
+    void renderMidi(EventMap* events, const MidiRenderer::Context& ctx, bool expandRepeats);
 
     BeatType tick2beatType(const Fraction& tick) const;
 
