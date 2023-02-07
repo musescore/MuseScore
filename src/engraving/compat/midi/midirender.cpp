@@ -940,7 +940,7 @@ void MidiRenderer::renderScore(EventMap* events, const Context& ctx)
     score->updateSwing();
     score->updateCapo();
 
-    score->createPlayEvents(score->firstMeasure(), score->lastMeasure());
+    score->createPlayEvents(score->firstMeasure(), nullptr);
 
     score->updateChannel();
     score->updateVelo();
