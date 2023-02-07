@@ -28,35 +28,26 @@
 #include "mpe/events.h"
 #include "modularity/ioc.h"
 
-#include "synthtypes.h"
-#include "audiotypes.h"
-#include "iaudiosource.h"
-#include "iaudioconfiguration.h"
+#include "../synthtypes.h"
+#include "../audiotypes.h"
+#include "../isynthesizer.h"
+#include "../iaudioconfiguration.h"
+
 #include "abstracteventsequencer.h"
 
 namespace mu::audio::synth {
-class AbstractSynthesizer : public IAudioSource, public async::Asyncable
+class AbstractSynthesizer : public ISynthesizer, public async::Asyncable
 {
     INJECT_STATIC(audio, IAudioConfiguration, config)
 public:
     AbstractSynthesizer(const audio::AudioInputParams& params);
     virtual ~AbstractSynthesizer() = default;
 
-    virtual std::string name() const = 0;
-    virtual AudioSourceType type() const = 0;
-    const audio::AudioInputParams& params() const;
-    async::Channel<audio::AudioInputParams> paramsChanged() const;
+    const audio::AudioInputParams& params() const override;
+    async::Channel<audio::AudioInputParams> paramsChanged() const override;
 
-    virtual msecs_t playbackPosition() const = 0;
-    virtual void setPlaybackPosition(const msecs_t newPosition) = 0;
-
-    void setup(const mpe::PlaybackData& playbackData);
-    virtual void flushSound() = 0;
-    virtual void revokePlayingNotes();
-
-    virtual bool isValid() const = 0;
-    virtual bool isActive() const = 0;
-    virtual void setIsActive(bool arg) = 0;
+    void setup(const mpe::PlaybackData& playbackData) override;
+    void revokePlayingNotes() override;
 
 protected:
 
@@ -76,8 +67,6 @@ protected:
 
     samples_t m_sampleRate = 0;
 };
-
-using ISynthesizerPtr = std::shared_ptr<AbstractSynthesizer>;
 }
 
 #endif // MU_AUDIO_ISYNTHESIZER_H

@@ -30,6 +30,6 @@ if (NOT BUILD_AUDIO_MODULE)
     add_subdirectory(audio)
 endif (NOT BUILD_AUDIO_MODULE)
 
-if (NOT BUILD_VST)
+if (NOT BUILD_VST_MODULE)
     add_subdirectory(vst)
-endif (NOT BUILD_VST)
+endif (NOT BUILD_VST_MODULE)

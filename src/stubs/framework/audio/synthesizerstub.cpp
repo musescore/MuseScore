@@ -21,11 +21,11 @@
  */
 #include "synthesizerstub.h"
 
+using namespace mu;
 using namespace mu::audio;
 using namespace mu::audio::synth;
 
-SynthesizerStub::SynthesizerStub(const AudioSourceParams& params)
-    : AbstractSynthesizer(params)
+SynthesizerStub::SynthesizerStub(const AudioSourceParams&)
 {
 }
 
@@ -58,6 +58,22 @@ AudioSourceType SynthesizerStub::type() const
     return AudioSourceType::Undefined;
 }
 
+void SynthesizerStub::setup(const mpe::PlaybackData&)
+{
+
+}
+
+const audio::AudioInputParams& SynthesizerStub::params() const
+{
+
+}
+
+async::Channel<audio::AudioInputParams> SynthesizerStub::paramsChanged() const
+{
+    static async::Channel<audio::AudioInputParams> ch;
+    return ch;
+}
+
 msecs_t SynthesizerStub::playbackPosition() const
 {
     return 0;
@@ -65,6 +81,11 @@ msecs_t SynthesizerStub::playbackPosition() const
 
 void SynthesizerStub::setPlaybackPosition(const msecs_t)
 {
+}
+
+void SynthesizerStub::revokePlayingNotes()
+{
+
 }
 
 void SynthesizerStub::flushSound()
@@ -85,10 +106,3 @@ void SynthesizerStub::setIsActive(bool)
 {
 }
 
-void SynthesizerStub::setupSound(const mpe::PlaybackSetupData&)
-{
-}
-
-void SynthesizerStub::setupEvents(const mpe::PlaybackData&)
-{
-}
