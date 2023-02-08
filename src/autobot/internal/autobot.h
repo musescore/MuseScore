@@ -90,6 +90,10 @@ private:
 
     void setStatus(Status st);
 
+    struct AffectedServiceState {
+        bool fontDisabledMerging = false;
+    };
+
     Status m_status = Status::Undefined;
     async::Channel<io::path_t, Status> m_statusChanged;
     async::Channel<StepInfo, Ret> m_stepStatusChanged;
@@ -98,6 +102,7 @@ private:
     TestCaseRunner m_runner;
     TestCaseReport m_report;
     AutobotInteractivePtr m_autobotInteractive = nullptr;
+    AffectedServiceState m_affectedServiceState;
 
     QEventLoop m_sleepLoop;
 };

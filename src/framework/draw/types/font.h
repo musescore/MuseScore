@@ -111,6 +111,8 @@ public:
     static Font fromQFont(const QFont& qf, Type type);
 #endif
 
+    static bool g_disableFontMerging;
+
 private:
 
     String m_family;

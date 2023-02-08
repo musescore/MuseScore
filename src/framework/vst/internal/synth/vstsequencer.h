@@ -23,7 +23,7 @@
 #ifndef MU_VST_VSTSEQUENCER_H
 #define MU_VST_VSTSEQUENCER_H
 
-#include "audio/abstracteventsequencer.h"
+#include "audio/internal/abstracteventsequencer.h"
 
 #include "vsttypes.h"
 

@@ -28,6 +28,7 @@
 
 #include "io/path.h"
 #include "types/ret.h"
+#include "autobotutils.h"
 
 namespace mu::autobot {
 struct File {
@@ -67,21 +68,7 @@ struct Step
     Ret exec()
     {
         QJSValue jsret = val.property("func").call();
-        if (jsret.isError()) {
-            QString fileName = jsret.property("fileName").toString();
-            int line = jsret.property("lineNumber").toInt();
-            QString err = jsret.toString();
-            if (err == "Error: abort") {
-                return make_ret(Ret::Code::Cancel, QString("script is aborted"));
-            }
-            Ret ret = make_ret(Ret::Code::UnknownError, QString("File: %1, Exception at line: %2, %3").arg(fileName).arg(line).arg(err));
-            ret.setData("file", fileName);
-            ret.setData("line", line);
-            ret.setData("err", err);
-            return ret;
-        }
-
-        return Ret(Ret::Code::Ok);
+        return jsValueToRet(jsret);
     }
 
 private:

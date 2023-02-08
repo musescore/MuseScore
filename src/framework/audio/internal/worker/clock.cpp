@@ -21,7 +21,7 @@
  */
 #include "clock.h"
 
-#include "audioerrors.h"
+#include "../../audioerrors.h"
 
 using namespace mu;
 using namespace mu::audio;

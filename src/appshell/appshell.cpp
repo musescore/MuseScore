@@ -444,6 +444,8 @@ void AppShell::processAutobot(const CommandLineController::Autobot& task)
         if (!ret) {
             LOGE() << "failed step: " << step.name << ", ret: " << ret.toString();
             qApp->exit(ret.code());
+        } else {
+            LOGI() << "success step: " << step.name << ", ret: " << ret.toString();
         }
     });
 

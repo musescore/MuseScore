@@ -110,7 +110,7 @@
 #endif
 #include "converter/convertermodule.h"
 
-#ifdef BUILD_VST
+#ifdef BUILD_VST_MODULE
 #include "framework/vst/vstmodule.h"
 #else
 #include "stubs/framework/vst/vststubmodule.h"
@@ -235,7 +235,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::instrumentsscene::InstrumentsSceneStubModule());
 #endif
 
-#ifdef BUILD_VST
+#ifdef BUILD_VST_MODULE
     app.addModule(new mu::vst::VSTModule());
 #else
     app.addModule(new mu::vst::VstStubModule());

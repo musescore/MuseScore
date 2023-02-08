@@ -22,6 +22,7 @@
 #ifndef MU_AUDIO_CLOCK_H
 #define MU_AUDIO_CLOCK_H
 
+#include "global/types/retval.h"
 #include "async/asyncable.h"
 
 #include "iclock.h"

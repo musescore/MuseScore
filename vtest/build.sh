@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-INSTALL_DIR="../musescore"
+INSTALL_DIR="./install"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
