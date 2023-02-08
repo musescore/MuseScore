@@ -90,6 +90,7 @@ StyledGridView {
         width: root.cellWidth
 
         ScoreItem {
+            id: scoreItem
 
             anchors.centerIn: parent
 
@@ -119,6 +120,18 @@ StyledGridView {
                     root.addNewScoreRequested()
                 } else if (!isNoResultFound) {
                     root.openScoreRequested(score.path)
+                }
+            }
+
+            onHovered: (mouseInArea) => {
+                if (isAdd) {
+                    return
+                }
+                // TODO: Set right tooltip position
+                if (mouseInArea) {
+                    ui.tooltip.show(scoreItem, score.name, score.path)
+                } else {
+                    ui.tooltip.hide(scoreItem)
                 }
             }
         }

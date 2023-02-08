@@ -40,6 +40,7 @@ FocusScope {
     property alias navigation: navCtrl
 
     signal clicked()
+    signal hovered(bool mouseInArea)
 
     NavigationControl {
         id: navCtrl
@@ -323,6 +324,10 @@ FocusScope {
 
         onClicked: {
             root.clicked()
+        }
+
+        onHoveredChanged: {
+            root.hovered(containsMouse)
         }
     }
 }
