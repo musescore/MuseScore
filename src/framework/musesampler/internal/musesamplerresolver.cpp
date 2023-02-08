@@ -40,7 +40,7 @@ void MuseSamplerResolver::init()
     io::path_t path = configuration()->userLibraryPath();
     m_libHandler = std::make_shared<MuseSamplerLibHandler>(path);
     if (checkLibrary()) {
-      return;
+        return;
     }
 
     // Use fallback
