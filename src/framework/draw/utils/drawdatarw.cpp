@@ -41,9 +41,9 @@ RetVal<DrawDataPtr> DrawDataRW::readData(const io::path_t& filePath)
     return rv;
 }
 
-Ret DrawDataRW::writeData(const io::path_t& filePath, const DrawDataPtr& data)
+Ret DrawDataRW::writeData(const io::path_t& filePath, const DrawDataPtr& data, bool prettify)
 {
-    ByteArray json = DrawDataJson::toJson(data);
+    ByteArray json = DrawDataJson::toJson(data, prettify);
     return io::File::writeFile(filePath, json);
 }
 

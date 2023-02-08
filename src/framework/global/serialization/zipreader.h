@@ -52,6 +52,7 @@ public:
     bool hasError() const;
 
     std::vector<FileInfo> fileInfoList() const;
+    bool fileExists(const std::string& fileName) const;
     ByteArray fileData(const std::string& fileName) const;
 
 private:

@@ -34,7 +34,7 @@ class DrawDataJson
 {
 public:
 
-    static ByteArray toJson(const DrawDataPtr& data);
+    static ByteArray toJson(const DrawDataPtr& data, bool prettify = true);
     static RetVal<DrawDataPtr> fromJson(const ByteArray& json);
 
     static ByteArray diffToJson(const Diff& diff);

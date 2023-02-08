@@ -32,6 +32,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/itestcasecontext.h
     ${CMAKE_CURRENT_LIST_DIR}/iautobotconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iautobotscriptsrepository.h
+    ${CMAKE_CURRENT_LIST_DIR}/autobotutils.h
+
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobot.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobot.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobotconfiguration.cpp
@@ -56,8 +58,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/jsmoduleloader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobotinteractive.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobotinteractive.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotutils.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotutils.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/iapiengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/iapiregister.h

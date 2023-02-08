@@ -3,20 +3,15 @@
 
 const THIS_SCRIPT = api.context.globalVal("script_path")
 const CONTEXT_PATH = api.context.globalVal("context_path")
-const MSCORE_REF_BIN = api.context.globalVal("mscore_ref_bin")
 const SCORE_DIR = api.context.globalVal("score_dir")
 const CURRENT_DATA_DIR = api.context.globalVal("current_data_dir")
 const REFERENCE_DATA_DIR = api.context.globalVal("reference_data_dir")
 const COMPARISON_DIR = api.context.globalVal("comparison_dir")
 
-const MODE = api.context.globalVal("mode")
-const IS_REF_MODE = MODE === "ref"
-const OUTPUT_DATA_DIR = IS_REF_MODE ? REFERENCE_DATA_DIR : CURRENT_DATA_DIR
-
 // options
 const DEFAULT = "default"
 const SMALL = "small"
-const MEDIUM = "medium"
+const OPTIONS = [DEFAULT, SMALL]
 
 // { fileName: { opt_name: true }}
 var DIFF_NAME_LIST = {}
@@ -24,11 +19,12 @@ var DIFF_NAME_LIST = {}
 var testCase = {
     name: "Compare draw data",
     steps: [
+        {name: "Clear", func: function() {
+            api.filesystem.clear(CURRENT_DATA_DIR)
+            api.filesystem.clear(COMPARISON_DIR)
+        }},
         {name: "Generate draw data (default)", func: function() {
             generateDrawData(DEFAULT)
-        }},
-        {name: "Generate ref draw data (default)", func: function() {
-            callRef(generateDrawData, DEFAULT)
         }},
         {name: "Create pngs (default) (debug step)", skip: true, func: function() {
             createDataPngs(DEFAULT)
@@ -39,29 +35,20 @@ var testCase = {
         {name: "Generate draw data (small)", func: function() {
             generateDrawData(SMALL)
         }},
-        {name: "Generate ref draw data (small)", func: function() {
-            callRef(generateDrawData, SMALL)
-        }},
         {name: "Create pngs (small) (debug step)", skip: true, func: function() {
             createDataPngs(SMALL)
         }},
         {name: "Compare draw data (small)", func: function() {
             compareDrawData(SMALL)
         }},
-        {name: "Generate draw data (medium)", func: function() {
-            generateDrawData(MEDIUM)
-        }},
-        {name: "Generate ref draw data (medium)", func: function() {
-            callRef(generateDrawData, MEDIUM)
-        }},
-        {name: "Create pngs (medium) (debug step)", skip: true, func: function() {
-            createDataPngs(MEDIUM)
-        }},
-        {name: "Compare draw data (medium)", func: function() {
-            compareDrawData(MEDIUM)
-        }},
         {name: "Create report", func: function() {
             createReport()
+        }},
+        {name: "Finish", func: function() {
+            if (isHasDiff()) {
+                return {code: 3101}
+            }
+            return {code: 0}
         }},
     ]
 };
@@ -69,8 +56,6 @@ var testCase = {
 function main()
 {
     api.log.info("Hello from VTest.js")
-
-    api.log.info("MODE: " + MODE)
 
     api.autobot.setInterval(100)
     api.autobot.runTestCase(testCase)
@@ -83,30 +68,19 @@ function fatalIfFailed(r)
     }
 }
 
-function callRef(func, funcArgs)
+function generateRefDrawData()
 {
-    let funcName = (typeof func === "function") ? func.name : func
-    let funcArgsArr = (typeof funcArgs === "array") ? funcArgs : [funcArgs]
-
-    let args = ["--test-case", THIS_SCRIPT,
-                "--test-case-context", CONTEXT_PATH,
-                "--test-case-context-value", JSON.stringify({"mode": "ref"}),
-                "--test-case-func", funcName,
-                "--test-case-func-args", JSON.stringify(funcArgsArr)
-        ]
-
-    api.process.execute(MSCORE_REF_BIN, args)
-}
-
-function makeOutputDataDir(optName)
-{
-    return OUTPUT_DATA_DIR+"/"+optName
+    for (let i = 0; i < OPTIONS.length; ++i) {
+        let optName = OPTIONS[i]
+        let opt = api.context.globalVal("opt_"+optName)
+        api.diagnostics.generateDrawData(SCORE_DIR, REFERENCE_DATA_DIR+"/"+optName, opt)
+    }
 }
 
 function generateDrawData(optName)
 {
     let opt = api.context.globalVal("opt_"+optName)
-    api.diagnostics.generateDrawData(SCORE_DIR, makeOutputDataDir(optName), opt)
+    api.diagnostics.generateDrawData(SCORE_DIR, CURRENT_DATA_DIR+"/"+optName, opt)
 }
 
 function compareDrawData(optName)
@@ -115,17 +89,15 @@ function compareDrawData(optName)
     const CURR_DIR = CURRENT_DATA_DIR + "/" + optName
     const REF_DIR = REFERENCE_DATA_DIR + "/" + optName
 
-    api.filesystem.clear(COMP_DIR)
-
     let opt = {
         isCopySrc: true,
         isMakePng: true
     }
 
-    let files = api.filesystem.scanFiles(REF_DIR, [], "FilesInCurrentDir").value
+    let files = api.filesystem.scanFiles(CURR_DIR, [], "FilesInCurrentDir").value
     for (let  i = 0; i < files.length; ++i) {
-        let refFile = files[i]
-        let fileName = api.filesystem.baseName(refFile)
+        let fileName = api.filesystem.baseName(files[i])
+        let refFile = REF_DIR + "/" + fileName + ".json"
         let currFile = CURR_DIR + "/" + fileName + ".json"
         let diffFile = COMP_DIR + "/" + fileName + ".diff.json"
 
@@ -144,7 +116,7 @@ function compareDrawData(optName)
 
 function createDataPngs(optName)
 {
-    let files = api.filesystem.scanFiles(makeOutputDataDir(optName), [], "FilesInCurrentDir").value
+    let files = api.filesystem.scanFiles(CURRENT_DATA_DIR+"/"+optName, [], "FilesInCurrentDir").value
     for (let  i = 0; i < files.length; ++i) {
         let file = files[i]
         api.diagnostics.drawDataToPng(file, file + ".png");

@@ -24,6 +24,7 @@
 #include <QJSValueIterator>
 
 #include "jsmoduleloader.h"
+#include "../autobotutils.h"
 
 #include "log.h"
 
@@ -232,21 +233,6 @@ RetVal<QJSValue> ScriptEngine::evaluateContent(const QByteArray& fileContent, co
     rv.val = m_engine->evaluate(QString(fileContent), filePath.toQString());
     rv.ret = jsValueToRet(rv.val);
     return rv;
-}
-
-Ret ScriptEngine::jsValueToRet(const QJSValue& val) const
-{
-    TRACEFUNC;
-    if (val.isError()) {
-        QString fileName = val.property("fileName").toString();
-        int line = val.property("lineNumber").toInt();
-        Ret ret = make_ret(Ret::Code::UnknownError,
-                           QString("File: %1, Exception at line: %2, %3").arg(fileName).arg(line).arg(val.toString()));
-
-        LOGE() << ret.toString();
-    }
-
-    return Ret(Ret::Code::Ok);
 }
 
 QJSValue ScriptEngine::newQObject(QObject* o)

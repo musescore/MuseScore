@@ -75,7 +75,7 @@ Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& 
         bool skip = false;
         std::string scorePath = scores.val.at(i).toStdString();
 
-        if (scorePath.find("disabled") != std::string::npos) {
+        if (scorePath.find("disabled") != std::string::npos || scorePath.find("DISABLED") != std::string::npos) {
             LOGW() << "disabled: " << scores.val.at(i);
             skip = true;
         }
