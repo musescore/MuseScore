@@ -41,6 +41,7 @@ class NoteEvent
 public:
     constexpr static int NOTE_LENGTH = 1000;
     constexpr static double GLISSANDO_VELOCITY_MULTIPLIER = 0.7;
+    constexpr static double GHOST_VELOCITY_MULTIPLIER = 0.5;
     constexpr static double DEFAULT_VELOCITY_MULTIPLIER = 1.0;
 
     NoteEvent() {}
