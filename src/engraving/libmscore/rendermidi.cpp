@@ -1153,24 +1153,23 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
         if (el->empty() && chord->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
             el->push_back(NoteEvent(0, ontime, 1000 - trailtime));
         }
-        if (trailtime == 0) {   // if trailtime is non-zero that means we have graceNotesAfter, so we don't need additional gate time.
-            for (NoteEvent& e : *el) {
-                e.setLen(note->deadNote() ? deadNoteDurationInTicks : e.len() * gateTime / 100);
 
-                if (note->letRingType() != mu::engraving::Note::LetRingType::None) {
-                    constexpr double letRingMaxStretch = 4.;
-                    constexpr double letRingMinStretch = 1.;
-                    double newLetRingStretch = 0;
+        for (NoteEvent& e : *el) {
+            e.setLen(note->deadNote() ? deadNoteDurationInTicks : e.len() * gateTime / 100);
 
-                    if (note->letRingType() == mu::engraving::Note::LetRingType::IgnoreEnd) {
-                        newLetRingStretch = letRingMaxStretch;
-                    } else {
-                        newLetRingStretch = std::clamp(
-                            (note->letRingEndDistance() / chord->ticks()).toDouble(), letRingMinStretch, letRingMaxStretch);
-                    }
+            if (note->letRingType() != mu::engraving::Note::LetRingType::None) {
+                constexpr double letRingMaxStretch = 4.;
+                constexpr double letRingMinStretch = 1.;
+                double newLetRingStretch = 0;
 
-                    e.setLen(e.len() * newLetRingStretch);
+                if (note->letRingType() == mu::engraving::Note::LetRingType::IgnoreEnd) {
+                    newLetRingStretch = letRingMaxStretch;
+                } else {
+                    newLetRingStretch = std::clamp(
+                        (note->letRingEndDistance() / chord->ticks()).toDouble(), letRingMinStretch, letRingMaxStretch);
                 }
+
+                e.setLen(e.len() * newLetRingStretch);
             }
         }
     }
