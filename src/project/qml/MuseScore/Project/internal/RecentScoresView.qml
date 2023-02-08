@@ -129,7 +129,7 @@ StyledGridView {
                 }
                 // TODO: Set right tooltip position
                 if (mouseInArea) {
-                    ui.tooltip.show(scoreItem, score.name, score.path)
+                    ui.tooltip.show(scoreItem, score.name, score.path, scoreItem.timeSinceModified)
                 } else {
                     ui.tooltip.hide(scoreItem)
                 }
