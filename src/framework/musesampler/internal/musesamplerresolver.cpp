@@ -59,10 +59,15 @@ static std::array<int, 3> parseVersion(const std::string& versionString, bool& o
 
 void MuseSamplerResolver::init()
 {
-    io::path_t path = configuration()->libraryPath();
-
+    io::path_t path = configuration()->userLibraryPath();
     m_libHandler = std::make_shared<MuseSamplerLibHandler>(path);
+    if (checkLibrary()) {
+      return;
+    }
 
+    // Use fallback
+    path = configuration()->backupLibraryPath();
+    m_libHandler = std::make_shared<MuseSamplerLibHandler>(path);
     if (!checkLibrary()) {
         m_libHandler.reset();
     }
