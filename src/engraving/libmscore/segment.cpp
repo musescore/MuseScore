@@ -2612,17 +2612,6 @@ double Segment::elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const
 
 double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
 {
-    // Handle mmRest segment case separately
-    if (measure() && measure()->isMMRest() && measure()->mmRestCount() > 1 && isChordRestType()) {
-        double minWidth = score()->styleMM(Sid::minMMRestWidth).val();
-        if (!score()->styleB(Sid::oldStyleMultiMeasureRests)) {
-            minWidth += 2 * score()->styleMM(Sid::multiMeasureRestMargin).val();
-        }
-        if (prevActive()) {
-            minWidth += prevActive()->minRight();
-        }
-        return minWidth;
-    }
     double ww = -1000000.0;          // can remain negative
     double d = 0.0;
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
@@ -2655,6 +2644,27 @@ double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
         double diff = w - minRight() - ns->minLeft();
         if (diff < absoluteMinHeaderDist) {
             w += absoluteMinHeaderDist - diff;
+        }
+    }
+
+    // Multimeasure rest exceptions that need special handling
+    if (measure() && measure()->isMMRest()) {
+        if (ns->isChordRestType()) {
+            double minDist = minRight();
+            if (isClefType()) {
+                minDist += score()->paddingTable().at(ElementType::CLEF).at(ElementType::REST);
+            } else if (isKeySigType()) {
+                minDist += score()->paddingTable().at(ElementType::KEYSIG).at(ElementType::REST);
+            } else if (isTimeSigType()) {
+                minDist += score()->paddingTable().at(ElementType::TIMESIG).at(ElementType::REST);
+            }
+            w = std::max(w, minDist);
+        } else if (isChordRestType()) {
+            double minWidth = score()->styleMM(Sid::minMMRestWidth).val();
+            if (!score()->styleB(Sid::oldStyleMultiMeasureRests)) {
+                minWidth += score()->styleMM(Sid::multiMeasureRestMargin).val();
+            }
+            w = std::max(w, minWidth);
         }
     }
 
