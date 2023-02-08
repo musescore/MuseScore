@@ -599,6 +599,7 @@ void MidiRenderer::doCollectMeasureEvents(EventMap* events, Measure const* m, co
 
             for (const Note* note : chord->notes()) {
                 int channel = getChannel(instr, note);
+                events->registerChannel(channel);
                 collectNote(events, channel, note, veloMultiplier, tickOffset, st1, pitchWheelRenderer);
             }
 
@@ -606,6 +607,7 @@ void MidiRenderer::doCollectMeasureEvents(EventMap* events, Measure const* m, co
                 for (Chord* c : chord->graceNotesAfter()) {
                     for (const Note* note : c->notes()) {
                         int channel = getChannel(instr, note);
+                        events->registerChannel(channel);
                         collectNote(events, channel, note, veloMultiplier, tickOffset, st1, pitchWheelRenderer);
                     }
                 }
