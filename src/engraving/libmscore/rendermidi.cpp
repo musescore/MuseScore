@@ -704,6 +704,9 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
     //   RETURNS the new ontime value.  The caller is expected to assign this value.
     auto makeEvent
         = [note, chord, chromatic, events](int pitch, int ontime, int duration, double velocityMultiplier = 1.0, bool play = true) {
+        if (note->ghost()) {
+            velocityMultiplier *= NoteEvent::GHOST_VELOCITY_MULTIPLIER;
+        }
         events->push_back(NoteEvent(chromatic ? pitch : chromaticPitchSteps(note, note, pitch),
                                     ontime / chord->actualTicks().ticks(),
                                     duration / chord->actualTicks().ticks(), velocityMultiplier, play));
@@ -1099,14 +1102,14 @@ static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int& onT
     const int slideDuration = 45;
     trailtime += slideNotes * slideDuration;
     int slideOn = 1000 - trailtime;
-    el->push_back(NoteEvent(0, onTime, slideOn, NoteEvent::DEFAULT_VELOCITY_MULTIPLIER, !note->tieBack()));
+    double velocity = !note->ghost() ? NoteEvent::DEFAULT_VELOCITY_MULTIPLIER : NoteEvent::GHOST_VELOCITY_MULTIPLIER;
+    el->push_back(NoteEvent(0, onTime, slideOn, velocity, !note->tieBack()));
 
     int pitch = 0;
     int pitchOffset = note->slide().is(Note::SlideType::Doit) ? 1 : -1;
     for (int i = 0; i < slideNotes; ++i) {
         pitch += pitchOffset;
-        el->push_back(NoteEvent(pitch, slideOn, slideDuration, NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER));
-
+        el->push_back(NoteEvent(pitch, slideOn, slideDuration, velocity * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER));
         slideOn += slideDuration;
     }
 }
@@ -1151,7 +1154,8 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
         // If we are here then we still need to render the note.
         // Render its body if necessary and apply gateTime.
         if (el->empty() && chord->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
-            el->push_back(NoteEvent(0, ontime, 1000 - trailtime));
+            el->push_back(NoteEvent(0, ontime, 1000 - trailtime,
+                                    !note->ghost() ? NoteEvent::DEFAULT_VELOCITY_MULTIPLIER : NoteEvent::GHOST_VELOCITY_MULTIPLIER));
         }
 
         for (NoteEvent& e : *el) {
