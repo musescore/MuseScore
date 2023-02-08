@@ -38,7 +38,7 @@ public:
     explicit IPopupWindow(QObject* parent = nullptr)
         : QObject(parent) {}
 
-    virtual void init(QQmlEngine* engine, std::shared_ptr<ui::IUiConfiguration> uiConfiguration, bool isDialogMode) = 0;
+    virtual void init(QQmlEngine* engine, bool isDialogMode) = 0;
 
     virtual void setContent(QQuickItem* item) = 0;
 

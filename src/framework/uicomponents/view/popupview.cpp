@@ -127,7 +127,7 @@ void PopupView::componentComplete()
     }
 
     m_window = new PopupWindow_QQuickView();
-    m_window->init(engine, uiConfiguration(), isDialog());
+    m_window->init(engine, isDialog());
     m_window->setOnHidden([this]() { onHidden(); });
     m_window->setContent(m_contentItem);
 
