@@ -37,10 +37,15 @@ using namespace mu::framework;
 
 void MuseSamplerResolver::init()
 {
-    io::path_t path = configuration()->libraryPath();
-
+    io::path_t path = configuration()->userLibraryPath();
     m_libHandler = std::make_shared<MuseSamplerLibHandler>(path);
+    if (checkLibrary()) {
+      return;
+    }
 
+    // Use fallback
+    path = configuration()->backupLibraryPath();
+    m_libHandler = std::make_shared<MuseSamplerLibHandler>(path);
     if (!checkLibrary()) {
         m_libHandler.reset();
     }

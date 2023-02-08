@@ -35,7 +35,8 @@ class IMuseSamplerConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMuseSamplerConfiguration() = default;
 
-    virtual mu::io::path_t libraryPath() const = 0;
+    virtual mu::io::path_t backupLibraryPath() const = 0;
+    virtual mu::io::path_t userLibraryPath() const = 0;
 
     virtual std::string minimumSupportedVersion() const = 0;
 };
