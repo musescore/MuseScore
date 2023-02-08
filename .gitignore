@@ -49,6 +49,7 @@ vtest/LOG
 vtest/META-INF
 vtest/Thumbnails
 vtest/Pictures
+vtest/temp*
 .vs
 dependencies
 

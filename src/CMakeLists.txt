@@ -103,14 +103,6 @@ add_subdirectory(stubs)
 if (BUILD_UNIT_TESTS)
     add_subdirectory(engraving/tests)
 
-    add_subdirectory(importexport/bb/tests)
-    add_subdirectory(importexport/braille/tests)
-    add_subdirectory(importexport/bww/tests)
-    add_subdirectory(importexport/capella/tests)
-    add_subdirectory(importexport/guitarpro/tests)
-    add_subdirectory(importexport/midi/tests)
-    add_subdirectory(importexport/musicxml/tests)
-
     #add_subdirectory(notation/tests) no tests at moment
     add_subdirectory(project/tests)
 

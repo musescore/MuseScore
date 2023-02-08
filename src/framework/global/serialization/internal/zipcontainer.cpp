@@ -687,13 +687,27 @@ int ZipContainer::count() const
     return (int)p->fileHeaders.size();
 }
 
+bool ZipContainer::fileExists(const std::string& fileName) const
+{
+    p->scanFiles();
+    ByteArray fileNameBa = ByteArray::fromRawData(fileName.c_str(), fileName.size());
+    for (size_t i = 0; i < p->fileHeaders.size(); ++i) {
+        if (p->fileHeaders.at(i).file_name == fileNameBa) {
+            return true;
+        }
+    }
+    return false;
+}
+
 ByteArray ZipContainer::fileData(const std::string& fileName) const
 {
     p->scanFiles();
 
+    ByteArray fileNameBa = ByteArray::fromRawData(fileName.c_str(), fileName.size());
+
     size_t i;
     for (i = 0; i < p->fileHeaders.size(); ++i) {
-        if (p->fileHeaders.at(i).file_name == ByteArray::fromRawData(fileName.c_str(), fileName.size())) {
+        if (p->fileHeaders.at(i).file_name == fileNameBa) {
             break;
         }
     }

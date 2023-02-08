@@ -85,6 +85,7 @@ private:
         //! but only one file among others (`.mscx` from MU 3.x)
         virtual bool isContainer() const = 0;
         virtual StringList fileList() const = 0;
+        virtual bool fileExists(const String& fileName) const = 0;
         virtual ByteArray fileData(const String& fileName) const = 0;
     };
 
@@ -96,6 +97,7 @@ private:
         bool isOpened() const override;
         bool isContainer() const override;
         StringList fileList() const override;
+        bool fileExists(const String& fileName) const override;
         ByteArray fileData(const String& fileName) const override;
     private:
         io::IODevice* m_device = nullptr;
@@ -110,6 +112,7 @@ private:
         bool isOpened() const override;
         bool isContainer() const override;
         StringList fileList() const override;
+        bool fileExists(const String& fileName) const override;
         ByteArray fileData(const String& fileName) const override;
     private:
         io::path_t m_rootPath;
@@ -122,6 +125,7 @@ private:
         bool isOpened() const override;
         bool isContainer() const override;
         StringList fileList() const override;
+        bool fileExists(const String& fileName) const override;
         ByteArray fileData(const String& fileName) const override;
     private:
         io::IODevice* m_device = nullptr;
@@ -129,6 +133,7 @@ private:
     };
 
     IReader* reader() const;
+    bool fileExists(const String& fileName) const;
     ByteArray fileData(const String& fileName) const;
 
     String mainFileName() const;
