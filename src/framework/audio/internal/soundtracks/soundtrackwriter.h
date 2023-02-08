@@ -41,12 +41,14 @@ class SoundTrackWriter : public async::Asyncable
 public:
     SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format, const msecs_t totalDuration, IAudioSourcePtr source);
 
-    bool write();
+    Ret write();
+    void abort();
+
     framework::Progress progress();
 
 private:
     encode::AbstractAudioEncoderPtr createEncoder(const SoundTrackType& type) const;
-    bool prepareInputBuffer();
+    Ret prepareInputBuffer();
 
     void sendStepProgress(int step, int64_t current, int64_t total);
 
@@ -58,6 +60,7 @@ private:
     encode::AbstractAudioEncoderPtr m_encoderPtr = nullptr;
 
     framework::Progress m_progress;
+    std::atomic<bool> m_isAborted = false;
 };
 }
 

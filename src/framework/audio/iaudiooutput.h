@@ -53,6 +53,7 @@ public:
 
     virtual async::Promise<bool> saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination,
                                                 const SoundTrackFormat& format) = 0;
+    virtual void abortSavingAllSoundTracks() = 0;
 
     virtual framework::Progress saveSoundTrackProgress(const TrackSequenceId sequenceId) = 0;
 

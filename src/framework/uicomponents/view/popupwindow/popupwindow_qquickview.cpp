@@ -37,7 +37,7 @@ PopupWindow_QQuickView::~PopupWindow_QQuickView()
     delete m_view;
 }
 
-void PopupWindow_QQuickView::init(QQmlEngine* engine, std::shared_ptr<ui::IUiConfiguration> uiConfiguration, bool isDialogMode)
+void PopupWindow_QQuickView::init(QQmlEngine* engine, bool isDialogMode)
 {
     //! NOTE Without a parent on MacOS with FullScreen, the popup is shown on another virtual Desktop.
     //! With parent on WinOS not work transparent background.
@@ -50,8 +50,6 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, std::shared_ptr<ui::IUiCon
     // dialog
     if (isDialogMode) {
         m_view->setFlags(Qt::Dialog);
-        QString bgColorStr = uiConfiguration->currentTheme().values.value(ui::BACKGROUND_PRIMARY_COLOR).toString();
-        m_view->setColor(QColor(bgColorStr));
     }
     // popup
     else {
@@ -63,8 +61,9 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, std::shared_ptr<ui::IUiCon
             );
 
         m_view->setFlags(flags);
-        m_view->setColor(QColor(Qt::transparent));
     }
+
+    m_view->setColor(QColor(Qt::transparent));
 
     // TODO: Can't use new `connect` syntax because the QQuickView::closing
     // has a parameter of type QQuickCloseEvent, which is not public, so we

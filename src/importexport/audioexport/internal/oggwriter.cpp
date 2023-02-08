@@ -36,7 +36,5 @@ mu::Ret OggWriter::write(notation::INotationPtr notation, QIODevice& destination
         128 /* bitRate */
     };
 
-    doWriteAndWait(notation, destinationDevice, format);
-
-    return make_ret(Ret::Code::Ok);
+    return doWriteAndWait(notation, destinationDevice, format);
 }
