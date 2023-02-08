@@ -34,18 +34,21 @@ static io::path_t DEFAULT_PATH()
 {
     return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/MuseSampler/lib/" + DEFAULT_LIB_NAME;
 }
+
 #elif defined(Q_OS_MAC)
 static const io::path_t DEFAULT_LIB_NAME("libMuseSamplerCoreLib.dylib");
 static io::path_t DEFAULT_PATH()
 {
     return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/MuseSampler/lib/" + DEFAULT_LIB_NAME;
 }
+
 #else
 static const io::path_t DEFAULT_LIB_NAME("MuseSamplerCoreLib.dll");
 static io::path_t DEFAULT_PATH()
 {
     return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "\\MuseSampler\\lib\\" + DEFAULT_LIB_NAME;
 }
+
 #endif
 
 static const std::string MINIMUM_SUPPORTED_VERSION = "0.2.2";
@@ -54,7 +57,7 @@ static const std::string MAXIMUM_SUPPORTED_VERSION = "0.4.0";
 // If installed on the system instead of user dir...do this as a backup
 io::path_t MuseSamplerConfiguration::backupLibraryPath() const
 {
-  return DEFAULT_LIB_NAME;
+    return DEFAULT_LIB_NAME;
 }
 
 // Preferred location
