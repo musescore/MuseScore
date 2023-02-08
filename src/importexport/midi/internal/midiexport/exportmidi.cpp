@@ -220,7 +220,6 @@ void ExportMidi::writeHeader()
 
 bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs, const SynthesizerState& synthState)
 {
-    UNUSED(midiExpandRepeats);
     m_midiFile.setDivision(Constants::division);
     m_midiFile.setFormat(1);
     std::vector<MidiTrack>& tracks = m_midiFile.tracks();
@@ -234,7 +233,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
     ctx.eachStringHasChannel = false;
     ctx.metronome = false;
     ctx.synthState = synthState;
-    m_score->renderMidi(&events, ctx, true);
+    m_score->renderMidi(&events, ctx, midiExpandRepeats);
 
     m_pauseMap.calculate(m_score);
     writeHeader();
