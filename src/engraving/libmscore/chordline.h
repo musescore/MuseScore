@@ -63,6 +63,8 @@ private:
     ChordLine(const ChordLine&);
 
     bool sameVoiceKerningLimited() const override { return true; }
+    bool alwaysKernable() const override { return true; }
+    KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
 
 public:
 

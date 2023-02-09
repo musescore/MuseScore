@@ -62,6 +62,14 @@ ChordLine::ChordLine(const ChordLine& cl)
     _note = cl._note;
 }
 
+KerningType ChordLine::doComputeKerningType(const EngravingItem* nextItem) const
+{
+    if (nextItem->isBarLine()) {
+        return KerningType::ALLOW_COLLISION;
+    }
+    return KerningType::KERNING;
+}
+
 //---------------------------------------------------------
 //   setChordLineType
 //---------------------------------------------------------
