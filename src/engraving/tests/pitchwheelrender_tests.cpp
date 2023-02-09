@@ -59,7 +59,7 @@ TEST_F(PitchWheelRender_Tests, simpleLinear)
     auto linearFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
         float x = (float)(tick - startTick);
         float y = a * x + b;
-        return y;
+        return (int)y;
     };
     func.func = linearFunc;
     render.addPitchWheelFunction(func, 0);
@@ -88,7 +88,7 @@ TEST_F(PitchWheelRender_Tests, twoReverseFunctions)
     auto linearFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
         float x = (float)(tick - startTick);
         float y = a * x + b;
-        return y;
+        return (int)y;
     };
     func.func = linearFunc;
     render.addPitchWheelFunction(func, 0);
@@ -96,7 +96,7 @@ TEST_F(PitchWheelRender_Tests, twoReverseFunctions)
     auto reverseLinearFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
         float x = (float)(tick - startTick);
         float y = -1 * a * x + b;
-        return y;
+        return (int)y;
     };
     func.func = reverseLinearFunc;
     render.addPitchWheelFunction(func, 0);
@@ -120,7 +120,7 @@ TEST_F(PitchWheelRender_Tests, channelTest)
     auto linearFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
         float x = (float)(tick - startTick);
         float y = a * x + b;
-        return y;
+        return (int)y;
     };
     func.func = linearFunc;
     render.addPitchWheelFunction(func, 0);
@@ -153,7 +153,7 @@ TEST_F(PitchWheelRender_Tests, twoConnectedFunctions)
         auto firstFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
             float x = (float)(tick - startTick);
             float y = a * x + b;
-            return y;
+            return (int)y;
         };
         func.func = firstFunc;
         render.addPitchWheelFunction(func, 0);
@@ -170,7 +170,7 @@ TEST_F(PitchWheelRender_Tests, twoConnectedFunctions)
         auto secondFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
             float x = (float)(tick - startTick);
             float y = a * x + b;
-            return y;
+            return (int)y;
         };
         func.func = secondFunc;
         render.addPitchWheelFunction(func, 0);
@@ -201,7 +201,7 @@ TEST_F(PitchWheelRender_Tests, twoDevidedFunctions)
         auto firstFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
             float x = (float)(tick - startTick);
             float y = a * x + b;
-            return y;
+            return (int)y;
         };
         func.func = firstFunc;
         render.addPitchWheelFunction(func, 0);
@@ -218,7 +218,7 @@ TEST_F(PitchWheelRender_Tests, twoDevidedFunctions)
         auto secondFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
             float x = (float)(tick - startTick);
             float y = a * x + b;
-            return y;
+            return (int)y;
         };
         func.func = secondFunc;
         render.addPitchWheelFunction(func, 0);
@@ -251,7 +251,7 @@ TEST_F(PitchWheelRender_Tests, twoOverlappedFunctions)
         auto firstFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
             float x = (float)(tick - startTick);
             float y = a * x + b;
-            return y;
+            return (int)y;
         };
         func.func = firstFunc;
         render.addPitchWheelFunction(func, 0);
@@ -268,7 +268,7 @@ TEST_F(PitchWheelRender_Tests, twoOverlappedFunctions)
         auto secondFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
             float x = (float)(tick - startTick);
             float y = a * x + b;
-            return y;
+            return (int)y;
         };
         func.func = secondFunc;
         render.addPitchWheelFunction(func, 0);
