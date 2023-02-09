@@ -467,10 +467,7 @@ void GuitarPro::addLetRing(Note* note)
         lr->setStartElement(chord);
         lr->setEndElement(chord);
         score->addElement(lr);
-        _addedLetRings.push_back(lr);
     }
-
-    note->setLetRingType(Note::LetRingType::IgnoreEnd);
 }
 
 void GuitarPro::addPalmMuteEffect(const PalmMute* const elem)
@@ -535,45 +532,8 @@ void GuitarPro::addPalmMuteEffect(const PalmMute* const elem)
 
 void GuitarPro::addSoundEffects()
 {
-    for (LetRing* lr : _addedLetRings) {
-        addLetRingEffect(lr);
-    }
-
     for (PalmMute* pm : _addedPalmMutes) {
         addPalmMuteEffect(pm);
-    }
-}
-
-void GuitarPro::addLetRingEffect(const LetRing* const elem)
-{
-    /// copied from gpconverter.cpp
-    track_idx_t track = elem->track();
-    EngravingItem* startEl = elem->startElement();
-    EngravingItem* endEl = elem->endElement();
-
-    if (!startEl->isChordRest() || !endEl->isChordRest()) {
-        return;
-    }
-
-    ChordRest* startCR = toChordRest(startEl);
-    ChordRest* endCR = toChordRest(endEl);
-    Segment* begSegment = startCR->segment();
-    Segment* endSegment = endCR->segment();
-    for (Segment* nextSeg = begSegment; nextSeg; nextSeg = nextSeg->nextCR(track, true)) {
-        const auto& elemList = nextSeg->elist();
-        for (const auto el : elemList) {
-            if (el && el->isChord()) {
-                /// put the duration until end of let ring
-                const auto& notes = toChord(el)->notes();
-                for (Note* note : notes) {
-                    note->setLetRingType(Note::LetRingType::TreatEnd);
-                    note->setLetRingEndDistance(endCR->tick() + endCR->ticks() - toChord(el)->tick());
-                }
-            }
-        }
-        if (nextSeg == endSegment) {
-            break;
-        }
     }
 }
 
