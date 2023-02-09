@@ -280,9 +280,6 @@ private:
 
     std::unordered_map<Note*, Note*> m_harmonicNotes;
     std::unique_ptr<GPDrumSetResolver> _drumResolver;
-
-    /// storing notes for each fraction of each pitch - to find closest note with same pitch
-    std::unordered_map<track_idx_t, std::unordered_map<int, std::map<Fraction, std::vector<Note*> > > > m_letRingNotes;
 };
 } //end Ms namespace
 #endif // SCOREDOMBUILDER_H

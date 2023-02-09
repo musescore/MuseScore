@@ -395,23 +395,6 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
         }
     }
 
-    if (engravingConfiguration()->guitarProImportExperimental()) {
-        // recalculate let ring endings
-        for (auto& [track, trackMap] : m_letRingNotes) {
-            for (auto& [pitch, pitchMap] : trackMap) {
-                for (auto& [tick, noteVector] : pitchMap) {
-                    auto upperBound = pitchMap.upper_bound(tick);
-                    if (upperBound != pitchMap.end()) {
-                        Fraction distanceToNext = upperBound->first - tick;
-                        for (Note* note : noteVector) {
-                            note->setLetRingEndDistance(std::min(note->letRingEndDistance(), distanceToNext));
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     // fixing last measure barline
     if (_lastMeasure) {
         for (size_t staffIdx = 0; staffIdx < _score->staves().size(); staffIdx++) {
@@ -1512,24 +1495,6 @@ void GPConverter::addSoundEffects(const SLine* const elem)
             palmMuteChannel->setName(String::fromUtf8(InstrChannel::PALM_MUTE_NAME));
             currentInstrument->appendChannel(palmMuteChannel);
         }
-    } else if (elem->isLetRing()) {
-        Segment* begSegment = startCR->segment();
-        Segment* endSegment = endCR->segment();
-        for (Segment* nextSeg = begSegment; nextSeg; nextSeg = nextSeg->nextCR(track, true)) {
-            const auto& elemList = nextSeg->elist();
-            for (const auto el : elemList) {
-                if (el && el->isChord() && el->track() == track) {
-                    const auto& notes = toChord(el)->notes();
-                    for (Note* note : notes) {
-                        note->setLetRingType(Note::LetRingType::TreatEnd);
-                        note->setLetRingEndDistance(endCR->tick() + endCR->ticks() - toChord(el)->tick());
-                    }
-                }
-            }
-            if (nextSeg == endSegment) {
-                break;
-            }
-        }
     }
 }
 
@@ -2439,9 +2404,6 @@ void GPConverter::addLetRing(const GPNote* gpnote, Note* note)
 {
     if (gpnote->letRing() && m_currentGPBeat) {
         m_currentGPBeat->setLetRing(true);
-        if (engravingConfiguration()->guitarProImportExperimental()) {
-            m_letRingNotes[note->track()][note->pitch()][note->tick()].push_back(note);
-        }
     }
 }
 

@@ -288,10 +288,8 @@ protected:
     /// midi effects
     void addSoundEffects();
     void addPalmMuteEffect(const PalmMute* const elem);
-    void addLetRingEffect(const LetRing* const elem);
 
     std::vector<PalmMute*> _addedPalmMutes;
-    std::vector<LetRing*> _addedLetRings;
 
     std::vector<PalmMute*> _palmMutes;
     std::vector<LetRing*> _letRings;

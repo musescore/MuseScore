@@ -189,10 +189,6 @@ private:
     bool _ghost = false;        ///< ghost note
     bool _deadNote = false;     ///< dead note
 
-    /// TODO: remove let ring variables when render midi for let ring is fixed
-    LetRingType _letRingType = LetRingType::None; ///< let ring
-    Fraction _letRingEndDistance; ///< ticks until end of let ring segment
-
     bool _hidden = false;                 ///< marks this note as the hidden one if there are
                                           ///< overlapping notes; hidden notes are not played
                                           ///< and heads + accidentals are not shown
@@ -397,11 +393,6 @@ public:
     void setGhost(bool val) { _ghost = val; }
     bool deadNote() const { return _deadNote; }
     void setDeadNote(bool deadNote) { _deadNote = deadNote; }
-
-    LetRingType letRingType() const { return _letRingType; }
-    void setLetRingType(LetRingType type) { _letRingType = type; }
-    Fraction letRingEndDistance() const { return _letRingEndDistance; }
-    void setLetRingEndDistance(Fraction dist) { _letRingEndDistance = dist; }
 
     bool fretConflict() const { return _fretConflict; }
     void setFretConflict(bool val) { _fretConflict = val; }
