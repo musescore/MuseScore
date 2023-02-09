@@ -103,16 +103,23 @@ StyledDialogView {
             StyledTextLabel {
                 id: titleLabel
 
+                Layout.fillWidth: true
+
                 text: qsTrc("global", "Success!")
                 font: ui.theme.tabBoldFont
+                horizontalAlignment: Text.AlignLeft
+                wrapMode: Text.Wrap
             }
 
             StyledTextLabel {
                 id: subtitleLabel
 
+                Layout.fillWidth: true
                 Layout.topMargin: 6
 
                 text: qsTrc("project", "All saved changes will now update to the cloud")
+                horizontalAlignment: Text.AlignLeft
+                wrapMode: Text.Wrap
             }
 
             Item {
@@ -137,8 +144,12 @@ StyledDialogView {
                     StyledTextLabel {
                         id: publishTitleLabel
 
+                        Layout.fillWidth: true
+
                         text: qsTrc("project", "Publish your finished scores on MuseScore.com")
                         font: ui.theme.largeBodyBoldFont
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.Wrap
                     }
 
                     Column {
@@ -165,14 +176,13 @@ StyledDialogView {
                                 qsTrc("project", "Share your projects and collaborate with other musicians")
                             ]
 
-                            Row {
+                            RowLayout {
+                                width: parent.width
                                 spacing: 10
 
                                 property string title: modelData
 
                                 Rectangle {
-                                    anchors.verticalCenter: parent.verticalCenter
-
                                     width: 9
                                     height: width
                                     radius: width / 2
@@ -181,7 +191,11 @@ StyledDialogView {
                                 }
 
                                 StyledTextLabel {
+                                    Layout.fillWidth: true
+
                                     text: title
+                                    horizontalAlignment: Text.AlignLeft
+                                    wrapMode: Text.Wrap
                                 }
                             }
                         }
