@@ -8,7 +8,7 @@ SET FILES_DIR=""
 SET FILE_PATH=""
 SET FILE_NAME=""
 
-SET SIGNTOOL="C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348\x64\signtool.exe"
+SET SIGNTOOL="C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\signtool.exe"
 SET SIGNCERT="build\ci\windows\resources\musescore.pfx"
 SET SIGNCERT_ENCRYPTED="build\ci\windows\resources\musescore.enc"
 
