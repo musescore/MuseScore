@@ -40,6 +40,7 @@
 #include "vsterrors.h"
 
 namespace mu::vst {
+class VstPluginProvider;
 class VstPlugin : public async::Asyncable
 {
     INJECT_STATIC(vst, audio::IAudioThreadSecurer, threadSecurer)
@@ -47,12 +48,17 @@ class VstPlugin : public async::Asyncable
 
 public:
     VstPlugin(const audio::AudioResourceId& resourceId);
+    ~VstPlugin() override;
 
     const audio::AudioResourceId& resourceId() const;
     const std::string& name() const;
 
     PluginViewPtr createView() const;
-    PluginProviderPtr provider() const;
+
+    PluginControllerPtr controller() const;
+    PluginComponentPtr component() const;
+    PluginMidiMappingPtr midiMapping() const;
+
     bool isAbleForInput() const;
 
     void updatePluginConfig(const audio::AudioUnitConfig& config);
@@ -76,7 +82,7 @@ private:
     audio::AudioResourceId m_resourceId;
 
     PluginModulePtr m_module = nullptr;
-    PluginProviderPtr m_pluginProvider = nullptr;
+    std::unique_ptr<VstPluginProvider> m_pluginProvider;
     ClassInfo m_classInfo;
 
     Steinberg::FUnknownPtr<VstComponentHandler> m_componentHandlerPtr = nullptr;
