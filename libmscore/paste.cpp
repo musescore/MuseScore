@@ -106,12 +106,12 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                         break;
                         }
                   }
-            Fraction tickStart = Fraction::fromString(e.attribute("tick", "0"));
-                tickLen       =  Fraction::fromString(e.attribute("len", "0"));
+            Fraction tickStart = Fraction::fromString(e.attribute("tick"));
+            tickLen =  Fraction::fromString(e.attribute("len"));
             Fraction oTickLen =  tickLen;
-                tickLen       *= scale;
-            int staffStart    = e.intAttribute("staff", 0);
-                staves        = e.intAttribute("staves", 0);
+            tickLen *= scale;
+            int staffStart = e.intAttribute("staff", 0);
+            staves = e.intAttribute("staves", 0);
 
             Fraction oEndTick = dstTick + oTickLen;
             auto oSpanner = spannerMap().findContained(dstTick.ticks(), oEndTick.ticks());
@@ -1018,8 +1018,8 @@ static bool canPasteStaff(XmlReader& reader, const Fraction& scale)
       if (scale != Fraction(1, 1)) {
             while (reader.readNext() && reader.tokenType() != XmlReader::TokenType::EndDocument) {
                   QString tag(reader.name().toString());
-                  int len = reader.intAttribute("len", 0);
-                  if (len && !TDuration(Fraction::fromTicks(len) * scale).isValid())
+                  Fraction len = Fraction::fromString(reader.attribute("len"));
+                  if (!len.isZero() && !TDuration(len * scale).isValid())
                         return false;
                   if (tag == "durationType")
                         if (!TDuration(TDuration(reader.readElementText()).fraction() * scale).isValid())
