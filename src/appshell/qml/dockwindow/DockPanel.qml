@@ -28,6 +28,8 @@ DockPanelView {
 
     default property alias contentComponent : contentLoader.sourceComponent
 
+    property int navigationPanelOrderStart: 1 // take into account the context menu button
+
     Loader {
         id: contentLoader
 
