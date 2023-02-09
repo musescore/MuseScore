@@ -562,7 +562,6 @@ void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, EventMap* events,
                     params.graceOffsetOff = graceTickSum - graceTickOffset * (currentBeaforeBeatNote + 1) + 1;
 
                     collectNote(events, note, params, st, pitchWheelRenderer);
-                    currentBeaforeBeatNote++;
                 } else {
                     CollectNoteParams params;
                     params.channel = channel;
@@ -571,6 +570,8 @@ void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, EventMap* events,
                     collectNote(events, note, params, st, pitchWheelRenderer);
                 }
             }
+
+            currentBeaforeBeatNote++;
         }
     }
 }
