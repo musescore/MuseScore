@@ -1,4 +1,4 @@
-﻿/*
+/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
@@ -45,6 +45,7 @@
 #include "libmscore/glissando.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/instrument.h"
+#include "libmscore/letring.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
 #include "libmscore/measurerepeat.h"
@@ -78,6 +79,27 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 static PitchWheelSpecs wheelSpec;
+
+struct CollectNoteParams {
+    int channel = 0;
+    double velocityMultiplier = 1.;
+    int tickOffset = 0;
+    int graceOffsetOn = 0;
+    int graceOffsetOff = 0;
+    int endLetRingTick = 0;
+    bool letRingNote = false;
+    bool callAllSoundOff = false;//NoteOn silence channel
+};
+
+struct PlayNoteParams {
+    int channel = 0;
+    int pitch = 0;
+    int velo = 0;
+    int onTime = 0;
+    int offTime = 0;
+    int staffIdx = 0;
+    bool callAllSoundOff = false;//NoteOn silence channel
+};
 
 static bool graceNotesMerged(Chord* chord);
 
@@ -153,43 +175,48 @@ static Fraction getPlayTicksForBend(const Note* note)
 //---------------------------------------------------------
 //   playNote
 //---------------------------------------------------------
-static void playNote(EventMap* events, const Note* note, int channel, int pitch,
-                     int velo, int onTime, int offTime, int staffIdx, PitchWheelRenderer& pitchWheelRenderer)
+static void playNote(EventMap* events, const Note* note, PlayNoteParams params, PitchWheelRenderer& pitchWheelRenderer)
 {
     if (!note->play()) {
         return;
     }
 
     if (note->userVelocity() != 0) {
-        velo = note->customizeVelocity(velo);
+        params.velo = note->customizeVelocity(params.velo);
     }
 
-    NPlayEvent ev(ME_NOTEON, channel, pitch, velo);
-    ev.setOriginatingStaff(staffIdx);
+    if (params.callAllSoundOff && params.onTime != 0) {
+        NPlayEvent ev1(ME_CONTROLLER, params.channel, CTRL_ALL_NOTES_OFF, 0);
+        events->insert(std::pair<int, NPlayEvent>(params.onTime - 1, ev1));
+    }
+
+    NPlayEvent ev(ME_NOTEON, params.channel, params.pitch, params.velo);
+    ev.setOriginatingStaff(params.staffIdx);
     ev.setTuning(note->tuning());
     ev.setNote(note);
-    if (offTime < onTime) {
-        offTime = onTime;
+    if (params.offTime > 0 && params.offTime < params.onTime) {
+        return;
     }
-    events->insert(std::pair<int, NPlayEvent>(onTime, ev));
+    events->insert(std::pair<int, NPlayEvent>(params.onTime, ev));
     // adds portamento for continuous glissando
     for (Spanner* spanner : note->spannerFor()) {
         if (spanner->type() == ElementType::GLISSANDO) {
             Glissando* glissando = toGlissando(spanner);
             if (glissando->glissandoStyle() == GlissandoStyle::PORTAMENTO) {
                 Note* nextNote = toNote(spanner->endElement());
-                double pitchDelta = nextNote->ppitch() - pitch;
-                int timeDelta = offTime - onTime;
+                double pitchDelta = nextNote->ppitch() - params.pitch;
+                int timeDelta = params.offTime - params.onTime;
                 if (pitchDelta != 0 && timeDelta != 0) {
-                    collectGlissando(channel, onTime, offTime, pitchDelta, pitchWheelRenderer);
+                    collectGlissando(params.channel, params.onTime, params.offTime, pitchDelta, pitchWheelRenderer);
                 }
             }
         }
     }
 
     ev.setVelo(0);
-    if (!note->part()->instrument(note->tick())->useDrumset()) {
-        events->insert(std::pair<int, NPlayEvent>(offTime, ev));
+    if (!note->part()->instrument(note->tick())->useDrumset()
+        && params.offTime != -1) {
+        events->insert(std::pair<int, NPlayEvent>(params.offTime, ev));
     }
 }
 
@@ -283,8 +310,8 @@ static void collectBend(const Bend* bend,
 //   collectNote
 //---------------------------------------------------------
 
-static void collectNote(EventMap* events, int channel, const Note* note, double velocityMultiplier, int tickOffset, Staff* staff,
-                        PitchWheelRenderer& pitchWheelRenderer, int graceOffsetOn = 0, int graceOffsetOff = 0)
+static void collectNote(EventMap* events, const Note* note, CollectNoteParams noteParams, Staff* staff,
+                        PitchWheelRenderer& pitchWheelRenderer)
 {
     if (!note->play() || note->hidden()) {      // do not play overlapping notes
         return;
@@ -317,7 +344,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, double 
         }
     }
 
-    int tick1    = chord->tick().ticks() + tickOffset;
+    int tick1    = chord->tick().ticks() + noteParams.tickOffset;
     bool tieFor  = note->tieFor();
     bool tieBack = note->tieBack();
 
@@ -341,14 +368,24 @@ static void collectNote(EventMap* events, int channel, const Note* note, double 
             off += tieLen;
         }
 
+        if (noteParams.letRingNote) {
+            off = noteParams.endLetRingTick;
+        }
+
         // Get the velocity used for this note from the staff
         // This allows correct playback of tremolos even without SND enabled.
-        Fraction nonUnwoundTick = Fraction::fromTicks(on - tickOffset);
-        int velo = staff->velocities().val(nonUnwoundTick) * velocityMultiplier * e.velocityMultiplier();
+        Fraction nonUnwoundTick = Fraction::fromTicks(on - noteParams.tickOffset);
+        int velo = staff->velocities().val(nonUnwoundTick) * noteParams.velocityMultiplier * e.velocityMultiplier();
         if (e.play()) {
-            playNote(events, note, channel, p, std::clamp(velo, 1, 127), std::max(0, on - graceOffsetOn), std::max(0,
-                                                                                                                   off - graceOffsetOff),
-                     static_cast<int>(staff->idx()), pitchWheelRenderer);
+            PlayNoteParams playParams;
+            playParams.channel = noteParams.channel;
+            playParams.pitch = p;
+            playParams.velo = std::clamp(velo, 1, 127);
+            playParams.onTime = std::max(0, on - noteParams.graceOffsetOn);
+            playParams.offTime = std::max(0, off - noteParams.graceOffsetOff);
+            playParams.staffIdx = static_cast<int>(staff->idx());
+            playParams.callAllSoundOff = noteParams.callAllSoundOff;
+            playNote(events, note, playParams, pitchWheelRenderer);
         }
     }
 
@@ -361,7 +398,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, double 
         if (!bend->playBend()) {
             break;
         }
-        collectBend(bend, channel, tick1, tick1 + getPlayTicksForBend(note).ticks(), pitchWheelRenderer);
+        collectBend(bend, noteParams.channel, tick1, tick1 + getPlayTicksForBend(note).ticks(), pitchWheelRenderer);
     }
 }
 
@@ -517,13 +554,21 @@ void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, EventMap* events,
             for (const Note* note : c->notes()) {
                 int channel = getChannel(chord->part()->instrument(chord->tick()), note);
                 if (note->noteType() == NoteType::ACCIACCATURA) {
-                    collectNote(events, channel, note, veloMultiplier, tickOffset, st,
-                                pitchWheelRenderer,
-                                graceTickSum - graceTickOffset * currentBeaforeBeatNote,
-                                graceTickSum - graceTickOffset * (currentBeaforeBeatNote + 1) + 1);
+                    CollectNoteParams params;
+                    params.channel = channel;
+                    params.velocityMultiplier = veloMultiplier;
+                    params.tickOffset = tickOffset;
+                    params.graceOffsetOn = graceTickSum - graceTickOffset * currentBeaforeBeatNote;
+                    params.graceOffsetOff = graceTickSum - graceTickOffset * (currentBeaforeBeatNote + 1) + 1;
+
+                    collectNote(events, note, params, st, pitchWheelRenderer);
                     currentBeaforeBeatNote++;
                 } else {
-                    collectNote(events, channel, note, veloMultiplier, tickOffset, st, pitchWheelRenderer);
+                    CollectNoteParams params;
+                    params.channel = channel;
+                    params.velocityMultiplier = veloMultiplier;
+                    params.tickOffset = tickOffset;
+                    collectNote(events, note, params, st, pitchWheelRenderer);
                 }
             }
         }
@@ -597,10 +642,34 @@ void MidiRenderer::doCollectMeasureEvents(EventMap* events, Measure const* m, co
             //
             collectGraceBeforeChordEvents(chord, events, veloMultiplier, st1, tickOffset, pitchWheelRenderer);
 
+            bool letRingNote = false;
+            int endLetRingTick = 0;
+            int currentTick = chord->tick().ticks();
+            for (auto it : score->spannerMap().findOverlapping(currentTick + 1, currentTick + 2)) {
+                Spanner* spanner = it.value;
+                if (!spanner->isLetRing()) {
+                    continue;
+                }
+                LetRing* letRing = toLetRing(spanner);
+                if (chord->track() == letRing->track()) {
+                    letRingNote = true;
+                }
+                endLetRingTick = letRing->endCR()->tick().ticks() + letRing->endCR()->ticks().ticks();
+            }
+
             for (const Note* note : chord->notes()) {
                 int channel = getChannel(instr, note);
                 events->registerChannel(channel);
-                collectNote(events, channel, note, veloMultiplier, tickOffset, st1, pitchWheelRenderer);
+                CollectNoteParams params;
+                params.channel = channel;
+                params.velocityMultiplier = veloMultiplier;
+                params.tickOffset = tickOffset;
+                params.letRingNote = letRingNote;
+                params.endLetRingTick = endLetRingTick;
+                if (_context.eachStringHasChannel) {
+                    params.callAllSoundOff = true;
+                }
+                collectNote(events, note, params, st1, pitchWheelRenderer);
             }
 
             if (!graceNotesMerged(chord)) {
@@ -608,7 +677,11 @@ void MidiRenderer::doCollectMeasureEvents(EventMap* events, Measure const* m, co
                     for (const Note* note : c->notes()) {
                         int channel = getChannel(instr, note);
                         events->registerChannel(channel);
-                        collectNote(events, channel, note, veloMultiplier, tickOffset, st1, pitchWheelRenderer);
+                        CollectNoteParams params;
+                        params.channel = channel;
+                        params.velocityMultiplier = veloMultiplier;
+                        params.tickOffset = tickOffset;
+                        collectNote(events, note, params, st1, pitchWheelRenderer);
                     }
                 }
             }
@@ -958,29 +1031,6 @@ void MidiRenderer::renderScore(EventMap* events, const Context& ctx)
 
     if (ctx.metronome) {
         renderMetronome(events);
-    }
-
-    // NOTE:JT this is a temporary fix for duplicate events until polyphonic aftertouch support
-    // can be implemented. This removes duplicate SND events.
-    int lastChannel = -1;
-    int lastController = -1;
-    int lastValue = -1;
-    for (auto i = events->begin(); i != events->end();) {
-        if (i->second.type() == ME_CONTROLLER) {
-            auto& event = i->second;
-            if (event.channel() == lastChannel
-                && event.controller() == lastController
-                && event.value() == lastValue) {
-                i = events->erase(i);
-            } else {
-                lastChannel = event.channel();
-                lastController = event.controller();
-                lastValue = event.value();
-                i++;
-            }
-        } else {
-            i++;
-        }
     }
 }
 
