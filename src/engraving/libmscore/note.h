@@ -178,13 +178,6 @@ public:
         ArtificialHarmonic
     };
 
-    /// TODO: remove when render midi for let ring is fixed
-    enum LetRingType {
-        None = -1,     // no let ring
-        IgnoreEnd = 0, // make note longer without checking let ring segment end
-        TreatEnd = 1   // make note longer but don't exceed let ring segment end
-    };
-
 private:
     bool _ghost = false;        ///< ghost note
     bool _deadNote = false;     ///< dead note
