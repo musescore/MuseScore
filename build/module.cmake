@@ -33,11 +33,16 @@
 # set(MODULE_USE_UNITY_NONE ON)               - set for disable UNITY BUILD for module
 # set(MODULE_OVERRIDDEN_PCH ...)              - set additional precompiled headers required for module
 # set(PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR}) - set root dir for module
+# set(MODULE_IS_STUB ON)                      - set a mark that the module is stub
 
 # After all the settings you need to do:
 # include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
-message(STATUS "Configuring " ${MODULE})
+if (MODULE_IS_STUB)
+    message(STATUS "Configuring " ${MODULE} " [stub]")
+else()
+    message(STATUS "Configuring " ${MODULE})
+endif()
 
 if (NOT PROJECT_ROOT_DIR)
     set(PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})

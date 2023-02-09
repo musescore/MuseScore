@@ -23,7 +23,9 @@ if (BUILD_IMPORTEXPORT_MODULE)
     add_subdirectory(braille)
     add_subdirectory(bww)
     add_subdirectory(capella)
+    add_subdirectory(${THIRDPARTY_DIR}/rtf2html rtf2html) # for capella
     add_subdirectory(midi)
+    add_subdirectory(${THIRDPARTY_DIR}/beatroot beatroot) # for midi import
     add_subdirectory(musedata)
     add_subdirectory(musicxml)
     add_subdirectory(ove)
