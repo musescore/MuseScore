@@ -49,9 +49,6 @@ endif (BUILD_WORKSPACE_MODULE)
 if (NOT OS_IS_WASM)
     add_subdirectory(importexport)
 
-    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/beatroot beatroot) # for midi import
-    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/rtf2html rtf2html) # for capella
-
     if (BUILD_CLOUD_MODULE)
         add_subdirectory(cloud)
     endif (BUILD_CLOUD_MODULE)

@@ -30,6 +30,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_MODULE_PATH
+    ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/build
     ${CMAKE_CURRENT_LIST_DIR}/build/cmake
     ${CMAKE_MODULE_PATH}
@@ -45,15 +46,17 @@ set(MUSESCORE_BUILD_CONFIG "dev" CACHE STRING "Build config")
 # - dev     - for development/nightly builds
 # - testing - for testing versions (alpha, beta, RC)
 # - release - for stable release builds
+set(MUSESCORE_BUILD_CONFIGURE "app" CACHE STRING "Build configure")
+# Possible MUSESCORE_BUILD_CONFIGURE values:
+# - app (or empty)  - for desktop app
+# - vtest           - for visual tests
+# - utest           - for unit tests
 
 option(BUILD_MACOS_APPLE_SILICON "Build for Apple Silicon architecture. Only applicable on Macs with Apple Silicon, and requires suitable Qt version." OFF)
 option(BUILD_64 "Build 64 bit version of editor" ON)
 option(BUILD_PORTABLEAPPS "Windows build for PortableApps.com" OFF)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(BUILD_AUTOUPDATE "Build with autoupdate support" OFF)
-
-set(CRASH_REPORT_URL "" CACHE STRING "URL where to send crash reports")
-option(LOGGER_DEBUGLEVEL_ENABLED "Enable logging debug level" ON)
 
 option(BUILD_SHORTCUTS_MODULE "Build shortcuts module" ON)
 option(BUILD_NETWORK_MODULE "Build network module" ON)
@@ -71,7 +74,6 @@ option(BUILD_MULTIINSTANCES_MODULE "Build multiinstances module" ON)
 option(BUILD_UPDATE_MODULE "Build update module" ON)
 option(BUILD_DIAGNOSTICS "Build diagnostic code" ON)
 option(BUILD_CRASHPAD_CLIENT "Build crashpad client" ON)
-option(CRASHPAD_HANDLER_PATH "Path to custom crashpad_handler executable (optional)" "")
 set(YOUTUBE_API_KEY "" CACHE STRING "YouTube API key")
 
 option(BUILD_AUDIO_MODULE "Build audio module" ON)
@@ -81,16 +83,8 @@ set(VST3_SDK_VERSION "3.7")
 option(BUILD_VST_MODULE "Build VST MODULE" OFF)
 set(VST3_SDK_PATH "" CACHE PATH "Path to VST3_SDK. SDK version >= ${VST3_SDK_VERSION} required")
 
-if (NOT BUILD_AUDIO_MODULE)
-    set(BUILD_MUSESAMPLER_MODULE OFF)
-    set(BUILD_VST_MODULE OFF)
-endif()
-
 option(BUILD_IMPORTEXPORT_MODULE "Build importexport module" ON)
-option(BUILD_VIDEOEXPORT_MODULE "Build videoexport module" OFF) # currently work only on Ubuntu 18.04 (for backend)
-if (NOT BUILD_IMPORTEXPORT_MODULE)
-    set(BUILD_VIDEOEXPORT_MODULE OFF)
-endif()
+option(BUILD_VIDEOEXPORT_MODULE "Build videoexport module" ON)
 
 option(ENGRAVING_PAINT_DEBUGGER_ENABLED "Enable diagnostic engraving paint debugger" OFF)
 # Temporary flags for MU3 compatibility to make testing easier.
@@ -98,16 +92,18 @@ option(ENGRAVING_COMPAT_WRITESTYLE_302 "Write style to score xml file" OFF)
 option(ENGRAVING_COMPAT_WRITEEXCERPTS_302 "Write excerpts to score xml file" ON)
 # -----
 
-option(UI_DISABLE_MODALITY "Disable dialogs modality for testing purpose" OFF)
-
-option(ACCESSIBILITY_LOGGING_ENABLED "Enable accessibility logging" OFF)
-
 option(SOUNDFONT3    "Ogg Vorbis compressed fonts"        ON)  # Enable Ogg Vorbis compressed fonts, requires Ogg & Vorbis
 option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
 
-option(BUILD_UNIT_TESTS "Build gtest unit test" ON)
+# Pack
 option(PACKAGE_FILE_ASSOCIATION "File types association" OFF)
 
+# Development
+option(BUILD_UNIT_TESTS "Build gtest unit test" ON)
+set(CRASH_REPORT_URL "" CACHE STRING "URL where to send crash reports")
+option(CRASHPAD_HANDLER_PATH "Path to custom crashpad_handler executable (optional)" "")
+option(LOGGER_DEBUGLEVEL_ENABLED "Enable logging debug level" ON)
+option(ACCESSIBILITY_LOGGING_ENABLED "Enable accessibility logging" OFF)
 option(MUE_RUN_LRELEASE "Generate .qm files" ON)
 option(TRY_USE_CCACHE "Try use ccache" ON)
 option(BUILD_PCH "Build using precompiled headers." ON)
@@ -117,12 +113,11 @@ option(BUILD_ASAN "Enable Address Sanitizer" OFF) # if ON, then disabled custom 
 option(BUILD_ALLOCATOR "Enable Custom allocator (used for engraving)" OFF)
 option(QML_LOAD_FROM_SOURCE "Load qml files from source (not resource)" OFF)
 option(TRACE_DRAW_OBJ_ENABLED "Trace draw objects" OFF)
+option(UI_DISABLE_MODALITY "Disable dialogs modality for testing purpose" OFF)
 
 if (BUILD_ASAN)
     set(BUILD_ALLOCATOR OFF)
 endif()
-
-set(QT_SUPPORT ON)
 
 option(USE_SYSTEM_FREETYPE "Use system FreeType" OFF) # requires freetype >= 2.5.2, does not work on win
 set(SCRIPT_INTERFACE  TRUE)
@@ -147,6 +142,11 @@ if (OS_IS_MAC OR OS_IS_WIN)
         set(APP_UPDATABLE 0)
     endif(WIN_PORTABLE OR FOR_WINSTORE)
 endif(OS_IS_MAC OR OS_IS_WIN)
+
+###########################################
+# Setup Configure
+###########################################
+include(SetupConfigure)
 
 ###########################################
 # Setup compiler and build environment

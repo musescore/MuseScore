@@ -27,6 +27,7 @@ add_subdirectory(actions)
 add_subdirectory(accessibility)
 
 if (BUILD_SHORTCUTS_MODULE)
+    message(STATUS "============ shortcuts")
     add_subdirectory(shortcuts)
 endif (BUILD_SHORTCUTS_MODULE)
 

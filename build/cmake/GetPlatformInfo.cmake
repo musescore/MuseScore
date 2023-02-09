@@ -55,7 +55,10 @@ string(REGEX MATCH "cmake_ARCH ([a-zA-Z0-9_]+)" ARCH "${ARCH}")
 
 string(REPLACE "cmake_ARCH " "" ARCH "${ARCH}")
 
-message(STATUS "Detected CPU Architecture: ${ARCH}")
+if (NOT ARCH_MSG)
+    message(STATUS "Detected CPU Architecture: ${ARCH}")
+    set(ARCH_MSG ON)
+endif()
 
 if(${ARCH} MATCHES "armv7l")
     set(ARCH_IS_ARMV7L 1)
