@@ -168,12 +168,20 @@ Item {
                 }
             }
 
-            onPressAndHold: {
-                if (menuLoader.isMenuOpened || !hasMenu) {
-                    return
-                }
+            Connections {
+                target: btn.mouseArea
 
-                toggleMenuOpened()
+                // Make sure we only connect to `pressAndHold` if necessary
+                // See https://github.com/musescore/MuseScore/issues/16012
+                enabled: btn.hasMenu && !menuLoader.isMenuOpened
+
+                function onPressAndHold() {
+                    if (menuLoader.isMenuOpened || !btn.hasMenu) {
+                        return
+                    }
+
+                    btn.toggleMenuOpened()
+                }
             }
 
             Canvas {
