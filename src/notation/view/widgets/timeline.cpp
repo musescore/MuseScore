@@ -1460,7 +1460,10 @@ void Timeline::jumpMarkerMeta(Segment* seg, int* stagger, int pos)
         measure = marker->measure();
         if (marker->markerType() == MarkerType::FINE
             || marker->markerType() == MarkerType::TOCODA
-            || marker->markerType() == MarkerType::TOCODASYM) {
+            || marker->markerType() == MarkerType::TOCODASYM
+            || marker->markerType() == MarkerType::DA_CODA
+            || marker->markerType() == MarkerType::DA_DBLCODA
+            ) {
             elementType = ElementType::MARKER;
             std::get<2>(_repeatInfo) = std::get<3>(_repeatInfo);
             std::get<3>(_repeatInfo) = nullptr;

@@ -83,9 +83,6 @@ static JumpType jumpType(const String& typeString)
         { u"DaSegnoSegnoAlCoda", JumpType::DSS_AL_CODA },
         { u"DaSegnoSegnoAlDoubleCoda", JumpType::DSS_AL_DBLCODA },
         { u"DaSegnoSegnoAlFine", JumpType::DSS_AL_FINE },
-        { u"DaCoda", JumpType::DCODA },
-        { u"DaDoubleCoda", JumpType::DDBLCODA },
-        { u"DaCoda", JumpType::DCODA },
     };
 
     if (types.find(typeString) != types.end()) {

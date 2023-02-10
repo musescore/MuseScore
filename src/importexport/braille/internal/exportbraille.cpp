@@ -2473,6 +2473,8 @@ QString ExportBrailleImpl::brailleMarker(Marker* marker)
         return BRAILLE_FINE;
     case MarkerType::TOCODA:
     case MarkerType::TOCODASYM:
+    case MarkerType::DA_CODA:
+    case MarkerType::DA_DBLCODA:
         return BRAILLE_TOCODA;
     case MarkerType::USER:
         return QString(">") + TextToUEBBraille().braille(marker->plainText().toQString().toLower()) + QString("> ");
@@ -2503,8 +2505,6 @@ QString ExportBrailleImpl::brailleJump(Jump* jump)
     case JumpType::DSS_AL_CODA:
     case JumpType::DSS_AL_DBLCODA:
     case JumpType::DSS_AL_FINE:
-    case JumpType::DCODA:
-    case JumpType::DDBLCODA:
         break;
     }
     return QString();

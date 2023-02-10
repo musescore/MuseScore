@@ -412,6 +412,8 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
         MarkerType::FINE,
         MarkerType::TOCODA,
         MarkerType::TOCODASYM,
+        MarkerType::DA_CODA,
+        MarkerType::DA_DBLCODA,
         MarkerType::USER
     };
 
