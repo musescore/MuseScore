@@ -109,6 +109,7 @@ Item {
             navigation.panel: navPanel
             navigation.row: 2 + model.index
             navigation.accessible.name: itemTitleLabel.text
+            navigation.accessible.description: model.description
 
             onNavigationTriggered: {
                 root.addSelectedInstrumentsToScoreRequested()
