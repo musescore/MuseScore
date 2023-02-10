@@ -1470,16 +1470,12 @@ void GPConverter::addInstrumentChanges()
 
 void GPConverter::addSoundEffects(const SLine* const elem)
 {
-    track_idx_t track = elem->track();
     EngravingItem* startEl = elem->startElement();
     EngravingItem* endEl = elem->endElement();
 
     if (!startEl->isChordRest() || !endEl->isChordRest()) {
         return;
     }
-
-    ChordRest* startCR = toChordRest(startEl);
-    ChordRest* endCR = toChordRest(endEl);
 
     if (elem->isPalmMute()) {
         Fraction begTick = elem->tick();
