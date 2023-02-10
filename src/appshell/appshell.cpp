@@ -240,7 +240,7 @@ int AppShell::run(int argc, char** argv)
         //! NOTE Move ownership to UiEngine
         ui::UiEngine::instance()->moveQQmlEngine(engine);
 
-#ifdef QML_LOAD_FROM_SOURCE
+#ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
         const QUrl url(QString(appshell_QML_IMPORT) + mainQmlFile);
 #else
         const QUrl url(QStringLiteral("qrc:/qml") + mainQmlFile);

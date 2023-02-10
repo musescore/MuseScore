@@ -18,14 +18,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-if (BUILD_IMPORTEXPORT_MODULE)
+if (MUE_BUILD_IMPORTEXPORT_MODULE)
     add_subdirectory(bb)
     add_subdirectory(braille)
     add_subdirectory(bww)
     add_subdirectory(capella)
-    add_subdirectory(${THIRDPARTY_DIR}/rtf2html rtf2html) # for capella
     add_subdirectory(midi)
-    add_subdirectory(${THIRDPARTY_DIR}/beatroot beatroot) # for midi import
     add_subdirectory(musedata)
     add_subdirectory(musicxml)
     add_subdirectory(ove)
@@ -33,17 +31,9 @@ if (BUILD_IMPORTEXPORT_MODULE)
     add_subdirectory(imagesexport)
     add_subdirectory(guitarpro)
 
-    if (BUILD_UNIT_TESTS)
-        add_subdirectory(bb/tests)
-        add_subdirectory(braille/tests)
-        add_subdirectory(bww/tests)
-        add_subdirectory(capella/tests)
-        add_subdirectory(guitarpro/tests)
-        add_subdirectory(midi/tests)
-        add_subdirectory(musicxml/tests)
+    if (MUE_BUILD_VIDEOEXPORT_MODULE)
+        add_subdirectory(videoexport)
     endif()
 endif()
 
-if (BUILD_VIDEOEXPORT_MODULE)
-    add_subdirectory(videoexport)
-endif()
+

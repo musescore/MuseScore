@@ -105,7 +105,7 @@ void FoldersPreferencesModel::load()
                 audioConfiguration()->userSoundFontDirectories()),
             configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories
         },
-#ifdef BUILD_VST_MODULE
+#ifdef MUE_BUILD_VST_MODULE
         {
             FolderType::VST3, qtrc("appshell/preferences", "VST3"), pathsToString(vstConfiguration()->userVstDirectories()),
             configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories

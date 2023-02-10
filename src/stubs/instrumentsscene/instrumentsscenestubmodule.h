@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::instrumentsscene {
-class InstrumentsSceneStubModule : public modularity::IModuleSetup
+class InstrumentsSceneModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

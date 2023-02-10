@@ -19,18 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_UPDATESTUBMODULE_H
-#define MU_UPDATE_UPDATESTUBMODULE_H
+import QtQuick 2.15
 
-#include "modularity/imodulesetup.h"
+Item {
+    id: root
 
-namespace mu::update {
-class UpdateModule : public modularity::IModuleSetup
-{
-public:
-    std::string moduleName() const override;
-    void registerExports() override;
-};
+    signal started()
+    signal finished()
+
 }
-
-#endif // MU_UPDATE_UPDATESTUBMODULE_H

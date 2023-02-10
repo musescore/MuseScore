@@ -34,7 +34,7 @@
 #include "engraving/libmscore/masterscore.h"
 
 #include "config.h"
-#ifdef BUILD_IMPORTEXPORT_MODULE
+#ifdef MUE_BUILD_IMPORTEXPORT_MODULE
 #include "importexport/guitarpro/internal/guitarproreader.h"
 #endif
 
@@ -214,7 +214,7 @@ bool DrawDataGenerator::loadScore(mu::engraving::MasterScore* score, const mu::i
         // Import
 
         TRACEFUNC_C("Load gp");
-#ifdef BUILD_IMPORTEXPORT_MODULE
+#ifdef MUE_BUILD_IMPORTEXPORT_MODULE
         mu::iex::guitarpro::GuitarProReader reader;
         Ret ret = reader.read(score, path);
         if (!ret) {

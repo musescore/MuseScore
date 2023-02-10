@@ -104,18 +104,13 @@ public:
 
     Info stateInfo() const;
 
-    static bool enabled()
-    {
-    #ifdef CUSTOM_ALLOCATOR_DISABLED
-        return false;
-    #else
-        return used;
-    #endif
-    }
+    static bool enabled() { return __used; }
+    static void used();
+    static void unused();
 
-    static int used;
-
+    static int __used;
 private:
+
     struct Chunk {
         /**
          * When a chunk is free, the `next` contains the

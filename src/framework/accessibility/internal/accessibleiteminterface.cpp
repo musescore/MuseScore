@@ -28,10 +28,10 @@
 #include "translation.h"
 #include "log.h"
 
-//#define ACCESSIBILITY_LOGGING_ENABLED
+//#define MUE_ENABLE_ACCESSIBILITY_TRACE
 
 #undef MYLOG
-#ifdef ACCESSIBILITY_LOGGING_ENABLED
+#ifdef MUE_ENABLE_ACCESSIBILITY_TRACE
 #define MYLOG() LOGI()
 #else
 #define MYLOG() LOGN()

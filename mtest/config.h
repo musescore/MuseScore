@@ -35,11 +35,8 @@
 #define VERSION           "2.0.0"
 
 /* #undef OPENGL */
-#define SOUNDFONT3
 
 /* #undef Q_OS_UIKIT */
 
 #define USE_BSP         true
-#define SCRIPT_INTERFACE true
-
 #endif /* MUSESCORE_CONFIG_H */

@@ -361,7 +361,7 @@ void NavigationController::resetIfNeed(QObject* watched)
         return;
     }
 
-#ifdef BUILD_DIAGNOSTICS
+#ifdef MUE_BUILD_DIAGNOSTICS_MODULE
     if (diagnostics::isDiagnosticHierarchy(watched)) {
         return;
     }

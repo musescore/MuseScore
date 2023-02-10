@@ -90,4 +90,12 @@ else()
     endif (USE_SYSTEM_FREETYPE)
 endif()
 
+if (MUE_ENABLE_DRAW_TRACE)
+    set(MODULE_DEF ${MODULE_DEF} -DMUE_ENABLE_DRAW_TRACE)
+endif()
+
 include(SetupModule)
+
+if (MUE_BUILD_UNIT_TESTS)
+    add_subdirectory(tests)
+endif()

@@ -103,6 +103,10 @@ if (OS_IS_WIN)
         )
 endif(OS_IS_WIN)
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+if (MUE_DISABLE_UI_MODALITY)
+    set(MODULE_DEF ${MODULE_DEF} -DMUE_DISABLE_UI_MODALITY)
+endif()
+
+include(SetupModule)
 
 

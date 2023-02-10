@@ -79,7 +79,7 @@ if (BUILD_SHARED_LIBS)
     endif (NOT MSVC)
 endif()
 
-if (BUILD_PCH)
+if (MUE_COMPILE_USE_PCH)
     if (MODULE_USE_PCH_NONE)
         # disabled pch for current module
     else()
@@ -97,16 +97,16 @@ if (BUILD_PCH)
             target_precompile_headers(${MODULE} PRIVATE ${PROJECT_SOURCE_DIR}/build/pch/pch.h)
         endif()
     endif()
-endif(BUILD_PCH)
+endif(MUE_COMPILE_USE_PCH)
 
-if (BUILD_UNITY)
+if (MUE_COMPILE_USE_UNITY)
     if (MODULE_USE_UNITY_NONE)
         # disabled unity build for current module
         set_target_properties(${MODULE} PROPERTIES UNITY_BUILD OFF)
     else()
         set_target_properties(${MODULE} PROPERTIES UNITY_BUILD ON)
     endif()
-endif(BUILD_UNITY)
+endif(MUE_COMPILE_USE_UNITY)
 
 target_sources(${MODULE} PRIVATE
     ${ui_headers}

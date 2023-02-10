@@ -44,7 +44,6 @@ if [ -z "$BUILD_NUMBER" ]; then echo "error: not set BUILD_NUMBER"; exit 1; fi
 if [ -z "$BUILD_MODE" ]; then BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env); fi
 
 MUSESCORE_BUILD_CONFIG=dev
-BUILD_UNIT_TESTS=OFF
 
 case "${BUILD_MODE}" in
 "devel_build")   MUSESCORE_BUILD_CONFIG=dev;;

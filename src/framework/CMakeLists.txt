@@ -18,43 +18,40 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#add_subdirectory(global)
+if (MUE_BUILD_ACCESSIBILITY_MODULE)
+    add_subdirectory(accessibility)
+endif()
+
+add_subdirectory(actions)
+
+if (MUE_BUILD_AUDIO_MODULE)
+    add_subdirectory(audio)
+endif ()
+
 add_subdirectory(draw)
+add_subdirectory(fonts)
+
+if (MUE_BUILD_MUSESAMPLER_MODULE)
+    add_subdirectory(musesampler)
+endif()
+
 add_subdirectory(ui)
 add_subdirectory(uicomponents)
-add_subdirectory(fonts)
-add_subdirectory(actions)
-add_subdirectory(accessibility)
 
-if (BUILD_SHORTCUTS_MODULE)
-    message(STATUS "============ shortcuts")
-    add_subdirectory(shortcuts)
-endif (BUILD_SHORTCUTS_MODULE)
-
-if (BUILD_NETWORK_MODULE)
+if (MUE_BUILD_NETWORK_MODULE)
     add_subdirectory(network)
-endif (BUILD_NETWORK_MODULE)
+endif()
 
-if (BUILD_AUDIO_MODULE)
-    add_subdirectory(audio)
-endif (BUILD_AUDIO_MODULE)
-
-if (BUILD_MUSESAMPLER_MODULE)
-    add_subdirectory(musesampler)
-endif(BUILD_MUSESAMPLER_MODULE)
-
-if (BUILD_VST_MODULE)
-    add_subdirectory(vst)
-endif(BUILD_VST_MODULE)
+if (MUE_BUILD_SHORTCUTS_MODULE)
+    add_subdirectory(shortcuts)
+endif()
 
 add_subdirectory(midi)
 add_subdirectory(mpe)
 
-if (BUILD_UNIT_TESTS)
-    add_subdirectory(global/tests)
-    add_subdirectory(draw/tests)
-    add_subdirectory(mpe/tests)
-    add_subdirectory(ui/tests)
-    add_subdirectory(accessibility/tests)
-endif(BUILD_UNIT_TESTS)
+if (MUE_BUILD_VST_MODULE)
+    add_subdirectory(vst)
+endif()
+
+
 

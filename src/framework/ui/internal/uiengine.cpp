@@ -121,7 +121,7 @@ void UiEngine::setup(QQmlEngine* engine)
 
     m_engine->addImportPath(":/qml");
 
-#ifdef QML_LOAD_FROM_SOURCE
+#ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
     for (const QString& path : m_sourceImportPaths) {
         m_engine->addImportPath(path);
     }
@@ -130,7 +130,7 @@ void UiEngine::setup(QQmlEngine* engine)
 
 void UiEngine::addSourceImportPath(const QString& path)
 {
-#ifdef QML_LOAD_FROM_SOURCE
+#ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
     LOGD() << path;
     m_sourceImportPaths << path;
     if (m_engine) {
