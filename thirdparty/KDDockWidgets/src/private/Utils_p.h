@@ -222,7 +222,13 @@ inline int startDragDistance()
 #ifdef KDDOCKWIDGETS_QTWIDGETS
     return QApplication::startDragDistance();
 #else
-    return 4;
+    //! NOTE: INTERNAL PATCH FOR MU4 ONLY
+    //!
+    //! Resolves the problem of unintended panel undocking
+    //!
+    //! See:
+    //! https://github.com/musescore/MuseScore/pull/16013
+    return 40;
 #endif
 }
 
