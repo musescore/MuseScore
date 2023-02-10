@@ -67,6 +67,7 @@ private:
 
     enum Roles {
         RoleName = SelectableItemListModel::UserRole + 1,
+        RoleDescription,
         RoleIsSoloist
     };
 

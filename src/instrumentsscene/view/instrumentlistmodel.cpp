@@ -62,6 +62,8 @@ QVariant InstrumentListModel::data(const QModelIndex& index, int role) const
     switch (role) {
     case RoleName:
         return instrument.name;
+    case RoleDescription:
+        return instrument.templates[instrument.currentTemplateIndex]->description.toQString();
     case RoleTraits: {
         QStringList traits;
         for (const InstrumentTemplate* templ : instrument.templates) {
@@ -89,6 +91,7 @@ bool InstrumentListModel::setData(const QModelIndex& index, const QVariant& valu
 
     switch (role) {
     case RoleName:
+    case RoleDescription:
     case RoleTraits:
     case RoleIsSelected:
         break;
@@ -112,6 +115,7 @@ QHash<int, QByteArray> InstrumentListModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
         { RoleName, "name" },
+        { RoleDescription, "description" },
         { RoleIsSelected, "isSelected" },
         { RoleTraits, "traits" },
         { RoleCurrentTraitIndex, "currentTraitIndex" }

@@ -154,6 +154,7 @@ Item {
             navigation.row: 1 + model.index
             navigation.column: 0
             navigation.accessible.name: itemTitleLabel.text
+            navigation.accessible.description: model.description
 
             StyledTextLabel {
                 id: itemTitleLabel
