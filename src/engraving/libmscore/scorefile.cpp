@@ -168,10 +168,10 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
         order.write(xml);
     }
 
-    if (!systemObjectStaves.empty()) {
+    if (!m_systemObjectStaves.empty()) {
         // write which staves currently have system objects above them
         xml.startElement("SystemObjects");
-        for (Staff* s : systemObjectStaves) {
+        for (Staff* s : m_systemObjectStaves) {
             // TODO: when we add more granularity to system object display, construct this string per staff
             String sysObjForStaff = u"barNumbers=\"false\"";
             // for now, everything except bar numbers is shown on system object staves

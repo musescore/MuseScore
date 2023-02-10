@@ -51,6 +51,7 @@
 #include "timesig.h"
 #include "tuplet.h"
 #include "undo.h"
+#include "utils.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -506,8 +507,7 @@ void Segment::insertStaff(staff_idx_t staff)
     _shapes.insert(_shapes.begin() + staff, Shape());
 
     for (EngravingItem* e : _annotations) {
-        staff_idx_t staffIdx = e->staffIdx();
-        if (staffIdx >= staff && !e->isTopSystemObject()) {
+        if (moveDownWhenAddingStaves(e, staff)) {
             e->setTrack(e->track() + VOICES);
         }
     }
@@ -527,7 +527,7 @@ void Segment::removeStaff(staff_idx_t staff)
 
     for (EngravingItem* e : _annotations) {
         staff_idx_t staffIdx = e->staffIdx();
-        if (staffIdx > staff && !e->isTopSystemObject()) {
+        if (staffIdx > staff) {
             e->setTrack(e->track() - VOICES);
         }
     }

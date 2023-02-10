@@ -392,7 +392,7 @@ private:
     MeasureBaseList _measures;            // here are the notes
     std::vector<Part*> _parts;
     std::vector<Staff*> _staves;
-    std::vector<Staff*> systemObjectStaves;
+    std::vector<Staff*> m_systemObjectStaves;
 
     SpannerMap _spanner;
     std::set<Spanner*> _unmanagedSpanner;
@@ -634,9 +634,10 @@ public:
     Staff* staffById(const ID& staffId) const;
     Part* partById(const ID& partId) const;
 
-    void clearSystemObjectStaves() { systemObjectStaves.clear(); }
-    void addSystemObjectStaff(Staff* staff) { systemObjectStaves.push_back(staff); }
-    std::vector<Staff*> getSystemObjectStaves() { return systemObjectStaves; }
+    void clearSystemObjectStaves();
+    void addSystemObjectStaff(Staff* staff);
+    const std::vector<Staff*>& systemObjectStaves() const { return m_systemObjectStaves; }
+    bool isSystemObjectStaff(Staff* staff) const;
 
     Measure* pos2measure(const mu::PointF&, staff_idx_t* staffIdx, int* pitch, Segment**, mu::PointF* offset) const;
     void dragPosition(const mu::PointF&, staff_idx_t* staffIdx, Segment**, double spacingFactor = 0.5) const;
