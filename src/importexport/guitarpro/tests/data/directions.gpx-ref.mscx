@@ -432,13 +432,11 @@
           </voice>
         </Measure>
       <Measure>
-        <Jump>
+        <Marker>
           <style>repeat_right</style>
           <text>Da Coda</text>
-          <jumpTo>coda</jumpTo>
-          <playUntil>end</playUntil>
-          <continueAt></continueAt>
-          </Jump>
+          <label>coda</label>
+          </Marker>
         <voice>
           <Rest>
             <durationType>measure</durationType>
@@ -454,13 +452,11 @@
           </voice>
         </Measure>
       <Measure>
-        <Jump>
+        <Marker>
           <style>repeat_right</style>
           <text>Da Double Coda</text>
-          <jumpTo>varcoda</jumpTo>
-          <playUntil>end</playUntil>
-          <continueAt></continueAt>
-          </Jump>
+          <label>coda</label>
+          </Marker>
         <voice>
           <Rest>
             <durationType>measure</durationType>

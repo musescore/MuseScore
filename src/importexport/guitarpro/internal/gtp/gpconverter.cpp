@@ -100,7 +100,9 @@ static MarkerType markerType(const String& typeString)
         { u"SegnoSegno", MarkerType::VARSEGNO },
         { u"Coda", MarkerType::CODA },
         { u"DoubleCoda", MarkerType::VARCODA },
-        { u"Fine", MarkerType::FINE }
+        { u"Fine", MarkerType::FINE },
+        { u"DaCoda", MarkerType::DA_CODA },
+        { u"DaDoubleCoda", MarkerType::DA_DBLCODA },
     };
 
     if (types.find(typeString) != types.end()) {
