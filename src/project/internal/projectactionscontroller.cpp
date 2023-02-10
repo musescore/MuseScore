@@ -32,6 +32,7 @@
 #include "engraving/infrastructure/mscio.h"
 #include "engraving/engravingerrors.h"
 #include "cloud/clouderrors.h"
+#include "projecterrors.h"
 
 #include "log.h"
 
@@ -58,7 +59,7 @@ void ProjectActionsController::init()
     });
 
     dispatcher()->reg(this, "file-save", [this]() { saveProject(); });
-    dispatcher()->reg(this, "file-save-as", this, &ProjectActionsController::saveProjectAs);
+    dispatcher()->reg(this, "file-save-as", [this]() { saveProjectAs(); });
     dispatcher()->reg(this, "file-save-a-copy", this, &ProjectActionsController::saveProjectCopy);
     dispatcher()->reg(this, "file-save-selection", this, &ProjectActionsController::saveSelection);
     dispatcher()->reg(this, "file-save-to-cloud", this, &ProjectActionsController::saveToCloud);
@@ -378,41 +379,31 @@ IInteractive::Button ProjectActionsController::askAboutSavingScore(INotationProj
     return result.standardButton();
 }
 
-bool ProjectActionsController::canSaveProject() const
+Ret ProjectActionsController::canSaveProject() const
 {
     auto project = currentNotationProject();
     if (!project) {
         LOGW() << "no current project";
-        return false;
+        return make_ret(Err::NoProjectError);
     }
 
-    if (!project->canSave()) {
-        LOGW() << "project could not be saved";
-        return false;
-    }
-
-    return true;
+    return project->canSave();
 }
 
 bool ProjectActionsController::saveProject(const io::path_t& path)
 {
-    if (!canSaveProject()) {
-        warnSaveIsNotAvailable();
-        return false;
-    }
-
     auto project = currentNotationProject();
 
     if (!project->isNewlyCreated()) {
         if (project->isCloudProject()) {
-            return saveProjectToCloud(project->cloudInfo());
+            return saveProjectAt(SaveLocation(SaveLocationType::Cloud, project->cloudInfo()));
         }
 
-        return saveProjectLocally();
+        return saveProjectAt(SaveLocation(SaveLocationType::Local));
     }
 
     if (!path.empty()) {
-        return saveProjectLocally(path);
+        return saveProjectAt(SaveLocation(SaveLocationType::Local, path));
     }
 
     RetVal<SaveLocation> location = saveProjectScenario()->askSaveLocation(project, SaveMode::Save);
@@ -420,33 +411,23 @@ bool ProjectActionsController::saveProject(const io::path_t& path)
         return false;
     }
 
-    return saveProjectAt(location.val, SaveMode::Save);
+    return saveProjectAt(location.val);
 }
 
-void ProjectActionsController::saveProjectAs()
+void ProjectActionsController::saveProjectAs(bool force, SaveLocationType preselectedType)
 {
-    if (!canSaveProject()) {
-        warnSaveIsNotAvailable();
-        return;
-    }
-
     auto project = currentNotationProject();
 
-    RetVal<SaveLocation> location = saveProjectScenario()->askSaveLocation(project, SaveMode::SaveAs);
+    RetVal<SaveLocation> location = saveProjectScenario()->askSaveLocation(project, SaveMode::SaveAs, preselectedType);
     if (!location.ret) {
         return;
     }
 
-    saveProjectAt(location.val, SaveMode::SaveAs);
+    saveProjectAt(location.val, SaveMode::SaveAs, force);
 }
 
 void ProjectActionsController::saveProjectCopy()
 {
-    if (!canSaveProject()) {
-        warnSaveIsNotAvailable();
-        return;
-    }
-
     auto project = currentNotationProject();
 
     RetVal<SaveLocation> location = saveProjectScenario()->askSaveLocation(project, SaveMode::SaveCopy);
@@ -459,11 +440,6 @@ void ProjectActionsController::saveProjectCopy()
 
 void ProjectActionsController::saveSelection()
 {
-    if (!canSaveProject()) {
-        warnSaveIsNotAvailable();
-        return;
-    }
-
     auto project = currentNotationProject();
 
     RetVal<io::path_t> path = saveProjectScenario()->askLocalPath(project, SaveMode::SaveSelection);
@@ -479,11 +455,6 @@ void ProjectActionsController::saveSelection()
 
 void ProjectActionsController::saveToCloud()
 {
-    if (!canSaveProject()) {
-        warnSaveIsNotAvailable();
-        return;
-    }
-
     auto project = currentNotationProject();
 
     RetVal<SaveLocation> response = saveProjectScenario()->askSaveLocation(project, SaveMode::SaveAs, SaveLocationType::Cloud);
@@ -496,8 +467,9 @@ void ProjectActionsController::saveToCloud()
 
 void ProjectActionsController::publish()
 {
-    if (!canSaveProject()) {
-        warnSaveIsNotAvailable();
+    Ret ret = canSaveProject();
+    if (!ret) {
+        warnSaveIsNotAvailable(ret, SaveLocationType::Cloud);
         return;
     }
 
@@ -519,8 +491,16 @@ void ProjectActionsController::publish()
     }
 }
 
-bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveMode saveMode)
+bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveMode saveMode, bool force)
 {
+    if (!force) {
+        Ret ret = canSaveProject();
+        if (!ret) {
+            warnSaveIsNotAvailable(ret, location);
+            return false;
+        }
+    }
+
     if (location.isLocal()) {
         return saveProjectLocally(location.localPath(), saveMode);
     }
@@ -938,15 +918,160 @@ void ProjectActionsController::warnPublishIsNotAvailable()
                            trc("project/save", "Please check your internet connection or try again later."));
 }
 
-void ProjectActionsController::warnSaveIsNotAvailable()
+void ProjectActionsController::warnSaveIsNotAvailable(const Ret& ret, const SaveLocation& location)
 {
-    std::string msg;
-
-    if (!currentMasterNotation()->hasParts()) {
-        msg = trc("project/save", "Please add at least one instrument to enable saving.");
+    auto masterNotation = currentMasterNotation();
+    if (!masterNotation) {
+        return;
     }
 
-    interactive()->warning(trc("project/save", "Your score could not be saved"), msg);
+    switch (static_cast<Err>(ret.code())) {
+    case Err::NoPartsError:
+        warnScoreWithoutPartsCannotBeSaved();
+        break;
+    case Err::CorruptionUponOpenningError:
+        warnCorruptedScoreUponOpenningCannotBeSaved(location, ret.text());
+        break;
+    case Err::CorruptionError: {
+        auto project = currentNotationProject();
+        warnCorruptedScoreCannotBeSaved(location, ret.text(), project->isNewlyCreated());
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+void ProjectActionsController::warnScoreWithoutPartsCannotBeSaved()
+{
+    interactive()->warning(trc("project/save", "Your score could not be saved"),
+                           trc("project/save", "Please add at least one instrument to enable saving."));
+}
+
+void ProjectActionsController::warnCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText,
+                                                               bool newlyCreated)
+{
+    switch (location.type) {
+    case SaveLocationType::Cloud:
+        warnCorruptedScoreCannotBeSavedOnCloud(errorText, newlyCreated);
+        break;
+    case SaveLocationType::Local:
+        warnCorruptedScoreCannotBeSavedLocally(location, errorText, newlyCreated);
+    case SaveLocationType::Undefined:
+        break;
+    }
+}
+
+void ProjectActionsController::warnCorruptedScoreCannotBeSavedOnCloud(const std::string& errorText, bool newlyCreated)
+{
+    std::string title = trc("project", "Your score cannot be uploaded to the cloud");
+    std::string body = trc("project", "This score has become corrupted and contains errors. "
+                                      "You can fix the errors manually, or save the score to your computer "
+                                      "and get help for this issue on musescore.org.");
+
+    IInteractive::ButtonDatas buttons;
+    buttons.push_back(interactive()->buttonData(IInteractive::Button::Cancel));
+
+    IInteractive::ButtonData saveCopyBtn(IInteractive::Button::CustomButton, trc("project", "Save as…"), newlyCreated /*accent*/);
+    buttons.push_back(saveCopyBtn);
+
+    int defaultBtn = saveCopyBtn.btn;
+
+    IInteractive::ButtonData revertToLastSavedBtn(saveCopyBtn.btn + 1, trc("project", "Revert to last saved"),
+                                                  true /*accent*/);
+
+    if (!newlyCreated) {
+        buttons.push_back(revertToLastSavedBtn);
+        defaultBtn = revertToLastSavedBtn.btn;
+    }
+
+    int btn = interactive()->error(title, body, errorText, buttons, defaultBtn).button();
+
+    if (btn == saveCopyBtn.btn) {
+        saveProjectAs(true, SaveLocationType::Local);
+    } else if (btn == revertToLastSavedBtn.btn) {
+        revertCorruptedScoreToLastSaved();
+    }
+}
+
+void ProjectActionsController::warnCorruptedScoreCannotBeSavedLocally(const SaveLocation& location, const std::string& errorText,
+                                                                      bool newlyCreated)
+{
+    std::string title = trc("project", "This score has become corrupted and contains errors");
+    std::string body = trc("project", "You can continue saving it locally, although the file may become unusable. "
+                                      "To preserve your score, revert to the last saved version, or fix the errors manually. "
+                                      "You can also get help for this issue on musescore.org.");
+
+    IInteractive::ButtonDatas buttons;
+    buttons.push_back(interactive()->buttonData(IInteractive::Button::Cancel));
+
+    IInteractive::ButtonData saveAnywayBtn(IInteractive::Button::CustomButton, trc("project", "Save anyway"), newlyCreated /*accent*/);
+    buttons.push_back(saveAnywayBtn);
+
+    int defaultBtn = saveAnywayBtn.btn;
+
+    IInteractive::ButtonData revertToLastSavedBtn(saveAnywayBtn.btn + 1, trc("project", "Revert to last saved"),
+                                                  true /*accent*/);
+    if (!newlyCreated) {
+        buttons.push_back(revertToLastSavedBtn);
+        defaultBtn = revertToLastSavedBtn.btn;
+    }
+
+    int btn = interactive()->error(title, body, errorText, buttons, defaultBtn).button();
+
+    if (btn == saveAnywayBtn.btn) {
+        saveProjectAt(location, SaveMode::Save, true);
+    } else if (btn == revertToLastSavedBtn.btn) {
+        revertCorruptedScoreToLastSaved();
+    }
+}
+
+void ProjectActionsController::warnCorruptedScoreUponOpenningCannotBeSaved(const SaveLocation& location, const std::string& errorText)
+{
+    std::string title = location.isLocal() ? trc("project", "Your score cannot be saved")
+                        : trc("project", "Your score cannot be uploaded to the cloud");
+    std::string body = trc("project", "This score is corrupted. You can get help for this issue on musescore.org.");
+
+    IInteractive::ButtonData getHelpBtn(IInteractive::Button::CustomButton, trc("project", "Get help"));
+
+    int btn = interactive()->error(title, body, errorText, {
+        getHelpBtn,
+        interactive()->buttonData(IInteractive::Button::Ok)
+    }).button();
+
+    if (btn == getHelpBtn.btn) {
+        interactive()->openUrl(configuration()->supportForumUrl());
+    }
+}
+
+void ProjectActionsController::revertCorruptedScoreToLastSaved()
+{
+    TRACEFUNC;
+
+    std::string title = trc("project", "Revert to last saved?");
+    std::string body = trc("project", "Your changes will be lost. This action cannot be undone.");
+
+    int btn = interactive()->warning(title, body, {
+        { IInteractive::Button::No, IInteractive::Button::Yes }
+    }, IInteractive::Button::Yes, IInteractive::Option::WithIcon).button();
+
+    if (btn == static_cast<int>(IInteractive::Button::No)) {
+        return;
+    }
+
+    auto currentProject = currentNotationProject();
+    io::path_t filePath = currentProject->path();
+
+    bool hasUnsavedChanges = projectAutoSaver()->projectHasUnsavedChanges(filePath);
+    if (hasUnsavedChanges) {
+        io::path_t autoSavePath = projectAutoSaver()->projectAutoSavePath(filePath);
+        fileSystem()->remove(autoSavePath);
+    }
+
+    Ret ret = doOpenProject(filePath);
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
 }
 
 bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const String& projectName)

@@ -27,6 +27,8 @@
 
 #include "io/buffer.h"
 
+#include "libmscore/undo.h"
+
 #include "engraving/engravingproject.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
@@ -38,8 +40,7 @@
 #include "notation/notationerrors.h"
 #include "projectaudiosettings.h"
 #include "projectfileinfoprovider.h"
-
-#include "libmscore/undo.h"
+#include "projecterrors.h"
 
 #include "defer.h"
 #include "log.h"
@@ -780,9 +781,19 @@ mu::ValNt<bool> NotationProject::needSave() const
     return needSave;
 }
 
-bool NotationProject::canSave() const
+Ret NotationProject::canSave() const
 {
-    return m_masterNotation->hasParts();
+    if (!m_masterNotation->hasParts()) {
+        return make_ret(Err::NoPartsError);
+    }
+
+    Ret ret = m_engravingProject->checkCorrupted();
+    if (!ret) {
+        Err errorCode = m_engravingProject->isCorruptedUponLoading() ? Err::CorruptionUponOpenningError : Err::CorruptionError;
+        ret.setCode(static_cast<int>(errorCode));
+    }
+
+    return ret;
 }
 
 ProjectMeta NotationProject::metaInfo() const
