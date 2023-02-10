@@ -1,5 +1,5 @@
 
-// --test-case ./../MuseScore/vtest/vtest.js --test-case-context ./../MuseScore/vtest/vtest_context.json
+// --test-case ./vtest/vtest.js --test-case-context ./vtest/vtest_context.json
 
 const THIS_SCRIPT = api.context.globalVal("script_path")
 const CONTEXT_PATH = api.context.globalVal("context_path")

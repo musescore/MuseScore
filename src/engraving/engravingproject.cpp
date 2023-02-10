@@ -57,14 +57,14 @@ std::shared_ptr<EngravingProject> EngravingProject::create(const MStyle& style)
 
 EngravingProject::EngravingProject()
 {
-    ObjectAllocator::used++;
+    ObjectAllocator::used();
 }
 
 EngravingProject::~EngravingProject()
 {
     delete m_masterScore;
 
-    ObjectAllocator::used--;
+    ObjectAllocator::unused();
 
     AllocatorsRegister::instance()->printStatistic("=== Destroy engraving project ===");
     //! NOTE At the moment, the allocator is working as leak detector. No need to do cleanup, at the moment it can lead to crashes

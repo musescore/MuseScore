@@ -36,23 +36,23 @@ static void plugins_init_qrc()
     Q_INIT_RESOURCE(plugins);
 }
 
-std::string PluginsStubModule::moduleName() const
+std::string PluginsModule::moduleName() const
 {
     return "plugins_stub";
 }
 
-void PluginsStubModule::registerExports()
+void PluginsModule::registerExports()
 {
     ioc()->registerExport<IPluginsService>(moduleName(), new PluginsServiceStub());
     ioc()->registerExport<IPluginsConfiguration>(moduleName(), new PluginsConfigurationStub());
 }
 
-void PluginsStubModule::registerResources()
+void PluginsModule::registerResources()
 {
     plugins_init_qrc();
 }
 
-void PluginsStubModule::registerUiTypes()
+void PluginsModule::registerUiTypes()
 {
     ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(plugins_QML_IMPORT);
 }

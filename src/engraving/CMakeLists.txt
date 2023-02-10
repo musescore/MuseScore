@@ -274,3 +274,7 @@ include(SetupModule)
 set_property(TARGET ${MODULE} APPEND PROPERTY AUTOMOC_MACRO_NAMES "BEGIN_QT_REGISTERED_ENUM")
 
 #target_compile_options(${MODULE} PUBLIC -Wconversion)
+
+if (MUE_BUILD_UNIT_TESTS)
+    add_subdirectory(tests)
+endif()

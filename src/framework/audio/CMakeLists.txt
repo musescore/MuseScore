@@ -198,7 +198,7 @@ set(MODULE_LINK
     fluidsynth
     )
 
-if (ENABLE_AUDIO_EXPORT)
+if (MUE_ENABLE_AUDIO_EXPORT)
     set(MODULE_SRC
         ${MODULE_SRC}
 

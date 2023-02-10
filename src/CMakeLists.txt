@@ -24,93 +24,75 @@ add_subdirectory(main)
 # Framework
 add_subdirectory(framework)
 
-# Domain model
-add_subdirectory(engraving)
-
-# AppShell
+# Modules
 add_subdirectory(appshell)
 
-# Modules
-add_subdirectory(context)
-add_subdirectory(notation)
-add_subdirectory(project)
-add_subdirectory(print)
-
-if (BUILD_LEARN_MODULE)
-    add_subdirectory(learn)
-endif (BUILD_LEARN_MODULE)
-
-add_subdirectory(converter)
-
-if (BUILD_WORKSPACE_MODULE)
-    add_subdirectory(workspace)
-endif (BUILD_WORKSPACE_MODULE)
-
-if (NOT OS_IS_WASM)
-    add_subdirectory(importexport)
-
-    if (BUILD_CLOUD_MODULE)
-        add_subdirectory(cloud)
-    endif (BUILD_CLOUD_MODULE)
-
-    if (BUILD_LANGUAGES_MODULE)
-        add_subdirectory(languages)
-    endif (BUILD_LANGUAGES_MODULE)
-
-    if (BUILD_PLUGINS_MODULE)
-        add_subdirectory(plugins)
-    endif (BUILD_PLUGINS_MODULE)
-endif()
-
-# Scenes common
-add_subdirectory(commonscene)
-if (BUILD_PLAYBACK_MODULE)
-    add_subdirectory(playback)
-endif (BUILD_PLAYBACK_MODULE)
-
-# Notation
-if (BUILD_PALETTE_MODULE)
-    add_subdirectory(palette)
-endif (BUILD_PALETTE_MODULE)
-if (BUILD_INSTRUMENTSSCENE_MODULE)
-    add_subdirectory(instrumentsscene)
-endif (BUILD_INSTRUMENTSSCENE_MODULE)
-if (BUILD_INSPECTOR_MODULE)
-    add_subdirectory(inspector)
-endif (BUILD_INSPECTOR_MODULE)
-
-# Other
-if (BUILD_MULTIINSTANCES_MODULE)
-    add_subdirectory(multiinstances)
-endif()
-
-add_subdirectory(diagnostics)
-
-if (BUILD_AUTOBOT_MODULE)
+if (MUE_BUILD_AUTOBOT_MODULE)
     add_subdirectory(autobot)
 endif()
 
-if (BUILD_UPDATE_MODULE)
+if (MUE_BUILD_CLOUD_MODULE)
+    add_subdirectory(cloud)
+endif()
+
+add_subdirectory(commonscene)
+add_subdirectory(context)
+add_subdirectory(converter)
+
+if (MUE_BUILD_DIAGNOSTICS_MODULE)
+    add_subdirectory(diagnostics)
+endif()
+
+add_subdirectory(engraving)
+add_subdirectory(importexport)
+
+if (MUE_BUILD_INSPECTOR_MODULE)
+    add_subdirectory(inspector)
+endif()
+
+if (MUE_BUILD_INSTRUMENTSSCENE_MODULE)
+    add_subdirectory(instrumentsscene)
+endif()
+
+if (MUE_BUILD_LANGUAGES_MODULE)
+    add_subdirectory(languages)
+endif()
+
+if (MUE_BUILD_LEARN_MODULE)
+    add_subdirectory(learn)
+endif()
+
+if (MUE_BUILD_MULTIINSTANCES_MODULE)
+    add_subdirectory(multiinstances)
+endif()
+
+add_subdirectory(notation)
+
+if (MUE_BUILD_PALETTE_MODULE)
+    add_subdirectory(palette)
+endif()
+
+if (MUE_BUILD_PLAYBACK_MODULE)
+    add_subdirectory(playback)
+endif()
+
+if (MUE_BUILD_PLUGINS_MODULE)
+    add_subdirectory(plugins)
+endif()
+
+add_subdirectory(print)
+add_subdirectory(project)
+
+if (MUE_BUILD_UPDATE_MODULE)
     add_subdirectory(update)
-endif (BUILD_UPDATE_MODULE)
+endif()
+
+if (MUE_BUILD_WORKSPACE_MODULE)
+    add_subdirectory(workspace)
+endif()
 
 # Stubs
 add_subdirectory(stubs)
-
-if (BUILD_UNIT_TESTS)
-    add_subdirectory(engraving/tests)
-
-    #add_subdirectory(notation/tests) no tests at moment
-    add_subdirectory(project/tests)
-
-    if (BUILD_PLUGINS_MODULE)
-        add_subdirectory(plugins/tests)
-    endif()
-
-    if (BUILD_DIAGNOSTICS)
-        add_subdirectory(diagnostics/tests)
-    endif()
-endif(BUILD_UNIT_TESTS)
 
 if (OS_IS_WASM)
     add_subdirectory(wasmtest)

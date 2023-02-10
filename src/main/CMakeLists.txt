@@ -164,7 +164,7 @@ if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB plugins)
     list(APPEND LINK_LIB multiinstances)
 
-    if (BUILD_IMPORTEXPORT_MODULE)
+    if (MUE_BUILD_IMPORTEXPORT_MODULE)
         set(LINK_LIB ${LINK_LIB}
             iex_musicxml
             iex_bb
@@ -178,21 +178,23 @@ if (NOT CC_IS_EMSCRIPTEN)
             iex_audioexport
             iex_imagesexport
         )
+
+        if (MUE_BUILD_VIDEOEXPORT_MODULE)
+            list(APPEND LINK_LIB iex_videoexport)
+        endif()
     endif()
 
 endif()
 
-if (BUILD_VIDEOEXPORT_MODULE)
-    list(APPEND LINK_LIB iex_videoexport)
-endif()
 
-if (BUILD_AUTOBOT_MODULE)
+
+if (MUE_BUILD_AUTOBOT_MODULE) 
     list(APPEND LINK_LIB autobot)
 endif()
 
-if (BUILD_MUSESAMPLER_MODULE)
+if (MUE_BUILD_MUSESAMPLER_MODULE)
     list(APPEND LINK_LIB musesampler)
-endif(BUILD_MUSESAMPLER_MODULE)
+endif(MUE_BUILD_MUSESAMPLER_MODULE)
 
 set (MSCORE_APPEND_SRC)
 

@@ -35,23 +35,23 @@ static void languages_init_qrc()
     Q_INIT_RESOURCE(languages);
 }
 
-std::string LanguagesStubModule::moduleName() const
+std::string LanguagesModule::moduleName() const
 {
     return "languages_stub";
 }
 
-void LanguagesStubModule::registerExports()
+void LanguagesModule::registerExports()
 {
     ioc()->registerExport<ILanguagesConfiguration>(moduleName(), new LanguagesConfigurationStub());
     ioc()->registerExport<ILanguagesService>(moduleName(), new LanguagesServiceStub());
 }
 
-void LanguagesStubModule::registerResources()
+void LanguagesModule::registerResources()
 {
     languages_init_qrc();
 }
 
-void LanguagesStubModule::registerUiTypes()
+void LanguagesModule::registerUiTypes()
 {
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(languages_QML_IMPORT);
 }

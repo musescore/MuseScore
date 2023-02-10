@@ -49,7 +49,7 @@ if [ -z "$BUILD_MODE" ]; then BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env
 if [ -z "$YOUTUBE_API_KEY" ]; then YOUTUBE_API_KEY=""; fi
 
 MUSESCORE_BUILD_CONFIG=dev
-BUILD_UNIT_TESTS=OFF
+
 case "${BUILD_MODE}" in
 "devel_build")   MUSESCORE_BUILD_CONFIG=dev; SUFFIX=dev;;
 "nightly_build") MUSESCORE_BUILD_CONFIG=dev; SUFFIX=nightly;;

@@ -90,7 +90,7 @@ UiContext UiContextResolver::currentUiContext() const
     TRACEFUNC;
     Uri currentUri = interactive()->currentUri().val;
 
-#ifdef BUILD_DIAGNOSTICS
+#ifdef MUE_BUILD_DIAGNOSTICS_MODULE
     currentUri = diagnostics::diagnosticCurrentUri(interactive()->stack());
 #endif
 

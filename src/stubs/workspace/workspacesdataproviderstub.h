@@ -19,18 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_UPDATESTUBMODULE_H
-#define MU_UPDATE_UPDATESTUBMODULE_H
+#ifndef MU_WORKSPACE_WORKSPACESDATAPROVIDERSTUB_H
+#define MU_WORKSPACE_WORKSPACESDATAPROVIDERSTUB_H
 
-#include "modularity/imodulesetup.h"
+#include "workspace/iworkspacesdataprovider.h"
 
-namespace mu::update {
-class UpdateModule : public modularity::IModuleSetup
+namespace mu::workspace {
+class WorkspacesDataProviderStub : public IWorkspacesDataProvider
 {
 public:
-    std::string moduleName() const override;
-    void registerExports() override;
+    WorkspacesDataProviderStub() = default;
+
+    RetVal<QByteArray> rawData(DataKey key) const override;
+    Ret setRawData(DataKey key, const QByteArray& data) override;
+    async::Notification dataChanged(DataKey key) const override;
+
+    async::Notification workspaceChanged() const override;
 };
 }
 
-#endif // MU_UPDATE_UPDATESTUBMODULE_H
+#endif // MU_WORKSPACE_WORKSPACESDATAPROVIDERSTUB_H

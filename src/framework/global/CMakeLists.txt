@@ -204,5 +204,16 @@ if (OS_IS_MAC)
     set(MODULE_LINK ${MODULE_LINK} ${AppKit})
 endif()
 
+if (MUE_ENABLE_CUSTOM_ALLOCATOR)
+    set(MODULE_DEF ${MODULE_DEF} -DMUE_ENABLE_CUSTOM_ALLOCATOR)
+endif()
+
+if (MUE_ENABLE_LOGGER_DEBUGLEVEL)
+    set(MODULE_DEF ${MODULE_DEF} -DMUE_ENABLE_LOGGER_DEBUGLEVEL)
+endif()
+
 include(SetupModule)
 
+if (MUE_BUILD_UNIT_TESTS)
+    add_subdirectory(tests)
+endif()

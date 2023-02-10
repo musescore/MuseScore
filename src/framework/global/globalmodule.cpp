@@ -105,7 +105,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 
     logger->addDest(logFile);
 
-#ifdef LOGGER_DEBUGLEVEL_ENABLED
+#ifdef MUE_ENABLE_LOGGER_DEBUGLEVEL
     logger->setLevel(haw::logger::Debug);
 #else
     logger->setLevel(haw::logger::Normal);

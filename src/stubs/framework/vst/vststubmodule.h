@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::vst {
-class VstStubModule : public modularity::IModuleSetup
+class VSTModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
