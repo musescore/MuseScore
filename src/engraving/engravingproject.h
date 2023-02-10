@@ -70,6 +70,9 @@ public:
     Ret loadMscz(const MscReader& msc, bool ignoreVersionError);
     bool writeMscz(MscWriter& writer, bool onlySelection, bool createThumbnail);
 
+    bool isCorruptedUponLoading() const;
+    Ret checkCorrupted() const;
+
 private:
     friend class MasterScore;
 
@@ -77,9 +80,11 @@ private:
 
     void init(const MStyle& style);
 
-    Ret doSetupMasterScore(MasterScore* score, bool forceMode);
+    Ret doSetupMasterScore(bool forceMode);
 
     MasterScore* m_masterScore = nullptr;
+
+    bool m_isCorruptedUponLoading = false;
 };
 
 using EngravingProjectPtr = std::shared_ptr<EngravingProject>;

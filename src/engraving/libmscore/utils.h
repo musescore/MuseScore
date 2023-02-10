@@ -76,5 +76,7 @@ int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalD
 extern Segment* skipTuplet(Tuplet* tuplet);
 extern SymIdList timeSigSymIdsFromString(const String&);
 extern Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStretch);
+
+extern double yStaffDifference(const System* system1, staff_idx_t staffIdx1, const System* system2, staff_idx_t staffIdx2);
 } // namespace mu::engraving
 #endif

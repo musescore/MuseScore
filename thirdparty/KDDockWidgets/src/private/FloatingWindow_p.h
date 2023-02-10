@@ -62,6 +62,8 @@ public:
 
     int userType() const;
 
+    static void ensureRectIsOnScreen(QRect &geometry);
+
 #ifdef Q_OS_WIN
     void setLastHitTest(int hitTest)
     {
