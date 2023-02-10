@@ -667,7 +667,7 @@ void MidiRenderer::doCollectMeasureEvents(EventMap* events, Measure const* m, co
                 params.tickOffset = tickOffset;
                 params.letRingNote = letRingNote;
                 params.endLetRingTick = endLetRingTick;
-                if (_context.eachStringHasChannel) {
+                if (_context.eachStringHasChannel && instr->hasStrings()) {
                     params.callAllSoundOff = true;
                 }
                 collectNote(events, note, params, st1, pitchWheelRenderer);
