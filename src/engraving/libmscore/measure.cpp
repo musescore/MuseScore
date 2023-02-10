@@ -1245,7 +1245,7 @@ void Measure::insertStaves(staff_idx_t sStaff, staff_idx_t eStaff)
             continue;
         }
         staff_idx_t staffIdx = e->staffIdx();
-        if (staffIdx >= sStaff && !e->systemFlag()) {
+        if (moveDownWhenAddingStaves(e, sStaff, eStaff)) {
             voice_idx_t voice = e->voice();
             staffIdx += eStaff - sStaff;
             e->setTrack(staffIdx * VOICES + voice);
@@ -1267,13 +1267,6 @@ void Measure::cmdRemoveStaves(staff_idx_t sStaff, staff_idx_t eStaff)
     track_idx_t sTrack = sStaff * VOICES;
     track_idx_t eTrack = eStaff * VOICES;
 
-    auto removingAllowed = [this, sStaff, eStaff](const EngravingItem* item) {
-        staff_idx_t staffIndex = item->staffIdx();
-        size_t staffCount = score()->nstaves();
-
-        return (staffIndex >= sStaff) && (staffIndex < eStaff) && (!item->systemFlag() || staffCount == 1);
-    };
-
     for (Segment* s = first(); s; s = s->next()) {
         for (int track = static_cast<int>(eTrack) - 1; track >= static_cast<int>(sTrack); --track) {
             EngravingItem* el = s->element(track);
@@ -1286,7 +1279,7 @@ void Measure::cmdRemoveStaves(staff_idx_t sStaff, staff_idx_t eStaff)
         // Create copy, because s->annotations() will be modified during the loop
         std::vector<EngravingItem*> annotations = s->annotations();
         for (EngravingItem* e : annotations) {
-            if (removingAllowed(e)) {
+            if (allowRemoveWhenRemovingStaves(e, sStaff, eStaff)) {
                 e->undoUnlink();
                 score()->undo(new RemoveElement(e));
             }
@@ -1298,7 +1291,7 @@ void Measure::cmdRemoveStaves(staff_idx_t sStaff, staff_idx_t eStaff)
             continue;
         }
 
-        if (removingAllowed(e)) {
+        if (allowRemoveWhenRemovingStaves(e, sStaff, eStaff)) {
             e->undoUnlink();
             score()->undo(new RemoveElement(e));
         }
@@ -2275,7 +2268,7 @@ void Measure::sortStaves(std::vector<staff_idx_t>& dst)
     }
 
     for (EngravingItem* e : el()) {
-        if (e->track() == mu::nidx /* || e->systemFlag()*/) {
+        if (e->track() == mu::nidx || e->isTopSystemObject()) {
             continue;
         }
         voice_idx_t voice    = e->voice();

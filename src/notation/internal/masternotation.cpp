@@ -431,7 +431,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
         tt->setFollowText(true);
         tt->setTrack(0);
         seg->add(tt);
-        for (auto staff : score->getSystemObjectStaves()) {
+        for (auto staff : score->systemObjectStaves()) {
             TempoText* linkedTt = toTempoText(tt->linkedClone());
             linkedTt->setScore(score);
             linkedTt->setTrack(staff->idx() * VOICES);

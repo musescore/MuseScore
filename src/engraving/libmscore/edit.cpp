@@ -5113,26 +5113,18 @@ void Score::undoRemoveStaff(Staff* staff)
     const staff_idx_t staffIndex = staff->idx();
     assert(staffIndex != mu::nidx);
 
-    auto removingAllowed = [staffIndex, this](const Spanner* spanner) {
-        if (spanner->staffIdx() != staffIndex) {
-            return false;
-        }
-
-        return staffIndex != 0 || _staves.size() == 1 || !spanner->systemFlag();
-    };
-
     std::vector<Spanner*> spannersToRemove;
 
     for (auto it = _spanner.cbegin(); it != _spanner.cend(); ++it) {
         Spanner* spanner = it->second;
 
-        if (removingAllowed(spanner)) {
+        if (allowRemoveWhenRemovingStaves(spanner, staffIndex)) {
             spannersToRemove.push_back(spanner);
         }
     }
 
     for (Spanner* spanner : _unmanagedSpanner) {
-        if (removingAllowed(spanner)) {
+        if (allowRemoveWhenRemovingStaves(spanner, staffIndex)) {
             spannersToRemove.push_back(spanner);
         }
     }
@@ -5348,7 +5340,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         } else {
             for (Score* s : scoreList()) {
                 staffList.push_back(s->staff(0)); // system objects always appear on the top staff
-                for (Staff* staff : s->getSystemObjectStaves()) {
+                for (Staff* staff : s->systemObjectStaves()) {
                     staffList.push_back(staff);
                 }
             }

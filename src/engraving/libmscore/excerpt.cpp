@@ -993,6 +993,9 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
         if (e->track() != mu::nidx) {
             // try to map track
             track = mu::value(trackList, e->track(), mu::nidx);
+            if (e->systemFlag() && !e->isTopSystemObject()) {
+                continue;
+            }
             if (track == mu::nidx) {
                 // even if track not in excerpt, we need to clone system elements
                 if (e->systemFlag() && e->track() == 0) {
