@@ -1692,15 +1692,13 @@ void ChordList::read(XmlReader& e)
                     symClass   = e.attribute("class");
                     if (code != "") {
                         bool ok = true;
-                        int val = code.toInt(&ok, 0);
+                        char32_t val = code.toUInt(&ok, 0);
                         if (!ok) {
                             cs.code = 0;
                             cs.value = code;
                         } else if (val & 0xffff0000) {
                             cs.code = 0;
-                            Char high = Char::highSurrogate(val);
-                            Char low = Char::lowSurrogate(val);
-                            cs.value = String(u"%1%2").arg(high, low);
+                            cs.value = String::fromUcs4(&val, 1);
                         } else {
                             cs.code = val;
                             cs.value = String(cs.code);
