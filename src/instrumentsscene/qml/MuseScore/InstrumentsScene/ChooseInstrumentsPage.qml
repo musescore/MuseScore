@@ -35,7 +35,9 @@ Rectangle {
     property string currentInstrumentId: ""
     property string description: instrumentsModel.selectedInstrument ? instrumentsModel.selectedInstrument.description : ""
 
-    property bool hasSelectedInstruments: instrumentsOnScoreView.hasInstruments
+    property bool hasSelectedInstruments: root.canSelectMultipleInstruments
+                                          ? instrumentsOnScoreView.hasInstruments
+                                          : Boolean(instrumentsModel.selectedInstrument)
 
     property NavigationSection navigationSection: null
 
@@ -142,9 +144,9 @@ Rectangle {
             instrumentsModel: instrumentsModel
 
             onAddSelectedInstrumentsToScoreRequested: {
-                prv.addSelectedInstrumentsToScore()
-
-                if (!root.canSelectMultipleInstruments) {
+                if (root.canSelectMultipleInstruments) {
+                    prv.addSelectedInstrumentsToScore()
+                } else {
                     root.submitRequested()
                 }
             }

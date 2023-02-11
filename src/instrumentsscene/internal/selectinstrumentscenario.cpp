@@ -21,6 +21,8 @@
  */
 #include "selectinstrumentscenario.h"
 
+#include "log.h"
+
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 
@@ -35,8 +37,6 @@ mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstru
 
 mu::RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const InstrumentKey& currentInstrumentKey) const
 {
-    RetVal<Instrument> result;
-
     QStringList params {
         "canSelectMultipleInstruments=false",
         "currentInstrumentId=" + currentInstrumentKey.instrumentId
@@ -44,42 +44,33 @@ mu::RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const Instrum
 
     RetVal<PartInstrumentListScoreOrder> selectedInstruments = selectInstruments(params);
     if (!selectedInstruments.ret) {
-        result.ret = selectedInstruments.ret;
-        return result;
-    }
-
-    result.ret = make_ret(Ret::Code::Ok);
-
-    if (selectedInstruments.val.instruments.empty()) {
-        return result;
+        return selectedInstruments.ret;
     }
 
     const InstrumentTemplate& templ = selectedInstruments.val.instruments.first().instrumentTemplate;
-    result.val = Instrument::fromTemplate(&templ);
 
-    return result;
+    return RetVal<Instrument>::make_ok(Instrument::fromTemplate(&templ));
 }
 
 mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(const QStringList& params) const
 {
-    RetVal<PartInstrumentListScoreOrder> result;
-
     QString uri = QString("musescore://instruments/select?%1").arg(params.join('&'));
     RetVal<Val> retVal = interactive()->open(uri.toStdString());
     if (!retVal.ret) {
-        result.ret = retVal.ret;
-        return result;
+        return retVal.ret;
     }
-
-    result.ret = make_ret(Ret::Code::Ok);
 
     ValMap content = retVal.val.toMap();
 
-    ValMap order = content["scoreOrder"].toMap();
-    result.val.scoreOrder = instrumentsRepository()->order(order["id"].toString());
-    result.val.scoreOrder.customized = order["customized"].toBool();
+    ValList instruments = content["instruments"].toList();
 
-    for (const Val& obj: content["instruments"].toList()) {
+    IF_ASSERT_FAILED(!instruments.empty()) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    PartInstrumentListScoreOrder result;
+
+    for (const Val& obj: instruments) {
         ValMap map = obj.toMap();
         PartInstrument pi;
 
@@ -90,8 +81,12 @@ mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstru
         std::string instrumentId = map["instrumentId"].toString();
         pi.instrumentTemplate = instrumentsRepository()->instrumentTemplate(instrumentId);
 
-        result.val.instruments << pi;
+        result.instruments << pi;
     }
 
-    return result;
+    ValMap order = content["scoreOrder"].toMap();
+    result.scoreOrder = instrumentsRepository()->order(order["id"].toString());
+    result.scoreOrder.customized = order["customized"].toBool();
+
+    return RetVal<PartInstrumentListScoreOrder>::make_ok(result);
 }
