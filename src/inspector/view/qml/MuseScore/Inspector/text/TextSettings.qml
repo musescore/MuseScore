@@ -115,6 +115,33 @@ Column {
         ]
     }
 
+    SeparatorLine { anchors.margins: -12 }
+
+    Item {
+        height: childrenRect.height
+        width: parent.width
+
+        SpinBoxPropertyView {
+            id: textLineSpacingSection
+            anchors.left: parent.left
+            anchors.right: parent.horizontalCenter
+            anchors.rightMargin: 2
+
+            navigationName: "Line Spacing"
+            navigationPanel: root.navigationPanel
+            navigationRowStart: styleSection.navigationRowEnd + 1
+
+            titleText: qsTrc("inspector", "Line Spacing")
+            measureUnitsSymbol: qsTrc("global", "li")
+            propertyItem: root.model ? root.model.textLineSpacing : null
+
+            decimals: 2
+            step: 0.1
+            minValue: 0
+            maxValue: 99
+        }
+    }
+
     Item {
         height: childrenRect.height
         width: parent.width
