@@ -436,7 +436,7 @@ static const StyleType styleTypes[] {
       { Sid::mmRestNumberPos,         "mmRestNumberPos",         Spatium(-1.5) },
       { Sid::hideEmptyStaves,         "hideEmptyStaves",         QVariant(false) },
       { Sid::dontHideStavesInFirstSystem,
-                                 "dontHideStavesInFirstSystem",  QVariant(true) },
+                                 "dontHidStavesInFirstSystm",    QVariant(true) },
       { Sid::enableIndentationOnFirstSystem,
                                  "enableIndentationOnFirstSystem", QVariant(true) },
       { Sid::firstSystemIndentationValue, "firstSystemIndentationValue", Spatium(5.0) },
@@ -3048,8 +3048,6 @@ void MStyle::load(XmlReader& e)
                   }
             else if (tag == "lyricsDashMaxLegth") // pre-3.6 typo
                   set(Sid::lyricsDashMaxLength, e.readDouble());
-            else if (tag == "dontHidStavesInFirstSystm") // pre-3.6.3/4.0 typo
-                  set(Sid::dontHideStavesInFirstSystem, e.readBool());
             else if (!readProperties(e))
                   e.unknown();
             }

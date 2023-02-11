@@ -14,7 +14,7 @@
       <maxSystemDistance>8</maxSystemDistance>
       <showMeasureNumber>0</showMeasureNumber>
       <hideEmptyStaves>1</hideEmptyStaves>
-      <dontHideStavesInFirstSystem>0</dontHideStavesInFirstSystem>
+      <dontHidStavesInFirstSystm>0</dontHidStavesInFirstSystm>
       <showFooter>0</showFooter>
       <page-layout>
         <page-height>680.315</page-height>
