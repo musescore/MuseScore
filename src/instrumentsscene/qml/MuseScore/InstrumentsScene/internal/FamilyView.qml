@@ -41,30 +41,22 @@ Item {
     signal genreSelected(int newIndex)
     signal groupSelected(int newIndex)
 
-    function focusGroup(groupIndex) {
+    function scrollToGroup(groupIndex) {
         groupsView.positionViewAtIndex(groupIndex, ListView.Beginning)
     }
 
     function focusOnFirst() {
-        root.groupSelected(0)
-    }
-
-    function groupName(index) {
-        var item = groupsView.itemAtIndex(index)
-        if (item) {
-            return item.groupName
+        if (root.currentGroupIndex !== -1) {
+            focusGroupNavigation(root.currentGroupIndex)
+        } else {
+            root.groupSelected(0)
         }
-
-        return undefined
     }
 
-    function restoreGroupNavigationActive(groupName) {
-        for (var i = 0; i < groupsView.count; ++i) {
-            var item = groupsView.itemAtIndex(i)
-             if (item.groupName === groupName && navigation.active) {
-                 item.navigation.requestActive()
-                 return
-            }
+    function focusGroupNavigation(groupIndex: int) {
+        var item = groupsView.itemAtIndex(groupIndex)
+        if (item && item.navigation) {
+            item.navigation.requestActive()
         }
     }
 

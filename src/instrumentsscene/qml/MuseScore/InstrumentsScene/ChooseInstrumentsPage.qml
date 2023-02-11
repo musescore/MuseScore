@@ -68,8 +68,8 @@ Rectangle {
     InstrumentListModel {
         id: instrumentsModel
 
-        onFocusRequested: function(groupIndex) {
-            familyView.focusGroup(groupIndex)
+        onFocusRequested: function(groupIndex, instrumentIndex) {
+            familyView.scrollToGroup(groupIndex)
             instrumentsView.focusInstrument(instrumentIndex)
         }
     }
@@ -116,7 +116,6 @@ Rectangle {
             }
 
             onGroupSelected: function(newIndex) {
-                var selectedGroupName = groupName(newIndex)
                 instrumentsModel.currentGroupIndex = newIndex
 
                 if (instrumentsView.searching) {
@@ -124,7 +123,7 @@ Rectangle {
                     instrumentsView.clearSearch()
                 }
 
-                restoreGroupNavigationActive(selectedGroupName)
+                focusGroupNavigation(newIndex)
             }
         }
 
