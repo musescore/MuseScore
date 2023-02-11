@@ -253,7 +253,9 @@ public:
     static String fromStdString(const std::string& str);
     std::string toStdString() const;
     std::u16string toStdU16String() const;
+
     static String fromUcs4(const char32_t* str, size_t size = mu::nidx);
+    static String fromUcs4(char32_t chr);
     std::u32string toStdU32String() const;
 
     size_t size() const;

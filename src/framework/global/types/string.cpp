@@ -486,6 +486,11 @@ String String::fromUcs4(const char32_t* str, size_t size)
     return s;
 }
 
+String String::fromUcs4(char32_t chr)
+{
+    return fromUcs4(&chr, 1);
+}
+
 std::u32string String::toStdU32String() const
 {
     std::string s;
