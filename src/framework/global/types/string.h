@@ -339,39 +339,7 @@ public:
     inline size_t hash() const { return std::hash<std::u16string> {}(constStr()); }
 
 private:
-
-    struct Mutator {
-        std::u16string& s;
-        String* self = nullptr;
-        Mutator(std::u16string& s, String* self)
-            : s(s), self(self) {}
-        ~Mutator()
-        {
-#ifdef STRING_DEBUG_HACK
-            self->updateDebugView();
-#endif
-        }
-
-        operator std::u16string& () {
-            return s;
-        }
-
-        void reserve(size_t n) { s.reserve(n); }
-        void resize(size_t n) { s.resize(n); }
-        void clear() { s.clear(); }
-        void insert(size_t p, const std::u16string& v) { s.insert(p, v); }
-        void erase(size_t p, size_t n) { s.erase(p, n); }
-
-        std::u16string& operator=(const std::u16string& v) { return s.operator=(v); }
-        std::u16string& operator=(const char16_t* v) { return s.operator=(v); }
-        std::u16string& operator=(const char16_t v) { return s.operator=(v); }
-
-        std::u16string& operator+=(const std::u16string& v) { return s.operator+=(v); }
-        std::u16string& operator+=(const char16_t* v) { return s.operator+=(v); }
-        std::u16string& operator+=(const char16_t v) { return s.operator+=(v); }
-        char16_t& operator[](size_t i) { return s.operator[](i); }
-    };
-
+    struct Mutator;
     const std::u16string& constStr() const;
     Mutator mutStr(bool do_detach = true);
     void detach();
