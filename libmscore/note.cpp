@@ -2099,7 +2099,7 @@ void Note::layout2()
       // so that the results are available there
 
       int dots = chord()->dots();
-      if (dots) {
+      if (dots && !_dots.empty()) {
             qreal d  = score()->point(score()->styleS(Sid::dotNoteDistance)) * mag();
             qreal dd = score()->point(score()->styleS(Sid::dotDotDistance)) * mag();
             qreal x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
