@@ -2961,7 +2961,11 @@
             </widget>
            </item>
            <item row="2" column="4" rowspan="2" colspan="2">
-            <widget class="mu::notation::OffsetSelect" name="measureNumberPosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="measureNumberPosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="1" column="6">
             <widget class="QToolButton" name="resetMeasureNumberHPlacement">
@@ -2974,7 +2978,11 @@
             </widget>
            </item>
            <item row="4" column="4" rowspan="2" colspan="2">
-            <widget class="mu::notation::OffsetSelect" name="measureNumberPosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="measureNumberPosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="0">
             <widget class="QRadioButton" name="showEverySystemMeasureNumber">
@@ -3058,7 +3066,11 @@
             <widget class="QComboBox" name="mmRestRangeBracketType"/>
            </item>
            <item row="3" column="1">
-            <widget class="mu::notation::OffsetSelect" name="mmRestRangePosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="mmRestRangePosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="3" column="2">
             <widget class="QToolButton" name="resetMMRestRangePosAbove">
@@ -3168,7 +3180,11 @@
             </widget>
            </item>
            <item row="4" column="1">
-            <widget class="mu::notation::OffsetSelect" name="mmRestRangePosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="mmRestRangePosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="4" column="2">
             <widget class="QToolButton" name="resetMMRestRangePosBelow">
@@ -7253,10 +7269,18 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="hairpinPosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="hairpinPosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="hairpinPosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="hairpinPosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="8" column="2">
             <widget class="QToolButton" name="resetHairpinLineWidth">
@@ -7363,7 +7387,11 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="mu::notation::OffsetSelect" name="voltaPosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="voltaPosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="5" column="2">
             <widget class="QToolButton" name="resetVoltaLineStyleDashSize">
@@ -7897,7 +7925,11 @@ By default, they will be placed such as that their right end are at the same lev
             </spacer>
            </item>
            <item row="3" column="1">
-            <widget class="mu::notation::OffsetSelect" name="ottavaPosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="ottavaPosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="9" column="0">
             <widget class="QLabel" name="label_ottava_lineStyle_gapSize">
@@ -7955,7 +7987,11 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="ottavaPosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="ottavaPosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="8" column="1">
             <widget class="QDoubleSpinBox" name="ottavaLineStyleDashSize">
@@ -8151,7 +8187,11 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="pedalLinePosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="pedalLinePosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="5" column="1">
             <widget class="QComboBox" name="pedalLineStyle">
@@ -8252,7 +8292,11 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="pedalLinePosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="pedalLinePosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="7" column="0">
             <widget class="QLabel" name="label_pedalLine_lineStyle_gapSize">
@@ -8451,10 +8495,18 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="trillLinePosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="trillLinePosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="trillLinePosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="trillLinePosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -8579,10 +8631,18 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="vibratoLinePosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="vibratoLinePosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="vibratoLinePosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="vibratoLinePosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -8842,10 +8902,18 @@ By default, they will be placed such as that their right end are at the same lev
             </spacer>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="textLinePosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="textLinePosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="textLinePosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="textLinePosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -8982,10 +9050,18 @@ By default, they will be placed such as that their right end are at the same lev
             </spacer>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="systemTextLinePosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="systemTextLinePosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="systemTextLinePosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="systemTextLinePosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -9223,7 +9299,11 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="fermataPosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="fermataPosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_168">
@@ -9249,7 +9329,11 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="mu::notation::OffsetSelect" name="fermataPosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="fermataPosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="0" column="2">
             <widget class="QToolButton" name="resetFermataPosAbove">
@@ -9408,7 +9492,11 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="staffTextPosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="staffTextPosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="0" column="2">
             <widget class="QToolButton" name="resetStaffTextPlacement">
@@ -9424,7 +9512,11 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="staffTextPosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="staffTextPosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_176">
@@ -9665,10 +9757,18 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="tempoTextPosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="tempoTextPosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="tempoTextPosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="tempoTextPosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -10114,7 +10214,11 @@ By default, they will be placed such as that their right end are at the same lev
                 </widget>
                </item>
                <item row="2" column="1">
-                <widget class="mu::notation::OffsetSelect" name="lyricsPosBelow" native="true"/>
+                <widget class="mu::notation::OffsetSelect" name="lyricsPosBelow" native="true">
+                 <property name="focusPolicy">
+                  <enum>Qt::StrongFocus</enum>
+                 </property>
+                </widget>
                </item>
                <item row="5" column="2">
                 <widget class="QToolButton" name="resetLyricsMinBottomDistance">
@@ -10211,7 +10315,11 @@ By default, they will be placed such as that their right end are at the same lev
                 </widget>
                </item>
                <item row="1" column="1">
-                <widget class="mu::notation::OffsetSelect" name="lyricsPosAbove" native="true"/>
+                <widget class="mu::notation::OffsetSelect" name="lyricsPosAbove" native="true">
+                 <property name="focusPolicy">
+                  <enum>Qt::StrongFocus</enum>
+                 </property>
+                </widget>
                </item>
                <item row="4" column="0">
                 <widget class="QLabel" name="label_131">
@@ -10550,10 +10658,18 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="dynamicsPosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="dynamicsPosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="dynamicsPosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="dynamicsPosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="0" column="3">
             <spacer name="horizontalSpacer_30">
@@ -10723,10 +10839,18 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="rehearsalMarkPosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="rehearsalMarkPosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="rehearsalMarkPosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="rehearsalMarkPosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="0" column="3">
             <spacer name="horizontalSpacer_36">
@@ -12656,7 +12780,11 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="10" column="1">
-            <widget class="mu::notation::OffsetSelect" name="textStyleOffset" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="textStyleOffset" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="9" column="1">
             <widget class="Awl::ColorLabel" name="textStyleColor"/>
@@ -13077,7 +13205,9 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetMeasureNumberVPlacement</tabstop>
   <tabstop>measureNumberHPlacement</tabstop>
   <tabstop>resetMeasureNumberHPlacement</tabstop>
+  <tabstop>measureNumberPosAbove</tabstop>
   <tabstop>resetMeasureNumberPosAbove</tabstop>
+  <tabstop>measureNumberPosBelow</tabstop>
   <tabstop>resetMeasureNumberPosBelow</tabstop>
   <tabstop>mmRestShowMeasureNumberRange</tabstop>
   <tabstop>mmRestRangeBracketType</tabstop>
@@ -13086,7 +13216,9 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetMmRestRangeVPlacement</tabstop>
   <tabstop>mmRestRangeHPlacement</tabstop>
   <tabstop>resetMmRestRangeHPlacement</tabstop>
+  <tabstop>mmRestRangePosAbove</tabstop>
   <tabstop>resetMMRestRangePosAbove</tabstop>
+  <tabstop>mmRestRangePosBelow</tabstop>
   <tabstop>resetMMRestRangePosBelow</tabstop>
   <tabstop>bracketWidth</tabstop>
   <tabstop>resetBracketThickness</tabstop>
@@ -13257,7 +13389,9 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetSlurMinDistance</tabstop>
   <tabstop>hairpinPlacement</tabstop>
   <tabstop>resetHairpinPlacement</tabstop>
+  <tabstop>hairpinPosAbove</tabstop>
   <tabstop>resetHairpinPosAbove</tabstop>
+  <tabstop>hairpinPosBelow</tabstop>
   <tabstop>resetHairpinPosBelow</tabstop>
   <tabstop>hairpinHeight</tabstop>
   <tabstop>resetHairpinHeight</tabstop>
@@ -13267,6 +13401,7 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetAutoplaceHairpinDynamicsDistance</tabstop>
   <tabstop>hairpinLineWidth</tabstop>
   <tabstop>resetHairpinLineWidth</tabstop>
+  <tabstop>voltaPosAbove</tabstop>
   <tabstop>resetVoltaPosAbove</tabstop>
   <tabstop>voltaHook</tabstop>
   <tabstop>resetVoltaHook</tabstop>
@@ -13280,7 +13415,9 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetVoltaLineStyleGapSize</tabstop>
   <tabstop>ottavaNumbersOnly</tabstop>
   <tabstop>resetOttavaNumbersOnly</tabstop>
+  <tabstop>ottavaPosAbove</tabstop>
   <tabstop>resetOttavaPosAbove</tabstop>
+  <tabstop>ottavaPosBelow</tabstop>
   <tabstop>resetOttavaPosBelow</tabstop>
   <tabstop>ottavaHookAbove</tabstop>
   <tabstop>resetOttavaHookAbove</tabstop>
@@ -13296,7 +13433,9 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetOttavaLineStyleGapSize</tabstop>
   <tabstop>pedalLinePlacement</tabstop>
   <tabstop>resetPedalLinePlacement</tabstop>
+  <tabstop>pedalLinePosAbove</tabstop>
   <tabstop>resetPedalLinePosAbove</tabstop>
+  <tabstop>pedalLinePosBelow</tabstop>
   <tabstop>resetPedalLinePosBelow</tabstop>
   <tabstop>pedalLineWidth</tabstop>
   <tabstop>resetPedalLineWidth</tabstop>
@@ -13308,11 +13447,15 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetPedalLineStyleGapSize</tabstop>
   <tabstop>trillLinePlacement</tabstop>
   <tabstop>resetTrillLinePlacement</tabstop>
+  <tabstop>trillLinePosAbove</tabstop>
   <tabstop>resetTrillLinePosAbove</tabstop>
+  <tabstop>trillLinePosBelow</tabstop>
   <tabstop>resetTrillLinePosBelow</tabstop>
   <tabstop>vibratoLinePlacement</tabstop>
   <tabstop>resetVibratoLinePlacement</tabstop>
+  <tabstop>vibratoLinePosAbove</tabstop>
   <tabstop>resetVibratoLinePosAbove</tabstop>
+  <tabstop>vibratoLinePosBelow</tabstop>
   <tabstop>resetVibratoLinePosBelow</tabstop>
   <tabstop>bendLineWidth</tabstop>
   <tabstop>resetBendLineWidth</tabstop>
@@ -13320,11 +13463,15 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetBendArrowWidth</tabstop>
   <tabstop>textLinePlacement</tabstop>
   <tabstop>resetTextLinePlacement</tabstop>
+  <tabstop>textLinePosAbove</tabstop>
   <tabstop>resetTextLinePosAbove</tabstop>
+  <tabstop>textLinePosBelow</tabstop>
   <tabstop>resetTextLinePosBelow</tabstop>
   <tabstop>systemTextLinePlacement</tabstop>
   <tabstop>resetSystemTextLinePlacement</tabstop>
+  <tabstop>systemTextLinePosAbove</tabstop>
   <tabstop>resetSystemTextLinePosAbove</tabstop>
+  <tabstop>systemTextLinePosBelow</tabstop>
   <tabstop>resetSystemTextLinePosBelow</tabstop>
   <tabstop>articMinVerticalDist</tabstop>
   <tabstop>resetArticMinVerticalDist</tabstop>
@@ -13336,26 +13483,34 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetArticStaffDist</tabstop>
   <tabstop>articulationMag</tabstop>
   <tabstop>resetArticulationMag</tabstop>
+  <tabstop>fermataPosAbove</tabstop>
   <tabstop>resetFermataPosAbove</tabstop>
+  <tabstop>fermataPosBelow</tabstop>
   <tabstop>resetFermataPosBelow</tabstop>
   <tabstop>fermataMinDistance</tabstop>
   <tabstop>resetFermataMinDistance</tabstop>
   <tabstop>staffTextPlacement</tabstop>
   <tabstop>resetStaffTextPlacement</tabstop>
+  <tabstop>staffTextPosAbove</tabstop>
   <tabstop>resetStaffTextPosAbove</tabstop>
+  <tabstop>staffTextPosBelow</tabstop>
   <tabstop>resetStaffTextPosBelow</tabstop>
   <tabstop>staffTextMinDistance</tabstop>
   <tabstop>resetStaffTextMinDistance</tabstop>
   <tabstop>tempoTextPlacement</tabstop>
   <tabstop>resetTempoTextPlacement</tabstop>
+  <tabstop>tempoTextPosAbove</tabstop>
   <tabstop>resetTempoTextPosAbove</tabstop>
+  <tabstop>tempoTextPosBelow</tabstop>
   <tabstop>resetTempoTextPosBelow</tabstop>
   <tabstop>tempoTextMinDistance</tabstop>
   <tabstop>resetTempoTextMinDistance</tabstop>
   <tabstop>scrollArea_lyrics</tabstop>
   <tabstop>lyricsPlacement</tabstop>
   <tabstop>resetLyricsPlacement</tabstop>
+  <tabstop>lyricsPosAbove</tabstop>
   <tabstop>resetLyricsPosAbove</tabstop>
+  <tabstop>lyricsPosBelow</tabstop>
   <tabstop>resetLyricsPosBelow</tabstop>
   <tabstop>lyricsLineHeight</tabstop>
   <tabstop>resetLyricsLineHeight</tabstop>
@@ -13388,13 +13543,17 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetLyricsMelismaAlign</tabstop>
   <tabstop>dynamicsPlacement</tabstop>
   <tabstop>resetDynamicsPlacement</tabstop>
+  <tabstop>dynamicsPosAbove</tabstop>
   <tabstop>resetDynamicsPosAbove</tabstop>
+  <tabstop>dynamicsPosBelow</tabstop>
   <tabstop>resetDynamicsPosBelow</tabstop>
   <tabstop>dynamicsMinDistance</tabstop>
   <tabstop>resetDynamicsMinDistance</tabstop>
   <tabstop>rehearsalMarkPlacement</tabstop>
   <tabstop>resetRehearsalMarkPlacement</tabstop>
+  <tabstop>rehearsalMarkPosAbove</tabstop>
   <tabstop>resetRehearsalMarkPosAbove</tabstop>
+  <tabstop>rehearsalMarkPosBelow</tabstop>
   <tabstop>resetRehearsalMarkPosBelow</tabstop>
   <tabstop>rehearsalMarkMinDistance</tabstop>
   <tabstop>resetRehearsalMarkMinDistance</tabstop>
@@ -13496,6 +13655,7 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetTextStyleAlign</tabstop>
   <tabstop>textStyleColor</tabstop>
   <tabstop>resetTextStyleColor</tabstop>
+  <tabstop>textStyleOffset</tabstop>
   <tabstop>resetTextStyleOffset</tabstop>
   <tabstop>textStyleFrameType</tabstop>
   <tabstop>resetTextStyleFrameType</tabstop>
