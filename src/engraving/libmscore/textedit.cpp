@@ -810,8 +810,7 @@ EngravingItem* TextBase::drop(EditData& ed)
 
     case ElementType::FSYMBOL:
     {
-        char32_t code = static_cast<char32_t>(toFSymbol(e)->code());
-        String s = String::fromUcs4(&code, 1);
+        String s = toFSymbol(e)->toString();
         delete e;
 
         deleteSelectedText(ed);
@@ -863,9 +862,9 @@ void TextBase::paste(EditData& ed, const String& txt)
                         assert(i + 1 < txt.size());
                         i++;
                         Char lowSurrogate = txt.at(i);
-                        insertText(ed, String(Char::surrogateToUcs4(highSurrogate, lowSurrogate)));
+                        insertText(ed, String::fromUcs4(Char::surrogateToUcs4(highSurrogate, lowSurrogate)));
                     } else {
-                        insertText(ed, String(Char(c.unicode())));
+                        insertText(ed, String(c));
                     }
                 }
             }
@@ -932,7 +931,7 @@ void TextBase::endHexState(EditData& ed)
             TextBlock& t = _layout[cursor->row()];
             String ss   = t.remove(static_cast<int>(c1), hexState + 1, cursor);
             bool ok;
-            int code     = ss.mid(1).toInt(&ok, 16);
+            char16_t code = ss.mid(1).toInt(&ok, 16);
             cursor->setColumn(c1);
             cursor->clearSelection();
             if (ok) {

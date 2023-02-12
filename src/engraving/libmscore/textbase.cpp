@@ -1230,8 +1230,7 @@ String TextBlock::remove(int column, TextCursor* cursor)
     int col = 0;
     String s;
     for (auto it = _fragments.begin(); it != _fragments.end(); ++it) {
-        int idx  = 0;
-        int rcol = 0;
+        size_t idx = 0;
 
         for (size_t i = 0; i < it->text.size(); ++i) {
             if (col == column) {
@@ -1254,7 +1253,6 @@ String TextBlock::remove(int column, TextCursor* cursor)
                 continue;
             }
             ++col;
-            ++rcol;
         }
     }
     insertEmptyFragmentIfNeeded(cursor);   // without this, cursorRect can't calculate the y position of the cursor correctly
@@ -1298,7 +1296,6 @@ String TextBlock::remove(int start, int n, TextCursor* cursor)
     int col = 0;
     String s;
     for (auto i = _fragments.begin(); i != _fragments.end();) {
-        int rcol = 0;
         bool inc = true;
         for (size_t idx = 0; idx < i->text.size();) {
             Char c = i->text.at(idx);
@@ -1326,7 +1323,6 @@ String TextBlock::remove(int start, int n, TextCursor* cursor)
                 continue;
             }
             ++col;
-            ++rcol;
         }
         if (inc) {
             ++i;
@@ -1639,12 +1635,7 @@ void TextBase::insert(TextCursor* cursor, char32_t code)
         code = ' ';
     }
 
-    String s;
-    if (Char::requiresSurrogates(code)) {
-        s = String(Char(Char::highSurrogate(code))).append(Char(Char::lowSurrogate(code)));
-    } else {
-        s = String::fromUcs4(&code, 1);
-    }
+    String s = String::fromUcs4(code);
 
     if (cursor->row() < rows()) {
         _layout[cursor->row()].insert(cursor, s);

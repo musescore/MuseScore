@@ -240,13 +240,7 @@ FSymbol::FSymbol(const FSymbol& s)
 
 String FSymbol::toString() const
 {
-    if (_code & 0xffff0000) {
-        String s;
-        s = Char(Char::highSurrogate(_code));
-        s += Char(Char::lowSurrogate(_code));
-        return s;
-    }
-    return Char(_code);
+    return String::fromUcs4(_code);
 }
 
 //---------------------------------------------------------

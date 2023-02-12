@@ -89,7 +89,7 @@ class FSymbol final : public BSymbol
     OBJECT_ALLOCATOR(engraving, FSymbol)
 
     mu::draw::Font _font;
-    int _code; // character code point (Unicode)
+    char32_t _code; // character code point (Unicode)
 
 public:
     FSymbol(EngravingItem* parent);
@@ -108,9 +108,9 @@ public:
     double baseLine() const override { return 0.0; }
     Segment* segment() const { return (Segment*)explicitParent(); }
     mu::draw::Font font() const { return _font; }
-    int code() const { return _code; }
+    char32_t code() const { return _code; }
     void setFont(const mu::draw::Font& f);
-    void setCode(int val) { _code = val; }
+    void setCode(char32_t val) { _code = val; }
 };
 } // namespace mu::engraving
 #endif

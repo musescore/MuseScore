@@ -541,14 +541,9 @@ SymId EngravingFont::fromCode(char32_t code) const
     return static_cast<SymId>(it == m_symbols.end() ? 0 : it - m_symbols.begin());
 }
 
-static String codeToString(char32_t code)
-{
-    return String::fromUcs4(&code, 1);
-}
-
 String EngravingFont::toString(SymId id) const
 {
-    return codeToString(symCode(id));
+    return String::fromUcs4(symCode(id));
 }
 
 bool EngravingFont::isValid(SymId id) const
