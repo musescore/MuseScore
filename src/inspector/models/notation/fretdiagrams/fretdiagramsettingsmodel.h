@@ -23,8 +23,12 @@
 #define MU_INSPECTOR_FRETDIAGRAMSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
+
 #include "types/fretdiagramtypes.h"
-#include "fret.h"
+
+namespace mu::engraving {
+class FretDiagram;
+}
 
 namespace mu::inspector {
 class FretDiagramSettingsModel : public AbstractInspectorModel
@@ -34,9 +38,10 @@ class FretDiagramSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * scale READ scale CONSTANT)
     Q_PROPERTY(PropertyItem * stringsCount READ stringsCount CONSTANT)
     Q_PROPERTY(PropertyItem * fretsCount READ fretsCount CONSTANT)
+    Q_PROPERTY(PropertyItem * fretNumber READ fretNumber CONSTANT)
     Q_PROPERTY(PropertyItem * isNutVisible READ isNutVisible CONSTANT)
     Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
-    Q_PROPERTY(PropertyItem * fretNumber READ fretNumber CONSTANT)
+    Q_PROPERTY(PropertyItem * orientation READ orientation CONSTANT)
 
     Q_PROPERTY(bool isBarreModeOn READ isBarreModeOn WRITE setIsBarreModeOn NOTIFY isBarreModeOnChanged)
     Q_PROPERTY(bool isMultipleDotsModeOn READ isMultipleDotsModeOn WRITE setIsMultipleDotsModeOn NOTIFY isMultipleDotsModeOnChanged)
@@ -57,9 +62,10 @@ public:
     PropertyItem* scale() const;
     PropertyItem* stringsCount() const;
     PropertyItem* fretsCount() const;
+    PropertyItem* fretNumber() const;
     PropertyItem* isNutVisible() const;
     PropertyItem* placement() const;
-    PropertyItem* fretNumber() const;
+    PropertyItem* orientation() const;
 
     QVariant fretDiagram() const;
 
@@ -84,13 +90,13 @@ signals:
     void areSettingsAvailableChanged(bool areSettingsAvailable);
 
 private:
-
     PropertyItem* m_scale = nullptr;
     PropertyItem* m_stringsCount = nullptr;
     PropertyItem* m_fretsCount = nullptr;
+    PropertyItem* m_fretNumber = nullptr;
     PropertyItem* m_isNutVisible = nullptr;
     PropertyItem* m_placement = nullptr;
-    PropertyItem* m_fretNumber = nullptr;
+    PropertyItem* m_orientation = nullptr;
 
     mu::engraving::FretDiagram* m_fretDiagram = nullptr;
 

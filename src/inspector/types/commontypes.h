@@ -27,7 +27,7 @@
 #include "ui/view/iconcodes.h"
 #include "dataformatter.h"
 
-#include "libmscore/types.h"
+#include "engraving/types/types.h"
 
 namespace mu::inspector {
 struct ElementKey

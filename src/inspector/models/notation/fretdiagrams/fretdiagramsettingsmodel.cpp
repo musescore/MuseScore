@@ -21,8 +21,10 @@
  */
 #include "fretdiagramsettingsmodel.h"
 
-#include "translation.h"
 #include "dataformatter.h"
+#include "translation.h"
+
+#include "engraving/libmscore/fret.h"
 
 using namespace mu::inspector;
 
@@ -64,6 +66,7 @@ void FretDiagramSettingsModel::createProperties()
     });
 
     m_placement = buildPropertyItem(mu::engraving::Pid::PLACEMENT);
+    m_orientation = buildPropertyItem(mu::engraving::Pid::ORIENTATION);
 }
 
 void FretDiagramSettingsModel::requestElements()
@@ -88,6 +91,7 @@ void FretDiagramSettingsModel::loadProperties()
 
     loadPropertyItem(m_isNutVisible);
     loadPropertyItem(m_placement);
+    loadPropertyItem(m_orientation);
 }
 
 void FretDiagramSettingsModel::resetProperties()
@@ -115,6 +119,11 @@ PropertyItem* FretDiagramSettingsModel::fretsCount() const
     return m_fretsCount;
 }
 
+PropertyItem* FretDiagramSettingsModel::fretNumber() const
+{
+    return m_fretNumber;
+}
+
 PropertyItem* FretDiagramSettingsModel::isNutVisible() const
 {
     return m_isNutVisible;
@@ -125,9 +134,9 @@ PropertyItem* FretDiagramSettingsModel::placement() const
     return m_placement;
 }
 
-PropertyItem* FretDiagramSettingsModel::fretNumber() const
+PropertyItem* FretDiagramSettingsModel::orientation() const
 {
-    return m_fretNumber;
+    return m_orientation;
 }
 
 QVariant FretDiagramSettingsModel::fretDiagram() const

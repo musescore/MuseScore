@@ -65,6 +65,19 @@ Item {
 
             spacing: 12
 
+            FretCanvas {
+                id: fretCanvas
+
+                diagram: root.model ? root.model.fretDiagram : null
+                isBarreModeOn: root.model ? root.model.isBarreModeOn : false
+                isMultipleDotsModeOn: root.model ? root.model.isMultipleDotsModeOn : false
+                currentFretDotType: root.model ? root.model.currentFretDotType : false
+                visible: root.model ? root.model.areSettingsAvailable : false
+                color: ui.theme.fontPrimaryColor
+
+                width: parent.width
+            }
+
             FlatButton {
                 width: parent.width
 
@@ -79,19 +92,6 @@ Item {
                 onClicked: {
                     fretCanvas.clear()
                 }
-            }
-
-            FretCanvas {
-                id: fretCanvas
-
-                diagram: root.model ? root.model.fretDiagram : null
-                isBarreModeOn: root.model ? root.model.isBarreModeOn : false
-                isMultipleDotsModeOn: root.model ? root.model.isMultipleDotsModeOn : false
-                currentFretDotType: root.model ? root.model.currentFretDotType : false
-                visible: root.model ? root.model.areSettingsAvailable : false
-                color: ui.theme.fontPrimaryColor
-
-                width: parent.width
             }
         }
     }
