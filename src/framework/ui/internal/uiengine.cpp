@@ -115,12 +115,17 @@ void UiEngine::setup(QQmlEngine* engine)
     QJSValue translator = m_engine->newQObject(m_translation);
     QQmlEngine::setObjectOwnership(m_translation, QQmlEngine::CppOwnership);
     m_translationFunction = translator.property("translate");
-    m_engine->globalObject().setProperty("qsTrc", m_translationFunction);
+
+    QJSValue qsTrc = m_engine->evaluate(
+        "(function(context, text, disambiguation = \"\", n = -1) {"
+        "    return ui.trc(context, text, disambiguation, n);"
+        "})");
+    m_engine->globalObject().setProperty("qsTrc", qsTrc);
 
 #ifdef Q_OS_WIN
     QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
     m_engine->addImportPath(dir.absolutePath());
- #endif
+#endif
 
     m_engine->addImportPath(":/qml");
 
