@@ -243,7 +243,7 @@ Column {
         decimals: 2
         step: 0.1
         minValue: 0
-        maxValue: 99
+        maxValue: 10
     }
 
     SeparatorLine { anchors.margins: -12 }

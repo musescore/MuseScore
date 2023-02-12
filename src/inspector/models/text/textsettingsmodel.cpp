@@ -117,7 +117,7 @@ void TextSettingsModel::loadProperties()
 
     m_fontSize->setIsEnabled(true);
 
-    loadPropertyItem(m_textLineSpacing);
+    loadPropertyItem(m_textLineSpacing, formatDoubleFunc);
 
     loadPropertyItem(m_horizontalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
         QVariantList list = elementPropertyValue.toList();
