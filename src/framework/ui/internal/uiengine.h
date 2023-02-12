@@ -49,6 +49,8 @@ class UiEngine : public QObject, public IUiEngine
 
     Q_PROPERTY(QQuickItem * rootItem READ rootItem WRITE setRootItem NOTIFY rootItemChanged)
 
+    Q_PROPERTY(QJSValue trc READ translationFunction NOTIFY translationFunctionChanged)
+
     // for internal use
     Q_PROPERTY(InteractiveProvider * _interactiveProvider READ interactiveProvider_property CONSTANT)
 
@@ -60,6 +62,7 @@ public:
     QmlApi* api() const;
     UiTheme* theme() const;
     QmlToolTip* tooltip() const;
+    QJSValue translationFunction() const;
     InteractiveProvider* interactiveProvider_property() const;
     std::shared_ptr<InteractiveProvider> interactiveProvider() const;
 
@@ -67,10 +70,11 @@ public:
     Q_INVOKABLE Qt::LayoutDirection currentLanguageLayoutDirection() const;
 
     // IUiEngine
-    void updateTheme() override;
     QQmlEngine* qmlEngine() const override;
     void clearComponentCache() override;
     void addSourceImportPath(const QString& path) override;
+
+    void retranslateUi() override;
     // ---
 
     void moveQQmlEngine(QQmlEngine* e);
@@ -86,6 +90,8 @@ signals:
 
     void rootItemChanged(QQuickItem* rootItem);
 
+    void translationFunctionChanged();
+
 private:
     UiEngine();
 
@@ -100,6 +106,7 @@ private:
     QmlApi* m_api = nullptr;
     QmlToolTip* m_tooltip = nullptr;
     QQuickItem* m_rootItem = nullptr;
+    QJSValue m_translationFunction;
 };
 }
 

@@ -32,11 +32,12 @@ namespace mu::plugins {
 class UiEngineMock : public QObject, public ui::IUiEngine
 {
 public:
-    MOCK_METHOD(void, updateTheme, (), (override));
     MOCK_METHOD(QQmlEngine*, qmlEngine, (), (const, override));
     MOCK_METHOD(void, clearComponentCache, (), (override));
 
     MOCK_METHOD(void, addSourceImportPath, (const QString& path), (override));
+
+    MOCK_METHOD(void, retranslateUi, (), (override));
 };
 }
 

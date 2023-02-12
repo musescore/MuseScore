@@ -65,10 +65,8 @@ void LanguagesService::init()
     ValCh<QString> languageCode = configuration()->currentLanguageCode();
     setCurrentLanguage(languageCode.val);
 
-    languageCode.ch.onReceive(this, [this](const QString&) {
-        //! NOTE To change the language at the moment, a restart is required
-        m_needRestartToApplyLanguageChange = true;
-        m_needRestartToApplyLanguageChangeChanged.send(m_needRestartToApplyLanguageChange);
+    languageCode.ch.onReceive(this, [this](const QString& languageCode) {
+        setCurrentLanguage(languageCode);
     });
 
     m_inited = true;
@@ -199,7 +197,7 @@ void LanguagesService::setCurrentLanguage(const QString& languageCode)
 
     lang.direction = locale.textDirection();
 
-    // Currently, no need to retranslate the UI on language change, because we require restart
+    uiEngine()->retranslateUi();
 
     m_currentLanguage = lang;
     m_currentLanguageChanged.notify();

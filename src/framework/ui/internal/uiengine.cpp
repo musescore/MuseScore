@@ -106,12 +106,16 @@ void UiEngine::setup(QQmlEngine* engine)
 
     m_engine = engine;
     m_theme->init();
-    m_engine->rootContext()->setContextProperty("ui", this);
+    QJSValue ui = m_engine->newQObject(this);
+    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
+    m_engine->globalObject().setProperty("ui", ui);
+
     m_engine->rootContext()->setContextProperty("api", m_api);
 
     QJSValue translator = m_engine->newQObject(m_translation);
-    QJSValue translateFn = translator.property("translate");
-    m_engine->globalObject().setProperty("qsTrc", translateFn);
+    QQmlEngine::setObjectOwnership(m_translation, QQmlEngine::CppOwnership);
+    m_translationFunction = translator.property("translate");
+    m_engine->globalObject().setProperty("qsTrc", m_translationFunction);
 
 #ifdef Q_OS_WIN
     QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
@@ -140,13 +144,9 @@ void UiEngine::addSourceImportPath(const QString& path)
 #endif
 }
 
-void UiEngine::updateTheme()
+void UiEngine::retranslateUi()
 {
-    if (!m_engine) {
-        return;
-    }
-
-    theme()->update();
+    emit translationFunctionChanged();
 }
 
 QmlApi* UiEngine::api() const
@@ -162,6 +162,11 @@ UiTheme* UiEngine::theme() const
 QmlToolTip* UiEngine::tooltip() const
 {
     return m_tooltip;
+}
+
+QJSValue UiEngine::translationFunction() const
+{
+    return m_translationFunction;
 }
 
 InteractiveProvider* UiEngine::interactiveProvider_property() const
