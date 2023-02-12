@@ -117,12 +117,7 @@ void TextSettingsModel::loadProperties()
 
     m_fontSize->setIsEnabled(true);
 
-    loadPropertyItem(m_textLineSpacing, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toInt() == mu::engraving::TextBase::UNDEFINED_TEXT_LINE_SPACING
-               ? QVariant() : elementPropertyValue.toInt();
-    });
-
-    m_textLineSpacing->setIsEnabled(true);
+    loadPropertyItem(m_textLineSpacing);
 
     loadPropertyItem(m_horizontalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
         QVariantList list = elementPropertyValue.toList();

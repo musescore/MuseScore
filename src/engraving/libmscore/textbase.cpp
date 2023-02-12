@@ -108,7 +108,6 @@ static void sort(size_t& r1, size_t& c1, size_t& r2, size_t& c2)
 
 const String TextBase::UNDEFINED_FONT_FAMILY = String(u"Undefined");
 const int TextBase::UNDEFINED_FONT_SIZE = -1;
-const int TextBase::UNDEFINED_TEXT_LINE_SPACING = -1;
 
 //---------------------------------------------------------
 //   operator==
@@ -1546,7 +1545,6 @@ String TextBlock::text(int col1, int len, bool withFormat) const
 TextBase::TextBase(const ElementType& type, EngravingItem* parent, TextStyleType tid, ElementFlags f)
     : EngravingItem(type, parent, f | ElementFlag::MOVABLE)
 {
-    _textLineSpacing        = 1.0;
     _textStyleType          = tid;
     _bgColor                = mu::draw::Color::transparent;
     _frameColor             = mu::draw::Color::BLACK;
@@ -1579,7 +1577,6 @@ TextBase::TextBase(const TextBase& st)
     hexState                     = -1;
 
     _textStyleType               = st._textStyleType;
-    _textLineSpacing             = st._textLineSpacing;
     _bgColor                     = st._bgColor;
     _frameColor                  = st._frameColor;
     _align                       = st._align;
