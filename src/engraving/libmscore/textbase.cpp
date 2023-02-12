@@ -1545,6 +1545,7 @@ String TextBlock::text(int col1, int len, bool withFormat) const
 TextBase::TextBase(const ElementType& type, EngravingItem* parent, TextStyleType tid, ElementFlags f)
     : EngravingItem(type, parent, f | ElementFlag::MOVABLE)
 {
+    _textLineSpacing        = 1.0;
     _textStyleType          = tid;
     _bgColor                = mu::draw::Color::transparent;
     _frameColor             = mu::draw::Color::BLACK;
@@ -1577,6 +1578,7 @@ TextBase::TextBase(const TextBase& st)
     hexState                     = -1;
 
     _textStyleType               = st._textStyleType;
+    _textLineSpacing             = st._textLineSpacing;
     _bgColor                     = st._bgColor;
     _frameColor                  = st._frameColor;
     _align                       = st._align;

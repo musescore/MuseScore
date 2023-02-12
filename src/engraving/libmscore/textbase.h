@@ -482,7 +482,6 @@ public:
 
     static const String UNDEFINED_FONT_FAMILY;
     static const int UNDEFINED_FONT_SIZE;
-    static const int UNDEFINED_TEXT_LINE_SPACING;
 
     bool bold() const { return fontStyle() & FontStyle::Bold; }
     bool italic() const { return fontStyle() & FontStyle::Italic; }

@@ -233,7 +233,7 @@ Column {
 
         navigationName: "Line Spacing"
         navigationPanel: root.navigationPanel
-        navigationRowStart: styleSection.navigationRowEnd + 1
+        navigationRowStart: cornerRadiusSection.navigationRowEnd + 1
 
         titleText: qsTrc("inspector", "Line Spacing")
         measureUnitsSymbol: qsTrc("global", "li")
@@ -254,7 +254,7 @@ Column {
 
         navigationName: "Text style"
         navigationPanel: root.navigationPanel
-        navigationRowStart: cornerRadiusSection.navigationRowEnd + 1
+        navigationRowStart: textLineSpacingSection.navigationRowEnd + 1
 
         model: root.model ? root.model.textStyles : []
     }
