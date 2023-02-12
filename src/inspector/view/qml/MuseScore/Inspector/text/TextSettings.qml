@@ -235,7 +235,8 @@ Column {
         navigationPanel: root.navigationPanel
         navigationRowStart: cornerRadiusSection.navigationRowEnd + 1
 
-        titleText: qsTrc("inspector", "Line Spacing")
+        titleText: qsTrc("inspector", "Line spacing")
+        //: Stands for "Lines". Used for text line spacing controls, for example.
         measureUnitsSymbol: qsTrc("global", "li")
         propertyItem: root.model ? root.model.textLineSpacing : null
 
