@@ -115,6 +115,12 @@
     </kudos>
     <!-- Only <releases> below this point please! -->
     <releases>
+        <release date="2023-01-13" version="4.0.1">
+            <url>https://musescore.org/en/4.0.1</url>
+        </release>
+        <release date="2022-12-14" version="4.0">
+            <url>https://musescore.org/en/4.0</url>
+        </release>
         <release date="2021-02-08" version="3.6.2">
             <url>https://musescore.org/en/3.6.2</url>
         </release>
