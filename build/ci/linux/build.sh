@@ -55,7 +55,6 @@ case "${BUILD_MODE}" in
 "nightly_build") MUSESCORE_BUILD_MODE=dev; SUFFIX=nightly;;
 "testing_build") MUSESCORE_BUILD_MODE=testing; SUFFIX=testing;;
 "stable_build")  MUSESCORE_BUILD_MODE=release; SUFFIX="";;
-"mtests")        MUSESCORE_BUILD_MODE=dev; BUILDTYPE=installdebug; OPTIONS="UPDATE_CACHE=FALSE PREFIX=$ARTIFACTS_DIR/software";;
 esac
 
 echo "MUSESCORE_BUILD_MODE: $MUSESCORE_BUILD_MODE"
