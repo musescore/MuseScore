@@ -108,6 +108,8 @@ void Score::checkScore()
 
 Ret Score::sanityCheck()
 {
+    TRACEFUNC;
+
     StringList errors;
     int mNumber = 1;
 

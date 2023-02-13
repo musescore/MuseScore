@@ -51,6 +51,7 @@
 #include "view/engraving/engravingelementsmodel.h"
 
 #include "devtools/crashhandlerdevtoolsmodel.h"
+#include "devtools/corruptscoredevtoolsmodel.h"
 
 #include "log.h"
 #include "config.h"
@@ -110,6 +111,7 @@ void DiagnosticsModule::registerUiTypes()
     qmlRegisterType<EngravingElementsModel>("MuseScore.Diagnostics", 1, 0, "EngravingElementsModel");
 
     qmlRegisterType<CrashHandlerDevToolsModel>("MuseScore.Diagnostics", 1, 0, "CrashHandlerDevToolsModel");
+    qmlRegisterType<CorruptScoreDevToolsModel>("MuseScore.Diagnostics", 1, 0, "CorruptScoreDevToolsModel");
 }
 
 void DiagnosticsModule::onInit(const framework::IApplication::RunMode&)
