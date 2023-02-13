@@ -40,7 +40,6 @@
 
 /* #undef Q_WS_UIKIT */
 
-#define APP_UPDATABLE
 
 #define USE_BSP     true
 

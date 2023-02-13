@@ -116,16 +116,7 @@ option(MUE_ENABLE_ACCESSIBILITY_TRACE "Enable accessibility logging" OFF)
 option(MUE_ENABLE_DRAW_TRACE "Trace draw objects" OFF)
 option(MUE_DISABLE_UI_MODALITY "Disable dialogs modality for testing purpose" OFF)
 option(MUE_ENABLE_LOAD_QML_FROM_SOURCE "Load qml files from source (not resource)" OFF)
-
-option(ENGRAVING_PAINT_DEBUGGER_ENABLED "Enable diagnostic engraving paint debugger" OFF)
-# Temporary flags for MU3 compatibility to make testing easier.
-option(ENGRAVING_COMPAT_WRITESTYLE_302 "Write style to score xml file" OFF)
-option(ENGRAVING_COMPAT_WRITEEXCERPTS_302 "Write excerpts to score xml file" ON)
-
-
-
-option(USE_SYSTEM_FREETYPE "Use system FreeType" OFF) # requires freetype >= 2.5.2, does not work on win
-
+option(MUE_ENABLE_ENGRAVING_PAINT_DEBUGGER "Enable diagnostic engraving paint debugger" OFF)
 
 ###########################################
 # Setup Configure
@@ -166,8 +157,6 @@ if (OS_IS_WIN)
     link_directories(${DEPENDENCIES_DIR})
     include_directories(${PROJECT_SOURCE_DIR}/dependencies/include)
 endif(OS_IS_WIN)
-
-include(SetupFreetype)
 
 include(FindSndFile)
 

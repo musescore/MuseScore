@@ -25,18 +25,12 @@
 #include "libmscore/masterscore.h"
 #include "libmscore/excerpt.h"
 
-#include "config.h"
-
 using namespace mu::engraving;
 using namespace mu::engraving::compat;
 
 void WriteScoreHook::onWriteStyle302(Score* score, XmlWriter& xml)
 {
     bool isWriteStyle = false;
-    //! NOTE Write the style to the score file if the compatibility define is set
-#ifdef ENGRAVING_COMPAT_WRITESTYLE_302
-    isWriteStyle = true;
-#endif
 
     //! NOTE If not the master score, because the Excerpts (parts) have not yet been write to separate files
     if (!score->isMaster()) {
@@ -56,10 +50,6 @@ void WriteScoreHook::onWriteStyle302(Score* score, XmlWriter& xml)
 void WriteScoreHook::onWriteExcerpts302(Score* score, XmlWriter& xml, bool selectionOnly)
 {
     bool isWriteExcerpts = false;
-    //! NOTE Write the Excerpts to the score file if the compatibility define is set
-#ifdef ENGRAVING_COMPAT_WRITEEXCERPTS_302
-    isWriteExcerpts = true;
-#endif
 
     //! NOTE If the test mode, because the tests have not yet been adapted to the new format
     if (MScore::testMode) {
