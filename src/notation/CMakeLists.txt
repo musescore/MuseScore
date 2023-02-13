@@ -163,16 +163,8 @@ set(MODULE_UI
     ${WIDGETS_UI}
     )
 
-set(FREETYPE_LIB )
-if (USE_SYSTEM_FREETYPE)
-    set(FREETYPE_LIB freetype)
-else (USE_SYSTEM_FREETYPE)
-    set(FREETYPE_LIB mscore_freetype)
-endif (USE_SYSTEM_FREETYPE)
-
 set(MODULE_LINK
     Qt5::Svg
-    ${FREETYPE_LIB}
     draw
     engraving
     commonscene
