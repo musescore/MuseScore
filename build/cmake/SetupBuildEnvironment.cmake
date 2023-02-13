@@ -53,9 +53,9 @@ elseif(CC_IS_MINGW)
 
     # -mno-ms-bitfields see #22048
     set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -mno-ms-bitfields")
-    if (NOT BUILD_64)
+    if (NOT MUE_COMPILE_BUILD_64)
         set(CMAKE_EXE_LINKER_FLAGS "-Wl,--large-address-aware")
-    endif (NOT BUILD_64)
+    endif()
 
     add_definitions(-D_UNICODE)
     add_definitions(-DUNICODE)
@@ -119,7 +119,7 @@ endif()
 
 # APPLE specific
 if (OS_IS_MAC)
-    if (BUILD_MACOS_APPLE_SILICON)
+    if (MUE_COMPILE_BUILD_MACOS_APPLE_SILICON)
         set(CMAKE_OSX_ARCHITECTURES ) # leave empty, use default
     else()
         set(CMAKE_OSX_ARCHITECTURES x86_64)

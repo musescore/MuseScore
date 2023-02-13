@@ -26,7 +26,6 @@
 #cmakedefine MSCORE_UNSTABLE
 
 #define MUSESCORE_NAME_VERSION "${MUSESCORE_NAME_VERSION}"
-#define MUSESCORE_REVISION     "${MUSESCORE_REVISION}"
 #define INSTALL_NAME           "${Mscore_INSTALL_NAME}"
 #define INSTPREFIX             "${CMAKE_INSTALL_PREFIX}"
 #define INSTSUFFIX             "${MSCORE_INSTALL_SUFFIX}"
@@ -40,7 +39,5 @@
 #cmakedefine ENGRAVING_COMPAT_WRITEEXCERPTS_302
 
 #cmakedefine APP_UPDATABLE
-#cmakedefine SPARKLE_ENABLED
-#cmakedefine FOR_WINSTORE
 
 #endif /* MUSESCORE_CONFIG_H */

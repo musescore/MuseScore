@@ -19,8 +19,10 @@
 
 include(GetBuildType)
 
-message(STATUS "Build configure: ${MUE_BUILD_CONFIGURE}")
-string(TOUPPER ${MUE_BUILD_CONFIGURE} _MUE_BUILD_CONFIGURE)
+message(STATUS "Build configure: ${MUSESCORE_BUILD_CONFIGURE}")
+message(STATUS "Build mode: ${MUSESCORE_BUILD_MODE}")
+
+string(TOUPPER ${MUSESCORE_BUILD_CONFIGURE} BUILD_CONFIGURE)
 
 ###########################################
 # General
@@ -49,11 +51,11 @@ endif()
 # Desktop App
 ###########################################
 set(MUE_GENERAL_APP OFF)
-if(_MUE_BUILD_CONFIGURE MATCHES "APP")
+if(BUILD_CONFIGURE MATCHES "APP")
     set(MUE_GENERAL_APP ON)
 endif()
 
-if(_MUE_BUILD_CONFIGURE MATCHES "APP-PORTABLE")
+if(BUILD_CONFIGURE MATCHES "APP-PORTABLE")
     set(MUE_GENERAL_APP ON)
     set(WIN_PORTABLE ON)
 endif()
@@ -75,7 +77,7 @@ endif()
 ###########################################
 # VTest
 ###########################################
-if(_MUE_BUILD_CONFIGURE MATCHES "VTEST")
+if(BUILD_CONFIGURE MATCHES "VTEST")
     set(MUE_BUILD_AUDIO_MODULE OFF)
     set(MUE_BUILD_MUSESAMPLER_MODULE OFF)
     set(MUE_BUILD_NETWORK_MODULE OFF)
@@ -102,7 +104,7 @@ endif()
 ###########################################
 # UTest
 ###########################################
-if(_MUE_BUILD_CONFIGURE MATCHES "UTEST")
+if(BUILD_CONFIGURE MATCHES "UTEST")
     set(MUE_BUILD_UNIT_TESTS ON)
     set(MUE_ENABLE_LOGGER_DEBUGLEVEL ON)
 endif()
@@ -151,6 +153,7 @@ if (WIN_PORTABLE)
     add_definitions(-DWIN_PORTABLE)
 endif()
 
+add_definitions(-DMUSESCORE_REVISION="${MUSESCORE_REVISION}")
 add_definitions(-DHAW_PROFILER_ENABLED)
 
 if (MUE_ENABLE_LOAD_QML_FROM_SOURCE)
