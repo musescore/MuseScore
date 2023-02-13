@@ -450,17 +450,13 @@ void MidiFile::skip(qint64 len)
             return;
 #if (!defined (_MSCVER) && !defined (_MSC_VER))
       char tmp[len];
-      read(tmp, len);
 #else
-      const int tmp_size = 256;  // Size of fixed-length temporary buffer. MSVC does not support VLA.
-      char tmp[tmp_size];
-      while(len > tmp_size) {
-            read(tmp, len);
-            len -= tmp_size;
-            }
-      // Now len is <= tmp_size, last read fits in the buffer.
-      read(tmp, tmp_size);
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<char> buffer(len);
+      char *tmp = buffer.data();
 #endif
+      read(tmp, len);
       }
 
 /*---------------------------------------------------------
