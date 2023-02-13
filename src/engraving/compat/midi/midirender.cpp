@@ -370,7 +370,7 @@ static void collectNote(EventMap* events, const Note* note, CollectNoteParams no
         }
 
         if (noteParams.letRingNote) {
-            off = noteParams.endLetRingTick;
+            off = std::max(off, noteParams.endLetRingTick);
         }
 
         // Get the velocity used for this note from the staff
