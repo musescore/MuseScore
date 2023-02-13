@@ -83,7 +83,6 @@ class CharFormat
     FontStyle _style          { FontStyle::Normal };
     VerticalAlignment _valign { VerticalAlignment::AlignNormal };
     double _fontSize           { 12.0 };
-    double _textLineSpacing    { 1.0 };
     String _fontFamily;
 
 public:
@@ -107,7 +106,6 @@ public:
     void setValign(VerticalAlignment val) { _valign = val; }
     void setFontSize(double val) { _fontSize = val; }
     void setFontFamily(const String& val) { _fontFamily = val; }
-    void setTextLineSpacing(double val) { _textLineSpacing = val; }
 
     FormatValue formatValue(FormatId) const;
     void setFormatValue(FormatId, const FormatValue& val);

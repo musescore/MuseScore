@@ -53,6 +53,7 @@ void TextSettingsModel::createProperties()
     m_fontFamily = buildPropertyItem(mu::engraving::Pid::FONT_FACE);
     m_fontStyle = buildPropertyItem(mu::engraving::Pid::FONT_STYLE);
     m_fontSize = buildPropertyItem(mu::engraving::Pid::FONT_SIZE);
+    m_textLineSpacing = buildPropertyItem(mu::engraving::Pid::TEXT_LINE_SPACING);
 
     m_horizontalAlignment = buildPropertyItem(mu::engraving::Pid::ALIGN, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QVariantList({ newValue.toInt(), m_verticalAlignment->value().toInt() }));
@@ -116,6 +117,8 @@ void TextSettingsModel::loadProperties()
 
     m_fontSize->setIsEnabled(true);
 
+    loadPropertyItem(m_textLineSpacing, formatDoubleFunc);
+
     loadPropertyItem(m_horizontalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
         QVariantList list = elementPropertyValue.toList();
         return list.size() >= 2 ? list[0] : QVariant();
@@ -152,6 +155,7 @@ void TextSettingsModel::resetProperties()
     m_fontFamily->resetToDefault();
     m_fontStyle->resetToDefault();
     m_fontSize->resetToDefault();
+    m_textLineSpacing->resetToDefault();
     m_isSizeSpatiumDependent->resetToDefault();
 
     m_frameType->resetToDefault();
@@ -213,6 +217,11 @@ PropertyItem* TextSettingsModel::fontStyle() const
 PropertyItem* TextSettingsModel::fontSize() const
 {
     return m_fontSize;
+}
+
+PropertyItem* TextSettingsModel::textLineSpacing() const
+{
+    return m_textLineSpacing;
 }
 
 PropertyItem* TextSettingsModel::horizontalAlignment() const
