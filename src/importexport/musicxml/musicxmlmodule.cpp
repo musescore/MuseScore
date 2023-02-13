@@ -22,7 +22,6 @@
 #include "musicxmlmodule.h"
 
 #include "log.h"
-#include "config.h"
 #include "modularity/ioc.h"
 
 #include "project/inotationreadersregister.h"

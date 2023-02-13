@@ -30,7 +30,6 @@
 #include "chord.h"
 #include "chordrest.h"
 #include "clef.h"
-#include "config.h"
 #include "measure.h"
 #include "note.h"
 #include "page.h"

@@ -1589,14 +1589,6 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
         return false;
     }
 
-//#ifdef MSCORE_UNSTABLE
-//    if (ScriptRecorder* rec = adapter()->getScriptRecorder()) {
-//        if (modifiers == 0) {
-//            rec->recordPaletteElement(element);
-//        }
-//    }
-//#endif
-
     startEdit();
 
     if (sel.isList()) {

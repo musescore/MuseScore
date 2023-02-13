@@ -20,30 +20,7 @@
 #ifndef MUSESCORE_CONFIG_H
 #define MUSESCORE_CONFIG_H
 
-#define MSCORE_UNSTABLE
-
-/* #undef HAS_MIDI */
-/* #undef HAS_AUDIOFILE */
-
-#define MUSESCORE_NAME_VERSION "MuseScore 4 (4.0.0 unstable)"
-#define INSTALL_NAME           "mscore-4.0/"
-#define INSTPREFIX             "/home/igor/Dev/MuseScore/build.debug/install"
 #define VERSION                "4.0.0"
-#define VERSION_LABEL          "Development"
-#define BUILD_NUMBER           ""
-#define SPARKLE_APPCAST_URL    ""
 
-/* #undef ENGRAVING_BUILD_ACCESSIBLE_TREE */
-
-/* #undef OPENGL */
-
-
-/* #undef Q_WS_UIKIT */
-
-
-#define USE_BSP     true
-
-// does not work on windows/mac:
-//#define USE_GLYPHS  true
 
 #endif /* MUSESCORE_CONFIG_H */

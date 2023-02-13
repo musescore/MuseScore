@@ -21,7 +21,6 @@
  */
 #include "cloudconfiguration.h"
 
-#include "config.h"
 #include "settings.h"
 
 #include <QRandomGenerator>
@@ -66,8 +65,8 @@ static QString userAgent()
     };
 
     return QString("MS_EDITOR/%1.%2 (%3)")
-           .arg(VERSION)
-           .arg(BUILD_NUMBER)
+           .arg(MUSESCORE_VERSION)
+           .arg(MUSESCORE_BUILD_NUMBER)
            .arg(systemInfo.join(' ')).toLatin1();
 }
 

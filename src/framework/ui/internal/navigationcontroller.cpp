@@ -34,8 +34,6 @@
 #include "defer.h"
 #include "log.h"
 
-#include "config.h"
-
 // #define NAVIGATION_LOGGING_ENABLED
 
 #ifdef NAVIGATION_LOGGING_ENABLED

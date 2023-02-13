@@ -33,5 +33,5 @@ mkdir -p $INSTALL_DIR
 
 bash $HERE/../ninja_build.sh -t clean
 MUSESCORE_INSTALL_DIR=$INSTALL_DIR \
-MUSESCORE_BUILD_CONFIGURE="vtest" \
+MUSESCORE_BUILD_CONFIGURATION="vtest" \
 bash ninja_build.sh -t installdebug

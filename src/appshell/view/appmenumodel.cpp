@@ -23,7 +23,6 @@
 
 #include "types/translatablestring.h"
 
-#include "config.h"
 #include "log.h"
 
 using namespace mu::appshell;

@@ -18,37 +18,70 @@
 #=============================================================================
 
 include(GetBuildType)
+include(GetPlatformInfo)
+include(version)
 
-message(STATUS "MUSESCORE_BUILD_CONFIGURE: ${MUSESCORE_BUILD_CONFIGURE}")
+
+
+if (NOT MUSESCORE_BUILD_CONFIGURATION)
+    set(MUSESCORE_BUILD_CONFIGURATION "app")
+endif()
+
+if (NOT MUSESCORE_BUILD_MODE)
+    set(MUSESCORE_BUILD_MODE "dev")
+endif()
+
+# Set revision for local builds
+# Before need run 'make revision' or 'msvc_build.bat revision'
+include(${CMAKE_CURRENT_LIST_DIR}/build/cmake/TryUseLocalRevision.cmake)
+
+message(STATUS "MUSESCORE_BUILD_CONFIGURATION: ${MUSESCORE_BUILD_CONFIGURATION}")
 message(STATUS "MUSESCORE_BUILD_MODE: ${MUSESCORE_BUILD_MODE}")
+message(STATUS "MUSESCORE_BUILD_NUMBER: ${CMAKE_BUILD_NUMBER}")
 
-string(TOUPPER ${MUSESCORE_BUILD_CONFIGURE} BUILD_CONFIGURE)
-
-###########################################
-# General
-###########################################
-
-set(QT_SUPPORT ON)
-
-if (NOT MUE_BUILD_AUDIO_MODULE)
-    set(MUE_BUILD_MUSESAMPLER_MODULE OFF)
-    set(MUE_BUILD_VST_MODULE OFF)
-endif()
-
-if (NOT MUE_BUILD_IMPORTEXPORT_MODULE)
-    set(MUE_BUILD_VIDEOEXPORT_MODULE OFF)
-endif()
-
-if (NOT MUE_BUILD_DIAGNOSTICS_MODULE)
-    set(MUE_BUILD_CRASHPAD_CLIENT OFF)
-endif()
-
-if (MUE_BUILD_ASAN)
-    set(MUE_ENABLE_CUSTOM_ALLOCATOR OFF)
-endif()
+string(TOUPPER ${MUSESCORE_BUILD_CONFIGURATION} BUILD_CONFIGURE)
+string(TOUPPER ${MUSESCORE_BUILD_MODE} BUILD_MODE)
 
 ###########################################
-# Desktop App
+# Setup by mode
+###########################################
+if(BUILD_MODE MATCHES "DEV")
+    set(MUSESCORE_UNSTABLE ON)
+    set(MUSESCORE_VERSION_LABEL "dev")
+    set(MUSESCORE_NAME_VERSION "${MUSESCORE_NAME} ${MUSESCORE_VERSION_MAJOR}")
+endif()
+
+if(BUILD_MODE MATCHES "TESTING")
+    set(MUSESCORE_UNSTABLE OFF)
+    set(MUSESCORE_VERSION_LABEL "Testing")
+    set(MUSESCORE_NAME_VERSION "${MUSESCORE_NAME} ${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR} ${MUSESCORE_VERSION_LABEL}")
+endif()
+
+if(BUILD_MODE MATCHES "RELEASE")
+    set(MUSESCORE_UNSTABLE OFF)
+    set(MUSESCORE_NAME_VERSION "${MUSESCORE_NAME} ${MUSESCORE_VERSION_MAJOR}")
+endif()
+
+if (MUSESCORE_UNSTABLE)
+    set (MUSESCORE_NAME_VERSION "${MUSESCORE_NAME_VERSION} (${MUSESCORE_VERSION_FULL} unstable)")
+endif()
+
+###########################################
+# Setup paths
+###########################################
+if (OS_IS_MAC)
+    SET(Mscore_INSTALL_NAME  "Contents/Resources/")
+    SET(Mscore_SHARE_NAME    "mscore.app/")
+elseif (OS_IS_WIN)
+    SET(Mscore_INSTALL_NAME  "")
+    SET(Mscore_SHARE_NAME    "./")
+else()
+    SET(Mscore_INSTALL_NAME  "mscore${MUSESCORE_INSTALL_SUFFIX}-${MUSESCORE_VERSION}/")
+    SET(Mscore_SHARE_NAME    "share/")
+endif()
+
+###########################################
+# CONFIGURE: Desktop App
 ###########################################
 set(MUE_GENERAL_APP OFF)
 if(BUILD_CONFIGURE MATCHES "APP")
@@ -68,14 +101,12 @@ if (MUE_GENERAL_APP)
     endif()
 endif()
 
-if (OS_IS_MAC OR OS_IS_WIN)
-    if (WIN_PORTABLE)
-        set(MUE_BUILD_UPDATE_MODULE OFF)
-    endif()
+if (WIN_PORTABLE)
+    set(MUE_BUILD_UPDATE_MODULE OFF)
 endif()
 
 ###########################################
-# VTest
+# CONFIGURE: VTest
 ###########################################
 if(BUILD_CONFIGURE MATCHES "VTEST")
     set(MUE_BUILD_AUDIO_MODULE OFF)
@@ -102,7 +133,7 @@ if(BUILD_CONFIGURE MATCHES "VTEST")
 endif()
 
 ###########################################
-# UTest
+# CONFIGURE: UTest
 ###########################################
 if(BUILD_CONFIGURE MATCHES "UTEST")
     set(MUE_BUILD_UNIT_TESTS ON)
@@ -110,8 +141,45 @@ if(BUILD_CONFIGURE MATCHES "UTEST")
 endif()
 
 ###########################################
+# Subsystem
+###########################################
+
+set(QT_SUPPORT ON)
+
+if (NOT MUE_BUILD_AUDIO_MODULE)
+    set(MUE_BUILD_MUSESAMPLER_MODULE OFF)
+    set(MUE_BUILD_VST_MODULE OFF)
+endif()
+
+if (NOT MUE_BUILD_IMPORTEXPORT_MODULE)
+    set(MUE_BUILD_VIDEOEXPORT_MODULE OFF)
+endif()
+
+if (NOT MUE_BUILD_DIAGNOSTICS_MODULE)
+    set(MUE_BUILD_CRASHPAD_CLIENT OFF)
+endif()
+
+if (MUE_BUILD_ASAN)
+    set(MUE_ENABLE_CUSTOM_ALLOCATOR OFF)
+endif()
+
+###########################################
 # Global definitions
 ###########################################
+
+add_definitions(-DMUSESCORE_REVISION="${MUSESCORE_REVISION}")
+add_definitions(-DMUSESCORE_BUILD_NUMBER="${CMAKE_BUILD_NUMBER}")
+add_definitions(-DMUSESCORE_VERSION="${MUSESCORE_VERSION_FULL}")
+add_definitions(-DMUSESCORE_VERSION_LABEL="${MUSESCORE_VERSION_LABEL}")
+add_definitions(-DMUSESCORE_INSTALL_SUFFIX="${MUSESCORE_INSTALL_SUFFIX}")
+add_definitions(-DMUSESCORE_INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
+add_definitions(-DMUSESCORE_INSTALL_NAME="${Mscore_INSTALL_NAME}")
+
+if (MUSESCORE_UNSTABLE)
+    add_definitions(-DMUSESCORE_UNSTABLE)
+endif()
+
+
 function(def_opt name val)
     if (${val})
         add_definitions(-D${name})
@@ -153,7 +221,6 @@ if (WIN_PORTABLE)
     add_definitions(-DWIN_PORTABLE)
 endif()
 
-add_definitions(-DMUSESCORE_REVISION="${MUSESCORE_REVISION}")
 add_definitions(-DHAW_PROFILER_ENABLED)
 
 if (MUE_ENABLE_LOAD_QML_FROM_SOURCE)

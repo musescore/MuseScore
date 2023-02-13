@@ -104,11 +104,11 @@ public:
 
     Info stateInfo() const;
 
-    static bool enabled() { return __used; }
+    static bool enabled() { return s_used; }
     static void used();
     static void unused();
 
-    static int __used;
+    static int s_used;
 private:
 
     struct Chunk {

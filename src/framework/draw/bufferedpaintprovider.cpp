@@ -23,7 +23,6 @@
 
 #include "utils/drawlogger.h"
 #include "log.h"
-#include "config.h"
 
 using namespace mu;
 using namespace mu::draw;

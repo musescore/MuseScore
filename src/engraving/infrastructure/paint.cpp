@@ -29,7 +29,6 @@
 #include "debugpaint.h"
 
 #include "log.h"
-#include "config.h"
 
 using namespace mu::engraving;
 

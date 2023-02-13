@@ -22,8 +22,6 @@
 
 #include "audiooutputhandler.h"
 
-#include "config.h"
-
 #include "async/async.h"
 #include "containers.h"
 

@@ -22,7 +22,6 @@
 
 #include <QTextCodec>
 
-#include "config.h"
 #include "runtime.h"
 #include "log.h"
 

@@ -33,7 +33,7 @@ if [ -z "$MUSESCORE_BUILD_MODE" ]; then echo "error: not set MUSESCORE_BUILD_MOD
 
 echo "MUSESCORE_BUILD_MODE: $MUSESCORE_BUILD_MODE"
 
-export MSCORE_RELEASE_CHANNEL=$(cmake -DMUSESCORE_BUILD_MODE=$MUSESCORE_BUILD_MODE -P config.cmake | sed -n -e 's/^.*MSCORE_RELEASE_CHANNEL  *//p')
+export MUSESCORE_RELEASE_CHANNEL=$(cmake -DMUSESCORE_BUILD_MODE=$MUSESCORE_BUILD_MODE -P version.cmake | sed -n -e 's/^.*MUSESCORE_RELEASE_CHANNEL  *//p')
 
-echo ${MSCORE_RELEASE_CHANNEL} > $ARTIFACTS_DIR/env/release_channel.env
+echo ${MUSESCORE_RELEASE_CHANNEL} > $ARTIFACTS_DIR/env/release_channel.env
 cat $ARTIFACTS_DIR/env/release_channel.env

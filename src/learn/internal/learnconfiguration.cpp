@@ -23,8 +23,6 @@
 
 #include <QString>
 
-#include "config.h"
-
 using namespace mu::learn;
 using namespace mu::network;
 

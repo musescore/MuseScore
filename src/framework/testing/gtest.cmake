@@ -28,7 +28,7 @@
 # After all the settings you need to do:
 # include(${PROJECT_SOURCE_DIR}/framework/testing/gtest.cmake)
 
-message(STATUS "Configuring ${MODULE_TEST} (gtest)")
+message(STATUS "Configuring ${MODULE_TEST}")
 
 get_property(gmock_LIBS GLOBAL PROPERTY gmock_LIBS)
 get_property(gmock_INCLUDE_DIRS GLOBAL PROPERTY gmock_INCLUDE_DIRS)

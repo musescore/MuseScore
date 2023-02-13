@@ -41,7 +41,6 @@
 #endif
 
 #include "log.h"
-#include "config.h"
 
 using namespace mu::uicomponents;
 

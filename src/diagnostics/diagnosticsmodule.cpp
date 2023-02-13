@@ -55,7 +55,6 @@
 #include "devtools/crashhandlerdevtoolsmodel.h"
 
 #include "log.h"
-#include "config.h"
 
 using namespace mu::diagnostics;
 using namespace mu::modularity;
