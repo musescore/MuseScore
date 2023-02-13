@@ -62,11 +62,7 @@ void UpdateConfiguration::init()
 
 bool UpdateConfiguration::isAppUpdatable() const
 {
-#ifdef APP_UPDATABLE
     return true;
-#else
-    return false;
-#endif
 }
 
 bool UpdateConfiguration::isTestingMode() const

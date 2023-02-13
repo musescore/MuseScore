@@ -48,14 +48,14 @@ set(MUSESCORE_BUILD_CONFIG "dev" CACHE STRING "Build config")
 # - release - for stable release builds
 set(MUE_BUILD_CONFIGURE "app" CACHE STRING "Build configure")
 # Possible MUE_BUILD_CONFIGURE values:
-# - app (or empty)  - for desktop app
+# - app             - for desktop app
+# - app-portable    - for desktop portable app (Windows build for PortableApps.com)
+# - app-winstore    - for desktop winstore app
 # - vtest           - for visual tests
 # - utest           - for unit tests
 
 option(BUILD_MACOS_APPLE_SILICON "Build for Apple Silicon architecture. Only applicable on Macs with Apple Silicon, and requires suitable Qt version." OFF)
 option(BUILD_64 "Build 64 bit version of editor" ON)
-option(BUILD_PORTABLEAPPS "Windows build for PortableApps.com" OFF)
-option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(BUILD_AUTOUPDATE "Build with autoupdate support" OFF)
 
 # Modules framework (alphabetical order please)
@@ -128,20 +128,6 @@ option(ENGRAVING_COMPAT_WRITEEXCERPTS_302 "Write excerpts to score xml file" ON)
 
 option(USE_SYSTEM_FREETYPE "Use system FreeType" OFF) # requires freetype >= 2.5.2, does not work on win
 
-if (BUILD_PORTABLEAPPS)
-    set(WIN_PORTABLE 1)
-endif (BUILD_PORTABLEAPPS)
-
-if (BUILD_FOR_WINSTORE)
-    set(FOR_WINSTORE 1)
-endif(BUILD_FOR_WINSTORE)
-
-set(APP_UPDATABLE 1)
-if (OS_IS_MAC OR OS_IS_WIN)
-    if (WIN_PORTABLE OR FOR_WINSTORE)
-        set(APP_UPDATABLE 0)
-    endif(WIN_PORTABLE OR FOR_WINSTORE)
-endif(OS_IS_MAC OR OS_IS_WIN)
 
 ###########################################
 # Setup Configure

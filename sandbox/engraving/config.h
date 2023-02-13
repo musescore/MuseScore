@@ -40,7 +40,6 @@
 
 /* #undef SPARKLE_ENABLED */
 /* #undef OPENGL */
-/* #undef WIN_PORTABLE */
 
 
 /* #undef Q_WS_UIKIT */
