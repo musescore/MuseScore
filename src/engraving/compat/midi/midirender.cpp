@@ -97,6 +97,7 @@ struct PlayNoteParams {
     int velo = 0;
     int onTime = 0;
     int offTime = 0;
+    int offset = 0;
     int staffIdx = 0;
     bool callAllSoundOff = false;//NoteOn silence channel
 };
@@ -197,7 +198,7 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
     if (params.offTime > 0 && params.offTime < params.onTime) {
         return;
     }
-    events->insert(std::pair<int, NPlayEvent>(params.onTime, ev));
+    events->insert(std::pair<int, NPlayEvent>(std::max(0, params.onTime - params.offset), ev));
     // adds portamento for continuous glissando
     for (Spanner* spanner : note->spannerFor()) {
         if (spanner->type() == ElementType::GLISSANDO) {
@@ -216,7 +217,7 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
     ev.setVelo(0);
     if (!note->part()->instrument(note->tick())->useDrumset()
         && params.offTime != -1) {
-        events->insert(std::pair<int, NPlayEvent>(params.offTime, ev));
+        events->insert(std::pair<int, NPlayEvent>(std::max(0, params.offTime - params.offset), ev));
     }
 }
 
@@ -383,6 +384,11 @@ static void collectNote(EventMap* events, const Note* note, CollectNoteParams no
             playParams.velo = std::clamp(velo, 1, 127);
             playParams.onTime = std::max(0, on - noteParams.graceOffsetOn);
             playParams.offTime = std::max(0, off - noteParams.graceOffsetOff);
+
+            if (noteParams.graceOffsetOn == 0) {
+                playParams.offset = ticks * e.offset() / 1000;
+            }
+
             playParams.staffIdx = static_cast<int>(staff->idx());
             playParams.callAllSoundOff = noteParams.callAllSoundOff;
             playNote(events, note, playParams, pitchWheelRenderer);
@@ -559,7 +565,7 @@ void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, EventMap* events,
                     params.velocityMultiplier = veloMultiplier;
                     params.tickOffset = tickOffset;
                     params.graceOffsetOn = graceTickSum - graceTickOffset * currentBeaforeBeatNote;
-                    params.graceOffsetOff = graceTickSum - graceTickOffset * (currentBeaforeBeatNote + 1) + 1;
+                    params.graceOffsetOff = graceTickSum - graceTickOffset * (currentBeaforeBeatNote + 1);
 
                     collectNote(events, note, params, st, pitchWheelRenderer);
                 } else {
