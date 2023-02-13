@@ -168,7 +168,6 @@ public:
         Note* endNote = nullptr;     // note to end slide (for 2 notes slides)
         bool isValid() const { return type != SlideType::Undefined; }
         bool is(SlideType t) const { return t == type; }
-        uint32_t slideToNoteLength = 40;
     };
 
     enum DisplayFretOption {
