@@ -23,7 +23,6 @@
 
 #include "log.h"
 #include "global/muversion.h"
-#include "config.h"
 
 using namespace mu::appshell;
 using namespace mu::framework;

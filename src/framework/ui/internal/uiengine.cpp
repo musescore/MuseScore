@@ -28,7 +28,6 @@
 #include <QDir>
 #include <QQmlContext>
 
-#include "config.h"
 #include "log.h"
 
 using namespace mu::ui;

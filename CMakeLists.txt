@@ -39,12 +39,12 @@ set(CMAKE_MODULE_PATH
 ###########################################
 # Setup option and build settings
 ###########################################
-set(MUSESCORE_BUILD_CONFIGURE "app" CACHE STRING "Build configure")
-# Possible MUSESCORE_BUILD_CONFIGURE values:
+set(MUSESCORE_BUILD_CONFIGURATION "app" CACHE STRING "Build configuration")
+# Possible MUSESCORE_BUILD_CONFIGURATION values:
 # - app             - for desktop app
 # - app-portable    - for desktop portable app (Windows build for PortableApps.com)
 # - vtest           - for visual tests
-# - utest           - for unit tests
+# - utest           - for unit tests (for CI)
 
 set(MUSESCORE_BUILD_MODE "dev" CACHE STRING "Build mode")
 # Possible MUSESCORE_BUILD_MODE values:
@@ -89,7 +89,7 @@ option(MUE_DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of 
 
 # === Pack ===
 option(MUE_RUN_LRELEASE "Generate .qm files" ON)
-option(MUE_PACKAGE_FILE_ASSOCIATION "File types association" OFF)
+option(MUE_ENABLE_FILE_ASSOCIATION "File types association (using for package)" OFF)
 
 # === Tests ===
 option(MUE_BUILD_UNIT_TESTS "Build unit tests" ON)
@@ -123,6 +123,8 @@ option(MUE_ENABLE_ENGRAVING_PAINT_DEBUGGER "Enable diagnostic engraving paint de
 ###########################################
 include(SetupConfigure)
 
+set(THIRDPARTY_DIR ${PROJECT_SOURCE_DIR}/thirdparty)
+
 ###########################################
 # Setup compiler and build environment
 ###########################################
@@ -133,17 +135,6 @@ if (MUE_COMPILE_USE_CCACHE)
     include(TryUseCcache)
 endif(MUE_COMPILE_USE_CCACHE)
 
-###########################################
-# Setup MuseScore config
-###########################################
-
-include(${CMAKE_CURRENT_LIST_DIR}/config.cmake)
-configure_file (
-      ${PROJECT_SOURCE_DIR}/build/config.h.in
-      ${PROJECT_BINARY_DIR}/config.h
-      )
-
-set(THIRDPARTY_DIR ${PROJECT_SOURCE_DIR}/thirdparty)
 
 ###########################################
 # Setup external dependencies

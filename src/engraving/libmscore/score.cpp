@@ -98,8 +98,6 @@
 #include "accessibility/accessibleroot.h"
 #endif
 
-#include "config.h"
-
 #include "log.h"
 
 using namespace mu;

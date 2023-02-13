@@ -138,6 +138,7 @@ jobs:
     - name: Setup environment
       if: env.DO_BUILD == 'true'
       run: |
+        echo "============================= gggg ======================="
         sudo bash ./build/ci/linux/setup.sh
     - name: Generate _en.ts files
       if: env.DO_BUILD == 'true'

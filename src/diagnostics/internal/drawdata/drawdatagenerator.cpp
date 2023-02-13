@@ -33,7 +33,6 @@
 #include "engraving/rw/scorereader.h"
 #include "engraving/libmscore/masterscore.h"
 
-#include "config.h"
 #ifdef MUE_BUILD_IMPORTEXPORT_MODULE
 #include "importexport/guitarpro/internal/guitarproreader.h"
 #endif

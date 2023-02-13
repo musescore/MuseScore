@@ -34,7 +34,6 @@
 #include "muversion.h"
 
 #include "translation.h"
-#include "config.h"
 #include "log.h"
 
 using namespace mu::update;

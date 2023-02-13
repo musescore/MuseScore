@@ -24,7 +24,6 @@
 #include "diagnostics/diagnosticutils.h"
 
 #include "shortcutcontext.h"
-#include "config.h"
 #include "log.h"
 
 using namespace mu::context;

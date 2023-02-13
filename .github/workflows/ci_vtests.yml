@@ -34,7 +34,7 @@ jobs:
 
     - name: Setup environment
       run: |
-        bash ./build/ci/linux/setup.sh
+        sudo bash ./build/ci/linux/setup.sh
     - name: Build
       run: |
         source $HOME/build_tools/environment.sh

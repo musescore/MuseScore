@@ -54,7 +54,6 @@
 #include "utils.h"
 
 #include "log.h"
-#include "config.h"
 
 using namespace mu;
 using namespace mu::io;
@@ -375,7 +374,7 @@ bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, com
     xml.startElement("museScore", { { "version", MSC_VERSION } });
 
     if (!MScore::testMode) {
-        xml.tag("programVersion", VERSION);
+        xml.tag("programVersion", MUSESCORE_VERSION);
         xml.tag("programRevision", MUSESCORE_REVISION);
     }
     write(xml, onlySelection, hook);
@@ -384,7 +383,7 @@ bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, com
 
     if (!onlySelection) {
         //update version values for i.e. plugin access
-        _mscoreVersion = String::fromAscii(VERSION);
+        _mscoreVersion = String::fromAscii(MUSESCORE_VERSION);
         _mscoreRevision = AsciiStringView(MUSESCORE_REVISION).toInt(nullptr, 16);
         _mscVersion = MSCVERSION;
     }

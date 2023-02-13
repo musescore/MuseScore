@@ -31,8 +31,6 @@
 #include "stafftype.h"
 #include "volta.h"
 
-#include "config.h"
-
 using namespace mu;
 
 namespace mu::engraving {

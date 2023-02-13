@@ -25,7 +25,6 @@
 
 #include "log.h"
 
-#include "config.h"
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 #include "ui/iinteractiveuriregister.h"

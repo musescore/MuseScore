@@ -25,7 +25,6 @@
 #include <list>
 #include <stack>
 
-#include "config.h"
 #include "ipaintprovider.h"
 
 #include "types/string.h"

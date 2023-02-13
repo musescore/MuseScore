@@ -21,7 +21,6 @@
  */
 
 #include "settings.h"
-#include "config.h"
 #include "log.h"
 
 #include <QDateTime>

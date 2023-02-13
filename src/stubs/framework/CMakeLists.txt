@@ -30,8 +30,6 @@ if (NOT MUE_BUILD_SHORTCUTS_MODULE)
     add_subdirectory(shortcuts)
 endif()
 
-
-
-if (NOT BUILD_VST_MODULE)
+if (NOT MUE_BUILD_VST_MODULE)
     add_subdirectory(vst)
-endif (NOT BUILD_VST_MODULE)
+endif()

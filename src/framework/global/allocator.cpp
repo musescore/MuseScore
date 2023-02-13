@@ -30,7 +30,7 @@
 
 using namespace mu;
 
-int ObjectAllocator::__used = 0;
+int ObjectAllocator::s_used = 0;
 size_t ObjectAllocator::DEFAULT_BLOCK_SIZE(1024 * 256); // 256 kB
 
 static inline size_t align(size_t n)
@@ -44,14 +44,14 @@ static inline size_t align(size_t n)
 void ObjectAllocator::used()
 {
 #ifdef MUE_ENABLE_CUSTOM_ALLOCATOR
-    __used++;
+    s_used++;
 #endif
 }
 
 void ObjectAllocator::unused()
 {
 #ifdef MUE_ENABLE_CUSTOM_ALLOCATOR
-    __used--;
+    s_used--;
 #endif
 }
 
