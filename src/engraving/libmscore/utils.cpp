@@ -1150,4 +1150,59 @@ double yStaffDifference(const System* system1, staff_idx_t staffIdx1, const Syst
     }
     return staff1->y() - staff2->y();
 }
+
+bool allowRemoveWhenRemovingStaves(EngravingItem* item, staff_idx_t startStaff, staff_idx_t endStaff)
+{
+    // Sanity checks
+    if (!item || item->staffIdx() == mu::nidx || startStaff == mu::nidx || endStaff == mu::nidx) {
+        return false;
+    }
+
+    Score* score = item->score();
+    if (score->nstaves() == 1) {
+        return true;
+    }
+
+    if (endStaff == 0) { // Default initialized
+        endStaff = startStaff + 1;
+    }
+
+    staff_idx_t staffIdx = item->staffIdx();
+    if (staffIdx < startStaff || staffIdx >= endStaff) {
+        return false;
+    }
+
+    Staff* nextRemaining = score->staff(endStaff);
+    bool nextRemainingIsSystemObjectStaff = nextRemaining && score->isSystemObjectStaff(nextRemaining);
+    if (item->isTopSystemObject() && !nextRemainingIsSystemObjectStaff) {
+        return false;
+    }
+
+    return true;
+}
+
+bool moveDownWhenAddingStaves(EngravingItem* item, staff_idx_t startStaff, staff_idx_t endStaff)
+{
+    // Sanity checks
+    if (!item || item->staffIdx() == mu::nidx || startStaff == mu::nidx || endStaff == mu::nidx) {
+        return false;
+    }
+
+    if (item->staffIdx() < startStaff) {
+        return false;
+    }
+
+    if (endStaff == 0) { // Default initialized
+        endStaff = startStaff + 1;
+    }
+
+    Score* score = item->score();
+    Staff* nextAfterInserted = score->staff(endStaff);
+    bool nextAfterInsertedIsSystemObjectStaff = nextAfterInserted && score->isSystemObjectStaff(nextAfterInserted);
+    if (item->isTopSystemObject() && !nextAfterInsertedIsSystemObjectStaff) {
+        return false;
+    }
+
+    return true;
+}
 }

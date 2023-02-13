@@ -2631,7 +2631,7 @@ void Score::insertStaff(Staff* staff, staff_idx_t ridx)
 
     for (auto i = staff->score()->spanner().cbegin(); i != staff->score()->spanner().cend(); ++i) {
         Spanner* s = i->second;
-        if (s->systemFlag()) {
+        if (!moveDownWhenAddingStaves(s, idx)) {
             continue;
         }
         if (s->staffIdx() >= idx) {
@@ -2737,6 +2737,10 @@ void Score::removeStaff(Staff* staff)
 
     mu::remove(_staves, staff);
     staff->part()->removeStaff(staff);
+
+    if (isSystemObjectStaff(staff)) {
+        mu::remove(m_systemObjectStaves, staff);
+    }
 
     updateStavesNumberForSystems();
 }
@@ -2905,7 +2909,7 @@ void Score::cmdRemoveStaff(staff_idx_t staffIdx)
 void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
 {
     std::vector<staff_idx_t> moveTo;
-    for (Staff* staff : systemObjectStaves) {
+    for (Staff* staff : m_systemObjectStaves) {
         moveTo.push_back(staff->idx());
     }
     // rebuild system object staves
@@ -2913,7 +2917,7 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
         staff_idx_t newLocation = mu::indexOf(dst, i);
         if (newLocation == mu::nidx) { //!dst.contains(_staves[i]->idx())) {
             // this staff was removed
-            for (size_t j = 0; j < systemObjectStaves.size(); j++) {
+            for (size_t j = 0; j < m_systemObjectStaves.size(); j++) {
                 if (_staves[i]->idx() == moveTo[j]) {
                     // the removed staff was a system object staff
                     if (i == _staves.size() - 1 || mu::contains(moveTo, _staves[i + 1]->idx())) {
@@ -2924,7 +2928,7 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
                     }
                 }
             }
-        } else if (newLocation != _staves[i]->idx() && mu::contains(systemObjectStaves, _staves[i])) {
+        } else if (newLocation != _staves[i]->idx() && mu::contains(m_systemObjectStaves, _staves[i])) {
             // system object staff was moved somewhere, put the system objects at the top of its new group
             staff_idx_t topOfGroup = newLocation;
             String family = _staves[dst[newLocation]]->part()->familyId();
@@ -2936,11 +2940,11 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
                     topOfGroup--;
                 }
             }
-            moveTo[mu::indexOf(systemObjectStaves, _staves[i])] = dst[topOfGroup];
+            moveTo[mu::indexOf(m_systemObjectStaves, _staves[i])] = dst[topOfGroup];
         }
     }
-    for (staff_idx_t i = 0; i < systemObjectStaves.size(); i++) {
-        if (moveTo[i] == systemObjectStaves[i]->idx()) {
+    for (staff_idx_t i = 0; i < m_systemObjectStaves.size(); i++) {
+        if (moveTo[i] == m_systemObjectStaves[i]->idx()) {
             // this sysobj staff doesn't move
             continue;
         } else {
@@ -2951,7 +2955,7 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
                 }
                 Measure* m = toMeasure(mb);
                 for (EngravingItem* e : m->el()) {
-                    if ((e->isJump() || e->isMarker()) && e->isLinked() && e->track() == staff2track(systemObjectStaves[i]->idx())) {
+                    if ((e->isJump() || e->isMarker()) && e->isLinked() && e->track() == staff2track(m_systemObjectStaves[i]->idx())) {
                         if (moveTo[i] == mu::nidx) {
                             // delete this clone
                             m->remove(e);
@@ -2971,7 +2975,7 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
                                 || e->isTripletFeel()
                                 || e->isTempoText()
                                 || isSystemTextLine(e)) {
-                                if (e->track() == staff2track(systemObjectStaves[i]->idx()) && e->isLinked()) {
+                                if (e->track() == staff2track(m_systemObjectStaves[i]->idx()) && e->isLinked()) {
                                     if (moveTo[i] == mu::nidx) {
                                         s->removeAnnotation(e);
                                         e->unlink();
@@ -2987,10 +2991,10 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
             }
             // update systemObjectStaves with the correct staff
             if (moveTo[i] == mu::nidx) {
-                systemObjectStaves.erase(systemObjectStaves.begin() + i);
+                m_systemObjectStaves.erase(m_systemObjectStaves.begin() + i);
                 moveTo.erase(moveTo.begin() + i);
             } else {
-                systemObjectStaves[i] = _staves[moveTo[i]];
+                m_systemObjectStaves[i] = _staves[moveTo[i]];
             }
         }
     }
@@ -3036,7 +3040,7 @@ void Score::sortStaves(std::vector<staff_idx_t>& dst)
         voice_idx_t voice    = sp->voice();
         staff_idx_t staffIdx = sp->staffIdx();
         staff_idx_t idx = mu::indexOf(dst, staffIdx);
-        if (idx != mu::nidx) {
+        if (idx != mu::nidx && !sp->isTopSystemObject()) {
             sp->setTrack(idx * VOICES + voice);
             if (sp->track2() != mu::nidx) {
                 sp->setTrack2(idx * VOICES + (sp->track2() % VOICES));        // at least keep the voice...
@@ -5596,6 +5600,21 @@ Part* Score::partById(const ID& partId) const
     }
 
     return nullptr;
+}
+
+void Score::clearSystemObjectStaves()
+{
+    m_systemObjectStaves.clear();
+}
+
+void Score::addSystemObjectStaff(Staff* staff)
+{
+    m_systemObjectStaves.push_back(staff);
+}
+
+bool Score::isSystemObjectStaff(Staff* staff) const
+{
+    return mu::contains(m_systemObjectStaves, staff);
 }
 
 int Score::visiblePartCount() const

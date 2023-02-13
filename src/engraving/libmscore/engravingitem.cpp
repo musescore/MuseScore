@@ -451,7 +451,7 @@ staff_idx_t EngravingItem::staffIdxOrNextVisible() const
     }
     bool foundStaff = false;
     if (!m->system()->staff(si)->show()) {
-        std::vector<Staff*> soStaves = score()->getSystemObjectStaves();
+        const std::vector<Staff*> soStaves = score()->systemObjectStaves();
         for (staff_idx_t i = 0; i < soStaves.size(); ++i) {
             staff_idx_t idxOrig = soStaves[i]->idx();
             if (idxOrig == si) {
