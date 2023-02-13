@@ -20,8 +20,6 @@
 #ifndef MUSESCORE_CONFIG_H
 #define MUSESCORE_CONFIG_H
 
-/* #undef FOR_WINSTORE */
-
 #define MSCORE_UNSTABLE
 
 /* #undef HAS_MIDI */
@@ -29,7 +27,6 @@
 /* #undef HAS_AUDIOFILE */
 
 #define MUSESCORE_NAME_VERSION "MuseScore 4 (4.0.0 unstable)"
-#define MUSESCORE_REVISION     ""
 #define INSTALL_NAME           "mscore-4.0/"
 #define INSTPREFIX             "/home/igor/Dev/MuseScore/build.debug/install"
 #define VERSION                "4.0.0"
@@ -40,7 +37,6 @@
 
 /* #undef ENGRAVING_BUILD_ACCESSIBLE_TREE */
 
-/* #undef SPARKLE_ENABLED */
 /* #undef OPENGL */
 
 

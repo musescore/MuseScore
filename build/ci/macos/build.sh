@@ -41,11 +41,11 @@ if [ -z "$BUILD_NUMBER" ]; then echo "error: not set BUILD_NUMBER"; exit 1; fi
 if [ -z "$YOUTUBE_API_KEY" ]; then YOUTUBE_API_KEY=""; fi
 
 BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env)
-MUSESCORE_BUILD_CONFIG=dev
-if [ "$BUILD_MODE" == "devel_build" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
-if [ "$BUILD_MODE" == "nightly_build" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
-if [ "$BUILD_MODE" == "testing_build" ]; then MUSESCORE_BUILD_CONFIG=testing; fi
-if [ "$BUILD_MODE" == "stable_build" ]; then MUSESCORE_BUILD_CONFIG=release; fi
+MUSESCORE_BUILD_MODE=dev
+if [ "$BUILD_MODE" == "devel_build" ]; then MUSESCORE_BUILD_MODE=dev; fi
+if [ "$BUILD_MODE" == "nightly_build" ]; then MUSESCORE_BUILD_MODE=dev; fi
+if [ "$BUILD_MODE" == "testing_build" ]; then MUSESCORE_BUILD_MODE=testing; fi
+if [ "$BUILD_MODE" == "stable_build" ]; then MUSESCORE_BUILD_MODE=release; fi
 
 if [ -z "$VST3_SDK_PATH" ]; then 
     echo "warning: not set VST3_SDK_PATH, build VST module disabled"
@@ -54,7 +54,7 @@ else
     BUILD_VST=ON
 fi
 
-echo "MUSESCORE_BUILD_CONFIG: $MUSESCORE_BUILD_CONFIG"
+echo "MUSESCORE_BUILD_MODE: $MUSESCORE_BUILD_MODE"
 echo "BUILD_NUMBER: $BUILD_NUMBER"
 echo "CRASH_REPORT_URL: $CRASH_REPORT_URL"
 echo "VST3_SDK_PATH: $VST3_SDK_PATH"
@@ -63,7 +63,7 @@ echo "YOUTUBE_API_KEY: $YOUTUBE_API_KEY"
 MUSESCORE_REVISION=$(git rev-parse --short=7 HEAD)
 
 MUSESCORE_INSTALL_DIR="../applebuild" \
-MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
+MUSESCORE_BUILD_MODE=$MUSESCORE_BUILD_MODE \
 MUSESCORE_BUILD_NUMBER=$BUILD_NUMBER \
 MUSESCORE_REVISION=$MUSESCORE_REVISION \
 MUSESCORE_CRASHREPORT_URL=$CRASH_REPORT_URL \
@@ -72,7 +72,7 @@ MUSESCORE_VST3_SDK_PATH=$VST3_SDK_PATH \
 MUSESCORE_YOUTUBE_API_KEY=$YOUTUBE_API_KEY \
 bash ./ninja_build.sh -t install
 
-bash ./build/ci/tools/make_release_channel_env.sh -c $MUSESCORE_BUILD_CONFIG
+bash ./build/ci/tools/make_release_channel_env.sh -c $MUSESCORE_BUILD_MODE
 bash ./build/ci/tools/make_version_env.sh $BUILD_NUMBER
 bash ./build/ci/tools/make_revision_env.sh $MUSESCORE_REVISION
 bash ./build/ci/tools/make_branch_env.sh

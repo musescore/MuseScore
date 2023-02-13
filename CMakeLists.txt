@@ -39,24 +39,20 @@ set(CMAKE_MODULE_PATH
 ###########################################
 # Setup option and build settings
 ###########################################
-
-set(MUSESCORE_REVISION "" CACHE STRING "Build revision")
-set(MUSESCORE_BUILD_CONFIG "dev" CACHE STRING "Build config")
-# Possible MUSESCORE_BUILD_CONFIG values:
-# - dev     - for development/nightly builds
-# - testing - for testing versions (alpha, beta, RC)
-# - release - for stable release builds
-set(MUE_BUILD_CONFIGURE "app" CACHE STRING "Build configure")
-# Possible MUE_BUILD_CONFIGURE values:
+set(MUSESCORE_BUILD_CONFIGURE "app" CACHE STRING "Build configure")
+# Possible MUSESCORE_BUILD_CONFIGURE values:
 # - app             - for desktop app
 # - app-portable    - for desktop portable app (Windows build for PortableApps.com)
-# - app-winstore    - for desktop winstore app
 # - vtest           - for visual tests
 # - utest           - for unit tests
 
-option(BUILD_MACOS_APPLE_SILICON "Build for Apple Silicon architecture. Only applicable on Macs with Apple Silicon, and requires suitable Qt version." OFF)
-option(BUILD_64 "Build 64 bit version of editor" ON)
-option(BUILD_AUTOUPDATE "Build with autoupdate support" OFF)
+set(MUSESCORE_BUILD_MODE "dev" CACHE STRING "Build mode")
+# Possible MUSESCORE_BUILD_MODE values:
+# - dev     - for development/nightly builds
+# - testing - for testing versions (alpha, beta, RC)
+# - release - for stable release builds
+
+set(MUSESCORE_REVISION "" CACHE STRING "Build revision")
 
 # Modules framework (alphabetical order please)
 option(MUE_BUILD_ACCESSIBILITY_MODULE "Build accessibility module" ON) # not impl
@@ -107,6 +103,8 @@ option(MUE_CRASHPAD_HANDLER_PATH "Path to custom crashpad_handler executable (op
 option(MUE_ENABLE_CUSTOM_ALLOCATOR "Enable custom allocator (used for engraving)" OFF)
 
 # === Compile ===
+option(MUE_COMPILE_BUILD_64 "Build 64 bit version of editor" ON)
+option(MUE_COMPILE_BUILD_MACOS_APPLE_SILICON "Build for Apple Silicon architecture. Only applicable on Macs with Apple Silicon, and requires suitable Qt version." OFF)
 option(MUE_COMPILE_USE_PCH "Use precompiled headers." ON)
 option(MUE_COMPILE_USE_UNITY "Use unity build." ON)
 option(MUE_COMPILE_USE_CCACHE "Try use ccache" ON)
@@ -172,10 +170,6 @@ endif(OS_IS_WIN)
 include(SetupFreetype)
 
 include(FindSndFile)
-
-if (BUILD_AUTOUPDATE)
-    include(SetupSparkle)
-endif(BUILD_AUTOUPDATE)
 
 if (MUE_DOWNLOAD_SOUNDFONT)
     include(DownloadSoundFont)
