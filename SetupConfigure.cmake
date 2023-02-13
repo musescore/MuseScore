@@ -48,11 +48,27 @@ endif()
 ###########################################
 # Desktop App
 ###########################################
+set(MUE_GENERAL_APP OFF)
 if(_MUE_BUILD_CONFIGURE MATCHES "APP")
+    set(MUE_GENERAL_APP ON)
+endif()
+
+if(_MUE_BUILD_CONFIGURE MATCHES "APP-PORTABLE")
+    set(MUE_GENERAL_APP ON)
+    set(WIN_PORTABLE ON)
+endif()
+
+if (MUE_GENERAL_APP)
     if (BUILD_IS_DEBUG)
         set(MUE_ENABLE_LOGGER_DEBUGLEVEL ON)
     else()
         set(MUE_ENABLE_LOGGER_DEBUGLEVEL OFF)
+    endif()
+endif()
+
+if (OS_IS_MAC OR OS_IS_WIN)
+    if (WIN_PORTABLE)
+        set(MUE_BUILD_UPDATE_MODULE OFF)
     endif()
 endif()
 
@@ -129,6 +145,10 @@ if (QT_SUPPORT)
     add_definitions(-DSCRIPT_INTERFACE)
 else()
     add_definitions(-DNO_QT_SUPPORT)
+endif()
+
+if (WIN_PORTABLE)
+    add_definitions(-DWIN_PORTABLE)
 endif()
 
 add_definitions(-DHAW_PROFILER_ENABLED)

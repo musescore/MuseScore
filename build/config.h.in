@@ -41,7 +41,6 @@
 
 #cmakedefine APP_UPDATABLE
 #cmakedefine SPARKLE_ENABLED
-#cmakedefine WIN_PORTABLE
 #cmakedefine FOR_WINSTORE
 
 #endif /* MUSESCORE_CONFIG_H */
