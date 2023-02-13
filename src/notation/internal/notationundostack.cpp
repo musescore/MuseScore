@@ -140,7 +140,10 @@ void NotationUndoStack::lock()
         return;
     }
 
-    undoStack()->setLocked(true);
+    if (!isLocked()) {
+        undoStack()->setLocked(true);
+        notifyAboutLockChanged();
+    }
 }
 
 void NotationUndoStack::unlock()
@@ -149,12 +152,20 @@ void NotationUndoStack::unlock()
         return;
     }
 
-    undoStack()->setLocked(false);
+    if (isLocked()) {
+        undoStack()->setLocked(false);
+        notifyAboutLockChanged();
+    }
 }
 
 bool NotationUndoStack::isLocked() const
 {
     return undoStack()->locked();
+}
+
+mu::async::Notification NotationUndoStack::stackLockedChanged() const
+{
+    return m_stackLockedChanged;
 }
 
 mu::async::Notification NotationUndoStack::stackChanged() const
@@ -190,6 +201,11 @@ void NotationUndoStack::notifyAboutNotationChanged()
 void NotationUndoStack::notifyAboutStateChanged()
 {
     m_stackStateChanged.notify();
+}
+
+void NotationUndoStack::notifyAboutLockChanged()
+{
+    m_stackLockedChanged.notify();
 }
 
 void NotationUndoStack::notifyAboutUndo()

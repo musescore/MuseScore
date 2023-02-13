@@ -76,9 +76,11 @@ void NotationPlayback::init(INotationUndoStackPtr undoStack)
 
     m_playbackModel.load(score());
 
-    updateTotalPlayTime();
     m_playbackModel.dataChanged().onNotify(this, [this]() {
         updateTotalPlayTime();
+    });
+    undoStack->stackLockedChanged().onNotify(this, [this]() {
+        m_playbackModel.reload();
     });
 
     configuration()->isPlayRepeatsChanged().onNotify(this, [this]() {

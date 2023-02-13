@@ -54,6 +54,7 @@ public:
     virtual void lock() = 0;
     virtual void unlock() = 0;
     virtual bool isLocked() const = 0;
+    virtual async::Notification stackLockedChanged() const = 0;
 
     virtual async::Notification stackChanged() const = 0;
     virtual async::Channel<ChangesRange> changesChannel() const = 0;
