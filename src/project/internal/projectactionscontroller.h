@@ -145,7 +145,7 @@ private:
     void warnCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText, bool newlyCreated);
     void warnCorruptedScoreCannotBeSavedOnCloud(const std::string& errorText, bool newlyCreated);
     void warnCorruptedScoreCannotBeSavedLocally(const SaveLocation& location, const std::string& errorText, bool newlyCreated);
-    void warnCorruptedScoreUponOpenningCannotBeSaved(const SaveLocation& location, const std::string& errorText);
+    void showErrCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText);
 
     void revertCorruptedScoreToLastSaved();
 
