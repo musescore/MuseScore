@@ -154,7 +154,7 @@ static Fraction getPlayTicksForBend(const Note* note)
 {
     Tie* tie = note->tieFor();
     if (!tie) {
-        return note->chord()->ticks();
+        return note->chord()->actualTicks();
     }
 
     Fraction stick = note->chord()->tick();
