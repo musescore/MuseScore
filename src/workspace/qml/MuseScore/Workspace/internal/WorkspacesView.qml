@@ -46,6 +46,7 @@ RadioButtonGroup {
     }
 
     spacing: 0
+    clip: true
     orientation: Qt.Vertical
 
     interactive: height < contentHeight
