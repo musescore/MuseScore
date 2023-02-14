@@ -998,9 +998,11 @@ void ProjectActionsController::warnCorruptedScoreCannotBeSavedLocally(const Save
                                                                       bool newlyCreated)
 {
     std::string title = trc("project", "This score has become corrupted and contains errors");
-    std::string body = trc("project", "You can continue saving it locally, although the file may become unusable. "
-                                      "To preserve your score, revert to the last saved version, or fix the errors manually. "
-                                      "You can also get help for this issue on musescore.org.");
+    std::string body = newlyCreated ? trc("project", "You can continue saving it locally, although the file may become unusable. "
+                                                     "You can try to fix the errors manually, or get help for this issue on musescore.org.")
+                       : trc("project", "You can continue saving it locally, although the file may become unusable. "
+                                        "To preserve your score, revert to the last saved version, or fix the errors manually. "
+                                        "You can also get help for this issue on musescore.org.");
 
     IInteractive::ButtonDatas buttons;
     buttons.push_back(interactive()->buttonData(IInteractive::Button::Cancel));
