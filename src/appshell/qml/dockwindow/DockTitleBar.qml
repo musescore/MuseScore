@@ -37,6 +37,8 @@ Item {
     property alias heightWhenVisible: titleBar.heightWhenVisible
     property bool isHorizontalPanel: false
 
+    property alias navigation: contextMenuButton.navigation
+
     signal handleContextMenuItemRequested(string itemId)
 
     width: parent.width
