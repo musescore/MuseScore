@@ -110,7 +110,6 @@ apt_packages_ffmpeg=(
   libswscale-dev
   )
 
-sudo sed -i 's/azure\.//' /etc/apt/sources.list
 sudo apt-get update 
 sudo apt-get install -y --no-install-recommends \
   "${apt_packages_basic[@]}" \
