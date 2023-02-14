@@ -77,7 +77,7 @@ RadioButtonGroup {
 
         function onSelectedWorkspaceChanged(selectedWorkspace) {
             if (Boolean(selectedWorkspace)) {
-                root.positionViewAtIndex(selectedWorkspace.index + 1, ListView.Contain)
+                root.positionViewAtIndex(selectedWorkspace.index, ListView.Contain)
             }
         }
     }
