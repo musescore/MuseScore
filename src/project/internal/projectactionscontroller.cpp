@@ -924,7 +924,7 @@ void ProjectActionsController::warnSaveIsNotAvailable(const Ret& ret, const Save
         warnScoreWithoutPartsCannotBeSaved();
         break;
     case Err::CorruptionUponOpenningError:
-        warnCorruptedScoreUponOpenningCannotBeSaved(location, ret.text());
+        showErrCorruptedScoreCannotBeSaved(location, ret.text());
         break;
     case Err::CorruptionError: {
         auto project = currentNotationProject();
@@ -946,9 +946,15 @@ void ProjectActionsController::warnCorruptedScoreCannotBeSaved(const SaveLocatio
                                                                bool newlyCreated)
 {
     switch (location.type) {
-    case SaveLocationType::Cloud:
-        warnCorruptedScoreCannotBeSavedOnCloud(errorText, newlyCreated);
+    case SaveLocationType::Cloud: {
+        if (newlyCreated) {
+            showErrCorruptedScoreCannotBeSaved(location, errorText);
+        } else {
+            warnCorruptedScoreCannotBeSavedOnCloud(errorText, newlyCreated);
+        }
+
         break;
+    }
     case SaveLocationType::Local:
         warnCorruptedScoreCannotBeSavedLocally(location, errorText, newlyCreated);
     case SaveLocationType::Undefined:
@@ -1023,7 +1029,7 @@ void ProjectActionsController::warnCorruptedScoreCannotBeSavedLocally(const Save
     }
 }
 
-void ProjectActionsController::warnCorruptedScoreUponOpenningCannotBeSaved(const SaveLocation& location, const std::string& errorText)
+void ProjectActionsController::showErrCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText)
 {
     std::string title = location.isLocal() ? trc("project", "Your score cannot be saved")
                         : trc("project", "Your score cannot be uploaded to the cloud");
