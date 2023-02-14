@@ -368,8 +368,32 @@ Rectangle {
 
             FlatButton {
                 icon: IconCode.SAVE
+                text: "Suuuuuuuuuuuuuper long text with icon"
+            }
+
+            FlatButton {
+                icon: IconCode.SAVE
+                text: "Elided suuuuuuuuuuuuuper long text with icon"
+                width: 132
+            }
+
+            FlatButton {
+                icon: IconCode.SAVE
                 text: "Text with icon"
                 orientation: Qt.Horizontal
+            }
+
+            FlatButton {
+                icon: IconCode.SAVE
+                text: "Suuuuuuuuuuuuuper long text with icon"
+                orientation: Qt.Horizontal
+            }
+
+            FlatButton {
+                icon: IconCode.SAVE
+                text: "Elided suuuuuuuuuuuuuper long text with icon"
+                orientation: Qt.Horizontal
+                width: 132
             }
 
             FlatButton {
