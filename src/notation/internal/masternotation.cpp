@@ -105,6 +105,15 @@ MasterNotation::~MasterNotation()
     unloadExcerpts(m_potentialExcerpts);
 }
 
+int MasterNotation::mscVersion() const
+{
+    if (!masterScore()) {
+        return 0;
+    }
+
+    return masterScore()->mscVersion();
+}
+
 INotationPtr MasterNotation::notation()
 {
     return shared_from_this();
@@ -746,6 +755,14 @@ Notification MasterNotation::hasPartsChanged() const
 INotationPlaybackPtr MasterNotation::playback() const
 {
     return m_notationPlayback;
+}
+
+void MasterNotation::setSaved(bool arg)
+{
+    IF_ASSERT_FAILED(masterScore()) {
+        return;
+    }
+    masterScore()->setSaved(arg);
 }
 
 const ExcerptNotationList& MasterNotation::potentialExcerpts() const

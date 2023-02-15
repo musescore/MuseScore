@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,30 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_IINSTRUMENTSREPOSITORY_H
-#define MU_NOTATION_IINSTRUMENTSREPOSITORY_H
+#ifndef MU_NOTATION_INOTATIONCREATOR_H
+#define MU_NOTATION_INOTATIONCREATOR_H
 
 #include "modularity/imoduleexport.h"
 
-#include "notationtypes.h"
+#include "imasternotation.h"
 
 namespace mu::notation {
-class IInstrumentsRepository : MODULE_EXPORT_INTERFACE
+class INotationCreator : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IInstrumentsRepository)
-
+    INTERFACE_ID(INotationCreator)
 public:
-    virtual ~IInstrumentsRepository() = default;
+    virtual ~INotationCreator() = default;
 
-    virtual const InstrumentTemplateList& instrumentTemplates() const = 0;
-    virtual const InstrumentTemplate& instrumentTemplate(const std::string& instrumentId) const = 0;
-
-    virtual const ScoreOrderList& orders() const = 0;
-    virtual const ScoreOrder& order(const std::string& orderId) const = 0;
-
-    virtual const InstrumentGenreList& genres() const = 0;
-    virtual const InstrumentGroupList& groups() const = 0;
+    virtual IMasterNotationPtr newMasterNotationPtr() const = 0;
 };
 }
 
-#endif // MU_NOTATION_IINSTRUMENTSREPOSITORY_H
+#endif // MU_NOTATION_INOTATIONCREATOR_H

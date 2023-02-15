@@ -37,14 +37,20 @@ endif()
 
 add_subdirectory(commonscene)
 add_subdirectory(context)
-add_subdirectory(converter)
+
+if (MUE_BUILD_CONVERTER_MODULE)
+    add_subdirectory(converter)
+endif()
 
 if (MUE_BUILD_DIAGNOSTICS_MODULE)
     add_subdirectory(diagnostics)
 endif()
 
 add_subdirectory(engraving)
-add_subdirectory(importexport)
+
+if (MUE_BUILD_IMPORTEXPORT_MODULE)
+    add_subdirectory(importexport)
+endif()
 
 if (MUE_BUILD_INSPECTOR_MODULE)
     add_subdirectory(inspector)
@@ -66,7 +72,9 @@ if (MUE_BUILD_MULTIINSTANCES_MODULE)
     add_subdirectory(multiinstances)
 endif()
 
-add_subdirectory(notation)
+if (MUE_BUILD_NOTATION_MODULE)
+    add_subdirectory(notation)
+endif()
 
 if (MUE_BUILD_PALETTE_MODULE)
     add_subdirectory(palette)
@@ -81,7 +89,10 @@ if (MUE_BUILD_PLUGINS_MODULE)
 endif()
 
 add_subdirectory(print)
-add_subdirectory(project)
+
+if (MUE_BUILD_PROJECT_MODULE)
+    add_subdirectory(project)
+endif()
 
 if (MUE_BUILD_UPDATE_MODULE)
     add_subdirectory(update)

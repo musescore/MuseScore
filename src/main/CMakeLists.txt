@@ -144,10 +144,13 @@ set(LINK_LIB
     inspector
     playback
     instrumentsscene
-    converter
     vst
     update
     )
+
+if (MUE_BUILD_CONVERTER_MODULE)
+    list(APPEND LINK_LIB converter)
+endif()
 
 if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB cloud)
