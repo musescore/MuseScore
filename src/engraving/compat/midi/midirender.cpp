@@ -363,14 +363,24 @@ static void collectNote(EventMap* events, const Note* note, CollectNoteParams no
         }
 
         int p = std::clamp(note->pitch() + e.pitch(), 0, 127);
-        int on  = tick1 + (ticks * e.ontime()) / 1000;
+        int on = tick1 + (ticks * e.ontime()) / 1000;
         int off = on + (ticks * e.len()) / 1000 - 1;
-        if (tieFor && i == nels - 1) {
-            off += tieLen;
-        }
 
-        if (noteParams.letRingNote) {
-            off = std::max(off, noteParams.endLetRingTick);
+        if (note->deadNote()) {
+            const double ticksPerSecond = chord->score()->tempo(chord->tick()).val * Constants::division;
+            constexpr double deadNoteDurationInSec = 0.05;
+            const double deadNoteDurationInTicks = ticksPerSecond * deadNoteDurationInSec;
+            if (off - on > deadNoteDurationInTicks) {
+                off = on + deadNoteDurationInTicks;
+            }
+        } else {
+            if (tieFor && i == nels - 1) {
+                off += tieLen;
+            }
+
+            if (noteParams.letRingNote) {
+                off = std::max(off, noteParams.endLetRingTick);
+            }
         }
 
         // Get the velocity used for this note from the staff
