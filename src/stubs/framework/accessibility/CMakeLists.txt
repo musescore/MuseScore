@@ -17,23 +17,14 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+set(MODULE accessibility)
 
-if (NOT MUE_BUILD_ACCESSIBILITY_MODULE)
-    add_subdirectory(accessibility)
-endif()
+set(MODULE_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/accessibilitystubmodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/accessibilitystubmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/accessibilityconfigurationstub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/accessibilityconfigurationstub.h
+    )
 
-if (NOT MUE_BUILD_AUDIO_MODULE)
-    add_subdirectory(audio)
-endif()
-
-if (NOT MUE_BUILD_NETWORK_MODULE)
-    add_subdirectory(network)
-endif()
-
-if (NOT MUE_BUILD_SHORTCUTS_MODULE)
-    add_subdirectory(shortcuts)
-endif()
-
-if (NOT MUE_BUILD_VST_MODULE)
-    add_subdirectory(vst)
-endif()
+set(MODULE_IS_STUB ON)
+include(SetupModule)
