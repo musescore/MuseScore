@@ -17,21 +17,16 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+set(MODULE notation)
 
-add_subdirectory(bb)
-add_subdirectory(braille)
-add_subdirectory(bww)
-add_subdirectory(capella)
-add_subdirectory(midi)
-add_subdirectory(musedata)
-add_subdirectory(musicxml)
-add_subdirectory(ove)
-add_subdirectory(audioexport)
-add_subdirectory(imagesexport)
-add_subdirectory(guitarpro)
+set(MODULE_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/notationstubmodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/notationstubmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/instrumentsrepositorystub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/instrumentsrepositorystub.h
+    ${CMAKE_CURRENT_LIST_DIR}/notationconfigurationstub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/notationconfigurationstub.h
+    )
 
-if (MUE_BUILD_VIDEOEXPORT_MODULE)
-    add_subdirectory(videoexport)
-endif()
-
-
+set(MODULE_IS_STUB ON)
+include(SetupModule)

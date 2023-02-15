@@ -83,7 +83,11 @@
 
 #include "commonscene/commonscenemodule.h"
 #include "context/contextmodule.h"
+
+#ifdef MUE_BUILD_CONVERTER_MODULE
 #include "converter/convertermodule.h"
+#endif
+
 #include "diagnostics/diagnosticsmodule.h"
 #include "engraving/engravingmodule.h"
 
@@ -130,7 +134,11 @@
 #include "stubs/multiinstances/multiinstancesstubmodule.h"
 #endif
 
+#ifdef MUE_BUILD_NOTATION_MODULE
 #include "notation/notationmodule.h"
+#else
+#include "stubs/notation/notationstubmodule.h"
+#endif
 
 #ifdef MUE_BUILD_PALETTE_MODULE
 #include "palette/palettemodule.h"
@@ -151,7 +159,12 @@
 #endif
 
 #include "print/printmodule.h"
+
+#ifdef MUE_BUILD_PROJECT_MODULE
 #include "project/projectmodule.h"
+#else
+#include "stubs/project/projectstubmodule.h"
+#endif
 
 #ifdef MUE_BUILD_UPDATE_MODULE
 #include "update/updatemodule.h"
@@ -216,7 +229,11 @@ int main(int argc, char** argv)
     app.addModule(new mu::cloud::CloudModule());
     app.addModule(new mu::commonscene::CommonSceneModule());
     app.addModule(new mu::context::ContextModule());
+
+#ifdef MUE_BUILD_CONVERTER_MODULE
     app.addModule(new mu::converter::ConverterModule());
+#endif
+
     app.addModule(new mu::engraving::EngravingModule());
 
 #ifdef MUE_BUILD_IMPORTEXPORT_MODULE

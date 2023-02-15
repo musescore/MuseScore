@@ -45,13 +45,13 @@ class MasterNotation : public IMasterNotation, public Notation, public std::enab
 public:
     ~MasterNotation();
 
-    void setMasterScore(mu::engraving::MasterScore* masterScore);
-    Ret setupNewScore(mu::engraving::MasterScore* score, const ScoreCreateOptions& scoreOptions);
-    void applyOptions(mu::engraving::MasterScore* score, const ScoreCreateOptions& scoreOptions, bool createdFromTemplate = false);
+    Ret setupNewScore(engraving::MasterScore* score, const ScoreCreateOptions& options) override;
+    void applyOptions(engraving::MasterScore* score, const ScoreCreateOptions& options, bool createdFromTemplate = false) override;
+    void setMasterScore(engraving::MasterScore* masterScore) override;
+    engraving::MasterScore* masterScore() const override;
 
     INotationPtr notation() override;
-
-    mu::ValNt<bool> needSave() const override;
+    int mscVersion() const override;
 
     IExcerptNotationPtr createEmptyExcerpt(const QString& name = QString()) const override;
 
@@ -71,21 +71,22 @@ public:
 
     INotationPlaybackPtr playback() const override;
 
+    void setSaved(bool arg) override;
+    mu::ValNt<bool> needSave() const override;
+
 private:
 
-    friend class project::NotationProject;
+    friend class NotationCreator;
     explicit MasterNotation();
 
-    mu::engraving::MasterScore* masterScore() const;
-
-    void initExcerptNotations(const std::vector<mu::engraving::Excerpt*>& excerpts);
-    void addExcerptsToMasterScore(const std::vector<mu::engraving::Excerpt*>& excerpts);
+    void initExcerptNotations(const std::vector<engraving::Excerpt*>& excerpts);
+    void addExcerptsToMasterScore(const std::vector<engraving::Excerpt*>& excerpts);
     void doSetExcerpts(ExcerptNotationList excerpts);
     void updateExcerpts();
     void updatePotentialExcerpts() const;
     void unloadExcerpts(ExcerptNotationList& excerpts);
 
-    bool containsExcerpt(const mu::engraving::Excerpt* excerpt) const;
+    bool containsExcerpt(const engraving::Excerpt* excerpt) const;
 
     void notifyAboutNeedSaveChanged();
 

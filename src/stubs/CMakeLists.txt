@@ -44,6 +44,10 @@ if (NOT MUE_BUILD_MULTIINSTANCES_MODULE)
     add_subdirectory(multiinstances)
 endif()
 
+if (NOT MUE_BUILD_NOTATION_MODULE)
+    add_subdirectory(notation)
+endif()
+
 if (NOT MUE_BUILD_PALETTE_MODULE)
     add_subdirectory(palette)
 endif()
@@ -54,6 +58,10 @@ endif()
 
 if (NOT MUE_BUILD_PLUGINS_MODULE)
     add_subdirectory(plugins)
+endif()
+
+if (NOT MUE_BUILD_PROJECT_MODULE)
+    add_subdirectory(project)
 endif()
 
 if (NOT MUE_BUILD_UPDATE_MODULE)
