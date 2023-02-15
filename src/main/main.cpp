@@ -52,7 +52,11 @@
 #include "stubs/framework/midi/midistubmodule.h"
 #endif
 
+#ifdef MUE_BUILD_MIDI_MODULE
 #include "framework/mpe/mpemodule.h"
+#else
+#include "stubs/framework/mpe/mpestubmodule.h"
+#endif
 
 #ifdef MUE_BUILD_MUSESAMPLER_MODULE
 #include "framework/musesampler/musesamplermodule.h"

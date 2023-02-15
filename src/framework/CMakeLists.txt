@@ -35,7 +35,9 @@ if (MUE_BUILD_MIDI_MODULE)
     add_subdirectory(midi)
 endif()
 
-add_subdirectory(mpe)
+if (MUE_BUILD_MPE_MODULE)
+    add_subdirectory(mpe)
+endif()
 
 if (MUE_BUILD_MUSESAMPLER_MODULE)
     add_subdirectory(musesampler)
