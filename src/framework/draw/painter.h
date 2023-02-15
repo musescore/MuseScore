@@ -167,6 +167,8 @@ public:
     void drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset = PointF());
 #endif
 
+    bool hasClipping() const;
+
     void setClipRect(const RectF& rect);
     void setClipping(bool enable);
 

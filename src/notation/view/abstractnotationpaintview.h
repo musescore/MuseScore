@@ -190,6 +190,9 @@ private:
 
     bool doMoveCanvas(qreal dx, qreal dy);
 
+    void redraw(const RectF& rect = RectF());
+    RectF correctDrawRect(const RectF& rect) const;
+
     // Input
     void wheelEvent(QWheelEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;

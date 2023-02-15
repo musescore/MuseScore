@@ -532,6 +532,11 @@ void Painter::updateMatrix()
     }
 }
 
+bool Painter::hasClipping() const
+{
+    return m_provider->hasClipping();
+}
+
 void Painter::setClipRect(const RectF& rect)
 {
     m_provider->setClipRect(rect);

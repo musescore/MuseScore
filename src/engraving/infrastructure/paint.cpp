@@ -124,11 +124,20 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const Options& opt)
             }
 
             // Draw page elements
-            painter->setClipping(true);
-            painter->setClipRect(pageRect);
+            bool disableClipping = false;
+
+            if (!painter->hasClipping()) {
+                painter->setClipping(true);
+                painter->setClipRect(pageRect);
+                disableClipping = true;
+            }
+
             std::vector<EngravingItem*> elements = page->items(drawRect.translated(-pagePos));
             paintElements(*painter, elements, opt.isPrinting);
-            painter->setClipping(false);
+
+            if (disableClipping) {
+                painter->setClipping(false);
+            }
 
 #ifdef MUE_ENABLE_ENGRAVING_PAINT_DEBUGGER
             if (!opt.isPrinting) {
