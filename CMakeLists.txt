@@ -55,7 +55,7 @@ set(MUSESCORE_BUILD_MODE "dev" CACHE STRING "Build mode")
 set(MUSESCORE_REVISION "" CACHE STRING "Build revision")
 
 # Modules framework (alphabetical order please)
-option(MUE_BUILD_ACCESSIBILITY_MODULE "Build accessibility module" ON) # not impl
+option(MUE_BUILD_ACCESSIBILITY_MODULE "Build accessibility module" ON)
 option(MUE_BUILD_AUDIO_MODULE "Build audio module" ON)
 option(MUE_ENABLE_AUDIO_EXPORT "Enable audio export" ON)
 option(MUE_BUILD_MUSESAMPLER_MODULE "Build MuseSampler module" ON)

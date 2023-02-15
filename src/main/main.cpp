@@ -29,7 +29,12 @@
 
 #include "framework/global/globalmodule.h"
 
+#ifdef MUE_BUILD_ACCESSIBILITY_MODULE
 #include "framework/accessibility/accessibilitymodule.h"
+#else
+#include "stubs/framework/accessibility/accessibilitystubmodule.h"
+#endif
+
 #include "framework/actions/actionsmodule.h"
 
 #ifdef MUE_BUILD_AUDIO_MODULE
