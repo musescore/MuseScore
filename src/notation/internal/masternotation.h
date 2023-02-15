@@ -47,8 +47,8 @@ public:
 
     Ret setupNewScore(engraving::MasterScore* score, const ScoreCreateOptions& options) override;
     void applyOptions(engraving::MasterScore* score, const ScoreCreateOptions& options, bool createdFromTemplate = false) override;
-    void setMasterScore(engraving::MasterScore* masterScore) override;
     engraving::MasterScore* masterScore() const override;
+    void setMasterScore(engraving::MasterScore* masterScore) override;
 
     INotationPtr notation() override;
     int mscVersion() const override;

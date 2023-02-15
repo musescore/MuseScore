@@ -119,8 +119,6 @@ set(LINK_LIB
     ${QT_LIBRARIES}
     global
     draw
-    ui
-    uicomponents
     fonts
     network
 
@@ -128,7 +126,6 @@ set(LINK_LIB
     engraving
     actions
     accessibility
-    appshell
     context
     shortcuts
     workspace
@@ -148,8 +145,17 @@ set(LINK_LIB
     update
     )
 
+if (MUE_BUILD_UI_MODULE)
+    list(APPEND LINK_LIB ui)
+    list(APPEND LINK_LIB uicomponents)
+endif()
+
 if (MUE_BUILD_CONVERTER_MODULE)
     list(APPEND LINK_LIB converter)
+endif()
+
+if (MUE_BUILD_APPSHELL_MODULE)
+    list(APPEND LINK_LIB appshell)
 endif()
 
 if (NOT CC_IS_EMSCRIPTEN)
@@ -213,6 +219,10 @@ endif()
 
 add_executable(${EXECUTABLE_NAME}
       main.cpp
+      app.cpp
+      app.h
+      commandlinecontroller.cpp
+      commandlinecontroller.h
       ${MSCORE_APPEND_SRC}
       )
 
@@ -379,7 +389,7 @@ elseif(OS_IS_LIN)
            COMMAND ${LN_EXECUTABLE} -sf "mscore${MUSESCORE_INSTALL_SUFFIX}" "musescore${MUSESCORE_INSTALL_SUFFIX}"
            COMMAND echo 'Symlink alias: musescore${MUSESCORE_INSTALL_SUFFIX} -> mscore${MUSESCORE_INSTALL_SUFFIX}'
            )
-       install(FILES ${PROJECT_BINARY_DIR}/src/main/musescore${MUSESCORE_INSTALL_SUFFIX} DESTINATION bin)
+       install(FILES ${PROJECT_BINARY_DIR}/src/app/musescore${MUSESCORE_INSTALL_SUFFIX} DESTINATION bin)
     else (LN_EXECUTABLE)
        add_custom_target(mscore_alias ALL COMMAND echo "No symlink aliases will be created." VERBATIM )
     endif (LN_EXECUTABLE)

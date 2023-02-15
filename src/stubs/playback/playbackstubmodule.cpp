@@ -54,5 +54,8 @@ void PlaybackModule::registerResources()
 
 void PlaybackModule::registerUiTypes()
 {
-    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(playback_QML_IMPORT);
+    std::shared_ptr<ui::IUiEngine> ui = ioc()->resolve<ui::IUiEngine>(moduleName());
+    if (ui) {
+        ui->addSourceImportPath(playback_QML_IMPORT);
+    }
 }

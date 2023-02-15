@@ -29,7 +29,7 @@ GEN_SCRIPT=tools/crashdump/generate_syms.sh
 ARTIFACTS_DIR=build.artifacts
 BUILD_DIR=build.release
 SYMBOLS_DIR=$ARTIFACTS_DIR/symbols
-MSCORE_BIN=$BUILD_DIR/src/main/mscore4portable*
+MSCORE_BIN=$BUILD_DIR/src/app/mscore4portable*
 
 
 echo "GEN_SCRIPT: $GEN_SCRIPT"
