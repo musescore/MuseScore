@@ -33,6 +33,7 @@
         <file>qml/MuseScore/Inspector/common/InspectorSectionView.qml</file>
         <file>qml/MuseScore/Inspector/common/SpinBoxPropertyView.qml</file>
         <file>qml/MuseScore/Inspector/common/DirectionSection.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/internal/PedalStyleSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/VoltaStyleSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/OttavaStyleSettings.qml</file>
@@ -70,7 +71,6 @@
         <file>qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml</file>
-        <file>qml/MuseScore/Inspector/notation/lines/PedalSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/spacers/SpacerSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/LineSettings.qml</file>
