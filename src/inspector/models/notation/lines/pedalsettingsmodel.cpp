@@ -129,8 +129,3 @@ void PedalSettingsModel::setLineType(int newType)
 
     m_lineType->setValue(newType);
 }
-
-bool PedalSettingsModel::isTextVisible(TextType) const
-{
-    return true;
-}

@@ -52,7 +52,6 @@ private:
 
     void createProperties() override;
     void loadProperties() override;
-    bool isTextVisible(TextType type) const override;
 
     void setLineType(int newType);
 

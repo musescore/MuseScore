@@ -120,7 +120,6 @@ protected:
                            const mu::engraving::StyleIdSet& changedStyleIdSet) override;
 
     virtual void onUpdateLinePropertiesAvailability();
-    virtual bool isTextVisible(TextType type) const;
 
     void setPossibleStartHookTypes(const QList<HookTypeInfo>& types);
     void setPossibleEndHookTypes(const QList<HookTypeInfo>& types);
