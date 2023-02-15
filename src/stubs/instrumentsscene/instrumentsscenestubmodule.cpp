@@ -63,5 +63,8 @@ void InstrumentsSceneModule::registerResources()
 
 void InstrumentsSceneModule::registerUiTypes()
 {
-    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(instrumentsscene_QML_IMPORT);
+    std::shared_ptr<ui::IUiEngine> ui = ioc()->resolve<ui::IUiEngine>(moduleName());
+    if (ui) {
+        ui->addSourceImportPath(instrumentsscene_QML_IMPORT);
+    }
 }

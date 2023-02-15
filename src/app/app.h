@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_APPSHELL_APPSHELL_H
-#define MU_APPSHELL_APPSHELL_H
+#ifndef MU_APP_APP_H
+#define MU_APP_APP_H
 
 #include <QList>
 
@@ -34,16 +34,16 @@
 
 #include "commandlinecontroller.h"
 
-namespace mu::appshell {
-class AppShell
+namespace mu::app {
+class App
 {
-    INJECT(appshell, framework::IApplication, muapplication)
-    INJECT(appshell, converter::IConverterController, converter)
-    INJECT(appshell, diagnostics::IDiagnosticDrawProvider, diagnosticDrawProvider)
-    INJECT(appshell, autobot::IAutobot, autobot)
+    INJECT(app, framework::IApplication, muapplication)
+    INJECT(app, converter::IConverterController, converter)
+    INJECT(app, diagnostics::IDiagnosticDrawProvider, diagnosticDrawProvider)
+    INJECT(app, autobot::IAutobot, autobot)
 
 public:
-    AppShell();
+    App();
 
     void addModule(modularity::IModuleSetup* module);
 
@@ -59,4 +59,4 @@ private:
 };
 }
 
-#endif // MU_APPSHELL_APPSHELL_H
+#endif // MU_APP_APP_H

@@ -25,7 +25,7 @@
 #include "runtime.h"
 #include "log.h"
 
-#include "appshell/appshell.h"
+#include "app.h"
 
 #include "framework/global/globalmodule.h"
 
@@ -74,8 +74,10 @@
 #include "stubs/framework/shortcuts/shortcutsstubmodule.h"
 #endif
 
+#ifdef MUE_BUILD_UI_MODULE
 #include "framework/ui/uimodule.h"
 #include "framework/uicomponents/uicomponentsmodule.h"
+#endif
 
 #ifdef MUE_BUILD_VST_MODULE
 #include "framework/vst/vstmodule.h"
@@ -212,7 +214,7 @@ int main(int argc, char** argv)
     // would otherwise default to the local ANSI code page and cause corruption of any non-ANSI Unicode characters in command-line arguments.
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
-    mu::appshell::AppShell app;
+    mu::app::App app;
 
     //! NOTE `diagnostics` must be first, because it installs the crash handler.
     //! For other modules, the order is (an should be) unimportant.
@@ -231,12 +233,17 @@ int main(int argc, char** argv)
 #endif
     app.addModule(new mu::network::NetworkModule());
     app.addModule(new mu::shortcuts::ShortcutsModule());
+#ifdef MUE_BUILD_UI_MODULE
     app.addModule(new mu::ui::UiModule());
     app.addModule(new mu::uicomponents::UiComponentsModule());
+#endif
     app.addModule(new mu::vst::VSTModule());
 
     // modules
+#ifdef MUE_BUILD_APPSHELL_MODULE
     app.addModule(new mu::appshell::AppShellModule());
+#endif
+
 #ifdef MUE_BUILD_AUTOBOT_MODULE
     app.addModule(new mu::autobot::AutobotModule());
 #endif

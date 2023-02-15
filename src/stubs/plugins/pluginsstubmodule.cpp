@@ -54,5 +54,8 @@ void PluginsModule::registerResources()
 
 void PluginsModule::registerUiTypes()
 {
-    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(plugins_QML_IMPORT);
+    std::shared_ptr<ui::IUiEngine> ui = ioc()->resolve<ui::IUiEngine>(moduleName());
+    if (ui) {
+        ui->addSourceImportPath(plugins_QML_IMPORT);
+    }
 }

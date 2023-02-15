@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "appshell.h"
+#include "app.h"
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
@@ -30,9 +30,8 @@
 #include <QThreadPool>
 #endif
 
-#include "view/internal/splashscreen.h"
-
-#include "view/dockwindow/docksetup.h"
+#include "appshell/view/internal/splashscreen.h"
+#include "appshell/view/dockwindow/docksetup.h"
 
 #include "modularity/ioc.h"
 #include "ui/internal/uiengine.h"
@@ -44,21 +43,22 @@
 
 #include "log.h"
 
+using namespace mu::app;
 using namespace mu::appshell;
 
 //! NOTE Separately to initialize logger and profiler as early as possible
 static mu::framework::GlobalModule globalModule;
 
-AppShell::AppShell()
+App::App()
 {
 }
 
-void AppShell::addModule(modularity::IModuleSetup* module)
+void App::addModule(modularity::IModuleSetup* module)
 {
     m_modules.push_back(module);
 }
 
-int AppShell::run(int argc, char** argv)
+int App::run(int argc, char** argv)
 {
     // ====================================================
     // Setup global Qt application variables
@@ -150,11 +150,13 @@ int AppShell::run(int argc, char** argv)
         m->onPreInit(runMode);
     }
 
+#ifdef MUE_BUILD_APPSHELL_MODULE
     SplashScreen* splashScreen = nullptr;
     if (runMode == framework::IApplication::RunMode::Editor) {
         splashScreen = new SplashScreen();
         splashScreen->show();
     }
+#endif
 
     // ====================================================
     // Setup modules: onInit
@@ -219,6 +221,7 @@ int AppShell::run(int argc, char** argv)
         }
     } break;
     case framework::IApplication::RunMode::Editor: {
+#ifdef MUE_BUILD_APPSHELL_MODULE
         // ====================================================
         // Setup Qml Engine
         // ====================================================
@@ -283,6 +286,7 @@ int AppShell::run(int argc, char** argv)
             splashScreen->close();
             delete splashScreen;
         }
+#endif // MUE_BUILD_APPSHELL_MODULE
     }
     }
 
@@ -305,8 +309,11 @@ int AppShell::run(int argc, char** argv)
         globalThreadPool->waitForDone();
     }
 #endif
+
+#ifdef MUE_BUILD_APPSHELL_MODULE
     // Engine quit
     ui::UiEngine::instance()->quit();
+#endif
 
     // Deinit
 
@@ -330,7 +337,7 @@ int AppShell::run(int argc, char** argv)
     return retCode;
 }
 
-int AppShell::processConverter(const CommandLineController::ConverterTask& task)
+int App::processConverter(const CommandLineController::ConverterTask& task)
 {
     Ret ret = make_ret(Ret::Code::Ok);
     io::path_t stylePath = task.params[CommandLineController::ParamKey::StylePath].toString();
@@ -379,7 +386,7 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
     return ret.code();
 }
 
-int AppShell::processDiagnostic(const CommandLineController::Diagnostic& task)
+int App::processDiagnostic(const CommandLineController::Diagnostic& task)
 {
     if (!diagnosticDrawProvider()) {
         return make_ret(Ret::Code::NotSupported);
@@ -434,7 +441,7 @@ int AppShell::processDiagnostic(const CommandLineController::Diagnostic& task)
     return ret.code();
 }
 
-void AppShell::processAutobot(const CommandLineController::Autobot& task)
+void App::processAutobot(const CommandLineController::Autobot& task)
 {
     using namespace mu::autobot;
     async::Channel<StepInfo, Ret> stepCh = autobot()->stepStatusChanged();

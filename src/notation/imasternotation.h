@@ -37,8 +37,8 @@ public:
 
     virtual Ret setupNewScore(engraving::MasterScore* score, const ScoreCreateOptions& options) = 0;
     virtual void applyOptions(engraving::MasterScore* score, const ScoreCreateOptions& options, bool createdFromTemplate = false) = 0;
-    virtual void setMasterScore(engraving::MasterScore* masterScore) = 0;
     virtual engraving::MasterScore* masterScore() const = 0;
+    virtual void setMasterScore(engraving::MasterScore* masterScore) = 0;
 
     virtual INotationPtr notation() = 0;
 

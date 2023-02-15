@@ -43,8 +43,10 @@ if (MUE_BUILD_MUSESAMPLER_MODULE)
     add_subdirectory(musesampler)
 endif()
 
-add_subdirectory(ui)
-add_subdirectory(uicomponents)
+if (MUE_BUILD_UI_MODULE)
+    add_subdirectory(ui)
+    add_subdirectory(uicomponents)
+endif()
 
 if (MUE_BUILD_NETWORK_MODULE)
     add_subdirectory(network)

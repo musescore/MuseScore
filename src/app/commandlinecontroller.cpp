@@ -21,10 +21,11 @@
  */
 #include "commandlinecontroller.h"
 
-#include "log.h"
 #include "global/muversion.h"
 
-using namespace mu::appshell;
+#include "log.h"
+
+using namespace mu::app;
 using namespace mu::framework;
 
 void CommandLineController::parse(const QStringList& args)

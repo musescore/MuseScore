@@ -61,5 +61,8 @@ void AudioModule::registerResources()
 
 void AudioModule::registerUiTypes()
 {
-    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(audio_QML_IMPORT);
+    std::shared_ptr<ui::IUiEngine> ui = ioc()->resolve<ui::IUiEngine>(moduleName());
+    if (ui) {
+        ui->addSourceImportPath(audio_QML_IMPORT);
+    }
 }

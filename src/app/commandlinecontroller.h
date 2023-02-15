@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_COMMANDLINECONTROLLER_H
-#define MU_APPSHELL_COMMANDLINECONTROLLER_H
+#ifndef MU_APP_COMMANDLINECONTROLLER_H
+#define MU_APP_COMMANDLINECONTROLLER_H
 
 #include <QCommandLineParser>
 #include <QStringList>
@@ -32,13 +32,13 @@
 #include "importexport/midi/imidiconfiguration.h"
 #include "importexport/audioexport/iaudioexportconfiguration.h"
 #include "importexport/videoexport/ivideoexportconfiguration.h"
-#include "iappshellconfiguration.h"
-#include "internal/istartupscenario.h"
+#include "appshell/iappshellconfiguration.h"
+#include "appshell/internal/istartupscenario.h"
 #include "notation/inotationconfiguration.h"
 #include "project/iprojectconfiguration.h"
 #include "importexport/guitarpro/iguitarproconfiguration.h"
 
-namespace mu::appshell {
+namespace mu::app {
 class CommandLineController
 {
     INJECT(appshell, framework::IApplication, application)
@@ -47,8 +47,8 @@ class CommandLineController
     INJECT(appshell, iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
     INJECT(appshell, iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
     INJECT(appshell, iex::videoexport::IVideoExportConfiguration, videoExportConfiguration)
-    INJECT(appshell, IAppShellConfiguration, configuration)
-    INJECT(appshell, IStartupScenario, startupScenario)
+    INJECT(appshell, appshell::IAppShellConfiguration, configuration)
+    INJECT(appshell, appshell::IStartupScenario, startupScenario)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, project::IProjectConfiguration, projectConfiguration)
     INJECT(appshell, iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration);
@@ -127,4 +127,4 @@ private:
 };
 }
 
-#endif // MU_APPSHELL_COMMANDLINECONTROLLER_H
+#endif // MU_APP_COMMANDLINECONTROLLER_H

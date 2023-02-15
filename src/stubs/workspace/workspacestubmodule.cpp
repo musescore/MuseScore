@@ -70,5 +70,8 @@ void WorkspaceModule::registerResources()
 
 void WorkspaceModule::registerUiTypes()
 {
-    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(workspace_QML_IMPORT);
+    std::shared_ptr<ui::IUiEngine> ui = ioc()->resolve<ui::IUiEngine>(moduleName());
+    if (ui) {
+        ui->addSourceImportPath(workspace_QML_IMPORT);
+    }
 }
