@@ -1174,9 +1174,6 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
     for (size_t i : getNotesIndexesToRender(chord)) {
         Note* note = chord->notes()[i];
         NoteEventList* el = &ell[i];
-        const double ticksPerSecond = chord->score()->tempo(chord->tick()).val * Constants::division;
-        constexpr double deadNoteDurationInSec = 0.05;
-        const double deadNoteDurationInTicks = ticksPerSecond * deadNoteDurationInSec;
 
         createSlideOutNotePlayEvents(note, el, ontime, trailtime);
         if (arpeggio) {
@@ -1192,7 +1189,7 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
         createSlideInNotePlayEvents(note, el);
 
         for (NoteEvent& e : *el) {
-            e.setLen(note->deadNote() ? deadNoteDurationInTicks : e.len() * gateTime / 100);
+            e.setLen(e.len() * gateTime / 100);
         }
     }
     return ell;
