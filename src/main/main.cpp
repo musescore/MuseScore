@@ -45,7 +45,13 @@
 
 #include "framework/draw/drawmodule.h"
 #include "framework/fonts/fontsmodule.h"
+
+#ifdef MUE_BUILD_MIDI_MODULE
 #include "framework/midi/midimodule.h"
+#else
+#include "stubs/framework/midi/midistubmodule.h"
+#endif
+
 #include "framework/mpe/mpemodule.h"
 
 #ifdef MUE_BUILD_MUSESAMPLER_MODULE
