@@ -55,8 +55,9 @@ VstPlugin::~VstPlugin()
 
         modulesRepo()->removePluginModule(resourceId);
 
-        module.reset();
+        //! NOTE: the order of destruction is important here
         provider.reset();
+        module.reset();
     }, threadSecurer()->mainThreadId());
 }
 
