@@ -44,7 +44,21 @@ VstPlugin::VstPlugin(const audio::AudioResourceId& resourceId)
     });
 }
 
-VstPlugin::~VstPlugin() {}
+VstPlugin::~VstPlugin()
+{
+    audio::AudioResourceId resourceId = m_resourceId;
+    std::shared_ptr<VstPluginProvider> provider = std::move(m_pluginProvider);
+    PluginModulePtr module = std::move(m_module);
+
+    Async::call(nullptr, [resourceId, provider, module]() mutable {
+        ONLY_MAIN_THREAD(threadSecurer);
+
+        modulesRepo()->removePluginModule(resourceId);
+
+        module.reset();
+        provider.reset();
+    }, threadSecurer()->mainThreadId());
+}
 
 const audio::AudioResourceId& VstPlugin::resourceId() const
 {
@@ -114,23 +128,6 @@ void VstPlugin::load()
 
         m_isLoaded = true;
         m_loadingCompleted.notify();
-    }, threadSecurer()->mainThreadId());
-}
-
-void VstPlugin::unload()
-{
-    Async::call(this, [this]() {
-        ONLY_MAIN_THREAD(threadSecurer);
-
-        modulesRepo()->removePluginModule(m_resourceId);
-
-        std::lock_guard lock(m_mutex);
-
-        m_module = nullptr;
-        m_pluginProvider.reset(nullptr);
-        m_classInfo = ClassInfo();
-        m_isLoaded = false;
-        m_unloadingCompleted.notify();
     }, threadSecurer()->mainThreadId());
 }
 
@@ -331,11 +328,6 @@ bool VstPlugin::isLoaded() const
 Notification VstPlugin::loadingCompleted() const
 {
     return m_loadingCompleted;
-}
-
-Notification VstPlugin::unloadingCompleted() const
-{
-    return m_unloadingCompleted;
 }
 
 async::Channel<audio::AudioUnitConfig> VstPlugin::pluginSettingsChanged() const
