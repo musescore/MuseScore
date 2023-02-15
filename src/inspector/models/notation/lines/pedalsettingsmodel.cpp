@@ -57,11 +57,6 @@ PropertyItem* PedalSettingsModel::lineType() const
     return m_lineType;
 }
 
-bool PedalSettingsModel::pedalSymbolVisible() const
-{
-    return beginningText()->value().toString() == mu::engraving::Pedal::PEDAL_SYMBOL;
-}
-
 bool PedalSettingsModel::isChangingLineVisibilityAllowed() const
 {
     return isStarSymbolVisible();
@@ -72,18 +67,9 @@ bool PedalSettingsModel::isStarSymbolVisible() const
     return endText()->value().toString() == mu::engraving::Pedal::STAR_SYMBOL;
 }
 
-void PedalSettingsModel::setPedalSymbolVisible(bool visible)
-{
-    beginningText()->setValue(visible ? mu::engraving::Pedal::PEDAL_SYMBOL.toQString() : "");
-}
-
 void PedalSettingsModel::createProperties()
 {
     TextLineSettingsModel::createProperties();
-
-    connect(beginningText(), &PropertyItem::isModifiedChanged, this, [this]() {
-        emit pedalSymbolVisibleChanged();
-    });
 
     connect(endText(), &PropertyItem::isModifiedChanged, this, [this]() {
         emit isChangingLineVisibilityAllowedChanged();

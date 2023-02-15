@@ -98,9 +98,9 @@ Loader {
             case Inspector.TYPE_KEYSIGNATURE: return keySignatureComp
             case Inspector.TYPE_ACCIDENTAL: return accidentalComp
             case Inspector.TYPE_FRET_DIAGRAM: return fretDiagramComp
-            case Inspector.TYPE_PEDAL: return pedalComp
             case Inspector.TYPE_SPACER: return spacerComp
             case Inspector.TYPE_CLEF: return clefComp
+            case Inspector.TYPE_PEDAL:
             case Inspector.TYPE_HAIRPIN:
             case Inspector.TYPE_CRESCENDO:
             case Inspector.TYPE_DIMINUENDO:
@@ -210,11 +210,6 @@ Loader {
     Component {
         id: fretDiagramComp
         FretDiagramSettings { }
-    }
-
-    Component {
-        id: pedalComp
-        PedalSettings { }
     }
 
     Component {
