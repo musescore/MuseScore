@@ -111,11 +111,6 @@ void HairpinSettingsModel::onNotationChanged(const PropertyIdSet& changedPropert
     loadProperties(changedPropertyIdSet);
 }
 
-bool HairpinSettingsModel::isTextVisible(TextType) const
-{
-    return true;
-}
-
 void HairpinSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
     if (mu::contains(propertyIdSet, Pid::HAIRPIN_CIRCLEDTIP)) {
