@@ -31,6 +31,12 @@ endif ()
 add_subdirectory(draw)
 add_subdirectory(fonts)
 
+if (MUE_BUILD_MIDI_MODULE)
+    add_subdirectory(midi)
+endif()
+
+add_subdirectory(mpe)
+
 if (MUE_BUILD_MUSESAMPLER_MODULE)
     add_subdirectory(musesampler)
 endif()
@@ -46,8 +52,6 @@ if (MUE_BUILD_SHORTCUTS_MODULE)
     add_subdirectory(shortcuts)
 endif()
 
-add_subdirectory(midi)
-add_subdirectory(mpe)
 
 if (MUE_BUILD_VST_MODULE)
     add_subdirectory(vst)
