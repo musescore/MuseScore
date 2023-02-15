@@ -351,7 +351,7 @@ static void collectNote(EventMap* events, const Note* note, CollectNoteParams no
 
     NoteEventList nel = note->playEvents();
     size_t nels = nel.size();
-    for (int i = 0, pitch = note->ppitch(); i < static_cast<int>(nels); ++i) {
+    for (size_t i = 0; i < nels; ++i) {
         const NoteEvent& e = nel[i];     // we make an explicit const ref, not a const copy.  no need to copy as we won't change the original object.
 
         // skip if note has a tie into it and only one NoteEvent
@@ -362,10 +362,10 @@ static void collectNote(EventMap* events, const Note* note, CollectNoteParams no
             break;
         }
 
-        int p = std::clamp(pitch + e.pitch(), 0, 127);
+        int p = std::clamp(note->pitch() + e.pitch(), 0, 127);
         int on  = tick1 + (ticks * e.ontime()) / 1000;
         int off = on + (ticks * e.len()) / 1000 - 1;
-        if (tieFor && i == static_cast<int>(nels) - 1) {
+        if (tieFor && i == nels - 1) {
             off += tieLen;
         }
 
