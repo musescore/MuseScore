@@ -66,11 +66,8 @@ private:
     void fxChainToCreate(const audio::AudioFxChain& currentFxChain, const audio::AudioFxChain& newFxChain,
                          audio::AudioFxChain& resultChain);
 
-    void unloadPlugin(VstPluginPtr plugin);
-
     std::map<audio::TrackId, FxMap> m_tracksFxMap;
     FxMap m_masterFxMap;
-    std::vector<VstPluginPtr> m_pluginsToUnload;
 };
 }
 
