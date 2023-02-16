@@ -327,7 +327,7 @@ FocusScope {
         }
 
         onHoveredChanged: {
-            if (root.isAdd) {
+            if (root.isAdd || root.isNoResultFound) {
                 return
             }
 
