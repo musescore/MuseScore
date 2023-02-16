@@ -304,7 +304,7 @@ public:
         NOTE_PLUS = 0xF39D,
         NOTE_TO_RIGHT = 0xF39E,
         RHYTHM_ONLY = 0xF39F,
-        RE_PITH = 0xF3A0,
+        RE_PITCH = 0xF3A0,
         FOOT_PEDAL = 0xF3A1,
 
         TOOLBAR_GRIP = 0xF3A2,

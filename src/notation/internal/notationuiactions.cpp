@@ -1930,7 +1930,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "Re-pitch existing notes"),
              TranslatableString("action", "Note input: toggle ‘re-pitch existing notes’ mode"),
-             IconCode::Code::RE_PITH
+             IconCode::Code::RE_PITCH
              ),
     UiAction("note-input-realtime-auto",
              mu::context::UiCtxNotationOpened,
