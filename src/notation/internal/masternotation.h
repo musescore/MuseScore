@@ -63,6 +63,8 @@ public:
     void removeExcerpts(const ExcerptNotationList& excerpts) override;
     void sortExcerpts(ExcerptNotationList& excerpts) override;
 
+    IExcerptNotationPtr resetReplaceExcerpt(IExcerptNotationPtr excerpt) override;
+
     void setExcerptIsOpen(const INotationPtr excerptNotation, bool open) override;
 
     INotationPartsPtr parts() const override;

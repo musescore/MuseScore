@@ -143,8 +143,8 @@ INotationPtr ExcerptNotation::notation()
     return shared_from_this();
 }
 
-IExcerptNotationPtr ExcerptNotation::clone() const
+IExcerptNotationPtr ExcerptNotation::clone(bool copyContents) const
 {
-    mu::engraving::Excerpt* copy = new mu::engraving::Excerpt(*m_excerpt);
+    mu::engraving::Excerpt* copy = new mu::engraving::Excerpt(*m_excerpt, copyContents);
     return std::make_shared<ExcerptNotation>(copy);
 }

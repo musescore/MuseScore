@@ -43,7 +43,7 @@ public:
     virtual async::Notification nameChanged() const = 0;
 
     virtual INotationPtr notation() = 0;
-    virtual IExcerptNotationPtr clone() const = 0;
+    virtual IExcerptNotationPtr clone(bool copyContents = true) const = 0;
 };
 }
 
