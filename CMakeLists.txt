@@ -43,7 +43,7 @@ set(MUSESCORE_BUILD_CONFIGURATION "app" CACHE STRING "Build configuration")
 # Possible MUSESCORE_BUILD_CONFIGURATION values:
 # - app             - for desktop app
 # - app-portable    - for desktop portable app (Windows build for PortableApps.com)
-# - vtest           - for visual tests
+# - vtest           - for visual tests (for CI)
 # - utest           - for unit tests (for CI)
 
 set(MUSESCORE_BUILD_MODE "dev" CACHE STRING "Build mode")
