@@ -332,9 +332,9 @@ FocusScope {
             }
 
             if (containsMouse) {
-                ui.tooltip.show(root, root.name, root.path, root.timeSinceModified)
+                ui.tooltip.show(scoreRect, root.name, root.path, root.timeSinceModified)
             } else {
-                ui.tooltip.hide(root)
+                ui.tooltip.hide(scoreRect)
             }
         }
     }
