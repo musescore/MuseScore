@@ -125,6 +125,12 @@ io::path_t GlobalConfiguration::downloadsPath() const
     return p;
 }
 
+io::path_t GlobalConfiguration::genericDataPath() const
+{
+    static io::path_t p = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    return p;
+}
+
 bool GlobalConfiguration::useFactorySettings() const
 {
     return false;

@@ -23,30 +23,29 @@
 #include "musesamplerconfiguration.h"
 
 #include <cstdlib>
-#include <QStandardPaths>
 
 using namespace mu;
 using namespace mu::musesampler;
 
 #if defined(Q_OS_LINUX)
 static const io::path_t DEFAULT_LIB_NAME("libMuseSamplerCoreLib.so");
-static io::path_t DEFAULT_PATH()
+io::path_t MuseSamplerConfiguration::defaultPath() const
 {
-    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/MuseSampler/lib/" + DEFAULT_LIB_NAME;
+    return globalConfig()->genericDataPath() + "/MuseSampler/lib/" + DEFAULT_LIB_NAME;
 }
 
 #elif defined(Q_OS_MAC)
 static const io::path_t DEFAULT_LIB_NAME("libMuseSamplerCoreLib.dylib");
-static io::path_t DEFAULT_PATH()
+io::path_t MuseSamplerConfiguration::defaultPath() const
 {
-    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/MuseSampler/lib/" + DEFAULT_LIB_NAME;
+    return globalConfig()->genericDataPath() + "/MuseSampler/lib/" + DEFAULT_LIB_NAME;
 }
 
 #else
 static const io::path_t DEFAULT_LIB_NAME("MuseSamplerCoreLib.dll");
-static io::path_t DEFAULT_PATH()
+io::path_t MuseSamplerConfiguration::defaultPath() const
 {
-    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "\\MuseSampler\\lib\\" + DEFAULT_LIB_NAME;
+    return globalConfig()->genericDataPath() + "\\MuseSampler\\lib\\" + DEFAULT_LIB_NAME;
 }
 
 #endif
@@ -67,7 +66,7 @@ io::path_t MuseSamplerConfiguration::userLibraryPath() const
         return io::path_t(path);
     }
 
-    return DEFAULT_PATH();
+    return defaultPath();
 }
 
 std::string MuseSamplerConfiguration::minimumSupportedVersion() const
