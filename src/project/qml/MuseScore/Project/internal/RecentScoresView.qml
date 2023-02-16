@@ -109,6 +109,7 @@ StyledGridView {
             name: score.name
             suffix: score.suffix ?? ""
             thumbnail: score.thumbnail ?? null
+            path: score.path
             isAdd: score.isAddNew
             isNoResultFound: score.isNoResultFound
             isCloud: score.isCloud

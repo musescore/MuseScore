@@ -33,6 +33,7 @@ FocusScope {
     property string suffix: ""
     property alias timeSinceModified: timeSinceModified.text
     property var thumbnail: null
+    property var path: null
     property bool isAdd: false
     property bool isNoResultFound: false
     property bool isCloud: false
@@ -328,6 +329,7 @@ FocusScope {
 
         onHoveredChanged: {
             root.hovered(containsMouse)
+            console.log(path)
         }
     }
 }
