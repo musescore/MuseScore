@@ -91,9 +91,9 @@ installBottleManually libsndfile
 
 # fixing install python 3.9 error (it is a dependency for ninja)
 rm '/usr/local/bin/2to3'
-brew install ninja
+brew install ninja pkg-config
 
-
+# Qt
 export QT_SHORT_VERSION=5.15.2
 export QT_PATH=$HOME/Qt
 export QT_MACOS=$QT_PATH/$QT_SHORT_VERSION/clang_64
