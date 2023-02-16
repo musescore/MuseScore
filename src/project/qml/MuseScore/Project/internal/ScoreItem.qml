@@ -41,7 +41,6 @@ FocusScope {
     property alias navigation: navCtrl
 
     signal clicked()
-    signal hovered(bool mouseInArea)
 
     NavigationControl {
         id: navCtrl
@@ -328,8 +327,15 @@ FocusScope {
         }
 
         onHoveredChanged: {
-            root.hovered(containsMouse)
-            console.log(path)
+            if (root.isAdd) {
+                return
+            }
+
+            if (containsMouse) {
+                ui.tooltip.show(root, root.name, root.path, root.timeSinceModified)
+            } else {
+                ui.tooltip.hide(root)
+            }
         }
     }
 }

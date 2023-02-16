@@ -123,18 +123,6 @@ StyledGridView {
                     root.openScoreRequested(score.path)
                 }
             }
-
-            onHovered: (mouseInArea) => {
-                if (isAdd) {
-                    return
-                }
-                // TODO: Set right tooltip position
-                if (mouseInArea) {
-                    ui.tooltip.show(scoreItem, score.name, score.path, scoreItem.timeSinceModified)
-                } else {
-                    ui.tooltip.hide(scoreItem)
-                }
-            }
         }
     }
 }
