@@ -549,6 +549,41 @@ void MasterNotation::removeExcerpts(const ExcerptNotationList& excerpts)
     doSetExcerpts(m_excerpts.val);
 }
 
+IExcerptNotationPtr MasterNotation::resetReplaceExcerpt(IExcerptNotationPtr oldExcerptNotation)
+{
+    if (!oldExcerptNotation) {
+        return nullptr;
+    }
+
+    TRACEFUNC;
+
+    auto it = std::find(m_excerpts.val.begin(), m_excerpts.val.end(), oldExcerptNotation);
+    if (it == m_excerpts.val.end()) {
+        return oldExcerptNotation;
+    }
+
+    undoStack()->prepareChanges();
+
+    mu::engraving::Excerpt* oldExcerpt = get_impl(oldExcerptNotation)->excerpt();
+    masterScore()->deleteExcerpt(oldExcerpt);
+
+    IExcerptNotationPtr newExcerptNotation = oldExcerptNotation->clone(false);
+    ExcerptNotation* newExcerptNotationImpl = get_impl(newExcerptNotation);
+
+    masterScore()->initAndAddExcerpt(newExcerptNotationImpl->excerpt(), false);
+    newExcerptNotationImpl->init();
+
+    *it = newExcerptNotation;
+
+    masterScore()->setExcerptsChanged(false);
+
+    undoStack()->commitChanges();
+
+    doSetExcerpts(m_excerpts.val);
+
+    return newExcerptNotation;
+}
+
 void MasterNotation::sortExcerpts(ExcerptNotationList& excerpts)
 {
     TRACEFUNC;

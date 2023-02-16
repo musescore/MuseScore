@@ -66,13 +66,16 @@
 using namespace mu;
 using namespace mu::engraving;
 
-Excerpt::Excerpt(const Excerpt& ex, bool copyPartScore)
-    : m_masterScore(ex.m_masterScore), m_name(ex.m_name), m_parts(ex.m_parts), m_tracksMapping(ex.m_tracksMapping)
+Excerpt::Excerpt(const Excerpt& ex, bool copyContents)
+    : m_masterScore(ex.m_masterScore), m_name(ex.m_name), m_parts(ex.m_parts), m_initialPartId(ex.m_initialPartId)
 {
-    m_excerptScore = (copyPartScore && ex.m_excerptScore) ? ex.m_excerptScore->clone() : nullptr;
+    if (copyContents) {
+        m_tracksMapping = ex.m_tracksMapping;
+        m_excerptScore = ex.m_excerptScore ? ex.m_excerptScore->clone() : nullptr;
 
-    if (m_excerptScore) {
-        m_excerptScore->setExcerpt(this);
+        if (m_excerptScore) {
+            m_excerptScore->setExcerpt(this);
+        }
     }
 }
 

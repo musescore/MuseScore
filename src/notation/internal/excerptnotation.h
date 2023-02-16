@@ -47,7 +47,7 @@ public:
     async::Notification nameChanged() const override;
 
     INotationPtr notation() override;
-    IExcerptNotationPtr clone() const override;
+    IExcerptNotationPtr clone(bool copyContents = true) const override;
 
 private:
     void fillWithDefaultInfo();
