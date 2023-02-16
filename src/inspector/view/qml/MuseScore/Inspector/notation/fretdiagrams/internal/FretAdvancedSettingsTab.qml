@@ -163,7 +163,6 @@ FocusableItem {
 
         PlacementSection {
             id: placementSection
-            titleText: qsTrc("inspector", "Placement on staff")
             propertyItem: root.model ? root.model.placement : null
 
             navigationPanel: root.navigationPanel
