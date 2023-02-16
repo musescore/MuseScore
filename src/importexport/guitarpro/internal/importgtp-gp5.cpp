@@ -1008,10 +1008,6 @@ bool GuitarPro5::read(IODevice* io)
     StretchedBend::prepareBends(m_bends);
 #endif
 
-    if (engravingConfiguration()->guitarProImportExperimental()) {
-        addSoundEffects();
-    }
-
     return true;
 }
 
@@ -1089,6 +1085,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
     }
     if (modMask2 & EFFECT_PALM_MUTE) {
         addPalmMute(note);
+        note->setPalmMute(true);
     }
 
     if (modMask2 & EFFECT_TREMOLO) {      // tremolo picking length

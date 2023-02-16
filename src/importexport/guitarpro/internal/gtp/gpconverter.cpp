@@ -63,10 +63,6 @@
 
 using namespace mu::engraving;
 
-constexpr int PALM_MUTE_CHAN = 1;
-constexpr int HARMONIC_CHAN = 2;
-constexpr int PALM_MUTE_PROG = 28;
-
 namespace mu::engraving {
 static JumpType jumpType(const String& typeString)
 {
@@ -387,9 +383,6 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
             for (SLine* elem : typeMaps.second.elements) {
                 if (elem) {
                     _score->addElement(elem);
-                    if (engravingConfiguration()->guitarProImportExperimental()) {
-                        addSoundEffects(elem);
-                    }
                 }
             }
         }
@@ -1468,32 +1461,6 @@ void GPConverter::addInstrumentChanges()
     }
 }
 
-void GPConverter::addSoundEffects(const SLine* const elem)
-{
-    EngravingItem* startEl = elem->startElement();
-    EngravingItem* endEl = elem->endElement();
-
-    if (!startEl->isChordRest() || !endEl->isChordRest()) {
-        return;
-    }
-
-    if (elem->isPalmMute()) {
-        Fraction begTick = elem->tick();
-        Instrument* currentInstrument = elem->part()->instrument(begTick);
-        if (!currentInstrument->hasStrings()) {
-            return;
-        }
-
-        if (int idx = currentInstrument->channelIdx(String::fromUtf8(InstrChannel::PALM_MUTE_NAME)); idx < 0) {
-            InstrChannel* palmMuteChannel = new InstrChannel(*currentInstrument->channel(0));
-            palmMuteChannel->setChannel(PALM_MUTE_CHAN);
-            palmMuteChannel->setProgram(PALM_MUTE_PROG);
-            palmMuteChannel->setName(String::fromUtf8(InstrChannel::PALM_MUTE_NAME));
-            currentInstrument->appendChannel(palmMuteChannel);
-        }
-    }
-}
-
 bool GPConverter::addSimileMark(const GPBar* bar, int curTrack)
 {
     if (bar->simileMark() == GPBar::SimileMark::None) {
@@ -2404,11 +2371,11 @@ void GPConverter::addLetRing(const GPNote* gpnote, Note* note)
     }
 }
 
-void GPConverter::addPalmMute(const GPNote* gpnote, Note* /*note*/)
+void GPConverter::addPalmMute(const GPNote* gpnote, Note* note)
 {
     if (gpnote->palmMute() && m_currentGPBeat) {
         m_currentGPBeat->setPalmMute(true);
-        //note->setPalmMute(true); TODO-gp: palm mute playback
+        note->setPalmMute(true);
     }
 }
 

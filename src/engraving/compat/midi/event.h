@@ -70,6 +70,7 @@ class NPlayEvent : public PlayEvent
     int _origin = -1;
     int _discard = 0;
     bool _portamento = false;
+    bool _palmMute = false;
 
 public:
     NPlayEvent()
@@ -84,6 +85,8 @@ public:
     void setNote(const Note* v) { _note = v; }
     const Harmony* harmony() const { return _harmony; }
     void setHarmony(const Harmony* v) { _harmony = v; }
+    bool palmMute() const { return _palmMute; }
+    void setPalmMute(bool palmMute) { _palmMute = palmMute; }
 
     int getOriginatingStaff() const { return _origin; }
     void setOriginatingStaff(int i) { _origin = i; }

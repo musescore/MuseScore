@@ -194,6 +194,7 @@ private:
     bool _play = true;           ///< note is not played if false
     mutable bool _mark = false;  ///< for use in sequencer
     bool _fixed = false;         ///< for slash notation
+    bool _palmMute = false;
     StretchedBend* m_bend = nullptr;
 
     DirectionH _userMirror = DirectionH::AUTO;        ///< user override of mirror
@@ -547,6 +548,9 @@ public:
 
     void setHarmonic(bool val) { _harmonic = val; }
     bool harmonic() const { return _harmonic; }
+
+    void setPalmMute(bool val) { _palmMute = val; }
+    bool palmMute() const { return _palmMute; }
 
     bool isGrace() const { return noteType() != NoteType::NORMAL; }
 

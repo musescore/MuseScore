@@ -195,6 +195,7 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
     ev.setOriginatingStaff(params.staffIdx);
     ev.setTuning(note->tuning());
     ev.setNote(note);
+    ev.setPalmMute(note->palmMute());
     if (params.offTime > 0 && params.offTime < params.onTime) {
         return;
     }
