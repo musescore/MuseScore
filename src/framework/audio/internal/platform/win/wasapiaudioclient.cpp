@@ -122,13 +122,16 @@ hstring WasapiAudioClient::defaultDeviceId() const
     return MediaDevice::GetDefaultAudioRenderId(AudioDeviceRole::Default);
 }
 
-void WasapiAudioClient::asyncInitializeAudioDevice(const hstring& deviceId) noexcept
+void WasapiAudioClient::asyncInitializeAudioDevice(const hstring& deviceId, bool useClosestSupportedFormat) noexcept
 {
     try {
         // This call can be made safely from a background thread because we are asking for the IAudioClient3
         // interface of an audio device. Async operation will call back to
         // IActivateAudioInterfaceCompletionHandler::ActivateCompleted, which must be an agile interface implementation
         m_deviceIdString = deviceId;
+
+        m_useClosestSupportedFormat = useClosestSupportedFormat;
+        m_deviceState = DeviceState::Uninitialized;
 
         com_ptr<IActivateAudioInterfaceAsyncOperation> asyncOp;
         check_hresult(ActivateAudioInterfaceAsync(m_deviceIdString.c_str(), __uuidof(IAudioClient3), nullptr, this, asyncOp.put()));
@@ -316,19 +319,12 @@ HRESULT WasapiAudioClient::configureDeviceInternal() noexcept
         LOGI() << "WASAPI: Modified mix format:";
         logWAVEFORMATEX(m_mixFormat.get());
 
-        {
+        if (m_useClosestSupportedFormat) {
             unique_cotaskmem_ptr<WAVEFORMATEX> closestSupported;
-            auto isSupported = m_audioClient->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED, m_mixFormat.get(), closestSupported.put());
-            if (S_OK == isSupported) {
-                LOGI() << "WASAPI: Modified mix format is supported";
-            } else if (S_FALSE == isSupported) {
-                LOGI() << "WASAPI: Modified mix format is not supported, using closest match:";
-                logWAVEFORMATEX(closestSupported.get());
-                m_mixFormat = std::move(closestSupported);
-            } else {
-                LOGE() << "WASAPI: Modified mix format is not supported!";
-                check_hresult(isSupported);
-            }
+            m_audioClient->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED, m_mixFormat.get(), closestSupported.put());
+
+            logWAVEFORMATEX(closestSupported.get());
+            m_mixFormat = std::move(closestSupported);
         }
 
         if (!audioProps.bIsOffload) {
@@ -669,10 +665,6 @@ void WasapiAudioClient::setStateAndNotify(const DeviceState newState, hresult re
     case AUDCLNT_E_HEADTRACKING_ENABLED: errMsg = "AUDCLNT_E_HEADTRACKING_ENABLED";
         break;
     case AUDCLNT_E_HEADTRACKING_UNSUPPORTED: errMsg = "AUDCLNT_E_HEADTRACKING_UNSUPPORTED";
-        break;
-    case AUDCLNT_E_EFFECT_NOT_AVAILABLE: errMsg = "AUDCLNT_E_EFFECT_NOT_AVAILABLE";
-        break;
-    case AUDCLNT_E_EFFECT_STATE_READ_ONLY: errMsg = "AUDCLNT_E_EFFECT_STATE_READ_ONLY";
         break;
     case AUDCLNT_S_BUFFER_EMPTY: errMsg = "AUDCLNT_S_BUFFER_EMPTY";
         break;
