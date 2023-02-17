@@ -3721,6 +3721,15 @@ Shape Chord::shape() const
     for (LedgerLine* l = _ledgerLines; l; l = l->next()) {
         shape.add(l->shape().translated(l->pos()));
     }
+    if (_beamlet) {
+        double xPos = _beamlet->line.p1().x() - _stem->xpos();
+        if (_beamlet->isBefore && !_up) {
+            xPos -= _stem->width();
+        } else if (!_beamlet->isBefore && _up) {
+            xPos += _stem->width();
+        }
+        shape.add(_beamlet->shape().translated(PointF(-xPos, 0.0)));
+    }
 
     return shape;
 }

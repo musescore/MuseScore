@@ -84,6 +84,7 @@ public:
 
     double minHorizontalDistance(const Shape&, Score* score) const;
     double minVerticalDistance(const Shape&) const;
+    double verticalClearance(const Shape&) const;
     double topDistance(const mu::PointF&) const;
     double bottomDistance(const mu::PointF&) const;
     double left() const;

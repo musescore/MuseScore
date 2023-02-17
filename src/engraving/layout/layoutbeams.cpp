@@ -29,6 +29,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/factory.h"
 #include "libmscore/measure.h"
+#include "libmscore/rest.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
 #include "libmscore/staff.h"
@@ -505,4 +506,38 @@ void LayoutBeams::layoutNonCrossBeams(Segment* s)
             }
         }
     }
+}
+
+void LayoutBeams::verticalAdjustBeamedRests(Rest* rest, Beam* beam)
+{
+    const double sp = rest->spatium();
+    static constexpr Fraction rest32nd(1, 32);
+    const bool up = beam->up();
+
+    double restToBeamPadding;
+    if (rest->ticks() <= rest32nd) {
+        restToBeamPadding = 0.2 * sp;
+    } else {
+        restToBeamPadding = 0.35 * sp;
+    }
+
+    Shape beamShape = beam->shape().translated(beam->pagePos());
+    mu::remove_if(beamShape, [&](ShapeElement& el) {
+        return el.toItem && el.toItem->isBeamSegment() && toBeamSegment(el.toItem)->isBeamlet;
+    });
+
+    double restYOffset = rest->offset().y();
+    bool ignoreYOffset = (up && restYOffset > 0) || (!up && restYOffset < 0);
+    PointF offset = ignoreYOffset ? PointF() : PointF(0.0, restYOffset);
+    Shape restShape = rest->shape().translated(rest->pagePos() - offset);
+
+    double restToBeamClearance = up ? beamShape.verticalClearance(restShape) : restShape.verticalClearance(beamShape);
+    if (restToBeamClearance > restToBeamPadding) {
+        return;
+    }
+    double overlap = (restToBeamPadding - restToBeamClearance);
+    double lineDistance = rest->staff()->lineDistance(rest->tick()) * sp;
+    int lineMoves = ceil(overlap / lineDistance);
+    lineMoves *= up ? 1 : -1;
+    rest->movePosY(lineMoves * lineDistance);
 }

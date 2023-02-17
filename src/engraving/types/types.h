@@ -97,6 +97,7 @@ enum class ElementType {
     CHORDLINE,
     DYNAMIC,
     BEAM,
+    BEAM_SEGMENT,
     HOOK,
     LYRICS,
     FIGURED_BASS,

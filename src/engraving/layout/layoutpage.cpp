@@ -307,6 +307,11 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                                     t->layout();
                                 }
                             }
+                        } else if (cr->isRest()) {
+                            Beam* beam = cr->beam();
+                            if (beam && !beam->cross()) {
+                                LayoutBeams::verticalAdjustBeamedRests(toRest(cr), beam);
+                            }
                         }
                     } else if (e->isBarLine()) {
                         toBarLine(e)->layout2();
