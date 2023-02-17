@@ -825,7 +825,7 @@ void Beam::createBeamSegment(ChordRest* startCr, ChordRest* endCr, int level)
         }
     }
 
-    BeamSegment* b = new BeamSegment();
+    BeamSegment* b = new BeamSegment(this);
     b->above = !overallUp;
     b->level = level;
     b->line = LineF(startX, startY, endX, endY);
@@ -997,10 +997,13 @@ void Beam::createBeamletSegment(ChordRest* cr, bool isBefore, int level)
         endY -= verticalOffset * grow2;
     }
 
-    BeamSegment* b = new BeamSegment();
+    BeamSegment* b = new BeamSegment(this);
     b->above = !cr->up();
     b->level = level;
     b->line = LineF(startX, startY, endX, endY);
+    b->isBeamlet = true;
+    b->isBefore = isBefore;
+    cr->setBeamlet(b);
     _beamSegments.push_back(b);
 }
 
@@ -2464,4 +2467,57 @@ bool Beam::hasAllRests()
         }
     }
     return true;
+}
+
+Shape Beam::shape() const
+{
+    Shape shape;
+    for (BeamSegment* beamSegment : _beamSegments) {
+        shape.add(beamSegment->shape());
+    }
+    return shape;
+}
+
+//-------------------------------------------------------
+// BEAM SEGMENT CLASS
+//-------------------------------------------------------
+
+BeamSegment::BeamSegment(Beam* b)
+    : EngravingItem(ElementType::BEAM_SEGMENT, b), beam(b) {}
+
+Shape BeamSegment::shape() const
+{
+    Shape shape;
+    PointF startPoint = line.p1();
+    PointF endPoint = line.p2();
+    double _beamWidth = beam->_beamWidth;
+    // This is the case of right-beamlets
+    if (startPoint.x() > endPoint.x()) {
+        std::swap(startPoint, endPoint);
+    }
+    double beamHorizontalLength = endPoint.x() - startPoint.x();
+    // If beam is horizontal, one rectangle is enough
+    if (RealIsEqual(startPoint.y(), endPoint.y())) {
+        RectF rect(startPoint.x(), startPoint.y(), beamHorizontalLength, _beamWidth / 2);
+        rect.adjust(0.0, -_beamWidth / 2, 0.0, 0.0);
+        shape.add(rect, this);
+        return shape;
+    }
+    // If not, break the beam shape into multiple rectangles
+    double beamHeightDiff = endPoint.y() - startPoint.y();
+    int subBoxesCount = floor(beamHorizontalLength / beam->spatium());
+    double horizontalStep = beamHorizontalLength / subBoxesCount;
+    double verticalStep = beamHeightDiff / subBoxesCount;
+    std::vector<PointF> pointsOnBeamLine;
+    pointsOnBeamLine.push_back(startPoint);
+    for (int i = 0; i < subBoxesCount - 1; ++i) {
+        PointF nextPoint = pointsOnBeamLine.back() + PointF(horizontalStep, verticalStep);
+        pointsOnBeamLine.push_back(nextPoint);
+    }
+    for (PointF point : pointsOnBeamLine) {
+        RectF rect(point.x(), point.y(), horizontalStep, _beamWidth / 2);
+        rect.adjust(0.0, -_beamWidth / 2, 0.0, 0.0);
+        shape.add(rect, this);
+    }
+    return shape;
 }

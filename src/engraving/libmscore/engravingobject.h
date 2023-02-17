@@ -54,6 +54,7 @@ class BSymbol;
 class BagpipeEmbellishment;
 class BarLine;
 class Beam;
+class BeamSegment;
 class Bend;
 class Box;
 class Bracket;
@@ -350,6 +351,7 @@ public:
     CONVERT(Lyrics,        LYRICS)
     CONVERT(Stem,          STEM)
     CONVERT(Beam,          BEAM)
+    CONVERT(BeamSegment,   BEAM_SEGMENT)
     CONVERT(Hook,          HOOK)
     CONVERT(StemSlash,     STEM_SLASH)
     CONVERT(SlurSegment,   SLUR_SEGMENT)
@@ -691,6 +693,7 @@ CONVERT(System)
 CONVERT(Lyrics)
 CONVERT(Stem)
 CONVERT(Beam)
+CONVERT(BeamSegment)
 CONVERT(Hook)
 CONVERT(StemSlash)
 CONVERT(LineSegment)

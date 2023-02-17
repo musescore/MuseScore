@@ -778,6 +778,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
                                 layoutDrumsetChord(c, drumset, st, score->spatium());
                             }
                             c->layoutStem();
+                            c->setBeamlet(nullptr); // Will be defined during beam layout
                         }
                         if (drumset) {
                             layoutDrumsetChord(chord, drumset, st, score->spatium());
@@ -804,6 +805,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
                         }
                     }
                     cr->setMag(m);
+                    cr->setBeamlet(nullptr); // Will be defined during beam layout
                 }
             } else if (segment.isClefType()) {
                 EngravingItem* e = segment.element(staffIdx * VOICES);
