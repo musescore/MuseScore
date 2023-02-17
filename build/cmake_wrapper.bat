@@ -9,7 +9,7 @@ set "TARGET_PROCESSOR_BITS=64"
 :loop
     rem  CMD splits arguments on equals sign, so -DFOO=BAR is treated as -DFOO and BAR
     if "%~1%~2" == "" goto continue
-    if "%~1=%~2" == "-DBUILD_64=OFF" set "TARGET_PROCESSOR_BITS=32"
+    if "%~1=%~2" == "-DMUE_COMPILE_BUILD_64=OFF" set "TARGET_PROCESSOR_BITS=32"
     shift
     goto loop
 :continue

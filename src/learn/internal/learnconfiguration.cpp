@@ -23,12 +23,10 @@
 
 #include <QString>
 
-#include "config.h"
-
 using namespace mu::learn;
 using namespace mu::network;
 
-static const QString API_KEY(YOUTUBE_API_KEY);
+static const QString API_KEY(MUE_LEARN_YOUTUBE_API_KEY);
 static const QString GET_STARTED_PLAYLIST_ID("PLTYuWi2LmaPEhcwZJwFZqoyQ2xXx_maPa");
 static const QString ADVANCED_PLAYLIST_ID("PL24C760637A625BB6");
 static const int MAX_NUMBER_OF_RESULT_ITEMS(100);

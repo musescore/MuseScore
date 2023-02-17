@@ -1,9 +1,0 @@
-init init/TrebleWithPart.mscx
-cmd note-input
-cmd escape
-cmd pad-note-4
-cmd del-empty-measures
-cmd note-input
-cmd escape
-cmd time-delete
-test score 290096-remove-beat-parts-corruption.mscx

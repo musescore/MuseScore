@@ -23,7 +23,6 @@
 
 #include "utils/drawlogger.h"
 #include "log.h"
-#include "config.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -71,7 +70,7 @@ void BufferedPaintProvider::beginObject(const std::string& name, const PointF& p
     // add new object
     m_currentObjects.push(DrawData::Object(name, pagePos));
 
-#ifdef TRACE_DRAW_OBJ_ENABLED
+#ifdef MUE_ENABLE_DRAW_TRACE
     m_drawObjectsLogger->beginObject(name, pagePos);
 #endif
 }
@@ -92,7 +91,7 @@ void BufferedPaintProvider::endObject()
     // remove obj
     m_currentObjects.pop();
 
-#ifdef TRACE_DRAW_OBJ_ENABLED
+#ifdef MUE_ENABLE_DRAW_TRACE
     m_drawObjectsLogger->endObject();
 #endif
 }

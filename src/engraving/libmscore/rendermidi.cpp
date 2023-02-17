@@ -601,6 +601,23 @@ int totalTiedNoteTicks(Note* note)
 }
 
 //---------------------------------------------------------
+//   noteHasGlissando
+// true if note is the end of a glissando
+//---------------------------------------------------------
+
+static bool noteHasGlissando(Note* note)
+{
+    for (Spanner* spanner : note->spannerFor()) {
+        if ((spanner->type() == ElementType::GLISSANDO)
+            && spanner->endElement()
+            && (ElementType::NOTE == spanner->endElement()->type())) {
+            return true;
+        }
+    }
+    return false;
+}
+
+//---------------------------------------------------------
 //   renderNoteArticulation
 // prefix, vector of int, normally something like {0,-1,0,1} modeling the prefix of tremblement relative to the base note
 // body, vector of int, normally something like {0,-1,0,1} modeling the possibly repeated tremblement relative to the base note
@@ -609,11 +626,11 @@ int totalTiedNoteTicks(Note* note)
 // sustainp, true means the last note of the body is sustained to fill remaining time slice
 //---------------------------------------------------------
 
-bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, int requestedTicksPerNote,
-                            const std::vector<int>& prefix, const std::vector<int>& body,
-                            bool repeatp, bool sustainp, const std::vector<int>& suffix,
-                            int fastestFreq=64, int slowestFreq=8 // 64 Hz and 8 Hz
-                            )
+static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, int requestedTicksPerNote,
+                                   const std::vector<int>& prefix, const std::vector<int>& body,
+                                   bool repeatp, bool sustainp, const std::vector<int>& suffix,
+                                   int fastestFreq = 64, int slowestFreq = 8, // 64 Hz and 8 Hz
+                                   double graceOnBeatProportion = 0)
 {
     events->clear();
     Chord* chord = note->chord();
@@ -623,7 +640,9 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
     int sustain   = 0;
     int ontime    = 0;
 
-    int gnb = int(note->chord()->graceNotesBefore().size());
+    ///@NOTE grace note + glissando combination is treated separetely, in this method grace notes for glissando are not added
+    /// graceOnBeatProportion is used for calculating grace note "on beat" offset
+    int gnb = noteHasGlissando(note) ? 0 : int(note->chord()->graceNotesBefore().size());
     int p = int(prefix.size());
     int b = int(body.size());
     int s = int(suffix.size());
@@ -702,10 +721,15 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
     //   append a NoteEvent either by calculating an articulationExcursion or by
     //   the given chromatic relative pitch.
     //   RETURNS the new ontime value.  The caller is expected to assign this value.
-    auto makeEvent = [note, chord, chromatic, events](int pitch, int ontime, int duration, double velocityMultiplier = 1.0) {
+    auto makeEvent
+        = [note, chord, chromatic, events](int pitch, int ontime, int duration, double velocityMultiplier = 1.0, bool play = true) {
+        if (note->ghost()) {
+            velocityMultiplier *= NoteEvent::GHOST_VELOCITY_MULTIPLIER;
+        }
         events->push_back(NoteEvent(chromatic ? pitch : chromaticPitchSteps(note, note, pitch),
                                     ontime / chord->actualTicks().ticks(),
-                                    duration / chord->actualTicks().ticks(), velocityMultiplier));
+                                    duration / chord->actualTicks().ticks(), velocityMultiplier, play));
+
         return ontime + duration;
     };
 
@@ -742,10 +766,13 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
         sustain   = space - millespernote * (gnb + p + numrepeat * b + s + gna);
     }
     // render the graceNotesBefore
-    ontime = graceExtend(note->pitch(), note->chord()->graceNotesBefore(), ontime);
+    ///@NOTE grace note + glissando combination is treated separetely
+    if (!noteHasGlissando(note)) {
+        ontime = graceExtend(note->pitch(), note->chord()->graceNotesBefore(), ontime);
+    }
 
     // render the prefix
-    for (int j=0; j < p; j++) {
+    for (int j = 0; j < p; j++) {
         ontime = makeEvent(prefix[j], ontime, tieForward(j, prefix));
     }
 
@@ -760,10 +787,15 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
                                     static_cast<double>(glissando->easeOut()) / 100.0);
 
                 // shifting glissando sounds to the second half of glissando duration
-                int duration = millespernote * b / 2;
-                easeInOut.timeList(b, duration, &onTimes);
+                int totalDuration = millespernote * b;
+                int glissandoDuration = totalDuration * (1 - graceOnBeatProportion) / 2;
+                easeInOut.timeList(b, glissandoDuration, &onTimes);
+                if (!onTimes.empty()) {
+                    onTimes[0] += graceOnBeatProportion * totalDuration;
+                }
+
                 for (size_t i = 1; i < onTimes.size(); i++) {
-                    onTimes[i] += duration;
+                    onTimes[i] += totalDuration - glissandoDuration;
                 }
 
                 isGlissando = true;
@@ -775,9 +807,14 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
             const double glissandoVelocityMultiplier = NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
 
             // render the body, i.e. the glissando
-            for (int j = 0; j < b - 1; j++) {
+            if (onTimes.size() > 1) {
+                makeEvent(body[0], onTimes[0], onTimes[1] - onTimes[0],
+                          defaultVelocityMultiplier, !note->tieBack());
+            }
+
+            for (int j = 1; j < b - 1; j++) {
                 makeEvent(body[j], onTimes[j], onTimes[j + 1] - onTimes[j],
-                          j == 0 ? defaultVelocityMultiplier : glissandoVelocityMultiplier);
+                          glissandoVelocityMultiplier);
             }
             makeEvent(body[b - 1], onTimes[b - 1], (millespernote * b - onTimes[b - 1]) + sustain, glissandoVelocityMultiplier);
         } else {
@@ -923,27 +960,10 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
 }
 
 //---------------------------------------------------------
-//   noteHasGlissando
-// true if note is the end of a glissando
-//---------------------------------------------------------
-
-bool noteHasGlissando(Note* note)
-{
-    for (Spanner* spanner : note->spannerFor()) {
-        if ((spanner->type() == ElementType::GLISSANDO)
-            && spanner->endElement()
-            && (ElementType::NOTE == spanner->endElement()->type())) {
-            return true;
-        }
-    }
-    return false;
-}
-
-//---------------------------------------------------------
 //   renderGlissando
 //---------------------------------------------------------
 
-void renderGlissando(NoteEventList* events, Note* notestart)
+static void renderGlissando(NoteEventList* events, Note* notestart, double graceOnBeatProportion)
 {
     std::vector<int> empty = {};
     std::vector<int> body;
@@ -951,7 +971,8 @@ void renderGlissando(NoteEventList* events, Note* notestart)
         if (spanner->type() == ElementType::GLISSANDO
             && toGlissando(spanner)->playGlissando()
             && Glissando::pitchSteps(spanner, body)) {
-            renderNoteArticulation(events, notestart, true, Constants::division, empty, body, false, true, empty, 16, 0);
+            renderNoteArticulation(events, notestart, true, Constants::division, empty, body, false, true, empty, 16, 0,
+                                   graceOnBeatProportion);
         }
     }
 }
@@ -1007,7 +1028,7 @@ static bool graceNotesMerged(Chord* chord)
 //   renderChordArticulation
 //---------------------------------------------------------
 
-void renderChordArticulation(Chord* chord, std::vector<NoteEventList>& ell, int& gateTime)
+static void renderChordArticulation(Chord* chord, std::vector<NoteEventList>& ell, int& gateTime, double graceOnBeatProportion)
 {
     Segment* seg = chord->segment();
     Instrument* instr = chord->part()->instrument(seg->tick());
@@ -1019,7 +1040,7 @@ void renderChordArticulation(Chord* chord, std::vector<NoteEventList>& ell, int&
         Trill* trill;
 
         if (noteHasGlissando(note)) {
-            renderGlissando(events, note);
+            renderGlissando(events, note, graceOnBeatProportion);
         } else if (chord->staff()->isPitchedStaff(chord->tick()) && (trill = findFirstTrill(chord)) != nullptr) {
             renderNoteArticulation(events, note, false, trill->trillType(), trill->ornamentStyle());
         } else {
@@ -1082,24 +1103,44 @@ static std::set<size_t> getNotesIndexesToRender(Chord* chord)
     return notesIndexesToRender;
 }
 
+static void createSlideInNotePlayEvents(Note* note, NoteEventList* el)
+{
+    if (!note->isSlideToNote()) {
+        return;
+    }
+
+    const int slideNotes = NoteEvent::SLIDE_AMOUNT;
+    const int slideDuration = NoteEvent::SLIDE_DURATION * NoteEvent::NOTE_LENGTH / note->chord()->ticks().ticks();
+    const int totalSlideDuration = slideNotes * slideDuration;
+
+    int slideOn = 0;
+    int pitchOffset = (note->slide().is(Note::SlideType::Plop) ? 1 : -1);
+    int pitch = pitchOffset * slideNotes;
+    for (int i = 0; i < slideNotes; ++i) {
+        el->push_back(NoteEvent(pitch, 0, slideDuration, NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER, true, totalSlideDuration - slideOn));
+        slideOn += slideDuration;
+        pitch -= pitchOffset;
+    }
+}
+
 static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int& onTime, int& trailtime)
 {
     if (!note->isSlideOutNote()) {
         return;
     }
 
-    const int slideNotes = 3;
-    const int slideDuration = 45;
+    const int slideNotes = NoteEvent::SLIDE_AMOUNT;
+    const int slideDuration = NoteEvent::SLIDE_DURATION * NoteEvent::NOTE_LENGTH / note->chord()->ticks().ticks();
     trailtime += slideNotes * slideDuration;
     int slideOn = 1000 - trailtime;
-    el->push_back(NoteEvent(0, onTime, slideOn));
+    double velocity = !note->ghost() ? NoteEvent::DEFAULT_VELOCITY_MULTIPLIER : NoteEvent::GHOST_VELOCITY_MULTIPLIER;
+    el->push_back(NoteEvent(0, onTime, slideOn, velocity, !note->tieBack()));
 
     int pitch = 0;
     int pitchOffset = note->slide().is(Note::SlideType::Doit) ? 1 : -1;
     for (int i = 0; i < slideNotes; ++i) {
         pitch += pitchOffset;
-        el->push_back(NoteEvent(pitch, slideOn, slideDuration, NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER));
-
+        el->push_back(NoteEvent(pitch, slideOn, slideDuration, velocity * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER));
         slideOn += slideDuration;
     }
 }
@@ -1126,16 +1167,13 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
         renderArpeggio(chord, ell);
         arpeggio = true;
     } else {
-        renderChordArticulation(chord, ell, gateTime);
+        renderChordArticulation(chord, ell, gateTime, (double)ontime / 1000);
     }
 
     // Check each note and apply gateTime
     for (size_t i : getNotesIndexesToRender(chord)) {
         Note* note = chord->notes()[i];
         NoteEventList* el = &ell[i];
-        const double ticksPerSecond = chord->score()->tempo(chord->tick()).val * Constants::division;
-        constexpr double deadNoteDurationInSec = 0.05;
-        const double deadNoteDurationInTicks = ticksPerSecond * deadNoteDurationInSec;
 
         createSlideOutNotePlayEvents(note, el, ontime, trailtime);
         if (arpeggio) {
@@ -1144,27 +1182,14 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
         // If we are here then we still need to render the note.
         // Render its body if necessary and apply gateTime.
         if (el->empty() && chord->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
-            el->push_back(NoteEvent(0, ontime, 1000 - trailtime));
+            el->push_back(NoteEvent(0, ontime, 1000 - trailtime,
+                                    !note->ghost() ? NoteEvent::DEFAULT_VELOCITY_MULTIPLIER : NoteEvent::GHOST_VELOCITY_MULTIPLIER));
         }
-        if (trailtime == 0) {   // if trailtime is non-zero that means we have graceNotesAfter, so we don't need additional gate time.
-            for (NoteEvent& e : *el) {
-                e.setLen(note->deadNote() ? deadNoteDurationInTicks : e.len() * gateTime / 100);
 
-                if (note->letRingType() != mu::engraving::Note::LetRingType::None) {
-                    constexpr double letRingMaxStretch = 4.;
-                    constexpr double letRingMinStretch = 1.;
-                    double newLetRingStretch = 0;
+        createSlideInNotePlayEvents(note, el);
 
-                    if (note->letRingType() == mu::engraving::Note::LetRingType::IgnoreEnd) {
-                        newLetRingStretch = letRingMaxStretch;
-                    } else {
-                        newLetRingStretch = std::clamp(
-                            (note->letRingEndDistance() / chord->ticks()).toDouble(), letRingMinStretch, letRingMaxStretch);
-                    }
-
-                    e.setLen(e.len() * newLetRingStretch);
-                }
-            }
+        for (NoteEvent& e : *el) {
+            e.setLen(e.len() * gateTime / 100);
         }
     }
     return ell;
@@ -1327,39 +1352,57 @@ void Score::createPlayEvents(Chord* chord)
 
 static void adjustPreviousChordLength(Chord* currentChord, Chord* prevChord)
 {
+    if (!prevChord) {
+        return;
+    }
+
     const std::vector<Chord*>& graceBeforeChords = currentChord->graceNotesBefore();
     std::vector<Chord*> graceNotesBeforeBar;
     std::copy_if(graceBeforeChords.begin(), graceBeforeChords.end(), std::back_inserter(graceNotesBeforeBar), [](Chord* ch) {
         return ch->noteType() == NoteType::ACCIACCATURA;
     });
 
-    if (prevChord && !graceNotesBeforeBar.empty()) {
+    int prevTicks = prevChord->ticks().ticks();
+    double lengthMultiply = 1.0;
+
+    const auto& notes = currentChord->notes();
+    bool anySlidesIn = std::any_of(notes.begin(), notes.end(), [](const Note* note) { return note->isSlideToNote(); });
+
+    if (!graceNotesBeforeBar.empty()) {
         int reducedTicks = graceNotesBeforeBar[0]->ticks().ticks();
-        int prevTicks = prevChord->ticks().ticks();
-        if (reducedTicks < prevTicks) {
-            double lengthMultiply = std::min(1.f, (float)(prevTicks - reducedTicks) / (float)prevTicks);
-
-            for (size_t i = 0; i < prevChord->notes().size(); i++) {
-                Note* prevChordNote = prevChord->notes()[i];
-                NoteEventList evList;
-                const auto& prevEvents = prevChordNote->playEvents();
-
-                int curPos = prevEvents.front().ontime();
-
-                for (size_t i = 0; i < prevEvents.size(); i++) {
-                    NoteEvent event;
-                    const NoteEvent& prevEvent = prevEvents[i];
-                    event.setOntime(curPos);
-                    event.setPitch(prevEvent.pitch());
-                    int newEventLength = prevEvent.len() * lengthMultiply;
-                    event.setLen(newEventLength);
-                    evList.push_back(event);
-                    curPos += newEventLength;
-                }
-
-                prevChordNote->setPlayEvents(evList);
-            }
+        if (reducedTicks >= prevTicks) {
+            return;
         }
+
+        lengthMultiply = std::min(1.0, (double)(prevTicks - reducedTicks) / prevTicks);
+    } else if (anySlidesIn) {
+        lengthMultiply
+            = std::min(1.0,
+                       ((double)NoteEvent::NOTE_LENGTH - NoteEvent::SLIDE_AMOUNT * NoteEvent::SLIDE_DURATION * NoteEvent::NOTE_LENGTH
+                        / prevChord->ticks().ticks()) / NoteEvent::NOTE_LENGTH);
+    } else {
+        return;
+    }
+
+    for (size_t i = 0; i < prevChord->notes().size(); i++) {
+        Note* prevChordNote = prevChord->notes()[i];
+        NoteEventList evList;
+        const auto& prevEvents = prevChordNote->playEvents();
+
+        int curPos = prevEvents.front().ontime();
+
+        for (size_t i = 0; i < prevEvents.size(); i++) {
+            NoteEvent event;
+            const NoteEvent& prevEvent = prevEvents[i];
+            event.setOntime(curPos);
+            event.setPitch(prevEvent.pitch());
+            int newEventLength = prevEvent.len() * lengthMultiply;
+            event.setLen(newEventLength);
+            evList.push_back(event);
+            curPos += newEventLength;
+        }
+
+        prevChordNote->setPlayEvents(evList);
     }
 }
 
@@ -1404,7 +1447,11 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
             }
             for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
                 EngravingItem* e = seg->element(track);
-                if (e == 0 || !e->isChord()) {
+                if (e == 0) {
+                    continue;
+                }
+
+                if (!e->isChord()) {
                     prevChord = nullptr;
                     continue;
                 }
@@ -1418,23 +1465,10 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
     }
 }
 
-//---------------------------------------------------------
-//   renderMidi
-//    export score to event list
-//---------------------------------------------------------
-
-void Score::renderMidi(EventMap* events, const SynthesizerState& synthState)
-{
-    renderMidi(events, true, MScore::playRepeats, synthState);
-}
-
-void Score::renderMidi(EventMap* events, bool metronome, bool expandRepeats, const SynthesizerState& synthState)
+void Score::renderMidi(EventMap* events, const MidiRenderer::Context& ctx, bool expandRepeats)
 {
     bool expandRepeatsBackup = masterScore()->expandRepeats();
     masterScore()->setExpandRepeats(expandRepeats);
-    MidiRenderer::Context ctx;
-    ctx.synthState = synthState;
-    ctx.metronome = metronome;
     MidiRenderer(this).renderScore(events, ctx);
     masterScore()->setExpandRepeats(expandRepeatsBackup);
 }

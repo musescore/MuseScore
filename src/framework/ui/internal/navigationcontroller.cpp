@@ -34,8 +34,6 @@
 #include "defer.h"
 #include "log.h"
 
-#include "config.h"
-
 // #define NAVIGATION_LOGGING_ENABLED
 
 #ifdef NAVIGATION_LOGGING_ENABLED
@@ -361,7 +359,7 @@ void NavigationController::resetIfNeed(QObject* watched)
         return;
     }
 
-#ifdef BUILD_DIAGNOSTICS
+#ifdef MUE_BUILD_DIAGNOSTICS_MODULE
     if (diagnostics::isDiagnosticHierarchy(watched)) {
         return;
     }

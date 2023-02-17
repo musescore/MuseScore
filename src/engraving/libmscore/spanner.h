@@ -163,9 +163,6 @@ private:
     track_idx_t _track2 = mu::nidx;
     bool _broken           { false };
 
-    int _startUniqueTicks = 0;
-    int _endUniqueTicks = 0;
-
     std::vector<SpannerSegment*> segments;
     std::deque<SpannerSegment*> unusedSegments;   // Currently unused segments which can be reused later.
                                                   // We cannot just delete them as they can be referenced

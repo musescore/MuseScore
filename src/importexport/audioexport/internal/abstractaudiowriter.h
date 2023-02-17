@@ -51,11 +51,14 @@ public:
     void abort() override;
 
 protected:
-    void doWriteAndWait(notation::INotationPtr notation, QIODevice& destinationDevice, const audio::SoundTrackFormat& format);
+    Ret doWriteAndWait(notation::INotationPtr notation, QIODevice& destinationDevice, const audio::SoundTrackFormat& format);
 
+private:
     UnitType unitTypeFromOptions(const Options& options) const;
+
     framework::Progress m_progress;
     bool m_isCompleted = false;
+    Ret m_writeRet;
 };
 }
 

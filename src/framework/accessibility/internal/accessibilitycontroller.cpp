@@ -37,9 +37,8 @@
 #include "async/async.h"
 
 #include "log.h"
-#include "config.h"
 
-#ifdef ACCESSIBILITY_LOGGING_ENABLED
+#ifdef MUE_ENABLE_ACCESSIBILITY_TRACE
 #define MYLOG() LOGI()
 #else
 #define MYLOG() LOGN()
@@ -280,7 +279,7 @@ void AccessibilityController::stateChanged(IAccessible* aitem, State state, bool
 
 void AccessibilityController::sendEvent(QAccessibleEvent* ev)
 {
-#ifdef ACCESSIBILITY_LOGGING_ENABLED
+#ifdef MUE_ENABLE_ACCESSIBILITY_TRACE
     AccessibleObject* obj = qobject_cast<AccessibleObject*>(ev->object());
     MYLOG() << "object: " << obj->item()->accessibleName() << ", event: " << int(ev->type());
 #endif

@@ -25,7 +25,7 @@
 
 #include <memory>
 
-#include "audio/abstractsynthesizer.h"
+#include "audio/internal/abstractsynthesizer.h"
 #include "audio/iaudioconfiguration.h"
 #include "audio/audiotypes.h"
 #include "modularity/ioc.h"

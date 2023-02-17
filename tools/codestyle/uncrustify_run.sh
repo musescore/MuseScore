@@ -29,7 +29,6 @@ SRC_DIRS=(
     bww2mxml
     fonttools
     miditools
-    mtest
     src
 )
 

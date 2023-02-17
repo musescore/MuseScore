@@ -21,7 +21,6 @@
  */
 #include "updateconfiguration.h"
 
-#include "config.h"
 #include "settings.h"
 
 using namespace mu::update;
@@ -50,7 +49,7 @@ static QString userAgent()
     QString cpuArchitecture = QSysInfo::currentCpuArchitecture();
 
     return QString("Musescore/%1 (%2 %3; %4)")
-           .arg(VERSION, osName, osVersion, cpuArchitecture);
+           .arg(MUSESCORE_VERSION, osName, osVersion, cpuArchitecture);
 }
 
 void UpdateConfiguration::init()
@@ -62,11 +61,7 @@ void UpdateConfiguration::init()
 
 bool UpdateConfiguration::isAppUpdatable() const
 {
-#ifdef APP_UPDATABLE
     return true;
-#else
-    return false;
-#endif
 }
 
 bool UpdateConfiguration::isTestingMode() const

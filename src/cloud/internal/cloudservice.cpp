@@ -21,7 +21,6 @@
  */
 
 #include "cloudservice.h"
-#include "config.h"
 
 #include <QOAuth2AuthorizationCodeFlow>
 #include <QJsonDocument>
@@ -53,7 +52,7 @@ static const QString REFRESH_TOKEN_KEY("refresh_token");
 static const QString DEVICE_ID_KEY("device_id");
 static const QString SCORE_ID_KEY("score_id");
 static const QString EDITOR_SOURCE_KEY("editor_source");
-static const QString EDITOR_SOURCE_VALUE(QString("Musescore Editor %1").arg(VERSION));
+static const QString EDITOR_SOURCE_VALUE(QString("Musescore Editor %1").arg(MUSESCORE_VERSION));
 static const QString PLATFORM_KEY("platform");
 
 static const std::string CLOUD_ACCESS_TOKEN_RESOURCE_NAME("CLOUD_ACCESS_TOKEN");

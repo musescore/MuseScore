@@ -36,6 +36,7 @@
 #include "internal/positionswriter.h"
 #include "internal/mscnotationwriter.h"
 #include "internal/instrumentsrepository.h"
+#include "internal/notationcreator.h"
 
 #include "view/notationpaintview.h"
 #include "view/notationswitchlistmodel.h"
@@ -101,6 +102,7 @@ std::string NotationModule::moduleName() const
 void NotationModule::registerExports()
 {
     ioc()->registerExport<INotationConfiguration>(moduleName(), s_configuration);
+    ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
     ioc()->registerExport<IInstrumentsRepository>(moduleName(), s_instrumentsRepository);
 }
 

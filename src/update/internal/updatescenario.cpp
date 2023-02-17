@@ -28,7 +28,6 @@
 #include "updateerrors.h"
 
 #include "translation.h"
-#include "config.h"
 #include "defer.h"
 #include "log.h"
 

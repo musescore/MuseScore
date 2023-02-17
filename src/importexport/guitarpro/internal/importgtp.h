@@ -98,22 +98,18 @@ struct GPLyrics {
 };
 
 struct GpBar {
-    Fraction timesig;
-    bool freeTime;
-    int keysig;
+    Fraction timesig = Fraction(4, 4);
+    bool freeTime = false;
+    int keysig = GP_INVALID_KEYSIG;
     String marker;
-    BarLineType barLine;
-    Repeat repeatFlags;
-    int repeats;
+    BarLineType barLine = BarLineType::NORMAL;
+    Repeat repeatFlags = Repeat::NONE;
+    int repeats = 2;
     GPVolta volta;
     String direction;
     String directionStyle;
-
     String section[2];
-
     std::vector<String> directions;
-
-    GpBar();
 };
 
 inline Drumset* gpDrumset = nullptr;
@@ -288,10 +284,8 @@ protected:
     /// midi effects
     void addSoundEffects();
     void addPalmMuteEffect(const PalmMute* const elem);
-    void addLetRingEffect(const LetRing* const elem);
 
     std::vector<PalmMute*> _addedPalmMutes;
-    std::vector<LetRing*> _addedLetRings;
 
     std::vector<PalmMute*> _palmMutes;
     std::vector<LetRing*> _letRings;

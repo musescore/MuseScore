@@ -148,11 +148,9 @@ void PlaybackConfiguration::setDefaultProfileForNewProjects(const SoundProfileNa
 
 const SoundProfileName& PlaybackConfiguration::fallbackSoundProfileStr() const
 {
-#ifdef BUILD_MUSESAMPLER_MODULE
-    if (musesamplerInfo()->isInstalled()) {
+    if (musesamplerInfo() && musesamplerInfo()->isInstalled()) {
         return MUSE_PROFILE_NAME;
     }
-#endif
 
     return BASIC_PROFILE_NAME;
 }

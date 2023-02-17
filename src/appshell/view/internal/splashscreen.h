@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
+#include "languages/ilanguagesservice.h"
 
 class QSvgRenderer;
 
@@ -36,6 +37,7 @@ class SplashScreen : public QWidget
     Q_OBJECT
 
     INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
+    INJECT(appshell, languages::ILanguagesService, languagesService)
 
 public:
     SplashScreen();

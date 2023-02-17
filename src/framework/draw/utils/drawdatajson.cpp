@@ -501,7 +501,7 @@ void DrawDataJson::fromJson(const JsonObject& root, DrawDataPtr& dd)
     }
 }
 
-ByteArray DrawDataJson::toJson(const DrawDataPtr& data)
+ByteArray DrawDataJson::toJson(const DrawDataPtr& data, bool prettify)
 {
     IF_ASSERT_FAILED(data) {
         return ByteArray();
@@ -509,7 +509,7 @@ ByteArray DrawDataJson::toJson(const DrawDataPtr& data)
 
     JsonObject root;
     toJson(root, data);
-    return JsonDocument(root).toJson(JsonDocument::Format::Indented);
+    return JsonDocument(root).toJson(prettify ? JsonDocument::Format::Indented : JsonDocument::Format::Compact);
 }
 
 mu::RetVal<DrawDataPtr> DrawDataJson::fromJson(const ByteArray& json)

@@ -51,6 +51,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationparts.h
     ${CMAKE_CURRENT_LIST_DIR}/iinstrumentsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/iselectinstrumentscenario.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationcreator.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationuiactions.h
@@ -105,6 +106,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationselectionrange.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationcreator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationcreator.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractnotationpaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractnotationpaintview.h
@@ -163,16 +166,8 @@ set(MODULE_UI
     ${WIDGETS_UI}
     )
 
-set(FREETYPE_LIB )
-if (USE_SYSTEM_FREETYPE)
-    set(FREETYPE_LIB freetype)
-else (USE_SYSTEM_FREETYPE)
-    set(FREETYPE_LIB mscore_freetype)
-endif (USE_SYSTEM_FREETYPE)
-
 set(MODULE_LINK
     Qt5::Svg
-    ${FREETYPE_LIB}
     draw
     engraving
     commonscene

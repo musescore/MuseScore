@@ -151,4 +151,8 @@ if (OS_IS_MAC)
     set(MODULE_LINK ${MODULE_LINK} ${AppKit})
 endif()
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)
+
+if (MUE_BUILD_UNIT_TESTS)
+    add_subdirectory(tests)
+endif()

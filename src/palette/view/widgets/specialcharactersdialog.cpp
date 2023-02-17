@@ -90,8 +90,8 @@ static constexpr SymId commonScoreSymbols[] = {
 };
 
 struct UnicodeRange {
-    int first;
-    int last;
+    char32_t first;
+    char32_t last;
     const char* name;
 };
 static constexpr UnicodeRange unicodeRanges[] = {
@@ -517,7 +517,7 @@ int SpecialCharactersDialog::static_metaTypeId()
 //   populateCommon
 //---------------------------------------------------------
 
-static constexpr int unicodeAccidentals[] = { //better size and alignment, so put these first
+static constexpr char32_t unicodeAccidentals[] = { //better size and alignment, so put these first
     0x1d12b, // double flat
     0x266d, // flat
     0x266e, // natural
@@ -525,7 +525,7 @@ static constexpr int unicodeAccidentals[] = { //better size and alignment, so pu
     0x1d12a // double sharp
 };
 
-static constexpr int commonTextSymbols[] = {
+static constexpr char32_t commonTextSymbols[] = {
     0x00a9,      // &copy;
 
     // upper case ligatures
@@ -668,20 +668,20 @@ void SpecialCharactersDialog::populateCommon()
 {
     m_pCommon->clear();
 
-    for (auto id : unicodeAccidentals) {
+    for (char32_t id : unicodeAccidentals) {
         std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gpaletteScore->dummy());
         fs->setCode(id);
         fs->setFont(m_font);
         m_pCommon->appendElement(fs, QString(id));
     }
 
-    for (auto id : commonScoreSymbols) {
+    for (SymId id : commonScoreSymbols) {
         std::shared_ptr<Symbol> s = std::make_shared<Symbol>(gpaletteScore->dummy());
         s->setSym(id, gpaletteScore->engravingFont());
         m_pCommon->appendElement(s, SymNames::translatedUserNameForSymId(id));
     }
 
-    for (auto id : commonTextSymbols) {
+    for (char32_t id : commonTextSymbols) {
         std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gpaletteScore->dummy());
         fs->setCode(id);
         fs->setFont(m_font);
@@ -718,7 +718,7 @@ void SpecialCharactersDialog::populateUnicode()
     int row = m_lwu->currentItem()->data(Qt::UserRole).toInt();
     const UnicodeRange& range = unicodeRanges[row];
     m_pUnicode->clear();
-    for (int code = range.first; code <= range.last; ++code) {
+    for (char32_t code = range.first; code <= range.last; ++code) {
         std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gpaletteScore->dummy());
         fs->setCode(code);
         fs->setFont(m_font);

@@ -96,6 +96,11 @@ std::vector<ZipReader::FileInfo> ZipReader::fileInfoList() const
     return ret;
 }
 
+bool ZipReader::fileExists(const std::string& fileName) const
+{
+    return m_impl->zip->fileExists(fileName);
+}
+
 ByteArray ZipReader::fileData(const std::string& fileName) const
 {
     return m_impl->zip->fileData(fileName);

@@ -97,8 +97,11 @@ public:
         EngravingFirst  = 2000,
         EngravingLast   = 2999,
 
-        DiagnosticsFirst = 3000,
-        DiagnosticsLast = 3999
+        ProjectFirst  = 3000,
+        ProjectLast   = 3999,
+
+        DiagnosticsFirst = 4000,
+        DiagnosticsLast = 4999
     };
 
     Ret() = default;

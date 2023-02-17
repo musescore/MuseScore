@@ -23,8 +23,6 @@
 
 #include <QAccessible>
 
-#include "config.h"
-
 using namespace mu::accessibility;
 
 class AccessibilityActivationObserver : public QAccessible::ActivationObserver

@@ -82,7 +82,7 @@ ECHO "PACKAGE_TYPE: %PACKAGE_TYPE%"
 
 :: For MSI
 SET SIGN="build\ci\windows\sign.bat"
-SET UUIDGEN="C:\Program Files (x86)\Windows Kits\10\bin\x64\uuidgen.exe"
+SET UUIDGEN="C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\uuidgen.exe"
 SET WIX_DIR=%WIX%
 
 IF %PACKAGE_TYPE% == "portable" ( GOTO PACK_PORTABLE) ELSE (
@@ -147,7 +147,7 @@ IF %BUILD_MODE% == stable_build (
     SET PACKAGE_FILE_ASSOCIATION=ON
 )
 cd "%BUILD_DIR%" 
-cmake -DPACKAGE_FILE_ASSOCIATION=%PACKAGE_FILE_ASSOCIATION% ..
+cmake -DMUE_ENABLE_FILE_ASSOCIATION=%PACKAGE_FILE_ASSOCIATION% ..
 
 SET PATH=%WIX_DIR%;%PATH% 
 cmake --build . --target package || GOTO END_ERROR

@@ -29,7 +29,7 @@
 #include "async/channel.h"
 #include "async/notification.h"
 
-#include "audiotypes.h"
+#include "../../audiotypes.h"
 
 namespace mu::audio {
 class IClock

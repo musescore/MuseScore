@@ -680,7 +680,8 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     }
 
     bool isNoteEnterMode = m_view->isNoteEnterMode();
-    bool isDragObjectsAllowed = !(isNoteEnterMode || playbackController()->isPlaying() || (event->buttons() & Qt::MiddleButton));
+    bool isMiddleButton  = (event->buttons() & Qt::MiddleButton);
+    bool isDragObjectsAllowed = !(isNoteEnterMode || playbackController()->isPlaying() || isMiddleButton);
     if (isDragObjectsAllowed) {
         const EngravingItem* hitElement = hitElementContext().element;
 
@@ -718,7 +719,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     }
 
     // move canvas
-    if (!isNoteEnterMode) {
+    if (!isNoteEnterMode || isMiddleButton) {
         m_view->moveCanvas(dragDelta.x(), dragDelta.y());
         m_isCanvasDragged = true;
     }

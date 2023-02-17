@@ -28,12 +28,12 @@
 using namespace mu::network;
 using namespace mu::modularity;
 
-std::string NetworkStubModule::moduleName() const
+std::string NetworkModule::moduleName() const
 {
     return "network_stub";
 }
 
-void NetworkStubModule::registerExports()
+void NetworkModule::registerExports()
 {
     ioc()->registerExport<INetworkManagerCreator>(moduleName(), new NetworkManagerCreatorStub());
 }

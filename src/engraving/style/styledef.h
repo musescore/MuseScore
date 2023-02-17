@@ -29,7 +29,6 @@
 #include "types/string.h"
 #include "types/propertyvalue.h"
 #include "libmscore/property.h"
-#include "config.h"
 
 namespace mu::engraving {
 // Needs to be duplicated here and in symid.h since moc doesn't handle macros from #include'd files

@@ -37,17 +37,17 @@ static void instrumentsscene_init_qrc()
     Q_INIT_RESOURCE(instrumentsscene);
 }
 
-std::string InstrumentsSceneStubModule::moduleName() const
+std::string InstrumentsSceneModule::moduleName() const
 {
     return "instrumentsscene";
 }
 
-void InstrumentsSceneStubModule::registerExports()
+void InstrumentsSceneModule::registerExports()
 {
     ioc()->registerExport<notation::ISelectInstrumentsScenario>(moduleName(), new SelectInstrumentsScenarioStub());
 }
 
-void InstrumentsSceneStubModule::resolveImports()
+void InstrumentsSceneModule::resolveImports()
 {
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
@@ -56,12 +56,15 @@ void InstrumentsSceneStubModule::resolveImports()
     }
 }
 
-void InstrumentsSceneStubModule::registerResources()
+void InstrumentsSceneModule::registerResources()
 {
     instrumentsscene_init_qrc();
 }
 
-void InstrumentsSceneStubModule::registerUiTypes()
+void InstrumentsSceneModule::registerUiTypes()
 {
-    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(instrumentsscene_QML_IMPORT);
+    std::shared_ptr<ui::IUiEngine> ui = ioc()->resolve<ui::IUiEngine>(moduleName());
+    if (ui) {
+        ui->addSourceImportPath(instrumentsscene_QML_IMPORT);
+    }
 }

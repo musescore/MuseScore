@@ -100,7 +100,7 @@ private:
     void convertVoice(const GPVoice*, Context ctx);
     void convertBeats(const std::vector<std::shared_ptr<GPBeat> >& beats, Context ctx);
     Fraction convertBeat(const GPBeat* beat, ChordRestContainer& graceChords, Context ctx);
-    void configureGraceChord(const GPBeat* beat, ChordRest* cr);
+    void configureGraceChord(const GPBeat* beat, ChordRest* cr, GPBeat::OttavaType type);
     void convertNotes(const std::vector<std::shared_ptr<GPNote> >& notes, ChordRest* cr);
     void convertNote(const GPNote* note, ChordRest* cr);
 
@@ -280,9 +280,6 @@ private:
 
     std::unordered_map<Note*, Note*> m_harmonicNotes;
     std::unique_ptr<GPDrumSetResolver> _drumResolver;
-
-    /// storing notes for each fraction of each pitch - to find closest note with same pitch
-    std::unordered_map<track_idx_t, std::unordered_map<int, std::map<Fraction, std::vector<Note*> > > > m_letRingNotes;
 };
 } //end Ms namespace
 #endif // SCOREDOMBUILDER_H

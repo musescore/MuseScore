@@ -34,7 +34,7 @@
 
 #include "engraving/engravingproject.h"
 
-#include "notation/internal/masternotation.h"
+#include "notation/inotationcreator.h"
 #include "notation/inotationconfiguration.h"
 #include "projectaudiosettings.h"
 #include "iprojectmigrator.h"
@@ -49,7 +49,8 @@ class NotationProject : public INotationProject, public async::Asyncable
 {
     INJECT(project, io::IFileSystem, fileSystem)
     INJECT(project, IProjectConfiguration, configuration)
-    INJECT(project, mu::notation::INotationConfiguration, notationConfiguration)
+    INJECT(project, notation::INotationConfiguration, notationConfiguration)
+    INJECT(project, notation::INotationCreator, notationCreator)
     INJECT(project, INotationReadersRegister, readers)
     INJECT(project, INotationWritersRegister, writers)
     INJECT(project, IProjectMigrator, migrator)
@@ -79,7 +80,7 @@ public:
     void markAsUnsaved() override;
 
     ValNt<bool> needSave() const override;
-    bool canSave() const override;
+    Ret canSave() const override;
 
     Ret save(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save) override;
     Ret writeToDevice(QIODevice* device) override;
@@ -106,7 +107,7 @@ private:
     Ret writeProject(engraving::MscWriter& msczWriter, bool onlySelection);
 
     mu::engraving::EngravingProjectPtr m_engravingProject = nullptr;
-    notation::MasterNotationPtr m_masterNotation = nullptr;
+    notation::IMasterNotationPtr m_masterNotation = nullptr;
     ProjectAudioSettingsPtr m_projectAudioSettings = nullptr;
     mutable CloudProjectInfo m_cloudInfo;
 

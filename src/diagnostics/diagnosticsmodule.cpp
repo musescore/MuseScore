@@ -53,9 +53,9 @@
 #include "view/engraving/engravingelementsmodel.h"
 
 #include "devtools/crashhandlerdevtoolsmodel.h"
+#include "devtools/corruptscoredevtoolsmodel.h"
 
 #include "log.h"
-#include "config.h"
 
 using namespace mu::diagnostics;
 using namespace mu::modularity;
@@ -113,6 +113,7 @@ void DiagnosticsModule::registerUiTypes()
     qmlRegisterType<EngravingElementsModel>("MuseScore.Diagnostics", 1, 0, "EngravingElementsModel");
 
     qmlRegisterType<CrashHandlerDevToolsModel>("MuseScore.Diagnostics", 1, 0, "CrashHandlerDevToolsModel");
+    qmlRegisterType<CorruptScoreDevToolsModel>("MuseScore.Diagnostics", 1, 0, "CorruptScoreDevToolsModel");
 }
 
 void DiagnosticsModule::onInit(const framework::IApplication::RunMode&)
@@ -125,7 +126,7 @@ void DiagnosticsModule::onInit(const framework::IApplication::RunMode&)
         return;
     }
 
-#ifdef BUILD_CRASHPAD_CLIENT
+#ifdef MUE_BUILD_CRASHPAD_CLIENT
 
     static CrashHandler s_crashHandler;
 
@@ -138,7 +139,7 @@ void DiagnosticsModule::onInit(const framework::IApplication::RunMode&)
     io::path_t handlerPath = globalConf->appBinPath() + "/" + handlerFile;
     io::path_t dumpsDir = globalConf->userAppDataPath() + "/logs/dumps";
     fileSystem()->makePath(dumpsDir);
-    std::string serverUrl(CRASH_REPORT_URL);
+    std::string serverUrl(MUE_CRASH_REPORT_URL);
 
     if (!s_configuration->isDumpUploadAllowed()) {
         serverUrl.clear();
@@ -156,5 +157,5 @@ void DiagnosticsModule::onInit(const framework::IApplication::RunMode&)
 
 #else
     LOGW() << "crash handling disabled";
-#endif // BUILD_CRASHPAD_CLIENT
+#endif // MUE_BUILD_CRASHPAD_CLIENT
 }

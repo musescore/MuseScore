@@ -29,7 +29,7 @@
 
 #include "libmscore/masterscore.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
-
+#include "engraving/engravingerrors.h"
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/writescorehook.h"

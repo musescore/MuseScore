@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtGraphicalEffects 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -82,10 +83,22 @@ FocusScope {
 
         NavigationFocusBorder { navigationCtrl: navCtrl }
 
-        border.color: ui.theme.strokeColor
-        border.width: ui.theme.borderWidth
-
         radius: 3
+        border.color: ui.theme.strokeColor
+        border.width: Math.max(ui.theme.borderWidth, 1)
+
+        layer.enabled: true
+        layer.effect: OpacityMask {
+            maskSource: Item {
+                width: backgroundRect.width
+                height: backgroundRect.height
+
+                Rectangle {
+                    anchors.fill: parent
+                    radius: backgroundRect.radius
+                }
+            }
+        }
 
         Rectangle {
             id: progressRect
@@ -93,8 +106,9 @@ FocusScope {
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.bottom: parent.bottom
+            anchors.margins: backgroundRect.border.width
 
-            width: Math.min(parent.width * (root.value / root.to), parent.width)
+            width: Math.min(parent.width * (root.value / root.to), parent.width - backgroundRect.border.width)
 
             color: ui.theme.accentColor
         }

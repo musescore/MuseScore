@@ -50,7 +50,7 @@ class MixerPanelModel : public QAbstractListModel, public async::Asyncable
 public:
     explicit MixerPanelModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void load(const QVariant& navigationSection);
+    Q_INVOKABLE void load(const QVariant& navigationSection, int navigationPanelOrderStart);
     Q_INVOKABLE QVariantMap get(int index);
 
     QVariant data(const QModelIndex& index, int role) const override;
@@ -92,6 +92,7 @@ private:
     audio::TrackSequenceId m_currentTrackSequenceId = -1;
 
     ui::NavigationSection* m_itemsNavigationSection = nullptr;
+    int m_navigationPanelOrderStart = 0;
 };
 }
 

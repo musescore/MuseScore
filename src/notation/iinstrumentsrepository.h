@@ -24,7 +24,6 @@
 
 #include "modularity/imoduleexport.h"
 
-#include "types/retval.h"
 #include "notationtypes.h"
 
 namespace mu::notation {

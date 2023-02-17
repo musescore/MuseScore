@@ -51,6 +51,10 @@ FocusScope {
     function ensureActiveFocus() {
         if (!root.activeFocus) {
             root.forceActiveFocus()
+        } else if (!textField.activeFocus) {
+            // In the case when the FocusScope is still in focus
+            // and therefore doesn't trigger the onActiveFocusChanged
+            textField.forceActiveFocus()
         }
     }
 
@@ -143,6 +147,9 @@ FocusScope {
                 var newValue = Math.max(textField.textAsInt(), root.minValue)
                 textField.text = prv.pad(newValue)
                 root.valueEdited(newValue)
+                textField.deselect()
+            } else if (activeFocus) {
+                textField.selectAll()
             }
         }
 
@@ -185,8 +192,10 @@ FocusScope {
         onPressed: {
             navigation.requestActiveByInteraction()
 
+            if (textField.selectedText == textField.text) {
+                textField.deselect()
+            }
             root.ensureActiveFocus()
-            textField.cursorPosition = textField.text.length
         }
     }
 
@@ -219,7 +228,7 @@ FocusScope {
 
             PropertyChanges {
                 target: textFieldBackground
-                color: ui.theme.accentColor
+                color: ui.theme.buttonColor
                 opacity: ui.theme.accentOpacityNormal
             }
         }

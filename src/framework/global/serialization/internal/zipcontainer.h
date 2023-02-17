@@ -62,6 +62,7 @@ public:
     std::vector<FileInfo> fileInfoList() const;
     int count() const;
 
+    bool fileExists(const std::string& fileName) const;
     ByteArray fileData(const std::string& fileName) const;
 
     // Write

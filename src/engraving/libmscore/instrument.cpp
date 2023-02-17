@@ -514,7 +514,10 @@ void Instrument::read(XmlReader& e, Part* part)
 bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
 {
     PartAudioSettingsCompat partAudioSetting;
-    InstrumentTrackId trackId = { part->score()->parts().size() + 1, id().toStdString() };//part is not assigned to score, _id field is not correct
+    InstrumentTrackId trackId;
+    if (part && part->score()) {
+        trackId = { part->score()->parts().size() + 1, id().toStdString() };//part is not assigned to score, _id field is not correct
+    }
     partAudioSetting.instrumentId = trackId;
     const AsciiStringView tag(e.name());
     if (tag == "longName") {

@@ -33,9 +33,15 @@ class MuseSamplerConfiguration : public IMuseSamplerConfiguration
 {
     INJECT(musesampler, framework::IGlobalConfiguration, globalConfig)
 public:
-    io::path_t libraryPath() const override;
+    // Backup location for system-wide sampler install
+    io::path_t backupLibraryPath() const override;
+    // Preferred local user install path; try this first.
+    io::path_t userLibraryPath() const override;
 
     std::string minimumSupportedVersion() const override;
+
+private:
+    io::path_t defaultPath() const;
 };
 }
 

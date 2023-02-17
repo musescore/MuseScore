@@ -29,9 +29,9 @@ import MuseScore.Project 1.0
 StyledDialogView {
     id: root
 
-    contentWidth: 240
-    contentHeight: 100
-    margins: 12
+    contentWidth: 306
+    contentHeight: 121
+    margins: 16
 
     modal: true
     frameless: true
@@ -52,14 +52,15 @@ StyledDialogView {
     ColumnLayout {
         anchors.fill: parent
 
-        spacing: 8
+        spacing: 18
 
         StyledTextLabel {
             Layout.fillWidth: true
-            Layout.alignment: Qt.AlignHCenter
+            Layout.alignment: Qt.AlignLeft
 
             text: root.title.length > 0 ? root.title : qsTrc("project/export", "Exporting…")
             font: ui.theme.largeBodyBoldFont
+            horizontalAlignment: Text.AlignLeft
         }
 
         ProgressBar {
@@ -73,7 +74,6 @@ StyledDialogView {
             progressStatus: Math.round(model.progress * 100 / model.totalProgress) + "%"
         }
 
-        /*
         FlatButton {
             Layout.alignment: Qt.AlignRight
 
@@ -83,6 +83,6 @@ StyledDialogView {
                 model.cancel()
                 root.close()
             }
-        }*/
+        }
     }
 }

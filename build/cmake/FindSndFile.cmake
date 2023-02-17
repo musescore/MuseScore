@@ -77,7 +77,7 @@ elseif (OS_IS_WASM)
 
 else()
     # Use pkg-config to get hints about paths
-    find_package(PkgConfig QUIET)
+    find_package(PkgConfig)
     if(PKG_CONFIG_FOUND)
         pkg_check_modules(LIBSNDFILE_PKGCONF sndfile>=1.0.25 QUIET)
     endif()

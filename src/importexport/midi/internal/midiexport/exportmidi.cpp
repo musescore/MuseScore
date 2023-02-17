@@ -229,7 +229,11 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
     }
 
     EventMap events;
-    m_score->renderMidi(&events, false, midiExpandRepeats, synthState);
+    MidiRenderer::Context ctx;
+    ctx.eachStringHasChannel = false;
+    ctx.metronome = false;
+    ctx.synthState = synthState;
+    m_score->renderMidi(&events, ctx, midiExpandRepeats);
 
     m_pauseMap.calculate(m_score);
     writeHeader();
