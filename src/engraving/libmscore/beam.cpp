@@ -1591,7 +1591,15 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
         }
         _startAnchor.setX(chordBeamAnchorX(startCr, ChordBeamAnchorType::Start));
         _endAnchor.setX(chordBeamAnchorX(endCr, ChordBeamAnchorType::End));
-        _slope = (_endAnchor.y() - _startAnchor.y()) / (_endAnchor.x() - _startAnchor.x());
+        double xDiff = _endAnchor.x() - _startAnchor.x();
+        double yDiff = _endAnchor.y() - _startAnchor.y();
+        // HACK: when beam layout is called before horizontal spacing, xDiff is a random small
+        // number, so don't try to compute the slope
+        if (abs(xDiff) < 0.5 * spatium()) {
+            _slope = 0;
+        } else {
+            _slope = yDiff / xDiff;
+        }
     } else {
         _slope = 0;
     }
