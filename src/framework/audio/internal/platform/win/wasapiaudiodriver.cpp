@@ -112,7 +112,16 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
     if (waitResult != WAIT_OBJECT_0) {
         // Either the event was the second event (namely s_data.clientFailedToStartEvent)
         // Or some wait error occurred
-        return false;
+
+        LOGE() << "WASAPI: error open the device " << to_string(deviceId) << ", trying to use closest supported format";
+
+        static constexpr bool USE_CLOSEST_SUPPORTED_FORMAT = true;
+        s_data.wasapiClient->asyncInitializeAudioDevice(deviceId, USE_CLOSEST_SUPPORTED_FORMAT);
+
+        waitResult = WaitForMultipleObjects(handleCount, handles, false, INFINITE);
+        if (waitResult != WAIT_OBJECT_0) {
+            return false;
+        }
     }
 
     m_activeSpec = m_desiredSpec;

@@ -47,7 +47,7 @@ public:
     Windows::Devices::Enumeration::DeviceInformationCollection availableDevices() const;
     hstring defaultDeviceId() const;
 
-    void asyncInitializeAudioDevice(const hstring& deviceId) noexcept;
+    void asyncInitializeAudioDevice(const hstring& deviceId, bool useClosestSupportedFormat = false) noexcept;
     void startPlayback() noexcept;
     HRESULT stopPlaybackAsync() noexcept;
 
@@ -101,6 +101,8 @@ private:
     HANDLE m_clientStartedEvent;
     HANDLE m_clientFailedToStartEvent;
     HANDLE m_clientStoppedEvent;
+
+    bool m_useClosestSupportedFormat = false;
 };
 }
 
