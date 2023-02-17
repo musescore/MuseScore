@@ -29,7 +29,6 @@
 #include "ilanguagesconfiguration.h"
 #include "framework/network/inetworkmanagercreator.h"
 #include "io/ifilesystem.h"
-#include "ui/iuiengine.h"
 #include "multiinstances/imultiinstancesprovider.h"
 
 class QTranslator;
@@ -40,7 +39,6 @@ class LanguagesService : public ILanguagesService, public async::Asyncable
     INJECT(languages, ILanguagesConfiguration, configuration)
     INJECT(languages, network::INetworkManagerCreator, networkManagerCreator)
     INJECT(languages, io::IFileSystem, fileSystem)
-    INJECT(languages, ui::IUiEngine, uiEngine)
     INJECT(languages, mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
@@ -56,13 +54,11 @@ public:
 
     framework::Progress update(const QString& languageCode) override;
 
-    bool needRestartToApplyLanguageChange() const override;
-    async::Channel<bool> needRestartToApplyLanguageChangeChanged() const override;
-
 private:
     void loadLanguages();
 
     void setCurrentLanguage(const QString& languageCode);
+    void doSetCurrentLanguage(const QString& effectiveLanguageCode);
     QString effectiveLanguageCode(const QString& languageCode) const;
     Ret loadLanguage(Language& lang);
 
@@ -71,7 +67,6 @@ private:
     Ret downloadLanguage(const QString& languageCode, framework::Progress progress) const;
     RetVal<QString> fileHash(const io::path_t& path);
 
-private:
     LanguagesHash m_languagesHash;
     Language m_currentLanguage;
     async::Notification m_currentLanguageChanged;
@@ -81,8 +76,6 @@ private:
     mutable QHash<QString, framework::Progress> m_updateOperationsHash;
 
     bool m_inited = false;
-    bool m_needRestartToApplyLanguageChange = false;
-    async::Channel<bool> m_needRestartToApplyLanguageChangeChanged;
 };
 }
 

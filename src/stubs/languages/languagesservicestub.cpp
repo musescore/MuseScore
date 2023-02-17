@@ -61,13 +61,3 @@ framework::Progress LanguagesServiceStub::update(const QString&)
 {
     return framework::Progress();
 }
-
-bool LanguagesServiceStub::needRestartToApplyLanguageChange() const
-{
-    return false;
-}
-
-async::Channel<bool> LanguagesServiceStub::needRestartToApplyLanguageChangeChanged() const
-{
-    return async::Channel<bool>();
-}

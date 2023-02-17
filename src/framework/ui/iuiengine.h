@@ -40,8 +40,6 @@ public:
     virtual void clearComponentCache() = 0;
 
     virtual void addSourceImportPath(const QString& path) = 0;
-
-    virtual void retranslateUi() = 0;
 };
 }
 

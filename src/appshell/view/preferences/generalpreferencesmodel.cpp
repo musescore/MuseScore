@@ -40,11 +40,6 @@ void GeneralPreferencesModel::load()
         emit currentLanguageCodeChanged(languageCode);
     });
 
-    setIsNeedRestart(languagesService()->needRestartToApplyLanguageChange());
-    languagesService()->needRestartToApplyLanguageChangeChanged().onReceive(this, [this](bool need) {
-        setIsNeedRestart(need);
-    });
-
     projectConfiguration()->autoSaveEnabledChanged().onReceive(this, [this](bool enabled) {
         emit autoSaveEnabledChanged(enabled);
     });
@@ -191,18 +186,4 @@ void GeneralPreferencesModel::setOscPort(int oscPort)
 {
     NOT_IMPLEMENTED;
     emit oscPortChanged(oscPort);
-}
-
-bool GeneralPreferencesModel::isNeedRestart() const
-{
-    return m_isNeedRestart;
-}
-
-void GeneralPreferencesModel::setIsNeedRestart(bool newIsNeedRestart)
-{
-    if (m_isNeedRestart == newIsNeedRestart) {
-        return;
-    }
-    m_isNeedRestart = newIsNeedRestart;
-    emit isNeedRestartChanged();
 }

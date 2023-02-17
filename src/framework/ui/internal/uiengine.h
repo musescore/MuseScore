@@ -26,6 +26,8 @@
 #include <QObject>
 #include <memory>
 
+#include "async/asyncable.h"
+
 #include "../iuiengine.h"
 #include "../view/uitheme.h"
 #include "../view/qmltooltip.h"
@@ -33,12 +35,13 @@
 #include "../view/interactiveprovider.h"
 #include "../view/qmlapi.h"
 
+#include "modularity/ioc.h"
 #include "languages/ilanguagesservice.h"
 
 class QQmlEngine;
 
 namespace mu::ui {
-class UiEngine : public QObject, public IUiEngine
+class UiEngine : public QObject, public IUiEngine, public async::Asyncable
 {
     Q_OBJECT
 
@@ -49,7 +52,7 @@ class UiEngine : public QObject, public IUiEngine
 
     Q_PROPERTY(QQuickItem * rootItem READ rootItem WRITE setRootItem NOTIFY rootItemChanged)
 
-    Q_PROPERTY(QJSValue trc READ translationFunction NOTIFY translationFunctionChanged)
+    Q_PROPERTY(QJSValue trc READ translationFunction NOTIFY translationChanged)
 
     // for internal use
     Q_PROPERTY(InteractiveProvider * _interactiveProvider READ interactiveProvider_property CONSTANT)
@@ -73,8 +76,6 @@ public:
     QQmlEngine* qmlEngine() const override;
     void clearComponentCache() override;
     void addSourceImportPath(const QString& path) override;
-
-    void retranslateUi() override;
     // ---
 
     void moveQQmlEngine(QQmlEngine* e);
@@ -90,7 +91,7 @@ signals:
 
     void rootItemChanged(QQuickItem* rootItem);
 
-    void translationFunctionChanged();
+    void translationChanged();
 
 private:
     UiEngine();

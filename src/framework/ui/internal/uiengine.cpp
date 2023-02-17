@@ -122,6 +122,10 @@ void UiEngine::setup(QQmlEngine* engine)
         "})");
     m_engine->globalObject().setProperty("qsTrc", qsTrc);
 
+    languagesService()->currentLanguageChanged().onNotify(this, [this]() {
+        emit translationChanged();
+    });
+
 #ifdef Q_OS_WIN
     QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
     m_engine->addImportPath(dir.absolutePath());
@@ -147,11 +151,6 @@ void UiEngine::addSourceImportPath(const QString& path)
 #else
     Q_UNUSED(path);
 #endif
-}
-
-void UiEngine::retranslateUi()
-{
-    emit translationFunctionChanged();
 }
 
 QmlApi* UiEngine::api() const

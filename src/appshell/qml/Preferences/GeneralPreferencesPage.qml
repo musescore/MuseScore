@@ -51,7 +51,6 @@ PreferencesPage {
 
             languages: preferencesModel.languages
             currentLanguageCode: preferencesModel.currentLanguageCode
-            isNeedRestart: preferencesModel.isNeedRestart
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
