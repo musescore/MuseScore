@@ -116,6 +116,8 @@ public:
 
     Q_INVOKABLE void setParentWindow(QWindow* window);
 
+    Q_INVOKABLE QRectF anchorGeometry() const;
+
     OpenPolicy openPolicy() const;
     ClosePolicy closePolicy() const;
 
@@ -214,7 +216,6 @@ protected:
     void updateContentPosition();
 
     virtual QRect viewGeometry() const;
-    QRectF anchorGeometry() const;
 
     void resolveNavigationParentControl();
     void activateNavigationParentControl();
