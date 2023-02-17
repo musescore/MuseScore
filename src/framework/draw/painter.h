@@ -62,7 +62,7 @@ public:
     bool endDraw();
 
     //! NOTE These are methods for debugging and automated testing.
-    void beginObject(const std::string& name, const PointF& pagePos);
+    void beginObject(const std::string& name);
     void endObject();
 
     // state
@@ -269,10 +269,10 @@ inline void Painter::drawText(int x, int y, const String& text)
 class PainterObjMarker
 {
 public:
-    PainterObjMarker(Painter* p, const std::string& name, const PointF& objPagePos)
+    PainterObjMarker(Painter* p, const std::string& name)
         : m_painter(p)
     {
-        p->beginObject(name, objPagePos);
+        p->beginObject(name);
     }
 
     ~PainterObjMarker()
@@ -286,13 +286,13 @@ private:
 
 #ifdef MUE_ENABLE_DRAW_TRACE
     #define TRACE_OBJ_DRAW \
-    mu::draw::PainterObjMarker __drawObjMarker(painter, typeName(), pagePos())
+    mu::draw::PainterObjMarker __drawObjMarker(painter, typeName())
 
-    #define TRACE_OBJ_DRAW_C(painter, objName, objPagePos) \
-    mu::draw::PainterObjMarker __drawObjMarker(painter, objName, objPagePos)
+    #define TRACE_OBJ_DRAW_C(painter, objName) \
+    mu::draw::PainterObjMarker __drawObjMarker(painter, objName)
 #else
     #define TRACE_OBJ_DRAW
-    #define TRACE_OBJ_DRAW_C(painter, objName, objPagePos)
+    #define TRACE_OBJ_DRAW_C(painter, objName)
 #endif
 }
 

@@ -94,9 +94,9 @@ bool QPainterProvider::isActive() const
     return m_painter->isActive();
 }
 
-void QPainterProvider::beginObject(const std::string& name, const PointF& pagePos)
+void QPainterProvider::beginObject(const std::string& name)
 {
-    m_drawObjectsLogger->beginObject(name, pagePos);
+    m_drawObjectsLogger->beginObject(name);
 }
 
 void QPainterProvider::endObject()

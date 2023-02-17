@@ -141,16 +141,12 @@ struct DrawData
 
     struct Object {
         std::string name;
-        PointF pagePos;
         std::vector<Data> datas;
+        std::vector<Object> chilren;
 
         Object() = default;
-        Object(const std::string& n, const PointF& p)
-            : name(n), pagePos(p)
-        {
-            //! NOTE Make data with default state
-            datas.push_back(DrawData::Data());
-        }
+        Object(const std::string& n)
+            : name(n) {}
     };
 
     std::string name;

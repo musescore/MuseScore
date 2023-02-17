@@ -43,7 +43,7 @@ public:
     void beforeEndTargetHook(Painter* painter) override;
     bool endTarget(bool endDraw = false) override;
 
-    void beginObject(const std::string& name, const PointF& pagePos) override;
+    void beginObject(const std::string& name) override;
     void endObject() override;
 
     void setAntialiasing(bool arg) override;
@@ -95,6 +95,9 @@ public:
 
 private:
 
+    const DrawData::Object& currentObject() const;
+    DrawData::Object& editableObject();
+
     const DrawData::Data& currentData() const;
     DrawData::Data& editableData();
 
@@ -102,7 +105,8 @@ private:
     DrawData::State& editableState();
 
     DrawDataPtr m_buf = nullptr;
-    std::stack<DrawData::Object> m_currentObjects;
+    int m_pageNo = 0;
+    int m_objectLevel = -1;
     bool m_isActive = false;
     DrawObjectsLogger* m_drawObjectsLogger = nullptr;
 };
