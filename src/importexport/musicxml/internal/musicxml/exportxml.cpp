@@ -129,7 +129,6 @@
 #include "../../imusicxmlconfiguration.h"
 #include "engraving/iengravingconfiguration.h"
 
-#include "config.h"
 #include "log.h"
 
 using namespace mu;
@@ -5978,7 +5977,7 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
         xml.tag("software", QString("MuseScore 0.7.0"));
         xml.tag("encoding-date", QString("2007-09-10"));
     } else {
-        xml.tag("software", QString("MuseScore ") + QString(VERSION));
+        xml.tag("software", QString("MuseScore ") + QString(MUSESCORE_VERSION));
         xml.tag("encoding-date", QDate::currentDate().toString(Qt::ISODate));
     }
 

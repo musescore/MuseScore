@@ -1178,11 +1178,15 @@ RemoveStaff::RemoveStaff(Staff* p)
 {
     staff = p;
     ridx  = staff->rstaff();
+    wasSystemObjectStaff = staff->score()->isSystemObjectStaff(staff);
 }
 
 void RemoveStaff::undo(EditData*)
 {
     staff->score()->insertStaff(staff, ridx);
+    if (wasSystemObjectStaff) {
+        staff->score()->addSystemObjectStaff(staff);
+    }
 }
 
 void RemoveStaff::redo(EditData*)

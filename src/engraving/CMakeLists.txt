@@ -268,9 +268,17 @@ set(MODULE_LINK
     draw
 )
 
+if (MUE_ENABLE_ENGRAVING_PAINT_DEBUGGER)
+    set(MODULE_DEF ${MODULE_DEF} -DMUE_ENABLE_ENGRAVING_PAINT_DEBUGGER)
+endif()
+
 set(MODULE_USE_UNITY_NONE ON)
 include(SetupModule)
 
 set_property(TARGET ${MODULE} APPEND PROPERTY AUTOMOC_MACRO_NAMES "BEGIN_QT_REGISTERED_ENUM")
 
 #target_compile_options(${MODULE} PUBLIC -Wconversion)
+
+if (MUE_BUILD_UNIT_TESTS)
+    add_subdirectory(tests)
+endif()

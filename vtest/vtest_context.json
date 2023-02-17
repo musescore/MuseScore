@@ -1,14 +1,11 @@
 {
-    "mscore_ref_bin": "./../MuseScore/build.debug/install/bin/mscore",
-    "score_dir": "./scores",
-    "current_data_dir": "./vtest_data/current",
-    "reference_data_dir": "./vtest_data/reference",
-    "comparison_dir": "./vtest_data/comparison",
+    "mscore_ref_bin": "./build.debug/install/bin/mscore",
+    "score_dir": "./vtest/scores",
+    "current_data_dir": "./vtest/temp_current",
+    "reference_data_dir": "./vtest/reference",
+    "comparison_dir": "./vtest/temp_comparison",
     "opt_default": {},
     "opt_small": {
         "pageSize": { "width": 60, "height": 130 }
-    },
-    "opt_medium": {
-        "pageSize": { "width": 120, "height": 200 }
     }
 }

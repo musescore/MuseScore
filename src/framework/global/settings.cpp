@@ -21,7 +21,6 @@
  */
 
 #include "settings.h"
-#include "config.h"
 #include "log.h"
 
 #include <QDateTime>
@@ -45,7 +44,7 @@ Settings* Settings::instance()
 
 Settings::Settings()
 {
-#if defined(WIN_PORTABLE)
+#ifdef WIN_PORTABLE
     QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, dataPath());
     QSettings::setPath(QSettings::IniFormat, QSettings::SystemScope, dataPath());
 #endif
@@ -208,7 +207,7 @@ void Settings::writeValue(const Key& key, const Val& value)
 
 QString Settings::dataPath() const
 {
-#if defined(WIN_PORTABLE)
+#ifdef WIN_PORTABLE
     return QDir::cleanPath(QString("%1/../../../Data/settings").arg(QCoreApplication::applicationDirPath()));
 #else
     return QStandardPaths::writableLocation(QStandardPaths::DataLocation);

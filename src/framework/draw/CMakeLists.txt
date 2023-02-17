@@ -83,11 +83,18 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/internal/qimagepainterprovider.h
         )
 
-    if (USE_SYSTEM_FREETYPE)
-         set(MODULE_LINK freetype)
-    else (USE_SYSTEM_FREETYPE)
-         set(MODULE_LINK mscore_freetype)
-    endif (USE_SYSTEM_FREETYPE)
+    add_subdirectory(${THIRDPARTY_DIR}/freetype freetype)
+    set(MODULE_INCLUDE ${THIRDPARTY_DIR}/freetype/include)
+    set(MODULE_LINK freetype)
+
+endif()
+
+if (MUE_ENABLE_DRAW_TRACE)
+    set(MODULE_DEF ${MODULE_DEF} -DMUE_ENABLE_DRAW_TRACE)
 endif()
 
 include(SetupModule)
+
+if (MUE_BUILD_UNIT_TESTS)
+    add_subdirectory(tests)
+endif()

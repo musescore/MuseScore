@@ -228,6 +228,7 @@ void NotationStatusBarModel::onCurrentNotationChanged()
     notation()->notationChanged().onNotify(this, [this]() {
         emit currentViewModeChanged();
         emit availableViewModeListChanged();
+        emit concertPitchActionChanged();
     });
 
     notation()->viewState()->zoomPercentage().ch.onReceive(this, [this](int) {

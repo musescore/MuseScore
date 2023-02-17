@@ -78,7 +78,7 @@ mu::Ret AbstractAudioWriter::writeList(const INotationPtrList&, QIODevice&, cons
 
 void AbstractAudioWriter::abort()
 {
-    NOT_IMPLEMENTED;
+    playback()->audioOutput()->abortSavingAllSoundTracks();
 }
 
 bool AbstractAudioWriter::supportsProgressNotifications() const
@@ -91,7 +91,7 @@ mu::framework::Progress AbstractAudioWriter::progress() const
     return m_progress;
 }
 
-void AbstractAudioWriter::doWriteAndWait(INotationPtr notation, QIODevice& destinationDevice, const audio::SoundTrackFormat& format)
+mu::Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation, QIODevice& destinationDevice, const audio::SoundTrackFormat& format)
 {
     //!Note Temporary workaround, since QIODevice is the alias for QIODevice, which falls with SIGSEGV
     //!     on any call from background thread. Once we have our own implementation of QIODevice
@@ -102,6 +102,7 @@ void AbstractAudioWriter::doWriteAndWait(INotationPtr notation, QIODevice& desti
     QString path = info.absoluteFilePath();
 
     m_isCompleted = false;
+    m_writeRet = Ret();
 
     playbackController()->setNotation(notation);
     playbackController()->setIsExportingAudio(true);
@@ -124,11 +125,13 @@ void AbstractAudioWriter::doWriteAndWait(INotationPtr notation, QIODevice& desti
             playback()->audioOutput()->saveSoundTrack(sequenceId, io::path_t(path), std::move(format))
             .onResolve(this, [this, path](const bool /*result*/) {
                 LOGD() << "Successfully saved sound track by path: " << path;
+                m_writeRet = make_ok();
                 m_isCompleted = true;
                 m_progress.finished.send(make_ok());
             })
             .onReject(this, [this](int errorCode, const std::string& msg) {
-                m_isCompleted  = true;
+                m_writeRet = Ret(errorCode, msg);
+                m_isCompleted = true;
                 m_progress.finished.send(make_ret(errorCode, msg));
             });
         }
@@ -141,6 +144,8 @@ void AbstractAudioWriter::doWriteAndWait(INotationPtr notation, QIODevice& desti
         QApplication::instance()->processEvents();
         QThread::yieldCurrentThread();
     }
+
+    return m_writeRet;
 }
 
 INotationWriter::UnitType AbstractAudioWriter::unitTypeFromOptions(const Options& options) const

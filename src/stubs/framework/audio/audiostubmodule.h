@@ -26,7 +26,7 @@
 #include "async/asyncable.h"
 
 namespace mu::audio {
-class AudioStubModule : public modularity::IModuleSetup, public async::Asyncable
+class AudioModule : public modularity::IModuleSetup, public async::Asyncable
 {
 public:
     std::string moduleName() const override;

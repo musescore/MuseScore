@@ -105,6 +105,15 @@ MasterNotation::~MasterNotation()
     unloadExcerpts(m_potentialExcerpts);
 }
 
+int MasterNotation::mscVersion() const
+{
+    if (!masterScore()) {
+        return 0;
+    }
+
+    return masterScore()->mscVersion();
+}
+
 INotationPtr MasterNotation::notation()
 {
     return shared_from_this();
@@ -431,7 +440,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
         tt->setFollowText(true);
         tt->setTrack(0);
         seg->add(tt);
-        for (auto staff : score->getSystemObjectStaves()) {
+        for (auto staff : score->systemObjectStaves()) {
             TempoText* linkedTt = toTempoText(tt->linkedClone());
             linkedTt->setScore(score);
             linkedTt->setTrack(staff->idx() * VOICES);
@@ -746,6 +755,14 @@ Notification MasterNotation::hasPartsChanged() const
 INotationPlaybackPtr MasterNotation::playback() const
 {
     return m_notationPlayback;
+}
+
+void MasterNotation::setSaved(bool arg)
+{
+    IF_ASSERT_FAILED(masterScore()) {
+        return;
+    }
+    masterScore()->setSaved(arg);
 }
 
 const ExcerptNotationList& MasterNotation::potentialExcerpts() const

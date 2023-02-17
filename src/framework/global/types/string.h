@@ -55,12 +55,12 @@ enum SplitBehavior {
 struct AsciiChar
 {
 public:
-    AsciiChar() = default;
-    explicit AsciiChar(char c)
+    constexpr AsciiChar() = default;
+    constexpr explicit AsciiChar(char c)
         : m_ch(c) {}
 
-    inline char ascii() const noexcept { return m_ch; }
-    inline char16_t unicode() const noexcept { return char16_t(m_ch); }
+    constexpr char ascii() const noexcept { return m_ch; }
+    constexpr char16_t unicode() const noexcept { return char16_t(m_ch); }
     inline char toLower() const { return toLower(m_ch); }
     inline char toUpper() const { return toUpper(m_ch); }
 
@@ -96,43 +96,43 @@ public:
         LastValidCodePoint = 0x10ffff
     };
 
-    Char() = default;
-    Char(char16_t c)
+    constexpr Char() = default;
+    constexpr Char(char16_t c)
         : m_ch(c) {}
     Char(AsciiChar c)
         : m_ch(c.unicode()) {}
 
 #ifndef NO_QT_SUPPORT
-    Char(QChar c)
+    constexpr Char(QChar c)
         : m_ch(c.unicode()) {}
-    operator QChar() const {
+    constexpr operator QChar() const {
         return QChar(m_ch);
     }
 #endif
 
-    inline bool operator ==(Char c) const { return m_ch == c.m_ch; }
-    inline bool operator !=(Char c) const { return !operator ==(c); }
-    inline bool operator ==(char16_t c) const { return m_ch == c; }
-    inline bool operator !=(char16_t c) const { return !operator ==(c); }
-    inline bool operator ==(AsciiChar c) const { return m_ch == c.unicode(); }
-    inline bool operator !=(AsciiChar c) const { return !operator ==(c); }
+    constexpr bool operator ==(Char c) const { return m_ch == c.m_ch; }
+    constexpr bool operator !=(Char c) const { return !operator ==(c); }
+    constexpr bool operator ==(char16_t c) const { return m_ch == c; }
+    constexpr bool operator !=(char16_t c) const { return !operator ==(c); }
+    constexpr bool operator ==(AsciiChar c) const { return m_ch == c.unicode(); }
+    constexpr bool operator !=(AsciiChar c) const { return !operator ==(c); }
 
-    inline bool operator >(Char c) const { return m_ch > c.m_ch; }
-    inline bool operator >(char16_t c) const { return m_ch > c; }
-    inline bool operator <(Char c) const { return m_ch < c.m_ch; }
-    inline bool operator <(char16_t c) const { return m_ch < c; }
+    constexpr bool operator >(Char c) const { return m_ch > c.m_ch; }
+    constexpr bool operator >(char16_t c) const { return m_ch > c; }
+    constexpr bool operator <(Char c) const { return m_ch < c.m_ch; }
+    constexpr bool operator <(char16_t c) const { return m_ch < c; }
 
-    inline bool operator >=(Char c) const { return m_ch >= c.m_ch; }
-    inline bool operator >=(char16_t c) const { return m_ch >= c; }
-    inline bool operator <=(Char c) const { return m_ch <= c.m_ch; }
-    inline bool operator <=(char16_t c) const { return m_ch <= c; }
+    constexpr bool operator >=(Char c) const { return m_ch >= c.m_ch; }
+    constexpr bool operator >=(char16_t c) const { return m_ch >= c; }
+    constexpr bool operator <=(Char c) const { return m_ch <= c.m_ch; }
+    constexpr bool operator <=(char16_t c) const { return m_ch <= c; }
 
-    inline char16_t unicode() const { return m_ch; }
+    constexpr char16_t unicode() const { return m_ch; }
 
     inline bool isNull() const { return m_ch == 0; }
 
-    inline bool isAscii() const { return isAscii(m_ch); }
-    static inline bool isAscii(char16_t c) { return c <= 0x7f; }
+    constexpr bool isAscii() const { return isAscii(m_ch); }
+    static constexpr bool isAscii(char16_t c) { return c <= 0x7f; }
     inline char toAscii(bool* ok = nullptr) const { return toAscii(m_ch, ok); }
     static char toAscii(char16_t c, bool* ok = nullptr);
     static inline Char fromAscii(char c) { return static_cast<char16_t>(c); }
@@ -158,14 +158,14 @@ public:
     inline bool isLowSurrogate() const { return isLowSurrogate(m_ch); }
     inline bool isSurrogate() const { return isSurrogate(m_ch); }
 
-    static inline char32_t surrogateToUcs4(char16_t high, char16_t low) { return (char32_t(high) << 10) + low - 0x35fdc00; }
-    static inline char32_t surrogateToUcs4(Char high, Char low) { return surrogateToUcs4(high.m_ch, low.m_ch); }
-    static inline bool isHighSurrogate(char32_t ucs4) { return (ucs4 & 0xfffffc00) == 0xd800; }
-    static inline bool isLowSurrogate(char32_t ucs4) { return (ucs4 & 0xfffffc00) == 0xdc00; }
-    static inline bool isSurrogate(char32_t ucs4) { return ucs4 - 0xd800u < 2048u; }
-    static inline char16_t highSurrogate(char32_t ucs4) { return char16_t((ucs4 >> 10) + 0xd7c0); }
-    static inline char16_t lowSurrogate(char32_t ucs4) { return char16_t(ucs4 % 0x400 + 0xdc00); }
-    static inline bool requiresSurrogates(char32_t ucs4) { return ucs4 >= 0x10000; }
+    static constexpr char32_t surrogateToUcs4(char16_t high, char16_t low) { return (char32_t(high) << 10) + low - 0x35fdc00; }
+    static constexpr char32_t surrogateToUcs4(Char high, Char low) { return surrogateToUcs4(high.m_ch, low.m_ch); }
+    static constexpr bool isHighSurrogate(char32_t ucs4) { return (ucs4 & 0xfffffc00) == 0xd800; }
+    static constexpr bool isLowSurrogate(char32_t ucs4) { return (ucs4 & 0xfffffc00) == 0xdc00; }
+    static constexpr bool isSurrogate(char32_t ucs4) { return ucs4 - 0xd800u < 2048u; }
+    static constexpr char16_t highSurrogate(char32_t ucs4) { return char16_t((ucs4 >> 10) + 0xd7c0); }
+    static constexpr char16_t lowSurrogate(char32_t ucs4) { return char16_t(ucs4 % 0x400 + 0xdc00); }
+    static constexpr bool requiresSurrogates(char32_t ucs4) { return ucs4 >= 0x10000; }
 
 private:
     char16_t m_ch = 0;
@@ -253,7 +253,9 @@ public:
     static String fromStdString(const std::string& str);
     std::string toStdString() const;
     std::u16string toStdU16String() const;
+
     static String fromUcs4(const char32_t* str, size_t size = mu::nidx);
+    static String fromUcs4(char32_t chr);
     std::u32string toStdU32String() const;
 
     size_t size() const;
@@ -337,39 +339,7 @@ public:
     inline size_t hash() const { return std::hash<std::u16string> {}(constStr()); }
 
 private:
-
-    struct Mutator {
-        std::u16string& s;
-        String* self = nullptr;
-        Mutator(std::u16string& s, String* self)
-            : s(s), self(self) {}
-        ~Mutator()
-        {
-#ifdef STRING_DEBUG_HACK
-            self->updateDebugView();
-#endif
-        }
-
-        operator std::u16string& () {
-            return s;
-        }
-
-        void reserve(size_t n) { s.reserve(n); }
-        void resize(size_t n) { s.resize(n); }
-        void clear() { s.clear(); }
-        void insert(size_t p, const std::u16string& v) { s.insert(p, v); }
-        void erase(size_t p, size_t n) { s.erase(p, n); }
-
-        std::u16string& operator=(const std::u16string& v) { return s.operator=(v); }
-        std::u16string& operator=(const char16_t* v) { return s.operator=(v); }
-        std::u16string& operator=(const char16_t v) { return s.operator=(v); }
-
-        std::u16string& operator+=(const std::u16string& v) { return s.operator+=(v); }
-        std::u16string& operator+=(const char16_t* v) { return s.operator+=(v); }
-        std::u16string& operator+=(const char16_t v) { return s.operator+=(v); }
-        char16_t& operator[](size_t i) { return s.operator[](i); }
-    };
-
+    struct Mutator;
     const std::u16string& constStr() const;
     Mutator mutStr(bool do_detach = true);
     void detach();

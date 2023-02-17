@@ -29,7 +29,6 @@
 #include "debugpaint.h"
 
 #include "log.h"
-#include "config.h"
 
 using namespace mu::engraving;
 
@@ -131,7 +130,7 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const Options& opt)
             paintElements(*painter, elements, opt.isPrinting);
             painter->setClipping(false);
 
-#ifdef ENGRAVING_PAINT_DEBUGGER_ENABLED
+#ifdef MUE_ENABLE_ENGRAVING_PAINT_DEBUGGER
             if (!opt.isPrinting) {
                 engraving::DebugPaint::paintPageDebug(*painter, page);
             }
@@ -197,7 +196,7 @@ void Paint::paintElements(mu::draw::Painter& painter, const std::vector<Engravin
         paintElement(painter, element);
     }
 
-#ifdef ENGRAVING_PAINT_DEBUGGER_ENABLED
+#ifdef MUE_ENABLE_ENGRAVING_PAINT_DEBUGGER
     if (!isPrinting) {
         DebugPaint::paintElementsDebug(painter, sortedElements);
     }

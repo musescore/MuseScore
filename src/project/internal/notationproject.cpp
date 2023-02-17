@@ -27,6 +27,9 @@
 
 #include "io/buffer.h"
 
+#include "libmscore/undo.h"
+
+#include "engraving/libmscore/masterscore.h"
 #include "engraving/engravingproject.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
@@ -38,8 +41,7 @@
 #include "notation/notationerrors.h"
 #include "projectaudiosettings.h"
 #include "projectfileinfoprovider.h"
-
-#include "libmscore/undo.h"
+#include "projecterrors.h"
 
 #include "defer.h"
 #include "log.h"
@@ -123,7 +125,7 @@ void NotationProject::setupProject()
     m_engravingProject = EngravingProject::create();
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
 
-    m_masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation());
+    m_masterNotation = notationCreator()->newMasterNotationPtr();
     m_masterNotation->needSave().notification.onNotify(this, [this]() {
         m_needSaveNotification.notify();
     });
@@ -167,9 +169,9 @@ mu::Ret NotationProject::load(const io::path_t& path, const io::path_t& stylePat
         return ret;
     }
 
-    bool treatAsImported = m_masterNotation->masterScore()->mscVersion() < 400;
+    bool treatAsImported = m_masterNotation->mscVersion() < 400;
 
-    m_masterNotation->masterScore()->setSaved(!treatAsImported);
+    m_masterNotation->setSaved(!treatAsImported);
 
     m_isNewlyCreated = treatAsImported;
     m_isImported = treatAsImported;
@@ -238,7 +240,7 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
     // Set current if all success
     m_masterNotation->setMasterScore(masterScore);
 
-    m_masterNotation->viewState()->read(reader);
+    m_masterNotation->notation()->viewState()->read(reader);
     for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
         excerpt->notation()->viewState()->read(reader, u"Excerpts/" + excerpt->name() + u"/");
     }
@@ -286,7 +288,7 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
     // Setup other stuff
     m_projectAudioSettings->makeDefault();
 
-    m_masterNotation->viewState()->makeDefault();
+    m_masterNotation->notation()->viewState()->makeDefault();
     for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
         excerpt->notation()->viewState()->makeDefault();
     }
@@ -330,7 +332,7 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     // Setup other stuff
     m_projectAudioSettings->makeDefault();
 
-    m_masterNotation->viewState()->makeDefault();
+    m_masterNotation->notation()->viewState()->makeDefault();
     for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
         excerpt->notation()->viewState()->makeDefault();
     }
@@ -354,9 +356,9 @@ mu::Ret NotationProject::loadTemplate(const ProjectCreateOptions& projectOptions
         mu::engraving::MasterScore* masterScore = m_masterNotation->masterScore();
         setupScoreMetaTags(masterScore, projectOptions);
 
-        m_masterNotation->undoStack()->lock();
+        m_masterNotation->notation()->undoStack()->lock();
         m_masterNotation->applyOptions(masterScore, projectOptions.scoreOptions, true /*createdFromTemplate*/);
-        m_masterNotation->undoStack()->unlock();
+        m_masterNotation->notation()->undoStack()->unlock();
 
         masterScore->setSaved(true);
 
@@ -390,7 +392,7 @@ QString NotationProject::displayName() const
 {
     if (isNewlyCreated()) {
         if (m_path.empty()) {
-            QString workTitle = m_masterNotation->workTitle();
+            QString workTitle = m_masterNotation->notation()->workTitle();
             if (workTitle.isEmpty()) {
                 return scoreDefaultTitle();
             }
@@ -453,9 +455,9 @@ mu::Ret NotationProject::save(const io::path_t& path, SaveMode saveMode)
             if (saveMode != SaveMode::SaveCopy) {
                 //! NOTE: order is important
                 m_isNewlyCreated = false;
-                m_masterNotation->masterScore()->setSaved(true);
+                m_masterNotation->setSaved(true);
                 setPath(savePath);
-                m_masterNotation->undoStack()->stackChanged().notify();
+                m_masterNotation->notation()->undoStack()->stackChanged().notify();
             }
         }
 
@@ -675,7 +677,7 @@ mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection)
         return ret;
     }
 
-    m_masterNotation->viewState()->write(msczWriter);
+    m_masterNotation->notation()->viewState()->write(msczWriter);
     for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
         excerpt->notation()->viewState()->write(msczWriter, u"Excerpts/" + excerpt->name() + u"/");
     }
@@ -731,7 +733,7 @@ mu::Ret NotationProject::exportProject(const io::path_t& path, const std::string
         return false;
     }
 
-    Ret ret = writer->write(m_masterNotation, file);
+    Ret ret = writer->write(m_masterNotation->notation(), file);
     file.close();
 
     return ret;
@@ -757,7 +759,7 @@ void NotationProject::markAsNewlyCreated()
     setPath(!title.isEmpty() ? title : scoreDefaultTitle());
 
     masterScore->setSaved(false);
-    m_masterNotation->undoStack()->stackChanged().notify();
+    m_masterNotation->notation()->undoStack()->stackChanged().notify();
 }
 
 bool NotationProject::isImported() const
@@ -780,9 +782,19 @@ mu::ValNt<bool> NotationProject::needSave() const
     return needSave;
 }
 
-bool NotationProject::canSave() const
+Ret NotationProject::canSave() const
 {
-    return m_masterNotation->hasParts();
+    if (!m_masterNotation->hasParts()) {
+        return make_ret(Err::NoPartsError);
+    }
+
+    Ret ret = m_engravingProject->checkCorrupted();
+    if (!ret) {
+        Err errorCode = m_engravingProject->isCorruptedUponLoading() ? Err::CorruptionUponOpenningError : Err::CorruptionError;
+        ret.setCode(static_cast<int>(errorCode));
+    }
+
+    return ret;
 }
 
 ProjectMeta NotationProject::metaInfo() const
@@ -849,9 +861,9 @@ void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
     MasterScore* score = m_masterNotation->masterScore();
 
     if (undoable) {
-        m_masterNotation->undoStack()->prepareChanges();
+        m_masterNotation->notation()->undoStack()->prepareChanges();
         score->undo(new mu::engraving::ChangeMetaTags(score, tags));
-        m_masterNotation->undoStack()->commitChanges();
+        m_masterNotation->notation()->undoStack()->commitChanges();
         m_masterNotation->notation()->notationChanged().notify();
     } else {
         score->setMetaTags(tags);

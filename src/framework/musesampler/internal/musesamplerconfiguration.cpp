@@ -28,22 +28,45 @@ using namespace mu;
 using namespace mu::musesampler;
 
 #if defined(Q_OS_LINUX)
-static const io::path_t DEFAULT_PATH("libMuseSamplerCoreLib.so");
+static const io::path_t DEFAULT_LIB_NAME("libMuseSamplerCoreLib.so");
+io::path_t MuseSamplerConfiguration::defaultPath() const
+{
+    return globalConfig()->genericDataPath() + "/MuseSampler/lib/" + DEFAULT_LIB_NAME;
+}
+
 #elif defined(Q_OS_MAC)
-static const io::path_t DEFAULT_PATH("/usr/local/lib/libMuseSamplerCoreLib.dylib");
+static const io::path_t DEFAULT_LIB_NAME("libMuseSamplerCoreLib.dylib");
+io::path_t MuseSamplerConfiguration::defaultPath() const
+{
+    return globalConfig()->genericDataPath() + "/MuseSampler/lib/" + DEFAULT_LIB_NAME;
+}
+
 #else
-static const io::path_t DEFAULT_PATH("MuseSamplerCoreLib.dll");
+static const io::path_t DEFAULT_LIB_NAME("MuseSamplerCoreLib.dll");
+io::path_t MuseSamplerConfiguration::defaultPath() const
+{
+    return globalConfig()->genericDataPath() + "\\MuseSampler\\lib\\" + DEFAULT_LIB_NAME;
+}
+
 #endif
 
 static const std::string MINIMUM_SUPPORTED_VERSION = "0.2.2";
 
-io::path_t MuseSamplerConfiguration::libraryPath() const
+// If installed on the system instead of user dir...do this as a backup
+io::path_t MuseSamplerConfiguration::backupLibraryPath() const
 {
+    return DEFAULT_LIB_NAME;
+}
+
+// Preferred location
+io::path_t MuseSamplerConfiguration::userLibraryPath() const
+{
+    // Override for testing/dev:
     if (const char* path = std::getenv("MUSESAMPLER_PATH")) {
         return io::path_t(path);
     }
 
-    return DEFAULT_PATH;
+    return defaultPath();
 }
 
 std::string MuseSamplerConfiguration::minimumSupportedVersion() const

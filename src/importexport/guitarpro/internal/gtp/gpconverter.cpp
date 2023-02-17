@@ -235,6 +235,21 @@ static GPConverter::LineImportType hairpinToImportType(GPBeat::Hairpin t)
     return GPConverter::LineImportType::NONE;
 }
 
+static void setPitchByOttavaType(Note* note, OttavaType type)
+{
+    int pitch = note->pitch();
+
+    if (type == mu::engraving::OttavaType::OTTAVA_8VA) {
+        note->setPitch((pitch - 12 > 0) ? pitch - 12 : pitch);
+    } else if (type == mu::engraving::OttavaType::OTTAVA_8VB) {
+        note->setPitch((pitch + 12 < 127) ? pitch + 12 : pitch);
+    } else if (type == mu::engraving::OttavaType::OTTAVA_15MA) {
+        note->setPitch((pitch - 24 > 0) ? pitch - 24 : (pitch - 12 > 0 ? pitch - 12 : pitch));
+    } else if (type == mu::engraving::OttavaType::OTTAVA_15MB) {
+        note->setPitch((pitch + 24 < 127) ? pitch + 24 : ((pitch + 12 < 127) ? pitch + 12 : pitch));
+    }
+}
+
 GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
     : _score(score), _gpDom(std::move(gpDom))
 {
@@ -374,23 +389,6 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
                     _score->addElement(elem);
                     if (engravingConfiguration()->guitarProImportExperimental()) {
                         addSoundEffects(elem);
-                    }
-                }
-            }
-        }
-    }
-
-    if (engravingConfiguration()->guitarProImportExperimental()) {
-        // recalculate let ring endings
-        for (auto& [track, trackMap] : m_letRingNotes) {
-            for (auto& [pitch, pitchMap] : trackMap) {
-                for (auto& [tick, noteVector] : pitchMap) {
-                    auto upperBound = pitchMap.upper_bound(tick);
-                    if (upperBound != pitchMap.end()) {
-                        Fraction distanceToNext = upperBound->first - tick;
-                        for (Note* note : noteVector) {
-                            note->setLetRingEndDistance(std::min(note->letRingEndDistance(), distanceToNext));
-                        }
                     }
                 }
             }
@@ -592,8 +590,9 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
 
         if (!graceChords.empty()) {
             int grIndex = 0;
+
             for (auto [pGrChord, pBeat] : graceChords) {
-                configureGraceChord(pBeat, pGrChord);
+                configureGraceChord(pBeat, pGrChord, beat->ottavaType());
                 if (pGrChord->type() == ElementType::CHORD) {
                     static_cast<Chord*>(pGrChord)->setGraceIndex(grIndex++);
                 }
@@ -704,17 +703,25 @@ void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
     }
 }
 
-void GPConverter::configureGraceChord(const GPBeat* beat, ChordRest* cr)
+void GPConverter::configureGraceChord(const GPBeat* beat, ChordRest* cr, GPBeat::OttavaType type)
 {
     convertNotes(beat->notes(), cr);
 
-    if (cr->type() == ElementType::CHORD) {
-        Chord* grChord = static_cast<Chord*>(cr);
+    if (!cr->isChord()) {
+        return;
+    }
 
-        if (GPBeat::GraceNotes::OnBeat == beat->graceNotes()) {
-            grChord->setNoteType(NoteType::APPOGGIATURA);
-        } else {
-            grChord->setNoteType(NoteType::ACCIACCATURA);
+    Chord* grChord = toChord(cr);
+
+    if (GPBeat::GraceNotes::OnBeat == beat->graceNotes()) {
+        grChord->setNoteType(NoteType::APPOGGIATURA);
+    } else {
+        grChord->setNoteType(NoteType::ACCIACCATURA);
+    }
+
+    if (type != GPBeat::OttavaType::None) {
+        for (Note* note : grChord->notes()) {
+            setPitchByOttavaType(note, ottavaType(type));
         }
     }
 }
@@ -1463,16 +1470,12 @@ void GPConverter::addInstrumentChanges()
 
 void GPConverter::addSoundEffects(const SLine* const elem)
 {
-    track_idx_t track = elem->track();
     EngravingItem* startEl = elem->startElement();
     EngravingItem* endEl = elem->endElement();
 
     if (!startEl->isChordRest() || !endEl->isChordRest()) {
         return;
     }
-
-    ChordRest* startCR = toChordRest(startEl);
-    ChordRest* endCR = toChordRest(endEl);
 
     if (elem->isPalmMute()) {
         Fraction begTick = elem->tick();
@@ -1487,24 +1490,6 @@ void GPConverter::addSoundEffects(const SLine* const elem)
             palmMuteChannel->setProgram(PALM_MUTE_PROG);
             palmMuteChannel->setName(String::fromUtf8(InstrChannel::PALM_MUTE_NAME));
             currentInstrument->appendChannel(palmMuteChannel);
-        }
-    } else if (elem->isLetRing()) {
-        Segment* begSegment = startCR->segment();
-        Segment* endSegment = endCR->segment();
-        for (Segment* nextSeg = begSegment; nextSeg; nextSeg = nextSeg->nextCR(track, true)) {
-            const auto& elemList = nextSeg->elist();
-            for (const auto el : elemList) {
-                if (el && el->isChord() && el->track() == track) {
-                    const auto& notes = toChord(el)->notes();
-                    for (Note* note : notes) {
-                        note->setLetRingType(Note::LetRingType::TreatEnd);
-                        note->setLetRingEndDistance(endCR->tick() + endCR->ticks() - toChord(el)->tick());
-                    }
-                }
-            }
-            if (nextSeg == endSegment) {
-                break;
-            }
         }
     }
 }
@@ -2402,16 +2387,7 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
 
     for (mu::engraving::Note* note : chord->notes()) {
         int pitch = note->pitch();
-
-        if (type == mu::engraving::OttavaType::OTTAVA_8VA) {
-            note->setPitch((pitch - 12 > 0) ? pitch - 12 : pitch);
-        } else if (type == mu::engraving::OttavaType::OTTAVA_8VB) {
-            note->setPitch((pitch + 12 < 127) ? pitch + 12 : pitch);
-        } else if (type == mu::engraving::OttavaType::OTTAVA_15MA) {
-            note->setPitch((pitch - 24 > 0) ? pitch - 24 : (pitch - 12 > 0 ? pitch - 12 : pitch));
-        } else if (type == mu::engraving::OttavaType::OTTAVA_15MB) {
-            note->setPitch((pitch + 24 < 127) ? pitch + 24 : ((pitch + 12 < 127) ? pitch + 12 : pitch));
-        }
+        setPitchByOttavaType(note, type);
 
         // pitch changed because of octave
         if (pitch != note->pitch()) {
@@ -2422,11 +2398,9 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
 
 void GPConverter::addLetRing(const GPNote* gpnote, Note* note)
 {
+    UNUSED(note);
     if (gpnote->letRing() && m_currentGPBeat) {
         m_currentGPBeat->setLetRing(true);
-        if (engravingConfiguration()->guitarProImportExperimental()) {
-            m_letRingNotes[note->track()][note->pitch()][note->tick()].push_back(note);
-        }
     }
 }
 

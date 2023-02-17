@@ -82,3 +82,7 @@ set(MODULE_LINK
     )
 
 include(SetupModule)
+
+if (MUE_BUILD_UNIT_TESTS)
+    add_subdirectory(tests)
+endif()

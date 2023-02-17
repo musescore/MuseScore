@@ -60,19 +60,22 @@ Column {
             anchors.fill: parent
             anchors.margins: 1
 
+            contentWidth: contentItem.childrenRect.width
+            flickableDirection: Flickable.AutoFlickDirection
+
             spacing: 0
 
             model: detailsModel
 
             NavigationPanel {
-               id: detailsViewNavPanel
+                id: detailsViewNavPanel
 
-               name: "DetailsViewNavPanel"
-               order: root.navigationOrder
-               enabled: root.enabled && root.visible
-               direction: NavigationPanel.Horizontal
-               section: root.navigationSection
-           }
+                name: "DetailsViewNavPanel"
+                order: root.navigationOrder
+                enabled: root.enabled && root.visible
+                direction: NavigationPanel.Horizontal
+                section: root.navigationSection
+            }
 
             delegate: ListItemBlank {
                 navigation.name: "Error " + model.index
@@ -88,9 +91,14 @@ Column {
                 background.color: model.index % 2 === 0 ? ui.theme.backgroundSecondaryColor : "transparent"
                 mouseArea.enabled: false
 
+                implicitWidth: label.implicitWidth + 2 * 30
+                width: Math.max(ListView.view.width, implicitWidth)
+
                 StyledTextLabel {
+                    id: label
                     anchors.fill: parent
                     anchors.leftMargin: 30
+                    anchors.rightMargin: 30
 
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignLeft
@@ -108,14 +116,14 @@ Column {
         spacing: 0
 
         NavigationPanel {
-           id: copyDetailsNavPanel
+            id: copyDetailsNavPanel
 
-           name: "CopyDetailsNavPanel"
-           order: root.navigationOrder + 1
-           enabled: root.enabled && root.visible
-           direction: NavigationPanel.Horizontal
-           section: root.navigationSection
-       }
+            name: "CopyDetailsNavPanel"
+            order: root.navigationOrder + 1
+            enabled: root.enabled && root.visible
+            direction: NavigationPanel.Horizontal
+            section: root.navigationSection
+        }
 
         FlatButton {
             text: qsTrc("global", "Copy")
@@ -167,7 +175,7 @@ Column {
             AccessibleItem {
                 id: accessibleInfo
 
-                accessibleParent: copyDetailsNavPanel.navigationPanel.accessible
+                accessibleParent: copyDetailsNavPanel.accessible
                 visualItem: detailsCopiedMessage
                 role: MUAccessible.StaticText
                 name: detailsCopiedMessage.text

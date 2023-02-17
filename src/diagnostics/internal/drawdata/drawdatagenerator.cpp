@@ -21,10 +21,8 @@
  */
 #include "drawdatagenerator.h"
 
-#include "global/io/file.h"
 #include "global/io/dir.h"
 #include "global/io/fileinfo.h"
-#include "global/stringutils.h"
 
 #include "draw/bufferedpaintprovider.h"
 #include "draw/utils/drawdatarw.h"
@@ -35,7 +33,9 @@
 #include "engraving/rw/scorereader.h"
 #include "engraving/libmscore/masterscore.h"
 
+#ifdef MUE_BUILD_IMPORTEXPORT_MODULE
 #include "importexport/guitarpro/internal/guitarproreader.h"
+#endif
 
 #include "log.h"
 
@@ -43,7 +43,6 @@ using namespace mu;
 using namespace mu::diagnostics;
 using namespace mu::draw;
 using namespace mu::engraving;
-using namespace mu::iex::guitarpro;
 
 //! TODO
 //! 1. Make saving by relative paths
@@ -75,7 +74,7 @@ Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& 
         bool skip = false;
         std::string scorePath = scores.val.at(i).toStdString();
 
-        if (scorePath.find("disabled") != std::string::npos) {
+        if (scorePath.find("disabled") != std::string::npos || scorePath.find("DISABLED") != std::string::npos) {
             LOGW() << "disabled: " << scores.val.at(i);
             skip = true;
         }
@@ -214,13 +213,17 @@ bool DrawDataGenerator::loadScore(mu::engraving::MasterScore* score, const mu::i
         // Import
 
         TRACEFUNC_C("Load gp");
-
-        GuitarProReader reader;
+#ifdef MUE_BUILD_IMPORTEXPORT_MODULE
+        mu::iex::guitarpro::GuitarProReader reader;
         Ret ret = reader.read(score, path);
         if (!ret) {
             LOGE() << "failed read file: " << path;
             return false;
         }
+#else
+        NOT_SUPPORTED;
+        return false;
+#endif
     }
 
     return true;

@@ -21,12 +21,6 @@
  */
 #include <gtest/gtest.h>
 
-#include "types/string.h"
-
-#ifdef CUSTOM_ALLOCATOR_DISABLED
-#undef CUSTOM_ALLOCATOR_DISABLED
-#endif
-
 #include "allocator.h"
 
 #include "log.h"
@@ -88,7 +82,7 @@ public:
 
     void SetUp() override
     {
-        ObjectAllocator::used++;
+        ObjectAllocator::s_used++;
     }
 };
 

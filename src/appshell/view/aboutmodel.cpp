@@ -23,7 +23,6 @@
 
 #include "translation.h"
 #include "muversion.h"
-#include "config.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -92,8 +91,8 @@ void AboutModel::copyRevisionToClipboard() const
         .arg(QSysInfo::prettyProductName())
         .arg(QSysInfo::currentCpuArchitecture())
         .arg(QSysInfo::WordSize)
-        .arg(VERSION)
-        .arg(BUILD_NUMBER)
+        .arg(MUSESCORE_VERSION)
+        .arg(MUSESCORE_BUILD_NUMBER)
         .arg(MUSESCORE_REVISION));
 }
 

@@ -25,7 +25,6 @@
 #include <list>
 #include <stack>
 
-#include "config.h"
 #include "ipaintprovider.h"
 
 #include "types/string.h"
@@ -285,7 +284,7 @@ private:
     Painter* m_painter = nullptr;
 };
 
-#ifdef TRACE_DRAW_OBJ_ENABLED
+#ifdef MUE_ENABLE_DRAW_TRACE
     #define TRACE_OBJ_DRAW \
     mu::draw::PainterObjMarker __drawObjMarker(painter, typeName(), pagePos())
 

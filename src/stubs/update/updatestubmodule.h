@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::update {
-class UpdateStubModule : public modularity::IModuleSetup
+class UpdateModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

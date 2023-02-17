@@ -28,6 +28,7 @@
 
 #include "workspaceconfigurationstub.h"
 #include "workspacemanagerstub.h"
+#include "workspacesdataproviderstub.h"
 
 using namespace mu::workspace;
 using namespace mu::modularity;
@@ -38,18 +39,19 @@ static void workspace_init_qrc()
     Q_INIT_RESOURCE(workspace);
 }
 
-std::string WorkspaceStubModule::moduleName() const
+std::string WorkspaceModule::moduleName() const
 {
     return "workspace_stub";
 }
 
-void WorkspaceStubModule::registerExports()
+void WorkspaceModule::registerExports()
 {
     ioc()->registerExport<IWorkspaceConfiguration>(moduleName(), new WorkspaceConfigurationStub());
     ioc()->registerExport<IWorkspaceManager>(moduleName(), new WorkspaceManagerStub());
+    ioc()->registerExport<IWorkspacesDataProvider>(moduleName(), new WorkspacesDataProviderStub());
 }
 
-void WorkspaceStubModule::resolveImports()
+void WorkspaceModule::resolveImports()
 {
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
@@ -61,12 +63,15 @@ void WorkspaceStubModule::resolveImports()
     }
 }
 
-void WorkspaceStubModule::registerResources()
+void WorkspaceModule::registerResources()
 {
     workspace_init_qrc();
 }
 
-void WorkspaceStubModule::registerUiTypes()
+void WorkspaceModule::registerUiTypes()
 {
-    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(workspace_QML_IMPORT);
+    std::shared_ptr<ui::IUiEngine> ui = ioc()->resolve<ui::IUiEngine>(moduleName());
+    if (ui) {
+        ui->addSourceImportPath(workspace_QML_IMPORT);
+    }
 }

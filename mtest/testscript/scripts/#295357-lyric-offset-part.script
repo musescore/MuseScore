@@ -1,7 +1,0 @@
-init init/TrebleWithPart-Lyrics.mscx
-excerpt 1
-cmd note-input
-cmd note-input
-cmd next-element
-cmd pitch-down-octave
-test score #295357-lyric-offset-part.mscx

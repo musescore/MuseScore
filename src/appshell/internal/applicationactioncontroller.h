@@ -65,7 +65,6 @@ public:
     void onDragEnterEvent(QDragEnterEvent* event) override;
     void onDragMoveEvent(QDragMoveEvent* event) override;
     void onDropEvent(QDropEvent* event) override;
-    bool canReceiveAction(const mu::actions::ActionCode&) const override;
 
 private:
     bool eventFilter(QObject* watched, QEvent* event) override;
@@ -86,6 +85,8 @@ private:
     void openPreferencesDialog();
 
     void revertToFactorySettings();
+
+    bool m_quiting = false;
 
     async::Channel<bool> m_fullScreenChannel;
     async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;

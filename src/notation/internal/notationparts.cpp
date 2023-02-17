@@ -650,7 +650,6 @@ void NotationParts::apply()
 {
     undoStack()->commitChanges();
 
-    score()->doLayout();
     m_partsChanged.notify();
 }
 

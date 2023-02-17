@@ -22,7 +22,6 @@
 
 #include <QDateTime>
 
-#include "config.h"
 #include "util.h"
 
 #include "score.h"

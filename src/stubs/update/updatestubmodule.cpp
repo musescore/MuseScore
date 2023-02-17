@@ -34,12 +34,12 @@ static std::shared_ptr<UpdateScenarioStub> s_scenario = std::make_shared<UpdateS
 static std::shared_ptr<UpdateServiceStub> s_service = std::make_shared<UpdateServiceStub>();
 static std::shared_ptr<UpdateConfigurationStub> s_configuration = std::make_shared<UpdateConfigurationStub>();
 
-std::string UpdateStubModule::moduleName() const
+std::string UpdateModule::moduleName() const
 {
     return "update_stub";
 }
 
-void UpdateStubModule::registerExports()
+void UpdateModule::registerExports()
 {
     ioc()->registerExport<IUpdateScenario>(moduleName(), s_scenario);
     ioc()->registerExport<IUpdateService>(moduleName(), s_service);

@@ -22,7 +22,7 @@
 #ifndef MU_FRAMEWORK_MUVERSION_H
 #define MU_FRAMEWORK_MUVERSION_H
 
-#include "types/version.h"
+#include "types/string.h"
 
 namespace mu::framework {
 class MUVersion

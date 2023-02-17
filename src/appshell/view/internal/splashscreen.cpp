@@ -59,7 +59,7 @@ SplashScreen::SplashScreen()
     setAttribute(Qt::WA_TranslucentBackground);
     setSize(splashScreenSize);
 
-    m_message = qtrc("appshell", "Loading…");
+    m_message = qtrc("appshell", "Loading…\u200e");
 
     repaint();
 }
@@ -99,16 +99,19 @@ void SplashScreen::draw(QPainter* painter)
 
     painter->drawText(messageRect, Qt::AlignTop | Qt::AlignHCenter | Qt::TextDontClip, m_message);
 
+    Qt::AlignmentFlag alignment = languagesService()->currentLanguage().direction == Qt::RightToLeft
+                                  ? Qt::AlignLeft : Qt::AlignRight;
+
     // Draw website URL
     QRectF websiteBoundingRect;
-    painter->drawText(websiteRect, Qt::AlignBottom | Qt::AlignRight | Qt::TextDontClip, website, &websiteBoundingRect);
+    painter->drawText(websiteRect, Qt::AlignBottom | alignment | Qt::TextDontClip, website, &websiteBoundingRect);
 
     // Draw version number
     pen.setColor(versionNumberColor);
     painter->setPen(pen);
 
     painter->drawText(websiteRect.translated(0.0, -websiteBoundingRect.height() - versionNumberSpacing),
-                      Qt::AlignBottom | Qt::AlignRight | Qt::TextDontClip,
+                      Qt::AlignBottom | alignment | Qt::TextDontClip,
                       qtrc("appshell", "Version %1").arg(QString::fromStdString(framework::MUVersion::fullVersion().toStdString())));
 }
 

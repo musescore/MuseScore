@@ -48,5 +48,8 @@ void InspectorModule::registerResources()
 
 void InspectorModule::registerUiTypes()
 {
-    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(inspector_QML_IMPORT);
+    std::shared_ptr<ui::IUiEngine> ui = ioc()->resolve<ui::IUiEngine>(moduleName());
+    if (ui) {
+        ui->addSourceImportPath(inspector_QML_IMPORT);
+    }
 }

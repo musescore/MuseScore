@@ -885,7 +885,7 @@ QString PaletteProvider::getPaletteFilename(bool open, const QString& name) cons
 {
     QString title;
     std::vector<std::string> filter;
-#if defined(WIN_PORTABLE)
+#ifdef WIN_PORTABLE
     QString wd = QDir::cleanPath(QString("%1/../../../Data/settings").arg(QCoreApplication::applicationDirPath()));
 #else
     QString wd = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::HomeLocation))

@@ -24,7 +24,6 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 
-#include "config.h"
 #include "settings.h"
 
 #include "multiinstances/resourcelockguard.h"
@@ -171,7 +170,7 @@ std::string AppShellConfiguration::musicXMLLicenseDeedUrl() const
 
 std::string AppShellConfiguration::museScoreVersion() const
 {
-    return VERSION + std::string(".") + BUILD_NUMBER;
+    return MUSESCORE_VERSION + std::string(".") + MUSESCORE_BUILD_NUMBER;
 }
 
 std::string AppShellConfiguration::museScoreRevision() const
@@ -250,7 +249,7 @@ std::string AppShellConfiguration::utmParameters(const std::string& utmMedium) c
 {
     return "utm_source=desktop&utm_medium=" + utmMedium
            + "&utm_content=" + MUSESCORE_REVISION
-           + "&utm_campaign=MuseScore" + VERSION;
+           + "&utm_campaign=MuseScore" + MUSESCORE_VERSION;
 }
 
 std::string AppShellConfiguration::sha() const

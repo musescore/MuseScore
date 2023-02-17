@@ -23,9 +23,9 @@
 #include "chordrest.h"
 #include "factory.h"
 #include "keysig.h"
+#include "masterscore.h"
 #include "measure.h"
 #include "rest.h"
-#include "score.h"
 #include "segment.h"
 #include "staff.h"
 #include "tuplet.h"
@@ -106,17 +106,53 @@ void Score::checkScore()
 ///    Check that voices > 1 contains less than measure duration
 //---------------------------------------------------------
 
-Ret Score::sanityCheck()
+Ret MasterScore::sanityCheck()
 {
+    std::string accumulatedErrors;
+
+    for (Score* score : scoreList()) {
+        Ret ret = score->sanityCheckLocal();
+        if (ret) {
+            // everything is fine in this part, let's continue
+            continue;
+        }
+
+        if (!accumulatedErrors.empty()) {
+            accumulatedErrors += "\n";
+        }
+
+        accumulatedErrors += ret.text();
+    }
+
+    if (accumulatedErrors.empty()) {
+        return make_ok();
+    }
+
+    return Ret(static_cast<int>(Err::FileCorrupted), accumulatedErrors);
+}
+
+Ret Score::sanityCheckLocal()
+{
+    TRACEFUNC;
+
     StringList errors;
     int mNumber = 1;
+
+    auto excerptInfo = [this]() {
+        if (isMaster()) {
+            return mtrc("engraving", "Full score");
+        }
+
+        //: %1 is the name of a part score.
+        return mtrc("engraving", "Part score: %1").arg(name());
+    };
 
     for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
         Fraction mLen = m->ticks();
         size_t endStaff  = staves().size();
 
         for (size_t staffIdx = 0; staffIdx < endStaff; ++staffIdx) {
-            Rest* fmrest0 = 0;            // full measure rest in voice 0
+            Rest* fmrest0 = nullptr; // full measure rest in voice 0
             Fraction voices[VOICES];
 
 #ifndef NDEBUG
@@ -124,16 +160,13 @@ Ret Score::sanityCheck()
 #endif
 
             for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-                for (size_t v = 0; v < VOICES; ++v) {
-                    EngravingItem* element = s->element(static_cast<int>(staffIdx) * VOICES + static_cast<int>(v));
+                for (voice_idx_t v = 0; v < VOICES; ++v) {
+                    EngravingItem* element = s->element(staffIdx * VOICES + v);
                     if (!element) {
                         continue;
                     }
 
                     ChordRest* cr = toChordRest(element);
-                    if (cr == 0) {
-                        continue;
-                    }
                     voices[v] += cr->actualTicks();
                     if (v == 0 && cr->isRest()) {
                         Rest* r = toRest(cr);
@@ -152,16 +185,17 @@ Ret Score::sanityCheck()
             }
 
             if (!repeatsIsValid) {
-                errors << mtrc("engraving", u"<b>Corrupted measure</b>: Measure %1, Staff %2.")
-                    .arg(mNumber).arg(staffIdx + 1);
+                errors << mtrc("engraving", u"<b>Corrupted measure</b>: %1, measure %2, staff %3.")
+                    .arg(excerptInfo()).arg(mNumber).arg(staffIdx + 1);
 #ifndef NDEBUG
                 m->setCorrupted(staffIdx, true);
 #endif
             }
 
             if (voices[0] != mLen) {
-                errors << mtrc("engraving", u"<b>Incomplete measure</b>: Measure %1, Staff %2. Found: %3. Expected: %4.")
-                    .arg(mNumber).arg(staffIdx + 1).arg(voices[0].toString(), mLen.toString());
+                //: %1 describes in which score the corruption is (either `Full score` or `"[part name]" part score`)
+                errors << mtrc("engraving", u"<b>Incomplete measure</b>: %1, measure %2, staff %3. Found: %4. Expected: %5.")
+                    .arg(excerptInfo()).arg(mNumber).arg(staffIdx + 1).arg(voices[0].toString(), mLen.toString());
 #ifndef NDEBUG
                 m->setCorrupted(staffIdx, true);
 #endif
@@ -171,10 +205,12 @@ Ret Score::sanityCheck()
                     fmrest0->setTicks(mLen);
                 }
             }
+
             for (voice_idx_t v = 1; v < VOICES; ++v) {
                 if (voices[v] > mLen) {
-                    errors << mtrc("engraving", u"<b>Voice too long</b>: Measure %1, Staff %2, Voice %3. Found: %4. Expected: %5.")
-                        .arg(mNumber).arg(staffIdx + 1).arg(v + 1).arg(voices[v].toString(), mLen.toString());
+                    //: %1 describes in which score the corruption is (either `Full score` or `"[part name]" part score`)
+                    errors << mtrc("engraving", u"<b>Voice too long</b>: %1, measure %2, staff %3, voice %4. Found: %5. Expected: %6.")
+                        .arg(excerptInfo()).arg(mNumber).arg(staffIdx + 1).arg(v + 1).arg(voices[v].toString(), mLen.toString());
 #ifndef NDEBUG
                     m->setCorrupted(staffIdx, true);
 #endif

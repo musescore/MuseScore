@@ -133,6 +133,9 @@ struct SaveLocation
 
     SaveLocation() = default;
 
+    SaveLocation(SaveLocationType type, const std::variant<io::path_t, CloudProjectInfo>& data = {})
+        : type(type), data(data) {}
+
     SaveLocation(const io::path_t& localPath)
         : type(SaveLocationType::Local), data(localPath) {}
 

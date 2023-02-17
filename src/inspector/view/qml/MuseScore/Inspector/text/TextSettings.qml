@@ -225,6 +225,29 @@ Column {
 
     SeparatorLine { anchors.margins: -12 }
 
+    SpinBoxPropertyView {
+        id: textLineSpacingSection
+        anchors.left: parent.left
+        anchors.right: parent.horizontalCenter
+        anchors.rightMargin: 2
+
+        navigationName: "Line Spacing"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: cornerRadiusSection.navigationRowEnd + 1
+
+        titleText: qsTrc("inspector", "Line spacing")
+        //: Stands for "Lines". Used for text line spacing controls, for example.
+        measureUnitsSymbol: qsTrc("global", "li")
+        propertyItem: root.model ? root.model.textLineSpacing : null
+
+        decimals: 2
+        step: 0.1
+        minValue: 0
+        maxValue: 10
+    }
+
+    SeparatorLine { anchors.margins: -12 }
+
     DropdownPropertyView {
         id: textStyleSection
         titleText: qsTrc("inspector", "Text style")
@@ -232,7 +255,7 @@ Column {
 
         navigationName: "Text style"
         navigationPanel: root.navigationPanel
-        navigationRowStart: cornerRadiusSection.navigationRowEnd + 1
+        navigationRowStart: textLineSpacingSection.navigationRowEnd + 1
 
         model: root.model ? root.model.textStyles : []
     }

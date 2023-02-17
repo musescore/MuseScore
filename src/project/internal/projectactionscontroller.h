@@ -100,15 +100,12 @@ private:
 
     framework::IInteractive::Button askAboutSavingScore(INotationProjectPtr project);
 
-    bool canSaveProject() const;
+    Ret canSaveProject() const;
+    bool saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false);
 
-    void saveProjectAs();
-    void saveProjectCopy();
-    void saveSelection();
-    void saveToCloud();
     void publish();
 
-    bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save);
+    bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
     bool saveProjectLocally(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save);
     bool saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode = SaveMode::Save);
 
@@ -139,7 +136,15 @@ private:
 
     void warnCloudIsNotAvailable();
     void warnPublishIsNotAvailable();
-    void warnSaveIsNotAvailable();
+
+    void warnSaveIsNotAvailable(const Ret& ret, const SaveLocation& location);
+    void warnScoreWithoutPartsCannotBeSaved();
+    void warnCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText, bool newlyCreated);
+    void warnCorruptedScoreCannotBeSavedOnCloud(const std::string& errorText, bool newlyCreated);
+    void warnCorruptedScoreCannotBeSavedLocally(const SaveLocation& location, const std::string& errorText, bool newlyCreated);
+    void showErrCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText);
+
+    void revertCorruptedScoreToLastSaved();
 
     void importPdf();
 
@@ -164,7 +169,10 @@ private:
 
     bool hasSelection() const;
 
+    bool m_isProjectSaving = false;
+    bool m_isProjectClosing = false;
     bool m_isProjectProcessing = false;
+    bool m_isProjectPublishing = false;
     bool m_isProjectUploading = false;
 
     framework::ProgressPtr m_uploadingProjectProgress = nullptr;

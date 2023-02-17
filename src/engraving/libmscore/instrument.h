@@ -361,8 +361,8 @@ public:
     void setUseDrumset(bool val);
     void setAmateurPitchRange(int a, int b) { _minPitchA = a; _maxPitchA = b; }
     void setProfessionalPitchRange(int a, int b) { _minPitchP = a; _maxPitchP = b; }
-    InstrChannel* channel(int idx) { return _channel[idx]; }
-    const InstrChannel* channel(int idx) const { return _channel.at(idx); }
+    InstrChannel* channel(int idx) { return mu::value(_channel, idx); }
+    const InstrChannel* channel(int idx) const { return mu::value(_channel, idx); }
     InstrChannel* playbackChannel(int idx, MasterScore*);
     const InstrChannel* playbackChannel(int idx, const MasterScore*) const;
     size_t cleffTypeCount() const;

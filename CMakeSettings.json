@@ -15,11 +15,7 @@
                "value": "RELWITHDEBINFO"
             },
             {
-               "name": "BUILD_FOR_WINSTORE",
-               "value": "OFF"
-            },
-            {
-               "name": "BUILD_64",
+               "name": "MUE_COMPILE_BUILD_64",
                "value": "ON"
             },
             {

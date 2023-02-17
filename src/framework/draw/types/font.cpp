@@ -25,6 +25,8 @@
 using namespace mu;
 using namespace mu::draw;
 
+bool Font::g_disableFontMerging = false;
+
 Font::Font(const String& family, Type type)
     : m_family(family), m_type(type)
 {
@@ -140,6 +142,9 @@ void Font::setNoFontMerging(bool arg)
 
 bool Font::noFontMerging() const
 {
+    if (g_disableFontMerging) {
+        return true;
+    }
     return m_noFontMerging;
 }
 

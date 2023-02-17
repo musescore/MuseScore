@@ -36,17 +36,17 @@ static void palette_init_qrc()
     Q_INIT_RESOURCE(palette);
 }
 
-std::string PaletteStubModule::moduleName() const
+std::string PaletteModule::moduleName() const
 {
     return "palette_stub";
 }
 
-void PaletteStubModule::registerExports()
+void PaletteModule::registerExports()
 {
     ioc()->registerExport<IPaletteConfiguration>(moduleName(), new PaletteConfigurationStub());
 }
 
-void PaletteStubModule::resolveImports()
+void PaletteModule::resolveImports()
 {
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
@@ -58,12 +58,15 @@ void PaletteStubModule::resolveImports()
     }
 }
 
-void PaletteStubModule::registerResources()
+void PaletteModule::registerResources()
 {
     palette_init_qrc();
 }
 
-void PaletteStubModule::registerUiTypes()
+void PaletteModule::registerUiTypes()
 {
-    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(palette_QML_IMPORT);
+    std::shared_ptr<ui::IUiEngine> ui = ioc()->resolve<ui::IUiEngine>(moduleName());
+    if (ui) {
+        ui->addSourceImportPath(palette_QML_IMPORT);
+    }
 }

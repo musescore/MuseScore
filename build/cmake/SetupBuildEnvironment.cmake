@@ -7,30 +7,17 @@ set(SHARED_LIBS_INSTALL_DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 set(CMAKE_UNITY_BUILD_BATCH_SIZE 12)
 
-if (QT_SUPPORT)
-    add_definitions(-DQT_SUPPORT)
-    add_definitions(-DHAW_LOGGER_QT_SUPPORT)
-else()
-    add_definitions(-DNO_QT_SUPPORT)
-endif()
-
-add_definitions(-DHAW_PROFILER_ENABLED)
-
-if (NOT BUILD_ALLOCATOR)
-    add_definitions(-DCUSTOM_ALLOCATOR_DISABLED)
-endif()
-
 if (CC_IS_GCC)
     message(STATUS "Using Compiler GCC ${CMAKE_CXX_COMPILER_VERSION}")
 
     set(CMAKE_CXX_FLAGS_DEBUG   "-g")
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
-    if (TRY_BUILD_SHARED_LIBS_IN_DEBUG AND BUILD_IS_DEBUG)
+    if (MUE_COMPILE_USE_SHARED_LIBS_IN_DEBUG AND BUILD_IS_DEBUG)
         set(BUILD_SHARED_LIBS ON)
     endif()
 
-    if (BUILD_ASAN)
+    if (MUE_BUILD_ASAN)
         string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fsanitize=address -fno-omit-frame-pointer")
     endif()
 
@@ -60,15 +47,15 @@ elseif(CC_IS_MINGW)
     set(CMAKE_CXX_FLAGS_DEBUG   "-g")
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
-    if (TRY_BUILD_SHARED_LIBS_IN_DEBUG AND BUILD_IS_DEBUG)
+    if (MUE_COMPILE_USE_SHARED_LIBS_IN_DEBUG AND BUILD_IS_DEBUG)
         set(BUILD_SHARED_LIBS ON)
     endif()
 
     # -mno-ms-bitfields see #22048
     set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -mno-ms-bitfields")
-    if (NOT BUILD_64)
+    if (NOT MUE_COMPILE_BUILD_64)
         set(CMAKE_EXE_LINKER_FLAGS "-Wl,--large-address-aware")
-    endif (NOT BUILD_64)
+    endif()
 
     add_definitions(-D_UNICODE)
     add_definitions(-DUNICODE)
@@ -79,7 +66,7 @@ elseif(CC_IS_CLANG)
     set(CMAKE_CXX_FLAGS_DEBUG   "-g")
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
-    if (BUILD_ASAN)
+    if (MUE_BUILD_ASAN)
         string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fsanitize=address -fno-omit-frame-pointer")
     endif()
 
@@ -132,7 +119,7 @@ endif()
 
 # APPLE specific
 if (OS_IS_MAC)
-    if (BUILD_MACOS_APPLE_SILICON)
+    if (MUE_COMPILE_BUILD_MACOS_APPLE_SILICON)
         set(CMAKE_OSX_ARCHITECTURES ) # leave empty, use default
     else()
         set(CMAKE_OSX_ARCHITECTURES x86_64)

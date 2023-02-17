@@ -95,7 +95,7 @@ StyledPopupView {
 
             currentText: settingsModel.abbreviature
 
-            onTextChanged: function(newTextValue) {
+            onTextEditingFinished: function(newTextValue) {
                 settingsModel.abbreviature = newTextValue
             }
         }

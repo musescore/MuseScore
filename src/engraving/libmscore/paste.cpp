@@ -129,8 +129,8 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
                 break;
             }
         }
-        Fraction tickStart = Fraction::fromTicks(e.intAttribute("tick", 0));
-        tickLen       =  Fraction::fromTicks(e.intAttribute("len", 0));
+        Fraction tickStart = Fraction::fromString(e.attribute("tick"));
+        tickLen       =  Fraction::fromString(e.attribute("len"));
         Fraction oTickLen =  tickLen;
         tickLen       *= scale;
         int staffStart    = e.intAttribute("staff", 0);
@@ -1083,8 +1083,8 @@ static bool canPasteStaff(XmlReader& reader, const Fraction& scale)
     if (scale != Fraction(1, 1)) {
         while (reader.readNext() && reader.tokenType() != XmlReader::TokenType::EndDocument) {
             AsciiStringView tag(reader.name());
-            int len = reader.intAttribute("len", 0);
-            if (len && !TDuration(Fraction::fromTicks(len) * scale).isValid()) {
+            Fraction len = Fraction::fromString(reader.attribute("len"));
+            if (!len.isZero() && !TDuration(len * scale).isValid()) {
                 return false;
             }
             if (tag == "durationType") {

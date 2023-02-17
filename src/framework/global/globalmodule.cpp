@@ -28,7 +28,6 @@
 #include "logremover.h"
 #include "thirdparty/haw_logger/logger/logdefdest.h"
 #include "muversion.h"
-#include "config.h"
 
 #include "internal/application.h"
 #include "internal/interactive.h"
@@ -44,8 +43,6 @@
 #include "io/internal/filesystem.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
-
-#include "config.h"
 
 using namespace mu::framework;
 using namespace mu::modularity;
@@ -105,14 +102,14 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 
     logger->addDest(logFile);
 
-#ifdef LOGGER_DEBUGLEVEL_ENABLED
+#ifdef MUE_ENABLE_LOGGER_DEBUGLEVEL
     logger->setLevel(haw::logger::Debug);
 #else
     logger->setLevel(haw::logger::Normal);
 #endif
 
     LOGI() << "log path: " << logFile->filePath();
-    LOGI() << "=== Started MuseScore " << framework::MUVersion::fullVersion() << ", build number " << BUILD_NUMBER << " ===";
+    LOGI() << "=== Started MuseScore " << framework::MUVersion::fullVersion() << ", build number " << MUSESCORE_BUILD_NUMBER << " ===";
 
     //! --- Setup profiler ---
     using namespace haw::profiler;

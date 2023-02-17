@@ -90,6 +90,7 @@ signals:
 private:
     enum Roles {
         RoleName = Qt::UserRole + 1,
+        RoleDescription,
         RoleIsSelected,
         RoleTraits,
         RoleCurrentTraitIndex

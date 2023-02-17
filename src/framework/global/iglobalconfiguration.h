@@ -63,6 +63,7 @@ public:
     //! NOTE System paths
     virtual io::path_t homePath() const = 0;
     virtual io::path_t downloadsPath() const = 0;
+    virtual io::path_t genericDataPath() const = 0;
 
     virtual bool useFactorySettings() const = 0;
     virtual bool enableExperimental() const = 0;

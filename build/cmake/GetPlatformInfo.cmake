@@ -11,51 +11,55 @@ else()
     message(FATAL_ERROR "Unsupported platform: ${CMAKE_HOST_SYSTEM_NAME}")
 endif()
 
-# architecture detection
-# based on QT5 processor detection code
-# qtbase/blobs/master/src/corelib/global/qprocessordetection.h
+if (NOT ARCH_DETECTED)
+    # architecture detection
+    # based on QT5 processor detection code
+    # qtbase/blobs/master/src/corelib/global/qprocessordetection.h
 
-# we only have binary blobs compatible with x86_64, aarch64, and armv7l
+    # we only have binary blobs compatible with x86_64, aarch64, and armv7l
 
-set(archdetect_c_code "
-#if defined(__arm__) || defined(__TARGET_ARCH_ARM) || defined(_M_ARM) || defined(__aarch64__) || defined(__ARM64__)
-    #if defined(__aarch64__) || defined(__ARM64__)
-        #error cmake_ARCH aarch64
-    #elif defined(__ARM_ARCH_7A__)
-        #error cmake_ARCH armv7l
+    set(archdetect_c_code "
+    #if defined(__arm__) || defined(__TARGET_ARCH_ARM) || defined(_M_ARM) || defined(__aarch64__) || defined(__ARM64__)
+        #if defined(__aarch64__) || defined(__ARM64__)
+            #error cmake_ARCH aarch64
+        #elif defined(__ARM_ARCH_7A__)
+            #error cmake_ARCH armv7l
+        #endif
+    #elif defined(__x86_64) || defined(__x86_64__) || defined(__amd64) || defined(_M_X64)
+        #error cmake_ARCH x86_64
     #endif
-#elif defined(__x86_64) || defined(__x86_64__) || defined(__amd64) || defined(_M_X64)
-    #error cmake_ARCH x86_64
-#endif
-#error cmake_ARCH unknown
-")
+    #error cmake_ARCH unknown
+    ")
 
-if(CMAKE_C_COMPILER_LOADED)
-    set(TA_EXTENSION "c")
-elseif(CMAKE_CXX_COMPILER_LOADED)
-    set(TA_EXTENSION "cpp")
-elseif(CMAKE_FORTRAN_COMPILER_LOADED)
-    set(TA_EXTENSION "F90")
-else()
-    message(FATAL_ERROR "You must enable a C, CXX, or Fortran compiler to use TargetArch.cmake")
-endif()
+    if(CMAKE_C_COMPILER_LOADED)
+        set(TA_EXTENSION "c")
+    elseif(CMAKE_CXX_COMPILER_LOADED)
+        set(TA_EXTENSION "cpp")
+    elseif(CMAKE_FORTRAN_COMPILER_LOADED)
+        set(TA_EXTENSION "F90")
+    else()
+        message(FATAL_ERROR "You must enable a C, CXX, or Fortran compiler to use TargetArch.cmake")
+    endif()
 
-file(WRITE "${CMAKE_BINARY_DIR}/arch.${TA_EXTENSION}" "${archdetect_c_code}")
+    file(WRITE "${CMAKE_BINARY_DIR}/arch.${TA_EXTENSION}" "${archdetect_c_code}")
 
-try_run(
-    run_result_unused
-    compile_result_unused
-    "${CMAKE_BINARY_DIR}"
-    "${CMAKE_BINARY_DIR}/arch.${TA_EXTENSION}"
-    COMPILE_OUTPUT_VARIABLE ARCH
-    CMAKE_FLAGS ${TA_CMAKE_FLAGS}
-)
+    try_run(
+        run_result_unused
+        compile_result_unused
+        "${CMAKE_BINARY_DIR}"
+        "${CMAKE_BINARY_DIR}/arch.${TA_EXTENSION}"
+        COMPILE_OUTPUT_VARIABLE ARCH
+        CMAKE_FLAGS ${TA_CMAKE_FLAGS}
+    )
 
-string(REGEX MATCH "cmake_ARCH ([a-zA-Z0-9_]+)" ARCH "${ARCH}")
+    string(REGEX MATCH "cmake_ARCH ([a-zA-Z0-9_]+)" ARCH "${ARCH}")
 
-string(REPLACE "cmake_ARCH " "" ARCH "${ARCH}")
+    string(REPLACE "cmake_ARCH " "" ARCH "${ARCH}")
+    message(STATUS "Detected CPU Architecture: ${ARCH}")
 
-message(STATUS "Detected CPU Architecture: ${ARCH}")
+    set(ARCH_DETECTED ON)
+
+endif(NOT ARCH_DETECTED)
 
 if(${ARCH} MATCHES "armv7l")
     set(ARCH_IS_ARMV7L 1)
