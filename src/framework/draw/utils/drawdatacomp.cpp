@@ -610,7 +610,6 @@ static void fillDrawData(DrawDataPtr& dd, const comp::Data& cd)
     for (const DrawData::Object* o : objs) {
         DrawData::Object dobj;
         dobj.name = o->name;
-        dobj.pagePos = o->pagePos;
 
         auto findOrCreateDData = [](DrawData::Object& dobj, const DrawData::State& state) {
             DrawData::Data* ddata = nullptr;

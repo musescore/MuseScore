@@ -116,11 +116,11 @@ bool Painter::isActive() const
     return m_provider->isActive();
 }
 
-void Painter::beginObject(const std::string& name, const PointF& pagePos)
+void Painter::beginObject(const std::string& name)
 {
-    m_provider->beginObject(name, pagePos);
+    m_provider->beginObject(name);
     if (extended) {
-        extended->beginObject(name, pagePos);
+        extended->beginObject(name);
     }
 }
 

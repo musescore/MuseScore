@@ -121,12 +121,12 @@ DrawDataPtr DrawDataGenerator::genDrawData(const io::path_t& scorePath, const Ge
         TRACEFUNC_C("Paint");
         Painter painter(pd, "DrawData");
         Paint::Options option;
-        option.fromPage = 0;
+        //option.fromPage = 0;
         //option.toPage = 0;
+        option.isMultiPage = true;
         option.deviceDpi = DrawData::CANVAS_DPI;
         option.printPageBackground = true;
         option.isSetViewport = true;
-        option.isMultiPage = false;
         option.isPrinting = true;
 
         Paint::paintScore(&painter, score, option);

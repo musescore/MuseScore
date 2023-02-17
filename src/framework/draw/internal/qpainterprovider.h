@@ -45,7 +45,7 @@ public:
     bool endTarget(bool endDraw = false) override;
     bool isActive() const override;
 
-    void beginObject(const std::string& name, const PointF& pagePos) override;
+    void beginObject(const std::string& name) override;
     void endObject() override;
 
     void setAntialiasing(bool arg) override;

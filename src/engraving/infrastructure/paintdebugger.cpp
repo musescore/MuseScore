@@ -73,9 +73,9 @@ bool PaintDebugger::isActive() const
     return m_real->isActive();
 }
 
-void PaintDebugger::beginObject(const std::string& name, const PointF& pagePos)
+void PaintDebugger::beginObject(const std::string& name)
 {
-    m_real->beginObject(name, pagePos);
+    m_real->beginObject(name);
 }
 
 void PaintDebugger::endObject()

@@ -118,17 +118,32 @@ TEST_F(Diagnostics_DrawDataTests, SimpleDraw)
         Painter p(prv, "test");
 
         p.setViewport(RectF(0, 0, 450, 450));
+        p.beginObject("page_1");
 
         PointF pos(120, 240);
         p.translate(pos);
 
         Pen pen(Color::GREEN);
         p.setPen(pen);
+        p.beginObject("line_1");
         p.drawLine(0, 0, 120, 0);
-        p.drawLine(0, 20, 120, 20);
+        p.endObject();
+
+        {
+            p.beginObject("line_2");
+            p.drawLine(0, 20, 120, 20);
+
+            {
+                p.beginObject("line_2.2");
+                p.drawLine(0, 40, 120, 40);
+                p.endObject();
+            }
+            p.endObject();
+        }
 
         p.translate(-pos);
 
+        p.endObject(); // page_1
         p.endDraw();
 
         data = prv->drawData();

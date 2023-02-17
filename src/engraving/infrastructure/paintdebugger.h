@@ -39,7 +39,7 @@ public:
     void beforeEndTargetHook(draw::Painter* painter) override;
     bool endTarget(bool endDraw = false) override;
 
-    void beginObject(const std::string& name, const PointF& pagePos) override;
+    void beginObject(const std::string& name) override;
     void endObject() override;
 
     void setAntialiasing(bool arg) override;

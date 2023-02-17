@@ -33,7 +33,7 @@ class DrawObjectsLogger
 public:
     DrawObjectsLogger() = default;
 
-    void beginObject(const std::string& name, const PointF& pagePos);
+    void beginObject(const std::string& name);
     void endObject();
 
 private:

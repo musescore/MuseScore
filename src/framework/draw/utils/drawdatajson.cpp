@@ -390,6 +390,93 @@ static void fromArr(const JsonArray& arr, std::vector<T>& vals)
     }
 }
 
+static void collectStates(std::vector<DrawData::State>& states, const DrawData::Object& obj)
+{
+    for (const DrawData::Data& data : obj.datas) {
+        if (mu::contains(states, data.state)) {
+            continue;
+        }
+        states.push_back(data.state);
+    }
+
+    for (const DrawData::Object& ch : obj.chilren) {
+        collectStates(states, ch);
+    }
+}
+
+static JsonObject toObj(const DrawData::Object& obj, const std::vector<DrawData::State>& states)
+{
+    //! NOTE 'a' added to the beginning of some field names for convenient sorting
+
+    JsonObject objObj;
+    objObj["a_name"] = obj.name;
+
+    JsonArray childrenArr;
+    for (const DrawData::Object& ch : obj.chilren) {
+        childrenArr.append(toObj(ch, states));
+    }
+    objObj["children"] = childrenArr;
+
+    JsonArray datasArr;
+    for (const DrawData::Data& data : obj.datas) {
+        if (data.empty()) {
+            continue;
+        }
+
+        JsonObject dataObj;
+        dataObj["state"] = static_cast<int>(mu::indexOf(states, data.state));
+        if (!data.paths.empty()) {
+            dataObj["paths"] = toArr(data.paths);
+        }
+        if (!data.polygons.empty()) {
+            dataObj["polygons"] = toArr(data.polygons);
+        }
+        if (!data.texts.empty()) {
+            dataObj["texts"] = toArr(data.texts);
+        }
+        if (!data.pixmaps.empty()) {
+            dataObj["pixmaps"] = toArr(data.pixmaps);
+        }
+
+        datasArr.append(dataObj);
+    }
+    objObj["datas"] = datasArr;
+
+    return objObj;
+}
+
+static void fromObj(const JsonObject& objObj, DrawData::Object& obj, const std::map<int, DrawData::State>& states)
+{
+    obj.name = objObj.value("a_name").toString().toStdString();
+    JsonArray childrenArr = objObj["children"].toArray();
+    for (size_t j = 0; j < childrenArr.size(); ++j) {
+        DrawData::Object& ch = obj.chilren.emplace_back();
+        const JsonObject childObj = childrenArr.at(j).toObject();
+        fromObj(childObj, ch, states);
+    }
+
+    JsonArray datasArr = objObj["datas"].toArray();
+    for (size_t j = 0; j < datasArr.size(); ++j) {
+        const JsonObject dataObj = datasArr.at(j).toObject();
+        DrawData::Data data;
+        data.state = states.at(dataObj["state"].toInt());
+        if (dataObj.contains("paths")) {
+            fromArr(dataObj.value("paths").toArray(), data.paths);
+        }
+        if (dataObj.contains("polygons")) {
+            fromArr(dataObj.value("polygons").toArray(), data.polygons);
+        }
+        if (dataObj.contains("texts")) {
+            fromArr(dataObj.value("texts").toArray(), data.texts);
+        }
+        if (dataObj.contains("pixmaps")) {
+            fromArr(dataObj.value("pixmaps").toArray(), data.pixmaps);
+        }
+
+        obj.datas.push_back(std::move(data));
+    }
+}
+
 void DrawDataJson::toJson(JsonObject& root, const DrawDataPtr& dd)
 {
     //! NOTE 'a' added to the beginning of some field names for convenient sorting
@@ -401,46 +488,13 @@ void DrawDataJson::toJson(JsonObject& root, const DrawDataPtr& dd)
     // collect states
     {
         for (const DrawData::Object& obj : dd->objects) {
-            for (const DrawData::Data& data : obj.datas) {
-                if (mu::contains(states, data.state)) {
-                    continue;
-                }
-                states.push_back(data.state);
-            }
+            collectStates(states, obj);
         }
     }
 
     JsonArray objsArr;
     for (const DrawData::Object& obj : dd->objects) {
-        JsonObject objObj;
-        objObj["a_name"] = obj.name;
-        objObj["a_pagePos"] = toArr(obj.pagePos);
-        JsonArray datasArr;
-        for (const DrawData::Data& data : obj.datas) {
-            if (data.empty()) {
-                continue;
-            }
-
-            JsonObject dataObj;
-            dataObj["state"] = static_cast<int>(mu::indexOf(states, data.state));
-            if (!data.paths.empty()) {
-                dataObj["paths"] = toArr(data.paths);
-            }
-            if (!data.polygons.empty()) {
-                dataObj["polygons"] = toArr(data.polygons);
-            }
-            if (!data.texts.empty()) {
-                dataObj["texts"] = toArr(data.texts);
-            }
-            if (!data.pixmaps.empty()) {
-                dataObj["pixmaps"] = toArr(data.pixmaps);
-            }
-
-            datasArr.append(dataObj);
-        }
-        objObj["datas"] = datasArr;
-
-        objsArr.append(objObj);
+        objsArr.append(toObj(obj, states));
     }
 
     root["objects"] = objsArr;
@@ -472,32 +526,9 @@ void DrawDataJson::fromJson(const JsonObject& root, DrawDataPtr& dd)
 
     JsonArray objsArr = root.value("objects").toArray();
     for (size_t i = 0; i < objsArr.size(); ++i) {
+        DrawData::Object& obj = dd->objects.emplace_back();
         const JsonObject objObj = objsArr.at(i).toObject();
-        DrawData::Object obj;
-        obj.name = objObj.value("a_name").toString().toStdString();
-        fromArr(objObj.value("a_pagePos").toArray(), obj.pagePos);
-        JsonArray datasArr = objObj["datas"].toArray();
-        for (size_t j = 0; j < datasArr.size(); ++j) {
-            const JsonObject dataObj = datasArr.at(j).toObject();
-            DrawData::Data data;
-            data.state = states.at(dataObj["state"].toInt());
-            if (dataObj.contains("paths")) {
-                fromArr(dataObj.value("paths").toArray(), data.paths);
-            }
-            if (dataObj.contains("polygons")) {
-                fromArr(dataObj.value("polygons").toArray(), data.polygons);
-            }
-            if (dataObj.contains("texts")) {
-                fromArr(dataObj.value("texts").toArray(), data.texts);
-            }
-            if (dataObj.contains("pixmaps")) {
-                fromArr(dataObj.value("pixmaps").toArray(), data.pixmaps);
-            }
-
-            obj.datas.push_back(std::move(data));
-        }
-
-        dd->objects.push_back(std::move(obj));
+        fromObj(objObj, obj, states);
     }
 }
 

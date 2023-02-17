@@ -45,7 +45,7 @@ public:
     virtual void beginTarget(const std::string& name) = 0;
     virtual void beforeEndTargetHook(Painter* painter) = 0;
     virtual bool endTarget(bool endDraw = false) = 0;
-    virtual void beginObject(const std::string& name, const PointF& pagePos) = 0;
+    virtual void beginObject(const std::string& name) = 0;
     virtual void endObject() = 0;
 
     virtual void setAntialiasing(bool arg) = 0;
