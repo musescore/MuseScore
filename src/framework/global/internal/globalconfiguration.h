@@ -46,6 +46,7 @@ public:
 
     bool useFactorySettings() const override;
     bool enableExperimental() const override;
+    io::path_t genericDataPath() const override;
 
     bool devModeEnabled() const override;
     void setDevModeEnabled(bool enabled) override;

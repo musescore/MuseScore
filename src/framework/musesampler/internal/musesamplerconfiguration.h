@@ -39,6 +39,9 @@ public:
     io::path_t userLibraryPath() const override;
 
     std::string minimumSupportedVersion() const override;
+
+private:
+    io::path_t defaultPath() const;
 };
 }
 
