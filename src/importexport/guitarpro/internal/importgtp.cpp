@@ -104,19 +104,6 @@ const char* const GuitarPro::errmsg[] = {
 #endif
 
 //---------------------------------------------------------
-//   GpBar
-//---------------------------------------------------------
-
-GpBar::GpBar()
-{
-    barLine = BarLineType::NORMAL;
-    keysig  = GP_INVALID_KEYSIG;
-    timesig = Fraction(4, 4);
-    repeatFlags = Repeat::NONE;
-    repeats = 2;
-}
-
-//---------------------------------------------------------
 //   GuitarPro
 //---------------------------------------------------------
 
