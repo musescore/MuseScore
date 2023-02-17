@@ -1589,7 +1589,7 @@ int Chord::maxReduction(int extensionOutsideStaff) const
 // all values are in quarter spaces
 int Chord::stemOpticalAdjustment(int stemEndPosition) const
 {
-    if (_hook) {
+    if (_hook && !_beam) {
         return 0;
     }
     int beamCount = beams();
