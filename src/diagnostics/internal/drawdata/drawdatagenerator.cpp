@@ -122,7 +122,7 @@ DrawDataPtr DrawDataGenerator::genDrawData(const io::path_t& scorePath, const Ge
         Painter painter(pd, "DrawData");
         Paint::Options option;
         option.fromPage = 0;
-        option.toPage = 0;
+        //option.toPage = 0;
         option.deviceDpi = DrawData::CANVAS_DPI;
         option.printPageBackground = true;
         option.isSetViewport = true;
