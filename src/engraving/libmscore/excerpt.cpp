@@ -259,7 +259,7 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
 
     staff_idx_t staffIndex = staff->idx();
     Fraction startTick = staff->score()->firstMeasure()->tick();
-    Fraction endTick = staff->score()->lastMeasure()->tick();
+    Fraction endTick = staff->score()->lastMeasure()->endTick();
 
     // update tracks
     staff->setVoiceVisible(voiceIndex, visible);
