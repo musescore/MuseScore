@@ -21,7 +21,6 @@
  */
 #include "applicationactioncontroller.h"
 
-#include <QCoreApplication>
 #include <QApplication>
 #include <QCloseEvent>
 #include <QFileOpenEvent>
@@ -31,6 +30,7 @@
 #include "async/async.h"
 #include "audio/synthtypes.h"
 
+#include "defer.h"
 #include "translation.h"
 #include "log.h"
 
@@ -161,6 +161,15 @@ mu::ValCh<bool> ApplicationActionController::isFullScreen() const
 
 bool ApplicationActionController::quit(bool isAllInstances, const io::path_t& installerPath)
 {
+    if (m_quiting) {
+        return false;
+    }
+
+    m_quiting = true;
+    DEFER {
+        m_quiting = false;
+    };
+
     if (!projectFilesController()->closeOpenedProject()) {
         return false;
     }
@@ -283,11 +292,4 @@ void ApplicationActionController::revertToFactorySettings()
     }
 
     restart();
-}
-
-bool ApplicationActionController::canReceiveAction(const mu::actions::ActionCode& code) const
-{
-    Q_UNUSED(code);
-    auto focus = QGuiApplication::focusWindow();
-    return !focus || focus->modality() == Qt::WindowModality::NonModal;
 }

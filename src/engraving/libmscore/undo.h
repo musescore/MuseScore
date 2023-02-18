@@ -303,6 +303,7 @@ class RemoveStaff : public UndoCommand
 
     Staff* staff = nullptr;
     staff_idx_t ridx = mu::nidx;
+    bool wasSystemObjectStaff = false;
 
 public:
     RemoveStaff(Staff*);

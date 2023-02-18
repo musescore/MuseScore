@@ -58,11 +58,12 @@ void ProjectActionsController::init()
         closeOpenedProject(quitApp);
     });
 
-    dispatcher()->reg(this, "file-save", [this]() { saveProject(); });
-    dispatcher()->reg(this, "file-save-as", [this]() { saveProjectAs(); });
-    dispatcher()->reg(this, "file-save-a-copy", this, &ProjectActionsController::saveProjectCopy);
-    dispatcher()->reg(this, "file-save-selection", this, &ProjectActionsController::saveSelection);
-    dispatcher()->reg(this, "file-save-to-cloud", this, &ProjectActionsController::saveToCloud);
+    dispatcher()->reg(this, "file-save", [this]() { saveProject(SaveMode::Save); });
+    dispatcher()->reg(this, "file-save-as", [this]() { saveProject(SaveMode::SaveAs); });
+    dispatcher()->reg(this, "file-save-a-copy", [this]() { saveProject(SaveMode::SaveCopy); });
+    dispatcher()->reg(this, "file-save-selection", [this]() { saveProject(SaveMode::SaveSelection, SaveLocationType::Local); });
+    dispatcher()->reg(this, "file-save-to-cloud", [this]() { saveProject(SaveMode::SaveAs, SaveLocationType::Cloud); });
+
     dispatcher()->reg(this, "file-publish", this, &ProjectActionsController::publish);
 
     dispatcher()->reg(this, "file-export", this, &ProjectActionsController::exportScore);
@@ -323,6 +324,15 @@ void ProjectActionsController::newProject()
 
 bool ProjectActionsController::closeOpenedProject(bool quitApp)
 {
+    if (m_isProjectClosing) {
+        return false;
+    }
+
+    m_isProjectClosing = true;
+    DEFER {
+        m_isProjectClosing = false;
+    };
+
     INotationProjectPtr project = currentNotationProject();
     if (!project) {
         return true;
@@ -392,81 +402,65 @@ Ret ProjectActionsController::canSaveProject() const
 
 bool ProjectActionsController::saveProject(const io::path_t& path)
 {
-    auto project = currentNotationProject();
-
-    if (!project->isNewlyCreated()) {
-        if (project->isCloudProject()) {
-            return saveProjectAt(SaveLocation(SaveLocationType::Cloud, project->cloudInfo()));
+    if (!path.empty()) {
+        if (m_isProjectSaving) {
+            return false;
         }
 
-        return saveProjectAt(SaveLocation(SaveLocationType::Local));
-    }
+        m_isProjectSaving = true;
+        DEFER {
+            m_isProjectSaving = false;
+        };
 
-    if (!path.empty()) {
         return saveProjectAt(SaveLocation(SaveLocationType::Local, path));
     }
 
-    RetVal<SaveLocation> location = saveProjectScenario()->askSaveLocation(project, SaveMode::Save);
-    if (!location.ret) {
+    return saveProject(SaveMode::Save);
+}
+
+bool ProjectActionsController::saveProject(SaveMode saveMode, SaveLocationType saveLocationType, bool force)
+{
+    if (m_isProjectSaving) {
         return false;
     }
 
-    return saveProjectAt(location.val);
-}
+    m_isProjectSaving = true;
+    DEFER {
+        m_isProjectSaving = false;
+    };
 
-void ProjectActionsController::saveProjectAs(bool force, SaveLocationType preselectedType)
-{
-    auto project = currentNotationProject();
+    INotationProjectPtr project = currentNotationProject();
 
-    RetVal<SaveLocation> location = saveProjectScenario()->askSaveLocation(project, SaveMode::SaveAs, preselectedType);
-    if (!location.ret) {
-        return;
+    if (saveMode == SaveMode::Save) {
+        if (!project->isNewlyCreated()) {
+            if (project->isCloudProject()) {
+                return saveProjectAt(SaveLocation(SaveLocationType::Cloud, project->cloudInfo()));
+            }
+
+            return saveProjectAt(SaveLocation(SaveLocationType::Local));
+        }
     }
 
-    saveProjectAt(location.val, SaveMode::SaveAs, force);
-}
-
-void ProjectActionsController::saveProjectCopy()
-{
-    auto project = currentNotationProject();
-
-    RetVal<SaveLocation> location = saveProjectScenario()->askSaveLocation(project, SaveMode::SaveCopy);
-    if (!location.ret) {
-        return;
-    }
-
-    saveProjectAt(location.val, SaveMode::SaveCopy);
-}
-
-void ProjectActionsController::saveSelection()
-{
-    auto project = currentNotationProject();
-
-    RetVal<io::path_t> path = saveProjectScenario()->askLocalPath(project, SaveMode::SaveSelection);
-    if (!path.ret) {
-        return;
-    }
-
-    Ret ret = currentNotationProject()->save(path.val, SaveMode::SaveSelection);
-    if (!ret) {
-        LOGE() << ret.toString();
-    }
-}
-
-void ProjectActionsController::saveToCloud()
-{
-    auto project = currentNotationProject();
-
-    RetVal<SaveLocation> response = saveProjectScenario()->askSaveLocation(project, SaveMode::SaveAs, SaveLocationType::Cloud);
+    RetVal<SaveLocation> response = saveProjectScenario()->askSaveLocation(project, saveMode, saveLocationType);
     if (!response.ret) {
-        return;
+        LOGE() << response.ret.toString();
+        return false;
     }
 
-    saveProjectAt(response.val, SaveMode::SaveAs);
+    return saveProjectAt(response.val, saveMode, force);
 }
 
 void ProjectActionsController::publish()
 {
+    if (m_isProjectPublishing) {
+        return;
+    }
+
+    m_isProjectPublishing = true;
+    DEFER {
+        m_isProjectPublishing = false;
+    };
+
     Ret ret = canSaveProject();
     if (!ret) {
         warnSaveIsNotAvailable(ret, SaveLocationType::Cloud);
@@ -930,7 +924,7 @@ void ProjectActionsController::warnSaveIsNotAvailable(const Ret& ret, const Save
         warnScoreWithoutPartsCannotBeSaved();
         break;
     case Err::CorruptionUponOpenningError:
-        warnCorruptedScoreUponOpenningCannotBeSaved(location, ret.text());
+        showErrCorruptedScoreCannotBeSaved(location, ret.text());
         break;
     case Err::CorruptionError: {
         auto project = currentNotationProject();
@@ -952,9 +946,15 @@ void ProjectActionsController::warnCorruptedScoreCannotBeSaved(const SaveLocatio
                                                                bool newlyCreated)
 {
     switch (location.type) {
-    case SaveLocationType::Cloud:
-        warnCorruptedScoreCannotBeSavedOnCloud(errorText, newlyCreated);
+    case SaveLocationType::Cloud: {
+        if (newlyCreated) {
+            showErrCorruptedScoreCannotBeSaved(location, errorText);
+        } else {
+            warnCorruptedScoreCannotBeSavedOnCloud(errorText, newlyCreated);
+        }
+
         break;
+    }
     case SaveLocationType::Local:
         warnCorruptedScoreCannotBeSavedLocally(location, errorText, newlyCreated);
     case SaveLocationType::Undefined:
@@ -988,7 +988,8 @@ void ProjectActionsController::warnCorruptedScoreCannotBeSavedOnCloud(const std:
     int btn = interactive()->error(title, body, errorText, buttons, defaultBtn).button();
 
     if (btn == saveCopyBtn.btn) {
-        saveProjectAs(true, SaveLocationType::Local);
+        m_isProjectSaving = false;
+        saveProject(SaveMode::SaveAs, SaveLocationType::Local, true /*force*/);
     } else if (btn == revertToLastSavedBtn.btn) {
         revertCorruptedScoreToLastSaved();
     }
@@ -998,9 +999,11 @@ void ProjectActionsController::warnCorruptedScoreCannotBeSavedLocally(const Save
                                                                       bool newlyCreated)
 {
     std::string title = trc("project", "This score has become corrupted and contains errors");
-    std::string body = trc("project", "You can continue saving it locally, although the file may become unusable. "
-                                      "To preserve your score, revert to the last saved version, or fix the errors manually. "
-                                      "You can also get help for this issue on musescore.org.");
+    std::string body = newlyCreated ? trc("project", "You can continue saving it locally, although the file may become unusable. "
+                                                     "You can try to fix the errors manually, or get help for this issue on musescore.org.")
+                       : trc("project", "You can continue saving it locally, although the file may become unusable. "
+                                        "To preserve your score, revert to the last saved version, or fix the errors manually. "
+                                        "You can also get help for this issue on musescore.org.");
 
     IInteractive::ButtonDatas buttons;
     buttons.push_back(interactive()->buttonData(IInteractive::Button::Cancel));
@@ -1026,7 +1029,7 @@ void ProjectActionsController::warnCorruptedScoreCannotBeSavedLocally(const Save
     }
 }
 
-void ProjectActionsController::warnCorruptedScoreUponOpenningCannotBeSaved(const SaveLocation& location, const std::string& errorText)
+void ProjectActionsController::showErrCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText)
 {
     std::string title = location.isLocal() ? trc("project", "Your score cannot be saved")
                         : trc("project", "Your score cannot be uploaded to the cloud");

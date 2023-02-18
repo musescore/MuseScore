@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,27 +20,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MUSESAMPLER_IMUSESAMPLERCONFIGURATION_H
-#define MU_MUSESAMPLER_IMUSESAMPLERCONFIGURATION_H
+#ifndef MU_DIAGNOSTICS_CORRUPTSCORENDEVTOOLSMODEL_H
+#define MU_DIAGNOSTICS_CORRUPTSCORENDEVTOOLSMODEL_H
 
-#include "modularity/imoduleexport.h"
+#include <QObject>
 
-#include "io/path.h"
+#include "modularity/ioc.h"
+#include "context/iglobalcontext.h"
 
-namespace mu::musesampler {
-class IMuseSamplerConfiguration : MODULE_EXPORT_INTERFACE
+namespace mu::diagnostics {
+class CorruptScoreDevToolsModel : public QObject
 {
-    INTERFACE_ID(IMuseSamplerConfiguration)
+    Q_OBJECT
+
+    INJECT(diagnostics, context::IGlobalContext, globalContext)
 
 public:
-    virtual ~IMuseSamplerConfiguration() = default;
+    explicit CorruptScoreDevToolsModel(QObject* parent = nullptr);
 
-    virtual mu::io::path_t backupLibraryPath() const = 0;
-    virtual mu::io::path_t userLibraryPath() const = 0;
-
-    virtual std::string minimumSupportedVersion() const = 0;
-    virtual std::string maximumSupportedVersion() const = 0;
+    Q_INVOKABLE void corruptOpenScore();
 };
 }
 
-#endif // MU_MUSESAMPLER_IMUSESAMPLERCONFIGURATION_H
+#endif // MU_DIAGNOSTICS_CORRUPTSCORENDEVTOOLSMODEL_H

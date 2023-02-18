@@ -237,6 +237,8 @@ public:
 
     String name() const override;
 
+    Ret sanityCheck();
+
     void setWidthOfSegmentCell(double val) { m_widthOfSegmentCell = val; }
     double widthOfSegmentCell() const { return m_widthOfSegmentCell; }
 };

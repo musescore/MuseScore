@@ -333,6 +333,7 @@ DockPage {
 
             MixerPanel {
                 navigationSection: mixerPanel.navigationSection
+                navigationPanelOrderStart: mixerPanel.navigationPanelOrderStart
 
                 Component.onCompleted: {
                     mixerPanel.contextMenuModel = contextMenuModel
