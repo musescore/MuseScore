@@ -244,7 +244,7 @@ void Excerpt::updateTracksMapping(bool voicesVisibilityChanged)
     setTracksMapping(tracks);
 }
 
-void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
+void Excerpt::setVoiceVisible(Staff* staff, voice_idx_t voiceIndex, bool visible)
 {
     TRACEFUNC;
 
@@ -257,29 +257,35 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
         return;
     }
 
-    staff_idx_t staffIndex = staff->idx();
-    Fraction startTick = staff->score()->firstMeasure()->tick();
-    Fraction endTick = staff->score()->lastMeasure()->endTick();
+    bool wasVisible = staff->isVoiceVisible(voiceIndex);
+    if (visible == wasVisible) {
+        return;
+    }
 
-    // update tracks
+    // update tracks (temporarily modify the old staff)
     staff->setVoiceVisible(voiceIndex, visible);
     updateTracksMapping(true /*voicesVisibilityChanged*/);
 
-    // clone staff
-    Staff* staffCopy = Factory::createStaff(staff->part());
-    staffCopy->setId(staff->id());
-    staffCopy->init(staff);
+    // create new staff
+    Staff* newStaff = Factory::createStaff(staff->part());
+    newStaff->setId(staff->id());
+    newStaff->init(staff);
 
-    // remove current staff, insert cloned
-    excerptScore()->undoRemoveStaff(staff);
+    // revert changes to old staff, to make undo work properly
+    staff->setVoiceVisible(voiceIndex, wasVisible);
+
+    // remove old staff, insert new
+    staff_idx_t staffIndex = staff->idx();
     staff_idx_t partStaffIndex = staffIndex - excerptScore()->staffIdx(staff->part());
-    excerptScore()->undoInsertStaff(staffCopy, partStaffIndex);
+    excerptScore()->undoRemoveStaff(staff);
+    excerptScore()->undoInsertStaff(newStaff, partStaffIndex);
 
-    // clone master staff to current with mapped tracks
-    cloneStaff2(masterStaff, staffCopy, startTick, endTick);
+    // clone master staff to new staff with mapped tracks
+    Fraction startTick = staff->score()->firstMeasure()->tick();
+    Fraction endTick = staff->score()->lastMeasure()->endTick();
+    cloneStaff2(masterStaff, newStaff, startTick, endTick);
 
     // link master staff to cloned
-    Staff* newStaff = excerptScore()->staffById(masterStaff->id());
     excerptScore()->undo(new Link(newStaff, masterStaff));
 }
 

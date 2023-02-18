@@ -74,7 +74,7 @@ public:
     TracksMap& tracksMapping();
     void setTracksMapping(const TracksMap& tracksMapping);
 
-    void setVoiceVisible(Staff* staff, int voiceIndex, bool visible);
+    void setVoiceVisible(Staff* staff, voice_idx_t voiceIndex, bool visible);
 
     void read(XmlReader&);
 
