@@ -1080,39 +1080,37 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
         part->instrument()->setDrumset(gpDrumset);
     }
 
-    if (tR->staffCount() == 1) {  //MSCore can set tunning only for one staff
-        std::vector<int> standartTuning = { 40, 45, 50, 55, 59, 64 };
+    std::vector<int> standartTuning = { 40, 45, 50, 55, 59, 64 };
 
-        if (!tR->staffProperty().empty()) {
-            auto staffProperty = tR->staffProperty();
+    if (!tR->staffProperty().empty()) {
+        auto staffProperty = tR->staffProperty();
 
-            int capoFret = staffProperty[0].capoFret;
-            part->staff(0)->insertIntoCapoList({ 0, 1 }, capoFret);
-            part->setCapoFret(capoFret);
+        int capoFret = staffProperty[0].capoFret;
+        part->staff(0)->insertIntoCapoList({ 0, 1 }, capoFret);
+        part->setCapoFret(capoFret);
 
-            auto tunning = staffProperty[0].tunning;
-            auto fretCount = staffProperty[0].fretCount;
+        auto tunning = staffProperty[0].tunning;
+        auto fretCount = staffProperty[0].fretCount;
 
-            if (tunning.empty()) {
-                tunning = standartTuning;
-            }
+        if (tunning.empty()) {
+            tunning = standartTuning;
+        }
 
-            int transpose = tR->transpose();
-            for (auto& t : tunning) {
-                t -= transpose;
-            }
+        int transpose = tR->transpose();
+        for (auto& t : tunning) {
+            t -= transpose;
+        }
 
-            StringData stringData = StringData(fretCount, static_cast<int>(tunning.size()), tunning.data());
+        StringData stringData = StringData(fretCount, static_cast<int>(tunning.size()), tunning.data());
 
-            part->instrument()->setStringData(stringData);
-        } else {
-            StringData stringData = StringData(24, static_cast<int>(standartTuning.size()), standartTuning.data());
-            part->instrument()->setStringData(stringData);
+        part->instrument()->setStringData(stringData);
+    } else {
+        StringData stringData = StringData(24, static_cast<int>(standartTuning.size()), standartTuning.data());
+        part->instrument()->setStringData(stringData);
 //            part->staff(0)->insertIntoCapoList({0, 1}, 0);
 //            part->setCapoFret(0);
-        }
-        part->instrument()->setSingleNoteDynamics(false);
     }
+    part->instrument()->setSingleNoteDynamics(false);
 
     // this code sets score lyrics from the first processed track.
 //    if (_score->OffLyrics.isEmpty())
