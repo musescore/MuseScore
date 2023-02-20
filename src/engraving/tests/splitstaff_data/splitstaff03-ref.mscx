@@ -243,6 +243,9 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             </Clef>
+          <KeySig>
+            <accidental>0</accidental>
+            </KeySig>
           <Chord>
             <durationType>whole</durationType>
             <Note>
