@@ -525,7 +525,7 @@
             <durationType>quarter</durationType>
             </Rest>
           <Beam>
-            <l1>38</l1>
+            <l1>42</l1>
             <l2>44</l2>
             </Beam>
           <Chord>
@@ -1160,7 +1160,7 @@
               <durationType>quarter</durationType>
               </Rest>
             <Beam>
-              <l1>38</l1>
+              <l1>42</l1>
               <l2>44</l2>
               </Beam>
             <Chord>
