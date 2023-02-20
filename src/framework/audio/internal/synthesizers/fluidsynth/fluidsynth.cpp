@@ -161,6 +161,10 @@ void FluidSynth::createFluidInstance()
 
 bool FluidSynth::handleEvent(const midi::Event& event)
 {
+    if (event.opcode() == Event::Opcode::NoteOn || event.opcode() == Event::Opcode::NoteOff) {
+        LOGD() << "handleEvent: " << event.opcodeString() << " velocity " << event.velocity() << " channel " << event.channel() <<
+            " note " << event.note() << " pitch " << event.pitchTuningCents();
+    }
     int ret = FLUID_OK;
     switch (event.opcode()) {
     case Event::Opcode::NoteOn: {

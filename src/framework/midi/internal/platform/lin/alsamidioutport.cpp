@@ -248,6 +248,8 @@ mu::Ret AlsaMidiOutPort::sendEvent(const Event& e)
     snd_seq_ev_set_source(&seqev, 0);
     snd_seq_ev_set_dest(&seqev, SND_SEQ_ADDRESS_SUBSCRIBERS, 0);
 
+    LOGD() << "Sent midi event " << e.to_string();
+
     switch (e.opcode()) {
     case Event::Opcode::NoteOn:
         snd_seq_ev_set_noteon(&seqev, e.channel(), e.note(), e.velocity());
