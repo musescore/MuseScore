@@ -139,19 +139,21 @@ struct DrawData
         }
     };
 
-    struct Object {
+    struct Item {
         std::string name;
         std::vector<Data> datas;
-        std::vector<Object> chilren;
+        std::vector<Item> chilren;
 
-        Object() = default;
-        Object(const std::string& n)
+        Item() = default;
+        Item(const std::string& n)
             : name(n) {}
     };
 
     std::string name;
     RectF viewport;
-    std::vector<Object> objects;
+    Item item;
+
+    bool empty() const { return item.datas.empty() && item.chilren.empty(); }
 };
 
 using DrawDataPtr = std::shared_ptr<DrawData>;
@@ -164,11 +166,11 @@ struct Diff {
     {
         bool ret = true;
         if (dataAdded) {
-            ret = dataAdded->objects.empty();
+            ret = dataAdded->empty();
         }
 
         if (ret && dataRemoved) {
-            ret = dataRemoved->objects.empty();
+            ret = dataRemoved->empty();
         }
 
         return ret;
