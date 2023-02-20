@@ -26,6 +26,7 @@
 #include "translation.h"
 
 #include "wasapiaudioclient.h"
+#include "audiodeviceslistener.h"
 
 using namespace winrt;
 using namespace mu::audio;
@@ -58,12 +59,15 @@ WasapiAudioDriver::WasapiAudioDriver()
     s_data.clientFailedToStartEvent = CreateEvent(NULL, FALSE, FALSE, L"WASAPI_Client_Failed_To_Start");
     s_data.clientStoppedEvent = CreateEvent(NULL, FALSE, FALSE, L"WASAPI_Client_Stopped");
 
-    m_devicesListener.startWithCallback([this]() {
-        return availableOutputDevices();
+    m_devicesListener = std::make_unique<AudioDevicesListener>();
+    m_devicesListener->devicesChanged().onNotify(this, [this]() {
+        m_availableOutputDevicesChanged.notify();
     });
 
-    m_devicesListener.devicesChanged().onNotify(this, [this]() {
-        m_availableOutputDevicesChanged.notify();
+    m_devicesListener->defaultDeviceChanged().onNotify(this, [this]() {
+        if (m_deviceId == DEFAULT_DEVICE_ID) {
+            reopen();
+        }
     });
 }
 
@@ -253,4 +257,11 @@ void WasapiAudioDriver::resume()
 
 void WasapiAudioDriver::suspend()
 {
+}
+
+void WasapiAudioDriver::reopen()
+{
+    close();
+
+    open(m_activeSpec, &m_activeSpec);
 }

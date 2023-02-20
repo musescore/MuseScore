@@ -32,11 +32,15 @@ if (OS_IS_WIN)
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wasapitypes.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wasapiaudiodriver.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wasapiaudiodriver.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/audiodeviceslistener.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/audiodeviceslistener.h
     )
 elseif(OS_IS_LIN)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.h
     )
 elseif(OS_IS_MAC)
     set(DRIVER_SRC
@@ -96,8 +100,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputdevicecontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputdevicecontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiodeviceslistener.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiodeviceslistener.h
 
     # Driver
     ${DRIVER_SRC}
