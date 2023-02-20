@@ -49,7 +49,6 @@ public:
 
 private:
     bool checkLibrary() const;
-    bool isVersionSupported() const;
     bool isVersionAboveMinSupported() const;
     bool isVersionBelowMaxSupported() const;
 

@@ -37,9 +37,6 @@ public:
     io::path_t backupLibraryPath() const override;
     // Preferred local user install path; try this first.
     io::path_t userLibraryPath() const override;
-
-    std::string minimumSupportedVersion() const override;
-    std::string maximumSupportedVersion() const override;
 };
 }
 

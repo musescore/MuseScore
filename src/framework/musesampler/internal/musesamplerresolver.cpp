@@ -181,79 +181,7 @@ bool MuseSamplerResolver::checkLibrary() const
         return false;
     }
 
-    if (!isVersionSupported()) {
-        LOGE() << "MuseSampler " << version() << " is not supported; ignoring";
-        return false;
-    }
-
     return true;
-}
-
-bool MuseSamplerResolver::isVersionSupported() const
-{
-    IF_ASSERT_FAILED(m_libHandler) {
-        return false;
-    }
-
-    return isVersionAboveMinSupported() && isVersionBelowMaxSupported();
-}
-
-bool MuseSamplerResolver::isVersionAboveMinSupported() const
-{
-    bool ok = true;
-    std::array<int, 3> minimumSupported = parseVersion(configuration()->minimumSupportedVersion(), ok);
-    if (!ok) {
-        return false;
-    }
-
-    int currentMajorNum = m_libHandler->getVersionMajor();
-    int currentMinorNum = m_libHandler->getVersionMinor();
-    int currentRevisionNum = m_libHandler->getVersionRevision();
-
-    if (currentMajorNum > minimumSupported.at(0)) {
-        return true;
-    } else if (currentMajorNum == minimumSupported.at(0)) {
-        if (currentMinorNum > minimumSupported.at(1)) {
-            return true;
-        } else if (currentMinorNum == minimumSupported.at(1)) {
-            if (currentRevisionNum > minimumSupported.at(2)) {
-                return true;
-            } else if (currentRevisionNum == minimumSupported.at(2)) {
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-bool MuseSamplerResolver::isVersionBelowMaxSupported() const
-{
-    bool ok = true;
-    std::array<int, 3> maxSupported = parseVersion(configuration()->maximumSupportedVersion(), ok);
-    if (!ok) {
-        return false;
-    }
-
-    int currentMajorNum = m_libHandler->getVersionMajor();
-    int currentMinorNum = m_libHandler->getVersionMinor();
-    int currentRevisionNum = m_libHandler->getVersionRevision();
-
-    if (currentMajorNum < maxSupported.at(0)) {
-        return true;
-    } else if (currentMajorNum == maxSupported.at(0)) {
-        if (currentMinorNum < maxSupported.at(1)) {
-            return true;
-        } else if (currentMinorNum == maxSupported.at(1)) {
-            if (currentRevisionNum < maxSupported.at(2)) {
-                return true;
-            } else if (currentRevisionNum == maxSupported.at(2)) {
-                return true;
-            }
-        }
-    }
-
-    return false;
 }
 
 String MuseSamplerResolver::buildMuseInstrumentId(const String& category, const String& name, int uniqueId) const
