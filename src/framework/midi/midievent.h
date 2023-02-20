@@ -761,11 +761,13 @@ struct Event {
                 break;
             //D3.3
             case Opcode::ControlChange: {
-                std::set<uint8_t> skip = { 6, 38, 98, 99, 100, 101 };
-                if (skip.find(index()) == skip.end()) {
-                    break;
-                }
                 switch (index()) {
+                default:
+                    event.setIndex(index());
+                    event.setData(scaleUp(data(), 7, 32));
+                    break;
+                // RPN and NPRN controller messages are no ordenary conrollers
+                // and need special handling in MIDI 2.0
                 case 99:
                     event.setOpcode(Opcode::AssignableController);
                     event.setBank(static_cast<uint16_t>(data()));
@@ -786,9 +788,6 @@ struct Event {
                     event.m_data[0] &= 0xFE03FFFF;
                     event.m_data[0] |= (data() & 0x7F) << 18;
                     break;
-                default:
-                    event.setIndex(index());
-                    event.setData(scaleUp(data(), 7, 32));
                 }
                 break;
             }
