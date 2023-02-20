@@ -186,7 +186,7 @@ void PartListModel::doResetPart(int partIndex)
     emit dataChanged(index(partIndex), index(partIndex));
 
     if (isCurrentNotation) {
-        context()->setCurrentNotation(context()->currentMasterNotation()->notation());
+        context()->setCurrentNotation(m_excerpts[partIndex]->notation());
     }
 }
 
