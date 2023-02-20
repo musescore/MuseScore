@@ -164,12 +164,39 @@
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <durationType>quarter</durationType>
+            <durationType>eighth</durationType>
+            <appoggiatura/>
             <Note>
               <pitch>68</pitch>
               <tpc>22</tpc>
               </Note>
             </Chord>
+          <Chord>
+            <durationType>eighth</durationType>
+            <appoggiatura/>
+            <Note>
+              <pitch>68</pitch>
+              <tpc>22</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>eighth</durationType>
+            <appoggiatura/>
+            <Note>
+              <pitch>68</pitch>
+              <tpc>22</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>68</pitch>
+              <tpc>22</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>eighth</durationType>
+            </Rest>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
