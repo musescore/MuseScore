@@ -48,9 +48,8 @@ public:
     virtual void initExcerpts(const ExcerptNotationList& excerpts) = 0;
     virtual void addExcerpts(const ExcerptNotationList& excerpts) = 0;
     virtual void removeExcerpts(const ExcerptNotationList& excerpts) = 0;
+    virtual void resetExcerpt(IExcerptNotationPtr excerpt) = 0;
     virtual void sortExcerpts(ExcerptNotationList& excerpts) = 0;
-
-    virtual IExcerptNotationPtr resetReplaceExcerpt(IExcerptNotationPtr excerpt) = 0;
 
     virtual void setExcerptIsOpen(const INotationPtr excerptNotation, bool opened) = 0;
 
