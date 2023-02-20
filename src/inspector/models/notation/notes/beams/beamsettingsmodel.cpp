@@ -109,7 +109,9 @@ void BeamSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& prope
 
     loadBeamHeightProperties();
 
-    updateFeatheringMode(m_featheringHeightLeft->value().toDouble(), m_featheringHeightRight->value().toDouble());
+    if (m_featheringHeightLeft->value().isValid() && m_featheringHeightRight->value().isValid()) {
+        updateFeatheringMode(m_featheringHeightLeft->value().toDouble(), m_featheringHeightRight->value().toDouble());
+    }
 }
 
 void BeamSettingsModel::loadBeamHeightProperties()
