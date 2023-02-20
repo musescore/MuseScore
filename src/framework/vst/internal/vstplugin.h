@@ -40,6 +40,7 @@
 #include "vsterrors.h"
 
 namespace mu::vst {
+class VstPluginProvider;
 class VstPlugin : public async::Asyncable
 {
     INJECT_STATIC(vst, audio::IAudioThreadSecurer, threadSecurer)
@@ -47,25 +48,28 @@ class VstPlugin : public async::Asyncable
 
 public:
     VstPlugin(const audio::AudioResourceId& resourceId);
+    ~VstPlugin() override;
 
     const audio::AudioResourceId& resourceId() const;
     const std::string& name() const;
 
     PluginViewPtr createView() const;
-    PluginProviderPtr provider() const;
+
+    PluginControllerPtr controller() const;
+    PluginComponentPtr component() const;
+    PluginMidiMappingPtr midiMapping() const;
+
     bool isAbleForInput() const;
 
     void updatePluginConfig(const audio::AudioUnitConfig& config);
     void refreshConfig();
 
     void load();
-    void unload();
 
     bool isValid() const;
     bool isLoaded() const;
 
     async::Notification loadingCompleted() const;
-    async::Notification unloadingCompleted() const;
 
     async::Channel<audio::AudioUnitConfig> pluginSettingsChanged() const;
 
@@ -76,7 +80,7 @@ private:
     audio::AudioResourceId m_resourceId;
 
     PluginModulePtr m_module = nullptr;
-    PluginProviderPtr m_pluginProvider = nullptr;
+    std::unique_ptr<VstPluginProvider> m_pluginProvider;
     ClassInfo m_classInfo;
 
     Steinberg::FUnknownPtr<VstComponentHandler> m_componentHandlerPtr = nullptr;
@@ -87,7 +91,6 @@ private:
 
     std::atomic_bool m_isLoaded = false;
     async::Notification m_loadingCompleted;
-    async::Notification m_unloadingCompleted;
 
     mutable std::mutex m_mutex;
 };

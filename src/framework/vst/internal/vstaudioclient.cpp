@@ -36,7 +36,6 @@ VstAudioClient::~VstAudioClient()
 
     m_pluginComponent->setActive(false);
     m_pluginComponent->terminate();
-    m_pluginComponent->release();
 }
 
 void VstAudioClient::init(VstPluginType&& type, VstPluginPtr plugin, audio::audioch_t&& audioChannelsCount)
@@ -63,7 +62,7 @@ bool VstAudioClient::handleEvent(const VstEvent& event)
 
 bool VstAudioClient::handleParamChange(const PluginParamInfo& param)
 {
-    IF_ASSERT_FAILED(m_pluginPtr && m_pluginPtr->provider()) {
+    IF_ASSERT_FAILED(m_pluginPtr) {
         return false;
     }
 
@@ -162,18 +161,11 @@ ParamsMapping VstAudioClient::paramsMapping(const std::set<Steinberg::Vst::CtrlN
 {
     ParamsMapping result;
 
-    if (!m_pluginPtr || !m_pluginPtr->provider()) {
+    if (!m_pluginPtr) {
         return result;
     }
 
-    auto controller = m_pluginPtr->provider()->getController();
-    if (!controller) {
-        return result;
-    }
-
-    Steinberg::Vst::IMidiMapping* midiMapping = nullptr;
-    controller->queryInterface(Steinberg::Vst::IMidiMapping_iid, (void**)&midiMapping);
-
+    PluginMidiMappingPtr midiMapping = m_pluginPtr->midiMapping();
     if (!midiMapping) {
         return result;
     }
@@ -200,12 +192,12 @@ IAudioProcessorPtr VstAudioClient::pluginProcessor() const
 
 PluginComponentPtr VstAudioClient::pluginComponent() const
 {
-    if (!m_pluginPtr || !m_pluginPtr->provider()) {
-        return nullptr;
-    }
-
     if (!m_pluginComponent) {
-        m_pluginComponent = m_pluginPtr->provider()->getComponent();
+        if (!m_pluginPtr) {
+            return nullptr;
+        }
+
+        m_pluginComponent = m_pluginPtr->component();
     }
 
     return m_pluginComponent;
@@ -213,6 +205,11 @@ PluginComponentPtr VstAudioClient::pluginComponent() const
 
 void VstAudioClient::setUpProcessData()
 {
+    PluginComponentPtr component = pluginComponent();
+    if (!component) {
+        return;
+    }
+
     m_processContext.sampleRate = m_samplesInfo.sampleRate;
 
     m_processData.inputEvents = &m_eventList;
@@ -225,7 +222,7 @@ void VstAudioClient::setUpProcessData()
     }
 
     if (!m_processData.outputs || !m_processData.inputs) {
-        m_processData.prepare(*m_pluginComponent, m_samplesInfo.samplesPerBlock, Steinberg::Vst::kSample32);
+        m_processData.prepare(*component, m_samplesInfo.samplesPerBlock, Steinberg::Vst::kSample32);
     }
 
     if (!m_activeOutputBusses.empty() && !m_activeInputBusses.empty()) {
@@ -235,19 +232,19 @@ void VstAudioClient::setUpProcessData()
     BusInfo busInfo;
 
     for (int busIndex = 0; busIndex < m_processData.numInputs; ++busIndex) {
-        m_pluginComponent->getBusInfo(BusMediaType::kAudio, BusDirection::kInput, busIndex, busInfo);
+        component->getBusInfo(BusMediaType::kAudio, BusDirection::kInput, busIndex, busInfo);
 
         if (busInfo.busType == BusType::kMain && (busInfo.flags & BusInfo::kDefaultActive)) {
-            m_pluginComponent->activateBus(BusMediaType::kAudio, BusDirection::kInput, busIndex, true);
+            component->activateBus(BusMediaType::kAudio, BusDirection::kInput, busIndex, true);
             m_activeInputBusses.emplace_back(busIndex);
         }
     }
 
     for (int busIndex = 0; busIndex < m_processData.numOutputs; ++busIndex) {
-        m_pluginComponent->getBusInfo(BusMediaType::kAudio, BusDirection::kOutput, busIndex, busInfo);
+        component->getBusInfo(BusMediaType::kAudio, BusDirection::kOutput, busIndex, busInfo);
 
         if (busInfo.busType == BusType::kMain && (busInfo.flags & BusInfo::kDefaultActive)) {
-            m_pluginComponent->activateBus(BusMediaType::kAudio, BusDirection::kOutput, busIndex, true);
+            component->activateBus(BusMediaType::kAudio, BusDirection::kOutput, busIndex, true);
             m_activeOutputBusses.emplace_back(busIndex);
         }
 
@@ -268,13 +265,13 @@ void VstAudioClient::setUpProcessData()
 
     if (m_activeInputBusses.empty()) {
         LOGI() << "0 active input buses, activating default bus";
-        m_pluginComponent->activateBus(BusMediaType::kAudio, BusDirection::kInput, 0, true);
+        component->activateBus(BusMediaType::kAudio, BusDirection::kInput, 0, true);
         m_activeInputBusses.emplace_back(0);
     }
 
     if (m_activeOutputBusses.empty()) {
         LOGI() << "0 active output buses, activating default bus";
-        m_pluginComponent->activateBus(BusMediaType::kAudio, BusDirection::kOutput, 0, true);
+        component->activateBus(BusMediaType::kAudio, BusDirection::kOutput, 0, true);
         m_activeOutputBusses.emplace_back(0);
     }
 }
@@ -287,6 +284,11 @@ void VstAudioClient::updateProcessSetup()
 
     IAudioProcessorPtr processor = pluginProcessor();
     if (!processor) {
+        return;
+    }
+
+    PluginComponentPtr component = pluginComponent();
+    if (!component) {
         return;
     }
 
@@ -303,7 +305,7 @@ void VstAudioClient::updateProcessSetup()
     }
 
     processor->setProcessing(true);
-    m_pluginComponent->setActive(true);
+    component->setActive(true);
     m_isActive = true;
 
     setUpProcessData();
@@ -380,8 +382,13 @@ void VstAudioClient::disableActivity()
         return;
     }
 
+    PluginComponentPtr component = pluginComponent();
+    if (!component) {
+        return;
+    }
+
     processor->setProcessing(false);
-    m_pluginComponent->setActive(false);
+    component->setActive(false);
 
     m_isActive = false;
 }

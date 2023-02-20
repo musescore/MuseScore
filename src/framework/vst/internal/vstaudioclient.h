@@ -62,6 +62,7 @@ private:
 
     IAudioProcessorPtr pluginProcessor() const;
     PluginComponentPtr pluginComponent() const;
+
     void setUpProcessData();
     void updateProcessSetup();
     void extractInputSamples(const audio::samples_t& sampleCount, const float* sourceBuffer);

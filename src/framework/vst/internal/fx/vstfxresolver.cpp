@@ -81,7 +81,6 @@ void VstFxResolver::clearAllFx()
 
     m_tracksFxMap.clear();
     m_masterFxMap.clear();
-    m_pluginsToUnload.clear();
 }
 
 VstFxPtr VstFxResolver::createMasterFx(const audio::AudioFxParams& fxParams) const
@@ -132,13 +131,10 @@ void VstFxResolver::updateTrackFxMap(FxMap& fxMap, const audio::TrackId trackId,
     fxChainToRemove(currentFxChain, newFxChain, fxToRemove);
 
     for (const auto& pair : fxToRemove) {
-        VstPluginPtr plugin = pluginsRegister()->fxPlugin(trackId, pair.second.resourceMeta.id, pair.second.chainOrder);
         pluginsRegister()->unregisterFxPlugin(trackId, pair.second.resourceMeta.id, pair.second.chainOrder);
 
         currentFxChain.erase(pair.first);
         fxMap.erase(pair.first);
-
-        unloadPlugin(plugin);
     }
 
     audio::AudioFxChain fxToCreate;
@@ -164,13 +160,10 @@ void VstFxResolver::updateMasterFxMap(const AudioFxChain& newFxChain)
     fxChainToRemove(currentFxChain, newFxChain, fxToRemove);
 
     for (const auto& pair : fxToRemove) {
-        VstPluginPtr plugin = pluginsRegister()->masterFxPlugin(pair.second.resourceMeta.id, pair.second.chainOrder);
         pluginsRegister()->unregisterMasterFxPlugin(pair.second.resourceMeta.id, pair.second.chainOrder);
 
         currentFxChain.erase(pair.first);
         m_masterFxMap.erase(pair.first);
-
-        unloadPlugin(plugin);
     }
 
     audio::AudioFxChain fxToCreate;
@@ -215,15 +208,4 @@ void VstFxResolver::fxChainToCreate(const AudioFxChain& currentFxChain,
             resultChain.insert({ it->first, it->second });
         }
     }
-}
-
-void VstFxResolver::unloadPlugin(VstPluginPtr plugin)
-{
-    m_pluginsToUnload.push_back(plugin);
-
-    plugin->unloadingCompleted().onNotify(this, [this, plugin]() {
-        mu::remove(m_pluginsToUnload, plugin);
-    });
-
-    plugin->unload();
 }
