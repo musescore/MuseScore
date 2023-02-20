@@ -179,15 +179,9 @@ void PartListModel::doResetPart(int partIndex)
         return;
     }
 
-    bool isCurrentNotation = context()->currentNotation() == m_excerpts[partIndex]->notation();
-
-    m_excerpts[partIndex] = masterNotation()->resetReplaceExcerpt(m_excerpts[partIndex]);
+    masterNotation()->resetExcerpt(m_excerpts[partIndex]);
 
     emit dataChanged(index(partIndex), index(partIndex));
-
-    if (isCurrentNotation) {
-        context()->setCurrentNotation(m_excerpts[partIndex]->notation());
-    }
 }
 
 void PartListModel::removePart(int partIndex)

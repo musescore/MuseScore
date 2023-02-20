@@ -557,40 +557,27 @@ void MasterNotation::removeExcerpts(const ExcerptNotationList& excerpts)
     doSetExcerpts(m_excerpts.val);
 }
 
-IExcerptNotationPtr MasterNotation::resetReplaceExcerpt(IExcerptNotationPtr oldExcerptNotation)
+void MasterNotation::resetExcerpt(IExcerptNotationPtr excerptNotation)
 {
-    if (!oldExcerptNotation) {
-        return nullptr;
+    if (!excerptNotation || !excerptNotation->isInited()) {
+        return;
     }
 
     TRACEFUNC;
 
-    auto it = std::find(m_excerpts.val.begin(), m_excerpts.val.end(), oldExcerptNotation);
-    if (it == m_excerpts.val.end()) {
-        return oldExcerptNotation;
-    }
-
     undoStack()->prepareChanges();
 
-    mu::engraving::Excerpt* oldExcerpt = get_impl(oldExcerptNotation)->excerpt();
+    mu::engraving::Excerpt* oldExcerpt = get_impl(excerptNotation)->excerpt();
     masterScore()->deleteExcerpt(oldExcerpt);
 
-    IExcerptNotationPtr newExcerptNotation = oldExcerptNotation->clone(false);
-    ExcerptNotation* newExcerptNotationImpl = get_impl(newExcerptNotation);
+    mu::engraving::Excerpt* newExcerpt = new mu::engraving::Excerpt(*oldExcerpt, false);
+    masterScore()->initAndAddExcerpt(newExcerpt, false);
 
-    masterScore()->initAndAddExcerpt(newExcerptNotationImpl->excerpt(), false);
-    newExcerptNotationImpl->init();
-    setExcerptIsOpen(newExcerptNotation->notation(), oldExcerptNotation->notation()->isOpen());
-
-    *it = newExcerptNotation;
+    get_impl(excerptNotation)->reinit(newExcerpt);
 
     masterScore()->setExcerptsChanged(false);
 
     undoStack()->commitChanges();
-
-    doSetExcerpts(m_excerpts.val);
-
-    return newExcerptNotation;
 }
 
 void MasterNotation::sortExcerpts(ExcerptNotationList& excerpts)

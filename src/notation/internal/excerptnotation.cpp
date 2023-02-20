@@ -56,6 +56,16 @@ void ExcerptNotation::init()
     m_inited = true;
 }
 
+void ExcerptNotation::reinit(engraving::Excerpt* newExcerpt)
+{
+    m_inited = false;
+    m_excerpt = newExcerpt;
+
+    init();
+
+    notifyAboutNotationChanged();
+}
+
 bool ExcerptNotation::isInited() const
 {
     return m_inited;
@@ -143,8 +153,8 @@ INotationPtr ExcerptNotation::notation()
     return shared_from_this();
 }
 
-IExcerptNotationPtr ExcerptNotation::clone(bool copyContents) const
+IExcerptNotationPtr ExcerptNotation::clone() const
 {
-    mu::engraving::Excerpt* copy = new mu::engraving::Excerpt(*m_excerpt, copyContents);
+    mu::engraving::Excerpt* copy = new mu::engraving::Excerpt(*m_excerpt);
     return std::make_shared<ExcerptNotation>(copy);
 }

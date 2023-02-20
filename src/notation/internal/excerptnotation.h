@@ -35,8 +35,9 @@ public:
     ~ExcerptNotation() override;
 
     void init();
+    void reinit(engraving::Excerpt* newExcerpt);
 
-    mu::engraving::Excerpt* excerpt() const;
+    engraving::Excerpt* excerpt() const;
 
     bool isInited() const override;
     bool isCustom() const override;
@@ -47,7 +48,7 @@ public:
     async::Notification nameChanged() const override;
 
     INotationPtr notation() override;
-    IExcerptNotationPtr clone(bool copyContents = true) const override;
+    IExcerptNotationPtr clone() const override;
 
 private:
     void fillWithDefaultInfo();
