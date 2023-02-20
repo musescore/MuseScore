@@ -5243,13 +5243,14 @@ static void undoChangeNoteVisibility(Note* note, bool visible)
                 ElementType::STEM,
                 ElementType::BEAM,
                 ElementType::NOTE,
+                ElementType::CHORD,
             };
 
             return !mu::contains(ignoredTypes, item->type());
         });
     } else {
         undoSetChordChildrenVisible(chord, chordHasVisibleNote_, [](const EngravingItem* item) {
-            return item->type() != ElementType::NOTE;
+            return item->type() != ElementType::NOTE && item->type() != ElementType::CHORD;
         });
 
         return;
