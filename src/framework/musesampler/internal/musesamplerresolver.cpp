@@ -159,15 +159,6 @@ bool MuseSamplerResolver::checkLibrary() const
         return false;
     }
 
-    Version current(m_libHandler->getVersionMajor(),
-                    m_libHandler->getVersionMinor(),
-                    m_libHandler->getVersionRevision());
-    Version minimumSupported(String::fromStdString(configuration()->minimumSupportedVersion()));
-    if (current < minimumSupported) {
-        LOGE() << "MuseSampler " << version() << " is not supported; ignoring";
-        return false;
-    }
-
     return true;
 }
 
