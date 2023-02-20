@@ -580,6 +580,7 @@ IExcerptNotationPtr MasterNotation::resetReplaceExcerpt(IExcerptNotationPtr oldE
 
     masterScore()->initAndAddExcerpt(newExcerptNotationImpl->excerpt(), false);
     newExcerptNotationImpl->init();
+    setExcerptIsOpen(newExcerptNotation->notation(), oldExcerptNotation->notation()->isOpen());
 
     *it = newExcerptNotation;
 
