@@ -151,7 +151,7 @@ static TripletFeelType tripletFeelType(GPMasterBar::TripletFeelType tf)
     return TripletFeelType::NONE;
 }
 
-static OttavaType ottavaType(GPBeat::OttavaType t)
+static std::pair<bool, OttavaType> ottavaType(GPBeat::OttavaType t)
 {
     static std::map<GPBeat::OttavaType, mu::engraving::OttavaType> types {
         { GPBeat::OttavaType::va8,  OttavaType::OTTAVA_8VA },
@@ -161,11 +161,10 @@ static OttavaType ottavaType(GPBeat::OttavaType t)
     };
 
     if (types.find(t) != types.end()) {
-        return types[t];
+        return { true, types[t] };
     }
 
-    LOGE() << "wrong ottava type";
-    return OttavaType::OTTAVA_8VA; /// there is no type "NONE"
+    return { false, OttavaType::OTTAVA_8VA };
 }
 
 static GPBeat::HarmonicMarkType harmonicTypeNoteToBeat(GPNote::Harmonic::Type t)
@@ -217,7 +216,6 @@ static GPConverter::LineImportType ottavaToImportType(GPBeat::OttavaType t)
         return types[t];
     }
 
-    // LOGE() << "wrong ottava type"; TODO: fix
     return GPConverter::LineImportType::NONE;
 }
 
@@ -719,9 +717,10 @@ void GPConverter::configureGraceChord(const GPBeat* beat, ChordRest* cr, GPBeat:
         grChord->setNoteType(NoteType::ACCIACCATURA);
     }
 
-    if (type != GPBeat::OttavaType::None) {
+    const auto& [foundOttava, muOttavaType] = ottavaType(type);
+    if (foundOttava) {
         for (Note* note : grChord->notes()) {
-            setPitchByOttavaType(note, ottavaType(type));
+            setPitchByOttavaType(note, muOttavaType);
         }
     }
 }
@@ -2372,7 +2371,11 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
     }
 
     const Chord* chord = toChord(cr);
-    mu::engraving::OttavaType type = ottavaType(gpb->ottavaType());
+    const auto& [foundOttava, muOttavaType] = ottavaType(gpb->ottavaType());
+    if (!foundOttava) {
+        return;
+    }
+
     SLine* lineElem = m_ottavas[gpb->ottavaType()][chord->track()];
     Ottava* ottava = dynamic_cast<Ottava*>(lineElem);
 
@@ -2381,11 +2384,11 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
         return;
     }
 
-    ottava->setOttavaType(type);
+    ottava->setOttavaType(muOttavaType);
 
     for (mu::engraving::Note* note : chord->notes()) {
         int pitch = note->pitch();
-        setPitchByOttavaType(note, type);
+        setPitchByOttavaType(note, muOttavaType);
 
         // pitch changed because of octave
         if (pitch != note->pitch()) {
