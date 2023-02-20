@@ -80,11 +80,11 @@ TEST_F(Diagnostics_DrawDataTests, Rw)
 
     mu::SetCompareRealPrecision(3);
 
-    EXPECT_EQ(origin->objects.size(), readed->objects.size());
+    EXPECT_EQ(origin->item.chilren.size(), readed->item.chilren.size());
 
-    for (size_t i = 0; i < origin->objects.size(); ++i) {
-        const DrawData::Object& originObj = origin->objects.at(i);
-        const DrawData::Object& readedObj = readed->objects.at(i);
+    for (size_t i = 0; i < origin->item.chilren.size(); ++i) {
+        const DrawData::Item& originObj = origin->item.chilren.at(i);
+        const DrawData::Item& readedObj = readed->item.chilren.at(i);
         EXPECT_EQ(originObj.datas.size(), readedObj.datas.size());
 
         for (size_t j = 0; j < originObj.datas.size(); ++j) {
@@ -260,8 +260,8 @@ TEST_F(Diagnostics_DrawDataTests, DrawDiff)
     saveDiff("3_diff.png", origin, diff.dataAdded);
 
     const DrawDataPtr& dd = diff.dataAdded;
-    EXPECT_EQ(dd->objects.size(), 1);
-    const DrawData::Object& ddo = dd->objects.at(0);
+    EXPECT_EQ(dd->item.chilren.size(), 1);
+    const DrawData::Item& ddo = dd->item.chilren.at(0);
     EXPECT_EQ(ddo.datas.size(), 1);
     const DrawData::Data& ddd = ddo.datas.at(0);
     EXPECT_EQ(ddd.polygons.size(), 1);

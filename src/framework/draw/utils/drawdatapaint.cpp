@@ -26,7 +26,7 @@
 using namespace mu;
 using namespace mu::draw;
 
-static void drawObj(IPaintProviderPtr& provider, const DrawData::Object& obj, const Color& overlay)
+static void drawItem(IPaintProviderPtr& provider, const DrawData::Item& obj, const Color& overlay)
 {
     // first draw obj itself
     for (const DrawData::Data& d : obj.datas) {
@@ -74,15 +74,13 @@ static void drawObj(IPaintProviderPtr& provider, const DrawData::Object& obj, co
     }
 
     // second draw chilren
-    for (const DrawData::Object& ch : obj.chilren) {
-        drawObj(provider, ch, overlay);
+    for (const DrawData::Item& ch : obj.chilren) {
+        drawItem(provider, ch, overlay);
     }
 }
 
 void DrawDataPaint::paint(Painter* painter, const DrawDataPtr& data, const Color& overlay)
 {
     IPaintProviderPtr provider = painter->provider();
-    for (const DrawData::Object& obj : data->objects) {
-        drawObj(provider, obj, overlay);
-    }
+    drawItem(provider, data->item, overlay);
 }

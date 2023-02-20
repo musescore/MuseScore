@@ -390,7 +390,7 @@ static void fromArr(const JsonArray& arr, std::vector<T>& vals)
     }
 }
 
-static void collectStates(std::vector<DrawData::State>& states, const DrawData::Object& obj)
+static void collectStates(std::vector<DrawData::State>& states, const DrawData::Item& obj)
 {
     for (const DrawData::Data& data : obj.datas) {
         if (mu::contains(states, data.state)) {
@@ -399,12 +399,12 @@ static void collectStates(std::vector<DrawData::State>& states, const DrawData::
         states.push_back(data.state);
     }
 
-    for (const DrawData::Object& ch : obj.chilren) {
+    for (const DrawData::Item& ch : obj.chilren) {
         collectStates(states, ch);
     }
 }
 
-static JsonObject toObj(const DrawData::Object& obj, const std::vector<DrawData::State>& states)
+static JsonObject toObj(const DrawData::Item& obj, const std::vector<DrawData::State>& states)
 {
     //! NOTE 'a' added to the beginning of some field names for convenient sorting
 
@@ -412,7 +412,7 @@ static JsonObject toObj(const DrawData::Object& obj, const std::vector<DrawData:
     objObj["a_name"] = obj.name;
 
     JsonArray childrenArr;
-    for (const DrawData::Object& ch : obj.chilren) {
+    for (const DrawData::Item& ch : obj.chilren) {
         childrenArr.append(toObj(ch, states));
     }
     objObj["children"] = childrenArr;
@@ -445,12 +445,12 @@ static JsonObject toObj(const DrawData::Object& obj, const std::vector<DrawData:
     return objObj;
 }
 
-static void fromObj(const JsonObject& objObj, DrawData::Object& obj, const std::map<int, DrawData::State>& states)
+static void fromObj(const JsonObject& objObj, DrawData::Item& obj, const std::map<int, DrawData::State>& states)
 {
     obj.name = objObj.value("a_name").toString().toStdString();
     JsonArray childrenArr = objObj["children"].toArray();
     for (size_t j = 0; j < childrenArr.size(); ++j) {
-        DrawData::Object& ch = obj.chilren.emplace_back();
+        DrawData::Item& ch = obj.chilren.emplace_back();
         const JsonObject childObj = childrenArr.at(j).toObject();
         fromObj(childObj, ch, states);
     }
@@ -486,18 +486,10 @@ void DrawDataJson::toJson(JsonObject& root, const DrawDataPtr& dd)
 
     std::vector<DrawData::State> states;
     // collect states
-    {
-        for (const DrawData::Object& obj : dd->objects) {
-            collectStates(states, obj);
-        }
-    }
+    collectStates(states, dd->item);
 
-    JsonArray objsArr;
-    for (const DrawData::Object& obj : dd->objects) {
-        objsArr.append(toObj(obj, states));
-    }
-
-    root["objects"] = objsArr;
+    // item
+    root["item"] = toObj(dd->item, states);
 
     // states
     JsonObject stateObj;
@@ -524,12 +516,8 @@ void DrawDataJson::fromJson(const JsonObject& root, DrawDataPtr& dd)
     dd->name = root.value("a_name").toStdString();
     fromArr(root.value("a_viewport").toArray(), dd->viewport);
 
-    JsonArray objsArr = root.value("objects").toArray();
-    for (size_t i = 0; i < objsArr.size(); ++i) {
-        DrawData::Object& obj = dd->objects.emplace_back();
-        const JsonObject objObj = objsArr.at(i).toObject();
-        fromObj(objObj, obj, states);
-    }
+    JsonObject itemObj = root.value("item").toObject();
+    fromObj(itemObj, dd->item, states);
 }
 
 ByteArray DrawDataJson::toJson(const DrawDataPtr& data, bool prettify)

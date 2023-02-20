@@ -38,26 +38,26 @@ struct Polygon;
 static bool isEqual(const Polygon& p1, const Polygon& p2, DrawDataComp::Tolerance tolerance);
 
 struct Path {
-    const DrawData::Object* obj = nullptr;
+    const DrawData::Item* obj = nullptr;
     const DrawData::Data* data = nullptr;
     const DrawPath* path = nullptr;
 };
 
 struct Polygon {
-    const DrawData::Object* obj = nullptr;
+    const DrawData::Item* obj = nullptr;
     const DrawData::Data* data = nullptr;
     const DrawPolygon* polygon = nullptr;
     bool operator==(const Polygon& o) const { return isEqual(*this, o, DrawDataComp::Tolerance()); }
 };
 
 struct Text {
-    const DrawData::Object* obj = nullptr;
+    const DrawData::Item* obj = nullptr;
     const DrawData::Data* data = nullptr;
     const DrawText* text = nullptr;
 };
 
 struct Pixmap {
-    const DrawData::Object* obj = nullptr;
+    const DrawData::Item* obj = nullptr;
     const DrawData::Data* data = nullptr;
     const DrawPixmap* pixmap = nullptr;
 };
@@ -558,25 +558,23 @@ static void difference(Data& diff, const Data& d1, const Data& d2, DrawDataComp:
 
 static Data toCompData(const DrawDataPtr& dd)
 {
-    Data cd;
-    for (const DrawData::Object& o : dd->objects) {
-        for (const DrawData::Data& d : o.datas) {
-            for (const DrawPath& p : d.paths) {
-                cd.paths.push_back(comp::Path { &o, &d, &p });
-            }
-            for (const DrawPolygon& p : d.polygons) {
-                cd.polygons.push_back(comp::Polygon { &o, &d, &p });
-            }
-            for (const DrawText& p : d.texts) {
-                cd.texts.push_back(comp::Text { &o, &d, &p });
-            }
-            for (const DrawPixmap& p : d.pixmaps) {
-                cd.pixmaps.push_back(comp::Pixmap { &o, &d, &p });
-            }
-        }
-    }
+//    Data cd;
+//    for (const DrawData::Data& d : item.datas) {
+//        for (const DrawPath& p : d.paths) {
+//            cd.paths.push_back(comp::Path { &item, &d, &p });
+//        }
+//        for (const DrawPolygon& p : d.polygons) {
+//            cd.polygons.push_back(comp::Polygon { &item, &d, &p });
+//        }
+//        for (const DrawText& p : d.texts) {
+//            cd.texts.push_back(comp::Text { &item, &d, &p });
+//        }
+//        for (const DrawPixmap& p : d.pixmaps) {
+//            cd.pixmaps.push_back(comp::Pixmap { &item, &d, &p });
+//        }
+//    }
 
-    return cd;
+//    return cd;
 }
 
 static void fillDrawData(DrawDataPtr& dd, const comp::Data& cd)
@@ -584,7 +582,7 @@ static void fillDrawData(DrawDataPtr& dd, const comp::Data& cd)
     //! NOTE Not effective, but efficiency is not required yet
 
     // collect objects (save order)
-    std::vector<const DrawData::Object*> objs;
+    std::vector<const DrawData::Item*> objs;
     for (const comp::Path& p : cd.paths) {
         if (!mu::contains(objs, p.obj)) {
             objs.push_back(p.obj);
@@ -607,11 +605,11 @@ static void fillDrawData(DrawDataPtr& dd, const comp::Data& cd)
     }
 
     // collect data
-    for (const DrawData::Object* o : objs) {
-        DrawData::Object dobj;
+    for (const DrawData::Item* o : objs) {
+        DrawData::Item dobj;
         dobj.name = o->name;
 
-        auto findOrCreateDData = [](DrawData::Object& dobj, const DrawData::State& state) {
+        auto findOrCreateDData = [](DrawData::Item& dobj, const DrawData::State& state) {
             DrawData::Data* ddata = nullptr;
 
             // find by state
@@ -651,7 +649,7 @@ static void fillDrawData(DrawDataPtr& dd, const comp::Data& cd)
             ddata->pixmaps.push_back(*p.pixmap);
         }
 
-        dd->objects.push_back(dobj);
+        //dd->objects.push_back(dobj);
     }
 }
 } // mu::draw::comp
