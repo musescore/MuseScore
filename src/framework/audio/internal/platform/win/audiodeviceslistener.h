@@ -19,39 +19,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MIDI_AUDIODEVICESLISTENER_H
-#define MU_MIDI_AUDIODEVICESLISTENER_H
+#ifndef MU_AUDIO_AUDIODEVICESLISTENER_H
+#define MU_AUDIO_AUDIODEVICESLISTENER_H
 
-#include <thread>
+#include "wasapitypes.h"
 
 #include "async/notification.h"
-#include "../audiotypes.h"
 
 namespace mu::audio {
-class AudioDevicesListener
+class AudioDevicesListener : public IMMNotificationClient
 {
 public:
-    ~AudioDevicesListener();
-
-    using ActualDevicesCallback = std::function<AudioDeviceList()>;
-
-    void startWithCallback(const ActualDevicesCallback& callback);
+    explicit AudioDevicesListener();
 
     async::Notification devicesChanged() const;
+    async::Notification defaultDeviceChanged() const;
 
 private:
-    void th_updateDevices();
-    void th_setDevices(const AudioDeviceList& devices);
-    void stop();
+    STDMETHOD_(ULONG, AddRef)();
+    STDMETHOD_(ULONG, Release)();
+    STDMETHOD(QueryInterface)(REFIID iid, void** object);
+    STDMETHOD(OnDeviceStateChanged)(LPCWSTR device_id, DWORD new_state);
+    STDMETHOD(OnDeviceAdded)(LPCWSTR device_id);
+    STDMETHOD(OnDeviceRemoved)(LPCWSTR device_id);
+    STDMETHOD(OnDefaultDeviceChanged)(EDataFlow flow, ERole role, LPCWSTR new_default_device_id);
+    STDMETHOD(OnPropertyValueChanged)(LPCWSTR device_id, const PROPERTYKEY key);
 
-    std::shared_ptr<std::thread> m_devicesUpdateThread;
-    std::atomic<bool> m_isRunning = false;
+    winrt::com_ptr<IMMDeviceEnumerator> m_deviceEnumerator;
+    winrt::hstring m_previousIdString;
 
-    AudioDeviceList m_devices;
     async::Notification m_devicesChanged;
-
-    ActualDevicesCallback m_actualDevicesCallback;
+    async::Notification m_defaultDeviceChanged;
 };
 }
 
-#endif // MU_MIDI_AUDIODEVICESLISTENER_H
+#endif // MU_AUDIO_AudioDevicesListener_H

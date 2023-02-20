@@ -28,9 +28,9 @@
 #include "async/asyncable.h"
 
 #include "iaudiodriver.h"
-#include "internal/audiodeviceslistener.h"
 
 namespace mu::audio {
+class AudioDevicesListener;
 class WasapiAudioDriver : public IAudioDriver, public async::Asyncable
 {
 public:
@@ -56,10 +56,13 @@ public:
 
 private:
 
+    void reopen();
+
     bool m_isOpened = false;
 
     AudioDeviceID m_deviceId;
-    AudioDevicesListener m_devicesListener;
+
+    std::unique_ptr<AudioDevicesListener> m_devicesListener;
 
     async::Notification m_outputDeviceChanged;
     async::Notification m_availableOutputDevicesChanged;
