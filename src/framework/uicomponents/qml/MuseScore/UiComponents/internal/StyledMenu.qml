@@ -74,11 +74,11 @@ MenuView {
 
         var itemsCount = model.length - sepCount
 
-        var anchorItemHeight = Boolean(root.anchorItem) ? root.anchorItem.height : (Screen.desktopAvailableHeight - padding * 2)
+        var anchorItemHeight = root.anchorGeometry().height
 
         root.contentWidth = root.menuMetrics.itemWidth
         root.contentHeight = Math.min(itemHeight * itemsCount + sepCount * prv.separatorHeight +
-                                      prv.viewVerticalMargin * 2, anchorItemHeight)
+                                      prv.viewVerticalMargin * 2, anchorItemHeight - padding * 2)
 
         x = 0
         y = parent.height
