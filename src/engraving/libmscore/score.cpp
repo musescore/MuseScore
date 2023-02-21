@@ -5750,7 +5750,6 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     _noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
 
     m_layoutOptions.updateFromStyle(style());
-    m_layout.doLayoutRange(m_layoutOptions, st, et);
 
     if (_resetAutoplace) {
         _resetAutoplace = false;
@@ -5761,6 +5760,8 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
         _resetDefaults = false;
         resetDefaults();
     }
+
+    m_layout.doLayoutRange(m_layoutOptions, st, et);
 }
 
 void Score::createPaddingTable()
