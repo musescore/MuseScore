@@ -1,0 +1,71 @@
+name: Bug report
+description: File a bug report
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: label
+    attributes:
+      label: Issue type
+      description: What kind of issue are you experiencing?
+      options:
+        - File corruption
+        - Crash
+        - Engraving bug
+        - Playback bug
+        - other
+    validations:
+      required: true
+  - type: textarea
+    id: desc
+    attributes:
+      label: Bug description
+      description: A more detailled description of the bug
+      placeholder: Context for the bug that didn't fit in the title
+    validations:
+      required: false
+  - type: textarea
+    id: str
+    attributes:
+      label: Steps to reproduce
+      description: Please provide step-by-step instructions to reproduce this bug 
+      placeholder: |
+        1. go to ...
+        2. then click on ...
+        3. then ...
+    validations:
+      required: true
+  - type: textarea
+    id: version
+    attributes:
+      label: Musescore Version
+      description: What version of Musescore are you running? You can copy the info from the Help > About dialog in Musescore.
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      description: What OS does this bug occur on?
+      multiple: true
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Other
+    validations: 
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Further information which may be relevant to this bug
+      placeholder: Crash log, Screenshots, Musescore project, build number, etc.
+  - type: markdown
+    attributes:
+      value: |
+        Useful information to include:
+        * For crashes: crash logs
+        * For playback issues: Is it using MS Basic, MuseSounds or VSTs?
+          * For VSTs in particular: Where did you get the VSTs from? (link)
+        * For engraving: sample score (Musescore project), screenshot
+
