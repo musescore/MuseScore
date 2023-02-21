@@ -63,6 +63,11 @@ void Playback::deinit()
     disconnectAll();
 }
 
+bool Playback::isInited() const
+{
+    return m_playerHandlersPtr != nullptr;
+}
+
 Promise<TrackSequenceId> Playback::addSequence()
 {
     return Promise<TrackSequenceId>([this](auto resolve, auto /*reject*/) {

@@ -37,6 +37,8 @@ public:
     void onPreInit(const IApplication::RunMode& mode) override;
     void onInit(const IApplication::RunMode& mode) override;
     void onDeinit() override;
+
+    static void invokeQueuedCalls();
 };
 }
 
