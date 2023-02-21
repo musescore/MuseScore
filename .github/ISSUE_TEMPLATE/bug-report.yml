@@ -13,6 +13,7 @@ body:
         - Crash
         - Engraving bug
         - Playback bug
+        - UI bug
         - other
     validations:
       required: true
@@ -35,12 +36,31 @@ body:
         3. then ...
     validations:
       required: true
+  - type: textarea
+      id: scr
+      attributes:
+        label: Screenshots/Screen recordings
+        description: Especially for more complicated issues, it's highly recommended to attach a video recording. If you don't have any screen recorder on your system, use your phone. 
+        placeholder: Click into this field and paste
+      validations:
+        required: false
   - type: input
     id: version
     attributes:
-      label: Musescore Version
-      description: What version of Musescore are you running? You can copy the info from the Help > About dialog in Musescore.
+      label: MuseScore Version
+      description: What version of MuseScore are you running? You can copy the info from the Help > About dialog in MuseScore.
     validations:
+      required: true
+  - type: dropdown
+    id: regression
+    attributes:
+      label: Regression
+      description: Did this work before?
+      options:
+        - Yes, this used to work and now is broken 
+        - No, I don't think this worked before
+        - I don't know
+    validations: 
       required: true
   - type: dropdown
     id: os
@@ -49,7 +69,7 @@ body:
       description: What OS does this bug occur on?
       multiple: true
       options:
-        - Windows
+        - Windows 
         - macOS
         - Linux
         - Other
@@ -60,13 +80,14 @@ body:
     attributes:
       label: Additional context
       description: Further information which may be relevant to this bug
-      placeholder: Crash log, Screenshots, Musescore project, build number, etc.
+      placeholder: Crash log, Screenshots, MuseScore project, build number, etc.
   - type: markdown
     attributes:
       value: |
         Useful information to include:
-        * For crashes: crash logs
+        * For crashes: crash logs, system information (OS, CPU, GPU, memory, drive type, etc.)
         * For playback issues: Is it using MS Basic, MuseSounds or VSTs?
           * For VSTs in particular: Where did you get the VSTs from? (link)
-        * For engraving: sample score (Musescore project), screenshot
+        * For engraving: sample score (MuseScore project), screenshots
+        * For UI issues: Screenshots, screen recordings, system information, GPU drivers
 
