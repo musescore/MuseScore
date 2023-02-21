@@ -1140,6 +1140,10 @@ Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
     Segment* cur = seg->next();
     auto rsIt = score()->repeatList().findRepeatSegmentFromUTick(utick);
 
+    if (rsIt == score()->repeatList().end()) {
+        stopAtMeasureEnd = true;
+    }
+
     Measure const* currentMeasure = seg->measure();
     Measure const* endMeasure = (stopAtMeasureEnd) ? currentMeasure : (*rsIt)->lastMeasure();
     Harmony const* nextHarmony = nullptr;
