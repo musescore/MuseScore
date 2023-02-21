@@ -210,7 +210,7 @@ void Excerpt::setTracksMapping(const TracksMap& tracksMapping)
     }
 }
 
-void Excerpt::updateTracksMapping(bool voicesVisibilityChanged)
+void Excerpt::updateTracksMapping()
 {
     Score* score = excerptScore();
     if (!score) {
@@ -219,19 +219,16 @@ void Excerpt::updateTracksMapping(bool voicesVisibilityChanged)
 
     TracksMap tracks;
 
-    if (m_cachedStaves == score->staves() && !voicesVisibilityChanged) {
-        return;
-    }
-
     TRACEFUNC;
 
-    m_cachedStaves = score->staves();
-
-    for (Staff* staff : m_cachedStaves) {
-        Staff* masterStaff = masterScore()->staffById(staff->id());
+    for (const Staff* staff : score->staves()) {
+        const Staff* masterStaff = masterScore()->staffById(staff->id());
         if (!masterStaff) {
             continue;
         }
+
+        staff_idx_t masterStaffIdx = masterStaff->idx();
+        staff_idx_t staffIdx = staff->idx();
 
         voice_idx_t voice = 0;
         for (voice_idx_t i = 0; i < VOICES; i++) {
@@ -239,7 +236,7 @@ void Excerpt::updateTracksMapping(bool voicesVisibilityChanged)
                 continue;
             }
 
-            tracks.insert({ masterStaff->idx() * VOICES + i % VOICES, staff->idx() * VOICES + voice % VOICES });
+            tracks.insert({ masterStaffIdx* VOICES + i % VOICES, staffIdx * VOICES + voice % VOICES });
             voice++;
         }
     }
@@ -266,7 +263,7 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
 
     // update tracks
     staff->setVoiceVisible(voiceIndex, visible);
-    updateTracksMapping(true /*voicesVisibilityChanged*/);
+    updateTracksMapping();
 
     // clone staff
     Staff* staffCopy = Factory::createStaff(staff->part());
