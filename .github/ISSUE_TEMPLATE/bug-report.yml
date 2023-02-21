@@ -8,6 +8,7 @@ body:
       label: Issue type
       description: What kind of issue are you experiencing?
       options:
+        - Choose option...
         - File corruption
         - Crash
         - Engraving bug
@@ -34,7 +35,7 @@ body:
         3. then ...
     validations:
       required: true
-  - type: textarea
+  - type: input
     id: version
     attributes:
       label: Musescore Version
