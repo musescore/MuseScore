@@ -291,6 +291,8 @@ int AppShell::run(int argc, char** argv)
 
     // Deinit
 
+    globalModule.invokeQueuedCalls();
+
     for (mu::modularity::IModuleSetup* m : m_modules) {
         m->onDeinit();
     }

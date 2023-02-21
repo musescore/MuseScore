@@ -159,5 +159,10 @@ void GlobalModule::onInit(const IApplication::RunMode&)
 
 void GlobalModule::onDeinit()
 {
+    invokeQueuedCalls();
+}
+
+void GlobalModule::invokeQueuedCalls()
+{
     s_asyncInvoker.invokeQueuedCalls();
 }
