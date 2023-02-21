@@ -362,7 +362,7 @@ static void collectNote(EventMap* events, const Note* note, CollectNoteParams no
             break;
         }
 
-        int p = std::clamp(note->pitch() + e.pitch(), 0, 127);
+        int p = std::clamp(note->ppitch() + e.pitch(), 0, 127);
         int on = tick1 + (ticks * e.ontime()) / 1000;
         int off = on + (ticks * e.len()) / 1000 - 1;
 
