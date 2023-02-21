@@ -52,8 +52,9 @@ public:
     struct SoundAutomation {
         String type;
         String value;
-        int bar{ 0 };
-        bool linear{ 0 };
+        int bar = 0;
+        bool linear = 0;
+        float position = 0;
     };
 
     GPTrack(int idx)
@@ -85,9 +86,17 @@ public:
     const std::vector<StaffProperty>& staffProperty() const { return _staffProperty; }
 
     void addSound(Sound sound);
-    void addSoundAutomation(SoundAutomation val) { _automations.insert({ val.bar, val }); }
+
+    struct SoundAutomationPos {
+        int bar = 0;
+        float pos = 0;
+
+        bool operator<(const SoundAutomationPos& other) const { return std::tie(bar, pos) < std::tie(other.bar, other.pos); }
+    };
+
+    void addSoundAutomation(SoundAutomation val) { _automations.insert({ { val.bar, val.position }, val }); }
     const std::unordered_map<String, Sound>& sounds() { return _sounds; }
-    const std::map<int, SoundAutomation>& soundAutomations() { return _automations; }
+    const std::map<SoundAutomationPos, SoundAutomation>& soundAutomations() { return _automations; }
 
     std::vector<InstrumentString> strings() const
     {
@@ -134,7 +143,7 @@ protected:
     size_t _staffCount{ 1 };
     std::vector<StaffProperty> _staffProperty;
     std::unordered_map<String, Sound> _sounds;
-    std::map<int, SoundAutomation> _automations;
+    std::map<SoundAutomationPos, SoundAutomation> _automations;
     int _transpose{ 0 };
     std::unordered_map<int, Diagram> _diagrams;
     std::string _lyrics;

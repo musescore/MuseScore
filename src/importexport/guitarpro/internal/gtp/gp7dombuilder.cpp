@@ -128,6 +128,7 @@ GPTrack::SoundAutomation GP7DomBuilder::readTrackAutomation(XmlDomNode* automati
     result.linear = automationNode->firstChildElement("Linear").text() == u"true";
     result.bar = automationNode->firstChildElement("Bar").text().toInt();
     result.value = automationNode->firstChildElement("Value").text();
+    result.position = automationNode->firstChildElement("Position").text().toFloat();
 
     return result;
 }

@@ -1432,14 +1432,12 @@ void GPConverter::addInstrumentChanges()
     for (const auto& track : _gpDom->tracks()) {
         for (const auto& soundAutomation : track.second->soundAutomations()) {
             int bar = soundAutomation.second.bar;
-            if (bar == 0) {
-                //!@NOTE bar 0 is a main instrument. Already added in setupTrack
-                continue;
-            }
+            float pos = soundAutomation.second.position;
 
             Measure* m = _score->crMeasure(bar);
             Segment* seg = m->first(SegmentType::ChordRest);
             int trackIdx = track.second->idx();
+            float position = soundAutomation.second.position; // offset for automation segment in current measure
 
             int midiProgramm = 0;
             String instrName;
@@ -1453,6 +1451,11 @@ void GPConverter::addInstrumentChanges()
                 instrName = it->second.name;
             }
 
+            if (bar == 0 && pos == 0 && midiProgramm == track.second->programm()) {
+                // skipping the default instrument in the beginning of the track
+                continue;
+            }
+
             Instrument instr;
             instr.setTranspose(track.second->transpose());
             instr.setStringData(*_score->parts()[trackIdx]->instrument()->stringData());
@@ -1460,6 +1463,16 @@ void GPConverter::addInstrumentChanges()
             InstrumentChange* instrCh =  Factory::createInstrumentChange(_score->dummy()->segment(), instr);
             instrCh->setTrack(trackIdx * VOICES);
             instrCh->setXmlText(instrName);
+
+            if (position != 0) {
+                // searching for correct segment to put instrument change
+                Fraction tick = m->tick() + Fraction::fromTicks(position * Constants::division);
+                Segment* positionedSegment = m->findSegment(SegmentType::ChordRest, tick);
+                if (positionedSegment) {
+                    seg = positionedSegment;
+                }
+            }
+
             seg->add(instrCh);
         }
     }
