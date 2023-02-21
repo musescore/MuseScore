@@ -103,6 +103,10 @@
           <RehearsalMark>
             <text>Intro</text>
             </RehearsalMark>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            </Dynamic>
           <Beam>
             <l1>-28</l1>
             <l2>-28</l2>
@@ -282,6 +286,10 @@
               <string>1</string>
               </Note>
             </Chord>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            </Dynamic>
           <Beam>
             <l1>-28</l1>
             <l2>-28</l2>
@@ -325,6 +333,10 @@
               <string>1</string>
               </Note>
             </Chord>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            </Dynamic>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -445,6 +457,10 @@
           <StaffText>
             <text>Asus4/E</text>
             </StaffText>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            </Dynamic>
           <Beam>
             <l1>-36</l1>
             <l2>-36</l2>
@@ -494,6 +510,10 @@
               <string>1</string>
               </Note>
             </Chord>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            </Dynamic>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -611,6 +631,10 @@
               <string>1</string>
               </Note>
             </Chord>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            </Dynamic>
           <Beam>
             <l1>-36</l1>
             <l2>-36</l2>
@@ -654,6 +678,10 @@
               <string>1</string>
               </Note>
             </Chord>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            </Dynamic>
           <Chord>
             <durationType>16th</durationType>
             <Note>

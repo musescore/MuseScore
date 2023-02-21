@@ -540,6 +540,10 @@
           <RehearsalMark>
             <text>tempo 144</text>
             </RehearsalMark>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            </Dynamic>
           <Tempo>
             <tempo>2.4</tempo>
             <text><sym>metNoteQuarterUp</sym> = 144</text>

@@ -1360,12 +1360,17 @@ bool GuitarPro5::readNote(int string, Note* note)
         }
     }
 
+    constexpr int defaultDynamicVal = 0;
+
     if (noteBits & NOTE_DYNAMIC) {            // velocity
         int d = readChar();
         if (previousDynamic != d) {
             previousDynamic = d;
             addDynamic(note, d);
         }
+    } else if (previousDynamic != defaultDynamicVal) {
+        previousDynamic = defaultDynamicVal;
+        addDynamic(note, defaultDynamicVal);
     }
 
     int fretNumber = 0;
