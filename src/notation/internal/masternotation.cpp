@@ -219,7 +219,6 @@ static void createMeasures(mu::engraving::Score* score, const ScoreCreateOptions
                             int diff = -part->instrument()->transpose().chromatic;
                             nKey.setKey(mu::engraving::transposeKey(nKey.key(), diff, part->preferSharpFlat()));
                         }
-                        // do not create empty keysig unless custom or atonal
                         staff->setKey(mu::engraving::Fraction(0, 1), nKey);
                         mu::engraving::Segment* ss
                             = measure->getSegment(mu::engraving::SegmentType::KeySig, mu::engraving::Fraction(0, 1));
