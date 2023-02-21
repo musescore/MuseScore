@@ -37,13 +37,17 @@ body:
     validations:
       required: true
   - type: textarea
-      id: scr
-      attributes:
-        label: Screenshots/Screen recordings
-        description: Especially for more complicated issues, it's highly recommended to attach a video recording. If you don't have any screen recorder on your system, use your phone. 
-        placeholder: Click into this field and paste
-      validations:
-        required: false
+    id: screenshot
+    attributes:
+      label: Screenshots/Screen recordings
+      description: | 
+        Especially for longer or more complicated bugs, screen recordings are highly recommended. 
+
+        If you don't have a screen recording tool installed (OBS, Bandicam, QuickTime, etc.), you can also take a video with your phone.
+      placeholder: |
+        Click into this text box and paste your video
+    validations:
+      required: false
   - type: input
     id: version
     attributes:
