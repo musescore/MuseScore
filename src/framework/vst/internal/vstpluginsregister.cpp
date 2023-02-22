@@ -61,7 +61,7 @@ void VstPluginsRegister::registerMasterFxPlugin(const audio::AudioResourceId& re
 
 VstPluginPtr VstPluginsRegister::instrumentPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) const
 {
-    ONLY_AUDIO_OR_MAIN_THREAD(threadSecurer);
+    ONLY_MAIN_THREAD(threadSecurer);
 
     std::lock_guard lock(m_mutex);
 
@@ -80,7 +80,7 @@ VstPluginPtr VstPluginsRegister::instrumentPlugin(const audio::TrackId trackId, 
 VstPluginPtr VstPluginsRegister::fxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId,
                                           const AudioFxChainOrder chainOrder) const
 {
-    ONLY_AUDIO_OR_MAIN_THREAD(threadSecurer);
+    ONLY_MAIN_THREAD(threadSecurer);
 
     std::lock_guard lock(m_mutex);
 
@@ -107,7 +107,7 @@ VstPluginPtr VstPluginsRegister::fxPlugin(const audio::TrackId trackId, const au
 
 VstPluginPtr VstPluginsRegister::masterFxPlugin(const audio::AudioResourceId& resourceId, const AudioFxChainOrder chainOrder) const
 {
-    ONLY_AUDIO_OR_MAIN_THREAD(threadSecurer);
+    ONLY_MAIN_THREAD(threadSecurer);
 
     std::lock_guard lock(m_mutex);
 

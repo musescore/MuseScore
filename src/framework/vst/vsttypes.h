@@ -55,8 +55,6 @@ using PluginFactory = VST3::Hosting::PluginFactory;
 using PluginSubcategories = ClassInfo::SubCategories;
 using PluginContextFactory = Steinberg::Vst::PluginContextFactory;
 using PluginContext = Steinberg::Vst::HostApplication;
-using PluginProviderPtr = Steinberg::IPtr<Steinberg::Vst::PlugProvider>;
-using PluginProvider = Steinberg::Vst::PlugProvider;
 using PluginControllerPtr = Steinberg::IPtr<Steinberg::Vst::IEditController>;
 using PluginComponentPtr = Steinberg::IPtr<Steinberg::Vst::IComponent>;
 using PluginViewPtr = Steinberg::IPtr<Steinberg::IPlugView>;
@@ -74,6 +72,7 @@ using BusInfo = Steinberg::Vst::BusInfo;
 using BusDirection = Steinberg::Vst::BusDirections;
 using BusType = Steinberg::Vst::BusTypes;
 using BusMediaType = Steinberg::Vst::MediaTypes;
+using PluginMidiMappingPtr = Steinberg::IPtr<Steinberg::Vst::IMidiMapping>;
 using ParamsMapping = std::unordered_map<ControllIdx, PluginParamId>;
 
 enum class VstPluginType {

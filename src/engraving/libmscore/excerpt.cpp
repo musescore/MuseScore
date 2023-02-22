@@ -1484,7 +1484,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     for (EngravingItem* e : oseg->annotations()) {
                         if (e->generated()
                             || (e->track() != srcTrack && !(e->systemFlag() && e->track() == 0)) // system items must be cloned even if they are on different tracks
-                            || (e->track() != srcTrack && e->systemFlag() && e->findLinkedInScore(score))) { // ...but only once!
+                            || (e->systemFlag() && e->findLinkedInScore(score))) { // ...but only once!
                             continue;
                         }
 
