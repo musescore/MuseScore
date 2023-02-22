@@ -318,11 +318,23 @@ void Beam::layout1()
         } else if (_isGrace) {
             _up = true;
         } else {
+            // search through the beam for the first chord with explicit stem direction and use that.
+            // if there is no explicit stem direction, default to the direction of the first stem.
+            bool firstUp = false;
+            bool firstChord = true;
+            DirectionV explicitDirection = DirectionV::AUTO;
             for (ChordRest* cr :_elements) {
                 if (cr->isChord()) {
-                    _up = cr->up();
-                    break;
+                    DirectionV crDirection = toChord(cr)->stemDirection();
+                    if (crDirection != DirectionV::AUTO) {
+                        _up = crDirection == DirectionV::UP;
+                        break;
+                    } else if (firstChord) {
+                        firstUp = cr->up();
+                        firstChord = false;
+                    }
                 }
+                _up = firstUp;
             }
         }
         for (ChordRest* cr : _elements) {
