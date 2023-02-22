@@ -29,11 +29,10 @@ AudioDevicesListener::AudioDevicesListener()
 {
     HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), nullptr,
                                   CLSCTX_INPROC_SERVER,
-
                                   IID_PPV_ARGS(&m_deviceEnumerator));
 
     if (hr == CO_E_NOTINITIALIZED) {
-        CoInitializeEx(nullptr, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE);
+        CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
         hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), nullptr,
                               CLSCTX_INPROC_SERVER,
                               IID_PPV_ARGS(&m_deviceEnumerator));
@@ -42,6 +41,8 @@ AudioDevicesListener::AudioDevicesListener()
             LOGE() << "CoCreateInstance fails with CO_E_NOTINITIALIZED";
             return;
         }
+
+        m_successfullyInitializedCOM = true;
     }
 
     if (!m_deviceEnumerator) {
@@ -53,6 +54,17 @@ AudioDevicesListener::AudioDevicesListener()
     if (FAILED(hr)) {
         LOGE() << "RegisterEndpointNotificationCallback failed";
         return;
+    }
+}
+
+AudioDevicesListener::~AudioDevicesListener()
+{
+    if (m_deviceEnumerator) {
+        m_deviceEnumerator->UnregisterEndpointNotificationCallback(this);
+    }
+
+    if (m_successfullyInitializedCOM) {
+        CoUninitialize();
     }
 }
 
