@@ -137,11 +137,12 @@ private:
     void warnCloudIsNotAvailable();
     void warnPublishIsNotAvailable();
 
-    void warnSaveIsNotAvailable(const Ret& ret, const SaveLocation& location);
+    bool askIfUserAgreesToSaveProjectWithErrors(const Ret& ret, const SaveLocation& location);
     void warnScoreWithoutPartsCannotBeSaved();
-    void warnCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText, bool newlyCreated);
-    void warnCorruptedScoreCannotBeSavedOnCloud(const std::string& errorText, bool newlyCreated);
-    void warnCorruptedScoreCannotBeSavedLocally(const SaveLocation& location, const std::string& errorText, bool newlyCreated);
+    bool askIfUserAgreesToSaveCorruptedScore(const SaveLocation& location, const std::string& errorText, bool newlyCreated);
+    void warnCorruptedScoreCannotBeSavedOnCloud(const std::string& errorText, bool canRevert);
+    bool askIfUserAgreesToSaveCorruptedScoreLocally(const std::string& errorText, bool canRevert);
+    bool askIfUserAgreesToSaveCorruptedScoreUponOpenning(const SaveLocation& location, const std::string& errorText);
     void showErrCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText);
 
     void revertCorruptedScoreToLastSaved();
