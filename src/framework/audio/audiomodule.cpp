@@ -187,7 +187,12 @@ void AudioModule::onDeinit()
     if (s_audioDriver->isOpened()) {
         s_audioDriver->close();
     }
+}
 
+void AudioModule::onDestroy()
+{
+    //! NOTE During deinitialization, objects that process events are destroyed,
+    //! it is better to destroy them on onDestroy, when no events should come anymore
     if (s_audioWorker->isRunning()) {
         s_audioWorker->stop([]() {
             ONLY_AUDIO_WORKER_THREAD;

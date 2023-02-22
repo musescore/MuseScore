@@ -42,6 +42,7 @@ public:
 
     virtual void init() = 0;
     virtual void deinit() = 0;
+    virtual bool isInited() const = 0;
 
     // A quick guide how to playback something:
 
