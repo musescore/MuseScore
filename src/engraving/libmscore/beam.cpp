@@ -322,7 +322,6 @@ void Beam::layout1()
             // if there is no explicit stem direction, default to the direction of the first stem.
             bool firstUp = false;
             bool firstChord = true;
-            DirectionV explicitDirection = DirectionV::AUTO;
             for (ChordRest* cr :_elements) {
                 if (cr->isChord()) {
                     DirectionV crDirection = toChord(cr)->stemDirection();
