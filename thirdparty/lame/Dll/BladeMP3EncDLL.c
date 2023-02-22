@@ -945,7 +945,7 @@ static void dump_config( lame_global_flags* gfp )
     case JOINT_STEREO: DebugPrintf( "Joint-Stereo\n" ); break;
     case DUAL_CHANNEL: DebugPrintf( "Forced Stereo\n" ); break;
     case MONO:         DebugPrintf( "Mono\n" ); break;
-    case NOT_SET:      /* FALLTROUGH */
+    case NOT_SET:      /* FALLTHROUGH */
     default:           DebugPrintf( "Error (unknown)\n" ); break;
     }
 
