@@ -306,18 +306,22 @@ void TextLineBaseSegment::layout()
         _offset2.setY(0);
     }
 
-    auto alignText = [tl](Text* text) {
+    auto alignBaseLine = [tl](Text* text, PointF& pp1, PointF& pp2) {
+        PointF widthCorrection(0.0, tl->lineWidth() / 2);
         switch (text->align().vertical) {
         case AlignV::TOP:
-            text->movePosY(-tl->lineWidth() / 2);
+            pp1 += widthCorrection;
+            pp2 += widthCorrection;
             break;
         case AlignV::VCENTER:
             break;
         case AlignV::BOTTOM:
-            text->movePosY(tl->lineWidth() / 2);
+            pp1 -= widthCorrection;
+            pp2 -= widthCorrection;
             break;
         case AlignV::BASELINE:
-            text->movePosY(tl->lineWidth() / 2);
+            pp1 -= widthCorrection;
+            pp2 -= widthCorrection;
             break;
         }
     };
@@ -345,10 +349,6 @@ void TextLineBaseSegment::layout()
     _text->setPlacement(PlacementV::ABOVE);
     _text->setTrack(track());
     _text->layout();
-    if ((isSingleBeginType() && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
-        || (!isSingleBeginType() && (tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO))) {
-        alignText(_text);
-    }
 
     if ((isSingleType() || isEndType())) {
         _endText->setXmlText(tl->endText());
@@ -360,10 +360,6 @@ void TextLineBaseSegment::layout()
         _endText->setPlacement(PlacementV::ABOVE);
         _endText->setTrack(track());
         _endText->layout();
-
-        if (tl->endTextPlace() == TextPlace::LEFT || tl->endTextPlace() == TextPlace::AUTO) {
-            alignText(_endText);
-        }
     } else {
         _endText->setXmlText(u"");
     }
@@ -450,6 +446,20 @@ void TextLineBaseSegment::layout()
 
     if (tl->lineVisible() || !score()->printing()) {
         pp1 = PointF(l, 0.0);
+
+        // Make sure baseline of text and line are properly aligned (accounting for line thickness)
+        bool alignBeginText = tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO;
+        bool alignContinueText = tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO;
+        bool alignEndText = tl->endTextPlace() == TextPlace::LEFT || tl->endTextPlace() == TextPlace::AUTO;
+        bool isSingleOrBegin = isSingleBeginType();
+        bool hasBeginText = !_text->empty() && isSingleOrBegin;
+        bool hasContinueText = !_text->empty() && !isSingleOrBegin;
+        bool hasEndText = !_endText->empty() && isSingleEndType();
+        if ((hasBeginText && alignBeginText) || (hasContinueText && alignContinueText)) {
+            alignBaseLine(_text, pp1, pp2);
+        } else if (hasEndText && alignEndText) {
+            alignBaseLine(_endText, pp1, pp2);
+        }
 
         double beginHookHeight = tl->beginHookHeight().val() * _spatium;
         double endHookHeight = tl->endHookHeight().val() * _spatium;
