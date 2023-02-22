@@ -89,6 +89,7 @@ GPTrack::SoundAutomation GP6DomBuilder::readRsePickUp(XmlDomNode& bankChangesNod
 
     result.bar = bankChangesNode.attribute("barIndex").toInt();
     result.value = bankChangesNode.attribute("bankId");
+    result.position = bankChangesNode.attribute("tickOffset").toFloat();
 
     return result;
 }
