@@ -957,7 +957,8 @@ bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScore(const SaveLoc
     }
     case SaveLocationType::Local:
         return askIfUserAgreesToSaveCorruptedScoreLocally(errorText, newlyCreated);
-    case SaveLocationType::Undefined:
+    case SaveLocationType::Undefined: // fallthrough
+    default:
         return false;
     }
 }
@@ -1037,7 +1038,8 @@ bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScoreUponOpenning(c
         return false;
     case SaveLocationType::Local:
         return askIfUserAgreesToSaveCorruptedScoreLocally(errorText, false /*canRevert*/);
-    case SaveLocationType::Undefined:
+    case SaveLocationType::Undefined: // fallthrough
+    default:
         return false;
     }
 }
