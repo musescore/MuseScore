@@ -31,6 +31,7 @@ class AudioDevicesListener : public IMMNotificationClient
 {
 public:
     explicit AudioDevicesListener();
+    ~AudioDevicesListener();
 
     async::Notification devicesChanged() const;
     async::Notification defaultDeviceChanged() const;
@@ -50,6 +51,8 @@ private:
 
     async::Notification m_devicesChanged;
     async::Notification m_defaultDeviceChanged;
+
+    bool m_successfullyInitializedCOM = false;
 };
 }
 
