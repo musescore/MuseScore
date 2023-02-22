@@ -785,12 +785,7 @@ bool GuitarPro5::read(IODevice* io)
     readLyrics();
     readPageSetup();
 
-    previousDynamic = -1;
     previousTempo = -1;
-    //previousDynamic = new int [staves * VOICES];
-    // initialise the dynamics to 0
-    //for (int i = 0; i < staves * VOICES; i++)
-    //      previousDynamic[i] = 0;
 
     tempo = readInt();
     if (version > 500) {
@@ -822,6 +817,7 @@ bool GuitarPro5::read(IODevice* io)
 
     measures = readInt();
     staves  = readInt();
+    initDynamics(staves);
 
     for (size_t str = 0; str < 7; ++str) {
         for (size_t staff = 0; staff < staves; ++staff) {
@@ -1360,7 +1356,7 @@ bool GuitarPro5::readNote(int string, Note* note)
         }
     }
 
-    constexpr int defaultDynamicVal = 0;
+    int& previousDynamic = previousDynamicByTrack[note->track()];
 
     if (noteBits & NOTE_DYNAMIC) {            // velocity
         int d = readChar();
@@ -1368,9 +1364,9 @@ bool GuitarPro5::readNote(int string, Note* note)
             previousDynamic = d;
             addDynamic(note, d);
         }
-    } else if (previousDynamic != defaultDynamicVal) {
-        previousDynamic = defaultDynamicVal;
-        addDynamic(note, defaultDynamicVal);
+    } else if (previousDynamic != DEFAULT_DYNAMIC) {
+        previousDynamic = DEFAULT_DYNAMIC;
+        addDynamic(note, previousDynamic);
     }
 
     int fretNumber = 0;

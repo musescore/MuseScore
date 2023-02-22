@@ -225,16 +225,18 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
         //readUInt8();
     }
 
+    int& previousDynamic = previousDynamicByTrack[note->track()];
+
     // set dynamic information on note if different from previous note
     if (noteBits & NOTE_DYNAMIC) {              // 0x10
         int d = readChar();
         if (previousDynamic != d) {
             previousDynamic = d;
-            // addDynamic(note, d);    // velocity? TODO-ws ??
+            addDynamic(note, d);
         }
-    } else if (previousDynamic) {
-        previousDynamic = 0;
-        //addDynamic(note, 0);
+    } else if (previousDynamic != DEFAULT_DYNAMIC) {
+        previousDynamic = DEFAULT_DYNAMIC;
+        addDynamic(note, previousDynamic);
     }
 
     int fretNumber = -1;
@@ -635,16 +637,13 @@ bool GuitarPro4::read(IODevice* io)
     key        = readInt();
     /*int octave =*/ readUInt8();      // octave
 
-    //previousDynamic = new int [staves * VOICES];
-    // initialise the dynamics to 0
-    //for (int i = 0; i < staves * VOICES; i++)
-    //      previousDynamic[i] = 0;
-    previousDynamic = -1;
     previousTempo = -1;
 
     readChannels();
     measures = readInt();
     staves   = readInt();
+
+    initDynamics(staves);
 
     curDynam.resize(staves * VOICES);
     for (auto& i : curDynam) {
@@ -979,7 +978,7 @@ bool GuitarPro4::read(IODevice* io)
                             toChord(cr)->add(note);
 
                             hasSlur = readNote(6 - i, static_cast<int>(staffIdx), note);
-                            dynam = std::max(dynam, previousDynamic);
+                            dynam = std::max(dynam, previousDynamicByTrack[track]);
                             note->setTpcFromPitch();
                         }
                     }
