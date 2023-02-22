@@ -51,7 +51,7 @@ Item {
         return false
     }
 
-    readonly property var currentPage: pageLoader.item
+    readonly property var currentPage: pageStack.itemAt(pageStack.currentIndex)
 
     signal done
 
@@ -146,8 +146,8 @@ Item {
         }
     }
 
-    Loader {
-        id: pageLoader
+    StackLayout {
+        id: pageStack
 
         anchors.top: bar.bottom
         anchors.topMargin: 20
@@ -155,32 +155,26 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        sourceComponent: {
-            if (!bar.completed) {
-                return null
-            }
+        currentIndex: bar.currentIndex
 
-            switch(bar.currentIndex) {
-            case 0: return instrumentsPageComp
-            case 1: return templatePageComp
-            }
+//        sourceComponent: {
+//            if (!bar.completed) {
+//                return null
+//            }
 
-            return null
-        }
-    }
+//            switch(bar.currentIndex) {
+//            case 0: return instrumentsPageComp
+//            case 1: return templatePageComp
+//            }
 
-    Component {
-        id: instrumentsPageComp
+//            return null
+//        }
 
         ChooseInstrumentsPage {
             navigationSection: root.navigationSection
 
             Component.onCompleted: focusOnFirst()
         }
-    }
-
-    Component {
-        id: templatePageComp
 
         CreateFromTemplatePage {
             property string description: ""
