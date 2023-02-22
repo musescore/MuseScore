@@ -463,7 +463,7 @@ void ProjectActionsController::publish()
 
     Ret ret = canSaveProject();
     if (!ret) {
-        warnSaveIsNotAvailable(ret, SaveLocationType::Cloud);
+        askIfUserAgreesToSaveProjectWithErrors(ret, SaveLocationType::Cloud);
         return;
     }
 
@@ -490,8 +490,10 @@ bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveM
     if (!force) {
         Ret ret = canSaveProject();
         if (!ret) {
-            warnSaveIsNotAvailable(ret, location);
-            return false;
+            ret = askIfUserAgreesToSaveProjectWithErrors(ret, location);
+            if (!ret) {
+                return ret;
+            }
         }
     }
 
@@ -912,27 +914,25 @@ void ProjectActionsController::warnPublishIsNotAvailable()
                            trc("project/save", "Please check your internet connection or try again later."));
 }
 
-void ProjectActionsController::warnSaveIsNotAvailable(const Ret& ret, const SaveLocation& location)
+bool ProjectActionsController::askIfUserAgreesToSaveProjectWithErrors(const Ret& ret, const SaveLocation& location)
 {
     auto masterNotation = currentMasterNotation();
     if (!masterNotation) {
-        return;
+        return false;
     }
 
     switch (static_cast<Err>(ret.code())) {
     case Err::NoPartsError:
         warnScoreWithoutPartsCannotBeSaved();
-        break;
+        return false;
     case Err::CorruptionUponOpenningError:
-        showErrCorruptedScoreCannotBeSaved(location, ret.text());
-        break;
+        return askIfUserAgreesToSaveCorruptedScoreUponOpenning(location, ret.text());
     case Err::CorruptionError: {
         auto project = currentNotationProject();
-        warnCorruptedScoreCannotBeSaved(location, ret.text(), project->isNewlyCreated());
-        break;
+        return askIfUserAgreesToSaveCorruptedScore(location, ret.text(), project->isNewlyCreated());
     }
     default:
-        break;
+        return false;
     }
 }
 
@@ -942,8 +942,8 @@ void ProjectActionsController::warnScoreWithoutPartsCannotBeSaved()
                            trc("project/save", "Please add at least one instrument to enable saving."));
 }
 
-void ProjectActionsController::warnCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText,
-                                                               bool newlyCreated)
+bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScore(const SaveLocation& location, const std::string& errorText,
+                                                                   bool newlyCreated)
 {
     switch (location.type) {
     case SaveLocationType::Cloud: {
@@ -953,16 +953,16 @@ void ProjectActionsController::warnCorruptedScoreCannotBeSaved(const SaveLocatio
             warnCorruptedScoreCannotBeSavedOnCloud(errorText, newlyCreated);
         }
 
-        break;
+        return false;
     }
     case SaveLocationType::Local:
-        warnCorruptedScoreCannotBeSavedLocally(location, errorText, newlyCreated);
+        return askIfUserAgreesToSaveCorruptedScoreLocally(errorText, newlyCreated);
     case SaveLocationType::Undefined:
-        break;
+        return false;
     }
 }
 
-void ProjectActionsController::warnCorruptedScoreCannotBeSavedOnCloud(const std::string& errorText, bool newlyCreated)
+void ProjectActionsController::warnCorruptedScoreCannotBeSavedOnCloud(const std::string& errorText, bool canRevert)
 {
     std::string title = trc("project", "Your score cannot be uploaded to the cloud");
     std::string body = trc("project", "This score has become corrupted and contains errors. "
@@ -972,7 +972,7 @@ void ProjectActionsController::warnCorruptedScoreCannotBeSavedOnCloud(const std:
     IInteractive::ButtonDatas buttons;
     buttons.push_back(interactive()->buttonData(IInteractive::Button::Cancel));
 
-    IInteractive::ButtonData saveCopyBtn(IInteractive::Button::CustomButton, trc("project", "Save as…"), newlyCreated /*accent*/);
+    IInteractive::ButtonData saveCopyBtn(IInteractive::Button::CustomButton, trc("project", "Save as…"), canRevert /*accent*/);
     buttons.push_back(saveCopyBtn);
 
     int defaultBtn = saveCopyBtn.btn;
@@ -980,7 +980,7 @@ void ProjectActionsController::warnCorruptedScoreCannotBeSavedOnCloud(const std:
     IInteractive::ButtonData revertToLastSavedBtn(saveCopyBtn.btn + 1, trc("project", "Revert to last saved"),
                                                   true /*accent*/);
 
-    if (!newlyCreated) {
+    if (!canRevert) {
         buttons.push_back(revertToLastSavedBtn);
         defaultBtn = revertToLastSavedBtn.btn;
     }
@@ -995,12 +995,12 @@ void ProjectActionsController::warnCorruptedScoreCannotBeSavedOnCloud(const std:
     }
 }
 
-void ProjectActionsController::warnCorruptedScoreCannotBeSavedLocally(const SaveLocation& location, const std::string& errorText,
-                                                                      bool newlyCreated)
+bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScoreLocally(const std::string& errorText,
+                                                                          bool canRevert)
 {
     std::string title = trc("project", "This score has become corrupted and contains errors");
-    std::string body = newlyCreated ? trc("project", "You can continue saving it locally, although the file may become unusable. "
-                                                     "You can try to fix the errors manually, or get help for this issue on musescore.org.")
+    std::string body = canRevert ? trc("project", "You can continue saving it locally, although the file may become unusable. "
+                                                  "You can try to fix the errors manually, or get help for this issue on musescore.org.")
                        : trc("project", "You can continue saving it locally, although the file may become unusable. "
                                         "To preserve your score, revert to the last saved version, or fix the errors manually. "
                                         "You can also get help for this issue on musescore.org.");
@@ -1008,24 +1008,37 @@ void ProjectActionsController::warnCorruptedScoreCannotBeSavedLocally(const Save
     IInteractive::ButtonDatas buttons;
     buttons.push_back(interactive()->buttonData(IInteractive::Button::Cancel));
 
-    IInteractive::ButtonData saveAnywayBtn(IInteractive::Button::CustomButton, trc("project", "Save anyway"), newlyCreated /*accent*/);
+    IInteractive::ButtonData saveAnywayBtn(IInteractive::Button::CustomButton, trc("project", "Save anyway"), !canRevert /*accent*/);
     buttons.push_back(saveAnywayBtn);
 
     int defaultBtn = saveAnywayBtn.btn;
 
     IInteractive::ButtonData revertToLastSavedBtn(saveAnywayBtn.btn + 1, trc("project", "Revert to last saved"),
                                                   true /*accent*/);
-    if (!newlyCreated) {
+    if (canRevert) {
         buttons.push_back(revertToLastSavedBtn);
         defaultBtn = revertToLastSavedBtn.btn;
     }
 
     int btn = interactive()->error(title, body, errorText, buttons, defaultBtn).button();
 
-    if (btn == saveAnywayBtn.btn) {
-        saveProjectAt(location, SaveMode::Save, true);
-    } else if (btn == revertToLastSavedBtn.btn) {
+    if (btn == revertToLastSavedBtn.btn) {
         revertCorruptedScoreToLastSaved();
+    }
+
+    return btn == saveAnywayBtn.btn;
+}
+
+bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScoreUponOpenning(const SaveLocation& location, const std::string& errorText)
+{
+    switch (location.type) {
+    case SaveLocationType::Cloud:
+        showErrCorruptedScoreCannotBeSaved(location, errorText);
+        return false;
+    case SaveLocationType::Local:
+        return askIfUserAgreesToSaveCorruptedScoreLocally(errorText, false /*canRevert*/);
+    case SaveLocationType::Undefined:
+        return false;
     }
 }
 
