@@ -153,6 +153,12 @@ void GuitarPro::createTuningString(int strings, int tuning[])
     tunings.push_back(t);
 }
 
+void GuitarPro::initDynamics(size_t stavesNum)
+{
+    previousDynamicByTrack.resize(stavesNum * VOICES);
+    std::fill(previousDynamicByTrack.begin(), previousDynamicByTrack.end(), INVALID_DYNAMIC);
+}
+
 //---------------------------------------------------------
 //    read
 //---------------------------------------------------------
@@ -1624,6 +1630,7 @@ bool GuitarPro2::read(IODevice* io)
     }
     measures   = readInt();
     staves = readInt();
+    initDynamics(staves);
 
     int tnumerator   = 4;
     int tdenominator = 4;
@@ -1974,6 +1981,8 @@ bool GuitarPro1::readNote(int string, Note* note)
         //readUInt8();
     }
 
+    int& previousDynamic = previousDynamicByTrack[note->track()];
+
     // set dynamic information on note if different from previous note
     if (noteBits & NOTE_DYNAMIC) {
         int d = readChar();
@@ -1981,6 +1990,9 @@ bool GuitarPro1::readNote(int string, Note* note)
             previousDynamic = d;
             addDynamic(note, d);
         }
+    } else if (previousDynamic != DEFAULT_DYNAMIC) {
+        previousDynamic = DEFAULT_DYNAMIC;
+        addDynamic(note, previousDynamic);
     }
 
     int fretNumber = -1;
@@ -2298,17 +2310,12 @@ bool GuitarPro3::read(IODevice* io)
     }
     measures   = readInt();
     staves = readInt();
+    initDynamics(staves);
 
     slurs = new Slur*[staves];
     for (size_t i = 0; i < staves; ++i) {
         slurs[i] = nullptr;
     }
-
-    //previousDynamic = new int [staves * VOICES];
-    // initialise the dynamics to 0
-    //for (int i = 0; i < staves * VOICES; i++)
-    //      previousDynamic[i] = 0;
-    previousDynamic = -1;
 
     int tnumerator   = 4;
     int tdenominator = 4;

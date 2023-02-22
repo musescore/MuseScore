@@ -223,7 +223,9 @@ protected:
     mu::io::IODevice* f = nullptr;
     int curPos = 0;
     int previousTempo = -1;
-    int previousDynamic = -1;
+    std::vector<int> previousDynamicByTrack;
+    constexpr static int INVALID_DYNAMIC = -1;
+    constexpr static int DEFAULT_DYNAMIC = 0;
     std::vector<int> ottavaFound;
     std::vector<String> ottavaValue;
     std::map<int, std::pair<int, bool> > tempoMap;
@@ -280,6 +282,7 @@ protected:
     void addPop(Note*);
     void createTuningString(int strings, int tuning[]);
     virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const { return nullptr; }
+    void initDynamics(size_t stavesNum);
 
     /// midi effects
     void addSoundEffects();
