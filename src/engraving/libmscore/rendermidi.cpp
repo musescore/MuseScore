@@ -816,7 +816,10 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
                 makeEvent(body[j], onTimes[j], onTimes[j + 1] - onTimes[j],
                           glissandoVelocityMultiplier);
             }
-            makeEvent(body[b - 1], onTimes[b - 1], (millespernote * b - onTimes[b - 1]) + sustain, glissandoVelocityMultiplier);
+
+            if (b > 1) {
+                makeEvent(body[b - 1], onTimes[b - 1], (millespernote * b - onTimes[b - 1]) + sustain, glissandoVelocityMultiplier);
+            }
         } else {
             // render the body, but not the final repetition
             for (int r = 0; r < numrepeat - 1; r++) {
