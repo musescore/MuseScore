@@ -117,6 +117,9 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
+        accessible.accessibleParent: navPanel.accessible
+        accessible.name: titleLabel.text
+
         onModelChanged: {
             groupsView.currentIndex = Qt.binding(() => (root.currentGroupIndex))
         }
@@ -131,7 +134,9 @@ Item {
             navigation.name: modelData
             navigation.panel: navPanel
             navigation.row: 2 + model.index
+            navigation.accessible.accessibleParent: groupsView.accessible
             navigation.accessible.name: itemTitleLabel.text
+            navigation.accessible.row: model.index
 
             StyledTextLabel {
                 id: itemTitleLabel

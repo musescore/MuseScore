@@ -89,6 +89,8 @@ public:
         QString accessibleTextAtOffset(int, TextBoundaryType, int*, int*) const override { return QString(); }
         int accessibleCharacterCount() const override { return 0; }
 
+        int accessibleRowIndex() const override { return 0; }
+
         async::Channel<IAccessible::Property, Val> accessiblePropertyChanged() const override
         {
             return m_propertyChanged;

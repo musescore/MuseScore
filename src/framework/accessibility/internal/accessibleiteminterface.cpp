@@ -153,9 +153,15 @@ QAccessible::State AccessibleItemInterface::state() const
         state.focusable = true;
         state.focused = item->accessibleState(IAccessible::State::Focused);
     } break;
+    case IAccessible::Role::List: {
+        state.active = item->accessibleState(IAccessible::State::Active);
+    } break;
     case IAccessible::Role::ListItem: {
         state.focusable = true;
         state.focused = item->accessibleState(IAccessible::State::Focused);
+
+        state.selectable = true;
+        state.selected = item->accessibleState(IAccessible::State::Selected);
     } break;
     case IAccessible::Role::Information: {
         state.focusable = true;
@@ -213,6 +219,7 @@ QAccessible::Role AccessibleItemInterface::role() const
     case IAccessible::Role::CheckBox: return QAccessible::CheckBox;
     case IAccessible::Role::RadioButton: return QAccessible::RadioButton;
     case IAccessible::Role::ComboBox: return QAccessible::ComboBox;
+    case IAccessible::Role::List: return QAccessible::List;
     case IAccessible::Role::ListItem: return QAccessible::ListItem;
     case IAccessible::Role::MenuItem: return QAccessible::MenuItem;
     case IAccessible::Role::Range: return QAccessible::Slider;
@@ -386,6 +393,51 @@ QString AccessibleItemInterface::attributes(int, int* startOffset, int* endOffse
     return QString();
 }
 
+bool AccessibleItemInterface::isSelected() const
+{
+    return m_object->item()->accessibleState(IAccessible::State::Selected);
+}
+
+QList<QAccessibleInterface*> AccessibleItemInterface::columnHeaderCells() const
+{
+    NOT_IMPLEMENTED;
+    return QList<QAccessibleInterface*>();
+}
+
+QList<QAccessibleInterface*> AccessibleItemInterface::rowHeaderCells() const
+{
+    NOT_IMPLEMENTED;
+    return QList<QAccessibleInterface*>();
+}
+
+int AccessibleItemInterface::columnIndex() const
+{
+    NOT_IMPLEMENTED;
+    return 0;
+}
+
+int AccessibleItemInterface::rowIndex() const
+{
+    return m_object->item()->accessibleRowIndex();
+}
+
+int AccessibleItemInterface::columnExtent() const
+{
+    NOT_IMPLEMENTED;
+    return 1;
+}
+
+int AccessibleItemInterface::rowExtent() const
+{
+    NOT_IMPLEMENTED;
+    return 1;
+}
+
+QAccessibleInterface* AccessibleItemInterface::table() const
+{
+    return parent();
+}
+
 void* AccessibleItemInterface::interface_cast(QAccessible::InterfaceType type)
 {
     QAccessible::Role itemRole = role();
@@ -393,6 +445,17 @@ void* AccessibleItemInterface::interface_cast(QAccessible::InterfaceType type)
         return static_cast<QAccessibleValueInterface*>(this);
     } else if (type == QAccessible::InterfaceType::TextInterface) {
         return static_cast<QAccessibleTextInterface*>(this);
+    }
+
+    bool isListType = type == QAccessible::InterfaceType::TableCellInterface;
+#ifdef Q_OS_WIN
+    //! NOTE: Without Action and Text interfaces NVDA doesn't work
+    isListType |= type == QAccessible::InterfaceType::ActionInterface;
+#endif
+
+    if (isListType && itemRole == QAccessible::ListItem) {
+        //! NOTE: Without Action and Text interfaces NVDA doesn't work
+        return static_cast<QAccessibleTableCellInterface*>(this);
     }
 
     //! NOTE Not implemented

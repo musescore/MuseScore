@@ -56,6 +56,7 @@ public:
         CheckBox,
         RadioButton,
         ComboBox,
+        List,
         ListItem,
         MenuItem,
         Range,
@@ -83,6 +84,8 @@ class AccessibleItem : public QObject, public QQmlParserStatus, public accessibi
     Q_PROPERTY(int selectionStart READ selectionStart WRITE setSelectionStart NOTIFY selectionStartChanged)
     Q_PROPERTY(int selectionEnd READ selectionEnd WRITE setSelectionEnd NOTIFY selectionEndChanged)
     Q_PROPERTY(int cursorPosition READ cursorPosition WRITE setCursorPosition NOTIFY cursorPositionChanged)
+
+    Q_PROPERTY(int row READ row WRITE setRow NOTIFY rowChanged)
 
     Q_PROPERTY(bool ignored READ ignored WRITE setIgnored NOTIFY ignoredChanged)
     Q_PROPERTY(QQuickItem * visualItem READ visualItem WRITE setVisualItem NOTIFY visualItemChanged)
@@ -133,6 +136,9 @@ public:
     QString accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const override;
     int accessibleCharacterCount() const override;
 
+    // ListView item Interface
+    int accessibleRowIndex() const override;
+
     async::Channel<Property, Val> accessiblePropertyChanged() const override;
 
     void setState(State st, bool arg) override;
@@ -159,6 +165,8 @@ public:
     int selectionEnd() const;
     int cursorPosition() const;
 
+    int row() const;
+
     bool ignored() const;
     QQuickItem* visualItem() const;
 
@@ -178,6 +186,7 @@ public slots:
     void setSelectionStart(int selectionStart);
     void setSelectionEnd(int selectionEnd);
     void setCursorPosition(int cursorPosition);
+    void setRow(int row);
     void setIgnored(bool ignored);
     void setVisualItem(QQuickItem* item);
     void setWindow(QWindow* window);
@@ -196,6 +205,7 @@ signals:
     void selectionStartChanged();
     void selectionEndChanged();
     void cursorPositionChanged();
+    void rowChanged();
     void ignoredChanged(bool ignored);
     void visualItemChanged(QQuickItem* item);
     void stateChanged();
@@ -224,6 +234,7 @@ private:
     int m_selectionStart = 0;
     int m_selectionEnd = 0;
     int m_cursorPosition = 0;
+    int m_row = 0;
     bool m_ignored = false;
     QQuickItem* m_visualItem = nullptr;
     QWindow* m_window = nullptr;

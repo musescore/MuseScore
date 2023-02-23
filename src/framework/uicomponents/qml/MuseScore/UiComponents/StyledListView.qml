@@ -40,6 +40,37 @@ ListView {
     ScrollBar.vertical: root.arrowControlsAvailable ? null : scrollBarComp.createObject(root)
     ScrollBar.horizontal: root.arrowControlsAvailable ? null : scrollBarComp.createObject(root)
 
+    property alias navigation: navPanel
+    property alias accessible: navPanel.accessible
+
+    NavigationPanel {
+        id: navPanel
+        name: root.objectName !== "" ? root.objectName : "ListView"
+        enabled: root.enabled && root.visible
+
+        accessible.role: MUAccessible.List
+        accessible.name: "List"
+        accessible.visualItem: root
+        accessible.enabled: navPanel.enabled
+
+        onNavigationEvent: function(event) {
+            if (event.type === NavigationEvent.AboutActive) {
+                for (var i = 0; i < root.count; ++i) {
+                    var item = root.itemAtIndex(i)
+                    if (item.isSelected) {
+                        event.setData("controlIndex", [item.navigation.row, item.navigation.column])
+                        return
+                    }
+                }
+
+                var firstItem = root.itemAtIndex(0)
+                if (Boolean(firstItem)) {
+                    event.setData("controlIndex", [firstItem.navigation.row, firstItem.navigation.column])
+                }
+            }
+        }
+    }
+
     Component {
         id: scrollBarComp
 

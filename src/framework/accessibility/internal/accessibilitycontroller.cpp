@@ -662,6 +662,11 @@ int AccessibilityController::accessibleCharacterCount() const
     return 0;
 }
 
+int AccessibilityController::accessibleRowIndex() const
+{
+    return 0;
+}
+
 mu::async::Channel<IAccessible::Property, mu::Val> AccessibilityController::accessiblePropertyChanged() const
 {
     static async::Channel<IAccessible::Property, Val> ch;
