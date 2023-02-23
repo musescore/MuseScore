@@ -71,7 +71,7 @@ public:
     size_t nstaves() const;
     bool isEmpty() const;
 
-    TracksMap& tracksMapping();
+    const TracksMap& tracksMapping();
     void setTracksMapping(const TracksMap& tracksMapping);
 
     void setVoiceVisible(Staff* staff, int voiceIndex, bool visible);

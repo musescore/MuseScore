@@ -125,7 +125,7 @@ private:
 
     friend class Excerpt;
     void setVoiceVisible(voice_idx_t voice, bool visible);
-    void updateVisibilityVoices(Staff* masterStaff, const TracksMap& tracks);
+    void updateVisibilityVoices(const Staff* masterStaff, const TracksMap& tracks);
 
 public:
     Staff* clone() const override;
@@ -303,7 +303,7 @@ public:
     bool playbackVoice(int voice) const;
     void setPlaybackVoice(int voice, bool val);
 
-    std::array<bool, VOICES> visibilityVoices() const;
+    const std::array<bool, VOICES>& visibilityVoices() const;
     bool isVoiceVisible(voice_idx_t voice) const;
     bool canDisableVoice() const;
 

@@ -108,7 +108,7 @@ private:
     void removeMissingParts(const PartInstrumentList& newParts);
     void appendNewParts(const PartInstrumentList& parts);
     void updateSoloist(const PartInstrumentList& parts);
-    void sortParts(const PartInstrumentList& parts, const std::vector<mu::engraving::Staff*>& originalStaves);
+    void sortParts(const PartInstrumentList& parts);
 
     int resolveNewInstrumentNumber(const InstrumentTemplate& instrument, const PartInstrumentList& allNewInstruments) const;
 
