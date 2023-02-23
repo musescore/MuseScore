@@ -573,6 +573,8 @@ void MasterNotation::resetExcerpt(IExcerptNotationPtr excerptNotation)
     mu::engraving::Excerpt* newExcerpt = new mu::engraving::Excerpt(*oldExcerpt, false);
     masterScore()->initAndAddExcerpt(newExcerpt, false);
 
+    newExcerpt->excerptScore()->setIsOpen(oldExcerpt->excerptScore()->isOpen());
+
     get_impl(excerptNotation)->reinit(newExcerpt);
 
     masterScore()->setExcerptsChanged(false);
