@@ -71,7 +71,7 @@ public:
     size_t nstaves() const;
     bool isEmpty() const;
 
-    TracksMap& tracksMapping();
+    const TracksMap& tracksMapping();
     void setTracksMapping(const TracksMap& tracksMapping);
 
     void setVoiceVisible(Staff* staff, int voiceIndex, bool visible);
@@ -97,7 +97,7 @@ private:
     void setInited(bool inited);
     void writeNameToMetaTags();
 
-    void updateTracksMapping(bool voicesVisibilityChanged = false);
+    void updateTracksMapping();
 
     MasterScore* m_masterScore = nullptr;
     Score* m_excerptScore = nullptr;
