@@ -35,9 +35,11 @@ public:
     ~ExcerptNotation() override;
 
     void init();
+    void reinit(engraving::Excerpt* newExcerpt);
 
-    mu::engraving::Excerpt* excerpt() const;
+    engraving::Excerpt* excerpt() const;
 
+    bool isInited() const override;
     bool isCustom() const override;
     bool isEmpty() const override;
 

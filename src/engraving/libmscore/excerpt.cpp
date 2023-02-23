@@ -66,13 +66,16 @@
 using namespace mu;
 using namespace mu::engraving;
 
-Excerpt::Excerpt(const Excerpt& ex, bool copyPartScore)
-    : m_masterScore(ex.m_masterScore), m_name(ex.m_name), m_parts(ex.m_parts), m_tracksMapping(ex.m_tracksMapping)
+Excerpt::Excerpt(const Excerpt& ex, bool copyContents)
+    : m_masterScore(ex.m_masterScore), m_name(ex.m_name), m_parts(ex.m_parts), m_initialPartId(ex.m_initialPartId)
 {
-    m_excerptScore = (copyPartScore && ex.m_excerptScore) ? ex.m_excerptScore->clone() : nullptr;
+    if (copyContents) {
+        m_tracksMapping = ex.m_tracksMapping;
+        m_excerptScore = ex.m_excerptScore ? ex.m_excerptScore->clone() : nullptr;
 
-    if (m_excerptScore) {
-        m_excerptScore->setExcerpt(this);
+        if (m_excerptScore) {
+            m_excerptScore->setExcerpt(this);
+        }
     }
 }
 
@@ -1450,6 +1453,24 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     }
                 }
 
+                for (EngravingItem* e : oseg->annotations()) {
+                    if (e->generated()) {
+                        continue;
+                    }
+                    bool systemObject = e->systemFlag() && e->track() == 0;
+                    bool alreadyCloned = bool(e->findLinkedInScore(score));
+                    bool cloneAnnotation = e->track() == srcTrack || (systemObject && !alreadyCloned);
+                    if (!cloneAnnotation) {
+                        continue;
+                    }
+                    EngravingItem* ne1 = e->linkedClone();
+                    ne1->setTrack(dstTrack);
+                    ne1->setParent(ns);
+                    ne1->setScore(score);
+                    ne1->styleChanged();
+                    addElement(ne1);
+                }
+
                 EngravingItem* oe = oseg->element(srcTrack);
                 if (oe == 0 || oe->generated()) {
                     continue;
@@ -1478,21 +1499,6 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         }
                         ncr->setTuplet(nt);
                         nt->add(ncr);
-                    }
-
-                    for (EngravingItem* e : oseg->annotations()) {
-                        if (e->generated()
-                            || (e->track() != srcTrack && !(e->systemFlag() && e->track() == 0)) // system items must be cloned even if they are on different tracks
-                            || (e->systemFlag() && e->findLinkedInScore(score))) { // ...but only once!
-                            continue;
-                        }
-
-                        EngravingItem* ne1 = e->linkedClone();
-                        ne1->setTrack(dstTrack);
-                        ne1->setParent(ns);
-                        ne1->setScore(score);
-                        ne1->styleChanged();
-                        addElement(ne1);
                     }
                     if (oe->isChord()) {
                         Chord* och = toChord(ocr);
