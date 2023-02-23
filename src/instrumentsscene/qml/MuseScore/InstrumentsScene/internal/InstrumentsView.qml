@@ -31,7 +31,7 @@ Item {
     id: root
 
     property var instrumentsModel
-    property alias navigation: navPanel
+    property alias navigation: instrumentsView.navigation
 
     property alias searching: searchField.hasText
 
@@ -43,25 +43,6 @@ Item {
 
     function focusInstrument(instrumentIndex) {
         instrumentsView.positionViewAtIndex(instrumentIndex, ListView.Beginning)
-    }
-
-    NavigationPanel {
-        id: navPanel
-        name: "InstrumentsView"
-        direction: NavigationPanel.Vertical
-        enabled: root.enabled && root.visible
-
-        onNavigationEvent: function(event) {
-            if (event.type === NavigationEvent.AboutActive) {
-                for (var i = 0; i < instrumentsView.count; ++i) {
-                    var item = instrumentsView.itemAtIndex(i)
-                    if (item.isSelected) {
-                        event.setData("controlIndex", [item.navigation.row, item.navigation.column])
-                        return
-                    }
-                }
-            }
-        }
     }
 
     StyledTextLabel {
@@ -83,7 +64,7 @@ Item {
         anchors.right: parent.right
 
         navigation.name: "SearchInstruments"
-        navigation.panel: navPanel
+        navigation.panel: instrumentsView.navigation
         navigation.row: 1
 
         onSearchTextChanged: {
@@ -102,20 +83,23 @@ Item {
 
         model: root.instrumentsModel
 
+        accessible.name: instrumentsLabel.text
+
         delegate: ListItemBlank {
             id: item
 
+            isSelected: model.isSelected
+
             navigation.name: model.name
-            navigation.panel: navPanel
+            navigation.panel: instrumentsView.navigation
             navigation.row: 2 + model.index
             navigation.accessible.name: itemTitleLabel.text
             navigation.accessible.description: model.description
+            navigation.accessible.row: model.index
 
             onNavigationTriggered: {
                 root.addSelectedInstrumentsToScoreRequested()
             }
-
-            isSelected: model.isSelected
 
             StyledTextLabel {
                 id: itemTitleLabel

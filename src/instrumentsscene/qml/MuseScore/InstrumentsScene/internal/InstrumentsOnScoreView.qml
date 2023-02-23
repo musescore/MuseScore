@@ -34,7 +34,7 @@ Item {
     readonly property alias isMovingUpAvailable: instrumentsOnScoreModel.isMovingUpAvailable
     readonly property alias isMovingDownAvailable: instrumentsOnScoreModel.isMovingDownAvailable
 
-    property alias navigation: navPanel
+    property alias navigation: instrumentsView.navigation
 
     function instruments() {
         return instrumentsOnScoreModel.instruments()
@@ -68,13 +68,6 @@ Item {
         instrumentsOnScoreModel.load()
     }
 
-    NavigationPanel {
-        id: navPanel
-        name: "InstrumentsOnScoreView"
-        direction: NavigationPanel.Both
-        enabled: root.enabled && root.visible
-    }
-
     StyledTextLabel {
         id: instrumentsLabel
 
@@ -99,7 +92,7 @@ Item {
             Layout.fillWidth: true
 
             navigation.name: "Orders"
-            navigation.panel: navPanel
+            navigation.panel: instrumentsView.navigation
             navigation.row: 0
             navigation.column: 0
 
@@ -118,7 +111,7 @@ Item {
             Layout.preferredWidth: width
 
             navigation.name: "Delete"
-            navigation.panel: navPanel
+            navigation.panel: instrumentsView.navigation
             navigation.row: 0
             navigation.column: 1
 
@@ -144,17 +137,20 @@ Item {
 
         model: instrumentsOnScoreModel
 
+        accessible.name: instrumentsLabel.text
+
         delegate: ListItemBlank {
             id: item
 
             isSelected: model.isSelected
 
             navigation.name: model.name
-            navigation.panel: navPanel
+            navigation.panel: instrumentsView.navigation
             navigation.row: 1 + model.index
             navigation.column: 0
             navigation.accessible.name: itemTitleLabel.text
             navigation.accessible.description: model.description
+            navigation.accessible.row: model.index
 
             StyledTextLabel {
                 id: itemTitleLabel
@@ -181,7 +177,7 @@ Item {
                 visible: model.isSelected
 
                 navigation.name: model.name + "MakeSoloist"
-                navigation.panel: navPanel
+                navigation.panel: instrumentsView.navigation
                 navigation.row: 1 + model.index
                 navigation.column: 1
 
