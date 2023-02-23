@@ -341,7 +341,6 @@ Sid GradualTempoChangeSegment::getPropertyStyle(Pid id) const
 void GradualTempoChangeSegment::layout()
 {
     TextLineBaseSegment::layout();
-    movePosY(-tempoChange()->lineWidth() / 2); // correct y-pos for linewidth
     if (isStyled(Pid::OFFSET)) {
         roffset() = tempoChange()->propertyDefault(Pid::OFFSET).value<PointF>();
     }

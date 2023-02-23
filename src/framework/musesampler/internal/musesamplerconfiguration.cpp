@@ -51,9 +51,6 @@ static io::path_t DEFAULT_PATH()
 
 #endif
 
-static const std::string MINIMUM_SUPPORTED_VERSION = "0.2.2";
-static const std::string MAXIMUM_SUPPORTED_VERSION = "0.4.0";
-
 // If installed on the system instead of user dir...do this as a backup
 io::path_t MuseSamplerConfiguration::backupLibraryPath() const
 {
@@ -69,14 +66,4 @@ io::path_t MuseSamplerConfiguration::userLibraryPath() const
     }
 
     return DEFAULT_PATH();
-}
-
-std::string MuseSamplerConfiguration::minimumSupportedVersion() const
-{
-    return MINIMUM_SUPPORTED_VERSION;
-}
-
-std::string MuseSamplerConfiguration::maximumSupportedVersion() const
-{
-    return MAXIMUM_SUPPORTED_VERSION;
 }
