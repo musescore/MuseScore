@@ -1454,12 +1454,15 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 }
 
                 for (EngravingItem* e : oseg->annotations()) {
-                    if (e->generated()
-                        || (e->track() != srcTrack && !(e->systemFlag() && e->track() == 0)) // system items must be cloned even if they are on different tracks
-                        || (e->track() != srcTrack && e->systemFlag() && e->findLinkedInScore(score))) { // ...but only once!
+                    if (e->generated()) {
                         continue;
                     }
-
+                    bool systemObject = e->systemFlag() && e->track() == 0;
+                    bool alreadyCloned = bool(e->findLinkedInScore(score));
+                    bool cloneAnnotation = e->track() == srcTrack || (systemObject && !alreadyCloned);
+                    if (!cloneAnnotation) {
+                        continue;
+                    }
                     EngravingItem* ne1 = e->linkedClone();
                     ne1->setTrack(dstTrack);
                     ne1->setParent(ns);
