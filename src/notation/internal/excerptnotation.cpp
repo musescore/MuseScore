@@ -56,6 +56,21 @@ void ExcerptNotation::init()
     m_inited = true;
 }
 
+void ExcerptNotation::reinit(engraving::Excerpt* newExcerpt)
+{
+    m_inited = false;
+    m_excerpt = newExcerpt;
+
+    init();
+
+    notifyAboutNotationChanged();
+}
+
+bool ExcerptNotation::isInited() const
+{
+    return m_inited;
+}
+
 bool ExcerptNotation::isCustom() const
 {
     return !m_excerpt->initialPartId().isValid();

@@ -43,7 +43,7 @@ class Excerpt
 {
 public:
     Excerpt(MasterScore* masterScore = nullptr) { m_masterScore = masterScore; }
-    Excerpt(const Excerpt& ex, bool copyPartScore = true);
+    Excerpt(const Excerpt& ex, bool copyContents = true);
 
     ~Excerpt();
 

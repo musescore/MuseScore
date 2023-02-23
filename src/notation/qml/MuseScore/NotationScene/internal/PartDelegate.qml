@@ -34,7 +34,8 @@ ListItemBlank {
 
     property int currentPartIndex: -1
 
-    property bool isCustom: false
+    property bool canReset: false
+    property bool canDelete: false
 
     property int sideMargin: 0
 
@@ -42,6 +43,7 @@ ListItemBlank {
     navigation.accessible.name: title
 
     signal copyPartRequested()
+    signal resetPartRequested()
     signal removePartRequested()
     signal partClicked()
 
@@ -160,10 +162,13 @@ ListItemBlank {
 
         MenuButton {
             Component.onCompleted: {
-                var operations = [ { "id": "duplicate", "title": qsTrc("notation", "Duplicate") },
-                                   { "id": "rename", "title": qsTrc("notation", "Rename") }]
+                var operations = [
+                            { "id": "duplicate", "title": qsTrc("notation", "Duplicate") },
+                            { "id": "rename", "title": qsTrc("notation", "Rename") },
+                            { "id": "reset", "title": qsTrc("notation", "Reset"), "enabled": root.canReset }
+                        ]
 
-                if (root.isCustom) {
+                if (root.canDelete) {
                     operations.push({ "id": "delete", "title": qsTrc("notation", "Delete") })
                 }
 
@@ -182,6 +187,9 @@ ListItemBlank {
                     break
                 case "rename":
                     root.startEditTitle()
+                    break
+                case "reset":
+                    root.resetPartRequested()
                     break
                 case "delete":
                     root.removePartRequested()
