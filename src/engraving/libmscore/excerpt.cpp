@@ -183,7 +183,7 @@ bool Excerpt::isEmpty() const
     return excerptScore() ? excerptScore()->parts().empty() : true;
 }
 
-TracksMap& Excerpt::tracksMapping()
+const TracksMap& Excerpt::tracksMapping()
 {
     updateTracksMapping();
 
@@ -199,17 +199,18 @@ void Excerpt::setTracksMapping(const TracksMap& tracksMapping)
     m_tracksMapping = tracksMapping;
 
     for (Staff* staff : excerptScore()->staves()) {
-        Staff* masterStaff = m_masterScore->staffById(staff->id());
+        const Staff* masterStaff = m_masterScore->staffById(staff->id());
         if (!masterStaff) {
             continue;
         }
+
         staff->updateVisibilityVoices(masterStaff, m_tracksMapping);
     }
 }
 
 void Excerpt::updateTracksMapping()
 {
-    Score* score = excerptScore();
+    const Score* score = excerptScore();
     if (!score) {
         return;
     }
@@ -228,8 +229,10 @@ void Excerpt::updateTracksMapping()
         staff_idx_t staffIdx = staff->idx();
 
         voice_idx_t voice = 0;
-        for (voice_idx_t i = 0; i < VOICES; i++) {
-            if (!staff->isVoiceVisible(i)) {
+        const std::array<bool, VOICES>& voicesVisibility = staff->visibilityVoices();
+
+        for (voice_idx_t i = 0; i < VOICES; ++i) {
+            if (!voicesVisibility[i]) {
                 continue;
             }
 
@@ -1566,7 +1569,7 @@ std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>&
         excerpt->parts().push_back(part);
 
         for (track_idx_t i = part->startTrack(), j = 0; i < part->endTrack(); ++i, ++j) {
-            excerpt->tracksMapping().insert({ i, j });
+            excerpt->m_tracksMapping.insert({ i, j });
         }
 
         String name = formatName(part->partName(), result);

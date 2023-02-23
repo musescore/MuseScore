@@ -281,7 +281,7 @@ void Staff::setPlaybackVoice(int voice, bool val)
     _playbackVoice[voice] = val;
 }
 
-std::array<bool, VOICES> Staff::visibilityVoices() const
+const std::array<bool, VOICES>& Staff::visibilityVoices() const
 {
     return _visibilityVoices;
 }
@@ -317,7 +317,7 @@ bool Staff::canDisableVoice() const
     return countOfVisibleVoices > 1;
 }
 
-void Staff::updateVisibilityVoices(Staff* masterStaff, const TracksMap& tracks)
+void Staff::updateVisibilityVoices(const Staff* masterStaff, const TracksMap& tracks)
 {
     if (tracks.empty()) {
         _visibilityVoices = { true, true, true, true };
@@ -326,10 +326,13 @@ void Staff::updateVisibilityVoices(Staff* masterStaff, const TracksMap& tracks)
 
     std::array<bool, VOICES> voices{ false, false, false, false };
 
+    staff_idx_t masterStaffIdx = masterStaff->idx();
+    staff_idx_t staffIdx = idx();
+
     voice_idx_t voiceIndex = 0;
     for (voice_idx_t voice = 0; voice < VOICES; voice++) {
-        std::vector<track_idx_t> masterStaffTracks = mu::values(tracks, masterStaff->idx() * VOICES + voice % VOICES);
-        bool isVoiceVisible = mu::contains(masterStaffTracks, idx() * VOICES + voiceIndex % VOICES);
+        std::vector<track_idx_t> masterStaffTracks = mu::values(tracks, masterStaffIdx * VOICES + voice % VOICES);
+        bool isVoiceVisible = mu::contains(masterStaffTracks, staffIdx * VOICES + voiceIndex % VOICES);
         if (isVoiceVisible) {
             voices[voice] = true;
             voiceIndex++;

@@ -230,7 +230,7 @@ void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& 
     removeMissingParts(parts);
     appendNewParts(parts);
     updateSoloist(parts);
-    sortParts(parts, score()->staves());
+    sortParts(parts);
     setBracketsAndBarlines();
 
     apply();
@@ -681,7 +681,7 @@ void NotationParts::removeParts(const IDList& partsIds)
         parts << pi;
     }
 
-    sortParts(parts, score()->staves());
+    sortParts(parts);
 
     setBracketsAndBarlines();
 
@@ -867,7 +867,7 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
     endInteractionWithScore();
     startEdit();
 
-    sortParts(parts, score()->staves());
+    sortParts(parts);
     setBracketsAndBarlines();
 
     apply();
@@ -1059,12 +1059,11 @@ void NotationParts::updateSoloist(const PartInstrumentList& parts)
     }
 }
 
-void NotationParts::sortParts(const PartInstrumentList& parts, const std::vector<mu::engraving::Staff*>& originalStaves)
+void NotationParts::sortParts(const PartInstrumentList& parts)
 {
     TRACEFUNC;
 
     std::vector<mu::engraving::staff_idx_t> staffMapping;
-    std::vector<mu::engraving::staff_idx_t> trackMapping;
     int runningStaffIndex = 0;
 
     int partIndex = 0;
@@ -1073,8 +1072,6 @@ void NotationParts::sortParts(const PartInstrumentList& parts, const std::vector
 
         for (mu::engraving::Staff* staff : currentPart->staves()) {
             mu::engraving::staff_idx_t actualStaffIndex = mu::indexOf(score()->staves(), staff);
-
-            trackMapping.push_back(mu::indexOf(originalStaves, staff));
             staffMapping.push_back(actualStaffIndex);
             ++runningStaffIndex;
         }
@@ -1082,8 +1079,6 @@ void NotationParts::sortParts(const PartInstrumentList& parts, const std::vector
     }
 
     score()->undo(new mu::engraving::SortStaves(score(), staffMapping));
-
-    score()->undo(new mu::engraving::MapExcerptTracks(score(), trackMapping));
 }
 
 int NotationParts::resolveNewInstrumentNumber(const InstrumentTemplate& instrument,

@@ -1261,47 +1261,6 @@ void SortStaves::undo(EditData*)
 }
 
 //---------------------------------------------------------
-//   MapExcerptTracks
-//---------------------------------------------------------
-
-MapExcerptTracks::MapExcerptTracks(Score* s, const std::vector<staff_idx_t>& l)
-{
-    score = s;
-
-    /*
-     *    In list l [x] represents the previous index of the staffIdx x.
-     *    If the a staff x is a newly added staff, l[x] = -1.
-     *    For the "undo" all staves which value -1 are *not* remapped since
-     *    it is assumed this staves are removed later.
-     */
-    staff_idx_t maxIndex = 0;
-    for (staff_idx_t i : l) {
-        maxIndex = std::max(i, maxIndex);
-    }
-
-    for (staff_idx_t i = 0; i <= maxIndex; ++i) {
-        rlist.push_back(mu::nidx);
-    }
-
-    for (staff_idx_t i = 0; i < l.size(); ++i) {
-        if (l[i] != mu::nidx) {
-            rlist[l[i]] = i;
-        }
-    }
-    list = l;
-}
-
-void MapExcerptTracks::redo(EditData*)
-{
-    score->mapExcerptTracks(list);
-}
-
-void MapExcerptTracks::undo(EditData*)
-{
-    score->mapExcerptTracks(rlist);
-}
-
-//---------------------------------------------------------
 //   ChangePitch
 //---------------------------------------------------------
 
