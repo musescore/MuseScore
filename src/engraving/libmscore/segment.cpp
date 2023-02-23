@@ -2684,7 +2684,7 @@ Fraction Segment::shortestChordRest() const
     Fraction shortest = measure()->ticks(); // Initializing at the highest possible value ( = time signature of the measure)
     Fraction cur = measure()->ticks();
     for (auto elem : elist()) {
-        if (!elem || !elem->staff()->show() || !elem->isChordRest() || !elem->visible()) {
+        if (!elem || !elem->staff()->show() || !elem->isChordRest() || !elem->visible() || (elem->isRest() && toRest(elem)->isGap())) {
             if (!(elem && elem->isRest() && toRest(elem)->isFullMeasureRest())) {
                 continue;
             }
