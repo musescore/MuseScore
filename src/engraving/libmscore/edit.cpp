@@ -32,6 +32,7 @@
 #include "bracket.h"
 #include "breath.h"
 #include "chord.h"
+#include "chordline.h"
 #include "clef.h"
 #include "excerpt.h"
 #include "factory.h"
@@ -5675,6 +5676,13 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 ne->setTrack(ntrack);
                 ChordRest* ncr = toChordRest(seg->element(ntrack));
                 ne->setParent(ncr);
+                if (element->isChordLine()) {
+                    ChordLine* oldChordLine = toChordLine(element);
+                    ChordLine* newChordLine = toChordLine(ne);
+                    // Chordline also needs to know the new note
+                    Note* newNote = toChord(ncr)->findNote(oldChordLine->note()->pitch());
+                    newChordLine->setNote(newNote);
+                }
                 undo(new AddElement(ne));
             }
             //
