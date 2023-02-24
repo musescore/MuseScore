@@ -44,7 +44,7 @@ void MuseSamplerResolver::init()
     }
 
     // Use fallback
-    path = configuration()->backupLibraryPath();
+    path = configuration()->fallbackLibraryPath();
     m_libHandler = std::make_shared<MuseSamplerLibHandler>(path);
     if (!checkLibrary()) {
         m_libHandler.reset();
