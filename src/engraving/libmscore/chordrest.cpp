@@ -400,6 +400,13 @@ EngravingItem* ChordRest::drop(EditData& data)
             bl->setGenerated(false);
 
             if (tick() == m->tick()) {
+                if (bl->barLineType() != BarLineType::START_REPEAT) {
+                    m = m->prevMeasure();
+                    if (!m) {
+                        delete e;
+                        return 0;
+                    }
+                }
                 return m->drop(data);
             }
 
