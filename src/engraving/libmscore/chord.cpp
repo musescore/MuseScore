@@ -4157,6 +4157,24 @@ void Chord::computeKerningExceptions()
     }
 }
 
+bool Chord::visible() const
+{
+    for (EngravingItem* child : childrenItems()) {
+        if (child->isGraceNotesGroup()) {
+            for (Chord* grace : *toGraceNotesGroup(child)) {
+                if (grace->visible()) {
+                    return true;
+                }
+            }
+            continue;
+        }
+        if (child->visible()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 //---------------------------------
 // GRACE NOTES
 //---------------------------------

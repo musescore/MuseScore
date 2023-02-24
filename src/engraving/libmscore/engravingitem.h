@@ -236,7 +236,7 @@ public:
     bool selected() const;
     virtual void setSelected(bool f);
 
-    bool visible() const { return !flag(ElementFlag::INVISIBLE); }
+    virtual bool visible() const { return !flag(ElementFlag::INVISIBLE); }
     virtual void setVisible(bool f) { setFlag(ElementFlag::INVISIBLE, !f); }
 
     bool isInteractionAvailable() const;
