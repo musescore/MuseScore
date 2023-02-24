@@ -48,8 +48,10 @@ QValidator::State IntInputValidator::validate(QString& inputStr, int& cursorPos)
 {
     QValidator::State state = Invalid;
 
-    if (inputStr.contains(QRegularExpression("^\\-?\\d{1,3}$"))) {
-        if (inputStr.contains(QRegularExpression("^\\-?0{2,3}"))
+    //maxDigits is the number of digits in the maximum absolute value between m_top and m_bottom.
+    int maxDigits = std::ceil(std::log10(std::max(std::abs(m_top), std::abs(m_bottom))));
+    if (inputStr.contains(QRegularExpression(QString("^\\-?\\d{1,%1}$").arg(maxDigits)))) {
+        if ((maxDigits >= 2 && inputStr.contains(QRegularExpression(QString("^\\-?0{2,%1}").arg(maxDigits))))
             || (inputStr.startsWith("-") && inputStr.toDouble() == 0.0)) {
             state = Intermediate;
         } else {
