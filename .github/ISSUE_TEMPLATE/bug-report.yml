@@ -61,22 +61,18 @@ body:
       label: Regression
       description: Did this work before?
       options:
-        - Yes, this used to work and now is broken 
+        - Yes, this used to work in Musescore 3.x and now is broken 
+        - Yes, this used to work in a previous version of Musescore 4.x
         - No, I don't think this worked before
         - I don't know
     validations: 
       required: true
-  - type: dropdown
+  - type: input
     id: os
     attributes:
       label: Operating system
       description: What OS does this bug occur on?
-      multiple: true
-      options:
-        - Windows 
-        - macOS
-        - Linux
-        - Other
+      placeholder: Windows 11, macOS 13, Ubuntu 22.04, etc.
     validations: 
       required: true
   - type: textarea
@@ -94,4 +90,5 @@ body:
           * For VSTs in particular: Where did you get the VSTs from? (link)
         * For engraving: sample score (MuseScore project), screenshots
         * For UI issues: Screenshots, screen recordings, system information, GPU drivers
+        * For regressions: The last MuseScore version (or even better: commit) that worked well. 
 
