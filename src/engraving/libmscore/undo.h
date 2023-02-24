@@ -408,24 +408,6 @@ public:
     UNDO_CHANGED_OBJECTS({ score })
 };
 
-class MapExcerptTracks : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, MapExcerptTracks)
-
-    Score* score = nullptr;
-    std::vector<staff_idx_t> list;
-    std::vector<staff_idx_t> rlist;
-
-public:
-    MapExcerptTracks(Score*, const std::vector<staff_idx_t>&);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
-
-    UNDO_TYPE(CommandType::MapExcerptTracks)
-    UNDO_NAME("MapExcerptTracks")
-    UNDO_CHANGED_OBJECTS({ score })
-};
-
 class ChangePitch : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangePitch)
