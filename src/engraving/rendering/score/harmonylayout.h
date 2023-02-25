@@ -68,6 +68,8 @@ private:
     static void layoutModifierParentheses(const Harmony* item);
 
     static void render(Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx);
+    static void doRenderSingleHarmony(Harmony* item, Harmony::LayoutData* ldata, HarmonyRenderCtx& harmonyCtx, int rootTpc, int bassTpc,
+                                      const LayoutContext& ctx);
     static void renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldata, HarmonyRenderCtx& harmonyCtx, const LayoutContext& ctx);
     static void renderRomanNumeral(Harmony* item, Harmony::LayoutData* ldata);
     static void render(Harmony* item, Harmony::LayoutData* ldata, const String& str, HarmonyRenderCtx& harmonyCtx);

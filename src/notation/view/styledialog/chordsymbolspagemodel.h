@@ -60,6 +60,8 @@ class ChordSymbolsPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * harmonyVoiceLiteral READ harmonyVoiceLiteral CONSTANT)
     Q_PROPERTY(StyleItem * harmonyVoicing READ harmonyVoicing CONSTANT)
     Q_PROPERTY(StyleItem * harmonyDuration READ harmonyDuration CONSTANT)
+
+    Q_PROPERTY(StyleItem * displayCapoChords READ displayCapoChords CONSTANT)
     Q_PROPERTY(StyleItem * capoPosition READ capoPosition CONSTANT)
 
     Q_PROPERTY(bool isCustomXml READ isCustomXml NOTIFY changePreset)
@@ -115,6 +117,9 @@ public:
     StyleItem* harmonyVoiceLiteral() const;
     StyleItem* harmonyVoicing() const;
     StyleItem* harmonyDuration() const;
+
+    StyleItem* displayCapoChords() const;
+    Q_INVOKABLE QVariantList possibleCapoDisplayOptions() const;
     StyleItem* capoPosition() const;
 
 signals:

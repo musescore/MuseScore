@@ -264,6 +264,7 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
                 for (ChordSymbolParen* outerParen : openingParenStack) {
                     outerParen->top = std::min(openingParen->top, outerParen->top);
                     outerParen->bottom = std::max(openingParen->bottom, outerParen->bottom);
+                    outerParen->closingParenPos = std::max(openingParen->closingParenPos, outerParen->closingParenPos);
                 }
             }
         } else if (TextSegment* textSeg = dynamic_cast<TextSegment*>(renderItem)) {
@@ -279,10 +280,12 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
                 rootRefHeight = height;
                 rootCapHeight = textSeg->capHeight();
             }
-            if (!openingParenStack.empty() && textSeg->font().type() != Font::Type::MusicSymbolText) {
+            if (!openingParenStack.empty()) {
                 ChordSymbolParen* topParen = openingParenStack.back();
-                topParen->top = std::min(topParen->top, textSeg->tightBoundingRect().translated(textSeg->pos()).y());
-                topParen->bottom = std::max(topParen->bottom, textSeg->pos().y());
+                if (textSeg->font().type() != Font::Type::MusicSymbolText) {
+                    topParen->top = std::min(topParen->top, textSeg->tightBoundingRect().translated(textSeg->pos()).y());
+                    topParen->bottom = std::max(topParen->bottom, textSeg->pos().y());
+                }
                 topParen->closingParenPos = std::max(topParen->closingParenPos, textSeg->x() + textSeg->width());
                 continue;
             }
@@ -491,20 +494,16 @@ void HarmonyLayout::renderRomanNumeral(Harmony* item, Harmony::LayoutData* ldata
     ldata->baseline = 0.0;
 }
 
-void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldata, HarmonyRenderCtx& harmonyCtx,
-                                        const LayoutContext& ctx)
+void HarmonyLayout::doRenderSingleHarmony(Harmony* item, Harmony::LayoutData* ldata, HarmonyRenderCtx& harmonyCtx, int rootTpc, int bassTpc,
+                                          const LayoutContext& ctx)
 {
-    harmonyCtx.hAlign = true;
     HarmonyInfo* info = harmonyCtx.info;
-
-    const MStyle& style = ctx.conf().style();
-
-    int capo = style.styleI(Sid::capoPosition);
-
     ChordList* chordList = info->chordList();
     if (!chordList) {
         return;
     }
+
+    const MStyle& style = ctx.conf().style();
 
     NoteCaseType rootCase = item->rootRenderCase(info);
     NoteCaseType bassCase = item->bassRenderCase();
@@ -514,16 +513,16 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
     const ChordDescription* cd = info->getDescription();
     const bool stackModifiers = style.styleB(Sid::verticallyStackModifiers) && !item->doNotStackModifiers();
 
-    if (item->harmonyType() == HarmonyType::STANDARD && tpcIsValid(info->rootTpc())) {
+    if (item->harmonyType() == HarmonyType::STANDARD && tpcIsValid(rootTpc)) {
         // render root
-        render(item, ldata, chordList->renderListRoot, harmonyCtx, ctx, info->rootTpc(), spelling, rootCase);
+        render(item, ldata, chordList->renderListRoot, harmonyCtx, ctx, rootTpc, spelling, rootCase);
         // render extension
         if (cd) {
             render(item, ldata, stackModifiers ? cd->renderListStacked : cd->renderList, harmonyCtx, ctx, 0);
         }
-    } else if (item->harmonyType() == HarmonyType::NASHVILLE && tpcIsValid(info->rootTpc())) {
+    } else if (item->harmonyType() == HarmonyType::NASHVILLE && tpcIsValid(rootTpc)) {
         // render function
-        render(item, ldata, chordList->renderListFunction, harmonyCtx, ctx, info->rootTpc(), spelling, bassCase);
+        render(item, ldata, chordList->renderListFunction, harmonyCtx, ctx, rootTpc, spelling, bassCase);
         double adjust = chordList->nominalAdjust();
         harmonyCtx.movey(adjust * item->magS() * item->spatium() * .2);
         // render extension
@@ -535,7 +534,7 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
     }
 
     // render bass
-    if (tpcIsValid(info->bassTpc())) {
+    if (tpcIsValid(bassTpc)) {
         const std::vector<RenderActionPtr>& bassNoteChordList
             = style.styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
 
@@ -545,15 +544,41 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
 
         if (hasModifierStack || is69) {
             render(item, ldata, { std::make_shared<RenderActionMove>(0.05, 0.0) }, harmonyCtx, ctx,
-                   info->bassTpc(), spelling, bassCase, item->bassScale());
+                   bassTpc, spelling, bassCase, item->bassScale());
         }
-        render(item, ldata, bassNoteChordList, harmonyCtx, ctx, info->bassTpc(), spelling, bassCase, item->bassScale());
+        render(item, ldata, bassNoteChordList, harmonyCtx, ctx, bassTpc, spelling, bassCase, item->bassScale());
+    }
+}
+
+void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldata, HarmonyRenderCtx& harmonyCtx,
+                                        const LayoutContext& ctx)
+{
+    harmonyCtx.hAlign = true;
+    const MStyle& style = ctx.conf().style();
+    HarmonyInfo* info = harmonyCtx.info;
+
+    int rootTpc = info->rootTpc();
+    int bassTpc = info->bassTpc();
+
+    DisplayCapoChordType displayCapo = style.styleV(Sid::displayCapoChords).value<DisplayCapoChordType>();
+
+    // render single if no capo or both
+
+    if (displayCapo == DisplayCapoChordType::BOTH || displayCapo == DisplayCapoChordType::CONCERT) {
+        doRenderSingleHarmony(item, ldata, harmonyCtx, rootTpc, bassTpc, ctx);
     }
 
-    if (tpcIsValid(info->rootTpc()) && capo > 0 && capo < 12) {
+    int capo = style.styleI(Sid::capoPosition);
+    if (capo == 0) {
+        return;
+    }
+
+    int capoRootTpc = Tpc::TPC_INVALID;
+    int capoBassTpc = Tpc::TPC_INVALID;
+    if (tpcIsValid(rootTpc) && capo > 0 && capo < 12) {
         int tpcOffset[] = { 0, 5, -2, 3, -4, 1, 6, -1, 4, -3, 2, -5 };
-        int capoRootTpc = info->rootTpc() + tpcOffset[capo];
-        int capoBassTpc = info->bassTpc();
+        capoRootTpc = rootTpc + tpcOffset[capo];
+        capoBassTpc = bassTpc;
 
         if (tpcIsValid(capoBassTpc)) {
             capoBassTpc += tpcOffset[capo];
@@ -574,21 +599,20 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
                 capoBassTpc -= 12;
             }
         }
+    }
 
-        render(item, ldata, SymId::csymParensLeftTall, harmonyCtx, ctx);
-        render(item, ldata, chordList->renderListRoot, harmonyCtx, ctx, capoRootTpc, spelling, rootCase);
-
-        // render extension
-        if (cd) {
-            render(item, ldata, stackModifiers ? cd->renderListStacked : cd->renderList, harmonyCtx, ctx,  0);
-        }
-
-        if (tpcIsValid(capoBassTpc)) {
-            const std::vector<RenderActionPtr>& bassNoteChordList
-                = style.styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
-            render(item, ldata, bassNoteChordList, harmonyCtx, ctx, capoBassTpc, spelling, bassCase, item->bassScale());
-        }
-        render(item, ldata, SymId::csymParensRightTall, harmonyCtx, ctx);
+    // Render parens if both
+    if (displayCapo == DisplayCapoChordType::BOTH) {
+        RenderActionParenPtr p = std::make_shared<RenderActionParenLeft>();
+        renderActionParen(item, p, harmonyCtx);
+    }
+    if (displayCapo == DisplayCapoChordType::BOTH || displayCapo == DisplayCapoChordType::TRANSPOSED) {
+        // render capo if both or capo
+        doRenderSingleHarmony(item, ldata, harmonyCtx, capoRootTpc, capoBassTpc, ctx);
+    }
+    if (displayCapo == DisplayCapoChordType::BOTH) {
+        RenderActionParenPtr p = std::make_shared<RenderActionParenRight>();
+        renderActionParen(item, p, harmonyCtx);
     }
 }
 

@@ -81,8 +81,12 @@ StyledFlickable {
         chordSymbolsModel.harmonyVoiceLiteral,
         chordSymbolsModel.harmonyVoicing,
         chordSymbolsModel.harmonyDuration,
-        chordSymbolsModel.capoPosition
     ];
+
+    property var capoStyles: [
+        chordSymbolsModel.displayCapoChords,
+        chordSymbolsModel.capoPosition
+    ]
 
     function resetStyles(styles) {
         for (let styleItem of styles) {
@@ -850,10 +854,51 @@ StyledFlickable {
                         }
                     }
                 }
+            }
+        }
+
+        StyledGroupBox {
+            Layout.fillWidth: true
+            Layout.minimumWidth: 500
+            title: qsTrc("notation/editstyle/chordsymbols", "Capo")
+
+            ColumnLayout {
+                spacing: 12
+                width: parent.width
 
                 RowLayout {
                     spacing: 6
                     Layout.fillWidth: true
+
+                    RadioButtonGroup {
+                        id: capoRadioButtonGroup
+                        Layout.fillWidth: true
+                        orientation: ListView.Vertical
+                        model: chordSymbolsModel.possibleCapoDisplayOptions()
+
+                        delegate: RoundedRadioButton {
+                            height: 30
+                            checked: modelData.value === chordSymbolsModel.displayCapoChords.value
+                            text: modelData.text ? modelData.text : ""
+
+                            onToggled: {
+                                chordSymbolsModel.displayCapoChords.value = modelData.value
+                            }
+                        }
+                    }
+
+                    FlatButton {
+                        Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                        icon: IconCode.UNDO
+                        enabled: isResetEnabled(root.capoStyles)
+                        onClicked: resetStyles(root.capoStyles)
+                    }
+                }
+
+                RowLayout {
+                    spacing: 6
+                    Layout.fillWidth: true
+                    enabled: chordSymbolsModel.displayCapoChords.value !== 0
 
                     StyledTextLabel {
                         Layout.preferredWidth: 120
