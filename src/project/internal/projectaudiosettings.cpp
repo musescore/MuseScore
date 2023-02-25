@@ -172,6 +172,11 @@ mu::ValNt<bool> ProjectAudioSettings::needSave() const
     return needSave;
 }
 
+void ProjectAudioSettings::markAsSaved()
+{
+    setNeedSave(false);
+}
+
 const SoundProfileName& ProjectAudioSettings::activeSoundProfile() const
 {
     return m_activeSoundProfileName;
@@ -237,8 +242,6 @@ mu::Ret ProjectAudioSettings::write(engraving::MscWriter& writer)
 
     QByteArray json = QJsonDocument(rootObj).toJson();
     writer.writeAudioSettingsJsonFile(ByteArray::fromQByteArrayNoCopy(json));
-
-    setNeedSave(false);
 
     return make_ret(Ret::Code::Ok);
 }

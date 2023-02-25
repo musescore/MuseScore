@@ -28,6 +28,7 @@
 #include "audio/audiotypes.h"
 #include "engraving/types/types.h"
 #include "playback/playbacktypes.h"
+#include "types/retval.h"
 
 namespace mu::project {
 class IProjectAudioSettings
@@ -62,6 +63,7 @@ public:
     virtual void removeTrackParams(const engraving::InstrumentTrackId& trackId) = 0;
 
     virtual mu::ValNt<bool> needSave() const = 0;
+    virtual void markAsSaved() = 0;
 
     virtual const playback::SoundProfileName& activeSoundProfile() const = 0;
     virtual void setActiveSoundProfile(const playback::SoundProfileName& profileName) = 0;

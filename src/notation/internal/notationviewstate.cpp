@@ -99,8 +99,6 @@ Ret NotationViewState::write(engraving::MscWriter& writer, const io::path_t& pat
     QByteArray json = QJsonDocument(rootObj).toJson();
     writer.writeViewSettingsJsonFile(ByteArray::fromQByteArrayNoCopy(json), pathPrefix);
 
-    setNeedSave(false);
-
     return make_ret(Ret::Code::Ok);
 }
 
@@ -176,6 +174,11 @@ bool NotationViewState::needSave() const
 async::Notification NotationViewState::needSaveChanged() const
 {
     return m_needSaveNotification;
+}
+
+void NotationViewState::markAsSaved()
+{
+    setNeedSave(false);
 }
 
 void NotationViewState::makeDefault()

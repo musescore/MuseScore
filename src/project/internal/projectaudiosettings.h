@@ -54,6 +54,7 @@ public:
     void removeTrackParams(const engraving::InstrumentTrackId& partId) override;
 
     mu::ValNt<bool> needSave() const override;
+    void markAsSaved() override;
 
     const playback::SoundProfileName& activeSoundProfile() const override;
     void setActiveSoundProfile(const playback::SoundProfileName& profileName) override;

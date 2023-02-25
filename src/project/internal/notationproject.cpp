@@ -240,6 +240,7 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
     // Set current if all success
     m_masterNotation->setMasterScore(masterScore);
 
+    // Load view settings (needs to be done after notations are created)
     m_masterNotation->notation()->viewState()->read(reader);
     for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
         excerpt->notation()->viewState()->read(reader, u"Excerpts/" + excerpt->name() + u"/");
@@ -285,9 +286,10 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
         score->loadStyle(stylePath.toQString());
     }
 
-    // Setup other stuff
+    // Setup audio settings
     m_projectAudioSettings->makeDefault();
 
+    // Setup view state
     m_masterNotation->notation()->viewState()->makeDefault();
     for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
         excerpt->notation()->viewState()->makeDefault();
@@ -329,9 +331,10 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
         return ret;
     }
 
-    // Setup other stuff
+    // Setup audio settings
     m_projectAudioSettings->makeDefault();
 
+    // Setup view state
     m_masterNotation->notation()->viewState()->makeDefault();
     for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
         excerpt->notation()->viewState()->makeDefault();
@@ -453,11 +456,7 @@ mu::Ret NotationProject::save(const io::path_t& path, SaveMode saveMode)
         Ret ret = saveScore(savePath, suffix);
         if (ret) {
             if (saveMode != SaveMode::SaveCopy) {
-                //! NOTE: order is important
-                m_isNewlyCreated = false;
-                m_masterNotation->setSaved(true);
-                setPath(savePath);
-                m_masterNotation->notation()->undoStack()->stackChanged().notify();
+                markAsSaved(savePath);
             }
         }
 
@@ -670,13 +669,14 @@ mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection)
         return make_ret(notation::Err::UnknownError);
     }
 
-    // Write other stuff
+    // Write audio settings
     Ret ret = m_projectAudioSettings->write(msczWriter);
     if (!ret) {
         LOGE() << "failed write project audio settings, err: " << ret.toString();
         return ret;
     }
 
+    // Write view settings
     m_masterNotation->notation()->viewState()->write(msczWriter);
     for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
         excerpt->notation()->viewState()->write(msczWriter, u"Excerpts/" + excerpt->name() + u"/");
@@ -770,6 +770,28 @@ bool NotationProject::isImported() const
 void NotationProject::markAsUnsaved()
 {
     m_masterNotation->masterScore()->setSaved(false);
+}
+
+void NotationProject::markAsSaved(const io::path_t& path)
+{
+    //! NOTE: order is important
+    m_isNewlyCreated = false;
+
+    // Mark engraving project as saved
+    m_masterNotation->setSaved(true);
+
+    // Mark audio settings as saved
+    m_projectAudioSettings->markAsSaved();
+
+    // Mark view settings as saved
+    m_masterNotation->notation()->viewState()->markAsSaved();
+    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
+        excerpt->notation()->viewState()->markAsSaved();
+    }
+
+    setPath(path);
+
+    m_masterNotation->notation()->undoStack()->stackChanged().notify();
 }
 
 mu::ValNt<bool> NotationProject::needSave() const

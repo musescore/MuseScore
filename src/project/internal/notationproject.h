@@ -106,6 +106,8 @@ private:
     Ret makeCurrentFileAsBackup();
     Ret writeProject(engraving::MscWriter& msczWriter, bool onlySelection);
 
+    void markAsSaved(const io::path_t& path);
+
     mu::engraving::EngravingProjectPtr m_engravingProject = nullptr;
     notation::IMasterNotationPtr m_masterNotation = nullptr;
     ProjectAudioSettingsPtr m_projectAudioSettings = nullptr;
