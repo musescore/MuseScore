@@ -457,13 +457,17 @@ Score* Score::clone()
     Excerpt* excerpt = new Excerpt(masterScore());
     excerpt->setName(name());
 
+    TracksMap tracks;
+
     for (Part* part : _parts) {
         excerpt->parts().push_back(part);
 
         for (track_idx_t track = part->startTrack(); track < part->endTrack(); ++track) {
-            excerpt->tracksMapping().insert({ track, track });
+            tracks.insert({ track, track });
         }
     }
+
+    excerpt->setTracksMapping(tracks);
 
     masterScore()->initAndAddExcerpt(excerpt, true);
     masterScore()->removeExcerpt(excerpt);
@@ -3041,25 +3045,6 @@ void Score::sortStaves(std::vector<staff_idx_t>& dst)
     }
     setLayoutAll();
     markInstrumentsAsPrimary(_parts);
-}
-
-//---------------------------------------------------------
-//   mapExcerptTracks
-//---------------------------------------------------------
-
-void Score::mapExcerptTracks(const std::vector<staff_idx_t>& dst)
-{
-    for (Excerpt* e : masterScore()->excerpts()) {
-        const TracksMap& tr = e->tracksMapping();
-        TracksMap tracks;
-        for (auto it = tr.begin(); it != tr.end(); ++it) {
-            staff_idx_t prvStaffIdx = it->first / VOICES;
-            staff_idx_t curStaffIdx = mu::indexOf(dst, prvStaffIdx);
-            int offset = static_cast<int>((curStaffIdx - prvStaffIdx) * VOICES);
-            tracks.insert({ it->first + offset, it->second });
-        }
-        e->setTracksMapping(tracks);
-    }
 }
 
 //---------------------------------------------------------

@@ -459,12 +459,40 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
         return true;
     }
 
+    static std::set<ElementType> breakSpannerTypes {
+        ElementType::VOLTA,
+        ElementType::GRADUAL_TEMPO_CHANGE,
+        ElementType::TEXTLINE,
+    };
+    // Break for spanners/textLines in this measure
     auto sl = ctx.score()->spannerMap().findOverlapping(m->tick().ticks(), m->endTick().ticks());
     for (auto i : sl) {
         Spanner* s = i.value;
-        // break for first measure of volta or textline and first measure *after* volta
-        if ((s->isVolta() || s->isGradualTempoChange() || s->isTextLine()) && (s->tick() == m->tick() || s->tick2() == m->tick())) {
+        Fraction spannerStart = s->tick();
+        Fraction spannerEnd = s->tick2();
+        Fraction measureStart = m->tick();
+        Fraction measureEnd = m->endTick();
+        bool spannerStartsInside = spannerStart >= measureStart && spannerStart < measureEnd;
+        bool spannerEndsInside = spannerEnd >= measureStart && spannerEnd < measureEnd;
+        if (mu::contains(breakSpannerTypes, s->type()) && (spannerStartsInside || spannerEndsInside)) {
             return true;
+        }
+    }
+    // Break for spanners/textLines starting or ending mid-way inside the *previous* measure
+    Measure* prevMeas = m->prevMeasure();
+    if (prevMeas) {
+        auto prevMeasSpanners = ctx.score()->spannerMap().findOverlapping(prevMeas->tick().ticks(), prevMeas->endTick().ticks());
+        for (auto i : prevMeasSpanners) {
+            Spanner* s = i.value;
+            Fraction spannerStart = s->tick();
+            Fraction spannerEnd = s->tick2();
+            Fraction measureStart = prevMeas->tick();
+            Fraction measureEnd = prevMeas->endTick();
+            bool spannerStartsInside = spannerStart > measureStart && spannerStart < measureEnd;
+            bool spannerEndsInside = spannerEnd > measureStart && spannerEnd < measureEnd;
+            if (mu::contains(breakSpannerTypes, s->type()) && (spannerStartsInside || spannerEndsInside)) {
+                return true;
+            }
         }
     }
 
@@ -501,16 +529,55 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
         }
     }
 
+    static std::set<ElementType> alwaysBreakTypes {
+        ElementType::TEMPO_TEXT,
+        ElementType::REHEARSAL_MARK
+    };
+    static std::set<ElementType> conditionalBreakTypes {
+        ElementType::HARMONY,
+        ElementType::STAFF_TEXT,
+        ElementType::SYSTEM_TEXT,
+        ElementType::TRIPLET_FEEL,
+        ElementType::PLAYTECH_ANNOTATION,
+        ElementType::INSTRUMENT_CHANGE
+    };
+
+    auto breakForAnnotation = [&](EngravingItem* e) {
+        if (mu::contains(alwaysBreakTypes, e->type())) {
+            return true;
+        }
+        bool breakForElement = e->systemFlag() || e->staff()->show();
+        if (mu::contains(conditionalBreakTypes, e->type()) && breakForElement) {
+            return true;
+        }
+        return false;
+    };
+
+    // Break for annotations found mid-way into the previous measure
+    if (prevMeas) {
+        for (Segment* s = prevMeas->first(); s; s = s->next()) {
+            for (EngravingItem* e : s->annotations()) {
+                if (!e->visible()) {
+                    continue;
+                }
+                bool isInMidMeasure = e->rtick() > Fraction(0, 1);
+                if (!isInMidMeasure) {
+                    continue;
+                }
+                if (breakForAnnotation(e)) {
+                    return true;
+                }
+            }
+        }
+    }
+
     for (Segment* s = m->first(); s; s = s->next()) {
+        // Break for annotations in this measure
         for (EngravingItem* e : s->annotations()) {
             if (!e->visible()) {
                 continue;
             }
-            if (e->isRehearsalMark()
-                || e->isTempoText()
-                || ((e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isTripletFeel() || e->isPlayTechAnnotation()
-                     || e->isInstrumentChange())
-                    && (e->systemFlag() || ctx.score()->staff(e->staffIdx())->show()))) {
+            if (breakForAnnotation(e)) {
                 return true;
             }
         }

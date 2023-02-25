@@ -794,7 +794,6 @@ public:
     void updateStaffIndex();
     void sortSystemObjects(std::vector<staff_idx_t>& dst);
     void sortStaves(std::vector<staff_idx_t>& dst);
-    void mapExcerptTracks(const std::vector<staff_idx_t>& l);
 
     bool showInvisible() const { return _showInvisible; }
     bool showUnprintable() const { return _showUnprintable; }

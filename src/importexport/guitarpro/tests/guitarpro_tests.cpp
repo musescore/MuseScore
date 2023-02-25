@@ -705,3 +705,15 @@ TEST_F(GuitarPro_Tests, gp5CapoFret) {
 TEST_F(GuitarPro_Tests, gpxUncompletedMeasure) {
     gpReadTest("UncompletedMeasure", "gpx");
 }
+TEST_F(GuitarPro_Tests, gpInstrumentChange) {
+    gpReadTest("instr-change", "gp");
+}
+TEST_F(GuitarPro_Tests, gpxInstrumentChange) {
+    gpReadTest("instr-change", "gpx");
+}
+TEST_F(GuitarPro_Tests, gpInstrumentChange1beat) {
+    gpReadTest("instr-change-1-beat", "gp");
+}
+TEST_F(GuitarPro_Tests, gpxInstrumentChange1beat) {
+    gpReadTest("instr-change-1-beat", "gpx");
+}

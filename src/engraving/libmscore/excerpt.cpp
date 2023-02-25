@@ -66,13 +66,16 @@
 using namespace mu;
 using namespace mu::engraving;
 
-Excerpt::Excerpt(const Excerpt& ex, bool copyPartScore)
-    : m_masterScore(ex.m_masterScore), m_name(ex.m_name), m_parts(ex.m_parts), m_tracksMapping(ex.m_tracksMapping)
+Excerpt::Excerpt(const Excerpt& ex, bool copyContents)
+    : m_masterScore(ex.m_masterScore), m_name(ex.m_name), m_parts(ex.m_parts), m_initialPartId(ex.m_initialPartId)
 {
-    m_excerptScore = (copyPartScore && ex.m_excerptScore) ? ex.m_excerptScore->clone() : nullptr;
+    if (copyContents) {
+        m_tracksMapping = ex.m_tracksMapping;
+        m_excerptScore = ex.m_excerptScore ? ex.m_excerptScore->clone() : nullptr;
 
-    if (m_excerptScore) {
-        m_excerptScore->setExcerpt(this);
+        if (m_excerptScore) {
+            m_excerptScore->setExcerpt(this);
+        }
     }
 }
 
@@ -183,7 +186,7 @@ bool Excerpt::isEmpty() const
     return excerptScore() ? excerptScore()->parts().empty() : true;
 }
 
-TracksMap& Excerpt::tracksMapping()
+const TracksMap& Excerpt::tracksMapping()
 {
     updateTracksMapping();
 
@@ -199,44 +202,44 @@ void Excerpt::setTracksMapping(const TracksMap& tracksMapping)
     m_tracksMapping = tracksMapping;
 
     for (Staff* staff : excerptScore()->staves()) {
-        Staff* masterStaff = m_masterScore->staffById(staff->id());
+        const Staff* masterStaff = m_masterScore->staffById(staff->id());
         if (!masterStaff) {
             continue;
         }
+
         staff->updateVisibilityVoices(masterStaff, m_tracksMapping);
     }
 }
 
-void Excerpt::updateTracksMapping(bool voicesVisibilityChanged)
+void Excerpt::updateTracksMapping()
 {
-    Score* score = excerptScore();
+    const Score* score = excerptScore();
     if (!score) {
         return;
     }
 
     TracksMap tracks;
 
-    if (m_cachedStaves == score->staves() && !voicesVisibilityChanged) {
-        return;
-    }
-
     TRACEFUNC;
 
-    m_cachedStaves = score->staves();
-
-    for (Staff* staff : m_cachedStaves) {
-        Staff* masterStaff = masterScore()->staffById(staff->id());
+    for (const Staff* staff : score->staves()) {
+        const Staff* masterStaff = masterScore()->staffById(staff->id());
         if (!masterStaff) {
             continue;
         }
 
+        staff_idx_t masterStaffIdx = masterStaff->idx();
+        staff_idx_t staffIdx = staff->idx();
+
         voice_idx_t voice = 0;
-        for (voice_idx_t i = 0; i < VOICES; i++) {
-            if (!staff->isVoiceVisible(i)) {
+        const std::array<bool, VOICES>& voicesVisibility = staff->visibilityVoices();
+
+        for (voice_idx_t i = 0; i < VOICES; ++i) {
+            if (!voicesVisibility[i]) {
                 continue;
             }
 
-            tracks.insert({ masterStaff->idx() * VOICES + i % VOICES, staff->idx() * VOICES + voice % VOICES });
+            tracks.insert({ masterStaffIdx* VOICES + i % VOICES, staffIdx * VOICES + voice % VOICES });
             voice++;
         }
     }
@@ -263,7 +266,7 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
 
     // update tracks
     staff->setVoiceVisible(voiceIndex, visible);
-    updateTracksMapping(true /*voicesVisibilityChanged*/);
+    updateTracksMapping();
 
     // clone staff
     Staff* staffCopy = Factory::createStaff(staff->part());
@@ -1420,6 +1423,24 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     }
                 }
 
+                for (EngravingItem* e : oseg->annotations()) {
+                    if (e->generated()) {
+                        continue;
+                    }
+                    bool systemObject = e->systemFlag() && e->track() == 0;
+                    bool alreadyCloned = bool(e->findLinkedInScore(score));
+                    bool cloneAnnotation = e->track() == srcTrack || (systemObject && !alreadyCloned);
+                    if (!cloneAnnotation) {
+                        continue;
+                    }
+                    EngravingItem* ne1 = e->linkedClone();
+                    ne1->setTrack(dstTrack);
+                    ne1->setParent(ns);
+                    ne1->setScore(score);
+                    ne1->styleChanged();
+                    addElement(ne1);
+                }
+
                 EngravingItem* oe = oseg->element(srcTrack);
                 if (oe == 0 || oe->generated()) {
                     continue;
@@ -1448,21 +1469,6 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         }
                         ncr->setTuplet(nt);
                         nt->add(ncr);
-                    }
-
-                    for (EngravingItem* e : oseg->annotations()) {
-                        if (e->generated()
-                            || (e->track() != srcTrack && !(e->systemFlag() && e->track() == 0)) // system items must be cloned even if they are on different tracks
-                            || (e->systemFlag() && e->findLinkedInScore(score))) { // ...but only once!
-                            continue;
-                        }
-
-                        EngravingItem* ne1 = e->linkedClone();
-                        ne1->setTrack(dstTrack);
-                        ne1->setParent(ns);
-                        ne1->setScore(score);
-                        ne1->styleChanged();
-                        addElement(ne1);
                     }
                     if (oe->isChord()) {
                         Chord* och = toChord(ocr);
@@ -1539,7 +1545,7 @@ std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>&
         excerpt->parts().push_back(part);
 
         for (track_idx_t i = part->startTrack(), j = 0; i < part->endTrack(); ++i, ++j) {
-            excerpt->tracksMapping().insert({ i, j });
+            excerpt->m_tracksMapping.insert({ i, j });
         }
 
         String name = formatName(part->partName(), result);

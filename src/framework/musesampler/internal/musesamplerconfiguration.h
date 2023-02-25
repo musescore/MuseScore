@@ -38,8 +38,6 @@ public:
     // Preferred local user install path; try this first.
     io::path_t userLibraryPath() const override;
 
-    std::string minimumSupportedVersion() const override;
-
 private:
     io::path_t defaultPath() const;
 };

@@ -98,6 +98,8 @@ QVariant PartListModel::data(const QModelIndex& index, int role) const
         return excerpt->name();
     case RoleIsSelected:
         return m_selectionModel->isSelected(index);
+    case RoleIsInited:
+        return excerpt->isInited();
     case RoleIsCustom:
         return excerpt->isCustom();
     }
@@ -115,6 +117,7 @@ QHash<int, QByteArray> PartListModel::roleNames() const
     static const QHash<int, QByteArray> roles {
         { RoleTitle, "title" },
         { RoleIsSelected, "isSelected" },
+        { RoleIsInited, "isInited" },
         { RoleIsCustom, "isCustom" }
     };
 
@@ -147,6 +150,38 @@ void PartListModel::selectPart(int partIndex)
     m_selectionModel->select(modelIndex);
 
     emit dataChanged(index(0), index(rowCount() - 1), { RoleIsSelected });
+}
+
+void PartListModel::resetPart(int partIndex)
+{
+    if (!isExcerptIndexValid(partIndex)) {
+        return;
+    }
+
+    if (!m_excerpts[partIndex]->isEmpty()) {
+        std::string question = mu::trc("notation", "Are you sure you want to reset this part?");
+
+        IInteractive::Button btn = interactive()->question("", question, {
+            IInteractive::Button::Yes, IInteractive::Button::No
+        }).standardButton();
+
+        if (btn != IInteractive::Button::Yes) {
+            return;
+        }
+    }
+
+    doResetPart(partIndex);
+}
+
+void PartListModel::doResetPart(int partIndex)
+{
+    if (!isExcerptIndexValid(partIndex)) {
+        return;
+    }
+
+    masterNotation()->resetExcerpt(m_excerpts[partIndex]);
+
+    emit dataChanged(index(partIndex), index(partIndex));
 }
 
 void PartListModel::removePart(int partIndex)
