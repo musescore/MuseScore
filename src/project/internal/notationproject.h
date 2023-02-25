@@ -117,6 +117,7 @@ private:
     async::Notification m_pathChanged;
 
     async::Notification m_needSaveNotification;
+    bool m_needSaveNotificationBlocked = false;
 
     bool m_isNewlyCreated = false; /// true if the file has never been saved yet
     bool m_isImported = false;

@@ -127,12 +127,16 @@ void NotationProject::setupProject()
 
     m_masterNotation = notationCreator()->newMasterNotationPtr();
     m_masterNotation->needSave().notification.onNotify(this, [this]() {
-        m_needSaveNotification.notify();
+        if (!m_needSaveNotificationBlocked) {
+            m_needSaveNotification.notify();
+        }
     });
 
     m_projectAudioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
     m_projectAudioSettings->needSave().notification.onNotify(this, [this]() {
-        m_needSaveNotification.notify();
+        if (!m_needSaveNotificationBlocked) {
+            m_needSaveNotification.notify();
+        }
     });
 }
 
@@ -777,6 +781,8 @@ void NotationProject::markAsSaved(const io::path_t& path)
     //! NOTE: order is important
     m_isNewlyCreated = false;
 
+    m_needSaveNotificationBlocked = true;
+
     // Mark engraving project as saved
     m_masterNotation->setSaved(true);
 
@@ -788,6 +794,9 @@ void NotationProject::markAsSaved(const io::path_t& path)
     for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
         excerpt->notation()->viewState()->markAsSaved();
     }
+
+    m_needSaveNotificationBlocked = false;
+    m_needSaveNotification.notify();
 
     setPath(path);
 
