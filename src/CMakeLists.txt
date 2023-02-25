@@ -84,6 +84,10 @@ if (MUE_BUILD_PALETTE_MODULE)
     add_subdirectory(palette)
 endif()
 
+if (MUE_BUILD_PIANOROLL_MODULE)
+    add_subdirectory(pianoroll)
+endif()
+
 if (MUE_BUILD_PLAYBACK_MODULE)
     add_subdirectory(playback)
 endif()
