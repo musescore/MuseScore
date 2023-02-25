@@ -297,15 +297,15 @@ void PianorollKeyboard::sendNoteOn(uint8_t key)
         return;
     }
 
-    Event ev;
-    ev.setMessageType(Event::MessageType::ChannelVoice10);
-    ev.setOpcode(Event::Opcode::NoteOn);
-    ev.setNote(key);
-    ev.setVelocity(80);
+//    Event ev;
+//    ev.setMessageType(Event::MessageType::ChannelVoice10);
+//    ev.setOpcode(Event::Opcode::NoteOn);
+//    ev.setNote(key);
+//    ev.setVelocity(80);
 
-    startNoteInputIfNeed();
+//    startNoteInputIfNeed();
 
-    notation->midiInput()->onMidiEventReceived(ev);
+//    notation->midiInput()->onMidiEventReceived(ev);
 }
 
 void PianorollKeyboard::sendNoteOff(uint8_t key)
@@ -315,12 +315,12 @@ void PianorollKeyboard::sendNoteOff(uint8_t key)
         return;
     }
 
-    Event ev;
-    ev.setMessageType(Event::MessageType::ChannelVoice10);
-    ev.setOpcode(Event::Opcode::NoteOff);
-    ev.setNote(key);
+//    Event ev;
+//    ev.setMessageType(Event::MessageType::ChannelVoice10);
+//    ev.setOpcode(Event::Opcode::NoteOff);
+//    ev.setNote(key);
 
-    notation->midiInput()->onMidiEventReceived(ev);
+//    notation->midiInput()->onMidiEventReceived(ev);
 }
 
 void PianorollKeyboard::startNoteInputIfNeed()
