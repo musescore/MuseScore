@@ -65,8 +65,8 @@ namespace Ms {
 static void allocateStaves(VoiceList& vcLst)
       {
       // initialize
-      int voicesAllocated[MAX_STAVES]; // number of voices allocated on each staff
-      for (int i = 0; i < MAX_STAVES; ++i)
+      int voicesAllocated[MAX_VOICE_DESC_STAVES]; // number of voices allocated on each staff
+      for (int i = 0; i < MAX_VOICE_DESC_STAVES; ++i)
             voicesAllocated[i] = 0;
 
       // handle regular (non-overlapping) voices
@@ -96,7 +96,7 @@ static void allocateStaves(VoiceList& vcLst)
       // handle overlapping voices
       // for every staff allocate remaining voices (if space allows)
       // the ones with the highest number of chords and rests get allocated first
-      for (int h = 0; h < MAX_STAVES; ++h) {
+      for (int h = 0; h < MAX_VOICE_DESC_STAVES; ++h) {
             // note: middle loop executed vcLst.size() times, as each inner loop handles exactly one item
             for (int i = 0; i < vcLst.size(); ++i) {
                   // find the overlapping voice containing the highest number of chords and rests that has not been handled yet
@@ -134,8 +134,8 @@ static void allocateStaves(VoiceList& vcLst)
 
 static void allocateVoices(VoiceList& vcLst)
       {
-      int nextVoice[MAX_STAVES]; // number of voices allocated on each staff
-      for (int i = 0; i < MAX_STAVES; ++i)
+      int nextVoice[MAX_VOICE_DESC_STAVES]; // number of voices allocated on each staff
+      for (int i = 0; i < MAX_VOICE_DESC_STAVES; ++i)
             nextVoice[i] = 0;
       // handle regular (non-overlapping) voices
       // a voice is allocated on one specific staff
@@ -150,7 +150,7 @@ static void allocateVoices(VoiceList& vcLst)
       // handle overlapping voices
       // each voice may be in every staff
       for (VoiceList::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
-            for (int j = 0; j < MAX_STAVES; ++j) {
+            for (int j = 0; j < MAX_VOICE_DESC_STAVES; ++j) {
                   int staffAlloc = i.value().staffAlloc(j);
                   QString key   = i.key();
                   if (staffAlloc >= 0) {
@@ -2479,14 +2479,14 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
                   skipLogCurrElem();
             }
 
-      if (staves - static_cast<int>(hiddenStaves.size()) > MAX_STAVES) {
-            _logger->logError("staves exceed MAX_STAVES, even when discarding hidden staves", &_e);
+      if (staves - static_cast<int>(hiddenStaves.size()) > MAX_VOICE_DESC_STAVES) {
+            _logger->logError("staves exceed MAX_VOICE_DESC_STAVES, even when discarding hidden staves", &_e);
             return;
             }
-      else if (staves > MAX_STAVES
+      else if (staves > MAX_VOICE_DESC_STAVES
             && static_cast<int>(hiddenStaves.size()) > 0
             && _parts[partId].staffNumberToIndex().size() == 0) {
-            _logger->logError("staves exceed MAX_STAVES, but hidden staves can be discarded", &_e);
+            _logger->logError("staves exceed MAX_VOICE_DESC_STAVES, but hidden staves can be discarded", &_e);
             // Some scores have parts with many staves (~10), but most are hidden
             // When this occurs, we can discard hidden staves
             // and store a QMap between staffNumber and staffIndex.

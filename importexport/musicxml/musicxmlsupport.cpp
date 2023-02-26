@@ -33,7 +33,7 @@ namespace Ms {
 
 NoteList::NoteList()
       {
-      for (int i = 0; i < MAX_STAVES; ++i)
+      for (int i = 0; i < MAX_VOICE_DESC_STAVES; ++i)
             _staffNoteLists << StartStopList();
       }
 
@@ -46,7 +46,7 @@ void NoteList::addNote(const int startTick, const int endTick, const int staff)
 void NoteList::dump(const QString& voice) const
       {
       // dump contents
-      for (int i = 0; i < MAX_STAVES; ++i) {
+      for (int i = 0; i < MAX_VOICE_DESC_STAVES; ++i) {
             printf("voice %s staff %d:", qPrintable(voice), i);
             for (int j = 0; j < _staffNoteLists.at(i).size(); ++j)
                   printf(" %d-%d", _staffNoteLists.at(i).at(j).first, _staffNoteLists.at(i).at(j).second);
@@ -54,8 +54,8 @@ void NoteList::dump(const QString& voice) const
             }
       // show overlap
       printf("overlap voice %s:", qPrintable(voice));
-      for (int i = 0; i < MAX_STAVES - 1; ++i)
-            for (int j = i + 1; j < MAX_STAVES; ++j)
+      for (int i = 0; i < MAX_VOICE_DESC_STAVES - 1; ++i)
+            for (int j = i + 1; j < MAX_VOICE_DESC_STAVES; ++j)
                   stavesOverlap(i, j);
       printf("\n");
       }
@@ -93,8 +93,8 @@ bool NoteList::stavesOverlap(const int staff1, const int staff2) const
 
 bool NoteList::anyStaffOverlaps() const
       {
-      for (int i = 0; i < MAX_STAVES - 1; ++i)
-            for (int j = i + 1; j < MAX_STAVES; ++j)
+      for (int i = 0; i < MAX_VOICE_DESC_STAVES - 1; ++i)
+            for (int j = i + 1; j < MAX_VOICE_DESC_STAVES; ++j)
                   if (stavesOverlap(i, j))
                         return true;
       return false;
@@ -102,7 +102,7 @@ bool NoteList::anyStaffOverlaps() const
 
 VoiceOverlapDetector::VoiceOverlapDetector()
       {
-      // qDebug("VoiceOverlapDetector::VoiceOverlapDetector(staves %d)", MAX_STAVES);
+      qDebug("VoiceOverlapDetector::VoiceOverlapDetector(staves %d)", MAX_VOICE_DESC_STAVES);
       }
 
 void VoiceOverlapDetector::addNote(const int startTick, const int endTick, const QString& voice, const int staff)

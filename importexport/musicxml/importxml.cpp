@@ -323,7 +323,7 @@ Score::FileError importCompressedMusicXml(MasterScore* score, const QString& nam
 
 VoiceDesc::VoiceDesc() : _staff(-1), _voice(-1), _overlaps(false)
       {
-      for (int i = 0; i < MAX_STAVES; ++i) {
+      for (int i = 0; i < MAX_VOICE_DESC_STAVES; ++i) {
             _chordRests[i] =  0;
             _staffAlloc[i] = -1;
             _voices[i]     = -1;
@@ -332,14 +332,14 @@ VoiceDesc::VoiceDesc() : _staff(-1), _voice(-1), _overlaps(false)
 
 void VoiceDesc::incrChordRests(int s)
       {
-      if (0 <= s && s < MAX_STAVES)
+      if (0 <= s && s < MAX_VOICE_DESC_STAVES)
             _chordRests[s]++;
       }
 
 int VoiceDesc::numberChordRests() const
       {
       int res = 0;
-      for (int i = 0; i < MAX_STAVES; ++i)
+      for (int i = 0; i < MAX_VOICE_DESC_STAVES; ++i)
             res += _chordRests[i];
       return res;
       }
@@ -348,7 +348,7 @@ int VoiceDesc::preferredStaff() const
       {
       int max = 0;
       int res = 0;
-      for (int i = 0; i < MAX_STAVES; ++i)
+      for (int i = 0; i < MAX_VOICE_DESC_STAVES; ++i)
             if (_chordRests[i] > max) {
                   max = _chordRests[i];
                   res = i;
@@ -359,15 +359,15 @@ int VoiceDesc::preferredStaff() const
 QString VoiceDesc::toString() const
       {
       QString res = "[";
-      for (int i = 0; i < MAX_STAVES; ++i)
+      for (int i = 0; i < MAX_VOICE_DESC_STAVES; ++i)
             res += QString(" %1").arg(_chordRests[i]);
       res += QString(" ] overlaps %1").arg(_overlaps);
       if (_overlaps) {
             res += " staffAlloc [";
-            for (int i = 0; i < MAX_STAVES; ++i)
+            for (int i = 0; i < MAX_VOICE_DESC_STAVES; ++i)
                   res += QString(" %1").arg(_staffAlloc[i]);
             res += " ] voices [";
-            for (int i = 0; i < MAX_STAVES; ++i)
+            for (int i = 0; i < MAX_VOICE_DESC_STAVES; ++i)
                   res += QString(" %1").arg(_voices[i]);
             res += " ]";
             }
