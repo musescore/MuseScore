@@ -405,17 +405,12 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             ks->setTrack(ctx.track());
             ks->read(e);
             Fraction curTick = ctx.tick();
-            if (!ks->isCustom() && !ks->isAtonal() && ks->key() == Key::C && curTick.isZero()) {
-                // ignore empty key signature
-                LOGD("remove keysig c at tick 0");
-            } else {
-                // if key sig not at beginning of measure => courtesy key sig
-                bool courtesySig = (curTick == measure->endTick());
-                segment = measure->getSegment(courtesySig ? SegmentType::KeySigAnnounce : SegmentType::KeySig, curTick);
-                segment->add(ks);
-                if (!courtesySig) {
-                    staff->setKey(curTick, ks->keySigEvent());
-                }
+            // if key sig not at beginning of measure => courtesy key sig
+            bool courtesySig = (curTick == measure->endTick());
+            segment = measure->getSegment(courtesySig ? SegmentType::KeySigAnnounce : SegmentType::KeySig, curTick);
+            segment->add(ks);
+            if (!courtesySig) {
+                staff->setKey(curTick, ks->keySigEvent());
             }
         } else if (tag == "Text") {
             segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());

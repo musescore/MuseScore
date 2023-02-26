@@ -1878,22 +1878,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             ks->setTrack(ctx.track());
             ks->read(e);
             Fraction curTick = ctx.tick();
-            if (!ks->isCustom() && !ks->isAtonal() && ks->key() == Key::C && curTick.isZero()) {
-                // ignore empty key signature
-                LOGD("remove keysig c at tick 0");
-                if (ks->links()) {
-                    if (ks->links()->size() == 1) {
-                        mu::remove(e.context()->linkIds(), ks->links()->lid());
-                    }
-                }
-            } else {
-                // if key sig not at beginning of measure => courtesy key sig
-                bool courtesySig = (curTick == m->endTick());
-                segment = m->getSegment(courtesySig ? SegmentType::KeySigAnnounce : SegmentType::KeySig, curTick);
-                segment->add(ks);
-                if (!courtesySig) {
-                    staff->setKey(curTick, ks->keySigEvent());
-                }
+            // if key sig not at beginning of measure => courtesy key sig
+            bool courtesySig = (curTick == m->endTick());
+            segment = m->getSegment(courtesySig ? SegmentType::KeySigAnnounce : SegmentType::KeySig, curTick);
+            segment->add(ks);
+            if (!courtesySig) {
+                staff->setKey(curTick, ks->keySigEvent());
             }
         } else if (tag == "Lyrics") {
             Lyrics* l = Factory::createLyrics(ctx.dummy()->chord());
@@ -2960,9 +2950,6 @@ Err Read114::read114(MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
             Fraction tick = Fraction::fromTicks(i->first);
             if (tick < Fraction(0, 1)) {
                 LOGD("read114: Key tick %d", tick.ticks());
-                continue;
-            }
-            if (tick.isZero() && i->second.key() == Key::C) {
                 continue;
             }
             Measure* m = masterScore->tick2measure(tick);

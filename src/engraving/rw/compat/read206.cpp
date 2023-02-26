@@ -2738,23 +2738,12 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             ks->setTrack(ctx.track());
             ks->read(e);
             Fraction curTick = ctx.tick();
-            if (!ks->isCustom() && !ks->isAtonal() && ks->key() == Key::C && curTick.isZero()) {
-                // ignore empty key signature
-                LOGD("remove keysig c at tick 0");
-                if (ks->links()) {
-                    if (ks->links()->size() == 1) {
-                        mu::remove(e.context()->linkIds(), ks->links()->lid());
-                    }
-                }
-                delete ks;
-            } else {
-                // if key sig not at beginning of measure => courtesy key sig
-                bool courtesySig = (curTick == m->endTick());
-                segment = m->getSegment(courtesySig ? SegmentType::KeySigAnnounce : SegmentType::KeySig, curTick);
-                segment->add(ks);
-                if (!courtesySig) {
-                    staff->setKey(curTick, ks->keySigEvent());
-                }
+            // if key sig not at beginning of measure => courtesy key sig
+            bool courtesySig = (curTick == m->endTick());
+            segment = m->getSegment(courtesySig ? SegmentType::KeySigAnnounce : SegmentType::KeySig, curTick);
+            segment->add(ks);
+            if (!courtesySig) {
+                staff->setKey(curTick, ks->keySigEvent());
             }
         } else if (tag == "Text" || tag == "StaffText") {
             // MuseScore 3 has different types for system text and
