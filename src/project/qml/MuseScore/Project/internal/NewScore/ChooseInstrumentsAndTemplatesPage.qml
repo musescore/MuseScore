@@ -157,19 +157,6 @@ Item {
 
         currentIndex: bar.currentIndex
 
-//        sourceComponent: {
-//            if (!bar.completed) {
-//                return null
-//            }
-
-//            switch(bar.currentIndex) {
-//            case 0: return instrumentsPageComp
-//            case 1: return templatePageComp
-//            }
-
-//            return null
-//        }
-
         ChooseInstrumentsPage {
             navigationSection: root.navigationSection
 
