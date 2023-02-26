@@ -609,6 +609,10 @@
     <seq>Num+8</seq>
     </SC>
   <SC>
+    <key>note-input-steptime</key>
+    <seq>N</seq>
+    </SC>
+  <SC>
     <key>pad-note-1</key>
     <seq>7</seq>
     <seq>Num+7</seq>
