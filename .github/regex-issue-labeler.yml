@@ -10,6 +10,8 @@ playback:
     - 'General playback bug'
 UI:
     - 'UI bug'
-
 needs-review:
     - 'Other type of issue'
+
+regression:
+    - '(Yes, this used to work in Musescore 3.x and now is broken|Yes, this used to work in a previous version of Musescore 4.x)'
