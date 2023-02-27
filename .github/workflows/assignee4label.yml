@@ -1,0 +1,13 @@
+name: "Assignees4label"
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  set-assignees:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: kyanagimoto/assignee4label@main
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        configuration-path: '.github/assignee4label.yml'
