@@ -201,7 +201,12 @@ void Excerpt::setTracksMapping(const TracksMap& tracksMapping)
 
     m_tracksMapping = tracksMapping;
 
-    for (Staff* staff : excerptScore()->staves()) {
+    const Score* score = excerptScore();
+    if (!score) {
+        return;
+    }
+
+    for (Staff* staff : score->staves()) {
         const Staff* masterStaff = m_masterScore->staffById(staff->id());
         if (!masterStaff) {
             continue;
