@@ -1,6 +1,5 @@
 name: Bug report
 description: File a bug report
-labels: ["bug"]
 body:
   - type: dropdown
     id: label
@@ -10,11 +9,14 @@ body:
       options:
         - Choose option...
         - File corruption
-        - Crash
+        - Crash or freeze
         - Engraving bug
-        - Playback bug
         - UI bug
-        - other
+        - VST bug
+        - Muse Sounds bug
+        - General playback bug
+        - Cloud saving/loading issue
+        - Other type of issue
     validations:
       required: true
   - type: textarea
@@ -61,10 +63,11 @@ body:
       label: Regression
       description: Did this work before?
       options:
+        - Choose option...
+        - No
+        - I don't know
         - Yes, this used to work in Musescore 3.x and now is broken 
         - Yes, this used to work in a previous version of Musescore 4.x
-        - No, I don't think this worked before
-        - I don't know
     validations: 
       required: true
   - type: input

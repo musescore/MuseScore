@@ -1,0 +1,15 @@
+corruption:
+    - 'File corruption'
+crash:
+    - 'Crash or freeze'
+engraving:
+    - 'Engraving bug'
+VST:
+    - 'VST bug'
+playback:
+    - 'General playback bug'
+UI:
+    - 'UI bug'
+
+needs-review:
+    - 'Other type of issue'
