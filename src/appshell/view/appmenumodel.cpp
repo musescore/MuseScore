@@ -327,7 +327,7 @@ MenuItem* AppMenuModel::makeHelpMenu()
         makeMenuItem("ask-help"),
         makeMenuItem("report-bug"),
         makeSeparator(),
-        makeMenuItem("about", MenuItemRole::AboutRole),
+        makeMenuItem("about-musescore", MenuItemRole::AboutRole),
         makeMenuItem("about-qt", MenuItemRole::AboutQtRole),
         makeMenuItem("about-musicxml"),
         makeSeparator(),
