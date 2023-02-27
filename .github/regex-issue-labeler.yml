@@ -6,11 +6,15 @@ engraving:
     - 'Engraving bug'
 VST:
     - 'VST bug'
+"Muse Sounds":
+    - 'Muse Sounds bug'
 playback:
     - 'General playback bug'
 UI:
     - 'UI bug'
-needs-review:
+cloud:
+    - 'Cloud saving/loading issue'
+"needs review":
     - 'Other type of issue'
 
 regression:
