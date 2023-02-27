@@ -2300,7 +2300,7 @@ void Segment::createShape(staff_idx_t staffIdx)
                 continue;
             }
             if (e->addToSkyline()) {
-                s.add(e->shape().translate(e->pos()));
+                s.add(e->shape().translated(e->isClef() ? e->ipos() : e->pos()));
             }
         }
     }
@@ -2624,10 +2624,6 @@ double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
         ww      = std::max(ww, d);
     }
     double w = std::max(ww, 0.0);        // non-negative
-
-    if (isClefType() && ns && ns->isChordRestType()) {
-        w = std::max(w, double(score()->styleMM(Sid::clefKeyRightMargin)));
-    }
 
     // Header exceptions that need additional space (more than the padding)
     double absoluteMinHeaderDist = 1.5 * spatium();

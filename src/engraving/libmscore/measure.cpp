@@ -4168,6 +4168,7 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
     double usrStretch = std::max(userStretch(), double(0.1)); // Avoids stretch going to zero
     usrStretch = std::min(usrStretch, double(10)); // Higher values may cause the spacing to break (10 is already ridiculously high and no user should even use that)
 
+    // PASS 1: compute the spacing of all left-aligned segments by stacking them one after the other
     while (s) {
         s->setWidthOffset(0.0);
         s->setPosX(x);
@@ -4176,14 +4177,14 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
         // skipped in computeMinWidth() -- the only way this would be an issue here is
         // if this method was called specifically with the invisible segment specified
         // which I'm pretty sure doesn't happen at this point. still...
-        if (!s->enabled() || !s->visible() || s->allElementsInvisible()) {
+        if (!s->enabled() || !s->visible() || s->allElementsInvisible() || s->isRightAligned()) {
             s->setWidth(0);
             s = s->next();
             continue;
         }
 
         Segment* ns = s->nextActive();
-        while (ns && ns->allElementsInvisible()) {
+        while (ns && (ns->allElementsInvisible() || ns->isRightAligned())) {
             ns = ns->nextActive();
         }
         // end barline might be disabled
@@ -4212,14 +4213,6 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
                     _squeezableSpace += s->shortestChordRest() == s->ticks() ? minStretchedWidth - w : 0.0;
                     w = std::max(w, minStretchedWidth);
                 }
-            }
-            // Clefs (or breaths) are justified right-to-left. It is the clef (or breath) that needs to move left
-            //(if there's space), not the following segment that needs to move right.
-            if ((ns->isClefType() || ns->isBreathType()) && ns->next()) {
-                double reduction = std::max(ns->minHorizontalCollidingDistance(ns->next()),
-                                            double(score()->styleMM(Sid::clefKeyRightMargin)));
-                w -= reduction;
-                s->setWidthOffset(s->widthOffset() - reduction);
             }
 
             // Adjust spacing for cross-beam situations
@@ -4250,14 +4243,15 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
 
             int n = 1;
             for (Segment* ps = s; ps; ps=ps->prevActive()) {
-                double ww;
-
-                assert(ps);         // ps should never be nullptr but better be safe.
+                assert(ps); // ps should never be nullptr but better be safe.
                 if (!ps) {
                     break;
                 }
+                if (ps->isRightAligned()) {
+                    continue;
+                }
 
-                ww = ps->minHorizontalCollidingDistance(ns) - (s->x() - ps->x());
+                double ww = ps->minHorizontalCollidingDistance(ns) - (s->x() - ps->x());
                 if (ps == fs) {
                     ww = std::max(ww, ns->minLeft(ls) - s->x());
                 }
@@ -4305,6 +4299,10 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
     _squeezableSpace = std::max(0.0, std::min(_squeezableSpace, x - score()->styleMM(Sid::minMeasureWidth)));
     setLayoutStretch(stretchCoeff);
     setWidth(x);
+
+    // PASS 2: now put in the right-aligned segments
+    spaceRightAlignedSegments();
+
     // Check against minimum width and increase if needed (MMRest minWidth is guaranteed elsewhere)
     double minWidth = computeMinMeasureWidth();
     if (width() < minWidth) {
@@ -4390,6 +4388,50 @@ double Measure::computeMinMeasureWidth() const
     minWidth += startPosition;
     minWidth = std::min(minWidth, maxWidth);
     return minWidth;
+}
+
+void Measure::spaceRightAlignedSegments()
+{
+    // Collect all the right-aligned segments starting from the back
+    std::vector<Segment*> rightAlignedSegments;
+    for (Segment* segment = m_segments.last(); segment; segment = segment->prev()) {
+        if (segment->enabled() && segment->isRightAligned()) {
+            rightAlignedSegments.push_back(segment);
+        }
+    }
+    // Compute spacing
+    static constexpr double arbitraryLowReal = -10000.0;
+    for (Segment* raSegment : rightAlignedSegments) {
+        // 1) right-align the segment against the following ones
+        double minDistAfter = arbitraryLowReal;
+        for (Segment* seg = raSegment->nextActive(); seg; seg = seg->nextActive()) {
+            double xDiff = seg->x() - raSegment->x();
+            double minDist = raSegment->minHorizontalCollidingDistance(seg);
+            minDistAfter = std::max(minDistAfter, minDist - xDiff);
+        }
+        if (minDistAfter != arbitraryLowReal && raSegment->prevActive()) {
+            Segment* prevSegment = raSegment->prev();
+            prevSegment->setWidth(prevSegment->width() - minDistAfter);
+            prevSegment->setWidthOffset(prevSegment->widthOffset() - minDistAfter);
+            raSegment->movePosX(-minDistAfter);
+            raSegment->setWidth(raSegment->width() + minDistAfter);
+        }
+        // 2) Make sure the segment isn't colliding with anything behind
+        double minDistBefore = 0.0;
+        for (Segment* seg = raSegment->prevActive(); seg; seg = seg->prevActive()) {
+            double xDiff = raSegment->x() - seg->x();
+            double minDist = seg->minHorizontalCollidingDistance(raSegment);
+            minDistBefore = std::max(minDistBefore, minDist - xDiff);
+        }
+        Segment* prevSegment = raSegment->prevActive();
+        if (prevSegment) {
+            prevSegment->setWidth(prevSegment->width() + minDistBefore);
+        }
+        for (Segment* seg = raSegment; seg; seg = seg->next()) {
+            seg->movePosX(minDistBefore);
+        }
+        setWidth(width() + minDistBefore);
+    }
 }
 
 void Measure::stretchToTargetWidth(double targetWidth)

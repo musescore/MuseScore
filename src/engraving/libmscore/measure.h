@@ -388,6 +388,7 @@ private:
     void fillGap(const Fraction& pos, const Fraction& len, track_idx_t track, const Fraction& stretch, bool useGapRests = true);
     void computeWidth(Segment* s, double x, bool isSystemHeader, Fraction minTicks, Fraction maxTicks, double stretchCoeff);
     double computeMinMeasureWidth() const;
+    void spaceRightAlignedSegments();
 
     MStaff* mstaff(staff_idx_t staffIndex) const;
 
