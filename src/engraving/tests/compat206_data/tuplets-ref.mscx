@@ -164,8 +164,8 @@
             <numberType>1</numberType>
             </Tuplet>
           <Beam>
-            <l1>40</l1>
-            <l2>38</l2>
+            <l1>38</l1>
+            <l2>36</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>

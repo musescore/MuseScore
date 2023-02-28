@@ -98,6 +98,8 @@
               </Note>
             <Tremolo>
               <subtype>c32</subtype>
+              <l1>-12</l1>
+              <l2>-18</l2>
               </Tremolo>
             </Chord>
           <Chord>
