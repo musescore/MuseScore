@@ -30,6 +30,7 @@ Rectangle {
     id: root
 
     color: ui.theme.backgroundSecondaryColor
+    clip: true
 
     NavigationSection {
         id: navSec
