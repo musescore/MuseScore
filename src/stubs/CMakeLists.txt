@@ -53,7 +53,7 @@ if (NOT MUE_BUILD_PALETTE_MODULE)
 endif()
 
 if (NOT MUE_BUILD_PIANOROLL_MODULE)
-    add_subdirectory(palette)
+    add_subdirectory(pianoroll)
 endif()
 
 if (NOT MUE_BUILD_PLAYBACK_MODULE)
