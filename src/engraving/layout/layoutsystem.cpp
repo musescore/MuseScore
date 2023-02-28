@@ -213,7 +213,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                 // but if too many are grouped, stop before we get 0 measures left on system
                 // TODO: intelligently break group into smaller groups instead
                 ctx.tick -= ctx.curMeasure->ticks();
-                ctx.measureNo = ctx.prevMeasure->no();
+                ctx.measureNo = ctx.curMeasure->no();
 
                 ctx.nextMeasure = ctx.curMeasure;
                 ctx.curMeasure  = ctx.prevMeasure;
