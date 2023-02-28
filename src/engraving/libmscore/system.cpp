@@ -1079,7 +1079,18 @@ void System::setInstrumentNames(const LayoutContext& ctx, bool longName, Fractio
     int staffIdx = 0;
     for (SysStaff* staff : _staves) {
         Staff* s = score()->staff(staffIdx);
-        if (!s->isTop() || !s->show()) {
+        Part* part = s->part();
+
+        bool atLeastOneVisibleStaff = false;
+        for (Staff* partStaff : part->staves()) {
+            if (partStaff->show()) {
+                atLeastOneVisibleStaff = true;
+                break;
+            }
+        }
+
+        bool showName = part->show() && atLeastOneVisibleStaff;
+        if (!s->isTop() || !showName) {
             for (InstrumentName* t : staff->instrumentNames) {
                 ctx.score()->removeElement(t);
             }
@@ -1087,7 +1098,6 @@ void System::setInstrumentNames(const LayoutContext& ctx, bool longName, Fractio
             continue;
         }
 
-        Part* part = s->part();
         const std::list<StaffName>& names = longName ? part->longNames(tick) : part->shortNames(tick);
 
         size_t idx = 0;
