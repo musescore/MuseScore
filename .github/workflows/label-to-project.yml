@@ -11,25 +11,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Engraving
-        uses: actions/add-to-project@0.4.0
+        uses: actions/add-to-project@v0.4.0
         with:
           project-url: https://github.com/orgs/Musescore/projects/23
           github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
           labeled: engraving
       - name: Cloud saving/loading
-        uses: actions/add-to-project@0.4.0
+        uses: actions/add-to-project@v0.4.0
         with:
           project-url: https://github.com/orgs/Musescore/projects/22
           github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
           labeled: cloud
       - name: Muse Sounds
-        uses: actions/add-to-project@0.4.0
+        uses: actions/add-to-project@v0.4.0
         with:
           project-url: https://github.com/orgs/Musescore/projects/21
           github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
           labeled: "Muse Sounds"
       - name: VSTs
-        uses: actions/add-to-project@0.4.0
+        uses: actions/add-to-project@v0.4.0
         with:
           project-url: https://github.com/orgs/Musescore/projects/20
           github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
