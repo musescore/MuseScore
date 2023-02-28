@@ -80,11 +80,16 @@ mu::Ret MscNotationWriter::write(INotationPtr notation, QIODevice& destinationDe
         LOGE() << "MscWriter is not opened";
         return Ret(Ret::Code::UnknownError);
     }
+
     notation->elements()->msScore()->masterScore()->project().lock()->writeMscz(msczWriter, false, true);
 
+    msczWriter.close();
+
     if (m_mode != MscIoMode::Dir) {
+        buf.open(io::IODevice::ReadOnly);
         ByteArray ba = buf.readAll();
         destinationDevice.write(reinterpret_cast<const char*>(ba.constData()), ba.size());
+        buf.close();
     }
 
     return Ret(Ret::Code::Ok);
