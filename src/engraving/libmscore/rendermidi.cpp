@@ -722,7 +722,8 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
     //   the given chromatic relative pitch.
     //   RETURNS the new ontime value.  The caller is expected to assign this value.
     auto makeEvent
-        = [note, chord, chromatic, events](int pitch, int ontime, int duration, double velocityMultiplier = 1.0, bool play = true) {
+        = [note, chord, chromatic, events](int pitch, int ontime, int duration,
+                                           double velocityMultiplier = NoteEvent::DEFAULT_VELOCITY_MULTIPLIER, bool play = true) {
         if (note->ghost()) {
             velocityMultiplier *= NoteEvent::GHOST_VELOCITY_MULTIPLIER;
         }

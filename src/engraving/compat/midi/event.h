@@ -26,6 +26,8 @@
 #include <map>
 #include <vector>
 
+#include <compat/midi/midiinstrumenteffects.h>
+
 #include "midicoreevent.h"
 
 namespace mu::engraving {
@@ -65,12 +67,6 @@ class NPlayEvent : public PlayEvent
 {
     OBJECT_ALLOCATOR(engraving, NPlayEvent)
 
-    const Note* _note{ nullptr };
-    const Harmony* _harmony{ nullptr };
-    int _origin = -1;
-    int _discard = 0;
-    bool _portamento = false;
-
 public:
     NPlayEvent()
         : PlayEvent() {}
@@ -85,6 +81,9 @@ public:
     const Harmony* harmony() const { return _harmony; }
     void setHarmony(const Harmony* v) { _harmony = v; }
 
+    void setEffect(MidiInstrumentEffect effect) { _effect = effect; }
+    MidiInstrumentEffect effect() const { return _effect; }
+
     int getOriginatingStaff() const { return _origin; }
     void setOriginatingStaff(int i) { _origin = i; }
     void setDiscard(int d) { _discard = d; }
@@ -98,6 +97,15 @@ public:
                    && (this->controller() == CTRL_PORTAMENTO || this->controller() == CTRL_PORTAMENTO_CONTROL
                        || this->controller() == CTRL_PORTAMENTO_TIME_MSB || this->controller() == CTRL_PORTAMENTO_TIME_LSB));
     }
+
+private:
+
+    const Note* _note = nullptr;
+    const Harmony* _harmony = nullptr;
+    int _origin = -1;
+    int _discard = 0;
+    bool _portamento = false;
+    MidiInstrumentEffect _effect = MidiInstrumentEffect::NONE;
 };
 
 //---------------------------------------------------------
