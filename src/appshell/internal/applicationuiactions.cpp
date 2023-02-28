@@ -54,10 +54,10 @@ const UiActionList ApplicationUiActions::m_actions = {
              TranslatableString("action", "Full screen"),
              Checkable::Yes
              ),
-    UiAction("about",
+    UiAction("about-musescore",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             TranslatableString("action", "&About…")
+             TranslatableString("action", "&About MuseScore…")
              ),
     UiAction("about-qt",
              mu::context::UiCtxAny,
