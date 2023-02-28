@@ -17,6 +17,7 @@ done
 if [ -z "$BUILD_MODE" ]; then 
     if [ -z "$EVENT" ]; then echo "error: not set EVENT"; exit 1; fi
 
+    if [ "$EVENT" == "push" ]; then BUILD_MODE=devel_build; fi
     if [ "$EVENT" == "pull_request" ]; then BUILD_MODE=devel_build; fi
     if [ "$EVENT" == "schedule" ]; then BUILD_MODE=nightly_build; fi
     if [ "$EVENT" == "workflow_dispatch" ]; then echo "error: event workflow_dispatch, but not set BUILD_MODE"; exit 1; fi
