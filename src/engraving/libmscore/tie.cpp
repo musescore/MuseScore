@@ -448,7 +448,7 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
     };
     Chord* ec = t->endNote() ? t->endNote()->chord() : 0;
     double staffDistance = 0.;
-    if (sc && sc->staffMove() != 0 && ec && ec->staffMove() == sc->staffMove()) {
+    if (sc && sc->staffMove() != 0 && ec->vStaffIdx() == sc->vStaffIdx()) {
         staffDistance = system()->staff(sc->vStaffIdx())->y() - system()->staff(staffIdx())->y();
     }
 
