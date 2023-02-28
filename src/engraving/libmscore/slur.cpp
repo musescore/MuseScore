@@ -1821,8 +1821,11 @@ void Slur::computeUp()
         Chord* c1 = startCR()->isChord() ? toChord(startCR()) : 0;
         Chord* c2 = endCR()->isChord() ? toChord(endCR()) : 0;
         if (c2 && startCR()->measure()->system() != endCR()->measure()->system()) {
-            // If the end chord is in a different system its direction may
-            // have never been computed, so we need to compute it here.
+            // HACK: if the end chord is in a different system, it may have never been laid out yet.
+            // But we need to know its direction to decide slur direction, so need to compute it here.
+            for (Note* note : c2->notes()) {
+                note->updateLine(); // because chord direction is based on note lines
+            }
             c2->computeUp();
         }
 
