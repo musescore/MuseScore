@@ -28,33 +28,33 @@ using namespace mu;
 using namespace mu::musesampler;
 
 #if defined(Q_OS_LINUX)
-static const io::path_t DEFAULT_LIB_NAME("libMuseSamplerCoreLib.so");
+static const io::path_t LIB_NAME("libMuseSamplerCoreLib.so");
+static const io::path_t FALLBACK_PATH = LIB_NAME;
+
 io::path_t MuseSamplerConfiguration::defaultPath() const
 {
-    return globalConfig()->genericDataPath() + "/MuseSampler/lib/" + DEFAULT_LIB_NAME;
+    return globalConfig()->genericDataPath() + "/MuseSampler/lib/" + LIB_NAME;
 }
 
 #elif defined(Q_OS_MAC)
-static const io::path_t DEFAULT_LIB_NAME("libMuseSamplerCoreLib.dylib");
+static const io::path_t LIB_NAME("libMuseSamplerCoreLib.dylib");
+static const io::path_t FALLBACK_PATH = "/usr/local/lib/" + LIB_NAME;
+
 io::path_t MuseSamplerConfiguration::defaultPath() const
 {
-    return globalConfig()->genericDataPath() + "/MuseSampler/lib/" + DEFAULT_LIB_NAME;
+    return globalConfig()->genericDataPath() + "/MuseSampler/lib/" + LIB_NAME;
 }
 
 #else
-static const io::path_t DEFAULT_LIB_NAME("MuseSamplerCoreLib.dll");
+static const io::path_t LIB_NAME("MuseSamplerCoreLib.dll");
+static const io::path_t FALLBACK_PATH = LIB_NAME;
+
 io::path_t MuseSamplerConfiguration::defaultPath() const
 {
-    return globalConfig()->genericDataPath() + "\\MuseSampler\\lib\\" + DEFAULT_LIB_NAME;
+    return globalConfig()->genericDataPath() + "\\MuseSampler\\lib\\" + LIB_NAME;
 }
 
 #endif
-
-// If installed on the system instead of user dir...do this as a backup
-io::path_t MuseSamplerConfiguration::backupLibraryPath() const
-{
-    return DEFAULT_LIB_NAME;
-}
 
 // Preferred location
 io::path_t MuseSamplerConfiguration::userLibraryPath() const
@@ -65,4 +65,10 @@ io::path_t MuseSamplerConfiguration::userLibraryPath() const
     }
 
     return defaultPath();
+}
+
+// If installed on the system instead of user dir...do this as a backup
+io::path_t MuseSamplerConfiguration::fallbackLibraryPath() const
+{
+    return FALLBACK_PATH;
 }
