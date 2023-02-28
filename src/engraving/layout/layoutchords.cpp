@@ -838,11 +838,11 @@ void LayoutChords::layoutChords3(const MStyle& style, const std::vector<Chord*>&
             // if we find one that is identical to the one before it, don't lay it out
             ac->setbbox(RectF());
             ac->setPos(PointF());
-        } else if (ac && !note->fixed()) {
+        } else if (ac) {
             prevLine = note->line();
             prevSubtype = ac->subtype();
             ac->layout();
-            if (!ac->visible()) {
+            if (!ac->visible() || note->fixed()) {
                 ac->setPos(ac->bbox().x() - ac->width(), 0.0);
             } else {
                 AcEl acel;
