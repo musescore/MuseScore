@@ -46,8 +46,14 @@ public:
         MARKER_CROSS
     };
 
+    enum class Orientation {
+        ORIENTATION_VERTICAL,
+        ORIENTATION_HORIZONTAL
+    };
+
     Q_ENUM(FretDot)
     Q_ENUM(FretMarker)
+    Q_ENUM(Orientation)
 };
 
 #endif // MU_INSPECTOR_FRETDIAGRAMTYPES_H

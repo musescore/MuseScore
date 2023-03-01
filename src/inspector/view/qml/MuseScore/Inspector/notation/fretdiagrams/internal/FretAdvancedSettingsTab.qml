@@ -133,16 +133,8 @@ FocusableItem {
             }
         }
 
-        PlacementSection {
-            id: placementSection
-            titleText: qsTrc("inspector", "Placement on staff")
-            propertyItem: root.model ? root.model.placement : null
-
-            navigationPanel: root.navigationPanel
-            navigationRowStart: fretNumber.navigationRowEnd + 1
-        }
-
         CheckBoxPropertyView {
+            id: multipleDotsCheckbox
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
@@ -152,7 +144,29 @@ FocusableItem {
 
             navigation.name: "MultipleDotsCheckBox"
             navigation.panel: root.navigationPanel
-            navigation.row: placementSection.navigationRowEnd + 2
+            navigation.row: fretNumber.navigationRowEnd + 1
+        }
+
+        FlatRadioButtonGroupPropertyView {
+            id: orientationSection
+            titleText: qsTrc("inspector", "Orientation")
+            propertyItem: root.model ? root.model.orientation : null
+
+            model: [
+                { text: qsTrc("inspector", "Vertical"), value: FretDiagramTypes.ORIENTATION_VERTICAL },
+                { text: qsTrc("inspector", "Horizontal"), value: FretDiagramTypes.ORIENTATION_HORIZONTAL }
+            ]
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: multipleDotsCheckbox.navigation.row + 1
+        }
+
+        PlacementSection {
+            id: placementSection
+            propertyItem: root.model ? root.model.placement : null
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: orientationSection.navigationRowEnd + 1
         }
     }
 }
