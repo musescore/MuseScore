@@ -73,7 +73,7 @@ bool ExcerptNotation::isInited() const
 
 bool ExcerptNotation::isCustom() const
 {
-    return !m_excerpt->initialPartId().isValid();
+    return m_excerpt->custom();
 }
 
 bool ExcerptNotation::isEmpty() const
@@ -156,5 +156,7 @@ INotationPtr ExcerptNotation::notation()
 IExcerptNotationPtr ExcerptNotation::clone() const
 {
     mu::engraving::Excerpt* copy = new mu::engraving::Excerpt(*m_excerpt);
+    copy->markAsCustom();
+
     return std::make_shared<ExcerptNotation>(copy);
 }
