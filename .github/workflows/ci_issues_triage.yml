@@ -1,0 +1,59 @@
+name: "Issue triage"
+on:
+  issues:
+    types: [opened, labeled]
+
+permissions:
+  issues: write
+
+jobs:
+  add_label:
+    if: github.event.action == 'opened'
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Add label to issue'
+      uses: github/issue-labeler@v3.0
+      with:
+        repo-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+        configuration-path: '.github/issue_add_label_config.yml'
+        not-before: 2023-02-27T00:00:00Z
+        enable-versioned-regex: 0
+
+  move_and_assing:
+    if: github.event.action == 'labeled'
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Engraving: move to project'
+      uses: actions/add-to-project@main
+      with:
+        project-url: https://github.com/orgs/musescore/projects/23
+        github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+        labeled: engraving
+
+    - name: 'Cloud saving/loading: move to project'
+      uses: actions/add-to-project@main
+      with:
+        project-url: https://github.com/orgs/musescore/projects/22
+        github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+        labeled: cloud
+
+    - name: 'Muse Sounds: move to project'
+      uses: actions/add-to-project@main
+      with:
+        project-url: https://github.com/orgs/musescore/projects/21
+        github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+        labeled: 'Muse Sounds'
+
+    - name: 'VSTs: move to project'
+      uses: actions/add-to-project@main
+      with:
+        project-url: https://github.com/orgs/musescore/projects/20
+        github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+        labeled: VST
+
+    - uses: actions/checkout@v3
+    - name: 'Set assignees on issue'
+      uses: kyanagimoto/assignee4label@main
+      with:
+        github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+        configuration-path: '.github/issue_assign_by_label_config.yml'
