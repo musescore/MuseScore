@@ -346,7 +346,9 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                 }
             }
 
-            if (cr->beam() && cr->beam()->hasAllRests()) {
+            bool hasAllRest = cr->beam() && cr->beam()->hasAllRests();
+            bool isARestBeamStart = cr->isRest() && cr->beamMode() == BeamMode::BEGIN;
+            if (hasAllRest && !isARestBeamStart) {
                 cr->removeDeleteBeam(false);
             }
 
