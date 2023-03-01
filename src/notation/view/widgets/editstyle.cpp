@@ -2178,7 +2178,7 @@ void EditStyle::textStyleChanged(int row)
 
     styleName->setText(score->getTextStyleUserName(tid).qTranslated());
     styleName->setEnabled(int(tid) >= int(TextStyleType::USER1));
-    resetTextStyleName->setEnabled(false);
+    resetTextStyleName->setEnabled(styleName->text() != TConv::translatedUserName(tid));
 }
 
 //---------------------------------------------------------
