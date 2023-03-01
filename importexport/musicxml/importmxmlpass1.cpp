@@ -1142,8 +1142,8 @@ void MusicXMLParserPass1::scorePartwise()
             if (pg->barlineSpan) {
                   // set setBarLineSpan to 1 for all staves in the part except the last staff
                   auto idx = staff->idx();
-                  for (auto i = idx; i < idx + stavesSpan - 1; ++i)
-                        _score->staff(i)->setBarLineSpan(1);
+                  for (auto k = idx; k < idx + stavesSpan - 1; ++k)
+                        _score->staff(k)->setBarLineSpan(1);
                   }
             }
 
