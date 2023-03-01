@@ -41,8 +41,6 @@ Item {
     implicitHeight: 4 * palettesPanelHeader.implicitHeight
     implicitWidth: paletteTree.implicitWidth
 
-    enabled: paletteRootModel.paletteEnabled
-
     function applyCurrentPaletteElement() {
         paletteTree.applyCurrentElement();
     }

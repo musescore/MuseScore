@@ -31,18 +31,15 @@ PaletteRootModel::PaletteRootModel(QObject* parent)
     });
 }
 
-bool PaletteRootModel::paletteEnabled() const
+PaletteRootModel::~PaletteRootModel()
 {
-    // TODO?
-    return true;
+    PaletteProvider* provider = paletteProvider_property();
+    if (provider) {
+        provider->setSearching(false);
+    }
 }
 
 PaletteProvider* PaletteRootModel::paletteProvider_property() const
 {
     return dynamic_cast<PaletteProvider*>(paletteProvider().get());
-}
-
-bool PaletteRootModel::needShowShadowOverlay() const
-{
-    return m_needShowShadowOverlay;
 }
