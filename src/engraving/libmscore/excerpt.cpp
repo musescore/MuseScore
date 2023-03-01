@@ -94,6 +94,16 @@ void Excerpt::setInited(bool inited)
     m_inited = inited;
 }
 
+bool Excerpt::custom() const
+{
+    return !m_initialPartId.isValid();
+}
+
+void Excerpt::markAsCustom()
+{
+    setInitialPartId(ID());
+}
+
 const ID& Excerpt::initialPartId() const
 {
     return m_initialPartId;

@@ -49,6 +49,9 @@ public:
 
     bool inited() const;
 
+    bool custom() const;
+    void markAsCustom();
+
     const ID& initialPartId() const;
     void setInitialPartId(const ID& id);
 
