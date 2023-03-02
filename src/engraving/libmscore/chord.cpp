@@ -4074,7 +4074,8 @@ void Chord::layoutArticulations3(Slur* slur)
     Segment* s = segment();
     Measure* m = measure();
     SysStaff* sstaff = m->system() ? m->system()->staff(vStaffIdx()) : nullptr;
-    for (Articulation* a : _articulations) {
+    for (auto iter = _articulations.begin(); iter != _articulations.end(); ++iter) {
+        Articulation* a = *iter;
         if (a->layoutCloseToNote() || !a->autoplace() || !slur->addToSkyline()) {
             continue;
         }
@@ -4082,18 +4083,16 @@ void Chord::layoutArticulations3(Slur* slur)
         Shape sShape = ss->shape().translated(ss->pos());
         if (aShape.intersects(sShape)) {
             double d = score()->styleS(Sid::articulationMinDistance).val() * spatium();
-            if (slur->up()) {
-                d += std::max(aShape.minVerticalDistance(sShape), 0.0);
-                a->movePosY(-d);
-                aShape.translateY(-d);
-            } else {
-                d += std::max(sShape.minVerticalDistance(aShape), 0.0);
-                a->movePosY(d);
-                aShape.translateY(d);
-            }
-            if (sstaff && a->addToSkyline()) {
-                sstaff->skyline().add(aShape);
-                s->staffShape(staffIdx()).add(aShape);
+            d += slur->up() ? std::max(aShape.minVerticalDistance(sShape), 0.0) : std::max(sShape.minVerticalDistance(aShape), 0.0);
+            d *= slur->up() ? -1 : 1;
+            for (auto iter2 = iter; iter2 != _articulations.end(); ++iter2) {
+                Articulation* aa = *iter2;
+                aa->movePosY(d);
+                Shape aaShape = aa->shape().translated(aa->pos() + pos() + s->pos() + m->pos());
+                if (sstaff && aa->addToSkyline()) {
+                    sstaff->skyline().add(aaShape);
+                    s->staffShape(staffIdx()).add(aaShape);
+                }
             }
         }
     }
