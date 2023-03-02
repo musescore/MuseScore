@@ -446,6 +446,12 @@ void Beam::layout1()
 
 void Beam::layout()
 {
+    // all of the beam layout code depends on _elements being in order by tick
+    // this may not be the case if two cr's were recently swapped.
+    std::sort(_elements.begin(), _elements.end(),
+              [](const ChordRest* a, const ChordRest* b) -> bool {
+        return a->tick() < b->tick();
+    });
     System* system = _elements.front()->measure()->system();
     setParent(system);
 
