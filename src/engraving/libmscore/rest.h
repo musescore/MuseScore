@@ -73,7 +73,7 @@ public:
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
-    SymId getSymbol(DurationType type, int line, int lines,  int* yoffset);
+    SymId getSymbol(DurationType type, int line, int lines);
 
     void checkDots();
     void layoutDots();

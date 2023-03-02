@@ -289,9 +289,8 @@ EngravingItem* Rest::drop(EditData& data)
 //   getSymbol
 //---------------------------------------------------------
 
-SymId Rest::getSymbol(DurationType type, int line, int lines, int* yoffset)
+SymId Rest::getSymbol(DurationType type, int line, int lines)
 {
-    *yoffset = 2;
     switch (type) {
     case DurationType::V_LONG:
         return SymId::restLonga;
@@ -303,7 +302,6 @@ SymId Rest::getSymbol(DurationType type, int line, int lines, int* yoffset)
         }
     // fall through
     case DurationType::V_WHOLE:
-        *yoffset = 1;
         return (line <= -2 || line >= (lines - 1)) ? SymId::restWholeLegerLine : SymId::restWhole;
     case DurationType::V_HALF:
         return (line <= -3 || line >= (lines - 2)) ? SymId::restHalfLegerLine : SymId::restHalf;
@@ -398,9 +396,8 @@ void Rest::layout()
     int lines      = st ? st->lines() : 5;
     int lineOffset = computeLineOffset(lines);
 
-    int yo;
-    m_sym = getSymbol(durationType().type(), lineOffset / 2 + userLine, lines, &yo);
-    setPosY((double(yo) + double(lineOffset) * .5) * lineDist * _spatium);
+    m_sym = getSymbol(durationType().type(), lineOffset / 2 + userLine, lines);
+    setPosY((double(lineOffset) * .5) * lineDist * _spatium);
     if (!shouldNotBeDrawn()) {
         setbbox(symBbox(m_sym));
     }
