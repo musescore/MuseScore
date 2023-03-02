@@ -66,11 +66,15 @@ Column {
 
     LineTypeSection {
         id: lineTypeSection
+
+        thickness: root.model ? root.model.thickness : null
+
         startHookType: root.model ? root.model.startHookType : null
         endHookType: root.model ? root.model.endHookType : null
-        thickness: root.model ? root.model.thickness : null
         startHookHeight: root.model ? root.model.startHookHeight : null
         endHookHeight: root.model ? root.model.endHookHeight : null
+
+        possibleStartHookTypes: root.model ? root.model.possibleStartHookTypes() : null
         possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes() : null
 
         navigationPanel: root.navigationPanel

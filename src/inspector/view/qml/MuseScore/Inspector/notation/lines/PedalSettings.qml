@@ -61,10 +61,11 @@ Column {
 
     LineTypeSection {
         id: lineTypeSection
-        startHookType: root.model ? root.model.startHookType : null
-        endHookType: root.model ? root.model.lineType : null
 
         thickness: root.model ? root.model.thickness : null
+
+        startHookType: root.model ? root.model.startHookType : null
+        endHookType: root.model ? root.model.lineType : null
         startHookHeight: root.model ? root.model.startHookHeight : null
         endHookHeight: root.model ? root.model.endHookHeight : null
 

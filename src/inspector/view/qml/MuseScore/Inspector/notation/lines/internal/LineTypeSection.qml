@@ -32,9 +32,10 @@ import "../../../common"
 Column {
     id: root
 
+    property PropertyItem thickness: null
+
     property PropertyItem startHookType: null
     property PropertyItem endHookType: null
-    property PropertyItem thickness: null
     property PropertyItem startHookHeight: null
     property PropertyItem endHookHeight: null
 
@@ -43,7 +44,7 @@ Column {
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
-    property int navigationRowEnd: endHookHeightSection.navigationRowEnd
+    property int navigationRowEnd: thicknessSection.navigationRowEnd
 
     width: parent.width
 
@@ -51,6 +52,8 @@ Column {
 
     FlatRadioButtonGroupPropertyView {
         id: lineTypeButtonGroup
+
+        visible: root.possibleEndHookTypes.length > 1
 
         titleText: qsTrc("inspector", "Line type")
         propertyItem: root.endHookType
@@ -62,28 +65,14 @@ Column {
     FlatRadioButtonGroupPropertyView {
         id: startHookButtonGroup
 
+        visible: root.possibleStartHookTypes.length > 1
+
         titleText: qsTrc("inspector", "Start hook")
         propertyItem: root.startHookType
 
         navigationPanel: root.navigationPanel
         navigationRowStart: lineTypeButtonGroup.navigationRowEnd + 1
     }
-
-        SpinBoxPropertyView {
-            id: thicknessSection
-
-            titleText: qsTrc("inspector", "Thickness")
-            propertyItem: root.thickness
-
-            step: 0.01
-            maxValue: 10.00
-            minValue: 0.01
-            decimals: 2
-
-            navigationName: "Thickness"
-            navigationPanel: root.navigationPanel
-            navigationRowStart: startHookButtonGroup.navigationRowEnd + 1
-        }
 
     Item {
         height: childrenRect.height
@@ -105,7 +94,7 @@ Column {
 
             navigationName: "StartHookHeight"
             navigationPanel: root.navigationPanel
-            navigationRowStart: thicknessSection.navigationRowEnd + 1
+            navigationRowStart: startHookButtonGroup.navigationRowEnd + 1
         }
 
         SpinBoxPropertyView {
@@ -124,7 +113,23 @@ Column {
 
             navigationName: "EndHookHeight"
             navigationPanel: root.navigationPanel
-            navigationRowStart: thicknessSection.navigationRowEnd + 1
+            navigationRowStart: startHookHeightSection.navigationRowEnd + 1
         }
+    }
+
+    SpinBoxPropertyView {
+        id: thicknessSection
+
+        titleText: qsTrc("inspector", "Thickness")
+        propertyItem: root.thickness
+
+        step: 0.01
+        maxValue: 10.00
+        minValue: 0.01
+        decimals: 2
+
+        navigationName: "Thickness"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: endHookHeightSection.navigationRowEnd + 1
     }
 }

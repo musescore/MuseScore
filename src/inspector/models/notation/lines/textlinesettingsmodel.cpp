@@ -70,12 +70,12 @@ void TextLineSettingsModel::createProperties()
     m_startHookType = buildPropertyItem(Pid::BEGIN_HOOK_TYPE, applyPropertyValueAndUpdateAvailability);
     m_endHookType = buildPropertyItem(Pid::END_HOOK_TYPE, applyPropertyValueAndUpdateAvailability);
 
+    m_startHookHeight = buildPropertyItem(Pid::BEGIN_HOOK_HEIGHT);
+    m_endHookHeight = buildPropertyItem(Pid::END_HOOK_HEIGHT);
+
     m_thickness = buildPropertyItem(Pid::LINE_WIDTH);
     m_dashLineLength = buildPropertyItem(Pid::DASH_LINE_LEN);
     m_dashGapLength = buildPropertyItem(Pid::DASH_GAP_LEN);
-
-    m_startHookHeight = buildPropertyItem(Pid::BEGIN_HOOK_HEIGHT);
-    m_endHookHeight = buildPropertyItem(Pid::END_HOOK_HEIGHT);
 
     m_placement = buildPropertyItem(Pid::PLACEMENT);
     m_placement->setIsVisible(false);
@@ -273,11 +273,10 @@ void TextLineSettingsModel::onUpdateLinePropertiesAvailability()
 
     m_startHookType->setIsEnabled(isLineAvailable);
     m_endHookType->setIsEnabled(isLineAvailable);
-    m_thickness->setIsEnabled(isLineAvailable);
-    // m_hookHeight->setIsEnabled(isLineAvailable && (hasStartHook || hasEndHook));
-    m_startHookHeight->setIsEnabled(isLineAvailable && (hasStartHook));
-    m_endHookHeight->setIsEnabled(isLineAvailable && (hasEndHook));
+    m_startHookHeight->setIsEnabled(isLineAvailable && hasStartHook);
+    m_endHookHeight->setIsEnabled(isLineAvailable && hasEndHook);
     m_lineStyle->setIsEnabled(isLineAvailable);
+    m_thickness->setIsEnabled(isLineAvailable);
 
     auto currentStyle = static_cast<LineTypes::LineStyle>(m_lineStyle->value().toInt());
     bool areDashPropertiesAvailable = currentStyle == LineTypes::LineStyle::LINE_STYLE_DASHED;
