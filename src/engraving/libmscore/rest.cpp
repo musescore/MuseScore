@@ -394,10 +394,12 @@ void Rest::layout()
     double lineDist = st ? st->lineDistance().val() : 1.0;
     int userLine   = yOff == 0.0 ? 0 : lrint(yOff / (lineDist * _spatium));
     int lines      = st ? st->lines() : 5;
-    int lineOffset = computeLineOffset(lines);
 
+    int lineOffset = computeLineOffset(lines);
     m_sym = getSymbol(durationType().type(), lineOffset / 2 + userLine, lines);
-    setPosY((double(lineOffset) * .5) * lineDist * _spatium);
+    int naturalLine = computeNaturalLine(lines);
+
+    setPosY((double(naturalLine) + double(lineOffset) * .5) * lineDist * _spatium);
     if (!shouldNotBeDrawn()) {
         setbbox(symBbox(m_sym));
     }
@@ -700,6 +702,15 @@ int Rest::computeLineOffset(int lines)
     //if (staff())
     //      lineOffset -= staff()->staffType()->stepOffset();
     return lineOffset;
+}
+
+int Rest::computeNaturalLine(int lines)
+{
+    int line = (lines % 2) ? floor(double(lines) / 2) : ceil(double(lines) / 2);
+    if (lines > 1 && m_sym == SymId::restWhole) {
+        line -= 1;
+    }
+    return line;
 }
 
 //---------------------------------------------------------

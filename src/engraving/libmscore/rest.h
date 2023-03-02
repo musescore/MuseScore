@@ -84,7 +84,9 @@ public:
     SymId sym() const { return m_sym; }
     bool accent();
     void setAccent(bool flag);
-    int computeLineOffset(int lines);
+
+    int computeNaturalLine(int lines); // Natural rest vertical position
+    int computeLineOffset(int lines); // Vertical displacement in multi-voice cases
 
     int upLine() const override;
     int downLine() const override;
