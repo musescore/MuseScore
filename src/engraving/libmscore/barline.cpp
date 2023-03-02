@@ -81,6 +81,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
         if (!m) {
             return;
         }
+        bl = const_cast<BarLine*>(m->endBarLine());
     }
 
     switch (barType) {
@@ -138,6 +139,9 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                     }
 
                     lmeasure->undoChangeProperty(Pid::REPEAT_END, false);
+                    if (lmeasure->nextMeasure() && !lmeasure->nextMeasure()->isFirstInSystem()) {
+                        lmeasure->nextMeasure()->undoChangeProperty(Pid::REPEAT_START, false);
+                    }
                     Segment* lsegment = lmeasure->undoGetSegmentR(SegmentType::EndBarLine, lmeasure->ticks());
                     BarLine* lbl = toBarLine(lsegment->element(ltrack));
                     if (!lbl) {
@@ -820,12 +824,6 @@ EngravingItem* BarLine::drop(EditData& data)
     if (e->isBarLine()) {
         BarLine* bl    = toBarLine(e);
         BarLineType st = bl->barLineType();
-
-        // if no change in subtype or no change in span, do nothing
-        if (st == barLineType() && !bl->spanFrom() && !bl->spanTo()) {
-            delete e;
-            return 0;
-        }
 
         // check if the new property can apply to this single bar line
         BarLineType bt = BarLineType::START_REPEAT | BarLineType::END_REPEAT | BarLineType::END_START_REPEAT;
