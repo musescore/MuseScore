@@ -543,7 +543,10 @@ bool NoteInputBarModel::isNoteInputModeAction(const ActionCode& actionCode) cons
 UiAction NoteInputBarModel::currentNoteInputModeAction() const
 {
     NoteInputMethod method = noteInputState().method;
-    return uiActionsRegister()->action(actionCodeForNoteInputMethod(method));
+    UiAction action = uiActionsRegister()->action(actionCodeForNoteInputMethod(method));
+    std::vector<std::string> genericShortcuts = uiActionsRegister()->action("note-input").shortcuts;
+    action.shortcuts = genericShortcuts;
+    return action;
 }
 
 MenuItem* NoteInputBarModel::makeActionItem(const UiAction& action, const QString& section, const uicomponents::MenuItemList& subitems)
