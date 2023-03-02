@@ -1235,7 +1235,14 @@ void LayoutChords::updateGraceNotes(Measure* measure)
             EngravingItem* e = s.preAppendedItem(track);
             if (e && e->isGraceNotesGroup()) {
                 s.clearPreAppended(track);
-                s.createShape(track2staff(track));
+                std::set<staff_idx_t> stavesToReShape;
+                for (Chord* grace : *toGraceNotesGroup(e)) {
+                    stavesToReShape.insert(grace->staffIdx());
+                    stavesToReShape.insert(grace->vStaffIdx());
+                }
+                for (staff_idx_t staffToReshape : stavesToReShape) {
+                    s.createShape(staffToReshape);
+                }
             }
         }
     }
@@ -1257,7 +1264,7 @@ void LayoutChords::updateGraceNotes(Measure* measure)
             if (e && e->isGraceNotesGroup()) {
                 GraceNotesGroup* gng = toGraceNotesGroup(e);
                 gng->layout();
-                s.staffShape(track2staff(track)).add(gng->shape().translated(gng->pos()));
+                gng->addToShape();
             }
         }
     }

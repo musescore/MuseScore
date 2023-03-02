@@ -68,6 +68,7 @@ public:
     void setPos(double x, double y) override;
     Segment* appendedSegment() const { return _appendedSegment; }
     void setAppendedSegment(Segment* s) { _appendedSegment = s; }
+    void addToShape();
 
 private:
     Chord* _parent = nullptr;
