@@ -43,14 +43,31 @@ void GeneralSettingsModel::createProperties()
         onVisibleChanged(newValue.toBool());
     });
 
+    m_isSmall = buildPropertyItem(Pid::SMALL, [this](const mu::engraving::Pid, const QVariant& newValue) {
+        setPropertyValue(m_elementsForIsSmallProperty, Pid::SMALL, newValue.toBool());
+    });
+
     m_isAutoPlaceAllowed = buildPropertyItem(Pid::AUTOPLACE);
     m_isPlayable = buildPropertyItem(Pid::PLAY);
-    m_isSmall = buildPropertyItem(Pid::SMALL);
 }
 
 void GeneralSettingsModel::requestElements()
 {
     m_elementList = m_repository->takeAllElements();
+
+    QSet<EngravingItem*> elementsForIsSmallProperty;
+
+    for (EngravingItem* element : m_elementList) {
+        EngravingItem* chord = element->findAncestor(ElementType::CHORD);
+
+        if (chord) {
+            elementsForIsSmallProperty.insert(chord);
+        } else {
+            elementsForIsSmallProperty.insert(element);
+        }
+    }
+
+    m_elementsForIsSmallProperty = elementsForIsSmallProperty.values();
 }
 
 void GeneralSettingsModel::loadProperties()
@@ -98,7 +115,7 @@ void GeneralSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& pr
     }
 
     if (mu::contains(propertyIdSet, Pid::SMALL)) {
-        loadPropertyItem(m_isSmall);
+        loadPropertyItem(m_isSmall, m_elementsForIsSmallProperty);
     }
 }
 

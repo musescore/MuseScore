@@ -76,6 +76,8 @@ private:
 
     PlaybackProxyModel* m_playbackProxyModel = nullptr;
     AppearanceSettingsModel* m_appearanceSettingsModel = nullptr;
+
+    QList<engraving::EngravingItem*> m_elementsForIsSmallProperty;
 };
 }
 

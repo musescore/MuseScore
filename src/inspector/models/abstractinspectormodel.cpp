@@ -526,10 +526,15 @@ void AbstractInspectorModel::initPropertyItem(PropertyItem* propertyItem,
     connect(propertyItem, &PropertyItem::applyToStyleRequested, this, styleCallback);
 }
 
-void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem,
-                                              std::function<QVariant(const QVariant&)> convertElementPropertyValueFunc)
+void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, ConvertPropertyValueFunc convertElementPropertyValueFunc)
 {
-    if (!propertyItem || m_elementList.isEmpty()) {
+    loadPropertyItem(propertyItem, m_elementList, convertElementPropertyValueFunc);
+}
+
+void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, const QList<EngravingItem*>& elements,
+                                              ConvertPropertyValueFunc convertElementPropertyValueFunc)
+{
+    if (!propertyItem || elements.isEmpty()) {
         return;
     }
 
@@ -543,7 +548,7 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem,
 
     bool isUndefined = false;
 
-    for (const mu::engraving::EngravingItem* element : m_elementList) {
+    for (const mu::engraving::EngravingItem* element : elements) {
         IF_ASSERT_FAILED(element) {
             continue;
         }
