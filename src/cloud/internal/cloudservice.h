@@ -84,9 +84,6 @@ private:
     bool updateTokens();
     void clearTokens();
 
-    using OnUserAuthorizedCallback = std::function<void ()>;
-    void authorize(const OnUserAuthorizedCallback& onUserAuthorizedCallback = OnUserAuthorizedCallback());
-
     void setAccountInfo(const AccountInfo& info);
 
     void openUrl(const QUrl& url);
@@ -102,7 +99,7 @@ private:
     Ret doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl);
 
     using RequestCallback = std::function<Ret()>;
-    void executeRequest(const RequestCallback& requestCallback);
+    Ret executeRequest(const RequestCallback& requestCallback);
 
     QOAuth2AuthorizationCodeFlow* m_oauth2 = nullptr;
     OAuthHttpServerReplyHandler* m_replyHandler = nullptr;
@@ -112,8 +109,6 @@ private:
 
     QString m_accessToken;
     QString m_refreshToken;
-
-    OnUserAuthorizedCallback m_onUserAuthorizedCallback;
 };
 }
 

@@ -57,6 +57,8 @@ static const QString PLATFORM_KEY("platform");
 
 static const std::string CLOUD_ACCESS_TOKEN_RESOURCE_NAME("CLOUD_ACCESS_TOKEN");
 
+static const std::string STATUS_KEY("status");
+
 static constexpr int USER_UNAUTHORIZED_STATUS_CODE = 401;
 static constexpr int FORBIDDEN_CODE = 403;
 static constexpr int NOT_FOUND_STATUS_CODE = 404;
@@ -65,7 +67,7 @@ static constexpr int INVALID_SCORE_ID = 0;
 
 static int statusCode(const mu::Ret& ret)
 {
-    std::any status = ret.data("status");
+    std::any status = ret.data(STATUS_KEY);
     return status.has_value() ? std::any_cast<int>(status) : 0;
 }
 
@@ -112,10 +114,6 @@ void CloudService::init()
     if (readTokens()) {
         executeRequest([this]() { return downloadAccountInfo(); });
     }
-
-    configuration()->customAccessTokenChanged().onReceive(this, [this](const QString& token) {
-        m_accessToken = token;
-    });
 }
 
 void CloudService::initOAuthIfNecessary()
@@ -251,26 +249,7 @@ void CloudService::onUserAuthorized()
     Ret ret = downloadAccountInfo();
     if (!ret) {
         LOGE() << ret.toString();
-        return;
     }
-
-    if (m_onUserAuthorizedCallback) {
-        m_onUserAuthorizedCallback();
-        m_onUserAuthorizedCallback = OnUserAuthorizedCallback();
-    }
-}
-
-void CloudService::authorize(const OnUserAuthorizedCallback& onUserAuthorizedCallback)
-{
-    if (m_userAuthorized.val) {
-        return;
-    }
-
-    initOAuthIfNecessary();
-
-    m_onUserAuthorizedCallback = onUserAuthorizedCallback;
-    m_oauth2->setAuthorizationUrl(configuration()->authorizationUrl());
-    m_oauth2->grant();
 }
 
 mu::RetVal<QUrl> CloudService::prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params) const
@@ -386,7 +365,14 @@ mu::RetVal<ScoreInfo> CloudService::downloadScoreInfo(int scoreId)
 
 void CloudService::signIn()
 {
-    authorize();
+    if (m_userAuthorized.val) {
+        return;
+    }
+
+    initOAuthIfNecessary();
+
+    m_oauth2->setAuthorizationUrl(configuration()->authorizationUrl());
+    m_oauth2->grant();
 }
 
 void CloudService::signUp()
@@ -484,31 +470,28 @@ ProgressPtr CloudService::uploadScore(QIODevice& scoreData, const QString& title
 {
     ProgressPtr progress = std::make_shared<Progress>();
 
-    auto uploadCallback = [this, progress, &scoreData, title, visibility, sourceUrl]() {
-        progress->started.notify();
+    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
+        progress->progressChanged.send(current, total, message);
+    });
 
-        INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-        manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
-            progress->progressChanged.send(current, total, message);
-        });
+    std::shared_ptr<ValMap> scoreUrlMap = std::make_shared<ValMap>();
 
+    auto uploadCallback = [this, manager, &scoreData, title, visibility, sourceUrl, scoreUrlMap]() {
         RetVal<ValMap> urlMap = doUploadScore(manager, scoreData, title, visibility, sourceUrl);
+        *scoreUrlMap = urlMap.val;
 
-        ProgressResult result;
-        result.ret = urlMap.ret;
-        result.val = Val(urlMap.val);
-        progress->finished.send(result);
-
-        return result.ret;
+        return urlMap.ret;
     };
 
-    async::Async::call(this, [this, uploadCallback]() {
-        if (!m_userAuthorized.val) {
-            authorize(uploadCallback);
-            return;
-        }
+    async::Async::call(this, [this, progress, uploadCallback, scoreUrlMap]() {
+        progress->started.notify();
 
-        executeRequest(uploadCallback);
+        ProgressResult result;
+        result.ret = executeRequest(uploadCallback);
+        result.val = Val(*scoreUrlMap);
+
+        progress->finished.send(result);
     });
 
     return progress;
@@ -518,27 +501,19 @@ ProgressPtr CloudService::uploadAudio(QIODevice& audioData, const QString& audio
 {
     ProgressPtr progress = std::make_shared<Progress>();
 
-    auto uploadCallback = [this, progress, &audioData, audioFormat, sourceUrl]() {
-        progress->started.notify();
+    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
+        progress->progressChanged.send(current, total, message);
+    });
 
-        INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-        manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
-            progress->progressChanged.send(current, total, message);
-        });
-
-        Ret ret = doUploadAudio(manager, audioData, audioFormat, sourceUrl);
-        progress->finished.send(ret);
-
-        return ret;
+    auto uploadCallback = [this, manager, &audioData, audioFormat, sourceUrl]() {
+        return doUploadAudio(manager, audioData, audioFormat, sourceUrl);
     };
 
-    async::Async::call(this, [this, uploadCallback]() {
-        if (!m_userAuthorized.val) {
-            authorize(uploadCallback);
-            return;
-        }
-
-        executeRequest(uploadCallback);
+    async::Async::call(this, [this, progress, uploadCallback]() {
+        progress->started.notify();
+        Ret ret = executeRequest(uploadCallback);
+        progress->finished.send(ret);
     });
 
     return progress;
@@ -554,6 +529,7 @@ static Ret uploadingRetFromRawUploadingRet(const Ret& rawRet, bool isScoreAlread
 
     static const std::map<int, mu::TranslatableString> codes {
         { 400, mu::TranslatableString("cloud", "Invalid request") },
+        { 401, mu::TranslatableString("cloud", "Authorization required") },
         { 403, mu::TranslatableString("cloud", "Forbidden. User is not owner of the score.") },
         { 422, mu::TranslatableString("cloud", "Validation is failed") },
         { 500, mu::TranslatableString("cloud", "Internal server error") },
@@ -566,6 +542,8 @@ static Ret uploadingRetFromRawUploadingRet(const Ret& rawRet, bool isScoreAlread
 
     Ret ret = make_ret(cloud::Err::NetworkError);
     ret.setData(CLOUD_NETWORK_ERROR_USER_DESCRIPTION_KEY, userDescription);
+    ret.setData(STATUS_KEY, code);
+
     return ret;
 }
 
@@ -601,6 +579,8 @@ mu::RetVal<mu::ValMap> CloudService::doUploadScore(INetworkManagerPtr uploadMana
             isScoreAlreadyUploaded = false;
         }
     }
+
+    scoreData.seek(0);
 
     QHttpMultiPart multiPart(QHttpMultiPart::FormDataType);
 
@@ -677,6 +657,8 @@ mu::Ret CloudService::doUploadAudio(network::INetworkManagerPtr uploadManager, Q
         return uploadUrl.ret;
     }
 
+    audioData.seek(0);
+
     QHttpMultiPart multiPart(QHttpMultiPart::FormDataType);
 
     QHttpPart audioPart;
@@ -705,11 +687,11 @@ mu::Ret CloudService::doUploadAudio(network::INetworkManagerPtr uploadManager, Q
     return ret;
 }
 
-void CloudService::executeRequest(const RequestCallback& requestCallback)
+Ret CloudService::executeRequest(const RequestCallback& requestCallback)
 {
     Ret ret = requestCallback();
     if (ret) {
-        return;
+        return make_ok();
     }
 
     if (statusCode(ret) == USER_UNAUTHORIZED_STATUS_CODE) {
@@ -721,6 +703,8 @@ void CloudService::executeRequest(const RequestCallback& requestCallback)
     if (!ret) {
         LOGE() << ret.toString();
     }
+
+    return ret;
 }
 
 void CloudService::openUrl(const QUrl& url)

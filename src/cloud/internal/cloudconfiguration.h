@@ -27,10 +27,8 @@
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
 
-#include "async/asyncable.h"
-
 namespace mu::cloud {
-class CloudConfiguration : public ICloudConfiguration, public async::Asyncable
+class CloudConfiguration : public ICloudConfiguration
 {
     INJECT(cloud, framework::IGlobalConfiguration, globalConfiguration)
 
@@ -56,12 +54,8 @@ public:
 
     io::path_t tokensFilePath() const override;
 
-    mu::async::Channel<QString> customAccessTokenChanged() const override;
-
 private:
     QString apiRootUrl() const;
-
-    mu::async::Channel<QString> m_customAccessTokenChanged;
 };
 }
 
