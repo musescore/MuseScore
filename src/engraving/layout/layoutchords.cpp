@@ -1456,4 +1456,59 @@ void LayoutChords::resolveVerticalRestsCollisions(Score* score, Segment* segment
             }
         }
     }
+
+    if (rests.size() < 2) {
+        return;
+    }
+
+    for (int i = 0; i < rests.size() - 1; ++i) {
+        Rest* rest1 = rests[i];
+        Shape shape1 = rest1->shape().translated(rest1->pos());
+        Rest* rest2 = rests[i + 1];
+        Shape shape2 = rest2->shape().translated(rest2->pos());
+        double clearance;
+        bool firstAbove = rest1->voice() < rest2->voice();
+        if (firstAbove) {
+            clearance = shape1.verticalClearance(shape2);
+        } else {
+            clearance = shape2.verticalClearance(shape1);
+        }
+        double margin = clearance - minVerticalClearance;
+        margin / spatium;
+        int marginInSteps = floor(margin / lineDistance);
+        if (firstAbove) {
+            int& clearanceBelow1 = rest1->verticalClearance().below;
+            clearanceBelow1 = std::min(clearanceBelow1, marginInSteps);
+            int& clearanceAbove2 = rest2->verticalClearance().above;
+            clearanceAbove2 = std::min(clearanceAbove2, marginInSteps);
+        } else {
+            int& clearanceAbove1 = rest1->verticalClearance().above;
+            clearanceAbove1 = std::min(clearanceAbove1, marginInSteps);
+            int& clearanceBelow2 = rest2->verticalClearance().below;
+            clearanceBelow2 = std::min(clearanceBelow2, marginInSteps);
+        }
+
+        if (margin > 0) {
+            continue;
+        }
+
+        int steps = ceil(abs(margin) / lineDistance);
+        // Move the two rests away from each other by splitting the necessary steps among the two
+        int step1 = floor(double(steps) / 2);
+        int step2 = ceil(double(steps) / 2);
+        int maxStep1 = firstAbove ? rest1->verticalClearance().above : rest1->verticalClearance().below;
+        int maxStep2 = firstAbove ? rest2->verticalClearance().below : rest2->verticalClearance().above;
+        maxStep1 = std::max(maxStep1, 0);
+        maxStep2 = std::max(maxStep2, 0);
+        if (step1 > maxStep1) {
+            step2 += step1 - maxStep1; // First rest is locked, try move the second more
+        }
+        if (step2 > maxStep2) {
+            step1 += step2 - maxStep2; // Second rest is locked, try move the first more
+        }
+        step1 = std::min(step1, maxStep1);
+        step2 = std::min(step2, maxStep2);
+        rest1->movePosY(step1 * lineDistance * (firstAbove ? -1 : 1));
+        rest2->movePosY(step2 * lineDistance * (firstAbove ? 1 : -1));
+    }
 }
