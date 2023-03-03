@@ -223,6 +223,9 @@ RetVal<project::INotationProjectPtr> BackendApi::openProject(const io::path_t& p
     }
 
     notation->setViewMode(ViewMode::PAGE);
+    for (IExcerptNotationPtr excerpt : notationProject->masterNotation()->excerpts().val) {
+        excerpt->notation()->setViewMode(ViewMode::PAGE);
+    }
 
     return RetVal<INotationProjectPtr>::make_ok(notationProject);
 }
