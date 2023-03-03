@@ -330,6 +330,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::lowerCaseBassNotes,      false, lowerCaseBassNotes,      0 },
         { StyleId::allCapsNoteNames,        false, allCapsNoteNames,        0 },
         { StyleId::concertPitch,            false, concertPitch,            0 },
+        { StyleId::multiVoiceRestOffset,    false, multiVoiceRestOffset,    0 },
         { StyleId::createMultiMeasureRests, false, multiMeasureRests,       0 },
         { StyleId::minEmptyMeasures,        false, minEmptyMeasures,        0 },
         { StyleId::minMMRestWidth,          false, minMeasureWidth,         resetMinMMRestWidth },

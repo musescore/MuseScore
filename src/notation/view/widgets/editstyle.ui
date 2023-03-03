@@ -14,55 +14,6 @@
    <string>Style</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_39">
-   <item row="1" column="0">
-    <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>6</number>
-     </property>
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="buttonTogglePagelist">
-       <property name="maximumSize">
-        <size>
-         <width>30</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="resetStylesButton">
-       <property name="text">
-        <string>Reset All Styles to Default</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
    <item row="0" column="0">
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
@@ -315,8 +266,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>673</width>
-                <height>638</height>
+                <width>592</width>
+                <height>441</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -899,8 +850,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>673</width>
-                <height>674</height>
+                <width>408</width>
+                <height>484</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -2213,8 +2164,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>737</width>
-             <height>674</height>
+             <width>685</width>
+             <height>298</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -3933,8 +3884,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>369</width>
-                <height>882</height>
+                <width>239</width>
+                <height>593</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_56">
@@ -5351,6 +5302,43 @@ By default, they will be placed such as that their right end are at the same lev
       <widget class="QWidget" name="PageRests">
        <layout class="QVBoxLayout" name="verticalLayout_8">
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_46">
+            <property name="text">
+             <string>Multi-voice rest offset:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="multiVoiceRestOffset">
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>2</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_64">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
          <widget class="QGroupBox" name="multiMeasureRests">
           <property name="title">
            <string>Multimeasure Rests</string>
@@ -5941,8 +5929,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>579</width>
-                <height>527</height>
+                <width>364</width>
+                <height>386</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54">
@@ -9699,8 +9687,8 @@ By default, they will be placed such as that their right end are at the same lev
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>585</width>
-             <height>465</height>
+             <width>380</width>
+             <height>324</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_57">
@@ -10995,8 +10983,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>568</width>
-                <height>551</height>
+                <width>384</width>
+                <height>422</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55">
@@ -11916,8 +11904,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>531</width>
-                <height>481</height>
+                <width>354</width>
+                <height>385</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">
@@ -12914,6 +12902,55 @@ By default, they will be placed such as that their right end are at the same lev
       </widget>
      </widget>
     </widget>
+   </item>
+   <item row="1" column="0">
+    <layout class="QHBoxLayout">
+     <property name="spacing">
+      <number>6</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="buttonTogglePagelist">
+       <property name="maximumSize">
+        <size>
+         <width>30</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="resetStylesButton">
+       <property name="text">
+        <string>Reset All Styles to Default</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

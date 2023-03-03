@@ -554,9 +554,9 @@ int Rest::computeVoiceOffset(int lines)
 
     bool up = voice() == 0 || voice() == 2;
     int upSign = up ? -1 : 1;
-    static constexpr int defaultVoiceLineOffset = 2; // TODO: style setting
+    int voiceLineOffset = score()->styleI(Sid::multiVoiceRestOffset);
 
-    return defaultVoiceLineOffset * upSign;
+    return voiceLineOffset * upSign;
 }
 
 int Rest::computeWholeRestOffset(int voiceOffset, int lines)

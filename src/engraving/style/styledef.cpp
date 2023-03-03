@@ -430,6 +430,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::chordModifierAdjust,     "chordModifierAdjust",     PropertyValue(0.0) },
     { Sid::concertPitch,            "concertPitch",            false },
 
+    { Sid::multiVoiceRestOffset,    "multiVoiceRestOffset",    PropertyValue(1) },
     { Sid::createMultiMeasureRests, "createMultiMeasureRests", false },
     { Sid::minEmptyMeasures,        "minEmptyMeasures",        PropertyValue(2) },
     { Sid::minMMRestWidth,          "minMMRestWidth",          Spatium(4) },
