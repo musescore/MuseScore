@@ -74,8 +74,6 @@ signals:
 private:
     void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
                            const mu::engraving::StyleIdSet& changedStyleIdSet) override;
-    void onOffsetChanged(const QVariant& offset);
-
     void loadProperties(const mu::engraving::PropertyIdSet& allowedPropertyIdSet);
 
     mu::engraving::Page* page() const;
@@ -88,6 +86,8 @@ private:
     PropertyItem* m_color = nullptr;
     PropertyItem* m_arrangeOrder = nullptr;
     PointFPropertyItem* m_offset = nullptr;
+
+    QList<engraving::EngravingItem*> m_elementsForOffsetProperty;
 };
 }
 
