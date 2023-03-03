@@ -60,7 +60,11 @@ void MidiModule::resolveImports()
     }
 }
 
-void MidiModule::onInit(const framework::IApplication::RunMode&)
+void MidiModule::onInit(const framework::IApplication::RunMode& mode)
 {
+    if (mode == framework::IApplication::RunMode::AudioPluginProbe) {
+        return;
+    }
+
     s_configuration->init();
 }

@@ -51,7 +51,3 @@ void GuitarProModule::resolveImports()
         readers->reg({ "gtp", "gp3", "gp4", "gp5", "gpx", "gp", "ptb" }, std::make_shared<GuitarProReader>());
     }
 }
-
-void GuitarProModule::onInit(const framework::IApplication::RunMode&)
-{
-}

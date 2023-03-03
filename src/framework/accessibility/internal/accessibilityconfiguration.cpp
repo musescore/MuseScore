@@ -60,10 +60,16 @@ void AccessibilityConfiguration::init()
     s_accessibilityActivationObserver = new AccessibilityActivationObserver();
 
     QAccessible::installActivationObserver(s_accessibilityActivationObserver);
+
+    m_inited = true;
 }
 
 bool AccessibilityConfiguration::enabled() const
 {
+    if (!m_inited) {
+        return false;
+    }
+
     if (!navigationController()) {
         return false;
     }
@@ -78,5 +84,9 @@ bool AccessibilityConfiguration::enabled() const
 
 bool AccessibilityConfiguration::active() const
 {
+    if (!m_inited) {
+        return false;
+    }
+
     return s_accessibilityActivationObserver->isAccessibilityActive();
 }

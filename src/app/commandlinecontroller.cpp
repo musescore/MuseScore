@@ -110,6 +110,9 @@ void CommandLineController::parse(const QStringList& args)
     m_parser.addOption(QCommandLineOption("test-case-func", "Call test case function", "name"));
     m_parser.addOption(QCommandLineOption("test-case-func-args", "Call test case function args", "args"));
 
+    // Compatibility check
+    m_parser.addOption(QCommandLineOption("audio-plugin-probe", "Check an audio plugin for compatibility with the application", "path"));
+
     m_parser.process(args);
 }
 
@@ -190,6 +193,11 @@ void CommandLineController::apply()
     QString modeType;
     if (m_parser.isSet("session-type")) {
         modeType = m_parser.value("session-type");
+    }
+
+    if (m_parser.isSet("audio-plugin-probe")) {
+        application()->setRunMode(IApplication::RunMode::AudioPluginProbe);
+        m_audioPluginPath = m_parser.value("audio-plugin-probe");
     }
 
     // Converter mode
@@ -458,6 +466,11 @@ CommandLineController::Diagnostic CommandLineController::diagnostic() const
 CommandLineController::Autobot CommandLineController::autobot() const
 {
     return m_autobot;
+}
+
+mu::io::path_t CommandLineController::audioPluginPath() const
+{
+    return m_audioPluginPath;
 }
 
 void CommandLineController::printLongVersion() const

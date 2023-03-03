@@ -57,7 +57,11 @@ void ImagesExportModule::resolveImports()
     }
 }
 
-void ImagesExportModule::onInit(const framework::IApplication::RunMode&)
+void ImagesExportModule::onInit(const framework::IApplication::RunMode& mode)
 {
+    if (mode == framework::IApplication::RunMode::AudioPluginProbe) {
+        return;
+    }
+
     s_configuration->init();
 }

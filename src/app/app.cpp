@@ -287,7 +287,15 @@ int App::run(int argc, char** argv)
             delete splashScreen;
         }
 #endif // MUE_BUILD_APPSHELL_MODULE
-    }
+    } break;
+    case framework::IApplication::RunMode::AudioPluginProbe: {
+        io::path_t pluginPath = commandLine.audioPluginPath();
+
+        QMetaObject::invokeMethod(qApp, [pluginPath]() {
+                LOGD() << "Scanning audio plugin: " << pluginPath;
+                qApp->exit(0);
+            }, Qt::QueuedConnection);
+    } break;
     }
 
     // ====================================================

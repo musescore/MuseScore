@@ -116,8 +116,12 @@ void DiagnosticsModule::registerUiTypes()
     qmlRegisterType<CorruptScoreDevToolsModel>("MuseScore.Diagnostics", 1, 0, "CorruptScoreDevToolsModel");
 }
 
-void DiagnosticsModule::onInit(const framework::IApplication::RunMode&)
+void DiagnosticsModule::onInit(const framework::IApplication::RunMode& mode)
 {
+    if (mode == framework::IApplication::RunMode::AudioPluginProbe) {
+        return;
+    }
+
     s_configuration->init();
     s_actionsController->init();
 

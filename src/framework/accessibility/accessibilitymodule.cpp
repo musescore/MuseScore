@@ -58,7 +58,11 @@ void AccessibilityModule::resolveImports()
     }
 }
 
-void AccessibilityModule::onInit(const framework::IApplication::RunMode&)
+void AccessibilityModule::onInit(const framework::IApplication::RunMode& mode)
 {
+    if (mode != framework::IApplication::RunMode::Editor) {
+        return;
+    }
+
     s_configuration->init();
 }

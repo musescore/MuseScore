@@ -37,7 +37,8 @@ public:
 
     enum class RunMode {
         Editor,
-        Converter
+        Converter,
+        AudioPluginProbe,
     };
 
     virtual void setRunMode(const RunMode& mode) = 0;

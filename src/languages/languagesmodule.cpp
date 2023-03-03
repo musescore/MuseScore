@@ -50,7 +50,7 @@ void LanguagesModule::onPreInit(const framework::IApplication::RunMode& mode)
     //! NOTE: configurator must be initialized before any service that uses it
     s_languagesConfiguration->init();
 
-    if (framework::IApplication::RunMode::Converter == mode) {
+    if (mode != framework::IApplication::RunMode::Editor) {
         return;
     }
 
