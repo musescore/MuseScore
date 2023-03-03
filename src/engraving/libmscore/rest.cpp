@@ -302,9 +302,9 @@ SymId Rest::getSymbol(DurationType type, int line, int lines)
         }
     // fall through
     case DurationType::V_WHOLE:
-        return (line <= -2 || line >= (lines - 1)) ? SymId::restWholeLegerLine : SymId::restWhole;
+        return (line < 0 || line >= lines) ? SymId::restWholeLegerLine : SymId::restWhole;
     case DurationType::V_HALF:
-        return (line <= -3 || line >= (lines - 2)) ? SymId::restHalfLegerLine : SymId::restHalf;
+        return (line < 0 || line >= lines) ? SymId::restHalfLegerLine : SymId::restHalf;
     case DurationType::V_QUARTER:
         return SymId::restQuarter;
     case DurationType::V_EIGHTH:
@@ -395,11 +395,11 @@ void Rest::layout()
     int userLine   = yOff == 0.0 ? 0 : lrint(yOff / (lineDist * _spatium));
     int lines      = st ? st->lines() : 5;
 
-    int lineOffset = computeLineOffset(lines);
-    m_sym = getSymbol(durationType().type(), lineOffset / 2 + userLine, lines);
-    int naturalLine = computeNaturalLine(lines);
+    int naturalLine = computeNaturalLine(lines); // Measured in 1sp steps
+    int lineOffset = computeVoiceOffset(lines); // Measured in 1sp steps
+    m_sym = getSymbol(durationType().type(), naturalLine + lineOffset + userLine, lines);
 
-    setPosY((double(naturalLine) + double(lineOffset) * .5) * lineDist * _spatium);
+    setPosY((double(naturalLine) + double(lineOffset)) * lineDist * _spatium);
     if (!shouldNotBeDrawn()) {
         setbbox(symBbox(m_sym));
     }
@@ -487,7 +487,7 @@ int Rest::getDotline(DurationType durationType)
 //   computeLineOffset
 //---------------------------------------------------------
 
-int Rest::computeLineOffset(int lines)
+int Rest::computeVoiceOffset(int lines)
 {
     Segment* s = segment();
     bool offsetVoices = s && measure() && (voice() > 0 || measure()->hasVoices(staffIdx(), tick(), actualTicks()));
@@ -545,169 +545,35 @@ int Rest::computeLineOffset(int lines)
         }
     }
 
-    int lineOffset    = 0;
-    int assumedCenter = 4;
-    int actualCenter  = (lines - 1);
-    int centerDiff    = actualCenter - assumedCenter;
-
-    if (offsetVoices) {
-        // move rests in a multi voice context
-        bool up = (voice() == 0) || (voice() == 2);         // TODO: use style values
-
-        // Calculate extra offset to move rests above the highest resp. below the lowest note
-        // of this segment (for measure rests, of the whole measure) in all opposite voices.
-        // Ignore stems and articulations, because which multi-voice they are at the opposite end.
-        int upOffset = up ? 1 : 0;
-        int line = up ? 10 : -10;
-
-        // For compatibility reasons apply automatic collision avoidance only if y-offset is unchanged
-        if (RealIsNull(offset().y()) && autoplace()) {
-            track_idx_t firstTrack = staffIdx() * 4;
-            int extraOffsetForFewLines = lines < 5 ? 2 : 0;
-            bool isMeasureRest = durationType().type() == DurationType::V_MEASURE;
-            Segment* seg = isMeasureRest ? measure()->first() : s;
-            while (seg) {
-                for (const track_idx_t track : { firstTrack + upOffset, firstTrack + 2 + upOffset }) {
-                    EngravingItem* e = seg->element(track);
-                    if (e && e->isChord()) {
-                        Chord* chord = toChord(e);
-                        StaffGroup staffGroup = staff()->staffType(chord->tick())->group();
-                        for (Note* note : chord->notes()) {
-                            int nline = staffGroup == StaffGroup::TAB
-                                        ? note->string() * 2
-                                        : note->line();
-                            nline = nline - centerDiff;
-                            if (up && nline <= line) {
-                                line = nline - extraOffsetForFewLines;
-                                if (note->accidentalType() != AccidentalType::NONE) {
-                                    line--;
-                                }
-                            } else if (!up && nline >= line) {
-                                line = nline + extraOffsetForFewLines;
-                                if (note->accidentalType() != AccidentalType::NONE) {
-                                    line++;
-                                }
-                            }
-                        }
-                    }
-                }
-                seg = isMeasureRest ? seg->next() : nullptr;
-            }
-        }
-
-        switch (durationType().type()) {
-        case DurationType::V_LONG:
-            lineOffset = up ? -3 : 5;
-            lineOffset += up ? (line < 5 ? line - 5 : 0) : (line > 5 ? line - 5 : 0);
-            break;
-        case DurationType::V_BREVE:
-            lineOffset = up ? -3 : 5;
-            lineOffset += up ? (line < 3 ? line - 3 : 0) : (line > 5 ? line - 5 : 0);
-            break;
-        case DurationType::V_MEASURE:
-            if (ticks() >= Fraction(2, 1)) {     // breve symbol
-                lineOffset = up ? -3 : 5;
-                lineOffset += up ? (line < 3 ? line - 3 : 0) : (line > 5 ? line - 4 : 0);
-            } else {
-                lineOffset = up ? -4 : 6;                   // whole symbol
-                lineOffset += up ? (line < 3 ? line - 2 : 0) : (line > 6 ? line - 5 : 0);
-            }
-            break;
-        case DurationType::V_WHOLE:
-            lineOffset = up ? -4 : 6;
-            lineOffset += up ? (line < 3 ? line - 2 : 0) : (line > 6 ? line - 5 : 0);
-            break;
-        case DurationType::V_HALF:
-            lineOffset = up ? -4 : 4;
-            lineOffset += up ? (line < 2 ? line - 3 : 0) : (line > 5 ? line - 4 : 0);
-            break;
-        case DurationType::V_QUARTER:
-            lineOffset = up ? -4 : 4;
-            lineOffset += up ? (line < 5 ? line - 4 : 0) : (line > 3 ? line - 3 : 0);
-            break;
-        case DurationType::V_EIGHTH:
-            lineOffset = up ? -4 : 4;
-            lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
-            break;
-        case DurationType::V_16TH:
-            lineOffset = up ? -6 : 4;
-            lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
-            break;
-        case DurationType::V_32ND:
-            lineOffset = up ? -6 : 6;
-            lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
-            break;
-        case DurationType::V_64TH:
-            lineOffset = up ? -8 : 6;
-            lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
-            break;
-        case DurationType::V_128TH:
-            lineOffset = up ? -8 : 8;
-            lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
-            break;
-        case DurationType::V_1024TH:
-        case DurationType::V_512TH:
-        case DurationType::V_256TH:
-            lineOffset = up ? -10 : 6;
-            lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
-            break;
-        default:
-            break;
-        }
-
-        // adjust offsets for staves with other than five lines
-        if (lines != 5) {
-            lineOffset += centerDiff;
-            if (centerDiff & 1) {
-                // round to line
-                if (lines == 2 && staff() && staff()->lineDistance(tick()) < 2.0) {
-                    // leave alone
-                } else if (lines <= 6) {
-                    lineOffset += lineOffset > 0 ? -1 : 1;              // round inward
-                } else {
-                    lineOffset += lineOffset > 0 ? 1 : -1;              // round outward
-                }
-            }
-        }
-    } else {
-        // Gould says to center rests on middle line or space
-        // but subjectively, many rests look strange centered on a space
-        // so we do it for 2-line staves only
-        if (centerDiff & 1 && lines != 2) {
-            centerDiff += 1;        // round down
-        }
-        lineOffset = centerDiff;
-        switch (durationType().type()) {
-        case DurationType::V_LONG:
-        case DurationType::V_BREVE:
-        case DurationType::V_MEASURE:
-        case DurationType::V_WHOLE:
-            if (lineOffset & 1) {
-                lineOffset += 1;                // always round to nearest line
-            } else if (lines <= 3) {
-                lineOffset += 2;                // special case - move down for 1-line or 3-line staff
-            }
-            break;
-        case DurationType::V_HALF:
-            if (lineOffset & 1) {
-                lineOffset += 1;                // always round to nearest line
-            }
-            break;
-        default:
-            break;
-        }
+    if (!offsetVoices) {
+        return 0;
     }
-    // DEBUG: subtract this off only to be added back in layout()?
-    // that would throw off calculation of when ledger lines are needed
-    //if (staff())
-    //      lineOffset -= staff()->staffType()->stepOffset();
+
+    bool up = voice() == 0 || voice() == 2;
+    int upSign = up ? -1 : 1;
+    static constexpr int defaultVoiceLineOffset = 1; // TODO: style setting
+    int voiceLineOffset;
+    if (defaultVoiceLineOffset == 1 && isWholeRest() && lines == 1 && up) {
+        voiceLineOffset = defaultVoiceLineOffset + 1;
+    } else {
+        voiceLineOffset = defaultVoiceLineOffset;
+    }
+    int lineOffset = voiceLineOffset * upSign;
+
     return lineOffset;
+}
+
+bool Rest::isWholeRest() const
+{
+    TDuration durType = durationType();
+    return durType == DurationType::V_WHOLE
+           || (durType == DurationType::V_MEASURE && measure() && measure()->ticks() < Fraction(2, 1));
 }
 
 int Rest::computeNaturalLine(int lines)
 {
     int line = (lines % 2) ? floor(double(lines) / 2) : ceil(double(lines) / 2);
-    if (lines > 1 && m_sym == SymId::restWhole) {
+    if (isWholeRest() && lines > 1) {
         line -= 1;
     }
     return line;

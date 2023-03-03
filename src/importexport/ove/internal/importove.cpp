@@ -1540,7 +1540,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                 if (!isRestDefaultLine(notePtr, container->getNoteType()) && notePtr->getLine() != 0) {
                     double yOffset = -(double)(notePtr->getLine());
                     int stepOffset = cr->staff()->staffType(cr->tick())->stepOffset();
-                    int lineOffset = static_cast<mu::engraving::Rest*>(cr)->computeLineOffset(5);
+                    int lineOffset = static_cast<mu::engraving::Rest*>(cr)->computeVoiceOffset(5);
                     yOffset -= qreal(lineOffset + stepOffset);
                     yOffset *= m_score->spatium() / 2.0;
                     cr->ryoffset() = yOffset;

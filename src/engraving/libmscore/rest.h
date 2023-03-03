@@ -86,7 +86,8 @@ public:
     void setAccent(bool flag);
 
     int computeNaturalLine(int lines); // Natural rest vertical position
-    int computeLineOffset(int lines); // Vertical displacement in multi-voice cases
+    int computeVoiceOffset(int lines); // Vertical displacement in multi-voice cases
+    bool isWholeRest() const;
 
     int upLine() const override;
     int downLine() const override;
