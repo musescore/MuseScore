@@ -565,6 +565,7 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
     jsonForPdfs["scoreBin"] = QString::fromLatin1(scoreBin);
 
     INotationPtrList notations;
+    notations.push_back(masterNotation->notation());
 
     QJsonArray partsArray;
     QJsonArray partsNamesArray;
