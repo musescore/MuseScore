@@ -396,10 +396,13 @@ void Rest::layout()
     int lines      = st ? st->lines() : 5;
 
     int naturalLine = computeNaturalLine(lines); // Measured in 1sp steps
-    int lineOffset = computeVoiceOffset(lines); // Measured in 1sp steps
-    m_sym = getSymbol(durationType().type(), naturalLine + lineOffset + userLine, lines);
+    int voiceOffset = computeVoiceOffset(lines); // Measured in 1sp steps
+    int wholeRestOffset = computeWholeRestOffset(voiceOffset, lines);
+    int finalLine = naturalLine + voiceOffset + wholeRestOffset;
 
-    setPosY((double(naturalLine) + double(lineOffset)) * lineDist * _spatium);
+    m_sym = getSymbol(durationType().type(), finalLine + userLine, lines);
+
+    setPosY(finalLine * lineDist * _spatium);
     if (!shouldNotBeDrawn()) {
         setbbox(symBbox(m_sym));
     }
@@ -551,16 +554,22 @@ int Rest::computeVoiceOffset(int lines)
 
     bool up = voice() == 0 || voice() == 2;
     int upSign = up ? -1 : 1;
-    static constexpr int defaultVoiceLineOffset = 1; // TODO: style setting
-    int voiceLineOffset;
-    if (defaultVoiceLineOffset == 1 && isWholeRest() && lines == 1 && up) {
-        voiceLineOffset = defaultVoiceLineOffset + 1;
-    } else {
-        voiceLineOffset = defaultVoiceLineOffset;
-    }
-    int lineOffset = voiceLineOffset * upSign;
+    static constexpr int defaultVoiceLineOffset = 2; // TODO: style setting
 
-    return lineOffset;
+    return defaultVoiceLineOffset * upSign;
+}
+
+int Rest::computeWholeRestOffset(int voiceOffset, int lines)
+{
+    if (!isWholeRest()) {
+        return 0;
+    }
+    bool moveToLineAbove = (lines > 5)
+                           || ((lines > 1 || voiceOffset == -1 || voiceOffset == 2) && !(voiceOffset == -2 || voiceOffset == 1));
+    if (moveToLineAbove) {
+        return -1;
+    }
+    return 0;
 }
 
 bool Rest::isWholeRest() const
@@ -573,9 +582,6 @@ bool Rest::isWholeRest() const
 int Rest::computeNaturalLine(int lines)
 {
     int line = (lines % 2) ? floor(double(lines) / 2) : ceil(double(lines) / 2);
-    if (isWholeRest() && lines > 1) {
-        line -= 1;
-    }
     return line;
 }
 

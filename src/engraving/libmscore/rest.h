@@ -87,6 +87,7 @@ public:
 
     int computeNaturalLine(int lines); // Natural rest vertical position
     int computeVoiceOffset(int lines); // Vertical displacement in multi-voice cases
+    int computeWholeRestOffset(int voiceOffset, int lines);
     bool isWholeRest() const;
 
     int upLine() const override;
