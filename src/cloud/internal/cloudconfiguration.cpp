@@ -32,8 +32,6 @@ using namespace mu::framework;
 static const std::string module_name("cloud");
 static const Settings::Key CLIENT_ID_KEY(module_name, "cloud/clientId");
 
-static const Settings::Key CUSTOM_ACCESS_TOKEN(module_name, "cloud/customAccessToken");
-
 static QByteArray generateClientId()
 {
     QByteArray qtGeneratedId(QSysInfo::machineUniqueId());
@@ -75,11 +73,6 @@ void CloudConfiguration::init()
     if (settings()->value(CLIENT_ID_KEY).isNull()) {
         settings()->setSharedValue(CLIENT_ID_KEY, Val(generateClientId().toStdString()));
     }
-
-    settings()->setDefaultValue(CUSTOM_ACCESS_TOKEN, Val(""));
-    settings()->valueChanged(CUSTOM_ACCESS_TOKEN).onReceive(this, [this](const Val& val) {
-        m_customAccessTokenChanged.send(val.toQString());
-    });
 }
 
 RequestHeaders CloudConfiguration::headers() const
@@ -160,11 +153,6 @@ QUrl CloudConfiguration::uploadAudioApiUrl() const
 mu::io::path_t CloudConfiguration::tokensFilePath() const
 {
     return globalConfiguration()->userAppDataPath() + "/cred.dat";
-}
-
-mu::async::Channel<QString> CloudConfiguration::customAccessTokenChanged() const
-{
-    return m_customAccessTokenChanged;
 }
 
 QString CloudConfiguration::apiRootUrl() const
