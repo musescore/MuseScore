@@ -329,6 +329,11 @@ SymId Rest::getSymbol(DurationType type, int line, int lines)
     }
 }
 
+void Rest::updateSymbol(int line, int lines)
+{
+    m_sym = getSymbol(durationType().type(), line, lines);
+}
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------

@@ -31,6 +31,16 @@
 namespace mu::engraving {
 class TDuration;
 
+struct VerticalClearance {
+    int above = 0.0; // In half-space units
+    int below = 0.0; // In half-space units
+    void reset()
+    {
+        above = 1000; // arbitrary high value
+        below = 1000; // arbitrary high value
+    }
+};
+
 //---------------------------------------------------------
 //    @@ Rest
 ///     This class implements a rest.
@@ -74,6 +84,7 @@ public:
     void write(XmlWriter& xml) const override;
 
     SymId getSymbol(DurationType type, int line, int lines);
+    void updateSymbol(int line, int lines);
 
     void checkDots();
     void layoutDots();
@@ -113,6 +124,8 @@ public:
 
     bool shouldNotBeDrawn() const;
 
+    VerticalClearance& verticalClearance() { return m_verticalClearance; }
+
 protected:
     Rest(const ElementType& type, Segment* parent = 0);
     Rest(const ElementType& type, Segment* parent, const TDuration&);
@@ -133,6 +146,8 @@ private:
     bool m_gap      { false };       // invisible and not selectable for user
     std::vector<NoteDot*> m_dots;
     DeadSlapped* _deadSlapped = nullptr;
+
+    VerticalClearance m_verticalClearance;
 
     mu::RectF drag(EditData&) override;
     double upPos() const override;

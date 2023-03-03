@@ -31,8 +31,10 @@
 #include "libmscore/measure.h"
 #include "libmscore/note.h"
 #include "libmscore/part.h"
+#include "libmscore/rest.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
+#include "libmscore/shape.h"
 #include "libmscore/staff.h"
 #include "libmscore/stem.h"
 #include "libmscore/stemslash.h"
@@ -1377,6 +1379,80 @@ void LayoutChords::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure)
             Note* endNote = tie->endNote();
             if (endNote && endNote->findMeasure() == note->findMeasure()) {
                 tie->layoutFor(note->findMeasure()->system()); // line attach points are updated here
+            }
+        }
+    }
+}
+
+void LayoutChords::resolveVerticalRestsCollisions(Score* score, Segment* segment, staff_idx_t staffIdx)
+{
+    track_idx_t startTrack = staffIdx * VOICES;
+    track_idx_t endTrack = startTrack + VOICES;
+    std::vector<Rest*> rests;
+    std::vector<Chord*> chords;
+
+    for (track_idx_t track = startTrack; track < endTrack; ++track) {
+        EngravingItem* e = segment->element(track);
+        if (!e) {
+            continue;
+        }
+        if (e->isRest()) {
+            Rest* rest = toRest(e);
+            rest->verticalClearance().reset();
+            rests.push_back(rest);
+        } else if (e->isChord()) {
+            chords.push_back(toChord(e));
+        }
+    }
+
+    if (rests.empty()) {
+        return;
+    }
+
+    Fraction tick = segment->tick();
+    Staff* staff = score->staff(staffIdx);
+    int lines = staff->lines(tick);
+    double spatium = staff->spatium(tick);
+    double lineDistance = staff->lineDistance(tick) * spatium;
+    const double minVerticalClearance = 0.35 * spatium;
+
+    for (Rest* rest : rests) {
+        for (Chord* chord : chords) {
+            bool restAbove = rest->voice() < chord->voice();
+            int upSign = restAbove ? -1 : 1;
+            double restYOffset = rest->offset().y();
+            bool ignoreYOffset = (restAbove && restYOffset > 0) || (!restAbove && restYOffset < 0);
+            PointF offset = ignoreYOffset ? PointF(0, restYOffset) : PointF(0, 0);
+            Shape restShape = rest->shape().translated(rest->pos() - offset);
+            Shape chordShape = chord->shape().translated(chord->pos());
+            double clearance = restAbove ? restShape.verticalClearance(chordShape) : chordShape.verticalClearance(restShape);
+            double margin = clearance - minVerticalClearance;
+            int marginInSteps = floor(margin / lineDistance);
+            if (restAbove) {
+                int& clearanceBelow = rest->verticalClearance().below;
+                clearanceBelow = std::min(clearanceBelow, marginInSteps);
+            } else {
+                int& clearanceAbove = rest->verticalClearance().above;
+                clearanceAbove = std::min(clearanceAbove, marginInSteps);
+            }
+            if (margin > 0) {
+                continue;
+            }
+            bool isWholeOrHalf = rest->isWholeRest() || rest->durationType() == DurationType::V_HALF;
+            bool outAboveStaff = restAbove && restShape.bottom() + margin < minVerticalClearance;
+            bool outBelowStaff = !restAbove && restShape.top() - margin > (lines - 1) * lineDistance - minVerticalClearance;
+            bool useHalfSpaceSteps = (outAboveStaff || outBelowStaff) && !isWholeOrHalf;
+            if (useHalfSpaceSteps) {
+                int steps = ceil(abs(margin) / (lineDistance / 2));
+                rest->movePosY(steps * lineDistance / 2 * upSign);
+            } else {
+                int steps = ceil(abs(margin) / lineDistance);
+                rest->movePosY(steps * lineDistance * upSign);
+            }
+            if (isWholeOrHalf) {
+                double y = rest->pos().y();
+                int line = y < 0 ? floor(y / lineDistance) : floor(y / lineDistance);
+                rest->updateSymbol(line, lines); // Because it may need to use the symbol with ledger line now
             }
         }
     }

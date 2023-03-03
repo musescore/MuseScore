@@ -47,6 +47,7 @@ public:
     static void appendGraceNotes(Chord* chord);
     static void clearLineAttachPoints(Measure* measure);
     static void updateLineAttachPoints(Chord* chord, bool isFirstInMeasure);
+    static void resolveVerticalRestsCollisions(Score* score, Segment* segment, staff_idx_t staffIdx);
 };
 }
 
