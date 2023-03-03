@@ -170,22 +170,24 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     if (!m_systemObjectStaves.empty()) {
         bool saveSysObjStaves = false;
         for (Staff* s : m_systemObjectStaves) {
-            if (s->idx() != mu::nidx) {
-                saveSysObjStaves = true;
-                break;
+            IF_ASSERT_FAILED(s->idx() != mu::nidx) {
+                continue;
             }
+            saveSysObjStaves = true;
+            break;
         }
         if (saveSysObjStaves) {
             // write which staves currently have system objects above them
             xml.startElement("SystemObjects");
             for (Staff* s : m_systemObjectStaves) {
-                if (s->idx() != mu::nidx) {
-                    // TODO: when we add more granularity to system object display, construct this string per staff
-                    String sysObjForStaff = u"barNumbers=\"false\"";
-                    // for now, everything except bar numbers is shown on system object staves
-                    // (also, the code to display bar numbers on system staves other than the first currently does not exist!)
-                    xml.tag("Instance", { { "staffId", s->idx() + 1 }, { "barNumbers", "false" } });
+                IF_ASSERT_FAILED(s->idx() != mu::nidx) {
+                    continue;
                 }
+                // TODO: when we add more granularity to system object display, construct this string per staff
+                String sysObjForStaff = u"barNumbers=\"false\"";
+                // for now, everything except bar numbers is shown on system object staves
+                // (also, the code to display bar numbers on system staves other than the first currently does not exist!)
+                xml.tag("Instance", { { "staffId", s->idx() + 1 }, { "barNumbers", "false" } });
             }
             xml.endElement();
         }
