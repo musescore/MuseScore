@@ -78,7 +78,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
             m->undoChangeProperty(Pid::REPEAT_START, false);
         }
         m = m->prevMeasure();
-        if (!m) {
+        if (!m || m->isFirstInSystem()) {
             return;
         }
         bl = const_cast<BarLine*>(m->endBarLine());
