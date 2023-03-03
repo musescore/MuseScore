@@ -24,6 +24,7 @@
 #include "async/async.h"
 
 #include "translation.h"
+#include "defer.h"
 #include "log.h"
 
 using namespace mu::project;
@@ -112,6 +113,15 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
             score->doLayout();
         }
     }
+
+    // Backup view modes
+    std::vector<ViewMode> viewModes = this->viewModes(notations);
+    setViewModes(notations, ViewMode::PAGE);
+
+    DEFER {
+        // Restore view modes
+        setViewModes(notations, viewModes);
+    };
 
     bool isCreatingOnlyOneFile = this->isCreatingOnlyOneFile(notations, unitType);
 
@@ -360,4 +370,32 @@ void ExportProjectScenario::openFolder(const io::path_t& path) const
     if (!ret) {
         LOGE() << "Could not open folder: " << path.toQString();
     }
+}
+
+std::vector<ViewMode> ExportProjectScenario::viewModes(const notation::INotationPtrList& notations) const
+{
+    std::vector<ViewMode> modes;
+    for (INotationPtr notation : notations) {
+        modes.push_back(notation->painting()->viewMode());
+    }
+
+    return modes;
+}
+
+void ExportProjectScenario::setViewModes(const notation::INotationPtrList& notations,
+                                         const std::vector<notation::ViewMode>& viewModes) const
+{
+    IF_ASSERT_FAILED(notations.size() == viewModes.size()) {
+        return;
+    }
+
+    for (size_t i = 0; i < notations.size(); ++i) {
+        notations[i]->painting()->setViewMode(viewModes[i]);
+    }
+}
+
+void ExportProjectScenario::setViewModes(const notation::INotationPtrList& notations, ViewMode viewMode) const
+{
+    std::vector<notation::ViewMode> modes(notations.size(), viewMode);
+    setViewModes(notations, modes);
 }

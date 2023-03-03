@@ -79,6 +79,10 @@ private:
 
     void openFolder(const io::path_t& path) const;
 
+    std::vector<notation::ViewMode> viewModes(const notation::INotationPtrList& notations) const;
+    void setViewModes(const notation::INotationPtrList& notations, const std::vector<notation::ViewMode>& viewModes) const;
+    void setViewModes(const notation::INotationPtrList& notations, notation::ViewMode viewMode) const;
+
     mutable FileConflictPolicy m_fileConflictPolicy = FileConflictPolicy::Undefined;
     mutable INotationWriterPtr m_currentWriter;
     mutable std::string m_currentSuffix;
