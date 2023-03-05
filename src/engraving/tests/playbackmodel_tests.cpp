@@ -337,18 +337,17 @@ TEST_F(Engraving_PlaybackModelTests, Pizz_To_Arco_Technique)
 }
 
 /**
- * @brief PlaybackModelTests_Repeat_Last_Measure
- * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 6 measures
- *          Additionally, there is a "repeat last measure" sign on the 6-th measure. In total, we'll be playing 7 measures overall
- *
- * @bug The test is currently disabled. At the moment it shows a flaw in libmscore - repeatSegments. RepeatSegments calculations don't
- *      take into account MeasureRepeat elements which leads to issues with playback model. Whenever the root issue will be finished, this test
- *      will be enabled
+ * @brief PlaybackModelTests_Single_Measure_Repeat
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 7 measures
+ *          The first measure contains 4 quarter notes, and the second measure contains a "repeat last measure" sign to repeat these.
+ *          The third measure contains 8 eighth notes, and the fourth through sixth measures contain "repeat last measure" signs to
+ *          repeat these three times.
+ *          The final measure contains a final whole note.
  */
-TEST_F(Engraving_PlaybackModelTests, Repeat_Last_Measure)
+TEST_F(Engraving_PlaybackModelTests, Single_Measure_Repeat)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_last_measure/repeat_last_measure.mscx");
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "single_measure_repeat/single_measure_repeat.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
@@ -357,8 +356,8 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_Last_Measure)
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
-    // [GIVEN] Expected amount of events - 4 quarter notes on every measure * 7 measures which should be played
-    int expectedSize = 24;
+    // [GIVEN] Expected amount of events - 2 measures of 4 quarter notes, 4 measures of 8 eighth notes, 1 final note
+    int expectedSize = 2 * 4 + 4 * 8 + 1;
 
     // [WHEN] The articulation profiles repository will be returning profiles for StringsArticulation family
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
