@@ -374,6 +374,43 @@ TEST_F(Engraving_PlaybackModelTests, Single_Measure_Repeat)
 }
 
 /**
+ * @brief PlaybackModelTests_Multi_Measure_Repeat
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 9 measures
+ *          The first measure contains a simple pattern of 4 quarter notes.
+ *          The second measure contains a "repeat last measure" sign; the third and fourth measures contain a "repeat last
+ *          two measures" sign; the fifth through eighth measures contain a "repeat last four measures" sign.
+ *          This means that we will repeat the same pattern eight times. The final measure contains a whole note.
+ */
+TEST_F(Engraving_PlaybackModelTests, Multi_Measure_Repeat)
+{
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "multi_measure_repeat/multi_measure_repeat.mscx");
+
+    ASSERT_TRUE(score);
+    ASSERT_EQ(score->parts().size(), 1);
+
+    const Part* part = score->parts().at(0);
+    ASSERT_TRUE(part);
+    ASSERT_EQ(part->instruments().size(), 1);
+
+    // [GIVEN] Expected amount of events - 8 measures of 4 quarter notes, 1 final note
+    int expectedSize = 8 * 4 + 1;
+
+    // [WHEN] The articulation profiles repository will be returning profiles for StringsArticulation family
+    EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
+
+    // [WHEN] The playback model requested to be loaded
+    PlaybackModel model;
+    model.setprofilesRepository(m_repositoryMock);
+    model.load(score);
+
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+
+    // [THEN] Amount of events does match expectations
+    EXPECT_EQ(result.size(), expectedSize);
+}
+
+/**
  * @brief PlaybackModelTests_SimpleRepeat_Changes_Notification
  * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 4 measures
  *          Additionally, there is a simple repeat from measure 2 up to measure 3. In total, we'll be playing 6 measures overall
