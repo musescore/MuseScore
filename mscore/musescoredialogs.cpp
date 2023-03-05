@@ -170,6 +170,8 @@ void AboutBoxDialog::copyRevisionToClipboard()
       QClipboard* cb = QApplication::clipboard();
       QString sysinfo = "OS: ";
       sysinfo += QSysInfo::prettyProductName();
+      if (QSysInfo::productType() == "windows" && (QSysInfo::productVersion() == "10" || QSysInfo::productVersion() == "11"))
+            sysinfo += " or later";
       sysinfo += ", Arch.: ";
       sysinfo += QSysInfo::currentCpuArchitecture();
       // endianness?
