@@ -2411,6 +2411,8 @@ void NotationUiActions::init()
                 m_actionCheckedChanged.send({ configActions.at(configType) });
             });
         }
+
+        m_actionCheckedChanged.send({ TOGGLE_CONCERT_PITCH_CODE });
         m_controller->currentNotationStyleChanged().onNotify(this, [this]() {
             m_actionCheckedChanged.send({ TOGGLE_CONCERT_PITCH_CODE });
         });

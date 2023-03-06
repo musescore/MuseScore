@@ -1549,6 +1549,23 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
 
         cloneSpanner(s, score, dstTrack, dstTrack2);
     }
+
+    bool oscoreConcertPitch = oscore->styleB(Sid::concertPitch);
+    bool scoreConcertPitch = score->styleB(Sid::concertPitch);
+
+    if ((oscoreConcertPitch && !scoreConcertPitch)
+        || (!oscoreConcertPitch && scoreConcertPitch)) {
+        Interval interval = srcStaff->part()->instrument()->transpose();
+        if (interval.isZero() && srcStaff->part()->instruments().size() == 1) {
+            return;
+        }
+
+        if (!scoreConcertPitch) {
+            interval.flip();
+        }
+
+        score->transposeKeys(dstStaffIdx, dstStaffIdx + 1, startTick, endTick, interval, true, !scoreConcertPitch);
+    }
 }
 
 std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>& parts)

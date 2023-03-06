@@ -617,16 +617,8 @@ void Score::transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fr
                 //            pref = PreferSharpFlat::FLATS;
                 //      }
                 Key nKey = transposeKey(ke.key(), segmentInterval, pref);
-                // remove initial C major key signatures
-                if (nKey == Key::C && s->tick().isZero() && !ks->isCustom()) {
-                    undo(new RemoveElement(ks));
-                    if (s->empty()) {
-                        undo(new RemoveElement(s));
-                    }
-                } else {
-                    ke.setKey(nKey);
-                    undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
-                }
+                ke.setKey(nKey);
+                undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
             }
         }
         if (createKey && firstMeasure()) {

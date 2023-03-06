@@ -132,6 +132,10 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             </Clef>
+          <KeySig>
+            <linkedMain/>
+            <accidental>0</accidental>
+            </KeySig>
           <TimeSig>
             <linkedMain/>
             <sigN>4</sigN>
