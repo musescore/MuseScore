@@ -291,6 +291,14 @@ fluid_mod_transform_source_value(fluid_real_t val, unsigned char mod_flags, cons
               :  fluid_concave(127 * 2 * (0.5f - val_norm));
         break;
 
+    case FLUID_MOD_LINEAR_LOG | FLUID_MOD_UNIPOLAR | FLUID_MOD_POSITIVE: /* =7 */
+            val = fluid_logarifmic(127 *val_norm);
+        break;
+
+    case FLUID_MOD_LINEAR_LOG | FLUID_MOD_UNIPOLAR | FLUID_MOD_NEGATIVE: /* =7 */
+            val = fluid_logarifmic(127 * (1.0f - val_norm));
+        break;
+
     case FLUID_MOD_CONVEX | FLUID_MOD_UNIPOLAR | FLUID_MOD_POSITIVE: /* =8 */
         val = fluid_convex(127 * (val_norm));
         break;

@@ -328,3 +328,16 @@ fluid_convex(fluid_real_t val)
     return fluid_convex_tab[(int) val];
 }
 
+fluid_real_t fluid_logarifmic(fluid_real_t val)
+{
+    if(val < 0.f)
+    {
+        return 0.f;
+    }
+    else if(val >= (fluid_real_t)FLUID_VEL_CB_SIZE)
+    {
+        return 1.f;
+    }
+
+    return fluid_logarifmic_tab[(int) val];
+}

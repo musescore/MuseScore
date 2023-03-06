@@ -36,5 +36,6 @@ fluid_real_t fluid_pan(fluid_real_t c, int left);
 fluid_real_t fluid_balance(fluid_real_t balance, int left);
 fluid_real_t fluid_concave(fluid_real_t val);
 fluid_real_t fluid_convex(fluid_real_t val);
+fluid_real_t fluid_logarifmic(fluid_real_t val);
 
 #endif /* _FLUID_CONV_H */

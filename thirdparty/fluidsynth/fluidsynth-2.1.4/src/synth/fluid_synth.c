@@ -281,6 +281,11 @@ fluid_synth_init(void)
     feenableexcept(FE_DIVBYZERO | FE_UNDERFLOW | FE_OVERFLOW | FE_INVALID);
 #endif
 
+    unsigned char attenuation_function = FLUID_MOD_CONCAVE;
+#ifdef LINEAR_VOLUME
+    attenuation_function = FLUID_MOD_LINEAR_LOG;
+#endif
+
     init_dither();
 
     /* custom_breath2att_mod is not a default modulator specified in SF2.01.
@@ -302,7 +307,7 @@ fluid_synth_init(void)
     fluid_mod_set_source1(&default_vel2att_mod, /* The modulator we are programming here */
                           FLUID_MOD_VELOCITY,    /* Source. VELOCITY corresponds to 'index=2'. */
                           FLUID_MOD_GC           /* Not a MIDI continuous controller */
-                          | FLUID_MOD_CONCAVE    /* Curve shape. Corresponds to 'type=1' */
+                          | attenuation_function /* Curve shape. Corresponds to 'type=1' */
                           | FLUID_MOD_UNIPOLAR   /* Polarity. Corresponds to 'P=0' */
                           | FLUID_MOD_NEGATIVE   /* Direction. Corresponds to 'D=1' */
                          );
@@ -366,7 +371,7 @@ fluid_synth_init(void)
     /* SF2.01 page 55 section 8.4.5: MIDI continuous controller 7 to initial attenuation*/
     fluid_mod_set_source1(&default_att_mod, VOLUME_MSB,    /* index=7 */
                           FLUID_MOD_CC                              /* CC=1 */
-                          | FLUID_MOD_CONCAVE                       /* type=1 */
+                          | attenuation_function                    /* type=1 */
                           | FLUID_MOD_UNIPOLAR                      /* P=0 */
                           | FLUID_MOD_NEGATIVE                      /* D=1 */
                          );
