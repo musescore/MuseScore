@@ -97,7 +97,7 @@ Column {
                 navigation.row: scaleSection.navigationRowStart + 2
                 navigation.accessible.name: scaleSection.titleText + " " + qsTrc("inspector", "Horizontal") + currentValue
 
-                onValueEdited: function(newValue) {
+                onValueEditingFinished: function(newValue) {
                     root.model.horizontalScale.value = newValue
                 }
             }
@@ -124,7 +124,7 @@ Column {
                 navigation.row: scaleSection.navigationRowStart + 3
                 navigation.accessible.name: scaleSection.titleText + " " + qsTrc("inspector", "Vertical") + currentValue
 
-                onValueEdited: function(newValue) {
+                onValueEditingFinished: function(newValue) {
                     root.model.verticalScale.value = newValue
                 }
             }

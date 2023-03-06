@@ -59,7 +59,7 @@ InspectorPropertyView {
             isIndeterminate: root.propertyItem && enabled ? root.propertyItem.isUndefined : false
             currentValue: root.propertyItem ? root.propertyItem.x : 0
 
-            onValueEdited: function(newValue) {
+            onValueEditingFinished: function(newValue) {
                 root.propertyItem.x = newValue
             }
         }
@@ -79,7 +79,7 @@ InspectorPropertyView {
             isIndeterminate: root.propertyItem && enabled ? root.propertyItem.isUndefined : false
             currentValue: root.propertyItem ? root.propertyItem.y : 0
 
-            onValueEdited: function(newValue) {
+            onValueEditingFinished: function(newValue) {
                 root.propertyItem.y = newValue
             }
         }

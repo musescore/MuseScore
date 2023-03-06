@@ -45,6 +45,7 @@ Item {
     readonly property int spacing: 8
 
     signal valueEdited(var newValue)
+    signal valueEditingFinished(var newValue)
 
     implicitHeight: 30
     implicitWidth: parent.width
@@ -59,7 +60,9 @@ Item {
             return
         }
 
-        root.valueEdited(+newValue.toFixed(decimals))
+        newValue = +newValue.toFixed(decimals)
+        root.valueEdited(newValue)
+        root.valueEditingFinished(newValue)
     }
 
     function decrement() {
@@ -70,7 +73,9 @@ Item {
             return
         }
 
-        root.valueEdited(+newValue.toFixed(decimals))
+        newValue = +newValue.toFixed(decimals)
+        root.valueEdited(newValue)
+        root.valueEditingFinished(newValue)
     }
 
     enum IconMode {
@@ -196,6 +201,16 @@ Item {
             }
 
             root.valueEdited(+newVal.toFixed(root.decimals))
+        }
+
+        onTextEditingFinished: function(newTextValue) {
+            var newVal = parseFloat(newTextValue)
+
+            if (isNaN(newVal)) {
+                newVal = 0
+            }
+
+            root.valueEditingFinished(+newVal.toFixed(root.decimals))
         }
     }
 
