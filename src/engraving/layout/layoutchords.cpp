@@ -1442,6 +1442,7 @@ void LayoutChords::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Cho
             if (margin > 0) {
                 continue;
             }
+            rest->verticalClearance().setLocked(true);
             bool isWholeOrHalf = rest->isWholeRest() || rest->durationType() == DurationType::V_HALF;
             bool outAboveStaff = restAbove && restShape.bottom() + margin < minRestToChordClearance;
             bool outBelowStaff = !restAbove && restShape.top() - margin > (lines - 1) * lineDistance - minRestToChordClearance;

@@ -38,6 +38,7 @@
 #include "measure.h"
 #include "mscore.h"
 #include "note.h"
+#include "rest.h"
 #include "score.h"
 #include "segment.h"
 #include "spanner.h"
@@ -713,7 +714,8 @@ double Beam::chordBeamAnchorX(const ChordRest* cr, ChordBeamAnchorType anchorTyp
 double Beam::chordBeamAnchorY(const ChordRest* cr) const
 {
     if (!cr->isChord()) {
-        return cr->pagePos().y();
+        Shape restShape = cr->shape().translated(cr->pagePos());
+        return _up ? restShape.top() : restShape.bottom();
     }
 
     const Chord* chord = toChord(cr);
@@ -1136,16 +1138,18 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
     double endY = (isStartDictator ? pointer : dictator) * spatium() / 4 + tolerance;
 
     for (ChordRest* chordRest : chordRests) {
-        if (!chordRest->isChord() || chordRest == _elements.back() || chordRest == _elements.front()) {
+        if (chordRest == _elements.back() || chordRest == _elements.front()) {
+            continue;
+        }
+        if (chordRest->isRest() && !toRest(chordRest)->verticalClearance().locked()) {
             continue;
         }
 
-        Chord* chord = toChord(chordRest);
-        PointF anchor = chordBeamAnchor(chord, ChordBeamAnchorType::Middle) - pagePos();
+        PointF anchor = chordBeamAnchor(chordRest, ChordBeamAnchorType::Middle) - pagePos();
 
         int slope = abs(dictator - pointer);
         double reduction = 0.0;
-        if (!isFlat) {
+        if (chordRest->isChord() && !isFlat) {
             if (slope <= 3) {
                 reduction = 0.25 * spatium();
             } else if (slope <= 6) {
@@ -1154,6 +1158,11 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
                 reduction = 0.75 * spatium();
             }
         }
+        double restClearMargin = 0.0;
+        if (chordRest->isRest()) {
+            const double restToBeamPadding = 0.35 * spatium(); // TODO: style setting
+            restClearMargin = _beamSegments.size() * _beamWidth + (_beamSegments.size() - 1) * _beamSpacing + restToBeamPadding;
+        }
 
         if (endX != startX) {
             // avoid division by zero for zero-length beams (can exist as a pre-layout state used
@@ -1161,9 +1170,9 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
             double proportionAlongX = (anchor.x() - startX) / (endX - startX);
 
             while (true) {
-                double desiredY = proportionAlongX * (endY - startY) + startY;
-                bool beamClearsAnchor = (_up && RealIsEqualOrLess(desiredY, anchor.y() + reduction))
-                                        || (!_up && RealIsEqualOrMore(desiredY, anchor.y() - reduction));
+                double desiredY = proportionAlongX * (endY - startY) + startY + tolerance;
+                bool beamClearsAnchor = (_up && RealIsEqualOrLess(desiredY, anchor.y() + reduction - restClearMargin))
+                                        || (!_up && RealIsEqualOrMore(desiredY, anchor.y() - reduction + restClearMargin));
                 if (beamClearsAnchor) {
                     break;
                 }
@@ -1177,8 +1186,8 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
                     pointer += _up ? -1 : 1;
                 }
 
-                startY = (isStartDictator ? dictator : pointer) * spatium() / 4 + tolerance;
-                endY = (isStartDictator ? pointer : dictator) * spatium() / 4 + tolerance;
+                startY = (isStartDictator ? dictator : pointer) * spatium() / 4;
+                endY = (isStartDictator ? pointer : dictator) * spatium() / 4;
             }
         }
     }

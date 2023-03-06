@@ -540,11 +540,6 @@ void LayoutBeams::verticalAdjustBeamedRests(Rest* rest, Beam* beam)
 
     bool restIsLocked = rest->verticalClearance().locked();
     if (!restIsLocked) {
-        if (up) {
-            rest->verticalClearance().setAbove(restToBeamClearance);
-        } else {
-            rest->verticalClearance().setBelow(restToBeamClearance);
-        }
         double overlap = (restToBeamPadding - restToBeamClearance);
         double lineDistance = rest->staff()->lineDistance(rest->tick()) * spatium;
         int lineMoves = ceil(overlap / lineDistance);
