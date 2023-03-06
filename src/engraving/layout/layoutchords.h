@@ -31,6 +31,7 @@ class Chord;
 class MStyle;
 class Measure;
 class Note;
+class Rest;
 class Score;
 class Segment;
 class Staff;
@@ -47,7 +48,10 @@ public:
     static void appendGraceNotes(Chord* chord);
     static void clearLineAttachPoints(Measure* measure);
     static void updateLineAttachPoints(Chord* chord, bool isFirstInMeasure);
-    static void resolveVerticalRestsCollisions(Score* score, Segment* segment, staff_idx_t staffIdx);
+    static void resolveVerticalRestConflicts(Score* score, Segment* segment, staff_idx_t staffIdx);
+    static void resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord*>& chords, Score* score, Segment* segment,
+                                   staff_idx_t staffIdx);
+    static void resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Segment* segment, staff_idx_t staffIdx);
 };
 }
 

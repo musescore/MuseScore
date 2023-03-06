@@ -39,6 +39,7 @@
 #include "libmscore/stem.h"
 #include "libmscore/stemslash.h"
 #include "libmscore/tie.h"
+#include "libmscore/utils.h"
 
 using namespace mu::engraving;
 
@@ -1384,39 +1385,44 @@ void LayoutChords::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure)
     }
 }
 
-void LayoutChords::resolveVerticalRestsCollisions(Score* score, Segment* segment, staff_idx_t staffIdx)
+void LayoutChords::resolveVerticalRestConflicts(Score* score, Segment* segment, staff_idx_t staffIdx)
 {
-    track_idx_t startTrack = staffIdx * VOICES;
-    track_idx_t endTrack = startTrack + VOICES;
     std::vector<Rest*> rests;
     std::vector<Chord*> chords;
 
-    for (track_idx_t track = startTrack; track < endTrack; ++track) {
-        EngravingItem* e = segment->element(track);
-        if (!e) {
-            continue;
-        }
-        if (e->isRest()) {
-            Rest* rest = toRest(e);
-            rest->verticalClearance().reset();
-            rests.push_back(rest);
-        } else if (e->isChord()) {
-            chords.push_back(toChord(e));
-        }
+    collectChordsAndRest(segment, staffIdx, chords, rests);
+
+    for (Rest* rest : rests) {
+        rest->verticalClearance().reset();
     }
 
     if (rests.empty()) {
         return;
     }
 
+    if (!chords.empty()) {
+        resolveRestVSChord(rests, chords, score, segment, staffIdx);
+    }
+
+    if (rests.size() < 2) {
+        return;
+    }
+
+    resolveRestVSRest(rests, score, segment, staffIdx);
+}
+
+void LayoutChords::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord*>& chords, Score* score, Segment* segment,
+                                      staff_idx_t staffIdx)
+{
     Fraction tick = segment->tick();
     Staff* staff = score->staff(staffIdx);
     int lines = staff->lines(tick);
     double spatium = staff->spatium(tick);
     double lineDistance = staff->lineDistance(tick) * spatium;
-    const double minVerticalClearance = 0.35 * spatium;
+    const double minRestToChordClearance = 0.35 * spatium;
 
     for (Rest* rest : rests) {
+        RestVerticalClearance& restVerticalClearance = rest->verticalClearance();
         for (Chord* chord : chords) {
             bool restAbove = rest->voice() < chord->voice();
             int upSign = restAbove ? -1 : 1;
@@ -1426,21 +1432,19 @@ void LayoutChords::resolveVerticalRestsCollisions(Score* score, Segment* segment
             Shape restShape = rest->shape().translated(rest->pos() - offset);
             Shape chordShape = chord->shape().translated(chord->pos());
             double clearance = restAbove ? restShape.verticalClearance(chordShape) : chordShape.verticalClearance(restShape);
-            double margin = clearance - minVerticalClearance;
+            double margin = clearance - minRestToChordClearance;
             int marginInSteps = floor(margin / lineDistance);
             if (restAbove) {
-                int& clearanceBelow = rest->verticalClearance().below;
-                clearanceBelow = std::min(clearanceBelow, marginInSteps);
+                restVerticalClearance.setBelow(marginInSteps);
             } else {
-                int& clearanceAbove = rest->verticalClearance().above;
-                clearanceAbove = std::min(clearanceAbove, marginInSteps);
+                restVerticalClearance.setAbove(marginInSteps);
             }
             if (margin > 0) {
                 continue;
             }
             bool isWholeOrHalf = rest->isWholeRest() || rest->durationType() == DurationType::V_HALF;
-            bool outAboveStaff = restAbove && restShape.bottom() + margin < minVerticalClearance;
-            bool outBelowStaff = !restAbove && restShape.top() - margin > (lines - 1) * lineDistance - minVerticalClearance;
+            bool outAboveStaff = restAbove && restShape.bottom() + margin < minRestToChordClearance;
+            bool outBelowStaff = !restAbove && restShape.top() - margin > (lines - 1) * lineDistance - minRestToChordClearance;
             bool useHalfSpaceSteps = (outAboveStaff || outBelowStaff) && !isWholeOrHalf;
             if (useHalfSpaceSteps) {
                 int steps = ceil(abs(margin) / (lineDistance / 2));
@@ -1456,16 +1460,25 @@ void LayoutChords::resolveVerticalRestsCollisions(Score* score, Segment* segment
             }
         }
     }
+}
 
-    if (rests.size() < 2) {
-        return;
-    }
+void LayoutChords::resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Segment* segment, staff_idx_t staffIdx)
+{
+    Fraction tick = segment->tick();
+    Staff* staff = score->staff(staffIdx);
+    double spatium = staff->spatium(tick);
+    double lineDistance = staff->lineDistance(tick) * spatium;
+    const double minRestToRestClearance = 0.35 * spatium;
 
     for (int i = 0; i < rests.size() - 1; ++i) {
         Rest* rest1 = rests[i];
+        RestVerticalClearance& rest1Clearance = rest1->verticalClearance();
         Shape shape1 = rest1->shape().translated(rest1->pos());
+
         Rest* rest2 = rests[i + 1];
         Shape shape2 = rest2->shape().translated(rest2->pos());
+        RestVerticalClearance& rest2Clearance = rest2->verticalClearance();
+
         double clearance;
         bool firstAbove = rest1->voice() < rest2->voice();
         if (firstAbove) {
@@ -1473,19 +1486,14 @@ void LayoutChords::resolveVerticalRestsCollisions(Score* score, Segment* segment
         } else {
             clearance = shape2.verticalClearance(shape1);
         }
-        double margin = clearance - minVerticalClearance;
-        margin / spatium;
+        double margin = clearance - minRestToRestClearance;
         int marginInSteps = floor(margin / lineDistance);
         if (firstAbove) {
-            int& clearanceBelow1 = rest1->verticalClearance().below;
-            clearanceBelow1 = std::min(clearanceBelow1, marginInSteps);
-            int& clearanceAbove2 = rest2->verticalClearance().above;
-            clearanceAbove2 = std::min(clearanceAbove2, marginInSteps);
+            rest1Clearance.setBelow(marginInSteps);
+            rest2Clearance.setAbove(marginInSteps);
         } else {
-            int& clearanceAbove1 = rest1->verticalClearance().above;
-            clearanceAbove1 = std::min(clearanceAbove1, marginInSteps);
-            int& clearanceBelow2 = rest2->verticalClearance().below;
-            clearanceBelow2 = std::min(clearanceBelow2, marginInSteps);
+            rest1Clearance.setAbove(marginInSteps);
+            rest2Clearance.setBelow(marginInSteps);
         }
 
         if (margin > 0) {
@@ -1496,8 +1504,8 @@ void LayoutChords::resolveVerticalRestsCollisions(Score* score, Segment* segment
         // Move the two rests away from each other by splitting the necessary steps among the two
         int step1 = floor(double(steps) / 2);
         int step2 = ceil(double(steps) / 2);
-        int maxStep1 = firstAbove ? rest1->verticalClearance().above : rest1->verticalClearance().below;
-        int maxStep2 = firstAbove ? rest2->verticalClearance().below : rest2->verticalClearance().above;
+        int maxStep1 = firstAbove ? rest1Clearance.above() : rest1Clearance.below();
+        int maxStep2 = firstAbove ? rest2Clearance.below() : rest2Clearance.above();
         maxStep1 = std::max(maxStep1, 0);
         maxStep2 = std::max(maxStep2, 0);
         if (step1 > maxStep1) {

@@ -31,14 +31,27 @@
 namespace mu::engraving {
 class TDuration;
 
-struct VerticalClearance {
-    int above = 0.0; // In half-space units
-    int below = 0.0; // In half-space units
+struct RestVerticalClearance {
+private:
+    int m_above = 0.0; // In space units
+    int m_below = 0.0; // In space units
+    bool m_locked = false;
+
+public:
     void reset()
     {
-        above = 1000; // arbitrary high value
-        below = 1000; // arbitrary high value
+        m_above = 1000; // arbitrary high value
+        m_below = 1000; // arbitrary high value
+        m_locked = false;
     }
+
+    int above() const { return m_above; }
+    int below() const { return m_below; }
+    void setAbove(int v) { m_above = std::max(std::min(m_above, v), 0); }
+    void setBelow(int v) { m_below = std::max(std::min(m_below, v), 0); }
+
+    bool locked() const { return m_locked; }
+    void setLocked(bool v) { m_locked = v; }
 };
 
 //---------------------------------------------------------
@@ -124,7 +137,7 @@ public:
 
     bool shouldNotBeDrawn() const;
 
-    VerticalClearance& verticalClearance() { return m_verticalClearance; }
+    RestVerticalClearance& verticalClearance() { return m_verticalClearance; }
 
 protected:
     Rest(const ElementType& type, Segment* parent = 0);
@@ -147,7 +160,7 @@ private:
     std::vector<NoteDot*> m_dots;
     DeadSlapped* _deadSlapped = nullptr;
 
-    VerticalClearance m_verticalClearance;
+    RestVerticalClearance m_verticalClearance;
 
     mu::RectF drag(EditData&) override;
     double upPos() const override;

@@ -839,7 +839,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
         for (Segment& segment : measure->segments()) {
             if (segment.isChordRestType()) {
                 LayoutChords::layoutChords1(score, &segment, staffIdx);
-                LayoutChords::resolveVerticalRestsCollisions(score, &segment, staffIdx);
+                LayoutChords::resolveVerticalRestConflicts(score, &segment, staffIdx);
                 for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
                     ChordRest* cr = segment.cr(staffIdx * VOICES + voice);
                     if (cr) {
