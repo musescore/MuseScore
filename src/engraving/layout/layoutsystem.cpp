@@ -1140,22 +1140,6 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     }
 
     //-------------------------------------------------------------
-    // Jump
-    //-------------------------------------------------------------
-
-    for (MeasureBase* mb : system->measures()) {
-        if (!mb->isMeasure()) {
-            continue;
-        }
-        Measure* m = toMeasure(mb);
-        for (EngravingItem* e : m->el()) {
-            if (e->isJump()) {
-                e->layout();
-            }
-        }
-    }
-
-    //-------------------------------------------------------------
     // layout Voltas for current system
     //-------------------------------------------------------------
 
@@ -1240,7 +1224,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     processLines(system, tempoChangeLines, false);
 
     //-------------------------------------------------------------
-    // Marker
+    // Marker and Jump
     //-------------------------------------------------------------
 
     for (MeasureBase* mb : system->measures()) {
@@ -1249,7 +1233,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         }
         Measure* m = toMeasure(mb);
         for (EngravingItem* e : m->el()) {
-            if (e->isMarker()) {
+            if (e->isMarker() || e->isJump()) {
                 e->layout();
             }
         }
