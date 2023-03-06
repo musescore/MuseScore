@@ -1579,6 +1579,9 @@ FilterElementsOptions NotationActionController::elementsFilterOptions(const Engr
         } else {
             options.subtype = element->subtype();
         }
+    } else if (element->type() == ElementType::HAIRPIN_SEGMENT) {
+        options.subtype = element->subtype();
+        options.bySubtype = true;
     }
 
     return options;
