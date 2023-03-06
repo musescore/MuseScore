@@ -173,7 +173,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newNoteHeadsPalette());
     defaultPalette->append(newArpeggioPalette());
     defaultPalette->append(newTremoloPalette());
-    defaultPalette->append(newGuitarPalette());
+    defaultPalette->append(newGuitarPalette(true));
     defaultPalette->append(newFingeringPalette(true));
     defaultPalette->append(newFretboardDiagramPalette());
     defaultPalette->append(newAccordionPalette());
@@ -599,10 +599,10 @@ PalettePtr PaletteCreator::newFingeringPalette(bool defaultPalette)
         f->setXmlText(QString(finger[i]));
         sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "LH guitar fingering %1"));
     }
-    finger = "0123456";
+    finger = defaultPalette ? "123456" : "0123456789";
     for (unsigned i = 0; i < strlen(finger); ++i) {
         auto f = makeElement<Fingering>(gpaletteScore);
-        f->setTextStyleType(TextStyleType::STRING_NUMBER);
+        f->initTextStyleType(TextStyleType::STRING_NUMBER);
         f->setXmlText(QString(finger[i]));
         sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "String number %1"));
     }
@@ -1786,7 +1786,7 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
     return sp;
 }
 
-PalettePtr PaletteCreator::newGuitarPalette()
+PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Guitar);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Guitar"));
@@ -1849,10 +1849,10 @@ PalettePtr PaletteCreator::newGuitarPalette()
         f->setXmlText(QString(finger[i]));
         sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "LH guitar fingering %1"));
     }
-    finger = "0123456";
+    finger = defaultPalette ? "123456" : "0123456789";
     for (unsigned i = 0; i < strlen(finger); ++i) {
         auto f = makeElement<Fingering>(gpaletteScore);
-        f->setTextStyleType(TextStyleType::STRING_NUMBER);
+        f->initTextStyleType(TextStyleType::STRING_NUMBER);
         f->setXmlText(QString(finger[i]));
         sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "String number %1"));
     }
