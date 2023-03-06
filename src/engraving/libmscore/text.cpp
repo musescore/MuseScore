@@ -42,7 +42,8 @@ static const ElementStyle defaultStyle {
 //---------------------------------------------------------
 
 Text::Text(EngravingItem* parent, TextStyleType tid)
-    : TextBase(ElementType::TEXT, parent, tid)
+    : TextBase(ElementType::TEXT, parent, tid,
+               tid == TextStyleType::HEADER || tid == TextStyleType::FOOTER ? ElementFlag::NOT_SELECTABLE : ElementFlag::NOTHING)
 {
     initElementStyle(&defaultStyle);
 }
