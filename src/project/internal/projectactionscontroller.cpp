@@ -950,13 +950,13 @@ bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScore(const SaveLoc
         if (newlyCreated) {
             showErrCorruptedScoreCannotBeSaved(location, errorText);
         } else {
-            warnCorruptedScoreCannotBeSavedOnCloud(errorText, newlyCreated);
+            warnCorruptedScoreCannotBeSavedOnCloud(errorText, !newlyCreated);
         }
 
         return false;
     }
     case SaveLocationType::Local:
-        return askIfUserAgreesToSaveCorruptedScoreLocally(errorText, newlyCreated);
+        return askIfUserAgreesToSaveCorruptedScoreLocally(errorText, !newlyCreated);
     case SaveLocationType::Undefined: // fallthrough
     default:
         return false;
@@ -973,7 +973,7 @@ void ProjectActionsController::warnCorruptedScoreCannotBeSavedOnCloud(const std:
     IInteractive::ButtonDatas buttons;
     buttons.push_back(interactive()->buttonData(IInteractive::Button::Cancel));
 
-    IInteractive::ButtonData saveCopyBtn(IInteractive::Button::CustomButton, trc("project", "Save as…"), canRevert /*accent*/);
+    IInteractive::ButtonData saveCopyBtn(IInteractive::Button::CustomButton, trc("project", "Save as…"), !canRevert /*accent*/);
     buttons.push_back(saveCopyBtn);
 
     int defaultBtn = saveCopyBtn.btn;
@@ -981,7 +981,7 @@ void ProjectActionsController::warnCorruptedScoreCannotBeSavedOnCloud(const std:
     IInteractive::ButtonData revertToLastSavedBtn(saveCopyBtn.btn + 1, trc("project", "Revert to last saved"),
                                                   true /*accent*/);
 
-    if (!canRevert) {
+    if (canRevert) {
         buttons.push_back(revertToLastSavedBtn);
         defaultBtn = revertToLastSavedBtn.btn;
     }
@@ -1000,8 +1000,8 @@ bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScoreLocally(const 
                                                                           bool canRevert)
 {
     std::string title = trc("project", "This score has become corrupted and contains errors");
-    std::string body = canRevert ? trc("project", "You can continue saving it locally, although the file may become unusable. "
-                                                  "You can try to fix the errors manually, or get help for this issue on musescore.org.")
+    std::string body = !canRevert ? trc("project", "You can continue saving it locally, although the file may become unusable. "
+                                                   "You can try to fix the errors manually, or get help for this issue on musescore.org.")
                        : trc("project", "You can continue saving it locally, although the file may become unusable. "
                                         "To preserve your score, revert to the last saved version, or fix the errors manually. "
                                         "You can also get help for this issue on musescore.org.");
