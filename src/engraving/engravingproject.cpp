@@ -156,8 +156,6 @@ bool EngravingProject::writeMscz(MscWriter& writer, bool onlySelection, bool cre
         m_masterScore->update();
     }
 
-    m_isCorruptedUponLoading = false;
-
     return ok;
 }
 
