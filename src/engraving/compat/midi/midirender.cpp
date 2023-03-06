@@ -1088,6 +1088,10 @@ uint32_t MidiRenderer::getChannel(const Instrument* instr, const Note* note, Mid
         lookupData.string = note->string();
     }
 
+    if (lookupData.empty()) {
+        return channel;
+    }
+
     return _context.channels->getChannel(channel, lookupData);
 }
 
