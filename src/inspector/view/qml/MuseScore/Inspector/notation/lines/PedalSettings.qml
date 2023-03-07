@@ -59,10 +59,8 @@ Column {
         }
     }
 
-    LineTypeSection {
-        id: lineTypeSection
-
-        thickness: root.model ? root.model.thickness : null
+    HooksSection {
+        id: hooksSection
 
         startHookType: root.model ? root.model.startHookType : null
         endHookType: root.model ? root.model.lineType : null
@@ -85,12 +83,14 @@ Column {
 
         navigation.name: "ShowLineWithRosetteCheckBox"
         navigation.panel: root.navigationPanel
-        navigation.row: lineTypeSection.navigationRowEnd + 1
+        navigation.row: hooksSection.navigationRowEnd + 1
     }
 
     SeparatorLine { anchors.margins: -12 }
 
     LineStyleSection {
+        thickness: root.model ? root.model.thickness : null
+
         lineStyle: root.model ? root.model.lineStyle : null
         dashLineLength: root.model ? root.model.dashLineLength : null
         dashGapLength: root.model ? root.model.dashGapLength : null

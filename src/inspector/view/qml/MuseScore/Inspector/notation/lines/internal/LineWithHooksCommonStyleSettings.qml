@@ -64,10 +64,8 @@ Column {
         }
     }
 
-    LineTypeSection {
-        id: lineTypeSection
-
-        thickness: root.model ? root.model.thickness : null
+    HooksSection {
+        id: hooksSection
 
         startHookType: root.model ? root.model.startHookType : null
         endHookType: root.model ? root.model.endHookType : null
@@ -85,12 +83,15 @@ Column {
 
     LineStyleSection {
         id: lineStyleSection
+
+        thickness: root.model ? root.model.thickness : null
+
         lineStyle: root.model ? root.model.lineStyle : null
         dashLineLength: root.model ? root.model.dashLineLength : null
         dashGapLength: root.model ? root.model.dashGapLength : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: lineTypeSection.navigationRowEnd + 1
+        navigationRowStart: hooksSection.navigationRowEnd + 1
     }
 
     SeparatorLine { anchors.margins: -12; visible: placementSection.visible }
