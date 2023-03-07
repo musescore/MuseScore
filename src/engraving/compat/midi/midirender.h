@@ -84,7 +84,8 @@ private:
     void renderStaff(EventMap* events, const Staff* sctx, PitchWheelRenderer& pitchWheelRenderer);
 
     void renderSpanners(EventMap* events, PitchWheelRenderer& pitchWheelRenderer);
-    void doRenderSpanners(EventMap* events, Spanner* s, uint32_t channel, PitchWheelRenderer& pitchWheelRenderer);
+    void doRenderSpanners(EventMap* events, Spanner* s, uint32_t channel, PitchWheelRenderer& pitchWheelRenderer,
+                          MidiInstrumentEffect effect);
 
     void renderMetronome(EventMap* events);
     void renderMetronome(EventMap* events, Measure const* m);

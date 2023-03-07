@@ -1004,10 +1004,6 @@ bool GuitarPro5::read(IODevice* io)
     StretchedBend::prepareBends(m_bends);
 #endif
 
-    if (engravingConfiguration()->guitarProImportExperimental()) {
-        addSoundEffects();
-    }
-
     return true;
 }
 

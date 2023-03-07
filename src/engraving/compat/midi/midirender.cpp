@@ -190,6 +190,7 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
 
     if (params.callAllSoundOff && params.onTime != 0) {
         NPlayEvent ev1(ME_CONTROLLER, params.channel, CTRL_ALL_NOTES_OFF, 0);
+        ev1.setEffect(params.effect);
         events->insert(std::pair<int, NPlayEvent>(params.onTime - 1, ev1));
     }
 
@@ -197,6 +198,7 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
     ev.setOriginatingStaff(params.staffIdx);
     ev.setTuning(note->tuning());
     ev.setNote(note);
+    ev.setEffect(params.effect);
     if (params.offTime > 0 && params.offTime < params.onTime) {
         return;
     }
@@ -226,7 +228,7 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
 static void collectVibrato(int channel,
                            int onTime, int offTime,
                            int lowPitch, int highPitch,
-                           PitchWheelRenderer& pitchWheelRenderer)
+                           PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect)
 {
     const uint16_t vibratoPeriod = Constants::division / 2;
     const uint32_t duration = offTime - onTime;
@@ -247,6 +249,7 @@ static void collectVibrato(int channel,
         return (pillarAmplitude * 2 / M_PI * asin(sin(2 * M_PI * x)) + lowPitch) * scale;
     };
     func.func = vibratoFunc;
+    func.effect = effect;
 
     pitchWheelRenderer.addPitchWheelFunction(func, channel);
 }
@@ -254,7 +257,7 @@ static void collectVibrato(int channel,
 static void collectBend(const Bend* bend,
                         int channel,
                         int onTime, int offTime,
-                        PitchWheelRenderer& pitchWheelRenderer)
+                        PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect)
 {
     const PitchValues& points = bend->points();
     size_t pitchSize = points.size();
@@ -279,6 +282,7 @@ static void collectBend(const Bend* bend,
         func.mStartTick = onTime + x0;
         uint32_t startTimeNextPoint = nextValue.time * duration / PitchValue::MAX_TIME;
         func.mEndTick = onTime + startTimeNextPoint;
+        func.effect = effect;
 
         auto bendFunc = [ startTick = func.mStartTick, scale,
                           a, b] (uint32_t tick) {
@@ -294,6 +298,7 @@ static void collectBend(const Bend* bend,
     PitchWheelRenderer::PitchWheelFunction func;
     func.mStartTick = onTime + points[pitchSize - 1].time * duration / PitchValue::MAX_TIME;
     func.mEndTick = offTime;
+    func.effect = effect;
 
     if (func.mEndTick == func.mStartTick) {
         return;
@@ -417,7 +422,7 @@ static void collectNote(EventMap* events, const Note* note, const CollectNotePar
         if (!bend->playBend()) {
             break;
         }
-        collectBend(bend, noteParams.channel, tick1, tick1 + getPlayTicksForBend(note).ticks(), pitchWheelRenderer);
+        collectBend(bend, noteParams.channel, tick1, tick1 + getPlayTicksForBend(note).ticks(), pitchWheelRenderer, noteParams.effect);
     }
 }
 
@@ -694,7 +699,9 @@ void MidiRenderer::doCollectMeasureEvents(EventMap* events, Measure const* m, co
                 params.tickOffset = tickOffset;
                 params.letRingNote = chordParams.letRing;
                 params.endLetRingTick = chordParams.endLetRingTick;
-                params.effect = effect;
+                if (_context.instrumentsHaveEffects) {
+                    params.effect = effect;
+                }
 
                 int channel = getChannel(instr, note, effect);
                 events->registerChannel(channel);
@@ -797,16 +804,61 @@ void MidiRenderer::renderSpanners(EventMap* events, PitchWheelRenderer& pitchWhe
         int channel = s->part()->instrument(s->tick())->channel(idx)->channel();
         const auto& channels = _context.channels->channelsMap[channel];
         if (channels.empty()) {
-            doRenderSpanners(events, s, channel, pitchWheelRenderer);
+            doRenderSpanners(events, s, channel, pitchWheelRenderer, MidiInstrumentEffect::NONE);
         } else {
             for (const auto& channel : channels) {
-                doRenderSpanners(events, s, channel.second, pitchWheelRenderer);
+                doRenderSpanners(events, s, channel.second, pitchWheelRenderer, channel.first.effect);
             }
         }
     }
 }
 
-void MidiRenderer::doRenderSpanners(EventMap* events, Spanner* s, uint32_t channel, PitchWheelRenderer& pitchWheelRenderer)
+static std::vector<std::pair<int, int> > collectTicksForEffect(const Score* const score, track_idx_t track, int stick, int etick,
+                                                               MidiInstrumentEffect effect)
+{
+    std::vector<std::pair<int, int> > ticksForEffect;
+    int curTick = stick;
+
+    for (auto it : score->spannerMap().findOverlapping(stick, etick)) {
+        Spanner* spanner = it.value;
+
+        if (spanner->track() != track) {
+            continue;
+        }
+
+        if (spanner->isPalmMute()) {
+            int palmMuteStartTick = spanner->tick().ticks();
+            int palmMuteEndTick = spanner->tick2().ticks();
+
+            if (curTick < palmMuteStartTick) {
+                int nextTick = std::min(palmMuteStartTick, etick);
+                if (effect == MidiInstrumentEffect::NONE) {
+                    ticksForEffect.push_back({ curTick, nextTick - 1 });
+                }
+
+                curTick = nextTick;
+            }
+
+            if (palmMuteStartTick <= curTick) {
+                int nextTick = std::min(palmMuteEndTick, etick);
+                if (effect == MidiInstrumentEffect::PALM_MUTE) {
+                    ticksForEffect.push_back({ curTick, nextTick - 1 });
+                }
+
+                curTick = nextTick;
+            }
+        }
+    }
+
+    if (curTick < etick && effect == MidiInstrumentEffect::NONE) {
+        ticksForEffect.push_back({ curTick, etick - 1 });
+    }
+
+    return ticksForEffect;
+}
+
+void MidiRenderer::doRenderSpanners(EventMap* events, Spanner* s, uint32_t channel, PitchWheelRenderer& pitchWheelRenderer,
+                                    MidiInstrumentEffect effect)
 {
     std::vector<std::pair<int, std::pair<bool, int> > > pedalEventList;
 
@@ -861,7 +913,11 @@ void MidiRenderer::doRenderSpanners(EventMap* events, Spanner* s, uint32_t chann
             epitch = 12;
         }
 
-        collectVibrato(channel, stick, etick, spitch, epitch, pitchWheelRenderer);
+        std::vector<std::pair<int, int> > vibratoTicksForEffect = collectTicksForEffect(score, s->track(), stick, etick, effect);
+
+        for (const auto& [tickStart, tickEnd] : vibratoTicksForEffect) {
+            collectVibrato(channel, tickStart, tickEnd, spitch, epitch, pitchWheelRenderer, effect);
+        }
     }
 
     for (const auto& pe : pedalEventList) {
@@ -872,6 +928,7 @@ void MidiRenderer::doRenderSpanners(EventMap* events, Spanner* s, uint32_t chann
             event = NPlayEvent(ME_CONTROLLER, static_cast<uint8_t>(channel), CTRL_SUSTAIN, 0);
         }
         event.setOriginatingStaff(pe.second.second);
+        event.setEffect(effect);
         events->insert(std::pair<int, NPlayEvent>(pe.first, event));
     }
 }

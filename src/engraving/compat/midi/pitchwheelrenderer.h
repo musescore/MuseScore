@@ -37,6 +37,7 @@ public:
         int32_t mStartTick;
         int32_t mEndTick;
         std::function<int(uint32_t)> func;
+        MidiInstrumentEffect effect = MidiInstrumentEffect::NONE;
     };
 
     PitchWheelRenderer(PitchWheelSpecs wheelSpec);

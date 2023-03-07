@@ -385,9 +385,6 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
             for (SLine* elem : typeMaps.second.elements) {
                 if (elem) {
                     _score->addElement(elem);
-                    if (engravingConfiguration()->guitarProImportExperimental()) {
-                        addSoundEffects(elem);
-                    }
                 }
             }
         }
@@ -1474,32 +1471,6 @@ void GPConverter::addInstrumentChanges()
             }
 
             seg->add(instrCh);
-        }
-    }
-}
-
-void GPConverter::addSoundEffects(const SLine* const elem)
-{
-    EngravingItem* startEl = elem->startElement();
-    EngravingItem* endEl = elem->endElement();
-
-    if (!startEl->isChordRest() || !endEl->isChordRest()) {
-        return;
-    }
-
-    if (elem->isPalmMute()) {
-        Fraction begTick = elem->tick();
-        Instrument* currentInstrument = elem->part()->instrument(begTick);
-        if (!currentInstrument->hasStrings()) {
-            return;
-        }
-
-        if (int idx = currentInstrument->channelIdx(String::fromUtf8(InstrChannel::PALM_MUTE_NAME)); idx < 0) {
-            InstrChannel* palmMuteChannel = new InstrChannel(*currentInstrument->channel(0));
-            palmMuteChannel->setChannel(PALM_MUTE_CHAN);
-            palmMuteChannel->setProgram(PALM_MUTE_PROG);
-            palmMuteChannel->setName(String::fromUtf8(InstrChannel::PALM_MUTE_NAME));
-            currentInstrument->appendChannel(palmMuteChannel);
         }
     }
 }

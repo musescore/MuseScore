@@ -414,7 +414,6 @@ void GuitarPro::addPalmMute(Note* note)
         pm->setStartElement(chord);
         pm->setEndElement(chord);
         score->addElement(pm);
-        _addedPalmMutes.push_back(pm);
     }
 }
 
@@ -460,73 +459,6 @@ void GuitarPro::addLetRing(Note* note)
         lr->setStartElement(chord);
         lr->setEndElement(chord);
         score->addElement(lr);
-    }
-}
-
-void GuitarPro::addPalmMuteEffect(const PalmMute* const elem)
-{
-    /// copied from gpconverter.cpp
-    track_idx_t track = elem->track();
-    EngravingItem* startEl = elem->startElement();
-    EngravingItem* endEl = elem->endElement();
-
-    if (!startEl->isChordRest() || !endEl->isChordRest()) {
-        return;
-    }
-
-    ChordRest* startCR = toChordRest(startEl);
-    ChordRest* endCR = toChordRest(endEl);
-
-    constexpr int PALM_MUTE_CHAN = 0;
-    constexpr int PALM_MUTE_PROG = 28;
-
-    Fraction begTick = elem->tick();
-
-    Instrument* currentInstrument = elem->part()->instrument(begTick);
-    if (!currentInstrument->hasStrings()) {
-        return;
-    }
-
-    Segment* begSegment = startCR->segment();
-    Segment* endSegment = endCR->segment();
-    Segment* nextSeg = endSegment->nextCR(track, true);
-    bool foundChord = false;
-    while (nextSeg && nextSeg->isChordRestType()) {
-        const auto& elemList = nextSeg->elist();
-        for (const auto el : elemList) {
-            if (el && el->isChord()) {
-                foundChord = true;
-                break;
-            }
-        }
-
-        if (foundChord) {
-            break;
-        }
-
-        nextSeg = nextSeg->nextCR(track, true);
-    }
-
-    endSegment = (nextSeg && nextSeg != endSegment ? nextSeg : nullptr);
-
-    Instrument palmMuteInstr(*currentInstrument);
-
-    palmMuteInstr.channel(PALM_MUTE_CHAN)->setProgram(PALM_MUTE_PROG);
-    InstrumentChange* instrChPalmMute =  Factory::createInstrumentChange(begSegment, palmMuteInstr);
-    instrChPalmMute->setTrack(track);
-    begSegment->add(instrChPalmMute);
-
-    if (endSegment) {
-        InstrumentChange* instrChangeBack =  Factory::createInstrumentChange(endSegment, *currentInstrument);
-        instrChangeBack->setTrack(track);
-        endSegment->add(instrChangeBack);
-    }
-}
-
-void GuitarPro::addSoundEffects()
-{
-    for (PalmMute* pm : _addedPalmMutes) {
-        addPalmMuteEffect(pm);
     }
 }
 
