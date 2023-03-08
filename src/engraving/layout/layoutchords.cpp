@@ -51,7 +51,7 @@ static void layoutSegmentElements(Segment* segment, track_idx_t startTrack, trac
 {
     for (track_idx_t track = startTrack; track < endTrack; ++track) {
         if (EngravingItem* e = segment->element(track)) {
-            if (!e->isChord() || (e->isChord() && toChord(e)->vStaffIdx() == staffIdx)) {
+            if (e->vStaffIdx() == staffIdx) {
                 e->layout();
             }
         }
