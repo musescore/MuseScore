@@ -26,9 +26,6 @@ HERE="tools/codestyle" # path to dir that contains this script
 
 SRC_DIRS=(
     # Alphabetical order please!
-    bww2mxml
-    fonttools
-    miditools
     src
 )
 
