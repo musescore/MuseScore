@@ -103,7 +103,7 @@ void VSTModule::registerUiTypes()
 
 void VSTModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    if (mode == framework::IApplication::RunMode::Converter) {
+    if (mode == framework::IApplication::RunMode::ConsoleApp) {
         return;
     }
 

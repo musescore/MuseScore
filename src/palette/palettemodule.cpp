@@ -149,7 +149,7 @@ void PaletteModule::registerUiTypes()
 
 void PaletteModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    if (framework::IApplication::RunMode::Editor != mode) {
+    if (framework::IApplication::RunMode::GuiApp != mode) {
         return;
     }
 
@@ -161,7 +161,7 @@ void PaletteModule::onInit(const framework::IApplication::RunMode& mode)
 
 void PaletteModule::onAllInited(const framework::IApplication::RunMode& mode)
 {
-    if (framework::IApplication::RunMode::Editor != mode) {
+    if (framework::IApplication::RunMode::GuiApp != mode) {
         return;
     }
 

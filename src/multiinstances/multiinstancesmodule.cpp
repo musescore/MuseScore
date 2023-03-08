@@ -77,7 +77,7 @@ void MultiInstancesModule::registerResources()
 
 void MultiInstancesModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    if (mode != framework::IApplication::RunMode::Editor) {
+    if (mode != framework::IApplication::RunMode::GuiApp) {
         return;
     }
 

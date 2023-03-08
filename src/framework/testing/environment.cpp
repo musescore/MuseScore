@@ -49,7 +49,7 @@ void Environment::setup()
 {
     static mu::framework::GlobalModule globalModule;
 
-    framework::IApplication::RunMode runMode = framework::IApplication::RunMode::Editor;
+    framework::IApplication::RunMode runMode = framework::IApplication::RunMode::GuiApp;
 
     globalModule.registerResources();
     globalModule.registerExports();

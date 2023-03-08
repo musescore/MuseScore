@@ -102,7 +102,7 @@ void InstrumentsSceneModule::registerUiTypes()
 
 void InstrumentsSceneModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode != IApplication::RunMode::Editor) {
+    if (mode != IApplication::RunMode::GuiApp) {
         return;
     }
 

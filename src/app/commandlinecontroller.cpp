@@ -211,7 +211,7 @@ void CommandLineController::apply()
     }
 
     if (m_parser.isSet("o")) {
-        application()->setRunMode(IApplication::RunMode::Converter);
+        application()->setRunMode(IApplication::RunMode::ConsoleApp);
         m_converterTask.type = ConvertType::File;
         if (scorefiles.size() < 1) {
             LOGE() << "Option: -o no input file specified";
@@ -233,13 +233,13 @@ void CommandLineController::apply()
     }
 
     if (m_parser.isSet("j")) {
-        application()->setRunMode(IApplication::RunMode::Converter);
+        application()->setRunMode(IApplication::RunMode::ConsoleApp);
         m_converterTask.type = ConvertType::Batch;
         m_converterTask.inputFile = m_parser.value("j");
     }
 
     if (m_parser.isSet("score-media")) {
-        application()->setRunMode(IApplication::RunMode::Converter);
+        application()->setRunMode(IApplication::RunMode::ConsoleApp);
         m_converterTask.type = ConvertType::ExportScoreMedia;
         m_converterTask.inputFile = scorefiles[0];
         if (m_parser.isSet("highlight-config")) {
@@ -248,25 +248,25 @@ void CommandLineController::apply()
     }
 
     if (m_parser.isSet("score-meta")) {
-        application()->setRunMode(IApplication::RunMode::Converter);
+        application()->setRunMode(IApplication::RunMode::ConsoleApp);
         m_converterTask.type = ConvertType::ExportScoreMeta;
         m_converterTask.inputFile = scorefiles[0];
     }
 
     if (m_parser.isSet("score-parts")) {
-        application()->setRunMode(IApplication::RunMode::Converter);
+        application()->setRunMode(IApplication::RunMode::ConsoleApp);
         m_converterTask.type = ConvertType::ExportScoreParts;
         m_converterTask.inputFile = scorefiles[0];
     }
 
     if (m_parser.isSet("score-parts-pdf")) {
-        application()->setRunMode(IApplication::RunMode::Converter);
+        application()->setRunMode(IApplication::RunMode::ConsoleApp);
         m_converterTask.type = ConvertType::ExportScorePartsPdf;
         m_converterTask.inputFile = scorefiles[0];
     }
 
     if (m_parser.isSet("score-transpose")) {
-        application()->setRunMode(IApplication::RunMode::Converter);
+        application()->setRunMode(IApplication::RunMode::ConsoleApp);
         m_converterTask.type = ConvertType::ExportScoreTranspose;
         m_converterTask.inputFile = scorefiles[0];
         m_converterTask.params[CommandLineController::ParamKey::ScoreTransposeOptions] = m_parser.value("score-transpose");
@@ -275,7 +275,7 @@ void CommandLineController::apply()
     if (m_parser.isSet("source-update")) {
         QStringList args = m_parser.positionalArguments();
 
-        application()->setRunMode(IApplication::RunMode::Converter);
+        application()->setRunMode(IApplication::RunMode::ConsoleApp);
         m_converterTask.type = ConvertType::SourceUpdate;
         m_converterTask.inputFile = args[0];
 
@@ -371,7 +371,7 @@ void CommandLineController::apply()
         guitarProConfiguration()->setExperimental(true);
     }
 
-    if (application()->runMode() == IApplication::RunMode::Converter) {
+    if (application()->runMode() == IApplication::RunMode::ConsoleApp) {
         project::MigrationOptions migration;
         migration.appVersion = mu::engraving::MSCVERSION;
 
@@ -398,32 +398,32 @@ void CommandLineController::apply()
     }
 
     if (m_parser.isSet("diagnostic-gen-drawdata")) {
-        application()->setRunMode(IApplication::RunMode::Converter);
+        application()->setRunMode(IApplication::RunMode::ConsoleApp);
         m_diagnostic.type = DiagnosticType::GenDrawData;
         m_diagnostic.input << m_parser.value("diagnostic-gen-drawdata");
     }
 
     if (m_parser.isSet("diagnostic-com-drawdata")) {
-        application()->setRunMode(IApplication::RunMode::Converter);
+        application()->setRunMode(IApplication::RunMode::ConsoleApp);
         m_diagnostic.type = DiagnosticType::ComDrawData;
         m_diagnostic.input = scorefiles;
     }
 
     if (m_parser.isSet("diagnostic-drawdata-to-png")) {
-        application()->setRunMode(IApplication::RunMode::Converter);
+        application()->setRunMode(IApplication::RunMode::ConsoleApp);
         m_diagnostic.type = DiagnosticType::DrawDataToPng;
         m_diagnostic.input << m_parser.value("diagnostic-drawdata-to-png");
     }
 
     if (m_parser.isSet("diagnostic-drawdiff-to-png")) {
-        application()->setRunMode(IApplication::RunMode::Converter);
+        application()->setRunMode(IApplication::RunMode::ConsoleApp);
         m_diagnostic.type = DiagnosticType::DrawDiffToPng;
         m_diagnostic.input = scorefiles;
     }
 
     // Autobot
     if (m_parser.isSet("test-case")) {
-        application()->setRunMode(IApplication::RunMode::Converter);
+        application()->setRunMode(IApplication::RunMode::ConsoleApp);
         m_autobot.testCaseNameOrFile = m_parser.value("test-case");
     }
 
@@ -444,7 +444,7 @@ void CommandLineController::apply()
     }
 
     // Startup
-    if (application()->runMode() == IApplication::RunMode::Editor) {
+    if (application()->runMode() == IApplication::RunMode::GuiApp) {
         startupScenario()->setModeType(modeType);
 
         if (!scorefiles.isEmpty()) {

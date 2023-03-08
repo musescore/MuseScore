@@ -36,8 +36,8 @@ public:
     virtual ~IApplication() = default;
 
     enum class RunMode {
-        Editor,
-        Converter,
+        GuiApp,
+        ConsoleApp,
         AudioPluginProbe,
     };
 

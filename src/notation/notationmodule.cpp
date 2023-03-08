@@ -221,7 +221,7 @@ void NotationModule::onInit(const framework::IApplication::RunMode& mode)
     s_actionController->init();
     s_notationUiActions->init();
 
-    if (mode == framework::IApplication::RunMode::Editor) {
+    if (mode == framework::IApplication::RunMode::GuiApp) {
         s_midiInputOutputController->init();
     }
 

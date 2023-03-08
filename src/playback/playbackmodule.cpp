@@ -106,7 +106,7 @@ void PlaybackModule::onInit(const framework::IApplication::RunMode& mode)
     s_configuration->init();
     s_playbackController->init();
 
-    if (mode != framework::IApplication::RunMode::Editor) {
+    if (mode != framework::IApplication::RunMode::GuiApp) {
         return;
     }
 

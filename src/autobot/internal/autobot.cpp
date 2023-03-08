@@ -68,7 +68,7 @@ void Autobot::init()
 void Autobot::affectOnServices()
 {
     IApplication::RunMode runMode = application()->runMode();
-    if (runMode == IApplication::RunMode::Editor) {
+    if (runMode == IApplication::RunMode::GuiApp) {
         //! NOTE Move focus to main window
         mainWindow()->qWindow()->requestActivate();
 
@@ -95,7 +95,7 @@ void Autobot::affectOnServices()
 void Autobot::restoreAffectOnServices()
 {
     IApplication::RunMode runMode = application()->runMode();
-    if (runMode == IApplication::RunMode::Editor) {
+    if (runMode == IApplication::RunMode::GuiApp) {
         navigation()->setIsResetOnMousePress(true);
         shortcutsRegister()->reload(false);
 

@@ -82,7 +82,7 @@ void MidiModule::onInit(const framework::IApplication::RunMode& mode)
 {
     s_configuration->init();
 
-    if (mode == framework::IApplication::RunMode::Editor) {
+    if (mode == framework::IApplication::RunMode::GuiApp) {
         s_midiOutPort->init();
         s_midiInPort->init();
     }

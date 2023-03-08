@@ -93,7 +93,7 @@ void UpdateModule::registerUiTypes()
 
 void UpdateModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    if (mode != framework::IApplication::RunMode::Editor) {
+    if (mode != framework::IApplication::RunMode::GuiApp) {
         return;
     }
 
