@@ -70,6 +70,8 @@ public:
     async::Notification synthesizerStateChanged() const override;
     async::Notification synthesizerStateGroupChanged(const std::string& groupName) const override;
 
+    io::path_t knownAudioPluginsDir() const override;
+
 private:
     async::Channel<io::paths_t> m_soundFontDirsChanged;
 

@@ -260,6 +260,11 @@ async::Notification AudioConfiguration::synthesizerStateGroupChanged(const std::
     return m_synthesizerStateGroupChanged[gname];
 }
 
+io::path_t AudioConfiguration::knownAudioPluginsDir() const
+{
+    return globalConfiguration()->userAppDataPath() + "/audio plugins";
+}
+
 io::path_t AudioConfiguration::stateFilePath() const
 {
     return globalConfiguration()->userAppDataPath() + "/synthesizer.xml";

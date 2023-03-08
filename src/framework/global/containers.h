@@ -300,7 +300,7 @@ inline bool remove(Map& c, const T& v)
 template<typename Map, typename K>
 inline auto take(Map& m, const K& k) -> typename Map::mapped_type
 {
-    auto it = m.find(static_cast<int>(k));
+    auto it = m.find(k);
     if (it != m.end()) {
         auto v = it->second;
         m.erase(it);

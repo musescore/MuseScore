@@ -33,6 +33,7 @@
 #include "internal/audiobuffer.h"
 #include "internal/audiothreadsecurer.h"
 #include "internal/audiooutputdevicecontroller.h"
+#include "internal/knownaudiopluginsregister.h"
 
 #include "internal/worker/audioengine.h"
 #include "internal/worker/playback.h"
@@ -65,6 +66,8 @@ static std::shared_ptr<SynthResolver> s_synthResolver = std::make_shared<SynthRe
 static std::shared_ptr<Playback> s_playbackFacade = std::make_shared<Playback>();
 
 static std::shared_ptr<SoundFontRepository> s_soundFontRepository = std::make_shared<SoundFontRepository>();
+
+static std::shared_ptr<KnownAudioPluginsRegister> s_knownAudioPluginsRegister = std::make_shared<KnownAudioPluginsRegister>();
 
 #ifdef Q_OS_LINUX
 #include "internal/platform/lin/linuxaudiodriver.h"
@@ -116,6 +119,8 @@ void AudioModule::registerExports()
     ioc()->registerExport<IFxResolver>(moduleName(), s_fxResolver);
 
     ioc()->registerExport<ISoundFontRepository>(moduleName(), s_soundFontRepository);
+
+    ioc()->registerExport<IKnownAudioPluginsRegister>(moduleName(), s_knownAudioPluginsRegister);
 }
 
 void AudioModule::registerResources()
@@ -163,6 +168,7 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
     // Init configuration
     s_audioConfiguration->init();
     s_soundFontRepository->init();
+    s_knownAudioPluginsRegister->init();
 
     s_audioBuffer->init(s_audioConfiguration->audioChannelsCount(),
                         s_audioConfiguration->renderStep());

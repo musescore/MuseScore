@@ -33,6 +33,7 @@
 #include "mpe/events.h"
 #include "io/iodevice.h"
 #include "async/channel.h"
+#include "io/path.h"
 
 namespace mu::audio {
 using msecs_t = int64_t;
@@ -151,6 +152,20 @@ struct AudioResourceMeta {
 
 using AudioResourceMetaList = std::vector<AudioResourceMeta>;
 using AudioResourceMetaSet = std::set<AudioResourceMeta>;
+
+enum class AudioPluginType {
+    Undefined = -1,
+    Instrument,
+    Fx,
+};
+
+struct AudioPluginInfo {
+    AudioPluginType type = AudioPluginType::Undefined;
+    AudioResourceMeta meta;
+    io::path_t path;
+    bool enabled = false;
+    int errorCode = 0;
+};
 
 enum class AudioFxType {
     Undefined = -1,
