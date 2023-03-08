@@ -19,21 +19,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-HERE="$(dirname ${BASH_SOURCE[0]})"
-MSCORE_BIN=build.debug/install/bin/mscore
+REF_BIN=./musescore_reference/app/bin/mscore4portable
+CUR_BIN=./musescore_current/app/bin/mscore4portable
 
-while [[ "$#" -gt 0 ]]; do
-    case $1 in
-        -m|--mscore) MSCORE_BIN="$2"; shift ;;
-        *) echo "Unknown parameter passed: $1"; exit 1 ;;
-    esac
-    shift
-done
+chmod +x $REF_BIN
+chmod +x ./musescore_reference/app/bin/crashpad_handler
 
-export XDG_RUNTIME_DIR=/tmp/runtime-root
-export QT_QPA_PLATFORM=offscreen
+chmod +x $CUR_BIN
+chmod +x ./musescore_current/app/bin/crashpad_handler
 
-$MSCORE_BIN \
-    --test-case $HERE/vtest.js \
-    --test-case-context $HERE/vtest_context.json \
-    --test-case-func "generateRefDrawData"
+echo reference version:
+$REF_BIN --long-version
+echo current version:
+$CUR_BIN --long-version
+
+echo =======================
+echo ==== Generate PNGs ====
+echo =======================
+
+echo Generate reference pngs: 
+./vtest/vtest-generate-pngs.sh -o ./reference_pngs -m $REF_BIN
+
+echo Generate current pngs: 
+./vtest/vtest-generate-pngs.sh -o ./current_pngs -m $CUR_BIN
