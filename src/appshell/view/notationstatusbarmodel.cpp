@@ -355,7 +355,7 @@ void NotationStatusBarModel::setCurrentZoom(const QString& zoomId)
 
 int NotationStatusBarModel::minZoomPercentage() const
 {
-    return possibleZoomPercentageList().first();
+    return 5;
 }
 
 int NotationStatusBarModel::maxZoomPercentage() const
