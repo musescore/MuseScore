@@ -380,7 +380,7 @@ class ExportMusicXml
     void clef(staff_idx_t staff, const ClefType ct, const QString& extraAttributes = "");
     void timesig(TimeSig* tsig);
     void keysig(const KeySig* ks, ClefType ct, staff_idx_t staff = 0, bool visible = true);
-    void barlineLeft(const Measure* const m);
+    void barlineLeft(const Measure* const m, const int track);
     void barlineMiddle(const BarLine* bl);
     void barlineRight(const Measure* const m, const track_idx_t strack, const track_idx_t etrack);
     void lyrics(const std::vector<Lyrics*>& ll, const track_idx_t trk);
@@ -1677,14 +1677,14 @@ static QString tick2xml(const Fraction& ticks, int* dots)
 //   findVolta -- find volta starting in measure m
 //---------------------------------------------------------
 
-static Volta* findVolta(const Measure* const m, bool left)
+static Volta* findVolta(const Measure* const m, bool left, const int track)
 {
     Fraction stick = m->tick();
     Fraction etick = m->tick() + m->ticks();
     auto spanners = m->score()->spannerMap().findOverlapping(stick.ticks(), etick.ticks());
     for (auto i : spanners) {
         Spanner* el = i.value;
-        if (el->type() != ElementType::VOLTA) {
+        if (el->type() != ElementType::VOLTA || track2staff(el->track()) != track2staff(track)) {
             continue;
         }
         if (left && el->tick() == stick) {
@@ -1729,6 +1729,9 @@ static void ending(XmlWriter& xml, Volta* v, bool left)
     }
     QString voltaXml = QString("ending number=\"%1\" type=\"%2\"").arg(number, type);
     voltaXml += ExportMusicXml::positioningAttributes(v, left);
+    if (!v->visible()) {
+        voltaXml += " print-object=\"no\"";
+    }
     if (left) {
         xml.tagRaw(voltaXml, v->text().toXmlEscaped());
     } else {
@@ -1740,10 +1743,10 @@ static void ending(XmlWriter& xml, Volta* v, bool left)
 //   barlineLeft -- search for and handle barline left
 //---------------------------------------------------------
 
-void ExportMusicXml::barlineLeft(const Measure* const m)
+void ExportMusicXml::barlineLeft(const Measure* const m, const int track)
 {
     bool rs = m->repeatStart();
-    Volta* volta = findVolta(m, true);
+    Volta* volta = findVolta(m, true, track);
     if (!rs && !volta) {
         return;
     }
@@ -1943,7 +1946,7 @@ void ExportMusicXml::barlineRight(const Measure* const m, const track_idx_t stra
     bool visible = m->endBarLineVisible();
 
     bool needBarStyle = (bst != BarLineType::NORMAL && bst != BarLineType::START_REPEAT) || !visible;
-    Volta* volta = findVolta(m, false);
+    Volta* volta = findVolta(m, false, strack);
     // detect short and tick barlines
     QString special = "";
     if (bst == BarLineType::NORMAL) {
@@ -7102,7 +7105,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     findTrills(m, strack, etrack, _trillStart, _trillStop);
 
     // barline left must be the first element in a measure
-    barlineLeft(m);
+    barlineLeft(m, strack);
 
     // output attributes with the first actual measure (pickup or regular)
     if (isFirstActualMeasure) {
