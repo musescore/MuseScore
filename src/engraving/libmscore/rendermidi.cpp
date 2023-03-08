@@ -67,7 +67,6 @@
 #include "trill.h"
 #include "undo.h"
 #include "utils.h"
-#include "vibrato.h"
 #include "volta.h"
 
 #include "log.h"

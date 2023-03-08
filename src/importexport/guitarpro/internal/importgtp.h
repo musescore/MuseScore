@@ -284,12 +284,6 @@ protected:
     virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const { return nullptr; }
     void initDynamics(size_t stavesNum);
 
-    /// midi effects
-    void addSoundEffects();
-    void addPalmMuteEffect(const PalmMute* const elem);
-
-    std::vector<PalmMute*> _addedPalmMutes;
-
     std::vector<PalmMute*> _palmMutes;
     std::vector<LetRing*> _letRings;
     std::vector<Vibrato*> _vibratos;

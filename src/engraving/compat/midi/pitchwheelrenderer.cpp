@@ -79,6 +79,7 @@ void PitchWheelRenderer::renderChannelPitchWheel(EventMap& pitchWheelEvents,
 
         if (pitchValue != prevPitchValue) {
             NPlayEvent evb(ME_PITCHBEND, channel, pitchValue % 128, pitchValue / 128);
+            evb.setEffect(iterBegin->effect);
             pitchWheelEvents.emplace_hint(pitchWheelEvents.end(), std::make_pair(tick, evb));
         }
 
@@ -111,6 +112,7 @@ void PitchWheelRenderer::renderChannelPitchWheel(EventMap& pitchWheelEvents,
         }
 
         NPlayEvent evb(ME_PITCHBEND, channel, pitchValue % 128, pitchValue / 128);
+        evb.setEffect(endFunc.effect);
         pitchWheelEvents.emplace_hint(pitchWheelEvents.end(), std::make_pair(endFuncTick, evb));
     }
 }
