@@ -102,7 +102,7 @@ Column {
 
             step: 0.5
             maxValue: 10.0
-            minValue: 0.1
+            minValue: -10.0
             decimals: 2
 
             navigationName: "HookHeight"
