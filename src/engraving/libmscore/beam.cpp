@@ -1160,7 +1160,7 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
         }
         double restClearMargin = 0.0;
         if (chordRest->isRest()) {
-            const double restToBeamPadding = 0.35 * spatium(); // TODO: style setting
+            const double restToBeamPadding = 0.5 * spatium(); // TODO: style setting
             restClearMargin = _beamSegments.size() * _beamWidth + (_beamSegments.size() - 1) * _beamSpacing + restToBeamPadding;
         }
 

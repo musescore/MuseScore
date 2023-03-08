@@ -1463,12 +1463,13 @@ void LayoutChords::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Cho
     }
 }
 
-void LayoutChords::resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Segment* segment, staff_idx_t staffIdx)
+void LayoutChords::resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Segment* segment, staff_idx_t staffIdx, bool considerBeams)
 {
     Fraction tick = segment->tick();
     Staff* staff = score->staff(staffIdx);
     double spatium = staff->spatium(tick);
     double lineDistance = staff->lineDistance(tick) * spatium;
+    int lines = staff->lines(tick);
     const double minRestToRestClearance = 0.35 * spatium;
 
     for (int i = 0; i < rests.size() - 1; ++i) {
@@ -1502,7 +1503,7 @@ void LayoutChords::resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Se
         }
 
         int steps = ceil(abs(margin) / lineDistance);
-        // Move the two rests away from each other by splitting the necessary steps among the two
+        // Move the two rests away from each other
         int step1 = floor(double(steps) / 2);
         int step2 = ceil(double(steps) / 2);
         int maxStep1 = firstAbove ? rest1Clearance.above() : rest1Clearance.below();
@@ -1519,5 +1520,52 @@ void LayoutChords::resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Se
         step2 = std::min(step2, maxStep2);
         rest1->movePosY(step1 * lineDistance * (firstAbove ? -1 : 1));
         rest2->movePosY(step2 * lineDistance * (firstAbove ? 1 : -1));
+
+        Beam* beam1 = rest1->beam();
+        Beam* beam2 = rest2->beam();
+        if (rest1 && rest2 && considerBeams) {
+            shape1 = rest1->shape().translated(rest1->pos());
+            shape2 = rest2->shape().translated(rest2->pos());
+
+            ChordRest* beam1Start = beam1->elements().front();
+            ChordRest* beam1End = beam1->elements().back();
+            double y1Start = beam1->chordBeamAnchorY(beam1Start) - beam1Start->pagePos().y();
+            double y1End = beam1->chordBeamAnchorY(beam1End) - beam1End->pagePos().y();
+            double beam1Ymid = 0.5 * (y1Start + y1End);
+
+            ChordRest* beam2Start = beam2->elements().front();
+            ChordRest* beam2End = beam2->elements().back();
+            double y2Start = beam2->chordBeamAnchorY(beam2Start) - beam2Start->pagePos().y();
+            double y2End = beam2->chordBeamAnchorY(beam2End) - beam2End->pagePos().y();
+            double beam2Ymid = 0.5 * (y2Start + y2End);
+
+            double centerY = 0.5 * (beam1Ymid + beam2Ymid);
+
+            double upperBound = shape1.bottom();
+            double lowerBound = shape2.top();
+            int steps = 0;
+            if (centerY < upperBound) {
+                steps = floor((centerY - upperBound) / lineDistance);
+            } else if (centerY > lowerBound) {
+                steps = ceil((centerY - lowerBound) / lineDistance);
+            }
+            double moveY = steps * lineDistance;
+            rest1->movePosY(moveY);
+            rest2->movePosY(moveY);
+            shape1.translate(PointF(0.0, moveY));
+            shape2.translate(PointF(0.0, moveY));
+
+            double halfLineDistance = 0.5 * lineDistance;
+            if (shape1.bottom() < - halfLineDistance) {
+                rest1->movePosY(halfLineDistance);
+            } else if (centerY >= (lines - 1) * lineDistance + halfLineDistance) {
+                rest2->movePosY(-halfLineDistance);
+            }
+
+            rest1->verticalClearance().setLocked(true);
+            rest2->verticalClearance().setLocked(true);
+            beam1->layout();
+            beam2->layout();
+        }
     }
 }

@@ -51,7 +51,7 @@ public:
     static void resolveVerticalRestConflicts(Score* score, Segment* segment, staff_idx_t staffIdx);
     static void resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord*>& chords, Score* score, Segment* segment,
                                    staff_idx_t staffIdx);
-    static void resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Segment* segment, staff_idx_t staffIdx);
+    static void resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Segment* segment, staff_idx_t staffIdx, bool considerBeams = false);
 };
 }
 

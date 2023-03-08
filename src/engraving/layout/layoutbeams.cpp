@@ -553,10 +553,7 @@ void LayoutBeams::verticalAdjustBeamedRests(Rest* rest, Beam* beam)
         std::vector<Rest*> rests;
         collectChordsAndRest(segment, staffIdx, chords, rests);
         LayoutChords::resolveRestVSChord(rests, chords, score, segment, staffIdx);
-        LayoutChords::resolveRestVSRest(rests, score, segment, staffIdx);
-        rest->verticalClearance().setLocked(true);
-        LayoutBeams::verticalAdjustBeamedRests(rest, beam);
-    } else {
-        beam->layout();
+        LayoutChords::resolveRestVSRest(rests, score, segment, staffIdx, /*considerBeams*/ true);
     }
+    beam->layout();
 }
