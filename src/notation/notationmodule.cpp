@@ -212,12 +212,16 @@ void NotationModule::registerUiTypes()
 
 void NotationModule::onInit(const framework::IApplication::RunMode& mode)
 {
+    if (mode == framework::IApplication::RunMode::AudioPluginProbe) {
+        return;
+    }
+
     s_configuration->init();
     s_instrumentsRepository->init();
     s_actionController->init();
     s_notationUiActions->init();
 
-    if (mode == framework::IApplication::RunMode::Editor) {
+    if (mode == framework::IApplication::RunMode::GuiApp) {
         s_midiInputOutputController->init();
     }
 

@@ -152,7 +152,7 @@ int App::run(int argc, char** argv)
 
 #ifdef MUE_BUILD_APPSHELL_MODULE
     SplashScreen* splashScreen = nullptr;
-    if (runMode == framework::IApplication::RunMode::Editor) {
+    if (runMode == framework::IApplication::RunMode::GuiApp) {
         splashScreen = new SplashScreen();
         splashScreen->show();
     }
@@ -189,7 +189,7 @@ int App::run(int argc, char** argv)
     // ====================================================
 
     switch (runMode) {
-    case framework::IApplication::RunMode::Converter: {
+    case framework::IApplication::RunMode::ConsoleApp: {
         // ====================================================
         // Process Autobot
         // ====================================================
@@ -220,7 +220,7 @@ int App::run(int argc, char** argv)
             }
         }
     } break;
-    case framework::IApplication::RunMode::Editor: {
+    case framework::IApplication::RunMode::GuiApp: {
 #ifdef MUE_BUILD_APPSHELL_MODULE
         // ====================================================
         // Setup Qml Engine
@@ -287,7 +287,15 @@ int App::run(int argc, char** argv)
             delete splashScreen;
         }
 #endif // MUE_BUILD_APPSHELL_MODULE
-    }
+    } break;
+    case framework::IApplication::RunMode::AudioPluginProbe: {
+        io::path_t pluginPath = commandLine.audioPluginPath();
+
+        QMetaObject::invokeMethod(qApp, [pluginPath]() {
+                LOGD() << "Scanning audio plugin: " << pluginPath;
+                qApp->exit(0);
+            }, Qt::QueuedConnection);
+    } break;
     }
 
     // ====================================================

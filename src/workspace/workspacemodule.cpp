@@ -95,7 +95,7 @@ void WorkspaceModule::registerUiTypes()
 
 void WorkspaceModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    if (framework::IApplication::RunMode::Converter == mode) {
+    if (mode != framework::IApplication::RunMode::GuiApp) {
         return;
     }
 

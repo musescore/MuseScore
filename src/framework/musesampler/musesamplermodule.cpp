@@ -68,7 +68,7 @@ void MuseSamplerModule::resolveImports()
 
 void MuseSamplerModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    if (framework::IApplication::RunMode::Editor != mode) {
+    if (framework::IApplication::RunMode::GuiApp != mode) {
         return;
     }
 

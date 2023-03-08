@@ -214,7 +214,7 @@ void AudioModule::setupAudioDriver(const framework::IApplication::RunMode& mode)
         s_audioBuffer->pop(reinterpret_cast<float*>(stream), samplesPerChannel);
     };
 
-    if (mode == framework::IApplication::RunMode::Editor) {
+    if (mode == framework::IApplication::RunMode::GuiApp) {
         s_audioDriver->init();
 
         IAudioDriver::Spec activeSpec;

@@ -116,6 +116,7 @@ public:
     ConverterTask converterTask() const;
     Diagnostic diagnostic() const;
     Autobot autobot() const;
+    io::path_t audioPluginPath() const;
 
 private:
     void printLongVersion() const;
@@ -124,6 +125,7 @@ private:
     ConverterTask m_converterTask;
     Diagnostic m_diagnostic;
     Autobot m_autobot;
+    io::path_t m_audioPluginPath;
 };
 }
 

@@ -97,7 +97,7 @@ void ShortcutsModule::registerUiTypes()
 
 void ShortcutsModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode == IApplication::RunMode::Converter) {
+    if (mode != IApplication::RunMode::GuiApp) {
         return;
     }
 
