@@ -1523,7 +1523,7 @@ void LayoutChords::resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Se
 
         Beam* beam1 = rest1->beam();
         Beam* beam2 = rest2->beam();
-        if (rest1 && rest2 && considerBeams) {
+        if (beam1 && beam2 && considerBeams) {
             shape1 = rest1->shape().translated(rest1->pos());
             shape2 = rest2->shape().translated(rest2->pos());
 
