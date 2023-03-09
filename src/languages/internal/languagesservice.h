@@ -58,7 +58,7 @@ private:
     void loadLanguages();
 
     void setCurrentLanguage(const QString& languageCode);
-    void doSetCurrentLanguage(const QString& effectiveLanguageCode);
+    void doSetCurrentLanguage(const QString& effectiveLanguageCode, bool forceReload = false);
     QString effectiveLanguageCode(const QString& languageCode) const;
     Ret loadLanguage(Language& lang);
 

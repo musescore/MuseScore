@@ -168,13 +168,13 @@ void LanguagesService::setCurrentLanguage(const QString& languageCode)
     doSetCurrentLanguage(effectiveLanguageCode);
 }
 
-void LanguagesService::doSetCurrentLanguage(const QString& effectiveLanguageCode)
+void LanguagesService::doSetCurrentLanguage(const QString& effectiveLanguageCode, bool forceReload)
 {
     Language& lang = effectiveLanguageCode == PLACEHOLDER_LANGUAGE_CODE
                      ? m_placeholderLanguage
                      : m_languagesHash[effectiveLanguageCode];
 
-    if (!lang.isLoaded()) {
+    if (forceReload || !lang.isLoaded()) {
         loadLanguage(lang);
     }
 
@@ -280,6 +280,8 @@ Ret LanguagesService::loadLanguage(Language& lang)
         return appFilePaths.ret;
     }
 
+    lang.files.clear();
+
     for (const io::path_t& appFilePath : appFilePaths.val) {
         io::path_t filename = io::filename(appFilePath);
         io::path_t userFilePath = languagesUserAppDataPath.appendingComponent(filename);
@@ -336,7 +338,7 @@ Progress LanguagesService::update(const QString& languageCode)
 
         if (res.ret && effectiveLanguageCode == m_currentLanguage.code) {
             // If the current language was succesfully updated, retranslate the UI
-            doSetCurrentLanguage(effectiveLanguageCode);
+            doSetCurrentLanguage(effectiveLanguageCode, true);
         }
     });
 
