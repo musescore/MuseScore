@@ -55,6 +55,10 @@ void SelectionFilterModel::load()
             emit dataChanged(index(0), index(rowCount() - 1), { IsSelectedRole, IsIndeterminateRole });
         }
     });
+
+    languagesService()->currentLanguageChanged().onNotify(this, [this]() {
+        emit dataChanged(index(0), index(rowCount() - 1), { TitleRole });
+    });
 }
 
 QVariant SelectionFilterModel::data(const QModelIndex& index, int role) const
