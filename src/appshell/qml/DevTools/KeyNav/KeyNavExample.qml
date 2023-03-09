@@ -45,6 +45,7 @@ Rectangle {
             anchors.margins: 8
             verticalAlignment: Text.AlignVCenter
             text: "Last clicked: " + root.lastClickedInfo
+            color: "#000000"
         }
     }
 
