@@ -47,7 +47,10 @@ class PopupView : public QObject, public QQmlParserStatus, async::Asyncable
     Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(QQuickItem * parent READ parentItem WRITE setParentItem NOTIFY parentItemChanged)
+
     Q_PROPERTY(QQuickItem * contentItem READ contentItem WRITE setContentItem NOTIFY contentItemChanged)
+    Q_PROPERTY(int contentWidth READ contentWidth WRITE setContentWidth NOTIFY contentWidthChanged)
+    Q_PROPERTY(int contentHeight READ contentHeight WRITE setContentHeight NOTIFY contentHeightChanged)
 
     Q_PROPERTY(QWindow * window READ window NOTIFY windowChanged)
 
@@ -100,7 +103,10 @@ public:
     };
 
     QQuickItem* parentItem() const;
+
     QQuickItem* contentItem() const;
+    int contentWidth() const;
+    int contentHeight() const;
 
     QWindow* window() const;
 
@@ -143,10 +149,12 @@ public:
 public slots:
     void setParentItem(QQuickItem* parent);
     void setContentItem(QQuickItem* content);
+    void setContentWidth(int contentWidth);
+    void setContentHeight(int contentHeight);
     void setLocalX(qreal x);
     void setLocalY(qreal y);
-    void setOpenPolicy(OpenPolicy openPolicy);
-    void setClosePolicy(ClosePolicy closePolicy);
+    void setOpenPolicy(mu::uicomponents::PopupView::OpenPolicy openPolicy);
+    void setClosePolicy(mu::uicomponents::PopupView::ClosePolicy closePolicy);
     void setNavigationParentControl(ui::INavigationControl* parentNavigationControl);
     void setObjectId(QString objectId);
     void setTitle(QString title);
@@ -166,11 +174,13 @@ public slots:
 signals:
     void parentItemChanged();
     void contentItemChanged();
+    void contentWidthChanged();
+    void contentHeightChanged();
     void windowChanged();
     void xChanged(qreal x);
     void yChanged(qreal y);
-    void openPolicyChanged(OpenPolicy openPolicy);
-    void closePolicyChanged(ClosePolicy closePolicy);
+    void openPolicyChanged(mu::uicomponents::PopupView::OpenPolicy openPolicy);
+    void closePolicyChanged(mu::uicomponents::PopupView::ClosePolicy closePolicy);
     void navigationParentControlChanged(ui::INavigationControl* navigationParentControl);
     void objectIdChanged(QString objectId);
     void titleChanged(QString title);
@@ -212,7 +222,7 @@ protected:
 
     virtual QScreen* resolveScreen() const;
     QRect currentScreenGeometry() const;
-    virtual void updatePosition();
+    virtual void updateGeometry();
     void updateContentPosition();
 
     virtual QRect viewGeometry() const;
@@ -223,6 +233,8 @@ protected:
     IPopupWindow* m_window = nullptr;
 
     QQuickItem* m_contentItem = nullptr;
+    int m_contentWidth = 0;
+    int m_contentHeight = 0;
 
     QQuickItem* m_anchorItem = nullptr;
 
