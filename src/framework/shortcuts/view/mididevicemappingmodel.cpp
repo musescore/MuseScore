@@ -124,6 +124,19 @@ QHash<int, QByteArray> MidiDeviceMappingModel::roleNames() const
 
 void MidiDeviceMappingModel::load()
 {
+    loadItems();
+
+    midiRemote()->midiMappingsChanged().onNotify(this, [this](){
+        loadItems();
+    });
+
+    languagesService()->currentLanguageChanged().onNotify(this, [this] {
+        loadItems();
+    });
+}
+
+void MidiDeviceMappingModel::loadItems()
+{
     beginResetModel();
     m_midiMappings.clear();
 
@@ -148,10 +161,6 @@ void MidiDeviceMappingModel::load()
             m_midiMappings.push_back(midiMapping);
         }
     }
-
-    midiRemote()->midiMappingsChanged().onNotify(this, [this](){
-        load();
-    });
 
     endResetModel();
 }
