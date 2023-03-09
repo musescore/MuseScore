@@ -45,12 +45,14 @@ static const QString IS_CLOUD_KEY("isCloud");
 RecentProjectsModel::RecentProjectsModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    ProjectMetaList recentProjects = recentProjectsProvider()->recentProjectList();
-    updateRecentScores(recentProjects);
+    updateRecentScores();
 
     recentProjectsProvider()->recentProjectListChanged().onNotify(this, [this]() {
-        ProjectMetaList recentProjects = recentProjectsProvider()->recentProjectList();
-        updateRecentScores(recentProjects);
+        updateRecentScores();
+    });
+
+    languagesService()->currentLanguageChanged().onNotify(this, [this]() {
+        updateRecentScores();
     });
 }
 
@@ -114,8 +116,10 @@ void RecentProjectsModel::setRecentScores(const QVariantList& recentScores)
     endResetModel();
 }
 
-void RecentProjectsModel::updateRecentScores(const ProjectMetaList& recentProjectsList)
+void RecentProjectsModel::updateRecentScores()
 {
+    ProjectMetaList recentProjectsList = recentProjectsProvider()->recentProjectList();
+
     QVariantList recentScores;
 
     QVariantMap addItem;

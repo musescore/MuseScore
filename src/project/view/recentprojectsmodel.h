@@ -30,6 +30,7 @@
 #include "iprojectconfiguration.h"
 #include "irecentprojectsprovider.h"
 #include "iinteractive.h"
+#include "languages/ilanguagesservice.h"
 
 namespace mu::project {
 class RecentProjectsModel : public QAbstractListModel, public async::Asyncable
@@ -40,6 +41,7 @@ class RecentProjectsModel : public QAbstractListModel, public async::Asyncable
     INJECT(project, IProjectConfiguration, configuration)
     INJECT(project, IRecentProjectsProvider, recentProjectsProvider)
     INJECT(project, framework::IInteractive, interactive)
+    INJECT(project, languages::ILanguagesService, languagesService)
 
 public:
     RecentProjectsModel(QObject* parent = nullptr);
@@ -59,7 +61,7 @@ private:
         ScoreRole
     };
 
-    void updateRecentScores(const ProjectMetaList& recentProjectsList);
+    void updateRecentScores();
     void setRecentScores(const QVariantList& recentScores);
 
     QVariantList m_recentScores;
