@@ -33,6 +33,7 @@
 #include "async/asyncable.h"
 #include "iinteractive.h"
 #include "iglobalconfiguration.h"
+#include "languages/ilanguagesservice.h"
 
 class QItemSelection;
 
@@ -46,6 +47,7 @@ class ShortcutsModel : public QAbstractListModel, public async::Asyncable
     INJECT(shortcuts, framework::IInteractive, interactive)
     INJECT(shortcuts, IShortcutsConfiguration, configuration)
     INJECT(shortcuts, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(shortcuts, languages::ILanguagesService, languagesService)
 
     Q_PROPERTY(QItemSelection selection READ selection WRITE setSelection NOTIFY selectionChanged)
     Q_PROPERTY(QVariant currentShortcut READ currentShortcut NOTIFY selectionChanged)
@@ -81,6 +83,8 @@ signals:
     void selectionChanged();
 
 private:
+    void loadItems();
+
     const ui::UiAction& action(const std::string& actionCode) const;
     QString actionText(const std::string& actionCode) const;
 
