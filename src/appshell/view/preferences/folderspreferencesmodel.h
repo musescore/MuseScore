@@ -24,8 +24,11 @@
 
 #include <QAbstractListModel>
 
+#include "types/translatablestring.h"
+
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "languages/ilanguagesservice.h"
 #include "project/iprojectconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "plugins/ipluginsconfiguration.h"
@@ -38,6 +41,7 @@ class FoldersPreferencesModel : public QAbstractListModel, public async::Asyncab
 {
     Q_OBJECT
 
+    INJECT(appshell, languages::ILanguagesService, languagesService)
     INJECT(appshell, project::IProjectConfiguration, projectConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, plugins::IPluginsConfiguration, pluginsConfiguration)
@@ -82,7 +86,7 @@ private:
 
     struct FolderInfo {
         FolderType type = FolderType::Undefined;
-        QString title;
+        TranslatableString title;
         QString value;
         QString dir;
         FolderValueType valueType = FolderValueType::Directory;
