@@ -24,6 +24,7 @@
 
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
+#include "languages/ilanguagesservice.h"
 
 namespace mu::appshell {
 class MainWindowTitleProvider : public QObject, public async::Asyncable
@@ -31,6 +32,7 @@ class MainWindowTitleProvider : public QObject, public async::Asyncable
     Q_OBJECT
 
     INJECT(ui, context::IGlobalContext, context)
+    INJECT(ui, languages::ILanguagesService, languagesService)
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QString filePath READ filePath NOTIFY filePathChanged)

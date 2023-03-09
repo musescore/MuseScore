@@ -49,6 +49,10 @@ void MainWindowTitleProvider::load()
     context()->currentNotationChanged().onNotify(this, [this]() {
         update();
     });
+
+    languagesService()->currentLanguageChanged().onNotify(this, [this] {
+        update();
+    });
 }
 
 QString MainWindowTitleProvider::title() const
