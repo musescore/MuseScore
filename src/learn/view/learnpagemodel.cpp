@@ -58,6 +58,10 @@ void LearnPageModel::load()
     learnService()->advancedPlaylistChanged().onReceive(this, [this](const Playlist& playlist) {
         setAdvancedPlaylist(playlist);
     });
+
+    languagesService()->currentLanguageChanged().onNotify(this, [this] {
+        emit classesAuthorChanged();
+    });
 }
 
 void LearnPageModel::openVideo(const QString& videoId) const
