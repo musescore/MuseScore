@@ -147,48 +147,48 @@ void PreferencesModel::load(const QString& currentPageId)
     m_rootItem = new PreferencePageItem();
 
     QList<PreferencePageItem*> generalItems {
-        makeItem("general-start", QT_TRANSLATE_NOOP("appshell/preferences", "Program start"), IconCode::Code::NONE,
+        makeItem("general-start", TranslatableString("appshell/preferences", "Program start"), IconCode::Code::NONE,
                  "Preferences/ProgrammeStartPreferencesPage.qml"),
 
-        makeItem("general-folders", QT_TRANSLATE_NOOP("appshell/preferences", "Folders"), IconCode::Code::NONE,
+        makeItem("general-folders", TranslatableString("appshell/preferences", "Folders"), IconCode::Code::NONE,
                  "Preferences/FoldersPreferencesPage.qml")
     };
 
     QList<PreferencePageItem*> items {
-        makeItem("general", QT_TRANSLATE_NOOP("appshell/preferences", "General"), IconCode::Code::SETTINGS_COG,
+        makeItem("general", TranslatableString("appshell/preferences", "General"), IconCode::Code::SETTINGS_COG,
                  "Preferences/GeneralPreferencesPage.qml", generalItems),
 
-        makeItem("appearance", QT_TRANSLATE_NOOP("appshell/preferences", "Appearance"), IconCode::Code::VISIBILITY_ON,
+        makeItem("appearance", TranslatableString("appshell/preferences", "Appearance"), IconCode::Code::VISIBILITY_ON,
                  "Preferences/AppearancePreferencesPage.qml"),
 
-        makeItem("canvas", QT_TRANSLATE_NOOP("appshell/preferences", "Canvas"), IconCode::Code::NEW_FILE,
+        makeItem("canvas", TranslatableString("appshell/preferences", "Canvas"), IconCode::Code::NEW_FILE,
                  "Preferences/CanvasPreferencesPage.qml"),
 
-        makeItem("cloud", QT_TRANSLATE_NOOP("appshell/preferences", "Cloud"), IconCode::Code::CLOUD_FILE,
+        makeItem("cloud", TranslatableString("appshell/preferences", "Cloud"), IconCode::Code::CLOUD_FILE,
                  "Preferences/CloudPreferencesPage.qml"),
 
-        makeItem("note-input", QT_TRANSLATE_NOOP("appshell/preferences", "Note input"), IconCode::Code::EDIT,
+        makeItem("note-input", TranslatableString("appshell/preferences", "Note input"), IconCode::Code::EDIT,
                  "Preferences/NoteInputPreferencesPage.qml"),
 
-        makeItem("midi-device-mapping", QT_TRANSLATE_NOOP("appshell/preferences", "MIDI mappings"), IconCode::Code::MIDI_INPUT,
+        makeItem("midi-device-mapping", TranslatableString("appshell/preferences", "MIDI mappings"), IconCode::Code::MIDI_INPUT,
                  "Preferences/MidiDeviceMappingPreferencesPage.qml"),
 
-        makeItem("score", QT_TRANSLATE_NOOP("appshell/preferences", "Score"), IconCode::Code::SCORE,
+        makeItem("score", TranslatableString("appshell/preferences", "Score"), IconCode::Code::SCORE,
                  "Preferences/ScorePreferencesPage.qml"),
 
-        makeItem("io", QT_TRANSLATE_NOOP("appshell/preferences", "I/O"), IconCode::Code::AUDIO,
+        makeItem("io", TranslatableString("appshell/preferences", "I/O"), IconCode::Code::AUDIO,
                  "Preferences/IOPreferencesPage.qml"),
 
-        makeItem("import", QT_TRANSLATE_NOOP("appshell/preferences", "Import"), IconCode::Code::IMPORT,
+        makeItem("import", TranslatableString("appshell/preferences", "Import"), IconCode::Code::IMPORT,
                  "Preferences/ImportPreferencesPage.qml"),
 
-        makeItem("shortcuts", QT_TRANSLATE_NOOP("appshell/preferences", "Shortcuts"), IconCode::Code::SHORTCUTS,
+        makeItem("shortcuts", TranslatableString("appshell/preferences", "Shortcuts"), IconCode::Code::SHORTCUTS,
                  "Preferences/ShortcutsPreferencesPage.qml"),
 
-        makeItem("update", QT_TRANSLATE_NOOP("appshell/preferences", "Update"), IconCode::Code::UPDATE,
+        makeItem("update", TranslatableString("appshell/preferences", "Update"), IconCode::Code::UPDATE,
                  "Preferences/UpdatePreferencesPage.qml"),
 
-        makeItem("advanced", QT_TRANSLATE_NOOP("appshell/preferences", "Advanced"), IconCode::Code::CONFIGURE,
+        makeItem("advanced", TranslatableString("appshell/preferences", "Advanced"), IconCode::Code::CONFIGURE,
                  "Preferences/AdvancedPreferencesPage.qml")
     };
 
@@ -278,7 +278,7 @@ void PreferencesModel::setCurrentPageId(QString currentPageId)
     emit currentPageIdChanged(m_currentPageId);
 }
 
-PreferencePageItem* PreferencesModel::makeItem(const QString& id, const QString& title, mu::ui::IconCode::Code icon,
+PreferencePageItem* PreferencesModel::makeItem(const QString& id, const TranslatableString& title, mu::ui::IconCode::Code icon,
                                                const QString& path,
                                                const QList<PreferencePageItem*>& children) const
 {

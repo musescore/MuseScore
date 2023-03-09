@@ -21,13 +21,14 @@
  */
 #include "preferencepageitem.h"
 
-#include "translation.h"
-
 using namespace mu::appshell;
 
 PreferencePageItem::PreferencePageItem(QObject* parent)
     : QObject(parent)
 {
+    languagesService()->currentLanguageChanged().onNotify(this, [this] {
+        emit titleChanged();
+    });
 }
 
 PreferencePageItem::~PreferencePageItem()
@@ -44,7 +45,7 @@ QString PreferencePageItem::id() const
 
 QString PreferencePageItem::title() const
 {
-    return qtrc("appshell/preferences", m_title.toUtf8());
+    return m_title.qTranslated();
 }
 
 int PreferencePageItem::icon() const
@@ -126,14 +127,14 @@ void PreferencePageItem::setId(QString id)
     emit idChanged(m_id);
 }
 
-void PreferencePageItem::setTitle(QString title)
+void PreferencePageItem::setTitle(TranslatableString title)
 {
     if (m_title == title) {
         return;
     }
 
     m_title = title;
-    emit titleChanged(m_title);
+    emit titleChanged();
 }
 
 void PreferencePageItem::setIcon(ui::IconCode::Code icon)
