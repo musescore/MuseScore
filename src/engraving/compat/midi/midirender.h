@@ -54,7 +54,6 @@ public:
             MidiInstrumentEffect effect = MidiInstrumentEffect::NONE;
 
             bool operator<(const LookupData& other) const;
-            bool empty() const;
         };
 
         std::map<int, std::map<LookupData, int> > channelsMap;
