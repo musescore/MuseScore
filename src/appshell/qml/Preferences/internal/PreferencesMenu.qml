@@ -96,7 +96,7 @@ Item {
         }
 
         itemDelegate: PageTabButton {
-            property bool expanded: Boolean(model) ? model.itemRole.expanded : false
+            property bool expanded: Boolean(model) && Boolean(model.itemRole) ? model.itemRole.expanded : false
             property int navigationRow: styleData.index.row
             property int navigationColumn: styleData.depth
 
@@ -108,7 +108,7 @@ Item {
             normalStateFont: ui.theme.bodyFont
             selectedStateFont: ui.theme.bodyBoldFont
 
-            title: Boolean(model) ? model.itemRole.title : ""
+            title: Boolean(model) && Boolean(model.itemRole) ? model.itemRole.title : ""
             checked: Boolean(model) && Boolean(model.itemRole) ? model.itemRole.id === treeView.model.currentPageId : false
             enabled: visible
 
