@@ -629,7 +629,7 @@ mu::draw::Color EngravingItem::curColor(bool isVisible, Color normalColor) const
     }
 
     if (m_colorsInversionEnabled && engravingConfiguration()->scoreInversionEnabled()) {
-        return engravingConfiguration()->scoreInversionColor();
+        return normalColor.invert();
     }
 
     return normalColor;
