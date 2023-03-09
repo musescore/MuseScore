@@ -25,11 +25,14 @@
 
 #include <QAbstractListModel>
 
+#include "types/translatablestring.h"
+
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "iglobalconfiguration.h"
+#include "languages/ilanguagesservice.h"
 
 namespace mu::appshell {
 class MainToolBarModel : public QAbstractListModel, public async::Asyncable
@@ -38,6 +41,7 @@ class MainToolBarModel : public QAbstractListModel, public async::Asyncable
 
     INJECT(appshell, context::IGlobalContext, context)
     INJECT(appshell, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(appshell, languages::ILanguagesService, languagesService)
 
 public:
     explicit MainToolBarModel(QObject* parent = nullptr);
@@ -57,7 +61,13 @@ private:
 
     void updateNotationPageItem();
 
-    QList<QVariantMap> m_items;
+    struct Item {
+        TranslatableString title;
+        QString uri;
+        bool isTitleBold = false;
+    };
+
+    QList<Item> m_items;
 };
 }
 
