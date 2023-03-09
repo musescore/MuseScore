@@ -28,11 +28,15 @@
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
+#include "languages/ilanguagesservice.h"
 
 namespace mu::appshell {
 class ThemesPageModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
+
+    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
+    INJECT(appshell, languages::ILanguagesService, languagesService)
 
     Q_PROPERTY(bool isFollowSystemThemeAvailable READ isFollowSystemThemeAvailable CONSTANT)
     Q_PROPERTY(bool isFollowSystemTheme READ isFollowSystemTheme WRITE setFollowSystemTheme NOTIFY isFollowSystemThemeChanged)
@@ -44,8 +48,6 @@ class ThemesPageModel : public QObject, public async::Asyncable
 
     Q_PROPERTY(QString currentThemeCode READ currentThemeCode WRITE setCurrentThemeCode NOTIFY themesChanged)
     Q_PROPERTY(int currentAccentColorIndex READ currentAccentColorIndex WRITE setCurrentAccentColorIndex NOTIFY themesChanged)
-
-    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
 
 public:
     explicit ThemesPageModel(QObject* parent = nullptr);

@@ -40,6 +40,10 @@ AppearancePreferencesModel::AppearancePreferencesModel(QObject* parent)
 
 void AppearancePreferencesModel::init()
 {
+    languagesService()->currentLanguageChanged().onNotify(this, [this] {
+        emit themesChanged();
+    });
+
     uiConfiguration()->isFollowSystemTheme().notification.onNotify(this, [this]() {
         emit isFollowSystemThemeChanged();
     });

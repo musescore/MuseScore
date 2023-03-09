@@ -27,6 +27,7 @@
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 #include "notation/inotationconfiguration.h"
+#include "languages/ilanguagesservice.h"
 #include "async/asyncable.h"
 
 namespace mu::appshell {
@@ -37,6 +38,7 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
     INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(appshell, languages::ILanguagesService, languagesService)
 
     Q_PROPERTY(bool isFollowSystemThemeAvailable READ isFollowSystemThemeAvailable CONSTANT)
     Q_PROPERTY(bool isFollowSystemTheme READ isFollowSystemTheme WRITE setFollowSystemTheme NOTIFY isFollowSystemThemeChanged)
