@@ -1135,6 +1135,10 @@ uint32_t MidiRenderer::getChannel(const Instrument* instr, const Note* note, Mid
     int subchannel = note->subchannel();
     int channel = instr->channel(subchannel)->channel();
 
+    if (!_context.instrumentsHaveEffects && !_context.eachStringHasChannel) {
+        return channel;
+    }
+
     ChannelLookup::LookupData lookupData;
 
     if (_context.instrumentsHaveEffects) {
@@ -1143,10 +1147,6 @@ uint32_t MidiRenderer::getChannel(const Instrument* instr, const Note* note, Mid
 
     if (_context.eachStringHasChannel && instr->hasStrings()) {
         lookupData.string = note->string();
-    }
-
-    if (lookupData.empty()) {
-        return channel;
     }
 
     return _context.channels->getChannel(channel, lookupData);
@@ -1168,10 +1168,5 @@ uint32_t MidiRenderer::ChannelLookup::getChannel(uint32_t instrumentChannel, con
 bool MidiRenderer::ChannelLookup::LookupData::operator<(const MidiRenderer::ChannelLookup::LookupData& other) const
 {
     return std::tie(string, effect) < std::tie(other.string, other.effect);
-}
-
-bool MidiRenderer::ChannelLookup::LookupData::empty() const
-{
-    return string == INVALID_STRING && effect == MidiInstrumentEffect::NONE;
 }
 }
