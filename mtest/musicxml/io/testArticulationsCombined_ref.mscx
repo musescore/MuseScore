@@ -171,7 +171,7 @@
               <subtype>stringsUpBow</subtype>
               </Articulation>
             <Articulation>
-              <subtype>articAccentStaccatoAbove</subtype>
+              <subtype>articAccentStaccatoBelow</subtype>
               </Articulation>
             <Note>
               <pitch>64</pitch>
@@ -189,7 +189,7 @@
               <subtype>stringsUpBow</subtype>
               </Articulation>
             <Articulation>
-              <subtype>articAccentStaccatoAbove</subtype>
+              <subtype>articAccentStaccatoBelow</subtype>
               </Articulation>
             <Note>
               <pitch>64</pitch>
@@ -210,7 +210,7 @@
               <subtype>ornamentTremblement</subtype>
               </Articulation>
             <Articulation>
-              <subtype>articTenutoAccentAbove</subtype>
+              <subtype>articTenutoAccentBelow</subtype>
               </Articulation>
             <StemDirection>up</StemDirection>
             <Note>
@@ -285,7 +285,7 @@
               <text>gal</text>
               </Lyrics>
             <Articulation>
-              <subtype>articTenutoStaccatoAbove</subtype>
+              <subtype>articTenutoStaccatoBelow</subtype>
               </Articulation>
             <Articulation>
               <subtype>stringsDownBow</subtype>
@@ -324,7 +324,7 @@
               <text>ly</text>
               </Lyrics>
             <Articulation>
-              <subtype>articAccentStaccatoAbove</subtype>
+              <subtype>articAccentStaccatoBelow</subtype>
               </Articulation>
             <StemDirection>up</StemDirection>
             <Note>
@@ -353,10 +353,12 @@
               <text>strea</text>
               </Lyrics>
             <Articulation>
-              <subtype>articStaccatoAbove</subtype>
+              <subtype>articStaccatoBelow</subtype>
+              <anchor>4</anchor>
               </Articulation>
             <Articulation>
               <subtype>articMarcatoAbove</subtype>
+              <anchor>3</anchor>
               </Articulation>
             <Note>
               <Accidental>
@@ -451,6 +453,7 @@
               </Lyrics>
             <Articulation>
               <subtype>articMarcatoTenutoAbove</subtype>
+              <anchor>3</anchor>
               </Articulation>
             <StemDirection>up</StemDirection>
             <Note>

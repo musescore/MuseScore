@@ -1069,15 +1069,21 @@ static void addArticulationToChord(const Notation& notation, ChordRest* cr)
       const QString place = notation.attribute("placement");
       Articulation* na = new Articulation(articSym, cr->score());
 
-      if (!dir.isNull()) // Only for case where XML attribute is present (isEmpty wouldn't work)
-            na->setUp(dir.isEmpty() || dir == "up");
-      setElementPropertyFlags(na, Pid::DIRECTION, dir);
+      if (dir == "up" || dir == "down") {
+            na->setUp(dir == "up");
+            na->setPropertyFlags(Pid::DIRECTION, PropertyFlags::UNSTYLED);
+            }
 
-      if (place == "above" || dir.isEmpty() || dir == "up")
-            na->setAnchor(ArticulationAnchor::TOP_STAFF);
-      else if (place == "below" || dir == "down")
-            na->setAnchor(ArticulationAnchor::BOTTOM_STAFF);
-      setElementPropertyFlags(na, Pid::DIRECTION, dir, place);
+      // when setting anchor, assume type up/down without explicit placement
+      // implies placement above/below
+      if (place == "above" || (dir == "up" && place == "")) {
+              na->setAnchor(ArticulationAnchor::TOP_CHORD);
+          na->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
+          }
+      else if (place == "below" || (dir == "down" && place == "")) {
+            na->setAnchor(ArticulationAnchor::BOTTOM_CHORD);
+            na->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
+            }
 
       cr->add(na);
       }

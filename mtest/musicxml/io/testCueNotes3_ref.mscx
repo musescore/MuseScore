@@ -254,7 +254,7 @@
               <text>stars</text>
               </Lyrics>
             <Articulation>
-              <subtype>articStaccatoAbove</subtype>
+              <subtype>articStaccatoBelow</subtype>
               </Articulation>
             <StemDirection>up</StemDirection>
             <Note>
