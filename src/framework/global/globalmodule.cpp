@@ -141,6 +141,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         pr->reg("appBinPath", s_globalConf->appBinPath());
+        pr->reg("appBinDirPath", s_globalConf->appBinDirPath());
         pr->reg("appDataPath", s_globalConf->appDataPath());
         pr->reg("appConfigPath", s_globalConf->appConfigPath());
         pr->reg("userAppDataPath", s_globalConf->userAppDataPath());

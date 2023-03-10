@@ -1,0 +1,56 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef MU_AUDIO_REGISTERAUDIOPLUGINSSCENARIO_H
+#define MU_AUDIO_REGISTERAUDIOPLUGINSSCENARIO_H
+
+#include "iregisteraudiopluginsscenario.h"
+
+#include "modularity/ioc.h"
+#include "iknownaudiopluginsregister.h"
+#include "iaudiopluginsscannerregister.h"
+#include "iaudiopluginmetareaderregister.h"
+#include "iprocess.h"
+#include "iglobalconfiguration.h"
+#include "iinteractive.h"
+
+namespace mu::audio {
+class RegisterAudioPluginsScenario : public IRegisterAudioPluginsScenario
+{
+    INJECT(audio, IKnownAudioPluginsRegister, knownPluginsRegister)
+    INJECT(audio, IAudioPluginsScannerRegister, scannerRegister)
+    INJECT(audio, IAudioPluginMetaReaderRegister, metaReaderRegister)
+    INJECT(audio, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(audio, framework::IInteractive, interactive)
+    INJECT(audio, IProcess, process)
+
+public:
+    Ret registerNewPlugins() override;
+    Ret registerPlugin(const io::path_t& pluginPath) override;
+
+private:
+    void startPluginsRegistration(const io::paths_t& pluginPaths);
+    IAudioPluginMetaReaderPtr metaReader(const io::path_t& pluginPath) const;
+};
+}
+
+#endif // MU_AUDIO_REGISTERAUDIOPLUGINSSCENARIO_H

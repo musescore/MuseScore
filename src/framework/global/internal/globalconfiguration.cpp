@@ -46,6 +46,11 @@ void GlobalConfiguration::init()
 
 io::path_t GlobalConfiguration::appBinPath() const
 {
+    return QCoreApplication::applicationFilePath();
+}
+
+io::path_t GlobalConfiguration::appBinDirPath() const
+{
     return io::path_t(QCoreApplication::applicationDirPath());
 }
 

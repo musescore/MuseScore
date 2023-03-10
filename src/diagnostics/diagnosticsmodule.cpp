@@ -140,7 +140,7 @@ void DiagnosticsModule::onInit(const framework::IApplication::RunMode& mode)
     io::path_t handlerFile("crashpad_handler");
 #endif // _MSC_VER
 
-    io::path_t handlerPath = globalConf->appBinPath() + "/" + handlerFile;
+    io::path_t handlerPath = globalConf->appBinDirPath() + "/" + handlerFile;
     io::path_t dumpsDir = globalConf->userAppDataPath() + "/logs/dumps";
     fileSystem()->makePath(dumpsDir);
     std::string serverUrl(MUE_CRASH_REPORT_URL);

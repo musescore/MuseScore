@@ -31,6 +31,7 @@
 #include "converter/iconvertercontroller.h"
 #include "diagnostics/idiagnosticdrawprovider.h"
 #include "autobot/iautobot.h"
+#include "audio/iregisteraudiopluginsscenario.h"
 
 #include "commandlinecontroller.h"
 
@@ -41,6 +42,7 @@ class App
     INJECT(app, converter::IConverterController, converter)
     INJECT(app, diagnostics::IDiagnosticDrawProvider, diagnosticDrawProvider)
     INJECT(app, autobot::IAutobot, autobot)
+    INJECT(app, audio::IRegisterAudioPluginsScenario, registerAudioPluginsScenario)
 
 public:
     App();

@@ -291,9 +291,12 @@ int App::run(int argc, char** argv)
     case framework::IApplication::RunMode::AudioPluginProbe: {
         io::path_t pluginPath = commandLine.audioPluginPath();
 
-        QMetaObject::invokeMethod(qApp, [pluginPath]() {
-                LOGD() << "Scanning audio plugin: " << pluginPath;
-                qApp->exit(0);
+        QMetaObject::invokeMethod(qApp, [this, pluginPath]() {
+                Ret ret = registerAudioPluginsScenario()->registerPlugin(pluginPath);
+                if (!ret) {
+                    LOGE() << ret.toString();
+                }
+                qApp->exit(ret.code());
             }, Qt::QueuedConnection);
     } break;
     }
