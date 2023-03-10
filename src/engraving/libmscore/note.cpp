@@ -1009,16 +1009,12 @@ double Note::outsideTieAttachX(bool up) const
     }
     // special cases:
     if (_headGroup == NoteHeadGroup::HEAD_SLASH) {
+        xo = (up ? headWidth() * 0.75 : headWidth() * 0.25);
         if (chord()->durationType().hasStem()) {
-            // the anchors are really close to the stem attach points
-            xo = up ? symSmuflAnchor(noteHead(), SmuflAnchorId::stemUpSE).x() : symSmuflAnchor(noteHead(), SmuflAnchorId::stemDownNW).x();
-            xo += spatium() * 0.13 * (chord()->up() ? mag() : -mag());
-            return x() + xo;
-        } else {
-            // whole notes etc, there really isn't a ton to work with here.
-            // 25% and 75% of headwidth seem reasonable (headWidth uses mag in its calcs)
-            return x() + (up ? headWidth() * 0.75 : headWidth() * 0.25);
+            // for quarters and halves, we can safely move a little bit outwards
+            xo += spatium() * 0.13 * (chord()->up() ? -mag() : mag());
         }
+        return x() + xo;
     }
     if (_headGroup == NoteHeadGroup::HEAD_SLASHED1 || _headGroup == NoteHeadGroup::HEAD_SLASHED2) {
         // just use the very center of the notehead
