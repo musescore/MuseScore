@@ -603,7 +603,7 @@ void Element::writeProperties(XmlWriter& xml) const
                   xml.setLidLocalIndex(_links->lid(), xml.assignLocalIndex(loc));
                   }
             else {
-                  if (s->links()) {
+                  if (s && s->links()) {
                         Staff* linkedStaff = toStaff(s->links()->mainElement());
                         loc.setStaff(linkedStaff->idx());
                         }
