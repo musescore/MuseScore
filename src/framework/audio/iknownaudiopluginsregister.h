@@ -36,7 +36,7 @@ class IKnownAudioPluginsRegister : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IKnownAudioPluginsRegister() = default;
 
-    using PluginInfoAccepted = std::function<bool(const AudioPluginInfo& info)>;
+    using PluginInfoAccepted = std::function<bool (const AudioPluginInfo& info)>;
 
     virtual std::vector<AudioPluginInfo> pluginInfoList(PluginInfoAccepted accepted = PluginInfoAccepted()) const = 0;
     virtual const io::path_t& pluginPath(const AudioResourceId& resourceId) const = 0;

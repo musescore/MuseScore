@@ -88,6 +88,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iknownaudiopluginsregister.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiopluginsscanner.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiopluginsscannerregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudiopluginmetareader.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudiopluginmetareaderregister.h
 
     # Common internal
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.cpp
@@ -107,10 +109,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstractsynthesizer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstractsynthesizer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstracteventsequencer.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/knownaudiopluginsregister.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/knownaudiopluginsregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiopluginsscannerregister.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiopluginsscannerregister.h
+
+    # Plugins
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/knownaudiopluginsregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/knownaudiopluginsregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/audiopluginsscannerregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/audiopluginsscannerregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/audiopluginmetareaderregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/audiopluginmetareaderregister.h
 
     # Driver
     ${DRIVER_SRC}

@@ -33,8 +33,10 @@
 #include "internal/audiobuffer.h"
 #include "internal/audiothreadsecurer.h"
 #include "internal/audiooutputdevicecontroller.h"
-#include "internal/knownaudiopluginsregister.h"
-#include "internal/audiopluginsscannerregister.h"
+
+#include "internal/plugins/knownaudiopluginsregister.h"
+#include "internal/plugins/audiopluginsscannerregister.h"
+#include "internal/plugins/audiopluginmetareaderregister.h"
 
 #include "internal/worker/audioengine.h"
 #include "internal/worker/playback.h"
@@ -123,6 +125,7 @@ void AudioModule::registerExports()
 
     ioc()->registerExport<IKnownAudioPluginsRegister>(moduleName(), s_knownAudioPluginsRegister);
     ioc()->registerExport<IAudioPluginsScannerRegister>(moduleName(), std::make_shared<AudioPluginsScannerRegister>());
+    ioc()->registerExport<IAudioPluginMetaReaderRegister>(moduleName(), std::make_shared<AudioPluginMetaReaderRegister>());
 }
 
 void AudioModule::registerResources()

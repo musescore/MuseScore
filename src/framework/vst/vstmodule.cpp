@@ -31,6 +31,7 @@
 #include "audio/isynthresolver.h"
 #include "audio/ifxresolver.h"
 #include "audio/iaudiopluginsscannerregister.h"
+#include "audio/iaudiopluginmetareaderregister.h"
 
 #include "internal/vstconfiguration.h"
 #include "internal/vstpluginsregister.h"
@@ -39,6 +40,7 @@
 #include "internal/synth/vstiresolver.h"
 #include "internal/fx/vstfxresolver.h"
 #include "internal/vstpluginsscanner.h"
+#include "internal/vstpluginmetareader.h"
 
 #include "view/vstieditorview.h"
 #include "view/vstfxeditorview.h"
@@ -95,6 +97,11 @@ void VSTModule::resolveImports()
     auto scannerRegister = ioc()->resolve<IAudioPluginsScannerRegister>(moduleName());
     if (scannerRegister) {
         scannerRegister->registerScanner(std::make_shared<VstPluginsScanner>());
+    }
+
+    auto metaReaderRegister = ioc()->resolve<IAudioPluginMetaReaderRegister>(moduleName());
+    if (metaReaderRegister) {
+        metaReaderRegister->registerReader(std::make_shared<VstPluginMetaReader>());
     }
 }
 
