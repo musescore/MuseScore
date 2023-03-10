@@ -86,6 +86,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
     ${CMAKE_CURRENT_LIST_DIR}/iknownaudiopluginsregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudiopluginsscanner.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudiopluginsscannerregister.h
 
     # Common internal
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.cpp
@@ -107,6 +109,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstracteventsequencer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/knownaudiopluginsregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/knownaudiopluginsregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiopluginsscannerregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiopluginsscannerregister.h
 
     # Driver
     ${DRIVER_SRC}

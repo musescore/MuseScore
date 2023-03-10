@@ -34,6 +34,7 @@
 #include "internal/audiothreadsecurer.h"
 #include "internal/audiooutputdevicecontroller.h"
 #include "internal/knownaudiopluginsregister.h"
+#include "internal/audiopluginsscannerregister.h"
 
 #include "internal/worker/audioengine.h"
 #include "internal/worker/playback.h"
@@ -121,6 +122,7 @@ void AudioModule::registerExports()
     ioc()->registerExport<ISoundFontRepository>(moduleName(), s_soundFontRepository);
 
     ioc()->registerExport<IKnownAudioPluginsRegister>(moduleName(), s_knownAudioPluginsRegister);
+    ioc()->registerExport<IAudioPluginsScannerRegister>(moduleName(), std::make_shared<AudioPluginsScannerRegister>());
 }
 
 void AudioModule::registerResources()

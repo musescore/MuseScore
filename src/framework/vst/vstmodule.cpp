@@ -30,6 +30,7 @@
 #include "modularity/ioc.h"
 #include "audio/isynthresolver.h"
 #include "audio/ifxresolver.h"
+#include "audio/iaudiopluginsscannerregister.h"
 
 #include "internal/vstconfiguration.h"
 #include "internal/vstpluginsregister.h"
@@ -37,6 +38,7 @@
 #include "internal/synth/vstsynthesiser.h"
 #include "internal/synth/vstiresolver.h"
 #include "internal/fx/vstfxresolver.h"
+#include "internal/vstpluginsscanner.h"
 
 #include "view/vstieditorview.h"
 #include "view/vstfxeditorview.h"
@@ -88,6 +90,11 @@ void VSTModule::resolveImports()
     auto fxResolver = ioc()->resolve<IFxResolver>(moduleName());
     if (fxResolver) {
         fxResolver->registerResolver(AudioFxType::VstFx, std::make_shared<VstFxResolver>());
+    }
+
+    auto scannerRegister = ioc()->resolve<IAudioPluginsScannerRegister>(moduleName());
+    if (scannerRegister) {
+        scannerRegister->registerScanner(std::make_shared<VstPluginsScanner>());
     }
 }
 
