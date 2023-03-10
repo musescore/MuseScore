@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: 'Set assignees on issue'
-      uses: cbjeukendrup/assign-by-label@main
+      uses: musescore/github_actions/assign-by-label@main
       with:
         github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
         configuration-path: '.github/issue_assign_by_label_config.yml'
