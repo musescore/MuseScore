@@ -48,6 +48,7 @@ StyledDialogView {
 
         property int buttonId: 999
         property string title: detailsLoader.active ? qsTrc("global", "Hide details") : qsTrc("global", "Show details")
+        property bool accent: false
     }
 
     contentWidth: content.implicitWidth
@@ -78,7 +79,7 @@ StyledDialogView {
         mainPanel.readInfo()
     }
 
-    ColumnLayout {
+    Column {
         id: content
 
         width: mainPanel.width
@@ -107,8 +108,8 @@ StyledDialogView {
         Loader {
             id: detailsLoader
 
-            Layout.fillWidth: true
-            Layout.preferredHeight: visible ? implicitHeight : 0
+            width: parent.width
+            height: visible ? implicitHeight : 0
 
             active: false
             visible: active
