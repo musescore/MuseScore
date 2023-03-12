@@ -15,7 +15,9 @@ body:
         - VST bug
         - Muse Sounds bug
         - General playback bug
-        - Cloud saving/loading issue
+        - Cloud issue (opening, saving, logging in/out)
+        - Opening/saving issue
+        - Import/export issue
         - File corruption
         - Other type of issue
     validations:

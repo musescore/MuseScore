@@ -13,7 +13,7 @@ VST:
 playback:
     - "General playback bug"
 cloud:
-    - "Cloud saving/loading issue"
+    - "Cloud issue (opening, saving, logging in/out)"
 corruption:
     - "File corruption"
 "needs review":
