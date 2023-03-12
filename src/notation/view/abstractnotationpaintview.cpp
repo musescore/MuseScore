@@ -239,6 +239,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     m_notation->notationChanged().onNotify(this, [this, interaction]() {
         interaction->hideShadowNote();
         m_shadowNoteRect = RectF();
+        ensureViewportInsideScrollableArea();
         scheduleRedraw();
     });
 
