@@ -252,12 +252,12 @@ elseif (OS_IS_LIN)
     set(MODULE_LINK ${MODULE_LINK} ${ALSA_LIBRARIES} pthread )
 endif()
 
-if (MUE_BUILD_UNIT_TESTS)
-    add_subdirectory(tests)
-endif()
-
 set(MODULE_QRC audio.qrc)
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+
+if (MUE_BUILD_UNIT_TESTS)
+    add_subdirectory(tests)
+endif()

@@ -26,8 +26,7 @@
 #include "global/tests/mocks/filesystemmock.h"
 #include "audio/tests/mocks/audioconfigurationmock.h"
 
-#include <QJsonDocument>
-#include <QJsonObject>
+#include "serialization/json.h"
 
 using ::testing::_;
 using ::testing::Return;
@@ -55,32 +54,32 @@ protected:
 
     ByteArray pluginInfoToJson(const AudioPluginInfo& info) const
     {
-        const std::map<AudioResourceType, QString> RESOURCE_TYPE_TO_STR {
+        const std::map<AudioResourceType, std::string> RESOURCE_TYPE_TO_STR {
             { AudioResourceType::VstPlugin, "VstPlugin" },
         };
 
-        QJsonObject attributesObj;
+        JsonObject attributesObj;
         for (auto it = info.meta.attributes.cbegin(); it != info.meta.attributes.cend(); ++it) {
-            attributesObj.insert(it->first.toQString(), it->second.toQString());
+            attributesObj.set(it->first.toStdString(), it->second.toStdString());
         }
 
-        QJsonObject metaObj;
-        metaObj.insert(QStringLiteral("id"), QString::fromStdString(info.meta.id));
-        metaObj.insert(QStringLiteral("type"), mu::value(RESOURCE_TYPE_TO_STR, info.meta.type, "Undefined"));
-        metaObj.insert(QStringLiteral("vendor"), QString::fromStdString(info.meta.vendor));
-        metaObj.insert(QStringLiteral("attributes"), attributesObj);
-        metaObj.insert(QStringLiteral("hasNativeEditorSupport"), info.meta.hasNativeEditorSupport);
+        JsonObject metaObj;
+        metaObj.set("id", info.meta.id);
+        metaObj.set("type", mu::value(RESOURCE_TYPE_TO_STR, info.meta.type, "Undefined"));
+        metaObj.set("vendor", info.meta.vendor);
+        metaObj.set("attributes", attributesObj);
+        metaObj.set("hasNativeEditorSupport", info.meta.hasNativeEditorSupport);
 
-        QJsonObject mainObj;
-        mainObj.insert(QStringLiteral("meta"), metaObj);
-        mainObj.insert(QStringLiteral("path"), info.path.toQString());
-        mainObj.insert(QStringLiteral("enabled"), info.enabled);
+        JsonObject mainObj;
+        mainObj.set("meta", metaObj);
+        mainObj.set("path", info.path.toStdString());
+        mainObj.set("enabled", info.enabled);
 
         if (info.errorCode != 0) {
-            mainObj.insert(QStringLiteral("errorCode"), info.errorCode);
+            mainObj.set("errorCode", info.errorCode);
         }
 
-        return ByteArray::fromQByteArray(QJsonDocument(mainObj).toJson());
+        return JsonDocument(mainObj).toJson();
     }
 
     std::vector<AudioPluginInfo> setupTestData()

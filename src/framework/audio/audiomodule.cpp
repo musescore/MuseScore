@@ -58,19 +58,19 @@ using namespace mu::audio;
 using namespace mu::audio::synth;
 using namespace mu::audio::fx;
 
-static std::shared_ptr<AudioConfiguration> s_audioConfiguration = std::make_shared<AudioConfiguration>();
-static std::shared_ptr<AudioThread> s_audioWorker = std::make_shared<AudioThread>();
-static std::shared_ptr<AudioBuffer> s_audioBuffer = std::make_shared<AudioBuffer>();
-static std::shared_ptr<AudioOutputDeviceController> s_audioOutputController = std::make_shared<AudioOutputDeviceController>();
+static std::shared_ptr<AudioConfiguration> s_audioConfiguration = {};
+static std::shared_ptr<AudioThread> s_audioWorker = {};
+static std::shared_ptr<AudioBuffer> s_audioBuffer = {};
+static std::shared_ptr<AudioOutputDeviceController> s_audioOutputController = {};
 
-static std::shared_ptr<FxResolver> s_fxResolver = std::make_shared<FxResolver>();
-static std::shared_ptr<SynthResolver> s_synthResolver = std::make_shared<SynthResolver>();
+static std::shared_ptr<FxResolver> s_fxResolver = {};
+static std::shared_ptr<SynthResolver> s_synthResolver = {};
 
-static std::shared_ptr<Playback> s_playbackFacade = std::make_shared<Playback>();
+static std::shared_ptr<Playback> s_playbackFacade = {};
 
-static std::shared_ptr<SoundFontRepository> s_soundFontRepository = std::make_shared<SoundFontRepository>();
+static std::shared_ptr<SoundFontRepository> s_soundFontRepository = {};
 
-static std::shared_ptr<KnownAudioPluginsRegister> s_knownAudioPluginsRegister = std::make_shared<KnownAudioPluginsRegister>();
+static std::shared_ptr<KnownAudioPluginsRegister> s_knownAudioPluginsRegister = {};
 
 #ifdef Q_OS_LINUX
 #include "internal/platform/lin/linuxaudiodriver.h"
@@ -113,6 +113,16 @@ std::string AudioModule::moduleName() const
 
 void AudioModule::registerExports()
 {
+    s_audioConfiguration = std::make_shared<AudioConfiguration>();
+    s_audioWorker = std::make_shared<AudioThread>();
+    s_audioBuffer = std::make_shared<AudioBuffer>();
+    s_audioOutputController = std::make_shared<AudioOutputDeviceController>();
+    s_fxResolver = std::make_shared<FxResolver>();
+    s_synthResolver = std::make_shared<SynthResolver>();
+    s_playbackFacade = std::make_shared<Playback>();
+    s_soundFontRepository = std::make_shared<SoundFontRepository>();
+    s_knownAudioPluginsRegister = std::make_shared<KnownAudioPluginsRegister>();
+
     ioc()->registerExport<IAudioConfiguration>(moduleName(), s_audioConfiguration);
     ioc()->registerExport<IAudioThreadSecurer>(moduleName(), std::make_shared<AudioThreadSecurer>());
     ioc()->registerExport<IAudioDriver>(moduleName(), s_audioDriver);

@@ -22,66 +22,65 @@
 
 #include "knownaudiopluginsregister.h"
 
-#include <QJsonDocument>
-#include <QJsonObject>
+#include "serialization/json.h"
 
 #include "log.h"
 
 using namespace mu::audio;
 
 namespace mu::audio {
-static const std::map<AudioResourceType, QString> RESOURCE_TYPE_TO_STRING_MAP {
+static const std::map<AudioResourceType, std::string> RESOURCE_TYPE_TO_STRING_MAP {
     { AudioResourceType::VstPlugin, "VstPlugin" },
 };
 
-static QJsonObject attributesToJson(const AudioResourceAttributes& attributes)
+static JsonObject attributesToJson(const AudioResourceAttributes& attributes)
 {
-    QJsonObject result;
+    JsonObject result;
 
     for (auto it = attributes.cbegin(); it != attributes.cend(); ++it) {
         if (it->second == audio::PLAYBACK_SETUP_DATA_ATTRIBUTE) {
             continue;
         }
 
-        result.insert(it->first.toQString(), it->second.toQString());
+        result.set(it->first.toStdString(), it->second.toStdString());
     }
 
     return result;
 }
 
-static QJsonObject metaToJson(const AudioResourceMeta& meta)
+static JsonObject metaToJson(const AudioResourceMeta& meta)
 {
-    QJsonObject result;
+    JsonObject result;
 
-    result.insert(QStringLiteral("id"), QString::fromStdString(meta.id));
-    result.insert(QStringLiteral("type"), mu::value(RESOURCE_TYPE_TO_STRING_MAP, meta.type, "Undefined"));
-    result.insert(QStringLiteral("vendor"), QString::fromStdString(meta.vendor));
-    result.insert(QStringLiteral("attributes"), attributesToJson(meta.attributes));
-    result.insert(QStringLiteral("hasNativeEditorSupport"), meta.hasNativeEditorSupport);
+    result.set("id", meta.id);
+    result.set("type", mu::value(RESOURCE_TYPE_TO_STRING_MAP, meta.type, "Undefined"));
+    result.set("vendor", meta.vendor);
+    result.set("attributes", attributesToJson(meta.attributes));
+    result.set("hasNativeEditorSupport", meta.hasNativeEditorSupport);
 
     return result;
 }
 
-static AudioResourceAttributes attributesFromJson(const QJsonObject& object)
+static AudioResourceAttributes attributesFromJson(const JsonObject& object)
 {
     AudioResourceAttributes result;
 
-    for (auto it = object.constBegin(); it != object.constEnd(); ++it) {
-        result.insert({ String::fromQString(it.key()), String::fromQString(it.value().toString()) });
+    for (const std::string& key : object.keys()) {
+        result.insert({ String::fromStdString(key), object.value(key).toString() });
     }
 
     return result;
 }
 
-static AudioResourceMeta metaFromJson(const QJsonObject& object)
+static AudioResourceMeta metaFromJson(const JsonObject& object)
 {
     AudioResourceMeta result;
 
-    result.id = object.value(QStringLiteral("id")).toString().toStdString();
-    result.type = mu::key(RESOURCE_TYPE_TO_STRING_MAP, object.value(QString("type")).toString());
-    result.vendor = object.value(QStringLiteral("vendor")).toString().toStdString();
-    result.attributes = attributesFromJson(object.value(QStringLiteral("attributes")).toObject());
-    result.hasNativeEditorSupport = object.value(QStringLiteral("hasNativeEditorSupport")).toBool();
+    result.id = object.value("id").toStdString();
+    result.type = mu::key(RESOURCE_TYPE_TO_STRING_MAP, object.value("type").toStdString());
+    result.vendor = object.value("vendor").toStdString();
+    result.attributes = attributesFromJson(object.value("attributes").toObject());
+    result.hasNativeEditorSupport = object.value("hasNativeEditorSupport").toBool();
 
     return result;
 }
@@ -112,16 +111,22 @@ void KnownAudioPluginsRegister::init()
             continue;
         }
 
-        QJsonDocument json = QJsonDocument::fromJson(file.val.toQByteArrayNoCopy());
-        QJsonObject object = json.object();
+        std::string err;
+        JsonDocument json = JsonDocument::fromJson(file.val, &err);
+        if (!err.empty()) {
+            LOGE() << err;
+            continue;
+        }
+
+        JsonObject object = json.rootObject();
 
         AudioPluginInfo info;
-        info.meta = metaFromJson(object.value(QStringLiteral("meta")).toObject());
+        info.meta = metaFromJson(object.value("meta").toObject());
         info.meta.attributes.insert({ audio::PLAYBACK_SETUP_DATA_ATTRIBUTE, mpe::GENERIC_SETUP_DATA_STRING });
         info.type = audioPluginTypeFromCategoriesString(info.meta.attributeVal(audio::CATEGORIES_ATTRIBUTE).toStdString());
-        info.path = object.value(QStringLiteral("path")).toString().toStdString();
-        info.enabled = object.value(QStringLiteral("enabled")).toBool();
-        info.errorCode = object.value(QStringLiteral("errorCode")).toInt(0);
+        info.path = object.value("path").toString();
+        info.enabled = object.value("enabled").toBool();
+        info.errorCode = object.value("errorCode").toInt();
 
         m_pluginInfoMap[info.meta.id] = info;
         m_pluginPaths.insert(info.path);
@@ -170,17 +175,17 @@ mu::Ret KnownAudioPluginsRegister::registerPlugin(const AudioPluginInfo& info)
 {
     TRACEFUNC;
 
-    QJsonObject obj;
-    obj.insert(QStringLiteral("meta"), metaToJson(info.meta));
-    obj.insert(QStringLiteral("path"), info.path.toQString());
-    obj.insert(QStringLiteral("enabled"), info.enabled);
+    JsonObject obj;
+    obj.set("meta", metaToJson(info.meta));
+    obj.set("path", info.path.toStdString());
+    obj.set("enabled", info.enabled);
 
     if (info.errorCode != 0) {
-        obj.insert(QStringLiteral("errorCode"), info.errorCode);
+        obj.set("errorCode", info.errorCode);
     }
 
     io::path_t path = pluginInfoPath(info.meta.id);
-    Ret ret = fileSystem()->writeFile(path, ByteArray::fromQByteArrayNoCopy(QJsonDocument(obj).toJson()));
+    Ret ret = fileSystem()->writeFile(path, JsonDocument(obj).toJson());
     if (!ret) {
         return ret;
     }
