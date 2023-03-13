@@ -305,8 +305,6 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
     mu::engraving::VBox* nvb = nullptr;
 
     if (createdFromTemplate) {
-        clearMeasures(score);
-
         mu::engraving::MeasureBase* mb = score->first();
         if (mb && mb->isVBox()) {
             mu::engraving::VBox* tvb = toVBox(mb);
@@ -321,6 +319,8 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
             nvb->setRightMargin(tvb->rightMargin());
             nvb->setAutoSizeEnabled(tvb->isAutoSizeEnabled());
         }
+
+        clearMeasures(score);
 
         // for templates using built-in base page style, set score page style to default (may be user-defined)
         bool isBaseWidth = (std::abs(score->style().styleD(Sid::pageWidth) - DefaultStyle::baseStyle().styleD(Sid::pageWidth)) < 0.1);
