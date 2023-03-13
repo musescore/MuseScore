@@ -3964,7 +3964,7 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
                               nkey = transposeKey(nkey, previousTranspose);
                               e.setKey(nkey);
                               }
-                        KeySig* keySig = toKeySig(s->element(track));
+                        KeySig* keySig = s ? toKeySig(s->element(track)) : nullptr;
                         if (keySig)
                               undo(new ChangeKeySig(keySig, e, keySig->showCourtesy()));
                         nextTick = kl->nextKeyTick(nextTick);
