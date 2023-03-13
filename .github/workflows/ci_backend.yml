@@ -1,6 +1,9 @@
 name: CI_Backend
 
 on:
+  schedule:
+    - cron: '0 3 * * 4' # At 03:00 on every Thursday
+
   workflow_dispatch:
     inputs:
       build_mode:
