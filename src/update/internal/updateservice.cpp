@@ -59,9 +59,9 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
     clear();
 
     QBuffer buff;
-    m_networkManager = networkManagerCreator()->makeNetworkManager();
-    Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(configuration()->checkForUpdateUrl()), &buff,
-                                              configuration()->checkForUpdateHeaders());
+    INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
+    Ret getUpdateInfo = manager->get(QString::fromStdString(configuration()->checkForUpdateUrl()), &buff,
+                                     configuration()->checkForUpdateHeaders());
 
     if (!getUpdateInfo) {
         result.ret = make_ret(Err::NetworkError);
