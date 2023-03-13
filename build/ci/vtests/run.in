@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+HERE="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+export QT_QPA_PLATFORM=offscreen
+
+exec "$HERE/bin/mscore4portable"* "$@"
