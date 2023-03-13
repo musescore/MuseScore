@@ -217,6 +217,11 @@ void PaintDebugger::drawTiledPixmap(const RectF& rect, const QPixmap& pm, const 
 
 #endif
 
+bool PaintDebugger::hasClipping() const
+{
+    return m_real->hasClipping();
+}
+
 void PaintDebugger::setClipRect(const RectF& rect)
 {
     m_real->setClipRect(rect);

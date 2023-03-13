@@ -291,7 +291,6 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
     painter.save();
 
     // Draw colored rectangle
-    painter.setClipping(false);
     PointF pos(offsetPanel, 0);
 
     painter.translate(pos);
@@ -311,9 +310,6 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
     } else {
         painter.drawTiledPixmap(bg, wallpaper, bg.topLeft() - PointF(lrint(ctx.xOffset), lrint(ctx.yOffset)));
     }
-
-    painter.setClipRect(m_rect);
-    painter.setClipping(true);
 
     mu::draw::Color color = engravingConfiguration()->formattingMarksColor();
 

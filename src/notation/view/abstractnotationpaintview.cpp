@@ -66,7 +66,7 @@ AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
 
     //! NOTE For diagnostic tools
     dispatcher()->reg(this, "diagnostic-notationview-redraw", [this]() {
-        update();
+        redraw();
     });
 
     m_enableAutoScrollTimer.setSingleShot(true);
@@ -109,7 +109,7 @@ void AbstractNotationPaintView::initBackground()
 
     configuration()->backgroundChanged().onNotify(this, [this]() {
         emit backgroundColorChanged(configuration()->backgroundColor());
-        update();
+        redraw();
     });
 }
 
@@ -232,7 +232,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
 
     m_notation->notationChanged().onNotify(this, [this, interaction]() {
         interaction->hideShadowNote();
-        update();
+        redraw();
     });
 
     onNoteInputStateChanged();
@@ -241,7 +241,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     });
 
     interaction->selectionChanged().onNotify(this, [this]() {
-        update();
+        redraw();
     });
 
     interaction->showItemRequested().onReceive(this, [this](const INotationInteraction::ShowItemRequest& request) {
@@ -289,7 +289,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     }
 
     forceFocusIn();
-    update();
+    redraw();
 
     emit horizontalScrollChanged();
     emit verticalScrollChanged();
@@ -330,7 +330,7 @@ void AbstractNotationPaintView::onMatrixChanged(const Transform&, bool overrideZ
 {
     UNUSED(overrideZoomType);
 
-    update();
+    redraw();
 
     emit horizontalScrollChanged();
     emit verticalScrollChanged();
@@ -355,6 +355,10 @@ void AbstractNotationPaintView::onViewSizeChanged()
 
     ensureViewportInsideScrollableArea();
 
+    if (m_playbackCursor->visible()) {
+        redraw();
+    }
+
     emit horizontalScrollChanged();
     emit verticalScrollChanged();
     emit viewportChanged();
@@ -372,7 +376,7 @@ void AbstractNotationPaintView::updateLoopMarkers()
     m_loopInMarker->setVisible(loop.visible);
     m_loopOutMarker->setVisible(loop.visible);
 
-    update();
+    redraw();
 }
 
 INotationPtr AbstractNotationPaintView::notation() const
@@ -428,7 +432,7 @@ void AbstractNotationPaintView::onNoteInputStateChanged()
 
     if (INotationInteractionPtr interaction = notationInteraction()) {
         interaction->hideShadowNote();
-        update();
+        redraw();
     }
 }
 
@@ -465,7 +469,7 @@ void AbstractNotationPaintView::showShadowNote(const PointF& pos)
 {
     TRACEFUNC;
     notationInteraction()->showShadowNote(pos);
-    update();
+    redraw();
 }
 
 void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, const QPointF& pos, bool activateFocus)
@@ -494,10 +498,12 @@ void AbstractNotationPaintView::paint(QPainter* qp)
 {
     TRACEFUNC;
 
+    RectF rect = RectF::fromQRectF(qp->clipBoundingRect());
+    rect = correctDrawRect(rect);
+
     mu::draw::Painter mup(qp, objectName().toStdString());
     mu::draw::Painter* painter = &mup;
 
-    RectF rect(0.0, 0.0, width(), height());
     paintBackground(rect, painter);
 
     if (!isInited()) {
@@ -547,15 +553,15 @@ void AbstractNotationPaintView::onNotationSetup()
     });
 
     configuration()->foregroundChanged().onNotify(this, [this]() {
-        update();
+        redraw();
     });
 
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
-        update();
+        redraw();
     });
 
     engravingConfiguration()->debuggingOptionsChanged().onNotify(this, [this]() {
-        update();
+        redraw();
     });
 }
 
@@ -886,6 +892,21 @@ bool AbstractNotationPaintView::doMoveCanvas(qreal dx, qreal dy)
     return true;
 }
 
+void AbstractNotationPaintView::redraw(const mu::RectF& rect)
+{
+    QRect qrect = correctDrawRect(rect).toQRect();
+    update(qrect);
+}
+
+RectF AbstractNotationPaintView::correctDrawRect(const RectF& rect) const
+{
+    if (!rect.isValid() || rect.isNull()) {
+        return RectF(0, 0, width(), height());
+    }
+
+    return rect;
+}
+
 void AbstractNotationPaintView::moveCanvasVertical(qreal dy)
 {
     moveCanvas(0, dy);
@@ -1113,7 +1134,7 @@ void AbstractNotationPaintView::setNotation(INotationPtr notation)
 {
     clear();
     m_notation = notation;
-    update();
+    redraw();
 }
 
 void AbstractNotationPaintView::setReadonly(bool readonly)
@@ -1192,7 +1213,7 @@ void AbstractNotationPaintView::onPlayingChanged()
         midi::tick_t tick = notationPlayback()->secToTick(playPosSec);
         movePlaybackCursor(tick);
     } else {
-        update();
+        redraw();
     }
 }
 
@@ -1204,22 +1225,36 @@ void AbstractNotationPaintView::movePlaybackCursor(midi::tick_t tick)
         return;
     }
 
+    RectF oldCursorRect = m_playbackCursor->rect();
     m_playbackCursor->move(tick);
-    const RectF& cursorRect = m_playbackCursor->rect();
+    const RectF& newCursorRect = m_playbackCursor->rect();
 
-    if (!m_playbackCursor->visible() || cursorRect.isNull()) {
+    if (!m_playbackCursor->visible() || newCursorRect.isNull()) {
         return;
     }
 
     if (configuration()->isAutomaticallyPanEnabled() && m_autoScrollEnabled) {
-        bool adjustVertically = needAdjustCanvasVerticallyWhilePlayback(cursorRect);
+        bool adjustVertically = needAdjustCanvasVerticallyWhilePlayback(newCursorRect);
 
-        if (adjustCanvasPosition(cursorRect, adjustVertically)) {
+        if (adjustCanvasPosition(newCursorRect, adjustVertically)) {
             return;
         }
     }
 
-    update(); //! TODO set rect to optimization
+    //! NOTE: redraw in a slightly larger area than the cursor rect to avoid graphical artifacts
+    RectF dirtyRect1 = fromLogical(oldCursorRect).adjusted(-1, -1, 2, 1);
+    RectF dirtyRect2 = fromLogical(newCursorRect).adjusted(-1, -1, 2, 1);
+
+    double dx = std::abs(dirtyRect2.x() - dirtyRect1.x());
+    double dy = std::abs(dirtyRect2.y() - dirtyRect1.y());
+
+    //! NOTE: the difference between the old cursor rect and the new one is not big, so we redraw their united rect
+    if (dx < 1.0 && dy < 1.0) {
+        redraw(dirtyRect1.united(dirtyRect2));
+    } else {
+        redraw(dirtyRect1);
+        redraw(dirtyRect2);
+    }
 }
 
 bool AbstractNotationPaintView::needAdjustCanvasVerticallyWhilePlayback(const RectF& cursorRect)

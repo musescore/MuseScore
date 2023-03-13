@@ -309,6 +309,11 @@ void BufferedPaintProvider::drawTiledPixmap(const RectF& rect, const QPixmap& pm
 
 #endif
 
+bool BufferedPaintProvider::hasClipping() const
+{
+    return false;
+}
+
 void BufferedPaintProvider::setClipRect(const RectF& rect)
 {
     UNUSED(rect);
