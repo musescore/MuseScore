@@ -289,7 +289,7 @@ void CommandLineController::apply()
     // Video
 #ifdef MUE_BUILD_VIDEOEXPORT_MODULE
     if (m_parser.isSet("score-video")) {
-        application()->setRunMode(IApplication::RunMode::Converter);
+        application()->setRunMode(IApplication::RunMode::ConsoleApp);
         m_converterTask.type = ConvertType::ExportScoreVideo;
         m_converterTask.inputFile = scorefiles[0];
         m_converterTask.outputFile = m_parser.value("o");
