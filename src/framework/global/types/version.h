@@ -31,9 +31,9 @@ public:
     Version(int major, int minor = 0, int patch = 0, const String& suffix = String(), int suffixVersion = 0);
     Version(const String& versionStr);
 
-    int major() const;
-    int minor() const;
-    int patch() const;
+    int majorVersion() const;
+    int minorVersion() const;
+    int patchVersion() const;
     String suffix() const;
     int suffixVersion() const;
 
