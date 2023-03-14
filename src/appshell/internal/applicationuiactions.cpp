@@ -80,11 +80,6 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "As&k for help")
              ),
-    UiAction("report-bug",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "&Report a bug")
-             ),
     UiAction("revert-factory",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,

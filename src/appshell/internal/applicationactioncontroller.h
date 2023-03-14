@@ -81,7 +81,6 @@ private:
 
     void openOnlineHandbookPage();
     void openAskForHelpPage();
-    void openBugReportPage();
     void openPreferencesDialog();
 
     void revertToFactorySettings();
