@@ -104,6 +104,12 @@ struct PlayNoteParams {
     bool callAllSoundOff = false;//NoteOn silence channel
 };
 
+struct VibratoParams {
+    int lowPitch = 0;
+    int highPitch = 0;
+    int period = 0;
+};
+
 static bool graceNotesMerged(Chord* chord);
 
 //---------------------------------------------------------
@@ -227,10 +233,10 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
 
 static void collectVibrato(int channel,
                            int onTime, int offTime,
-                           int lowPitch, int highPitch,
+                           const VibratoParams& vibratoParams,
                            PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect)
 {
-    const uint16_t vibratoPeriod = Constants::division / 2;
+    const uint16_t vibratoPeriod = vibratoParams.period;
     const uint32_t duration = offTime - onTime;
     const float scale = 2 * (float)wheelSpec.mLimit / wheelSpec.mAmplitude / 100;
 
@@ -238,12 +244,13 @@ static void collectVibrato(int channel,
         return;
     }
 
-    const int pillarAmplitude = (highPitch - lowPitch);
+    const int pillarAmplitude = (vibratoParams.highPitch - vibratoParams.lowPitch);
 
     PitchWheelRenderer::PitchWheelFunction func;
     func.mStartTick = onTime;
     func.mEndTick = offTime - duration % vibratoPeriod;//removed last points to make more smooth of the end
 
+    int lowPitch = vibratoParams.lowPitch;
     auto vibratoFunc = [startTick = onTime, pillarAmplitude, vibratoPeriod, lowPitch, scale] (uint32_t tick) {
         float x = (float)(tick - startTick) / vibratoPeriod;
         return (pillarAmplitude * 2 / M_PI * asin(sin(2 * M_PI * x)) + lowPitch) * scale;
@@ -857,6 +864,45 @@ static std::vector<std::pair<int, int> > collectTicksForEffect(const Score* cons
     return ticksForEffect;
 }
 
+static VibratoParams getVibratoParams(VibratoType type)
+{
+    VibratoParams params;
+
+    switch (type) {
+    case VibratoType::GUITAR_VIBRATO:
+        // guitar vibrato, up only
+        params.lowPitch = 0;       // 1.5 less amplitude than wide
+        params.highPitch = 8;
+        params.period = Constants::division / 3;
+        break;
+
+    case VibratoType::GUITAR_VIBRATO_WIDE:
+        params.lowPitch = 0;         // 1/8 (100 is a semitone)
+        params.highPitch = 12;
+        params.period = Constants::division / 2;
+        break;
+
+    case VibratoType::VIBRATO_SAWTOOTH_WIDE:
+        // vibrato with whammy bar up and down
+        params.lowPitch = -25;         // 1/16
+        params.highPitch = 25;
+        params.period = Constants::division / 2;
+        break;
+
+    case VibratoType::VIBRATO_SAWTOOTH:
+        params.lowPitch = -12;
+        params.highPitch = 12;
+        params.period = Constants::division / 2;
+        break;
+
+    default:
+        LOGE() << "vibrato type is not handled in midi renderer";
+        break;
+    }
+
+    return params;
+}
+
 void MidiRenderer::doRenderSpanners(EventMap* events, Spanner* s, uint32_t channel, PitchWheelRenderer& pitchWheelRenderer,
                                     MidiInstrumentEffect effect)
 {
@@ -897,26 +943,12 @@ void MidiRenderer::doRenderSpanners(EventMap* events, Spanner* s, uint32_t chann
 
         // from start to end of trill, send bend events at regular interval
         Vibrato* t = toVibrato(s);
-        // guitar vibrato, up only
-        int spitch = 0;       // 1/8 (100 is a semitone)
-        int epitch = 12;
-        if (t->vibratoType() == VibratoType::GUITAR_VIBRATO_WIDE) {
-            spitch = 0;         // 1/4
-            epitch = 25;
-        }
-        // vibrato with whammy bar up and down
-        else if (t->vibratoType() == VibratoType::VIBRATO_SAWTOOTH_WIDE) {
-            spitch = -25;         // 1/16
-            epitch = 25;
-        } else if (t->vibratoType() == VibratoType::VIBRATO_SAWTOOTH) {
-            spitch = -12;
-            epitch = 12;
-        }
+        VibratoParams vibratoParams = getVibratoParams(t->vibratoType());
 
         std::vector<std::pair<int, int> > vibratoTicksForEffect = collectTicksForEffect(score, s->track(), stick, etick, effect);
 
         for (const auto& [tickStart, tickEnd] : vibratoTicksForEffect) {
-            collectVibrato(channel, tickStart, tickEnd, spitch, epitch, pitchWheelRenderer, effect);
+            collectVibrato(channel, tickStart, tickEnd, vibratoParams, pitchWheelRenderer, effect);
         }
     }
 
