@@ -44,6 +44,7 @@ Item {
     property string indeterminateText: "--"
 
     property int popupItemsCount: 18
+    property bool isFontDropdown: false
 
     property alias dropIcon: dropIconItem
     property alias label: mainItem.label
@@ -96,6 +97,7 @@ Item {
 
             textRole: root.textRole
             valueRole: root.valueRole
+            isFontDropdown: root.isFontDropdown
 
             currentIndex: root.currentIndex
 

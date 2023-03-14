@@ -47,6 +47,7 @@ InspectorSectionView {
             navigationRowStart: root.navigationRowStart + 1
 
             titleText: qsTrc("inspector", "Font")
+            dropdown.isFontDropdown: true
             propertyItem: root.model ? root.model.fontFamily : null
 
             dropdown.textRole: "text"

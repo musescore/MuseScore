@@ -54,6 +54,7 @@ DropdownView {
 
     property int contentWidth: root.itemWidth
     property int contentHeight: content.contentBodyHeight
+    property bool isFontDropdown: false
 
     //! NOTE: Due to the fact that the dropdown window opens without activating focus,
     //!       for all items in the dropdown, the accessible window must be the window
@@ -263,6 +264,7 @@ DropdownView {
                     anchors.leftMargin: 12
                     horizontalAlignment: Text.AlignLeft
 
+                    font.family: root.isFontDropdown ? Utils.getItemValue(root.model, model.index, root.valueRole, undefined) : ui.theme.bodyFont.family
                     text: Utils.getItemValue(root.model, model.index, root.textRole, "")
                 }
 
