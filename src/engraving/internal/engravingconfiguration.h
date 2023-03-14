@@ -27,6 +27,7 @@
 #include "modularity/ioc.h"
 #include "global/iglobalconfiguration.h"
 #include "ui/iuiconfiguration.h"
+#include "notation/inotationconfiguration.h"
 #include "accessibility/iaccessibilityconfiguration.h"
 #include "importexport/guitarpro/iguitarproconfiguration.h"
 
@@ -37,6 +38,7 @@ class EngravingConfiguration : public IEngravingConfiguration, public async::Asy
 {
     INJECT(engraving, mu::framework::IGlobalConfiguration, globalConfiguration)
     INJECT(engraving, mu::ui::IUiConfiguration, uiConfiguration)
+    INJECT(engraving, notation::INotationConfiguration, notationConfiguration)
     INJECT(engraving, mu::accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
     INJECT(engraving, iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration);
 

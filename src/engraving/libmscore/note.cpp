@@ -1416,6 +1416,8 @@ void Note::draw(mu::draw::Painter* painter) const
                 for (MuseScoreView* view : score()->getViewer()) {
                     view->drawBackground(painter, bb);
                 }
+            } else if (score()->printing()) {
+                painter->fillRect(bb, Color::WHITE);
             } else {
                 painter->fillRect(bb, engravingConfiguration()->noteBackgroundColor());
             }

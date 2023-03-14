@@ -201,7 +201,7 @@ Color EngravingConfiguration::thumbnailBackgroundColor() const
 
 Color EngravingConfiguration::noteBackgroundColor() const
 {
-    return Color::WHITE;
+    return notationConfiguration()->foregroundColor();
 }
 
 double EngravingConfiguration::guiScaling() const
