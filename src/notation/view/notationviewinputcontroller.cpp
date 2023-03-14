@@ -673,10 +673,14 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     Qt::KeyboardModifiers keyState = event->modifiers();
 
     PointF dragDelta = logicPos - m_beginPoint;
-    // start some drag operations after a minimum of movement:
-    bool isDrag = dragDelta.manhattanLength() > 4;
-    if (!isDrag) {
-        return;
+
+    bool isDragStarted = m_isCanvasDragged || viewInteraction()->isDragStarted();
+    if (!isDragStarted) {
+        // only start drag operations after a minimum of movement:
+        bool canStartDrag = dragDelta.manhattanLength() > 4;
+        if (!canStartDrag) {
+            return;
+        }
     }
 
     bool isNoteEnterMode = m_view->isNoteEnterMode();
