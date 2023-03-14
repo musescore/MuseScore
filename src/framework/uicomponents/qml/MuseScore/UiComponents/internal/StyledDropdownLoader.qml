@@ -36,6 +36,7 @@ Loader {
 
     property alias dropdown: loader.item
     property alias isOpened: loader.active
+    property bool isFontDropdown: false
 
     active: false
 
@@ -63,6 +64,7 @@ Loader {
         currentIndex: loader.currentIndex
         itemWidth: loader.itemWidth
         itemHeight: loader.itemHeight
+        isFontDropdown: root.isFontDropdown
 
         textRole: loader.textRole
         valueRole: loader.valueRole
