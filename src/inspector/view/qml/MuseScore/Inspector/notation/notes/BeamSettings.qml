@@ -26,8 +26,8 @@ import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
+import "../beams"
 import "../../common"
-import "internal"
 
 FocusableItem {
     id: root

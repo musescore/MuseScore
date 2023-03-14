@@ -23,7 +23,7 @@
 #define BEAMSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
-#include "internal/beammodesmodel.h"
+#include "models/notation/beams/beammodesmodel.h"
 #include "types/beamtypes.h"
 
 namespace mu::inspector {

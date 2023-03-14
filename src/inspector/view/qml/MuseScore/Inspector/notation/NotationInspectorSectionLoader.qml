@@ -57,6 +57,7 @@ import "measurerepeats"
 import "tuplets"
 import "instrumentname"
 import "lyrics"
+import "rests"
 
 Loader {
     id: root
@@ -126,6 +127,8 @@ Loader {
             case Inspector.TYPE_TUPLET: return tupletComp
             case Inspector.TYPE_INSTRUMENT_NAME: return instrumentNameComp
             case Inspector.TYPE_LYRICS: return lyricsComp
+            case Inspector.TYPE_REST: return restComp
+            case Inspector.TYPE_REST_BEAM: return restComp
             }
 
             return null
@@ -318,5 +321,10 @@ Loader {
     Component {
         id: lyricsComp
         LyricsSettings {}
+    }
+
+    Component {
+        id: restComp
+        RestSettings {}
     }
 }

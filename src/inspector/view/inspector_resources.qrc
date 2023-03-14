@@ -10,7 +10,7 @@
         <file>qml/MuseScore/Inspector/notation/notes/internal/NoteheadGroupSelector.qml</file>
         <file>qml/MuseScore/Inspector/notation/notes/internal/NoteheadTypeSelector.qml</file>
         <file>qml/MuseScore/Inspector/notation/notes/BeamSettings.qml</file>
-        <file>qml/MuseScore/Inspector/notation/notes/internal/BeamTypeSelector.qml</file>
+        <file>qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/PlaybackSettings.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/PlaybackGeneralSettings.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/internal/NoteExpandableBlank.qml</file>
@@ -97,5 +97,7 @@
         <file>qml/MuseScore/Inspector/general/appearance/AppearanceSettings.qml</file>
         <file>qml/MuseScore/Inspector/text/TextSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lyrics/LyricsSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/rests/RestBeamSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/rests/RestSettings.qml</file>
     </qresource>
 </RCC>

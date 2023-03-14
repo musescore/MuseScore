@@ -89,6 +89,7 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByTyp
     case mu::engraving::ElementType::TEXT: return findTexts();
     case mu::engraving::ElementType::TREMOLO: return findTremolos();
     case mu::engraving::ElementType::BRACKET: return findBrackets();
+    case mu::engraving::ElementType::REST: return findRests();
     case mu::engraving::ElementType::PEDAL:
     case mu::engraving::ElementType::GLISSANDO:
     case mu::engraving::ElementType::VIBRATO:
@@ -430,6 +431,19 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findBrackets() co
 
     for (mu::engraving::EngravingItem* element : m_exposedElementList) {
         if (element->isBracketItem()) {
+            resultList << element;
+        }
+    }
+
+    return resultList;
+}
+
+QList<mu::engraving::EngravingItem*> ElementRepositoryService::findRests() const
+{
+    QList<mu::engraving::EngravingItem*> resultList;
+
+    for (mu::engraving::EngravingItem* element : m_exposedElementList) {
+        if (element->isRest()) {
             resultList << element;
         }
     }
