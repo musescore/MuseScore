@@ -6160,6 +6160,17 @@ void Score::undoChangeTpc(Note* note, int v)
 
 void Score::undoAddBracket(Staff* staff, int level, BracketType type, size_t span)
 {
+    staff_idx_t startStaffIdx = staff->idx();
+    staff_idx_t totStaves = nstaves();
+    // Make sure this brackets won't overlap with others sharing same column.
+    // If overlaps are found, move the other brackets outwards (i.e. increase column).
+    for (staff_idx_t staffIdx = startStaffIdx; staffIdx < startStaffIdx + span && staffIdx < totStaves; ++staffIdx) {
+        for (BracketItem* bracketItem : _staves.at(staffIdx)->brackets()) {
+            if (bracketItem->column() >= level) {
+                bracketItem->setColumn(bracketItem->column() + 1);
+            }
+        }
+    }
     undo(new AddBracket(staff, level, type, span));
 }
 
