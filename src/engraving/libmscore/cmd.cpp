@@ -3342,7 +3342,8 @@ void Score::cmdImplode()
                             if (dstChord->findNote(nv.pitch)) {
                                 continue;
                             }
-                            Note* nn = addNote(dstChord, nv);
+                            bool forceAccidental = n->accidental() && n->accidental()->role() == AccidentalRole::USER;
+                            Note* nn = addNote(dstChord, nv, forceAccidental);
                             // add tie to this note if original chord was tied
                             if (tied) {
                                 // find note to tie to
