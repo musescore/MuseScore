@@ -5340,6 +5340,10 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             for (Score* s : scoreList()) {
                 staffList.push_back(s->staff(0)); // system objects always appear on the top staff
                 for (Staff* staff : s->systemObjectStaves()) {
+                    IF_ASSERT_FAILED(staff->idx() != mu::nidx) {
+                        continue;
+                    }
+
                     staffList.push_back(staff);
                 }
             }
