@@ -50,9 +50,7 @@ endif()
 
 add_subdirectory(engraving)
 
-if (MUE_BUILD_IMPORTEXPORT_MODULE)
-    add_subdirectory(importexport)
-endif()
+add_subdirectory(importexport)
 
 if (MUE_BUILD_INSPECTOR_MODULE)
     add_subdirectory(inspector)

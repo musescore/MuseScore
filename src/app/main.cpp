@@ -123,6 +123,10 @@
 #ifdef MUE_BUILD_VIDEOEXPORT_MODULE
 #include "importexport/videoexport/videoexportmodule.h"
 #endif
+#else
+#ifdef MUE_BUILD_IMAGEEXPORT_MODULE
+#include "importexport/imagesexport/imagesexportmodule.h"
+#endif
 #endif
 
 #include "inspector/inspectormodule.h"
@@ -272,6 +276,10 @@ int main(int argc, char** argv)
     app.addModule(new mu::iex::imagesexport::ImagesExportModule());
 #ifdef MUE_BUILD_VIDEOEXPORT_MODULE
     app.addModule(new mu::iex::videoexport::VideoExportModule());
+#endif
+#else
+#ifdef MUE_BUILD_IMAGEEXPORT_MODULE
+    app.addModule(new mu::iex::imagesexport::ImagesExportModule());
 #endif
 #endif
 
