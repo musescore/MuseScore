@@ -1635,6 +1635,7 @@ double Chord::calcDefaultStemLength()
     // returns default length even if the chord doesn't have a stem
 
     double _spatium = spatium();
+    double lineDistance = (staff() ? staff()->lineDistance(tick()) : 1.0);
 
     const Staff* staffItem = staff();
     const StaffType* staffType = staffItem ? staffItem->staffTypeForElement(this) : nullptr;
@@ -1654,27 +1655,25 @@ double Chord::calcDefaultStemLength()
     // eg. slashed noteheads etc
     double extraHeight = (_up ? upNote()->stemUpSE().y() : downNote()->stemDownNW().y()) / _relativeMag / _spatium;
     int shortestStem = score()->styleB(Sid::useWideBeams) ? 12 : (score()->styleD(Sid::shortestStem) + abs(extraHeight)) * 4;
-    int chordHeight = (downLine() - upLine()) * 2; // convert to quarter spaces
+    int quarterSpacesPerLine = std::floor(lineDistance * 2);
+    int chordHeight = (downLine() - upLine()) * quarterSpacesPerLine; // convert to quarter spaces
     int stemLength = defaultStemLength;
 
     int minStemLengthQuarterSpaces = calcMinStemLength();
     _minStemLength = minStemLengthQuarterSpaces / 4.0 * _spatium;
 
     int staffLineCount = staffItem ? staffItem->lines(tick()) : 5;
-    int shortStemStart = score()->styleI(Sid::shortStemStartLocation) * 2 + 1;
+    int shortStemStart = score()->styleI(Sid::shortStemStartLocation) * quarterSpacesPerLine + 1;
     bool useWideBeams = score()->styleB(Sid::useWideBeams);
 
     int middleLine = minStaffOverlap(_up, staffLineCount, beams(), !!_hook, useWideBeams ? 4 : 3, useWideBeams, !(isGrace() || isSmall()));
     if (up()) {
-        int stemEndPosition = upLine() * 2 - defaultStemLength;
-        double stemEndPositionMag = upLine() * 2.0 - (defaultStemLength * _relativeMag);
+        int stemEndPosition = upLine() * quarterSpacesPerLine - defaultStemLength;
+        double stemEndPositionMag = (double)upLine() * quarterSpacesPerLine - (defaultStemLength * _relativeMag);
         int idealStemLength = defaultStemLength;
 
         if (stemEndPositionMag <= -shortStemStart) {
             int reduction = maxReduction(std::abs((int)floor(stemEndPositionMag) + shortStemStart));
-            if (tab) {
-                reduction *= 2;
-            }
             idealStemLength = std::max(idealStemLength - reduction, shortestStem);
         } else if (stemEndPosition > middleLine) {
             // this case will be taken care of below; even if we were to adjust here we'd have
@@ -1685,16 +1684,13 @@ double Chord::calcDefaultStemLength()
         }
         stemLength = std::max(idealStemLength, minStemLengthQuarterSpaces);
     } else {
-        int stemEndPosition = downLine() * 2 + defaultStemLength;
-        double stemEndPositionMag = downLine() * 2.0 + (defaultStemLength * _relativeMag);
+        int stemEndPosition = downLine() * quarterSpacesPerLine + defaultStemLength;
+        double stemEndPositionMag = (double)downLine() * quarterSpacesPerLine + (defaultStemLength * _relativeMag);
         int idealStemLength = defaultStemLength;
 
-        int downShortStemStart = (staffLineCount - 1) * 4 + shortStemStart;
+        int downShortStemStart = (staffLineCount - 1) * (2 * quarterSpacesPerLine) + shortStemStart;
         if (stemEndPositionMag >= downShortStemStart) {
             int reduction = maxReduction(std::abs((int)ceil(stemEndPositionMag) - downShortStemStart));
-            if (tab) {
-                reduction *= 2;
-            }
             idealStemLength = std::max(idealStemLength - reduction, shortestStem);
         } else if (stemEndPosition < middleLine) {
             // this case will be taken care of below; even if we were to adjust here we'd have
@@ -1718,8 +1714,8 @@ double Chord::calcDefaultStemLength()
     double upValue = _up ? -1. : 1.;
     double stemStart = startNote->pos().y();
     double stemEndMag = stemStart + (finalStemLength * upValue);
-    double lineDistance = (staff() ? staff()->lineDistance(tick()) : 1.0) * _spatium;
     double topLine = 0.0;
+    lineDistance *= _spatium;
     double bottomLine = lineDistance * (staffLineCount - 1.0);
     double target = 0.0;
     double midLine = middleLine / 4.0 * lineDistance;
