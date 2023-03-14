@@ -655,6 +655,7 @@ void Selection::updateSelectedElements()
         }
     }
     update();
+    _score->setSelectionChanged(true);
 }
 
 void Selection::setRange(Segment* startSegment, Segment* endSegment, staff_idx_t staffStart, staff_idx_t staffEnd)
