@@ -627,6 +627,7 @@ enum class TextStyleType {
 
     // System-level styles
     TEMPO,
+    TEMPO_CHANGE,
     METRONOME,
     REPEAT_LEFT,       // align to start of measure
     REPEAT_RIGHT,      // align to end of measure
