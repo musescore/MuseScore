@@ -89,7 +89,7 @@ Column {
                 measureUnitsSymbol: "%"
                 step: 1
                 decimals: 0
-                maxValue: 300
+                maxValue: 1000
                 minValue: 1
 
                 navigation.name: "HorizontalScale"
@@ -116,7 +116,7 @@ Column {
                 measureUnitsSymbol: "%"
                 step: 1
                 decimals: 0
-                maxValue: 300
+                maxValue: 1000
                 minValue: 1
 
                 navigation.name: "VerticalScale"
