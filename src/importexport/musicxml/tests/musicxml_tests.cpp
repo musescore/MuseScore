@@ -838,6 +838,9 @@ TEST_F(Musicxml_Tests, tempo4) {
 TEST_F(Musicxml_Tests, tempo5) {
     mxmlIoTest("testTempo5");
 }
+TEST_F(Musicxml_Tests, tempo6) {
+    mxmlIoTest("testTempo6");
+}
 TEST_F(Musicxml_Tests, tempoOverlap) {
     mxmlIoTestRef("testTempoOverlap");
 }
