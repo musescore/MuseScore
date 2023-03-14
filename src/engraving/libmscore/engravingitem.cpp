@@ -840,7 +840,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
             int index = ctx->assignLocalIndex(loc);
             ctx->setLidLocalIndex(_links->lid(), index);
         } else {
-            if (s->links()) {
+            if (s && s->links()) {
                 Staff* linkedStaff = toStaff(s->links()->mainElement());
                 loc.setStaff(static_cast<int>(linkedStaff->idx()));
             }
