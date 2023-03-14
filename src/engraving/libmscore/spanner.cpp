@@ -1635,6 +1635,8 @@ void SpannerSegment::autoplaceSpannerSegment()
         if (stfIdx == mu::nidx) {
             _skipDraw = true;
             return;
+        } else {
+            _skipDraw = false;
         }
         if (above) {
             double d  = system()->topDistance(stfIdx, sl);
