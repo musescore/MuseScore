@@ -325,7 +325,6 @@ MenuItem* AppMenuModel::makeHelpMenu()
         makeMenuItem("online-handbook"),
         makeSeparator(),
         makeMenuItem("ask-help"),
-        makeMenuItem("report-bug"),
         makeSeparator(),
         makeMenuItem("about-musescore", MenuItemRole::AboutRole),
         makeMenuItem("about-qt", MenuItemRole::AboutQtRole),
