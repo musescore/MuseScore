@@ -21,12 +21,14 @@
  */
 
 #include "chordrest.h"
+#include "durationtype.h"
 #include "factory.h"
 #include "keysig.h"
 #include "masterscore.h"
 #include "measure.h"
 #include "rest.h"
 #include "segment.h"
+#include "sig.h"
 #include "staff.h"
 #include "tuplet.h"
 #include "utils.h"
@@ -268,15 +270,23 @@ void Measure::fillGap(const Fraction& pos, const Fraction& len, track_idx_t trac
          len.numerator(), len.denominator(),
          stretch.numerator(), stretch.denominator(),
          track);
-    TDuration d;
-    d.setVal(len.ticks());
-    if (d.isValid()) {
+    std::vector<TDuration> durationList;
+    if (useGapRests) { // fill this gap with a single rest
+        TDuration d;
+        d.setVal(len.ticks());
+        durationList.push_back(d);
+    } else { // break the gap into shorter durations if necessary
+        durationList = toRhythmicDurationList(len, true, pos, score()->sigmap()->timesig(tick()).nominal(), this, 0);
+    }
+    Fraction curTick = pos;
+    for (TDuration d : durationList) {
         Rest* rest = Factory::createRest(score()->dummy()->segment());
-        rest->setTicks(len);
+        rest->setTicks(d.fraction());
         rest->setDurationType(d);
         rest->setTrack(track);
         rest->setGap(useGapRests);
-        score()->undoAddCR(rest, this, (pos / stretch) + tick());
+        score()->undoAddCR(rest, this, curTick + tick());
+        curTick += d.fraction();
     }
 }
 
