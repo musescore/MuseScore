@@ -57,6 +57,7 @@ public:
 
     bool needSave() const override;
     async::Notification needSaveChanged() const override;
+    void markAsSaved() override;
 
     void makeDefault() override;
 

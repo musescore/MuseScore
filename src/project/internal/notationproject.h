@@ -106,6 +106,8 @@ private:
     Ret makeCurrentFileAsBackup();
     Ret writeProject(engraving::MscWriter& msczWriter, bool onlySelection);
 
+    void markAsSaved(const io::path_t& path);
+
     mu::engraving::EngravingProjectPtr m_engravingProject = nullptr;
     notation::IMasterNotationPtr m_masterNotation = nullptr;
     ProjectAudioSettingsPtr m_projectAudioSettings = nullptr;
@@ -115,6 +117,7 @@ private:
     async::Notification m_pathChanged;
 
     async::Notification m_needSaveNotification;
+    bool m_needSaveNotificationBlocked = false;
 
     bool m_isNewlyCreated = false; /// true if the file has never been saved yet
     bool m_isImported = false;

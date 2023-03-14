@@ -61,6 +61,7 @@ public:
 
     virtual bool needSave() const = 0;
     virtual async::Notification needSaveChanged() const = 0;
+    virtual void markAsSaved() = 0;
 
     virtual void makeDefault() = 0;
 };
