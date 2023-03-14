@@ -31,7 +31,7 @@ DropdownView::DropdownView(QQuickItem* parent)
 {
 }
 
-void DropdownView::updatePosition()
+void DropdownView::updateGeometry()
 {
     const QQuickItem* parent = parentItem();
     IF_ASSERT_FAILED(parent) {

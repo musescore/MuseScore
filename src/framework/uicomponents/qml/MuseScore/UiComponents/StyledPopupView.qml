@@ -44,8 +44,8 @@ PopupView {
     property alias closeOnEscape: content.closeOnEscape
     property alias navigationSection: content.navigationSection
 
-    property int contentWidth: 240
-    property int contentHeight: content.contentBodyHeight
+    contentWidth: 240
+    contentHeight: content.contentBodyHeight
 
     closePolicy: PopupView.CloseOnPressOutsideParent
 

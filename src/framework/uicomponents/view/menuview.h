@@ -62,7 +62,7 @@ signals:
 private:
     void componentComplete() override;
 
-    void updatePosition() override;
+    void updateGeometry() override;
 
     QRect viewGeometry() const override;
 

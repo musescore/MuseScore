@@ -38,12 +38,12 @@ DialogView {
 
     property int margins: 0
 
-    property int contentWidth: 240
-    property int contentHeight: contentBody.childrenRect.height
-
     property alias navigationSection: navSec
 
     property bool closeOnEscape : true
+
+    contentWidth: 240
+    contentHeight: contentBody.childrenRect.height
 
     onOpened: {
         navSec.requestActive()

@@ -197,7 +197,7 @@ void PopupWindow_QQuickView::setResizable(bool resizable)
     }
 
     m_resizable = resizable;
-    if (m_view) {
+    if (m_view && isVisible()) {
         updateSize(m_view->size());
     }
 }

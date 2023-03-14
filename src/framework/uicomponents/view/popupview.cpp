@@ -165,7 +165,7 @@ void PopupView::open()
         return;
     }
 
-    updatePosition();
+    updateGeometry();
 
     if (!isDialog()) {
         updateContentPosition();
@@ -293,6 +293,36 @@ QQuickItem* PopupView::contentItem() const
     return m_contentItem;
 }
 
+int PopupView::contentWidth() const
+{
+    return m_contentWidth;
+}
+
+void PopupView::setContentWidth(int contentWidth)
+{
+    if (m_contentWidth == contentWidth) {
+        return;
+    }
+
+    m_contentWidth = contentWidth;
+    emit contentWidthChanged();
+}
+
+int PopupView::contentHeight() const
+{
+    return m_contentHeight;
+}
+
+void PopupView::setContentHeight(int contentHeight)
+{
+    if (m_contentHeight == contentHeight) {
+        return;
+    }
+
+    m_contentHeight = contentHeight;
+    emit contentHeightChanged();
+}
+
 QWindow* PopupView::window() const
 {
     return qWindow();
@@ -356,7 +386,7 @@ void PopupView::repositionWindowIfNeed()
 {
     if (isOpened() && !isDialog()) {
         m_globalPos = QPointF();
-        updatePosition();
+        updateGeometry();
         updateContentPosition();
         m_window->setPosition(m_globalPos.toPoint());
         m_globalPos = QPoint();
@@ -586,7 +616,7 @@ QRect PopupView::currentScreenGeometry() const
     return mainWindow()->isFullScreen() ? screen->geometry() : screen->availableGeometry();
 }
 
-void PopupView::updatePosition()
+void PopupView::updateGeometry()
 {
     const QQuickItem* parent = parentItem();
     IF_ASSERT_FAILED(parent) {
