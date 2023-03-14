@@ -182,10 +182,13 @@ if (NOT CC_IS_EMSCRIPTEN)
         if (MUE_BUILD_VIDEOEXPORT_MODULE)
             list(APPEND LINK_LIB iex_videoexport)
         endif()
+    else()
+        if (MUE_BUILD_IMAGEEXPORT_MODULE)
+            list(APPEND LINK_LIB iex_imagesexport)
+        endif()
     endif()
 
 endif()
-
 
 
 if (MUE_BUILD_AUTOBOT_MODULE) 
