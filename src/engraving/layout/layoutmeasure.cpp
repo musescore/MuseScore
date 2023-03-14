@@ -944,12 +944,12 @@ void LayoutMeasure::computePreSpacingItems(Measure* m)
             for (Chord* gn : chord->graceNotes()) {
                 LayoutChords::updateLineAttachPoints(gn, false);
             }
-            isFirstChordInMeasure = false;
 
             chord->layoutArticulations();
             chord->checkStartEndSlurs();
             chord->computeKerningExceptions();
         }
         seg.createShapes();
+        isFirstChordInMeasure = false;
     }
 }
