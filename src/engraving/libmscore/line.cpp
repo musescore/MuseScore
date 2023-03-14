@@ -984,15 +984,15 @@ PointF SLine::linePos(Grip grip, System** sys) const
             if (grip == Grip::END && segment && segment->rtick().ticks() == 0) {
                 // The line should end on the left-most segment at this tick. If endSegment() is the first of
                 // the measure, we need to look back for other segments (eg endBarLine) in the prev measure
-                Segment* prevSegment = segment->prev1();
+                Segment* prevSegment = segment->prev1MM();
                 while (prevSegment && prevSegment->tick() == segment->tick()) {
                     segment = prevSegment;
-                    prevSegment = segment->prev1();
+                    prevSegment = segment->prev1MM();
                 }
             }
             if (segment) {
                 m = segment->measure();
-                if (m->mmRest()) {
+                if (m->isMMRest() && m->mmRest()) {
                     m = m->mmRest();
                 }
                 x += m->pos().x() + segment->pos().x() - (grip == Grip::START ? 0 : sp);

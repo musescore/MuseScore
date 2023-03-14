@@ -992,7 +992,7 @@ ChordRest* Spanner::findEndCR() const
 Segment* Spanner::startSegment() const
 {
     assert(score() != NULL);
-    return score()->tick2rightSegment(tick());
+    return score()->tick2rightSegment(tick(), score()->styleB(Sid::createMultiMeasureRests));
 }
 
 //---------------------------------------------------------
@@ -1001,7 +1001,7 @@ Segment* Spanner::startSegment() const
 
 Segment* Spanner::endSegment() const
 {
-    return score()->tick2leftSegment(tick2());
+    return score()->tick2leftSegment(tick2(), score()->styleB(Sid::createMultiMeasureRests));
 }
 
 //---------------------------------------------------------
