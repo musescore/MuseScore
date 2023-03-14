@@ -326,7 +326,7 @@ public:
     EngravingItem* preAppendedItem(int track) { return _preAppendedItems[track]; }
     void preAppend(EngravingItem* item, int track) { _preAppendedItems[track] = item; }
     void clearPreAppended(int track) { _preAppendedItems[track] = nullptr; }
-    void addPreAppendedToShape(int staffIdx, Shape& s);
+    void addPreAppendedToShape();
 
     static constexpr SegmentType durationSegmentsMask = SegmentType::ChordRest;   // segment types which may have non-zero tick length
 };

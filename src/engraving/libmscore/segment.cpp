@@ -2248,6 +2248,7 @@ void Segment::createShapes()
     for (size_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
         createShape(staffIdx);
     }
+    addPreAppendedToShape();
 }
 
 //---------------------------------------------------------
@@ -2275,8 +2276,6 @@ void Segment::createShape(staff_idx_t staffIdx)
             s.add(r.translated(bl->pos()), bl);
         }
         s.addHorizontalSpacing(bl, 0, 0);
-        addPreAppendedToShape(static_cast<int>(staffIdx), s);
-        //s.addHorizontalSpacing(Shape::SPACING_LYRICS, 0, 0);
         return;
     }
 
@@ -2341,18 +2340,22 @@ void Segment::createShape(staff_idx_t staffIdx)
             s.add(e->shape().translated(e->pos()));
         }
     }
-
-    addPreAppendedToShape(static_cast<int>(staffIdx), s);
 }
 
-void Segment::addPreAppendedToShape(int staffIdx, Shape& s)
+void Segment::addPreAppendedToShape()
 {
-    for (unsigned track = staffIdx * VOICES; track < staffIdx * VOICES + VOICES; ++track) {
+    track_idx_t tracks = score()->ntracks();
+    for (unsigned track = 0; track < tracks; ++track) {
         if (!_preAppendedItems[track]) {
             continue;
         }
         EngravingItem* item = _preAppendedItems[track];
-        s.add(item->shape().translated(item->pos()));
+        if (item->isGraceNotesGroup()) {
+            toGraceNotesGroup(item)->addToShape();
+        } else {
+            Shape& shape = _shapes[item->vStaffIdx()];
+            shape.add(item->shape().translated(item->pos()));
+        }
     }
 }
 
