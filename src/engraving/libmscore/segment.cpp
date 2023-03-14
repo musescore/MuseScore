@@ -2680,10 +2680,6 @@ double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
         }
     }
 
-    if (ns) {
-        w += ns->extraLeadingSpace().val() * spatium();
-    }
-
     return w;
 }
 
