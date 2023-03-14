@@ -4697,7 +4697,7 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
                     e.setKey(nkey);
                 }
                 KeySig* keySig = nullptr;
-                EngravingItem* keySigElem = s->element(track);
+                EngravingItem* keySigElem = s ? s->element(track) : nullptr;
                 if (keySigElem && keySigElem->isKeySig()) {
                     keySig = toKeySig(keySigElem);
                 }
