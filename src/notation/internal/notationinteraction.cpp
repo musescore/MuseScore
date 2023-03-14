@@ -67,6 +67,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/stafflines.h"
 #include "libmscore/stafftype.h"
+#include "libmscore/stafftypechange.h"
 #include "libmscore/system.h"
 #include "libmscore/textedit.h"
 #include "libmscore/textframe.h"
@@ -1486,8 +1487,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::AMBITUS:
     case ElementType::TREMOLOBAR:
     case ElementType::FIGURED_BASS:
-    case ElementType::LYRICS:
-    case ElementType::STAFFTYPE_CHANGE: {
+    case ElementType::LYRICS: {
         EngravingItem* el = dropTarget(m_dropData.ed);
         if (!el) {
             if (!dropCanvas(m_dropData.ed.dropElement)) {
@@ -1522,6 +1522,18 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
             score()->addRefresh(dropElement->canvasBoundingRect());
         }
         accepted = true;
+    }
+    break;
+    case ElementType::STAFFTYPE_CHANGE: {
+        EngravingItem* el = dropTarget(m_dropData.ed);
+        if (el->isMeasure()) {
+            Measure* m = toMeasure(el);
+            System* s = m->system();
+            double y = pos.y() - s->canvasPos().y();
+            staff_idx_t staffIndex = s->searchStaff(y);
+            StaffTypeChange* stc = toStaffTypeChange(m_dropData.ed.dropElement);
+            score()->cmdAddStaffTypeChange(toMeasure(el), staffIndex, stc);
+        }
     }
     break;
     case ElementType::SLUR:
@@ -1698,7 +1710,6 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             || element->type() == ElementType::TBOX
             || element->type() == ElementType::MEASURE
             || element->type() == ElementType::BRACKET
-            || element->type() == ElementType::STAFFTYPE_CHANGE
             || (element->type() == ElementType::ACTION_ICON
                 && (toActionIcon(element)->actionType() == mu::engraving::ActionIconType::VFRAME
                     || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::HFRAME
@@ -1713,6 +1724,20 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 applyDropPaletteElement(score, m, element, modifiers, pt);
                 if ((m == last) || (element->type() == ElementType::BRACKET)) {
                     break;
+                }
+            }
+        } else if (element->isStaffTypeChange()) {
+            Measure* measure = sel.startSegment() ? sel.startSegment()->measure() : nullptr;
+            if (measure) {
+                ByteArray a = element->mimeData();
+
+                for (staff_idx_t i = sel.staffStart(); i < sel.staffEnd(); ++i) {
+                    mu::engraving::XmlReader n(a);
+                    StaffTypeChange* stc = engraving::Factory::createStaffTypeChange(measure);
+                    stc->read(n);
+                    stc->styleChanged(); // update to local style
+
+                    score->cmdAddStaffTypeChange(measure, i, stc);
                 }
             }
         } else if (element->type() == ElementType::LAYOUT_BREAK) {
