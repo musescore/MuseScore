@@ -2535,6 +2535,21 @@ static std::vector<QString> symIdToArtics(const SymId sid)
                   return { "soft-accent" };
                   break;
 
+            case SymId::articSoftAccentStaccatoAbove:
+            case SymId::articSoftAccentStaccatoBelow:
+                  return { "soft-accent", "staccato" };
+                  break;
+
+            case SymId::articSoftAccentTenutoAbove:
+            case SymId::articSoftAccentTenutoBelow:
+                  return { "soft-accent", "tenuto" };
+                  break;
+
+            case SymId::articSoftAccentTenutoStaccatoAbove:
+            case SymId::articSoftAccentTenutoStaccatoBelow:
+                  return { "soft-accent", "detached-legato" };
+                  break;
+
             case SymId::articStressAbove:
             case SymId::articStressBelow:
                   return { "stress" };
@@ -2563,22 +2578,6 @@ static std::vector<QString> symIdToArtics(const SymId sid)
             case SymId::articTenutoAccentAbove:
             case SymId::articTenutoAccentBelow:
                   return { "tenuto", "accent" };
-                  break;
-
-            case SymId::articSoftAccentStaccatoAbove:
-            case SymId::articSoftAccentStaccatoBelow:
-                  return { "staccato", "soft-accent" };
-                  break;
-
-            case SymId::articSoftAccentTenutoAbove:
-            case SymId::articSoftAccentTenutoBelow:
-                  return { "soft-accent", "tenuto" };
-                  break;
-
-
-            case SymId::articSoftAccentTenutoStaccatoAbove:
-            case SymId::articSoftAccentTenutoStaccatoBelow:
-                  return { "staccato", "soft-accent", "tenuto" };
                   break;
 
             default:
