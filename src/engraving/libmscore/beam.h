@@ -39,12 +39,22 @@ enum class SpannerSegmentType;
 
 struct BeamFragment;
 
-struct BeamSegment {
+class BeamSegment : public EngravingItem
+{
+public:
     mu::LineF line;
     int level;
     bool above; // above level 0 or below? (meaningless for level 0)
     Fraction startTick;
     Fraction endTick;
+    bool isBeamlet = false;
+    bool isBefore = false;
+
+    Shape shape() const override;
+    Beam* beam;
+
+    BeamSegment(Beam* b);
+    BeamSegment* clone() const override { return new BeamSegment(*this); }
 };
 
 //---------------------------------------------------------
@@ -90,6 +100,7 @@ class Beam final : public EngravingItem
     std::vector<int> _notes;
 
     friend class Factory;
+    friend class BeamSegment;
     Beam(System* parent);
     Beam(const Beam&);
 
@@ -233,6 +244,8 @@ public:
     void startDrag(EditData&) override;
 
     bool hasAllRests();
+
+    Shape shape() const override;
 
 private:
     void initBeamEditData(EditData& ed);

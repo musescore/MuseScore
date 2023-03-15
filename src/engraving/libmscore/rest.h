@@ -31,6 +31,29 @@
 namespace mu::engraving {
 class TDuration;
 
+struct RestVerticalClearance {
+private:
+    int m_above = 0.0; // In space units
+    int m_below = 0.0; // In space units
+    bool m_locked = false;
+
+public:
+    void reset()
+    {
+        m_above = 1000; // arbitrary high value
+        m_below = 1000; // arbitrary high value
+        m_locked = false;
+    }
+
+    int above() const { return m_above; }
+    int below() const { return m_below; }
+    void setAbove(int v) { m_above = std::max(std::min(m_above, v), 0); }
+    void setBelow(int v) { m_below = std::max(std::min(m_below, v), 0); }
+
+    bool locked() const { return m_locked; }
+    void setLocked(bool v) { m_locked = v; }
+};
+
 //---------------------------------------------------------
 //    @@ Rest
 ///     This class implements a rest.
@@ -74,7 +97,8 @@ public:
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
-    SymId getSymbol(DurationType type, int line, int lines,  int* yoffset);
+    SymId getSymbol(DurationType type, int line, int lines);
+    void updateSymbol(int line, int lines);
 
     void checkDots();
     void layoutDots();
@@ -86,7 +110,11 @@ public:
     SymId sym() const { return m_sym; }
     bool accent();
     void setAccent(bool flag);
-    int computeLineOffset(int lines);
+
+    int computeNaturalLine(int lines); // Natural rest vertical position
+    int computeVoiceOffset(int lines); // Vertical displacement in multi-voice cases
+    int computeWholeRestOffset(int voiceOffset, int lines);
+    bool isWholeRest() const;
 
     int upLine() const override;
     int downLine() const override;
@@ -111,6 +139,9 @@ public:
 
     bool shouldNotBeDrawn() const;
 
+    RestVerticalClearance& verticalClearance() { return m_verticalClearance; }
+    const std::vector<Rest*>& mergedRests() const { return m_mergedRests; }
+
 protected:
     Rest(const ElementType& type, Segment* parent = 0);
     Rest(const ElementType& type, Segment* parent, const TDuration&);
@@ -132,12 +163,16 @@ private:
     std::vector<NoteDot*> m_dots;
     DeadSlapped* _deadSlapped = nullptr;
 
+    RestVerticalClearance m_verticalClearance;
+
     mu::RectF drag(EditData&) override;
     double upPos() const override;
     double downPos() const override;
     void setOffset(const mu::PointF& o) override;
 
     bool sameVoiceKerningLimited() const override { return true; }
+
+    std::vector<Rest*> m_mergedRests; // Rests from other voices that may be merged with this
 };
 } // namespace mu::engraving
 #endif

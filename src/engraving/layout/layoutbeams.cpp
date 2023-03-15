@@ -29,13 +29,16 @@
 #include "libmscore/chord.h"
 #include "libmscore/factory.h"
 #include "libmscore/measure.h"
+#include "libmscore/rest.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
 #include "libmscore/staff.h"
 #include "libmscore/system.h"
 #include "libmscore/timesig.h"
+#include "libmscore/utils.h"
 
 #include "layoutcontext.h"
+#include "layoutchords.h"
 
 using namespace mu::engraving;
 
@@ -510,4 +513,59 @@ void LayoutBeams::layoutNonCrossBeams(Segment* s)
             }
         }
     }
+}
+
+void LayoutBeams::verticalAdjustBeamedRests(Rest* rest, Beam* beam)
+{
+    const double spatium = rest->spatium();
+    static constexpr Fraction rest32nd(1, 32);
+    const bool up = beam->up();
+
+    double restToBeamPadding;
+    if (rest->ticks() <= rest32nd) {
+        restToBeamPadding = 0.2 * spatium;
+    } else {
+        restToBeamPadding = 0.35 * spatium;
+    }
+
+    Shape beamShape = beam->shape().translated(beam->pagePos());
+    mu::remove_if(beamShape, [&](ShapeElement& el) {
+        return el.toItem && el.toItem->isBeamSegment() && toBeamSegment(el.toItem)->isBeamlet;
+    });
+
+    Shape restShape = rest->shape().translated(rest->pagePos() - rest->offset());
+
+    double restToBeamClearance = up ? beamShape.verticalClearance(restShape) : restShape.verticalClearance(beamShape);
+    if (restToBeamClearance > restToBeamPadding) {
+        return;
+    }
+
+    if (up) {
+        rest->verticalClearance().setAbove(restToBeamClearance);
+    } else {
+        rest->verticalClearance().setBelow(restToBeamClearance);
+    }
+
+    bool restIsLocked = rest->verticalClearance().locked();
+    if (!restIsLocked) {
+        double overlap = (restToBeamPadding - restToBeamClearance);
+        double lineDistance = rest->staff()->lineDistance(rest->tick()) * spatium;
+        int lineMoves = ceil(overlap / lineDistance);
+        lineMoves *= up ? 1 : -1;
+        double yMove = lineMoves * lineDistance;
+        rest->movePosY(yMove);
+        for (Rest* mergedRest : rest->mergedRests()) {
+            mergedRest->movePosY(yMove);
+        }
+
+        Segment* segment = rest->segment();
+        staff_idx_t staffIdx = rest->vStaffIdx();
+        Score* score = rest->score();
+        std::vector<Chord*> chords;
+        std::vector<Rest*> rests;
+        collectChordsAndRest(segment, staffIdx, chords, rests);
+        LayoutChords::resolveRestVSChord(rests, chords, score, segment, staffIdx);
+        LayoutChords::resolveRestVSRest(rests, score, segment, staffIdx, /*considerBeams*/ true);
+    }
+    beam->layout();
 }

@@ -637,6 +637,12 @@ void ChordRest::setBeam(Beam* b)
     _beam = b;
 }
 
+void ChordRest::setBeamlet(BeamSegment* b)
+{
+    _beamlet = b;
+    segment()->createShape(vStaffIdx());
+}
+
 //---------------------------------------------------------
 //   setDurationType
 //---------------------------------------------------------

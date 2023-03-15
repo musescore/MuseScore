@@ -184,7 +184,7 @@ void MMRest::layout()
 
     // Only need to set y position here; x position is handled in Measure::layoutMeasureElements()
     const StaffType* staffType = this->staffType();
-    setPos(0, std::floor(staffType->middleLine() / 2.0) * staffType->lineDistance().val() * spatium());
+    setPos(0, (staffType->middleLine() / 2.0) * staffType->lineDistance().val() * spatium());
 
     if (m_numberVisible) {
         addbbox(numberRect());

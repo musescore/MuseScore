@@ -289,9 +289,8 @@ EngravingItem* Rest::drop(EditData& data)
 //   getSymbol
 //---------------------------------------------------------
 
-SymId Rest::getSymbol(DurationType type, int line, int lines, int* yoffset)
+SymId Rest::getSymbol(DurationType type, int line, int lines)
 {
-    *yoffset = 2;
     switch (type) {
     case DurationType::V_LONG:
         return SymId::restLonga;
@@ -303,10 +302,9 @@ SymId Rest::getSymbol(DurationType type, int line, int lines, int* yoffset)
         }
     // fall through
     case DurationType::V_WHOLE:
-        *yoffset = 1;
-        return (line <= -2 || line >= (lines - 1)) ? SymId::restWholeLegerLine : SymId::restWhole;
+        return (line < 0 || line >= lines) ? SymId::restWholeLegerLine : SymId::restWhole;
     case DurationType::V_HALF:
-        return (line <= -3 || line >= (lines - 2)) ? SymId::restHalfLegerLine : SymId::restHalf;
+        return (line < 0 || line >= lines) ? SymId::restHalfLegerLine : SymId::restHalf;
     case DurationType::V_QUARTER:
         return SymId::restQuarter;
     case DurationType::V_EIGHTH:
@@ -329,6 +327,11 @@ SymId Rest::getSymbol(DurationType type, int line, int lines, int* yoffset)
         LOGD("unknown rest type %d", int(type));
         return SymId::restQuarter;
     }
+}
+
+void Rest::updateSymbol(int line, int lines)
+{
+    m_sym = getSymbol(durationType().type(), line, lines);
 }
 
 //---------------------------------------------------------
@@ -396,11 +399,15 @@ void Rest::layout()
     double lineDist = st ? st->lineDistance().val() : 1.0;
     int userLine   = yOff == 0.0 ? 0 : lrint(yOff / (lineDist * _spatium));
     int lines      = st ? st->lines() : 5;
-    int lineOffset = computeLineOffset(lines);
 
-    int yo;
-    m_sym = getSymbol(durationType().type(), lineOffset / 2 + userLine, lines, &yo);
-    setPosY((double(yo) + double(lineOffset) * .5) * lineDist * _spatium);
+    int naturalLine = computeNaturalLine(lines); // Measured in 1sp steps
+    int voiceOffset = computeVoiceOffset(lines); // Measured in 1sp steps
+    int wholeRestOffset = computeWholeRestOffset(voiceOffset, lines);
+    int finalLine = naturalLine + voiceOffset + wholeRestOffset;
+
+    m_sym = getSymbol(durationType().type(), finalLine + userLine, lines);
+
+    setPosY(finalLine * lineDist * _spatium);
     if (!shouldNotBeDrawn()) {
         setbbox(symBbox(m_sym));
     }
@@ -506,8 +513,9 @@ int Rest::getDotline(DurationType durationType)
 //   computeLineOffset
 //---------------------------------------------------------
 
-int Rest::computeLineOffset(int lines)
+int Rest::computeVoiceOffset(int lines)
 {
+    m_mergedRests.clear();
     Segment* s = segment();
     bool offsetVoices = s && measure() && (voice() > 0 || measure()->hasVoices(staffIdx(), tick(), actualTicks()));
     if (offsetVoices && voice() == 0) {
@@ -551,6 +559,7 @@ int Rest::computeLineOffset(int lines)
                     Rest* r = toRest(e);
                     if (r->globalTicks() == globalTicks()) {
                         matchFound = true;
+                        m_mergedRests.push_back(r);
                         continue;
                     }
                 }
@@ -564,163 +573,89 @@ int Rest::computeLineOffset(int lines)
         }
     }
 
-    int lineOffset    = 0;
-    int assumedCenter = 4;
-    int actualCenter  = (lines - 1);
-    int centerDiff    = actualCenter - assumedCenter;
+    if (!offsetVoices) {
+        return 0;
+    }
 
-    if (offsetVoices) {
-        // move rests in a multi voice context
-        bool up = (voice() == 0) || (voice() == 2);         // TODO: use style values
+    bool up = voice() == 0 || voice() == 2;
+    int upSign = up ? -1 : 1;
+    int voiceLineOffset = score()->styleB(Sid::multiVoiceRestTwoSpaceOffset) ? 2 : 1;
 
-        // Calculate extra offset to move rests above the highest resp. below the lowest note
-        // of this segment (for measure rests, of the whole measure) in all opposite voices.
-        // Ignore stems and articulations, because which multi-voice they are at the opposite end.
-        int upOffset = up ? 1 : 0;
-        int line = up ? 10 : -10;
+    return voiceLineOffset * upSign;
+}
 
-        // For compatibility reasons apply automatic collision avoidance only if y-offset is unchanged
-        if (RealIsNull(offset().y()) && autoplace()) {
-            track_idx_t firstTrack = staffIdx() * 4;
-            int extraOffsetForFewLines = lines < 5 ? 2 : 0;
-            bool isMeasureRest = durationType().type() == DurationType::V_MEASURE;
-            Segment* seg = isMeasureRest ? measure()->first() : s;
-            while (seg) {
-                for (const track_idx_t track : { firstTrack + upOffset, firstTrack + 2 + upOffset }) {
-                    EngravingItem* e = seg->element(track);
-                    if (e && e->isChord()) {
-                        Chord* chord = toChord(e);
-                        StaffGroup staffGroup = staff()->staffType(chord->tick())->group();
-                        for (Note* note : chord->notes()) {
-                            int nline = staffGroup == StaffGroup::TAB
-                                        ? note->string() * 2
-                                        : note->line();
-                            nline = nline - centerDiff;
-                            if (up && nline <= line) {
-                                line = nline - extraOffsetForFewLines;
-                                if (note->accidentalType() != AccidentalType::NONE) {
-                                    line--;
-                                }
-                            } else if (!up && nline >= line) {
-                                line = nline + extraOffsetForFewLines;
-                                if (note->accidentalType() != AccidentalType::NONE) {
-                                    line++;
-                                }
-                            }
-                        }
-                    }
-                }
-                seg = isMeasureRest ? seg->next() : nullptr;
-            }
-        }
+int Rest::computeWholeRestOffset(int voiceOffset, int lines)
+{
+    if (!isWholeRest()) {
+        return 0;
+    }
+    int lineMove = 0;
+    bool moveToLineAbove = (lines > 5)
+                           || ((lines > 1 || voiceOffset == -1 || voiceOffset == 2) && !(voiceOffset == -2 || voiceOffset == 1));
+    if (moveToLineAbove) {
+        lineMove = -1;
+    }
 
-        switch (durationType().type()) {
-        case DurationType::V_LONG:
-            lineOffset = up ? -3 : 5;
-            lineOffset += up ? (line < 5 ? line - 5 : 0) : (line > 5 ? line - 5 : 0);
-            break;
-        case DurationType::V_BREVE:
-            lineOffset = up ? -3 : 5;
-            lineOffset += up ? (line < 3 ? line - 3 : 0) : (line > 5 ? line - 5 : 0);
-            break;
-        case DurationType::V_MEASURE:
-            if (ticks() >= Fraction(2, 1)) {     // breve symbol
-                lineOffset = up ? -3 : 5;
-                lineOffset += up ? (line < 3 ? line - 3 : 0) : (line > 5 ? line - 4 : 0);
-            } else {
-                lineOffset = up ? -4 : 6;                   // whole symbol
-                lineOffset += up ? (line < 3 ? line - 2 : 0) : (line > 6 ? line - 5 : 0);
-            }
-            break;
-        case DurationType::V_WHOLE:
-            lineOffset = up ? -4 : 6;
-            lineOffset += up ? (line < 3 ? line - 2 : 0) : (line > 6 ? line - 5 : 0);
-            break;
-        case DurationType::V_HALF:
-            lineOffset = up ? -4 : 4;
-            lineOffset += up ? (line < 2 ? line - 3 : 0) : (line > 5 ? line - 4 : 0);
-            break;
-        case DurationType::V_QUARTER:
-            lineOffset = up ? -4 : 4;
-            lineOffset += up ? (line < 5 ? line - 4 : 0) : (line > 3 ? line - 3 : 0);
-            break;
-        case DurationType::V_EIGHTH:
-            lineOffset = up ? -4 : 4;
-            lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
-            break;
-        case DurationType::V_16TH:
-            lineOffset = up ? -6 : 4;
-            lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
-            break;
-        case DurationType::V_32ND:
-            lineOffset = up ? -6 : 6;
-            lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
-            break;
-        case DurationType::V_64TH:
-            lineOffset = up ? -8 : 6;
-            lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
-            break;
-        case DurationType::V_128TH:
-            lineOffset = up ? -8 : 8;
-            lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
-            break;
-        case DurationType::V_1024TH:
-        case DurationType::V_512TH:
-        case DurationType::V_256TH:
-            lineOffset = up ? -10 : 6;
-            lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
-            break;
-        default:
-            break;
-        }
+    if (!isFullMeasureRest()) {
+        return lineMove;
+    }
 
-        // adjust offsets for staves with other than five lines
-        if (lines != 5) {
-            lineOffset += centerDiff;
-            if (centerDiff & 1) {
-                // round to line
-                if (lines == 2 && staff() && staff()->lineDistance(tick()) < 2.0) {
-                    // leave alone
-                } else if (lines <= 6) {
-                    lineOffset += lineOffset > 0 ? -1 : 1;              // round inward
-                } else {
-                    lineOffset += lineOffset > 0 ? 1 : -1;              // round outward
-                }
+    track_idx_t startTrack = staffIdx() * VOICES;
+    track_idx_t endTrack = startTrack + VOICES;
+    track_idx_t thisTrack = track();
+    bool hasNotesAbove = false;
+    bool hasNotesBelow = false;
+    double topY = 10000.0;
+    double bottomY = -10000.0;
+    for (Segment& segment : measure()->segments()) {
+        for (track_idx_t track = startTrack; track < endTrack; ++track) {
+            EngravingItem* item = segment.elementAt(track);
+            if (!item || !item->isChord()) {
+                continue;
             }
-        }
-    } else {
-        // Gould says to center rests on middle line or space
-        // but subjectively, many rests look strange centered on a space
-        // so we do it for 2-line staves only
-        if (centerDiff & 1 && lines != 2) {
-            centerDiff += 1;        // round down
-        }
-        lineOffset = centerDiff;
-        switch (durationType().type()) {
-        case DurationType::V_LONG:
-        case DurationType::V_BREVE:
-        case DurationType::V_MEASURE:
-        case DurationType::V_WHOLE:
-            if (lineOffset & 1) {
-                lineOffset += 1;                // always round to nearest line
-            } else if (lines <= 3) {
-                lineOffset += 2;                // special case - move down for 1-line or 3-line staff
+            Chord* chord = toChord(item);
+            Shape chordShape = chord->shape().translated(chord->pos());
+            if (track < thisTrack) {
+                hasNotesAbove = true;
+                bottomY = std::max(bottomY, chordShape.bottom());
+            } else if (track > thisTrack) {
+                hasNotesBelow = true;
+                topY = std::min(topY, chordShape.top());
             }
-            break;
-        case DurationType::V_HALF:
-            if (lineOffset & 1) {
-                lineOffset += 1;                // always round to nearest line
-            }
-            break;
-        default:
-            break;
         }
     }
-    // DEBUG: subtract this off only to be added back in layout()?
-    // that would throw off calculation of when ledger lines are needed
-    //if (staff())
-    //      lineOffset -= staff()->staffType()->stepOffset();
-    return lineOffset;
+
+    if (hasNotesAbove && hasNotesBelow) {
+        return lineMove; // Don't do anything
+    }
+
+    double lineDistance = staff()->lineDistance(tick()) * spatium();
+    int centerLine = floor(double(lines) / 2);
+
+    if (hasNotesAbove) {
+        int bottomLine = floor(bottomY / lineDistance);
+        lineMove = std::max(lineMove, bottomLine - centerLine);
+    }
+
+    if (hasNotesBelow) {
+        int topLine = floor(topY / lineDistance);
+        lineMove = std::min(lineMove, topLine - centerLine);
+    }
+
+    return lineMove;
+}
+
+bool Rest::isWholeRest() const
+{
+    TDuration durType = durationType();
+    return durType == DurationType::V_WHOLE
+           || (durType == DurationType::V_MEASURE && measure() && measure()->ticks() < Fraction(2, 1));
+}
+
+int Rest::computeNaturalLine(int lines)
+{
+    int line = (lines % 2) ? floor(double(lines) / 2) : ceil(double(lines) / 2);
+    return line;
 }
 
 //---------------------------------------------------------
@@ -1164,7 +1099,7 @@ Shape Rest::shape() const
     Shape shape;
     if (!m_gap) {
         shape.add(ChordRest::shape());
-        shape.add(bbox(), this);
+        shape.add(symBbox(sym()), this);
         for (NoteDot* dot : m_dots) {
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
         }

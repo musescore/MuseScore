@@ -34,6 +34,7 @@
 #include "libmscore/mmrestrange.h"
 #include "libmscore/note.h"
 #include "libmscore/part.h"
+#include "libmscore/rest.h"
 #include "libmscore/score.h"
 #include "libmscore/slur.h"
 #include "libmscore/staff.h"
@@ -715,6 +716,19 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         LayoutBeams::layoutNonCrossBeams(s);
         // Must recreate the shapes because stem lengths may have been changed!
         s->createShapes();
+    }
+
+    for (Segment* s : sl) {
+        for (EngravingItem* item : s->elist()) {
+            if (!item || !item->isRest()) {
+                continue;
+            }
+            Rest* rest = toRest(item);
+            Beam* beam = rest->beam();
+            if (beam && !beam->cross()) {
+                LayoutBeams::verticalAdjustBeamedRests(rest, beam);
+            }
+        }
     }
 
     //-------------------------------------------------------------

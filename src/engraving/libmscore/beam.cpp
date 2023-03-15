@@ -38,6 +38,7 @@
 #include "measure.h"
 #include "mscore.h"
 #include "note.h"
+#include "rest.h"
 #include "score.h"
 #include "segment.h"
 #include "spanner.h"
@@ -720,7 +721,8 @@ double Beam::chordBeamAnchorX(const ChordRest* cr, ChordBeamAnchorType anchorTyp
 double Beam::chordBeamAnchorY(const ChordRest* cr) const
 {
     if (!cr->isChord()) {
-        return cr->pagePos().y();
+        Shape restShape = cr->shape().translated(cr->pagePos());
+        return _up ? restShape.top() : restShape.bottom();
     }
 
     const Chord* chord = toChord(cr);
@@ -831,7 +833,7 @@ void Beam::createBeamSegment(ChordRest* startCr, ChordRest* endCr, int level)
         }
     }
 
-    BeamSegment* b = new BeamSegment();
+    BeamSegment* b = new BeamSegment(this);
     b->above = !overallUp;
     b->level = level;
     b->line = LineF(startX, startY, endX, endY);
@@ -1008,10 +1010,13 @@ void Beam::createBeamletSegment(ChordRest* cr, bool isBefore, int level)
         endY -= verticalOffset * grow2;
     }
 
-    BeamSegment* b = new BeamSegment();
+    BeamSegment* b = new BeamSegment(this);
     b->above = !cr->up();
     b->level = level;
     b->line = LineF(startX, startY, endX, endY);
+    b->isBeamlet = true;
+    b->isBefore = isBefore;
+    cr->setBeamlet(b);
     _beamSegments.push_back(b);
 }
 
@@ -1140,16 +1145,18 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
     double endY = (isStartDictator ? pointer : dictator) * spatium() / 4 + tolerance;
 
     for (ChordRest* chordRest : chordRests) {
-        if (!chordRest->isChord() || chordRest == _elements.back() || chordRest == _elements.front()) {
+        if (chordRest == _elements.back() || chordRest == _elements.front()) {
+            continue;
+        }
+        if (chordRest->isRest() && !toRest(chordRest)->verticalClearance().locked()) {
             continue;
         }
 
-        Chord* chord = toChord(chordRest);
-        PointF anchor = chordBeamAnchor(chord, ChordBeamAnchorType::Middle) - pagePos();
+        PointF anchor = chordBeamAnchor(chordRest, ChordBeamAnchorType::Middle) - pagePos();
 
         int slope = abs(dictator - pointer);
         double reduction = 0.0;
-        if (!isFlat) {
+        if (chordRest->isChord() && !isFlat) {
             if (slope <= 3) {
                 reduction = 0.25 * spatium();
             } else if (slope <= 6) {
@@ -1157,6 +1164,11 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
             } else { // slope > 6
                 reduction = 0.75 * spatium();
             }
+        }
+        double restClearMargin = 0.0;
+        if (chordRest->isRest()) {
+            const double restToBeamPadding = 0.5 * spatium(); // TODO: style setting
+            restClearMargin = _beamSegments.size() * _beamWidth + (_beamSegments.size() - 1) * _beamSpacing + restToBeamPadding;
         }
 
         if (endX != startX) {
@@ -1166,8 +1178,8 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
 
             while (true) {
                 double desiredY = proportionAlongX * (endY - startY) + startY;
-                bool beamClearsAnchor = (_up && RealIsEqualOrLess(desiredY, anchor.y() + reduction))
-                                        || (!_up && RealIsEqualOrMore(desiredY, anchor.y() - reduction));
+                bool beamClearsAnchor = (_up && RealIsEqualOrLess(desiredY, anchor.y() + reduction - restClearMargin))
+                                        || (!_up && RealIsEqualOrMore(desiredY, anchor.y() - reduction + restClearMargin));
                 if (beamClearsAnchor) {
                     break;
                 }
@@ -1602,7 +1614,15 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
         }
         _startAnchor.setX(chordBeamAnchorX(startCr, ChordBeamAnchorType::Start));
         _endAnchor.setX(chordBeamAnchorX(endCr, ChordBeamAnchorType::End));
-        _slope = (_endAnchor.y() - _startAnchor.y()) / (_endAnchor.x() - _startAnchor.x());
+        double xDiff = _endAnchor.x() - _startAnchor.x();
+        double yDiff = _endAnchor.y() - _startAnchor.y();
+        // HACK: when beam layout is called before horizontal spacing, xDiff is a random small
+        // number, so don't try to compute the slope
+        if (abs(xDiff) < 0.5 * spatium()) {
+            _slope = 0;
+        } else {
+            _slope = yDiff / xDiff;
+        }
     } else {
         _slope = 0;
     }
@@ -2478,4 +2498,57 @@ bool Beam::hasAllRests()
         }
     }
     return true;
+}
+
+Shape Beam::shape() const
+{
+    Shape shape;
+    for (BeamSegment* beamSegment : _beamSegments) {
+        shape.add(beamSegment->shape());
+    }
+    return shape;
+}
+
+//-------------------------------------------------------
+// BEAM SEGMENT CLASS
+//-------------------------------------------------------
+
+BeamSegment::BeamSegment(Beam* b)
+    : EngravingItem(ElementType::BEAM_SEGMENT, b), beam(b) {}
+
+Shape BeamSegment::shape() const
+{
+    Shape shape;
+    PointF startPoint = line.p1();
+    PointF endPoint = line.p2();
+    double _beamWidth = beam->_beamWidth;
+    // This is the case of right-beamlets
+    if (startPoint.x() > endPoint.x()) {
+        std::swap(startPoint, endPoint);
+    }
+    double beamHorizontalLength = endPoint.x() - startPoint.x();
+    // If beam is horizontal, one rectangle is enough
+    if (RealIsEqual(startPoint.y(), endPoint.y())) {
+        RectF rect(startPoint.x(), startPoint.y(), beamHorizontalLength, _beamWidth / 2);
+        rect.adjust(0.0, -_beamWidth / 2, 0.0, 0.0);
+        shape.add(rect, this);
+        return shape;
+    }
+    // If not, break the beam shape into multiple rectangles
+    double beamHeightDiff = endPoint.y() - startPoint.y();
+    int subBoxesCount = floor(beamHorizontalLength / beam->spatium());
+    double horizontalStep = beamHorizontalLength / subBoxesCount;
+    double verticalStep = beamHeightDiff / subBoxesCount;
+    std::vector<PointF> pointsOnBeamLine;
+    pointsOnBeamLine.push_back(startPoint);
+    for (int i = 0; i < subBoxesCount - 1; ++i) {
+        PointF nextPoint = pointsOnBeamLine.back() + PointF(horizontalStep, verticalStep);
+        pointsOnBeamLine.push_back(nextPoint);
+    }
+    for (PointF point : pointsOnBeamLine) {
+        RectF rect(point.x(), point.y(), horizontalStep, _beamWidth / 2);
+        rect.adjust(0.0, -_beamWidth / 2, 0.0, 0.0);
+        shape.add(rect, this);
+    }
+    return shape;
 }

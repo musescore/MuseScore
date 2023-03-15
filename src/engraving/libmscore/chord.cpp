@@ -1598,7 +1598,7 @@ int Chord::maxReduction(int extensionOutsideStaff) const
 // all values are in quarter spaces
 int Chord::stemOpticalAdjustment(int stemEndPosition) const
 {
-    if (_hook) {
+    if (_hook && !_beam) {
         return 0;
     }
     int beamCount = beams();
@@ -3717,6 +3717,15 @@ Shape Chord::shape() const
     shape.add(ChordRest::shape());      // add lyrics
     for (LedgerLine* l = _ledgerLines; l; l = l->next()) {
         shape.add(l->shape().translate(l->pos()));
+    }
+    if (_beamlet) {
+        double xPos = _beamlet->line.p1().x() - _stem->xpos();
+        if (_beamlet->isBefore && !_up) {
+            xPos -= _stem->width();
+        } else if (!_beamlet->isBefore && _up) {
+            xPos += _stem->width();
+        }
+        shape.add(_beamlet->shape().translated(PointF(-xPos, 0.0)));
     }
 
     return shape;
