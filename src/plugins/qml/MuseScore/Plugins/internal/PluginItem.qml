@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Window 2.15
 import QtGraphicalEffects 1.0
 
 import MuseScore.Ui 1.0
@@ -63,6 +64,8 @@ Item {
             anchors.fill: parent
 
             fillMode: Image.PreserveAspectCrop
+
+            sourceSize: Qt.size(width * Screen.devicePixelRatio, height * Screen.devicePixelRatio)
 
             layer.enabled: true
             layer.effect: OpacityMask {
