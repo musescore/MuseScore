@@ -506,9 +506,9 @@ void Beam::layout()
 int Beam::getMiddleStaffLine(ChordRest* startChord, ChordRest* endChord, int staffLines) const
 {
     bool useWideBeams = score()->styleB(Sid::useWideBeams);
-    bool isFullSize = RealIsEqual(_mag, 1.0);
+    bool isFullSize = RealIsEqual(_mag, 1.0) && !_isGrace;
     int startMiddleLine = Chord::minStaffOverlap(_up, staffLines, startChord->beams(), false, _beamSpacing / 4.0, useWideBeams, isFullSize);
-    int endMiddleLine = Chord::minStaffOverlap(_up, staffLines, endChord->beams(), false, _beamSpacing / 4.0, useWideBeams, !_isGrace);
+    int endMiddleLine = Chord::minStaffOverlap(_up, staffLines, endChord->beams(), false, _beamSpacing / 4.0, useWideBeams, isFullSize);
 
     // offset middle line by 1 or -1 since the anchor is at the middle of the beam,
     // not at the tip of the stem
@@ -1134,6 +1134,7 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
 
     // tolerance eliminates all possibilities of floating point rounding errors
     const double tolerance = _beamWidth * 0.25 * (_up ? -1 : 1);
+    bool isSmall = _isGrace || mag() < 1.;
 
     double startY = (isStartDictator ? dictator : pointer) * spatium() / 4 + tolerance;
     double endY = (isStartDictator ? pointer : dictator) * spatium() / 4 + tolerance;
@@ -1171,7 +1172,7 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
                     break;
                 }
 
-                if (isFlat) {
+                if (isFlat || (isSmall && dictator == pointer)) {
                     dictator += _up ? -1 : 1;
                     pointer += _up ? -1 : 1;
                 } else if (std::abs(dictator - pointer) == 1) {
@@ -1418,12 +1419,13 @@ void Beam::setValidBeamPositions(int& dictator, int& pointer, int beamCountD, in
 
 void Beam::addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int middleLine, int interval, int desiredSlant)
 {
-    if (interval == 0 || (beamCount > 2 && _beamSpacing != 4) || noSlope()) {
+    bool isSmall = mag() < 1. || _isGrace;
+    if (interval == 0 || (!isSmall && beamCount > 2 && _beamSpacing != 4) || noSlope()) {
         return;
     }
     bool isOnMiddleLine = pointer == middleLine && (std::abs(pointer - dictator) < 2);
     if (isOnMiddleLine) {
-        if (abs(desiredSlant) == 1 || interval == 1 || (beamCount == 2 && _beamSpacing != 4)) {
+        if (abs(desiredSlant) == 1 || interval == 1 || (beamCount == 2 && _beamSpacing != 4 && !isSmall)) {
             dictator = middleLine + (_up ? -1 : 1);
         } else {
             dictator = middleLine + (_up ? -2 : 2);
@@ -1523,6 +1525,7 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
     // location depends on _isBesideTabStaff
 
     if (!_isBesideTabStaff) {
+        bool isSmall = mag() < 1. || _isGrace;
         int startNote = _up ? startChord->upNote()->line() : startChord->downNote()->line();
         int endNote = _up ? endChord->upNote()->line() : endChord->downNote()->line();
         if (_tab) {
@@ -1541,7 +1544,7 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
         const int middleLine = getMiddleStaffLine(startChord, endChord, staffLines);
 
         int slant = computeDesiredSlant(startNote, endNote, middleLine, dictator, pointer);
-        bool isFlat = slant == 0;
+        bool isFlat = slant == 0 && !isSmall;
         int specialSlant = isFlat ? isSlopeConstrained(startNote, endNote) : -1;
         bool forceFlat = specialSlant == 0;
         bool smallSlant = specialSlant == 1;
@@ -1557,7 +1560,6 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
         int stemLengthStart = abs(round((startAnchorBase - _startAnchor.y()) / spatium() * 4));
         int stemLengthEnd = abs(round((endAnchorBase - _endAnchor.y()) / spatium() * 4));
         int stemLengthDictator = isStartDictator ? stemLengthStart : stemLengthEnd;
-        bool isSmall = mag() < 1.;
         if (endAnchor.x() > startAnchor.x()) {
             /* When beam layout is called before horizontal spacing (see LayoutMeasure::getNextMeasure() to
              * know why) the x positions aren't yet determined and may be all zero, which would cause the
@@ -1571,7 +1573,7 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
         }
         int beamCount = std::max(beamCountD, beamCountP);
         if (!_tab) {
-            if (!_isGrace) {
+            if (!isSmall) {
                 setValidBeamPositions(dictator, pointer, beamCountD, beamCountP, staffLines, isStartDictator, isFlat, isAscending);
             }
             if (!forceFlat) {
