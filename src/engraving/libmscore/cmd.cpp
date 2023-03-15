@@ -1996,6 +1996,12 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
         return;
     }
     ClefType clef = estaff->clef(tick);
+    if (clef == ClefType::TAB
+        || clef == ClefType::TAB4
+        || clef == ClefType::TAB_SERIF
+        || clef == ClefType::TAB4_SERIF) {
+        return;
+    }
     int step      = ClefInfo::pitchOffset(clef) - note->line();
     while (step < 0) {
         step += 7;
