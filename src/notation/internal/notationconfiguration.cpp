@@ -664,14 +664,14 @@ void NotationConfiguration::setNotePlayDurationMilliseconds(int durationMs)
     settings()->setSharedValue(NOTE_DEFAULT_PLAY_DURATION, Val(durationMs));
 }
 
-void NotationConfiguration::setTemplateModeEnabled(bool enabled)
+void NotationConfiguration::setTemplateModeEnabled(std::optional<bool> enabled)
 {
-    mu::engraving::MScore::saveTemplateMode = enabled;
+    mu::engraving::MScore::saveTemplateMode = enabled ? enabled.value() : false;
 }
 
-void NotationConfiguration::setTestModeEnabled(bool enabled)
+void NotationConfiguration::setTestModeEnabled(std::optional<bool> enabled)
 {
-    mu::engraving::MScore::testMode = enabled;
+    mu::engraving::MScore::testMode = enabled ? enabled.value() : false;
 }
 
 io::path_t NotationConfiguration::instrumentListPath() const

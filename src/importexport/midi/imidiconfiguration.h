@@ -22,6 +22,8 @@
 #ifndef MU_IMPORTEXPORT_IMIDIIMPORTEXPORTCONFIGURATION_H
 #define MU_IMPORTEXPORT_IMIDIIMPORTEXPORTCONFIGURATION_H
 
+#include <optional>
+
 #include "modularity/imoduleexport.h"
 #include "io/path.h"
 
@@ -39,7 +41,7 @@ public:
     virtual bool isMidiExportRpns() const = 0;
     virtual void setIsMidiExportRpns(bool exportRpns) const = 0;
 
-    virtual void setMidiImportOperationsFile(const io::path_t& filePath) const = 0;
+    virtual void setMidiImportOperationsFile(const std::optional<io::path_t>& filePath) const = 0;
 };
 }
 

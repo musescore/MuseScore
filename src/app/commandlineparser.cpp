@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "commandlinecontroller.h"
+#include "commandlineparser.h"
 
 #include "global/muversion.h"
 
@@ -28,7 +28,26 @@
 using namespace mu::app;
 using namespace mu::framework;
 
-void CommandLineController::parse(const QStringList& args)
+static QStringList prepareArguments(int argc, char** argv)
+{
+    QStringList args;
+
+    for (int i = 0; i < argc; ++i) {
+        QString arg = QString::fromLocal8Bit(argv[i]);
+
+#ifndef NDEBUG
+        if (arg.startsWith("-qmljsdebugger")) {
+            continue;
+        }
+#endif
+
+        args << arg;
+    }
+
+    return args;
+}
+
+void CommandLineParser::init()
 {
     // Common
     m_parser.addHelpOption(); // -?, -h, --help
@@ -112,12 +131,13 @@ void CommandLineController::parse(const QStringList& args)
 
     // Compatibility check
     m_parser.addOption(QCommandLineOption("audio-plugin-probe", "Check an audio plugin for compatibility with the application", "path"));
-
-    m_parser.process(args);
 }
 
-void CommandLineController::apply()
+void CommandLineParser::parse(int argc, char** argv)
 {
+    QStringList args = prepareArguments(argc, argv);
+    m_parser.process(args);
+
     auto floatValue = [this](const QString& name) -> std::optional<float> {
         bool ok = true;
         float val = m_parser.value(name).toFloat(&ok);
@@ -159,7 +179,7 @@ void CommandLineController::apply()
     if (m_parser.isSet("D")) {
         std::optional<double> val = doubleValue("D");
         if (val) {
-            uiConfiguration()->setPhysicalDotsPerInch(val);
+            m_options.ui.physicalDotsPerInch = val;
         } else {
             LOGE() << "Option: -D not recognized DPI value: " << m_parser.value("D");
         }
@@ -168,35 +188,39 @@ void CommandLineController::apply()
     if (m_parser.isSet("T")) {
         std::optional<int> val = intValue("T");
         if (val) {
-            imagesExportConfiguration()->setTrimMarginPixelSize(val);
+            m_options.exportImage.trimMarginPixelSize = val;
         } else {
             LOGE() << "Option: -T not recognized trim value: " << m_parser.value("T");
         }
     }
 
     if (m_parser.isSet("M")) {
-        midiImportExportConfiguration()->setMidiImportOperationsFile(m_parser.value("M").toStdString());
+        m_options.importMidi.operationsFile = m_parser.value("M").toStdString();
     }
 
     if (m_parser.isSet("b")) {
         std::optional<int> val = intValue("b");
         if (val) {
-            audioExportConfiguration()->setExportMp3Bitrate(val);
+            m_options.exportAudio.mp3Bitrate = val;
         } else {
             LOGE() << "Option: -b not recognized bitrate value: " << m_parser.value("b");
         }
     }
 
-    notationConfiguration()->setTemplateModeEnabled(m_parser.isSet("template-mode"));
-    notationConfiguration()->setTestModeEnabled(m_parser.isSet("t"));
+    if (m_parser.isSet("template-mode")) {
+        m_options.notation.templateModeEnabled = true;
+    }
 
-    QString modeType;
+    if (m_parser.isSet("t")) {
+        m_options.notation.testModeEnabled = true;
+    }
+
     if (m_parser.isSet("session-type")) {
-        modeType = m_parser.value("session-type");
+        m_options.startup.type = m_parser.value("session-type").toStdString();
     }
 
     if (m_parser.isSet("audio-plugin-probe")) {
-        application()->setRunMode(IApplication::RunMode::AudioPluginProbe);
+        m_runMode = IApplication::RunMode::AudioPluginProbe;
         m_audioPluginPath = m_parser.value("audio-plugin-probe");
     }
 
@@ -204,14 +228,14 @@ void CommandLineController::apply()
     if (m_parser.isSet("r")) {
         std::optional<float> val = floatValue("r");
         if (val) {
-            imagesExportConfiguration()->setExportPngDpiResolution(val);
+            m_options.exportImage.pngDpiResolution = val;
         } else {
             LOGE() << "Option: -r not recognized DPI value: " << m_parser.value("r");
         }
     }
 
     if (m_parser.isSet("o")) {
-        application()->setRunMode(IApplication::RunMode::ConsoleApp);
+        m_runMode = IApplication::RunMode::ConsoleApp;
         m_converterTask.type = ConvertType::File;
         if (scorefiles.size() < 1) {
             LOGE() << "Option: -o no input file specified";
@@ -233,162 +257,119 @@ void CommandLineController::apply()
     }
 
     if (m_parser.isSet("j")) {
-        application()->setRunMode(IApplication::RunMode::ConsoleApp);
+        m_runMode = IApplication::RunMode::ConsoleApp;
         m_converterTask.type = ConvertType::Batch;
         m_converterTask.inputFile = m_parser.value("j");
     }
 
     if (m_parser.isSet("score-media")) {
-        application()->setRunMode(IApplication::RunMode::ConsoleApp);
+        m_runMode = IApplication::RunMode::ConsoleApp;
         m_converterTask.type = ConvertType::ExportScoreMedia;
         m_converterTask.inputFile = scorefiles[0];
         if (m_parser.isSet("highlight-config")) {
-            m_converterTask.params[CommandLineController::ParamKey::HighlightConfigPath] = m_parser.value("highlight-config");
+            m_converterTask.params[CommandLineParser::ParamKey::HighlightConfigPath] = m_parser.value("highlight-config");
         }
     }
 
     if (m_parser.isSet("score-meta")) {
-        application()->setRunMode(IApplication::RunMode::ConsoleApp);
+        m_runMode = IApplication::RunMode::ConsoleApp;
         m_converterTask.type = ConvertType::ExportScoreMeta;
         m_converterTask.inputFile = scorefiles[0];
     }
 
     if (m_parser.isSet("score-parts")) {
-        application()->setRunMode(IApplication::RunMode::ConsoleApp);
+        m_runMode = IApplication::RunMode::ConsoleApp;
         m_converterTask.type = ConvertType::ExportScoreParts;
         m_converterTask.inputFile = scorefiles[0];
     }
 
     if (m_parser.isSet("score-parts-pdf")) {
-        application()->setRunMode(IApplication::RunMode::ConsoleApp);
+        m_runMode = IApplication::RunMode::ConsoleApp;
         m_converterTask.type = ConvertType::ExportScorePartsPdf;
         m_converterTask.inputFile = scorefiles[0];
     }
 
     if (m_parser.isSet("score-transpose")) {
-        application()->setRunMode(IApplication::RunMode::ConsoleApp);
+        m_runMode = IApplication::RunMode::ConsoleApp;
         m_converterTask.type = ConvertType::ExportScoreTranspose;
         m_converterTask.inputFile = scorefiles[0];
-        m_converterTask.params[CommandLineController::ParamKey::ScoreTransposeOptions] = m_parser.value("score-transpose");
+        m_converterTask.params[CommandLineParser::ParamKey::ScoreTransposeOptions] = m_parser.value("score-transpose");
     }
 
     if (m_parser.isSet("source-update")) {
         QStringList args = m_parser.positionalArguments();
 
-        application()->setRunMode(IApplication::RunMode::ConsoleApp);
+        m_runMode = IApplication::RunMode::ConsoleApp;
         m_converterTask.type = ConvertType::SourceUpdate;
         m_converterTask.inputFile = args[0];
 
         if (args.size() >= 2) {
-            m_converterTask.params[CommandLineController::ParamKey::ScoreSource] = args[1];
+            m_converterTask.params[CommandLineParser::ParamKey::ScoreSource] = args[1];
         } else {
             LOGW() << "Option: --source-update no source specified";
         }
     }
 
     // Video
-#ifdef MUE_BUILD_VIDEOEXPORT_MODULE
     if (m_parser.isSet("score-video")) {
-        application()->setRunMode(IApplication::RunMode::ConsoleApp);
+        m_runMode = IApplication::RunMode::ConsoleApp;
         m_converterTask.type = ConvertType::ExportScoreVideo;
         m_converterTask.inputFile = scorefiles[0];
         m_converterTask.outputFile = m_parser.value("o");
 
-        using namespace mu::iex::videoexport;
-// not implemented
-//        if (m_parser.isSet("view-mode")) {
-//            auto toViewMode = [](const QString& str) {
-//                if ("auto" == str) {
-//                    return ViewMode::Auto;
-//                }
-//                if ("paged-float" == str) {
-//                    return ViewMode::PagedFloat;
-//                }
-//                if ("paged-original" == str) {
-//                    return ViewMode::PagedOriginal;
-//                }
-//                if ("paged-float-height" == str) {
-//                    return ViewMode::PagedFloatHeight;
-//                }
-//                if ("pano" == str) {
-//                    return ViewMode::Pano;
-//                }
-//                return ViewMode::Auto;
-//            };
-//            videoExportConfiguration()->setViewMode(toViewMode(m_parser.value("view-mode")));
-//        }
+        if (m_parser.isSet("view-mode")) {
+            NOT_IMPLEMENTED;
+        }
 
-// not implemented
-//        if (m_parser.isSet("piano")) {
-//            videoExportConfiguration()->setShowPiano(true);
-//        }
+        if (m_parser.isSet("piano")) {
+            NOT_IMPLEMENTED;
+        }
 
-//        if (m_parser.isSet("piano-position")) {
-//            auto toPianoPosition= [](const QString& str) {
-//                if ("top" == str) {
-//                    return PianoPosition::Top;
-//                }
-//                return PianoPosition::Bottom;
-//            };
-//            videoExportConfiguration()->setPianoPosition(toPianoPosition(m_parser.value("piano-position")));
-//        }
+        if (m_parser.isSet("piano-position")) {
+            NOT_IMPLEMENTED;
+        }
 
         if (m_parser.isSet("resolution")) {
-            videoExportConfiguration()->setResolution(m_parser.value("resolution").toStdString());
+            m_options.exportVideo.resolution = m_parser.value("resolution").toStdString();
         }
 
         if (m_parser.isSet("fps")) {
-            videoExportConfiguration()->setFps(intValue("fps"));
+            m_options.exportVideo.fps = intValue("fps");
         }
 
         if (m_parser.isSet("ls")) {
-            videoExportConfiguration()->setLeadingSec(doubleValue("ls"));
+            m_options.exportVideo.leadingSec = doubleValue("ls");
         }
 
         if (m_parser.isSet("ts")) {
-            videoExportConfiguration()->setTrailingSec(doubleValue("ts"));
+            m_options.exportVideo.trailingSec = doubleValue("ts");
         }
     }
-#endif
 
     if (m_parser.isSet("F") || m_parser.isSet("R")) {
-        configuration()->revertToFactorySettings(m_parser.isSet("R"));
+        m_options.app.revertToFactorySettings = true;
     }
 
     if (m_parser.isSet("f")) {
-        m_converterTask.params[CommandLineController::ParamKey::ForceMode] = true;
+        m_converterTask.params[CommandLineParser::ParamKey::ForceMode] = true;
     }
 
     if (m_parser.isSet("S")) {
-        m_converterTask.params[CommandLineController::ParamKey::StylePath] = m_parser.value("S");
+        m_converterTask.params[CommandLineParser::ParamKey::StylePath] = m_parser.value("S");
     }
 
     if (m_parser.isSet("gp-linked")) {
-        guitarProConfiguration()->setLinkedTabStaffCreated(true);
+        m_options.guitarPro.linkedTabStaffCreated = true;
     }
 
     if (m_parser.isSet("gp-experimental")) {
-        guitarProConfiguration()->setExperimental(true);
+        m_options.guitarPro.experimental = true;
     }
 
-    if (application()->runMode() == IApplication::RunMode::ConsoleApp) {
-        project::MigrationOptions migration;
-        migration.appVersion = mu::engraving::MSCVERSION;
-
-        //! NOTE Don't ask about migration in convert mode
-        migration.isAskAgain = false;
-
+    if (m_runMode == IApplication::RunMode::ConsoleApp) {
         if (m_parser.isSet("migration")) {
             QString val = m_parser.value("migration");
-            bool isMigration = (val == "full") ? true : false;
-            migration.isApplyMigration = isMigration;
-            migration.isApplyEdwin = isMigration;
-            migration.isApplyLeland = isMigration;
-        }
-
-        //! NOTE Don't write to settings, just on current session
-        for (project::MigrationType type : project::allMigrationTypes()) {
-            projectConfiguration()->setMigrationOptions(type, migration, false);
+            m_options.project.fullMigration = (val == "full") ? true : false;
         }
     }
 
@@ -398,32 +379,32 @@ void CommandLineController::apply()
     }
 
     if (m_parser.isSet("diagnostic-gen-drawdata")) {
-        application()->setRunMode(IApplication::RunMode::ConsoleApp);
+        m_runMode = IApplication::RunMode::ConsoleApp;
         m_diagnostic.type = DiagnosticType::GenDrawData;
         m_diagnostic.input << m_parser.value("diagnostic-gen-drawdata");
     }
 
     if (m_parser.isSet("diagnostic-com-drawdata")) {
-        application()->setRunMode(IApplication::RunMode::ConsoleApp);
+        m_runMode = IApplication::RunMode::ConsoleApp;
         m_diagnostic.type = DiagnosticType::ComDrawData;
         m_diagnostic.input = scorefiles;
     }
 
     if (m_parser.isSet("diagnostic-drawdata-to-png")) {
-        application()->setRunMode(IApplication::RunMode::ConsoleApp);
+        m_runMode = IApplication::RunMode::ConsoleApp;
         m_diagnostic.type = DiagnosticType::DrawDataToPng;
         m_diagnostic.input << m_parser.value("diagnostic-drawdata-to-png");
     }
 
     if (m_parser.isSet("diagnostic-drawdiff-to-png")) {
-        application()->setRunMode(IApplication::RunMode::ConsoleApp);
+        m_runMode = IApplication::RunMode::ConsoleApp;
         m_diagnostic.type = DiagnosticType::DrawDiffToPng;
         m_diagnostic.input = scorefiles;
     }
 
     // Autobot
     if (m_parser.isSet("test-case")) {
-        application()->setRunMode(IApplication::RunMode::ConsoleApp);
+        m_runMode = IApplication::RunMode::ConsoleApp;
         m_autobot.testCaseNameOrFile = m_parser.value("test-case");
     }
 
@@ -444,36 +425,44 @@ void CommandLineController::apply()
     }
 
     // Startup
-    if (application()->runMode() == IApplication::RunMode::GuiApp) {
-        startupScenario()->setModeType(modeType);
-
+    if (m_runMode == IApplication::RunMode::GuiApp) {
         if (!scorefiles.isEmpty()) {
-            startupScenario()->setStartupScorePath(scorefiles[0]);
+            m_options.startup.scorePath = scorefiles[0].toStdString();
         }
     }
 }
 
-CommandLineController::ConverterTask CommandLineController::converterTask() const
+mu::framework::IApplication::RunMode CommandLineParser::runMode() const
+{
+    return m_runMode;
+}
+
+const CommandLineParser::Options& CommandLineParser::options() const
+{
+    return m_options;
+}
+
+CommandLineParser::ConverterTask CommandLineParser::converterTask() const
 {
     return m_converterTask;
 }
 
-CommandLineController::Diagnostic CommandLineController::diagnostic() const
+CommandLineParser::Diagnostic CommandLineParser::diagnostic() const
 {
     return m_diagnostic;
 }
 
-CommandLineController::Autobot CommandLineController::autobot() const
+CommandLineParser::Autobot CommandLineParser::autobot() const
 {
     return m_autobot;
 }
 
-mu::io::path_t CommandLineController::audioPluginPath() const
+mu::io::path_t CommandLineParser::audioPluginPath() const
 {
     return m_audioPluginPath;
 }
 
-void CommandLineController::printLongVersion() const
+void CommandLineParser::printLongVersion() const
 {
     if (MUVersion::unstable()) {
         printf("MuseScore: Music Score Editor\nUnstable Prerelease for Version %s; Build %s\n",
