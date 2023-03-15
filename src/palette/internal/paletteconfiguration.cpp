@@ -23,6 +23,7 @@
 
 #include "log.h"
 #include "settings.h"
+#include "translation.h"
 
 #include "ui/internal/uiengine.h"
 
@@ -38,9 +39,11 @@ static const Settings::Key IS_SINGLE_CLICK_TO_OPEN_PALETTE(MODULE_NAME, "applica
 void PaletteConfiguration::init()
 {
     settings()->setDefaultValue(PALETTE_SCALE, Val(1.0));
+    settings()->setDescription(PALETTE_SCALE, qtrc("palette", "Palette scale").toStdString());
     settings()->setCanBeManuallyEdited(PALETTE_SCALE, true, Val(0.5), Val(5.0));
 
     settings()->setDefaultValue(PALETTE_USE_SINGLE, Val(false));
+    settings()->setDescription(PALETTE_USE_SINGLE, qtrc("palette", "Open only one palette at a time").toStdString());
     settings()->setCanBeManuallyEdited(PALETTE_USE_SINGLE, true);
 
     m_isSinglePalette.val = settings()->value(PALETTE_USE_SINGLE).toBool();
@@ -49,6 +52,7 @@ void PaletteConfiguration::init()
     });
 
     settings()->setDefaultValue(IS_SINGLE_CLICK_TO_OPEN_PALETTE, Val(true));
+    settings()->setDescription(IS_SINGLE_CLICK_TO_OPEN_PALETTE, qtrc("palette", "Single-click to open a palette").toStdString());
     settings()->setCanBeManuallyEdited(IS_SINGLE_CLICK_TO_OPEN_PALETTE, true);
 
     m_isSingleClickToOpenPalette.val = settings()->value(IS_SINGLE_CLICK_TO_OPEN_PALETTE).toBool();
