@@ -59,8 +59,8 @@ jobs:
         echo "::set-output name=artifact_name::$UPLOAD_ARTIFACT_NAME"
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME"
 
-  build_current:
-    name: "Build current"
+  generate_current_pngs:
+    name: "Generate current PNGs"
     runs-on: ubuntu-20.04
     needs: setup
     if: needs.setup.outputs.do_run == 'true' # Can't use env: see https://github.com/actions/runner/issues/480
@@ -79,17 +79,23 @@ jobs:
     - name: Setup environment
       run: |
         bash ./build/ci/linux/setup.sh
-    - name: Build and Pack
+    - name: Build
       run: |
-        bash ./build/ci/vtests/build_and_pack.sh
-    - name: Upload
+        source $HOME/build_tools/environment.sh
+        mkdir -p "$HOME/musescore_install"
+        bash ninja_build.sh -t clean
+        MUSESCORE_INSTALL_DIR="$HOME/musescore_install" bash ninja_build.sh -t installdebug
+    - name: Generate current PNGs
+      run: |
+        xvfb-run ./vtest/vtest-generate-pngs.sh -o ./current_pngs -m $HOME/musescore_install/bin/mscore
+    - name: Upload PNGs
       uses: actions/upload-artifact@v3
       with:
-        name: current_build
-        path: ./build.artifacts/
+        name: Current PNGs
+        path: ./current_pngs
 
-  build_reference:
-    name: "Build reference"
+  generate_reference_pngs:
+    name: "Generate reference PNGs"
     runs-on: ubuntu-20.04
     needs: setup
     if: needs.setup.outputs.do_run == 'true'
@@ -110,36 +116,41 @@ jobs:
     - name: Setup environment
       run: |
         bash ./build/ci/linux/setup.sh
-    - name: Build and Pack
+    - name: Build
       run: |
-        bash ./build/ci/vtests/build_and_pack.sh
-    - name: Upload
+        source $HOME/build_tools/environment.sh
+        mkdir -p "$HOME/musescore_install"
+        bash ninja_build.sh -t clean
+        MUSESCORE_INSTALL_DIR="$HOME/musescore_install" bash ninja_build.sh -t installdebug
+    - name: Checkout current commit
+      uses: actions/checkout@v3
+    - name: Generate reference PNGs
+      run: |
+        xvfb-run ./vtest/vtest-generate-pngs.sh -o ./reference_pngs -m $HOME/musescore_install/bin/mscore
+    - name: Upload PNGs
       uses: actions/upload-artifact@v3
       with:
-        name: reference_build
-        path: ./build.artifacts/
+        name: Reference PNGs
+        path: ./reference_pngs
 
-  generate_and_compare:
-    name: "Generate and Compare"
+  compare_pngs:
+    name: "Compare PNGs"
     runs-on: ubuntu-20.04
-    needs: [setup, build_current, build_reference]
+    needs: [setup, generate_current_pngs, generate_reference_pngs]
     if: needs.setup.outputs.do_run == 'true'
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
-    - name: Download current
+    - name: Download current PNGs
       uses: actions/download-artifact@v3
       with:
-        name: current_build
-        path: ./musescore_current
-    - name: Download reference
+        name: Current PNGs
+        path: ./current_pngs
+    - name: Download reference PNGs
       uses: actions/download-artifact@v3
       with:
-        name: reference_build
-        path: ./musescore_reference
-    - name: Generate PNGs   
-      run: |
-        xvfb-run ./build/ci/vtests/generate_pngs.sh
+        name: Reference PNGs
+        path: ./reference_pngs
     - name: Compare PNGs
       run: |
         echo "VTEST_DIFF_FOUND=false" >> $GITHUB_ENV
@@ -150,14 +161,6 @@ jobs:
       with:
         name: ${{ needs.setup.outputs.artifact_name }}
         path: ./comparison
-    - name: Generate ref drawdata
-      run: |
-        chmod +x ./musescore_reference/app/bin/mscore4portable
-        xvfb-run ./vtest/gen-ref-data.sh -m ./musescore_reference/app/bin/mscore4portable
-    - name: DrawData VTest
-      run: |
-        chmod +x ./musescore_current/app/bin/mscore4portable
-        xvfb-run ./vtest/vtest.sh -m ./musescore_current/app/bin/mscore4portable  
     - name: Skip failure signal if PR is labeled 'vtests'
       if: github.event_name == 'pull_request' && contains( env.VTEST_DIFF_FOUND, 'true') && contains(github.event.pull_request.labels.*.name, 'vtests')
       run: |
@@ -182,5 +185,58 @@ jobs:
           [here][1]
 
           [1]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        token: ${{ secrets.GITHUB_TOKEN }}    
+        token: ${{ secrets.GITHUB_TOKEN }}
 
+
+
+
+# name: CI_vtests
+
+# on:
+#   pull_request:
+#     branches:
+#     - master
+
+# jobs:
+#   setup:
+#     name: "VTests workflow"
+#     runs-on: ubuntu-20.04
+#     steps:
+#     - name: Cancel Previous Runs
+#       uses: styfle/cancel-workflow-action@0.11.0
+#       with:
+#         access_token: ${{ github.token }}
+#     - name: Clone repository
+#       uses: actions/checkout@v3  
+#     - name: "Configure workflow"
+#       env:
+#         pull_request_title: ${{ github.event.pull_request.title }}
+#       run: |
+#         bash ./build/ci/tools/make_build_number.sh
+#         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)      
+
+#         ADD_INFO="_${GITHUB_REF#refs/heads/}"
+#         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
+#         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"VTests_Comparison_${BUILD_NUMBER}_${ADD_INFO}")"
+
+#         echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+#         echo "BUILD_NUMBER: $BUILD_NUMBER"
+#         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
+#         echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
+
+#     - name: Setup environment
+#       run: |
+#         bash ./build/ci/linux/setup.sh
+#     - name: Build
+#       run: |
+#         source $HOME/build_tools/environment.sh
+#         bash ./vtest/build.sh
+#     - name: Run test 
+#       run: |
+#         bash ./vtest/vtest.sh 
+#     - name: Upload comparison
+#       if: ${{ always() }}
+#       uses: actions/upload-artifact@v3
+#       with:
+#         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
+#         path: ./vtest/temp_comparison    

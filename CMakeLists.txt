@@ -77,7 +77,7 @@ option(MUE_BUILD_CONVERTER_MODULE "Build converter module" ON)
 option(MUE_BUILD_DIAGNOSTICS_MODULE "Build diagnostic code" ON)
 option(MUE_BUILD_IMPORTEXPORT_MODULE "Build importexport module" ON)
 option(MUE_BUILD_VIDEOEXPORT_MODULE "Build videoexport module" OFF)
-option(MUE_BUILD_IMAGESEXPORT_MODULE "Build imagesexport module" ON)
+option(MUE_BUILD_IMAGEEXPORT_MODULE "Build videoexport module" ON)
 option(MUE_BUILD_INSPECTOR_MODULE "Build inspector module" ON)
 option(MUE_BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON)
 option(MUE_BUILD_LANGUAGES_MODULE "Build languages module" ON)
@@ -98,7 +98,6 @@ option(MUE_DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of 
 # === Pack ===
 option(MUE_RUN_LRELEASE "Generate .qm files" ON)
 option(MUE_ENABLE_FILE_ASSOCIATION "File types association (using for package)" OFF)
-option(MUE_INSTALL_SOUNDFONT "Install sound font" ON)
 
 # === Tests ===
 option(MUE_BUILD_UNIT_TESTS "Build unit tests" ON)

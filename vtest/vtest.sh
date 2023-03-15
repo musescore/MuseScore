@@ -39,7 +39,5 @@ $MSCORE_BIN \
 
 code=$?
 echo "diagnostic code: $code"
-
-# At moment needs for CI
-#exit $code
-exit 0    
+exit $code
+   

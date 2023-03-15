@@ -1,6 +1,6 @@
 {
-    "mscore_ref_bin": "./install/bin/mscore",
-    "score_dir": "./vtest/scores",
+    "mscore_ref_bin": "./build.debug/install/bin/mscore",
+    "score_dir": "/home/igor/Dev/scores",
     "current_data_dir": "./vtest/temp_current",
     "reference_data_dir": "./vtest/reference",
     "comparison_dir": "./vtest/temp_comparison",

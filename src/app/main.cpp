@@ -124,7 +124,7 @@
 #include "importexport/videoexport/videoexportmodule.h"
 #endif
 #else
-#ifdef MUE_BUILD_IMAGESEXPORT_MODULE
+#ifdef MUE_BUILD_IMAGEEXPORT_MODULE
 #include "importexport/imagesexport/imagesexportmodule.h"
 #endif
 #endif
@@ -278,7 +278,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::iex::videoexport::VideoExportModule());
 #endif
 #else
-#ifdef MUE_BUILD_IMAGESEXPORT_MODULE
+#ifdef MUE_BUILD_IMAGEEXPORT_MODULE
     app.addModule(new mu::iex::imagesexport::ImagesExportModule());
 #endif
 #endif

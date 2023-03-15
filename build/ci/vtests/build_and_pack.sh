@@ -38,7 +38,6 @@ MUSESCORE_REVISION=$(git rev-parse --short=7 HEAD)
 bash ninja_build.sh -t clean
 
 MUSESCORE_BUILD_CONFIGURATION="vtest" \
-MUSESCORE_REVISION=$MUSESCORE_REVISION \
 bash ninja_build.sh -t appimage
 
 bash ./build/ci/tools/make_release_channel_env.sh -c $BUILD_MODE
