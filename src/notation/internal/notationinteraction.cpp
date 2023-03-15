@@ -1851,7 +1851,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 spanner->styleChanged();
                 score->cmdAddSpanner(spanner, i, startSegment, endSegment);
             }
-        } else if (element->isTextBase()) {
+        } else if (element->isTextBase() && !element->isFingering() && !element->isSticking()) {
             mu::engraving::Segment* firstSegment = sel.startSegment();
             staff_idx_t firstStaffIndex = sel.staffStart();
             staff_idx_t lastStaffIndex = sel.staffEnd();
