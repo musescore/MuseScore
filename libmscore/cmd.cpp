@@ -1833,6 +1833,8 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
       if (!estaff)
             return;
       ClefType clef = estaff->clef(tick);
+      if (estaff->isTabStaff(tick))
+            return;
       int step      = ClefInfo::pitchOffset(clef) - note->line();
       while (step < 0)
             step += 7;
