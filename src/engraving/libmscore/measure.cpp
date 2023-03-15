@@ -4284,7 +4284,7 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
                 }
             }
             double extraLeadingSpace = ns->extraLeadingSpace().val() * spatium();
-            s->setWidthOffset(extraLeadingSpace);
+            s->setWidthOffset(s->widthOffset() + extraLeadingSpace);
             extraLeadingSpace = std::max(extraLeadingSpace, -w);
             w += extraLeadingSpace;
         } else {
