@@ -6356,6 +6356,9 @@ void MusicXMLParserNotations::combineArticulations()
     map[{ SymId::articMarcatoAbove, SymId::articStaccatoAbove }] = SymId::articMarcatoStaccatoAbove;
     map[{ SymId::articMarcatoAbove, SymId::articTenutoAbove }] = SymId::articMarcatoTenutoAbove;
     map[{ SymId::articAccentAbove, SymId::articTenutoAbove }] = SymId::articTenutoAccentAbove;
+    map[{ SymId::articSoftAccentAbove, SymId::articStaccatoAbove }] = SymId::articSoftAccentStaccatoAbove;
+    map[{ SymId::articSoftAccentAbove, SymId::articTenutoAbove }] = SymId::articSoftAccentTenutoAbove;
+    map[{ SymId::articSoftAccentAbove, SymId::articTenutoStaccatoAbove }] = SymId::articSoftAccentTenutoStaccatoAbove;
 
     // Iterate through each distinct pair (backwards, to allow for deletions)
     for (std::vector<Notation>::reverse_iterator n1 = _notations.rbegin(), n1Next = n1; n1 != _notations.rend(); n1 = n1Next) {

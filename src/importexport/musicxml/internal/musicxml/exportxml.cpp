@@ -2779,6 +2779,21 @@ static std::vector<QString> symIdToArtic(const SymId sid)
         return { "soft-accent" };
         break;
 
+    case SymId::articSoftAccentStaccatoAbove:
+    case SymId::articSoftAccentStaccatoBelow:
+        return { "soft-accent", "staccato" };
+        break;
+
+    case SymId::articSoftAccentTenutoAbove:
+    case SymId::articSoftAccentTenutoBelow:
+        return { "soft-accent", "tenuto" };
+        break;
+
+    case SymId::articSoftAccentTenutoStaccatoAbove:
+    case SymId::articSoftAccentTenutoStaccatoBelow:
+        return { "soft-accent", "detached-legato" };
+        break;
+
     case SymId::articStressAbove:
     case SymId::articStressBelow:
         return { "stress" };
