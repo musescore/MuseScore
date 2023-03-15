@@ -81,9 +81,9 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
 
     Version current(MUVersion::fullVersion());
     Version update(String::fromStdString(releaseInfo.val.version));
-    if (update <= current) {
-        return result;
-    }
+    // if (update <= current) {
+    //     return result;
+    // }
 
     result.ret = make_ok();
     result.val = releaseInfo.val;

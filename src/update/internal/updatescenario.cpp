@@ -95,6 +95,10 @@ void UpdateScenario::doCheckForUpdate(bool manual)
             m_progress = false;
         };
 
+        // TEMP: Force to check for update locally (hacky!)
+        showReleaseInfo(releaseInfoFromValMap(res.val.toMap()));
+        return;
+
         if (!res.ret) {
             LOGE() << "Unable to check for update, error: " << res.ret.toString();
 
