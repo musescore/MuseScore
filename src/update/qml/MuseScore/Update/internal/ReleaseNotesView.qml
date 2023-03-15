@@ -56,11 +56,12 @@ ColumnLayout {
         contentHeight: notesLabel.implicitHeight
 
         StyledTextLabel {
+            textFormat: (notes.indexOf("<!DOCTYPE html>") != -1) ? Text.RichText : Text.MarkdownText
+
             id: notesLabel
 
             anchors.left: parent.left
             anchors.right: parent.right
-
             horizontalAlignment: Text.AlignLeft
             font: ui.theme.largeBodyFont
             wrapMode: Text.WordWrap

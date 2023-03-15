@@ -36,9 +36,13 @@
 #include "translation.h"
 #include "log.h"
 
+#include <fstream>
+
 using namespace mu::update;
 using namespace mu::network;
 using namespace mu::framework;
+
+const std::string UPDATE_BODY_FILE = "update_notes.md";  // .md or .html
 
 static std::string platformFileSuffix()
 {
@@ -153,6 +157,13 @@ mu::RetVal<ReleaseInfo> UpdateService::parseRelease(const QByteArray& json) cons
     QJsonObject release = jsonDoc.object();
     result.val.title = release.value("name").toString().toStdString();
     result.val.notes = release.value("body").toString().toStdString();
+
+    // Replacing notes body with update_notes contents
+    const std::string currPath = __FILE__;
+    const std::ifstream updateNotes(currPath.substr(0, currPath.rfind("updateservice.cpp")) + UPDATE_BODY_FILE);
+    std::stringstream notesBuff;
+    notesBuff << updateNotes.rdbuf();
+    result.val.notes = notesBuff.str();
 
     QString tagName = release.value("tag_name").toString();
     result.val.version = tagName.replace("v", "").toStdString();
