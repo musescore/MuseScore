@@ -21,12 +21,11 @@ on:
         default: 'off'  
  
 env:
-  DEVELOPER_DIR: /Applications/Xcode_10.3.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_12.4.app/Contents/Developer
 
 jobs:
   build:    
-    runs-on: macos-10.15
-    #runs-on: macos-11 may be needed in the near futur
+    runs-on: macos-11
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.11.0

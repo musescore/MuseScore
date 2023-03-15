@@ -526,7 +526,7 @@ add_library(
       inspector/resetButton.cpp
       icons.cpp
       miconengine.cpp
-      ${qrc_files}
+#      ${qrc_files}
       )
 
 if (APPLE)
