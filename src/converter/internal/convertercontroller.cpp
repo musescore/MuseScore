@@ -92,6 +92,8 @@ mu::Ret ConverterController::fileConvert(const io::path_t& in, const io::path_t&
         ret = convertFullNotation(writer, notationProject->masterNotation()->notation(), out);
     }
 
+    globalContext()->setCurrentProject(nullptr);
+
     return make_ret(Ret::Code::Ok);
 }
 
