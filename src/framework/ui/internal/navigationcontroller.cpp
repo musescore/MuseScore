@@ -303,7 +303,7 @@ void NavigationController::reg(INavigationSection* section)
     section->setOnActiveRequested([this](INavigationSection* section, INavigationPanel* panel, INavigationControl* control,
                                          bool enableHighlight, ActivationType activationType) {
         if (control && activationType == ActivationType::ByMouse) {
-            if (mainWindow()->qWindow() == control->window()) {
+            if (section->type() != INavigationSection::Type::Exclusive) {
                 return;
             }
         }
