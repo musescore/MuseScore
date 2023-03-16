@@ -24,6 +24,7 @@
 #define MU_AUDIO_REGISTERAUDIOPLUGINSSCENARIO_H
 
 #include "iregisteraudiopluginsscenario.h"
+#include "async/asyncable.h"
 
 #include "modularity/ioc.h"
 #include "iknownaudiopluginsregister.h"
@@ -34,7 +35,7 @@
 #include "iinteractive.h"
 
 namespace mu::audio {
-class RegisterAudioPluginsScenario : public IRegisterAudioPluginsScenario
+class RegisterAudioPluginsScenario : public IRegisterAudioPluginsScenario, public async::Asyncable
 {
     INJECT(audio, IKnownAudioPluginsRegister, knownPluginsRegister)
     INJECT(audio, IAudioPluginsScannerRegister, scannerRegister)
@@ -44,12 +45,17 @@ class RegisterAudioPluginsScenario : public IRegisterAudioPluginsScenario
     INJECT(audio, IProcess, process)
 
 public:
+    void init();
+
     Ret registerNewPlugins() override;
     Ret registerPlugin(const io::path_t& pluginPath) override;
 
 private:
     void startPluginsRegistration(const io::paths_t& pluginPaths);
     IAudioPluginMetaReaderPtr metaReader(const io::path_t& pluginPath) const;
+
+    framework::Progress m_progress;
+    bool m_aborted = false;
 };
 }
 

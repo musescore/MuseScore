@@ -59,6 +59,7 @@
 #include "view/focuslistener.h"
 
 #include "view/internal/errordetailsmodel.h"
+#include "view/internal/progressdialogmodel.h"
 
 #include "dev/interactivetestsmodel.h"
 #include "dev/testdialog.h"
@@ -149,6 +150,7 @@ void UiModule::registerUiTypes()
 #endif
 
     qmlRegisterType<ErrorDetailsModel>("MuseScore.Ui", 1, 0, "ErrorDetailsModel");
+    qmlRegisterType<ProgressDialogModel>("MuseScore.Ui", 1, 0, "ProgressDialogModel");
 
     qmlRegisterType<InteractiveTestsModel>("MuseScore.Ui", 1, 0, "InteractiveTestsModel");
     qRegisterMetaType<TestDialog>("TestDialog");

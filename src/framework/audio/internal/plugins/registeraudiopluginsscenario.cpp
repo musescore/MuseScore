@@ -22,13 +22,22 @@
 
 #include "registeraudiopluginsscenario.h"
 
+#include <QApplication>
+
 #include "translation.h"
 #include "log.h"
 
-#include <QProgressDialog>
-#include <QApplication>
-
 using namespace mu::audio;
+using namespace mu::framework;
+
+void RegisterAudioPluginsScenario::init()
+{
+    m_progress.finished.onReceive(this, [this](const ProgressResult& res) {
+        if (res.ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+            m_aborted = true;
+        }
+    });
+}
 
 mu::Ret RegisterAudioPluginsScenario::registerNewPlugins()
 {
@@ -57,25 +66,27 @@ void RegisterAudioPluginsScenario::startPluginsRegistration(const io::paths_t& p
         return;
     }
 
+    Ret ret = interactive()->showProgress(mu::trc("audio", "Scanning audio plugins"), &m_progress);
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
+
+    m_aborted = false;
+    m_progress.started.notify();
+
     std::string appPath = globalConfiguration()->appBinPath().toStdString();
     int64_t pluginCount = static_cast<int64_t>(pluginPaths.size());
 
-    QProgressDialog progress(qApp->activeWindow());
-    progress.setWindowTitle(mu::qtrc("audio", "Scanning audio plugins"));
-    progress.setMinimum(0);
-    progress.setMaximum(pluginCount);
-    progress.open();
-
     for (int64_t i = 0; i < pluginCount; ++i) {
+        if (m_aborted) {
+            return;
+        }
+
         const io::path_t& pluginPath = pluginPaths[i];
         std::string pluginPathStr = pluginPath.toStdString();
 
-        progress.setValue(i);
-        progress.setLabelText(pluginPath.toQString());
-
-        if (progress.wasCanceled()) {
-            return;
-        }
+        m_progress.progressChanged.send(i, pluginCount, pluginPathStr);
+        qApp->processEvents();
 
         int code = process()->execute(appPath, { "--audio-plugin-probe", pluginPathStr });
         if (code == 0) {
@@ -94,7 +105,7 @@ void RegisterAudioPluginsScenario::startPluginsRegistration(const io::paths_t& p
         }
     }
 
-    progress.setValue(pluginCount);
+    m_progress.finished.send(make_ok());
 }
 
 mu::Ret RegisterAudioPluginsScenario::registerPlugin(const io::path_t& pluginPath)

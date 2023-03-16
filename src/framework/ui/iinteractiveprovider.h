@@ -25,6 +25,7 @@
 #include "modularity/imoduleexport.h"
 #include "types/uri.h"
 #include "types/retval.h"
+#include "progress.h"
 
 #include "iinteractive.h"
 
@@ -57,6 +58,8 @@ public:
                               const framework::IInteractive::ButtonDatas& buttons = {},
                               int defBtn = int(framework::IInteractive::Button::NoButton),
                               const framework::IInteractive::Options& options = {}) = 0;
+
+    virtual Ret showProgress(const std::string& title, framework::Progress* progress) = 0;
 
     virtual RetVal<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir,
                                                  const std::vector<std::string>& filter) = 0;

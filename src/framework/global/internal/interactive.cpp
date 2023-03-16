@@ -173,6 +173,11 @@ IInteractive::Result Interactive::error(const std::string& title, const Text& te
     return standardDialogResult(provider()->error(title, text, detailedText, buttons, defBtn, options));
 }
 
+Ret Interactive::showProgress(const std::string& title, framework::Progress* progress) const
+{
+    return provider()->showProgress(title, progress);
+}
+
 mu::io::path_t Interactive::selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter)
 {
 #ifndef Q_OS_LINUX

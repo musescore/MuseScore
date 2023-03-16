@@ -70,6 +70,9 @@ public:
     Result error(const std::string& title, const Text& text, const std::string& detailedText, const ButtonDatas& buttons = {},
                  int defBtn = int(Button::NoButton), const Options& options = {}) const override;
 
+    // progress
+    Ret showProgress(const std::string& title, framework::Progress* progress) const override;
+
     // files
     io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
     io::path_t selectSavingFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter,
