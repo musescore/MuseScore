@@ -49,7 +49,7 @@ private:
     bool nativeEventFilter(const QByteArray& eventType, void* message, long* result) override;
 
     bool removeWindowFrame(MSG* message, long* result);
-    bool calculateWindowSize(MSG* message, long* result);
+    bool calculateWindowSize(MSG* msg, long* result);
     bool processMouseMove(MSG* message, long* result) const;
     bool processMouseRightClick(MSG* message) const;
 
@@ -57,6 +57,9 @@ private:
     bool showSystemMenuIfNeed(MSG* message) const;
 
     bool isWindowMaximized(HWND hWnd) const;
+    bool isTaskbarInAutohideState() const;
+
+    std::optional<UINT> taskbarEdge() const;
 
     int borderWidth() const;
 
