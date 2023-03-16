@@ -42,8 +42,6 @@ using namespace mu::update;
 using namespace mu::network;
 using namespace mu::framework;
 
-const std::string UPDATE_BODY_FILE = "update_notes.md";  // .md or .html
-
 static std::string platformFileSuffix()
 {
 #if defined(Q_OS_WIN)
@@ -156,14 +154,17 @@ mu::RetVal<ReleaseInfo> UpdateService::parseRelease(const QByteArray& json) cons
 
     QJsonObject release = jsonDoc.object();
     result.val.title = release.value("name").toString().toStdString();
-    result.val.notes = release.value("body").toString().toStdString();
 
     // Replacing notes body with update_notes contents
-    const std::string currPath = __FILE__;
-    const std::ifstream updateNotes(currPath.substr(0, currPath.rfind("updateservice.cpp")) + UPDATE_BODY_FILE);
-    std::stringstream notesBuff;
-    notesBuff << updateNotes.rdbuf();
-    result.val.notes = notesBuff.str();
+    const io::path_t updateNotesPath = globalConfiguration()->appDataPath() + "update/update_notes.txt";
+    const RetVal<ByteArray> notesBytes = fileSystem()->readFile(updateNotesPath);
+    if (!notesBytes.ret) {
+        result.val.notes
+            = "(ERROR: This is the fallback, which should have been replaced by update_notes.txt. See error log.)\n";
+        LOGE() << "failed to read update_notes file, err: " << notesBytes.ret.toString();
+    } else {
+        result.val.notes = notesBytes.val.toQByteArrayNoCopy().toStdString();
+    }
 
     QString tagName = release.value("tag_name").toString();
     result.val.version = tagName.replace("v", "").toStdString();

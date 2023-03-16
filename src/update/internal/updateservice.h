@@ -39,6 +39,7 @@ class UpdateService : public IUpdateService, public async::Asyncable
     INJECT(update, network::INetworkManagerCreator, networkManagerCreator)
     INJECT(update, IUpdateConfiguration, configuration)
     INJECT(update, io::IFileSystem, fileSystem)
+    INJECT(workspace, framework::IGlobalConfiguration, globalConfiguration)
 
 public:
     RetVal<ReleaseInfo> checkForUpdate() override;

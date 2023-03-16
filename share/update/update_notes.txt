@@ -1,3 +1,9 @@
+# READ ME!
+
+You can write this file in either a markdown or HTML format. Note that this **by default renders as markdown** unless it begins with the `!DOCTYPE html` tag, in which it interprets as [a subset of HTML 4](https://doc.qt.io/qt-5/richtext-html-subset.html).
+
+Edit this file at `MuseScore4.app/Contents/resources/update_notes.txt`.
+
 # Markdown Example
 
 I based this off of [The Markdown Guide](https://www.markdownguide.org).
