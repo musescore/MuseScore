@@ -51,12 +51,12 @@ jobs:
       env:
         pr_info: ${{ env.PR_INFO }}
       run: |
-        echo "::set-output name=do_run::${{ env.DO_RUN }}"
+        echo "do_run=${{ env.DO_RUN }}" >> $GITHUB_OUTPUT
         echo "DO_RUN=${{ env.DO_RUN }}"
-        echo "::set-output name=reference_sha::${{ env.REFERENCE_SHA }}"
+        echo "reference_sha=${{ env.REFERENCE_SHA }}" >> $GITHUB_OUTPUT
         echo "REFERENCE_SHA=${{ env.REFERENCE_SHA }}"
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"VTests Comparison ${{ env.BUILD_NUMBER }}${pr_info}")"
-        echo "::set-output name=artifact_name::$UPLOAD_ARTIFACT_NAME"
+        echo "artifact_name=$UPLOAD_ARTIFACT_NAME"  >> $GITHUB_OUTPUT
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME"
 
   build_current:
