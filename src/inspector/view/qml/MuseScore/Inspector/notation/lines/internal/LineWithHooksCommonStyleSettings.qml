@@ -79,7 +79,7 @@ Column {
         navigationRowStart: root.navigationRowStart + 3
     }
 
-    SeparatorLine { anchors.margins: -12 }
+    SeparatorLine { anchors.margins: -12; visible: hooksSection.visible }
 
     LineStyleSection {
         id: lineStyleSection

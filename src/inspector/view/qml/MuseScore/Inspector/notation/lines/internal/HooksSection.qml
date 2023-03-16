@@ -44,6 +44,9 @@ Column {
     property int navigationRowStart: 1
     property int navigationRowEnd: endHookHeightSection.navigationRowEnd
 
+    // NOTE can't bind to `visible` property of children, because children are always invisible when parent is invisible
+    visible: startHookButtonGroup.isUseful || endHookButtonGroup.isUseful || hookHeightSections.isUseful
+
     width: parent.width
 
     spacing: 12
@@ -51,7 +54,9 @@ Column {
     FlatRadioButtonGroupPropertyView {
         id: startHookButtonGroup
 
-        visible: Boolean(root.possibleStartHookTypes) && root.possibleStartHookTypes.length > 1
+        readonly property bool isUseful: Boolean(root.possibleStartHookTypes) && root.possibleStartHookTypes.length > 1
+
+        visible: isUseful
 
         titleText: qsTrc("inspector", "Start hook")
         propertyItem: root.startHookType
@@ -63,7 +68,9 @@ Column {
     FlatRadioButtonGroupPropertyView {
         id: endHookButtonGroup
 
-        visible: Boolean(root.possibleEndHookTypes) && root.possibleEndHookTypes.length > 1
+        readonly property bool isUseful: Boolean(root.possibleEndHookTypes) && root.possibleEndHookTypes.length > 1
+
+        visible: isUseful
 
         titleText: qsTrc("inspector", "End hook")
         propertyItem: root.endHookType
@@ -73,6 +80,13 @@ Column {
     }
 
     Item {
+        id: hookHeightSections
+
+        readonly property bool isUseful: (root.startHookHeight && root.startHookHeight.isVisible)
+                                         || (root.endHookHeight && root.endHookHeight.isVisible)
+
+        visible: isUseful
+
         height: childrenRect.height
         width: parent.width
 
