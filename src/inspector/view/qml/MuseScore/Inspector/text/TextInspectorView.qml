@@ -148,7 +148,7 @@ InspectorSectionView {
                 measureUnitsSymbol: qsTrc("global", "pt")
                 propertyItem: root.model ? root.model.fontSize : null
 
-                decimals: 1
+                decimals: 2
                 step: 1
                 minValue: 1
                 maxValue: 99

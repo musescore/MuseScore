@@ -60,7 +60,7 @@ Item {
             return
         }
 
-        newValue = +newValue.toFixed(decimals)
+        newValue = +newValue.toFixed(root.decimals)
         root.valueEdited(newValue)
         root.valueEditingFinished(newValue)
     }
@@ -73,7 +73,7 @@ Item {
             return
         }
 
-        newValue = +newValue.toFixed(decimals)
+        newValue = +newValue.toFixed(root.decimals)
         root.valueEdited(newValue)
         root.valueEditingFinished(newValue)
     }
