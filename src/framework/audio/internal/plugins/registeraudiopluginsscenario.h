@@ -23,13 +23,13 @@
 #ifndef MU_AUDIO_REGISTERAUDIOPLUGINSSCENARIO_H
 #define MU_AUDIO_REGISTERAUDIOPLUGINSSCENARIO_H
 
-#include "iregisteraudiopluginsscenario.h"
+#include "audio/iregisteraudiopluginsscenario.h"
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "iknownaudiopluginsregister.h"
-#include "iaudiopluginsscannerregister.h"
-#include "iaudiopluginmetareaderregister.h"
+#include "audio/iknownaudiopluginsregister.h"
+#include "audio/iaudiopluginsscannerregister.h"
+#include "audio/iaudiopluginmetareaderregister.h"
 #include "iprocess.h"
 #include "iglobalconfiguration.h"
 #include "iinteractive.h"
