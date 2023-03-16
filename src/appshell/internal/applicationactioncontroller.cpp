@@ -149,14 +149,6 @@ bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
     return QObject::eventFilter(watched, event);
 }
 
-mu::ValCh<bool> ApplicationActionController::isFullScreen() const
-{
-    ValCh<bool> result;
-    result.ch = m_fullScreenChannel;
-    result.val = mainWindow()->isFullScreen();
-
-    return result;
-}
 
 bool ApplicationActionController::quit(bool isAllInstances, const io::path_t& installerPath)
 {
@@ -209,8 +201,6 @@ void ApplicationActionController::restart()
 void ApplicationActionController::toggleFullScreen()
 {
     mainWindow()->toggleFullScreen();
-    bool isFullScreen = mainWindow()->isFullScreen();
-    m_fullScreenChannel.send(isFullScreen);
 }
 
 void ApplicationActionController::openAboutDialog()
