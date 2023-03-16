@@ -108,7 +108,7 @@ void ActionIcon::layout()
 
 void ActionIcon::draw(Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     painter->setFont(m_iconFont);
     painter->drawText(bbox(), draw::AlignCenter, Char(m_icon));
 }

@@ -42,6 +42,9 @@ void BufferedPaintProvider::beginTarget(const std::string& name)
 {
     clear();
     m_buf->name = name;
+    m_stateIsUsed = false;
+    m_currentStateNo = 0;
+    m_buf->states[m_currentStateNo] = DrawData::State(); // default
     beginObject("target_" + name);
     m_isActive = true;
 }
@@ -76,14 +79,15 @@ void BufferedPaintProvider::beginObject(const std::string& name)
     }
 
     // add new object
-    DrawData::Item& parent = editableObject();
+    DrawData::Item& parent = editableItem();
     DrawData::Item& ch = parent.chilren.emplace_back(name);
-    ch.datas.emplace_back(); // default state
 
     ++m_itemLevel;
 
+    ensureItemInit(ch);
+
 #ifdef MUE_ENABLE_DRAW_TRACE
-    m_drawObjectsLogger->beginObject(name, pagePos);
+    //m_drawObjectsLogger->beginObject(name);
 #endif
 }
 
@@ -94,7 +98,7 @@ void BufferedPaintProvider::endObject()
         return;
     }
 
-    DrawData::Item& obj = editableObject();
+    DrawData::Item& obj = editableItem();
 
     // remove default state or state without data
     if (obj.datas.back().empty()) {
@@ -104,69 +108,90 @@ void BufferedPaintProvider::endObject()
     --m_itemLevel;
 
 #ifdef MUE_ENABLE_DRAW_TRACE
-    m_drawObjectsLogger->endObject();
+    //m_drawObjectsLogger->endObject();
 #endif
 }
 
-const DrawData::Item& BufferedPaintProvider::currentObject() const
+void BufferedPaintProvider::ensureItemInit(DrawData::Item& item) const
 {
-    DrawData::Item* item = &m_buf->item;
-    for (int i = 0; i < m_itemLevel; ++i) {
-        item = &item->chilren.back();
+    if (item.datas.empty()) {
+        item.datas.emplace_back();                    // default data
+        item.datas.back().state = m_currentStateNo;   // current state
     }
-
-    if (item->datas.empty()) {
-        item->datas.emplace_back(); // default state
-    }
-
-    return *item;
 }
 
-DrawData::Item& BufferedPaintProvider::editableObject()
+const DrawData::Item& BufferedPaintProvider::currentItem() const
 {
-    DrawData::Item* item = &m_buf->item;
+    DrawData::Item* itemPtr = &m_buf->item;
     for (int i = 0; i < m_itemLevel; ++i) {
-        item = &item->chilren.back();
+        itemPtr = &itemPtr->chilren.back();
     }
 
-    if (item->datas.empty()) {
-        item->datas.emplace_back(); // default state
+    DrawData::Item& item = *itemPtr;
+
+    ensureItemInit(item);
+
+    return item;
+}
+
+DrawData::Item& BufferedPaintProvider::editableItem()
+{
+    DrawData::Item* itemPtr = &m_buf->item;
+    for (int i = 0; i < m_itemLevel; ++i) {
+        itemPtr = &itemPtr->chilren.back();
     }
 
-    return *item;
+    DrawData::Item& item = *itemPtr;
+
+    ensureItemInit(item);
+
+    return item;
 }
 
 const DrawData::Data& BufferedPaintProvider::currentData() const
 {
-    return currentObject().datas.back();
+    return currentItem().datas.back();
 }
 
 const DrawData::State& BufferedPaintProvider::currentState() const
 {
-    return currentData().state;
+    return m_buf->states.at(m_currentStateNo);
 }
 
 DrawData::Data& BufferedPaintProvider::editableData()
 {
-    return editableObject().datas.back();
+    m_stateIsUsed = true;
+    return editableItem().datas.back();
 }
 
 DrawData::State& BufferedPaintProvider::editableState()
 {
-    DrawData::Item& obj = editableObject();
-    IF_ASSERT_FAILED(obj.datas.size() > 0) {
-        obj.datas.emplace_back();
+    {
+        if (!m_stateIsUsed) {
+            return m_buf->states[m_currentStateNo];
+        }
     }
 
-    DrawData::Data& data = obj.datas.back();
-    if (data.empty()) {
-        return data.state;
+    // make new state
+    {
+        const DrawData::State& current = m_buf->states.at(m_currentStateNo);
+        m_currentStateNo++;
+        m_buf->states[m_currentStateNo] = current;
     }
 
-    DrawData::Data& newData = obj.datas.emplace_back();
-    newData.state = data.state;
+    // make new data if current not empty
+    {
+        DrawData::Item& item = editableItem();
+        ensureItemInit(item);
+        if (!item.datas.back().empty()) {
+            item.datas.emplace_back();
+            item.datas.back().state = m_currentStateNo;
+        }
+    }
 
-    return newData.state;
+    m_stateIsUsed = false;
+
+    return m_buf->states[m_currentStateNo];
 }
 
 void BufferedPaintProvider::setAntialiasing(bool arg)
@@ -332,6 +357,5 @@ DrawDataPtr BufferedPaintProvider::drawData() const
 void BufferedPaintProvider::clear()
 {
     m_buf = std::make_shared<DrawData>();
-    m_pageNo = 0;
     m_itemLevel = -1;
 }

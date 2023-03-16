@@ -126,17 +126,14 @@ struct DrawData
     };
 
     struct Data {
-        State state;
+        int state = 0;
 
         std::vector<DrawPath> paths;
         std::vector<DrawPolygon> polygons;
         std::vector<DrawText> texts;
         std::vector<DrawPixmap> pixmaps;
 
-        bool empty() const
-        {
-            return paths.empty() && polygons.empty() && texts.empty() && pixmaps.empty();
-        }
+        bool empty() const { return paths.empty() && polygons.empty() && texts.empty() && pixmaps.empty(); }
     };
 
     struct Item {
@@ -152,6 +149,7 @@ struct DrawData
     std::string name;
     RectF viewport;
     Item item;
+    std::map<int, State> states;
 
     bool empty() const { return item.datas.empty() && item.chilren.empty(); }
 };

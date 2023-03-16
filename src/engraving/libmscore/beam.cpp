@@ -240,7 +240,7 @@ const Chord* Beam::findChordWithCustomStemDirection() const
 
 void Beam::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     if (_beamSegments.empty()) {
         return;
     }

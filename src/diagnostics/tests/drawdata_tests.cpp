@@ -91,8 +91,8 @@ TEST_F(Diagnostics_DrawDataTests, Rw)
             const DrawData::Data& originData = originObj.datas.at(j);
             const DrawData::Data& readedData = readedObj.datas.at(j);
             // state
-            const DrawData::State& originState = originData.state;
-            const DrawData::State& readedState = readedData.state;
+            const DrawData::State& originState = origin->states.at(originData.state);
+            const DrawData::State& readedState = readed->states.at(readedData.state);
 
             EXPECT_EQ(originState.pen, readedState.pen);
             EXPECT_EQ(originState.brush, readedState.brush);
@@ -118,6 +118,8 @@ TEST_F(Diagnostics_DrawDataTests, SimpleDraw)
         Painter p(prv, "test");
 
         p.setViewport(RectF(0, 0, 450, 450));
+
+        p.setAntialiasing(true);
         p.beginObject("page_1");
 
         PointF pos(120, 240);
@@ -149,6 +151,8 @@ TEST_F(Diagnostics_DrawDataTests, SimpleDraw)
         data = prv->drawData();
     }
 
+    DrawDataRW::writeData("1_data.json", data);
+
     // convert
     {
         DrawDataConverter c;
@@ -164,6 +168,14 @@ TEST_F(Diagnostics_DrawDataTests, ScoreDraw)
         DrawDataGenerator g;
         originImage = g.genImage(VTEST_SCORES + "/accidental-1.mscx");
         io::File::writeFile("2_accidental-1.origin.png", originImage.data());
+    }
+
+    {
+        PainterItemMarker::enabled = false;
+        DrawDataGenerator g;
+        DrawDataPtr drawData = g.genDrawData(VTEST_SCORES + "/accidental-1.mscx");
+        DrawDataRW::writeData("2_accidental-1_no_objects.json", drawData);
+        PainterItemMarker::enabled = true;
     }
 
     DrawDataPtr drawData;

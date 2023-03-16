@@ -245,7 +245,7 @@ void StretchedBend::layout()
 
 void StretchedBend::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
 
     setupPainter(painter);
     layoutDraw(false, painter);

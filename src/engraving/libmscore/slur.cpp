@@ -81,7 +81,7 @@ SlurSegment::SlurSegment(const SlurSegment& ss)
 
 void SlurSegment::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     using namespace mu::draw;
     Pen pen(curColor());
     double mag = staff() ? staff()->staffMag(slur()->tick()) : 1.0;

@@ -30,9 +30,12 @@ set(MODULE_TEST_LINK
     fonts
     diagnostics
     engraving
-    iex_guitarpro
     accessibility
 )
+
+if (MUE_BUILD_IMPORTEXPORT_MODULE)
+    list(APPEND MODULE_TEST_LINK iex_guitarpro)
+endif()
 
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 

@@ -71,7 +71,7 @@ MMRest::MMRest(const MMRest& r, bool link)
 
 void MMRest::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     if (shouldNotBeDrawn() || (track() % VOICES)) {     //only on voice 1
         return;
     }

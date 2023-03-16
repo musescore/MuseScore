@@ -96,12 +96,13 @@ bool QPainterProvider::isActive() const
 
 void QPainterProvider::beginObject(const std::string& name)
 {
-    m_drawObjectsLogger->beginObject(name);
+    UNUSED(name)
+    //m_drawObjectsLogger->beginObject(name);
 }
 
 void QPainterProvider::endObject()
 {
-    m_drawObjectsLogger->endObject();
+    //m_drawObjectsLogger->endObject();
 }
 
 void QPainterProvider::setAntialiasing(bool arg)

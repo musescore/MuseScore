@@ -112,6 +112,8 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const Options& opt)
             }
             firstPage = false;
 
+            painter->beginObject("page_" + std::to_string(pi));
+
             if (opt.isMultiPage) {
                 painter->translate(pagePos);
             }
@@ -144,6 +146,8 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const Options& opt)
                 engraving::DebugPaint::paintPageDebug(*painter, page);
             }
 #endif
+
+            painter->endObject(); // page
 
             if (opt.isMultiPage) {
                 painter->translate(-pagePos);

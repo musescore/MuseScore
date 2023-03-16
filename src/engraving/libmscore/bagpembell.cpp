@@ -313,7 +313,7 @@ void BagpipeEmbellishment::drawGraceNote(mu::draw::Painter* painter,
 
 void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     using namespace mu::draw;
     SymId headsym = SymId::noteheadBlack;
     SymId flagsym = SymId::flag32ndUp;

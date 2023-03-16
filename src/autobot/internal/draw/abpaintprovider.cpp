@@ -70,7 +70,7 @@ void AbPaintProvider::paintData(draw::IPaintProviderPtr provider, const draw::Dr
     const DrawData::Item& obj = data->item;
 
     for (const DrawData::Data& d : obj.datas) {
-        DrawData::State st = d.state;
+        DrawData::State st = data->states.at(d.state);
         st.pen.setColor(overcolor);
         st.pen.setWidthF(10.);
         st.brush.setColor(overcolor);

@@ -111,7 +111,7 @@ void Symbol::layout()
 
 void Symbol::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     if (!isNoteDot() || !staff()->isTabStaff(tick())) {
         painter->setPen(curColor());
         if (_scoreFont) {

@@ -275,7 +275,7 @@ String Articulation::translatedTypeUserName() const
 
 void Articulation::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
 
     painter->setPen(curColor());
 

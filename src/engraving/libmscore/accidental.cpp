@@ -522,7 +522,7 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
 
 void Accidental::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     // don't show accidentals for tab or slash notation
     if (onTabStaff() || (note() && note()->fixed())) {
         return;

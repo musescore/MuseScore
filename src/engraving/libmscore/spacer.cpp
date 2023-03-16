@@ -58,7 +58,7 @@ Spacer::Spacer(const Spacer& s)
 
 void Spacer::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     if (score()->printing() || !score()->showUnprintable()) {
         return;
     }

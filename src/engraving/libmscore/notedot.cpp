@@ -55,7 +55,7 @@ NoteDot::NoteDot(Rest* parent)
 
 void NoteDot::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     if (note() && note()->dotsHidden()) {     // don't draw dot if note is hidden
         return;
     } else if (rest() && rest()->isGap()) {  // don't draw dot for gap rests

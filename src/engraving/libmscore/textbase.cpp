@@ -3265,7 +3265,7 @@ TextCursor* TextBase::cursorFromEditData(const EditData& ed)
 
 void TextBase::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     using namespace mu::draw;
     if (hasFrame()) {
         double baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();

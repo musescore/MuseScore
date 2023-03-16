@@ -26,11 +26,12 @@
 using namespace mu;
 using namespace mu::draw;
 
-static void drawItem(IPaintProviderPtr& provider, const DrawData::Item& obj, const Color& overlay)
+static void drawItem(IPaintProviderPtr& provider, const DrawData::Item& item, const std::map<int, DrawData::State>& states,
+                     const Color& overlay)
 {
     // first draw obj itself
-    for (const DrawData::Data& d : obj.datas) {
-        DrawData::State st = d.state;
+    for (const DrawData::Data& d : item.datas) {
+        DrawData::State st = states.at(d.state);
         if (overlay.isValid()) {
             st.pen.setColor(overlay);
             st.brush.setColor(overlay);
@@ -74,13 +75,13 @@ static void drawItem(IPaintProviderPtr& provider, const DrawData::Item& obj, con
     }
 
     // second draw chilren
-    for (const DrawData::Item& ch : obj.chilren) {
-        drawItem(provider, ch, overlay);
+    for (const DrawData::Item& ch : item.chilren) {
+        drawItem(provider, ch, states, overlay);
     }
 }
 
 void DrawDataPaint::paint(Painter* painter, const DrawDataPtr& data, const Color& overlay)
 {
     IPaintProviderPtr provider = painter->provider();
-    drawItem(provider, data->item, overlay);
+    drawItem(provider, data->item, data->states, overlay);
 }

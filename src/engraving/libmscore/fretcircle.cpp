@@ -50,7 +50,7 @@ FretCircle::~FretCircle()
 
 void FretCircle::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     painter->save();
     painter->setPen(mu::draw::Pen(curColor(), spatium() * circleWidth));
     painter->setBrush(mu::draw::BrushStyle::NoBrush);

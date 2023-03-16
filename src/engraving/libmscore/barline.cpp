@@ -581,7 +581,7 @@ bool BarLine::isBottom() const
 
 void BarLine::draw(Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     using namespace mu::draw;
     switch (barLineType()) {
     case BarLineType::NORMAL: {

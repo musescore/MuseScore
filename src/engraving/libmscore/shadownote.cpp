@@ -109,7 +109,7 @@ bool ShadowNote::computeUp() const
 
 void ShadowNote::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     using namespace mu::draw;
     if (!visible() || !isValid()) {
         return;

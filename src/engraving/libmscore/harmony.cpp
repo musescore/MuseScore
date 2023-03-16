@@ -1541,7 +1541,7 @@ PointF Harmony::calculateBoundingRect()
 
 void Harmony::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     using namespace mu::draw;
     // painter->setPen(curColor());
     if (textList.empty()) {

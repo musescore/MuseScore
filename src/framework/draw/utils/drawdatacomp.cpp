@@ -617,7 +617,7 @@ static void fillDrawData(DrawDataPtr& dd, const comp::Data& cd)
         DrawData::Item dobj;
         dobj.name = o->name;
 
-        auto findOrCreateDData = [](DrawData::Item& dobj, const DrawData::State& state) {
+        auto findOrCreateDData = [](DrawData::Item& dobj, int state) {
             DrawData::Data* ddata = nullptr;
 
             // find by state
@@ -685,11 +685,13 @@ Diff DrawDataComp::compare(const DrawDataPtr& data, const DrawDataPtr& origin, T
     diff.dataAdded = std::make_shared<DrawData>();
     diff.dataAdded->name = origin->name;
     diff.dataAdded->viewport = origin->viewport;
+    diff.dataAdded->states = origin->states;
     fillDrawData(diff.dataAdded, added);
 
     diff.dataRemoved = std::make_shared<DrawData>();
     diff.dataRemoved->name = origin->name;
     diff.dataRemoved->viewport = origin->viewport;
+    diff.dataRemoved->states = origin->states;
     fillDrawData(diff.dataRemoved, removed);
 
     return diff;

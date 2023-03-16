@@ -91,7 +91,7 @@ void Page::appendSystem(System* s)
 
 void Page::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     if (!score()->isLayoutMode(LayoutMode::PAGE)) {
         return;
     }

@@ -264,7 +264,7 @@ void Bend::layout()
 
 void Bend::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     using namespace mu::draw;
     double _spatium = spatium();
     double _lw = _lineWidth;

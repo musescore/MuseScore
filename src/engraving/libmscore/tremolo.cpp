@@ -114,7 +114,7 @@ double Tremolo::minHeight() const
 
 void Tremolo::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     using namespace mu::draw;
     if (isBuzzRoll()) {
         painter->setPen(curColor());

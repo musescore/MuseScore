@@ -390,21 +390,7 @@ static void fromArr(const JsonArray& arr, std::vector<T>& vals)
     }
 }
 
-static void collectStates(std::vector<DrawData::State>& states, const DrawData::Item& obj)
-{
-    for (const DrawData::Data& data : obj.datas) {
-        if (mu::contains(states, data.state)) {
-            continue;
-        }
-        states.push_back(data.state);
-    }
-
-    for (const DrawData::Item& ch : obj.chilren) {
-        collectStates(states, ch);
-    }
-}
-
-static JsonObject toObj(const DrawData::Item& obj, const std::vector<DrawData::State>& states)
+static JsonObject toObj(const DrawData::Item& obj)
 {
     //! NOTE 'a' added to the beginning of some field names for convenient sorting
 
@@ -413,7 +399,7 @@ static JsonObject toObj(const DrawData::Item& obj, const std::vector<DrawData::S
 
     JsonArray childrenArr;
     for (const DrawData::Item& ch : obj.chilren) {
-        childrenArr.append(toObj(ch, states));
+        childrenArr.append(toObj(ch));
     }
     objObj["children"] = childrenArr;
 
@@ -424,7 +410,7 @@ static JsonObject toObj(const DrawData::Item& obj, const std::vector<DrawData::S
         }
 
         JsonObject dataObj;
-        dataObj["state"] = static_cast<int>(mu::indexOf(states, data.state));
+        dataObj["state"] = data.state;
         if (!data.paths.empty()) {
             dataObj["paths"] = toArr(data.paths);
         }
@@ -445,21 +431,21 @@ static JsonObject toObj(const DrawData::Item& obj, const std::vector<DrawData::S
     return objObj;
 }
 
-static void fromObj(const JsonObject& objObj, DrawData::Item& obj, const std::map<int, DrawData::State>& states)
+static void fromObj(const JsonObject& objObj, DrawData::Item& obj)
 {
     obj.name = objObj.value("a_name").toString().toStdString();
     JsonArray childrenArr = objObj["children"].toArray();
     for (size_t j = 0; j < childrenArr.size(); ++j) {
         DrawData::Item& ch = obj.chilren.emplace_back();
         const JsonObject childObj = childrenArr.at(j).toObject();
-        fromObj(childObj, ch, states);
+        fromObj(childObj, ch);
     }
 
     JsonArray datasArr = objObj["datas"].toArray();
     for (size_t j = 0; j < datasArr.size(); ++j) {
         const JsonObject dataObj = datasArr.at(j).toObject();
         DrawData::Data data;
-        data.state = states.at(dataObj["state"].toInt());
+        data.state = dataObj["state"].toInt();
         if (dataObj.contains("paths")) {
             fromArr(dataObj.value("paths").toArray(), data.paths);
         }
@@ -484,24 +470,19 @@ void DrawDataJson::toJson(JsonObject& root, const DrawDataPtr& dd)
     root["a_name"] = dd->name;
     root["a_viewport"] = toArr(dd->viewport);
 
-    std::vector<DrawData::State> states;
-    // collect states
-    collectStates(states, dd->item);
-
     // item
-    root["item"] = toObj(dd->item, states);
+    root["item"] = toObj(dd->item);
 
     // states
     JsonObject stateObj;
-    for (size_t i = 0; i < states.size(); ++i) {
-        stateObj[std::to_string(i)] = toObj(states.at(i));
+    for (auto it = dd->states.cbegin(); it != dd->states.cend(); ++it) {
+        stateObj[std::to_string(it->first)] = toObj(it->second);
     }
     root["states"] = stateObj;
 }
 
 void DrawDataJson::fromJson(const JsonObject& root, DrawDataPtr& dd)
 {
-    std::map<int, DrawData::State> states;
     // read states
     {
         const JsonObject obj = root.value("states").toObject();
@@ -509,7 +490,7 @@ void DrawDataJson::fromJson(const JsonObject& root, DrawDataPtr& dd)
         for (const std::string& k : keys) {
             DrawData::State state;
             fromObj(obj.value(k).toObject(), state);
-            states[std::stoi(k)] = state;
+            dd->states[std::stoi(k)] = state;
         }
     }
 
@@ -517,7 +498,7 @@ void DrawDataJson::fromJson(const JsonObject& root, DrawDataPtr& dd)
     fromArr(root.value("a_viewport").toArray(), dd->viewport);
 
     JsonObject itemObj = root.value("item").toObject();
-    fromObj(itemObj, dd->item, states);
+    fromObj(itemObj, dd->item);
 }
 
 ByteArray DrawDataJson::toJson(const DrawDataPtr& data, bool prettify)
