@@ -28,9 +28,15 @@ import MuseScore.UiComponents 1.0
 StyledPopupView {
     id: root
 
+    enum ToolTipType {
+        Default,
+        FileToolTip
+    }
+
     property alias title: titleLabel.text
     property alias description: descriptionLabel.text
     property string shortcut: ""
+    property int toolTipType: StyledToolTip.Default
 
     padding: 8
     margins: 8
@@ -60,10 +66,10 @@ StyledPopupView {
                 id: titleLabel
                 Layout.fillWidth: true
 
-                font: ui.theme.bodyBoldFont
+                font: if (toolTipType === Default) ui.theme.bodyBoldFont
                 horizontalAlignment: Text.AlignLeft
                 wrapMode: Text.Wrap
-                maximumLineCount: 3
+                maximumLineCount: if (toolTipType === Default) 3
             }
 
             StyledTextLabel {

@@ -33,7 +33,7 @@ FocusScope {
     property string suffix: ""
     property alias timeSinceModified: timeSinceModified.text
     property var thumbnail: null
-    property var path: null
+    property string path: ""
     property bool isAdd: false
     property bool isNoResultFound: false
     property bool isCloud: false
@@ -332,7 +332,7 @@ FocusScope {
             }
 
             if (containsMouse) {
-                ui.tooltip.show(timeSinceModified, root.path)
+                ui.tooltip.show(timeSinceModified, root.path, "", "", StyledToolTip.FileToolTip)
             } else {
                 ui.tooltip.hide(timeSinceModified)
             }

@@ -23,7 +23,9 @@
 
 #include <QGuiApplication>
 
-static constexpr int INTERVAL = 500;
+static constexpr int DEFAULT_INTERVAL = 500;
+static constexpr int FILETOOLTIP_INTERVAL = 1000;
+
 
 using namespace mu::ui;
 
@@ -38,7 +40,7 @@ QmlToolTip::QmlToolTip(QObject* parent)
     qApp->installEventFilter(this);
 }
 
-void QmlToolTip::show(QQuickItem* item, const QString& title, const QString& description, const QString& shortcut)
+void QmlToolTip::show(QQuickItem* item, const QString& title, const QString& description, const QString& shortcut, const ToolTipType& toolTipType)
 {
     if (item == m_item) {
         m_closeTimer.stop();
@@ -48,6 +50,7 @@ void QmlToolTip::show(QQuickItem* item, const QString& title, const QString& des
     m_title = title;
     m_description = description;
     m_shortcut = shortcut;
+    m_toolTipType = toolTipType;
 
     bool toolTipNotOpened = m_item == nullptr;
     bool openTimerStarted = m_openTimer.isActive();
@@ -58,7 +61,7 @@ void QmlToolTip::show(QQuickItem* item, const QString& title, const QString& des
     if (toolTipNotOpened || openTimerStarted) {
         connect(m_item, &QObject::destroyed, this, &QmlToolTip::doHide);
 
-        m_openTimer.start(INTERVAL);
+        m_openTimer.start(m_toolTipType == Default ? DEFAULT_INTERVAL : FILETOOLTIP_INTERVAL);
     } else {
         doShow();
     }
@@ -77,7 +80,7 @@ void QmlToolTip::hide(QQuickItem* item, bool force)
         return;
     }
 
-    m_closeTimer.start(INTERVAL);
+    m_closeTimer.start(m_toolTipType == Default ? DEFAULT_INTERVAL : FILETOOLTIP_INTERVAL);
 }
 
 void QmlToolTip::doShow()
@@ -95,7 +98,7 @@ void QmlToolTip::doShow()
         return;
     }
 
-    emit showToolTip(m_item, m_title, m_description, m_shortcut);
+    emit showToolTip(m_item, m_title, m_description, m_shortcut, m_toolTipType);
 }
 
 void QmlToolTip::doHide()
@@ -115,6 +118,7 @@ void QmlToolTip::doHide()
     m_title = QString();
     m_description = QString();
     m_shortcut = QString();
+    m_toolTipType = Default;
 
     emit hideToolTip();
 }

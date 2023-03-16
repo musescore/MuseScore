@@ -57,10 +57,10 @@ Item {
             toolTipLoader.active = false
         }
 
-        function open(parent, title, description, shortcut) {
+        function open(parent, title, description, shortcut, toolTipType) {
             loadToolTip()
 
-            update(parent, title, description, shortcut)
+            update(parent, title, description, shortcut, toolTipType)
 
             var toolTip = toolTipLoader.item
             toolTip.open()
@@ -75,7 +75,7 @@ Item {
             toolTip.close()
         }
 
-        function update(parent, title, description, shortcut) {
+        function update(parent, title, description, shortcut, toolTipType) {
             var toolTip = toolTipLoader.item
             if (!Boolean(toolTip)) {
                 return
@@ -85,6 +85,7 @@ Item {
             toolTip.title = title
             toolTip.description = description
             toolTip.shortcut = shortcut
+            toolTip.toolTipType = toolTipType
 
             toolTip.calculateSize()
         }
@@ -93,8 +94,8 @@ Item {
     Connections {
         target: root.provider
 
-        function onShowToolTip(parent, title, description, shortcut) {
-            toolTipLoader.open(parent, title, description, shortcut)
+        function onShowToolTip(parent, title, description, shortcut, toolTipType) {
+            toolTipLoader.open(parent, title, description, shortcut, toolTipType)
         }
 
         function onHideToolTip() {
