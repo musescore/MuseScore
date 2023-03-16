@@ -95,7 +95,7 @@ void UpdateScenario::doCheckForUpdate(bool manual)
             m_progress = false;
         };
 
-        // Force to check for update locally
+        // Force to check for update (hacky!)
         showReleaseInfo(releaseInfoFromValMap(res.val.toMap()));
         return;
 

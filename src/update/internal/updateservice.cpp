@@ -36,8 +36,6 @@
 #include "translation.h"
 #include "log.h"
 
-#include <fstream>
-
 using namespace mu::update;
 using namespace mu::network;
 using namespace mu::framework;
@@ -158,6 +156,7 @@ mu::RetVal<ReleaseInfo> UpdateService::parseRelease(const QByteArray& json) cons
     // Replacing notes body with update_notes contents
     const io::path_t updateNotesPath = globalConfiguration()->appDataPath() + "update/update_notes.txt";
     const RetVal<ByteArray> notesBytes = fileSystem()->readFile(updateNotesPath);
+
     if (!notesBytes.ret) {
         result.val.notes
             = "(ERROR: This is the fallback, which should have been replaced by update_notes.txt. See error log.)\n";

@@ -96,8 +96,7 @@ void UpdateConfiguration::setSkippedReleaseVersion(const std::string& version) c
 
 std::string UpdateConfiguration::checkForUpdateUrl() const
 {
-    return !isTestingMode() ? "https://updates.musescore.org/feed/latest.xml"
-           : "https://updates.musescore.org/feed/latest.test.xml";
+    return !isTestingMode() ? "https://updates.musescore.org/feed/latest.xml" : "https://updates.musescore.org/feed/latest.test.xml";
 }
 
 mu::network::RequestHeaders UpdateConfiguration::checkForUpdateHeaders() const
