@@ -28,7 +28,6 @@
           <name>stdNormal</name>
           </StaffType>
         <bracket type="0" span="1" col="0"/>
-        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Backing
 Vocals</trackName>
@@ -121,6 +120,7 @@ Vocals</longName>
           <showTabFingering>1</showTabFingering>
           <useNumbers>1</useNumbers>
           </StaffType>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Electric
 Guitar 1</trackName>
@@ -248,6 +248,7 @@ Gtr. 1</shortName>
           <showTabFingering>1</showTabFingering>
           <useNumbers>1</useNumbers>
           </StaffType>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Electric
 Guitar 2</trackName>
@@ -554,7 +555,6 @@ Gtr.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>0</span>
             </BarLine>
           </voice>
         </Measure>
@@ -576,7 +576,6 @@ Gtr.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>

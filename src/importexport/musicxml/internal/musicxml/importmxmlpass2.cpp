@@ -1608,6 +1608,53 @@ Err MusicXMLParserPass2::parse()
 }
 
 //---------------------------------------------------------
+//   createBarline
+//---------------------------------------------------------
+
+/*
+ * Create a barline of the specified type.
+ */
+
+static std::unique_ptr<BarLine> createBarline(Score* score, const track_idx_t track, const BarLineType type, const bool visible,
+                                              const QString& barStyle, int spanStaff)
+{
+    std::unique_ptr<BarLine> barline(Factory::createBarLine(score->dummy()->segment()));
+    barline->setTrack(track);
+    barline->setBarLineType(type);
+    barline->setSpanStaff(spanStaff);
+    barline->setVisible(visible);
+    if (barStyle == "tick") {
+        barline->setSpanFrom(BARLINE_SPAN_TICK1_FROM);
+        barline->setSpanTo(BARLINE_SPAN_TICK1_TO);
+    } else if (barStyle == "short") {
+        barline->setSpanFrom(BARLINE_SPAN_SHORT1_FROM);
+        barline->setSpanTo(BARLINE_SPAN_SHORT1_TO);
+    }
+    return barline;
+}
+
+//---------------------------------------------------------
+//   addBarlineToMeasure
+//---------------------------------------------------------
+
+/*
+ * Add barline to the measure at tick.
+ */
+
+static void addBarlineToMeasure(Measure* measure, const Fraction tick, std::unique_ptr<BarLine> barline)
+{
+    auto st = SegmentType::BarLine;
+    if (tick == measure->endTick()) {
+        st = SegmentType::EndBarLine;
+    } else if (tick == measure->tick()) {
+        st = SegmentType::BeginBarLine;
+    }
+    const auto segment = measure->getSegment(st, tick);
+    barline->layout();
+    segment->add(barline.release());
+}
+
+//---------------------------------------------------------
 //   scorePartwise
 //---------------------------------------------------------
 
@@ -1627,10 +1674,14 @@ void MusicXMLParserPass2::scorePartwise()
         }
     }
     // set last measure barline to normal or MuseScore will generate light-heavy EndBarline
+    // this creates non-generated barlines spanning only the current instrument
+    // BarLine::_spanStaff is set using the default in Staff::_barLineSpan
     auto lm = _score->lastMeasure();
     if (lm && lm->endBarLineType() == BarLineType::NORMAL) {
-        for (staff_idx_t staff = 0; staff < _score->nstaves(); ++staff) {
-            lm->setEndBarLineType(BarLineType::NORMAL, staff * VOICES);
+        for (staff_idx_t staffidx = 0; staffidx < _score->nstaves(); ++staffidx) {
+            auto staff = _score->staff(staffidx);
+            auto b = createBarline(_score, staffidx * VOICES, BarLineType::NORMAL, true, "", staff->barLineSpan());
+            addBarlineToMeasure(lm, lm->endTick(), std::move(b));
         }
     }
 
@@ -3419,53 +3470,6 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
 }
 
 //---------------------------------------------------------
-//   createBarline
-//---------------------------------------------------------
-
-/*
- * Create a barline of the specified type.
- */
-
-static std::unique_ptr<BarLine> createBarline(Score* score, const track_idx_t track, const BarLineType type, const bool visible,
-                                              const QString& barStyle)
-{
-    std::unique_ptr<BarLine> barline(Factory::createBarLine(score->dummy()->segment()));
-    barline->setTrack(track);
-    barline->setBarLineType(type);
-    barline->setSpanStaff(0);
-    barline->setVisible(visible);
-    if (barStyle == "tick") {
-        barline->setSpanFrom(BARLINE_SPAN_TICK1_FROM);
-        barline->setSpanTo(BARLINE_SPAN_TICK1_TO);
-    } else if (barStyle == "short") {
-        barline->setSpanFrom(BARLINE_SPAN_SHORT1_FROM);
-        barline->setSpanTo(BARLINE_SPAN_SHORT1_TO);
-    }
-    return barline;
-}
-
-//---------------------------------------------------------
-//   addBarlineToMeasure
-//---------------------------------------------------------
-
-/*
- * Add barline to the measure at tick.
- */
-
-static void addBarlineToMeasure(Measure* measure, const Fraction tick, std::unique_ptr<BarLine> barline)
-{
-    auto st = SegmentType::BarLine;
-    if (tick == measure->endTick()) {
-        st = SegmentType::EndBarLine;
-    } else if (tick == measure->tick()) {
-        st = SegmentType::BeginBarLine;
-    }
-    const auto segment = measure->getSegment(st, tick);
-    barline->layout();
-    segment->add(barline.release());
-}
-
-//---------------------------------------------------------
 //   barline
 //---------------------------------------------------------
 
@@ -3533,17 +3537,19 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
         } else if (type == BarLineType::END_REPEAT) {
             // combine end_repeat flag with current state initialized during measure parsing
             measure->setRepeatEnd(true);
-        } else if (type == BarLineType::END) {
-            measure->setEndBarLineType(type, track, visible);
         } else {
-            if (barStyle == "tick"
+            if (barStyle == ""
+                || barStyle == "tick"
                 || barStyle == "short"
                 || barStyle == "none"
                 || barStyle == "dashed"
                 || barStyle == "dotted"
                 || barStyle == "light-light"
+                || barStyle == "light-heavy"
                 || (barStyle == "regular" && !(loc == "left" || loc == "right"))) {
-                auto b = createBarline(measure->score(), track, type, visible, barStyle);
+                auto score = measure->score();
+                auto staff = score->staff(track / VOICES);
+                auto b = createBarline(score, track, type, visible, barStyle, staff->barLineSpan());
                 addBarlineToMeasure(measure, tick, std::move(b));
             }
         }
