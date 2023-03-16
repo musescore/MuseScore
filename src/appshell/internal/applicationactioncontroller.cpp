@@ -149,7 +149,6 @@ bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
     return QObject::eventFilter(watched, event);
 }
 
-
 bool ApplicationActionController::quit(bool isAllInstances, const io::path_t& installerPath)
 {
     if (m_quiting) {

@@ -27,12 +27,14 @@
 #include "modularity/ioc.h"
 #include "context/iuicontextresolver.h"
 #include "async/asyncable.h"
+#include "ui/imainwindow.h"
 
 #include "view/dockwindow/idockwindowprovider.h"
 
 namespace mu::appshell {
 class ApplicationUiActions : public ui::IUiActionsModule, public async::Asyncable
 {
+    INJECT(appshell, ui::IMainWindow, mainWindow)
     INJECT(appshell, dock::IDockWindowProvider, dockWindowProvider)
     INJECT(appshell, IAppShellConfiguration, configuration)
 

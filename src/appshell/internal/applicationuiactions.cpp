@@ -25,6 +25,7 @@
 #include "context/uicontext.h"
 
 #include "view/dockwindow/idockwindow.h"
+#include "async/notification.h"
 
 #include "log.h"
 
@@ -33,6 +34,7 @@ using namespace mu::ui;
 using namespace mu::actions;
 using namespace mu::dock;
 
+static const ActionCode FULL_SCREEN_CODE("fullscreen");
 const ActionCode TOGGLE_NAVIGATOR_ACTION_CODE("toggle-navigator");
 
 const UiActionList ApplicationUiActions::m_actions = {
@@ -47,7 +49,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "Restart")
              ),
-    UiAction("fullscreen",
+    UiAction(FULL_SCREEN_CODE,
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Full screen"),
@@ -204,6 +206,10 @@ ApplicationUiActions::ApplicationUiActions(std::shared_ptr<ApplicationActionCont
 
 void ApplicationUiActions::init()
 {
+    mainWindow()->isFullScreenChanged().onNotify(this, [this]() {
+        m_actionCheckedChanged.send({ FULL_SCREEN_CODE });
+    });
+
     configuration()->isNotationNavigatorVisibleChanged().onNotify(this, [this]() {
         m_actionCheckedChanged.send({ TOGGLE_NAVIGATOR_ACTION_CODE });
     });
@@ -252,6 +258,10 @@ bool ApplicationUiActions::actionEnabled(const UiAction& act) const
 
 bool ApplicationUiActions::actionChecked(const UiAction& act) const
 {
+    if (act.code == FULL_SCREEN_CODE) {
+        return mainWindow()->isFullScreen();
+    }
+
     QMap<ActionCode, DockName> toggleDockActions = ApplicationUiActions::toggleDockActions();
     DockName dockName = toggleDockActions.value(act.code, DockName());
 

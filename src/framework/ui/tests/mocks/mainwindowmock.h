@@ -25,6 +25,7 @@
 #include <gmock/gmock.h>
 
 #include "framework/ui/imainwindow.h"
+#include "async/notification.h"
 
 namespace mu::ui {
 class MainWindowMock : public IMainWindow
@@ -39,6 +40,8 @@ public:
     MOCK_METHOD(void, requestShowOnFront, (), (override));
 
     MOCK_METHOD(bool, isFullScreen, (), (const, override));
+    MOCK_METHOD(async::Notification, isFullScreenChanged, (), (const, override));
+
     MOCK_METHOD(void, toggleFullScreen, (), (override));
     MOCK_METHOD(QScreen*, screen, (), (const, override));
 };
