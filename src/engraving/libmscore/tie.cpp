@@ -70,7 +70,7 @@ TieSegment::TieSegment(const TieSegment& s)
 
 void TieSegment::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     using namespace mu::draw;
     // hide tie toward the second chord of a cross-measure value
     if (tie()->endNote() && tie()->endNote()->chord()->crossMeasure() == CrossMeasure::SECOND) {

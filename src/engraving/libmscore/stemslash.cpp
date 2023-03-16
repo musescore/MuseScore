@@ -45,7 +45,7 @@ StemSlash::StemSlash(Chord* parent)
 
 void StemSlash::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     using namespace mu::draw;
     painter->setPen(Pen(curColor(), _width, PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->drawLine(line);

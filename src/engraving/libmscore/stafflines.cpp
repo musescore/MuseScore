@@ -190,7 +190,7 @@ void StaffLines::layoutPartialWidth(double w, double wPartial, bool alignRight)
 
 void StaffLines::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     using namespace mu::draw;
     painter->setPen(Pen(curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->drawLines(lines);

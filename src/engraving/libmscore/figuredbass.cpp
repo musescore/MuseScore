@@ -623,7 +623,7 @@ void FiguredBassItem::layout()
 
 void FiguredBassItem::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     using namespace mu::draw;
     int font = 0;
     double _spatium = spatium();

@@ -157,7 +157,7 @@ TranslatableString Fermata::typeUserName() const
 
 void Fermata::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     painter->setPen(curColor());
     drawSymbol(_symId, painter, PointF(-0.5 * width(), 0.0));
 }

@@ -55,7 +55,7 @@ void Hook::layout()
 
 void Hook::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     // hide if belonging to the second chord of a cross-measure pair
     if (chord() && chord()->crossMeasure() == CrossMeasure::SECOND) {
         return;

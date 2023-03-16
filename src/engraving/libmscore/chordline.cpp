@@ -281,7 +281,7 @@ void ChordLine::write(XmlWriter& xml) const
 
 void ChordLine::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     if (!_wavy) {
         painter->setPen(Pen(curColor(), score()->styleMM(Sid::chordlineThickness) * mag(), PenStyle::SolidLine));
         painter->setBrush(BrushStyle::NoBrush);

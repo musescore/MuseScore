@@ -48,7 +48,7 @@ VibratoSegment::VibratoSegment(Vibrato* sp, System* parent)
 
 void VibratoSegment::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     painter->setPen(spanner()->curColor());
     drawSymbols(_symbols, painter);
 }

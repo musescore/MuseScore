@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "types/retval.h"
 
 #include "abstractaudiosource.h"
 #include "mixerchannel.h"

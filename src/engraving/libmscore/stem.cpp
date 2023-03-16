@@ -149,7 +149,7 @@ PointF Stem::flagPosition() const
 
 void Stem::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     if (!chord()) { // may be need assert?
         return;
     }

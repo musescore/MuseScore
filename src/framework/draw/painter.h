@@ -268,33 +268,41 @@ inline void Painter::drawText(int x, int y, const String& text)
     drawText(PointF(x, y), text);
 }
 
-class PainterObjMarker
+class PainterItemMarker
 {
 public:
-    PainterObjMarker(Painter* p, const std::string& name)
+    PainterItemMarker(Painter* p, const std::string& name)
         : m_painter(p)
     {
+        if (!enabled) {
+            return;
+        }
         p->beginObject(name);
     }
 
-    ~PainterObjMarker()
+    ~PainterItemMarker()
     {
+        if (!enabled) {
+            return;
+        }
         m_painter->endObject();
     }
+
+    static bool enabled;
 
 private:
     Painter* m_painter = nullptr;
 };
 
 #ifdef MUE_ENABLE_DRAW_TRACE
-    #define TRACE_OBJ_DRAW \
-    mu::draw::PainterObjMarker __drawObjMarker(painter, typeName())
+    #define TRACE_ITEM_DRAW \
+    mu::draw::PainterItemMarker __drawItemMarker(painter, typeName())
 
-    #define TRACE_OBJ_DRAW_C(painter, objName) \
-    mu::draw::PainterObjMarker __drawObjMarker(painter, objName)
+    #define TRACE_ITEM_DRAW_C(painter, itemName) \
+    mu::draw::PainterItemMarker __drawItemMarker(painter, itemName)
 #else
-    #define TRACE_OBJ_DRAW
-    #define TRACE_OBJ_DRAW_C(painter, objName)
+    #define TRACE_ITEM_DRAW
+    #define TRACE_ITEM_DRAW_C(painter, objName)
 #endif
 }
 

@@ -92,7 +92,7 @@ void HBox::computeMinWidth()
 
 void Box::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     if (score() && score()->printing()) {
         return;
     }

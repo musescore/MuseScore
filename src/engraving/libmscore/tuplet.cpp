@@ -726,7 +726,7 @@ bool Tuplet::calcHasBracket(const DurationElement* cr1, const DurationElement* c
 
 void Tuplet::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     using namespace mu::draw;
     // if in a TAB without stems, tuplets are not shown
     const StaffType* stt = staffType();

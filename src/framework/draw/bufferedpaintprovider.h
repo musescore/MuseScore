@@ -97,8 +97,8 @@ public:
 
 private:
 
-    const DrawData::Item& currentObject() const;
-    DrawData::Item& editableObject();
+    const DrawData::Item& currentItem() const;
+    DrawData::Item& editableItem();
 
     const DrawData::Data& currentData() const;
     DrawData::Data& editableData();
@@ -106,9 +106,12 @@ private:
     const DrawData::State& currentState() const;
     DrawData::State& editableState();
 
+    void ensureItemInit(DrawData::Item& item) const;
+
     DrawDataPtr m_buf = nullptr;
-    int m_pageNo = 0;
     int m_itemLevel = -1;
+    bool m_stateIsUsed = false;
+    int m_currentStateNo = 0;
     bool m_isActive = false;
     DrawObjectsLogger* m_drawObjectsLogger = nullptr;
 };

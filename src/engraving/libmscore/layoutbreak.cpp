@@ -129,7 +129,7 @@ void LayoutBreak::read(XmlReader& e)
 
 void LayoutBreak::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     using namespace mu::draw;
     if (score()->printing() || !score()->showUnprintable()) {
         return;

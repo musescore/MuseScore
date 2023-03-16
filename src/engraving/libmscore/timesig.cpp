@@ -386,7 +386,7 @@ void TimeSig::layout()
 
 void TimeSig::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     if (staff() && !const_cast<const Staff*>(staff())->staffType(tick())->genTimesig()) {
         return;
     }

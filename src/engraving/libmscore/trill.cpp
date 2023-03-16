@@ -65,7 +65,7 @@ TrillSegment::TrillSegment(System* parent)
 
 void TrillSegment::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     painter->setPen(spanner()->curColor());
     drawSymbols(_symbols, painter);
 }
