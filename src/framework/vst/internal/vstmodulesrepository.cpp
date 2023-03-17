@@ -31,9 +31,6 @@
 using namespace mu;
 using namespace mu::vst;
 
-//@see https://developer.steinberg.help/pages/viewpage.action?pageId=9798275
-static const std::string VST3_PACKAGE_EXTENSION = "*.vst3";
-
 void VstModulesRepository::init()
 {
     ONLY_MAIN_THREAD(threadSecurer);
@@ -195,7 +192,7 @@ io::paths_t VstModulesRepository::pluginPathsFromCustomLocations(const io::paths
     io::paths_t result;
 
     for (const io::path_t& path : customPaths) {
-        RetVal<io::paths_t> paths = fileSystem()->scanFiles(path, { VST3_PACKAGE_EXTENSION });
+        RetVal<io::paths_t> paths = fileSystem()->scanFiles(path, { VST3_PACKAGE_FILTER });
         if (!paths.ret) {
             LOGW() << paths.ret.toString();
             continue;

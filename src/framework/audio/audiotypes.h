@@ -33,6 +33,7 @@
 #include "mpe/events.h"
 #include "io/iodevice.h"
 #include "async/channel.h"
+#include "io/path.h"
 
 namespace mu::audio {
 using msecs_t = int64_t;
@@ -94,6 +95,9 @@ using AudioResourceVendor = std::string;
 using AudioResourceAttributes = std::map<String, String>;
 using AudioUnitConfig = std::map<std::string, std::string>;
 
+static const String PLAYBACK_SETUP_DATA_ATTRIBUTE("playbackSetupData");
+static const String CATEGORIES_ATTRIBUTE("categories");
+
 enum class AudioResourceType {
     Undefined = -1,
     FluidSoundfont,
@@ -151,6 +155,36 @@ struct AudioResourceMeta {
 
 using AudioResourceMetaList = std::vector<AudioResourceMeta>;
 using AudioResourceMetaSet = std::set<AudioResourceMeta>;
+
+enum class AudioPluginType {
+    Undefined = -1,
+    Instrument,
+    Fx,
+};
+
+struct AudioPluginInfo {
+    AudioPluginType type = AudioPluginType::Undefined;
+    AudioResourceMeta meta;
+    io::path_t path;
+    bool enabled = false;
+    int errorCode = 0;
+};
+
+inline AudioPluginType audioPluginTypeFromCategoriesString(const std::string& categoriesStr)
+{
+    static const std::map<std::string, AudioPluginType> STRING_TO_PLUGIN_TYPE_MAP = {
+        { "Fx", AudioPluginType::Fx },
+        { "Instrument", AudioPluginType::Instrument },
+    };
+
+    for (auto it = STRING_TO_PLUGIN_TYPE_MAP.cbegin(); it != STRING_TO_PLUGIN_TYPE_MAP.cend(); ++it) {
+        if (categoriesStr.find(it->first) != std::string::npos) {
+            return it->second;
+        }
+    }
+
+    return AudioPluginType::Undefined;
+}
 
 enum class AudioFxType {
     Undefined = -1,

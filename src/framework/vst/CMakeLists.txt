@@ -53,6 +53,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstmodulesmetaregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstpluginprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstpluginprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/vstpluginsscanner.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/vstpluginsscanner.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/vstpluginmetareader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/vstpluginmetareader.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/synth/vstsynthesiser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/synth/vstsynthesiser.h

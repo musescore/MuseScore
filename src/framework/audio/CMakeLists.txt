@@ -85,6 +85,11 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
+    ${CMAKE_CURRENT_LIST_DIR}/iknownaudiopluginsregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudiopluginsscanner.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudiopluginsscannerregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudiopluginmetareader.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudiopluginmetareaderregister.h
 
     # Common internal
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.cpp
@@ -104,6 +109,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstractsynthesizer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstractsynthesizer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstracteventsequencer.h
+
+    # Plugins
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/knownaudiopluginsregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/knownaudiopluginsregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/audiopluginsscannerregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/audiopluginsscannerregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/audiopluginmetareaderregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/audiopluginmetareaderregister.h
 
     # Driver
     ${DRIVER_SRC}
@@ -229,7 +242,8 @@ endif()
 
 if (OS_IS_MAC)
     find_library(AudioToolbox NAMES AudioToolbox)
-    set(MODULE_LINK ${MODULE_LINK} ${AudioToolbox})
+    find_library(CoreAudio NAMES CoreAudio)
+    set(MODULE_LINK ${MODULE_LINK} ${AudioToolbox} ${CoreAudio})
 elseif (OS_IS_WIN)
     set(MODULE_LINK ${MODULE_LINK} winmm mmdevapi mfplat)
 elseif (OS_IS_LIN)
@@ -243,3 +257,7 @@ set(MODULE_QRC audio.qrc)
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+
+if (MUE_BUILD_UNIT_TESTS)
+    add_subdirectory(tests)
+endif()

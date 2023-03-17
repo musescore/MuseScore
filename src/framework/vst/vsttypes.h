@@ -75,6 +75,10 @@ using BusMediaType = Steinberg::Vst::MediaTypes;
 using PluginMidiMappingPtr = Steinberg::IPtr<Steinberg::Vst::IMidiMapping>;
 using ParamsMapping = std::unordered_map<ControllIdx, PluginParamId>;
 
+//@see https://developer.steinberg.help/pages/viewpage.action?pageId=9798275
+static const std::string VST3_PACKAGE_EXTENSION = "vst3";
+static const std::string VST3_PACKAGE_FILTER = "*." + VST3_PACKAGE_EXTENSION;
+
 enum class VstPluginType {
     Undefined,
     Instrument,
