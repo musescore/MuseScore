@@ -23,6 +23,7 @@
 #define MU_NOTATION_INOTATIONCONFIGURATION_H
 
 #include <QColor>
+#include <optional>
 
 #include "modularity/imoduleexport.h"
 #include "async/channel.h"

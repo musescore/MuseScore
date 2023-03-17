@@ -38,6 +38,7 @@ public:
 
     virtual Ret registerNewPlugins() = 0;
     virtual Ret registerPlugin(const io::path_t& pluginPath) = 0;
+    virtual Ret registerFailedPlugin(const io::path_t& pluginPath, int failCode) = 0;
 };
 }
 

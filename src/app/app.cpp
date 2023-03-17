@@ -300,14 +300,11 @@ int App::run(int argc, char** argv)
 #endif // MUE_BUILD_APPSHELL_MODULE
     } break;
     case framework::IApplication::RunMode::AudioPluginRegistration: {
-        io::path_t pluginPath = commandLineParser.audioPluginPath();
+        CommandLineParser::AudioPluginRegistration pluginRegistration = commandLineParser.audioPluginRegistration();
 
-        QMetaObject::invokeMethod(qApp, [this, pluginPath]() {
-                Ret ret = registerAudioPluginsScenario()->registerPlugin(pluginPath);
-                if (!ret) {
-                    LOGE() << ret.toString();
-                }
-                qApp->exit(ret.code());
+        QMetaObject::invokeMethod(qApp, [this, pluginRegistration]() {
+                int code = processAudioPluginRegistration(pluginRegistration);
+                qApp->exit(code);
             }, Qt::QueuedConnection);
     } break;
     }
@@ -518,6 +515,19 @@ int App::processDiagnostic(const CommandLineParser::Diagnostic& task)
 
     if (!ret) {
         LOGE() << "diagnostic ret: " << ret.toString();
+    }
+
+    return ret.code();
+}
+
+int App::processAudioPluginRegistration(const CommandLineParser::AudioPluginRegistration& task)
+{
+    Ret ret = make_ret(Ret::Code::Ok);
+
+    if (task.failedPlugin) {
+        ret = registerAudioPluginsScenario()->registerFailedPlugin(task.pluginPath, task.failCode);
+    } else {
+        ret = registerAudioPluginsScenario()->registerPlugin(task.pluginPath);
     }
 
     return ret.code();

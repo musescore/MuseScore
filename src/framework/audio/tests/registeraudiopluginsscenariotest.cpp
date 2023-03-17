@@ -158,16 +158,17 @@ TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterNewPlugins)
             // Incompatible plugin detected
             EXPECT_CALL(*m_process, execute(m_appPath, args))
             .WillOnce(Return(-1));
+
+            args = { "--register-failed-audio-plugin", pluginPath.toStdString(), "--", "-1" };
+
+            EXPECT_CALL(*m_process, execute(m_appPath, args))
+            .WillOnce(Return(0));
         } else {
             // Successfully registered plugins
             EXPECT_CALL(*m_process, execute(m_appPath, args))
             .WillOnce(Return(0));
         }
     }
-
-    // [THEN] The incompatible plugin has been registered
-    EXPECT_CALL(*m_knownPlugins, registerPlugin(incompatiblePluginInfo))
-    .WillOnce(Return(true));
 
     // [THEN] All plugins remain in the register
     EXPECT_CALL(*m_knownPlugins, unregisterPlugin(_)).Times(0);
@@ -212,6 +213,29 @@ TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterPlugin)
     // [WHEN] Register the plugin
     m_scenario->init();
     mu::Ret ret = m_scenario->registerPlugin(pluginPath);
+
+    // [THEN] The plugin successfully registered
+    EXPECT_TRUE(ret);
+}
+
+TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterFailedPlugin)
+{
+    // [GIVEN] Some incompatible plugin we want to register
+    path_t pluginPath = "/some/test/path/to/plugin/AAA.vst3";
+
+    // [THEN] The plugin has been registered
+    AudioPluginInfo expectedPluginInfo;
+    expectedPluginInfo.meta.id = mu::io::filename(pluginPath).toStdString();
+    expectedPluginInfo.path = pluginPath;
+    expectedPluginInfo.enabled = false;
+    expectedPluginInfo.errorCode = -42;
+
+    EXPECT_CALL(*m_knownPlugins, registerPlugin(expectedPluginInfo))
+    .WillOnce(Return(true));
+
+    // [WHEN] Register the incompatible plugin
+    m_scenario->init();
+    mu::Ret ret = m_scenario->registerFailedPlugin(pluginPath, expectedPluginInfo.errorCode);
 
     // [THEN] The plugin successfully registered
     EXPECT_TRUE(ret);

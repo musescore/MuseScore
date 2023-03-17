@@ -32,6 +32,8 @@ using namespace mu::framework;
 
 void RegisterAudioPluginsScenario::init()
 {
+    TRACEFUNC;
+
     m_progress.finished.onReceive(this, [this](const ProgressResult& res) {
         if (res.ret.code() == static_cast<int>(Ret::Code::Cancel)) {
             m_aborted = true;
@@ -55,12 +57,12 @@ mu::Ret RegisterAudioPluginsScenario::registerNewPlugins()
         }
     }
 
-    startPluginsRegistration(newPluginPaths);
+    processPluginsRegistration(newPluginPaths);
 
     return make_ok();
 }
 
-void RegisterAudioPluginsScenario::startPluginsRegistration(const io::paths_t& pluginPaths)
+void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t& pluginPaths)
 {
     if (pluginPaths.empty()) {
         return;
@@ -89,19 +91,12 @@ void RegisterAudioPluginsScenario::startPluginsRegistration(const io::paths_t& p
         qApp->processEvents();
 
         int code = process()->execute(appPath, { "--register-audio-plugin", pluginPathStr });
-        if (code == 0) {
-            continue;
+        if (code != 0) {
+            code = process()->execute(appPath, { "--register-failed-audio-plugin", pluginPathStr, "--", std::to_string(code) });
         }
 
-        AudioPluginInfo info;
-        info.meta.id = io::filename(pluginPath).toStdString();
-        info.path = pluginPath;
-        info.enabled = false;
-        info.errorCode = code;
-
-        Ret ret = knownPluginsRegister()->registerPlugin(info);
-        if (!ret) {
-            LOGE() << ret.toString();
+        if (code != 0) {
+            LOGE() << "Could not register plugin: " << pluginPathStr << "\n error code: " << code;
         }
     }
 
@@ -111,6 +106,10 @@ void RegisterAudioPluginsScenario::startPluginsRegistration(const io::paths_t& p
 mu::Ret RegisterAudioPluginsScenario::registerPlugin(const io::path_t& pluginPath)
 {
     TRACEFUNC;
+
+    IF_ASSERT_FAILED(!pluginPath.empty()) {
+        return false;
+    }
 
     IAudioPluginMetaReaderPtr reader = metaReader(pluginPath);
     if (!reader) {
@@ -128,6 +127,24 @@ mu::Ret RegisterAudioPluginsScenario::registerPlugin(const io::path_t& pluginPat
     info.meta = meta.val;
     info.path = pluginPath;
     info.enabled = true;
+
+    Ret ret = knownPluginsRegister()->registerPlugin(info);
+    return ret;
+}
+
+mu::Ret RegisterAudioPluginsScenario::registerFailedPlugin(const io::path_t& pluginPath, int failCode)
+{
+    TRACEFUNC;
+
+    IF_ASSERT_FAILED(!pluginPath.empty()) {
+        return false;
+    }
+
+    AudioPluginInfo info;
+    info.meta.id = io::filename(pluginPath).toStdString();
+    info.path = pluginPath;
+    info.enabled = false;
+    info.errorCode = failCode;
 
     Ret ret = knownPluginsRegister()->registerPlugin(info);
     return ret;

@@ -76,6 +76,7 @@ private:
     void applyCommandLineOptions(const CommandLineParser::Options& options, framework::IApplication::RunMode runMode);
     int processConverter(const CommandLineParser::ConverterTask& task);
     int processDiagnostic(const CommandLineParser::Diagnostic& task);
+    int processAudioPluginRegistration(const CommandLineParser::AudioPluginRegistration& task);
     void processAutobot(const CommandLineParser::Autobot& task);
 
     QList<modularity::IModuleSetup*> m_modules;

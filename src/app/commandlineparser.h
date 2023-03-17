@@ -140,6 +140,12 @@ public:
         QString testCaseFuncArgs;
     };
 
+    struct AudioPluginRegistration {
+        io::path_t pluginPath;
+        bool failedPlugin = false;
+        int failCode = 0;
+    };
+
     void init();
     void parse(int argc, char** argv);
 
@@ -152,7 +158,7 @@ public:
     ConverterTask converterTask() const;
     Diagnostic diagnostic() const;
     Autobot autobot() const;
-    io::path_t audioPluginPath() const;
+    AudioPluginRegistration audioPluginRegistration() const;
 
 private:
     void printLongVersion() const;
@@ -164,7 +170,7 @@ private:
     ConverterTask m_converterTask;
     Diagnostic m_diagnostic;
     Autobot m_autobot;
-    io::path_t m_audioPluginPath;
+    AudioPluginRegistration m_audioPluginRegistration;
 };
 }
 

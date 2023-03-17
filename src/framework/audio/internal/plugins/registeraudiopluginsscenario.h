@@ -49,9 +49,10 @@ public:
 
     Ret registerNewPlugins() override;
     Ret registerPlugin(const io::path_t& pluginPath) override;
+    Ret registerFailedPlugin(const io::path_t& pluginPath, int failCode) override;
 
 private:
-    void startPluginsRegistration(const io::paths_t& pluginPaths);
+    void processPluginsRegistration(const io::paths_t& pluginPaths);
     IAudioPluginMetaReaderPtr metaReader(const io::path_t& pluginPath) const;
 
     framework::Progress m_progress;

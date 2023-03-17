@@ -130,7 +130,9 @@ void CommandLineParser::init()
     m_parser.addOption(QCommandLineOption("test-case-func-args", "Call test case function args", "args"));
 
     // Audio plugins
-    m_parser.addOption(QCommandLineOption("register-audio-plugin", "Check an audio plugin for compatibility with the application and register it", "path"));
+    m_parser.addOption(QCommandLineOption("register-audio-plugin",
+                                          "Check an audio plugin for compatibility with the application and register it", "path"));
+    m_parser.addOption(QCommandLineOption("register-failed-audio-plugin", "Register an incompatible audio plugin", "path"));
 }
 
 void CommandLineParser::parse(int argc, char** argv)
@@ -221,7 +223,16 @@ void CommandLineParser::parse(int argc, char** argv)
 
     if (m_parser.isSet("register-audio-plugin")) {
         m_runMode = IApplication::RunMode::AudioPluginRegistration;
-        m_audioPluginPath = m_parser.value("register-audio-plugin");
+        m_audioPluginRegistration.pluginPath = m_parser.value("register-audio-plugin");
+        m_audioPluginRegistration.failedPlugin = false;
+    }
+
+    if (m_parser.isSet("register-failed-audio-plugin")) {
+        QStringList args = m_parser.positionalArguments();
+        m_runMode = IApplication::RunMode::AudioPluginRegistration;
+        m_audioPluginRegistration.pluginPath = m_parser.value("register-failed-audio-plugin");
+        m_audioPluginRegistration.failedPlugin = true;
+        m_audioPluginRegistration.failCode = !args.empty() ? args[0].toInt() : -1;
     }
 
     // Converter mode
@@ -457,9 +468,9 @@ CommandLineParser::Autobot CommandLineParser::autobot() const
     return m_autobot;
 }
 
-mu::io::path_t CommandLineParser::audioPluginPath() const
+CommandLineParser::AudioPluginRegistration CommandLineParser::audioPluginRegistration() const
 {
-    return m_audioPluginPath;
+    return m_audioPluginRegistration;
 }
 
 void CommandLineParser::printLongVersion() const
