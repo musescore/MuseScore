@@ -2482,7 +2482,7 @@ bool GuitarPro3::read(IODevice* io)
 
                 slide = -1;
                 if (mu::contains(slides, static_cast<int>(track))) {
-                    slide = mu::take(slides, track);
+                    slide = mu::take(slides, static_cast<int>(track));
                 }
 
                 int len = readChar();
