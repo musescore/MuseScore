@@ -58,9 +58,7 @@ public:
     virtual Ret write(notation::INotationPtr notation, QIODevice& device, const Options& options = Options()) = 0;
     virtual Ret writeList(const notation::INotationPtrList& notations, QIODevice& device, const Options& options = Options()) = 0;
 
-    virtual bool supportsProgressNotifications() const { return false; }
-    virtual framework::Progress progress() const { return framework::Progress(); }
-
+    virtual framework::Progress* progress() { return nullptr; }
     virtual void abort() {}
 };
 

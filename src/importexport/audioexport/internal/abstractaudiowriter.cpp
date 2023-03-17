@@ -81,14 +81,9 @@ void AbstractAudioWriter::abort()
     playback()->audioOutput()->abortSavingAllSoundTracks();
 }
 
-bool AbstractAudioWriter::supportsProgressNotifications() const
+mu::framework::Progress* AbstractAudioWriter::progress()
 {
-    return true;
-}
-
-mu::framework::Progress AbstractAudioWriter::progress() const
-{
-    return m_progress;
+    return &m_progress;
 }
 
 mu::Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation, QIODevice& destinationDevice, const audio::SoundTrackFormat& format)

@@ -94,7 +94,7 @@ void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t&
         const io::path_t& pluginPath = pluginPaths[i];
         std::string pluginPathStr = pluginPath.toStdString();
 
-        m_progress.progressChanged.send(i, pluginCount, pluginPathStr);
+        m_progress.progressChanged.send(i, pluginCount, io::filename(pluginPath).toStdString());
         qApp->processEvents();
 
         int code = process()->execute(appPath, { "--register-audio-plugin", pluginPathStr });

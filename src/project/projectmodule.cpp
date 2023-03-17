@@ -42,7 +42,6 @@
 #include "internal/projectrwregister.h"
 
 #include "view/exportdialogmodel.h"
-#include "view/exportprogressmodel.h"
 #include "view/recentprojectsmodel.h"
 #include "view/scorethumbnail.h"
 #include "view/templatesmodel.h"
@@ -121,7 +120,6 @@ void ProjectModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://project/asksavelocationtype"), "MuseScore/Project/AskSaveLocationTypeDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/savetocloud"), "MuseScore/Project/SaveToCloudDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/export"), "MuseScore/Project/ExportDialog.qml");
-        ir->registerQmlUri(Uri("musescore://project/export/progress"), "MuseScore/Project/ExportProgressDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/migration"), "MuseScore/Project/MigrationDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/properties"), "MuseScore/Project/ProjectPropertiesDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/upload/progress"), "MuseScore/Project/UploadProgressDialog.qml");
@@ -138,7 +136,6 @@ void ProjectModule::registerResources()
 void ProjectModule::registerUiTypes()
 {
     qmlRegisterType<ExportDialogModel>("MuseScore.Project", 1, 0, "ExportDialogModel");
-    qmlRegisterType<ExportProgressModel>("MuseScore.Project", 1, 0, "ExportProgressModel");
 
     qmlRegisterType<RecentProjectsModel>("MuseScore.Project", 1, 0, "RecentScoresModel");
     qmlRegisterType<NewScoreModel>("MuseScore.Project", 1, 0, "NewScoreModel");

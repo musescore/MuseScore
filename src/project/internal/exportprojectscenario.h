@@ -53,10 +53,6 @@ public:
                       INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
                       bool openDestinationFolderOnExport = false) const override;
 
-    framework::Progress progress() const override;
-
-    void abort() override;
-
 private:
     enum class FileConflictPolicy {
         Undefined,

@@ -46,8 +46,7 @@ public:
     Ret write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options& options = Options()) override;
     Ret writeList(const notation::INotationPtrList& notations, QIODevice& destinationDevice, const Options& options = Options()) override;
 
-    bool supportsProgressNotifications() const override;
-    framework::Progress progress() const override;
+    framework::Progress* progress() override;
     void abort() override;
 
 protected:

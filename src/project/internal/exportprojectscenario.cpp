@@ -23,8 +23,6 @@
 
 #include "exportprojectscenario.h"
 
-#include "async/async.h"
-
 #include "translation.h"
 #include "defer.h"
 #include "log.h"
@@ -208,18 +206,6 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
     return true;
 }
 
-Progress ExportProjectScenario::progress() const
-{
-    return m_currentWriter ? m_currentWriter->progress() : Progress();
-}
-
-void ExportProjectScenario::abort()
-{
-    if (m_currentWriter) {
-        m_currentWriter->abort();
-    }
-}
-
 bool ExportProjectScenario::isCreatingOnlyOneFile(const INotationPtrList& notations, INotationWriter::UnitType unitType) const
 {
     switch (unitType) {
@@ -352,16 +338,21 @@ mu::Ret ExportProjectScenario::doExportLoop(const io::path_t& scorePath, std::fu
 
 void ExportProjectScenario::showExportProgressIfNeed() const
 {
-    if (m_currentWriter && m_currentWriter->supportsProgressNotifications()) {
-        async::Async::call(this, [this]() {
-            UriQuery query("musescore://project/export/progress");
+    if (!m_currentWriter) {
+        return;
+    }
 
-            if (isAudioExport(m_currentSuffix)) {
-                query.addParam("title", Val(trc("project/export", "Exporting audio…")));
-            }
+    framework::Progress* progress = m_currentWriter->progress();
+    if (!progress) {
+        return;
+    }
 
-            interactive()->open(query);
-        });
+    bool isAudio = isAudioExport(m_currentSuffix);
+    std::string title = isAudio ? trc("project/export", "Exporting audio…") : trc("project/export", "Exporting…");
+
+    Ret ret = interactive()->showProgress(title, progress);
+    if (!ret) {
+        LOGE() << ret.toString();
     }
 }
 
