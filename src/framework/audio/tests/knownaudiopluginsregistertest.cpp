@@ -163,8 +163,8 @@ TEST_F(Audio_KnownAudioPluginsRegisterTest, PluginInfoList)
     // [GIVEN] All known plugins
     std::vector<AudioPluginInfo> expectedPluginInfoList = setupTestData();
 
-    // [WHEN] Init the register
-    m_knownPlugins->init();
+    // [WHEN] Load the info
+    m_knownPlugins->load();
 
     // [WHEN] Request the info
     std::vector<AudioPluginInfo> actualPluginInfoList = m_knownPlugins->pluginInfoList();

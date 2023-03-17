@@ -24,6 +24,7 @@
 
 #include <QApplication>
 
+#include "audioerrors.h"
 #include "translation.h"
 #include "log.h"
 
@@ -39,6 +40,11 @@ void RegisterAudioPluginsScenario::init()
             m_aborted = true;
         }
     });
+
+    Ret ret = knownPluginsRegister()->load();
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
 }
 
 mu::Ret RegisterAudioPluginsScenario::registerNewPlugins()
@@ -57,17 +63,18 @@ mu::Ret RegisterAudioPluginsScenario::registerNewPlugins()
         }
     }
 
+    if (newPluginPaths.empty()) {
+        return make_ok();
+    }
+
     processPluginsRegistration(newPluginPaths);
 
-    return make_ok();
+    Ret ret = knownPluginsRegister()->load();
+    return ret;
 }
 
 void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t& pluginPaths)
 {
-    if (pluginPaths.empty()) {
-        return;
-    }
-
     Ret ret = interactive()->showProgress(mu::trc("audio", "Scanning audio plugins"), &m_progress);
     if (!ret) {
         LOGE() << ret.toString();
@@ -113,7 +120,7 @@ mu::Ret RegisterAudioPluginsScenario::registerPlugin(const io::path_t& pluginPat
 
     IAudioPluginMetaReaderPtr reader = metaReader(pluginPath);
     if (!reader) {
-        return make_ret(Ret::Code::UnknownError);
+        return make_ret(audio::Err::UnknownPluginType);
     }
 
     RetVal<AudioResourceMeta> meta = reader->readMeta(pluginPath);

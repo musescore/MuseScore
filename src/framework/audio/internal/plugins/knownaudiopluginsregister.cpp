@@ -86,7 +86,7 @@ static AudioResourceMeta metaFromJson(const JsonObject& object)
 }
 }
 
-void KnownAudioPluginsRegister::init()
+mu::Ret KnownAudioPluginsRegister::load()
 {
     TRACEFUNC;
 
@@ -99,10 +99,12 @@ void KnownAudioPluginsRegister::init()
     RetVal<io::paths_t> paths = fileSystem()->scanFiles(knownAudioPluginsDir,
                                                         { "*.json" },
                                                         io::ScanMode::FilesInCurrentDir);
-
     if (!paths.ret) {
-        LOGE() << paths.ret.toString();
+        return paths.ret;
     }
+
+    m_pluginInfoMap.clear();
+    m_pluginPaths.clear();
 
     for (const io::path_t& infoPath : paths.val) {
         RetVal<ByteArray> file = fileSystem()->readFile(infoPath);
@@ -131,6 +133,8 @@ void KnownAudioPluginsRegister::init()
         m_pluginInfoMap[info.meta.id] = info;
         m_pluginPaths.insert(info.path);
     }
+
+    return make_ok();
 }
 
 std::vector<AudioPluginInfo> KnownAudioPluginsRegister::pluginInfoList(PluginInfoAccepted accepted) const

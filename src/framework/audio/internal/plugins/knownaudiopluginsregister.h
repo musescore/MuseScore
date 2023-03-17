@@ -36,7 +36,7 @@ class KnownAudioPluginsRegister : public IKnownAudioPluginsRegister
     INJECT(audio, io::IFileSystem, fileSystem)
 
 public:
-    void init();
+    Ret load() override;
 
     std::vector<AudioPluginInfo> pluginInfoList(PluginInfoAccepted accepted = PluginInfoAccepted()) const override;
     const io::path_t& pluginPath(const AudioResourceId& resourceId) const override;

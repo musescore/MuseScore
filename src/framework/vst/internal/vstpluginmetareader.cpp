@@ -31,20 +31,6 @@ using namespace mu::audio;
 using namespace mu::vst;
 
 namespace mu::vst {
-static PluginModulePtr createModule(const io::path_t& pluginPath)
-{
-    std::string errorString;
-    PluginModulePtr result = nullptr;
-
-    try {
-        result = PluginModule::create(pluginPath.toStdString(), errorString);
-    }  catch (...) {
-        LOGE() << "Unable to load a new VST Module, error string: " << errorString;
-    }
-
-    return result;
-}
-
 static bool hasNativeEditorSupport()
 {
 #ifdef Q_OS_LINUX

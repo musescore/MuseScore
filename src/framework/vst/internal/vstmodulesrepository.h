@@ -26,22 +26,19 @@
 #include <unordered_map>
 #include <mutex>
 
+#include "ivstmodulesrepository.h"
+
 #include "modularity/ioc.h"
-#include "io/ifilesystem.h"
-#include "async/asyncable.h"
-#include "audio/audiotypes.h"
+#include "audio/iknownaudiopluginsregister.h"
 #include "audio/iaudiothreadsecurer.h"
 
-#include "ivstmodulesrepository.h"
-#include "ivstconfiguration.h"
+#include "audio/audiotypes.h"
 #include "vsttypes.h"
-#include "vstmodulesmetaregister.h"
 
 namespace mu::vst {
-class VstModulesRepository : public IVstModulesRepository, public async::Asyncable
+class VstModulesRepository : public IVstModulesRepository
 {
-    INJECT(vst, IVstConfiguration, configuration)
-    INJECT(vst, io::IFileSystem, fileSystem)
+    INJECT(vst, audio::IKnownAudioPluginsRegister, knownPlugins)
     INJECT_STATIC(vst, audio::IAudioThreadSecurer, threadSecurer)
 
 public:
@@ -60,19 +57,12 @@ public:
     void refresh() override;
 
 private:
-    PluginModulePtr createModule(const io::path_t& path);
-    void addModule(const io::path_t& path);
-    audio::AudioResourceMetaList modulesMetaList(const VstPluginType& type) const;
-
-    io::paths_t pluginPathsFromCustomLocations(const io::paths_t& customPaths) const;
-    PluginModule::PathList pluginPathsFromDefaultLocation() const;
+    audio::AudioResourceMetaList modulesMetaList(const audio::AudioPluginType& type) const;
 
     PluginContext m_pluginContext;
 
     mutable std::mutex m_mutex;
     mutable std::unordered_map<audio::AudioResourceId, PluginModulePtr> m_modules;
-
-    VstModulesMetaRegister m_knownPlugins;
 };
 }
 
