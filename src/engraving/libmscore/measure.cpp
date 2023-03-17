@@ -4294,22 +4294,16 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
         x += w;
         s = s->next();
     }
-    if (isMMRest()) {
-        _squeezableSpace = std::max(x - score()->styleMM(Sid::minMMRestWidth), 0.0);
-    } else {
-        _squeezableSpace = std::max(0.0, std::min(_squeezableSpace, x - score()->styleMM(Sid::minMeasureWidth)));
-    }
+    _squeezableSpace = std::max(0.0, std::min(_squeezableSpace, x - score()->styleMM(Sid::minMeasureWidth)));
     setLayoutStretch(stretchCoeff);
     setWidth(x);
     // Check against minimum width and increase if needed (MMRest minWidth is guaranteed elsewhere)
-    if (!(isMMRest() && mmRestCount() > 1)) {
-        double minWidth = computeMinMeasureWidth();
-        if (width() < minWidth) {
-            stretchToTargetWidth(minWidth);
-            setWidthLocked(true);
-        } else {
-            setWidthLocked(false);
-        }
+    double minWidth = computeMinMeasureWidth();
+    if (width() < minWidth) {
+        stretchToTargetWidth(minWidth);
+        setWidthLocked(true);
+    } else {
+        setWidthLocked(false);
     }
 }
 
