@@ -34,80 +34,98 @@ Column {
 
     property PropertyItem startHookType: null
     property PropertyItem endHookType: null
-    property PropertyItem thickness: null
-    property PropertyItem hookHeight: null
+    property PropertyItem startHookHeight: null
+    property PropertyItem endHookHeight: null
 
     property alias possibleStartHookTypes: startHookButtonGroup.model
-    property alias possibleEndHookTypes: lineTypeButtonGroup.model
+    property alias possibleEndHookTypes: endHookButtonGroup.model
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
-    property int navigationRowEnd: hookHeightSection.navigationRowEnd
+    property int navigationRowEnd: endHookHeightSection.navigationRowEnd
+
+    // NOTE can't bind to `visible` property of children, because children are always invisible when parent is invisible
+    visible: startHookButtonGroup.isUseful || endHookButtonGroup.isUseful || hookHeightSections.isUseful
 
     width: parent.width
 
     spacing: 12
 
     FlatRadioButtonGroupPropertyView {
-        id: lineTypeButtonGroup
+        id: startHookButtonGroup
 
-        titleText: qsTrc("inspector", "Line type")
-        propertyItem: root.endHookType
+        readonly property bool isUseful: Boolean(root.possibleStartHookTypes) && root.possibleStartHookTypes.length > 1
+
+        visible: isUseful
+
+        titleText: qsTrc("inspector", "Start hook")
+        propertyItem: root.startHookType
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart
     }
 
     FlatRadioButtonGroupPropertyView {
-        id: startHookButtonGroup
+        id: endHookButtonGroup
 
-        titleText: qsTrc("inspector", "Start hook")
-        propertyItem: root.startHookType
+        readonly property bool isUseful: Boolean(root.possibleEndHookTypes) && root.possibleEndHookTypes.length > 1
+
+        visible: isUseful
+
+        titleText: qsTrc("inspector", "End hook")
+        propertyItem: root.endHookType
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: lineTypeButtonGroup.navigationRowEnd + 1
+        navigationRowStart: startHookButtonGroup.navigationRowEnd + 1
     }
 
     Item {
+        id: hookHeightSections
+
+        readonly property bool isUseful: (root.startHookHeight && root.startHookHeight.isVisible)
+                                         || (root.endHookHeight && root.endHookHeight.isVisible)
+
+        visible: isUseful
+
         height: childrenRect.height
         width: parent.width
 
         SpinBoxPropertyView {
-            id: thicknessSection
+            id: startHookHeightSection
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
-            titleText: qsTrc("inspector", "Thickness")
-            propertyItem: root.thickness
-
-            step: 0.01
-            maxValue: 10.00
-            minValue: 0.01
-            decimals: 2
-
-            navigationName: "Thickness"
-            navigationPanel: root.navigationPanel
-            navigationRowStart: startHookButtonGroup.navigationRowEnd + 1
-        }
-
-        SpinBoxPropertyView {
-            id: hookHeightSection
-            anchors.left: parent.horizontalCenter
-            anchors.leftMargin: 2
-            anchors.right: parent.right
-
-            titleText: qsTrc("inspector", "Hook height")
-            propertyItem: root.hookHeight
+            titleText: qsTrc("inspector", "Start hook height")
+            propertyItem: root.startHookHeight
 
             step: 0.5
             maxValue: 10.0
             minValue: -10.0
             decimals: 2
 
-            navigationName: "HookHeight"
+            navigationName: "StartHookHeight"
             navigationPanel: root.navigationPanel
-            navigationRowStart: thicknessSection.navigationRowEnd + 1
+            navigationRowStart: endHookButtonGroup.navigationRowEnd + 1
+        }
+
+        SpinBoxPropertyView {
+            id: endHookHeightSection
+            anchors.left: parent.horizontalCenter
+            anchors.leftMargin: 2
+            anchors.right: parent.right
+
+            titleText: qsTrc("inspector", "End hook height")
+            propertyItem: root.endHookHeight
+
+            step: 0.5
+            maxValue: 10.0
+            minValue: -10.0
+            decimals: 2
+
+            navigationName: "EndHookHeight"
+            navigationPanel: root.navigationPanel
+            navigationRowStart: startHookHeightSection.navigationRowEnd + 1
         }
     }
 }
