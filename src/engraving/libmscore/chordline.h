@@ -54,7 +54,6 @@ private:
     double _lengthX = 0.0;
     double _lengthY = 0.0;
     Note* _note = nullptr;
-    static constexpr double _baseLength = 1.0;
     static constexpr double _waveAngle = 20;
 
     friend class Factory;

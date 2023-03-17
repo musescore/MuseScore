@@ -90,12 +90,14 @@ const TranslatableString& ChordLine::chordLineTypeName() const
 
 void ChordLine::layout()
 {
+    setMag(chord() ? chord()->mag() : 1);
     if (!modified) {
         double x2 = 0;
         double y2 = 0;
-        double horBaseLength = 1.2 * _baseLength; // let the symbols extend a bit more horizontally
+        double baseLength = spatium() * (chord() ? chord()->chordMag() : 1);
+        double horBaseLength = 1.2 * baseLength; // let the symbols extend a bit more horizontally
         x2 += isToTheLeft() ? -horBaseLength : horBaseLength;
-        y2 += isBelow() ? _baseLength : -_baseLength;
+        y2 += isBelow() ? baseLength : -baseLength;
         if (_chordLineType != ChordLineType::NOTYPE && !_wavy) {
             path = PainterPath();
             if (!isToTheLeft()) {
@@ -114,7 +116,6 @@ void ChordLine::layout()
         }
     }
 
-    double _spatium = spatium();
     if (explicitParent()) {
         Note* note = nullptr;
 
@@ -162,10 +163,10 @@ void ChordLine::layout()
         RectF r = path.boundingRect();
         int x1 = 0, y1 = 0, width = 0, height = 0;
 
-        x1 = r.x() * _spatium;
-        y1 = r.y() * _spatium;
-        width = r.width() * _spatium;
-        height = r.height() * _spatium;
+        x1 = r.x();
+        y1 = r.y();
+        width = r.width();
+        height = r.height();
         bbox().setRect(x1, y1, width, height);
     } else {
         RectF r(score()->engravingFont()->bbox(s_waveSymbols, magS()));
@@ -282,12 +283,9 @@ void ChordLine::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     if (!_wavy) {
-        double _spatium = spatium();
-        painter->scale(_spatium, _spatium);
-        painter->setPen(Pen(curColor(), score()->styleMM(Sid::chordlineThickness), PenStyle::SolidLine));
+        painter->setPen(Pen(curColor(), score()->styleMM(Sid::chordlineThickness) * mag(), PenStyle::SolidLine));
         painter->setBrush(BrushStyle::NoBrush);
         painter->drawPath(path);
-        painter->scale(1.0 / _spatium, 1.0 / _spatium);
     } else {
         painter->save();
         painter->rotate((_chordLineType == ChordLineType::FALL ? 1 : -1) * _waveAngle);
@@ -316,7 +314,6 @@ void ChordLine::editDrag(EditData& ed)
 {
     auto n = path.elementCount();
     PainterPath p;
-    double sp = spatium();
     _lengthX += ed.delta.x();
     _lengthY += ed.delta.y();
 
@@ -332,8 +329,8 @@ void ChordLine::editDrag(EditData& ed)
         _lengthX = slideBoundary;
     }
 
-    double dx = ed.delta.x() / sp;
-    double dy = ed.delta.y() / sp;
+    double dx = ed.delta.x();
+    double dy = ed.delta.y();
 
     bool curvative = !_wavy && !_straight;
     for (size_t i = 0; i < n; ++i) {
@@ -425,7 +422,7 @@ std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
     } else {
         std::vector<PointF> grips(n);
         for (size_t i = 0; i < n; ++i) {
-            grips[i] = cp + PointF(path.elementAt(i).x * sp, path.elementAt(i).y * sp);
+            grips[i] = cp + PointF(path.elementAt(i).x, path.elementAt(i).y);
         }
         return grips;
     }
