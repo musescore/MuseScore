@@ -4154,7 +4154,8 @@ void Measure::checkTrailer()
 //   to compute the minimum non-collision distance between elements.
 //---------------------------------------------------------
 
-void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction minTicks, Fraction maxTicks, double stretchCoeff)
+void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction minTicks, Fraction maxTicks, double stretchCoeff,
+                           bool overrideMinMeasureWidth)
 {
     Segment* fs = firstEnabled();
     if (!fs->visible()) {           // first enabled could be a clef change on invisible staff
@@ -4305,7 +4306,7 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
 
     // Check against minimum width and increase if needed (MMRest minWidth is guaranteed elsewhere)
     double minWidth = computeMinMeasureWidth();
-    if (width() < minWidth) {
+    if (width() < minWidth && !overrideMinMeasureWidth) {
         stretchToTargetWidth(minWidth);
         setWidthLocked(true);
     } else {
@@ -4313,7 +4314,7 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
     }
 }
 
-void Measure::computeWidth(Fraction minTicks, Fraction maxTicks, double stretchCoeff)
+void Measure::computeWidth(Fraction minTicks, Fraction maxTicks, double stretchCoeff, bool overrideMinMeasureWidth)
 {
     Segment* s;
 
@@ -4354,7 +4355,7 @@ void Measure::computeWidth(Fraction minTicks, Fraction maxTicks, double stretchC
     bool isSystemHeader = s->header();
 
     _squeezableSpace = 0;
-    computeWidth(s, x, isSystemHeader, minTicks, maxTicks, stretchCoeff);
+    computeWidth(s, x, isSystemHeader, minTicks, maxTicks, stretchCoeff, overrideMinMeasureWidth);
 }
 
 double Measure::computeMinMeasureWidth() const
@@ -4464,7 +4465,7 @@ double Measure::computeFirstSegmentXPosition(Segment* segment)
     Shape ls(RectF(0.0, 0.0, 0.0, spatium() * 4));
 
     // First, try to compute first segment x-position by padding against end barline of previous measure
-    Measure* prevMeas = (prev() && prev()->isMeasure()) ? toMeasure(prev()) : nullptr;
+    Measure* prevMeas = (prev() && prev()->isMeasure() && prev()->system() == system()) ? toMeasure(prev()) : nullptr;
     Segment* prevMeasEnd = prevMeas ? prevMeas->last() : nullptr;
     if (prevMeasEnd && prevMeasEnd->isEndBarLineType()
         && !(segment->isBeginBarLineType() || segment->isStartRepeatBarLineType() || segment->isBarLineType())) {

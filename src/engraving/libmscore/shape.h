@@ -60,6 +60,7 @@ class Shape : public std::vector<ShapeElement>
     OBJECT_ALLOCATOR(engraving, Shape)
 private:
     double _spatium = 0.0;
+    double _squeezeFactor = 1.0;
 public:
     enum HorizontalSpacingType {
         SPACING_GENERAL = 0,
@@ -102,6 +103,8 @@ public:
     bool intersects(const mu::RectF& rr) const;
     bool intersects(const Shape&) const;
     bool clearsVertically(const Shape& a) const;
+
+    void setSqueezeFactor(double v) { _squeezeFactor = v; }
 
     void paint(mu::draw::Painter& painter) const;
 #ifndef NDEBUG
