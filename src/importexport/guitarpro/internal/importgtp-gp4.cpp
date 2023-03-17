@@ -845,7 +845,7 @@ bool GuitarPro4::read(IODevice* io)
             for (int beat = 0; beat < beats; ++beat) {
                 slide = -1;
                 if (mu::contains(slides, static_cast<int>(track))) {
-                    slide = mu::take(slides, track);
+                    slide = mu::take(slides, static_cast<int>(track));
                 }
 
                 uint8_t beatBits = readUInt8();
