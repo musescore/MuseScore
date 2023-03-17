@@ -154,8 +154,8 @@ const mu::io::path_t& KnownAudioPluginsRegister::pluginPath(const AudioResourceI
 {
     auto it = m_pluginInfoMap.find(resourceId);
     if (it == m_pluginInfoMap.end()) {
-        static const io::path_t dummy;
-        return dummy;
+        static const io::path_t _dummy;
+        return _dummy;
     }
 
     return it->second.path;
