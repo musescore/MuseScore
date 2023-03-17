@@ -299,7 +299,7 @@ int App::run(int argc, char** argv)
         }
 #endif // MUE_BUILD_APPSHELL_MODULE
     } break;
-    case framework::IApplication::RunMode::AudioPluginProbe: {
+    case framework::IApplication::RunMode::AudioPluginRegistration: {
         io::path_t pluginPath = commandLineParser.audioPluginPath();
 
         QMetaObject::invokeMethod(qApp, [this, pluginPath]() {

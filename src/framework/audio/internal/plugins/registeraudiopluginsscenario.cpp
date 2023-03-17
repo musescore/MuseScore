@@ -88,7 +88,7 @@ void RegisterAudioPluginsScenario::startPluginsRegistration(const io::paths_t& p
         m_progress.progressChanged.send(i, pluginCount, pluginPathStr);
         qApp->processEvents();
 
-        int code = process()->execute(appPath, { "--audio-plugin-probe", pluginPathStr });
+        int code = process()->execute(appPath, { "--register-audio-plugin", pluginPathStr });
         if (code == 0) {
             continue;
         }

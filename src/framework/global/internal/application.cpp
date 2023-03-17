@@ -41,7 +41,7 @@ bool Application::noGui() const
     switch (m_runMode) {
     case RunMode::GuiApp: return false;
     case RunMode::ConsoleApp: return true;
-    case RunMode::AudioPluginProbe: return true;
+    case RunMode::AudioPluginRegistration: return true;
     }
     return false;
 }

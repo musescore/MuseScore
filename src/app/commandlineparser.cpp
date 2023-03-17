@@ -129,8 +129,8 @@ void CommandLineParser::init()
     m_parser.addOption(QCommandLineOption("test-case-func", "Call test case function", "name"));
     m_parser.addOption(QCommandLineOption("test-case-func-args", "Call test case function args", "args"));
 
-    // Compatibility check
-    m_parser.addOption(QCommandLineOption("audio-plugin-probe", "Check an audio plugin for compatibility with the application", "path"));
+    // Audio plugins
+    m_parser.addOption(QCommandLineOption("register-audio-plugin", "Check an audio plugin for compatibility with the application and register it", "path"));
 }
 
 void CommandLineParser::parse(int argc, char** argv)
@@ -219,9 +219,9 @@ void CommandLineParser::parse(int argc, char** argv)
         m_options.startup.type = m_parser.value("session-type").toStdString();
     }
 
-    if (m_parser.isSet("audio-plugin-probe")) {
-        m_runMode = IApplication::RunMode::AudioPluginProbe;
-        m_audioPluginPath = m_parser.value("audio-plugin-probe");
+    if (m_parser.isSet("register-audio-plugin")) {
+        m_runMode = IApplication::RunMode::AudioPluginRegistration;
+        m_audioPluginPath = m_parser.value("register-audio-plugin");
     }
 
     // Converter mode

@@ -148,7 +148,7 @@ TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterNewPlugins)
 
     // [THEN] Processes started only for unregistered plugins
     for (const path_t& pluginPath : foundPluginPaths) {
-        std::vector<std::string> args = { "--audio-plugin-probe", pluginPath.toStdString() };
+        std::vector<std::string> args = { "--register-audio-plugin", pluginPath.toStdString() };
 
         if (mu::contains(alreadyRegisteredPlugins, pluginPath)) {
             // Ignore already registered plugins
