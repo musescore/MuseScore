@@ -402,7 +402,7 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                 bm = BeamMode::NONE;
             }
 
-            if ((cr->durationType().type() <= DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
+            if (bm == BeamMode::NONE) {
                 bool removeBeam = true;
                 if (beam) {
                     beam->layout1();
