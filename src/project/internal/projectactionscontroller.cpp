@@ -680,6 +680,18 @@ ProjectActionsController::AudioFile ProjectActionsController::exportMp3(const IN
         return AudioFile();
     }
 
+    // In the uploaded audio file, the repeats need to be expanded
+    bool wasExpandRepeats = notationConfiguration()->isPlayRepeatsEnabled();
+    if (!wasExpandRepeats) {
+        notationConfiguration()->setIsPlayRepeatsEnabled(true);
+    }
+
+    DEFER {
+        if (!wasExpandRepeats) {
+            notationConfiguration()->setIsPlayRepeatsEnabled(false);
+        }
+    };
+
     if (!exportProjectScenario()->exportScores({ notation }, mp3Path)) {
         LOGE() << "Could not export an mp3";
         delete tempFile;

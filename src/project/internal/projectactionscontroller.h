@@ -40,6 +40,7 @@
 #include "isaveprojectscenario.h"
 #include "io/ifilesystem.h"
 #include "internal/iexportprojectscenario.h"
+#include "notation/inotationconfiguration.h"
 
 #include "async/asyncable.h"
 
@@ -65,6 +66,7 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
     INJECT(project, mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(project, cloud::IAuthorizationService, authorizationService)
     INJECT(project, cloud::ICloudProjectsService, cloudProjectsService)
+    INJECT(project, notation::INotationConfiguration, notationConfiguration)
     INJECT(project, playback::IPlaybackController, playbackController)
     INJECT(project, print::IPrintProvider, printProvider)
     INJECT(project, io::IFileSystem, fileSystem)
