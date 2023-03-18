@@ -44,7 +44,8 @@ StyledPopupView {
     openPolicy: PopupView.NoActivateFocus
 
     function calculateSize() {
-        contentWidth = Math.min(content.implicitWidth, 300 - margins * 2)
+        const MAX_WIDTH = toolTipType === StyledToolTip.Default ? 300 : 172 // Hardcoded from ScoreItem.qml
+        contentWidth = Math.min(content.implicitWidth, MAX_WIDTH - margins * 2)
         contentHeight = content.implicitHeight
 
         x = root.parent.width / 2 - (contentWidth + padding * 2 + margins * 2) / 2
@@ -66,10 +67,10 @@ StyledPopupView {
                 id: titleLabel
                 Layout.fillWidth: true
 
-                font: if (toolTipType === Default) ui.theme.bodyBoldFont
+                font: if (toolTipType === StyledToolTip.Default) ui.theme.bodyBoldFont
                 horizontalAlignment: Text.AlignLeft
-                wrapMode: Text.Wrap
-                maximumLineCount: if (toolTipType === Default) 3
+                wrapMode: toolTipType === StyledToolTip.Default ? Text.Wrap : Text.WrapAnywhere
+                maximumLineCount: if (toolTipType === StyledToolTip.Default) 3
             }
 
             StyledTextLabel {
