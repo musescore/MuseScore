@@ -20,31 +20,34 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "mainwindowprovider.h"
+#include "mainwindowbridge.h"
 
 #include <QWindow>
-
-#include "modularity/ioc.h"
 
 #include "log.h"
 
 using namespace mu::ui;
 using namespace mu::modularity;
 
-MainWindowProvider::MainWindowProvider(QObject* parent)
+MainWindowBridge::MainWindowBridge(QObject* parent)
     : QObject(parent), m_window(nullptr)
 {
 }
 
-QWindow* MainWindowProvider::qWindow() const
+MainWindowBridge::~MainWindowBridge()
+{
+    mainWindow()->deinit();
+}
+
+QWindow* MainWindowBridge::qWindow() const
 {
     return m_window;
 }
 
-void MainWindowProvider::setWindow(QWindow* window)
+void MainWindowBridge::setWindow(QWindow* window)
 {
     if (m_window != nullptr) {
-        LOGW() << "Window for this MainWindowProvider is already set. Refusing to set it again.";
+        LOGW() << "Window for this MainWindowBridge is already set. Refusing to set it again.";
         return;
     }
 
@@ -54,17 +57,17 @@ void MainWindowProvider::setWindow(QWindow* window)
     init();
 }
 
-void MainWindowProvider::init()
+void MainWindowBridge::init()
 {
-    ioc()->registerExport<IMainWindow>("ui", this);
+    mainWindow()->init(this);
 }
 
-QString MainWindowProvider::filePath() const
+QString MainWindowBridge::filePath() const
 {
     return m_window ? m_window->filePath() : "";
 }
 
-void MainWindowProvider::setFilePath(const QString& filePath)
+void MainWindowBridge::setFilePath(const QString& filePath)
 {
     if (!m_window) {
         return;
@@ -78,21 +81,21 @@ void MainWindowProvider::setFilePath(const QString& filePath)
     emit filePathChanged();
 }
 
-bool MainWindowProvider::fileModified() const
+bool MainWindowBridge::fileModified() const
 {
     return false;
 }
 
-void MainWindowProvider::setFileModified(bool /*modified*/)
+void MainWindowBridge::setFileModified(bool /*modified*/)
 {
 }
 
-void MainWindowProvider::requestShowOnBack()
+void MainWindowBridge::showOnBack()
 {
     m_window->lower();
 }
 
-void MainWindowProvider::requestShowOnFront()
+void MainWindowBridge::showOnFront()
 {
 #ifdef Q_OS_MAC
     // On macOS, this simple way of raising the window works just fine
@@ -118,12 +121,12 @@ void MainWindowProvider::requestShowOnFront()
 #endif
 }
 
-bool MainWindowProvider::isFullScreen() const
+bool MainWindowBridge::isFullScreen() const
 {
     return m_window ? m_window->visibility() == QWindow::FullScreen : false;
 }
 
-void MainWindowProvider::toggleFullScreen()
+void MainWindowBridge::toggleFullScreen()
 {
     if (!m_window) {
         return;
@@ -137,12 +140,12 @@ void MainWindowProvider::toggleFullScreen()
     }
 }
 
-QScreen* MainWindowProvider::screen() const
+QScreen* MainWindowBridge::screen() const
 {
     return m_window ? m_window->screen() : nullptr;
 }
 
-void MainWindowProvider::showMinimizedWithSavePreviousState()
+void MainWindowBridge::showMinimizedWithSavePreviousState()
 {
     // On Windows, QWindow::showMinimized() doesn't store the previous state of the window.
     // Thus, it will always be restored to a windowed state once clicked on from the task bar, even

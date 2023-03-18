@@ -19,36 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_IMAINWINDOW_H
-#define MU_UI_IMAINWINDOW_H
+#ifndef MU_UI_MAINWINDOWMOCK_H
+#define MU_UI_MAINWINDOWMOCK_H
 
-#include "modularity/imoduleexport.h"
+#include <gmock/gmock.h>
 
-class QWindow;
-class QScreen;
+#include "framework/ui/imainwindow.h"
 
 namespace mu::ui {
-class MainWindowBridge;
-
-class IMainWindow : MODULE_EXPORT_INTERFACE
+class MainWindowMock : public IMainWindow
 {
-    INTERFACE_ID(IMainWindow)
-
 public:
-    virtual ~IMainWindow() = default;
+    MOCK_METHOD(void, init, (MainWindowBridge * bridge), (override));
+    MOCK_METHOD(void, deinit, (), (override));
 
-    virtual void init(MainWindowBridge* bridge) = 0;
-    virtual void deinit() = 0;
+    MOCK_METHOD(QWindow*, qWindow, (), (const, override));
 
-    virtual QWindow* qWindow() const = 0;
+    MOCK_METHOD(void, requestShowOnBack, (), (override));
+    MOCK_METHOD(void, requestShowOnFront, (), (override));
 
-    virtual void requestShowOnBack() = 0;
-    virtual void requestShowOnFront() = 0;
-
-    virtual bool isFullScreen() const = 0;
-    virtual void toggleFullScreen() = 0;
-    virtual QScreen* screen() const = 0;
+    MOCK_METHOD(bool, isFullScreen, (), (const, override));
+    MOCK_METHOD(void, toggleFullScreen, (), (override));
+    MOCK_METHOD(QScreen*, screen, (), (const, override));
 };
 }
 
-#endif // MU_UI_IMAINWINDOW_H
+#endif // MU_UI_MAINWINDOWMOCK_H

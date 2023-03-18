@@ -19,27 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_MAINWINDOWPROVIDERMOCK_H
-#define MU_UI_MAINWINDOWPROVIDERMOCK_H
+#ifndef MU_APPSHELL_MACOS_MAINWINDOWBRIDGE_H
+#define MU_APPSHELL_MACOS_MAINWINDOWBRIDGE_H
 
-#include <gmock/gmock.h>
+#include "async/asyncable.h"
+#include "modularity/ioc.h"
+#include "ui/iuiconfiguration.h"
 
-#include "framework/ui/imainwindow.h"
+#include "ui/view/mainwindowbridge.h"
 
 namespace mu::ui {
-class MainWindowProviderMock : public IMainWindow
+class MacOSMainWindowBridge : public MainWindowBridge, public async::Asyncable
 {
+    Q_OBJECT
+
+    INJECT(appshell, IUiConfiguration, uiConfiguration)
+
 public:
+    explicit MacOSMainWindowBridge(QObject* parent = nullptr);
 
-    MOCK_METHOD(QWindow*, qWindow, (), (const, override));
+    bool fileModified() const override;
 
-    MOCK_METHOD(void, requestShowOnBack, (), (override));
-    MOCK_METHOD(void, requestShowOnFront, (), (override));
+public slots:
+    void setFileModified(bool modified) override;
 
-    MOCK_METHOD(bool, isFullScreen, (), (const, override));
-    MOCK_METHOD(void, toggleFullScreen, (), (override));
-    MOCK_METHOD(QScreen*, screen, (), (const, override));
+private:
+    void init() override;
 };
 }
 
-#endif // MU_UI_MAINWINDOWPROVIDERMOCK_H
+#endif // MU_APPSHELL_MACOS_MAINWINDOWBRIDGE_H

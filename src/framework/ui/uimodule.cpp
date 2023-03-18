@@ -27,6 +27,7 @@
 #include "modularity/ioc.h"
 
 #include "internal/uiengine.h"
+#include "internal/mainwindow.h"
 #include "internal/uiconfiguration.h"
 #include "internal/interactiveuriregister.h"
 #include "internal/uiactionsregister.h"
@@ -35,16 +36,16 @@
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosplatformtheme.h"
-#include "view/platform/macos/macosmainwindowprovider.h"
+#include "view/platform/macos/macosmainwindowbridge.h"
 #elif defined(Q_OS_WIN)
 #include "internal/platform/windows/windowsplatformtheme.h"
-#include "view/mainwindowprovider.h"
+#include "view/mainwindowbridge.h"
 #elif defined(Q_OS_LINUX)
 #include "internal/platform/linux/linuxplatformtheme.h"
-#include "view/mainwindowprovider.h"
+#include "view/mainwindowbridge.h"
 #else
 #include "internal/platform/stub/stubplatformtheme.h"
-#include "view/mainwindowprovider.h"
+#include "view/mainwindowbridge.h"
 #endif
 
 #include "view/qmltooltip.h"
@@ -95,6 +96,7 @@ void UiModule::registerExports()
 {
     ioc()->registerExport<IUiConfiguration>(moduleName(), s_configuration);
     ioc()->registerExportNoDelete<IUiEngine>(moduleName(), UiEngine::instance());
+    ioc()->registerExport<IMainWindow>(moduleName(), new MainWindow());
     ioc()->registerExport<IInteractiveProvider>(moduleName(), UiEngine::instance()->interactiveProvider());
     ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
     ioc()->registerExport<IPlatformTheme>(moduleName(), s_platformTheme);
@@ -143,9 +145,9 @@ void UiModule::registerUiTypes()
     qmlRegisterType<FocusListener>("MuseScore.Ui", 1, 0, "FocusListener");
 
 #ifdef Q_OS_MAC
-    qmlRegisterType<MacOSMainWindowProvider>("MuseScore.Ui", 1, 0, "MainWindowProvider");
+    qmlRegisterType<MacOSMainWindowBridge>("MuseScore.Ui", 1, 0, "MainWindowBridge");
 #else
-    qmlRegisterType<MainWindowProvider>("MuseScore.Ui", 1, 0, "MainWindowProvider");
+    qmlRegisterType<MainWindowBridge>("MuseScore.Ui", 1, 0, "MainWindowBridge");
 #endif
 
     qmlRegisterType<ErrorDetailsModel>("MuseScore.Ui", 1, 0, "ErrorDetailsModel");
