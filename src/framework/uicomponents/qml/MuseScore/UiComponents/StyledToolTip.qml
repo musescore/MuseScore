@@ -67,7 +67,7 @@ StyledPopupView {
                 id: titleLabel
                 Layout.fillWidth: true
 
-                font: if (toolTipType === StyledToolTip.Default) ui.theme.bodyBoldFont
+                font: toolTipType === StyledToolTip.Default ? ui.theme.bodyBoldFont : ui.theme.bodyFont
                 horizontalAlignment: Text.AlignLeft
                 wrapMode: toolTipType === StyledToolTip.Default ? Text.Wrap : Text.WrapAnywhere
                 maximumLineCount: if (toolTipType === StyledToolTip.Default) 3
