@@ -242,7 +242,7 @@ bool ExportProjectScenario::isMainNotation(INotationPtr notation) const
 mu::io::path_t ExportProjectScenario::completeExportPath(const io::path_t& basePath, INotationPtr notation, bool isMain,
                                                          int pageIndex) const
 {
-    io::path_t result = io::dirpath(basePath) + "/" + io::basename(basePath);
+    io::path_t result = io::dirpath(basePath) + "/" + io::completeBasename(basePath);
 
     if (!isMain) {
         result += "-" + io::escapeFileName(notation->name()).toStdString();
