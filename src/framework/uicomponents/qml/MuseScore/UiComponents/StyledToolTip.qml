@@ -28,15 +28,10 @@ import MuseScore.UiComponents 1.0
 StyledPopupView {
     id: root
 
-    enum ToolTipType {
-        Default,
-        FileToolTip
-    }
-
     property alias title: titleLabel.text
     property alias description: descriptionLabel.text
     property string shortcut: ""
-    property int toolTipType: StyledToolTip.Default
+    property int toolTipType: QmlToolTip.Default
 
     padding: 8
     margins: 8
@@ -44,7 +39,7 @@ StyledPopupView {
     openPolicy: PopupView.NoActivateFocus
 
     function calculateSize() {
-        const MAX_WIDTH = toolTipType === StyledToolTip.Default ? 300 : 172 // Hardcoded from ScoreItem.qml
+        const MAX_WIDTH = toolTipType === QmlToolTip.Default ? 300 : 172 // Hardcoded from ScoreItem.qml
         contentWidth = Math.min(content.implicitWidth, MAX_WIDTH - margins * 2)
         contentHeight = content.implicitHeight
 
@@ -67,10 +62,10 @@ StyledPopupView {
                 id: titleLabel
                 Layout.fillWidth: true
 
-                font: toolTipType === StyledToolTip.Default ? ui.theme.bodyBoldFont : ui.theme.bodyFont
+                font: toolTipType === QmlToolTip.Default ? ui.theme.bodyBoldFont : ui.theme.bodyFont
                 horizontalAlignment: Text.AlignLeft
-                wrapMode: toolTipType === StyledToolTip.Default ? Text.Wrap : Text.WrapAnywhere
-                maximumLineCount: if (toolTipType === StyledToolTip.Default) 3
+                wrapMode: toolTipType === QmlToolTip.Default ? Text.Wrap : Text.WrapAnywhere
+                maximumLineCount: if (toolTipType === QmlToolTip.Default) 3
             }
 
             StyledTextLabel {

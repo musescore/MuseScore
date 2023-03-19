@@ -332,7 +332,7 @@ FocusScope {
             }
 
             if (containsMouse) {
-                ui.tooltip.show(timeSinceModified, root.path, "", "", StyledToolTip.FileToolTip)
+                ui.tooltip.show(timeSinceModified, root.path, "", "", QmlToolTip.FileToolTip)
             } else {
                 ui.tooltip.hide(timeSinceModified)
             }
