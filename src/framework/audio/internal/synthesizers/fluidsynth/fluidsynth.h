@@ -107,6 +107,8 @@ private:
     int setExpressionLevel(int level);
     int setControllerValue(const midi::Event& event);
 
+    bool isMetronome() const;
+
     std::shared_ptr<Fluid> m_fluid = nullptr;
 
     async::Channel<unsigned int> m_streamsCountChanged;

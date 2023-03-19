@@ -194,9 +194,27 @@ bool FluidSynth::handleEvent(const midi::Event& event)
     }
     }
 
-    midiOutPort()->sendEvent(event);
+    if (!isMetronome()) {
+        midiOutPort()->sendEvent(event);
+    }
 
     return ret == FLUID_OK;
+}
+
+bool FluidSynth::isMetronome() const
+{
+    // There is no easy way to know if this fluidsynth instance is the metronome one
+    // Let's guess it from the channel sound program
+    const std::map<mpe::voice_layer_idx_t, ChannelMap::VoiceMappings>& data = m_sequencer.channels().data();
+    ChannelMap::VoiceMappings mapping = data.at(data.begin()->first);
+    ChannelMap::ChannelMapping channelMapping = mapping.at(mapping.begin()->first);
+    program_t program = channelMapping.second.program;
+
+    std::map<SoundMappingKey, midi::Programs> percussionsMapping = mappingByCategory(METRONOME_SETUP_DATA.category);
+    SoundMappingKey metronomeSoundMapping = { METRONOME_SETUP_DATA.id,  { METRONOME_SETUP_DATA.subCategorySet } };
+    program_t metronomeProgram = percussionsMapping.at(metronomeSoundMapping).begin()->program;
+
+    return program == metronomeProgram;
 }
 
 void FluidSynth::setSampleRate(unsigned int sampleRate)

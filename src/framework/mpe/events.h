@@ -369,6 +369,13 @@ static const PlaybackSetupData GENERIC_SETUP_DATA = {
 
 static const String GENERIC_SETUP_DATA_STRING = GENERIC_SETUP_DATA.toString();
 
+static const PlaybackSetupData METRONOME_SETUP_DATA = {
+    SoundId::Block,
+    SoundCategory::Percussions,
+    { SoundSubCategory::Wooden },
+    {}
+};
+
 struct PlaybackData {
     PlaybackEventsMap originEvents;
     PlaybackSetupData setupData;

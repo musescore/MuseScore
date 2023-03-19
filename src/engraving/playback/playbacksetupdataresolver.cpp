@@ -80,9 +80,5 @@ void PlaybackSetupDataResolver::resolveChordSymbolsSetupData(const Instrument* i
 
 void PlaybackSetupDataResolver::resolveMetronomeSetupData(mpe::PlaybackSetupData& result) const
 {
-    static const mpe::PlaybackSetupData METRONOME_SETUP_DATA = {
-        SoundId::Block, SoundCategory::Percussions, { SoundSubCategory::Wooden }, {}
-    };
-
     result = METRONOME_SETUP_DATA;
 }
