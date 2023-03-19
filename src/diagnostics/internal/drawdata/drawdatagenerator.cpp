@@ -84,7 +84,7 @@ Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& 
         }
 
         io::path_t scoreFile = scores.val.at(i);
-        io::path_t outFile = outDir + "/" + io::FileInfo(scoreFile).baseName() + ".json";
+        io::path_t outFile = outDir + "/" + io::FileInfo(scoreFile).completeBaseName() + ".json";
         processFile(scoreFile, outFile, opt);
     }
 

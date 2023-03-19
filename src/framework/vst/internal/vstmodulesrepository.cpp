@@ -169,7 +169,7 @@ PluginModulePtr VstModulesRepository::createModule(const io::path_t& path)
 
 void VstModulesRepository::addModule(const io::path_t& path)
 {
-    audio::AudioResourceId resourceId = io::basename(path).toStdString();
+    audio::AudioResourceId resourceId = io::completeBasename(path).toStdString();
 
     m_knownPlugins.registerPath(resourceId, path);
 

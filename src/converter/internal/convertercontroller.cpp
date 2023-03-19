@@ -181,7 +181,8 @@ mu::Ret ConverterController::convertPageByPage(INotationWriterPtr writer, INotat
     TRACEFUNC;
 
     for (size_t i = 0; i < notation->elements()->pages().size(); i++) {
-        const QString filePath = io::path_t(io::dirpath(out) + "/" + io::basename(out) + "-%1." + io::suffix(out)).toQString().arg(i + 1);
+        const QString filePath
+            = io::path_t(io::dirpath(out) + "/" + io::completeBasename(out) + "-%1." + io::suffix(out)).toQString().arg(i + 1);
 
         QFile file(filePath);
         if (!file.open(QFile::WriteOnly)) {
@@ -272,7 +273,7 @@ mu::Ret ConverterController::convertScorePartsToPngs(INotationWriterPtr writer, 
         excerpts.push_back(e->notation());
     }
 
-    io::path_t pngFilePath = io::dirpath(out) + "/" + io::path_t(io::basename(out) + "-excerpt.png");
+    io::path_t pngFilePath = io::dirpath(out) + "/" + io::path_t(io::completeBasename(out) + "-excerpt.png");
 
     for (size_t i = 0; i < excerpts.size(); i++) {
         Ret ret = convertPageByPage(writer, excerpts[i], pngFilePath);

@@ -114,7 +114,7 @@ PluginInfoMap PluginsService::readPlugins() const
         }
 
         PluginInfo info;
-        info.codeKey = io::basename(pluginPath).toQString();
+        info.codeKey = io::completeBasename(pluginPath).toQString();
         info.url = url;
         info.name = view.name();
         info.description = view.description();

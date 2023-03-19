@@ -189,7 +189,7 @@ void VstModulesMetaRegister::load()
         }
 
         io::path_t pluginPath(object.value(QStringLiteral("path")).toString().toStdString());
-        m_paths.emplace(io::basename(pluginPath).toStdString(), std::move(pluginPath));
+        m_paths.emplace(io::completeBasename(pluginPath).toStdString(), std::move(pluginPath));
 
         file.close();
     }
