@@ -5216,18 +5216,18 @@ void Score::undoExchangeVoice(Measure* measure, voice_idx_t srcVoice, voice_idx_
 //   undoRemovePart
 //---------------------------------------------------------
 
-void Score::undoRemovePart(Part* part, staff_idx_t idx)
+void Score::undoRemovePart(Part* part, size_t partIdx)
 {
-    undo(new RemovePart(part, idx));
+    undo(new RemovePart(part, partIdx));
 }
 
 //---------------------------------------------------------
 //   undoInsertPart
 //---------------------------------------------------------
 
-void Score::undoInsertPart(Part* part, int idx)
+void Score::undoInsertPart(Part* part, size_t targetPartIndex)
 {
-    undo(new InsertPart(part, idx));
+    undo(new InsertPart(part, targetPartIndex));
 }
 
 //---------------------------------------------------------

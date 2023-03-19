@@ -2526,36 +2526,28 @@ void Score::cmdRemovePart(Part* part)
         cmdRemoveStaff(sidx);
     }
 
-    undoRemovePart(part, sidx);
+    undoRemovePart(part, mu::indexOf(_parts, part));
 }
 
 //---------------------------------------------------------
 //   insertPart
 //---------------------------------------------------------
 
-void Score::insertPart(Part* part, staff_idx_t idx)
+void Score::insertPart(Part* part, size_t targetPartIdx)
 {
     if (!part) {
         return;
     }
 
-    bool inserted = false;
-    staff_idx_t staff = 0;
-
     part->setScore(this);
     assignIdIfNeed(*part);
 
-    for (auto i = _parts.begin(); i != _parts.end(); ++i) {
-        if (staff >= idx) {
-            _parts.insert(i, part);
-            inserted = true;
-            break;
-        }
-        staff += (*i)->nstaves();
-    }
-    if (!inserted) {
+    if (targetPartIdx < _parts.size()) {
+        _parts.insert(_parts.begin() + targetPartIdx, part);
+    } else {
         _parts.push_back(part);
     }
+
     masterScore()->rebuildMidiMapping();
     setInstrumentsChanged(true);
     markInstrumentsAsPrimary(_parts);
@@ -4426,7 +4418,6 @@ void Score::appendPart(const InstrumentTemplate* t)
 {
     Part* part = new Part(this);
     part->initFromInstrTemplate(t);
-    size_t n = nstaves();
     for (staff_idx_t i = 0; i < t->staffCount; ++i) {
         Staff* staff = Factory::createStaff(part);
         StaffType* stt = staff->staffType(Fraction(0, 1));
@@ -4439,7 +4430,7 @@ void Score::appendPart(const InstrumentTemplate* t)
         undoInsertStaff(staff, i);
     }
     part->staves().front()->setBarLineSpan(static_cast<int>(part->nstaves()));
-    undoInsertPart(part, static_cast<int>(n));
+    undoInsertPart(part, _parts.size());
     setUpTempoMapLater();
     masterScore()->rebuildMidiMapping();
 }

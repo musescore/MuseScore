@@ -548,7 +548,7 @@ public:
 
     void rebuildBspTree();
     bool noStaves() const { return _staves.empty(); }
-    void insertPart(Part*, staff_idx_t);
+    void insertPart(Part*, size_t targetPartIdx);
     void appendPart(Part*);
     void removePart(Part*);
     void insertStaff(Staff*, staff_idx_t);
@@ -663,8 +663,8 @@ public:
     void undoChangeChordRestLen(ChordRest* cr, const TDuration&);
     void undoTransposeHarmony(Harmony*, int, int);
     void undoExchangeVoice(Measure* measure, voice_idx_t val1, voice_idx_t val2, staff_idx_t staff1, staff_idx_t staff2);
-    void undoRemovePart(Part* part, staff_idx_t idx = mu::nidx);
-    void undoInsertPart(Part* part, int idx);
+    void undoRemovePart(Part* part, size_t partIdx = mu::nidx);
+    void undoInsertPart(Part* part, size_t targetPartIndex);
     void undoRemoveStaff(Staff* staff);
     void undoInsertStaff(Staff* staff, staff_idx_t idx, bool createRests=true);
     void undoChangeVisible(EngravingItem* item, bool visible);
