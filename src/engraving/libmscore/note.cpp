@@ -1009,9 +1009,11 @@ double Note::outsideTieAttachX(bool up) const
     }
     // special cases:
     if (_headGroup == NoteHeadGroup::HEAD_SLASH) {
-        // the anchors are really close to the stem attach points
-        xo = up ? symSmuflAnchor(noteHead(), SmuflAnchorId::stemUpSE).x() : symSmuflAnchor(noteHead(), SmuflAnchorId::stemDownNW).x();
-        xo += spatium() * 0.13 * (chord()->up() ? mag() : -mag());
+        xo = (up ? headWidth() * 0.75 : headWidth() * 0.25);
+        if (chord()->durationType().hasStem()) {
+            // for quarters and halves, we can safely move a little bit outwards
+            xo += spatium() * 0.13 * (chord()->up() ? -mag() : mag());
+        }
         return x() + xo;
     }
     if (_headGroup == NoteHeadGroup::HEAD_SLASHED1 || _headGroup == NoteHeadGroup::HEAD_SLASHED2) {
