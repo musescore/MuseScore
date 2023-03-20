@@ -380,7 +380,7 @@ class ExportMusicXml
     void clef(staff_idx_t staff, const ClefType ct, const QString& extraAttributes = "");
     void timesig(TimeSig* tsig);
     void keysig(const KeySig* ks, ClefType ct, staff_idx_t staff = 0, bool visible = true);
-    void barlineLeft(const Measure* const m, const int track);
+    void barlineLeft(const Measure* const m, const track_idx_t track);
     void barlineMiddle(const BarLine* bl);
     void barlineRight(const Measure* const m, const track_idx_t strack, const track_idx_t etrack);
     void lyrics(const std::vector<Lyrics*>& ll, const track_idx_t trk);
@@ -1677,7 +1677,7 @@ static QString tick2xml(const Fraction& ticks, int* dots)
 //   findVolta -- find volta starting in measure m
 //---------------------------------------------------------
 
-static Volta* findVolta(const Measure* const m, bool left, const int track)
+static Volta* findVolta(const Measure* const m, bool left, const track_idx_t track)
 {
     Fraction stick = m->tick();
     Fraction etick = m->tick() + m->ticks();
@@ -1743,7 +1743,7 @@ static void ending(XmlWriter& xml, Volta* v, bool left)
 //   barlineLeft -- search for and handle barline left
 //---------------------------------------------------------
 
-void ExportMusicXml::barlineLeft(const Measure* const m, const int track)
+void ExportMusicXml::barlineLeft(const Measure* const m, const track_idx_t track)
 {
     bool rs = m->repeatStart();
     Volta* volta = findVolta(m, true, track);

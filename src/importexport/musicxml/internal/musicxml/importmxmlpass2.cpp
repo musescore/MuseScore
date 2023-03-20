@@ -3563,7 +3563,7 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
 //---------------------------------------------------------
 //   findRedundantVolta
 //---------------------------------------------------------
-static Volta* findRedundantVolta(const int track, const Measure* measure)
+static Volta* findRedundantVolta(const track_idx_t track, const Measure* measure)
 {
     auto spanners = measure->score()->spannerMap().findOverlapping(measure->tick().ticks(), measure->endTick().ticks());
     for (auto spanner : spanners) {
