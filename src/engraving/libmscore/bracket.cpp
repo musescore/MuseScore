@@ -170,6 +170,7 @@ void Bracket::layout()
         return;
     }
 
+    setVisible(_bi->visible());
     _shape.clear();
     switch (bracketType()) {
     case BracketType::BRACE: {

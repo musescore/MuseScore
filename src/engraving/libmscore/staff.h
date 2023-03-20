@@ -153,6 +153,7 @@ public:
     size_t bracketSpan(size_t idx) const;
     void setBracketType(size_t idx, BracketType val);
     void setBracketSpan(size_t idx, size_t val);
+    void setBracketVisible(size_t idx, bool v);
     void swapBracket(size_t oldIdx, size_t newIdx);
     void changeBracketColumn(size_t oldColumn, size_t newColumn);
     void addBracket(BracketItem*);

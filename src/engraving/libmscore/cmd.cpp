@@ -4485,10 +4485,6 @@ void Score::cmdToggleVisible()
     bool newVisible = !allVisible;
 
     for (EngravingItem* item : selection().elements()) {
-        if (item->isBracket()) {
-            continue;
-        }
-
         undoChangeVisible(item, newVisible);
     }
 }
