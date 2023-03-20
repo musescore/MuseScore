@@ -1277,6 +1277,12 @@ void Beam::extendStem(Chord* chord, double addition)
     if (chord->stemSlash()) {
         chord->stemSlash()->layout();
     }
+
+    if (cross()) {
+        // stem-side articulations on cross-staff beams must be re-laid-out
+        chord->layoutArticulations();
+        chord->layoutArticulations2();
+    }
 }
 
 bool Beam::isBeamInsideStaff(int yPos, int staffLines, bool allowFloater) const
