@@ -283,6 +283,9 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::pedalFrameRound,         "pedalFrameRound",         0 },
     { Sid::pedalFrameFgColor,       "pedalFrameFgColor",       Color::BLACK },
     { Sid::pedalFrameBgColor,       "pedalFrameBgColor",       Color::transparent },
+    { Sid::pedalText,               "pedalText",               String() },
+    { Sid::pedalContinueText,       "pedalContinueText",       String() },
+    { Sid::pedalEndText,            "pedalEndText",            String() },
 
     { Sid::trillPlacement,          "trillPlacement",          PlacementV::ABOVE },
     { Sid::trillPosAbove,           "trillPosAbove",           PointF(.0, -0.5) },

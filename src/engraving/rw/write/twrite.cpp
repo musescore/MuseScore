@@ -2128,9 +2128,6 @@ void TWrite::write(const Pedal* item, XmlWriter& xml, WriteContext& ctx)
 
     for (auto i : {
         Pid::END_HOOK_TYPE,
-        Pid::BEGIN_TEXT,
-        Pid::CONTINUE_TEXT,
-        Pid::END_TEXT,
         Pid::LINE_VISIBLE,
         Pid::BEGIN_HOOK_TYPE
     }) {
