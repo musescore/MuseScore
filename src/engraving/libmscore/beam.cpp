@@ -1066,17 +1066,11 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
         bool breakBeam = false;
         bool previousBreak32 = false;
         bool previousBreak64 = false;
-        int prevRests = 0;
 
         for (size_t i = 0; i < chordRests.size(); i++) {
             ChordRest* chordRest = chordRests[i];
             ChordRest* prevChordRest = i < 1 ? nullptr : chordRests[i - 1];
-            if (!chordRest->isChord()) {
-                if ((chordRest != chordRests.front() && chordRest != chordRests.back()) || level >= chordRest->beams()) {
-                    prevRests++;
-                    continue;
-                }
-            }
+
             if (level < chordRest->beams()) {
                 levelHasBeam = true;
             }
@@ -1095,19 +1089,19 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
                 if (startCr && endCr) {
                     if (startCr == endCr && startCr->isChord()) {
                         bool isBeamletBefore = calcIsBeamletBefore(toChord(
-                                                                       startCr), static_cast<int>(i) - 1 - prevRests, level, previousBreak32,
+                                                                       startCr), static_cast<int>(i) - 1, level, previousBreak32,
                                                                    previousBreak64);
                         createBeamletSegment(toChord(startCr), isBeamletBefore, level);
                     } else {
                         createBeamSegment(startCr, endCr, level);
                     }
                 }
-                startCr = chordRest && breakBeam && level < chordRest->beams() ? chordRest : nullptr;
-                endCr = chordRest && breakBeam && level < chordRest->beams() ? chordRest : nullptr;
+                bool setCr = chordRest && chordRest->isChord() && breakBeam && level < chordRest->beams();
+                startCr = setCr ? chordRest : nullptr;
+                endCr = setCr ? chordRest : nullptr;
             }
             previousBreak32 = isBroken32;
             previousBreak64 = isBroken64;
-            prevRests = 0;
         }
 
         // if the beam ends on the last chord
