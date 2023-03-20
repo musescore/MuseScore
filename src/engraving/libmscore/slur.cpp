@@ -501,7 +501,14 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
 
     static constexpr unsigned maxIter = 30;     // Max iterations allowed
     const double vertClearance = slur()->up() ? clearance : -clearance;
-    const double step = slur()->up() ? -0.25 * spatium() : 0.25 * spatium();
+    // Optimize the slur shape and position in quarter-space steps
+    double step = slur()->up() ? -0.25 * spatium() : 0.25 * spatium();
+    // ...but allow long slurs to user coarser steps
+    static constexpr double longSlurLimit = 16.0; // in spaces
+    if (slurLength > longSlurLimit) {
+        step *= slurLength / longSlurLimit;
+        step = std::min(step, 1.5 * spatium());
+    }
     // Divide slur in several rectangles to localize collisions
     const unsigned npoints = 20;
     std::vector<RectF> slurRects;
