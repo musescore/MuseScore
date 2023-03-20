@@ -981,8 +981,6 @@ bool TextBase::deleteSelectedText(EditData& ed)
                 break;
             }
             TextCursor undoCursor(*_cursor);
-            // can't rely on the cursor's current format as it doesn't preserve the special font "ScoreText"
-            undoCursor.setFormat(*_layout[_cursor->row()].formatAt(static_cast<int>(_cursor->column())));
             score()->undo(new RemoveText(&undoCursor, String(_cursor->currentCharacter())), &ed);
         }
     }
