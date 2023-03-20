@@ -44,7 +44,7 @@ public:
     Fingering* clone() const override { return new Fingering(*this); }
 
     Note* note() const { return toNote(explicitParent()); }
-    ElementType layoutType();
+    ElementType layoutType() const;
     PlacementV calculatePlacement() const;
 
     void draw(mu::draw::Painter*) const override;
@@ -56,7 +56,7 @@ public:
 
     String accessibleInfo() const override;
 
-    bool isOnCrossBeamSide();
+    bool isOnCrossBeamSide() const;
 };
 } // namespace mu::engraving
 #endif
