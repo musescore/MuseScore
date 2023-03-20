@@ -334,9 +334,11 @@ Lexer::Lexer(QIODevice* inDevice)
     graceMap["thg"] = "HA HG";
 
     // piobraich
-    graceMap["endari"] = "E LA F LA";
-    graceMap["embari"] = "E LG F LG";
-    graceMap["dare"]   = "F E HG E";
+    graceMap["endari"]   = "E LA F LA";
+    graceMap["embari"]   = "E LG F LG";
+    graceMap["dare"]     = "F E HG E";
+    graceMap["crunl"]    = "LG D LG E LA F LA";
+    graceMap["crunlb"]   = "LG B LG E LA F LA";
 
     getSym();
 
