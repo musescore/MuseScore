@@ -1831,6 +1831,7 @@ void Chord::layoutHook()
 {
     if (!_hook) {
         createHook();
+        computeUp();
     }
     _hook->setHookType(up() ? durationType().hooks() : -durationType().hooks());
     _hook->layout();

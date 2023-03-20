@@ -332,15 +332,20 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                 BeamMode mode = cr->beamMode();
                 if (mode == BeamMode::MID || mode == BeamMode::END || mode == BeamMode::BEGIN32 || mode == BeamMode::BEGIN64) {
                     ChordRest* prevCR = score->findCR(measure->tick() - Fraction::fromTicks(1), track);
+                    Beam* prevBeam = prevCR->beam();
                     if (prevCR) {
                         const Measure* pm = prevCR->measure();
                         if (!beamNoContinue(prevCR->beamMode())
                             && !pm->lineBreak() && !pm->pageBreak() && !pm->sectionBreak()
                             && lc.prevMeasure
                             && !(prevCR->isChord() && prevCR->durationType().type() <= DurationType::V_QUARTER)) {
-                            beam = prevCR->beam();
+                            beam = prevBeam;
                             //a1 = beam ? beam->elements().front() : prevCR;
                             a1 = beam ? nullptr : prevCR;               // when beam is found, a1 is no longer required.
+                        } else if (prevBeam && prevBeam == cr->beam() && prevBeam->elements().front() == prevCR) {
+                            // remove the beam from the previous chordrest because we do not currently
+                            // support cross-system beams
+                            prevCR->removeDeleteBeam(false);
                         }
                     }
                 }
