@@ -560,8 +560,8 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
     }
 }
 
-static void collectGraceBeforeChordEvents(Chord* chord, EventMap* events, double veloMultiplier, Staff* st, int tickOffset,
-                                          PitchWheelRenderer& pitchWheelRenderer,  MidiInstrumentEffect effect)
+void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, EventMap* events, double veloMultiplier, Staff* st, int tickOffset,
+                                                 PitchWheelRenderer& pitchWheelRenderer,  MidiInstrumentEffect effect)
 {
     // calculate offset for grace notes here
     const auto& grChords = chord->graceNotesBefore();
@@ -587,6 +587,11 @@ static void collectGraceBeforeChordEvents(Chord* chord, EventMap* events, double
                 params.effect = effect;
                 params.velocityMultiplier = veloMultiplier;
                 params.tickOffset = tickOffset;
+
+                Instrument* instr = st->part()->instrument(chord->tick());
+                int channel = getChannel(instr, note, effect);
+                events->registerChannel(channel);
+                params.channel = channel;
 
                 if (note->noteType() == NoteType::ACCIACCATURA) {
                     params.graceOffsetOn = graceTickSum - graceTickOffset * currentBeaforeBeatNote;

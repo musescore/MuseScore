@@ -101,6 +101,8 @@ private:
     };
 
     ChordParams collectChordParams(const Chord* chord) const;
+    void collectGraceBeforeChordEvents(Chord* chord, EventMap* events, double veloMultiplier, Staff* st, int tickOffset,
+                                       PitchWheelRenderer& pitchWheelRenderer,  MidiInstrumentEffect effect);
 
     uint32_t getChannel(const Instrument* instr, const Note* note, MidiInstrumentEffect effect);
 
