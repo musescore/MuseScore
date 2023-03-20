@@ -1814,35 +1814,37 @@ void Slur::computeUp()
         // assumption:
         // slurs have only chords or rests as start/end elements
         //
-        if (startCR() == 0 || endCR() == 0) {
+        ChordRest* chordRest1 = startCR();
+        ChordRest* chordRest2 = endCR();
+        if (chordRest1 == 0 || chordRest2 == 0) {
             _up = true;
             break;
         }
-        Chord* c1 = startCR()->isChord() ? toChord(startCR()) : 0;
-        Chord* c2 = endCR()->isChord() ? toChord(endCR()) : 0;
-        if (c2 && startCR()->measure()->system() != endCR()->measure()->system()) {
+        Chord* chord1 = startCR()->isChord() ? toChord(startCR()) : 0;
+        Chord* chord2 = endCR()->isChord() ? toChord(endCR()) : 0;
+        if (chord2 && startCR()->measure()->system() != endCR()->measure()->system()) {
             // HACK: if the end chord is in a different system, it may have never been laid out yet.
             // But we need to know its direction to decide slur direction, so need to compute it here.
-            for (Note* note : c2->notes()) {
+            for (Note* note : chord2->notes()) {
                 note->updateLine(); // because chord direction is based on note lines
             }
-            c2->computeUp();
+            chord2->computeUp();
         }
 
-        if (c1 && c1->beam() && c1->beam()->cross()) {
+        if (chord1 && chord1->beam() && chord1->beam()->cross()) {
             // TODO: stem direction is not finalized, so we cannot use it here
             _up = true;
             break;
         }
 
-        _up = !(startCR()->up());
+        _up = !(chordRest1->up());
 
         // Check if multiple voices
         bool multipleVoices = false;
-        Measure* m1 = startCR()->measure();
-        while (m1 && m1->tick() <= endCR()->tick()) {
-            if ((m1->hasVoices(startCR()->staffIdx(), tick(), ticks() + endCR()->ticks()))
-                && c1) {
+        Measure* m1 = chordRest1->measure();
+        while (m1 && m1->tick() <= chordRest2->tick()) {
+            if ((m1->hasVoices(chordRest1->staffIdx(), tick(), ticks() + chordRest2->ticks()))
+                && chord1) {
                 multipleVoices = true;
                 break;
             }
@@ -1850,16 +1852,16 @@ void Slur::computeUp()
         }
         if (multipleVoices) {
             // slurs go on the stem side
-            if (startCR()->voice() > 0 || endCR()->voice() > 0) {
+            if (chordRest1->voice() > 0 || chordRest2->voice() > 0) {
                 _up = false;
             } else {
                 _up = true;
             }
-        } else if (c1 && c2 && !c1->isGrace() && isDirectionMixture(c1, c2)) {
+        } else if (chord1 && chord2 && !chord1->isGrace() && isDirectionMixture(chord1, chord2)) {
             // slurs go above if there are mixed direction stems between c1 and c2
             // but grace notes are exceptions
             _up = true;
-        } else if (c1 && c2 && c1->isGrace() && c2 != c1->parent() && isDirectionMixture(c1, c2)) {
+        } else if (chord1 && chord2 && chord1->isGrace() && chord2 != chord1->parent() && isDirectionMixture(chord1, chord2)) {
             _up = true;
         }
     }
