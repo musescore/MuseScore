@@ -798,6 +798,17 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                         // add element to skyline
                         if (e->addToSkyline()) {
                             skyline.add(e->shape().translated(e->pos() + p));
+                            // add grace notes to skyline
+                            if (e->isChord()) {
+                                GraceNotesGroup& graceBefore = toChord(e)->graceNotesBefore();
+                                GraceNotesGroup& graceAfter = toChord(e)->graceNotesAfter();
+                                if (!graceBefore.empty()) {
+                                    skyline.add(graceBefore.shape().translated(graceBefore.pos() + p));
+                                }
+                                if (!graceAfter.empty()) {
+                                    skyline.add(graceAfter.shape().translated(graceAfter.pos() + p));
+                                }
+                            }
                         }
 
                         // add tremolo to skyline
