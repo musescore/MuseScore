@@ -931,7 +931,7 @@ TEST_F(Musicxml_Tests, volta1) {
 TEST_F(Musicxml_Tests, volta2) {
     mxmlIoTest("testVolta2");
 }
-TEST_F(Musicxml_Tests, DISABLED_voltaHiding1) {
+TEST_F(Musicxml_Tests, voltaHiding1) {
     mxmlImportTestRef("testVoltaHiding");
 }
 TEST_F(Musicxml_Tests, voltaHiding2) {
