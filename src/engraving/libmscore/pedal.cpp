@@ -33,6 +33,9 @@ using namespace mu;
 
 namespace mu::engraving {
 static const ElementStyle pedalStyle {
+    { Sid::pedalText,                          Pid::BEGIN_TEXT },
+    { Sid::pedalContinueText,                  Pid::CONTINUE_TEXT },
+    { Sid::pedalEndText,                       Pid::END_TEXT },
     { Sid::pedalFontFace,                      Pid::BEGIN_FONT_FACE },
     { Sid::pedalFontFace,                      Pid::CONTINUE_FONT_FACE },
     { Sid::pedalFontFace,                      Pid::END_FONT_FACE },
@@ -92,9 +95,6 @@ Pedal::Pedal(EngravingItem* parent)
 {
     initElementStyle(&pedalStyle);
     setLineVisible(true);
-    resetProperty(Pid::BEGIN_TEXT);
-    resetProperty(Pid::CONTINUE_TEXT);
-    resetProperty(Pid::END_TEXT);
 
     resetProperty(Pid::LINE_WIDTH);
     resetProperty(Pid::LINE_STYLE);
@@ -137,9 +137,13 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
         return style().styleV(Sid::pedalLineStyle);
 
     case Pid::BEGIN_TEXT:
+        return score()->styleV(Sid::pedalText);
+
     case Pid::CONTINUE_TEXT:
+        return score()->styleV(Sid::pedalContinueText);
+
     case Pid::END_TEXT:
-        return "";
+        return score()->styleV(Sid::pedalEndText);
 
     case Pid::BEGIN_TEXT_PLACE:
     case Pid::CONTINUE_TEXT_PLACE:
