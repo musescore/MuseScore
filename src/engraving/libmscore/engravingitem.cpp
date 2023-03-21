@@ -55,6 +55,7 @@
 #include "mscore.h"
 #include "note.h"
 #include "page.h"
+#include "rest.h"
 #include "score.h"
 #include "segment.h"
 #include "shape.h"
@@ -2704,6 +2705,16 @@ double EngravingItem::computePadding(const EngravingItem* nextItem) const
     double scaling = (mag() + nextItem->mag()) / 2;
     double padding = score()->paddingTable().at(type()).at(nextItem->type());
     padding *= scaling;
+    if (!isLedgerLine() && nextItem->isRest()) {
+        const Rest* rest = toRest(nextItem);
+        SymId symbol = rest->sym();
+        if (symbol == SymId::restWholeLegerLine
+            || symbol == SymId::restDoubleWholeLegerLine
+            || symbol == SymId::restHalfLegerLine) {
+            // In this case the ledgerLine is included in the glyph itself, so we must ignore it
+            padding += rest->bbox().left();
+        }
+    }
     return padding;
 }
 }
