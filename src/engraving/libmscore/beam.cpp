@@ -804,10 +804,9 @@ void Beam::createBeamSegment(ChordRest* startCr, ChordRest* endCr, int level)
     // avoid adjusting for beams on opposite side of level 0
     if (level != 0) {
         for (const BeamSegment* beam : _beamSegments) {
-            if (beam->level == 0 || beam->line.x2() < startX || beam->line.x1() > endX) {
+            if (beam->level == 0 || beam->endTick < startCr->tick() || beam->startTick > endCr->tick()) {
                 continue;
             }
-
             ++(beam->above ? beamsAbove : beamsBelow);
         }
 
@@ -835,6 +834,8 @@ void Beam::createBeamSegment(ChordRest* startCr, ChordRest* endCr, int level)
     b->above = !overallUp;
     b->level = level;
     b->line = LineF(startX, startY, endX, endY);
+    b->startTick = startCr->tick();
+    b->endTick = endCr->tick();
     _beamSegments.push_back(b);
 
     if (level > 0) {
