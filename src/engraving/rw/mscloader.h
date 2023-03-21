@@ -33,7 +33,7 @@ class ReadStyleHook;
 
 namespace mu::engraving {
 class MasterScore;
-class ReadInOutData;
+struct ReadInOutData;
 class XmlReader;
 class MscLoader
 {
