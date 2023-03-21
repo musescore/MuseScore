@@ -24,7 +24,7 @@
 #include "io/file.h"
 #include "io/buffer.h"
 
-#include "../rw/scorereader.h"
+#include "../rw/mscloader.h"
 
 #include "infrastructure/localfileinfoprovider.h"
 
@@ -85,7 +85,7 @@ mu::Ret mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const String& 
     MscReader reader(params);
     reader.open();
 
-    ScoreReader scoreReader;
+    MscLoader scoreReader;
     SettingsCompat audioSettings;
     return scoreReader.loadMscz(score, reader, audioSettings, ignoreVersionError);
 }

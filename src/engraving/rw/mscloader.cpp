@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "scorereader.h"
+#include "mscloader.h"
 
 #include "io/buffer.h"
 
@@ -38,8 +38,8 @@
 using namespace mu::io;
 using namespace mu::engraving;
 
-mu::Ret ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, SettingsCompat& settingsCompat,
-                              bool ignoreVersionError)
+mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, SettingsCompat& settingsCompat,
+                            bool ignoreVersionError)
 {
     TRACEFUNC;
 
@@ -149,7 +149,7 @@ mu::Ret ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscRead
     return ret;
 }
 
-mu::Ret ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat::ReadStyleHook* styleHook)
+mu::Ret MscLoader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat::ReadStyleHook* styleHook)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
@@ -207,7 +207,7 @@ mu::Ret ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, co
     return Ret(static_cast<int>(Err::FileCorrupted), e.errorString().toStdString());
 }
 
-Err ScoreReader::doRead(MasterScore* score, XmlReader& e, ReadContext& ctx)
+Err MscLoader::doRead(MasterScore* score, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());

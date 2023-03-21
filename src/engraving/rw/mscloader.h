@@ -31,10 +31,10 @@
 #include "../libmscore/masterscore.h"
 
 namespace mu::engraving {
-class ScoreReader
+class MscLoader
 {
 public:
-    ScoreReader() = default;
+    MscLoader() = default;
 
     Ret loadMscz(MasterScore* score, const MscReader& mscReader, SettingsCompat& settingsCompat, bool ignoreVersionError);
 

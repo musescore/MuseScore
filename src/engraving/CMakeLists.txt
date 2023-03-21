@@ -69,8 +69,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/writecontext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/writecontext.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/linksindexer.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/scorereader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/scorereader.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/mscloader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/mscloader.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/read400.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read400.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/staffrw.cpp
