@@ -228,11 +228,11 @@ void CommandLineParser::parse(int argc, char** argv)
     }
 
     if (m_parser.isSet("register-failed-audio-plugin")) {
-        QStringList args = m_parser.positionalArguments();
+        QStringList args1 = m_parser.positionalArguments();
         m_runMode = IApplication::RunMode::AudioPluginRegistration;
         m_audioPluginRegistration.pluginPath = m_parser.value("register-failed-audio-plugin");
         m_audioPluginRegistration.failedPlugin = true;
-        m_audioPluginRegistration.failCode = !args.empty() ? args[0].toInt() : -1;
+        m_audioPluginRegistration.failCode = !args1.empty() ? args1[0].toInt() : -1;
     }
 
     // Converter mode
@@ -308,14 +308,14 @@ void CommandLineParser::parse(int argc, char** argv)
     }
 
     if (m_parser.isSet("source-update")) {
-        QStringList args = m_parser.positionalArguments();
+        QStringList args2 = m_parser.positionalArguments();
 
         m_runMode = IApplication::RunMode::ConsoleApp;
         m_converterTask.type = ConvertType::SourceUpdate;
-        m_converterTask.inputFile = args[0];
+        m_converterTask.inputFile = args2[0];
 
-        if (args.size() >= 2) {
-            m_converterTask.params[CommandLineParser::ParamKey::ScoreSource] = args[1];
+        if (args2.size() >= 2) {
+            m_converterTask.params[CommandLineParser::ParamKey::ScoreSource] = args2[1];
         } else {
             LOGW() << "Option: --source-update no source specified";
         }
