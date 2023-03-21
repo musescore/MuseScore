@@ -54,8 +54,8 @@ class BeamSegment
     OBJECT_ALLOCATOR(engraving, BeamSegment)
 public:
     mu::LineF line;
-    int level;
-    bool above; // above level 0 or below? (meaningless for level 0)
+    int level = 0;
+    bool above = false; // above level 0 or below? (meaningless for level 0)
     Fraction startTick;
     Fraction endTick;
     bool isBeamlet = false;
@@ -69,9 +69,9 @@ public:
 };
 
 struct TremAnchor {
-    ChordRest* chord1;
-    double y1;
-    double y2;
+    ChordRest* chord1 = nullptr;
+    double y1 = 0.;
+    double y2 = 0.;
 };
 
 class BeamLayout
@@ -83,25 +83,25 @@ private:
         BEAM,
         TREMOLO
     };
-    BeamType _beamType{ BeamType::INVALID };
-    EngravingItem* _e{ nullptr };
-    Beam* _beam{ nullptr };
-    Tremolo* _trem{ nullptr };
-    bool _isValid{ false };
-    bool _up{ false };
-    Fraction _tick{ Fraction(0, 1) };
-    double _spatium{ 0. };
-    PointF _startAnchor;
-    PointF _endAnchor;
-    double _slope;
-    bool _isGrace{ false };
-    int _beamSpacing{ 0 };
-    double _beamDist{ 0. };
-    double _beamWidth{ 0. };
-    std::vector<ChordRest*> _elements;
-    std::vector<int> _notes;
-    StaffType const* _tab;
-    bool _isBesideTabStaff;
+    BeamType m_beamType = BeamType::INVALID;
+    EngravingItem* m_element = nullptr;
+    Beam* m_beam = nullptr;
+    Tremolo* m_trem = nullptr;
+    bool m_isValid = false;
+    bool m_up = false;
+    Fraction m_tick = Fraction(0, 1);
+    double m_spatium = 0.;
+    PointF m_startAnchor;
+    PointF m_endAnchor;
+    double m_slope = 0.;
+    bool m_isGrace = false;
+    int m_beamSpacing = 0;
+    double m_beamDist = 0.;
+    double m_beamWidth = 0.;
+    std::vector<ChordRest*> m_elements;
+    std::vector<int> m_notes;
+    StaffType const* m_tab = nullptr;
+    bool m_isBesideTabStaff = false;
 
     int getMiddleStaffLine(ChordRest* startChord, ChordRest* endChord, int staffLines) const;
     int computeDesiredSlant(int startNote, int endNote, int middleLine, int dictator, int pointer) const;
@@ -128,10 +128,10 @@ public:
     BeamLayout() {}
     BeamLayout(EngravingItem* e);
 
-    double beamDist() { return _beamDist; }
-    PointF startAnchor() { return _startAnchor; }
-    PointF endAnchor() { return _endAnchor; }
-    void setAnchors(PointF startAnchor, PointF endAnchor) { _startAnchor = startAnchor; _endAnchor = endAnchor; }
+    double beamDist() { return m_beamDist; }
+    PointF startAnchor() { return m_startAnchor; }
+    PointF endAnchor() { return m_endAnchor; }
+    void setAnchors(PointF startAnchor, PointF endAnchor) { m_startAnchor = startAnchor; m_endAnchor = endAnchor; }
 
     bool calculateAnchors(const std::vector<ChordRest*>& chordRests, const std::vector<int>& notes);
 
