@@ -21,6 +21,8 @@
  */
 #include "read302.h"
 
+#include "global/defer.h"
+
 #include "iengravingfont.h"
 #include "rw/xml.h"
 #include "rw/compat/compatutils.h"
@@ -261,8 +263,17 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-Err Read302::read(Score* score, XmlReader& e, ReadContext& ctx)
+Err Read302::read(Score* score, XmlReader& e, ReadInOutData* out)
 {
+    ReadContext ctx(score);
+    e.setContext(&ctx);
+
+    DEFER {
+        if (out) {
+            out->settingsCompat = std::move(ctx.settingCompat());
+        }
+    };
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "programVersion") {

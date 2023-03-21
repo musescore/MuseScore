@@ -22,15 +22,19 @@
 #ifndef MU_ENGRAVING_SCOREREADER_H
 #define MU_ENGRAVING_SCOREREADER_H
 
-#include "../engravingerrors.h"
+#include "global/types/ret.h"
 
 #include "infrastructure/mscreader.h"
-#include "readcontext.h"
-#include "xml.h"
+#include "engraving/types/types.h"
 
-#include "../libmscore/masterscore.h"
+namespace mu::engraving::compat {
+class ReadStyleHook;
+}
 
 namespace mu::engraving {
+class MasterScore;
+class ReadInOutData;
+class XmlReader;
 class MscLoader
 {
 public:
@@ -42,8 +46,8 @@ private:
 
     friend class MasterScore;
 
-    Ret read(MasterScore* score, XmlReader&, ReadContext& ctx, compat::ReadStyleHook* styleHook = nullptr);
-    Err doRead(MasterScore* score, XmlReader& e, ReadContext& ctx);
+    Ret read(MasterScore* score, XmlReader&, bool ignoreVersionError, ReadInOutData* out = nullptr,
+             compat::ReadStyleHook* styleHook = nullptr);
 };
 }
 

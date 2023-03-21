@@ -27,6 +27,11 @@
 #include "global/io/buffer.h"
 #include "global/types/retval.h"
 
+#include "../libmscore/masterscore.h"
+#include "../libmscore/audio.h"
+#include "../libmscore/excerpt.h"
+#include "../libmscore/imageStore.h"
+
 #include "114/read114.h"
 #include "206/read206.h"
 #include "302/read302.h"
@@ -34,9 +39,8 @@
 
 #include "compat/readstyle.h"
 
-#include "../libmscore/audio.h"
-#include "../libmscore/excerpt.h"
-#include "../libmscore/imageStore.h"
+#include "xmlreader.h"
+#include "readcontext.h"
 
 #include "log.h"
 
@@ -116,8 +120,7 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
         }
     }
 
-    ReadContext masterScoreCtx(masterScore);
-    masterScoreCtx.setIgnoreVersionError(ignoreVersionError);
+    ReadInOutData masterReadOutData;
 
     Ret ret = make_ok();
 
@@ -130,9 +133,8 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
 
         XmlReader xml(scoreData);
         xml.setDocName(docName);
-        xml.setContext(&masterScoreCtx);
 
-        ret = read(masterScore, xml, masterScoreCtx, &styleHook);
+        ret = read(masterScore, xml, ignoreVersionError, &masterReadOutData, &styleHook);
     }
 
     // Read excerpts
@@ -153,14 +155,13 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
 
             ByteArray excerptData = mscReader.readExcerptFile(excerptName);
 
-            ReadContext ctx(partScore);
-            ctx.initLinks(masterScoreCtx);
-
             XmlReader xml(excerptData);
             xml.setDocName(excerptName);
-            xml.setContext(&ctx);
 
-            Read400().read(partScore, xml, ctx);
+            ReadInOutData partReadInData;
+            partReadInData.links = masterReadOutData.links;
+
+            Read400().read(partScore, xml, &partReadInData);
 
             partScore->linkMeasures(masterScore);
             ex->setTracksMapping(xml.context()->tracks());
@@ -179,12 +180,12 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
         }
     }
 
-    settingsCompat = std::move(masterScoreCtx.settingCompat());
+    settingsCompat = std::move(masterReadOutData.settingsCompat);
 
     return ret;
 }
 
-mu::Ret MscLoader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat::ReadStyleHook* styleHook)
+mu::Ret MscLoader::read(MasterScore* score, XmlReader& e, bool ignoreVersionError, ReadInOutData* out, compat::ReadStyleHook* styleHook)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
@@ -192,7 +193,7 @@ mu::Ret MscLoader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, comp
             StringList sl = version.split('.');
             score->setMscVersion(sl[0].toInt() * 100 + sl[1].toInt());
 
-            RetVal<IScoreReaderPtr> reader = makeReader(score->mscVersion(), ctx.ignoreVersionError());
+            RetVal<IScoreReaderPtr> reader = makeReader(score->mscVersion(), ignoreVersionError);
             if (!reader.ret) {
                 return reader.ret;
             }
@@ -216,7 +217,7 @@ mu::Ret MscLoader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, comp
                 score->checkChordList();
             }
 
-            Err err = reader.val->read(score, e, ctx);
+            Err err = reader.val->read(score, e, out);
 
             score->setExcerptsChanged(false);
 
@@ -230,27 +231,4 @@ mu::Ret MscLoader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, comp
     }
 
     return Ret(static_cast<int>(Err::FileCorrupted), e.errorString().toStdString());
-}
-
-Err MscLoader::doRead(MasterScore* score, XmlReader& e, ReadContext& ctx)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "programVersion") {
-            score->setMscoreVersion(e.readText());
-        } else if (tag == "programRevision") {
-            score->setMscoreRevision(e.readInt(nullptr, 16));
-        } else if (tag == "Score") {
-            if (!Read400::readScore400(score, e, ctx)) {
-                if (e.error() == XmlStreamReader::CustomError) {
-                    return Err::FileCriticallyCorrupted;
-                }
-                return Err::FileBadFormat;
-            }
-        } else if (tag == "Revision") {
-            e.skipCurrentElement();
-        }
-    }
-
-    return Err::NoError;
 }

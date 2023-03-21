@@ -60,6 +60,7 @@ set(MODULE_SRC
     ${LIBMSCORE_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/iscorereader.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/readoutdata.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/114/read114.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/114/read114.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/206/read206.cpp
