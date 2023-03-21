@@ -77,6 +77,7 @@ public:
 
     void checkDots();
     void layoutDots();
+    double symWidthNoLedgerLines() const;
     NoteDot* dot(int n);
     const std::vector<NoteDot*>& dotList() const;
     int getDotline() const { return m_dotline; }

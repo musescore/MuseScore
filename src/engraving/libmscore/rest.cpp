@@ -414,7 +414,7 @@ void Rest::layout()
 void Rest::layoutDots()
 {
     checkDots();
-    double x = symWidth(m_sym) + score()->styleMM(Sid::dotNoteDistance) * mag();
+    double x = symWidthNoLedgerLines() + score()->styleMM(Sid::dotNoteDistance) * mag();
     double dx = score()->styleMM(Sid::dotDotDistance) * mag();
     double y = m_dotline * spatium() * .5;
     for (NoteDot* dot : m_dots) {
@@ -422,6 +422,20 @@ void Rest::layoutDots()
         dot->setPos(x, y);
         x += dx;
     }
+}
+
+double Rest::symWidthNoLedgerLines() const
+{
+    if (m_sym == SymId::restHalfLegerLine) {
+        return symWidth(SymId::restHalf);
+    }
+    if (m_sym == SymId::restWholeLegerLine) {
+        return symWidth(SymId::restWhole);
+    }
+    if (m_sym == SymId::restDoubleWholeLegerLine) {
+        return symWidth(SymId::restDoubleWhole);
+    }
+    return symWidth(m_sym);
 }
 
 //---------------------------------------------------------
@@ -476,6 +490,10 @@ int Rest::getDotline(DurationType durationType)
     case DurationType::V_256TH:
     case DurationType::V_128TH:
         dl = -5;
+        break;
+    case DurationType::V_MEASURE:
+    case DurationType::V_WHOLE:
+        dl = 1;
         break;
     default:
         dl = -1;
