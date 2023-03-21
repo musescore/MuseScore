@@ -23,6 +23,7 @@
 #ifndef __BEAM_H__
 #define __BEAM_H__
 
+#include "beamtremololayout.h"
 #include "engravingitem.h"
 #include "durationtype.h"
 #include "property.h"
@@ -62,87 +63,16 @@ public:
     bool isBefore = false;
 
     Shape shape() const;
-    Beam* beam;
+    EngravingItem* parentElement;
 
-    BeamSegment(Beam* b)
-        : beam(b) {}
+    BeamSegment(EngravingItem* b)
+        : parentElement(b) {}
 };
 
 struct TremAnchor {
     ChordRest* chord1 = nullptr;
     double y1 = 0.;
     double y2 = 0.;
-};
-
-class BeamLayout
-{
-private:
-    static constexpr std::array _maxSlopes = { 0, 1, 2, 3, 4, 5, 6, 7 };
-    enum class BeamType {
-        INVALID,
-        BEAM,
-        TREMOLO
-    };
-    BeamType m_beamType = BeamType::INVALID;
-    EngravingItem* m_element = nullptr;
-    Beam* m_beam = nullptr;
-    Tremolo* m_trem = nullptr;
-    bool m_isValid = false;
-    bool m_up = false;
-    Fraction m_tick = Fraction(0, 1);
-    double m_spatium = 0.;
-    PointF m_startAnchor;
-    PointF m_endAnchor;
-    double m_slope = 0.;
-    bool m_isGrace = false;
-    int m_beamSpacing = 0;
-    double m_beamDist = 0.;
-    double m_beamWidth = 0.;
-    std::vector<ChordRest*> m_elements;
-    std::vector<int> m_notes;
-    StaffType const* m_tab = nullptr;
-    bool m_isBesideTabStaff = false;
-
-    int getMiddleStaffLine(ChordRest* startChord, ChordRest* endChord, int staffLines) const;
-    int computeDesiredSlant(int startNote, int endNote, int middleLine, int dictator, int pointer) const;
-    int isSlopeConstrained(int startNote, int endNote) const;
-    void offsetBeamWithAnchorShortening(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, int staffLines,
-                                        bool isStartDictator, int stemLengthDictator) const;
-    bool isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines, bool isOuter) const;
-    bool isBeamInsideStaff(int yPos, int staffLines, bool allowFloater) const;
-    int getOuterBeamPosOffset(int innerBeam, int beamCount, int staffLines) const;
-    void offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, const double startX,
-                                      const double endX, bool isFlat, bool isStartDictator) const;
-    int getBeamCount(std::vector<ChordRest*> chordRests) const;
-    bool is64thBeamPositionException(int& yPos, int staffLines) const;
-    int findValidBeamOffset(int outer, int beamCount, int staffLines, bool isStart, bool isAscending, bool isFlat) const;
-    void setValidBeamPositions(int& dictator, int& pointer, int beamCountD, int beamCountP, int staffLines, bool isStartDictator,
-                               bool isFlat, bool isAscending);
-    void addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int middleLine, int interval, int desiredSlant);
-    void add8thSpaceSlant(mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount, int interval, int middleLine, bool Flat);
-    bool noSlope();
-    int strokeCount(ChordRest* cr) const;
-    bool calculateAnchorsCross();
-    bool computeTremoloUp();
-public:
-    BeamLayout() {}
-    BeamLayout(EngravingItem* e);
-
-    double beamDist() { return m_beamDist; }
-    PointF startAnchor() { return m_startAnchor; }
-    PointF endAnchor() { return m_endAnchor; }
-    void setAnchors(PointF startAnchor, PointF endAnchor) { m_startAnchor = startAnchor; m_endAnchor = endAnchor; }
-
-    bool calculateAnchors(const std::vector<ChordRest*>& chordRests, const std::vector<int>& notes);
-
-    enum class ChordBeamAnchorType {
-        Start, End, Middle
-    };
-    double chordBeamAnchorX(const ChordRest* chord, ChordBeamAnchorType anchorType) const;
-    double chordBeamAnchorY(const ChordRest* chord) const;
-    PointF chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anchorType) const;
-    int getMaxSlope() const;
-    void extendStem(Chord* chord, double addition);
 };
 
 //---------------------------------------------------------
@@ -170,7 +100,7 @@ class Beam final : public EngravingItem
     double _beamWidth        { 0.0f }; // how wide each beam is
     mu::PointF _startAnchor;
     mu::PointF _endAnchor;
-    BeamLayout _layoutInfo;
+    BeamTremoloLayout _layoutInfo;
 
     // for tabs
     bool _isBesideTabStaff  { false };
@@ -236,7 +166,8 @@ public:
     void layout1();
     void layout() override;
 
-    PointF chordBeamAnchor(const ChordRest* chord, BeamLayout::ChordBeamAnchorType anchorType) const;
+    PointF chordBeamAnchor(const ChordRest* chord, BeamTremoloLayout::ChordBeamAnchorType anchorType) const;
+    double chordBeamAnchorY(const ChordRest* chord) const;
 
     const std::vector<ChordRest*>& elements() const { return _elements; }
     void clear() { _elements.clear(); }

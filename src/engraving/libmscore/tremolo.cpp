@@ -142,7 +142,7 @@ void Tremolo::createBeamSegments()
     endAnchor.rx() -= offset;
     startAnchor.ry() += offset * slope;
     endAnchor.ry() -= offset * slope;
-    BeamSegment* mainStroke = new BeamSegment();
+    BeamSegment* mainStroke = new BeamSegment(this);
     mainStroke->level = 0;
     mainStroke->line = LineF(startAnchor, endAnchor);
     _beamSegments.push_back(mainStroke);
@@ -153,7 +153,7 @@ void Tremolo::createBeamSegments()
     PointF beamOffset = PointF(0., (_up ? 1 : -1) * spatium() * (score()->styleB(Sid::useWideBeams) ? 1. : 0.75));
     beamOffset.setY(beamOffset.y() * mag() * (_isGrace ? score()->styleD(Sid::graceNoteMag) : 1.));
     for (int i = 1; i < lines(); ++i) {
-        BeamSegment* stroke = new BeamSegment();
+        BeamSegment* stroke = new BeamSegment(this);
         stroke->level = i;
         stroke->line = LineF(startAnchor + (beamOffset * (double)i), endAnchor + (beamOffset * (double)i));
         _beamSegments.push_back(stroke);
@@ -184,9 +184,14 @@ void Tremolo::createBeamSegments()
 //   chordBeamAnchor
 //---------------------------------------------------------
 
-PointF Tremolo::chordBeamAnchor(const ChordRest* chord, BeamLayout::ChordBeamAnchorType anchorType) const
+PointF Tremolo::chordBeamAnchor(const ChordRest* chord, BeamTremoloLayout::ChordBeamAnchorType anchorType) const
 {
     return _layoutInfo.chordBeamAnchor(chord, anchorType);
+}
+
+double Tremolo::beamWidth() const
+{
+    return _layoutInfo.beamWidth();
 }
 
 //---------------------------------------------------------
@@ -542,9 +547,9 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
         _chord2->layoutStem();
     }
 
-    _layoutInfo = BeamLayout(this);
-    _startAnchor = _layoutInfo.chordBeamAnchor(_chord1, BeamLayout::ChordBeamAnchorType::Start);
-    _endAnchor = _layoutInfo.chordBeamAnchor(_chord2, BeamLayout::ChordBeamAnchorType::End);
+    _layoutInfo = BeamTremoloLayout(this);
+    _startAnchor = _layoutInfo.chordBeamAnchor(_chord1, BeamTremoloLayout::ChordBeamAnchorType::Start);
+    _endAnchor = _layoutInfo.chordBeamAnchor(_chord2, BeamTremoloLayout::ChordBeamAnchorType::End);
     // deal with manual adjustments here and return
     PropertyValue val = getProperty(Pid::PLACEMENT);
     if (userModified()) {

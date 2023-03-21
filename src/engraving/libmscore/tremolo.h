@@ -56,7 +56,7 @@ class Tremolo final : public EngravingItem
     DirectionV _direction;
     mu::draw::PainterPath path;
     std::vector<BeamSegment*> _beamSegments;
-    BeamLayout _layoutInfo;
+    BeamTremoloLayout _layoutInfo;
     mu::PointF _startAnchor;
     mu::PointF _endAnchor;
 
@@ -98,7 +98,7 @@ public:
     double minHeight() const;
     void reset() override;
 
-    PointF chordBeamAnchor(const ChordRest* chord, BeamLayout::ChordBeamAnchorType anchorType) const;
+    PointF chordBeamAnchor(const ChordRest* chord, BeamTremoloLayout::ChordBeamAnchorType anchorType) const;
 
     double chordMag() const;
     double mag() const override;
@@ -112,6 +112,7 @@ public:
     Chord* chord1() const { return _chord1; }
     Chord* chord2() const { return _chord2; }
     PairF beamPos() const;
+    double beamWidth() const;
 
     TDuration durationType() const;
     void setDurationType(TDuration d);

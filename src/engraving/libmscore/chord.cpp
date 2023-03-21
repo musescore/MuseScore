@@ -1084,8 +1084,8 @@ void Chord::computeUp()
             double noteX = stemPosX() + pagePos().x() - base.x();
             PointF startAnchor = PointF();
             PointF endAnchor = PointF();
-            startAnchor = _beam->chordBeamAnchor(firstChord, BeamLayout::ChordBeamAnchorType::Start);
-            endAnchor = _beam->chordBeamAnchor(lastChord, BeamLayout::ChordBeamAnchorType::End);
+            startAnchor = _beam->chordBeamAnchor(firstChord, BeamTremoloLayout::ChordBeamAnchorType::Start);
+            endAnchor = _beam->chordBeamAnchor(lastChord, BeamTremoloLayout::ChordBeamAnchorType::End);
 
             if (this == _beam->elements().front()) {
                 _up = noteY > startAnchor.y();
