@@ -79,7 +79,7 @@
           <upsideDown>0</upsideDown>
           <useNumbers>1</useNumbers>
           </StaffType>
-        <bracket type="-1" span="1" col="0"/>
+        <bracket type="-1" span="1" col="0" visible="1"/>
         </Staff>
       <trackName>Renaissance Tenor Lute (6 course)</trackName>
       <Instrument>

@@ -40,7 +40,7 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="0" span="4" col="0"/>
+        <bracket type="0" span="4" col="0" visible="1"/>
         </Staff>
       <trackName>Soprano</trackName>
       <Instrument id="soprano">
