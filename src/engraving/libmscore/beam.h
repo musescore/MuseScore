@@ -43,6 +43,8 @@ struct BeamSegment {
     mu::LineF line;
     int level;
     bool above; // above level 0 or below? (meaningless for level 0)
+    Fraction startTick;
+    Fraction endTick;
 };
 
 //---------------------------------------------------------
