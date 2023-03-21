@@ -466,7 +466,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 
     // update style values if spatium different for part
     if (masterScore->spatium() != score->spatium()) {
-        //score->spatiumChanged(oscore->spatium(), score->spatium());
+        score->spatiumChanged(masterScore->spatium(), score->spatium());
         score->styleChanged();
     }
 
@@ -1413,6 +1413,15 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         score->undoAddElement(element, false /*addToLinkedStaves*/);
     };
 
+    auto updateSpatium = [](void* oldElement, EngravingItem* newElement)
+    {
+        double oldSpatium = static_cast<EngravingItem*>(oldElement)->spatium();
+        double newSpatium = newElement->spatium();
+        if (!RealIsEqual(oldSpatium, newSpatium)) {
+            newElement->spatiumChanged(oldSpatium, newSpatium);
+        }
+    };
+
     for (Measure* m = m1; m && (m != m2); m = m->nextMeasure()) {
         Measure* nm = score->tick2measure(m->tick());
         nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaffIdx), dstStaffIdx);
@@ -1434,6 +1443,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         ne->setParent(ns);
                         ne->setScore(score);
                         ne->styleChanged();
+                        ne->scanElements(oef, updateSpatium);
                         addElement(ne);
                     }
                 }
@@ -1466,6 +1476,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 ne->setParent(ns);
                 ne->setScore(score);
                 ne->styleChanged();
+                ne->scanElements(oe, updateSpatium);
                 addElement(ne);
                 if (oe->isChordRest()) {
                     ChordRest* ocr = toChordRest(oe);
@@ -1480,6 +1491,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                             nt->setTrack(dstTrack);
                             nt->setParent(nm);
                             nt->styleChanged();
+                            nt->scanElements(ot, updateSpatium);
                             tupletMap.add(ot, nt);
                         }
                         ncr->setTuplet(nt);
