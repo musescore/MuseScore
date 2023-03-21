@@ -85,7 +85,7 @@ void Tremolo::setParent(Chord* ch)
 
 double Tremolo::chordMag() const
 {
-    return explicitParent() ? toChord(explicitParent())->chordMag() : 1.0;
+    return explicitParent() ? toChord(explicitParent())->intrinsicMag() : 1.0;
 }
 
 //---------------------------------------------------------
@@ -283,7 +283,7 @@ void Tremolo::layoutOneNoteTremolo(double x, double y, double h, double spatium)
 
     bool up = chord()->up();
     int upValue = up ? -1 : 1;
-    double mag = chord()->relativeMag();
+    double mag = chord()->intrinsicMag();
     spatium *= mag;
 
     double yOffset = h - score()->styleMM(Sid::tremoloOutSidePadding).val() * mag;
@@ -649,7 +649,7 @@ void Tremolo::layout()
             }
         }
         y = anchor1->y();
-        h = (score()->styleMM(Sid::tremoloNoteSidePadding).val() + bbox().height()) * _chord1->relativeMag();
+        h = (score()->styleMM(Sid::tremoloNoteSidePadding).val() + bbox().height()) * _chord1->intrinsicMag();
     }
 
     if (twoNotes()) {

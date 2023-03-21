@@ -55,6 +55,7 @@ public:
     EngravingItem* linkedClone() override { return new Rest(*this, true); }
     Measure* measure() const override { return explicitParent() ? toMeasure(explicitParent()->explicitParent()) : 0; }
     double mag() const override;
+    double intrinsicMag() const override;
 
     void draw(mu::draw::Painter*) const override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
