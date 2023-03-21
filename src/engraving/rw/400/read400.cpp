@@ -40,25 +40,32 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 
-bool Read400::read400(Score* score, XmlReader& e, ReadContext& ctx)
+Err Read400::read(Score* score, XmlReader& e, ReadContext& ctx)
 {
     if (!e.readNextStartElement()) {
         LOGD("%s: xml file is empty", muPrintable(e.docName()));
-        return false;
+        return Err::FileUnknownError;
     }
 
     if (e.name() == "museScore") {
         while (e.readNextStartElement()) {
             const AsciiStringView tag(e.name());
             if (tag == "programVersion") {
-                e.skipCurrentElement();
+                if (score->isMaster()) {
+                    score->setMscoreVersion(e.readText());
+                }
             } else if (tag == "programRevision") {
-                e.skipCurrentElement();
+                if (score->isMaster()) {
+                    score->setMscoreRevision(e.readInt(nullptr, 16));
+                }
             } else if (tag == "Revision") {
                 e.skipCurrentElement();
             } else if (tag == "Score") {
                 if (!readScore400(score, e, ctx)) {
-                    return false;
+                    if (e.error() == XmlStreamReader::CustomError) {
+                        return Err::FileCriticallyCorrupted;
+                    }
+                    return Err::FileBadFormat;
                 }
             } else {
                 e.skipCurrentElement();
@@ -66,10 +73,10 @@ bool Read400::read400(Score* score, XmlReader& e, ReadContext& ctx)
         }
     } else {
         LOGD("%s: invalid structure of xml file", muPrintable(e.docName()));
-        return false;
+        return Err::FileUnknownError;
     }
 
-    return true;
+    return Err::NoError;
 }
 
 bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)

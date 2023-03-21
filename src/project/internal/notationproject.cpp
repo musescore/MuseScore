@@ -140,34 +140,22 @@ void NotationProject::setupProject()
     });
 }
 
-mu::Ret NotationProject::load(const io::path_t& path, const io::path_t& stylePath, bool forceMode, const std::string& format)
+mu::Ret NotationProject::load(const io::path_t& path, const io::path_t& stylePath, bool forceMode, const std::string& format_)
 {
     TRACEFUNC;
 
-    LOGD() << "try load: " << path;
+    std::string format = format_.empty() ? io::suffix(path) : format_;
+
+    LOGD() << "try load: " << path << ", format: " << format;
 
     setupProject();
     setPath(path);
 
-    std::string suffix = !format.empty() ? format : io::suffix(path);
-    if (!isMuseScoreFile(suffix)) {
+    if (!isMuseScoreFile(format)) {
         return doImport(path, stylePath.empty() ? notationConfiguration()->styleFileImportPath() : stylePath, forceMode);
     }
 
-    MscReader::Params params;
-    params.filePath = path.toQString();
-
-    params.mode = mscIoModeBySuffix(suffix);
-    IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
-        return make_ret(Ret::Code::InternalError);
-    }
-
-    MscReader reader(params);
-    if (!reader.open()) {
-        return make_ret(engraving::Err::FileOpenError);
-    }
-
-    Ret ret = doLoad(reader, stylePath, forceMode);
+    Ret ret = doLoad(path, stylePath, forceMode, format);
     if (!ret) {
         LOGE() << "failed load, err: " << ret.toString();
         return ret;
@@ -183,9 +171,21 @@ mu::Ret NotationProject::load(const io::path_t& path, const io::path_t& stylePat
     return ret;
 }
 
-mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& stylePath, bool forceMode)
+mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& stylePath, bool forceMode, const std::string& format)
 {
     TRACEFUNC;
+
+    MscReader::Params params;
+    params.filePath = path.toQString();
+    params.mode = mscIoModeBySuffix(format);
+    IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
+        return make_ret(Ret::Code::InternalError);
+    }
+
+    MscReader reader(params);
+    if (!reader.open()) {
+        return make_ret(engraving::Err::FileOpenError);
+    }
 
     // Load engraving project
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));

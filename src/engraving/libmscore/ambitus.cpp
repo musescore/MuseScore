@@ -25,7 +25,7 @@
 #include "translation.h"
 
 #include "draw/types/pen.h"
-#include "rw/compat/read206.h"
+#include "rw/206/read206.h"
 #include "rw/xml.h"
 
 #include "accidental.h"

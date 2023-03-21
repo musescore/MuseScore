@@ -19,28 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_ENGRAVING_MEASURERW_H
+#define MU_ENGRAVING_MEASURERW_H
 
-#ifndef MU_ENGRAVING_READ114_H
-#define MU_ENGRAVING_READ114_H
-
-#include "engravingerrors.h"
+#include "../readcontext.h"
 
 namespace mu::engraving {
-class MasterScore;
-class ReadContext;
-class XmlReader;
+class Measure;
 }
 
-namespace mu::engraving::compat {
-class Read114
+namespace mu::engraving::rw {
+class MeasureRW
 {
 public:
-    //---------------------------------------------------------
-    //   read114
-    //    import old version <= 1.3 files
-    //---------------------------------------------------------
-    static Err read114(MasterScore* masterScore, XmlReader& e, ReadContext& ctx);
+
+    static void readMeasure(Measure* measure, XmlReader& xml, ReadContext& ctx, int staffIdx);
+    static void writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t staff, bool writeSystemElements, bool forceTimeSig);
+
+private:
+    static void readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int staffIdx, bool irregular);
 };
 }
 
-#endif // MU_ENGRAVING_READ114_H
+#endif // MU_ENGRAVING_MEASURERW_H

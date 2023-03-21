@@ -19,26 +19,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_MEASURERW_H
-#define MU_ENGRAVING_MEASURERW_H
+#ifndef MU_ENGRAVING_READ302_H
+#define MU_ENGRAVING_READ302_H
 
-#include "readcontext.h"
+#include "../iscorereader.h"
+
+#include "modularity/ioc.h"
+#include "iengravingfontsprovider.h"
+
+#include "engravingerrors.h"
 
 namespace mu::engraving {
-class Measure;
+class Instrument;
+class MasterScore;
+class Score;
+
+class ReadContext;
+class XmlReader;
 }
 
-namespace mu::engraving::rw {
-class MeasureRW
+namespace mu::engraving::compat {
+class Read302 : public IScoreReader
 {
+    INJECT_STATIC(engraving, IEngravingFontsProvider, engravingFonts)
 public:
 
-    static void readMeasure(Measure* measure, XmlReader& xml, ReadContext& ctx, int staffIdx);
-    static void writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t staff, bool writeSystemElements, bool forceTimeSig);
+    Err read(Score* score, XmlReader& e, ReadContext& ctx) override;
 
 private:
-    static void readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int staffIdx, bool irregular);
+    static bool readScore302(Score* score, XmlReader& e, ReadContext& ctx);
+
+    static void fixInstrumentId(Instrument* instrument);
 };
 }
 
-#endif // MU_ENGRAVING_MEASURERW_H
+#endif // MU_ENGRAVING_READ302_H

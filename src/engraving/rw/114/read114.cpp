@@ -85,9 +85,9 @@
 #include "libmscore/utils.h"
 #include "libmscore/volta.h"
 
-#include "readchordlisthook.h"
-#include "readstyle.h"
-#include "read206.h"
+#include "../compat/readchordlisthook.h"
+#include "../compat/readstyle.h"
+#include "../206/read206.h"
 
 #include "log.h"
 
@@ -2738,8 +2738,14 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
 //    import old version <= 1.3 files
 //---------------------------------------------------------
 
-Err Read114::read114(MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
+Err Read114::read(Score* score, XmlReader& e, ReadContext& ctx)
 {
+    IF_ASSERT_FAILED(score->isMaster()) {
+        return Err::FileUnknownError;
+    }
+
+    MasterScore* masterScore = static_cast<MasterScore*>(score);
+
     TempoMap tm;
     while (e.readNextStartElement()) {
         ctx.setTrack(mu::nidx);
