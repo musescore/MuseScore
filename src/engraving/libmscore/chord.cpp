@@ -1675,7 +1675,7 @@ double Chord::calcDefaultStemLength()
     int middleLine = minStaffOverlap(_up, staffLineCount, beams(), !!_hook, useWideBeams ? 4 : 3, useWideBeams, !(isGrace() || isSmall()));
     if (up()) {
         int stemEndPosition = upLine() * quarterSpacesPerLine - defaultStemLength;
-        double stemEndPositionMag = (double)upLine() * quarterSpacesPerLine - (defaultStemLength * _relativeMag);
+        double stemEndPositionMag = (double)upLine() * quarterSpacesPerLine - (defaultStemLength * intrinsicMag());
         int idealStemLength = defaultStemLength;
 
         if (stemEndPositionMag <= -shortStemStart) {
@@ -1691,7 +1691,7 @@ double Chord::calcDefaultStemLength()
         stemLength = std::max(idealStemLength, minStemLengthQuarterSpaces);
     } else {
         int stemEndPosition = downLine() * quarterSpacesPerLine + defaultStemLength;
-        double stemEndPositionMag = (double)downLine() * quarterSpacesPerLine + (defaultStemLength * _relativeMag);
+        double stemEndPositionMag = (double)downLine() * quarterSpacesPerLine + (defaultStemLength * intrinsicMag());
         int idealStemLength = defaultStemLength;
 
         int downShortStemStart = (staffLineCount - 1) * (2 * quarterSpacesPerLine) + shortStemStart;
