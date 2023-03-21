@@ -3162,8 +3162,8 @@ Err Read114::read(Score* score, XmlReader& e, ReadInOutData* out)
     masterScore->rebuildMidiMapping();
     masterScore->updateChannel();
 
-    for (Score* score : masterScore->scoreList()) {
-        CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(score);
+    for (Score* s : masterScore->scoreList()) {
+        CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(s);
     }
 
     CompatUtils::assignInitialPartToExcerpts(masterScore->excerpts());
