@@ -30,7 +30,7 @@
 #include "compat/writescorehook.h"
 #include "rw/xml.h"
 #include "rw/writecontext.h"
-#include "rw/staffrw.h"
+#include "rw/400/staffrw.h"
 
 #include "audio.h"
 #include "chordrest.h"

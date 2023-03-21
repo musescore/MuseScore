@@ -32,7 +32,7 @@
 #include "realfn.h"
 
 #include "layout/layoutchords.h"
-#include "rw/measurerw.h"
+#include "rw/400/measurerw.h"
 #include "rw/xml.h"
 #include "style/style.h"
 

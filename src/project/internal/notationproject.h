@@ -96,7 +96,7 @@ private:
 
     Ret loadTemplate(const ProjectCreateOptions& projectOptions);
 
-    Ret doLoad(engraving::MscReader& reader, const io::path_t& stylePath, bool forceMode);
+    Ret doLoad(const io::path_t& path, const io::path_t& stylePath, bool forceMode, const std::string& format);
     Ret doImport(const io::path_t& path, const io::path_t& stylePath, bool forceMode);
 
     Ret saveScore(const io::path_t& path, const std::string& fileSuffix);

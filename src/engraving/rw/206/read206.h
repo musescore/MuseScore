@@ -23,6 +23,8 @@
 #ifndef MU_ENGRAVING_READ206_H
 #define MU_ENGRAVING_READ206_H
 
+#include "../iscorereader.h"
+
 #include "modularity/ioc.h"
 #include "iengravingfontsprovider.h"
 
@@ -52,7 +54,7 @@ class Score;
 }
 
 namespace mu::engraving::compat {
-class Read206
+class Read206 : public IScoreReader
 {
     INJECT_STATIC(engraving, IEngravingFontsProvider, engravingFonts)
 public:
@@ -61,7 +63,7 @@ public:
     //   read206
     //    import old version > 1.3  and < 3.x files
     //---------------------------------------------------------
-    static Err read206(MasterScore* masterScore, XmlReader& e, ReadContext& ctx);
+    Err read(Score* score, XmlReader& e, ReadContext& ctx) override;
 
     static EngravingItem* readArticulation(EngravingItem*, XmlReader&, const ReadContext& ctx);
     static void readAccidental206(Accidental*, XmlReader&);

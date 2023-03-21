@@ -39,8 +39,8 @@
 #include "libmscore/staff.h"
 #include "libmscore/text.h"
 
-#include "../staffrw.h"
-#include "readstyle.h"
+#include "../400/staffrw.h"
+#include "../compat/readstyle.h"
 
 #include "log.h"
 
@@ -261,16 +261,16 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-Err Read302::read302(MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
+Err Read302::read(Score* score, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "programVersion") {
-            masterScore->setMscoreVersion(e.readText());
+            score->setMscoreVersion(e.readText());
         } else if (tag == "programRevision") {
-            masterScore->setMscoreRevision(e.readInt(nullptr, 16));
+            score->setMscoreRevision(e.readInt(nullptr, 16));
         } else if (tag == "Score") {
-            if (!readScore302(masterScore, e, ctx)) {
+            if (!readScore302(score, e, ctx)) {
                 if (e.error() == XmlStreamReader::CustomError) {
                     return Err::FileCriticallyCorrupted;
                 }

@@ -19,22 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_READ400_H
-#define MU_ENGRAVING_READ400_H
+#ifndef MU_ENGRAVING_STAFFRW_H
+#define MU_ENGRAVING_STAFFRW_H
+
+#include "../readcontext.h"
 
 namespace mu::engraving {
-class Score;
+class MeasureBase;
+}
 
-class ReadContext;
-class XmlReader;
-
-class Read400
+namespace mu::engraving::rw {
+class StaffRW
 {
 public:
 
-    static bool read400(Score* score, XmlReader& e, ReadContext& ctx);
-    static bool readScore400(Score* score, XmlReader& e, ReadContext& ctx);
+    static void readStaff(Score* score, XmlReader&, ReadContext& ctx);
+    static void writeStaff(const Staff* staff, XmlWriter& xml, MeasureBase* measureStart, MeasureBase* measureEnd, staff_idx_t staffStart,
+                           staff_idx_t staffIdx, bool selectionOnly);
 };
 }
 
-#endif // MU_ENGRAVING_READ400_H
+#endif // MU_ENGRAVING_STAFFRW_H

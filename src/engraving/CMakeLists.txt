@@ -59,6 +59,20 @@ set(MODULE_SRC
 
     ${LIBMSCORE_SRC}
 
+    ${CMAKE_CURRENT_LIST_DIR}/rw/iscorereader.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/114/read114.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/114/read114.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/206/read206.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/206/read206.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/302/read302.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/302/read302.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/read400.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/read400.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/staffrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/staffrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/measurerw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/measurerw.h
+
     ${CMAKE_CURRENT_LIST_DIR}/rw/xml.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/xmlreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/xmlreader.h
@@ -71,20 +85,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/linksindexer.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/mscloader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/mscloader.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/read400.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/read400.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/staffrw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/staffrw.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/measurerw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/measurerw.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read114.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read114.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read206.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read206.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read302.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read302.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readchordlisthook.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readchordlisthook.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/compatutils.cpp

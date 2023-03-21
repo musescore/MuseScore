@@ -19,24 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_STAFFRW_H
-#define MU_ENGRAVING_STAFFRW_H
+#ifndef MU_ENGRAVING_READ400_H
+#define MU_ENGRAVING_READ400_H
 
-#include "readcontext.h"
+#include "../iscorereader.h"
 
 namespace mu::engraving {
-class MeasureBase;
-}
+class Score;
 
-namespace mu::engraving::rw {
-class StaffRW
+class ReadContext;
+class XmlReader;
+
+class Read400 : public IScoreReader
 {
 public:
 
-    static void readStaff(Score* score, XmlReader&, ReadContext& ctx);
-    static void writeStaff(const Staff* staff, XmlWriter& xml, MeasureBase* measureStart, MeasureBase* measureEnd, staff_idx_t staffStart,
-                           staff_idx_t staffIdx, bool selectionOnly);
+    Err read(Score* score, XmlReader& e, ReadContext& ctx) override;
+    static bool readScore400(Score* score, XmlReader& e, ReadContext& ctx);
 };
 }
 
-#endif // MU_ENGRAVING_STAFFRW_H
+#endif // MU_ENGRAVING_READ400_H
