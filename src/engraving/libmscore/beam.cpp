@@ -2513,9 +2513,6 @@ Shape Beam::shape() const
 // BEAM SEGMENT CLASS
 //-------------------------------------------------------
 
-BeamSegment::BeamSegment(Beam* b)
-    : EngravingItem(ElementType::BEAM_SEGMENT, b), beam(b) {}
-
 Shape BeamSegment::shape() const
 {
     Shape shape;
@@ -2531,7 +2528,7 @@ Shape BeamSegment::shape() const
     if (RealIsEqual(startPoint.y(), endPoint.y())) {
         RectF rect(startPoint.x(), startPoint.y(), beamHorizontalLength, _beamWidth / 2);
         rect.adjust(0.0, -_beamWidth / 2, 0.0, 0.0);
-        shape.add(rect, this);
+        shape.add(rect, beam);
         return shape;
     }
     // If not, break the beam shape into multiple rectangles
@@ -2548,7 +2545,7 @@ Shape BeamSegment::shape() const
     for (PointF point : pointsOnBeamLine) {
         RectF rect(point.x(), point.y(), horizontalStep, _beamWidth / 2);
         rect.adjust(0.0, -_beamWidth / 2, 0.0, 0.0);
-        shape.add(rect, this);
+        shape.add(rect, beam);
     }
     return shape;
 }

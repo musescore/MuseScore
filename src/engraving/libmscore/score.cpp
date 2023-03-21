@@ -5919,7 +5919,7 @@ void Score::createPaddingTable()
     }
 
     // This is needed for beamlets, not beams themselves
-    _paddingTable[ElementType::BEAM_SEGMENT][ElementType::BEAM_SEGMENT] = 0.4 * spatium();
+    _paddingTable[ElementType::BEAM][ElementType::BEAM] = 0.4 * spatium();
 }
 
 //--------------------------------------------------------

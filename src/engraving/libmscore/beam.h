@@ -39,8 +39,9 @@ enum class SpannerSegmentType;
 
 struct BeamFragment;
 
-class BeamSegment : public EngravingItem
+class BeamSegment
 {
+    OBJECT_ALLOCATOR(engraving, BeamSegment)
 public:
     mu::LineF line;
     int level;
@@ -50,11 +51,11 @@ public:
     bool isBeamlet = false;
     bool isBefore = false;
 
-    Shape shape() const override;
+    Shape shape() const;
     Beam* beam;
 
-    BeamSegment(Beam* b);
-    BeamSegment* clone() const override { return new BeamSegment(*this); }
+    BeamSegment(Beam* b)
+        : beam(b) {}
 };
 
 //---------------------------------------------------------
