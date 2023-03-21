@@ -259,7 +259,7 @@ int App::run(int argc, char** argv)
 #endif
 
         QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
-                         app, [this, url](QObject* obj, const QUrl& objUrl) {
+                         app, [this, url, splashScreen](QObject* obj, const QUrl& objUrl) {
                 if (!obj && url == objUrl) {
                     LOGE() << "failed Qml load\n";
                     QCoreApplication::exit(-1);
@@ -274,6 +274,13 @@ int App::run(int argc, char** argv)
                     for (mu::modularity::IModuleSetup* m : m_modules) {
                         m->onDelayedInit();
                     }
+
+                    if (splashScreen) {
+                        splashScreen->close();
+                        delete splashScreen;
+                    }
+
+                    startupScenario()->run();
                 }
             }, Qt::QueuedConnection);
 
@@ -292,11 +299,6 @@ int App::run(int argc, char** argv)
         QQuickWindow::setDefaultAlphaBuffer(true);
 
         engine->load(url);
-
-        if (splashScreen) {
-            splashScreen->close();
-            delete splashScreen;
-        }
 #endif // MUE_BUILD_APPSHELL_MODULE
     } break;
     case framework::IApplication::RunMode::AudioPluginRegistration: {
