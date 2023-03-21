@@ -224,8 +224,8 @@ add_executable(${EXECUTABLE_NAME}
       main.cpp
       app.cpp
       app.h
-      commandlinecontroller.cpp
-      commandlinecontroller.h
+      commandlineparser.cpp
+      commandlineparser.h
       ${MSCORE_APPEND_SRC}
       )
 

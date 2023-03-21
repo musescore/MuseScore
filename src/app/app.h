@@ -31,8 +31,20 @@
 #include "converter/iconvertercontroller.h"
 #include "diagnostics/idiagnosticdrawprovider.h"
 #include "autobot/iautobot.h"
+#include "audio/iregisteraudiopluginsscenario.h"
 
-#include "commandlinecontroller.h"
+#include "ui/iuiconfiguration.h"
+#include "notation/inotationconfiguration.h"
+#include "project/iprojectconfiguration.h"
+#include "appshell/iappshellconfiguration.h"
+#include "appshell/internal/istartupscenario.h"
+#include "importexport/imagesexport/iimagesexportconfiguration.h"
+#include "importexport/midi/imidiconfiguration.h"
+#include "importexport/audioexport/iaudioexportconfiguration.h"
+#include "importexport/videoexport/ivideoexportconfiguration.h"
+#include "importexport/guitarpro/iguitarproconfiguration.h"
+
+#include "commandlineparser.h"
 
 namespace mu::app {
 class App
@@ -41,6 +53,17 @@ class App
     INJECT(app, converter::IConverterController, converter)
     INJECT(app, diagnostics::IDiagnosticDrawProvider, diagnosticDrawProvider)
     INJECT(app, autobot::IAutobot, autobot)
+    INJECT(app, audio::IRegisterAudioPluginsScenario, registerAudioPluginsScenario)
+    INJECT(app, ui::IUiConfiguration, uiConfiguration)
+    INJECT(app, appshell::IAppShellConfiguration, appshellConfiguration)
+    INJECT(app, appshell::IStartupScenario, startupScenario)
+    INJECT(app, notation::INotationConfiguration, notationConfiguration)
+    INJECT(app, project::IProjectConfiguration, projectConfiguration)
+    INJECT(app, iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
+    INJECT(app, iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
+    INJECT(app, iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
+    INJECT(app, iex::videoexport::IVideoExportConfiguration, videoExportConfiguration)
+    INJECT(app, iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration)
 
 public:
     App();
@@ -50,10 +73,11 @@ public:
     int run(int argc, char** argv);
 
 private:
-
-    int processConverter(const CommandLineController::ConverterTask& task);
-    int processDiagnostic(const CommandLineController::Diagnostic& task);
-    void processAutobot(const CommandLineController::Autobot& task);
+    void applyCommandLineOptions(const CommandLineParser::Options& options, framework::IApplication::RunMode runMode);
+    int processConverter(const CommandLineParser::ConverterTask& task);
+    int processDiagnostic(const CommandLineParser::Diagnostic& task);
+    int processAudioPluginRegistration(const CommandLineParser::AudioPluginRegistration& task);
+    void processAutobot(const CommandLineParser::Autobot& task);
 
     QList<modularity::IModuleSetup*> m_modules;
 };

@@ -19,42 +19,72 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APP_COMMANDLINECONTROLLER_H
-#define MU_APP_COMMANDLINECONTROLLER_H
+#ifndef MU_APP_COMMANDLINEPARSER_H
+#define MU_APP_COMMANDLINEPARSER_H
 
 #include <QCommandLineParser>
 #include <QStringList>
+#include <optional>
 
-#include "modularity/ioc.h"
 #include "global/iapplication.h"
-#include "ui/iuiconfiguration.h"
-#include "importexport/imagesexport/iimagesexportconfiguration.h"
-#include "importexport/midi/imidiconfiguration.h"
-#include "importexport/audioexport/iaudioexportconfiguration.h"
-#include "importexport/videoexport/ivideoexportconfiguration.h"
-#include "appshell/iappshellconfiguration.h"
-#include "appshell/internal/istartupscenario.h"
-#include "notation/inotationconfiguration.h"
-#include "project/iprojectconfiguration.h"
-#include "importexport/guitarpro/iguitarproconfiguration.h"
+#include "io/path.h"
 
 namespace mu::app {
-class CommandLineController
+class CommandLineParser
 {
-    INJECT(appshell, framework::IApplication, application)
-    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
-    INJECT(appshell, iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
-    INJECT(appshell, iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
-    INJECT(appshell, iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
-    INJECT(appshell, iex::videoexport::IVideoExportConfiguration, videoExportConfiguration)
-    INJECT(appshell, appshell::IAppShellConfiguration, configuration)
-    INJECT(appshell, appshell::IStartupScenario, startupScenario)
-    INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
-    INJECT(appshell, project::IProjectConfiguration, projectConfiguration)
-    INJECT(appshell, iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration);
-
+    //! NOTE: This parser is created at the earliest stage of the application initialization
+    //! You should not inject anything into it
 public:
-    CommandLineController() = default;
+    CommandLineParser() = default;
+
+    struct Options {
+        struct {
+            std::optional<double> physicalDotsPerInch;
+        } ui;
+
+        struct {
+            std::optional<bool> templateModeEnabled;
+            std::optional<bool> testModeEnabled;
+        } notation;
+
+        struct {
+            std::optional<bool> fullMigration;
+        } project;
+
+        struct {
+            std::optional<int> trimMarginPixelSize;
+            std::optional<float> pngDpiResolution;
+        } exportImage;
+
+        struct {
+            std::optional<int> mp3Bitrate;
+        } exportAudio;
+
+        struct {
+            std::optional<std::string> resolution;
+            std::optional<int> fps;
+            std::optional<double> leadingSec;
+            std::optional<double> trailingSec;
+        } exportVideo;
+
+        struct {
+            std::optional<io::path_t> operationsFile;
+        } importMidi;
+
+        struct {
+            std::optional<bool> linkedTabStaffCreated;
+            std::optional<bool> experimental;
+        } guitarPro;
+
+        struct {
+            std::optional<bool> revertToFactorySettings;
+        } app;
+
+        struct {
+            std::optional<std::string> type;
+            std::optional<io::path_t> scorePath;
+        } startup;
+    };
 
     enum class ConvertType {
         File,
@@ -110,23 +140,38 @@ public:
         QString testCaseFuncArgs;
     };
 
-    void parse(const QStringList& args);
-    void apply();
+    struct AudioPluginRegistration {
+        io::path_t pluginPath;
+        bool failedPlugin = false;
+        int failCode = 0;
+    };
 
+    void init();
+    void parse(int argc, char** argv);
+
+    framework::IApplication::RunMode runMode() const;
+
+    // Options
+    const Options& options() const;
+
+    // Tasks
     ConverterTask converterTask() const;
     Diagnostic diagnostic() const;
     Autobot autobot() const;
-    io::path_t audioPluginPath() const;
+    AudioPluginRegistration audioPluginRegistration() const;
 
 private:
     void printLongVersion() const;
 
     QCommandLineParser m_parser;
+    framework::IApplication::RunMode m_runMode = framework::IApplication::RunMode::GuiApp;
+    Options m_options;
+
     ConverterTask m_converterTask;
     Diagnostic m_diagnostic;
     Autobot m_autobot;
-    io::path_t m_audioPluginPath;
+    AudioPluginRegistration m_audioPluginRegistration;
 };
 }
 
-#endif // MU_APP_COMMANDLINECONTROLLER_H
+#endif // MU_APP_COMMANDLINEPARSER_H

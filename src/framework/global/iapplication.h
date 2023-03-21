@@ -38,7 +38,7 @@ public:
     enum class RunMode {
         GuiApp,
         ConsoleApp,
-        AudioPluginProbe,
+        AudioPluginRegistration,
     };
 
     virtual void setRunMode(const RunMode& mode) = 0;

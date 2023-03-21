@@ -22,7 +22,14 @@ set(MODULE_TEST audio_test)
 
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/audioconfigurationmock.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/knownaudiopluginsregistermock.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/audiopluginsscannerregistermock.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/audiopluginsscannermock.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/audiopluginmetareaderregistermock.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/audiopluginmetareadermock.h
+
     ${CMAKE_CURRENT_LIST_DIR}/knownaudiopluginsregistertest.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/registeraudiopluginsscenariotest.cpp
 )
 
 set(MODULE_TEST_LINK audio)

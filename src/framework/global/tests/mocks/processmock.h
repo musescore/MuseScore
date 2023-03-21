@@ -19,27 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_ISTARTUPSCENARIO_H
-#define MU_APPSHELL_ISTARTUPSCENARIO_H
+#ifndef MU_FRAMEWORK_PROCESSMOCK_H
+#define MU_FRAMEWORK_PROCESSMOCK_H
 
-#include "modularity/ioc.h"
-#include "io/path.h"
-#include "types/uri.h"
+#include <gmock/gmock.h>
 
-namespace mu::appshell {
-class IStartupScenario : MODULE_EXPORT_INTERFACE
+#include "iprocess.h"
+
+namespace mu {
+class ProcessMock : public IProcess
 {
-    INTERFACE_ID(IStartupScenario)
-
 public:
-    virtual ~IStartupScenario() = default;
-
-    virtual void setStartupType(const std::optional<std::string>& type) = 0;
-    virtual void setStartupScorePath(const std::optional<io::path_t>& path) = 0;
-
-    virtual void run() = 0;
-    virtual bool startupCompleted() const = 0;
+    MOCK_METHOD(int, execute, (const std::string&, const std::vector<std::string>&), (override));
+    MOCK_METHOD(bool, startDetached, (const std::string&, const std::vector<std::string>&), (override));
 };
 }
 
-#endif // MU_APPSHELL_ISTARTUPSCENARIO_H
+#endif // MU_FRAMEWORK_PROCESSMOCK_H

@@ -37,8 +37,6 @@
 #include "ui/internal/uiengine.h"
 #include "muversion.h"
 
-#include "commandlinecontroller.h"
-
 #include "framework/global/globalmodule.h"
 
 #include "log.h"
@@ -102,7 +100,22 @@ int App::run(int argc, char** argv)
 
     QGuiApplication::styleHints()->setMousePressAndHoldInterval(250);
 
-    QApplication app(argc, argv);
+    // ====================================================
+    // Parse command line options
+    // ====================================================
+    CommandLineParser commandLineParser;
+    commandLineParser.init();
+    commandLineParser.parse(argc, argv);
+
+    framework::IApplication::RunMode runMode = commandLineParser.runMode();
+    QCoreApplication* app = nullptr;
+
+    if (runMode == framework::IApplication::RunMode::AudioPluginRegistration) {
+        app = new QCoreApplication(argc, argv);
+    } else {
+        app = new QApplication(argc, argv);
+    }
+
     QCoreApplication::setApplicationName(appName);
     QCoreApplication::setOrganizationName("MuseScore");
     QCoreApplication::setOrganizationDomain("musescore.org");
@@ -135,12 +148,10 @@ int App::run(int argc, char** argv)
     }
 
     // ====================================================
-    // Parse and apply command line options
+    // Setup modules: apply the command line options
     // ====================================================
-    CommandLineController commandLine;
-    commandLine.parse(QCoreApplication::arguments());
-    commandLine.apply();
-    framework::IApplication::RunMode runMode = muapplication()->runMode();
+    muapplication()->setRunMode(runMode);
+    applyCommandLineOptions(commandLineParser.options(), runMode);
 
     // ====================================================
     // Setup modules: onPreInit
@@ -193,7 +204,7 @@ int App::run(int argc, char** argv)
         // ====================================================
         // Process Autobot
         // ====================================================
-        CommandLineController::Autobot autobot = commandLine.autobot();
+        CommandLineParser::Autobot autobot = commandLineParser.autobot();
         if (!autobot.testCaseNameOrFile.isEmpty()) {
             QMetaObject::invokeMethod(qApp, [this, autobot]() {
                     processAutobot(autobot);
@@ -202,8 +213,8 @@ int App::run(int argc, char** argv)
             // ====================================================
             // Process Diagnostic
             // ====================================================
-            CommandLineController::Diagnostic diagnostic = commandLine.diagnostic();
-            if (diagnostic.type != CommandLineController::DiagnosticType::Undefined) {
+            CommandLineParser::Diagnostic diagnostic = commandLineParser.diagnostic();
+            if (diagnostic.type != CommandLineParser::DiagnosticType::Undefined) {
                 QMetaObject::invokeMethod(qApp, [this, diagnostic]() {
                         int code = processDiagnostic(diagnostic);
                         qApp->exit(code);
@@ -212,7 +223,7 @@ int App::run(int argc, char** argv)
                 // ====================================================
                 // Process Converter
                 // ====================================================
-                CommandLineController::ConverterTask task = commandLine.converterTask();
+                CommandLineParser::ConverterTask task = commandLineParser.converterTask();
                 QMetaObject::invokeMethod(qApp, [this, task]() {
                         int code = processConverter(task);
                         qApp->exit(code);
@@ -248,7 +259,7 @@ int App::run(int argc, char** argv)
 #endif
 
         QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
-                         &app, [this, url](QObject* obj, const QUrl& objUrl) {
+                         app, [this, url](QObject* obj, const QUrl& objUrl) {
                 if (!obj && url == objUrl) {
                     LOGE() << "failed Qml load\n";
                     QCoreApplication::exit(-1);
@@ -288,12 +299,12 @@ int App::run(int argc, char** argv)
         }
 #endif // MUE_BUILD_APPSHELL_MODULE
     } break;
-    case framework::IApplication::RunMode::AudioPluginProbe: {
-        io::path_t pluginPath = commandLine.audioPluginPath();
+    case framework::IApplication::RunMode::AudioPluginRegistration: {
+        CommandLineParser::AudioPluginRegistration pluginRegistration = commandLineParser.audioPluginRegistration();
 
-        QMetaObject::invokeMethod(qApp, [pluginPath]() {
-                LOGD() << "Scanning audio plugin: " << pluginPath;
-                qApp->exit(0);
+        QMetaObject::invokeMethod(qApp, [this, pluginRegistration]() {
+                int code = processAudioPluginRegistration(pluginRegistration);
+                qApp->exit(code);
             }, Qt::QueuedConnection);
     } break;
     }
@@ -301,7 +312,7 @@ int App::run(int argc, char** argv)
     // ====================================================
     // Run main loop
     // ====================================================
-    int retCode = app.exec();
+    int retCode = app->exec();
 
     // ====================================================
     // Quit
@@ -344,47 +355,105 @@ int App::run(int argc, char** argv)
     m_modules.clear();
     mu::modularity::ioc()->reset();
 
+    delete app;
+
     return retCode;
 }
 
-int App::processConverter(const CommandLineController::ConverterTask& task)
+void App::applyCommandLineOptions(const CommandLineParser::Options& options, framework::IApplication::RunMode runMode)
+{
+    uiConfiguration()->setPhysicalDotsPerInch(options.ui.physicalDotsPerInch);
+
+    notationConfiguration()->setTemplateModeEnabled(options.notation.templateModeEnabled);
+    notationConfiguration()->setTestModeEnabled(options.notation.testModeEnabled);
+
+    if (runMode == framework::IApplication::RunMode::ConsoleApp) {
+        project::MigrationOptions migration;
+        migration.appVersion = mu::engraving::MSCVERSION;
+
+        //! NOTE Don't ask about migration in convert mode
+        migration.isAskAgain = false;
+
+        if (options.project.fullMigration) {
+            bool isMigration = options.project.fullMigration.value();
+            migration.isApplyMigration = isMigration;
+            migration.isApplyEdwin = isMigration;
+            migration.isApplyLeland = isMigration;
+        }
+
+        //! NOTE Don't write to settings, just on current session
+        for (project::MigrationType type : project::allMigrationTypes()) {
+            projectConfiguration()->setMigrationOptions(type, migration, false);
+        }
+    }
+
+#ifdef MUE_BUILD_IMAGESEXPORT_MODULE
+    imagesExportConfiguration()->setTrimMarginPixelSize(options.exportImage.trimMarginPixelSize);
+    imagesExportConfiguration()->setExportPngDpiResolution(options.exportImage.pngDpiResolution);
+#endif
+
+#ifdef MUE_BUILD_VIDEOEXPORT_MODULE
+    videoExportConfiguration()->setResolution(options.exportVideo.resolution);
+    videoExportConfiguration()->setFps(options.exportVideo.fps);
+    videoExportConfiguration()->setLeadingSec(options.exportVideo.leadingSec);
+    videoExportConfiguration()->setTrailingSec(options.exportVideo.trailingSec);
+#endif
+
+#ifdef MUE_BUILD_IMPORTEXPORT_MODULE
+    audioExportConfiguration()->setExportMp3Bitrate(options.exportAudio.mp3Bitrate);
+    midiImportExportConfiguration()->setMidiImportOperationsFile(options.importMidi.operationsFile);
+    guitarProConfiguration()->setLinkedTabStaffCreated(options.guitarPro.linkedTabStaffCreated);
+    guitarProConfiguration()->setExperimental(options.guitarPro.experimental);
+#endif
+
+    if (options.app.revertToFactorySettings) {
+        appshellConfiguration()->revertToFactorySettings(options.app.revertToFactorySettings.value());
+    }
+
+    if (runMode == framework::IApplication::RunMode::GuiApp) {
+        startupScenario()->setStartupType(options.startup.type);
+        startupScenario()->setStartupScorePath(options.startup.scorePath);
+    }
+}
+
+int App::processConverter(const CommandLineParser::ConverterTask& task)
 {
     Ret ret = make_ret(Ret::Code::Ok);
-    io::path_t stylePath = task.params[CommandLineController::ParamKey::StylePath].toString();
-    bool forceMode = task.params[CommandLineController::ParamKey::ForceMode].toBool();
+    io::path_t stylePath = task.params[CommandLineParser::ParamKey::StylePath].toString();
+    bool forceMode = task.params[CommandLineParser::ParamKey::ForceMode].toBool();
 
     switch (task.type) {
-    case CommandLineController::ConvertType::Batch:
+    case CommandLineParser::ConvertType::Batch:
         ret = converter()->batchConvert(task.inputFile, stylePath, forceMode);
         break;
-    case CommandLineController::ConvertType::ConvertScoreParts:
+    case CommandLineParser::ConvertType::ConvertScoreParts:
         ret = converter()->convertScoreParts(task.inputFile, task.outputFile, stylePath);
         break;
-    case CommandLineController::ConvertType::File:
+    case CommandLineParser::ConvertType::File:
         ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode);
         break;
-    case CommandLineController::ConvertType::ExportScoreMedia: {
-        io::path_t highlightConfigPath = task.params[CommandLineController::ParamKey::HighlightConfigPath].toString();
+    case CommandLineParser::ConvertType::ExportScoreMedia: {
+        io::path_t highlightConfigPath = task.params[CommandLineParser::ParamKey::HighlightConfigPath].toString();
         ret = converter()->exportScoreMedia(task.inputFile, task.outputFile, highlightConfigPath, stylePath, forceMode);
     } break;
-    case CommandLineController::ConvertType::ExportScoreMeta:
+    case CommandLineParser::ConvertType::ExportScoreMeta:
         ret = converter()->exportScoreMeta(task.inputFile, task.outputFile, stylePath, forceMode);
         break;
-    case CommandLineController::ConvertType::ExportScoreParts:
+    case CommandLineParser::ConvertType::ExportScoreParts:
         ret = converter()->exportScoreParts(task.inputFile, task.outputFile, stylePath, forceMode);
         break;
-    case CommandLineController::ConvertType::ExportScorePartsPdf:
+    case CommandLineParser::ConvertType::ExportScorePartsPdf:
         ret = converter()->exportScorePartsPdfs(task.inputFile, task.outputFile, stylePath, forceMode);
         break;
-    case CommandLineController::ConvertType::ExportScoreTranspose: {
-        std::string scoreTranspose = task.params[CommandLineController::ParamKey::ScoreTransposeOptions].toString().toStdString();
+    case CommandLineParser::ConvertType::ExportScoreTranspose: {
+        std::string scoreTranspose = task.params[CommandLineParser::ParamKey::ScoreTransposeOptions].toString().toStdString();
         ret = converter()->exportScoreTranspose(task.inputFile, task.outputFile, scoreTranspose, stylePath, forceMode);
     } break;
-    case CommandLineController::ConvertType::ExportScoreVideo: {
+    case CommandLineParser::ConvertType::ExportScoreVideo: {
         ret = converter()->exportScoreVideo(task.inputFile, task.outputFile);
     } break;
-    case CommandLineController::ConvertType::SourceUpdate: {
-        std::string scoreSource = task.params[CommandLineController::ParamKey::ScoreSource].toString().toStdString();
+    case CommandLineParser::ConvertType::SourceUpdate: {
+        std::string scoreSource = task.params[CommandLineParser::ParamKey::ScoreSource].toString().toStdString();
         ret = converter()->updateSource(task.inputFile, scoreSource, forceMode);
     } break;
     }
@@ -396,7 +465,7 @@ int App::processConverter(const CommandLineController::ConverterTask& task)
     return ret.code();
 }
 
-int App::processDiagnostic(const CommandLineController::Diagnostic& task)
+int App::processDiagnostic(const CommandLineParser::Diagnostic& task)
 {
     if (!diagnosticDrawProvider()) {
         return make_ret(Ret::Code::NotSupported);
@@ -420,19 +489,19 @@ int App::processDiagnostic(const CommandLineController::Diagnostic& task)
     }
 
     switch (task.type) {
-    case CommandLineController::DiagnosticType::GenDrawData:
+    case CommandLineParser::DiagnosticType::GenDrawData:
         ret = diagnosticDrawProvider()->generateDrawData(input.front(), output);
         break;
-    case CommandLineController::DiagnosticType::ComDrawData:
+    case CommandLineParser::DiagnosticType::ComDrawData:
         IF_ASSERT_FAILED(input.size() == 2) {
             return make_ret(Ret::Code::UnknownError);
         }
         ret = diagnosticDrawProvider()->compareDrawData(input.at(0), input.at(1), output);
         break;
-    case CommandLineController::DiagnosticType::DrawDataToPng:
+    case CommandLineParser::DiagnosticType::DrawDataToPng:
         ret = diagnosticDrawProvider()->drawDataToPng(input.front(), output);
         break;
-    case CommandLineController::DiagnosticType::DrawDiffToPng: {
+    case CommandLineParser::DiagnosticType::DrawDiffToPng: {
         io::path_t diffPath = input.at(0);
         io::path_t refPath;
         if (input.size() > 1) {
@@ -451,7 +520,20 @@ int App::processDiagnostic(const CommandLineController::Diagnostic& task)
     return ret.code();
 }
 
-void App::processAutobot(const CommandLineController::Autobot& task)
+int App::processAudioPluginRegistration(const CommandLineParser::AudioPluginRegistration& task)
+{
+    Ret ret = make_ret(Ret::Code::Ok);
+
+    if (task.failedPlugin) {
+        ret = registerAudioPluginsScenario()->registerFailedPlugin(task.pluginPath, task.failCode);
+    } else {
+        ret = registerAudioPluginsScenario()->registerPlugin(task.pluginPath);
+    }
+
+    return ret.code();
+}
+
+void App::processAutobot(const CommandLineParser::Autobot& task)
 {
     using namespace mu::autobot;
     async::Channel<StepInfo, Ret> stepCh = autobot()->stepStatusChanged();

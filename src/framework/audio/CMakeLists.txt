@@ -90,6 +90,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iaudiopluginsscannerregister.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiopluginmetareader.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiopluginmetareaderregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/iregisteraudiopluginsscenario.h
 
     # Common internal
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.cpp
@@ -117,6 +118,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/audiopluginsscannerregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/audiopluginmetareaderregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/audiopluginmetareaderregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/registeraudiopluginsscenario.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugins/registeraudiopluginsscenario.h
 
     # Driver
     ${DRIVER_SRC}
