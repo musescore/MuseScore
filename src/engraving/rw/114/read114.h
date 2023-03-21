@@ -33,7 +33,7 @@ public:
     //   read114
     //    import old version <= 1.3 files
     //---------------------------------------------------------
-    Err read(Score* masterScore, XmlReader& e, ReadContext& ctx) override;
+    Err read(Score* masterScore, XmlReader& e, ReadInOutData* out) override;
 };
 }
 

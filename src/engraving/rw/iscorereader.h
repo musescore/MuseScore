@@ -24,17 +24,18 @@
 #define MU_ENGRAVING_ISCOREREADER_H
 
 #include "engravingerrors.h"
+#include "readoutdata.h"
 
 namespace mu::engraving {
 class Score;
 class XmlReader;
-class ReadContext;
+
 class IScoreReader
 {
 public:
     virtual ~IScoreReader() = default;
 
-    virtual Err read(Score* score, XmlReader& e, ReadContext& ctx) = 0;
+    virtual Err read(Score* score, XmlReader& e, ReadInOutData* out) = 0;
 };
 }
 

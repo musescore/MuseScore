@@ -34,7 +34,7 @@ class Read400 : public IScoreReader
 {
 public:
 
-    Err read(Score* score, XmlReader& e, ReadContext& ctx) override;
+    Err read(Score* score, XmlReader& e, ReadInOutData* data) override;
     static bool readScore400(Score* score, XmlReader& e, ReadContext& ctx);
 };
 }

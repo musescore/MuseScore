@@ -24,6 +24,8 @@
 
 #include <cmath>
 
+#include "global/defer.h"
+
 #include "compat/pageformat.h"
 
 #include "infrastructure/htmlparser.h"
@@ -2738,11 +2740,20 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
 //    import old version <= 1.3 files
 //---------------------------------------------------------
 
-Err Read114::read(Score* score, XmlReader& e, ReadContext& ctx)
+Err Read114::read(Score* score, XmlReader& e, ReadInOutData* out)
 {
     IF_ASSERT_FAILED(score->isMaster()) {
         return Err::FileUnknownError;
     }
+
+    ReadContext ctx(score);
+    e.setContext(&ctx);
+
+    DEFER {
+        if (out) {
+            out->settingsCompat = std::move(ctx.settingCompat());
+        }
+    };
 
     MasterScore* masterScore = static_cast<MasterScore*>(score);
 

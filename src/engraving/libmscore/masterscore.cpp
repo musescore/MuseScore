@@ -421,13 +421,8 @@ MasterScore* MasterScore::clone()
     ByteArray scoreData = buffer.data();
     MasterScore* score = new MasterScore(style(), m_project);
 
-    ReadContext readCtx(score);
-    readCtx.setIgnoreVersionError(true);
-
     XmlReader r(scoreData);
-    r.setContext(&readCtx);
-
-    MscLoader().read(score, r, readCtx);
+    MscLoader().read(score, r, true);
 
     score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
     score->doLayout();

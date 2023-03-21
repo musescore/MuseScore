@@ -19,38 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_READ302_H
-#define MU_ENGRAVING_READ302_H
 
-#include "../iscorereader.h"
+#ifndef MU_ENGRAVING_READOUTDATA_H
+#define MU_ENGRAVING_READOUTDATA_H
 
-#include "modularity/ioc.h"
-#include "iengravingfontsprovider.h"
+#include <map>
+#include <vector>
 
-#include "engravingerrors.h"
+#include "linksindexer.h"
 
 namespace mu::engraving {
-class Instrument;
-class MasterScore;
-class Score;
+class LinkedObjects;
 
-class ReadContext;
-class XmlReader;
-}
-
-namespace mu::engraving::compat {
-class Read302 : public IScoreReader
+struct ReadLinks
 {
-    INJECT_STATIC(engraving, IEngravingFontsProvider, engravingFonts)
-public:
+    std::map<int /*staffIndex*/, std::vector<std::pair<LinkedObjects*, Location> > > staffLinkedElements; // one list per staff
+    LinksIndexer linksIndexer;
+};
 
-    Err read(Score* score, XmlReader& e, ReadInOutData* out) override;
+struct ReadInOutData {
+    // for master - out
+    // for except - in
+    ReadLinks links;
 
-private:
-    static bool readScore302(Score* score, XmlReader& e, ReadContext& ctx);
-
-    static void fixInstrumentId(Instrument* instrument);
+    // out
+    SettingsCompat settingsCompat;
 };
 }
 
-#endif // MU_ENGRAVING_READ302_H
+#endif // MU_ENGRAVING_READOUTDATA_H

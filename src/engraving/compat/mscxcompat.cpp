@@ -24,6 +24,7 @@
 #include "io/file.h"
 #include "io/buffer.h"
 
+#include "engraving/engravingerrors.h"
 #include "../rw/mscloader.h"
 
 #include "infrastructure/localfileinfoprovider.h"

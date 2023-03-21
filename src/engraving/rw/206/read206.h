@@ -63,7 +63,7 @@ public:
     //   read206
     //    import old version > 1.3  and < 3.x files
     //---------------------------------------------------------
-    Err read(Score* score, XmlReader& e, ReadContext& ctx) override;
+    Err read(Score* score, XmlReader& e, ReadInOutData* out) override;
 
     static EngravingItem* readArticulation(EngravingItem*, XmlReader&, const ReadContext& ctx);
     static void readAccidental206(Accidental*, XmlReader&);

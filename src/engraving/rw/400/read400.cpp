@@ -40,40 +40,42 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 
-Err Read400::read(Score* score, XmlReader& e, ReadContext& ctx)
+Err Read400::read(Score* score, XmlReader& e, ReadInOutData* data)
 {
-    if (!e.readNextStartElement()) {
-        LOGD("%s: xml file is empty", muPrintable(e.docName()));
-        return Err::FileUnknownError;
+    ReadContext ctx(score);
+    e.setContext(&ctx);
+
+    if (!score->isMaster() && data) {
+        ctx.initLinks(data->links);
     }
 
-    if (e.name() == "museScore") {
-        while (e.readNextStartElement()) {
-            const AsciiStringView tag(e.name());
-            if (tag == "programVersion") {
-                if (score->isMaster()) {
-                    score->setMscoreVersion(e.readText());
-                }
-            } else if (tag == "programRevision") {
-                if (score->isMaster()) {
-                    score->setMscoreRevision(e.readInt(nullptr, 16));
-                }
-            } else if (tag == "Revision") {
-                e.skipCurrentElement();
-            } else if (tag == "Score") {
-                if (!readScore400(score, e, ctx)) {
-                    if (e.error() == XmlStreamReader::CustomError) {
-                        return Err::FileCriticallyCorrupted;
-                    }
-                    return Err::FileBadFormat;
-                }
-            } else {
-                e.skipCurrentElement();
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "programVersion") {
+            if (score->isMaster()) {
+                score->setMscoreVersion(e.readText());
             }
+        } else if (tag == "programRevision") {
+            if (score->isMaster()) {
+                score->setMscoreRevision(e.readInt(nullptr, 16));
+            }
+        } else if (tag == "Revision") {
+            e.skipCurrentElement();
+        } else if (tag == "Score") {
+            if (!readScore400(score, e, ctx)) {
+                if (e.error() == XmlStreamReader::CustomError) {
+                    return Err::FileCriticallyCorrupted;
+                }
+                return Err::FileBadFormat;
+            }
+        } else {
+            e.skipCurrentElement();
         }
-    } else {
-        LOGD("%s: invalid structure of xml file", muPrintable(e.docName()));
-        return Err::FileUnknownError;
+    }
+
+    if (data) {
+        data->links = ctx.readLinks();
+        data->settingsCompat = ctx.settingCompat();
     }
 
     return Err::NoError;
