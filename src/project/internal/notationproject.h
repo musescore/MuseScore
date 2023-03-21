@@ -28,7 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "io/ifilesystem.h"
-#include "iprojectconfiguration.h"
+#include "../iprojectconfiguration.h"
 #include "inotationreadersregister.h"
 #include "inotationwritersregister.h"
 

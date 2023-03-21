@@ -31,7 +31,7 @@ namespace mu::engraving {
 class EngravingProject;
 class MscReader;
 class MscWriter;
-class ScoreReader;
+class MscLoader;
 class Read400;
 }
 

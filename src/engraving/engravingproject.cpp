@@ -24,7 +24,7 @@
 #include "global/allocator.h"
 
 #include "style/defaultstyle.h"
-#include "rw/scorereader.h"
+#include "rw/mscloader.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/part.h"
 
@@ -143,7 +143,7 @@ Ret EngravingProject::loadMscz(const MscReader& msc, SettingsCompat& settingsCom
 {
     TRACEFUNC;
     MScore::setError(MsError::MS_NO_ERROR);
-    ScoreReader scoreReader;
+    MscLoader scoreReader;
     return scoreReader.loadMscz(m_masterScore, msc, settingsCompat, ignoreVersionError);
 }
 

@@ -26,7 +26,7 @@
 
 #include "compat/writescorehook.h"
 #include "infrastructure/mscwriter.h"
-#include "rw/scorereader.h"
+#include "rw/mscloader.h"
 #include "rw/xml.h"
 #include "style/defaultstyle.h"
 
@@ -427,7 +427,7 @@ MasterScore* MasterScore::clone()
     XmlReader r(scoreData);
     r.setContext(&readCtx);
 
-    ScoreReader().read(score, r, readCtx);
+    MscLoader().read(score, r, readCtx);
 
     score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
     score->doLayout();
