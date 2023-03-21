@@ -32,7 +32,7 @@
 #include "realfn.h"
 
 #include "layout/layoutchords.h"
-#include "rw/measurerw.h"
+#include "rw/400/measurerw.h"
 #include "rw/xml.h"
 #include "style/style.h"
 
@@ -4223,15 +4223,20 @@ void Measure::computeWidth(Segment* s, double x, bool isSystemHeader, Fraction m
             s->computeCrossBeamType(ns);
             CrossBeamType crossBeamType = s->crossBeamType();
             double displacement = score()->noteHeadWidth() - score()->styleMM(Sid::stemWidth);
-            if (crossBeamType.upDown) {
+            if (crossBeamType.upDown && crossBeamType.canBeAdjusted) {
                 s->setWidthOffset(s->widthOffset() + displacement);
                 w += displacement;
-                _squeezableSpace -= score()->noteHeadWidth();
-            }
-            if (crossBeamType.downUp) {
+                _squeezableSpace -= displacement;
+            } else if (crossBeamType.downUp && crossBeamType.canBeAdjusted) {
                 s->setWidthOffset(s->widthOffset() - displacement);
                 w -= displacement;
-                _squeezableSpace -= score()->noteHeadWidth();
+                _squeezableSpace -= displacement;
+            }
+            if (crossBeamType.upDown) {
+                // Even if it can't be adjusted, the up-down case needs enforced
+                // this minimum width to avoid stems overlapping weirdly
+                w = std::max(w, 2 * displacement);
+                _squeezableSpace -= 2 * displacement;
             }
 
             // look back for collisions with previous segments

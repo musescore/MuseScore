@@ -23,7 +23,7 @@
 #include "articulation.h"
 
 #include "draw/fontmetrics.h"
-#include "rw/compat/read206.h"
+#include "rw/206/read206.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
 #include "types/translatablestring.h"

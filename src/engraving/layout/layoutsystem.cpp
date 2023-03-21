@@ -115,8 +115,11 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         double ww  = 0.0; // width of current measure
         if (ctx.curMeasure->isMeasure()) {
             Measure* m = toMeasure(ctx.curMeasure);
-            // Construct information that is needed before horizontal spacing
-            LayoutMeasure::computePreSpacingItems(m);
+            if (!(oldSystem && oldSystem->page() && oldSystem->page() != ctx.page)) {
+                // Construct information that is needed before horizontal spacing
+                // (unless the curMeasure we've just collected comes from the next page)
+                LayoutMeasure::computePreSpacingItems(m);
+            }
             // After appending a new measure, the shortest note in the system may change, in which case
             // we need to recompute the layout of the previous measures. When updating the width of these
             // measures, curSysWidth must be updated accordingly.
@@ -484,7 +487,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         ctx.startWithLongNames = ctx.firstSystem && layoutBreak->startWithLongNames();
     }
 
-    if (oldSystem) {
+    if (oldSystem && !(oldSystem->page() && oldSystem->page() != ctx.page)) {
         // We may have previously processed the ties of the next system (in LayoutChords::updateLineAttachPoints()).
         // We need to restore them to the correct state.
         LayoutSystem::restoreTies(oldSystem);
@@ -795,6 +798,17 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                         // add element to skyline
                         if (e->addToSkyline()) {
                             skyline.add(e->shape().translated(e->pos() + p));
+                            // add grace notes to skyline
+                            if (e->isChord()) {
+                                GraceNotesGroup& graceBefore = toChord(e)->graceNotesBefore();
+                                GraceNotesGroup& graceAfter = toChord(e)->graceNotesAfter();
+                                if (!graceBefore.empty()) {
+                                    skyline.add(graceBefore.shape().translated(graceBefore.pos() + p));
+                                }
+                                if (!graceAfter.empty()) {
+                                    skyline.add(graceAfter.shape().translated(graceAfter.pos() + p));
+                                }
+                            }
                         }
 
                         // add tremolo to skyline
@@ -804,7 +818,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                             Chord* c2 = t->chord2();
                             if (!t->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
                                 if (t->chord() == e && t->addToSkyline()) {
-                                    skyline.add(t->shape().translated(t->pos() + e->pos() + p));
+                                    skyline.add(t->shape().translate(t->pos() + e->pos() + p));
                                 }
                             }
                         }
@@ -849,7 +863,8 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                     for (EngravingItem* el : note->el()) {
                         if (el->isFingering()) {
                             Fingering* f = toFingering(el);
-                            if (f->layoutType() == ElementType::CHORD) {
+                            if (f->layoutType() == ElementType::CHORD && !f->isOnCrossBeamSide()) {
+                                // Fingering on top of cross-staff beams must be laid out later
                                 if (f->placeAbove()) {
                                     fingerings.push_back(f);
                                 } else {
@@ -1018,7 +1033,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         staff_idx_t si = d->staffIdx();
         Segment* s = d->segment();
         Measure* m = s->measure();
-        system->staff(si)->skyline().add(d->shape().translated(d->pos() + s->pos() + m->pos()));
+        system->staff(si)->skyline().add(d->shape().translate(d->pos() + s->pos() + m->pos()));
     }
 
     //-------------------------------------------------------------
@@ -1179,7 +1194,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                     ss->setPosY(y);
                 }
                 if (ss->addToSkyline()) {
-                    system->staff(staffIdx)->skyline().add(ss->shape().translated(ss->pos()));
+                    system->staff(staffIdx)->skyline().add(ss->shape().translate(ss->pos()));
                 }
             }
 
@@ -1385,7 +1400,7 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
             if (stfIdx == mu::nidx) {
                 continue;
             }
-            system->staff(stfIdx)->skyline().add(ss->shape().translated(ss->pos()));
+            system->staff(stfIdx)->skyline().add(ss->shape().translate(ss->pos()));
         }
     }
 }
@@ -1401,7 +1416,7 @@ void LayoutSystem::layoutTies(Chord* ch, System* system, const Fraction& stick)
         if (t) {
             TieSegment* ts = t->layoutFor(system);
             if (ts && ts->addToSkyline()) {
-                staff->skyline().add(ts->shape().translated(ts->pos()));
+                staff->skyline().add(ts->shape().translate(ts->pos()));
             }
         }
         t = note->tieBack();
@@ -1409,7 +1424,7 @@ void LayoutSystem::layoutTies(Chord* ch, System* system, const Fraction& stick)
             if (t->startNote()->tick() < stick) {
                 TieSegment* ts = t->layoutBack(system);
                 if (ts && ts->addToSkyline()) {
-                    staff->skyline().add(ts->shape().translated(ts->pos()));
+                    staff->skyline().add(ts->shape().translate(ts->pos()));
                 }
             }
         }

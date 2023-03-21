@@ -351,6 +351,9 @@ Chord::Chord(const Chord& c, bool link)
             ChordLine* cl = toChordLine(e);
             ChordLine* ncl = Factory::copyChordLine(*cl);
             add(ncl);
+            if (cl->note()) {
+                ncl->setNote(findNote(cl->note()->pitch()));
+            }
             if (link) {
                 score()->undo(new Link(ncl, cl));
             }
@@ -1449,7 +1452,7 @@ int Chord::calcMinStemLength()
         // buzz roll's height is actually half of the visual height,
         // so we need to multiply it by 2 to get the actual height
         int buzzRollMultiplier = _tremolo->isBuzzRoll() ? 2 : 1;
-        minStemLength += ceil(_tremolo->minHeight() / _relativeMag * 4.0 * buzzRollMultiplier);
+        minStemLength += ceil(_tremolo->minHeight() / intrinsicMag() * 4.0 * buzzRollMultiplier);
         int outSidePadding = score()->styleMM(Sid::tremoloOutSidePadding).val() / _spatium * 4.0;
         int noteSidePadding = score()->styleMM(Sid::tremoloNoteSidePadding).val() / _spatium * 4.0;
 
@@ -1472,7 +1475,7 @@ int Chord::calcMinStemLength()
         if (_hook) {
             bool straightFlags = score()->styleB(Sid::useStraightNoteFlags);
             double smuflAnchor = _hook->smuflAnchor().y() * (_up ? 1 : -1);
-            int hookOffset = floor((_hook->height() / _relativeMag + smuflAnchor) / _spatium * 4) - (straightFlags ? 0 : 2);
+            int hookOffset = floor((_hook->height() / intrinsicMag() + smuflAnchor) / _spatium * 4) - (straightFlags ? 0 : 2);
             // some fonts have hooks that extend very far down (making the height of the hook very large)
             // so we constrain to a reasonable maximum for hook length
             hookOffset = std::min(hookOffset, 11);
@@ -1566,7 +1569,7 @@ int Chord::maxReduction(int extensionOutsideStaff) const
     int extensionHalfSpaces = floor(extensionOutsideStaff / 2.0);
     extensionHalfSpaces = std::min(extensionHalfSpaces, 4);
     int reduction = maxReductions[beamCount][extensionHalfSpaces];
-    if (_relativeMag < 1) {
+    if (intrinsicMag() < 1) {
         // there is an exception for grace-sized stems with hooks.
         // reducing by the full amount puts the hooks too low. Limit reduction to 0.5sp
         if (hasTradHook) {
@@ -1659,7 +1662,7 @@ double Chord::calcDefaultStemLength()
     }
     // extraHeight represents the extra vertical distance between notehead and stem start
     // eg. slashed noteheads etc
-    double extraHeight = (_up ? upNote()->stemUpSE().y() : downNote()->stemDownNW().y()) / _relativeMag / _spatium;
+    double extraHeight = (_up ? upNote()->stemUpSE().y() : downNote()->stemDownNW().y()) / intrinsicMag() / _spatium;
     int shortestStem = score()->styleB(Sid::useWideBeams) ? 12 : (score()->styleD(Sid::shortestStem) + abs(extraHeight)) * 4;
     int quarterSpacesPerLine = std::floor(lineDistance * 2);
     int chordHeight = (downLine() - upLine()) * quarterSpacesPerLine; // convert to quarter spaces
@@ -1675,7 +1678,7 @@ double Chord::calcDefaultStemLength()
     int middleLine = minStaffOverlap(_up, staffLineCount, beams(), !!_hook, useWideBeams ? 4 : 3, useWideBeams, !(isGrace() || isSmall()));
     if (up()) {
         int stemEndPosition = upLine() * quarterSpacesPerLine - defaultStemLength;
-        double stemEndPositionMag = (double)upLine() * quarterSpacesPerLine - (defaultStemLength * _relativeMag);
+        double stemEndPositionMag = (double)upLine() * quarterSpacesPerLine - (defaultStemLength * intrinsicMag());
         int idealStemLength = defaultStemLength;
 
         if (stemEndPositionMag <= -shortStemStart) {
@@ -1691,7 +1694,7 @@ double Chord::calcDefaultStemLength()
         stemLength = std::max(idealStemLength, minStemLengthQuarterSpaces);
     } else {
         int stemEndPosition = downLine() * quarterSpacesPerLine + defaultStemLength;
-        double stemEndPositionMag = (double)downLine() * quarterSpacesPerLine + (defaultStemLength * _relativeMag);
+        double stemEndPositionMag = (double)downLine() * quarterSpacesPerLine + (defaultStemLength * intrinsicMag());
         int idealStemLength = defaultStemLength;
 
         int downShortStemStart = (staffLineCount - 1) * (2 * quarterSpacesPerLine) + shortStemStart;
@@ -1712,7 +1715,7 @@ double Chord::calcDefaultStemLength()
         stemLength = calc4BeamsException(stemLength);
     }
 
-    double finalStemLength = (chordHeight / 4.0 * _spatium) + ((stemLength / 4.0 * _spatium) * _relativeMag);
+    double finalStemLength = (chordHeight / 4.0 * _spatium) + ((stemLength / 4.0 * _spatium) * intrinsicMag());
 
     // when the chord's magnitude is < 1, the stem length with mag can find itself below the middle line.
     // in those cases, we have to add the extra amount to it to bring it to a minimum.
@@ -1831,20 +1834,10 @@ void Chord::layoutHook()
 {
     if (!_hook) {
         createHook();
+        computeUp();
     }
     _hook->setHookType(up() ? durationType().hooks() : -durationType().hooks());
     _hook->layout();
-}
-
-void Chord::calcRelativeMag()
-{
-    _relativeMag = 1;
-    if (isSmall()) {
-        _relativeMag *= score()->styleD(Sid::smallNoteMag);
-    }
-    if (isGrace()) {
-        _relativeMag *= score()->styleD(Sid::graceNoteMag);
-    }
 }
 
 //! May be called again when the chord is added to or removed from a beam.
@@ -1866,7 +1859,7 @@ void Chord::layoutStem()
         removeStem();
         return;
     }
-    calcRelativeMag();
+
     if (!_stem) {
         createStem();
     }
@@ -2049,7 +2042,6 @@ void Chord::layout()
     if (_notes.empty()) {
         return;
     }
-    calcRelativeMag();
     if (onTabStaff()) {
         layoutTablature();
     } else {
@@ -3226,10 +3218,12 @@ void Chord::removeMarkings(bool keepTremolo)
 }
 
 //---------------------------------------------------------
-//   chordMag
+//   intrinsicMag
+//   returns the INTRINSIC mag of the chord (i.e. NOT scaled
+//   by staff size)
 //---------------------------------------------------------
 
-double Chord::chordMag() const
+double Chord::intrinsicMag() const
 {
     double m = 1.0;
     if (isSmall()) {
@@ -3248,7 +3242,7 @@ double Chord::chordMag() const
 double Chord::mag() const
 {
     const Staff* st = staff();
-    return (st ? st->staffMag(this) : 1.0) * chordMag();
+    return (st ? st->staffMag(this) : 1.0) * intrinsicMag();
 }
 
 //---------------------------------------------------------
@@ -3699,30 +3693,30 @@ Shape Chord::shape() const
 {
     Shape shape;
     if (_hook && _hook->addToSkyline()) {
-        shape.add(_hook->shape().translated(_hook->pos()));
+        shape.add(_hook->shape().translate(_hook->pos()));
     }
     if (_stem && _stem->addToSkyline()) {
-        shape.add(_stem->shape().translated(_stem->pos()));
+        shape.add(_stem->shape().translate(_stem->pos()));
     }
     if (_stemSlash && _stemSlash->addToSkyline()) {
-        shape.add(_stemSlash->shape().translated(_stemSlash->pos()));
+        shape.add(_stemSlash->shape().translate(_stemSlash->pos()));
     }
     if (_arpeggio && _arpeggio->addToSkyline()) {
-        shape.add(_arpeggio->shape().translated(_arpeggio->pos()));
+        shape.add(_arpeggio->shape().translate(_arpeggio->pos()));
     }
 //      if (_tremolo)
 //            shape.add(_tremolo->shape().translated(_tremolo->pos()));
     for (Note* note : _notes) {
-        shape.add(note->shape().translated(note->pos()));
+        shape.add(note->shape().translate(note->pos()));
     }
     for (EngravingItem* e : el()) {
         if (e->addToSkyline()) {
-            shape.add(e->shape().translated(e->pos()));
+            shape.add(e->shape().translate(e->pos()));
         }
     }
     shape.add(ChordRest::shape());      // add lyrics
     for (LedgerLine* l = _ledgerLines; l; l = l->next()) {
-        shape.add(l->shape().translated(l->pos()));
+        shape.add(l->shape().translate(l->pos()));
     }
 
     return shape;
@@ -4082,8 +4076,8 @@ void Chord::layoutArticulations3(Slur* slur)
         if (a->layoutCloseToNote() || !a->autoplace() || !slur->addToSkyline()) {
             continue;
         }
-        Shape aShape = a->shape().translated(a->pos() + pos() + s->pos() + m->pos());
-        Shape sShape = ss->shape().translated(ss->pos());
+        Shape aShape = a->shape().translate(a->pos() + pos() + s->pos() + m->pos());
+        Shape sShape = ss->shape().translate(ss->pos());
         if (aShape.intersects(sShape)) {
             double d = score()->styleS(Sid::articulationMinDistance).val() * spatium();
             d += slur->up() ? std::max(aShape.minVerticalDistance(sShape), 0.0) : std::max(sShape.minVerticalDistance(aShape), 0.0);
@@ -4199,7 +4193,7 @@ void GraceNotesGroup::layout()
             return false;
         });
         double offset;
-        offset = -std::max(graceShape.minHorizontalDistance(groupShape, score()), 0.0);
+        offset = -std::max(graceShape.minHorizontalDistance(groupShape), 0.0);
         // Adjust spacing for cross-beam situations
         if (i < this->size() - 1) {
             Chord* prevGrace = this->at(i + 1);
@@ -4216,16 +4210,16 @@ void GraceNotesGroup::layout()
         double xpos = offset - parent()->rxoffset() - parent()->xpos();
         grace->setPos(xpos, 0.0);
     }
-    double xPos = -_shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->staffIdx()), score());
+    double xPos = -_shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->staffIdx()));
     // If the parent chord is cross-staff, also check against shape in the other staff and take the minimum
     if (_parent->staffMove() != 0) {
-        double xPosCross = -_shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->vStaffIdx()), score());
+        double xPosCross = -_shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->vStaffIdx()));
         xPos = std::min(xPos, xPosCross);
     }
     // Same if the grace note itself is cross-staff
     Chord* firstGN = this->back();
     if (firstGN->staffMove() != 0) {
-        double xPosCross = -_shape.minHorizontalDistance(_appendedSegment->staffShape(firstGN->vStaffIdx()), score());
+        double xPosCross = -_shape.minHorizontalDistance(_appendedSegment->staffShape(firstGN->vStaffIdx()));
         xPos = std::min(xPos, xPosCross);
     }
     // Safety net in case the shape checks don't succeed
@@ -4261,7 +4255,7 @@ Shape GraceNotesGroup::shape() const
 {
     Shape shape;
     for (Chord* grace : *this) {
-        shape.add(grace->shape().translated(grace->pos() - this->pos()));
+        shape.add(grace->shape().translate(grace->pos() - this->pos()));
     }
     return shape;
 }

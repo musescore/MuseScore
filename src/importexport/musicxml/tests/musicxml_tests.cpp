@@ -376,6 +376,9 @@ TEST_F(Musicxml_Tests, arpGliss2) {
 TEST_F(Musicxml_Tests, arpGliss3) {
     mxmlIoTest("testArpGliss3");
 }
+TEST_F(Musicxml_Tests, articulationCombination) {
+    mxmlIoTest("testArticulationCombination");
+}
 TEST_F(Musicxml_Tests, barlineFermatas) {
     mxmlMscxExportTestRef("testBarlineFermatas");
 }
@@ -927,6 +930,12 @@ TEST_F(Musicxml_Tests, volta1) {
 }
 TEST_F(Musicxml_Tests, volta2) {
     mxmlIoTest("testVolta2");
+}
+TEST_F(Musicxml_Tests, voltaHiding1) {
+    mxmlImportTestRef("testVoltaHiding");
+}
+TEST_F(Musicxml_Tests, voltaHiding2) {
+    mxmlIoTestRef("testVoltaHiding");
 }
 TEST_F(Musicxml_Tests, wedge1) {
     mxmlIoTest("testWedge1");

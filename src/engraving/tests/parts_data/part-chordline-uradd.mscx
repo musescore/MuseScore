@@ -878,6 +878,11 @@
                   </linked>
                 <pitch>74</pitch>
                 <tpc>16</tpc>
+                <ChordLine>
+                  <subtype>1</subtype>
+                  <linked>
+                    </linked>
+                  </ChordLine>
                 </Note>
               </Chord>
             <Chord>

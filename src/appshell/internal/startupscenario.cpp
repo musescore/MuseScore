@@ -34,7 +34,7 @@ static const mu::Uri FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup");
 static const mu::Uri HOME_URI("musescore://home");
 static const mu::Uri NOTATION_URI("musescore://notation");
 
-static StartupModeType modeTypeTromString(const QString& str)
+static StartupModeType modeTypeTromString(const std::string& str)
 {
     if ("start-empty" == str) {
         return StartupModeType::StartEmpty;
@@ -55,14 +55,14 @@ static StartupModeType modeTypeTromString(const QString& str)
     return StartupModeType::StartEmpty;
 }
 
-void StartupScenario::setModeType(const QString& modeType)
+void StartupScenario::setStartupType(const std::optional<std::string>& type)
 {
-    m_modeTypeStr = modeType;
+    m_startupTypeStr = type ? type.value() : "";
 }
 
-void StartupScenario::setStartupScorePath(const io::path_t& path)
+void StartupScenario::setStartupScorePath(const std::optional<io::path_t>& path)
 {
-    m_startupScorePath = path;
+    m_startupScorePath = path ? path.value() : "";
 }
 
 void StartupScenario::run()
@@ -112,8 +112,8 @@ StartupModeType StartupScenario::resolveStartupModeType() const
         return StartupModeType::StartWithScore;
     }
 
-    if (!m_modeTypeStr.isEmpty()) {
-        return modeTypeTromString(m_modeTypeStr);
+    if (!m_startupTypeStr.empty()) {
+        return modeTypeTromString(m_startupTypeStr);
     }
 
     return configuration()->startupModeType();

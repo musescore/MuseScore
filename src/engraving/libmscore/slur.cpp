@@ -453,18 +453,11 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
 
     // Collect all the segments shapes spanned by this slur segment in a single vector
     std::vector<Shape> segShapes;
-    Segment* seg = startSeg;
-    while (seg && seg->tick() <= endSeg->tick()) {
-        if (seg->enabled()) {
-            segShapes.push_back(getSegmentShape(seg, startCR, endCR));
+    for (Segment* seg = startSeg; seg && seg->tick() <= endSeg->tick(); seg = seg->next1enabled()) {
+        if (seg->isType(SegmentType::BarLineType)) {
+            continue;
         }
-        if (seg->next() && !seg->next()->isType(SegmentType::BarLineType)) {
-            seg = seg->next();
-        } else if (seg->measure()->next() && seg->measure()->next()->isMeasure()) {
-            seg = toMeasure(seg->measure()->next())->first();
-        } else {
-            break;
-        }
+        segShapes.push_back(getSegmentShape(seg, startCR, endCR));
     }
     if (segShapes.empty()) {
         return;
@@ -508,7 +501,14 @@ void SlurSegment::avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p
 
     static constexpr unsigned maxIter = 30;     // Max iterations allowed
     const double vertClearance = slur()->up() ? clearance : -clearance;
-    const double step = slur()->up() ? -0.25 * spatium() : 0.25 * spatium();
+    // Optimize the slur shape and position in quarter-space steps
+    double step = slur()->up() ? -0.25 * spatium() : 0.25 * spatium();
+    // ...but allow long slurs to user coarser steps
+    static constexpr double longSlurLimit = 16.0; // in spaces
+    if (slurLength > longSlurLimit) {
+        step *= slurLength / longSlurLimit;
+        step = std::min(step, 1.5 * spatium());
+    }
     // Divide slur in several rectangles to localize collisions
     const unsigned npoints = 20;
     std::vector<RectF> slurRects;
@@ -1094,9 +1094,9 @@ void Slur::slurPos(SlurPos* sp)
         // clear the stem (x)
         // allow slight overlap (y)
         // don't allow overlap with hook if not disabling the autoplace checks against start/end segments in SlurSegment::layoutSegment()
-        double yadj = -stemSideInset* sc->mag();
+        double yadj = -stemSideInset* sc->intrinsicMag();
         yadj *= _spatium * __up;
-        double offset = std::max(stemOffsetX * sc->mag(), minOffset);
+        double offset = std::max(stemOffsetX * sc->intrinsicMag(), minOffset);
         pt += PointF(offset * _spatium, yadj);
         // account for articulations
         fixArticulations(pt, sc, __up, true);
@@ -1149,7 +1149,7 @@ void Slur::slurPos(SlurPos* sp)
             yadj = -stemSideInset;
         }
         yadj *= _spatium * __up;
-        double offset = std::max(stemOffsetX * ec->mag(), minOffset);
+        double offset = std::max(stemOffsetX * ec->intrinsicMag(), minOffset);
         pt += PointF(-offset * _spatium, yadj);
         // account for articulations
         fixArticulations(pt, ec, __up, true);
@@ -1180,7 +1180,7 @@ void Slur::slurPos(SlurPos* sp)
             po.ry() = scr->bbox().top() + scr->height();
         }
         double offset = useTablature ? 0.75 : 0.9;
-        po.ry() += scr->mag() * _spatium * offset * __up;
+        po.ry() += scr->intrinsicMag() * _spatium * offset * __up;
 
         // adjustments for stem and/or beam
         Tremolo* trem = sc ? sc->tremolo() : nullptr;
@@ -1193,14 +1193,14 @@ void Slur::slurPos(SlurPos* sp)
 
                 // in these cases, layout start of slur to stem
                 double beamWidthSp = score()->styleS(Sid::beamWidth).val() * beam1->magS();
-                double offset = std::max(beamClearance * sc->mag(), minOffset) * _spatium;
+                double offset = std::max(beamClearance * sc->intrinsicMag(), minOffset) * _spatium;
                 double sh = stem1->length() + (beamWidthSp / 2) + offset;
                 if (_up) {
                     po.ry() = sc->stemPos().y() - sc->pagePos().y() - sh;
                 } else {
                     po.ry() = sc->stemPos().y() - sc->pagePos().y() + sh;
                 }
-                po.rx() = sc->stemPosX() + (beamAnchorInset * _spatium * sc->mag()) + (stem1->lineWidthMag() / 2 * __up);
+                po.rx() = sc->stemPosX() + (beamAnchorInset * _spatium * sc->intrinsicMag()) + (stem1->lineWidthMag() / 2 * __up);
 
                 // account for articulations
                 fixArticulations(po, sc, __up, true);
@@ -1212,7 +1212,7 @@ void Slur::slurPos(SlurPos* sp)
                 trem->layout();
                 Note* note = _up ? sc->upNote() : sc->downNote();
                 double stemHeight = stem1 ? stem1->length() : trem->defaultStemLengthStart();
-                double offset = std::max(beamClearance * sc->mag(), minOffset) * _spatium;
+                double offset = std::max(beamClearance * sc->intrinsicMag(), minOffset) * _spatium;
                 double sh = stemHeight + offset;
 
                 if (_up) {
@@ -1223,7 +1223,7 @@ void Slur::slurPos(SlurPos* sp)
                 if (!stem1) {
                     po.rx() = note->noteheadCenterX();
                 } else {
-                    po.rx() = sc->stemPosX() + (beamAnchorInset * _spatium * sc->mag()) + (stem1->lineWidthMag() / 2. * __up);
+                    po.rx() = sc->stemPosX() + (beamAnchorInset * _spatium * sc->intrinsicMag()) + (stem1->lineWidthMag() / 2. * __up);
                 }
                 fixArticulations(po, sc, __up, true);
 
@@ -1308,7 +1308,7 @@ void Slur::slurPos(SlurPos* sp)
                 po.ry() = endCR()->bbox().top() + endCR()->height();
             }
             double offset = useTablature ? 0.75 : 0.9;
-            po.ry() += ecr->mag() * _spatium * offset * __up;
+            po.ry() += ecr->intrinsicMag() * _spatium * offset * __up;
 
             // adjustments for stem and/or beam
             Tremolo* trem = ec ? ec->tremolo() : nullptr;
@@ -1339,7 +1339,7 @@ void Slur::slurPos(SlurPos* sp)
                     double beamWidthSp = beam2 ? score()->styleS(Sid::beamWidth).val() : 0;
                     Note* note = _up ? sc->upNote() : sc->downNote();
                     double stemHeight = stem2 ? stem2->length() + (beamWidthSp / 2) : trem->defaultStemLengthEnd();
-                    double offset = std::max(beamClearance * ec->mag(), minOffset) * _spatium;
+                    double offset = std::max(beamClearance * ec->intrinsicMag(), minOffset) * _spatium;
                     double sh = stemHeight + offset;
 
                     if (_up) {
@@ -1351,7 +1351,7 @@ void Slur::slurPos(SlurPos* sp)
                         // tremolo whole notes
                         po.setX(note->noteheadCenterX());
                     } else {
-                        po.setX(ec->stemPosX() + (stem2->lineWidthMag() / 2 * __up) - (beamAnchorInset * _spatium * ec->mag()));
+                        po.setX(ec->stemPosX() + (stem2->lineWidthMag() / 2 * __up) - (beamAnchorInset * _spatium * ec->intrinsicMag()));
                     }
 
                     // account for articulations
@@ -1814,35 +1814,37 @@ void Slur::computeUp()
         // assumption:
         // slurs have only chords or rests as start/end elements
         //
-        if (startCR() == 0 || endCR() == 0) {
+        ChordRest* chordRest1 = startCR();
+        ChordRest* chordRest2 = endCR();
+        if (chordRest1 == 0 || chordRest2 == 0) {
             _up = true;
             break;
         }
-        Chord* c1 = startCR()->isChord() ? toChord(startCR()) : 0;
-        Chord* c2 = endCR()->isChord() ? toChord(endCR()) : 0;
-        if (c2 && startCR()->measure()->system() != endCR()->measure()->system()) {
+        Chord* chord1 = startCR()->isChord() ? toChord(startCR()) : 0;
+        Chord* chord2 = endCR()->isChord() ? toChord(endCR()) : 0;
+        if (chord2 && startCR()->measure()->system() != endCR()->measure()->system()) {
             // HACK: if the end chord is in a different system, it may have never been laid out yet.
             // But we need to know its direction to decide slur direction, so need to compute it here.
-            for (Note* note : c2->notes()) {
+            for (Note* note : chord2->notes()) {
                 note->updateLine(); // because chord direction is based on note lines
             }
-            c2->computeUp();
+            chord2->computeUp();
         }
 
-        if (c1 && c1->beam() && c1->beam()->cross()) {
+        if (chord1 && chord1->beam() && chord1->beam()->cross()) {
             // TODO: stem direction is not finalized, so we cannot use it here
             _up = true;
             break;
         }
 
-        _up = !(startCR()->up());
+        _up = !(chordRest1->up());
 
         // Check if multiple voices
         bool multipleVoices = false;
-        Measure* m1 = startCR()->measure();
-        while (m1 && m1->tick() <= endCR()->tick()) {
-            if ((m1->hasVoices(startCR()->staffIdx(), tick(), ticks() + endCR()->ticks()))
-                && c1) {
+        Measure* m1 = chordRest1->measure();
+        while (m1 && m1->tick() <= chordRest2->tick()) {
+            if ((m1->hasVoices(chordRest1->staffIdx(), tick(), ticks() + chordRest2->ticks()))
+                && chord1) {
                 multipleVoices = true;
                 break;
             }
@@ -1850,16 +1852,16 @@ void Slur::computeUp()
         }
         if (multipleVoices) {
             // slurs go on the stem side
-            if (startCR()->voice() > 0 || endCR()->voice() > 0) {
+            if (chordRest1->voice() > 0 || chordRest2->voice() > 0) {
                 _up = false;
             } else {
                 _up = true;
             }
-        } else if (c1 && c2 && !c1->isGrace() && isDirectionMixture(c1, c2)) {
+        } else if (chord1 && chord2 && !chord1->isGrace() && isDirectionMixture(chord1, chord2)) {
             // slurs go above if there are mixed direction stems between c1 and c2
             // but grace notes are exceptions
             _up = true;
-        } else if (c1 && c2 && c1->isGrace() && c2 != c1->parent() && isDirectionMixture(c1, c2)) {
+        } else if (chord1 && chord2 && chord1->isGrace() && chord2 != chord1->parent() && isDirectionMixture(chord1, chord2)) {
             _up = true;
         }
     }

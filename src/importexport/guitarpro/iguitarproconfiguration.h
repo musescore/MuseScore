@@ -22,7 +22,8 @@
 #ifndef MU_IMPORTEXPORT_IGUITARPROCONFIGURATION_H
 #define MU_IMPORTEXPORT_IGUITARPROCONFIGURATION_H
 
-#include <string>
+#include <optional>
+
 #include "modularity/imoduleexport.h"
 
 namespace mu::iex::guitarpro {
@@ -34,10 +35,10 @@ public:
     virtual ~IGuitarProConfiguration() = default;
 
     virtual bool linkedTabStaffCreated() const = 0;
-    virtual void setLinkedTabStaffCreated(bool created) = 0;
+    virtual void setLinkedTabStaffCreated(std::optional<bool> created) = 0;
 
     virtual bool experimental() const = 0;
-    virtual void setExperimental(bool experimental) = 0;
+    virtual void setExperimental(std::optional<bool> experimental) = 0;
 };
 }
 

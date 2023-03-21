@@ -31,8 +31,10 @@
 #include "libmscore/chordrest.h"
 #include "libmscore/durationelement.h"
 #include "libmscore/factory.h"
+#include "libmscore/fingering.h"
 #include "libmscore/measure.h"
 #include "libmscore/measurebase.h"
+#include "libmscore/note.h"
 #include "libmscore/page.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
@@ -305,6 +307,20 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                                 Chord* c2 = t->chord2();
                                 if (t->twoNotes() && c1 && c2 && (c1->staffMove() || c2->staffMove())) {
                                     t->layout();
+                                }
+                            }
+                            // Fingering on top of cross-staff beams must be laid out here
+                            if (c->beam() && (c->beam()->cross() || c->staffMove() != 0)) {
+                                for (Note* note : c->notes()) {
+                                    for (EngravingItem* e : note->el()) {
+                                        if (!e || !e->isFingering()) {
+                                            continue;
+                                        }
+                                        Fingering* fingering = toFingering(e);
+                                        if (fingering->isOnCrossBeamSide()) {
+                                            fingering->layout();
+                                        }
+                                    }
                                 }
                             }
                         }

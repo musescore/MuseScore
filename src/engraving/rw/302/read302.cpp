@@ -19,64 +19,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "read400.h"
+#include "read302.h"
 
+#include "global/defer.h"
+
+#include "iengravingfont.h"
 #include "rw/xml.h"
+#include "rw/compat/compatutils.h"
+#include "style/style.h"
 
 #include "libmscore/audio.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
+#include "libmscore/measurebase.h"
+#include "libmscore/page.h"
 #include "libmscore/part.h"
 #include "libmscore/score.h"
+#include "libmscore/scoreorder.h"
 #include "libmscore/spanner.h"
 #include "libmscore/staff.h"
 #include "libmscore/text.h"
 
-#include "staffrw.h"
+#include "../400/staffrw.h"
+#include "../compat/readstyle.h"
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
+using namespace mu::engraving::compat;
 
-bool Read400::read400(Score* score, XmlReader& e, ReadContext& ctx)
+bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
 {
-    if (!e.readNextStartElement()) {
-        LOGD("%s: xml file is empty", muPrintable(e.docName()));
-        return false;
-    }
-
-    if (e.name() == "museScore") {
-        while (e.readNextStartElement()) {
-            const AsciiStringView tag(e.name());
-            if (tag == "programVersion") {
-                e.skipCurrentElement();
-            } else if (tag == "programRevision") {
-                e.skipCurrentElement();
-            } else if (tag == "Revision") {
-                e.skipCurrentElement();
-            } else if (tag == "Score") {
-                if (!readScore400(score, e, ctx)) {
-                    return false;
-                }
-            } else {
-                e.skipCurrentElement();
-            }
-        }
-    } else {
-        LOGD("%s: invalid structure of xml file", muPrintable(e.docName()));
-        return false;
-    }
-
-    return true;
-}
-
-bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
-{
-    std::vector<int> sysStaves;
     while (e.readNextStartElement()) {
-        e.context()->setTrack(mu::nidx);
+        ctx.setTrack(mu::nidx);
         const AsciiStringView tag(e.name());
         if (tag == "Staff") {
             StaffRW::readStaff(score, e, ctx);
@@ -111,8 +89,6 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
             score->_pageNumberOffset = e.readInt();
         } else if (tag == "Division") {
             score->_fileDivision = e.readInt();
-        } else if (tag == "open") {
-            score->_isOpen = e.readBool();
         } else if (tag == "showInvisible") {
             score->_showInvisible = e.readInt();
         } else if (tag == "showUnprintable") {
@@ -124,8 +100,17 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "markIrregularMeasures") {
             score->_markIrregularMeasures = e.readInt();
         } else if (tag == "Style") {
-            // Since version 400, the style is stored in a separate file
-            e.skipCurrentElement();
+            double sp = score->style().value(Sid::spatium).toReal();
+
+            ReadStyleHook::readStyleTag(score, e);
+
+            // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
+            if (score->layoutOptions().isMode(LayoutMode::FLOAT)) {
+                // style should not change spatium in
+                // float mode
+                score->style().set(Sid::spatium, sp);
+            }
+            score->m_engravingFont = engravingFonts()->fontByName(score->style().styleSt(Sid::MusicalSymbolFont).toStdString());
         } else if (tag == "copyright" || tag == "rights") {
             score->setMetaTag(u"copyright", Text::readXmlText(e, score));
         } else if (tag == "movement-number") {
@@ -147,23 +132,6 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
             if (order.isValid()) {
                 score->setScoreOrder(order);
             }
-        } else if (tag == "SystemObjects") {
-            // the staves to show system objects
-            score->clearSystemObjectStaves();
-            while (e.readNextStartElement()) {
-                if (e.name() == "Instance") {
-                    int staffIdx = e.attribute("staffId").toInt() - 1;
-                    // TODO: read the other attributes from this element when we begin treating different classes
-                    // of system objects differently. ex:
-                    // bool showBarNumbers = !(e.hasAttribute("barNumbers") && e.attribute("barNumbers") == "false");
-                    if (staffIdx > 0) {
-                        sysStaves.push_back(staffIdx);
-                    }
-                    e.skipCurrentElement();
-                } else {
-                    e.skipCurrentElement();
-                }
-            }
         } else if (tag == "Part") {
             Part* part = new Part(score);
             part->read(e);
@@ -179,11 +147,18 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
             s->read(e);
             score->addSpanner(s);
         } else if (tag == "Excerpt") {
-            // Since version 400, the Excerpts are stored in a separate file
-            e.skipCurrentElement();
-        } else if (e.name() == "initialPartId") {
-            if (score->excerpt()) {
-                score->excerpt()->setInitialPartId(ID(e.readInt()));
+            if (MScore::noExcerpts) {
+                e.skipCurrentElement();
+            } else {
+                if (score->isMaster()) {
+                    MasterScore* mScore = static_cast<MasterScore*>(score);
+                    Excerpt* ex = new Excerpt(mScore);
+                    ex->read(e);
+                    mScore->excerpts().push_back(ex);
+                } else {
+                    LOGD("Score::read(): part cannot have parts");
+                    e.skipCurrentElement();
+                }
             }
         } else if (e.name() == "Tracklist") {
             int strack = e.intAttribute("sTrack",   -1);
@@ -192,9 +167,31 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
                 ctx.tracks().insert({ strack, dtrack });
             }
             e.skipCurrentElement();
-        } else if (tag == "Score") {
-            // Since version 400, the Excerpts is stored in a separate file
-            e.skipCurrentElement();
+        } else if (tag == "Score") {            // recursion
+            if (MScore::noExcerpts) {
+                e.skipCurrentElement();
+            } else {
+                ctx.tracks().clear();             // ???
+                MasterScore* m = score->masterScore();
+                Score* s = m->createScore();
+
+                ReadStyleHook::setupDefaultStyle(s);
+
+                Excerpt* ex = new Excerpt(m);
+                ex->setExcerptScore(s);
+                ctx.setLastMeasure(nullptr);
+
+                Score* curScore = e.context()->score();
+                e.context()->setScore(s);
+
+                readScore302(s, e, *e.context());
+
+                e.context()->setScore(curScore);
+
+                s->linkMeasures(m);
+                ex->setTracksMapping(ctx.tracks());
+                m->addExcerpt(ex);
+            }
         } else if (tag == "name") {
             String n = e.readText();
             if (!score->isMaster()) {     //ignore the name if it's not a child score
@@ -213,7 +210,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
-    ctx.reconnectBrokenConnectors();
+    e.context()->reconnectBrokenConnectors();
     if (e.error() != XmlStreamReader::NoError) {
         if (e.error() == XmlStreamReader::CustomError) {
             LOGE() << e.errorString();
@@ -228,10 +225,19 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
 
     score->_fileDivision = Constants::division;
 
-    // Make sure every instrument has an instrumentId set.
-    for (Part* part : score->parts()) {
-        for (const auto& pair : part->instruments()) {
-            pair.second->updateInstrumentId();
+    if (score->mscVersion() == 302) {
+        // MuseScore 3.6.x scores had some wrong instrument IDs
+        for (Part* part : score->parts()) {
+            for (const auto& pair : part->instruments()) {
+                fixInstrumentId(pair.second);
+            }
+        }
+    } else {
+        // Older scores had no IDs at all
+        for (Part* part : score->parts()) {
+            for (const auto& pair : part->instruments()) {
+                pair.second->updateInstrumentId();
+            }
         }
     }
 
@@ -247,11 +253,75 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
     for (Staff* staff : score->staves()) {
         staff->updateOttava();
     }
-    for (int idx : sysStaves) {
-        score->addSystemObjectStaff(score->staff(idx));
+
+    CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(score);
+
+    if (score->isMaster()) {
+        CompatUtils::assignInitialPartToExcerpts(score->masterScore()->excerpts());
     }
 
-//      createPlayEvents();
-
     return true;
+}
+
+Err Read302::read(Score* score, XmlReader& e, ReadInOutData* out)
+{
+    ReadContext ctx(score);
+    e.setContext(&ctx);
+
+    DEFER {
+        if (out) {
+            out->settingsCompat = std::move(ctx.settingCompat());
+        }
+    };
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "programVersion") {
+            score->setMscoreVersion(e.readText());
+        } else if (tag == "programRevision") {
+            score->setMscoreRevision(e.readInt(nullptr, 16));
+        } else if (tag == "Score") {
+            if (!readScore302(score, e, ctx)) {
+                if (e.error() == XmlStreamReader::CustomError) {
+                    return Err::FileCriticallyCorrupted;
+                }
+                return Err::FileBadFormat;
+            }
+        } else if (tag == "Revision") {
+            e.skipCurrentElement();
+        }
+    }
+
+    return Err::NoError;
+}
+
+void Read302::fixInstrumentId(Instrument* instrument)
+{
+    String id = instrument->id();
+    String trackName = instrument->trackName().toLower();
+
+    // incorrect instrument IDs in 3.6.x
+    if (id == u"Winds") {
+        id = u"winds";
+    } else if (id == u"harmonica-d12high-g") {
+        id = u"harmonica-d10high-g";
+    } else if (id == u"harmonica-d12f") {
+        id = u"harmonica-d10f";
+    } else if (id == u"harmonica-d12d") {
+        id = u"harmonica-d10d";
+    } else if (id == u"harmonica-d12c") {
+        id = u"harmonica-d10c";
+    } else if (id == u"harmonica-d12a") {
+        id = u"harmonica-d10a";
+    } else if (id == u"harmonica-d12-g") {
+        id = u"harmonica-d10g";
+    } else if (id == u"drumset" && trackName == u"percussion") {
+        id = u"percussion";
+    } else if (id == u"cymbal" && trackName == u"cymbals") {
+        id = u"marching-cymbals";
+    } else if (id == u"bass-drum" && trackName == u"bass drums") {
+        id = u"marching-bass-drums";
+    }
+
+    instrument->setId(id);
 }

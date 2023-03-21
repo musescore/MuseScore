@@ -560,8 +560,8 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
     }
 }
 
-static void collectGraceBeforeChordEvents(Chord* chord, EventMap* events, double veloMultiplier, Staff* st, int tickOffset,
-                                          PitchWheelRenderer& pitchWheelRenderer,  MidiInstrumentEffect effect)
+void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, EventMap* events, double veloMultiplier, Staff* st, int tickOffset,
+                                                 PitchWheelRenderer& pitchWheelRenderer,  MidiInstrumentEffect effect)
 {
     // calculate offset for grace notes here
     const auto& grChords = chord->graceNotesBefore();
@@ -587,6 +587,11 @@ static void collectGraceBeforeChordEvents(Chord* chord, EventMap* events, double
                 params.effect = effect;
                 params.velocityMultiplier = veloMultiplier;
                 params.tickOffset = tickOffset;
+
+                Instrument* instr = st->part()->instrument(chord->tick());
+                int channel = getChannel(instr, note, effect);
+                events->registerChannel(channel);
+                params.channel = channel;
 
                 if (note->noteType() == NoteType::ACCIACCATURA) {
                     params.graceOffsetOn = graceTickSum - graceTickOffset * currentBeaforeBeatNote;
@@ -871,15 +876,15 @@ static VibratoParams getVibratoParams(VibratoType type)
     switch (type) {
     case VibratoType::GUITAR_VIBRATO:
         // guitar vibrato, up only
-        params.lowPitch = 0;       // 1.5 less amplitude than wide
-        params.highPitch = 8;
+        params.lowPitch = 0;
+        params.highPitch = 10;
         params.period = Constants::division / 3;
         break;
 
     case VibratoType::GUITAR_VIBRATO_WIDE:
-        params.lowPitch = 0;         // 1/8 (100 is a semitone)
-        params.highPitch = 12;
-        params.period = Constants::division / 2;
+        params.lowPitch = 0;         // 100 is a semitone
+        params.highPitch = 20;
+        params.period = Constants::division / 2.5;
         break;
 
     case VibratoType::VIBRATO_SAWTOOTH_WIDE:

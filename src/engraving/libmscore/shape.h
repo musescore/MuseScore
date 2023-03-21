@@ -58,6 +58,8 @@ public:
 class Shape : public std::vector<ShapeElement>
 {
     OBJECT_ALLOCATOR(engraving, Shape)
+private:
+    double _spatium = NULL;
 public:
     enum HorizontalSpacingType {
         SPACING_GENERAL = 0,
@@ -68,8 +70,8 @@ public:
     Shape() {}
     Shape(const mu::RectF& r, const EngravingItem* p = nullptr) { add(r, p); }
 
-    void add(const Shape& s) { insert(end(), s.begin(), s.end()); }
-    void add(const mu::RectF& r, const EngravingItem* p) { push_back(ShapeElement(r, p)); }
+    void add(const Shape& s);
+    void add(const mu::RectF& r, const EngravingItem* p);
     void add(const mu::RectF& r) { push_back(ShapeElement(r)); }
 
     void remove(const mu::RectF&);
@@ -77,12 +79,12 @@ public:
 
     void addHorizontalSpacing(EngravingItem* item, double left, double right);
 
-    void translate(const mu::PointF&);
+    Shape& translate(const mu::PointF&);
     void translateX(double);
     void translateY(double);
     Shape translated(const mu::PointF&) const;
 
-    double minHorizontalDistance(const Shape&, Score* score) const;
+    double minHorizontalDistance(const Shape&) const;
     double minVerticalDistance(const Shape&) const;
     double topDistance(const mu::PointF&) const;
     double bottomDistance(const mu::PointF&) const;

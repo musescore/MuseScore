@@ -37,6 +37,7 @@
 #include "internal/plugins/knownaudiopluginsregister.h"
 #include "internal/plugins/audiopluginsscannerregister.h"
 #include "internal/plugins/audiopluginmetareaderregister.h"
+#include "internal/plugins/registeraudiopluginsscenario.h"
 
 #include "internal/worker/audioengine.h"
 #include "internal/worker/playback.h"
@@ -71,6 +72,7 @@ static std::shared_ptr<Playback> s_playbackFacade = {};
 static std::shared_ptr<SoundFontRepository> s_soundFontRepository = {};
 
 static std::shared_ptr<KnownAudioPluginsRegister> s_knownAudioPluginsRegister = {};
+static std::shared_ptr<RegisterAudioPluginsScenario> s_registerAudioPluginsScenario = {};
 
 #ifdef Q_OS_LINUX
 #include "internal/platform/lin/linuxaudiodriver.h"
@@ -122,6 +124,7 @@ void AudioModule::registerExports()
     s_playbackFacade = std::make_shared<Playback>();
     s_soundFontRepository = std::make_shared<SoundFontRepository>();
     s_knownAudioPluginsRegister = std::make_shared<KnownAudioPluginsRegister>();
+    s_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>();
 
     ioc()->registerExport<IAudioConfiguration>(moduleName(), s_audioConfiguration);
     ioc()->registerExport<IAudioThreadSecurer>(moduleName(), std::make_shared<AudioThreadSecurer>());
@@ -136,6 +139,7 @@ void AudioModule::registerExports()
     ioc()->registerExport<IKnownAudioPluginsRegister>(moduleName(), s_knownAudioPluginsRegister);
     ioc()->registerExport<IAudioPluginsScannerRegister>(moduleName(), std::make_shared<AudioPluginsScannerRegister>());
     ioc()->registerExport<IAudioPluginMetaReaderRegister>(moduleName(), std::make_shared<AudioPluginMetaReaderRegister>());
+    ioc()->registerExport<IRegisterAudioPluginsScenario>(moduleName(), s_registerAudioPluginsScenario);
 }
 
 void AudioModule::registerResources()
@@ -184,6 +188,7 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
     s_audioConfiguration->init();
     s_soundFontRepository->init();
     s_knownAudioPluginsRegister->init();
+    s_registerAudioPluginsScenario->init();
 
     s_audioBuffer->init(s_audioConfiguration->audioChannelsCount(),
                         s_audioConfiguration->renderStep());

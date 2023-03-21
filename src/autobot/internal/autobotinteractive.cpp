@@ -103,6 +103,11 @@ IInteractive::Result AutobotInteractive::error(const std::string& title, const T
     return m_real->error(title, text, detailedText, buttons, defBtn, options);
 }
 
+Ret AutobotInteractive::showProgress(const std::string& title, framework::Progress* progress) const
+{
+    return m_real->showProgress(title, progress);
+}
+
 io::path_t AutobotInteractive::selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter)
 {
     return m_real->selectOpeningFile(title, dir, filter);

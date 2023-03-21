@@ -46,8 +46,8 @@ class StartupScenario : public IStartupScenario, public async::Asyncable
 
 public:
 
-    void setModeType(const QString& modeType) override;
-    void setStartupScorePath(const io::path_t& path) override;
+    void setStartupType(const std::optional<std::string>& type) override;
+    void setStartupScorePath(const std::optional<io::path_t>& path) override;
 
     void run() override;
     bool startupCompleted() const override;
@@ -63,7 +63,7 @@ private:
     void restoreLastSession();
     void removeProjectsUnsavedChanges(const io::paths_t& projectsPaths);
 
-    QString m_modeTypeStr;
+    std::string m_startupTypeStr;
     io::path_t m_startupScorePath;
     bool m_startupCompleted = false;
 };

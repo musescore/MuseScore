@@ -30,7 +30,7 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
 #include "engraving/infrastructure/paint.h"
-#include "engraving/rw/scorereader.h"
+#include "engraving/rw/mscloader.h"
 #include "engraving/libmscore/masterscore.h"
 
 #ifdef MUE_BUILD_IMPORTEXPORT_MODULE
@@ -202,7 +202,7 @@ bool DrawDataGenerator::loadScore(mu::engraving::MasterScore* score, const mu::i
             return false;
         }
 
-        ScoreReader scoreReader;
+        MscLoader scoreReader;
         SettingsCompat settingsCompat;
         Ret ret = scoreReader.loadMscz(score, reader, settingsCompat, true);
         if (!ret) {

@@ -315,9 +315,6 @@
         </note>
       </measure>
     <measure number="7">
-      <barline location="left">
-        <ending number="1" type="start">1.</ending>
-        </barline>
       <note>
         <pitch>
           <step>F</step>
@@ -330,14 +327,10 @@
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
-        <ending number="1" type="stop"/>
         <repeat direction="backward"/>
         </barline>
       </measure>
     <measure number="8">
-      <barline location="left">
-        <ending number="2" type="start">2.</ending>
-        </barline>
       <note>
         <pitch>
           <step>G</step>
@@ -349,7 +342,6 @@
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
-        <ending number="2" type="discontinue"/>
         </barline>
       </measure>
     </part>

@@ -19,22 +19,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_READ400_H
-#define MU_ENGRAVING_READ400_H
+#ifndef MU_ENGRAVING_READ302_H
+#define MU_ENGRAVING_READ302_H
+
+#include "../iscorereader.h"
+
+#include "modularity/ioc.h"
+#include "iengravingfontsprovider.h"
+
+#include "engravingerrors.h"
 
 namespace mu::engraving {
+class Instrument;
+class MasterScore;
 class Score;
 
 class ReadContext;
 class XmlReader;
+}
 
-class Read400
+namespace mu::engraving::compat {
+class Read302 : public IScoreReader
 {
+    INJECT_STATIC(engraving, IEngravingFontsProvider, engravingFonts)
 public:
 
-    static bool read400(Score* score, XmlReader& e, ReadContext& ctx);
-    static bool readScore400(Score* score, XmlReader& e, ReadContext& ctx);
+    Err read(Score* score, XmlReader& e, ReadInOutData* out) override;
+
+private:
+    static bool readScore302(Score* score, XmlReader& e, ReadContext& ctx);
+
+    static void fixInstrumentId(Instrument* instrument);
 };
 }
 
-#endif // MU_ENGRAVING_READ400_H
+#endif // MU_ENGRAVING_READ302_H

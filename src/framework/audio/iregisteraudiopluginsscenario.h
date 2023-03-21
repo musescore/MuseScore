@@ -19,26 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_MEASURERW_H
-#define MU_ENGRAVING_MEASURERW_H
 
-#include "readcontext.h"
+#ifndef MU_AUDIO_IREGISTERAUDIOPLUGINSSCENARIO_H
+#define MU_AUDIO_IREGISTERAUDIOPLUGINSSCENARIO_H
 
-namespace mu::engraving {
-class Measure;
-}
+#include "modularity/imoduleexport.h"
 
-namespace mu::engraving::rw {
-class MeasureRW
+#include "types/ret.h"
+#include "io/path.h"
+
+namespace mu::audio {
+class IRegisterAudioPluginsScenario : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IRegisterAudioPluginsScenario)
+
 public:
+    virtual ~IRegisterAudioPluginsScenario() = default;
 
-    static void readMeasure(Measure* measure, XmlReader& xml, ReadContext& ctx, int staffIdx);
-    static void writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t staff, bool writeSystemElements, bool forceTimeSig);
-
-private:
-    static void readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int staffIdx, bool irregular);
+    virtual Ret registerNewPlugins() = 0;
+    virtual Ret registerPlugin(const io::path_t& pluginPath) = 0;
+    virtual Ret registerFailedPlugin(const io::path_t& pluginPath, int failCode) = 0;
 };
 }
 
-#endif // MU_ENGRAVING_MEASURERW_H
+#endif // MU_AUDIO_IREGISTERAUDIOPLUGINSSCENARIO_H

@@ -270,18 +270,19 @@ void Tuplet::layout()
     }
 
     _hasBracket = calcHasBracket(cr1, cr2);
+    setMag((cr1->mag() + cr2->mag()) / 2);
 
     //
     //    calculate bracket start and end point p1 p2
     //
     double maxSlope      = score()->styleD(Sid::tupletMaxSlope);
     bool outOfStaff     = score()->styleB(Sid::tupletOufOfStaff);
-    double vHeadDistance = score()->styleMM(Sid::tupletVHeadDistance);
-    double vStemDistance = score()->styleMM(Sid::tupletVStemDistance);
-    double stemLeft      = score()->styleMM(Sid::tupletStemLeftDistance) - score()->styleMM(Sid::tupletBracketWidth) / 2;
-    double stemRight     = score()->styleMM(Sid::tupletStemRightDistance) - score()->styleMM(Sid::tupletBracketWidth) / 2;
-    double noteLeft      = score()->styleMM(Sid::tupletNoteLeftDistance) - score()->styleMM(Sid::tupletBracketWidth) / 2;
-    double noteRight     = score()->styleMM(Sid::tupletNoteRightDistance) - score()->styleMM(Sid::tupletBracketWidth) / 2;
+    double vHeadDistance = score()->styleMM(Sid::tupletVHeadDistance) * mag();
+    double vStemDistance = score()->styleMM(Sid::tupletVStemDistance) * mag();
+    double stemLeft      = (score()->styleMM(Sid::tupletStemLeftDistance) - score()->styleMM(Sid::tupletBracketWidth) / 2) * cr1->mag();
+    double stemRight     = (score()->styleMM(Sid::tupletStemRightDistance) - score()->styleMM(Sid::tupletBracketWidth) / 2) * cr2->mag();
+    double noteLeft      = (score()->styleMM(Sid::tupletNoteLeftDistance) - score()->styleMM(Sid::tupletBracketWidth) / 2) * cr1->mag();
+    double noteRight     = (score()->styleMM(Sid::tupletNoteRightDistance) - score()->styleMM(Sid::tupletBracketWidth) / 2) * cr2->mag();
 
     int move = 0;
     setStaffIdx(cr1->vStaffIdx());
@@ -298,7 +299,7 @@ void Tuplet::layout()
         }
     }
 
-    double l1  =  score()->styleMM(Sid::tupletBracketHookHeight);
+    double l1  =  score()->styleMM(Sid::tupletBracketHookHeight) * mag();
     double l2l = vHeadDistance;      // left bracket vertical distance
     double l2r = vHeadDistance;      // right bracket vertical distance right
 
@@ -743,7 +744,7 @@ void Tuplet::draw(mu::draw::Painter* painter) const
         painter->translate(-pos);
     }
     if (_hasBracket) {
-        painter->setPen(Pen(color, _bracketWidth.val()));
+        painter->setPen(Pen(color, _bracketWidth.val() * mag()));
         if (!_number) {
             painter->drawPolyline(bracketL, 4);
         } else {
@@ -778,7 +779,7 @@ Shape Tuplet::shape() const
 {
     Shape s;
     if (_hasBracket) {
-        double w = _bracketWidth.val();
+        double w = _bracketWidth.val() * mag();
         s.add(TupletRect(bracketL[0], bracketL[1], w));
         s.add(TupletRect(bracketL[1], bracketL[2], w));
         if (_number) {

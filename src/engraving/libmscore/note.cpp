@@ -1009,9 +1009,11 @@ double Note::outsideTieAttachX(bool up) const
     }
     // special cases:
     if (_headGroup == NoteHeadGroup::HEAD_SLASH) {
-        // the anchors are really close to the stem attach points
-        xo = up ? symSmuflAnchor(noteHead(), SmuflAnchorId::stemUpSE).x() : symSmuflAnchor(noteHead(), SmuflAnchorId::stemDownNW).x();
-        xo += spatium() * 0.13 * (chord()->up() ? mag() : -mag());
+        xo = (up ? headWidth() * 0.75 : headWidth() * 0.25);
+        if (chord()->durationType().hasStem()) {
+            // for quarters and halves, we can safely move a little bit outwards
+            xo += spatium() * 0.13 * (chord()->up() ? -mag() : mag());
+        }
         return x() + xo;
     }
     if (_headGroup == NoteHeadGroup::HEAD_SLASHED1 || _headGroup == NoteHeadGroup::HEAD_SLASHED2) {
@@ -2363,9 +2365,17 @@ void Note::layout2()
 
     int dots = chord()->dots();
     if (dots && !_dots.empty()) {
-        double d  = score()->point(score()->styleS(Sid::dotNoteDistance)) * mag();
-        double dd = score()->point(score()->styleS(Sid::dotDotDistance)) * mag();
+        // if chords have notes with different mag, dots must still  align
+        double correctMag = chord()->notes().size() > 1 ? chord()->mag() : mag();
+        double d  = score()->point(score()->styleS(Sid::dotNoteDistance)) * correctMag;
+        double dd = score()->point(score()->styleS(Sid::dotDotDistance)) * correctMag;
         double x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
+        // in case of dots with different size, center-align them
+        if (mag() != chord()->mag() && chord()->notes().size() > 1) {
+            double relativeMag = mag() / chord()->mag();
+            double centerAlignOffset = dot(0)->width() * (1 / relativeMag - 1) / 2;
+            x += centerAlignOffset;
+        }
         // adjust dot distance for hooks
         if (chord()->hook() && chord()->up()) {
             double hookRight = chord()->hook()->width() + chord()->hook()->x() + chord()->pos().x();
@@ -3999,7 +4009,7 @@ double Note::computePadding(const EngravingItem* nextItem) const
     double padding = score()->paddingTable().at(type()).at(nextItem->type());
 
     if ((nextItem->isNote() || nextItem->isStem()) && track() == nextItem->track()
-        && (shape().translated(pos())).intersects(nextItem->shape().translated(nextItem->pos()))) {
+        && (shape().translate(pos())).intersects(nextItem->shape().translate(nextItem->pos()))) {
         padding = std::max(padding, static_cast<double>(score()->styleMM(Sid::minNoteDistance)));
     }
 
@@ -4018,7 +4028,7 @@ double Note::computePadding(const EngravingItem* nextItem) const
         padding = std::max(padding, static_cast<double>(score()->styleMM(Sid::graceToMainNoteDist)));
     }
 
-    if (nextItem->isNote()) {
+    if (nextItem->isNote() && !(_lineAttachPoints.empty() || toNote(nextItem)->lineAttachPoints().empty())) {
         // This is where space for minTieLength and minGlissandoLength is allocated by making sure
         // there is enough distance between the attach points
         double minEndPointsDistance = 0.0;

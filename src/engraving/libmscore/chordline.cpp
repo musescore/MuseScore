@@ -94,7 +94,7 @@ void ChordLine::layout()
     if (!modified) {
         double x2 = 0;
         double y2 = 0;
-        double baseLength = spatium() * (chord() ? chord()->chordMag() : 1);
+        double baseLength = spatium() * (chord() ? chord()->intrinsicMag() : 1);
         double horBaseLength = 1.2 * baseLength; // let the symbols extend a bit more horizontally
         x2 += isToTheLeft() ? -horBaseLength : horBaseLength;
         y2 += isBelow() ? baseLength : -baseLength;

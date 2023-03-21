@@ -259,11 +259,14 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t sta
                     upOffset = maxDownWidth + 0.1 * sp;
                 } else {
                     downOffset = maxUpWidth;
-                    // align stems if present, leave extra room if not
+                    // align stems if present
                     if (topDownNote->chord()->stem() && bottomUpNote->chord()->stem()) {
                         downOffset -= topDownNote->chord()->stem()->lineWidth();
-                    } else {
-                        downOffset += 0.1 * sp;
+                    } else if (topDownNote->chord()->durationType().headType() != NoteHeadType::HEAD_BREVIS
+                               && bottomUpNote->chord()->durationType().headType() != NoteHeadType::HEAD_BREVIS) {
+                        // stemless notes should be aligned as is they were stemmed
+                        // (except in case of brevis, cause the notehead has the side bars)
+                        downOffset -= score->styleMM(Sid::stemWidth) * topDownNote->chord()->mag();
                     }
                 }
             } else if (separation < 1) {
@@ -769,9 +772,9 @@ static std::pair<double, double> layoutAccidental(const MStyle& style, AcEl* me,
             }
             // undercut note above if possible
             if (lnBottom - me->top <= me->ascent - pnd) {
-                lx = std::min(lx, ln->x() + ln->chord()->x() + lnLedgerAdjust + me->rightClear);
+                lx = std::min(lx, ln->x() + lnLedgerAdjust + me->rightClear);
             } else {
-                lx = std::min(lx, ln->x() + ln->chord()->x() + lnLedgerAdjust);
+                lx = std::min(lx, ln->x() + lnLedgerAdjust);
             }
         } else if (lnTop > me->bottom) {
             break;
@@ -894,7 +897,7 @@ void LayoutChords::layoutChords3(const MStyle& style, const std::vector<Chord*>&
         double overlapMirror;
         Stem* stem = chord->stem();
         if (stem) {
-            overlapMirror = stem->lineWidth();
+            overlapMirror = stem->lineWidth() * chord->mag();
         } else if (chord->durationType().headType() == NoteHeadType::HEAD_WHOLE) {
             overlapMirror = style.styleMM(Sid::stemWidth) * chord->mag();
         } else {
@@ -928,7 +931,7 @@ void LayoutChords::layoutChords3(const MStyle& style, const std::vector<Chord*>&
         // a mirrored note that extends to left of segment X origin
         // will displace accidentals only if there is conflict
         double sx = x + chord->x();     // segment-relative X position of note
-        if (note->mirror() && !chord->up() && sx < 0.0) {
+        if (note->mirror() && !chord->up() && sx < -note->headBodyWidth() / 2) {
             leftNotes.push_back(note);
         } else if (sx < lx) {
             lx = sx;

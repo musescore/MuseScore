@@ -19,27 +19,66 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "scorereader.h"
+#include "mscloader.h"
 
-#include "io/buffer.h"
+#include <memory>
+#include <map>
 
-#include "compat/readstyle.h"
-#include "compat/read114.h"
-#include "compat/read206.h"
-#include "compat/read302.h"
-#include "read400.h"
+#include "global/io/buffer.h"
+#include "global/types/retval.h"
 
+#include "../libmscore/masterscore.h"
 #include "../libmscore/audio.h"
 #include "../libmscore/excerpt.h"
 #include "../libmscore/imageStore.h"
 
+#include "114/read114.h"
+#include "206/read206.h"
+#include "302/read302.h"
+#include "400/read400.h"
+
+#include "compat/readstyle.h"
+
+#include "xmlreader.h"
+#include "readcontext.h"
+
 #include "log.h"
 
+using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 
-mu::Ret ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, SettingsCompat& settingsCompat,
-                              bool ignoreVersionError)
+using IScoreReaderPtr = std::shared_ptr<IScoreReader>;
+
+static RetVal<IScoreReaderPtr> makeReader(int version, bool ignoreVersionError)
+{
+    if (!ignoreVersionError) {
+        if (version > MSCVERSION) {
+            return RetVal<IScoreReaderPtr>(make_ret(Err::FileTooNew));
+        }
+
+        if (version < 114) {
+            return RetVal<IScoreReaderPtr>(make_ret(Err::FileTooOld));
+        }
+
+        if (version == 300) {
+            return RetVal<IScoreReaderPtr>(make_ret(Err::FileOld300Format));
+        }
+    }
+
+    if (version <= 114) {
+        return RetVal<IScoreReaderPtr>::make_ok(std::make_shared<compat::Read114>());
+    } else if (version <= 207) {
+        return RetVal<IScoreReaderPtr>::make_ok(std::make_shared<compat::Read206>());
+    } else if (version < 400 || MScore::testMode) {
+        return RetVal<IScoreReaderPtr>::make_ok(std::make_shared<compat::Read302>());
+    }
+
+    return RetVal<IScoreReaderPtr>::make_ok(std::make_shared<Read400>());
+}
+
+mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, SettingsCompat& settingsCompat,
+                            bool ignoreVersionError)
 {
     TRACEFUNC;
 
@@ -81,8 +120,7 @@ mu::Ret ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscRead
         }
     }
 
-    ReadContext masterScoreCtx(masterScore);
-    masterScoreCtx.setIgnoreVersionError(ignoreVersionError);
+    ReadInOutData masterReadOutData;
 
     Ret ret = make_ok();
 
@@ -95,9 +133,8 @@ mu::Ret ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscRead
 
         XmlReader xml(scoreData);
         xml.setDocName(docName);
-        xml.setContext(&masterScoreCtx);
 
-        ret = read(masterScore, xml, masterScoreCtx, &styleHook);
+        ret = read(masterScore, xml, ignoreVersionError, &masterReadOutData, &styleHook);
     }
 
     // Read excerpts
@@ -118,14 +155,13 @@ mu::Ret ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscRead
 
             ByteArray excerptData = mscReader.readExcerptFile(excerptName);
 
-            ReadContext ctx(partScore);
-            ctx.initLinks(masterScoreCtx);
-
             XmlReader xml(excerptData);
             xml.setDocName(excerptName);
-            xml.setContext(&ctx);
 
-            Read400::read400(partScore, xml, ctx);
+            ReadInOutData partReadInData;
+            partReadInData.links = masterReadOutData.links;
+
+            Read400().read(partScore, xml, &partReadInData);
 
             partScore->linkMeasures(masterScore);
             ex->setTracksMapping(xml.context()->tracks());
@@ -144,12 +180,12 @@ mu::Ret ScoreReader::loadMscz(MasterScore* masterScore, const MscReader& mscRead
         }
     }
 
-    settingsCompat = std::move(masterScoreCtx.settingCompat());
+    settingsCompat = std::move(masterReadOutData.settingsCompat);
 
     return ret;
 }
 
-mu::Ret ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat::ReadStyleHook* styleHook)
+mu::Ret MscLoader::read(MasterScore* score, XmlReader& e, bool ignoreVersionError, ReadInOutData* out, compat::ReadStyleHook* styleHook)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
@@ -157,16 +193,13 @@ mu::Ret ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, co
             StringList sl = version.split('.');
             score->setMscVersion(sl[0].toInt() * 100 + sl[1].toInt());
 
-            if (!ctx.ignoreVersionError()) {
-                if (score->mscVersion() > MSCVERSION) {
-                    return make_ret(Err::FileTooNew);
-                }
-                if (score->mscVersion() < 114) {
-                    return make_ret(Err::FileTooOld);
-                }
-                if (score->mscVersion() == 300) {
-                    return make_ret(Err::FileOld300Format);
-                }
+            RetVal<IScoreReaderPtr> reader = makeReader(score->mscVersion(), ignoreVersionError);
+            if (!reader.ret) {
+                return reader.ret;
+            }
+
+            IF_ASSERT_FAILED(reader.val) {
+                return make_ret(Err::FileUnknownError);
             }
 
             //! NOTE We need to achieve that the default style corresponds to the version in which the score is created.
@@ -178,20 +211,13 @@ mu::Ret ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, co
                 styleHook->setupDefaultStyle();
             }
 
-            Err err = Err::NoError;
-            if (score->mscVersion() <= 114) {
-                err = compat::Read114::read114(score, e, ctx);
-            } else if (score->mscVersion() <= 207) {
-                err = compat::Read206::read206(score, e, ctx);
-            } else if (score->mscVersion() < 400 || MScore::testMode) {
-                err = compat::Read302::read302(score, e, ctx);
-            } else {
+            if (score->mscVersion() >= 400) {
                 //! NOTE: make sure we have a chord list
                 //! Load the default chord list otherwise
                 score->checkChordList();
-
-                err = doRead(score, e, ctx);
             }
+
+            Err err = reader.val->read(score, e, out);
 
             score->setExcerptsChanged(false);
 
@@ -205,27 +231,4 @@ mu::Ret ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, co
     }
 
     return Ret(static_cast<int>(Err::FileCorrupted), e.errorString().toStdString());
-}
-
-Err ScoreReader::doRead(MasterScore* score, XmlReader& e, ReadContext& ctx)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "programVersion") {
-            score->setMscoreVersion(e.readText());
-        } else if (tag == "programRevision") {
-            score->setMscoreRevision(e.readInt(nullptr, 16));
-        } else if (tag == "Score") {
-            if (!Read400::readScore400(score, e, ctx)) {
-                if (e.error() == XmlStreamReader::CustomError) {
-                    return Err::FileCriticallyCorrupted;
-                }
-                return Err::FileBadFormat;
-            }
-        } else if (tag == "Revision") {
-            e.skipCurrentElement();
-        }
-    }
-
-    return Err::NoError;
 }

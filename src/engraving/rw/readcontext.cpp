@@ -64,16 +64,6 @@ Score* ReadContext::score() const
     return m_score;
 }
 
-void ReadContext::setIgnoreVersionError(bool arg)
-{
-    m_ignoreVersionError = arg;
-}
-
-bool ReadContext::ignoreVersionError() const
-{
-    return m_ignoreVersionError;
-}
-
 String ReadContext::mscoreVersion() const
 {
     return m_score->mscoreVersion();
@@ -134,10 +124,18 @@ bool ReadContext::isSameScore(const EngravingObject* obj) const
     return obj->score() == m_score;
 }
 
-void ReadContext::initLinks(const ReadContext& ctx)
+ReadLinks ReadContext::readLinks() const
 {
-    m_linksIndexer = ctx.m_linksIndexer;
-    m_staffLinkedElements = ctx.m_staffLinkedElements;
+    ReadLinks l;
+    l.linksIndexer = m_linksIndexer;
+    l.staffLinkedElements = m_staffLinkedElements;
+    return l;
+}
+
+void ReadContext::initLinks(const ReadLinks& l)
+{
+    m_linksIndexer = l.linksIndexer;
+    m_staffLinkedElements = l.staffLinkedElements;
 }
 
 void ReadContext::addLink(Staff* staff, LinkedObjects* link, const Location& location)

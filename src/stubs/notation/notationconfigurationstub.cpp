@@ -377,11 +377,11 @@ void NotationConfigurationStub::setNotePlayDurationMilliseconds(int)
 {
 }
 
-void NotationConfigurationStub::setTemplateModeEnabled(bool)
+void NotationConfigurationStub::setTemplateModeEnabled(std::optional<bool>)
 {
 }
 
-void NotationConfigurationStub::setTestModeEnabled(bool)
+void NotationConfigurationStub::setTestModeEnabled(std::optional<bool>)
 {
 }
 

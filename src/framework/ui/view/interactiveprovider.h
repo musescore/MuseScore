@@ -75,6 +75,8 @@ public:
                       const framework::IInteractive::ButtonDatas& buttons = {}, int defBtn = int(framework::IInteractive::Button::NoButton),
                       const framework::IInteractive::Options& options = {}) override;
 
+    Ret showProgress(const std::string& title, framework::Progress* progress) override;
+
     RetVal<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
     RetVal<io::path_t> selectSavingFile(const std::string& title, const io::path_t& path, const std::vector<std::string>& filter,
                                         bool confirmOverwrite) override;
@@ -109,6 +111,7 @@ signals:
 
     void fireOpenStandardDialog(mu::ui::QmlLaunchData* data);
     void fireOpenFileDialog(mu::ui::QmlLaunchData* data);
+    void fireOpenProgressDialog(mu::ui::QmlLaunchData* data);
 
 private:
     struct OpenData

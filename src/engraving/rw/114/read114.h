@@ -19,36 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_READ302_H
-#define MU_ENGRAVING_READ302_H
 
-#include "modularity/ioc.h"
-#include "iengravingfontsprovider.h"
+#ifndef MU_ENGRAVING_READ114_H
+#define MU_ENGRAVING_READ114_H
 
-#include "engravingerrors.h"
-
-namespace mu::engraving {
-class Instrument;
-class MasterScore;
-class Score;
-
-class ReadContext;
-class XmlReader;
-}
+#include "../iscorereader.h"
 
 namespace mu::engraving::compat {
-class Read302
+class Read114 : public IScoreReader
 {
-    INJECT_STATIC(engraving, IEngravingFontsProvider, engravingFonts)
 public:
-
-    static Err read302(MasterScore* masterScore, XmlReader& e, ReadContext& ctx);
-
-private:
-    static bool readScore302(Score* score, XmlReader& e, ReadContext& ctx);
-
-    static void fixInstrumentId(Instrument* instrument);
+    //---------------------------------------------------------
+    //   read114
+    //    import old version <= 1.3 files
+    //---------------------------------------------------------
+    Err read(Score* masterScore, XmlReader& e, ReadInOutData* out) override;
 };
 }
 
-#endif // MU_ENGRAVING_READ302_H
+#endif // MU_ENGRAVING_READ114_H

@@ -19,28 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_FRAMEWORK_AUDIOPLUGINSSCANNERMOCK_H
+#define MU_FRAMEWORK_AUDIOPLUGINSSCANNERMOCK_H
 
-#ifndef MU_ENGRAVING_READ114_H
-#define MU_ENGRAVING_READ114_H
+#include <gmock/gmock.h>
 
-#include "engravingerrors.h"
+#include "audio/iaudiopluginsscanner.h"
 
-namespace mu::engraving {
-class MasterScore;
-class ReadContext;
-class XmlReader;
-}
-
-namespace mu::engraving::compat {
-class Read114
+namespace mu::audio {
+class AudioPluginsScannerMock : public IAudioPluginsScanner
 {
 public:
-    //---------------------------------------------------------
-    //   read114
-    //    import old version <= 1.3 files
-    //---------------------------------------------------------
-    static Err read114(MasterScore* masterScore, XmlReader& e, ReadContext& ctx);
+    MOCK_METHOD(io::paths_t, scanPlugins, (), (const, override));
 };
 }
 
-#endif // MU_ENGRAVING_READ114_H
+#endif // MU_FRAMEWORK_AUDIOPLUGINSSCANNERMOCK_H

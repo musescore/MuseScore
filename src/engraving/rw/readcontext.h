@@ -31,6 +31,7 @@
 #include "libmscore/interval.h"
 #include "libmscore/location.h"
 #include "linksindexer.h"
+#include "readoutdata.h"
 
 namespace mu::engraving::compat {
 class DummyElement;
@@ -71,9 +72,6 @@ public:
     bool pasteMode() const { return _pasteMode; }
     void setPasteMode(bool v) { _pasteMode = v; }
 
-    void setIgnoreVersionError(bool arg);
-    bool ignoreVersionError() const;
-
     String mscoreVersion() const;
     int mscVersion() const;
 
@@ -94,7 +92,8 @@ public:
 
     bool isSameScore(const EngravingObject* obj) const;
 
-    void initLinks(const ReadContext& ctx);
+    ReadLinks readLinks() const;
+    void initLinks(const ReadLinks& l);
     void addLink(Staff* staff, LinkedObjects* link, const Location& location);
     LinkedObjects* getLink(bool isMasterScore, const Location& location, int localIndexDiff);
     std::map<int, std::vector<std::pair<LinkedObjects*, Location> > >& staffLinkedElements();
@@ -169,8 +168,6 @@ private:
     Score* m_score = nullptr;
 
     bool _pasteMode = false;  // modifies read behaviour on paste operation
-
-    bool m_ignoreVersionError = false;
 
     std::map<int /*staffIndex*/, std::vector<std::pair<LinkedObjects*, Location> > > m_staffLinkedElements; // one list per staff
     LinksIndexer m_linksIndexer;

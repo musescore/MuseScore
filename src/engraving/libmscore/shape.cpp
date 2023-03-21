@@ -54,11 +54,12 @@ void Shape::addHorizontalSpacing(EngravingItem* item, double leftEdge, double ri
 //   translate
 //---------------------------------------------------------
 
-void Shape::translate(const PointF& pt)
+Shape& Shape::translate(const PointF& pt)
 {
     for (RectF& r : *this) {
         r.translate(pt);
     }
+    return *this;
 }
 
 void Shape::translateX(double xo)
@@ -97,10 +98,10 @@ Shape Shape::translated(const PointF& pt) const
 //    so they don’t touch.
 //-------------------------------------------------------------------
 
-double Shape::minHorizontalDistance(const Shape& a, Score* score) const
+double Shape::minHorizontalDistance(const Shape& a) const
 {
     double dist = -1000000.0;        // min real
-    double verticalClearance = 0.2 * score->spatium();
+    double verticalClearance = 0.2 * _spatium;
     for (const ShapeElement& r2 : a) {
         const EngravingItem* item2 = r2.toItem;
         double by1 = r2.top();
@@ -284,6 +285,26 @@ double Shape::bottomDistance(const PointF& p) const
         }
     }
     return dist;
+}
+
+//---------------------------------------------------------
+//   add
+//---------------------------------------------------------
+
+void Shape::add(const Shape& s)
+{
+    insert(end(), s.begin(), s.end());
+    if (!_spatium) {
+        _spatium = s._spatium;
+    }
+}
+
+void Shape::add(const RectF& r, const EngravingItem* p)
+{
+    push_back(ShapeElement(r, p));
+    if (!_spatium && p) {
+        _spatium = p->spatium();
+    }
 }
 
 //---------------------------------------------------------

@@ -142,8 +142,8 @@ public:
     int notePlayDurationMilliseconds() const override;
     void setNotePlayDurationMilliseconds(int durationMs)  override;
 
-    void setTemplateModeEnabled(bool enabled)  override;
-    void setTestModeEnabled(bool enabled)  override;
+    void setTemplateModeEnabled(std::optional<bool> enabled) override;
+    void setTestModeEnabled(std::optional<bool> enabled) override;
 
     io::path_t instrumentListPath() const override;
 

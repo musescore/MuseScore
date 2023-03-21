@@ -29,14 +29,14 @@ class GuitarProConfiguration : public IGuitarProConfiguration
 {
 public:
     bool linkedTabStaffCreated() const override;
-    void setLinkedTabStaffCreated(bool created) override;
+    void setLinkedTabStaffCreated(std::optional<bool> created) override;
 
     bool experimental() const override;
-    void setExperimental(bool experimental) override;
+    void setExperimental(std::optional<bool> experimental) override;
 
 private:
-    bool m_linkedTabStaffCreated = false;
-    bool m_experimental = false;
+    std::optional<bool> m_linkedTabStaffCreated;
+    std::optional<bool> m_experimental;
 };
 }
 

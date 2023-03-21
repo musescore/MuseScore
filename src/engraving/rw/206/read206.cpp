@@ -24,6 +24,8 @@
 
 #include <cmath>
 
+#include "global/defer.h"
+
 #include "compat/pageformat.h"
 
 #include "iengravingfont.h"
@@ -96,8 +98,8 @@
 #include "libmscore/utils.h"
 #include "libmscore/volta.h"
 
-#include "readchordlisthook.h"
-#include "readstyle.h"
+#include "../compat/readchordlisthook.h"
+#include "../compat/readstyle.h"
 
 #include "log.h"
 
@@ -3358,16 +3360,25 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-Err Read206::read206(mu::engraving::MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
+Err Read206::read(Score* score, XmlReader& e, ReadInOutData* out)
 {
+    ReadContext ctx(score);
+    e.setContext(&ctx);
+
+    DEFER {
+        if (out) {
+            out->settingsCompat = std::move(ctx.settingCompat());
+        }
+    };
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "programVersion") {
-            masterScore->setMscoreVersion(e.readText());
+            score->setMscoreVersion(e.readText());
         } else if (tag == "programRevision") {
-            masterScore->setMscoreRevision(e.readInt(nullptr, 16));
+            score->setMscoreRevision(e.readInt(nullptr, 16));
         } else if (tag == "Score") {
-            if (!readScore206(masterScore, e, ctx)) {
+            if (!readScore206(score, e, ctx)) {
                 return Err::FileBadFormat;
             }
         } else if (tag == "Revision") {
@@ -3378,17 +3389,17 @@ Err Read206::read206(mu::engraving::MasterScore* masterScore, XmlReader& e, Read
     int id = 1;
     for (auto& p : e.context()->linkIds()) {
         LinkedObjects* le = p.second;
-        le->setLid(masterScore, id++);
+        le->setLid(score, id++);
     }
 
-    for (Staff* s : masterScore->staves()) {
+    for (Staff* s : score->staves()) {
         s->updateOttava();
     }
 
     // fix segment span
     SegmentType st = SegmentType::BarLineType;
-    for (Segment* s = masterScore->firstSegment(st); s; s = s->next1(st)) {
-        for (size_t staffIdx = 0; staffIdx < masterScore->nstaves(); ++staffIdx) {
+    for (Segment* s = score->firstSegment(st); s; s = s->next1(st)) {
+        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             BarLine* b = toBarLine(s->element(staffIdx * VOICES));
             if (!b) {
                 continue;
@@ -3409,14 +3420,14 @@ Err Read206::read206(mu::engraving::MasterScore* masterScore, XmlReader& e, Read
             staffIdx += sp;
         }
     }
-    for (size_t staffIdx = 0; staffIdx < masterScore->nstaves(); ++staffIdx) {
-        Staff* s = masterScore->staff(staffIdx);
+    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        Staff* s = score->staff(staffIdx);
         int sp = s->barLineSpan();
         if (sp <= 0) {
             continue;
         }
         for (int span = 1; span <= sp; ++span) {
-            Staff* ns = masterScore->staff(staffIdx + span);
+            Staff* ns = score->staff(staffIdx + span);
             ns->setBarLineSpan(sp - span);
         }
         staffIdx += sp;
@@ -3424,7 +3435,7 @@ Err Read206::read206(mu::engraving::MasterScore* masterScore, XmlReader& e, Read
 
     // fix positions
     //    offset = saved offset - layout position
-    masterScore->doLayout();
+    score->doLayout();
     for (auto i : ctx.fixOffsets()) {
         i.first->setOffset(i.second - i.first->pos());
     }

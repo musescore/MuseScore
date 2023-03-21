@@ -19,32 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SCOREREADER_H
-#define MU_ENGRAVING_SCOREREADER_H
 
-#include "../engravingerrors.h"
+#ifndef MU_ENGRAVING_READOUTDATA_H
+#define MU_ENGRAVING_READOUTDATA_H
 
-#include "infrastructure/mscreader.h"
-#include "readcontext.h"
-#include "xml.h"
+#include <map>
+#include <vector>
 
-#include "../libmscore/masterscore.h"
+#include "linksindexer.h"
 
 namespace mu::engraving {
-class ScoreReader
+class LinkedObjects;
+
+struct ReadLinks
 {
-public:
-    ScoreReader() = default;
+    std::map<int /*staffIndex*/, std::vector<std::pair<LinkedObjects*, Location> > > staffLinkedElements; // one list per staff
+    LinksIndexer linksIndexer;
+};
 
-    Ret loadMscz(MasterScore* score, const MscReader& mscReader, SettingsCompat& settingsCompat, bool ignoreVersionError);
+struct ReadInOutData {
+    // for master - out
+    // for except - in
+    ReadLinks links;
 
-private:
-
-    friend class MasterScore;
-
-    Ret read(MasterScore* score, XmlReader&, ReadContext& ctx, compat::ReadStyleHook* styleHook = nullptr);
-    Err doRead(MasterScore* score, XmlReader& e, ReadContext& ctx);
+    // out
+    SettingsCompat settingsCompat;
 };
 }
 
-#endif // MU_ENGRAVING_SCOREREADER_H
+#endif // MU_ENGRAVING_READOUTDATA_H

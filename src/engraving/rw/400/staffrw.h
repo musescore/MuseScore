@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_STAFFRW_H
 #define MU_ENGRAVING_STAFFRW_H
 
-#include "readcontext.h"
+#include "../readcontext.h"
 
 namespace mu::engraving {
 class MeasureBase;

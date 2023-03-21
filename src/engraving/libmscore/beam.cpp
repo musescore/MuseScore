@@ -459,7 +459,8 @@ void Beam::layout()
 
     size_t n = 0;
     for (ChordRest* cr : _elements) {
-        if (cr->measure()->system() != system) {
+        auto newSystem = cr->measure()->system();
+        if (newSystem && newSystem != system) {
             SpannerSegmentType st;
             if (n == 0) {
                 st = SpannerSegmentType::BEGIN;
@@ -804,10 +805,9 @@ void Beam::createBeamSegment(ChordRest* startCr, ChordRest* endCr, int level)
     // avoid adjusting for beams on opposite side of level 0
     if (level != 0) {
         for (const BeamSegment* beam : _beamSegments) {
-            if (beam->level == 0 || beam->line.x2() < startX || beam->line.x1() > endX) {
+            if (beam->level == 0 || beam->endTick < startCr->tick() || beam->startTick > endCr->tick()) {
                 continue;
             }
-
             ++(beam->above ? beamsAbove : beamsBelow);
         }
 
@@ -835,6 +835,8 @@ void Beam::createBeamSegment(ChordRest* startCr, ChordRest* endCr, int level)
     b->above = !overallUp;
     b->level = level;
     b->line = LineF(startX, startY, endX, endY);
+    b->startTick = startCr->tick();
+    b->endTick = endCr->tick();
     _beamSegments.push_back(b);
 
     if (level > 0) {
@@ -894,11 +896,15 @@ bool Beam::calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Bre
     // next note has a beam break
     ChordRest* nextChordRest = _elements[i + 1];
     ChordRest* currChordRest = _elements[i];
+    ChordRest* prevChordRest = _elements[i - 1];
     if (nextChordRest->isChord()) {
         bool nextBreak32 = false;
         bool nextBreak64 = false;
+        bool currBreak32 = false;
+        bool currBreak64 = false;
+        calcBeamBreaks(currChordRest, prevChordRest, prevChordRest->beams(), currBreak32, currBreak64);
         calcBeamBreaks(nextChordRest, currChordRest, level, nextBreak32, nextBreak64);
-        if ((nextBreak32 && level >= 1) || (nextBreak64 && level >= 2)) {
+        if ((nextBreak32 && level >= 1) || (!currBreak32 && nextBreak64 && level >= 2)) {
             return true;
         }
     }
@@ -963,8 +969,7 @@ void Beam::createBeamletSegment(ChordRest* cr, bool isBefore, int level)
     const double startX = chordBeamAnchorX(cr, isBefore ? ChordBeamAnchorType::End : ChordBeamAnchorType::Start);
 
     const double beamletLength = score()->styleMM(Sid::beamMinLen).val()
-                                 * cr->mag()
-                                 * cr->staff()->staffMag(cr);
+                                 * cr->mag();
 
     const double endX = startX + (isBefore ? -beamletLength : beamletLength);
 
@@ -1034,14 +1039,14 @@ void Beam::calcBeamBreaks(const ChordRest* chord, const ChordRest* prevChord, in
             // this cr starts a tuplet
             int beams = std::max(TDuration(chord->tuplet()->ticks()).hooks(), 1);
             if (beams <= level) {
-                isBroken32 = level >= 1;
+                isBroken32 = level == 1;
                 isBroken64 = level >= 2;
             }
         } else if (prevChord->tuplet() && prevChord->tuplet() != chord->tuplet()) {
             // this is a non-tuplet cr that is first after a tuplet
             int beams = std::max(TDuration(prevChord->tuplet()->ticks()).hooks(), 1);
             if (beams <= level) {
-                isBroken32 = level >= 1;
+                isBroken32 = level == 1;
                 isBroken64 = level >= 2;
             }
         }
@@ -1062,17 +1067,11 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
         bool breakBeam = false;
         bool previousBreak32 = false;
         bool previousBreak64 = false;
-        int prevRests = 0;
 
         for (size_t i = 0; i < chordRests.size(); i++) {
             ChordRest* chordRest = chordRests[i];
             ChordRest* prevChordRest = i < 1 ? nullptr : chordRests[i - 1];
-            if (!chordRest->isChord()) {
-                if ((chordRest != chordRests.front() && chordRest != chordRests.back()) || level >= chordRest->beams()) {
-                    prevRests++;
-                    continue;
-                }
-            }
+
             if (level < chordRest->beams()) {
                 levelHasBeam = true;
             }
@@ -1091,26 +1090,27 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
                 if (startCr && endCr) {
                     if (startCr == endCr && startCr->isChord()) {
                         bool isBeamletBefore = calcIsBeamletBefore(toChord(
-                                                                       startCr), static_cast<int>(i) - 1 - prevRests, level, previousBreak32,
+                                                                       startCr), static_cast<int>(i) - 1, level, previousBreak32,
                                                                    previousBreak64);
                         createBeamletSegment(toChord(startCr), isBeamletBefore, level);
                     } else {
                         createBeamSegment(startCr, endCr, level);
                     }
                 }
-                startCr = chordRest && breakBeam && level < chordRest->beams() ? chordRest : nullptr;
-                endCr = chordRest && breakBeam && level < chordRest->beams() ? chordRest : nullptr;
+                bool setCr = chordRest && chordRest->isChord() && breakBeam && level < chordRest->beams();
+                startCr = setCr ? chordRest : nullptr;
+                endCr = setCr ? chordRest : nullptr;
             }
             previousBreak32 = isBroken32;
             previousBreak64 = isBroken64;
-            prevRests = 0;
         }
 
         // if the beam ends on the last chord
         if (startCr && (endCr || breakBeam)) {
             if ((startCr == endCr || !endCr) && startCr->isChord()) {
-                // since it's the last chord, beamlet always goes before
-                createBeamletSegment(toChord(startCr), true, level);
+                // this chord is either the last chord, or the first (followed by a rest)
+                bool isBefore = !(startCr == chordRests.front());
+                createBeamletSegment(toChord(startCr), isBefore, level);
             } else {
                 createBeamSegment(startCr, endCr, level);
             }
@@ -1271,6 +1271,12 @@ void Beam::extendStem(Chord* chord, double addition)
     }
     if (chord->stemSlash()) {
         chord->stemSlash()->layout();
+    }
+
+    if (cross()) {
+        // stem-side articulations on cross-staff beams must be re-laid-out
+        chord->layoutArticulations();
+        chord->layoutArticulations2();
     }
 }
 

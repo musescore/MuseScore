@@ -131,6 +131,40 @@ RetVal<Val> InteractiveProvider::error(const std::string& title, const framework
     return openStandardDialog("ERROR", title, text, detailedText, buttons, defBtn, options);
 }
 
+Ret InteractiveProvider::showProgress(const std::string& title, framework::Progress* progress)
+{
+    IF_ASSERT_FAILED(progress) {
+        return false;
+    }
+
+    QVariantMap params;
+    params["title"] = QString::fromStdString(title);
+    params["progress"] = QVariant::fromValue(progress);
+
+    QmlLaunchData* data = new QmlLaunchData();
+    data->setValue("params", params);
+
+    emit fireOpenProgressDialog(data);
+
+    Ret ret = toRet(data->value("ret"));
+    QString objectId = data->value("objectId").toString();
+
+    delete data;
+
+    if (!ret) {
+        return ret;
+    }
+
+    if (!objectId.isEmpty()) {
+        RetVal<Val> rv = m_retvals.take(objectId);
+        if (rv.ret.valid()) {
+            return rv.ret;
+        }
+    }
+
+    return make_ok();
+}
+
 RetVal<io::path_t> InteractiveProvider::selectOpeningFile(const std::string& title, const io::path_t& dir,
                                                           const std::vector<std::string>& filter)
 {

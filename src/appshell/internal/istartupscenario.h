@@ -34,8 +34,8 @@ class IStartupScenario : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IStartupScenario() = default;
 
-    virtual void setModeType(const QString& modeType) = 0;
-    virtual void setStartupScorePath(const io::path_t& path) = 0;
+    virtual void setStartupType(const std::optional<std::string>& type) = 0;
+    virtual void setStartupScorePath(const std::optional<io::path_t>& path) = 0;
 
     virtual void run() = 0;
     virtual bool startupCompleted() const = 0;

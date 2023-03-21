@@ -1097,7 +1097,7 @@ void Spanner::setEndElement(EngravingItem* e)
 #endif
     _endElement = e;
     if (e && ticks() == Fraction() && _tick >= Fraction()) {
-        setTicks(e->tick() - _tick);
+        setTicks(std::max(e->tick() - _tick, Fraction()));
     }
 }
 
