@@ -468,7 +468,7 @@ void LyricsLineSegment::layout()
     double lw = lyricsLine()->lineWidth() * .5;
     setbbox(r.adjusted(-lw, -lw, lw, lw));
     if (system() && lyr->addToSkyline()) {
-        system()->staff(lyr->staffIdx())->skyline().add(shape().translated(pos()));
+        system()->staff(lyr->staffIdx())->skyline().add(shape().translate(pos()));
     }
 }
 

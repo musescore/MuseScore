@@ -818,7 +818,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                             Chord* c2 = t->chord2();
                             if (!t->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
                                 if (t->chord() == e && t->addToSkyline()) {
-                                    skyline.add(t->shape().translated(t->pos() + e->pos() + p));
+                                    skyline.add(t->shape().translate(t->pos() + e->pos() + p));
                                 }
                             }
                         }
@@ -1032,7 +1032,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         staff_idx_t si = d->staffIdx();
         Segment* s = d->segment();
         Measure* m = s->measure();
-        system->staff(si)->skyline().add(d->shape().translated(d->pos() + s->pos() + m->pos()));
+        system->staff(si)->skyline().add(d->shape().translate(d->pos() + s->pos() + m->pos()));
     }
 
     //-------------------------------------------------------------
@@ -1193,7 +1193,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                     ss->setPosY(y);
                 }
                 if (ss->addToSkyline()) {
-                    system->staff(staffIdx)->skyline().add(ss->shape().translated(ss->pos()));
+                    system->staff(staffIdx)->skyline().add(ss->shape().translate(ss->pos()));
                 }
             }
 
@@ -1399,7 +1399,7 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
             if (stfIdx == mu::nidx) {
                 continue;
             }
-            system->staff(stfIdx)->skyline().add(ss->shape().translated(ss->pos()));
+            system->staff(stfIdx)->skyline().add(ss->shape().translate(ss->pos()));
         }
     }
 }
@@ -1415,7 +1415,7 @@ void LayoutSystem::layoutTies(Chord* ch, System* system, const Fraction& stick)
         if (t) {
             TieSegment* ts = t->layoutFor(system);
             if (ts && ts->addToSkyline()) {
-                staff->skyline().add(ts->shape().translated(ts->pos()));
+                staff->skyline().add(ts->shape().translate(ts->pos()));
             }
         }
         t = note->tieBack();
@@ -1423,7 +1423,7 @@ void LayoutSystem::layoutTies(Chord* ch, System* system, const Fraction& stick)
             if (t->startNote()->tick() < stick) {
                 TieSegment* ts = t->layoutBack(system);
                 if (ts && ts->addToSkyline()) {
-                    staff->skyline().add(ts->shape().translated(ts->pos()));
+                    staff->skyline().add(ts->shape().translate(ts->pos()));
                 }
             }
         }

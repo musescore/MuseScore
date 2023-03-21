@@ -3700,30 +3700,30 @@ Shape Chord::shape() const
 {
     Shape shape;
     if (_hook && _hook->addToSkyline()) {
-        shape.add(_hook->shape().translated(_hook->pos()));
+        shape.add(_hook->shape().translate(_hook->pos()));
     }
     if (_stem && _stem->addToSkyline()) {
-        shape.add(_stem->shape().translated(_stem->pos()));
+        shape.add(_stem->shape().translate(_stem->pos()));
     }
     if (_stemSlash && _stemSlash->addToSkyline()) {
-        shape.add(_stemSlash->shape().translated(_stemSlash->pos()));
+        shape.add(_stemSlash->shape().translate(_stemSlash->pos()));
     }
     if (_arpeggio && _arpeggio->addToSkyline()) {
-        shape.add(_arpeggio->shape().translated(_arpeggio->pos()));
+        shape.add(_arpeggio->shape().translate(_arpeggio->pos()));
     }
 //      if (_tremolo)
 //            shape.add(_tremolo->shape().translated(_tremolo->pos()));
     for (Note* note : _notes) {
-        shape.add(note->shape().translated(note->pos()));
+        shape.add(note->shape().translate(note->pos()));
     }
     for (EngravingItem* e : el()) {
         if (e->addToSkyline()) {
-            shape.add(e->shape().translated(e->pos()));
+            shape.add(e->shape().translate(e->pos()));
         }
     }
     shape.add(ChordRest::shape());      // add lyrics
     for (LedgerLine* l = _ledgerLines; l; l = l->next()) {
-        shape.add(l->shape().translated(l->pos()));
+        shape.add(l->shape().translate(l->pos()));
     }
 
     return shape;
@@ -4083,8 +4083,8 @@ void Chord::layoutArticulations3(Slur* slur)
         if (a->layoutCloseToNote() || !a->autoplace() || !slur->addToSkyline()) {
             continue;
         }
-        Shape aShape = a->shape().translated(a->pos() + pos() + s->pos() + m->pos());
-        Shape sShape = ss->shape().translated(ss->pos());
+        Shape aShape = a->shape().translate(a->pos() + pos() + s->pos() + m->pos());
+        Shape sShape = ss->shape().translate(ss->pos());
         if (aShape.intersects(sShape)) {
             double d = score()->styleS(Sid::articulationMinDistance).val() * spatium();
             d += slur->up() ? std::max(aShape.minVerticalDistance(sShape), 0.0) : std::max(sShape.minVerticalDistance(aShape), 0.0);
@@ -4200,7 +4200,7 @@ void GraceNotesGroup::layout()
             return false;
         });
         double offset;
-        offset = -std::max(graceShape.minHorizontalDistance(groupShape, score()), 0.0);
+        offset = -std::max(graceShape.minHorizontalDistance(groupShape), 0.0);
         // Adjust spacing for cross-beam situations
         if (i < this->size() - 1) {
             Chord* prevGrace = this->at(i + 1);
@@ -4217,16 +4217,16 @@ void GraceNotesGroup::layout()
         double xpos = offset - parent()->rxoffset() - parent()->xpos();
         grace->setPos(xpos, 0.0);
     }
-    double xPos = -_shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->staffIdx()), score());
+    double xPos = -_shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->staffIdx()));
     // If the parent chord is cross-staff, also check against shape in the other staff and take the minimum
     if (_parent->staffMove() != 0) {
-        double xPosCross = -_shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->vStaffIdx()), score());
+        double xPosCross = -_shape.minHorizontalDistance(_appendedSegment->staffShape(_parent->vStaffIdx()));
         xPos = std::min(xPos, xPosCross);
     }
     // Same if the grace note itself is cross-staff
     Chord* firstGN = this->back();
     if (firstGN->staffMove() != 0) {
-        double xPosCross = -_shape.minHorizontalDistance(_appendedSegment->staffShape(firstGN->vStaffIdx()), score());
+        double xPosCross = -_shape.minHorizontalDistance(_appendedSegment->staffShape(firstGN->vStaffIdx()));
         xPos = std::min(xPos, xPosCross);
     }
     // Safety net in case the shape checks don't succeed
@@ -4262,7 +4262,7 @@ Shape GraceNotesGroup::shape() const
 {
     Shape shape;
     for (Chord* grace : *this) {
-        shape.add(grace->shape().translated(grace->pos() - this->pos()));
+        shape.add(grace->shape().translate(grace->pos() - this->pos()));
     }
     return shape;
 }

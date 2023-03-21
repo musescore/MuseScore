@@ -2300,7 +2300,7 @@ void Segment::createShape(staff_idx_t staffIdx)
                 continue;
             }
             if (e->addToSkyline()) {
-                s.add(e->shape().translated(e->pos()));
+                s.add(e->shape().translate(e->pos()));
             }
         }
     }
@@ -2337,7 +2337,7 @@ void Segment::createShape(staff_idx_t staffIdx)
                    && !e->isPlayTechAnnotation()) {
             // annotations added here are candidates for collision detection
             // lyrics, ...
-            s.add(e->shape().translated(e->pos()));
+            s.add(e->shape().translate(e->pos()));
         }
     }
 }
@@ -2389,7 +2389,7 @@ double Segment::minLeft(const Shape& sl) const
 {
     double distance = 0.0;
     for (const Shape& sh : shapes()) {
-        double d = sl.minHorizontalDistance(sh, score());
+        double d = sl.minHorizontalDistance(sh);
         if (d > distance) {
             distance = d;
         }
@@ -2533,7 +2533,7 @@ double Segment::minHorizontalCollidingDistance(Segment* ns) const
 {
     double w = -100000.0; // This can remain negative in some cases (for instance, mid-system clefs)
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
-        double d = staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx), score());
+        double d = staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx));
         w       = std::max(w, d);
     }
     return w;
@@ -2615,7 +2615,7 @@ double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
     double ww = -1000000.0;          // can remain negative
     double d = 0.0;
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
-        d = ns ? staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx), score()) : 0.0;
+        d = ns ? staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx)) : 0.0;
         // first chordrest of a staff should clear the widest header for any staff
         // so make sure segment is as wide as it needs to be
         if (systemHeaderGap) {

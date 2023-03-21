@@ -2593,7 +2593,7 @@ void EngravingItem::autoplaceMeasureElement(bool above, bool add)
 
         SysStaff* ss = m->system()->staff(si);
         // shape rather than bbox is good for tuplets especially
-        Shape sh = shape().translated(m->pos() + pos());
+        Shape sh = shape().translate(m->pos() + pos());
 
         SkylineLine sk(!above);
         double d;
