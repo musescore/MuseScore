@@ -17,10 +17,16 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/ibrailleconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/ibrailleconverter.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationbraille.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/braillecode.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/braillecode.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/brailleconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/brailleconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/brailleconverter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/brailleconverter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/brailleinput.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/brailleinput.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/brailleinputparser.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/brailleinputparser.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/braillewriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/braillewriter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/braille.cpp

@@ -28,6 +28,13 @@
 #include "modularity/imoduleinterface.h"
 
 namespace mu::braille {
+enum class BrailleMode
+{
+    Undefined = 0,
+    Navigation,
+    BrailleInput,
+};
+
 class INotationBraille : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(INotationBraille)
@@ -39,14 +46,25 @@ public:
     virtual ValCh<int> cursorPosition() const = 0;
     virtual ValCh<int> currentItemPositionStart() const = 0;
     virtual ValCh<int> currentItemPositionEnd() const = 0;
-    virtual ValCh<std::string> shortcut() const = 0;
+    virtual ValCh<std::string> keys() const = 0;
     virtual ValCh<bool> enabled() const = 0;
+    virtual ValCh<QString> intervalDirection() const = 0;
+    virtual ValCh<int> mode() const = 0;
+    virtual ValCh<std::string> cursorColor() const = 0;
 
-    virtual void setEnabled(bool enabled) = 0;
+    virtual void setEnabled(const bool enabled) = 0;
+    virtual void setIntervalDirection(const QString direction) = 0;
 
     virtual void setCursorPosition(const int pos) = 0;
     virtual void setCurrentItemPosition(const int, const int) = 0;
-    virtual void setShortcut(const QString&) = 0;
+    virtual void setKeys(const QString&) = 0;
+
+    virtual void setMode(const BrailleMode) = 0;
+    virtual void toggleMode() = 0;
+    virtual bool isNavigationMode() = 0;
+    virtual bool isBrailleInputMode() = 0;
+
+    virtual void setCursorColor(const QString) = 0;
 };
 }
 

@@ -37,11 +37,15 @@ public:
     virtual bool braillePanelEnabled() const = 0;
     virtual void setBraillePanelEnabled(const bool enabled) = 0;
 
+    virtual async::Notification intervalDirectionChanged() const = 0;
+    virtual QString intervalDirection() const = 0;
+    virtual void setIntervalDirection(const QString direction) = 0;
+    virtual QStringList intervalDirectionsList() const = 0;
+
     virtual async::Notification brailleTableChanged() const = 0;
     virtual QString brailleTable() const = 0;
     virtual void setBrailleTable(const QString table) = 0;
-
-    virtual QStringList brailleTableList() = 0;
+    virtual QStringList brailleTableList() const = 0;
 };
 }
 

@@ -21,13 +21,17 @@
  */
 
 #include "braillemodel.h"
-#include "types/translatablestring.h"
-#include "log.h"
 
-namespace mu::notation {
+using namespace mu::braille;
+using namespace mu::notation;
+
+namespace mu::engraving {
 BrailleModel::BrailleModel(QObject* parent)
     : QObject(parent)
 {
+    if (notationBraille()) {
+        notationBraille()->setMode(BrailleMode::Navigation);
+    }
     load();
 }
 
@@ -36,9 +40,9 @@ QString BrailleModel::brailleInfo() const
     return notationBraille() ? QString::fromStdString(notationBraille()->brailleInfo().val) : QString();
 }
 
-QString BrailleModel::shortcut() const
+QString BrailleModel::keys() const
 {
-    return notationBraille() ? QString::fromStdString(notationBraille()->shortcut().val) : QString();
+    return notationBraille() ? QString::fromStdString(notationBraille()->keys().val) : QString();
 }
 
 int BrailleModel::cursorPosition() const
@@ -56,7 +60,7 @@ int BrailleModel::currentItemPositionEnd() const
     return notationBraille() ? notationBraille()->currentItemPositionEnd().val : 0;
 }
 
-void BrailleModel::setCursorPosition(int pos) const
+void BrailleModel::setCursorPosition(int pos)
 {
     if (!notationBraille()) {
         return;
@@ -69,22 +73,20 @@ void BrailleModel::setCursorPosition(int pos) const
     notationBraille()->setCursorPosition(pos);
 }
 
-void BrailleModel::setShortcut(const QString& sequence) const
+void BrailleModel::setKeys(const QString& sequence)
 {
     if (!notationBraille()) {
         return;
     }
-    notationBraille()->setShortcut(sequence);
+    notationBraille()->setKeys(sequence);
 }
 
 bool BrailleModel::enabled() const
 {
-    //if(!notationBraille()) return false;
-    //return notationBraille()->enabled().val;
     return brailleConfiguration()->braillePanelEnabled();
 }
 
-void BrailleModel::setEnabled(bool e) const
+void BrailleModel::setEnabled(bool e)
 {
     if (!notationBraille()) {
         return;
@@ -94,6 +96,48 @@ void BrailleModel::setEnabled(bool e) const
     }
     notationBraille()->setEnabled(e);
     emit braillePanelEnabledChanged();
+}
+
+int BrailleModel::mode() const
+{
+    return notationBraille()->mode().val;
+}
+
+void BrailleModel::setMode(int m)
+{
+    if (!notationBraille()) {
+        return;
+    }
+
+    if (notationBraille()->mode().val == m) {
+        return;
+    }
+
+    notationBraille()->setMode(static_cast<BrailleMode>(m));
+
+    emit brailleModeChanged();
+}
+
+bool BrailleModel::isNavigationMode()
+{
+    if (!notationBraille()) {
+        return false;
+    }
+    return notationBraille()->isNavigationMode();
+}
+
+bool BrailleModel::isBrailleInputMode()
+{
+    if (!notationBraille()) {
+        return false;
+    }
+    return notationBraille()->isBrailleInputMode();
+}
+
+QString BrailleModel::cursorColor() const
+{
+    QString color = notationBraille() ? QString::fromStdString(notationBraille()->cursorColor().val) : QString();
+    return color;
 }
 
 void BrailleModel::load()
@@ -114,8 +158,9 @@ void BrailleModel::onCurrentNotationChanged()
 
     listenChangesInnotationBraille();
     listenCurrentItemChanges();
-    listenShortcuts();
+    listenKeys();
     listenBraillePanelEnabledChanges();
+    listenBrailleModeChanges();
     listenCursorPositionChanges();
 }
 
@@ -130,14 +175,14 @@ void BrailleModel::listenChangesInnotationBraille()
     });
 }
 
-void BrailleModel::listenShortcuts()
+void BrailleModel::listenKeys()
 {
     if (!notationBraille()) {
         return;
     }
 
-    notationBraille()->shortcut().ch.onReceive(this, [this](const std::string&) {
-        emit shortcutFired();
+    notationBraille()->keys().ch.onReceive(this, [this](const std::string&) {
+        emit keysFired();
     });
 }
 
@@ -172,6 +217,16 @@ void BrailleModel::listenBraillePanelEnabledChanges()
     }
     notationBraille()->enabled().ch.onReceive(this, [this](const int) {
         emit braillePanelEnabledChanged();
+    });
+}
+
+void BrailleModel::listenBrailleModeChanges()
+{
+    if (!notationBraille()) {
+        return;
+    }
+    notationBraille()->mode().ch.onReceive(this, [this](const int) {
+        emit brailleModeChanged();
     });
 }
 

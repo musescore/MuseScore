@@ -44,7 +44,7 @@ BaseSection {
         navigation.row: 0
 
         onClicked: {
-            root.braillePanelEnabledChangeRequested(!checked)
+            root.braillePanelEnabledChangeRequested(!checked);
         }
     }
 }

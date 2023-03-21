@@ -214,6 +214,13 @@ FocusScope {
                 sourceComponent: BrailleView {
                     navigationPanel.section: navSec
                     navigationPanel.order: brailleViewLoader.navigationOrder
+
+                    navigationPanel.onActiveChanged: {
+                        if (active) {
+                            notationView.navigationPanel.setActive(false);
+                            fakeNavCtrl.setActive(false);
+                        }
+                    }
                 }
             }
 

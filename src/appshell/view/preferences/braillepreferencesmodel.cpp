@@ -22,8 +22,6 @@
 
 #include "braillepreferencesmodel.h"
 
-#include "log.h"
-
 using namespace mu::appshell;
 
 BraillePreferencesModel::BraillePreferencesModel(QObject* parent)
@@ -36,6 +34,26 @@ bool BraillePreferencesModel::braillePanelEnabled() const
     return brailleConfiguration()->braillePanelEnabled();
 }
 
+QString BraillePreferencesModel::brailleTable() const
+{
+    return brailleConfiguration()->brailleTable();
+}
+
+QString BraillePreferencesModel::intervalDirection() const
+{
+    return brailleConfiguration()->intervalDirection();
+}
+
+QStringList BraillePreferencesModel::brailleTables() const
+{
+    return brailleConfiguration()->brailleTableList();
+}
+
+QStringList BraillePreferencesModel::intervalDirections() const
+{
+    return brailleConfiguration()->intervalDirectionsList();
+}
+
 void BraillePreferencesModel::setBraillePanelEnabled(bool value)
 {
     if (value == braillePanelEnabled()) {
@@ -44,11 +62,6 @@ void BraillePreferencesModel::setBraillePanelEnabled(bool value)
 
     brailleConfiguration()->setBraillePanelEnabled(value);
     emit braillePanelEnabledChanged(value);
-}
-
-QString BraillePreferencesModel::brailleTable() const
-{
-    return brailleConfiguration()->brailleTable();
 }
 
 void BraillePreferencesModel::setBrailleTable(QString table)
@@ -61,7 +74,12 @@ void BraillePreferencesModel::setBrailleTable(QString table)
     emit brailleTableChanged(table);
 }
 
-QStringList BraillePreferencesModel::tables() const
+void BraillePreferencesModel::setIntervalDirection(QString direction)
 {
-    return brailleConfiguration()->brailleTableList();
+    if (direction == intervalDirection()) {
+        return;
+    }
+
+    brailleConfiguration()->setIntervalDirection(direction);
+    emit intervalDirectionChanged(direction);
 }

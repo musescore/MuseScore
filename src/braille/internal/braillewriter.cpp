@@ -24,8 +24,6 @@
 
 #include "braille.h"
 
-#include "log.h"
-
 using namespace mu::project;
 
 namespace mu::engraving {
