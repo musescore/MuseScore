@@ -351,6 +351,9 @@ Chord::Chord(const Chord& c, bool link)
             ChordLine* cl = toChordLine(e);
             ChordLine* ncl = Factory::copyChordLine(*cl);
             add(ncl);
+            if (cl->note()) {
+                ncl->setNote(findNote(cl->note()->pitch()));
+            }
             if (link) {
                 score()->undo(new Link(ncl, cl));
             }
