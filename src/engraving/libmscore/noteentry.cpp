@@ -92,7 +92,6 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
     }
     case StaffGroup::TAB: {
         if (_is.rest()) {
-            error = true;
             return nval;
         }
         stringData = instr->stringData();
