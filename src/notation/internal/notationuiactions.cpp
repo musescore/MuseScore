@@ -1091,6 +1091,12 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Eighth rest"),
              TranslatableString("action", "Enter rest: eighth")
              ),
+    UiAction("rest-TAB",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_NOTE_INPUT_STAFF_TAB,
+             X_TAB.arg(TranslatableString("action", "Rest")),
+             X_TAB.arg(TranslatableString("action", "Enter rest"))
+             ),
     UiAction("fret-0",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_NOTE_INPUT_STAFF_TAB,
@@ -2178,6 +2184,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Rest"),
+             TranslatableString("action", "Toggle rest"),
              IconCode::Code::REST
              ),
     UiAction("next-segment-element",

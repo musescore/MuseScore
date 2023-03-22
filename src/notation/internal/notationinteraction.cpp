@@ -3842,7 +3842,11 @@ void NotationInteraction::putRestToSelection()
     if (!is.duration().isValid() || is.duration().isZero() || is.duration().isMeasure()) {
         is.setDuration(DurationType::V_QUARTER);
     }
-    putRest(is.duration());
+    if (is.usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
+        m_noteInput->padNote(Pad::REST);
+    } else {
+        putRest(is.duration());
+    }
 }
 
 void NotationInteraction::putRest(Duration duration)
