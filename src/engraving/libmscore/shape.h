@@ -59,7 +59,7 @@ class Shape : public std::vector<ShapeElement>
 {
     OBJECT_ALLOCATOR(engraving, Shape)
 private:
-    double _spatium = NULL;
+    double _spatium = 0.0;
 public:
     enum HorizontalSpacingType {
         SPACING_GENERAL = 0,

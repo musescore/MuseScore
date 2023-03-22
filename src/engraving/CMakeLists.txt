@@ -61,31 +61,41 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/iscorereader.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/readoutdata.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/linksindexer.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/xml.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/xmlreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/xmlreader.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/xmlwriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/xmlwriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/mscloader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/mscloader.h
+
     ${CMAKE_CURRENT_LIST_DIR}/rw/114/read114.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/114/read114.h
+
     ${CMAKE_CURRENT_LIST_DIR}/rw/206/read206.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/206/read206.h
+
     ${CMAKE_CURRENT_LIST_DIR}/rw/302/read302.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/302/read302.h
+
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/read400.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/read400.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/staffrw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/staffrw.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/measurerw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/measurerw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/readcontext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/readcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/writecontext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/writecontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/propertyrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/propertyrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/engravingitemrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/engravingitemrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/articulationrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/articulationrw.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/rw/xml.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/xmlreader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/xmlreader.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/xmlwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/xmlwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/readcontext.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/readcontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/writecontext.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/writecontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/linksindexer.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/mscloader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/mscloader.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readchordlisthook.cpp

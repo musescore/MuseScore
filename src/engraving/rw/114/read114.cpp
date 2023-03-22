@@ -95,7 +95,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rw;
+using namespace mu::engraving::rw400;
 using namespace mu::engraving::compat;
 
 static int g_guitarStrings[] = { 40, 45, 50, 55, 59, 64 };

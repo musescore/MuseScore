@@ -29,7 +29,7 @@
 
 #include "compat/writescorehook.h"
 #include "rw/xml.h"
-#include "rw/writecontext.h"
+#include "rw/400/writecontext.h"
 #include "rw/400/staffrw.h"
 
 #include "audio.h"
@@ -58,7 +58,6 @@
 using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
-using namespace mu::engraving::rw;
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -238,7 +237,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     if (measureStart) {
         for (staff_idx_t staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
             const Staff* st = staff(staffIdx);
-            StaffRW::writeStaff(st, xml, measureStart, measureEnd, staffStart, staffIdx, selectionOnly);
+            rw400::StaffRW::writeStaff(st, xml, measureStart, measureEnd, staffStart, staffIdx, selectionOnly);
         }
     }
     xml.context()->setCurTrack(mu::nidx);

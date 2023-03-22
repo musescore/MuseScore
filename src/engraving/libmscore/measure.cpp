@@ -2014,13 +2014,13 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
 
 void Measure::write(XmlWriter& xml, staff_idx_t staff, bool writeSystemElements, bool forceTimeSig) const
 {
-    rw::MeasureRW::writeMeasure(this, xml, staff, writeSystemElements, forceTimeSig);
+    rw400::MeasureRW::writeMeasure(this, xml, staff, writeSystemElements, forceTimeSig);
 }
 
 void Measure::read(XmlReader& xml)
 {
     ReadContext ctx(score());
-    rw::MeasureRW::readMeasure(this, xml, ctx, 0);
+    rw400::MeasureRW::readMeasure(this, xml, ctx, 0);
 }
 
 //---------------------------------------------------------

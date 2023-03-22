@@ -6253,7 +6253,7 @@ Notation Notation::mergeNotations(const Notation& n1, const Notation& n2, const 
     for (const auto& attr : n1.attributes()) {
         mergedNotation.addAttribute(attr.first, attr.second);
     }
-    for (const auto attr : n2.attributes()) {
+    for (const auto& attr : n2.attributes()) {
         mergedNotation.addAttribute(attr.first, attr.second);
     }
     return mergedNotation;

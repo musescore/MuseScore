@@ -23,7 +23,7 @@
 
 #include "translation.h"
 
-#include "rw/writecontext.h"
+#include "rw/400/writecontext.h"
 #include "rw/xml.h"
 
 #include "../libmscore/ambitus.h"
@@ -55,8 +55,8 @@
 
 #include "log.h"
 
-using namespace mu::engraving::rw;
 using namespace mu::engraving;
+using namespace mu::engraving::rw400;
 
 void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, int staffIdx)
 {

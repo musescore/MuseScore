@@ -40,7 +40,7 @@
 #include "compat/readstyle.h"
 
 #include "xmlreader.h"
-#include "readcontext.h"
+#include "400/readcontext.h"
 
 #include "log.h"
 
@@ -74,7 +74,7 @@ static RetVal<IScoreReaderPtr> makeReader(int version, bool ignoreVersionError)
         return RetVal<IScoreReaderPtr>::make_ok(std::make_shared<compat::Read302>());
     }
 
-    return RetVal<IScoreReaderPtr>::make_ok(std::make_shared<Read400>());
+    return RetVal<IScoreReaderPtr>::make_ok(std::make_shared<rw400::Read400>());
 }
 
 mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, SettingsCompat& settingsCompat,
@@ -161,7 +161,7 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
             ReadInOutData partReadInData;
             partReadInData.links = masterReadOutData.links;
 
-            Read400().read(partScore, xml, &partReadInData);
+            rw400::Read400().read(partScore, xml, &partReadInData);
 
             partScore->linkMeasures(masterScore);
             ex->setTracksMapping(xml.context()->tracks());

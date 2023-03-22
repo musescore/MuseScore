@@ -2366,6 +2366,27 @@ VibratoType TConv::fromXml(const AsciiStringView& tag, VibratoType def)
     return findTypeByXmlTag<VibratoType>(VIBRATO_TYPES, tag, def);
 }
 
+// Note about "engraving/sym": they need to be in this context because PaletteCell::translationContext expects them there
+const std::array<Item<ArticulationTextType>, 3> ARTICULATIONTEXT_TYPES = { {
+    { ArticulationTextType::TAP,    "Tap",      TranslatableString("engraving/sym", "Tap") },
+    { ArticulationTextType::SLAP,   "Slap",     TranslatableString("engraving/sym", "Slap") },
+    { ArticulationTextType::POP,    "Pop",      TranslatableString("engraving/sym", "Pop") }
+} };
+
+ArticulationTextType TConv::fromXml(const AsciiStringView& tag, ArticulationTextType def)
+{
+    auto it = std::find_if(ARTICULATIONTEXT_TYPES.cbegin(), ARTICULATIONTEXT_TYPES.cend(), [tag](const Item<ArticulationTextType>& i) {
+        return i.xml == tag;
+    });
+
+    if (it != ARTICULATIONTEXT_TYPES.cend()) {
+        return it->type;
+    }
+
+    // compatibility
+    return def;
+}
+
 const std::array<const char*, 17> KEY_NAMES = { {
     QT_TRANSLATE_NOOP("engraving", "G major, E minor"),
     QT_TRANSLATE_NOOP("engraving", "C♭ major, A♭ minor"),

@@ -48,7 +48,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rw;
+using namespace mu::engraving::rw400;
 using namespace mu::engraving::compat;
 
 bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
@@ -57,7 +57,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
         ctx.setTrack(mu::nidx);
         const AsciiStringView tag(e.name());
         if (tag == "Staff") {
-            StaffRW::readStaff(score, e, ctx);
+            rw400::StaffRW::readStaff(score, e, ctx);
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {

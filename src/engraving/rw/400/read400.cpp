@@ -38,7 +38,7 @@
 #include "log.h"
 
 using namespace mu::engraving;
-using namespace mu::engraving::rw;
+using namespace mu::engraving::rw400;
 
 Err Read400::read(Score* score, XmlReader& e, ReadInOutData* data)
 {

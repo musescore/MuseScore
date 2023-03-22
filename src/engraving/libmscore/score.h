@@ -58,8 +58,11 @@
 
 namespace mu::engraving {
 class IMimeData;
-class Read400;
 class WriteContext;
+}
+
+namespace mu::engraving::rw400 {
+class Read400;
 }
 
 namespace mu::engraving::compat {
@@ -369,7 +372,7 @@ class Score : public EngravingObject
 private:
 
     friend class compat::Read302;
-    friend class Read400;
+    friend class rw400::Read400;
     friend class Layout;
 
     static std::set<Score*> validScores;

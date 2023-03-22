@@ -21,7 +21,7 @@
  */
 #include "staffrw.h"
 
-#include "rw/writecontext.h"
+#include "rw/400/writecontext.h"
 #include "rw/xml.h"
 
 #include "libmscore/factory.h"
@@ -33,8 +33,8 @@
 
 #include "log.h"
 
-using namespace mu::engraving::rw;
 using namespace mu::engraving;
+using namespace mu::engraving::rw400;
 
 void StaffRW::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
 {

@@ -30,12 +30,9 @@
 #include "libmscore/connector.h"
 #include "libmscore/interval.h"
 #include "libmscore/location.h"
-#include "linksindexer.h"
-#include "readoutdata.h"
 
-namespace mu::engraving::compat {
-class DummyElement;
-}
+#include "../linksindexer.h"
+#include "../readoutdata.h"
 
 namespace mu::engraving {
 class Beam;
@@ -47,7 +44,13 @@ class Spanner;
 class Staff;
 class TimeSigMap;
 class Tuplet;
+}
 
+namespace mu::engraving::compat {
+class DummyElement;
+}
+
+namespace mu::engraving {
 struct SpannerValues {
     int spannerId;
     Fraction tick2;
@@ -68,6 +71,7 @@ public:
 
     void setScore(Score* score);
     Score* score() const;
+    bool isMasterScore() const;
 
     bool pasteMode() const { return _pasteMode; }
     void setPasteMode(bool v) { _pasteMode = v; }

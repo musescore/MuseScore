@@ -25,7 +25,9 @@
 #include "draw/fontmetrics.h"
 #include "rw/206/read206.h"
 #include "rw/xml.h"
+#include "rw/400/articulationrw.h"
 #include "types/symnames.h"
+#include "types/typesconv.h"
 #include "types/translatablestring.h"
 
 #include "chordrest.h"
@@ -58,16 +60,10 @@ struct ArticulationTextTypeMapping {
 };
 
 // Note about "engraving/sym": they need to be in this context because PaletteCell::translationContext expects them there
-static const std::map<Articulation::TextType, ArticulationTextTypeMapping> artTypeToInfo {
-    { Articulation::TextType::TAP, { "Tap", String(u"T"), TranslatableString("engraving/sym", "Tap") } },
-    { Articulation::TextType::SLAP, { "Slap", String(u"S"), TranslatableString("engraving/sym", "Slap") } },
-    { Articulation::TextType::POP, { "Pop", String(u"P"), TranslatableString("engraving/sym", "Pop") } },
-};
-
-static const std::map<AsciiStringView, Articulation::TextType> artTextToType {
-    { "Tap", Articulation::TextType::TAP },
-    { "Slap", Articulation::TextType::SLAP },
-    { "Pop", Articulation::TextType::POP },
+static const std::map<ArticulationTextType, ArticulationTextTypeMapping> artTypeToInfo {
+    { ArticulationTextType::TAP, { "Tap", String(u"T"), TranslatableString("engraving/sym", "Tap") } },
+    { ArticulationTextType::SLAP, { "Slap", String(u"S"), TranslatableString("engraving/sym", "Slap") } },
+    { ArticulationTextType::POP, { "Pop", String(u"P"), TranslatableString("engraving/sym", "Pop") } },
 };
 
 //---------------------------------------------------------
@@ -101,14 +97,14 @@ void Articulation::setSymId(SymId id)
     computeCategories();
     setupShowOnTabStyles();
     _anchor = ArticulationAnchor(propertyDefault(Pid::ARTICULATION_ANCHOR).toInt());
-    m_textType = TextType::NO_TEXT;
+    m_textType = ArticulationTextType::NO_TEXT;
 }
 
 //---------------------------------------------------------
 //   setTextType
 //---------------------------------------------------------
 
-void Articulation::setTextType(TextType textType)
+void Articulation::setTextType(ArticulationTextType textType)
 {
     m_textType = textType;
 }
@@ -159,9 +155,13 @@ void Articulation::setUp(bool val)
 
 void Articulation::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        if (!readProperties(e)) {
-            e.unknown();
+    rw400::ArticulationRW::read(this, e, *e.context());
+
+    if (0) {
+        while (e.readNextStartElement()) {
+            if (!readProperties(e)) {
+                e.unknown();
+            }
         }
     }
 }
@@ -172,50 +172,53 @@ void Articulation::read(XmlReader& e)
 
 bool Articulation::readProperties(XmlReader& e)
 {
-    const AsciiStringView tag(e.name());
+    return rw400::ArticulationRW::readProperties(this, e, *e.context());
 
-    if (tag == "subtype") {
-        AsciiStringView s = e.readAsciiText();
-        if (artTextToType.find(s) != artTextToType.end()) {
-            m_textType = artTextToType.at(s);
-        } else {
-            SymId id = SymNames::symIdByName(s);
-            if (id == SymId::noSym) {
-                id = compat::Read206::articulationNames2SymId206(s); // compatibility hack for "old" 3.0 scores
-            }
-            if (id == SymId::noSym || s == "ornamentMordentInverted") {   // SMuFL < 1.30
-                id = SymId::ornamentMordent;
-            }
+    if (0) {
+        const AsciiStringView tag(e.name());
 
-            String programVersion = masterScore()->mscoreVersion();
-            if (!programVersion.isEmpty() && programVersion < u"3.6") {
-                if (id == SymId::noSym || s == "ornamentMordent") {   // SMuFL < 1.30 and MuseScore < 3.6
-                    id = SymId::ornamentShortTrill;
+        if (tag == "subtype") {
+            AsciiStringView s = e.readAsciiText();
+            m_textType = TConv::fromXml(s, ArticulationTextType::NO_TEXT);
+            if (m_textType == ArticulationTextType::NO_TEXT) {
+                SymId id = SymNames::symIdByName(s);
+                if (id == SymId::noSym) {
+                    id = compat::Read206::articulationNames2SymId206(s); // compatibility hack for "old" 3.0 scores
                 }
+                if (id == SymId::noSym || s == "ornamentMordentInverted") { // SMuFL < 1.30
+                    id = SymId::ornamentMordent;
+                }
+
+                String programVersion = masterScore()->mscoreVersion();
+                if (!programVersion.isEmpty() && programVersion < u"3.6") {
+                    if (id == SymId::noSym || s == "ornamentMordent") { // SMuFL < 1.30 and MuseScore < 3.6
+                        id = SymId::ornamentShortTrill;
+                    }
+                }
+                setSymId(id);
             }
-            setSymId(id);
-        }
-    } else if (tag == "channel") {
-        _channelName = e.attribute("name");
-        e.readNext();
-    } else if (readProperty(tag, e, Pid::ARTICULATION_ANCHOR)) {
-    } else if (tag == "direction") {
-        readProperty(e, Pid::DIRECTION);
-    } else if (tag == "ornamentStyle") {
-        readProperty(e, Pid::ORNAMENT_STYLE);
-    } else if (tag == "play") {
-        setPlayArticulation(e.readBool());
-    } else if (tag == "offset") {
-        if (score()->mscVersion() >= 400) {
-            EngravingItem::readProperties(e);
+        } else if (tag == "channel") {
+            _channelName = e.attribute("name");
+            e.readNext();
+        } else if (readProperty(tag, e, Pid::ARTICULATION_ANCHOR)) {
+        } else if (tag == "direction") {
+            readProperty(e, Pid::DIRECTION);
+        } else if (tag == "ornamentStyle") {
+            readProperty(e, Pid::ORNAMENT_STYLE);
+        } else if (tag == "play") {
+            setPlayArticulation(e.readBool());
+        } else if (tag == "offset") {
+            if (score()->mscVersion() >= 400) {
+                EngravingItem::readProperties(e);
+            } else {
+                e.skipCurrentElement();   // ignore manual layout in older scores
+            }
+        } else if (EngravingItem::readProperties(e)) {
         } else {
-            e.skipCurrentElement();       // ignore manual layout in older scores
+            return false;
         }
-    } else if (EngravingItem::readProperties(e)) {
-    } else {
-        return false;
+        return true;
     }
-    return true;
 }
 
 //---------------------------------------------------------
@@ -232,7 +235,7 @@ void Articulation::write(XmlWriter& xml) const
         xml.tag("channe", { { "name", _channelName } });
     }
     writeProperty(xml, Pid::DIRECTION);
-    if (m_textType != TextType::NO_TEXT) {
+    if (m_textType != ArticulationTextType::NO_TEXT) {
         xml.tag("subtype", artTypeToInfo.at(m_textType).xml);
     } else {
         xml.tag("subtype", SymNames::nameForSymId(_symId));
@@ -253,7 +256,7 @@ void Articulation::write(XmlWriter& xml) const
 
 TranslatableString Articulation::typeUserName() const
 {
-    if (m_textType != TextType::NO_TEXT) {
+    if (m_textType != ArticulationTextType::NO_TEXT) {
         return artTypeToInfo.at(m_textType).name;
     }
 
@@ -262,7 +265,7 @@ TranslatableString Articulation::typeUserName() const
 
 String Articulation::translatedTypeUserName() const
 {
-    if (m_textType != TextType::NO_TEXT) {
+    if (m_textType != ArticulationTextType::NO_TEXT) {
         return artTypeToInfo.at(m_textType).name.translated();
     }
 
@@ -279,7 +282,7 @@ void Articulation::draw(mu::draw::Painter* painter) const
 
     painter->setPen(curColor());
 
-    if (m_textType != TextType::NO_TEXT) {
+    if (m_textType != ArticulationTextType::NO_TEXT) {
         mu::draw::Font scaledFont(m_font);
         scaledFont.setPointSizeF(m_font.pointSizeF() * magS() * MScore::pixelRatio);
         painter->setFont(scaledFont);
@@ -352,7 +355,7 @@ void Articulation::layout()
 
     RectF bRect;
 
-    if (m_textType != TextType::NO_TEXT) {
+    if (m_textType != ArticulationTextType::NO_TEXT) {
         mu::draw::Font scaledFont(m_font);
         scaledFont.setPointSizeF(m_font.pointSizeF() * magS());
         mu::draw::FontMetrics fm(scaledFont);

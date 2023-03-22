@@ -22,13 +22,13 @@
 #ifndef MU_ENGRAVING_MEASURERW_H
 #define MU_ENGRAVING_MEASURERW_H
 
-#include "../readcontext.h"
+#include "readcontext.h"
 
 namespace mu::engraving {
 class Measure;
 }
 
-namespace mu::engraving::rw {
+namespace mu::engraving::rw400 {
 class MeasureRW
 {
 public:
