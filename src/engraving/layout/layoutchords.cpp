@@ -26,6 +26,7 @@
 #include "libmscore/accidental.h"
 #include "libmscore/beam.h"
 #include "libmscore/chord.h"
+#include "libmscore/fingering.h"
 #include "libmscore/glissando.h"
 #include "libmscore/hook.h"
 #include "libmscore/measure.h"
@@ -38,6 +39,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/stem.h"
 #include "libmscore/stemslash.h"
+#include "libmscore/system.h"
 #include "libmscore/tie.h"
 #include "libmscore/utils.h"
 
@@ -1603,5 +1605,48 @@ void LayoutChords::resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Se
             beam1->layout();
             beam2->layout();
         }
+    }
+}
+
+void LayoutChords::layoutChordBaseFingering(Chord* chord, System* system)
+{
+    std::set<staff_idx_t> shapesToRecreate;
+    std::list<Note*> notes;
+    Segment* segment = chord->segment();
+    for (auto gc : chord->graceNotes()) {
+        for (auto n : gc->notes()) {
+            notes.push_back(n);
+        }
+    }
+    for (auto n : chord->notes()) {
+        notes.push_back(n);
+    }
+    std::list<Fingering*> fingerings;
+    for (Note* note : notes) {
+        for (EngravingItem* el : note->el()) {
+            if (el->isFingering()) {
+                Fingering* f = toFingering(el);
+                if (f->layoutType() == ElementType::CHORD && !f->isOnCrossBeamSide()) {
+                    // Fingering on top of cross-staff beams must be laid out later
+                    if (f->placeAbove()) {
+                        fingerings.push_back(f);
+                    } else {
+                        fingerings.push_front(f);
+                    }
+                }
+            }
+        }
+    }
+    for (Fingering* f : fingerings) {
+        f->layout();
+        if (f->addToSkyline()) {
+            Note* n = f->note();
+            RectF r = f->bbox().translated(f->pos() + n->pos() + n->chord()->pos() + segment->pos() + segment->measure()->pos());
+            system->staff(f->note()->chord()->vStaffIdx())->skyline().add(r);
+        }
+        shapesToRecreate.insert(f->staffIdx());
+    }
+    for (staff_idx_t staffIdx : shapesToRecreate) {
+        segment->createShape(staffIdx);
     }
 }

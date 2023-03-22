@@ -53,6 +53,7 @@ public:
                                    staff_idx_t staffIdx);
     static void resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Segment* segment, staff_idx_t staffIdx,
                                   bool considerBeams = false);
+    static void layoutChordBaseFingering(Chord* chord, System* system);
 };
 }
 
