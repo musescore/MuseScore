@@ -1215,6 +1215,8 @@ void Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
                 LOGD("paste <%s>", data.data());
             }
             XmlReader e(data);
+            ReadContext ctx(cr->score());
+            e.setContext(&ctx);
             pasteSymbols(e, cr);
         }
     } else if (ms->hasImage()) {

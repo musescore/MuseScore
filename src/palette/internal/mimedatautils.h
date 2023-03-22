@@ -25,7 +25,7 @@
 #include "io/buffer.h"
 
 #include "engraving/rw/xml.h"
-#include "engraving/rw/readcontext.h"
+#include "engraving/rw/400/readcontext.h"
 
 namespace mu::palette {
 template<class T>

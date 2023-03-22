@@ -210,6 +210,8 @@ public:
     static AsciiStringView toXml(VibratoType v);
     static VibratoType fromXml(const AsciiStringView& tag, VibratoType def);
 
+    static ArticulationTextType fromXml(const AsciiStringView& tag, ArticulationTextType def);
+
     static const char* userName(Key v, bool isAtonal = false, bool isCustom = false);
     static String translatedUserName(Key v, bool isAtonal = false, bool isCustom = false);
 };

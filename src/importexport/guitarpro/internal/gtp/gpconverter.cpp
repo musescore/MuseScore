@@ -1843,7 +1843,7 @@ void GPConverter::addTapping(const GPNote* gpnote, Note* note)
 
     if (Chord* ch = toChord(note->parent())) {
         Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
-        art->setTextType(Articulation::TextType::TAP);
+        art->setTextType(ArticulationTextType::TAP);
         ch->add(art);
     }
 }
@@ -2505,7 +2505,7 @@ void GPConverter::addSlapped(const GPBeat* beat, ChordRest* cr)
     }
 
     Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
-    art->setTextType(Articulation::TextType::SLAP);
+    art->setTextType(ArticulationTextType::SLAP);
     cr->add(art);
 }
 
@@ -2516,7 +2516,7 @@ void GPConverter::addPopped(const GPBeat* beat, ChordRest* cr)
     }
 
     Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
-    art->setTextType(Articulation::TextType::POP);
+    art->setTextType(ArticulationTextType::POP);
     cr->add(art);
 }
 

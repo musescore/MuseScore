@@ -64,6 +64,11 @@ Score* ReadContext::score() const
     return m_score;
 }
 
+bool ReadContext::isMasterScore() const
+{
+    return m_score->isMaster();
+}
+
 String ReadContext::mscoreVersion() const
 {
     return m_score->mscoreVersion();

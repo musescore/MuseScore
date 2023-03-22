@@ -32,7 +32,7 @@
 
 #include "segmentlist.h"
 
-namespace mu::engraving::rw {
+namespace mu::engraving::rw400 {
 class MeasureRW;
 }
 
@@ -377,7 +377,7 @@ public:
 private:
     double _squeezableSpace = 0;
     friend class Factory;
-    friend class rw::MeasureRW;
+    friend class rw400::MeasureRW;
 
     Measure(System* parent = 0);
     Measure(const Measure&);

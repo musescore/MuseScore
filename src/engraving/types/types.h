@@ -874,6 +874,13 @@ enum class VibratoType : char {
     GUITAR_VIBRATO, GUITAR_VIBRATO_WIDE, VIBRATO_SAWTOOTH, VIBRATO_SAWTOOTH_WIDE
 };
 
+enum class ArticulationTextType {
+    NO_TEXT,
+    TAP,
+    SLAP,
+    POP
+};
+
 //---------------------------------------------------------
 //   Key
 //---------------------------------------------------------

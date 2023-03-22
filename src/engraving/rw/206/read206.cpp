@@ -105,7 +105,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rw;
+using namespace mu::engraving::rw400;
 using namespace mu::engraving::compat;
 
 static void readText206(XmlReader& e, const ReadContext& ctx, TextBase* t, EngravingItem* be);

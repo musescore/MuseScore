@@ -518,7 +518,7 @@ void GuitarPro::addVibrato(Note* note, VibratoType type)
 
 void GuitarPro::addTap(Note* note)
 {
-    addTextArticulation(note, Articulation::TextType::TAP);
+    addTextArticulation(note, ArticulationTextType::TAP);
 }
 
 //---------------------------------------------------------
@@ -527,7 +527,7 @@ void GuitarPro::addTap(Note* note)
 
 void GuitarPro::addSlap(Note* note)
 {
-    addTextArticulation(note, Articulation::TextType::SLAP);
+    addTextArticulation(note, ArticulationTextType::SLAP);
 }
 
 //---------------------------------------------------------
@@ -536,12 +536,12 @@ void GuitarPro::addSlap(Note* note)
 
 void GuitarPro::addPop(Note* note)
 {
-    addTextArticulation(note, Articulation::TextType::POP);
+    addTextArticulation(note, ArticulationTextType::POP);
 }
 
-void GuitarPro::addTextArticulation(Note* note, Articulation::TextType type)
+void GuitarPro::addTextArticulation(Note* note, ArticulationTextType type)
 {
-    if (type == Articulation::TextType::NO_TEXT) {
+    if (type == ArticulationTextType::NO_TEXT) {
         return;
     }
 

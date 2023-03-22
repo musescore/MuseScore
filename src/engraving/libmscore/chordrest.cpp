@@ -24,7 +24,7 @@
 
 #include "translation.h"
 
-#include "rw/writecontext.h"
+#include "rw/400/writecontext.h"
 #include "rw/xml.h"
 #include "style/style.h"
 #include "types/typesconv.h"
@@ -62,7 +62,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rw;
+using namespace mu::engraving::rw400;
 
 namespace mu::engraving {
 //---------------------------------------------------------

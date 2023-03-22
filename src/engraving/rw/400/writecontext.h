@@ -25,7 +25,7 @@
 
 #include <map>
 #include "containers.h"
-#include "linksindexer.h"
+#include "../linksindexer.h"
 #include "libmscore/select.h"
 
 namespace mu::engraving {

@@ -273,7 +273,7 @@ protected:
     void createSlide(int slide, ChordRest* cr, int staffIdx, Note* note = nullptr);
     void createCrecDim(int staffIdx, int track, const Fraction& tick, bool crec);
     void addTextToNote(String text, Note* note);
-    void addTextArticulation(Note* note, Articulation::TextType type);
+    void addTextArticulation(Note* note, ArticulationTextType type);
     void addPalmMute(Note*);
     void addLetRing(Note*);
     void addVibrato(Note*, VibratoType type = VibratoType::GUITAR_VIBRATO);

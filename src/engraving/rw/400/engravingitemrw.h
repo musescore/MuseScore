@@ -19,25 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_READ400_H
-#define MU_ENGRAVING_READ400_H
-
-#include "../iscorereader.h"
+#ifndef MU_ENGRAVING_ENGRAVINGITEMRW_H
+#define MU_ENGRAVING_ENGRAVINGITEMRW_H
 
 namespace mu::engraving {
-class Score;
-class ReadContext;
 class XmlReader;
+class ReadContext;
+class EngravingItem;
 }
 
 namespace mu::engraving::rw400 {
-class Read400 : public IScoreReader
+class EngravingItemRW
 {
 public:
+    EngravingItemRW() = default;
 
-    Err read(Score* score, XmlReader& e, ReadInOutData* data) override;
-    static bool readScore400(Score* score, XmlReader& e, ReadContext& ctx);
+    static bool readProperties(EngravingItem* item, XmlReader& xml, ReadContext& ctx);
 };
 }
 
-#endif // MU_ENGRAVING_READ400_H
+#endif // MU_ENGRAVING_ENGRAVINGITEMRW_H
