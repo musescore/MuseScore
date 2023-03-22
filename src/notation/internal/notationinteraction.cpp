@@ -601,7 +601,7 @@ std::vector<mu::engraving::EngravingItem*> NotationInteraction::hitElements(cons
             continue;
         }
 
-        if (element->contains(p)) {
+        if (element->hitShapeContains(p)) {
             ll.push_back(element);
         }
     }
@@ -619,7 +619,7 @@ std::vector<mu::engraving::EngravingItem*> NotationInteraction::hitElements(cons
                 continue;
             }
 
-            if (element->intersects(r)) {
+            if (element->hitShapeIntersects(r)) {
                 ll.push_back(element);
             }
         }
@@ -645,7 +645,7 @@ NotationInteraction::HitMeasureData NotationInteraction::hitMeasure(const PointF
     Measure* measure = score()->pos2measure(pos, &staffIndex, 0, &segment, &offset);
 
     HitMeasureData result;
-    if (measure && measure->staffLines(staffIndex)->canvasBoundingRect().contains(pos)) {
+    if (measure && measure->staffLines(staffIndex)->hitShapeContains(pos)) {
         result.measure = measure;
         result.staff = score()->staff(staffIndex);
     }

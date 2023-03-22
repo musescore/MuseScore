@@ -800,6 +800,16 @@ bool EngravingItem::intersects(const RectF& rr) const
     return shape().intersects(rr.translated(-pagePos()));
 }
 
+bool EngravingItem::hitShapeContains(const PointF& p) const
+{
+    return hitShape().contains(p - pagePos());
+}
+
+bool EngravingItem::hitShapeIntersects(const RectF& rr) const
+{
+    return hitShape().intersects(rr.translated(-pagePos()));
+}
+
 //---------------------------------------------------------
 //   writeProperties
 //---------------------------------------------------------

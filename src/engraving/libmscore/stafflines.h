@@ -60,6 +60,8 @@ public:
     double y1() const;
     void layoutForWidth(double width);
     void layoutPartialWidth(double w, double wPartial, bool alignLeft);
+    RectF hitBBox() const override;
+    Shape hitShape() const override;
 };
 }
 
