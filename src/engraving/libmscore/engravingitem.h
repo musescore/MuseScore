@@ -320,6 +320,11 @@ public:
     virtual Shape shape() const { return Shape(bbox(), this); }
     virtual double baseLine() const { return -height(); }
 
+    virtual mu::RectF hitBBox() const { return _bbox; }
+    virtual Shape hitShape() const { return shape(); }
+    bool hitShapeContains(const PointF& p) const;
+    bool hitShapeIntersects(const mu::RectF& rr) const;
+
     virtual int subtype() const { return -1; }                    // for select gui
 
     virtual void draw(mu::draw::Painter*) const {}

@@ -123,13 +123,6 @@ void StaffLines::layoutForWidth(double w)
     double y  = pos().y();
     bbox().setRect(x1, -lw * .5 + y, w, (_lines - 1) * dist + lw);
 
-    if (_lines == 1) {
-        double extraSize = _spatium;
-        bbox().adjust(0, -extraSize, 0, extraSize);
-    } else if (_lines == 0) {
-        bbox().adjust(0, -2 * dist, 0, 2 * dist);
-    }
-
     lines.clear();
     for (int i = 0; i < _lines; ++i) {
         lines.push_back(LineF(x1, y, x2, y));
@@ -182,6 +175,20 @@ void StaffLines::layoutPartialWidth(double w, double wPartial, bool alignRight)
         }
         y += dist;
     }
+}
+
+RectF StaffLines::hitBBox() const
+{
+    double clickablePadding = spatium();
+    if (lines.size() <= 1) {
+        return bbox().adjusted(0.0, -clickablePadding, 0.0, clickablePadding);
+    }
+    return bbox();
+}
+
+Shape StaffLines::hitShape() const
+{
+    return Shape(hitBBox(), this);
 }
 
 //---------------------------------------------------------
