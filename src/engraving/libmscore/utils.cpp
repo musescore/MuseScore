@@ -1219,9 +1219,9 @@ void collectChordsAndRest(Segment* segment, staff_idx_t staffIdx, std::vector<Ch
         if (!e) {
             continue;
         }
-        if (e->isChord()) {
+        if (e->isChord() && !toChordRest(e)->staffMove()) {
             chords.push_back(toChord(e));
-        } else if (e->isRest()) {
+        } else if (e->isRest() && !toChordRest(e)->staffMove()) {
             rests.push_back(toRest(e));
         }
     }
