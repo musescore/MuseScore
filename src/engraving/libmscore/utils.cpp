@@ -1204,4 +1204,26 @@ bool moveDownWhenAddingStaves(EngravingItem* item, staff_idx_t startStaff, staff
 
     return true;
 }
+
+void collectChordsAndRest(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords, std::vector<Rest*>& rests)
+{
+    if (!segment) {
+        return;
+    }
+
+    track_idx_t startTrack = staffIdx * VOICES;
+    track_idx_t endTrack = startTrack + VOICES;
+
+    for (track_idx_t track = startTrack; track < endTrack; ++track) {
+        EngravingItem* e = segment->elementAt(track);
+        if (!e) {
+            continue;
+        }
+        if (e->isChord() && !toChordRest(e)->staffMove()) {
+            chords.push_back(toChord(e));
+        } else if (e->isRest() && !toChordRest(e)->staffMove()) {
+            rests.push_back(toRest(e));
+        }
+    }
+}
 }

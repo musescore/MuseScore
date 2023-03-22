@@ -31,12 +31,15 @@
 #include "libmscore/measure.h"
 #include "libmscore/note.h"
 #include "libmscore/part.h"
+#include "libmscore/rest.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
+#include "libmscore/shape.h"
 #include "libmscore/staff.h"
 #include "libmscore/stem.h"
 #include "libmscore/stemslash.h"
 #include "libmscore/tie.h"
+#include "libmscore/utils.h"
 
 using namespace mu::engraving;
 
@@ -48,7 +51,7 @@ static void layoutSegmentElements(Segment* segment, track_idx_t startTrack, trac
 {
     for (track_idx_t track = startTrack; track < endTrack; ++track) {
         if (EngravingItem* e = segment->element(track)) {
-            if (!e->isChord() || (e->isChord() && toChord(e)->vStaffIdx() == staffIdx)) {
+            if (e->vStaffIdx() == staffIdx) {
                 e->layout();
             }
         }
@@ -1391,6 +1394,214 @@ void LayoutChords::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure)
             if (endNote && endNote->findMeasure() == note->findMeasure()) {
                 tie->layoutFor(note->findMeasure()->system()); // line attach points are updated here
             }
+        }
+    }
+}
+
+void LayoutChords::resolveVerticalRestConflicts(Score* score, Segment* segment, staff_idx_t staffIdx)
+{
+    std::vector<Rest*> rests;
+    std::vector<Chord*> chords;
+
+    collectChordsAndRest(segment, staffIdx, chords, rests);
+
+    for (Rest* rest : rests) {
+        rest->verticalClearance().reset();
+    }
+
+    if (rests.empty()) {
+        return;
+    }
+
+    if (!chords.empty()) {
+        resolveRestVSChord(rests, chords, score, segment, staffIdx);
+    }
+
+    if (rests.size() < 2) {
+        return;
+    }
+
+    resolveRestVSRest(rests, score, segment, staffIdx);
+}
+
+void LayoutChords::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord*>& chords, Score* score, Segment* segment,
+                                      staff_idx_t staffIdx)
+{
+    Fraction tick = segment->tick();
+    Staff* staff = score->staff(staffIdx);
+    int lines = staff->lines(tick);
+    double spatium = staff->spatium(tick);
+    double lineDistance = staff->lineDistance(tick) * spatium;
+    const double minRestToChordClearance = 0.35 * spatium;
+
+    for (Rest* rest : rests) {
+        if (!rest->visible() || !rest->autoplace()) {
+            continue;
+        }
+        RestVerticalClearance& restVerticalClearance = rest->verticalClearance();
+        for (Chord* chord : chords) {
+            if (!chord->visible() || !chord->autoplace()) {
+                continue;
+            }
+            bool restAbove = rest->voice() < chord->voice() || (chord->slash() && !(rest->voice() % 2));
+            int upSign = restAbove ? -1 : 1;
+            double restYOffset = rest->offset().y();
+            bool ignoreYOffset = (restAbove && restYOffset > 0) || (!restAbove && restYOffset < 0);
+            PointF offset = ignoreYOffset ? PointF(0, restYOffset) : PointF(0, 0);
+            Shape restShape = rest->shape().translated(rest->pos() - offset);
+            Shape chordShape = chord->shape().translated(chord->pos());
+            double clearance = restAbove ? restShape.verticalClearance(chordShape) : chordShape.verticalClearance(restShape);
+            double margin = clearance - minRestToChordClearance;
+            int marginInSteps = floor(margin / lineDistance);
+            if (restAbove) {
+                restVerticalClearance.setBelow(marginInSteps);
+            } else {
+                restVerticalClearance.setAbove(marginInSteps);
+            }
+            if (margin > 0) {
+                continue;
+            }
+            rest->verticalClearance().setLocked(true);
+            bool isWholeOrHalf = rest->isWholeRest() || rest->durationType() == DurationType::V_HALF;
+            bool outAboveStaff = restAbove && restShape.bottom() + margin < minRestToChordClearance;
+            bool outBelowStaff = !restAbove && restShape.top() - margin > (lines - 1) * lineDistance - minRestToChordClearance;
+            bool useHalfSpaceSteps = (outAboveStaff || outBelowStaff) && !isWholeOrHalf;
+            double yMove;
+            if (useHalfSpaceSteps) {
+                int steps = ceil(abs(margin) / (lineDistance / 2));
+                yMove = steps * lineDistance / 2 * upSign;
+                rest->movePosY(yMove);
+            } else {
+                int steps = ceil(abs(margin) / lineDistance);
+                yMove = steps * lineDistance * upSign;
+                rest->movePosY(yMove);
+            }
+            for (Rest* mergedRest : rest->mergedRests()) {
+                mergedRest->movePosY(yMove);
+            }
+            if (isWholeOrHalf) {
+                double y = rest->pos().y();
+                int line = y < 0 ? floor(y / lineDistance) : floor(y / lineDistance);
+                rest->updateSymbol(line, lines); // Because it may need to use the symbol with ledger line now
+            }
+        }
+    }
+}
+
+void LayoutChords::resolveRestVSRest(std::vector<Rest*>& rests, Score* score, Segment* segment, staff_idx_t staffIdx, bool considerBeams)
+{
+    Fraction tick = segment->tick();
+    Staff* staff = score->staff(staffIdx);
+    double spatium = staff->spatium(tick);
+    double lineDistance = staff->lineDistance(tick) * spatium;
+    int lines = staff->lines(tick);
+    const double minRestToRestClearance = 0.35 * spatium;
+
+    for (int i = 0; i < rests.size() - 1; ++i) {
+        Rest* rest1 = rests[i];
+        if (!rest1->visible() || !rest1->autoplace()) {
+            continue;
+        }
+        RestVerticalClearance& rest1Clearance = rest1->verticalClearance();
+        Shape shape1 = rest1->shape().translated(rest1->pos() - rest1->offset());
+
+        Rest* rest2 = rests[i + 1];
+        if (!rest2->visible() || !rest2->autoplace()) {
+            continue;
+        }
+
+        if (mu::contains(rest1->mergedRests(), rest2) || mu::contains(rest2->mergedRests(), rest1)) {
+            continue;
+        }
+
+        Shape shape2 = rest2->shape().translated(rest2->pos() - rest2->offset());
+        RestVerticalClearance& rest2Clearance = rest2->verticalClearance();
+
+        double clearance;
+        bool firstAbove = rest1->voice() < rest2->voice();
+        if (firstAbove) {
+            clearance = shape1.verticalClearance(shape2);
+        } else {
+            clearance = shape2.verticalClearance(shape1);
+        }
+        double margin = clearance - minRestToRestClearance;
+        int marginInSteps = floor(margin / lineDistance);
+        if (firstAbove) {
+            rest1Clearance.setBelow(marginInSteps);
+            rest2Clearance.setAbove(marginInSteps);
+        } else {
+            rest1Clearance.setAbove(marginInSteps);
+            rest2Clearance.setBelow(marginInSteps);
+        }
+
+        if (margin > 0) {
+            continue;
+        }
+
+        int steps = ceil(abs(margin) / lineDistance);
+        // Move the two rests away from each other
+        int step1 = floor(double(steps) / 2);
+        int step2 = ceil(double(steps) / 2);
+        int maxStep1 = firstAbove ? rest1Clearance.above() : rest1Clearance.below();
+        int maxStep2 = firstAbove ? rest2Clearance.below() : rest2Clearance.above();
+        maxStep1 = std::max(maxStep1, 0);
+        maxStep2 = std::max(maxStep2, 0);
+        if (step1 > maxStep1) {
+            step2 += step1 - maxStep1; // First rest is locked, try move the second more
+        }
+        if (step2 > maxStep2) {
+            step1 += step2 - maxStep2; // Second rest is locked, try move the first more
+        }
+        step1 = std::min(step1, maxStep1);
+        step2 = std::min(step2, maxStep2);
+        rest1->movePosY(step1 * lineDistance * (firstAbove ? -1 : 1));
+        rest2->movePosY(step2 * lineDistance * (firstAbove ? 1 : -1));
+
+        Beam* beam1 = rest1->beam();
+        Beam* beam2 = rest2->beam();
+        if (beam1 && beam2 && considerBeams) {
+            shape1 = rest1->shape().translated(rest1->pos() - rest1->offset());
+            shape2 = rest2->shape().translated(rest2->pos() - rest2->offset());
+
+            ChordRest* beam1Start = beam1->elements().front();
+            ChordRest* beam1End = beam1->elements().back();
+            double y1Start = beam1->chordBeamAnchorY(beam1Start) - beam1Start->pagePos().y();
+            double y1End = beam1->chordBeamAnchorY(beam1End) - beam1End->pagePos().y();
+            double beam1Ymid = 0.5 * (y1Start + y1End);
+
+            ChordRest* beam2Start = beam2->elements().front();
+            ChordRest* beam2End = beam2->elements().back();
+            double y2Start = beam2->chordBeamAnchorY(beam2Start) - beam2Start->pagePos().y();
+            double y2End = beam2->chordBeamAnchorY(beam2End) - beam2End->pagePos().y();
+            double beam2Ymid = 0.5 * (y2Start + y2End);
+
+            double centerY = 0.5 * (beam1Ymid + beam2Ymid);
+
+            double upperBound = shape1.bottom();
+            double lowerBound = shape2.top();
+            int steps = 0;
+            if (centerY < upperBound) {
+                steps = floor((centerY - upperBound) / lineDistance);
+            } else if (centerY > lowerBound) {
+                steps = ceil((centerY - lowerBound) / lineDistance);
+            }
+            double moveY = steps * lineDistance;
+            rest1->movePosY(moveY);
+            rest2->movePosY(moveY);
+            shape1.translate(PointF(0.0, moveY));
+            shape2.translate(PointF(0.0, moveY));
+
+            double halfLineDistance = 0.5 * lineDistance;
+            if (shape1.bottom() < -halfLineDistance) {
+                rest1->movePosY(halfLineDistance);
+            } else if (centerY >= (lines - 1) * lineDistance + halfLineDistance) {
+                rest2->movePosY(-halfLineDistance);
+            }
+
+            rest1->verticalClearance().setLocked(true);
+            rest2->verticalClearance().setLocked(true);
+            beam1->layout();
+            beam2->layout();
         }
     }
 }

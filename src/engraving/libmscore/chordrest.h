@@ -44,6 +44,7 @@ class Segment;
 class Slur;
 class TabDurationSymbol;
 enum class SegmentType;
+class BeamSegment;
 
 //-------------------------------------------------------------------
 //   ChordRest
@@ -66,6 +67,7 @@ protected:
     TabDurationSymbol* _tabDur;           // stores a duration symbol in tablature staves
 
     Beam* _beam;
+    BeamSegment* _beamlet = nullptr;
     BeamMode _beamMode;
     bool _up;                             // actual stem direction
     bool _usesAutoUp;
@@ -101,6 +103,7 @@ public:
     BeamMode beamMode() const { return _beamMode; }
 
     void setBeam(Beam* b);
+    void setBeamlet(BeamSegment* b);
     virtual Beam* beam() const final;
     int beams() const { return _durationType.hooks(); }
     virtual double upPos()   const = 0;

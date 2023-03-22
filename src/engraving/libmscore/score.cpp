@@ -5917,6 +5917,9 @@ void Score::createPaddingTable()
     for (auto& elem : _paddingTable) {
         elem[ElementType::FINGERING] = elem[ElementType::ACCIDENTAL];
     }
+
+    // This is needed for beamlets, not beams themselves
+    _paddingTable[ElementType::BEAM][ElementType::BEAM] = 0.4 * spatium();
 }
 
 //--------------------------------------------------------

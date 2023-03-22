@@ -165,6 +165,41 @@ double Shape::minVerticalDistance(const Shape& a) const
     return dist;
 }
 
+//-------------------------------------------------------------------
+//   verticalClearance
+//    a is located below this shape.
+//    Claculates the amount of clearance between the two shapes.
+//    If there is an overlap, returns a negative value corresponging
+//    to the amount of overlap.
+//-------------------------------------------------------------------
+
+double Shape::verticalClearance(const Shape& a) const
+{
+    if (empty() || a.empty()) {
+        return 0.0;
+    }
+
+    double dist = 1000000.0; // max real
+    for (const RectF& r2 : a) {
+        if (r2.height() <= 0.0) {
+            continue;
+        }
+        double bx1 = r2.left();
+        double bx2 = r2.right();
+        for (const RectF& r1 : *this) {
+            if (r1.height() <= 0.0) {
+                continue;
+            }
+            double ax1 = r1.left();
+            double ax2 = r1.right();
+            if (mu::engraving::intersects(ax1, ax2, bx1, bx2, 0.0)) {
+                dist = std::min(dist, r2.top() - r1.bottom());
+            }
+        }
+    }
+    return dist;
+}
+
 //----------------------------------------------------------------
 // clearsVertically()
 // a is located below this shape

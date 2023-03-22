@@ -727,6 +727,19 @@ EditStyle::EditStyle(QWidget* parent)
     groupBox_noteFlags->layout()->addWidget(noteFlagsTypeSelector);
 
     // ====================================================
+    // Rests (QML)
+    // ====================================================
+
+    QQuickWidget* restOffsetSelector = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
+                                                        /*parent*/ groupBox_rests);
+    restOffsetSelector->setObjectName("restOffsetSelector_QQuickWidget");
+    restOffsetSelector->setSource(
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml")));
+    restOffsetSelector->setMinimumSize(224, 30);
+    restOffsetSelector->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    groupBox_rests->layout()->addWidget(restOffsetSelector);
+
+    // ====================================================
     // Notes (QML)
     // ====================================================
 
