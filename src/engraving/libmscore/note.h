@@ -272,6 +272,8 @@ private:
 
     bool sameVoiceKerningLimited() const override { return true; }
 
+    void getNoteListForDots(std::vector<Note*>& topDownNotes, std::vector<Note*>& bottomUpNotes, std::vector<int>& anchoredDots);
+
     std::vector<LineAttachPoint> _lineAttachPoints;
 
 public:
