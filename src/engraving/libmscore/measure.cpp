@@ -3347,7 +3347,10 @@ void Measure::layoutCrossStaff()
             }
             if (e->isChord()) {
                 Chord* c = toChord(e);
-                if (c->beam() && (c->beam()->cross() || c->beam()->userModified())) {
+                Beam* beam = c->beam();
+                Tremolo* tremolo = c->tremolo();
+                if ((beam && (beam->cross() || beam->userModified()))
+                    || tremolo && tremolo->twoNotes() && tremolo->userModified()) {
                     c->computeUp(); // for cross-staff beams
                 }
                 if (!c->graceNotes().empty()) {

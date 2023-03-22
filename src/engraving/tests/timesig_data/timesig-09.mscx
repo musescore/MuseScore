@@ -102,6 +102,8 @@
               </Note>
             <Tremolo>
               <subtype>c32</subtype>
+              <l1>52</l1>
+              <l2>42</l2>
               </Tremolo>
             </Chord>
           <Chord>
@@ -125,6 +127,8 @@
               </Note>
             <Tremolo>
               <subtype>c32</subtype>
+              <l1>52</l1>
+              <l2>42</l2>
               </Tremolo>
             </Chord>
           <Chord>
@@ -148,101 +152,8 @@
               </Note>
             <Tremolo>
               <subtype>c32</subtype>
-              </Tremolo>
-            </Chord>
-          <Chord>
-            <durationType>whole</durationType>
-            <duration>1/2</duration>
-            <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
-        <voice>
-          <Chord>
-            <durationType>whole</durationType>
-            <duration>1/2</duration>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            <Tremolo>
-              <subtype>c32</subtype>
-              </Tremolo>
-            </Chord>
-          <Chord>
-            <durationType>whole</durationType>
-            <duration>1/2</duration>
-            <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Chord>
-            <durationType>whole</durationType>
-            <duration>1/2</duration>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            <Tremolo>
-              <subtype>c32</subtype>
-              </Tremolo>
-            </Chord>
-          <Chord>
-            <durationType>whole</durationType>
-            <duration>1/2</duration>
-            <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Chord>
-            <durationType>whole</durationType>
-            <duration>1/2</duration>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            <Tremolo>
-              <subtype>c32</subtype>
-              </Tremolo>
-            </Chord>
-          <Chord>
-            <durationType>whole</durationType>
-            <duration>1/2</duration>
-            <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Chord>
-            <durationType>whole</durationType>
-            <duration>1/2</duration>
-            <Note>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            <Tremolo>
-              <subtype>c32</subtype>
+              <l1>52</l1>
+              <l2>42</l2>
               </Tremolo>
             </Chord>
           <Chord>
@@ -269,6 +180,8 @@
               </Note>
             <Tremolo>
               <subtype>c32</subtype>
+              <l1>52</l1>
+              <l2>42</l2>
               </Tremolo>
             </Chord>
           <Chord>
@@ -292,6 +205,8 @@
               </Note>
             <Tremolo>
               <subtype>c32</subtype>
+              <l1>52</l1>
+              <l2>42</l2>
               </Tremolo>
             </Chord>
           <Chord>
@@ -315,6 +230,111 @@
               </Note>
             <Tremolo>
               <subtype>c32</subtype>
+              <l1>52</l1>
+              <l2>42</l2>
+              </Tremolo>
+            </Chord>
+          <Chord>
+            <durationType>whole</durationType>
+            <duration>1/2</duration>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <duration>1/2</duration>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            <Tremolo>
+              <subtype>c32</subtype>
+              <l1>52</l1>
+              <l2>42</l2>
+              </Tremolo>
+            </Chord>
+          <Chord>
+            <durationType>whole</durationType>
+            <duration>1/2</duration>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <duration>1/2</duration>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            <Tremolo>
+              <subtype>c32</subtype>
+              <l1>52</l1>
+              <l2>42</l2>
+              </Tremolo>
+            </Chord>
+          <Chord>
+            <durationType>whole</durationType>
+            <duration>1/2</duration>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <duration>1/2</duration>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            <Tremolo>
+              <subtype>c32</subtype>
+              <l1>52</l1>
+              <l2>50</l2>
+              </Tremolo>
+            </Chord>
+          <Chord>
+            <durationType>whole</durationType>
+            <duration>1/2</duration>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <duration>1/2</duration>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            <Tremolo>
+              <subtype>c32</subtype>
+              <l1>52</l1>
+              <l2>50</l2>
               </Tremolo>
             </Chord>
           <Chord>

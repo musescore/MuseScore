@@ -102,6 +102,8 @@
               </Note>
             <Tremolo>
               <subtype>c32</subtype>
+              <l1>52</l1>
+              <l2>50</l2>
               </Tremolo>
             </Chord>
           <Chord>
@@ -401,6 +403,8 @@
               </Note>
             <Tremolo>
               <subtype>c32</subtype>
+              <l1>52</l1>
+              <l2>42</l2>
               </Tremolo>
             </Chord>
           <Chord>
@@ -424,6 +428,8 @@
               </Note>
             <Tremolo>
               <subtype>c32</subtype>
+              <l1>52</l1>
+              <l2>42</l2>
               </Tremolo>
             </Chord>
           <Chord>

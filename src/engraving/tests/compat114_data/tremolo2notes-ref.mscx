@@ -85,6 +85,8 @@
               </Note>
             <Tremolo>
               <subtype>c8</subtype>
+              <l1>34</l1>
+              <l2>30</l2>
               </Tremolo>
             </Chord>
           <Chord>
@@ -110,6 +112,8 @@
               </Note>
             <Tremolo>
               <subtype>c16</subtype>
+              <l1>38</l1>
+              <l2>36</l2>
               </Tremolo>
             </Chord>
           <Chord>
@@ -135,6 +139,8 @@
               </Note>
             <Tremolo>
               <subtype>c32</subtype>
+              <l1>44</l1>
+              <l2>42</l2>
               </Tremolo>
             </Chord>
           <Chord>

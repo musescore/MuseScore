@@ -113,8 +113,8 @@ The Wall</text>
             <text><sym>metNoteQuarterUp</sym> = 115</text>
             </Tempo>
           <Beam>
-            <l1>40</l1>
-            <l2>38</l2>
+            <l1>38</l1>
+            <l2>36</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -308,8 +308,8 @@ The Wall</text>
             <text>Acoustic Grand Piano</text>
             </InstrumentChange>
           <Beam>
-            <l1>40</l1>
-            <l2>38</l2>
+            <l1>38</l1>
+            <l2>36</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>

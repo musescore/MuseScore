@@ -28,6 +28,8 @@
 #include "durationtype.h"
 #include "draw/types/painterpath.h"
 #include "types/types.h"
+#include "beam.h"
+#include "chord.h"
 
 namespace mu::engraving {
 class Chord;
@@ -50,11 +52,21 @@ class Tremolo final : public EngravingItem
     Chord* _chord2 { nullptr };
     TDuration _durationType;
     bool _up{ true };
+    bool _userModified[2]{ false };                // 0: auto/down  1: up
     DirectionV _direction;
     mu::draw::PainterPath path;
+    std::vector<BeamSegment*> _beamSegments;
+    BeamTremoloLayout _layoutInfo;
+    mu::PointF _startAnchor;
+    mu::PointF _endAnchor;
 
     int _lines = 0;         // derived from _subtype
     TremoloStyle _style { TremoloStyle::DEFAULT };
+    // for _startAnchor and _slope, once we decide to change trems so that they can
+    // continue from one system to the other (or indeed, one measure to the other)
+    // we will want a vector of fragments similar to Beam's _beamFragments structure.
+    // for now, a single fragment is sufficient
+    BeamFragment _beamFragment;
 
     friend class Factory;
     Tremolo(Chord* parent);
@@ -64,6 +76,8 @@ class Tremolo final : public EngravingItem
     void computeShape();
     void layoutOneNoteTremolo(double x, double y, double h, double spatium);
     void layoutTwoNotesTremolo(double x, double y, double h, double spatium);
+    void createBeamSegments();
+    void setBeamPos(const PairF& bp);
 
 public:
 
@@ -82,9 +96,13 @@ public:
     TremoloType tremoloType() const { return _tremoloType; }
 
     double minHeight() const;
+    void reset() override;
+
+    PointF chordBeamAnchor(const ChordRest* chord, BeamTremoloLayout::ChordBeamAnchorType anchorType) const;
 
     double chordMag() const;
     double mag() const override;
+    RectF drag(EditData&) override;
     void draw(mu::draw::Painter*) const override;
     void layout() override;
     void layout2();
@@ -93,6 +111,8 @@ public:
 
     Chord* chord1() const { return _chord1; }
     Chord* chord2() const { return _chord2; }
+    PairF beamPos() const;
+    double beamWidth() const;
 
     TDuration durationType() const;
     void setDurationType(TDuration d);
@@ -102,6 +122,9 @@ public:
         _chord1 = c1;
         _chord2 = c2;
     }
+
+    bool userModified() const;
+    void setUserModified(bool val);
 
     Fraction tremoloLen() const;
     bool isBuzzRoll() const { return _tremoloType == TremoloType::BUZZ_ROLL; }
@@ -116,8 +139,9 @@ public:
     void spatiumChanged(double oldValue, double newValue) override;
     void localSpatiumChanged(double oldValue, double newValue) override;
     void styleChanged() override;
-
+    PointF pagePos() const override;      ///< position in page coordinates
     String accessibleInfo() const override;
+    void triggerLayout() const override;
 
     TremoloStyle style() const { return _style; }
     void setStyle(TremoloStyle v) { _style = v; }
@@ -130,6 +154,20 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
+    void setUp(bool up) { _up = up; }
+
+    // only need grips for two-note trems
+    bool needStartEditingAfterSelecting() const override { return twoNotes(); }
+    int gripsCount() const override { return 3; }
+    Grip initialEditModeGrip() const override { return Grip::END; }
+    Grip defaultGrip() const override { return Grip::MIDDLE; }
+    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+    bool isMovable() const override { return true; }
+    void startDrag(EditData&) override {}
+    bool isEditable() const override { return true; }
+    void startEdit(EditData&) override {}
+    void endEdit(EditData&) override;
+    void editDrag(EditData&) override;
 };
 } // namespace mu::engraving
 #endif
