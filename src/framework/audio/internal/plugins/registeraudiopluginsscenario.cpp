@@ -123,20 +123,26 @@ mu::Ret RegisterAudioPluginsScenario::registerPlugin(const io::path_t& pluginPat
         return make_ret(audio::Err::UnknownPluginType);
     }
 
-    RetVal<AudioResourceMeta> meta = reader->readMeta(pluginPath);
-    if (!meta.ret) {
-        LOGE() << meta.ret.toString();
-        return meta.ret;
+    RetVal<AudioResourceMetaList> metaList = reader->readMeta(pluginPath);
+    if (!metaList.ret) {
+        LOGE() << metaList.ret.toString();
+        return metaList.ret;
     }
 
-    AudioPluginInfo info;
-    info.type = audioPluginTypeFromCategoriesString(meta.val.attributeVal(audio::CATEGORIES_ATTRIBUTE).toStdString());
-    info.meta = meta.val;
-    info.path = pluginPath;
-    info.enabled = true;
+    for (const AudioResourceMeta& meta : metaList.val) {
+        AudioPluginInfo info;
+        info.type = audioPluginTypeFromCategoriesString(meta.attributeVal(audio::CATEGORIES_ATTRIBUTE).toStdString());
+        info.meta = meta;
+        info.path = pluginPath;
+        info.enabled = true;
 
-    Ret ret = knownPluginsRegister()->registerPlugin(info);
-    return ret;
+        Ret ret = knownPluginsRegister()->registerPlugin(info);
+        if (!ret) {
+            return ret;
+        }
+    }
+
+    return make_ok();
 }
 
 mu::Ret RegisterAudioPluginsScenario::registerFailedPlugin(const io::path_t& pluginPath, int failCode)

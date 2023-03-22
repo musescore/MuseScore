@@ -239,9 +239,17 @@ TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterPlugin)
     // [GIVEN] Some plugin we want to register
     path_t pluginPath = "/some/test/path/to/plugin/AAA.vst3";
 
-    AudioResourceMeta pluginMeta;
-    pluginMeta.id = mu::io::filename(pluginPath).toStdString();
-    pluginMeta.attributes.insert({ mu::audio::CATEGORIES_ATTRIBUTE, u"Fx" });
+    AudioResourceMetaList metaList;
+
+    AudioResourceMeta pluginMeta1;
+    pluginMeta1.id = "Mono plugin";
+    pluginMeta1.attributes.insert({ mu::audio::CATEGORIES_ATTRIBUTE, u"Fx|Mono" });
+    metaList.push_back(pluginMeta1);
+
+    AudioResourceMeta pluginMeta2;
+    pluginMeta2.id = "Stereo plugin";
+    pluginMeta2.attributes.insert({ mu::audio::CATEGORIES_ATTRIBUTE, u"Fx|Stereo" });
+    metaList.push_back(pluginMeta2);
 
     ASSERT_FALSE(m_metaReaders.empty());
     AudioPluginMetaReaderMock* mock = dynamic_cast<AudioPluginMetaReaderMock*>(m_metaReaders[0].get());
@@ -249,19 +257,22 @@ TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterPlugin)
 
     ON_CALL(*mock, canReadMeta(pluginPath))
     .WillByDefault(Return(true));
+
     ON_CALL(*mock, readMeta(pluginPath))
-    .WillByDefault(Return(mu::RetVal<AudioResourceMeta>::make_ok(pluginMeta)));
+    .WillByDefault(Return(mu::RetVal<AudioResourceMetaList>::make_ok(metaList)));
 
     // [THEN] The plugin has been registered
-    AudioPluginInfo expectedPluginInfo;
-    expectedPluginInfo.type = AudioPluginType::Fx;
-    expectedPluginInfo.meta = pluginMeta;
-    expectedPluginInfo.path = pluginPath;
-    expectedPluginInfo.enabled = true;
-    expectedPluginInfo.errorCode = 0;
+    for (const AudioResourceMeta& meta : metaList) {
+        AudioPluginInfo expectedPluginInfo;
+        expectedPluginInfo.type = AudioPluginType::Fx;
+        expectedPluginInfo.meta = meta;
+        expectedPluginInfo.path = pluginPath;
+        expectedPluginInfo.enabled = true;
+        expectedPluginInfo.errorCode = 0;
 
-    EXPECT_CALL(*m_knownPlugins, registerPlugin(expectedPluginInfo))
-    .WillOnce(Return(true));
+        EXPECT_CALL(*m_knownPlugins, registerPlugin(expectedPluginInfo))
+        .WillOnce(Return(true));
+    }
 
     // [WHEN] Register the plugin
     mu::Ret ret = m_scenario->registerPlugin(pluginPath);
