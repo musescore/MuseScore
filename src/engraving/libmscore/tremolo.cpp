@@ -499,7 +499,10 @@ void Tremolo::layoutOneNoteTremolo(double x, double y, double h, double spatium)
 
 void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium)
 {
+    UNUSED(x);
+    UNUSED(y);
     UNUSED(h);
+    UNUSED(spatium);
     const bool defaultStyle = (!customStyleApplicable()) || (_style == TremoloStyle::DEFAULT);
     const bool isTraditionalAlternate = (_style == TremoloStyle::TRADITIONAL_ALTERNATE);
 
