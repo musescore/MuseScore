@@ -1677,41 +1677,42 @@ double Chord::calcDefaultStemLength()
     }
 
     double finalStemLength = (chordHeight / 4.0 * _spatium) + ((stemLength / 4.0 * _spatium) * intrinsicMag());
-
-    // when the chord's magnitude is < 1, the stem length with mag can find itself below the middle line.
-    // in those cases, we have to add the extra amount to it to bring it to a minimum.
+    double extraLength = 0.;
     Note* startNote = _up ? downNote() : upNote();
-    double upValue = _up ? -1. : 1.;
-    double stemStart = startNote->pos().y();
-    double stemEndMag = stemStart + (finalStemLength * upValue);
-    double topLine = 0.0;
-    lineDistance *= _spatium;
-    double bottomLine = lineDistance * (staffLineCount - 1.0);
-    double target = 0.0;
-    double midLine = middleLine / 4.0 * lineDistance;
-    if (RealIsEqualOrMore(lineDistance / _spatium, 1.0)) {
-        // need to extend to middle line, or to opposite line if staff is < 2sp tall
-        if (bottomLine < 2 * _spatium) {
-            target = _up ? topLine : bottomLine;
+    if (!startNote->fixed()) {
+        // when the chord's magnitude is < 1, the stem length with mag can find itself below the middle line.
+        // in those cases, we have to add the extra amount to it to bring it to a minimum.
+        double upValue = _up ? -1. : 1.;
+        double stemStart = startNote->pos().y();
+        double stemEndMag = stemStart + (finalStemLength * upValue);
+        double topLine = 0.0;
+        lineDistance *= _spatium;
+        double bottomLine = lineDistance * (staffLineCount - 1.0);
+        double target = 0.0;
+        double midLine = middleLine / 4.0 * lineDistance;
+        if (RealIsEqualOrMore(lineDistance / _spatium, 1.0)) {
+            // need to extend to middle line, or to opposite line if staff is < 2sp tall
+            if (bottomLine < 2 * _spatium) {
+                target = _up ? topLine : bottomLine;
+            } else {
+                double twoSpIn = _up ? bottomLine - (2 * _spatium) : topLine + (2 * _spatium);
+                target = RealIsEqual(lineDistance / _spatium, 1.0) ? midLine : twoSpIn;
+            }
         } else {
-            double twoSpIn = _up ? bottomLine - (2 * _spatium) : topLine + (2 * _spatium);
-            target = RealIsEqual(lineDistance / _spatium, 1.0) ? midLine : twoSpIn;
+            // need to extend to second line in staff, or to opposite line if staff has < 3 lines
+            if (staffLineCount < 3) {
+                target = _up ? topLine : bottomLine;
+            } else {
+                target = _up ? bottomLine - (2 * lineDistance) : topLine + (2 * lineDistance);
+            }
         }
-    } else {
-        // need to extend to second line in staff, or to opposite line if staff has < 3 lines
-        if (staffLineCount < 3) {
-            target = _up ? topLine : bottomLine;
-        } else {
-            target = _up ? bottomLine - (2 * lineDistance) : topLine + (2 * lineDistance);
+        extraLength = 0.0;
+        if (_up && stemEndMag > target) {
+            extraLength = stemEndMag - target;
+        } else if (!_up && stemEndMag < target) {
+            extraLength = target - stemEndMag;
         }
     }
-    double extraLength = 0.0;
-    if (_up && stemEndMag > target) {
-        extraLength = stemEndMag - target;
-    } else if (!_up && stemEndMag < target) {
-        extraLength = target - stemEndMag;
-    }
-
     return finalStemLength + extraLength;
 }
 
