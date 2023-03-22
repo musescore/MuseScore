@@ -515,6 +515,7 @@ int Rest::getDotline(DurationType durationType)
 
 int Rest::computeVoiceOffset(int lines)
 {
+    UNUSED(lines);
     m_mergedRests.clear();
     Segment* s = segment();
     bool offsetVoices = s && measure() && (voice() > 0 || measure()->hasVoices(staffIdx(), tick(), actualTicks()));
