@@ -532,6 +532,10 @@ int App::processAudioPluginRegistration(const CommandLineParser::AudioPluginRegi
         ret = registerAudioPluginsScenario()->registerPlugin(task.pluginPath);
     }
 
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
+
     return ret.code();
 }
 
