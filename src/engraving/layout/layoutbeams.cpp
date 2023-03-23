@@ -290,11 +290,11 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
             continue;
         }
 
-        ChordRest* a1    = 0;          // start of (potential) beam
+        ChordRest* a1    = nullptr;          // start of (potential) beam
         bool firstCR     = true;
-        Beam* beam       = 0;          // current beam
+        Beam* beam       = nullptr;          // current beam
         BeamMode bm    = BeamMode::AUTO;
-        ChordRest* prev  = 0;
+        ChordRest* prev  = nullptr;
         bool checkBeats  = false;
         Fraction stretch = Fraction(1, 1);
         std::unordered_map<int, TDuration> beatSubdivision;
@@ -326,7 +326,7 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
 
         for (Segment* segment = measure->first(st); segment; segment = segment->next(st)) {
             ChordRest* cr = segment->cr(track);
-            if (cr == 0) {
+            if (!cr) {
                 continue;
             }
 
@@ -336,8 +336,8 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                 BeamMode mode = cr->beamMode();
                 if (mode == BeamMode::MID || mode == BeamMode::END || mode == BeamMode::BEGIN32 || mode == BeamMode::BEGIN64) {
                     ChordRest* prevCR = score->findCR(measure->tick() - Fraction::fromTicks(1), track);
-                    Beam* prevBeam = prevCR->beam();
                     if (prevCR) {
+                        Beam* prevBeam = prevCR->beam();
                         const Measure* pm = prevCR->measure();
                         if (!beamNoContinue(prevCR->beamMode())
                             && !pm->lineBreak() && !pm->pageBreak() && !pm->sectionBreak()
