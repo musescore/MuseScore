@@ -2211,7 +2211,6 @@ void Note::setHeadHasParentheses(bool hasParentheses)
 
 void Note::getNoteListForDots(std::vector<Note*>& topDownNotes, std::vector<Note*>& bottomUpNotes, std::vector<int>& anchoredDots)
 {
-    bool oddVoice = voice() & 1;
     Chord* c = chord();
     bool hasVoices = c->measure()->hasVoices(c->staffIdx(), c->tick(), c->ticks());
     if (!hasVoices) {
