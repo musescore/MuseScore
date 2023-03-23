@@ -204,7 +204,8 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         // check if lc.curMeasure fits, remove if not
         // collect at least one measure and the break
         double acceptanceRange = squeezability * system->squeezableSpace();
-        bool doBreak = (system->measures().size() > 1) && ((curSysWidth + ww) > targetSystemWidth + acceptanceRange);
+        bool doBreak = (system->measures().size() > 1) && ((curSysWidth + ww) > targetSystemWidth + acceptanceRange)
+                       && !ctx.prevMeasure->noBreak();
         /* acceptanceRange allows some systems to be initially slightly larger than the margins and be
          * justified by squeezing instead of stretching. Allows to make much better choices of how many
          * measures to fit per system. */
@@ -426,6 +427,10 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         double oldWidth = m->width();
         m->computeWidth(minTicks, maxTicks, preStretch);
         curSysWidth += m->width() - oldWidth;
+    }
+
+    if (curSysWidth > targetSystemWidth) {
+        manageNarrowSpacing(system, curSysWidth, targetSystemWidth, minTicks, maxTicks);
     }
 
     // JUSTIFY SYSTEM
@@ -1529,4 +1534,103 @@ void LayoutSystem::restoreTies(System* system)
     Fraction stick = system->measures().front()->tick();
     Fraction etick = system->measures().back()->endTick();
     doLayoutTies(system, segList, stick, etick);
+}
+
+void LayoutSystem::manageNarrowSpacing(System* system, double& curSysWidth, double targetSysWidth, const Fraction minTicks,
+                                       const Fraction maxTicks)
+{
+    static constexpr double step = 0.2; // We'll try reducing the spacing in steps of 20%
+                                        // (empiric compromise between looking good and not taking too many iterations)
+    static constexpr double squeezeLimit = 0.3; // For some spaces, do not go below 30%
+
+    // First, try to gradually reduce the duration stretch (i.e. flatten the spacing curve)
+    double stretchCoeff = system->firstMeasure()->layoutStretch() - step;
+    while (curSysWidth > targetSysWidth && RealIsEqualOrMore(stretchCoeff, 0.0)) {
+        for (MeasureBase* mb : system->measures()) {
+            if (!mb->isMeasure()) {
+                continue;
+            }
+            Measure* m = toMeasure(mb);
+            double prevWidth = m->width();
+            m->computeWidth(minTicks, maxTicks, stretchCoeff, /*overrideMinMeasureWidth*/ true);
+            curSysWidth += m->width() - prevWidth;
+        }
+        stretchCoeff -= step;
+    }
+    if (curSysWidth < targetSysWidth) {
+        // Success!
+        return;
+    }
+
+    // Now we are limited by the collision checks, so try to gradually squeeze everything without collisions
+    staff_idx_t nstaves = system->score()->nstaves();
+    double squeezeFactor = 1 - step;
+    while (curSysWidth > targetSysWidth && RealIsEqualOrMore(squeezeFactor, 0.0)) {
+        for (MeasureBase* mb : system->measures()) {
+            if (!mb->isMeasure()) {
+                continue;
+            }
+
+            // Reduce all paddings
+            Measure* m = toMeasure(mb);
+            double prevWidth = m->width();
+            for (Segment& segment : m->segments()) {
+                for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+                    Shape& shape = segment.staffShape(staffIdx);
+                    shape.setSqueezeFactor(squeezeFactor);
+                }
+            }
+            m->computeWidth(minTicks, maxTicks, stretchCoeff,  /*overrideMinMeasureWidth*/ true);
+
+            // Reduce other distances that don't depend on paddings
+            Segment* first = m->firstEnabled();
+            double currentFirstX = first->x();
+            if (currentFirstX > 0 && !first->hasAccidentals()) {
+                first->setPosX(currentFirstX * std::max(squeezeFactor, squeezeLimit));
+            }
+            for (Segment& segment : m->segments()) {
+                if (!segment.header() && !segment.isTimeSigType()) {
+                    continue;
+                }
+                Segment* nextSeg = segment.next();
+                if (!nextSeg || !nextSeg->isChordRestType()) {
+                    continue;
+                }
+                double margin = segment.width() - segment.minHorizontalCollidingDistance(nextSeg);
+                double reducedMargin = margin * (1 - std::max(squeezeFactor, squeezeLimit));
+                segment.setWidth(segment.width() - reducedMargin);
+            }
+            m->respaceSegments();
+            curSysWidth += m->width() - prevWidth;
+        }
+        squeezeFactor -= step;
+    }
+    if (curSysWidth < targetSysWidth) {
+        // Success!
+        return;
+    }
+
+    // Things don't fit without collisions, so give up and allow collisions
+    double smallerStep = 0.25 * step;
+    double widthReduction = 1 - smallerStep;
+    while (curSysWidth > targetSysWidth && RealIsEqualOrMore(widthReduction, 0.0)) {
+        for (MeasureBase* mb : system->measures()) {
+            if (!mb->isMeasure()) {
+                continue;
+            }
+
+            Measure* m = toMeasure(mb);
+            double prevWidth = m->width();
+            for (Segment& segment : m->segments()) {
+                if (!segment.isChordRestType()) {
+                    continue;
+                }
+                double curSegmentWidth = segment.width();
+                segment.setWidth(curSegmentWidth * widthReduction);
+            }
+            m->respaceSegments();
+            curSysWidth += m->width() - prevWidth;
+        }
+        widthReduction *= 1 - smallerStep;
+    }
 }

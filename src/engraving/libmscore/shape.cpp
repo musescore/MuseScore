@@ -101,7 +101,8 @@ Shape Shape::translated(const PointF& pt) const
 double Shape::minHorizontalDistance(const Shape& a) const
 {
     double dist = -1000000.0;        // min real
-    double verticalClearance = 0.2 * _spatium;
+    double absoluteMinPadding = 0.1 * _spatium * _squeezeFactor;
+    double verticalClearance = 0.2 * _spatium * _squeezeFactor;
     for (const ShapeElement& r2 : a) {
         const EngravingItem* item2 = r2.toItem;
         double by1 = r2.top();
@@ -115,6 +116,8 @@ double Shape::minHorizontalDistance(const Shape& a) const
             KerningType kerningType = KerningType::NON_KERNING;
             if (item1 && item2) {
                 padding = item1->computePadding(item2);
+                padding *= _squeezeFactor;
+                padding = std::max(padding, absoluteMinPadding);
                 kerningType = item1->computeKerningType(item2);
             }
             if ((intersection && kerningType != KerningType::ALLOW_COLLISION)

@@ -347,7 +347,7 @@ public:
     void triggerLayout() const override;
     double basicStretch() const;
     double basicWidth() const;
-    void computeWidth(Fraction minTicks, Fraction maxTicks, double stretchCoeff);
+    void computeWidth(Fraction minTicks, Fraction maxTicks, double stretchCoeff, bool overrideMinMeasureWidth = false);
     void stretchToTargetWidth(double targetWidth);
     void checkHeader();
     void checkTrailer();
@@ -386,8 +386,10 @@ private:
     void push_front(Segment* e);
 
     void fillGap(const Fraction& pos, const Fraction& len, track_idx_t track, const Fraction& stretch, bool useGapRests = true);
-    void computeWidth(Segment* s, double x, bool isSystemHeader, Fraction minTicks, Fraction maxTicks, double stretchCoeff);
+    void computeWidth(Segment* s, double x, bool isSystemHeader, Fraction minTicks, Fraction maxTicks, double stretchCoeff,
+                      bool overrideMinMeasureWidth = false);
     double computeMinMeasureWidth() const;
+    void spaceRightAlignedSegments();
 
     MStaff* mstaff(staff_idx_t staffIndex) const;
 
