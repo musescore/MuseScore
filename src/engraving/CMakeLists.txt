@@ -95,6 +95,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/engravingitemrw.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/articulationrw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/articulationrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/barlinerw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/barlinerw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/bsymbolrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/bsymbolrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/symbolrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/symbolrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/fsymbolrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/fsymbolrw.h
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.h

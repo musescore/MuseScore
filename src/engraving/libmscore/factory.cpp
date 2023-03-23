@@ -678,7 +678,10 @@ Image* Factory::createImage(EngravingItem * parent)
     return image;
 }
 
-PlayTechAnnotation* Factory::createPlayTechAnnotation(Segment* parent, PlayingTechniqueType techniqueType, TextStyleType styleType,
+CREATE_ITEM_IMPL(Symbol, ElementType::SYMBOL, EngravingItem, isAccessibleEnabled)
+CREATE_ITEM_IMPL(FSymbol, ElementType::FSYMBOL, EngravingItem, isAccessibleEnabled)
+
+PlayTechAnnotation* Factory::createPlayTechAnnotation(Segment * parent, PlayingTechniqueType techniqueType, TextStyleType styleType,
                                                       bool isAccessibleEnabled)
 {
     PlayTechAnnotation* annotation = new PlayTechAnnotation(parent, techniqueType, styleType);
