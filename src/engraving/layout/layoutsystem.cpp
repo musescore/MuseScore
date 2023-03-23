@@ -788,32 +788,6 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                             continue;
                         }
 
-                        // clear layout for chord-based fingerings
-                        // do this before adding chord to skyline
-                        if (e->isChord()) {
-                            Chord* c = toChord(e);
-                            std::list<Note*> notes;
-                            for (auto gc : c->graceNotes()) {
-                                for (auto n : gc->notes()) {
-                                    notes.push_back(n);
-                                }
-                            }
-                            for (auto n : c->notes()) {
-                                notes.push_back(n);
-                            }
-                            for (Note* note : notes) {
-                                for (EngravingItem* en : note->el()) {
-                                    if (en->isFingering()) {
-                                        Fingering* f = toFingering(en);
-                                        if (f->layoutType() == ElementType::CHORD) {
-                                            f->setPos(PointF());
-                                            f->setbbox(RectF());
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
                         // add element to skyline
                         if (e->addToSkyline()) {
                             skyline.add(e->shape().translated(e->pos() + p));
@@ -841,90 +815,34 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                                 }
                             }
                         }
-                    }
-                }
-            }
-        }
-    }
 
-    //-------------------------------------------------------------
-    // layout fingerings, add beams to skylines
-    //-------------------------------------------------------------
-
-    for (Segment* s : sl) {
-        std::set<staff_idx_t> recreateShapes;
-        for (EngravingItem* e : s->elist()) {
-            if (!e || !e->isChordRest() || !score->staff(e->staffIdx())->show()) {
-                continue;
-            }
-            ChordRest* cr = toChordRest(e);
-
-            // add beam to skyline
-            if (LayoutBeams::isTopBeam(cr)) {
-                Beam* b = cr->beam();
-                b->addSkyline(system->staff(b->staffIdx())->skyline());
-            }
-
-            // layout chord-based fingerings
-            if (e->isChord()) {
-                Chord* c = toChord(e);
-                std::list<Note*> notes;
-                for (auto gc : c->graceNotes()) {
-                    for (auto n : gc->notes()) {
-                        notes.push_back(n);
-                    }
-                }
-                for (auto n : c->notes()) {
-                    notes.push_back(n);
-                }
-                std::list<Fingering*> fingerings;
-                for (Note* note : notes) {
-                    for (EngravingItem* el : note->el()) {
-                        if (el->isFingering()) {
-                            Fingering* f = toFingering(el);
-                            if (f->layoutType() == ElementType::CHORD && !f->isOnCrossBeamSide()) {
-                                // Fingering on top of cross-staff beams must be laid out later
-                                if (f->placeAbove()) {
-                                    fingerings.push_back(f);
-                                } else {
-                                    fingerings.push_front(f);
-                                }
+                        // add beams to skline
+                        if (e->isChordRest()) {
+                            ChordRest* cr = toChordRest(e);
+                            if (LayoutBeams::isTopBeam(cr)) {
+                                Beam* b = cr->beam();
+                                b->addSkyline(skyline);
                             }
                         }
                     }
                 }
-                for (Fingering* f : fingerings) {
-                    f->layout();
-                    if (f->addToSkyline()) {
-                        Note* n = f->note();
-                        RectF r = f->bbox().translated(f->pos() + n->pos() + n->chord()->pos() + s->pos() + s->measure()->pos());
-                        system->staff(f->note()->chord()->vStaffIdx())->skyline().add(r);
-                    }
-                    recreateShapes.insert(f->staffIdx());
-                }
             }
-        }
-        for (staff_idx_t staffIdx : recreateShapes) {
-            s->createShape(staffIdx);
         }
     }
 
     //-------------------------------------------------------------
-    // layout articulations
+    // layout articulations and fingering
     //-------------------------------------------------------------
 
     for (Segment* s : sl) {
         for (EngravingItem* e : s->elist()) {
-            if (!e || !e->isChordRest() || !score->staff(e->staffIdx())->show()) {
+            if (!e || !e->isChord() || !score->staff(e->staffIdx())->show()) {
                 continue;
             }
-            ChordRest* cr = toChordRest(e);
-            // articulations
-            if (cr->isChord()) {
-                Chord* c = toChord(cr);
-                c->layoutArticulations();
-                c->layoutArticulations2();
-            }
+            Chord* c = toChord(e);
+            c->layoutArticulations();
+            c->layoutArticulations2();
+            LayoutChords::layoutChordBaseFingering(c, system);
         }
     }
 
