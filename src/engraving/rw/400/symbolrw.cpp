@@ -31,6 +31,7 @@
 
 #include "readcontext.h"
 #include "bsymbolrw.h"
+#include "imagerw.h"
 
 #include "log.h"
 
@@ -68,7 +69,7 @@ void SymbolRW::read(Symbol* sym, XmlReader& e, ReadContext& ctx)
                 e.skipCurrentElement();
             } else {
                 Image* image = new Image(sym);
-                image->read(e);
+                ImageRW::read(image, e, ctx);
                 sym->add(image);
             }
         } else if (tag == "small" || tag == "subtype") {    // obsolete
