@@ -25,6 +25,8 @@
 #include "draw/fontmetrics.h"
 #include "iengravingfont.h"
 #include "rw/xml.h"
+#include "rw/400/symbolrw.h"
+#include "rw/400/fsymbolrw.h"
 #include "types/symnames.h"
 
 #include "image.h"
@@ -137,50 +139,9 @@ void Symbol::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-//---------------------------------------------------------
-//   Symbol::read
-//---------------------------------------------------------
-
 void Symbol::read(XmlReader& e)
 {
-    PointF pos;
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "name") {
-            String val(e.readText());
-            SymId symId = SymNames::symIdByName(val);
-            if (val != "noSym" && symId == SymId::noSym) {
-                // if symbol name not found, fall back to user names
-                // TODO: does it make sense? user names are probably localized
-                symId = SymNames::symIdByUserName(val);
-                if (symId == SymId::noSym) {
-                    LOGD("unknown symbol <%s>, falling back to no symbol", muPrintable(val));
-                    // set a default symbol, or layout() will crash
-                    symId = SymId::noSym;
-                }
-            }
-            setSym(symId);
-        } else if (tag == "font") {
-            _scoreFont = engravingFonts()->fontByName(e.readText().toStdString());
-        } else if (tag == "Symbol") {
-            Symbol* s = new Symbol(this);
-            s->read(e);
-            add(s);
-        } else if (tag == "Image") {
-            if (MScore::noImages) {
-                e.skipCurrentElement();
-            } else {
-                Image* image = new Image(this);
-                image->read(e);
-                add(image);
-            }
-        } else if (tag == "small" || tag == "subtype") {    // obsolete
-            e.skipCurrentElement();
-        } else if (!BSymbol::readProperties(e)) {
-            e.unknown();
-        }
-    }
-    setPos(pos);
+    rw400::SymbolRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
@@ -283,30 +244,10 @@ void FSymbol::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
 void FSymbol::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "font") {
-            _font.setFamily(e.readText(), draw::Font::Type::Unknown);
-        } else if (tag == "fontsize") {
-            _font.setPointSizeF(e.readDouble());
-        } else if (tag == "code") {
-            _code = e.readInt();
-        } else if (!BSymbol::readProperties(e)) {
-            e.unknown();
-        }
-    }
-    setPos(PointF());
+    rw400::FSymbolRW::read(this, e, *e.context());
 }
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
 
 void FSymbol::layout()
 {

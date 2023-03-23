@@ -26,6 +26,7 @@
 
 #include "containers.h"
 #include "rw/xml.h"
+#include "rw/400/bsymbolrw.h"
 
 #include "factory.h"
 #include "measure.h"
@@ -74,34 +75,9 @@ void BSymbol::writeProperties(XmlWriter& xml) const
     EngravingItem::writeProperties(xml);
 }
 
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
 bool BSymbol::readProperties(XmlReader& e)
 {
-    const AsciiStringView tag = e.name();
-
-    if (EngravingItem::readProperties(e)) {
-        return true;
-    } else if (tag == "systemFlag") {
-        setSystemFlag(e.readInt());
-    } else if (tag == "Symbol" || tag == "FSymbol") {
-        EngravingItem* element = Factory::createItemByName(tag, this);
-        element->read(e);
-        add(element);
-    } else if (tag == "Image") {
-        if (MScore::noImages) {
-            e.skipCurrentElement();
-        } else {
-            EngravingItem* element = Factory::createItemByName(tag, this);
-            element->read(e);
-            add(element);
-        }
-    } else {
-        return false;
-    }
-    return true;
+    return rw400::BSymbolRW::readProperties(this, e, *e.context());
 }
 
 //---------------------------------------------------------

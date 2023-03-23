@@ -149,76 +149,14 @@ void Articulation::setUp(bool val)
     }
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
 void Articulation::read(XmlReader& e)
 {
     rw400::ArticulationRW::read(this, e, *e.context());
-
-    if (0) {
-        while (e.readNextStartElement()) {
-            if (!readProperties(e)) {
-                e.unknown();
-            }
-        }
-    }
 }
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
 
 bool Articulation::readProperties(XmlReader& e)
 {
     return rw400::ArticulationRW::readProperties(this, e, *e.context());
-
-    if (0) {
-        const AsciiStringView tag(e.name());
-
-        if (tag == "subtype") {
-            AsciiStringView s = e.readAsciiText();
-            m_textType = TConv::fromXml(s, ArticulationTextType::NO_TEXT);
-            if (m_textType == ArticulationTextType::NO_TEXT) {
-                SymId id = SymNames::symIdByName(s);
-                if (id == SymId::noSym) {
-                    id = compat::Read206::articulationNames2SymId206(s); // compatibility hack for "old" 3.0 scores
-                }
-                if (id == SymId::noSym || s == "ornamentMordentInverted") { // SMuFL < 1.30
-                    id = SymId::ornamentMordent;
-                }
-
-                String programVersion = masterScore()->mscoreVersion();
-                if (!programVersion.isEmpty() && programVersion < u"3.6") {
-                    if (id == SymId::noSym || s == "ornamentMordent") { // SMuFL < 1.30 and MuseScore < 3.6
-                        id = SymId::ornamentShortTrill;
-                    }
-                }
-                setSymId(id);
-            }
-        } else if (tag == "channel") {
-            _channelName = e.attribute("name");
-            e.readNext();
-        } else if (readProperty(tag, e, Pid::ARTICULATION_ANCHOR)) {
-        } else if (tag == "direction") {
-            readProperty(e, Pid::DIRECTION);
-        } else if (tag == "ornamentStyle") {
-            readProperty(e, Pid::ORNAMENT_STYLE);
-        } else if (tag == "play") {
-            setPlayArticulation(e.readBool());
-        } else if (tag == "offset") {
-            if (score()->mscVersion() >= 400) {
-                EngravingItem::readProperties(e);
-            } else {
-                e.skipCurrentElement();   // ignore manual layout in older scores
-            }
-        } else if (EngravingItem::readProperties(e)) {
-        } else {
-            return false;
-        }
-        return true;
-    }
 }
 
 //---------------------------------------------------------
