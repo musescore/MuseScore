@@ -644,7 +644,7 @@ NotationInteraction::HitMeasureData NotationInteraction::hitMeasure(const PointF
     Measure* measure = score()->pos2measure(pos, &staffIndex, 0, &segment, &offset);
 
     HitMeasureData result;
-    if (measure && measure->staffLines(staffIndex)->hitShapeContains(pos)) {
+    if (measure && measure->staffLines(staffIndex)->canvasHitShape().contains(pos)) {
         result.measure = measure;
         result.staff = score()->staff(staffIndex);
     }

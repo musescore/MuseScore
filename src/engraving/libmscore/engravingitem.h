@@ -322,6 +322,7 @@ public:
 
     virtual mu::RectF hitBBox() const { return _bbox; }
     virtual Shape hitShape() const { return shape(); }
+    Shape canvasHitShape() const { return hitShape().translate(canvasPos()); }
     bool hitShapeContains(const PointF& p) const;
     bool hitShapeIntersects(const mu::RectF& rr) const;
 
