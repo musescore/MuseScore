@@ -27,7 +27,7 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="0" span="1" col="0"/>
+        <bracket type="0" span="1" col="0" visible="1"/>
         </Staff>
       <trackName>Backing
 Vocals</trackName>
@@ -94,8 +94,8 @@ Vocals</longName>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="0" span="6" col="0"/>
-        <bracket type="1" span="2" col="1"/>
+        <bracket type="0" span="6" col="0" visible="1"/>
+        <bracket type="1" span="2" col="1" visible="1"/>
         <barLineSpan>2</barLineSpan>
         </Staff>
       <Staff id="3">
@@ -223,7 +223,7 @@ Gtr. 1</shortName>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="2" span="2" col="1"/>
+        <bracket type="2" span="2" col="1" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="5">
@@ -463,7 +463,7 @@ Gtr.</shortName>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="0" span="2" col="0"/>
+        <bracket type="0" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="9">

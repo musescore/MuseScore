@@ -367,7 +367,7 @@ double System::totalBracketOffset(LayoutContext& ctx)
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         const Staff* staff = ctx.score()->staff(staffIdx);
         for (auto bi : staff->brackets()) {
-            if (bi->bracketType() == BracketType::NO_BRACKET) {
+            if (bi->bracketType() == BracketType::NO_BRACKET || !bi->visible()) {
                 continue;
             }
 
@@ -827,6 +827,9 @@ void System::setBracketsXPosition(const double xPosition)
         // Compute offset cause by other stacked brackets
         double xOffset = 0;
         for (const Bracket* b2 : _brackets) {
+            if (!b2->bracketItem()->visible()) {
+                continue;
+            }
             bool b1FirstStaffInB2 = (b1->firstStaff() >= b2->firstStaff() && b1->firstStaff() <= b2->lastStaff());
             bool b1LastStaffInB2 = (b1->lastStaff() >= b2->firstStaff() && b1->lastStaff() <= b2->lastStaff());
             if (b1->column() > b2->column()

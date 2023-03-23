@@ -218,6 +218,12 @@ void Staff::setBracketSpan(size_t idx, size_t val)
     _brackets[idx]->setBracketSpan(val);
 }
 
+void Staff::setBracketVisible(size_t idx, bool v)
+{
+    fillBrackets(idx);
+    _brackets[idx]->setVisible(v);
+}
+
 //---------------------------------------------------------
 //   addBracket
 //---------------------------------------------------------
@@ -810,8 +816,9 @@ void Staff::write(XmlWriter& xml) const
         BracketType a = i->bracketType();
         size_t b = i->bracketSpan();
         size_t c = i->column();
+        bool v = i->visible();
         if (a != BracketType::NO_BRACKET || b > 0) {
-            xml.tag("bracket", { { "type", static_cast<int>(a) }, { "span", b }, { "col", c } });
+            xml.tag("bracket", { { "type", static_cast<int>(a) }, { "span", b }, { "col", c }, { "visible", v } });
         }
     }
 
@@ -883,6 +890,7 @@ bool Staff::readProperties(XmlReader& e)
         }
         setBracketType(col, BracketType(e.intAttribute("type", -1)));
         setBracketSpan(col, e.intAttribute("span", 0));
+        setBracketVisible(col, static_cast<bool>(e.intAttribute("visible", 1)));
         e.readNext();
     } else if (tag == "barLineSpan") {
         _barLineSpan = e.readInt();
