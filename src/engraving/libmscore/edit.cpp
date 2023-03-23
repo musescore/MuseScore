@@ -2959,7 +2959,7 @@ void Score::reconnectSlurs(MeasureBase* mbStart, MeasureBase* mbEnd)
             ChordRest* firstAvailableCr = nullptr;
             // search for last cr in this voice
             Segment* seg = mNext->first(SegmentType::ChordRest);
-            int spTrack = sp->track();
+            track_idx_t spTrack = sp->track();
             ChordRest* spEndCr = sp->endCR();
             Fraction spEndCrTick = spEndCr->tick();
             while (seg) {
