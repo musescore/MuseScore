@@ -1049,9 +1049,19 @@ bool Beam::layout2Cross(const std::vector<ChordRest*>& chordRests, int frag)
     double maxY = std::numeric_limits<double>::max();
     double minY = std::numeric_limits<double>::min();
     int otherStaff = 0;
+    // recompute _minMove and _maxMove as they may have shifted since last layout
+    _minMove = std::numeric_limits<int>::max();
+    _maxMove = std::numeric_limits<int>::min();
     for (ChordRest* c : chordRests) {
-        if (c && (otherStaff = c->staffMove())) {
-            break;
+        IF_ASSERT_FAILED(c) {
+            continue;
+        }
+        int staffMove = c->staffMove();
+        _minMove = std::min(_minMove, staffMove);
+        _maxMove = std::max(_maxMove, staffMove);
+
+        if (staffMove != 0) {
+            otherStaff = staffMove;
         }
     }
     if (otherStaff == 0 || _minMove == _maxMove) {
