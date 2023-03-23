@@ -55,6 +55,7 @@
 
 #include "barlinerw.h"
 #include "locationrw.h"
+#include "chordrw.h"
 
 #include "log.h"
 
@@ -263,7 +264,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         } else if (tag == "Chord") {
             Chord* chord = Factory::createChord(ctx.dummy()->segment());
             chord->setTrack(ctx.track());
-            chord->read(e);
+            ChordRW::read(chord, e, ctx);
             if (startingBeam) {
                 startingBeam->add(chord);         // also calls chord->setBeam(startingBeam)
                 startingBeam = nullptr;

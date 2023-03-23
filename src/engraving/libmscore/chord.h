@@ -242,9 +242,11 @@ public:
 
     Stem* stem() const { return _stem; }
     Arpeggio* arpeggio() const { return _arpeggio; }
+    void setArpeggio(Arpeggio* a) { _arpeggio = a; }
     Tremolo* tremolo() const { return _tremolo; }
+    void setTremolo(Tremolo* t, bool applyLogic = true);
+
     ChordLine* chordLine() const;
-    void setTremolo(Tremolo* t);
     bool endsGlissando() const { return _endsGlissando; }
     void setEndsGlissando(bool val) { _endsGlissando = val; }
     void updateEndsGlissando();
@@ -271,6 +273,7 @@ public:
 
     bool underBeam() const;
     Hook* hook() const { return _hook; }
+    void setHook(Hook* h) { _hook = h; }
 
     //@ add an element to the Chord
     void add(EngravingItem*) override;

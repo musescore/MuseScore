@@ -26,6 +26,7 @@
 
 #include "rw/400/writecontext.h"
 #include "rw/xml.h"
+#include "rw/400/chordrestrw.h"
 #include "style/style.h"
 #include "types/typesconv.h"
 
@@ -194,91 +195,9 @@ void ChordRest::writeProperties(XmlWriter& xml) const
     }
 }
 
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
 bool ChordRest::readProperties(XmlReader& e)
 {
-    const AsciiStringView tag(e.name());
-
-    if (tag == "durationType") {
-        setDurationType(TConv::fromXml(e.readAsciiText(), DurationType::V_QUARTER));
-        if (actualDurationType().type() != DurationType::V_MEASURE) {
-            if (score()->mscVersion() < 112 && (type() == ElementType::REST)
-                &&            // for backward compatibility, convert V_WHOLE rests to V_MEASURE
-                              // if long enough to fill a measure.
-                              // OTOH, freshly created (un-initialized) rests have numerator == 0 (< 4/4)
-                              // (see Fraction() constructor in fraction.h; this happens for instance
-                              // when pasting selection from clipboard): they should not be converted
-                ticks().numerator() != 0
-                &&            // rest durations are initialized to full measure duration when
-                              // created upon reading the <Rest> tag (see Measure::read() )
-                              // so a V_WHOLE rest in a measure of 4/4 or less => V_MEASURE
-                (actualDurationType() == DurationType::V_WHOLE && ticks() <= Fraction(4, 4))) {
-                // old pre 2.0 scores: convert
-                setDurationType(DurationType::V_MEASURE);
-            } else {    // not from old score: set duration fraction from duration type
-                setTicks(actualDurationType().fraction());
-            }
-        } else {
-            if (score()->mscVersion() <= 114) {
-                SigEvent event = score()->sigmap()->timesig(e.context()->tick());
-                setTicks(event.timesig());
-            }
-        }
-    } else if (tag == "BeamMode") {
-        _beamMode = TConv::fromXml(e.readAsciiText(), BeamMode::AUTO);
-    } else if (tag == "Articulation") {
-        Articulation* atr = Factory::createArticulation(this);
-        atr->setTrack(track());
-        atr->read(e);
-        add(atr);
-    } else if (tag == "leadingSpace" || tag == "trailingSpace") {
-        LOGD("ChordRest: %s obsolete", tag.ascii());
-        e.skipCurrentElement();
-    } else if (tag == "small") {
-        m_isSmall = e.readInt();
-    } else if (tag == "duration") {
-        setTicks(e.readFraction());
-    } else if (tag == "ticklen") {      // obsolete (version < 1.12)
-        int mticks = score()->sigmap()->timesig(e.context()->tick()).timesig().ticks();
-        int i = e.readInt();
-        if (i == 0) {
-            i = mticks;
-        }
-        if ((type() == ElementType::REST) && (mticks == i)) {
-            setDurationType(DurationType::V_MEASURE);
-            setTicks(Fraction::fromTicks(i));
-        } else {
-            Fraction f = Fraction::fromTicks(i);
-            setTicks(f);
-            setDurationType(TDuration(f));
-        }
-    } else if (tag == "dots") {
-        setDots(e.readInt());
-    } else if (tag == "staffMove") {
-        _staffMove = e.readInt();
-        if (vStaffIdx() < part()->staves().front()->idx() || vStaffIdx() > part()->staves().back()->idx()) {
-            _staffMove = 0;
-        }
-    } else if (tag == "Spanner") {
-        Spanner::readSpanner(e, this, track());
-    } else if (tag == "Lyrics") {
-        EngravingItem* element = Factory::createLyrics(this);
-        element->setTrack(e.context()->track());
-        element->read(e);
-        add(element);
-    } else if (tag == "pos") {
-        PointF pt = e.readPoint();
-        setOffset(pt * spatium());
-    }
-//      else if (tag == "offset")
-//            DurationElement::readProperties(e);
-    else if (!DurationElement::readProperties(e)) {
-        return false;
-    }
-    return true;
+    return ChordRestRW::readProperties(this, e, *e.context());
 }
 
 //---------------------------------------------------------
