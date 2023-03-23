@@ -714,6 +714,9 @@ void NotationActionController::padNote(const Pad& pad)
     startNoteInputIfNeed();
 
     noteInput->padNote(pad);
+    if (currentNotationElements()->msScore()->inputState().usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
+        playSelectedElement();
+    }
 }
 
 void NotationActionController::putNote(const actions::ActionData& args)
