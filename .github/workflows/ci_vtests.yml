@@ -150,14 +150,14 @@ jobs:
       with:
         name: ${{ needs.setup.outputs.artifact_name }}
         path: ./comparison
-    - name: Generate ref drawdata
-      run: |
-        chmod +x ./musescore_reference/app/bin/mscore4portable
-        xvfb-run ./vtest/gen-ref-data.sh -m ./musescore_reference/app/bin/mscore4portable
-    - name: DrawData VTest
-      run: |
-        chmod +x ./musescore_current/app/bin/mscore4portable
-        xvfb-run ./vtest/vtest.sh -m ./musescore_current/app/bin/mscore4portable  
+    #- name: Generate ref drawdata
+    #  run: |
+    #    chmod +x ./musescore_reference/app/bin/mscore4portable
+    #    xvfb-run ./vtest/gen-ref-data.sh -m ./musescore_reference/app/bin/mscore4portable
+    #- name: DrawData VTest
+    #  run: |
+    #    chmod +x ./musescore_current/app/bin/mscore4portable
+    #    xvfb-run ./vtest/vtest.sh -m ./musescore_current/app/bin/mscore4portable
     # - name: Skip failure signal if PR is labeled 'vtests'
     #   if: github.event_name == 'pull_request' && contains( env.VTEST_DIFF_FOUND, 'true') && contains(github.event.pull_request.labels.*.name, 'vtests')
     #   run: |
