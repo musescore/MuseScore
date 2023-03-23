@@ -20,19 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_MAINWINDOWPROVIDER_H
-#define MU_DOCK_MAINWINDOWPROVIDER_H
+#ifndef MU_DOCK_MAINWINDOWBRIDGE_H
+#define MU_DOCK_MAINWINDOWBRIDGE_H
 
 #include <QObject>
 #include <QWindow>
 
 #include "modularity/ioc.h"
-#include "../iinteractiveprovider.h"
 
 #include "framework/ui/imainwindow.h"
 
 namespace mu::ui {
-class MainWindowProvider : public QObject, public IMainWindow
+class MainWindowBridge : public QObject
 {
     Q_OBJECT
 
@@ -40,22 +39,23 @@ class MainWindowProvider : public QObject, public IMainWindow
     Q_PROPERTY(QString filePath READ filePath WRITE setFilePath NOTIFY filePathChanged)
     Q_PROPERTY(bool fileModified READ fileModified WRITE setFileModified NOTIFY fileModifiedChanged)
 
-    INJECT(ui, IInteractiveProvider, interactiveProvider)
+    INJECT(ui, IMainWindow, mainWindow)
 
 public:
-    explicit MainWindowProvider(QObject* parent = nullptr);
+    explicit MainWindowBridge(QObject* parent = nullptr);
+    ~MainWindowBridge();
 
-    QWindow* qWindow() const override;
+    QWindow* qWindow() const;
 
     QString filePath() const;
     virtual bool fileModified() const;
 
-    void requestShowOnBack() override;
-    void requestShowOnFront() override;
+    void showOnBack();
+    void showOnFront();
 
-    bool isFullScreen() const override;
-    void toggleFullScreen() override;
-    QScreen* screen() const override;
+    bool isFullScreen() const;
+    void toggleFullScreen();
+    QScreen* screen() const;
 
     Q_INVOKABLE void showMinimizedWithSavePreviousState();
 
@@ -78,4 +78,4 @@ private slots: // Should only be used from QML
 };
 }
 
-#endif // MU_DOCK_MAINWINDOWPROVIDER_H
+#endif // MU_DOCK_MAINWINDOWBRIDGE_H

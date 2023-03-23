@@ -32,7 +32,7 @@
 
 #include "mocks/navigationmocks.h"
 #include "global/tests/mocks/applicationmock.h"
-#include "ui/tests/mocks/mainwindowprovidermock.h"
+#include "ui/tests/mocks/mainwindowmock.h"
 
 #include "ui/view/navigationcontrol.h"
 #include "ui/view/navigationpanel.h"
@@ -60,7 +60,7 @@ public:
         m_dispatcher = std::make_shared<actions::ActionsDispatcher>();
         m_controller->setdispatcher(m_dispatcher);
 
-        m_mainWindow = std::make_shared<ui::MainWindowProviderMock>();
+        m_mainWindow = std::make_shared<ui::MainWindowMock>();
         ON_CALL(*m_mainWindow, qWindow()).WillByDefault(Return(&m_window));
         m_controller->setmainWindow(m_mainWindow);
 
@@ -230,7 +230,7 @@ public:
 
     std::shared_ptr<NavigationController> m_controller;
     std::shared_ptr<actions::IActionsDispatcher> m_dispatcher;
-    std::shared_ptr<MainWindowProviderMock> m_mainWindow;
+    std::shared_ptr<MainWindowMock> m_mainWindow;
     std::shared_ptr<framework::ApplicationMock> m_applicationMock;
 
     QQuickWindow m_window;

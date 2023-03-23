@@ -19,33 +19,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_MACOS_MAINWINDOWPROVIDER_H
-#define MU_APPSHELL_MACOS_MAINWINDOWPROVIDER_H
 
-#include "async/asyncable.h"
-#include "modularity/ioc.h"
-#include "ui/iuiconfiguration.h"
+#ifndef MU_DOCK_MAINWINDOW_H
+#define MU_DOCK_MAINWINDOW_H
 
-#include "ui/view/mainwindowprovider.h"
+#include <QObject>
+#include <QWindow>
+
+#include "framework/ui/imainwindow.h"
 
 namespace mu::ui {
-class MacOSMainWindowProvider : public MainWindowProvider, public async::Asyncable
+class MainWindow : public IMainWindow
 {
-    Q_OBJECT
-
-    INJECT(appshell, IUiConfiguration, uiConfiguration)
-
 public:
-    explicit MacOSMainWindowProvider(QObject* parent = nullptr);
+    MainWindow() = default;
 
-    bool fileModified() const override;
+    void init(MainWindowBridge* bridge) override;
+    void deinit() override;
 
-public slots:
-    void setFileModified(bool modified) override;
+    QWindow* qWindow() const override;
+
+    void requestShowOnBack() override;
+    void requestShowOnFront() override;
+
+    bool isFullScreen() const override;
+    void toggleFullScreen() override;
+    QScreen* screen() const override;
 
 private:
-    void init() override;
+    MainWindowBridge* m_bridge = nullptr;
 };
 }
 
-#endif // MU_APPSHELL_MACOS_MAINWINDOWPROVIDER_H
+#endif // MU_DOCK_MAINWINDOW_H

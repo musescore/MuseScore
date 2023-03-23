@@ -54,13 +54,13 @@ ApplicationWindow {
         id: titleProvider
     }
 
-    MainWindowProvider {
-        id: windowProvider
+    MainWindowBridge {
+        id: bridge
 
         window: root
 
         //! NOTE These properties of QWindow (of which ApplicationWindow is derived)
-        //!      are not available in QML, so we access them via MainWindowProvider
+        //!      are not available in QML, so we access them via MainWindowBridge
         filePath: titleProvider.filePath
         fileModified: titleProvider.fileModified
     }
@@ -80,6 +80,6 @@ ApplicationWindow {
     }
 
     function showMinimizedWithSavePreviousState() {
-        windowProvider.showMinimizedWithSavePreviousState()
+        bridge.showMinimizedWithSavePreviousState()
     }
 }

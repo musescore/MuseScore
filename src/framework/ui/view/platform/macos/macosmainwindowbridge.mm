@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "macosmainwindowprovider.h"
+#include "macosmainwindowbridge.h"
 
 #include <Cocoa/Cocoa.h>
 #include <QWindow>
@@ -37,14 +37,14 @@ static NSWindow* nsWindowForQWindow(QWindow* qWindow)
     return nsWindow;
 }
 
-MacOSMainWindowProvider::MacOSMainWindowProvider(QObject* parent)
-    : MainWindowProvider(parent)
+MacOSMainWindowBridge::MacOSMainWindowBridge(QObject* parent)
+    : MainWindowBridge(parent)
 {
 }
 
-void MacOSMainWindowProvider::init()
+void MacOSMainWindowBridge::init()
 {
-    MainWindowProvider::init();
+    MainWindowBridge::init();
 
     uiConfiguration()->applyPlatformStyle(m_window);
 
@@ -53,7 +53,7 @@ void MacOSMainWindowProvider::init()
     });
 }
 
-bool MacOSMainWindowProvider::fileModified() const
+bool MacOSMainWindowBridge::fileModified() const
 {
     //! NOTE QWindow misses an API for this, so we'll do it ourselves.
     NSWindow* nsWindow = nsWindowForQWindow(m_window);
@@ -64,7 +64,7 @@ bool MacOSMainWindowProvider::fileModified() const
     return [nsWindow isDocumentEdited];
 }
 
-void MacOSMainWindowProvider::setFileModified(bool modified)
+void MacOSMainWindowBridge::setFileModified(bool modified)
 {
     NSWindow* nsWindow = nsWindowForQWindow(m_window);
     if (!nsWindow) {
