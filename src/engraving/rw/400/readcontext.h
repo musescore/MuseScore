@@ -25,6 +25,9 @@
 
 #include <map>
 
+#include "global/modularity/ioc.h"
+#include "iengravingfontsprovider.h"
+
 #include "types/types.h"
 
 #include "libmscore/connector.h"
@@ -64,6 +67,7 @@ struct TextStyleMap {
 
 class ReadContext
 {
+    INJECT(engraving, IEngravingFontsProvider, engravingFonts)
 public:
 
     ReadContext(Score* score);

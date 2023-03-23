@@ -36,21 +36,21 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
 
-void ArticulationRW::read(Articulation* a, XmlReader& e, ReadContext& ctx)
+void ArticulationRW::read(Articulation* a, XmlReader& xml, ReadContext& ctx)
 {
-    while (e.readNextStartElement()) {
-        if (!readProperties(a, e, ctx)) {
-            e.unknown();
+    while (xml.readNextStartElement()) {
+        if (!readProperties(a, xml, ctx)) {
+            xml.unknown();
         }
     }
 }
 
-bool ArticulationRW::readProperties(Articulation* a, XmlReader& e, ReadContext& ctx)
+bool ArticulationRW::readProperties(Articulation* a, XmlReader& xml, ReadContext& ctx)
 {
-    const AsciiStringView tag(e.name());
+    const AsciiStringView tag(xml.name());
 
     if (tag == "subtype") {
-        AsciiStringView s = e.readAsciiText();
+        AsciiStringView s = xml.readAsciiText();
         ArticulationTextType textType = TConv::fromXml(s, ArticulationTextType::NO_TEXT);
         if (textType != ArticulationTextType::NO_TEXT) {
             a->setTextType(textType);
@@ -74,22 +74,22 @@ bool ArticulationRW::readProperties(Articulation* a, XmlReader& e, ReadContext& 
             a->setSymId(id);
         }
     } else if (tag == "channel") {
-        a->setChannelName(e.attribute("name"));
-        e.readNext();
-    } else if (PropertyRW::readProperty(a, tag, e, ctx, Pid::ARTICULATION_ANCHOR)) {
+        a->setChannelName(xml.attribute("name"));
+        xml.readNext();
+    } else if (PropertyRW::readProperty(a, tag, xml, ctx, Pid::ARTICULATION_ANCHOR)) {
     } else if (tag == "direction") {
-        PropertyRW::readProperty(a, e, ctx, Pid::DIRECTION);
+        PropertyRW::readProperty(a, xml, ctx, Pid::DIRECTION);
     } else if (tag == "ornamentStyle") {
-        PropertyRW::readProperty(a, e, ctx, Pid::ORNAMENT_STYLE);
+        PropertyRW::readProperty(a, xml, ctx, Pid::ORNAMENT_STYLE);
     } else if (tag == "play") {
-        a->setPlayArticulation(e.readBool());
+        a->setPlayArticulation(xml.readBool());
     } else if (tag == "offset") {
         if (ctx.mscVersion() >= 400) {
-            EngravingItemRW::readProperties(a, e, ctx);
+            EngravingItemRW::readProperties(a, xml, ctx);
         } else {
-            e.skipCurrentElement();       // ignore manual layout in older scores
+            xml.skipCurrentElement();       // ignore manual layout in older scores
         }
-    } else if (EngravingItemRW::readProperties(a, e, ctx)) {
+    } else if (EngravingItemRW::readProperties(a, xml, ctx)) {
     } else {
         return false;
     }

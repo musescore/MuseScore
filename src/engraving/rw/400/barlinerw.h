@@ -19,24 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_ARTICULATIONRW_H
-#define MU_ENGRAVING_ARTICULATIONRW_H
+#ifndef MU_ENGRAVING_BARLINERW_H
+#define MU_ENGRAVING_BARLINERW_H
 
 namespace mu::engraving {
 class XmlReader;
 class ReadContext;
-class Articulation;
+class BarLine;
 }
 
 namespace mu::engraving::rw400 {
-class ArticulationRW
+class BarLineRW
 {
 public:
-    ArticulationRW() = default;
+    BarLineRW() = default;
 
-    static void read(Articulation* a, XmlReader& xml, ReadContext& ctx);
-    static bool readProperties(Articulation* a, XmlReader& xml, ReadContext& ctx);
+    static void read(BarLine* b, XmlReader& xml, ReadContext& ctx);
 };
 }
 
-#endif // MU_ENGRAVING_ARTICULATIONRW_H
+#endif // MU_ENGRAVING_BARLINERW_H
