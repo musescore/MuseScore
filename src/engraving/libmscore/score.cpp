@@ -5032,9 +5032,9 @@ String Score::extractLyrics()
                     }
                     found = true;
                     String lyric = l->plainText().trimmed();
-                    if (l->syllabic() == Lyrics::Syllabic::SINGLE || l->syllabic() == Lyrics::Syllabic::END) {
+                    if (l->syllabic() == LyricsSyllabic::SINGLE || l->syllabic() == LyricsSyllabic::END) {
                         result += lyric + u" ";
-                    } else if (l->syllabic() == Lyrics::Syllabic::BEGIN || l->syllabic() == Lyrics::Syllabic::MIDDLE) {
+                    } else if (l->syllabic() == LyricsSyllabic::BEGIN || l->syllabic() == LyricsSyllabic::MIDDLE) {
                         result += lyric;
                     }
                 }
@@ -5067,9 +5067,9 @@ String Score::extractLyrics()
                         }
                         found = true;
                         String lyric = l->plainText().trimmed();
-                        if (l->syllabic() == Lyrics::Syllabic::SINGLE || l->syllabic() == Lyrics::Syllabic::END) {
+                        if (l->syllabic() == LyricsSyllabic::SINGLE || l->syllabic() == LyricsSyllabic::END) {
                             result += lyric + u" ";
-                        } else if (l->syllabic() == Lyrics::Syllabic::BEGIN || l->syllabic() == Lyrics:: Syllabic::MIDDLE) {
+                        } else if (l->syllabic() == LyricsSyllabic::BEGIN || l->syllabic() == LyricsSyllabic::MIDDLE) {
                             result += lyric;
                         }
                     }

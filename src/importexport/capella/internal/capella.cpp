@@ -804,7 +804,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 l->setTrack(track);
                 l->setPlainText(v.text);
                 if (v.hyphen) {
-                    l->setSyllabic(Lyrics::Syllabic::BEGIN);
+                    l->setSyllabic(LyricsSyllabic::BEGIN);
                 }
                 l->setNo(v.num);
                 chord->add(l);

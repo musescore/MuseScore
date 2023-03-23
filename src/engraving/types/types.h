@@ -882,6 +882,10 @@ enum class ArticulationTextType {
     POP
 };
 
+enum class LyricsSyllabic : char {
+    SINGLE, BEGIN, END, MIDDLE
+};
+
 //---------------------------------------------------------
 //   Key
 //---------------------------------------------------------

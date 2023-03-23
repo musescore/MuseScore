@@ -119,7 +119,7 @@ void MScore::registerUiTypes()
     qRegisterMetaType<JumpType>("JumpType");
     qRegisterMetaType<MarkerType>("MarkerType");
     qRegisterMetaType<HairpinType>("HairpinType");
-    qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
+    qRegisterMetaType<LyricsSyllabic>("Syllabic");
 
 #endif
 }

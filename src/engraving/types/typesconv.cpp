@@ -2387,6 +2387,23 @@ ArticulationTextType TConv::fromXml(const AsciiStringView& tag, ArticulationText
     return def;
 }
 
+const std::array<Item<LyricsSyllabic>, 4> LYRICSSYLLABIC_TYPES = { {
+    { LyricsSyllabic::SINGLE,   "single" },
+    { LyricsSyllabic::BEGIN,    "begin" },
+    { LyricsSyllabic::END,      "end" },
+    { LyricsSyllabic::MIDDLE,   "middle" }
+} };
+
+AsciiStringView TConv::toXml(LyricsSyllabic v)
+{
+    return findXmlTagByType<LyricsSyllabic>(LYRICSSYLLABIC_TYPES, v);
+}
+
+LyricsSyllabic TConv::fromXml(const AsciiStringView& tag, LyricsSyllabic def)
+{
+    return findTypeByXmlTag<LyricsSyllabic>(LYRICSSYLLABIC_TYPES, tag, def);
+}
+
 const std::array<const char*, 17> KEY_NAMES = { {
     QT_TRANSLATE_NOOP("engraving", "G major, E minor"),
     QT_TRANSLATE_NOOP("engraving", "C♭ major, A♭ minor"),

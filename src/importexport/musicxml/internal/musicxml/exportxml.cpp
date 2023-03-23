@@ -5096,16 +5096,16 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>& ll, const track_idx_t tr
                 lyricXml += color2xml(l);
                 lyricXml += positioningAttributes(l);
                 _xml.startElementRaw(lyricXml);
-                Lyrics::Syllabic syl = (l)->syllabic();
+                LyricsSyllabic syl = (l)->syllabic();
                 QString s = "";
                 switch (syl) {
-                case Lyrics::Syllabic::SINGLE: s = "single";
+                case LyricsSyllabic::SINGLE: s = "single";
                     break;
-                case Lyrics::Syllabic::BEGIN:  s = "begin";
+                case LyricsSyllabic::BEGIN:  s = "begin";
                     break;
-                case Lyrics::Syllabic::END:    s = "end";
+                case LyricsSyllabic::END:    s = "end";
                     break;
-                case Lyrics::Syllabic::MIDDLE: s = "middle";
+                case LyricsSyllabic::MIDDLE: s = "middle";
                     break;
                 default:
                     LOGD("unknown syllabic %d", int(syl));

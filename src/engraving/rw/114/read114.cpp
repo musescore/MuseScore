@@ -1901,13 +1901,13 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 } else if (t == "syllabic") {
                     String val(e.readText());
                     if (val == "single") {
-                        l->setSyllabic(Lyrics::Syllabic::SINGLE);
+                        l->setSyllabic(LyricsSyllabic::SINGLE);
                     } else if (val == "begin") {
-                        l->setSyllabic(Lyrics::Syllabic::BEGIN);
+                        l->setSyllabic(LyricsSyllabic::BEGIN);
                     } else if (val == "end") {
-                        l->setSyllabic(Lyrics::Syllabic::END);
+                        l->setSyllabic(LyricsSyllabic::END);
                     } else if (val == "middle") {
-                        l->setSyllabic(Lyrics::Syllabic::MIDDLE);
+                        l->setSyllabic(LyricsSyllabic::MIDDLE);
                     } else {
                         LOGD("bad syllabic property");
                     }
