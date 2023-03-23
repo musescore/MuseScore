@@ -23,6 +23,7 @@
 #include "location.h"
 
 #include "rw/xml.h"
+#include "rw/400/locationrw.h"
 
 #include "chord.h"
 #include "engravingitem.h"
@@ -85,25 +86,7 @@ void Location::write(XmlWriter& xml) const
 
 void Location::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-
-        if (tag == "staves") {
-            _staff = e.readInt();
-        } else if (tag == "voices") {
-            _voice = e.readInt();
-        } else if (tag == "measures") {
-            _measure = e.readInt();
-        } else if (tag == "fractions") {
-            _frac = e.readFraction();
-        } else if (tag == "grace") {
-            _graceIndex = e.readInt();
-        } else if (tag == "notes") {
-            _note = e.readInt();
-        } else {
-            e.unknown();
-        }
-    }
+    rw400::LocationRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

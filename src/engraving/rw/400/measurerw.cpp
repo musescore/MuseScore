@@ -53,6 +53,9 @@
 #include "../libmscore/timesig.h"
 #include "../libmscore/tuplet.h"
 
+#include "barlinerw.h"
+#include "locationrw.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
@@ -218,7 +221,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
 
         if (tag == "location") {
             Location loc = Location::relative();
-            loc.read(e);
+            LocationRW::read(&loc, e, ctx);
             ctx.setLocation(loc);
         } else if (tag == "tick") {             // obsolete?
             LOGD() << "read midi tick";
@@ -226,7 +229,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         } else if (tag == "BarLine") {
             BarLine* barLine = Factory::createBarLine(ctx.dummy()->segment());
             barLine->setTrack(ctx.track());
-            barLine->read(e);
+            BarLineRW::read(barLine, e, ctx);
             //
             //  StartRepeatBarLine: at rtick == 0, always BarLineType::START_REPEAT
             //  BarLine:            in the middle of a measure, has no semantic

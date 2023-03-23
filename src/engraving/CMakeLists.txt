@@ -105,6 +105,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/fsymbolrw.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/imagerw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/imagerw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/locationrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/locationrw.h
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.h
