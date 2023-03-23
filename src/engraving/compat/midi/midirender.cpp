@@ -138,7 +138,7 @@ bool isGlissandoFor(const Note* note)
     return false;
 }
 
-static void collectGlissando(int channel,
+static void collectGlissando(int channel, MidiInstrumentEffect effect,
                              int onTime, int offTime,
                              int pitchDelta,
                              PitchWheelRenderer& pitchWheelRenderer)
@@ -155,7 +155,7 @@ static void collectGlissando(int channel,
     };
     func.func = linearFunc;
 
-    pitchWheelRenderer.addPitchWheelFunction(func, channel);
+    pitchWheelRenderer.addPitchWheelFunction(func, channel, effect);
 }
 
 static Fraction getPlayTicksForBend(const Note* note)
@@ -218,7 +218,7 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
                 double pitchDelta = nextNote->ppitch() - params.pitch;
                 int timeDelta = params.offTime - params.onTime;
                 if (pitchDelta != 0 && timeDelta != 0) {
-                    collectGlissando(params.channel, params.onTime, params.offTime, pitchDelta, pitchWheelRenderer);
+                    collectGlissando(params.channel, params.effect, params.onTime, params.offTime, pitchDelta, pitchWheelRenderer);
                 }
             }
         }
@@ -256,9 +256,8 @@ static void collectVibrato(int channel,
         return (pillarAmplitude * 2 / M_PI * asin(sin(2 * M_PI * x)) + lowPitch) * scale;
     };
     func.func = vibratoFunc;
-    func.effect = effect;
 
-    pitchWheelRenderer.addPitchWheelFunction(func, channel);
+    pitchWheelRenderer.addPitchWheelFunction(func, channel, effect);
 }
 
 static void collectBend(const Bend* bend,
@@ -289,7 +288,6 @@ static void collectBend(const Bend* bend,
         func.mStartTick = onTime + x0;
         uint32_t startTimeNextPoint = nextValue.time * duration / PitchValue::MAX_TIME;
         func.mEndTick = onTime + startTimeNextPoint;
-        func.effect = effect;
 
         auto bendFunc = [ startTick = func.mStartTick, scale,
                           a, b] (uint32_t tick) {
@@ -300,12 +298,11 @@ static void collectBend(const Bend* bend,
             return y * scale;
         };
         func.func = bendFunc;
-        pitchWheelRenderer.addPitchWheelFunction(func, channel);
+        pitchWheelRenderer.addPitchWheelFunction(func, channel, effect);
     }
     PitchWheelRenderer::PitchWheelFunction func;
     func.mStartTick = onTime + points[pitchSize - 1].time * duration / PitchValue::MAX_TIME;
     func.mEndTick = offTime;
-    func.effect = effect;
 
     if (func.mEndTick == func.mStartTick) {
         return;
@@ -318,7 +315,7 @@ static void collectBend(const Bend* bend,
         return releaseValue;
     };
     func.func = bendFunc;
-    pitchWheelRenderer.addPitchWheelFunction(func, channel);
+    pitchWheelRenderer.addPitchWheelFunction(func, channel, effect);
 }
 
 //---------------------------------------------------------

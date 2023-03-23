@@ -25,6 +25,7 @@
 
 #include <limits>
 #include <list>
+#include <unordered_map>
 #include <functional>
 
 #include "event.h"
@@ -37,12 +38,11 @@ public:
         int32_t mStartTick;
         int32_t mEndTick;
         std::function<int(uint32_t)> func;
-        MidiInstrumentEffect effect = MidiInstrumentEffect::NONE;
     };
 
     PitchWheelRenderer(PitchWheelSpecs wheelSpec);
 
-    void addPitchWheelFunction(const PitchWheelFunction& function, uint32_t channel);
+    void addPitchWheelFunction(const PitchWheelFunction& function, uint32_t channel, MidiInstrumentEffect effect);
 
     EventMap renderPitchWheel() const noexcept;
 
@@ -64,6 +64,8 @@ private:
     std::map<uint32_t /*channel*/, PitchWheelFunctions> _functions;
 
     PitchWheelSpecs _wheelSpec;
+
+    std::unordered_map<int, MidiInstrumentEffect> _effectByChannel;
 };
 }  // namespace mu::engraving
 
