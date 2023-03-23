@@ -63,7 +63,9 @@ bool ArticulationRW::readProperties(Articulation* a, XmlReader& e, ReadContext& 
                 id = SymId::ornamentMordent;
             }
 
-            String programVersion = ctx.mscoreVersion();
+            //! TODO Should be replaced with `ctx.mscoreVersion()`
+            //! But at the moment, `ctx` is not set everywhere
+            String programVersion = a->score()->mscoreVersion();
             if (!programVersion.isEmpty() && programVersion < u"3.6") {
                 if (id == SymId::noSym || s == "ornamentMordent") {   // SMuFL < 1.30 and MuseScore < 3.6
                     id = SymId::ornamentShortTrill;
