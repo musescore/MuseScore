@@ -2301,7 +2301,7 @@ void Segment::createShape(staff_idx_t staffIdx)
                 continue;
             }
             if (e->addToSkyline()) {
-                s.add(e->shape().translated(e->isClef() ? e->ipos() : e->pos()));
+                s.add(e->shape().translate(e->isClef() ? e->ipos() : e->pos()));
             }
         }
     }

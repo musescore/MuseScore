@@ -101,8 +101,8 @@ Shape Shape::translated(const PointF& pt) const
 double Shape::minHorizontalDistance(const Shape& a) const
 {
     double dist = -1000000.0;        // min real
-    double absoluteMinPadding = 0.1 * spatium;
-    double verticalClearance = 0.2 * spatium * _squeezeFactor;
+    double absoluteMinPadding = 0.1 * _spatium * _squeezeFactor;
+    double verticalClearance = 0.2 * _spatium * _squeezeFactor;
     for (const ShapeElement& r2 : a) {
         const EngravingItem* item2 = r2.toItem;
         double by1 = r2.top();
