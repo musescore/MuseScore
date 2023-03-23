@@ -4550,7 +4550,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         nextLyrics->setNo(verse);
         nextLyrics->setPlacement(placement);
         nextLyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, pFlags);
-        nextLyrics->setSyllabic(mu::engraving::Lyrics::Syllabic::SINGLE);
+        nextLyrics->setSyllabic(mu::engraving::LyricsSyllabic::SINGLE);
         newLyrics = true;
     }
 
@@ -4559,27 +4559,27 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         switch (nextLyrics->syllabic()) {
         // as we arrived at nextLyrics by a [Space], it can be the beginning
         // of a multi-syllable, but cannot have syllabic dashes before
-        case mu::engraving::Lyrics::Syllabic::SINGLE:
-        case mu::engraving::Lyrics::Syllabic::BEGIN:
+        case mu::engraving::LyricsSyllabic::SINGLE:
+        case mu::engraving::LyricsSyllabic::BEGIN:
             break;
-        case mu::engraving::Lyrics::Syllabic::END:
-            nextLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::Lyrics::Syllabic::SINGLE));
+        case mu::engraving::LyricsSyllabic::END:
+            nextLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::LyricsSyllabic::SINGLE));
             break;
-        case mu::engraving::Lyrics::Syllabic::MIDDLE:
-            nextLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::Lyrics::Syllabic::BEGIN));
+        case mu::engraving::LyricsSyllabic::MIDDLE:
+            nextLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::LyricsSyllabic::BEGIN));
             break;
         }
         // as we moved away from fromLyrics by a [Space], it can be
         // the end of a multi-syllable, but cannot have syllabic dashes after
         switch (fromLyrics->syllabic()) {
-        case mu::engraving::Lyrics::Syllabic::SINGLE:
-        case mu::engraving::Lyrics::Syllabic::END:
+        case mu::engraving::LyricsSyllabic::SINGLE:
+        case mu::engraving::LyricsSyllabic::END:
             break;
-        case mu::engraving::Lyrics::Syllabic::BEGIN:
-            fromLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::Lyrics::Syllabic::SINGLE));
+        case mu::engraving::LyricsSyllabic::BEGIN:
+            fromLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::LyricsSyllabic::SINGLE));
             break;
-        case mu::engraving::Lyrics::Syllabic::MIDDLE:
-            fromLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::Lyrics::Syllabic::END));
+        case mu::engraving::LyricsSyllabic::MIDDLE:
+            fromLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::LyricsSyllabic::END));
             break;
         }
         // for the same reason, it cannot have a melisma
@@ -4666,13 +4666,13 @@ void NotationInteraction::navigateToNextSyllable()
         toLyrics->setNo(verse);
         toLyrics->setPlacement(placement);
         toLyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, pFlags);
-        toLyrics->setSyllabic(mu::engraving::Lyrics::Syllabic::END);
+        toLyrics->setSyllabic(mu::engraving::LyricsSyllabic::END);
     } else {
         // as we arrived at toLyrics by a dash, it cannot be initial or isolated
-        if (toLyrics->syllabic() == mu::engraving::Lyrics::Syllabic::BEGIN) {
-            toLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::Lyrics::Syllabic::MIDDLE));
-        } else if (toLyrics->syllabic() == mu::engraving::Lyrics::Syllabic::SINGLE) {
-            toLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::Lyrics::Syllabic::END));
+        if (toLyrics->syllabic() == mu::engraving::LyricsSyllabic::BEGIN) {
+            toLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::LyricsSyllabic::MIDDLE));
+        } else if (toLyrics->syllabic() == mu::engraving::LyricsSyllabic::SINGLE) {
+            toLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::LyricsSyllabic::END));
         }
     }
 
@@ -4680,14 +4680,14 @@ void NotationInteraction::navigateToNextSyllable()
         // as we moved away from fromLyrics by a dash,
         // it can have syll. dashes before and after but cannot be isolated or terminal
         switch (fromLyrics->syllabic()) {
-        case mu::engraving::Lyrics::Syllabic::BEGIN:
-        case mu::engraving::Lyrics::Syllabic::MIDDLE:
+        case mu::engraving::LyricsSyllabic::BEGIN:
+        case mu::engraving::LyricsSyllabic::MIDDLE:
             break;
-        case mu::engraving::Lyrics::Syllabic::SINGLE:
-            fromLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::Lyrics::Syllabic::BEGIN));
+        case mu::engraving::LyricsSyllabic::SINGLE:
+            fromLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::LyricsSyllabic::BEGIN));
             break;
-        case mu::engraving::Lyrics::Syllabic::END:
-            fromLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::Lyrics::Syllabic::MIDDLE));
+        case mu::engraving::LyricsSyllabic::END:
+            fromLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::LyricsSyllabic::MIDDLE));
             break;
         }
         // for the same reason, it cannot have a melisma
@@ -5269,11 +5269,11 @@ void NotationInteraction::addMelisma()
         score()->startCmd();
         if (fromLyrics) {
             switch (fromLyrics->syllabic()) {
-            case mu::engraving::Lyrics::Syllabic::SINGLE:
-            case mu::engraving::Lyrics::Syllabic::END:
+            case mu::engraving::LyricsSyllabic::SINGLE:
+            case mu::engraving::LyricsSyllabic::END:
                 break;
             default:
-                fromLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::Lyrics::Syllabic::END));
+                fromLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::LyricsSyllabic::END));
                 break;
             }
             if (fromLyrics->segment()->tick() < endTick) {
@@ -5302,23 +5302,23 @@ void NotationInteraction::addMelisma()
         toLyrics->setNo(verse);
         toLyrics->setPlacement(placement);
         toLyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, pFlags);
-        toLyrics->setSyllabic(mu::engraving::Lyrics::Syllabic::SINGLE);
+        toLyrics->setSyllabic(mu::engraving::LyricsSyllabic::SINGLE);
     }
     // as we arrived at toLyrics by an underscore, it cannot have syllabic dashes before
-    else if (toLyrics->syllabic() == mu::engraving::Lyrics::Syllabic::MIDDLE) {
-        toLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::Lyrics::Syllabic::BEGIN));
-    } else if (toLyrics->syllabic() == mu::engraving::Lyrics::Syllabic::END) {
-        toLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::Lyrics::Syllabic::SINGLE));
+    else if (toLyrics->syllabic() == mu::engraving::LyricsSyllabic::MIDDLE) {
+        toLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::LyricsSyllabic::BEGIN));
+    } else if (toLyrics->syllabic() == mu::engraving::LyricsSyllabic::END) {
+        toLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::LyricsSyllabic::SINGLE));
     }
     if (fromLyrics) {
         // as we moved away from fromLyrics by an underscore,
         // it can be isolated or terminal but cannot have dashes after
         switch (fromLyrics->syllabic()) {
-        case mu::engraving::Lyrics::Syllabic::SINGLE:
-        case mu::engraving::Lyrics::Syllabic::END:
+        case mu::engraving::LyricsSyllabic::SINGLE:
+        case mu::engraving::LyricsSyllabic::END:
             break;
         default:
-            fromLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::Lyrics::Syllabic::END));
+            fromLyrics->undoChangeProperty(mu::engraving::Pid::SYLLABIC, int(mu::engraving::LyricsSyllabic::END));
             break;
         }
         // for the same reason, if it has a melisma, this cannot extend beyond toLyrics

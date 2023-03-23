@@ -212,6 +212,9 @@ public:
 
     static ArticulationTextType fromXml(const AsciiStringView& tag, ArticulationTextType def);
 
+    static AsciiStringView toXml(LyricsSyllabic v);
+    static LyricsSyllabic fromXml(const AsciiStringView& tag, LyricsSyllabic def);
+
     static const char* userName(Key v, bool isAtonal = false, bool isCustom = false);
     static String translatedUserName(Key v, bool isAtonal = false, bool isCustom = false);
 };

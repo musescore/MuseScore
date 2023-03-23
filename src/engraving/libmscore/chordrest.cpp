@@ -1241,8 +1241,8 @@ Shape ChordRest::shape() const
             }
             double lmargin = score()->styleS(Sid::lyricsMinDistance).val() * spatium() * 0.5;
             double rmargin = lmargin;
-            Lyrics::Syllabic syl = l->syllabic();
-            if ((syl == Lyrics::Syllabic::BEGIN || syl == Lyrics::Syllabic::MIDDLE) && score()->styleB(Sid::lyricsDashForce)) {
+            LyricsSyllabic syl = l->syllabic();
+            if ((syl == LyricsSyllabic::BEGIN || syl == LyricsSyllabic::MIDDLE) && score()->styleB(Sid::lyricsDashForce)) {
                 rmargin = std::max(rmargin, styleP(Sid::lyricsDashMinLength));
             }
             // for horizontal spacing we only need the lyrics width:

@@ -23,6 +23,8 @@
 #include "lyrics.h"
 
 #include "rw/xml.h"
+#include "rw/400/lyricsrw.h"
+
 #include "translation.h"
 #include "types/translatablestring.h"
 
@@ -61,7 +63,7 @@ Lyrics::Lyrics(ChordRest* parent)
     initElementStyle(&lyricsElementStyle);
     _no         = 0;
     _ticks      = Fraction(0, 1);
-    _syllabic   = Syllabic::SINGLE;
+    _syllabic   = LyricsSyllabic::SINGLE;
 }
 
 Lyrics::Lyrics(const Lyrics& l)
@@ -92,7 +94,7 @@ void Lyrics::write(XmlWriter& xml) const
     }
     xml.startElement(this);
     writeProperty(xml, Pid::VERSE);
-    if (_syllabic != Syllabic::SINGLE) {
+    if (_syllabic != LyricsSyllabic::SINGLE) {
         static const char* sl[] = {
             "single", "begin", "end", "middle"
         };
@@ -105,60 +107,14 @@ void Lyrics::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
 void Lyrics::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
-    if (!isStyled(Pid::OFFSET) && !e.context()->pasteMode()) {
-        // fix offset for pre-3.1 scores
-        // 3.0: y offset was meaningless if autoplace is set
-        String version = e.context()->mscoreVersion();
-        if (autoplace() && !version.isEmpty() && version < u"3.1") {
-            PointF off = propertyDefault(Pid::OFFSET).value<PointF>();
-            ryoffset() = off.y();
-        }
-    }
+    rw400::LyricsRW::read(this, e, *e.context());
 }
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
 
 bool Lyrics::readProperties(XmlReader& e)
 {
-    const AsciiStringView tag(e.name());
-
-    if (tag == "no") {
-        _no = e.readInt();
-    } else if (tag == "syllabic") {
-        String val(e.readText());
-        if (val == "single") {
-            _syllabic = Syllabic::SINGLE;
-        } else if (val == "begin") {
-            _syllabic = Syllabic::BEGIN;
-        } else if (val == "end") {
-            _syllabic = Syllabic::END;
-        } else if (val == "middle") {
-            _syllabic = Syllabic::MIDDLE;
-        } else {
-            LOGD("bad syllabic property");
-        }
-    } else if (tag == "ticks") {          // obsolete
-        _ticks = e.readFraction();     // will fall back to reading integer ticks on older scores
-    } else if (tag == "ticks_f") {
-        _ticks = e.readFraction();
-    } else if (readProperty(tag, e, Pid::PLACEMENT)) {
-    } else if (!TextBase::readProperties(e)) {
-        return false;
-    }
-    return true;
+    return rw400::LyricsRW::readProperties(this, e, *e.context());
 }
 
 TranslatableString Lyrics::subtypeUserName() const
@@ -214,7 +170,7 @@ bool Lyrics::isMelisma() const
 
     // hyphenated?
     // if so, it is a melisma only if there is no lyric in same verse on next CR
-    if (_syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
+    if (_syllabic == LyricsSyllabic::BEGIN || _syllabic == LyricsSyllabic::MIDDLE) {
         // find next CR on same track and check for existence of lyric in same verse
         ChordRest* cr  = chordRest();
         if (cr) {
@@ -360,7 +316,7 @@ void Lyrics::layout()
 
     setPosX(x);
 
-    if (_ticks > Fraction(0, 1) || _syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
+    if (_ticks > Fraction(0, 1) || _syllabic == LyricsSyllabic::BEGIN || _syllabic == LyricsSyllabic::MIDDLE) {
         if (!_separator) {
             _separator = new LyricsLine(score()->dummy());
             _separator->setTick(cr->tick());
@@ -633,7 +589,7 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
         setPlacement(v.value<PlacementV>());
         break;
     case Pid::SYLLABIC:
-        _syllabic = Syllabic(v.toInt());
+        _syllabic = LyricsSyllabic(v.toInt());
         break;
     case Pid::LYRIC_TICKS:
         if (_ticks.isNotZero()) {
@@ -677,7 +633,7 @@ PropertyValue Lyrics::propertyDefault(Pid id) const
     case Pid::PLACEMENT:
         return score()->styleV(Sid::lyricsPlacement);
     case Pid::SYLLABIC:
-        return int(Syllabic::SINGLE);
+        return int(LyricsSyllabic::SINGLE);
     case Pid::LYRIC_TICKS:
         return Fraction(0, 1);
     case Pid::VERSE:

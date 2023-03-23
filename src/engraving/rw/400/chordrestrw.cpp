@@ -37,6 +37,7 @@
 #include "readcontext.h"
 #include "articulationrw.h"
 #include "engravingitemrw.h"
+#include "lyricsrw.h"
 
 #include "log.h"
 
@@ -115,7 +116,7 @@ bool ChordRestRW::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
     } else if (tag == "Lyrics") {
         Lyrics* lyr = Factory::createLyrics(ch);
         lyr->setTrack(e.context()->track());
-        lyr->read(e);
+        LyricsRW::read(lyr, e, ctx);
         ch->add(lyr);
     } else if (tag == "pos") {
         PointF pt = e.readPoint();

@@ -5524,13 +5524,13 @@ void MusicXMLParserLyric::parse()
         } else if (_e.name() == "syllabic") {
             auto syll = _e.readElementText();
             if (syll == "single") {
-                lyric->setSyllabic(Lyrics::Syllabic::SINGLE);
+                lyric->setSyllabic(LyricsSyllabic::SINGLE);
             } else if (syll == "begin") {
-                lyric->setSyllabic(Lyrics::Syllabic::BEGIN);
+                lyric->setSyllabic(LyricsSyllabic::BEGIN);
             } else if (syll == "end") {
-                lyric->setSyllabic(Lyrics::Syllabic::END);
+                lyric->setSyllabic(LyricsSyllabic::END);
             } else if (syll == "middle") {
-                lyric->setSyllabic(Lyrics::Syllabic::MIDDLE);
+                lyric->setSyllabic(LyricsSyllabic::MIDDLE);
             } else {
                 LOGD("unknown syllabic %s", qPrintable(syll));                      // TODO
             }

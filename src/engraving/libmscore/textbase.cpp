@@ -30,6 +30,7 @@
 #include "iengravingfont.h"
 
 #include "rw/xml.h"
+#include "rw/400/textbaserw.h"
 
 #include "style/defaultstyle.h"
 #include "style/textstyle.h"
@@ -2306,82 +2307,9 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
     }
 }
 
-static constexpr std::array<Pid, 18> TextBasePropertyId { {
-    Pid::TEXT_STYLE,
-    Pid::FONT_FACE,
-    Pid::FONT_SIZE,
-    Pid::TEXT_LINE_SPACING,
-    Pid::FONT_STYLE,
-    Pid::COLOR,
-    Pid::FRAME_TYPE,
-    Pid::FRAME_WIDTH,
-    Pid::FRAME_PADDING,
-    Pid::FRAME_ROUND,
-    Pid::FRAME_FG_COLOR,
-    Pid::FRAME_BG_COLOR,
-    Pid::ALIGN,
-} };
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
 bool TextBase::readProperties(XmlReader& e)
 {
-    const AsciiStringView tag(e.name());
-    for (Pid i : TextBasePropertyId) {
-        if (readProperty(tag, e, i)) {
-            return true;
-        }
-    }
-    if (tag == "text") {
-        String str = e.readXml();
-        setXmlText(str);
-        checkCustomFormatting(str);
-    } else if (tag == "bold") {
-        bool val = e.readInt();
-        if (val) {
-            setFontStyle(fontStyle() + FontStyle::Bold);
-        } else {
-            setFontStyle(fontStyle() - FontStyle::Bold);
-        }
-        if (isStyled(Pid::FONT_STYLE)) {
-            setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
-        }
-    } else if (tag == "italic") {
-        bool val = e.readInt();
-        if (val) {
-            setFontStyle(fontStyle() + FontStyle::Italic);
-        } else {
-            setFontStyle(fontStyle() - FontStyle::Italic);
-        }
-        if (isStyled(Pid::FONT_STYLE)) {
-            setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
-        }
-    } else if (tag == "underline") {
-        bool val = e.readInt();
-        if (val) {
-            setFontStyle(fontStyle() + FontStyle::Underline);
-        } else {
-            setFontStyle(fontStyle() - FontStyle::Underline);
-        }
-        if (isStyled(Pid::FONT_STYLE)) {
-            setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
-        }
-    } else if (tag == "strike") {
-        bool val = e.readInt();
-        if (val) {
-            setFontStyle(fontStyle() + FontStyle::Strike);
-        } else {
-            setFontStyle(fontStyle() - FontStyle::Strike);
-        }
-        if (isStyled(Pid::FONT_STYLE)) {
-            setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
-        }
-    } else if (!EngravingItem::readProperties(e)) {
-        return false;
-    }
-    return true;
+    return rw400::TextBaseRW::readProperties(this, e, *e.context());
 }
 
 //---------------------------------------------------------
