@@ -503,8 +503,6 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
     UNUSED(y);
     UNUSED(h);
     UNUSED(spatium);
-    const bool defaultStyle = (!customStyleApplicable()) || (_style == TremoloStyle::DEFAULT);
-    const bool isTraditionalAlternate = (_style == TremoloStyle::TRADITIONAL_ALTERNATE);
 
     // TODO: This should be a style setting, to replace tremoloStrokeLengthMultiplier
     static constexpr double stemGapSp = 1.0;
@@ -587,7 +585,7 @@ void Tremolo::layoutTwoNotesTremolo(double x, double y, double h, double spatium
         if (cr->isChord()) {
             Chord* chord = toChord(cr);
             staffIdx = chord->vStaffIdx();
-            int i = chord->staffMove();
+            //int i = chord->staffMove();
             //_minMove = std::min(_minMove, i); todo: investigate this
             //_maxMove = std::max(_maxMove, i);
 
@@ -899,9 +897,6 @@ void Tremolo::triggerLayout() const
 std::vector<PointF> Tremolo::gripsPositions(const EditData&) const
 {
     int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
-
-    ChordRest* c1 = nullptr;
-    ChordRest* c2 = nullptr;
 
     if (!twoNotes()) {
         return std::vector<PointF>();
