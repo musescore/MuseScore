@@ -30,6 +30,7 @@
 
 #include "style/style.h"
 #include "rw/xml.h"
+#include "rw/400/chordrw.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -554,7 +555,7 @@ double Chord::rightEdge() const
 //   setTremolo
 //---------------------------------------------------------
 
-void Chord::setTremolo(Tremolo* tr)
+void Chord::setTremolo(Tremolo* tr, bool applyLogic)
 {
     if (_tremolo && tr && tr == _tremolo) {
         return;
@@ -585,7 +586,7 @@ void Chord::setTremolo(Tremolo* tr)
     }
 
     if (tr) {
-        if (tr->twoNotes()) {
+        if (applyLogic && tr->twoNotes()) {
             TDuration d = tr->durationType();
             if (!d.isValid()) {
                 d = durationType();
@@ -1286,99 +1287,14 @@ void Chord::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-//---------------------------------------------------------
-//   Chord::read
-//---------------------------------------------------------
-
 void Chord::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        if (readProperties(e)) {
-        } else {
-            e.unknown();
-        }
-    }
-    // Reset horizontal offset of grace notes when migrating from before 4.0
-    if (isGrace() && score()->mscVersion() < 400) {
-        rxoffset() = 0;
-    }
+    rw400::ChordRW::read(this, e, *e.context());
 }
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
 
 bool Chord::readProperties(XmlReader& e)
 {
-    const AsciiStringView tag(e.name());
-
-    if (tag == "Note") {
-        Note* note = Factory::createNote(this);
-        // the note needs to know the properties of the track it belongs to
-        note->setTrack(track());
-        note->setParent(this);
-        note->read(e);
-        add(note);
-    } else if (ChordRest::readProperties(e)) {
-    } else if (tag == "Stem") {
-        Stem* s = Factory::createStem(this);
-        s->read(e);
-        add(s);
-    } else if (tag == "Hook") {
-        _hook = new Hook(this);
-        _hook->read(e);
-        add(_hook);
-    } else if (tag == "appoggiatura") {
-        _noteType = NoteType::APPOGGIATURA;
-        e.readNext();
-    } else if (tag == "acciaccatura") {
-        _noteType = NoteType::ACCIACCATURA;
-        e.readNext();
-    } else if (tag == "grace4") {
-        _noteType = NoteType::GRACE4;
-        e.readNext();
-    } else if (tag == "grace16") {
-        _noteType = NoteType::GRACE16;
-        e.readNext();
-    } else if (tag == "grace32") {
-        _noteType = NoteType::GRACE32;
-        e.readNext();
-    } else if (tag == "grace8after") {
-        _noteType = NoteType::GRACE8_AFTER;
-        e.readNext();
-    } else if (tag == "grace16after") {
-        _noteType = NoteType::GRACE16_AFTER;
-        e.readNext();
-    } else if (tag == "grace32after") {
-        _noteType = NoteType::GRACE32_AFTER;
-        e.readNext();
-    } else if (tag == "StemSlash") {
-        StemSlash* ss = Factory::createStemSlash(this);
-        ss->read(e);
-        add(ss);
-    } else if (readProperty(tag, e, Pid::STEM_DIRECTION)) {
-    } else if (tag == "noStem") {
-        _noStem = e.readInt();
-    } else if (tag == "Arpeggio") {
-        _arpeggio = Factory::createArpeggio(this);
-        _arpeggio->setTrack(track());
-        _arpeggio->read(e);
-        _arpeggio->setParent(this);
-    } else if (tag == "Tremolo") {
-        _tremolo = Factory::createTremolo(this);
-        _tremolo->setTrack(track());
-        _tremolo->read(e);
-        _tremolo->setParent(this);
-        _tremolo->setDurationType(durationType());
-    } else if (tag == "tickOffset") {     // obsolete
-    } else if (tag == "ChordLine") {
-        ChordLine* cl = Factory::createChordLine(this);
-        cl->read(e);
-        add(cl);
-    } else {
-        return false;
-    }
-    return true;
+    return rw400::ChordRW::readProperties(this, e, *e.context());
 }
 
 //---------------------------------------------------------
