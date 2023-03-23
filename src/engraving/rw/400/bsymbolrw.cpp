@@ -32,6 +32,7 @@
 #include "engravingitemrw.h"
 #include "symbolrw.h"
 #include "fsymbolrw.h"
+#include "imagerw.h"
 
 using namespace mu::engraving::rw400;
 
@@ -56,7 +57,7 @@ bool BSymbolRW::readProperties(BSymbol* sym, XmlReader& e, ReadContext& ctx)
             e.skipCurrentElement();
         } else {
             Image* image = new Image(sym);
-            image->read(e);
+            ImageRW::read(image, e, ctx);
             sym->add(image);
         }
     } else {

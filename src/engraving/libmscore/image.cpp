@@ -29,6 +29,7 @@
 #include "draw/types/transform.h"
 #include "draw/svgrenderer.h"
 #include "rw/xml.h"
+#include "rw/400/imagerw.h"
 
 #include "imageStore.h"
 #include "masterscore.h"
@@ -344,36 +345,11 @@ void Image::write(XmlWriter& xml) const
 
 void Image::read(XmlReader& e)
 {
-    if (score()->mscVersion() <= 114) {
-        _sizeIsSpatium = false;
-    }
+    rw400::ImageRW::read(this, e, *e.context());
+}
 
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "autoScale") {
-            readProperty(e, Pid::AUTOSCALE);
-        } else if (tag == "size") {
-            readProperty(e, Pid::SIZE);
-        } else if (tag == "lockAspectRatio") {
-            readProperty(e, Pid::LOCK_ASPECT_RATIO);
-        } else if (tag == "sizeIsSpatium") {
-            // setting this using the property Pid::SIZE_IS_SPATIUM breaks, because the
-            // property setter attempts to maintain a constant size. If we're reading, we
-            // don't want to do that, because the stored size will be in:
-            //    mm if size isn't spatium
-            //    sp if size is spatium
-            _sizeIsSpatium = e.readBool();
-        } else if (tag == "path") {
-            _storePath = e.readText();
-        } else if (tag == "linkPath") {
-            _linkPath = e.readText();
-        } else if (tag == "subtype") {    // obsolete
-            e.skipCurrentElement();
-        } else if (!BSymbol::readProperties(e)) {
-            e.unknown();
-        }
-    }
-
+bool Image::load()
+{
     // once all paths are read, load img or retrieve it from store
     // loading from file is tried first to update the stored image, if necessary
 
@@ -394,7 +370,8 @@ void Image::read(XmlReader& e)
     }
     // if no success from store path, attempt loading from link path (for .mscx files)
     if (!loaded) {
-        _linkIsValid = load(_linkPath);
+        loaded = load(_linkPath);
+        _linkIsValid = loaded;
         path = _linkPath;
     }
 
@@ -403,6 +380,8 @@ void Image::read(XmlReader& e)
     } else {
         setImageType(ImageType::RASTER);
     }
+
+    return loaded;
 }
 
 //---------------------------------------------------------

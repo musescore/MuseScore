@@ -37,6 +37,7 @@
 #include "articulationrw.h"
 #include "engravingitemrw.h"
 #include "symbolrw.h"
+#include "imagerw.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
@@ -72,7 +73,7 @@ void BarLineRW::read(BarLine* b, XmlReader& e, ReadContext& ctx)
             } else {
                 Image* image = Factory::createImage(b);
                 image->setTrack(b->track());
-                image->read(e);
+                ImageRW::read(image, e, ctx);
                 b->add(image);
             }
         } else if (!EngravingItemRW::readProperties(b, e, ctx)) {
