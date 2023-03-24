@@ -3849,7 +3849,7 @@ void Chord::layoutArticulations()
 //    To be finished after laying out slurs
 //---------------------------------------------------------
 
-void Chord::layoutArticulations2()
+void Chord::layoutArticulations2(bool layoutOnCrossBeamSide)
 {
     for (Chord* gc : graceNotes()) {
         gc->layoutArticulations2();
@@ -3900,6 +3900,9 @@ void Chord::layoutArticulations2()
         }
     }
     for (Articulation* a : _articulations) {
+        if (layoutOnCrossBeamSide && !a->isOnCrossBeamSide()) {
+            continue;
+        }
         ArticulationAnchor aa = a->anchor();
         if (aa != ArticulationAnchor::TOP_CHORD && aa != ArticulationAnchor::BOTTOM_CHORD) {
             continue;
@@ -3932,6 +3935,9 @@ void Chord::layoutArticulations2()
     staffTopY = std::min(staffTopY, chordTopY);
     staffBotY = std::max(staffBotY, chordBotY);
     for (Articulation* a : _articulations) {
+        if (layoutOnCrossBeamSide && !a->isOnCrossBeamSide()) {
+            continue;
+        }
         ArticulationAnchor aa = a->anchor();
         if (aa == ArticulationAnchor::TOP_STAFF
             || aa == ArticulationAnchor::BOTTOM_STAFF
@@ -3953,7 +3959,7 @@ void Chord::layoutArticulations2()
     }
 
     for (Articulation* a : _articulations) {
-        if (a->addToSkyline()) {
+        if (a->addToSkyline() && !a->isOnCrossBeamSide()) {
             // the segment shape has already been calculated
             // so measure width and spacing is already determined
             // in line mode, we cannot add to segment shape without throwing this off

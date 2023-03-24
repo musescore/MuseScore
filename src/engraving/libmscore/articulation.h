@@ -199,6 +199,8 @@ public:
     void doAutoplace();
 
     void styleChanged() override;
+
+    bool isOnCrossBeamSide() const;
 };
 } // namespace mu::engraving
 
