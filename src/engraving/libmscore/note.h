@@ -333,7 +333,7 @@ public:
     int subtype() const override { return int(_headGroup); }
     TranslatableString subtypeUserName() const override;
 
-    void setPitch(int val);
+    void setPitch(int val, bool notifyAboutChanged = true);
     void setPitch(int pitch, int tpc1, int tpc2);
     int pitch() const { return _pitch; }
     int ottaveCapoFret() const;
@@ -419,6 +419,7 @@ public:
     void read(XmlReader&) override;
     bool readProperties(XmlReader&) override;
     void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
+    void setupAfterRead(const Fraction& tick, bool pasteMode);
     void write(XmlWriter&) const override;
 
     bool acceptDrop(EditData&) const override;
