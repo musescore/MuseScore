@@ -39,6 +39,7 @@
 #include "symbolrw.h"
 #include "imagerw.h"
 #include "engravingitemrw.h"
+#include "accidentalrw.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
@@ -73,7 +74,7 @@ bool NoteRW::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
     } else if (tag == "Accidental") {
         Accidental* a = Factory::createAccidental(n);
         a->setTrack(n->track());
-        a->read(e);
+        AccidentalRW::read(a, e, ctx);
         n->add(a);
     } else if (tag == "Spanner") {
         Spanner::readSpanner(e, n, n->track());
