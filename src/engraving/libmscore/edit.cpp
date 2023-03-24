@@ -5348,6 +5348,8 @@ static void undoChangeNoteVisibility(Note* note, bool visible)
 
     static const std::unordered_set<ElementType> IGNORED_TYPES {
         ElementType::NOTE,
+        ElementType::LYRICS,
+        ElementType::SLUR,
         ElementType::CHORD, // grace notes
         ElementType::LEDGER_LINE, // temporary objects, impossible to change visibility
     };
