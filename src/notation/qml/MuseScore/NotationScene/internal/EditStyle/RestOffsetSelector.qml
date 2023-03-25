@@ -35,10 +35,6 @@ Rectangle {
     }
 
     RadioButtonGroup {
-        width: 224
-        height: 30
-        spacing: 12
-
         model: [
             { text: qsTrc("notation", "1 space"), value: false },
             { text: qsTrc("notation", "2 spaces"), value: true }
@@ -49,23 +45,7 @@ Rectangle {
             height: 30
 
             checked: modelData.value === restsPageModel.multiVoiceRestTwoSpaceOffset.value
-
-            Column {
-                anchors.centerIn: parent
-                height: childrenRect.height
-                spacing: 8
-
-                StyledIconLabel {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    iconCode: modelData.iconCode
-                    font.pixelSize: 32
-                }
-
-                StyledTextLabel {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: modelData.text
-                }
-            }
+            text: modelData.text
 
             onToggled: {
                 restsPageModel.multiVoiceRestTwoSpaceOffset.value = modelData.value
