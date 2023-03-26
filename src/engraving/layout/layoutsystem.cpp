@@ -1549,6 +1549,6 @@ void LayoutSystem::manageNarrowSpacing(System* system, double& curSysWidth, doub
             m->respaceSegments();
             curSysWidth += m->width() - prevWidth;
         }
-        widthReduction *= 1 - smallerStep;
+        widthReduction -= smallerStep;
     }
 }
