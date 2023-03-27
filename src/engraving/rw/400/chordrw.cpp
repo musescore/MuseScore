@@ -39,6 +39,7 @@
 #include "noterw.h"
 #include "stemrw.h"
 #include "hookrw.h"
+#include "stemslashrw.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
@@ -109,7 +110,7 @@ bool ChordRW::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         e.readNext();
     } else if (tag == "StemSlash") {
         StemSlash* ss = Factory::createStemSlash(ch);
-        ss->read(e);
+        StemSlashRW::read(ss, e, ctx);
         ch->add(ss);
     } else if (PropertyRW::readProperty(ch, tag, e, ctx, Pid::STEM_DIRECTION)) {
     } else if (tag == "noStem") {

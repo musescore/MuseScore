@@ -37,6 +37,15 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
 
+void EngravingItemRW::read(EngravingItem* item, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        if (!readProperties(item, e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
 bool EngravingItemRW::readProperties(EngravingItem* item, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag(e.name());
