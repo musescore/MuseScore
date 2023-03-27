@@ -723,8 +723,6 @@ void TieSegment::adjustX()
                 }
             } else if (sn->tieBack()) {
                 xo += spatium() / 6; // 1/3 spatium in either direction, so .33/2
-            } else {
-                xo += spatium() / 8; // tiny offset to the right
             }
         }
         xo *= sc->mag();
@@ -801,8 +799,6 @@ void TieSegment::adjustX()
                 xo -= offsetMargin;
             } else if (en && en->tieFor()) {
                 xo -= spatium() / 6;
-            } else {
-                xo -= spatium() / 8;
             }
         }
         xo *= ec->mag();
