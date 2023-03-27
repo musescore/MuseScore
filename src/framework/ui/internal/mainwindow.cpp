@@ -80,7 +80,7 @@ void MainWindow::toggleFullScreen()
         return;
     }
 
-    m_bridge->showOnFront();
+    m_bridge->toggleFullScreen();
 }
 
 QScreen* MainWindow::screen() const
