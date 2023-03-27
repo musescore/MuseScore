@@ -69,6 +69,7 @@
         <file>qml/DevTools/DevToolsPage.qml</file>
         <file>qml/dockwindow/DockWidget.qml</file>
         <file>qml/dockwindow/DockTitleBar.qml</file>
+        <file>qml/dockwindow/DockTitleBarMouseArea.qml</file>
         <file>qml/dockwindow/DockTabBar.qml</file>
         <file>qml/dockwindow/DockToolBar.qml</file>
         <file>qml/dockwindow/DockFrame.qml</file>
