@@ -40,6 +40,7 @@
 #include "stemrw.h"
 #include "hookrw.h"
 #include "stemslashrw.h"
+#include "arpeggiorw.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
@@ -118,7 +119,7 @@ bool ChordRW::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
     } else if (tag == "Arpeggio") {
         Arpeggio* arpeggio = Factory::createArpeggio(ch);
         arpeggio->setTrack(ch->track());
-        arpeggio->read(e);
+        ArpeggioRW::read(arpeggio, e, ctx);
         arpeggio->setParent(ch);
         ch->setArpeggio(arpeggio);
     } else if (tag == "Tremolo") {
