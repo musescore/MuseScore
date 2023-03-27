@@ -26,6 +26,7 @@
 #include "draw/types/pen.h"
 #include "draw/types/transform.h"
 #include "rw/xml.h"
+#include "rw/400/tremolorw.h"
 #include "style/style.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
@@ -755,44 +756,28 @@ void Tremolo::write(XmlWriter& xml) const
     xml.endElement();
 }
 
+void Tremolo::setUserModified(DirectionV d, bool val)
+{
+    switch (d) {
+    case DirectionV::AUTO:
+        _userModified[0] = val;
+        break;
+    case DirectionV::DOWN:
+        _userModified[0] = val;
+        break;
+    case DirectionV::UP:
+        _userModified[1] = val;
+        break;
+    }
+}
+
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
 void Tremolo::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "subtype") {
-            setTremoloType(TConv::fromXml(e.readAsciiText(), TremoloType::INVALID_TREMOLO));
-        }
-        // Style needs special handling other than readStyledProperty()
-        // to avoid calling customStyleApplicable() in setProperty(),
-        // which cannot be called now because durationType() isn't defined yet.
-        else if (tag == "strokeStyle") {
-            setStyle(TremoloStyle(e.readInt()));
-            setPropertyFlags(Pid::TREMOLO_STYLE, PropertyFlags::UNSTYLED);
-        } else if (tag == "Fragment") {
-            BeamFragment f = BeamFragment();
-            int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
-            _userModified[idx] = true;
-            double _spatium = spatium();
-            while (e.readNextStartElement()) {
-                const AsciiStringView tag1(e.name());
-                if (tag1 == "y1") {
-                    f.py1[idx] = e.readDouble() * _spatium;
-                } else if (tag1 == "y2") {
-                    f.py2[idx] = e.readDouble() * _spatium;
-                } else {
-                    e.unknown();
-                }
-            }
-            _beamFragment = f;
-        } else if (readStyledProperty(e, tag)) {
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
+    rw400::TremoloRW::read(this, e, *e.context());
 }
 
 TDuration Tremolo::durationType() const
