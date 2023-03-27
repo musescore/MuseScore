@@ -28,6 +28,7 @@
 
 #include "iengravingfont.h"
 #include "rw/xml.h"
+#include "rw/400/arpeggiorw.h"
 #include "types/typesconv.h"
 
 #include "accidental.h"
@@ -99,30 +100,9 @@ void Arpeggio::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
 void Arpeggio::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "subtype") {
-            _arpeggioType = TConv::fromXml(e.readAsciiText(), ArpeggioType::NORMAL);
-        } else if (tag == "userLen1") {
-            _userLen1 = e.readDouble() * spatium();
-        } else if (tag == "userLen2") {
-            _userLen2 = e.readDouble() * spatium();
-        } else if (tag == "span") {
-            _span = e.readInt();
-        } else if (tag == "play") {
-            _playArpeggio = e.readBool();
-        } else if (tag == "timeStretch") {
-            _stretch = e.readDouble();
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
+    rw400::ArpeggioRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
