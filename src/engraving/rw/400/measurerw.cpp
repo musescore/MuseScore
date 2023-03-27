@@ -56,6 +56,8 @@
 #include "barlinerw.h"
 #include "locationrw.h"
 #include "chordrw.h"
+#include "mmrestrw.h"
+#include "restrw.h"
 
 #include "log.h"
 
@@ -297,7 +299,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
                 MMRest* mmr = Factory::createMMRest(segment);
                 mmr->setTrack(ctx.track());
                 mmr->setParent(segment);
-                mmr->read(e);
+                MMRestRW::read(mmr, e, ctx);
                 segment->add(mmr);
                 ctx.incTick(mmr->actualTicks());
             } else {
@@ -306,7 +308,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
                 rest->setDurationType(DurationType::V_MEASURE);
                 rest->setTicks(measure->timesig() / timeStretch);
                 rest->setTrack(ctx.track());
-                rest->read(e);
+                RestRW::read(rest, e, ctx);
                 if (startingBeam) {
                     startingBeam->add(rest); // also calls rest->setBeam(startingBeam)
                     startingBeam = nullptr;

@@ -24,6 +24,7 @@
 
 #include "draw/types/pen.h"
 #include "rw/xml.h"
+#include "rw/400/mmrestrw.h"
 
 #include "measure.h"
 #include "score.h"
@@ -235,14 +236,7 @@ void MMRest::writeProperties(XmlWriter& xml) const
 
 bool MMRest::readProperties(XmlReader& xml)
 {
-    const AsciiStringView tag(xml.name());
-    if (tag == "mmRestNumberVisible") {
-        setProperty(Pid::MMREST_NUMBER_VISIBLE, xml.readBool());
-    } else if (ChordRest::readProperties(xml)) {
-    } else {
-        return false;
-    }
-    return true;
+    return rw400::MMRestRW::readProperties(this, xml, *xml.context());
 }
 
 //---------------------------------------------------------
