@@ -95,6 +95,10 @@ public:
     void setTremoloType(TremoloType t);
     TremoloType tremoloType() const { return _tremoloType; }
 
+    DirectionV direction() const { return _direction; }
+
+    void setUserModified(DirectionV d, bool val);
+
     double minHeight() const;
     void reset() override;
 
@@ -146,6 +150,7 @@ public:
     TremoloStyle style() const { return _style; }
     void setStyle(TremoloStyle v) { _style = v; }
     void setBeamDirection(DirectionV v);
+    void setBeamFragment(const BeamFragment& bf) { _beamFragment = bf; }
 
     double defaultStemLengthStart();
     double defaultStemLengthEnd();

@@ -41,6 +41,8 @@
 #include "hookrw.h"
 #include "stemslashrw.h"
 #include "arpeggiorw.h"
+#include "tremolorw.h"
+#include "chordlinerw.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
@@ -125,14 +127,14 @@ bool ChordRW::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
     } else if (tag == "Tremolo") {
         Tremolo* tremolo = Factory::createTremolo(ch);
         tremolo->setTrack(ch->track());
-        tremolo->read(e);
+        TremoloRW::read(tremolo, e, ctx);
         tremolo->setParent(ch);
         tremolo->setDurationType(ch->durationType());
         ch->setTremolo(tremolo, false);
     } else if (tag == "tickOffset") {     // obsolete
     } else if (tag == "ChordLine") {
         ChordLine* cl = Factory::createChordLine(ch);
-        cl->read(e);
+        ChordLineRW::read(cl, e, ctx);
         ch->add(cl);
     } else {
         return false;
