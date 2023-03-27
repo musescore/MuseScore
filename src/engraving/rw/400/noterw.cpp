@@ -42,6 +42,7 @@
 #include "accidentalrw.h"
 #include "bendrw.h"
 #include "notedotrw.h"
+#include "chordlinerw.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
@@ -165,7 +166,7 @@ bool NoteRW::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
     } else if (tag == "ChordLine" && n->chord()) {
         ChordLine* cl = Factory::createChordLine(n->chord());
         cl->setNote(n);
-        cl->read(e);
+        ChordLineRW::read(cl, e, ctx);
         n->chord()->add(cl);
     } else if (EngravingItemRW::readProperties(n, e, ctx)) {
     } else {

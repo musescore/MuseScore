@@ -49,7 +49,7 @@ private:
     bool _wavy = false;
 
     ChordLineType _chordLineType = ChordLineType::NOTYPE;
-    mu::draw::PainterPath path;
+    draw::PainterPath path;
     bool modified = false;
     double _lengthX = 0.0;
     double _lengthY = 0.0;
@@ -79,6 +79,8 @@ public:
     void setWavy(bool wavy) { _wavy =  wavy; }
     void setLengthX(double length) { _lengthX = length; }
     void setLengthY(double length) { _lengthY = length; }
+    void setPath(const draw::PainterPath& p) { path = p; }
+    void setModified(bool m) { modified = m; }
 
     const TranslatableString& chordLineTypeName() const;
 
