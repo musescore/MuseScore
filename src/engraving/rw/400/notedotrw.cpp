@@ -19,29 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_PROPERTYRW_H
-#define MU_ENGRAVING_PROPERTYRW_H
+#include "notedotrw.h"
 
-#include "global/types/string.h"
+#include "../../libmscore/notedot.h"
 
-#include "../../libmscore/property.h"
+#include "../xmlreader.h"
 
-namespace mu::engraving {
-class XmlReader;
-class ReadContext;
-class EngravingItem;
-}
+#include "engravingitemrw.h"
 
-namespace mu::engraving::rw400 {
-class PropertyRW
+using namespace mu::engraving;
+using namespace mu::engraving::rw400;
+
+void NoteDotRW::read(NoteDot* d, XmlReader& e, ReadContext& ctx)
 {
-public:
-    PropertyRW() = default;
-
-    static bool readProperty(EngravingItem* item, const AsciiStringView&, XmlReader&, ReadContext&, Pid);
-    static void readProperty(EngravingItem* item, XmlReader&, ReadContext&, Pid);
-    static bool readStyledProperty(EngravingItem* item, const AsciiStringView& tag, XmlReader& xml, ReadContext& ctx);
-};
+    while (e.readNextStartElement()) {
+        if (e.name() == "name") {      // obsolete
+            e.readText();
+        } else if (e.name() == "subtype") {     // obsolete
+            e.readText();
+        } else if (!EngravingItemRW::readProperties(d, e, ctx)) {
+            e.unknown();
+        }
+    }
 }
-
-#endif // MU_ENGRAVING_PROPERTYRW_H

@@ -19,29 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_PROPERTYRW_H
-#define MU_ENGRAVING_PROPERTYRW_H
-
-#include "global/types/string.h"
-
-#include "../../libmscore/property.h"
+#ifndef MU_ENGRAVING_NOTEDOTRW_H
+#define MU_ENGRAVING_NOTEDOTRW_H
 
 namespace mu::engraving {
 class XmlReader;
 class ReadContext;
-class EngravingItem;
+class NoteDot;
 }
 
 namespace mu::engraving::rw400 {
-class PropertyRW
+class NoteDotRW
 {
 public:
-    PropertyRW() = default;
+    NoteDotRW() = default;
 
-    static bool readProperty(EngravingItem* item, const AsciiStringView&, XmlReader&, ReadContext&, Pid);
-    static void readProperty(EngravingItem* item, XmlReader&, ReadContext&, Pid);
-    static bool readStyledProperty(EngravingItem* item, const AsciiStringView& tag, XmlReader& xml, ReadContext& ctx);
+    static void read(NoteDot* d, XmlReader& xml, ReadContext& ctx);
 };
 }
 
-#endif // MU_ENGRAVING_PROPERTYRW_H
+#endif // MU_ENGRAVING_NOTEDOTRW_H
