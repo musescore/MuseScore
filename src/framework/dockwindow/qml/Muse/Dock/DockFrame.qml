@@ -34,9 +34,13 @@ Rectangle {
     //! NOTE: please, don't rename those properties because they are used in c++
     property QtObject frameCpp
     readonly property QtObject titleBarCpp: Boolean(frameCpp) ? frameCpp.actualTitleBar : null
-    readonly property int nonContentsHeight: titleBar.visible ? titleBar.heightWhenVisible + tabBar.height : 0
+    readonly property int nonContentsHeight: titleBar.height + tabBar.height + stackLayout.anchors.topMargin
     property int titleBarNavigationPanelOrder: 1
     //! ---
+
+    readonly property bool hasTitleBar: frameModel.titleBarAllowed && !(frameModel.tabs.length > 1 || frameModel.isHorizontalPanel)
+    readonly property bool hasSingleTab: frameModel.titleBarAllowed && frameModel.tabs.length === 1 && frameModel.isHorizontalPanel
+    readonly property bool hasTabBar: frameModel.titleBarAllowed && (frameModel.tabs.length > 1 || frameModel.isHorizontalPanel)
 
     anchors.fill: parent
     color: ui.theme.backgroundPrimaryColor
@@ -77,14 +81,16 @@ Rectangle {
         id: titleBar
 
         anchors.top: parent.top
+        width: parent.width
+        height: visible ? 34 : 0
+
+        visible: root.hasTitleBar
 
         property alias titleBar: frameModel.titleBar
 
         titleBarCpp: root.titleBarCpp
 
         contextMenuModel: frameModel.currentDockContextMenuModel
-        visible: frameModel.titleBarVisible
-        isHorizontalPanel: frameModel.isHorizontalPanel
 
         navigationPanel: navPanel
         navigationOrder: 1
@@ -99,12 +105,12 @@ Rectangle {
     DockTabBar {
         id: tabBar
 
-        anchors.top: titleBar.visible ? titleBar.bottom : parent.top
-
-        height: visible ? 35 : 0
+        anchors.top: parent.top
         width: parent.width
+        height: visible ? 35 : 0
 
-        visible: frameModel.tabs.length > 1
+        visible: root.hasTabBar
+        draggingTabsAllowed: root.hasTabBar && !root.hasSingleTab
 
         tabBarCpp: Boolean(root.frameCpp) ? root.frameCpp.tabWidget.tabBar : null
         tabsModel: frameModel.tabs
@@ -131,10 +137,23 @@ Rectangle {
         }
     }
 
+    DockTitleBarMouseArea {
+        id: titleBarMouseArea
+
+        anchors.fill: tabBar.visible ? tabBar
+                                     : titleBar.visible ? titleBar : null
+
+        enabled: root.hasTitleBar || root.hasSingleTab
+        propagateComposedEvents: true
+
+        titleBarCpp: root.titleBarCpp
+    }
+
     StackLayout {
         id: stackLayout
 
-        anchors.top: tabBar.visible ? tabBar.bottom : (titleBar.visible ? titleBar.bottom : parent.top)
+        anchors.top: tabBar.visible ? tabBar.bottom
+                                    : titleBar.visible ? titleBar.bottom : parent.top
         anchors.topMargin: tabBar.visible ? 12 : 0
         anchors.bottom: parent.bottom
 
