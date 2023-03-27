@@ -46,8 +46,8 @@ Rectangle {
 
     function updateMouseArea() {
         if (tabBarCpp) {
-            tabBarCpp.setDraggableMouseArea(draggingTabsAllowed ? draggingTabsMouseArea : null)
-            tabBarCpp.tabBarQmlItem = draggingTabsAllowed ? this : null
+            tabBarCpp.setDraggableMouseArea(draggingTabsMouseArea)
+            tabBarCpp.tabBarQmlItem = this
         }
     }
 

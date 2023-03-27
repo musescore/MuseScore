@@ -79,7 +79,7 @@ QVariantList DockFrameModel::tabs() const
 {
     QVariantList result;
 
-    if (!m_frame || m_frame->hasSingleDockWidget()) {
+    if (!m_frame) {
         return result;
     }
 
@@ -94,9 +94,9 @@ QVariantList DockFrameModel::tabs() const
     return result;
 }
 
-bool DockFrameModel::titleBarVisible() const
+bool DockFrameModel::titleBarAllowed() const
 {
-    return m_titleBarVisible;
+    return m_titleBarAllowed;
 }
 
 bool DockFrameModel::isHorizontalPanel() const
@@ -131,7 +131,7 @@ void DockFrameModel::listenChangesInFrame()
 
         auto allDocks = m_frame->dockWidgets();
         if (allDocks.isEmpty()) {
-            setTitleBarVisible(false);
+            setTitleBarAllowed(false);
             return;
         }
 
@@ -140,8 +140,8 @@ void DockFrameModel::listenChangesInFrame()
                                  && (properties.location == Location::Top || properties.location == Location::Bottom);
         setIsHorizontalPanel(isHorizontalPanel);
 
-        bool visible = (allDocks.size() == 1) && (properties.type == DockType::Panel) && (properties.floatable || properties.closable);
-        setTitleBarVisible(visible);
+        bool allowed = (properties.type == DockType::Panel) && (properties.floatable || properties.closable);
+        setTitleBarAllowed(allowed);
 
         updateNavigationSection();
     });
@@ -153,14 +153,14 @@ void DockFrameModel::listenChangesInFrame()
     });
 }
 
-void DockFrameModel::setTitleBarVisible(bool visible)
+void DockFrameModel::setTitleBarAllowed(bool allowed)
 {
-    if (visible == m_titleBarVisible) {
+    if (allowed == m_titleBarAllowed) {
         return;
     }
 
-    m_titleBarVisible = visible;
-    emit titleBarVisibleChanged(visible);
+    m_titleBarAllowed = allowed;
+    emit titleBarAllowedChanged(allowed);
 }
 
 void DockFrameModel::setIsHorizontalPanel(bool is)
