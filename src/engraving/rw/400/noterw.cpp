@@ -43,6 +43,7 @@
 #include "bendrw.h"
 #include "notedotrw.h"
 #include "chordlinerw.h"
+#include "fingeringrw.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
@@ -120,7 +121,7 @@ bool NoteRW::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
     } else if (tag == "Fingering") {
         Fingering* f = Factory::createFingering(n);
         f->setTrack(n->track());
-        f->read(e);
+        FingeringRW::read(f, e, ctx);
         n->add(f);
     } else if (tag == "Symbol") {
         Symbol* s = new Symbol(n);
