@@ -26,82 +26,48 @@ import QtQuick.Layouts 1.12
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 
-import "qrc:/kddockwidgets/private/quick/qml/" as KDDW
-
 Item {
     id: root
 
     required property QtObject titleBarCpp
 
     property alias contextMenuModel: contextMenuButton.menuModel
-    property alias heightWhenVisible: titleBar.heightWhenVisible
-    property bool isHorizontalPanel: false
 
     property alias navigation: contextMenuButton.navigation
 
     signal handleContextMenuItemRequested(string itemId)
 
-    width: parent.width
-    height: visible ? heightWhenVisible : 0
-
-    visible: Boolean(titleBarCpp)
-
-    KDDW.TitleBarBase {
-        id: titleBar
-
+    MouseArea {
+        id: mouseArea
         anchors.fill: parent
+        acceptedButtons: Qt.NoButton
+        cursorShape: Qt.SizeAllCursor
+    }
 
-        heightWhenVisible: titleBarContent.implicitHeight
-        color: ui.theme.backgroundPrimaryColor
+    RowLayout {
+        anchors.fill: parent
+        anchors.leftMargin: 12
+        anchors.rightMargin: 12
 
-        visible: parent.visible
+        spacing: 4
 
-        MouseArea {
-            id: mouseArea
-            anchors.fill: parent
-            acceptedButtons: Qt.NoButton
-            cursorShape: Qt.SizeAllCursor
+        StyledTextLabel {
+            id: titleLabel
+            Layout.fillWidth: true
+
+            text: root.titleBarCpp ? root.titleBarCpp.title : ""
+            font: ui.theme.bodyBoldFont
+            horizontalAlignment: Text.AlignLeft
         }
 
-        Column {
-            id: titleBarContent
+        MenuButton {
+            id: contextMenuButton
 
-            anchors.fill: parent
-            anchors.leftMargin: 12
-            anchors.rightMargin: 12
+            width: 20
+            height: width
 
-            spacing: 0
-
-            RowLayout {
-                width: parent.width
-                height: 34
-
-                StyledTextLabel {
-                    id: titleLabel
-                    Layout.fillWidth: true
-
-                    text: titleBar.title
-                    font: ui.theme.bodyBoldFont
-                    horizontalAlignment: Qt.AlignLeft
-                }
-
-                MenuButton {
-                    id: contextMenuButton
-
-                    width: 20
-                    height: width
-
-                    onHandleMenuItem: function(itemId) {
-                        root.handleContextMenuItemRequested(itemId)
-                    }
-                }
-            }
-
-            SeparatorLine {
-                id: bottomSeparator
-                orientation: Qt.Horizontal
-                anchors.margins: -12
-                visible: root.isHorizontalPanel
+            onHandleMenuItem: function(itemId) {
+                root.handleContextMenuItemRequested(itemId)
             }
         }
     }
