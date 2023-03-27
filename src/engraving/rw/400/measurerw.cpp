@@ -58,6 +58,7 @@
 #include "chordrw.h"
 #include "mmrestrw.h"
 #include "restrw.h"
+#include "breathrw.h"
 
 #include "log.h"
 
@@ -334,7 +335,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             Breath* breath = Factory::createBreath(segment);
             breath->setTrack(ctx.track());
             breath->setPlacement(breath->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
-            breath->read(e);
+            BreathRW::read(breath, e, ctx);
             segment->add(breath);
         } else if (tag == "Spanner") {
             Spanner::readSpanner(e, measure, ctx.track());
