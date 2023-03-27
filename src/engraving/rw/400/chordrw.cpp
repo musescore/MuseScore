@@ -36,6 +36,8 @@
 
 #include "propertyrw.h"
 #include "chordrestrw.h"
+#include "noterw.h"
+#include "stemrw.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
@@ -68,12 +70,12 @@ bool ChordRW::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         // the note needs to know the properties of the track it belongs to
         note->setTrack(ch->track());
         note->setParent(ch);
-        note->read(e);
+        NoteRW::read(note, e, ctx);
         ch->add(note);
     } else if (ChordRestRW::readProperties(ch, e, ctx)) {
     } else if (tag == "Stem") {
         Stem* s = Factory::createStem(ch);
-        s->read(e);
+        StemRW::read(s, e, ctx);
         ch->add(s);
     } else if (tag == "Hook") {
         Hook* hook = new Hook(ch);

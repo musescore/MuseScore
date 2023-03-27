@@ -24,6 +24,7 @@
 #include <cmath>
 
 #include "rw/xml.h"
+#include "rw/400/stemrw.h"
 #include "draw/types/brush.h"
 
 #include "beam.h"
@@ -230,24 +231,12 @@ void Stem::write(XmlWriter& xml) const
 
 void Stem::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
+    rw400::StemRW::read(this, e, *e.context());
 }
 
 bool Stem::readProperties(XmlReader& e)
 {
-    const AsciiStringView tag(e.name());
-
-    if (readProperty(tag, e, Pid::USER_LEN)) {
-    } else if (readStyledProperty(e, tag)) {
-    } else if (EngravingItem::readProperties(e)) {
-    } else {
-        return false;
-    }
-    return true;
+    return rw400::StemRW::readProperties(this, e, *e.context());
 }
 
 std::vector<mu::PointF> Stem::gripsPositions(const EditData&) const
