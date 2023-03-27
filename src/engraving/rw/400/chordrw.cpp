@@ -38,6 +38,7 @@
 #include "chordrestrw.h"
 #include "noterw.h"
 #include "stemrw.h"
+#include "hookrw.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
@@ -79,7 +80,7 @@ bool ChordRW::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         ch->add(s);
     } else if (tag == "Hook") {
         Hook* hook = new Hook(ch);
-        hook->read(e);
+        HookRW::read(hook, e, ctx);
         ch->setHook(hook);
         ch->add(hook);
     } else if (tag == "appoggiatura") {
