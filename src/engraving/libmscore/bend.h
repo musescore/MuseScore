@@ -62,6 +62,7 @@ public:
     void read(XmlReader& e) override;
     PitchValues& points() { return m_points; }
     const PitchValues& points() const { return m_points; }
+    void addPoint(const PitchValue& pv) { m_points.push_back(pv); }
     void setPoints(const PitchValues& p) { m_points = p; }
     bool playBend() const { return m_playBend; }
     void setPlayBend(bool v) { m_playBend = v; }

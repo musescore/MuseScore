@@ -22,10 +22,12 @@
 
 #include "bend.h"
 
+#include "rw/xml.h"
+#include "rw/400/bendrw.h"
+
 #include "draw/types/pen.h"
 #include "draw/types/brush.h"
 #include "draw/fontmetrics.h"
-#include "rw/xml.h"
 
 #include "note.h"
 #include "score.h"
@@ -371,29 +373,9 @@ void Bend::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
 void Bend::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-
-        if (readStyledProperty(e, tag)) {
-        } else if (tag == "point") {
-            PitchValue pv;
-            pv.time    = e.intAttribute("time");
-            pv.pitch   = e.intAttribute("pitch");
-            pv.vibrato = e.intAttribute("vibrato");
-            m_points.push_back(pv);
-            e.readNext();
-        } else if (tag == "play") {
-            setPlayBend(e.readBool());
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
+    rw400::BendRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

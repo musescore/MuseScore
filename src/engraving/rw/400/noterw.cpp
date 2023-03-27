@@ -40,6 +40,8 @@
 #include "imagerw.h"
 #include "engravingitemrw.h"
 #include "accidentalrw.h"
+#include "bendrw.h"
+#include "notedotrw.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
@@ -136,11 +138,11 @@ bool NoteRW::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
     } else if (tag == "Bend") {
         Bend* b = Factory::createBend(n);
         b->setTrack(n->track());
-        b->read(e);
+        rw400::BendRW::read(b, e, ctx);
         n->add(b);
     } else if (tag == "NoteDot") {
         NoteDot* dot = Factory::createNoteDot(n);
-        dot->read(e);
+        NoteDotRW::read(dot, e, ctx);
         n->add(dot);
     } else if (tag == "Events") {
         NoteEventList playEvents;

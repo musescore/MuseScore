@@ -62,3 +62,13 @@ void PropertyRW::readProperty(EngravingItem* item, XmlReader& xml, ReadContext& 
         item->setPropertyFlags(pid, PropertyFlags::UNSTYLED);
     }
 }
+
+bool PropertyRW::readStyledProperty(EngravingItem* item, const AsciiStringView& tag, XmlReader& xml, ReadContext& ctx)
+{
+    for (const StyledProperty& spp : *item->styledProperties()) {
+        if (readProperty(item, tag, xml, ctx, spp.pid)) {
+            return true;
+        }
+    }
+    return false;
+}
