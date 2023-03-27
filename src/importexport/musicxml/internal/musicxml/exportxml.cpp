@@ -3134,8 +3134,11 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                 _xml.startElementRaw(mxmlTechn + attr);
                 _xml.tag("natural");
                 _xml.endElement();
-            } else {   // TODO: check additional modifier (attr) for other symbols
-                _xml.tagRaw(mxmlTechn);
+            } else {
+                if (placement != "") {
+                    attr += QString(" placement=\"%1\"").arg(placement);
+                }
+                _xml.tagRaw(mxmlTechn + attr);
             }
         }
     }
