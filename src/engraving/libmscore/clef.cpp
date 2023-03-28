@@ -30,6 +30,7 @@
 #include "translation.h"
 
 #include "rw/xml.h"
+#include "rw/400/clefrw.h"
 #include "types/typesconv.h"
 
 #include "ambitus.h"
@@ -289,29 +290,9 @@ void Clef::setSmall(bool val)
     }
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
 void Clef::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "concertClefType") {
-            _clefTypes._concertClef = TConv::fromXml(e.readAsciiText(), ClefType::G);
-        } else if (tag == "transposingClefType") {
-            _clefTypes._transposingClef = TConv::fromXml(e.readAsciiText(), ClefType::G);
-        } else if (tag == "showCourtesyClef") {
-            _showCourtesy = e.readInt();
-        } else if (tag == "forInstrumentChange") {
-            _forInstrumentChange = e.readBool();
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
-    if (clefType() == ClefType::INVALID) {
-        setClefType(ClefType::G);
-    }
+    rw400::ClefRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
