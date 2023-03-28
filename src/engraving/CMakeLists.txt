@@ -143,6 +143,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/restrw.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/breathrw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/breathrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/measurerepeatrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/measurerepeatrw.h
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.h

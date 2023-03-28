@@ -19,24 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_RESTRW_H
-#define MU_ENGRAVING_RESTRW_H
+#include "measurerepeatrw.h"
 
-namespace mu::engraving {
-class XmlReader;
-class ReadContext;
-class Rest;
-}
+#include "../../libmscore/measurerepeat.h"
 
-namespace mu::engraving::rw400 {
-class RestRW
+#include "../xmlreader.h"
+
+#include "restrw.h"
+
+using namespace mu::engraving;
+using namespace mu::engraving::rw400;
+
+void MeasureRepeatRW::read(MeasureRepeat* r, XmlReader& e, ReadContext& ctx)
 {
-public:
-    RestRW() = default;
-
-    static void read(Rest* r, XmlReader& xml, ReadContext& ctx);
-    static bool readProperties(Rest* r, XmlReader& xml, ReadContext& ctx);
-};
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "subtype") {
+            r->setNumMeasures(e.readInt());
+        } else if (!RestRW::readProperties(r, e, ctx)) {
+            e.unknown();
+        }
+    }
 }
-
-#endif // MU_ENGRAVING_RESTRW_H

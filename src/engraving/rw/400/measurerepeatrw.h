@@ -19,24 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_RESTRW_H
-#define MU_ENGRAVING_RESTRW_H
+#ifndef MU_ENGRAVING_MEASUREREPEATRW_H
+#define MU_ENGRAVING_MEASUREREPEATRW_H
 
 namespace mu::engraving {
 class XmlReader;
 class ReadContext;
-class Rest;
+class MeasureRepeat;
 }
 
 namespace mu::engraving::rw400 {
-class RestRW
+class MeasureRepeatRW
 {
 public:
-    RestRW() = default;
+    MeasureRepeatRW() = default;
 
-    static void read(Rest* r, XmlReader& xml, ReadContext& ctx);
-    static bool readProperties(Rest* r, XmlReader& xml, ReadContext& ctx);
+    static void read(MeasureRepeat* r, XmlReader& xml, ReadContext& ctx);
 };
 }
 
-#endif // MU_ENGRAVING_RESTRW_H
+#endif // MU_ENGRAVING_MEASUREREPEATRW_H

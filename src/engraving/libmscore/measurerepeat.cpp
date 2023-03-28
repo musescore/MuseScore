@@ -24,6 +24,7 @@
 
 #include "draw/types/pen.h"
 #include "rw/xml.h"
+#include "rw/400/measurerepeatrw.h"
 #include "translation.h"
 
 #include "measure.h"
@@ -237,14 +238,7 @@ void MeasureRepeat::write(XmlWriter& xml) const
 
 void MeasureRepeat::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "subtype") {
-            setNumMeasures(e.readInt());
-        } else if (!Rest::readProperties(e)) {
-            e.unknown();
-        }
-    }
+    rw400::MeasureRepeatRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
