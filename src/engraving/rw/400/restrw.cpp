@@ -34,6 +34,7 @@
 #include "notedotrw.h"
 #include "propertyrw.h"
 #include "chordrestrw.h"
+#include "engravingitemrw.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
@@ -66,4 +67,9 @@ void RestRW::read(Rest* r, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+}
+
+bool RestRW::readProperties(Rest* r, XmlReader& xml, ReadContext& ctx)
+{
+    return EngravingItemRW::readProperties(r, xml, ctx);
 }
