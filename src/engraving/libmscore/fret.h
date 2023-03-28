@@ -194,7 +194,6 @@ public:
     void writeNew(XmlWriter& xml) const;
     void writeOld(XmlWriter& xml) const;
     void read(XmlReader&) override;
-    void readNew(XmlReader&);
     std::vector<mu::LineF> dragAnchorLines() const override;
     mu::PointF pagePos() const override;
     double centerX() const;
