@@ -31,6 +31,7 @@
 
 #include "draw/types/brush.h"
 #include "rw/xml.h"
+#include "rw/400/noterw.h"
 #include "translation.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
@@ -698,16 +699,19 @@ inline int Note::concertPitchIdx() const
 //   setPitch
 //---------------------------------------------------------
 
-void Note::setPitch(int val)
+void Note::setPitch(int val, bool notifyAboutChanged)
 {
     assert(pitchIsValid(val));
     if (_pitch != val) {
         _pitch = val;
-        score()->setPlaylistDirty();
+
+        if (notifyAboutChanged) {
+            score()->setPlaylistDirty();
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
-        notifyAboutNameChanged();
+            notifyAboutNameChanged();
 #endif
+        }
     }
 }
 
@@ -1537,15 +1541,11 @@ void Note::write(XmlWriter& xml) const
 
 void Note::read(XmlReader& e)
 {
-    setTpc1(Tpc::TPC_INVALID);
-    setTpc2(Tpc::TPC_INVALID);
+    rw400::NoteRW::read(this, e, *e.context());
+}
 
-    while (e.readNextStartElement()) {
-        if (readProperties(e)) {
-        } else {
-            e.unknown();
-        }
-    }
+void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
+{
     // ensure sane values:
     _pitch = std::clamp(_pitch, 0, 127);
 
@@ -1583,7 +1583,7 @@ void Note::read(XmlReader& e)
     // including perhaps some we don't know about yet,
     // we will attempt to fix some problems here regardless of version
 
-    if (staff() && !staff()->isDrumStaff(e.context()->tick()) && !e.context()->pasteMode() && !MScore::testMode) {
+    if (staff() && !staff()->isDrumStaff(ctxTick) && !pasteMode && !MScore::testMode) {
         int tpc1Pitch = (tpc2pitch(_tpc[0]) + 12) % 12;
         int tpc2Pitch = (tpc2pitch(_tpc[1]) + 12) % 12;
         int soundingPitch = _pitch % 12;
@@ -1592,7 +1592,7 @@ void Note::read(XmlReader& e)
             _pitch += tpc1Pitch - soundingPitch;
         }
         if (staff()) {
-            Interval v = staff()->part()->instrument(e.context()->tick())->transpose();
+            Interval v = staff()->part()->instrument(ctxTick)->transpose();
             int writtenPitch = (_pitch - v.chromatic) % 12;
             if (tpc2Pitch != writtenPitch) {
                 LOGD("bad tpc2 - writtenPitch = %d, tpc2 = %d", writtenPitch, tpc2Pitch);
@@ -1637,113 +1637,7 @@ void Note::read(XmlReader& e)
 
 bool Note::readProperties(XmlReader& e)
 {
-    const AsciiStringView tag(e.name());
-
-    if (tag == "pitch") {
-        _pitch = e.readInt();
-    } else if (tag == "tpc") {
-        _tpc[0] = e.readInt();
-        _tpc[1] = _tpc[0];
-    } else if (tag == "track") {          // for performance
-        setTrack(e.readInt());
-    } else if (tag == "Accidental") {
-        Accidental* a = Factory::createAccidental(this);
-        a->setTrack(track());
-        a->read(e);
-        add(a);
-    } else if (tag == "Spanner") {
-        Spanner::readSpanner(e, this, track());
-    } else if (tag == "tpc2") {
-        _tpc[1] = e.readInt();
-    } else if (tag == "small") {
-        setSmall(e.readInt());
-    } else if (tag == "mirror") {
-        readProperty(e, Pid::MIRROR_HEAD);
-    } else if (tag == "dotPosition") {
-        readProperty(e, Pid::DOT_POSITION);
-    } else if (tag == "fixed") {
-        setFixed(e.readBool());
-    } else if (tag == "fixedLine") {
-        setFixedLine(e.readInt());
-    } else if (tag == "headScheme") {
-        readProperty(e, Pid::HEAD_SCHEME);
-    } else if (tag == "head") {
-        readProperty(e, Pid::HEAD_GROUP);
-    } else if (tag == "velocity") {
-        setUserVelocity(e.readInt());
-    } else if (tag == "play") {
-        setPlay(e.readInt());
-    } else if (tag == "tuning") {
-        setTuning(e.readDouble());
-    } else if (tag == "fret") {
-        setFret(e.readInt());
-    } else if (tag == "string") {
-        setString(e.readInt());
-    } else if (tag == "ghost") {
-        setGhost(e.readInt());
-    } else if (tag == "dead") {
-        setDeadNote(e.readInt());
-    } else if (tag == "headType") {
-        readProperty(e, Pid::HEAD_TYPE);
-    } else if (tag == "veloType") {
-        readProperty(e, Pid::VELO_TYPE);
-    } else if (tag == "line") {
-        setLine(e.readInt());
-    } else if (tag == "Fingering") {
-        Fingering* f = Factory::createFingering(this);
-        f->setTrack(track());
-        f->read(e);
-        add(f);
-    } else if (tag == "Symbol") {
-        Symbol* s = new Symbol(this);
-        s->setTrack(track());
-        s->read(e);
-        add(s);
-    } else if (tag == "Image") {
-        if (MScore::noImages) {
-            e.skipCurrentElement();
-        } else {
-            Image* image = new Image(this);
-            image->setTrack(track());
-            image->read(e);
-            add(image);
-        }
-    } else if (tag == "Bend") {
-        Bend* b = Factory::createBend(this);
-        b->setTrack(track());
-        b->read(e);
-        add(b);
-    } else if (tag == "NoteDot") {
-        NoteDot* dot = Factory::createNoteDot(this);
-        dot->read(e);
-        add(dot);
-    } else if (tag == "Events") {
-        _playEvents.clear();        // remove default event
-        while (e.readNextStartElement()) {
-            const AsciiStringView t(e.name());
-            if (t == "Event") {
-                NoteEvent ne;
-                ne.read(e);
-                _playEvents.push_back(ne);
-            } else {
-                e.unknown();
-            }
-        }
-        if (chord()) {
-            chord()->setPlayEventType(PlayEventType::User);
-        }
-    } else if (tag == "offset") {
-        EngravingItem::readProperties(e);
-    } else if (tag == "ChordLine" && chord()) {
-        ChordLine* cl = Factory::createChordLine(chord());
-        cl->setNote(this);
-        cl->read(e);
-        chord()->add(cl);
-    } else if (EngravingItem::readProperties(e)) {
-    } else {
-        return false;
-    }
-    return true;
+    return rw400::NoteRW::readProperties(this, e, *e.context());
 }
 
 //---------------------------------------------------------

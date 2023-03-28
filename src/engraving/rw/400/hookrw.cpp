@@ -19,23 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_IMAGERW_H
-#define MU_ENGRAVING_IMAGERW_H
+#include "hookrw.h"
 
-namespace mu::engraving {
-class XmlReader;
-class ReadContext;
-class Image;
-}
+#include "../../libmscore/hook.h"
 
-namespace mu::engraving::rw400 {
-class ImageRW
+#include "../xmlreader.h"
+
+#include "symbolrw.h"
+
+using namespace mu::engraving;
+using namespace mu::engraving::rw400;
+
+void HookRW::read(Hook* h, XmlReader& xml, ReadContext& ctx)
 {
-public:
-    ImageRW() = default;
-
-    static void read(Image* img, XmlReader& xml, ReadContext& ctx);
-};
+    SymbolRW::read(h, xml, ctx);
 }
-
-#endif // MU_ENGRAVING_IMAGERW_H

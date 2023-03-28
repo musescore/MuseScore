@@ -24,6 +24,7 @@
 
 #include "iengravingfont.h"
 #include "rw/xml.h"
+#include "rw/400/accidentalrw.h"
 #include "types/symnames.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
@@ -249,30 +250,9 @@ Accidental::Accidental(EngravingItem* parent)
 {
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
 void Accidental::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "bracket") {
-            int i = e.readInt();
-            if (i == 0 || i == 1 || i == 2) {
-                _bracket = AccidentalBracket(i);
-            }
-        } else if (tag == "subtype") {
-            setSubtype(e.readAsciiText());
-        } else if (tag == "role") {
-            _role = TConv::fromXml(e.readAsciiText(), AccidentalRole::AUTO);
-        } else if (tag == "small") {
-            m_isSmall = e.readInt();
-        } else if (EngravingItem::readProperties(e)) {
-        } else {
-            e.unknown();
-        }
-    }
+    rw400::AccidentalRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

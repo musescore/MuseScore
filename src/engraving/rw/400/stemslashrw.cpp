@@ -19,23 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_IMAGERW_H
-#define MU_ENGRAVING_IMAGERW_H
+#include "stemslashrw.h"
 
-namespace mu::engraving {
-class XmlReader;
-class ReadContext;
-class Image;
-}
+#include "../../libmscore/stemslash.h"
 
-namespace mu::engraving::rw400 {
-class ImageRW
+#include "engravingitemrw.h"
+
+using namespace mu::engraving;
+using namespace mu::engraving::rw400;
+
+void StemSlashRW::read(StemSlash* s, XmlReader& xml, ReadContext& ctx)
 {
-public:
-    ImageRW() = default;
-
-    static void read(Image* img, XmlReader& xml, ReadContext& ctx);
-};
+    EngravingItemRW::read(s, xml, ctx);
 }
-
-#endif // MU_ENGRAVING_IMAGERW_H

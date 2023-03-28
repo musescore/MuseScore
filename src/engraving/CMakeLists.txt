@@ -115,6 +115,34 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/lyricsrw.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/textbaserw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/textbaserw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/noterw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/noterw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/accidentalrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/accidentalrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/bendrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/bendrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/notedotrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/notedotrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/chordlinerw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/chordlinerw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/fingeringrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/fingeringrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/stemrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/stemrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/hookrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/hookrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/stemslashrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/stemslashrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/arpeggiorw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/arpeggiorw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/tremolorw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/tremolorw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/mmrestrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/mmrestrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/restrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/restrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/breathrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/breathrw.h
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.h

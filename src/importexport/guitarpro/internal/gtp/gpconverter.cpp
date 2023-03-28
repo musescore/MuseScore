@@ -1100,12 +1100,8 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
         StringData stringData = StringData(fretCount, static_cast<int>(tunning.size()), tunning.data());
 
         part->instrument()->setStringData(stringData);
-    } else {
-        StringData stringData = StringData(24, static_cast<int>(standartTuning.size()), standartTuning.data());
-        part->instrument()->setStringData(stringData);
-//            part->staff(0)->insertIntoCapoList({0, 1}, 0);
-//            part->setCapoFret(0);
     }
+
     part->instrument()->setSingleNoteDynamics(false);
 
     // this code sets score lyrics from the first processed track.

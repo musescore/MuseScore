@@ -19,23 +19,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_IMAGERW_H
-#define MU_ENGRAVING_IMAGERW_H
+#include "stemrw.h"
 
-namespace mu::engraving {
-class XmlReader;
-class ReadContext;
-class Image;
-}
+#include "../../libmscore/stem.h"
 
-namespace mu::engraving::rw400 {
-class ImageRW
+#include "../xmlreader.h"
+
+#include "propertyrw.h"
+#include "engravingitemrw.h"
+
+using namespace mu::engraving;
+using namespace mu::engraving::rw400;
+
+void StemRW::read(Stem* s, XmlReader& e, ReadContext& ctx)
 {
-public:
-    ImageRW() = default;
-
-    static void read(Image* img, XmlReader& xml, ReadContext& ctx);
-};
+    while (e.readNextStartElement()) {
+        if (!readProperties(s, e, ctx)) {
+            e.unknown();
+        }
+    }
 }
 
-#endif // MU_ENGRAVING_IMAGERW_H
+bool StemRW::readProperties(Stem* s, XmlReader& e, ReadContext& ctx)
+{
+    const AsciiStringView tag(e.name());
+
+    if (PropertyRW::readProperty(s, tag, e, ctx, Pid::USER_LEN)) {
+    } else if (PropertyRW::readStyledProperty(s, tag, e, ctx)) {
+    } else if (EngravingItemRW::readProperties(s, e, ctx)) {
+    } else {
+        return false;
+    }
+    return true;
+}

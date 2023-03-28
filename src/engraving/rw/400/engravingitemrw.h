@@ -34,6 +34,7 @@ class EngravingItemRW
 public:
     EngravingItemRW() = default;
 
+    static void read(EngravingItem* item, XmlReader& e, ReadContext& ctx);
     static bool readProperties(EngravingItem* item, XmlReader& xml, ReadContext& ctx);
 };
 }

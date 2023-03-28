@@ -23,6 +23,7 @@
 #include "chordline.h"
 
 #include "rw/xml.h"
+#include "rw/400/chordlinerw.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
@@ -183,71 +184,9 @@ void ChordLine::layout()
     }
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
 void ChordLine::read(XmlReader& e)
 {
-    path = PainterPath();
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "Path") {
-            path = PainterPath();
-            PointF curveTo;
-            PointF p1;
-            int state = 0;
-            while (e.readNextStartElement()) {
-                const AsciiStringView nextTag(e.name());
-                if (nextTag == "Element") {
-                    int type = e.intAttribute("type");
-                    double x  = e.doubleAttribute("x");
-                    double y  = e.doubleAttribute("y");
-                    switch (PainterPath::ElementType(type)) {
-                    case PainterPath::ElementType::MoveToElement:
-                        path.moveTo(x, y);
-                        break;
-                    case PainterPath::ElementType::LineToElement:
-                        path.lineTo(x, y);
-                        break;
-                    case PainterPath::ElementType::CurveToElement:
-                        curveTo.rx() = x;
-                        curveTo.ry() = y;
-                        state = 1;
-                        break;
-                    case PainterPath::ElementType::CurveToDataElement:
-                        if (state == 1) {
-                            p1.rx() = x;
-                            p1.ry() = y;
-                            state = 2;
-                        } else if (state == 2) {
-                            path.cubicTo(curveTo, p1, PointF(x, y));
-                            state = 0;
-                        }
-                        break;
-                    }
-                    e.skipCurrentElement();           //needed to go to next EngravingItem in Path
-                } else {
-                    e.unknown();
-                }
-            }
-            modified = true;
-        } else if (tag == "subtype") {
-            setChordLineType(TConv::fromXml(e.readAsciiText(), ChordLineType::NOTYPE));
-        } else if (tag == "straight") {
-            setStraight(e.readInt());
-        } else if (tag == "wavy") {
-            setWavy(e.readInt());
-        } else if (tag == "lengthX") {
-            setLengthX(e.readInt());
-        } else if (tag == "lengthY") {
-            setLengthY(e.readInt());
-        } else if (tag == "offset" && score()->mscVersion() < 400) { // default positions has changed in 4.0 so ignore previous offset
-            e.skipCurrentElement();
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
+    rw400::ChordLineRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

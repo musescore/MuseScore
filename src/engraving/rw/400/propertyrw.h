@@ -40,6 +40,7 @@ public:
 
     static bool readProperty(EngravingItem* item, const AsciiStringView&, XmlReader&, ReadContext&, Pid);
     static void readProperty(EngravingItem* item, XmlReader&, ReadContext&, Pid);
+    static bool readStyledProperty(EngravingItem* item, const AsciiStringView& tag, XmlReader& xml, ReadContext& ctx);
 };
 }
 

@@ -19,23 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_IMAGERW_H
-#define MU_ENGRAVING_IMAGERW_H
+#include "notedotrw.h"
 
-namespace mu::engraving {
-class XmlReader;
-class ReadContext;
-class Image;
-}
+#include "../../libmscore/notedot.h"
 
-namespace mu::engraving::rw400 {
-class ImageRW
+#include "../xmlreader.h"
+
+#include "engravingitemrw.h"
+
+using namespace mu::engraving;
+using namespace mu::engraving::rw400;
+
+void NoteDotRW::read(NoteDot* d, XmlReader& e, ReadContext& ctx)
 {
-public:
-    ImageRW() = default;
-
-    static void read(Image* img, XmlReader& xml, ReadContext& ctx);
-};
+    while (e.readNextStartElement()) {
+        if (e.name() == "name") {      // obsolete
+            e.readText();
+        } else if (e.name() == "subtype") {     // obsolete
+            e.readText();
+        } else if (!EngravingItemRW::readProperties(d, e, ctx)) {
+            e.unknown();
+        }
+    }
 }
-
-#endif // MU_ENGRAVING_IMAGERW_H

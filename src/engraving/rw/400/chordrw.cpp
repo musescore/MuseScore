@@ -36,6 +36,13 @@
 
 #include "propertyrw.h"
 #include "chordrestrw.h"
+#include "noterw.h"
+#include "stemrw.h"
+#include "hookrw.h"
+#include "stemslashrw.h"
+#include "arpeggiorw.h"
+#include "tremolorw.h"
+#include "chordlinerw.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
@@ -68,16 +75,16 @@ bool ChordRW::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         // the note needs to know the properties of the track it belongs to
         note->setTrack(ch->track());
         note->setParent(ch);
-        note->read(e);
+        NoteRW::read(note, e, ctx);
         ch->add(note);
     } else if (ChordRestRW::readProperties(ch, e, ctx)) {
     } else if (tag == "Stem") {
         Stem* s = Factory::createStem(ch);
-        s->read(e);
+        StemRW::read(s, e, ctx);
         ch->add(s);
     } else if (tag == "Hook") {
         Hook* hook = new Hook(ch);
-        hook->read(e);
+        HookRW::read(hook, e, ctx);
         ch->setHook(hook);
         ch->add(hook);
     } else if (tag == "appoggiatura") {
@@ -106,7 +113,7 @@ bool ChordRW::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         e.readNext();
     } else if (tag == "StemSlash") {
         StemSlash* ss = Factory::createStemSlash(ch);
-        ss->read(e);
+        StemSlashRW::read(ss, e, ctx);
         ch->add(ss);
     } else if (PropertyRW::readProperty(ch, tag, e, ctx, Pid::STEM_DIRECTION)) {
     } else if (tag == "noStem") {
@@ -114,20 +121,20 @@ bool ChordRW::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
     } else if (tag == "Arpeggio") {
         Arpeggio* arpeggio = Factory::createArpeggio(ch);
         arpeggio->setTrack(ch->track());
-        arpeggio->read(e);
+        ArpeggioRW::read(arpeggio, e, ctx);
         arpeggio->setParent(ch);
         ch->setArpeggio(arpeggio);
     } else if (tag == "Tremolo") {
         Tremolo* tremolo = Factory::createTremolo(ch);
         tremolo->setTrack(ch->track());
-        tremolo->read(e);
+        TremoloRW::read(tremolo, e, ctx);
         tremolo->setParent(ch);
         tremolo->setDurationType(ch->durationType());
         ch->setTremolo(tremolo, false);
     } else if (tag == "tickOffset") {     // obsolete
     } else if (tag == "ChordLine") {
         ChordLine* cl = Factory::createChordLine(ch);
-        cl->read(e);
+        ChordLineRW::read(cl, e, ctx);
         ch->add(cl);
     } else {
         return false;

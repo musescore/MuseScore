@@ -19,23 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_IMAGERW_H
-#define MU_ENGRAVING_IMAGERW_H
+#ifndef MU_ENGRAVING_FINGERINGRW_H
+#define MU_ENGRAVING_FINGERINGRW_H
 
 namespace mu::engraving {
 class XmlReader;
 class ReadContext;
-class Image;
+class Fingering;
 }
 
 namespace mu::engraving::rw400 {
-class ImageRW
+class FingeringRW
 {
 public:
-    ImageRW() = default;
+    FingeringRW() = default;
 
-    static void read(Image* img, XmlReader& xml, ReadContext& ctx);
+    static void read(Fingering* f, XmlReader& xml, ReadContext& ctx);
 };
 }
 
-#endif // MU_ENGRAVING_IMAGERW_H
+#endif // MU_ENGRAVING_FINGERINGRW_H
