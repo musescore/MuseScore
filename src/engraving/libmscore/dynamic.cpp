@@ -22,6 +22,7 @@
 #include "dynamic.h"
 
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
@@ -249,28 +250,9 @@ void Dynamic::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
 void Dynamic::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag = e.name();
-        if (tag == "subtype") {
-            setDynamicType(e.readText());
-        } else if (tag == "velocity") {
-            _velocity = e.readInt();
-        } else if (tag == "dynType") {
-            _dynRange = TConv::fromXml(e.readAsciiText(), DynamicRange::STAFF);
-        } else if (tag == "veloChange") {
-            _changeInVelocity = e.readInt();
-        } else if (tag == "veloChangeSpeed") {
-            _velChangeSpeed = TConv::fromXml(e.readAsciiText(), DynamicSpeed::NORMAL);
-        } else if (!TextBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------

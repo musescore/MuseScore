@@ -442,7 +442,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
             Dynamic* dyn = Factory::createDynamic(segment);
             dyn->setTrack(ctx.track());
-            dyn->read(e);
+            TRead::read(dyn, e, ctx);
             segment->add(dyn);
         } else if (tag == "Harmony"
                    || tag == "FretDiagram"

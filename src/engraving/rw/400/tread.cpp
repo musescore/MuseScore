@@ -25,6 +25,7 @@
 
 #include "../../libmscore/stafftext.h"
 #include "../../libmscore/stafftextbase.h"
+#include "../../libmscore/dynamic.h"
 
 #include "../xmlreader.h"
 
@@ -115,4 +116,24 @@ bool TRead::readProperties(StaffTextBase* t, XmlReader& e, ReadContext& ctx)
         return false;
     }
     return true;
+}
+
+void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag = e.name();
+        if (tag == "subtype") {
+            d->setDynamicType(e.readText());
+        } else if (tag == "velocity") {
+            d->setVelocity(e.readInt());
+        } else if (tag == "dynType") {
+            d->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::STAFF));
+        } else if (tag == "veloChange") {
+            d->setChangeInVelocity(e.readInt());
+        } else if (tag == "veloChangeSpeed") {
+            d->setVelChangeSpeed(TConv::fromXml(e.readAsciiText(), DynamicSpeed::NORMAL));
+        } else if (!TextBaseRW::readProperties(d, e, ctx)) {
+            e.unknown();
+        }
+    }
 }
