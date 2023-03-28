@@ -31,6 +31,7 @@
 #include "draw/types/pen.h"
 #include "rw/400/writecontext.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 
 #include "chordlist.h"
 #include "fret.h"
@@ -353,69 +354,11 @@ void Harmony::write(XmlWriter& xml) const
 
 void Harmony::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "base") {
-            setBaseTpc(e.readInt());
-        } else if (tag == "baseCase") {
-            _baseCase = static_cast<NoteCaseType>(e.readInt());
-        } else if (tag == "extension") {
-            setId(e.readInt());
-        } else if (tag == "name") {
-            _textName = e.readText();
-        } else if (tag == "root") {
-            setRootTpc(e.readInt());
-        } else if (tag == "rootCase") {
-            _rootCase = static_cast<NoteCaseType>(e.readInt());
-        } else if (tag == "function") {
-            _function = e.readText();
-        } else if (tag == "degree") {
-            int degreeValue = 0;
-            int degreeAlter = 0;
-            String degreeType;
-            while (e.readNextStartElement()) {
-                const AsciiStringView t(e.name());
-                if (t == "degree-value") {
-                    degreeValue = e.readInt();
-                } else if (t == "degree-alter") {
-                    degreeAlter = e.readInt();
-                } else if (t == "degree-type") {
-                    degreeType = e.readText();
-                } else {
-                    e.unknown();
-                }
-            }
-            if (degreeValue <= 0 || degreeValue > 13
-                || degreeAlter < -2 || degreeAlter > 2
-                || (degreeType != "add" && degreeType != "alter" && degreeType != "subtract")) {
-                LOGD("incorrect degree: degreeValue=%d degreeAlter=%d degreeType=%s",
-                     degreeValue, degreeAlter, muPrintable(degreeType));
-            } else {
-                if (degreeType == "add") {
-                    addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ADD));
-                } else if (degreeType == "alter") {
-                    addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ALTER));
-                } else if (degreeType == "subtract") {
-                    addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::SUBTRACT));
-                }
-            }
-        } else if (tag == "leftParen") {
-            _leftParen = true;
-            e.readNext();
-        } else if (tag == "rightParen") {
-            _rightParen = true;
-            e.readNext();
-        } else if (readProperty(tag, e, Pid::POS_ABOVE)) {
-        } else if (readProperty(tag, e, Pid::HARMONY_TYPE)) {
-        } else if (readProperty(tag, e, Pid::PLAY)) {
-        } else if (readProperty(tag, e, Pid::HARMONY_VOICE_LITERAL)) {
-        } else if (readProperty(tag, e, Pid::HARMONY_VOICING)) {
-        } else if (readProperty(tag, e, Pid::HARMONY_DURATION)) {
-        } else if (!TextBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
+    rw400::TRead::read(this, e, *e.context());
+}
 
+void Harmony::afterRead()
+{
     // TODO: now that we can render arbitrary chords,
     // we could try to construct a full representation from a degree list.
     // These will typically only exist for chords imported from MusicXML prior to MuseScore 2.0

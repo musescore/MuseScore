@@ -26,10 +26,15 @@
 #include "../../libmscore/stafftext.h"
 #include "../../libmscore/stafftextbase.h"
 #include "../../libmscore/dynamic.h"
+#include "../../libmscore/harmony.h"
+#include "../../libmscore/chordlist.h"
 
 #include "../xmlreader.h"
 
 #include "textbaserw.h"
+#include "propertyrw.h"
+
+#include "log.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
@@ -136,4 +141,72 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+}
+
+void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "base") {
+            h->setBaseTpc(e.readInt());
+        } else if (tag == "baseCase") {
+            h->setBaseCase(static_cast<NoteCaseType>(e.readInt()));
+        } else if (tag == "extension") {
+            h->setId(e.readInt());
+        } else if (tag == "name") {
+            h->setTextName(e.readText());
+        } else if (tag == "root") {
+            h->setRootTpc(e.readInt());
+        } else if (tag == "rootCase") {
+            h->setRootCase(static_cast<NoteCaseType>(e.readInt()));
+        } else if (tag == "function") {
+            h->setFunction(e.readText());
+        } else if (tag == "degree") {
+            int degreeValue = 0;
+            int degreeAlter = 0;
+            String degreeType;
+            while (e.readNextStartElement()) {
+                const AsciiStringView t(e.name());
+                if (t == "degree-value") {
+                    degreeValue = e.readInt();
+                } else if (t == "degree-alter") {
+                    degreeAlter = e.readInt();
+                } else if (t == "degree-type") {
+                    degreeType = e.readText();
+                } else {
+                    e.unknown();
+                }
+            }
+            if (degreeValue <= 0 || degreeValue > 13
+                || degreeAlter < -2 || degreeAlter > 2
+                || (degreeType != "add" && degreeType != "alter" && degreeType != "subtract")) {
+                LOGD("incorrect degree: degreeValue=%d degreeAlter=%d degreeType=%s",
+                     degreeValue, degreeAlter, muPrintable(degreeType));
+            } else {
+                if (degreeType == "add") {
+                    h->addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ADD));
+                } else if (degreeType == "alter") {
+                    h->addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ALTER));
+                } else if (degreeType == "subtract") {
+                    h->addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::SUBTRACT));
+                }
+            }
+        } else if (tag == "leftParen") {
+            h->setLeftParen(true);
+            e.readNext();
+        } else if (tag == "rightParen") {
+            h->setRightParen(true);
+            e.readNext();
+        } else if (PropertyRW::readProperty(h, tag, e, ctx, Pid::POS_ABOVE)) {
+        } else if (PropertyRW::readProperty(h, tag, e, ctx, Pid::HARMONY_TYPE)) {
+        } else if (PropertyRW::readProperty(h, tag, e, ctx, Pid::PLAY)) {
+        } else if (PropertyRW::readProperty(h, tag, e, ctx, Pid::HARMONY_VOICE_LITERAL)) {
+        } else if (PropertyRW::readProperty(h, tag, e, ctx, Pid::HARMONY_VOICING)) {
+        } else if (PropertyRW::readProperty(h, tag, e, ctx, Pid::HARMONY_DURATION)) {
+        } else if (!TextBaseRW::readProperties(h, e, ctx)) {
+            e.unknown();
+        }
+    }
+
+    h->afterRead();
 }

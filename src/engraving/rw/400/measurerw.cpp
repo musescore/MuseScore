@@ -52,6 +52,7 @@
 #include "../libmscore/textlinebase.h"
 #include "../libmscore/timesig.h"
 #include "../libmscore/tuplet.h"
+#include "../libmscore/harmony.h"
 
 #include "barlinerw.h"
 #include "locationrw.h"
@@ -444,8 +445,19 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             dyn->setTrack(ctx.track());
             TRead::read(dyn, e, ctx);
             segment->add(dyn);
-        } else if (tag == "Harmony"
-                   || tag == "FretDiagram"
+        } else if (tag == "Harmony") {
+            // hack - getSegment needed because tick tags are unreliable in 1.3 scores
+            // for symbols attached to anything but a measure
+            segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
+            Harmony* el = Factory::createHarmony(segment);
+
+            el->setTrack(ctx.track());
+            TRead::read(el, e, ctx);
+            if (el->systemFlag() && el->isTopSystemObject()) {
+                el->setTrack(0); // original system object always goes on top
+            }
+            segment->add(el);
+        } else if (tag == "FretDiagram"
                    || tag == "TremoloBar"
                    || tag == "Symbol"
                    || tag == "Tempo"
