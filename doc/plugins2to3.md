@@ -10,7 +10,7 @@ If your plugin uses \ref Ms::PluginAPI::FileIO "FileIO" API, replace also
 **import FileIO 1.0** with **import FileIO 3.0**.
 
 ### Properties assignments
-Most of properties should remain the same as in MuseScore 2.X. Most notable differences:
+Most of the properties should remain the same as in MuseScore 2.X. Most notable differences:
 
 - TimeSig doesn't have setSig() function anymore. \par
 Replace
@@ -19,7 +19,7 @@ with
 \code ts.timesig = fraction(numerator, denominator) \endcode
 
 - No **pos** property available. \par
-Autoplacement engine makes it not necessary to adjust elements position in most cases.
+The Autoplacement engine makes it not necessary to adjust elements' position in most cases.
 If this is still needed, use **offset** or **offsetX** and **offsetY** properties to adjust position offset:
 \code element.offset = Qt.point(x, y); \endcode
 or
@@ -32,7 +32,7 @@ where **x**, **y** are arbitrary numbers (in spatium units).
 .
 
 ### Enumerations
-Most of enumerations exposed to QML plugins remain the same but some were renamed compared to MuseScore 2.X API. The renamed enumerations include:
+Most of the enumerations exposed to QML plugins remain the same but some were renamed compared to MuseScore 2.X API. The renamed enumerations include:
 
 - \ref Ms::PluginAPI::PluginAPI::Placement "Placement" — element placement above or below staff \par
 **Element.ABOVE, Element.BELOW** → **Placement.ABOVE, Placement.BELOW**
