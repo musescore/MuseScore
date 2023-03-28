@@ -55,6 +55,8 @@ class StaffTextBase : public TextBase
 public:
     StaffTextBase(const ElementType& type, Segment* parent, TextStyleType tid, ElementFlags = ElementFlag::NOTHING);
 
+    void clear();
+
     virtual void write(XmlWriter& xml) const override;
     virtual void read(XmlReader&) override;
     virtual bool readProperties(XmlReader&) override;
@@ -73,6 +75,7 @@ public:
     const SwingParameters& swingParameters() const { return _swingParameters; }
     void clearAeolusStops();
     void setAeolusStop(int group, int idx, bool val);
+    void setAeolusStop(int group, int val);
     bool getAeolusStop(int group, int idx) const;
     void setSetAeolusStops(bool val) { _setAeolusStops = val; }
     void setSwing(bool checked) { _swing = checked; }

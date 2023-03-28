@@ -63,6 +63,7 @@
 #include "clefrw.h"
 #include "timesigrw.h"
 #include "keysigrw.h"
+#include "tread.h"
 
 #include "log.h"
 
@@ -427,7 +428,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
             StaffText* t = Factory::createStaffText(segment);
             t->setTrack(ctx.track());
-            t->read(e);
+            TRead::read(t, e, ctx);
             if (t->empty()) {
                 LOGD("==reading empty text: deleted");
                 delete t;
