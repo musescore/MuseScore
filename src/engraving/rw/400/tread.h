@@ -27,6 +27,7 @@ class XmlReader;
 class ReadContext;
 class StaffText;
 class StaffTextBase;
+class Dynamic;
 }
 
 namespace mu::engraving::rw400 {
@@ -38,6 +39,8 @@ public:
     static void read(StaffText* t, XmlReader& xml, ReadContext& ctx);
     static void read(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
+
+    static void read(Dynamic* d, XmlReader& xml, ReadContext& ctx);
 };
 }
 
