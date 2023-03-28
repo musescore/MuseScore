@@ -153,6 +153,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/groupsrw.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/keysigrw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/keysigrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/tread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/400/tread.h
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.h
