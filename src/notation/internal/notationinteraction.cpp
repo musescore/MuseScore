@@ -3577,6 +3577,7 @@ mu::Ret NotationInteraction::repeatSelection()
     }
 
     mu::engraving::XmlReader xml(selection.mimeData());
+    xml.context()->setScore(score());
     xml.context()->setPasteMode(true);
     track_idx_t dStaff = selection.staffStart();
     mu::engraving::Segment* endSegment = selection.endSegment();

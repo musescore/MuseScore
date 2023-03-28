@@ -1291,6 +1291,7 @@ EngravingItem* EngravingItem::readMimeData(Score* score, const ByteArray& data, 
 {
     XmlReader e(data);
     const ElementType type = EngravingItem::readType(e, dragOffset, duration);
+    e.context()->setScore(score);
     e.context()->setPasteMode(true);
 
     if (type == ElementType::INVALID) {
