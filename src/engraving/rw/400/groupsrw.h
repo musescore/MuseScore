@@ -19,32 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "fsymbolrw.h"
+#ifndef MU_ENGRAVING_GROUPSRW_H
+#define MU_ENGRAVING_GROUPSRW_H
 
-#include "../../libmscore/symbol.h"
-
-#include "../xmlreader.h"
-
-#include "bsymbolrw.h"
-
-using namespace mu::engraving::rw400;
-
-void FSymbolRW::read(FSymbol* sym, XmlReader& e, ReadContext& ctx)
-{
-    mu::draw::Font font = sym->font();
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "font") {
-            font.setFamily(e.readText(), draw::Font::Type::Unknown);
-        } else if (tag == "fontsize") {
-            font.setPointSizeF(e.readDouble());
-        } else if (tag == "code") {
-            sym->setCode(e.readInt());
-        } else if (!BSymbolRW::readProperties(sym, e, ctx)) {
-            e.unknown();
-        }
-    }
-
-    sym->setPos(PointF());
-    sym->setFont(font);
+namespace mu::engraving {
+class XmlReader;
+class ReadContext;
+class Groups;
 }
+
+namespace mu::engraving::rw400 {
+class GroupsRW
+{
+public:
+    GroupsRW() = default;
+
+    static void read(Groups* g, XmlReader& xml, ReadContext& ctx);
+};
+}
+
+#endif // MU_ENGRAVING_GROUPSRW_H

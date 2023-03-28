@@ -61,6 +61,7 @@
 #include "breathrw.h"
 #include "measurerepeatrw.h"
 #include "clefrw.h"
+#include "timesigrw.h"
 
 #include "log.h"
 
@@ -385,7 +386,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         } else if (tag == "TimeSig") {
             TimeSig* ts = Factory::createTimeSig(ctx.dummy()->segment());
             ts->setTrack(ctx.track());
-            ts->read(e);
+            TimeSigRW::read(ts, e, ctx);
             // if time sig not at beginning of measure => courtesy time sig
             Fraction currTick = ctx.tick();
             bool courtesySig = (currTick > measure->tick());

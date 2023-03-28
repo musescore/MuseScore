@@ -23,6 +23,7 @@
 #include "timesig.h"
 
 #include "rw/xml.h"
+#include "rw/400/timesigrw.h"
 #include "style/style.h"
 #include "translation.h"
 #include "iengravingfont.h"
@@ -175,78 +176,7 @@ void TimeSig::write(XmlWriter& xml) const
 
 void TimeSig::read(XmlReader& e)
 {
-    int n=0, z1=0, z2=0, z3=0, z4=0;
-    bool old = false;
-
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-
-        if (tag == "den") {
-            old = true;
-            n = e.readInt();
-        } else if (tag == "nom1") {
-            old = true;
-            z1 = e.readInt();
-        } else if (tag == "nom2") {
-            old = true;
-            z2 = e.readInt();
-        } else if (tag == "nom3") {
-            old = true;
-            z3 = e.readInt();
-        } else if (tag == "nom4") {
-            old = true;
-            z4 = e.readInt();
-        } else if (tag == "subtype") {
-            int i = e.readInt();
-            if (score()->mscVersion() <= 114) {
-                if (i == 0x40000104) {
-                    _timeSigType = TimeSigType::FOUR_FOUR;
-                } else if (i == 0x40002084) {
-                    _timeSigType = TimeSigType::ALLA_BREVE;
-                } else {
-                    _timeSigType = TimeSigType::NORMAL;
-                }
-            } else {
-                _timeSigType = TimeSigType(i);
-            }
-        } else if (tag == "showCourtesySig") {
-            _showCourtesySig = e.readInt();
-        } else if (tag == "sigN") {
-            _sig.setNumerator(e.readInt());
-        } else if (tag == "sigD") {
-            _sig.setDenominator(e.readInt());
-        } else if (tag == "stretchN") {
-            _stretch.setNumerator(e.readInt());
-        } else if (tag == "stretchD") {
-            _stretch.setDenominator(e.readInt());
-        } else if (tag == "textN") {
-            setNumeratorString(e.readText());
-        } else if (tag == "textD") {
-            setDenominatorString(e.readText());
-        } else if (tag == "Groups") {
-            _groups.read(e);
-        } else if (readStyledProperty(e, tag)) {
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
-    if (old) {
-        _sig.set(z1 + z2 + z3 + z4, n);
-    }
-    _stretch.reduce();
-
-    // HACK: handle time signatures from scores before 3.5 differently on some special occasions.
-    // See https://musescore.org/node/308139.
-    String version = score()->mscoreVersion();
-    if (!version.isEmpty() && (version >= u"3.0") && (version < u"3.5")) {
-        if ((_timeSigType == TimeSigType::NORMAL) && !_numeratorString.isEmpty() && _denominatorString.isEmpty()) {
-            if (_numeratorString == String::number(_sig.numerator())) {
-                _numeratorString.clear();
-            } else {
-                setDenominatorString(String::number(_sig.denominator()));
-            }
-        }
-    }
+    rw400::TimeSigRW::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
