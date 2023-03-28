@@ -12,26 +12,26 @@ MuseScore plugins are coded in
 Each plugin is a QML component using which implements some logic inside its
 instance of \ref Ms::PluginAPI::PluginAPI "MuseScore" class and are capable to
 interact both with MuseScore API and with Qt itself (so MuseScore plugins can
-create their own windows, dialogs). Most of plugins are contained within a
+create their own windows, dialogs). Most of the plugins are contained within a
 single `.qml` file though they may contain more items like resources and
 translation files.
 
 #### Debugging plugins
-MuseScore provides a simple plugin code editor which allows to develop and
-instantly test the developed plugin. This editor can be launched with Plugins →
+MuseScore provides a simple plugin code editor which allows developing and
+instantly testing the developed plugin. This editor can be launched with Plugins →
 Plugin Creator menu item or by pressing
 <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>.
 
 Clicking on a New button will create a sample plugin, you can also run your
-plugin with Run button and see some debugging output in the console window below
-the editing area. In order to print some debugging message to that console use
+plugin with the Run button and see some debugging output in the console window below
+the editing area. In order to print some debugging messages to that console use
 `console.log()`:
 ```
 var e = newElement(Element.STAFF_TEXT);
 console.log("the created element:", e, e.name);
 ```
 
-Alternatively, you can edit your plugin's code with your favorite text editor
+Alternatively, you can edit your plugin's code with your favourite text editor
 and test it by launching it from MuseScore as long as the plugin is properly
 installed. See [this Handbook
 page](https://musescore.org/en/handbook/plugins#installation)
@@ -72,7 +72,7 @@ menu entry or via a shortcut). This is the entry point of your plugin.
 requests termination of the plugin's execution.
 
 ## Documentation from Earlier Versions
-Although it is not up to date, documentation for creating plugins for earlier versions is available, and may be useful.
+Although it is not up to date, documentation for creating plugins for earlier versions is available and may be useful.
 https://musescore.org/en/handbook/developers-handbook/plugin-development
 
 
@@ -84,7 +84,7 @@ a reference while developing your own plugins.
 This plugin imports ABC text from a file or the clipboard. Internet connection is required, because it uses an external web-service for the conversion, which uses abc2xml and gets send the ABC data, returns MusicXML and imports that into MuseScore.
 
 ### Color Notes
-This demo plugin colors notes in the selected range (or the entire score), depending on their pitch. It colors the note head of all notes in all staves and voices according to the Boomwhackers convention. Each pitch has a different color. C and C♯ have a different color. C♯ and D♭ have the same color.
+This demo plugin colors notes in the selected range (or the entire score), depending on their pitch. It colors the note head of all notes in all staves and voices according to the Boomwhackers convention. Each pitch has a different color. C and C♯ have different color. C♯ and D♭ have the same color.
 To color all the notes in black, just run that plugin again (on the same selection). You could also use the 'Remove Notes Color' plugin for this.
 
 ### Create Score
@@ -94,7 +94,7 @@ This demo plugin creates a new score. It creates a new piano score with 4 quarte
 This demo plugin shows some basic tasks.
 
 ### Note Names
-This plugin names notes in the selected range or the entire score. It displays the names of the notes (as a staff text) as per MuseScore's language settings, for voices 1 and 3 above the staff, for voices 2 and 4 below the staff, and for chords in a comma separated list, starting with the top note.
+This plugin names notes in the selected range or the entire score. It displays the names of the notes (as a staff text) as per MuseScore's language settings, for voices 1 and 3 above the staff, for voices 2 and 4 below the staff, and for chords in a comma-separated list, starting with the top note.
 
 ### Note Names -Interactive
 This plugin names notes as per your language setting.
