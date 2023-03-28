@@ -29,6 +29,7 @@ class StaffText;
 class StaffTextBase;
 class Dynamic;
 class Harmony;
+class FretDiagram;
 }
 
 namespace mu::engraving::rw400 {
@@ -42,6 +43,7 @@ public:
     static bool readProperties(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
     static void read(Dynamic* d, XmlReader& xml, ReadContext& ctx);
     static void read(Harmony* h, XmlReader& xml, ReadContext& ctx);
+    static void read(FretDiagram* d, XmlReader& xml, ReadContext& ctx);
 };
 }
 

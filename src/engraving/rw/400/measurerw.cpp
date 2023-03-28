@@ -21,6 +21,7 @@
  */
 #include "measurerw.h"
 
+#include "libmscore/fret.h"
 #include "translation.h"
 
 #include "rw/400/writecontext.h"
@@ -53,6 +54,7 @@
 #include "../libmscore/timesig.h"
 #include "../libmscore/tuplet.h"
 #include "../libmscore/harmony.h"
+#include "../libmscore/fret.h"
 
 #include "barlinerw.h"
 #include "locationrw.h"
@@ -457,8 +459,19 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
                 el->setTrack(0); // original system object always goes on top
             }
             segment->add(el);
-        } else if (tag == "FretDiagram"
-                   || tag == "TremoloBar"
+        } else if (tag == "FretDiagram") {
+            // hack - getSegment needed because tick tags are unreliable in 1.3 scores
+            // for symbols attached to anything but a measure
+            segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
+            FretDiagram* el = Factory::createFretDiagram(segment);
+
+            el->setTrack(ctx.track());
+            TRead::read(el, e, ctx);
+            if (el->systemFlag() && el->isTopSystemObject()) {
+                el->setTrack(0); // original system object always goes on top
+            }
+            segment->add(el);
+        } else if (tag == "TremoloBar"
                    || tag == "Symbol"
                    || tag == "Tempo"
                    || tag == "StaffText"

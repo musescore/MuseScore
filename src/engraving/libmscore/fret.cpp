@@ -28,6 +28,7 @@
 #include "draw/types/brush.h"
 #include "draw/types/pen.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 
 #include "chord.h"
 #include "factory.h"
@@ -779,114 +780,7 @@ void FretDiagram::writeNew(XmlWriter& xml) const
 
 void FretDiagram::read(XmlReader& e)
 {
-    // Read the old format first
-    bool hasBarre = false;
-    bool haveReadNew = false;
-
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-
-        // Check for new format fret diagram
-        if (haveReadNew) {
-            e.skipCurrentElement();
-            continue;
-        }
-        if (tag == "fretDiagram") {
-            readNew(e);
-            haveReadNew = true;
-        }
-        // Check for new properties
-        else if (tag == "showNut") {
-            readProperty(e, Pid::FRET_NUT);
-        } else if (tag == "orientation") {
-            readProperty(e, Pid::ORIENTATION);
-        }
-        // Then read the rest if there is no new format diagram (compatibility read)
-        else if (tag == "strings") {
-            readProperty(e, Pid::FRET_STRINGS);
-        } else if (tag == "frets") {
-            readProperty(e, Pid::FRET_FRETS);
-        } else if (tag == "fretOffset") {
-            readProperty(e, Pid::FRET_OFFSET);
-        } else if (tag == "string") {
-            int no = e.intAttribute("no");
-            while (e.readNextStartElement()) {
-                const AsciiStringView t(e.name());
-                if (t == "dot") {
-                    setDot(no, e.readInt());
-                } else if (t == "marker") {
-                    setMarker(no, Char(e.readInt()) == u'X' ? FretMarkerType::CROSS : FretMarkerType::CIRCLE);
-                }
-                /*else if (t == "fingering")
-                      setFingering(no, e.readInt());*/
-                else {
-                    e.unknown();
-                }
-            }
-        } else if (tag == "barre") {
-            hasBarre = e.readBool();
-        } else if (tag == "mag") {
-            readProperty(e, Pid::MAG);
-        } else if (tag == "Harmony") {
-            Harmony* h = new Harmony(this->score()->dummy()->segment());
-            h->read(e);
-            add(h);
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
-
-    // Old handling of barres
-    if (hasBarre) {
-        for (int s = 0; s < _strings; ++s) {
-            for (auto& d : dot(s)) {
-                if (d.exists()) {
-                    setBarre(s, -1, d.fret);
-                    return;
-                }
-            }
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   readNew
-//    read the new 'fretDiagram' tag
-//---------------------------------------------------------
-
-void FretDiagram::readNew(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-
-        if (tag == "string") {
-            int no = e.intAttribute("no");
-            while (e.readNextStartElement()) {
-                const AsciiStringView t(e.name());
-                if (t == "dot") {
-                    int fret = e.intAttribute("fret", 0);
-                    FretDotType dtype = FretItem::nameToDotType(e.readText());
-                    setDot(no, fret, true, dtype);
-                } else if (t == "marker") {
-                    FretMarkerType mtype = FretItem::nameToMarkerType(e.readText());
-                    setMarker(no, mtype);
-                } else if (t == "fingering") {
-                    e.readText();
-                    /*setFingering(no, e.readInt()); NOTE:JT todo */
-                } else {
-                    e.unknown();
-                }
-            }
-        } else if (tag == "barre") {
-            int start = e.intAttribute("start", -1);
-            int end = e.intAttribute("end", -1);
-            int fret = e.readInt();
-
-            setBarre(start, end, fret);
-        } else if (!EngravingItem::readProperties(e)) {
-            e.unknown();
-        }
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
