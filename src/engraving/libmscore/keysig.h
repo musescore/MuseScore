@@ -100,8 +100,6 @@ public:
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
-
-    SymId convertFromOldId(int val) const;
 };
 } // namespace mu::engraving
 #endif
