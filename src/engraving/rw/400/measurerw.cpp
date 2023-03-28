@@ -59,6 +59,8 @@
 #include "mmrestrw.h"
 #include "restrw.h"
 #include "breathrw.h"
+#include "measurerepeatrw.h"
+#include "clefrw.h"
 
 #include "log.h"
 
@@ -344,7 +346,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
             MeasureRepeat* mr = Factory::createMeasureRepeat(segment);
             mr->setTrack(ctx.track());
-            mr->read(e);
+            MeasureRepeatRW::read(mr, e, ctx);
             if (!mr->numMeasures()) {
                 mr->setNumMeasures(1); // 3.x doesn't have any other possibilities
             }
@@ -376,7 +378,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             segment = measure->getSegment(header ? SegmentType::HeaderClef : SegmentType::Clef, ctx.tick());
             Clef* clef = Factory::createClef(segment);
             clef->setTrack(ctx.track());
-            clef->read(e);
+            ClefRW::read(clef, e, ctx);
             clef->setGenerated(false);
 
             segment->add(clef);
