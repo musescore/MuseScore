@@ -19,32 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "fsymbolrw.h"
+#include "groupsrw.h"
 
-#include "../../libmscore/symbol.h"
+#include "../../libmscore/groups.h"
 
 #include "../xmlreader.h"
 
-#include "bsymbolrw.h"
-
+using namespace mu::engraving;
 using namespace mu::engraving::rw400;
 
-void FSymbolRW::read(FSymbol* sym, XmlReader& e, ReadContext& ctx)
+void GroupsRW::read(Groups* g, XmlReader& e, ReadContext&)
 {
-    mu::draw::Font font = sym->font();
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
-        if (tag == "font") {
-            font.setFamily(e.readText(), draw::Font::Type::Unknown);
-        } else if (tag == "fontsize") {
-            font.setPointSizeF(e.readDouble());
-        } else if (tag == "code") {
-            sym->setCode(e.readInt());
-        } else if (!BSymbolRW::readProperties(sym, e, ctx)) {
+        if (tag == "Node") {
+            GroupNode n;
+            n.pos    = e.intAttribute("pos");
+            n.action = e.intAttribute("action");
+            g->addNode(n);
+            e.skipCurrentElement();
+        } else {
             e.unknown();
         }
     }
-
-    sym->setPos(PointF());
-    sym->setFont(font);
 }
