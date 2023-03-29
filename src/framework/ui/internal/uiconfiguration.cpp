@@ -325,14 +325,12 @@ void UiConfiguration::synchThemeWithSystemIfNecessary()
 
 void UiConfiguration::synchAccentColorWithSystemIfNecessary()
 {
-   LOGD() << "macOS detected";
     if (QSysInfo::productType() != "osx" || !m_isFollowSystemTheme.val) {
           return;
     }
 
     // get the accent color index pertaining to the user's macOS system color
     int MSAccentColorIndex = MacOSPlatformTheme::getAccentColorIndex();
-    LOGD() << "MuseScore accent color index is " << MSAccentColorIndex;
 
     // change the actual accent color setting
     // can get QStringList of hex values of accent color options for current theme with possibleAccentColors()
