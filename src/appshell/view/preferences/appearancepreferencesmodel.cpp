@@ -281,7 +281,7 @@ void AppearancePreferencesModel::setCurrentAccentColorIndex(int index)
     // if on macOS, manually setting an accent color in this menu should disable followSystemTheme
     LOGD() << "accent color manually changed";
     if (QSysInfo::productType() == "osx") {
-       setFollowSystemTheme(false);
+        setFollowSystemTheme(false);
     }
 }
 

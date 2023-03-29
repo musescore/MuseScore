@@ -34,7 +34,8 @@ using namespace mu::async;
 id<NSObject> darkModeObserverToken = nil;
 id<NSObject> accentColorObserverToken = nil;
 
-void MacOSPlatformTheme::startListening() {
+void MacOSPlatformTheme::startListening()
+{
     // set up dark mode observer
     if (!darkModeObserverToken) {
         darkModeObserverToken = [[NSDistributedNotificationCenter defaultCenter]
@@ -49,16 +50,17 @@ void MacOSPlatformTheme::startListening() {
     // set up accent color observer
     if (!accentColorObserverToken) {
         accentColorObserverToken = [[NSDistributedNotificationCenter defaultCenter]
-                                 addObserverForName:@"AppleColorPreferencesChangedNotification"
-                                 object:nil
-                                 queue:nil
-                                 usingBlock:^(NSNotification*) {
-                                     m_platformThemeChanged.notify();
-                                 }];
+                                    addObserverForName:@"AppleColorPreferencesChangedNotification"
+                                    object:nil
+                                    queue:nil
+                                    usingBlock:^(NSNotification*) {
+                                        m_platformThemeChanged.notify();
+                                    }];
     }
 }
 
-void MacOSPlatformTheme::stopListening() {
+void MacOSPlatformTheme::stopListening()
+{
     // clean up dark mode observer
     if (darkModeObserverToken) {
         [[NSDistributedNotificationCenter defaultCenter] removeObserver:darkModeObserverToken];
@@ -72,24 +74,28 @@ void MacOSPlatformTheme::stopListening() {
     }
 }
 
-bool MacOSPlatformTheme::isFollowSystemThemeAvailable() const {
+bool MacOSPlatformTheme::isFollowSystemThemeAvailable() const
+{
     // Supported from macOS 10.14, which is our minimum supported version
     return true;
 }
 
-bool MacOSPlatformTheme::isSystemThemeDark() const {
+bool MacOSPlatformTheme::isSystemThemeDark() const
+{
     NSString* systemMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
     return [systemMode isEqualToString:@"Dark"];
 }
 
-bool MacOSPlatformTheme::isGlobalMenuAvailable() const {
+bool MacOSPlatformTheme::isGlobalMenuAvailable() const
+{
     return true;
 }
 
-int MacOSPlatformTheme::getAccentColorIndex() {
-   // get macOS int representation of system accent color
-   NSNumber *accentNum = [[NSUserDefaults standardUserDefaults] objectForKey:@"AppleAccentColor"];
-   LOGD() << [[NSUserDefaults standardUserDefaults] objectForKey:@"AppleAccentColor"];
+int MacOSPlatformTheme::getAccentColorIndex()
+{
+    // get macOS int representation of system accent color
+    NSNumber* accentNum = [[NSUserDefaults standardUserDefaults] objectForKey:@"AppleAccentColor"];
+    LOGD() << [[NSUserDefaults standardUserDefaults] objectForKey:@"AppleAccentColor"];
     /*
      * Notes:
      *
@@ -111,62 +117,63 @@ int MacOSPlatformTheme::getAccentColorIndex() {
      *    6  | pink         | 6
     */
 
-   int MSIndex;
+    int MSIndex;
 
-   if (accentNum == 0) {
-         LOGD() << "Color is multicolor, defaulting to blue";
-         MSIndex = 4;
-      }
-   else {
-         LOGD() << "User color is defined, converting index...";
-         switch ([accentNum intValue]) {
-               case -1:
-                     LOGD() << "Color is graphite -> switching to blue";
-                     MSIndex = 4;
-                     break;
-               case 0:
-                     LOGD() << "Color is red";
-                     MSIndex = 0;
-                     break;
-               case 1:
-                     LOGD() << "Color is orange";
-                     MSIndex = 1;
-                     break;
-               case 2:
-                     LOGD() << "Color is yellow";
-                     MSIndex = 2;
-                     break;
-               case 3:
-                     LOGD() << "Color is green";
-                     MSIndex = 3;
-                     break;
-               case 4:
-                     LOGD() << "Color is blue";
-                     MSIndex = 4;
-                     break;
-               case 5:
-                     LOGD() << "Color is purple";
-                     MSIndex = 5;
-                     break;
-               case 6:
-                     LOGD() << "Color is pink";
-                     MSIndex = 6;
-                     break;
-               default:
-                     LOGD() << "Unexpected value, defaulting to blue";
-                     MSIndex = 4;
-                     break;
-            }
-      }
+    if (accentNum == 0) {
+        LOGD() << "Color is multicolor, defaulting to blue";
+        MSIndex = 4;
+    } else {
+        LOGD() << "User color is defined, converting index...";
+        switch ([accentNum intValue]) {
+        case -1:
+            LOGD() << "Color is graphite -> switching to blue";
+            MSIndex = 4;
+            break;
+        case 0:
+            LOGD() << "Color is red";
+            MSIndex = 0;
+            break;
+        case 1:
+            LOGD() << "Color is orange";
+            MSIndex = 1;
+            break;
+        case 2:
+            LOGD() << "Color is yellow";
+            MSIndex = 2;
+            break;
+        case 3:
+            LOGD() << "Color is green";
+            MSIndex = 3;
+            break;
+        case 4:
+            LOGD() << "Color is blue";
+            MSIndex = 4;
+            break;
+        case 5:
+            LOGD() << "Color is purple";
+            MSIndex = 5;
+            break;
+        case 6:
+            LOGD() << "Color is pink";
+            MSIndex = 6;
+            break;
+        default:
+            LOGD() << "Unexpected value, defaulting to blue";
+            MSIndex = 4;
+            break;
+        }
+    }
 
-   return MSIndex;
+    return MSIndex;
 }
 
-Notification MacOSPlatformTheme::platformThemeChanged() const {
+Notification MacOSPlatformTheme::platformThemeChanged() const
+{
     return m_platformThemeChanged;
 }
 
-void MacOSPlatformTheme::applyPlatformStyleOnAppForTheme(const ThemeCode& themeCode) {
+void MacOSPlatformTheme::applyPlatformStyleOnAppForTheme(const ThemeCode& themeCode)
+{
     // The system will turn these appearance names into their high contrast
     // counterparts automatically if system high contrast is enabled
     if (isDarkTheme(themeCode)) {
@@ -176,7 +183,8 @@ void MacOSPlatformTheme::applyPlatformStyleOnAppForTheme(const ThemeCode& themeC
     }
 }
 
-void MacOSPlatformTheme::applyPlatformStyleOnWindowForTheme(QWindow* window, const ThemeCode&) {
+void MacOSPlatformTheme::applyPlatformStyleOnWindowForTheme(QWindow* window, const ThemeCode&)
+{
     if (!window) {
         return;
     }

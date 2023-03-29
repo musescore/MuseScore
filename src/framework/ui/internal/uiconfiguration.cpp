@@ -307,7 +307,7 @@ void UiConfiguration::setFollowSystemTheme(bool follow)
     // for some reasno, trying to do this in updateSystemThemeListeningStatus causes MuseScore
     // to crash during startup. i wasn't able to figure out how or why :(
     if (QSysInfo::productType() == "osx" && follow) {
-          synchAccentColorWithSystemIfNecessary();
+        synchAccentColorWithSystemIfNecessary();
     }
 }
 
@@ -333,7 +333,7 @@ void UiConfiguration::synchThemeWithSystemIfNecessary()
 void UiConfiguration::synchAccentColorWithSystemIfNecessary()
 {
     if (QSysInfo::productType() != "osx" || !m_isFollowSystemTheme.val) {
-          return;
+        return;
     }
 
     // get the accent color index pertaining to the user's macOS system color
