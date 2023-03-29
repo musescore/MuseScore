@@ -35,6 +35,7 @@ public:
     bool isFollowSystemThemeAvailable() const override;
 
     bool isSystemThemeDark() const override;
+    static int getAccentColorIndex();
     async::Notification platformThemeChanged() const override;
 
     bool isGlobalMenuAvailable() const override;
