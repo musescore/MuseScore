@@ -52,12 +52,14 @@ Err Read400::read(Score* score, XmlReader& e, ReadInOutData* data)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "programVersion") {
+            String ver = e.readText();
             if (score->isMaster()) {
-                score->setMscoreVersion(e.readText());
+                score->setMscoreVersion(ver);
             }
         } else if (tag == "programRevision") {
+            int rev = e.readInt(nullptr, 16);
             if (score->isMaster()) {
-                score->setMscoreRevision(e.readInt(nullptr, 16));
+                score->setMscoreRevision(rev);
             }
         } else if (tag == "Revision") {
             e.skipCurrentElement();
@@ -68,9 +70,16 @@ Err Read400::read(Score* score, XmlReader& e, ReadInOutData* data)
                 }
                 return Err::FileBadFormat;
             }
+        } else if (tag == "museScore") {
+            // pass
         } else {
             e.skipCurrentElement();
         }
+    }
+
+    if (!score->isMaster()) {
+        Excerpt* ex = score->excerpt();
+        ex->setTracksMapping(ctx.tracks());
     }
 
     if (data) {
