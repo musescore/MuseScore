@@ -489,18 +489,19 @@ TEST_F(Ui_NavigationControllerTests, UserClickedOnControlOnNonMainWindow)
     Section* sect1 = make_section(1, 2, 3);
     Section* sect2 = make_section(2, 2, 3);
 
+    //! [GIVEN] Second section on non main window
+    sect2->section->setType(NavigationSection::QmlType::Exclusive);
+    QQuickWindow* controlWindow = new QQuickWindow();
+    setComponentWindow(sect2->panels[1]->controls[1]->control, controlWindow);
+
     m_controller->reg(sect1->section);
     m_controller->reg(sect2->section);
 
-    //! [GIVEN] Control not on main window
-    QQuickWindow* controlWindow = new QQuickWindow();
-    setComponentWindow(sect1->panels[1]->controls[1]->control, controlWindow);
-
-    //! [WHEN] The user has clicked on control
-    sect1->panels[1]->controls[1]->control->requestActiveByInteraction();
+    //! [WHEN] The user has clicked on control of second section
+    sect2->panels[1]->controls[1]->control->requestActiveByInteraction();
 
     //! [THEN] The control is activated
-    EXPECT_EQ(m_controller->activeControl(), sect1->panels[1]->controls[1]->control);
+    EXPECT_EQ(m_controller->activeControl(), sect2->panels[1]->controls[1]->control);
     EXPECT_FALSE(m_controller->isHighlight());
 
     delete sect1;
