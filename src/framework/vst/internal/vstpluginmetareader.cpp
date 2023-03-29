@@ -77,7 +77,7 @@ mu::RetVal<AudioResourceMeta> VstPluginMetaReader::readMeta(const io::path_t& pl
         }
 
         audio::AudioResourceMeta meta;
-        meta.id = io::basename(pluginPath).toStdString();
+        meta.id = io::completeBasename(pluginPath).toStdString();
         meta.type = audio::AudioResourceType::VstPlugin;
         meta.attributes.insert({ audio::CATEGORIES_ATTRIBUTE, String::fromStdString(classInfo.subCategoriesString()) });
         meta.vendor = factory.info().vendor();

@@ -55,7 +55,7 @@ QVariant AbFilesModel::data(const QModelIndex& index, int role) const
 
     const File& file = m_files.val.at(index.row());
     switch (role) {
-    case FileTitle: return io::basename(file.path).toQString();
+    case FileTitle: return io::completeBasename(file.path).toQString();
     case FileIndex: return index.row();
     case IsCurrentFile: return m_fileIndex.val == index.row();
     case FileStatus: return fileStatus(file);

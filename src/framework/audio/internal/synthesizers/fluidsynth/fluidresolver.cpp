@@ -92,7 +92,7 @@ void FluidResolver::refresh()
     m_resourcesCache.clear();
 
     for (const SoundFontPath& path : soundFontRepository()->soundFontPaths()) {
-        m_resourcesCache.emplace(io::basename(path).toStdString(), path);
+        m_resourcesCache.emplace(io::completeBasename(path).toStdString(), path);
     }
 }
 

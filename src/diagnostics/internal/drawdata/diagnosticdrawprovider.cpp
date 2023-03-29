@@ -66,15 +66,15 @@ Ret DiagnosticDrawProvider::compareDrawData(const io::path_t& ref, const io::pat
 
     io::path_t outDir = io::FileInfo(outDiff).dirPath();
     if (opt.isCopySrc) {
-        io::File::copy(ref, outDir + "/" + io::FileInfo(ref).baseName() + ".ref.json");
-        io::File::copy(test, outDir + "/" + io::FileInfo(test).baseName() + ".json");
+        io::File::copy(ref, outDir + "/" + io::FileInfo(ref).completeBaseName() + ".ref.json");
+        io::File::copy(test, outDir + "/" + io::FileInfo(test).completeBaseName() + ".json");
     }
 
     if (opt.isMakePng) {
         DrawDataConverter c;
-        c.drawDataToPng(ref, outDir + "/" + io::FileInfo(ref).baseName() + ".ref.png");
-        c.drawDataToPng(test, outDir + "/" + io::FileInfo(test).baseName() + ".png");
-        c.drawDiffToPng(outDiff, ref, outDir + "/" + io::FileInfo(outDiff).baseName() + ".diff.png");
+        c.drawDataToPng(ref, outDir + "/" + io::FileInfo(ref).completeBaseName() + ".ref.png");
+        c.drawDataToPng(test, outDir + "/" + io::FileInfo(test).completeBaseName() + ".png");
+        c.drawDiffToPng(outDiff, ref, outDir + "/" + io::FileInfo(outDiff).completeBaseName() + ".diff.png");
     }
 
     return ret;
