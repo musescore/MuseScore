@@ -279,10 +279,10 @@ void AppearancePreferencesModel::setCurrentAccentColorIndex(int index)
     uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, Val(color));
 
     // if on macOS, manually setting an accent color in this menu should disable followSystemTheme
-    LOGD() << "accent color manually changed";
-    if (QSysInfo::productType() == "osx") {
+    #ifdef Q_OS_MAC
+        LOGD() << "accent color manually changed";
         setFollowSystemTheme(false);
-    }
+    #endif
 }
 
 void AppearancePreferencesModel::setCurrentFontIndex(int index)
