@@ -338,20 +338,19 @@ void UiConfiguration::synchAccentColorWithSystemIfNecessary()
 
     // macOS-specific accent color handling
     #ifdef Q_OS_MAC
-        // get the accent color index pertaining to the user's macOS system color
-        int MSAccentColorIndex = MacOSPlatformTheme::getAccentColorIndex();
-
-        // change the actual accent color setting
-        // can get QStringList of hex values of accent color options for current theme with possibleAccentColors()
-        QStringList themeAccents = possibleAccentColors();
-        QString colorString = themeAccents[MSAccentColorIndex];
-        QColor newAccentColor = QColor(colorString);
-        setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, Val(newAccentColor));
+    // get the accent color index pertaining to the user's macOS system colorString
+    int MSAccentColorIndex = MacOSPlatformTheme::getAccentColorIndex();
+    // change the actual accent color setting
+    // can get QStringList of hex values of accent color options for current theme with possibleAccentColors()
+    QStringList themeAccents = possibleAccentColors();
+    QString colorString = themeAccents[MSAccentColorIndex];
+    QColor newAccentColor = QColor(colorString);
+    setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, Val(newAccentColor));
     #endif
 
     #ifdef Q_OS_WIN
-        // windows system accent color implmentation can go here
-        return;
+    // windows system accent color implmentation can go here
+    return;
     #endif
 }
 
