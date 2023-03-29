@@ -164,7 +164,6 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
             rw400::Read400().read(partScore, xml, &partReadInData);
 
             partScore->linkMeasures(masterScore);
-            ex->setTracksMapping(xml.context()->tracks());
 
             ex->setName(excerptName);
 
