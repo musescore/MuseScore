@@ -71,5 +71,5 @@ void RestRW::read(Rest* r, XmlReader& e, ReadContext& ctx)
 
 bool RestRW::readProperties(Rest* r, XmlReader& xml, ReadContext& ctx)
 {
-    return EngravingItemRW::readProperties(r, xml, ctx);
+    return ChordRestRW::readProperties(r, xml, ctx);
 }
