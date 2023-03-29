@@ -36,6 +36,10 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH}
     )
 
+
+
+# Just build test
+
 ###########################################
 # Setup option and build settings
 ###########################################
