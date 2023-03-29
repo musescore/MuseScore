@@ -30,6 +30,7 @@ class StaffTextBase;
 class Dynamic;
 class Harmony;
 class FretDiagram;
+class TremoloBar;
 }
 
 namespace mu::engraving::rw400 {
@@ -44,6 +45,7 @@ public:
     static void read(Dynamic* d, XmlReader& xml, ReadContext& ctx);
     static void read(Harmony* h, XmlReader& xml, ReadContext& ctx);
     static void read(FretDiagram* d, XmlReader& xml, ReadContext& ctx);
+    static void read(TremoloBar* b, XmlReader& xml, ReadContext& ctx);
 };
 }
 

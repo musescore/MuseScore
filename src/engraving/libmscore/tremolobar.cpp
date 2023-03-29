@@ -24,6 +24,7 @@
 
 #include "draw/types/pen.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 
 #include "score.h"
 
@@ -131,31 +132,9 @@ void TremoloBar::write(XmlWriter& xml) const
     xml.endElement();
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
 void TremoloBar::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        auto tag = e.name();
-        if (tag == "point") {
-            PitchValue pv;
-            pv.time    = e.intAttribute("time");
-            pv.pitch   = e.intAttribute("pitch");
-            pv.vibrato = e.intAttribute("vibrato");
-            m_points.push_back(pv);
-            e.readNext();
-        } else if (tag == "mag") {
-            m_userMag = e.readDouble(0.1, 10.0);
-        } else if (readStyledProperty(e, tag)) {
-        } else if (tag == "play") {
-            setPlay(e.readInt());
-        } else if (readProperty(tag, e, Pid::LINE_WIDTH)) {
-        } else {
-            e.unknown();
-        }
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
