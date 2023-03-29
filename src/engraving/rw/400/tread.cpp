@@ -23,6 +23,7 @@
 
 #include "../../types/typesconv.h"
 
+#include "../../libmscore/tempotext.h"
 #include "../../libmscore/stafftext.h"
 #include "../../libmscore/stafftextbase.h"
 #include "../../libmscore/dynamic.h"
@@ -42,6 +43,25 @@
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
+
+void TRead::read(TempoText* t, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "tempo") {
+            t->setTempo(TConv::fromXml(e.readAsciiText(), Constants::defaultTempo));
+        } else if (tag == "followText") {
+            t->setFollowText(e.readInt());
+        } else if (!TextBaseRW::readProperties(t, e, ctx)) {
+            e.unknown();
+        }
+    }
+    // check sanity
+    if (t->xmlText().isEmpty()) {
+        t->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(int(lrint(t->tempo().toBPM().val))));
+        t->setVisible(false);
+    }
+}
 
 void TRead::read(StaffText* t, XmlReader& xml, ReadContext& ctx)
 {

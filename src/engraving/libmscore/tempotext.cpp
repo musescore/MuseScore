@@ -27,6 +27,7 @@
 #include "containers.h"
 #include "translation.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 #include "types/typesconv.h"
 #include "types/constants.h"
 
@@ -88,21 +89,7 @@ void TempoText::write(XmlWriter& xml) const
 
 void TempoText::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "tempo") {
-            setTempo(TConv::fromXml(e.readAsciiText(), Constants::defaultTempo));
-        } else if (tag == "followText") {
-            _followText = e.readInt();
-        } else if (!TextBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
-    // check sanity
-    if (xmlText().isEmpty()) {
-        setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(int(lrint(_tempo.toBPM().val))));
-        setVisible(false);
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 double TempoText::tempoBpm() const
