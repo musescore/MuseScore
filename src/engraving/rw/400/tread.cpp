@@ -30,6 +30,7 @@
 #include "../../libmscore/chordlist.h"
 #include "../../libmscore/fret.h"
 #include "../../libmscore/score.h"
+#include "../../libmscore/tremolobar.h"
 
 #include "../xmlreader.h"
 
@@ -313,6 +314,29 @@ void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
                     return;
                 }
             }
+        }
+    }
+}
+
+void TRead::read(TremoloBar* b, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        auto tag = e.name();
+        if (tag == "point") {
+            PitchValue pv;
+            pv.time    = e.intAttribute("time");
+            pv.pitch   = e.intAttribute("pitch");
+            pv.vibrato = e.intAttribute("vibrato");
+            b->points().push_back(pv);
+            e.readNext();
+        } else if (tag == "mag") {
+            b->setUserMag(e.readDouble(0.1, 10.0));
+        } else if (PropertyRW::readStyledProperty(b, tag, e, ctx)) {
+        } else if (tag == "play") {
+            b->setPlay(e.readInt());
+        } else if (PropertyRW::readProperty(b, tag, e, ctx, Pid::LINE_WIDTH)) {
+        } else {
+            e.unknown();
         }
     }
 }

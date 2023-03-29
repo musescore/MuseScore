@@ -55,6 +55,7 @@
 #include "../libmscore/tuplet.h"
 #include "../libmscore/harmony.h"
 #include "../libmscore/fret.h"
+#include "../libmscore/tremolobar.h"
 
 #include "barlinerw.h"
 #include "locationrw.h"
@@ -471,8 +472,18 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
                 el->setTrack(0); // original system object always goes on top
             }
             segment->add(el);
-        } else if (tag == "TremoloBar"
-                   || tag == "Symbol"
+        } else if (tag == "TremoloBar") {
+            // hack - getSegment needed because tick tags are unreliable in 1.3 scores
+            // for symbols attached to anything but a measure
+            segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
+            TremoloBar* el = Factory::createTremoloBar(segment);
+            el->setTrack(ctx.track());
+            TRead::read(el, e, ctx);
+            if (el->systemFlag() && el->isTopSystemObject()) {
+                el->setTrack(0); // original system object always goes on top
+            }
+            segment->add(el);
+        } else if (tag == "Symbol"
                    || tag == "Tempo"
                    || tag == "StaffText"
                    || tag == "Sticking"
