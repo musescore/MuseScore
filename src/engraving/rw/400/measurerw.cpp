@@ -56,6 +56,7 @@
 #include "../libmscore/harmony.h"
 #include "../libmscore/fret.h"
 #include "../libmscore/tremolobar.h"
+#include "../libmscore/tempotext.h"
 
 #include "barlinerw.h"
 #include "locationrw.h"
@@ -68,6 +69,7 @@
 #include "timesigrw.h"
 #include "keysigrw.h"
 #include "tread.h"
+#include "symbolrw.h"
 
 #include "log.h"
 
@@ -483,9 +485,31 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
                 el->setTrack(0); // original system object always goes on top
             }
             segment->add(el);
-        } else if (tag == "Symbol"
-                   || tag == "Tempo"
-                   || tag == "StaffText"
+        } else if (tag == "Symbol") {
+            // hack - getSegment needed because tick tags are unreliable in 1.3 scores
+            // for symbols attached to anything but a measure
+            segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
+            Symbol* el = Factory::createSymbol(segment);
+
+            el->setTrack(ctx.track());
+            SymbolRW::read(el, e, ctx);
+            if (el->systemFlag() && el->isTopSystemObject()) {
+                el->setTrack(0); // original system object always goes on top
+            }
+            segment->add(el);
+        } else if (tag == "Tempo") {
+            // hack - getSegment needed because tick tags are unreliable in 1.3 scores
+            // for symbols attached to anything but a measure
+            segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
+            TempoText* el = Factory::createTempoText(segment);
+
+            el->setTrack(ctx.track());
+            TRead::read(el, e, ctx);
+            if (el->systemFlag() && el->isTopSystemObject()) {
+                el->setTrack(0); // original system object always goes on top
+            }
+            segment->add(el);
+        } else if (tag == "StaffText"
                    || tag == "Sticking"
                    || tag == "SystemText"
                    || tag == "PlayTechAnnotation"

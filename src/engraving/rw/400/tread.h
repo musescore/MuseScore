@@ -25,6 +25,7 @@
 namespace mu::engraving {
 class XmlReader;
 class ReadContext;
+class TempoText;
 class StaffText;
 class StaffTextBase;
 class Dynamic;
@@ -39,6 +40,7 @@ class TRead
 public:
     TRead() = default;
 
+    static void read(TempoText* t, XmlReader& xml, ReadContext& ctx);
     static void read(StaffText* t, XmlReader& xml, ReadContext& ctx);
     static void read(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
