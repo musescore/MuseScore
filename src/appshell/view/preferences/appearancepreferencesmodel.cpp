@@ -26,6 +26,7 @@
 
 #include "log.h"
 #include "translation.h"
+#include <QSysInfo>
 
 using namespace mu::appshell;
 using namespace mu::notation;
@@ -276,6 +277,12 @@ void AppearancePreferencesModel::setCurrentAccentColorIndex(int index)
 
     QColor color = accentColors()[index];
     uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, Val(color));
+
+    // if on macOS, manually setting an accent color in this menu should disable followSystemTheme
+    LOGD() << "accent color manually changed";
+    if (QSysInfo::productType() == "osx") {
+       setFollowSystemTheme(false);
+    }
 }
 
 void AppearancePreferencesModel::setCurrentFontIndex(int index)
