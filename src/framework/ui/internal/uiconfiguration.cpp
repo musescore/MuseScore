@@ -302,6 +302,13 @@ ValNt<bool> UiConfiguration::isFollowSystemTheme() const
 void UiConfiguration::setFollowSystemTheme(bool follow)
 {
     settings()->setSharedValue(UI_FOLLOW_SYSTEM_THEME_KEY, Val(follow));
+
+    // enabling followSystemTheme on macOS should sync the accent color to the system setting
+    // for some reasno, trying to do this in updateSystemThemeListeningStatus causes MuseScore
+    // to crash during startup. i wasn't able to figure out how or why :(
+    if (QSysInfo::productType() == "osx" && follow) {
+          synchAccentColorWithSystemIfNecessary();
+    }
 }
 
 void UiConfiguration::updateSystemThemeListeningStatus()
