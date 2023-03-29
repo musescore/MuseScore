@@ -53,7 +53,6 @@ void MacOSPlatformTheme::startListening() {
                                  object:nil
                                  queue:nil
                                  usingBlock:^(NSNotification*) {
-                                     LOGD() << "macOS accent color change detected";
                                      m_platformThemeChanged.notify();
                                  }];
     }
