@@ -244,6 +244,10 @@ void UiConfiguration::initThemes()
 
     updateThemes();
     updateCurrentTheme();
+
+    // macOS: check & update accent color if set to follow system theme
+    // in case it was changed while MuseScore was closed
+    synchAccentColorWithSystemIfNecessary();
 }
 
 void UiConfiguration::updateCurrentTheme()
@@ -322,7 +326,7 @@ void UiConfiguration::synchThemeWithSystemIfNecessary()
 void UiConfiguration::synchAccentColorWithSystemIfNecessary()
 {
    LOGD() << "macOS detected";
-   if (QSysInfo::productType() == "osx") {
+   if (QSysInfo::productType() == "osx" && m_isFollowSystemTheme.val) {
          // get the accent color index pertaining to the user's macOS system color
         int MSAccentColorIndex = MacOSPlatformTheme::getAccentColorIndex();
         LOGD() << "MuseScore accent color index is " << MSAccentColorIndex;
