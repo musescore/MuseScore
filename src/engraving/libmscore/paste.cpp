@@ -778,6 +778,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& src
 
 void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
 {
+    e.context()->setScore(this);
     e.context()->setPasteMode(true);   // ensure the reader is in paste mode
     Segment* currSegm = dst->segment();
     Fraction destTick = Fraction(0, 1);                // the tick and track to place the pasted element at
@@ -1184,6 +1185,7 @@ void Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
             }
             if (canPasteStaff(data, scale)) {
                 XmlReader e(data);
+                e.context()->setScore(this);
                 e.context()->setPasteMode(true);
                 if (!pasteStaff(e, cr->segment(), cr->staffIdx(), scale)) {
                     return;
