@@ -58,7 +58,7 @@ void QmlToolTip::show(QQuickItem* item, const QString& title, const QString& des
     m_item = item;
     m_shouldBeClosed = false;
 
-    if (toolTipNotOpened || openTimerStarted) {
+    if (toolTipNotOpened || !openTimerStarted) {
         connect(m_item, &QObject::destroyed, this, &QmlToolTip::doHide);
 
         m_openTimer.start(m_toolTipType == Default ? DEFAULT_INTERVAL : FILETOOLTIP_INTERVAL);
