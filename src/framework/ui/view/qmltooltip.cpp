@@ -23,8 +23,10 @@
 
 #include <QGuiApplication>
 
-static constexpr int DEFAULT_INTERVAL = 500;
-static constexpr int FILETOOLTIP_INTERVAL = 1000;
+static constexpr int DEFAULT_OPEN_INTERVAL = 500;
+static constexpr int DEFAULT_CLOSE_INTERVAL = 500;
+static constexpr int FILETOOLTIP_OPEN_INTERVAL = 500;
+static constexpr int FILETOOLTIP_CLOSE_INTERVAL = 100;
 
 
 using namespace mu::ui;
@@ -61,7 +63,7 @@ void QmlToolTip::show(QQuickItem* item, const QString& title, const QString& des
     if (toolTipNotOpened || !openTimerStarted) {
         connect(m_item, &QObject::destroyed, this, &QmlToolTip::doHide);
 
-        m_openTimer.start(m_toolTipType == Default ? DEFAULT_INTERVAL : FILETOOLTIP_INTERVAL);
+        m_openTimer.start(m_toolTipType == Default ? DEFAULT_OPEN_INTERVAL : FILETOOLTIP_OPEN_INTERVAL);
     } else {
         doShow();
     }
@@ -80,7 +82,7 @@ void QmlToolTip::hide(QQuickItem* item, bool force)
         return;
     }
 
-    m_closeTimer.start(m_toolTipType == Default ? DEFAULT_INTERVAL : FILETOOLTIP_INTERVAL);
+    m_closeTimer.start(m_toolTipType == Default ? DEFAULT_CLOSE_INTERVAL : FILETOOLTIP_CLOSE_INTERVAL);
 }
 
 void QmlToolTip::doShow()
