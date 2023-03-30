@@ -51,6 +51,7 @@ class Marker;
 class Jump;
 class MeasureNumber;
 class MeasureNumberBase;
+class MMRestRange;
 }
 
 namespace mu::engraving::rw400 {
@@ -87,6 +88,7 @@ public:
     static void read(Jump* j, XmlReader& xml, ReadContext& ctx);
     static void read(MeasureNumber* n, XmlReader& xml, ReadContext& ctx);
     static void read(MeasureNumberBase* b, XmlReader& xml, ReadContext& ctx);
+    static void read(MMRestRange* r, XmlReader& xml, ReadContext& ctx);
 };
 }
 

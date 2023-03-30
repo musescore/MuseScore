@@ -53,6 +53,7 @@
 #include "../../libmscore/marker.h"
 #include "../../libmscore/jump.h"
 #include "../../libmscore/measurenumber.h"
+#include "../../libmscore/mmrestrange.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -848,4 +849,9 @@ void TRead::read(MeasureNumber* n, XmlReader& xml, ReadContext& ctx)
 void TRead::read(MeasureNumberBase* b, XmlReader& xml, ReadContext& ctx)
 {
     read(static_cast<TextBase*>(b), xml, ctx);
+}
+
+void TRead::read(MMRestRange* r, XmlReader& xml, ReadContext& ctx)
+{
+    read(static_cast<MeasureNumberBase*>(r), xml, ctx);
 }

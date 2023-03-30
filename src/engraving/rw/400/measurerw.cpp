@@ -203,7 +203,7 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
             measure->add(noText);
         } else if (tag == "MMRestRange") {
             MMRestRange* range = new MMRestRange(measure);
-            range->read(e);
+            TRead::read(range, e, ctx);
             range->setTrack(ctx.track());
             measure->add(range);
         } else if (measure->MeasureBase::readProperties(e)) {
