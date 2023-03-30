@@ -22,6 +22,7 @@
 #include "tread.h"
 
 #include "../../types/typesconv.h"
+#include "../../types/symnames.h"
 
 #include "../../libmscore/tempotext.h"
 #include "../../libmscore/stafftext.h"
@@ -40,12 +41,15 @@
 #include "../../libmscore/staffstate.h"
 #include "../../libmscore/figuredbass.h"
 #include "../../libmscore/part.h"
+#include "../../libmscore/fermata.h"
+#include "../../libmscore/image.h"
 
 #include "../xmlreader.h"
 
 #include "textbaserw.h"
 #include "propertyrw.h"
 #include "engravingitemrw.h"
+#include "bsymbolrw.h"
 
 #include "log.h"
 
@@ -513,4 +517,76 @@ void TRead::read(FiguredBass* b, XmlReader& e, ReadContext& ctx)
     if (b->items().size() > 0) {
         b->setXmlText(normalizedText);          // this is the text to show while editing
     }
+}
+
+void TRead::read(Fermata* f, XmlReader& e, ReadContext& ctx)
+{
+    auto readProperties = [](Fermata* f, XmlReader& e, ReadContext& ctx)
+    {
+        const AsciiStringView tag(e.name());
+
+        if (tag == "subtype") {
+            AsciiStringView s = e.readAsciiText();
+            SymId id = SymNames::symIdByName(s);
+            f->setSymId(id);
+        } else if (tag == "play") {
+            f->setPlay(e.readBool());
+        } else if (tag == "timeStretch") {
+            f->setTimeStretch(e.readDouble());
+        } else if (tag == "offset") {
+            if (f->score()->mscVersion() > 114) {
+                EngravingItemRW::readProperties(f, e, ctx);
+            } else {
+                e.skipCurrentElement();       // ignore manual layout in older scores
+            }
+        } else if (EngravingItemRW::readProperties(f, e, ctx)) {
+        } else {
+            return false;
+        }
+        return true;
+    };
+
+    while (e.readNextStartElement()) {
+        if (!readProperties(f, e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
+void TRead::read(Image* img, XmlReader& e, ReadContext& ctx)
+{
+    //! TODO Should be replaced with `ctx.mscVersion()`
+    //! But at the moment, `ctx` is not set everywhere
+    int mscVersion = img->score()->mscVersion();
+    if (mscVersion <= 114) {
+        img->setSizeIsSpatium(false);
+    }
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "autoScale") {
+            PropertyRW::readProperty(img, e, ctx, Pid::AUTOSCALE);
+        } else if (tag == "size") {
+            PropertyRW::readProperty(img, e, ctx, Pid::SIZE);
+        } else if (tag == "lockAspectRatio") {
+            PropertyRW::readProperty(img, e, ctx, Pid::LOCK_ASPECT_RATIO);
+        } else if (tag == "sizeIsSpatium") {
+            // setting this using the property Pid::SIZE_IS_SPATIUM breaks, because the
+            // property setter attempts to maintain a constant size. If we're reading, we
+            // don't want to do that, because the stored size will be in:
+            //    mm if size isn't spatium
+            //    sp if size is spatium
+            img->setSizeIsSpatium(e.readBool());
+        } else if (tag == "path") {
+            img->setStorePath(e.readText());
+        } else if (tag == "linkPath") {
+            img->setLinkPath(e.readText());
+        } else if (tag == "subtype") {    // obsolete
+            e.skipCurrentElement();
+        } else if (!BSymbolRW::readProperties(img, e, ctx)) {
+            e.unknown();
+        }
+    }
+
+    img->load();
 }
