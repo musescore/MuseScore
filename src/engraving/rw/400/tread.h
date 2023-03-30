@@ -44,6 +44,7 @@ class FiguredBass;
 class Fermata;
 class Image;
 class Tuplet;
+class Beam;
 }
 
 namespace mu::engraving::rw400 {
@@ -73,6 +74,7 @@ public:
     static void read(Fermata* f, XmlReader& xml, ReadContext& ctx);
     static void read(Image* i, XmlReader& xml, ReadContext& ctx);
     static void read(Tuplet* t, XmlReader& xml, ReadContext& ctx);
+    static void read(Beam* b, XmlReader& xml, ReadContext& ctx);
 };
 }
 

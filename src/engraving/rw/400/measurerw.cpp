@@ -588,7 +588,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         } else if (tag == "Beam") {
             Beam* beam = Factory::createBeam(ctx.dummy()->system());
             beam->setTrack(ctx.track());
-            beam->read(e);
+            TRead::read(beam, e, ctx);
             beam->resetExplicitParent();
             if (startingBeam) {
                 LOGD("The read beam was not used");
