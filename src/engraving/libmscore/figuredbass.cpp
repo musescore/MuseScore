@@ -1021,8 +1021,8 @@ FiguredBass::FiguredBass(Segment* parent)
     }
     setOnNote(true);
     setTicks(Fraction(0, 1));
-    DeleteAll(items);
-    items.clear();
+    DeleteAll(m_items);
+    m_items.clear();
 }
 
 FiguredBass::FiguredBass(const FiguredBass& fb)
@@ -1030,17 +1030,17 @@ FiguredBass::FiguredBass(const FiguredBass& fb)
 {
     setOnNote(fb.onNote());
     setTicks(fb.ticks());
-    for (auto i : fb.items) {       // deep copy is needed
+    for (auto i : fb.m_items) {       // deep copy is needed
         FiguredBassItem* fbi = new FiguredBassItem(*i);
         fbi->setParent(this);
-        items.push_back(fbi);
+        m_items.push_back(fbi);
     }
 //      items = fb.items;
 }
 
 FiguredBass::~FiguredBass()
 {
-    for (FiguredBassItem* item : items) {
+    for (FiguredBassItem* item : m_items) {
         delete item;
     }
 }
@@ -1078,13 +1078,13 @@ void FiguredBass::write(XmlWriter& xml) const
         xml.tagFraction("ticks", ticks());
     }
     // if unparseable items, write full text data
-    if (items.size() < 1) {
+    if (m_items.size() < 1) {
         TextBase::writeProperties(xml, true);
     } else {
 //            if (textStyleType() != StyledPropertyListIdx::FIGURED_BASS)
 //                  // if all items parsed and not unstiled, we simply have a special style: write it
 //                  xml.tag("style", textStyle().name());
-        for (FiguredBassItem* item : items) {
+        for (FiguredBassItem* item : m_items) {
             item->write(xml);
         }
         for (const StyledProperty& spp : *_elementStyle) {
@@ -1114,7 +1114,7 @@ void FiguredBass::read(XmlReader& e)
             pItem->setTrack(track());
             pItem->setParent(this);
             pItem->read(e);
-            items.push_back(pItem);
+            m_items.push_back(pItem);
             // add item normalized text
             if (!normalizedText.isEmpty()) {
                 normalizedText.append('\n');
@@ -1128,7 +1128,7 @@ void FiguredBass::read(XmlReader& e)
         }
     }
     // if items could be parsed set normalized text
-    if (items.size() > 0) {
+    if (m_items.size() > 0) {
         setXmlText(normalizedText);          // this is the text to show while editing
     }
 }
@@ -1148,11 +1148,11 @@ void FiguredBass::layout()
     // if element could be parsed into items, layout each element
     // Items list will be empty in edit mode (see FiguredBass::startEdit).
     // TODO: consider disabling specific layout in case text style is changed (tid() != TextStyleName::FIGURED_BASS).
-    if (items.size() > 0) {
+    if (m_items.size() > 0) {
         layoutLines();
         bbox().setRect(0, 0, _lineLengths.at(0), 0);
         // layout each item and enlarge bbox to include items bboxes
-        for (FiguredBassItem* item : items) {
+        for (FiguredBassItem* item : m_items) {
             item->layout();
             addbbox(item->bbox().translated(item->pos()));
         }
@@ -1293,10 +1293,10 @@ void FiguredBass::draw(mu::draw::Painter* painter) const
 //            TextBase::draw(painter);
 //      else
     {                                                        // not edit mode:
-        if (items.size() < 1) {                             // if not parseable into f.b. items
+        if (m_items.size() < 1) {                             // if not parseable into f.b. items
             TextBase::draw(painter);                            // draw as standard text
         } else {
-            for (FiguredBassItem* item : items) {           // if parseable into f.b. items
+            for (FiguredBassItem* item : m_items) {           // if parseable into f.b. items
                 painter->translate(item->pos());            // draw each item in its proper position
                 item->draw(painter);
                 painter->translate(-item->pos());
@@ -1311,8 +1311,8 @@ void FiguredBass::draw(mu::draw::Painter* painter) const
 
 void FiguredBass::startEdit(EditData& ed)
 {
-    DeleteAll(items);
-    items.clear();
+    DeleteAll(m_items);
+    m_items.clear();
     layout1();   // re-layout without F.B.-specific formatting.
     TextBase::startEdit(ed);
 }
@@ -1338,15 +1338,15 @@ void FiguredBass::endEdit(EditData& ed)
 
     // split text into lines and create an item for each line
     StringList list = txt.split(u'\n', mu::SkipEmptyParts);
-    DeleteAll(items);
-    items.clear();
+    DeleteAll(m_items);
+    m_items.clear();
     String normalizedText;
     int idx = 0;
     for (String str : list) {
         FiguredBassItem* pItem = new FiguredBassItem(this, idx++);
         if (!pItem->parse(str)) {               // if any item fails parsing
-            DeleteAll(items);
-            items.clear();                      // clear item list
+            DeleteAll(m_items);
+            m_items.clear();                      // clear item list
             score()->startCmd();
             triggerLayout();
             score()->endCmd();
@@ -1355,7 +1355,7 @@ void FiguredBass::endEdit(EditData& ed)
         }
         pItem->setTrack(track());
         pItem->setParent(this);
-        items.push_back(pItem);
+        m_items.push_back(pItem);
 
         // add item normalized text
         if (!normalizedText.isEmpty()) {
@@ -1364,7 +1364,7 @@ void FiguredBass::endEdit(EditData& ed)
         normalizedText.append(pItem->normalizedText());
     }
     // if all items parsed and text is styled, replaced entered text with normalized text
-    if (items.size()) {
+    if (m_items.size()) {
         setXmlText(normalizedText);
     }
 
@@ -1382,7 +1382,7 @@ void FiguredBass::endEdit(EditData& ed)
 void FiguredBass::setSelected(bool flag)
 {
     EngravingItem::setSelected(flag);
-    for (FiguredBassItem* item : items) {
+    for (FiguredBassItem* item : m_items) {
         item->setSelected(flag);
     }
 }
@@ -1390,7 +1390,7 @@ void FiguredBass::setSelected(bool flag)
 void FiguredBass::setVisible(bool flag)
 {
     EngravingItem::setVisible(flag);
-    for (FiguredBassItem* item : items) {
+    for (FiguredBassItem* item : m_items) {
         item->setVisible(flag);
     }
 }
@@ -1442,7 +1442,7 @@ FiguredBass* FiguredBass::nextFiguredBass() const
 double FiguredBass::additionalContLineX(double pagePosY) const
 {
     PointF pgPos = pagePos();
-    for (FiguredBassItem* fbi : items) {
+    for (FiguredBassItem* fbi : m_items) {
         // if item has cont.line but nothing before it
         // and item Y coord near enough to pagePosY
         if (fbi->contLine() != FiguredBassItem::ContLine::NONE
@@ -1752,7 +1752,7 @@ bool FiguredBass::fontData(int nIdx, String* pFamily, String* pDisplayName,
 
 bool FiguredBass::hasParentheses() const
 {
-    for (FiguredBassItem* item : items) {
+    for (FiguredBassItem* item : m_items) {
         if (item->startsWithParenthesis()) {
             return true;
         }
@@ -1772,7 +1772,7 @@ void FiguredBass::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEnd
         attrs = { { "parentheses", "yes" } };
     }
     xml.startElement("figured-bass", attrs);
-    for (FiguredBassItem* item : items) {
+    for (FiguredBassItem* item : m_items) {
         item->writeMusicXML(xml, isOriginalFigure, crEndTick, fbEndTick);
     }
     if (writeDuration) {

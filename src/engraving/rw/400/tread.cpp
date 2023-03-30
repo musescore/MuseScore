@@ -32,6 +32,14 @@
 #include "../../libmscore/fret.h"
 #include "../../libmscore/score.h"
 #include "../../libmscore/tremolobar.h"
+#include "../../libmscore/sticking.h"
+#include "../../libmscore/systemtext.h"
+#include "../../libmscore/playtechannotation.h"
+#include "../../libmscore/rehearsalmark.h"
+#include "../../libmscore/instrchange.h"
+#include "../../libmscore/staffstate.h"
+#include "../../libmscore/figuredbass.h"
+#include "../../libmscore/part.h"
 
 #include "../xmlreader.h"
 
@@ -43,6 +51,40 @@
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw400;
+
+template<typename T>
+static bool try_read(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
+{
+    T* t = dynamic_cast<T*>(el);
+    if (!t) {
+        return false;
+    }
+    TRead::read(t, xml, ctx);
+    return true;
+}
+
+void TRead::read(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
+{
+    if (try_read<Sticking>(el, xml, ctx)) {
+    } else if (try_read<SystemText>(el, xml, ctx)) {
+    } else if (try_read<PlayTechAnnotation>(el, xml, ctx)) {
+    } else if (try_read<RehearsalMark>(el, xml, ctx)) {
+    } else if (try_read<InstrumentChange>(el, xml, ctx)) {
+    } else if (try_read<StaffState>(el, xml, ctx)) {
+    } else if (try_read<FiguredBass>(el, xml, ctx)) {
+    } else {
+        UNREACHABLE;
+    }
+}
+
+void TRead::read(TextBase* t, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        if (!TextBaseRW::readProperties(t, xml, ctx)) {
+            xml.unknown();
+        }
+    }
+}
 
 void TRead::read(TempoText* t, XmlReader& e, ReadContext& ctx)
 {
@@ -358,5 +400,117 @@ void TRead::read(TremoloBar* b, XmlReader& e, ReadContext& ctx)
         } else {
             e.unknown();
         }
+    }
+}
+
+void TRead::read(Sticking* s, XmlReader& xml, ReadContext& ctx)
+{
+    read(static_cast<TextBase*>(s), xml, ctx);
+}
+
+void TRead::read(SystemText* t, XmlReader& xml, ReadContext& ctx)
+{
+    read(static_cast<StaffTextBase*>(t), xml, ctx);
+}
+
+void TRead::read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+
+        if (PropertyRW::readProperty(a, tag, xml, ctx, Pid::PLAY_TECH_TYPE)) {
+            continue;
+        }
+
+        if (!readProperties(static_cast<StaffTextBase*>(a), xml, ctx)) {
+            xml.unknown();
+        }
+    }
+}
+
+void TRead::read(RehearsalMark* m, XmlReader& xml, ReadContext& ctx)
+{
+    read(static_cast<TextBase*>(m), xml, ctx);
+}
+
+void TRead::read(InstrumentChange* c, XmlReader& e, ReadContext& ctx)
+{
+    Instrument inst;
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "Instrument") {
+            inst.read(e, c->part());
+        } else if (tag == "init") {
+            c->setInit(e.readBool());
+        } else if (!TextBaseRW::readProperties(c, e, ctx)) {
+            e.unknown();
+        }
+    }
+
+    if (c->score()->mscVersion() < 206) {
+        // previous versions did not honor transposition of instrument change
+        // except in ways that it should not have
+        // notes entered before the instrument change was added would not be altered,
+        // so original transposition remained in effect
+        // notes added afterwards would be transposed by both intervals, resulting in tpc corruption
+        // here we set the instrument change to inherit the staff transposition to emulate previous versions
+        // in Note::read(), we attempt to fix the tpc corruption
+        // There is also code in read206 to try to deal with this, but it is out of date and therefore disabled
+        // What this means is, scores created in 2.1 or later should be fine, scores created in 2.0 maybe not so much
+
+        Interval v = c->staff() ? c->staff()->part()->instrument(c->tick())->transpose() : 0;
+        inst.setTranspose(v);
+    }
+
+    c->setInstrument(inst);
+}
+
+void TRead::read(StaffState* s, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "subtype") {
+            s->setStaffStateType(StaffStateType(e.readInt()));
+        } else if (tag == "Instrument") {
+            Instrument i;
+            i.read(e, nullptr);
+            s->setInstrument(std::move(i));
+        } else if (!EngravingItemRW::readProperties(s, e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
+void TRead::read(FiguredBass* b, XmlReader& e, ReadContext& ctx)
+{
+    String normalizedText;
+    int idx = 0;
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "ticks") {
+            b->setTicks(e.readFraction());
+        } else if (tag == "onNote") {
+            b->setOnNote(e.readInt() != 0l);
+        } else if (tag == "FiguredBassItem") {
+            FiguredBassItem* pItem = b->createItem(idx++);
+            pItem->setTrack(b->track());
+            pItem->setParent(b);
+            pItem->read(e);
+            b->appendItem(pItem);
+            // add item normalized text
+            if (!normalizedText.isEmpty()) {
+                normalizedText.append('\n');
+            }
+            normalizedText.append(pItem->normalizedText());
+        }
+//            else if (tag == "style")
+//                  setStyledPropertyListIdx(e.readElementText());
+        else if (!TextBaseRW::readProperties(b, e, ctx)) {
+            e.unknown();
+        }
+    }
+    // if items could be parsed set normalized text
+    if (b->items().size() > 0) {
+        b->setXmlText(normalizedText);          // this is the text to show while editing
     }
 }
