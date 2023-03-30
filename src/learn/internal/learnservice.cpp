@@ -26,6 +26,7 @@
 #include <QJsonObject>
 #include <QBuffer>
 #include <QtConcurrent>
+#include <QLocale>
 
 #include "dataformatter.h"
 #include "learnerrors.h"
@@ -33,6 +34,35 @@
 
 using namespace mu::learn;
 using namespace mu::network;
+
+static const Playlist s_bilibiliPlaylist = {
+    { "BV1fv4y197Vc", "MuseScore 4视频公告", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/announcing.jpg", 241 },
+    { "BV1d14y1K7zf", "MuseScore 4与3相比有哪些变化", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/differences_v3.jpg", 341 },
+    { "BV18V4y1P78J", "怎样安装交响乐插件Muse Sounds", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/installing.jpg", 63 },
+    { "BV1Ye4y1T7t3", "雕排改进以及会如何影响旧乐谱", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/engraving.jpg", 144 },
+    { "BV1Ae4y1M7gU?p=1", "视频导引：新建乐谱", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/setting_up.jpg", 92 },
+    { "BV1Ae4y1M7gU?p=2", "视频导引：乐谱写作基础", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/basics_writing.jpg", 262 },
+    { "BV1Ae4y1M7gU?p=3", "视频导引：力度记号、奏法记号、速度记号与文字", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/dynamics.jpg", 200 },
+    { "BV1Ae4y1M7gU?p=4", "视频导引：吉他与打击乐", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/guitar.jpg", 167 },
+    { "BV1Ae4y1M7gU?p=5", "视频导引：布局与分谱", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/layouts.jpg", 297 },
+    { "BV1Ae4y1M7gU?p=6", "视频导引：文字、歌词与和弦记号", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/text.jpg", 165 },
+    { "BV1Ae4y1M7gU?p=7", "视频导引：反复与跳跃", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/repeats.jpg", 161 },
+    { "BV1Ae4y1M7gU?p=8", "视频导引：MIDI键盘的使用", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/midi.jpg", 148 },
+    { "BV1Ae4y1M7gU?p=9", "视频导引：在云端保存与发布", "Musescore",
+      "https://s3.amazonaws.com/s.musescore.org/video_thumbs/publishing.jpg", 131 }
+};
 
 static int videoDurationSecs(const QString& durationInIsoFormat)
 {
@@ -98,7 +128,7 @@ void LearnService::refreshPlaylists()
 
 Playlist LearnService::startedPlaylist() const
 {
-    return m_startedPlaylist;
+    return QLocale().name() == "zh_CN" ? s_bilibiliPlaylist : m_startedPlaylist;
 }
 
 mu::async::Channel<Playlist> LearnService::startedPlaylistChanged() const
@@ -118,7 +148,7 @@ mu::async::Channel<Playlist> LearnService::advancedPlaylistChanged() const
 
 void LearnService::openVideo(const QString& videoId) const
 {
-    openUrl(configuration()->videoOpenUrl(videoId));
+    openUrl(configuration()->videoOpenUrl(videoId, QLocale().name() == "zh_CN"));
 }
 
 void LearnService::th_requestPlaylist(const QUrl& playlistUrl, std::function<void(RetVal<Playlist>)> callBack) const
