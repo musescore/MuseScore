@@ -246,6 +246,8 @@ public:
 
     const std::vector<TremAnchor>& tremAnchors() const { return _tremAnchors; }
 
+    void addBeamFragment(BeamFragment* f) { fragments.push_back(f); }
+
 private:
     void initBeamEditData(EditData& ed);
 

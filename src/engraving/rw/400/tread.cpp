@@ -47,6 +47,7 @@
 #include "../../libmscore/image.h"
 #include "../../libmscore/tuplet.h"
 #include "../../libmscore/text.h"
+#include "../../libmscore/beam.h"
 
 #include "../xmlreader.h"
 
@@ -674,4 +675,49 @@ void TRead::read(Tuplet* t, XmlReader& e, ReadContext& ctx)
 
     Fraction f =  t->baseLen().fraction() * t->ratio().denominator();
     t->setTicks(f.reduced());
+}
+
+void TRead::read(Beam* b, XmlReader& e, ReadContext& ctx)
+{
+    if (b->score()->mscVersion() < 301) {
+        b->setId(e.intAttribute("id"));
+    }
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "StemDirection") {
+            PropertyRW::readProperty(b, e, ctx, Pid::STEM_DIRECTION);
+        } else if (tag == "distribute") {
+            e.skipCurrentElement(); // obsolete
+        } else if (PropertyRW::readStyledProperty(b, tag, e, ctx)) {
+        } else if (tag == "growLeft") {
+            b->setGrowLeft(e.readDouble());
+        } else if (tag == "growRight") {
+            b->setGrowRight(e.readDouble());
+        } else if (tag == "Fragment") {
+            BeamFragment* f = new BeamFragment;
+            int idx = (b->beamDirection() == DirectionV::AUTO || b->beamDirection() == DirectionV::DOWN) ? 0 : 1;
+            b->setUserModified(true);
+            double _spatium = b->spatium();
+            while (e.readNextStartElement()) {
+                const AsciiStringView tag1(e.name());
+                if (tag1 == "y1") {
+                    f->py1[idx] = e.readDouble() * _spatium;
+                } else if (tag1 == "y2") {
+                    f->py2[idx] = e.readDouble() * _spatium;
+                } else {
+                    e.unknown();
+                }
+            }
+            b->addBeamFragment(f);
+        } else if (tag == "l1" || tag == "l2") {      // ignore
+            e.skipCurrentElement();
+        } else if (tag == "subtype") {          // obsolete
+            e.skipCurrentElement();
+        } else if (tag == "y1" || tag == "y2") { // obsolete
+            e.skipCurrentElement();
+        } else if (!EngravingItemRW::readProperties(b, e, ctx)) {
+            e.unknown();
+        }
+    }
 }
