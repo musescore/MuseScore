@@ -167,8 +167,13 @@ void Ambitus::setTrack(track_idx_t t)
 //    setting either pitch requires to adjust the corresponding tpc
 //---------------------------------------------------------
 
-void Ambitus::setTopPitch(int val)
+void Ambitus::setTopPitch(int val, bool applyLogic)
 {
+    if (!applyLogic) {
+        _topPitch   = val;
+        return;
+    }
+
     int deltaPitch    = val - topPitch();
     // if deltaPitch is not an integer number of octaves, adjust tpc
     // (to avoid 'wild' tpc changes with octave changes)
@@ -187,8 +192,13 @@ void Ambitus::setTopPitch(int val)
     normalize();
 }
 
-void Ambitus::setBottomPitch(int val)
+void Ambitus::setBottomPitch(int val, bool applyLogic)
 {
+    if (!applyLogic) {
+        _bottomPitch = val;
+        return;
+    }
+
     int deltaPitch    = val - bottomPitch();
     // if deltaPitch is not an integer number of octaves, adjust tpc
     // (to avoid 'wild' tpc changes with octave changes)
@@ -214,8 +224,13 @@ void Ambitus::setBottomPitch(int val)
 //    (but remaining in the same octave)
 //---------------------------------------------------------
 
-void Ambitus::setTopTpc(int val)
+void Ambitus::setTopTpc(int val, bool applyLogic)
 {
+    if (!applyLogic) {
+        _topTpc = val;
+        return;
+    }
+
     int octave        = topPitch() / PITCH_DELTA_OCTAVE;
     int deltaTpc      = val - topTpc();
     // get new pitch according to tpc change
@@ -227,8 +242,13 @@ void Ambitus::setTopTpc(int val)
     normalize();
 }
 
-void Ambitus::setBottomTpc(int val)
+void Ambitus::setBottomTpc(int val, bool applyLogic)
 {
+    if (!applyLogic) {
+        _bottomTpc = val;
+        return;
+    }
+
     int octave        = bottomPitch() / PITCH_DELTA_OCTAVE;
     int deltaTpc      = val - bottomTpc();
     // get new pitch according to tpc change
