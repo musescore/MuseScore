@@ -128,7 +128,7 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
         } else if (tag == "Marker" || tag == "Jump") {
             EngravingItem* el = Factory::createItemByName(tag, measure);
             el->setTrack(ctx.track());
-            el->read(e);
+            TRead::read(el, e, ctx);
             if (el->systemFlag() && el->isTopSystemObject()) {
                 el->setTrack(0); // original system object always goes on top
             }

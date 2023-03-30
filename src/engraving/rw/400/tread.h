@@ -47,6 +47,8 @@ class Tuplet;
 class Beam;
 class Ambitus;
 class Accidental;
+class Marker;
+class Jump;
 }
 
 namespace mu::engraving::rw400 {
@@ -79,6 +81,8 @@ public:
     static void read(Beam* b, XmlReader& xml, ReadContext& ctx);
     static void read(Ambitus* a, XmlReader& xml, ReadContext& ctx);
     static void read(Accidental* a, XmlReader& xml, ReadContext& ctx);
+    static void read(Marker* m, XmlReader& xml, ReadContext& ctx);
+    static void read(Jump* j, XmlReader& xml, ReadContext& ctx);
 };
 }
 

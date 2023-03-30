@@ -50,6 +50,8 @@
 #include "../../libmscore/beam.h"
 #include "../../libmscore/ambitus.h"
 #include "../../libmscore/accidental.h"
+#include "../../libmscore/marker.h"
+#include "../../libmscore/jump.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -84,6 +86,8 @@ void TRead::read(EngravingItem* el, XmlReader& xml, ReadContext& ctx)
     } else if (try_read<InstrumentChange>(el, xml, ctx)) {
     } else if (try_read<StaffState>(el, xml, ctx)) {
     } else if (try_read<FiguredBass>(el, xml, ctx)) {
+    } else if (try_read<Marker>(el, xml, ctx)) {
+    } else if (try_read<Jump>(el, xml, ctx)) {
     } else {
         UNREACHABLE;
     }
@@ -795,6 +799,41 @@ void TRead::read(Accidental* a, XmlReader& e, ReadContext& ctx)
             a->setSmall(e.readInt());
         } else if (EngravingItemRW::readProperties(a, e, ctx)) {
         } else {
+            e.unknown();
+        }
+    }
+}
+
+void TRead::read(Marker* m, XmlReader& e, ReadContext& ctx)
+{
+    MarkerType mt = MarkerType::SEGNO;
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "label") {
+            AsciiStringView s(e.readAsciiText());
+            m->setLabel(String::fromAscii(s.ascii()));
+            mt = TConv::fromXml(s, MarkerType::USER);
+        } else if (!TextBaseRW::readProperties(m, e, ctx)) {
+            e.unknown();
+        }
+    }
+    m->setMarkerType(mt);
+}
+
+void TRead::read(Jump* j, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "jumpTo") {
+            j->setJumpTo(e.readText());
+        } else if (tag == "playUntil") {
+            j->setPlayUntil(e.readText());
+        } else if (tag == "continueAt") {
+            j->setContinueAt(e.readText());
+        } else if (tag == "playRepeats") {
+            j->setPlayRepeats(e.readBool());
+        } else if (!TextBaseRW::readProperties(j, e, ctx)) {
             e.unknown();
         }
     }
