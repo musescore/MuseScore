@@ -185,7 +185,7 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
             measure->setMeasureRepeatCount(e.readInt(), staffIdx);
         } else if (tag == "SystemDivider") {
             SystemDivider* sd = new SystemDivider(ctx.dummy()->system());
-            sd->read(e);
+            TRead::read(sd, e, ctx);
             //! TODO Looks like a bug.
             //! The SystemDivider parent must be System
             //! there is a method: `System* system() const { return (System*)parent(); }`,
