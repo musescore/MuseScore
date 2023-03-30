@@ -52,6 +52,7 @@
 #include "../../libmscore/accidental.h"
 #include "../../libmscore/marker.h"
 #include "../../libmscore/jump.h"
+#include "../../libmscore/measurenumber.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -837,4 +838,14 @@ void TRead::read(Jump* j, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+}
+
+void TRead::read(MeasureNumber* n, XmlReader& xml, ReadContext& ctx)
+{
+    read(static_cast<MeasureNumberBase*>(n), xml, ctx);
+}
+
+void TRead::read(MeasureNumberBase* b, XmlReader& xml, ReadContext& ctx)
+{
+    read(static_cast<TextBase*>(b), xml, ctx);
 }

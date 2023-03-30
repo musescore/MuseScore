@@ -198,7 +198,7 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
             ctx.setTick(ctx.lastMeasure()->tick());
         } else if (tag == "MeasureNumber") {
             MeasureNumber* noText = new MeasureNumber(measure);
-            noText->read(e);
+            TRead::read(noText, e, ctx);
             noText->setTrack(ctx.track());
             measure->add(noText);
         } else if (tag == "MMRestRange") {
