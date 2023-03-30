@@ -48,8 +48,11 @@
 #include "../../libmscore/tuplet.h"
 #include "../../libmscore/text.h"
 #include "../../libmscore/beam.h"
+#include "../../libmscore/ambitus.h"
+#include "../../libmscore/accidental.h"
 
 #include "../xmlreader.h"
+#include "../206/read206.h"
 
 #include "textbaserw.h"
 #include "propertyrw.h"
@@ -717,6 +720,81 @@ void TRead::read(Beam* b, XmlReader& e, ReadContext& ctx)
         } else if (tag == "y1" || tag == "y2") { // obsolete
             e.skipCurrentElement();
         } else if (!EngravingItemRW::readProperties(b, e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
+void TRead::read(Ambitus* a, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "head") {
+            PropertyRW::readProperty(a, e, ctx, Pid::HEAD_GROUP);
+        } else if (tag == "headType") {
+            PropertyRW::readProperty(a, e, ctx, Pid::HEAD_TYPE);
+        } else if (tag == "mirror") {
+            PropertyRW::readProperty(a, e, ctx, Pid::MIRROR_HEAD);
+        } else if (tag == "hasLine") {
+            a->setHasLine(e.readInt());
+        } else if (tag == "lineWidth") {
+            PropertyRW::readProperty(a, e, ctx, Pid::LINE_WIDTH_SPATIUM);
+        } else if (tag == "topPitch") {
+            a->setTopPitch(e.readInt(), false);
+        } else if (tag == "bottomPitch") {
+            a->setBottomPitch(e.readInt(), false);
+        } else if (tag == "topTpc") {
+            a->setTopTpc(e.readInt(), false);
+        } else if (tag == "bottomTpc") {
+            a->setBottomTpc(e.readInt(), false);
+        } else if (tag == "topAccidental") {
+            while (e.readNextStartElement()) {
+                if (e.name() == "Accidental") {
+                    if (a->score()->mscVersion() < 301) {
+                        compat::Read206::readAccidental206(a->topAccidental(), e);
+                    } else {
+                        TRead::read(a->topAccidental(), e, ctx);
+                    }
+                } else {
+                    e.skipCurrentElement();
+                }
+            }
+        } else if (tag == "bottomAccidental") {
+            while (e.readNextStartElement()) {
+                if (e.name() == "Accidental") {
+                    if (a->score()->mscVersion() < 301) {
+                        compat::Read206::readAccidental206(a->bottomAccidental(), e);
+                    } else {
+                        TRead::read(a->bottomAccidental(), e, ctx);
+                    }
+                } else {
+                    e.skipCurrentElement();
+                }
+            }
+        } else if (EngravingItemRW::readProperties(a, e, ctx)) {
+        } else {
+            e.unknown();
+        }
+    }
+}
+
+void TRead::read(Accidental* a, XmlReader& e, ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "bracket") {
+            int i = e.readInt();
+            if (i == 0 || i == 1 || i == 2) {
+                a->setBracket(AccidentalBracket(i));
+            }
+        } else if (tag == "subtype") {
+            a->setSubtype(e.readAsciiText());
+        } else if (tag == "role") {
+            a->setRole(TConv::fromXml(e.readAsciiText(), AccidentalRole::AUTO));
+        } else if (tag == "small") {
+            a->setSmall(e.readInt());
+        } else if (EngravingItemRW::readProperties(a, e, ctx)) {
+        } else {
             e.unknown();
         }
     }

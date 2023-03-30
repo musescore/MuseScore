@@ -45,6 +45,8 @@ class Fermata;
 class Image;
 class Tuplet;
 class Beam;
+class Ambitus;
+class Accidental;
 }
 
 namespace mu::engraving::rw400 {
@@ -75,6 +77,8 @@ public:
     static void read(Image* i, XmlReader& xml, ReadContext& ctx);
     static void read(Tuplet* t, XmlReader& xml, ReadContext& ctx);
     static void read(Beam* b, XmlReader& xml, ReadContext& ctx);
+    static void read(Ambitus* a, XmlReader& xml, ReadContext& ctx);
+    static void read(Accidental* a, XmlReader& xml, ReadContext& ctx);
 };
 }
 

@@ -600,7 +600,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         } else if (tag == "Ambitus") {
             segment = measure->getSegment(SegmentType::Ambitus, ctx.tick());
             Ambitus* range = Factory::createAmbitus(segment);
-            range->read(e);
+            TRead::read(range, e, ctx);
             range->setParent(segment);                // a parent segment is needed for setTrack() to work
             range->setTrack(trackZeroVoice(ctx.track()));
             segment->add(range);

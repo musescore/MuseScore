@@ -88,15 +88,18 @@ public:
     int topTpc() const { return _topTpc; }
     int bottomTpc() const { return _bottomTpc; }
 
+    Accidental* topAccidental() const { return _topAccid; }
+    Accidental* bottomAccidental() const { return _bottomAccid; }
+
     void setNoteHeadGroup(NoteHeadGroup val) { _noteHeadGroup = val; }
     void setNoteHeadType(NoteHeadType val) { _noteHeadType  = val; }
     void setDirection(DirectionH val) { _dir = val; }
     void setHasLine(bool val) { _hasLine = val; }
     void setLineWidth(Spatium val) { _lineWidth = val; }
-    void setTopPitch(int val);
-    void setBottomPitch(int val);
-    void setTopTpc(int val);
-    void setBottomTpc(int val);
+    void setTopPitch(int val, bool applyLogic = true);
+    void setBottomPitch(int val, bool applyLogic = true);
+    void setTopTpc(int val, bool applyLogic = true);
+    void setBottomTpc(int val, bool applyLogic = true);
 
     // some utility functions
     Segment* segment() const { return (Segment*)explicitParent(); }
