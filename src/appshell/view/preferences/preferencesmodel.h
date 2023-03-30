@@ -24,6 +24,8 @@
 
 #include <QAbstractItemModel>
 
+#include "types/translatablestring.h"
+
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "ui/iuiactionsregister.h"
@@ -76,7 +78,7 @@ private:
         ItemRole = Qt::UserRole + 1
     };
 
-    PreferencePageItem* makeItem(const QString& id, const QString& title, ui::IconCode::Code icon = mu::ui::IconCode::Code::NONE,
+    PreferencePageItem* makeItem(const QString& id, const TranslatableString& title, ui::IconCode::Code icon = mu::ui::IconCode::Code::NONE,
                                  const QString& path = "", const QList<PreferencePageItem*>& children = {}) const;
 
     PreferencePageItem* modelIndexToItem(const QModelIndex& index) const;

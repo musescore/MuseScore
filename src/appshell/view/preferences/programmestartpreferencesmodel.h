@@ -24,16 +24,21 @@
 
 #include <QObject>
 
+#include "types/translatablestring.h"
+
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "iappshellconfiguration.h"
-#include "project/iprojectconfiguration.h"
+#include "languages/ilanguagesservice.h"
 
 namespace mu::appshell {
-class ProgrammeStartPreferencesModel : public QObject
+class ProgrammeStartPreferencesModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(appshell, IAppShellConfiguration, configuration)
+    INJECT(appshell, languages::ILanguagesService, languagesService)
 
     Q_PROPERTY(QVariantList startupModes READ startupModes NOTIFY startupModesChanged)
     Q_PROPERTY(QVariantList panels READ panels NOTIFY panelsChanged)
@@ -64,7 +69,7 @@ private:
     struct Panel
     {
         PanelType type = Unknown;
-        QString title;
+        TranslatableString title;
         bool visible = false;
     };
 
@@ -73,7 +78,7 @@ private:
     struct StartMode
     {
         StartupModeType type = StartupModeType::StartWithNewScore;
-        QString title;
+        TranslatableString title;
         bool checked = false;
         bool canSelectScorePath = false;
         QString scorePath;

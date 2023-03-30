@@ -29,6 +29,7 @@
 
 #include "notation/inotationconfiguration.h"
 #include "audio/iaudioconfiguration.h"
+#include "languages/ilanguagesservice.h"
 
 namespace mu::appshell {
 class ScorePreferencesModel : public QAbstractListModel, public async::Asyncable
@@ -37,6 +38,7 @@ class ScorePreferencesModel : public QAbstractListModel, public async::Asyncable
 
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, audio::IAudioConfiguration, audioConfiguration)
+    INJECT(appshell, languages::ILanguagesService, languagesService)
 
 public:
     explicit ScorePreferencesModel(QObject* parent = nullptr);
@@ -72,6 +74,8 @@ private:
         QStringList pathFilter;
         QString chooseTitle;
     };
+
+    void loadItems();
 
     void savePath(DefaultFileType fileType, const QString& path);
 

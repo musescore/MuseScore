@@ -23,13 +23,16 @@
 #include "programmestartpreferencesmodel.h"
 
 #include "log.h"
-#include "translation.h"
 
 using namespace mu::appshell;
 
 ProgrammeStartPreferencesModel::ProgrammeStartPreferencesModel(QObject* parent)
     : QObject(parent)
 {
+    languagesService()->currentLanguageChanged().onNotify(this, [this] {
+        emit startupModesChanged();
+        emit panelsChanged();
+    });
 }
 
 QVariantList ProgrammeStartPreferencesModel::startupModes() const
@@ -38,7 +41,7 @@ QVariantList ProgrammeStartPreferencesModel::startupModes() const
 
     for (const StartMode& mode: allStartupModes()) {
         QVariantMap obj;
-        obj["title"] = mode.title;
+        obj["title"] = mode.title.qTranslated();
         obj["checked"] = mode.checked;
         obj["canSelectScorePath"] = mode.canSelectScorePath;
         obj["scorePath"] = mode.scorePath;
@@ -51,11 +54,11 @@ QVariantList ProgrammeStartPreferencesModel::startupModes() const
 
 ProgrammeStartPreferencesModel::StartModeList ProgrammeStartPreferencesModel::allStartupModes() const
 {
-    static const QMap<StartupModeType, QString> modeTitles {
-        { StartupModeType::StartEmpty,  qtrc("appshell/preferences", "Start empty") },
-        { StartupModeType::ContinueLastSession, qtrc("appshell/preferences", "Continue last session") },
-        { StartupModeType::StartWithNewScore, qtrc("appshell/preferences", "Start with new score") },
-        { StartupModeType::StartWithScore, qtrc("appshell/preferences", "Start with score:") }
+    static const QMap<StartupModeType, TranslatableString> modeTitles {
+        { StartupModeType::StartEmpty,  TranslatableString("appshell/preferences", "Start empty") },
+        { StartupModeType::ContinueLastSession, TranslatableString("appshell/preferences", "Continue last session") },
+        { StartupModeType::StartWithNewScore, TranslatableString("appshell/preferences", "Start with new score") },
+        { StartupModeType::StartWithScore, TranslatableString("appshell/preferences", "Start with score:") }
     };
 
     StartModeList modes;
@@ -82,7 +85,7 @@ QVariantList ProgrammeStartPreferencesModel::panels() const
 
     for (const Panel& panel: allPanels()) {
         QVariantMap obj;
-        obj["title"] = panel.title;
+        obj["title"] = panel.title.qTranslated();
         obj["visible"] = panel.visible;
 
         result << obj;
@@ -98,7 +101,7 @@ ProgrammeStartPreferencesModel::PanelList ProgrammeStartPreferencesModel::allPan
          * TODO: https://github.com/musescore/MuseScore/issues/9807
         Panel { SplashScreen, qtrc("appshell/preferences", "Show splash screen"), configuration()->needShowSplashScreen() },
          */
-        Panel { Navigator, qtrc("appshell/preferences", "Show navigator"), configuration()->isNotationNavigatorVisible() },
+        Panel { Navigator, TranslatableString("appshell/preferences", "Show navigator"), configuration()->isNotationNavigatorVisible() },
     };
 
     return panels;

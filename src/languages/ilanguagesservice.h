@@ -45,9 +45,6 @@ public:
     virtual const Language& placeholderLanguage() const = 0;
 
     virtual framework::Progress update(const QString& languageCode) = 0;
-
-    virtual bool needRestartToApplyLanguageChange() const = 0;
-    virtual async::Channel<bool> needRestartToApplyLanguageChangeChanged() const = 0;
 };
 }
 

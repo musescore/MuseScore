@@ -25,12 +25,21 @@
 #include <QObject>
 #include <QVariantMap>
 
+#include "types/translatablestring.h"
+
+#include "async/asyncable.h"
+
+#include "modularity/ioc.h"
+#include "languages/ilanguagesservice.h"
+
 #include "ui/view/iconcodes.h"
 
 namespace mu::appshell {
-class PreferencePageItem : public QObject
+class PreferencePageItem : public QObject, public async::Asyncable
 {
     Q_OBJECT
+
+    INJECT(appshell, languages::ILanguagesService, languagesService)
 
     Q_PROPERTY(QString id READ id NOTIFY idChanged)
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
@@ -62,7 +71,7 @@ public:
     int row() const;
 
 public slots:
-    void setTitle(QString title);
+    void setTitle(TranslatableString title);
     void setId(QString id);
     void setIcon(ui::IconCode::Code icon);
     void setPath(QString path);
@@ -70,7 +79,7 @@ public slots:
 
 signals:
     void idChanged(QString id);
-    void titleChanged(QString title);
+    void titleChanged();
     void iconChanged(int icon);
     void pathChanged(QString path);
     void expandedChanged(bool expanded);
@@ -79,7 +88,7 @@ private:
     QList<PreferencePageItem*> m_children;
     PreferencePageItem* m_parent = nullptr;
 
-    QString m_title;
+    TranslatableString m_title;
     QString m_id;
     ui::IconCode::Code m_icon = ui::IconCode::Code::NONE;
     QString m_path;

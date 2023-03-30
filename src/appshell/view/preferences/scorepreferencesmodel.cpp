@@ -85,6 +85,15 @@ QHash<int, QByteArray> ScorePreferencesModel::roleNames() const
 
 void ScorePreferencesModel::load()
 {
+    loadItems();
+
+    languagesService()->currentLanguageChanged().onNotify(this, [this]() {
+        loadItems();
+    });
+}
+
+void ScorePreferencesModel::loadItems()
+{
     beginResetModel();
 
     m_defaultFiles = {

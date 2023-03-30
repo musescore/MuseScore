@@ -74,10 +74,10 @@ Item {
     function makeMenu(menuInfo) {
         var menu = menuComponent.createObject(menuBar)
 
-        menu.id = menuInfo.id
-        menu.title = menuInfo.title
-        menu.enabled = menuInfo.enabled
-        menu.subitems = menuInfo.subitems
+        menu.id = Qt.binding(() => { return menuInfo.id })
+        menu.title = Qt.binding(() => { return menuInfo.title })
+        menu.enabled = Qt.binding(() => { return menuInfo.enabled })
+        menu.subitems = Qt.binding(() => { return menuInfo.subitems })
 
         return menu
     }
@@ -85,13 +85,13 @@ Item {
     function makeMenuItem(parentMenu, itemInfo) {
         var menuItem = menuItemComponent.createObject(parentMenu)
 
-        menuItem.id = itemInfo.id
-        menuItem.text = itemInfo.title + "\t" + itemInfo.portableShortcuts
-        menuItem.enabled = itemInfo.enabled
-        menuItem.checked = itemInfo.checked
-        menuItem.checkable = itemInfo.checkable
-        menuItem.separator = !Boolean(itemInfo.title)
-        menuItem.role = itemInfo.role
+        menuItem.id = Qt.binding(() => { return itemInfo.id })
+        menuItem.text = Qt.binding(() => { return itemInfo.title + "\t" + itemInfo.portableShortcuts })
+        menuItem.enabled = Qt.binding(() => { return itemInfo.enabled })
+        menuItem.checked = Qt.binding(() => { return itemInfo.checked })
+        menuItem.checkable = Qt.binding(() => { return itemInfo.checkable })
+        menuItem.separator = Qt.binding(() => { return !Boolean(itemInfo.title) })
+        menuItem.role = Qt.binding(() => { return itemInfo.role })
 
         return menuItem
     }

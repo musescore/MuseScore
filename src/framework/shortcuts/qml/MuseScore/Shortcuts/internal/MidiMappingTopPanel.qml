@@ -47,6 +47,9 @@ RowLayout {
 
     CheckBox {
         id: remoteControlCheckBox
+
+        Layout.fillWidth: true
+
         text: qsTrc("shortcuts", "MIDI remote control")
         font: ui.theme.bodyBoldFont
 

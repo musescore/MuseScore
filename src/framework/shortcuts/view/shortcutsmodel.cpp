@@ -99,6 +99,19 @@ QHash<int, QByteArray> ShortcutsModel::roleNames() const
 
 void ShortcutsModel::load()
 {
+    loadItems();
+
+    shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
+        loadItems();
+    });
+
+    languagesService()->currentLanguageChanged().onNotify(this, [this] {
+        loadItems();
+    });
+}
+
+void ShortcutsModel::loadItems()
+{
     beginResetModel();
     m_shortcuts.clear();
 
@@ -115,10 +128,6 @@ void ShortcutsModel::load()
 
         m_shortcuts << shortcut;
     }
-
-    shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
-        load();
-    });
 
     std::sort(m_shortcuts.begin(), m_shortcuts.end(), [this](const Shortcut& s1, const Shortcut& s2) {
         return actionText(s1.action) < actionText(s2.action);

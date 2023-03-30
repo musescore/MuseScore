@@ -39,7 +39,7 @@ QVariant FoldersPreferencesModel::data(const QModelIndex& index, int role) const
 {
     const FolderInfo& folder = m_folders.at(index.row());
     switch (role) {
-    case TitleRole: return folder.title;
+    case TitleRole: return folder.title.qTranslated();
     case PathRole: return folder.value;
     case DirRole: return folder.dir;
     case IsMultiDirectoriesRole: return folder.valueType == FolderValueType::MultiDirectories;
@@ -85,29 +85,34 @@ void FoldersPreferencesModel::load()
 
     m_folders = {
         {
-            FolderType::Scores, qtrc("appshell/preferences", "Scores"), projectConfiguration()->userProjectsPath().toQString(),
+            FolderType::Scores, TranslatableString("appshell/preferences", "Scores"),
+            projectConfiguration()->userProjectsPath().toQString(),
             projectConfiguration()->userProjectsPath().toQString()
         },
         {
-            FolderType::Styles, qtrc("appshell/preferences", "Styles"), notationConfiguration()->userStylesPath().toQString(),
+            FolderType::Styles, TranslatableString("appshell/preferences", "Styles"),
+            notationConfiguration()->userStylesPath().toQString(),
             notationConfiguration()->userStylesPath().toQString()
         },
         {
-            FolderType::Templates, qtrc("appshell/preferences", "Templates"), projectConfiguration()->userTemplatesPath().toQString(),
+            FolderType::Templates, TranslatableString("appshell/preferences", "Templates"),
+            projectConfiguration()->userTemplatesPath().toQString(),
             projectConfiguration()->userTemplatesPath().toQString()
         },
         {
-            FolderType::Plugins, qtrc("appshell/preferences", "Plugins"), pluginsConfiguration()->userPluginsPath().toQString(),
+            FolderType::Plugins, TranslatableString("appshell/preferences", "Plugins"),
+            pluginsConfiguration()->userPluginsPath().toQString(),
             pluginsConfiguration()->userPluginsPath().toQString()
         },
         {
-            FolderType::SoundFonts, qtrc("appshell/preferences", "SoundFonts"), pathsToString(
-                audioConfiguration()->userSoundFontDirectories()),
+            FolderType::SoundFonts, TranslatableString("appshell/preferences", "SoundFonts"),
+            pathsToString(audioConfiguration()->userSoundFontDirectories()),
             configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories
         },
 #ifdef MUE_BUILD_VST_MODULE
         {
-            FolderType::VST3, qtrc("appshell/preferences", "VST3"), pathsToString(vstConfiguration()->userVstDirectories()),
+            FolderType::VST3, TranslatableString("appshell/preferences", "VST3"),
+            pathsToString(vstConfiguration()->userVstDirectories()),
             configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories
         }
 #endif
@@ -120,6 +125,10 @@ void FoldersPreferencesModel::load()
 
 void FoldersPreferencesModel::setupConnections()
 {
+    languagesService()->currentLanguageChanged().onNotify(this, [this]{
+        emit dataChanged(index(0), index(rowCount() - 1), { TitleRole });
+    });
+
     projectConfiguration()->userProjectsPathChanged().onReceive(this, [this](const io::path_t& path) {
         setFolderPaths(FolderType::Scores, path.toQString());
     });

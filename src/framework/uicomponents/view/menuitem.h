@@ -27,6 +27,9 @@
 
 #include "async/asyncable.h"
 
+#include "modularity/ioc.h"
+#include "languages/ilanguagesservice.h"
+
 #include "ui/uitypes.h"
 
 namespace mu {
@@ -48,6 +51,8 @@ enum class MenuItemRole {
 class MenuItem : public QObject, public async::Asyncable
 {
     Q_OBJECT
+
+    INJECT_STATIC(uicomponents, languages::ILanguagesService, languagesService)
 
     Q_PROPERTY(QString id READ id NOTIFY idChanged)
 

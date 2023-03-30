@@ -65,10 +65,8 @@ void LanguagesService::init()
     ValCh<QString> languageCode = configuration()->currentLanguageCode();
     setCurrentLanguage(languageCode.val);
 
-    languageCode.ch.onReceive(this, [this](const QString&) {
-        //! NOTE To change the language at the moment, a restart is required
-        m_needRestartToApplyLanguageChange = true;
-        m_needRestartToApplyLanguageChangeChanged.send(m_needRestartToApplyLanguageChange);
+    languageCode.ch.onReceive(this, [this](const QString& languageCode) {
+        setCurrentLanguage(languageCode);
     });
 
     m_inited = true;
@@ -167,11 +165,16 @@ void LanguagesService::setCurrentLanguage(const QString& languageCode)
         return;
     }
 
-    Language& lang = languageCode == PLACEHOLDER_LANGUAGE_CODE
+    doSetCurrentLanguage(effectiveLanguageCode);
+}
+
+void LanguagesService::doSetCurrentLanguage(const QString& effectiveLanguageCode, bool forceReload)
+{
+    Language& lang = effectiveLanguageCode == PLACEHOLDER_LANGUAGE_CODE
                      ? m_placeholderLanguage
                      : m_languagesHash[effectiveLanguageCode];
 
-    if (!lang.isLoaded()) {
+    if (forceReload || !lang.isLoaded()) {
         loadLanguage(lang);
     }
 
@@ -198,8 +201,6 @@ void LanguagesService::setCurrentLanguage(const QString& languageCode)
     qApp->setLayoutDirection(locale.textDirection());
 
     lang.direction = locale.textDirection();
-
-    // Currently, no need to retranslate the UI on language change, because we require restart
 
     m_currentLanguage = lang;
     m_currentLanguageChanged.notify();
@@ -279,6 +280,8 @@ Ret LanguagesService::loadLanguage(Language& lang)
         return appFilePaths.ret;
     }
 
+    lang.files.clear();
+
     for (const io::path_t& appFilePath : appFilePaths.val) {
         io::path_t filename = io::filename(appFilePath);
         io::path_t userFilePath = languagesUserAppDataPath.appendingComponent(filename);
@@ -332,21 +335,16 @@ Progress LanguagesService::update(const QString& languageCode)
         }
 
         m_updateOperationsHash.remove(effectiveLanguageCode);
+
+        if (res.ret && effectiveLanguageCode == m_currentLanguage.code) {
+            // If the current language was succesfully updated, retranslate the UI
+            doSetCurrentLanguage(effectiveLanguageCode, true);
+        }
     });
 
     QtConcurrent::run(this, &LanguagesService::th_update, effectiveLanguageCode, progress);
 
     return progress;
-}
-
-bool LanguagesService::needRestartToApplyLanguageChange() const
-{
-    return m_needRestartToApplyLanguageChange;
-}
-
-async::Channel<bool> LanguagesService::needRestartToApplyLanguageChangeChanged() const
-{
-    return m_needRestartToApplyLanguageChangeChanged;
 }
 
 void LanguagesService::th_update(const QString& languageCode, Progress progress)
@@ -365,9 +363,6 @@ void LanguagesService::th_update(const QString& languageCode, Progress progress)
         progress.finished.send(ret);
         return;
     }
-
-    m_needRestartToApplyLanguageChange = true;
-    m_needRestartToApplyLanguageChangeChanged.send(m_needRestartToApplyLanguageChange);
 
     progress.finished.send(make_ret(Err::NoError));
 }

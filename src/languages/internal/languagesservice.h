@@ -54,13 +54,11 @@ public:
 
     framework::Progress update(const QString& languageCode) override;
 
-    bool needRestartToApplyLanguageChange() const override;
-    async::Channel<bool> needRestartToApplyLanguageChangeChanged() const override;
-
 private:
     void loadLanguages();
 
     void setCurrentLanguage(const QString& languageCode);
+    void doSetCurrentLanguage(const QString& effectiveLanguageCode, bool forceReload = false);
     QString effectiveLanguageCode(const QString& languageCode) const;
     Ret loadLanguage(Language& lang);
 
@@ -69,7 +67,6 @@ private:
     Ret downloadLanguage(const QString& languageCode, framework::Progress progress) const;
     RetVal<QString> fileHash(const io::path_t& path);
 
-private:
     LanguagesHash m_languagesHash;
     Language m_currentLanguage;
     async::Notification m_currentLanguageChanged;
@@ -79,8 +76,6 @@ private:
     mutable QHash<QString, framework::Progress> m_updateOperationsHash;
 
     bool m_inited = false;
-    bool m_needRestartToApplyLanguageChange = false;
-    async::Channel<bool> m_needRestartToApplyLanguageChangeChanged;
 };
 }
 

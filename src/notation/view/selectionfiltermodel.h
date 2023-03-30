@@ -28,6 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
+#include "languages/ilanguagesservice.h"
 
 namespace mu::notation {
 class SelectionFilterModel : public QAbstractListModel, public async::Asyncable
@@ -35,6 +36,7 @@ class SelectionFilterModel : public QAbstractListModel, public async::Asyncable
     Q_OBJECT
 
     INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(notation, languages::ILanguagesService, languagesService)
 
     Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
 

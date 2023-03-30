@@ -33,6 +33,7 @@
 #include "midi/imidiconfiguration.h"
 #include "ishortcutsconfiguration.h"
 #include "imidiremote.h"
+#include "languages/ilanguagesservice.h"
 
 #include "ui/iuiactionsregister.h"
 #include "ui/uitypes.h"
@@ -46,6 +47,7 @@ class MidiDeviceMappingModel : public QAbstractListModel, public async::Asyncabl
     INJECT(shortcuts, shortcuts::IMidiRemote, midiRemote)
     INJECT(shortcuts, IShortcutsConfiguration, configuration)
     INJECT(shortcuts, midi::IMidiConfiguration, midiConfiguration)
+    INJECT(shortcuts, languages::ILanguagesService, languagesService)
 
     Q_PROPERTY(bool useRemoteControl READ useRemoteControl WRITE setUseRemoteControl NOTIFY useRemoteControlChanged)
 
@@ -90,6 +92,8 @@ private:
         RoleMappedType,
         RoleMappedValue
     };
+
+    void loadItems();
 
     QVariantMap midiMappingToObject(const MidiControlsMapping& midiMapping) const;
 

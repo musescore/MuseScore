@@ -32,10 +32,13 @@ using namespace mu::ui;
 MenuItem::MenuItem(QObject* parent)
     : QObject(parent)
 {
+    languagesService()->currentLanguageChanged().onNotify(this, [this]() {
+        emit actionChanged();
+    });
 }
 
 MenuItem::MenuItem(const UiAction& action, QObject* parent)
-    : QObject(parent)
+    : MenuItem(parent)
 {
     m_id = QString::fromStdString(action.code);
     m_action = action;

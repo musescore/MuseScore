@@ -22,28 +22,12 @@
 
 #include "maintoolbarmodel.h"
 
-#include "translation.h"
-
 using namespace mu::appshell;
 
 static const QString HOME_PAGE("musescore://home");
 static const QString NOTATION_PAGE("musescore://notation");
 static const QString PUBLISH_PAGE("musescore://publish");
 static const QString DEVTOOLS_PAGE("musescore://devtools");
-
-static const QString TITLE_KEY("title");
-static const QString URI_KEY("uri");
-static const QString IS_TITLE_BOLD_KEY("isTitleBold");
-
-inline QVariantMap buildItem(const QString& title, const QString& uri)
-{
-    QVariantMap item;
-    item[TITLE_KEY] = title;
-    item[URI_KEY] = uri;
-    item[IS_TITLE_BOLD_KEY] = false;
-
-    return item;
-}
 
 MainToolBarModel::MainToolBarModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -56,11 +40,11 @@ QVariant MainToolBarModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    const QVariantMap& item = m_items.at(index.row());
+    const Item& item = m_items.at(index.row());
     switch (role) {
-    case TitleRole: return item[TITLE_KEY];
-    case UriRole: return item[URI_KEY];
-    case IsTitleBoldRole: return item[IS_TITLE_BOLD_KEY];
+    case TitleRole: return item.title.qTranslated();
+    case UriRole: return item.uri;
+    case IsTitleBoldRole: return item.isTitleBold;
     }
 
     return QVariant();
@@ -74,9 +58,9 @@ int MainToolBarModel::rowCount(const QModelIndex&) const
 QHash<int, QByteArray> MainToolBarModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles = {
-        { TitleRole, TITLE_KEY.toUtf8() },
-        { UriRole, URI_KEY.toUtf8() },
-        { IsTitleBoldRole, IS_TITLE_BOLD_KEY.toUtf8() },
+        { TitleRole, "title" },
+        { UriRole, "uri" },
+        { IsTitleBoldRole, "isTitleBold" },
     };
 
     return roles;
@@ -87,12 +71,13 @@ void MainToolBarModel::load()
     beginResetModel();
 
     m_items.clear();
-    m_items << buildItem(mu::qtrc("appshell", "Home"), HOME_PAGE);
-    m_items << buildItem(mu::qtrc("appshell", "Score"), NOTATION_PAGE);
-    m_items << buildItem(mu::qtrc("appshell", "Publish"), PUBLISH_PAGE);
+    m_items << Item { TranslatableString("appshell", "Home"), HOME_PAGE };
+    m_items << Item { TranslatableString("appshell", "Score"), NOTATION_PAGE };
+    m_items << Item { TranslatableString("appshell", "Publish"), PUBLISH_PAGE };
 
     if (globalConfiguration()->devModeEnabled()) {
-        m_items << buildItem(mu::qtrc("appshell", "DevTools"), DEVTOOLS_PAGE);
+        //: Tools that are used by the developers of MuseScore; generally not exposed to users
+        m_items << Item { TranslatableString("appshell", "DevTools"), DEVTOOLS_PAGE };
     }
 
     endResetModel();
@@ -101,15 +86,19 @@ void MainToolBarModel::load()
     context()->currentProjectChanged().onNotify(this, [this]() {
         updateNotationPageItem();
     });
+
+    languagesService()->currentLanguageChanged().onNotify(this, [this] {
+        emit dataChanged(index(0), index(rowCount() - 1), { TitleRole });
+    });
 }
 
 void MainToolBarModel::updateNotationPageItem()
 {
     for (int i = 0; i < m_items.size(); ++i) {
-        QVariantMap& item = m_items[i];
+        Item& item = m_items[i];
 
-        if (item[URI_KEY] == NOTATION_PAGE) {
-            item[IS_TITLE_BOLD_KEY] = context()->currentProject() != nullptr;
+        if (item.uri == NOTATION_PAGE) {
+            item.isTitleBold = context()->currentProject() != nullptr;
 
             QModelIndex modelIndex = index(i);
             emit dataChanged(modelIndex, modelIndex, { IsTitleBoldRole });

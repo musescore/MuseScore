@@ -241,7 +241,7 @@ FocusScope {
         ClassesPage {
             id: classesComp
 
-            property var author: pageModel.classesAuthor()
+            property var author: pageModel.classesAuthor
 
             authorName: author.name
             authorPosition: author.position
