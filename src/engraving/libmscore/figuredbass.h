@@ -249,7 +249,7 @@ class FiguredBass final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, FiguredBass)
 
-    std::vector<FiguredBassItem*> items;        // the individual lines of the F.B.
+    std::vector<FiguredBassItem*> m_items;        // the individual lines of the F.B.
     std::vector<double> _lineLengths;                // lengths of duration indicator lines (in raster units)
     bool _onNote;                               // true if this element is on a staff note | false if it is between notes
     Fraction _ticks;                            // the duration (used for cont. lines and for multiple F.B.
@@ -305,7 +305,7 @@ public:
 
     double             printedLineLength() const { return _printedLineLength; }
     bool              onNote() const { return _onNote; }
-    size_t            numOfItems() const { return items.size(); }
+    size_t            numOfItems() const { return m_items.size(); }
     void              setOnNote(bool val) { _onNote = val; }
     Segment* segment() const { return (Segment*)(explicitParent()); }
     Fraction          ticks() const { return _ticks; }
@@ -318,7 +318,9 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue  propertyDefault(Pid) const override;
 
-    void appendItem(FiguredBassItem* item) { items.push_back(item); }
+    void appendItem(FiguredBassItem* item) { m_items.push_back(item); }
+
+    std::vector<FiguredBassItem*> items() const { return m_items; }
 };
 } // namespace mu::engraving
 

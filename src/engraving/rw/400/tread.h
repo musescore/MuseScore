@@ -25,6 +25,8 @@
 namespace mu::engraving {
 class XmlReader;
 class ReadContext;
+class EngravingItem;
+class TextBase;
 class TempoText;
 class StaffText;
 class StaffTextBase;
@@ -32,6 +34,13 @@ class Dynamic;
 class Harmony;
 class FretDiagram;
 class TremoloBar;
+class Sticking;
+class SystemText;
+class PlayTechAnnotation;
+class RehearsalMark;
+class InstrumentChange;
+class StaffState;
+class FiguredBass;
 }
 
 namespace mu::engraving::rw400 {
@@ -40,6 +49,9 @@ class TRead
 public:
     TRead() = default;
 
+    static void read(EngravingItem* el, XmlReader& xml, ReadContext& ctx); // factory
+
+    static void read(TextBase* t, XmlReader& xml, ReadContext& ctx);
     static void read(TempoText* t, XmlReader& xml, ReadContext& ctx);
     static void read(StaffText* t, XmlReader& xml, ReadContext& ctx);
     static void read(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
@@ -48,6 +60,13 @@ public:
     static void read(Harmony* h, XmlReader& xml, ReadContext& ctx);
     static void read(FretDiagram* d, XmlReader& xml, ReadContext& ctx);
     static void read(TremoloBar* b, XmlReader& xml, ReadContext& ctx);
+    static void read(Sticking* s, XmlReader& xml, ReadContext& ctx);
+    static void read(SystemText* t, XmlReader& xml, ReadContext& ctx);
+    static void read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx);
+    static void read(RehearsalMark* m, XmlReader& xml, ReadContext& ctx);
+    static void read(InstrumentChange* c, XmlReader& xml, ReadContext& ctx);
+    static void read(StaffState* s, XmlReader& xml, ReadContext& ctx);
+    static void read(FiguredBass* b, XmlReader& xml, ReadContext& ctx);
 };
 }
 

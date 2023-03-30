@@ -509,8 +509,19 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
                 el->setTrack(0); // original system object always goes on top
             }
             segment->add(el);
-        } else if (tag == "StaffText"
-                   || tag == "Sticking"
+        } else if (tag == "StaffText") {
+            // hack - getSegment needed because tick tags are unreliable in 1.3 scores
+            // for symbols attached to anything but a measure
+            segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
+            StaffText* el = Factory::createStaffText(segment);
+
+            el->setTrack(ctx.track());
+            TRead::read(el, e, ctx);
+            if (el->systemFlag() && el->isTopSystemObject()) {
+                el->setTrack(0); // original system object always goes on top
+            }
+            segment->add(el);
+        } else if (tag == "Sticking"
                    || tag == "SystemText"
                    || tag == "PlayTechAnnotation"
                    || tag == "RehearsalMark"
@@ -524,7 +535,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             EngravingItem* el = Factory::createItemByName(tag, segment);
 
             el->setTrack(ctx.track());
-            el->read(e);
+            TRead::read(el, e, ctx);
             if (el->systemFlag() && el->isTopSystemObject()) {
                 el->setTrack(0); // original system object always goes on top
             }
