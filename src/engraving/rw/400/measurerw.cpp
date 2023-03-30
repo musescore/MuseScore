@@ -564,7 +564,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             tuplet->setTrack(ctx.track());
             tuplet->setTick(ctx.tick());
             tuplet->setParent(measure);
-            tuplet->read(e);
+            TRead::read(tuplet, e, ctx);
             if (oldTuplet) {
                 oldTuplet->add(tuplet);
             }

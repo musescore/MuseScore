@@ -93,6 +93,7 @@ public:
     Text* number() const { return _number; }
     void setNumber(Text* t) { _number = t; }
     void resetNumberProperty();
+    static void resetNumberProperty(Text* number);
 
     bool isEditable() const override;
     void startEditDrag(EditData&) override;
@@ -113,6 +114,9 @@ public:
 
     Fraction ratio() const { return _ratio; }
     void setRatio(const Fraction& r) { _ratio = r; }
+
+    void setUserPoint1(PointF p) { _p1 = p; }
+    void setUserPoint2(PointF p) { _p2 = p; }
 
     const std::vector<DurationElement*>& elements() const { return _elements; }
     void clear() { _elements.clear(); }

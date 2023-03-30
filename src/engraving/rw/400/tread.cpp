@@ -24,6 +24,9 @@
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"
 
+#include "../../libmscore/score.h"
+#include "../../libmscore/factory.h"
+
 #include "../../libmscore/tempotext.h"
 #include "../../libmscore/stafftext.h"
 #include "../../libmscore/stafftextbase.h"
@@ -31,7 +34,6 @@
 #include "../../libmscore/harmony.h"
 #include "../../libmscore/chordlist.h"
 #include "../../libmscore/fret.h"
-#include "../../libmscore/score.h"
 #include "../../libmscore/tremolobar.h"
 #include "../../libmscore/sticking.h"
 #include "../../libmscore/systemtext.h"
@@ -43,6 +45,8 @@
 #include "../../libmscore/part.h"
 #include "../../libmscore/fermata.h"
 #include "../../libmscore/image.h"
+#include "../../libmscore/tuplet.h"
+#include "../../libmscore/text.h"
 
 #include "../xmlreader.h"
 
@@ -589,4 +593,85 @@ void TRead::read(Image* img, XmlReader& e, ReadContext& ctx)
     }
 
     img->load();
+}
+
+void TRead::read(Tuplet* t, XmlReader& e, ReadContext& ctx)
+{
+    t->setId(e.intAttribute("id", 0));
+
+    Text* number = nullptr;
+    Fraction ratio;
+    TDuration baseLen;
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+
+        if (PropertyRW::readStyledProperty(t, tag, e, ctx)) {
+        } else if (tag == "bold") { //important that these properties are read after number is created
+            bool val = e.readInt();
+            if (number) {
+                number->setBold(val);
+            }
+            if (t->isStyled(Pid::FONT_STYLE)) {
+                t->setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
+        } else if (tag == "italic") {
+            bool val = e.readInt();
+            if (number) {
+                number->setItalic(val);
+            }
+            if (t->isStyled(Pid::FONT_STYLE)) {
+                t->setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
+        } else if (tag == "underline") {
+            bool val = e.readInt();
+            if (number) {
+                number->setUnderline(val);
+            }
+            if (t->isStyled(Pid::FONT_STYLE)) {
+                t->setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
+        } else if (tag == "strike") {
+            bool val = e.readInt();
+            if (number) {
+                number->setStrike(val);
+            }
+            if (t->isStyled(Pid::FONT_STYLE)) {
+                t->setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
+        } else if (tag == "normalNotes") {
+            ratio.setDenominator(e.readInt());
+        } else if (tag == "actualNotes") {
+            ratio.setNumerator(e.readInt());
+        } else if (tag == "p1") {
+            t->setUserPoint1(e.readPoint() * t->score()->spatium());
+        } else if (tag == "p2") {
+            t->setUserPoint2(e.readPoint() * t->score()->spatium());
+        } else if (tag == "baseNote") {
+            baseLen = TDuration(TConv::fromXml(e.readAsciiText(), DurationType::V_INVALID));
+        } else if (tag == "baseDots") {
+            baseLen.setDots(e.readInt());
+        } else if (tag == "Number") {
+            number = Factory::createText(t, TextStyleType::TUPLET);
+            number->setComposition(true);
+            number->setParent(t);
+            Tuplet::resetNumberProperty(number);
+            number->read(e);
+            number->setVisible(t->visible());         //?? override saved property
+            number->setTrack(t->track());
+            // move property flags from _number back to tuplet
+            for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN }) {
+                t->setPropertyFlags(p, number->propertyFlags(p));
+            }
+        } else if (!EngravingItemRW::readProperties(t, e, ctx)) {
+            e.unknown();
+        }
+    }
+
+    t->setNumber(number);
+    t->setBaseLen(baseLen);
+    t->setRatio(ratio);
+
+    Fraction f =  t->baseLen().fraction() * t->ratio().denominator();
+    t->setTicks(f.reduced());
 }

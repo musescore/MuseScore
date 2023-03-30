@@ -163,8 +163,13 @@ Fraction Tuplet::rtick() const
 
 void Tuplet::resetNumberProperty()
 {
+    resetNumberProperty(_number);
+}
+
+void Tuplet::resetNumberProperty(Text* number)
+{
     for (auto p : { Pid::FONT_FACE, Pid::FONT_STYLE, Pid::FONT_SIZE, Pid::ALIGN, Pid::SIZE_SPATIUM_DEPENDENT }) {
-        _number->resetProperty(p);
+        number->resetProperty(p);
     }
 }
 
