@@ -54,6 +54,7 @@
 #include "../../libmscore/jump.h"
 #include "../../libmscore/measurenumber.h"
 #include "../../libmscore/mmrestrange.h"
+#include "../../libmscore/systemdivider.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -62,6 +63,7 @@
 #include "propertyrw.h"
 #include "engravingitemrw.h"
 #include "bsymbolrw.h"
+#include "symbolrw.h"
 
 #include "log.h"
 
@@ -854,4 +856,20 @@ void TRead::read(MeasureNumberBase* b, XmlReader& xml, ReadContext& ctx)
 void TRead::read(MMRestRange* r, XmlReader& xml, ReadContext& ctx)
 {
     read(static_cast<MeasureNumberBase*>(r), xml, ctx);
+}
+
+void TRead::read(SystemDivider* d, XmlReader& e, ReadContext& ctx)
+{
+    if (e.attribute("type") == "left") {
+        d->setDividerType(SystemDivider::Type::LEFT);
+
+        SymId sym = SymNames::symIdByName(d->score()->styleSt(Sid::dividerLeftSym));
+        d->setSym(sym, d->score()->engravingFont());
+    } else {
+        d->setDividerType(SystemDivider::Type::RIGHT);
+
+        SymId sym = SymNames::symIdByName(d->score()->styleSt(Sid::dividerRightSym));
+        d->setSym(sym, d->score()->engravingFont());
+    }
+    SymbolRW::read(d, e, ctx);
 }
