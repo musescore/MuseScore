@@ -57,6 +57,7 @@
 #include "../libmscore/fret.h"
 #include "../libmscore/tremolobar.h"
 #include "../libmscore/tempotext.h"
+#include "../libmscore/image.h"
 
 #include "barlinerw.h"
 #include "locationrw.h"
@@ -544,15 +545,15 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             fermata = Factory::createFermata(ctx.dummy());
             fermata->setTrack(ctx.track());
             fermata->setPlacement(fermata->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
-            fermata->read(e);
+            TRead::read(fermata, e, ctx);
         } else if (tag == "Image") {
             if (MScore::noImages) {
                 e.skipCurrentElement();
             } else {
                 segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
-                EngravingItem* el = Factory::createItemByName(tag, segment);
+                Image* el = Factory::createImage(segment);
                 el->setTrack(ctx.track());
-                el->read(e);
+                TRead::read(el, e, ctx);
                 segment->add(el);
             }
         }

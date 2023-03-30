@@ -41,6 +41,8 @@ class RehearsalMark;
 class InstrumentChange;
 class StaffState;
 class FiguredBass;
+class Fermata;
+class Image;
 }
 
 namespace mu::engraving::rw400 {
@@ -67,6 +69,8 @@ public:
     static void read(InstrumentChange* c, XmlReader& xml, ReadContext& ctx);
     static void read(StaffState* s, XmlReader& xml, ReadContext& ctx);
     static void read(FiguredBass* b, XmlReader& xml, ReadContext& ctx);
+    static void read(Fermata* f, XmlReader& xml, ReadContext& ctx);
+    static void read(Image* i, XmlReader& xml, ReadContext& ctx);
 };
 }
 
