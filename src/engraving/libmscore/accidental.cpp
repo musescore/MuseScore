@@ -24,7 +24,7 @@
 
 #include "iengravingfont.h"
 #include "rw/xml.h"
-#include "rw/400/accidentalrw.h"
+#include "rw/400/tread.h"
 #include "types/symnames.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
@@ -252,7 +252,7 @@ Accidental::Accidental(EngravingItem* parent)
 
 void Accidental::read(XmlReader& e)
 {
-    rw400::AccidentalRW::read(this, e, *e.context());
+    rw400::TRead::read(this, e, *e.context());
 }
 
 //---------------------------------------------------------
