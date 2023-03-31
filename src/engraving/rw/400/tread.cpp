@@ -55,6 +55,7 @@
 #include "../../libmscore/measurenumber.h"
 #include "../../libmscore/mmrestrange.h"
 #include "../../libmscore/systemdivider.h"
+#include "../../libmscore/actionicon.h"
 
 #include "../xmlreader.h"
 #include "../206/read206.h"
@@ -872,4 +873,18 @@ void TRead::read(SystemDivider* d, XmlReader& e, ReadContext& ctx)
         d->setSym(sym, d->score()->engravingFont());
     }
     SymbolRW::read(d, e, ctx);
+}
+
+void TRead::read(ActionIcon* i, XmlReader& e, ReadContext&)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "action") {
+            i->setAction(e.readText().toStdString(), 0);
+        } else if (tag == "subtype") {
+            i->setActionType(static_cast<ActionIconType>(e.readInt()));
+        } else {
+            e.unknown();
+        }
+    }
 }

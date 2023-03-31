@@ -24,6 +24,7 @@
 
 #include "draw/fontmetrics.h"
 #include "rw/xml.h"
+#include "rw/400/tread.h"
 
 #include "property.h"
 
@@ -88,16 +89,7 @@ void ActionIcon::write(XmlWriter& xml) const
 
 void ActionIcon::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "action") {
-            m_actionCode = e.readText().toStdString();
-        } else if (tag == "subtype") {
-            m_actionType = static_cast<ActionIconType>(e.readInt());
-        } else {
-            e.unknown();
-        }
-    }
+    rw400::TRead::read(this, e, *e.context());
 }
 
 void ActionIcon::layout()

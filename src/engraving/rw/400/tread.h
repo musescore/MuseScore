@@ -53,6 +53,7 @@ class MeasureNumber;
 class MeasureNumberBase;
 class MMRestRange;
 class SystemDivider;
+class ActionIcon;
 }
 
 namespace mu::engraving::rw400 {
@@ -91,6 +92,7 @@ public:
     static void read(MeasureNumberBase* b, XmlReader& xml, ReadContext& ctx);
     static void read(MMRestRange* r, XmlReader& xml, ReadContext& ctx);
     static void read(SystemDivider* d, XmlReader& xml, ReadContext& ctx);
+    static void read(ActionIcon* i, XmlReader& xml, ReadContext& ctx);
 };
 }
 

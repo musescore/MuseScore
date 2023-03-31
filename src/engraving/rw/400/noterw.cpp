@@ -34,12 +34,12 @@
 
 #include "../xmlreader.h"
 
+#include "tread.h"
 #include "readcontext.h"
 #include "propertyrw.h"
 #include "symbolrw.h"
 #include "imagerw.h"
 #include "engravingitemrw.h"
-#include "accidentalrw.h"
 #include "bendrw.h"
 #include "notedotrw.h"
 #include "chordlinerw.h"
@@ -78,7 +78,7 @@ bool NoteRW::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
     } else if (tag == "Accidental") {
         Accidental* a = Factory::createAccidental(n);
         a->setTrack(n->track());
-        AccidentalRW::read(a, e, ctx);
+        TRead::read(a, e, ctx);
         n->add(a);
     } else if (tag == "Spanner") {
         Spanner::readSpanner(e, n, n->track());

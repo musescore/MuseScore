@@ -117,8 +117,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/textbaserw.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/noterw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/noterw.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/accidentalrw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/400/accidentalrw.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/bendrw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/bendrw.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/400/notedotrw.cpp
