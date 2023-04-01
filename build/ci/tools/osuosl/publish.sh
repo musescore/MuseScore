@@ -76,8 +76,11 @@ chmod 600 $SSH_KEY
 
 FTP_PATH=${OS}/${MAJOR_VERSION}x/${BUILD_DIR}
 
-file_extension="${ARTIFACT_NAME##*.}"
-LATEST_NAME="MuseScoreNightly-latest-x86_64.${file_extension}"
+if [ "$BUILD_MODE" == "nightly_build" ]; then
+    file_extension="${ARTIFACT_NAME##*.}"
+    BUILD_BRANCH=$(cat $ARTIFACTS_DIR/env/build_branch.env)
+    LATEST_NAME="MuseScoreNightly-latest-${BUILD_BRANCH}-x86_64.${file_extension}"
+fi
 
 echo "Copy ${ARTIFACTS_DIR}/${ARTIFACT_NAME} to $FTP_PATH"
 scp -oStrictHostKeyChecking=no -C -i $SSH_KEY $ARTIFACTS_DIR/$ARTIFACT_NAME musescore-nightlies@ftp-osl.osuosl.org:~/ftp/$FTP_PATH

@@ -82,7 +82,7 @@ if [ "$PACKTYPE" == "appimage" ]; then
     # https://github.com/AppImage/AppImageSpec/blob/master/draft.md#update-information
     case "${BUILD_MODE}" in
     "stable_build")  export UPDATE_INFORMATION="gh-releases-zsync|musescore|MuseScore|latest|MuseScore-*x86_64.AppImage.zsync";;
-    "nightly_build") export UPDATE_INFORMATION="zsync|https://ftp.osuosl.org/pub/musescore-nightlies/linux/${MAJOR_VERSION}x/nightly/MuseScoreNightly-latest-x86_64.AppImage.zsync";;
+    "nightly_build") export UPDATE_INFORMATION="zsync|https://ftp.osuosl.org/pub/musescore-nightlies/linux/${MAJOR_VERSION}x/nightly/MuseScoreNightly-latest-${BUILD_BRANCH}-x86_64.AppImage.zsync";;
     *) unset UPDATE_INFORMATION;; # disable updates for other build modes
     esac
 
