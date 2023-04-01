@@ -34,9 +34,16 @@ done
 if [ -z "$S3_KEY" ]; then echo "error: not set S3_KEY"; exit 1; fi
 if [ -z "$S3_SECRET" ]; then echo "error: not set S3_SECRET"; exit 1; fi
 
+command -v s3cmd >/dev/null 2>&1
+if [[ $? -ne 0 ]]; then
+    echo "=== Install tools ==="
 
-echo "Install s3cmd"
-pip3 install s3cmd
+    apt install python3-setuptools
+
+    echo "Install s3cmd"
+    pip3 install s3cmd
+fi
+
 
 cat >~/.s3cfg <<EOL
 [default]
