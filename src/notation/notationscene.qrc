@@ -38,6 +38,5 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml</file>
         <file>qml/MuseScore/NotationScene/internal/ElementPopupLoader.qml</file>
         <file>qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml</file>
-        <file>qml/MuseScore/NotationScene/internal/HarpPedalGridColumn.qml</file>
     </qresource>
 </RCC>
