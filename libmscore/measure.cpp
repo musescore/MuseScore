@@ -2264,7 +2264,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                   }
             else if (tag == "Spanner")
                   Spanner::readSpanner(e, this, e.track());
-            else if (tag == "RepeatMeasure") {
+            else if (tag == "RepeatMeasure" || tag == "MeasureRepeat" ) {
                   RepeatMeasure* rm = new RepeatMeasure(score());
                   rm->setTrack(e.track());
                   rm->read(e);
