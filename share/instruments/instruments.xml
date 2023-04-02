@@ -12373,6 +12373,7 @@
                   <trackName>Lute</trackName>
                   <longName>Lute</longName>
                   <shortName>Lt.</shortName>
+                  <traitName type="variant">Classic</traitName>
                   <description>6-course lute (staff notation).</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
@@ -13170,6 +13171,7 @@
                   <trackName>Laúd</trackName>
                   <longName>Laúd</longName>
                   <shortName>Laúd</shortName>
+                  <traitName type="variant">Spanish</traitName>
                   <description>Spanish lute similar to the bandurria. (Staff notation).</description>
                   <musicXMLid>pluck.laud</musicXMLid>
                   <StringData>
