@@ -13150,8 +13150,9 @@
                   <pPitchRange>56-98</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
-                        <!--MIDI: Bank 0, Prog 24; MS General: Nylon String Guitar-->
-                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                        <!--MIDI: Bank 8, Prog 25; MS General: 12-String Guitar-->
+                        <controller ctrl="32" value="8"/> <!--Bank LSB-->
+                        <program value="25"/>
                   </Channel>
                   <genre>popular</genre>
             </Instrument>
@@ -13187,8 +13188,9 @@
                   <pPitchRange>44-91</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
-                        <!--MIDI: Bank 0, Prog 24; MS General: Nylon String Guitar-->
-                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                        <!--MIDI: Bank 8, Prog 25; MS General: 12-String Guitar-->
+                        <controller ctrl="32" value="8"/> <!--Bank LSB-->
+                        <program value="25"/>
                   </Channel>
                   <genre>popular</genre>
             </Instrument>
