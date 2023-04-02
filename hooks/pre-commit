@@ -1,29 +1,126 @@
 #!/usr/bin/env bash
 
-echo "Uncrustifying staged files..."
+((${BASH_VERSION%%.*} >= 4)) || { echo >&2 "$0: Error: Please upgrade Bash."; exit 1; }
 
-RELPATH=../..
-staged=$(git diff --name-only --cached)
+set -euo pipefail
 
-cd ./tools/codestyle/
-while IFS= read -r file; do
-	ext="${file##*.}"
-	if [ $ext != "cpp" ] && [ $ext != "h" ]; then
-		continue
-	fi
-	cp "$RELPATH/$file" "$RELPATH/$file.bak" 
-	if $( ./uncrustify_run_file.sh "$RELPATH/$file" ); then
-		mv "$RELPATH/$file.uncrustify" "$RELPATH/$file"
-		rm "$RELPATH/$file.bak"
-		git add "$RELPATH/$file"
-	else
-		echo $?
-		mv "$RELPATH/$file.bak" "$RELPATH/$file"
-		rm "$RELPATH/$file.uncrustify"
-		echo "Uncrustify failed for $file"
-	fi
-done <<< "$staged"
+source "tools/codestyle/globals.source"
 
-echo "Finished uncrustifying"
+function path_under_any_of_dirs()
+{
+    local path="$1" dir
+    shift
+    for dir in "$@"; do
+        if [[ "${path}" == "${dir}/"* ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
 
-exit 0
+# Files with staged changes that are required to follow the coding style.
+function get_staged_files()
+{
+    local tidy_globs=() dir ext
+    for dir in "${TIDY_DIRS[@]}"; do
+        for ext in "${TIDY_EXTENSIONS[@]}"; do
+            tidy_globs+=("${dir}/*.${ext}")
+        done
+    done
+
+    local untidy_dirs=() untidy_path
+    while IFS= read -r -d '' untidy_path; do
+        untidy_dirs+=("${untidy_path%/${UNTIDY_FILE}}")
+    done < <(git ls-files -z -- "*/${UNTIDY_FILE}")
+
+    STAGED_FILES=()
+
+    local file
+    while IFS= read -r -d '' file; do
+        if ! path_under_any_of_dirs "${file}" "${untidy_dirs[@]}"; then
+            STAGED_FILES+=("${file}")
+        fi
+    done < <(git diff -z --name-only --cached -- "${tidy_globs[@]}")
+
+    NUM_STAGED="${#STAGED_FILES[@]}"
+}
+
+# Files from STAGED_FILES that also have unstaged changes. Beware, if
+# STAGED_FILES is empty then this will return all unstaged files.
+function get_unstaged_files()
+{
+    UNSTAGED_FILES=()
+
+    while IFS= read -r -d '' unstaged_file; do
+        UNSTAGED_FILES+=("${unstaged_file}")
+    done < <(git diff -z --name-only -- "${STAGED_FILES[@]}")
+
+    NUM_UNSTAGED="${#UNSTAGED_FILES[@]}"
+}
+
+exit_status=0
+
+get_staged_files
+
+if ((${NUM_STAGED} == 0)); then
+    echo >&2 "$0: Nothing to do."
+    exit 0
+fi
+
+get_unstaged_files
+
+echo >&2 "$0: Tidying staged files..."
+
+# Avoid overwriting unstaged changes.
+for file in "${UNSTAGED_FILES[@]}"; do
+    mv "${file}" "${file}.unstaged"
+    git checkout -- "${file}"
+done
+
+# Begin tidying the staged version of each file.
+STAGED_PIDS=()
+for file in "${STAGED_FILES[@]}"; do
+    "tools/codestyle/tidy_file.sh" "${file}" & # Run in background. Must not use Git.
+    STAGED_PIDS+=( $! ) # store process ID
+done
+
+# Begin tidying the unstaged versions to reduce diff with staged versions.
+UNSTAGED_PIDS=()
+for file in "${UNSTAGED_FILES[@]}"; do
+    "tools/codestyle/tidy_file.sh" "${file}.unstaged" & # Run in background. Must not use Git.
+    UNSTAGED_PIDS+=( $! ) # store process ID
+done
+
+# Once the staged files are tidy, re-stage them.
+for idx in "${!STAGED_PIDS[@]}"; do
+    # Wait for background process to finish
+    if wait "${STAGED_PIDS[${idx}]}"; then
+        # Process was successful
+        file="${STAGED_FILES[${idx}]}"
+        git add -- "${file}" # Run in foreground to avoid git index conflicts.
+    else
+        # Process failed
+        exit_status=$?
+    fi
+done
+
+# Once the unstaged files are tidy, restore them.
+for idx in "${!UNSTAGED_PIDS[@]}"; do
+    # Wait for background process to finish
+    if wait "${UNSTAGED_PIDS[${idx}]}"; then
+        # Process was successful
+        file="${UNSTAGED_FILES[${idx}]}"
+        mv "${file}.unstaged" "${file}"
+    else
+        # Process failed
+        exit_status=$?
+    fi
+done
+
+if ((${exit_status} == 0)); then
+    echo >&2 "$0: Tidying complete!"
+else
+    echo >&2 "$0: Errors occured."
+fi
+
+exit ${exit_status}
