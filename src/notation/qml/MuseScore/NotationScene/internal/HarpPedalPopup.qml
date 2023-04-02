@@ -63,7 +63,7 @@ StyledPopupView {
         }
 
         // not enough room on window to open above so open below stave
-        var globPos = mapToItem(notationView.windowContent, Qt.point(root.x, root.y))
+        var globPos = mapToItem(notationView, Qt.point(root.x, root.y))
         if (globPos.y < 0) {
             setOpensUpward(false)
             root.y = harpModel.staffPos.y + harpModel.staffHeight

@@ -43,8 +43,6 @@ DockPage {
 
     property var topToolKeyNavSec
 
-    property var windowContent: null
-
     property NotationPageModel pageModel: NotationPageModel {}
 
     property NavigationSection noteInputKeyNavSec: NavigationSection {
@@ -423,8 +421,6 @@ DockPage {
 
         isNavigatorVisible: pageModel.isNavigatorVisible
         isMainView: true
-
-        windowContent: root.windowContent
 
         Component.onCompleted: {
             root.notationView = notationView.paintView
