@@ -31,6 +31,7 @@
 
 #include "translation.h"
 #include "log.h"
+#include "realfn.h"
 
 using namespace mu::inspector;
 using namespace mu::engraving;
@@ -111,7 +112,7 @@ void TextSettingsModel::loadProperties()
     m_fontStyle->setIsEnabled(true);
 
     loadPropertyItem(m_fontSize, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toDouble() == mu::engraving::TextBase::UNDEFINED_FONT_SIZE
+        return RealIsEqual(elementPropertyValue.toDouble(), mu::engraving::TextBase::UNDEFINED_FONT_SIZE)
                ? QVariant() : elementPropertyValue.toDouble();
     });
 
